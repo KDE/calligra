@@ -55,7 +55,6 @@
 #include "karbon_resourceserver.h"
 #include "vcomposite.h"
 #include "vgradient.h"
-#include "vgradienttabwidget.h"
 #include "vgroup.h"
 #include "vobject.h"
 #include "vtext.h"
@@ -108,32 +107,28 @@ KarbonResourceServer::KarbonResourceServer()
 
 	// GRADIENTS
 	kDebug(38000) <<"Loading gradients:";
-	m_gradients = new Q3PtrList<VGradientListItem>();
-	m_gradients->setAutoDelete( true );
-
 	formats.clear();
 	lst.clear();
 	formats = KoGradientManager::filters();
 
-	// find Gradients
+    // find Gradients
+    for( QStringList::Iterator it = formats.begin(); it != formats.end(); ++it )
+    {
+        format = *it;
+        QStringList l = KarbonFactory::componentData().dirs()->findAllResources(
+                            "karbon_gradient", format, KStandardDirs::NoDuplicates);
+        lst += l;
+    }
+    kDebug(38000) << lst.count() <<" gradients found.";
+    // load Gradients
+    for( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
+    {
+        file = *it;
+        kDebug(38000) <<" -" << file;
+        loadGradient( file );
+    }
 
-	for( QStringList::Iterator it = formats.begin(); it != formats.end(); ++it )
-	{
-		format = *it;
-		QStringList l = KarbonFactory::componentData().dirs()->findAllResources(
-							"karbon_gradient", format, KStandardDirs::NoDuplicates);
-		lst += l;
-	}
-kDebug(38000) << lst.count() <<" gradients found.";
-	// load Gradients
-	for( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
-	{
-		file = *it;
-		kDebug(38000) <<" -" << file;
-		loadGradient( file );
-	}
-
-	kDebug(38000) << m_gradients->count() <<" gradients loaded.";
+    kDebug(38000) << m_gradients.count() <<" gradients loaded.";
 
 	// CLIPARTS
 	kDebug(38000) <<"Loading cliparts:";
@@ -170,8 +165,7 @@ kDebug(38000) << lst.count() <<" gradients found.";
 KarbonResourceServer::~KarbonResourceServer()
 {
     qDeleteAll( m_patterns );
-	m_gradients->clear();
-	delete m_gradients;
+    qDeleteAll( m_gradients );
 	m_cliparts->clear();
 	delete m_cliparts;
 } // KarbonResourceServer::~KarbonResourceServer
@@ -263,52 +257,64 @@ void KarbonResourceServer::removePattern( KoPattern* pattern )
     }
 } // KarbonResourceServer::removePattern
 
-VGradientListItem*
-KarbonResourceServer::addGradient( QGradient* gradient )
+int KarbonResourceServer::gradientCount()
 {
-	int i = 1;
-	char buffer[ 20 ];
-	QFileInfo fi;
+    return m_gradients.count();
+}
 
-	sprintf( buffer, "%04d.kgr", i++ );
-	fi.setFile( KarbonFactory::componentData().dirs()->saveLocation( "karbon_gradient" ) + buffer );
+QList<KoAbstractGradient*> KarbonResourceServer::gradients()
+{
+    return m_gradients;
+}
 
-	while( fi.exists() == true )
-	{
-		sprintf( buffer, "%04d.kgr", i++ );
-		fi.setFile( KarbonFactory::componentData().dirs()->saveLocation( "karbon_gradient" ) + buffer );
-		kDebug(38000) << fi.fileName();
-	}
+KoAbstractGradient* KarbonResourceServer::addGradient( QGradient* gradient )
+{
+    int i = 1;
+    char buffer[ 20 ];
+    QFileInfo fi;
 
-	QString filename = KarbonFactory::componentData().dirs()->saveLocation( "karbon_gradient" ) + buffer;
+    sprintf( buffer, "%04d.kgr", i++ );
+    fi.setFile( KarbonFactory::componentData().dirs()->saveLocation( "karbon_gradient" ) + buffer );
 
-    // TODO port 
-	//saveGradient( gradient, filename );
+    while( fi.exists() == true )
+    {
+        sprintf( buffer, "%04d.kgr", i++ );
+        fi.setFile( KarbonFactory::componentData().dirs()->saveLocation( "karbon_gradient" ) + buffer );
+        kDebug(38000) << fi.fileName();
+    }
 
-	m_gradients->append( new VGradientListItem( gradient, filename ) );
+    QString filename = KarbonFactory::componentData().dirs()->saveLocation( "karbon_gradient" ) + buffer;
 
-	return m_gradients->last();
+    KoStopGradient * newGradient = KoStopGradient::fromQGradient( gradient );
+    if( newGradient)
+    {
+        newGradient->setFilename( filename );
+        newGradient->save();
+        m_gradients.append( newGradient );
+    }
+
+    return m_gradients.last();
 } // KarbonResourceServer::addGradient
 
-void
-KarbonResourceServer::removeGradient( VGradientListItem* gradient )
+void KarbonResourceServer::removeGradient( KoAbstractGradient * gradient )
 {
-	QFile file( gradient->filename() );
+    QFile file( gradient->filename() );
 
-	if( file.remove() )
-		m_gradients->remove( gradient );
+    if( file.remove() )
+        m_gradients.remove( gradient );
+
+    delete gradient;
 } // KarbonResourceServer::removeGradient
 
-void
-KarbonResourceServer::loadGradient( const QString& filename )
+void KarbonResourceServer::loadGradient( const QString& filename )
 {
-    KoAbstractGradient* grad;
-
     QString fileExtension;
     int index = filename.lastIndexOf('.');
 
     if (index != -1)
         fileExtension = filename.mid(index).toLower();
+
+    KoAbstractGradient* grad = 0;
 
     if(fileExtension == ".svg" || fileExtension == ".kgr")
         grad = new KoStopGradient(filename);
@@ -317,21 +323,17 @@ KarbonResourceServer::loadGradient( const QString& filename )
 
     grad->load();
     if(!grad->valid())
+    {
+        delete grad;
         return;
+    }
 
-    QGradient* gradient = grad->toQGradient();
-    if(!gradient)
-        return;
-
-    m_gradients->append( new VGradientListItem( gradient, filename ) );
-
-    delete grad;
+    m_gradients.append( grad );
 } // KarbonResourceServer::loadGradient
 
-void
-KarbonResourceServer::saveGradient( VGradient* gradient, const QString& filename )
+bool KarbonResourceServer::saveGradient( QGradient* gradient, const QString& filename )
 {
-    QFile file( filename );
+    /*
     QDomDocument doc;
     QDomElement me = doc.createElement( "PREDEFGRADIENT" );
     doc.appendChild( me );
@@ -347,6 +349,7 @@ KarbonResourceServer::saveGradient( VGradient* gradient, const QString& filename
     file.flush();
 
     file.close();
+    */
 } // KarbonResourceServer::saveGradient
 
 VClipartIconItem*

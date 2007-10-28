@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001-2002 Beno� Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2001-2002 Beno�t Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2002-2003 Rob Buis <buis@kde.org>
    Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
 
@@ -19,6 +19,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "vgradientwidget.h"
+#include "vgradienttabwidget.h"
+#include "karbon_resourceserver.h"
+#include "KarbonGradientItem.h"
+
+#include <KoAbstractGradient.h>
+#include <KoStopGradient.h>
+#include <KoResourceChooser.h>
+
+#include <knuminput.h>
+#include <kcombobox.h>
+#include <klocale.h>
+#include <kiconloader.h>
+#include <klistwidget.h>
+
 #include <QLabel>
 #include <QPainter>
 #include <QLayout>
@@ -32,17 +47,9 @@
 #include <QLinearGradient>
 #include <QConicalGradient>
 
-#include <knuminput.h>
-#include <kcombobox.h>
-#include <klocale.h>
-#include <k3listbox.h>
-#include <kiconloader.h>
+#include <kdebug.h>
 
-#include "vgradientwidget.h"
-#include "vgradienttabwidget.h"
-#include "karbon_resourceserver.h"
-#include "vqpainter.h"
-#include "vfill.h"
+#include <math.h>
 
 /// helper function to clone a gradient
 QGradient * cloneGradient( const QGradient * gradient )
@@ -82,63 +89,108 @@ QGradient * cloneGradient( const QGradient * gradient )
     return clone;
 }
 
-VGradientListItem::VGradientListItem( const QGradient * gradient, const QString & filename )
-    : Q3ListBoxItem( 0L ), m_gradient( gradient ), m_filename( filename )
+void transferGradientPosition( const QGradient * srcGradient, QGradient * dstGradient )
 {
-    m_pixmap = QPixmap( 200, 16 );
+    // first check if gradients have the same type
+    if( srcGradient->type() == dstGradient->type() )
+    {
+        switch( srcGradient->type() )
+        {
+            case QGradient::LinearGradient:
+            {
+                const QLinearGradient * src = static_cast<const QLinearGradient*>( srcGradient );
+                QLinearGradient * dst = static_cast<QLinearGradient*>( dstGradient );
+                dst->setStart( src->start() );
+                dst->setFinalStop( src->finalStop() );
+                break;
+            }
+            case QGradient::RadialGradient:
+            {
+                const QRadialGradient * src = static_cast<const QRadialGradient*>( srcGradient );
+                QRadialGradient * dst = static_cast<QRadialGradient*>( dstGradient );
+                dst->setCenter( src->center() );
+                dst->setRadius( src->radius() );
+                dst->setFocalPoint( src->focalPoint() );
+                break;
+            }
+            case QGradient::ConicalGradient:
+            {
+                const QConicalGradient * src = static_cast<const QConicalGradient*>( srcGradient );
+                QConicalGradient * dst = static_cast<QConicalGradient*>( dstGradient );
+                dst->setCenter( src->center() );
+                dst->setAngle( src->angle() );
+                break;
+            }
+            default:
+                return;
+        }
+        return;
+    }
 
-    QLinearGradient paintGradient;
-    paintGradient.setStops( gradient->stops() );
-    paintGradient.setStart( QPointF( 0, 0 ) );
-    paintGradient.setFinalStop( QPointF( m_pixmap.width() - 1, 0 ) );
+    // try to preserve gradient positions as best as possible
+    QPointF start, stop;
+    switch( srcGradient->type() )
+    {
+        case QGradient::LinearGradient:
+        {
+            const QLinearGradient * g = static_cast<const QLinearGradient*>( srcGradient );
+            start = g->start();
+            stop = g->finalStop();
+            break;
+        }
+        case QGradient::RadialGradient:
+        {
+            const QRadialGradient * g = static_cast<const QRadialGradient*>( srcGradient );
+            start = g->center();
+            stop = QPointF( g->radius(), 0.0 );
+            break;
+        }
+        case QGradient::ConicalGradient:
+        {
+            const QConicalGradient * g = static_cast<const QConicalGradient*>( srcGradient );
+            start = g->center();
+            double radAngle = g->angle()*M_PI/180.0;
+            stop = QPointF( 50.0 * cos( radAngle), 50.*sin( radAngle ) );
+            break;
+        }
+        default:
+            start = QPointF( 0.0, 0.0 );
+            stop = QPointF( 50.0, 50.0 );
+    }
 
-    QPixmap checker(8, 8);
-    QPainter p(&checker);
-    p.fillRect(0, 0, 4, 4, Qt::lightGray);
-    p.fillRect(4, 0, 4, 4, Qt::darkGray);
-    p.fillRect(0, 4, 4, 4, Qt::darkGray);
-    p.fillRect(4, 4, 4, 4, Qt::lightGray);
-    p.end();
-
-    QPainter painter( &m_pixmap );
-    QRect rect = QRect( 0, 0, m_pixmap.width(), m_pixmap.height() );
-    painter.fillRect( rect, QBrush(checker));
-    painter.fillRect( rect, QBrush( paintGradient ) );
-
-    m_delete = QFileInfo( filename ).isWritable();
-}
-
-VGradientListItem::VGradientListItem( const VGradientListItem& gradient )
-    : Q3ListBoxItem( 0L )
-{
-    m_pixmap = gradient.m_pixmap;
-    m_delete = gradient.m_delete;
-    m_gradient = cloneGradient( gradient.gradient() );
-    m_filename = gradient.m_filename;
-}
-
-VGradientListItem::~VGradientListItem()
-{
-    delete m_gradient;
-}
-
-int VGradientListItem::width( const Q3ListBox* lb ) const
-{
-    return lb->width() - 25;
-}
-
-void VGradientListItem::paint( QPainter* painter )
-{
-    painter->save();
-    QRect r ( 0, 0, width( listBox() ), height( listBox() ) );
-    painter->scale( ( (float)( width( listBox() ) ) ) / 200., 1. );
-    painter->drawPixmap( 0, 0, m_pixmap );
-    painter->restore();
-    if ( isSelected() )
-        painter->setPen( listBox()->palette().highlightedText().color() );
-    else
-        painter->setPen( listBox()->palette().base().color() );
-    painter->drawRect( r );
+    switch( dstGradient->type() )
+    {
+        case QGradient::LinearGradient:
+        {
+            QLinearGradient * g = static_cast<QLinearGradient*>( dstGradient );
+            g->setStart( start );
+            g->setFinalStop( stop );
+            break;
+        }
+        case QGradient::RadialGradient:
+        {
+            QRadialGradient * g = static_cast<QRadialGradient*>( dstGradient );
+            QPointF diff = stop-start;
+            double radius = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+            g->setCenter( start );
+            g->setFocalPoint( start );
+            g->setRadius( radius );
+            break;
+        }
+        case QGradient::ConicalGradient:
+        {
+            QConicalGradient * g = static_cast<QConicalGradient*>( dstGradient );
+            QPointF diff = stop-start;
+            double angle = atan2( diff.y(), diff.x() );
+            if( angle < 0.0 )
+                angle += 2*M_PI;
+            g->setCenter( start );
+            g->setAngle( angle*180/M_PI );
+            break;
+        }
+        default:
+            return;
+    }
 }
 
 VGradientPreview::VGradientPreview( QWidget* parent )
@@ -198,16 +250,27 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 {
     QPainter painter( this );
 
+    QPixmap checker(8, 8);
+    QPainter p(&checker);
+    p.fillRect(0, 0, 4, 4, Qt::lightGray);
+    p.fillRect(4, 0, 4, 4, Qt::darkGray);
+    p.fillRect(0, 4, 4, 4, Qt::darkGray);
+    p.fillRect(4, 4, 4, 4, Qt::lightGray);
+    p.end();
+
+    QRect rect = QRect( 0, 0, width(), height() );
+
     // TODO draw a checker board as background?
     //painter.setBrush( QBrush( SmallIcon( "karbon" ) ) );
-    painter.setBrush( palette().base() );
-    painter.drawRect( QRectF( 0, 0, width(), height() ) );
+    painter.fillRect( rect, QBrush(checker));
+    //painter.setBrush( palette().base() );
+    //painter.drawRect( rect ) ) );
 
     if( ! m_gradient )
         return;
 
     painter.setBrush( QBrush( *m_gradient ) );
-    painter.drawRect( QRectF( 0, 0, width(), height() ) );
+    painter.drawRect( rect );
 
     painter.setPen( palette().light().color() );
     // light frame around widget
@@ -237,6 +300,11 @@ VGradientTabWidget::VGradientTabWidget( QWidget* parent )
 VGradientTabWidget::~VGradientTabWidget()
 {
     delete m_gradient;
+}
+
+void VGradientTabWidget::resizeEvent( QResizeEvent * event )
+{
+    //m_predefGradientsView->setIconSize( QSize( m_predefGradientsView->width(), 16 ) );
 }
 
 void VGradientTabWidget::setupUI()
@@ -285,18 +353,20 @@ void VGradientTabWidget::setupUI()
 
     QWidget* predefTab  = new QWidget();
     QGridLayout* predefLayout = new QGridLayout( predefTab );
-    predefLayout->setSpacing( 3 );
-    predefLayout->setMargin( 6 );
-    predefLayout->setRowMinimumHeight( 0, 12 );
-    m_predefGradientsView = new K3ListBox( predefTab );
+    m_predefGradientsView = new KoResourceChooser( QSize( 300, 20 ), predefTab );
+    m_predefGradientsView->setIconSize( QSize( 305, 25 ) );
     predefLayout->addWidget( m_predefGradientsView, 0, 0, 1, 2 );
 
     m_predefDelete = new QPushButton( i18n( "&Delete" ), predefTab );
-    predefLayout->addWidget( m_predefDelete, 2, 0 );
+    predefLayout->addWidget( m_predefDelete, 1, 0 );
 
     m_predefImport = new QPushButton( i18n( "&Import" ), predefTab );
-    predefLayout->addWidget( m_predefImport, 2, 1 );
+    predefLayout->addWidget( m_predefImport, 1, 1 );
     m_predefImport->setEnabled( false );
+
+    predefLayout->setSpacing( 3 );
+    predefLayout->setMargin( 6 );
+    predefLayout->setRowMinimumHeight( 0, 12 );
 
     addTab( m_editTab, i18n( "Edit Gradient" ) );
     addTab( predefTab, i18n( "Predefined Gradients" ) );
@@ -308,9 +378,20 @@ void VGradientTabWidget::setupConnections()
     connect( m_gradientRepeat, SIGNAL( activated( int ) ), this, SLOT( combosChange( int ) ) );
     connect( m_gradientWidget, SIGNAL( changed() ), this, SLOT( stopsChanged() ) );
     connect( m_addToPredefs, SIGNAL( clicked() ), this, SLOT( addGradientToPredefs() ) );
-    connect( m_predefGradientsView, SIGNAL( doubleClicked( Q3ListBoxItem *, const QPoint & ) ), this, SLOT( changeToPredef( Q3ListBoxItem* ) ) );
+    connect( m_predefGradientsView, SIGNAL( itemDoubleClicked( QTableWidgetItem * ) ), this, SLOT( changeToPredef( QTableWidgetItem* ) ) );
     connect( m_predefDelete, SIGNAL( clicked() ), this, SLOT( deletePredef() ) );
     connect( m_opacity, SIGNAL( valueChanged( int ) ), this, SLOT( opacityChanged( int ) ) );
+}
+
+void VGradientTabWidget::blockChildSignals( bool block )
+{
+    m_gradientType->blockSignals( block );
+    m_gradientRepeat->blockSignals( block );
+    m_gradientWidget->blockSignals( block );
+    m_addToPredefs->blockSignals( block );
+    m_predefGradientsView->blockSignals( block );
+    m_predefDelete->blockSignals( block );
+    m_opacity->blockSignals( block );
 }
 
 void VGradientTabWidget::updateUI()
@@ -327,10 +408,12 @@ void VGradientTabWidget::updatePredefGradients()
     if( ! m_resourceServer )
         return;
 
-    Q3PtrList<VGradientListItem>* gradientList = m_resourceServer->gradients();
-    if( gradientList->count() > 0 )
-        for( VGradientListItem* g = gradientList->first(); g != NULL; g = gradientList->next() )
-            m_predefGradientsView->insertItem( new VGradientListItem( *g ) );
+    QList<KoAbstractGradient*> gradients = m_resourceServer->gradients();
+    if( gradients.count() > 0 )
+    {
+        foreach( KoAbstractGradient * gradient, gradients )
+            m_predefGradientsView->addItem( new KarbonGradientItem( gradient ) );
+    }
 }
 
 double VGradientTabWidget::opacity() const
@@ -380,17 +463,58 @@ void VGradientTabWidget::combosChange( int )
 {
     QGradient * newGradient = 0;
 
+    QPointF start, stop;
+    // try to preserve gradient positions
+    switch( m_gradient->type() )
+    {
+        case QGradient::LinearGradient:
+        {
+            QLinearGradient * g = static_cast<QLinearGradient*>( m_gradient );
+            start = g->start();
+            stop = g->finalStop();
+            break;
+        }
+        case QGradient::RadialGradient:
+        {
+            QRadialGradient * g = static_cast<QRadialGradient*>( m_gradient );
+            start = g->center();
+            stop = QPointF( g->radius(), 0.0 );
+            break;
+        }
+        case QGradient::ConicalGradient:
+        {
+            QConicalGradient * g = static_cast<QConicalGradient*>( m_gradient );
+            start = g->center();
+            double radAngle = g->angle()*M_PI/180.0;
+            stop = QPointF( 50.0 * cos( radAngle), 50.*sin( radAngle ) );
+            break;
+        }
+        default:
+            start = QPointF( 0.0, 0.0 );
+            stop = QPointF( 50.0, 50.0 );
+    }
+
     switch( m_gradientType->currentIndex() )
     {
         case QGradient::LinearGradient:
-            newGradient = new QLinearGradient();
-        break;
+            newGradient = new QLinearGradient( start, stop );
+            break;
         case QGradient::RadialGradient:
-            newGradient = new QRadialGradient();
-        break;
+        {
+            QPointF diff = stop-start;
+            double radius = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+            newGradient = new QRadialGradient( start, radius, start );
+            break;
+        }
         case QGradient::ConicalGradient:
-            newGradient = new QConicalGradient();
-        break;
+        {
+            QPointF diff = stop-start;
+            double angle = atan2( diff.y(), diff.x() );
+            if( angle < 0.0 )
+                angle += 2*M_PI;
+            newGradient = new QConicalGradient( start, angle*180/M_PI );
+            break;
+        }
         default:
             return;
     }
@@ -419,42 +543,57 @@ void VGradientTabWidget::opacityChanged( int value )
 
 void VGradientTabWidget::addGradientToPredefs()
 {
-    VGradientListItem* item = m_resourceServer->addGradient( cloneGradient( m_gradient ) );
-    m_predefGradientsView->insertItem( item );
+    KoAbstractGradient * g = m_resourceServer->addGradient( cloneGradient( m_gradient ) );
+    if( g )
+        m_predefGradientsView->addItem( new KarbonGradientItem( g ) );
 }
 
-void VGradientTabWidget::predefSelected( Q3ListBoxItem* item )
+void VGradientTabWidget::predefSelected( QTableWidgetItem * item )
 {
-    if( item )
-    {
-        VGradientListItem* gradientItem = (VGradientListItem*)item;
-        m_predefDelete->setEnabled( gradientItem->canDelete() );
-    }
+    if( ! item )
+        return;
+
+    KarbonGradientItem * gradientItem = static_cast<KarbonGradientItem*>( item );
+    // TODO m_predefDelete->setEnabled( gradientItem->canDelete() );
 }
 
-void VGradientTabWidget::changeToPredef( Q3ListBoxItem* item )
+void VGradientTabWidget::changeToPredef( QTableWidgetItem * item )
 {
-    if( item )
+    if( ! item )
+        return;
+
+    KarbonGradientItem * gradientItem = dynamic_cast<KarbonGradientItem*>(item);
+    if( ! gradientItem )
+        return;
+
+    QGradient * newGradient = gradientItem->gradient()->toQGradient();
+    if( m_gradient )
     {
-        VGradientListItem* gradientItem = (VGradientListItem*)item;
+        transferGradientPosition( m_gradient, newGradient );
         delete m_gradient;
-        m_gradient = cloneGradient( gradientItem->gradient() );
-        m_gradientType->setCurrentIndex( m_gradient->type() );
-        m_gradientRepeat->setCurrentIndex( m_gradient->spread() );
-        m_opacity->setValue( 100 );
-        m_gradientWidget->setStops( m_gradient->stops() );
-        setCurrentWidget( m_editTab );
-        emit changed();
     }
+    m_gradient = newGradient;
+    blockChildSignals( true );
+    m_gradientType->setCurrentIndex( m_gradient->type() );
+    m_gradientRepeat->setCurrentIndex( m_gradient->spread() );
+    m_opacity->setValue( 100 );
+    m_gradientWidget->setStops( m_gradient->stops() );
+    blockChildSignals( false );
+    setCurrentWidget( m_editTab );
+    emit changed();
 }
 
 void VGradientTabWidget::deletePredef()
 {
-    int i = m_predefGradientsView->currentItem();
-    if( !m_predefGradientsView->item( i ) )
+    KarbonGradientItem * item = dynamic_cast<KarbonGradientItem*>( m_predefGradientsView->currentItem() );
+    if( ! item )
         return;
-    m_resourceServer->removeGradient( (VGradientListItem*)m_predefGradientsView->item( i ) );
-    m_predefGradientsView->removeItem( i );
+
+    m_resourceServer->removeGradient( item->gradient() );
+    int row = m_predefGradientsView->row( item );
+    int col = m_predefGradientsView->column( item );
+    m_predefGradientsView->takeItem( row, col );
+    delete item;
 }
 
 void VGradientTabWidget::stopsChanged()

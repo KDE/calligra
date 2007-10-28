@@ -4,6 +4,7 @@ set(karbonwidgets_SRCS
     KarbonCanvas.cpp
     vcolorslider.cc
     vgradientwidget.cc
+    KarbonGradientItem.cpp
     vgradienttabwidget.cc
     KarbonStylePreview.cpp
     vselecttoolbar.cc

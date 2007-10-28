@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001-2002 Benoît Vautrin <benoit.vautrin@free.fr>
+   Copyright (C) 2001-2002 Benoï¿½t Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2002 Rob Buis <buis@kde.org>
    Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
 
@@ -22,62 +22,20 @@
 #ifndef _VGRADIENTTABWIDGET_H_
 #define _VGRADIENTTABWIDGET_H_
 
+#include <karbon_export.h>
+
 #include <QWidget>
 #include <QTabWidget>
-#include <Q3ListBox>
 #include <QPixmap>
-
-#include <karbon_export.h>
+#include <QtGui/QTableWidgetItem>
 
 class KComboBox;
 class VGradientWidget;
-class K3ListBox;
+class KListWidget;
 class KIntNumInput;
 class QPushButton;
 class KarbonResourceServer;
-
-/**
- * A list item for showing gradients in a list box.
- */
-class VGradientListItem : public Q3ListBoxItem
-{
-public:
-    /**
-     * Constructs a new gradient list item with the given gradient and file name.
-     *
-     * The gradient list item takes ownership of the gradient.
-     *
-     * @param gradient the gradient the item represents
-     * @param filename the filename of the gradient
-     */
-    VGradientListItem( const QGradient * gradient, const QString & filename );
-
-    /// Copy constructor
-    explicit VGradientListItem( const VGradientListItem& );
-
-    /// Destroys the gradient list item
-    ~VGradientListItem();
-
-    QPixmap& pixmap() { return m_pixmap; }
-    /// Returns the list items gradient
-    const QGradient* gradient() const { return m_gradient; }
-    /// Returns the filename of the gradient
-    QString filename() { return m_filename; }
-    /// Returns if the gradient can be removed from disk
-    bool canDelete() { return m_delete; }
-
-    virtual int height( const Q3ListBox* ) const { return 16; }
-    virtual int width( const Q3ListBox* lb ) const;
-
-protected:
-    virtual void paint( QPainter* p );
-
-private:
-    const QGradient * m_gradient; ///< the gradient of this list item
-    QPixmap m_pixmap; ///< cached pixmap for drawing
-    QString m_filename; ///< the filename the gradient was loaded from
-    bool m_delete; ///< shows if the gradient can be removed from disk
-};
+class KoResourceChooser;
 
 /// A widget to preview a gradient
 class VGradientPreview : public QWidget
@@ -168,17 +126,19 @@ Q_SIGNALS:
 protected Q_SLOTS:
     void combosChange( int );
     void addGradientToPredefs();
-    void changeToPredef( Q3ListBoxItem* );
-    void predefSelected( Q3ListBoxItem* );
+    void changeToPredef( QTableWidgetItem* );
+    void predefSelected( QTableWidgetItem* );
     void deletePredef();
     void opacityChanged( int );
     void stopsChanged();
 
 protected:
+    virtual void resizeEvent ( QResizeEvent * event );
     void setupUI();
     void updateUI();
     void updatePredefGradients();
     void setupConnections();
+    void blockChildSignals( bool block );
 
 private:
     QWidget          *m_editTab;
@@ -186,7 +146,7 @@ private:
     KComboBox        *m_gradientTarget;
     KComboBox        *m_gradientRepeat;
     KComboBox        *m_gradientType;
-    K3ListBox         *m_predefGradientsView;
+    KoResourceChooser *m_predefGradientsView;
     QPushButton      *m_predefDelete;
     QPushButton      *m_predefImport;
     QPushButton      *m_addToPredefs;

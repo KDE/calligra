@@ -46,10 +46,10 @@
 #include <QtGui/QTableWidgetItem>
 
 class VGradient;
-class VGradientListItem;
 class VClipartIconItem;
 class VObject;
 class KoPattern;
+class KoAbstractGradient;
 
 class KARBONCOMMON_EXPORT KarbonResourceServer
 {
@@ -70,18 +70,17 @@ public:
     /// Removes given pattern
     void removePattern( KoPattern * pattern );
 
-	int gradientCount()
-	{
-		return m_gradients->count();
-	}
+    /// Returns number of loaded gradients
+    int gradientCount();
 
-	Q3PtrList<VGradientListItem>* gradients()
-	{
-		return m_gradients;
-	}
+    /// Returns list of gradients
+    QList<KoAbstractGradient*> gradients();
 
-	VGradientListItem* addGradient( QGradient* gradient );
-	void removeGradient( VGradientListItem* gradient );
+    /// Adds a new gradient
+    KoAbstractGradient* addGradient( QGradient* gradient );
+
+    /// Removes given gradient
+    void removeGradient( KoAbstractGradient* gradient );
 
 	int clipartCount()
 	{
@@ -103,14 +102,15 @@ protected:
     const KoPattern* loadPattern( const QString& filename );
 
 	void loadGradient( const QString& filename );
-	void saveGradient( VGradient* gradient, const QString& filename );
+    /// Saves gradient to given file
+    bool saveGradient( QGradient* gradient, const QString& filename );
 
 	void loadClipart( const QString& filename );
 	void saveClipart( VObject* object, double width, double height, const QString& filename );
 
 private:
     QList<KoPattern*> m_patterns; ///< the loaded patterns
-	Q3PtrList<VGradientListItem>* m_gradients;
+    QList<KoAbstractGradient*> m_gradients; ///< the loaded gradients
 	Q3PtrList<VClipartIconItem>* m_cliparts;
 	Q3Dict<QPixmap> m_pixmaps;
 };
