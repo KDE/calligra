@@ -79,12 +79,12 @@ void TestInformationFunctions::initTestCase()
 //     // B3:B17
     storage->setValue(2, 3, Value(     "7"   ) );
     storage->setValue(2, 4, Value(      2    ) );
-//     storage->setValue(2, 5, Value(      3    ) );
-//     storage->setValue(2, 6, Value(    true   ) );
-//     storage->setValue(2, 7, Value(   "Hello" ) );
+    storage->setValue(2, 5, Value(      3    ) );
+    storage->setValue(2, 6, Value(    true   ) );
+    storage->setValue(2, 7, Value(   "Hello" ) );
 //     // B8 leave empty
-//     storage->setValue(2, 9, Value::errorDIV0() );
-//     storage->setValue(2,10, Value(      0    ) );
+    storage->setValue(2, 9, Value::errorDIV0() );
+    storage->setValue(2,10, Value(      0    ) );
 //     storage->setValue(2,11, Value(      3    ) );
 //     storage->setValue(2,12, Value(      4    ) );
 //     storage->setValue(2,13, Value( "2005-0131T01:00:00" ));
@@ -206,11 +206,71 @@ void TestInformationFunctions::testCOLUMNS()
     CHECK_EVAL( "COLUMNS(A4:D100)", Value( 4 ) ); // Number of columns in range.
 }
 
+void TestInformationFunctions::testCOUNT()
+{
+    CHECK_EVAL( "COUNT(1;2;3)",       Value( 3 ) ); // Simple count.
+    CHECK_EVAL( "COUNT(B4:B5)",       Value( 2 ) ); // Two numbers in the range.
+    CHECK_EVAL( "COUNT(B4:B5;B4:B5)", Value( 4 ) ); // Duplicates are not removed.
+    CHECK_EVAL( "COUNT(B4:B9)",       Value( 2 ) ); // Errors in referenced cells or ranges are ignored.
+    CHECK_EVAL( "COUNT(B4:B8;1/0)",   Value( 2 ) ); // Errors in direct parameters are still ignored..
+    CHECK_EVAL( "COUNT(B3:B5)",       Value( 2 ) ); // Conversion to NumberSequence ignores strings (in B3).
+}
+
+void TestInformationFunctions::testCOUNTA()
+{
+    CHECK_EVAL( "COUNTA(\"1\";2;TRUE())",     Value( 3 ) ); // Simple count of 3 constant values.
+    CHECK_EVAL( "COUNTA(B3:B5)",              Value( 3 ) ); // Three non-empty cells in the range.
+    CHECK_EVAL( "COUNTA(B3:B5;B3:B5)",        Value( 6 ) ); // Duplicates are not removed.
+    CHECK_EVAL( "COUNTA(B3:B9)",              Value( 6 ) ); // Where B9 is "=1/0", i.e. an error,
+                                                            // counts the error as non-empty; errors contained 
+                                                            // in a reference do not propogate the error into the result.
+    CHECK_EVAL( "COUNTA(\"1\";2;SUM(B3:B9))", Value( 3 ) ); // Errors in an evaluated formula do not propagate; they are just counted.
+    CHECK_EVAL( "COUNTA(\"1\";2;B3:B9)",      Value( 2 ) ); // Conversion to NumberSequence ignores strings (in B3).
+}
+
+void TestInformationFunctions::testCOUNTBLANK()
+{
+    CHECK_EVAL( "COUNTBLANK(B3:B10)",    Value( 1 ) ); // Only B8 is blank. Zero ('0') in B10 is not considered blank.
+}
+
+void TestInformationFunctions::testCOUNTIF()
+{
+    CHECK_EVAL( "COUNTIF(B4:B5;\">2.5\")", Value(       1 ) ); // B4 is 2 and B5 is 3, so there is one cell in the range with a value greater than 2.5.
+    CHECK_EVAL( "COUNTIF(B3:B5;B4)",       Value(       1 ) ); // Test if a cell equals the value in [.B4].
+    CHECK_EVAL( "COUNTIF(\"\";B4)",        Value::errorNA() ); // Constant values are not allowed for the range.
+    CHECK_EVAL( "COUNTIF(B3:B10;\"7\")",   Value(       1 ) ); // [.B3] is the string "7".
+    CHECK_EVAL( "COUNTIF(B3:B10;1+1)",     Value(       1 ) ); // The criteria can be an expression.
+}
+
 void TestInformationFunctions::testERRORTYPE()
 {
     CHECK_EVAL( "ERRORTYPE(0)",    Value::errorVALUE() ); // Non-errors produce an error.
     CHECK_EVAL( "ERRORTYPE(NA())", Value( 7          ) ); // By convention, the ERROR.TYPE of NA() is 7.
     CHECK_EVAL( "ERRORTYPE(1/0)",  Value( 2          ) );
+}
+
+void TestInformationFunctions::testFORMULA()
+{
+    CHECK_EVAL( "LENGTH(FORMULA(B7))>0", Value( true ) ); // B7 is a formula, so this is fine and will produce a text value
+    CHECK_EVAL( "FORMULA(B3)",           Value( true ) ); // Simple formulas that produce Text are still formulas
+}
+
+void TestInformationFunctions::testINFO()
+{
+    CHECK_EVAL( "INFO(\"recalc\")",             Value( "Automatic" ) ); // 
+    CHECK_EVAL( "ISTEXT(INFO(\"system\"))",     Value( true        ) ); // The details of "system" vary by system, but it is always a text value
+    CHECK_EVAL( "ISTEXT(INFO(\"directory\"))",  Value( true        ) ); // Test to see that every required category is supported
+//     CHECK_EVAL( "ISNUMBER(INFO(\"memavail\"))", Value( true        ) ); // not implemented
+//     CHECK_EVAL( "ISNUMBER(INFO(\"memused\"))",  Value( true        ) ); // not implemented 
+    CHECK_EVAL( "ISNUMBER(INFO(\"numfile\"))",  Value( true        ) ); // 
+    CHECK_EVAL( "ISTEXT(INFO(\"osversion\"))",  Value( true        ) ); // 
+//     CHECK_EVAL( "ISTEXT(INFO(\"origin\"))",     Value( true        ) ); // not implemented 
+    CHECK_EVAL( "ISTEXT(INFO(\"recalc\"))",     Value( true        ) ); // 
+    CHECK_EVAL( "ISTEXT(INFO(\"release\"))",    Value( true        ) ); // 
+//     CHECK_EVAL( "ISNUMBER(INFO(\"totmem\"))",   Value( true        ) ); // not implemented 
+
+    // TODO should ISTEXT return errorVALUE() if args is errorVALUE? false seems to be more logical
+//     CHECK_EVAL( "ISTEXT(INFO(\"completely-unknown-category\"))", Value::errorVALUE()  ); // Error if the category is unknown
 }
 
 void TestInformationFunctions::testISEVEN()

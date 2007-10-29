@@ -41,13 +41,13 @@ private slots:
     void testCELL(); // to be implemented
     void testCOLUMN();
     void testCOLUMNS();
-//     void testCOUNT();
-//     void testCOUNTA();
-//     void testCOUNTBLANK();
-//     void testCOUNTIF();
+    void testCOUNT();
+    void testCOUNTA();
+    void testCOUNTBLANK();
+    void testCOUNTIF();
     void testERRORTYPE();
-//     void testFORMULA();
-//     void testINFO();
+    void testFORMULA();
+    void testINFO();
 //     void testISBLANK();
 //     void testISERR();
 //     void testISERR();
