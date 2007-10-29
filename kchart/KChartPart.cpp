@@ -64,6 +64,7 @@ using std::cerr;
 #include <KoOasisLoadingContext.h>
 #include <KoOasisStyles.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeRegistry.h>
 
 // KDChart
 #include "KDChartChart"
@@ -92,11 +93,9 @@ KChartPart::KChartPart( QWidget *parentWidget,
 			QObject* parent,
 			bool singleViewMode )
   : KoChart::Part( parentWidget, parent, singleViewMode ),
-    m_chartShape( new ChartShape ),
     m_chartData( 0 )
 {
-    kDebug(35001) <<"Constructor started!";
-
+    m_chartShape = ( ChartShape* )( KoShapeRegistry::instance()->value("ChartShape") )->createDefaultShape();
     setComponentData( KChartFactory::global(), false );
     setTemplateType( "kchart_template" );
 
