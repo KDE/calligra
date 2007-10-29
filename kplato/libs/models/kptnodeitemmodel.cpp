@@ -3,7 +3,7 @@
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
-  License as published by the Free Software Foundation;
+  License as published by the Free Software Foundation; either
   version 2 of the License, or (at your option) any later version.
 
   This library is distributed in the hope that it will be useful,
@@ -930,6 +930,12 @@ QVariant NodeModel::status( const Node *node, int role ) const
                     return i18n( "Started early" );
                 }
                 return i18n( "Started" );
+            }
+            if ( st & Node::State_ReadyToStart ) {
+                return i18n( "Can start" );
+            }
+            if ( st & Node::State_NotReadyToStart ) {
+                return i18n( "Cannot start" );
             }
             return i18n( "Not started" );
             break;

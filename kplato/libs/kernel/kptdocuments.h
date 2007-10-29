@@ -40,9 +40,10 @@ class KPLATOKERNEL_EXPORT Document
 {
 public:
     enum Type { Type_None, Type_Product, Type_Reference };
+    enum SendAs { SendAs_None, SendAs_Reference, SendAs_Copy };
     
     Document();
-    explicit Document( const KUrl &url, Type type = Type_None );
+    explicit Document( const KUrl &url, Type type = Type_None, SendAs sendAs = SendAs_Reference );
     ~Document();
     
     bool operator==( const Document &doc ) const;
@@ -50,7 +51,11 @@ public:
     
     Type type() const { return m_type; }
     void  setType( Type type ) { m_type = type; }
-    QString typeToString( bool trans = false ) const;
+    static QString typeToString( Type type, bool trans = false );
+    
+    SendAs sendAs() const { return m_sendAs; }
+    void setSendAs( SendAs snd ) { m_sendAs = snd; }
+    static QString sendAsToString( SendAs snd, bool trans = false );
     
     KUrl url() const { return m_url; }
     void setUrl( const KUrl &url ) { m_url = url; }
@@ -66,6 +71,7 @@ private:
     Type m_type;
     KUrl m_url;
     QString m_status;
+    SendAs m_sendAs;
 };
 
 class KPLATOKERNEL_EXPORT Documents

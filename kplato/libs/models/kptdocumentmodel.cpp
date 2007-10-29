@@ -47,7 +47,7 @@ QVariant DocumentModel::type( const Document *doc, int role ) const
         case Qt::DisplayRole:
         case Qt::EditRole:
         case Qt::ToolTipRole:
-            return doc->typeToString( true );
+            return Document::typeToString( doc->type(), true );
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::StatusTipRole:
@@ -74,6 +74,21 @@ QVariant DocumentModel::status( const Document *doc, int role ) const
     return QVariant();
 }
 
+QVariant DocumentModel::sendAs( const Document *doc, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+            case Qt::ToolTipRole: {
+                return Document::sendAsToString( doc->sendAs(), true );
+            }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 QVariant DocumentModel::data( const Document *doc, int property, int role ) const
 {
     QVariant result;
@@ -90,7 +105,7 @@ QVariant DocumentModel::data( const Document *doc, int property, int role ) cons
 
 int DocumentModel::propertyCount()
 {
-    return 3;
+    return 4;
 }
 
 bool DocumentModel::setData( Document *doc, int property, const QVariant & value, int role )
@@ -105,6 +120,7 @@ QVariant DocumentModel::headerData( int section, int role )
             case 0: return i18n( "Url" );
             case 1: return i18n( "Type" );
             case 2: return i18n( "Status" );
+            case 3: return i18n( "Send As" );
     
             default: return QVariant();
         }
@@ -114,6 +130,7 @@ QVariant DocumentModel::headerData( int section, int role )
             case 0: return ToolTip::DocumentUrl;
             case 1: return ToolTip::DocumentType;
             case 2: return ToolTip::DocumentStatus;
+            case 3: return ToolTip::DocumentSendAs;
 
             default: return QVariant();
         }
@@ -252,7 +269,7 @@ bool DocumentItemModel::setType( Document *doc, const QVariant &value, int role 
 {
     switch ( role ) {
         case Qt::EditRole:
-            if ( value.toString() == doc->typeToString( true ) ) {
+            if ( value.toString() == Document::typeToString( doc->type(), true ) ) {
                 return false;
             }
             //m_part->addCommand( new DocumentModifyTypeCmd( *doc, value.toString(), "Modify Document Type" ) );

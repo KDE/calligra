@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,35 +17,40 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTWBSDEFINITIONDIALOG_H
-#define KPTWBSDEFINITIONDIALOG_H
+#ifndef KPTWORKPACKAGECONTROLPANEL_H
+#define KPTWORKPACKAGECONTROLPANEL_H
 
 #include "kplatoui_export.h"
 
-#include <kdialog.h>
+#include "ui_kptworkpackagecontrolpanel.h"
+
+#include <QWidget>
 
 
 namespace KPlato
 {
 
-class WBSDefinitionPanel;
-class WBSDefinition;
-class MacroCommand;
+class Project;
+class Task;
 
-class KPLATOUI_EXPORT WBSDefinitionDialog : public KDialog {
+class WorkPackageControlPanel : public QWidget, public Ui_WorkPackageControlPanel
+{
     Q_OBJECT
 public:
-    explicit WBSDefinitionDialog(WBSDefinition &def, QWidget *parent=0);
-
-    MacroCommand *buildCommand();
+    explicit WorkPackageControlPanel( Project &project, Task &task, QWidget *parent=0 );
 
 protected slots:
-    void slotOk();
+    void slotSelectionChanged();
+    void slotSendWPClicked();
+    void slotLoadWPClicked();
+    void slotViewWPClicked();
+    void slotMailToClicked();
 
 private:
-    WBSDefinitionPanel *m_panel;
+    Project &m_project;
+    Task &m_task;
 };
 
 } //KPlato namespace
 
-#endif // WBSDEFINITIONDIALOG_H
+#endif // KPTWORKPACKAGECONTROLPANEL_H

@@ -74,7 +74,9 @@ public:
         State_FinishedEarly = 32,
         State_Running = 64,
         State_RunningLate = 128,
-        State_RuningEarly = 256
+        State_RunningEarly = 256,
+        State_ReadyToStart = 512, // all precceeding tasks finished (if any)
+        State_NotReadyToStart = 1024 // all precceeding tasks not finished (must be one or more)
     };
 
     Node(Node *parent = 0);

@@ -30,7 +30,21 @@ namespace KPlato
     
 Document::Document()
     : m_type( Type_None ),
-    m_url( KUrl() )
+    m_url( KUrl() ),
+    m_sendAs( SendAs_None )
+{
+    kDebug()<<this;
+}
+
+Document::Document( const KUrl &url, Document::Type type, Document::SendAs sendAs )
+    : m_type( type ),
+    m_url( url ),
+    m_sendAs( sendAs )
+{
+    kDebug()<<this;
+}
+
+Document::~Document()
 {
     kDebug()<<this;
 }
@@ -41,28 +55,26 @@ bool Document::operator==( const Document &doc ) const
     return res;
 }
 
-Document::Document( const KUrl &url, Document::Type type )
-    : m_type( type ),
-    m_url( url )
-{
-    kDebug()<<this;
-}
-
-Document::~Document()
-{
-    kDebug()<<this;
-}
-
 bool Document::isValid() const
 {
     return m_url.url().isEmpty();
 }
 
-QString Document::typeToString( bool trans ) const
+QString Document::typeToString( Document::Type type, bool trans )
 {
-    switch ( m_type ) {
+    switch ( type ) {
         case Type_Product: return trans ? i18n( "Product" ) : "Product";
         case Type_Reference: return trans ? i18n( "Reference" ) : "Reference";
+        default: break;
+    }
+    return trans ? i18n( "Unknown" ) : "Unknown";
+}
+
+QString Document::sendAsToString( Document::SendAs snd, bool trans )
+{
+    switch ( snd ) {
+        case SendAs_Reference: return trans ? i18n( "Reference" ) : "Reference";
+        case SendAs_Copy: return trans ? i18n( "Copy" ) : "Copy";
         default: break;
     }
     return trans ? i18n( "Unknown" ) : "Unknown";

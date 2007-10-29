@@ -1318,6 +1318,17 @@ QStringList ResourceRequestCollection::requestNameList() const {
     return lst;
 }
 
+QList<Resource*> ResourceRequestCollection::requestedResources() const {
+    QList<Resource*> lst;
+    foreach ( ResourceGroupRequest *g, m_requests ) {
+        foreach ( ResourceRequest *r, g->resourceRequests() ) {
+            lst << r->resource();
+        }
+    }
+    return lst;
+}
+
+
 bool ResourceRequestCollection::contains( const QString &identity ) const {
     QStringList lst = requestNameList();
     return lst.indexOf( QRegExp( identity, Qt::CaseSensitive, QRegExp::FixedString ) ) != -1;

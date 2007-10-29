@@ -38,6 +38,8 @@
 namespace KPlato
 {
 
+class Completion;
+
 /**
  * The Completion class holds information about the tasks progress.
  */
@@ -131,7 +133,7 @@ public:
 
     typedef QMap<const Resource*, UsedEffort*> ResourceUsedEffortMap;
     
-    explicit Completion( Node *node = 0 );
+    explicit Completion( Node *node = 0 );  // review * or &, or at all?
     Completion( const Completion &copy );
     ~Completion();
     
@@ -152,6 +154,9 @@ public:
     void setStartTime( const DateTime &dt );
     DateTime finishTime() const { return m_finishTime; }
     void setFinishTime( const DateTime &dt );
+    
+    /// Return a list of the resource that has done any work on this task
+    QList<const Resource*> resources() { return m_usedEffort.keys(); }
     
     const EntryList &entries() const { return m_entries; }
     void addEntry( const QDate &date, Entry *entry );
@@ -193,6 +198,7 @@ public:
     
     void changed();
     Node *node() const { return m_node; }
+    void setNode( Node *node ) { m_node = node; }
     
     enum Entrymode { FollowPlan, EnterCompleted, EnterEffortPerTask, EnterEffortPerResource };
     void setEntrymode( Entrymode mode ) { m_entrymode = mode; }
@@ -215,6 +221,74 @@ public:
 #endif
 };
 
+/**
+ * The WorkPackage class controls work flow for a task
+ */
+class KPLATOKERNEL_EXPORT WorkPackage
+{
+public:
+
+    enum WPStatus { Status_None, Status_Issued, Status_Received, Status_Loaded };
+    enum WPResponse { Response_None, Response_Required };
+
+    explicit WorkPackage( Task &task );
+    ~WorkPackage();
+
+    WPStatus status( const Resource *r ) const;
+    WPStatus status( Resource *r );
+    static QString statusToString( WPStatus sts, bool trans = false );
+    WPResponse responseType( const Resource *r ) const;
+    WPResponse responseType( Resource *r );
+    static QString responseTypeToString( WPResponse rsp, bool trans = false );
+    
+    /// Load from document
+    bool loadXML(KoXmlElement &element, XMLLoaderObject &status );
+    /// Save to document
+    void saveXML(QDomElement &element) const;
+
+    /// Set schedule manager
+    void setScheduleManager( ScheduleManager *sm );
+    /// Return schedule manager
+    ScheduleManager *scheduleManager() const { return m_manager; }
+    /// Return the schedule id, or -1 if no no schedule manager is set
+    long id() const { return m_manager ? m_manager->id() : -1; }
+
+    Completion &completion();
+    const Completion &completion() const;
+
+    void addLogEntry( DateTime &dt, const QString &str );
+    const QMap<DateTime, QString> &log() const;
+    QStringList log();
+
+    class ResourceStatus
+    {
+        public:
+            ResourceStatus() : responseType( Response_None ), status( Status_None ) {}
+            DateTime time;
+            WPResponse responseType;
+            WPStatus status;
+    };
+    QList<Resource*> resources() const { return m_resourceStatus.keys(); }
+    QMap<Resource*, ResourceStatus> &resourceStatus();
+    const QMap<Resource*, ResourceStatus> &resourceStatus() const;
+
+protected:
+    /// Return a list of resources fetched from the appointements or requests
+    /// merged with resources added to completion
+    QList<Resource*> fetchResources();
+
+private:
+    WPStatus p_status( Resource *r );
+    WPResponse p_responseType( Resource *r );
+
+private:
+    Task &m_task;
+    ScheduleManager *m_manager;
+    Completion m_completion;
+
+    QMap<DateTime, QString> m_log;
+    QMap<Resource*, ResourceStatus> m_resourceStatus;
+};
 
 /**
   * A task in the scheduling software is represented by this class. A task
@@ -251,6 +325,7 @@ public:
     int workUnits() const;
     void makeAppointments();
     virtual QStringList requestNameList() const;
+    virtual QList<Resource*> requestedResources() const;
     virtual bool containsRequest( const QString &/*identity*/ ) const;
     virtual ResourceRequest *resourceRequest( const QString &/*name*/ ) const;
     
@@ -371,9 +446,12 @@ public:
      */
     virtual bool effortMetError( long id = -1 ) const;
     
-    Completion &completion() { return m_completion; }
-    const Completion &completion() const { return m_completion; }
+    Completion &completion() { return m_workPackage.completion(); }
+    const Completion &completion() const { return m_workPackage.completion(); }
     
+    WorkPackage &workPackage() { return m_workPackage; }
+    const WorkPackage &workPackage() const { return m_workPackage; }
+
     ResourceRequestCollection *requests() const { return m_requests; }
     
     /**
@@ -553,7 +631,7 @@ private:
     int m_activitySlack;
     int m_activityFreeMargin;
 
-    Completion m_completion;
+    WorkPackage m_workPackage;
     
 #ifndef NDEBUG
 public:

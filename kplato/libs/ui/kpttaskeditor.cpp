@@ -438,17 +438,17 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
     l->setMargin( 0 );
     m_view = new NodeTreeView( part, this );
     l->addWidget( m_view );
+    updateReadWrite( false );
     //m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
     QList<int> lst1; lst1 << 1 << -1;
-    QList<int> lst2; lst2 << 0 << 1 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13 << 14 << 15 << 16<< 18 << 19 << 20 << 21 << 22 << 23 << 24 << 25 << 26 << 27 << 28 << 29 << 30 << 31 << 32 << 34 << 35 << 36 << 37 << 40 << -1;
+    QList<int> lst2; lst2 << 0 << 1 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13 << 14 << 15 << 16 << 18 << 19 << 20 << 21 << 22 << 23 << 24 << 25 << 26 << 27 << 28 << 29 << 30 << 31 << 32 << 34 << 35 << 36 << 37 << 40 << -1;
     m_view->hideColumns( lst1, lst2 );
     
     m_view->slaveView()->mapToSection( 38, 1 );
     m_view->slaveView()->mapToSection( 39, 2 );
     m_view->slaveView()->mapToSection( 2, 3 );
-    m_view->slaveView()->mapToSection( 3, 4 );
-    m_view->slaveView()->mapToSection( 33, 5 );
-    m_view->slaveView()->mapToSection( 17, 6 );
+    m_view->slaveView()->mapToSection( 33, 4 );
+    m_view->slaveView()->mapToSection( 17, 5 );
 
     m_view->setDragDropMode( QAbstractItemView::InternalMove );
     m_view->setDropIndicatorShown( false );
@@ -465,9 +465,10 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
-void TaskView::updateReadWrite( bool rw )
+void TaskView::updateReadWrite( bool /*rw*/ )
 {
-    m_view->setReadWrite( rw );
+    // This is view only, don't allow editing
+    m_view->setReadWrite( false );
 }
 
 void TaskView::draw( Project &project )
@@ -541,25 +542,26 @@ Node *TaskView::currentNode() const {
 
 void TaskView::slotContextMenuRequested( const QModelIndex& index, const QPoint& pos )
 {
-/*    Node *node = m_view->itemModel()->node( index );
-    if ( node == 0 ) {
+    QString name;
+    Node *node = m_view->itemModel()->node( index );
+    if ( node ) {
+        switch ( node->type() ) {
+            case Node::Type_Task:
+                name = "taskview_popup";
+                break;
+            case Node::Type_Milestone:
+                break;
+            case Node::Type_Summarytask:
+                break;
+            default:
+                break;
+        }
+    } else kDebug()<<"No node: "<<index;
+    if ( name.isEmpty() ) {
+        kDebug()<<"No menu";
         return;
     }
-    kDebug()<<node->name()<<" :"<<pos;
-    QString name;
-    switch ( node->type() ) {
-        case Node::Type_Task:
-        case Node::Type_Milestone:
-            name = "task_popup";
-            break;
-        case Node::Type_Summarytask:
-            name = "summarytask_popup";
-            break;
-        default:
-            name = "node_popup";
-    }
-    kDebug()<<name;
-    emit requestPopupMenu( name, pos );*/
+    emit requestPopupMenu( name, pos );
 }
 
 void TaskView::slotCurrentScheduleManagerChanged( ScheduleManager *sm )

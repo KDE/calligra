@@ -10,6 +10,7 @@ include_directories(
 ########### KPlato data models library ###############
 
 set(kplatomodels_LIB_SRCS
+    kptworkpackagemodel.cpp
     kptdocumentmodel.cpp
     kptitemmodelbase.cpp
     kptnodeitemmodel.cpp

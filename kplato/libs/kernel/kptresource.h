@@ -657,6 +657,7 @@ public:
     bool contains( const QString &identity ) const;
 
     QStringList requestNameList() const;
+    QList<Resource*> requestedResources() const;
     
     //bool load(KoXmlElement &element, Project &project);
     void save( QDomElement &element ) const;

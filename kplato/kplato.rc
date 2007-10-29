@@ -125,7 +125,7 @@
         <Separator/>
         <Action name="task_progress"/>
         <Separator/>
-        <Action name="task_workpackage"/>
+        <Action name="task_workpackagecontrol"/>
     </Menu>
     <Menu name="summarytask_popup">
         <Action name="node_properties"/>
@@ -142,6 +142,11 @@
     </Menu>
     <Menu name="taskstatus_popup">
         <Action name="task_progress"/>
+        <Action name="task_workpackagecontrol"/>
+    </Menu>
+    <Menu name="taskview_popup">
+        <Action name="task_progress"/>
+        <Action name="task_workpackagecontrol"/>
     </Menu>
     <Menu name="resourceassigment_popup">
 	    <Action name="task_progress"/>

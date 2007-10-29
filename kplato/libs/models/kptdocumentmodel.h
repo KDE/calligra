@@ -49,7 +49,7 @@ public:
     QVariant url( const Document *doc, int role ) const;
     QVariant type( const Document *doc, int role ) const;
     QVariant status( const Document *doc, int role ) const;
-
+    QVariant sendAs( const Document *doc, int role ) const;
 };
 
 class KPLATOMODELS_EXPORT DocumentItemModel : public ItemModelBase

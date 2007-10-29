@@ -15,6 +15,10 @@ include_directories(
 ########### KPlato private library ###############
 
 set(kplatoui_LIB_SRCS
+    kptworkpackagecontrolpanel.cpp
+    kptworkpackagecontroldialog.cpp
+    kptworkpackageview.cpp
+    
     kptdocumentseditor.cpp
     kptdocumentspanel.cpp
     
@@ -72,6 +76,8 @@ set(kplatoui_LIB_SRCS
     kptchartview.cpp
 )
 kde4_add_ui_files(kplatoui_LIB_SRCS
+    kptworkpackagecontrolpanel.ui
+    
     kptdocumentspanel.ui
     
     kptcpmwidget.ui

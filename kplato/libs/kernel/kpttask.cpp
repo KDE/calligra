@@ -45,7 +45,7 @@ namespace KPlato
 Task::Task(Node *parent) 
     : Node(parent),
       m_resource(),
-      m_completion( this )
+      m_workPackage( *this )
 {
     //kDebug()<<"("<<this<<")";
     Duration d(1, 0, 0);
@@ -63,7 +63,7 @@ Task::Task(Node *parent)
 Task::Task(Task &task, Node *parent) 
     : Node(task, parent), 
       m_resource(),
-      m_completion( this )
+      m_workPackage( *this )
 {
     //kDebug()<<"("<<this<<")";
     m_requests = 0;
@@ -147,6 +147,14 @@ QStringList Task::requestNameList() const {
     QStringList lst;
     if ( m_requests ) {
         lst << m_requests->requestNameList();
+    }
+    return lst;
+}
+
+QList<Resource*> Task::requestedResources() const {
+    QList<Resource*> lst;
+    if ( m_requests ) {
+        lst << m_requests->requestedResources();
     }
     return lst;
 }
@@ -282,7 +290,7 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
                 delete r;
             }
         } else if (e.tagName() == "progress") {
-            m_completion.loadXML( e, status );
+            completion().loadXML( e, status );
         } else if (e.tagName() == "schedules") {
             KoXmlNode n = e.firstChild();
             for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -329,7 +337,7 @@ void Task::save(QDomElement &element)  const {
     
     m_estimate->save(me);
 
-    m_completion.saveXML( me );
+    completion().saveXML( me );
     
     if (!m_schedules.isEmpty()) {
         QDomElement schs = me.ownerDocument().createElement("schedules");
@@ -383,7 +391,7 @@ void Task::saveWorkPackageXML(QDomElement &element, long id )  const
     
     m_estimate->save(me);
 
-    m_completion.saveXML( me );
+    completion().saveXML( me );
     
     if ( m_schedules.contains( id ) && ! m_schedules[ id ]->isDeleted() ) {
         QDomElement schs = me.ownerDocument().createElement("schedules");
@@ -462,7 +470,7 @@ Duration Task::actualEffort( long id ) const {
             eff += n->actualEffort(id);
         }
     }
-    return m_completion.actualEffort();
+    return completion().actualEffort();
 }
 
 // Returns the total actual effort for this task (or subtasks) on date
@@ -475,7 +483,7 @@ Duration Task::actualEffort(const QDate &date, long id) const {
         }
         return eff;
     }
-    return m_completion.actualEffort( date );
+    return completion().actualEffort( date );
 }
 
 // Returns the total actual effort for this task (or subtasks) to date
@@ -488,7 +496,7 @@ Duration Task::actualEffortTo(const QDate &date, long id) const {
         }
         return eff;
     }
-    return m_completion.actualEffortTo( date );
+    return completion().actualEffortTo( date );
 }
 
 double Task::plannedCost( long id ) const {
@@ -548,7 +556,7 @@ double Task::actualCost( long id ) const {
         }
         return c;
     }
-    return m_completion.actualCost();
+    return completion().actualCost();
 }
 
 double Task::actualCost(const QDate &date, long id) const {
@@ -560,7 +568,7 @@ double Task::actualCost(const QDate &date, long id) const {
         }
         return c;
     }
-    return m_completion.actualCost( date );
+    return completion().actualCost( date );
 }
 
 double Task::actualCostTo(const QDate &date, long id) const {
@@ -572,7 +580,7 @@ double Task::actualCostTo(const QDate &date, long id) const {
         }
         return c;
     }
-    return m_completion.actualCostTo( date );
+    return completion().actualCostTo( date );
 }
 
 double Task::bcwp( long id ) const
@@ -585,7 +593,7 @@ double Task::bcwp( long id ) const
         }
         return c;
     }
-    return plannedCost( id ) * (double)m_completion.percentFinished() / 100.0;
+    return plannedCost( id ) * (double)completion().percentFinished() / 100.0;
 }
 
 double Task::bcwp( const QDate &date, long id ) const
@@ -598,7 +606,7 @@ double Task::bcwp( const QDate &date, long id ) const
         }
         return c;
     }
-    c = plannedCostTo( date, id ) * (double)m_completion.percentFinished( date ) / 100.0;
+    c = plannedCostTo( date, id ) * (double)completion().percentFinished( date ) / 100.0;
     //kDebug()<<m_name<<"("<<id<<")"<<date<<"="<<c;
     return c;
 }
@@ -609,12 +617,12 @@ double Task::effortPerformanceIndex(const QDate &date, bool *error) const {
     double res = 0.0;
     Duration ae = actualEffortTo(date);
     
-    bool e = (ae == Duration::zeroDuration || m_completion.percentFinished() == 0);
+    bool e = (ae == Duration::zeroDuration || completion().percentFinished() == 0);
     if (error) {
         *error = e;
     }
     if (!e) {
-        res = (plannedEffortTo(date).toDouble() * ((double)m_completion.percentFinished()/100.0) / ae.toDouble());
+        res = (plannedEffortTo(date).toDouble() * ((double)completion().percentFinished()/100.0) / ae.toDouble());
     }
     return res;
 }
@@ -624,12 +632,12 @@ double Task::costPerformanceIndex(const QDate &date, bool *error) const {
     double res = 0.0;
     double ac = actualCostTo(date);
     
-    bool e = (ac == 0.0 || m_completion.percentFinished() == 0);
+    bool e = (ac == 0.0 || completion().percentFinished() == 0);
     if (error) {
         *error = e;
     }
     if (!e) {
-        res = (plannedCostTo(date) * m_completion.percentFinished())/(100 * ac);
+        res = (plannedCostTo(date) * completion().percentFinished())/(100 * ac);
     }
     return res;
 }
@@ -1161,9 +1169,9 @@ DateTime Task::scheduleFromStartTime(int use) {
     }
     //kDebug()<<m_name<<" startTime="<<cs->startTime;
     if(type() == Node::Type_Task) {
-        if ( cs->recalculate() && m_completion.isFinished() ) {
-            cs->startTime = m_completion.startTime();
-            cs->endTime = m_completion.finishTime();
+        if ( cs->recalculate() && completion().isFinished() ) {
+            cs->startTime = completion().startTime();
+            cs->endTime = completion().finishTime();
             m_visitedForward = true;
             return cs->endTime;
         }
@@ -1182,8 +1190,8 @@ DateTime Task::scheduleFromStartTime(int use) {
             } else {
                 cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             }
-            if ( cs->recalculate() && m_completion.isStarted() ) {
-                cs->earlyStart = cs->startTime = m_completion.startTime();
+            if ( cs->recalculate() && completion().isStarted() ) {
+                cs->earlyStart = cs->startTime = completion().startTime();
             }
             break;
         case Node::ALAP:
@@ -1198,8 +1206,8 @@ DateTime Task::scheduleFromStartTime(int use) {
             } else {
                 cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
             }
-            if ( cs->recalculate() && m_completion.isStarted() ) {
-                cs->earlyStart = cs->startTime = m_completion.startTime();
+            if ( cs->recalculate() && completion().isStarted() ) {
+                cs->earlyStart = cs->startTime = completion().startTime();
             }
             break;
         case Node::StartNotEarlier:
@@ -1309,9 +1317,9 @@ DateTime Task::scheduleFromStartTime(int use) {
             break;
         }
     } else if (type() == Node::Type_Milestone) {
-        if ( cs->recalculate() && m_completion.isFinished() ) {
-            cs->startTime = m_completion.startTime();
-            cs->endTime = m_completion.finishTime();
+        if ( cs->recalculate() && completion().isFinished() ) {
+            cs->startTime = completion().startTime();
+            cs->endTime = completion().finishTime();
             m_visitedForward = true;
             return cs->endTime;
         }
@@ -1691,10 +1699,10 @@ Duration Task::duration(const DateTime &time, int use, bool backward) {
     }
     //kDebug()<<m_name<<": Use="<<use;
     Duration eff;
-    if ( m_currentSchedule->recalculate() && m_completion.isStarted() ) {
-        eff = m_completion.remainingEffort();
+    if ( m_currentSchedule->recalculate() && completion().isStarted() ) {
+        eff = completion().remainingEffort();
         //kDebug()<<m_name<<": recalculate, effort="<<eff.toDouble(Duration::Unit_h);
-        if ( eff == 0 || m_completion.isFinished() ) {
+        if ( eff == 0 || completion().isFinished() ) {
             return eff;
         }
     } else {
@@ -1994,25 +2002,34 @@ bool Task::effortMetError( long id ) const
 uint Task::state( long id ) const
 {
     int st = Node::State_None;
-    if ( m_completion.isFinished() ) {
+    if ( completion().isFinished() ) {
         st |= Node::State_Finished;
-        if ( m_completion.finishTime() > endTime( id ) ) {
+        if ( completion().finishTime() > endTime( id ) ) {
             st |= State_FinishedLate;
         }
-        if ( m_completion.finishTime() < endTime( id ) ) {
+        if ( completion().finishTime() < endTime( id ) ) {
             st |= State_FinishedEarly;
         }
-    } else if ( m_completion.isStarted() ) {
-        if ( m_completion.percentFinished() == 0 ) {
+    } else if ( completion().isStarted() ) {
+        if ( completion().percentFinished() == 0 ) {
             st |= Node::State_Started;
-            if ( m_completion.startTime() > startTime( id ) ) {
+            if ( completion().startTime() > startTime( id ) ) {
                 st |= State_StartedLate;
             }
-            if ( m_completion.startTime() < startTime( id ) ) {
+            if ( completion().startTime() < startTime( id ) ) {
                 st |= State_StartedEarly;
             }
         } else {
             st |= State_Running;
+        }
+    }
+    st |= State_ReadyToStart;
+    //TODO: check proxy relations
+    foreach ( const Relation *r, m_dependParentNodes ) {
+        if ( ! static_cast<Task*>( r->parent() )->completion().isFinished() ) {
+            st &= ~Node::State_ReadyToStart;
+            st |= Node::State_NotReadyToStart;
+            break;
         }
     }
     return st;
@@ -2452,6 +2469,146 @@ void Completion::UsedEffort::saveXML(QDomElement &element ) const
 }
 
 //----------------------------------
+WorkPackage::WorkPackage( Task &task )
+    : m_task( task ),
+    m_manager( 0 )
+{
+    m_completion.setNode( &task );
+}
+
+WorkPackage::~WorkPackage()
+{
+}
+
+bool WorkPackage::loadXML(KoXmlElement &element, XMLLoaderObject &status )
+{
+    return true;
+}
+
+void WorkPackage::saveXML(QDomElement &element) const
+{
+}
+
+QList<Resource*> WorkPackage::fetchResources()
+{
+    QList<Resource*> lst;
+    if ( id() == -1 ) {
+        kDebug()<<"No schedule";
+        lst << m_task.requestedResources();
+    } else {
+        lst = m_task.assignedResources( id() );
+        foreach ( const Resource *r, m_completion.resources() ) {
+            if ( ! lst.contains( const_cast<Resource*>( r ) ) ) {
+                lst << const_cast<Resource*>( r );
+            }
+        }
+    }
+    kDebug()<<lst;
+    return lst;
+}
+
+Completion &WorkPackage::completion()
+{
+    return m_completion;
+}
+
+const Completion &WorkPackage::completion() const
+{
+    return m_completion;
+}
+
+QMap<Resource*, WorkPackage::ResourceStatus> &WorkPackage::resourceStatus()
+{
+    foreach ( Resource *r, fetchResources() ) {
+        if ( ! m_resourceStatus.contains( r ) ) {
+            m_resourceStatus.insert( r, ResourceStatus() );
+        }
+    }
+    return m_resourceStatus;
+}
+
+const QMap<Resource*, WorkPackage::ResourceStatus> &WorkPackage::resourceStatus() const
+{
+    return m_resourceStatus;
+}
+
+void WorkPackage::setScheduleManager( ScheduleManager *sm )
+{
+    m_manager = sm;
+    resourceStatus();
+}
+
+WorkPackage::WPStatus WorkPackage::status( const Resource *r ) const
+{
+    return const_cast<WorkPackage*>( this )->p_status( const_cast<Resource*>( r ) );
+}
+
+WorkPackage::WPStatus WorkPackage::status( Resource *r )
+{
+    return p_status( r );
+}
+
+WorkPackage::WPStatus WorkPackage::p_status( Resource *r )
+{
+    //Resource *r = const_cast<Resource*> ( res );
+    if ( ! m_resourceStatus.contains( r ) ) {
+        return Status_None;
+    }
+    return m_resourceStatus[ r ].status;
+}
+
+QString WorkPackage::statusToString( WorkPackage::WPStatus sts, bool trans )
+{
+    QString s = trans ? i18n( "None" ) : "None";
+    switch ( sts ) {
+        case Status_Issued: 
+            s = trans ? i18n( "Issued" ) : "Issued";
+            break;
+        case Status_Received:
+            s = trans ? i18n( "Received" ) : "Received";
+            break;
+        case Status_Loaded:
+            s = trans ? i18n( "Loaded" ) : "Loaded";
+            break;
+        default:
+            break;
+    }
+    return s;
+}
+
+WorkPackage::WPResponse WorkPackage::responseType(  const Resource *r ) const
+{
+    return const_cast<WorkPackage*>( this )->p_responseType( const_cast<Resource*>( r ) );
+}
+
+WorkPackage::WPResponse WorkPackage::responseType(  Resource *r )
+{
+    return p_responseType( r );
+}
+
+WorkPackage::WPResponse WorkPackage::p_responseType(  Resource *r )
+{
+    //Resource *r = const_cast<Resource*> ( res );
+    if ( ! m_resourceStatus.contains( r ) ) {
+        return Response_None;
+    }
+    return m_resourceStatus[ r ].responseType;
+}
+
+QString WorkPackage::responseTypeToString( WorkPackage::WPResponse rsp, bool trans )
+{
+    QString s = trans ? i18n( "None" ) : "None";
+    switch ( rsp ) {
+        case Response_Required: 
+            s = trans ? i18n( "Required" ) : "Required";
+            break;
+        default:
+            break;
+    }
+    return s;
+}
+    
+//----------------------------------
 #ifndef NDEBUG
 void Task::printDebug(bool children, const QByteArray& _indent) {
     QByteArray indent = _indent;
@@ -2462,7 +2619,7 @@ void Task::printDebug(bool children, const QByteArray& _indent) {
     if (m_requests)
         m_requests->printDebug(indent);
     
-    m_completion.printDebug( indent );
+    completion().printDebug( indent );
     
     Node::printDebug(children, indent);
 

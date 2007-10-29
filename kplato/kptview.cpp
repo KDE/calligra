@@ -106,6 +106,7 @@
 #include "kptstandardworktimedialog.h"
 #include "kptconfigdialog.h"
 #include "kptwbsdefinitiondialog.h"
+#include "kptworkpackagecontroldialog.h"
 #include "kptaccountsdialog.h"
 #include "kptresourceassignmentview.h"
 #include "kpttaskstatusview.h"
@@ -247,8 +248,8 @@ View::View( Part* part, QWidget* parent )
     actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
     
-    actionTaskWorkpackage  = new KAction(KIcon( "edit" ), i18n("Generate Work Package"), this);
-    actionCollection()->addAction("task_workpackage", actionTaskWorkpackage );
+    actionTaskWorkpackage  = new KAction(KIcon( "edit" ), i18n("Work Package Control..."), this);
+    actionCollection()->addAction("task_workpackagecontrol", actionTaskWorkpackage );
     connect( actionTaskWorkpackage, SIGNAL( triggered( bool ) ), SLOT( slotTaskWorkpackage() ) );
 
     actionEditResource  = new KAction(KIcon( "edit" ), i18n("Edit Resource..."), this);
@@ -1458,10 +1459,13 @@ void View::slotTaskWorkpackage()
 {
     //kDebug();
     Node *node = currentTask();
-    if ( node == 0 ) {
+    if ( node == 0 || node->type() != Node::Type_Task ) {
         return;
     }
-    getPart()->saveWorkPackageUrl( KUrl( "workpackage.kplatowork" ), node, currentScheduleId() );
+    Task *task = static_cast<Task*>( node );
+    WorkPackageControlDialog *dlg = new WorkPackageControlDialog( getProject(), *task, this );
+    dlg->exec();
+//    getPart()->saveWorkPackageUrl( KUrl( "workpackage.kplatowork" ), node, currentScheduleId() );
 }
 
 void View::slotIndentTask()

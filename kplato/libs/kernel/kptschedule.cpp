@@ -220,6 +220,11 @@ QStringList Schedule::resourceNameList() const
     return QStringList();
 }
 
+QList<Resource*> Schedule::resources() const
+{
+    return QList<Resource*>();
+}
+
 bool Schedule::loadXML( const KoXmlElement &sch )
 {
     m_name = sch.attribute( "name" );
@@ -669,6 +674,15 @@ void NodeSchedule::takeAppointment( Appointment *appointment, int mode )
     //kDebug()<<"Taken:"<<appointment;
     if ( appointment->resource() )
         appointment->resource() ->takeAppointment( appointment );
+}
+
+QList<Resource*> NodeSchedule::resources() const
+{
+    QList<Resource*> rl;
+    foreach( Appointment *a, m_appointments ) {
+        rl += a->resource() ->resource();
+    }
+    return rl;
 }
 
 QStringList NodeSchedule::resourceNameList() const

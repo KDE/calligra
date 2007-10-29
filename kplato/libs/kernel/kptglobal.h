@@ -131,6 +131,7 @@ namespace ToolTip
     static QString DocumentUrl = i18n( "The url of the document" );
     static QString DocumentType = i18n( "The type of the document" );
     static QString DocumentStatus = i18n( "The status of the document" );
+    static QString DocumentSendAs = i18n( "Defines how this document is send" );
 
 } //namespace ToolTip
 
