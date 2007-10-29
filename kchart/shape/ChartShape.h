@@ -54,6 +54,8 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     ChartShape();
     virtual ~ChartShape();
 
+    void refreshPixmap( QPainter& painter, const KoViewConverter& converter );
+
     KDChart::Chart* chart() const;
 
     /// reimplemented

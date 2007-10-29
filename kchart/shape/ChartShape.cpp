@@ -29,6 +29,7 @@
 #include <QAbstractItemModel>
 #include <QStandardItemModel>
 #include <QPainter>
+#include <QPixmap>
 
 // KDE
 #include <kapplication.h>
@@ -97,7 +98,12 @@ public:
     Private();
     ~Private();
 
-public:
+    // We can rerender faster if we cache KDChart's output
+    QPixmap pixmap;
+    QPointF lastZoomLevel;
+    QSizeF  lastSize;
+    bool    pixmapRepaintRequested;
+
     // The chart and its contents
     OdfChartType        chartType;
     OdfChartSubtype     chartSubtype;
@@ -146,12 +152,13 @@ ChartShape::Private::Private()
 {
     for ( int i = 0; i < NUM_CHARTTYPES; ++i )
         chartTypeOptions[i].subtype = defaultSubtypes[i];  
-    threeDMode            = false;
-    takeOwnershipOfModel  = false;
-    useExternalDataSource = false;
-    chartModel            = new ChartProxyModel;
-    internalModel         = 0;
-    externalModel         = 0;
+    threeDMode             = false;
+    takeOwnershipOfModel   = false;
+    useExternalDataSource  = false;
+    chartModel             = new ChartProxyModel;
+    internalModel          = 0;
+    externalModel          = 0;
+    pixmapRepaintRequested = true;
 }
 
 
@@ -203,50 +210,6 @@ ChartShape::ChartShape()
     d->chart->addLegend( d->legend );
 
     setChartDefaults();
-#if 0
-    // diagram->coordinatePlane returns an abstract plane one.
-    // if we want to specify the orientation we need to cast
-    // as follow
-    CartesianCoordinatePlane* plane = static_cast <CartesianCoordinatePlane*>
-		    ( d->diagram->coordinatePlane() );
-
-    /* Configure grid steps and pen */
-    // Vertical
-    GridAttributes gv ( plane->gridAttributes( Qt::Vertical ) );
-
-    // Configure a grid pen
-    // I know it is horrible
-    // just for demo'ing
-    QPen gridPen(  Qt::gray );
-    gridPen.setWidth( 0 );
-    gv.setGridPen(  gridPen );
-
-    // Configure a sub-grid pen
-    QPen subGridPen( Qt::darkGray );
-    subGridPen.setWidth( 0 );
-    subGridPen.setStyle( Qt::DotLine );
-    gv.setSubGridPen(  subGridPen );
-
-    // Display a blue zero line
-    gv.setZeroLinePen( QPen( Qt::blue ) );
-
-    // change step and substep width
-    // or any of those.
-    gv.setGridStepWidth( 1.0 );
-    gv.setGridSubStepWidth( 0.5 );
-    gv.setGridVisible(  true );
-    gv.setSubGridVisible( true );
-
-    // Horizontal
-    GridAttributes gh = plane->gridAttributes( Qt::Horizontal );
-    gh.setGridPen( gridPen );
-    gh.setGridStepWidth(  0.5 );
-    gh.setSubGridPen(  subGridPen );
-    gh.setGridSubStepWidth( 0.1 );
-
-    plane->setGridAttributes( Qt::Vertical,  gv );
-    plane->setGridAttributes( Qt::Horizontal,  gh );
-#endif
 }
 
 ChartShape::~ChartShape()
@@ -254,11 +217,28 @@ ChartShape::~ChartShape()
     delete d;
 }
 
+void ChartShape::refreshPixmap( QPainter &painter, const KoViewConverter &converter )
+{
+    // Adjust the size of the pixmap to the current zoom level
+    d->pixmap = QPixmap( converter.documentToView( size() ).toSize() );
+    const QRect paintRect = QRect( QPoint( 0, 0 ), size().toSize() );
+
+    // Copy the painter's render hints, such as antialiasing
+    QPainter pixmapPainter( &d->pixmap );
+    pixmapPainter.setRenderHints( painter.renderHints() );
+
+    // Adjust the pixmapPainter's coordinate system to the current zoom level
+    applyConversion( pixmapPainter, converter );
+
+    // Paint the background
+    pixmapPainter.fillRect( paintRect, KApplication::palette().base() );
+    d->chart->paint( &pixmapPainter, paintRect );
+}
+
 KDChart::Chart* ChartShape::chart() const
 {
     return d->chart;
 }
-
 
 void ChartShape::setChartDefaults()
 {
@@ -717,15 +697,22 @@ ChartTypeOptions ChartShape::chartTypeOptions( OdfChartType type ) const
 
 void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
-    QRectF clipRect  = converter.viewToDocument( painter.clipRegion().boundingRect() );
-    QRectF paintRect = QRectF( QPoint( 0.0, 0.0 ), size() );
-    clipRect.intersect( paintRect );
+    // Get the current zoom level
+    QPointF zoomLevel;
+    converter.zoom( &zoomLevel.rx(), &zoomLevel.ry() );
 
-    applyConversion( painter, converter );
-    painter.setClipRect( clipRect );
+    // Only repaint the pixmap if it is scheduled, the zoom level changed or the shape was resized
+    if (    d->pixmapRepaintRequested
+         || d->lastZoomLevel != zoomLevel
+         || d->lastSize      != size() ) {
+        refreshPixmap( painter, converter );
+        d->lastZoomLevel = zoomLevel;
+        d->lastSize      = size();
+        d->pixmapRepaintRequested = false;
+    }
 
-    painter.fillRect( paintRect, KApplication::palette().base() );
-    d->chart->paint( &painter, QRect( QPoint( 0, 0 ), size().toSize() ) );
+    // Paint the cached pixmap
+    painter.drawPixmap( 0, 0, d->pixmap );
 }
 
 
@@ -1517,5 +1504,6 @@ void ChartShape::update()
     d->legend->update();
     d->diagram->update();
     d->chart->update();
+    d->pixmapRepaintRequested = true;
     KoShape::update();
 }
