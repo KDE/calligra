@@ -94,10 +94,11 @@ void TestInformationFunctions::initTestCase()
 //     storage->setValue(2,17, Value(      4    ) );
 // 
 // 
-//     // C4:C6
+//     // C4:C7
     storage->setValue(3, 4, Value( 4 ) );
-//     storage->setValue(3, 5, Value( 5 ) );
+    storage->setValue(3, 5, Value( 5 ) );
 //     storage->setValue(3, 6, Value( 7 ) );
+    storage->setValue(3, 7, Value( "2005-01-31" ) );
 //     // C11:C17
 //     storage->setValue(3,11, Value( 5 ) );
 //     storage->setValue(3,12, Value( 6 ) );
@@ -316,6 +317,23 @@ void TestInformationFunctions::testISEVEN()
     CHECK_EVAL( "ISEVEN(-3)",   Value( false   ) ); //
     CHECK_EVAL( "ISEVEN(NA())", Value::errorNA() ); //
     CHECK_EVAL( "ISEVEN( 0)",   Value( true    ) ); //
+}
+
+void TestInformationFunctions::testISFORMULA()
+{
+    CHECK_EVAL( "ISFORMULA(B5)", Value( true  ) ); // Simple formulas that produce Number are still formulas
+    CHECK_EVAL( "ISFORMULA(B3)", Value( true  ) ); // Simple formulas that produce Text are still formulas
+    CHECK_EVAL( "ISFORMULA(C5)", Value( false ) ); // Cell constants are not formulas
+    CHECK_EVAL( "ISFORMULA(C7)", Value( false ) ); // Cell constants are not formulas, even if they are dates
+    CHECK_EVAL( "ISFORMULA(B9)", Value( true  ) ); // Formulas that return an error are still formulas
+}
+
+void TestInformationFunctions::testISLOGICAL()
+{
+    CHECK_EVAL( "ISLOGICAL(TRUE())",   Value( true  ) ); // Logical values return true.
+    CHECK_EVAL( "ISLOGICAL(FALSE())",  Value( true  ) ); // Logical values return true.
+    CHECK_EVAL( "ISLOGICAL(\"TRUE\")", Value( false ) ); // Text values are not logicals,
+                                                         // even if they can be converted.
 }
 
 void TestInformationFunctions::testVALUE()
