@@ -529,7 +529,6 @@ void View::Private::initActions()
     actions = new ViewActions;
 
     KActionCollection* ac = view->actionCollection();
-    ac->addAssociatedWidget(view->canvasWidget());
 
   // -- cell formatting actions --
 
@@ -1389,6 +1388,7 @@ void View::Private::initActions()
     actions->inspector->setShortcut( QKeySequence( Qt::CTRL+ Qt::SHIFT + Qt::Key_I));
     connect(actions->inspector, SIGNAL(triggered(bool)), view, SLOT( runInspector() ));
 
+    ac->associateWidget(view->canvasWidget());
 
     m_propertyEditor = 0;
 }
