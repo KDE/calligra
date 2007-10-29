@@ -273,6 +273,33 @@ void TestInformationFunctions::testINFO()
 //     CHECK_EVAL( "ISTEXT(INFO(\"completely-unknown-category\"))", Value::errorVALUE()  ); // Error if the category is unknown
 }
 
+void TestInformationFunctions::testISBLANK()
+{
+    CHECK_EVAL( "ISBLANK(1)",    Value( false ) ); // Numbers return false.
+    CHECK_EVAL( "ISBLANK(\"\")", Value( false ) ); // Text, even empty string, returns false.
+    CHECK_EVAL( "ISBLANK(B8)",   Value( true  ) ); // Blank cell is true.
+    CHECK_EVAL( "ISBLANK(B7)",   Value( false ) ); // Non-blank cell is false.
+}
+
+void TestInformationFunctions::testISERR()
+{
+    CHECK_EVAL( "ISERR(1/0)",      Value( true  ) ); // Error values other than NA() return true.
+    CHECK_EVAL( "ISERR(NA())",     Value( false ) ); // NA() does NOT return True.
+    CHECK_EVAL( "ISERR(\"#N/A\")", Value( false ) ); // Text is not an error.
+    CHECK_EVAL( "ISERR(1)",        Value( false ) ); // Numbers are not an error.
+}
+
+void TestInformationFunctions::testISERROR()
+{
+    CHECK_EVAL( "ISERROR(1/0)",      Value( true  ) ); // Error values return true.
+    CHECK_EVAL( "ISERROR(NA())",     Value( true  ) ); // Even NA().
+    CHECK_EVAL( "ISERROR(\"#N/A\")", Value( false ) ); // Text is not an error.
+    CHECK_EVAL( "ISERROR(1)",        Value( false ) ); // Numbers are not an error.
+    CHECK_EVAL( "ISERROR(CHOOSE(0; \"Apple\"; \"Orange\";"
+                " \"Grape\"; \"Perry\"))", Value( true ) ); // If CHOOSE given 
+                                                       // out-of-range value, ISERROR needs to capture it.
+}
+
 void TestInformationFunctions::testISEVEN()
 {
     CHECK_EVAL( "ISEVEN( 2)",   Value( true    ) ); // 2 is even, because (2 modulo 2) = 0

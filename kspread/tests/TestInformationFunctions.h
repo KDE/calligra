@@ -48,9 +48,9 @@ private slots:
     void testERRORTYPE();
     void testFORMULA();
     void testINFO();
-//     void testISBLANK();
-//     void testISERR();
-//     void testISERR();
+    void testISBLANK();
+    void testISERR();
+    void testISERROR();
     void testISEVEN();
 //     void testISFORMULA();
 //     void testISLOGICAL();
