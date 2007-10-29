@@ -43,6 +43,7 @@ Name[tr]=FormTasarımcısı
 Name[uk]=Дизайнер форм
 Name[uz]=Шакл дизайнери
 Name[x-test]=xxForm Designerxx
+Name[zh_CN]=表单设计器
 Name[zh_TW]=表單設計師
 MimeType=application/x-designer;
 ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart

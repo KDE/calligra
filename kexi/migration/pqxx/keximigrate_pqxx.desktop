@@ -40,6 +40,7 @@ Comment[sv]=PostgreSQL-övergångsdrivrutin för Kexi
 Comment[uk]=PostgreSQL драйвер міграції даних для Kexi
 Comment[uz]=Kexi учун PostgreSQL миграция драйвери
 Comment[x-test]=xxPostgreSQL Migration Driver for Kexixx
+Comment[zh_CN]=Kexi PostgreSQL 升迁驱动程序
 Comment[zh_TW]=Kexi 的 PostgreSQL 轉移驅動程式
 X-KDE-Library=keximigrate_pqxx
 ServiceTypes=Kexi/MigrationDriver

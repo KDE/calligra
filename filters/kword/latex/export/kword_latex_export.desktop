@@ -57,6 +57,7 @@ Name[uz]=KWord LaTeX экспорт филтери
 Name[wa]=Passete LaTeX di rexhowe po KWord
 Name[x-test]=xxKWord LATEX Export Filterxx
 Name[xh]=Isihluzi Sokurhweba ngaphandle se KWord LATEX
+Name[zh_CN]=KWord LATEX 导出过滤器
 Name[zh_TW]=KWord LATEX 匯出過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service

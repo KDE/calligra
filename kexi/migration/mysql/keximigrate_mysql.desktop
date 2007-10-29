@@ -40,6 +40,7 @@ Comment[sv]=MySQL-övergångsdrivrutin för Kexi
 Comment[uk]=MySQL драйвер міграції даних для Kexi
 Comment[uz]=Kexi учун MySQL миграция драйвери
 Comment[x-test]=xxMySQL Migration Driver for Kexixx
+Comment[zh_CN]=Kexi MySQL 升迁驱动程序
 Comment[zh_TW]=Kexi 的 MySQL 轉移驅動程式
 X-KDE-Library=keximigrate_mysql
 ServiceTypes=Kexi/MigrationDriver

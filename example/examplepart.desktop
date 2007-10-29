@@ -46,6 +46,7 @@ Name[tr]=KOffice Örnek Bileşeni
 Name[uk]=Приклад компонента KOffice
 Name[wa]=Componint di mostraedje di KOffice
 Name[x-test]=xxKOffice Example Componentxx
+Name[zh_CN]=KOffice 组件范例
 Name[zh_TW]=KOffice 範例元件
 X-KDE-Library=libkoexamplepart
 MimeType=application/x-vnd.kde.koexample

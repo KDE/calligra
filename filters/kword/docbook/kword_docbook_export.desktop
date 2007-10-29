@@ -52,6 +52,7 @@ Name[uz]=KWord SGML DocBook экспорт филтери
 Name[wa]=Passete SGML DocBook di rexhowe po KWord
 Name[x-test]=xxKWord SGML DocBook Export Filterxx
 Name[xh]=Isihluzi Sorhweba ngaphandle se KWord SGML DocBook
+Name[zh_CN]=KWord SGML DocBook 导出过滤器
 Name[zh_TW]=KWord SGML DocBook 匯出過濾程式
 X-KDE-Export=text/sgml
 X-KDE-Import=application/x-kword

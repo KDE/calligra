@@ -53,6 +53,7 @@ Name[uz]=KSpread учун CSV импорт филтери
 Name[wa]=Passete CSV d' intrêye po KSpread
 Name[x-test]=xxCSV Import Filter for KSpreadxx
 Name[xh]=CSV Yesihluzi Sokurhweba se KSpread
+Name[zh_CN]=KSpread 的 CSV 导入过滤器
 Name[zh_TW]=KSpread 的 CSV 匯入過濾程式
 X-KDE-Export=application/x-kspread
 X-KDE-Import=text/csv,text/plain

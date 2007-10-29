@@ -54,6 +54,7 @@ Comment[uz]=KOffice компоненти
 Comment[wa]=Componint Koffice
 Comment[x-test]=xxKOffice Componentxx
 Comment[xh]=Ingxenye ye KOffice
+Comment[zh_CN]=KOffice 组件
 Comment[zh_TW]=KOffice 元件
 
 # Name of the native mimetype (mandatory) - currently still the KOffice-1.3 one, e.g. application/x-kword

@@ -39,6 +39,7 @@ Name[ta]=படிவ வடிவமைப்பாளர் கேடெவெ
 Name[tr]=FormTasarımcısı KDevelop Eklentisi
 Name[uk]=Втулок дизайнера форм KDevelop
 Name[x-test]=xxForm Designer KDevelop Pluginxx
+Name[zh_CN]=表单设计器 KDevelop 插件
 Name[zh_TW]=表單設計師 KDevelop 外掛程式
 MimeType=application/x-designer;
 ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart
