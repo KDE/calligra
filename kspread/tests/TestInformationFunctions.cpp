@@ -437,6 +437,33 @@ void TestInformationFunctions::testROWS()
     CHECK_EVAL( "ROWS(A4:D100)", Value( 97 ) ); // Number of rows in range.
 }
 
+void TestInformationFunctions::testSHEET()
+{
+    CHECK_EVAL( "SHEET(B7)>=1",         Value( true ) ); // If given, the sheet number of the reference is used.
+    CHECK_EVAL( "SHEET(\"Sheet1\")>=1", Value( true ) ); // Given a sheet name, the sheet number is returned.
+}
+
+void TestInformationFunctions::testSHEETS()
+{
+    CHECK_EVAL( "SHEETS(B7)",  Value(    1 ) ); // If given, the sheet number of the reference is used.
+    CHECK_EVAL( "SHEETS()>=1", Value( true ) ); // Range with four rows.
+}
+
+void TestInformationFunctions::testTYPE()
+{
+    //  Value's Type | Type return 
+    // --------------+------------- 
+    //     Number    |     1   
+    //     Text      |     2   
+    //     Logical   |     4   
+    //     Error     |    16   
+    //     Array     |    64
+   
+    CHECK_EVAL( "TYPE(1+2)",              Value(  1 ) ); // Number has TYPE code of 1
+    CHECK_EVAL( "TYPE(\"Hi\"&\"there\")", Value(  2 ) ); // Text has TYPE 2
+    CHECK_EVAL( "TYPE(NA())",             Value( 16 ) ); // Errors have TYPE 16.
+}
+
 void TestInformationFunctions::testVALUE()
 {
     CHECK_EVAL( "VALUE(\"6\")", Value( 6 ) );

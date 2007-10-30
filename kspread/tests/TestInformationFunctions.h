@@ -38,7 +38,7 @@ private slots:
     void initTestCase();
 
     void testAREAS();
-    void testCELL(); // to be implemented
+    void testCELL();        // to be implemented
     void testCOLUMN();
     void testCOLUMNS();
     void testCOUNT();
@@ -52,7 +52,7 @@ private slots:
     void testISERR();
     void testISERROR();
     void testISEVEN();
-    void testISFORMULA(); // to be implemented
+    void testISFORMULA();   // to be implemented
     void testISLOGICAL();
     void testISNONTEXT();
     void testISNA();
@@ -63,11 +63,11 @@ private slots:
     void testN();
     void testNA();
     void testNUMBERVALUE(); // to be implemented
-    void testROW();  // not working
-    void testROWS(); // not working
-//     void testSHEET();
-//     void testSHEETS();
-//     void testTYPE();
+    void testROW();         // not working
+    void testROWS();        // not working
+    void testSHEET();       // to be implemented
+    void testSHEETS();      // to be implemented
+    void testTYPE();
     void testVALUE();
 
     void cleanupTestCase();
