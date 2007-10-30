@@ -60,11 +60,11 @@ private slots:
     void testISODD();
     void testISTEXT();
     void testISREF();
-//     void testN();
-//     void testNA();
-//     void testNUMBERVALUE();
-//     void testROW();
-//     void testROWS();
+    void testN();
+    void testNA();
+    void testNUMBERVALUE(); // to be implemented
+    void testROW();  // not working
+    void testROWS(); // not working
 //     void testSHEET();
 //     void testSHEETS();
 //     void testTYPE();

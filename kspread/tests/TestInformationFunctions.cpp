@@ -394,6 +394,49 @@ void TestInformationFunctions::testISREF()
     CHECK_EVAL( "ISREF(NA())",   Value::errorNA() ); // Errors propagate through this function
 }
 
+void TestInformationFunctions::testN()
+{
+    CHECK_EVAL( "N(6)",       Value( 6 ) ); // N does not change numbers.
+    CHECK_EVAL( "N(TRUE())",  Value( 1 ) ); // Does convert logicals.
+    CHECK_EVAL( "N(FALSE())", Value( 0 ) ); // Does convert logicals.
+}
+
+void TestInformationFunctions::testNA()
+{
+    CHECK_EVAL( "ISERROR(NA())", Value( true ) ); // NA is an error.
+    CHECK_EVAL( "ISNA(NA())",    Value( true ) ); // Obviously, if this doesn't work, NA() or ISNA() is broken.
+    CHECK_EVAL( "ISNA(5+NA())",  Value( true ) ); // NA propagates through various functions 
+                                                  // and operators, just like any other error type.
+}
+
+void TestInformationFunctions::testNUMBERVALUE()
+{
+    CHECK_EVAL( "NUMBERVALUE(\"6\"      ; \".\")", Value(    6   ) ); // VALUE converts text to numbers (unlike N).
+    CHECK_EVAL( "NUMBERVALUE(\"6,000.5\"; \".\")", Value( 6000.5 ) ); // Period works.
+    CHECK_EVAL( "NUMBERVALUE(\"6.000,5\"; \",\")", Value( 6000.5 ) ); // Comma works
+}
+
+// TODO row not working here
+void TestInformationFunctions::testROW()
+{
+    CHECK_EVAL( "ROW(B7)", Value( 7 ) ); // The second value of a cell reference is the row number.
+//     CHECK_EVAL( "ROW()",   Value( 5 ) ); // Row of current cell is default, here formula in row 5.
+
+    Value res( Value::Array );
+    res.setElement(0, 0, Value( 2 ) );
+    res.setElement(0, 1, Value( 3 ) );
+    res.setElement(0, 2, Value( 4 ) );
+
+    CHECK_EVAL( "ROW(B2:B4)", res );    // Array with row numbers.
+}
+
+void TestInformationFunctions::testROWS()
+{
+    CHECK_EVAL( "ROWS(C1)",      Value(  1 ) ); // Single cell range contains one row.
+    CHECK_EVAL( "ROWS(C1:C4)",   Value(  4 ) ); // Range with four rows.
+    CHECK_EVAL( "ROWS(A4:D100)", Value( 97 ) ); // Number of rows in range.
+}
+
 void TestInformationFunctions::testVALUE()
 {
     CHECK_EVAL( "VALUE(\"6\")", Value( 6 ) );
