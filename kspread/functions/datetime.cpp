@@ -759,8 +759,14 @@ Value func_weekNum (valVector args, ValueCalc *calc, FuncExtra *)
   if (method == 2)
     startday=-1;
 
-  //kDebug(36002) <<"weeknum = [startday(" << startday <<") + base(7) + New Year(" << date1.dayOfWeek() <<") + days(" << days <<")] / 7 =" << (startday+7+date1.dayOfWeek()+days)/7;
-  return Value( (int)(startday+7+date1.dayOfWeek()+days)/7 );
+  int res =  (int)( (startday+7+date1.dayOfWeek()+days)/7 );
+ 
+  if (date1.dayOfWeek()==7)
+    res--;
+
+  //kDebug(36002) <<"weeknum = [startday(" << startday <<") + base(7) + New Year(" << date1.dayOfWeek() <<") + days(" << days <<")] / 7 =" << res;
+
+  return Value(res);
 }
 
 // Function: DATEDIF
