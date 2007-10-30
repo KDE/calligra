@@ -175,7 +175,7 @@ If <guilabel>White</guilabel> is chosen, then &kword; will look for an area surr
 checkbox, &kword; will ask you to select your scanner each time you insert a scanned image into your document.  If there is no mark, then &kword; uses the previously 
 selected scanner.  If you have access to only one scanner, or you only use one scanner, you should remove any mark from this box.</para>
 <para>The checkbox labeled <guilabel>Query the network for scan devices</guilabel> is also used to select scanners.  If there is a mark in this checkbox, 
-&kword; will check your local network for scanners that are availalbe.  If there is no mark in this box, &kword; will only look for scanners connected directly to 
+&kword; will check your local network for scanners that are available.  If there is no mark in this box, &kword; will only look for scanners connected directly to 
 your machine.</para>
 <para>To save these options, click <guibutton>Close</guibutton>.</para>
 
