@@ -81,7 +81,8 @@ void awSumA (ValueCalc *c, Value &res, Value val, Value)
 
 void awSumSq (ValueCalc *c, Value &res, Value val, Value)
 {
-  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+  // removed (!val.isBoolean()) to allow conversion from BOOL to int
+  if ((!val.isEmpty()) && (!val.isString()))
     res = c->add (res, c->sqr (val));
 }
 
