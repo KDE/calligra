@@ -289,13 +289,13 @@ void TestDatetimeFunctions::testDAY()
 {
   //
   CHECK_EVAL( "DAY(DATE(2006;05;21))", Value( 21 ) );
-  CHECK_EVAL( "DAY(\"2006-12-15\")", Value( 15 ) );
+  CHECK_EVAL( "DAY(\"2006-12-15\")",   Value( 15 ) );
 }
 
 void TestDatetimeFunctions::testDAYS()
 {
   //
-  CHECK_EVAL( "DAYS(DATE(1993;4;16); DATE(1993;9;25))", Value( -162 ) );        //
+  CHECK_EVAL( "DAYS(DATE(1993;4;16); DATE(1993;9;25))", Value( -162 ) ); //
 }
 
 void TestDatetimeFunctions::testDAYSINMONTH()
@@ -327,7 +327,6 @@ void TestDatetimeFunctions::testDAYS360()
   // DAYS(DATE(1993;4;16);  DATE(1993;9;25)) computes -159, not -162. 
 
   CHECK_EVAL( "DAYS360(DATE(1993;4;16);DATE(1993;9;25); FALSE)", Value( 159 ) ); // specs. -162 but OOo and KSpread calculate 159
-
   CHECK_EVAL( "DAYS360(\"2002-02-22\"; \"2002-04-21\" ; FALSE)", Value(  59 ) ); // ref. docs
 }
 
@@ -366,29 +365,29 @@ void TestDatetimeFunctions::testEOMONTH()
 void TestDatetimeFunctions::testHOUR()
 {
   //
-  CHECK_EVAL( "HOUR(5/24)", Value( 5 ) );                // 5/24ths of a day is 5 hours, aka 5AM.
-  CHECK_EVAL( "HOUR(5/24-1/(24*60*60))", Value( 4 ) );   // A second before 5AM, it's 4AM.
-  CHECK_EVAL( "HOUR(\"14:00\")", Value( 14 ) );          // TimeParam accepts text
-  CHECK_EVAL( "HOUR(\"9:00\")", Value( 9 ) );
-  CHECK_EVAL( "HOUR(\"09:00\")", Value( 9 ) );
-  CHECK_EVAL( "HOUR(\"23:00\")", Value( 23 ) );
-  CHECK_EVAL( "HOUR(\"11:00 PM\")", Value( 23 ) );
-  CHECK_EVAL( "HOUR(\"11:00 AM\")", Value( 11 ) );
+  CHECK_EVAL( "HOUR(5/24)",              Value(  5 ) ); // 5/24ths of a day is 5 hours, aka 5AM.
+  CHECK_EVAL( "HOUR(5/24-1/(24*60*60))", Value(  4 ) ); // A second before 5AM, it's 4AM.
+  CHECK_EVAL( "HOUR(\"14:00\")",         Value( 14 ) ); // TimeParam accepts text
+  CHECK_EVAL( "HOUR(\"9:00\")",          Value(  9 ) );
+  CHECK_EVAL( "HOUR(\"09:00\")",         Value(  9 ) );
+  CHECK_EVAL( "HOUR(\"23:00\")",         Value( 23 ) );
+  CHECK_EVAL( "HOUR(\"11:00 PM\")",      Value( 23 ) );
+  CHECK_EVAL( "HOUR(\"11:00 AM\")",      Value( 11 ) );
 }
 
 void TestDatetimeFunctions::testISOWEEKNUM()
 {
   // ODF-tests
-  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1);1)", Value( 1 ) );    // January 1, 1995 was a Sunday
-  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1);2)", Value( 52 ) );   // January 1, 1995 was a Sunday, so if Monday is the beginning of the week,
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1);1)",   Value(  1 ) ); // January 1, 1995 was a Sunday
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1);2)",   Value( 52 ) ); // January 1, 1995 was a Sunday, so if Monday is the beginning of the week,
                                                                // then it's week 52 of the previous year
-  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1))", Value( 52 ) );     // Default is Monday is beginning of week (per ISO)
-  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21))", Value( 20 ) );    // ref OOo-2.2.0 
-  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21);1)", Value( 21 ) );  // ref OOo-2.2.0
-  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21);2)", Value( 20 ) );  // ref OOo-2.2.0
-  CHECK_EVAL( "ISOWEEKNUM(DATE(2005;1;1))", Value( 53 ) );     // ref OOo-2.2.0
-  CHECK_EVAL( "ISOWEEKNUM(DATE(2005;1;2))", Value( 53 ) );     // ref OOo-2.2.0
-  CHECK_EVAL( "ISOWEEKNUM(DATE(2006;1;1))", Value( 52 ) );     // ref OOo-2.2.0
+  CHECK_EVAL( "ISOWEEKNUM(DATE(1995;1;1))",     Value( 52 ) ); // Default is Monday is beginning of week (per ISO)
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21))",    Value( 20 ) ); // ref OOo-2.2.0 
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21);1)",  Value( 21 ) ); // ref OOo-2.2.0
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2000;5;21);2)",  Value( 20 ) ); // ref OOo-2.2.0
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2005;1;1))",     Value( 53 ) ); // ref OOo-2.2.0
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2005;1;2))",     Value( 53 ) ); // ref OOo-2.2.0
+  CHECK_EVAL( "ISOWEEKNUM(DATE(2006;1;1))",     Value( 52 ) ); // ref OOo-2.2.0
 
   // method 2 - week begins on sunday
   CHECK_EVAL( "ISOWEEKNUM(DATE(1995;01;01);2)", Value( 52 ) ); // January 1, 1995 was a Sunday
@@ -428,9 +427,9 @@ void TestDatetimeFunctions::testISOWEEKNUM()
 void TestDatetimeFunctions::testMINUTE()
 {
   //
-  CHECK_EVAL( "MINUTE(1/(24*60))", Value( 1 ) );         // 1 minute is 1/(24*60) of a day.
+  CHECK_EVAL( "MINUTE(1/(24*60))",         Value( 1 ) ); // 1 minute is 1/(24*60) of a day.
   CHECK_EVAL( "MINUTE(TODAY()+1/(24*60))", Value( 1 ) ); // If you start with today, and add a minute, you get a minute.
-  CHECK_EVAL( "MINUTE(1/24)", Value( 0 ) );              // At the beginning of the hour, we have 0 minutes.
+  CHECK_EVAL( "MINUTE(1/24)",              Value( 0 ) ); // At the beginning of the hour, we have 0 minutes.
 }
 
 void TestDatetimeFunctions::testMONTH()
@@ -443,13 +442,13 @@ void TestDatetimeFunctions::testNOW()
 {
   //
   CHECK_EVAL( "NOW()>DATE(2006;1;3)", Value( true ) );   // NOW constantly changes, but we know it's beyond this date.
-  CHECK_EVAL( "INT(NOW())=TODAY()", Value( true ) );
+  CHECK_EVAL( "INT(NOW())=TODAY()",   Value( true ) );
 }
 
 void TestDatetimeFunctions::testSECOND()
 {
   //
-  CHECK_EVAL( "SECOND(1/(24*60*60))", Value( 1 ) );      // This is one second into today.
+  CHECK_EVAL( "SECOND(1/(24*60*60))",   Value( 1 ) );    // This is one second into today.
   CHECK_EVAL( "SECOND(1/(24*60*60*2))", Value( 1 ) );    // Rounds.
   CHECK_EVAL( "SECOND(1/(24*60*60*4))", Value( 0 ) );    // Rounds.
 }
@@ -457,20 +456,20 @@ void TestDatetimeFunctions::testSECOND()
 void TestDatetimeFunctions::testTIME()
 {
   //
-  CHECK_EVAL( "TIME(0;0;0)", Value( 0 ) );                      // All zero arguments becomes midnight, 12:00:00 AM.
-  CHECK_EVAL( "TIME(23;59;59)*60*60*24", Value( 86399 ) );      // This is 11:59:59 PM.
-  CHECK_EVAL( "TIME(11;125;144)*60*60*24", Value( 47244 ) );    // Seconds and minutes roll over transitively; this is 1:07:24 PM.
-  CHECK_EVAL( "TIME(11;0; -117)*60*60*24", Value( 39483 ) );    // Negative seconds roll minutes backwards, 10:58:03 AM
-  CHECK_EVAL( "TIME(11;-117;0)*60*60*24", Value( 32580 ) );     // Negative minutes roll hours backwards, 9:03:00 AM
+  CHECK_EVAL( "TIME(0;0;0)",                 Value(     0 ) ); // All zero arguments becomes midnight, 12:00:00 AM.
+  CHECK_EVAL( "TIME(23;59;59)*60*60*24",     Value( 86399 ) ); // This is 11:59:59 PM.
+  CHECK_EVAL( "TIME(11;125;144)*60*60*24",   Value( 47244 ) ); // Seconds and minutes roll over transitively; this is 1:07:24 PM.
+  CHECK_EVAL( "TIME(11;0; -117)*60*60*24",   Value( 39483 ) ); // Negative seconds roll minutes backwards, 10:58:03 AM
+  CHECK_EVAL( "TIME(11;-117;0)*60*60*24",    Value( 32580 ) ); // Negative minutes roll hours backwards, 9:03:00 AM
   
-  CHECK_EVAL( "TIME(11;-125;-144)*60*60*24", Value( 31956 ) );  // Negative seconds and minutes roll backwards transitively, 8:52:36 AM
-                                                                // WARNING specs says -31956, but calc and kspread calculate 31956
+  CHECK_EVAL( "TIME(11;-125;-144)*60*60*24", Value( 31956 ) ); // Negative seconds and minutes roll backwards transitively, 8:52:36 AM
+                                                               // WARNING specs says -31956, but calc and kspread calculate 31956
 }
 
 void TestDatetimeFunctions::testTIMEVALUE()
 {
   //
-  CHECK_EVAL( "TIMEVALUE(\"06:05\")=TIME(6;5;0)", Value( true ) );
+  CHECK_EVAL( "TIMEVALUE(\"06:05\")   =TIME(6;5;0)", Value( true ) );
   CHECK_EVAL( "TIMEVALUE(\"06:05:07\")=TIME(6;5;7)", Value( true ) );
 }
 
@@ -478,7 +477,7 @@ void TestDatetimeFunctions::testTODAY()
 {
   //
   CHECK_EVAL( "TODAY()>DATE(2006;1;3)", Value( true ) ); // Every date TODAY() changes, but we know it's beyond this date.
-  CHECK_EVAL( "INT(TODAY())=TODAY()", Value( true ) );
+  CHECK_EVAL( "INT(TODAY())=TODAY()",   Value( true ) );
 }
 
 void TestDatetimeFunctions::testWEEKDAY()
@@ -493,8 +492,8 @@ void TestDatetimeFunctions::testWEEKDAY()
   // 06 |  FR    |   SA    |  SU
   // 07 |  SA    |   SU    |  MO
 
-  CHECK_EVAL( "WEEKDAY(DATE(2006;05;21))", Value( 1 ) );   // Year-month-date format
-  CHECK_EVAL( "WEEKDAY(DATE(2005;01;01))", Value( 7 ) );   // Saturday 
+  CHECK_EVAL( "WEEKDAY(DATE(2006;05;21))",   Value( 1 ) ); // Year-month-date format
+  CHECK_EVAL( "WEEKDAY(DATE(2005;01;01))",   Value( 7 ) ); // Saturday 
   CHECK_EVAL( "WEEKDAY(DATE(2005;01;01);1)", Value( 7 ) ); // Saturday
   CHECK_EVAL( "WEEKDAY(DATE(2005;01;01);2)", Value( 6 ) ); // Saturday
   CHECK_EVAL( "WEEKDAY(DATE(2005;01;01);3)", Value( 5 ) ); // Saturday
