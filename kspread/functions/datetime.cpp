@@ -761,7 +761,7 @@ Value func_weekNum (valVector args, ValueCalc *calc, FuncExtra *)
 
   int res =  (int)( (startday+7+date1.dayOfWeek()+days)/7 );
  
-  if (date1.dayOfWeek()==7)
+  if (date1.dayOfWeek()==7 && method==1)
     res--;
 
   //kDebug(36002) <<"weeknum = [startday(" << startday <<") + base(7) + New Year(" << date1.dayOfWeek() <<") + days(" << days <<")] / 7 =" << res;
