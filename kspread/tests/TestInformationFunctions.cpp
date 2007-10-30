@@ -336,6 +336,64 @@ void TestInformationFunctions::testISLOGICAL()
                                                          // even if they can be converted.
 }
 
+void TestInformationFunctions::testISNONTEXT()
+{
+    CHECK_EVAL( "ISNONTEXT(1)",      Value( true  ) ); // Numbers are not text
+    CHECK_EVAL( "ISNONTEXT(TRUE())", Value( true  ) ); // Logical values are not text.
+    CHECK_EVAL( "ISNONTEXT(\"1\")",  Value( false ) ); // TexText values are text, even 
+                                                       // if they can be converted into a number.
+    CHECK_EVAL( "ISNONTEXT(1)",      Value( false ) ); // Numbers are not text
+    CHECK_EVAL( "ISNONTEXT(B7)",     Value( false ) ); // B7 is a cell with text
+    CHECK_EVAL( "ISNONTEXT(B9)",     Value( true  ) ); // B9 is an error, thus not text
+    CHECK_EVAL( "ISNONTEXT(B8)",     Value( true  ) ); // B8 is a blank cell, so this will return TRUE
+}
+
+void TestInformationFunctions::testISNA()
+{
+    CHECK_EVAL( "ISNA(1/0)",      Value( false ) ); // Error values other than NA() return False - the error does not propagate.
+    CHECK_EVAL( "ISNA(NA())",     Value( true  ) ); // By definition
+    CHECK_EVAL( "ISNA(#N/A)",     Value( true  ) ); // By definition
+    CHECK_EVAL( "ISNA(\"#N/A\")", Value( false ) ); // Text is not NA
+    CHECK_EVAL( "ISNA(1)",        Value( false ) ); // Numbers are not NA
+}
+
+void TestInformationFunctions::testISNUMBER()
+{
+    CHECK_EVAL( "ISNUMBER(1)",     Value( true  ) ); // Numbers are numbers
+    CHECK_EVAL( "ISNUMBER(\"1\")", Value( false ) ); // Text values are not numbers,
+                                                     // even if they can be converted into a number.
+}
+
+void TestInformationFunctions::testISODD()
+{
+    CHECK_EVAL( "ISODD(3)",    Value( true  ) ); // 3 is odd, because (3 modulo 2) = 0
+    CHECK_EVAL( "ISODD(5)",    Value( true  ) ); // 5 is odd, because (5 modulo 2) = 0
+    CHECK_EVAL( "ISODD(3.1)",  Value( true  ) ); // TRUNC(3.1)=3, and 3 is odd
+    CHECK_EVAL( "ISODD(3.5)",  Value( true  ) ); //
+    CHECK_EVAL( "ISODD(3.9)",  Value( true  ) ); // TRUNC(3.9)=3, and 3 is odd.
+    CHECK_EVAL( "ISODD(4)",    Value( false ) ); // 4 is not even.
+    CHECK_EVAL( "ISODD(4.9)",  Value( false ) ); // TRUNC(4.9)=4, and 3 is not even.
+    CHECK_EVAL( "ISODD(-3)",   Value( true  ) ); //
+    CHECK_EVAL( "ISODD(-3.1)", Value( true  ) ); //
+    CHECK_EVAL( "ISODD(-3.5)", Value( true  ) ); //
+}
+
+void TestInformationFunctions::testISTEXT()
+{
+    CHECK_EVAL( "ISTEXT(1)",     Value( false ) ); // Numbers are not text
+    CHECK_EVAL( "ISTEXT(\"1\")", Value( true  ) ); // Text values are text,
+                                                   // even if they can be converted into a number.
+}
+
+void TestInformationFunctions::testISREF()
+{
+    CHECK_EVAL( "ISREF(B3)",     Value( true    ) ); //
+    CHECK_EVAL( "ISREF(B3:C4)",  Value( true    ) ); // The range operator produces references
+    CHECK_EVAL( "ISREF(1)",      Value( false   ) ); // Numbers are not references
+    CHECK_EVAL( "ISREF(\"A1\")", Value( false   ) ); // Text is not a reference, even if it looks a little like one
+    CHECK_EVAL( "ISREF(NA())",   Value::errorNA() ); // Errors propagate through this function
+}
+
 void TestInformationFunctions::testVALUE()
 {
     CHECK_EVAL( "VALUE(\"6\")", Value( 6 ) );

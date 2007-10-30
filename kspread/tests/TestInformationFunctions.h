@@ -54,12 +54,12 @@ private slots:
     void testISEVEN();
     void testISFORMULA(); // to be implemented
     void testISLOGICAL();
-//     void testISNONTEXT();
-//     void testISNA();
-//     void testISNUMBER();
-//     void testISODD();
-//     void testISTEXT();
-//     void testISREF();
+    void testISNONTEXT();
+    void testISNA();
+    void testISNUMBER();
+    void testISODD();
+    void testISTEXT();
+    void testISREF();
 //     void testN();
 //     void testNA();
 //     void testNUMBERVALUE();
