@@ -25,7 +25,7 @@
 #include <kio/job.h>
 
 #include <kis_global.h>
-#include <kis_progress_subject.h>
+
 #include <kis_types.h>
 
 class QString;
@@ -58,7 +58,7 @@ enum KisImageBuilder_Result {
 /**
  * Build a KisImage representation of an image file.
  */
-class KisImageMagickConverter : public KisProgressSubject {
+class KisImageMagickConverter : public QObject {
     typedef QObject super;
     Q_OBJECT
 

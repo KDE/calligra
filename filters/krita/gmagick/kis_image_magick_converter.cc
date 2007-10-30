@@ -55,6 +55,8 @@
 #include "kis_group_layer.h"
 #include "kis_paint_device.h"
 
+// XXX_PROGRESS: fix progress reporting in this (and other?) file filters
+
 namespace {
 
     const quint8 PIXEL_BLUE = 0;
@@ -391,7 +393,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         qstrncpy(ii -> filename, QFile::encodeName(uri.path()), MaxTextExtent - 1);
 
         if (ii -> filename[MaxTextExtent - 1]) {
-            emit notifyProgressError();
+            // XXX_PROGRESS (was: emit notifyProgressError();
             return KisImageBuilder_RESULT_PATH;
         }
 
@@ -405,11 +407,11 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
     if (images == 0) {
         DestroyImageInfo(ii);
         DestroyExceptionInfo(&ei);
-        emit notifyProgressError();
+        // XXX_PROGRESS (was: emit notifyProgressError();
         return KisImageBuilder_RESULT_FAILURE;
     }
 
-    emit notifyProgressStage(i18n("Importing..."), 0);
+//     emit notifyProgressStage(i18n("Importing..."), 0);
 
     m_img = 0;
 
@@ -456,7 +458,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             DestroyExceptionInfo(&ei);
             DestroyImageList(images);
             DestroyImageInfo(ii);
-            emit notifyProgressError();
+            // XXX_PROGRESS (was: emit notifyProgressError();
             return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
         }
 
@@ -514,7 +516,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                     DestroyImageList(images);
                     DestroyImageInfo(ii);
                     DestroyExceptionInfo(&ei);
-                    emit notifyProgressError();
+                    // XXX_PROGRESS (was: emit notifyProgressError();
                     return KisImageBuilder_RESULT_FAILURE;
                 }
 
@@ -623,7 +625,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                         }
                     }
 
-                    emit notifyProgress(y * 100 / image->rows);
+//                    emit notifyProgress(y * 100 / image->rows);
 
                     if (m_stop) {
                         CloseCacheView(vi);
@@ -640,12 +642,12 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 layer->setDirty();
             }
 
-            emit notifyProgressDone();
+//             emit notifyProgressDone();
             CloseCacheView(vi);
             DestroyImage(image);
         }
 
-        emit notifyProgressDone();
+//         emit notifyProgressDone();
         DestroyImageList(images);
         DestroyImageInfo(ii);
         DestroyExceptionInfo(&ei);
@@ -717,7 +719,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         qstrncpy(ii -> filename, QFile::encodeName(uri.path()), MaxTextExtent - 1);
 
         if (ii -> filename[MaxTextExtent - 1]) {
-            emit notifyProgressError();
+            // XXX_PROGRESS (was: emit notifyProgressError();
             return KisImageBuilder_RESULT_PATH;
         }
 
@@ -774,7 +776,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
             if (!pp) {
                 DestroyExceptionInfo(&ei);
                 DestroyImage(image);
-                emit notifyProgressError();
+                // XXX_PROGRESS (was: emit notifyProgressError();
                 return KisImageBuilder_RESULT_FAILURE;
 
             }
@@ -891,7 +893,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 return KisImageBuilder_RESULT_INVALID_ARG;
             }
 
-            emit notifyProgressStage(i18n("Saving..."), y * 100 / height);
+//             emit notifyProgressStage(i18n("Saving..."), y * 100 / height);
 
 #ifdef HAVE_MAGICK6
             if (SyncImagePixels(image) == MagickFalse)
@@ -911,14 +913,14 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         WriteImage(ii, image);
         DestroyExceptionInfo(&ei);
         DestroyImage(image);
-        emit notifyProgressDone();
+//         emit notifyProgressDone();
         return KisImageBuilder_RESULT_OK;
     }
 
     void KisImageMagickConverter::ioData(KIO::Job *job, const QByteArray& data)
     {
         if (data.isNull() || data.isEmpty()) {
-            emit notifyProgressStage(i18n("Loading..."), 0);
+//             emit notifyProgressStage(i18n("Loading..."), 0);
             return;
         }
 
@@ -935,20 +937,20 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
                 DestroyExceptionInfo(&ei);
                 DestroyImageInfo(ii);
                 job -> kill();
-                emit notifyProgressError();
+                // XXX_PROGRESS (was: emit notifyProgressError();
                 return;
             }
 
             DestroyImage(image);
             DestroyExceptionInfo(&ei);
             DestroyImageInfo(ii);
-            emit notifyProgressStage(i18n("Loading..."), 0);
+//             emit notifyProgressStage(i18n("Loading..."), 0);
         }
 
         Q_ASSERT(data.size() + m_data.size() <= m_size);
         memcpy(&m_data[m_data.size()], data.data(), data.count());
         m_data.resize(m_data.size() + data.count());
-        emit notifyProgressStage(i18n("Loading..."), m_data.size() * 100 / m_size);
+//         emit notifyProgressStage(i18n("Loading..."), m_data.size() * 100 / m_size);
 
         if (m_stop)
             job -> kill();
@@ -958,8 +960,8 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
     {
         m_job = 0;
 
-        if (job -> error())
-            emit notifyProgressError();
+//        if (job -> error())
+            // XXX_PROGRESS (was: emit notifyProgressError();
 
         decode(KUrl(), true);
     }
@@ -968,7 +970,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
     {
         m_size = size;
         m_data.reserve(size);
-        emit notifyProgressStage(i18n("Loading..."), 0);
+//         emit notifyProgressStage(i18n("Loading..."), 0);
     }
 
     void KisImageMagickConverter::cancel()

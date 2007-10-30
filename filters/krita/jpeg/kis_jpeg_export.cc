@@ -32,7 +32,7 @@
 #include <kis_image.h>
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
-#include <kis_progress_display_interface.h>
+
 #include <kis_node_visitor.h>
 
 #include "kis_jpeg_converter.h"

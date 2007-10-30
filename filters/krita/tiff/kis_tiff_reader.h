@@ -28,7 +28,7 @@
 
 // #include <qvaluevector.h>
 // #include <kio/job.h>
-// #include <kis_progress_subject.h> 
+//  
 
 #include <kis_paint_device.h>
 

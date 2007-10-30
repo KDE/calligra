@@ -30,7 +30,7 @@ extern "C" {
 
 #include <kio/job.h>
 
-#include <kis_progress_subject.h>
+
 
 #include "kis_types.h"
 #include "kis_annotation.h"
@@ -67,7 +67,7 @@ namespace KisMetaData {
     class Store;
 }
 
-class KisJPEGConverter : public KisProgressSubject {
+class KisJPEGConverter : public QObject {
         Q_OBJECT
     public:
         KisJPEGConverter(KisDoc2 *doc, KisUndoAdapter *adapter);

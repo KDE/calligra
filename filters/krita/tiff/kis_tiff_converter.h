@@ -27,7 +27,7 @@
 
 #include <kio/job.h>
 
-#include <kis_progress_subject.h>
+
 
 #include "kis_types.h"
 #include "kis_global.h"
@@ -66,7 +66,7 @@ struct KisTIFFOptions {
     quint16 pixarLogCompress;
 };
 
-class KisTIFFConverter : public KisProgressSubject {
+class KisTIFFConverter : public QObject {
         Q_OBJECT
     public:
         KisTIFFConverter(KisDoc2 *doc, KisUndoAdapter *adapter);

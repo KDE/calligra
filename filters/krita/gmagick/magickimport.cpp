@@ -26,7 +26,7 @@
 #include <kis_doc2.h>
 #include <kis_view2.h>
 #include <kis_image_magick_converter.h>
-#include <kis_progress_display_interface.h>
+
 #include <kis_image.h>
 #include <kis_layer.h>
 

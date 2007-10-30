@@ -32,7 +32,7 @@
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
-#include <kis_progress_display_interface.h>
+
 
 #include "kis_tiff_converter.h"
 #include "kis_dlg_options_tiff.h"
