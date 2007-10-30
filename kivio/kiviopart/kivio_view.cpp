@@ -150,7 +150,7 @@ KivioView::KivioView( QWidget *_parent, KivioDoc* doc )
   dcopObject(); // build it
 
   if(KStatusBar* sb = statusBar()) { // No statusbar in e.g. konqueror
-    m_pageCountSLbl = new QLabel(i18n("%1 current page, %2 total number of pages",
+    m_pageCountSLbl = new QLabel(i18nc("%1 current page, %2 total number of pages",
                                           "Page %1/%2", 0, 0), PAGECOUNT_TEXT, sb);
     addStatusBarItem(m_pageCountSLbl, 0, false);
 
@@ -160,7 +160,7 @@ KivioView::KivioView( QWidget *_parent, KivioDoc* doc )
     // Add coords to the statusbar
     QString unit = KoUnit::unitName(m_pDoc->unit());
     KoPoint xy(0, 0);
-    QString text = i18n("%1 x coord, %2 y coord, %3 and %4 the unit",
+    QString text = i18nc("%1 x coord, %2 y coord, %3 and %4 the unit",
                         "X: %1 %3 Y: %2 %4", KGlobal::_locale->formatNumber(xy.x(), 2)
                         , KGlobal::_locale->formatNumber(xy.y(), 2), unit, unit);
     m_coordSLbl = new QLabel(text, MOUSEPOS_TEXT, sb);
