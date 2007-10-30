@@ -204,6 +204,11 @@ void TestDatetimeFunctions::testWEEKNUM()
   CHECK_EVAL( "WEEKNUM(DATE(2000;01;03);2)", Value( 02 ) ); // ref. OOo-2.2.0 = 2
   CHECK_EVAL( "WEEKNUM(DATE(2000;01;04);2)", Value( 02 ) ); // ref. OOo-2.2.0 = 2
   CHECK_EVAL( "WEEKNUM(DATE(2008;03;09);2)", Value( 10 ) );
+
+  // additional tests for method 2 
+  CHECK_EVAL( "WEEKNUM(DATE(2006;01;01);2)", Value( 01 ) );
+  CHECK_EVAL( "WEEKNUM(DATE(2006;01;02);2)", Value( 02 ) );
+
 }
 
 void TestDatetimeFunctions::testWEEKSINYEAR()
