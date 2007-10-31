@@ -443,12 +443,12 @@ void TestMathFunctions::testFIB()
   CHECK_EVAL( "FIB(10)", Value( 55 ) );
 
   // large number
-  CHECK_EVAL( "FIB(100)", Value( 3.54224848179263E+20  ) ); // TODO check CHECK_EVAL for big numbers
-  CHECK_EVAL( "FIB(200)", Value( 2.80571172992512E+41  ) );
-  CHECK_EVAL( "FIB(300)", Value( 2.22232244629423E+62  ) );
-  CHECK_EVAL( "FIB(400)", Value( 1.76023680645016E+83  ) );
-  CHECK_EVAL( "FIB(500)", Value( 1.394232245617E+104   ) );
-  CHECK_EVAL( "FIB(600)", Value( 1.10433070572954E+125 ) );
+  CHECK_EVAL( "FIB(100)/1E+20",  Value( 3.54224848179263 ) );
+  CHECK_EVAL( "FIB(200)/1E+41",  Value( 2.80571172992512 ) );
+  CHECK_EVAL( "FIB(300)/1E+62",  Value( 2.22232244629423 ) );
+  CHECK_EVAL( "FIB(400)/1E+83",  Value( 1.76023680645016 ) );
+  CHECK_EVAL( "FIB(500)/1E+104", Value( 1.394232245617   ) );
+  CHECK_EVAL( "FIB(600)/1E+125", Value( 1.10433070572954 ) );
 
   // invalid
   CHECK_EVAL( "FIB(0)",        Value::errorNUM() );
@@ -795,16 +795,19 @@ void TestMathFunctions::testSUMIF()
     // B3 = 7
     // B4 = 2
     // B5 = 3
-    CHECK_EVAL( "SUMIF(B4:B5;\">2.5\")", Value( 3 ) ); // B4 is 2 and B5 is 3, so only B5 has a value greater than 2.5.
-    CHECK_EVAL( "SUMIF(B3:B5;B4)",       Value( 2 ) ); // Test if a cell equals the value in B4.
-    CHECK_EVAL( "SUMIF("";B4)",   Value::errorNUM() ); // Constant values are not allowed for the range.
-    CHECK_EVAL( "SUMIF(B3:B4;\"7\")",    Value( 0 ) ); // TODO B3 is the string "7", but only numbers are summed.
+    CHECK_EVAL( "SUMIF(B4:B5;\">2.5\")",    Value( 3 ) ); // B4 is 2 and B5 is 3, so only B5 has a value greater than 2.5.
+    CHECK_EVAL( "SUMIF(B3:B5;B4)",          Value( 2 ) ); // Test if a cell equals the value in B4.
+    CHECK_EVAL( "SUMIF("";B4)",      Value::errorNUM() ); // Constant values are not allowed for the range.
+    CHECK_EVAL( "SUMIF(B3:B4;\"7\";B4:B5)", Value( 2 ) ); // B3 is the string "7", but its match is mapped to B4 for the summation.
+    CHECK_EVAL( "SUMIF(B3:B10;1+1)",        Value( 2 ) ); // The criteria can be an expression.
+    CHECK_EVAL( "SUMIF(B3:B4;\"7\")",       Value( 0 ) ); // TODO B3 is the string "7", but only numbers are summed.
 }
 
 void TestMathFunctions::testSUMSQ()
 {
     CHECK_EVAL( "SUMSQ(1;2;3)",      Value( 14 ) ); // Simple sum.
     CHECK_EVAL( "SUMSQ(TRUE();2;3)", Value( 14 ) ); // TRUE() is 1.
+    CHECK_EVAL( "SUMSQ(B4:B5)",      Value( 13 ) ); // 2*2+3*3 is 13.
 }
 
 void TestMathFunctions::testTRUNC()
