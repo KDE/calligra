@@ -1841,12 +1841,16 @@ Value ValueCalc::sumIf (const Value &range,
   if (!range.isArray())
   {
     if (matches (cond, checkRange.element (0, 0)))
-      return converter->asNumeric (range);
+    {
+      //kDebug()<<"return non array value "<<range;
+      return range;
+    }
     return Value (0.0);
   }
 
   //if we are here, we have an array
   Value res;
+  Value tmp;
 
   unsigned int rows = range.rows ();
   unsigned int cols = range.columns ();
@@ -1859,10 +1863,20 @@ Value ValueCalc::sumIf (const Value &range,
         newcheck = checkRange.element (c, r);
 
       if (v.isArray())
-        res = add (res, sumIf (v, newcheck, cond));
+        tmp = sumIf (v, newcheck, cond);
+        if (tmp.isNumber())
+        {// only add numbers, no conversion from string allowed
+          res = add (res, tmp);
+        }
       else
         if (matches (cond, newcheck))
-          res = add (res, v);
+        {
+          if(v.isNumber())
+          {// only add numbers, no conversion from string allowed
+            //kDebug()<<"add "<<v;
+            res = add (res, v);
+          }
+        }
     }
 
   return res;
