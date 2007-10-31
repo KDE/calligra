@@ -92,7 +92,7 @@
         <Help>
           <Text>The AMORDEGRC function Calculates the amortization value for the French accounting system using degressive depreciation.</Text>
           <Syntax>AMORDEGRC( Cost; purchaseDate; firstPeriodEndDate; salvage; period; rate; basis)</Syntax>
-          <Example>AMORDEGRC( 1000; би2006-02-01би; би2006-12-31би; 10; 0; 0.1; 1 ) returns 228</Example>
+          <Example>AMORDEGRC( 1000; "2006-02-01"; "2006-12-31"; 10; 0; 0.1; 1 ) returns 228</Example>
           <Related>AMORLINC</Related>
           <Related>DB</Related>
           <Related>DDB</Related>
