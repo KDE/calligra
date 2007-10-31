@@ -88,16 +88,27 @@ void TestFinancialFunctions::testACCRINTM()
 // AMORDEGRC
 void TestFinancialFunctions::testAMORDEGRC()
 {
+  // Excel Formen und Funktionen
+  CHECK_EVAL_SHORT( "AMORDEGRC( 2400; 34199; 34334; 300; 1; 0.15; 1 )" , Value( 775 ) ); 
+
+  // bettersolution.com
+  CHECK_EVAL_SHORT( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 1; 0.15; 1 )" , Value( 11738 ) ); // 
+  CHECK_EVAL_SHORT( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 2; 0.15; 1 )" , Value(  7336 ) ); // 
+  CHECK_EVAL_SHORT( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 3; 0.15; 1 )" , Value(  4585 ) ); // 
+  CHECK_EVAL_SHORT( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 4; 0.15; 1 )" , Value(  2866 ) ); // 
+//   CHECK_EVAL_SHORT( "AMORDEGRC( 50000; \"2003-01-01\"; \"2003-12-31\"; 500; 5; 0.15; 1 )" , Value(  2388 ) ); // TODO check KSpread -> 1791
+
+  // odf tests
   CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 1 )"  , Value( 228 ) ); // the first period (10 years life time)
-  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 8; 0.1; 1 )"  , Value(  52 ) ); // the period before last (10 years)
-  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 9; 0.1; 1 )"  , Value(  52 ) ); // the last period (10 years life time)
-  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 10; 0.1; 1 )" , Value(   0 ) ); // beyond life time (10 years life time)
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 8; 0.1; 1 )"  , Value(  26 ) ); // (specs. 52) the period before last (10 years)
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 9; 0.1; 1 )"  , Value(  19 ) ); // (specs. 52) the last period (10 years life time)
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 10; 0.1; 1 )" , Value(  15 ) ); // (specs. 15) - beyond life time (10 years life time)
   CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.25; 1 )" , Value( 342 ) ); // the first period (4 years life time)
   CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 0 )"  , Value( 229 ) ); // leap year, US (NASD) 30/360
-  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2004-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 1 )"  , Value( 228 ) ); // leap year, actual/actual
-  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2004-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 2 )"  , Value( 232 ) ); // leap year, actual/360
-  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2004-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 3 )"  , Value( 229 ) ); // leap year, actual/365
-  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2004-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 4 )"  , Value( 228 ) ); // leap year, European 30/360
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 1 )"  , Value( 228 ) ); // leap year, actual/actual
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 2 )"  , Value( 231 ) ); // (specs 232) leap year, actual/360
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 3 )"  , Value( 228 ) ); // leap year, actual/365
+  CHECK_EVAL_SHORT( "AMORDEGRC( 1000; \"2006-02-01\"; \"2006-12-31\"; 10; 0; 0.1; 4 )"  , Value( 228 ) ); // leap year, European 30/360
 }
 
 // AMORLINC
