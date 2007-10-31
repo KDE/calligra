@@ -21,12 +21,12 @@
 
 #include "vgradientwidget.h"
 #include "vgradienttabwidget.h"
-#include "karbon_resourceserver.h"
 #include "KarbonGradientItem.h"
 
 #include <KoAbstractGradient.h>
-#include <KoStopGradient.h>
 #include <KoResourceChooser.h>
+#include <KoResourceServer.h>
+#include <KoResourceServerProvider.h>
 
 #include <knuminput.h>
 #include <kcombobox.h>
@@ -408,11 +408,12 @@ void VGradientTabWidget::updatePredefGradients()
     if( ! m_resourceServer )
         return;
 
-    QList<KoAbstractGradient*> gradients = m_resourceServer->gradients();
+    QList<KoAbstractGradient*> gradients = m_resourceServer->resources();
     if( gradients.count() > 0 )
     {
-        foreach( KoAbstractGradient * gradient, gradients )
-            m_predefGradientsView->addItem( new KarbonGradientItem( gradient ) );
+        foreach( KoAbstractGradient * gradient, gradients ) {
+                m_predefGradientsView->addItem( new KarbonGradientItem( gradient ) );
+        }
     }
 }
 
@@ -453,7 +454,7 @@ void VGradientTabWidget::setTarget( VGradientTarget target )
     m_gradientTarget->setCurrentIndex( target );
 }
 
-void VGradientTabWidget::setResourceServer( KarbonResourceServer* server )
+void VGradientTabWidget::setResourceServer( KoResourceServer<KoAbstractGradient>* server )
 {
     m_resourceServer = server;
     updatePredefGradients();
@@ -543,9 +544,10 @@ void VGradientTabWidget::opacityChanged( int value )
 
 void VGradientTabWidget::addGradientToPredefs()
 {
-    KoAbstractGradient * g = m_resourceServer->addGradient( cloneGradient( m_gradient ) );
-    if( g )
-        m_predefGradientsView->addItem( new KarbonGradientItem( g ) );
+//     KoStopGradient * g; = cloneGradient( m_gradient );
+//     m_resourceServer->addResource( g );
+//     if( g )
+//         m_predefGradientsView->addItem( new KarbonGradientItem( g ) );
 }
 
 void VGradientTabWidget::predefSelected( QTableWidgetItem * item )
@@ -585,15 +587,15 @@ void VGradientTabWidget::changeToPredef( QTableWidgetItem * item )
 
 void VGradientTabWidget::deletePredef()
 {
-    KarbonGradientItem * item = dynamic_cast<KarbonGradientItem*>( m_predefGradientsView->currentItem() );
-    if( ! item )
-        return;
-
-    m_resourceServer->removeGradient( item->gradient() );
-    int row = m_predefGradientsView->row( item );
-    int col = m_predefGradientsView->column( item );
-    m_predefGradientsView->takeItem( row, col );
-    delete item;
+//     KarbonGradientItem * item = dynamic_cast<KarbonGradientItem*>( m_predefGradientsView->currentItem() );
+//     if( ! item )
+//         return;
+// 
+//     m_resourceServer->removeResource( item->gradient() );
+//     int row = m_predefGradientsView->row( item );
+//     int col = m_predefGradientsView->column( item );
+//     m_predefGradientsView->takeItem( row, col );
+//     delete item;
 }
 
 void VGradientTabWidget::stopsChanged()

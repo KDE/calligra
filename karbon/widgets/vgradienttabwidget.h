@@ -29,12 +29,14 @@
 #include <QPixmap>
 #include <QtGui/QTableWidgetItem>
 
+#include <KoResourceServer.h>
+#include <KoAbstractGradient.h>
+
 class KComboBox;
 class VGradientWidget;
 class KListWidget;
 class KIntNumInput;
 class QPushButton;
-class KarbonResourceServer;
 class KoResourceChooser;
 
 /// A widget to preview a gradient
@@ -117,7 +119,7 @@ public:
      * Sets the resource server to get the predefined gradients from.
      * @param server the new resource server to use
      */
-    void setResourceServer( KarbonResourceServer* server );
+    void setResourceServer( KoResourceServer<KoAbstractGradient>* server );
 
 Q_SIGNALS:
     /// Is emmited a soon as the gradient changes
@@ -153,7 +155,7 @@ private:
     KIntNumInput     *m_opacity;
 
     QGradient * m_gradient; /// the actual edited gradient
-    KarbonResourceServer* m_resourceServer; ///< the predefined gradients list.
+    KoResourceServer<KoAbstractGradient>* m_resourceServer; ///< the predefined gradients list.
     double m_gradOpacity;    ///< the gradient opacity
 };
 

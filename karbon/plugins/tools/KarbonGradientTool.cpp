@@ -21,8 +21,6 @@
 #include "KarbonGradientTool.h"
 #include "KarbonGradientEditStrategy.h"
 
-#include <karbon_factory.h>
-#include <karbon_resourceserver.h>
 #include <vgradienttabwidget.h>
 
 #include <KoShape.h>
@@ -32,6 +30,7 @@
 #include <KoSelection.h>
 #include <KoPointerEvent.h>
 #include <KoShapeBackgroundCommand.h>
+#include <KoResourceServerProvider.h>
 
 #include <QGridLayout>
 
@@ -234,7 +233,7 @@ QWidget * KarbonGradientTool::createOptionWidget()
 
     m_gradientWidget = new VGradientTabWidget( optionWidget );
     m_gradientWidget->setGradient( m_gradient );
-    m_gradientWidget->setResourceServer( KarbonFactory::rServer() );
+    m_gradientWidget->setResourceServer( KoResourceServerProvider::instance()->gradientServer() );
     layout->addWidget( m_gradientWidget );
     layout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
 

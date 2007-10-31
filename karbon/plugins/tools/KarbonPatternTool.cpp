@@ -31,7 +31,7 @@
 #include <KoPointerEvent.h>
 #include <KoPattern.h>
 #include <KoResourceServer.h>
-#include <KoResourceServerRegistry.h>
+#include <KoResourceServerProvider.h>
 
 #include <klocale.h>
 #include <kiconloader.h>
@@ -224,15 +224,13 @@ QWidget * KarbonPatternTool::createOptionWidget()
     QWidget *optionWidget = new QWidget();
     QGridLayout* layout = new QGridLayout( optionWidget );
 
-    KoResourceServerBase* srv = KoResourceServerRegistry::instance()->value("PatternServer");
-    QList<KoResource*> patterns = srv->resources();
+    KoResourceServer<KoPattern>* srv = KoResourceServerProvider::instance()->patternServer();
+    QList<KoPattern*> patterns = srv->resources();
 
-    QList<QTableWidgetItem*> items;
-    foreach( KoResource* resource, patterns ) {
-        KoPattern* pat = dynamic_cast<KoPattern*>(resource);
-        if(pat)
-            items.append( static_cast<QTableWidgetItem*>( new KarbonPatternItem( pat ) ) );
-    }
+     QList<QTableWidgetItem*> items;
+     foreach( KoPattern* pat, patterns ) {
+             items.append( static_cast<QTableWidgetItem*>( new KarbonPatternItem( pat ) ) );
+     }
 
     m_patternChooser = new KoPatternChooser( items, optionWidget );
     //m_patternChooser->setFixedSize( 180, 120 );
@@ -311,7 +309,7 @@ void KarbonPatternTool::importPattern()
     QString newFilename = KGlobal::mainComponent().dirs()->saveLocation("ko_patterns" ) + fi.baseName() + ".pat";
     pattern->setFilename(newFilename);
 
-    KoResourceServerBase* srv = KoResourceServerRegistry::instance()->value("PatternServer");
+    KoResourceServer<KoPattern>* srv = KoResourceServerProvider::instance()->patternServer();;
     srv->addResource(pattern);
 
     if( pattern )
@@ -322,7 +320,7 @@ void KarbonPatternTool::deletePattern()
 {
     KoPattern * pattern = m_currentPattern->pattern();
     m_patternChooser->removePattern( m_currentPattern );
-    KoResourceServerRegistry::instance()->value("PatternServer")->removeResource(pattern);
+    KoResourceServerProvider::instance()->patternServer()->removeResource(pattern);
     m_currentPattern = static_cast<KarbonPatternItem*>( m_patternChooser->currentPattern() );
 }
 
