@@ -57,8 +57,20 @@ static Value TestDouble(const QString& formula, const Value& v2, int accuracy)
 // ACCRINT
 void TestFinancialFunctions::testACCRINT()
 {
-  // kspread
-  CHECK_EVAL_SHORT( "ACCRINT( \"02/28/2001\"; \"08/31/2001\"; \"05/01/2001\" ;  0.1; 1000; 2; 0 )", Value( 16.944 ) ); 
+  // odf test
+  CHECK_EVAL( "ACCRINT( \"1992-12-01\"; \"1993-06-01\"; \"1993-07-01\";  0.055; 100 ; 2; 0 ) ", Value( 3.2083333333 ) ); 
+  CHECK_EVAL( "ACCRINT( \"2001-02-28\"; \"2001-08-31\";\"2001-05-01\";  0.1  ; 1000; 2; 0 )",
+              Value( 16.9444444444 ) ); // A security is issued on 2.28.2001.
+                                        // First interest is set for 8.31.2001. The settlement date is 5.1.2001.
+                                        // The Rate is 0.1 or 10% and Par is 1000 currency units. Interest is paid
+                                        // half-yearly (frequency is 2). The basis is the US method (0). How much interest has accrued?
+  CHECK_EVAL( "ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 4; 0 )", Value( 24.7222222222 ) ); // leap year, quaterly, US (NASD) 30/360
+  CHECK_EVAL_SHORT( "ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 4; 1 )", Value( 24.590164     ) ); // leap year, quaterly, actual/acual
+  CHECK_EVAL( "ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 4; 2 )", Value( 25            ) ); // leap year, quaterly, actual/360
+  CHECK_EVAL_SHORT( "ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 4; 3 )", Value( 24.657534     ) ); // leap year, quaterly, actual/365
+  CHECK_EVAL( "ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 4; 4 )", Value( 25            ) ); // leap year, quaterly, European 30/360
+  CHECK_EVAL( "ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 1 )",    Value( 24.7222222222 ) ); // leap year, annual, US (NASD) 30/360
+  CHECK_EVAL( "ACCRINT( \"2004-02-01\"; \"2004-04-01\"; \"2004-05-01\"; 0.1; 1000; 2 )",    Value( 24.7222222222 ) ); // leap year, semiannual, US 30/360
 }
 
 // ACCRINTM
