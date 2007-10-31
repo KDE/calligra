@@ -75,10 +75,10 @@ void CharacterHighlighting::open(KoCharacterStyle *style) {
     // TODO represent single and double lines.
 
     switch(style->transform()) {
-        case KoCharacterStyle::NoTransform: widget.normal->setChecked(true); break;
+        case KoCharacterStyle::MixedCase: widget.normal->setChecked(true); break;
         case KoCharacterStyle::SmallCaps: widget.smallcaps->setChecked(true); break;
-        case KoCharacterStyle::Uppercase: widget.uppercase->setChecked(true); break;
-        case KoCharacterStyle::Lowercase: widget.lowercase->setChecked(true); break;
+        case KoCharacterStyle::AllUppercase: widget.uppercase->setChecked(true); break;
+        case KoCharacterStyle::AllLowercase: widget.lowercase->setChecked(true); break;
         case KoCharacterStyle::Capitalize: widget.capitalize->setChecked(true); break;
     }
 
@@ -128,13 +128,13 @@ void CharacterHighlighting::save() {
         m_style->setStrikeOutStyle(KoCharacterStyle::NoLineStyle);
 
     if (widget.normal->isChecked())
-        m_style->setTransform(KoCharacterStyle::NoTransform);
+        m_style->setTransform(KoCharacterStyle::MixedCase);
     else if (widget.smallcaps->isChecked())
         m_style->setTransform(KoCharacterStyle::SmallCaps);
     else if (widget.uppercase->isChecked())
-        m_style->setTransform(KoCharacterStyle::Uppercase);
+        m_style->setTransform(KoCharacterStyle::AllUppercase);
     else if (widget.lowercase->isChecked())
-        m_style->setTransform(KoCharacterStyle::Lowercase);
+        m_style->setTransform(KoCharacterStyle::AllLowercase);
     else if (widget.capitalize->isChecked())
         m_style->setTransform(KoCharacterStyle::Capitalize);
 }
