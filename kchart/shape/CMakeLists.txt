@@ -7,6 +7,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/kchart
 
 SET (chartshape_LIB_SRCS
     ChartProxyModel.cpp
+    ChartTableView.cpp
     ChartShape.cpp
     ChartShapeFactory.cpp
     ChartTypeTool.cpp

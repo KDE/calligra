@@ -28,19 +28,27 @@ class QAbstractItemModel;
 
 namespace KChart {
 
+class ChartShape;
+
 class ChartProxyModel : public QAbstractProxyModel
 {
     Q_OBJECT
 
 public:
-    ChartProxyModel( QObject *parent = 0 );
+    ChartProxyModel( ChartShape *shape, QObject *parent = 0 );
     ~ChartProxyModel();
 
 public slots:
+    virtual void setSourceModel( QAbstractItemModel *sourceModel );
+
     virtual QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
     virtual bool setData( const QModelIndex &index, const QVariant& data, int role = Qt::EditRole );
+
+    virtual void dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
+    // Overloaded method for convenience. It marks the entire dataset as changed.
+    void dataChanged();
 
     virtual QMap<int, QVariant> itemData( const QModelIndex &index ) const;
 

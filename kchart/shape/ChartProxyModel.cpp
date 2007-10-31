@@ -18,6 +18,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "ChartShape.h"
 #include "ChartProxyModel.h"
 
 #include <KDebug>
@@ -28,6 +29,7 @@ class ChartProxyModel::Private {
 public:
     Private();
 
+    ChartShape *shape;
     bool firstRowIsLabel;
     bool firstColumnIsLabel;
     Qt::Orientation dataDirection;
@@ -41,14 +43,26 @@ ChartProxyModel::Private::Private()
     dataDirection = Qt::Vertical;
 }
 
-ChartProxyModel::ChartProxyModel( QObject *parent /* = 0 */ )
+ChartProxyModel::ChartProxyModel( ChartShape *shape, QObject *parent /* = 0 */ )
     : QAbstractProxyModel( parent ),
       d( new Private )
 {
+    d->shape = shape;
 }
 
 ChartProxyModel::~ChartProxyModel()
 {
+}
+
+void ChartProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
+{
+    connect( sourceModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
+             this,        SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
+
+    QAbstractProxyModel::setSourceModel( sourceModel );
+
+    // Update the entire data set
+    dataChanged();
 }
 
 QVariant ChartProxyModel::data( const QModelIndex &index,
@@ -66,10 +80,20 @@ bool ChartProxyModel::setData( const QModelIndex &index,
 {
     if ( sourceModel() == 0 )
         return false;
-    kDebug() << index;
-    kDebug() << data;
-    kDebug() << role;
+    
     return sourceModel()->setData( mapToSource( index ), data, role );
+}
+
+void ChartProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight )
+{
+    emit QAbstractProxyModel::dataChanged( mapFromSource( topLeft ), mapFromSource( bottomRight ) );
+    d->shape->dataChanged( topLeft, bottomRight );
+}
+
+void ChartProxyModel::dataChanged()
+{
+    // Update the entire data set
+    dataChanged( index( 0, 0 ), index( rowCount() - 1, columnCount() - 1 ) );
 }
 
 QVariant ChartProxyModel::headerData( int section,
@@ -103,14 +127,12 @@ QVariant ChartProxyModel::headerData( int section,
             column++;
     }
 
-    
-
     return sourceModel()->data( sourceModel()->index( row, column ), role );
 }
 
 QMap<int, QVariant> ChartProxyModel::itemData( const QModelIndex &index ) const
 {
-    return sourceModel()->itemData( index );
+    return sourceModel()->itemData( mapToSource( index ) );
 }
 
 QModelIndex ChartProxyModel::index( int row,
@@ -146,9 +168,9 @@ QModelIndex ChartProxyModel::mapFromSource( const QModelIndex &sourceIndex ) con
         column = sourceIndex.row();
 
         if ( d->firstRowIsLabel )
-            column--;
-        if ( d->firstColumnIsLabel )
             row--;
+        if ( d->firstColumnIsLabel )
+            column--;
     }
     return sourceModel()->index( row, column );
 }
@@ -252,16 +274,21 @@ int ChartProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() *
 void ChartProxyModel::setFirstRowIsLabel( bool b )
 {
     d->firstRowIsLabel = b;
+    dataChanged();
 }
 
 void ChartProxyModel::setFirstColumnIsLabel( bool b )
 {
     d->firstColumnIsLabel = b;
+    dataChanged();
 }
 
 void ChartProxyModel::setDataDirection( Qt::Orientation orientation )
 {
     d->dataDirection = orientation;
+
+    // Update the entire data set
+    dataChanged();
 }
 
 } // namespace KChart

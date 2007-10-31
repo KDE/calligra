@@ -12,11 +12,7 @@
   <property name="windowTitle" >
    <string>Dialog</string>
   </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="0" >
-    <widget class="QTableView" name="table" />
-   </item>
-  </layout>
+  <layout class="QGridLayout" />
  </widget>
  <resources/>
  <connections/>

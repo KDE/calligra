@@ -125,7 +125,6 @@ public:
     QAbstractItemModel        *internalModel;
     QAbstractItemModel        *externalModel;
     bool                       takeOwnershipOfModel;
-    bool                       useExternalDataSource;
     // ----------------------------------------------------------------
     // Data that are not immediately applicable to the chart itself.
 
@@ -154,8 +153,6 @@ ChartShape::Private::Private()
         chartTypeOptions[i].subtype = defaultSubtypes[i];  
     threeDMode             = false;
     takeOwnershipOfModel   = false;
-    useExternalDataSource  = false;
-    chartModel             = new ChartProxyModel;
     internalModel          = 0;
     externalModel          = 0;
     pixmapRepaintRequested = true;
@@ -186,8 +183,9 @@ ChartShape::ChartShape()
     d->chartSubtype = NormalChartSubtype;
 
     // Initialize a basic chart.
-    d->chart     = new KDChart::Chart();
-    d->diagram   = new KDChart::BarDiagram();
+    d->chartModel = new ChartProxyModel( this );
+    d->chart      = new KDChart::Chart();
+    d->diagram    = new KDChart::BarDiagram();
 
     d->chart->coordinatePlane()->replaceDiagram( d->diagram );
 
@@ -534,19 +532,16 @@ void ChartShape::setThreeDMode( bool threeD )
 void ChartShape::setFirstRowIsLabel( bool b )
 {
     d->chartModel->setFirstRowIsLabel( b );
-    modelChanged();
 }
 
 void ChartShape::setFirstColumnIsLabel( bool b )
 {
     d->chartModel->setFirstColumnIsLabel( b );
-    modelChanged();
 }
 
 void ChartShape::setDataDirection( Qt::Orientation orientation )
 {
     d->chartModel->setDataDirection( orientation );
-    modelChanged();
 }
 
 void ChartShape::setLegendTitle( const QString &title )
@@ -609,30 +604,6 @@ void ChartShape::setLegendFixedPosition( KDChart::Position position )
     update();
 }
 
-void ChartShape::setUseExternalDatasource( bool b )
-{
-    if ( b ) {
-        if ( d->externalModel != 0 ) {
-            d-> chartModel->setSourceModel( d->externalModel );
-            d->useExternalDataSource = true;
-        }
-    } else {
-        if ( d->internalModel != 0 ) {
-            d->chartModel->setSourceModel( d->internalModel );
-            d->useExternalDataSource = false;
-        }
-    }
-}
-
-void ChartShape::modelChanged()
-{
-    // Tell the diagram that the entire set of data changed
-    d->diagram->dataChanged( d->chartModel->index( 0, 0 ),
-                             d->chartModel->index( d->chartModel->rowCount() - 1,
-                                                  d->chartModel->columnCount() - 1 ) );
-    update();
-}
-
 void ChartShape::saveChartTypeOptions()
 {
     // Check if the int value is in range of the OdfChartType enumeration
@@ -657,14 +628,22 @@ void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel 
     d->externalModel = model;
     d->chartModel->setSourceModel( model );
     d->takeOwnershipOfModel = takeOwnershipOfModel;
-    modelChanged();
+
+    delete d->internalModel;
+    d->internalModel = 0;
 }
 
 void ChartShape::setInternalModel( QAbstractItemModel *model )
 {
     d->internalModel = model;
     d->chartModel->setSourceModel( model );
-    modelChanged();
+}
+
+bool ChartShape::hasInternalModel()
+{
+    if ( d->internalModel == 0 )
+        return false;
+    return true;
 }
 
 QAbstractItemModel *ChartShape::model()
@@ -697,6 +676,12 @@ ChartTypeOptions ChartShape::chartTypeOptions( OdfChartType type ) const
 
 void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
+    // Calculate the clipping rect
+    QRectF clipRect  = painter.clipRegion().boundingRect();
+    QRectF paintRect = converter.documentToView( QRectF( position(), size() ) );
+    clipRect.intersect( paintRect );
+    painter.setClipRect( clipRect );
+
     // Get the current zoom level
     QPointF zoomLevel;
     converter.zoom( &zoomLevel.rx(), &zoomLevel.ry() );
@@ -706,9 +691,9 @@ void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
          || d->lastZoomLevel != zoomLevel
          || d->lastSize      != size() ) {
         refreshPixmap( painter, converter );
+        d->pixmapRepaintRequested = false;
         d->lastZoomLevel = zoomLevel;
         d->lastSize      = size();
-        d->pixmapRepaintRequested = false;
     }
 
     // Paint the cached pixmap
@@ -1491,18 +1476,15 @@ void ChartShape::saveOdfData( KoXmlWriter& bodyWriter,
 //                         Private methods
 
 
-#if 0
-void ChartShape::initNullChart()
+void ChartShape::dataChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight )
 {
-} 
-#endif
-
+    d->diagram->dataChanged( topLeft, bottomRight );
+    update();
+}
 
 void ChartShape::update()
 {
     d->diagram->doItemsLayout();
-    d->legend->update();
-    d->diagram->update();
     d->chart->update();
     d->pixmapRepaintRequested = true;
     KoShape::update();

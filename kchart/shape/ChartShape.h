@@ -22,6 +22,9 @@
 #ifndef KCHART_CHART_SHAPE
 #define KCHART_CHART_SHAPE
 
+// Qt
+#include <QModelIndex>
+
 // KOffice
 #include <KoShape.h>
 #include "koChart.h"
@@ -36,8 +39,6 @@
 #define ChartShapeId "ChartShape"
 
 class QAbstractItemModel;
-
-//enum ChartType { NoType, Bar, Line, Pie, Ring, Polar };
 
 namespace KDChart
 {
@@ -61,6 +62,7 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     /// reimplemented
     virtual void setModel( QAbstractItemModel *model, bool takeOwnershipOfModel = false );
     void setInternalModel( QAbstractItemModel *model );
+    bool hasInternalModel();
     QAbstractItemModel *model();
     
     /// reimplemented
@@ -88,6 +90,7 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
 
  public Q_SLOTS:
     virtual void update();
+    void dataChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight );
 
     /// Set new chart type and subtype.
     void setChartType( OdfChartType newType, 
@@ -106,7 +109,6 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     void setLegendOrientation( Qt::Orientation orientation );
     void setLegendAlignment( Qt::Alignment alignment );
     void setLegendFixedPosition( KDChart::Position position );
-    void setUseExternalDatasource( bool b );
     void modelChanged();
 
     void saveChartTypeOptions();

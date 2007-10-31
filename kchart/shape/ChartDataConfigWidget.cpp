@@ -34,6 +34,7 @@
 #include "ui_ChartDataConfigWidget.h"
 #include "ui_ChartTableEditor.h"
 #include "ChartShape.h"
+#include "ChartTableView.h"
 
 
 using namespace KChart;
@@ -47,6 +48,7 @@ public:
     Ui::ChartDataConfigWidget  ui;
     Ui::ChartTableEditor       tableEditor;
     QDialog                   *tableEditorDialog;
+    ChartTableView            *tableView;
 };
 
 ChartDataConfigWidget::Private::~Private()
@@ -62,11 +64,12 @@ ChartDataConfigWidget::ChartDataConfigWidget()
     d->ui.setupUi( this );
     d->tableEditorDialog = new QDialog( this );
     d->tableEditor.setupUi( d->tableEditorDialog );
+    d->tableView = new ChartTableView;
+    d->tableEditor.gridLayout->addWidget( d->tableView );
     d->tableEditorDialog->hide();
 
     d->ui.m_firstRowAsLabel->setChecked( true );
     d->ui.m_firstColumnAsLabel->setChecked( true );
-    d->ui.useExternalDatasource->setChecked( false );
     d->ui.areaLabel->hide();
     d->ui.area->hide();
 
@@ -80,8 +83,6 @@ ChartDataConfigWidget::ChartDataConfigWidget()
              this,                    SIGNAL( firstRowIsLabelChanged( bool ) ) );
     connect( d->ui.m_firstColumnAsLabel, SIGNAL( toggled( bool ) ),
              this,                       SIGNAL( firstColumnIsLabelChanged( bool ) ) );
-    connect( d->ui.useExternalDatasource, SIGNAL( toggled( bool ) ),
-             this,                        SLOT( setUseExternalDatasource( bool ) ) );
     connect( d->ui.editData, SIGNAL( clicked( bool ) ),
              this, SLOT( slotShowTableEditor( bool ) ) );
 }
@@ -93,46 +94,52 @@ ChartDataConfigWidget::~ChartDataConfigWidget()
 
 void ChartDataConfigWidget::createActions()
 {
-    QAction *cutRowsAction       = new QAction( KIcon( "edit-cut" ), i18n( "Cut Rows" ),    d->tableEditor.table );
-    QAction *cutColumnsAction    = new QAction( KIcon( "edit-cut" ), i18n( "Cut Columns" ), d->tableEditor.table );
-    QAction *cutCellsAction    = new QAction( KIcon( "edit-cut" ), i18n( "Cut Cells" ), d->tableEditor.table );
-    QAction *copyRowsAction      = new QAction( KIcon( "edit-copy" ), i18n( "Copy Rows" ), d->tableEditor.table );
-    QAction *copyColumnsAction   = new QAction( KIcon( "edit-copy" ), i18n( "Copy Columns" ), d->tableEditor.table );
-    QAction *copyCellsAction   = new QAction( KIcon( "edit-copy" ), i18n( "Copy Cells" ), d->tableEditor.table );
-    QAction *deleteRowsAction    = new QAction( KIcon( "edit-delete" ), i18n( "Delete Rows" ), d->tableEditor.table );
-    QAction *deleteColumnsAction = new QAction( KIcon( "edit-delete" ), i18n( "Delete Columns" ), d->tableEditor.table );
-    QAction *deleteCellsAction = new QAction( KIcon( "edit-delete" ), i18n( "Delete Cells" ), d->tableEditor.table );
-    QAction *insertRowsAction    = new QAction( KIcon( "edit-paste" ), i18n( "Insert Rows" ), d->tableEditor.table );
-    QAction *insertColumnsAction = new QAction( KIcon( "edit-paste" ), i18n( "Insert Columns" ), d->tableEditor.table );
-    QAction *insertCellsAction = new QAction( KIcon( "edit-paste" ), i18n( "Insert Cells" ), d->tableEditor.table );
+    QAction *cutRowsAction       = new QAction( KIcon( "edit-cut" ), i18n( "Cut Rows" ),    d->tableView );
+    QAction *cutColumnsAction    = new QAction( KIcon( "edit-cut" ), i18n( "Cut Columns" ), d->tableView );
+    QAction *cutCellsAction    = new QAction( KIcon( "edit-cut" ), i18n( "Cut Cells" ), d->tableView );
+    QAction *copyRowsAction      = new QAction( KIcon( "edit-copy" ), i18n( "Copy Rows" ), d->tableView );
+    QAction *copyColumnsAction   = new QAction( KIcon( "edit-copy" ), i18n( "Copy Columns" ), d->tableView );
+    QAction *copyCellsAction   = new QAction( KIcon( "edit-copy" ), i18n( "Copy Cells" ), d->tableView );
+    QAction *deleteRowsAction    = new QAction( KIcon( "edit-delete" ), i18n( "Delete Rows" ), d->tableView );
+    QAction *deleteColumnsAction = new QAction( KIcon( "edit-delete" ), i18n( "Delete Columns" ), d->tableView );
+    QAction *deleteCellsAction = new QAction( KIcon( "edit-delete" ), i18n( "Delete Cells" ), d->tableView );
+    QAction *insertRowsAction    = new QAction( KIcon( "edit-paste" ), i18n( "Insert Rows" ), d->tableView );
+    QAction *insertColumnsAction = new QAction( KIcon( "edit-paste" ), i18n( "Insert Columns" ), d->tableView );
+    QAction *insertCellsAction = new QAction( KIcon( "edit-paste" ), i18n( "Insert Cells" ), d->tableView );
 
-    QAction *separator1 = new QAction( d->tableEditor.table );
-    QAction *separator2 = new QAction( d->tableEditor.table );
+    QAction *separator1 = new QAction( d->tableView );
+    QAction *separator2 = new QAction( d->tableView );
     separator1->setSeparator( true );
     separator2->setSeparator( true );
 
-    d->tableEditor.table->addAction( copyRowsAction );
-    d->tableEditor.table->addAction( cutRowsAction );
-    d->tableEditor.table->addAction( deleteRowsAction );
-    d->tableEditor.table->addAction( insertRowsAction );
-    d->tableEditor.table->addAction( separator1 );
-    d->tableEditor.table->addAction( copyColumnsAction );
-    d->tableEditor.table->addAction( cutColumnsAction );
-    d->tableEditor.table->addAction( deleteColumnsAction );
-    d->tableEditor.table->addAction( insertColumnsAction );
-    d->tableEditor.table->addAction( separator2 );
-    d->tableEditor.table->addAction( copyCellsAction );
-    d->tableEditor.table->addAction( cutCellsAction );
-    d->tableEditor.table->addAction( deleteCellsAction );
-    d->tableEditor.table->addAction( insertCellsAction );
+    d->tableView->addAction( copyRowsAction );
+    d->tableView->addAction( cutRowsAction );
+    d->tableView->addAction( deleteRowsAction );
+    d->tableView->addAction( insertRowsAction );
+    d->tableView->addAction( separator1 );
+    d->tableView->addAction( copyColumnsAction );
+    d->tableView->addAction( cutColumnsAction );
+    d->tableView->addAction( deleteColumnsAction );
+    d->tableView->addAction( insertColumnsAction );
+    d->tableView->addAction( separator2 );
+    d->tableView->addAction( copyCellsAction );
+    d->tableView->addAction( cutCellsAction );
+    d->tableView->addAction( deleteCellsAction );
+    d->tableView->addAction( insertCellsAction );
 
-    d->tableEditor.table->setContextMenuPolicy( Qt::ActionsContextMenu );
+    d->tableView->setContextMenuPolicy( Qt::ActionsContextMenu );
 }
 
 void ChartDataConfigWidget::open( KoShape* chart )
 {
     d->chart = dynamic_cast<ChartShape*>( chart );
-    d->tableEditor.table->setModel( d->chart->model() );
+    d->tableView->setModel( ( ChartProxyModel* )d->chart->model() );
+
+    if ( !d->chart->hasInternalModel() ) {
+        d->ui.area->show();
+        d->ui.areaLabel->show();
+        d->ui.editData->hide();
+    }
 }
 
 void ChartDataConfigWidget::save()
@@ -159,21 +166,6 @@ void ChartDataConfigWidget::setDataInRows( bool checked )
         emit dataDirectionChanged( Qt::Horizontal );
     else
         emit dataDirectionChanged( Qt::Vertical );
-}
-
-void ChartDataConfigWidget::setUseExternalDatasource( bool checked )
-{
-    emit useExternalDatasourceChanged( checked );
-    if ( checked ) {
-        d->ui.editData->hide();
-        d->ui.areaLabel->show();
-        d->ui.area->show();
-    } else {
-        d->ui.editData->show();
-        d->ui.areaLabel->hide();
-        d->ui.area->hide();
-    }
-    d->tableEditorDialog->hide();
 }
 
 #include "ChartDataConfigWidget.moc"

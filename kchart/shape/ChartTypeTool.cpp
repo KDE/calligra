@@ -146,8 +146,6 @@ QWidget *ChartTypeTool::createOptionWidget()
              this,    SLOT( setFirstRowIsLabel( bool ) ) );
     connect( widget1, SIGNAL( firstColumnIsLabelChanged( bool ) ),
              this,    SLOT( setFirstColumnIsLabel( bool ) ) );
-    connect( widget1, SIGNAL( useExternalDatasourceChanged( bool ) ),
-             this,    SLOT( setUseExternalDatasource( bool ) ) );
 
     connect( widget2, SIGNAL( chartTypeChange( KChart::OdfChartType ) ),
 	     this,    SLOT( setChartType( KChart::OdfChartType ) ) );
@@ -195,12 +193,6 @@ void ChartTypeTool::setFirstColumnIsLabel( bool b )
 {
     if ( m_currentShape != 0 )
         m_currentShape->setFirstColumnIsLabel( b );
-}
-
-void ChartTypeTool::setUseExternalDatasource( bool b )
-{
-    if ( m_currentShape != 0 )
-        m_currentShape->setUseExternalDatasource( b );
 }
 
 #include "ChartTypeTool.moc"

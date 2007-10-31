@@ -67,21 +67,11 @@ private slots:
     void setDataDirection( Qt::Orientation );
     void setFirstRowIsLabel( bool b );
     void setFirstColumnIsLabel( bool b );
-    void setUseExternalDatasource( bool b );
-#if 0
-    void catchFoo(bool on);
-    void catchBar(bool on);
-#endif
 
 private:
     void updateActions();
 
     ChartShape  *m_currentShape;
-
-#if 0
-    QAction *m_foo;
-    QAction *m_bar;
-#endif
 };
 
 } // namespace KChart
