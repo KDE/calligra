@@ -6,7 +6,7 @@ macro_optional_find_package(TIFF)
 macro_optional_find_package(Exiv2)
 macro_optional_find_package(JPEG)
 macro_optional_find_package(GraphicsMagick)
-macro_optional_find_package(PopplerQt4)
+macro_optional_find_package(Poppler)
 
 macro_log_feature(JPEG_FOUND "jpeg" "The Krita JPEG filter will not be built" "http://www.ijg.org" FALSE "")
 macro_log_feature(EXIV2_FOUND "Exiv2" "The Krita JPEG filter will not be built" "http://www.exiv2.org" FALSE "")
@@ -14,7 +14,7 @@ macro_log_feature(TIFF_FOUND "tiff" "The Krita TIFF filter will not be built" "h
 macro_log_feature(PNG_FOUND "png" "The Krita PNG filter will not be built" "http://www.libpng.org/pub/png/libpng.html" FALSE "")
 macro_log_feature(OPENEXR_FOUND "OpenEXR" "The Krita OpenEXR filter will not be built" "http://www.openexr.com" FALSE "")
 macro_log_feature(GRAPHICSMAGICK_FOUND "GraphicsMagick" "The Krita GraphicsMagick filter for various file formats (including PSD, XCF) will not be built" "http://www.graphicsmagick.org" FALSE "")
-macro_log_feature(POPPLER_QT4_FOUND "poppler-qt4" "The Krita PDF filter will not be built" "http://poppler.freedesktop.org" FALSE "")
+macro_log_feature(POPPLER_QT4_FOUND "poppler-qt4" "The Krita PDF filter will not be built (version 0.5.x is currently required)" "http://poppler.freedesktop.org" FALSE "")
 
 include_directories(${KRITA_INCLUDES})
 
@@ -45,6 +45,6 @@ if(GRAPHICSMAGICK_FOUND)
     add_subdirectory(gmagick)
 endif(GRAPHICSMAGICK_FOUND)
 
-if(POPPLER_QT4_FOUND)
+if(POPPLER_QT4_FOUND AND NOT HAVE_POPPLER_0_6)
     add_subdirectory(pdf)
-endif(POPPLER_QT4_FOUND)
+endif(POPPLER_QT4_FOUND AND NOT HAVE_POPPLER_0_6)
