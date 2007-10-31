@@ -17,6 +17,61 @@ The available tests so far:
   TrigFunctions          passed  8/ 8
   Value                  passed 13/13
 
+Failed tests:
+-------------
+
+TestFormula::
+    testEquality()
+
+TestFinancialFunctions::
+    testACCRINT()
+    testAMORDEGRC()
+    testCOMPOUND()
+    testCUMIPMT()
+    testCUMPRINC()
+    testDISC()
+    testFV()
+    testFVSCHEDULE()
+    testINTRATE()
+    testIPMT()
+    testISPMT()
+    testODDLYIELD()
+    testPDURATION()
+    testPMT()
+    testPPMT()
+    testYIELDMAT()
+
+TestInformationFunctions::
+    testAREAS()
+    testCELL()
+    testCOLUMN()
+    testCOLUMNS()
+    testCOUNT()
+    testCOUNTA()
+    testCOUNTIF()
+    testFORMULA()
+    testISBLANK()
+    testISFORMULA()
+    testISNONTEXT()
+    testISNA()
+    testISREF()
+    testNUMBERVALUE()
+    testROW()
+    testROWS()
+    testSHEET()
+    testSHEETS()
+    testVALUE()
+
+TestStatisticalFunctions::
+    testKURT()
+    testSTDEV()
+
+TestTextFunctions::
+    testASC()
+    testJIS()
+    testUNICHAR()
+    testUNICODE()
+
 Some tests are not intended only to check performance
   BenchmarkCluster
   BenchmarkRTree
