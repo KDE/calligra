@@ -7,10 +7,7 @@ set(kivioprivate_LIB_SRCS
   KivioFactory.cpp
   KivioDocument.cpp
   KivioView.cpp
-  KivioShapeGeometry.cpp
 )
-
-kde4_add_ui_files(kivioprivate_LIB_SRCS KivioShapeGeometry.ui)
 
 kde4_add_library(kivioprivate SHARED ${kivioprivate_LIB_SRCS})
 

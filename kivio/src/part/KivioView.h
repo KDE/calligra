@@ -25,7 +25,6 @@
 class KAction;
 
 class KivioDocument;
-class KivioShapeGeometry;
 
 class KivioView : public KoPAView
 {
@@ -38,10 +37,7 @@ class KivioView : public KoPAView
     /// Returns the document
     KivioDocument* document() const;
 
-  protected Q_SLOTS:
-    /// Called when the selection changed
-    void selectionChanged();
-
+  protected slots:
     /// Called when the doc emits updateGui
     void updateGui();
 
@@ -53,8 +49,6 @@ class KivioView : public KoPAView
 
   private:
     KivioDocument* m_document;
-
-    KivioShapeGeometry* m_geometryDocker;
 };
 
 #endif

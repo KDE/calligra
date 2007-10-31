@@ -26,7 +26,6 @@
 #include <KoPACanvas.h>
 
 #include "KivioDocument.h"
-#include "KivioShapeGeometry.h"
 
 KivioView::KivioView(KivioDocument* document, QWidget* parent)
   : KoPAView(document, parent), m_document(document)
@@ -52,21 +51,10 @@ KivioDocument* KivioView::document() const
 
 void KivioView::initializeGUI()
 {
-    KivioShapeGeometryFactory geometryFactory(document());
-    m_geometryDocker = qobject_cast<KivioShapeGeometry*>(createDockWidget(&geometryFactory));
 }
 
 void KivioView::initializeActions()
 {
-}
-
-void KivioView::selectionChanged()
-{
-    KoPAView::selectionChanged();
-
-    if(m_geometryDocker) {
-        m_geometryDocker->setSelection(m_canvas->shapeManager()->selection());
-    }
 }
 
 void KivioView::updateGui()
