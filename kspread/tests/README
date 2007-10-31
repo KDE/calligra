@@ -4,14 +4,18 @@ error message(s) in details.
 
 The available tests so far:
 
-  FinancialFunctions
-  Formula
-  OpenFormula
-  RTree
-  TrigFunctions
-  Value
-  DateTime
-
+  BitopsFunctions        passed  7/ 7
+  DatabaseFunctions      passed 14/14
+  DatetimeFunctions      passed 30/30
+  Dependencies           passed  4/ 4
+  Engineering            passed 26/26
+  StatisticalFunctions   passed 69/71
+  FinancialFunctions     passed 37/53
+  Formula                passed 10/11
+  OpenFormula            passed  6/ 6
+  RTree                  passed 12/12
+  TrigFunctions          passed  8/ 8
+  Value                  passed 13/13
 
 Some tests are not intended only to check performance
   BenchmarkCluster
