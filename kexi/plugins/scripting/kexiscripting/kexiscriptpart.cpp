@@ -55,7 +55,7 @@ KexiScriptPart::KexiScriptPart(QObject *parent, const QStringList &l)
 	, d( new Private() )
 {
 	setInternalPropertyValue("instanceName",
-		i18n("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
+		i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
 		"If you cannot use latin characters in your language, use english word.", 
 		"script"));
