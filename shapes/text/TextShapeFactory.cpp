@@ -30,7 +30,7 @@
 TextShapeFactory::TextShapeFactory(QObject *parent)
     : KoShapeFactory(parent, TextShape_SHAPEID, i18n("Text"))
 {
-    setToolTip(i18n("A Shape That Shows Text"));
+    setToolTip(i18n("A shape that shows text"));
     setOdfElementNames( KoXmlNS::draw, QStringList( "text-box" ) );
     setLoadingPriority( 1 );
 
