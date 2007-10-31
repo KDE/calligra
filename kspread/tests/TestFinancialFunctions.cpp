@@ -635,10 +635,14 @@ void TestFinancialFunctions::testIPMT()
 // ISPMT
 void TestFinancialFunctions::testISPMT()
 {
+  // betersolutions
+  CHECK_EVAL( "ISPMT(10%/12;1 ;36;8000000)", Value(  -64814.8148148148 ) ); //
+  CHECK_EVAL( "ISPMT(10%   ;1 ;3 ;8000000)", Value( -533333.3333333333 ) ); //
+
   // ODF
-  CHECK_EVAL_SHORT( "ISPMT(5%/12;12;360;100000)", Value( -402.78 ) ); // A trivial example of ISPMT.  A 100000 unit investment with an
-                                                                      // annual interest rate of 5% and a 30 year term has an interest payment 
-                                                                      // of 402.78 units in month 12.
+  CHECK_EVAL( "ISPMT(5%/12;12;360;100000)",  Value(    -402.7777777778 ) ); // A trivial example of ISPMT.  A 100000 unit investment with an
+                                                                            // annual interest rate of 5% and a 30 year term has an interest payment 
+                                                                            // of 402.78 units in month 12.
 }
 
 // Level-coupon bond

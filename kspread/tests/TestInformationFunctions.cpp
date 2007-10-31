@@ -53,6 +53,7 @@ void TestInformationFunctions::initTestCase()
     m_doc = new Doc();
     m_doc->map()->addNewSheet();
     Sheet* sheet = m_doc->map()->sheet(0);
+    sheet->setSheetName("Sheet1");
     CellStorage* storage = sheet->cellStorage();
 
     //
