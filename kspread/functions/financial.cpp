@@ -560,10 +560,12 @@ Value func_accrint (valVector args, ValueCalc *calc, FuncExtra *)
   if ( basis < 0 || basis > 4 || (calc->isZero (Value(frequency))) ||
       (12 % frequency != 0))
     return Value::errorVALUE();
-
-  if ( ( settlement.daysTo( firstInterest ) < 0 )
-       || ( firstInterest.daysTo( maturity ) > 0 ) )
+  
+  if ( maturity >= settlement )
+  {
+    kDebug()<<"maturity >= settlement";
     return Value::errorVALUE();
+  }
 
   double d = daysBetweenDates (maturity, settlement, basis);
   double y = daysPerYear (maturity, basis);
