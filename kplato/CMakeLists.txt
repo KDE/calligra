@@ -23,7 +23,7 @@ add_subdirectory( templates )
 add_subdirectory( pics )
 add_subdirectory( reports )
 add_subdirectory( toolbar )
-add_subdirectory( tests )
+#add_subdirectory( tests )
 
 add_subdirectory( workpackage )
 
