@@ -24,7 +24,7 @@ Item                                                                   Prio Stat
 ------------------------------------------------------------------------------
 
 * KChart, the application
-  + Make tools work                                                     ----
+  + Make tools work                                                     DONE
   + Import data (should this be in ChartShape?)                         ----
   + Drag&drop a chart                                                   ----
   + Export                                                              ----
@@ -75,7 +75,7 @@ Item                                                                   Prio Stat
   + Data editor                                                         ----
 
 * Infrastructure
-  + Switch KDChart to version 2.1                                       ----
+  + Switch KDChart to version 2.1                                       DONE
 
 * External programs and embedding
   + KChart itself                                                       ----
