@@ -340,7 +340,7 @@ bool KexiInputTableEdit::cursorAtEnd()
 	return m_lineedit->cursorPosition()==(int)m_lineedit->text().length();
 }
 
-QSize KexiInputTableEdit::totalSize()
+QSize KexiInputTableEdit::totalSize() const
 {
 	if (!m_lineedit)
 		return size();

@@ -74,7 +74,7 @@ class KEXIDATATABLE_EXPORT KexiInputTableEdit : public KexiTableEdit
 		virtual void clear();
 
 		/*! \return total size of this editor, including any buttons, etc. (if present). */
-		virtual QSize totalSize();
+		virtual QSize totalSize() const;
 
 		/*! Handles action having standard name \a actionName. 
 		 Action could be: "edit_cut", "edit_paste", etc. */
