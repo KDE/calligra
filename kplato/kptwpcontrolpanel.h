@@ -17,12 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTWORKPACKAGECONTROLPANEL_H
-#define KPTWORKPACKAGECONTROLPANEL_H
+#ifndef KPTWPCONTROLPANEL_H
+#define KPTWPCONTROLPANEL_H
 
-#include "kplatoui_export.h"
+#include "kplato_export.h"
 
-#include "ui_kptworkpackagecontrolpanel.h"
+#include "kptworkpackagecontrolpanel.h"
 
 #include <QWidget>
 
@@ -30,27 +30,24 @@
 namespace KPlato
 {
 
-class Project;
+class View;
 class Task;
 
-class KPLATOUI_EXPORT WorkPackageControlPanel : public QWidget, public Ui_WorkPackageControlPanel
+class WPControlPanel : public WorkPackageControlPanel
 {
     Q_OBJECT
 public:
-    explicit WorkPackageControlPanel( Project &project, Task &task, QWidget *parent=0 );
+    explicit WPControlPanel( View *view, Task &task, QWidget *parent=0 );
 
 protected slots:
-    void slotSelectionChanged();
     virtual void slotTransferWPClicked();
     virtual void slotLoadWPClicked();
-    virtual void slotViewWPClicked();
     virtual void slotMailToClicked();
 
-protected:
-    Project &m_project;
-    Task &m_task;
+private:
+    View *m_view;
 };
 
 } //KPlato namespace
 
-#endif // KPTWORKPACKAGECONTROLPANEL_H
+#endif // KPTWPCONTROLPANEL_H

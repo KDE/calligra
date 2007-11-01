@@ -20,6 +20,8 @@
 #ifndef KPLATO_DOCUMENTSPANEL_H
 #define KPLATO_DOCUMENTSPANEL_H
 
+#include "kplatoui_export.h"
+
 #include "ui_kptdocumentspanel.h"
 
 #include "kptdocuments.h"
@@ -34,7 +36,7 @@ class Node;
 class DocumentItemModel;
 class MacroCommand;
 
-class DocumentsPanel : public QWidget
+class KPLATOUI_EXPORT DocumentsPanel : public QWidget
 {
     Q_OBJECT
 public:

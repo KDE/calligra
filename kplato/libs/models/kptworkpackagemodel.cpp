@@ -72,13 +72,27 @@ QVariant WorkPackageModel::email( const Resource *r, int role ) const
     return QVariant();
 }
 
-QVariant WorkPackageModel::status( const Resource *r, int role ) const
+QVariant WorkPackageModel::sendStatus( const Resource *r, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
         case Qt::ToolTipRole:
-            return WorkPackage::statusToString( workPackage().status( r ), true );
+            return WorkPackage::sendStatusToString( workPackage().sendStatus( r ), true );
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant WorkPackageModel::sendTime( const Resource *r, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return workPackage().resourceStatus().value( const_cast<Resource*>( r ) ).sendTime.dateTime();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -100,6 +114,62 @@ QVariant WorkPackageModel::responseType( const Resource *r, int role ) const
     return QVariant();
 }
 
+QVariant WorkPackageModel::requiredTime( const Resource *r, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return workPackage().resourceStatus().value( const_cast<Resource*>( r ) ).requiredTime.dateTime();
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant WorkPackageModel::responseStatus( const Resource *r, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return WorkPackage::responseStatusToString( workPackage().responseStatus( r ), true );
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant WorkPackageModel::responseTime( const Resource *r, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return workPackage().resourceStatus().value( const_cast<Resource*>( r ) ).responseTime.dateTime();
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant WorkPackageModel::lastAction( const Resource *r, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return WorkPackage::actionTypeToString( workPackage().actionType( r ) );
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 
 int WorkPackageModel::rowCount( const QModelIndex &parent ) const
 {
@@ -111,7 +181,7 @@ int WorkPackageModel::rowCount( const QModelIndex &parent ) const
 
 int WorkPackageModel::columnCount( const QModelIndex & ) const
 {
-    return 4;
+    return 9;
 }
 
 QVariant WorkPackageModel::data( const QModelIndex &index, int role ) const
@@ -121,8 +191,13 @@ QVariant WorkPackageModel::data( const QModelIndex &index, int role ) const
     switch ( index.column() ) {
         case 0: result = name( r, role ); break;
         case 1: result = email( r, role ); break;
-        case 2: result = status( r, role ); break;
-        case 3: result = responseType( r, role ); break;
+        case 2: result = sendStatus( r, role ); break;
+        case 3: result = sendTime( r, role ); break;
+        case 4: result = responseType( r, role ); break;
+        case 5: result = requiredTime( r, role ); break;
+        case 6: result = responseStatus( r, role ); break;
+        case 7: result = responseTime( r, role ); break;
+        case 8: result = lastAction( r, role ); break;
 
         default:
             //kDebug()<<"Invalid column number: "<<index.column()<<endl;;
@@ -145,8 +220,13 @@ QVariant WorkPackageModel::headerData( int section, Qt::Orientation orientation,
         switch ( section ) {
             case 0: return i18n( "Name" );
             case 1: return i18n( "E-mail" );
-            case 2: return i18n( "Status" );
-            case 3: return i18n( "Response" );
+            case 2: return i18n( "Send Reason" );
+            case 3: return i18n( "Send Time" );
+            case 4: return i18n( "Response Type" );
+            case 5: return i18n( "Response Due" );
+            case 6: return i18n( "Response Reason" );
+            case 7: return i18n( "Response Time" );
+            case 8: return i18n( "Last Action" );
             
             default: return QVariant();
         }

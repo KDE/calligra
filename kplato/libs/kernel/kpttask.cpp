@@ -2538,37 +2538,43 @@ void WorkPackage::setScheduleManager( ScheduleManager *sm )
     resourceStatus();
 }
 
-WorkPackage::WPStatus WorkPackage::status( const Resource *r ) const
+WorkPackage::WPControlStatus WorkPackage::controlStatus() const
 {
-    return const_cast<WorkPackage*>( this )->p_status( const_cast<Resource*>( r ) );
-}
-
-WorkPackage::WPStatus WorkPackage::status( Resource *r )
-{
-    return p_status( r );
-}
-
-WorkPackage::WPStatus WorkPackage::p_status( Resource *r )
-{
-    //Resource *r = const_cast<Resource*> ( res );
-    if ( ! m_resourceStatus.contains( r ) ) {
-        return Status_None;
+    foreach ( Resource *r, m_resourceStatus.keys() ) {
+        if ( const_cast<WorkPackage*>( this )->p_controlStatus( r ) == CS_Work ) {
+            return CS_Work;
+        }
     }
-    return m_resourceStatus[ r ].status;
+    return CS_KPlato;
 }
 
-QString WorkPackage::statusToString( WorkPackage::WPStatus sts, bool trans )
+WorkPackage::WPControlStatus WorkPackage::controlStatus( const Resource *r ) const
+{
+    return const_cast<WorkPackage*>( this )->p_controlStatus( const_cast<Resource*>( r ) );
+}
+
+WorkPackage::WPControlStatus WorkPackage::controlStatus( Resource *r )
+{
+    return p_controlStatus( r );
+}
+
+WorkPackage::WPControlStatus WorkPackage::p_controlStatus( Resource *r )
+{
+    if ( ! m_resourceStatus.contains( r ) ) {
+        return CS_None;
+    }
+    return m_resourceStatus[ r ].controlStatus;
+}
+
+QString WorkPackage::controlStatusToString( WorkPackage::WPControlStatus sts, bool trans )
 {
     QString s = trans ? i18n( "None" ) : "None";
     switch ( sts ) {
-        case Status_Issued: 
-            s = trans ? i18n( "Issued" ) : "Issued";
+        case CS_KPlato: 
+            s = trans ? i18n( "KPlato" ) : "KPlato";
             break;
-        case Status_Received:
-            s = trans ? i18n( "Received" ) : "Received";
-            break;
-        case Status_Loaded:
-            s = trans ? i18n( "Loaded" ) : "Loaded";
+        case CS_Work:
+            s = trans ? i18n( "Work" ) : "Work";
             break;
         default:
             break;
@@ -2576,31 +2582,153 @@ QString WorkPackage::statusToString( WorkPackage::WPStatus sts, bool trans )
     return s;
 }
 
-WorkPackage::WPResponse WorkPackage::responseType(  const Resource *r ) const
+WorkPackage::WPSendStatus WorkPackage::sendStatus( const Resource *r ) const
+{
+    return const_cast<WorkPackage*>( this )->p_sendStatus( const_cast<Resource*>( r ) );
+}
+
+WorkPackage::WPSendStatus WorkPackage::sendStatus( Resource *r )
+{
+    return p_sendStatus( r );
+}
+
+WorkPackage::WPSendStatus WorkPackage::p_sendStatus( Resource *r )
+{
+    if ( ! m_resourceStatus.contains( r ) ) {
+        return SS_None;
+    }
+    return m_resourceStatus[ r ].sendStatus;
+}
+
+QString WorkPackage::sendStatusToString( WorkPackage::WPSendStatus sts, bool trans )
+{
+    QString s = trans ? i18n( "None" ) : "None";
+    switch ( sts ) {
+        case SS_ForInformation: 
+            s = trans ? i18n( "ForInformation" ) : "ForInformation";
+            break;
+        case SS_ForEstimation:
+            s = trans ? i18n( "ForEstimation" ) : "ForEstimation";
+            break;
+        case SS_TentativeSchedule:
+            s = trans ? i18n( "TentativeSchedule" ) : "TentativeSchedule";
+            break;
+        case SS_Scheduled:
+            s = trans ? i18n( "Scheduled" ) : "Scheduled";
+            break;
+        case SS_Execute:
+            s = trans ? i18n( "Execute" ) : "Execute";
+            break;
+        case SS_Cancel:
+            s = trans ? i18n( "Cancel" ) : "Cancel";
+            break;
+        default:
+            break;
+    }
+    return s;
+}
+
+WorkPackage::WPResponseStatus WorkPackage::responseStatus( const Resource *r ) const
+{
+    return const_cast<WorkPackage*>( this )->p_responseStatus( const_cast<Resource*>( r ) );
+}
+
+WorkPackage::WPResponseStatus WorkPackage::responseStatus( Resource *r )
+{
+    return p_responseStatus( r );
+}
+
+WorkPackage::WPResponseStatus WorkPackage::p_responseStatus( Resource *r )
+{
+    if ( ! m_resourceStatus.contains( r ) ) {
+        return RS_None;
+    }
+    return m_resourceStatus[ r ].responseStatus;
+}
+
+QString WorkPackage::responseStatusToString( WorkPackage::WPResponseStatus sts, bool trans )
+{
+    QString s = trans ? i18n( "None" ) : "None";
+    switch ( sts ) {
+        case RS_Accepted: 
+            s = trans ? i18n( "Accepted" ) : "Accepted";
+            break;
+        case RS_Tentative:
+            s = trans ? i18n( "Tentative" ) : "Tentative";
+            break;
+        case RS_Refused:
+            s = trans ? i18n( "Refused" ) : "Refused";
+            break;
+        case RS_Update:
+            s = trans ? i18n( "Update" ) : "Update";
+            break;
+        default:
+            break;
+    }
+    return s;
+}
+
+WorkPackage::WPResponseType WorkPackage::responseType(  const Resource *r ) const
 {
     return const_cast<WorkPackage*>( this )->p_responseType( const_cast<Resource*>( r ) );
 }
 
-WorkPackage::WPResponse WorkPackage::responseType(  Resource *r )
+WorkPackage::WPResponseType WorkPackage::responseType(  Resource *r )
 {
     return p_responseType( r );
 }
 
-WorkPackage::WPResponse WorkPackage::p_responseType(  Resource *r )
+WorkPackage::WPResponseType WorkPackage::p_responseType(  Resource *r )
 {
-    //Resource *r = const_cast<Resource*> ( res );
     if ( ! m_resourceStatus.contains( r ) ) {
-        return Response_None;
+        return RT_None;
     }
     return m_resourceStatus[ r ].responseType;
 }
 
-QString WorkPackage::responseTypeToString( WorkPackage::WPResponse rsp, bool trans )
+QString WorkPackage::responseTypeToString( WorkPackage::WPResponseType rsp, bool trans )
 {
     QString s = trans ? i18n( "None" ) : "None";
     switch ( rsp ) {
-        case Response_Required: 
+        case RT_Required: 
             s = trans ? i18n( "Required" ) : "Required";
+            break;
+        default:
+            break;
+    }
+    return s;
+}
+    
+WorkPackage::WPActionType WorkPackage::actionType(  const Resource *r ) const
+{
+    return const_cast<WorkPackage*>( this )->p_actionType( const_cast<Resource*>( r ) );
+}
+
+WorkPackage::WPActionType WorkPackage::actionType(  Resource *r )
+{
+    return p_actionType( r );
+}
+
+WorkPackage::WPActionType WorkPackage::p_actionType(  Resource *r )
+{
+    if ( ! m_resourceStatus.contains( r ) ) {
+        return AT_None;
+    }
+    return m_resourceStatus[ r ].actionType;
+}
+
+QString WorkPackage::actionTypeToString( WorkPackage::WPActionType type, bool trans )
+{
+    QString s = trans ? i18n( "None" ) : "None";
+    switch ( type ) {
+        case AT_Send: 
+            s = trans ? i18n( "Send" ) : "Send";
+            break;
+        case AT_Receive: 
+            s = trans ? i18n( "Receive" ) : "Receive";
+            break;
+        case AT_Load: 
+            s = trans ? i18n( "Load" ) : "Load";
             break;
         default:
             break;

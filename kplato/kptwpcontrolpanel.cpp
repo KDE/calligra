@@ -17,14 +17,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kptworkpackagecontrolpanel.h"
-#include "kptworkpackageview.h"
-#include "kptworkpackagemodel.h"
+#include "kptwpcontrolpanel.h"
 
+#include "kptpart.h"
 #include "kptproject.h"
 #include "kpttask.h"
+#include "kptview.h"
 
 #include <klocale.h>
+#include <ktoolinvocation.h>
+
 #include <kdebug.h>
 
 #include <QPushButton>
@@ -34,49 +36,39 @@ namespace KPlato
 {
 
 
-WorkPackageControlPanel::WorkPackageControlPanel( Project &project, Task &task, QWidget *p )
-    : QWidget(p),
-    m_project( project ),
-    m_task( task )
-{
-    setupUi( this );
-    
-    task.workPackage().setScheduleManager( 0 );
-    
-    resourceTable->itemModel()->setProject( &project );
-    resourceTable->itemModel()->setTask( &task );
-    
-    
-    connect( transferWP, SIGNAL( clicked(bool) ), SLOT( slotTransferWPClicked() ) );
-    connect( loadWP, SIGNAL( clicked(bool) ), SLOT( slotLoadWPClicked() ) );
-    connect( viewWP, SIGNAL( clicked(bool) ), SLOT( slotViewWPClicked() ) );
-    connect( mailTo, SIGNAL( clicked(bool) ), SLOT( slotMailToClicked() ) );
-
-}
-
-void WorkPackageControlPanel::slotSelectionChanged()
+WPControlPanel::WPControlPanel( View *view, Task &task, QWidget *p )
+    : WorkPackageControlPanel( view->getProject(), task, p ),
+    m_view( view )
 {
 }
 
-void WorkPackageControlPanel::slotTransferWPClicked()
+void WPControlPanel::slotTransferWPClicked()
+{
+    KUrl url( "workpackage.kplatowork" );
+    kDebug()<<m_task.name()<<" -> "<<url;
+    m_view->getPart()->saveWorkPackageUrl( url, &m_task, m_view->currentScheduleId() );
+    
+/*    QString to = m_task.leader();
+    QString cc;
+    QString bcc;
+    QString subject = m_task.name();
+    QString body = m_task.description();
+    QString messageFile;
+    QStringList attachURLs = QStringList() << url.url();
+    KToolInvocation::invokeMailer( to, cc, bcc, subject, body, messageFile, attachURLs );*/
+}
+
+void WPControlPanel::slotLoadWPClicked()
 {
     kDebug();
 }
 
-void WorkPackageControlPanel::slotLoadWPClicked()
+void WPControlPanel::slotMailToClicked()
 {
+    kDebug();
 }
-
-void WorkPackageControlPanel::slotViewWPClicked()
-{
-}
-
-void WorkPackageControlPanel::slotMailToClicked()
-{
-}
-
 
 
 }  //KPlato namespace
 
-#include "kptworkpackagecontrolpanel.moc"
+#include "kptwpcontrolpanel.moc"

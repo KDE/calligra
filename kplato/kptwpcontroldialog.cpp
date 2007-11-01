@@ -17,40 +17,36 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTWORKPACKAGECONTROLPANEL_H
-#define KPTWORKPACKAGECONTROLPANEL_H
+#include "kptwpcontroldialog.h"
+#include "kptwpcontrolpanel.h"
+#include "kptdocumentspanel.h"
+#include "kpttask.h"
 
-#include "kplatoui_export.h"
+#include <klocale.h>
 
-#include "ui_kptworkpackagecontrolpanel.h"
-
-#include <QWidget>
-
+#include <kdebug.h>
 
 namespace KPlato
 {
 
-class Project;
-class Task;
-
-class KPLATOUI_EXPORT WorkPackageControlPanel : public QWidget, public Ui_WorkPackageControlPanel
+WPControlDialog::WPControlDialog( View *view, Task &task, QWidget *p)
+    : KPageDialog(p)
 {
-    Q_OBJECT
-public:
-    explicit WorkPackageControlPanel( Project &project, Task &task, QWidget *parent=0 );
+    setFaceType( Tabbed );
+    setCaption( i18n("Work Package Control") );
+    setButtons( Close );
+    setDefaultButton( Close );
+    showButtonSeparator( true );
 
-protected slots:
-    void slotSelectionChanged();
-    virtual void slotTransferWPClicked();
-    virtual void slotLoadWPClicked();
-    virtual void slotViewWPClicked();
-    virtual void slotMailToClicked();
+    m_wp = new WPControlPanel( view, task, this);
+    addPage( m_wp, i18n( "General" ) );
 
-protected:
-    Project &m_project;
-    Task &m_task;
-};
+    m_docs = new DocumentsPanel( task, this );
+    addPage( m_docs, i18n( "Documents" ) );
 
-} //KPlato namespace
+}
 
-#endif // KPTWORKPACKAGECONTROLPANEL_H
+
+}  //KPlato namespace
+
+#include "kptwpcontroldialog.moc"

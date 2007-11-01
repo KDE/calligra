@@ -60,7 +60,7 @@ namespace KPlato
 
 //--------------------
     DocumentTreeView::DocumentTreeView( KoDocument *part, QWidget *parent )
-    : DoubleTreeViewBase( parent )
+    : TreeViewBase( parent )
 {
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
     setStretchLastSection( false );
@@ -75,9 +75,9 @@ namespace KPlato
     setAcceptDrops( true );
     setDropIndicatorShown( true );
     
-    QList<int> lst1; lst1 << 1 << -1;
+/*    QList<int> lst1; lst1 << 1 << -1;
     QList<int> lst2; lst2 << 0;
-    hideColumns( lst1, lst2 );
+    hideColumns( lst1, lst2 );*/
 }
 
 void DocumentTreeView::slotActivated( const QModelIndex index )
@@ -222,7 +222,7 @@ void DocumentsEditor::setupGui()
 void DocumentsEditor::slotOptions()
 {
     kDebug();
-    ItemViewSettupDialog dlg( m_view->slaveView() );
+    ItemViewSettupDialog dlg( m_view/*->slaveView()*/ );
     dlg.exec();
 }
 

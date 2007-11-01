@@ -228,29 +228,78 @@ class KPLATOKERNEL_EXPORT WorkPackage
 {
 public:
 
-    enum WPStatus { Status_None, Status_Issued, Status_Received, Status_Loaded };
-    enum WPResponse { Response_None, Response_Required };
+    /// @enum WPControlStatus describes who is in control of the package data
+    enum WPControlStatus {
+        CS_None,           /// This application is not in control
+        CS_KPlato,         /// KPlato (usually the project manager) has control of the information
+        CS_Work            /// KPlatoWork (usually a resource) has control of the information
+    };
+    /// @enum WPSendStatus describes the reason for sending the workpackage to a resource
+    enum WPSendStatus { 
+        SS_None,                /// No particular reason
+        SS_ForInformation,      /// To keep the receiver informed
+        SS_ForEstimation,       /// The task has not been estimated
+        SS_TentativeSchedule,   /// The schedule is not yet confirmed
+        SS_Scheduled,           /// The task is scheduled but not ready to be executed
+        SS_Execute,             /// The task is ready to be executed
+        SS_Cancel               /// Cancel current operation
+    };
+    /// @enum WPResponseStatus describes the resources reason for responding
+    enum WPResponseStatus { 
+        RS_None,            /// No particular reason
+        RS_Accepted,        /// Last message accepted
+        RS_Tentative,       /// Last message tentativly accepted
+        RS_Refused,         /// Last message refused
+        RS_Update           /// The workpackage includes updated data
+    };
+    /// @enum WPResponseType describes wether a response is required
+    enum WPResponseType { 
+        RT_None,        /// No response is required
+        RT_Required     /// Response is required
+    };
+    /// @enum WPLastAction describes actions for this workpackage
+    enum WPActionType { 
+        AT_None,        /// No action performed yet
+        AT_Send,        /// The package has been sent (we've had no response after that)
+        AT_Receive,     /// The package has been received (but not loaded)
+        AT_Load         /// The package data has been loaded
+    };
 
     explicit WorkPackage( Task &task );
-    ~WorkPackage();
+    virtual ~WorkPackage();
 
-    WPStatus status( const Resource *r ) const;
-    WPStatus status( Resource *r );
-    static QString statusToString( WPStatus sts, bool trans = false );
-    WPResponse responseType( const Resource *r ) const;
-    WPResponse responseType( Resource *r );
-    static QString responseTypeToString( WPResponse rsp, bool trans = false );
+    /// Return the type of application that is in control of this package data
+    virtual WPControlStatus controlStatus() const;
+    WPControlStatus controlStatus( const Resource *r ) const;
+    WPControlStatus controlStatus( Resource *r );
+    static QString controlStatusToString( WPControlStatus sts, bool trans = false );
+    
+    WPSendStatus sendStatus( const Resource *r ) const;
+    WPSendStatus sendStatus( Resource *r );
+    static QString sendStatusToString( WPSendStatus sts, bool trans = false );
+    
+    WPResponseStatus responseStatus( const Resource *r ) const;
+    WPResponseStatus responseStatus( Resource *r );
+    static QString responseStatusToString( WPResponseStatus sts, bool trans = false );
+
+    WPResponseType responseType( const Resource *r ) const;
+    WPResponseType responseType( Resource *r );
+    static QString responseTypeToString( WPResponseType rsp, bool trans = false );
+    
+    WPActionType actionType( const Resource *r ) const;
+    WPActionType actionType( Resource *r );
+    static QString actionTypeToString( WPActionType type, bool trans = false );
     
     /// Load from document
-    bool loadXML(KoXmlElement &element, XMLLoaderObject &status );
-    /// Save to document
-    void saveXML(QDomElement &element) const;
+    virtual bool loadXML(KoXmlElement &element, XMLLoaderObject &status );
+    /// Save the full workpackage
+    virtual void saveXML(QDomElement &element) const;
 
     /// Set schedule manager
     void setScheduleManager( ScheduleManager *sm );
     /// Return schedule manager
     ScheduleManager *scheduleManager() const { return m_manager; }
-    /// Return the schedule id, or -1 if no no schedule manager is set
+    /// Return the schedule id, or -1 if no schedule manager is set
     long id() const { return m_manager ? m_manager->id() : -1; }
 
     Completion &completion();
@@ -262,11 +311,22 @@ public:
 
     class ResourceStatus
     {
-        public:
-            ResourceStatus() : responseType( Response_None ), status( Status_None ) {}
-            DateTime time;
-            WPResponse responseType;
-            WPStatus status;
+    public:
+        ResourceStatus() 
+            : controlStatus( CS_None ),
+                sendStatus( SS_None ),
+                responseStatus( RS_None ),
+                responseType( RT_None ),
+                actionType( AT_None )
+            {}
+        DateTime sendTime;
+        DateTime responseTime;
+        DateTime requiredTime;
+        WPControlStatus controlStatus;
+        WPSendStatus sendStatus;
+        WPResponseStatus responseStatus;
+        WPResponseType responseType;
+        WPActionType actionType;
     };
     QList<Resource*> resources() const { return m_resourceStatus.keys(); }
     QMap<Resource*, ResourceStatus> &resourceStatus();
@@ -278,16 +338,19 @@ protected:
     QList<Resource*> fetchResources();
 
 private:
-    WPStatus p_status( Resource *r );
-    WPResponse p_responseType( Resource *r );
+    WPControlStatus p_controlStatus( Resource *r );
+    WPSendStatus p_sendStatus( Resource *r );
+    WPResponseStatus p_responseStatus( Resource *r );
+    WPResponseType p_responseType( Resource *r );
+    WPActionType p_actionType( Resource *r );
 
 private:
     Task &m_task;
     ScheduleManager *m_manager;
     Completion m_completion;
 
-    QMap<DateTime, QString> m_log;
     QMap<Resource*, ResourceStatus> m_resourceStatus;
+    QMap<DateTime, QString> m_log;
 };
 
 /**

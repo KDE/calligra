@@ -72,8 +72,13 @@ protected:
     
     QVariant name( const Resource *r, int role ) const;
     QVariant email( const Resource *r, int role ) const;
-    QVariant status( const Resource *r, int role ) const;
+    QVariant sendStatus( const Resource *r, int role ) const;
+    QVariant sendTime( const Resource *r, int role ) const;
     QVariant responseType( const Resource *r, int role ) const;
+    QVariant requiredTime( const Resource *r, int role ) const;
+    QVariant responseStatus( const Resource *r, int role ) const;
+    QVariant responseTime( const Resource *r, int role ) const;
+    QVariant lastAction( const Resource *r, int role ) const;
     
 private:
     Project *m_project;

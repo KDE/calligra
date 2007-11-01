@@ -349,9 +349,10 @@ int DocumentItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 int DocumentItemModel::rowCount( const QModelIndex &parent ) const
 {
     if ( m_documents == 0 || parent.isValid() ) {
+        kDebug()<<parent;
         return 0;
     }
-    //kDebug()<<parent<<": "<<m_documents->count();
+    kDebug()<<parent<<": "<<m_documents->count();
     return m_documents->count();
 }
 

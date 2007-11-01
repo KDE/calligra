@@ -30,7 +30,7 @@
     <widget class="WorkPackageTableView" name="resourceTable" />
    </item>
    <item row="1" column="0" >
-    <widget class="QPushButton" name="sendWP" >
+    <widget class="QPushButton" name="transferWP" >
      <property name="text" >
       <string>Transfer</string>
      </property>

@@ -36,7 +36,7 @@ class KoDocument;
 namespace KPlato
 {
 
-class KPLATOUI_EXPORT DocumentTreeView : public DoubleTreeViewBase
+class KPLATOUI_EXPORT DocumentTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:

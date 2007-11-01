@@ -106,7 +106,7 @@
 #include "kptstandardworktimedialog.h"
 #include "kptconfigdialog.h"
 #include "kptwbsdefinitiondialog.h"
-#include "kptworkpackagecontroldialog.h"
+#include "kptwpcontroldialog.h"
 #include "kptaccountsdialog.h"
 #include "kptresourceassignmentview.h"
 #include "kpttaskstatusview.h"
@@ -1463,7 +1463,7 @@ void View::slotTaskWorkpackage()
         return;
     }
     Task *task = static_cast<Task*>( node );
-    WorkPackageControlDialog *dlg = new WorkPackageControlDialog( getProject(), *task, this );
+    WPControlDialog *dlg = new WPControlDialog( this, *task, this );
     dlg->exec();
 //    getPart()->saveWorkPackageUrl( KUrl( "workpackage.kplatowork" ), node, currentScheduleId() );
 }

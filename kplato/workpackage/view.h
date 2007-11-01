@@ -22,55 +22,157 @@
 #define KPLATOWORK_VIEW
 
 #include <KoView.h>
-#include <KoQueryTrader.h>
 
 #include <QMenu>
-#include <QDockWidget>
-#include <QTreeWidget>
 
 
 class QProgressBar;
-class QStackedWidget;
-class QSplitter;
+class QTabWidget;
+class QPrinter;
+class QPrintDialog;
 
-class KPrinter;
 class KAction;
 class KToggleAction;
 class QLabel;
 
-/// The main namespace for KPlato WorkPackage Handler
+class KoView;
+
+namespace KPlato
+{
+
+class ViewBase;
+class AccountsView;
+class GanttView;
+class PertEditor;
+class ResourceView;
+class AccountsEditor;
+class TaskEditor;
+class CalendarEditor;
+class ScheduleEditor;
+class ScheduleManager;
+
+class Node;
+class Project;
+class MainSchedule;
+class Schedule;
+class Resource;
+class ResourceGroup;
+class Relation;
+
+}
+using namespace KPlato;
+
+/// Then namespace for the KPlato work package handler
 namespace KPlatoWork
 {
 
 class Part;
+class View;
 
+//-------------
 class View : public KoView
 {
     Q_OBJECT
+
 public:
     explicit View( Part* part, QWidget* parent = 0 );
     ~View();
     /**
      * Support zooming.
      */
-    virtual void setZoom( double zoom ) {}
+    virtual void setZoom( double zoom );
 
-    virtual void updateReadWrite( bool ) {}
+    Part *getPart() const;
+
+    Project& getProject() const;
+
+    virtual void setupPrinter( QPrinter &printer, QPrintDialog &printDialog );
+    virtual void print( QPrinter &printer, QPrintDialog &printDialog );
+
+    QMenu *popupMenu( const QString& name );
+
+//    virtual ViewAdaptor* dbusObject();
+
+    virtual bool loadContext();
+    virtual void saveContext( QDomElement &context ) const;
+
+//    QWidget *canvas() const;
+
+    //virtual QDockWidget *createToolBox();
+
+//    KoDocument *hitTest( const QPoint &viewPos );
+
+    ScheduleManager *currentScheduleManager() const;
+    long currentScheduleId() const;
     
-    Part *part() const;
-
-    QMenu *popupMenu( const QString& name ) {}
+    ViewBase *createDocumentsView();
+    
+signals:
+    void currentScheduleManagerChanged( ScheduleManager *sm );
     
 public slots:
+    void slotUpdate();
+    
+    void slotEditCut();
+    void slotEditCopy();
+    void slotEditPaste();
+
+    void slotConfigure();
+
     void slotPopupMenu( const QString& menuname, const QPoint &pos );
 
+protected slots:
+    void slotGuiActivated( ViewBase *view, bool );
+    void slotPlugScheduleActions();
+    void slotViewSchedule( QAction *act );
+    void slotScheduleChanged( MainSchedule* );
+    void slotScheduleAdded( const MainSchedule * );
+    void slotScheduleRemoved( const MainSchedule * );
+
+    void slotAddScheduleManager( Project *project );
+    void slotDeleteScheduleManager( Project *project, ScheduleManager *sm );
+    
+    void slotProgressChanged( int value );
+
+    void slotCurrentChanged( int );
+
+protected:
+    virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
+    virtual void updateReadWrite( bool readwrite );
+
+    QAction *addScheduleAction( Schedule *sch );
+    void setLabel();
+    void updateView( QWidget *widget );
+
+private slots:
+    void slotActionDestroyed( QObject *o );
 
 private:
+    void createViews();
+    
+private:
+    QTabWidget *m_tab;
+
+
+    int m_viewGrp;
+    int m_defaultFontSize;
+
+    QLabel *m_estlabel;
+    QProgressBar *m_progress;
+
+    QActionGroup *m_scheduleActionGroup;
+    QMap<QAction*, Schedule*> m_scheduleActions;
+    ScheduleManager *m_manager;
+    
+    bool m_readWrite;
     
     // ------ Edit
     QAction *actionCut;
     QAction *actionCopy;
     QAction *actionPaste;
+
+    // ------ Settings
+    KAction *actionConfigure;
 
 };
 
