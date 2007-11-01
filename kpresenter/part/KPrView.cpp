@@ -35,6 +35,8 @@
 #include "commands/KPrAnimationCreateCommand.h"
 #include "commands/KPrPageEffectSetCommand.h"
 #include "pageeffects/KPrCoverDownEffect.h"
+#include "dockers/KPrPageEffectDocker.h"
+#include "dockers/KPrPageEffectDockerFactory.h"
 #include "shapeanimations/KPrAnimationMoveAppear.h"
 
 KPrView::KPrView( KPrDocument *document, QWidget *parent )
@@ -42,6 +44,7 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
 , m_presentationMode( new KPrViewModePresentation( this, m_canvas ))
 , m_normalMode( 0 )
 {
+    initGUI();
     initActions();
 }
 
@@ -58,9 +61,12 @@ KoViewConverter * KPrView::viewConverter()
 }
 
 void KPrView::initGUI()
-{
-    // KoPAView::initGUI();
-    // do special kpresenter stuff here
+{ 
+    // add page effect docker to the main window
+    KPrPageEffectDockerFactory factory;
+    KPrPageEffectDocker* docker;
+    docker = qobject_cast<KPrPageEffectDocker*>( createDockWidget( &factory ) );
+    docker->setView( this );
 }
 
 void KPrView::initActions()
@@ -111,7 +117,7 @@ void KPrView::createAnimation()
 
 void KPrView::createPageEffect()
 {
-    // this does not work n master pages
+    // this does not work in master pages
     if ( dynamic_cast<KPrPage *>( activePage() ) ) {
         KPrPageEffectSetCommand * command = new KPrPageEffectSetCommand( activePage(), new KPrCoverDownEffect() );
         m_canvas->addCommand( command );
@@ -120,7 +126,7 @@ void KPrView::createPageEffect()
 
 void KPrView::deletePageEffect()
 {
-    // this does not work n master pages
+    // this does not work in master pages
     if ( dynamic_cast<KPrPage *>( activePage() ) && KPrPage::pageData( activePage() )->pageEffect() ) {
         KPrPageEffectSetCommand * command = new KPrPageEffectSetCommand( activePage(), 0 );
         m_canvas->addCommand( command );
