@@ -64,7 +64,10 @@ public:
     virtual void updateInputMethodInfo();
 
     QRectF documentViewRect();
-    QPoint widgetToView( const QPoint &p );
+    QPoint widgetToView( const QPoint &point );
+    QPoint viewToWidget( const QPoint &point );
+    QRect  widgetToView( const QRect &rect );
+    QRect  viewToWidget( const QRect &rect );
 
     QWidget *canvasWidget() { return this; }
 

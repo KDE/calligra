@@ -109,8 +109,12 @@ KoShapeManager *KChartCanvas::shapeManager() const
     return m_shapeManager;
 }
 
-void KChartCanvas::updateCanvas( const QRectF& )
+void KChartCanvas::updateCanvas( const QRectF& clipRect )
 {
+    QRect rect( viewToWidget( viewConverter()->documentToView( clipRect ).toRect() ) );
+    rect.adjust( -2, -2, 2, 2 ); // grow for anti-aliasing
+    rect.moveTopLeft( rect.topLeft() - m_documentOffset );
+    update( rect );
 }
 
 KoToolProxy *KChartCanvas::toolProxy() const
@@ -171,9 +175,24 @@ QRectF KChartCanvas::documentViewRect()
     return m_documentRect;
 }
 
-QPoint KChartCanvas::widgetToView( const QPoint &p )
+QPoint KChartCanvas::widgetToView( const QPoint &point )
 {
-    return p - m_origin;
+    return point - m_origin;
+}
+
+QPoint KChartCanvas::viewToWidget( const QPoint &point )
+{
+    return point + m_origin;
+}
+
+QRect KChartCanvas::widgetToView( const QRect &rect )
+{
+    return rect.translated( -m_origin );
+}
+
+QRect KChartCanvas::viewToWidget( const QRect &rect )
+{
+    return rect.translated( m_origin );
 }
 
 void KChartCanvas::mouseReleaseEvent( QMouseEvent *e )
