@@ -24,6 +24,7 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoPACanvas.h>
+#include <KoPADocumentStructureDocker.h>
 
 #include "KivioDocument.h"
 
@@ -51,6 +52,7 @@ KivioDocument* KivioView::document() const
 
 void KivioView::initializeGUI()
 {
+    documentStructureDocker()->setWindowTitle (i18n("Document"));
 }
 
 void KivioView::initializeActions()
