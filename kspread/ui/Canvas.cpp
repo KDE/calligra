@@ -85,7 +85,6 @@
 // KOffice
 #include <KoCanvasController.h>
 #include <KoDocumentChild.h>
-#include <KoOasisStore.h>
 #include <KoShapeManager.h>
 #include <KoStore.h>
 #include <KoToolManager.h>

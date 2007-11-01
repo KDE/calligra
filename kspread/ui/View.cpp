@@ -96,7 +96,7 @@
 #include <KoColor.h>
 #include <KoMainWindow.h>
 #include <KoOasisLoadingContext.h>
-#include <KoOasisStore.h>
+#include <KoOdfReadStore.h>
 #include <KoOasisStyles.h>
 #include <KoPartSelectAction.h>
 #include <KoShapeManager.h>
@@ -4078,10 +4078,10 @@ void View::paste()
     QBuffer buffer( &arr );
     KoStore * store = KoStore::createStore( &buffer, KoStore::Read );
 
-    KoOasisStore oasisStore( store );
+    KoOdfReadStore odfStore( store );
     KoXmlDocument doc;
     QString errorMessage;
-    bool ok = oasisStore.loadAndParse( "content.xml", doc, errorMessage );
+    bool ok = odfStore.loadAndParse( "content.xml", doc, errorMessage );
     if ( !ok ) {
       kError(32001) << "Error parsing content.xml: " << errorMessage << endl;
       return;
@@ -4089,7 +4089,7 @@ void View::paste()
 
     KoOasisStyles oasisStyles;
     KoXmlDocument stylesDoc;
-    (void)oasisStore.loadAndParse( "styles.xml", stylesDoc, errorMessage );
+    (void)odfStore.loadAndParse( "styles.xml", stylesDoc, errorMessage );
     // Load styles from style.xml
     oasisStyles.createStyleMap( stylesDoc, true );
     // Also load styles from content.xml
