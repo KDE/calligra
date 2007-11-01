@@ -80,9 +80,15 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     ChartTypeOptions chartTypeOptions( OdfChartType type ) const;
 
  private:
-    void saveLegend( KoXmlWriter &bodyWriter,
-		     KoGenStyles &mainStyles ) const;
-    void saveOdfPlotArea( KoXmlWriter &xmlWriter,
+    bool loadOdfLegend( const KoXmlElement    &legendElement, 
+			KoShapeLoadingContext &context );
+    bool loadOdfPlotarea( const KoXmlElement    &plotareaElement, 
+			  KoShapeLoadingContext &context );
+    bool loadOdfData( const KoXmlElement    &plotareaElement, 
+		      KoShapeLoadingContext &context );
+    void saveOdfLegend( KoXmlWriter &bodyWriter,
+			KoGenStyles &mainStyles ) const;
+    void saveOdfPlotarea( KoXmlWriter &xmlWriter,
                           KoGenStyles &mainStyles) const;
     void saveOdfData( KoXmlWriter& bodyWriter,
                       KoGenStyles& mainStyles ) const;

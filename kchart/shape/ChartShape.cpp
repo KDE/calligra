@@ -776,18 +776,34 @@ bool ChartShape::loadOdf( const KoXmlElement    &chartElement,
     // FIXME
 
     // 5. Load the legend.
-     //loadLegend( ... );
+    KoXmlElement legendElem = KoXml::namedItemNS( chartElement, KoXmlNS::chart,
+						  "legend" );
+    if ( !legendElem.isNull() ) {
+	if ( !loadOdfLegend( legendElem, context ) )
+	    return false;
+    }
 
     // 6. Load the plot area (this is where the real action is!).
+    KoXmlElement  plotareaElem = KoXml::namedItemNS( chartElement,
+						     KoXmlNS::chart, "plot-area" );
+    if ( !plotareaElem.isNull() ) {
+	if ( !loadOdfPlotarea( plotareaElem, context ) )
+	    return false;
+    }
 
     // 7. Load the data
-    //loadOdfData(  );
+    KoXmlElement  dataElem = KoXml::namedItemNS( chartElement,
+						 KoXmlNS::table, "table" );
+    if ( !dataElem.isNull() ) {
+	if ( !loadOdfData( dataElem, context ) )
+	    return false;
+    }
 
 #if 0  // Taken from old kchart_params.cpp: Use what we can from here
        // and throw away the rest.
 
     // Title TODO (more details, e.g. font, placement etc)
-    KoXmlElement titleElem = KoXml::namedItemNS( chartElem,
+    KoXmlElement titleElem = KoXml::namedItemNS( chartElement,
 						 KoXmlNS::chart, "title" );
     if ( !titleElem.isNull() ) {
         loadingContext.styleStack().save();
@@ -843,8 +859,7 @@ bool ChartShape::loadOdf( const KoXmlElement    &chartElement,
     // TODO: Get legend settings
     KoXmlElement legendElem = KoXml::namedItemNS( chartElem, KoXmlNS::chart,
 						 "legend" );
-    if ( !legendElem.isNull() )
-    {
+    if ( !legendElem.isNull() ) {
         loadingContext.styleStack().save();
         loadingContext.fillStyleStack( legendElem, KoXmlNS::chart, "style-name", "chart" );
         QFont font;
@@ -939,19 +954,29 @@ bool ChartShape::loadOdf( const KoXmlElement    &chartElement,
         setLegendPosition( NoLegend );
     }
 
-    // Get the plot-area.  This is where the action is.
-    KoXmlElement  plotareaElem = KoXml::namedItemNS( chartElem,
-						    KoXmlNS::chart, "plot-area" );
-    if ( !plotareaElem.isNull() ) {
-	return loadOasisPlotarea( plotareaElem, loadingContext, errorMessage );
-    }
-
     return false;
 #endif
 
     return true;
 }
 
+bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement, 
+				KoShapeLoadingContext &context )
+{
+    return true;
+}
+
+bool ChartShape::loadOdfPlotarea( const KoXmlElement    &plotareaElement, 
+				  KoShapeLoadingContext &context )
+{
+    return true;
+}
+
+bool ChartShape::loadOdfData( const KoXmlElement    &dataElement, 
+			      KoShapeLoadingContext &context )
+{
+    return true;
+}
 
 // ----------------------------------------------------------------
 //                             Saving
@@ -992,11 +1017,11 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     // FIXME
 
     // 5. Write the legend.
-    saveLegend( bodyWriter, mainStyles );
+    saveOdfLegend( bodyWriter, mainStyles );
 
     // 6. Write the plot area (this is where the real action is!).
     bodyWriter.startElement( "chart:plot-area" );
-    saveOdfPlotArea( bodyWriter, mainStyles );
+    saveOdfPlotarea( bodyWriter, mainStyles );
     bodyWriter.endElement();
 
     // 7. Save the data
@@ -1006,8 +1031,8 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
 }
 
 
-void ChartShape::saveLegend( KoXmlWriter &bodyWriter,
-			     KoGenStyles& mainStyles ) const
+void ChartShape::saveOdfLegend( KoXmlWriter &bodyWriter,
+				KoGenStyles& mainStyles ) const
 {
 }
 
@@ -1152,7 +1177,7 @@ void KChartParams::saveOasis( KoXmlWriter* bodyWriter,
 }
 #endif
 
-void ChartShape::saveOdfPlotArea( KoXmlWriter& xmlWriter,
+void ChartShape::saveOdfPlotarea( KoXmlWriter& xmlWriter,
                                   KoGenStyles& mainStyles ) const
 {
 #if 0
@@ -1186,19 +1211,15 @@ void ChartShape::saveOdfPlotArea( KoXmlWriter& xmlWriter,
             plotAreaStyle.addProperty( "chart:percentage", "true" );
             break;
         }
+	if ( threeDMode() ) {
+	    plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
+	    // FIXME: Save all 3D attributes too.
+	}
         plotAreaStyle.addProperty( "chart:vertical", "false" ); // FIXME
         plotAreaStyle.addProperty( "chart:lines-used", 0 ); // FIXME: for now
-
-#if 0
-	if ( threeDBars() )
-	    plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
         break;
-#endif
 
     case LineChartType:
-        // FIXME
-        break;
-
         switch( d->chartSubtype ) {
         case NoChartSubtype:
         case NormalChartSubtype:
@@ -1210,34 +1231,31 @@ void ChartShape::saveOdfPlotArea( KoXmlWriter& xmlWriter,
             plotAreaStyle.addProperty( "chart:percentage", "true" );
             break;
         }
+	if ( threeDMode() ) {
+	    plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
+	    // FIXME: Save all 3D attributes too.
+	}
         // FIXME: What does this mean?
         plotAreaStyle.addProperty( "chart:symbol-type", "automatic" );
-
-#if 0
-	if ( threeDLines() )
-	    plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
-#endif
-
         break;
 
     case AreaChartType:
-        // FIXME
-        break;
-
-#if 0
-        switch( areaChartSubType() ) {
-        case AreaStacked:
+        switch( d->chartSubtype ) {
+        case NoChartSubtype:
+        case NormalChartSubtype:
+	    break;
+	case StackedChartSubtype:
             plotAreaStyle.addProperty( "chart:stacked", "true" );
             break;
-        case AreaPercent:
+        case PercentChartSubtype:
             plotAreaStyle.addProperty( "chart:percentage", "true" );
             break;
-        case AreaNormal:
-            break;
         }
-#endif
         //plotAreaStyle.addProperty( "chart:lines-used", 0 ); // #### for now
-
+	if ( threeDMode() ) {
+	    plotAreaStyle.addProperty( "chart:three-dimensional", "true" );
+	    // FIXME: Save all 3D attributes too.
+	}
 
     case CircleChartType:
         // FIXME
@@ -1353,6 +1371,8 @@ QString KChartParams::saveOasisFont( KoGenStyles& mainStyles,
 void ChartShape::saveOdfData( KoXmlWriter& bodyWriter,
                               KoGenStyles& mainStyles ) const
 {
+    Q_UNUSED( mainStyles );
+
     const int cols = d->chartModel->columnCount();
     const int rows = d->chartModel->rowCount();
 
