@@ -23,7 +23,7 @@
 
 #include <KoFilterChain.h>
 #include <KoStoreDevice.h>
-#include <KoOasisStore.h>
+#include <KoOdfWriteStore.h>
 #include <KoOasisStyles.h>
 #include <KoGenStyles.h>
 #include <KoPageLayout.h>
@@ -133,7 +133,7 @@ KoFilter::ConversionStatus KarbonImport::convert(const QByteArray& from, const Q
 
     // Tell KoStore not to touch the file names
     storeout->disallowNameExpansion();
-    KoOasisStore oasisStore( storeout );
+    KoOdfWriteStore oasisStore( storeout );
     KoXmlWriter* manifestWriter = oasisStore.manifestWriter( to );
 
     KoGenStyles mainStyles;

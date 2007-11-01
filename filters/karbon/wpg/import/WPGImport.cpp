@@ -31,7 +31,6 @@
 #include <kgenericfactory.h>
 
 #include <KoXmlWriter.h>
-#include <KoOasisStore.h>
 
 #include <libwpg.h>
 #include <WPGStreamImplementation.h>

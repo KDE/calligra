@@ -24,7 +24,7 @@
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 #include <KoXmlNS.h>
-#include <KoOasisStore.h>
+#include <KoOdfReadStore.h>
 #include <KoDocument.h>
 #include <KoDom.h>
 #include <klocale.h>
@@ -56,7 +56,7 @@ KoFilter::ConversionStatus Odp2Odt::convert( const QByteArray& from, const QByte
 
     // Parse presentation content.xml
     QString errorMsg;
-    if ( !KoOasisStore::loadAndParse( inpdev, doc, errorMsg, "content.xml" ) )
+    if ( !KoOdfReadStore::loadAndParse( inpdev, doc, errorMsg, "content.xml" ) )
     {
         return KoFilter::ParsingError;
     }
@@ -87,7 +87,7 @@ KoFilter::ConversionStatus Odp2Odt::convert( const QByteArray& from, const QByte
 
     copyFile( "settings.xml" );
     copyFile( "meta.xml" );
-    // TODO generate the manifest along the way using KoOasisStore
+    // TODO generate the manifest along the way
 
     // Write output file
 

@@ -31,7 +31,7 @@
 #include <kgenericfactory.h>
 
 #include <KoXmlWriter.h>
-#include <KoOasisStore.h>
+#include <KoOdfWriteStore.h>
 
 #include "swinder.h"
 #include <iostream>
@@ -57,9 +57,9 @@ public:
 
   Workbook *workbook;
 
-  bool createStyles( KoOasisStore* store );
-  bool createContent( KoOasisStore* store );
-  bool createManifest( KoOasisStore* store );
+  bool createStyles( KoOdfWriteStore* store );
+  bool createContent( KoOdfWriteStore* store );
+  bool createManifest( KoOdfWriteStore* store );
 
   int sheetFormatIndex;
   int columnFormatIndex;
@@ -134,7 +134,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QByteArray& from, const Q
 
   // Tell KoStore not to touch the file names
   storeout->disallowNameExpansion();
-  KoOasisStore oasisStore( storeout );
+  KoOdfWriteStore oasisStore( storeout );
 
   // store document styles
   d->sheetFormatIndex = 1;
@@ -183,7 +183,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QByteArray& from, const Q
   return KoFilter::OK;
 }
 
-bool ExcelImport::Private::createContent( KoOasisStore* store )
+bool ExcelImport::Private::createContent( KoOdfWriteStore* store )
 {
   KoXmlWriter* bodyWriter = store->bodyWriter();
   KoXmlWriter* contentWriter = store->contentWriter();
@@ -229,7 +229,7 @@ bool ExcelImport::Private::createContent( KoOasisStore* store )
   return store->closeContentWriter();
 }
 
-bool ExcelImport::Private::createStyles( KoOasisStore* store )
+bool ExcelImport::Private::createStyles( KoOdfWriteStore* store )
 {
   if ( !store->store()->open( "styles.xml" ) )
     return false;
@@ -285,7 +285,7 @@ bool ExcelImport::Private::createStyles( KoOasisStore* store )
   return store->store()->close();
 }
 
-bool ExcelImport::Private::createManifest( KoOasisStore* store )
+bool ExcelImport::Private::createManifest( KoOdfWriteStore* store )
 {
   KoXmlWriter* manifestWriter = store->manifestWriter( "application/vnd.oasis.opendocument.spreadsheet" );
 

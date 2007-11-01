@@ -29,7 +29,7 @@
 #include <QXmlSimpleReader>
 #include <KoDom.h>
 #include <KoDocumentInfo.h>
-#include <KoOasisStore.h>
+#include <KoOdfReadStore.h>
 
 typedef KGenericFactory<Odp2Kpr> Odp2KprFactory;
 K_EXPORT_COMPONENT_FACTORY( libodp2kpr, Odp2KprFactory( "kofficefilters" ) )
@@ -91,7 +91,7 @@ KoFilter::ConversionStatus Odp2Kpr::convert( const QByteArray& from, const QByte
     KoXmlDocument metaDoc;
     QString errorMessage;
     KoDocumentInfo info;
-    if ( KoOasisStore::loadAndParse( inpdev, metaDoc, errorMessage, "meta.xml" /*just for debug message*/ ) ) {
+    if ( KoOdfReadStore::loadAndParse( inpdev, metaDoc, errorMessage, "meta.xml" /*just for debug message*/ ) ) {
          info.loadOasis( metaDoc );
     }
 
