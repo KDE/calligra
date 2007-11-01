@@ -53,7 +53,6 @@ using std::cerr;
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
-#include <KoOasisStore.h>
 #include <KoShape.h>
 #include <KoShapeCreateCommand.h>
 #include <KoShapeManager.h>
