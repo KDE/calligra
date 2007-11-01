@@ -327,7 +327,10 @@ static Value getPay (ValueCalc *calc, Value rate,
 {
   Value pvif, fvifa;
 
-  if (calc->isZero (rate)) return Value::errorVALUE();
+  // TODO This is for PMT. Check constraints of the other function using this
+  //if (calc->isZero (rate)) return Value::errorVALUE();
+  if ( calc->isZero(rate) )
+    return calc->mul( calc->div( calc->add(pv,fv), nper), Value(-1.0));
 
   //pvif  = pow( 1 + rate, nper );
   //fvifa = ( pvif - 1 ) / rate;

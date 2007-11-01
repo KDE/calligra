@@ -763,9 +763,9 @@ void TestFinancialFunctions::testPDURATION()
 void TestFinancialFunctions::testPMT()
 {
   // ODF
-  CHECK_EVAL_SHORT( "PMT(5%;12;1000)",       Value( -112.82541  ) ); // A trivial example of PMT.
-  CHECK_EVAL_SHORT( "PMT(5%;12;1000;100)",   Value( -119.107951 ) ); // A trivial example of PMT with non-zero FV.
-  CHECK_EVAL_SHORT( "PMT(5%;12;1000;100;1)", Value( -113.43614  ) ); // A trivial example of PMT with non-zero FV and PayType.
+  CHECK_EVAL_SHORT( "PMT(5%;12;1000)",       Value( -112.8254100208 ) ); // A trivial example of PMT.
+  CHECK_EVAL_SHORT( "PMT(5%;12;1000;100)",   Value( -119.1079510229 ) ); // A trivial example of PMT with non-zero FV.
+  CHECK_EVAL_SHORT( "PMT(5%;12;1000;100;1)", Value( -113.4361438313 ) ); // A trivial example of PMT with non-zero FV and PayType.
   CHECK_EVAL_SHORT( "PMT(0;10;1000)",        Value( -100.00000  ) ); // TODO Rate can be zero.
 }
 
