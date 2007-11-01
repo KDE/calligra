@@ -77,19 +77,19 @@ VShadowEffectDlg::VShadowEffectDlg( QWidget* parent, const char* name )
 
 	layout->addWidget(new QLabel( i18n( "Distance:" )), 0, 0);
 	m_distance = new KIntNumInput( group );
-	m_distance->setRange( -1000, 1000, 1, true );
+	m_distance->setRange( -1000, 1000 );
 	m_distance->setValue( 2 );
 	layout->addWidget(m_distance, 0, 1);
 
 	layout->addWidget(new QLabel( i18n( "Angle:" )), 1, 0);
 	m_angle = new KIntNumInput( group );
-	m_angle->setRange( 0, 360, 10, true );
+	m_angle->setRange( 0, 360, 10 );
 	m_angle->setValue( 0 );
 	layout->addWidget(m_angle, 1, 1);
 
 	layout->addWidget(new QLabel( i18n( "Opacity:" )), 2, 0);
 	m_opacity = new KIntNumInput( group );
-	m_opacity->setRange( 0, 100, 1, true );
+	m_opacity->setRange( 0, 100, 1 );
 	m_opacity->setValue( 100 );
 	layout->addWidget(m_opacity, 2, 1);
 

@@ -340,7 +340,7 @@ void VGradientTabWidget::setupUI()
 
     editLayout->addWidget( new QLabel( i18n( "Overall opacity:" ), m_editTab ), 5, 0 );
     m_opacity = new KIntNumInput( 100, m_editTab );
-    m_opacity->setRange( 0, 100, 1, true );
+    m_opacity->setRange( 0, 100 );
     m_opacity->setValue( 100 );
     editLayout->addWidget( m_opacity, 5, 1, 1, 1 );
 
