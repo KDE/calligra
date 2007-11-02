@@ -94,6 +94,7 @@ KChartPart::KChartPart( QWidget *parentWidget,
   : KoChart::Part( parentWidget, parent, singleViewMode ),
     m_chartData( 0 )
 {
+    // A KChart part contains a single chart Flake shape. 
     m_chartShape = ( ChartShape* )( KoShapeRegistry::instance()->value("ChartShape") )->createDefaultShape();
     setComponentData( KChartFactory::global(), false );
     setTemplateType( "kchart_template" );
@@ -321,13 +322,6 @@ void KChartPart::removeShape( KoShape* )
 
 
 // ----------------------------------------------------------------
-
-
-void KChartPart::initLabelAndLegend()
-{
-    // Labels and legends are automatically initialized to reasonable
-    // default values in KDChart
-}
 
 
 // Set up some values for the chart Axis, that are not well chosen by

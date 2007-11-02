@@ -84,7 +84,6 @@ public:
 
     void  analyzeHeaders( const QStandardItemModel &data );
 
-    void initLabelAndLegend();
     void loadConfig(KConfig *conf);
     void saveConfig(KConfig *conf);
     void defaultConfig();
