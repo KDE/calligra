@@ -36,7 +36,8 @@ class MyDialog:
         dialog.setFaceType("List") #Auto Plain List Tree Tabbed
         
         filepage = dialog.addPage("Open", "vCard File", "document-open")
-        deffile = "/home/kde4/vcardtest/addressbook.vcf" #"kfiledialog:///kspreadvcardimport"
+        #deffile = "/home/kde4/vcardtest/addressbook.vcf" #"kfiledialog:///kspreadvcardimport"
+        deffile = "kfiledialog:///kspreadvcardimport"
         self.openwidget = forms.createFileWidget(filepage, deffile)
         self.openwidget.setMode("Opening")
         self.openwidget.setFilter("*.vcf|vCard Files\n*|All Files")
