@@ -24,6 +24,7 @@
 
 class KComponentData;
 class KAboutData;
+class KIconLoader;
 
 class ExampleFactory : public KoFactory
 {
@@ -38,10 +39,12 @@ public:
 
     // _Creates_ a KAboutData but doesn't keep ownership
     static KAboutData* aboutData();
+    static KIconLoader* iconLoader();
 
 private:
     static KComponentData* s_global;
     static KAboutData* s_aboutData;
+    static KIconLoader* s_iconLoader;
 };
 
 #endif

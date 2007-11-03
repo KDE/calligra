@@ -2,6 +2,7 @@
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
 		 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -69,8 +70,7 @@ public:
     bool loadXML( QIODevice *, const KoXmlDocument & doc );
 
     /// reimplemented from KoDocument
-    bool loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles,
-		            const KoXmlDocument& settings, KoStore* );
+    bool loadOdf( KoOdfReadStore & odfStore );
 
     /// reimplemented from KoDocument
     bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );

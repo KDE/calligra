@@ -2,6 +2,7 @@
  Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
  Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
  Copyright (C) 2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
+ Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Library General Public
@@ -32,6 +33,7 @@
 #include <KoXmlReader.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
+#include <KoOdfReadStore.h>
 
 #include <QApplication>
 #include <qpainter.h>
@@ -94,10 +96,11 @@ KoView *Part::createViewInstance( QWidget *parent )
     return view;
 }
 
-bool Part::loadOasis( const KoXmlDocument &doc, KoOasisStyles &, const KoXmlDocument&, KoStore * )
+bool Part::loadOdf( KoOdfReadStore & odfStore )
 {
-    kWarning()<< "Oasis not supported, let's try native xml format";
-    return loadXML( 0, doc ); // We have only one format, so try to load that!
+    Q_UNUSED( odfStore );
+    kWarning()<< "OpenDocument not supported, let's try native xml format";
+    return loadXML( 0, odfStore.contentDoc() ); // We have only one format, so try to load that!
 }
 
 bool Part::loadXML( QIODevice *, const KoXmlDocument &document )

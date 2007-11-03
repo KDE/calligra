@@ -11,7 +11,7 @@
    Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
    Copyright (C) 2006 Tim Beaulen <tbscope@gmail.com>
    Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
-   Copyright (C) 2006 Thorsten Zachmann <t.zachmann@zagge.de>
+   Copyright (C) 2006-2007 Thorsten Zachmann <t.zachmann@zagge.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -60,8 +60,7 @@ public:
 
 	/// file-> open calls this method
 	virtual bool loadXML( QIODevice*, const KoXmlDocument& document );
-    virtual bool loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
-                            const KoXmlDocument & settings, KoStore* store );
+    virtual bool loadOdf( KoOdfReadStore & odfStore );
     virtual bool completeLoading( KoStore* store );
 
 	/// file-> save and file-> save as call this method

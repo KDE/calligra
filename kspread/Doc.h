@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2007 Thorsten Zachmann <zachmann@kde.org>
    Copyright 2004 Ariya Hidayat <ariya@kde.org>
    Copyright 2002-2003 Norbert Andres <nandres@web.de>
    Copyright 2000-2005 Laurent Montel <montel@kde.org>
@@ -519,8 +520,7 @@ public:
    * Main loading method.
    * @see Map::loadOasis
    */
-  virtual bool loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles,
-                          const KoXmlDocument& settings, KoStore* );
+  virtual bool loadOdf( KoOdfReadStore & odfStore );
 
   /**
    * \ingroup OpenDocument

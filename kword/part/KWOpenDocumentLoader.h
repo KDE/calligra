@@ -2,6 +2,7 @@
  * Copyright (C) 2005 David Faure <faure@kde.org>
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
+ * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -24,15 +25,17 @@
 
 #include <QObject>
 #include <KoStore.h>
-#include <KoXmlReader.h>
 #include <KoTextLoader.h>
 
 class KWDocument;
 class KWPageManager;
 class KWTextFrameSet;
+class KoOdfReadStore;
 class KoOasisStyles;
 class KoTextLoadingContext;
 class KoTextAnchor;
+class KoXmlDocument;
+class KoXmlElement;
 
 class QTextCursor;
 //class QColor;
@@ -58,9 +61,9 @@ public:
 
     /**
      *  @brief Loads an OASIS OpenDocument from a store.
-     *  This implements the KoDocument::loadOasis method.
+     *  This implements the KoDocument::loadOdf method.
      */
-    bool load(const KoXmlDocument& doc, KoOasisStyles& styles, const KoXmlDocument& settings, KoStore* store);
+    bool load( KoOdfReadStore & odfStore );
 
 protected:
     virtual void loadSettings(KoTextLoadingContext& context, const KoXmlDocument& settings);

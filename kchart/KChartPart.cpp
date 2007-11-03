@@ -2,6 +2,7 @@
 
    Copyright 1999-2007  Kalle Dalheimer <kalle@kde.org>
    Copyright 2005-2007  Inge Wallin <inge@lysator.liu.se>
+   Copyright 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -62,6 +63,7 @@ using std::cerr;
 #include <KoToolManager.h>
 #include <KoOasisLoadingContext.h>
 #include <KoOasisStyles.h>
+#include <KoOdfReadStore.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeRegistry.h>
 
@@ -585,12 +587,9 @@ void KChartPart::saveConfig( KConfig *config )
 //              Save and Load OpenDocument file format
 
 
-bool KChartPart::loadOasis( const KoXmlDocument& doc,         // content.xml
-			    KoOasisStyles&       oasisStyles, // Styles
-			    const KoXmlDocument& settings,
-			    KoStore             *store )      // pics, etc
+bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
 {
-    KoXmlElement  content = doc.documentElement();
+    KoXmlElement  content = odfStore.contentDoc().documentElement();
 
     // Find office:body
     KoXmlElement  realBody ( KoDom::namedItemNS( content, 
@@ -633,7 +632,7 @@ bool KChartPart::loadOasis( const KoXmlDocument& doc,         // content.xml
     styleManager()->loadOasisStyleTemplate( oasisStyles, this );
 #endif
 
-    KoOasisLoadingContext  context( this, oasisStyles, store );
+    KoOasisLoadingContext  context( this, odfStore.styles(), odfStore.store() );
     KoShapeLoadingContext  shapeContext( context );
 
     // ----------------------------------------------------------------
@@ -643,8 +642,8 @@ bool KChartPart::loadOasis( const KoXmlDocument& doc,         // content.xml
         return false;
 
 #if 0     // Load settings later.
-    if ( !settings.isNull() ) {
-        loadOasisSettings( settings );
+    if ( !odfStore.settingsDoc().isNull() ) {
+        loadOasisSettings( odfStore.settingsDoc() );
     }
 #endif
 
@@ -652,11 +651,6 @@ bool KChartPart::loadOasis( const KoXmlDocument& doc,         // content.xml
 
     // ----------------------------------------------------------------
 
-    Q_UNUSED( settings );
-
-    Q_UNUSED( doc );
-    Q_UNUSED( oasisStyles );
-    Q_UNUSED( store );
 #if 0
     kDebug(35001) <<"kchart loadOasis called";
 
@@ -735,8 +729,8 @@ bool KChartPart::loadOasis( const KoXmlDocument& doc,         // content.xml
             return false; // TODO setErrorMessage
     }
 
-#endif
     return true;
+#endif
 }
 
 

@@ -46,14 +46,10 @@ QDomDocument ExamplePart::saveXML()
     return QDomDocument();
 }
 
-bool ExamplePart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
-		const KoXmlDocument & settings, KoStore* store )
+bool ExamplePart::loadOdf( KoOdfReadStore & odfStore )
 {
-    // TODO load the document from the QDomDocument
-    Q_UNUSED( doc );
-    Q_UNUSED( oasisStyles );
-    Q_UNUSED( settings );
-    Q_UNUSED( store );
+    // TODO load the document from Xml
+    Q_UNUSED( odfStore );
     return true;
 }
 

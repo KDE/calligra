@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,6 +31,7 @@
 #include <kdebug.h>
 #include <kglobalsettings.h>
 #include <qapplication.h>
+#include <KoOdfReadStore.h>
 
 KoUnavailPart::KoUnavailPart( QWidget *parentWidget, QObject* parent )
     : KoDocument( parentWidget, parent, false /*singleViewMode*/ )
@@ -42,9 +44,9 @@ KoView* KoUnavailPart::createViewInstance( QWidget* parent)
     return new KoUnavailView( this, parent );
 }
 
-bool KoUnavailPart::loadOasis( const KoXmlDocument& doc, KoOasisStyles&, const KoXmlDocument&, KoStore* )
+bool KoUnavailPart::loadOdf( KoOdfReadStore & odfStore )
 {
-    m_doc = KoXml::asQDomDocument( QDomDocument(), doc );
+    m_doc = KoXml::asQDomDocument( QDomDocument(), odfStore.contentDoc() );
     return true;
 }
 

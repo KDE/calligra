@@ -2,6 +2,7 @@
 
    Copyright 1999-2007  Kalle Dalheimer <kalle@kde.org>
    Copyright 2005-2007  Inge Wallin <inge@lysator.liu.se>
+   Copyright 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -98,10 +99,7 @@ public:
     // Save and load
     virtual QDomDocument  saveXML();
     virtual bool          loadXML( QIODevice *, const KoXmlDocument& doc );
-    virtual bool          loadOasis( const KoXmlDocument& doc,
-				     KoOasisStyles& oasisStyles,
-				     const KoXmlDocument& settings,
-				     KoStore *store );
+    virtual bool          loadOdf( KoOdfReadStore & odfStore );
     virtual bool          saveOasis( KoStore* store,
                                      KoXmlWriter* manifestWriter );
 

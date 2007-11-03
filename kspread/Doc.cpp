@@ -62,6 +62,7 @@
 #include <KoMainWindow.h>
 #include <KoOasisSettings.h>
 #include <KoOasisStyles.h>
+#include <KoOdfReadStore.h>
 #include <KoShapeConfigFactory.h>
 #include <KoShapeFactory.h>
 #include <KoShapeManager.h>
@@ -796,7 +797,7 @@ void Doc::loadOasisIgnoreList( const KoOasisSettings& settings )
 }
 
 
-bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const KoXmlDocument& settings, KoStore* store)
+bool Doc::loadOdf( KoOdfReadStore & odfStore )
 {
     if ( !d->loadingInfo )
         d->loadingInfo = new LoadingInfo;
@@ -809,7 +810,7 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
     connect(this, SIGNAL(completed()), this, SLOT(finishLoading()));
     d->spellListIgnoreAll.clear();
 
-    KoXmlElement content = doc.documentElement();
+    KoXmlElement content = odfStore.contentDoc().documentElement();
     KoXmlElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( realBody.isNull() )
     {
@@ -835,13 +836,13 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
         return false;
     }
 
-    KoOasisLoadingContext context( this, oasisStyles, store );
+    KoOasisLoadingContext context( this, odfStore.styles(), odfStore.store() );
 
     //load in first
-    styleManager()->loadOasisStyleTemplate( oasisStyles, this );
+    styleManager()->loadOasisStyleTemplate( odfStore.styles(), this );
 
     // load default column style
-    const KoXmlElement* defaultColumnStyle = oasisStyles.defaultStyle( "table-column" );
+    const KoXmlElement* defaultColumnStyle = odfStore.styles().defaultStyle( "table-column" );
     if ( defaultColumnStyle )
     {
 //       kDebug() <<"style:default-style style:family=\"table-column\"";
@@ -860,7 +861,7 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
     }
 
     // load default row style
-    const KoXmlElement* defaultRowStyle = oasisStyles.defaultStyle( "table-row" );
+    const KoXmlElement* defaultRowStyle = odfStore.styles().defaultStyle( "table-row" );
     if ( defaultRowStyle )
     {
 //       kDebug() <<"style:default-style style:family=\"table-row\"";
@@ -894,9 +895,9 @@ bool Doc::loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const
     d->databaseManager->loadOdf(body); // table:database-ranges
     d->namedAreaManager->loadOdf(body); // table:named-expressions
 
-    if ( !settings.isNull() )
+    if ( !odfStore.settingsDoc().isNull() )
     {
-        loadOasisSettings( settings );
+        loadOasisSettings( odfStore.settingsDoc() );
     }
     initConfig();
     emit sigProgress(-1);

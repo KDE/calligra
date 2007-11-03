@@ -2,8 +2,8 @@
  * Copyright (C) 2005 David Faure <faure@kde.org>
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
- * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
+ * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -31,6 +31,8 @@
 #include <KoTextLoadingContext.h>
 #include <KoOasisStyles.h>
 #include <KoOasisSettings.h>
+#include <KoOdfReadStore.h>
+#include <KoXmlReader.h>
 #include <KoXmlNS.h>
 #include <KoDom.h>
 #include <KoShapeRegistry.h>
@@ -247,12 +249,12 @@ QString KWOpenDocumentLoader::currentMasterPage() const { return d->currentMaste
 QString KWOpenDocumentLoader::currentFramesetName() const { return d->currentFramesetName; }
 
 //1.6: KWDocument::loadOasis
-bool KWOpenDocumentLoader::load(const KoXmlDocument& doc, KoOasisStyles& styles, const KoXmlDocument& settings, KoStore* store)
+bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
 {
     emit sigProgress( 0 );
     kDebug(32001) <<"========================> KWOpenDocumentLoader::load START";
 
-    KoXmlElement content = doc.documentElement();
+    KoXmlElement content = odfStore.contentDoc().documentElement();
     KoXmlElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( realBody.isNull() ) {
         kError(32001) << "No office:body found!" << endl;
@@ -276,7 +278,7 @@ bool KWOpenDocumentLoader::load(const KoXmlDocument& doc, KoOasisStyles& styles,
 
     // TODO check versions and mimetypes etc.
 
-    KoTextLoadingContext context( this, d->document, styles, store );
+    KoTextLoadingContext context( this, d->document, odfStore.styles(), odfStore.store() );
 
     KoColumns columns;
     columns.columns = 1;
@@ -435,7 +437,7 @@ bool KWOpenDocumentLoader::load(const KoXmlDocument& doc, KoOasisStyles& styles,
     if ( !loadMasterPageStyle(context, d->currentMasterPage) )
         return false;
 
-    loadSettings(context, settings);
+    loadSettings(context, odfStore.settingsDoc() );
 
 #if 0 //1.6:
     // This sets the columns and header/footer flags, and calls recalcFrames, so it must be done last.

@@ -2,6 +2,7 @@
    Copyright (C) 2001 Andrea Rizzi <rizzi@kde.org>
 	              Ulrich Kuettler <ulrich.kuettler@mailbox.tu-dresden.de>
 		 2006 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,6 +35,7 @@
 #include <KoXmlWriter.h>
 #include <KoMainWindow.h>
 #include <KoStoreDevice.h>
+#include <KoOdfReadStore.h>
 #include <ktemporaryfile.h>
 #include <klocale.h>
 
@@ -85,10 +87,9 @@ bool KFormulaPartDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWrite
     return true;
 }
 
-bool KFormulaPartDocument::loadOasis( const KoXmlDocument& doc, KoOasisStyles&,
-                                      const KoXmlDocument&, KoStore* )
+bool KFormulaPartDocument::loadOdf( KoOdfReadStore & odfStore )
 {
-    m_formulaElement->readMathML( doc.documentElement() );
+    m_formulaElement->readMathML( odfStore.contentDoc().documentElement() );
 /*    if ( document->loadOasis( doc ) )
     {
         m_commandHistory->clear();

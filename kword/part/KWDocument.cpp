@@ -491,7 +491,8 @@ void KWDocument::clear() {
     m_inlineTextObjectManager->setProperty(KoInlineObject::PageCount, pageCount());
 }
 
-bool KWDocument::loadOasis(const KoXmlDocument& doc, KoOasisStyles& styles, const KoXmlDocument& settings, KoStore* store) {
+bool KWDocument::loadOdf( KoOdfReadStore & odfStore )
+{
     clear();
     foreach(KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
@@ -499,7 +500,7 @@ bool KWDocument::loadOasis(const KoXmlDocument& doc, KoOasisStyles& styles, cons
     }
 
     KWOpenDocumentLoader loader(this);
-    bool rc = loader.load(doc, styles, settings, store);
+    bool rc = loader.load(odfStore);
     if (rc)
         endOfLoading();
     return rc;

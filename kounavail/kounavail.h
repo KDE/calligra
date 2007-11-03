@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -34,7 +35,7 @@ public:
 
     virtual void paintContent( QPainter& painter, const QRect& rect);
 
-    virtual bool loadOasis( const KoXmlDocument& doc, KoOasisStyles& oasisStyles, const KoXmlDocument& settings, KoStore* );
+    virtual bool loadOdf( KoOdfReadStore & odfStore );
     virtual bool saveOasis(KoStore*, KoXmlWriter*);
 
     virtual bool loadXML( QIODevice *, const KoXmlDocument & );

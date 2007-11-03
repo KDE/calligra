@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999, 2000 Torben Weis <weis@kde.org>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,8 +34,7 @@ public:
     virtual bool loadXML( QIODevice *, const KoXmlDocument & );
     virtual QDomDocument saveXML();
 
-    virtual bool loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
-                            const KoXmlDocument & settings, KoStore* store );
+    virtual bool loadOdf( KoOdfReadStore & odfStore );
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
 protected:

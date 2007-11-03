@@ -21,7 +21,7 @@
    Copyright (C) 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
    Copyright (C) 2006 Jaison Lee <lee.jaison@gmail.com>
    Copyright (C) 2006 Casper Boemann <cbr@boemann.dk>
-   Copyright (C) 2006 Thorsten Zachmann <t.zachmann@zagge.de>
+   Copyright (C) 2006-2007 Thorsten Zachmann <t.zachmann@zagge.de>
    Copyright (C) 2007 Matthias Kretz <kretz@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -51,6 +51,7 @@
 #include <KoApplication.h>
 #include <KoOasisStyles.h>
 #include <KoOasisLoadingContext.h>
+#include <KoOdfReadStore.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
@@ -237,12 +238,11 @@ KarbonPart::saveXML()
 	return doc;
 }
 
-bool KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyles,
-                       const KoXmlDocument & settings, KoStore* store )
+bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
 {
     kDebug(38000) <<"Start loading OASIS document..." /*<< doc.toString()*/;
 
-    KoXmlElement contents = doc.documentElement();
+    KoXmlElement contents = odfStore.contentDoc().documentElement();
     kDebug(38000) <<"Start loading OASIS document..." << contents.text();
     kDebug(38000) <<"Start loading OASIS contents..." << contents.lastChild().localName();
     kDebug(38000) <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
@@ -273,14 +273,14 @@ bool KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyle
     }
 
     QString masterPageName = "Standard"; // use default layout as fallback
-    KoXmlElement *master = oasisStyles.masterPages()[ masterPageName ];
+    KoXmlElement *master = odfStore.styles().masterPages()[ masterPageName ];
     if ( !master ) //last test...
-        master = oasisStyles.masterPages()[ "Default" ];
+        master = odfStore.styles().masterPages()[ "Default" ];
     Q_ASSERT( master );
 
     if( master )
     {
-        const KoXmlElement *style = oasisStyles.findStyle(
+        const KoXmlElement *style = odfStore.styles().findStyle(
             master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) );
         m_pageLayout.loadOasis( *style );
         m_doc.setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
@@ -288,7 +288,7 @@ bool KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyle
     else
         return false;
 
-    KoOasisLoadingContext context( this, oasisStyles, store );
+    KoOasisLoadingContext context( this, odfStore.styles(), odfStore.store() );
     KoShapeLoadingContext shapeContext( context );
 
     m_doc.loadOasis( page, shapeContext );
@@ -301,7 +301,7 @@ bool KarbonPart::loadOasis( const KoXmlDocument & doc, KoOasisStyles& oasisStyle
         m_doc.setPageSize( pageSize );
     }
 
-    loadOasisSettings( settings );
+    loadOasisSettings( odfStore.settingsDoc() );
 
     return true;
 }

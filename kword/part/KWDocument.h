@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
  * Copyright (C) 2002-2006 David Faure <faure@kde.org>
  * Copyright (C) 2005-2007 Thomas Zander <zander@kde.org>
+ * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -73,7 +74,7 @@ public:
     /// reimplemented from KoDocument
     virtual bool loadXML(QIODevice*, const KoXmlDocument&);
     /// reimplemented from KoDocument
-    virtual bool loadOasis(const KoXmlDocument&, KoOasisStyles&, const KoXmlDocument&, KoStore*);
+    virtual bool loadOdf(KoOdfReadStore & odfStore);
     /// reimplemented from KoDocument
     virtual bool saveOasis(KoStore*, KoXmlWriter*);
     /// reimplemented from KoDocument
