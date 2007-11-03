@@ -320,6 +320,21 @@ void awNpv (ValueCalc *c, Value &res, Value val, Value rate)
 }
 
 //
+// helper: calc_fvifa
+//
+static Value calc_fvifa (ValueCalc *calc, Value rate,
+    Value nper)
+{
+  Value res;
+
+  if (rate.isZero())
+    return (nper);
+  else
+    return Value(pow1pm1(rate.asFloat(), nper.asFloat())/rate.asFloat());
+}
+
+
+//
 // helper: getPay
 //
 static Value getPay (ValueCalc *calc, Value rate,
@@ -334,13 +349,17 @@ static Value getPay (ValueCalc *calc, Value rate,
 
   //pvif  = pow( 1 + rate, nper );
   //fvifa = ( pvif - 1 ) / rate;
-  pvif = calc->pow (calc->add (rate, 1), nper);
-  fvifa = calc->div (calc->sub (pvif, 1), rate);
+  pvif = Value(pow1p (rate.asFloat(), nper.asFloat()));
+//   fvifa = calc->div (calc->sub (pvif, 1), rate);
+  fvifa = calc_fvifa(calc, rate, nper);
 
   // ( -pv * pvif - fv ) / ( ( 1.0 + rate * type ) * fvifa );
   Value val1 = calc->sub (calc->mul (calc->mul (Value(-1), pv), pvif), fv);
   Value val2 = calc->mul (calc->add (Value(1.0), calc->mul (rate, type)),
       fvifa);
+
+  
+  kDebug()<<"(1.0 + "<<rate<<"*"<<type<<")*"<<fvifa<<") ="<<val2;
   return calc->div (val1, val2);
 }
 
@@ -386,14 +405,27 @@ static double helper_eurofactor(const QString& currency)
 } 
 
 //
-// helper for IPMT and CUMIPMT
+// helper for IPMT and CUMIPMT is calculation of IPMT
 //
 static Value helper_ipmt( ValueCalc* calc, Value rate, Value per, Value nper, Value pv, Value fv, Value type )
 {
-    const Value payment = getPay (calc, rate, nper, pv, fv, type);
-    const Value ineg = getPrinc (calc, pv, payment, rate, calc->sub (per, Value(1)));
-    // -ineg * rate
-    return calc->mul (calc->mul (ineg, Value(-1)), rate);
+//     const Value payment = getPay (calc, rate, nper, pv, fv, type);
+//     const Value ineg = getPrinc (calc, pv, payment, rate, calc->sub (per, Value(1)));
+//     // -ineg * rate
+//     return calc->mul (calc->mul (ineg, Value(-1)), rate);
+
+  const Value pmt = getPay (calc, rate, nper, pv, fv, Value(0)); // Type 0
+
+  // pow1p (rate, per-1)
+  const Value val1 (pow1p (rate.asFloat(), calc->sub( per, Value(1)).asFloat()));
+  // pow1pm1 (rate, per-1)
+  const Value val2 (pow1pm1 (rate.asFloat(), calc->sub( per, Value(1)).asFloat()));
+
+  Value ipmt;
+  // -1*(pv * pow1p(rate, per-1)*rate + pmt* pow1pm1(rate, per-1))
+  ipmt = calc->mul(Value(-1),calc->add(calc->mul( calc->mul( pv, val1), rate), calc->mul(pmt, val2)));
+
+  return (type.isZero()) ? ipmt : calc->div(ipmt, calc->add( Value(1), rate));
 }
 
 
@@ -1553,27 +1585,31 @@ Value func_pmt (valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_ppmt (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  /*
-Docs partly copied from OO.
-Syntax
-PPMT(Rate;Period;NPER;PV;FV;Type)
-
-Rate is the periodic interest rate.
-Period is the amortizement period. P=1 for the first and P=NPER for the last period.
-NPER is the total number of periods during which annuity is paid.
-PV is the present value in the sequence of payments.
-FV (optional) is the desired (future) value.
-Type (optional) defines the due date. F=1 for payment at the beginning of a period and F=0 for payment at the end of a period.
-  */
+  // Docs partly copied from OO.
+  //
+  // PPMT(Rate;Period;NPER;PV;FV;Type)
+  //
+  // Rate is the periodic interest rate.
+  // Period is the amortizement period. P=1 for the first and P=NPER for the last period.
+  // NPER is the total number of periods during which annuity is paid.
+  // PV is the present value in the sequence of payments.
+  // FV (optional) is the desired (future) value.
+  // Type (optional) defines the due date. F=1 for payment at the beginning of a period and F=0 for payment at the end of a period.
+  //
 
   Value rate = args[0];
   Value per  = args[1];
   Value nper = args[2];
   Value pv   = args[3];
+
+  // defaults
   Value fv = Value(0.0);
   Value type = Value(0);
+  
   if (args.count() > 4) fv = args[4];
   if (args.count() == 6) type = args[5];
+
+  kDebug()<<"Type="<<type;
 
   Value pay  = getPay (calc, rate, nper, pv, fv, type);
   Value ipmt = func_ipmt (args, calc, 0);

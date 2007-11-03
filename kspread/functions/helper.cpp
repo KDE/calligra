@@ -371,6 +371,15 @@ double KSpread::pow1p ( const double& x, const double& y)
     return exp(y * log1p (x));
 }
 
+// pow1pm1 calculate ((1+x)^y)-1 accurately
+double KSpread::pow1pm1 ( const double& x, const double& y)
+{
+  if (x <= -1)
+    return pow(1 + x, y) - 1;
+  else
+    return expm1(y * log1p (x));
+}
+
 double KSpread::duration( const QDate& refDate, const QDate& settlement, const QDate& maturity, 
 const double& coup_, const double& yield_, const int& freq, const int& basis, const double& numOfCoups)
 {

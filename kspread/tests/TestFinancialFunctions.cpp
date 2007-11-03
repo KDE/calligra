@@ -624,9 +624,9 @@ void TestFinancialFunctions::testINTRATE()
 void TestFinancialFunctions::testIPMT()
 {
   // ODF
-  CHECK_EVAL_SHORT( "IPMT(5%/12;10;360;100000)", Value( -412.0850243 ) );     // An example of IPMT.  The interest payment on a 100000 unit loan
-                                                                              // in the 10th month of a 30 year loan at 5% annual interest.
-  CHECK_EVAL_SHORT( "IPMT(5%/12;10;360;100000;0;1)", Value( -412.1699604 ) ); // Payments at the beginning of each period.
+  CHECK_EVAL_SHORT( "IPMT(5%/12;10;360;100000)", Value( -412.0850243 ) );        // An example of IPMT.  The interest payment on a 100000 unit loan
+                                                                                 // in the 10th month of a 30 year loan at 5% annual interest.
+  CHECK_EVAL_SHORT( "IPMT(5%/12;10;360;100000;0;1)", Value( -410.3751278993 ) ); // Payments at the beginning of each period.
 
   // The total payment is the principle plus the interest.
   CHECK_EVAL_SHORT( "IPMT(5%/12;10;360;100000)+IPMT(5%/12;10;360;100000)-PMT(5%/12;360;100000)", Value( 0 ) ); 
@@ -772,13 +772,19 @@ void TestFinancialFunctions::testPMT()
 // PPMT
 void TestFinancialFunctions::testPPMT()
 {
+  // bettersolution.com
+  CHECK_EVAL_SHORT( "PPMT(10%/12;1;24;2000)",      Value(    -75.6231860084 ) ); // A simple test case
+  CHECK_EVAL_SHORT( "PPMT(8%;10;10;200000)",       Value( -27598.0534624214 ) ); // A simple test case
+
   // ODF
-  CHECK_EVAL_SHORT( "PPMT(3%;1;12;100)",           Value(   -7.046208547 ) ); // A simple test case
-  CHECK_EVAL_SHORT( "PPMT(3%;1;12;100;1;200)",     Value(  -21.138625642 ) ); // With future value
-  CHECK_EVAL_SHORT( "PPMT(3%;1;12;100;1;200;1)",   Value(  -23.435558876 ) ); // With future value and type
-  CHECK_EVAL_SHORT( "PPMT(8%;5;24;10000;0)",       Value( -203.773514049 ) ); // With nPer=5 and Future=0
-  CHECK_EVAL_SHORT( "PPMT(8%;10;24;10000;2000)",   Value( -359.292174601 ) ); // With nPer=10 and Future=2000
-  CHECK_EVAL_SHORT( "PPMT(8%;10;24;10000;2000;1)", Value( -332.677939445 ) ); // With Type=1
+  CHECK_EVAL_SHORT( "PPMT(3%;1;12;100)",           Value(   -7.0462085473 ) ); // A simple test case
+  CHECK_EVAL_SHORT( "PPMT(8%;5;24;10000;0)",       Value( -203.7735140493 ) ); // With nPer=5 and Future=0
+  CHECK_EVAL_SHORT( "PPMT(8%;10;24;10000;2000)",   Value( -359.2921746011 ) ); // With nPer=10 and Future=2000
+  CHECK_EVAL_SHORT( "PPMT(8%;10;24;10000;2000;1)", Value( -332.6779394454 ) ); // With Type=1
+
+  // these tests seems to be wrong in specs. remove superflous parameter "1".
+  CHECK_EVAL_SHORT( "PPMT(3%;1;12;100;200)",     Value(  -21.1386256419 ) ); // With future value
+  CHECK_EVAL_SHORT( "PPMT(3%;1;12;100;200;1)",   Value(  -20.5229375164 ) ); // With future value and type
 }
 
 // PRICEMAT

@@ -48,6 +48,7 @@ int days360( int day1, int month1, int year1, bool leapYear1, int  day2, int mon
 double yearFrac( const QDate& refDate, const QDate& startDate, const QDate& endDate, int basis );
 double duration( const QDate& refDate, const QDate& settlement, const QDate& maturity, const double& coup_, const double& yield_, const int& freq, const int& basis, const double& numOfCoups );
 double pow1p ( const double& x, const double& y);
+double pow1pm1 ( const double& x, const double& y);
 } //namespace KSpread
 
 #endif
