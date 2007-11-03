@@ -8,6 +8,12 @@
             interpreter="python"
             file="extensions/csvimport.py" />
         <script
+            name="pyvcardimport"
+            text="vCard File"
+            comment="Import from a vCard File"
+            interpreter="python"
+            file="extensions/vcardimport.py" />
+        <script
             name="pykexidbimport"
             text="Kexi Database"
             comment="Import from a Kexi Project File"

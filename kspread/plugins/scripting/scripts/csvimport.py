@@ -29,7 +29,7 @@ class CsvImport:
         self.openwidget.setMode("Opening")
         self.openwidget.setFilter("*.csv *.txt|Comma-Separated-Value Files\n*|All Files")
 
-        datapage = self.dialog.addPage("Import","Import to sheet beginning at cell","spreadsheet")
+        datapage = self.dialog.addPage("Import","Import to sheet beginning at cell","document-import")
         self.sheetslistview = KSpread.createSheetsListView(datapage)
         self.sheetslistview.setEditorType("Cell")
 
