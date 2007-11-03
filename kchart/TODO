@@ -26,14 +26,10 @@ Item                                                                   Prio Stat
 * KChart, the application
   + Make tools work                                                     DONE
   + Import data (should this be in ChartShape?)                         ----
-  + Drag&drop a chart                                                   ----
+  + Drag & drop a chart                                                 ----
   + Export                                                              ----
      - SVG                                                              --
      - PNG and other bitmap formats                                     --
-     - old kchart format                                                --
-  + Import                                                              ----
-     - old kchart format                                                --
-     - excel                                                            --
 
 * ChartShape
   + Handle all chart types                                              ----
@@ -50,12 +46,12 @@ Item                                                                   Prio Stat
      - gantt                                                            --
   + Commands so that undo/redo will work                                ----
 
-* OpenDocument Support for current features
+* OpenDocument 1.0 Support
 
   Item                                                          Load    Save
   ----------------------------------------------------------------------------
   + Handle all chart types                                      DONE    DONE
-  + Handle subtypes                                             --      --
+  + Handle subtypes                                             --      done
   + Plot area                                                   ----    ----
     - title                                                     --      --
     - subtitle                                                  --      --
@@ -91,9 +87,6 @@ Item                                                                   Prio Stat
   + KWord                                                               ----
      - Set chartshape to use own data                                   --
 
-* OpenDocument 1.0 Support -- read and write all tags and attributes    ----
-  + ...
-
 
 Before release of KOffice 2.0.1
 -------------------------------
@@ -112,3 +105,9 @@ Before release of KOffice 2.1.0
 
 * OpenDocument 1.2 support                                              ----
 
+* File formats
+  + Export
+     - old kchart format                                                --
+  + Import                                                              ----
+     - old kchart format                                                --
+     - excel                                                            --

@@ -24,20 +24,23 @@
 #include <QStringList>
 #include <QStandardItemModel>
 
+// KDE
 #include <kiconloader.h>
 #include <kgenericfactory.h>
 #include <klocale.h>
 
+// KOffice
 #include <KoProperties.h>
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
 
+// Chart shape
 #include "ChartShape.h"
 #include "ChartTypeToolFactory.h"
 #include "ChartLegendToolFactory.h"
-//#include "ChartDataConfigFactory.h"
 #include "ChartTypeConfigWidget.h"
 #include "ChartLegendConfigWidget.h"
+
 
 using namespace KChart;
 
@@ -45,8 +48,10 @@ K_EXPORT_COMPONENT_FACTORY( chartshape, KGenericFactory<ChartShapePlugin>( "Char
 
 ChartShapePlugin::ChartShapePlugin( QObject * parent,  const QStringList& )
 {
+    // Register all the chart shape.factory.
     KoShapeRegistry::instance()->add( new ChartShapeFactory( parent ) );
 
+    // Register all tools for the chart shape.
     KoToolRegistry::instance()->add( new ChartTypeToolFactory( parent ) );
     KoToolRegistry::instance()->add( new ChartLegendToolFactory( parent ) );
 }
@@ -56,39 +61,45 @@ ChartShapeFactory::ChartShapeFactory( QObject* parent )
     : KoShapeFactory( parent, ChartShapeId, i18n( "Chart" ) )
 {
     setToolTip( i18n( "A shape that shows a chart" ) );
+
     KIconLoader::global()->addAppDir("kchart");
     setIcon( "kchart" );
-    // default 'app specific' config pages
-    // i.e. unless an app defines other config pages, these are used.
+
+    // Default 'app specific' config pages i.e. unless an app defines
+    // other config pages, these are used.
     QList<KoShapeConfigFactory*> panelFactories;
-//     panelFactories.append( new ChartDataConfigFactory() );
+    // panelFactories.append( new ChartDataConfigFactory() );
     setOptionPanels( panelFactories );
 }
+
 
 KoShape* ChartShapeFactory::createDefaultShape() const
 {
     ChartShape* shape = new ChartShape();
 
     // Fill cells with data if there is none.
-    QStandardItemModel *m_chartData = new QStandardItemModel();
+    QStandardItemModel  *m_chartData = new QStandardItemModel();
     m_chartData->setRowCount( 4 );
     m_chartData->setColumnCount( 5 );
 
     // Insert example data
-    for (uint row = 0; row < 4; row++) {
-        // Fill row label.
+    for ( uint row = 0; row < 4; ++row ) {
+        // The first column has row labels, except the upper left
+        // corner which is unused.
         if ( row > 0 )
             m_chartData->setItem( row, 0,
-                new QStandardItem( i18n( "Row %1", row ) ) );
+                                  new QStandardItem( i18n( "Row %1", row ) ) );
 
-        for (uint col = 0; col < 5; col++) {
-            if ( row == 0 && col > 0 )
+        for ( uint col = 1; col < 5; ++col ) {
+            if ( row == 0 )
+                // First row has column labels
                 m_chartData->setData( m_chartData->index( 0, col ),
-                    i18n( "Column %1", col ), Qt::EditRole | Qt::DisplayRole );
+                                      i18n( "Column %1", col ),
+                                      Qt::EditRole | Qt::DisplayRole );
             else
                 m_chartData->setData( m_chartData->index( row, col ),
-                    QString::number( row + col ), Qt::EditRole | Qt::DisplayRole );
-            // Fill column label, but only on the first iteration.
+                                      QString::number( row + col ),
+                                      Qt::EditRole | Qt::DisplayRole );
         }
     }
 
@@ -104,15 +115,17 @@ KoShape* ChartShapeFactory::createDefaultShape() const
 KoShape* ChartShapeFactory::createShape( const KoProperties* params ) const
 {
     Q_UNUSED( params );
-    ChartShape* shape = new ChartShape();
-    return shape;
+
+    return new ChartShape();
 }
+
 
 QList<KoShapeConfigWidgetBase*> ChartShapeFactory::createShapeOptionPanels()
 {
-    QList<KoShapeConfigWidgetBase*> answer;
+    QList<KoShapeConfigWidgetBase*>  answer;
     answer.append(new ChartTypeConfigWidget());
     answer.append(new ChartLegendConfigWidget());
+
     // TODO Stefan: Axes
     return answer;
 }

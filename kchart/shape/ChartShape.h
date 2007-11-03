@@ -22,6 +22,7 @@
 #ifndef KCHART_CHART_SHAPE
 #define KCHART_CHART_SHAPE
 
+
 // Qt
 #include <QModelIndex>
 
@@ -35,6 +36,7 @@
 // KChart
 #include "kchart_export.h"
 #include "kchart_global.h"
+
 
 #define ChartShapeId "ChartShape"
 

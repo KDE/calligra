@@ -92,24 +92,19 @@ static bool isCartesian( OdfChartType type )
     return !isPolar( type );
 }
 
+
+// The private class
+
 class ChartShape::Private
 {
 public:
     Private();
     ~Private();
 
-    // We can rerender faster if we cache KDChart's output
-    QPixmap pixmap;
-    QPointF lastZoomLevel;
-    QSizeF  lastSize;
-    bool    pixmapRepaintRequested;
-
-    // The chart and its contents
+    // Basic info about the chart
     OdfChartType        chartType;
     OdfChartSubtype     chartSubtype;
-
-    // Whether we're in 2D or 3D mode
-    bool threeDMode;
+    bool                threeDMode; // Whether we're in 2D or 3D mode
 
     // The underlying engine
     KDChart::Chart            *chart;
@@ -125,6 +120,13 @@ public:
     QAbstractItemModel        *internalModel;
     QAbstractItemModel        *externalModel;
     bool                       takeOwnershipOfModel;
+
+    // We can rerender faster if we cache KDChart's output
+    QPixmap  pixmap;
+    QPointF  lastZoomLevel;
+    QSizeF   lastSize;
+    bool     pixmapRepaintRequested;
+
     // ----------------------------------------------------------------
     // Data that are not immediately applicable to the chart itself.
 
