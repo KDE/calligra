@@ -79,6 +79,7 @@ KAboutData * newAboutData()
     aboutData->addAuthor(ki18n("Robert Knight"), KLocalizedString() , "robertknight@gmail.com");
     aboutData->addAuthor(ki18n("Stefan Nikolaus"), KLocalizedString(), "stefan.nikolaus@kdemail.net");
     aboutData->addAuthor(ki18n("Sascha Pfau"), ki18n("Developer (functions)"), "mrpeacock@gmail.com");
+    aboutData->addAuthor(ki18n("Sebastian Sauer"),ki18n("Scripting Plugin"), "mail@dipe.org");
     // "Thanks to" section
     aboutData->addCredit(ki18n("Brad Hards"),
                          ki18n("Implemented, reviewed and tested various functions"),
