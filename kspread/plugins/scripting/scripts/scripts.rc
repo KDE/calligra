@@ -98,4 +98,14 @@
            file="extensions/logger.py" />
     </collection>
 
+    <collection name="docker" text="Docker" comment="Scripting Docker Widgets" enabled="false">
+        <script
+           name="pyconsoledocker"
+           text="Python Console"
+           comment="Interactive Python Console Docker"
+           enabled="false"
+           interpreter="python"
+           file="docker/consoledocker.py" />
+    </collection>
+
 </KrossScripting>

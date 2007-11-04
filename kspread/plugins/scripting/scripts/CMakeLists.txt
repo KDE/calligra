@@ -18,3 +18,7 @@ install(FILES
     yfinance.py yweather.py
     pytime.py pyregexp.py
     DESTINATION ${DATA_INSTALL_DIR}/kspread/scripts/functions)
+
+install(FILES
+    consoledocker.py
+    DESTINATION ${DATA_INSTALL_DIR}/kspread/scripts/docker)
