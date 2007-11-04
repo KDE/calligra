@@ -41,7 +41,7 @@ class KLineEdit;
 class Q3ListBox;
 class QPushButton;
 class KTabWidget;
-class Q3TextBrowser;
+class QTextBrowser;
 class KLineEdit;
 
 namespace KSpread
@@ -131,7 +131,7 @@ private:
     View* m_pView;
 
     KTabWidget* m_tabwidget;
-    Q3TextBrowser* m_browser;
+    QTextBrowser* m_browser;
     QWidget* m_input;
 
     QPushButton *selectFunction;

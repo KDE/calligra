@@ -27,7 +27,7 @@
 // Local
 #include "FormulaDialog.h"
 
-#include <q3textbrowser.h>
+#include <qtextbrowser.h>
 #include <KTabWidget>
 #include <QApplication>
 #include <QCloseEvent>
@@ -127,7 +127,8 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     m_tabwidget->setSizePolicy( sp2 );
     grid1->addWidget( m_tabwidget, 0, 1, 3, 1 );
 
-    m_browser = new Q3TextBrowser( m_tabwidget );
+    m_browser = new QTextBrowser( m_tabwidget );
+    m_browser->document()->setDefaultStyleSheet("h1 { font-size:x-large; } h2 { font-size:large; } h3 { font-size:medium; }");
     m_browser->setMinimumWidth( 300 );
 
     m_tabwidget->addTab( m_browser, i18n("Help") );
@@ -702,7 +703,7 @@ void FormulaDialog::slotSelected( const QString& function )
 
     // Set the help text
     m_browser->setText( m_desc->toQML() );
-    m_browser->setContentsPos( 0, 0 );
+    //m_browser->setContentsPos( 0, 0 );
 
     m_focus=0;
 
