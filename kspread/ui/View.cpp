@@ -1271,36 +1271,37 @@ void View::Private::initActions()
   // -- navigation actions --
 
   actions->gotoCell = new KAction(KIcon("go-jump" ), i18n("Goto Cell..."), view);
+  actions->gotoCell->setIconText(i18n("Goto"));
   actions->gotoCell->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_G ) );
   ac->addAction("gotoCell", actions->gotoCell );
   connect(actions->gotoCell, SIGNAL(triggered(bool)), view, SLOT( gotoCell() ));
   actions->gotoCell->setToolTip(i18n("Move to a particular cell"));
 
   actions->nextSheet  = new KAction(KIcon( "go-next" ), i18n("Next Sheet"), view);
+  actions->nextSheet->setIconText(i18n("Next"));
+  actions->nextSheet->setToolTip(i18n("Move to the next sheet"));
   ac->addAction("nextSheet", actions->nextSheet );
   actions->nextSheet->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_PageDown));
   connect(actions->nextSheet, SIGNAL(triggered(bool)), view, SLOT( nextSheet() ));
 
-  actions->nextSheet->setToolTip(i18n("Move to the next sheet"));
-
   actions->prevSheet  = new KAction(KIcon( "go-previous" ), i18n("Previous Sheet"), view);
+  actions->prevSheet->setIconText(i18n("Previous"));
+  actions->prevSheet->setToolTip(i18n("Move to the previous sheet"));
   ac->addAction("previousSheet", actions->prevSheet );
   actions->prevSheet->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_PageUp));
   connect(actions->prevSheet, SIGNAL(triggered(bool)), view, SLOT( previousSheet() ));
 
-  actions->prevSheet->setToolTip(i18n("Move to the previous sheet"));
-
   actions->firstSheet  = new KAction(KIcon( "go-first" ), i18n("First Sheet"), view);
+  actions->firstSheet->setIconText(i18n("First"));
+  actions->firstSheet->setToolTip(i18n("Move to the first sheet"));
   ac->addAction("firstSheet", actions->firstSheet );
   connect(actions->firstSheet, SIGNAL(triggered(bool)), view, SLOT( firstSheet() ));
 
-  actions->firstSheet->setToolTip(i18n("Move to the first sheet"));
-
   actions->lastSheet  = new KAction(KIcon( "go-last" ), i18n("Last Sheet"), view);
+  actions->lastSheet->setIconText(i18n("Last"));
+  actions->lastSheet->setToolTip(i18n("Move to the last sheet"));
   ac->addAction("lastSheet", actions->lastSheet );
   connect(actions->lastSheet, SIGNAL(triggered(bool)), view, SLOT( lastSheet() ));
-
-  actions->lastSheet->setToolTip(i18n("Move to the last sheet"));
 
   // -- settings actions --
 
