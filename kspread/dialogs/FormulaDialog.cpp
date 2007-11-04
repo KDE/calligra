@@ -125,7 +125,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     m_tabwidget = new KTabWidget( page );
     QSizePolicy sp2( QSizePolicy::Expanding, QSizePolicy::Expanding );
     m_tabwidget->setSizePolicy( sp2 );
-    grid1->addWidget( m_tabwidget, 0, 1, 3, 1 );
+    grid1->addWidget( m_tabwidget, 0, 1, 4, 1 );
 
     m_browser = new QTextBrowser( m_tabwidget );
     m_browser->document()->setDefaultStyleSheet("h1 { font-size:x-large; } h2 { font-size:large; } h3 { font-size:medium; }");
