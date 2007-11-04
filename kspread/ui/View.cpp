@@ -1270,7 +1270,7 @@ void View::Private::initActions()
 
   // -- navigation actions --
 
-  actions->gotoCell = new KAction(KIcon("goto-page" ), i18n("Goto Cell..."), view);
+  actions->gotoCell = new KAction(KIcon("go-jump" ), i18n("Goto Cell..."), view);
   actions->gotoCell->setShortcut( QKeySequence( Qt::CTRL+Qt::Key_G ) );
   ac->addAction("gotoCell", actions->gotoCell );
   connect(actions->gotoCell, SIGNAL(triggered(bool)), view, SLOT( gotoCell() ));
