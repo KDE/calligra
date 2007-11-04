@@ -756,7 +756,12 @@ void TestFinancialFunctions::testODDLYIELD()
 // PDURATION
 void TestFinancialFunctions::testPDURATION()
 {
-  CHECK_EVAL_SHORT( "PDURATION( 0.1; 10; 100 )" , Value( 24.158858 ) ); //
+  // is DURATION in kspread
+  CHECK_EVAL_SHORT( "PDURATION( 0.1; 10; 100 )" , Value(  24.158858 ) ); // simple use case
+  CHECK_EVAL_SHORT( "PDURATION( 0.1; 100; 10 )" , Value( -24.158858 ) ); // curentValue > desiredValue
+  CHECK_EVAL_SHORT( "PDURATION(   0; 10;  11 )" , Value::errorVALUE() ); // rate > 0
+  CHECK_EVAL_SHORT( "PDURATION( 0.1;  0;  11 )" , Value::errorVALUE() ); // currentValue > 0
+  CHECK_EVAL_SHORT( "PDURATION( 0.1; 10;   0 )" , Value::errorVALUE() ); // desiredValue > 0
 }
 
 // PMT

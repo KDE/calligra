@@ -235,6 +235,9 @@ void RegisterFinancialFunctions()
   f = new Function ("ODDLYIELD", func_oddlyield);
   f->setParamCount (7,8);
   repo->add (f);
+  f = new Function ("PDURATION", func_duration);
+  f->setParamCount (3);
+  repo->add (f);
   f = new Function ("PMT", func_pmt);
   f->setParamCount (3, 5);
   repo->add (f);
