@@ -84,11 +84,11 @@ SimpleEntryTool::SimpleEntryTool( KoCanvasBase* canvas )
     QActionGroup* actionGroup = new QActionGroup(this);
     connect(actionGroup, SIGNAL(triggered(QAction*)), this, SLOT(activeActionChanged(QAction*)));
 
-    QAction* importAction = new QAction(KIcon("file-import"), i18n("Import"), this);
+    QAction* importAction = new QAction(KIcon("document-import"), i18n("Import"), this);
     addAction("import", importAction);
     connect(importAction, SIGNAL(triggered()), this, SLOT(importSheet()));
 
-    QAction* exportAction = new QAction(KIcon("file-export"), i18n("Export"), this);
+    QAction* exportAction = new QAction(KIcon("document-export"), i18n("Export"), this);
     addAction("export", exportAction);
     connect(exportAction, SIGNAL(triggered()), this, SLOT(exportSheet()));
 
