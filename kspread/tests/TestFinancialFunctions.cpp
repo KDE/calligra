@@ -595,7 +595,7 @@ void TestFinancialFunctions::testEUROCONVERT()
 void TestFinancialFunctions::testFV()
 {
   // ODF
-  CHECK_EVAL_SHORT( "FV(10%;12;-100;100)" , Value( 1824.59 ) ); // A trivial example of FV.
+  CHECK_EVAL( "FV(10%;12;-100;100)" , Value( 1824.5855390489 ) ); // A trivial example of FV.
 }
 
 // FVSCHEDULE
@@ -609,15 +609,15 @@ void TestFinancialFunctions::testFVSCHEDULE()
 void TestFinancialFunctions::testINTRATE()
 {
   // ODF
-  CHECK_EVAL_SHORT( "INTRATE( DATE(2002; 6;8); DATE(1995;10;5); 100000; 200000; 0 )" , Value::errorVALUE() ); // Settlement date must be before the maturity date.
-  CHECK_EVAL_SHORT( "INTRATE( DATE(2002; 6;8); DATE(2002; 6;8); 100000; 200000; 0 )" , Value::errorVALUE() ); // Settlement date must be before the maturity date.
-  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 50)" , Value::errorVALUE() ); // Unknown Basis returns Error.
-  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 0 )" , Value( 0.14981 ) );    // An example of INTRATE.
-  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000    )" , Value( 0.14981 ) );    // Basis defaults to 0.
-  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 1 )" , Value( 0.14971 ) );    //
-  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 2 )" , Value( 0.14766 ) );    //
-  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 3 )" , Value( 0.14971 ) );    //
-  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 4 )" , Value( 0.14981 ) );    //
+  CHECK_EVAL_SHORT( "INTRATE( DATE(2002; 6;8); DATE(1995;10;5); 100000; 200000; 0 )" , Value::errorVALUE()   ); // Settlement date must be before the maturity date.
+  CHECK_EVAL_SHORT( "INTRATE( DATE(2002; 6;8); DATE(2002; 6;8); 100000; 200000; 0 )" , Value::errorVALUE()   ); // Settlement date must be before the maturity date.
+  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 50)" , Value::errorVALUE()   ); // Unknown Basis returns Error.
+  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 0 )" , Value( 0.1498127341 ) ); // An example of INTRATE.
+  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000    )" , Value( 0.1498127341 ) ); // Basis defaults to 0.
+  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 1 )" , Value( 0.1497128794 ) ); //
+  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 2 )" , Value( 0.1476620180 ) ); //
+  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 3 )" , Value( 0.1497128794 ) ); //
+  CHECK_EVAL_SHORT( "INTRATE( DATE(1995;10;5); DATE(2002; 6;8); 100000; 200000; 4 )" , Value( 0.1498127341 ) ); //
 }
 
 // IPMT

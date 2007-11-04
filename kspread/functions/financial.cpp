@@ -186,7 +186,7 @@ void RegisterFinancialFunctions()
   f->setParamCount (3);
   repo->add (f);
   f = new Function ("FV", func_fv);
-  f->setParamCount (3);
+  f->setParamCount (3, 5);
   repo->add (f);
   f = new Function ("FV_ANNUITY", func_fv_annuity);
   f->setParamCount (3);
@@ -1214,12 +1214,30 @@ Value func_euroconvert (valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_fv (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  Value present = args[0];
-  Value interest = args[1];
-  Value periods = args[2];
+  Value rate = args[0];
+  Value nper = args[1];
+  Value pmt  = args[2];
 
+  // defaults
+  Value pv (0.0);
+  int type = 0;
+  
+  if (args.count() > 3)
+    pv = Value(calc->conv()->asFloat (args[3]).asFloat());
+
+  if (args.count() == 5)
+    type = calc->conv()->asInteger (args[4]).asInteger();
+
+  //TODO check payType
+
+  Value pvif = Value(pow1p (rate.asFloat(), nper.asFloat()));
+  Value fvifa = calc_fvifa(calc, rate, nper);
+
+  Value res (calc->mul( Value(-1), calc->add(calc->mul(pv,pvif), calc->mul(pmt,calc->mul(calc->add(Value(1),calc->mul(rate,type)), fvifa)))));
+
+  return (res);
   // present * pow (1 + interest, periods)
-  return calc->mul (present, calc->pow (calc->add (interest, 1), periods));
+//   return calc->mul (present, calc->pow (calc->add (interest, 1), periods));
 }
 
 
