@@ -9,7 +9,6 @@ http://www.koffice.org/kspread
 Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
-import os, sys, types
 import Kross, KoDocker, KSpread
 import PyQt4.Qt as Qt
 import sip #wrapinstance, unwrapinstance
@@ -61,6 +60,7 @@ class _ConsoleDocker(Qt.QWidget):
             def row(self):
                 return 0
             def hasChildren(self):
+                import types
                 if not self.parent:
                     return True
                 if isinstance(self.object, types.ClassType) or isinstance(self.object, types.ModuleType):
@@ -206,6 +206,7 @@ class _ConsoleDocker(Qt.QWidget):
                 self.treeExpired = False
         
     def execute(self, code):
+        import sys, traceback
         _stdout = sys.stdout
         _stderr = sys.stderr
         try:
@@ -226,9 +227,11 @@ class _ConsoleDocker(Qt.QWidget):
                     Base.write(self, "<b>%s</b>" % text.strip().replace("\n","<br>"))
             sys.stdout = StdOut(self.browser)
             sys.stderr = StdErr(self.browser)
-            
             sys.stdout.write("&gt; <i>%s</i>" % code.strip())
-            exec code in globals(), globals()
+            try:
+                exec code in globals(), globals()
+            except:
+                sys.stderr.write("".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
         finally:
             sys.stdout = _stdout
             sys.stderr = _stderr
