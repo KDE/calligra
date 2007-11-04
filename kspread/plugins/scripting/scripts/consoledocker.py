@@ -31,12 +31,12 @@ def _getHome():
     except (KeyError, ImportError):
         return os.curdir
 
-#def executeFile(fileName):
-    #""" Execute a file. """
-    #if fileName.startswith("file://"):
-        #fileName = fileName[7:]
-    #fileName = fileName.replace("$HOME", _getHome())
-    #execfile(fileName, globals(), globals())
+def executeFile(fileName):
+    """ Execute a file. """
+    if fileName.startswith("file://"):
+        fileName = fileName[7:]
+    fileName = fileName.replace("$HOME", _getHome())
+    execfile(fileName, globals(), globals())
 
 class _ConsoleDocker(Qt.QWidget):
     
