@@ -103,7 +103,7 @@
            name="pyconsoledocker"
            text="Python Console"
            comment="Interactive Python Console Docker"
-           enabled="false"
+           enabled="true"
            interpreter="python"
            file="docker/consoledocker.py" />
     </collection>
