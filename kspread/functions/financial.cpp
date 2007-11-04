@@ -897,8 +897,8 @@ Value func_cumprinc(valVector args, ValueCalc *calc, FuncExtra *)
     if ( v2.isError() )
         return Value::errorVALUE();
     const int end = v2.asInteger();
-    if ( end < start || end > periods )
-        return Value::errorVALUE();
+    if ( end <=0 || end < start || end > periods )
+        return Value::errorVALUE(); 
     const Value type( calc->conv()->asInteger(args[5]) );
     if ( type.isError() )
         return Value::errorVALUE();

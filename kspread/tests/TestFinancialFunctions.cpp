@@ -164,8 +164,8 @@ void TestFinancialFunctions::testCUMPRINC()
   CHECK_EVAL_SHORT( "CUMPRINC( 0.06/12; 5*12; 100000; 5; 12; 0 )", Value( -11904.054201       ) ); // maturity at the end of a period
   CHECK_EVAL_SHORT( "CUMPRINC( 0.06/12; 5*12; 100000; 5; 12; 1 )", Value( -11844.830051       ) ); // maturity at the beginning of a period
   CHECK_EVAL_SHORT( "CUMPRINC( 0.06/12; 5*12; 100000; 0;  0; 0 )", Value( Value::errorVALUE() ) ); // start > 0; end > 0
-  CHECK_EVAL_SHORT( "CUMPRINC( 0.06/12; 5*12; 100000; 5; 12; 0 )", Value( Value::errorVALUE() ) ); // end > periods
-  CHECK_EVAL_SHORT( "CUMPRINC( 0.06/12; 5*12; 100000; 5; 12; 0 )", Value( Value::errorVALUE() ) ); // start > end
+  CHECK_EVAL_SHORT( "CUMPRINC( 0.06/12; 5*12; 100000; 5; 61; 0 )", Value( Value::errorVALUE() ) ); // end > periods
+  CHECK_EVAL_SHORT( "CUMPRINC( 0.06/12; 5*12; 100000;15; 12; 0 )", Value( Value::errorVALUE() ) ); // start > end
 }
 
 // Fixed-declining balance depreciation
