@@ -27,6 +27,7 @@ class ConsoleDocker(Qt.QWidget):
 
         self.edit = Qt.QComboBox(self)
         self.edit.setEditable(True)
+        self.edit.insertItems(0, ['print dir(Kross)','print dir(KSpread)','print KSpread.sheetNames()'])
         self.browser.setFocusProxy(self.edit)
         Qt.QObject.connect(self.edit.lineEdit(), Qt.SIGNAL("returnPressed()"), self.returnPressed)
         layout.addWidget(self.edit)
