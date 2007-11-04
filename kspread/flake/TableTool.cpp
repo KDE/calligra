@@ -105,12 +105,12 @@ TableTool::TableTool( KoCanvasBase* canvas )
     connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(changeSelection(const Region&)));
     d->tableShape = 0;
 
-    KAction* importAction = new KAction(KIcon("file-import"), i18n("Import OpenDocument Spreadsheet File"), this);
+    KAction* importAction = new KAction(KIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
     importAction->setIconText(i18n("Import"));
     addAction("import", importAction);
     connect(importAction, SIGNAL(triggered()), this, SLOT(importDocument()));
 
-    KAction* exportAction = new KAction(KIcon("file-export"), i18n("Export OpenDocument Spreadsheet File"), this);
+    KAction* exportAction = new KAction(KIcon("document-export"), i18n("Export OpenDocument Spreadsheet File"), this);
     exportAction->setIconText(i18n("Export"));
     addAction("export", exportAction);
     connect(exportAction, SIGNAL(triggered()), this, SLOT(exportDocument()));
