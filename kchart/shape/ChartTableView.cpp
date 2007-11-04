@@ -29,7 +29,15 @@ using namespace KChart;
 
 class ChartTableView::Private
 {
+public:
+    Private();
+    ChartProxyModel *sourceModel;
 };
+
+ChartTableView::Private::Private()
+{
+    sourceModel = 0;
+}
 
 ChartTableView::ChartTableView( QWidget *parent /* = 0 */ )
    : QTableView( parent ),
@@ -44,17 +52,18 @@ ChartTableView::~ChartTableView()
 
 void ChartTableView::setModel( ChartProxyModel *model )
 {
-    QTableView::setModel( ( QAbstractItemModel* )model );
+    d->sourceModel = model;
+    QTableView::setModel( ( QAbstractItemModel* )model->sourceModel() );
 }
 
 ChartProxyModel *ChartTableView::model()
 {
-    return ( ChartProxyModel* )QTableView::model();
+    return d->sourceModel;
 }
 
 void ChartTableView::commitData( QWidget *editor )
 {
     QTableView::commitData( editor );
-    model()->dataChanged();
+    d->sourceModel->dataChanged();
 }
 
