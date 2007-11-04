@@ -258,6 +258,8 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
 	     this, SLOT( slotSearchText(const QString &) ) );
     connect( searchFunct, SIGNAL( returnPressed() ),
 	     this, SLOT( slotPressReturn() ) );
+
+    resize( QSize(660, 520).expandedTo(minimumSizeHint()) );
 }
 
 FormulaDialog::~FormulaDialog()
