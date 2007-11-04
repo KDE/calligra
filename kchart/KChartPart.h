@@ -41,7 +41,7 @@
 #include <KoShapeControllerBase.h>
 
 // KDChart
-#include "KDChartChart.h"
+#include "KDChartChart"
 
 // KChart
 #include "kchart_export.h"

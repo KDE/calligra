@@ -9,12 +9,12 @@
 #include <QToolButton>
 
 // KDE
-#include <klocale.h>
-#include <kiconloader.h>
+#include <KLocale>
+#include <KIconloader>
 #include <KDebug>
 
 // KDChart
-#include "KDChartChart.h"
+#include <KDChartChart>
 
 // KChart
 #include "kchart_global.h"

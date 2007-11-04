@@ -1,5 +1,5 @@
 include_directories( ${CMAKE_SOURCE_DIR}/kchart
-                     ${CMAKE_SOURCE_DIR}/kchart/kdchart/src
+                     ${CMAKE_SOURCE_DIR}/kchart/kdchart/include
                      ${CMAKE_SOURCE_DIR}/interfaces
                      ${KOGUIUTILS_INCLUDES} )
 

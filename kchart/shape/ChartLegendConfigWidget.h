@@ -26,7 +26,7 @@
 
 // KDChart
 #include "kchart_export.h"
-#include <KDChartPosition.h>
+#include "KDChartPosition"
 
 
 namespace KChart

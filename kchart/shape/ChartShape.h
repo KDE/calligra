@@ -30,9 +30,6 @@
 #include <KoShape.h>
 #include "koChart.h"
 
-// KDChart
-#include <KDChartPosition.h>
-
 // KChart
 #include "kchart_export.h"
 #include "kchart_global.h"
@@ -46,6 +43,7 @@ namespace KDChart
 {
     class Chart;
     class AbstractDiagram;
+    class Position;
 }
 
 namespace KChart

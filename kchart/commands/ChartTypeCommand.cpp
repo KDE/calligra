@@ -24,13 +24,13 @@
 #include <klocalizedstring.h>
 
 // KDChart
-#include "KDChartAbstractCoordinatePlane.h"
-#include "KDChartBarDiagram.h"
-#include "KDChartChart.h"
-#include "KDChartLineDiagram.h"
-#include "KDChartPieDiagram.h"
-#include "KDChartPolarDiagram.h"
-#include "KDChartRingDiagram.h"
+#include "KDChartAbstractCoordinatePlane"
+#include "KDChartBarDiagram"
+#include "KDChartChart"
+#include "KDChartLineDiagram"
+#include "KDChartPieDiagram"
+#include "KDChartPolarDiagram"
+#include "KDChartRingDiagram"
 
 // KChart
 #include "ChartShape.h"
