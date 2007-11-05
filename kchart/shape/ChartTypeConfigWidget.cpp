@@ -10,7 +10,7 @@
 
 // KDE
 #include <KLocale>
-#include <KIconloader>
+#include <KIconLoader>
 #include <KDebug>
 
 // KDChart
