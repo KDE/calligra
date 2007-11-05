@@ -204,10 +204,13 @@
  <Action name="bottom"/>
  <Action name="multiRow"/>
  <Separator/>
+ <Action name="cellLayout"/>
+ <!--
  <Action name="percent"/>
  <Action name="precplus"/>
  <Action name="precminus"/>
  <Action name="money"/>
+ //-->
 </ToolBar>
 <ToolBar fullWidth="true" hidden="true" name="colorAndBorderToolBar"><text>Color/Border</text>
  <Action name="borderLeft"/>
