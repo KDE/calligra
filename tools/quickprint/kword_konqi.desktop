@@ -1,6 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
-ServiceTypes=application/x-kword
+ServiceTypes=KonqPopupMenu/Plugin,application/x-kword
 Type=Service
 Actions=Print;
 

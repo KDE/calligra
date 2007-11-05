@@ -1,6 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
-ServiceTypes=application/x-karbon
+ServiceTypes=KonqPopupMenu/Plugin,application/x-karbon
 Type=Service
 Actions=Print;
 
