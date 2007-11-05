@@ -23,7 +23,6 @@
 #include "kplatoui_export.h"
 
 #include <QTreeWidget>
-#include <Q3ValueList>
 
 #include <KoQueryTrader.h>
 
@@ -166,7 +165,7 @@ private:
 private:
     Part *m_part;
     ViewListTreeWidget *m_viewlist;
-    Q3ValueList<KoDocumentEntry> m_lstEntries;
+    QList<KoDocumentEntry> m_lstEntries;
     KoDocumentEntry m_documentEntry;
 
     ViewListItem *m_contextitem;

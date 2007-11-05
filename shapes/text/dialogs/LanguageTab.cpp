@@ -40,7 +40,7 @@ LanguageTab::LanguageTab( /*KSpell2::Loader::Ptr loader,*/ QWidget* parent, Qt::
 
     //TODO use fl
     const QStringList langNames = KoGlobal::listOfLanguages();
-    const QStringList langTags = KoGlobal::listTagOfLanguages();
+    const QStringList langTags = KoGlobal::listOfLanguageTags();
     QSet<QString> spellCheckLanguages;
 #if 0 //Port it
     if ( loader )

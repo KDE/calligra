@@ -596,11 +596,12 @@ void ViewListWidget::insertViewListItem( ViewListItem *item, QTreeWidgetItem *pa
 void ViewListWidget::setupContextMenus()
 {
     // NOTE: can't use xml file as there may not be a factory()
-        QAction *action;
+    // DF: Why not use KoPartSelectAction though?
+    QAction *action;
     // document insert actions
     // Query for document types
-    m_lstEntries = KoDocumentEntry::query();
-    Q3ValueList<KoDocumentEntry>::Iterator it = m_lstEntries.begin();
+    m_lstEntries = KoDocumentEntry::query(KoDocumentEntry::OnlyEmbeddableDocuments);
+    QList<KoDocumentEntry>::const_iterator it = m_lstEntries.begin();
     for( ; it != m_lstEntries.end(); ++it ) {
         KService::Ptr serv = (*it).service();
         // TODO: Make this test safer (possibly add desktopfile to define embedable parts)
