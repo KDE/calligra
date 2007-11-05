@@ -25,11 +25,13 @@
 #include <kptviewbase.h>
 
 #include <QTableView>
+#include <QTextCursor>
 
 class KoDocument;
 
 class QPoint;
 
+class KTextBrowser;
 
 namespace KPlato
 {
@@ -37,6 +39,7 @@ namespace KPlato
 class Project;
 class Task;
 class Resource;
+class ScheduleManager;
 class WorkPackageModel;
 
 class KPLATOUI_EXPORT WorkPackageTableView : public QTableView
@@ -56,6 +59,28 @@ public:
     QList<Resource*> selectedResources() const;
 
 };
+
+class KPLATOUI_EXPORT WorkPackageInfoView : public ViewBase
+{
+    Q_OBJECT
+public:
+    WorkPackageInfoView( KoDocument *doc, QWidget *parent );
+
+    Project *project() const;
+    void setProject( Project *project );
+    Task *task() const;
+    void setTask( Task *task );
+    ScheduleManager *scheduleManager() const;
+    void setScheduleManager( ScheduleManager *sm );
+    void draw();
+
+private:
+    KTextBrowser *m_view;
+    Project *m_project;
+    Task *m_task;
+    ScheduleManager *m_manager;
+};
+
 
 }  //KPlato namespace
 

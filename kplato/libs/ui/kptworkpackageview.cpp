@@ -24,6 +24,7 @@
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptresource.h"
+#include "kptschedule.h"
 
 #include <KoDocument.h>
 
@@ -42,7 +43,10 @@
 #include <QTreeWidget>
 #include <QStringList>
 #include <QVBoxLayout>
-
+#include <QTextBlockFormat>
+#include <QTextCharFormat>
+#include <QTextTable>
+#include <QTextTableCell>
 
 #include <kaction.h>
 #include <kicon.h>
@@ -50,9 +54,7 @@
 #include <klocale.h>
 #include <kactioncollection.h>
 #include <kxmlguifactory.h>
-
-#include <kabc/addressee.h>
-#include <kabc/vcardconverter.h>
+#include <ktextbrowser.h>
 
 #include <kdebug.h>
 
@@ -110,6 +112,149 @@ void WorkPackageTableView::setTask( Task *task )
 {
     itemModel()->setTask( task );
 }
+
+//-------------------------------------------
+WorkPackageInfoView::WorkPackageInfoView( KoDocument *doc, QWidget *parent )
+    : ViewBase( doc, parent ),
+    m_view( new KTextBrowser( this ) ),
+    m_project( 0 ),
+    m_task( 0 ),
+    m_manager( 0 )
+{
+    kDebug()<<"--------------------------------------";
+    QVBoxLayout *l = new QVBoxLayout( this );
+    l->setMargin(0);
+    l->addWidget( m_view );
+
+}
+
+Project *WorkPackageInfoView::project() const
+{
+    return m_project;
+}
+
+void WorkPackageInfoView::setProject( Project *project )
+{
+    kDebug()<<project;
+    m_project = project;
+    draw();
+}
+
+Task *WorkPackageInfoView::task() const
+{
+    return m_task;
+}
+
+void WorkPackageInfoView::setTask( Task *task )
+{
+    kDebug()<<task;
+    m_task = task;
+    draw();
+}
+
+ScheduleManager *WorkPackageInfoView::scheduleManager() const
+{
+    return m_manager;
+}
+
+void WorkPackageInfoView::setScheduleManager( ScheduleManager *sm )
+{
+    kDebug()<<sm;
+    m_manager = sm;
+    draw();
+}
+
+
+void WorkPackageInfoView::draw()
+{
+    kDebug();
+    m_view->clear();
+    
+    QTextCursor c = m_view->textCursor();
+    QTextBlockFormat bf;
+    
+    if ( m_project == 0 ) {
+        m_view->setText("No project available" );
+        return;
+    }
+    m_view->setText( i18n( "Project: %1", m_project->name() ) );
+    m_view->append( "" );
+    if ( m_task == 0 ) {
+        m_view->append("No task available" );
+        return;
+    }
+    QString s;
+    m_view->append( i18n( "Task: %1", m_task->name() ) );
+    m_view->append( "" );
+    long id = -1;
+    if ( m_manager == 0 ) {
+        m_view->append( i18n( "Not scheduled" ) );
+    } else {
+        m_view->setFontUnderline( true );
+        m_view->append( i18n( "Schedule:" ) );
+        m_view->setFontUnderline( false );
+        
+        bf.setIndent( 1 );
+        c.insertBlock( bf );
+        c.setBlockCharFormat( QTextCharFormat() );
+        
+        id = m_manager->id();
+        c.insertText( i18n( "Start: %1", m_task->startTime( id ).toLocalZone().dateTime().toString( Qt::SystemLocaleDate ) ) );
+        c.insertText( "\n" );
+        c.insertText( i18n( "Finish: %1", m_task->endTime( id ).toLocalZone().dateTime().toString( Qt::SystemLocaleDate ) ) );
+    }
+    c.insertText( "\n" );
+    
+    m_view->setFontUnderline( true );
+    m_view->append( i18n( "Description:" ) );
+    m_view->setFontUnderline( false );
+    
+    c.movePosition( QTextCursor::End );
+    bf.setIndent( 1 );
+    c.insertBlock( bf );
+    c.setBlockCharFormat( QTextCharFormat() );
+    
+    s = m_task->description();
+    if ( s.isEmpty() ) {
+        s = i18n( "No description available" );
+    }
+    c.insertText( s );
+    
+    c.insertBlock( QTextBlockFormat() );
+
+    m_view->setFontUnderline( true );
+    m_view->append( i18n( "Contacts:" ) );
+    m_view->setFontUnderline( false );
+    
+    c.movePosition( QTextCursor::End );
+    c.insertBlock( bf );
+    c.setBlockCharFormat( QTextCharFormat() );
+    
+    c.insertText( i18n( "Project Manager: %1", m_project->leader() ) );
+    c.insertText( "\n" );
+    c.insertText( i18n( "Responsible: %1", m_task->leader() ) );
+    c.insertText( "\n" );
+    if ( id != -1 ) {
+        QList<Resource*> lst = m_task->assignedResources( id );
+        if ( lst.isEmpty() ) {
+            c.insertText( i18n( "Partisipants: None" ) );
+            c.insertText( "\n" );
+        } else {
+            c.insertText( i18n( "Partisipants:" ) );
+            bf.setIndent( 2 );
+            c.insertBlock( bf );
+            foreach ( Resource *r, lst ) {
+                s = r->email();
+                if ( ! s.isEmpty() ) {
+                    s = '<' + s + '>';
+                }
+                c.insertText( r->name() + " " + s );
+                c.insertText( "\n" );
+            }
+        }
+    }
+}
+
 
 
 } // namespace KPlato

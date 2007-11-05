@@ -105,6 +105,7 @@ public:
     ScheduleManager *currentScheduleManager() const;
     long currentScheduleId() const;
     
+    ViewBase *createTaskInfoView();
     ViewBase *createDocumentsView();
     
 signals:

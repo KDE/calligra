@@ -71,6 +71,7 @@
 
 #include "kptviewbase.h"
 #include "kptdocumentseditor.h"
+#include "kptworkpackageview.h"
 
 #include "kptnode.h"
 #include "kptproject.h"
@@ -152,7 +153,32 @@ View::~View()
 
 void View::createViews()
 {
+    createTaskInfoView();
     createDocumentsView();
+}
+
+ViewBase *View::createTaskInfoView()
+{
+    kDebug();
+    WorkPackageInfoView *v = new WorkPackageInfoView( getPart(), m_tab );
+    m_tab->addTab( v, i18n( "Information" ) );
+
+    Project &p = getProject();
+    v->setProject( &p );
+    Task *t = 0;
+    if ( p.numChildren() > 0 ) { // should be 1
+        t = dynamic_cast<Task*>( p.childNode( 0 ) );
+    }
+    v->setTask( t );
+    
+    kDebug()<<p.allScheduleManagers();
+    v->setScheduleManager( p.allScheduleManagers().value( 0 ) );
+    
+    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+    connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+    v->updateReadWrite( false );
+    return v;
 }
 
 ViewBase *View::createDocumentsView()

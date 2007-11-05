@@ -51,7 +51,7 @@
 
 #include <KoGlobal.h>
 
-#define CURRENT_SYNTAX_VERSION "0.6"
+#define CURRENT_SYNTAX_VERSION XML_FILE_SYNTAX_VERSION
 
 namespace KPlato
 {
@@ -228,28 +228,15 @@ QDomDocument Part::saveWorkPackageXML( const Node *node, long id )
                 "xml",
     "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
-    QDomElement doc = document.createElement( "kplatowork" );
+    QDomElement doc = document.createElement( "kplatowork" ); //??
     doc.setAttribute( "editor", "KPlatoWork" );
     doc.setAttribute( "mime", "application/x-vnd.kde.kplato.work" );
-    doc.setAttribute( "version", "0.1" );
+    doc.setAttribute( "version", CURRENT_SYNTAX_VERSION );
     document.appendChild( doc );
 
     // Save the project
     m_project->saveWorkPackageXML( doc, node, id );
     
-    if ( ! children().isEmpty() ) {
-        QDomElement el = document.createElement( "objects" );
-        foreach ( KoDocumentChild *ch, children() ) {
-            if ( ch->isDeleted() ) {
-                continue;
-            }
-            QDomElement e = ch->save( document, false );
-            el.appendChild( e );
-        }
-        if ( el.childNodes().count() > 0 ) {
-            doc.appendChild( el );
-        }
-    }
     return document;
 }
 

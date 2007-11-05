@@ -48,7 +48,7 @@
 
 #include <KoGlobal.h>
 
-#define CURRENT_SYNTAX_VERSION "0.1"
+#define CURRENT_SYNTAX_VERSION XML_FILE_SYNTAX_VERSION
 
 using namespace KPlato;
 
@@ -122,6 +122,7 @@ bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
         return false;
     }
     QString m_syntaxVersion = plan.attribute( "version", CURRENT_SYNTAX_VERSION );
+    m_xmlLoader.setVersion( m_syntaxVersion );
     if ( m_syntaxVersion > CURRENT_SYNTAX_VERSION ) {
         int ret = KMessageBox::warningContinueCancel(
                       0, i18n( "This document was created with a newer version of KPlatoWork (syntax version: %1)\n"
