@@ -38,10 +38,101 @@ def executeFile(fileName):
     execfile(fileName, globals(), globals())
 
 class _ConsoleDocker(Qt.QWidget):
-    
-    class ConsoleModel(Qt.QAbstractItemModel):
-    
+    """ The docker widget. """
+
+    class Editor(Qt.QWidget):
+        """ An editor to edit python scripting code. """
+        
+        def __init__(self, docker):
+            self.docker = docker
+            self.filename = None
+            Qt.QWidget.__init__(self, self.docker)
+            layout = Qt.QVBoxLayout(self)
+            layout.setMargin(0)
+            layout.setSpacing(0)
+            self.setLayout(layout)
+            menubar = Qt.QMenuBar(self)
+            layout.addWidget(menubar)
+            self.edit = Qt.QTextEdit(self)
+            self.edit.setWordWrapMode(Qt.QTextOption.NoWrap)
+            layout.addWidget(self.edit)
+            self.status = Qt.QLabel('', self)
+            layout.addWidget(self.status)
+            menu = Qt.QMenu("File", menubar)
+            menubar.addMenu(menu)
+            self.addAction(menu, "New", self.newClicked)
+            self.addAction(menu, "Open...", self.openClicked)
+            self.addAction(menu, "Save", self.saveClicked)
+            self.addAction(menu, "Save As...", self.saveAsClicked)
+            self.editmenu = self.edit.createStandardContextMenu()
+            self.editmenu.setTitle("Edit")
+            menubar.addMenu(self.editmenu)
+            menu = Qt.QMenu("Build", menubar)
+            menubar.addMenu(menu)
+            self.addAction(menu, "Compile", self.compileClicked)
+            self.addAction(menu, "Execute", self.executeClicked)
+        def addAction(self, menu, text, func):
+            action = Qt.QAction(text, self)
+            Qt.QObject.connect(action, Qt.SIGNAL("triggered(bool)"), func)
+            menu.addAction(action)
+            return action
+        def newClicked(self, *args):
+            self.edit.clear()
+            self.status.setText('')
+            self.filename = None
+        def openClicked(self, *args):
+            if self.filename:
+                filename = self.filename
+            else:
+                filename = _getHome()
+            filename = Qt.QFileDialog.getOpenFileName(self, "Open File", filename, "*.py;;*")
+            if filename:
+                try:
+                    f = open(filename, "r")
+                    self.edit.setText( "%s" % f.read() )
+                    f.close()
+                    self.filename = filename
+                except IOError, (errno, strerror):
+                    Qt.QMessageBox.critical(self, "Error", "<qt>Failed to open file \"%s\"<br><br>%s</qt>" % (filename,strerror))
+        def saveClicked(self, *args):
+            try:
+                f = open(self.filename, "w")
+                f.write( "%s" % self.edit.toPlainText() )
+                f.close()
+            except IOError, (errno, strerror):
+                qt.QMessageBox.critical(self, "Error", "<qt>Failed to save file \"%s\"<br><br>%s</qt>" % (self.filename,strerror))
+        def saveAsClicked(self, *args):
+            if self.filename:
+                filename = self.filename
+            else:
+                filename = _getHome()
+            filename = Qt.QFileDialog.getSaveFileName(self, "Save File", filename, "*.py;;*")
+            if filename:
+                self.filename = filename
+                self.saveClicked()
+        def compileClicked(self, *args):
+            import time, traceback
+            text = "%s" % self.edit.toPlainText()
+            try:
+                compile(text, '', 'exec')
+                self.status.setText("Compiled! %s" % time.strftime('%H:%M.%S'))
+            except Exception, e:
+                self.status.setText("%s" % e)
+                traceback.print_exc(file=sys.stderr)
+        def executeClicked(self, *args):
+            import time
+            err = self.docker.execute("%s" % self.edit.toPlainText())
+            if not err:
+                self.status.setText("Executed! %s" % time.strftime('%H:%M.%S'))
+            else:
+                self.status.setText("%s" % err[1])
+
+    class Model(Qt.QAbstractItemModel):
+        """ The model for the treeview that displays the content of our globals(). """
+
         class Item:
+            """ An item within the model. """
+
             def __init__(self, parentItem = None, object = None, name = ""):
                 self.parent = parentItem
                 self.object = object
@@ -54,7 +145,7 @@ class _ConsoleDocker(Qt.QWidget):
                     for s in dir(self.object):
                         if not s.startswith('_'):
                             try:
-                                _ConsoleDocker.ConsoleModel.Item(self, getattr(self.object,s), s)
+                                _ConsoleDocker.Model.Item(self, getattr(self.object,s), s)
                             except:
                                 pass
             def row(self):
@@ -87,10 +178,10 @@ class _ConsoleDocker(Qt.QWidget):
             
         def __init__(self):
             Qt.QAbstractItemModel.__init__(self)
-            self.rootItem = _ConsoleDocker.ConsoleModel.Item()
+            self.rootItem = _ConsoleDocker.Model.Item()
             for s in globals():
                 if not s.startswith('_') and not s.startswith('PyQt4.Qt'):
-                    _ConsoleDocker.ConsoleModel.Item(self.rootItem, globals()[s], s)
+                    _ConsoleDocker.Model.Item(self.rootItem, globals()[s], s)
         def columnCount(self, parent):
             return 2
         def flags(self, index):
@@ -163,6 +254,8 @@ class _ConsoleDocker(Qt.QWidget):
         Qt.QObject.connect(self.edit.lineEdit(), Qt.SIGNAL("returnPressed()"), self.returnPressed)
         consoleLayout.addWidget(self.edit)
 
+        self.pages.addTab(_ConsoleDocker.Editor(self), "Editor")
+
         self.tree = Qt.QTreeView(self)
         self.tree.setFrameShape(Qt.QFrame.NoFrame)
         self.tree.setRootIsDecorated(True)
@@ -171,7 +264,7 @@ class _ConsoleDocker(Qt.QWidget):
         #self.tree.header().setResizeMode(0, Qt.QHeaderView.Stretch)
         #self.tree.header().hide()
         self.tree.header().setClickable(False)
-        self.model = _ConsoleDocker.ConsoleModel()
+        self.model = _ConsoleDocker.Model()
         self.tree.setModel(self.model)
         self.pages.addTab(self.tree, "Inspect")
 
@@ -209,6 +302,7 @@ class _ConsoleDocker(Qt.QWidget):
         import sys, traceback
         _stdout = sys.stdout
         _stderr = sys.stderr
+        err = None
         try:
             class Base():
                 def __init__(self, browser):
@@ -231,10 +325,12 @@ class _ConsoleDocker(Qt.QWidget):
             try:
                 exec code in globals(), globals()
             except:
-                sys.stderr.write("".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
+                err = sys.exc_info()
+                sys.stderr.write("".join( traceback.format_exception(err[0],err[1],err[2]) ))
         finally:
             sys.stdout = _stdout
             sys.stderr = _stderr
+        return err
 
 print "Execute _ConsoleDocker Script"
 _ConsoleDocker()
