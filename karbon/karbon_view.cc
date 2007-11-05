@@ -255,7 +255,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 		createLayersTabDock();
 		//createResourceDock();
 
-		KoToolBoxFactory toolBoxFactory(m_canvasController, "Karbon" );
+		KoToolBoxFactory toolBoxFactory(m_canvasController, i18n( "Karbon" ) );
 		createDockWidget( &toolBoxFactory );
 
         KarbonStylePreviewDockerFactory styleFactory;
