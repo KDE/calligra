@@ -125,7 +125,7 @@ class _ConsoleDocker(Qt.QWidget):
             if not err:
                 self.status.setText("Executed! %s" % time.strftime('%H:%M.%S'))
             else:
-                self.status.setText("%s" % err[1])
+                self.status.setText("%s" % err)
 
     class Model(Qt.QAbstractItemModel):
         """ The model for the treeview that displays the content of our globals(). """
@@ -325,8 +325,8 @@ class _ConsoleDocker(Qt.QWidget):
             try:
                 exec code in globals(), globals()
             except:
-                err = sys.exc_info()
-                sys.stderr.write("".join( traceback.format_exception(err[0],err[1],err[2]) ))
+                err = sys.exc_info()[1]
+                sys.stderr.write("".join( traceback.format_exception(sys.exc_info()[0],sys.exc_info()[1],sys.exc_info()[2]) ))
         finally:
             sys.stdout = _stdout
             sys.stderr = _stderr
