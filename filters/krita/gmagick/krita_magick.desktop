@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Krita
-Name[eo]=Krito
 Name[km]= Krita
 Name[ne]=क्रिता
 Name[x-test]=xxKritaxx
@@ -14,6 +13,7 @@ GenericName[cy]=Cymhwysiad Peintio Golygu Delweddau
 GenericName[da]=Male- og billedredigeringsprogram
 GenericName[de]=Mal- und Bildbearbeitungsprogramm
 GenericName[el]=Εφαρμογή επεξεργασίας εικόνων
+GenericName[eo]=Aplikaĵo por Pentrado kaj Bildredaktado
 GenericName[es]=Aplicación de pintura y de edición de imágenes
 GenericName[et]=Joonistamise ja pilditöötluse rakendus
 GenericName[eu]=Irudien marrazketa eta ediziorako aplikazioa

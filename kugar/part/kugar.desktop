@@ -1,7 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Kugar
-Name[eo]=Raportilo
 Name[ne]=कुगर
 Name[x-test]=xxKugarxx
 Exec=kugar %u
