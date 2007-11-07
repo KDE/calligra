@@ -203,7 +203,7 @@ class _ConsoleDocker(Qt.QWidget):
             return Qt.QModelIndex()
         def data(self, index, role):
             if index.isValid():
-                if role == 0: #Qt.DisplayRole:
+                if role == Qt.Qt.DisplayRole:
                     return index.internalPointer().data(index.column())
             return Qt.QVariant()
         def rowCount(self, parent):
@@ -219,7 +219,7 @@ class _ConsoleDocker(Qt.QWidget):
                 parentItem = self.rootItem
             return parentItem.hasChildren()
         def headerData(self, section, orientation, role = 0):
-            if role == 0: #Qt.DisplayRole:
+            if role == Qt.Qt.DisplayRole:
                 if section == 0:
                     return Qt.QVariant("Name")
                 if section == 1:
@@ -256,19 +256,32 @@ class _ConsoleDocker(Qt.QWidget):
 
         self.pages.addTab(_ConsoleDocker.Editor(self), "Editor")
 
-        self.tree = Qt.QTreeView(self)
+        inspWidget = Qt.QWidget(self)
+        inspLayout = Qt.QVBoxLayout()
+        inspLayout.setMargin(0)
+        inspLayout.setSpacing(0)
+        inspWidget.setLayout(inspLayout)
+        self.pages.addTab(inspWidget, "Inspect")
+
+        self.treeFilter = Qt.QLineEdit(inspWidget)
+        inspLayout.addWidget(self.treeFilter)
+
+        self.tree = Qt.QTreeView(inspWidget)
+        inspLayout.addWidget(self.tree)
         self.tree.setFrameShape(Qt.QFrame.NoFrame)
         self.tree.setRootIsDecorated(True)
         self.tree.setSortingEnabled(False)
-        #self.tree.setAlternatingRowColors(True)
-        #self.tree.header().setResizeMode(0, Qt.QHeaderView.Stretch)
-        #self.tree.header().hide()
         self.tree.header().setClickable(False)
+        
         self.model = _ConsoleDocker.Model()
-        self.tree.setModel(self.model)
-        self.pages.addTab(self.tree, "Inspect")
+        self.proxyModel = Qt.QSortFilterProxyModel(self.tree)
+        self.proxyModel.setDynamicSortFilter(True)
+        self.proxyModel.setFilterCaseSensitivity(Qt.Qt.CaseInsensitive)
+        self.proxyModel.setSourceModel(self.model)
+        self.tree.setModel(self.proxyModel)
 
         self.treeExpired = True
+        Qt.QObject.connect(self.treeFilter, Qt.SIGNAL("textChanged(QString)"), self.proxyModel, Qt.SLOT("setFilterFixedString(QString)"))
         Qt.QObject.connect(self.tree, Qt.SIGNAL("activated(QModelIndex)"), self.itemActivated)
         Qt.QObject.connect(self.pages, Qt.SIGNAL("currentChanged(int)"), self.currentChanged)
 
@@ -282,12 +295,12 @@ class _ConsoleDocker(Qt.QWidget):
         self.treeExpired = True
         
     def itemActivated(self, index):
-        s = self.model.data(index, 0).toString()
+        s = self.proxyModel.data(index, 0).toString()
         parent = index
         while True:
-            parent = self.model.parent(parent)
+            parent = self.proxyModel.parent(parent)
             if not parent.isValid(): break
-            s = "%s.%s" % (self.model.data(parent, 0).toString(), s)
+            s = "%s.%s" % (self.proxyModel.data(parent, 0).toString(), s)
         self.edit.lineEdit().setText("print %s" % s)
         self.pages.setCurrentIndex(0)
         #self.returnPressed()
