@@ -184,6 +184,7 @@ bool Layout::addLine(QTextLine &line) {
 
     return false;
 }
+
 extern int qt_defaultDpiX();
 
 bool Layout::nextParag() {
@@ -587,11 +588,9 @@ void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &c
         if(!painter->hasClipping() || ! clipRegion.intersect(QRegion(layout->boundingRect().toRect())).isEmpty()) {
             started=true;
             painter->save();
-            decorateParagraph(painter, block);
+            drawListItem(painter, block);
             painter->restore();
 
-//#if QT_VERSION > KDE_MAKE_VERSION(4,4,0) // code for drawing using the normal QTextLayout::draw().  Can't use it due to tabs before Qt4.4.
-#if 0
             QVector<QTextLayout::FormatRange> selections;
             foreach(QAbstractTextDocumentLayout::Selection selection, context.textContext.selections) {
                 QTextCursor cursor = selection.cursor;
@@ -609,9 +608,7 @@ void Layout::draw(QPainter *painter, const KoTextDocumentLayout::PaintContext &c
                 selections.append(fr);
             }
             layout->draw(painter, QPointF(0,0), selections);
-#else
-            drawParagraph(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
-#endif
+            decorateParagraph(painter, block, selectionStart - block.position(), selectionEnd - block.position(), context.viewConverter);
 
             KoTextBlockBorderData *border = 0;
             KoTextBlockData *blockData = dynamic_cast<KoTextBlockData*> (block.userData());
@@ -694,49 +691,11 @@ static void drawDecorationLine (QPainter *painter, const QColor &color, KoCharac
     painter->setPen(penBackup);
 }
 
-void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter) {
-    // this method replaces QTextLayout::draw() because we need to do some stuff per line for tabs, etc. :/
+void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter) {
     QTextLayout *layout = block.layout();
     QTextOption textOption = layout->textOption();
 
     QTextBlockFormat bf = block.blockFormat();
-
-    if(bf.hasProperty(QTextFormat::BackgroundBrush))
-        painter->fillRect(layout->boundingRect(), bf.background());
-
-    for(int i=0; i < layout->lineCount(); i++) {
-        QTextLine line = layout->lineAt(i);
-        if(line.textLength() == 0) continue;
-        if(line.textStart() < selectionEnd && line.textStart() + line.textLength() > selectionStart) {
-            // paint selection!
-            const double x1 = line.cursorToX(qMax(selectionStart, line.textStart()));
-            const double x2 = line.cursorToX(qMin(selectionEnd, line.textStart() + line.textLength()));
-            QRectF rect(line.position().x() + x1, line.position().y(), x2 - x1, line.height());
-            painter->fillRect(rect, QBrush(QColor(255, 255, 0, 130))); // TODO use proper selection color
-        }
-        if(converter) {
-            QRectF pixelRect = converter->documentToView(line.naturalTextRect());
-            if(pixelRect.height() < 7) {
-                painter->save();
-                if(pixelRect.height() < 4) {
-                    painter->setPen(Qt::gray);
-                    painter->drawLine(line.position(), line.position() + QPointF(line.naturalTextWidth(),0));
-                }
-                else {
-                    double zoomX, zoomY;
-                    converter->zoom(&zoomX, &zoomY);
-                    painter->scale(1/zoomX, 1/zoomY);
-                    painter->fillRect(pixelRect, QBrush(Qt::gray, Qt::Dense4Pattern));
-                }
-                painter->restore();
-                continue;
-            }
-        }
-
-        painter->save();
-        line.draw(painter, layout->position());
-        painter->restore();
-    }
 
     QTextBlock::iterator it;
     int offset = -1;
@@ -795,11 +754,11 @@ void Layout::drawParagraph(QPainter *painter, const QTextBlock &block, int selec
     }
 }
 
-void Layout::decorateParagraph(QPainter *painter, const QTextBlock &block) {
+void Layout::drawListItem(QPainter *painter, const QTextBlock &block) {
     KoTextBlockData *data = dynamic_cast<KoTextBlockData*> (block.userData());
     if(data == 0)
         return;
-    
+
     QTextList *list = block.textList();
     if(list && data->hasCounterData()) {
         QTextListFormat listFormat = list->format();

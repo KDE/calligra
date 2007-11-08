@@ -81,8 +81,8 @@ private:
     void cleanupShapes();
     void cleanupShape(KoShape *daShape);
     void nextShape();
-    void decorateParagraph(QPainter *painter, const QTextBlock &block);
-    void drawParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);
+    void drawListItem(QPainter *painter, const QTextBlock &block);
+    void decorateParagraph(QPainter *painter, const QTextBlock &block, int selectionStart, int selectionEnd, const KoViewConverter *converter);
     double inlineCharHeight(const QTextFragment &fragment);
     double findFootnote(const QTextLine &line);
 
