@@ -97,7 +97,6 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
 
 KWDocument::~KWDocument() {
     saveConfig();
-    delete m_styleManager;
     qDeleteAll(m_frameSets);
     delete m_imageCollection;
     m_imageCollection = 0;
@@ -317,7 +316,7 @@ void KWDocument::addFrameSet(KWFrameSet *fs) {
     if(tfs) {
         tfs->setPageManager(pageManager());
         m_styleManager->add( tfs->document() );
-        KWTextDocumentLayout *lay = dynamic_cast<KWTextDocumentLayout*> (tfs->document()->documentLayout());
+        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (tfs->document()->documentLayout());
         if(lay)
             lay->setStyleManager(m_styleManager);
         if(tfs->textFrameSetType() == KWord::MainTextFrameSet ||
