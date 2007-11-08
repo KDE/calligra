@@ -84,8 +84,8 @@ void DocumentsPanel::slotAddUrl()
     dlg->setWindowTitle( i18n( "Attach Document" ) );
     if ( dlg->exec() == QDialog::Accepted ) {
         if ( m_docs.findDocument( dlg->selectedUrl() ) ) {
-            kWarning()<<"Document (url) allready exists: "<<dlg->selectedUrl();
-            KMessageBox::sorry( this, i18n( "Document url allready attached: %1", dlg->selectedUrl().prettyUrl() ), i18n( "Cannot Attach Document" ) );
+            kWarning()<<"Document (url) already exists: "<<dlg->selectedUrl();
+            KMessageBox::sorry( this, i18n( "Document url already attached: %1", dlg->selectedUrl().prettyUrl() ), i18n( "Cannot Attach Document" ) );
         } else {
             Document *doc = new Document( dlg->selectedUrl() );
             //DocumentAddCmd *cmd = new DocumentAddCmd( m_docs, doc, i18n( "Add Document" ) );
