@@ -68,7 +68,6 @@
 #include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
 #include <KoStoreDevice.h>
-#include <KoVariable.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
