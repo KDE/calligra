@@ -52,6 +52,7 @@
 #include <KoBookmark.h>
 #include <KoBookmarkManager.h>
 #include <KoListStyle.h>
+#include <KoStyleManager.h>
 #include <KoXmlWriter.h>
 
 #include <kdebug.h>
@@ -552,7 +553,9 @@ void TextTool::setShapeData(KoTextShapeData *data) {
     if(m_textShapeData && docChanged)
         disconnect(m_textShapeData->document(), SIGNAL(undoCommandAdded()), this, SLOT(addUndoCommand()));
     m_textShapeData = data;
-    if(m_textShapeData && docChanged) {
+    if (m_textShapeData == 0)
+        return;
+    if(docChanged) {
         connect(m_textShapeData->document(), SIGNAL(undoCommandAdded()), this, SLOT(addUndoCommand()));
         m_caret = QTextCursor(m_textShapeData->document());
 
@@ -562,13 +565,17 @@ void TextTool::setShapeData(KoTextShapeData *data) {
         }
         m_textShapeData->document()->setUndoRedoEnabled(true); // allow undo history
     }
-    if(m_textShapeData && m_trackChanges) {
+    if(m_trackChanges) {
         if(m_changeTracker == 0)
             m_changeTracker = new ChangeTracker(this);
         m_changeTracker->setDocument(m_textShapeData->document());
     }
-    if(m_textShapeData && m_spellcheckPlugin)
+    if(m_spellcheckPlugin)
         m_spellcheckPlugin->checkSection(m_textShapeData->document(), 0, 0);
+
+    KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (m_textShapeData->document()->documentLayout());
+    if(lay && lay->styleManager() == 0) // this means there is no (ko)document-wide stylemanager.
+        lay->setStyleManager( new KoStyleManager(m_textShapeData));
 }
 
 void TextTool::updateSelectionHandler() {

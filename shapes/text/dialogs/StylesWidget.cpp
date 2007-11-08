@@ -41,7 +41,6 @@ StylesWidget::StylesWidget(Type type, QWidget *parent)
     widget.newStyle->setIcon( KIcon("edit-add") );
     widget.deleteStyle->setIcon( KIcon("edit-delete") );
     widget.deleteStyle->setEnabled(false);
-    setEnabled(false);
 }
 
 void StylesWidget::setStyleManager(KoStyleManager *sm) {
@@ -55,11 +54,8 @@ void StylesWidget::setStyleManager(KoStyleManager *sm) {
     }
     m_styleManager = sm;
     widget.styleList->clear();
-    if(m_styleManager == 0) {
-        setEnabled(false);
+    if(m_styleManager == 0)
         return;
-    }
-    setEnabled(true);
 
     if(m_type == CharacterStyle) {
         foreach(KoCharacterStyle *style, m_styleManager->characterStyles()) {

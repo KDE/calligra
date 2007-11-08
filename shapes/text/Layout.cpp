@@ -1043,3 +1043,8 @@ double Layout::findFootnote(const QTextLine &line) {
     return 0;
 }
 
+void Layout::setStyleManager(KoStyleManager *sm) {
+    delete m_styleManager;
+    m_styleManager = sm;
+}
+
