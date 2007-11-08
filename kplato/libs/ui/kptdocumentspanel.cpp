@@ -110,8 +110,8 @@ void DocumentsPanel::slotChangeUrl()
     if ( dlg->exec() == QDialog::Accepted ) {
         if ( doc->url() != dlg->selectedUrl() ) {
             if ( m_docs.findDocument( dlg->selectedUrl() ) ) {
-                kWarning()<<"Document url allready exists";
-                KMessageBox::sorry( this, i18n( "Document url allready exists: %1", dlg->selectedUrl().prettyUrl() ), i18n( "Cannot Modify Url" ) );
+                kWarning()<<"Document url already exists";
+                KMessageBox::sorry( this, i18n( "Document url already exists: %1", dlg->selectedUrl().prettyUrl() ), i18n( "Cannot Modify Url" ) );
             } else {
                 kDebug()<<"Modify url: "<<doc->url()<<" : "<<dlg->selectedUrl();
                 doc->setUrl( dlg->selectedUrl() );
