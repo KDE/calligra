@@ -47,7 +47,7 @@ void KWordPictureHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word9
     // 1 - Create the frameset and its frame
     // 2 - Store the picture in the store
     // We combine those two things into one call to the document
-    KoSize size( (double)picf->dxaGoal / 20.0, (double)picf->dyaGoal / 20.0 );
+    QSizeF size( (double)picf->dxaGoal / 20.0, (double)picf->dyaGoal / 20.0 );
     kDebug(30513) <<"size=" << size;
     KoStoreDevice* dev = m_doc->createPictureFrameSet( size );
     Q_ASSERT(dev);
