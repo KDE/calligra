@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2001, 2002 Montel Laurent <lmontel@mandrakesoft.com>
-   Copyright (C)  2006 Thomas Zander <zander@kde.org>
+   Copyright (C)  2006-2007 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,8 +22,6 @@
 
 #include <KoText.h>
 #include <KoCharacterStyle.h>
-
-#include <kdebug.h>
 
 CharacterHighlighting::CharacterHighlighting( QWidget* parent)
     : QWidget ( parent)
@@ -48,31 +46,27 @@ void CharacterHighlighting::open(KoCharacterStyle *style) {
 
     widget.underlineStyle->setCurrentIndex(1);
     switch(style->underlineStyle()) {
-        case QTextCharFormat::SingleUnderline:
-            widget.underlineLineStyle->setCurrentIndex(0);
-            break;
-        case QTextCharFormat::DashUnderline:
+        case KoCharacterStyle::DashLine:
             widget.underlineLineStyle->setCurrentIndex(1);
             break;
-        case QTextCharFormat::DotLine:
+        case KoCharacterStyle::DottedLine:
             widget.underlineLineStyle->setCurrentIndex(2);
             break;
-        case QTextCharFormat::DashDotLine:
+        case KoCharacterStyle::DotDashLine:
             widget.underlineLineStyle->setCurrentIndex(3);
             break;
-        case QTextCharFormat::DashDotDotLine:
+        case KoCharacterStyle::DotDotDashLine:
             widget.underlineLineStyle->setCurrentIndex(4);
             break;
-        case QTextCharFormat::WaveUnderline:
+        case KoCharacterStyle::WaveLine:
             widget.underlineLineStyle->setCurrentIndex(5);
             break;
+        case KoCharacterStyle::SolidLine:
         default:
             widget.underlineStyle->setCurrentIndex(0);
             break;
     }
-    if(style->underlineType() == KoCharacterStyle::NoLineType)
-        widget.underlineStyle->setCurrentIndex(0);
-    // TODO represent single and double lines.
+    widget.underlineStyle->setCurrentIndex( style->underlineType() );
 
     switch(style->transform()) {
         case KoCharacterStyle::MixedCase: widget.normal->setChecked(true); break;
@@ -91,35 +85,25 @@ void CharacterHighlighting::open(KoCharacterStyle *style) {
 void CharacterHighlighting::save() {
     if(m_style == 0)
         return;
-    switch(widget.underlineStyle->currentIndex()) {
-        case 0:
-            m_style->setUnderlineType(KoCharacterStyle::NoLineType);
-            m_style->setUnderlineStyle(KoCharacterStyle::NoLineStyle);
-            break;
-        case 1:
-            m_style->setUnderlineType(KoCharacterStyle::SingleLine);
-            QTextCharFormat::UnderlineStyle style;
-            switch(widget.underlineLineStyle->currentIndex()) {
-                case 0: style = QTextCharFormat::SingleUnderline; break;
-                case 1: style = QTextCharFormat::DashUnderline; break;
-                case 2: style = QTextCharFormat::DotLine; break;
-                case 3: style = QTextCharFormat::DashDotLine; break;
-                case 4: style = QTextCharFormat::DashDotDotLine; break;
-                case 5: style = QTextCharFormat::WaveUnderline; break;
-                default:
-                    style = QTextCharFormat::SingleUnderline; break;
-                    kWarning() << "Unknown items in the underlineLineStyle combobox!\n";
-            }
-            m_style->setUnderlineStyle((KoCharacterStyle::LineStyle) style);
-            m_style->setUnderlineColor(widget.underlineColor->color());
-            break;
-        case 2: // double underlining unsupported by Qt right now :(  TODO
-            m_style->setUnderlineType(KoCharacterStyle::DoubleLine);
-            m_style->setUnderlineStyle(KoCharacterStyle::SolidLine);
-            m_style->setUnderlineColor(widget.underlineColor->color());
-            break;
-        default:
-            kWarning() << "Unknown items in the underlineStyle combobox!\n";
+    if (widget.underlineStyle->currentIndex() == 0) {
+        m_style->setUnderlineType(KoCharacterStyle::NoLineType);
+        m_style->setUnderlineStyle(KoCharacterStyle::NoLineStyle);
+    }
+    else {
+        m_style->setUnderlineType( static_cast<KoCharacterStyle::LineType>(widget.underlineStyle->currentIndex()));
+        KoCharacterStyle::LineStyle style;
+        switch(widget.underlineLineStyle->currentIndex()) {
+            case 1: style = KoCharacterStyle::DashLine; break;
+            case 2: style = KoCharacterStyle::DottedLine; break;
+            case 3: style = KoCharacterStyle::DotDashLine; break;
+            case 4: style = KoCharacterStyle::DotDotDashLine; break;
+            case 5: style = KoCharacterStyle::WaveLine; break;
+            case 0:
+            default:
+                style = KoCharacterStyle::SolidLine; break;
+        }
+        m_style->setUnderlineStyle( style);
+        m_style->setUnderlineColor(widget.underlineColor->color());
     }
 
     if (widget.strikethrough->isChecked())
