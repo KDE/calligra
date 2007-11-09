@@ -240,14 +240,14 @@ QWidget * KarbonPatternTool::createOptionWidget()
     m_buttonGroup->setExclusive( false );
 
     QPushButton *button = new QPushButton( optionWidget );
-    button->setIcon( SmallIcon( "list-add" ) );
+    button->setIcon( SmallIcon( "edit-add" ) );
     button->setToolTip( i18n("Import pattern") );
     button->setEnabled( true );
     m_buttonGroup->addButton( button, Button_Import );
     layout->addWidget( button, 1, 0 );
 
     button = new QPushButton( optionWidget );
-    button->setIcon( SmallIcon( "list-remove" ) );
+    button->setIcon( SmallIcon( "edit-delete" ) );
     button->setToolTip( i18n("Delete pattern") );
     button->setEnabled( false );
     m_buttonGroup->addButton( button, Button_Remove );
