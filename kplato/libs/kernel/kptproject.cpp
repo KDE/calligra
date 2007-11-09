@@ -35,7 +35,6 @@
 #include <QString>
 #include <qdatetime.h>
 #include <qbrush.h>
-#include <q3canvas.h>
 #include <QList>
 
 #include <kdatetime.h>

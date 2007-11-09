@@ -24,8 +24,6 @@
 #include "kptproject.h"
 #include "kpttask.h"
 
-#include <KoDocument.h>
-
 #include <QModelIndex>
 
 namespace KPlato
