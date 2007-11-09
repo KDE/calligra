@@ -29,6 +29,8 @@
 #include <kurl.h>
 #include <klocale.h>
 
+class KoStore;
+
 class QDomElement;
 
 namespace KPlato
@@ -40,7 +42,7 @@ class KPLATOKERNEL_EXPORT Document
 {
 public:
     enum Type { Type_None, Type_Product, Type_Reference };
-    enum SendAs { SendAs_None, SendAs_Reference, SendAs_Copy };
+    enum SendAs { SendAs_None, SendAs_Copy, SendAs_Reference };
     
     Document();
     explicit Document( const KUrl &url, Type type = Type_None, SendAs sendAs = SendAs_Reference );
@@ -51,10 +53,12 @@ public:
     
     Type type() const { return m_type; }
     void  setType( Type type ) { m_type = type; }
+    static QStringList typeList( bool trans = false );
     static QString typeToString( Type type, bool trans = false );
     
     SendAs sendAs() const { return m_sendAs; }
     void setSendAs( SendAs snd ) { m_sendAs = snd; }
+    static QStringList sendAsList( bool trans = false );
     static QString sendAsToString( SendAs snd, bool trans = false );
     
     KUrl url() const { return m_url; }
@@ -102,6 +106,8 @@ public:
     
     bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;
+    
+    void saveToStore( KoStore *store ) const;
     
 protected:
     QList<Document*> m_docs;

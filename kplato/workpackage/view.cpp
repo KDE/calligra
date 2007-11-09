@@ -21,6 +21,10 @@
 #include "view.h"
 
 #include <kmessagebox.h>
+#include <krun.h>
+#include <kvbox.h>
+#include <kmimetype.h>
+#include <kurl.h>
 
 #include "KoDocumentInfo.h"
 #include <KoMainWindow.h>
@@ -64,6 +68,7 @@
 #include <kfiledialog.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
+#include <kparts/componentfactory.h>
 #include <KoQueryTrader.h>
 
 #include "part.h"
@@ -77,6 +82,7 @@
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptcommand.h"
+#include "kptdocuments.h"
 
 #include <assert.h>
 
@@ -86,6 +92,7 @@ namespace KPlatoWork
 //-------------------------------
 View::View( Part* part, QWidget* parent )
         : KoView( part, parent ),
+        m_currentWidget( 0 ),
         m_scheduleActionGroup( new QActionGroup( this ) ),
         m_manager( 0 ),
         m_readWrite( false )
@@ -106,6 +113,8 @@ View::View( Part* part, QWidget* parent )
     layout->setMargin(0);
     layout->addWidget( m_tab );
 
+    connect( m_tab, SIGNAL( currentChanged( int ) ), SLOT( slotCurrentChanged( int ) ) );
+    
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     
     // Add sub views
@@ -194,6 +203,8 @@ ViewBase *View::createDocumentsView()
         kDebug()<<"Node: "<<n->name();
         v->draw( n->documents() );
     }
+    connect( v, SIGNAL( editDocument( Document* ) ), SLOT( slotEditDocument( Document* ) ) );
+    connect( v, SIGNAL( viewDocument( Document* ) ), SLOT( slotViewDocument( Document* ) ) );
     
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
@@ -219,6 +230,223 @@ void View::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
 
 void View::print( QPrinter &printer, QPrintDialog &printDialog )
 {
+}
+
+void View::addPart( KParts::Part* part, const QString &name )
+{
+    kDebug()<<"---------->";
+    m_partsMap.insert( part->widget(), part );
+    int tab = m_tab->addTab( part->widget(), name );
+    partManager()->addPart( part, false );
+    if ( factory() ) {
+/*        factory()->addClient( part );
+        kDebug()<<factory()->clients();*/
+    }
+    m_tab->setCurrentIndex( tab );
+    kDebug()<<"<----------";
+}
+
+bool View::viewDocument( const KUrl &filename )
+{
+    kDebug()<<"---------->";
+    kDebug()<<"url:"<<filename;
+    if ( ! filename.isValid() ) {
+        kDebug()<<"Invalid url:"<<filename;
+        kDebug()<<"<----------";
+        return false;
+    }
+    KMimeType::Ptr mimetype = KMimeType::findByUrl( filename, 0, true );
+
+    QStringList args;// args << filename.fileName();
+    int error = 0;
+    KParts::ReadOnlyPart *part = KParts::ComponentFactory::createPartInstanceFromQuery<KParts::ReadOnlyPart>( mimetype->name(), QString::null, m_tab, m_tab, args, &error );
+    
+    kDebug()<<"Return status="<<error;
+    if ( part == 0 ) {
+        kError()<<"Could not create part";
+        kDebug()<<"<----------";
+        return false;
+    }
+    bool r = part->openUrl( filename );
+    addPart( part, filename.fileName() );
+    kDebug()<<part<<part->url()<<r;
+    kDebug()<<"<----------";
+    return true;
+}
+
+bool View::editDocument( const KUrl &filename )
+{
+    kDebug()<<"---------->";
+    kDebug()<<"url:"<<filename;
+    if ( ! filename.isValid() ) {
+        kDebug()<<"Invalid url:"<<filename;
+        kDebug()<<"<----------";
+        return false;
+    }
+    KMimeType::Ptr mimetype = KMimeType::findByUrl( filename, 0, true );
+
+    QStringList args;// args << filename.fileName();
+    int error = 0;
+    KParts::ReadWritePart *part = KParts::ComponentFactory::createPartInstanceFromQuery<KParts::ReadWritePart>( mimetype->name(), QString::null, m_tab, m_tab, args, &error );
+    
+    kDebug()<<"Return status="<<error;
+    if ( part == 0 ) {
+        kError()<<"Could not create part";
+        kDebug()<<"<----------";
+        return false;
+    }
+    bool r = part->openUrl( filename );
+    addPart( part, filename.fileName() );
+    kDebug()<<part<<part->widget()<<partManager()->parts()<<part->url()<<r;
+    kDebug()<<"<----------";
+    return true;
+}
+
+void View::slotEditDocument( Document *doc )
+{
+    kDebug()<<doc;
+    if ( doc == 0 ) {
+        return;
+    }
+    if ( doc->type() == Document::Type_Product ) {
+        KUrl filename;
+        if ( doc->sendAs() == Document::SendAs_Copy ) {
+            filename = KUrl( KStandardDirs::locateLocal( "tmp", doc->url().fileName() ) );
+        } else {
+            filename = doc->url();
+        }
+        // open for edit
+        if ( ! filename.isValid() ) {
+            kDebug()<<"Invalid url:"<<filename;
+            kDebug()<<"<----------";
+            return;
+        }
+        editDocument( filename );
+    } else {
+        slotViewDocument( doc );
+    }
+    kDebug()<<"<----------";
+}
+
+void View::slotViewDocument( Document *doc )
+{
+    kDebug()<<"---------->";
+    kDebug()<<doc;
+    if ( doc == 0 ) {
+        return;
+    }
+    KUrl filename;
+    if ( doc->sendAs() == Document::SendAs_Copy ) {
+        filename = KUrl( KStandardDirs::locateLocal( "tmp", doc->url().fileName() ) );
+    } else {
+        filename = doc->url();
+    }
+    // open for view
+    viewDocument( filename );
+    kDebug()<<"<----------";
+}
+
+void View::slotCurrentChanged( int index )
+{
+    kDebug()<<"---------->";
+    KParts::Part *ap = partManager()->activePart();
+    QWidget *aw = partManager()->activeWidget();
+    QWidget *cw = m_tab->currentWidget();
+    kDebug()<<ap<<aw<<cw;
+    if ( cw == m_currentWidget ) {
+        kDebug()<<cw<<m_currentWidget;
+        kDebug()<<"<----------";
+        return;
+    }
+    ViewBase *cv = dynamic_cast<ViewBase*>( m_currentWidget );
+    if ( cv ) {
+        cv->setGuiActive( false );
+    }
+    partManager()->setActivePart( getPart(), this ); // restore my factory and clear ap->factory()
+    cv = dynamic_cast<ViewBase*>( cw );
+    if ( cv ) {
+        cv->setGuiActive( true );
+    } else {
+        // might be a kpart
+        if ( factory() ) kDebug()<<"this:"<<factory()->clients();
+        if ( ap->factory() ) kDebug()<<"ap:"<<ap->factory()->clients();
+
+        if ( m_partsMap.contains( cw ) ) {
+            kDebug()<<"Part found"<<m_partsMap[cw]<<" for widget:"<<cw;
+            if ( m_partsMap[ cw ]->factory() ) kDebug()<<"cp:"<<m_partsMap[ cw ]->factory()->clients();
+            if ( factory() ) {
+                factory()->addClient( m_partsMap[ cw ] );
+            }
+            partManager()->setActivePart( m_partsMap[ cw ] ); // this removes my factory()
+        } else kDebug()<<"No part found for widget:"<<cw;
+    }
+    m_currentWidget = cw;
+    kDebug()<<"<----------";
+}
+
+KoDocument *View::hitTest( const QPoint &pos )
+{
+    kDebug()<<"---------->";
+    // TODO: The gui handling can certainly be simplified (at least I think so),
+    // by someone who have a better understanding of all the possibilities of KParts
+    // than I have.
+    // pos is in m_tab->currentWidget() coordinates
+    QPoint gl = m_tab->currentWidget()->mapToGlobal(pos);
+    kDebug()<<pos<<gl;
+    if ( koDocument() == dynamic_cast<KoDocument*>(partManager()->activePart() ) ) {
+        // just activating new view on the same doc
+        return koDocument()->hitTest( pos, this );
+    }
+    return 0;
+    kDebug()<<"<----------";
+}
+
+QWidget *View::canvas() const
+{
+    return m_tab->currentWidget();
+}
+
+void View::slotGuiActivated( ViewBase *view, bool activate )
+{
+    kDebug()<<"---------->";
+    if ( activate ) {
+        foreach( QString name, view->actionListNames() ) {
+            kDebug()<<"activate"<<name<<","<<view->actionList( name ).count();
+            plugActionList( name, view->actionList( name ) );
+        }
+    } else {
+        foreach( QString name, view->actionListNames() ) {
+            kDebug()<<"deactivate"<<name;
+            unplugActionList( name );
+        }
+    }
+    kDebug()<<"<----------";
+}
+
+void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
+{
+    kDebug()<<"---------->";
+    kDebug()<<ev->activated();
+    kDebug()<<"View:"<<partManager()<<partManager()->parts();
+    kDebug()<<"Active:"<<partManager()->activePart()<<partManager()->activeWidget();
+    kDebug()<<"Clients:"<<factory()->clients();
+    KoView::guiActivateEvent( ev );
+    if ( ev->activated() ) {
+        // plug my own actionlists, they may be gone
+        slotPlugScheduleActions();
+        //Remove gui for all KParts
+        foreach ( KParts::Part *p, m_partsMap.values() ) {
+            if ( p->factory() ) {
+                p->factory()->removeClient( p );
+            }
+        }
+    }
+    // propagate to sub-view
+    ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
+    if ( v ) {
+        v->setGuiActive( ev->activated() );
+    }
+    kDebug()<<"<----------";
 }
 
 void View::slotEditCut()
@@ -427,40 +655,6 @@ QMenu * View::popupMenu( const QString& name )
 void View::slotUpdate()
 {
     updateView( m_tab->currentWidget() );
-}
-
-void View::slotGuiActivated( ViewBase *view, bool activate )
-{
-    if ( activate ) {
-        foreach( QString name, view->actionListNames() ) {
-            //kDebug()<<"activate"<<name<<","<<view->actionList( name ).count();
-            plugActionList( name, view->actionList( name ) );
-        }
-    } else {
-        foreach( QString name, view->actionListNames() ) {
-            //kDebug()<<"deactivate"<<name;
-            unplugActionList( name );
-        }
-    }
-}
-
-void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
-{
-    //kDebug()<<ev->activated();
-    KoView::guiActivateEvent( ev );
-    if ( ev->activated() ) {
-        // plug my own actionlists, they may be gone
-        slotPlugScheduleActions();
-    }
-    // propagate to sub-view
-    ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
-    if ( v ) {
-        v->setGuiActive( ev->activated() );
-    }
-}
-
-void View::slotCurrentChanged( int )
-{
 }
 
 void View::updateView( QWidget * )

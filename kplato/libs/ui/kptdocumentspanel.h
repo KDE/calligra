@@ -29,12 +29,15 @@
 #include <QWidget>
 #include <QUndoStack>
 
+class QModelIndex;
+
 namespace KPlato
 {
 
 class Node;
 class DocumentItemModel;
 class MacroCommand;
+class DocumentTreeView;
 
 class KPLATOUI_EXPORT DocumentsPanel : public QWidget
 {
@@ -59,6 +62,8 @@ protected slots:
     void slotRemoveUrl();
     void slotViewUrl();
     
+    void dataChanged( const QModelIndex& );
+    
     void currentChanged( const QModelIndex &index ) const;
     
 private:
@@ -68,6 +73,7 @@ private:
     QMap<Document*, State> m_state;
     QMap<Document*, KUrl> m_orgurl;
     QUndoStack m_cmds;
+    DocumentTreeView *m_view;
 };
 
 }

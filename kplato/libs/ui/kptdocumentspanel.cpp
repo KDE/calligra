@@ -19,6 +19,7 @@
 
 #include "kptdocumentspanel.h"
 
+#include "kptdocumentseditor.h"
 #include "kptdocumentmodel.h"
 #include "kptnode.h"
 #include "kptcommand.h"
@@ -26,6 +27,8 @@
 #include <QDialog>
 #include <QList>
 #include <QString>
+#include <QModelIndex>
+#include <QVBoxLayout>
 
 #include <klocale.h>
 #include <kurlrequesterdialog.h>
@@ -42,28 +45,40 @@ DocumentsPanel::DocumentsPanel( Node &node, QWidget *parent )
     m_docs( node.documents() )
 {
     widget.setupUi( this );
-
+    QVBoxLayout *l = new QVBoxLayout( widget.itemViewHolder );
+    m_view = new DocumentTreeView( 0, widget.itemViewHolder );
+    l->addWidget( m_view );
+    m_view->setDocuments( &m_docs );
+    m_view->setReadWrite( true );
+    
     currentChanged( QModelIndex() );
     
     foreach ( Document *doc, m_docs.documents() ) {
         m_orgurl.insert( doc, doc->url() );
     }
-    
-    DocumentItemModel *m = new DocumentItemModel( 0, this );
-    m->setDocuments( &m_docs );
-    widget.itemView->setModel( m );
 
     connect( widget.pbAdd, SIGNAL( clicked() ), SLOT( slotAddUrl() ) );
     connect( widget.pbChange, SIGNAL( clicked() ), SLOT( slotChangeUrl() ) );
     connect( widget.pbRemove, SIGNAL( clicked() ), SLOT( slotRemoveUrl() ) );
     connect( widget.pbView, SIGNAL( clicked() ), SLOT( slotViewUrl() ) );
     
-    connect( widget.itemView->selectionModel(), SIGNAL( currentChanged ( const QModelIndex&, const QModelIndex& ) ), SLOT( currentChanged( const QModelIndex& ) ) );
+    connect( m_view->model(), SIGNAL( dataChanged ( const QModelIndex&, const QModelIndex& ) ), SLOT( dataChanged( const QModelIndex& ) ) );
 }
 
 DocumentItemModel *DocumentsPanel::model() const
 {
-    return static_cast<DocumentItemModel*>( widget.itemView->model() );
+    return m_view->itemModel();
+}
+
+void DocumentsPanel::dataChanged( const QModelIndex &index )
+{
+    Document *doc = m_docs.value( index.row() );
+    if ( doc == 0 ) {
+        return;
+    }
+    m_state.insert( doc, (State)( m_state[ doc ] | Modified ) );
+    emit changed();
+    kDebug()<<index<<doc<<m_state[ doc ];
 }
 
 void DocumentsPanel::currentChanged( const QModelIndex &index ) const
@@ -75,7 +90,7 @@ void DocumentsPanel::currentChanged( const QModelIndex &index ) const
 
 Document *DocumentsPanel::currentDocument() const
 {
-    return model()->document( widget.itemView->selectionModel()->currentIndex() );
+//    return model()->document( m_editor->selectionModel()->currentIndex() );
 }
 
 void DocumentsPanel::slotAddUrl()
@@ -92,7 +107,7 @@ void DocumentsPanel::slotAddUrl()
             //m_cmds.push( cmd );
             m_docs.addDocument( doc );
             m_state.insert( doc, Added );
-            model()->setDocuments( &m_docs );
+            model()->setDocuments( &m_docs ); // refresh
             emit changed();
         }
     }
@@ -137,7 +152,7 @@ void DocumentsPanel::slotRemoveUrl()
     } else {
         m_state.insert( doc, Removed );
     }
-    model()->setDocuments( &m_docs );
+    model()->setDocuments( &m_docs ); // refresh
     emit changed();
 }
 
@@ -157,7 +172,7 @@ MacroCommand *DocumentsPanel::buildCommand()
     MacroCommand *m = 0;
     QMap<Document*, State>::const_iterator i = m_state.constBegin();
     for ( ; i != m_state.constEnd(); ++i) {
-        kDebug()<<i.value();
+        kDebug()<<i.key()<<i.value();
         if ( i.value() &  Removed ) {
             if ( m == 0 ) m = new MacroCommand( txt );
             kDebug()<<"remove document "<<i.key();
@@ -180,6 +195,10 @@ MacroCommand *DocumentsPanel::buildCommand()
                 if ( m == 0 ) m = new MacroCommand( txt );
                 m->addCommand( new DocumentModifyStatusCmd( d, i.key()->status(), i18n( "Modify Document Status" ) ) );
             }
+            if ( i.key()->sendAs() != d->sendAs() ) {
+                if ( m == 0 ) m = new MacroCommand( txt );
+                m->addCommand( new DocumentModifySendAsCmd( d, i.key()->sendAs(), i18n( "Modify Document SendAs" ) ) );
+            }
             kDebug()<<2;
         } else if ( i.value() &  Added ) {
             if ( m == 0 ) m = new MacroCommand( txt );
@@ -187,7 +206,7 @@ MacroCommand *DocumentsPanel::buildCommand()
             d = m_docs.takeDocument( i.key() );
             kDebug()<<"add document "<<d;
             m->addCommand( new DocumentAddCmd( docs, d, i18n( "Add Document" ) ) );
-            kDebug()<<2;
+            kDebug()<<4;
         }
     }
     kDebug()<<3;

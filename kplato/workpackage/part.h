@@ -78,7 +78,8 @@ signals:
 
 protected:
     virtual KoView* createViewInstance( QWidget* parent );
-
+    bool completeLoading( KoStore *store );
+    
 protected slots:
     void slotViewDestroyed();
     

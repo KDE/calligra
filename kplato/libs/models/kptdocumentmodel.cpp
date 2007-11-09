@@ -45,9 +45,13 @@ QVariant DocumentModel::type( const Document *doc, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::EditRole:
         case Qt::ToolTipRole:
             return Document::typeToString( doc->type(), true );
+        case Role::EnumList: 
+            return Document::typeList( true );
+        case Qt::EditRole: 
+        case Role::EnumListValue: 
+            return (int)doc->type();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::StatusTipRole:
@@ -57,6 +61,18 @@ QVariant DocumentModel::type( const Document *doc, int role ) const
             break;
     }
     return QVariant();
+}
+
+bool DocumentModel::setType( Document *doc, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            doc->setType( static_cast<Document::Type>( value.toInt() ) );
+            return true;
+        default: 
+            break;
+    }
+    return false;
 }
 
 QVariant DocumentModel::status( const Document *doc, int role ) const
@@ -78,15 +94,34 @@ QVariant DocumentModel::sendAs( const Document *doc, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::EditRole:
-            case Qt::ToolTipRole: {
-                return Document::sendAsToString( doc->sendAs(), true );
-            }
+        case Qt::ToolTipRole:
+            return Document::sendAsToString( doc->sendAs(), true );
+        case Role::EnumList: 
+            return Document::sendAsList( true );
+        case Qt::EditRole: 
+        case Role::EnumListValue: 
+            return (int)doc->sendAs();
+        case Qt::TextAlignmentRole:
+            return Qt::AlignCenter;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
+        default: 
+            break;
     }
     return QVariant();
+}
+
+bool DocumentModel::setSendAs( Document *doc, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            doc->setSendAs( static_cast<Document::SendAs>( value.toInt() ) );
+            return true;
+        default: 
+            break;
+    }
+    return false;
 }
 
 QVariant DocumentModel::data( const Document *doc, int property, int role ) const
@@ -96,6 +131,7 @@ QVariant DocumentModel::data( const Document *doc, int property, int role ) cons
         case 0: result = url( doc, role ); break;
         case 1: result = type( doc, role ); break;
         case 2: result = status( doc, role ); break;
+        case 3: result = sendAs( doc, role ); break;
         default:
             //kDebug()<<"Invalid property number: "<<property<<endl;;
             return result;
@@ -110,6 +146,14 @@ int DocumentModel::propertyCount()
 
 bool DocumentModel::setData( Document *doc, int property, const QVariant & value, int role )
 {
+    switch ( property ) {
+        //case 0: result = url( doc, role ); break;
+        //case 1: return setType( doc, value, role );
+        //case 2: result = status( doc, role ); break;
+        default:
+            //kDebug()<<"Invalid property number: "<<property<<endl;;
+            break;
+    }
     return false;
 }
 
@@ -197,17 +241,21 @@ Qt::ItemFlags DocumentItemModel::flags( const QModelIndex &index ) const
         }
         return flags;
     }
+    //kDebug()<<index<<m_readWrite;
     if ( m_readWrite ) {
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
             case 0: // url
-                flags |= Qt::ItemIsEditable;
+                flags &= ~Qt::ItemIsEditable; // wee need a full path
                 break;
-            case 1: break; // type
+            case 1: // type
                 flags |= Qt::ItemIsEditable;
                 break;
             case 2: // status
                 flags &= ~Qt::ItemIsEditable;
+                break;
+            case 3: // sendAs
+                flags |= Qt::ItemIsEditable;
                 break;
             default: 
                 flags &= ~Qt::ItemIsEditable;
@@ -269,9 +317,24 @@ bool DocumentItemModel::setType( Document *doc, const QVariant &value, int role 
 {
     switch ( role ) {
         case Qt::EditRole:
-            if ( value.toString() == Document::typeToString( doc->type(), true ) ) {
+            if ( value.toInt() == doc->type() ) {
                 return false;
             }
+            m_model.setType( doc, value, role );
+            //m_part->addCommand( new DocumentModifyTypeCmd( *doc, value.toString(), "Modify Document Type" ) );
+            return true;
+    }
+    return false;
+}
+
+bool DocumentItemModel::setSendAs( Document *doc, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            if ( value.toInt() == doc->sendAs() ) {
+                return false;
+            }
+            m_model.setSendAs( doc, value, role );
             //m_part->addCommand( new DocumentModifyTypeCmd( *doc, value.toString(), "Modify Document Type" ) );
             return true;
     }
@@ -301,15 +364,26 @@ bool DocumentItemModel::setData( const QModelIndex &index, const QVariant &value
     if ( ( flags(index) &Qt::ItemIsEditable ) == 0 || role != Qt::EditRole ) {
         return false;
     }
+    bool result = false;
     Document *doc = document( index );
     switch (index.column()) {
-        case 0: return setUrl( doc, value, role );
-        case 1: return setType( doc, value, role );
+        case 0: 
+            result = setUrl( doc, value, role );
+            break;
+        case 1:
+            result = setType( doc, value, role );
+            break;
+        case 3:
+            result = setSendAs( doc, value, role );
+            break;
         default:
             qWarning("data: invalid display value column %d", index.column());
-            return false;
+            break;
     }
-    return false;
+    if ( result ) {
+        emit dataChanged( index, index );
+    }
+    return result;
 }
 
 QVariant DocumentItemModel::headerData( int section, Qt::Orientation orientation, int role ) const
@@ -335,24 +409,26 @@ QItemDelegate *DocumentItemModel::createDelegate( int column, QWidget *parent ) 
 {
     switch ( column ) {
         //case 0: return new KUrlDelegate( parent ); //???????
-        case 1: return new EnumDelegate( parent );
-        default: return 0;
+        case 1: { kDebug()<< column; return new EnumDelegate( parent ); }
+        case 3: { kDebug()<< column; return new EnumDelegate( parent ); }
+        default: break;
     }
     return 0;
 }
 
 int DocumentItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
+    //kDebug()<<m_model.propertyCount();
     return m_model.propertyCount();
 }
 
 int DocumentItemModel::rowCount( const QModelIndex &parent ) const
 {
     if ( m_documents == 0 || parent.isValid() ) {
-        kDebug()<<parent;
+        //kDebug()<<parent;
         return 0;
     }
-    kDebug()<<parent<<": "<<m_documents->count();
+    //kDebug()<<parent<<": "<<m_documents->count();
     return m_documents->count();
 }
 

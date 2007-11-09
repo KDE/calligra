@@ -462,6 +462,7 @@ public:
     
     virtual uint state( long ) const { return State_None; }
     
+    const Documents &documents() const { return m_documents; }
     Documents &documents() { return m_documents; }
     
 public:

@@ -1487,6 +1487,18 @@ private:
     QString  m_oldvalue;
 };
 
+class KPLATOKERNEL_EXPORT DocumentModifySendAsCmd : public NamedCommand
+{
+    public:
+        DocumentModifySendAsCmd( Document *doc, const Document::SendAs value, const QString& name = QString() );
+        void execute();
+        void unexecute();
+    private:
+        Document *m_doc;
+        Document::SendAs m_value;
+        Document::SendAs m_oldvalue;
+};
+
 
 }  //KPlato namespace
 

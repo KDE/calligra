@@ -249,7 +249,7 @@ bool Part::saveWorkPackageToStream( QIODevice * dev, const Node *node, long id )
     int nwritten = dev->write( s.data(), s.size() );
     if ( nwritten != (int)s.size() )
         kWarning(30003) << "KoDocument::saveToStream wrote " << nwritten << "   - expected " <<  s.size();
-    return nwritten == (int)s.size();
+        return nwritten == (int)s.size();
 }
 
 bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id  )
@@ -279,35 +279,19 @@ bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id
     // Tell KoStore not to touch the file names
     store->disallowNameExpansion();
 
-    if ( store->open( "root" ) ) {
-        KoStoreDevice dev( store );
-        if ( !saveWorkPackageToStream( &dev, node, id ) || !store->close() ) {
-            kDebug(30003) <<"saveToStream failed";
-            delete store;
-            return false;
-        }
-    } else {
+    if ( ! store->open( "root" ) ) {
         setErrorMessage( i18n( "Not able to write '%1'. Partition full?", QString( "maindoc.xml") ) );
         delete store;
         return false;
     }
-//     if ( store->open( "documentinfo.xml" ) )
-//     {
-//         QDomDocument doc = d->m_docInfo->save();
-//         KoStoreDevice dev( store );
-// 
-//         QByteArray s = doc.toByteArray(); // this is already Utf8!
-//         (void)dev.write( s.data(), s.size() );
-//         (void)store->close();
-//     }
-// 
-//     if ( store->open( "preview.png" ) )
-//     {
-//         // ### TODO: missing error checking (The partition could be full!)
-//         savePreview( store );
-//         (void)store->close();
-//     }
-
+    KoStoreDevice dev( store );
+    if ( !saveWorkPackageToStream( &dev, node, id ) || !store->close() ) {
+        kDebug(30003) <<"saveToStream failed";
+        delete store;
+        return false;
+    }
+    node->documents().saveToStore( store );
+    
     kDebug(30003) <<"Saving done of url:" << file;
     if ( !store->finalize() ) {
         delete store;

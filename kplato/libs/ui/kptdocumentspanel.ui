@@ -19,8 +19,11 @@
    <property name="rightMargin" >
     <number>0</number>
    </property>
+   <property name="bottomMargin" >
+    <number>0</number>
+   </property>
    <item row="0" column="0" colspan="4" >
-    <widget class="QTableView" name="itemView" />
+    <widget class="QWidget" native="1" name="itemViewHolder" />
    </item>
    <item row="1" column="0" >
     <widget class="QPushButton" name="pbAdd" >

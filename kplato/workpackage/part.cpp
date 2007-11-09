@@ -26,6 +26,7 @@
 
 #include "kptnode.h"
 #include "kptproject.h"
+#include "kpttask.h"
 
 #include <KoZoomHandler.h>
 #include <KoStore.h>
@@ -45,6 +46,7 @@
 #include <kstandarddirs.h>
 #include <kparts/partmanager.h>
 #include <kmimetype.h>
+#include <kstandarddirs.h>
 
 #include <KoGlobal.h>
 
@@ -163,6 +165,16 @@ bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
             if ( newProject->load( e, m_xmlLoader ) ) {
                 // The load went fine. Throw out the old project
                 setProject( newProject );
+                // Load documents
+                Task *t = dynamic_cast<Task*>( m_project->childNode( 0 ) );
+                if ( t && t->type() == Node::Type_Task ) {
+                    foreach ( Document *doc, t->documents().documents() ) {
+                        if ( doc->type() == Document::Type_Product ) {
+                            kDebug()<<"load "<<doc->url();
+                            //loadObject( doc );
+                        }
+                    }
+                }
             } else {
                 delete newProject;
                 m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
@@ -186,6 +198,23 @@ bool Part::loadXML( QIODevice *, const KoXmlDocument &document )
     return true;
 }
 
+bool Part::completeLoading( KoStore *store )
+{
+    Node *n = m_project->childNode( 0 );
+    if ( n == 0 ) {
+        return true;
+    }
+    QString tmp = KStandardDirs::locateLocal( "tmp", QString(), false );
+    kDebug()<<tmp;
+    foreach ( Document *doc, n->documents().documents() ) {
+        if ( doc->sendAs() == Document::SendAs_Copy ) {
+            kDebug()<<"Extract: "<<doc->url().fileName()<<" -> "<<tmp + doc->url().fileName();
+            store->extractFile( doc->url().fileName(), tmp + doc->url().fileName() );
+        }
+    }
+    return true;
+}
+
 QDomDocument Part::saveXML()
 {
     kDebug();
@@ -195,9 +224,9 @@ QDomDocument Part::saveXML()
                               "xml",
                               "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
-    QDomElement doc = document.createElement( "kplato-workpackage" );
+    QDomElement doc = document.createElement( "kplatowork" );
     doc.setAttribute( "editor", "KPlatoWork" );
-    doc.setAttribute( "mime", "application/x-vnd.kde.kplato.workpackage" );
+    doc.setAttribute( "mime", "application/x-vnd.kde.kplato.work" );
     doc.setAttribute( "version", CURRENT_SYNTAX_VERSION );
     document.appendChild( doc );
 

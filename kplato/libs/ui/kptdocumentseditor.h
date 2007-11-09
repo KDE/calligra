@@ -50,7 +50,11 @@ public:
     Document *currentDocument() const;
     QList<Document*> selectedDocuments() const;
 
+signals:
+    void selectionChanged( QModelIndexList );
+    
 protected slots:
+    void slotSelectionChanged( const QItemSelection &selected );
     void slotActivated( const QModelIndex index );
 
 };
@@ -74,10 +78,14 @@ public:
     /// Save context info from this view. Reimplement.
     virtual void saveContext( QDomElement &/*context*/ ) const;
     
+    DocumentTreeView *view() const { return m_view; }
+    
 signals:
     void requestPopupMenu( const QString&, const QPoint& );
     void addDocument();
     void deleteDocumentList( QList<Document*> );
+    void editDocument( Document *doc );
+    void viewDocument( Document *doc );
     
 public slots:
     /// Activate/deactivate the gui
@@ -95,12 +103,16 @@ private slots:
     void slotCurrentChanged( const QModelIndex& );
     void slotEnableActions( bool on );
 
+    void slotEditDocument();
+    void slotViewDocument();
     void slotAddDocument();
     void slotDeleteSelection();
 
 private:
     DocumentTreeView *m_view;
 
+    KAction *actionEditDocument;
+    KAction *actionViewDocument;
     KAction *actionAddDocument;
     KAction *actionDeleteSelection;
 

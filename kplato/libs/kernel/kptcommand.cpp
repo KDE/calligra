@@ -2909,5 +2909,23 @@ void DocumentModifyStatusCmd::unexecute()
     m_doc->setStatus( m_oldvalue );
 }
 
+//----------------
+DocumentModifySendAsCmd::DocumentModifySendAsCmd( Document *doc, Document::SendAs value, const QString& name )
+    : NamedCommand( name ),
+    m_doc( doc )
+{
+    Q_ASSERT( doc );
+    m_value = value;
+    m_oldvalue = doc->sendAs();
+}
+void DocumentModifySendAsCmd::execute()
+{
+    m_doc->setSendAs( m_value );
+}
+void DocumentModifySendAsCmd::unexecute()
+{
+    m_doc->setSendAs( m_oldvalue );
+}
+
 
 }  //KPlato namespace

@@ -48,8 +48,10 @@ public:
 
     QVariant url( const Document *doc, int role ) const;
     QVariant type( const Document *doc, int role ) const;
+    bool setType( Document *doc, const QVariant &value, int role );
     QVariant status( const Document *doc, int role ) const;
     QVariant sendAs( const Document *doc, int role ) const;
+    bool setSendAs( Document *doc, const QVariant &value, int role );
 };
 
 class KPLATOMODELS_EXPORT DocumentItemModel : public ItemModelBase
@@ -103,6 +105,7 @@ protected slots:
 protected:
     bool setUrl( Document *doc, const QVariant &value, int role );
     bool setType( Document *doc, const QVariant &value, int role );
+    bool setSendAs( Document *doc, const QVariant &value, int role );
 
 private:
     Documents *m_documents;

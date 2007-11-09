@@ -34,6 +34,7 @@ class QPrintDialog;
 class KAction;
 class KToggleAction;
 class QLabel;
+class KUrl;
 
 class KoView;
 
@@ -42,6 +43,7 @@ namespace KPlato
 
 class ViewBase;
 class AccountsView;
+class Document;
 class GanttView;
 class PertEditor;
 class ResourceView;
@@ -96,17 +98,20 @@ public:
     virtual bool loadContext();
     virtual void saveContext( QDomElement &context ) const;
 
-//    QWidget *canvas() const;
+    QWidget *canvas() const;
 
     //virtual QDockWidget *createToolBox();
 
-//    KoDocument *hitTest( const QPoint &viewPos );
+    KoDocument *hitTest( const QPoint &viewPos );
 
     ScheduleManager *currentScheduleManager() const;
     long currentScheduleId() const;
     
     ViewBase *createTaskInfoView();
     ViewBase *createDocumentsView();
+    
+    bool viewDocument( const KUrl &filename );
+    bool editDocument( const KUrl &filename );
     
 signals:
     void currentScheduleManagerChanged( ScheduleManager *sm );
@@ -137,6 +142,9 @@ protected slots:
 
     void slotCurrentChanged( int );
 
+    void slotEditDocument( Document *doc );
+    void slotViewDocument( Document *doc );
+    
 protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
     virtual void updateReadWrite( bool readwrite );
@@ -150,11 +158,12 @@ private slots:
 
 private:
     void createViews();
+    void addPart( KParts::Part* part, const QString &name );
     
 private:
     QTabWidget *m_tab;
-
-
+    QWidget *m_currentWidget;
+    QMap<QWidget*, KParts::Part*> m_partsMap;
     int m_viewGrp;
     int m_defaultFontSize;
 

@@ -21,6 +21,8 @@
 #include "KoXmlReader.h"
 #include "kptxmlloaderobject.h"
 
+#include <KoStore.h>
+
 #include "qdom.h"
 
 #include <kdebug.h>
@@ -51,7 +53,11 @@ Document::~Document()
 
 bool Document::operator==( const Document &doc ) const
 {
-    bool res = ( m_url == doc.url() && m_type == doc.type() && m_status == doc.status() );
+    bool res = ( m_url == doc.url() && 
+                 m_type == doc.type() && 
+                 m_status == doc.status() &&
+                 m_sendAs == doc.sendAs() 
+               );
     return res;
 }
 
@@ -60,24 +66,30 @@ bool Document::isValid() const
     return m_url.url().isEmpty();
 }
 
+QStringList Document::typeList( bool trans )
+{
+    return QStringList()
+            << ( trans ? i18n( "Unknown" ) : "Unknown" )
+            << ( trans ? i18n( "Product" ) : "Product" )
+            << ( trans ? i18n( "Reference" ) : "Reference" );
+}
+
 QString Document::typeToString( Document::Type type, bool trans )
 {
-    switch ( type ) {
-        case Type_Product: return trans ? i18n( "Product" ) : "Product";
-        case Type_Reference: return trans ? i18n( "Reference" ) : "Reference";
-        default: break;
-    }
-    return trans ? i18n( "Unknown" ) : "Unknown";
+    return typeList( trans ).at( type );
+}
+
+QStringList Document::sendAsList( bool trans )
+{
+    return QStringList()
+            << ( trans ? i18n( "Unknown" ) : "Unknown" )
+            << ( trans ? i18n( "Copy" ) : "Copy" )
+            << ( trans ? i18n( "Reference" ) : "Reference" );
 }
 
 QString Document::sendAsToString( Document::SendAs snd, bool trans )
 {
-    switch ( snd ) {
-        case SendAs_Reference: return trans ? i18n( "Reference" ) : "Reference";
-        case SendAs_Copy: return trans ? i18n( "Copy" ) : "Copy";
-        default: break;
-    }
-    return trans ? i18n( "Unknown" ) : "Unknown";
+    return sendAsList( trans ).at( snd );
 }
 
 bool Document::load( KoXmlElement &element, XMLLoaderObject &status )
@@ -85,6 +97,7 @@ bool Document::load( KoXmlElement &element, XMLLoaderObject &status )
     m_url = KUrl( element.attribute( "url" ) );
     m_type = ( Type )( element.attribute( "type" ).toInt() );
     m_status = element.attribute( "status" );
+    m_sendAs = ( SendAs )( element.attribute( "sendas" ).toInt() );
     return true;
 }
 
@@ -93,6 +106,7 @@ void Document::save(QDomElement &element) const
     element.setAttribute("url", m_url.url() );
     element.setAttribute("type", m_type );
     element.setAttribute("status", m_status );
+    element.setAttribute("sendas", m_sendAs );
 }
 
 //----------------
@@ -211,6 +225,21 @@ void Documents::save(QDomElement &element) const
         QDomElement me = element.ownerDocument().createElement("document");
         e.appendChild(me);
         d->save( me );
+    }
+}
+
+void Documents::saveToStore( KoStore *store ) const
+{
+    foreach ( Document *doc, m_docs ) {
+        if ( doc->sendAs() == Document::SendAs_Copy ) {
+            QString path = doc->url().url();
+            if ( doc->url().isLocalFile() ) {
+                path = doc->url().path();
+            }
+            kDebug()<<"Copy file to store: "<<path<<doc->url().fileName();
+            store->addLocalFile( path, doc->url().fileName() );
+
+        }
     }
 }
 

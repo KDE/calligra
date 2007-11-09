@@ -59,25 +59,26 @@ namespace KPlato
 
 
 //--------------------
-    DocumentTreeView::DocumentTreeView( KoDocument *part, QWidget *parent )
+DocumentTreeView::DocumentTreeView( KoDocument *part, QWidget *parent )
     : TreeViewBase( parent )
 {
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
     setStretchLastSection( false );
     
-    setModel( new DocumentItemModel( part ) );
+    DocumentItemModel *m = new DocumentItemModel( part );
+    setModel( m );
     
-    setSelectionMode( QAbstractItemView::ExtendedSelection );
+    //setSelectionMode( QAbstractItemView::ExtendedSelection );
 
-    setItemDelegateForColumn( 1, new EnumDelegate( this ) );
-    setItemDelegateForColumn( 4, new EnumDelegate( this ) );
+    for ( int col = 0; col < m->columnCount(); ++col ) {
+        QItemDelegate *delegate = m->createDelegate( col, this );
+        if ( delegate ) {
+            setItemDelegateForColumn( col, delegate );
+        }
+    }
 
     setAcceptDrops( true );
     setDropIndicatorShown( true );
-    
-/*    QList<int> lst1; lst1 << 1 << -1;
-    QList<int> lst2; lst2 << 0;
-    hideColumns( lst1, lst2 );*/
 }
 
 void DocumentTreeView::slotActivated( const QModelIndex index )
@@ -88,6 +89,11 @@ void DocumentTreeView::slotActivated( const QModelIndex index )
 Document *DocumentTreeView::currentDocument() const
 {
     return itemModel()->document( selectionModel()->currentIndex() );
+}
+
+void DocumentTreeView::slotSelectionChanged( const QItemSelection &selected )
+{
+    emit selectionChanged( selected.indexes() );
 }
 
 QList<Document*> DocumentTreeView::selectedDocuments() const
@@ -200,18 +206,24 @@ void DocumentsEditor::updateActionsEnabled(  bool on )
 void DocumentsEditor::setupGui()
 {
     QString name = "documentseditor_edit_list";
-    actionAddDocument  = new KAction(KIcon( "document-new" ), i18n("Add Document..."), this);
-    actionCollection()->addAction("add_documents", actionAddDocument );
-    actionAddDocument->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
+    actionEditDocument  = new KAction(KIcon( "document-edit" ), i18n("Edit..."), this);
+    actionCollection()->addAction("edit_documents", actionEditDocument );
+//    actionEditDocument->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
+    connect( actionEditDocument, SIGNAL( triggered( bool ) ), SLOT( slotEditDocument() ) );
+    addAction( name, actionEditDocument );
     
-    connect( actionAddDocument, SIGNAL( triggered( bool ) ), SLOT( slotAddDocument() ) );
-    addAction( name, actionAddDocument );
+    actionViewDocument  = new KAction(KIcon( "document-view" ), i18n("View..."), this);
+    actionCollection()->addAction("view_documents", actionViewDocument );
+//    actionViewDocument->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
+    connect( actionViewDocument, SIGNAL( triggered( bool ) ), SLOT( slotViewDocument() ) );
+    addAction( name, actionViewDocument );
+
     
-    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete Selected Documents"), this);
+/*    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete"), this);
     actionCollection()->addAction("delete_selection", actionDeleteSelection );
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
-    addAction( name, actionDeleteSelection );
+    addAction( name, actionDeleteSelection );*/
     
     // Add the context menu actions for the view options
     actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
@@ -226,6 +238,25 @@ void DocumentsEditor::slotOptions()
     dlg.exec();
 }
 
+void DocumentsEditor::slotEditDocument()
+{
+    QList<Document*> dl = m_view->selectedDocuments();
+    if ( dl.isEmpty() ) {
+        return;
+    }
+    kDebug()<<dl;
+    emit editDocument( dl.first() );
+}
+
+void DocumentsEditor::slotViewDocument()
+{
+    QList<Document*> dl = m_view->selectedDocuments();
+    if ( dl.isEmpty() ) {
+        return;
+    }
+    kDebug()<<dl;
+    emit viewDocument( dl.first() );
+}
 
 void DocumentsEditor::slotAddDocument()
 {

@@ -19,5 +19,6 @@
     <ToolBar name="edit" position="top"><Text>Project</Text>
         <Action name="edit_undo"/>
         <Action name="edit_redo"/>
+        <ActionList name="documentseditor_edit_list"/>
     </ToolBar>
 </kpartgui>
