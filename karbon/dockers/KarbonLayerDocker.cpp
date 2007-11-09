@@ -86,25 +86,25 @@ KarbonLayerDocker::KarbonLayerDocker( KoShapeControllerBase *shapeController, VD
     buttonGroup->setExclusive( false );
 
     QPushButton *button = new QPushButton( mainWidget );
-    button->setIcon( SmallIcon( "list-add" ) );
+    button->setIcon( SmallIcon( "edit-add" ) );
     button->setToolTip( i18n("Add a new layer") );
     buttonGroup->addButton( button, Button_New );
     layout->addWidget( button, 1, 0 );
 
     button = new QPushButton( mainWidget );
-    button->setIcon( SmallIcon( "arrow-up" ) );
+    button->setIcon( SmallIcon( "go-up" ) );
     button->setToolTip( i18n("Raise selected objects") );
     buttonGroup->addButton( button, Button_Raise );
     layout->addWidget( button, 1, 1 );
 
     button = new QPushButton( mainWidget );
-    button->setIcon( SmallIcon( "arrow-down" ) );
+    button->setIcon( SmallIcon( "go-down" ) );
     button->setToolTip( i18n("Lower selected objects") );
     buttonGroup->addButton( button, Button_Lower );
     layout->addWidget( button, 1, 2 );
 
     button = new QPushButton( mainWidget );
-    button->setIcon( SmallIcon( "list-remove" ) );
+    button->setIcon( SmallIcon( "edit-delete" ) );
     button->setToolTip( i18n("Delete selected objects") );
     buttonGroup->addButton( button, Button_Delete );
     layout->addWidget( button, 1, 3 );

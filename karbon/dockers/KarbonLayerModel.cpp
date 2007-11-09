@@ -256,7 +256,7 @@ KoDocumentSectionModel::PropertyList KarbonLayerModel::properties( KoShape* shap
 {
     PropertyList l;
     l << Property(i18n("Visible"), SmallIcon("14_layer_visible"), SmallIcon("14_layer_novisible"), shape->isVisible());
-    l << Property(i18n("Locked"), SmallIcon("security-high"), SmallIcon("security-low"), shape->isLocked());
+    l << Property(i18n("Locked"), SmallIcon("encrypted"), SmallIcon("decrypted"), shape->isLocked());
     return l;
 }
 
