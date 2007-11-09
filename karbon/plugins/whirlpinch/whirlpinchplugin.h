@@ -26,7 +26,6 @@
 
 #include <kdialog.h>
 #include <kparts/plugin.h>
-#include <commands/vcommand.h>
 
 #include <QtCore/QPointF>
 
