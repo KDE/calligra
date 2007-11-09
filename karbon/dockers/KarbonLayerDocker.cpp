@@ -86,7 +86,7 @@ KarbonLayerDocker::KarbonLayerDocker( KoShapeControllerBase *shapeController, VD
     buttonGroup->setExclusive( false );
 
     QPushButton *button = new QPushButton( mainWidget );
-    button->setIcon( SmallIcon( "edit-add" ) );
+    button->setIcon( SmallIcon( "list-add" ) );
     button->setToolTip( i18n("Add a new layer") );
     buttonGroup->addButton( button, Button_New );
     layout->addWidget( button, 1, 0 );
@@ -104,7 +104,7 @@ KarbonLayerDocker::KarbonLayerDocker( KoShapeControllerBase *shapeController, VD
     layout->addWidget( button, 1, 2 );
 
     button = new QPushButton( mainWidget );
-    button->setIcon( SmallIcon( "edit-delete" ) );
+    button->setIcon( SmallIcon( "list-remove" ) );
     button->setToolTip( i18n("Delete selected objects") );
     buttonGroup->addButton( button, Button_Delete );
     layout->addWidget( button, 1, 3 );
