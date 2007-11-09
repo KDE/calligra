@@ -571,10 +571,13 @@ void VGradientTabWidget::changeToPredef( QTableWidgetItem * item )
     QGradient * newGradient = gradientItem->gradient()->toQGradient();
     if( m_gradient )
     {
-        transferGradientPosition( m_gradient, newGradient );
-        delete m_gradient;
+        m_gradient->setStops( newGradient->stops() );
+        delete newGradient;
     }
-    m_gradient = newGradient;
+    else
+    {
+        m_gradient = newGradient;
+    }
     blockChildSignals( true );
     m_gradientType->setCurrentIndex( m_gradient->type() );
     m_gradientRepeat->setCurrentIndex( m_gradient->spread() );
