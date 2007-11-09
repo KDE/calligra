@@ -20,6 +20,7 @@ extern "C" {
  * returns NULL.
  */
 extern void *gmalloc(int size);
+extern void *gmallocn_checkoverflow(int nObjs, int objSize);
 
 /*
  * Same as realloc, but prints error message and exits if realloc()

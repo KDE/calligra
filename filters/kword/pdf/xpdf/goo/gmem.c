@@ -11,6 +11,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
+#include <limits.h>
 #include "gmem.h"
 
 #ifdef DEBUG_MEM
@@ -92,6 +93,24 @@ void *gmalloc(int size) {
   }
   return p;
 #endif
+}
+
+void *gmallocn_checkoverflow(int nObjs, int objSize) {
+  int n;
+
+  if (nObjs == 0) {
+    return NULL;
+  }
+  n = nObjs * objSize;
+  if (objSize <= 0 || nObjs < 0 || nObjs >= INT_MAX / objSize) {
+#if USE_EXCEPTIONS
+    throw GMemException();
+#else
+    fprintf(stderr, "Bogus memory allocation size\n");
+    return NULL;
+#endif
+  }
+  return gmalloc(n);
 }
 
 void *grealloc(void *p, int size) {
