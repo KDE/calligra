@@ -1,14 +1,7 @@
 include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOPAINTER_INCLUDES} ${CMAKE_SOURCE_DIR}/karbon )
 
 set(karboncommands_SRCS
-    vclipartcmd.cc
-    vcommand.cc
-    vfillcmd.cc 
     KarbonLayerReorderCommand.cpp
-    vreplacingcmd.cc 
-    vshapecmd.cc 
-    vtransformcmd.cc 
-    vinsertcmd.cc
     KarbonBooleanCommand.cpp
     )
 

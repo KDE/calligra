@@ -45,10 +45,6 @@
 
 #include "karbon_view.h"
 
-// Commands.
-#include "vclipartcmd.h"
-#include "vinsertcmd.h"
-
 // Dialogs.
 #include "vconfiguredlg.h"
 
@@ -64,9 +60,8 @@
 #include "karbon_factory.h"
 #include "karbon_part.h"
 #include "vglobal.h"
-#include "vselection.h"
 #include "KarbonCanvas.h"
-#include "karbon_drag.h"
+//#include "karbon_drag.h"
 
 #include <KoMainWindow.h>
 #include <KoLineBorder.h>
@@ -313,8 +308,6 @@ void KarbonView::dropEvent( QDropEvent *e )
 {
     debugView("KarbonView::dropEvent()");
 
-    VObjectList selection;
-
     //Accepts QColor - from Color Manager's KColorPatch
     QColor color = KColorMimeData::fromMimeData( e->mimeData() );
     if ( color.isValid() )
@@ -350,9 +343,9 @@ void KarbonView::dropEvent( QDropEvent *e )
         else
             m_canvas->addCommand( new KoShapeBackgroundCommand( selection->selectedShapes(), QBrush( color ), 0 ) );
     }
+/* TODO port to flake
     else if( KarbonDrag::decode( e->mimeData(), selection, m_part->document() ) )
     {
-        /* TODO port to flake
         VObject *clipart = selection.first();
         QPointF p( e->pos() );
         p = m_canvas->viewConverter()->viewToDocument( p ); // TODO: or documentToView ?
@@ -363,8 +356,8 @@ void KarbonView::dropEvent( QDropEvent *e )
         VClipartCmd* cmd = new VClipartCmd( &m_part->document(), i18n( "Insert Clipart" ), clipart );
 
         m_part->addCommand( cmd, true );
-        */
     }
+*/
 }
 
 void KarbonView::print( QPrinter &printer, QPrintDialog &printDialog )
@@ -442,12 +435,14 @@ KarbonView::addSelectionToClipboard() const
 {
 	debugView("KarbonView::addSelectionToClipboard()");
 
+    /*
 	if( part()->document().selection()->objects().count() <= 0 )
 		return;
 
 	KarbonDrag* kd = new KarbonDrag();
 	kd->setObjectList( part()->document().selection()->objects() );
 	QApplication::clipboard()->setMimeData( kd->mimeData() );
+    */
 }
 
 void

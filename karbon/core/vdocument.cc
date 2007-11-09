@@ -31,12 +31,9 @@
 */
 
 #include "vdocument.h"
-#include "vselection.h"
-#include "vvisitor.h"
 
 #include <KoStore.h>
 #include <KoPageLayout.h>
-#include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoOasisLoadingContext.h>
 #include <KoOasisStyles.h>
@@ -67,7 +64,6 @@ public:
 
     ~Private()
     {
-        delete( selection );
         qDeleteAll( layers );
         layers.clear();
         qDeleteAll( objects );
@@ -79,9 +75,6 @@ public:
     QList<KoShape*> objects;   ///< The list of all object of the document.
     VLayerList layers;         ///< The layers in this document.
 
-    VSelection* selection;        ///< The selection. A list of selected objects.
-    VSelectionMode selectionMode; ///< The selectionMode
-
     KoUnit unit; ///< The unit.
     KoImageCollection imageCollection; ///< the image collection
 
@@ -90,17 +83,15 @@ public:
 };
 
 VDocument::VDocument()
-: VObject( 0L ), d( new Private )
+: d( new Private )
 {
-    d->selection = new VSelection( this );
     // create a layer. we need at least one:
     insertLayer( new KoShapeLayer() );
 }
 
 VDocument::VDocument( const VDocument& document )
-    : VObject( document ), d( new Private )
+: d( new Private )
 {
-    d->selection = new VSelection( this );
     d->layers = document.layers();
 // TODO
 }
@@ -177,7 +168,7 @@ VDocument::saveXML() const
 void VDocument::saveOasis( KoShapeSavingContext & context ) const
 {
     context.xmlWriter().startElement( "draw:page" );
-    context.xmlWriter().addAttribute( "draw:name", name());
+    context.xmlWriter().addAttribute( "draw:name", "" );
     context.xmlWriter().addAttribute( "draw:id", "page1");
     context.xmlWriter().addAttribute( "draw:master-page-name", "Default");
 
@@ -314,12 +305,6 @@ bool VDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingContext &c
     return true;
 }
 
-void
-VDocument::accept( VVisitor& visitor )
-{
-	visitor.visitVDocument( *this );
-}
-
 QRectF VDocument::boundingRect() const
 {
     return contentRect().united( QRectF( QPointF(0,0), d->pageSize ) );
@@ -352,16 +337,6 @@ void VDocument::setPageSize( QSizeF pageSize )
 const QList<KoShape*> VDocument::shapes() const
 {
     return d->objects;
-}
-
-VSelection* VDocument::selection() const
-{
-    return d->selection;
-}
-
-VDocument::VSelectionMode VDocument::selectionMode()
-{
-    return VDocument::AllLayers;
 }
 
 bool VDocument::saveAsPath() const

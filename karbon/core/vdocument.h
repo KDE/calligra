@@ -34,8 +34,6 @@
 #include <QMap>
 #include <QRectF>
 
-#include "vobject.h"
-
 #include <karbon_export.h>
 #include <KoUnit.h>
 #include <KoShapeLoadingContext.h>
@@ -47,6 +45,7 @@ class KoShape;
 class KoShapeSavingContext;
 class KoShapeLayer;
 class KoImageCollection;
+class KoStore;
 
 typedef QList<KoShapeLayer*> VLayerList;
 
@@ -57,7 +56,7 @@ typedef QList<KoShapeLayer*> VLayerList;
  * the visually oriented karbon part.
  */
 
-class KARBONBASE_EXPORT VDocument : public VObject
+class KARBONBASE_EXPORT VDocument
 {
 public:
 	/** The different selection modes */
@@ -190,37 +189,21 @@ public:
 
 	virtual VDocument* clone() const;
 
-	virtual void accept( VVisitor& visitor );
 
+    /**
+    * Adds an object to the document.
+    *
+    * @param shape the object to append
+    */
+    void add( KoShape* shape );
 
-	/**
-	 * Returns a pointer to the selection.
-	 *
-	 * @return the document's selection
-	 */
-    VSelection* selection() const;
+    /**
+    * Removes an object from the document.
+    *
+    * @param shape the object to append
+    */
+    void remove( KoShape* shape );
 
-	/**
-	 * Returns the selection mode.
-	 * 
-	 * @return the actual selection mode
-	 */
-    VSelectionMode selectionMode();
-
-	/**
-	 * Adds an object to the document.
-	 *
-	 * @param shape the object to append
-	 */
-	void add( KoShape* shape );
-
-	/**
-	 * Removes an object from the document.
-	 *
-	 * @param shape the object to append
-	 */
-	void remove( KoShape* shape );
-	
     bool saveAsPath() const;
     void saveAsPath( bool b );
 

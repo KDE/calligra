@@ -25,8 +25,6 @@ include_directories(
 		${CMAKE_BINARY_DIR}/karbon/core 
 		${CMAKE_SOURCE_DIR}/karbon/widgets 
 		${CMAKE_BINARY_DIR}/karbon/widgets 
-		${CMAKE_SOURCE_DIR}/karbon/render
-		${CMAKE_BINARY_DIR}/karbon/render
 		${CMAKE_SOURCE_DIR}/karbon/commands
 		${CMAKE_BINARY_DIR}/karbon/commands
 		${CMAKE_SOURCE_DIR}/karbon/dockers 
@@ -38,13 +36,10 @@ include_directories(
         ${KOTEXT_INCLUDES})
 
 add_subdirectory( commands )
-add_subdirectory( visitors )
 add_subdirectory( core )
-add_subdirectory( shapes )
 add_subdirectory( widgets )
 add_subdirectory( dialogs )
 add_subdirectory( dockers )
-#add_subdirectory( tools )
 add_subdirectory( plugins )
 add_subdirectory( data )
 add_subdirectory( pics )
@@ -55,17 +50,17 @@ add_subdirectory( templates )
 
 set(karboncommon_LIB_SRCS 
    karbon_factory.cc 
-   karbon_resourceserver.cc 
+#karbon_resourceserver.cc 
    karbon_part.cc 
    karbon_view.cc 
-   karbon_drag.cpp 
+#   karbon_drag.cpp 
    karbon_tool_registry.cc
    karbon_tool_factory.cc 
 )
 
 kde4_add_library(karboncommon SHARED ${karboncommon_LIB_SRCS})
 
-target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} komain koguiutils kopainter kotext karbondockers karbonwidgets karboncore karbonshapes karboncommands karbonvisitors karbondialogs )
+target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} komain koguiutils kopainter kotext karbondockers karbonwidgets karboncore karboncommands karbondialogs )
 
 set_target_properties(karboncommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS karboncommon  DESTINATION ${LIB_INSTALL_DIR})

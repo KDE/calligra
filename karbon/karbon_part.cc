@@ -44,7 +44,6 @@
 #include "karbon_factory.h"
 #include "karbon_view.h"
 #include "vglobal.h"
-#include "vselection.h"
 #include "KarbonCanvas.h"
 #include "vdocumentdocker.h"
 
@@ -103,11 +102,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
     m_pageLayout.width = MM_TO_POINT( KoPageFormat::width( m_pageLayout.format, m_pageLayout.orientation ) );
     m_pageLayout.height = MM_TO_POINT( KoPageFormat::height( m_pageLayout.format, m_pageLayout.orientation ) );
     m_doc.setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
-	// enable selection drawing
-	m_doc.selection()->showHandle();
-	m_doc.selection()->setSelectObjects();
-	m_doc.selection()->setState( VObject::selected );
-	m_doc.selection()->selectNodes();
 }
 
 KarbonPart::~KarbonPart()

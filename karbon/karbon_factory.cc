@@ -19,7 +19,7 @@
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
-#include "karbon_resourceserver.h"
+//#include "karbon_resourceserver.h"
 #include "karbon_aboutdata.h"
 #include "karbon_tool_registry.h"
 
@@ -122,6 +122,7 @@ const KComponentData &KarbonFactory::componentData()
 	return *s_instance;
 }
 
+/*
 KarbonResourceServer *KarbonFactory::rServer()
 {
 	if( !s_rserver )
@@ -129,6 +130,6 @@ KarbonResourceServer *KarbonFactory::rServer()
 
 	return s_rserver;
 }
-
+*/
 #include "karbon_factory.moc"
 

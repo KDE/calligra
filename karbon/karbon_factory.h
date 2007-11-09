@@ -42,7 +42,7 @@ public:
 	static const KComponentData &componentData();
 	static KAboutData* aboutData();
 
-	static KarbonResourceServer *rServer();
+	//static KarbonResourceServer *rServer();
 
 private:
 	static KComponentData* s_instance;
