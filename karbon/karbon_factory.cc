@@ -21,7 +21,6 @@
 #include "karbon_part.h"
 //#include "karbon_resourceserver.h"
 #include "karbon_aboutdata.h"
-#include "karbon_tool_registry.h"
 
 #include <kaboutdata.h>
 #include <kglobal.h>
@@ -45,7 +44,6 @@ KarbonFactory::KarbonFactory( QObject* parent, const char* name )
 {
 	componentData();
 
-	KarbonToolRegistry::instance();
 
 	// Load plugins
 	/* TODO enable it when we are in better shape (already ported to kde4)

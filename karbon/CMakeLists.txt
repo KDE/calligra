@@ -54,8 +54,6 @@ set(karboncommon_LIB_SRCS
    karbon_part.cc 
    karbon_view.cc 
 #   karbon_drag.cpp 
-   karbon_tool_registry.cc
-   karbon_tool_factory.cc 
 )
 
 kde4_add_library(karboncommon SHARED ${karboncommon_LIB_SRCS})
