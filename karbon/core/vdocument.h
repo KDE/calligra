@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
    Copyright (C) 2002 Benoit Vautrin <benoit.vautrin@free.fr>
-   Copyright (C) 2002-2005 Rob Buis <buis@kde.org>
+   Copyright (C) 2002-2005,2007 Rob Buis <buis@kde.org>
    Copyright (C) 2002,2005-2006 Laurent Montel <montel@kde.org>
    Copyright (C) 2005,2007 David Faure <faure@kde.org>
    Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
@@ -59,135 +59,135 @@ typedef QList<KoShapeLayer*> VLayerList;
 class KARBONBASE_EXPORT VDocument
 {
 public:
-	/** The different selection modes */
-	enum VSelectionMode {
-		ActiveLayer,	/**< selection within the active layer */
-		VisibleLayers,	/**< selection within all visible layers */
-		SelectedLayers,	/**< selection within all selected layers */
-		AllLayers		/**< selection within all layers */
-	};
+    /** The different selection modes */
+    enum VSelectionMode {
+        ActiveLayer,    /**< selection within the active layer */
+        VisibleLayers,    /**< selection within all visible layers */
+        SelectedLayers,    /**< selection within all selected layers */
+        AllLayers        /**< selection within all layers */
+    };
 
-	/**
-	 * Constructs a new document.
-	 */
-	VDocument();
+    /**
+     * Constructs a new document.
+     */
+    VDocument();
 
-	/**
-	 * Copy constructor.
-	 *
-	 * @param document the document to copy properties from
-	 */
-	VDocument( const VDocument& document );
+    /**
+     * Copy constructor.
+     *
+     * @param document the document to copy properties from
+     */
+    VDocument( const VDocument& document );
 
-	/** 
-	 * Destroys the document and all of the layers.
-	 */
-	virtual ~VDocument();
+    /** 
+     * Destroys the document and all of the layers.
+     */
+    virtual ~VDocument();
 
-	/**
-	 * Returns document unit.
-	 *
-	 * @return the document's unit
-	 */
+    /**
+     * Returns document unit.
+     *
+     * @return the document's unit
+     */
     KoUnit unit() const;
 
-	/**
-	 * Sets document unit.
-	 *
-	 * @param unit the new document unit
-	 */
+    /**
+     * Sets document unit.
+     *
+     * @param unit the new document unit
+     */
     void setUnit( KoUnit unit );
 
-	/**
-	 * Checks if specified layer can be raised. 
-	 *
-	 * A layer can be raised if there is more than one layer and the specified layer
-	 * is not already at the top.
-	 *
-	 * @param layer the layer to check
-	 * @return true if layer can be raised, else false
-	 */
-	bool canRaiseLayer( KoShapeLayer* layer );
+    /**
+     * Checks if specified layer can be raised. 
+     *
+     * A layer can be raised if there is more than one layer and the specified layer
+     * is not already at the top.
+     *
+     * @param layer the layer to check
+     * @return true if layer can be raised, else false
+     */
+    bool canRaiseLayer( KoShapeLayer* layer );
 
-	/**
-	 * Checks if specified layer can be lowered. 
-	 *
-	 * A layer can be lowered if there is more than one layer and the specified layer
-	 * is not already at the bottom.
-	 *
-	 * @param layer the layer to check
-	 * @return true if layer can be lowered, else false
-	 */
-	bool canLowerLayer( KoShapeLayer* layer );
+    /**
+     * Checks if specified layer can be lowered. 
+     *
+     * A layer can be lowered if there is more than one layer and the specified layer
+     * is not already at the bottom.
+     *
+     * @param layer the layer to check
+     * @return true if layer can be lowered, else false
+     */
+    bool canLowerLayer( KoShapeLayer* layer );
 
-	/**
-	 * Raises the layer.
-	 * 
-	 * @param layer the layer to raise
-	 */
-	void raiseLayer( KoShapeLayer* layer );
+    /**
+     * Raises the layer.
+     * 
+     * @param layer the layer to raise
+     */
+    void raiseLayer( KoShapeLayer* layer );
 
-	/**
-	 * Lowers the layer.
-	 * 
-	 * @param layer the layer to lower
-	 */
-	void lowerLayer( KoShapeLayer* layer );
+    /**
+     * Lowers the layer.
+     * 
+     * @param layer the layer to lower
+     */
+    void lowerLayer( KoShapeLayer* layer );
 
-	/**
-	 * Returns the position of the specified layer.
-	 *
-	 * @param layer the layer to retrieve the position for
-	 * @return the layer position
-	 */
-	int layerPos( KoShapeLayer* layer );
+    /**
+     * Returns the position of the specified layer.
+     *
+     * @param layer the layer to retrieve the position for
+     * @return the layer position
+     */
+    int layerPos( KoShapeLayer* layer );
 
-	/**
-	 * Inserts a new layer.
-	 * 
-	 * The layer is appended at the end, on top of all other layers, and is activated.
-	 *
-	 * @param layer the layer to insert
-	 */
-	void insertLayer( KoShapeLayer* layer );
+    /**
+     * Inserts a new layer.
+     * 
+     * The layer is appended at the end, on top of all other layers, and is activated.
+     *
+     * @param layer the layer to insert
+     */
+    void insertLayer( KoShapeLayer* layer );
 
-	/**
-	 * Removes the layer.
-	 *
-	 * If there is no layer left, a new layer is created, inserted and activated.
-	 *
-	 * @param layer the layer to remove
-	 */
-	void removeLayer( KoShapeLayer* layer );
+    /**
+     * Removes the layer.
+     *
+     * If there is no layer left, a new layer is created, inserted and activated.
+     *
+     * @param layer the layer to remove
+     */
+    void removeLayer( KoShapeLayer* layer );
 
-	/**
-	 * Returns the list of layers.
+    /**
+     * Returns the list of layers.
      * The layer list provides a hierarchical view/access of the document data.
      * All the documents shapes are children of a shape container, where a layer
      * resembles a root container which can contain other containers in an
      * arbitrary nesting depth.
-	 */
-	const VLayerList& layers() const;
+     */
+    const VLayerList& layers() const;
 
-	/**
-	 * Returns the list of all shapes of the document.
+    /**
+     * Returns the list of all shapes of the document.
      * This list provides a flat view/access to all the documents shapes.
      * For an hierarchical view/access one should retrieve the documents
      * layers with layers().
-	 */
-	const QList<KoShape*> shapes() const;
+     */
+    const QList<KoShape*> shapes() const;
 
-	QDomDocument saveXML() const;
+    QDomDocument saveXML() const;
     void saveOasis( KoShapeSavingContext & context ) const;
     bool saveOasis( KoStore *store, KoXmlWriter *manifestWriter, KoGenStyles &mainStyles );
 
-	bool loadXML( const KoXmlElement& doc );
+    bool loadXML( const KoXmlElement& doc );
     virtual bool loadOasis( const KoXmlElement &element, KoShapeLoadingContext &context );
-	virtual void save( QDomElement& element ) const;
-	virtual void load( const KoXmlElement& element );
-	void loadDocumentContent( const KoXmlElement& doc );
+    virtual void save( QDomElement& element ) const;
+    virtual void load( const KoXmlElement& element );
+    void loadDocumentContent( const KoXmlElement& doc );
 
-	virtual VDocument* clone() const;
+    virtual VDocument* clone() const;
 
 
     /**

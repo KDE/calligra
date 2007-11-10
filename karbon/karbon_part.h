@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001-2002 Lennart Kudling <kudling@kde.org>
-   Copyright (C) 2001-2005 Rob Buis <buis@kde.org>
+   Copyright (C) 2001-2005,2007 Rob Buis <buis@kde.org>
    Copyright (C) 2002,2004-2005 Laurent Montel <montel@kde.org>
    Copyright (C) 2002 Benoit Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2004-2005,2007 David Faure <faure@kde.org>
@@ -50,64 +50,64 @@ class QRect;
 
 class KARBONCOMMON_EXPORT KarbonPart : public KoDocument, public KoShapeControllerBase
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	explicit KarbonPart( QWidget* parentWidget = 0L, const char* widgetName = 0L,
-				QObject* parent = 0L, const char* name = 0L, bool singleViewMode = false );
-	virtual ~KarbonPart();
+    explicit KarbonPart( QWidget* parentWidget = 0L, const char* widgetName = 0L,
+                QObject* parent = 0L, const char* name = 0L, bool singleViewMode = false );
+    virtual ~KarbonPart();
 
-	virtual void paintContent( QPainter& painter, const QRect& rect);
+    virtual void paintContent( QPainter& painter, const QRect& rect);
 
-	/// file-> open calls this method
-	virtual bool loadXML( QIODevice*, const KoXmlDocument& document );
+    /// file-> open calls this method
+    virtual bool loadXML( QIODevice*, const KoXmlDocument& document );
     virtual bool loadOdf( KoOdfReadStore & odfStore );
     virtual bool completeLoading( KoStore* store );
 
-	/// file-> save and file-> save as call this method
-	virtual QDomDocument saveXML();
-	virtual bool saveOasis( KoStore *store, KoXmlWriter *manifestWriter );
+    /// file-> save and file-> save as call this method
+    virtual QDomDocument saveXML();
+    virtual bool saveOasis( KoStore *store, KoXmlWriter *manifestWriter );
 
-	// access static document:
-	VDocument& document() { return m_doc; }
+    // access static document:
+    VDocument& document() { return m_doc; }
 
-	bool showStatusBar() const
-	{
-		return m_bShowStatusBar;
-	}
+    bool showStatusBar() const
+    {
+        return m_bShowStatusBar;
+    }
 
-	void setShowStatusBar( bool b );
-	/// update attached view(s) on the current doc settings
-	/// at this time only the status bar is handled
-	void reorganizeGUI();
+    void setShowStatusBar( bool b );
+    /// update attached view(s) on the current doc settings
+    /// at this time only the status bar is handled
+    void reorganizeGUI();
 
-	void initConfig();
-	unsigned int maxRecentFiles() const { return m_maxRecentFiles; }
+    void initConfig();
+    unsigned int maxRecentFiles() const { return m_maxRecentFiles; }
 
-	void setPageLayout( KoPageLayout& layout, KoUnit _unit );
+    void setPageLayout( KoPageLayout& layout, KoUnit _unit );
 
-	bool mergeNativeFormat( const QString & file );
+    bool mergeNativeFormat( const QString & file );
 
-	// implemented from KoShapeController
-	virtual void addShape( KoShape* shape );
-	virtual void removeShape( KoShape* shape );
+    // implemented from KoShapeController
+    virtual void addShape( KoShape* shape );
+    virtual void removeShape( KoShape* shape );
 
 public slots:
-	/// repaint all views attached to this koDocument
-	void repaintAllViews( bool repaint = true );
-	void slotDocumentRestored();
+    /// repaint all views attached to this koDocument
+    void repaintAllViews( bool repaint = true );
+    void slotDocumentRestored();
 
 protected:
-	virtual KoView* createViewInstance( QWidget* parent );
-	virtual void removeView( KoView *view );
-	void loadOasisSettings( const KoXmlDocument&settingsDoc );
+    virtual KoView* createViewInstance( QWidget* parent );
+    virtual void removeView( KoView *view );
+    void loadOasisSettings( const KoXmlDocument&settingsDoc );
 
     void updateDocumentSize();
 private:
-	VDocument m_doc;					/// store non-visual doc info
+    VDocument m_doc;                    /// store non-visual doc info
 
-	bool m_bShowStatusBar;				/// enable/disable status bar in attached view(s)
-	bool m_merge;
-	unsigned int m_maxRecentFiles;				/// max. number of files shown in open recent menu item
+    bool m_bShowStatusBar;                /// enable/disable status bar in attached view(s)
+    bool m_merge;
+    unsigned int m_maxRecentFiles;                /// max. number of files shown in open recent menu item
 };
 
 #endif

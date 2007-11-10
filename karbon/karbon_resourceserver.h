@@ -4,7 +4,7 @@
    kis_resourceserver.h - part of KImageShop
 
    Copyright (c) 1999 Matthias Elter <elter@kde.org>
-   Copyright (C) 2002-2004 Rob Buis <buis@kde.org>
+   Copyright (C) 2002-2004,2007 Rob Buis <buis@kde.org>
    Copyright (C) 2002 Beno�t Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
    Copyright (C) 2005-2006 Laurent Montel <montel@kde.org>
@@ -55,8 +55,8 @@ class KARBONCOMMON_EXPORT KarbonResourceServer
 {
 
 public:
-	KarbonResourceServer();
-	virtual ~KarbonResourceServer();
+    KarbonResourceServer();
+    virtual ~KarbonResourceServer();
 
     /// Returns number of loaded patterns
     int patternCount() const;
@@ -82,91 +82,91 @@ public:
     /// Removes given gradient
     void removeGradient( KoAbstractGradient* gradient );
 
-	int clipartCount()
-	{
-		return m_cliparts->count();
-	}
+    int clipartCount()
+    {
+        return m_cliparts->count();
+    }
 
-	Q3PtrList<VClipartIconItem>* cliparts()
-	{
-		return m_cliparts;
-	}
+    Q3PtrList<VClipartIconItem>* cliparts()
+    {
+        return m_cliparts;
+    }
 
-	VClipartIconItem* addClipart( VObject* clipart, double width, double height );
-	void removeClipart( VClipartIconItem* clipartIcon );
+    VClipartIconItem* addClipart( VObject* clipart, double width, double height );
+    void removeClipart( VClipartIconItem* clipartIcon );
 
-	QPixmap *cachePixmap( const QString &key, int group_or_size );
+    QPixmap *cachePixmap( const QString &key, int group_or_size );
 
 protected:
     /// Loads pattern from given file name
     const KoPattern* loadPattern( const QString& filename );
 
-	void loadGradient( const QString& filename );
+    void loadGradient( const QString& filename );
     /// Saves gradient to given file
     bool saveGradient( QGradient* gradient, const QString& filename );
 
-	void loadClipart( const QString& filename );
-	void saveClipart( VObject* object, double width, double height, const QString& filename );
+    void loadClipart( const QString& filename );
+    void saveClipart( VObject* object, double width, double height, const QString& filename );
 
 private:
     QList<KoPattern*> m_patterns; ///< the loaded patterns
     QList<KoAbstractGradient*> m_gradients; ///< the loaded gradients
-	Q3PtrList<VClipartIconItem>* m_cliparts;
-	Q3Dict<QPixmap> m_pixmaps;
+    Q3PtrList<VClipartIconItem>* m_cliparts;
+    Q3Dict<QPixmap> m_pixmaps;
 };
 
 class VClipartIconItem : public QTableWidgetItem
 {
 public:
-	VClipartIconItem( const VObject* clipart, double width, double height, const QString & filename );
-	VClipartIconItem( const VClipartIconItem& item );
-	virtual ~VClipartIconItem();
+    VClipartIconItem( const VObject* clipart, double width, double height, const QString & filename );
+    VClipartIconItem( const VClipartIconItem& item );
+    virtual ~VClipartIconItem();
 
-	virtual QPixmap& thumbPixmap() const
-	{
-		return ( QPixmap& ) m_thumbPixmap;
-	}
+    virtual QPixmap& thumbPixmap() const
+    {
+        return ( QPixmap& ) m_thumbPixmap;
+    }
 
-	virtual QPixmap& pixmap() const
-	{
-		return ( QPixmap& ) m_pixmap;
-	}
+    virtual QPixmap& pixmap() const
+    {
+        return ( QPixmap& ) m_pixmap;
+    }
 
-	const VObject* clipart() const
-	{
-		return m_clipart;
-	}
+    const VObject* clipart() const
+    {
+        return m_clipart;
+    }
 
-	QString filename() const
-	{
-		return m_filename;
-	}
+    QString filename() const
+    {
+        return m_filename;
+    }
 
-	bool canDelete() const
-	{
-		return m_delete;
-	}
+    bool canDelete() const
+    {
+        return m_delete;
+    }
 
-	double originalWidth() const
-	{
-		return m_width;
-	}
+    double originalWidth() const
+    {
+        return m_width;
+    }
 
-	double originalHeight() const
-	{
-		return m_height;
-	}
+    double originalHeight() const
+    {
+        return m_height;
+    }
 
-	VClipartIconItem* clone() const;
+    VClipartIconItem* clone() const;
 
 private:
-	QPixmap m_pixmap;
-	QPixmap m_thumbPixmap;
-	VObject* m_clipart;
-	QString m_filename;
-	bool m_delete;
-	double m_width;
-	double m_height;
+    QPixmap m_pixmap;
+    QPixmap m_thumbPixmap;
+    VObject* m_clipart;
+    QString m_filename;
+    bool m_delete;
+    double m_width;
+    double m_height;
 }
 
 ; // VClipartIconItem

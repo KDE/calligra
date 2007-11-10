@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
    Copyright (C) 2002 Benoit Vautrin <benoit.vautrin@free.fr>
-   Copyright (C) 2002-2006 Rob Buis <buis@kde.org>
+   Copyright (C) 2002-2007 Rob Buis <buis@kde.org>
    Copyright (C) 2002,2005 David Faure <faure@kde.org>
    Copyright (C) 2002 Laurent Montel <montel@kde.org>
    Copyright (C) 2004 Waldo Bastian <bastian@kde.org>
@@ -158,11 +158,11 @@ void VDocument::remove( KoShape* shape )
 QDomDocument
 VDocument::saveXML() const
 {
-	QDomDocument doc;
-	QDomElement me = doc.createElement( "DOC" );
-	doc.appendChild( me );
-	save( me );
-	return doc;
+    QDomDocument doc;
+    QDomElement me = doc.createElement( "DOC" );
+    doc.appendChild( me );
+    save( me );
+    return doc;
  }
 
 void VDocument::saveOasis( KoShapeSavingContext & context ) const
@@ -181,44 +181,44 @@ void VDocument::saveOasis( KoShapeSavingContext & context ) const
 void
 VDocument::save( QDomElement& me ) const
 {
-	me.setAttribute( "mime", "application/x-karbon" ),
-	me.setAttribute( "version", "0.1" );
-	me.setAttribute( "editor", "Karbon14" );
-	me.setAttribute( "syntaxVersion", "0.1" );
+    me.setAttribute( "mime", "application/x-karbon" ),
+    me.setAttribute( "version", "0.1" );
+    me.setAttribute( "editor", "Karbon14" );
+    me.setAttribute( "syntaxVersion", "0.1" );
     if( d->pageSize.width() > 0.0 )
         me.setAttribute( "width", d->pageSize.width() );
     if( d->pageSize.height() > 0. )
         me.setAttribute( "height", d->pageSize.height() );
-	me.setAttribute( "unit", KoUnit::unitName( d->unit ) );
+    me.setAttribute( "unit", KoUnit::unitName( d->unit ) );
 
-	// save objects:
-	/* TODO: porting to flake
-	VLayerListIterator itr( m_layers );
+    // save objects:
+    /* TODO: porting to flake
+    VLayerListIterator itr( m_layers );
 
-	for ( ; itr.current(); ++itr )
-			itr.current()->save( me );
-	*/
+    for ( ; itr.current(); ++itr )
+            itr.current()->save( me );
+    */
 }
 
 VDocument*
 VDocument::clone() const
 {
-	return new VDocument( *this );
+    return new VDocument( *this );
 }
 
 void
 VDocument::load( const KoXmlElement& doc )
 {
-	loadXML( doc );
+    loadXML( doc );
 }
 
 bool VDocument::loadXML( const KoXmlElement& doc )
 {
     if( doc.attribute( "mime" ) != "application/x-karbon" ||
-		doc.attribute( "syntaxVersion" ) != "0.1" )
-	{
-		return false;
-	}
+        doc.attribute( "syntaxVersion" ) != "0.1" )
+    {
+        return false;
+    }
 
     qDeleteAll( d->layers );
     d->layers.clear();
@@ -230,12 +230,12 @@ bool VDocument::loadXML( const KoXmlElement& doc )
 
     d->unit = KoUnit::unit( doc.attribute( "unit", KoUnit::unitName( d->unit ) ) );
 
-	loadDocumentContent( doc );
+    loadDocumentContent( doc );
 
     if( d->layers.isEmpty() )
         insertLayer( new KoShapeLayer() );
 
-	return true;
+    return true;
 }
 
 void

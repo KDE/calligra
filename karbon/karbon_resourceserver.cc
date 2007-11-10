@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002-2003 Rob Buis <buis@kde.org>
+   Copyright (C) 2002-2003,2007 Rob Buis <buis@kde.org>
    Copyright (C) 2002 Beno� Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
    Copyright (C) 2003 Anders Lund <anders@alweb.dk>
@@ -72,44 +72,44 @@
 
 KarbonResourceServer::KarbonResourceServer()
 {
-	kDebug(38000) <<"-- Karbon ResourceServer --";
+    kDebug(38000) <<"-- Karbon ResourceServer --";
 
-	// PATTERNS
-	kDebug(38000) <<"Loading patterns:";
+    // PATTERNS
+    kDebug(38000) <<"Loading patterns:";
 
-	// image formats
-	QStringList formats;
-	formats << "*.png" << "*.tif" << "*.xpm" << "*.bmp" << "*.jpg" << "*.gif" << "*.pat";
+    // image formats
+    QStringList formats;
+    formats << "*.png" << "*.tif" << "*.xpm" << "*.bmp" << "*.jpg" << "*.gif" << "*.pat";
 
-	// init vars
-	QStringList lst;
-	QString format, file;
+    // init vars
+    QStringList lst;
+    QString format, file;
 
-	// find patterns
+    // find patterns
 
-	for( QStringList::Iterator it = formats.begin(); it != formats.end(); ++it )
-	{
-		format = *it;
-		QStringList l = KarbonFactory::componentData().dirs()->findAllResources(
-							"kis_pattern", format, KStandardDirs::NoDuplicates);
-		lst += l;
-	}
+    for( QStringList::Iterator it = formats.begin(); it != formats.end(); ++it )
+    {
+        format = *it;
+        QStringList l = KarbonFactory::componentData().dirs()->findAllResources(
+                            "kis_pattern", format, KStandardDirs::NoDuplicates);
+        lst += l;
+    }
 
-	// load patterns
-	for( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
-	{
-		file = *it;
-		kDebug(38000) <<" -" << file;
-		loadPattern( file );
-	}
+    // load patterns
+    for( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
+    {
+        file = *it;
+        kDebug(38000) <<" -" << file;
+        loadPattern( file );
+    }
 
-	kDebug(38000) << m_patterns.count() <<" patterns loaded.";
+    kDebug(38000) << m_patterns.count() <<" patterns loaded.";
 
-	// GRADIENTS
-	kDebug(38000) <<"Loading gradients:";
-	formats.clear();
-	lst.clear();
-	formats = KoGradientManager::filters();
+    // GRADIENTS
+    kDebug(38000) <<"Loading gradients:";
+    formats.clear();
+    lst.clear();
+    formats = KoGradientManager::filters();
 
     // find Gradients
     for( QStringList::Iterator it = formats.begin(); it != formats.end(); ++it )
@@ -130,44 +130,44 @@ KarbonResourceServer::KarbonResourceServer()
 
     kDebug(38000) << m_gradients.count() <<" gradients loaded.";
 
-	// CLIPARTS
-	kDebug(38000) <<"Loading cliparts:";
-	m_cliparts = new Q3PtrList<VClipartIconItem>();
-	m_cliparts->setAutoDelete( true );
+    // CLIPARTS
+    kDebug(38000) <<"Loading cliparts:";
+    m_cliparts = new Q3PtrList<VClipartIconItem>();
+    m_cliparts->setAutoDelete( true );
 
-	formats.clear();
-	lst.clear();
-	formats << "*.kclp";
+    formats.clear();
+    lst.clear();
+    formats << "*.kclp";
 
-	// find cliparts
+    // find cliparts
 
-	for( QStringList::Iterator it = formats.begin(); it != formats.end(); ++it )
-	{
-		format = *it;
-		QStringList l = KarbonFactory::componentData().dirs()->findAllResources(
-							"karbon_clipart", format, KStandardDirs::NoDuplicates);
-		lst += l;
-	}
+    for( QStringList::Iterator it = formats.begin(); it != formats.end(); ++it )
+    {
+        format = *it;
+        QStringList l = KarbonFactory::componentData().dirs()->findAllResources(
+                            "karbon_clipart", format, KStandardDirs::NoDuplicates);
+        lst += l;
+    }
 
-	// load cliparts
-	for( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
-	{
-		file = *it;
-		kDebug(38000) <<" -" << file;
-		loadClipart( file );
-	}
+    // load cliparts
+    for( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
+    {
+        file = *it;
+        kDebug(38000) <<" -" << file;
+        loadClipart( file );
+    }
 
-	m_pixmaps.setAutoDelete( true );
+    m_pixmaps.setAutoDelete( true );
 
-	kDebug(38000) << m_cliparts->count() <<" cliparts loaded.";
+    kDebug(38000) << m_cliparts->count() <<" cliparts loaded.";
 } // KarbonResourceServer::KarbonResourceServer
 
 KarbonResourceServer::~KarbonResourceServer()
 {
     qDeleteAll( m_patterns );
     qDeleteAll( m_gradients );
-	m_cliparts->clear();
-	delete m_cliparts;
+    m_cliparts->clear();
+    delete m_cliparts;
 } // KarbonResourceServer::~KarbonResourceServer
 
 int KarbonResourceServer::patternCount() const
@@ -355,196 +355,196 @@ bool KarbonResourceServer::saveGradient( QGradient* gradient, const QString& fil
 VClipartIconItem*
 KarbonResourceServer::addClipart( VObject* clipart, double width, double height )
 {
-	int i = 1;
-	char buffer[ 20 ];
-	sprintf( buffer, "%04d.kclp", i++ );
+    int i = 1;
+    char buffer[ 20 ];
+    sprintf( buffer, "%04d.kclp", i++ );
 
-	while( KStandardDirs::exists( KarbonFactory::componentData().dirs()->saveLocation( "karbon_clipart" ) + buffer ) )
-		sprintf( buffer, "%04d.kclp", i++ );
+    while( KStandardDirs::exists( KarbonFactory::componentData().dirs()->saveLocation( "karbon_clipart" ) + buffer ) )
+        sprintf( buffer, "%04d.kclp", i++ );
 
-	QString filename = KarbonFactory::componentData().dirs()->saveLocation( "karbon_clipart" ) + buffer;
+    QString filename = KarbonFactory::componentData().dirs()->saveLocation( "karbon_clipart" ) + buffer;
 
-	saveClipart( clipart, width, height, filename );
+    saveClipart( clipart, width, height, filename );
 
-	m_cliparts->append( new VClipartIconItem( clipart, width, height, filename ) );
+    m_cliparts->append( new VClipartIconItem( clipart, width, height, filename ) );
 
-	return m_cliparts->last();
+    return m_cliparts->last();
 } // KarbonResourceServer::addClipart
 
 void
 KarbonResourceServer::removeClipart( VClipartIconItem* clipart )
 {
-	QFile file( clipart->filename() );
+    QFile file( clipart->filename() );
 
-	if( file.remove() )
-		m_cliparts->remove
-		( clipart );
+    if( file.remove() )
+        m_cliparts->remove
+        ( clipart );
 }
 
 void
 KarbonResourceServer::loadClipart( const QString& filename )
 {
-	QFile f( filename );
+    QFile f( filename );
 
-	if( f.open( QIODevice::ReadOnly ) )
-	{
-		KoXmlDocument doc;
+    if( f.open( QIODevice::ReadOnly ) )
+    {
+        KoXmlDocument doc;
 
-		if( !( doc.setContent( &f ) ) )
-			f.close();
-		else
-		{
-			KoXmlElement de = doc.documentElement();
+        if( !( doc.setContent( &f ) ) )
+            f.close();
+        else
+        {
+            KoXmlElement de = doc.documentElement();
 
-			if( !de.isNull() && de.tagName() == "PREDEFCLIPART" )
-			{
-				VObject* clipart = 0L;
-				double width = de.attribute( "width", "100.0" ).toFloat();
-				double height = de.attribute( "height", "100.0" ).toFloat();
+            if( !de.isNull() && de.tagName() == "PREDEFCLIPART" )
+            {
+                VObject* clipart = 0L;
+                double width = de.attribute( "width", "100.0" ).toFloat();
+                double height = de.attribute( "height", "100.0" ).toFloat();
 
-				KoXmlNode n = de.firstChild();
+                KoXmlNode n = de.firstChild();
 
-				if( !n.isNull() )
-				{
-					KoXmlElement e;
-					e = n.toElement();
+                if( !n.isNull() )
+                {
+                    KoXmlElement e;
+                    e = n.toElement();
 
-					if( !e.isNull() )
-					{
-						if( e.tagName() == "TEXT" )
-							clipart = new VText( 0L );
-						else if( e.tagName() == "COMPOSITE" || e.tagName() == "PATH" )
-							clipart = new VPath( 0L );
-						else if( e.tagName() == "GROUP" )
-							clipart = new VGroup( 0L );
-						else if( e.tagName() == "ELLIPSE" )
-							clipart = new VEllipse( 0L );
-						else if( e.tagName() == "POLYGON" )
-							clipart = new VPolygon( 0L );
-						else if( e.tagName() == "POLYLINE" )
-							clipart = new VPolyline( 0L );
+                    if( !e.isNull() )
+                    {
+                        if( e.tagName() == "TEXT" )
+                            clipart = new VText( 0L );
+                        else if( e.tagName() == "COMPOSITE" || e.tagName() == "PATH" )
+                            clipart = new VPath( 0L );
+                        else if( e.tagName() == "GROUP" )
+                            clipart = new VGroup( 0L );
+                        else if( e.tagName() == "ELLIPSE" )
+                            clipart = new VEllipse( 0L );
+                        else if( e.tagName() == "POLYGON" )
+                            clipart = new VPolygon( 0L );
+                        else if( e.tagName() == "POLYLINE" )
+                            clipart = new VPolyline( 0L );
 #if 0 
-for now	
-					else if( e.tagName() == "RECT" )
-							clipart = new KarbonRectangle;
+for now    
+                    else if( e.tagName() == "RECT" )
+                            clipart = new KarbonRectangle;
 #endif
-						else if( e.tagName() == "SINUS" )
-							clipart = new VSinus( 0L );
-						else if( e.tagName() == "SPIRAL" )
-							clipart = new VSpiral( 0L );
-						else if( e.tagName() == "STAR" )
-							clipart = new VStar( 0L );
+                        else if( e.tagName() == "SINUS" )
+                            clipart = new VSinus( 0L );
+                        else if( e.tagName() == "SPIRAL" )
+                            clipart = new VSpiral( 0L );
+                        else if( e.tagName() == "STAR" )
+                            clipart = new VStar( 0L );
 #ifdef HAVE_KARBONTEXT
-						else if( e.tagName() == "TEXT" )
-							clipart = new VText( 0L );
+                        else if( e.tagName() == "TEXT" )
+                            clipart = new VText( 0L );
 #endif
-						if( clipart )
-							clipart->load( e );
-					}
+                        if( clipart )
+                            clipart->load( e );
+                    }
 
-					if( clipart )
-						m_cliparts->append( new VClipartIconItem( clipart, width, height, filename ) );
+                    if( clipart )
+                        m_cliparts->append( new VClipartIconItem( clipart, width, height, filename ) );
 
-					delete clipart;
-				}
-			}
-		}
-	}
+                    delete clipart;
+                }
+            }
+        }
+    }
 }
 
 void
 KarbonResourceServer::saveClipart( VObject* clipart, double width, double height, const QString& filename )
 {
-	QFile file( filename );
-	QDomDocument doc;
-	QDomElement me = doc.createElement( "PREDEFCLIPART" );
-	doc.appendChild( me );
-	me.setAttribute( "width", width );
-	me.setAttribute( "height", height );
-	clipart->save( me );
+    QFile file( filename );
+    QDomDocument doc;
+    QDomElement me = doc.createElement( "PREDEFCLIPART" );
+    doc.appendChild( me );
+    me.setAttribute( "width", width );
+    me.setAttribute( "height", height );
+    clipart->save( me );
 
-	if( !( file.open( QIODevice::WriteOnly ) ) )
-		return ;
+    if( !( file.open( QIODevice::WriteOnly ) ) )
+        return ;
 
-	QTextStream ts( &file );
+    QTextStream ts( &file );
 
-	doc.save( ts, 2 );
+    doc.save( ts, 2 );
 
-	file.flush();
+    file.flush();
 
-	file.close();
+    file.close();
 }
 
 QPixmap *
 KarbonResourceServer::cachePixmap( const QString &key, int group_or_size )
 {
-	QPixmap *result = 0L;
-	if( !( result = m_pixmaps[ key ] ) )
-	{
-		result = new QPixmap( KIconLoader::global()->iconPath( key, group_or_size ) );
-		m_pixmaps.insert( key, result );
-	}
-	return result;
+    QPixmap *result = 0L;
+    if( !( result = m_pixmaps[ key ] ) )
+    {
+        result = new QPixmap( KIconLoader::global()->iconPath( key, group_or_size ) );
+        m_pixmaps.insert( key, result );
+    }
+    return result;
 }
 
 VClipartIconItem::VClipartIconItem( const VObject* clipart, double width, double height, const QString & filename )
-		: m_filename( filename ), m_width( width ), m_height( height )
+        : m_filename( filename ), m_width( width ), m_height( height )
 {
-	m_clipart = clipart->clone();
-	m_clipart->setState( VObject::normal );
+    m_clipart = clipart->clone();
+    m_clipart->setState( VObject::normal );
 
-	m_pixmap = QPixmap( 64, 64 );
+    m_pixmap = QPixmap( 64, 64 );
     /*
-	VQPainter p( &m_pixmap, 64, 64 );
-	QMatrix mat( 64., 0, 0, 64., 0, 0 );
+    VQPainter p( &m_pixmap, 64, 64 );
+    QMatrix mat( 64., 0, 0, 64., 0, 0 );
 
-	VTransformCmd trafo( 0L, mat );
-	trafo.visit( *m_clipart );
+    VTransformCmd trafo( 0L, mat );
+    trafo.visit( *m_clipart );
 
-	m_clipart->draw( &p, &m_clipart->boundingBox() );
+    m_clipart->draw( &p, &m_clipart->boundingBox() );
 
-	trafo.setMatrix( mat.inverted() );
-	trafo.visit( *m_clipart );
+    trafo.setMatrix( mat.inverted() );
+    trafo.visit( *m_clipart );
 
-	p.end();
+    p.end();
 
-	m_thumbPixmap = QPixmap( 32, 32 );
-	VQPainter p2( &m_thumbPixmap, 32, 32 );
-	mat.setMatrix( 32., 0, 0, 32., 0, 0 );
+    m_thumbPixmap = QPixmap( 32, 32 );
+    VQPainter p2( &m_thumbPixmap, 32, 32 );
+    mat.setMatrix( 32., 0, 0, 32., 0, 0 );
 
-	trafo.setMatrix( mat );
-	trafo.visit( *m_clipart );
+    trafo.setMatrix( mat );
+    trafo.visit( *m_clipart );
 
-	m_clipart->draw( &p2, &m_clipart->boundingBox() );
+    m_clipart->draw( &p2, &m_clipart->boundingBox() );
 
-	trafo.setMatrix( mat.inverted() );
-	trafo.visit( *m_clipart );
+    trafo.setMatrix( mat.inverted() );
+    trafo.visit( *m_clipart );
 
-	p2.end();
+    p2.end();
     */
-	m_delete = QFileInfo( filename ).isWritable();
+    m_delete = QFileInfo( filename ).isWritable();
 }
 
 
 VClipartIconItem::VClipartIconItem( const VClipartIconItem& item )
-		: QTableWidgetItem( item )
+        : QTableWidgetItem( item )
 {
-	m_clipart = item.m_clipart->clone();
-	m_filename = item.m_filename;
-	m_delete = item.m_delete;
-	m_pixmap = item.m_pixmap;
-	m_thumbPixmap = item.m_thumbPixmap;
-	m_width = item.m_width;
-	m_height = item.m_height;
+    m_clipart = item.m_clipart->clone();
+    m_filename = item.m_filename;
+    m_delete = item.m_delete;
+    m_pixmap = item.m_pixmap;
+    m_thumbPixmap = item.m_thumbPixmap;
+    m_width = item.m_width;
+    m_height = item.m_height;
 }
 
 VClipartIconItem::~VClipartIconItem()
 {
-	delete m_clipart;
+    delete m_clipart;
 }
 
 VClipartIconItem* VClipartIconItem::clone() const
 {
-	return new VClipartIconItem( *this );
+    return new VClipartIconItem( *this );
 }
 
