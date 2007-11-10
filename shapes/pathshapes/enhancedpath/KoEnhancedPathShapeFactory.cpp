@@ -288,6 +288,7 @@ void KoEnhancedPathShapeFactory::addSmiley()
     commands.append( "N" );
     commands.append( "M 4870 ?f1" );
     commands.append( "C 8680 ?f2 12920 ?f2 16730 ?f1" );
+    commands.append( "Z" );
     commands.append( "F" );
     commands.append( "N" );
 
