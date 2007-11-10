@@ -46,8 +46,8 @@ static Value TestDouble(const QString& formula, const Value& v2, int accuracy)
 
   if (!res)
     kDebug(36002)<<"check failed -->" <<"Epsilon =" << epsilon <<"" << v2.asFloat() <<" to" << result.asFloat() <<"  diff =" << v2.asFloat()-result.asFloat();
-  else
-    kDebug(36002)<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();
+//   else
+//     kDebug(36002)<<"check -->" <<"  diff =" << v2.asFloat()-result.asFloat();
   if (res)
     return v2;
   else 
@@ -602,7 +602,7 @@ void TestFinancialFunctions::testFV()
 void TestFinancialFunctions::testFVSCHEDULE()
 {
   // ODF
-  CHECK_EVAL_SHORT( "FVSCHEDULE(1000000; {0.03; 0.04; 0.05})" , Value( 112476 ) ); // A trivial example of FVSCHEDULE.
+  CHECK_EVAL_SHORT( "FVSCHEDULE(1000000; {0.03; 0.04; 0.05})" , Value( 1124760 ) ); // A trivial example of FVSCHEDULE.
 }
 
 // INTRATE
