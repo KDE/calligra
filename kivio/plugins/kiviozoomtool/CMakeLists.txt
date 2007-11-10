@@ -14,7 +14,7 @@ kde4_add_plugin(kiviozoomtool WITH_PREFIX ${kiviozoomtool_PART_SRCS})
 
 
 
-target_link_libraries(kiviozoomtool  ${KDE4_KDECORE_LIBS} kotext kopainter kiviocommon )
+target_link_libraries(kiviozoomtool  ${KDE4_KDECORE_LIBS} kotext kiviocommon )
 
 install(TARGETS kiviozoomtool  DESTINATION ${PLUGIN_INSTALL_DIR})
 

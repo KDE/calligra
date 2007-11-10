@@ -11,7 +11,6 @@ set(SHAPES_SOURCES
 include_directories(
         ${KOTEXT_INCLUDES}
         ${KOMAIN_INCLUDES}
-        ${KOPAINTER_INCLUDES}
         ${FLAKE_INCLUDES}
         ${CMAKE_SOURCE_DIR}/karbon
         ${CMAKE_SOURCE_DIR}/karbon/core

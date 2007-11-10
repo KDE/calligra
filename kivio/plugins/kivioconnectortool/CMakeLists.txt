@@ -14,7 +14,7 @@ kde4_add_plugin(kivioconnectortool WITH_PREFIX ${kivioconnectortool_PART_SRCS})
 
 
 
-target_link_libraries(kivioconnectortool  ${KDE4_KDECORE_LIBS} kopainter kiviocommon )
+target_link_libraries(kivioconnectortool  ${KDE4_KDECORE_LIBS} kiviocommon )
 
 install(TARGETS kivioconnectortool  DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -1,5 +1,5 @@
 
-include_directories( ${KWMF_INCLUDES} ${CMAKE_SOURCE_DIR}/shapes/ )
+include_directories( ${KWMF_INCLUDES} ${CMAKE_SOURCE_DIR}/shapes/ ${KOGUIUTILS_INCLUDES})
 
 ########### next target ###############
 
@@ -10,7 +10,7 @@ set(wmfimport_PART_SRCS
 
 kde4_add_plugin(wmfimport WITH_PREFIX ${wmfimport_PART_SRCS})
 
-target_link_libraries(wmfimport  ${KDE4_KDECORE_LIBS} kowmf karboncommon )
+target_link_libraries(wmfimport  ${KDE4_KDECORE_LIBS} kowmf koguiutils karboncommon )
 
 install(TARGETS wmfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

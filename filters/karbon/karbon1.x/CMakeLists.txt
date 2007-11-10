@@ -1,6 +1,6 @@
 
 include_directories( ${CMAKE_SOURCE_DIR}/karbon
-${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/shapes/ ${KDE4_INCLUDES}  )
+${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/shapes/ ${KDE4_INCLUDES} ${KOGUIUTILS_INCLUDES} )
 
 ########### next target ###############
 
@@ -10,7 +10,7 @@ set(karbon1ximport_PART_SRCS
 
 kde4_add_plugin(karbon1ximport WITH_PREFIX ${karbon1ximport_PART_SRCS})
 
-target_link_libraries(karbon1ximport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon kotext )
+target_link_libraries(karbon1ximport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon koguiutils kotext )
 
 install(TARGETS karbon1ximport DESTINATION ${PLUGIN_INSTALL_DIR})
 

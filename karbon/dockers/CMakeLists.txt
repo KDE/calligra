@@ -1,4 +1,4 @@
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOGUIUTILS_INCLUDES} ${KOPAINTER_INCLUDES} ${CMAKE_SOURCE_DIR}/karbon ${LCMS_INCLUDE_DIR} )
+include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOGUIUTILS_INCLUDES} ${CMAKE_SOURCE_DIR}/karbon ${LCMS_INCLUDE_DIR} )
 
 set(karbondockers_SRCS
     vcolordocker.cc

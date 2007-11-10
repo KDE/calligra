@@ -19,7 +19,6 @@ include_directories(
 		${KDE4_INCLUDE_DIR} 
 		${QT_INCLUDES} 
 		${KOGUIUTILS_INCLUDES} 
-		${KOPAINTER_INCLUDES}
 		${CMAKE_BINARY_DIR}/karbon/
 		${CMAKE_SOURCE_DIR}/karbon/core 
 		${CMAKE_BINARY_DIR}/karbon/core 
@@ -58,7 +57,7 @@ set(karboncommon_LIB_SRCS
 
 kde4_add_library(karboncommon SHARED ${karboncommon_LIB_SRCS})
 
-target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} komain koguiutils kopainter kotext karbondockers karbonwidgets karboncore karboncommands karbondialogs )
+target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} komain koguiutils kotext karbondockers karbonwidgets karboncore karboncommands karbondialogs )
 
 set_target_properties(karboncommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS karboncommon  DESTINATION ${LIB_INSTALL_DIR})

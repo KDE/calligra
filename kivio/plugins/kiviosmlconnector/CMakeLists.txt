@@ -14,7 +14,7 @@ kde4_add_plugin(kiviosmlconnector WITH_PREFIX ${kiviosmlconnector_PART_SRCS})
 
 
 
-target_link_libraries(kiviosmlconnector  ${KDE4_KDECORE_LIBS} kopainter kiviocommon )
+target_link_libraries(kiviosmlconnector  ${KDE4_KDECORE_LIBS} kiviocommon )
 
 install(TARGETS kiviosmlconnector  DESTINATION ${PLUGIN_INSTALL_DIR})
 

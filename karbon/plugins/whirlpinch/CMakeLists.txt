@@ -12,7 +12,7 @@ kde4_add_plugin(karbon_whirlpinchplugin ${karbon_whirlpinchplugin_PART_SRCS})
 
 
 
-target_link_libraries(karbon_whirlpinchplugin  ${KDE4_KPARTS_LIBS} kopainter karboncommon )
+target_link_libraries(karbon_whirlpinchplugin  ${KDE4_KPARTS_LIBS} karboncommon )
 
 install(TARGETS karbon_whirlpinchplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
