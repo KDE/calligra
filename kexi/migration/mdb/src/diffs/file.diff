@@ -1,5 +1,16 @@
---- mdbtools.ansi/libmdb/file.c	2005-12-20 01:38:22.591241064 +0000
-+++ mdbtools/libmdb/file.c	2005-12-20 01:38:39.597655696 +0000
+--- ./libmdb.cvs/file.c	2005-06-28 06:53:40.000000000 +0200
++++ ./libmdb/file.c	2007-11-09 22:05:36.468750000 +0100
+@@ -13,8 +13,8 @@
+  *
+  * You should have received a copy of the GNU Library General Public
+  * License along with this library; if not, write to the
+- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+- * Boston, MA 02111-1307, USA.
++ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++ * Boston, MA 02110-1301, USA.
+  */
+ 
+ #include "mdbtools.h"
 @@ -94,6 +94,32 @@
  	g_strfreev(dir);
  	return NULL;
@@ -97,6 +108,15 @@
  
  	return newmdb;
  }
+@@ -240,7 +282,7 @@
+ 	if (pg && mdb->cur_pg == pg) return mdb->fmt->pg_size;
+ 
+ 	len = _mdb_read_pg(mdb, mdb->pg_buf, pg);
+-	//fprintf(stderr, "read page %d type %02x\n", pg, mdb->pg_buf[0]);
++	
+ 	mdb->cur_pg = pg;
+ 	/* kan - reset the cur_pos on a new page read */
+ 	mdb->cur_pos = 0; /* kan */
 @@ -264,9 +306,10 @@
                  fprintf(stderr,"offset %lu is beyond EOF\n",offset);
                  return 0;

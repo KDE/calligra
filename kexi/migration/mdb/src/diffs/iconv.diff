@@ -1,5 +1,16 @@
---- mdbtools.ansi/libmdb/iconv.c	2005-12-20 01:38:22.596240304 +0000
-+++ mdbtools/libmdb/iconv.c	2005-12-20 01:38:39.599655392 +0000
+--- ./libmdb.cvs/iconv.c	2005-09-08 01:27:43.000000000 +0200
++++ ./libmdb/iconv.c	2007-11-09 22:05:36.390625000 +0100
+@@ -13,8 +13,8 @@
+  *
+  * You should have received a copy of the GNU Library General Public
+  * License along with this library; if not, write to the
+- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+- * Boston, MA 02111-1307, USA.
++ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++ * Boston, MA 02110-1301, USA.
+  */
+ 
+ #include "mdbtools.h"
 @@ -24,6 +24,10 @@
  #include "dmalloc.h"
  #endif
@@ -11,6 +22,42 @@
  /*
   * This function is used in reading text data from an MDB table.
   */
+@@ -68,7 +72,7 @@
+ 	len_out = dlen;
+ 
+ #if HAVE_ICONV
+-	//printf("1 len_in %d len_out %d\n",len_in, len_out);
++	
+ 	while (1) {
+ 		iconv(mdb->iconv_in, &in_ptr, &len_in, &out_ptr, &len_out);
+ 		if ((!len_in) || (errno == E2BIG)) break;
+@@ -78,7 +82,7 @@
+ 		*out_ptr++ = '?';
+ 		len_out--;
+ 	}
+-	//printf("2 len_in %d len_out %d\n",len_in, len_out);
++	
+ 	dlen -= len_out;
+ #else
+ 	if (IS_JET3(mdb)) {
+@@ -95,7 +99,7 @@
+ 
+ 	if (tmp) g_free(tmp);
+ 	dest[dlen]='\0';
+-	//printf("dest %s\n",dest);
++	
+ 	return dlen;
+ }
+ 
+@@ -119,7 +123,7 @@
+ 
+ #ifdef HAVE_ICONV
+ 	iconv(mdb->iconv_out, &in_ptr, &len_in, &out_ptr, &len_out);
+-	//printf("len_in %d len_out %d\n", len_in, len_out);
++	
+ 	dlen -= len_out;
+ #else
+ 	if (IS_JET3(mdb)) {
 @@ -192,18 +196,28 @@
                  mdb->iconv_out = iconv_open("UCS-2LE", iconv_code);
                  mdb->iconv_in = iconv_open(iconv_code, "UCS-2LE");

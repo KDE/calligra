@@ -1,5 +1,16 @@
---- mdbtools.ansi/libmdb/mem.c	2005-09-23 16:30:23.259179248 +0100
-+++ mdbtools/libmdb/mem.c	2005-09-23 16:31:33.356522832 +0100
+--- ./libmdb.cvs/mem.c	2005-02-11 17:24:21.000000000 +0100
++++ ./libmdb/mem.c	2007-11-09 22:05:36.375000000 +0100
+@@ -13,8 +13,8 @@
+  *
+  * You should have received a copy of the GNU Library General Public
+  * License along with this library; if not, write to the
+- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+- * Boston, MA 02111-1307, USA.
++ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++ * Boston, MA 02110-1301, USA.
+  */
+ #ifdef JAVA
+ #include "javadefines.h"
 @@ -35,7 +35,9 @@
   **/
  /* METHOD */ void mdb_init()

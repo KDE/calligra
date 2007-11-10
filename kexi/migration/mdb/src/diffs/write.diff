@@ -1,6 +1,25 @@
---- mdbtools.ansi/libmdb/write.c	2005-09-23 16:30:23.299173168 +0100
-+++ mdbtools/libmdb/write.c	2005-09-23 16:31:00.406531992 +0100
-@@ -33,19 +33,19 @@
+--- ./libmdb.cvs/write.c	2005-07-02 09:16:05.000000000 +0200
++++ ./libmdb/write.c	2007-11-10 01:25:54.546875000 +0100
+@@ -13,8 +13,8 @@
+  *
+  * You should have received a copy of the GNU Library General Public
+  * License along with this library; if not, write to the
+- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+- * Boston, MA 02111-1307, USA.
++ * Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
++ * Boston, MA 02110-1301, USA.
+  */
+ 
+ #include "mdbtools.h"
+@@ -26,26 +26,26 @@
+ #endif
+ 
+ 
+-//static int mdb_copy_index_pg(MdbTableDef *table, MdbIndex *idx, MdbIndexPage *ipg);
++
+ static int mdb_add_row_to_leaf_pg(MdbTableDef *table, MdbIndex *idx, MdbIndexPage *ipg, MdbField *idx_fields, guint32 pgnum, guint16 rownum);
+ 
+ void
  _mdb_put_int16(void *buf, guint32 offset, guint32 value)
  {
  	value = GINT32_TO_LE(value);
@@ -59,6 +78,30 @@
  			fields[i].siz = var_col_offsets[(col->var_col_num)+1] -
  		                col_start;
  		} else {
+@@ -246,7 +246,7 @@
+ 		/* column is null if bit is clear (0) */
+ 		if (!fields[i].is_null) {
+ 			byte |= 1 << bit;
+-			//printf("%d %d %d %d\n", i, bit, 1 << bit, byte);
++			
+ 		}
+ 		bit++;
+ 		if (bit==8) {
+@@ -511,10 +511,10 @@
+ 	chain = g_malloc0(sizeof(MdbIndexChain));
+ 
+ 	mdb_index_find_row(mdb, idx, chain, pgnum, rownum);
+-	//printf("chain depth = %d\n", chain->cur_depth);
+-	//printf("pg = %" G_GUINT32_FORMAT "\n",
+-		//chain->pages[chain->cur_depth-1].pg);
+-	//mdb_copy_index_pg(table, idx, &chain->pages[chain->cur_depth-1]);
++	
++	
++		
++	
+ 	mdb_add_row_to_leaf_pg(table, idx, &chain->pages[chain->cur_depth-1], idx_fields, pgnum, rownum);
+ 	
+ 	return 1;
 @@ -601,14 +601,14 @@
  		for (i=0;i<num_rows;i++) {
  			mdb_find_row(mdb, i, &row_start, &row_size);
@@ -76,6 +119,15 @@
  	/* add row to the row offset table */
  	_mdb_put_int16(new_pg, (fmt->row_count_offset + 2) + (num_rows*2), pos);
  
+@@ -664,7 +664,7 @@
+ 
+ 	if (mdb_get_option(MDB_DEBUG_WRITE)) {
+ 		for (i=0;i<num_fields;i++) {
+-			//printf("col %d %d start %d siz %d fixed 5d\n", i, fields[i].colnum, fields[i].start, fields[i].siz, fields[i].is_fixed);
++			
+ 		}
+ 	}
+ 	for (i=0;i<table->num_cols;i++) {
 @@ -715,20 +715,20 @@
  	for (i=0;i<row;i++) {
  		mdb_find_row(mdb, i, &row_start, &row_size);
@@ -100,7 +152,7 @@
  		_mdb_put_int16(new_pg, rco + 2 + i*2, pos);
  	}
  
-@@ -807,7 +807,7 @@
+@@ -807,16 +807,16 @@
  			buffer_dump(key_hash, 0, col->col_size);
  		}
  
@@ -109,7 +161,18 @@
  		ipg->offset += ipg->len;
  		ipg->len = 0;
  
-@@ -827,7 +827,7 @@
+ 		row++;
+ 	}
+-	//_mdb_put_int16(new_pg, mdb->fmt->row_count_offset, row);
++	
+ 	/* free space left */
+ 	_mdb_put_int16(new_pg, 2, mdb->fmt->pg_size - ipg->offset);
+-	//printf("offset = %d\n", ipg->offset);
++	
+ 
+ 	mdb_index_swap_n(idx_fields[0].value, col->col_size, key_hash);
+ 	key_hash[0] |= 0x080;
+@@ -827,11 +827,11 @@
  		printf("--------\n");
  	}
  	((char *)new_pg)[ipg->offset] = 0x7f;
@@ -118,3 +181,8 @@
  	pg_row = (pgnum << 8) | ((rownum-1) & 0xff);
  	_mdb_put_int32_msb(new_pg, ipg->offset + 5, pg_row);
  	ipg->idx_starts[row++] = ipg->offset + ipg->len;
+-	//ipg->idx_starts[row] = ipg->offset + ipg->len;
++	
+ 	if (mdb_get_option(MDB_DEBUG_WRITE)) {
+ 		buffer_dump(mdb->pg_buf, 0, mdb->fmt->pg_size);
+ 	}

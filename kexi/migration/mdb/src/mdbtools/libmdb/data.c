@@ -67,7 +67,7 @@ mdb_bind_column_by_name(MdbTableDef *table, gchar *col_name, void *bind_ptr, int
 	
 	for (i=0;i<table->num_cols;i++) {
 		col=g_ptr_array_index(table->columns,i);
-		if (!strcmp(col->name,col_name)) {
+		if (!strcasecmp(col->name,col_name)) {
 			col_num = i + 1;
 			if (bind_ptr)
 				col->bind_ptr = bind_ptr;
@@ -575,7 +575,7 @@ static size_t mdb_copy_ole(MdbHandle *mdb, void *dest, int start, int size)
 		if (dest)
 			memcpy(dest, (char*)buf + row_start, len);
 		return len;
-	} else if ((ole_len & 0xff000000) == 0) { 
+	} else if ((ole_len & 0xff000000) == 0) { // assume all flags in MSB
 		/* multi-page */
 		int cur = 0;
 		pg_row = mdb_get_int32(pg_buf, start+4);
@@ -649,7 +649,7 @@ static char *mdb_memo_to_string(MdbHandle *mdb, int start, int size)
 #endif
 		mdb_unicode2ascii(mdb, (char*)buf + row_start, len, text, MDB_BIND_SIZE);
 		return text;
-	} else if ((memo_len & 0xff000000) == 0) { 
+	} else if ((memo_len & 0xff000000) == 0) { // assume all flags in MSB
 		/* multi-page memo field */
 		guint32 tmpoff = 0;
 		char *tmp;
