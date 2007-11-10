@@ -52,10 +52,10 @@
 #include <QtGui/QLinearGradient>
 #include <QtGui/QRadialGradient>
 
-QString INDENT("  ");
 
-void printIndentation( QTextStream *stream, unsigned int indent )
+static void printIndentation( QTextStream *stream, unsigned int indent )
 {
+    static const QString INDENT("  ");
     for( unsigned int i = 0; i < indent;++i)
         *stream << INDENT;
 }
@@ -215,7 +215,7 @@ QString SvgExport::getID( KoShape *obj )
     return QString();
 }
 
-QString createUID()
+static QString createUID()
 {
     static unsigned int nr = 0;
 

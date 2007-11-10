@@ -130,7 +130,7 @@ KarbonPart::removeView( KoView *view )
     KoDocument::removeView( view );
 }
 
-double getAttribute(KoXmlElement &element, const char *attributeName, double defaultValue)
+static double getAttribute(KoXmlElement &element, const char *attributeName, double defaultValue)
 {
     QString value = element.attribute( attributeName );
     if( ! value.isEmpty() )
@@ -139,7 +139,7 @@ double getAttribute(KoXmlElement &element, const char *attributeName, double def
         return defaultValue;
 }
 
-int getAttribute(KoXmlElement &element, const char *attributeName, int defaultValue)
+static int getAttribute(KoXmlElement &element, const char *attributeName, int defaultValue)
 {
     QString value = element.attribute( attributeName );
     if( ! value.isEmpty() )
