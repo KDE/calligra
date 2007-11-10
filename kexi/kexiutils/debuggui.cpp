@@ -105,7 +105,7 @@ void KexiUtils::addAlterTableActionDebug(const QString& text, int nestingLevel)
 		hbox->addWidget(btn_exec);
 		KPushButton *btn_clear = new KPushButton(KGuiItem("Clear", "edit-clear-locationbar-rtl"), page);
 		hbox->addWidget(btn_clear);
-		KPushButton *btn_sim = new KPushButton(KGuiItem("Simulate Execution", "exec"), page);
+		KPushButton *btn_sim = new KPushButton(KGuiItem("Simulate Execution", "system-run"), page);
 		btn_sim->setObjectName("simulateAlterTableExecution");
 		hbox->addWidget(btn_sim);
 
