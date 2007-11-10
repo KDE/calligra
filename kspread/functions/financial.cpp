@@ -330,7 +330,7 @@ void awNpv (ValueCalc *c, Value &res, Value val, Value rate)
 //
 // helper: calc_fvifa
 //
-static Value calc_fvifa (ValueCalc *calc, Value rate,
+static Value calc_fvifa (ValueCalc */*calc*/, Value rate,
     Value nper)
 {
   Value res;
@@ -1266,7 +1266,7 @@ Value func_fvschedule (valVector args, ValueCalc *calc, FuncExtra *)
 
   for ( i = 0; i < n; ++i )
   {
-    v = args[0].element( i );
+    v = args[1].element( i );
     res = Value(calc->mul(res, calc->add(Value(1),v)));
   }
  
