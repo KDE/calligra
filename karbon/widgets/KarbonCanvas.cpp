@@ -137,7 +137,9 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
     gc.drawRect( d->zoomHandler.documentToView( QRectF( QPointF(0.0, 0.0), d->document->pageSize() ) ) );
 
     paintMargins( gc, d->zoomHandler );
+    gc.setRenderHint(QPainter::Antialiasing, false);
     paintGrid( gc, d->zoomHandler, d->zoomHandler.viewToDocument( widgetToView( clipRect ) ) );
+    gc.setRenderHint(QPainter::Antialiasing);
 
     d->shapeManager->paint( gc, d->zoomHandler, false );
     d->toolProxy->paint( gc, d->zoomHandler );
