@@ -63,6 +63,7 @@
 #include <KoOasisSettings.h>
 #include <KoOasisStyles.h>
 #include <KoOdfReadStore.h>
+#include <KoOdfWriteStore.h>
 #include <KoShapeConfigFactory.h>
 #include <KoShapeFactory.h>
 #include <KoShapeManager.h>
@@ -651,7 +652,7 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
       return false;
     }
 
-    KoXmlWriter* contentWriter = createOasisXmlWriter( &dev, "office:document-content" );
+    KoXmlWriter* contentWriter = KoOdfWriteStore::createOasisXmlWriter( &dev, "office:document-content" );
     KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
 
 
@@ -712,7 +713,7 @@ bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag
     if(!store->open("settings.xml"))
         return false;
 
-    KoXmlWriter* settingsWriter = createOasisXmlWriter(&dev, "office:document-settings");
+    KoXmlWriter* settingsWriter = KoOdfWriteStore::createOasisXmlWriter(&dev, "office:document-settings");
     settingsWriter->startElement("office:settings");
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");

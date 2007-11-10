@@ -42,6 +42,7 @@
 // koffice libs includes
 #include <KoShapeManager.h>
 #include <KoShapeContainer.h>
+#include <KoOdfWriteStore.h>
 #include <KoOasisStyles.h>
 #include <KoToolManager.h>
 #include <KoShapeRegistry.h>
@@ -148,7 +149,7 @@ bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
         return false;
 
     KoStoreDevice contentDev( store );
-    KoXmlWriter* contentWriter = createOasisXmlWriter( &contentDev, "office:document-content" );
+    KoXmlWriter* contentWriter = KoOdfWriteStore::createOasisXmlWriter( &contentDev, "office:document-content" );
 
     // for office:master-styles
     KTemporaryFile masterStyles;

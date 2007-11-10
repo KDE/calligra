@@ -25,7 +25,6 @@
 #include <KoGlobal.h>
 #include <KoXmlNS.h>
 #include <KoOdfReadStore.h>
-#include <KoDocument.h>
 #include <KoDom.h>
 #include <klocale.h>
 #include <kdebug.h>
@@ -204,7 +203,7 @@ void Odp2Odt::adjustStyles()
 #ifdef NAMESPACE_SUPPORT
     QXmlInputSource source( inpdev );
     QXmlSimpleReader reader;
-    KoDocument::setupXmlReader( reader, true /*namespaceProcessing*/ );
+    KoOdfReadStore::setupXmlReader( reader, true /*namespaceProcessing*/ );
     bool ok = stylesDoc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn );
 #else
     bool ok = stylesDoc.setContent( inpdev, &errorMsg, &errorLine, &errorColumn );

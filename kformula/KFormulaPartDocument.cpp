@@ -36,6 +36,7 @@
 #include <KoMainWindow.h>
 #include <KoStoreDevice.h>
 #include <KoOdfReadStore.h>
+#include <KoOdfWriteStore.h>
 #include <ktemporaryfile.h>
 #include <klocale.h>
 
@@ -77,7 +78,7 @@ bool KFormulaPartDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWrite
     Q_UNUSED( manifestWriter );
 /*  KoStoreDevice dev( store );
  
-    KoXmlWriter* contentWriter = createOasisXmlWriter( &dev, "math:math" );
+    KoXmlWriter* contentWriter = KoOdfWriteStore::createOasisXmlWriter( &dev, "math:math" );
     formulaShape->saveOasis( contentWriter )
     delete contentWriter;
 

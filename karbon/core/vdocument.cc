@@ -42,7 +42,7 @@
 #include <KoShapeLayer.h>
 #include <KoShapeRegistry.h>
 #include <KoStoreDevice.h>
-#include <KoDocument.h>
+#include <KoOdfWriteStore.h>
 #include <KoShapeStyleWriter.h>
 #include <KoImageCollection.h>
 
@@ -379,7 +379,7 @@ bool VDocument::saveOasis( KoStore *store, KoXmlWriter *manifestWriter, KoGenSty
         return false;
 
     KoStoreDevice storeDev( store );
-    KoXmlWriter * docWriter = KoDocument::createOasisXmlWriter( &storeDev, "office:document-content" );
+    KoXmlWriter * docWriter = KoOdfWriteStore::createOasisXmlWriter( &storeDev, "office:document-content" );
 
     // for office:master-styles
     KTemporaryFile masterStyles;
@@ -449,7 +449,7 @@ bool VDocument::saveOasis( KoStore *store, KoXmlWriter *manifestWriter, KoGenSty
 void VDocument::saveOasisSettings( KoStore * store )
 {
     KoStoreDevice settingsDev( store );
-    KoXmlWriter * settingsWriter = KoDocument::createOasisXmlWriter( &settingsDev, "office:document-settings");
+    KoXmlWriter * settingsWriter = KoOdfWriteStore::createOasisXmlWriter( &settingsDev, "office:document-settings");
 
     settingsWriter->startElement("office:settings");
     settingsWriter->startElement("config:config-item-set");

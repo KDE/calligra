@@ -20,7 +20,7 @@
 */
 
 #include "ooutils.h"
-#include <KoDocument.h>
+#include <KoOdfReadStore.h>
 #include <KoStyleStack.h>
 #include <KoXmlReader.h>
 #include <qdom.h>
@@ -515,7 +515,7 @@ KoFilter::ConversionStatus OoUtils::loadAndParse(QIODevice* io, KoXmlDocument& d
     QXmlInputSource source( io );
     // Copied from QDomDocumentPrivate::setContent, to change the whitespace thing
     QXmlSimpleReader reader;
-    KoDocument::setupXmlReader( reader, true /*namespaceProcessing*/ );
+    KoOdfReadStore::setupXmlReader( reader, true /*namespaceProcessing*/ );
 
     // Error variables for QDomDocument::setContent
     QString errorMsg;

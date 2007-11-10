@@ -20,7 +20,6 @@
 #include <kgenericfactory.h>
 #include <KoStoreDevice.h>
 #include <KoFilterChain.h>
-#include <KoDocument.h>
 #include <KoGlobal.h>
 #include <odp2kpr.h>
 #include <KoGlobal.h>
@@ -55,7 +54,7 @@ KoFilter::ConversionStatus Odp2Kpr::convert( const QByteArray& from, const QByte
     // Parse presentation content.xml
     QXmlInputSource source( inpdev );
     QXmlSimpleReader reader;
-    KoDocument::setupXmlReader( reader, true /*namespaceProcessing*/ );
+    KoOdfReadStore::setupXmlReader( reader, true /*namespaceProcessing*/ );
     QString errorMsg;
     int errorLine, errorColumn;
     bool ok = doc.setContent( &source, &reader, &errorMsg, &errorLine, &errorColumn );

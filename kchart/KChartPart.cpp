@@ -64,6 +64,7 @@ using std::cerr;
 #include <KoOasisLoadingContext.h>
 #include <KoOasisStyles.h>
 #include <KoOdfReadStore.h>
+#include <KoOdfWriteStore.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeRegistry.h>
 
@@ -867,7 +868,7 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     // The main file.
     KoStoreDevice  contentDev( store );
-    KoXmlWriter   *contentWriter = createOasisXmlWriter( &contentDev,
+    KoXmlWriter   *contentWriter = KoOdfWriteStore::createOasisXmlWriter( &contentDev,
                                                          "office:document-content" );
 
     // Create a temporary file for the document contents.
@@ -938,7 +939,7 @@ bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     // Write settings
     // FIXME: Should we save any settings in KChart?
-    KoXmlWriter* settingsWriter = createOasisXmlWriter(&contentDev,
+    KoXmlWriter* settingsWriter = KoOdfWriteStore::createOasisXmlWriter(&contentDev,
                                                        "office:document-settings");
     settingsWriter->startElement("office:settings");
 
