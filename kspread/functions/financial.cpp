@@ -66,6 +66,7 @@ Value func_effective (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_euro (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_euroconvert (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fv (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_fvschedule (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_fv_annuity (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_intrate (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ipmt (valVector args, ValueCalc *calc, FuncExtra *);
@@ -187,6 +188,10 @@ void RegisterFinancialFunctions()
   repo->add (f);
   f = new Function ("FV", func_fv);
   f->setParamCount (3, 5);
+  repo->add (f);  
+  f = new Function ("FVSCHEDULE", func_fvschedule);
+  f->setParamCount (2);
+  f->setAcceptArray();
   repo->add (f);
   f = new Function ("FV_ANNUITY", func_fv_annuity);
   f->setParamCount (3);
@@ -1241,6 +1246,31 @@ Value func_fv (valVector args, ValueCalc *calc, FuncExtra *)
   return (res);
   // present * pow (1 + interest, periods)
 //   return calc->mul (present, calc->pow (calc->add (interest, 1), periods));
+}
+
+//
+// Function: FVSCHEDULE
+//
+// Returns future value
+//
+Value func_fvschedule (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  Value pv       = args[0];
+  Value schedule = args[1];
+
+  int n = schedule.count();
+  int i;
+ 
+  Value v;
+  Value res (pv);
+
+  for ( i = 0; i < n; ++i )
+  {
+    v = args[0].element( i );
+    res = Value(calc->mul(res, calc->add(Value(1),v)));
+  }
+ 
+  return (res);
 }
 
 
