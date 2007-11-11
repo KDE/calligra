@@ -33,7 +33,7 @@ class Sheet;
  * \class AbstractRegionCommand
  * \brief Abstract base class for all region related operations.
  */
-class AbstractRegionCommand : public Region, public QUndoCommand
+class KSPREAD_EXPORT AbstractRegionCommand : public Region, public QUndoCommand
 {
 public:
     /**

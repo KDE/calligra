@@ -36,7 +36,7 @@ class CellStorageUndoData;
 /**
  * Provides an abstract method for the actual setting of new values.
  */
-class AbstractDataManipulator : public AbstractRegionCommand
+class KSPREAD_EXPORT AbstractDataManipulator : public AbstractRegionCommand
 {
   public:
     AbstractDataManipulator ();
