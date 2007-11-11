@@ -7,6 +7,10 @@ set(pathshapes_PART_SRCS
     ellipse/KoEllipseShapeFactory.cpp
     ellipse/EllipseShapeConfigWidget.cpp
     ellipse/EllipseShapeConfigCommand.cpp
+    spiral/KoSpiralShape.cpp
+    spiral/KoSpiralShapeFactory.cpp
+    spiral/SpiralShapeConfigWidget.cpp
+    spiral/SpiralShapeConfigCommand.cpp
     star/KoStarShape.cpp
     star/KoStarShapeFactory.cpp
     star/StarShapeConfigWidget.cpp
@@ -30,6 +34,7 @@ kde4_add_ui_files(pathshapes_PART_SRCS
     star/StarShapeConfigWidget.ui
     rectangle/RectangleShapeConfigWidget.ui
     ellipse/EllipseShapeConfigWidget.ui
+    spiral/SpiralShapeConfigWidget.ui
 )
 kde4_add_plugin(pathshapes ${pathshapes_PART_SRCS})
 
