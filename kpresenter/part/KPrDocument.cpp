@@ -69,6 +69,11 @@ KoPAMasterPage * KPrDocument::newMasterPage()
     return new KPrMasterPage();
 }
 
+KoOdf::DocumentType KPrDocument::documentType() const
+{
+    return KoOdf::Presentation;
+}
+
 void KPrDocument::addAnimation( KPrShapeAnimation * animation )
 {
     KoShape * shape = animation->shape();

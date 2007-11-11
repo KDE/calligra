@@ -44,6 +44,9 @@ public:
     /// reimplemented
     virtual KoPAMasterPage * newMasterPage();
 
+    /// reimplemented
+    virtual KoOdf::DocumentType documentType() const;
+
     /**
      * @brief Add animation to shape
      *

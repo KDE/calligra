@@ -37,6 +37,11 @@ KivioDocument::~KivioDocument()
 {
 }
 
+KoOdf::DocumentType KivioDocument::documentType() const
+{
+    return KoOdf::Graphics;
+}
+
 KoView* KivioDocument::createViewInstance(QWidget* parent)
 {
     return new KivioView(this, parent);
