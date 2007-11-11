@@ -129,7 +129,7 @@
  </Menu>
  <Menu name="Data"><text>&amp;Data</text>
   <Action name="sort"/>
-  <Menu name="Filter" icon="search-filter"><text>Filter</text>
+  <Menu name="Filter" icon="view-filter"><text>Filter</text>
     <Action name="autoFilter"/>
     <Action name="customFilter"/>
   </Menu>

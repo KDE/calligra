@@ -1079,7 +1079,7 @@ void View::Private::initActions()
   connect(actions->sortInc, SIGNAL(triggered(bool)), view, SLOT( sortInc() ));
   actions->sortInc->setToolTip(i18n("Sort a group of cells in ascending (first to last) order"));
 
-  actions->autoFilter = new KAction(KIcon("search-filter"), i18n("&Auto-Filter"), view);
+  actions->autoFilter = new KAction(KIcon("view-filter"), i18n("&Auto-Filter"), view);
   ac->addAction("autoFilter", actions->autoFilter);
   connect(actions->autoFilter, SIGNAL(triggered(bool)), view, SLOT(autoFilter()));
   actions->autoFilter->setToolTip(i18n("Add an automatic filter to a cell range"));

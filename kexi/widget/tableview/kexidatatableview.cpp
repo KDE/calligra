@@ -66,7 +66,7 @@ KexiDataTableView::init()
 /*void KexiDataTableView::initActions(KActionCollection *col)
 {
 	KexiTableView::initActions(col);
-	new KAction(i18n("Filter"), "search-filter", 0, this, SLOT(filter()), col, "tablepart_filter");
+	new KAction(i18n("Filter"), "view-filter", 0, this, SLOT(filter()), col, "tablepart_filter");
 }*/
 
 bool KexiDataTableView::setData(KexiDB::Cursor *cursor)

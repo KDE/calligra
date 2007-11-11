@@ -1002,7 +1002,7 @@ void KexiMainWindow::setupActions()
 	//d->action_data_execute->setWhatsThis(i18n("")); //TODO
 
 #ifndef KEXI_NO_UNFINISHED
-	action = createSharedAction(i18n("&Filter"), "search-filter", KShortcut(), "data_filter");
+	action = createSharedAction(i18n("&Filter"), "view-filter", KShortcut(), "data_filter");
 	setActionVolatile( action, true );
 #endif
 //	action->setToolTip(i18n("")); //todo
