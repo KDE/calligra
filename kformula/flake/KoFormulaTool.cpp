@@ -28,6 +28,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <QKeyEvent>
+#include <QPainter>
 #include "KoFormulaTool.moc"
 
 KoFormulaTool::KoFormulaTool( KoCanvasBase* canvas ) : KoTool( canvas ),
