@@ -1114,7 +1114,7 @@ bool StructureParser::StartElementTable(StackItem* stackItem, StackItem* stackCu
     for ( i=0, it=widthList.begin(); i<columns; ++i, ++it )
     {
         kDebug(30506) <<"Column width:" << (*it) <<" cooked" << ValueWithLengthUnit(*it);
-        stackItem->m_doubleArray[i+1] = ValueWithLengthUnit(*it) + stackItem->m_doubleArray[i];
+        stackItem->m_doubleArray.at(i+1) = ValueWithLengthUnit(*it) + stackItem->m_doubleArray.at(i);
     }
     // ### TODO: in case of automatic column widths, we have not any width given by AbiWord
 
@@ -1199,7 +1199,7 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
         // We play on the fact that QByteArray uses shallow copies by default.
         //  (We do want that the change is known at <table> level)
         stackItem->m_doubleArray.resize( stackItem->m_doubleArray.size() + 1, Q3GArray::SpeedOptim );
-        stackItem->m_doubleArray[col+1] = stackItem->m_doubleArray[col] + 72; // Try 1 inch
+        stackItem->m_doubleArray.at(col+1) = stackItem->m_doubleArray.at(col) + 72; // Try 1 inch
     }
 
     const QString frameName(i18nc("Frameset name","Table %3, row %1, column %2",row,col,stackCurrent->strTemp2)); // As the stack could be wrong, be careful and use the string as last!
@@ -1218,8 +1218,8 @@ bool StructureParser::StartElementCell(StackItem* stackItem, StackItem* stackCur
     framesetsPluralElement.appendChild(framesetElement);
 
     QDomElement frameElementOut(mainDocument.createElement("FRAME"));
-    frameElementOut.setAttribute( "left", stackItem->m_doubleArray[col] );
-    frameElementOut.setAttribute( "right", stackItem->m_doubleArray[col+1] );
+    frameElementOut.setAttribute( "left", stackItem->m_doubleArray.at(col) );
+    frameElementOut.setAttribute( "right", stackItem->m_doubleArray.at(col+1) );
     frameElementOut.setAttribute("top",0);
     frameElementOut.setAttribute("bottom",0);
     frameElementOut.setAttribute("runaround",1);
