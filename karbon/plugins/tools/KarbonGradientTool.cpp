@@ -33,6 +33,7 @@
 #include <KoResourceServerProvider.h>
 
 #include <QGridLayout>
+#include <QPainter>
 
 KarbonGradientTool::KarbonGradientTool(KoCanvasBase *canvas)
 : KoTool( canvas )
