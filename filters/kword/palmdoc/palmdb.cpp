@@ -185,7 +185,9 @@ bool PalmDB::load( const char* filename )
         {
           data->resize( recsize[r] );
           stream.device()->at( recpos[r] );
+#ifdef __GNUC__
 # warning "kde4 port it"
+#endif
           //for( int q = 0; q < recsize[r]; q++ )
             //{ quint8 c; stream >> c; data->at(q) = c; }
         }
