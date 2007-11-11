@@ -34,7 +34,7 @@ public:
      * @param cornerCount the number of corners to set
      * @param innerRadius the inner radius
      * @param outerRadius the outer radius
-     * @param convex indictaes if the star is convex of not
+     * @param convex indicates whether the star is convex or not
      * @param parent the optional parent command
      */
     StarShapeConfigCommand( KoStarShape * star, uint cornerCount, double innerRadius, double outerRadius, bool convex, QUndoCommand *parent = 0 );
