@@ -62,3 +62,4 @@ X-KDE-NativeMimeType=application/x-vnd.kde.kplato.work
 DocPath=kplatowork/index.html
 Categories=Qt;KDE;Office;
 X-KDE-StartupNotify=true
+X-KDE-NOTKoDocumentEmbeddable=true
