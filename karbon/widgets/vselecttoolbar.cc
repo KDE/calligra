@@ -71,37 +71,35 @@ VSelectToolBar::~VSelectToolBar()
 void
 VSelectToolBar::slotXChanged( double newval )
 {
-	double dx = newval - m_view->part()->document().selection()->boundingBox().topLeft().x();
-	//m_view->part()->addCommand( new VTranslateCmd( &m_view->part()->document(), dx, 0.0 ), true );
+    double dx = newval - m_view->part()->document().selection()->boundingBox().topLeft().x();
+    //m_view->part()->addCommand( new VTranslateCmd( &m_view->part()->document(), dx, 0.0 ), true );
 }
 
 void
 VSelectToolBar::slotYChanged( double newval )
 {
-	double dy = newval - m_view->part()->document().selection()->boundingBox().topLeft().y();
-	//m_view->part()->addCommand( new VTranslateCmd( &m_view->part()->document(), 0.0, dy ), true );
+    double dy = newval - m_view->part()->document().selection()->boundingBox().topLeft().y();
+    //m_view->part()->addCommand( new VTranslateCmd( &m_view->part()->document(), 0.0, dy ), true );
 }
 
 void
 VSelectToolBar::slotWidthChanged( double newval )
 {
-	if( newval != 0.0 )
-	{
-		double sx = newval / m_view->part()->document().selection()->boundingBox().width();
-		QPointF sp = m_view->part()->document().selection()->boundingBox().topLeft();
-		//m_view->part()->addCommand( new VScaleCmd( &m_view->part()->document(), sp, sx, 1.0 ), true );
-	}
+    if ( newval != 0.0 ) {
+        double sx = newval / m_view->part()->document().selection()->boundingBox().width();
+        QPointF sp = m_view->part()->document().selection()->boundingBox().topLeft();
+        //m_view->part()->addCommand( new VScaleCmd( &m_view->part()->document(), sp, sx, 1.0 ), true );
+    }
 }
 
 void
 VSelectToolBar::slotHeightChanged( double newval )
 {
-	if( newval != 0.0 )
-	{
-		double sy = newval / m_view->part()->document().selection()->boundingBox().height();
-		QPointF sp = m_view->part()->document().selection()->boundingBox().bottomLeft();
-		//m_view->part()->addCommand( new VScaleCmd( &m_view->part()->document(), sp, 1.0, sy ), true );
-	}
+    if ( newval != 0.0 ) {
+        double sy = newval / m_view->part()->document().selection()->boundingBox().height();
+        QPointF sp = m_view->part()->document().selection()->boundingBox().bottomLeft();
+        //m_view->part()->addCommand( new VScaleCmd( &m_view->part()->document(), sp, 1.0, sy ), true );
+    }
 }
 
 void

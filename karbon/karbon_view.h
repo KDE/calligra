@@ -89,7 +89,11 @@ public:
 
 
     // printing support, override from KoView
-    virtual void setupPrinter( QPrinter &printer, QPrintDialog &printDialog ) {}
+    virtual void setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
+    {
+        Q_UNUSED( printer );
+        Q_UNUSED( printDialog );
+    }
     virtual void print( QPrinter& printer, QPrintDialog &printDialog );
 
     KoContextHelpAction* contextHelpAction() const { return m_contextHelpAction; }

@@ -118,8 +118,8 @@ VColorTab::VColorTab( const VColor &c, QWidget* parent, const char* name )
 	mainLayout->addWidget( cgroupbox, 1, 2 );
 
 	//--->Opacity
-	QGroupBox* ogroupBox = new QGroupBox( i18n( "Opacity" ), mRGBWidget );
-	QGridLayout* olayout = new QGridLayout;
+	QGroupBox   *ogroupBox = new QGroupBox( i18n( "Opacity" ), mRGBWidget );
+	QGridLayout *olayout   = new QGridLayout;
 	mOpacity = new KIntNumInput( 100, ogroupBox );
 	mOpacity->setRange( 0, 100 );
 	mOpacity->setValue( int( c.opacity() * 100.0 ) );
