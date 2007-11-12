@@ -21,6 +21,7 @@
 #include "FormulaElement.h"
 #include "FormulaRenderer.h"
 #include <KoShapeSavingContext.h>
+#include <KoShapeLoadingContext.h>
 #include <KoXmlWriter.h>
 
 KoFormulaShape::KoFormulaShape()
