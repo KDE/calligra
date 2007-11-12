@@ -22,7 +22,7 @@
 
 #include "kplatoui_export.h"
 
-#include "kptitemmodelbase.h" //DoubleTreeViewBase
+#include "kptitemmodelbase.h"
 
 #include "kptviewbase.h"
 
@@ -46,11 +46,11 @@ class KPLATOUI_EXPORT TaskStatusTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    TaskStatusTreeView( KoDocument *part, QWidget *parent );
+    TaskStatusTreeView( QWidget *parent );
     
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
-    TaskStatusItemModel *itemModel() const;
+    TaskStatusItemModel *model() const;
     
     Project *project() const;
     void setProject( Project *project );
@@ -74,6 +74,8 @@ public:
     virtual void setProject( Project *project );
     virtual void draw( Project &project );
 
+    TaskStatusItemModel *model() const { return m_view->model(); }
+    
     virtual void updateReadWrite( bool readwrite );
     virtual Node *currentNode() const;
     

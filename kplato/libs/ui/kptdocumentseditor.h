@@ -40,12 +40,12 @@ class KPLATOUI_EXPORT DocumentTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    DocumentTreeView( KoDocument *part, QWidget *parent );
+    DocumentTreeView( QWidget *parent );
 
-    DocumentItemModel *itemModel() const { return static_cast<DocumentItemModel*>( model() ); }
+    DocumentItemModel *model() const { return static_cast<DocumentItemModel*>( TreeViewBase::model() ); }
 
-    Documents *documents() const { return itemModel()->documents(); }
-    void setDocuments( Documents *docs ) { itemModel()->setDocuments( docs ); }
+    Documents *documents() const { return model()->documents(); }
+    void setDocuments( Documents *docs ) { model()->setDocuments( docs ); }
 
     Document *currentDocument() const;
     QList<Document*> selectedDocuments() const;
@@ -69,6 +69,8 @@ public:
     virtual void draw( Documents &docs );
     virtual void draw();
 
+    DocumentItemModel *model() const { return m_view->model(); }
+    
     virtual void updateReadWrite( bool readwrite );
 
     virtual Document *currentDocument() const;

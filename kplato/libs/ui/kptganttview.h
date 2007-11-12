@@ -50,9 +50,9 @@ class MyKDGanttView : public KDGantt::View
 {
     Q_OBJECT
 public:
-    MyKDGanttView( KoDocument *part, QWidget *parent );
+    MyKDGanttView( QWidget *parent );
     
-    NodeItemModel *itemModel() const { return m_model; }
+    NodeItemModel *model() const { return m_model; }
     void setProject( Project *project );
     void setScheduleManager( ScheduleManager *sm );
     void update();
@@ -151,9 +151,9 @@ class KPLATOUI_EXPORT MilestoneKDGanttView : public KDGantt::View
 {
     Q_OBJECT
 public:
-    MilestoneKDGanttView( KoDocument *part, QWidget *parent );
+    MilestoneKDGanttView( QWidget *parent );
 
-    MilestoneItemModel *itemModel() const { return m_model; }
+    MilestoneItemModel *model() const { return m_model; }
     void setProject( Project *project );
     void setScheduleManager( ScheduleManager *sm );
     void update();

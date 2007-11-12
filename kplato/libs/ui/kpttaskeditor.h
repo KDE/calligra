@@ -57,10 +57,10 @@ public:
     
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
-    NodeItemModel *itemModel() const { return static_cast<NodeItemModel*>( model() ); }
+    NodeItemModel *model() const { return static_cast<NodeItemModel*>( DoubleTreeViewBase::model() ); }
     
-    Project *project() const { return itemModel()->project(); }
-    void setProject( Project *project ) { itemModel()->setProject( project ); }
+    Project *project() const { return model()->project(); }
+    void setProject( Project *project ) { model()->setProject( project ); }
     
 signals:
     void currentColumnChanged( QModelIndex, QModelIndex );
@@ -85,6 +85,8 @@ public:
     Node *selectedNode() const;
 
     virtual void updateReadWrite( bool readwrite );
+
+    NodeItemModel *model() const { return m_view->model(); }
 
     /// Loads context info into this view. Reimplement.
     virtual bool loadContext( const KoXmlElement &/*context*/ );

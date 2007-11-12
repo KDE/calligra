@@ -61,11 +61,11 @@ namespace KPlato
 {
 
 
-TaskStatusTreeView::TaskStatusTreeView( KoDocument *part, QWidget *parent )
+TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
     setContextMenuPolicy( Qt::CustomContextMenu );
-    setModel( new TaskStatusItemModel( part ) );
+    setModel( new TaskStatusItemModel() );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setStretchLastSection( false );
@@ -81,19 +81,19 @@ TaskStatusTreeView::TaskStatusTreeView( KoDocument *part, QWidget *parent )
     hideColumns( lst1, lst2 );
 }
 
-TaskStatusItemModel *TaskStatusTreeView::itemModel() const
+TaskStatusItemModel *TaskStatusTreeView::model() const
 {
-    return static_cast<TaskStatusItemModel*>( model() );
+    return static_cast<TaskStatusItemModel*>( DoubleTreeViewBase::model() );
 }
 
 Project *TaskStatusTreeView::project() const
 {
-    return itemModel()->project();
+    return model()->project();
 }
 
 void TaskStatusTreeView::setProject( Project *project )
 {
-    itemModel()->setProject( project );
+    model()->setProject( project );
 }
 
 void TaskStatusTreeView::slotActivated( const QModelIndex index )
@@ -118,7 +118,7 @@ void TaskStatusTreeView::dragMoveEvent(QDragMoveEvent *event)
         event->accept();
         return; // always ok to drop on main project
     }
-    Node *dn = itemModel()->node( index );
+    Node *dn = model()->node( index );
     if ( dn == 0 ) {
         kError()<<"no node to drop on!"<<endl;
         return; // hmmm
@@ -127,13 +127,13 @@ void TaskStatusTreeView::dragMoveEvent(QDragMoveEvent *event)
         case AboveItem:
         case BelowItem:
             //dn == sibling
-            if ( itemModel()->dropAllowed( dn->parentNode(), event->mimeData() ) ) {
+            if ( model()->dropAllowed( dn->parentNode(), event->mimeData() ) ) {
                 event->accept();
             }
             break;
         case OnItem:
             //dn == new parent
-            if ( itemModel()->dropAllowed( dn, event->mimeData() ) ) {
+            if ( model()->dropAllowed( dn, event->mimeData() ) ) {
                 event->accept();
             }
             break;
@@ -153,8 +153,10 @@ TaskStatusView::TaskStatusView( KoDocument *part, QWidget *parent )
 
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_view = new TaskStatusTreeView( part, this );
+    m_view = new TaskStatusTreeView( this );
     l->addWidget( m_view );
+
+    connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
 
     connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
     
@@ -183,7 +185,7 @@ void TaskStatusView::slotCurrentScheduleManagerChanged( ScheduleManager *sm )
 
 Node *TaskStatusView::currentNode() const 
 {
-    Node * n = m_view->itemModel()->node( m_view->selectionModel()->currentIndex() );
+    Node * n = m_view->model()->node( m_view->selectionModel()->currentIndex() );
     if ( n && n->type() != Node::Type_Task ) {
         return 0;
     }
@@ -193,7 +195,7 @@ Node *TaskStatusView::currentNode() const
 void TaskStatusView::setProject( Project *project )
 {
     m_project = project;
-    m_view->itemModel()->setProject( m_project );
+    m_view->model()->setProject( m_project );
 }
 
 void TaskStatusView::draw( Project &project )
@@ -214,7 +216,7 @@ void TaskStatusView::slotContextMenuRequested( const QModelIndex &index, const Q
     if ( ! index.isValid() ) {
         return;
     }
-    Node *node = m_view->itemModel()->node( index );
+    Node *node = m_view->model()->node( index );
     if ( node == 0 ) {
         return;
     }

@@ -49,7 +49,7 @@ class KPLATOUI_EXPORT ScheduleItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit ScheduleItemModel( KoDocument *part, QObject *parent = 0 );
+    explicit ScheduleItemModel( QObject *parent = 0 );
     ~ScheduleItemModel();
 
     virtual void setProject( Project *project );
@@ -121,20 +121,18 @@ class KPLATOUI_EXPORT ScheduleTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    ScheduleTreeView( KoDocument *part, QWidget *parent );
+    ScheduleTreeView( QWidget *parent );
 
-    ScheduleItemModel *itemModel() const { return static_cast<ScheduleItemModel*>( model() ); }
+    ScheduleItemModel *model() const { return static_cast<ScheduleItemModel*>( TreeViewBase::model() ); }
 
     void setArrowKeyNavigation( bool on ) { m_arrowKeyNavigation = on; }
     bool arrowKeyNavigation() const { return m_arrowKeyNavigation; }
 
-    Project *project() const { return itemModel()->project(); }
-    void setProject( Project *project ) { itemModel()->setProject( project ); }
+    Project *project() const { return model()->project(); }
+    void setProject( Project *project ) { model()->setProject( project ); }
 
     ScheduleManager *currentManager() const;
 
-    KoDocument *part() const { return m_part; }
-    
 signals:
     void currentChanged( const QModelIndex& );
     void currentColumnChanged( QModelIndex, QModelIndex );
@@ -152,7 +150,6 @@ protected:
 
 private:
     bool m_arrowKeyNavigation;
-    KoDocument *m_part;
 };
 
 class KPLATOUI_EXPORT ScheduleEditor : public ViewBase
@@ -164,6 +161,9 @@ public:
     void setupGui();
     virtual void draw( Project &project );
     virtual void draw();
+    
+    ScheduleItemModel *model() const { return m_view->model(); }
+    
     virtual void updateReadWrite( bool readwrite );
 
     /// Loads context info into this view. Reimplement.

@@ -26,8 +26,6 @@
 #include <QDate>
 #include <QItemDelegate>
 
-class KoDocument;
-
 class QMimeData;
 class QModelIndex;
 
@@ -144,7 +142,7 @@ class KPLATOMODELS_EXPORT NodeItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit NodeItemModel( KoDocument *part, QObject *parent = 0 );
+    explicit NodeItemModel( QObject *parent = 0 );
     ~NodeItemModel();
     
     virtual void setProject( Project *project );
@@ -222,7 +220,7 @@ class KPLATOMODELS_EXPORT MilestoneItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit MilestoneItemModel( KoDocument *part, QObject *parent = 0 );
+    explicit MilestoneItemModel( QObject *parent = 0 );
     ~MilestoneItemModel();
 
     virtual void setProject( Project *project );

@@ -25,8 +25,6 @@
 #include "kptproject.h"
 #include "kptnode.h"
 
-#include <KoDocument.h>
-
 #include <QAbstractItemModel>
 #include <QApplication>
 #include <QComboBox>
@@ -1407,8 +1405,8 @@ QVariant NodeModel::headerData( int section, int role )
 }
 
 //----------------------------
-NodeItemModel::NodeItemModel( KoDocument *part, QObject *parent )
-    : ItemModelBase( part, parent ),
+NodeItemModel::NodeItemModel( QObject *parent )
+    : ItemModelBase( parent ),
     m_node( 0 )
 {
 }
@@ -1641,7 +1639,7 @@ bool NodeItemModel::setName( Node *node, const QVariant &value, int role )
             if ( value.toString() == node->name() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyNameCmd( *node, value.toString(), "Modify task name" ) );
+            emit executeCommand( new NodeModifyNameCmd( *node, value.toString(), "Modify task name" ) );
             return true;
     }
     return false;
@@ -1654,7 +1652,7 @@ bool NodeItemModel::setLeader( Node *node, const QVariant &value, int role )
             if ( value.toString() == node->leader() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyLeaderCmd( *node, value.toString(), "Modify task responsible" ) );
+            emit executeCommand( new NodeModifyLeaderCmd( *node, value.toString(), "Modify task responsible" ) );
             return true;
     }
     return false;
@@ -1694,7 +1692,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                 r->setName( s.trimmed() );
                 cmd->addCommand( new AddResourceCmd( pargr, r ) );
                 //kDebug()<<"add resource:"<<r->name();
-                m_part->addCommand( cmd );
+                emit executeCommand( cmd );
                 cmd = 0;
             }
             
@@ -1731,7 +1729,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                         r->setName( s );
                         cmd->addCommand( new AddResourceCmd( pargr, r ) );
                         //kDebug()<<"add resource:"<<r->name();
-                        m_part->addCommand( cmd );
+                        emit executeCommand( cmd );
                         cmd = 0;
                     } else {
                         pargr = r->parentGroup();
@@ -1752,7 +1750,7 @@ bool NodeItemModel::setAllocation( Node *node, const QVariant &value, int role )
                 }
             }
             if ( cmd ) {
-                m_part->addCommand( cmd );
+                emit executeCommand( cmd );
             }
             return true;
         }
@@ -1767,7 +1765,7 @@ bool NodeItemModel::setDescription( Node *node, const QVariant &value, int role 
             if ( value.toString() == node->description() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyDescriptionCmd( *node, value.toString(), "Modify task description" ) );
+            emit executeCommand( new NodeModifyDescriptionCmd( *node, value.toString(), "Modify task description" ) );
             return true;
     }
     return false;
@@ -1787,7 +1785,7 @@ bool NodeItemModel::setConstraint( Node *node, const QVariant &value, int role )
             if ( v == node->constraint() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyConstraintCmd( *node, v, "Modify constraint type" ) );
+            emit executeCommand( new NodeModifyConstraintCmd( *node, v, "Modify constraint type" ) );
             return true;
     }
     return false;
@@ -1800,7 +1798,7 @@ bool NodeItemModel::setConstraintStartTime( Node *node, const QVariant &value, i
             if ( value.toDateTime() == node->constraintStartTime().dateTime() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyConstraintStartTimeCmd( *node, value.toDateTime(), "Modify constraint start time" ) );
+            emit executeCommand( new NodeModifyConstraintStartTimeCmd( *node, value.toDateTime(), "Modify constraint start time" ) );
             return true;
     }
     return false;
@@ -1813,7 +1811,7 @@ bool NodeItemModel::setConstraintEndTime( Node *node, const QVariant &value, int
             if ( value.toDateTime() == node->constraintEndTime().dateTime() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyConstraintEndTimeCmd( *node, value.toDateTime(), "Modify constraint end time" ) );
+            emit executeCommand( new NodeModifyConstraintEndTimeCmd( *node, value.toDateTime(), "Modify constraint end time" ) );
             return true;
     }
     return false;
@@ -1827,7 +1825,7 @@ bool NodeItemModel::setEstimateType( Node *node, const QVariant &value, int role
             if ( v == node->estimate()->type() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyEstimateTypeCmd( *node, node->estimate()->type(), v, "Modify estimate type" ) );
+            emit executeCommand( new ModifyEstimateTypeCmd( *node, node->estimate()->type(), v, "Modify estimate type" ) );
             return true;
     }
     return false;
@@ -1846,7 +1844,7 @@ bool NodeItemModel::setEstimate( Node *node, const QVariant &value, int role )
             MacroCommand *cmd = new MacroCommand( i18n( "Modify estimate" ) );
             cmd->addCommand( new ModifyEstimateCmd( *node, node->estimate()->expected(), d ) );
             cmd->addCommand( new ModifyEstimateUnitCmd( *node, node->estimate()->displayUnit(), unit ) );
-            m_part->addCommand( cmd );
+            emit executeCommand( cmd );
             return true;
     }
     return false;
@@ -1859,7 +1857,7 @@ bool NodeItemModel::setOptimisticRatio( Node *node, const QVariant &value, int r
             if ( value.toInt() == node->estimate()->optimisticRatio() ) {
                 return false;
             }
-            m_part->addCommand( new EstimateModifyOptimisticRatioCmd( *node, node->estimate()->optimisticRatio(), value.toInt(), "Modify estimate" ) );
+            emit executeCommand( new EstimateModifyOptimisticRatioCmd( *node, node->estimate()->optimisticRatio(), value.toInt(), "Modify estimate" ) );
             return true;
     }
     return false;
@@ -1872,7 +1870,7 @@ bool NodeItemModel::setPessimisticRatio( Node *node, const QVariant &value, int 
             if ( value.toInt() == node->estimate()->pessimisticRatio() ) {
                 return false;
             }
-            m_part->addCommand( new EstimateModifyPessimisticRatioCmd( *node, node->estimate()->pessimisticRatio(), value.toInt(), "Modify estimate" ) );
+            emit executeCommand( new EstimateModifyPessimisticRatioCmd( *node, node->estimate()->pessimisticRatio(), value.toInt(), "Modify estimate" ) );
             return true;
     }
     return false;
@@ -1886,7 +1884,7 @@ bool NodeItemModel::setRiskType( Node *node, const QVariant &value, int role )
                 return false;
             }
             Estimate::Risktype v = Estimate::Risktype( value.toInt() );
-            m_part->addCommand( new EstimateModifyRiskCmd( *node, node->estimate()->risktype(), v, "Modify Risk Type" ) );
+            emit executeCommand( new EstimateModifyRiskCmd( *node, node->estimate()->risktype(), v, "Modify Risk Type" ) );
             return true;
     }
     return false;
@@ -1904,7 +1902,7 @@ bool NodeItemModel::setRunningAccount( Node *node, const QVariant &value, int ro
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->runningAccount();
             if ( old != a ) {
-                m_part->addCommand( new NodeModifyRunningAccountCmd( *node, old, a, i18n( "Modify Running Account" ) ) );
+                emit executeCommand( new NodeModifyRunningAccountCmd( *node, old, a, i18n( "Modify Running Account" ) ) );
             }
             return true;
     }
@@ -1924,7 +1922,7 @@ bool NodeItemModel::setStartupAccount( Node *node, const QVariant &value, int ro
             Account *old = node->startupAccount();
             //kDebug()<<(value.toInt())<<";"<<(lst.at( value.toInt()))<<":"<<a;
             if ( old != a ) {
-                m_part->addCommand( new NodeModifyStartupAccountCmd( *node, old, a, i18n( "Modify Startup Account" ) ) );
+                emit executeCommand( new NodeModifyStartupAccountCmd( *node, old, a, i18n( "Modify Startup Account" ) ) );
             }
             return true;
     }
@@ -1939,7 +1937,7 @@ bool NodeItemModel::setStartupCost( Node *node, const QVariant &value, int role 
             if ( v == node->startupCost() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyStartupCostCmd( *node, v, i18n( "Modify Startup Cost" ) ) );
+            emit executeCommand( new NodeModifyStartupCostCmd( *node, v, i18n( "Modify Startup Cost" ) ) );
             return true;
     }
     return false;
@@ -1957,7 +1955,7 @@ bool NodeItemModel::setShutdownAccount( Node *node, const QVariant &value, int r
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->shutdownAccount();
             if ( old != a ) {
-                m_part->addCommand( new NodeModifyShutdownAccountCmd( *node, old, a, i18n( "Modify Shutdown Account" ) ) );
+                emit executeCommand( new NodeModifyShutdownAccountCmd( *node, old, a, i18n( "Modify Shutdown Account" ) ) );
             }
             return true;
     }
@@ -1972,7 +1970,7 @@ bool NodeItemModel::setShutdownCost( Node *node, const QVariant &value, int role
             if ( v == node->shutdownCost() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyShutdownCostCmd( *node, v, i18n( "Modify Shutdown Cost" ) ) );
+            emit executeCommand( new NodeModifyShutdownCostCmd( *node, v, i18n( "Modify Shutdown Cost" ) ) );
             return true;
     }
     return false;
@@ -2128,11 +2126,11 @@ bool NodeItemModel::dropAllowed( const QModelIndex &index, int dropIndicatorPosi
         return false; // hmmm
     }
     switch ( dropIndicatorPosition ) {
-        case TreeViewBase::AboveItem:
-        case TreeViewBase::BelowItem:
+        case ItemModelBase::AboveItem:
+        case ItemModelBase::BelowItem:
             // dn == sibling
             return dropAllowed( dn->parentNode(), data );
-        case TreeViewBase::OnItem:
+        case ItemModelBase::OnItem:
             // dn == new parent
             return dropAllowed( dn, data );
         default:
@@ -2247,7 +2245,7 @@ bool NodeItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, 
             offset++;
         }
         if ( cmd ) {
-            m_part->addCommand( cmd );
+            emit executeCommand( cmd );
         }
         //kDebug()<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
         return true;
@@ -2280,7 +2278,7 @@ void NodeItemModel::slotNodeChanged( Node *node )
 
 QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
 {
-    m_part->addCommand( new TaskAddCmd( m_project, node, after, i18n( "Add Task") ) );
+    emit executeCommand( new TaskAddCmd( m_project, node, after, i18n( "Add Task") ) );
     int row = -1;
     if ( node->parentNode() ) {
         row = node->parentNode()->indexOf( node );
@@ -2295,7 +2293,7 @@ QModelIndex NodeItemModel::insertTask( Node *node, Node *after )
 
 QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
 {
-    m_part->addCommand( new SubtaskAddCmd( m_project, node, parent, i18n( "Add Subtask" ) ) );
+    emit executeCommand( new SubtaskAddCmd( m_project, node, parent, i18n( "Add Subtask" ) ) );
     reset();
     int row = -1;
     if ( node->parentNode() ) {
@@ -2310,8 +2308,8 @@ QModelIndex NodeItemModel::insertSubtask( Node *node, Node *parent )
 }
 
 //----------------------------
-MilestoneItemModel::MilestoneItemModel( KoDocument *part, QObject *parent )
-    : ItemModelBase( part, parent )
+MilestoneItemModel::MilestoneItemModel( QObject *parent )
+    : ItemModelBase( parent )
 {
 }
 
@@ -2512,7 +2510,7 @@ bool MilestoneItemModel::setName( Node *node, const QVariant &value, int role )
             if ( value.toString() == node->name() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyNameCmd( *node, value.toString(), "Modify task name" ) );
+            emit executeCommand( new NodeModifyNameCmd( *node, value.toString(), "Modify task name" ) );
             return true;
     }
     return false;
@@ -2525,7 +2523,7 @@ bool MilestoneItemModel::setLeader( Node *node, const QVariant &value, int role 
             if ( value.toString() == node->leader() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyLeaderCmd( *node, value.toString(), "Modify task responsible" ) );
+            emit executeCommand( new NodeModifyLeaderCmd( *node, value.toString(), "Modify task responsible" ) );
             return true;
     }
     return false;
@@ -2538,7 +2536,7 @@ bool MilestoneItemModel::setDescription( Node *node, const QVariant &value, int 
             if ( value.toString() == node->description() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyDescriptionCmd( *node, value.toString(), "Modify task description" ) );
+            emit executeCommand( new NodeModifyDescriptionCmd( *node, value.toString(), "Modify task description" ) );
             return true;
     }
     return false;
@@ -2558,7 +2556,7 @@ bool MilestoneItemModel::setConstraint( Node *node, const QVariant &value, int r
             if ( v == node->constraint() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyConstraintCmd( *node, v, "Modify constraint type" ) );
+            emit executeCommand( new NodeModifyConstraintCmd( *node, v, "Modify constraint type" ) );
             return true;
     }
     return false;
@@ -2571,7 +2569,7 @@ bool MilestoneItemModel::setConstraintStartTime( Node *node, const QVariant &val
             if ( value.toDateTime() == node->constraintStartTime().dateTime() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyConstraintStartTimeCmd( *node, value.toDateTime(), "Modify constraint start time" ) );
+            emit executeCommand( new NodeModifyConstraintStartTimeCmd( *node, value.toDateTime(), "Modify constraint start time" ) );
             return true;
     }
     return false;
@@ -2584,7 +2582,7 @@ bool MilestoneItemModel::setConstraintEndTime( Node *node, const QVariant &value
             if ( value.toDateTime() == node->constraintEndTime().dateTime() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyConstraintEndTimeCmd( *node, value.toDateTime(), "Modify constraint end time" ) );
+            emit executeCommand( new NodeModifyConstraintEndTimeCmd( *node, value.toDateTime(), "Modify constraint end time" ) );
             return true;
     }
     return false;
@@ -2602,7 +2600,7 @@ bool MilestoneItemModel::setRunningAccount( Node *node, const QVariant &value, i
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->runningAccount();
             if ( old != a ) {
-                m_part->addCommand( new NodeModifyRunningAccountCmd( *node, old, a, i18n( "Modify Running Account" ) ) );
+                emit executeCommand( new NodeModifyRunningAccountCmd( *node, old, a, i18n( "Modify Running Account" ) ) );
             }
             return true;
     }
@@ -2622,7 +2620,7 @@ bool MilestoneItemModel::setStartupAccount( Node *node, const QVariant &value, i
             Account *old = node->startupAccount();
             //kDebug()<<(value.toInt())<<";"<<(lst.at( value.toInt()))<<":"<<a;
             if ( old != a ) {
-                m_part->addCommand( new NodeModifyStartupAccountCmd( *node, old, a, i18n( "Modify Startup Account" ) ) );
+                emit executeCommand( new NodeModifyStartupAccountCmd( *node, old, a, i18n( "Modify Startup Account" ) ) );
             }
             return true;
     }
@@ -2637,7 +2635,7 @@ bool MilestoneItemModel::setStartupCost( Node *node, const QVariant &value, int 
             if ( v == node->startupCost() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyStartupCostCmd( *node, v, i18n( "Modify Startup Cost" ) ) );
+            emit executeCommand( new NodeModifyStartupCostCmd( *node, v, i18n( "Modify Startup Cost" ) ) );
             return true;
     }
     return false;
@@ -2655,7 +2653,7 @@ bool MilestoneItemModel::setShutdownAccount( Node *node, const QVariant &value, 
             Account *a = m_project->accounts().findAccount( lst.at( value.toInt() ) );
             Account *old = node->shutdownAccount();
             if ( old != a ) {
-                m_part->addCommand( new NodeModifyShutdownAccountCmd( *node, old, a, i18n( "Modify Shutdown Account" ) ) );
+                emit executeCommand( new NodeModifyShutdownAccountCmd( *node, old, a, i18n( "Modify Shutdown Account" ) ) );
             }
             return true;
     }
@@ -2670,7 +2668,7 @@ bool MilestoneItemModel::setShutdownCost( Node *node, const QVariant &value, int
             if ( v == node->shutdownCost() ) {
                 return false;
             }
-            m_part->addCommand( new NodeModifyShutdownCostCmd( *node, v, i18n( "Modify Shutdown Cost" ) ) );
+            emit executeCommand( new NodeModifyShutdownCostCmd( *node, v, i18n( "Modify Shutdown Cost" ) ) );
             return true;
     }
     return false;
@@ -2819,11 +2817,11 @@ bool MilestoneItemModel::dropAllowed( const QModelIndex &index, int dropIndicato
         return false; // hmmm
     }
     switch ( dropIndicatorPosition ) {
-        case TreeViewBase::AboveItem:
-        case TreeViewBase::BelowItem:
+        case ItemModelBase::AboveItem:
+        case ItemModelBase::BelowItem:
             // dn == sibling
             return dropAllowed( dn->parentNode(), data );
-        case TreeViewBase::OnItem:
+        case ItemModelBase::OnItem:
             // dn == new parent
             return dropAllowed( dn, data );
         default:
@@ -2938,7 +2936,7 @@ bool MilestoneItemModel::dropMimeData( const QMimeData *data, Qt::DropAction act
             offset++;
         }
         if ( cmd ) {
-            m_part->addCommand( cmd );
+            emit executeCommand( cmd );
         }
         //kDebug()<<row<<","<<column<<" parent="<<parent.row()<<","<<parent.column()<<":"<<par->name();
         return true;

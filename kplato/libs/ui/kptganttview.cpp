@@ -48,7 +48,7 @@
 namespace KPlato
 {
 
-MyKDGanttView::MyKDGanttView( KoDocument *part, QWidget *parent )
+MyKDGanttView::MyKDGanttView( QWidget *parent )
     : KDGantt::View( parent ),
     m_project( 0 ),
     m_manager( 0 )
@@ -62,7 +62,7 @@ MyKDGanttView::MyKDGanttView( KoDocument *part, QWidget *parent )
     m->setRole( KDGantt::EndTimeRole, KDGantt::EndTimeRole );
     m->setColumn( KDGantt::StartTimeRole, 18 );
     m->setColumn( KDGantt::EndTimeRole, 19 );
-    m_model = new NodeItemModel( part, this );
+    m_model = new NodeItemModel( this );
     setModel( m_model );
     QTreeView *tv = dynamic_cast<QTreeView*>( leftView() ); //FIXME ?
     if ( tv ) {
@@ -171,7 +171,7 @@ GanttView::GanttView( KoDocument *part, QWidget *parent, bool readWrite )
     l->addWidget( m_splitter );
     m_splitter->setOrientation( Qt::Vertical );
 
-    m_gantt = new MyKDGanttView( part, m_splitter );
+    m_gantt = new MyKDGanttView( m_splitter );
 
     setupGui();
     
@@ -352,11 +352,11 @@ void GanttView::update()
 }
 
 //------------------------
-MilestoneKDGanttView::MilestoneKDGanttView( KoDocument *part, QWidget *parent )
+MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
     : KDGantt::View( parent ),
     m_project( 0 ),
     m_manager( 0 ),
-    m_model( new MilestoneItemModel( part, this ) )
+    m_model( new MilestoneItemModel( this ) )
 {
     kDebug()<<"------------------- create MilestoneKDGanttView -----------------------"<<endl;
     KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( ganttProxyModel() );
@@ -423,7 +423,7 @@ MilestoneGanttView::MilestoneGanttView( KoDocument *part, QWidget *parent, bool 
     l->addWidget( m_splitter );
     m_splitter->setOrientation( Qt::Vertical );
 
-    m_gantt = new MilestoneKDGanttView( part, m_splitter );
+    m_gantt = new MilestoneKDGanttView( m_splitter );
 
     m_showTaskName = false; // FIXME
     m_showProgress = false; //FIXME

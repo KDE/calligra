@@ -20,6 +20,7 @@
 
 #include "kptitemviewsettup.h"
 #include "kptitemmodelbase.h"
+#include "kptviewbase.h"
 
 #include <QCheckBox>
 #include <QHeaderView>
@@ -55,7 +56,7 @@ ItemViewSettup::ItemViewSettup( TreeViewBase *view, bool includeColumn0, QWidget
     
     stretchLastSection->setChecked( view->header()->stretchLastSection() );
     
-    ItemModelBase *model = view->itemModel();
+    ItemModelBase *model = view->model();
 
     QMap<int, Item*> map;
     int c = includeColumn0 ? 0 : 1;

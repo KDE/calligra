@@ -25,8 +25,6 @@
 #include "kptproject.h"
 #include "kpttask.h"
 
-#include <KoDocument.h>
-
 #include <QAbstractItemModel>
 #include <QDragEnterEvent>
 #include <QDragMoveEvent>
@@ -43,8 +41,8 @@ namespace KPlato
 {
 
 
-TaskStatusItemModel::TaskStatusItemModel( KoDocument *part, QObject *parent )
-    : ItemModelBase( part, parent ),
+TaskStatusItemModel::TaskStatusItemModel( QObject *parent )
+    : ItemModelBase( parent ),
     m_period( 7 )
 {
     m_nodemodel.setNow( QDate::currentDate() );

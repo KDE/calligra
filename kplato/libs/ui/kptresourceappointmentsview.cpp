@@ -64,8 +64,8 @@
 namespace KPlato
 {
 
-ResourceAppointmentsItemModel::ResourceAppointmentsItemModel( KoDocument *part, QObject *parent )
-    : ItemModelBase( part, parent ),
+ResourceAppointmentsItemModel::ResourceAppointmentsItemModel( QObject *parent )
+    : ItemModelBase( parent ),
     m_columnCount( 3 ),
     m_group( 0 ),
     m_resource( 0 ),
@@ -794,20 +794,20 @@ bool ResourceAppointmentsItemModel::dropMimeData( const QMimeData *data, Qt::Dro
         }
     }
     if ( m ) {
-        m_part->addCommand( m );
+        emit executeCommand( m );
     }
     return true;
 }
 
 
 //--------------------
-ResourceAppointmentsTreeView::ResourceAppointmentsTreeView( KoDocument *part, QWidget *parent )
+ResourceAppointmentsTreeView::ResourceAppointmentsTreeView( QWidget *parent )
     : DoubleTreeViewBase( true, parent )
 {
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
     setStretchLastSection( false );
     
-    ResourceAppointmentsItemModel *m = new ResourceAppointmentsItemModel( part );
+    ResourceAppointmentsItemModel *m = new ResourceAppointmentsItemModel();
     setModel( m );
     QList<int> lst1; lst1 << 2 << -1;
     QList<int> lst2; lst2 << 0 << 1;
@@ -831,7 +831,7 @@ void ResourceAppointmentsTreeView::slotColumnsInserted( const QModelIndex&, int 
 
 void ResourceAppointmentsTreeView::slotRefreshed()
 {
-    kDebug()<<itemModel()->columnCount()<<", "<<m_leftview->header()->count()<<", "<<m_rightview->header()->count()<<", "<<m_leftview->header()->hiddenSectionCount()<<", "<<m_rightview->header()->hiddenSectionCount()<<endl;
+    kDebug()<<model()->columnCount()<<", "<<m_leftview->header()->count()<<", "<<m_rightview->header()->count()<<", "<<m_leftview->header()->hiddenSectionCount()<<", "<<m_rightview->header()->hiddenSectionCount()<<endl;
     m_leftview->selectionModel()->clear();
     QList<int> lst1; lst1 << 2 << -1;
     QList<int> lst2; lst2 << 0 << 1;
@@ -848,11 +848,13 @@ ResourceAppointmentsView::ResourceAppointmentsView( KoDocument *part, QWidget *p
     
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_view = new ResourceAppointmentsTreeView( part, this );
+    m_view = new ResourceAppointmentsTreeView( this );
     l->addWidget( m_view );
     
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
+    connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
+    
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
 
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
@@ -897,7 +899,7 @@ void ResourceAppointmentsView::slotContextMenuRequested( QModelIndex index, cons
     //kDebug()<<index.row()<<", "<<index.column()<<": "<<pos<<endl;
 /*    QString name;
     if ( index.isValid() ) {
-        QObject *obj = m_view->itemModel()->object( index );
+        QObject *obj = m_view->model()->object( index );
         ResourceGroup *g = qobject_cast<ResourceGroup*>( obj );
         if ( g ) {
             name = "resourceeditor_group_popup";
@@ -1021,7 +1023,7 @@ void ResourceAppointmentsView::slotAddResource()
         return;
     }
     Resource *r = new Resource();
-    QModelIndex i = m_view->itemModel()->insertResource( g, r );
+    QModelIndex i = m_view->model()->insertResource( g, r );
     if ( i.isValid() ) {
         m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
         m_view->edit( i );
@@ -1033,7 +1035,7 @@ void ResourceAppointmentsView::slotAddGroup()
 {
     //kDebug()<<endl;
 /*    ResourceGroup *g = new ResourceGroup();
-    QModelIndex i = m_view->itemModel()->insertGroup( g );
+    QModelIndex i = m_view->model()->insertGroup( g );
     if ( i.isValid() ) {
         m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
         m_view->edit( i );

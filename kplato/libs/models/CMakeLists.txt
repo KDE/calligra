@@ -25,7 +25,7 @@ kde4_add_ui_files(kplatomodels_LIB_SRCS
 
 kde4_add_library(kplatomodels SHARED ${kplatomodels_LIB_SRCS})
 
-target_link_libraries(kplatomodels kplatokernel komain)
+target_link_libraries(kplatomodels kplatokernel)
 
 set_target_properties(kplatomodels PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

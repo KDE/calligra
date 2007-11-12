@@ -45,7 +45,7 @@ class KPLATOMODELS_EXPORT WorkPackageModel : public ItemModelBase
     Q_OBJECT
 public:
     explicit WorkPackageModel( QObject *parent = 0 )
-        : ItemModelBase( 0, parent ),
+        : ItemModelBase( parent ),
         m_project( 0 ),
         m_task( 0 )
      {}

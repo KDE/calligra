@@ -183,8 +183,8 @@ QVariant DocumentModel::headerData( int section, int role )
 }
 
 //----------------------------
-DocumentItemModel::DocumentItemModel( KoDocument *part, QObject *parent )
-    : ItemModelBase( part, parent ),
+DocumentItemModel::DocumentItemModel( QObject *parent )
+    : ItemModelBase( parent ),
     m_documents( 0 )
 {
 }

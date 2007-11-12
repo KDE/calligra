@@ -62,8 +62,8 @@
 namespace KPlato
 {
 
-ResourceItemModel::ResourceItemModel( KoDocument *part, QObject *parent )
-    : ItemModelBase( part, parent ),
+ResourceItemModel::ResourceItemModel( QObject *parent )
+    : ItemModelBase( parent ),
     m_group( 0 ),
     m_resource( 0 )
 {
@@ -360,7 +360,7 @@ bool ResourceItemModel::setName( Resource *res, const QVariant &value, int role 
             if ( value.toString() == res->name() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceNameCmd( res, value.toString(), "Modify resource name" ) );
+            emit executeCommand( new ModifyResourceNameCmd( res, value.toString(), "Modify resource name" ) );
             return true;
     }
     return false;
@@ -373,7 +373,7 @@ bool ResourceItemModel::setName( ResourceGroup *res, const QVariant &value, int 
             if ( value.toString() == res->name() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceGroupNameCmd( res, value.toString(), "Modify resourcegroup name" ) );
+            emit executeCommand( new ModifyResourceGroupNameCmd( res, value.toString(), "Modify resourcegroup name" ) );
             return true;
     }
     return false;
@@ -427,7 +427,7 @@ bool ResourceItemModel::setType( Resource *res, const QVariant &value, int role 
             if ( v == res->type() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceTypeCmd( res, v, "Modify resource type" ) );
+            emit executeCommand( new ModifyResourceTypeCmd( res, v, "Modify resource type" ) );
             return true;
     }
     return false;
@@ -441,7 +441,7 @@ bool ResourceItemModel::setType( ResourceGroup *res, const QVariant &value, int 
             if ( v == res->type() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceGroupTypeCmd( res, v, "Modify resourcegroup type" ) );
+            emit executeCommand( new ModifyResourceGroupTypeCmd( res, v, "Modify resourcegroup type" ) );
             return true;
     }
     return false;
@@ -470,7 +470,7 @@ bool ResourceItemModel::setInitials( Resource *res, const QVariant &value, int r
             if ( value.toString() == res->initials() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceInitialsCmd( res, value.toString(), "Modify resource initials" ) );
+            emit executeCommand( new ModifyResourceInitialsCmd( res, value.toString(), "Modify resource initials" ) );
             return true;
     }
     return false;
@@ -499,7 +499,7 @@ bool ResourceItemModel::setEmail( Resource *res, const QVariant &value, int role
             if ( value.toString() == res->email() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceEmailCmd( res, value.toString(), "Modify resource email" ) );
+            emit executeCommand( new ModifyResourceEmailCmd( res, value.toString(), "Modify resource email" ) );
             return true;
     }
     return false;
@@ -560,7 +560,7 @@ bool ResourceItemModel::setCalendar( Resource *res, const QVariant &value, int r
             if ( c == res->calendar( true ) ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceCalendarCmd( res, c, "Modify resource calendar" ) );
+            emit executeCommand( new ModifyResourceCalendarCmd( res, c, "Modify resource calendar" ) );
             return true;
         }
     }
@@ -591,7 +591,7 @@ bool ResourceItemModel::setUnits( Resource *res, const QVariant &value, int role
             if ( value.toInt() == res->units() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceUnitsCmd( res, value.toInt(), "Modify resource available units" ) );
+            emit executeCommand( new ModifyResourceUnitsCmd( res, value.toInt(), "Modify resource available units" ) );
             return true;
     }
     return false;
@@ -622,7 +622,7 @@ bool ResourceItemModel::setAvailableFrom( Resource *res, const QVariant &value, 
             if ( value.toDateTime() == res->availableFrom().dateTime() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceAvailableFromCmd( res, value.toDateTime(), "Modify resource available from" ) );
+            emit executeCommand( new ModifyResourceAvailableFromCmd( res, value.toDateTime(), "Modify resource available from" ) );
             return true;
     }
     return false;
@@ -653,7 +653,7 @@ bool ResourceItemModel::setAvailableUntil( Resource *res, const QVariant &value,
             if ( value.toDateTime() == res->availableUntil().dateTime() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceAvailableUntilCmd( res, value.toDateTime(), "Modify resource available until" ) );
+            emit executeCommand( new ModifyResourceAvailableUntilCmd( res, value.toDateTime(), "Modify resource available until" ) );
             return true;
     }
     return false;
@@ -683,7 +683,7 @@ bool ResourceItemModel::setNormalRate( Resource *res, const QVariant &value, int
             if ( value.toDouble() == res->normalRate() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceNormalRateCmd( res, value.toDouble(), "Modify resource normal rate" ) );
+            emit executeCommand( new ModifyResourceNormalRateCmd( res, value.toDouble(), "Modify resource normal rate" ) );
             return true;
     }
     return false;
@@ -714,7 +714,7 @@ bool ResourceItemModel::setOvertimeRate( Resource *res, const QVariant &value, i
             if ( value.toDouble() == res->overtimeRate() ) {
                 return false;
             }
-            m_part->addCommand( new ModifyResourceOvertimeRateCmd( res, value.toDouble(), "Modify resource overtime rate" ) );
+            emit executeCommand( new ModifyResourceOvertimeRateCmd( res, value.toDouble(), "Modify resource overtime rate" ) );
             return true;
     }
     return false;
@@ -967,7 +967,7 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         }
     }
     if ( m ) {
-        m_part->addCommand( m );
+        emit executeCommand( m );
     }
     return true;
 }
@@ -975,7 +975,7 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
 QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
 {
     //kDebug();
-    m_part->addCommand( new AddResourceGroupCmd( m_project, g, i18n( "Add resource group" ) ) );
+    emit executeCommand( new AddResourceGroupCmd( m_project, g, i18n( "Add resource group" ) ) );
     int row = m_project->resourceGroups().indexOf( g );
     if ( row != -1 ) {
         return createIndex( row, 0, g );
@@ -986,7 +986,7 @@ QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
 QModelIndex ResourceItemModel::insertResource( ResourceGroup *g, Resource *r, Resource */*after*/ )
 {
     //kDebug();
-    m_part->addCommand( new AddResourceCmd( g, r, i18n( "Add resource" ) ) );
+    emit executeCommand( new AddResourceCmd( g, r, i18n( "Add resource" ) ) );
     int row = g->indexOf( r );
     if ( row != -1 ) {
         return createIndex( row, 0, r );
@@ -996,13 +996,13 @@ QModelIndex ResourceItemModel::insertResource( ResourceGroup *g, Resource *r, Re
 
 
 //--------------------
-ResourceTreeView::ResourceTreeView( KoDocument *part, QWidget *parent )
+ResourceTreeView::ResourceTreeView( QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
     setStretchLastSection( false );
     
-    setModel( new ResourceItemModel( part ) );
+    setModel( new ResourceItemModel() );
     
     setSelectionMode( QAbstractItemView::ExtendedSelection );
 
@@ -1024,7 +1024,7 @@ void ResourceTreeView::slotActivated( const QModelIndex index )
 
 QObject *ResourceTreeView::currentObject() const
 {
-    return itemModel()->object( selectionModel()->currentIndex() );
+    return model()->object( selectionModel()->currentIndex() );
 }
 
 QList<QObject*> ResourceTreeView::selectedObjects() const
@@ -1068,10 +1068,12 @@ ResourceEditor::ResourceEditor( KoDocument *part, QWidget *parent )
     
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_view = new ResourceTreeView( part, this );
+    m_view = new ResourceTreeView( this );
     l->addWidget( m_view );
     
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
+
+    connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
 
@@ -1112,7 +1114,7 @@ void ResourceEditor::slotContextMenuRequested( QModelIndex index, const QPoint& 
     //kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
     if ( index.isValid() ) {
-        QObject *obj = m_view->itemModel()->object( index );
+        QObject *obj = m_view->model()->object( index );
         ResourceGroup *g = qobject_cast<ResourceGroup*>( obj );
         if ( g ) {
             name = "resourceeditor_group_popup";
@@ -1236,7 +1238,7 @@ void ResourceEditor::slotAddResource()
         return;
     }
     Resource *r = new Resource();
-    QModelIndex i = m_view->itemModel()->insertResource( g, r );
+    QModelIndex i = m_view->model()->insertResource( g, r );
     if ( i.isValid() ) {
         m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
         m_view->edit( i );
@@ -1248,7 +1250,7 @@ void ResourceEditor::slotAddGroup()
 {
     //kDebug();
     ResourceGroup *g = new ResourceGroup();
-    QModelIndex i = m_view->itemModel()->insertGroup( g );
+    QModelIndex i = m_view->model()->insertGroup( g );
     if ( i.isValid() ) {
         m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
         m_view->edit( i );

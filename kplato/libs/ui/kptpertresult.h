@@ -62,7 +62,7 @@ class KPLATOUI_EXPORT CriticalPathItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit CriticalPathItemModel( KoDocument *part, QObject *parent = 0 );
+    explicit CriticalPathItemModel( QObject *parent = 0 );
     ~CriticalPathItemModel();
     
     virtual void setProject( Project *project );
@@ -130,7 +130,7 @@ class KPLATOUI_EXPORT PertResultItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit PertResultItemModel( KoDocument *part, QObject *parent = 0 );
+    explicit PertResultItemModel( QObject *parent = 0 );
     ~PertResultItemModel();
     
     virtual void setProject( Project *project );
@@ -250,7 +250,6 @@ protected slots:
     
 private:
     Node * m_node;
-    KoDocument * m_part;
     Project * m_project;
     bool complexGraph;
     QList<Node *> m_criticalPath;

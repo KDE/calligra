@@ -22,8 +22,6 @@
 
 #include "kptitemmodelbase.h"
 
-#include "KoDocument.h"
-
 namespace KPlato
 {
 
@@ -35,7 +33,7 @@ class KPLATOMODELS_EXPORT DocumentModel : public QObject
     Q_OBJECT
 public:
     DocumentModel()
-    : QObject()
+        : QObject()
     {}
     ~DocumentModel() {}
 
@@ -58,7 +56,7 @@ class KPLATOMODELS_EXPORT DocumentItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit DocumentItemModel( KoDocument *part, QObject *parent = 0 );
+    explicit DocumentItemModel( QObject *parent = 0 );
     ~DocumentItemModel();
 
     virtual void setDocuments( Documents *docs );

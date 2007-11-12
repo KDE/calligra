@@ -50,8 +50,8 @@ class Task;
 
 typedef QList<Node*> NodeList;
 
-CriticalPathItemModel::CriticalPathItemModel( KoDocument *part, QObject *parent )
-    : ItemModelBase( part, parent ),
+CriticalPathItemModel::CriticalPathItemModel( QObject *parent )
+    : ItemModelBase( parent ),
     m_manager( 0 )
 {
 /*    connect( this, SIGNAL( modelAboutToBeReset() ), SLOT( slotAboutToBeReset() ) );
@@ -515,8 +515,8 @@ void CriticalPathItemModel::slotNodeChanged( Node *node )
 
 
 //-----------------------------
-PertResultItemModel::PertResultItemModel( KoDocument *part, QObject *parent )
-    : ItemModelBase( part, parent ),
+PertResultItemModel::PertResultItemModel( QObject *parent )
+    : ItemModelBase( parent ),
     m_manager( 0 )
 {
 /*    connect( this, SIGNAL( modelAboutToBeReset() ), SLOT( slotAboutToBeReset() ) );
@@ -1142,7 +1142,7 @@ PertResult::PertResult( KoDocument *part, QWidget *parent )
 {
     kDebug() << " ---------------- KPlato: Creating PertResult ----------------" << endl;
     widget.setupUi(this);
-    PertResultItemModel *m = new PertResultItemModel( part );
+    PertResultItemModel *m = new PertResultItemModel();
     widget.treeWidgetTaskResult->setModel( m );
     widget.treeWidgetTaskResult->setStretchLastSection( false );
 
@@ -1150,7 +1150,6 @@ PertResult::PertResult( KoDocument *part, QWidget *parent )
     setupGui();
     
     current_schedule=0;
-    m_part = part;
 
         
     QList<int> lst1; lst1 << 1 << -1;
@@ -1450,7 +1449,7 @@ PertCpmView::PertCpmView( KoDocument *part, QWidget *parent )
     widget.probabilityFrame->setVisible( false );
 
     widget.cpmTable->setStretchLastSection ( false );
-    CriticalPathItemModel *m = new CriticalPathItemModel( part );
+    CriticalPathItemModel *m = new CriticalPathItemModel();
     widget.cpmTable->setModel( m );
     
     setupGui();

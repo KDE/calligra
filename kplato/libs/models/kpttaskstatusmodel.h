@@ -25,8 +25,6 @@
 #include "kptitemmodelbase.h"
 #include "kptnodeitemmodel.h"
 
-class KoDocument;
-
 class KAction;
 
 namespace KPlato
@@ -42,7 +40,7 @@ class KPLATOMODELS_EXPORT TaskStatusItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit TaskStatusItemModel( KoDocument *part, QObject *parent = 0 );
+    explicit TaskStatusItemModel( QObject *parent = 0 );
     ~TaskStatusItemModel();
     
     virtual void setProject( Project *project );

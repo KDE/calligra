@@ -67,8 +67,8 @@ NodeTreeView::NodeTreeView( KoDocument *part, QWidget *parent )
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     
-    for ( int c = 0; c < itemModel()->columnCount(); ++c ) {
-        QItemDelegate *delegate = itemModel()->createDelegate( c, this );
+    for ( int c = 0; c < model()->columnCount(); ++c ) {
+        QItemDelegate *delegate = model()->createDelegate( c, this );
         if ( delegate ) {
             setItemDelegateForColumn( c, delegate );
         }
@@ -101,6 +101,8 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
     m_view->setDragEnabled ( true );
     m_view->setAcceptDrops( true );
     m_view->setAcceptDropsOnView( true );
+    
+    connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
     
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
 
@@ -160,7 +162,7 @@ QList<Node*> TaskEditor::selectedNodes() const {
         return lst;
     }
     foreach ( QModelIndex i, sm->selectedRows() ) {
-        Node * n = m_view->itemModel()->node( i );
+        Node * n = m_view->model()->node( i );
         if ( n != 0 && n->type() != Node::Type_Project ) {
             lst.append( n );
         }
@@ -178,7 +180,7 @@ Node *TaskEditor::selectedNode() const
 }
 
 Node *TaskEditor::currentNode() const {
-    Node * n = m_view->itemModel()->node( m_view->selectionModel()->currentIndex() );
+    Node * n = m_view->model()->node( m_view->selectionModel()->currentIndex() );
     if ( n == 0 || n->type() == Node::Type_Project ) {
         return 0;
     }
@@ -187,7 +189,7 @@ Node *TaskEditor::currentNode() const {
 
 void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoint& pos )
 {
-    Node *node = m_view->itemModel()->node( index );
+    Node *node = m_view->model()->node( index );
     if ( node == 0 ) {
         return;
     }
@@ -314,7 +316,7 @@ void TaskEditor::slotAddTask()
     if ( selectedNodeCount() == 0 ) {
         // insert under main project
         Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ m_view->project() );
-        edit( m_view->itemModel()->insertSubtask( t, t->parentNode() ) );
+        edit( m_view->model()->insertSubtask( t, t->parentNode() ) );
 	kDebug()<<"test"<<t->type();
         return;
     }
@@ -323,7 +325,7 @@ void TaskEditor::slotAddTask()
         return;
     }
     Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ sib->parentNode() );
-    edit( m_view->itemModel()->insertTask( t, sib ) );
+    edit( m_view->model()->insertTask( t, sib ) );
 }
 
 void TaskEditor::slotAddMilestone()
@@ -333,7 +335,7 @@ void TaskEditor::slotAddMilestone()
         // insert under main project
         Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ m_view->project() );
         t->estimate()->set( Duration::zeroDuration );
-        edit( m_view->itemModel()->insertSubtask( t, t->parentNode() ) );
+        edit( m_view->model()->insertSubtask( t, t->parentNode() ) );
         return;
     }
     Node *sib = selectedNode(); // sibling
@@ -342,7 +344,7 @@ void TaskEditor::slotAddMilestone()
     }
     Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ sib->parentNode() );
     t->estimate()->set( Duration::zeroDuration );
-    edit( m_view->itemModel()->insertTask( t, sib ) );
+    edit( m_view->model()->insertTask( t, sib ) );
 }
 
 void TaskEditor::slotAddSubtask()
@@ -353,7 +355,7 @@ void TaskEditor::slotAddSubtask()
         return;
     }
     Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ parent );
-    edit( m_view->itemModel()->insertSubtask( t, parent ) );
+    edit( m_view->model()->insertSubtask( t, parent ) );
 }
 
 void TaskEditor::edit( QModelIndex i )
@@ -515,7 +517,7 @@ QList<Node*> TaskView::selectedNodes() const {
         return lst;
     }
     foreach ( QModelIndex i, sm->selectedRows() ) {
-        Node * n = m_view->itemModel()->node( i );
+        Node * n = m_view->model()->node( i );
         if ( n != 0 && n->type() != Node::Type_Project ) {
             lst.append( n );
         }
@@ -533,7 +535,7 @@ Node *TaskView::selectedNode() const
 }
 
 Node *TaskView::currentNode() const {
-    Node * n = m_view->itemModel()->node( m_view->selectionModel()->currentIndex() );
+    Node * n = m_view->model()->node( m_view->selectionModel()->currentIndex() );
     if ( n == 0 || n->type() == Node::Type_Project ) {
         return 0;
     }
@@ -543,7 +545,7 @@ Node *TaskView::currentNode() const {
 void TaskView::slotContextMenuRequested( const QModelIndex& index, const QPoint& pos )
 {
     QString name;
-    Node *node = m_view->itemModel()->node( index );
+    Node *node = m_view->model()->node( index );
     if ( node ) {
         switch ( node->type() ) {
             case Node::Type_Task:

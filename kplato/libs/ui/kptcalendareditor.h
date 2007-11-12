@@ -24,16 +24,16 @@
 
 #include "kptviewbase.h"
 #include "kptitemmodelbase.h"
+#include "kptviewbase.h"
 #include "kptcalendar.h"
 
 #include <QTreeWidget>
 #include <QAbstractProxyModel>
 
-class KoDocument;
-
 class QPoint;
 class QDragMoveEvent;
 
+class KoDocument;
 
 namespace KPlato
 {
@@ -47,7 +47,7 @@ class KPLATOUI_EXPORT CalendarDayItemModelBase : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit CalendarDayItemModelBase( KoDocument *part, QObject *parent = 0 );
+    explicit CalendarDayItemModelBase( QObject *parent = 0 );
     ~CalendarDayItemModelBase();
 
     virtual void setCalendar( Calendar *calendar );
@@ -75,7 +75,7 @@ class KPLATOUI_EXPORT CalendarItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit CalendarItemModel( KoDocument *part, QObject *parent = 0 );
+    explicit CalendarItemModel( QObject *parent = 0 );
     ~CalendarItemModel();
 
     virtual void setProject( Project *project );
@@ -132,7 +132,7 @@ class KPLATOUI_EXPORT CalendarDayItemModel : public CalendarDayItemModelBase
 {
     Q_OBJECT
 public:
-    explicit CalendarDayItemModel( KoDocument *part, QObject *parent = 0 );
+    explicit CalendarDayItemModel( QObject *parent = 0 );
     ~CalendarDayItemModel();
 
     virtual void setCalendar( Calendar *calendar );
@@ -222,12 +222,12 @@ class KPLATOUI_EXPORT CalendarTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    CalendarTreeView( KoDocument *part, QWidget *parent );
+    CalendarTreeView( QWidget *parent );
 
-    CalendarItemModel *itemModel() const { return static_cast<CalendarItemModel*>( model() ); }
+    CalendarItemModel *model() const { return static_cast<CalendarItemModel*>( TreeViewBase::model() ); }
 
-    Project *project() const { return itemModel()->project(); }
-    void setProject( Project *project ) { itemModel()->setProject( project ); }
+    Project *project() const { return model()->project(); }
+    void setProject( Project *project ) { model()->setProject( project ); }
 
     Calendar *currentCalendar() const;
     Calendar *selectedCalendar() const;
@@ -259,12 +259,12 @@ class KPLATOUI_EXPORT CalendarDayView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    CalendarDayView( KoDocument *part, QWidget *parent );
+    CalendarDayView( QWidget *parent );
 
-    CalendarDayItemModel *itemModel() const { return m_model; }
+    CalendarDayItemModel *model() const { return m_model; }
 
-    Project *project() const { return itemModel()->project(); }
-    void setProject( Project *project ) { itemModel()->setProject( project ); }
+    Project *project() const { return model()->project(); }
+    void setProject( Project *project ) { model()->setProject( project ); }
 
     CalendarDay *selectedDay() const;
     TimeInterval *selectedInterval() const;

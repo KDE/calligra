@@ -54,7 +54,7 @@ class KPLATOUI_EXPORT ResourceAppointmentsItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit ResourceAppointmentsItemModel( KoDocument *part, QObject *parent = 0 );
+    explicit ResourceAppointmentsItemModel( QObject *parent = 0 );
     ~ResourceAppointmentsItemModel();
 
     virtual void setProject( Project *project );
@@ -141,13 +141,13 @@ class KPLATOUI_EXPORT ResourceAppointmentsTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    ResourceAppointmentsTreeView( KoDocument *part, QWidget *parent );
+    ResourceAppointmentsTreeView( QWidget *parent );
 
-    ResourceAppointmentsItemModel *itemModel() const { return static_cast<ResourceAppointmentsItemModel*>( model() ); }
+    ResourceAppointmentsItemModel *model() const { return static_cast<ResourceAppointmentsItemModel*>( DoubleTreeViewBase::model() ); }
 
-    Project *project() const { return itemModel()->project(); }
-    void setProject( Project *project ) { itemModel()->setProject( project ); }
-    void setScheduleManager( ScheduleManager *sm ) { itemModel()->setScheduleManager( sm ); }
+    Project *project() const { return model()->project(); }
+    void setProject( Project *project ) { model()->setProject( project ); }
+    void setScheduleManager( ScheduleManager *sm ) { model()->setScheduleManager( sm ); }
 
 protected slots:
     void slotActivated( const QModelIndex index );
@@ -167,6 +167,8 @@ public:
     virtual void draw( Project &project );
     virtual void draw();
 
+    ResourceAppointmentsItemModel *model() const { return m_view->model(); }
+    
     virtual void updateReadWrite( bool /*readwrite*/ ) {};
 
     virtual Resource *currentResource() const;

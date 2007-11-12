@@ -46,7 +46,7 @@ DocumentsPanel::DocumentsPanel( Node &node, QWidget *parent )
 {
     widget.setupUi( this );
     QVBoxLayout *l = new QVBoxLayout( widget.itemViewHolder );
-    m_view = new DocumentTreeView( 0, widget.itemViewHolder );
+    m_view = new DocumentTreeView( widget.itemViewHolder );
     l->addWidget( m_view );
     m_view->setDocuments( &m_docs );
     m_view->setReadWrite( true );
@@ -67,7 +67,7 @@ DocumentsPanel::DocumentsPanel( Node &node, QWidget *parent )
 
 DocumentItemModel *DocumentsPanel::model() const
 {
-    return m_view->itemModel();
+    return m_view->model();
 }
 
 void DocumentsPanel::dataChanged( const QModelIndex &index )

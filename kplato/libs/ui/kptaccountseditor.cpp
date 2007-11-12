@@ -57,8 +57,8 @@
 namespace KPlato
 {
 
-    AccountItemModel::AccountItemModel( KoDocument *part, QObject *parent )
-    : ItemModelBase( part, parent ),
+    AccountItemModel::AccountItemModel( QObject *parent )
+    : ItemModelBase( parent ),
     m_account( 0 )
 {
 }
@@ -262,7 +262,7 @@ bool AccountItemModel::setName( Account *a, const QVariant &value, int role )
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toString() != a->name() ) {
-                m_part->addCommand( new RenameAccountCmd( a, value.toString(), "Modify account name" ) );
+                emit executeCommand( new RenameAccountCmd( a, value.toString(), "Modify account name" ) );
             }
             return true;
     }
@@ -290,7 +290,7 @@ bool AccountItemModel::setDescription( Account *a, const QVariant &value, int ro
     switch ( role ) {
         case Qt::EditRole:
             if ( value.toString() != a->description() ) {
-                m_part->addCommand( new ModifyAccountDescriptionCmd( a, value.toString(), "Modify account description" ) );
+                emit executeCommand( new ModifyAccountDescriptionCmd( a, value.toString(), "Modify account description" ) );
             }
             return true;
     }
@@ -390,7 +390,7 @@ QModelIndex AccountItemModel::insertAccount( Account *account, Account *parent )
         account->setName( m_project->accounts().uniqueId( s ) );
         //m_project->accounts().insertId( account );
     }
-    m_part->addCommand( new AddAccountCmd( *m_project, account, parent, i18n( "Add account" ) ) );
+    emit executeCommand( new AddAccountCmd( *m_project, account, parent, i18n( "Add account" ) ) );
     int row = -1;
     if ( parent ) {
         row = parent->accountList().indexOf( account );
@@ -424,15 +424,15 @@ void AccountItemModel::removeAccounts( QList<Account*> lst )
         }
     }
     if ( cmd )
-        m_part->addCommand( cmd );
+        emit executeCommand( cmd );
 }
 
 //--------------------
-AccountTreeView::AccountTreeView( KoDocument *part, QWidget *parent )
+AccountTreeView::AccountTreeView( QWidget *parent )
     : TreeViewBase( parent )
 {
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
-    setModel( new AccountItemModel( part ) );
+    setModel( new AccountItemModel() );
     setSelectionModel( new QItemSelectionModel( model() ) );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
 
@@ -480,14 +480,14 @@ void AccountTreeView::currentChanged( const QModelIndex & current, const QModelI
 
 Account *AccountTreeView::currentAccount() const
 {
-    return itemModel()->account( currentIndex() );
+    return model()->account( currentIndex() );
 }
 
 Account *AccountTreeView::selectedAccount() const
 {
     QModelIndexList lst = selectionModel()->selectedRows();
     if ( lst.count() == 1 ) {
-        return itemModel()->account( lst.first() );
+        return model()->account( lst.first() );
     }
     return 0;
 }
@@ -496,7 +496,7 @@ QList<Account*> AccountTreeView::selectedAccounts() const
 {
     QList<Account*> lst;
     foreach ( QModelIndex i, selectionModel()->selectedRows() ) {
-        Account *a = itemModel()->account( i );
+        Account *a = model()->account( i );
         if ( a ) {
             lst << a;
         }
@@ -513,10 +513,12 @@ AccountsEditor::AccountsEditor( KoDocument *part, QWidget *parent )
     
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_view = new AccountTreeView( part, this );
+    m_view = new AccountTreeView( this );
     l->addWidget( m_view );
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
+    connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
+    
     connect( m_view, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentChanged( QModelIndex ) ) );
 
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
@@ -556,7 +558,7 @@ void AccountsEditor::slotContextMenuRequested( QModelIndex index, const QPoint& 
     kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
     if ( index.isValid() ) {
-        Account *a = m_view->itemModel()->account( index );
+        Account *a = m_view->model()->account( index );
         if ( a ) {
             name = "accountseditor_accounts_popup";
         } else {
@@ -641,7 +643,7 @@ void AccountsEditor::slotAddSubAccount()
 
 void AccountsEditor::insertAccount( Account *account, Account *parent )
 {
-    QModelIndex i = m_view->itemModel()->insertAccount( account, parent );
+    QModelIndex i = m_view->model()->insertAccount( account, parent );
     if ( i.isValid() ) {
         QModelIndex p = m_view->model()->parent( i );
         if (parent) kDebug()<<" parent="<<parent->name()<<":"<<p.row()<<","<<p.column();
@@ -655,7 +657,7 @@ void AccountsEditor::insertAccount( Account *account, Account *parent )
 void AccountsEditor::slotDeleteSelection()
 {
     kDebug();
-    m_view->itemModel()->removeAccounts( m_view->selectedAccounts() );
+    m_view->model()->removeAccounts( m_view->selectedAccounts() );
 }
 
 void AccountsEditor::slotAccountsOk()
@@ -664,7 +666,7 @@ void AccountsEditor::slotAccountsOk()
      //QModelList
      
 
-     //QModelIndex i = m_view->itemModel()->insertGroup( g );
+     //QModelIndex i = m_view->model()->insertGroup( g );
      
 }
 

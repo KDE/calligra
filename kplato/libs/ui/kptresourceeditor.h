@@ -43,7 +43,7 @@ class KPLATOUI_EXPORT ResourceItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit ResourceItemModel( KoDocument *part, QObject *parent = 0 );
+    explicit ResourceItemModel( QObject *parent = 0 );
     ~ResourceItemModel();
 
     virtual void setProject( Project *project );
@@ -136,12 +136,12 @@ class KPLATOUI_EXPORT ResourceTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    ResourceTreeView( KoDocument *part, QWidget *parent );
+    ResourceTreeView( QWidget *parent );
 
-    ResourceItemModel *itemModel() const { return static_cast<ResourceItemModel*>( model() ); }
+    ResourceItemModel *model() const { return static_cast<ResourceItemModel*>( DoubleTreeViewBase::model() ); }
 
-    Project *project() const { return itemModel()->project(); }
-    void setProject( Project *project ) { itemModel()->setProject( project ); }
+    Project *project() const { return model()->project(); }
+    void setProject( Project *project ) { model()->setProject( project ); }
 
     QObject *currentObject() const;
     QList<QObject*> selectedObjects() const;
@@ -163,6 +163,8 @@ public:
     virtual void draw( Project &project );
     virtual void draw();
 
+    ResourceItemModel *model() const { return m_view->model(); }
+    
     virtual void updateReadWrite( bool readwrite );
 
     virtual Resource *currentResource() const;

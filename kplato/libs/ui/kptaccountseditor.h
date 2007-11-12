@@ -42,7 +42,7 @@ class KPLATOUI_EXPORT AccountItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
-    explicit AccountItemModel( KoDocument *KoDocument, QObject *parent = 0 );
+    explicit AccountItemModel( QObject *parent = 0 );
     ~AccountItemModel();
 
     virtual void setProject( Project *project );
@@ -89,12 +89,12 @@ class KPLATOUI_EXPORT AccountTreeView : public TreeViewBase
 {
     Q_OBJECT
 public:
-    AccountTreeView( KoDocument *KoDocument, QWidget *parent );
+    AccountTreeView( QWidget *parent );
 
-    AccountItemModel *itemModel() const { return static_cast<AccountItemModel*>( model() ); }
+    AccountItemModel *model() const { return static_cast<AccountItemModel*>( TreeViewBase::model() ); }
 
-    Project *project() const { return itemModel()->project(); }
-    void setProject( Project *project ) { itemModel()->setProject( project ); }
+    Project *project() const { return model()->project(); }
+    void setProject( Project *project ) { model()->setProject( project ); }
 
     Account *currentAccount() const;
     Account *selectedAccount() const;
@@ -128,6 +128,8 @@ public:
     virtual void draw( Project &project );
     virtual void draw();
 
+    AccountItemModel *model() const { return m_view->model(); }
+    
     virtual void updateReadWrite( bool readwrite );
 
     virtual Account *currentAccount() const;

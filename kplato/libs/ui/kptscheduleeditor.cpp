@@ -56,8 +56,8 @@
 namespace KPlato
 {
 
-ScheduleItemModel::ScheduleItemModel( KoDocument *part, QObject *parent )
-    : ItemModelBase( part, parent ),
+ScheduleItemModel::ScheduleItemModel( QObject *parent )
+    : ItemModelBase( parent ),
     m_manager( 0 )
 {
 }
@@ -288,7 +288,7 @@ bool ScheduleItemModel::setName( const QModelIndex &index, const QVariant &value
     }
     switch ( role ) {
         case Qt::EditRole:
-            m_part->addCommand(new ModifyScheduleManagerNameCmd( *sm, value.toString(), "Modify Schedule Name" ) );
+            emit executeCommand(new ModifyScheduleManagerNameCmd( *sm, value.toString(), "Modify Schedule Name" ) );
             return true;
     }
     return false;
@@ -363,7 +363,7 @@ bool ScheduleItemModel::setAllowOverbooking( const QModelIndex &index, const QVa
     }
     switch ( role ) {
         case Qt::EditRole:
-            m_part->addCommand(new ModifyScheduleManagerAllowOverbookingCmd( *sm, value.toBool(), "Modify Schedule Allow Overbooking" ) );
+            emit executeCommand(new ModifyScheduleManagerAllowOverbookingCmd( *sm, value.toBool(), "Modify Schedule Allow Overbooking" ) );
             return true;
     }
     return false;
@@ -403,7 +403,7 @@ bool ScheduleItemModel::setUsePert( const QModelIndex &index, const QVariant &va
     }
     switch ( role ) {
         case Qt::EditRole:
-            m_part->addCommand(new ModifyScheduleManagerDistributionCmd( *sm, value.toBool(), "Modify Schedule Distribution" ) );
+            emit executeCommand(new ModifyScheduleManagerDistributionCmd( *sm, value.toBool(), "Modify Schedule Distribution" ) );
             emit slotManagerChanged( static_cast<ScheduleManager*>( sm ) );
             return true;
     }
@@ -443,7 +443,7 @@ bool ScheduleItemModel::setCalculateAll( const QModelIndex &index, const QVarian
     }
     switch ( role ) {
         case Qt::EditRole:
-            m_part->addCommand(new ModifyScheduleManagerCalculateAllCmd( *sm, value.toBool(), "Modify Schedule Calculate" ) );
+            emit executeCommand(new ModifyScheduleManagerCalculateAllCmd( *sm, value.toBool(), "Modify Schedule Calculate" ) );
             return true;
     }
     return false;
@@ -610,19 +610,18 @@ ScheduleManager *ScheduleItemModel::manager( const QModelIndex &index ) const
 
 
 //--------------------
-ScheduleTreeView::ScheduleTreeView( KoDocument *part, QWidget *parent )
-    : TreeViewBase( parent ),
-    m_part( part )
+ScheduleTreeView::ScheduleTreeView( QWidget *parent )
+    : TreeViewBase( parent )
 {
     header()->setStretchLastSection ( false );
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
-    setModel( new ScheduleItemModel( part ) );
+    setModel( new ScheduleItemModel() );
     setSelectionModel( new QItemSelectionModel( model() ) );
     setSelectionMode( QAbstractItemView::SingleSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     
-    for ( int c = 0; c < itemModel()->columnCount(); ++c ) {
-        QItemDelegate *delegate = itemModel()->createDelegate( c, this );
+    for ( int c = 0; c < model()->columnCount(); ++c ) {
+        QItemDelegate *delegate = model()->createDelegate( c, this );
         if ( delegate ) {
             setItemDelegateForColumn( c, delegate );
         }
@@ -663,7 +662,7 @@ void ScheduleTreeView::currentChanged( const QModelIndex & current, const QModel
 
 ScheduleManager *ScheduleTreeView::currentManager() const
 {
-    return itemModel()->manager( currentIndex() );
+    return model()->manager( currentIndex() );
 }
 
 //-----------------------------------
@@ -674,9 +673,11 @@ ScheduleEditor::ScheduleEditor( KoDocument *part, QWidget *parent )
     
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_view = new ScheduleTreeView(part,this);
+    m_view = new ScheduleTreeView( this );
     l->addWidget( m_view );
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
+
+    connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentChanged( QModelIndex ) ) );
 
@@ -719,7 +720,7 @@ void ScheduleEditor::slotContextMenuRequested( QModelIndex index, const QPoint& 
     kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
 /*    QString name;
     if ( index.isValid() ) {
-        QObject *obj = m_view->itemModel()->object( index );
+        QObject *obj = m_view->model()->object( index );
         ResourceGroup *g = qobject_cast<ResourceGroup*>( obj );
         if ( g ) {
             name = "resourceeditor_group_popup";
@@ -745,7 +746,7 @@ void ScheduleEditor::slotSelectionChanged( const QModelIndexList list)
     // The list has one entry per column, and we only select one row at a time, so...
     ScheduleManager *sm = 0;
     if ( ! list.isEmpty() ) {
-        sm = m_view->itemModel()->manager( list.first() );
+        sm = m_view->model()->manager( list.first() );
         emit scheduleSelectionChanged( sm );
     } else {
         emit scheduleSelectionChanged( 0 );
@@ -820,7 +821,7 @@ void ScheduleEditor::slotAddSchedule()
     if ( sm && sm->parentManager() ) {
         sm = sm->parentManager();
         ScheduleManager *m = m_view->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
-        m_view->part()->addCommand( new AddScheduleManagerCmd( sm, m, i18n( "Create sub-schedule" ) ) );
+        part()->addCommand( new AddScheduleManagerCmd( sm, m, i18n( "Create sub-schedule" ) ) );
     } else {
         emit addScheduleManager( m_view->project() );
     }
@@ -833,7 +834,7 @@ void ScheduleEditor::slotAddSubSchedule()
     if ( sm ) {
         ScheduleManager *m = m_view->project()->createScheduleManager( sm->name() + QString(".%1").arg( sm->children().count() + 1 ) );
         
-        m_view->part()->addCommand( new AddScheduleManagerCmd( sm, m, i18n( "Create sub-schedule" ) ) );
+        part()->addCommand( new AddScheduleManagerCmd( sm, m, i18n( "Create sub-schedule" ) ) );
     } else {
         emit addScheduleManager( m_view->project() );
     }

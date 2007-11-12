@@ -59,13 +59,13 @@ namespace KPlato
 
 
 //--------------------
-DocumentTreeView::DocumentTreeView( KoDocument *part, QWidget *parent )
+DocumentTreeView::DocumentTreeView( QWidget *parent )
     : TreeViewBase( parent )
 {
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
     setStretchLastSection( false );
     
-    DocumentItemModel *m = new DocumentItemModel( part );
+    DocumentItemModel *m = new DocumentItemModel();
     setModel( m );
     
     //setSelectionMode( QAbstractItemView::ExtendedSelection );
@@ -88,7 +88,7 @@ void DocumentTreeView::slotActivated( const QModelIndex index )
 
 Document *DocumentTreeView::currentDocument() const
 {
-    return itemModel()->document( selectionModel()->currentIndex() );
+    return model()->document( selectionModel()->currentIndex() );
 }
 
 void DocumentTreeView::slotSelectionChanged( const QItemSelection &selected )
@@ -100,7 +100,7 @@ QList<Document*> DocumentTreeView::selectedDocuments() const
 {
     QList<Document*> lst;
     foreach (QModelIndex i, selectionModel()->selectedRows() ) {
-        Document *doc = itemModel()->document( i );
+        Document *doc = model()->document( i );
         if ( doc ) {
             lst << doc;
         }
@@ -116,10 +116,12 @@ DocumentsEditor::DocumentsEditor( KoDocument *part, QWidget *parent )
     
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_view = new DocumentTreeView( part, this );
+    m_view = new DocumentTreeView( this );
     l->addWidget( m_view );
     
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
+
+    connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
 
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT( slotCurrentChanged( const QModelIndex & ) ) );
 
@@ -160,7 +162,7 @@ void DocumentsEditor::slotContextMenuRequested( QModelIndex index, const QPoint&
     //kDebug()<<index.row()<<","<<index.column()<<":"<<pos;
     QString name;
     if ( index.isValid() ) {
-        Document *obj = m_view->itemModel()->document( index );
+        Document *obj = m_view->model()->document( index );
         if ( obj ) {
             name = "documentseditor_popup";
         }
@@ -267,7 +269,7 @@ void DocumentsEditor::slotAddDocument()
         after = dl.last();
     }
     Document *doc = new Document();
-    QModelIndex i = m_view->itemModel()->insertDocument( doc, after );
+    QModelIndex i = m_view->model()->insertDocument( doc, after );
     if ( i.isValid() ) {
         m_view->selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
         m_view->edit( i );
