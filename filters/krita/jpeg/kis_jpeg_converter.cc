@@ -64,7 +64,7 @@ const QByteArray photoshopIptc_((char*)&photoshopIptc, 2);
 
 namespace {
 
-    J_COLOR_SPACE getColorTypeforColorSpace( KoColorSpace * cs)
+    J_COLOR_SPACE getColorTypeforColorSpace( const KoColorSpace * cs)
     {
         if ( KoID(cs->id()) == KoID("GRAYA") || KoID(cs->id()) == KoID("GRAYA16") )
         {
@@ -168,7 +168,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     }
 
     // Retrieve a pointer to the colorspace
-    KoColorSpace* cs;
+    const KoColorSpace* cs;
     if (profile && profile->isSuitableForOutput())
     {
         kDebug(41008) <<"image has embedded profile:" << profile -> name() <<"";

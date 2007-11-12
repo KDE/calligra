@@ -250,7 +250,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     }
 
     // Retrieve a pointer to the colorspace
-    KoColorSpace* cs = 0;
+    const KoColorSpace* cs = 0;
     if (profile && profile->isSuitableForOutput())
     {
         kDebug(41008) <<"image has embedded profile:" << profile -> name() <<"";

@@ -35,7 +35,7 @@
 #include "kis_tiff_converter.h"
 
 namespace {
-    bool writeColorSpaceInformation( TIFF* image, KoColorSpace * cs, uint16& color_type, uint16& sample_type )
+    bool writeColorSpaceInformation( TIFF* image, const KoColorSpace * cs, uint16& color_type, uint16& sample_type )
     {
         if ( cs->id() == "GRAYA" || cs->id() == "GRAYA16" )
         {
@@ -176,10 +176,10 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
     TIFFSetField(image(), TIFFTAG_ROWSPERSTRIP, 8);
 
     // Save profile
-    KoColorProfile* profile = pd->colorSpace()->profile();
+    const KoColorProfile* profile = pd->colorSpace()->profile();
     if(profile)
     {
-        KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
+        const KoIccColorProfile* iccprofile = dynamic_cast<const KoIccColorProfile*>(profile);
         if(iccprofile)
         {
             QByteArray ba = iccprofile->rawData();

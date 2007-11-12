@@ -63,7 +63,7 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QByteArray& from, const 
     if (!output)
         return KoFilter::CreationError;
 
-    KoColorSpace* cs = output->image()->colorSpace();
+    const KoColorSpace* cs = output->image()->colorSpace();
     KoChannelInfo::enumChannelValueType type = cs->channels()[0]->channelValueType();
     if( type == KoChannelInfo::FLOAT16 || type == KoChannelInfo::FLOAT32)
     {

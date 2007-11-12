@@ -107,7 +107,7 @@ namespace {
 
     }
 
-    ColorspaceType getColorTypeforColorSpace( KoColorSpace * cs )
+    ColorspaceType getColorTypeforColorSpace( const KoColorSpace * cs )
     {
         if ( KoID(cs->id()) == KoID("GRAYA") || KoID(cs->id()) == KoID("GRAYA16") ) return GRAYColorspace;
         if ( KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16") ) return RGBColorspace;
@@ -424,7 +424,7 @@ KisImageBuilder_Result KisImageMagickConverter::decode(const KUrl& uri, bool isB
         kDebug(41008) <<"Image depth:" << imageDepth <<"";
 
         QString csName;
-        KoColorSpace * cs = 0;
+        const KoColorSpace * cs = 0;
         ColorspaceType colorspaceType;
 
         // Determine image type -- rgb, grayscale or cmyk

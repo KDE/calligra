@@ -94,7 +94,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
 
     doc -> undoAdapter() -> setUndo(undo);
 
-    KoColorSpace *cs = layer->paintDevice()->colorSpace();
+    const KoColorSpace *cs = layer->paintDevice()->colorSpace();
 
     if (cs->id() != "RGBAF16HALF") {
         // We could convert automatically, but the conversion wants to be done with
