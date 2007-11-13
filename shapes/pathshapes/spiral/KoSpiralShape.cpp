@@ -211,9 +211,15 @@ void KoSpiralShape::createPath( const QSizeF &size )
         newP.setX( r * cos( adv_ang * ( i + 2 ) ) + newCenter.x() );
         newP.setY( r * sin( adv_ang * ( i + 2 ) ) + newCenter.y() );
 
-        if( m_type == Curve )
-            arcTo( oldP + newP - newCenter, newP, r );
-        else
+        if( m_type == Curve ) {
+	    double rx = abs( oldP.x() - newP.x() );
+	    double ry = abs( oldP.y() - newP.y() );
+	    if ( m_clockwise ) {
+                arcTo( rx, ry, ( ( i + 2 ) % 4 ) * 90, 90 );
+	    } else {
+                arcTo( rx, ry, 360 - ( ( i + 2 ) % 4 ) * 90, -90 );
+	    }
+        } else
             lineTo( newP );
 
         newCenter += ( newP - newCenter ) * ( 1.0 - m_fade );
