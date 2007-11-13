@@ -625,12 +625,7 @@ public:
     ~ResourceRequestCollection();
 
     const QList<ResourceGroupRequest*> &requests() const { return m_requests; }
-    void addRequest( ResourceGroupRequest *request )
-    {
-        m_requests.append( request );
-        request->setParent( this );
-        changed();
-    }
+    void addRequest( ResourceGroupRequest *request );
     void deleteRequest( ResourceGroupRequest *request )
     {
         int i = m_requests.indexOf( request );
@@ -655,7 +650,7 @@ public:
     bool isEmpty() const;
     void clear() { m_requests.clear(); }
     bool contains( const QString &identity ) const;
-
+    ResourceGroupRequest *findGroupRequestById( const QString &id ) const;
     QStringList requestNameList() const;
     QList<Resource*> requestedResources() const;
     

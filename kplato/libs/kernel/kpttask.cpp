@@ -129,7 +129,7 @@ void Task::addRequest(ResourceGroup *group, int numResources) {
 }
 
 void Task::addRequest(ResourceGroupRequest *request) {
-    //kDebug()<<request;
+    //kDebug()<<m_name<<request<<request->group()<<request->group()->id()<<request->group()->name();
     if (!m_requests) {
         m_requests = new ResourceRequestCollection(*this);
     }
@@ -282,12 +282,24 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
             m_estimate->load(e);
         } else if (e.tagName() == "resourcegroup-request") {
             // Load the resource request
-            ResourceGroupRequest *r = new ResourceGroupRequest();
-            if (r->load(e, status.project())) {
-                addRequest(r);
+            // Handle multiple requests to same group gracefully (Not really allowed)
+            if ( m_requests == 0 ) {
+                m_requests = new ResourceRequestCollection( *this );
+            }
+            ResourceGroupRequest *r = m_requests->findGroupRequestById( e.attribute("group-id") );
+            if ( r ) {
+                kWarning()<<"Multiple requests to same group, loading into existing group";
+                if ( ! r->load( e, status.project() ) ) {
+                    kError()<<"Failed to load resource request"<<endl;
+                }
             } else {
-                kError()<<"Failed to load resource request"<<endl;
-                delete r;
+                r = new ResourceGroupRequest();
+                if (r->load(e, status.project())) {
+                    addRequest(r);
+                } else {
+                    kError()<<"Failed to load resource request"<<endl;
+                    delete r;
+                }
             }
         } else if (e.tagName() == "progress") {
             completion().loadXML( e, status );

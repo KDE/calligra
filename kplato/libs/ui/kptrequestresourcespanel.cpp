@@ -46,8 +46,8 @@ namespace KPlato
 ResourceTableItem::ResourceTableItem(Resource *resource, ResourceRequest *request, bool check) {
     m_resource = resource;
     m_request = request;
-    m_checked = check;
-    m_origChecked = check;
+    m_checked = check ? Qt::Checked : Qt::Unchecked;
+    m_origChecked = check ? Qt::Checked : Qt::Unchecked;
     m_checkitem = 0;
     m_units = 100;
     m_origUnits = 100;
@@ -60,7 +60,7 @@ ResourceTableItem::~ResourceTableItem() {
 
 void ResourceTableItem::update() {
     if (m_checkitem)
-        m_checked = m_checkitem->checkState() == Qt::Checked;
+        m_checked = m_checkitem->checkState();
     //kDebug()<<m_resource->name()<<" checked="<<m_checked;
 }
 
@@ -68,7 +68,7 @@ void ResourceTableItem::insert(QTableWidget *table, int row) {
     //kDebug();
     m_checkitem = new QTableWidgetItem(m_resource->name());
     m_checkitem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEditable | Qt::ItemIsEnabled);
-    m_checkitem->setCheckState(m_checked ? Qt::Checked : Qt::Unchecked);
+    m_checkitem->setCheckState(m_checked);
     table->setItem(row, 0, m_checkitem);
 
     //kDebug()<<"Added: '"<<m_resource->name()<<"' checked="<<m_checked;
@@ -166,8 +166,6 @@ RequestResourcesPanel::RequestResourcesPanel(QWidget *parent, Task &task, bool)
         item->setSelected(true);
         groupChanged(item);
     }
-
-    //resourceTable->setReadOnly(baseline);
 
     connect(groupList, SIGNAL(itemSelectionChanged()),  SLOT(groupChanged()));
     connect(resourceTable, SIGNAL(cellChanged(int, int)), SLOT(resourceChanged(int, int)));

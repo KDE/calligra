@@ -959,8 +959,9 @@ ResourceRequest *ResourceGroupRequest::takeResourceRequest(ResourceRequest *requ
 
 ResourceRequest *ResourceGroupRequest::find(Resource *resource) {
     foreach (ResourceRequest *gr, m_resourceRequests) {
-        if (gr->resource() == resource)
+        if (gr->resource() == resource) {
             return gr;
+        }
     }
     return 0;
 }
@@ -990,7 +991,7 @@ bool ResourceGroupRequest::load(KoXmlElement &element, Project &project) {
     //kDebug();
     m_group = project.findResourceGroup(element.attribute("group-id"));
     if (m_group == 0) {
-        //kDebug()<<"The referenced resource group does not exist: group id="<<element.attribute("group-id");
+        kError()<<"The referenced resource group does not exist: group id="<<element.attribute("group-id");
         return false;
     }
     m_group->registerRequest(this);
@@ -1283,6 +1284,20 @@ ResourceRequestCollection::~ResourceRequestCollection() {
     }
 }
 
+void ResourceRequestCollection::addRequest( ResourceGroupRequest *request )
+{
+    foreach ( ResourceGroupRequest *r, m_requests ) {
+        if ( r->group() == request->group() ) {
+            kError()<<"Request to this group already exists";
+            kError()<<"Task:"<<m_task.name()<<"Group:"<<request->group()->name();
+            Q_ASSERT( r->group() != request->group() );
+        }
+    }
+    m_requests.append( request );
+    request->setParent( this );
+    changed();
+}
+
 ResourceGroupRequest *ResourceRequestCollection::find(ResourceGroup *group) const {
     foreach (ResourceGroupRequest *r, m_requests) {
         if (r->group() == group)
@@ -1332,6 +1347,16 @@ QList<Resource*> ResourceRequestCollection::requestedResources() const {
 bool ResourceRequestCollection::contains( const QString &identity ) const {
     QStringList lst = requestNameList();
     return lst.indexOf( QRegExp( identity, Qt::CaseSensitive, QRegExp::FixedString ) ) != -1;
+}
+
+ResourceGroupRequest *ResourceRequestCollection::findGroupRequestById( const QString &id ) const
+{
+    foreach ( ResourceGroupRequest *r, m_requests ) {
+        if ( r->group()->id() == id ) {
+            return r;
+        }
+    }
+    return 0;
 }
 
 // bool ResourceRequestCollection::load(KoXmlElement &element, Project &project) {

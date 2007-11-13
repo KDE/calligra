@@ -54,16 +54,16 @@ public:
     void insert(QTableWidget *table, int row);
     void ok(ResourceGroupRequest *group);
 
-    bool isChecked() const { return m_checked; }
-    bool isOrigChecked() const { return m_origChecked; }
+    bool isChecked() const { return m_checked != Qt::Unchecked; }
+    bool isOrigChecked() const { return m_origChecked != Qt::Unchecked; }
     Resource *resource() { return m_resource; }
     ResourceRequest *request() { return m_request; }
-    int numRequests() const { return m_checked ? 1 : 0; }
+    int numRequests() const { return isChecked() ? 1 : 0; }
     int units() const { return m_units; }
 
     Resource *m_resource;
     int m_units, m_origUnits;
-    bool m_checked, m_origChecked;
+    Qt::CheckState m_checked, m_origChecked;
     QTableWidgetItem *m_checkitem;
     ResourceRequest *m_request;
     int m_curAccountItem;
