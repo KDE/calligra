@@ -95,6 +95,9 @@ class _ConsoleDocker(Qt.QWidget):
                 except IOError, (errno, strerror):
                     Qt.QMessageBox.critical(self, "Error", "<qt>Failed to open file \"%s\"<br><br>%s</qt>" % (filename,strerror))
         def saveClicked(self, *args):
+            if not self.filename:
+                self.saveAsClicked()
+                return
             try:
                 f = open(self.filename, "w")
                 f.write( "%s" % self.edit.toPlainText() )
