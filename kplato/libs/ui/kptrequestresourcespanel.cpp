@@ -67,7 +67,7 @@ void ResourceTableItem::update() {
 void ResourceTableItem::insert(QTableWidget *table, int row) {
     //kDebug();
     m_checkitem = new QTableWidgetItem(m_resource->name());
-    m_checkitem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEditable | Qt::ItemIsEnabled);
+    m_checkitem->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
     m_checkitem->setCheckState(m_checked);
     table->setItem(row, 0, m_checkitem);
 
