@@ -34,7 +34,7 @@ public:
      * @param fade the fade parameter
      * @param parent the optional parent command
      */
-    SpiralShapeConfigCommand( KoSpiralShape * spiral, KoSpiralShape::KoSpiralType type, double fade, QUndoCommand *parent = 0 );
+    SpiralShapeConfigCommand( KoSpiralShape * spiral, KoSpiralShape::KoSpiralType type, bool clockWise, double fade, QUndoCommand *parent = 0 );
     /// redo the command
     virtual void redo();
     /// revert the actions done in redo
@@ -42,8 +42,10 @@ public:
 private:
     KoSpiralShape * m_spiral;
     KoSpiralShape::KoSpiralType m_oldType;
+    bool m_oldClockWise;
     double m_oldFade;
     KoSpiralShape::KoSpiralType m_newType;
+    bool m_newClockWise;
     double m_newFade;
 };
 

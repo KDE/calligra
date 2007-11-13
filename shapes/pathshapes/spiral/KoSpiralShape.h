@@ -62,6 +62,9 @@ public:
     /// Returns the actual fade parameter
     double fade() const;
 
+    bool clockWise() const;
+    void setClockWise( bool clockwise );
+
     /// reimplemented
     virtual QString pathShapeId() const;
 

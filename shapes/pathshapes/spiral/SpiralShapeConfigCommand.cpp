@@ -20,10 +20,11 @@
 #include "SpiralShapeConfigCommand.h"
 #include <klocale.h>
 
-SpiralShapeConfigCommand::SpiralShapeConfigCommand( KoSpiralShape * spiral, KoSpiralShape::KoSpiralType type, double fade, QUndoCommand *parent )
+SpiralShapeConfigCommand::SpiralShapeConfigCommand( KoSpiralShape * spiral, KoSpiralShape::KoSpiralType type, bool clockWise, double fade, QUndoCommand *parent )
     : QUndoCommand( parent )
     , m_spiral(spiral)
     , m_newType(type)
+    , m_newClockWise(clockWise)
     , m_newFade(fade)
 {
     Q_ASSERT(m_spiral);
@@ -31,6 +32,7 @@ SpiralShapeConfigCommand::SpiralShapeConfigCommand( KoSpiralShape * spiral, KoSp
     setText( i18n("Change spiral") );
 
     m_oldType = m_spiral->type();
+    m_oldClockWise = m_spiral->clockWise();
     m_oldFade = m_spiral->fade();
 }
 
@@ -42,6 +44,8 @@ void SpiralShapeConfigCommand::redo()
 
     if( m_oldType != m_newType )
         m_spiral->setType( m_newType );
+    if( m_oldClockWise != m_newClockWise )
+        m_spiral->setClockWise( m_newClockWise );
     if( m_oldFade != m_newFade )
         m_spiral->setFade( m_newFade );
 
@@ -56,6 +60,8 @@ void SpiralShapeConfigCommand::undo()
 
     if( m_oldType != m_newType )
         m_spiral->setType( m_oldType );
+    if( m_oldClockWise != m_newClockWise )
+        m_spiral->setClockWise( m_oldClockWise );
     if( m_oldFade != m_newFade )
         m_spiral->setFade( m_oldFade );
 

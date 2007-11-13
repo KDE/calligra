@@ -33,7 +33,12 @@ SpiralShapeConfigWidget::SpiralShapeConfigWidget()
     widget.fade->setMinimum( 0.0 );
     widget.fade->setMaximum( 1.0 );
 
+    widget.clockWise->clear();
+    widget.clockWise->addItem( "ClockWise" );
+    widget.clockWise->addItem( "Anti-ClockWise" );
+
     connect( widget.spiralType, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));
+    connect( widget.clockWise, SIGNAL(currentIndexChanged(int)), this, SIGNAL(propertyChanged()));
     connect( widget.fade, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
 }
 
@@ -44,12 +49,15 @@ void SpiralShapeConfigWidget::open(KoShape *shape)
         return;
 
     widget.spiralType->blockSignals( true );
+    widget.clockWise->blockSignals( true );
     widget.fade->blockSignals( true );
 
     widget.spiralType->setCurrentIndex( m_spiral->type() );
+    widget.clockWise->setCurrentIndex( m_spiral->clockWise() ? 0 : 1 );
     widget.fade->setValue( m_spiral->fade() );
 
     widget.spiralType->blockSignals( false );
+    widget.clockWise->blockSignals( false );
     widget.fade->blockSignals( false );
 }
 
@@ -59,6 +67,7 @@ void SpiralShapeConfigWidget::save()
         return;
 
     m_spiral->setType( static_cast<KoSpiralShape::KoSpiralType>( widget.spiralType->currentIndex() ) );
+    m_spiral->setClockWise( widget.clockWise->currentIndex() == 0 );
     m_spiral->setFade( widget.fade->value() );
 }
 
@@ -69,7 +78,7 @@ QUndoCommand * SpiralShapeConfigWidget::createCommand()
     else
     {
         KoSpiralShape::KoSpiralType type = static_cast<KoSpiralShape::KoSpiralType>( widget.spiralType->currentIndex() );
-        return new SpiralShapeConfigCommand( m_spiral, type, widget.fade->value() );
+        return new SpiralShapeConfigCommand( m_spiral, type, ( widget.clockWise->currentIndex() == 0 ), widget.fade->value() );
     }
 }
 

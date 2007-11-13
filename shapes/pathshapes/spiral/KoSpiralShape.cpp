@@ -283,6 +283,19 @@ double KoSpiralShape::fade() const
     return m_fade;
 }
 
+bool KoSpiralShape::clockWise() const
+{
+    return m_clockwise;
+}
+
+void KoSpiralShape::setClockWise( bool clockWise )
+{
+    m_clockwise = clockWise;
+    updateKindHandle();
+    //updateAngleHandles();
+    updatePath( size() );
+}
+
 QString KoSpiralShape::pathShapeId() const
 {
     return KoSpiralShapeId;
