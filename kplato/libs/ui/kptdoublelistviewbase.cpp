@@ -36,6 +36,7 @@
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <klocale.h>
+#include <kprinter.h>
 
 
 #include <kdebug.h>

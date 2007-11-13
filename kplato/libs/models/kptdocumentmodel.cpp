@@ -232,6 +232,11 @@ void DocumentItemModel::setDocuments( Documents *docs )
     reset();
 }
 
+Documents *DocumentItemModel::documents() const
+{
+    return m_documents;
+}
+
 Qt::ItemFlags DocumentItemModel::flags( const QModelIndex &index ) const
 {
     Qt::ItemFlags flags = QAbstractItemModel::flags( index );

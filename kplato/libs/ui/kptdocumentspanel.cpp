@@ -91,6 +91,7 @@ void DocumentsPanel::currentChanged( const QModelIndex &index ) const
 Document *DocumentsPanel::currentDocument() const
 {
 //    return model()->document( m_editor->selectionModel()->currentIndex() );
+    return NULL;
 }
 
 void DocumentsPanel::slotAddUrl()

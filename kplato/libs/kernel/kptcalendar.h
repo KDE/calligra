@@ -266,7 +266,7 @@ public:
  * This enables planning with resources that does not recide in the same place.
  *
  */
-class KPLATOKERNEL_EXPORT Calendar : protected QObject
+class KPLATOKERNEL_EXPORT Calendar : public QObject
 {
     Q_OBJECT
 public:

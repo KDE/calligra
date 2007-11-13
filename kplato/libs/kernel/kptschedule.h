@@ -183,7 +183,7 @@ public:
     virtual ScheduleManager *manager() const { return 0; }
     
 protected:
-    virtual void changed( Schedule */*sch*/ ) {}
+    virtual void changed( Schedule * /*sch*/ ) {}
     
 protected:
     QString m_name;

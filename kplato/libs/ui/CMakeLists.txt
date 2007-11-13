@@ -104,6 +104,7 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     kptchartpanelbase.ui
     kptresourceassignmentview.ui
 )
+add_definitions(-DKDGANTT_STATICLIB)
 
 kde4_add_library(kplatoui SHARED ${kplatoui_LIB_SRCS} ${libkdgantt_SRCS})
 

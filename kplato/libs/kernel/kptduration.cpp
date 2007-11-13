@@ -202,7 +202,7 @@ QString Duration::toString(Format format) const {
     return result;
 }
 
-Duration::Duration Duration::fromString(const QString &s, Format format, bool *ok) {
+Duration Duration::fromString(const QString &s, Format format, bool *ok) {
     if (ok) *ok = false;
     QRegExp matcher;
     Duration tmp;

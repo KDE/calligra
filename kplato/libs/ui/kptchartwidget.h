@@ -20,7 +20,7 @@
 
 #ifndef KPTCHARTWIDGET_H
 #define KPTCHARTWIDGET_H
-using namespace std;
+
 #include "kptchart.h"
 #include <QWidget>
 #include <QPainter>

@@ -632,7 +632,7 @@ void NodeSchedule::saveXML( QDomElement &element ) const
     if ( startTime.isValid() )
         sch.setAttribute( "start", startTime.toString( KDateTime::ISODate ) );
     if ( endTime.isValid() )
-        sch.setAttribute( "end", endTime.toString( KDateTime::KDateTime::ISODate ) );
+        sch.setAttribute( "end", endTime.toString( KDateTime::ISODate ) );
     if ( workStartTime.isValid() )
         sch.setAttribute( "start-work", workStartTime.toString( KDateTime::ISODate ) );
     if ( workEndTime.isValid() )

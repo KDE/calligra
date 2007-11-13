@@ -925,11 +925,13 @@ void ResourceAppointmentsView::slotHeaderContextMenuRequested( const QPoint &pos
 Resource *ResourceAppointmentsView::currentResource() const
 {
     //return qobject_cast<Resource*>( m_view->currentObject() );
+    return 0;
 }
 
 ResourceGroup *ResourceAppointmentsView::currentResourceGroup() const
 {
     //return qobject_cast<ResourceGroup*>( m_view->currentObject() );
+    return 0;
 }
 
 void ResourceAppointmentsView::slotCurrentChanged(  const QModelIndex & )

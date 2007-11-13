@@ -863,7 +863,7 @@ QVariant NodeModel::finishFloat( const Node *node, int role ) const
 
 QVariant NodeModel::assignedResources( const Node *node, int role ) const
 {
-    if ( ! node->type() == Node::Type_Task ) {
+    if ( node->type() != Node::Type_Task ) {
         return QVariant();
     }
     switch ( role ) {

@@ -68,14 +68,14 @@ CalendarEdit::CalendarEdit (QWidget *parent)
     connect (bAddInterval, SIGNAL(clicked()), SLOT(slotAddIntervalClicked()));
 
     connect (bApply, SIGNAL(clicked()), SLOT(slotApplyClicked()));
-    connect (timezone, SIGNAL( activated( int ) ), SLOT( slotTimeZoneChanged( int ) ) );
+    connect (tz, SIGNAL( activated( int ) ), SLOT( slotTimeZoneChanged( int ) ) );
 }
 
 void CalendarEdit::slotTimeZoneChanged( int )
 {
     //kDebug();
     QStringList lst;
-    QString name = timezone->currentText();
+    QString name = tz->currentText();
     KTimeZone tz;
     foreach ( QString s, KSystemTimeZones::timeZones()->zones().keys() ) {
         if ( name == i18n( s.toUtf8() ) ) {
@@ -186,32 +186,32 @@ void CalendarEdit::slotCheckAllFieldsFilled() {
     {
         emit obligatedFieldsFilled(m_changed);
     }
-    else if (state->currentIndex() == 2 && !intervalList->topLevelItemCount() > 0)
+    else if (state->currentIndex() == 2 && !(intervalList->topLevelItemCount() > 0))
     {
         emit obligatedFieldsFilled(false);
     }
 }
 
-void CalendarEdit::setCalendar(Calendar *cal, const QString &tz, bool disable)
+void CalendarEdit::setCalendar(Calendar *cal, const QString &tzString, bool disable)
 {
     m_calendar = cal;
     clear();
     if ( disable ) {
-        timezone->addItem( i18n( tz.toUtf8() ) );
+        tz->addItem( i18n( tzString.toUtf8() ) );
     } else {
         QStringList lst;
         foreach ( QString s, KSystemTimeZones::timeZones()->zones().keys() ) {
             lst << i18n( s.toUtf8() );
         }
         lst.sort();
-        timezone->addItems( lst );
-        timezone->setCurrentIndex( lst.indexOf( i18n( tz.toUtf8() ) ) );
+        tz->addItems( lst );
+        tz->setCurrentIndex( lst.indexOf( i18n( tzString.toUtf8() ) ) );
     }
     calendarPanel->setCalendar(cal);
 }
 
 void CalendarEdit::clear() {
-    timezone->clear();
+    tz->clear();
     clearPanel();
     clearEditPart();
 }
@@ -398,7 +398,7 @@ MacroCommand *CalendarEditDialog::buildCommand() {
             kError()<<"Should always have 7 weekdays"<<endl;
         }
     }
-    // timezone
+    // tz
     if ( original->timeZone() != calendar->timeZone() ) {
         if (macro == 0) macro = new MacroCommand("");
         macro->addCommand( new CalendarModifyTimeZoneCmd( original, calendar->timeZone() ) );

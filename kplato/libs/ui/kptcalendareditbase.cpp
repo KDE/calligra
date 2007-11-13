@@ -61,8 +61,8 @@ CalendarEditBase::CalendarEditBase( QWidget* parent, Qt::WFlags fl )
     groupBox2Layout = new Q3GridLayout( groupBox2->layout() );
     groupBox2Layout->setAlignment( Qt::AlignTop );
 
-    timezone = new QComboBox( groupBox2 );
-    groupBox2Layout->addWidget( timezone, 0, 0 );
+    tz = new QComboBox( groupBox2 );
+    groupBox2Layout->addWidget( tz, 0, 0 );
     
     calendarPanel = new CalendarPanel( groupBox2, "calendarPanel" );
     groupBox2Layout->addWidget( calendarPanel, 1, 0 );

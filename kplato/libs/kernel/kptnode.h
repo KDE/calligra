@@ -239,7 +239,7 @@ public:
     virtual DateTime mustStartOn() const { return m_constraintStartTime; }
     virtual DateTime mustFinishOn() const { return m_constraintEndTime; }
 
-    virtual ResourceGroupRequest *resourceGroupRequest(ResourceGroup */*group*/) const { return 0; }
+    virtual ResourceGroupRequest *resourceGroupRequest(ResourceGroup * /*group*/) const { return 0; }
     virtual QStringList requestNameList() const { return QStringList(); }
     virtual bool containsRequest( const QString &/*identity*/ ) const { return false; }
     virtual ResourceRequest *resourceRequest( const QString &/*name*/ ) const { return 0; }
@@ -312,9 +312,9 @@ public:
     virtual double bcwp( const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return 0.0; }
     
     /// Effort based performance index
-    double effortPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) const { return 0.0; }
+    double effortPerformanceIndex(const QDate &/*date*/, bool * /*error=0*/) const { return 0.0; }
     /// Cost performance index
-    double costPerformanceIndex(const QDate &/*date*/, bool */*error=0*/) const { return 0.0; }
+    double costPerformanceIndex(const QDate &/*date*/, bool * /*error=0*/) const { return 0.0; }
     
     virtual void initiateCalculationLists(MainSchedule &sch) = 0;
     virtual DateTime calculateForward(int /*use*/) = 0;

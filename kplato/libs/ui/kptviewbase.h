@@ -66,7 +66,7 @@ public:
     
     virtual void setZoom(double /*zoom*/) {}
     /// Set the project this view shall handle.
-    virtual void setProject( Project */*project*/ ) {}
+    virtual void setProject( Project * /*project*/ ) {}
     /// Draw data from current part / project
     virtual void draw() {}
     /// Draw data from project.

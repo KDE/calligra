@@ -146,10 +146,10 @@ void PertEditor::dispAvailableTasks(){
             // Checks if the curent node is not a milestone
             // and if it isn't the same as the selected task in the m_tasktree
             if ( currentNode->type() != Node::Type_Milestone 
-		and currentNode->type() != Node::Type_Summarytask 
-		and currentNode->name() != selectedTaskName
-                and  !list_nodeNotView.contains(currentNode)
-                and (m_assignList->selectedListWidget()->findItems(currentNode->name(),0)).empty())
+		&& currentNode->type() != Node::Type_Summarytask 
+		&& currentNode->name() != selectedTaskName
+                &&  !list_nodeNotView.contains(currentNode)
+                && (m_assignList->selectedListWidget()->findItems(currentNode->name(),0)).empty())
             {
                 m_assignList->availableListWidget()->addItem(currentNode->name());
             }
