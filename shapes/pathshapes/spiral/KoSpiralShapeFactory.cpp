@@ -30,7 +30,7 @@ KoSpiralShapeFactory::KoSpiralShapeFactory( QObject *parent )
 : KoShapeFactory( parent, KoSpiralShapeId, i18n( "A spiral shape" ) )
 {
     setToolTip( i18n( "A spiral shape" ) );
-    setIcon("spiral");
+    setIcon("spiral-shape");
     setLoadingPriority( 1 );
 }
 

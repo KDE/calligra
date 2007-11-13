@@ -30,10 +30,10 @@
 #include <math.h>
 
 KoSpiralShape::KoSpiralShape()
-    : m_fade( .96 )
+    : m_fade( .9 )
     , m_kindAngle( M_PI )
     , m_type( Curve )
-    , m_clockwise( false )
+    , m_clockwise( true )
 {
     //m_handles.push_back( QPointF( 50, 0 ) );
     //m_handles.push_back( QPointF( 50, 50 ) );
@@ -192,35 +192,33 @@ void KoSpiralShape::updatePath( const QSizeF &size )
 void KoSpiralShape::createPath( const QSizeF &size )
 {
     clear();
-    uint m_segments = 44;
     QPointF center = QPointF( size.width() / 2.0, size.height() / 2.0 );
     //moveTo( QPointF( size.width(), m_radii.y() ) );
     double adv_ang = ( m_clockwise ? -1.0 : 1.0 ) * M_PI_2;
     // radius of first segment is non-faded radius:
-    double m_radius = 2;//size.height() / 32.0;
+    double m_radius = size.height() / 2.0;
     double r = m_radius;
 
-    //QPointF oldP( center.x(), ( m_clockwise ? -1.0 : 1.0 ) * m_radius + center.y() );
-    QPointF oldP( center.x(), center.y() );
+    QPointF oldP( center.x(), ( m_clockwise ? -1.0 : 1.0 ) * m_radius + center.y() );
     QPointF newP;
-    //QPointF newCenter( center );
-    QPointF newCenter( center.x(), ( m_clockwise ? -1.0 : 1.0 ) * m_radius + center.y() );
+    QPointF newCenter( center );
     moveTo( oldP );
+    uint m_segments = 10;
     //m_handles[0] = oldP;
 
     for ( uint i = 0; i < m_segments; ++i )
     {
-        newP.setX( newCenter.x() - r * cos( adv_ang * ( i + 2 ) ) );
-        newP.setY( newCenter.y() + r * sin( adv_ang * ( i + 2 ) ) );
+        newP.setX( r * cos( adv_ang * ( i + 2 ) ) + newCenter.x() );
+        newP.setY( r * sin( adv_ang * ( i + 2 ) ) + newCenter.y() );
 
         if( m_type == Curve )
             arcTo( oldP + newP - newCenter, newP, r );
         else
             lineTo( newP );
 
-        newCenter -= ( newP - newCenter ) * ( 1.0 - m_fade );
+        newCenter += ( newP - newCenter ) * ( 1.0 - m_fade );
         oldP = newP;
-        r /= m_fade;
+        r *= m_fade;
     }
     //m_handles[1] = QPointF( center.x(), ( m_clockwise ? -1.0 : 1.0 ) * m_radius + center.y() );
     m_points = *m_subpaths[0];
