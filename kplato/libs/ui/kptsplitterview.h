@@ -89,6 +89,8 @@ public:
     void addView( ViewBase *view, QTabWidget *tab, const QString &label );
     /// Return the active view at @p pos
     ViewBase *findView( const QPoint &pos ) const;
+    /// Return the hit view at global position @p glpos
+    ViewBase *hitView( const QPoint &glpos );
 
     /// Loads context info into this view. Reimplement.
     virtual bool loadContext( const KoXmlElement &/*context*/ );

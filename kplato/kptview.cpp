@@ -150,11 +150,15 @@ View::View( Part* part, QWidget* parent )
     layout->setMargin(0);
     layout->addWidget( m_sp );
 
-    ViewListDockerFactory vl(this);
-    ViewListDocker *docker = dynamic_cast<ViewListDocker *>(createDockWidget(&vl));
-    if (docker->view() != this) docker->setView(this);
-    m_viewlist = docker->viewList();
-    
+    if ( part->isEmbedded() || shell() == 0 ) {
+        // Don't use docker if embedded
+        m_viewlist = new ViewListWidget( part, m_sp );
+    } else {
+        ViewListDockerFactory vl(this);
+        ViewListDocker *docker = dynamic_cast<ViewListDocker *>(createDockWidget(&vl));
+        if (docker->view() != this) docker->setView(this);
+        m_viewlist = docker->viewList();
+    }
     m_tab = new QStackedWidget( m_sp );
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1770,22 +1774,23 @@ void View::slotUpdate()
 
 void View::slotGuiActivated( ViewBase *view, bool activate )
 {
+    //FIXME: Avoid unplug if possible, it flashes the gui
+    // always unplug, in case they already are plugged
+    foreach( QString name, view->actionListNames() ) {
+        //kDebug()<<"deactivate"<<name;
+        unplugActionList( name );
+    }
     if ( activate ) {
         foreach( QString name, view->actionListNames() ) {
             //kDebug()<<"activate"<<name<<","<<view->actionList( name ).count();
             plugActionList( name, view->actionList( name ) );
-        }
-    } else {
-        foreach( QString name, view->actionListNames() ) {
-            //kDebug()<<"deactivate"<<name;
-            unplugActionList( name );
         }
     }
 }
 
 void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
-    //kDebug()<<ev->activated();
+    kDebug()<<ev->activated();
     KoView::guiActivateEvent( ev );
     if ( ev->activated() ) {
         // plug my own actionlists, they may be gone
@@ -1800,52 +1805,34 @@ void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 
 KoDocument *View::hitTest( const QPoint &pos )
 {
-    // TODO: The gui handling can certainly be simplified (at least I think so),
-    // by someone who have a better understanding of all the possibilities of KParts
-    // than I have.
-    kDebug()<<pos;
+    //TODO: test this with embedded koffice parts
+    //kDebug()<<pos;
     // pos is in m_tab->currentWidget() coordinates
     QPoint gl = m_tab->currentWidget()->mapToGlobal(pos);
+    kDebug()<<pos<<gl;
     if ( m_tab->currentWidget()->frameGeometry().contains( m_tab->currentWidget()->mapFromGlobal( gl ) ) ) {
-        if ( koDocument() == dynamic_cast<KoDocument*>(partManager()->activePart() ) ) {
-            // just activating new view on the same doc
-            SplitterView *sp = dynamic_cast<SplitterView*>( m_tab->currentWidget() );
-            if ( sp ) {
-                // Check which view has actually been hit (can aslo be the splitter)
-                ViewBase *v = sp->findView( pos );
-                if ( v ) {
-                    kDebug()<<"Hit on:"<<v;
-                    v->setGuiActive( true );
-                }
+        // Check if own subview
+        ViewBase *v = dynamic_cast<ViewBase*>( m_tab->currentWidget() );
+        if ( v ) {
+            kDebug()<<"Hit on:"<<v;
+            v = v->hitView( gl );
+            v->setGuiActive( true );
+            return koDocument();
+        }
+        SplitterView *sp = dynamic_cast<SplitterView*>( m_tab->currentWidget() );
+        if ( sp ) {
+            // Check which subview has actually been hit (can aslo be the splitter)
+            v = sp->findView( pos );
+            if ( v ) {
+                kDebug()<<"Hit on:"<<sp<<" -> "<<v;
+                v->hitView( gl );
+                v->setGuiActive( true );
+                return koDocument();
             }
         }
-        return koDocument()->hitTest( pos, this );
     }
-    // get a 0 based geometry
-    QRect r = m_viewlist->frameGeometry();
-    r.translate( -r.topLeft() );
-    if ( r.contains( m_viewlist->mapFromGlobal( gl ) ) ) {
-        if ( getPart()->isEmbedded() ) {
-            // TODO: Needs testing
-            return dynamic_cast<KoDocument*>(partManager()->activePart()); // NOTE: We only handle koffice parts!
-        }
-        return 0;
-    }
-    for (int i = 0; i < m_sp->count(); ++i ) {
-        QWidget *w = m_sp->handle( i );
-        r = w->frameGeometry();
-        r.translate( -r.topLeft() );
-        if ( r.contains( w->mapFromGlobal( gl ) ) ) {
-            if ( getPart()->isEmbedded() ) {
-            // TODO: Needs testing
-                return dynamic_cast<KoDocument*>(partManager()->activePart()); // NOTE: We only handle koffice parts!
-            }
-            return 0;
-        }
-    }
-    kDebug()<<"No hit:"<<pos;
-    return 0;
-
+    // check child documents
+    return koDocument()->hitTest( pos, this );
 }
 
 void View::createChildDocumentViews()

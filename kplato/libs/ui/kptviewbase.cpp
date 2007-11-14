@@ -27,6 +27,7 @@
 #include <KoDocument.h>
 
 #include <QHeaderView>
+#include <QPoint>
 
 namespace KPlato
 {
@@ -51,6 +52,13 @@ void ViewBase::setGuiActive( bool active ) // virtual slot
     //kDebug()<<active;
     emit guiActivated( this, active );
 }
+
+ViewBase *ViewBase::hitView( const QPoint &glpos )
+{
+    kDebug()<<glpos;
+    return this;
+}
+
 
 //------------------------------------------------
 

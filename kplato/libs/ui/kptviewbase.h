@@ -102,6 +102,8 @@ public:
     virtual QList<QAction*> contextActionList() const { return m_contextActionList; }
     void addContextAction( QAction *action ) { m_contextActionList.append( action ); }
     
+    virtual ViewBase *hitView( const QPoint &pos );
+
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
