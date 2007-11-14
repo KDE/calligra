@@ -32,15 +32,14 @@
 KoSpiralShape::KoSpiralShape()
     : m_fade( .9 )
     , m_kindAngle( M_PI )
+    , m_radii( 100.0, 100.0 )
     , m_type( Curve )
     , m_clockwise( true )
 {
     //m_handles.push_back( QPointF( 50, 0 ) );
     //m_handles.push_back( QPointF( 50, 50 ) );
     //m_handles.push_back( QPointF( 0, 50 ) );
-    QSizeF size( 100, 100 );
-    //createPath( size );
-    updatePath( size );
+    createPath( QSizeF( m_radii.x(), m_radii.y() ) );
 }
 
 KoSpiralShape::~KoSpiralShape()
@@ -192,11 +191,11 @@ void KoSpiralShape::updatePath( const QSizeF &size )
 void KoSpiralShape::createPath( const QSizeF &size )
 {
     clear();
-    QPointF center = QPointF( size.width() / 2.0, size.height() / 2.0 );
+    QPointF center = QPointF( m_radii.x() / 2.0, m_radii.y() / 2.0 );
     //moveTo( QPointF( size.width(), m_radii.y() ) );
     double adv_ang = ( m_clockwise ? -1.0 : 1.0 ) * M_PI_2;
     // radius of first segment is non-faded radius:
-    double m_radius = size.height() / 2.0;
+    double m_radius = m_radii.x() / 2.0;
     double r = m_radius;
 
     QPointF oldP( center.x(), ( m_clockwise ? -1.0 : 1.0 ) * m_radius + center.y() );
@@ -215,9 +214,9 @@ void KoSpiralShape::createPath( const QSizeF &size )
 	    double rx = abs( oldP.x() - newP.x() );
 	    double ry = abs( oldP.y() - newP.y() );
 	    if ( m_clockwise ) {
-                arcTo( rx, ry, ( ( i + 2 ) % 4 ) * 90, 90 );
+                arcTo( rx, ry, ( ( i + 1 ) % 4 ) * 90, 90 );
 	    } else {
-                arcTo( rx, ry, 360 - ( ( i + 2 ) % 4 ) * 90, -90 );
+                arcTo( rx, ry, 360 - ( ( i + 1 ) % 4 ) * 90, -90 );
 	    }
         } else
             lineTo( newP );

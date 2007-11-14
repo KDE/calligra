@@ -88,7 +88,7 @@ private:
     double m_kindAngle;
     // the center of the spiral
     QPointF m_center;
-    // the radii of the ellips
+    // the radii of the spiral
     QPointF m_radii;
     // the actual spiral type
     KoSpiralType m_type;
