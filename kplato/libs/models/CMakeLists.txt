@@ -5,6 +5,7 @@ include_directories(
     ../kernel 
     ${KOMAIN_INCLUDES}
     ${CMAKE_SOURCE_DIR}/kdgantt
+    ${KDE4_INCLUDES}
 )
 
 ########### KPlato data models library ###############
@@ -17,6 +18,12 @@ set(kplatomodels_LIB_SRCS
     kptdurationwidget.cpp
     kptdurationspinbox.cpp
     kpttaskstatusmodel.cpp
+    kptresourcemodel.cpp
+    kptcalendarmodel.cpp
+    kptschedulemodel.cpp
+    kptaccountsmodel.cpp
+    kptpertcpmmodel.cpp
+    kptresourceappointmentsmodel.cpp
 )
 
 kde4_add_ui_files(kplatomodels_LIB_SRCS
@@ -25,7 +32,7 @@ kde4_add_ui_files(kplatomodels_LIB_SRCS
 
 kde4_add_library(kplatomodels SHARED ${kplatomodels_LIB_SRCS})
 
-target_link_libraries(kplatomodels kplatokernel)
+target_link_libraries(kplatomodels kplatokernel ${KDE4_KABC_LIBS})
 
 set_target_properties(kplatomodels PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 

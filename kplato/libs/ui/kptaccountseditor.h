@@ -23,9 +23,8 @@
 #include "kplatoui_export.h"
 
 #include <kptviewbase.h>
-#include <kptitemmodelbase.h>
+#include "kptaccountsmodel.h"
 
-#include <QTreeWidget>
 
 class KoDocument;
 
@@ -37,53 +36,6 @@ namespace KPlato
 
 class Project;
 class Account;
-
-class KPLATOUI_EXPORT AccountItemModel : public ItemModelBase
-{
-    Q_OBJECT
-public:
-    explicit AccountItemModel( QObject *parent = 0 );
-    ~AccountItemModel();
-
-    virtual void setProject( Project *project );
-
-    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
-
-    virtual QModelIndex parent( const QModelIndex & index ) const;
-    virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
-    virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
-    QModelIndex index( const Account* account ) const;
-
-    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
-    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
-
-    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
-    virtual bool setData( const QModelIndex & index, const QVariant & value, int role = Qt::EditRole );
-
-
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-
-    Account *account( const QModelIndex &index ) const;
-    QModelIndex insertAccount( Account *account, Account *parent = 0 );
-    void removeAccounts( QList<Account*> lst );
-    
-protected slots:
-    void slotAccountChanged( Account* );
-    void slotAccountToBeInserted( const Account *parent, int row );
-    void slotAccountInserted( const Account *account );
-    void slotAccountToBeRemoved( const Account *account );
-    void slotAccountRemoved( const Account *account );
-
-protected:
-    QVariant name( const Account *account, int role ) const;
-    bool setName( Account *account, const QVariant &value, int role );
-    
-    QVariant description( const Account *account, int role ) const;
-    bool setDescription( Account *account, const QVariant &value, int role );
-
-private:
-    Account *m_account; // test for sane operation
-};
 
 class KPLATOUI_EXPORT AccountTreeView : public TreeViewBase
 {
