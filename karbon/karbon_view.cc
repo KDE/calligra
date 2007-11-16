@@ -360,8 +360,15 @@ void KarbonView::dropEvent( QDropEvent *e )
 */
 }
 
+void KarbonView::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
+{
+    Q_UNUSED( printer );
+    Q_UNUSED( printDialog );
+}
+
 void KarbonView::print( QPrinter &printer, QPrintDialog &printDialog )
 {
+    Q_UNUSED( printDialog );
     debugView("KarbonView::print(QPrinter)");
 
     const int resolution = 600;
