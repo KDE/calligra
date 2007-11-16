@@ -28,6 +28,7 @@ Shapes/Tools:
 - check if the KoTextShape provided by KWord is flexible enough for our use cases (i.e. text along a path)
   KoText intends to have a shape that does most of what karbon needs.  Text along a path is an exception,
   but that feature will be provided by Qt4.3 (in QPainterPath) [TZ]
+  see example code form zack rusin http://labs.trolltech.com/page/Graphics/Examples
 - add support for adding shapes like sinus, spiral, etc. (see odf spec for custom shape/enhanced geometry)
 - implement changing a single path point's type from line to curve and vice versa
 - implement something like kword/part/frames/KWCopyShape.h
@@ -58,6 +59,7 @@ Plugins:
 
 Filters:
 --------
+- make svg import and export work directly with the document to not lose any data from there !!!
 - port the filters to create a document with flake shapes
 - fix the eps and ps filters (maybe using ps2pdf and then use a pdf import filter)
 - text support for wmf and svg import filter
@@ -73,18 +75,11 @@ General:
 - consider the old todos and wishes when implementing/porting the above parts
 - replace VColor with KoColor
 
-
-From the usability review of Thomas Zander
-------------------------------------------
-
-* Toolbars
-  - Toolbars should be persistent					----
-  - toolbox to the left by default					----
-
-* Toolbox
-  - add kbd shortcuts to the tools					----
-  - make 'ESC' select the 'Select tool'					----
-
+Resources:
+-----------
+- implement saving of KoStopGradient to svg
+- implement adding user defined gradients to the gradient resource server (addResource)
+- add a method to KoResource to check whether the resource can be deleted (user defined resources)
 
 All time favourites :)
 -----------------------
