@@ -106,7 +106,6 @@ Chord::Chord(Staff* staff, Duration duration, int dots) : d(new Private)
 
 Chord::~Chord()
 {
-    Q_FOREACH(Note* n, d->notes) delete n;
     delete d;
 }
 
@@ -191,6 +190,8 @@ Note* Chord::addNote(Staff* staff, int pitch, int accidentals)
 
 void Chord::addNote(Note* note)
 {
+    Q_ASSERT( note );
+    note->setParent(this);
     if (!staff()) setStaff(note->staff());
     for (int i = 0; i < d->notes.size(); i++) {
         if (d->notes[i]->pitch() > note->pitch()) {

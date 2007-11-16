@@ -19,41 +19,34 @@
 #include "Part.h"
 #include "Staff.h"
 #include "Voice.h"
+#include "Sheet.h"
 #include <QtCore/QList>
+#include <kdebug.h>
 
 namespace MusicCore {
 
 class Part::Private
 {
 public:
-    Sheet* sheet;
     QString name;
     QString shortName;
     QList<Staff*> staves;
     QList<Voice*> voices;
 };
 
-Part::Part(Sheet* sheet, const QString& name) : d(new Private)
+Part::Part(Sheet* sheet, const QString& name) : QObject(sheet), d(new Private)
 {
-    d->sheet = sheet;
     d->name = name;
 }
 
 Part::~Part()
 {
-    Q_FOREACH(Staff* s, d->staves) delete s;
-    Q_FOREACH(Voice* v, d->voices) delete v;
     delete d;
 }
 
 Sheet* Part::sheet()
 {
-    return d->sheet;
-}
-
-void Part::setSheet(Sheet* sheet)
-{
-    d->sheet = sheet;
+    return qobject_cast<Sheet*>(parent());
 }
 
 QString Part::name() const

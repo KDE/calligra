@@ -18,13 +18,13 @@
  */
 #include "StaffSystem.h"
 #include "Clef.h"
+#include "Sheet.h"
 
 namespace MusicCore {
 
 class StaffSystem::Private
 {
 public:
-    Sheet* sheet;
     double top;
     double height;
     int firstBar;
@@ -34,9 +34,8 @@ public:
 };
 
 StaffSystem::StaffSystem(Sheet* sheet)
-    : d(new Private)
+    : QObject(sheet), d(new Private)
 {
-    d->sheet = sheet;
     d->top = 0.0;
     d->height = 100.0;
     d->firstBar = 0;

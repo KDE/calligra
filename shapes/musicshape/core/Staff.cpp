@@ -33,15 +33,13 @@ namespace MusicCore {
 class Staff::Private
 {
 public:
-    Part* part;
     double spacing;
     int lineCount;
     double lineSpacing;
 };
 
-Staff::Staff(Part* part) : d(new Private)
+Staff::Staff(Part* part) : QObject(part), d(new Private)
 {
-    d->part = part;
     d->spacing = 60;
     d->lineCount = 5;
     d->lineSpacing = 5.0;
@@ -54,7 +52,7 @@ Staff::~Staff()
 
 Part* Staff::part()
 {
-    return d->part;
+    return qobject_cast<Part*>(parent());
 }
 
 double Staff::spacing() const
@@ -71,7 +69,7 @@ void Staff::setSpacing(double spacing)
 
 double Staff::top()
 {
-    if (!d->part) return 0;
+    if (!part()) return 0;
     int n = 0;
     for (int i = 0; i < part()->sheet()->partCount(); i++) {
         Part* p = part()->sheet()->part(i);
@@ -127,7 +125,7 @@ int Staff::line(double y) const
 
 Clef* Staff::lastClefChange(int bar, int time, Clef* oldClef)
 {
-    if (!d->part) return NULL;
+    if (!part()) return NULL;
     
     if (time < 0) time = INT_MAX;
     for (int b = bar; b >= 0; b--) {
@@ -148,12 +146,12 @@ Clef* Staff::lastClefChange(int bar, int time, Clef* oldClef)
 
 Clef* Staff::lastClefChange(Bar* bar, int time, Clef* oldClef)
 {
-    return lastClefChange(d->part->sheet()->indexOfBar(bar), time, oldClef);
+    return lastClefChange(part()->sheet()->indexOfBar(bar), time, oldClef);
 }
 
 KeySignature* Staff::lastKeySignatureChange(int bar)
 {
-    if (!d->part) return NULL;
+    if (!part()) return NULL;
     
     for (int b = bar; b >= 0; b--) {
         Bar* curBar = part()->sheet()->bar(b);
@@ -168,12 +166,12 @@ KeySignature* Staff::lastKeySignatureChange(int bar)
 
 KeySignature* Staff::lastKeySignatureChange(Bar* bar)
 {
-    return lastKeySignatureChange(d->part->sheet()->indexOfBar(bar));
+    return lastKeySignatureChange(part()->sheet()->indexOfBar(bar));
 }
 
 TimeSignature* Staff::lastTimeSignatureChange(int bar)
 {
-    if (!d->part) return NULL;
+    if (!part()) return NULL;
     
     for (int b = bar; b >= 0; b--) {
         Bar* curBar = part()->sheet()->bar(b);
@@ -188,7 +186,7 @@ TimeSignature* Staff::lastTimeSignatureChange(int bar)
 
 TimeSignature* Staff::lastTimeSignatureChange(Bar* bar)
 {
-    return lastTimeSignatureChange(d->part->sheet()->indexOfBar(bar));
+    return lastTimeSignatureChange(part()->sheet()->indexOfBar(bar));
 }
 
 } // namespace MusicCore

@@ -24,7 +24,6 @@ namespace MusicCore {
 class PartGroup::Private
 {
 public:
-    Sheet* sheet;
     GroupSymbol symbol;
     QString name;
     QString shortName;
@@ -33,9 +32,8 @@ public:
     bool commonBarLines;
 };
 
-PartGroup::PartGroup(Sheet* sheet, int firstPart, int lastPart) : d(new Private)
+PartGroup::PartGroup(Sheet* sheet, int firstPart, int lastPart) : QObject(sheet), d(new Private)
 {
-    d->sheet = sheet;
     d->symbol = DefaultSymbol;
     d->firstPart = firstPart;
     d->lastPart = lastPart;
@@ -49,7 +47,7 @@ PartGroup::~PartGroup()
 
 Sheet* PartGroup::sheet()
 {
-    return d->sheet;
+    return qobject_cast<Sheet*>(parent());
 }
 
 int PartGroup::firstPart() const

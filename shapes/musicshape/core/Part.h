@@ -54,12 +54,6 @@ public:
     Sheet* sheet();
 
     /**
-     * Changes the sheet this part is part of. Do not call this method after the part has been added to a sheet using
-     * the addPart method.
-     */
-    void setSheet(Sheet* sheet);
-
-    /**
      * Return the name of this part.
      */
     QString name() const;

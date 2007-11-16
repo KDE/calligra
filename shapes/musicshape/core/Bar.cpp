@@ -19,6 +19,7 @@
 #include "Bar.h"
 #include "VoiceBar.h"
 #include "StaffElement.h"
+#include "Sheet.h"
 
 #include <QtCore/QHash>
 #include <QtCore/QList>
@@ -28,7 +29,6 @@ namespace MusicCore {
 class Bar::Private
 {
 public:
-    Sheet* sheet;
     QHash<Voice*, VoiceBar*> voices;
     QPointF position;
     double size;
@@ -38,9 +38,8 @@ public:
     QList<StaffElement*> staffElements;
 };
 
-Bar::Bar(Sheet* sheet) : d(new Private)
+Bar::Bar(Sheet* sheet) : QObject(sheet), d(new Private)
 {
-    d->sheet = sheet;
     setDesiredSize(100);
     d->prefix = 0;
 }
@@ -52,7 +51,7 @@ Bar::~Bar()
 
 Sheet* Bar::sheet()
 {
-    return d->sheet;
+    return qobject_cast<Sheet*>(parent());
 }
 
 VoiceBar* Bar::voice(Voice* voice)

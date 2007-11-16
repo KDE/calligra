@@ -28,12 +28,10 @@ namespace MusicCore {
 class Voice::Private
 {
 public:
-    Part* part;
 };
 
-Voice::Voice(Part* part) : d(new Private)
+Voice::Voice(Part* part) : QObject(part), d(new Private)
 {
-    d->part = part;
 }
 
 Voice::~Voice()
@@ -43,7 +41,7 @@ Voice::~Voice()
 
 Part* Voice::part()
 {
-    return d->part;
+    return qobject_cast<Part*>(parent());;
 }
 
 VoiceBar* Voice::bar(Bar* bar)

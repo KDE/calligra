@@ -42,10 +42,6 @@ Sheet::Sheet() : d(new Private)
 
 Sheet::~Sheet()
 {
-    Q_FOREACH(Part* p, d->parts) delete p;
-    Q_FOREACH(PartGroup* ph, d->partGroups) delete ph;
-    Q_FOREACH(Bar* b, d->bars) delete b;
-    Q_FOREACH(StaffSystem* ss, d->staffSystems) delete ss;
     delete d;
 }
 
@@ -76,7 +72,7 @@ Part* Sheet::addPart(const QString& name)
 void Sheet::addPart(Part* part)
 {
     Q_ASSERT( part );
-    part->setSheet(this);
+    part->setParent(this);
     d->parts.append(part);
     emit partAdded(d->parts.size(), part);
 }
@@ -94,7 +90,7 @@ void Sheet::insertPart(int before, Part* part)
 {
     Q_ASSERT( before >= 0 && before <= partCount() );
     Q_ASSERT( part );
-    part->setSheet(this);
+    part->setParent(this);
     d->parts.insert(before, part);
     emit partAdded(before, part);
 }
@@ -132,7 +128,7 @@ PartGroup* Sheet::addPartGroup(int firstPart, int lastPart)
 {
     Q_ASSERT( firstPart >= 0 && firstPart < partCount() );
     Q_ASSERT( lastPart >= 0 && lastPart < partCount() );
-    PartGroup *group = new PartGroup( this, firstPart, lastPart );
+    PartGroup *group = new PartGroup(this, firstPart, lastPart);
     d->partGroups.append(group);
     return group;
 }
