@@ -73,8 +73,6 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QRectF>
 #include <QtGui/QPainter>
-#include <Qt3Support/q3paintdevicemetrics.h>
-#include <Qt3Support/Q3ValueList>
 
 
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
@@ -357,12 +355,16 @@ KarbonPart::repaintAllViews( bool /*repaint*/ )
 
 void KarbonPart::paintContent( QPainter& painter, const QRect& rect)
 {
+    Q_UNUSED( painter );
+    Q_UNUSED( rect );
     kDebug(38000) <<"**** part->paintContent()";
 
+    /*
     QRectF r = rect;
     double zoomFactorX = double( r.width() ) / double( document().pageSize().width() );
     double zoomFactorY = double( r.height() ) / double( document().pageSize().height() );
     double zoomFactor = qMin( zoomFactorX, zoomFactorY );
+    */
 }
 
 void
