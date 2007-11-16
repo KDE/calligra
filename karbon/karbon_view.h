@@ -61,7 +61,6 @@ class KoRuler;
 class KoZoomController;
 
 class VDocumentTab;
-class KoStrokeDocker;
 class VColorDocker;
 class VStyleDocker;
 class KarbonTransformDocker;
@@ -85,15 +84,8 @@ public:
 
     KarbonCanvas* canvasWidget() const { return m_canvas; }
 
-    virtual VPainterFactory* painterFactory() const { return m_painterFactory; }
-
-
     // printing support, override from KoView
-    virtual void setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
-    {
-        Q_UNUSED( printer );
-        Q_UNUSED( printDialog );
-    }
+    virtual void setupPrinter( QPrinter &printer, QPrintDialog &printDialog );
     virtual void print( QPrinter& printer, QPrintDialog &printDialog );
 
     KoContextHelpAction* contextHelpAction() const { return m_contextHelpAction; }
@@ -207,7 +199,6 @@ private:
     KoRuler            *m_horizRuler;
     KoRuler            *m_vertRuler;
 
-    VPainterFactory        *m_painterFactory;
     KarbonStylePreviewDocker * m_stylePreview;
 
     KAction            *m_groupObjects;
@@ -233,7 +224,6 @@ private:
     //dockers
     VDocumentTab        *m_DocumentTab;
     VColorDocker        *m_ColorManager;
-    KoStrokeDocker        *m_strokeDocker;
     VStyleDocker        *m_styleDocker;
     KarbonTransformDocker *m_TransformDocker;
     KarbonLayerDocker        *m_layerDocker;
