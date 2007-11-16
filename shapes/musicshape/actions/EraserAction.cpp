@@ -45,91 +45,36 @@
 using namespace MusicCore;
 
 EraserAction::EraserAction(SimpleEntryTool* tool)
-    : AbstractMusicAction(KIcon("eraser"), i18n("Eraser"), tool)
+    : AbstractNoteMusicAction(KIcon("eraser"), i18n("Eraser"), tool)
 {
 }
 
-inline static double sqr(double a) { return a*a; }
-
-void EraserAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
+void EraserAction::mousePress(Chord* chord, Note* note, double distance, const QPointF& pos)
 {
-    Part* part = staff->part();
-    Sheet* sheet = part->sheet();
-    Bar* bar = sheet->bar(barIdx);
-
-    Clef* clef = staff->lastClefChange(barIdx, 0);
-
-    // loop over all noteheads
-    double closestDist = 1e9;
-    Note* closestNote = 0;
-    Chord* chord = 0;
-
-    // outer loop, loop over all voices
-    for (int v = 0; v < part->voiceCount(); v++) {
-        Voice* voice = part->voice(v);
-        VoiceBar* vb = voice->bar(bar);
-
-        // next loop over all chords
-        for (int e = 0; e < vb->elementCount(); e++) {
-            Chord* c = dynamic_cast<Chord*>(vb->element(e));
-            if (!c) continue;
-
-            double centerX = c->x() + (c->width() / 2);
-
-            if (c->noteCount() == 0) {
-                double centerY = c->y() + (c->height() / 2);
-                double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
-                if (dist < closestDist) {
-                    closestDist = dist;
-                    closestNote = NULL;
-                    chord = c;
-                }
-            }
-            // lastly loop over all noteheads
-            for (int n = 0; n < c->noteCount(); n++) {
-                Note* note = c->note(n);
-                if (note->staff() != staff) continue;
-
-                int line = clef->pitchToLine(note->pitch());
-                double centerY = line * staff->lineSpacing() / 2;
-
-                double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
-                if (dist < closestDist) {
-                    closestDist = dist;
-                    closestNote = note;
-                    chord = c;
-                }
-            }
-        }
-    }
+    Q_UNUSED( pos );
     
-    StaffElement* se = 0;
-    for (int e = 0; e < bar->staffElementCount(staff); e++) {
-        StaffElement* elem = bar->staffElement(staff, e);
-        double centerX = elem->x() + (elem->width() / 2);
-        double centerY = elem->y() + (elem->height() / 2);
-        double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
-        if (dist < closestDist) {
-            se = elem;
-            closestDist = dist;
-            chord = 0;
-        }
-    }
-
-    if (!chord && !se) return;
-    if (closestDist > 10) return; // bah, magic numbers are ugly....
-
-    if (chord) {
-        if (closestNote && chord->noteCount() > 1) {
-            m_tool->addCommand(new RemoveNoteCommand(m_tool->shape(), chord, closestNote));
-        } else {
-            m_tool->addCommand(new RemoveChordCommand(m_tool->shape(), chord));
-        }
+    if (!chord) return;
+    if (distance > 10) return;
+    
+    if (note && chord->noteCount() > 1) {
+        m_tool->addCommand(new RemoveNoteCommand(m_tool->shape(), chord, note));
     } else {
-        // remove staff element
-        if (barIdx > 0 || se->startTime() > 0) {
-            // don't allow removal of staff elements at the start of the first bar
-            m_tool->addCommand(new RemoveStaffElementCommand(m_tool->shape(), se, bar));
-        }
+        m_tool->addCommand(new RemoveChordCommand(m_tool->shape(), chord));
+    }
+}
+
+void EraserAction::mousePress(StaffElement* se, double distance, const QPointF& pos)
+{
+    Q_UNUSED( pos );
+    
+    if (!se) return;
+    if (distance > 10) return;
+    
+    Bar* bar = se->bar();
+    Sheet* sheet = bar->sheet();
+    // remove staff element
+    if (bar != sheet->bar(0) || se->startTime() > 0) {
+        // don't allow removal of staff elements at the start of the first bar
+        m_tool->addCommand(new RemoveStaffElementCommand(m_tool->shape(), se, bar));
     }
 }

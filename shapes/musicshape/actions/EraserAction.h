@@ -19,14 +19,15 @@
 #ifndef ERASERACTION_H
 #define ERASERACTION_H
 
-#include "AbstractMusicAction.h"
+#include "AbstractNoteMusicAction.h"
 
-class EraserAction : public AbstractMusicAction
+class EraserAction : public AbstractNoteMusicAction
 {
 public:
     EraserAction(SimpleEntryTool* tool);
 
-    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos);
+    virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, double distance, const QPointF& pos);
+    virtual void mousePress(MusicCore::StaffElement* note, double distance, const QPointF& pos);
 };
 
 #endif // ERASERACTION_H

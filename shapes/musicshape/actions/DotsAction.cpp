@@ -43,44 +43,17 @@
 using namespace MusicCore;
 
 DotsAction::DotsAction(SimpleEntryTool* tool)
-    : AbstractMusicAction(KIcon("music-dottednote"), i18n("Dots"), tool)
+    : AbstractNoteMusicAction(KIcon("music-dottednote"), i18n("Dots"), tool)
 {
 }
 
-inline static double sqr(double a) { return a*a; }
-
-void DotsAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
+void DotsAction::mousePress(Chord* chord, Note* note, double distance, const QPointF& pos)
 {
-    Part* part = staff->part();
-    Sheet* sheet = part->sheet();
-    Bar* bar = sheet->bar(barIdx);
-    
-    // loop over all chords
-    double closestDist = 1e9;
-    Chord* chord = 0;
-    
-    // outer loop, loop over all voices
-    for (int v = 0; v < part->voiceCount(); v++) {
-        Voice* voice = part->voice(v);
-        VoiceBar* vb = voice->bar(bar);
-        
-        // next loop over all chords
-        for (int e = 0; e < vb->elementCount(); e++) {
-            Chord* c = dynamic_cast<Chord*>(vb->element(e));
-            if (!c) continue;
-            
-            double centerX = c->x() + (c->width() / 2);
-            double centerY = c->y() + (c->height() / 2);
-            double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
-            if (dist < closestDist) {
-                closestDist = dist;
-                chord = c;
-            }
-        }
-    }
-    
+    Q_UNUSED( note );
+    Q_UNUSED( pos );
+
     if (!chord) return;
-    if (closestDist > 10) return; // bah, magic numbers are ugly....
+    if (distance > 10) return; // bah, magic numbers are ugly....
     
     m_tool->addCommand(new AddDotCommand(m_tool->shape(), chord));
 }

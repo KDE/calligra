@@ -19,15 +19,15 @@
 #ifndef ACCIDENTALACTION_H
 #define ACCIDENTALACTION_H
 
-#include "AbstractMusicAction.h"
+#include "AbstractNoteMusicAction.h"
 
-class AccidentalAction : public AbstractMusicAction
+class AccidentalAction : public AbstractNoteMusicAction
 {
 public:
     AccidentalAction(int accidentals, SimpleEntryTool* tool);
 
     virtual void renderPreview(QPainter& painter, const QPointF& point);
-    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos);
+    virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, double distance, const QPointF& pos);
 private:
     int m_accidentals;
 };

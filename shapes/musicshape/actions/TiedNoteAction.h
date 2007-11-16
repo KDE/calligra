@@ -19,14 +19,14 @@
 #ifndef TIEDNOTEACTION_H
 #define TIEDNOTEACTION_H
 
-#include "AbstractMusicAction.h"
+#include "AbstractNoteMusicAction.h"
 
-class TiedNoteAction : public AbstractMusicAction
+class TiedNoteAction : public AbstractNoteMusicAction
 {
 public:
     TiedNoteAction(SimpleEntryTool* tool);
     
-    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos);
+    virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, double distance, const QPointF& pos);
 };
 
 #endif // ERASERACTION_H

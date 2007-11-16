@@ -19,14 +19,14 @@
 #ifndef DOTSACTION_H
 #define DOTSACTION_H
 
-#include "AbstractMusicAction.h"
+#include "AbstractNoteMusicAction.h"
 
-class DotsAction : public AbstractMusicAction
+class DotsAction : public AbstractNoteMusicAction
 {
 public:
     DotsAction(SimpleEntryTool* tool);
     
-    virtual void mousePress(MusicCore::Staff* staff, int bar, const QPointF& pos);
+    virtual void mousePress(MusicCore::Chord* chord, MusicCore::Note* note, double distance, const QPointF& pos);
 };
 
 #endif // DOTSACTION_H

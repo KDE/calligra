@@ -71,7 +71,7 @@ static QString getText(int accidentals)
 }
 
 AccidentalAction::AccidentalAction(int accidentals, SimpleEntryTool* tool)
-    : AbstractMusicAction(getIcon(accidentals), getText(accidentals), tool)
+    : AbstractNoteMusicAction(getIcon(accidentals), getText(accidentals), tool)
     , m_accidentals(accidentals)
 {
 }
@@ -81,53 +81,13 @@ void AccidentalAction::renderPreview(QPainter& painter, const QPointF& point)
     m_tool->shape()->renderer()->renderAccidental(painter, m_accidentals, point, Qt::gray);
 }
 
-static inline double sqr(double a)
+void AccidentalAction::mousePress(Chord* chord, Note* note, double distance, const QPointF& pos)
 {
-    return a * a;
-}
+    Q_UNUSED( chord );
+    Q_UNUSED( pos );
 
-void AccidentalAction::mousePress(Staff* staff, int barIdx, const QPointF& pos)
-{
-    Part* part = staff->part();
-    Sheet* sheet = part->sheet();
-    Bar* bar = sheet->bar(barIdx);
+    if (!note) return;
+    if (distance > 15) return; // bah, magic numbers are ugly....
 
-    Clef* clef = staff->lastClefChange(barIdx, 0);
-
-    // loop over all noteheads
-    double closestDist = 1e9;
-    Note* closestNote = 0;
-
-    // outer loop, loop over all voices
-    for (int v = 0; v < part->voiceCount(); v++) {
-        Voice* voice = part->voice(v);
-        VoiceBar* vb = voice->bar(bar);
-
-        // next loop over all chords
-        for (int e = 0; e < vb->elementCount(); e++) {
-            Chord* c = dynamic_cast<Chord*>(vb->element(e));
-            if (!c) continue;
-
-            double centerX = c->x() + (c->width() / 2);
-            // lastly loop over all noteheads
-            for (int n = 0; n < c->noteCount(); n++) {
-                Note* note = c->note(n);
-                if (note->staff() != staff) continue;
-
-                int line = clef->pitchToLine(note->pitch());
-                double centerY = line * staff->lineSpacing() / 2;
-
-                double dist = sqrt(sqr(centerX - pos.x()) + sqr(centerY - pos.y()));
-                if (dist < closestDist) {
-                    closestDist = dist;
-                    closestNote = note;
-                }
-            }
-        }
-    }
-
-    if (!closestNote) return;
-    if (closestDist > 15) return; // bah, magic numbers are ugly....
-
-    m_tool->addCommand(new SetAccidentalsCommand(m_tool->shape(), closestNote, m_accidentals));
+    m_tool->addCommand(new SetAccidentalsCommand(m_tool->shape(), note, m_accidentals));
 }

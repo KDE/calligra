@@ -47,6 +47,7 @@ SET (musicshape_LIB_SRCS
     dialogs/StaffElementPreviewWidget.cpp
 
     actions/AbstractMusicAction.cpp
+    actions/AbstractNoteMusicAction.cpp
     actions/NoteEntryAction.cpp
     actions/AccidentalAction.cpp
     actions/EraserAction.cpp
