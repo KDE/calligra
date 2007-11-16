@@ -60,8 +60,10 @@ ItemViewSettup::ItemViewSettup( TreeViewBase *view, bool includeColumn0, QWidget
 
     QMap<int, Item*> map;
     int c = includeColumn0 ? 0 : 1;
+    kDebug()<<includeColumn0<<c;
     for ( ; c < model->columnCount(); ++c ) {
         Item *item = new Item( c, model->headerData( c, Qt::Horizontal ).toString() );
+        item->setToolTip( model->headerData( c, Qt::Horizontal, Qt::ToolTipRole ).toString() );
         if ( view->isColumnHidden( c ) ) {
             selector->availableListWidget()->addItem( item );
         } else {

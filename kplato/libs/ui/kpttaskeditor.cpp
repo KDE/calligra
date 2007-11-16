@@ -84,12 +84,14 @@ void NodeTreeView::slotActivated( const QModelIndex index )
 TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
-    setupGui();
-
+    kDebug()<<"----------------- Create TaskEditor ----------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new NodeTreeView( part, this );
     l->addWidget( m_view );
+    kDebug()<<m_view->actionSplitView();
+    setupGui();
+
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
     QList<int> lst1; lst1 << 1 << -1;
     QList<int> lst2; lst2 << 0 << 18 << -1;
@@ -111,6 +113,7 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
     connect( m_view, SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
 
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    
 }
 
 void TaskEditor::updateReadWrite( bool rw )
@@ -298,15 +301,31 @@ void TaskEditor::setupGui()
     addAction( name, actionMoveTaskDown );
 
     // Add the context menu actions for the view options
+    connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
+    addContextAction( m_view->actionSplitView() );
+
     actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
     addContextAction( actionOptions );
 }
 
+void TaskEditor::slotSplitView()
+{
+    kDebug();
+    m_view->setViewSplitMode( ! m_view->isViewSplit() );
+}
+
+
 void TaskEditor::slotOptions()
 {
     kDebug();
-    ItemViewSettupDialog dlg( m_view->slaveView() );
+    bool col0 = false;
+    TreeViewBase *v = m_view->slaveView();
+    if ( v->isHidden() ) {
+        v = m_view->masterView();
+        col0 = true;
+    }
+    ItemViewSettupDialog dlg( v, col0 );
     dlg.exec();
 }
 
@@ -434,23 +453,27 @@ void TaskEditor::saveContext( QDomElement &context ) const
 TaskView::TaskView( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
-    setupGui();
-
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new NodeTreeView( part, this );
     l->addWidget( m_view );
     updateReadWrite( false );
+    setupGui();
+
     //m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
     QList<int> lst1; lst1 << 1 << -1;
     QList<int> lst2; lst2 << 0 << 1 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13 << 14 << 15 << 16 << 18 << 19 << 20 << 21 << 22 << 23 << 24 << 25 << 26 << 27 << 28 << 29 << 30 << 31 << 32 << 34 << 35 << 36 << 37 << 40 << -1;
     m_view->hideColumns( lst1, lst2 );
     
-    m_view->slaveView()->mapToSection( 38, 1 );
-    m_view->slaveView()->mapToSection( 39, 2 );
-    m_view->slaveView()->mapToSection( 2, 3 );
-    m_view->slaveView()->mapToSection( 33, 4 );
-    m_view->slaveView()->mapToSection( 17, 5 );
+    TreeViewBase *v = m_view->slaveView();
+    if ( v == 0 ) {
+        v = m_view->masterView();
+    }
+    v->mapToSection( 38, 1 );
+    v->mapToSection( 39, 2 );
+    v->mapToSection( 2, 3 );
+    v->mapToSection( 33, 4 );
+    v->mapToSection( 17, 5 );
 
     m_view->setDragDropMode( QAbstractItemView::InternalMove );
     m_view->setDropIndicatorShown( false );
@@ -596,15 +619,30 @@ void TaskView::setupGui()
     KActionCollection *coll = actionCollection();
     
     // Add the context menu actions for the view options
+    connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
+    addContextAction( m_view->actionSplitView() );
+    
     actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
     addContextAction( actionOptions );
 }
 
+void TaskView::slotSplitView()
+{
+    kDebug();
+    m_view->setViewSplitMode( ! m_view->isViewSplit() );
+}
+
 void TaskView::slotOptions()
 {
     kDebug();
-    ItemViewSettupDialog dlg( m_view->slaveView() );
+    bool col0 = false;
+    TreeViewBase *v = m_view->slaveView();
+    if ( v->isHidden() ) {
+        v = m_view->masterView();
+        col0 = true;
+    }
+    ItemViewSettupDialog dlg( v, col0 );
     dlg.exec();
 }
 

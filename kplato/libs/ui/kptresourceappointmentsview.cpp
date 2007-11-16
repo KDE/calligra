@@ -265,7 +265,7 @@ void ResourceAppointmentsView::setupGui()
 void ResourceAppointmentsView::slotOptions()
 {
     kDebug()<<endl;
-    ItemViewSettupDialog dlg( m_view->slaveView() );
+    ItemViewSettupDialog dlg( m_view->masterView() );
     dlg.exec();
 }
 

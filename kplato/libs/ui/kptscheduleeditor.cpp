@@ -72,6 +72,8 @@ ScheduleTreeView::ScheduleTreeView( QWidget *parent )
         }
     }
 
+    hideColumn( 4 );
+    
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
     connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
 

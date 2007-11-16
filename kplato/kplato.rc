@@ -27,6 +27,8 @@
             <Action name="link_mode"/>
         </Menu>
         <Menu name="view"><text>&amp;View</text>
+            <Action name="view_newview"/>
+            <Separator/>
             <ActionList name="view_schedule_list"/>
             <Separator/>
             <Menu name="view_gantt_options"><text>Ganttview Options</text>

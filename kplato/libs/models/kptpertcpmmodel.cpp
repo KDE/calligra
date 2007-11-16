@@ -450,9 +450,7 @@ QVariant CriticalPathItemModel::headerData( int section, Qt::Orientation orienta
         }
     }
     if ( role == Qt::ToolTipRole ) {
-        switch ( section ) {
-            default: return QVariant();
-        }
+        return m_nodemodel.headerData( section, role );
     }
     return ItemModelBase::headerData(section, orientation, role);
 }

@@ -424,7 +424,7 @@ void View::createViews()
         
         createCalendarEditor( cat, "CalendarEditor", i18n( "Work & Vacation" ), i18n( "Edit working- and vacation days for resources" ) );
         
-        createAccountsEditor( cat, "AccountEditor", i18n( "Accounts" ), i18n( "Edit cost breakdown structure." ) );
+        createAccountsEditor( cat, "AccountEditor", i18n( "Cost Breakdown Structure" ), i18n( "Edit cost breakdown structure." ) );
         
         createResourcEditor( cat, "ResourceEditor", i18n( "Resources" ), i18n( "Edit resource breakdown structure." ) );
 
@@ -447,7 +447,7 @@ void View::createViews()
         
         createResourceAppointmentsView( cat, "ResourceAppointmentsView", i18n( "Resource Assignments" ), i18n( "View resource assignments" ) );
 
-        createAccountsView( cat, "AccountsView", i18n( "Accounts" ), i18n( "View planned cost" ) );
+        createAccountsView( cat, "AccountsView", i18n( "Cost Breakdown" ), i18n( "View planned cost" ) );
 
         createResourceAssignmentView( cat, "ResourceAssignmentView", i18n( "Tasks by resources" ), i18n( "View task status per resource" ) );
 

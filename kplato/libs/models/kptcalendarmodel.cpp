@@ -411,7 +411,8 @@ QVariant CalendarItemModel::headerData( int section, Qt::Orientation orientation
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-       /*     case 0: return ToolTip::Calendar Name;*/
+            case 0: return ToolTip::CalendarName;
+            case 1: return ToolTip::CalendarTimeZone;
             default: return QVariant();
         }
     }

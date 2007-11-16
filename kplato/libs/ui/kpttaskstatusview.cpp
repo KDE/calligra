@@ -149,12 +149,11 @@ TaskStatusView::TaskStatusView( KoDocument *part, QWidget *parent )
     m_id( -1 )
 {
     kDebug()<<"-------------------- creating TaskStatusView -------------------"<<endl;
-    setupGui();
-
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new TaskStatusTreeView( this );
     l->addWidget( m_view );
+    setupGui();
 
     connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
 
@@ -248,15 +247,29 @@ void TaskStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
 void TaskStatusView::setupGui()
 {
     // Add the context menu actions for the view options
+    connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
+    addContextAction( m_view->actionSplitView() );
+    
     actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
     addContextAction( actionOptions );
 }
 
+void TaskStatusView::slotSplitView()
+{
+    kDebug();
+    m_view->setViewSplitMode( ! m_view->isViewSplit() );
+}
+
+
 void TaskStatusView::slotOptions()
 {
     kDebug();
-    ItemViewSettupDialog dlg( m_view->slaveView() );
+    TreeViewBase *v = m_view->slaveView();
+    if ( v == 0 ) {
+        v = m_view->masterView();
+    }
+    ItemViewSettupDialog dlg( v, ( m_view->slaveView() == 0 ) );
     dlg.exec();
 }
 

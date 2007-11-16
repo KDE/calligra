@@ -553,6 +553,8 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
             case 2: return ToolTip::ScheduleOverbooking;
             case 3: return ToolTip::ScheduleDistribution;
             case 4: return ToolTip::ScheduleCalculate;
+            case 5: return ToolTip::ScheduleStart;
+            case 6: return ToolTip::ScheduleFinish;
             default: return QVariant();
         }
     }

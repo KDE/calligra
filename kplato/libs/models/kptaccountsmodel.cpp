@@ -344,8 +344,8 @@ QVariant AccountItemModel::headerData( int section, Qt::Orientation orientation,
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-       /*     case 0: return ToolTip::AccountName;
-            case 1: return ToolTip::AccountDescription;*/
+            case 0: return ToolTip::AccountName;
+            case 1: return ToolTip::AccountDescription;
             default: return QVariant();
         }
     }

@@ -28,6 +28,8 @@
 #include <QTreeView>
 #include <QSplitter>
 
+class KAction;
+
 class QWidget;
 
 class KoDocument;
@@ -162,9 +164,6 @@ signals:
     void moveAfterLastColumn( const QModelIndex & );
     void moveBeforeFirstColumn( const QModelIndex & );
 
-public slots:
-    void updateColumnsHidden();
-
 protected:
     void keyPressEvent(QKeyEvent *event);
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const;
@@ -241,7 +240,10 @@ public:
     /// Save context info from this view. Reimplement.
     virtual void saveContext( QDomElement &/*context*/ ) const;
     
-
+    void setViewSplitMode( bool split );
+    bool isViewSplit() const { return m_mode; }
+    KAction *actionSplitView() const { return m_actionSplitView; }
+    
 signals:
     /// Context menu requested from the viewport, pointer over @p index at global position @p pos
     void contextMenuRequested( QModelIndex index, const QPoint& pos );
@@ -266,11 +268,10 @@ protected slots:
     void slotRightHeaderContextMenuRequested( const QPoint &pos );
     void slotLeftHeaderContextMenuRequested( const QPoint &pos );
 
-    void updateColumnsHidden();
-
 protected:
-    void init( bool mode );
-
+    void init();
+    QList<int> expandColumnList( const QList<int> lst ) const;
+    
 protected:
     TreeViewBase *m_leftview;
     TreeViewBase *m_rightview;
@@ -278,6 +279,10 @@ protected:
     QItemSelectionModel *m_selectionmodel;
     bool m_arrowKeyNavigation;
     bool m_readWrite;
+    bool m_mode;
+    
+    KAction *m_actionSplitView;
+
 };
 
 } // namespace KPlato

@@ -131,6 +131,7 @@ private slots:
     void slotMoveTaskUp();
     void slotMoveTaskDown();
 
+    void slotSplitView();
     void slotOptions();
     
     void slotHeaderContextMenuRequested( const QPoint& );
@@ -196,6 +197,7 @@ private slots:
 
     void slotEnableActions();
 
+    void slotSplitView();
     void slotOptions();
 
     void slotHeaderContextMenuRequested( const QPoint& );
@@ -204,6 +206,7 @@ private:
     NodeTreeView *m_view;
 
     // View options context menu
+    KAction *actionSplitView;
     KAction *actionOptions;
 };
 

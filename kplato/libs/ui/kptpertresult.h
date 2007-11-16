@@ -93,6 +93,7 @@ protected slots:
     void slotScheduleManagerChanged( ScheduleManager *sm );
     void slotHeaderContextMenuRequested( const QPoint &pos );
     
+    void slotSplitView();
     void slotOptions();
     
 private:
@@ -142,6 +143,7 @@ protected slots:
     void slotScheduleManagerChanged( ScheduleManager *sm );
     void slotHeaderContextMenuRequested( const QPoint &pos );
     
+    void slotSplitView();
     void slotOptions();
     
     void slotFinishTimeChanged( const QDateTime &dt );

@@ -272,15 +272,28 @@ void ResourceEditor::setupGui()
     addAction( name, actionDeleteSelection );
     
     // Add the context menu actions for the view options
+    connect(m_view->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
+    addContextAction( m_view->actionSplitView() );
+    
     actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
     addContextAction( actionOptions );
 }
 
+void ResourceEditor::slotSplitView()
+{
+    kDebug();
+    m_view->setViewSplitMode( ! m_view->isViewSplit() );
+}
+
 void ResourceEditor::slotOptions()
 {
     kDebug();
-    ItemViewSettupDialog dlg( m_view->slaveView() );
+    TreeViewBase *v = m_view->slaveView();
+    if ( v == 0 ) {
+        v = m_view->masterView();
+    }
+    ItemViewSettupDialog dlg( v, ( m_view->slaveView() == 0 ) );
     dlg.exec();
 }
 

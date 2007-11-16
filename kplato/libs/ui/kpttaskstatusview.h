@@ -101,6 +101,7 @@ private slots:
     void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotContextMenuRequested( Node *node, const QPoint& pos );
     void slotHeaderContextMenuRequested( const QPoint& );
+    void slotSplitView();
     void slotOptions();
     
 private:

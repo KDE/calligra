@@ -130,11 +130,16 @@ namespace ToolTip
     static QString ScheduleOverbooking = i18n( "Controles resource overbooking when scheduling" );
     static QString ScheduleDistribution = i18n( "The distribution to be used during scheduling" );
     static QString ScheduleCalculate = i18n( "Defines the schedules to be calculated" );
+    static QString ScheduleStart = i18n( "The scheduled start time" );
+    static QString ScheduleFinish = i18n( "The scheduled finish time" );
 
     static QString DocumentUrl = i18n( "The url of the document" );
     static QString DocumentType = i18n( "The type of the document" );
     static QString DocumentStatus = i18n( "The status of the document" );
     static QString DocumentSendAs = i18n( "Defines how this document is send" );
+
+    static QString CalendarName = i18n( "The name of the calendar" );
+    static QString CalendarTimeZone = i18n( "The timezone of the calendar" );
 
 } //namespace ToolTip
 

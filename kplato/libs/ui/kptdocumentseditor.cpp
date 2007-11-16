@@ -236,7 +236,7 @@ void DocumentsEditor::setupGui()
 void DocumentsEditor::slotOptions()
 {
     kDebug();
-    ItemViewSettupDialog dlg( m_view/*->slaveView()*/ );
+    ItemViewSettupDialog dlg( m_view/*->masterView()*/ );
     dlg.exec();
 }
 

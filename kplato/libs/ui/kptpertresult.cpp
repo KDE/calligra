@@ -264,9 +264,18 @@ void PertResult::testComplexGraph()
 void PertResult::setupGui()
 {
     // Add the context menu actions for the view options
+    connect(widget.treeWidgetTaskResult->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
+    addContextAction( widget.treeWidgetTaskResult->actionSplitView() );
+    
     actionOptions = new KAction( KIcon("configure"), i18n("Configure..."), this );
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
     addContextAction( actionOptions );
+}
+
+void PertResult::slotSplitView()
+{
+    kDebug();
+    widget.treeWidgetTaskResult->setViewSplitMode( ! widget.treeWidgetTaskResult->isViewSplit() );
 }
 
 void PertResult::slotHeaderContextMenuRequested( const QPoint &pos )
@@ -281,7 +290,11 @@ void PertResult::slotHeaderContextMenuRequested( const QPoint &pos )
 void PertResult::slotOptions()
 {
     kDebug();
-    ItemViewSettupDialog dlg( widget.treeWidgetTaskResult->slaveView() );
+    TreeViewBase *v = widget.treeWidgetTaskResult->slaveView();
+    if ( v == 0 ) {
+        v = widget.treeWidgetTaskResult->masterView();
+    }
+    ItemViewSettupDialog dlg( v, ( widget.treeWidgetTaskResult->slaveView() == 0 ) );
     dlg.exec();
 }
 
@@ -378,15 +391,19 @@ PertCpmView::PertCpmView( KoDocument *part, QWidget *parent )
         }
     }
     widget.cpmTable->hideColumns( lst1, lst2 );
-    widget.cpmTable->slaveView()->mapToSection( 33, 0 );
-    widget.cpmTable->slaveView()->mapToSection( 34, 1 );
-    widget.cpmTable->slaveView()->mapToSection( 35, 2 );
-    widget.cpmTable->slaveView()->mapToSection( 36, 3 );
-    widget.cpmTable->slaveView()->mapToSection( 5, 4 );
-    widget.cpmTable->slaveView()->mapToSection( 18, 5 );
-    widget.cpmTable->slaveView()->mapToSection( 19, 6 );
-    widget.cpmTable->slaveView()->mapToSection( 20, 7 );
-    widget.cpmTable->slaveView()->mapToSection( 21, 8 );
+    TreeViewBase *v = widget.cpmTable->slaveView();
+    if ( v == 0 ) {
+        v = widget.cpmTable->masterView();
+    }
+    v->mapToSection( 33, 0 );
+    v->mapToSection( 34, 1 );
+    v->mapToSection( 35, 2 );
+    v->mapToSection( 36, 3 );
+    v->mapToSection( 5, 4 );
+    v->mapToSection( 18, 5 );
+    v->mapToSection( 19, 6 );
+    v->mapToSection( 20, 7 );
+    v->mapToSection( 21, 8 );
     
     connect( widget.cpmTable, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
     
@@ -398,9 +415,18 @@ PertCpmView::PertCpmView( KoDocument *part, QWidget *parent )
 void PertCpmView::setupGui()
 {
     // Add the context menu actions for the view options
+    connect(widget.cpmTable->actionSplitView(), SIGNAL(triggered(bool) ), SLOT(slotSplitView()));
+    addContextAction( widget.cpmTable->actionSplitView() );
+    
     actionOptions = new KAction( KIcon("configure"), i18n("Configure..."), this );
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
     addContextAction( actionOptions );
+}
+
+void PertCpmView::slotSplitView()
+{
+    kDebug();
+    widget.cpmTable->setViewSplitMode( ! widget.cpmTable->isViewSplit() );
 }
 
 void PertCpmView::slotHeaderContextMenuRequested( const QPoint &pos )
@@ -415,7 +441,11 @@ void PertCpmView::slotHeaderContextMenuRequested( const QPoint &pos )
 void PertCpmView::slotOptions()
 {
     kDebug();
-    ItemViewSettupDialog dlg( widget.cpmTable->slaveView() );
+    TreeViewBase *v = widget.cpmTable->slaveView();
+    if ( v == 0 ) {
+        v = widget.cpmTable->masterView();
+    }
+    ItemViewSettupDialog dlg( v, ( widget.cpmTable->slaveView() == 0 ) );
     dlg.exec();
 }
 

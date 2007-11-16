@@ -21,6 +21,8 @@
 #include "kptitemmodelbase.h"
 #include "kptproject.h"
 
+#include <kaction.h>
+#include <kicon.h>
 #include <kparts/event.h>
 #include <kxmlguifactory.h>
 
@@ -89,20 +91,15 @@ void TreeViewBase::slotHeaderContextMenuRequested( const QPoint& pos )
     emit headerContextMenuRequested( header()->mapToGlobal( pos ) );
 }
 
-void TreeViewBase::setColumnsHidden( const QList<int> &list )
-{
-    m_hideList = list;
-}
-
-void TreeViewBase::updateColumnsHidden()
+void TreeViewBase::setColumnsHidden( const QList<int> &lst )
 {
     //kDebug()<<m_hideList<<endl;
     int prev = 0;
-    foreach ( int c, m_hideList ) {
+    foreach ( int c, lst ) {
         if ( c == -1 ) {
             // hide rest
             for ( int i = prev+1; i < model()->columnCount(); ++i ) {
-                if ( ! m_hideList.contains( i ) ) {
+                if ( ! lst.contains( i ) ) {
                     hideColumn( i );
                 }
             }
@@ -382,73 +379,92 @@ DoubleTreeViewBase::DoubleTreeViewBase( bool mode, QWidget *parent )
     m_rightview( 0 ),
     m_model( 0 ),
     m_selectionmodel( 0 ),
-    m_readWrite( false )
+    m_readWrite( false ),
+    m_mode( false )
 {
-    init( mode );
+    init();
 }
 
 DoubleTreeViewBase::DoubleTreeViewBase( QWidget *parent )
     : QSplitter( parent ),
     m_rightview( 0 ),
     m_model( 0 ),
-    m_selectionmodel( 0 )
+    m_selectionmodel( 0 ),
+    m_mode( false )
 {
-    init( true );
+    init();
 }
 
 DoubleTreeViewBase::~DoubleTreeViewBase()
 {
 }
 
-void DoubleTreeViewBase::init( bool mode )
+void DoubleTreeViewBase::init()
 {
     setOrientation( Qt::Horizontal );
-    setHandleWidth( 2 );
+    setHandleWidth( 3 );
     m_leftview = new TreeViewBase( this );
-    if ( mode ) {
-        m_leftview->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-        m_leftview->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-        
-        m_rightview = new TreeViewBase( this );
-        m_rightview->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
-    }
+    m_rightview = new TreeViewBase( this );
 
     connect( m_leftview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
     connect( m_leftview, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotLeftHeaderContextMenuRequested( const QPoint& ) ) );
-    if ( m_rightview ) {
-        connect( m_rightview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
-        connect( m_rightview, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotRightHeaderContextMenuRequested( const QPoint& ) ) );
+    
+    connect( m_rightview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
+    connect( m_rightview, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotRightHeaderContextMenuRequested( const QPoint& ) ) );
 
-        connect( m_rightview->verticalScrollBar(), SIGNAL( valueChanged( int ) ), m_leftview->verticalScrollBar(), SLOT( setValue( int ) ) );
+    connect( m_rightview->verticalScrollBar(), SIGNAL( valueChanged( int ) ), m_leftview->verticalScrollBar(), SLOT( setValue( int ) ) );
+
+    connect( m_leftview, SIGNAL( moveAfterLastColumn( const QModelIndex & ) ), this, SLOT( slotToRightView( const QModelIndex & ) ) );
+    connect( m_rightview, SIGNAL( moveBeforeFirstColumn( const QModelIndex & ) ), this, SLOT( slotToLeftView( const QModelIndex & ) ) );
+
+    connect( m_leftview, SIGNAL( expanded( const QModelIndex & ) ), m_rightview, SLOT( expand( const QModelIndex & ) ) );
+    connect( m_leftview, SIGNAL( collapsed( const QModelIndex & ) ), m_rightview, SLOT( collapse( const QModelIndex & ) ) );
     
-        connect( m_leftview, SIGNAL( moveAfterLastColumn( const QModelIndex & ) ), this, SLOT( slotToRightView( const QModelIndex & ) ) );
-        connect( m_rightview, SIGNAL( moveBeforeFirstColumn( const QModelIndex & ) ), this, SLOT( slotToLeftView( const QModelIndex & ) ) );
-    
-        connect( m_leftview, SIGNAL( expanded( const QModelIndex & ) ), m_rightview, SLOT( expand( const QModelIndex & ) ) );
-        connect( m_leftview, SIGNAL( collapsed( const QModelIndex & ) ), m_rightview, SLOT( collapse( const QModelIndex & ) ) );
-    }
+    m_actionSplitView = new KAction(KIcon("splitview"), "Hmmmm", this);
+    kDebug()<<m_actionSplitView;
+    setViewSplitMode( true );
 }
-void DoubleTreeViewBase::updateColumnsHidden()
+
+QList<int> DoubleTreeViewBase::expandColumnList( const QList<int> lst ) const
 {
-    m_leftview->updateColumnsHidden();
-    if ( m_rightview ) {
-        m_rightview->updateColumnsHidden();
+    QList<int> mlst = lst;
+    if ( ! mlst.isEmpty() ) {
+        int v = 0;
+        if ( mlst.last() == -1 && mlst.count() > 1 ) {
+            v = mlst[ mlst.count() - 2 ] + 1;
+            mlst.removeLast();
+        }
+        for ( int c = v; c < model()->columnCount(); ++c ) {
+            mlst << c;
+        }
     }
+    return mlst;
 }
+
 void DoubleTreeViewBase::hideColumns( const QList<int> &masterList, QList<int> slaveList )
 {
     m_leftview->setColumnsHidden( masterList );
-    if ( m_rightview ) {
-        m_rightview->setColumnsHidden( slaveList );
+    m_rightview->setColumnsHidden( slaveList );
+    if ( m_rightview->isHidden() ) {
+        QList<int> mlst = expandColumnList( masterList );
+        QList<int> slst = expandColumnList( slaveList );
+        QList<int> lst;
+        for ( int c = 0; c < model()->columnCount(); ++c ) {
+            // only hide columns hidden in *both* views
+            kDebug()<<c<<(mlst.indexOf( c ))<<(slst.indexOf( c ));
+            if ( (mlst.indexOf( c ) >= 0) && (slst.indexOf( c ) >= 0) ) {
+                lst << c;
+            }
+        }
+        kDebug()<<lst;
+        m_leftview->setColumnsHidden( lst );
     }
-    // HACK: Bug in qt
-    QTimer::singleShot( 100, this, SLOT( updateColumnsHidden() ) );
 }
 
 void DoubleTreeViewBase::slotToRightView( const QModelIndex &index )
 {
     kDebug()<<index.column()<<endl;
-    if ( m_rightview == 0 ) {
+    if ( m_rightview->isHidden() ) {
         return;
     }
     m_rightview->setFocus();
@@ -480,18 +496,14 @@ void DoubleTreeViewBase::setModel( ItemModelBase *model )
 {
     m_model = model;
     m_leftview->setModel( model );
-    if ( m_rightview ) {
-        m_rightview->setModel( model );
-    }
+    m_rightview->setModel( model );
     if ( m_selectionmodel ) {
         disconnect( m_selectionmodel, SIGNAL( selectionChanged ( const QItemSelection &, const QItemSelection & ) ), this, SLOT( slotSelectionChanged( const QItemSelection &, const QItemSelection & ) ) );
     
         disconnect( m_selectionmodel, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SIGNAL( currentChanged ( const QModelIndex &, const QModelIndex & ) ) );
     }
     m_selectionmodel = m_leftview->selectionModel();
-    if ( m_rightview ) {
-        m_rightview->setSelectionModel( m_selectionmodel );
-    }
+    m_rightview->setSelectionModel( m_selectionmodel );
     
     connect( m_selectionmodel, SIGNAL( selectionChanged ( const QItemSelection &, const QItemSelection & ) ), this, SLOT( slotSelectionChanged( const QItemSelection &, const QItemSelection & ) ) );
 
@@ -513,41 +525,31 @@ void DoubleTreeViewBase::slotSelectionChanged( const QItemSelection &sel, const 
 void DoubleTreeViewBase::setSelectionModel( QItemSelectionModel *model )
 {
     m_leftview->setSelectionModel( model );
-    if ( m_rightview ) {
-        m_rightview->setSelectionModel( model );
-    }
+    m_rightview->setSelectionModel( model );
 }
 
 void DoubleTreeViewBase::setSelectionMode( QAbstractItemView::SelectionMode mode )
 {
     m_leftview->setSelectionMode( mode );
-    if ( m_rightview ) {
-        m_rightview->setSelectionMode( mode );
-    }
+    m_rightview->setSelectionMode( mode );
 }
 
 void DoubleTreeViewBase::setSelectionBehavior( QAbstractItemView::SelectionBehavior mode )
 {
     m_leftview->setSelectionBehavior( mode );
-    if ( m_rightview ) {
-        m_rightview->setSelectionBehavior( mode );
-    }
+    m_rightview->setSelectionBehavior( mode );
 }
 
 void DoubleTreeViewBase::setItemDelegateForColumn( int col, QAbstractItemDelegate * delegate )
 {
     m_leftview->setItemDelegateForColumn( col, delegate );
-    if ( m_rightview ) {
-        m_rightview->setItemDelegateForColumn( col, delegate );
-    }
+    m_rightview->setItemDelegateForColumn( col, delegate );
 }
 
 void DoubleTreeViewBase::setEditTriggers( QAbstractItemView::EditTriggers mode )
 {
     m_leftview->setEditTriggers( mode );
-    if ( m_rightview ) {
-        m_rightview->setEditTriggers( mode );
-    }
+    m_rightview->setEditTriggers( mode );
 }
 
 QAbstractItemView::EditTriggers DoubleTreeViewBase::editTriggers() const
@@ -557,9 +559,8 @@ QAbstractItemView::EditTriggers DoubleTreeViewBase::editTriggers() const
 
 void DoubleTreeViewBase::setStretchLastSection( bool mode )
 {
-    if ( m_rightview ) {
-        m_rightview->header()->setStretchLastSection( mode );
-    } else {
+    m_rightview->header()->setStretchLastSection( mode );
+    if ( m_rightview->isHidden() ) {
         m_leftview->header()->setStretchLastSection( mode );
     }
 }
@@ -568,7 +569,7 @@ void DoubleTreeViewBase::edit( const QModelIndex &index )
 {
     if ( ! m_leftview->isColumnHidden( index.column() ) ) {
         m_leftview->edit( index );
-    } else if ( m_rightview && ! m_leftview->isColumnHidden( index.column() ) ) {
+    } else if ( ! m_rightview->isHidden() && ! m_rightview->isColumnHidden( index.column() ) ) {
         m_rightview->edit( index );
     }
 }
@@ -620,24 +621,14 @@ bool DoubleTreeViewBase::loadContext( const KoXmlElement &element )
     KoXmlElement e = element.namedItem( "master" ).toElement();
     if ( ! e.isNull() ) {
         m_leftview->loadContext( e );
-/*        for ( int i = model()->columnCount() - 1; i >= 0; --i ) {
-        if ( e.attribute( QString( "column-%1" ).arg( i ), "" ) == "hidden" ) {
-        lst1 << i;
     }
-    }*/
-    }
-    if ( m_rightview ) {
-        e = element.namedItem( "slave" ).toElement();
-        if ( ! e.isNull() ) {
-            m_rightview->loadContext( e );
-/*        for ( int i = model()->columnCount() - 1; i >= 0; --i ) {
-            if ( e.attribute( QString( "column-%1" ).arg( i ), "" ) == "hidden" ) {
-            lst2 << i;
-        }
-        }*/
+    e = element.namedItem( "slave" ).toElement();
+    if ( ! e.isNull() ) {
+        m_rightview->loadContext( e );
+        if ( e.attribute( "hidden", "false" ) == "true" ) {
+            setViewSplitMode( false );
         }
     }
-//    hideColumns( lst1, lst2 );
     return true;
 }
 
@@ -646,12 +637,60 @@ void DoubleTreeViewBase::saveContext( QDomElement &element ) const
     QDomElement e = element.ownerDocument().createElement( "master" );
     element.appendChild( e );
     m_leftview->saveContext( e );
-    if ( m_rightview ) {
-        e = element.ownerDocument().createElement( "slave" );
-        element.appendChild( e );
-        m_rightview->saveContext( e );
+    e = element.ownerDocument().createElement( "slave" );
+    element.appendChild( e );
+    if ( m_rightview->isHidden() ) {
+        e.setAttribute( "hidden", "true" );
+    }
+    m_rightview->saveContext( e );
+}
+
+void DoubleTreeViewBase::setViewSplitMode( bool split )
+{
+    m_actionSplitView->setText( split ? i18n( "Unsplit View" ) : i18n( "Split View" ) );
+    
+    if ( m_mode == split ) {
+        return;
+    }
+
+    m_mode = split;
+    kDebug()<<split;
+    if ( split ) {
+        m_leftview->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
+        m_leftview->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+        if ( model() ) {
+            m_rightview->setColumnHidden( 0, true );
+            m_leftview->resizeColumnToContents( 0 );
+            for ( int c = 1; c < m_rightview->model()->columnCount(); ++c ) {
+                if ( m_leftview->isColumnHidden( c ) ) {
+                    m_rightview->setColumnHidden( c, true );
+                } else {
+                    m_rightview->setColumnHidden( c, false );
+                    m_rightview->mapToSection( c, m_leftview->section( c ) );
+                    m_leftview->setColumnHidden( c, true );
+                    m_rightview->resizeColumnToContents( c );
+                }
+            }
+        }
+        m_rightview->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+        m_rightview->show();
+    } else {
+        m_rightview->hide();
+        if ( model() ) {
+            int offset = m_rightview->isColumnHidden( 0 ) ? 1 : 0;
+            for ( int c = 0; c < model()->columnCount(); ++c ) {
+                if ( ! m_rightview->isColumnHidden( c ) ) {
+                    m_leftview->setColumnHidden( c, false );
+                    m_leftview->mapToSection( c, m_rightview->section( c ) + 1 );
+                    m_leftview->resizeColumnToContents( c );
+                }
+            }
+        }
+        m_leftview->setVerticalScrollBarPolicy( Qt::ScrollBarAsNeeded );
+        m_leftview->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
     }
 }
+
 
 } // namespace KPlato
 
