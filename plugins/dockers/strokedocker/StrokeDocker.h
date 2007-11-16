@@ -25,8 +25,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KARBONSTROKEDOCKER_H
-#define KARBONSTROKEDOCKER_H
+#ifndef STROKEDOCKER_H
+#define STROKEDOCKER_H
 
 #include <KoUnit.h>
 #include <KoCanvasObserver.h>
@@ -36,14 +36,14 @@ class KoShapeBorderModel;
 class KoCanvasController;
 
 /// A docker for setting properties of a line border
-class KarbonStrokeDocker : public QDockWidget, public KoCanvasObserver
+class StrokeDocker : public QDockWidget, public KoCanvasObserver
 {
     Q_OBJECT
 
 public:
     /// Creates the stroke docker
-    KarbonStrokeDocker();
-    virtual ~KarbonStrokeDocker();
+    StrokeDocker();
+    virtual ~StrokeDocker();
 
 public slots:
     /// Sets the border to edit the properties of
@@ -79,5 +79,5 @@ private:
     Private * const d;
 };
 
-#endif // KARBONSTROKEDOCKER_H
+#endif // STROKEDOCKER_H
 

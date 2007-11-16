@@ -17,20 +17,23 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KARBONSTROKEDOCKERFACTORY_H
-#define KARBONSTROKEDOCKERFACTORY_H
+#include "StrokeDockerFactory.h"
+#include "StrokeDocker.h"
 
-#include <KoDockFactory.h>
-#include <QtGui/QDockWidget>
-
-/// the factory which creates the stroke docker
-class KarbonStrokeDockerFactory : public KoDockFactory
+StrokeDockerFactory::StrokeDockerFactory()
 {
-public:
-    KarbonStrokeDockerFactory();
+}
 
-    virtual QString id() const;
-    virtual QDockWidget* createDockWidget();
-};
+QString StrokeDockerFactory::id() const
+{
+    return QString("Stroke Properties");
+}
 
-#endif // KARBONSTROKEDOCKERFACTORY_H
+QDockWidget* StrokeDockerFactory::createDockWidget()
+{
+    StrokeDocker* widget = new StrokeDocker();
+    widget->setObjectName(id());
+
+    return widget;
+}
+

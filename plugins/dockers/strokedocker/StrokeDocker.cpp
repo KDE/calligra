@@ -27,7 +27,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KarbonStrokeDocker.h"
+#include "StrokeDocker.h"
 
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
@@ -52,7 +52,7 @@
 #include <QDockWidget>
 #include <QButtonGroup>
 
-class KarbonStrokeDocker::Private
+class StrokeDocker::Private
 {
 public:
     Private() {}
@@ -64,7 +64,7 @@ public:
     KoLineBorder border;
 };
 
-KarbonStrokeDocker::KarbonStrokeDocker()
+StrokeDocker::StrokeDocker()
     : d( new Private() )
 {
     setWindowTitle( i18n( "Stroke Properties" ) );
@@ -171,12 +171,12 @@ KarbonStrokeDocker::KarbonStrokeDocker()
     updateControls();
 }
 
-KarbonStrokeDocker::~KarbonStrokeDocker()
+StrokeDocker::~StrokeDocker()
 {
     delete d;
 }
 
-void KarbonStrokeDocker::applyChanges()
+void StrokeDocker::applyChanges()
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -192,19 +192,19 @@ void KarbonStrokeDocker::applyChanges()
     canvasController->canvas()->addCommand( cmd );
 }
 
-void KarbonStrokeDocker::slotCapChanged( int ID )
+void StrokeDocker::slotCapChanged( int ID )
 {
     d->border.setCapStyle( static_cast<Qt::PenCapStyle>( ID ) );
     applyChanges();
 }
 
-void KarbonStrokeDocker::slotJoinChanged( int ID )
+void StrokeDocker::slotJoinChanged( int ID )
 {
     d->border.setJoinStyle( static_cast<Qt::PenJoinStyle>( ID ) );
     applyChanges();
 }
 
-void KarbonStrokeDocker::updateControls()
+void StrokeDocker::updateControls()
 {
     blockChildSignals( true );
 
@@ -217,25 +217,25 @@ void KarbonStrokeDocker::updateControls()
     blockChildSignals( false );
 }
 
-void KarbonStrokeDocker::widthChanged()
+void StrokeDocker::widthChanged()
 {
     d->border.setLineWidth( d->setLineWidth->value() );
     applyChanges();
 }
 
-void KarbonStrokeDocker::miterLimitChanged()
+void StrokeDocker::miterLimitChanged()
 {
     d->border.setMiterLimit( d->miterLimit->value() );
     applyChanges();
 }
 
-void KarbonStrokeDocker::styleChanged()
+void StrokeDocker::styleChanged()
 {
     d->border.setLineStyle( d->lineStyle->lineStyle(), d->lineStyle->lineDashes() );
     applyChanges();
 }
 
-void KarbonStrokeDocker::setStroke( const KoShapeBorderModel *border )
+void StrokeDocker::setStroke( const KoShapeBorderModel *border )
 {
     const KoLineBorder *lineBorder = dynamic_cast<const KoLineBorder*>( border );
     if( lineBorder )
@@ -257,7 +257,7 @@ void KarbonStrokeDocker::setStroke( const KoShapeBorderModel *border )
     updateControls();
 }
 
-void KarbonStrokeDocker::setUnit( KoUnit unit )
+void StrokeDocker::setUnit( KoUnit unit )
 {
     // TODO this has to be connect to a unit changed signal
     blockChildSignals( true );
@@ -266,7 +266,7 @@ void KarbonStrokeDocker::setUnit( KoUnit unit )
     blockChildSignals( false );
 }
 
-void KarbonStrokeDocker::blockChildSignals( bool block )
+void StrokeDocker::blockChildSignals( bool block )
 {
     d->setLineWidth->blockSignals( block );
     d->capGroup->blockSignals( block );
@@ -275,7 +275,7 @@ void KarbonStrokeDocker::blockChildSignals( bool block )
     d->lineStyle->blockSignals( block );
 }
 
-void KarbonStrokeDocker::selectionChanged()
+void StrokeDocker::selectionChanged()
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
@@ -283,7 +283,7 @@ void KarbonStrokeDocker::selectionChanged()
         setStroke( selection->firstSelectedShape()->border() );
 }
 
-void KarbonStrokeDocker::setCanvas( KoCanvasBase *canvas )
+void StrokeDocker::setCanvas( KoCanvasBase *canvas )
 {
     if( canvas )
     {
@@ -292,5 +292,5 @@ void KarbonStrokeDocker::setCanvas( KoCanvasBase *canvas )
     }
 }
 
-// #include "KarbonStrokeDocker.moc"
+// #include "StrokeDocker.moc"
 
