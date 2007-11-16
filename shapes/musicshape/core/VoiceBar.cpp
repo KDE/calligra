@@ -18,6 +18,8 @@
  */
 #include "VoiceBar.h"
 #include "VoiceElement.h"
+#include "Bar.h"
+
 #include <QtCore/QList>
 
 namespace MusicCore {
@@ -25,14 +27,12 @@ namespace MusicCore {
 class VoiceBar::Private
 {
 public:
-    Bar* bar;
     QList<VoiceElement*> elements;
 };
 
-VoiceBar::VoiceBar(Bar* bar) : d(new Private)
+VoiceBar::VoiceBar(Bar* bar) : QObject(bar), d(new Private)
 {
     Q_ASSERT( bar );
-    d->bar = bar;
 }
 
 VoiceBar::~VoiceBar()
@@ -43,7 +43,7 @@ VoiceBar::~VoiceBar()
 
 Bar* VoiceBar::bar()
 {
-    return d->bar;
+    return qobject_cast<Bar*>(parent());
 }
 
 int VoiceBar::elementCount() const
