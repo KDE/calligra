@@ -38,7 +38,6 @@
 #include <q3ptrlist.h>
 #include <q3dict.h>
 #include <QString>
-//Added by qt3to4:
 #include <QPixmap>
 
 #include <karbon_export.h>
