@@ -449,6 +449,10 @@ void MusicRenderer::renderChord(QPainter& painter, Chord* chord, Voice* voice, c
             if (nextChord) {
                 QPointF startPos = bar->position() + QPointF(1 + chord->xScaled() + chord->width(), ypos);
                 QPointF endPos = nextChord->voiceBar()->bar()->position() + QPointF(nextChord->xScaled() - 1, ypos);
+                if (bar->position().y() < nextChord->voiceBar()->bar()->position().y() - 1e-6) {
+                    endPos = bar->position() + QPointF(bar->size(), 0);
+                }
+                
                 endPos.setY(startPos.y());
                 QPointF c1a = startPos + QPointF(2, 4);
                 QPointF c2a = endPos + QPointF(-2, 4);

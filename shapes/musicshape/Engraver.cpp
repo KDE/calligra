@@ -133,6 +133,11 @@ void Engraver::engraveSheet(Sheet* sheet, int firstSystem, QSizeF size, bool eng
             
             if (p.y() + sheet->staffSystem(curSystem)->height() >= size.height()) {
                 *lastSystem = curSystem-1;
+
+                // some code depends on having the position of the next bar
+                sheet->bar(i)->setPosition(p + QPointF(bar->prefix(), 0), !prefixPlaced);
+                sheet->bar(i)->setSize(sheet->bar(i)->desiredSize());
+
                 break;
             }
         }
