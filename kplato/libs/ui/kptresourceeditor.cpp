@@ -132,12 +132,11 @@ QList<Resource*> ResourceTreeView::selectedResources() const
 ResourceEditor::ResourceEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
-    setupGui();
-    
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new ResourceTreeView( this );
     l->addWidget( m_view );
+    setupGui();
     
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
@@ -289,11 +288,13 @@ void ResourceEditor::slotSplitView()
 void ResourceEditor::slotOptions()
 {
     kDebug();
+    bool col0 = false;
     TreeViewBase *v = m_view->slaveView();
-    if ( v == 0 ) {
+    if ( v->isHidden() ) {
         v = m_view->masterView();
+        col0 = true;
     }
-    ItemViewSettupDialog dlg( v, ( m_view->slaveView() == 0 ) );
+    ItemViewSettupDialog dlg( v, col0 );
     dlg.exec();
 }
 

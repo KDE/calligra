@@ -290,11 +290,13 @@ void PertResult::slotHeaderContextMenuRequested( const QPoint &pos )
 void PertResult::slotOptions()
 {
     kDebug();
+    bool col0 = false;
     TreeViewBase *v = widget.treeWidgetTaskResult->slaveView();
-    if ( v == 0 ) {
+    if ( v->isHidden() ) {
         v = widget.treeWidgetTaskResult->masterView();
+        col0 = true;
     }
-    ItemViewSettupDialog dlg( v, ( widget.treeWidgetTaskResult->slaveView() == 0 ) );
+    ItemViewSettupDialog dlg( v, col0 );
     dlg.exec();
 }
 
@@ -441,11 +443,13 @@ void PertCpmView::slotHeaderContextMenuRequested( const QPoint &pos )
 void PertCpmView::slotOptions()
 {
     kDebug();
+    bool col0 = false;
     TreeViewBase *v = widget.cpmTable->slaveView();
-    if ( v == 0 ) {
+    if ( v->isHidden() ) {
         v = widget.cpmTable->masterView();
+        col0 = true;
     }
-    ItemViewSettupDialog dlg( v, ( widget.cpmTable->slaveView() == 0 ) );
+    ItemViewSettupDialog dlg( v, col0 );
     dlg.exec();
 }
 

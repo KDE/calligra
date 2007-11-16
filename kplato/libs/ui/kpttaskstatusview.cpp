@@ -265,11 +265,13 @@ void TaskStatusView::slotSplitView()
 void TaskStatusView::slotOptions()
 {
     kDebug();
+    bool col0 = false;
     TreeViewBase *v = m_view->slaveView();
-    if ( v == 0 ) {
+    if ( v->isHidden() ) {
         v = m_view->masterView();
+        col0 = true;
     }
-    ItemViewSettupDialog dlg( v, ( m_view->slaveView() == 0 ) );
+    ItemViewSettupDialog dlg( v, col0 );
     dlg.exec();
 }
 
