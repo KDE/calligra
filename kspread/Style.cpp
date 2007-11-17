@@ -31,6 +31,7 @@
 #include <KoGenStyles.h>
 #include <KoGlobal.h>
 #include <KoOasisStyles.h>
+#include <KoOdfGraphicStyles.h>
 #include <KoStyleStack.h>
 #include <KoUnit.h>
 #include <KoXmlNS.h>
@@ -458,7 +459,7 @@ void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoSt
                 if ( fill == "solid" || fill == "hatch" )
                 {
                     kDebug(36003)<<" Style ******************************************************";
-                    setBackgroundBrush( KoOasisStyles::loadOasisFillStyle( drawStyleStack, fill, oasisStyles ) );
+                    setBackgroundBrush( KoOdfGraphicStyles::loadOasisFillStyle( drawStyleStack, fill, oasisStyles ) );
 
                 }
                 else
@@ -1369,7 +1370,7 @@ void Style::saveOasisStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
 QString Style::saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush )
 {
     KoGenStyle styleobjectauto = KoGenStyle( KoGenStyle::StyleGraphicAuto, "graphic" );
-    KoOasisStyles::saveOasisFillStyle( styleobjectauto, mainStyles, brush );
+    KoOdfGraphicStyles::saveOasisFillStyle( styleobjectauto, mainStyles, brush );
     return mainStyles.lookup( styleobjectauto, "gr" );
 }
 
