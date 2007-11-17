@@ -260,16 +260,9 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
         KoToolDocker * toolDocker =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
         connect(m_canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), toolDocker, SLOT(newOptionWidget(QWidget*)));
 
-        if( m_showRulerAction->isChecked() )
-        {
-            m_horizRuler->show();
-            m_vertRuler->show();
-        }
-        else
-        {
-            m_horizRuler->hide();
-            m_vertRuler->hide();
-        }
+        bool b = m_showRulerAction->isChecked();
+        m_horizRuler->setVisible( b );
+        m_vertRuler->setVisible( b );
     }
 
     setLayout(layout);
@@ -1165,12 +1158,7 @@ KarbonView::reorganizeGUI()
     debugView("KarbonView::reorganizeGUI()");
 
     if( statusBar() )
-    {
-        if( part()->showStatusBar() )
-            statusBar()->show();
-        else
-            statusBar()->hide();
-    }
+        statusBar()->setVisible( part()->showStatusBar() );
 }
 
 void
