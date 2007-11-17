@@ -59,7 +59,7 @@ KAboutData * newKarbonAboutData()
 		"inge@lysator.liu.se");
 	aboutData->addCredit(
 		ki18n("Alan Horkan"),
-		ki18n( "Helpfull patches and advice" ));
+		ki18n( "Helpful patches and advice" ));
 	// TODO: add the names of some helpful souls
         return aboutData;
 }
