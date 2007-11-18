@@ -17,15 +17,14 @@ You should have received a copy of the GNU Library General Public
 License along with this library; see the file COPYING.LIB.  If not,
 write to the Free Software Foundation, Inc., 51 Franklin Street,
 Fifth Floor, Boston, MA 02110-1301, USA.</comment>
- <exportmacro></exportmacro>
- <class>KSpread::DataFormatWidget</class>
+ <class>DataFormatWidget</class>
  <widget class="QWidget" name="DataFormatWidget" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
     <width>624</width>
-    <height>416</height>
+    <height>433</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" >
@@ -129,9 +128,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       <item row="1" column="3" >
        <widget class="KComboBox" name="comboBox_2" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>3</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -141,9 +138,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       <item row="0" column="3" >
        <widget class="KComboBox" name="comboBox" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>3</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -174,9 +169,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       <item row="2" column="1" >
        <widget class="KLineEdit" name="lineEdit_2" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>3</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -186,9 +179,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       <item row="0" column="1" >
        <widget class="KLineEdit" name="lineEdit" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>3</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -198,9 +189,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       <item row="1" column="1" >
        <widget class="QDoubleSpinBox" name="doubleSpinBox" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>3</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -228,25 +217,38 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
  </widget>
  <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>listWidget</tabstop>
+  <tabstop>radioButton</tabstop>
+  <tabstop>radioButton_2</tabstop>
+  <tabstop>radioButton_3</tabstop>
+  <tabstop>radioButton_4</tabstop>
+  <tabstop>radioButton_5</tabstop>
+  <tabstop>radioButton_6</tabstop>
+  <tabstop>radioButton_7</tabstop>
+  <tabstop>radioButton_8</tabstop>
+  <tabstop>radioButton_9</tabstop>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>comboBox</tabstop>
+  <tabstop>doubleSpinBox</tabstop>
+  <tabstop>comboBox_2</tabstop>
+  <tabstop>lineEdit_2</tabstop>
+ </tabstops>
  <includes>
-   <include location="global">kdialog.h</include>
+  <include location="global" >kdialog.h</include>
  </includes>
  <resources/>
  <connections/>
-  <customwidgets>
-    <customwidget>
-      <class>KComboBox</class>
-      <extends>QComboBox</extends>
-      <header>kcombobox.h</header>
-      <container>0</container>
-      <pixmap></pixmap>
-    </customwidget>
-    <customwidget>
-      <class>KLineEdit</class>
-      <extends>QLineEdit</extends>
-      <header>klineedit.h</header>
-      <container>0</container>
-      <pixmap></pixmap>
-    </customwidget>
-  </customwidgets>
 </ui>

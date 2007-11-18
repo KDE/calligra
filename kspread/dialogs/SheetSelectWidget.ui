@@ -1,6 +1,6 @@
-<ui version="4.0" stdsetdef="1" >
-  <author>The KSpread Team &lt;koffice-devel@kde.org></author>
-  <comment>This file is part of the KDE project
+<ui version="4.0" >
+ <author>The KSpread Team &lt;koffice-devel@kde.org></author>
+ <comment>This file is part of the KDE project
 Copyright (C) 2006 The KSpread Team &lt;koffice-devel@kde.org>
 
 This library is free software; you can redistribute it and/or
@@ -17,208 +17,198 @@ You should have received a copy of the GNU Library General Public
 License along with this library; see the file COPYING.LIB.  If not,
 write to the Free Software Foundation, Inc., 51 Franklin Street,
 Fifth Floor, Boston, MA 02110-1301, USA.</comment>
-  <exportmacro></exportmacro>
-  <class>KSpread::SheetSelectWidget</class>
-  <widget class="QWidget" name="SheetSelectWidget" >
-    <property name="geometry" >
-      <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>527</width>
-        <height>160</height>
-      </rect>
-    </property>
-    <property name="sizePolicy" >
-      <sizepolicy>
-        <hsizetype>7</hsizetype>
-        <vsizetype>7</vsizetype>
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-      </sizepolicy>
-    </property>
-    <property name="windowTitle" >
-      <string>Sheet Selection</string>
-    </property>
-    <layout class="QGridLayout" >
-      <item row="0" column="1" >
-        <widget class="KPushButton" name="ButtonSelectAll" >
-          <property name="text" >
-            <string/>
-          </property>
-          <property name="toolTip" stdset="0" >
-            <string>Select all sheets</string>
-          </property>
-        </widget>
-      </item>
-      <item row="1" column="1" >
-        <widget class="KPushButton" name="ButtonSelect" >
-          <property name="text" >
-            <string/>
-          </property>
-          <property name="toolTip" stdset="0" >
-            <string>Select sheets</string>
-          </property>
-        </widget>
-      </item>
-      <item row="3" column="1" >
-        <widget class="KPushButton" name="ButtonRemoveAll" >
-          <property name="text" >
-            <string/>
-          </property>
-          <property name="toolTip" stdset="0" >
-            <string>Clear Selection</string>
-          </property>
-        </widget>
-      </item>
-      <item row="2" column="1" >
-        <widget class="KPushButton" name="ButtonRemove" >
-          <property name="text" >
-            <string/>
-          </property>
-          <property name="toolTip" stdset="0" >
-            <string>Remove sheets</string>
-          </property>
-        </widget>
-      </item>
-      <item rowspan="4" row="0" column="0" colspan="1" >
-        <widget class="K3ListView" name="ListViewAvailable" >
-          <property name="resizePolicy" >
-            <enum>AutoOneFit</enum>
-          </property>
-          <property name="selectionMode" stdset="0" >
-            <enum>Extended</enum>
-          </property>
-          <property name="fullWidth" >
-            <bool>true</bool>
-          </property>
-          <property name="dragEnabled" >
-            <bool>true</bool>
-          </property>
-          <property name="toolTip" stdset="0" >
-            <string>Available sheets</string>
-          </property>
-          <property name="whatsThis" stdset="0" >
-            <string>&lt;b>List of all available sheets.&lt;/b>&lt;br>
+ <class>SheetSelectWidget</class>
+ <widget class="QWidget" name="SheetSelectWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>527</width>
+    <height>160</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle" >
+   <string>Sheet Selection</string>
+  </property>
+  <layout class="QGridLayout" >
+   <item row="0" column="1" >
+    <widget class="KPushButton" name="ButtonSelectAll" >
+     <property name="toolTip" >
+      <string>Select all sheets</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="KPushButton" name="ButtonSelect" >
+     <property name="toolTip" >
+      <string>Select sheets</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="1" >
+    <widget class="KPushButton" name="ButtonRemoveAll" >
+     <property name="toolTip" >
+      <string>Clear Selection</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1" >
+    <widget class="KPushButton" name="ButtonRemove" >
+     <property name="toolTip" >
+      <string>Remove sheets</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="4" row="0" column="0" >
+    <widget class="K3ListView" name="ListViewAvailable" >
+     <property name="toolTip" >
+      <string>Available sheets</string>
+     </property>
+     <property name="whatsThis" >
+      <string>&lt;b>List of all available sheets.&lt;/b>&lt;br>
 To print a sheet you have to select one or more sheets in this list and use the buttons to insert the selected sheet(s) in the right-hand list, which lists all sheets that are printed.&lt;br>
 You can insert a sheet as often as you like, this way it will be printed multiple times. This is useful for dividers or title pages, for example.</string>
-          </property>
-          <column>
-            <property name="text" >
-              <string>Available Sheets</string>
-            </property>
-            <property name="clickable" >
-              <bool>false</bool>
-            </property>
-            <property name="resizable" >
-              <bool>true</bool>
-            </property>
-          </column>
-        </widget>
-      </item>
-      <item row="0" column="3" >
-        <widget class="KPushButton" name="ButtonMoveTop" >
-          <property name="text" >
-            <string/>
-          </property>
-          <property name="toolTip" stdset="0" >
-            <string>Move selected sheet to the top</string>
-          </property>
-        </widget>
-      </item>
-      <item row="1" column="3" >
-        <widget class="KPushButton" name="ButtonMoveUp" >
-          <property name="text" >
-            <string/>
-          </property>
-          <property name="toolTip" stdset="0" >
-            <string>Move selected sheet up</string>
-          </property>
-        </widget>
-      </item>
-      <item row="2" column="3" >
-        <widget class="KPushButton" name="ButtonMoveDown" >
-          <property name="text" >
-            <string/>
-          </property>
-          <property name="toolTip" stdset="0" >
-            <string>Move selected sheet down</string>
-          </property>
-        </widget>
-      </item>
-      <item row="3" column="3" >
-        <widget class="KPushButton" name="ButtonMoveBottom" >
-          <property name="text" >
-            <string/>
-          </property>
-          <property name="toolTip" stdset="0" >
-            <string>Move selected sheet to the bottom</string>
-          </property>
-        </widget>
-      </item>
-      <item rowspan="4" row="0" column="2" colspan="1" >
-        <widget class="K3ListView" name="ListViewSelected" >
-          <property name="acceptDrops" >
-            <bool>true</bool>
-          </property>
-          <property name="resizePolicy" >
-            <enum>AutoOneFit</enum>
-          </property>
-          <property name="selectionMode" stdset="0" >
-            <enum>Extended</enum>
-          </property>
-          <property name="fullWidth" >
-            <bool>true</bool>
-          </property>
-          <property name="dragEnabled" >
-            <bool>true</bool>
-          </property>
-          <property name="toolTip" stdset="0" >
-            <string>List of sheets to print in given order</string>
-          </property>
-          <property name="whatsThis" stdset="0" >
-            <string>&lt;b>List of sheets to print.&lt;/b>&lt;br>
+     </property>
+     <property name="resizePolicy" >
+      <enum>Q3ScrollView::Manual</enum>
+     </property>
+     <property name="selectionMode" >
+      <enum>Q3ListView::Single</enum>
+     </property>
+     <property name="fullWidth" >
+      <bool>true</bool>
+     </property>
+     <property name="dragEnabled" >
+      <bool>true</bool>
+     </property>
+     <column>
+      <property name="text" >
+       <string>Available Sheets</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="0" column="3" >
+    <widget class="KPushButton" name="ButtonMoveTop" >
+     <property name="toolTip" >
+      <string>Move selected sheet to the top</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3" >
+    <widget class="KPushButton" name="ButtonMoveUp" >
+     <property name="toolTip" >
+      <string>Move selected sheet up</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="3" >
+    <widget class="KPushButton" name="ButtonMoveDown" >
+     <property name="toolTip" >
+      <string>Move selected sheet down</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="3" >
+    <widget class="KPushButton" name="ButtonMoveBottom" >
+     <property name="toolTip" >
+      <string>Move selected sheet to the bottom</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item rowspan="4" row="0" column="2" >
+    <widget class="K3ListView" name="ListViewSelected" >
+     <property name="acceptDrops" >
+      <bool>true</bool>
+     </property>
+     <property name="toolTip" >
+      <string>List of sheets to print in given order</string>
+     </property>
+     <property name="whatsThis" >
+      <string>&lt;b>List of sheets to print.&lt;/b>&lt;br>
 Only the sheets listed here will be printed in the order of listing. You can change the print order with the up and down buttons.&lt;br>
 It is even possible to print a sheet more than once. Just insert the desired sheet again and order the list to your needs.</string>
-          </property>
-          <column>
-            <property name="text" >
-              <string>Selected Sheets</string>
-            </property>
-            <property name="clickable" >
-              <bool>false</bool>
-            </property>
-            <property name="resizable" >
-              <bool>true</bool>
-            </property>
-          </column>
-        </widget>
-      </item>
-    </layout>
-  </widget>
-  <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
-  <pixmapfunction>KIcon</pixmapfunction>
-  <includes>
-    <include location="global">kdialog.h</include>
-  </includes>
-  <customwidgets>
-    <customwidget>
-      <class>K3ListView</class>
-      <extends>Q3ListView</extends>
-      <header>k3listview.h</header>
-      <container>0</container>
-      <pixmap></pixmap>
-    </customwidget>
-  </customwidgets>
-  <tabstops>
-    <tabstop>ListViewAvailable</tabstop>
-    <tabstop>ListViewSelected</tabstop>
-    <tabstop>ButtonSelectAll</tabstop>
-    <tabstop>ButtonSelect</tabstop>
-    <tabstop>ButtonRemove</tabstop>
-    <tabstop>ButtonRemoveAll</tabstop>
-    <tabstop>ButtonMoveTop</tabstop>
-    <tabstop>ButtonMoveUp</tabstop>
-    <tabstop>ButtonMoveDown</tabstop>
-    <tabstop>ButtonMoveBottom</tabstop>
-  </tabstops>
+     </property>
+     <property name="resizePolicy" >
+      <enum>Q3ScrollView::Manual</enum>
+     </property>
+     <property name="selectionMode" >
+      <enum>Q3ListView::Single</enum>
+     </property>
+     <property name="fullWidth" >
+      <bool>true</bool>
+     </property>
+     <property name="dragEnabled" >
+      <bool>true</bool>
+     </property>
+     <column>
+      <property name="text" >
+       <string>Selected Sheets</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutfunction spacing="KDialog::spacingHint" margin="KDialog::marginHint" />
+ <pixmapfunction>KIcon</pixmapfunction>
+ <customwidgets>
+  <customwidget>
+   <class>K3ListView</class>
+   <extends>Q3ListView</extends>
+   <header>k3listview.h</header>
+  </customwidget>
+  <customwidget>
+   <class>KPushButton</class>
+   <extends>QPushButton</extends>
+   <header>kpushbutton.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>ListViewAvailable</tabstop>
+  <tabstop>ButtonSelectAll</tabstop>
+  <tabstop>ButtonSelect</tabstop>
+  <tabstop>ButtonRemove</tabstop>
+  <tabstop>ButtonRemoveAll</tabstop>
+  <tabstop>ListViewSelected</tabstop>
+  <tabstop>ButtonMoveTop</tabstop>
+  <tabstop>ButtonMoveUp</tabstop>
+  <tabstop>ButtonMoveDown</tabstop>
+  <tabstop>ButtonMoveBottom</tabstop>
+ </tabstops>
+ <includes>
+  <include location="global" >kdialog.h</include>
+ </includes>
+ <resources/>
+ <connections/>
 </ui>
