@@ -36,6 +36,7 @@
 class KoShape;
 class KoShapeContainer;
 class KoShapeGroup;
+class TextShape;
 
 class SvgImport : public KoFilter
 {
@@ -110,8 +111,10 @@ protected:
     /// Constructs an absolute file path from the fiven href and base directory
     QString absoluteFilePath( const QString &href, const QString &xmlBase );
 
+    void applySizeFromContent( TextShape * shape, const QString &content );
+
 private:
-    VDocument                      m_document;
+    VDocument *                    m_document;
     QStack<SvgGraphicsContext*>    m_gc;
     QMap<QString, SvgGradientHelper>  m_gradients;
     QMap<QString, QDomElement>     m_defs;

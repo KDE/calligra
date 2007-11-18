@@ -22,6 +22,7 @@
 #include "color.h"
 
 #include <vglobal.h>
+#include <karbon_part.h>
 
 #include <KoShape.h>
 #include <KoShapeLayer.h>
@@ -37,6 +38,7 @@
 #include <KoUnit.h>
 #include <KoGlobal.h>
 #include <KoImageData.h>
+#include <KoZoomHandler.h>
 #include <pictureshape/PictureShape.h>
 #include <pathshapes/rectangle/KoRectangleShape.h>
 #include <pathshapes/ellipse/KoEllipseShape.h>
@@ -50,12 +52,14 @@
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
+#include <QtGui/QTextCursor>
+#include <QtGui/QTextCharFormat>
 
 K_PLUGIN_FACTORY( SvgImportFactory, registerPlugin<SvgImport>(); )
 K_EXPORT_PLUGIN( SvgImportFactory( "kofficefilters" ) )
 
 SvgImport::SvgImport(QObject*parent, const QVariantList&)
-    : KoFilter(parent)
+    : KoFilter(parent), m_document(0)
 {
 }
 
@@ -115,39 +119,23 @@ KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByt
         return KoFilter::ParsingError;
     }
 
+    KarbonPart * part = dynamic_cast<KarbonPart*>(m_chain->outputDocument());
+    if( ! part )
+        return KoFilter::CreationError;
+
+    m_document = &part->document();
+
     // Do the conversion!
     convert();
 
-    // create output store
-    KoStore* storeout = KoStore::createStore( m_chain->outputFile(), KoStore::Write, to, KoStore::Zip );
-
-    if ( !storeout )
-    {
-        kWarning() << "Couldn't open the requested file.";
-        return KoFilter::FileNotFound;
-    }
-
-    // Tell KoStore not to touch the file names
-    storeout->disallowNameExpansion();
-    KoOdfWriteStore oasisStore( storeout );
-    KoXmlWriter* manifestWriter = oasisStore.manifestWriter( to );
-
-    KoGenStyles mainStyles;
-
-    bool success = m_document.saveOasis( storeout, manifestWriter, mainStyles );
-
-    // cleanup
-    oasisStore.closeManifestWriter();
-    delete storeout;
-
-    if( ! success )
-        return KoFilter::CreationError;
-    else
-        return KoFilter::OK;
+    return KoFilter::OK;
 }
 
 void SvgImport::convert()
 {
+    if( ! m_document )
+        return;
+
     SvgGraphicsContext *gc = new SvgGraphicsContext;
     QDomElement docElem = m_inpdoc.documentElement();
 
@@ -164,8 +152,8 @@ void SvgImport::convert()
 
     double width = !docElem.attribute( "width" ).isEmpty() ? parseUnit( docElem.attribute( "width" ), true, false, viewBox ) : 550.0;
     double height = !docElem.attribute( "height" ).isEmpty() ? parseUnit( docElem.attribute( "height" ), false, true, viewBox ) : 841.0;
-    m_document.setPageSize( QSizeF( width, height ) );
-    m_outerRect = QRectF( QPointF(0,0), m_document.pageSize() );
+    m_document->setPageSize( QSizeF( width, height ) );
+    m_outerRect = QRectF( QPointF(0,0), m_document->pageSize() );
 
     if( ! docElem.attribute( "viewBox" ).isEmpty() )
     {
@@ -190,20 +178,20 @@ void SvgImport::convert()
     m_gc.push( gc );
     QList<KoShape*> shapes = parseGroup( docElem );
     foreach( KoShape * shape, shapes )
-        m_document.add( shape );
+        m_document->add( shape );
 
     KoShapeLayer * layer = 0;
     // check if we have to insert a default layer
-    if( m_document.layers().count() == 0 )
+    if( m_document->layers().count() == 0 )
     {
         layer = new KoShapeLayer();
-        m_document.insertLayer( layer );
+        m_document->insertLayer( layer );
     }
     else
-        layer = m_document.layers().first();
+        layer = m_document->layers().first();
 
     // add all toplevel shapes to the layer
-    foreach( KoShape * shape, m_document.shapes() )
+    foreach( KoShape * shape, m_document->shapes() )
     {
         if( ! shape->parent() )
             layer->addChild( shape );
@@ -415,7 +403,7 @@ KoShape * SvgImport::findObject( const QString &name, KoShapeContainer * group )
 
 KoShape * SvgImport::findObject( const QString &name )
 {
-    foreach( KoShapeLayer * layer, m_document.layers() )
+    foreach( KoShapeLayer * layer, m_document->layers() )
     {
         KoShape * shape = findObject( name, layer );
         if( shape )
@@ -1149,7 +1137,7 @@ QList<KoShape*> SvgImport::parseUse( const QDomElement &e )
 void SvgImport::addToGroup( QList<KoShape*> shapes, KoShapeGroup * group )
 {
     foreach( KoShape * shape, shapes )
-        m_document.add( shape );
+        m_document->add( shape );
 
     if( ! group )
         return;
@@ -1385,8 +1373,13 @@ KoShape * SvgImport::createText( const QDomElement &b )
                 anchor = e.attribute( "text-anchor" );
             */
         }
-        textDoc->setPlainText( content.simplified() );
-        textDoc->setDefaultFont( m_gc.top()->font );
+        QTextCursor cursor( textDoc );
+        QTextCharFormat format;
+        format.setFont( m_gc.top()->font );
+        format.setForeground( m_gc.top()->fill );
+        cursor.insertText( content.simplified(), format );
+        applySizeFromContent( text, content.simplified() );
+        textPosition -= QPointF( 0, text->size().height() );
         text->setPosition( textPosition );
     }
     else
@@ -1397,8 +1390,12 @@ KoShape * SvgImport::createText( const QDomElement &b )
         textPosition.setY( parseUnit( b.attribute( "y" ) ) );
         text = new TextShape();
         QTextDocument * textDoc = text->textShapeData()->document();
-        textDoc->setDefaultFont( m_gc.top()->font );
-        textDoc->setPlainText( b.text().simplified() );
+        QTextCursor cursor( textDoc );
+        QTextCharFormat format;
+        format.setFont( m_gc.top()->font );
+        format.setForeground( m_gc.top()->fill );
+        cursor.insertText( b.text().simplified(), format );
+        applySizeFromContent( text, content.simplified() );
         text->setPosition( textPosition );
     }
 
@@ -1410,7 +1407,8 @@ KoShape * SvgImport::createText( const QDomElement &b )
 
     parseStyle( text, b );
 
-    //text->setFont( m_gc.top()->font );
+    // the fill applies to the text foreground
+    text->setBackground( QBrush() );
 
     text->applyAbsoluteTransformation( m_gc.top()->matrix );
 
@@ -1429,7 +1427,28 @@ KoShape * SvgImport::createText( const QDomElement &b )
 
     removeGraphicContext();
 
+    // mark dirty
+    text->textShapeData()->faul();
+
     return text;
+}
+
+void SvgImport::applySizeFromContent( TextShape * shape, const QString &content )
+{
+    if( ! shape )
+        return;
+
+    QFontMetrics metrics( m_gc.top()->font );
+    QSize pixelSize( metrics.width( content ), metrics.height()  );
+    KoZoomHandler zoomHandler;
+    QSizeF pointSize = zoomHandler.viewToDocument( pixelSize );
+    KoInsets inset = shape->textShapeData()->shapeMargins();
+    pointSize.rheight() += inset.top + inset.bottom;
+    pointSize.rwidth() += inset.left + inset.right;
+    // the following two lines are a hack to make the text appear
+    pointSize.rheight() += 10;
+    pointSize.rwidth() += 10;
+    shape->setSize( pointSize );
 }
 
 KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &style )
@@ -1549,7 +1568,7 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
         else if( ! img.load( absoluteFilePath( fname, m_gc.top()->xmlBaseDir ) ) )
             return 0;
 
-        KoImageData * data = new KoImageData( m_document.imageCollection() );
+        KoImageData * data = new KoImageData( m_document->imageCollection() );
         data->setImage( img );
 
         double x = parseUnit( b.attribute( "x" ) );
