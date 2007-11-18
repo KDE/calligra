@@ -42,6 +42,8 @@
 #include <KoXmlWriter.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlNS.h>
+#include <KoOasisLoadingContext.h>
+#include <KoShapeLoadingContext.h>
 
 // KDChart
 #include "KDChartPosition"
@@ -111,6 +113,8 @@ public:
     KDChart::Chart            *chart;
     KDChart::AbstractDiagram  *diagram;
     KDChart::Legend           *legend;
+    KDChart::HeaderFooter     *title;
+    KDChart::HeaderFooter     *subTitle;
 
     // About the data
     bool                       firstRowIsLabel;
@@ -207,10 +211,11 @@ ChartShape::ChartShape()
     diagram->addAxis( yAxis );
 
     // Add a legend
-    d->legend = new KDChart::Legend( d->diagram, d->chart );
+    d->legend = new KDChart::Legend( d->diagram, d->chart ); 
     d->chart->addLegend( d->legend );
 
     setChartDefaults();
+
 }
 
 ChartShape::~ChartShape()
@@ -328,44 +333,44 @@ void ChartShape::setChartType( OdfChartType    newType,
         case BarChartType:
             new_diagram = new KDChart::BarDiagram( d->chart, cartPlane );
             break;
-        
+
         case LineChartType:
             new_diagram = new KDChart::LineDiagram( d->chart, cartPlane );
             break;
-        
+
         case AreaChartType:
             new_diagram = new KDChart::LineDiagram( d->chart, cartPlane );
             break;
-        
+
         case CircleChartType:
             new_diagram = new KDChart::PieDiagram( d->chart, polPlane );
             break;
-        
+
         case RingChartType:
             new_diagram = new KDChart::RingDiagram( d->chart, polPlane );
             break;
-        
+
         case ScatterChartType:
             new_diagram = new KDChart::LineDiagram( d->chart, cartPlane );
             break;
-        
+
         case RadarChartType:
             new_diagram = new KDChart::PolarDiagram( d->chart, polPlane );
             break;
-        
+
         case StockChartType:
             return;
             break;
-        
+
         case BubbleChartType:
             new_diagram = new KDChart::LineDiagram( d->chart, cartPlane );
             break;
-        
+
         case SurfaceChartType:
             // FIXME
             return;
             break;
-        
+
         case GanttChartType:
             // FIXME
             return;
@@ -757,7 +762,7 @@ bool ChartShape::loadOdf( const KoXmlElement    &chartElement,
 
             setChartType( odfChartTypes[i].chartType );
             knownType = true;
-            break;
+            break;  
         }
     }
 
@@ -770,10 +775,20 @@ bool ChartShape::loadOdf( const KoXmlElement    &chartElement,
     }
 
     // 2. Load the title.
-    // FIXME
+    KoXmlElement titleElem = KoXml::namedItemNS( chartElement, 
+                                                    KoXmlNS::chart, "title" );
+    if( !titleElem.isNull() ) {
+        if( !loadOdfTitle( titleElem, context) )
+            return false;
+    }
 
     // 3. Load the subtitle.
-    // FIXME
+    KoXmlElement subTitleElem = KoXml::namedItemNS( chartElement, 
+                                                    KoXmlNS::chart, "subtitle" );
+    if( !subTitleElem.isNull() ) {
+        if( !loadOdfSubTitle( subTitleElem, context) )
+            return false;
+    }
 
     // 4. Load the footer.
     // FIXME
@@ -805,23 +820,7 @@ bool ChartShape::loadOdf( const KoXmlElement    &chartElement,
 #if 0  // Taken from old kchart_params.cpp: Use what we can from here
        // and throw away the rest.
 
-    // Title TODO (more details, e.g. font, placement etc)
-    KoXmlElement titleElem = KoXml::namedItemNS( chartElement,
-						 KoXmlNS::chart, "title" );
-    if ( !titleElem.isNull() ) {
-        loadingContext.styleStack().save();
-        loadingContext.fillStyleStack( titleElem, KoXmlNS::chart, "style-name", "chart" );
-        QFont font;
-        QColor color;
-        loadOasisFont( loadingContext, font, color );
-        setHeaderFooterFont( KDChartParams::HdFtPosHeader, font, true, font.pointSize() );
-        setHeaderFooterColor( KDChartParams::HdFtPosHeader, color );
-        loadingContext.styleStack().restore();
 
-	KoXmlElement  pElem = KoXml::namedItemNS( titleElem,
-						 KoXmlNS::text, "p" );
-	setHeader1Text( pElem.text() );
-    }
 
     // Subtitle TODO (more details)
     KoXmlElement subtitleElem = KoXml::namedItemNS( chartElem, KoXmlNS::chart,
@@ -963,9 +962,33 @@ bool ChartShape::loadOdf( const KoXmlElement    &chartElement,
     return true;
 }
 
+
+bool ChartShape::loadOdfTitle ( const KoXmlElement &titleElement,
+                                    KoShapeLoadingContext &context ) 
+{
+    KoXmlElement  pElement = KoXml::namedItemNS( titleElement,
+                                            KoXmlNS::text, "p" );
+    d->title->setType( KDChart::HeaderFooter::Header );
+    d->title->setPosition( KDChart::Position::North );
+    d->title->setText( pElement.text() );
+    d->chart->addHeaderFooter( d->title );
+}
+
+bool ChartShape::loadOdfSubTitle ( const KoXmlElement &titleElement,
+                                    KoShapeLoadingContext &context ) 
+{
+    KoXmlElement  pElement = KoXml::namedItemNS( titleElement,
+                                            KoXmlNS::text, "p" );
+    d->subTitle->setType( KDChart::HeaderFooter::Header );
+    d->subTitle->setPosition( KDChart::Position::North );
+    d->subTitle->setText( pElement.text() );
+    d->chart->addHeaderFooter( d->subTitle );
+}
+
 bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement, 
 				KoShapeLoadingContext &context )
 {
+    
     return true;
 }
 
