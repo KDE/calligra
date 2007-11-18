@@ -48,8 +48,6 @@
 #include <QLinearGradient>
 #include <QConicalGradient>
 
-#include <kdebug.h>
-
 #include <math.h>
 
 /// helper function to clone a gradient
@@ -380,6 +378,7 @@ void VGradientTabWidget::setupConnections()
     connect( m_gradientWidget, SIGNAL( changed() ), this, SLOT( stopsChanged() ) );
     connect( m_addToPredefs, SIGNAL( clicked() ), this, SLOT( addGradientToPredefs() ) );
     connect( m_predefGradientsView, SIGNAL( itemDoubleClicked( QTableWidgetItem * ) ), this, SLOT( changeToPredef( QTableWidgetItem* ) ) );
+    connect( m_predefGradientsView, SIGNAL( itemClicked( QTableWidgetItem * ) ), this, SLOT( predefSelected( QTableWidgetItem* ) ) );
     connect( m_predefDelete, SIGNAL( clicked() ), this, SLOT( deletePredef() ) );
     connect( m_opacity, SIGNAL( valueChanged( int ) ), this, SLOT( opacityChanged( int ) ) );
 }
@@ -546,14 +545,12 @@ void VGradientTabWidget::opacityChanged( int value )
 void VGradientTabWidget::addGradientToPredefs()
 {
     QString savePath = m_resourceServer->saveLocation();
-    kDebug(38000) << "savepath = " << savePath;
 
     int i = 1;
     QFileInfo fileInfo;
 
     do {
         fileInfo.setFile( savePath + QString("%1.svg").arg( i++, 4, 10, QChar('0') ) );
-        kDebug(38000) << fileInfo.fileName();
     }
     while( fileInfo.exists() );
 
@@ -574,9 +571,8 @@ void VGradientTabWidget::predefSelected( QTableWidgetItem * item )
     if( ! item )
         return;
 
-    // TODO added function to KoResource to check if it can be deleted
-    //KarbonGradientItem * gradientItem = static_cast<KarbonGradientItem*>( item );
-    //m_predefDelete->setEnabled( gradientItem->canDelete() );
+    KarbonGradientItem * gradientItem = static_cast<KarbonGradientItem*>( item );
+    m_predefDelete->setEnabled( gradientItem->gradient()->removable() );
 }
 
 void VGradientTabWidget::changeToPredef( QTableWidgetItem * item )
@@ -610,15 +606,12 @@ void VGradientTabWidget::changeToPredef( QTableWidgetItem * item )
 
 void VGradientTabWidget::deletePredef()
 {
-//     KarbonGradientItem * item = dynamic_cast<KarbonGradientItem*>( m_predefGradientsView->currentItem() );
-//     if( ! item )
-//         return;
-// 
-//     m_resourceServer->removeResource( item->gradient() );
-//     int row = m_predefGradientsView->row( item );
-//     int col = m_predefGradientsView->column( item );
-//     m_predefGradientsView->takeItem( row, col );
-//     delete item;
+     KarbonGradientItem * item = dynamic_cast<KarbonGradientItem*>( m_predefGradientsView->currentItem() );
+     if( ! item )
+         return;
+
+     if( m_resourceServer->removeResource( item->gradient() ) )
+         m_predefGradientsView->removeItem( item );
 }
 
 void VGradientTabWidget::stopsChanged()
