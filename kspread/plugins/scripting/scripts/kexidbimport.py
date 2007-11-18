@@ -91,7 +91,7 @@ class KexiImport:
         openwidget.setMode("Opening")
         openwidget.setFilter("*.kexi *.kexis *kexic|Kexi Project Files\n*|All Files")
 
-        datapage = dialog.addPage("Import","Import to sheet beginning at cell","spreadsheet")
+        datapage = dialog.addPage("Import","Import to sheet beginning at cell","document-import")
         sheetslistview = KSpread.createSheetsListView(datapage)
         sheetslistview.setEditorType("Cell")
 

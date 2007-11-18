@@ -95,7 +95,7 @@ class KexiExport:
         savewidget.setMode("Saving")
         savewidget.setFilter("*.kexi *.kexis *kexic|Kexi Project Files\n*|All Files")
 
-        datapage = dialog.addPage("Export","Export sheets and ranges","spreadsheet")
+        datapage = dialog.addPage("Export","Export sheets and ranges","document-export")
         sheetslistview = KSpread.createSheetsListView(datapage)
         sheetslistview.setSelectionType("MultiSelect")
         sheetslistview.setEditorType("Range")

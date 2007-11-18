@@ -30,11 +30,7 @@ Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
 import os, datetime, sys, traceback, urlparse
-
-try:
-    import Kross
-except:
-    raise "Failed to import the Kross module."
+import Kross
 
 class Config:
     """ Some configurations for the htmlexport.py script. """

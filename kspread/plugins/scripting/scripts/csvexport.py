@@ -29,7 +29,7 @@ class CsvExporter:
         self.savewidget.setMode("Saving")
         self.savewidget.setFilter("*.csv *.txt|Comma-Separated-Value Files\n*|All Files")
 
-        datapage = self.dialog.addPage("Export","Export Sheets and ranges","spreadsheet")
+        datapage = self.dialog.addPage("Export","Export Sheets and ranges","document-export")
         self.sheetslistview = KSpread.createSheetsListView(datapage)
         self.sheetslistview.setSelectionType("MultiSelect")
         self.sheetslistview.setEditorType("Range")
