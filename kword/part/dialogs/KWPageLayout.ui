@@ -373,10 +373,13 @@
   <tabstop>landscape</tabstop>
   <tabstop>singleSided</tabstop>
   <tabstop>facingPages</tabstop>
+  <tabstop>firstPage</tabstop>
+  <tabstop>textDirection</tabstop>
   <tabstop>topMargin</tabstop>
   <tabstop>bindingEdgeMargin</tabstop>
   <tabstop>pageEdgeMargin</tabstop>
   <tabstop>bottomMargin</tabstop>
+  <tabstop>wholeDocument</tabstop>
  </tabstops>
  <resources/>
  <connections/>

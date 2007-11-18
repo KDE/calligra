@@ -188,6 +188,19 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>isCopyOfPrevious</tabstop>
+  <tabstop>keepAspectRatio</tabstop>
+  <tabstop>createNewPage</tabstop>
+  <tabstop>resizeLastFrame</tabstop>
+  <tabstop>noExtraText</tabstop>
+  <tabstop>reconnect</tabstop>
+  <tabstop>noFollowup</tabstop>
+  <tabstop>placeCopy</tabstop>
+  <tabstop>evenOdd</tabstop>
+  <tabstop>allFrames</tabstop>
+  <tabstop>protectContent</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

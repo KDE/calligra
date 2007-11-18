@@ -96,6 +96,10 @@
    <header>KoUnitDoubleSpinBox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>columns</tabstop>
+  <tabstop>spacing</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>KWFrameConnectSelector</class>
  <widget class="QWidget" name="KWFrameConnectSelector" >
   <property name="geometry" >
@@ -13,19 +10,40 @@
    </rect>
   </property>
   <layout class="QGridLayout" >
-   <property name="margin" >
+   <property name="leftMargin" >
     <number>0</number>
    </property>
-   <property name="spacing" >
+   <property name="topMargin" >
+    <number>0</number>
+   </property>
+   <property name="rightMargin" >
+    <number>0</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>0</number>
+   </property>
+   <property name="horizontalSpacing" >
+    <number>6</number>
+   </property>
+   <property name="verticalSpacing" >
     <number>6</number>
    </property>
    <item row="3" column="0" colspan="2" >
     <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
      <property name="spacing" >
       <number>6</number>
+     </property>
+     <property name="leftMargin" >
+      <number>0</number>
+     </property>
+     <property name="topMargin" >
+      <number>0</number>
+     </property>
+     <property name="rightMargin" >
+      <number>0</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>0</number>
      </property>
      <item>
       <spacer>
@@ -108,7 +126,12 @@
    </item>
   </layout>
  </widget>
- <pixmapfunction></pixmapfunction>
+ <tabstops>
+  <tabstop>frameSetName</tabstop>
+  <tabstop>existingRadio</tabstop>
+  <tabstop>framesList</tabstop>
+  <tabstop>newRadio</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

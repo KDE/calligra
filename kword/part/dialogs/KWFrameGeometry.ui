@@ -235,6 +235,18 @@
    <header>KoAspectButton.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>protectSize</tabstop>
+  <tabstop>xPos</tabstop>
+  <tabstop>yPos</tabstop>
+  <tabstop>width</tabstop>
+  <tabstop>height</tabstop>
+  <tabstop>synchronize</tabstop>
+  <tabstop>leftMargin</tabstop>
+  <tabstop>topMargin</tabstop>
+  <tabstop>rightMargin</tabstop>
+  <tabstop>bottomMargin</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
