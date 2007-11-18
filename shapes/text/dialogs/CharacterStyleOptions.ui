@@ -10,11 +10,20 @@
    </rect>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
    <property name="spacing" >
     <number>6</number>
+   </property>
+   <property name="leftMargin" >
+    <number>9</number>
+   </property>
+   <property name="topMargin" >
+    <number>9</number>
+   </property>
+   <property name="rightMargin" >
+    <number>9</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>9</number>
    </property>
    <item>
     <widget class="QGroupBox" name="positionGroup" >
@@ -22,10 +31,22 @@
       <string>Position</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="margin" >
+      <property name="leftMargin" >
        <number>9</number>
       </property>
-      <property name="spacing" >
+      <property name="topMargin" >
+       <number>9</number>
+      </property>
+      <property name="rightMargin" >
+       <number>9</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>9</number>
+      </property>
+      <property name="horizontalSpacing" >
+       <number>6</number>
+      </property>
+      <property name="verticalSpacing" >
        <number>6</number>
       </property>
       <item row="1" column="3" >
@@ -132,6 +153,14 @@
    <header>KoUnitDoubleSpinBox.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>normal</tabstop>
+  <tabstop>superscript</tabstop>
+  <tabstop>subscript</tabstop>
+  <tabstop>custom</tabstop>
+  <tabstop>offset</tabstop>
+  <tabstop>hyphenate</tabstop>
+ </tabstops>
  <includes>
   <include location="global" >knuminput.h</include>
   <include location="global" >klocale.h</include>
