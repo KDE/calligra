@@ -229,7 +229,7 @@ void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& 
         const QString styleName = element.attributeNS( KoXmlNS::style, "data-style-name", QString() );
         if ( oasisStyles.dataFormats().contains(styleName) )
         {
-            const KoOasisStyles::NumericStyleFormat dataStyle = oasisStyles.dataFormats()[styleName];
+            const KoOdfNumberStyles::NumericStyleFormat dataStyle = oasisStyles.dataFormats()[styleName];
 
             QString tmp = dataStyle.prefix;
             if ( !tmp.isEmpty() )
@@ -244,23 +244,23 @@ void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& 
             // determine data formatting
             switch (dataStyle.type)
             {
-                case KoOasisStyles::NumericStyleFormat::Number:
+                case KoOdfNumberStyles::Number:
                     setFormatType( Format::Number );
                     break;
-                case KoOasisStyles::NumericStyleFormat::Scientific:
+                case KoOdfNumberStyles::Scientific:
                     setFormatType( Format::Scientific );
                     break;
-                case KoOasisStyles::NumericStyleFormat::Currency:
+                case KoOdfNumberStyles::Currency:
                     kDebug(36003) <<" currency-symbol:" << dataStyle.currencySymbol;
                     if (!dataStyle.currencySymbol.isEmpty())
                     {
                         setCurrency( Currency(dataStyle.currencySymbol) );
                     }
                     break;
-                case KoOasisStyles::NumericStyleFormat::Percentage:
+                case KoOdfNumberStyles::Percentage:
                     setFormatType( Format::Percentage );
                     break;
-                case KoOasisStyles::NumericStyleFormat::Fraction:
+                case KoOdfNumberStyles::Fraction:
                     // determine format of fractions, dates and times by using the
                     // formatting string
                     tmp = dataStyle.formatStr;
@@ -269,7 +269,7 @@ void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& 
                         setFormatType( Style::fractionType( tmp ) );
                     }
                     break;
-                case KoOasisStyles::NumericStyleFormat::Date:
+                case KoOdfNumberStyles::Date:
                     // determine format of fractions, dates and times by using the
                     // formatting string
                     tmp = dataStyle.formatStr;
@@ -278,7 +278,7 @@ void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& 
                         setFormatType( Style::dateType( tmp ) );
                     }
                     break;
-                case KoOasisStyles::NumericStyleFormat::Time:
+                case KoOdfNumberStyles::Time:
                     // determine format of fractions, dates and times by using the
                     // formatting string
                     tmp = dataStyle.formatStr;
@@ -287,10 +287,10 @@ void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& 
                         setFormatType( Style::timeType( tmp ) );
                     }
                     break;
-                case KoOasisStyles::NumericStyleFormat::Boolean:
+                case KoOdfNumberStyles::Boolean:
                     setFormatType( Format::Number );
                     break;
-                case KoOasisStyles::NumericStyleFormat::Text:
+                case KoOdfNumberStyles::Text:
                     setFormatType( Format::Text );
                     break;
             }
@@ -788,7 +788,7 @@ QString Style::saveOasisStyleNumericNumber( KoGenStyles& mainStyles, Format::Typ
         }
         format = "0."+tmp;
     }
-    return KoOasisStyles::saveOasisNumberStyle( mainStyles, format, _prefix, _postfix );
+    return KoOdfNumberStyles::saveOdfNumberStyle( mainStyles, format, _prefix, _postfix );
 }
 
 QString Style::saveOasisStyleNumericText( KoGenStyles& /*mainStyles*/, Format::Type /*_style*/, int /*_precision*/,
@@ -813,7 +813,7 @@ QString Style::saveOasisStyleNumericMoney( KoGenStyles& mainStyles, Format::Type
         }
         format = "0."+tmp;
     }
-    return KoOasisStyles::saveOasisCurrencyStyle( mainStyles, format, symbol, _prefix, _postfix );
+    return KoOdfNumberStyles::saveOdfCurrencyStyle( mainStyles, format, symbol, _prefix, _postfix );
 }
 
 QString Style::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, Format::Type /*_style*/, int _precision,
@@ -836,7 +836,7 @@ QString Style::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, Format::
         }
         format = "0."+tmp;
     }
-    return KoOasisStyles::saveOasisPercentageStyle( mainStyles, format, _prefix, _postfix );
+    return KoOdfNumberStyles::saveOdfPercentageStyle( mainStyles, format, _prefix, _postfix );
 }
 
 
@@ -858,7 +858,7 @@ QString Style::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, Format::
         }
         format = "0."+tmp+"E+00";
     }
-    return KoOasisStyles::saveOasisScientificStyle( mainStyles, format, _prefix, _suffix );
+    return KoOdfNumberStyles::saveOdfScientificStyle( mainStyles, format, _prefix, _suffix );
 }
 
 QString Style::saveOasisStyleNumericDate( KoGenStyles&mainStyles, Format::Type _style,
@@ -959,7 +959,7 @@ QString Style::saveOasisStyleNumericDate( KoGenStyles&mainStyles, Format::Type _
             kDebug(36003)<<"this date format is not defined ! :"<<_style;
             break;
     }
-    return KoOasisStyles::saveOasisDateStyle( mainStyles, format, locale, _prefix, _postfix );
+    return KoOdfNumberStyles::saveOdfDateStyle( mainStyles, format, locale, _prefix, _postfix );
 }
 
 QString Style::saveOasisStyleNumericCustom( KoGenStyles& /*mainStyles*/, Format::Type /*_style*/,
@@ -1032,7 +1032,7 @@ QString Style::saveOasisStyleNumericTime( KoGenStyles& mainStyles, Format::Type 
             kDebug(36003)<<"time format not defined :"<<_style;
             break;
     }
-    return KoOasisStyles::saveOasisTimeStyle( mainStyles, format, locale, _prefix, _postfix );
+    return KoOdfNumberStyles::saveOdfTimeStyle( mainStyles, format, locale, _prefix, _postfix );
 }
 
 
@@ -1077,7 +1077,7 @@ QString Style::saveOasisStyleNumericFraction( KoGenStyles &mainStyles, Format::T
             break;
     }
 
-    return KoOasisStyles::saveOasisFractionStyle( mainStyles, format, _prefix, _suffix );
+    return KoOdfNumberStyles::saveOdfFractionStyle( mainStyles, format, _prefix, _suffix );
 }
 
 QString Style::saveOasis(KoGenStyle& style, KoGenStyles& mainStyles,
