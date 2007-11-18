@@ -46,7 +46,7 @@ KexiCSVImportOptions::KexiCSVImportOptions()
 		defaultEncodingExplicitySet = true;
 
 	trimmedInTextValuesChecked 
-		= importExportGroup.readEntry<bool>("StripBlanksOffOfTextValuesWhenImportingCSVFiles", true);
+		= importExportGroup.readEntry("StripBlanksOffOfTextValuesWhenImportingCSVFiles", true);
 }
 
 KexiCSVImportOptions::~KexiCSVImportOptions()

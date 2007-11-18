@@ -403,7 +403,7 @@ static QString convertKey(const char *key, KexiCSVExport::Mode mode)
 
 bool KexiCSVExportWizard::readBoolEntry(const char *key, bool defaultValue)
 {
-	return m_importExportGroup.readEntry<bool>(convertKey(key, m_options.mode), defaultValue);
+	return m_importExportGroup.readEntry(convertKey(key, m_options.mode), defaultValue);
 }
 
 QString KexiCSVExportWizard::readEntry(const char *key, const QString& defaultValue)

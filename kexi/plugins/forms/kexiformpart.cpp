@@ -167,7 +167,7 @@ void KexiFormPart::initInstanceActions()
 	KActionCollection *col = actionCollectionForMode(Kexi::DesignViewMode);
 #ifdef KEXI_DEBUG_GUI
 	KConfigGroup generalGroup( KGlobal::config()->group("General") );
-	if (generalGroup.readEntry<bool>("showInternalDebugger", false)) {
+	if (generalGroup.readEntry("showInternalDebugger", false)) {
 		KAction *a;
 		col->addAction("show_form_ui",
 			a = new KAction(KIcon("compfile"), i18n("Show Form UI Code"), this) );
