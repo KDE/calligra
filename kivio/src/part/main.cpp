@@ -21,11 +21,11 @@
 
 #include <KoApplication.h>
 
-#include "KivioAboutData.h"
+#include "KivioFactory.h"
 
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
 {
-  KCmdLineArgs::init( argc, argv, newKivioAboutData());
+  KCmdLineArgs::init( argc, argv, KivioFactory::aboutData());
 
   KCmdLineOptions options;
   options.add("+[file]", ki18n("File to open"));
