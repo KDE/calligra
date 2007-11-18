@@ -24,6 +24,7 @@
 #include "KarbonGradientItem.h"
 
 #include <KoAbstractGradient.h>
+#include <KoStopGradient.h>
 #include <KoResourceChooser.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
@@ -302,7 +303,7 @@ VGradientTabWidget::~VGradientTabWidget()
     delete m_gradient;
 }
 
-void VGradientTabWidget::resizeEvent( QResizeEvent * event )
+void VGradientTabWidget::resizeEvent( QResizeEvent * )
 {
     //m_predefGradientsView->setIconSize( QSize( m_predefGradientsView->width(), 16 ) );
 }
@@ -353,8 +354,8 @@ void VGradientTabWidget::setupUI()
 
     QWidget* predefTab  = new QWidget();
     QGridLayout* predefLayout = new QGridLayout( predefTab );
-    m_predefGradientsView = new KoResourceChooser( QSize( 300, 20 ), predefTab );
-    m_predefGradientsView->setIconSize( QSize( 305, 25 ) );
+    m_predefGradientsView = new KoResourceChooser( QSize( 300, 26 ), predefTab );
+    m_predefGradientsView->setIconSize( QSize( 300, 20 ) );
     predefLayout->addWidget( m_predefGradientsView, 0, 0, 1, 2 );
 
     m_predefDelete = new QPushButton( i18n( "&Delete" ), predefTab );
@@ -412,7 +413,7 @@ void VGradientTabWidget::updatePredefGradients()
     if( gradients.count() > 0 )
     {
         foreach( KoAbstractGradient * gradient, gradients ) {
-                m_predefGradientsView->addItem( new KarbonGradientItem( gradient ) );
+            m_predefGradientsView->addItem( new KarbonGradientItem( gradient ) );
         }
     }
 }
@@ -544,10 +545,28 @@ void VGradientTabWidget::opacityChanged( int value )
 
 void VGradientTabWidget::addGradientToPredefs()
 {
-//     KoStopGradient * g; = cloneGradient( m_gradient );
-//     m_resourceServer->addResource( g );
-//     if( g )
-//         m_predefGradientsView->addItem( new KarbonGradientItem( g ) );
+    QString savePath = m_resourceServer->saveLocation();
+    kDebug(38000) << "savepath = " << savePath;
+
+    int i = 1;
+    QFileInfo fileInfo;
+
+    do {
+        fileInfo.setFile( savePath + QString("%1.svg").arg( i++, 4, 10, QChar('0') ) );
+        kDebug(38000) << fileInfo.fileName();
+    }
+    while( fileInfo.exists() );
+
+    KoStopGradient * g = KoStopGradient::fromQGradient( m_gradient );
+    if( ! g )
+        return;
+    g->setFilename( fileInfo.filePath() );
+    g->setValid( true );
+
+    if( m_resourceServer->addResource( g ) )
+        m_predefGradientsView->addItem( new KarbonGradientItem( g ) );
+    else
+        delete g;
 }
 
 void VGradientTabWidget::predefSelected( QTableWidgetItem * item )
@@ -555,8 +574,9 @@ void VGradientTabWidget::predefSelected( QTableWidgetItem * item )
     if( ! item )
         return;
 
-    KarbonGradientItem * gradientItem = static_cast<KarbonGradientItem*>( item );
-    // TODO m_predefDelete->setEnabled( gradientItem->canDelete() );
+    // TODO added function to KoResource to check if it can be deleted
+    //KarbonGradientItem * gradientItem = static_cast<KarbonGradientItem*>( item );
+    //m_predefDelete->setEnabled( gradientItem->canDelete() );
 }
 
 void VGradientTabWidget::changeToPredef( QTableWidgetItem * item )
