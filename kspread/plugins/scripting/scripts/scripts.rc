@@ -106,6 +106,13 @@
            enabled="true"
            interpreter="python"
            file="docker/consoledocker.py" />
+        <script
+           name="rbsnippets"
+           text="Ruby Snippets"
+           comment="Ruby Snippets"
+           enabled="true"
+           interpreter="ruby"
+           file="docker/snippetsdocker.rb" />
     </collection>
 
 </KrossScripting>

@@ -21,4 +21,5 @@ install(FILES
 
 install(FILES
     consoledocker.py
+    snippetsdocker.rb
     DESTINATION ${DATA_INSTALL_DIR}/kspread/scripts/docker)
