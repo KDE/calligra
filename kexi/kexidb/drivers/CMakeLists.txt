@@ -1,7 +1,7 @@
 
 
 add_subdirectory( sqlite )
-add_subdirectory( sqlite2 )
+#ancient add_subdirectory( sqlite2 )
 
 INCLUDE (FindMySQL)
 IF (MYSQL_FOUND)
