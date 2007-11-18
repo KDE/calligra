@@ -117,7 +117,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
 	
 	KConfigGroup mainWindowGroup = KGlobal::config()->group("MainWindow");
 	if ((m_features & SingleClickOpensItemOptionEnabled) 
-		&& mainWindowGroup.readEntry<bool>("SingleClickOpensItem", false))
+		&& mainWindowGroup.readEntry("SingleClickOpensItem", false))
 	{
 		connect(m_list, SIGNAL(executed(Q3ListViewItem*)), this,
 			SLOT(slotExecuteItem(Q3ListViewItem*)));
