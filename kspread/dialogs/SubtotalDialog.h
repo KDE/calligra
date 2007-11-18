@@ -28,7 +28,7 @@
 
 #include <kdialog.h>
 
-#include "ui_SubtotalWidget.h"
+#include <ui_SubtotalWidget.h>
 
 
 namespace KSpread
@@ -36,7 +36,7 @@ namespace KSpread
 class Sheet;
 class View;
 
-class SubtotalDialog : public KDialog, public Ui::SubtotalWidget
+class SubtotalDialog : public KDialog, public ::Ui::SubtotalWidget
 {
   Q_OBJECT
 

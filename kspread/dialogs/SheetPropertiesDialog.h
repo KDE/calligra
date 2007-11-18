@@ -24,12 +24,12 @@
 
 #include <kdialog.h>
 
-#include "ui_SheetPropertiesWidget.h"
+#include <ui_SheetPropertiesWidget.h>
 
 namespace KSpread
 {
 
-class SheetPropertiesWidget : public QWidget, public Ui::SheetPropertiesWidget
+class SheetPropertiesWidget : public QWidget, public ::Ui::SheetPropertiesWidget
 {
  public:
   explicit SheetPropertiesWidget(QWidget* parent) : QWidget(parent) { setupUi(this); }
