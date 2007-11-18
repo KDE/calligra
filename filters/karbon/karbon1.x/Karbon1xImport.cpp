@@ -24,7 +24,7 @@
 #include <KoFilterChain.h>
 #include <KoStoreDevice.h>
 #include <KoOdfWriteStore.h>
-#include <KoOasisStyles.h>
+#include <KoOdfGraphicStyles.h>
 #include <KoGenStyles.h>
 #include <KoPageLayout.h>
 #include <KoShape.h>
@@ -659,7 +659,7 @@ void KarbonImport::loadCommon( KoShape * shape, const KoXmlElement &element )
     QString trafo = element.attribute( "transform" );
 
     if( !trafo.isEmpty() )
-        shape->applyAbsoluteTransformation( KoOasisStyles::loadTransformation( trafo ) );
+        shape->applyAbsoluteTransformation( KoOdfGraphicStyles::loadTransformation( trafo ) );
 
     if( dynamic_cast<KoShapeContainer*>( shape ) )
         return;
