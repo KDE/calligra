@@ -33,9 +33,9 @@ KFormulaCanvas::KFormulaCanvas( KFormulaPartView* view, KFormulaPartDocument* do
       QWidget( parent ),
       m_view( view )
 {
-    m_toolProxy = KoToolManager::instance()->createToolProxy( this );
+    m_toolProxy = new KoToolProxy(this, this);
     m_shapeManager = new KoShapeManager( this );
-	
+
     setFocusPolicy( Qt::StrongFocus );
     setBackgroundRole( QPalette::NoRole );
     m_dirtyBuffer = true;
