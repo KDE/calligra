@@ -45,7 +45,7 @@ ScriptingSheetsListView::ScriptingSheetsListView(ScriptingModule* module, QWidge
     layout->setMargin(0);
     setLayout(layout);
     m_view = new QTreeView(this);
-    m_view->setAlternatingRowColors(true);
+    //m_view->setAlternatingRowColors(true);
     m_view->setRootIsDecorated(false);
     m_view->setSortingEnabled(false);
     m_view->setItemsExpandable(false);
