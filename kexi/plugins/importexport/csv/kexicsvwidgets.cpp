@@ -39,7 +39,7 @@
 
 #define KEXICSV_OTHER_DELIMITER_INDEX 4
 
-#ifdef Q_WS_WIN
+#ifdef MSC_VER
 Q_TEMPLATE_EXTERN template class Q_CORE_EXPORT QVector<QString>;
 #endif
 
