@@ -10,16 +10,9 @@ for explanation how to conveniently set compile-time options.
 List of available options
 -------------------------
 
-* KEXI_STANDALONE
-Type: defined/undefined
-Default: -
-Description: Can be defined globally in kexi_global.h.
-Defined for standalone Kexi releases (without KOffice, e.g. 1.0) and undefined 
-for releases bundled with KOffice,. e.g. 1.1.
-
 * KEXI_NO_UNFINISHED
 Type: defined/undefined
-Default: defined in kexi_export.h if KEXI_OPTIONS is undefined
+Default: defined
 Description: If defined, unfinished Kexi features (for example a few features 
 within Table Designer) will be hidded for Kexi, to avoid user confusion.
 
@@ -30,20 +23,20 @@ Description: If defined, forces to show menu entries and dialogs just to give
 impression about development plans of Kexi Team. 
 Only recommended for test/development versions.
 
-* KEXI_FORMS_SUPPORT
-Type: defined/undefined
-Default: defined in kexi_export.h if KEXI_OPTIONS is undefined
-Description: If defined, form plugin will be loaded; else: it will be 
-not loaded even if is compiled.
-
 * KEXI_REPORTS_SUPPORT
 Type: defined/undefined
-Like KEXI_FORMS_SUPPORT macro, but for enabling report plugin.
 Default: undefined
+Description: If defined, the reports plugin will be compiled in and loaded; 
+else: it will be not loaded even if is compiled.
 
 * KEXI_SCRIPTS_SUPPORT
 Type: defined/undefined
-Like KEXI_FORMS_SUPPORT macro, but for enabling scripts plugin.
+Like KEXI_REPORTS_SUPPORT macro, but for enabling scripts plugin.
+Default: undefined
+
+* KEXI_MACROS_SUPPORT
+Type: defined/undefined
+Like KEXI_REPORTS_SUPPORT macro, but for enabling macros plugin.
 Default: undefined
 
 * KEXI_KROSS_SUPPORT
@@ -60,45 +53,15 @@ Description: If defined, data/project migration support for Kexi
 (available in Tools>Migration menu) will be disabled; else: support will 
 be enabled.
 
-* KEXI_CUSTOM_HARDCODED_CONNDATA
-Type: defined/undefined
-Default: undefined
-Description: If defined, you are forcing to add custom hardcoded connections 
-to the  KexiMigration::importWizard constructor and KexiStartupHandler::init().
-All you need is to create your own private "custom_connectiondata.h" file 
-in kexi/ directory, which will be included into Kexi source code and fill 
-it with code providing one or more hardcoded connections. 
-Example custom_connectiondata.h file for adding a single connection data: 
----- custom_connectiondata.h, cut here -----
-	conndata = new KexiDB::ConnectionData();
-	conndata->connName = "My Custom Pgsql Connection";
-	conndata->driverName = "postgresql"; //can be also "sqlite3", "sqlite2", "mysql"
-	conndata->hostName = "myhost.example.com";
-	conndata->userName = "john";
-	conndata->password = "secret";
-	Kexi::connset().addConnectionData(conndata); //always call this to add 
------ cut here ------------------------------
-Notes: 
-- security warning: if you provide your passwords in your code, it will 
-  be available in compiled binaries, so think twice before providine the binaries
-  for somebody else. The custom_connectiondata.h file will not be available 
-  in CVS, so don't worry.
-- this hardcoding will be removed when full handling of connectiondata arrives.
-- conndata is predefined as: KexiDB::ConnectionData* conndata;
-- See KexiDB::ConnectionData deocumentation for more information.
-- you can assign KUser().loginName() for username if you want to get current 
-  login.
-
 * KEXI_USE_GRADIENT_WIDGET
 Type: defined/undefined
 Default: undefined
 Description: If defined, KexiGradientWidget is used as form's background. 
 Currently disabled due to problems with performance and child widget's palettes.
 
-
 * KEXI_NO_SUBFORM
 Type: defined/undefined, temporary
-Default: undefined
+Default: defined
 Description: If defined, subform widget will not be available
 
 * KEXI_NO_AUTOFIELD_WIDGET
@@ -135,24 +98,21 @@ action is executed. TODO: it will be merged with Internal Debuger window.
 
 * KEXI_DB_COMBOBOX_WIDGET
 Type: defined/undefined
-Default: undefined
+Default: defined
 Description: Defined means Kexi offers combo box form widget.
 
 * DB_TEMPLATES
 Type: defined/undefined
-Default: undefined
+Default: defined
 Description: Defined means Kexi offers "Templates" in the startup dialog.
+
+* KEXI_SQLITE_MIGRATION
+Type: defined/undefined
+Default: undefined
+Description: If defined, sqlite3 migration to some newer format is supported
+(users can see appropriate proposal on startup). Used in KexiStartup.cpp.
+NOTE: Shall be defined.
 
 ==== Obsolete, don't use ====
 
-* KDOCKWIDGET_P
-Type: defined/undefined
-Default: undefined
-Description: If defined, enables a hack for better handling property editor's 
-panel within KexiMainWindowImpl object. 
-
-* KEXI_OPTIONS
-Type: defined/undefined
-Default: undefined
-Description: Define this if you want override default compile time options 
-to use any of the options described below.
+(none)
