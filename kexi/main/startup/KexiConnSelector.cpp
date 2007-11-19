@@ -217,7 +217,6 @@ void KexiConnSelectorWidget::slotPrjTypeSelected(int id)
 			if (m_remote->list->firstChild()) {
 				m_remote->list->setSelected(m_remote->list->firstChild(),true);
 			}
-			m_remote->descriptionEdit->setPaletteBackgroundColor(palette().active().background());
 			m_remote->descGroupBox->layout()->setMargin(2);
 			m_remote->list->setFocus();
 			slotConnectionSelectionChanged();
@@ -329,7 +328,7 @@ void KexiConnSelectorWidget::slotConnectionSelectionChanged()
 	}*/
 	m_remote->btn_edit->setEnabled(item);
 	m_remote->btn_remove->setEnabled(item);
-	m_remote->descriptionEdit->setText(item ? item->data()->description : QString());
+	m_remote->descriptionLabel->setText(item ? item->data()->description : QString());
 	emit connectionItemHighlighted(item);
 }
 

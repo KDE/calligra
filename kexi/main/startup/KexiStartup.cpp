@@ -18,11 +18,6 @@
 */
 
 #include "KexiStartup.h"
-//#ifdef Q_WS_WIN
-//# include "KexiStartup_p_win.h"
-//#else
-#include "KexiStartup_p.h"
-//#endif
 
 #include "kexiproject.h"
 #include "kexiprojectdata.h"
@@ -53,6 +48,12 @@
 
 #include <qapplication.h>
 #include <qlayout.h>
+
+// #define KEXI_SQLITE_MIGRATION
+
+#ifdef KEXI_SQLITE_MIGRATION
+# include "KexiStartup_p.h"
+#endif
 
 namespace Kexi {
 	K_GLOBAL_STATIC(KexiStartupHandler, _startupHandler)
@@ -853,6 +854,9 @@ tristate KexiStartupHandler::detectActionForFile(
 //	kDebug() << "KexiStartupHandler::detectActionForFile(): driver name: " << detectedDriverName << endl;
 //hardcoded for convenience:
 	const QString newFileFormat = "SQLite3";
+
+//! @todo enable this when we need sqlite3-to-someting-newer migration
+#ifdef KEXI_SQLITE_MIGRATION
 	if (!(options & DontConvert || options & SkipMessages) 
 		&& detectedDriverName.toLower()=="sqlite2" && detectedDriverName.toLower()!=suggestedDriverName.toLower()
 		&& KMessageBox::Yes == KMessageBox::questionYesNo(parent, i18n(
@@ -860,18 +864,9 @@ tristate KexiStartupHandler::detectActionForFile(
 			"project file.\nDo you want to convert the project to a new \"%3\" format (recommended)?",
 				detectedDriverName, QDir::convertSeparators(dbFileName), newFileFormat)) )
 	{
-#ifdef __GNUC__
-#warning reenable when SQLite2ToSQLite3Migration is ported
-#else
-#pragma WARNING( reenable when SQLite2ToSQLite3Migration is ported )
-#endif
-#if 0 //TODO
 		SQLite2ToSQLite3Migration migr( finfo.absoluteFilePath() );
 		tristate res = migr.run();
 //		kDebug() << "--- migr.run() END ---" <<endl;
-#else
-		tristate res = false;
-#endif
 		if (!res) {
 			//TODO msg
 			KMessageBox::sorry(parent, i18n(
@@ -883,6 +878,7 @@ tristate KexiStartupHandler::detectActionForFile(
 		if (res==true)
 			detectedDriverName = newFileFormat;
 	}
+#endif
 //	action.driverName = detectedDriverName;
 	if (detectedDriverName.isEmpty()) {
 		QString possibleProblemsInfoMsg( Kexi::driverManager().possibleProblemsInfoMsg() );
