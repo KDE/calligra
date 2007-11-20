@@ -192,10 +192,11 @@ void WMFImportParser::lineTo( int left, int top ) {
 
 
 void WMFImportParser::drawRect( int left, int top, int width, int height ) {
+    QRectF bound = QRectF( QPointF( coordX(left), coordY(top) ), QSizeF( scaleW(width), scaleH(height) ) ).normalized();
+
     KoRectangleShape * rectangle = new KoRectangleShape();
-    rectangle->setPosition( QPointF( coordX(left), coordY(top) ) );
-    rectangle->setSize( QSizeF( scaleW(width), scaleH(height) ) );
-    rectangle->setScale( width < 0 ? -1.0 : 1.0, height < 0 ? -1.0 : 1.0 );
+    rectangle->setPosition( bound.topLeft() );
+    rectangle->setSize( bound.size() );
 
     appendPen( *rectangle );
     appendBrush( *rectangle );
@@ -205,12 +206,13 @@ void WMFImportParser::drawRect( int left, int top, int width, int height ) {
 
 
 void WMFImportParser::drawRoundRect( int left, int top, int width, int height, int roundw, int roundh ) {
+    QRectF bound = QRectF( QPointF( coordX(left), coordY(top) ), QSizeF( scaleW(width), scaleH(height) ) ).normalized();
+
     KoRectangleShape * rectangle = new KoRectangleShape();
-    rectangle->setPosition( QPointF( coordX(left), coordY(top) ) );
-    rectangle->setSize( QSizeF( scaleW(width), scaleH(height) ) );
+    rectangle->setPosition( bound.topLeft() );
+    rectangle->setSize( bound.size() );
     rectangle->setCornerRadiusX( 2.0 * qAbs( roundw )  );
     rectangle->setCornerRadiusY( 2.0 * qAbs( roundh ) );
-    rectangle->setScale( width < 0 ? -1.0 : 1.0, height < 0 ? -1.0 : 1.0 );
 
     appendPen( *rectangle );
     appendBrush( *rectangle );
@@ -220,10 +222,11 @@ void WMFImportParser::drawRoundRect( int left, int top, int width, int height, i
 
 
 void WMFImportParser::drawEllipse( int left, int top, int width, int height ) {
+    QRectF bound = QRectF( QPointF( coordX(left), coordY(top) ), QSizeF( scaleW(width), scaleH(height) ) ).normalized();
+
     KoEllipseShape *ellipse = new KoEllipseShape();
-    ellipse->setPosition( QPointF( coordX(left), coordY(top) ) );
-    ellipse->setSize( QSizeF( scaleW(width), scaleH(height) ) );
-    ellipse->setScale( width < 0 ? -1.0 : 1.0, height < 0 ? -1.0 : 1.0 );
+    ellipse->setPosition( bound.topLeft() );
+    ellipse->setSize( bound.size() );
 
     appendPen( *ellipse );
     appendBrush( *ellipse );
@@ -237,13 +240,14 @@ void WMFImportParser::drawArc( int x, int y, int w, int h, int aStart, int aLen 
     double end = (aLen * 180) / 2880.0;
     end += start;
 
+    QRectF bound = QRectF( QPointF( coordX(x), coordY(y) ), QSizeF( scaleW(w), scaleH(h) ) ).normalized();
+
     KoEllipseShape * arc = new KoEllipseShape();
     arc->setType( KoEllipseShape::Arc );
     arc->setStartAngle( start );
     arc->setEndAngle( end );
-    arc->setPosition( QPointF( coordX(x), coordY(y) ) );
-    arc->setSize( QSizeF( scaleW(w), scaleH(h) ) );
-    arc->setScale( w < 0 ? -1.0 : 1.0, h < 0 ? -1.0 : 1.0 );
+    arc->setPosition( bound.topLeft() );
+    arc->setSize( bound.size() );
 
     appendPen( *arc );
     //appendBrush( *arc );
@@ -257,13 +261,14 @@ void WMFImportParser::drawPie( int x, int y, int w, int h, int aStart, int aLen 
     double end = (aLen * 180) / 2880.0;
     end += start;
 
+    QRectF bound = QRectF( QPointF( coordX(x), coordY(y) ), QSizeF( scaleW(w), scaleH(h) ) ).normalized();
+
     KoEllipseShape * pie = new KoEllipseShape();
     pie->setType( KoEllipseShape::Pie );
     pie->setStartAngle( start );
     pie->setEndAngle( end );
-    pie->setPosition( QPointF( coordX(x), coordY(y) ) );
-    pie->setSize( QSizeF( scaleW(w), scaleH(h) ) );
-    pie->setScale( w < 0 ? -1.0 : 1.0, h < 0 ? -1.0 : 1.0 );
+    pie->setPosition( bound.topLeft() );
+    pie->setSize( bound.size() );
 
     appendPen( *pie );
     appendBrush( *pie );
@@ -277,13 +282,14 @@ void WMFImportParser::drawChord( int x, int y, int w, int h, int aStart, int aLe
     double end = (aLen * 180) / 2880.0;
     end += start;
 
+    QRectF bound = QRectF( QPointF( coordX(x), coordY(y) ), QSizeF( scaleW(w), scaleH(h) ) ).normalized();
+
     KoEllipseShape * chord = new KoEllipseShape();
     chord->setType( KoEllipseShape::Chord );
     chord->setStartAngle( start );
     chord->setEndAngle( end );
-    chord->setPosition( QPointF( coordX(x), coordY(y) ) );
-    chord->setSize( QSizeF( scaleW(w), scaleH(h) ) );
-    chord->setScale( w < 0 ? -1.0 : 1.0, h < 0 ? -1.0 : 1.0 );
+    chord->setPosition( bound.topLeft() );
+    chord->setSize( bound.size() );
 
     appendPen( *chord );
     appendBrush( *chord );
