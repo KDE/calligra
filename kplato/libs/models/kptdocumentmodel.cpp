@@ -20,6 +20,8 @@
 #include "kptdocumentmodel.h"
 
 #include "kptdocuments.h"
+#include "kptglobal.h"
+
 #include <kdebug.h>
 
 class KoDocument;
@@ -171,10 +173,10 @@ QVariant DocumentModel::headerData( int section, int role )
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-            case 0: return ToolTip::DocumentUrl;
-            case 1: return ToolTip::DocumentType;
-            case 2: return ToolTip::DocumentStatus;
-            case 3: return ToolTip::DocumentSendAs;
+            case 0: return ToolTip::documentUrl();
+            case 1: return ToolTip::documentType();
+            case 2: return ToolTip::documentStatus();
+            case 3: return ToolTip::documentSendAs();
 
             default: return QVariant();
         }

@@ -18,6 +18,8 @@
 */
 
 #include "kptpertcpmmodel.h"
+
+#include "kptglobal.h"
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptnode.h"

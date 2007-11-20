@@ -19,6 +19,7 @@
 
 #include "kptresourceappointmentsmodel.h"
 
+#include "kptglobal.h"
 #include "kptappointment.h"
 #include "kptcommand.h"
 #include "kpteffortcostmap.h"

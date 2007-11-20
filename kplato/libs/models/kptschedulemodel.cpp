@@ -19,6 +19,7 @@
 
 #include "kptschedulemodel.h"
 
+#include "kptglobal.h"
 #include "kptcommand.h"
 #include "kptitemmodelbase.h"
 #include "kptduration.h"
@@ -548,13 +549,13 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-            case 0: return ToolTip::ScheduleName;
-            case 1: return ToolTip::ScheduleState;
-            case 2: return ToolTip::ScheduleOverbooking;
-            case 3: return ToolTip::ScheduleDistribution;
-            case 4: return ToolTip::ScheduleCalculate;
-            case 5: return ToolTip::ScheduleStart;
-            case 6: return ToolTip::ScheduleFinish;
+            case 0: return ToolTip::scheduleName();
+            case 1: return ToolTip::scheduleState();
+            case 2: return ToolTip::scheduleOverbooking();
+            case 3: return ToolTip::scheduleDistribution();
+            case 4: return ToolTip::scheduleCalculate();
+            case 5: return ToolTip::scheduleStart();
+            case 6: return ToolTip::scheduleFinish();
             default: return QVariant();
         }
     }

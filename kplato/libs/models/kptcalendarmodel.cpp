@@ -19,6 +19,7 @@
 
 #include "kptcalendarmodel.h"
 
+#include "kptglobal.h"
 #include "kptcommand.h"
 #include "kptitemmodelbase.h"
 #include "kptcalendar.h"
@@ -411,8 +412,8 @@ QVariant CalendarItemModel::headerData( int section, Qt::Orientation orientation
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-            case 0: return ToolTip::CalendarName;
-            case 1: return ToolTip::CalendarTimeZone;
+            case 0: return ToolTip::calendarName();
+            case 1: return ToolTip::calendarTimeZone();
             default: return QVariant();
         }
     }

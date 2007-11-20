@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006 Dag Andersen <danders@get2net.dk>
+  Copyright (C) 2006, 2007 Dag Andersen <danders@get2net.dk>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -19,6 +19,8 @@
 
 #ifndef KPLATO_GLOBAL_H
 #define KPLATO_GLOBAL_H
+
+#include "kplatokernel_export.h"
 
 #include <QtCore>
 
@@ -45,112 +47,112 @@ namespace Role
     };
 } //namespace Role
 
-namespace ToolTip
+struct KPLATOKERNEL_EXPORT ToolTip
 {
-    static QString NodeName = i18n( "The name of the task" );
-    static QString NodeType = i18n( "Task type" );
-    static QString NodeResponsible = i18n( "The responsible person for this task" );
-    static QString Allocation = i18n( "List of resource allocations" );
-    static QString NodeConstraint = i18n( "The timing constraint type" );
-    static QString NodeConstraintStart = i18n( "Constraint start time" );
-    static QString NodeConstraintEnd = i18n( "Constraint end time" );
-    static QString NodeDescription = i18n( "Task notes" );
-    static QString NodeWBS = i18n( "Work Breakdown Structure Code" );
-    static QString NodeRisk = i18n( "Risk controles the PERT distribution used when calculating the actual estimate for this task" );
-    static QString NodeRunningAccount = i18n( "Account for running costs" );
-    static QString NodeStartupAccount = i18n( "Account for cost incurred at startup of the task" );
-    static QString NodeStartupCost = i18n( "The cost incurred at startup of the task" );
-    static QString NodeShutdownAccount = i18n( "Account for cost incurred at shutdown of the task" );
-    static QString NodeShutdownCost = i18n( "The cost incurred at shutdown of the task" );
+    static QString nodeName();
+    static QString nodeType();
+    static QString nodeResponsible();
+    static QString allocation();
+    static QString nodeConstraint();
+    static QString nodeConstraintStart();
+    static QString nodeConstraintEnd();
+    static QString nodeDescription();
+    static QString nodeWBS();
+    static QString nodeRisk();
+    static QString nodeRunningAccount();
+    static QString nodeStartupAccount();
+    static QString nodeStartupCost();
+    static QString nodeShutdownAccount();
+    static QString nodeShutdownCost();
 
-    static QString NodeStartTime = i18n( "Planned start time" );
-    static QString NodeEndTime = i18n( "Planned finish time" );
-    static QString NodeEarlyStart = i18n( "Earliest start time allowed by dependencies" );
-    static QString NodeEarlyFinish = i18n( "Earliest finish  time allowed by dependencies" );
-    static QString NodeLateStart = i18n( "Latest start time allowed by dependencies" );
-    static QString NodeLateFinish = i18n( "Latest finish time allowed by dependencies" );
+    static QString nodeStartTime();
+    static QString nodeEndTime();
+    static QString nodeEarlyStart();
+    static QString nodeEarlyFinish();
+    static QString nodeLateStart();
+    static QString nodeLateFinish();
     
-    static QString NodeDuration = i18n( "The planned duration" );
-    static QString NodeVarianceDuration = i18n( "The variance of the duration" );
-    static QString NodeOptimisticDuration = i18n( "The optimistic duration" );
-    static QString NodePessimisticDuration = i18n( "The pessimistic duration" );
+    static QString nodeDuration();
+    static QString nodeVarianceDuration();
+    static QString nodeOptimisticDuration();
+    static QString nodePessimisticDuration();
 
-    static QString NodePositiveFloat = i18n( "The duration by which a tasks start can be delayed  without affecting the project completion time" );
-    static QString NodeNegativeFloat = i18n( "The duration by which the duration of a task or path has to be reduced in order to fullfill a timing constraint" );
-    static QString NodeFreeFloat = i18n( "The duration by which a task can be delayed or extended without affecting the start of any succeeding task" );
-    static QString NodeStartFloat = i18n( "The duration from Early Start to Late Start" );
-    static QString NodeFinishFloat = i18n( "The duration from Early Finish to Late Finish" );
-    static QString NodeAssignment = i18n( "The resources assigned to the task" );
+    static QString nodePositiveFloat();
+    static QString nodeNegativeFloat();
+    static QString nodeFreeFloat();
+    static QString nodeStartFloat();
+    static QString nodeFinishFloat();
+    static QString nodeAssignment();
 
-    static QString NodeStatus = i18n( "Task status" );
-    static QString NodeCompletion = i18n( "Task completion" );
-    static QString NodePlannedEffortTo = i18n( "Planned effort" );
-    static QString NodeActualEffortTo = i18n( "Actual effort" );
-    static QString NodeRemainingEffort = i18n( "Remaining effort" );
-    static QString NodePlannedCostTo = i18n( "Planned cost" );
-    static QString NodeActualCostTo = i18n( "Actual cost" );
-    static QString CompletionStartedTime = i18n( "Time when task was actually started" );
-    static QString CompletionFinishedTime = i18n( "Time when task was actually finished" );
-    static QString CompletionStatusNote = i18n( "Status Note" );
+    static QString nodeStatus();
+    static QString nodeCompletion();
+    static QString nodePlannedEffortTo();
+    static QString nodeActualEffortTo();
+    static QString nodeRemainingEffort();
+    static QString nodePlannedCostTo();
+    static QString nodeActualCostTo();
+    static QString completionStartedTime();
+    static QString completionFinishedTime();
+    static QString completionStatusNote();
     
-    static QString EstimateExpected = i18n( "Calculated expected estimate" );
-    static QString EstimateVariance = i18n( "Calculated estimate variance" );
-    static QString EstimateOptimistic = i18n( "Optimistic estimate" );
-    static QString EstimatePessimistic = i18n( "Pessimistic estimate" );
-    static QString EstimateType = i18n( "Type of estimate" );
-    static QString Estimate = i18n( "The most likely estimate" );
-    static QString OptimisticRatio = i18n( "Optimistic estimate" );
-    static QString PessimisticRatio = i18n( "Pessimistic estimate" );
-    static QString RiskType = i18n( "Type of risk" );
+    static QString estimateExpected();
+    static QString estimateVariance();
+    static QString estimateOptimistic();
+    static QString estimatePessimistic();
+    static QString estimateType();
+    static QString estimate();
+    static QString optimisticRatio();
+    static QString pessimisticRatio();
+    static QString riskType();
 
-    static QString NodeNotScheduled = i18n( "The node has not been scheduled" );
-    static QString NodeAssigmentMissing = i18n( "An effort has been estimated, but no resource has been assigned" );
-    static QString NodeResourceOverbooked = i18n( "A resource assigned to this task is overbooked" );
-    static QString NodeResourceUnavailable = i18n( "A resource assigned to this task is not available" );
-    static QString NodeConstraintsError = i18n( "A timing constraint could not be met" );
-    static QString NodeEffortNotMet = i18n( "The assigned resource could not meet the estimated effort" );
+    static QString nodeNotScheduled();
+    static QString nodeAssigmentMissing();
+    static QString nodeResourceOverbooked();
+    static QString nodeResourceUnavailable();
+    static QString nodeConstraintsError();
+    static QString nodeEffortNotMet();
 
-    static QString ResourceName = i18n( "The name of the resource or resource group" );
-    static QString ResourceType = i18n( "The type of the resource or resource group" );
-    static QString ResourceInitials = i18n( "The initials of the resource" );
-    static QString ResourceEMail = i18n( "The e-mail address of the resource" );
-    static QString ResourceCalendar = i18n( "The calendar defines when the resource is working" );
-    static QString ResourceUnits = i18n( "The maximum load that can be assigned" );
-    static QString ResourceAvailableFrom = i18n( "Defines when the resource is available to the project" );
-    static QString ResourceAvailableUntil = i18n( "Defines when the resource is available to the project" );
-    static QString ResourceNormalRate = i18n( "The cost pr hour, normal hours" );
-    static QString ResourceOvertimeRate = i18n( "The cost pr hour, overtime hours" );
-    static QString ResourceFixedCost = i18n( "The fixed cost" );
+    static QString resourceName();
+    static QString resourceType();
+    static QString resourceInitials();
+    static QString resourceEMail();
+    static QString resourceCalendar();
+    static QString resourceUnits();
+    static QString resourceAvailableFrom();
+    static QString resourceAvailableUntil();
+    static QString resourceNormalRate();
+    static QString resourceOvertimeRate();
+    static QString resourceFixedCost();
 
-    static QString AccountName = i18n( "The name of the account" );
-    static QString AccountDescription = i18n( "The description of the account" );
+    static QString accountName();
+    static QString accountDescription();
 
-    static QString ScheduleName = i18n( "The name of the schedule" );
-    static QString ScheduleState = i18n( "The schedules state" );
-    static QString ScheduleOverbooking = i18n( "Controles resource overbooking when scheduling" );
-    static QString ScheduleDistribution = i18n( "The distribution to be used during scheduling" );
-    static QString ScheduleCalculate = i18n( "Defines the schedules to be calculated" );
-    static QString ScheduleStart = i18n( "The scheduled start time" );
-    static QString ScheduleFinish = i18n( "The scheduled finish time" );
+    static QString scheduleName();
+    static QString scheduleState();
+    static QString scheduleOverbooking();
+    static QString scheduleDistribution();
+    static QString scheduleCalculate();
+    static QString scheduleStart();
+    static QString scheduleFinish();
 
-    static QString DocumentUrl = i18n( "The url of the document" );
-    static QString DocumentType = i18n( "The type of the document" );
-    static QString DocumentStatus = i18n( "The status of the document" );
-    static QString DocumentSendAs = i18n( "Defines how this document is send" );
+    static QString documentUrl();
+    static QString documentType();
+    static QString documentStatus();
+    static QString documentSendAs();
 
-    static QString CalendarName = i18n( "The name of the calendar" );
-    static QString CalendarTimeZone = i18n( "The timezone of the calendar" );
+    static QString calendarName();
+    static QString calendarTimeZone();
 
-} //namespace ToolTip
+}; //namespace ToolTip
 
-namespace WhatsThis
+struct KPLATOKERNEL_EXPORT WhatsThis
 {
-    static QString  NodeNegativeFloat = i18n( "Negative float is the duration by which the duration of a task or path has to be reduced in order to fullfill a timing constraint." );
-    static QString  NodeFreeFloat = i18n( "Free float is the duration by which a task can be delayed or extended without affecting the start of any succeeding task." );
-    static QString  NodeStartFloat = i18n( "Start float is the duration from Early Start to Late Start." );
-    static QString  NodeFinishFloat = i18n( "Finish float is the duration from Early Finish to Late Finish." );
+    static QString  nodeNegativeFloat();
+    static QString  nodeFreeFloat();
+    static QString  nodeStartFloat();
+    static QString  nodeFinishFloat();
 
-} //namespace WhatsThis
+}; //namespace WhatsThis
 
 
 } //namespace KPlato

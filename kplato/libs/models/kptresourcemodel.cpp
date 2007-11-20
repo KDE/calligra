@@ -856,16 +856,16 @@ QVariant ResourceItemModel::headerData( int section, Qt::Orientation orientation
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-            case 0: return ToolTip::ResourceName;
-            case 1: return ToolTip::ResourceType;
-            case 2: return ToolTip::ResourceInitials;
-            case 3: return ToolTip::ResourceEMail;
-            case 4: return ToolTip::ResourceCalendar;
-            case 5: return ToolTip::ResourceUnits;
-            case 6: return ToolTip::ResourceAvailableFrom;
-            case 7: return ToolTip::ResourceAvailableUntil;
-            case 8: return ToolTip::ResourceNormalRate;
-            case 9: return ToolTip::ResourceOvertimeRate;
+            case 0: return ToolTip::resourceName();
+            case 1: return ToolTip::resourceType();
+            case 2: return ToolTip::resourceInitials();
+            case 3: return ToolTip::resourceEMail();
+            case 4: return ToolTip::resourceCalendar();
+            case 5: return ToolTip::resourceUnits();
+            case 6: return ToolTip::resourceAvailableFrom();
+            case 7: return ToolTip::resourceAvailableUntil();
+            case 8: return ToolTip::resourceNormalRate();
+            case 9: return ToolTip::resourceOvertimeRate();
             default: return QVariant();
         }
     }

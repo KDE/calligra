@@ -6,6 +6,7 @@ include_directories(${KOSTORE_INCLUDES})
 ########### KPlato kernel library ###############
 
 set(kplatokernel_LIB_SRCS
+    kptglobal.cpp
     kptdocuments.cpp
     kptaccount.cpp
     kptappointment.cpp

@@ -19,6 +19,7 @@
 
 #include "kptaccountsmodel.h"
 
+#include "kptglobal.h"
 #include "kptcommand.h"
 #include "kptduration.h"
 #include "kptnode.h"
@@ -344,8 +345,8 @@ QVariant AccountItemModel::headerData( int section, Qt::Orientation orientation,
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-            case 0: return ToolTip::AccountName;
-            case 1: return ToolTip::AccountDescription;
+            case 0: return ToolTip::accountName();
+            case 1: return ToolTip::accountDescription();
             default: return QVariant();
         }
     }

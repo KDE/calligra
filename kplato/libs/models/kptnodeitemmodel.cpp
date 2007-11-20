@@ -1333,70 +1333,70 @@ QVariant NodeModel::headerData( int section, int role )
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-            case 0: return ToolTip::NodeName;
-            case 1: return ToolTip::NodeType;
-            case 2: return ToolTip::NodeResponsible;
-            case 3: return ToolTip::Allocation;
-            case 4: return ToolTip::EstimateType;
-            case 5: return ToolTip::Estimate;
-            case 6: return ToolTip::OptimisticRatio;
-            case 7: return ToolTip::PessimisticRatio;
-            case 8: return ToolTip::RiskType;
-            case 9: return ToolTip::NodeConstraint;
-            case 10: return ToolTip::NodeConstraintStart;
-            case 11: return ToolTip::NodeConstraintEnd;
-            case 12: return ToolTip::NodeRunningAccount;
-            case 13: return ToolTip::NodeStartupAccount;
-            case 14: return ToolTip::NodeStartupCost;
-            case 15: return ToolTip::NodeShutdownAccount;
-            case 16: return ToolTip::NodeShutdownCost;
-            case 17: return ToolTip::NodeDescription;
+            case 0: return ToolTip::nodeName();
+            case 1: return ToolTip::nodeType();
+            case 2: return ToolTip::nodeResponsible();
+            case 3: return ToolTip::allocation();
+            case 4: return ToolTip::estimateType();
+            case 5: return ToolTip::estimate();
+            case 6: return ToolTip::optimisticRatio();
+            case 7: return ToolTip::pessimisticRatio();
+            case 8: return ToolTip::riskType();
+            case 9: return ToolTip::nodeConstraint();
+            case 10: return ToolTip::nodeConstraintStart();
+            case 11: return ToolTip::nodeConstraintEnd();
+            case 12: return ToolTip::nodeRunningAccount();
+            case 13: return ToolTip::nodeStartupAccount();
+            case 14: return ToolTip::nodeStartupCost();
+            case 15: return ToolTip::nodeShutdownAccount();
+            case 16: return ToolTip::nodeShutdownCost();
+            case 17: return ToolTip::nodeDescription();
 
             // Based on edited values
-            case 18: return ToolTip::EstimateExpected;
-            case 19: return ToolTip::EstimateVariance;
-            case 20: return ToolTip::EstimateOptimistic;
-            case 21: return ToolTip::EstimatePessimistic;
+            case 18: return ToolTip::estimateExpected();
+            case 19: return ToolTip::estimateVariance();
+            case 20: return ToolTip::estimateOptimistic();
+            case 21: return ToolTip::estimatePessimistic();
             
             // After scheduling
-            case 22: return ToolTip::NodeStartTime;
-            case 23: return ToolTip::NodeEndTime;
-            case 24: return ToolTip::NodeEarlyStart;
-            case 25: return ToolTip::NodeEarlyFinish;
-            case 26: return ToolTip::NodeLateStart;
-            case 27: return ToolTip::NodeLateFinish;
-            case 28: return ToolTip::NodePositiveFloat;
-            case 29: return ToolTip::NodeFreeFloat;
-            case 30: return ToolTip::NodeNegativeFloat;
-            case 31: return ToolTip::NodeStartFloat;
-            case 32: return ToolTip::NodeFinishFloat;
-            case 33: return ToolTip::NodeAssignment;
+            case 22: return ToolTip::nodeStartTime();
+            case 23: return ToolTip::nodeEndTime();
+            case 24: return ToolTip::nodeEarlyStart();
+            case 25: return ToolTip::nodeEarlyFinish();
+            case 26: return ToolTip::nodeLateStart();
+            case 27: return ToolTip::nodeLateFinish();
+            case 28: return ToolTip::nodePositiveFloat();
+            case 29: return ToolTip::nodeFreeFloat();
+            case 30: return ToolTip::nodeNegativeFloat();
+            case 31: return ToolTip::nodeStartFloat();
+            case 32: return ToolTip::nodeFinishFloat();
+            case 33: return ToolTip::nodeAssignment();
 
             // Based on scheduled values
-            case 34: return ToolTip::NodeDuration;
-            case 35: return ToolTip::NodeVarianceDuration;
-            case 36: return ToolTip::NodeOptimisticDuration;
-            case 37: return ToolTip::NodePessimisticDuration;
+            case 34: return ToolTip::nodeDuration();
+            case 35: return ToolTip::nodeVarianceDuration();
+            case 36: return ToolTip::nodeOptimisticDuration();
+            case 37: return ToolTip::nodePessimisticDuration();
 
             // Completion
-            case 38: return ToolTip::NodeStatus;
-            case 39: return ToolTip::NodeCompletion;
-            case 40: return ToolTip::NodePlannedEffortTo;
-            case 41: return ToolTip::NodeActualEffortTo;
-            case 42: return ToolTip::NodeRemainingEffort;
-            case 43: return ToolTip::NodePlannedCostTo;
-            case 44: return ToolTip::NodeActualCostTo;
-            case 45: return ToolTip::CompletionStartedTime;
-            case 46: return ToolTip::CompletionFinishedTime;
-            case 47: return ToolTip::CompletionStatusNote;
+            case 38: return ToolTip::nodeStatus();
+            case 39: return ToolTip::nodeCompletion();
+            case 40: return ToolTip::nodePlannedEffortTo();
+            case 41: return ToolTip::nodeActualEffortTo();
+            case 42: return ToolTip::nodeRemainingEffort();
+            case 43: return ToolTip::nodePlannedCostTo();
+            case 44: return ToolTip::nodeActualCostTo();
+            case 45: return ToolTip::completionStartedTime();
+            case 46: return ToolTip::completionFinishedTime();
+            case 47: return ToolTip::completionStatusNote();
     
             // Scheduling errors
-            case 48: return ToolTip::NodeNotScheduled;
-            case 49: return ToolTip::NodeAssigmentMissing;
-            case 50: return ToolTip::NodeResourceOverbooked;
-            case 51: return ToolTip::NodeResourceUnavailable;
-            case 52: return ToolTip::NodeConstraintsError;
-            case 53: return ToolTip::NodeEffortNotMet;
+            case 48: return ToolTip::nodeNotScheduled();
+            case 49: return ToolTip::nodeAssigmentMissing();
+            case 50: return ToolTip::nodeResourceOverbooked();
+            case 51: return ToolTip::nodeResourceUnavailable();
+            case 52: return ToolTip::nodeConstraintsError();
+            case 53: return ToolTip::nodeEffortNotMet();
             
             default: return QVariant();
         }
