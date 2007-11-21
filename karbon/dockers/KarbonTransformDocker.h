@@ -69,7 +69,7 @@ private:
     void layoutVertical();
     void layoutHorizontal();
     void clearLayout();
-
+    void enableWidgets( bool enable );
     class Private;
     Private * const d;
 };

@@ -301,7 +301,7 @@ void KarbonTransformDocker::update()
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
     if ( selection->count() > 0 )
     {
-        setEnabled( true );
+        enableWidgets( true );
         QRectF rect = selectionRect();
 
         d->x->changeValue( rect.x() );
@@ -322,7 +322,7 @@ void KarbonTransformDocker::update()
         d->shearX->setValue(0.0);
         d->shearY->setValue(0.0);
         d->rotate->setValue(0.0);
-        setEnabled( false );
+        enableWidgets( false );
     }
 
     enableSignals( true );
@@ -492,6 +492,17 @@ void KarbonTransformDocker::dockLocationChanged( Qt::DockWidgetArea area )
         layoutVertical();
     else
         layoutHorizontal();
+}
+
+void KarbonTransformDocker::enableWidgets( bool enable )
+{
+    d->x->setEnabled( enable );
+    d->y->setEnabled( enable );
+    d->width->setEnabled( enable );
+    d->height->setEnabled( enable );
+    d->rotate->setEnabled( enable );
+    d->shearX->setEnabled( enable );
+    d->shearY->setEnabled( enable );
 }
 
 #include "KarbonTransformDocker.moc"
