@@ -11,7 +11,7 @@ set(kivioprivate_LIB_SRCS
 
 kde4_add_library(kivioprivate SHARED ${kivioprivate_LIB_SRCS})
 
-target_link_libraries(kivioprivate  ${KDE4_KDECORE_LIBS} komain koguiutils flake kopageapp)
+target_link_libraries(kivioprivate  ${KDE4_KDECORE_LIBS} koguiutils flake kopageapp)
 
 set_target_properties(kivioprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kivioprivate  DESTINATION ${LIB_INSTALL_DIR})
@@ -32,7 +32,7 @@ set(kivio_KDEINIT_SRCS main.cpp )
 
 kde4_add_kdeinit_executable( kivio ${kivio_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_kivio  ${KDE4_KDECORE_LIBS} kivioprivate )
+target_link_libraries(kdeinit_kivio  ${KDE4_KDECORE_LIBS} komain )
 
 install(TARGETS kdeinit_kivio DESTINATION ${LIB_INSTALL_DIR})
 

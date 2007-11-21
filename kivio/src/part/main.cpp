@@ -20,12 +20,14 @@
 #include <kcmdlineargs.h>
 
 #include <KoApplication.h>
+#include <memory>
 
-#include "KivioFactory.h"
+#include "KivioAboutData.h"
 
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv )
 {
-  KCmdLineArgs::init( argc, argv, KivioFactory::aboutData());
+  std::auto_ptr<KAboutData> about( newKivioAboutData() );
+  KCmdLineArgs::init( argc, argv, about.get() );
 
   KCmdLineOptions options;
   options.add("+[file]", ki18n("File to open"));
