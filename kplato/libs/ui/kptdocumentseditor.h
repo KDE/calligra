@@ -49,7 +49,8 @@ public:
 
     Document *currentDocument() const;
     QList<Document*> selectedDocuments() const;
-
+    
+    using QTreeView::selectionChanged;
 signals:
     void selectionChanged( QModelIndexList );
     
@@ -66,6 +67,7 @@ public:
     DocumentsEditor( KoDocument *part, QWidget *parent );
     
     void setupGui();
+    using ViewBase::draw;
     virtual void draw( Documents &docs );
     virtual void draw();
 

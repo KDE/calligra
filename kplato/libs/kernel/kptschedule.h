@@ -94,7 +94,7 @@ public:
 
     bool isCritical() const { return positiveFloat == Duration::zeroDuration; }
 
-    virtual bool loadXML( const KoXmlElement &element );
+    virtual bool loadXML( const KoXmlElement &element, XMLLoaderObject &status );
     virtual void saveXML( QDomElement &element ) const;
     void saveCommonXML( QDomElement &element ) const;
     void saveAppointments( QDomElement &element ) const;
@@ -125,7 +125,7 @@ public:
     virtual Appointment appointmentIntervals( int which = Scheduling ) const;
 
     virtual bool isOverbooked() const { return false; }
-    virtual bool isOverbooked( const QDateTime & /*start*/, const QDateTime & /*end*/ ) const { return false; }
+    virtual bool isOverbooked( const KDateTime & /*start*/, const KDateTime & /*end*/ ) const { return false; }
     virtual QStringList overbookedResources() const;
 
     /// Return the resources that has appointments to this schedule
@@ -328,7 +328,7 @@ public:
     virtual void takeAppointment( Appointment *appointment, int type = Scheduling );
 
     virtual bool isOverbooked() const;
-    virtual bool isOverbooked( const DateTime &start, const DateTime &end ) const;
+    virtual bool isOverbooked( const KDateTime &start, const KDateTime &end ) const;
 
     virtual Resource *resource() const { return m_resource; }
     virtual double normalRatePrHour() const;

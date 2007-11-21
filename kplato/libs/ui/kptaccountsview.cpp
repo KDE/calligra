@@ -433,7 +433,7 @@ bool AccountsView::loadContext( const KoXmlElement &context )
 //     }
 // }
 
-void AccountsView::saveContext( QDomElement *context ) const
+void AccountsView::saveContext( QDomElement &context ) const
 {
     //kDebug()<<endl;
 /*    Context::Accountsview &context = c.accountsview;

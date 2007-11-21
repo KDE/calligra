@@ -780,14 +780,14 @@ Calendar *Resource::findCalendar(const QString &id) const {
 }
 
 bool Resource::isOverbooked() const {
-    return isOverbooked(QDateTime(), QDateTime());
+    return isOverbooked(KDateTime(), KDateTime());
 }
 
 bool Resource::isOverbooked(const QDate &date) const {
-    return isOverbooked(QDateTime(date), QDateTime(date.addDays(1)));
+    return isOverbooked(KDateTime(date), KDateTime(date.addDays(1)));
 }
 
-bool Resource::isOverbooked(const QDateTime &start, const QDateTime &end) const {
+bool Resource::isOverbooked(const KDateTime &start, const KDateTime &end) const {
     //kDebug()<<m_name<<":"<<start.toString()<<" -"<<end.toString()<<" cs=("<<m_currentSchedule<<")";
     return m_currentSchedule ? m_currentSchedule->isOverbooked(start, end) : false;
 }

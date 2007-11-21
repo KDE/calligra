@@ -61,11 +61,12 @@ public:
 
     virtual void setZoom( double zoom );
     virtual void setProject( Project *project );
+    using ViewBase::draw;
     virtual void draw();
     void print( QPrinter &printer, QPrintDialog &printDialog );
 
     virtual bool loadContext( const KoXmlElement &context );
-    virtual void saveContext( QDomElement *context ) const;
+    virtual void saveContext( QDomElement &context ) const;
 
 signals:
     void configChanged();

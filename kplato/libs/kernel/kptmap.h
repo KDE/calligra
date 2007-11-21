@@ -151,6 +151,7 @@ public:
 
     static QPair<int, int> week(int key) { return QPair<int, int>(key/10000, key%10000); }
 
+    using IntMap::state;
     int state(QPair<int, int> week) { return IntMap::state(week.first*10000 + week.second); }
     int state(int week, int year) { return state(QPair<int, int>(week, year)); }
 

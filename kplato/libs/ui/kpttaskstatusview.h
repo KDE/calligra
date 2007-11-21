@@ -72,6 +72,7 @@ public:
     
     void setupGui();
     virtual void setProject( Project *project );
+    using ViewBase::draw;
     virtual void draw( Project &project );
 
     TaskStatusItemModel *model() const { return m_view->model(); }

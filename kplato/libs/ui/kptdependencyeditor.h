@@ -90,6 +90,7 @@ public:
     
     int newChildColumn() const;
     
+    using DependencyLinkItemBase::createPath;
     virtual void createPath();
     virtual QPointF startPoint() const;
     virtual QPointF endPoint() const;
@@ -116,6 +117,7 @@ public:
     
     void clear();
     
+    using DependencyLinkItemBase::createPath;
     virtual void createPath();
     void createPath( const QPointF &ep );
 

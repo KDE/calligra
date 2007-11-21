@@ -72,6 +72,7 @@ public:
     void setTask( Task *task );
     ScheduleManager *scheduleManager() const;
     void setScheduleManager( ScheduleManager *sm );
+    using ViewBase::draw;
     void draw();
 
 private:

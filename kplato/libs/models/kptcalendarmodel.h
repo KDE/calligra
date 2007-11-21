@@ -95,6 +95,7 @@ public:
     virtual QStringList mimeTypes () const;
     virtual Qt::DropActions supportedDropActions() const;
     virtual bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
+    using ItemModelBase::dropAllowed;
     bool dropAllowed( Calendar *on, const QMimeData *data );
 
     Calendar *calendar( const QModelIndex &index ) const;

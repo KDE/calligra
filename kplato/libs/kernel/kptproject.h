@@ -104,9 +104,10 @@ public:
     virtual bool load( KoXmlElement &element, XMLLoaderObject &status );
     virtual void save( QDomElement &element ) const;
     
+    using Node::saveWorkPackageXML;
     /// Save a workpackage document containing @node with schedule identity @id
     void saveWorkPackageXML( QDomElement &element, const Node *node, long id ) const;
-
+    
     /**
      * Add the node @p task to the project, after node @p position
      * If @p postition is zero, it will be added to this project.
@@ -271,6 +272,7 @@ public:
     /// Return a list of all nodes in the project
     QList<Node*> allNodes();
 
+    using Node::findNode;
     /// Find the node with identity id
     virtual Node *findNode( const QString &id ) const
     {
@@ -281,8 +283,11 @@ public:
         }
         return m_parent->findNode( id );
     }
+    using Node::removeId;
     /// Remove the node with identity id from the register
     virtual bool removeId( const QString &id );
+    
+    using Node::insertId;
     /// Insert the node with identity id
     virtual void insertId( const QString &id, Node *node );
     /// Register node. The nodes id must be unique and non-empty.

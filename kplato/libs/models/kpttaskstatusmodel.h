@@ -74,6 +74,7 @@ public:
     
     NodeList nodeList( QDataStream &stream );
     static NodeList removeChildNodes( const NodeList nodes );
+    using ItemModelBase::dropAllowed;
     bool dropAllowed( Node *on, const QMimeData *data );
     
     void clear();

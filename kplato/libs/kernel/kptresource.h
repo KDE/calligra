@@ -293,7 +293,7 @@ public:
     /// check if overbooked on date.
     bool isOverbooked( const QDate &date ) const;
     /// check if overbooked within the interval start, end.
-    bool isOverbooked( const QDateTime &start, const QDateTime &end ) const;
+    bool isOverbooked( const KDateTime &start, const KDateTime &end ) const;
 
     double normalRate() const { return cost.normalRate; }
     void setNormalRate( double rate ) { cost.normalRate = rate; changed(); }

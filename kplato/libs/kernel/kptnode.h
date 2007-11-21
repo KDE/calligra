@@ -109,8 +109,7 @@ public:
     virtual Node *projectNode();
     
     // The load and save methods
-    virtual bool load(KoXmlElement &) { return true; }
-    virtual bool load(KoXmlElement &, Project &) { return true; }
+    virtual bool load(KoXmlElement &, XMLLoaderObject &) { return true; }
     virtual void save(QDomElement &element) const  = 0;
     /// Save me and my childrens relations.
     virtual void saveRelations(QDomElement &element) const;

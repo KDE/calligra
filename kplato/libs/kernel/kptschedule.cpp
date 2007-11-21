@@ -197,7 +197,7 @@ void Schedule::calcResourceOverbooked()
 {
     resourceOverbooked = false;
     foreach( Appointment *a, m_appointments ) {
-        if ( a->resource() ->isOverbooked( a->startTime().dateTime(), a->endTime().dateTime() ) ) {
+        if ( a->resource() ->isOverbooked( a->startTime(), a->endTime() ) ) {
             resourceOverbooked = true;
             break;
         }
@@ -208,7 +208,7 @@ QStringList Schedule::overbookedResources() const
 {
     QStringList rl;
     foreach( Appointment *a, m_appointments ) {
-        if ( a->resource() ->isOverbooked( a->startTime().dateTime(), a->endTime().dateTime() ) ) {
+        if ( a->resource() ->isOverbooked( a->startTime(), a->endTime() ) ) {
             rl += a->resource() ->resource() ->name();
         }
     }
@@ -225,7 +225,7 @@ QList<Resource*> Schedule::resources() const
     return QList<Resource*>();
 }
 
-bool Schedule::loadXML( const KoXmlElement &sch )
+bool Schedule::loadXML( const KoXmlElement &sch, XMLLoaderObject & )
 {
     m_name = sch.attribute( "name" );
     setType( sch.attribute( "type" ) );
@@ -559,7 +559,7 @@ bool NodeSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
 {
     //kDebug();
     QString s;
-    Schedule::loadXML( sch );
+    Schedule::loadXML( sch, status );
     s = sch.attribute( "earlystart" );
     if ( s.isEmpty() ) { // try version < 0.6
         s = sch.attribute( "earlieststart" );
@@ -772,7 +772,7 @@ bool ResourceSchedule::isOverbooked() const
     return false;
 }
 
-bool ResourceSchedule::isOverbooked( const DateTime &start, const DateTime &end ) const
+bool ResourceSchedule::isOverbooked( const KDateTime &start, const KDateTime &end ) const
 {
     if ( m_resource == 0 )
         return false;
@@ -884,7 +884,7 @@ bool MainSchedule::loadXML( const KoXmlElement &sch, XMLLoaderObject &status )
 {
     //kDebug();
     QString s;
-    Schedule::loadXML( sch );
+    Schedule::loadXML( sch, status );
 
     s = sch.attribute( "start" );
     if ( !s.isEmpty() )
