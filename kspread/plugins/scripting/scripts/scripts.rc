@@ -110,7 +110,7 @@
            name="rbsnippets"
            text="Ruby Snippets"
            comment="Ruby Snippets"
-           enabled="true"
+           enabled="false"
            interpreter="ruby"
            file="docker/snippetsdocker.rb" />
     </collection>
