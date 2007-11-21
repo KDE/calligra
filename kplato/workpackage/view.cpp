@@ -72,7 +72,7 @@
 #include <kurl.h>
 #include <kopenwithdialog.h>
 #include <kmimetypetrader.h>
-#include <kserviceoffer.h>
+//#include <kserviceoffer.h>
 
 #include "part.h"
 #include "factory.h"
