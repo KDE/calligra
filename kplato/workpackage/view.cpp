@@ -20,12 +20,6 @@
 
 #include "view.h"
 
-#include <kmessagebox.h>
-#include <krun.h>
-#include <kvbox.h>
-#include <kmimetype.h>
-#include <kurl.h>
-
 #include "KoDocumentInfo.h"
 #include <KoMainWindow.h>
 #include <KoToolManager.h>
@@ -70,6 +64,15 @@
 #include <kparts/partmanager.h>
 #include <kparts/componentfactory.h>
 #include <KoQueryTrader.h>
+#include <kmessagebox.h>
+#include <krun.h>
+#include <kvbox.h>
+#include <kmimetype.h>
+#include <kprocess.h>
+#include <kurl.h>
+#include <kopenwithdialog.h>
+#include <kmimetypetrader.h>
+#include <kserviceoffer.h>
 
 #include "part.h"
 #include "factory.h"
@@ -88,6 +91,31 @@
 
 namespace KPlatoWork
 {
+
+Process::Process( QObject *parent )
+    : KProcess( parent )
+{
+    kDebug();
+    connect( this, SIGNAL( finished( int, QProcess::ExitStatus ) ), SLOT( slotFinished( int, QProcess::ExitStatus ) ) );
+
+    connect( this, SIGNAL( error( QProcess::ProcessError ) ), SLOT( slotError( QProcess::ProcessError ) ) );
+}
+    
+Process::~Process()
+{
+    kDebug();
+}
+
+void Process::slotFinished( int exitCode, QProcess::ExitStatus status )
+{
+    emit processFinished( this, exitCode, status );
+}
+
+void Process::slotError( QProcess::ProcessError status )
+{
+    emit processError( this, status );
+}
+
 
 //-------------------------------
 View::View( Part* part, QWidget* parent )
@@ -232,117 +260,25 @@ void View::print( QPrinter &printer, QPrintDialog &printDialog )
 {
 }
 
-void View::addPart( KParts::Part* part, const QString &name )
+QWidget *View::canvas() const
 {
-    kDebug()<<"---------->";
-    m_partsMap.insert( part->widget(), part );
-    int tab = m_tab->addTab( part->widget(), name );
-    partManager()->addPart( part, false );
-    if ( factory() ) {
-/*        factory()->addClient( part );
-        kDebug()<<factory()->clients();*/
-    }
-    m_tab->setCurrentIndex( tab );
-    kDebug()<<"<----------";
+    return m_tab->currentWidget();
 }
 
-bool View::viewDocument( const KUrl &filename )
+KoDocument *View::hitTest( const QPoint &pos )
 {
     kDebug()<<"---------->";
-    kDebug()<<"url:"<<filename;
-    if ( ! filename.isValid() ) {
-        kDebug()<<"Invalid url:"<<filename;
-        kDebug()<<"<----------";
-        return false;
+    // TODO: The gui handling can certainly be simplified (at least I think so),
+    // by someone who have a better understanding of all the possibilities of KParts
+    // than I have.
+    // pos is in m_tab->currentWidget() coordinates
+    QPoint gl = m_tab->currentWidget()->mapToGlobal(pos);
+    kDebug()<<pos<<gl;
+    if ( koDocument() == dynamic_cast<KoDocument*>(partManager()->activePart() ) ) {
+        // just activating new view on the same doc
+        return koDocument()->hitTest( pos, this );
     }
-    KMimeType::Ptr mimetype = KMimeType::findByUrl( filename, 0, true );
-
-    QStringList args;// args << filename.fileName();
-    int error = 0;
-    KParts::ReadOnlyPart *part = KParts::ComponentFactory::createPartInstanceFromQuery<KParts::ReadOnlyPart>( mimetype->name(), QString::null, m_tab, m_tab, args, &error );
-    
-    kDebug()<<"Return status="<<error;
-    if ( part == 0 ) {
-        kError()<<"Could not create part";
-        kDebug()<<"<----------";
-        return false;
-    }
-    bool r = part->openUrl( filename );
-    addPart( part, filename.fileName() );
-    kDebug()<<part<<part->url()<<r;
-    kDebug()<<"<----------";
-    return true;
-}
-
-bool View::editDocument( const KUrl &filename )
-{
-    kDebug()<<"---------->";
-    kDebug()<<"url:"<<filename;
-    if ( ! filename.isValid() ) {
-        kDebug()<<"Invalid url:"<<filename;
-        kDebug()<<"<----------";
-        return false;
-    }
-    KMimeType::Ptr mimetype = KMimeType::findByUrl( filename, 0, true );
-
-    QStringList args;// args << filename.fileName();
-    int error = 0;
-    KParts::ReadWritePart *part = KParts::ComponentFactory::createPartInstanceFromQuery<KParts::ReadWritePart>( mimetype->name(), QString::null, m_tab, m_tab, args, &error );
-    
-    kDebug()<<"Return status="<<error;
-    if ( part == 0 ) {
-        kError()<<"Could not create part";
-        kDebug()<<"<----------";
-        return false;
-    }
-    bool r = part->openUrl( filename );
-    addPart( part, filename.fileName() );
-    kDebug()<<part<<part->widget()<<partManager()->parts()<<part->url()<<r;
-    kDebug()<<"<----------";
-    return true;
-}
-
-void View::slotEditDocument( Document *doc )
-{
-    kDebug()<<doc;
-    if ( doc == 0 ) {
-        return;
-    }
-    if ( doc->type() == Document::Type_Product ) {
-        KUrl filename;
-        if ( doc->sendAs() == Document::SendAs_Copy ) {
-            filename = KUrl( KStandardDirs::locateLocal( "tmp", doc->url().fileName() ) );
-        } else {
-            filename = doc->url();
-        }
-        // open for edit
-        if ( ! filename.isValid() ) {
-            kDebug()<<"Invalid url:"<<filename;
-            kDebug()<<"<----------";
-            return;
-        }
-        editDocument( filename );
-    } else {
-        slotViewDocument( doc );
-    }
-    kDebug()<<"<----------";
-}
-
-void View::slotViewDocument( Document *doc )
-{
-    kDebug()<<"---------->";
-    kDebug()<<doc;
-    if ( doc == 0 ) {
-        return;
-    }
-    KUrl filename;
-    if ( doc->sendAs() == Document::SendAs_Copy ) {
-        filename = KUrl( KStandardDirs::locateLocal( "tmp", doc->url().fileName() ) );
-    } else {
-        filename = doc->url();
-    }
-    // open for view
-    viewDocument( filename );
+    return 0;
     kDebug()<<"<----------";
 }
 
@@ -382,28 +318,6 @@ void View::slotCurrentChanged( int index )
     }
     m_currentWidget = cw;
     kDebug()<<"<----------";
-}
-
-KoDocument *View::hitTest( const QPoint &pos )
-{
-    kDebug()<<"---------->";
-    // TODO: The gui handling can certainly be simplified (at least I think so),
-    // by someone who have a better understanding of all the possibilities of KParts
-    // than I have.
-    // pos is in m_tab->currentWidget() coordinates
-    QPoint gl = m_tab->currentWidget()->mapToGlobal(pos);
-    kDebug()<<pos<<gl;
-    if ( koDocument() == dynamic_cast<KoDocument*>(partManager()->activePart() ) ) {
-        // just activating new view on the same doc
-        return koDocument()->hitTest( pos, this );
-    }
-    return 0;
-    kDebug()<<"<----------";
-}
-
-QWidget *View::canvas() const
-{
-    return m_tab->currentWidget();
 }
 
 void View::slotGuiActivated( ViewBase *view, bool activate )
@@ -694,6 +608,129 @@ void View::setLabel()
     }
     m_estlabel->setText( i18n( "Not scheduled" ) );
 }
+
+void View::slotEditFinished( Process *process, int exitCode,  QProcess::ExitStatus status )
+{
+    kDebug()<<exitCode<<status;
+    //TODO: Handle changed docs
+    delete process;
+}
+
+void View::slotEditError( Process *process, QProcess::ProcessError status )
+{
+    kDebug()<<status;
+    if ( status == QProcess::FailedToStart || status == QProcess::Crashed ) {
+        process->deleteLater();
+    }
+}
+
+void View::addPart( KParts::Part* part, const QString &name )
+{
+    kDebug()<<"---------->";
+    m_partsMap.insert( part->widget(), part );
+    int tab = m_tab->addTab( part->widget(), name );
+    partManager()->addPart( part, false );
+    if ( factory() ) {
+/*        factory()->addClient( part );
+        kDebug()<<factory()->clients();*/
+    }
+    m_tab->setCurrentIndex( tab );
+    kDebug()<<"<----------";
+}
+
+bool View::viewDocument( const KUrl &filename )
+{
+    kDebug()<<"---------->";
+    kDebug()<<"url:"<<filename;
+    if ( ! filename.isValid() ) {
+        kDebug()<<"Invalid url:"<<filename;
+        kDebug()<<"<----------";
+        return false;
+    }
+    KRun *run = new KRun( filename, 0 );
+    return true;
+}
+
+bool View::editDocument( const KUrl &filename )
+{
+    kDebug()<<"---------->";
+    kDebug()<<"url:"<<filename;
+    if ( ! filename.isValid() ) {
+        kDebug()<<"Invalid url:"<<filename;
+        return false;
+    }
+    KMimeType::Ptr mimetype = KMimeType::findByUrl( filename, 0, true );
+    KService::Ptr service = KMimeTypeTrader::self()->preferredService( mimetype->name() );
+    QStringList args;
+    if ( service ) {
+        args = KRun::processDesktopExec( *service, KUrl::List()<< filename );
+    } else {
+        KUrl::List list;
+        KOpenWithDialog dlg( list, i18n("Edit with:"), QString::null, (QWidget*)0L );
+        if ( dlg.exec() == QDialog::Accepted ){
+            args << dlg.text();
+        }
+        if ( args.isEmpty() ) {
+            kDebug()<<"No executable";
+            return false;
+        }
+        args << filename.url();
+    }
+    kDebug()<<args;
+    Process *process = new Process();
+    process->setProgram( args );
+    connect( process, SIGNAL( processFinished( Process*, int,  QProcess::ExitStatus ) ),  SLOT( slotEditFinished( Process*, int,  QProcess::ExitStatus ) ) );
+    connect( process, SIGNAL( processError( Process*, QProcess::ProcessError ) ),  SLOT( slotEditError( Process*, QProcess::ProcessError ) ) );
+    process->start();
+    
+    kDebug()<<"<----------";
+    return true;
+}
+
+void View::slotEditDocument( Document *doc )
+{
+    kDebug()<<doc;
+    if ( doc == 0 ) {
+        return;
+    }
+    if ( doc->type() == Document::Type_Product ) {
+        KUrl filename;
+        if ( doc->sendAs() == Document::SendAs_Copy ) {
+            filename = KUrl( KStandardDirs::locateLocal( "tmp", doc->url().fileName() ) );
+        } else {
+            filename = doc->url();
+        }
+        if ( ! filename.isValid() ) {
+            kDebug()<<"Invalid url:"<<filename;
+            kDebug()<<"<----------";
+            return;
+        }
+        // open for edit
+        editDocument( filename );
+    } else {
+        slotViewDocument( doc );
+    }
+    kDebug()<<"<----------";
+}
+
+void View::slotViewDocument( Document *doc )
+{
+    kDebug()<<"---------->";
+    kDebug()<<doc;
+    if ( doc == 0 ) {
+        return;
+    }
+    KUrl filename;
+    if ( doc->sendAs() == Document::SendAs_Copy ) {
+        filename = KUrl( KStandardDirs::locateLocal( "tmp", doc->url().fileName() ) );
+    } else {
+        filename = doc->url();
+    }
+    // open for view
+    viewDocument( filename );
+    kDebug()<<"<----------";
+}
+
 
 }  //KPlatoWork namespace
 

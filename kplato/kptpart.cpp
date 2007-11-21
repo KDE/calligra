@@ -272,7 +272,7 @@ bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id
         store->setPassword( d->m_password );
     }*/
     if ( store->bad() ) {
-        setErrorMessage( i18n( "Could not create the workpackage file for saving" ) ); // more details needed?
+        setErrorMessage( i18n( "Could not create the workpackage file for saving: %1", file ) ); // more details needed?
         delete store;
         return false;
     }
@@ -286,13 +286,13 @@ bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id
     }
     KoStoreDevice dev( store );
     if ( !saveWorkPackageToStream( &dev, node, id ) || !store->close() ) {
-        kDebug(30003) <<"saveToStream failed";
+        kDebug() <<"saveToStream failed";
         delete store;
         return false;
     }
     node->documents().saveToStore( store );
     
-    kDebug(30003) <<"Saving done of url:" << file;
+    kDebug() <<"Saving done of url:" << file;
     if ( !store->finalize() ) {
         delete store;
         return false;
@@ -305,23 +305,12 @@ bool Part::saveWorkPackageFormat( const QString &file, const Node *node, long id
 
 bool Part::saveWorkPackageUrl( const KUrl & _url, const Node *node, long id  )
 {
-    kDebug()<<_url;
-
+    //kDebug()<<_url;
     QApplication::setOverrideCursor( Qt::WaitCursor );
-
     emit statusBarMessage( i18n("Saving...") );
     bool ret = false;
-    bool suppressErrorDialog = false;
-
-    ret = saveWorkPackageFormat( _url.url(), node, id );
-
-
+    ret = saveWorkPackageFormat( _url.path(), node, id ); // kzip don't handle file://
     QApplication::restoreOverrideCursor();
-    if ( ! ret ) {
-        if ( !suppressErrorDialog ) {
-            showSavingErrorDialog();
-        }
-    }
     emit clearStatusBarMessage();
     return ret;
 }

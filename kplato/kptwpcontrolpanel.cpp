@@ -26,6 +26,9 @@
 
 #include <klocale.h>
 #include <ktoolinvocation.h>
+#include <ktemporaryfile.h>
+#include <kstandarddirs.h>
+#include <kmessagebox.h>
 
 #include <kdebug.h>
 
@@ -44,18 +47,32 @@ WPControlPanel::WPControlPanel( View *view, Task &task, QWidget *p )
 
 void WPControlPanel::slotTransferWPClicked()
 {
-    KUrl url( "workpackage.kplatowork" );
-    kDebug()<<m_task.name()<<" -> "<<url;
-    m_view->getPart()->saveWorkPackageUrl( url, &m_task, m_view->currentScheduleId() );
-    
-/*    QString to = m_task.leader();
+    KTemporaryFile tmpfile;
+    tmpfile.setAutoRemove( false );
+    tmpfile.setSuffix( ".kplatowork" );
+    if ( ! tmpfile.open() ) {
+        kDebug()<<"Failed to open file";
+        KMessageBox::error(0, i18n("Failed to open temporary file" ) );
+        return;
+    }
+    KUrl url;
+    url.setPath( tmpfile.fileName() );
+    if ( ! m_view->getPart()->saveWorkPackageUrl( url, &m_task, m_view->currentScheduleId() ) ) {
+        kDebug()<<"Failed to save to file";
+        KMessageBox::error(0, i18n("Failed to save to temporary file: %1", url.url() ) );
+        return;
+    }
+    QStringList attachURLs;
+    attachURLs << url.url();
+    QString to;
     QString cc;
     QString bcc;
-    QString subject = m_task.name();
+    QString subject = i18n( "Work Package: %1", m_task.name() );
     QString body = m_task.description();
     QString messageFile;
-    QStringList attachURLs = QStringList() << url.url();
-    KToolInvocation::invokeMailer( to, cc, bcc, subject, body, messageFile, attachURLs );*/
+
+    KToolInvocation::invokeMailer( to, cc, bcc, subject, body, messageFile, attachURLs );
+    
 }
 
 void WPControlPanel::slotLoadWPClicked()

@@ -24,7 +24,9 @@
 #include <KoView.h>
 
 #include <QMenu>
+#include <QProcess>
 
+#include <kprocess.h>
 
 class QProgressBar;
 class QTabWidget;
@@ -34,6 +36,7 @@ class QPrintDialog;
 class KAction;
 class KToggleAction;
 class QLabel;
+
 class KUrl;
 
 class KoView;
@@ -70,6 +73,23 @@ namespace KPlatoWork
 
 class Part;
 class View;
+
+
+class Process : public KProcess
+{
+    Q_OBJECT
+public:
+    Process( QObject *parent = 0 );
+    ~Process();
+    
+signals:
+    void processFinished( Process*, int exitCode, QProcess::ExitStatus status );
+    void processError( Process*, QProcess::ProcessError status );
+
+protected slots:
+    void slotFinished( int exitCode, QProcess::ExitStatus status );
+    void slotError( QProcess::ProcessError status );
+};
 
 //-------------
 class View : public KoView
@@ -155,6 +175,8 @@ protected:
 
 private slots:
     void slotActionDestroyed( QObject *o );
+    void slotEditFinished( Process *, int exitCode,  QProcess::ExitStatus status );
+    void slotEditError( Process *, QProcess::ProcessError status );
 
 private:
     void createViews();

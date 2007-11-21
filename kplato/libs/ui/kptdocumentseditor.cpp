@@ -68,7 +68,9 @@ DocumentTreeView::DocumentTreeView( QWidget *parent )
     DocumentItemModel *m = new DocumentItemModel();
     setModel( m );
     
-    //setSelectionMode( QAbstractItemView::ExtendedSelection );
+    setRootIsDecorated ( false );
+    setSelectionBehavior( QAbstractItemView::SelectRows );
+    setSelectionMode( QAbstractItemView::SingleSelection );
 
     for ( int col = 0; col < m->columnCount(); ++col ) {
         QItemDelegate *delegate = m->createDelegate( col, this );
@@ -79,6 +81,8 @@ DocumentTreeView::DocumentTreeView( QWidget *parent )
 
     setAcceptDrops( true );
     setDropIndicatorShown( true );
+    
+    connect( selectionModel(), SIGNAL( selectionChanged ( const QItemSelection&, const QItemSelection& ) ), SLOT( slotSelectionChanged( const QItemSelection& ) ) );
 }
 
 void DocumentTreeView::slotActivated( const QModelIndex index )
@@ -190,10 +194,10 @@ void DocumentsEditor::slotCurrentChanged(  const QModelIndex & )
 //    slotEnableActions();
 }
 
-void DocumentsEditor::slotSelectionChanged( const QModelIndexList )
+void DocumentsEditor::slotSelectionChanged( const QModelIndexList list )
 {
-    //kDebug()<<list.count();
-    updateActionsEnabled();
+    kDebug()<<list.count();
+    updateActionsEnabled( true );
 }
 
 void DocumentsEditor::slotEnableActions( bool on )
@@ -203,18 +207,26 @@ void DocumentsEditor::slotEnableActions( bool on )
 
 void DocumentsEditor::updateActionsEnabled(  bool on )
 {
+    Document *doc = currentDocument();
+    if ( doc == 0 ) {
+        actionEditDocument->setEnabled( false );
+        actionViewDocument->setEnabled( false );
+        return;
+    }
+    actionViewDocument->setEnabled( on );
+    actionEditDocument->setEnabled( on && doc->type() == Document::Type_Product );
 }
 
 void DocumentsEditor::setupGui()
 {
     QString name = "documentseditor_edit_list";
-    actionEditDocument  = new KAction(KIcon( "document-edit" ), i18n("Edit..."), this);
+    actionEditDocument  = new KAction(KIcon( "edit" ), i18n("Edit..."), this);
     actionCollection()->addAction("edit_documents", actionEditDocument );
 //    actionEditDocument->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     connect( actionEditDocument, SIGNAL( triggered( bool ) ), SLOT( slotEditDocument() ) );
     addAction( name, actionEditDocument );
     
-    actionViewDocument  = new KAction(KIcon( "document-view" ), i18n("View..."), this);
+    actionViewDocument  = new KAction(KIcon( "view-choose" ), i18n("View..."), this);
     actionCollection()->addAction("view_documents", actionViewDocument );
 //    actionViewDocument->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     connect( actionViewDocument, SIGNAL( triggered( bool ) ), SLOT( slotViewDocument() ) );
