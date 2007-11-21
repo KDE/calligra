@@ -19,6 +19,7 @@ X-KDE-ExtraNativeMimeTypes=application/x-kpresenter,application/vnd.oasis.opendo
 GenericName=Presentation
 GenericName[el]=Παρουσίαση
 GenericName[ga]=Láithreoireacht
+GenericName[oc]=Presentacion
 GenericName[pt]=Apresentação
 GenericName[pt_BR]=Apresentação
 Icon=kpresenter

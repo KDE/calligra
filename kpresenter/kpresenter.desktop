@@ -13,6 +13,7 @@ Exec=kpresenter %u
 GenericName=Presentation
 GenericName[el]=Παρουσίαση
 GenericName[ga]=Láithreoireacht
+GenericName[oc]=Presentacion
 GenericName[pt]=Apresentação
 GenericName[pt_BR]=Apresentação
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/x-kpresenter;application/mspowerpoint;
