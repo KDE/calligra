@@ -34,7 +34,7 @@
 #include "KPrViewModePresentation.h"
 #include "commands/KPrAnimationCreateCommand.h"
 #include "commands/KPrPageEffectSetCommand.h"
-#include "pageeffects/KPrCoverDownEffect.h"
+#include "pageeffects/KPrSlideWipeEffect.h"
 #include "dockers/KPrPageEffectDocker.h"
 #include "dockers/KPrPageEffectDockerFactory.h"
 #include "shapeanimations/KPrAnimationMoveAppear.h"
@@ -119,7 +119,7 @@ void KPrView::createPageEffect()
 {
     // this does not work in master pages
     if ( dynamic_cast<KPrPage *>( activePage() ) ) {
-        KPrPageEffectSetCommand * command = new KPrPageEffectSetCommand( activePage(), new KPrCoverDownEffect() );
+        KPrPageEffectSetCommand * command = new KPrPageEffectSetCommand( activePage(), new KPrSlideWipeEffect() );
         m_canvas->addCommand( command );
     }
 }

@@ -27,7 +27,7 @@
 #include <klocale.h>
 
 // hard code
-#include "pageeffects/KPrCoverDownEffect.h"
+#include "pageeffects/KPrSlideWipeEffect.h"
 
 KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags )
                    : QDockWidget( parent, flags )
@@ -94,7 +94,7 @@ void KPrPageEffectDocker::slotEffectChanged( int index )
     // TODO: Use the registry to obtain the effect object
 
     // start hard coded
-//    KPrCoverDownEffect effect;
+//    KPrSlideWipeEffect effect;
 //    effect->setup( m_preview );
 }
 

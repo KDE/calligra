@@ -17,22 +17,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRCOVERDOWNEFFECT_H
-#define KPRCOVERDOWNEFFECT_H
+#ifndef KPRSLIDEWIPEEFFECT_H
+#define KPRSLIDEWIPEEFFECT_H
 
 #include "KPrPageEffect.h"
 
-class KPrCoverDownEffect : public KPrPageEffect
+class KPrSlideWipeEffect : public KPrPageEffect
 {
 public:
-    KPrCoverDownEffect();
+    KPrSlideWipeEffect();
 
+    // reimplemented
     virtual void setup( const Data &data, QTimeLine &timeLine );
 
+    // reimplemented
     virtual bool paint( QPainter &p, const Data &data );
 
-private:
-    int m_count;
+    // reimplemented
+    virtual void next( const Data &data );
 };
 
-#endif // KPRCOVERDOWNEFFECT_H
+#endif // KPRSLIDEWIPEEFFECT_H

@@ -17,53 +17,52 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KPrCoverDownEffect.h"
+#include "KPrSlideWipeEffect.h"
 
 #include <QPainter>
 #include <QPixmap>
 #include <QWidget>
-#include <QDebug>
 
-KPrCoverDownEffect::KPrCoverDownEffect()
+KPrSlideWipeEffect::KPrSlideWipeEffect()
 : KPrPageEffect()
-, m_count( 0 )
 {
 }
 
-void KPrCoverDownEffect::setup( const Data &data, QTimeLine &timeLine )
+void KPrSlideWipeEffect::setup( const Data &data, QTimeLine &timeLine )
 {
     timeLine.setDuration( m_duration );
     timeLine.setFrameRange( 0, data.m_widget->height() );
     timeLine.setCurveShape( QTimeLine::LinearCurve );
 }
 
-bool KPrCoverDownEffect::paint( QPainter &p, const Data &data )
+bool KPrSlideWipeEffect::paint( QPainter &p, const Data &data )
 {
     int height = data.m_widget->height();
-    ++m_count;
 
-    int m_lastPos = data.m_timeLine.frameForTime( data.m_currentTime );
+    int currPos = data.m_timeLine.frameForTime( data.m_currentTime );
 
     bool finish = data.m_finished;
 
-    if ( m_lastPos >= height )
-    {
+    if ( currPos >= height ) {
         finish = true;
     }
 
-    if ( ! finish )
-    {
+    if ( ! finish ) {
         int width = data.m_widget->width();
-        QRect rect1( 0, m_lastPos, width, height - m_lastPos );
-        QRect rect2( 0, height - m_lastPos, width, m_lastPos );
-        p.drawPixmap( QPoint( 0, m_lastPos ), data.m_oldPage, rect1 );
+        QRect rect1( 0, currPos, width, height - currPos );
+        QRect rect2( 0, height - currPos, width, currPos );
+        p.drawPixmap( QPoint( 0, currPos ), data.m_oldPage, rect1 );
         p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, rect2 );
     }
-    else
-    {
+    else {
         p.drawPixmap( 0, 0, data.m_newPage );
-        qDebug() << "m_count" << m_count;
     }
 
     return !finish;
+}
+
+void KPrSlideWipeEffect::next( const Data &data )
+{
+    int currPos = data.m_timeLine.frameForTime( data.m_currentTime );
+    data.m_widget->update( 0, 0, data.m_widget->width(), currPos );
 }

@@ -31,7 +31,7 @@ set( kpresenterprivate_LIB_SRCS
      dockers/KPrPageEffectDocker.cpp
      pageeffects/KPrPageEffectRunner.cpp
      pageeffects/KPrPageEffect.cpp
-     pageeffects/KPrCoverDownEffect.cpp
+     pageeffects/KPrSlideWipeEffect.cpp
      shapeanimations/KPrShapeAnimation.cpp
      shapeanimations/KPrTranslateAnimation.cpp
      shapeanimations/KPrAnimationMoveAppear.cpp
