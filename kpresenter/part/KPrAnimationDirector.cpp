@@ -84,7 +84,6 @@ void KPrAnimationDirector::paintEvent( QPaintEvent* event )
     if ( m_pageEffectRunner )
     {
         bool finished = m_pageEffectRunner->isFinished();
-        //if ( !m_pageEffectRunner->paint( painter, m_timeLine.currentTime() ) )
         if ( !m_pageEffectRunner->paint( painter ) )
         {
             delete m_pageEffectRunner;
