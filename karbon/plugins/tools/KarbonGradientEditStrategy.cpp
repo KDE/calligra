@@ -30,10 +30,12 @@
 
 #include <math.h>
 
+#include <kdebug.h>
+
 int GradientStrategy::m_handleRadius = 3;
 
 GradientStrategy::GradientStrategy( KoShape *shape )
-: m_shape( shape ),m_selectedHandle( -1 ), m_editing( false )
+: m_shape( shape ),m_selectedHandle( -1 ), m_selectedLine(false), m_editing( false )
 {
     m_matrix = m_shape->background().matrix() * m_shape->absoluteTransformation( 0 );
 }
@@ -63,6 +65,12 @@ bool GradientStrategy::selectHandle( const QPointF &mousePos )
     return false;
 }
 
+bool GradientStrategy::selectLine( const QPointF & )
+{
+    m_selectedLine = false;
+    return false;
+}
+
 void GradientStrategy::paintHandle( QPainter &painter, const KoViewConverter &converter, const QPointF &position )
 {
     QRectF handleRect = converter.viewToDocument( QRectF( m_handleRadius, m_handleRadius, 2*m_handleRadius, 2*m_handleRadius ) );
@@ -84,11 +92,44 @@ bool GradientStrategy::mouseInsideHandle( const QPointF &mousePos, const QPointF
     return true;
 }
 
+bool GradientStrategy::mouseAtLineSegment( const QPointF &mousePos, const QPointF &segStart, const QPointF &segStop )
+{
+    QPointF seg = segStop - segStart;
+    double segLength = sqrt( seg.x()*seg.x() + seg.y()*seg.y() );
+    // calculate normalized segment vector
+    QPointF normSeg = seg / segLength;
+    // mouse position relative to segment start point
+    QPointF relMousePos = mousePos - segStart;
+    // project relative mouse position onto segment
+    double scalar = normSeg.x()*relMousePos.x() + normSeg.y()*relMousePos.y();
+    // check if projection is between start and stop point
+    if( scalar < 0.0 || scalar > segLength )
+        return false;
+    // calculate vector between relative mouse position and projected mouse position
+    QPointF distVec = scalar * normSeg - relMousePos;
+    double dist = distVec.x()*distVec.x() + distVec.y()*distVec.y();
+    if( dist > handleRadius()*handleRadius() )
+        return false;
+
+    return true;
+}
+
 void GradientStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
 {
     Q_UNUSED( modifiers )
 
-    m_handles[m_selectedHandle] = m_matrix.inverted().map( mouseLocation );
+    QMatrix invMatrix = m_matrix.inverted();
+    if( m_selectedLine )
+    {
+        uint handleCount = m_handles.count();
+        for( uint i = 0; i < handleCount; ++i )
+            m_handles[i] += mouseLocation - m_lastMousePos;
+        m_lastMousePos = mouseLocation;
+    }
+    else
+    {
+        m_handles[m_selectedHandle] = invMatrix.map( mouseLocation );
+    }
 
     m_newBackground = background();
     m_shape->setBackground( m_newBackground );
@@ -144,6 +185,15 @@ void LinearGradientStrategy::paint( QPainter &painter, const KoViewConverter &co
     paintHandle( painter, converter, stopPoint );
 }
 
+bool LinearGradientStrategy::selectLine( const QPointF &mousePos )
+{
+    m_selectedLine = mouseAtLineSegment( mousePos, m_matrix.map( m_handles[start] ), m_matrix.map( m_handles[stop] ) );
+    if( m_selectedLine )
+        m_lastMousePos = mousePos;
+
+    return m_selectedLine;
+}
+
 QBrush LinearGradientStrategy::background()
 {
     QLinearGradient gradient( m_handles[start], m_handles[stop] );
@@ -172,6 +222,15 @@ void RadialGradientStrategy::paint( QPainter &painter, const KoViewConverter &co
     paintHandle( painter, converter, centerPoint );
     paintHandle( painter, converter, radiusPoint );
     paintHandle( painter, converter, focalPoint );
+}
+
+bool RadialGradientStrategy::selectLine( const QPointF &mousePos )
+{
+    m_selectedLine = mouseAtLineSegment( mousePos, m_matrix.map( m_handles[center] ), m_matrix.map( m_handles[radius] ) );
+    if( m_selectedLine )
+        m_lastMousePos = mousePos;
+
+    return m_selectedLine;
 }
 
 QBrush RadialGradientStrategy::background()
@@ -203,6 +262,15 @@ void ConicalGradientStrategy::paint( QPainter &painter, const KoViewConverter &c
     painter.drawLine( centerPoint, directionPoint );
     paintHandle( painter, converter, centerPoint );
     paintHandle( painter, converter, directionPoint );
+}
+
+bool ConicalGradientStrategy::selectLine( const QPointF &mousePos )
+{
+    m_selectedLine = mouseAtLineSegment( mousePos, m_matrix.map( m_handles[center] ), m_matrix.map( m_handles[direction] ) );
+    if( m_selectedLine )
+        m_lastMousePos = mousePos;
+
+    return m_selectedLine;
 }
 
 QBrush ConicalGradientStrategy::background()

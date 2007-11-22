@@ -95,6 +95,7 @@ void KarbonGradientTool::mouseMoveEvent( KoPointerEvent *event )
             return;
         }
     }
+    // first check if we hit any handles
     foreach( GradientStrategy *strategy, m_gradients )
     {
         if( strategy->selectHandle( event->point ) )
@@ -105,6 +106,18 @@ void KarbonGradientTool::mouseMoveEvent( KoPointerEvent *event )
             return;
         }
     }
+    // now check if we hit any lines
+    foreach( GradientStrategy *strategy, m_gradients )
+    {
+        if( strategy->selectLine( event->point ) )
+        {
+            m_currentStrategy = strategy;
+            m_currentStrategy->repaint();
+            useCursor(Qt::SizeAllCursor);
+            return;
+        }
+    }
+
     m_currentStrategy = 0;
     useCursor(Qt::ArrowCursor);
 }
