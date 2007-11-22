@@ -53,6 +53,7 @@ X-KDE-NativeMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.spreadsheet-template,application/x-kspread
 GenericName=Spreadsheet
 GenericName[el]=Λογιστικό φύλλο
+GenericName[es]=Hoja de cálculo
 GenericName[ga]=Scarbhileog
 GenericName[oc]=Fuèlha de calcul
 GenericName[pt]=Folha de cálculo

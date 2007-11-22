@@ -9,6 +9,7 @@ Name[x-test]=xxKWordxx
 Exec=kword %u
 GenericName=Word Processor
 GenericName[el]=Επεξεργασία κειμένου
+GenericName[es]=Procesador de textos
 GenericName[ga]=Próiseálaí Focal
 GenericName[oc]=Tractament de tèxt
 GenericName[pt]=Processador de Texto
