@@ -33,6 +33,13 @@ class QPainter;
 class KPrPageEffect
 {
 public:
+    /**
+     * Data used by the effect
+     *
+     * The effect itself contains no status about the effect. All data
+     * is kept in this struct. It contains the old and new pixmap, the 
+     * widget on which the effect is painted and the time values.
+     */
     struct Data
     {
         Data( const QPixmap &oldPage, const QPixmap &newPage, QWidget *w )
@@ -61,25 +68,38 @@ public:
     /**
      * Paint the page effect
      *
+     * This should repaint the whole widget. Due to clipping only the
+     * relevant parts are repainted.
+     *
      * @param painter painter used for painting the effect.
-     * @param currentTime The time for which the effect should be painted.
+     * @param data The data used for painting the effect.
      * @return true if the effect is finished, false otherwise
+     *
+     * @see next()
      */
     virtual bool paint( QPainter &painter, const Data &data ) = 0;
 
     /**
      * Trigger the next paint paint event.
      *
-     * @param currentTime The current time.
+     * Trigger a repaint of the part of the widget that changed since 
+     * the last time to this call. The default implementation repaints 
+     * the full widget.
+     *
+     * @param data The data used for the effect.
      */
-    void next( const Data &data );
+    virtual void next( const Data &data );
 
     /**
      * Finish the the page effect.
      *
-     * This only set the m_finish flag to true and triggers an update of the widget.
+     * Trigger a repaint of the part of the widget that changed since 
+     * the last call to next. The default implementation repaints the 
+     * full widget.
+     *
+     * @param data The data used for the effect.
      */
-    void finish( const Data &data );
+    virtual void finish( const Data &data );
 
     /**
      * Get the duration of the page effect.
