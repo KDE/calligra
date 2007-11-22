@@ -28,9 +28,6 @@
 
 #include <KoZoomHandler.h>
 
-// TODO remove see where it is used
-#include "pageeffects/KPrCoverDownEffect.h"
-
 class QPainter;
 class QPaintEvent;
 class KoViewConverter;
