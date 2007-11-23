@@ -35,7 +35,7 @@ public:
         topLeft = createButton(KoFlake::TopLeftCorner);
         topLeft->setChecked(true);
         topRight = createButton(KoFlake::TopRightCorner);
-        center = createButton(KoFlake::CenteredPositon);
+        center = createButton(KoFlake::CenteredPosition);
         bottomRight = createButton(KoFlake::BottomRightCorner);
         bottomLeft = createButton(KoFlake::BottomLeftCorner);
     }
@@ -172,7 +172,7 @@ void KWPositionSelector::setPosition(KoFlake::Position position) {
         case KoFlake::TopRightCorner:
             d->topRight->setChecked(true);
             break;
-        case KoFlake::CenteredPositon:
+        case KoFlake::CenteredPosition:
             d->center->setChecked(true);
             break;
         case KoFlake::BottomLeftCorner:
