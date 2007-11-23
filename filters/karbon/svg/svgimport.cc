@@ -146,8 +146,11 @@ void SvgImport::convert()
         // allow for viewbox def with ',' or whitespace
         QString viewbox = docElem.attribute( "viewBox" );
         QStringList points = viewbox.replace( ',', ' ').simplified().split( ' ' );
-        viewBox.setWidth( points[2].toFloat() );
-        viewBox.setHeight( points[3].toFloat() );
+	if( points.count() == 4 )
+	{
+            viewBox.setWidth( points[2].toFloat() );
+            viewBox.setHeight( points[3].toFloat() );
+	}
     }
 
     double width = !docElem.attribute( "width" ).isEmpty() ? parseUnit( docElem.attribute( "width" ), true, false, viewBox ) : 550.0;
@@ -916,7 +919,9 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
     else if( command == "font-size" )
     {
         float pointSize = parseUnit( params );
-        gc->font.setPointSizeF( pointSize * getScalingFromMatrix( gc->matrix ) );
+	pointSize *= getScalingFromMatrix( gc->matrix );
+	if( pointSize > 0.0f ) 
+            gc->font.setPointSizeF( pointSize );
     }
     else if( command == "font-weight" )
     {
