@@ -43,6 +43,7 @@ public:
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
+    virtual Qt::Dock defaultDockPosition() const;
 };
 
 class VColorDocker : public QDockWidget

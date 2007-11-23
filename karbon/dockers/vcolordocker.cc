@@ -73,6 +73,11 @@ QDockWidget* VColorDockerFactory::createDockWidget()
     return widget;
 }
 
+Qt::Dock VColorDockerFactory::defaultDockPosition() const
+{
+    return Qt::DockMinimized;
+}
+
 VColorDocker::VColorDocker()
 : m_isStrokeDocker( false )
 {
