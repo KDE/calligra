@@ -74,8 +74,8 @@ void KWPagePreview::paintEvent(QPaintEvent *event) {
 }
 
 void KWPagePreview::drawPage(QPainter &painter, double zoom, const QRect &dimensions, bool left) {
-    painter.fillRect(dimensions, QBrush(Qt::white));
-    painter.setPen(QPen(Qt::gray));
+    painter.fillRect(dimensions, QBrush(palette().base()));
+    painter.setPen(QPen(palette().color(QPalette::Dark)));
     painter.drawRect(dimensions);
 
     // draw text areas
@@ -103,8 +103,8 @@ void KWPagePreview::drawPage(QPainter &painter, double zoom, const QRect &dimens
         textArea.setLeft(textArea.left() + qRound(zoom * leftMargin));
         textArea.setRight(textArea.right() - qRound(zoom * rightMargin));
     }
-    painter.setBrush( QBrush( Qt::black, Qt::HorPattern ) );
-    painter.setPen( Qt::lightGray );
+    painter.setBrush( QBrush( palette().color(QPalette::ButtonText), Qt::HorPattern ) );
+    painter.setPen( palette().color(QPalette::Dark) );
 
     double columnWidth = (textArea.width() + (m_columns.columnSpacing * zoom)) / m_columns.columns;
     int width = qRound(columnWidth - m_columns.columnSpacing * zoom);
