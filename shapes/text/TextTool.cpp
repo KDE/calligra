@@ -249,10 +249,10 @@ TextTool::TextTool(KoCanvasBase *canvas)
     m_actionFormatColor->setDefaultColor(QColor());
 
 
-    m_actionFormatNumber  = new KActionMenu(KIcon( "enumList" ), i18n("Number"), this);
+    m_actionFormatNumber  = new KActionMenu(KIcon( "format-list-ordered" ), i18n("Number"), this);
     addAction("format_number", m_actionFormatNumber );
     m_actionFormatNumber->setDelayed( false );
-    m_actionFormatBullet  = new KActionMenu(KIcon( "unsortedList" ), i18n("Bullet"), this);
+    m_actionFormatBullet  = new KActionMenu(KIcon( "format-list-unordered" ), i18n("Bullet"), this);
     addAction("format_bullet", m_actionFormatBullet );
     m_actionFormatBullet->setDelayed( false );
     QActionGroup* counterStyleActionGroup = new QActionGroup( this );

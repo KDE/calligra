@@ -71,9 +71,9 @@ RichTextDialog::RichTextDialog(QWidget *parent, const QString &text)
 	m_underlineTextAction->setCheckable(true);
 	m_toolbar->addSeparator();
 
-	m_superscriptTextAction = m_toolbar->addAction(KIcon("text_super"), i18n("Superscript"));
+	m_superscriptTextAction = m_toolbar->addAction(KIcon("format-text-superscript"), i18n("Superscript"));
 	m_superscriptTextAction->setCheckable(true);
-	m_subscriptTextAction = m_toolbar->addAction(KIcon("text_sub"), i18n("Subscript"));
+	m_subscriptTextAction = m_toolbar->addAction(KIcon("format-text-suscript"), i18n("Subscript"));
 	m_subscriptTextAction->setCheckable(true);
 	m_toolbar->addSeparator();
 
