@@ -24,7 +24,6 @@
 EllipseShapeConfigWidget::EllipseShapeConfigWidget()
 {
     widget.setupUi( this );
-    layout()->setContentsMargins( 0,0,0,0 );
 
     widget.ellipseType->clear();
     widget.ellipseType->addItem( i18n("Arc") );

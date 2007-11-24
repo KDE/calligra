@@ -24,7 +24,6 @@
 SpiralShapeConfigWidget::SpiralShapeConfigWidget()
 {
     widget.setupUi( this );
-    layout()->setContentsMargins( 0,0,0,0 );
 
     widget.spiralType->clear();
     widget.spiralType->addItem( i18n("Curve") );

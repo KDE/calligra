@@ -24,7 +24,6 @@
 StarShapeConfigWidget::StarShapeConfigWidget()
 {
     widget.setupUi( this );
-    layout()->setContentsMargins( 0,0,0,0 );
 
     connect( widget.corners, SIGNAL(valueChanged(int)), this, SIGNAL(propertyChanged()));
     connect( widget.innerRadius, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));

@@ -24,7 +24,6 @@
 RectangleShapeConfigWidget::RectangleShapeConfigWidget()
 {
     widget.setupUi( this );
-    layout()->setContentsMargins( 0,0,0,0 );
 
     connect( widget.cornerRadiusX, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
     connect( widget.cornerRadiusY, SIGNAL(editingFinished()), this, SIGNAL(propertyChanged()));
