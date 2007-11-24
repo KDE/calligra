@@ -35,7 +35,6 @@ KarbonStylePreviewDocker::KarbonStylePreviewDocker( QWidget * parent )
     : QDockWidget( parent )
 {
     setWindowTitle( i18n( "Styles" ) );
-    setProperty("KoDockWidgetCollapsable", false);
 
     QWidget *mainWidget = new QWidget( this );
     QVBoxLayout * layout = new QVBoxLayout( mainWidget );
