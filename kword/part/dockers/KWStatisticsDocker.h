@@ -46,7 +46,6 @@ public:
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
-    virtual Qt::Dock defaultDockPosition() const { return Qt::DockMinimized; }
 
 private:
     KWView *m_view;

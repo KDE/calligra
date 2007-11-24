@@ -73,9 +73,9 @@ QDockWidget* VColorDockerFactory::createDockWidget()
     return widget;
 }
 
-Qt::Dock VColorDockerFactory::defaultDockPosition() const
+KoDockFactory::DockPosition VColorDockerFactory::defaultDockPosition() const
 {
-    return Qt::DockMinimized;
+    return DockMinimized;
 }
 
 VColorDocker::VColorDocker()

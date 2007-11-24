@@ -51,7 +51,7 @@ public:
     KarbonStylePreviewDockerFactory();
 
     virtual QString id() const;
-    virtual Qt::Dock defaultDockPosition() const;
+    virtual KoDockFactory::DockPosition defaultDockPosition() const;
     virtual QDockWidget* createDockWidget();
     virtual bool isCollapsable() const { return false; }
 };

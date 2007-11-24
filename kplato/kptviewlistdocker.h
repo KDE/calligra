@@ -52,7 +52,7 @@ public:
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
     /// @return the dock widget area the widget should appear in by default
-    virtual Qt::Dock defaultDockPosition() const { return Qt::DockLeft; }
+    virtual KoDockFactory::DockPosition defaultDockPosition() const { return DockLeft; }
 
 private:
     View *m_view;

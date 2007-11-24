@@ -72,9 +72,9 @@ QDockWidget* KarbonTransformDockerFactory::createDockWidget()
     return widget;
 }
 
-Qt::Dock KarbonTransformDockerFactory::defaultDockPosition() const
+KoDockFactory::DockPosition KarbonTransformDockerFactory::defaultDockPosition() const
 {
-    return Qt::DockMinimized;
+    return DockMinimized;
 }
 
 class KarbonTransformDocker::Private

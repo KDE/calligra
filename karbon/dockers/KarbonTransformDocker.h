@@ -42,7 +42,7 @@ public:
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
-    virtual Qt::Dock defaultDockPosition() const;
+    virtual KoDockFactory::DockPosition defaultDockPosition() const;
 };
 
 class KarbonTransformDocker : public QDockWidget
