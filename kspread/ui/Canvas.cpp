@@ -1490,7 +1490,7 @@ bool Canvas::processNextKey(QKeyEvent *event)
   return true;
 }
 
-void Canvas::processDeleteKey(QKeyEvent* /* event */)
+void Canvas::processDeleteKey(QKeyEvent* event)
 {
   register Sheet * const sheet = activeSheet();
   if (!sheet)
@@ -1503,6 +1503,16 @@ void Canvas::processDeleteKey(QKeyEvent* /* event */)
     return;
   }
 #endif // KSPREAD_KOPART_EMBEDDING
+
+  // Delete is also a valid editing key, process accordingly
+  if ( !d->cellEditor && !d->chooseCell )
+  {
+      // Switch to editing mode
+      createEditor();
+      d->cellEditor->handleKeyPressEvent( event );
+  }
+  else if ( d->cellEditor )
+      d->cellEditor->handleKeyPressEvent( event );
 
   d->view->clearContents();
   d->editWidget->setText( "" );

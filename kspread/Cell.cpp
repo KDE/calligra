@@ -766,6 +766,7 @@ void Cell::parseUserInput( const QString& text )
     if ( text.isEmpty() )
     {
         setValue( Value::empty() );
+        setUserInput( text );
         setFormula( Formula() );
         return;
     }
