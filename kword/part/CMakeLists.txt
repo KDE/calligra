@@ -49,7 +49,6 @@ set(kwordprivate_LIB_SRCS
     dialogs/KWStatistics.cpp
     dialogs/KWStatisticsDialog.cpp
     dialogs/KWPrintingDialog.cpp
-    dialogs/KWPositionSelector.cpp
     dockers/KWStatisticsDocker.cpp
 
     commands/KWPagePropertiesCommand.cpp

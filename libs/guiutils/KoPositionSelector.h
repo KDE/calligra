@@ -17,20 +17,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWPOSITIONSELECTOR_H
-#define KWPOSITIONSELECTOR_H
+#ifndef KOPOSITIONSELECTOR_H
+#define KOPOSITIONSELECTOR_H
 
 #include <QWidget>
 #include <KoFlake.h>
+#include <koguiutils_export.h>
 
 /**
  * Widget to show a set of radio buttons so the user can select a position.
  */
-class KWPositionSelector : public QWidget {
+class KOGUIUTILS_EXPORT KoPositionSelector : public QWidget {
     Q_OBJECT
 public:
-    KWPositionSelector(QWidget *parent);
-    ~KWPositionSelector();
+    KoPositionSelector(QWidget *parent);
+    ~KoPositionSelector();
 
     KoFlake::Position position() const;
     void setPosition(KoFlake::Position position);

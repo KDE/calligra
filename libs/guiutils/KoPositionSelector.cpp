@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KWPositionSelector.h"
+#include "KoPositionSelector.h"
 
 #include <QRadioButton>
 #include <QGridLayout>
@@ -25,9 +25,7 @@
 #include <QButtonGroup>
 #include <QPainter>
 
-#include <KDebug>
-
-class KWPositionSelector::Private {
+class KoPositionSelector::Private {
 public:
     Private()
         : position(KoFlake::TopLeftCorner)
@@ -139,7 +137,7 @@ private:
     int maxCol, maxRow;
 };
 
-KWPositionSelector::KWPositionSelector(QWidget *parent)
+KoPositionSelector::KoPositionSelector(QWidget *parent)
     : QWidget(parent),
     d(new Private())
 {
@@ -155,15 +153,15 @@ KWPositionSelector::KWPositionSelector(QWidget *parent)
     connect(&d->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(positionChanged(int)));
 }
 
-KWPositionSelector::~KWPositionSelector() {
+KoPositionSelector::~KoPositionSelector() {
     delete d;
 }
 
-KoFlake::Position KWPositionSelector::position() const {
+KoFlake::Position KoPositionSelector::position() const {
     return d->position;
 }
 
-void KWPositionSelector::setPosition(KoFlake::Position position) {
+void KoPositionSelector::setPosition(KoFlake::Position position) {
     d->position = position;
     switch(d->position) {
         case KoFlake::TopLeftCorner:
@@ -184,12 +182,12 @@ void KWPositionSelector::setPosition(KoFlake::Position position) {
     }
 }
 
-void KWPositionSelector::positionChanged(int position) {
+void KoPositionSelector::positionChanged(int position) {
     d->position = static_cast<KoFlake::Position> (position);
     emit positionSelected(d->position);
 }
 
-void KWPositionSelector::paintEvent (QPaintEvent *) {
+void KoPositionSelector::paintEvent (QPaintEvent *) {
     QPainter painter( this );
     QPen pen(Qt::black);
     pen.setWidth(3);
