@@ -1917,7 +1917,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
     QDomDocument doc;
     QString errorMsg;
     int errorLine, errorColumn;
-    if ( !doc.setContent(in, &errorMsg, &errorLine, &errorColumn) )
+    if ( !doc.setContent(in, true, &errorMsg, &errorLine, &errorColumn) )
     {
         kError(30521) << "Parsing error in " << from << "! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
@@ -1936,7 +1936,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
     Sheet * selTable = 0;
 
     QDomElement docElem = doc.documentElement();
-    QDomElement uiData  = docElem.namedItem("gmr:UIData").toElement();
+    QDomElement uiData  = docElem.namedItem("UIData").toElement();
     if ( !uiData.isNull() )
     {
       if ( uiData.hasAttribute( "SelectedTab" ) )
@@ -1949,14 +1949,14 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
         }
       }
     }
-    QDomNode sheets = docElem.namedItem("gmr:Sheets");
+    QDomNode sheets = docElem.namedItem("Sheets");
     if ( sheets.isNull() )
     {
         //avoid crash with new file format.
         //TODO allow to load new file format
         return KoFilter::ParsingError;
     }
-    QDomNode sheet =  sheets.namedItem("gmr:Sheet");
+    QDomNode sheet =  sheets.namedItem("Sheet");
 
     /* This sets the Document information. */
     set_document_info( document, &docElem );
@@ -1982,7 +1982,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
         if ( currentTab == selectedTab )
           selTable = table;
 
-        QDomElement name = sheet.namedItem( "gmr:Name" ).toElement();
+        QDomElement name = sheet.namedItem( "Name" ).toElement();
         QDomElement sheetElement = sheet.toElement();
 
         if ( !name.isNull() )
@@ -2025,17 +2025,17 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
 	setSelectionInfo(&sheet, table);
 
         /* handling print information */
-	QDomNode printInfo = sheet.namedItem("gmr:PrintInformation");
+	QDomNode printInfo = sheet.namedItem("PrintInformation");
         if ( !printInfo.isNull() )
           ParsePrintInfo( printInfo, table );
 
         kDebug(30521) <<"Reading in cells";
 
 	/* CELL handling START */
-	QDomNode cells = sheet.namedItem( "gmr:Cells" );
-	QDomNode cell  = cells.namedItem( "gmr:Cell" );
-        QDomNode mergedCells = sheet.namedItem( "gmr:MergedRegions" );
-        QDomNode mergedRegion = mergedCells.namedItem( "gmr:Merge" );
+	QDomNode cells = sheet.namedItem( "Cells" );
+	QDomNode cell  = cells.namedItem( "Cell" );
+        QDomNode mergedCells = sheet.namedItem( "MergedRegions" );
+        QDomNode mergedRegion = mergedCells.namedItem( "Merge" );
         if ( cell.isNull() )
         {
           kWarning(30521) << "No cells";
@@ -2050,7 +2050,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
 	  if ( !e.isNull() )
           { // the node was really an element.
             kDebug(30521) <<"New Cell";
-	    QDomNode content_node = cell.namedItem("gmr:Content");
+	    QDomNode content_node = cell.namedItem("Content");
 
 	    if (!content_node.isNull())
             {
