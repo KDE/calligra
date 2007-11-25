@@ -62,6 +62,7 @@
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
 #include <KoImageCollection.h>
+#include <KoCanvasResourceProvider.h>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -99,7 +100,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
     m_pageLayout.orientation = KoPageFormat::Portrait;
     m_pageLayout.width = MM_TO_POINT( KoPageFormat::width( m_pageLayout.format, m_pageLayout.orientation ) );
     m_pageLayout.height = MM_TO_POINT( KoPageFormat::height( m_pageLayout.format, m_pageLayout.orientation ) );
-    m_doc.setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
+    setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
 }
 
 KarbonPart::~KarbonPart()
@@ -111,13 +112,13 @@ KarbonPart::setPageLayout( KoPageLayout& layout, KoUnit _unit )
 {
     m_pageLayout = layout;
     m_doc.setUnit( _unit );
-    m_doc.setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
+    setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
 }
 
-KoView*
-KarbonPart::createViewInstance( QWidget* parent )
+KoView* KarbonPart::createViewInstance( QWidget* parent )
 {
     KarbonView *result = new KarbonView( this, parent );
+    result->canvasWidget()->resourceProvider()->setResource( KoCanvasResource::PageSize, m_doc.pageSize() );
     return result;
 }
 
@@ -203,6 +204,7 @@ KarbonPart::loadXML( QIODevice*, const KoXmlDocument& document )
     }
 
     setUnit( m_doc.unit() );
+    setPageSize( m_doc.pageSize() );
 
     return success;
 }
@@ -275,7 +277,7 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
         const KoXmlElement *style = odfStore.styles().findStyle(
             master->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) );
         m_pageLayout.loadOasis( *style );
-        m_doc.setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
+        setPageSize( QSizeF( m_pageLayout.width, m_pageLayout.height ) );
     }
     else
         return false;
@@ -290,7 +292,7 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
     if( m_doc.pageSize().isEmpty() )
     {
         QSizeF pageSize = m_doc.contentRect().united( QRectF(0,0,1,1) ).size();
-        m_doc.setPageSize( pageSize );
+        setPageSize( pageSize );
     }
 
     loadOasisSettings( odfStore.settingsDoc() );
@@ -502,6 +504,16 @@ void KarbonPart::updateDocumentSize()
     const KoViewConverter * viewConverter = canvasController->canvas()->viewConverter();
     QSize documentSize = viewConverter->documentToView( m_doc.boundingRect() ).size().toSize();
     canvasController->setDocumentSize( documentSize );
+}
+
+void KarbonPart::setPageSize( const QSizeF &pageSize )
+{
+    m_doc.setPageSize( pageSize );
+    foreach( KoView *view, views() )
+    {
+        KarbonCanvas *canvas = ((KarbonView*)view)->canvasWidget();
+        canvas->resourceProvider()->setResource( KoCanvasResource::PageSize, pageSize );
+    }
 }
 
 #include "karbon_part.moc"

@@ -102,6 +102,7 @@ protected:
     void loadOasisSettings( const KoXmlDocument&settingsDoc );
 
     void updateDocumentSize();
+    void setPageSize( const QSizeF &pageSize );
 private:
     VDocument m_doc;                    /// store non-visual doc info
 
