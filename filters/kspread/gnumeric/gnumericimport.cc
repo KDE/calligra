@@ -235,14 +235,14 @@ void areaNames( Doc * ksdoc, const QString &_name, QString _zone )
 
 void set_document_area_names( Doc * ksdoc, QDomElement * docElem )
 {
-    QDomNode areaNamesElement = docElem->namedItem( "gmr:Names" );
+    QDomNode areaNamesElement = docElem->namedItem( "Names" );
     if ( areaNamesElement.isNull() )
         return;
-    QDomNode areaNameItem = areaNamesElement.namedItem( "gmr:Name" );
+    QDomNode areaNameItem = areaNamesElement.namedItem( "Name" );
     while ( !areaNameItem.isNull() )
     {
-        QDomNode gmr_name  = areaNameItem.namedItem("gmr:name");
-        QDomNode gmr_value = areaNameItem.namedItem("gmr:value");
+        QDomNode gmr_name  = areaNameItem.namedItem("name");
+        QDomNode gmr_value = areaNameItem.namedItem("value");
         QString name = gmr_name.toElement().text();
         areaNames( ksdoc, name, gmr_value.toElement().text() );
         areaNameItem = areaNameItem.nextSibling();
@@ -254,15 +254,15 @@ void set_document_area_names( Doc * ksdoc, QDomElement * docElem )
 void set_document_attributes( Doc * ksdoc, QDomElement * docElem)
 {
     ksdoc->loadConfigFromFile();
-    QDomNode attributes  = docElem->namedItem("gmr:Attributes");
+    QDomNode attributes  = docElem->namedItem("Attributes");
     if ( attributes.isNull() )
         return;
 
-    QDomNode attributeItem = attributes.namedItem("gmr:Attribute");
+    QDomNode attributeItem = attributes.namedItem("Attribute");
     while( !attributeItem.isNull() )
     {
-        QDomNode gmr_name  = attributeItem.namedItem("gmr:name");
-        QDomNode gmr_value = attributeItem.namedItem("gmr:value");
+        QDomNode gmr_name  = attributeItem.namedItem("name");
+        QDomNode gmr_value = attributeItem.namedItem("value");
         if (gmr_name.toElement().text() == "WorkbookView::show_horizontal_scrollbar")
         {
             ksdoc->setShowHorizontalScrollBar( gmr_value.toElement().text().lower()=="true"? true : false );
@@ -295,13 +295,13 @@ void set_document_attributes( Doc * ksdoc, QDomElement * docElem)
 void set_document_info(KoDocument * document, QDomElement * docElem)
 {
   /* Summary Handling START */
-  QDomNode summary  = docElem->namedItem("gmr:Summary");
-  QDomNode gmr_item = summary.namedItem("gmr:Item");
+  QDomNode summary  = docElem->namedItem("Summary");
+  QDomNode gmr_item = summary.namedItem("Item");
 
   while( !gmr_item.isNull() )
   {
-    QDomNode gmr_name  = gmr_item.namedItem("gmr:name");
-    QDomNode gmr_value = gmr_item.namedItem("gmr:val-string");
+    QDomNode gmr_name  = gmr_item.namedItem("name");
+    QDomNode gmr_value = gmr_item.namedItem("val-string");
 
     KoDocumentInfo * DocumentInfo     = document->documentInfo();
     KoDocumentInfoAbout  * aboutPage  = static_cast<KoDocumentInfoAbout *>(DocumentInfo->page( "about" ));
@@ -350,8 +350,8 @@ void set_document_info(KoDocument * document, QDomElement * docElem)
 
 void setColInfo(QDomNode * sheet, Sheet * table)
 {
-  QDomNode columns =  sheet->namedItem("gmr:Cols");
-  QDomNode columninfo = columns.namedItem("gmr:ColInfo");
+  QDomNode columns =  sheet->namedItem("Cols");
+  QDomNode columninfo = columns.namedItem("ColInfo");
 
   QDomElement def = columns.toElement();
   if ( def.hasAttribute( "DefaultSizePts" ) )
@@ -392,8 +392,8 @@ void setColInfo(QDomNode * sheet, Sheet * table)
 
 void setRowInfo(QDomNode *sheet, Sheet *table)
 {
-  QDomNode rows =  sheet->namedItem("gmr:Rows");
-  QDomNode rowinfo = rows.namedItem("gmr:RowInfo");
+  QDomNode rows =  sheet->namedItem("Rows");
+  QDomNode rowinfo = rows.namedItem("RowInfo");
 
   double d;
   bool ok = false;
@@ -436,8 +436,8 @@ void setRowInfo(QDomNode *sheet, Sheet *table)
 
 void setSelectionInfo( QDomNode * sheet, Sheet * /* table */ )
 {
-  QDomNode selections =  sheet->namedItem("gmr:Selections");
-  QDomNode selection = selections.namedItem("gmr:Selection");
+  QDomNode selections =  sheet->namedItem("Selections");
+  QDomNode selection = selections.namedItem("Selection");
 
   /* Kspread does not support mutiple selections.. */
   /* This code will set the selection to the last one GNUmeric's multiple
@@ -462,8 +462,8 @@ void setSelectionInfo( QDomNode * sheet, Sheet * /* table */ )
 
 void setObjectInfo(QDomNode * sheet, Sheet * table)
 {
-  QDomNode gmr_objects =  sheet->namedItem("gmr:Objects");
-  QDomNode gmr_cellcomment = gmr_objects.namedItem("gmr:CellComment");
+  QDomNode gmr_objects =  sheet->namedItem("Objects");
+  QDomNode gmr_cellcomment = gmr_objects.namedItem("CellComment");
   while( !gmr_cellcomment.isNull() )
   {
     QDomElement e = gmr_cellcomment.toElement(); // try to convert the node to an element.
@@ -551,12 +551,12 @@ void convertToPen( QPen & pen, int style )
 
 void GNUMERICFilter::ParseBorder( QDomElement & gmr_styleborder, Cell * kspread_cell )
 {
-  QDomNode gmr_diagonal = gmr_styleborder.namedItem("gmr:Diagonal");
-  QDomNode gmr_rev_diagonal = gmr_styleborder.namedItem("gmr:Rev-Diagonal");
-  QDomNode gmr_top = gmr_styleborder.namedItem("gmr:Top");
-  QDomNode gmr_bottom = gmr_styleborder.namedItem("gmr:Bottom");
-  QDomNode gmr_left = gmr_styleborder.namedItem("gmr:Left");
-  QDomNode gmr_right = gmr_styleborder.namedItem("gmr:Right");
+  QDomNode gmr_diagonal = gmr_styleborder.namedItem("Diagonal");
+  QDomNode gmr_rev_diagonal = gmr_styleborder.namedItem("Rev-Diagonal");
+  QDomNode gmr_top = gmr_styleborder.namedItem("Top");
+  QDomNode gmr_bottom = gmr_styleborder.namedItem("Bottom");
+  QDomNode gmr_left = gmr_styleborder.namedItem("Left");
+  QDomNode gmr_right = gmr_styleborder.namedItem("Right");
 
   // NoPen - no line at all. For example,
   // QPainter::drawRect() fills but does not
@@ -862,27 +862,27 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, Sheet * table )
   QString footLeft, footMiddle, footRight;
   QString headLeft, headMiddle, headRight; // no we are zombies :-)
 
-  QDomNode margins( printInfo.namedItem("gmr:Margins") );
+  QDomNode margins( printInfo.namedItem("Margins") );
   if ( !margins.isNull() )
   {
-    QDomElement top( margins.namedItem( "gmr:top" ).toElement() );
+    QDomElement top( margins.namedItem( "top" ).toElement() );
     if ( !top.isNull() )
         ftop = parseAttribute( top );
 
-    QDomElement bottom( margins.namedItem( "gmr:bottom" ).toElement() );
+    QDomElement bottom( margins.namedItem( "bottom" ).toElement() );
     if ( !bottom.isNull() )
         fbottom= parseAttribute( bottom );
 
-    QDomElement left( margins.namedItem( "gmr:left" ).toElement() );
+    QDomElement left( margins.namedItem( "left" ).toElement() );
     if ( !left.isNull() )
         fleft = parseAttribute( left );
 
-    QDomElement right( margins.namedItem( "gmr:right" ).toElement() );
+    QDomElement right( margins.namedItem( "right" ).toElement() );
     if ( !right.isNull() )
         fright = parseAttribute( right );
   }
 
-  QDomElement foot( printInfo.namedItem("gmr:Footer").toElement() );
+  QDomElement foot( printInfo.namedItem("Footer").toElement() );
   if ( !foot.isNull() )
   {
     kdDebug(30521) << "Parsing footer: " << foot.attribute("Left") << ", " << foot.attribute("Middle") << ", "
@@ -895,7 +895,7 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, Sheet * table )
       footRight = convertVars( foot.attribute("Right"), table );
   }
 
-  QDomElement head( printInfo.namedItem("gmr:Header").toElement() );
+  QDomElement head( printInfo.namedItem("Header").toElement() );
   if ( !head.isNull() )
   {
     kdDebug(30521) << "Parsing header: " << head.attribute("Left") << ", " << head.attribute("Middle") << ", " << head.attribute("Right") << ", "<< endl;
@@ -907,7 +907,7 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, Sheet * table )
       headRight = convertVars( head.attribute("Right"), table );
   }
 
-  QDomElement repeateColumn( printInfo.namedItem("gmr:repeat_top").toElement() );
+  QDomElement repeateColumn( printInfo.namedItem("repeat_top").toElement() );
   if ( !repeateColumn.isNull() )
   {
       QString repeate = repeateColumn.attribute( "value" );
@@ -919,7 +919,7 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, Sheet * table )
       }
   }
 
-  QDomElement repeateRow( printInfo.namedItem("gmr:repeat_left").toElement() );
+  QDomElement repeateRow( printInfo.namedItem("repeat_left").toElement() );
   if ( !repeateRow.isNull() )
   {
       QString repeate = repeateRow.attribute( "value" );
@@ -933,11 +933,11 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, Sheet * table )
       }
   }
 
-  QDomElement orient( printInfo.namedItem("gmr:orientation").toElement() );
+  QDomElement orient( printInfo.namedItem("orientation").toElement() );
   if ( !orient.isNull() )
     orientation = orient.text();
 
-  QDomElement size( printInfo.namedItem("gmr:paper").toElement() );
+  QDomElement size( printInfo.namedItem("paper").toElement() );
   if ( !size.isNull() )
     paperSize = size.text();
 
@@ -961,22 +961,22 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
     kspread_cell->format()->setCurrency( 1, "$" );
     lastPos = 1;
   }
-  else if (formatString[0] == '£')
+  else if (formatString[0] == 'ï¿½')
   {
     kspread_cell->format()->setFormatType(Money_format);
-    kspread_cell->format()->setCurrency( 1, "£" );
+    kspread_cell->format()->setCurrency( 1, "ï¿½" );
     lastPos = 1;
   }
-  else if (formatString[0] == '¥')
+  else if (formatString[0] == 'ï¿½')
   {
     kspread_cell->format()->setFormatType(Money_format);
-    kspread_cell->format()->setCurrency( 1, "¥" );
+    kspread_cell->format()->setCurrency( 1, "ï¿½" );
     lastPos = 1;
   }
-  else if (formatString[0] == '¤')
+  else if (formatString[0] == 'ï¿½')
   {
     kspread_cell->format()->setFormatType(Money_format);
-    kspread_cell->format()->setCurrency( 1, "¤" );
+    kspread_cell->format()->setCurrency( 1, "ï¿½" );
     lastPos = 1;
   }
   else if (l > 1)
@@ -1092,21 +1092,21 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
     kdDebug(30521) << "SetStyleInfo entered " << endl;
 
     int row, column;
-    QDomNode styles =  sheet->namedItem( "gmr:Styles" );
+    QDomNode styles =  sheet->namedItem( "Styles" );
     if ( !styles.isNull() )
     {
         // Get a style region within that sheet.
-        QDomNode style_region =  styles.namedItem( "gmr:StyleRegion" );
+        QDomNode style_region =  styles.namedItem( "StyleRegion" );
 
         while ( !style_region.isNull() )
         {
             QDomElement e = style_region.toElement(); // try to convert the node to an element.
 
-            QDomNode style = style_region.namedItem( "gmr:Style" );
-            QDomNode font = style.namedItem( "gmr:Font" );
-            QDomNode validation = style.namedItem( "gmr:Validation" );
-            QDomNode gmr_styleborder = style.namedItem( "gmr:StyleBorder" );
-            QDomNode hyperlink = style.namedItem( "gmr:HyperLink" );
+            QDomNode style = style_region.namedItem( "Style" );
+            QDomNode font = style.namedItem( "Font" );
+            QDomNode validation = style.namedItem( "Validation" );
+            QDomNode gmr_styleborder = style.namedItem( "StyleBorder" );
+            QDomNode hyperlink = style.namedItem( "HyperLink" );
             int startCol = e.attribute( "startCol" ).toInt() + 1;
             int endCol   = e.attribute( "endCol" ).toInt() + 1;
             int startRow = e.attribute( "startRow" ).toInt() + 1;
@@ -1432,8 +1432,8 @@ void GNUMERICFilter::setStyleInfo(QDomNode * sheet, Sheet * table)
                                     break;
                                 }
                             }
-                            QDomNode expression0 = validation_element.namedItem( "gmr:Expression0" );
-                            QDomNode expression1 = validation_element.namedItem( "gmr:Expression1" );
+                            QDomNode expression0 = validation_element.namedItem( "Expression0" );
+                            QDomNode expression1 = validation_element.namedItem( "Expression1" );
                             //kdDebug()<<" expression0.isNull() "<<expression0.isNull()<<endl;
                             //kdDebug()<<" expression1.isNull() "<<expression1.isNull()<<endl;
                             if ( validation_element.hasAttribute( "Type" ) )
@@ -1876,7 +1876,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
     QDomDocument doc;
     QString errorMsg;
     int errorLine, errorColumn;
-    if ( !doc.setContent(in, &errorMsg, &errorLine, &errorColumn) )
+    if ( !doc.setContent(in, true, &errorMsg, &errorLine, &errorColumn) )
     {
         kdError(30521) << "Parsing error in " << from << "! Aborting!" << endl
             << " In line: " << errorLine << ", column: " << errorColumn << endl
@@ -1895,7 +1895,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
     Sheet * selTable = 0;
 
     QDomElement docElem = doc.documentElement();
-    QDomElement uiData  = docElem.namedItem("gmr:UIData").toElement();
+    QDomElement uiData  = docElem.namedItem("UIData").toElement();
     if ( !uiData.isNull() )
     {
       if ( uiData.hasAttribute( "SelectedTab" ) )
@@ -1908,14 +1908,14 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
         }
       }
     }
-    QDomNode sheets = docElem.namedItem("gmr:Sheets");
+    QDomNode sheets = docElem.namedItem("Sheets");
     if ( sheets.isNull() )
     {
         //avoid crash with new file format.
         //TODO allow to load new file format
         return KoFilter::ParsingError;
     }
-    QDomNode sheet =  sheets.namedItem("gmr:Sheet");
+    QDomNode sheet =  sheets.namedItem("Sheet");
 
     /* This sets the Document information. */
     set_document_info( document, &docElem );
@@ -1941,7 +1941,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
         if ( currentTab == selectedTab )
           selTable = table;
 
-        QDomElement name = sheet.namedItem( "gmr:Name" ).toElement();
+        QDomElement name = sheet.namedItem( "Name" ).toElement();
         QDomElement sheetElement = sheet.toElement();
 
         if ( !name.isNull() )
@@ -1985,17 +1985,17 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 	setSelectionInfo(&sheet, table);
 
         /* handling print information */
-	QDomNode printInfo = sheet.namedItem("gmr:PrintInformation");
+	QDomNode printInfo = sheet.namedItem("PrintInformation");
         if ( !printInfo.isNull() )
           ParsePrintInfo( printInfo, table );
 
         kdDebug(30521) << "Reading in cells" << endl;
 
 	/* CELL handling START */
-	QDomNode cells = sheet.namedItem( "gmr:Cells" );
-	QDomNode cell  = cells.namedItem( "gmr:Cell" );
-        QDomNode mergedCells = sheet.namedItem( "gmr:MergedRegions" );
-        QDomNode mergedRegion = mergedCells.namedItem( "gmr:Merge" );
+	QDomNode cells = sheet.namedItem( "Cells" );
+	QDomNode cell  = cells.namedItem( "Cell" );
+        QDomNode mergedCells = sheet.namedItem( "MergedRegions" );
+        QDomNode mergedRegion = mergedCells.namedItem( "Merge" );
         if ( cell.isNull() )
         {
           kdWarning(30521) << "No cells" << endl;
@@ -2010,7 +2010,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 	  if ( !e.isNull() )
           { // the node was really an element.
             kdDebug(30521) << "New Cell " << endl;
-	    QDomNode content_node = cell.namedItem("gmr:Content");
+	    QDomNode content_node = cell.namedItem("Content");
 
 	    if (!content_node.isNull())
             {
