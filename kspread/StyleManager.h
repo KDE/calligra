@@ -30,7 +30,7 @@ class QDomDocument;
 class QStringList;
 
 class KoGenStyles;
-class KoOasisStyles;
+class KoOdfStylesReader;
 
 namespace KSpread
 {
@@ -56,7 +56,7 @@ public:
   bool loadXML( KoXmlElement const & styles );
 
   void saveOasis( KoGenStyles &mainStyles );
-  void loadOasisStyleTemplate(  KoOasisStyles& oasisStyles, Doc* doc = 0 );
+  void loadOasisStyleTemplate(  KoOdfStylesReader& stylesReader, Doc* doc = 0 );
 
   CustomStyle * defaultStyle() const { return m_defaultStyle; }
 
@@ -88,10 +88,10 @@ public:
    * among cells. So, preloading prevents a multiple loading of the same
    * auto style.
    * This method is called before the cell loading process.
-   * @param oasisStyles repository of styles
+   * @param stylesReader repository of styles
    * @return a hash of styles with the OpenDocument internal name as key
    */
-  Styles loadOasisAutoStyles( KoOasisStyles& oasisStyles, QHash<QString, Conditions>& conditionalStyles );
+  Styles loadOasisAutoStyles( KoOdfStylesReader& stylesReader, QHash<QString, Conditions>& conditionalStyles );
 
   /**
    * Releases unused auto styles.

@@ -30,7 +30,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoOasisLoadingContext.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoGenStyles.h>
 
 #include <KFileDialog>
@@ -94,8 +94,8 @@ void FormulaToolOptions::slotLoadFormula()
     if( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
         return;
 
-    KoOasisStyles styles;
-    KoOasisLoadingContext oasisContext( 0, styles, 0 );
+    KoOdfStylesReader stylesReader;
+    KoOasisLoadingContext oasisContext( 0, stylesReader, 0 );
     KoShapeLoadingContext shapeContext( oasisContext );
 
     KoXmlDocument tmpDocument;

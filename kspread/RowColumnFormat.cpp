@@ -34,7 +34,7 @@
 #include <KoGlobal.h>
 #include <KoStyleStack.h>
 #include <KoOasisLoadingContext.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 
 #include "CellStorage.h"
 #include "Canvas.h"

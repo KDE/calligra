@@ -77,7 +77,7 @@
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>
 #include <KoDom.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoXmlWriter.h>
 
 #include <kmessagebox.h>

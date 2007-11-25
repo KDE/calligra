@@ -36,7 +36,7 @@
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
 #include <KoOasisLoadingContext.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeLayer.h>
@@ -264,7 +264,7 @@ bool VDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingContext &c
     context.setImageCollection( &d->imageCollection );
 
     KoXmlElement layerElement;
-    forEachElement( layerElement, context.koLoadingContext().oasisStyles().layerSet() )
+    forEachElement( layerElement, context.koLoadingContext().stylesReader().layerSet() )
     {
         KoShapeLayer * l = new KoShapeLayer();
         if( l->loadOdf( layerElement, context ) )

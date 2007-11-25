@@ -30,7 +30,7 @@
 
 #include <KoGenStyles.h>
 #include <KoGlobal.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoOdfGraphicStyles.h>
 #include <KoStyleStack.h>
 #include <KoUnit.h>
@@ -198,18 +198,18 @@ void Style::loadAttributes( const QList<SharedSubStyle>& subStyles )
     }
 }
 
-void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const KoXmlElement& element,
+void Style::loadOasisStyle( KoOdfStylesReader& stylesReader, const KoXmlElement& element,
                             Conditions& conditions, const StyleManager* styleManager )
 {
     // NOTE Stefan: Don't fill the style stack with the parent styles!
     KoStyleStack styleStack;
     styleStack.push( element );
     styleStack.setTypeProperties( "table-cell" );
-    loadOasisTableCellProperties( oasisStyles, styleStack );
+    loadOasisTableCellProperties( stylesReader, styleStack );
     styleStack.setTypeProperties( "text" );
-    loadOasisTextProperties( oasisStyles, styleStack );
+    loadOasisTextProperties( stylesReader, styleStack );
     styleStack.setTypeProperties( "paragraph" );
-    loadOasisParagraphProperties( oasisStyles, styleStack );
+    loadOasisParagraphProperties( stylesReader, styleStack );
 
     KoXmlElement e;
     forEachElement( e, element )
@@ -218,18 +218,18 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const KoXmlElement& elem
             conditions.loadOasisConditions( styleManager, e );
     }
 
-    loadOasisDataStyle( oasisStyles, element );
+    loadOasisDataStyle( stylesReader, element );
 }
 
-void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& element )
+void Style::loadOasisDataStyle( KoOdfStylesReader& stylesReader, const KoXmlElement& element )
 {
     QString str;
     if ( element.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
     {
         const QString styleName = element.attributeNS( KoXmlNS::style, "data-style-name", QString() );
-        if ( oasisStyles.dataFormats().contains(styleName) )
+        if ( stylesReader.dataFormats().contains(styleName) )
         {
-            const KoOdfNumberStyles::NumericStyleFormat dataStyle = oasisStyles.dataFormats()[styleName];
+            const KoOdfNumberStyles::NumericStyleFormat dataStyle = stylesReader.dataFormats()[styleName];
 
             QString tmp = dataStyle.prefix;
             if ( !tmp.isEmpty() )
@@ -310,9 +310,9 @@ void Style::loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& 
     }
 }
 
-void Style::loadOasisParagraphProperties( KoOasisStyles& oasisStyles, const KoStyleStack& styleStack )
+void Style::loadOasisParagraphProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack )
 {
-    Q_UNUSED( oasisStyles );
+    Q_UNUSED( stylesReader );
     kDebug(36003) <<"\t paragraph-properties";
     if ( styleStack.hasProperty( KoXmlNS::fo, "text-align" ) )
     {
@@ -329,7 +329,7 @@ void Style::loadOasisParagraphProperties( KoOasisStyles& oasisStyles, const KoSt
     }
 }
 
-void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoStyleStack& styleStack )
+void Style::loadOasisTableCellProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack )
 {
     QString str;
     if ( styleStack.hasProperty( KoXmlNS::style, "vertical-align" ) )
@@ -444,7 +444,7 @@ void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoSt
     {
         kDebug(36003)<<" style name :"<<styleStack.property( KoXmlNS::draw,"style-name" );
 
-        const KoXmlElement * style = oasisStyles.findStyle( styleStack.property( KoXmlNS::draw, "style-name" ), "graphic" );
+        const KoXmlElement * style = stylesReader.findStyle( styleStack.property( KoXmlNS::draw, "style-name" ), "graphic" );
         kDebug(36003)<<" style :"<<style;
         if ( style )
         {
@@ -459,7 +459,7 @@ void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoSt
                 if ( fill == "solid" || fill == "hatch" )
                 {
                     kDebug(36003)<<" Style ******************************************************";
-                    setBackgroundBrush( KoOdfGraphicStyles::loadOasisFillStyle( drawStyleStack, fill, oasisStyles ) );
+                    setBackgroundBrush( KoOdfGraphicStyles::loadOasisFillStyle( drawStyleStack, fill, stylesReader ) );
 
                 }
                 else
@@ -469,9 +469,9 @@ void Style::loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoSt
     }
 }
 
-void Style::loadOasisTextProperties( KoOasisStyles& oasisStyles, const KoStyleStack& styleStack )
+void Style::loadOasisTextProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack )
 {
-    Q_UNUSED( oasisStyles );
+    Q_UNUSED( stylesReader );
   // fo:font-size="13pt"
   // fo:font-style="italic"
   // style:text-underline="double"
@@ -2722,7 +2722,7 @@ QString CustomStyle::saveOasis(KoGenStyle& style, KoGenStyles &mainStyles,
     return mainStyles.lookup( style, "custom-style" );
 }
 
-void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement& style,
+void CustomStyle::loadOasis( KoOdfStylesReader& stylesReader, const KoXmlElement& style,
                              const QString& name, Conditions& conditions,
                              const StyleManager* styleManager )
 {
@@ -2732,7 +2732,7 @@ void CustomStyle::loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement& sty
 
     setType (CUSTOM);
 
-    Style::loadOasisStyle( oasisStyles, style, conditions, styleManager );
+    Style::loadOasisStyle( stylesReader, style, conditions, styleManager );
 }
 
 void CustomStyle::save(QDomDocument& doc, QDomElement& styles, const StyleManager* styleManager)

@@ -61,7 +61,7 @@
 #include <KoDom.h>
 #include <KoMainWindow.h>
 #include <KoOasisSettings.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
 #include <KoShapeConfigFactory.h>

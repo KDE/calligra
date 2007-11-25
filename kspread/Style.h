@@ -32,7 +32,7 @@
 
 class KoGenStyle;
 class KoGenStyles;
-class KoOasisStyles;
+class KoOdfStylesReader;
 class KoStyleStack;
 
 namespace KSpread
@@ -167,7 +167,7 @@ public:
 
     bool loadXML(KoXmlElement& format, Paste::Mode pm = Paste::Normal);
     void saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* styleManager) const;
-    void loadOasisStyle( KoOasisStyles& oasisStyles, const KoXmlElement& element,
+    void loadOasisStyle( KoOdfStylesReader& stylesReader, const KoXmlElement& element,
                          Conditions& conditions, const StyleManager* styleManager );
     /**
      * Saves an OASIS automatic style.
@@ -237,10 +237,10 @@ protected:
     void saveOasisStyle(const QSet<Key>& subStyles, KoGenStyle &style,
                         KoGenStyles &mainStyles, const StyleManager* manager) const;
 
-    void loadOasisDataStyle( KoOasisStyles& oasisStyles, const KoXmlElement& element );
-    void loadOasisParagraphProperties( KoOasisStyles& oasisStyles, const KoStyleStack& element );
-    void loadOasisTableCellProperties( KoOasisStyles& oasisStyles, const KoStyleStack& element );
-    void loadOasisTextProperties( KoOasisStyles& oasisStyles, const KoStyleStack& element );
+    void loadOasisDataStyle( KoOdfStylesReader& stylesReader, const KoXmlElement& element );
+    void loadOasisParagraphProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& element );
+    void loadOasisTableCellProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& element );
+    void loadOasisTextProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& element );
 
 public:
     void setHAlign( HAlign align );
@@ -384,11 +384,11 @@ public:
     /**
      * Loads the style properties from @p style .
      * Determines also the parent's name.
-     * @param oasisStyles map of all styles
+     * @param stylesReader map of all styles
      * @param style the DOM element defining the style
      * @param name the style's new name
      */
-    void loadOasis( KoOasisStyles& oasisStyles, const KoXmlElement& style,
+    void loadOasis( KoOdfStylesReader& stylesReader, const KoXmlElement& style,
                     const QString& name, Conditions& conditions,
                     const StyleManager* styleManager );
 

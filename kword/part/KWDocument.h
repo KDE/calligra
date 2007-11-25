@@ -40,7 +40,6 @@ class KWPageManager;
 class KWPage;
 class KWFrameSet;
 
-class KoOasisStyles;
 class KoStyleManager;
 class KoImageCollection;
 class KoInlineTextObjectManager;

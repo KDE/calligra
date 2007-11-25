@@ -49,7 +49,7 @@ class KoStyleStack;
 class KoGenStyles;
 class KoOasisLoadingContext;
 class KoOasisSettings;
-class KoOasisStyles;
+class KoOdfStylesReader;
 class KoPicture;
 class KoXmlWriter;
 
@@ -1044,7 +1044,7 @@ protected:
      * defaultColumnCellStyles is a map from column indicies to the default cell style for that column
      */
     bool loadColumnFormat(const KoXmlElement& row,
-                          const KoOasisStyles& oasisStyles, int & indexCol,
+                          const KoOdfStylesReader& stylesReader, int & indexCol,
                           QHash<QString, QRegion>& columnStyleRegions );
 
     /**

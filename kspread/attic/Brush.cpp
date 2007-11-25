@@ -21,7 +21,7 @@
 #include "Brush.h"
 
 #include <KoGenStyles.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoOasisContext.h>
 #include <KoXmlNS.h>
 
@@ -74,7 +74,7 @@ void KSpreadBrush::saveOasisFillStyle( KoGenStyle &styleObjectAuto, KoGenStyles&
         {
             if( m_brush.style() != Qt::NoBrush )
             {
-                KoOasisStyles::saveOasisFillStyle( styleObjectAuto, mainStyles, m_brush );
+                KoOdfStylesReader::saveOasisFillStyle( styleObjectAuto, mainStyles, m_brush );
             }
             else
             {
@@ -165,7 +165,7 @@ void KSpreadBrush::loadOasisFillStyle( KoOasisContext &context, const char * pro
 
         if ( fill == "solid" || fill == "hatch" )
         {
-            setBrush( KoOasisStyles::loadOasisFillStyle( styleStack, fill, context.oasisStyles() ) );
+            setBrush( KoOdfStylesReader::loadOasisFillStyle( styleStack, fill, context.oasisStyles() ) );
         }
         else if ( fill == "gradient" )
         {

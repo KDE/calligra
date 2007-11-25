@@ -48,7 +48,7 @@
 #include "vdocumentdocker.h"
 
 #include <KoApplication.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoOasisLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoShapeSavingContext.h>

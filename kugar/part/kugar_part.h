@@ -22,7 +22,7 @@ public:
     KugarPart( QWidget *parentWidget = 0, QObject* parent = 0, bool singleViewMode = false );
     virtual ~KugarPart();
 
-    virtual bool loadOasis( const KoXmlDocument&, KoOasisStyles&,
+    virtual bool loadOasis( const KoXmlDocument&, KoOdfStylesReader&,
                             const KoXmlDocument&, KoStore* );
     virtual bool saveOasis( KoStore*, KoXmlWriter* );
 

@@ -29,7 +29,7 @@
 
 // koffice
 #include <KoTextLoadingContext.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoOasisSettings.h>
 #include <KoOdfReadStore.h>
 #include <KoXmlReader.h>
@@ -293,7 +293,7 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
         return false;
     // It's quite possible that the following line asserts if we load e.g. an document
     // that does not contain anything except a single table.
-    //Q_ASSERT( context.oasisStyles().masterPages().contains( d->currentMasterPage ) );
+    //Q_ASSERT( context.stylesReader().masterPages().contains( d->currentMasterPage ) );
 
 #if 0 //1.6:
     KWOasisLoader oasisLoader( this );
@@ -335,7 +335,7 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
     /*
     // We always needs at least one valid default paragraph style
     KoParagraphStyle *defaultParagraphStyle = d->document->styleManager()->defaultParagraphStyle();
-    //const KoXmlElement* defaultParagraphStyle = context.oasisStyles().defaultStyle("paragraph");
+    //const KoXmlElement* defaultParagraphStyle = context.stylesReader().defaultStyle("paragraph");
     //if( ! defaultParagraphStyle ) {
         KoParagraphStyle *parastyle = new KoParagraphStyle();
         parastyle->setName("Standard");
@@ -480,7 +480,7 @@ void KWOpenDocumentLoader::loadSettings(KoTextLoadingContext& context, const KoX
 bool KWOpenDocumentLoader::loadPageLayout(KoTextLoadingContext& context, const QString& masterPageName)
 {
     kDebug(32001)<<"KWOpenDocumentLoader::loadPageLayout masterPageName="<<masterPageName;
-    const KoOasisStyles& styles = context.oasisStyles();
+    const KoOdfStylesReader& styles = context.stylesReader();
     const KoXmlElement* masterPage = styles.masterPages()[ masterPageName ];
     const KoXmlElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
     if ( masterPageStyle ) {
@@ -551,7 +551,7 @@ bool KWOpenDocumentLoader::loadPageLayout(KoTextLoadingContext& context, const Q
 bool KWOpenDocumentLoader::loadMasterPageStyle(KoTextLoadingContext& context, const QString& masterPageName)
 {
     kDebug(32001)<<"KWOpenDocumentLoader::loadMasterPageStyle masterPageName="<<masterPageName;
-    const KoOasisStyles& styles = context.oasisStyles();
+    const KoOdfStylesReader& styles = context.stylesReader();
     const KoXmlElement *masterPage = styles.masterPages()[ masterPageName ];
     const KoXmlElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
 #if 0 //1.6:

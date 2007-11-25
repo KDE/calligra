@@ -43,7 +43,6 @@
 #include <KoShapeManager.h>
 #include <KoShapeContainer.h>
 #include <KoOdfWriteStore.h>
-#include <KoOasisStyles.h>
 #include <KoToolManager.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>

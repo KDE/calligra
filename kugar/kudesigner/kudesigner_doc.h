@@ -43,7 +43,7 @@ public:
 
     virtual void paintContent( QPainter& painter, const QRect& rect);
 
-    virtual bool loadOasis( const KoXmlDocument&, KoOasisStyles&, const KoXmlDocument&, KoStore* );
+    virtual bool loadOasis( const KoXmlDocument&, KoOdfStylesReader&, const KoXmlDocument&, KoStore* );
     virtual bool saveOasis( KoStore*, KoXmlWriter* );
 
     virtual bool loadXML( QIODevice *, const KoXmlDocument & );

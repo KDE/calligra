@@ -55,7 +55,7 @@ class KoXmlWriter;
 class KoGenStyles;
 
 class KoShape;
-class KoOasisStyles;
+class KoOdfStylesReader;
 
 namespace KChart
 {

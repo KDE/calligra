@@ -356,7 +356,7 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
 
     //pre-load auto styles
     QHash<QString, Conditions> conditionalStyles;
-    Styles autoStyles = doc()->styleManager()->loadOasisAutoStyles( oasisContext.oasisStyles(), conditionalStyles );
+    Styles autoStyles = doc()->styleManager()->loadOasisAutoStyles( oasisContext.stylesReader(), conditionalStyles );
 
     // load the sheet
     sheetNode = body.firstChild();

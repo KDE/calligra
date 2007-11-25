@@ -27,7 +27,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
@@ -66,18 +66,18 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
     }
 }
 
-void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles, Doc* doc )
+void StyleManager::loadOasisStyleTemplate( KoOdfStylesReader& stylesReader, Doc* doc )
 {
     // reset the map of OpenDocument Styles
     m_oasisStyles.clear();
 
     // loading default style first
-    const KoXmlElement* defStyle = oasisStyles.defaultStyle( "table-cell" );
+    const KoXmlElement* defStyle = stylesReader.defaultStyle( "table-cell" );
     if ( defStyle )
     {
       kDebug(36003) <<"StyleManager: Loading default cell style";
       Conditions conditions;
-      defaultStyle()->loadOasis( oasisStyles, *defStyle, "Default", conditions, this );
+      defaultStyle()->loadOasis( stylesReader, *defStyle, "Default", conditions, this );
       defaultStyle()->setType( Style::BUILTIN );
         if ( doc )
         {
@@ -109,7 +109,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles, Doc* doc 
     else
       resetDefaultStyle();
 
-    QList<KoXmlElement*> customStyles( oasisStyles.customStyles( "table-cell" ).values() );
+    QList<KoXmlElement*> customStyles( stylesReader.customStyles( "table-cell" ).values() );
     uint nStyles = customStyles.count();
     for (unsigned int item = 0; item < nStyles; item++) {
         KoXmlElement* styleElem = customStyles[item];
@@ -129,7 +129,7 @@ void StyleManager::loadOasisStyleTemplate( KoOasisStyles& oasisStyles, Doc* doc 
             CustomStyle * style = new CustomStyle( name );
 
             Conditions conditions;
-            style->loadOasis( oasisStyles, *styleElem, name, conditions, this );
+            style->loadOasis( stylesReader, *styleElem, name, conditions, this );
             // TODO Stefan: conditions
             insertStyle (style);
             // insert it into the the map sorted the OpenDocument name
@@ -394,10 +394,10 @@ QStringList StyleManager::styleNames() const
   return list;
 }
 
-Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles, QHash<QString, Conditions>& conditionalStyles )
+Styles StyleManager::loadOasisAutoStyles( KoOdfStylesReader& stylesReader, QHash<QString, Conditions>& conditionalStyles )
 {
     Styles autoStyles;
-    foreach ( KoXmlElement* element, oasisStyles.autoStyles("table-cell") )
+    foreach ( KoXmlElement* element, stylesReader.autoStyles("table-cell") )
     {
         if ( element->hasAttributeNS( KoXmlNS::style , "name" ) )
         {
@@ -405,7 +405,7 @@ Styles StyleManager::loadOasisAutoStyles( KoOasisStyles& oasisStyles, QHash<QStr
             kDebug(36003) <<"StyleManager: Preloading automatic cell style:" << name;
             autoStyles.remove( name );
             Conditions conditions;
-            autoStyles[name].loadOasisStyle( oasisStyles, *(element), conditions, this );
+            autoStyles[name].loadOasisStyle( stylesReader, *(element), conditions, this );
             if ( !conditions.isEmpty() )
             {
                 kDebug() <<"\t\tCONDITIONS";

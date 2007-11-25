@@ -44,7 +44,7 @@ KugarPart::~KugarPart()
     //  closeUrl();
 }
 
-bool KugarPart::loadOasis( const KoXmlDocument&, KoOasisStyles&,
+bool KugarPart::loadOasis( const KoXmlDocument&, KoOdfStylesReader&,
                            const KoXmlDocument&, KoStore* )
 {
     return false;

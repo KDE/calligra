@@ -97,7 +97,7 @@
 #include <KoMainWindow.h>
 #include <KoOasisLoadingContext.h>
 #include <KoOdfReadStore.h>
-#include <KoOasisStyles.h>
+#include <KoOdfStylesReader.h>
 #include <KoPartSelectAction.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
@@ -4058,13 +4058,13 @@ void View::paste()
       return;
     }
 
-    KoOasisStyles oasisStyles;
+    KoOdfStylesReader stylesReader;
     KoXmlDocument stylesDoc;
     (void)odfStore.loadAndParse( "styles.xml", stylesDoc, errorMessage );
     // Load styles from style.xml
-    oasisStyles.createStyleMap( stylesDoc, true );
+    stylesReader.createStyleMap( stylesDoc, true );
     // Also load styles from content.xml
-    oasisStyles.createStyleMap( doc, false );
+    stylesReader.createStyleMap( doc, false );
 
     // from KSpreadDoc::loadOasis:
     KoXmlElement content = doc.documentElement();
@@ -4087,11 +4087,11 @@ void View::paste()
       return;
     }
 
-    KoOasisLoadingContext context( d->doc, oasisStyles, store );
-    Q_ASSERT( !oasisStyles.officeStyle().isNull() );
+    KoOasisLoadingContext context( d->doc, stylesReader, store );
+    Q_ASSERT( !stylesReader.officeStyle().isNull() );
 
     //load in first
-    d->doc->styleManager()->loadOasisStyleTemplate( oasisStyles );
+    d->doc->styleManager()->loadOasisStyleTemplate( stylesReader );
 
 //     // TODO check versions and mimetypes etc.
     d->doc->loadOasisCellValidation( body );

@@ -80,7 +80,7 @@ KoView* KudesignerDoc::createViewInstance( QWidget* parent)
     return new KudesignerView( this, parent);
 }
 
-bool KudesignerDoc::loadOasis( const KoXmlDocument&, KoOasisStyles&, const KoXmlDocument&, KoStore* )
+bool KudesignerDoc::loadOasis( const KoXmlDocument&, KoOdfStylesReader&, const KoXmlDocument&, KoStore* )
 {
     return false;
 }

@@ -31,7 +31,6 @@ class KWDocument;
 class KWPageManager;
 class KWTextFrameSet;
 class KoOdfReadStore;
-class KoOasisStyles;
 class KoTextLoadingContext;
 class KoTextAnchor;
 class KoXmlDocument;
