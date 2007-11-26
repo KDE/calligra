@@ -983,8 +983,15 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, const Cell& kspre
   if (l == 0) return;
 
   Style style;
-  if (formatString[l - 1] == '%')
+
+  if (l == 0 || formatString == "General")
+  {
+    style.setFormatType(Format::Generic);
+  }
+  else if (formatString[l - 1] == '%')
+  {
     style.setFormatType(Format::Percentage);
+  }
   else if (formatString[0] == '$')
   {
     style.setFormatType(Format::Money);
