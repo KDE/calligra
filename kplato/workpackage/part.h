@@ -29,10 +29,14 @@
 #include <KoDocumentChild.h>
 
 class KoView;
+class KoStore;
+
+class KProcess;
 
 namespace KPlato
 {
     class Project;
+    class Document;
 }
 
 using namespace KPlato;
@@ -41,8 +45,43 @@ using namespace KPlato;
 namespace KPlatoWork
 {
 
-class DocumentChild;
 class View;
+class Part;
+
+
+/**
+ * DocumentChild can handle documents opened for editing in a separate process
+ */
+class DocumentChild : public KoDocumentChild
+{
+    Q_OBJECT
+public:
+    explicit DocumentChild( Part *parent );
+    
+    Part *part() const;
+    const Document *doc() const { return m_doc; }
+    /// Set document, return true if ok, false if failure
+    bool setDoc( const Document *doc );
+    /// Open document for editing, return true if ok, false if failure
+    bool editDoc();
+    bool isOpen() const { return m_process != 0; }
+    bool isModified() const;
+    QString fileName() const { return m_fileinfo.fileName(); }
+    QString filePath() const { return m_fileinfo.canonicalFilePath(); }
+    void setFileInfo( const KUrl &url );
+    const QFileInfo &fileInfo() const { return m_fileinfo; }
+
+protected slots:
+    void slotEditFinished( int,  QProcess::ExitStatus );
+    void slotEditError( QProcess::ProcessError status );
+    
+protected:
+    const Document *m_doc;
+    bool m_copy;
+    KProcess *m_process;
+    QFileInfo m_fileinfo;
+};
+
 
 /**
  This part handles a work package.
@@ -63,15 +102,30 @@ public:
     const Project &getProject() const { return *m_project; }
 
     virtual void paintContent( QPainter& painter, const QRect& rect);
+    virtual void paintChildren( QPainter &painter, const QRect &/*rect*/, KoView *view) {}
 
     // The load and save functions.
     virtual bool loadXML( QIODevice *, const KoXmlDocument &document );
     virtual QDomDocument saveXML();
 
+    /// Check if we have documents open for editing before saving
+    virtual bool completeSaving( KoStore* store );
+
     bool saveOasis( KoStore*, KoXmlWriter* ) { return false; }
     bool loadOdf( KoOdfReadStore & odfStore );
 
+    /// Extract document file from the store to disk
+    KUrl extractFile( const Document *doc );
+    /// Copy file @p filename from old store @p from to the new store @p to
+    bool copyFile( KoStore *from, KoStore *to, const QString &filename );
+    
     //Config &config() { return m_config; }
+    
+    /// Open document for editing, return true if ok, false if failure
+    bool editDocument( const Document *doc );
+    
+    QList<DocumentChild*> childDocs() { return m_childdocs; }
+    void addChild( DocumentChild *child );
     
 signals:
     void changed();
@@ -80,13 +134,17 @@ protected:
     virtual KoView* createViewInstance( QWidget* parent );
     bool completeLoading( KoStore *store );
     
+    Node *node() const;
+    
 protected slots:
     void slotViewDestroyed();
+    void slotDirty( const QString & );
     
 private:
     Project *m_project;
     XMLLoaderObject m_xmlLoader;
     //Config m_config;
+    QList<DocumentChild*> m_childdocs;
 };
 
 

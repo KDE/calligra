@@ -70,9 +70,6 @@
 #include <kmimetype.h>
 #include <kprocess.h>
 #include <kurl.h>
-#include <kopenwithdialog.h>
-#include <kmimetypetrader.h>
-//#include <kserviceoffer.h>
 
 #include "part.h"
 #include "factory.h"
@@ -92,32 +89,6 @@
 namespace KPlatoWork
 {
 
-Process::Process( QObject *parent )
-    : KProcess( parent )
-{
-    kDebug();
-    connect( this, SIGNAL( finished( int, QProcess::ExitStatus ) ), SLOT( slotFinished( int, QProcess::ExitStatus ) ) );
-
-    connect( this, SIGNAL( error( QProcess::ProcessError ) ), SLOT( slotError( QProcess::ProcessError ) ) );
-}
-    
-Process::~Process()
-{
-    kDebug();
-}
-
-void Process::slotFinished( int exitCode, QProcess::ExitStatus status )
-{
-    emit processFinished( this, exitCode, status );
-}
-
-void Process::slotError( QProcess::ProcessError status )
-{
-    emit processError( this, status );
-}
-
-
-//-------------------------------
 View::View( Part* part, QWidget* parent )
         : KoView( part, parent ),
         m_currentWidget( 0 ),
@@ -225,7 +196,6 @@ ViewBase *View::createDocumentsView()
     m_tab->addTab( v, i18n( "Documents" ) );
 
     Project &p = getProject();
-    Task *t = 0;
     if ( p.numChildren() > 0 ) { // should be 1
         Node *n = p.childNode( 0 );
         kDebug()<<"Node: "<<n->name();
@@ -609,21 +579,6 @@ void View::setLabel()
     m_estlabel->setText( i18n( "Not scheduled" ) );
 }
 
-void View::slotEditFinished( Process *process, int exitCode,  QProcess::ExitStatus status )
-{
-    kDebug()<<exitCode<<status;
-    //TODO: Handle changed docs
-    delete process;
-}
-
-void View::slotEditError( Process *process, QProcess::ProcessError status )
-{
-    kDebug()<<status;
-    if ( status == QProcess::FailedToStart || status == QProcess::Crashed ) {
-        process->deleteLater();
-    }
-}
-
 void View::addPart( KParts::Part* part, const QString &name )
 {
     kDebug()<<"---------->";
@@ -640,50 +595,12 @@ void View::addPart( KParts::Part* part, const QString &name )
 
 bool View::viewDocument( const KUrl &filename )
 {
-    kDebug()<<"---------->";
     kDebug()<<"url:"<<filename;
     if ( ! filename.isValid() ) {
         kDebug()<<"Invalid url:"<<filename;
-        kDebug()<<"<----------";
         return false;
     }
     KRun *run = new KRun( filename, 0 );
-    return true;
-}
-
-bool View::editDocument( const KUrl &filename )
-{
-    kDebug()<<"---------->";
-    kDebug()<<"url:"<<filename;
-    if ( ! filename.isValid() ) {
-        kDebug()<<"Invalid url:"<<filename;
-        return false;
-    }
-    KMimeType::Ptr mimetype = KMimeType::findByUrl( filename, 0, true );
-    KService::Ptr service = KMimeTypeTrader::self()->preferredService( mimetype->name() );
-    QStringList args;
-    if ( service ) {
-        args = KRun::processDesktopExec( *service, KUrl::List()<< filename );
-    } else {
-        KUrl::List list;
-        KOpenWithDialog dlg( list, i18n("Edit with:"), QString::null, (QWidget*)0L );
-        if ( dlg.exec() == QDialog::Accepted ){
-            args << dlg.text();
-        }
-        if ( args.isEmpty() ) {
-            kDebug()<<"No executable";
-            return false;
-        }
-        args << filename.url();
-    }
-    kDebug()<<args;
-    Process *process = new Process();
-    process->setProgram( args );
-    connect( process, SIGNAL( processFinished( Process*, int,  QProcess::ExitStatus ) ),  SLOT( slotEditFinished( Process*, int,  QProcess::ExitStatus ) ) );
-    connect( process, SIGNAL( processError( Process*, QProcess::ProcessError ) ),  SLOT( slotEditError( Process*, QProcess::ProcessError ) ) );
-    process->start();
-    
-    kDebug()<<"<----------";
     return true;
 }
 
@@ -691,26 +608,14 @@ void View::slotEditDocument( Document *doc )
 {
     kDebug()<<doc;
     if ( doc == 0 ) {
+        kDebug()<<"No document";
         return;
     }
-    if ( doc->type() == Document::Type_Product ) {
-        KUrl filename;
-        if ( doc->sendAs() == Document::SendAs_Copy ) {
-            filename = KUrl( KStandardDirs::locateLocal( "tmp", doc->url().fileName() ) );
-        } else {
-            filename = doc->url();
-        }
-        if ( ! filename.isValid() ) {
-            kDebug()<<"Invalid url:"<<filename;
-            kDebug()<<"<----------";
-            return;
-        }
-        // open for edit
-        editDocument( filename );
-    } else {
-        slotViewDocument( doc );
+    if ( doc->type() != Document::Type_Product ) {
+        KMessageBox::error( 0, i18n( "This file is not editable" ) );
+        return;
     }
-    kDebug()<<"<----------";
+    getPart()->editDocument( doc );
 }
 
 void View::slotViewDocument( Document *doc )
@@ -722,7 +627,7 @@ void View::slotViewDocument( Document *doc )
     }
     KUrl filename;
     if ( doc->sendAs() == Document::SendAs_Copy ) {
-        filename = KUrl( KStandardDirs::locateLocal( "tmp", doc->url().fileName() ) );
+        filename = getPart()->extractFile( doc );
     } else {
         filename = doc->url();
     }

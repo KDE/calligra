@@ -23,6 +23,7 @@
 
 #include <KoView.h>
 
+#include <QFileInfo>
 #include <QMenu>
 #include <QProcess>
 
@@ -75,22 +76,6 @@ class Part;
 class View;
 
 
-class Process : public KProcess
-{
-    Q_OBJECT
-public:
-    Process( QObject *parent = 0 );
-    ~Process();
-    
-signals:
-    void processFinished( Process*, int exitCode, QProcess::ExitStatus status );
-    void processError( Process*, QProcess::ProcessError status );
-
-protected slots:
-    void slotFinished( int exitCode, QProcess::ExitStatus status );
-    void slotError( QProcess::ProcessError status );
-};
-
 //-------------
 class View : public KoView
 {
@@ -131,7 +116,6 @@ public:
     ViewBase *createDocumentsView();
     
     bool viewDocument( const KUrl &filename );
-    bool editDocument( const KUrl &filename );
     
 signals:
     void currentScheduleManagerChanged( ScheduleManager *sm );
@@ -175,8 +159,6 @@ protected:
 
 private slots:
     void slotActionDestroyed( QObject *o );
-    void slotEditFinished( Process *, int exitCode,  QProcess::ExitStatus status );
-    void slotEditError( Process *, QProcess::ProcessError status );
 
 private:
     void createViews();
@@ -191,7 +173,7 @@ private:
 
     QLabel *m_estlabel;
     QProgressBar *m_progress;
-
+    
     QActionGroup *m_scheduleActionGroup;
     QMap<QAction*, Schedule*> m_scheduleActions;
     ScheduleManager *m_manager;
