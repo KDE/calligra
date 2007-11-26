@@ -564,9 +564,16 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,const Cell& c
 
     const Style style = cell.style();
     QColor bgColor =  style.backgroundColor();
-	red = bgColor.red()<<8;
-	green = bgColor.green()<<8;
-	blue = bgColor.blue()<<8;
+    if (bgColor.isValid()) {
+        red = bgColor.red()<<8;
+        green = bgColor.green()<<8;
+        blue = bgColor.blue()<<8;
+    } else {
+        // Let's use white default for background
+        red = 0xffff;
+        green = 0xffff;
+        blue = 0xffff;
+    }
 
     switch (style.backgroundBrush().style())
     {
