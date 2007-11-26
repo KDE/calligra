@@ -24,7 +24,8 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kuniqueapplication.h>
-#include <kwin.h>
+//#include <kwin.h>
+#include <kdemacros.h>
 
 #include <KoGlobal.h>
 

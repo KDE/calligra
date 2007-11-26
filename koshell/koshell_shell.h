@@ -2,7 +2,7 @@
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>
    Copyright (C) 1999 Simon Hausmann <hausmann@kde.org>
    Copyright (C) 2000-2005 David Faure <faure@kde.org>
-   Copyright (C) 2005 Sven Lüppken <sven@kde.org>
+   Copyright (C) 2005 Sven Lï¿½ppken <sven@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -60,6 +60,7 @@ public:
    * (title in the about page) changes.
    */
   virtual void updateCaption();
+  using KoMainWindow::updateCaption;
 
   virtual QString configFile() const;
 

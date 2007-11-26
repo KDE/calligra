@@ -23,7 +23,7 @@
 #define KOFFICE_ICONSIDEPANEBASE_H
 
 #include <kactioncollection.h>
-#include <klistbox.h>
+#include <k3listbox.h>
 
 #include <q3buttongroup.h> 
 #include <QLayout>
@@ -125,7 +125,7 @@ Q_OBJECT
 /**
   Navigation pane showing all parts relevant to the user
 */
-class Navigator : public KListBox
+class Navigator : public K3ListBox
 {
     Q_OBJECT
   public:

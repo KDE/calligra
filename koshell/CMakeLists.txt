@@ -5,7 +5,7 @@ include_directories(${KOGUIUTILS_INCLUDES})
 
 ########### next target ###############
 
-set(koshell_KDEINIT_SRCS koshell_main.cc koshell_shell.cc iconsidepane.cpp )
+set(koshell_KDEINIT_SRCS koshell_main.cpp koshell_shell.cpp iconsidepane.cpp )
 
 
 kde4_add_kcfg_files(koshell_KDEINIT_SRCS koshellsettings.kcfgc )

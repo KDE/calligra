@@ -20,6 +20,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <QApplication>
 #include <QCursor>
 #include <QSplitter>
 #include <q3iconview.h>
@@ -195,8 +196,7 @@ bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
     // Open the temporary file
     tmpUrl.setPath( tmpFile.fileName() );
   }
-
-  recentAction()->addUrl( url );
+  addRecentURL( url );
 
   KoDocument* newdoc = m_documentEntry.createDoc();
   if ( !newdoc ) {
@@ -232,10 +232,10 @@ bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
     newdoc->setConfirmNonNativeSave(false,true); //save/save as,warn_on
 
     //correct document file (should point to URL)
-    newdoc->setFile( url.path() );
+    //TODO newdoc->setFile( url.path() );
 
     //correct document URL
-    newdoc->setURL( url );
+    //TODO newdoc->setURL( url );
 
     //update caption to represent the correct URL in the window titlebar
     updateCaption();
@@ -333,7 +333,7 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
     
     v->setGeometry( 0, 0, m_pFrame->width(), m_pFrame->height() );
     v->setPartManager( partManager() );
-    m_pFrame->addTab( v, KGlobal::iconLoader()->loadIcon( m_documentEntry.service()->icon(), KIconLoader::Small ), i18n("Untitled") );
+    m_pFrame->addTab( v, KIconLoader::global()->loadIcon( m_documentEntry.service()->icon(), KIconLoader::Small ), i18n("Untitled") );
     
     // Create a new page for this doc
     Page page;
@@ -403,12 +403,12 @@ void KoShellWindow::updateCaption()
 void KoShellWindow::slotSidebar_Part(int _item)
 {
   //kDebug() <<"Component part chosen:" << _item;
-  qApp->setOverrideCursor( QCursor(Qt::WaitCursor) );
+  QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
   m_documentEntry = m_mapComponents[ _item ];
   kDebug() << m_documentEntry.service();
   kDebug() << m_documentEntry.name();
   KoDocument *doc = m_documentEntry.createDoc();
-  qApp->restoreOverrideCursor();
+  QApplication::restoreOverrideCursor();
   if (doc)
   {
     if ( doc->showEmbedInitDialog( this ) )
@@ -525,7 +525,7 @@ void KoShellWindow::slotFileOpen()
     KUrl url;
     if(dialog->exec()==QDialog::Accepted) {
         url=dialog->selectedUrl();
-        recentAction()->addUrl( url );
+        addRecentURL( url );
         if ( url.isLocalFile() )
             KRecentDocument::add(url.path(KUrl::RemoveTrailingSlash));
         else
@@ -692,11 +692,11 @@ void KoShellWindow::slotConfigureKeys()
   KoView *view = rootView();
   KShortcutsDialog dlg(KShortcutsEditor::AllActions,KShortcutsEditor::LetterShortcutsAllowed, this );
   
-  dlg.insert( actionCollection() );
+  dlg.addCollection( actionCollection() );
   if ( view )
-     dlg.insert( view->actionCollection() );
+     dlg.addCollection( view->actionCollection() );
   if ( rootDocument() )
-    dlg.insert( rootDocument()->actionCollection() );
+    dlg.addCollection( rootDocument()->actionCollection() );
   dlg.configure();
 }
 
@@ -718,10 +718,12 @@ void KoShellWindow::showPartSpecificHelp()
 KoShellGUIClient::KoShellGUIClient( KoShellWindow *window ) : KXMLGUIClient()
 {
   setXMLFile( "koshellui.rc", true, true );
-  window->mnuSaveAll = new KAction( i18n("Save All"), actionCollection(), "save_all" );
+  window->mnuSaveAll = new KAction( i18n("Save All"), window );
+  actionCollection()->addAction( "save_all", window->mnuSaveAll );
   QObject::connect(window->mnuSaveAll, SIGNAL(triggered(bool)), window, SLOT( saveAll() ));
   window->mnuSaveAll->setEnabled(false);
-  window->partSpecificHelpAction = new KAction(KIcon("help-contents"), i18n("Part Handbook"), actionCollection(), "partSpecificHelp");
+  window->partSpecificHelpAction = new KAction(KIcon("help-contents"), i18n("Part Handbook"), window );
+  actionCollection()->addAction( "partSpecificHelp", window->partSpecificHelpAction );
   QObject::connect(window->partSpecificHelpAction, SIGNAL(triggered(bool) ), window, SLOT(showPartSpecificHelp()));
   window->partSpecificHelpAction->setEnabled(false);
 }

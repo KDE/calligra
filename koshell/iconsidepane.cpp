@@ -20,6 +20,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QApplication>
 #include <QBitmap>
 #include <QCursor>
 #include <QFontMetrics>
@@ -73,9 +74,9 @@ void EntryItem::setNewText(const QString &_text)
 void EntryItem::reloadPixmap()
 {
   int size = (int)navigator()->viewMode();
-  if ( size != 0 )
-    mPixmap = KGlobal::iconLoader()->loadIcon( mPixmapName, KIconLoader::Desktop, size );
-  else
+  if ( size != 0 ) {
+    mPixmap = KIconLoader::global()->loadIcon( mPixmapName, KIconLoader::Desktop, size );
+  } else
     mPixmap = QPixmap();
 }
 
@@ -209,9 +210,9 @@ void EntryItem::setPaintActive( bool paintActive )
 // ************************************************
 
 Navigator::Navigator(bool _selectable, KMenu * menu, IconSidePane *_iconsidepane, QWidget *parent, const char *name )
-  : KListBox( parent, name ), mSidePane( _iconsidepane ), mPopupMenu( menu )
+  : K3ListBox( parent, name ), mSidePane( _iconsidepane ), mPopupMenu( menu )
 {
-  setSelectionMode( KListBox::Single );
+  setSelectionMode( K3ListBox::Single );
   viewport()->setAutoFillBackground( true );
   setFrameStyle( QFrame::NoFrame );
   setHScrollBarMode( Q3ScrollView::AlwaysOff );
@@ -251,7 +252,7 @@ bool Navigator::showIcons()
 
 void Navigator::mouseReleaseEvent(QMouseEvent *e)
 {
-  KListBox::mouseReleaseEvent(e);
+  K3ListBox::mouseReleaseEvent(e);
   if ( e->button() != Qt::LeftButton || !mLeftMouseButtonPressed )
     return;
   if ( itemAt( e->pos() ) && executedItem == selectedItem() )
@@ -271,13 +272,13 @@ void Navigator::mousePressEvent(QMouseEvent *e)
   }
   else
     mLeftMouseButtonPressed = true;
-  KListBox::mousePressEvent(e);
+  K3ListBox::mousePressEvent(e);
 }
 
 void Navigator::enterEvent( QEvent *event )
 {
   // work around Qt behaviour: onItem is not emmitted in enterEvent()
-  KListBox::enterEvent( event );
+  K3ListBox::enterEvent( event );
   emit onItem( itemAt( mapFromGlobal( QCursor::pos() ) ) );
 }
 
