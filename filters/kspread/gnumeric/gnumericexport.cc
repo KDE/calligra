@@ -718,11 +718,14 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,const Cell& c
 
 	switch( style.formatType())
 	{
+        case Format::Generic:
+            stringFormat="General";
+            break;
         case Format::Number:
             stringFormat="0.00";
 			break;
         case Format::Text:
-            stringFormat="general";
+            stringFormat="General";
             break;
 		case Format::Money:
 
@@ -896,6 +899,9 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,const Cell& c
             stringFormat = style.customFormat();
             break;
         default:
+            // This is a required parameter, so let's write a sane default
+            kWarning(30521) << "Unhandled Format value, setting 'General' as default: " << style.formatType();
+            stringFormat = "General";
             break;
     }
     cell_style.setAttribute("Format",stringFormat);
