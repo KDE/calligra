@@ -45,7 +45,6 @@ class RelationPanel : public QWidget, public Ui_RelationPanel
 public:
     RelationPanel(QWidget *parent=0);
     
-    DurationWidget *lag;
 };
 
 class KPLATOUI_EXPORT AddRelationDialog : public KDialog
@@ -70,7 +69,6 @@ protected:
     RelationPanel *m_panel;
     Q3ButtonGroup *relationType;
     Relation *m_relation;
-    DurationWidget *m_lag;
 };
 
 

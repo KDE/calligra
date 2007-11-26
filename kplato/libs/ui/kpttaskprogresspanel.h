@@ -32,7 +32,6 @@
 namespace KPlato
 {
 
-class DurationWidget;
 class StandardWorktime;
 class Duration;
 class ScheduleManager;

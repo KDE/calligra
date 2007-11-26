@@ -37,7 +37,6 @@
 
 #include "kpttask.h"
 #include "kptcommand.h"
-#include "kptdurationwidget.h"
 #include "kptcalendar.h"
 #include "kptresource.h"
 #include "kptdurationspinbox.h"

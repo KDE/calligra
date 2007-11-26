@@ -45,6 +45,8 @@ class KPLATOMODELS_EXPORT DurationSpinBox : public QDoubleSpinBox
 public:
     explicit DurationSpinBox(QWidget *parent = 0);
 
+    /// Return value as a Duration (in milliseconds)
+    Duration durationValue() const;
     /// Return value in milliseconds
     qint64 value() const;
     /// Return the current unit
@@ -66,14 +68,25 @@ public slots:
     void setUnit( Duration::Unit unit);
     /**
      * Set the scales used for conversion between different units.
-     * lst is a QVariant<QVariantList> where entry
+     * @p scales is a QVariant<QVariantList> where entry
      * 0 is number of hours in a day,
      * 1 is number of minutes in an hour,
      * 2 is number of seconds in a minute,
      * 3 is number of milliseconds in a second.
      * If the list is shorter, default values are used for the missing values.
      */
-    void setScales( const QVariant &lst );
+    void setScales( const QVariant &scales );
+
+    /**
+     * Set the scales used for conversion between different units.
+     * @p scales is a list of doubles where entry
+     * 0 is number of hours in a day,
+     * 1 is number of minutes in an hour,
+     * 2 is number of seconds in a minute,
+     * 3 is number of milliseconds in a second.
+     * If the list is shorter, default values are used for the missing values.
+     */
+    void setScales( const QList<double> &scales );
 
 protected:
     void keyPressEvent( QKeyEvent * event );
@@ -82,8 +95,6 @@ protected:
     void stepUnitUp();
     void stepUnitDown();
 
-    /// Return value as a Duration (in milliseconds)
-    Duration durationValue() const;
     /// Convert a Duration into a double, scaled to unit
     double durationToDouble( const Duration &value, Duration::Unit unit) const;
     /// Convert a double in unit into a Duration

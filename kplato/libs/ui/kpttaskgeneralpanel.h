@@ -57,8 +57,6 @@ public:
     virtual QDate endDate();
     virtual int risktype() const;
 
-    DurationWidget *estimate;
-    
 public slots:
     virtual void setSchedulingType( int type );
     virtual void changeLeader();
@@ -70,9 +68,7 @@ public slots:
     virtual void setEstimate( const Duration & duration );
     virtual void setEstimateType( int type );
     virtual void checkAllFieldsFilled();
-    virtual void setEstimateFields( int mask );
     virtual void setEstimateScales( double day );
-    virtual void setEstimateFieldUnit( int field, const QString& unit );
     virtual void startDateChanged();
     virtual void startTimeChanged( const QTime & time );
     virtual void endDateChanged();

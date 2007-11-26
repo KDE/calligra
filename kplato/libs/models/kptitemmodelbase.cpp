@@ -20,7 +20,6 @@
 #include "kptitemmodelbase.h"
 
 #include "kptproject.h"
-#include "kptdurationwidget.h"
 #include "kptdurationspinbox.h"
 
 #include <QComboBox>
@@ -140,48 +139,6 @@ void EnumDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewI
     kDebug()<<editor<<":"<<option.rect<<","<<editor->sizeHint();
     QRect r = option.rect;
     //r.setHeight(r.height() 50);
-    editor->setGeometry(r);
-}
-
-DurationDelegate::DurationDelegate( QObject *parent )
-    : QItemDelegate( parent )
-{
-}
-
-QWidget *DurationDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &/* option */, const QModelIndex &/* index */) const
-{
-    DurationWidget *editor = new DurationWidget(parent);
-    editor->installEventFilter(const_cast<DurationDelegate*>(this));
-    return editor;
-}
-
-void DurationDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
-{
-    DurationWidget *dw = static_cast<DurationWidget*>(editor);
-    Duration value = Duration( index.model()->data(index, Qt::EditRole).toLongLong() );
-    QVariantList scales = index.model()->data(index, Role::DurationScales ).value<QVariantList>();
-    for(int i = 0; i < scales.count(); ++i ) {
-        dw->setFieldScale( i, scales[ i ].toDouble() );
-        dw->setFieldRightscale(i, scales[ i ].toDouble());
-        dw->setFieldLeftscale(i+1, scales[ i ].toDouble());
-    }
-    dw->setVisibleFields( DurationWidget::Days | DurationWidget::Hours | DurationWidget::Minutes );
-    dw->setValue( value );
-}
-
-void DurationDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
-                                const QModelIndex &index) const
-{
-    DurationWidget *dw = static_cast<DurationWidget*>(editor);
-    qint64 value = dw->value().seconds();
-    model->setData( index, value, Qt::EditRole );
-}
-
-void DurationDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &/* index */) const
-{
-    kDebug()<<editor<<":"<<option.rect<<","<<editor->sizeHint();
-    QRect r = option.rect;
-    //r.setHeight(r.height() + 50);
     editor->setGeometry(r);
 }
 

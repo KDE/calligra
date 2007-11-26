@@ -201,6 +201,16 @@ void DurationSpinBox::setScales( const QVariant &scales )
     }
 }
 
+void DurationSpinBox::setScales( const QList<double> &scales )
+{
+    switch ( scales.count() ) {
+        case 4: msToFromSec = scales[3];
+        case 3: secToFromMin = scales[2];
+        case 2: minToFromHour = scales[1];
+        case 1: hourToFromDay = scales[0];
+    }
+}
+
 double DurationSpinBox::durationToDouble( const Duration &value, Duration::Unit unit) const
 {
     QList<double> lst;

@@ -21,7 +21,7 @@
 #include "kpttask.h"
 #include "kptcommand.h"
 #include "kptduration.h"
-#include "kptdurationwidget.h"
+#include "kptdurationspinbox.h"
 #include "kptcalendar.h"
 #include "kptdatetime.h"
 
@@ -60,7 +60,7 @@ void TaskDefaultPanel::setStartValues(Task &task, StandardWorktime *workTime) {
     leaderfield->setText(task.leader());
     descriptionfield->setText(task.description());
 
-    setEstimateFields(DurationWidget::Days|DurationWidget::Hours|DurationWidget::Minutes);
+    estimate->setUnit( task.estimate()->displayUnit() );
     if (workTime) {
         //kDebug()<<"daylength="<<workTime->day();
         m_dayLength = workTime->day();
@@ -68,9 +68,6 @@ void TaskDefaultPanel::setStartValues(Task &task, StandardWorktime *workTime) {
             setEstimateScales(m_dayLength);
         }
     }
-    setEstimateFieldUnit(0, i18nc("days", "d"));
-    setEstimateFieldUnit(1, i18nc("hours", "h"));
-    setEstimateFieldUnit(2, i18nc("minutes", "m"));
     setEstimateType(task.estimate()->type());
 
     setSchedulingType(task.constraint());
@@ -190,9 +187,6 @@ ConfigTaskPanelImpl::ConfigTaskPanelImpl(QWidget *p, const char *n)
 
     setObjectName(n);
     setupUi(this);
-    estimate = new DurationWidget(durationHolder);
-    if (durationHolder->layout()) 
-        durationHolder->layout()->addWidget(estimate);
 
     connect(leaderfield, SIGNAL(textChanged(const QString &)), SLOT(checkAllFieldsFilled()));
     connect(chooseLeader, SIGNAL(clicked()), SLOT(changeLeader()));
@@ -202,7 +196,7 @@ ConfigTaskPanelImpl::ConfigTaskPanelImpl(QWidget *p, const char *n)
     connect(scheduleStartTime, SIGNAL(timeChanged(const QTime&)), SLOT(startTimeChanged(const QTime&)));
     connect(scheduleEndDate, SIGNAL(changed(QDate)), SLOT(endDateChanged()));
     connect(scheduleEndTime, SIGNAL(timeChanged(const QTime&)), SLOT(endTimeChanged(const QTime&)));
-    connect(estimate, SIGNAL(valueChanged()), SLOT(checkAllFieldsFilled()));
+    connect(estimate, SIGNAL(valueChanged(double)), SLOT(checkAllFieldsFilled()));
     connect(optimisticValue, SIGNAL(valueChanged(int)), SLOT(checkAllFieldsFilled()));
     connect(pessimisticValue, SIGNAL(valueChanged(int)), SLOT(checkAllFieldsFilled()));
     connect(descriptionfield, SIGNAL(textChanged()), SLOT(checkAllFieldsFilled()));
@@ -330,29 +324,16 @@ void ConfigTaskPanelImpl::checkAllFieldsFilled()
 
 Duration ConfigTaskPanelImpl::estimationValue()
 {
-    return estimate->value();
-}
-
-
-void ConfigTaskPanelImpl::setEstimateFields( int mask )
-{
-    estimate->setVisibleFields(mask);
+    return estimate->durationValue();
 }
 
 
 void ConfigTaskPanelImpl::setEstimateScales( double day )
 {
-    estimate->setFieldScale(0, day);
-    estimate->setFieldRightscale(0, day);
-
-    estimate->setFieldLeftscale(1, day);
+    QList<double> scales; scales << day;
+    estimate->setScales( scales );
 }
 
-
-void ConfigTaskPanelImpl::setEstimateFieldUnit( int field, const QString& unit )
-{
-    estimate->setFieldUnit(field, unit);
-}
 
 void ConfigTaskPanelImpl::startDateChanged()
 {

@@ -15,7 +15,6 @@ set(kplatomodels_LIB_SRCS
     kptdocumentmodel.cpp
     kptitemmodelbase.cpp
     kptnodeitemmodel.cpp
-    kptdurationwidget.cpp
     kptdurationspinbox.cpp
     kpttaskstatusmodel.cpp
     kptresourcemodel.cpp
@@ -24,10 +23,6 @@ set(kplatomodels_LIB_SRCS
     kptaccountsmodel.cpp
     kptpertcpmmodel.cpp
     kptresourceappointmentsmodel.cpp
-)
-
-kde4_add_ui_files(kplatomodels_LIB_SRCS
-    kptdurationwidget.ui
 )
 
 kde4_add_library(kplatomodels SHARED ${kplatomodels_LIB_SRCS})

@@ -21,7 +21,6 @@
 #include "kptrelation.h"
 #include "kptnode.h"
 #include "kptcommand.h"
-#include "kptdurationwidget.h"
 
 #include <QLayout>
 #include <QLabel>
@@ -37,10 +36,6 @@ RelationPanel::RelationPanel(QWidget *parent)
     : QWidget(parent)
 {
     setupUi(this);
-    lag = new DurationWidget(durationHolder);
-    QLayout *l = durationHolder->layout();
-    if (l)
-        l->addWidget(lag);
 }
     
 AddRelationDialog::AddRelationDialog(Project &project, Relation *rel, QWidget *p, const QString& caption, ButtonCodes buttons)
@@ -68,10 +63,6 @@ AddRelationDialog::AddRelationDialog(Project &project, Relation *rel, QWidget *p
         m_panel->bStartStart->setChecked(true);
     }
 
-    m_panel->lag->setVisibleFields(DurationWidget::Days|DurationWidget::Hours|DurationWidget::Minutes);
-    m_panel->lag->setFieldUnit(0, i18nc("days", "d"));
-    m_panel->lag->setFieldUnit(1, i18nc("hours", "h"));
-    m_panel->lag->setFieldUnit(2, i18nc("minutes", "m"));
     m_panel->lag->setValue(rel->lag());
 
     m_panel->relationType->setFocus();
@@ -80,7 +71,7 @@ AddRelationDialog::AddRelationDialog(Project &project, Relation *rel, QWidget *p
     connect(m_panel->bFinishStart, SIGNAL(toggled(bool)), SLOT(slotFinishStartToggled(bool)));
     connect(m_panel->bFinishFinish, SIGNAL(toggled(bool)), SLOT(slotFinishFinishToggled(bool)));
     connect(m_panel->bStartStart, SIGNAL(toggled(bool)), SLOT(slotStartStartToggled(bool)));
-    connect(m_panel->lag, SIGNAL(valueChanged()), SLOT(lagChanged()));
+    connect(m_panel->lag, SIGNAL(valueChanged(double)), SLOT(lagChanged()));
 }
 
 MacroCommand *AddRelationDialog::buildCommand() {
@@ -153,10 +144,10 @@ MacroCommand *ModifyRelationDialog::buildCommand() {
         
         //kDebug()<<m_panel->relationType->selectedId();
     }
-    if (m_relation->lag() != m_panel->lag->value()) {
+    if (m_relation->lag() != m_panel->lag->durationValue()) {
         if (cmd == 0)
             cmd = new MacroCommand(i18n("Modify Relation"));
-        cmd->addCommand(new ModifyRelationLagCmd(m_relation, m_panel->lag->value()));
+        cmd->addCommand(new ModifyRelationLagCmd(m_relation, m_panel->lag->durationValue()));
     }
     return cmd;
 }

@@ -6,17 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>489</width>
-    <height>300</height>
+    <width>480</width>
+    <height>467</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>TaskGeneralPanelBase</string>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="spacing" >
-    <number>6</number>
-   </property>
    <property name="leftMargin" >
     <number>0</number>
    </property>
@@ -263,23 +260,8 @@ The estimation can be either effort based or duration based. If it is effort bas
      <property name="title" >
       <string>Timing</string>
      </property>
-     <layout class="QVBoxLayout" >
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <property name="leftMargin" >
-       <number>9</number>
-      </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
-      <item>
+     <layout class="QGridLayout" >
+      <item row="0" column="0" >
        <widget class="QFrame" name="frame" >
         <property name="frameShape" >
          <enum>QFrame::NoFrame</enum>
@@ -405,7 +387,7 @@ The estimation can be either effort based or duration based. If it is effort bas
         </layout>
        </widget>
       </item>
-      <item>
+      <item row="1" column="0" >
        <widget class="QFrame" name="frame_2" >
         <property name="frameShape" >
          <enum>QFrame::NoFrame</enum>
@@ -518,22 +500,6 @@ The estimation can be either effort based or duration based. If it is effort bas
            </item>
           </widget>
          </item>
-         <item row="0" column="2" >
-          <widget class="QWidget" native="1" name="durationHolder" >
-           <property name="sizePolicy" >
-            <sizepolicy vsizetype="Preferred" hsizetype="MinimumExpanding" >
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize" >
-            <size>
-             <width>200</width>
-             <height>18</height>
-            </size>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="1" >
           <widget class="KComboBox" name="risk" >
            <property name="sizePolicy" >
@@ -642,6 +608,9 @@ The estimation can be either effort based or duration based. If it is effort bas
            </item>
           </layout>
          </item>
+         <item row="0" column="2" >
+          <widget class="DurationSpinBox" name="estimate" />
+         </item>
         </layout>
        </widget>
       </item>
@@ -696,6 +665,11 @@ The estimation can be either effort based or duration based. If it is effort bas
    <extends>QTextEdit</extends>
    <header>ktextedit.h</header>
    <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DurationSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kptdurationspinbox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

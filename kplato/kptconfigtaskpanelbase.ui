@@ -6,24 +6,39 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>419</width>
-    <height>300</height>
+    <width>500</width>
+    <height>425</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
+   <property name="leftMargin" >
     <number>0</number>
    </property>
-   <property name="spacing" >
-    <number>6</number>
+   <property name="topMargin" >
+    <number>0</number>
+   </property>
+   <property name="rightMargin" >
+    <number>0</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>0</number>
    </property>
    <item>
     <layout class="QHBoxLayout" >
-     <property name="margin" >
-      <number>0</number>
-     </property>
      <property name="spacing" >
       <number>6</number>
+     </property>
+     <property name="leftMargin" >
+      <number>0</number>
+     </property>
+     <property name="topMargin" >
+      <number>0</number>
+     </property>
+     <property name="rightMargin" >
+      <number>0</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>0</number>
      </property>
      <item>
       <widget class="QLabel" name="leaderlabel" >
@@ -44,11 +59,9 @@ This is not limited to persons available in a resource group but can be anyone. 
       </widget>
      </item>
      <item>
-      <widget class="KLineEdit" native="1" name="leaderfield" >
+      <widget class="KLineEdit" name="leaderfield" >
        <property name="sizePolicy" >
-        <sizepolicy>
-         <hsizetype>5</hsizetype>
-         <vsizetype>5</vsizetype>
+        <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
@@ -84,18 +97,10 @@ This is not limited to persons available in a resource group but can be anyone. 
       <string>Timing</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>9</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
       <item row="0" column="0" >
        <widget class="QLabel" name="textLabel3" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>5</hsizetype>
-          <vsizetype>5</vsizetype>
+         <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -114,9 +119,7 @@ This is not limited to persons available in a resource group but can be anyone. 
       <item row="0" column="1" colspan="2" >
        <widget class="KComboBox" name="scheduleType" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>5</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -160,18 +163,25 @@ This is not limited to persons available in a resource group but can be anyone. 
       </item>
       <item row="0" column="3" >
        <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
         </property>
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
+        </property>
         <item>
-         <widget class="KDateWidget" native="1" name="scheduleStartDate" >
+         <widget class="KDateWidget" name="scheduleStartDate" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>1</hsizetype>
-            <vsizetype>0</vsizetype>
+           <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -188,18 +198,25 @@ This is not limited to persons available in a resource group but can be anyone. 
       </item>
       <item row="1" column="3" >
        <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
         </property>
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
+        </property>
         <item>
-         <widget class="KDateWidget" native="1" name="scheduleEndDate" >
+         <widget class="KDateWidget" name="scheduleEndDate" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>1</hsizetype>
-            <vsizetype>0</vsizetype>
+           <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -217,9 +234,7 @@ This is not limited to persons available in a resource group but can be anyone. 
       <item row="2" column="0" >
        <widget class="QLabel" name="textLabel3_2" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>5</hsizetype>
-          <vsizetype>5</vsizetype>
+         <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -235,9 +250,7 @@ This is not limited to persons available in a resource group but can be anyone. 
       <item row="2" column="1" >
        <widget class="KComboBox" name="estimateType" >
         <property name="sizePolicy" >
-         <sizepolicy>
-          <hsizetype>5</hsizetype>
-          <vsizetype>0</vsizetype>
+         <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
@@ -258,29 +271,29 @@ This is not limited to persons available in a resource group but can be anyone. 
        </widget>
       </item>
       <item row="2" column="2" colspan="2" >
-       <widget class="QWidget" native="1" name="durationHolder" >
-        <property name="minimumSize" >
-         <size>
-          <width>250</width>
-          <height>18</height>
-         </size>
-        </property>
-       </widget>
+       <widget class="DurationSpinBox" name="estimate" />
       </item>
       <item row="3" column="2" colspan="2" >
        <layout class="QHBoxLayout" >
-        <property name="margin" >
-         <number>0</number>
-        </property>
         <property name="spacing" >
          <number>6</number>
+        </property>
+        <property name="leftMargin" >
+         <number>0</number>
+        </property>
+        <property name="topMargin" >
+         <number>0</number>
+        </property>
+        <property name="rightMargin" >
+         <number>0</number>
+        </property>
+        <property name="bottomMargin" >
+         <number>0</number>
         </property>
         <item>
          <widget class="QLabel" name="textLabel1_2" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>5</hsizetype>
-            <vsizetype>5</vsizetype>
+           <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -301,20 +314,18 @@ This is not limited to persons available in a resource group but can be anyone. 
           <property name="suffix" >
            <string>%</string>
           </property>
-          <property name="maximum" >
-           <number>0</number>
-          </property>
           <property name="minimum" >
            <number>-99</number>
+          </property>
+          <property name="maximum" >
+           <number>0</number>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QLabel" name="textLabel2_2" >
           <property name="sizePolicy" >
-           <sizepolicy>
-            <hsizetype>5</hsizetype>
-            <vsizetype>5</vsizetype>
+           <sizepolicy vsizetype="Preferred" hsizetype="Preferred" >
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -362,17 +373,16 @@ This is not limited to persons available in a resource group but can be anyone. 
     </widget>
    </item>
    <item>
-    <widget class="KTextEdit" native="1" name="descriptionfield" />
+    <widget class="KTextEdit" name="descriptionfield" />
    </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <customwidgets>
   <customwidget>
-   <class>KTextEdit</class>
-   <extends>QWidget</extends>
-   <header>ktextedit.h</header>
-   <container>1</container>
+   <class>KComboBox</class>
+   <extends>QComboBox</extends>
+   <header>kcombobox.h</header>
   </customwidget>
   <customwidget>
    <class>KDateWidget</class>
@@ -382,14 +392,20 @@ This is not limited to persons available in a resource group but can be anyone. 
   </customwidget>
   <customwidget>
    <class>KLineEdit</class>
-   <extends>QWidget</extends>
+   <extends>QLineEdit</extends>
    <header>klineedit.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>KComboBox</class>
-   <extends>QComboBox</extends>
-   <header>kcombobox.h</header>
+   <class>KTextEdit</class>
+   <extends>QTextEdit</extends>
+   <header>ktextedit.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DurationSpinBox</class>
+   <extends>QDoubleSpinBox</extends>
+   <header>kptdurationspinbox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
@@ -406,10 +422,7 @@ This is not limited to persons available in a resource group but can be anyone. 
  <includes>
   <include location="local" >klineedit.h</include>
   <include location="local" >kcombobox.h</include>
-  <include location="local" >kcombobox.h</include>
   <include location="local" >kdatewidget.h</include>
-  <include location="local" >kdatewidget.h</include>
-  <include location="local" >kptdurationwidget.h</include>
   <include location="local" >ktextedit.h</include>
  </includes>
  <resources/>
