@@ -252,8 +252,8 @@ void VConfigMiscPage::apply()
     if( currentUnit >= 0 && m_oldUnit.indexInList() != static_cast<uint>( currentUnit ) )
     {
         m_oldUnit = KoUnit((KoUnit::Unit)currentUnit);
+        part->document().setUnit( m_oldUnit );
         part->setUnit( m_oldUnit );
-        part->document().setUnit(part->unit());
         miscGroup.writeEntry( "Units", KoUnit::unitName( part->unit() ) );
     }
 }

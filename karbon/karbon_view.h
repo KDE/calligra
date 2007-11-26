@@ -167,6 +167,7 @@ protected slots:
 
     void documentViewRectChanged( const QRectF &viewRect );
 
+    void updateUnit( KoUnit unit );
 signals:
     void selectionChange();
     void pageLayoutChanged();

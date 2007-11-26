@@ -66,6 +66,7 @@
 #include <KoMainWindow.h>
 #include <KoLineBorder.h>
 #include <KoCanvasController.h>
+#include <KoCanvasResourceProvider.h>
 #include <KoFilterManager.h>
 #include <KoContextHelp.h>
 #include <KoUnitDoubleSpinBox.h>
@@ -216,13 +217,12 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     new KoRulerController( m_horizRuler, m_canvas->resourceProvider() );
 
     layout->addWidget( m_horizRuler, 0, 1 );
-    connect( p, SIGNAL( unitChanged( KoUnit ) ), m_horizRuler, SLOT( setUnit( KoUnit ) ) );
+    connect( p, SIGNAL( unitChanged( KoUnit ) ), this, SLOT( updateUnit( KoUnit ) ) );
 
     m_vertRuler = new KoRuler( this, Qt::Vertical, m_canvas->viewConverter() );
     m_vertRuler->setShowMousePosition(true);
     m_vertRuler->setUnit(p->unit());
     layout->addWidget( m_vertRuler, 1, 0 );
-    connect( p, SIGNAL( unitChanged( KoUnit ) ), m_horizRuler, SLOT( setUnit( KoUnit ) ) );
 
     connect(m_canvas, SIGNAL(documentOriginChanged( const QPoint &)), this, SLOT(pageOffsetChanged()));
     connect(m_canvas, SIGNAL(documentViewRectChanged(const QRectF &)),
@@ -250,7 +250,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
         createLayersTabDock();
         //createResourceDock();
 
-        KoToolBoxFactory toolBoxFactory(m_canvasController, i18n( "Karbon" ) );
+        KoToolBoxFactory toolBoxFactory(m_canvasController, i18n( "Tools" ) );
         createDockWidget( &toolBoxFactory );
 
         KarbonStylePreviewDockerFactory styleFactory;
@@ -1402,7 +1402,6 @@ void KarbonView::createTransformDock()
     KarbonTransformDockerFactory transformFactory;
     m_TransformDocker = qobject_cast<KarbonTransformDocker*>(createDockWidget(&transformFactory));
     connect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
-    connect( part(), SIGNAL( unitChanged( KoUnit ) ), m_TransformDocker, SLOT( setUnit( KoUnit ) ) );
 }
 
 void KarbonView::createResourceDock()
@@ -1420,6 +1419,14 @@ void KarbonView::updateReadWrite( bool readwrite )
 {
     debugView("KarbonView::updateReadWrite( bool )");
     kDebug(38000) <<"writable state =" << readwrite;
+}
+
+void KarbonView::updateUnit( KoUnit unit )
+{
+    m_horizRuler->setUnit( unit );
+    m_vertRuler->setUnit( unit );
+    m_TransformDocker->setUnit( unit );
+    m_canvas->resourceProvider()->setUnitChanged();
 }
 
 #include "karbon_view.moc"
