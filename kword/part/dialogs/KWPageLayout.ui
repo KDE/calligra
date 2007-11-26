@@ -143,7 +143,7 @@
    <item row="4" column="0" >
     <widget class="QLabel" name="facingPageLabel" >
      <property name="text" >
-      <string>Facing Pages:</string>
+      <string>Facing pages:</string>
      </property>
     </widget>
    </item>
@@ -164,7 +164,7 @@
    <item row="5" column="0" >
     <widget class="QLabel" name="label_6" >
      <property name="text" >
-      <string>First Page:</string>
+      <string>First page:</string>
      </property>
      <property name="buddy" >
       <cstring>firstPage</cstring>
@@ -244,7 +244,7 @@
       <item row="2" column="0" >
        <widget class="QLabel" name="rightLabel" >
         <property name="text" >
-         <string>Page Edge:</string>
+         <string>Page edge:</string>
         </property>
         <property name="buddy" >
          <cstring>pageEdgeMargin</cstring>
@@ -254,7 +254,7 @@
       <item row="1" column="0" >
        <widget class="QLabel" name="leftLabel" >
         <property name="text" >
-         <string>Binding Edge:</string>
+         <string>Binding edge:</string>
         </property>
         <property name="buddy" >
          <cstring>bindingEdgeMargin</cstring>
@@ -319,7 +319,7 @@
       <item row="4" column="0" >
        <widget class="QLabel" name="wholeDocumentLabel" >
         <property name="text" >
-         <string>Whole Document:</string>
+         <string>Whole document:</string>
         </property>
         <property name="buddy" >
          <cstring>wholeDocument</cstring>
@@ -332,7 +332,7 @@
    <item row="6" column="0" >
     <widget class="QLabel" name="directionLabel" >
      <property name="text" >
-      <string>Text Direction:</string>
+      <string>Text direction:</string>
      </property>
     </widget>
    </item>
