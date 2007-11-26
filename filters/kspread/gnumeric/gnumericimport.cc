@@ -980,6 +980,8 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, const Cell& kspre
   int l = formatString.length();
   int lastPos = 0;
 
+  if (l == 0) return;
+
   Style style;
   if (formatString[l - 1] == '%')
     style.setFormatType(Format::Percentage);
