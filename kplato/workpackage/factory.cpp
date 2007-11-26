@@ -90,10 +90,6 @@ const KComponentData &Factory::global()
         // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");
         
-        // Add library translation files
-        KGlobal::locale()->insertCatalog( "kplatokernel" );
-        KGlobal::locale()->insertCatalog( "kplatomodels" );
-        KGlobal::locale()->insertCatalog( "kplatoui" );
     }
     return *s_global;
 }

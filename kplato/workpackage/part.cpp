@@ -180,6 +180,15 @@ Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
 {
     setComponentData( Factory::global() );
     setTemplateType( "kplatowork_template" );
+    
+    // Add library translation files
+    KLocale *locale = KGlobal::locale();
+    if ( locale ) {
+        locale->insertCatalog( "kplatokernel" );
+        locale->insertCatalog( "kplatomodels" );
+        locale->insertCatalog( "kplatoui" );
+    }
+
 //     m_config.setReadWrite( isReadWrite() || !isEmbedded() );
 //     m_config.load();
 
