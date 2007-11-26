@@ -1537,6 +1537,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
     QTextStream streamOut(out);
 
     streamOut << str;
+    streamOut.flush();
 
     out->close();
     delete out;
