@@ -30,18 +30,18 @@
 #include <QCloseEvent>
 #include <QLabel>
 #include <QEvent>
-#include <Q3ListBoxItem>
+#include <QListView>
 
 #include <kcompletion.h>
 #include <kdialog.h>
 
-class KComboBox;
 class QLabel;
-class KLineEdit;
-class Q3ListBox;
 class QPushButton;
 class KTabWidget;
 class QTextBrowser;
+class QStringListModel;
+class QSortFilterProxyModel;
+class KComboBox;
 class KLineEdit;
 
 namespace KSpread
@@ -80,7 +80,7 @@ private slots:
      * Called if a function name was selected but not double clicked.
      * This will just show the help page for the function.
      */
-    void slotSelected( const QString& function );
+    void slotSelected( QString function = QString() );
     /**
      * Called if the user clicked on one of the "related function"
      * This will switch the active function and show help page
@@ -92,7 +92,7 @@ private slots:
      * That will switch into editing mode, allowing the user
      * to enter the parameters for the function.
      */
-    void slotDoubleClicked( Q3ListBoxItem* item );
+    void slotDoubleClicked( QModelIndex item = QModelIndex() );
     /**
      * Called if a category of methods has been selected.
      */
@@ -136,7 +136,9 @@ private:
 
     QPushButton *selectFunction;
     KComboBox *typeFunction;
-    Q3ListBox *functions;
+    QListView *functions;
+    QStringListModel *functionsModel;
+    QSortFilterProxyModel *proxyModel;
     KLineEdit *result;
 
     KLineEdit *searchFunct;
