@@ -25,6 +25,7 @@
 
 #include <KoAbstractGradient.h>
 #include <KoStopGradient.h>
+#include <KoSegmentGradient.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
@@ -34,6 +35,10 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <klistwidget.h>
+#include <kfiledialog.h>
+#include <kurl.h>
+#include <kcomponentdata.h>
+#include <kstandarddirs.h>
 
 #include <QLabel>
 #include <QPainter>
@@ -372,6 +377,7 @@ void VGradientTabWidget::setupConnections()
     connect( m_addToPredefs, SIGNAL( clicked() ), this, SLOT( addGradientToPredefs() ) );
     connect( m_predefGradientsView, SIGNAL( itemDoubleClicked( QTableWidgetItem * ) ), this, SLOT( changeToPredef( QTableWidgetItem* ) ) );
     connect( m_predefGradientsView, SIGNAL( deleteClicked() ), this, SLOT( deletePredef() ) );
+    connect( m_predefGradientsView, SIGNAL( importClicked() ), this, SLOT( importGradient() ) );
     connect( m_opacity, SIGNAL( valueChanged( int ) ), this, SLOT( opacityChanged( int ) ) );
 }
 
@@ -584,6 +590,42 @@ void VGradientTabWidget::changeToPredef( QTableWidgetItem * item )
     blockChildSignals( false );
     setCurrentWidget( m_editTab );
     emit changed();
+}
+
+void VGradientTabWidget::importGradient()
+{
+    QString filter( "*.svg *.ggr" );
+    QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose Gradient to Add" ) );
+
+    QFileInfo fi( filename );
+    if( fi.exists() == false )
+        return;
+
+    QString fileExtension;
+    int index = filename.lastIndexOf('.');
+
+    if (index != -1)
+        fileExtension = filename.mid(index).toLower();
+
+    KoAbstractGradient* grad = 0;
+
+    if(fileExtension == ".svg" || fileExtension == ".kgr")
+        grad = new KoStopGradient(filename);
+    else if(fileExtension == ".ggr" )
+        grad = new KoSegmentGradient(filename);
+
+    grad->load();
+    if( !grad->valid())
+        return;
+
+    QString newFilename = KGlobal::mainComponent().dirs()->saveLocation("ko_gradients" ) + fi.baseName() + fileExtension;
+    grad->setFilename(newFilename);
+
+    KoResourceServer<KoAbstractGradient>* srv = KoResourceServerProvider::instance()->gradientServer();
+    srv->addResource(grad);
+
+    if( grad )
+        m_predefGradientsView->addItem( new KarbonGradientItem( grad ) );
 }
 
 void VGradientTabWidget::deletePredef()

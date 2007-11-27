@@ -249,7 +249,6 @@ QWidget * KarbonGradientTool::createOptionWidget()
     m_gradientWidget->setGradient( m_gradient );
     m_gradientWidget->setResourceServer( KoResourceServerProvider::instance()->gradientServer() );
     layout->addWidget( m_gradientWidget );
-    layout->addItem(new QSpacerItem(1, 1, QSizePolicy::Minimum, QSizePolicy::MinimumExpanding));
 
     connect( m_gradientWidget, SIGNAL(changed()), this, SLOT(gradientChanged()) );
 

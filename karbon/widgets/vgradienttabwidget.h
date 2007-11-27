@@ -129,6 +129,7 @@ protected Q_SLOTS:
     void combosChange( int );
     void addGradientToPredefs();
     void changeToPredef( QTableWidgetItem* );
+    void importGradient();
     void deletePredef();
     void opacityChanged( int );
     void stopsChanged();
