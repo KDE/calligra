@@ -1,2 +1,2 @@
 #! /bin/sh
-$XGETTEXT rc.cpp *.cc *.cpp -o $podir/koshell.pot
+$XGETTEXT rc.cpp *.cpp -o $podir/koshell.pot
