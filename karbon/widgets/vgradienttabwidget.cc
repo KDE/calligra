@@ -25,7 +25,7 @@
 
 #include <KoAbstractGradient.h>
 #include <KoStopGradient.h>
-#include <KoResourceChooser.h>
+#include <KoResourceItemChooser.h>
 #include <KoResourceServer.h>
 #include <KoResourceServerProvider.h>
 
@@ -352,16 +352,9 @@ void VGradientTabWidget::setupUI()
 
     QWidget* predefTab  = new QWidget();
     QGridLayout* predefLayout = new QGridLayout( predefTab );
-    m_predefGradientsView = new KoResourceChooser( QSize( 300, 26 ), predefTab );
+    m_predefGradientsView = new KoResourceItemChooser( predefTab );
     m_predefGradientsView->setIconSize( QSize( 300, 20 ) );
     predefLayout->addWidget( m_predefGradientsView, 0, 0, 1, 2 );
-
-    m_predefDelete = new QPushButton( i18n( "&Delete" ), predefTab );
-    predefLayout->addWidget( m_predefDelete, 1, 0 );
-
-    m_predefImport = new QPushButton( i18n( "&Import" ), predefTab );
-    predefLayout->addWidget( m_predefImport, 1, 1 );
-    m_predefImport->setEnabled( false );
 
     predefLayout->setSpacing( 3 );
     predefLayout->setMargin( 6 );
@@ -378,8 +371,7 @@ void VGradientTabWidget::setupConnections()
     connect( m_gradientWidget, SIGNAL( changed() ), this, SLOT( stopsChanged() ) );
     connect( m_addToPredefs, SIGNAL( clicked() ), this, SLOT( addGradientToPredefs() ) );
     connect( m_predefGradientsView, SIGNAL( itemDoubleClicked( QTableWidgetItem * ) ), this, SLOT( changeToPredef( QTableWidgetItem* ) ) );
-    connect( m_predefGradientsView, SIGNAL( itemClicked( QTableWidgetItem * ) ), this, SLOT( predefSelected( QTableWidgetItem* ) ) );
-    connect( m_predefDelete, SIGNAL( clicked() ), this, SLOT( deletePredef() ) );
+    connect( m_predefGradientsView, SIGNAL( deleteClicked() ), this, SLOT( deletePredef() ) );
     connect( m_opacity, SIGNAL( valueChanged( int ) ), this, SLOT( opacityChanged( int ) ) );
 }
 
@@ -390,7 +382,6 @@ void VGradientTabWidget::blockChildSignals( bool block )
     m_gradientWidget->blockSignals( block );
     m_addToPredefs->blockSignals( block );
     m_predefGradientsView->blockSignals( block );
-    m_predefDelete->blockSignals( block );
     m_opacity->blockSignals( block );
 }
 
@@ -564,15 +555,6 @@ void VGradientTabWidget::addGradientToPredefs()
         m_predefGradientsView->addItem( new KarbonGradientItem( g ) );
     else
         delete g;
-}
-
-void VGradientTabWidget::predefSelected( QTableWidgetItem * item )
-{
-    if( ! item )
-        return;
-
-    KarbonGradientItem * gradientItem = static_cast<KarbonGradientItem*>( item );
-    m_predefDelete->setEnabled( gradientItem->gradient()->removable() );
 }
 
 void VGradientTabWidget::changeToPredef( QTableWidgetItem * item )

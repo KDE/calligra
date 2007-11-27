@@ -25,7 +25,7 @@
 class QPainter;
 class QButtonGroup;
 class QTableWidgetItem;
-class KoPatternChooser;
+class KoResourceItemChooser;
 class KarbonPatternEditStrategy;
 class KarbonPatternItem;
 
@@ -52,16 +52,12 @@ protected:
 
 private slots:
     virtual void resourceChanged( int key, const QVariant & res );
-    void slotButtonClicked( int button );
     void patternSelected( QTableWidgetItem * item );
     void importPattern();
     void deletePattern();
     void initialize();
 private:
-    enum Buttons { Button_Import, Button_Remove };
-
-    KoPatternChooser * m_patternChooser;
-    QButtonGroup * m_buttonGroup;
+    KoResourceItemChooser * m_patternChooser;
     KarbonPatternItem * m_currentPattern;
 
     QList<KarbonPatternEditStrategy*> m_patterns;  ///< the list of editing strategies, one for each shape

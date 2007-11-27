@@ -37,7 +37,7 @@ class VGradientWidget;
 class KListWidget;
 class KIntNumInput;
 class QPushButton;
-class KoResourceChooser;
+class KoResourceItemChooser;
 
 /// A widget to preview a gradient
 class VGradientPreview : public QWidget
@@ -129,7 +129,6 @@ protected Q_SLOTS:
     void combosChange( int );
     void addGradientToPredefs();
     void changeToPredef( QTableWidgetItem* );
-    void predefSelected( QTableWidgetItem* );
     void deletePredef();
     void opacityChanged( int );
     void stopsChanged();
@@ -148,9 +147,7 @@ private:
     KComboBox        *m_gradientTarget;
     KComboBox        *m_gradientRepeat;
     KComboBox        *m_gradientType;
-    KoResourceChooser *m_predefGradientsView;
-    QPushButton      *m_predefDelete;
-    QPushButton      *m_predefImport;
+    KoResourceItemChooser *m_predefGradientsView;
     QPushButton      *m_addToPredefs;
     KIntNumInput     *m_opacity;
 

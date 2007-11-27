@@ -27,16 +27,16 @@
 #include <QtGui/QPainter>
 
 KarbonGradientItem::KarbonGradientItem( KoAbstractGradient * gradient )
-    : m_gradient( gradient )
+    : KoResourceItem( gradient )
 {
-    Q_ASSERT( m_gradient );
+    Q_ASSERT( gradient );
     //setSizeHint( QSize( 200, 16 ) );
     setIcon( QIcon( QPixmap::fromImage( thumbnail( QSize( 300, 20 ) ) ) ) );
 }
 
 QImage KarbonGradientItem::thumbnail( const QSize &thumbSize ) const
 {
-    QGradient * g = m_gradient->toQGradient();
+    QGradient * g = static_cast<KoAbstractGradient*>(resource())->toQGradient();
 
     QLinearGradient paintGradient;
     paintGradient.setStops( g->stops() );
@@ -73,5 +73,5 @@ QVariant KarbonGradientItem::data( int role ) const
 
 KoAbstractGradient * KarbonGradientItem::gradient()
 {
-    return m_gradient;
+    return static_cast<KoAbstractGradient*>(resource());
 }

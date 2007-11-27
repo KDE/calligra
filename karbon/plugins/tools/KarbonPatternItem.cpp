@@ -24,25 +24,8 @@
 #define THUMB_SIZE 30
 
 KarbonPatternItem::KarbonPatternItem( KoPattern * pattern )
-    : m_pattern( pattern)
+    : KoResourceItem( pattern)
 {
-    Q_ASSERT( m_pattern );
-    setIcon( QIcon( QPixmap::fromImage( thumbnail( QSize( THUMB_SIZE, THUMB_SIZE ) ) ) ) );
-}
-
-QImage KarbonPatternItem::thumbnail( const QSize &thumbSize ) const
-{
-    QSize imgSize = m_pattern->img().size();
-
-    double scaleW = static_cast<double>( thumbSize.width() ) / static_cast<double>( imgSize.width() );
-    double scaleH = static_cast<double>( thumbSize.height() ) / static_cast<double>( imgSize.height() );
-
-    double scale = qMin( scaleW, scaleH );
-
-    int thumbW = static_cast<int>( imgSize.width() * scale );
-    int thumbH = static_cast<int>( imgSize.height() * scale );
-
-    return m_pattern->img().scaled( thumbW, thumbH, Qt::IgnoreAspectRatio );
 }
 
 QVariant KarbonPatternItem::data ( int role ) const
@@ -57,5 +40,5 @@ QVariant KarbonPatternItem::data ( int role ) const
 
 KoPattern * KarbonPatternItem::pattern()
 {
-    return m_pattern;
+    return static_cast<KoPattern*>(resource());
 }

@@ -21,7 +21,7 @@
 #include "KarbonPatternEditStrategy.h"
 #include "KarbonPatternItem.h"
 
-#include <KoResourceChooser.h>
+#include <KoResourceItemChooser.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
@@ -50,7 +50,7 @@
 #include <QUndoCommand>
 
 KarbonPatternTool::KarbonPatternTool(KoCanvasBase *canvas)
-: KoTool( canvas ), m_patternChooser( 0 ), m_buttonGroup( 0 )
+: KoTool( canvas ), m_patternChooser( 0 )
 , m_currentPattern( 0 ), m_currentStrategy( 0 )
 {
 }
@@ -224,67 +224,35 @@ QWidget * KarbonPatternTool::createOptionWidget()
     QWidget *optionWidget = new QWidget();
     QGridLayout* layout = new QGridLayout( optionWidget );
 
+    m_patternChooser = new KoResourceItemChooser( optionWidget );
+    //m_patternChooser->setFixedSize( 180, 120 );
+
     KoResourceServer<KoPattern>* srv = KoResourceServerProvider::instance()->patternServer();
     QList<KoPattern*> patterns = srv->resources();
 
-     QList<QTableWidgetItem*> items;
+     QList<KoResourceItem*> items;
      foreach( KoPattern* pat, patterns ) {
-             items.append( static_cast<QTableWidgetItem*>( new KarbonPatternItem( pat ) ) );
+             items.append( new KarbonPatternItem( pat ) );
      }
+     m_patternChooser->addItems(items);
 
-    m_patternChooser = new KoPatternChooser( items, optionWidget );
-    //m_patternChooser->setFixedSize( 180, 120 );
+    connect( m_patternChooser, SIGNAL( selected( QTableWidgetItem* ) ), this, SLOT( patternSelected( QTableWidgetItem* ) ) );
+    connect( m_patternChooser, SIGNAL( importClicked() ), this, SLOT( importPattern() ) );
+    connect( m_patternChooser, SIGNAL( deleteClicked() ), this, SLOT( deletePattern() ) );
+
     layout->addWidget( m_patternChooser, 0, 0, 1, 3 );
 
-    m_buttonGroup = new QButtonGroup( optionWidget );
-    m_buttonGroup->setExclusive( false );
-
-    QPushButton *button = new QPushButton( optionWidget );
-    button->setIcon( SmallIcon( "list-add" ) );
-    button->setToolTip( i18n("Import pattern") );
-    button->setEnabled( true );
-    m_buttonGroup->addButton( button, Button_Import );
-    layout->addWidget( button, 1, 0 );
-
-    button = new QPushButton( optionWidget );
-    button->setIcon( SmallIcon( "list-remove" ) );
-    button->setToolTip( i18n("Delete pattern") );
-    button->setEnabled( false );
-    m_buttonGroup->addButton( button, Button_Remove );
-    layout->addWidget( button, 1, 1 );
-
-    layout->setColumnStretch( 0, 1 );
-    layout->setColumnStretch( 1, 1 );
-    layout->setColumnStretch( 2, 2 );
-    layout->setSpacing( 0 );
-    layout->setMargin( 3 );
-
-    connect( m_buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
-    connect( m_patternChooser, SIGNAL( selected( QTableWidgetItem* ) ), this, SLOT( patternSelected( QTableWidgetItem* ) ) );
-
-    if( !items.isEmpty() )
-        m_currentPattern = static_cast<KarbonPatternItem*>( items.first() );
+    if( m_patternChooser->currentItem() )
+          m_currentPattern = static_cast<KarbonPatternItem*>(m_patternChooser->currentItem());
 
     return optionWidget;
 }
 
-void KarbonPatternTool::slotButtonClicked( int button )
+void KarbonPatternTool::patternSelected( QTableWidgetItem * item )
 {
-    if( button == Button_Import )
-        importPattern();
-    else if( button == Button_Remove )
-        deletePattern();
-}
-
-void KarbonPatternTool::patternSelected( QTableWidgetItem* item )
-{
-    m_currentPattern = dynamic_cast<KarbonPatternItem*>( item );
+    m_currentPattern = static_cast<KarbonPatternItem*>(item);
     if( ! m_currentPattern || ! m_currentPattern->pattern()->valid() )
         return;
-
-    QAbstractButton * removeButton = m_buttonGroup->button( Button_Remove );
-    if( removeButton )
-        removeButton->setEnabled( QFileInfo( m_currentPattern->pattern()->filename() ).isWritable() );
 
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
     QBrush newBrush( m_currentPattern->pattern()->img() );
@@ -313,15 +281,17 @@ void KarbonPatternTool::importPattern()
     srv->addResource(pattern);
 
     if( pattern )
-        m_patternChooser->addPattern( new KarbonPatternItem( pattern ) );
+        m_patternChooser->addItem( new KarbonPatternItem( pattern ) );
 }
 
 void KarbonPatternTool::deletePattern()
 {
-    KoPattern * pattern = m_currentPattern->pattern();
-    m_patternChooser->removePattern( m_currentPattern );
+    if(!m_patternChooser->currentItem())
+        return;
+
+    KoPattern * pattern = static_cast<KarbonPatternItem*>(m_patternChooser->currentItem())->pattern();
+    m_patternChooser->removeItem( static_cast<KoResourceItem*>(m_patternChooser->currentItem()) );
     KoResourceServerProvider::instance()->patternServer()->removeResource(pattern);
-    m_currentPattern = static_cast<KarbonPatternItem*>( m_patternChooser->currentPattern() );
 }
 
 #include "KarbonPatternTool.moc"

@@ -20,11 +20,11 @@
 #ifndef KARBONGRADIENTITEM_H
 #define KARBONGRADIENTITEM_H
 
-#include <QtGui/QTableWidgetItem>
+#include <KoResourceItemChooser.h>
 
 class KoAbstractGradient;
 
-class KarbonGradientItem : public QTableWidgetItem
+class KarbonGradientItem : public KoResourceItem
 {
 public:
     KarbonGradientItem( KoAbstractGradient * gradient );
@@ -36,7 +36,6 @@ public:
 
 private:
     QImage thumbnail( const QSize &thumbSize ) const;
-    KoAbstractGradient * m_gradient;
 };
 
 #endif // KARBONGRADIENTITEM_H

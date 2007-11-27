@@ -20,11 +20,11 @@
 #ifndef KARBONPATTERNITEM_H
 #define KARBONPATTERNITEM_H
 
-#include <QtGui/QTableWidgetItem>
+#include <KoResourceItemChooser.h>
 
 class KoPattern;
 
-class KarbonPatternItem : public QTableWidgetItem
+class KarbonPatternItem : public KoResourceItem
 {
 public:
     KarbonPatternItem( KoPattern * pattern );
@@ -33,10 +33,6 @@ public:
     virtual QVariant data ( int role ) const;
 
     KoPattern * pattern();
-
-private:
-    QImage thumbnail( const QSize &thumbSize ) const;
-    KoPattern * m_pattern;
 };
 
 #endif // KARBONPATTERNITEM_H
