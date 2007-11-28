@@ -598,6 +598,8 @@ void CellFormatDialog::initGUI()
 
 CellFormatDialog::~CellFormatDialog()
 {
+  if ( KPageWidgetItem* item = currentPage() )
+       m_lastpage = item->name();
   delete formatOnlyNegSignedPixmap;
   delete formatRedOnlyNegSignedPixmap;
   delete formatRedNeverSignedPixmap;
@@ -782,31 +784,43 @@ void CellFormatDialog::init()
   {
     generalPage = new GeneralTab( this, this );
 
-    KPageWidgetItem* item = addPage( generalPage, i18n( "&General" ) );
-    //item->setHeader( i18n( "&General" ) );
-    Q_UNUSED(item);
+    KPageWidgetItem* generalitem = addPage( generalPage, i18n( "&General" ) );
+    //generalitem->setHeader( i18n( "&General" ) );
+    Q_UNUSED(generalitem);
   }
 
   floatPage = new CellFormatPageFloat( this, this );
-  addPage( floatPage, i18n("&Data Format") );
+  KPageWidgetItem* formatitem = addPage( floatPage, i18n("&Data Format") );
+  if ( formatitem->name() == m_lastpage )
+      setCurrentPage( formatitem );
 
   fontPage = new CellFormatPageFont( this, this );
-  addPage( fontPage, i18n("&Font") );
+  KPageWidgetItem* fontitem = addPage( fontPage, i18n("&Font") );
+  if ( fontitem->name() == m_lastpage )
+      setCurrentPage( fontitem );
 
   //  miscPage = new CellFormatPageMisc( tab, this );
   //  tab->addTab( miscPage, i18n("&Misc") );
 
   positionPage = new CellFormatPagePosition( this, this);
-  addPage( positionPage, i18n("&Position") );
+  KPageWidgetItem* positem = addPage( positionPage, i18n("&Position") );
+  if ( positem->name() == m_lastpage )
+      setCurrentPage( positem );
 
   borderPage = new CellFormatPageBorder( this, this );
-  addPage( borderPage, i18n("&Border") );
+  KPageWidgetItem* borderitem = addPage( borderPage, i18n("&Border") );
+  if ( borderitem->name() == m_lastpage )
+      setCurrentPage( borderitem );
 
   patternPage=new CellFormatPagePattern(this,this);
-  addPage( patternPage,i18n("Back&ground") );
+  KPageWidgetItem* backgrounditem = addPage( patternPage,i18n("Back&ground") );
+  if ( backgrounditem->name() == m_lastpage )
+      setCurrentPage( backgrounditem );
 
   protectPage = new CellFormatPageProtection( this, this );
-  addPage( protectPage, i18n("&Cell Protection") );
+  KPageWidgetItem* protectitem = addPage( protectPage, i18n("&Cell Protection") );
+  if ( protectitem->name() == m_lastpage )
+      setCurrentPage( protectitem );
 
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
 }
