@@ -318,6 +318,8 @@ bool GeneralTab::apply( CustomStyle * style )
  *
  ***************************************************************************/
 
+QString CellFormatDialog::m_lastpage;
+
 CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   : KPageDialog(_view),
     m_doc( _sheet->doc() ),
