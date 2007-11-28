@@ -15,6 +15,7 @@ install(FILES
 
 install(FILES
     functions.py
+    rpyfunctions.py
     yfinance.py yweather.py
     pytime.py pyregexp.py
     DESTINATION ${DATA_INSTALL_DIR}/kspread/scripts/functions)

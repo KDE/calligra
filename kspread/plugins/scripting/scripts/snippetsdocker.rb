@@ -72,13 +72,18 @@ class Snippets
             action.setInterpreter(@interpreterCombo.currentText)
             action.setCode(@edit.plainText)
             action.trigger()
+            #action.destroyLater()
             puts "EXECUTE DONE"
         end
     end
 
     class Snippet_Informations < Base
         def initialize(parent)
-            super(parent, "Informations", "Details about the Environment")
+            super(parent, "Informations", "Environment Details")
+
+            ObjectSpace.define_finalizer(self,
+                                     self.class.method(:finalize).to_proc)
+
         end
         def slotExecute()
             text = "<h3>Ruby</h3><table>"
@@ -100,6 +105,7 @@ class Snippets
                     text += "<tr><td>" + n + "</td><td>" + ENV[n] + "</td></tr>"
                 end
             text += "</table>"
+
             dialog = Qt::Dialog.new(self)
             layout = Qt::VBoxLayout.new(dialog)
             layout.setMargin(0)
@@ -111,60 +117,69 @@ class Snippets
             dialog.resize(560,400)
             dialog.exec()
         end
-    end
-
+def Snippet_Informations.finalize(id)
+        puts "Object #{id} dying at #{Time.new}"
 end
 
-class WidgetListBox < Qt::TableWidget
-    def initialize(parent)
-        super(parent)
-        setRowCount(0)
-        setColumnCount(1)
-        horizontalHeader().hide()
-        verticalHeader().hide()
-        setSelectionMode(Qt::AbstractItemView::SingleSelection)
-        setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff)
-        horizontalHeader().setStretchLastSection(true)
-        setAlternatingRowColors(true)
-        @snippets = {}
     end
-    def addItem(snippetClazzName)
-        snippet = Snippets.const_get(snippetClazzName).new(self)
-        @snippets[snippetClazzName] = snippet #this is a hack which seems to be needed to keep the qwidget-instance alive.
 
-        row = rowCount()
-        setRowCount(row + 1)
-        widget = Qt::Widget.new(self)
-        layout = Qt::GridLayout.new(widget)
-        layout.setMargin(2)
-        layout.setSpacing(0)
-        layout.setColumnStretch(0, 1)
-        widget.setLayout(layout)
-
-        caption = snippet.instance_variable_get("@caption")
-        layout.addWidget(Qt::Label.new(caption, widget), 0, 0)
-
-        runbtn = Qt::PushButton.new('Run', widget)
-        runbtn.setProperty("snippetClazzName", Qt::Variant.new(snippetClazzName))
-        connect(runbtn, SIGNAL('clicked()'), snippet, SLOT('slotExecute()'))
-        layout.addWidget(runbtn, 0, 1, 2, 1)
-
-        description = snippet.instance_variable_get("@description")
-        layout.addWidget(Qt::Label.new("<i>" + description + "</i>", widget), 1, 0)
-
-        setCellWidget(row, 0, widget)
-        setRowHeight(row, widget.height() + 8)
-    end
 end
 
 class SnippetsWidget < Qt::Widget
-    def initialize(parent)
+
+    class WidgetListBox < Qt::TableWidget
+        def initialize(parent, scriptaction)
+            super(parent)
+            setRowCount(0)
+            setColumnCount(1)
+            horizontalHeader().hide()
+            verticalHeader().hide()
+            setSelectionMode(Qt::AbstractItemView::SingleSelection)
+            setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff)
+            horizontalHeader().setStretchLastSection(true)
+            setAlternatingRowColors(true)
+            @scriptaction = scriptaction
+            @snippets = {}
+        end
+        def scriptAction
+            return @scriptaction
+        end
+        def addItem(snippetClazzName)
+            snippet = Snippets.const_get(snippetClazzName).new(self)
+            @snippets[snippetClazzName] = snippet #this is a hack which seems to be needed to keep the qwidget-instance alive.
+
+            row = rowCount()
+            setRowCount(row + 1)
+            widget = Qt::Widget.new(self)
+            layout = Qt::GridLayout.new(widget)
+            layout.setMargin(2)
+            layout.setSpacing(0)
+            layout.setColumnStretch(0, 1)
+            widget.setLayout(layout)
+
+            caption = snippet.instance_variable_get("@caption")
+            layout.addWidget(Qt::Label.new(caption, widget), 0, 0)
+
+            runbtn = Qt::PushButton.new('Run', widget)
+            runbtn.setProperty("snippetClazzName", Qt::Variant.new(snippetClazzName))
+            connect(runbtn, SIGNAL('clicked()'), snippet, SLOT('slotExecute()'))
+            layout.addWidget(runbtn, 0, 1, 2, 1)
+
+            description = snippet.instance_variable_get("@description")
+            layout.addWidget(Qt::Label.new("<i>" + description + "</i>", widget), 1, 0)
+
+            setCellWidget(row, 0, widget)
+            setRowHeight(row, widget.height() + 8)
+        end
+    end
+
+    def initialize(parent, scriptaction)
         super(parent)
         layout = Qt::VBoxLayout.new(self)
         layout.setMargin(0)
         layout.setSpacing(0)
         setLayout(layout)
-        @listbox = WidgetListBox.new(self)
+        @listbox = WidgetListBox.new(self, scriptaction)
         layout.addWidget(@listbox)
         Snippets.constants.each do |n|
             if n.index('Snippet_') == 0
@@ -177,7 +192,7 @@ end
 
 $voidptr = KoDocker.toVoidPtr()
 $wdg = Qt::Internal.kross2smoke($voidptr, Qt::DockWidget)
-$label = SnippetsWidget.new($wdg)
+$label = SnippetsWidget.new($wdg, self)
 $wdg.setWidget($label)
 
 puts "Ruby Docker Script 'snippetsdocker.rb' Loaded!"

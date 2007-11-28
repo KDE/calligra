@@ -50,6 +50,12 @@
 
     <collection name="functions" text="Functions" comment="Scripting formula functions">
         <script
+            name="rpyfunctions"
+            text="R-Project"
+            comment="Functions for the R programming environment for data analysis and graphics"
+            interpreter="python"
+            file="functions/rpyfunctions.py" />
+        <script
             name="yfinance"
             text="YFinance"
             comment="Yahoo! Finance formula function"
@@ -110,7 +116,7 @@
            name="rbsnippets"
            text="Ruby Snippets"
            comment="Ruby Snippets"
-           enabled="false"
+           enabled="true"
            interpreter="ruby"
            file="docker/snippetsdocker.rb" />
     </collection>

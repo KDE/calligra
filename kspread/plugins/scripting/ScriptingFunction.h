@@ -60,6 +60,11 @@ class ScriptingFunction : public QObject
         Q_PROPERTY(QString name READ name)
 
         /**
+        * Set the name of the return-type. Could be e.g. "String", "int", "bool" or "float".
+        */
+        Q_PROPERTY(QString typeName READ typeName WRITE setTypeName)
+
+        /**
         * Minimum number of parameters the function expects.
         */
         Q_PROPERTY(int minparam READ minParam WRITE setMinParam)
@@ -97,6 +102,12 @@ class ScriptingFunction : public QObject
         QString name() const;
         /// Set the name the function has.
         void setName(const QString& name);
+
+        /// \return the name the function has.
+        QString typeName() const;
+        /// Set the name the function has.
+        void setTypeName(const QString& typeName);
+
         /// \return the minimum number of parameters the function expects.
         int minParam() const;
         /// Set the minimum number of parameters the function expects.
@@ -105,18 +116,22 @@ class ScriptingFunction : public QObject
         int maxParam() const;
         /// Set the maximum number of parameters the function expects.
         void setMaxParam(int maxparam);
+
         /// \return the comment that describes what the function does.
         QString comment() const;
         /// Set the comment that describes what the function does.
         void setComment(const QString& comment);
+
         /// \return the syntax string the function looks like.
         QString syntax() const;
         /// Set the syntax string the function looks like.
         void setSyntax(const QString& syntax);
+
         /// \return the error-message if there was an error.
         QString error() const;
         /// Set the error-message.
         void setError(const QString& error = QString());
+
         /// \return the result of the function call.
         QVariant result() const;
         /// Set the result of the function call.

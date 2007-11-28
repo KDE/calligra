@@ -28,6 +28,7 @@
 //#include <Doc.h>
 //#include <View.h>
 #include <Value.h>
+#include <Number.h>
 #include <Functions.h>
 
 //#define KROSS_MAIN_EXPORT KDE_EXPORT
@@ -60,13 +61,40 @@ class ScriptingFunctionImpl : public KSpread::Function
 
             kDebug() << QString("ScriptingFunctionImpl::callback name=%1 argcount=%2").arg(funcimpl->m_function->name()).arg(args.count());
 
+KSpread::FunctionDescription *description = KSpread::FunctionRepository::self()->functionInfo( funcimpl->name() );
+kDebug()<<"0 ==================> name="<<description->name()<<" type="<<description->type();
+
             QVariantList list;
-            int size = args.size();
-            for(int i = 0; i < size; ++i) {
-                //TODO needs to be more generic!
-                list.append( args[i].asString() );
+            for(int i = 0; i < args.size(); ++i) {
+                switch( description->param(i).type() ) {
+                    case KSpread::KSpread_Int:
+                        list << int( args[i].asInteger() );
+                        break;
+                    case KSpread::KSpread_Float: {
+                        list << double( args[i].asFloat() );
+                    } break;
+                    case KSpread::KSpread_String:
+                        list << args[i].asString();
+                        break;
+                    case KSpread::KSpread_Boolean:
+                        list << args[i].asBoolean();
+                        break;
+                    case KSpread::KSpread_Any:
+                    default:
+                        list << args[i].asVariant();
+                        break;
+                }
+                //kDebug()<<"1 ==================> helpText="<<description->param(i).helpText()<<" type="<<description->param(i).type();
             }
 
+/*
+            for(int i = 0; i < size; ++i) {
+kDebug()<<"2 ==================> "<<args[i].asString();
+                //TODO needs to be more generic!
+                //list << args[i].asVariant();
+                list << args[i].asString();
+            }
+*/
             funcimpl->m_function->setError( QString() );
             funcimpl->m_function->setResult( QVariant() );
 
@@ -90,9 +118,31 @@ class ScriptingFunctionImpl : public KSpread::Function
                 return err;
             }
 
-            kDebug() <<"result=" << result.toString();
-            return KSpread::Value( result.toString() );
-            //return KSpread::Value( result );
+            KSpread::Value resultvalue;
+            switch( description->type() ) {
+                case KSpread::KSpread_Int:
+                    resultvalue = KSpread::Value( result.toInt() );
+                    break;
+                case KSpread::KSpread_Float:
+                    resultvalue = KSpread::Value( (double) result.toDouble() );
+                    break;
+                case KSpread::KSpread_String:
+                    resultvalue = KSpread::Value( result.toString() );
+                    break;
+                case KSpread::KSpread_Boolean:
+                    resultvalue = KSpread::Value( result.toBool() );
+                    break;
+                case KSpread::KSpread_Any:
+                default:
+                    //TODO make more generic
+                    //resultvalue = KSpread::Value( result );
+                    resultvalue = KSpread::Value( result.toString() );
+                    break;
+            }
+
+            //kDebug() <<"result=" << result.toString();
+            //return KSpread::Value( result.toString() );
+            return resultvalue;
         }
 
         ScriptingFunctionImpl(ScriptingFunction* function, const QDomElement& description)
@@ -130,6 +180,7 @@ class ScriptingFunction::Private
 {
     public:
         QString name;
+        QString typeName;
         int minparam;
         int maxparam;
         QString comment;
@@ -148,6 +199,7 @@ ScriptingFunction::ScriptingFunction(QObject* parent)
     , d(new Private())
 {
     kDebug() <<"ScriptingFunction::ScriptingFunction";
+    d->typeName = "String";
     d->funcElement = d->document.createElement("Function");
     d->helpElement = d->document.createElement("Help");
 }
@@ -160,6 +212,8 @@ ScriptingFunction::~ScriptingFunction()
 
 QString ScriptingFunction::name() const { return d->name; }
 void ScriptingFunction::setName(const QString& name) { d->name = name; }
+QString ScriptingFunction::typeName() const { return d->typeName; }
+void ScriptingFunction::setTypeName(const QString& typeName) { d->typeName = typeName; }
 int ScriptingFunction::minParam() const { return d->minparam; }
 void ScriptingFunction::setMinParam(int minparam) { d->minparam = minparam; }
 int ScriptingFunction::maxParam() const { return d->maxparam; }
@@ -206,7 +260,7 @@ bool ScriptingFunction::registerFunction()
     d->funcElement.appendChild(nameelem);
 
     QDomElement typeelem = d->document.createElement("Type");
-    typeelem.appendChild( d->document.createTextNode("String") );
+    typeelem.appendChild( d->document.createTextNode(d->typeName) );
     d->funcElement.appendChild(typeelem);
 
     QDomElement helpTextElem = d->document.createElement("Text");
