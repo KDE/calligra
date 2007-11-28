@@ -78,7 +78,14 @@ public:
 		result = -1;
 		QString iconname( KexiDB::defaultFileBasedDriverIcon() );
 		kexi_sqlite_icon = KIconLoader::global()->loadMimeTypeIcon( iconname, KIconLoader::Desktop );
-		iconname = KMimeType::mimeType("application/x-kexiproject-shortcut")->iconName();
+		const char shortcutMimeTypeName[] = "application/x-kexiproject-shortcut";
+		KMimeType::Ptr mime( KMimeType::mimeType(shortcutMimeTypeName) );
+		if (mime.isNull()) {
+			KexiDBWarn << QString("'%1' mimetype not installed!").arg( shortcutMimeTypeName );
+			iconname = QString();
+		}
+		else
+			iconname = mime->iconName();
 		kexi_shortcut_icon = KIconLoader::global()->loadMimeTypeIcon(
 			iconname, KIconLoader::Desktop );
 		prj_selector = 0;

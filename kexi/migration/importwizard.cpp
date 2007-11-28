@@ -163,10 +163,12 @@ void ImportWizard::setupIntro()
 	else if (!m_predefinedDatabaseName.isEmpty()) { //predefined import: file source
 //! @todo this message is currently ok for files only
 		KMimeType::Ptr mimeTypePtr = KMimeType::mimeType(m_predefinedMimeType);
+		if (mimeTypePtr.isNull())
+			KexiDBWarn << QString("'%1' mimetype not installed!").arg( m_predefinedMimeType );
 		msg = i18n(
 			"<qt>Database Importing wizard is about to import <nobr>\"%1\"</nobr> file "
 			"of type \"%2\" into a Kexi database.</qt>",
-			QDir::convertSeparators(m_predefinedDatabaseName), mimeTypePtr->comment());
+			QDir::convertSeparators(m_predefinedDatabaseName), mimeTypePtr ? mimeTypePtr->comment() : "???");
 	}
 	else {
 		msg = i18n("Database Importing wizard allows you to import an existing database "
