@@ -102,7 +102,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     actionCollection()->addAction("extra_template", actionExtraCreateTemplate );
     connect(actionExtraCreateTemplate, SIGNAL(triggered(bool)), SLOT( extraCreateTemplate() ));
 
-    m_edit  = new KAction(KIcon("edit"), i18n("Edit &Data..."), this);
+    m_edit  = new KAction(KIcon("object-edit"), i18n("Edit &Data..."), this);
     actionCollection()->addAction("editdata", m_edit );
     connect(m_edit, SIGNAL(triggered(bool) ), SLOT( editData() ));
 

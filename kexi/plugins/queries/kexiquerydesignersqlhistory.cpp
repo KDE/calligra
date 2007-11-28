@@ -166,7 +166,7 @@ KexiQueryDesignerSQLHistory::contextMenu(const QPoint &pos, HistoryEntry *)
 
 #ifndef KEXI_NO_UNFINISHED
 	p.insertSeparator();
-	p.insertItem(SmallIcon("edit"), i18n("Edit"), this, SLOT(slotEdit()));
+	p.insertItem(SmallIcon("object-edit"), i18n("Edit"), this, SLOT(slotEdit()));
 	p.insertItem(SmallIcon("view-refresh"), i18n("Requery"));
 #endif
 

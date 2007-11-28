@@ -81,7 +81,7 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
 
   KVBox *page4 = new KVBox();
   p4 = addPage(page4, i18n("Misc"));
-  p4->setIcon( KIcon( BarIcon("edit",KIconLoader::SizeMedium) ) );
+  p4->setIcon( KIcon( BarIcon("object-edit",KIconLoader::SizeMedium) ) );
   _miscParameter = new  miscParameters(parent,page4 );
 
   KVBox *page5 = new KVBox();

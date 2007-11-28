@@ -163,7 +163,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
 		//todo	plugSharedAction("edit_paste",SLOT(slotPaste()));
 #endif
 
-		m_designAction = addAction("design_object", KIcon("edit"), i18n("&Design"),
+		m_designAction = addAction("design_object", KIcon("object-edit"), i18n("&Design"),
 			i18n("Design object"), i18n("Starts designing of the object selected in the list."),
 			SLOT(slotDesignObject()));
 		if (m_features & Toolbar) {

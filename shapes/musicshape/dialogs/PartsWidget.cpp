@@ -41,7 +41,7 @@ PartsWidget::PartsWidget(MusicTool *tool, QWidget *parent)
 
     widget.addPart->setIcon(KIcon("edit-add"));
     widget.removePart->setIcon(KIcon("edit-delete"));
-    widget.editPart->setIcon(KIcon("edit"));
+    widget.editPart->setIcon(KIcon("object-edit"));
 
     connect(widget.partsList, SIGNAL(doubleClicked(const QModelIndex&)), this, SLOT(partDoubleClicked(const QModelIndex&)));
     //connect(widget.partsList, SIGNAL(currentItemChanged(QListWidgetItem*,QListWidgetItem*)), this, SLOT(selectionChanged(QListWidgetItem*,QListWidgetItem*)));

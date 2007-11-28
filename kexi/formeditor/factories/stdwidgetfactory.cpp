@@ -478,12 +478,12 @@ StdWidgetFactory::createMenuActions(const Q3CString &classname, QWidget *,
 {
 	if((classname == "QLabel") || (classname == "KTextEdit"))
 	{
-		menu->addAction(KIcon("edit"), i18n("Edit Rich Text"), this, SLOT(editText()));
+		menu->addAction(KIcon("object-edit"), i18n("Edit Rich Text"), this, SLOT(editText()));
 		return true;
 	}
 	else if(classname == "QListView" || classname == "Q3ListView" || classname == "KListView" || classname=="K3ListView")
 	{
-		menu->addAction(KIcon("edit"), i18n("Edit Listview Contents"), this, SLOT(editListContents()));
+		menu->addAction(KIcon("object-edit"), i18n("Edit Listview Contents"), this, SLOT(editListContents()));
 		return true;
 	}
 

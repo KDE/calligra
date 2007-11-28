@@ -125,7 +125,7 @@ KexiReportFactory::createMenuActions(const Q3CString &classname, QWidget *w,
 	Q_UNUSED(container);
 	if(classname == "Label") {
 		/*! @todo use KAction */
-		menu->insertItem(KIcon("edit"), i18n("Edit Rich Text"), this, SLOT(editText()));
+		menu->insertItem(KIcon("object-edit"), i18n("Edit Rich Text"), this, SLOT(editText()));
 		return true;
 	}
 	return false;

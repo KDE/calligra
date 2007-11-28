@@ -136,7 +136,7 @@ KexiRelationsView::KexiRelationsView(QWidget *parent)
 	connect(d->openSelectedTableAction, SIGNAL(triggered()),
 		this, SLOT(openSelectedTable()));
 		
-	d->designSelectedTableAction = new KAction(KIcon("edit"), i18n("&Design Table"), this);
+	d->designSelectedTableAction = new KAction(KIcon("object-edit"), i18n("&Design Table"), this);
 	connect(d->designSelectedTableAction, SIGNAL(triggered()),
 		this, SLOT(designSelectedTable()));
 	d->designSelectedTableAction->setObjectName("relationsview_designTable");

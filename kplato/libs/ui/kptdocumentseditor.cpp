@@ -220,7 +220,7 @@ void DocumentsEditor::updateActionsEnabled(  bool on )
 void DocumentsEditor::setupGui()
 {
     QString name = "documentseditor_edit_list";
-    actionEditDocument  = new KAction(KIcon( "edit" ), i18n("Edit..."), this);
+    actionEditDocument  = new KAction(KIcon( "object-edit" ), i18n("Edit..."), this);
     actionCollection()->addAction("edit_documents", actionEditDocument );
 //    actionEditDocument->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     connect( actionEditDocument, SIGNAL( triggered( bool ) ), SLOT( slotEditDocument() ) );

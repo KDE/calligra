@@ -682,7 +682,7 @@ ContainerFactory::createMenuActions(const Q3CString &classname, QWidget *w,
 		}
 
 		int id = menu->insertItem(KIcon("tab-new"), i18n("Add Page"), this, SLOT(addTabPage()) );
-		id = menu->insertItem(KIcon("edit"), i18n("Rename Page..."), this, SLOT(renameTabPage()));
+		id = menu->insertItem(KIcon("object-edit"), i18n("Rename Page..."), this, SLOT(renameTabPage()));
 		id = menu->insertItem(KIcon("tab-remove"), i18n("Remove Page"), this, SLOT(removeTabPage()));
 //		if( dynamic_cast<TabWidgetBase*>(m_widget)->count() == 1)
 		if( dynamic_cast<TabWidgetBase*>(widget())->count() == 1)

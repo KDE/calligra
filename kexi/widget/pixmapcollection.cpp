@@ -368,7 +368,7 @@ PixmapCollectionEditor::displayMenu(Q3IconViewItem *it, const QPoint &p)
 {
 	if(!it) return;
 	KMenu *menu = new KMenu();
-	menu->insertItem(KIcon("edit"), i18n("Rename Item"), this, SLOT(renameItem()));
+	menu->insertItem(KIcon("object-edit"), i18n("Rename Item"), this, SLOT(renameItem()));
 	menu->insertItem(KIcon("list-remove"), i18n("Remove Item"), this, SLOT(removeItem()));
 	menu->exec(p);
 }
