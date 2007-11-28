@@ -80,18 +80,18 @@ public:
 	public:
 		Appearance(QWidget *widget = 0);
 
-		/*! base color for cells, default is "Base" color for application's 
+		/*! base color for cells, default is "Base" color for application's
 		 current active palette */
 		QColor baseColor;
 
-		/*! text color for cells, default is "Text" color for application's 
+		/*! text color for cells, default is "Text" color for application's
 		 current active palette */
 		QColor textColor;
 
 		/*! border color for cells, default is QColor(200,200,200) */
 		QColor borderColor;
 
-		/*! empty area color, default is "Base" color for application's 
+		/*! empty area color, default is "Base" color for application's
 		 current active palette */
 		QColor emptyAreaColor;
 
@@ -108,8 +108,8 @@ public:
 		*/
 		bool fullRowSelection : 1;
 
-		/*! true if fullgrid is enabled. True by default. 
-		 It is set to false for comboboxpopup table, to mimic original 
+		/*! true if fullgrid is enabled. True by default.
+		 It is set to false for comboboxpopup table, to mimic original
 		 combobox look and feel. */
 		bool gridEnabled : 1;
 
@@ -123,9 +123,9 @@ public:
 		/*! true if "row highlight over " behaviour is enabled. False by default. */
 		bool rowMouseOverHighlightingEnabled : 1;
 
-		/*! true if selection of a row should be kept when a user moved mouse 
-		 pointer over other rows. Makes only sense when rowMouseOverHighlightingEnabled is true. 
-		 True by default. It is set to false for comboboxpopup table, to mimic original 
+		/*! true if selection of a row should be kept when a user moved mouse
+		 pointer over other rows. Makes only sense when rowMouseOverHighlightingEnabled is true.
+		 True by default. It is set to false for comboboxpopup table, to mimic original
 		 combobox look and feel. */
 		bool persistentSelections : 1;
 
@@ -133,7 +133,7 @@ public:
 		 active highlight and base color. */
 		QColor rowHighlightingColor;
 
-		/*! color for text under row highlight, default is the same as textColor. 
+		/*! color for text under row highlight, default is the same as textColor.
 		 Used when rowHighlightingEnabled is true; */
 		QColor rowHighlightingTextColor;
 
@@ -141,15 +141,15 @@ public:
 		 active highlight and base color. Used when rowMouseOverHighlightingEnabled is true. */
 		QColor rowMouseOverHighlightingColor;
 
-		/*! color for text under row highlight for mouseover, default is the same as textColor. 
+		/*! color for text under row highlight for mouseover, default is the same as textColor.
 		 Used when rowMouseOverHighlightingEnabled is true; */
 		QColor rowMouseOverHighlightingTextColor;
 
-		/*! Like rowMouseOverHighlightingColor but for areas painted with alternate color. 
+		/*! Like rowMouseOverHighlightingColor but for areas painted with alternate color.
 		 This is computed using active highlight color and alternateBackgroundColor. */
 		QColor rowMouseOverAlternateHighlightingColor;
 	};
-	
+
 	KexiTableView(KexiTableViewData* data=0, QWidget* parent=0, const char* name=0);
 	virtual ~KexiTableView();
 
@@ -165,7 +165,7 @@ public:
 	/*! \return string displayed for column's header \a colNum */
 	QString columnCaption(int colNum) const;
 
-	/*! Convenience function. 
+	/*! Convenience function.
 	 \return field object that define column \a colNum or NULL if there is no such column */
 	KexiDB::Field* field(int colNum) const;
 
@@ -178,7 +178,7 @@ public:
 	/*! Enables or disables vertical scrollbar's. */
 //moved	void setScrollbarToolTipsEnabled(bool set);
 
-	/*! \return maximum number of rows that can be displayed per one "page" 
+	/*! \return maximum number of rows that can be displayed per one "page"
 	 for current table view's size. */
 	virtual int rowsPerPage() const;
 
@@ -190,8 +190,8 @@ public:
 	int columnAt(int pos) const;
 	int rowAt(int pos, bool ignoreEnd=false) const;
 
-	/*! \return last row visible on the screen (counting from 0). 
-	 The returned value is guaranteed to be smaller or equal to currentRow() or -1 
+	/*! \return last row visible on the screen (counting from 0).
+	 The returned value is guaranteed to be smaller or equal to currentRow() or -1
 	 if there are no rows. */
 	virtual int lastVisibleRow() const;
 
@@ -253,7 +253,7 @@ public:
 	//! Initializes standard editor cell editor factories. This is called internally, once.
 	static void initCellEditorFactories();
 
-	/*! \return highlighted row number or -1 if no row is highlighted. 
+	/*! \return highlighted row number or -1 if no row is highlighted.
 	 Makes sense if row highlighting is enabled.
 	 @see Appearance::rowHighlightingEnabled setHighlightedRow() */
 	int highlightedRow() const;
@@ -269,7 +269,7 @@ public slots:
 
 	virtual void clearColumnsInternal(bool repaint);
 
-	/*! Adjusts \a colNum column's width to its (current) contents. 
+	/*! Adjusts \a colNum column's width to its (current) contents.
 	 If \a colNum == -1, all columns' width is adjusted. */
 	void adjustColumnWidthToContents(int colNum = -1);
 
@@ -277,23 +277,23 @@ public slots:
 	void setColumnWidth(int col, int width);
 
 	/*! If \a set is true, \a colNum column is resized to take full possible width.
-	 If \a set is false, no automatic resize will be performed. 
+	 If \a set is false, no automatic resize will be performed.
 	 If \a colNum is -1, all columns are equally resized, when needed, to take full possible width.
 	 This method behaves like QHeader::setStretchEnabled ( bool b, int section ). */
 	void setColumnStretchEnabled( bool set, int colNum );
 
-	/*! Maximizes widths of columns selected by \a columnList, so the horizontal 
-	 header has maximum overall width. Each selected column's width will be increased 
-	 by the same value. Does nothing if \a columnList is empty or there is no free space 
+	/*! Maximizes widths of columns selected by \a columnList, so the horizontal
+	 header has maximum overall width. Each selected column's width will be increased
+	 by the same value. Does nothing if \a columnList is empty or there is no free space
 	 to resize columns. If this table view is not visible, resizing will be performed on showing. */
 	void maximizeColumnsWidth( const QList<int> &columnList );
 
-	/*! Adjusts the size of the sections to fit the size of the horizontal header 
+	/*! Adjusts the size of the sections to fit the size of the horizontal header
 	 as completely as possible. Only sections for which column stretch is enabled will be resized.
 	 \sa setColumnStretchEnabled() QHeader::adjustHeaderSize() */
 	void adjustHorizontalHeaderSize();
 
-	/*! Sets highlighted row number or -1 if no row has to be highlighted. 
+	/*! Sets highlighted row number or -1 if no row has to be highlighted.
 	 Makes sense if row highlighting is enabled.
 	 @see Appearance::rowHighlightingEnabled */
 	void setHighlightedRow(int row);
@@ -301,16 +301,16 @@ public slots:
 	/*! Sets no row that will be highlighted. Equivalent to setHighlightedRow(-1). */
 	inline void clearHighlightedRow() { setHighlightedRow(-1); }
 
-	/*! Ensures that cell at \a row and \a col is visible. 
-	 If \a col is -1, current column number is used. \a row and \a col (if not -1) must 
+	/*! Ensures that cell at \a row and \a col is visible.
+	 If \a col is -1, current column number is used. \a row and \a col (if not -1) must
 	 be between 0 and rows() (or cols() accordingly). */
 	virtual void ensureCellVisible(int row, int col/*=-1*/);
 
 //	void			gotoNext();
 //js	int			findString(const QString &string);
-	
-	/*! Deletes currently selected record; does nothing if no record 
-	 is currently selected. If record is in edit mode, editing 
+
+	/*! Deletes currently selected record; does nothing if no record
+	 is currently selected. If record is in edit mode, editing
 	 is cancelled before deleting.  */
 	virtual void deleteCurrentRow() { KexiDataAwareObjectInterface::deleteCurrentRow(); }
 
@@ -322,7 +322,7 @@ public slots:
 	 -read-only flag is set (see isReadOnly())
 	 \ return inserted row's data
 	*/
-	virtual KexiDB::RecordData *insertEmptyRow(int pos = -1) 
+	virtual KexiDB::RecordData *insertEmptyRow(int pos = -1)
 		{ return KexiDataAwareObjectInterface::insertEmptyRow(pos); }
 
 	/*! Used when Return key is pressed on cell or "+" nav. button is clicked.
@@ -333,29 +333,29 @@ public slots:
 	virtual void startEditCurrentCell(const QString& setText = QString())
 		{ KexiDataAwareObjectInterface::startEditCurrentCell(setText); }
 
-	/*! Deletes currently selected cell's contents, if allowed. 
+	/*! Deletes currently selected cell's contents, if allowed.
 	 In most cases delete is not accepted immediately but "row editing" mode is just started. */
-	virtual void deleteAndStartEditCurrentCell() 
+	virtual void deleteAndStartEditCurrentCell()
 		{ KexiDataAwareObjectInterface::deleteAndStartEditCurrentCell(); }
 
-	/*! Cancels row editing All changes made to the editing 
-	 row during this current session will be undone. 
+	/*! Cancels row editing All changes made to the editing
+	 row during this current session will be undone.
 	 \return true on success or false on failure (e.g. when editor does not exist) */
 	virtual bool cancelRowEdit() { return KexiDataAwareObjectInterface::cancelRowEdit(); }
 
-	/*! Accepts row editing. All changes made to the editing 
-	 row during this current session will be accepted (saved). 
-	 \return true if accepting was successful, false otherwise 
+	/*! Accepts row editing. All changes made to the editing
+	 row during this current session will be accepted (saved).
+	 \return true if accepting was successful, false otherwise
 	 (e.g. when current row contain data that does not meet given constraints). */
 	virtual bool acceptRowEdit() { return KexiDataAwareObjectInterface::acceptRowEdit(); }
 
-	/*! Specifies, if this table view automatically accepts 
-	 row editing (using acceptRowEdit()) on accepting any cell's edit 
+	/*! Specifies, if this table view automatically accepts
+	 row editing (using acceptRowEdit()) on accepting any cell's edit
 	 (i.e. after acceptEditor()). \sa acceptsRowEditAfterCellAccepting() */
-	virtual void setAcceptsRowEditAfterCellAccepting(bool set) 
+	virtual void setAcceptsRowEditAfterCellAccepting(bool set)
 		{ KexiDataAwareObjectInterface::setAcceptsRowEditAfterCellAccepting(set); }
 
-	/*! Specifies, if this table accepts dropping data on the rows. 
+	/*! Specifies, if this table accepts dropping data on the rows.
 	 If enabled:
 	 - dragging over row is indicated by drawing a line at bottom side of this row
 	 - dragOverRow() signal will be emitted on dragging,
@@ -404,11 +404,9 @@ signals:
 	void reloadActions();
 
 protected slots:
-	void slotSettingsChanged(int category);
-
 	virtual void slotDataDestroying() { KexiDataAwareObjectInterface::slotDataDestroying(); }
 
-	virtual void slotRowsDeleted( const QList<int> & ); 
+	virtual void slotRowsDeleted( const QList<int> & );
 
 	//! updates display after many rows deletion
 	void slotColumnWidthChanged( int col, int os, int ns );
@@ -450,27 +448,27 @@ protected slots:
 	virtual void slotRowInserted(KexiDB::RecordData *record, uint row, bool repaint)
 	{ KexiDataAwareObjectInterface::slotRowInserted(record, row, repaint); }
 
-	/*! Handles verticalScrollBar()'s valueChanged(int) signal. 
+	/*! Handles verticalScrollBar()'s valueChanged(int) signal.
 	 Called when vscrollbar's value has been changed. */
 	virtual void vScrollBarValueChanged(int v) { KexiDataAwareObjectInterface::vScrollBarValueChanged(v); }
 
 	/*! Handles sliderReleased() signal of the verticalScrollBar(). Used to hide the "row number" tooltip. */
 	virtual void vScrollBarSliderReleased() { KexiDataAwareObjectInterface::vScrollBarSliderReleased(); }
 
-	/*! Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible, 
-	 m_scrollBarTipTimerCnt is set to 0 and m_scrollBarTipTimerCnt is restarted; 
+	/*! Handles timeout() signal of the m_scrollBarTipTimer. If the tooltip is visible,
+	 m_scrollBarTipTimerCnt is set to 0 and m_scrollBarTipTimerCnt is restarted;
 	 else the m_scrollBarTipTimerCnt is just set to 0.*/
 	virtual void scrollBarTipTimeout() { KexiDataAwareObjectInterface::scrollBarTipTimeout(); }
 
 protected:
-	/*! Reimplementation for KexiDataAwareObjectInterface 
+	/*! Reimplementation for KexiDataAwareObjectInterface
 	 Initializes data contents (resizes it, sets cursor at 1st row).
 	 Called on setData(). Also called once on show event after
 	 reloadRequested() signal was received from KexiTableViewData object. */
 	virtual void initDataContents();
 
 	/*! Implementation for KexiDataAwareObjectInterface.
-	 Updates widget's contents size using QScrollView::resizeContents() 
+	 Updates widget's contents size using QScrollView::resizeContents()
 	 depending on tableSize(). */
 	virtual void updateWidgetContentsSize();
 
@@ -500,10 +498,10 @@ protected:
 
 	/*! Implementation for KexiDataAwareObjectInterface.
 	 Adds another section within the horizontal header. */
-	virtual void addHeaderColumn(const QString& caption, const QString& description, 
+	virtual void addHeaderColumn(const QString& caption, const QString& description,
 		const QIconSet& icon, int size);
 
-	/*! @internal \return true if the row defined by \a record has default 
+	/*! @internal \return true if the row defined by \a record has default
 	 value at column \a col. If this is the case and \a value is not NULL,
 	 *value is set to the default value. */
 	bool isDefaultValueDisplayed(KexiDB::RecordData *record, int col, QVariant* value = 0);
@@ -527,6 +525,7 @@ protected:
 	virtual void contentsMouseMoveEvent(QMouseEvent* e);
 	virtual void contentsMouseDoubleClickEvent(QMouseEvent* e);
 	virtual void keyPressEvent(QKeyEvent* e);
+	virtual void contextMenuEvent(QContextMenuEvent* e);
 	virtual void focusInEvent(QFocusEvent* e);
 	virtual void focusOutEvent(QFocusEvent* e);
 	virtual void resizeEvent(QResizeEvent* e);
@@ -536,7 +535,7 @@ protected:
 	virtual void contentsDropEvent(QDropEvent *e);
 	virtual void viewportDragLeaveEvent(QDragLeaveEvent *e);
 	virtual void paletteChange( const QPalette &oldPalette );
-	
+
 	/*! Implementation for KexiDataAwareObjectInterface */
 	virtual KexiDataItemInterface *editor( int col, bool ignoreMissingEditor = false );
 
@@ -547,14 +546,14 @@ protected:
 	virtual void editorShowFocus( int row, int col );
 
 	//! Creates editors and shows it, what usually means the beginning of a cell editing
-	virtual void createEditor(int row, int col, const QString& addText = QString(), 
+	virtual void createEditor(int row, int col, const QString& addText = QString(),
 		bool removeOld = false);
 
 	bool focusNextPrevChild(bool next);
 
 	/*! Used in key event: \return true if event \a e should execute action \a action_name.
-	 Action shortcuts defined by shortCutPressed() are reused, if present, and if \a e matches 
-	 given action's shortcut - false is returned (beause action is already performed at main 
+	 Action shortcuts defined by shortCutPressed() are reused, if present, and if \a e matches
+	 given action's shortcut - false is returned (beause action is already performed at main
 	 window's level).
 	*/
 	bool shortCutPressed( QKeyEvent *e, const QString &action_name );
@@ -576,7 +575,7 @@ protected:
 
 	/*! internal */
 	inline void paintRow(KexiDB::RecordData *record,
-		QPainter *pb, int r, int rowp, int cx, int cy, 
+		QPainter *pb, int r, int rowp, int cx, int cy,
 		int colfirst, int collast, int maxwc);
 
 	virtual void setHBarGeometry( QScrollBar & hbar, int x, int y, int w, int h );
@@ -587,14 +586,14 @@ protected:
 	//! internal, to determine valid row number when navigator text changed
 	int validRowNumber(const QString& text);
 
-	/*! Reimplementation for KexiDataAwareObjectInterface 
+	/*! Reimplementation for KexiDataAwareObjectInterface
 	 (viewport()->setFocus() is just added) */
 	virtual void removeEditor();
 
 	//! Internal: updated sched fonts for painting.
 	void updateFonts(bool repaint = false);
 
-	/*! @internal Changes bottom margin settings, in pixels. 
+	/*! @internal Changes bottom margin settings, in pixels.
 	 At this time, it's used by KexiComboBoxPopup to decrease margin for popup's table. */
 	void setBottomMarginInternal(int pixels);
 
@@ -617,7 +616,7 @@ protected:
 	//! Paste current clipboard contents (e.g. to a cell)
 	virtual void paste();
 
-	/*! Used in KexiDataAwareObjectInterface::slotRowDeleted() 
+	/*! Used in KexiDataAwareObjectInterface::slotRowDeleted()
 	 to repaint tow \a row and all visible below. */
 	virtual void updateAllVisibleRowsBelow(int row);
 
@@ -627,7 +626,7 @@ protected:
 	/*! Sets \a cellValue if there is a lookup value for the cell \a record.
 	 Used in KexiTableView::paintCell() and KexiTableViewCellToolTip::maybeTip()
 	 \return true is \a cellValue has been found. */
-	bool getVisibleLookupValue(QVariant& cellValue, KexiTableEdit *edit, 
+	bool getVisibleLookupValue(QVariant& cellValue, KexiTableEdit *edit,
 		KexiDB::RecordData *record, KexiTableViewColumn *tvcol) const;
 
 //	//! Called to repaint contents after a row is deleted.
