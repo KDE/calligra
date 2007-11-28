@@ -11,7 +11,7 @@ http://www.koffice.org/kspread
 This script is licensed under the BSD license.
 """
 
-import traceback
+import types, traceback
 import Kross, KSpread
 
 try:
@@ -30,17 +30,24 @@ class Rfunctions:
                 self.robj = getattr(rpy.r, name)
                 self.isNewFunc = not KSpread.hasFunction(self.__name__)
                 if self.isNewFunc:
+
                     def format2name(fchar):
-                        if fchar == 'f': return 'float'
-                        if fchar == 'i': return 'int'
-                        if fchar == 's': return 'string'
-                        if fchar == 'b': return 'bool'
+                        if fchar == 'f': return 'Float'
+                        if fchar == 'i': return 'Int'
+                        if fchar == 's': return 'String'
+                        if fchar == 'b': return 'Boolean'
                         raise "Unknown format char '%s'" % fchar
+
                     def format2value(fchar, value):
                         if fchar == 'f': return float(value or 0.0)
                         if fchar == 'i': return int(value or 0)
                         if fchar == 's': return "%s" % (value or '')
-                        if fchar == 'b': return bool(value)
+                        if fchar == 'b':
+                            if type(value) == types.StringType:
+                                v = value.strip().lower()
+                                return bool( len(v)>0 and v!='0' and v!='no' and v!='false' )
+                            else:
+                                return bool(value)
                         raise "Unknown format char '%s' with value '%s'" % (fchar,value)
 
                     try:
@@ -105,109 +112,109 @@ class Rfunctions:
         # the 45 functions the gnumeric plugin fn-r/functions.c provides.
 
         F(self.functions, 'dnorm', 'This function returns the probability density function of the normal distribution.',
-            'fff|f', ["x:observation.","mu:mean of the distribution.","sigma:standard deviation of the distribution.","give_log:if true, log of the result will be returned instead. This is useful if the result would otherwise underflow to 0. Defaults to false."] )
+            'fff|b', ["x:observation.","mu:mean of the distribution.","sigma:standard deviation of the distribution.","give_log:if true, log of the result will be returned instead. This is useful if the result would otherwise underflow to 0. Defaults to false."] )
         F(self.functions, 'pnorm', 'This function returns the cumulative distribution function of the normal distribution.',
-            'fff|ff', ["x:observation.","mu:mean of the distribution.","sigma:standard deviation of the distribution.","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0. Defaults to false."] )
+            'fff|bb', ["x:observation.","mu:mean of the distribution.","sigma:standard deviation of the distribution.","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0. Defaults to false."] )
         F(self.functions, 'qnorm', 'This function returns the probability quantile function, i.e., the inverse of the cumulative distribution function, of the normal distribution.',
-            'fff|ff', ["p:probability.","mu:mean of the distribution.","sigma:standard deviation of the distribution.","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["p:probability.","mu:mean of the distribution.","sigma:standard deviation of the distribution.","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
 
         F(self.functions, 'dlnorm', 'This function returns the probability density function of the log-normal distribution.',
-            'fff|f', ["x:observation.","logmean:mean of the underlying normal distribution.","logsd:standard deviation of the underlying normal distribution.","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
+            'fff|b', ["x:observation.","logmean:mean of the underlying normal distribution.","logsd:standard deviation of the underlying normal distribution.","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'plnorm', 'This function returns the cumulative distribution function of the log-normal distribution.',
-            'fff|ff', ["x:observation.","logmean:mean of the underlying normal distribution.","logsd:standard deviation of the underlying normal distribution.","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["x:observation.","logmean:mean of the underlying normal distribution.","logsd:standard deviation of the underlying normal distribution.","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'qlnorm', 'This function returns the probability quantile function, i.e., the inverse of the cumulative distribution function, of the log-normal distribution.',
-            'fff|ff', ["x:observation.","logmean:mean of the underlying normal distribution.","logsd:standard deviation of the underlying normal distribution.","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["x:observation.","logmean:mean of the underlying normal distribution.","logsd:standard deviation of the underlying normal distribution.","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
 
         F(self.functions, 'dgamma', 'This function returns the probability density function of the gamma distribution.',
-            'fff|f', ["x:observation.","shape:the shape parameter of the distribution","scale:the scale parameter of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
+            'fff|b', ["x:observation.","shape:the shape parameter of the distribution","scale:the scale parameter of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'pgamma', 'This function returns the cumulative distribution function of the gamma distribution.',
-            'fff|ff', ["x:observation.","shape:the shape parameter of the distribution","scale:the scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["x:observation.","shape:the shape parameter of the distribution","scale:the scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'qgamma', 'This function returns the probability quantile function, i.e., the inverse of the cumulative distribution function, of the gamma distribution.',
-            'fff|ff', ["p:probability.","shape:the shape parameter of the distribution","scale:the scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["p:probability.","shape:the shape parameter of the distribution","scale:the scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
 
         F(self.functions, 'dbeta', 'This function returns the probability density function of the beta distribution.',
-            'fff|f', ["x:observation.","a:the first shape parameter of the distribution","b:the second scale parameter of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
+            'fff|b', ["x:observation.","a:the first shape parameter of the distribution","b:the second scale parameter of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'pbeta', 'This function returns the cumulative distribution function of the beta distribution.',
-            'fff|ff', ["x:observation.","a:the first shape parameter of the distribution","b:the second scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["x:observation.","a:the first shape parameter of the distribution","b:the second scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'qbeta', 'This function returns the probability quantile function, i.e., the inverse of the cumulative distribution function, of the beta distribution.',
-            'fff|ff', ["p:probability.","a:the first shape parameter of the distribution","b:the second scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["p:probability.","a:the first shape parameter of the distribution","b:the second scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
 
         F(self.functions, 'dt', 'This function returns the probability density function of the Student t distribution.',
-            'ff|f', ["x:observation.","n:the number of degrees of freedom of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
+            'ff|b', ["x:observation.","n:the number of degrees of freedom of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'pt', 'This function returns the cumulative distribution function of the Student t distribution.',
-            'ff|ff', ["x:observation.","n:the number of degrees of freedom of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'ff|bb', ["x:observation.","n:the number of degrees of freedom of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'qt', 'This function returns the probability quantile function, i.e., the inverse of the cumulative distribution function, of the Student t distribution.',
-            'ff|ff', ["p:probability.","n:the number of degrees of freedom of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'ff|bb', ["p:probability.","n:the number of degrees of freedom of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
 
         F(self.functions, 'df', 'This function returns the probability density function of the F distribution.',
-            'fff|f', ["x:observation.","n1:the first number of degrees of freedom of the distribution","n2:the second number of degrees of freedom of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
+            'fff|b', ["x:observation.","n1:the first number of degrees of freedom of the distribution","n2:the second number of degrees of freedom of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'pf', 'This function returns the cumulative distribution function of the F distribution.',
-            'fff|ff', ["x:observation.","n1:the first number of degrees of freedom of the distribution","n2:the second number of degrees of freedom of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["x:observation.","n1:the first number of degrees of freedom of the distribution","n2:the second number of degrees of freedom of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'qf', 'This function returns the probability quantile function, i.e., the inverse of the cumulative distribution function, of the F distribution.',
-            'fff|ff', ["x:observation.","n1:the first number of degrees of freedom of the distribution","n2:the second number of degrees of freedom of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["x:observation.","n1:the first number of degrees of freedom of the distribution","n2:the second number of degrees of freedom of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
 
         F(self.functions, 'dchisq', 'This function returns the probability density function of the chi-square distribution.',
-            'ff|f', ["x:observation.","df:the number of degrees of freedom of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
+            'ff|b', ["x:observation.","df:the number of degrees of freedom of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'pchisq', 'This function returns the cumulative distribution function of the chi-square distribution.',
-            'ff|ff', ["x:observation.","df:the number of degrees of freedom of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'ff|bb', ["x:observation.","df:the number of degrees of freedom of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'qchisq', 'This function returns the probability quantile function, i.e., the inverse of the cumulative distribution function, of the chi-square distribution.',
-            'ff|ff', ["p:probability.","df:the number of degrees of freedom of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'ff|bb', ["p:probability.","df:the number of degrees of freedom of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
 
         F(self.functions, 'dweibull', 'This function returns the probability density function of the Weibull distribution.',
-            'fff|f', ["x:observation.","shape:the shape parameter of the distribution","scale:the scale parameter of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
+            'fff|b', ["x:observation.","shape:the shape parameter of the distribution","scale:the scale parameter of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'pweibull', 'This function returns the cumulative distribution function of the Weibull distribution.',
-            'fff|ff', ["x:observation.","shape:the shape parameter of the distribution","scale:the scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["x:observation.","shape:the shape parameter of the distribution","scale:the scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'qweibull', 'This function returns the probability quantile function, i.e., the inverse of the cumulative distribution function, of the Weibull distribution.',
-            'fff|ff', ["p:probability.","shape:the shape parameter of the distribution","scale:the scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["p:probability.","shape:the shape parameter of the distribution","scale:the scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
 
         F(self.functions, 'dpois', 'This function returns the probability density function of the Poisson distribution.',
-            'ff|f', ["x:observation.","lambda:the mean of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
+            'ff|b', ["x:observation.","lambda:the mean of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'ppois', 'This function returns the cumulative distribution function of the Poisson distribution.',
-            'ff|ff', ["x:observation.","lambda:the mean of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'ff|bb', ["x:observation.","lambda:the mean of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'qpois', 'This function returns the probability quantile function, i.e., the inverse of the cumulative distribution function, of the Poisson distribution.',
-            'ff|ff', ["p:probability.","lambda:the mean of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'ff|bb', ["p:probability.","lambda:the mean of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
 
         F(self.functions, 'dexp', 'This function returns the probability density function of the exponential distribution.',
-            'ff|f', ["x:observation.","scale:the scale parameter of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
+            'ff|b', ["x:observation.","scale:the scale parameter of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'pexp', 'This function returns the cumulative distribution function of the exponential distribution.',
-            'ff|ff', ["x:observation.","scale:the scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'ff|bb', ["x:observation.","scale:the scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'qexp', 'This function returns the probability quantile function, i.e., the inverse of the cumulative distribution function, of the exponential distribution.',
-            'ff|ff', ["p:probability.","scale:the scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'ff|bb', ["p:probability.","scale:the scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
 
         F(self.functions, 'dbinom', 'This function returns the probability density function of the binomial distribution.',
-            'fff|f', ["x:observation.","n:the number of trials","psuc:the probability of success in each trial","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
+            'fff|b', ["x:observation.","n:the number of trials","psuc:the probability of success in each trial","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'pbinom', 'This function returns the cumulative distribution function of the binomial distribution.',
-            'fff|ff', ["x:observation.","n:the number of trials","psuc:the probability of success in each trial","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["x:observation.","n:the number of trials","psuc:the probability of success in each trial","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'qbinom', 'This function returns the probability quantile function, i.e., the inverse of the cumulative distribution function, of the binomial distribution.',
-            'fff|ff', ["x:observation.","n:the number of trials","psuc:the probability of success in each trial","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["x:observation.","n:the number of trials","psuc:the probability of success in each trial","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
 
         F(self.functions, 'dnbinom', 'This function returns the probability density function of the negative binomial distribution.',
-            'fff|f', ["x:observation.","n:the number of trials","psuc:the probability of success in each trial","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
+            'fff|b', ["x:observation.","n:the number of trials","psuc:the probability of success in each trial","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'pnbinom', 'This function returns the cumulative distribution function of the negative binomial distribution.',
-            'fff|ff', ["x:observation.","n:the number of trials","psuc:the probability of success in each trial","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["x:observation.","n:the number of trials","psuc:the probability of success in each trial","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'qnbinom', 'This function returns the probability quantile function, i.e., the inverse of the cumulative distribution function, of the negative binomial distribution.',
-            'fff|ff', ["p:probability.","n:the number of trials","psuc:the probability of success in each trial","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["p:probability.","n:the number of trials","psuc:the probability of success in each trial","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
 
         F(self.functions, 'dhyper', 'This function returns the probability density function of the hypergeometric distribution.',
-            'ffff|f', ["x:observation.","r:the number of red balls","b:the number of black balls","n:the number of balls drawn","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
+            'ffff|b', ["x:observation.","r:the number of red balls","b:the number of black balls","n:the number of balls drawn","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'phyper', 'This function returns the cumulative distribution function of the hypergeometric distribution.',
-            'ffff|ff', ["x:observation.","r:the number of red balls","b:the number of black balls","n:the number of balls drawn","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'ffff|bb', ["x:observation.","r:the number of red balls","b:the number of black balls","n:the number of balls drawn","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'qhyper', 'This function returns the probability quantile function, i.e., the inverse of the cumulative distribution function, of the hypergeometric distribution.',
-            'ffff|ff', ["p:probability.","r:the number of red balls","b:the number of black balls","n:the number of balls drawn","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'ffff|bb', ["p:probability.","r:the number of red balls","b:the number of black balls","n:the number of balls drawn","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
 
         F(self.functions, 'dgeom', 'This function returns the probability density function of the geometric distribution.',
-            'ff|f', ["x:observation.","psuc:the probability of success in each trial","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
+            'ff|b', ["x:observation.","psuc:the probability of success in each trial","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'pgeom', 'This function returns the cumulative distribution function of the geometric distribution.',
-            'ff|ff', ["x:observation.","psuc:the probability of success in each trial","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'ff|bb', ["x:observation.","psuc:the probability of success in each trial","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'qgeom', 'This function returns the probability quantile function, i.e., the inverse of the cumulative distribution function, of the geometric distribution.',
-            'ff|ff', ["p:probability.","psuc:the probability of success in each trial","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'ff|bb', ["p:probability.","psuc:the probability of success in each trial","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
 
         F(self.functions, 'dcauchy', 'This function returns the probability density function of the Cauchy distribution.',
-            'fff|f', ["x:observation.","location:the center of the distribution","scale:the scale parameter of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
+            'fff|b', ["x:observation.","location:the center of the distribution","scale:the scale parameter of the distribution","give_log:if true, log of the result will be returned instead.  This is useful if the result would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'pcauchy', 'This function returns the cumulative distribution function of the Cauchy distribution.',
-            'fff|ff', ["x:observation.","location:the center of the distribution","scale:the scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["x:observation.","location:the center of the distribution","scale:the scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
         F(self.functions, 'qcauchy', 'This function returns the probability quantile function, i.e., the inverse of the cumulative distribution function, of the Cauchy distribution.',
-            'fff|ff', ["p:probability.","location:the center of the distribution","scale:the scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
+            'fff|bb', ["p:probability.","location:the center of the distribution","scale:the scale parameter of the distribution","lower_tail:if true (the default), the lower tail of the distribution is considered.","log_p:if true, log of the probability is used.  This is useful if the probability would otherwise underflow to 0.  Defaults to false."] )
 
         print "########################################################################################"
 
