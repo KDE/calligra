@@ -84,7 +84,7 @@ private:
 
 enum ParameterType { KSpread_Int, KSpread_Float, KSpread_String, KSpread_Boolean, KSpread_Any };
 
-class FunctionParameter
+class KSPREAD_EXPORT FunctionParameter
 {
 public:
   FunctionParameter();
