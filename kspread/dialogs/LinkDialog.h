@@ -30,11 +30,13 @@
 namespace KSpread
 {
 
+class View;
+
 class LinkDialog : public KPageDialog
 {
     Q_OBJECT
 public:
-    explicit LinkDialog( QWidget* parent, const char* name = 0 );
+    explicit LinkDialog( View* view, const char* name = 0 );
     ~LinkDialog();
     QString text() const;
     QString link() const;

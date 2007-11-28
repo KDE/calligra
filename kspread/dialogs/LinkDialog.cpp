@@ -24,9 +24,14 @@
 
 #include "LinkDialog.h"
 
+#include "View.h"
+#include "Doc.h"
+#include "NamedAreaManager.h"
+
 #include <QFrame>
 #include <QLabel>
 #include <QVBoxLayout>
+#include <QComboBox>
 
 #include <kcombobox.h>
 #include <kdesktopfile.h>
@@ -56,11 +61,11 @@ public:
     KUrlRequester* fileLink;
     QWidget* cellPage;
     KLineEdit* cellText;
-    KLineEdit* cellLink;
+    QComboBox* cellLink;
     KPageWidgetItem* p1, *p2, *p3, *p4;
 };
 
-LinkDialog::LinkDialog( QWidget*, const char* )
+LinkDialog::LinkDialog( View* view, const char* )
     : KPageDialog()
     , d( new Private )
 {
@@ -155,7 +160,13 @@ LinkDialog::LinkDialog( QWidget*, const char* )
     d->cellText = new KLineEdit( d->cellPage );
     cLayout->addWidget( d->cellText );
     cLayout->addWidget( new QLabel( i18n("Cell:" ), d->cellPage ) );
-    d->cellLink = new KLineEdit( d->cellPage );
+    d->cellLink = new QComboBox( d->cellPage );
+    d->cellLink->setEditable(true);
+    d->cellLink->addItem( "" );
+    Doc *doc = view->doc();
+    NamedAreaManager *manager = doc->namedAreaManager();
+    d->cellLink->addItems( manager->areaNames() );
+
     cLayout->addWidget( d->cellLink );
     cLayout->addItem( new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
     connect( d->cellText, SIGNAL( textChanged( const QString& ) ), this,
@@ -209,7 +220,7 @@ QString LinkDialog::link() const
     }
     else if ( currentPage() == d->p4 )
     {
-      str = d->cellLink->text();
+      str = d->cellLink->currentText();
     }
 
     return str;
@@ -278,7 +289,7 @@ void LinkDialog::setLink( const QString& link )
     }
 
     // assume cell reference
-    d->cellLink->setText( link );
+    d->cellLink->setCurrentText( link );
     setCurrentPage( d->p4 );
 }
 
