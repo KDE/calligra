@@ -548,8 +548,7 @@ void DefaultTool::keyPressEvent( QKeyEvent* event )
          (event->key() != Qt::Key_Left) &&
          (event->key() != Qt::Key_Home) &&
          (event->key() != Qt::Key_Enter) &&
-         (event->key() != Qt::Key_Return) &&
-         (event->key() != KGlobalSettings::contextMenuKey()))
+         (event->key() != Qt::Key_Return) )
     {
         d->canvas->QWidget::keyPressEvent( event );
         return;
@@ -559,12 +558,17 @@ void DefaultTool::keyPressEvent( QKeyEvent* event )
     // passed to the parent.
     event->setAccepted(true);
 
+#if 0
+    // TODO move this to the contextMenuEvent of the view.
+    // keyPressEvent() is not called with the contextMenuKey,
+    // it's handled separately by Qt.
     if ( event->key() == KGlobalSettings::contextMenuKey() ) {
         int row = d->canvas->selection()->marker().y();
         int col = d->canvas->selection()->marker().x();
         QPointF p( sheet->columnPosition(col), sheet->rowPosition(row) );
         d->canvas->view()->openPopupMenu( d->canvas->mapToGlobal(p.toPoint()) );
     }
+#endif
     switch( event->key() )
     {
         case Qt::Key_Return:
