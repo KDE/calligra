@@ -1273,8 +1273,14 @@ QString KexiDB::defaultFileBasedDriverMimeType()
 
 QString KexiDB::defaultFileBasedDriverIcon()
 {
-	return KMimeType::mimeType( 
-		KexiDB::defaultFileBasedDriverMimeType() )->iconName();
+	KMimeType::Ptr mimeType( KMimeType::mimeType( 
+		KexiDB::defaultFileBasedDriverMimeType() ) );
+	if (mimeType.isNull()) {
+		KexiDBWarn << QString("'%1' mimetype not installed!")
+			.arg( KexiDB::defaultFileBasedDriverMimeType() );
+		return QString();
+	}
+	return mimeType->iconName();
 }
 
 QString KexiDB::defaultFileBasedDriverName()
