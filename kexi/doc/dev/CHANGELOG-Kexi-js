@@ -15,49 +15,14 @@ Legend:
 = -a fix for recently introduced bug or a minor/too technical fix not worth 
    mentioning in the public changelog
 
-TODO: fix displaying default values in comboboxes (form and tableview)
-TODO: use KCompletionBox in (editable/noneditable) comboboxes
-
-KDE4: TODO:
-- fix KMenu::addTitle():
-  http://api.kde.org/4.0-api/kdelibs-apidocs/kdeui/html/kmenu_8cpp-source.html#l00144
-
-TODO: check reports at scan.coverity.com
-TODO: shared actions are not so usable now as we move actions down to KexiWindow
-
-NOTE (put into wiki): use QWidget::setAutoFillBackground(true) on widgets that should have their own backgrounds
-
-TODO: report crash in QDockWidgetPrivate::nonClientAreaMouseEvent() when dragging and dropping dock widget
- (state=0, crash when accesing state->ctrlDrag):
-	QtGuid4.dll!QDockWidgetPrivate::nonClientAreaMouseEvent(QMouseEvent * event=0x00d9c474)  Line 863	C++
- 	QtGuid4.dll!QDockWidget::event(QEvent * event=0x00d9c474)  Line 1353	C++
- 	QtGuid4.dll!QApplicationPrivate::notify_helper(QObject * receiver=0x049d1cb0, QEvent * e=0x00d9c474)  Line 3558	C++
- 	QtGuid4.dll!QApplication::notify(QObject * receiver=0x049d1cb0, QEvent * e=0x00d9c474)  Line 3499	C++
- 	kdeui.dll!KApplication::notify(QObject * receiver=0x049d1cb0, QEvent * event=0x00d9c474)  Line 300	C++
- 	QtCored4.dll!QCoreApplication::notifyInternal(QObject * receiver=0x049d1cb0, QEvent * event=0x00d9c474)  Line 533	C++
- 	QtCored4.dll!QCoreApplication::sendSpontaneousEvent(QObject * receiver=0x049d1cb0, QEvent * event=0x00d9c474)  Line 205	C++
- 	QtGuid4.dll!QETWidget::translateMouseEvent(const tagMSG & msg={...})  Line 2774	C++
- 	QtGuid4.dll!QtWndProc(HWND__ * hwnd=0x00041540, unsigned int message=161, unsigned int wParam=2, long lParam=9307228)  Line 1407	C++
- 	USER32.DLL!GetSysColor() 	
- 	USER32.DLL!GetSysColor() 	
- 	USER32.DLL!DispatchMessageW() 	
- 	QtGuid4.dll!QGuiEventDispatcherWin32::processEvents(QFlags<enum QEventLoop::ProcessEventsFlag> flags={...})  Line 992	C++
- 	QtCored4.dll!QEventLoop::processEvents(QFlags<enum QEventLoop::ProcessEventsFlag> flags={...})  Line 142	C++
- 	QtCored4.dll!QEventLoop::exec(QFlags<enum QEventLoop::ProcessEventsFlag> flags={...})  Line 187	C++
- 	QtCored4.dll!QCoreApplication::exec()  Line 752	C++
- 	QtGuid4.dll!QApplication::exec()  Line 3056	C++
-
-HINT: QWidget::setFocus() is not virtual, use event()
-HINT: 
- -QVector::insert(i) inserts a value, not sets value at i as in QPtrVector::insert()! use vector[ i ] = value.
- -QVector::remove() entirely removes a value, not clears the value as in QPtrVector::remove()! use vector[ i ] = 0
- -QVector::take(), like above
- -QVector::count() == QVector::size() - counts null and not null values, unlike QPtrVector::count()!
-   to count nonnull values use vectore.size()-vector.count(0)
-- KexiDataAwarePropertySet: remove() is now called eraseAt(); insert() is now called set(); 
-  removeCurrentPropertySet() is now called eraseCurrentPropertySet()
-
 ===================== Kexi 2.0 Alpha =====================
+
+2007-11-19
+Startup
+- minor GUI fixes (description box)
+
+~~~~~~~~~~~~~~~~ 2.0 alpha 5 ~~~~~~~~~~~~~~~~
+
 2007-10-18..19
 Table View
 - fixed highlighting current table column
