@@ -35,7 +35,6 @@
 #include <klocale.h>
 #include <kaction.h>
 #include <kmenu.h>
-#include <kglobalsettings.h>
 #include <kmessagebox.h>
 
 #include <kexidb/tableschema.h>
@@ -83,7 +82,7 @@ class KexiRelationsScrollAreaWidget : public QWidget
 		virtual void mousePressEvent(QMouseEvent *ev);
 
 	private:
-		KexiRelationsScrollArea *scrollArea() { 
+		KexiRelationsScrollArea *scrollArea() {
 			return static_cast<KexiRelationsScrollArea*>(parentWidget()->parentWidget()); }
 };
 
@@ -189,17 +188,17 @@ KexiRelationsScrollArea::addTableContainer(KexiDB::TableSchema *t, const QRect &
 		return c;
 	}
 
-	c = new KexiRelationsTableContainer(d->areaWidget, this, 
+	c = new KexiRelationsTableContainer(d->areaWidget, this,
 /*! @todo what about query? */
 		new KexiDB::TableOrQuerySchema(t)
 	);
 	connect(c, SIGNAL(endDrag()), this, SLOT(slotTableViewEndDrag()));
 	connect(c, SIGNAL(gotFocus()), this, SLOT(slotTableViewGotFocus()));
-//	connect(c, SIGNAL(headerContextMenuRequest(const QPoint&)), 
+//	connect(c, SIGNAL(headerContextMenuRequest(const QPoint&)),
 //		this, SLOT(tableHeaderContextMenuRequest(const QPoint&)));
-	connect(c, SIGNAL(contextMenuRequest(const QPoint&)), 
+	connect(c, SIGNAL(contextMenuRequest(const QPoint&)),
 		this, SIGNAL(tableContextMenuRequest(const QPoint&)));
-	
+
 	if (rect.isValid()) {//predefined size
 		QSize finalSize = c->size().expandedTo( c->sizeHint() );
 		QRect r = rect;
@@ -252,7 +251,7 @@ KexiRelationsScrollArea::addTableContainer(KexiDB::TableSchema *t, const QRect &
 
 	connect(c, SIGNAL(moved(KexiRelationsTableContainer *)), this,
 		SLOT(containerMoved(KexiRelationsTableContainer *)));
-	
+
 	c->show();
 	if (hasFocus()) //ok?
 		c->setFocus();
@@ -283,7 +282,7 @@ KexiRelationsScrollArea::addConnection(const SourceConnection& _conn)
 	KexiDB::Field *detailsFld = detailsTable->field(conn.detailsField);
 	if (!masterFld || !detailsFld)
 		return;
-	
+
 	if (!masterFld->isUniqueKey()) {
 		if (detailsFld->isUniqueKey()) {
 			//SWAP:
@@ -351,7 +350,7 @@ KexiRelationsScrollArea::containerMoved(KexiRelationsTableContainer *c)
 	foreach (KexiRelationsConnection* cview, d->connectionViews) {
 //! @todo	optimize
 		if (cview->masterTable() == c || cview->detailsTable() == c
-			|| cview->connectionRect().intersects(r)) 
+			|| cview->connectionRect().intersects(r))
 		{
 			r |= cview->oldRect();
 			kDebug() << r << endl;
@@ -403,7 +402,7 @@ KexiRelationsScrollArea::slotAutoScrollTimeout()
 	int delay = 100;
 	if (d->movedTableContainer) {
 		delay = qMin(
-			100, 
+			100,
 			100 - (d->movedTableContainer->geometry().left()
 			- (horizontalScrollBar()->value() + width() - verticalScrollBar()->width()))
 		);
@@ -438,7 +437,7 @@ KexiRelationsScrollArea::setReadOnly(bool b)
 	d->readOnly=b;
 //TODO
 //	invalidateActions();
-/*	TableList::Iterator it, end( d->tables.end() );	
+/*	TableList::Iterator it, end( d->tables.end() );
  	for ( it=d->tables.begin(); it != end; ++it)
 	{
 //		(*it)->setReadOnly(b);
@@ -515,7 +514,7 @@ void KexiRelationsScrollArea::handlePaintEvent( QPaintEvent *event )
 		d->areaWidget->width(),d->areaWidget->height());
 	QRect clipping(
 		horizontalScrollBar() ? horizontalScrollBar()->value() : 0,
-		verticalScrollBar() ? verticalScrollBar()->value() : 0, 
+		verticalScrollBar() ? verticalScrollBar()->value() : 0,
 		width(), height());
 //		viewport()->width(), viewport()->height());
 	foreach (KexiRelationsConnection *cview, d->connectionViews) {
@@ -542,21 +541,23 @@ void KexiRelationsScrollArea::clearSelection()
 }
 
 void
-KexiRelationsScrollArea::keyPressEvent(QKeyEvent *ev)
+KexiRelationsScrollArea::contextMenuEvent(QContextMenuEvent* event)
 {
-	kDebug() << "KexiRelationsScrollArea::keyPressEvent()" << endl;
-
-	if (ev->key()==KGlobalSettings::contextMenuKey()) {
 		if (d->selectedConnection) {
 			emit connectionContextMenuRequest(
 				mapToGlobal(d->selectedConnection->connectionRect().center()) );
 		}
 //		d->popup->exec( mapToGlobal( d->focusedTableContainer ? d->focusedTableContainer->pos() + d->focusedTableContainer->rect().center() : rect().center() ) );
 //		executePopup();
-	}
-	else {
-		if(ev->key() == Qt::Key_Delete)
-			removeSelectedObject();
+}
+
+void
+KexiRelationsScrollArea::keyPressEvent(QKeyEvent *ev)
+{
+	kDebug() << "KexiRelationsScrollArea::keyPressEvent()" << endl;
+
+	if(ev->key() == Qt::Key_Delete) {
+		removeSelectedObject();
 	}
 }
 
@@ -579,7 +580,7 @@ KexiRelationsScrollArea::recalculateSize(int width, int height)
 }*/
 
 /* Resizes contents to size exactly enough to fit tableViews.
-	Executed on every tableView's drop event. 
+	Executed on every tableView's drop event.
 */
 /*unused
 void
@@ -662,7 +663,7 @@ KexiRelationsScrollArea::hideTableInternal(TablesHashMutableIterator& it)
 	//for all connections: find and remove all connected with this table
 	for (ConnectionSetMutableIterator itConn(d->connectionViews);itConn.hasNext();) {
 		KexiRelationsConnection* conn = itConn.next();
-		if (conn->masterTable() == container 
+		if (conn->masterTable() == container
 			|| conn->detailsTable() == container)
 		{
 			//remove this
@@ -688,7 +689,7 @@ KexiRelationsScrollArea::hideAllTablesExcept( KexiDB::TableSchema::List* tables 
 	}
 }
 
-void 
+void
 KexiRelationsScrollArea::removeConnection(KexiRelationsConnection *conn)
 {
 	ConnectionSetMutableIterator it( d->connectionViews );
@@ -697,7 +698,7 @@ KexiRelationsScrollArea::removeConnection(KexiRelationsConnection *conn)
 	removeConnectionInternal(it);
 }
 
-void 
+void
 KexiRelationsScrollArea::removeConnectionInternal(ConnectionSetMutableIterator& it)
 {
 	KexiRelationsConnection *conn = it.value();
@@ -754,7 +755,7 @@ void KexiRelationsScrollArea::tableHeaderContextMenuRequest(const QPoint& pos)
 		return;
 	kDebug() << "HEADER CTXT MENU!" <<endl;
 	invalidateActions();
-	d->tableQueryPopup->exec(pos);	
+	d->tableQueryPopup->exec(pos);
 }
 
 //! Invalidates all actions availability

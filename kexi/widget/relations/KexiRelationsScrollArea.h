@@ -63,7 +63,7 @@ struct SourceConnection
  - displaying global database relations
  - displaying relations defined for a database query
 
- The class is for displaying only - retrieving data and updating data on the backend side is implemented 
+ The class is for displaying only - retrieving data and updating data on the backend side is implemented
  in KexiRelationWidget, and more specifically in: Kexi Relation Part and Kexi Query Part.
 */
 class KEXIRELATIONSVIEW_EXPORT KexiRelationsScrollArea : public QScrollArea
@@ -81,7 +81,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationsScrollArea : public QScrollArea
 		 If \a rect is valid, table widget geometry will be initialized.
 		 \return added table container or 0 on failure.
 		 */
-		KexiRelationsTableContainer* addTableContainer(KexiDB::TableSchema *t, 
+		KexiRelationsTableContainer* addTableContainer(KexiDB::TableSchema *t,
 			const QRect &rect = QRect());
 
 		/*! \return table container for table \a t. */
@@ -121,7 +121,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationsScrollArea : public QScrollArea
 		//! Clears current selection - table/query or connection
 		void clearSelection();
 
-		/*! Removes all tables and connections from the view. 
+		/*! Removes all tables and connections from the view.
 		 Does not emit signals like tableHidden(). */
 		void clear();
 
@@ -149,6 +149,7 @@ class KEXIRELATIONSVIEW_EXPORT KexiRelationsScrollArea : public QScrollArea
 //Qt 4		void drawContents(QPainter *p, int cx, int cy, int cw, int ch);
 		void contentsMousePressEvent(QMouseEvent *ev);
 		virtual void keyPressEvent(QKeyEvent *ev);
+		virtual void contextMenuEvent(QContextMenuEvent* event);
 
 //unused		void recalculateSize(int width, int height);
 //unused		void stretchExpandSize();
