@@ -159,7 +159,7 @@ LinkDialog::LinkDialog( View* view, const char* )
     cLayout->addWidget( new QLabel( i18n("Text to display:" ), d->cellPage ) );
     d->cellText = new KLineEdit( d->cellPage );
     cLayout->addWidget( d->cellText );
-    cLayout->addWidget( new QLabel( i18n("Cell:" ), d->cellPage ) );
+    cLayout->addWidget( new QLabel( i18n("Cell or Named Area:" ), d->cellPage ) );
     d->cellLink = new QComboBox( d->cellPage );
     d->cellLink->setEditable(true);
     d->cellLink->addItem( "" );
