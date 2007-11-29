@@ -255,7 +255,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         }
     }
 
-    m_img->addLayer(KisLayerSP(layer.data()), m_img->rootLayer(), KisLayerSP(0));
+    m_img->addNode(KisNodeSP(layer.data()), m_img->rootLayer().data());
     layer->setDirty();
 
     // Read exif information

@@ -151,7 +151,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QByteArray& from, con
         }
     }
 
-    image->addLayer(layer, image->rootLayer(), 0 );
+    image->addNode(layer.data(), image->rootLayer().data() );
     layer->setDirty();
     doc -> setCurrentImage(image);
     doc -> undoAdapter() -> setUndo(true);

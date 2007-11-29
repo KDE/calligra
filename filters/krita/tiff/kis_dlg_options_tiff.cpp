@@ -119,6 +119,8 @@ KisTIFFOptions KisDlgOptionsTIFF::options()
         case 8:
             options.compressionType = COMPRESSION_PIXARLOG;
             break;
+        default:
+            options.compressionType = COMPRESSION_NONE;
     }
     options.predictor = optionswdg->kComboBoxPredictor->currentIndex() + 1;
     options.alpha = optionswdg->alpha->isChecked();

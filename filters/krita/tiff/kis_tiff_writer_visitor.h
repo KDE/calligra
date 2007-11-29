@@ -34,10 +34,13 @@ class KisTIFFOptions;
 class KisTIFFWriterVisitor : public KisNodeVisitor
 {
     public:
+
+        using KisNodeVisitor::visit;
+    
         KisTIFFWriterVisitor(TIFF*img, KisTIFFOptions* options);
         ~KisTIFFWriterVisitor();
     public:
-        virtual bool visit(KisExternalLayer * layer) { return true; }
+        virtual bool visit(KisExternalLayer * layer) { Q_UNUSED(layer); return true; }
         virtual bool visit(KisPaintLayer *layer);
         virtual bool visit(KisGroupLayer *layer);
         virtual bool visit(KisAdjustmentLayer* ) { return true; }

@@ -45,6 +45,8 @@ class KisExternalLayer;
 class KisExifInfoVisitor : public KisNodeVisitor
 {
     public:
+        using KisNodeVisitor::visit;
+    
         KisExifInfoVisitor() :
             m_exifInfo(0),
             m_countPaintLayer(0)

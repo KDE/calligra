@@ -575,7 +575,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         delete[] ps_buf;
     }
 
-    m_img->addLayer(KisLayerSP(layer), m_img->rootLayer(), KisLayerSP(0));
+    m_img->addNode( KisNodeSP(layer), m_img->rootLayer().data() );
     layer->setDirty();
     m_img->unlock();
     return KisImageBuilder_RESULT_OK;

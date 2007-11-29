@@ -113,6 +113,7 @@ bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const
 
 bool KisIptcIO::canSaveAllEntries(KisMetaData::Store* store) const
 {
+    Q_UNUSED(store);
     return false;
 }
 
