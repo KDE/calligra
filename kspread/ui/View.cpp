@@ -999,6 +999,7 @@ void View::Private::initActions()
   actions->areaName->setToolTip(i18n("Set a name for a region of the spreadsheet"));
 
   actions->showArea = new KAction(i18n("Named Areas..."), view);
+  actions->showArea->setShortcut( QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_G) );
   actions->showArea->setIconText(i18n("Named Areas"));
   actions->showArea->setIcon(KIcon("bookmark"));
   actions->showArea->setToolTip(i18n("Edit or select named areas"));

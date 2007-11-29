@@ -106,9 +106,14 @@ NamedAreaDialog::NamedAreaDialog(View* parent)
     connect(this, SIGNAL(user1Clicked()), this, SLOT(slotRemove()));
     connect(this, SIGNAL(user2Clicked()), this, SLOT(slotEdit()));
     connect(this, SIGNAL(user3Clicked()), this, SLOT(slotNew()));
-    connect(m_list, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(slotOk()));
+    connect(m_list, SIGNAL(itemActivated(QListWidgetItem*)), this, SLOT(slotOk()));
     connect(m_list, SIGNAL(currentTextChanged(const QString&)),
             this, SLOT(displayAreaValues(const QString&)));
+
+    if ( m_list->count() > 0 )
+        m_list->setCurrentItem( m_list->item(0) );
+
+    m_list->setFocus();
 }
 
 void NamedAreaDialog::displayAreaValues(QString const & areaName)
