@@ -70,6 +70,7 @@ GotoDialog::GotoDialog( View* parent, const char* name )
   if( sheet && selection ) {
     Cell cell(sheet, selection->cursor());
     m_nameCell->addItem( cell.name() );
+    m_nameCell->addItem( cell.fullName() );
   }
   Doc *doc = m_pView->doc();
   NamedAreaManager *manager = doc->namedAreaManager();
@@ -79,6 +80,8 @@ GotoDialog::GotoDialog( View* parent, const char* name )
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
   connect( m_nameCell, SIGNAL(textChanged ( const QString & )),
            this, SLOT(textChanged ( const QString & )));
+
+  resize( QSize(320,50).expandedTo( minimumSizeHint() ) );
 }
 
 void GotoDialog::textChanged ( const QString &_text )
