@@ -56,6 +56,7 @@ public:
     QWidget* mailPage;
     KLineEdit* mailText;
     KLineEdit* mailLink;
+    KLineEdit* mailSubject;
     QWidget* filePage;
     KLineEdit* fileText;
     KUrlRequester* fileLink;
@@ -105,9 +106,12 @@ LinkDialog::LinkDialog( View* view, const char* )
     mLayout->addWidget( new QLabel( i18n("Email:" ), d->mailPage ) );
     d->mailLink = new KLineEdit( d->mailPage );
     mLayout->addWidget( d->mailLink );
-    mLayout->addItem( new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
     connect( d->mailText, SIGNAL( textChanged( const QString& ) ), this,
         SLOT( setText( const QString& ) ) );
+    mLayout->addWidget( new QLabel( i18n("Subject:" ), d->mailPage ) );
+    d->mailSubject = new KLineEdit( d->mailPage );
+    mLayout->addWidget( d->mailSubject );
+    mLayout->addItem( new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
     // link for external file
     d->filePage = new QWidget();
@@ -207,10 +211,9 @@ QString LinkDialog::link() const
       if( !str.isEmpty() )
         if( str.indexOf( "mailto:" )==-1 )
           str.prepend( "mailto:" );
-      str = d->fileLink->lineEdit()->text();
-      if( !str.isEmpty() )
-        if( str.indexOf( "file:/" )==-1 )
-          str.prepend( "file://" );
+      const QString subject = d->mailSubject->text().trimmed();
+      if( ! subject.isEmpty() )
+        str.append( QString("?subject=%1").arg( QString(QUrl::toPercentEncoding(subject)) ) );
     }
     else if ( currentPage() == d->p3 )
     {
@@ -275,8 +278,15 @@ void LinkDialog::setLink( const QString& link )
 
     if( link.startsWith( "mailto:" ) )
     {
-      d->mailLink->setText( link.mid( QString("mailto:").length() ) );
-      setCurrentPage( d->p1 );
+      QUrl url(link);
+      if ( url.isValid() ) {
+        d->mailLink->setText( url.toString(QUrl::RemoveScheme|QUrl::RemoveQuery) );
+        d->mailSubject->setText( url.queryItemValue("subject") );
+      }
+      else {
+        d->mailLink->setText( link.mid( QString("mailto:").length() ) );
+      }
+      setCurrentPage( d->p2 );
       return;
     }
 
@@ -285,7 +295,7 @@ void LinkDialog::setLink( const QString& link )
       QString s = link.mid( QString("file:/").length() );
       while(s.startsWith("//")) s.remove(0,1);
       d->fileLink->lineEdit()->setText(s);
-      setCurrentPage( d->p2 );
+      setCurrentPage( d->p3 );
       return;
     }
 
