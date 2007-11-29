@@ -701,9 +701,11 @@ void DefaultTool::Private::processLeftClickAnchor()
     else
     {
         Region r(anchor, canvas->view()->doc()->map(), canvas->activeSheet());
-        if ( r.firstSheet() != canvas->view()->activeSheet() )
-            canvas->view()->setActiveSheet( r.firstSheet() );
-        canvas->selection()->initialize(r);
+        if ( r.isValid() ) {
+            if ( r.firstSheet() != canvas->view()->activeSheet() )
+                canvas->view()->setActiveSheet( r.firstSheet() );
+            canvas->selection()->initialize(r);
+        }
     }
 }
 
