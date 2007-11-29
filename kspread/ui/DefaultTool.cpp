@@ -680,12 +680,13 @@ void DefaultTool::Private::processClickSelectionHandle( KoPointerEvent* event )
 void DefaultTool::Private::processLeftClickAnchor()
 {
     bool isRefLink = Util::localReferenceAnchor( anchor );
-    bool isLocalLink = (anchor.indexOf("file:") == 0);
     if ( !isRefLink )
     {
-        QString type = KMimeType::findByUrl(anchor, 0, isLocalLink)->name();
-
-        if ( KRun::isExecutableFile( anchor, type ) )
+        KUrl url(anchor);
+        if ( ! url.isValid() )
+            return;
+        const QString type = KMimeType::findByUrl(url, 0, url.isLocalFile())->name();
+        if ( KRun::isExecutableFile( url, type ) )
         {
             QString question = i18n("This link points to the program or script '%1'.\n"
                                     "Malicious programs can harm your computer. "
@@ -696,7 +697,7 @@ void DefaultTool::Private::processLeftClickAnchor()
             if ( choice != KMessageBox::Yes )
                 return;
         }
-        new KRun(anchor, canvas);
+        new KRun(url, canvas);
     }
     else
     {

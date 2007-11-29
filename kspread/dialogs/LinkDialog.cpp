@@ -43,6 +43,7 @@
 #include <klocale.h>
 #include <krecentdocument.h>
 #include <kurlrequester.h>
+#include <kurlcompletion.h>
 
 using namespace KSpread;
 
@@ -126,6 +127,8 @@ LinkDialog::LinkDialog( View* view, const char* )
     fLayout->addWidget( d->fileText );
     fLayout->addWidget( new QLabel( i18n("File location:" ), d->filePage ) );
     d->fileLink = new KUrlRequester( d->filePage );
+    d->fileLink->completionObject()->setReplaceHome(true);
+    d->fileLink->completionObject()->setReplaceEnv(true);
     fLayout->addWidget( d->fileLink );
     fLayout->addWidget( new QLabel( i18n("Recent file:" ), d->filePage ) );
     KComboBox* recentFile = new KComboBox( d->filePage );
@@ -136,7 +139,6 @@ LinkDialog::LinkDialog( View* view, const char* )
         SLOT( setText( const QString& ) ) );
     QObject::connect( recentFile, SIGNAL( highlighted ( const QString &) ),
         d->fileLink->lineEdit(), SLOT( setText( const QString & ) ) );
-
 
     // populate recent files
     int index = 0;
@@ -217,10 +219,16 @@ QString LinkDialog::link() const
     }
     else if ( currentPage() == d->p3 )
     {
-      str = d->fileLink->lineEdit()->text();
-      if( !str.isEmpty() )
-        if( ! str.contains( QRegExp("^(file|mailto|http|https|ftp):") ) )
-          str.prepend( "file://" );
+      KUrl url = d->fileLink->url();
+      if( url.isValid() ) {
+        str = url.url();
+      }
+      else {
+        str = d->fileText->text();
+        if( !str.isEmpty() )
+          if( ! str.contains( QRegExp("^(file|mailto|http|https|ftp):") ) )
+            str.prepend( "file://" );
+      }
     }
     else if ( currentPage() == d->p4 )
     {
