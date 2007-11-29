@@ -1194,9 +1194,9 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         xmlwriter.startElement( "text:a" );
         //Reference cell is started by '#'
         if ( Util::localReferenceAnchor( link() ) )
-            xmlwriter.addAttribute( " xLinkDialog.href", ( '#'+link() ) );
+            xmlwriter.addAttribute( "xlink:href", ( '#'+link() ) );
         else
-            xmlwriter.addAttribute( " xLinkDialog.href", link() );
+            xmlwriter.addAttribute( "xlink:href", link() );
         xmlwriter.addTextNode( userInput() );
         xmlwriter.endElement();
         xmlwriter.endElement();
