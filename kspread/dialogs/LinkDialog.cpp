@@ -219,7 +219,7 @@ QString LinkDialog::link() const
     {
       str = d->fileLink->lineEdit()->text();
       if( !str.isEmpty() )
-        if( str.indexOf( "file:/" )==-1 )
+        if( ! str.contains( QRegExp("^(file|mailto|http|https|ftp):") ) )
           str.prepend( "file://" );
     }
     else if ( currentPage() == d->p4 )
