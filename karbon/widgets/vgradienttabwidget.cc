@@ -346,7 +346,7 @@ void VGradientTabWidget::setupUI()
     m_opacity = new KIntNumInput( 100, m_editTab );
     m_opacity->setRange( 0, 100 );
     m_opacity->setValue( 100 );
-    editLayout->addWidget( m_opacity, 5, 1, 1, 1 );
+    editLayout->addWidget( m_opacity, 5, 1 );
 
     m_addToPredefs = new QPushButton( i18n( "&Add to Predefined Gradients" ), m_editTab );
     editLayout->addWidget( m_addToPredefs, 6, 0, 1, 2 );
@@ -354,6 +354,7 @@ void VGradientTabWidget::setupUI()
     editLayout->setSpacing( 3 );
     editLayout->setMargin( 6 );
     editLayout->setRowMinimumHeight( 0, 12 );
+    editLayout->setRowStretch( 7, 1 );
 
     QWidget* predefTab  = new QWidget();
     QGridLayout* predefLayout = new QGridLayout( predefTab );
