@@ -660,6 +660,7 @@ void View::Private::initActions()
   actions->wrapText->setToolTip(i18n("Make the cell text wrap onto multiple lines"));
 
   actions->verticalText  = new KToggleAction(KIcon("vertical_text"  ), i18n("Vertical Text"), view);
+  actions->verticalText->setIconText(i18n("Vertical"));
   ac->addAction("verticaltext", actions->verticalText );
   connect( actions->verticalText, SIGNAL( toggled( bool ) ),
                     view, SLOT( verticalText( bool ) ) );
@@ -676,11 +677,13 @@ void View::Private::initActions()
   actions->decreaseIndent->setToolTip(i18n("Decrease the indentation"));
 
   actions->changeAngle  = new KAction(i18n("Change Angle..."), view);
+  actions->changeAngle->setIconText(i18n("Angle"));
   ac->addAction("changeangle", actions->changeAngle );
   connect(actions->changeAngle, SIGNAL(triggered(bool)),view, SLOT( changeAngle() ));
   actions->changeAngle->setToolTip(i18n("Change the angle that cell contents are printed"));
 
   actions->percent  = new KToggleAction(KIcon( "percent" ), i18n("Percent Format"), view);
+  actions->percent->setIconText(i18n("Percent"));
   ac->addAction("percent", actions->percent );
   connect( actions->percent, SIGNAL( toggled( bool ) ),
                     view, SLOT( percent( bool ) ) );
@@ -697,6 +700,7 @@ void View::Private::initActions()
   actions->precminus->setToolTip(i18n("Decrease the decimal precision shown onscreen"));
 
   actions->money  = new KToggleAction(KIcon( "money" ), i18n("Money Format"), view);
+  actions->money->setIconText(i18n("Money"));
   ac->addAction("money", actions->money );
   connect( actions->money, SIGNAL( toggled( bool ) ),
                     view, SLOT( moneyFormat( bool ) ) );
@@ -715,6 +719,7 @@ void View::Private::initActions()
   actions->lower->setToolTip(i18n("Convert all letters to lower case"));
 
   actions->firstLetterUpper  = new KAction(KIcon("first_letter_upper" ), i18n("Convert First Letter to Upper Case"), view);
+  actions->firstLetterUpper->setIconText(i18n("First Letter Upper"));
   ac->addAction("firstletterupper", actions->firstLetterUpper );
   connect(actions->firstLetterUpper, SIGNAL(triggered(bool)), view, SLOT( firstLetterUpper() ));
   actions->firstLetterUpper->setToolTip(i18n("Capitalize the first letter"));
@@ -771,13 +776,14 @@ void View::Private::initActions()
   connect(actions->borderColor, SIGNAL(triggered(bool)), view, SLOT(changeBorderColor()));
   actions->borderColor->setToolTip(i18n("Select a new border color"));
 
-  actions->selectStyle  = new KSelectAction(i18n("St&yle"), view);
+  actions->selectStyle  = new KSelectAction(i18n("Style"), view);
   ac->addAction("stylemenu", actions->selectStyle );
   actions->selectStyle->setToolTip( i18n( "Apply a predefined style to the selected cells" ) );
   connect( actions->selectStyle, SIGNAL( triggered( const QString & ) ),
            view, SLOT( setStyle( const QString & ) ) );
 
   actions->createStyle  = new KAction(i18n("Create Style From Cell..."), view);
+  actions->createStyle->setIconText(i18n("Style From Cell"));
   ac->addAction("createStyle", actions->createStyle );
   connect(actions->createStyle, SIGNAL(triggered(bool)),view, SLOT( createStyleFromCell()));
   actions->createStyle->setToolTip( i18n( "Create a new style based on the currently selected cell" ) );
@@ -1108,12 +1114,16 @@ void View::Private::initActions()
   connect(actions->showPageBorders, SIGNAL(toggled(bool)), view, SLOT(togglePageBorders(bool)));
 
   actions->recalcWorksheet  = new KAction(i18n("Recalculate Sheet"), view);
+  actions->recalcWorksheet->setIcon(KIcon("view-refresh"));
+  actions->recalcWorksheet->setIconText(i18n("Recalculate"));
   ac->addAction("RecalcWorkSheet", actions->recalcWorksheet );
   actions->recalcWorksheet->setShortcut( QKeySequence( Qt::SHIFT + Qt::Key_F9));
   connect(actions->recalcWorksheet, SIGNAL(triggered(bool)),view, SLOT( recalcWorkSheet() ));
   actions->recalcWorksheet->setToolTip(i18n("Recalculate the value of every cell in the current worksheet"));
 
   actions->recalcWorkbook  = new KAction(i18n("Recalculate Document"), view);
+  actions->recalcWorkbook->setIcon(KIcon("view-refresh"));
+  actions->recalcWorkbook->setIconText(i18n("Recalculate"));
   ac->addAction("RecalcWorkBook", actions->recalcWorkbook );
   actions->recalcWorkbook->setShortcut( QKeySequence( Qt::Key_F9));
   connect(actions->recalcWorkbook, SIGNAL(triggered(bool)),view, SLOT( recalcWorkBook() ));
