@@ -198,6 +198,7 @@ QBrush LinearGradientStrategy::background()
 {
     QLinearGradient gradient( m_handles[start], m_handles[stop] );
     gradient.setStops( m_oldBackground.gradient()->stops() );
+    gradient.setSpread( m_oldBackground.gradient()->spread() );
     QBrush background = QBrush( gradient );
     background.setMatrix( m_oldBackground.matrix() );
     return background;
@@ -239,6 +240,7 @@ QBrush RadialGradientStrategy::background()
     double r = sqrt( d.x()*d.x() + d.y()*d.y() );
     QRadialGradient gradient( m_handles[center], r, m_handles[focal] );
     gradient.setStops( m_oldBackground.gradient()->stops() );
+    gradient.setSpread( m_oldBackground.gradient()->spread() );
     QBrush background = QBrush( gradient );
     background.setMatrix( m_oldBackground.matrix() );
     return background;
@@ -281,6 +283,7 @@ QBrush ConicalGradientStrategy::background()
         angle += 360;
     QConicalGradient gradient( m_handles[center], angle );
     gradient.setStops( m_oldBackground.gradient()->stops() );
+    gradient.setSpread( m_oldBackground.gradient()->spread() );
     QBrush background = QBrush( gradient );
     background.setMatrix( m_oldBackground.matrix() );
     return background;
