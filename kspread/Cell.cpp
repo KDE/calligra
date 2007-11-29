@@ -1192,11 +1192,12 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         //kDebug(36003)<<"Link found";
         xmlwriter.startElement( "text:p" );
         xmlwriter.startElement( "text:a" );
+        const QString url = link();
         //Reference cell is started by '#'
-        if ( Util::localReferenceAnchor( link() ) )
-            xmlwriter.addAttribute( "xlink:href", ( '#'+link() ) );
+        if ( Util::localReferenceAnchor( url ) )
+            xmlwriter.addAttribute( "xlink:href", ( '#'+url ) );
         else
-            xmlwriter.addAttribute( "xlink:href", link() );
+            xmlwriter.addAttribute( "xlink:href", url );
         xmlwriter.addTextNode( userInput() );
         xmlwriter.endElement();
         xmlwriter.endElement();
