@@ -697,7 +697,7 @@ void DefaultTool::Private::processLeftClickAnchor()
             if ( choice != KMessageBox::Yes )
                 return;
         }
-        new KRun(url, canvas);
+        new KRun(url, canvas, 0, url.isLocalFile());
     }
     else
     {
