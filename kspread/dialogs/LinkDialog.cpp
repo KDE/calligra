@@ -155,6 +155,7 @@ LinkDialog::LinkDialog( View* view, const char* )
     d->p4->setHeader( i18n("Link to Cell") );
     d->p4->setIcon( KIcon("table") );
     QVBoxLayout* cLayout = new QVBoxLayout( d->cellPage );
+    cLayout->setMargin( marginHint() );
     cLayout->setSpacing( spacingHint() );
     cLayout->addWidget( new QLabel( i18n("Text to display:" ), d->cellPage ) );
     d->cellText = new KLineEdit( d->cellPage );
