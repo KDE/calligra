@@ -26,6 +26,8 @@
 
 #include "View.h"
 #include "Doc.h"
+#include "Cell.h"
+#include "Selection.h"
 #include "NamedAreaManager.h"
 
 #include <QFrame>
@@ -169,11 +171,19 @@ LinkDialog::LinkDialog( View* view, const char* )
     cLayout->addWidget( new QLabel( i18n("Cell or Named Area:" ), d->cellPage ) );
     d->cellLink = new QComboBox( d->cellPage );
     d->cellLink->setEditable(true);
-    d->cellLink->addItem( "" );
-    Doc *doc = view->doc();
-    NamedAreaManager *manager = doc->namedAreaManager();
+
+    const Sheet *sheet = view->activeSheet();
+    const Selection *selection = view->selection();
+    if( sheet && selection ) {
+        Cell cell(sheet, selection->cursor());
+        d->cellLink->addItem( cell.fullName() );
+    }
+
+    const Doc *doc = view->doc();
+    const NamedAreaManager *manager = doc->namedAreaManager();
     d->cellLink->addItems( manager->areaNames() );
 
+    d->cellLink->setCurrentText( "" );
     cLayout->addWidget( d->cellLink );
     cLayout->addItem( new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
     connect( d->cellText, SIGNAL( textChanged( const QString& ) ), this,
