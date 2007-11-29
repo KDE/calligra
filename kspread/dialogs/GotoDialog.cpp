@@ -27,8 +27,8 @@
 
 #include <QLabel>
 #include <QLayout>
-//Added by qt3to4:
 #include <QVBoxLayout>
+#include <QComboBox>
 
 #include <klineedit.h>
 
@@ -39,6 +39,7 @@
 #include "View.h"
 #include "Cell.h"
 #include "Selection.h"
+#include "NamedAreaManager.h"
 
 using namespace KSpread;
 
@@ -60,18 +61,20 @@ GotoDialog::GotoDialog( View* parent, const char* name )
   QLabel *label = new QLabel(i18n("Enter cell:"), page);
   lay1->addWidget(label);
 
-  m_nameCell = new KLineEdit( page );
+  m_nameCell = new QComboBox( page );
+  m_nameCell->setEditable(true);
   lay1->addWidget(m_nameCell);
 
   const Sheet* sheet = parent->activeSheet();
   Selection* selection = parent->selection();
   if( sheet && selection ) {
     Cell cell(sheet, selection->cursor());
-    m_nameCell->setText( cell.name() );
+    m_nameCell->addItem( cell.name() );
   }
-
+  Doc *doc = m_pView->doc();
+  NamedAreaManager *manager = doc->namedAreaManager();
+  m_nameCell->addItems( manager->areaNames() );
   m_nameCell->setFocus();
-  enableButtonOk( false );
 
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
   connect( m_nameCell, SIGNAL(textChanged ( const QString & )),
@@ -87,17 +90,18 @@ void GotoDialog::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
 
-    QString tmp_upper;
-    tmp_upper=m_nameCell->text().toUpper();
+    QString tmp_upper = m_nameCell->currentText();
     Region region(tmp_upper, m_pView->doc()->map(), m_pView->activeSheet());
     if ( region.isValid() )
     {
+      if ( region.firstSheet() != m_pView->activeSheet() )
+          m_pView->setActiveSheet( region.firstSheet() );
       m_pView->selection()->initialize(region);
       accept();
     }
     else
     {
-        m_nameCell->clear();
+      m_nameCell->setCurrentText("");
     }
     m_pView->slotUpdateView( m_pView->activeSheet() );
 }

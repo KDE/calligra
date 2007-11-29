@@ -27,7 +27,7 @@
 
 #include <kdialog.h>
 
-class KLineEdit;
+class QComboBox;
 
 namespace KSpread
 {
@@ -46,7 +46,7 @@ public slots:
 
 protected:
   View* m_pView;
-  KLineEdit* m_nameCell;
+  QComboBox* m_nameCell;
 };
 
 } // namespace KSpread
