@@ -1151,7 +1151,7 @@ QVariant CalendarDayItemModel::intervalDuration( const TimeInterval *ti, int rol
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-            Duration d( Duration( ti->first.msecsTo( ti->second ) ) );
+            Duration d( Duration( (qint64)(ti->first.msecsTo( ti->second ) ) ) );
             return KGlobal::locale()->formatNumber( d.toDouble( Duration::Unit_h ), 1 ) + Duration::unitToString( Duration::Unit_h );
         }
         case Qt::EditRole:

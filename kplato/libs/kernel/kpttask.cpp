@@ -99,7 +99,7 @@ int Task::type() const {
     if ( numChildren() > 0) {
         return Node::Type_Summarytask;
     }
-    else if ( 0 == m_estimate->expected().milliseconds() ) {
+    else if ( m_estimate->expectedEstimate() == 0.0 ) {
         return Node::Type_Milestone;
     }
     else {
@@ -279,7 +279,7 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
         } else if (e.tagName() == "estimate" || 
                    ( /*status.version() < "0.6" &&*/ e.tagName() == "effort" ) ) {
             //  Load the estimate
-            m_estimate->load(e);
+            m_estimate->load(e, status);
         } else if (e.tagName() == "resourcegroup-request") {
             // Load the resource request
             // Handle multiple requests to same group gracefully (Not really allowed)

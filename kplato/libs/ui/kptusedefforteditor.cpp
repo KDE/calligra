@@ -453,18 +453,20 @@ QVariant CompletionEntryItemModel::remainingEffort ( int row, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
+            //TODO
             QList<double> scales;
             Duration::Unit unit = Duration::Unit_h;
             if ( m_node && m_node->projectNode() ) {
                 Project *p = static_cast<Project*>( m_node->projectNode() );
-                unit = m_node->estimate()->displayUnit();
+                unit = m_node->estimate()->unit();
                 QList<double> scales; // TODO: week
                 if ( m_node->estimate()->type() == Estimate::Type_Effort ) {
                     scales << p->standardWorktime()->day();
                     // rest is default
                 }
             }
-            double v = Estimate::scale( e->remainingEffort, unit, scales );
+            //double v = Estimate::scale( e->remainingEffort, unit, scales );
+            double v = e->remainingEffort.toDouble( unit );
             //kDebug()<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
             return KGlobal::locale()->formatNumber( v, 1 ) +  Duration::unitToString( unit, true );
         }
@@ -486,7 +488,7 @@ QVariant CompletionEntryItemModel::remainingEffort ( int row, int role ) const
         }
         case Role::DurationUnit:
             if ( m_node ) {
-                return static_cast<int>( m_node->estimate()->displayUnit() );
+                return static_cast<int>( m_node->estimate()->unit() );
             }
             return static_cast<int>( Duration::Unit_h );
         case Qt::StatusTipRole:
@@ -505,18 +507,19 @@ QVariant CompletionEntryItemModel::actualEffort ( int row, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
+            //TODO
             QList<double> scales;
             Duration::Unit unit = Duration::Unit_h;
             if ( m_node && m_node->projectNode() ) {
                 Project *p = static_cast<Project*>( m_node->projectNode() );
-                unit = m_node->estimate()->displayUnit();
+                unit = m_node->estimate()->unit();
                 QList<double> scales; // TODO: week
                 if ( m_node->estimate()->type() == Estimate::Type_Effort ) {
                     scales << p->standardWorktime()->day();
                     // rest is default
                 }
             }
-            double v;
+            double v = -1.0;
             if ( m_completion->entrymode() == Completion::EnterEffortPerResource ) {
                 v = Estimate::scale( m_completion->actualEffortTo( date( row ).toDate() ), unit, scales );
             } else {
@@ -543,7 +546,7 @@ QVariant CompletionEntryItemModel::actualEffort ( int row, int role ) const
         }
         case Role::DurationUnit:
             if ( m_node ) {
-                return static_cast<int>( m_node->estimate()->displayUnit() );
+                return static_cast<int>( m_node->estimate()->unit() );
             }
             return static_cast<int>( Duration::Unit_h );
         case Qt::StatusTipRole:
@@ -561,18 +564,20 @@ QVariant CompletionEntryItemModel::plannedEffort ( int row, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
+            //TODO
             QList<double> scales;
             Duration::Unit unit = Duration::Unit_h;
             if ( m_node && m_node->projectNode() ) {
                 Project *p = static_cast<Project*>( m_node->projectNode() );
-                unit = m_node->estimate()->displayUnit();
+                unit = m_node->estimate()->unit();
                 QList<double> scales; // TODO: week
                 if ( m_node->estimate()->type() == Estimate::Type_Effort ) {
                     scales << p->standardWorktime()->day();
                     // rest is default
                 }
             }
-            double v = Estimate::scale( m_node->plannedEffort( m_manager->id() ), unit, scales );
+            //double v = Estimate::scale( m_node->plannedEffort( m_manager->id() ), unit, scales );
+            double v = m_node->plannedEffort( m_manager->id() ).toDouble( unit );
             //kDebug()<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
             return KGlobal::locale()->formatNumber( v, 1 ) +  Duration::unitToString( unit, true );
         }
@@ -594,7 +599,7 @@ QVariant CompletionEntryItemModel::plannedEffort ( int row, int role ) const
         }
         case Role::DurationUnit:
             if ( m_node ) {
-                return static_cast<int>( m_node->estimate()->displayUnit() );
+                return static_cast<int>( m_node->estimate()->unit() );
             }
             return static_cast<int>( Duration::Unit_h );
         case Qt::StatusTipRole:
@@ -640,7 +645,7 @@ bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant 
                 e->percentFinished = value.toInt();
                 if ( m_completion->entrymode() == Completion::EnterCompleted && m_node ) {
                     // calculate used/remaining
-                    Duration est = m_node->estimate()->expected();
+                    Duration est = m_node->estimate()->pertExpected();
                     e->totalPerformed = est * e->percentFinished / 100;
                     e->remainingEffort = est - e->totalPerformed;
                 }
@@ -787,7 +792,7 @@ void CompletionEntryItemModel::addEntry( const QDate date )
     Completion::Entry *e = new Completion::Entry();
     if ( m_completion->entries().isEmpty() ) {
         if ( m_node ) {
-            e->remainingEffort = m_node->estimate()->expected();
+            e->remainingEffort = m_node->estimate()->pertExpected();
         }
     } else {
         e->percentFinished = m_completion->percentFinished();

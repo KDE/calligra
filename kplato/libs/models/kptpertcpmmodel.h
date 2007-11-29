@@ -76,26 +76,10 @@ protected slots:
 public:
     QVariant alignment( int column ) const;
     
-    QVariant name( const Node *node, int role ) const;
     QVariant name( int role ) const;
-    QVariant duration( const Node *node, int role ) const;
     QVariant duration( int role ) const;
-    
-    QVariant variance( const Node *node, int role ) const;
     QVariant variance( int role ) const;
-    QVariant variance( const Estimate *est, int role ) const;
     
-    QVariant optimistic( const Node *node, int role ) const;
-    QVariant optimistic( int role ) const;
-    QVariant optimistic( const Estimate *est, int role ) const;
-    
-    QVariant expected( const Estimate *est, int role ) const;
-
-    QVariant pessimistic( const Node *node, int role ) const;
-    QVariant pessimistic( int role ) const;
-    QVariant pessimistic( const Estimate *est, int role ) const;
-    
-    QVariant estimate( const Node *node, int role ) const;
     QVariant notUsed( int role ) const;
 
 private:

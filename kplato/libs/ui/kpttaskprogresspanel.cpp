@@ -63,7 +63,7 @@ TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardW
         setEstimateScales(m_dayLength);
     }
     
-    scheduledEffort = task.estimate()->expected();
+    scheduledEffort = task.estimate()->expectedValue();
     
     m_year = QDate::currentDate().year();
     m_weekOffset = 1;
@@ -101,7 +101,9 @@ TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardW
             }
         }
     }
-    
+    if ( m_completion.isStarted() ) {
+        tabWidget->setCurrentWidget( completionTab );
+    }
     enableWidgets();
     started->setFocus();
     

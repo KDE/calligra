@@ -48,33 +48,33 @@ DurationSpinBox::DurationSpinBox(QWidget *parent)
     hourToFromDay = 24.0;
 }
 
-void DurationSpinBox::setValue( const Duration &value )
-{
-    //kDebug()<<value.milliseconds();
-    QDoubleSpinBox::setValue( durationToDouble( value, m_unit ) );
-}
+// void DurationSpinBox::setValue( const Duration &value )
+// {
+//     //kDebug()<<value.milliseconds();
+//     QDoubleSpinBox::setValue( durationToDouble( value, m_unit ) );
+// }
 
-void DurationSpinBox::setValue( const qint64 value )
-{
-    //kDebug()<<value;
-    setValue( Duration( value ) );
-}
+// void DurationSpinBox::setValue( const qint64 value )
+// {
+//     //kDebug()<<value;
+//     setValue( Duration( value ) );
+// }
 
-qint64 DurationSpinBox::value() const
-{
-    return durationValue().milliseconds();
-}
+// qint64 DurationSpinBox::value() const
+// {
+//     return durationValue().milliseconds();
+// }
 
-Duration DurationSpinBox::durationValue() const
-{
-    return durationFromDouble( QDoubleSpinBox::value(), m_unit );
-}
+// Duration DurationSpinBox::durationValue() const
+// {
+//     return durationFromDouble( QDoubleSpinBox::value(), m_unit );
+// }
 
 void DurationSpinBox::setUnit( Duration::Unit unit )
 {
-    Duration v = durationValue();
+//    Duration v = durationValue();
     m_unit = unit;
-    setValue( v );
+//    setValue( v );
 }
 
 void DurationSpinBox::stepUnitUp()
@@ -190,40 +190,40 @@ void DurationSpinBox::keyPressEvent( QKeyEvent * event )
     QDoubleSpinBox::keyPressEvent(event);
 }
 
-void DurationSpinBox::setScales( const QVariant &scales )
-{
-    QVariantList lst = scales.toList();
-    switch ( lst.count() ) {
-        case 4: msToFromSec = lst[3].toDouble();
-        case 3: secToFromMin = lst[2].toDouble();
-        case 2: minToFromHour = lst[1].toDouble();
-        case 1: hourToFromDay = lst[0].toDouble();
-    }
-}
+// void DurationSpinBox::setScales( const QVariant &scales )
+// {
+//     QVariantList lst = scales.toList();
+//     switch ( lst.count() ) {
+//         case 4: msToFromSec = lst[3].toDouble();
+//         case 3: secToFromMin = lst[2].toDouble();
+//         case 2: minToFromHour = lst[1].toDouble();
+//         case 1: hourToFromDay = lst[0].toDouble();
+//     }
+// }
 
-void DurationSpinBox::setScales( const QList<double> &scales )
-{
-    switch ( scales.count() ) {
-        case 4: msToFromSec = scales[3];
-        case 3: secToFromMin = scales[2];
-        case 2: minToFromHour = scales[1];
-        case 1: hourToFromDay = scales[0];
-    }
-}
+// void DurationSpinBox::setScales( const QList<double> &scales )
+// {
+//     switch ( scales.count() ) {
+//         case 4: msToFromSec = scales[3];
+//         case 3: secToFromMin = scales[2];
+//         case 2: minToFromHour = scales[1];
+//         case 1: hourToFromDay = scales[0];
+//     }
+// }
 
-double DurationSpinBox::durationToDouble( const Duration &value, Duration::Unit unit) const
+/*double DurationSpinBox::durationToDouble( const Duration &value, Duration::Unit unit) const
 {
     QList<double> lst;
     lst << hourToFromDay << minToFromHour << secToFromMin << msToFromSec;
     return Estimate::scale( value, unit, lst );
 }
-
-Duration DurationSpinBox::durationFromDouble( double value, Duration::Unit unit) const
-{
-    QList<double> lst;
-    lst << hourToFromDay << minToFromHour << secToFromMin << msToFromSec;
-    return Estimate::scale( value, unit, lst );
-}
+*/
+// Duration DurationSpinBox::durationFromDouble( double value, Duration::Unit unit) const
+// {
+//     QList<double> lst;
+//     lst << hourToFromDay << minToFromHour << secToFromMin << msToFromSec;
+//     return Estimate::scale( value, unit, lst );
+// }
 
 } //namespace KPlato
 

@@ -255,8 +255,6 @@ void TaskEditor::updateActionsEnabled( bool on )
 
 void TaskEditor::setupGui()
 {
-    KActionCollection *coll = actionCollection();
-    
     QString name = "taskeditor_add_list";
     actionAddTask  = new KAction(KIcon( "add_task" ), i18n("Add Task..."), this);
     actionCollection()->addAction("add_task", actionAddTask );
@@ -353,7 +351,7 @@ void TaskEditor::slotAddMilestone()
     if ( selectedNodeCount() == 0 ) {
         // insert under main project
         Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ m_view->project() );
-        t->estimate()->set( Duration::zeroDuration );
+        t->estimate()->clear();
         edit( m_view->model()->insertSubtask( t, t->parentNode() ) );
         return;
     }
@@ -362,7 +360,7 @@ void TaskEditor::slotAddMilestone()
         return;
     }
     Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ sib->parentNode() );
-    t->estimate()->set( Duration::zeroDuration );
+    t->estimate()->clear();
     edit( m_view->model()->insertTask( t, sib ) );
 }
 

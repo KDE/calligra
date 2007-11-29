@@ -617,31 +617,46 @@ public:
 
 ////////////////////////////////   Estimate   ////////////////////////////////
 /**
-  * Any @ref Node will store how much time it takes to complete the node
-  * (typically a @ref Task) in the traditional scheduling software the
-  * estimate which is needed to complete the node is not simply a timespan but
-  * is stored as an optimistic, a pessimistic and an expected timespan.
+  * The Estimate class stores how much time (or effort) it takes to complete a Task.
+  * The estimate which is needed to complete the task is not simply a single value but
+  * is stored as an optimistic, a pessimistic and an expected value.
+  * With statistical calculations using the PERT distribution, one can arrive at a more 
+  * realistic estimate than when using the expected value alone.
   */
 class KPLATOKERNEL_EXPORT Estimate {
 public:
-    explicit Estimate ( Duration e = Duration::zeroDuration, Duration p = Duration::zeroDuration, Duration o = Duration::zeroDuration );
-
-    explicit Estimate ( double e, double p = 0, double o = 0);
-    
+    /// Constructor
+    Estimate( Node *parent = 0 );
+    /// Copy constructor.
     Estimate (const Estimate &estimate);
+    /// Destructor
     ~Estimate();
 
+    /// Reset estimate
+    void clear();
+    
+    /// Copy values from @p estimate
+    Estimate &operator=( const Estimate &estimate );
+    
+    /// Type defines the types of estimates
     enum Type {
-        Type_Effort = 0, /// Changing amount of resources changes the task duration
-        Type_FixedDuration = 1 /// Changing amount of resources will not change the tasks duration
+        Type_Effort,        /// Changing amount of resources changes the task duration
+        Type_FixedDuration  /// Changing amount of resources will not change the tasks duration
     };
+    /// Return the node that owns this Estimate
     Node *parentNode() const { return m_parent; }
+    /// Set the node that owns this Estimate
     void setParentNode( Node* parent ) { m_parent = parent; }
     
+    /// Return estimate Type
     Type type() const { return m_type; }
-    void setType(Type type) { m_type = type; changed(); }
+    /// Set estimate type to @p type
+    void setType(Type type);
+    /// Set estimate type to type represented by the string @p type
     void setType(const QString& type);
+    /// Return estimate type as a string. If @p trans is true, it's translated
     QString typeToString( bool trans=false ) const;
+    /// Return a stringlist of all estimate types. Translated if @p trans = true.
     static QStringList typeToStringList( bool trans=false );
     
     enum Risktype { Risk_None, Risk_Low, Risk_High };
@@ -651,77 +666,133 @@ public:
     QString risktypeToString( bool trans=false ) const;
     static QStringList risktypeToStringList( bool trans=false );
 
+    /// Use defines which value to access
     enum Use { Use_Expected=0, Use_Optimistic=1, Use_Pessimistic=2 };
-    Duration value(int valueType, bool pert) const;
-    const Duration& optimistic() const {return m_optimisticEstimate;}
-    const Duration& pessimistic() const {return m_pessimisticEstimate;}
-    const Duration& expected() const {return m_expectedEstimate;}
-
-    /// The unit in which this value was last entered.
-    Duration::Unit displayUnit() const { return m_displayUnit; }
-    /// Set display unit.
-    void setDisplayUnit( Duration::Unit unit ) { m_displayUnit = unit; }
     
-    void set( Duration e, Duration p = Duration::zeroDuration, Duration o = Duration::zeroDuration );
-    void set( int e, int p = -1, int o = -1 );
-    void set(unsigned days, unsigned hours, unsigned minutes);
-    void expectedEstimate(unsigned *days, unsigned *hours, unsigned *minutes);
+    /// Return estimate (scaled) of type @p valueType.
+    /// If @p pert is true the pert value is calculated and returned
+    Duration value(int valueType, bool pert) const;
+    
+    /// Return unscaled value
+    Duration optimisticValue() const;
+    /// Return unscaled value
+    Duration pessimisticValue() const;
+    /// Return unscaled value
+    Duration expectedValue() const;
 
-    bool load(KoXmlElement &element);
-    void save(QDomElement &element) const;
+    /// The unit in which the estimates were entered.
+    Duration::Unit unit() const { return m_unit; }
+    /// Set display unit.
+    void setUnit( Duration::Unit unit );
+    
+    /// Return the expected estimate (normally entered by user)
+    double expectedEstimate() const { return m_expectedEstimate; }
+    /// Return the optimistic estimate (normally entered by user)
+    double optimisticEstimate() const { return m_optimisticEstimate; }
+    /// Return the pessimistic estimate (normally entered by user)
+    double pessimisticEstimate() const { return m_pessimisticEstimate; }
+    /// Set the expected estimate
+    void setExpectedEstimate( double value );
+    /// Set the optimistic estimate
+    void setOptimisticEstimate( double value );
+    /// Set the pessimistic estimate
+    void setPessimisticEstimate( double value );
 
     /**
-     * Set the optimistic duration
+     * Set the optimistic estimate as a deviation from "expected" in percent
      * @param percent should be a negative value.
      */
     void setOptimisticRatio(int percent);
     /**
-     * Return the "optimistic" duration as deviation from "expected" in percent.
+     * Return the "optimistic" estimate as deviation from "expected" in percent.
      * This should be a negative value.
      */
     int optimisticRatio() const;
     /**
-     * Set the pessimistic duration
+     * Set the pessimistic estimate as a deviation from "expected" in percent
      * @param percent should be a positive value.
      */
     void setPessimisticRatio(int percent);
     /**
-     * Return the "pessimistic" duration as the deviation from "expected" in percent.
+     * Return the "pessimistic" estimate as the deviation from "expected" in percent.
      * This should be a positive value.
      */
     int pessimisticRatio() const;
-
+    
     /**
      * The variance is calculated based on
-     * the optimistic/pessimistic ratio.
+     * the optimistic/pessimistic estimates, scaled to current unit.
      */
-    double variance( Duration::Unit unit = Duration::Unit_ms ) const;
+    double variance() const;
+    /**
+     * The variance is calculated based on
+     * the optimistic/pessimistic estimates, scaled to @p unit
+     */
+    double variance( Duration::Unit unit ) const;
     /**
      * The standard deviation is calculated based on 
-     * the optimistic/pessimistic ratio.
+     * the optimistic/pessimistic estimates, scaled to current unit.
      */
-    double deviation( Duration::Unit unit = Duration::Unit_ms ) const;
+    double deviation() const;
+    /**
+     * The standard deviation is calculated based on 
+     * the optimistic/pessimistic estimates, scaled to @p unit
+     */
+    double deviation( Duration::Unit unit ) const;
     
+    /// Returns the expected duration. Calculated based on the estimates expected, optimistic and pessimistic
     Duration pertExpected() const;
+    /// Returns the most optimistic duration. Calculated based on the estimates expected, optimistic and pessimistic
     Duration pertOptimistic() const;
+    /// Returns the most pessimistic duration. Calculated based on the estimates expected, optimistic and pessimistic
     Duration pertPessimistic() const;
+    
+    /// Convert the duration @p value (in milliseconds) to a value in @p unit, using the scaling factors in @p scales
+    static double scale( const Duration &value, Duration::Unit unit, const QList<double> &scales );
+    /// Convert the duration @p value (in @p unit) to a value in milliseconds (base unit), using the scaling factors in @p scales
+    static Duration scale( double value, Duration::Unit unit, const QList<double> &scales );
 
-    static double scale( const Duration &value, Duration::Unit unit, QList<double> scales );
-    static Duration scale( double value, Duration::Unit unit, QList<double> scales );
+    /// Return a list of scaling factors fetched from the projects standard worktime
+    QList<double> scales() const;
+    
+    /// Load from xml document
+    bool load(KoXmlElement &element, XMLLoaderObject &status);
+    /// Save to xml document
+    void save(QDomElement &element) const;
 
 protected:
+    /// Set (calculate) cached value
+    void setOptimisticValue();
+    /// Set (calculate) cached value
+    void setExpectedValue();
+    /// Set (calculate) cached value
+    void setPessimisticValue();
+    /// Notify parent of changes
     void changed() { if ( m_parent ) m_parent->changed(); }
+    /// Copy @p estimate, parentNode is not copied
+    void copy( const Estimate &estimate );
     
 private:
     Node *m_parent;
-    Duration m_optimisticEstimate;
-    Duration m_pessimisticEstimate;
-    Duration m_expectedEstimate;
+    /// Holds the unit entered by user
+    Duration::Unit m_unit;
+    /// Holds the value entered by user, in unit m_unit
+    double m_expectedEstimate;
+    /// Holds the value entered by user, in unit m_unit
+    double m_optimisticEstimate;
+    /// Holds the value entered by user, in unit m_unit
+    double m_pessimisticEstimate;
+
+    bool m_expectedCached, m_optimisticCached, m_pessimisticCached;
+    /// Cached value in base unit (milliseconds)
+    Duration m_expectedValue;
+    /// Cached value in base unit (milliseconds)
+    Duration m_optimisticValue;
+    /// Cached value in base unit (milliseconds)
+    Duration m_pessimisticValue;
 
     Type m_type;
     Risktype m_risktype;
-    
-    Duration::Unit m_displayUnit;
     
 #ifndef NDEBUG
 public:

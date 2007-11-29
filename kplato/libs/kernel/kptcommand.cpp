@@ -1297,17 +1297,17 @@ void RemoveResourceRequestCmd::unexecute()
 
 }
 
-ModifyEstimateCmd::ModifyEstimateCmd( Node &node, Duration oldvalue, Duration newvalue, const QString& name )
-        : NamedCommand( name ),
-        m_estimate( node.estimate() ),
-        m_oldvalue( oldvalue ),
-        m_newvalue( newvalue ),
-        m_cmd( 0 )
+ModifyEstimateCmd::ModifyEstimateCmd( Node &node, double oldvalue, double newvalue, const QString& name )
+    : NamedCommand( name ),
+    m_estimate( node.estimate() ),
+    m_oldvalue( oldvalue ),
+    m_newvalue( newvalue ),
+    m_cmd( 0 )
 {
 /*    foreach ( Schedule * s, node.schedules() ) {
         addSchScheduled( s );
     }*/
-    if ( newvalue == Duration::zeroDuration ) {
+    if ( newvalue == 0.0 ) {
         // Milestones can't have resources, so remove resource requests
         ResourceRequestCollection *rc = node.requests();
         if ( rc ) {
@@ -1324,7 +1324,7 @@ ModifyEstimateCmd::~ModifyEstimateCmd()
 }
 void ModifyEstimateCmd::execute()
 {
-    m_estimate->set( m_newvalue );
+    m_estimate->setExpectedEstimate( m_newvalue );
 //    setSchScheduled( false );
     if ( m_cmd ) {
         m_cmd->execute();
@@ -1333,7 +1333,7 @@ void ModifyEstimateCmd::execute()
 }
 void ModifyEstimateCmd::unexecute()
 {
-    m_estimate->set( m_oldvalue );
+    m_estimate->setExpectedEstimate( m_oldvalue );
     if ( m_cmd ) {
         m_cmd->unexecute();
     }
@@ -1422,12 +1422,12 @@ ModifyEstimateUnitCmd::ModifyEstimateUnitCmd( Node &node, Duration::Unit oldvalu
 }
 void ModifyEstimateUnitCmd::execute()
 {
-    m_estimate->setDisplayUnit( m_newvalue );
+    m_estimate->setUnit( m_newvalue );
 
 }
 void ModifyEstimateUnitCmd::unexecute()
 {
-    m_estimate->setDisplayUnit( m_oldvalue );
+    m_estimate->setUnit( m_oldvalue );
 }
 
 EstimateModifyRiskCmd::EstimateModifyRiskCmd( Node &node, int oldvalue, int newvalue, const QString& name )

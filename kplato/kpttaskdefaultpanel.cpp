@@ -47,27 +47,20 @@
 namespace KPlato
 {
 
-TaskDefaultPanel::TaskDefaultPanel(Task &task, StandardWorktime *workTime, QWidget *parent, const char *n)
+TaskDefaultPanel::TaskDefaultPanel(Task &task, QWidget *parent, const char *n)
     : ConfigTaskPanelImpl(parent, n),
       m_task(task),
       m_dayLength(24)
 {
-    setStartValues(task, workTime);
+    setStartValues(task);
 }
 
-void TaskDefaultPanel::setStartValues(Task &task, StandardWorktime *workTime) {
-    m_estimate = m_duration = task.estimate()->expected();
+void TaskDefaultPanel::setStartValues(Task &task) {
+    m_estimate = m_duration = task.estimate()->expectedValue();
     leaderfield->setText(task.leader());
     descriptionfield->setText(task.description());
 
-    estimate->setUnit( task.estimate()->displayUnit() );
-    if (workTime) {
-        //kDebug()<<"daylength="<<workTime->day();
-        m_dayLength = workTime->day();
-        if (task.estimate()->type() == Estimate::Type_Effort) {
-            setEstimateScales(m_dayLength);
-        }
-    }
+    estimate->setUnit( task.estimate()->unit() );
     setEstimateType(task.estimate()->type());
 
     setSchedulingType(task.constraint());
@@ -83,7 +76,7 @@ void TaskDefaultPanel::setStartValues(Task &task, StandardWorktime *workTime) {
         setEndDateTime(QDateTime(startDate().addDays(1), QTime()));
     }
     //kDebug()<<"Estimate:"<<task.estimate()->expected().toString();
-    setEstimate(task.estimate()->expected());
+    setEstimate(task.estimate()->expectedEstimate());
     setOptimistic(task.estimate()->optimisticRatio());
     setPessimistic(task.estimate()->pessimisticRatio());
 
@@ -93,8 +86,6 @@ void TaskDefaultPanel::setStartValues(Task &task, StandardWorktime *workTime) {
 MacroCommand *TaskDefaultPanel::buildCommand() {
     MacroCommand *cmd = new MacroCommand(i18n("Modify Default Task"));
     bool modified = false;
-
-    Duration dt = Duration();
 
     if (m_task.leader() != leaderfield->text()) {
         cmd->addCommand(new NodeModifyLeaderCmd(m_task, leaderfield->text()));
@@ -124,20 +115,23 @@ MacroCommand *TaskDefaultPanel::buildCommand() {
         cmd->addCommand(new ModifyEstimateTypeCmd(m_task,  m_task.estimate()->type(), et));
         modified = true;
     }
-    dt = estimationValue();
-    kDebug()<<"Estimate:"<<dt.toString();
-    bool expchanged = dt != m_task.estimate()->expected();
+    bool unitchanged = estimate->unit() != m_task.estimate()->unit();
+    if ( unitchanged ) {
+        cmd->addCommand( new ModifyEstimateUnitCmd( m_task, m_task.estimate()->unit(), estimate->unit() ) );
+        modified = true;
+    }
+    bool expchanged = estimationValue() != m_task.estimate()->expectedEstimate();
     if ( expchanged ) {
-        cmd->addCommand(new ModifyEstimateCmd(m_task, m_task.estimate()->expected(), dt));
+        cmd->addCommand(new ModifyEstimateCmd(m_task, m_task.estimate()->expectedEstimate(), estimationValue()));
         modified = true;
     }
     int x = optimistic();
-    if ( x != m_task.estimate()->optimisticRatio() || expchanged) {
+    if ( x != m_task.estimate()->optimisticRatio() || expchanged || unitchanged ) {
         cmd->addCommand(new EstimateModifyOptimisticRatioCmd(m_task, m_task.estimate()->optimisticRatio(), x));
         modified = true;
     }
     x = pessimistic();
-    if ( x != m_task.estimate()->pessimisticRatio() || expchanged) {
+    if ( x != m_task.estimate()->pessimisticRatio() || expchanged || unitchanged ) {
         cmd->addCommand(new EstimateModifyPessimisticRatioCmd(m_task, m_task.estimate()->pessimisticRatio(), x));
         modified = true;
     }
@@ -154,12 +148,12 @@ bool TaskDefaultPanel::ok() {
 
 void TaskDefaultPanel::estimationTypeChanged(int type) {
     if (type == 0 /*Effort*/) {
-        Duration d = estimationValue();
-        setEstimateScales(m_dayLength);
+/*        Duration d = estimationValue();
+        setEstimateScales(m_dayLength);*/
         //setEstimate(d);
     } else {
-        Duration d = estimationValue();
-        setEstimateScales(24);
+/*        Duration d = estimationValue();
+        setEstimateScales(24);*/
         //setEstimate(d);
     }
     ConfigTaskPanelImpl::estimationTypeChanged(type);
@@ -169,12 +163,12 @@ void TaskDefaultPanel::scheduleTypeChanged(int value)
 {
     if (value == 6 /*Fixed interval*/) {
         if (estimateType->currentIndex() == 1/*duration*/){
-            setEstimateScales(24);
+//            setEstimateScales(24);
             //estimate->setEnabled(false);
             //setEstimate(DateTime(endDateTime()) - DateTime(startDateTime()));
         }
     } else {
-        setEstimateScales(m_dayLength);
+//        setEstimateScales(m_dayLength);
         estimate->setEnabled(true);
     }
     ConfigTaskPanelImpl::scheduleTypeChanged(value);
@@ -303,7 +297,7 @@ void ConfigTaskPanelImpl::estimationTypeChanged( int /*type*/ )
 
 
 
-void ConfigTaskPanelImpl::setEstimate( const Duration & duration)
+void ConfigTaskPanelImpl::setEstimate( double duration)
 {
     estimate->setValue( duration );
 }
@@ -322,18 +316,10 @@ void ConfigTaskPanelImpl::checkAllFieldsFilled()
 }
 
 
-Duration ConfigTaskPanelImpl::estimationValue()
+double ConfigTaskPanelImpl::estimationValue()
 {
-    return estimate->durationValue();
+    return estimate->value();
 }
-
-
-void ConfigTaskPanelImpl::setEstimateScales( double day )
-{
-    QList<double> scales; scales << day;
-    estimate->setScales( scales );
-}
-
 
 void ConfigTaskPanelImpl::startDateChanged()
 {

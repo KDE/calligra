@@ -158,9 +158,9 @@ QWidget *DurationSpinBoxDelegate::createEditor(QWidget *parent, const QStyleOpti
 void DurationSpinBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
 {
     DurationSpinBox *dsb = static_cast<DurationSpinBox*>(editor);
-    dsb->setScales( index.model()->data( index, Role::DurationScales ) );
+//    dsb->setScales( index.model()->data( index, Role::DurationScales ) );
     dsb->setUnit( (Duration::Unit)( index.model()->data( index, Role::DurationUnit ).toInt() ) );
-    dsb->setValue( index.model()->data( index, Qt::EditRole ).toLongLong() );
+    dsb->setValue( index.model()->data( index, Qt::EditRole ).toDouble() );
 }
 
 void DurationSpinBoxDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,

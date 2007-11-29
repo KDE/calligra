@@ -47,7 +47,7 @@ Duration::Duration( double value, Duration::Unit unit ) {
 }
 
 Duration::Duration(const Duration &d) {
-    m_ms = d.m_ms;
+    copy( d );
 }
 
 Duration::Duration(unsigned d, unsigned h, unsigned m, unsigned s, unsigned ms) {
@@ -58,8 +58,13 @@ Duration::Duration(unsigned d, unsigned h, unsigned m, unsigned s, unsigned ms) 
     m_ms += static_cast<qint64>(d) * 24 * 60 * 60 * 1000;
 }
 
-Duration::Duration(const qint64 ms) {
-    m_ms = ms;
+Duration::Duration(const qint64 value, Duration::Unit unit) {
+    if (unit == Unit_ms) m_ms = value;
+    else if (unit == Unit_s) m_ms = (qint64)(value * 1000);
+    else if (unit == Unit_m) m_ms = (qint64)(value * ( 1000 * 60 ));
+    else if (unit == Unit_h) m_ms = (qint64)(value * ( 1000 * 60 * 60 ));
+    else if (unit == Unit_d) m_ms = (qint64)(value * ( 1000 * 60 * 60 * 24 ));
+    else kError()<<"Unknown unit: "<<unit;
 }
 
 Duration::~Duration() {
@@ -88,24 +93,24 @@ void Duration::subtract(const Duration &delta) {
     m_ms -= delta.m_ms;
 }
 
-Duration Duration::operator*(int unit) const {
+Duration Duration::operator*(int value) const {
     Duration dur(*this);
-    if (unit < 0) {
-        kDebug()<<"Underflow"<<unit<<" from"<<this->toString();
+    if (value < 0) {
+        kDebug()<<"Underflow"<<value<<" from"<<this->toString();
     }
     else {
-        dur.m_ms = m_ms * unit; //FIXME
+        dur.m_ms = m_ms * value; //FIXME
     }
     return dur;
 }
 
-Duration Duration::operator/(int unit) const {
+Duration Duration::operator/(int value) const {
     Duration dur(*this);
-    if (unit <= 0) {
-        kDebug()<<"Underflow"<<unit<<" from"<<this->toString();
+    if (value <= 0) {
+        kDebug()<<"Underflow"<<value<<" from"<<this->toString();
     }
     else {
-        dur.m_ms = m_ms / unit; //FIXME
+        dur.m_ms = m_ms / value; //FIXME
     }
     return dur;
 }
@@ -321,5 +326,9 @@ bool Duration::valueFromString( const QString &value, double &rv, Unit &unit ) {
     return false;
 }
 
+void Duration::copy( const Duration &d )
+{
+    m_ms = d.m_ms;
+}
 
 }  //KPlato namespace

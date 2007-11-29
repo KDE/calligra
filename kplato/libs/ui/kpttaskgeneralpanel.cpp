@@ -50,31 +50,24 @@
 namespace KPlato
 {
 
-TaskGeneralPanel::TaskGeneralPanel(Task &task, StandardWorktime *workTime, QWidget *p, const char *n)
+TaskGeneralPanel::TaskGeneralPanel(Task &task, QWidget *p, const char *n)
     : TaskGeneralPanelImpl(p, n),
       m_task(task),
       m_dayLength(24)
 {
     useTime = true;
-    setStartValues(task, workTime);
+    setStartValues( task );
 }
 
-void TaskGeneralPanel::setStartValues(Task &task, StandardWorktime *workTime) {
-    m_estimate = m_duration = task.estimate()->expected();
+void TaskGeneralPanel::setStartValues( Task &task ) {
+    m_estimate = m_duration = task.estimate()->expectedValue();
     namefield->setText(task.name());
     leaderfield->setText(task.leader());
     descriptionfield->setText(task.description());
     idfield->setText(task.id());
     wbsfield->setText(task.wbs());
 
-    estimate->setUnit( task.estimate()->displayUnit() );
-    if (workTime) {
-        //kDebug()<<"daylength="<<workTime->day();
-        m_dayLength = workTime->day();
-        if (task.estimate()->type() == Estimate::Type_Effort) {
-            setEstimateScales(m_dayLength);
-        }
-    }
+    estimate->setUnit( task.estimate()->unit() );
     setEstimateType(task.estimate()->type());
 
     setSchedulingType(task.constraint());
@@ -90,7 +83,7 @@ void TaskGeneralPanel::setStartValues(Task &task, StandardWorktime *workTime) {
         setEndDateTime(QDateTime(startDate().addDays(1), QTime()));
     }
     //kDebug()<<"Estimate:"<<task.estimate()->expected().toString();
-    setEstimate(task.estimate()->expected());
+    setEstimate(task.estimate()->expectedEstimate());
     setOptimistic(task.estimate()->optimisticRatio());
     setPessimistic(task.estimate()->pessimisticRatio());
     setRisktype(task.estimate()->risktype());
@@ -101,8 +94,6 @@ void TaskGeneralPanel::setStartValues(Task &task, StandardWorktime *workTime) {
 MacroCommand *TaskGeneralPanel::buildCommand() {
     MacroCommand *cmd = new MacroCommand(i18n("Modify Task"));
     bool modified = false;
-
-    Duration dt = Duration();
 
     if (!namefield->isHidden() && m_task.name() != namefield->text()) {
         cmd->addCommand(new NodeModifyNameCmd(m_task, namefield->text()));
@@ -133,7 +124,6 @@ MacroCommand *TaskGeneralPanel::buildCommand() {
         modified = true;
     }
     if (!idfield->isHidden() && idfield->text() != m_task.id()) {
-
         cmd->addCommand(new NodeModifyIdCmd(m_task, idfield->text()));
         modified = true;
     }
@@ -142,20 +132,23 @@ MacroCommand *TaskGeneralPanel::buildCommand() {
         cmd->addCommand(new ModifyEstimateTypeCmd(m_task,  m_task.estimate()->type(), et));
         modified = true;
     }
-    dt = estimationValue();
-    kDebug()<<"Estimate:"<<dt.toString();
-    bool expchanged = dt != m_task.estimate()->expected();
+    bool unitchanged = estimate->unit() != m_task.estimate()->unit();
+    if ( unitchanged ) {
+        cmd->addCommand( new ModifyEstimateUnitCmd( m_task, m_task.estimate()->unit(), estimate->unit() ) );
+        modified = true;
+    }
+    bool expchanged = estimationValue() != m_task.estimate()->expectedEstimate();
     if ( expchanged ) {
-        cmd->addCommand(new ModifyEstimateCmd(m_task, m_task.estimate()->expected(), dt));
+        cmd->addCommand(new ModifyEstimateCmd(m_task, m_task.estimate()->expectedEstimate(), estimationValue()));
         modified = true;
     }
     int x = optimistic();
-    if ( x != m_task.estimate()->optimisticRatio() || expchanged) {
+    if ( x != m_task.estimate()->optimisticRatio() || expchanged || unitchanged ) {
         cmd->addCommand(new EstimateModifyOptimisticRatioCmd(m_task, m_task.estimate()->optimisticRatio(), x));
         modified = true;
     }
     x = pessimistic();
-    if ( x != m_task.estimate()->pessimisticRatio() || expchanged) {
+    if ( x != m_task.estimate()->pessimisticRatio() || expchanged || unitchanged ) {
         cmd->addCommand(new EstimateModifyPessimisticRatioCmd(m_task, m_task.estimate()->pessimisticRatio(), x));
         modified = true;
     }
@@ -181,13 +174,13 @@ bool TaskGeneralPanel::ok() {
 
 void TaskGeneralPanel::estimationTypeChanged(int type) {
     if (type == 0 /*Effort*/) {
-        Duration d = estimationValue();
-        setEstimateScales(m_dayLength);
+/*        Duration d = estimationValue();
+        setEstimateScales(m_dayLength);*/
         //setEstimate(d);
         estimate->setEnabled(true);
     } else {
-        Duration d = estimationValue();
-        setEstimateScales(24);
+/*        Duration d = estimationValue();
+        setEstimateScales(24);*/
         //setEstimate(d);
         if (schedulingType() == 6) { /*Fixed interval*/
             estimate->setEnabled(false);
@@ -203,12 +196,12 @@ void TaskGeneralPanel::scheduleTypeChanged(int value)
 {
     if (value == 6 /*Fixed interval*/) {
         if (estimateType->currentIndex() == 1/*duration*/){
-            setEstimateScales(24);
+//            setEstimateScales(24);
             estimate->setEnabled(false);
-            setEstimate( DateTime( endDateTime(), KDateTime::UTC) - DateTime( startDateTime(), KDateTime::UTC ) );
+//TODO            setEstimate( DateTime( endDateTime(), KDateTime::UTC) - DateTime( startDateTime(), KDateTime::UTC ) );
         }
     } else {
-        setEstimateScales(m_dayLength);
+//        setEstimateScales(m_dayLength);
         estimate->setEnabled(true);
     }
     TaskGeneralPanelImpl::scheduleTypeChanged(value);
@@ -339,7 +332,7 @@ void TaskGeneralPanelImpl::estimationTypeChanged( int /*type*/ )
 
 
 
-void TaskGeneralPanelImpl::setEstimate( const Duration & duration)
+void TaskGeneralPanelImpl::setEstimate( double duration)
 {
     estimate->setValue( duration );
 }
@@ -358,15 +351,9 @@ void TaskGeneralPanelImpl::checkAllFieldsFilled()
 }
 
 
-Duration TaskGeneralPanelImpl::estimationValue()
+double TaskGeneralPanelImpl::estimationValue()
 {
-    return estimate->durationValue();
-}
-
-void TaskGeneralPanelImpl::setEstimateScales( double day )
-{
-    QList<double> scales; scales << day;
-    estimate->setScales( scales );
+    return estimate->value();
 }
 
 void TaskGeneralPanelImpl::startDateChanged()

@@ -46,9 +46,9 @@ public:
     explicit DurationSpinBox(QWidget *parent = 0);
 
     /// Return value as a Duration (in milliseconds)
-    Duration durationValue() const;
+//    Duration durationValue() const;
     /// Return value in milliseconds
-    qint64 value() const;
+//    qint64 value() const;
     /// Return the current unit
     Duration::Unit unit() const { return m_unit; }
     
@@ -61,9 +61,9 @@ public:
     
 public slots:
     /// Set spinbox to value, scaled by current unit
-    void setValue( const Duration &value );
+//    void setValue( const Duration &value );
     /// Set spinbox to value, scaled by current unit.
-    void setValue( const qint64 value );
+//    void setValue( const qint64 value );
     /// Set the current unit. The displayed value is rescaled.
     void setUnit( Duration::Unit unit);
     /**
@@ -75,7 +75,7 @@ public slots:
      * 3 is number of milliseconds in a second.
      * If the list is shorter, default values are used for the missing values.
      */
-    void setScales( const QVariant &scales );
+//    void setScales( const QVariant &scales );
 
     /**
      * Set the scales used for conversion between different units.
@@ -86,7 +86,7 @@ public slots:
      * 3 is number of milliseconds in a second.
      * If the list is shorter, default values are used for the missing values.
      */
-    void setScales( const QList<double> &scales );
+//    void setScales( const QList<double> &scales );
 
 protected:
     void keyPressEvent( QKeyEvent * event );
@@ -96,9 +96,9 @@ protected:
     void stepUnitDown();
 
     /// Convert a Duration into a double, scaled to unit
-    double durationToDouble( const Duration &value, Duration::Unit unit) const;
+//    double durationToDouble( const Duration &value, Duration::Unit unit) const;
     /// Convert a double in unit into a Duration
-    Duration durationFromDouble( double value, Duration::Unit unit) const;
+//    Duration durationFromDouble( double value, Duration::Unit unit) const;
 
 private:
     Duration::Unit m_unit;

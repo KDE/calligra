@@ -8,7 +8,7 @@ set(DateTimeTester_SRCS DateTimeTester.cpp )
  
 kde4_add_unit_test(DateTimeTester TESTNAME KPlato-DateTimeTester  ${DateTimeTester_SRCS})
  
-target_link_libraries(DateTimeTester  ${KDE4_KDECORE_LIBS} kplatoprivate ${QT_QTTEST_LIBRARY})
+target_link_libraries(DateTimeTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTTEST_LIBRARY})
  
 
 ########## next target ###############
@@ -18,7 +18,16 @@ set(DurationTester_SRCS DurationTester.cpp )
  
 kde4_add_unit_test(DurationTester TESTNAME KPlato-DurationTester  ${DurationTester_SRCS})
  
-target_link_libraries(DurationTester  ${KDE4_KDECORE_LIBS} kplatoprivate ${QT_QTTEST_LIBRARY})
+target_link_libraries(DurationTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTTEST_LIBRARY})
+ 
+########## next target ###############
+
+set(EstimateTester_SRCS EstimateTester.cpp )
+ 
+ 
+kde4_add_unit_test(EstimateTester TESTNAME KPlato-EstimateTester  ${EstimateTester_SRCS})
+ 
+target_link_libraries(EstimateTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTTEST_LIBRARY})
  
 
 ########### next target ###############
@@ -28,7 +37,7 @@ set(CalendarTester_SRCS CalendarTester.cpp )
  
 kde4_add_unit_test(CalendarTester TESTNAME KPlato-CalendarTester  ${CalendarTester_SRCS})
  
-target_link_libraries(CalendarTester  ${KDE4_KDECORE_LIBS} kplatoprivate ${QT_QTTEST_LIBRARY})
+target_link_libraries(CalendarTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTTEST_LIBRARY})
  
 
 ########### next target ###############

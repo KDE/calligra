@@ -24,6 +24,7 @@
 #include "kptwbsdefinition.h"
 #include "kptresource.h"
 #include "kptschedule.h"
+#include "kptxmlloaderobject.h"
 
 #include <QList>
 #include <QListIterator>
@@ -1071,123 +1072,164 @@ void Node::changed(Node *node) {
 
 //////////////////////////   Estimate   /////////////////////////////////
 
-Estimate::Estimate( Duration e, Duration p, Duration o) 
+Estimate::Estimate( Node *parent )
+    : m_parent( parent )
 {
-    m_parent = 0;
-    m_expectedEstimate = e;
-    m_pessimisticEstimate = p;
-    m_optimisticEstimate = o;
+    setUnit( Duration::Unit_ms );
+    setExpectedEstimate( 0.0 );
+    setPessimisticEstimate( 0.0 );
+    setOptimisticEstimate( 0.0 );
+    
     m_type = Type_Effort;
     m_risktype = Risk_None;
-    m_displayUnit = Duration::Unit_h;
 }
 
 Estimate::Estimate(const Estimate &estimate) 
 {
-    m_parent = 0; // don't copy
-    set(estimate.expected(), estimate.pessimistic(), estimate.optimistic());
-    setType(estimate.type());
-    setRisktype(estimate.risktype());
-    setDisplayUnit( estimate.displayUnit() );
+    copy( estimate );
 }
 
-Estimate::~Estimate() {
+Estimate::~Estimate()
+{
 }
 
-void Estimate::set( Duration e, Duration p, Duration o ) {
-    m_expectedEstimate = e;
-    m_pessimisticEstimate = (p == Duration::zeroDuration) ? e :  p;
-    m_optimisticEstimate = (o == Duration::zeroDuration) ? e :  o;
-    //kDebug()<<"   Expected:"<<m_expectedEstimate.toString();
+void Estimate::clear()
+{
+    setExpectedEstimate( 0.0 );
+    setPessimisticEstimate( 0.0 );
+    setOptimisticEstimate( 0.0 );
+    
+    m_type = Type_Effort;
+    m_risktype = Risk_None;
+    m_unit = Duration::Unit_ms;
     changed();
 }
 
-void Estimate::set( int e, int p, int o ) {
-    m_expectedEstimate = Duration((qint64)(e)*1000);
-    m_pessimisticEstimate = (p < 0) ? Duration((qint64)(e)*1000) :  Duration((qint64)(p)*1000);
-    m_optimisticEstimate = (o < 0) ? Duration((qint64)(e)*1000) :  Duration((qint64)(o)*1000);
-    //kDebug()<<"   Expected:"<<m_expectedEstimate.toString();
-    //kDebug()<<"   Optimistic:"<<m_optimisticEstimate.toString();
-    //kDebug()<<"   Pessimistic:"<<m_pessimisticEstimate.toString();
+Estimate &Estimate::operator=( const Estimate &estimate )
+{
+    copy( estimate );
+    return *this;
+}
 
-    //kDebug()<<"   Expected:"<<m_expectedEstimate.duration()<<" manseconds";
+void Estimate::copy( const Estimate &estimate )
+{
+    //m_parent = 0; // don't touch
+    m_expectedEstimate = estimate.m_expectedEstimate;
+    m_optimisticEstimate = estimate.m_optimisticEstimate;
+    m_pessimisticEstimate = estimate.m_pessimisticEstimate;
+    
+    m_expectedValue = estimate.m_expectedValue;
+    m_optimisticValue = estimate.m_optimisticValue;
+    m_pessimisticValue = estimate.m_pessimisticValue;
+    
+    m_expectedCached = estimate.m_expectedCached;
+    m_optimisticCached = estimate.m_optimisticCached;
+    m_pessimisticCached = estimate.m_pessimisticCached;
+    
+    m_type = estimate.m_type;
+    m_risktype = estimate.m_risktype;
+    m_unit = estimate.m_unit;
     changed();
 }
 
-void Estimate::set(unsigned days, unsigned hours, unsigned minutes) {
-    Duration dur(days, hours, minutes);
-    set(dur);
-    //kDebug()<<"estimate="<<dur.toString();
-    changed();
+double Estimate::variance() const
+{
+    double d = deviation();
+    return d * d;
 }
 
-void Estimate::expectedEstimate(unsigned *days, unsigned *hours, unsigned *minutes) {
-    m_expectedEstimate.get(days, hours, minutes);
-}
-
-double Estimate::variance( Duration::Unit unit ) const {
+double Estimate::variance( Duration::Unit unit ) const
+{
     double d = deviation( unit );
     return d * d;
 }
 
-double Estimate::deviation( Duration::Unit unit ) const {
-    double p = m_pessimisticEstimate.toDouble( unit );
-    double o = m_optimisticEstimate.toDouble( unit );
+double Estimate::deviation() const
+{
+    return ( m_pessimisticEstimate - m_optimisticEstimate ) / 6;
+}
+
+double Estimate::deviation( Duration::Unit unit ) const
+{
+    if ( unit == m_unit ) {
+        return deviation();
+    }
+    double p = pessimisticValue().toDouble( unit );
+    double o = optimisticValue().toDouble( unit );
     double v = ( p - o ) / 6;
     return v;
 }
 
 Duration Estimate::pertExpected() const {
     if (m_risktype == Risk_Low) {
-        return (m_optimisticEstimate + m_pessimisticEstimate + (m_expectedEstimate*4))/6;
+        return (optimisticValue() + pessimisticValue() + (expectedValue()*4))/6;
     } else if (m_risktype == Risk_High) {
-        return (m_optimisticEstimate + (m_pessimisticEstimate*2) + (m_expectedEstimate*4))/7;
+        return (optimisticValue() + (pessimisticValue()*2) + (expectedValue()*4))/7;
     }
-    return m_expectedEstimate; // risk==none
+    return expectedValue(); // risk==none
 }
+
 Duration Estimate::pertOptimistic() const {
     if (m_risktype != Risk_None) {
-        return pertExpected() - Duration( variance() );
+        return pertExpected() - Duration( variance( Duration::Unit_ms ) );
     }
-    return m_optimisticEstimate;
+    return optimisticValue();
 }
+
 Duration Estimate::pertPessimistic() const {
     if (m_risktype != Risk_None) {
-        return pertExpected() + Duration( variance() );
+        return pertExpected() + Duration( variance( Duration::Unit_ms ) );
     }
-    return m_pessimisticEstimate;
+    return pessimisticValue();
 }
 
 Duration Estimate::value(int valueType, bool pert) const {
     if (valueType == Estimate::Use_Expected) {
-        return pert ? pertExpected() : m_expectedEstimate;
+        return pert ? pertExpected() : expectedValue();
     } else if (valueType == Estimate::Use_Optimistic) {
-        return pert ? pertOptimistic() : m_optimisticEstimate;
-    } else if (valueType == Estimate::Use_Pessimistic)
-        return pert ? pertPessimistic() : m_pessimisticEstimate;
-    
-    return m_expectedEstimate; // default
+        return pert ? pertOptimistic() : optimisticValue();
+    } else if (valueType == Estimate::Use_Pessimistic) {
+        return pert ? pertPessimistic() : pessimisticValue();
+    }
+    return expectedValue();
 }
 
-bool Estimate::load(KoXmlElement &element) {
-    m_expectedEstimate = Duration::fromString(element.attribute("expected"));
-    m_optimisticEstimate = Duration::fromString(element.attribute("optimistic"));
-    m_pessimisticEstimate = Duration::fromString(element.attribute("pessimistic"));
+void Estimate::setUnit( Duration::Unit unit )
+{
+    m_unit = unit;
+    m_expectedCached = false;
+    m_optimisticCached = false;
+    m_pessimisticCached = false;
+    changed();
+}
+
+bool Estimate::load(KoXmlElement &element, XMLLoaderObject &status) {
     setType(element.attribute("type", "WorkBased"));
     setRisktype(element.attribute("risk"));
-    m_displayUnit = (Duration::Unit)(element.attribute("display-unit", QString().number(Duration::Unit_h) ).toInt());
+    if ( status.version() <= "0.6" ) {
+        m_unit = (Duration::Unit)(element.attribute("display-unit", QString().number(Duration::Unit_h) ).toInt());
+        QList<double> s; s << status.project().standardWorktime()->day();
+        m_expectedEstimate = scale( Duration::fromString(element.attribute("expected")), m_unit, s );
+        m_optimisticEstimate = scale(  Duration::fromString(element.attribute("optimistic")), m_unit, s );
+        m_pessimisticEstimate = scale( Duration::fromString(element.attribute("pessimistic")), m_unit, s );
+    } else {
+        m_unit = (Duration::Unit)(element.attribute("unit", QString().number(Duration::Unit_ms) ).toInt());
+        m_expectedEstimate = element.attribute("expected", "0.0").toDouble();
+        m_optimisticEstimate = element.attribute("optimistic", "0.0").toDouble();
+        m_pessimisticEstimate = element.attribute("pessimistic", "0.0").toDouble();
+    }
     return true;
 }
 
 void Estimate::save(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("estimate");
     element.appendChild(me);
-    me.setAttribute("expected", m_expectedEstimate.toString());
-    me.setAttribute("optimistic", m_optimisticEstimate.toString());
-    me.setAttribute("pessimistic", m_pessimisticEstimate.toString());
+    me.setAttribute("expected", m_expectedEstimate);
+    me.setAttribute("optimistic", m_optimisticEstimate);
+    me.setAttribute("pessimistic", m_pessimisticEstimate);
     me.setAttribute("type", typeToString());
     me.setAttribute("risk", risktypeToString());
-    me.setAttribute("display-unit", m_displayUnit);
+    me.setAttribute("unit", m_unit);
 }
 
 QString Estimate::typeToString( bool trans ) const {
@@ -1198,6 +1240,15 @@ QStringList Estimate::typeToStringList( bool trans ) {
     return QStringList() 
             << (trans ? i18n("Effort") : QString("Effort"))
             << (trans ? i18n("FixedDuration") : QString("FixedDuration"));
+}
+
+void Estimate::setType(Type type)
+{
+    m_type = type;
+    m_expectedCached = false;
+    m_optimisticCached = false;
+    m_pessimisticCached = false;
+    changed();
 }
 
 void Estimate::setType(const QString& type) {
@@ -1231,32 +1282,103 @@ void Estimate::setRisktype(const QString& type) {
         setRisktype(Risk_None); // default
 }
 
+void Estimate::setExpectedEstimate( double value)
+{
+    m_expectedEstimate = value;
+    m_expectedCached = false;
+    changed();
+}
+
+void Estimate::setOptimisticEstimate( double value )
+{
+    m_optimisticEstimate = value;
+    m_optimisticCached = false;
+    changed();
+}
+
+void Estimate::setPessimisticEstimate( double value )
+{
+    m_pessimisticEstimate = value;
+    m_pessimisticCached = false;
+    changed();
+}
+
 void Estimate::setOptimisticRatio(int percent)
 {
     int p = percent>0 ? -percent : percent;
-    m_optimisticEstimate = m_expectedEstimate*(100+p)/100;
+    m_optimisticValue = expectedValue()*(100+p)/100;
+    m_optimisticEstimate = scale( m_optimisticValue, m_unit, scales() );
+    m_optimisticCached = true;
     changed();
 }
 
 int Estimate::optimisticRatio() const {
-    if (m_expectedEstimate == Duration::zeroDuration)
+    if (m_expectedEstimate == 0.0)
         return 0;
-    return (m_optimisticEstimate.milliseconds()*100/m_expectedEstimate.milliseconds())-100;
+    return (int)((optimisticValue()*100)/expectedValue())-100;
 }
 
 void Estimate::setPessimisticRatio(int percent) 
 {
     int p = percent<0 ? -percent : percent;
-    m_pessimisticEstimate = m_expectedEstimate*(100+p)/100;
+    m_pessimisticValue = expectedValue()*(100+p)/100;
+    m_pessimisticEstimate = scale( m_pessimisticValue, m_unit, scales() );
+    m_pessimisticCached = true;
     changed();
 }
+
 int Estimate::pessimisticRatio() const {
-    if (m_expectedEstimate == Duration::zeroDuration)
+    if (m_expectedEstimate == 0.0)
         return 0;
-    return m_pessimisticEstimate.milliseconds()*100/m_expectedEstimate.milliseconds()-100;
+    return (int)((pessimisticValue()*100)/expectedValue())-100;
 }
 
-double Estimate::scale( const Duration &value, Duration::Unit unit, QList<double> scales )
+// internal
+void Estimate::setOptimisticValue()
+{
+    m_optimisticValue = scale( m_optimisticEstimate, m_unit, scales() );
+    m_optimisticCached = true;
+}
+
+// internal
+void Estimate::setExpectedValue()
+{
+    m_expectedValue = scale( m_expectedEstimate, m_unit, scales() );
+    m_expectedCached = true;
+}
+
+// internal
+void Estimate::setPessimisticValue()
+{
+    m_pessimisticValue = scale( m_pessimisticEstimate, m_unit, scales() );
+    m_pessimisticCached = true;
+}
+
+Duration Estimate::optimisticValue() const
+{
+    if ( ! m_optimisticCached ) {
+        const_cast<Estimate*>(this)->setOptimisticValue();
+    }
+    return m_optimisticValue;
+}
+
+Duration Estimate::pessimisticValue() const
+{
+    if ( ! m_pessimisticCached ) {
+        const_cast<Estimate*>(this)->setPessimisticValue();
+    }
+    return m_pessimisticValue;
+}
+
+Duration Estimate::expectedValue() const
+{
+    if ( ! m_expectedCached ) {
+        const_cast<Estimate*>(this)->setExpectedValue();
+    }
+    return m_expectedValue;
+}
+
+double Estimate::scale( const Duration &value, Duration::Unit unit, const QList<double> &scales )
 {
     QList<double> lst = scales;
     switch ( lst.count() ) {
@@ -1284,7 +1406,7 @@ double Estimate::scale( const Duration &value, Duration::Unit unit, QList<double
     return v;
 }
 
-Duration Estimate::scale( double value, Duration::Unit unit, const QList<double> scales )
+Duration Estimate::scale( double value, Duration::Unit unit, const QList<double> &scales )
 {
     QList<double> lst = scales;
     switch ( lst.count() ) {
@@ -1316,6 +1438,22 @@ Duration Estimate::scale( double value, Duration::Unit unit, const QList<double>
     return Duration( v, Duration::Unit_ms );
 }
 
+QList<double> Estimate::scales() const
+{
+    QList<double> s;
+    if ( m_type == Type_FixedDuration ) {
+        return s; // Use default scaling ( 24h a day...)
+    }
+    if ( m_parent == 0 ) {
+        return s;
+    }
+    Project *p = static_cast<Project*>( m_parent->projectNode() );
+    if ( p == 0 ) {
+        return s;
+    }
+    s << p->standardWorktime()->day();
+    return s;
+}
 
 // Debugging
 #ifndef NDEBUG
@@ -1370,9 +1508,9 @@ void Estimate::printDebug(const QByteArray& _indent) {
     QByteArray indent = _indent;
     kDebug()<<indent<<"  Estimate:";
     indent += "  ";
-    kDebug()<<indent<<"  Expected:"<<m_expectedEstimate.toString();
-    kDebug()<<indent<<"  Optimistic:"<<m_optimisticEstimate.toString();
-    kDebug()<<indent<<"  Pessimistic:"<<m_pessimisticEstimate.toString();
+    kDebug()<<indent<<"  Expected:"<<m_expectedEstimate<<Duration::unitToString(m_unit);
+    kDebug()<<indent<<"  Optimistic:"<<m_optimisticEstimate<<Duration::unitToString(m_unit);
+    kDebug()<<indent<<"  Pessimistic:"<<m_pessimisticEstimate<<Duration::unitToString(m_unit);
     
     kDebug()<<indent<<"  Risk:"<<risktypeToString();
     kDebug()<<indent<<"  Pert expected:      "<<pertExpected().toString()<<endl;

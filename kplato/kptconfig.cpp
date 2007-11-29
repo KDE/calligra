@@ -63,7 +63,8 @@ void Config::load() {
         m_taskDefaults.setConstraintEndTime( DateTime( dt, KDateTime::Spec::LocalZone() ) );
         
         m_taskDefaults.estimate()->setType((Estimate::Type)grp.readEntry("EstimateType",0));
-        m_taskDefaults.estimate()->set(Duration((qint64)(grp.readEntry("ExpectedEstimate",0))*1000)); //FIXME
+        m_taskDefaults.estimate()->setUnit(Duration::unitFromString(grp.readEntry("Unit","")));
+        m_taskDefaults.estimate()->setExpectedEstimate(grp.readEntry("ExpectedEstimate",0));
         m_taskDefaults.estimate()->setPessimisticRatio(grp.readEntry("PessimisticEstimate",0));
         m_taskDefaults.estimate()->setOptimisticRatio(grp.readEntry("OptimisticEstimate",0));
     }
@@ -82,7 +83,8 @@ void Config::save() {
     config.writeEntry("ConstraintStartTime", m_taskDefaults.constraintStartTime().dateTime());
     config.writeEntry("ConstraintEndTime", m_taskDefaults.constraintEndTime().dateTime());
     config.writeEntry("EstimateType", (int)m_taskDefaults.estimate()->type());
-    config.writeEntry("ExpectedEstimate", m_taskDefaults.estimate()->expected().seconds()); //FIXME
+    config.writeEntry("Unit", Duration::unitToString(m_taskDefaults.estimate()->unit()));
+    config.writeEntry("ExpectedEstimate", m_taskDefaults.estimate()->expectedEstimate());
     config.writeEntry("PessimisticEstimate", m_taskDefaults.estimate()->pessimisticRatio());
     config.writeEntry("OptimisticEstimate", m_taskDefaults.estimate()->optimisticRatio());
 }

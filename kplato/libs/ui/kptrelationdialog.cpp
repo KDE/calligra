@@ -63,7 +63,8 @@ AddRelationDialog::AddRelationDialog(Project &project, Relation *rel, QWidget *p
         m_panel->bStartStart->setChecked(true);
     }
 
-    m_panel->lag->setValue(rel->lag());
+    m_panel->lag->setUnit( Duration::Unit_h );
+    m_panel->lag->setValue(rel->lag().toDouble( Duration::Unit_h ) ); //FIXME store user input
 
     m_panel->relationType->setFocus();
     enableButtonOk(true);
@@ -144,10 +145,11 @@ MacroCommand *ModifyRelationDialog::buildCommand() {
         
         //kDebug()<<m_panel->relationType->selectedId();
     }
-    if (m_relation->lag() != m_panel->lag->durationValue()) {
+    Duration d(m_panel->lag->value(), m_panel->lag->unit());
+    if (m_relation->lag() != d) {
         if (cmd == 0)
             cmd = new MacroCommand(i18n("Modify Relation"));
-        cmd->addCommand(new ModifyRelationLagCmd(m_relation, m_panel->lag->durationValue()));
+        cmd->addCommand(new ModifyRelationLagCmd(m_relation, d));
     }
     return cmd;
 }

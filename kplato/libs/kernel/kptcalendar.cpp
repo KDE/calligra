@@ -258,7 +258,7 @@ Duration CalendarDay::workDuration() const
     }
     foreach (TimeInterval *i, m_workingIntervals) {
         //kDebug()<<"Interval:"<<i->first<<" -"<<i->second;
-        d += Duration(i->first.msecsTo( i->second ) );
+        d += Duration( (qint64)(i->first.msecsTo( i->second )) );
     }
     return d;
 }

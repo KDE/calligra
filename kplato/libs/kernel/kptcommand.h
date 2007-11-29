@@ -648,14 +648,14 @@ private:
 class KPLATOKERNEL_EXPORT ModifyEstimateCmd : public NamedCommand
 {
 public:
-    ModifyEstimateCmd( Node &node, Duration oldvalue, Duration newvalue, const QString& name = QString() );
+    ModifyEstimateCmd( Node &node, double oldvalue, double newvalue, const QString& name = QString() );
     ~ModifyEstimateCmd();
     void execute();
     void unexecute();
 
 private:
     Estimate *m_estimate;
-    Duration m_oldvalue, m_newvalue;
+    double m_oldvalue, m_newvalue;
     MacroCommand *m_cmd;
 
 };

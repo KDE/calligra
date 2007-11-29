@@ -1124,7 +1124,7 @@ void View::slotAddSubTask()
     // do is to add a first project. We will silently accept the challenge
     // and will not complain.
     Task * node = getProject().createTask( getPart() ->config().taskDefaults(), currentTask() );
-    TaskDialog *dia = new TaskDialog( *node, getProject().accounts(), getProject().standardWorktime() );
+    TaskDialog *dia = new TaskDialog( *node, getProject().accounts() );
     if ( dia->exec()  == QDialog::Accepted) {
         Node * currNode = currentTask();
         if ( currNode ) {
@@ -1145,7 +1145,7 @@ void View::slotAddSubTask()
 void View::slotAddTask()
 {
     Task * node = getProject().createTask( getPart() ->config().taskDefaults(), currentTask() );
-    TaskDialog *dia = new TaskDialog( *node, getProject().accounts(), getProject().standardWorktime() );
+    TaskDialog *dia = new TaskDialog( *node, getProject().accounts() );
     if ( dia->exec()  == QDialog::Accepted) {
         Node * currNode = currentTask();
         if ( currNode ) {
@@ -1166,9 +1166,9 @@ void View::slotAddTask()
 void View::slotAddMilestone()
 {
     Task * node = getProject().createTask( currentTask() );
-    node->estimate() ->set( Duration::zeroDuration );
+    node->estimate() ->clear();
 
-    TaskDialog *dia = new TaskDialog( *node, getProject().accounts(), getProject().standardWorktime() );
+    TaskDialog *dia = new TaskDialog( *node, getProject().accounts() );
     if ( dia->exec() == QDialog::Accepted ) {
         Node * currNode = currentTask();
         if ( currNode ) {
@@ -1285,7 +1285,7 @@ void View::slotOpenNode( Node *node )
             kDebug()<<0;
             Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
-                TaskDialog *dia = new TaskDialog( *task, getProject().accounts(), getProject().standardWorktime() );
+                TaskDialog *dia = new TaskDialog( *task, getProject().accounts() );
                 if ( dia->exec()  == QDialog::Accepted) {
                     QUndoCommand * m = dia->buildCommand();
                     if ( m ) {
@@ -1304,7 +1304,7 @@ void View::slotOpenNode( Node *node )
                 // and hence, create a milestone
                 Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
-                TaskDialog *dia = new TaskDialog( *task, getProject().accounts(), getProject().standardWorktime() );
+                TaskDialog *dia = new TaskDialog( *task, getProject().accounts() );
                 if ( dia->exec()  == QDialog::Accepted) {
                     QUndoCommand * m = dia->buildCommand();
                     if ( m ) {

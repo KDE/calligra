@@ -44,7 +44,7 @@ public:
     virtual int estimationType() const;
     virtual int optimistic() const;
     virtual int pessimistic();
-    virtual Duration estimationValue();
+    virtual double estimationValue();
     virtual QDateTime startDateTime();
     virtual QDateTime endDateTime();
     virtual QTime startTime() const;
@@ -60,10 +60,10 @@ public slots:
     virtual void setPessimistic( int value );
     virtual void enableDateTime( int scheduleType );
     virtual void estimationTypeChanged( int type );
-    virtual void setEstimate( const Duration & duration );
+    virtual void setEstimate( double duration );
     virtual void setEstimateType( int type );
     virtual void checkAllFieldsFilled();
-    virtual void setEstimateScales( double day );
+//    virtual void setEstimateScales( double day );
     virtual void startDateChanged();
     virtual void startTimeChanged( const QTime & time );
     virtual void endDateChanged();
@@ -88,13 +88,13 @@ protected:
 class KPLATO_EXPORT TaskDefaultPanel : public ConfigTaskPanelImpl {
     Q_OBJECT
 public:
-    explicit TaskDefaultPanel(Task &task, StandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
+    explicit TaskDefaultPanel(Task &task, QWidget *parent=0, const char *name=0);
 
     MacroCommand *buildCommand();
 
     bool ok();
 
-    void setStartValues(Task &task, StandardWorktime *workTime=0);
+    void setStartValues(Task &task);
 
 public slots:
     virtual void estimationTypeChanged(int type);

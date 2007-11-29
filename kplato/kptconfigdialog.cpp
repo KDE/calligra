@@ -61,7 +61,7 @@ ConfigDialog::ConfigDialog(Config &config, Project &project, QWidget *parent, co
     KVBox *page = new KVBox();
     addPage( page, i18n("Task Defaults") );
     //addVBoxPage(i18n("Task Defaults"), i18n("Task Defaults"), loadIcon("misc"));
-    m_taskDefaultPage = new TaskDefaultPanel(config.taskDefaults(), project.standardWorktime(), page);
+    m_taskDefaultPage = new TaskDefaultPanel(config.taskDefaults(), page);
 
     enableButtonOk(false);
     enableButtonApply(false);

@@ -33,7 +33,7 @@
 namespace KPlato
 {
 
-TaskDialog::TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTime, QWidget *p)
+TaskDialog::TaskDialog(Task &task, Accounts &accounts, QWidget *p)
     : KPageDialog(p)
 {
     setCaption( i18n("Task Settings") );
@@ -46,7 +46,7 @@ TaskDialog::TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTim
     // Create all the tabs.
     page =  new KVBox();
     addPage(page, i18n("&General"));
-    m_generalTab = new TaskGeneralPanel(task, workTime, page);
+    m_generalTab = new TaskGeneralPanel(task, page);
 
     page =  new KVBox();
     addPage(page, i18n("&Resources"));

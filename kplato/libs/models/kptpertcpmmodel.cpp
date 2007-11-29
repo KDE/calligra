@@ -132,20 +132,6 @@ QModelIndex CriticalPathItemModel::index( int row, int column, const QModelIndex
     return i;
 }
 
-QVariant CriticalPathItemModel::name( const Node *node, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return node->name();
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
 QVariant CriticalPathItemModel::name( int role ) const
 {
     switch ( role ) {
@@ -160,72 +146,12 @@ QVariant CriticalPathItemModel::name( int role ) const
     return QVariant();
 }
 
-QVariant CriticalPathItemModel::duration( const Node *node, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::ToolTipRole:
-            if ( node->type() == Node::Type_Task ) {
-                Duration::Unit unit = presentationUnit();
-                QList<double> scales; // TODO: week
-                if ( node->estimate()->type() == Estimate::Type_Effort ) {
-                    scales << m_project->standardWorktime()->day();
-                    // rest is default
-                }
-                double v = Estimate::scale( node->duration( m_manager->id() ), unit, scales );
-                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
-            }
-            break;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
 QVariant CriticalPathItemModel::duration( int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole:
-            return KGlobal::locale()->formatNumber( m_project->duration( m_manager->id() ).toDouble( presentationUnit() ), 1 );
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant CriticalPathItemModel::variance( const Node *node, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::ToolTipRole:
-            if ( node->type() == Node::Type_Task ) {
-                Duration::Unit unit = presentationUnit();
-                double v = node->variance( m_manager->id(), unit );
-                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
-            }
-            break;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant CriticalPathItemModel::variance( const Estimate *est, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::ToolTipRole: {
-                double v = est->variance( presentationUnit() );
-                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
-                return KGlobal::locale()->formatNumber( v );
-            break;
-        }
+            return KGlobal::locale()->formatNumber( m_project->duration( m_manager->id() ) .toDouble( presentationUnit() ), 1 );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -259,153 +185,12 @@ QVariant CriticalPathItemModel::variance( int role ) const
     return QVariant();
 }
 
-QVariant CriticalPathItemModel::optimistic( const Node *node, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::ToolTipRole: {
-                Duration d = node->duration( m_manager->id() );
-                d = ( d * ( 100 + node->estimate()->optimisticRatio() ) ) / 100;
-                double v = d.toDouble( presentationUnit() );
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( presentationUnit(), true );
-            break;
-        }
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant CriticalPathItemModel::optimistic( const Estimate *est, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::ToolTipRole: {
-                Duration::Unit unit = presentationUnit();
-                QList<double> scales; // TODO: week
-                if ( est->type() == Estimate::Type_Effort ) {
-                    scales << m_project->standardWorktime()->day();
-                    // rest is default
-                }
-                double v = Estimate::scale( est->optimistic(), unit, scales );
-                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
-            break;
-        }
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-
-QVariant CriticalPathItemModel::estimate( const Node *node, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::ToolTipRole:
-            if ( node->type() == Node::Type_Task ) {
-                Duration::Unit unit = presentationUnit();
-                QList<double> scales; // TODO: week
-                if ( node->estimate()->type() == Estimate::Type_Effort ) {
-                    scales << m_project->standardWorktime()->day();
-                    // rest is default
-                }
-                double v = Estimate::scale( node->estimate()->expected(), unit, scales );
-                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
-            }
-            break;
-        case Role::DurationScales: {
-            QVariantList lst; // TODO: week
-            if ( node->estimate()->type() == Estimate::Type_Effort ) {
-                lst.append( m_project->standardWorktime()->day() );
-            } else {
-                lst.append( 24.0 );
-            }
-            lst << 60.0 << 60.0 << 1000.0;
-            return lst;
-        }
-        case Role::DurationUnit:
-            return static_cast<int>( presentationUnit() );
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
 QVariant CriticalPathItemModel::notUsed( int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
             return "";
         default:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant CriticalPathItemModel::expected( const Estimate *est, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::ToolTipRole: {
-            Duration::Unit unit = Duration::Unit_h;
-            QList<double> scales; // TODO: week
-            if ( est->type() == Estimate::Type_Effort ) {
-                scales << m_project->standardWorktime()->day();
-                // rest is default
-            }
-            double v = Estimate::scale( est->pertExpected(), unit, scales );
-            return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
-        }
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant CriticalPathItemModel::pessimistic( const Node *node, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::ToolTipRole: {
-                Duration d = node->duration( m_manager->id() );
-                d = ( d * ( 100 + node->estimate()->pessimisticRatio() ) ) / 100;
-                double v = d.toDouble( presentationUnit() );
-                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( presentationUnit(), true );
-            break;
-        }
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
-QVariant CriticalPathItemModel::pessimistic( const Estimate *est, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::ToolTipRole: {
-                Duration::Unit unit = presentationUnit();
-                QList<double> scales; // TODO: week
-                if ( est->type() == Estimate::Type_Effort ) {
-                    scales << m_project->standardWorktime()->day();
-                    // rest is default
-                }
-                double v = Estimate::scale( est->pessimistic(), unit, scales );
-                //kDebug()<<node->name()<<": "<<v<<" "<<unit<<" : "<<scales;
-                return KGlobal::locale()->formatNumber( v ) +  Duration::unitToString( unit, true );
-            break;
-        }
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
             return QVariant();
     }
     return QVariant();
