@@ -24,6 +24,8 @@
 
 #include <QString>
 
+#include <qtest_kde.h>
+
 namespace KPlato
 {
 
@@ -108,8 +110,8 @@ void CalendarTester::testCalendarWithParent() {
     QVERIFY(t.firstAvailableAfter(before, after).isValid());
     QVERIFY(t.firstAvailableBefore(after, before).isValid());
     
-    QCOMPARE(t.firstAvailableAfter(before,after).toString(), wdt1.toString());
-    QCOMPARE(t.firstAvailableBefore(after, before).toString(), wdt2.toString());
+    QCOMPARE(t.firstAvailableAfter(before,after), wdt1);
+    QCOMPARE(t.firstAvailableBefore(after, before), wdt2);
     
     Duration e(0, 2, 0);
     QVERIFY((t.effort(before, after)).toString() == e.toString());
@@ -118,6 +120,6 @@ void CalendarTester::testCalendarWithParent() {
 
 } //namespace KPlato
 
-QTEST_MAIN( KPlato::CalendarTester )
+QTEST_KDEMAIN_CORE( KPlato::CalendarTester )
 
 #include "CalendarTester.moc"

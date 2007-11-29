@@ -23,6 +23,7 @@
 
 #include <QString>
 
+#include <qtest_kde.h>
 #include <kdebug.h>
 
 namespace KPlato
@@ -100,6 +101,6 @@ void ProjectTester::testTaskDeleteCmd()
 
 } //namespace KPlato
 
-QTEST_MAIN( KPlato::ProjectTester )
+QTEST_KDEMAIN_CORE( KPlato::ProjectTester )
 
 #include "ProjectTester.moc"
