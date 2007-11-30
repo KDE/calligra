@@ -904,6 +904,7 @@ bool Doc::loadOdf( KoOdfReadStore & odfStore )
 
     //display loading time
     kDebug(36001) <<"Loading took" << (float)(dt.elapsed()) / 1000.0 <<" seconds";
+
     return true;
 }
 

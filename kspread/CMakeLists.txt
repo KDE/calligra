@@ -209,6 +209,7 @@ kde4_add_library(kspreadcommon SHARED ${kspreadcommon_LIB_SRCS})
 
 target_link_libraries(kspreadcommon
 	${QT_QTSQL_LIBRARY}
+	${KDE4_KNOTIFYCONFIG_LIBS}
 	komain koguiutils kochart
 	${KDE4_KDE3SUPPORT_LIBS} )
 
@@ -244,7 +245,7 @@ install(TARGETS kspread  DESTINATION ${BIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  kspread.rc kspread_readonly.rc  DESTINATION ${DATA_INSTALL_DIR}/kspread)
-install( FILES  kspreadpart.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-install( FILES  kspread.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR})
-install( FILES  kspread.kcfg  DESTINATION  ${KCFG_INSTALL_DIR} )
+install( FILES  kspread.rc kspread_readonly.rc kspread.notifyrc DESTINATION ${DATA_INSTALL_DIR}/kspread)
+install( FILES  kspreadpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  kspread.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
+install( FILES  kspread.kcfg DESTINATION ${KCFG_INSTALL_DIR} )

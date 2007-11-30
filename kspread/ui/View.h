@@ -416,6 +416,7 @@ public Q_SLOTS:
     void lower();
     void equalizeColumn();
     void equalizeRow();
+    void optionsNotifications();
     void preference();
     void firstLetterUpper();
     void verticalText(bool );

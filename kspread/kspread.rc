@@ -159,7 +159,8 @@
   <Action name="showFormulaBar" group="settings_show" />
   <Action name="showTabBar" group="settings_show" />
   <Action name="showStatusBar" group="settings_show" />
-  <Separator group="settings_show"/>
+  
+  <Action name="configureNotifications" group="settings_configure"/>
   <Action name="preference" group="settings_configure"/>
  </Menu>
 </MenuBar>

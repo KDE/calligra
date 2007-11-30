@@ -86,6 +86,7 @@
 #include <kpushbutton.h>
 #include <kxmlguifactory.h>
 #include <kicon.h>
+#include <knotifyconfigwidget.h>
 
 // KOffice includes
 #include <kdatatool.h>
@@ -1308,11 +1309,12 @@ void View::Private::initActions()
     connect(actions->showFormulaBar, SIGNAL(toggled(bool)),
             view, SLOT(showFormulaBar(bool)));
 
-  actions->preference  = new KAction(KIcon("configure" ), i18n("Configure KSpread..."), view);
-  ac->addAction("preference", actions->preference );
-  connect(actions->preference, SIGNAL(triggered(bool)), view, SLOT( preference() ));
-  actions->preference->setToolTip(i18n("Set various KSpread options"));
+    actions->preference = KStandardAction::preferences(view, SLOT(preference()), view);
+    actions->preference->setToolTip(i18n("Set various KSpread options"));
+    ac->addAction("preference", actions->preference);
 
+    KAction *notifyAction = KStandardAction::configureNotifications(view, SLOT(optionsNotifications()), view);
+    ac->addAction("configureNotifications", notifyAction);
 
     // -- calculation actions --
     //
@@ -5186,6 +5188,11 @@ void View::showFormulaBar( bool b )
 {
   doc()->setShowFormulaBar( b );
   refreshView();
+}
+
+void View::optionsNotifications()
+{
+    KNotifyConfigWidget::configure( this );
 }
 
 void View::preference()

@@ -1,0 +1,25 @@
+[Global]
+IconName=kspread
+Name=KSpread
+Comment=KSpread Spreadsheet
+Version=4
+
+[Event/DocumentLoaded]
+Name=Document loaded
+Comment=A document was loaded
+Action=None
+
+[Event/DocumentSaved]
+Name=Document saved
+Comment=A document was saved
+Action=None
+
+[Event/LinkActivated]
+Name=Link activated
+Comment=A hyperlink was activated
+Action=None
+
+[Event/ValidityError]
+Name=Validity failed
+Comment=Validation for a cell failed
+Action=None

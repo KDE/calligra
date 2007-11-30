@@ -53,6 +53,7 @@
 #include <kmessagebox.h>
 #include <kmimetype.h>
 #include <krun.h>
+#include <knotification.h>
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
@@ -679,35 +680,45 @@ void DefaultTool::Private::processClickSelectionHandle( KoPointerEvent* event )
 
 void DefaultTool::Private::processLeftClickAnchor()
 {
-    bool isRefLink = Util::localReferenceAnchor( anchor );
-    if ( !isRefLink )
-    {
-        KUrl url(anchor);
-        if ( ! url.isValid() )
-            return;
-        const QString type = KMimeType::findByUrl(url, 0, url.isLocalFile())->name();
-        if ( KRun::isExecutableFile( url, type ) )
-        {
-            QString question = i18n("This link points to the program or script '%1'.\n"
-                                    "Malicious programs can harm your computer. "
-                                    "Are you sure that you want to run this program?", anchor);
-            // this will also start local programs, so adding a "don't warn again"
-            // checkbox will probably be too dangerous
-            int choice = KMessageBox::warningYesNo(canvas, question, i18n("Open Link?"));
-            if ( choice != KMessageBox::Yes )
-                return;
-        }
-        new KRun(url, canvas, 0, url.isLocalFile());
-    }
-    else
-    {
+    KNotification *notify = new KNotification("LinkActivated");
+    notify->setText( i18n("Link <i>%1</i> activated", anchor) );
+    notify->addContext("anchor", anchor);
+
+    KUrl url(anchor);
+    if ( ! url.isValid() || url.isRelative() ) {
         Region r(anchor, canvas->view()->doc()->map(), canvas->activeSheet());
         if ( r.isValid() ) {
             if ( r.firstSheet() != canvas->view()->activeSheet() )
                 canvas->view()->setActiveSheet( r.firstSheet() );
             canvas->selection()->initialize(r);
+
+            if ( ! r.firstRange().isNull() ) {
+                QPoint p( r.firstRange().topLeft() );
+                notify->addContext("region", Cell(r.firstSheet(), p.x(), p.y()).fullName());
+            }
         }
     }
+    else {
+        const QString type = KMimeType::findByUrl(url, 0, url.isLocalFile())->name();
+        notify->addContext("type", type);
+        if ( ! Util::localReferenceAnchor(anchor) ) {
+            const bool executable = KRun::isExecutableFile( url, type );
+            notify->addContext("executable", QVariant(executable).toString());
+            if ( executable ) {
+                QString question = i18n("This link points to the program or script '%1'.\n"
+                                        "Malicious programs can harm your computer. "
+                                        "Are you sure that you want to run this program?", anchor);
+                // this will also start local programs, so adding a "don't warn again"
+                // checkbox will probably be too dangerous
+                int choice = KMessageBox::warningYesNo(canvas, question, i18n("Open Link?"));
+                if ( choice != KMessageBox::Yes )
+                    return;
+            }
+            new KRun(url, canvas, 0, url.isLocalFile());
+        }
+    }
+
+    QTimer::singleShot(0, notify, SLOT(sendEvent()));
 }
 
 #include "DefaultTool.moc"

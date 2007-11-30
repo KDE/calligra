@@ -22,8 +22,12 @@
 
 #include <float.h>
 
+// Qt
+#include <QTimer>
+
 // KDE
 #include <kmessagebox.h>
+#include <knotification.h>
 
 // KOffice
 #include <KoDom.h>
@@ -887,23 +891,31 @@ bool Validity::testValidity( const Cell* cell ) const
         valid= true;
     }
 
-    if ( !valid && d->displayMessage )
+    if ( !valid )
     {
-        switch (d->action )
+        if ( d->displayMessage )
         {
-          case Stop:
-            KMessageBox::error((QWidget*)0, d->message,
-                               d->title);
-            break;
-          case Warning:
-            KMessageBox::warningYesNo((QWidget*)0, d->message,
-                                      d->title);
-            break;
-          case Information:
-            KMessageBox::information((QWidget*)0, d->message,
-                                     d->title);
-            break;
+            switch (d->action)
+            {
+                case Stop:
+                    KMessageBox::error((QWidget*)0, d->message, d->title);
+                    break;
+                case Warning:
+                    KMessageBox::warningYesNo((QWidget*)0, d->message, d->title);
+                    break;
+                case Information:
+                    KMessageBox::information((QWidget*)0, d->message, d->title);
+                    break;
+            }
         }
+
+        KNotification *notify = new KNotification("ValidityError");
+        notify->setText( i18n("Validation for cell <i>%1</i> failed", cell->fullName()) );
+        notify->addContext("cell", cell->fullName());
+        notify->addContext("value", cell->userInput());
+        notify->addContext("title", d->title);
+        notify->addContext("message", d->message);
+        QTimer::singleShot(0, notify, SLOT(sendEvent()));
     }
     return (valid || d->action != Stop);
 }

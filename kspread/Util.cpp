@@ -329,6 +329,7 @@ QPen KSpread::Oasis::decodePen( const QString &border )
 bool KSpread::Util::localReferenceAnchor( const QString &_ref )
 {
     bool isLocalRef = (_ref.indexOf("http://") != 0 &&
+                       _ref.indexOf("https://") != 0 &&
                        _ref.indexOf("mailto:") != 0 &&
                        _ref.indexOf("ftp://") != 0  &&
                        _ref.indexOf("file:") != 0 );
