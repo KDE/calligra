@@ -321,13 +321,13 @@ void VGradientTabWidget::setupUI()
     editLayout->addWidget( new QLabel( i18n( "Target:" ), m_editTab ), 2, 0 );
 
     m_gradientType = new KComboBox( false, m_editTab );
-    m_gradientType->insertItem( 0, i18n( "Linear" ) );
-    m_gradientType->insertItem( 1, i18n( "Radial" ) );
-    m_gradientType->insertItem( 2, i18n( "Conical" ) );
+    m_gradientType->insertItem( 0, i18nc( "Linear gradient type", "Linear" ) );
+    m_gradientType->insertItem( 1, i18nc( "Radial gradient type", "Radial" ) );
+    m_gradientType->insertItem( 2, i18nc( "Conical gradient type", "Conical" ) );
     editLayout->addWidget( m_gradientType, 0, 1 );
 
     m_gradientRepeat = new KComboBox( false, m_editTab );
-    m_gradientRepeat->insertItem( 0, i18n( "None" ) );
+    m_gradientRepeat->insertItem( 0, i18nc( "No gradient spread", "None" ) );
     m_gradientRepeat->insertItem( 1, i18n( "Reflect" ) );
     m_gradientRepeat->insertItem( 2, i18n( "Repeat" ) );
     editLayout->addWidget( m_gradientRepeat, 1, 1 );

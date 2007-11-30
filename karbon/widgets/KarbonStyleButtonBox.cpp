@@ -284,7 +284,7 @@ KarbonStyleButtonBox::KarbonStyleButtonBox( QWidget* parent )
     QPushButton* button = new QPushButton( this );
     button->setIcon( QPixmap( (const char **) buttonnone ) );
     button->setMinimumHeight( 20 );
-    button->setToolTip( i18n( "None" ) );
+    button->setToolTip( i18nc( "No stroke or fill", "None" ) );
     group->addButton( button, None );
     layout->addWidget( button, 0, 0 );
 
@@ -292,7 +292,7 @@ KarbonStyleButtonBox::KarbonStyleButtonBox( QWidget* parent )
     button = new QPushButton( this );
     button->setIcon( QPixmap( (const char **) buttonsolid ) );
     button->setMinimumHeight( 20 );
-    button->setToolTip( i18n( "Solid" ) );
+    button->setToolTip( i18nc( "Solid color stroke or fill", "Solid" ) );
     group->addButton( button, Solid );
     layout->addWidget( button, 0, 1 );
 

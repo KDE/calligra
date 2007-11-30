@@ -976,7 +976,7 @@ KarbonView::initActions()
     // edit <-----
 
     // object ----->
-    KAction *actionDuplicate  = new KAction(KIcon("duplicate"), i18n("&Duplicate"), this);
+    KAction *actionDuplicate  = new KAction(KIcon("duplicate"), i18nc("Duplicate selection", "&Duplicate"), this);
     actionCollection()->addAction("object_duplicate", actionDuplicate );
     actionDuplicate->setShortcut(QKeySequence("Ctrl+D"));
     connect(actionDuplicate, SIGNAL(triggered()), this, SLOT(selectionDuplicate()));
@@ -991,7 +991,7 @@ KarbonView::initActions()
     actionRaise->setShortcut(QKeySequence("Ctrl+]"));
     connect(actionRaise, SIGNAL(triggered()), this, SLOT(selectionMoveUp()));
 
-    KAction *actionLower  = new KAction(KIcon("lower"), i18n("&Lower"), this);
+    KAction *actionLower  = new KAction(KIcon("lower"), i18nc("Lower selected shapes", "&Lower"), this);
     actionCollection()->addAction("object_move_down", actionLower );
     actionLower->setShortcut(QKeySequence("Ctrl+["));
     connect(actionLower, SIGNAL(triggered()), this, SLOT(selectionMoveDown()));

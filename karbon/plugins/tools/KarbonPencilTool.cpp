@@ -251,7 +251,7 @@ QWidget * KarbonPencilTool::createOptionWidget()
     QVBoxLayout * layout = new QVBoxLayout( optionWidget );
 
     KComboBox * modeBox = new KComboBox( optionWidget );
-    modeBox->addItem( i18n( "Raw" ) );
+    modeBox->addItem( i18nc( "The raw line data", "Raw" ) );
     modeBox->addItem( i18n( "Curve" ) );
     modeBox->addItem( i18n( "Straight" ) );
     layout->addWidget( modeBox );

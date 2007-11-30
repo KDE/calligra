@@ -71,7 +71,7 @@ VConfigureDlg::VConfigureDlg( KarbonView* parent )
 	connect( m_miscPage, SIGNAL( unitChanged( int ) ), m_gridPage, SLOT( slotUnitChanged( int ) ) );
 
 	m_defaultDocPage = new VConfigDefaultPage( parent );
-	item = addPage( m_defaultDocPage, i18n( "Document" ) );
+	item = addPage( m_defaultDocPage, i18nc( "@title:tab", "Document" ) );
 	item->setHeader( i18n( "Document Settings" ) );
 	item->setIcon(KIcon(BarIcon("document", KIconLoader::SizeMedium)));
 
@@ -290,13 +290,13 @@ VConfigGridPage::VConfigGridPage( KarbonView* view, char* name )
 
 	QGroupBox* spacingGrp = new QGroupBox( i18n( "Spacing" ), this );
 	QGridLayout* layoutSpacingGrp = new QGridLayout( spacingGrp );
-	QLabel* spaceHorizLbl = new QLabel( i18n( "&Horizontal:" ) );
+	QLabel* spaceHorizLbl = new QLabel( i18nc( "Horizontal grid spacing", "&Horizontal:" ) );
     m_spaceHorizUSpin = new KoUnitDoubleSpinBox( spacingGrp );
     m_spaceHorizUSpin->setMinMaxStep( 0.0, pageSize.width(), 0.1 );
     m_spaceHorizUSpin->setUnit( unit );
     m_spaceHorizUSpin->changeValue( gd.gridX() );
 	spaceHorizLbl->setBuddy( m_spaceHorizUSpin );
-	QLabel* spaceVertLbl = new QLabel( i18n( "&Vertical:" ) );
+	QLabel* spaceVertLbl = new QLabel( i18nc( "Vertical grid spacing", "&Vertical:" ) );
     m_spaceVertUSpin = new KoUnitDoubleSpinBox( spacingGrp );
     m_spaceVertUSpin->setMinMaxStep( 0.0, pageSize.height(), 0.1 );
     m_spaceVertUSpin->setUnit( unit );

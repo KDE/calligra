@@ -255,8 +255,8 @@ bool KarbonLayerModel::setData(const QModelIndex &index, const QVariant &value, 
 KoDocumentSectionModel::PropertyList KarbonLayerModel::properties( KoShape* shape ) const
 {
     PropertyList l;
-    l << Property(i18n("Visible"), SmallIcon("14_layer_visible"), SmallIcon("14_layer_novisible"), shape->isVisible());
-    l << Property(i18n("Locked"), SmallIcon("encrypted"), SmallIcon("decrypted"), shape->isLocked());
+    l << Property(i18nc("Visibility state of the shape","Visible"), SmallIcon("14_layer_visible"), SmallIcon("14_layer_novisible"), shape->isVisible());
+    l << Property(i18nc("Lock state of the shape","Locked"), SmallIcon("encrypted"), SmallIcon("decrypted"), shape->isLocked());
     return l;
 }
 
