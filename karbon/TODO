@@ -59,11 +59,9 @@ Plugins:
 
 Filters:
 --------
-- make svg import and export work directly with the document to not lose any data from there !!!
 - port the filters to create a document with flake shapes
 - fix the eps and ps filters (maybe using ps2pdf and then use a pdf import filter)
 - text support for wmf and svg import filter
-- import filter for old karbon file format
 
 Cleanup:
 --------
@@ -77,9 +75,6 @@ General:
 
 Resources:
 -----------
-- implement saving of KoStopGradient to svg
-- implement adding user defined gradients to the gradient resource server (addResource)
-- add a method to KoResource to check whether the resource can be deleted (user defined resources)
 
 All time favourites :)
 -----------------------
