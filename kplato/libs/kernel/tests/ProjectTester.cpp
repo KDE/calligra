@@ -18,8 +18,13 @@
 */
 #include "ProjectTester.h"
 
-#include "kpttask.h"
 #include "kptcommand.h"
+#include "kptcalendar.h"
+#include "kptdatetime.h"
+#include "kptresource.h"
+#include "kptnode.h"
+#include "kpttask.h"
+#include "kptschedule.h"
 
 #include <QString>
 
@@ -38,11 +43,6 @@ void ProjectTester::initTestCase()
 void ProjectTester::cleanupTestCase()
 {
     delete m_project;
-}
-
-void ProjectTester::testProjectSetup()
-{
-
 }
 
 void ProjectTester::testAddTask()
@@ -98,6 +98,291 @@ void ProjectTester::testTaskDeleteCmd()
     delete cmd; 
     m_task = 0;
 }
+
+void ProjectTester::schedule()
+{
+    QDate today = QDate::currentDate();
+    QDate tomorrow = today.addDays( 1 );
+    QDate yesterday = today.addDays( -1 );
+    QDate nextweek = today.addDays( 7 );
+    QTime t1( 9, 0, 0 );
+    QTime t2 ( 17, 0, 0 );
+    
+    Task *t = m_project->createTask( m_project );
+    t->setName( "T1" );
+    m_project->addTask( t, m_project );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 1.0 );
+    t->estimate()->setType( Estimate::Type_FixedDuration );
+    
+    ScheduleManager *sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+    
+    QVERIFY( t->startTime() == m_project->startTime() );
+    QVERIFY( t->endTime() == t->startTime().addDays( 1 ) );
+    
+    // standard worktime defines 8 hour day as default
+    Calendar *c = new Calendar();
+    c->setDefault( true );
+    for ( int i=1; i <= 7; ++i ) {
+        CalendarDay *d = c->weekday( i );
+        d->setState( CalendarDay::Working );
+        d->addInterval( t1, t2 );
+    }
+    m_project->addCalendar( c );
+    
+    ResourceGroup *g = new ResourceGroup();
+    m_project->addResourceGroup( g );
+    Resource *r = new Resource();
+    r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
+    r->setCalendar( c );
+    m_project->addResource( g, r );
+
+    ResourceGroupRequest *gr = new ResourceGroupRequest( g );
+    t->addRequest( gr );
+    ResourceRequest *rr = new ResourceRequest( r, 100 );
+    gr->addResourceRequest( rr );
+    t->estimate()->setType( Estimate::Type_Effort );
+    
+    kDebug()<<"Calculate forward, Task: ASAP -----------------------------------";
+    m_project->setConstraintStartTime( DateTime( today, QTime() ) );
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+    
+    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QVERIFY( t->lateStart() >=  t->earlyStart() );
+    QVERIFY( t->earlyFinish() <= t->endTime() );
+    QVERIFY( t->lateFinish() >= t->endTime() );
+    
+    QVERIFY( t->startTime() == DateTime( today, t1 ) );
+    QVERIFY( t->endTime() == t->startTime() + Duration( 0, 8, 0 ) );
+
+    kDebug()<<"Calculate forward, Task: ASAP, Resource 50% load ------------------";
+    r->setUnits( 50 );
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+    
+    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QVERIFY( t->lateStart() >=  t->earlyStart() );
+    QVERIFY( t->earlyFinish() <= t->endTime() );
+    QVERIFY( t->lateFinish() >= t->endTime() );
+
+    QVERIFY( t->startTime() == DateTime( today, t1 ) );
+    QVERIFY( t->endTime() == t->startTime() + Duration( 1, 8, 0 ) );
+
+    r->setAvailableFrom( QDateTime( tomorrow, QTime() ) );
+    r->setUnits( 100 );
+    
+    kDebug()<<"Calculate forward, Task: ASAP, Resource available tomorrow --------";
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QVERIFY( t->lateStart() >=  t->earlyStart() );
+    QVERIFY( t->earlyFinish() <= t->endTime() );
+    QVERIFY( t->lateFinish() >= t->endTime() );
+    
+    QVERIFY( t->startTime() == DateTime( r->availableFrom().date(), t1 ) );
+    QVERIFY( t->endTime() == t->startTime() + Duration( 0, 8, 0 ) );
+    
+    kDebug()<<"Calculate forward, Task: MustStartOn -----------------------------------";
+    r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
+    t->setConstraint( Node::MustStartOn );
+    t->setConstraintStartTime( DateTime( nextweek, t1 ) );
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QVERIFY( t->lateStart() >=  t->earlyStart() );
+    QVERIFY( t->earlyFinish() <= t->endTime() );
+    QVERIFY( t->lateFinish() >= t->endTime() );
+    
+    QVERIFY( t->startTime() == DateTime( t->constraintStartTime().date(), t1 ) );
+    QVERIFY( t->endTime() == t->startTime() + Duration( 0, 8, 0 ) );
+    QVERIFY( t->schedulingError() == false );
+    
+    // Calculate backwards
+    kDebug()<<"Calculate backward, Task: MustStartOn -----------------------------------";
+    m_project->setConstraint( Node::MustFinishOn );
+    m_project->setConstraintEndTime( DateTime( nextweek.addDays( 1 ), QTime() ) );
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QVERIFY( t->lateStart() >=  t->earlyStart() );
+    QVERIFY( t->earlyFinish() <= t->endTime() );
+    QVERIFY( t->lateFinish() >= t->endTime() );
+
+    QVERIFY( t->startTime() == DateTime( t->constraintStartTime().date(), t1 ) );
+    QVERIFY( t->endTime() == t->startTime() + Duration( 0, 8, 0 ) );
+    QVERIFY( t->schedulingError() == false );
+
+    // Calculate backword
+    kDebug()<<"Calculate backwards, Task: MustFinishOn -----------------------------------";
+    m_project->setConstraint( Node::MustFinishOn );
+    m_project->setConstraintEndTime( DateTime( nextweek.addDays( 1 ), QTime() ) );
+    t->setConstraint( Node::MustFinishOn );
+    t->setConstraintEndTime( DateTime( nextweek.addDays( -2 ), t2 ) );
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QVERIFY( t->lateStart() >=  t->earlyStart() );
+    QVERIFY( t->earlyFinish() <= t->endTime() );
+    QVERIFY( t->lateFinish() >= t->endTime() );
+
+    QVERIFY( t->endTime() == t->constraintEndTime() );
+    QVERIFY( t->startTime() == t->endTime() - Duration( 0, 8, 0 ) );
+    QVERIFY( t->schedulingError() == false );
+
+    // Calculate forward
+    kDebug()<<"Calculate forwards, Task: MustFinishOn -----------------------------------";
+    m_project->setConstraint( Node::MustStartOn );
+    m_project->setConstraintStartTime( DateTime( today, QTime() ) );
+    t->setConstraint( Node::MustFinishOn );
+    t->setConstraintEndTime( DateTime( tomorrow, t2 ) );
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QVERIFY( t->lateStart() >=  t->earlyStart() );
+    QVERIFY( t->earlyFinish() <= t->endTime() );
+    QVERIFY( t->lateFinish() >= t->endTime() );
+
+    QVERIFY( t->endTime() == t->constraintEndTime() );
+    QVERIFY( t->startTime() == t->endTime() - Duration( 0, 8, 0 ) );
+    QVERIFY( t->schedulingError() == false );
+
+    // Calculate forward
+    kDebug()<<"Calculate forwards, Task: StartNotEarlier -----------------------------------";
+    m_project->setConstraint( Node::MustStartOn );
+    m_project->setConstraintStartTime( DateTime( today, QTime() ) );
+    t->setConstraint( Node::StartNotEarlier );
+    t->setConstraintStartTime( DateTime( today, t2 ) );
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QVERIFY( t->lateStart() >=  t->constraintStartTime() );
+    QVERIFY( t->earlyFinish() == t->endTime() );
+    QVERIFY( t->lateFinish() == m_project->endTime() );
+
+    QVERIFY( t->startTime() == DateTime( tomorrow, t1 ));
+    QVERIFY( t->endTime() == t->startTime() + Duration( 0, 8, 0 )  );
+    QVERIFY( t->schedulingError() == false );
+
+    // Calculate backward
+    kDebug()<<"Calculate backwards, Task: StartNotEarlier -----------------------------------";
+    m_project->setConstraint( Node::MustFinishOn );
+    m_project->setConstraintEndTime( DateTime( nextweek, QTime() ) );
+    t->setConstraint( Node::StartNotEarlier );
+    t->setConstraintStartTime( DateTime( today, t2 ) );
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QVERIFY( t->lateStart() >=  t->constraintStartTime() );
+    QVERIFY( t->earlyFinish() == t->endTime() );
+    QVERIFY( t->lateFinish() == m_project->endTime() );
+    
+    QVERIFY( t->endTime() == DateTime( nextweek.addDays( -1 ), t2 ));
+    QVERIFY( t->startTime() == t->endTime() - Duration( 0, 8, 0 )  );
+    QVERIFY( t->schedulingError() == false );
+
+    // Calculate forward
+    kDebug()<<"Calculate forwards, Task: FinishNotLater -----------------------------------";
+    m_project->setConstraint( Node::MustStartOn );
+    m_project->setConstraintStartTime( DateTime( today, QTime() ) );
+    t->setConstraint( Node::FinishNotLater );
+    t->setConstraintEndTime( DateTime( tomorrow.addDays( 1 ), t2 ) );
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QVERIFY( t->lateStart() ==  t->startTime() );
+    QVERIFY( t->earlyFinish() <= t->constraintEndTime() );
+    QVERIFY( t->lateFinish() == m_project->endTime() );
+
+    QVERIFY( t->startTime() == DateTime( today, t1 ));
+    QVERIFY( t->endTime() == t->startTime() + Duration( 0, 8, 0 )  );
+    QVERIFY( t->schedulingError() == false );
+
+    // Calculate backward
+    kDebug()<<"Calculate backwards, Task: FinishNotLater -----------------------------------";
+    m_project->setConstraint( Node::MustFinishOn );
+    m_project->setConstraintStartTime( DateTime( nextweek, QTime() ) );
+    t->setConstraint( Node::FinishNotLater );
+    t->setConstraintEndTime( DateTime( tomorrow, t2 ) );
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QVERIFY( t->lateStart() ==  t->startTime() );
+    QVERIFY( t->earlyFinish() == t->constraintEndTime() );
+    QVERIFY( t->lateFinish() == m_project->constraintEndTime() );
+
+    QVERIFY( t->startTime() == DateTime( tomorrow, t1 ));
+    QVERIFY( t->endTime() == t->startTime() + Duration( 0, 8, 0 )  );
+    QVERIFY( t->schedulingError() == false );
+
+    // Calculate forward
+    kDebug()<<"Calculate forwards, Task: FixedInterval -----------------------------------";
+    m_project->setConstraint( Node::MustStartOn );
+    m_project->setConstraintStartTime( DateTime( today, QTime() ) );
+    t->setConstraint( Node::FixedInterval );
+    t->setConstraintStartTime( DateTime( tomorrow, t1 ) );
+    t->setConstraintEndTime( DateTime( tomorrow, t2 ) );
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QVERIFY( t->earlyStart() == m_project->constraintStartTime() );
+    QVERIFY( t->lateStart() == t->constraintStartTime() );
+    QVERIFY( t->earlyFinish() == t->constraintEndTime() );
+    QVERIFY( t->lateFinish() == t->constraintEndTime() );
+
+    QVERIFY( t->startTime() == t->constraintStartTime() );
+    QVERIFY( t->endTime() == t->constraintEndTime()  );
+    QVERIFY( t->schedulingError() == false );
+
+    // Calculate forward
+    kDebug()<<"Calculate forwards, Task: FixedInterval -----------------------------------";
+    m_project->setConstraint( Node::MustStartOn );
+    m_project->setConstraintStartTime( DateTime( today, QTime() ) );
+    t->setConstraint( Node::FixedInterval );
+    t->setConstraintStartTime( DateTime( tomorrow, QTime() ) ); // outside working hours
+    t->setConstraintEndTime( DateTime( tomorrow, t2 ) );
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QVERIFY( t->earlyStart() == m_project->constraintStartTime() );
+    QVERIFY( t->lateStart() == t->constraintStartTime() );
+    QVERIFY( t->earlyFinish() == t->constraintEndTime() );
+    QVERIFY( t->lateFinish() == t->constraintEndTime() );
+
+    QVERIFY( t->startTime() == t->constraintStartTime() );
+    QVERIFY( t->endTime() == t->constraintEndTime() );
+    QVERIFY( t->schedulingError() == false );
+
+}
+
 
 } //namespace KPlato
 

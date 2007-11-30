@@ -638,7 +638,7 @@ void Node::propagateEarliestStart(DateTime &time) {
     if (m_currentSchedule == 0)
         return;
     m_currentSchedule->earlyStart = time;
-    //kDebug()<<m_name<<":"<<m_currentSchedule->earlyStart.toString();
+    //kDebug()<<m_name<<":"<<m_currentSchedule->earlyStart;
     QListIterator<Node*> it = m_nodes;
     while (it.hasNext()) {
         it.next()->propagateEarliestStart(time);

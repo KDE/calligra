@@ -36,12 +36,13 @@ private slots:
     void initTestCase();
     void cleanupTestCase();
     
-    void testProjectSetup();
     void testAddTask();
     void testTakeTask();
     void testTaskAddCmd();
     void testTaskDeleteCmd();
 
+    void schedule();
+    
 private:
     Project *m_project;
     Task *m_task;

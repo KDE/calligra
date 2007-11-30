@@ -239,7 +239,7 @@ bool Project::calcCriticalPath( bool fromEnd )
 
 void Project::calcCriticalPathList( MainSchedule *cs )
 {
-    kDebug()<<m_name<<", "<<cs->name()<<endl;
+    //kDebug()<<m_name<<", "<<cs->name()<<endl;
     cs->clearCriticalPathList();
     foreach ( Node *n, allNodes() ) {
         if ( n->numDependParentNodes() == 0 && n->inCriticalPath( cs->id() ) ) {
@@ -249,19 +249,19 @@ void Project::calcCriticalPathList( MainSchedule *cs )
         }
     }
     cs->criticalPathListCached = true;
-    kDebug()<<*(criticalPathList( cs->id() ))<<endl;
+    //kDebug()<<*(criticalPathList( cs->id() ))<<endl;
 }
 
 void Project::calcCriticalPathList( MainSchedule *cs, Node *node )
 {
-    kDebug()<<node->name()<<", "<<cs->id()<<endl;
+    //kDebug()<<node->name()<<", "<<cs->id()<<endl;
     bool newPath = false;
     QList<Node*> lst = *( cs->currentCriticalPath() );
     foreach ( Relation *r, node->dependChildNodes() ) {
         if ( r->child()->inCriticalPath( cs->id() ) ) {
             if ( newPath ) {
                 cs->addCriticalPath( &lst );
-                kDebug()<<node->name()<<" new path"<<endl;
+                //kDebug()<<node->name()<<" new path"<<endl;
             }
             cs->addCriticalPathNode( r->child() );
             calcCriticalPathList( cs, r->child() );
@@ -274,7 +274,7 @@ const QList< QList<Node*> > *Project::criticalPathList( long id )
 {
     Schedule *s = schedule( id );
     if ( s == 0 ) {
-        kDebug()<<"No schedule with id="<<id<<endl;
+        //kDebug()<<"No schedule with id="<<id<<endl;
         return 0;
     }
     MainSchedule *ms = static_cast<MainSchedule*>( s );
@@ -289,7 +289,7 @@ QList<Node*> Project::criticalPath( long id, int index )
 {
     Schedule *s = schedule( id );
     if ( s == 0 ) {
-        kDebug()<<"No schedule with id="<<id<<endl;
+        //kDebug()<<"No schedule with id="<<id<<endl;
         return QList<Node*>();
     }
     MainSchedule *ms = static_cast<MainSchedule*>( s );

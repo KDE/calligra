@@ -723,6 +723,10 @@ DateTime Resource::availableAfter(const DateTime &time, const DateTime limit, Sc
         return t;
     }
     t = m_availableFrom > time ? m_availableFrom : time;
+    if ( t >= lmt ) {
+        //kDebug()<<t<<lmt;
+        return DateTime();
+    }
     t = cal->firstAvailableAfter(t, lmt, sch);
     //kDebug()<<m_currentSchedule<<""<<m_name<<" id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<" returns:"<<time.toString()<<"="<<t.toString()<<""<<lmt.toString();
     return t;
