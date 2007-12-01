@@ -721,7 +721,7 @@ static const struct {
     { LineChartType,    "chart:line"    },
     { AreaChartType ,   "chart:area"    },
     { CircleChartType,  "chart:circle"  },
-    { RingChartType,    "chart:circle"  },
+    { RingChartType,    "chart:ring"    },
     { ScatterChartType, "chart:scatter" },
     { RadarChartType,   "chart:radar"   },
     { StockChartType,   "chart:stock"   },
