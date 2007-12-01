@@ -1,6 +1,10 @@
 [Global]
 IconName=kspread
 Name=KSpread
+Name[af]=Kspread
+Name[ne]=केडीई स्प्रेड
+Name[sv]=Kspread
+Name[x-test]=xxKSpreadxx
 Comment=KSpread Spreadsheet
 Version=4
 
