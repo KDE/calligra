@@ -2,7 +2,7 @@ include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_SOURCE_DIR}/karb
 
 set(karbondialogs_SRCS
 #    vcolordlg.cc 
-    vconfiguredlg.cc 
+    KarbonConfigureDialog.cpp
 #    vcolortab.cc 
     )
 

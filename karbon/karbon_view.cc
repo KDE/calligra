@@ -46,7 +46,7 @@
 #include "karbon_view.h"
 
 // Dialogs.
-#include "vconfiguredlg.h"
+#include "KarbonConfigureDialog.h"
 
 // Dockers.
 #include "vcolordocker.h"
@@ -1258,12 +1258,11 @@ KarbonView::showSelectionPopupMenu( const QPoint &pos )
     unplugActionList( "selection_type_action" );
 }
 
-void
-KarbonView::configure()
+void KarbonView::configure()
 {
     debugView("KarbonView::configure()");
 
-    VConfigureDlg dialog( this );
+    KarbonConfigureDialog dialog( this );
     dialog.exec();
 }
 
