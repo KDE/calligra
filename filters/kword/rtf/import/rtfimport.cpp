@@ -2099,7 +2099,9 @@ void RTFImport::addFormat( DomNode &node, const KWFormat& format, const RTFForma
 	    node.closeNode( "COLOR" );
 	}
 	if (format.fmt.bgcolor < colorTable.count() &&
-	    (!baseFormat || format.fmt.bgcolor != baseFormat->bgcolor))
+            format.fmt.bgcolor >= 0 &&
+	    (!baseFormat || format.fmt.bgcolor != baseFormat->bgcolor) &&
+            colorTable[format.fmt.bgcolor].isValid())
 	{
 	    node.addNode( "TEXTBACKGROUNDCOLOR" );
 	    node.addColor( colorTable[format.fmt.bgcolor] );
