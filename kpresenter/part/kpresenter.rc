@@ -11,6 +11,7 @@
             <Action name="edit_paste"/>
             <Separator/>
             <Action name="edit_insertpage"/>
+            <Action name="edit_copypage"/>
             <Action name="edit_deletepage"/>
             <Separator/>
             <Action name="edit_createanimation"/>

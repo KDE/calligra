@@ -73,6 +73,7 @@
 // #include <KoPageLayoutDia.h>
 #include <KoRuler.h>
 #include <KoToolManager.h>
+#include <KoToolProxy.h>
 #include <KoToolDocker.h>
 #include <KoToolDockerFactory.h>
 #include <KoShapeManager.h>
@@ -417,17 +418,23 @@ KarbonView::editCut()
 {
     debugView("KarbonView::editCut()");
 
+    m_canvas->toolProxy()->cut();
+    /*
     addSelectionToClipboard();
     // remove selection
     editDeleteSelection();
+    */
 }
 
 void
 KarbonView::editCopy()
 {
     debugView("KarbonView::editCopy()");
+    m_canvas->toolProxy()->copy();
 
+    /*
     addSelectionToClipboard();
+    */
 }
 
 void
@@ -449,6 +456,8 @@ void
 KarbonView::editPaste()
 {
     debugView("KarbonView::editPaste()");
+
+    m_canvas->toolProxy()->paste();
     /*
     KarbonDrag kd;
     VObjectList objects;
