@@ -904,7 +904,9 @@ void KWDLoader::fill(KoCharacterStyle *style, const KoXmlElement &formatElem) {
     KoXmlElement element = formatElem.namedItem( "COLOR" ).toElement();
     if( !element.isNull() ) {
         QBrush fg = style->foreground();
-        fg.setColor(colorFrom(element));
+        QColor c = colorFrom(element);
+        if (c.isValid())
+            fg.setColor(c);
         style->setForeground(fg);
     }
     element = formatElem.namedItem( "FONT" ).toElement();
@@ -958,7 +960,11 @@ void KWDLoader::fill(KoCharacterStyle *style, const KoXmlElement &formatElem) {
     }
     element = formatElem.namedItem( "TEXTBACKGROUNDCOLOR" ).toElement();
     if( !element.isNull() ) {
-        style->setBackground(QBrush(colorFrom(element)));
+        QColor background = colorFrom(element);
+        if (background.isValid())
+            style->setBackground(QBrush(background));
+        else
+            style->setBackground(Qt::NoBrush);
     }
 
        //VERTALIGN
