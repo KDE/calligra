@@ -7,7 +7,6 @@ set(karbonwidgets_SRCS
     KarbonGradientItem.cpp
     vgradienttabwidget.cc
     KarbonStylePreview.cpp
-#    vselecttoolbar.cc
 #vsmallpreview.cc
     KarbonStyleButtonBox.cpp
     )
