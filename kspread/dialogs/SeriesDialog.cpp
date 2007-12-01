@@ -123,16 +123,19 @@ SeriesDlg::SeriesDlg( View* parent, const char* name,const QPoint &_marker)
 
   start->setFocus();
 
-  connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
+  //connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 }
 
-
-void SeriesDlg::slotOk()
+void SeriesDlg::slotButtonClicked(int button)
 {
+  if (button != KDialog::Ok) {
+    KDialog::slotButtonClicked(button);
+    return;
+  }
 
   bool isColumn = column->isChecked();
   bool isLinear = linear->isChecked();
-  
+
   QString tmp;
   double dstep, dend, dstart;
   Sheet * m_pSheet;

@@ -46,7 +46,10 @@ public:
     Sheet* sheet;
 
 public slots:
-    void slotOk();
+    //void slotOk();
+
+    virtual void slotButtonClicked(int button);
+
 protected:
     View* m_pView;
     KDoubleNumInput *start;
