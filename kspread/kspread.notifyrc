@@ -6,24 +6,74 @@ Name[ne]=केडीई स्प्रेड
 Name[sv]=Kspread
 Name[x-test]=xxKSpreadxx
 Comment=KSpread Spreadsheet
+Comment[el]=Λογιστικό φύλλο του KSpread
+Comment[ga]=Scarbhileog KSpread
+Comment[pt]=Folha de cálculo do KSpread
+Comment[pt_BR]=Folha de cálculo do KSpread
+Comment[sv]=Kspread kalkylark
+Comment[x-test]=xxKSpread Spreadsheetxx
 Version=4
 
 [Event/DocumentLoaded]
 Name=Document loaded
+Name[el]=Το έγγραφο φορτώθηκε
+Name[ga]=Luchtaíodh cáipéis
+Name[pt]=Documento carregado
+Name[pt_BR]=Documento carregado
+Name[sv]=Dokument laddat
+Name[x-test]=xxDocument loadedxx
 Comment=A document was loaded
+Comment[el]=Ένα έγγραφο φορτώθηκε
+Comment[ga]=Luchtaíodh cáipéis
+Comment[pt]=Foi carregado um documento
+Comment[pt_BR]=Foi carregado um documento
+Comment[sv]=Ett dokument laddades
+Comment[x-test]=xxA document was loadedxx
 Action=None
 
 [Event/DocumentSaved]
 Name=Document saved
+Name[el]=Το έγγραφο αποθηκεύτηκε
+Name[ga]=Sábháladh cáipéis
+Name[pt]=Documento gravado
+Name[pt_BR]=Documento gravado
+Name[sv]=Dokument sparat
+Name[x-test]=xxDocument savedxx
 Comment=A document was saved
+Comment[el]=Ένα έγγραφο αποθηκεύτηκε
+Comment[ga]=Sábháladh cáipéis
+Comment[pt]=Foi gravado um documento
+Comment[pt_BR]=Foi gravado um documento
+Comment[sv]=Ett dokument sparades
+Comment[x-test]=xxA document was savedxx
 Action=None
 
 [Event/LinkActivated]
 Name=Link activated
+Name[el]=Ο δεσμός ενεργοποιήθηκε
+Name[pt]=Ligação activada
+Name[pt_BR]=Ligação activada
+Name[sv]=Länk aktiverad
+Name[x-test]=xxLink activatedxx
 Comment=A hyperlink was activated
+Comment[el]=Ένας υπερδεσμός ενεργοποιήθηκε
+Comment[pt]=Foi activada uma hiperligação
+Comment[pt_BR]=Foi activada uma hiperligação
+Comment[sv]=En hyperlänk aktiverades
+Comment[x-test]=xxA hyperlink was activatedxx
 Action=None
 
 [Event/ValidityError]
 Name=Validity failed
+Name[el]=Ο έλεγχος εγκυρότητας απέτυχε
+Name[pt]=A validação falhou
+Name[pt_BR]=A validação falhou
+Name[sv]=Validering misslyckades
+Name[x-test]=xxValidity failedxx
 Comment=Validation for a cell failed
+Comment[el]=Ο έλεγχος εγκυρότητας ενός κελιού απέτυχε
+Comment[pt]=Falhou a validação de uma célula
+Comment[pt_BR]=Falhou a validação de uma célula
+Comment[sv]=Validering av en cell misslyckades
+Comment[x-test]=xxValidation for a cell failedxx
 Action=None
