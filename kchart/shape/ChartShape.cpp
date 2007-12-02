@@ -1049,7 +1049,7 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     }
 
     // 2. Write the title.
-    // FIXME
+    saveOdfTitle( bodyWriter, mainStyles );
 
     // 3. Write the subtitle.
     // FIXME
@@ -1071,6 +1071,22 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     bodyWriter.endElement(); // chart:chart
 }
 
+
+void ChartShape::saveOdfTitle( KoXmlWriter& bodyWriter,
+                               KoGenStyles& mainStyles ) const
+{
+    bodyWriter.startElement( "chart:title" );
+    if ( d->title ) {
+        QRect rect( d->title->geometry() );
+        bodyWriter.addAttributePt( "svg:x", rect.x() );
+        bodyWriter.addAttributePt( "svg:y", rect.y() );
+    }
+//    bodyWriter.addAttribute( "chart:style-name", saveOasisFont( mainStyles, header1Font(), headerFooterColor( KDChartParams::HdFtPosHeader ) ) );
+    bodyWriter.startElement( "text:p" );
+//    bodyWriter.addTextNode( header1Text() );
+    bodyWriter.endElement(); // text:p
+    bodyWriter.endElement(); // chart:title
+}
 
 void ChartShape::saveOdfLegend( KoXmlWriter &bodyWriter,
 				KoGenStyles& mainStyles ) const
