@@ -799,7 +799,12 @@ bool ChartShape::loadOdf( const KoXmlElement    &chartElement,
     }
 
     // 4. Load the footer.
-    // FIXME
+    KoXmlElement footerElem = KoXml::namedItemNS( chartElement, 
+                                                  KoXmlNS::chart, "footer" );
+    if( !footerElem.isNull() ) {
+        if( !loadOdfFooter( footerElem, context) )
+            return false;
+    }
 
     // 5. Load the legend.
     KoXmlElement legendElem = KoXml::namedItemNS( chartElement, KoXmlNS::chart,
@@ -996,6 +1001,20 @@ bool ChartShape::loadOdfSubTitle ( const KoXmlElement &titleElement,
     d->subTitle->setPosition( KDChart::Position::North );
     d->subTitle->setText( pElement.text() );
     d->chart->replaceHeaderFooter( d->subTitle, old );
+    return true;
+}
+
+bool ChartShape::loadOdfFooter ( const KoXmlElement &footerElement,
+                                 KoShapeLoadingContext &context ) 
+{
+    KoXmlElement  pElement = KoXml::namedItemNS( footerElement,
+                                                 KoXmlNS::text, "p" );
+    KDChart::HeaderFooter *old = d->footer;
+    d->footer = new KDChart::HeaderFooter();
+    d->footer->setType( KDChart::HeaderFooter::Header );
+    d->footer->setPosition( KDChart::Position::North );
+    d->footer->setText( pElement.text() );
+    d->chart->replaceHeaderFooter( d->footer, old );
     return true;
 }
 
