@@ -1093,6 +1093,21 @@ void ChartShape::saveOdfLegend( KoXmlWriter &bodyWriter,
 {
 }
 
+QString ChartShape::saveOdfFont( KoGenStyles& mainStyles, 
+                                 const QFont& font,
+                                 const QColor& color ) const
+{
+    KoGenStyle::PropertyType tt = KoGenStyle::TextType;
+    KoGenStyle autoStyle( KoGenStyle::StyleAuto, "chart", 0 );
+    autoStyle.addProperty( "fo:font-family", font.family(), tt );
+    autoStyle.addPropertyPt( "fo:font-size", font.pointSize(), tt );
+    autoStyle.addProperty( "fo:color", color.isValid() ? color.name() : "#000000", tt );
+    int w = font.weight();
+    autoStyle.addProperty( "fo:font-weight", w == 50 ? "normal" : w == 75 ? "bold" : QString::number( qRound(  w / 10 ) * 100 ), tt );
+    autoStyle.addProperty( "fo:font-style", font.italic() ? "italic" : "normal", tt );
+
+    return mainStyles.lookup( autoStyle, "ch", KoGenStyles::ForceNumbering );
+}
 
 #if 0
 void KChartParams::saveOasis( KoXmlWriter* bodyWriter, 

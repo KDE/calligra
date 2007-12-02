@@ -102,6 +102,9 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
                           KoGenStyles &mainStyles) const;
     void saveOdfData( KoXmlWriter& bodyWriter,
                       KoGenStyles& mainStyles ) const;
+    QString saveOdfFont( KoGenStyles& mainStyles, 
+                         const QFont& font,
+                         const QColor& color ) const;
 
 
  public Q_SLOTS:
