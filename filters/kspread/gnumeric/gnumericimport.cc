@@ -2220,7 +2220,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
             //kDebug()<<"text !!! :"<<cell_merge_area<<"range :start row :"<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ();
             Cell cell = Cell( table, region.firstRange().left(), region.firstRange().top() );
             cell.mergeCells( region.firstRange().left(), region.firstRange().top(),
-                             region.firstRange().width(), region.firstRange().height() );
+                             region.firstRange().width() - 1, region.firstRange().height() - 1);
             mergedRegion = mergedRegion.nextSibling();
         }
 	/* There is a memory leak here...
