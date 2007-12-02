@@ -1,6 +1,14 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2001-2002 Lennart Kudling <kudling@kde.org>
+   Copyright (C) 2002,2004 David Faure <faure@kde.org>
+   Copyright (C) 2003,2005 Laurent Montel <montel@kde.org>
+   Copyright (C) 2003,2007 Rob Buis <buis@kde.org>
+   Copyright (C) 2003 Stephan Binner <binner@kde.org>
+   Copyright (C) 2004 Waldo Bastian <bastian@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
+   Copyright (C) 2006 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2007 Chusslove Illich <caslav.ilic@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
