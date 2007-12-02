@@ -979,6 +979,10 @@ bool ChartShape::loadOdf( const KoXmlElement    &chartElement,
 bool ChartShape::loadOdfTitle ( const KoXmlElement &titleElement,
                                     KoShapeLoadingContext &context ) 
 {
+    // TODO: Read optional attributes
+    // 1. Table range
+    // 2. Position and size
+    // 3. Style name
     KoXmlElement  pElement = KoXml::namedItemNS( titleElement,
                                             KoXmlNS::text, "p" );
     KDChart::HeaderFooter *old = d->title;
@@ -993,6 +997,10 @@ bool ChartShape::loadOdfTitle ( const KoXmlElement &titleElement,
 bool ChartShape::loadOdfSubTitle ( const KoXmlElement &titleElement,
                                     KoShapeLoadingContext &context ) 
 {
+    // TODO: Read optional attributes
+    // 1. Table range
+    // 2. Position and size
+    // 3. Style name
     KoXmlElement  pElement = KoXml::namedItemNS( titleElement,
                                             KoXmlNS::text, "p" );
     KDChart::HeaderFooter *old = d->subTitle;
@@ -1007,6 +1015,10 @@ bool ChartShape::loadOdfSubTitle ( const KoXmlElement &titleElement,
 bool ChartShape::loadOdfFooter ( const KoXmlElement &footerElement,
                                  KoShapeLoadingContext &context ) 
 {
+    // TODO: Read optional attributes
+    // 1. Table range
+    // 2. Position and size
+    // 3. Style name
     KoXmlElement  pElement = KoXml::namedItemNS( footerElement,
                                                  KoXmlNS::text, "p" );
     KDChart::HeaderFooter *old = d->footer;
@@ -1021,6 +1033,11 @@ bool ChartShape::loadOdfFooter ( const KoXmlElement &footerElement,
 bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement, 
 				KoShapeLoadingContext &context )
 {
+    // TODO: Read optional attributes
+    // 1. Legend placement
+    // 2. Legend expansion
+    // 3. Legend styling
+    // 4. KOffice specific title name
     KDChart::Legend *old = d->legend;
     d->legend = new KDChart::Legend( d->diagram, d->chart );
     d->chart->replaceLegend( d->legend, old );
