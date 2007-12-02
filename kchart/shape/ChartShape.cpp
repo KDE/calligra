@@ -1021,7 +1021,9 @@ bool ChartShape::loadOdfFooter ( const KoXmlElement &footerElement,
 bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement, 
 				KoShapeLoadingContext &context )
 {
-    
+    KDChart::Legend *old = d->legend;
+    d->legend = new KDChart::Legend( d->diagram, d->chart );
+    d->chart->replaceLegend( d->legend, old );
     return true;
 }
 
