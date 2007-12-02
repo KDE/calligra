@@ -71,7 +71,7 @@ KarbonConfigureDialog::KarbonConfigureDialog( KarbonView* parent )
     connect( m_miscPage, SIGNAL( unitChanged( int ) ), m_gridPage, SLOT( slotUnitChanged( int ) ) );
 
     m_defaultDocPage = new ConfigDefaultPage( parent );
-    item = addPage( m_defaultDocPage, i18nc( "@title:tab", "Document" ) );
+    item = addPage( m_defaultDocPage, i18nc( "@title:tab Document settings page", "Document" ) );
     item->setHeader( i18n( "Document Settings" ) );
     item->setIcon(KIcon(BarIcon("document", KIconLoader::SizeMedium)));
 
