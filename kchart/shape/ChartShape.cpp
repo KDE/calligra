@@ -1092,7 +1092,7 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     saveOdfSubTitle( bodyWriter, mainStyles );
 
     // 4. Write the footer.
-    // FIXME
+    saveOdfFooter( bodyWriter, mainStyles );
 
     // 5. Write the legend.
     saveOdfLegend( bodyWriter, mainStyles );
