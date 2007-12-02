@@ -90,8 +90,14 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
                         KoShapeLoadingContext &context );
     bool loadOdfSubTitle( const KoXmlElement &titleElement, 
                         KoShapeLoadingContext &context );
+    void saveOdfTitle( KoXmlWriter &bodyWriter,
+                       KoGenStyles &mainStyles ) const;
+    void saveOdfSubTitle( KoXmlWriter &bodyWriter,
+                          KoGenStyles &mainStyles ) const;
+    void saveOdfFooter( KoXmlWriter &bodyWriter,
+                        KoGenStyles &mainStyles ) const;
     void saveOdfLegend( KoXmlWriter &bodyWriter,
-			KoGenStyles &mainStyles ) const;
+                        KoGenStyles &mainStyles ) const;
     void saveOdfPlotarea( KoXmlWriter &xmlWriter,
                           KoGenStyles &mainStyles) const;
     void saveOdfData( KoXmlWriter& bodyWriter,
