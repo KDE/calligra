@@ -70,8 +70,15 @@ class KSPREAD_EXPORT CellStorage : public QObject
 public:
     enum Visiting
     {
-        VisitAll,       ///< visit all: cell contents, styles, comments, ...
-        VisitContent    ///< just visit the cell contents: values, formulas
+        Values          = 0x01,
+        Formulas        = 0x02,
+        Comments        = 0x04,
+        Links           = 0x08,
+        Styles          = 0x10,
+        ConditionStyles = 0x20,
+        Validities      = 0x40,
+        VisitContent    = 0x03, ///< just visit the cell contents: values, formulas
+        VisitAll        = 0xFF, ///< visit all: cell contents, styles, comments, ...
     };
 
     /**
@@ -184,6 +191,19 @@ public:
      */
     bool doesMergeCells( int column, int row ) const;
     bool isPartOfMerged( int column, int row ) const;
+
+    /**
+     * Merge the cell at \p column, \p row with the \p numXCells adjacent cells in horizontal
+     * direction and with the \p numYCells adjacent cells in vertical direction. I.e. the
+     * resulting cell spans \p numXCells + 1 columns and \p numYCells + 1 rows. Passing \c 0
+     * as \p numXCells and \p numYCells unmerges the cell at \p column, \p row.
+     *
+     * \param column the master cell's column
+     * \param row the master cell's row
+     * \param numXCells number of horizontal cells to be merged in
+     * \param numYCells number of vertical cells to be merged in
+     *
+     */
     void mergeCells( int column, int row, int numXCells, int numYCells );
     Cell masterCell( int column, int row ) const;
     int mergedXCells( int column, int row ) const;
