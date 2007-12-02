@@ -46,6 +46,7 @@
 #include <KoShapeLoadingContext.h>
 
 // KDChart
+#include "KDChartEnums"
 #include "KDChartPosition"
 #include "KDChartAbstractCoordinatePlane"
 #include "KDChartBackgroundAttributes"
@@ -1130,8 +1131,65 @@ void ChartShape::saveOdfFooter( KoXmlWriter& bodyWriter,
 }
 
 void ChartShape::saveOdfLegend( KoXmlWriter &bodyWriter,
-				KoGenStyles& mainStyles ) const
+                                KoGenStyles& mainStyles ) const
 {
+    // Optional element
+    if ( d->legend ) {
+        bodyWriter.startElement( "chart:legend" );
+
+        QString lp;
+        QString lalign;
+        switch ( d->legend->position().value() ) {
+        case KDChartEnums::PositionNorthWest:
+            lp = "top-start";
+            break;
+        case KDChartEnums::PositionNorth:
+            lp = "top";
+            lalign = "center";
+            break;
+        case KDChartEnums::PositionNorthEast:
+            lp = "top-end";
+            break;
+        case KDChartEnums::PositionEast:
+            lp = "bottom";
+            lalign = "center";
+            break;
+        case KDChartEnums::PositionSouthEast:
+            lp = "bottom-end";
+            break;
+        case KDChartEnums::PositionSouth:
+            lp = "bottom";
+            lalign = "center";
+            break;
+        case KDChartEnums::PositionSouthWest:
+            lp = "bottom-start";
+            break;
+        case KDChartEnums::PositionWest:
+            lp = "start";
+            lalign = "center";
+            break;
+
+        case KDChartEnums::PositionCenter:
+        case KDChartEnums::PositionFloating:
+        case KDChartEnums::PositionUnknown:
+            // TODO: Unhandled
+            // There's no direct ODF equivalent for PositionCenter.
+            // Absolute coordiantes could be used for Floating and Unknown
+            break;
+        }
+
+        if ( !lp.isEmpty() ) {
+            bodyWriter.addAttribute( "chart:legend-position", lp );
+        }
+        if ( !lalign.isEmpty() ) {
+            bodyWriter.addAttribute( "chart:legend-align", lalign );
+        }
+            
+        KDChart::TextAttributes ta = d->legend->titleTextAttributes();
+        bodyWriter.addAttribute( "chart:style-name", saveOdfFont( mainStyles, ta.font(), ta.pen().color() ) );
+        bodyWriter.addAttribute( "koffice:title", d->legend->titleText() );
+        bodyWriter.endElement(); // chart:legend
+    }
 }
 
 QString ChartShape::saveOdfFont( KoGenStyles& mainStyles, 
