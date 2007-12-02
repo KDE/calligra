@@ -976,10 +976,14 @@ bool ChartShape::loadOdfTitle ( const KoXmlElement &titleElement,
 {
     KoXmlElement  pElement = KoXml::namedItemNS( titleElement,
                                             KoXmlNS::text, "p" );
+
+    delete d->title;
+    d->title = new KDChart::HeaderFooter();
     d->title->setType( KDChart::HeaderFooter::Header );
     d->title->setPosition( KDChart::Position::North );
     d->title->setText( pElement.text() );
     d->chart->addHeaderFooter( d->title );
+    return true;
 }
 
 bool ChartShape::loadOdfSubTitle ( const KoXmlElement &titleElement,
@@ -987,10 +991,13 @@ bool ChartShape::loadOdfSubTitle ( const KoXmlElement &titleElement,
 {
     KoXmlElement  pElement = KoXml::namedItemNS( titleElement,
                                             KoXmlNS::text, "p" );
+    delete d->subTitle;
+    d->subTitle = new KDChart::HeaderFooter();
     d->subTitle->setType( KDChart::HeaderFooter::Header );
     d->subTitle->setPosition( KDChart::Position::North );
     d->subTitle->setText( pElement.text() );
     d->chart->addHeaderFooter( d->subTitle );
+    return true;
 }
 
 bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement, 
