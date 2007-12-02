@@ -115,6 +115,7 @@ public:
     KDChart::Legend           *legend;
     KDChart::HeaderFooter     *title;
     KDChart::HeaderFooter     *subTitle;
+    KDChart::HeaderFooter     *footer;
 
     // About the data
     bool                       firstRowIsLabel;
@@ -168,6 +169,7 @@ ChartShape::Private::Private()
     legend                 = 0;
     title                  = 0;
     subTitle               = 0;
+    footer                 = 0;
 }
 
 
@@ -178,6 +180,7 @@ ChartShape::Private::~Private()
     if ( internalModel != 0 )
         delete internalModel;
     delete chartModel;
+    delete footer;
     delete subTitle;
     delete title;
     delete legend;
@@ -1105,6 +1108,24 @@ void ChartShape::saveOdfSubTitle( KoXmlWriter& bodyWriter,
         bodyWriter.addTextNode( d->subTitle->text() );
         bodyWriter.endElement(); // text:p
         bodyWriter.endElement(); // chart:subtitle
+    }
+}
+
+void ChartShape::saveOdfFooter( KoXmlWriter& bodyWriter,
+                                KoGenStyles& mainStyles ) const
+{
+    // Optional element
+    if ( d->footer ) {
+        bodyWriter.startElement( "chart:footer" );
+        QRect rect( d->footer->geometry() );
+        bodyWriter.addAttributePt( "svg:x", rect.x() );
+        bodyWriter.addAttributePt( "svg:y", rect.y() );
+        KDChart::TextAttributes ta = d->footer->textAttributes();
+        bodyWriter.addAttribute( "chart:style-name", saveOdfFont( mainStyles, ta.font(), ta.pen().color() ) );
+        bodyWriter.startElement( "text:p" );
+        bodyWriter.addTextNode( d->footer->text() );
+        bodyWriter.endElement(); // text:p
+        bodyWriter.endElement(); // chart:footer
     }
 }
 
