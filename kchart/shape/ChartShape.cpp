@@ -181,10 +181,6 @@ ChartShape::Private::~Private()
     if ( internalModel != 0 )
         delete internalModel;
     delete chartModel;
-    delete footer;
-    delete subTitle;
-    delete title;
-    delete legend;
     delete diagram;
     delete chart;
 }
@@ -980,13 +976,12 @@ bool ChartShape::loadOdfTitle ( const KoXmlElement &titleElement,
 {
     KoXmlElement  pElement = KoXml::namedItemNS( titleElement,
                                             KoXmlNS::text, "p" );
-
-    delete d->title;
+    KDChart::HeaderFooter *old = d->title;
     d->title = new KDChart::HeaderFooter();
     d->title->setType( KDChart::HeaderFooter::Header );
     d->title->setPosition( KDChart::Position::North );
     d->title->setText( pElement.text() );
-    d->chart->addHeaderFooter( d->title );
+    d->chart->replaceHeaderFooter( d->title, old );
     return true;
 }
 
@@ -995,12 +990,12 @@ bool ChartShape::loadOdfSubTitle ( const KoXmlElement &titleElement,
 {
     KoXmlElement  pElement = KoXml::namedItemNS( titleElement,
                                             KoXmlNS::text, "p" );
-    delete d->subTitle;
+    KDChart::HeaderFooter *old = d->subTitle;
     d->subTitle = new KDChart::HeaderFooter();
     d->subTitle->setType( KDChart::HeaderFooter::Header );
     d->subTitle->setPosition( KDChart::Position::North );
     d->subTitle->setText( pElement.text() );
-    d->chart->addHeaderFooter( d->subTitle );
+    d->chart->replaceHeaderFooter( d->subTitle, old );
     return true;
 }
 
