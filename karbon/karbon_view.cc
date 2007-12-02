@@ -259,7 +259,10 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
         KoToolDockerFactory toolDockerFactory;
         KoToolDocker * toolDocker =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
-        connect(m_canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), toolDocker, SLOT(newOptionWidget(QWidget*)));
+        connect(m_canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), 
+                toolDocker, SLOT(newOptionWidget(QWidget*)));
+
+        KoToolManager::instance()->requestToolActivation( m_canvasController );
 
         bool b = m_showRulerAction->isChecked();
         m_horizRuler->setVisible( b );
