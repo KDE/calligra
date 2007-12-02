@@ -163,11 +163,11 @@ ChartShape::Private::Private()
     internalModel          = 0;
     externalModel          = 0;
     pixmapRepaintRequested = true;
-    chart = 0;
-    diagram = 0;
-    legend = 0;
-    title = 0;
-    subTitle = 0;
+    chart                  = 0;
+    diagram                = 0;
+    legend                 = 0;
+    title                  = 0;
+    subTitle               = 0;
 }
 
 
