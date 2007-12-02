@@ -163,6 +163,11 @@ ChartShape::Private::Private()
     internalModel          = 0;
     externalModel          = 0;
     pixmapRepaintRequested = true;
+    chart = 0;
+    diagram = 0;
+    legend = 0;
+    title = 0;
+    subTitle = 0;
 }
 
 
@@ -173,6 +178,9 @@ ChartShape::Private::~Private()
     if ( internalModel != 0 )
         delete internalModel;
     delete chartModel;
+    delete subTitle;
+    delete title;
+    delete legend;
     delete diagram;
     delete chart;
 }
