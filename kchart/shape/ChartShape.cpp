@@ -1075,17 +1075,19 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
 void ChartShape::saveOdfTitle( KoXmlWriter& bodyWriter,
                                KoGenStyles& mainStyles ) const
 {
-    bodyWriter.startElement( "chart:title" );
+    // Optional element
     if ( d->title ) {
+        bodyWriter.startElement( "chart:title" );
         QRect rect( d->title->geometry() );
         bodyWriter.addAttributePt( "svg:x", rect.x() );
         bodyWriter.addAttributePt( "svg:y", rect.y() );
+        KDChart::TextAttributes ta = d->title->textAttributes();
+        bodyWriter.addAttribute( "chart:style-name", saveOdfFont( mainStyles, ta.font(), ta.pen().color() ) );
+        bodyWriter.startElement( "text:p" );
+        bodyWriter.addTextNode( d->title->text() );
+        bodyWriter.endElement(); // text:p
+        bodyWriter.endElement(); // chart:title
     }
-//    bodyWriter.addAttribute( "chart:style-name", saveOasisFont( mainStyles, header1Font(), headerFooterColor( KDChartParams::HdFtPosHeader ) ) );
-    bodyWriter.startElement( "text:p" );
-//    bodyWriter.addTextNode( header1Text() );
-    bodyWriter.endElement(); // text:p
-    bodyWriter.endElement(); // chart:title
 }
 
 void ChartShape::saveOdfLegend( KoXmlWriter &bodyWriter,
