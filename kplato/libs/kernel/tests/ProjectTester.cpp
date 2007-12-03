@@ -119,8 +119,8 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
     
-    QVERIFY( t->startTime() == m_project->startTime() );
-    QVERIFY( t->endTime() == t->startTime().addDays( 1 ) );
+    QCOMPARE( t->startTime(), m_project->startTime() );
+    QCOMPARE( t->endTime(), DateTime(t->startTime().addDays( 1 )) );
     
     // standard worktime defines 8 hour day as default
     Calendar *c = new Calendar();
@@ -151,13 +151,14 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
     
-    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QCOMPARE( t->earlyStart(), m_project->startTime() );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
     QVERIFY( t->earlyFinish() <= t->endTime() );
     QVERIFY( t->lateFinish() >= t->endTime() );
     
-    QVERIFY( t->startTime() == DateTime( today, t1 ) );
-    QVERIFY( t->endTime() == t->startTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( t->startTime(), DateTime( today, t1 ) );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+    QVERIFY( t->schedulingError() == false );
 
     kDebug()<<"Calculate forward, Task: ASAP, Resource 50% load ------------------";
     r->setUnits( 50 );
@@ -165,30 +166,48 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
     
-    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QCOMPARE( t->earlyStart(), m_project->startTime() );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
     QVERIFY( t->earlyFinish() <= t->endTime() );
     QVERIFY( t->lateFinish() >= t->endTime() );
 
-    QVERIFY( t->startTime() == DateTime( today, t1 ) );
-    QVERIFY( t->endTime() == t->startTime() + Duration( 1, 8, 0 ) );
-
-    r->setAvailableFrom( QDateTime( tomorrow, QTime() ) );
-    r->setUnits( 100 );
+    QCOMPARE( t->startTime(), DateTime( today, t1 ) );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 1, 8, 0 ) );
+    QVERIFY( t->schedulingError() == false );
     
     kDebug()<<"Calculate forward, Task: ASAP, Resource available tomorrow --------";
+    r->setAvailableFrom( QDateTime( tomorrow, QTime() ) );
+    r->setUnits( 100 );
     sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QCOMPARE( t->earlyStart(), m_project->startTime() );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
     QVERIFY( t->earlyFinish() <= t->endTime() );
     QVERIFY( t->lateFinish() >= t->endTime() );
     
-    QVERIFY( t->startTime() == DateTime( r->availableFrom().date(), t1 ) );
-    QVERIFY( t->endTime() == t->startTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( t->startTime(), DateTime( r->availableFrom().date(), t1 ) );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+    QVERIFY( t->schedulingError() == false );
     
+    kDebug()<<"Calculate forward, Task: ALAP -----------------------------------";
+    m_project->setConstraintStartTime( DateTime( today, QTime() ) );
+    t->setConstraint( Node::ALAP );
+    r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+    
+    QCOMPARE( t->earlyStart(), m_project->startTime() );
+    QVERIFY( t->lateStart() >=  t->earlyStart() );
+    QVERIFY( t->earlyFinish() <= t->endTime() );
+    QVERIFY( t->lateFinish() >= t->endTime() );
+    
+    QCOMPARE( t->startTime(), DateTime( today, t1 ) );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
+    QVERIFY( t->schedulingError() == false );
+
     kDebug()<<"Calculate forward, Task: MustStartOn -----------------------------------";
     r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
     t->setConstraint( Node::MustStartOn );
@@ -197,13 +216,13 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QCOMPARE( t->earlyStart(), m_project->startTime() );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
     QVERIFY( t->earlyFinish() <= t->endTime() );
     QVERIFY( t->lateFinish() >= t->endTime() );
     
-    QVERIFY( t->startTime() == DateTime( t->constraintStartTime().date(), t1 ) );
-    QVERIFY( t->endTime() == t->startTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( t->startTime(), DateTime( t->constraintStartTime().date(), t1 ) );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
     
     // Calculate backwards
@@ -214,13 +233,13 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QCOMPARE( t->earlyStart(), m_project->startTime() );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
     QVERIFY( t->earlyFinish() <= t->endTime() );
     QVERIFY( t->lateFinish() >= t->endTime() );
 
-    QVERIFY( t->startTime() == DateTime( t->constraintStartTime().date(), t1 ) );
-    QVERIFY( t->endTime() == t->startTime() + Duration( 0, 8, 0 ) );
+    QCOMPARE( t->startTime(), DateTime( t->constraintStartTime().date(), t1 ) );
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
 
     // Calculate backword
@@ -233,13 +252,13 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QCOMPARE( t->earlyStart(), m_project->startTime() );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
     QVERIFY( t->earlyFinish() <= t->endTime() );
     QVERIFY( t->lateFinish() >= t->endTime() );
 
-    QVERIFY( t->endTime() == t->constraintEndTime() );
-    QVERIFY( t->startTime() == t->endTime() - Duration( 0, 8, 0 ) );
+    QCOMPARE( t->endTime(), t->constraintEndTime() );
+    QCOMPARE( t->startTime(), t->endTime() - Duration( 0, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
 
     // Calculate forward
@@ -252,13 +271,13 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QCOMPARE( t->earlyStart(), m_project->startTime() );
     QVERIFY( t->lateStart() >=  t->earlyStart() );
     QVERIFY( t->earlyFinish() <= t->endTime() );
     QVERIFY( t->lateFinish() >= t->endTime() );
 
-    QVERIFY( t->endTime() == t->constraintEndTime() );
-    QVERIFY( t->startTime() == t->endTime() - Duration( 0, 8, 0 ) );
+    QCOMPARE( t->endTime(), t->constraintEndTime() );
+    QCOMPARE( t->startTime(), t->endTime() - Duration( 0, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
 
     // Calculate forward
@@ -271,13 +290,13 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QCOMPARE( t->earlyStart(), m_project->startTime() );
     QVERIFY( t->lateStart() >=  t->constraintStartTime() );
-    QVERIFY( t->earlyFinish() == t->endTime() );
-    QVERIFY( t->lateFinish() == m_project->endTime() );
+    QCOMPARE( t->earlyFinish(), t->endTime() );
+    QCOMPARE( t->lateFinish(), m_project->endTime() );
 
-    QVERIFY( t->startTime() == DateTime( tomorrow, t1 ));
-    QVERIFY( t->endTime() == t->startTime() + Duration( 0, 8, 0 )  );
+    QCOMPARE( t->startTime(), DateTime( tomorrow, t1 ));
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 )  );
     QVERIFY( t->schedulingError() == false );
 
     // Calculate backward
@@ -290,13 +309,13 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-    QVERIFY( t->earlyStart() == m_project->startTime() );
+    QCOMPARE( t->earlyStart(), m_project->startTime() );
     QVERIFY( t->lateStart() >=  t->constraintStartTime() );
-    QVERIFY( t->earlyFinish() == t->endTime() );
-    QVERIFY( t->lateFinish() == m_project->endTime() );
+    QCOMPARE( t->earlyFinish(), t->endTime() );
+    QCOMPARE( t->lateFinish(), m_project->endTime() );
     
-    QVERIFY( t->endTime() == DateTime( nextweek.addDays( -1 ), t2 ));
-    QVERIFY( t->startTime() == t->endTime() - Duration( 0, 8, 0 )  );
+    QCOMPARE( t->endTime(), DateTime( nextweek.addDays( -1 ), t2 ));
+    QCOMPARE( t->startTime(), t->endTime() - Duration( 0, 8, 0 )  );
     QVERIFY( t->schedulingError() == false );
 
     // Calculate forward
@@ -310,13 +329,13 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-    QVERIFY( t->earlyStart() == m_project->startTime() );
-    QVERIFY( t->lateStart() ==  t->startTime() );
+    QCOMPARE( t->earlyStart(), m_project->startTime() );
+    QCOMPARE( t->lateStart(),  t->startTime() );
     QVERIFY( t->earlyFinish() <= t->constraintEndTime() );
-    QVERIFY( t->lateFinish() == m_project->endTime() );
+    QCOMPARE( t->lateFinish(), m_project->endTime() );
 
-    QVERIFY( t->startTime() == DateTime( today, t1 ));
-    QVERIFY( t->endTime() == t->startTime() + Duration( 0, 8, 0 )  );
+    QCOMPARE( t->startTime(), DateTime( today, t1 ));
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 )  );
     QVERIFY( t->schedulingError() == false );
 
     // Calculate backward
@@ -330,13 +349,13 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-    QVERIFY( t->earlyStart() == m_project->startTime() );
-    QVERIFY( t->lateStart() ==  t->startTime() );
-    QVERIFY( t->earlyFinish() == t->constraintEndTime() );
-    QVERIFY( t->lateFinish() == m_project->constraintEndTime() );
+    QCOMPARE( t->earlyStart(), m_project->startTime() );
+    QCOMPARE( t->lateStart(),  t->startTime() );
+    QCOMPARE( t->earlyFinish(), t->constraintEndTime() );
+    QCOMPARE( t->lateFinish(), m_project->constraintEndTime() );
 
-    QVERIFY( t->startTime() == DateTime( tomorrow, t1 ));
-    QVERIFY( t->endTime() == t->startTime() + Duration( 0, 8, 0 )  );
+    QCOMPARE( t->startTime(), DateTime( tomorrow, t1 ));
+    QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 )  );
     QVERIFY( t->schedulingError() == false );
 
     // Calculate forward
@@ -351,13 +370,13 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-    QVERIFY( t->earlyStart() == m_project->constraintStartTime() );
-    QVERIFY( t->lateStart() == t->constraintStartTime() );
-    QVERIFY( t->earlyFinish() == t->constraintEndTime() );
-    QVERIFY( t->lateFinish() == t->constraintEndTime() );
+    QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
+    QCOMPARE( t->lateStart(), t->constraintStartTime() );
+    QCOMPARE( t->earlyFinish(), t->constraintEndTime() );
+    QCOMPARE( t->lateFinish(), t->constraintEndTime() );
 
-    QVERIFY( t->startTime() == t->constraintStartTime() );
-    QVERIFY( t->endTime() == t->constraintEndTime()  );
+    QCOMPARE( t->startTime(), t->constraintStartTime() );
+    QCOMPARE( t->endTime(), t->constraintEndTime()  );
     QVERIFY( t->schedulingError() == false );
 
     // Calculate forward
@@ -372,14 +391,266 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-    QVERIFY( t->earlyStart() == m_project->constraintStartTime() );
-    QVERIFY( t->lateStart() == t->constraintStartTime() );
-    QVERIFY( t->earlyFinish() == t->constraintEndTime() );
-    QVERIFY( t->lateFinish() == t->constraintEndTime() );
+    QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
+    QCOMPARE( t->lateStart(), t->constraintStartTime() );
+    QCOMPARE( t->earlyFinish(), t->constraintEndTime() );
+    QCOMPARE( t->lateFinish(), t->constraintEndTime() );
 
-    QVERIFY( t->startTime() == t->constraintStartTime() );
-    QVERIFY( t->endTime() == t->constraintEndTime() );
+    QCOMPARE( t->startTime(), t->constraintStartTime() );
+    QCOMPARE( t->endTime(), t->constraintEndTime() );
     QVERIFY( t->schedulingError() == false );
+
+    // Calculate forward
+    kDebug()<<"Calculate forwards, Task: Milestone, ASAP-------------------------";
+    m_project->setConstraint( Node::MustStartOn );
+    m_project->setConstraintStartTime( DateTime( today, QTime() ) );
+    t->setConstraint( Node::ASAP );
+    t->estimate()->clear();
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
+    QCOMPARE( t->lateStart(), t->earlyStart() );
+    QCOMPARE( t->earlyFinish(), t->earlyStart() );
+    QCOMPARE( t->lateFinish(), t->earlyFinish() );
+
+    QCOMPARE( t->startTime(), t->earlyStart() );
+    QCOMPARE( t->endTime(), t->startTime() );
+    QVERIFY( t->schedulingError() == false );
+
+    // Calculate backward
+    kDebug()<<"Calculate backwards, Task: Milestone, ASAP-------------------------";
+    m_project->setConstraint( Node::MustFinishOn );
+    m_project->setConstraintEndTime( DateTime( today, QTime() ) );
+    t->setConstraint( Node::ASAP );
+    t->estimate()->clear();
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
+    QCOMPARE( t->lateStart(), t->earlyStart() );
+    QCOMPARE( t->earlyFinish(), t->earlyStart() );
+    QCOMPARE( t->lateFinish(), t->earlyFinish() );
+
+    QCOMPARE( t->startTime(), t->earlyStart() );
+    QCOMPARE( t->endTime(), t->startTime() );
+    QVERIFY( t->schedulingError() == false );
+
+    // Calculate forward
+    kDebug()<<"Calculate forwards, Task: Milestone, ALAP-------------------------";
+    m_project->setConstraint( Node::MustStartOn );
+    m_project->setConstraintStartTime( DateTime( today, QTime() ) );
+    t->setConstraint( Node::ALAP );
+    t->estimate()->clear();
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
+    QCOMPARE( t->lateStart(), t->earlyStart() );
+    QCOMPARE( t->earlyFinish(), t->earlyStart() );
+    QCOMPARE( t->lateFinish(), t->earlyFinish() );
+
+    QCOMPARE( t->startTime(), t->earlyStart() );
+    QCOMPARE( t->endTime(), t->startTime() );
+    QVERIFY( t->schedulingError() == false );
+
+    // Calculate backward
+    kDebug()<<"Calculate backwards, Task: Milestone, ALAP-------------------------";
+    m_project->setConstraint( Node::MustFinishOn );
+    m_project->setConstraintEndTime( DateTime( today, QTime() ) );
+    t->setConstraint( Node::ALAP );
+    t->estimate()->clear();
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
+    QCOMPARE( t->lateStart(), t->earlyStart() );
+    QCOMPARE( t->earlyFinish(), t->earlyStart() );
+    QCOMPARE( t->lateFinish(), t->earlyFinish() );
+
+    QCOMPARE( t->startTime(), t->earlyStart() );
+    QCOMPARE( t->endTime(), t->startTime() );
+    QVERIFY( t->schedulingError() == false );
+
+    // Calculate forward
+    kDebug()<<"Calculate forwards, Task: Milestone, MustStartOn ------------------";
+    m_project->setConstraint( Node::MustStartOn );
+    m_project->setConstraintStartTime( DateTime( today, QTime() ) );
+    t->setConstraint( Node::MustStartOn );
+    t->setConstraintStartTime( DateTime( tomorrow, t1 ) );
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
+    QCOMPARE( t->lateStart(), t->constraintStartTime() );
+    QCOMPARE( t->earlyFinish(), t->lateStart() );
+    QCOMPARE( t->lateFinish(), t->earlyFinish() );
+
+    QCOMPARE( t->startTime(), t->constraintStartTime() );
+    QCOMPARE( t->endTime(), t->startTime() );
+    QVERIFY( t->schedulingError() == false );
+
+    // Calculate backward
+    kDebug()<<"Calculate backwards, Task: Milestone, MustStartOn ------------------";
+    m_project->setConstraint( Node::MustFinishOn );
+    m_project->setConstraintEndTime( DateTime( tomorrow, QTime() ) );
+    t->setConstraint( Node::MustStartOn );
+    t->setConstraintStartTime( DateTime( today, t1 ) );
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QCOMPARE( t->earlyStart(), t->constraintStartTime() );
+    QCOMPARE( t->lateStart(), t->earlyStart() );
+    QCOMPARE( t->earlyFinish(), t->earlyStart() );
+    QCOMPARE( t->lateFinish(), m_project->constraintEndTime() );
+
+    QCOMPARE( t->startTime(), t->constraintStartTime() );
+    QCOMPARE( t->endTime(), t->startTime() );
+    QVERIFY( t->schedulingError() == false );
+
+    // Calculate forward
+    kDebug()<<"Calculate forwards, Task: Milestone, MustFinishOn ------------------";
+    m_project->setConstraint( Node::MustStartOn );
+    m_project->setConstraintStartTime( DateTime( today, QTime() ) );
+    t->setConstraint( Node::MustFinishOn );
+    t->setConstraintEndTime( DateTime( tomorrow, t1 ) );
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
+    QCOMPARE( t->lateStart(), t->constraintEndTime() );
+    QCOMPARE( t->earlyFinish(), t->lateStart() );
+    QCOMPARE( t->lateFinish(), t->earlyFinish() );
+
+    QCOMPARE( t->startTime(), t->constraintEndTime() );
+    QCOMPARE( t->endTime(), t->startTime() );
+    QVERIFY( t->schedulingError() == false );
+
+    QCOMPARE( m_project->endTime(), t->endTime() );
+
+    // Calculate backward
+    kDebug()<<"Calculate backwards, Task: Milestone, MustFinishOn ------------------";
+    m_project->setConstraint( Node::MustFinishOn );
+    m_project->setConstraintEndTime( DateTime( tomorrow, QTime() ) );
+    t->setConstraint( Node::MustFinishOn );
+    t->setConstraintEndTime( DateTime( today, t1 ) );
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QCOMPARE( t->earlyStart(), t->constraintEndTime() );
+    QCOMPARE( t->lateStart(), t->constraintEndTime() );
+    QCOMPARE( t->earlyFinish(), t->lateStart() );
+    QCOMPARE( t->lateFinish(), m_project->constraintEndTime() );
+
+    QCOMPARE( t->startTime(), t->constraintEndTime() );
+    QCOMPARE( t->endTime(), t->startTime() );
+    QVERIFY( t->schedulingError() == false );
+
+    QCOMPARE( m_project->startTime(), t->startTime() );
+
+    // Calculate forward
+    kDebug()<<"Calculate forwards, Task: Milestone, StartNotEarlier ---------------";
+    m_project->setConstraint( Node::MustStartOn );
+    m_project->setConstraintStartTime( DateTime( today, QTime() ) );
+    t->setConstraint( Node::StartNotEarlier );
+    t->setConstraintEndTime( DateTime( tomorrow, t1 ) );
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
+    QCOMPARE( t->lateStart(), t->constraintStartTime() );
+    QCOMPARE( t->earlyFinish(), t->lateStart() );
+    QCOMPARE( t->lateFinish(), t->earlyFinish() );
+
+    QCOMPARE( t->startTime(), t->constraintStartTime() );
+    QCOMPARE( t->endTime(), t->startTime() );
+    QVERIFY( t->schedulingError() == false );
+
+    QCOMPARE( m_project->endTime(), t->endTime() );
+
+    // Calculate backward
+    kDebug()<<"Calculate backwards, Task: Milestone, StartNotEarlier ---------------";
+    m_project->setConstraint( Node::MustFinishOn );
+    m_project->setConstraintEndTime( DateTime( tomorrow, QTime() ) );
+    t->setConstraint( Node::StartNotEarlier );
+    t->setConstraintStartTime( DateTime( today, t1 ) );
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QCOMPARE( t->earlyStart(), t->constraintStartTime() );
+    QCOMPARE( t->lateStart(), t->constraintStartTime() );
+    QCOMPARE( t->earlyFinish(), t->lateStart() );
+    QCOMPARE( t->lateFinish(), m_project->constraintEndTime() );
+
+    QCOMPARE( t->startTime(), t->constraintStartTime() );
+    QCOMPARE( t->endTime(), t->startTime() );
+    QVERIFY( t->schedulingError() == false );
+
+    QCOMPARE( m_project->startTime(), t->startTime() );
+
+    // Calculate forward
+    kDebug()<<"Calculate forwards, Task: Milestone, FinishNotLater ---------------";
+    m_project->setConstraint( Node::MustStartOn );
+    m_project->setConstraintStartTime( DateTime( today, QTime() ) );
+    t->setConstraint( Node::FinishNotLater );
+    t->setConstraintEndTime( DateTime( tomorrow, t1 ) );
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
+    QCOMPARE( t->lateStart(), t->constraintEndTime() );
+    QCOMPARE( t->earlyFinish(), t->lateStart() );
+    QCOMPARE( t->lateFinish(), t->earlyFinish() );
+
+    QCOMPARE( t->startTime(), t->constraintEndTime() );
+    QCOMPARE( t->endTime(), t->startTime() );
+    QVERIFY( t->schedulingError() == false );
+
+    QCOMPARE( m_project->endTime(), t->endTime() );
+
+    // Calculate backward
+    kDebug()<<"Calculate backwards, Task: Milestone, FinishNotLater ---------------";
+    m_project->setConstraint( Node::MustFinishOn );
+    m_project->setConstraintEndTime( DateTime( tomorrow, QTime() ) );
+    t->setConstraint( Node::FinishNotLater );
+    t->setConstraintEndTime( DateTime( today, t1 ) );
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QCOMPARE( t->earlyStart(), t->constraintStartTime() );
+    QCOMPARE( t->lateStart(), t->earlyStart() );
+    QCOMPARE( t->earlyFinish(), t->lateStart() );
+    QCOMPARE( t->lateFinish(), m_project->constraintEndTime() );
+
+    QCOMPARE( t->startTime(), t->constraintEndTime() );
+    QCOMPARE( t->endTime(), t->startTime() );
+    QVERIFY( t->schedulingError() == false );
+
+    QCOMPARE( m_project->startTime(), t->startTime() );
 
 }
 

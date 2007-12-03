@@ -470,7 +470,7 @@ public:
     Duration positiveFloat( long id = -1 ) const;
     /**
      * Return the duration by which the duration of an activity or path 
-     * has to be reduced in order to fullfill a timing constraint.
+     * has to be reduced in order to fullfill a timing- or dependency constraint.
      * @param id Schedule identity. If id is -1, use current schedule.
      */
     Duration negativeFloat( long id = -1 ) const;
