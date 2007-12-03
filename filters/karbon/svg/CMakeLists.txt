@@ -1,6 +1,6 @@
 
 include_directories( ${CMAKE_SOURCE_DIR}/karbon
-${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/shapes/pathshapes ${KOGUIUTILS_INCLUDES} ${KDE4_INCLUDES}  )
+${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/plugins/pathshapes ${KOGUIUTILS_INCLUDES} ${KDE4_INCLUDES}  )
 
 ########### next target ###############
 

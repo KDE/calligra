@@ -42,7 +42,7 @@
 #include <pictureshape/PictureShape.h>
 #include <pathshapes/rectangle/KoRectangleShape.h>
 #include <pathshapes/ellipse/KoEllipseShape.h>
-#include <text/TextShape.h>
+#include <textshape/TextShape.h>
 
 #include <kgenericfactory.h>
 #include <kdebug.h>

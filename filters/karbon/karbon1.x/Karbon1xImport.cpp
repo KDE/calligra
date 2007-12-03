@@ -40,7 +40,7 @@
 #include <pathshapes/star/KoStarShape.h>
 #include <pictureshape/PictureShape.h>
 #include <KoImageData.h>
-#include <text/TextShape.h>
+#include <textshape/TextShape.h>
 #include <KoPathPoint.h>
 #include <KoZoomHandler.h>
 

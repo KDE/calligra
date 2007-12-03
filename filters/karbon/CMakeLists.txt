@@ -1,11 +1,11 @@
 set(SHAPES_SOURCES
-    ${CMAKE_SOURCE_DIR}/shapes/pathshapes/ellipse/KoEllipseShape.cpp 
-    ${CMAKE_SOURCE_DIR}/shapes/pathshapes/rectangle/KoRectangleShape.cpp
-    ${CMAKE_SOURCE_DIR}/shapes/pathshapes/star/KoStarShape.cpp
-    ${CMAKE_SOURCE_DIR}/shapes/pictureshape/PictureShape.cpp
-    ${CMAKE_SOURCE_DIR}/shapes/text/TextShape.cpp
-    ${CMAKE_SOURCE_DIR}/shapes/text/Layout.cpp
-    ${CMAKE_SOURCE_DIR}/shapes/text/ListItemsHelper.cpp)
+    ${CMAKE_SOURCE_DIR}/plugins/pathshapes/ellipse/KoEllipseShape.cpp 
+    ${CMAKE_SOURCE_DIR}/plugins/pathshapes/rectangle/KoRectangleShape.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/pathshapes/star/KoStarShape.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/pictureshape/PictureShape.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/textshape/TextShape.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/textshape/Layout.cpp
+    ${CMAKE_SOURCE_DIR}/plugins/textshape/ListItemsHelper.cpp)
 
 
 include_directories(
@@ -17,7 +17,7 @@ include_directories(
         ${CMAKE_SOURCE_DIR}/karbon/visitors
         ${CMAKE_BINARY_DIR}/karbon
         ${KDE4_INCLUDES}
-        ${CMAKE_SOURCE_DIR}/shapes/ )
+        ${CMAKE_SOURCE_DIR}/plugins/ )
 
 add_subdirectory( png )
 add_subdirectory( svg )
