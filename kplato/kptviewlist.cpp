@@ -620,12 +620,12 @@ void ViewListWidget::setupContextMenus()
     //m_noitem.append( action );
     
     // view insert actions
-    action = new QAction( KIcon( "edit-add" ), i18n( "View..." ), this );
+    action = new QAction( KIcon( "list-add" ), i18n( "View..." ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotAddView() ) );
     m_addview.append( action );
 
     // Category edit actions
-    action = new QAction( KIcon( "editinput" ), i18n( "Rename" ), this );
+    action = new QAction( KIcon( "edit-rename" ), i18n( "Rename" ), this );
     connect( action, SIGNAL( triggered( bool ) ), SLOT( renameCategory() ) );
     m_editcategory.append( action );
     action = new QAction( KIcon( "list-remove" ), i18n( "Remove" ), this );
@@ -636,10 +636,10 @@ void ViewListWidget::setupContextMenus()
     m_editcategory.append( action );
 
     // view edit actions
-    action = new QAction( KIcon( "editinput" ), i18n( "Rename" ), this );
+    action = new QAction( KIcon( "edit-rename" ), i18n( "Rename" ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotEditViewTitle() ) );
     m_editview.append( action );
-    action = new QAction( KIcon( "edit-delete" ), i18n( "Remove" ), this );
+    action = new QAction( KIcon( "list-remove" ), i18n( "Remove" ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotRemoveView() ) );
     m_editview.append( action );
     action = new QAction( KIcon( "configure" ), i18n( "Entry..." ), this );
@@ -647,7 +647,7 @@ void ViewListWidget::setupContextMenus()
     m_editview.append( action );
 
     // document edit actions
-    action = new QAction( KIcon( "editinput" ), i18n( "Rename" ), this );
+    action = new QAction( KIcon( "edit-rename" ), i18n( "Rename" ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotEditDocumentTitle() ) );
     m_editdocument.append( action );
     action = new QAction( KIcon( "edit-delete" ), i18n( "Remove" ), this );

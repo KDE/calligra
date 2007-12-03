@@ -200,10 +200,10 @@ View::View( Part* part, QWidget* parent )
     actionEditStandardWorktime  = new KAction(KIcon( "object-edit" ), i18n("Edit Standard Worktime..."), this);
     actionCollection()->addAction("project_worktime", actionEditStandardWorktime );
     connect( actionEditStandardWorktime, SIGNAL( triggered( bool ) ), SLOT( slotProjectWorktime() ) );
-    actionEditCalendarList  = new KAction(KIcon( "object-edit" ), i18n("Edit Calendar..."), this);
+    actionEditCalendarList  = new KAction(KIcon( "preferences-system-time" ), i18n("Edit Calendar..."), this);
     actionCollection()->addAction("project_calendar", actionEditCalendarList );
     connect( actionEditCalendarList, SIGNAL( triggered( bool ) ), SLOT( slotProjectCalendar() ) );
-    actionEditAccounts  = new KAction(KIcon( "object-edit" ), i18n("Edit Accounts..."), this);
+    actionEditAccounts  = new KAction(KIcon( "users" ), i18n("Edit Accounts..."), this);
     actionCollection()->addAction("project_accounts", actionEditAccounts );
     connect( actionEditAccounts, SIGNAL( triggered( bool ) ), SLOT( slotProjectAccounts() ) );
     actionEditResources  = new KAction(KIcon( "object-edit" ), i18n("Edit Resources..."), this);
@@ -260,7 +260,7 @@ View::View( Part* part, QWidget* parent )
     actionCollection()->addAction("edit_resource", actionEditResource );
     connect( actionEditResource, SIGNAL( triggered( bool ) ), SLOT( slotEditResource() ) );
 
-    actionEditCalendar  = new KAction(KIcon( "object-edit" ), i18n("Edit Calendar..."), this);
+    actionEditCalendar  = new KAction(KIcon( "preferences-system-time" ), i18n("Edit Calendar..."), this);
     actionCollection()->addAction("edit_calendar", actionEditCalendar );
     connect( actionEditCalendar, SIGNAL( triggered( bool ) ), SLOT( slotEditCalendar() ) );
 

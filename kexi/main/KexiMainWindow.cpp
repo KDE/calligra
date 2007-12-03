@@ -650,7 +650,7 @@ void KexiMainWindow::setupActions()
 
 #ifdef HAVE_KNEWSTUFF
 	ac->addAction( "project_download_examples",
-		action = new KAction(KIcon("kget"), i18n("&Download Example Databases..."), this) );
+		action = new KAction(KIcon("go-down"), i18n("&Download Example Databases..."), this) );
 	action->setToolTip(i18n("Download example databases from the Internet"));
 	action->setWhatsThis(i18n("Downloads example databases from the Internet."));
 	connect(action, SIGNAL(triggered()), this, SLOT(slotGetNewStuff()));
@@ -730,7 +730,7 @@ void KexiMainWindow::setupActions()
 #endif
 	ac->addAction( "tools_import_project",
 		d->action_tools_data_migration = new KAction( 
-		KIcon("database_import"), i18n("&Import Database..."), this) );
+		KIcon("document-import-database"), i18n("&Import Database..."), this) );
 	d->action_tools_data_migration->setToolTip(i18n("Import entire database as a Kexi project"));
 	d->action_tools_data_migration->setWhatsThis(
 		i18n("Imports entire database as a Kexi project."));
@@ -792,8 +792,7 @@ void KexiMainWindow::setupActions()
 
 	ac->addAction( "project_print_setup",
 		d->action_project_print_setup = new KAction(
-//! @todo icon
-			KIcon("document"), 
+			KIcon("document-page-setup"), 
 			i18n("Page Set&up..."), this) );
 	d->action_project_print_setup->setToolTip(
 		i18n("Show page setup for printing the active table or query"));
