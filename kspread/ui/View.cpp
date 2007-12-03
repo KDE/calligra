@@ -62,6 +62,7 @@
 #include <kconfig.h>
 #include <kcomponentdata.h>
 #include <kdebug.h>
+#include <kdeversion.h>
 #include <kfind.h>
 #include <kfinddialog.h>
 #include <kfontaction.h>
@@ -1375,7 +1376,13 @@ void View::Private::initActions()
     actions->inspector->setShortcut( QKeySequence( Qt::CTRL+ Qt::SHIFT + Qt::Key_I));
     connect(actions->inspector, SIGNAL(triggered(bool)), view, SLOT( runInspector() ));
 
-    ac->associateWidget(view->canvasWidget());
+    ac->addAssociatedWidget(view->canvasWidget());
+    foreach (QAction* action, ac->actions())
+#if QT_VERSION < KDE_MAKE_VERSION(4,4,0)
+        action->setShortcutContext(Qt::WidgetShortcut); // remove after Qt4.4 becomes mandatory
+#else
+        action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+#endif
     m_propertyEditor = 0;
 }
 
