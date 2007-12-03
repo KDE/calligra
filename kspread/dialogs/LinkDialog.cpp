@@ -83,8 +83,6 @@ LinkDialog::LinkDialog( View* view, const char* )
     d->p1->setHeader( i18n("Link to Internet Address") );
     d->p1->setIcon( KIcon("network") );
     QVBoxLayout* iLayout = new QVBoxLayout( d->internetPage );
-    iLayout->setMargin( marginHint() );
-    iLayout->setSpacing( spacingHint() );
     iLayout->addWidget( new QLabel( i18n("Text to display:" ), d->internetPage ) );
     d->internetText = new KLineEdit( d->internetPage );
     iLayout->addWidget( d->internetText );
@@ -101,8 +99,6 @@ LinkDialog::LinkDialog( View* view, const char* )
     d->p2->setHeader( i18n("Link to Mail Address") );
     d->p2->setIcon( KIcon("mail") );
     QVBoxLayout* mLayout = new QVBoxLayout( d->mailPage );
-    mLayout->setMargin( marginHint() );
-    mLayout->setSpacing( spacingHint() );
     mLayout->addWidget( new QLabel( i18n("Text to display:" ), d->mailPage ) );
     d->mailText = new KLineEdit( d->mailPage );
     mLayout->addWidget( d->mailText );
@@ -122,8 +118,6 @@ LinkDialog::LinkDialog( View* view, const char* )
     d->p3->setHeader( i18n("Link to File") );
     d->p3->setIcon( KIcon("document-open") );
     QVBoxLayout* fLayout = new QVBoxLayout( d->filePage );
-    fLayout->setMargin( marginHint() );
-    fLayout->setSpacing( spacingHint() );
     fLayout->addWidget( new QLabel( i18n("Text to display:" ), d->filePage ) );
     d->fileText = new KLineEdit( d->filePage );
     fLayout->addWidget( d->fileText );
@@ -163,8 +157,6 @@ LinkDialog::LinkDialog( View* view, const char* )
     d->p4->setHeader( i18n("Link to Cell") );
     d->p4->setIcon( KIcon("table") );
     QVBoxLayout* cLayout = new QVBoxLayout( d->cellPage );
-    cLayout->setMargin( marginHint() );
-    cLayout->setSpacing( spacingHint() );
     cLayout->addWidget( new QLabel( i18n("Text to display:" ), d->cellPage ) );
     d->cellText = new KLineEdit( d->cellPage );
     cLayout->addWidget( d->cellText );

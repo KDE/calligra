@@ -318,8 +318,6 @@ bool GeneralTab::apply( CustomStyle * style )
  *
  ***************************************************************************/
 
-QString CellFormatDialog::m_lastpage;
-
 CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   : KPageDialog(_view),
     m_doc( _sheet->doc() ),
@@ -600,8 +598,6 @@ void CellFormatDialog::initGUI()
 
 CellFormatDialog::~CellFormatDialog()
 {
-  if ( KPageWidgetItem* item = currentPage() )
-       m_lastpage = item->name();
   delete formatOnlyNegSignedPixmap;
   delete formatRedOnlyNegSignedPixmap;
   delete formatRedNeverSignedPixmap;
@@ -793,36 +789,24 @@ void CellFormatDialog::init()
 
   floatPage = new CellFormatPageFloat( this, this );
   KPageWidgetItem* formatitem = addPage( floatPage, i18n("&Data Format") );
-  if ( formatitem->name() == m_lastpage )
-      setCurrentPage( formatitem );
 
   fontPage = new CellFormatPageFont( this, this );
   KPageWidgetItem* fontitem = addPage( fontPage, i18n("&Font") );
-  if ( fontitem->name() == m_lastpage )
-      setCurrentPage( fontitem );
 
   //  miscPage = new CellFormatPageMisc( tab, this );
   //  tab->addTab( miscPage, i18n("&Misc") );
 
   positionPage = new CellFormatPagePosition( this, this);
   KPageWidgetItem* positem = addPage( positionPage, i18n("&Position") );
-  if ( positem->name() == m_lastpage )
-      setCurrentPage( positem );
 
   borderPage = new CellFormatPageBorder( this, this );
   KPageWidgetItem* borderitem = addPage( borderPage, i18n("&Border") );
-  if ( borderitem->name() == m_lastpage )
-      setCurrentPage( borderitem );
 
   patternPage=new CellFormatPagePattern(this,this);
   KPageWidgetItem* backgrounditem = addPage( patternPage,i18n("Back&ground") );
-  if ( backgrounditem->name() == m_lastpage )
-      setCurrentPage( backgrounditem );
 
   protectPage = new CellFormatPageProtection( this, this );
   KPageWidgetItem* protectitem = addPage( protectPage, i18n("&Cell Protection") );
-  if ( protectitem->name() == m_lastpage )
-      setCurrentPage( protectitem );
 
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
 }

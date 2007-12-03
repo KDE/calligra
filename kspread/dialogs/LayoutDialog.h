@@ -626,8 +626,6 @@ protected:
     CustomStyle * m_style;
     StyleManager * m_styleManager;
 
-    static QString m_lastpage;
-
     void applyStyle();
 };
 

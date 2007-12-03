@@ -56,6 +56,7 @@
   <Action name="showCommentIndicator"/>
   <Separator/>
   <Action name="view_zoom"/>
+  <Action name="view_fullscreen"/>
 <!--  <Separator/>
   <Action name="inspector"/>-->
  </Menu>

@@ -532,6 +532,8 @@ void View::Private::initActions()
 
     KActionCollection* ac = view->actionCollection();
 
+  ac->addAction("view_fullscreen", view->shell()->actionCollection()->action("view_fullscreen"));
+
   // -- cell formatting actions --
 
   actions->cellLayout  = new KAction(KIcon( "cell_layout" ), i18n("Cell Format..."), view);

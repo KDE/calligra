@@ -122,8 +122,6 @@ SeriesDlg::SeriesDlg( View* parent, const char* name,const QPoint &_marker)
   grid1->addWidget(gb2);
 
   start->setFocus();
-
-  //connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 }
 
 void SeriesDlg::slotButtonClicked(int button)

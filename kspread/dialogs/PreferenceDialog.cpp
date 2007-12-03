@@ -781,6 +781,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char * /*name
   QWidget* tmpQGroupBox = new QWidget( box );
 
   QGridLayout *grid1 = new QGridLayout(tmpQGroupBox);
+  grid1->setMargin(0);
 //   grid1->addItem(new QSpacerItem( 0, KDialog::marginHint() ), 0, 0 );
   grid1->setRowStretch( 7, 10 );
 

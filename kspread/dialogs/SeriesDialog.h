@@ -46,8 +46,6 @@ public:
     Sheet* sheet;
 
 public slots:
-    //void slotOk();
-
     virtual void slotButtonClicked(int button);
 
 protected:
