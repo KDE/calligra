@@ -920,7 +920,8 @@ Duration Calendar::effort(const DateTime &start, const DateTime &end, Schedule *
     //kDebug()<<m_name<<":"<<start<<" to"<<end;
     Duration eff;
     if (!start.isValid() || !end.isValid() || end < start) {
-        kError()<<"Illegal datetime: "<<start.toString()<<", "<<end.toString()<<endl;
+        if ( sch && sch->resource() ) kDebug()<<sch->resource()->name()<<sch->name()<<"Available:"<<sch->resource()->availableFrom()<<sch->resource()->availableUntil();
+        kError()<<"Illegal datetime: "<<start<<", "<<end<<endl;
         return eff;
     }
     if ( start == end ) {
@@ -972,11 +973,11 @@ TimeInterval Calendar::firstInterval(const QDate &date, const QTime &startTime, 
 DateTimeInterval Calendar::firstInterval(const DateTime &start, const DateTime &end, Schedule *sch) const {
     //kDebug()<<"inp:"<<start.toString()<<" -"<<end.toString();
     if (!start.isValid()) {
-        kWarning()<<"Invalid start time"<<endl;
+        kWarning()<<"Invalid start time";
         return DateTimeInterval(DateTime(), DateTime());
     }
     if (!end.isValid()) {
-        kWarning()<<"Invalid end time"<<endl;
+        kWarning()<<"Invalid end time";
         return DateTimeInterval(DateTime(), DateTime());
     }
     // convert to calendar's timezone in case caller use a different timezone
@@ -1032,9 +1033,12 @@ bool Calendar::hasInterval(const QDate &date, const QTime &startTime, const QTim
 
 bool Calendar::hasInterval(const DateTime &start, const DateTime &end, Schedule *sch) const {
     //kDebug()<<m_name<<":"<<start<<" -"<<end;
-    if (!start.isValid() || !end.isValid() || end <= start) {
-        //kError()<<"Invalid input: "<<(start.isValid()?"":"(start invalid) ")<<(end.isValid()?"":"(end invalid) ")<<(start>end?"":"(start<=end)")<<endl;
+    if (!start.isValid() || !end.isValid() || end < start) {
+        kError()<<"Invalid input: "<<(start.isValid()?"":"(start invalid) ")<<(end.isValid()?"":"(end invalid) ")<<(start>end?"":"(start>end)");
         //kDebug()<<kBacktrace(8);
+        return false;
+    }
+    if ( end == start ) {
         return false;
     }
     // convert to calendar's timezone in case caller use a different timezone
@@ -1061,11 +1065,13 @@ bool Calendar::hasInterval(const DateTime &start, const DateTime &end, Schedule 
 
 DateTime Calendar::firstAvailableAfter(const DateTime &time, const DateTime &limit, Schedule *sch ) {
     //kDebug()<<m_name<<": check from"<<time<<" limit="<<limit;
-    if (!time.isValid() || !limit.isValid() || time >= limit) {
-        kError()<<"Invalid input: "<<(time.isValid()?"":"(time invalid) ")<<(limit.isValid()?"":"(limit invalid) ")<<(time>limit?"":"(time>=limit)")<<endl;
+    if (!time.isValid() || !limit.isValid() || time > limit) {
+        kError()<<"Invalid input: "<<(time.isValid()?"":"(time invalid) ")<<(limit.isValid()?"":"(limit invalid) ")<<(time>limit?"":"(time>limit)");
         return DateTime();
     }
-    
+    if ( time == limit ) {
+        return DateTime();
+    }
     if (!hasInterval(time, limit, sch)) {
         return DateTime();
     }
@@ -1076,15 +1082,18 @@ DateTime Calendar::firstAvailableAfter(const DateTime &time, const DateTime &lim
 
 DateTime Calendar::firstAvailableBefore(const DateTime &time, const DateTime &limit, Schedule *sch) {
     //kDebug()<<m_name<<": check from"<<time.toString()<<" limit="<<limit.toString();
-    if (!time.isValid() || !limit.isValid() || time <= limit) {
-        kError()<<"Invalid input: "<<(time.isValid()?"":"(time invalid) ")<<(limit.isValid()?"":"(limit invalid) ")<<(time>limit?"":"(time<=limit)")<<endl;
+    if (!time.isValid() || !limit.isValid() || time < limit) {
+        kError()<<"Invalid input: "<<(time.isValid()?"":"(time invalid) ")<<(limit.isValid()?"":"(limit invalid) ")<<(time<limit?"":"(time<limit)");
+        return DateTime();
+    }
+    if ( time == limit ) {
         return DateTime();
     }
     // convert to calendar's timezone in case caller use a different timezone
     DateTime ltime = time.toTimeSpec( m_spec );
     DateTime llimit = limit.toTimeSpec( m_spec );
     DateTime lmt = ltime;
-    DateTime t = DateTime(ltime.date(), m_spec); // start of first day
+    DateTime t = DateTime(ltime.date(), QTime(), m_spec); // start of first day
     if (t == lmt)
         t = t.addDays(-1); // in case time == start of day
     if (t < llimit)

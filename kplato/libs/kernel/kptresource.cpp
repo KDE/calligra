@@ -676,6 +676,7 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
         DateTime t = availableBefore(start, limit);
         if (t.isValid()) {
             sts = true;
+            if ( t < limit ) kError()<<m_name<<"backward, t < limit: t="<<t<<" limit="<<limit;
             e = (cal->effort(limit, t, m_currentSchedule) * m_units)/100;
         } else {
             //kDebug()<<m_name<<": Not available (start="<<start<<","<<limit<<")";
@@ -685,6 +686,7 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
         DateTime t = availableAfter(start, limit);
         if (t.isValid()) {
             sts = true;
+            if ( t > limit ) kError()<<m_name<<"forward, t > limit: t="<<t<<" limit="<<limit;
             e = (cal->effort(t, limit, m_currentSchedule) * m_units)/100;
         }
     }
@@ -759,9 +761,9 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, S
     } else {
         t = m_availableUntil < time ? m_availableUntil : time;
     }
-    //kDebug()<<t<<","<<lmt;
+    if ( t < lmt ) kError()<<" t < lmt"<<t<<"<"<<lmt;
     t = cal->firstAvailableBefore(t, lmt, sch );
-    //kDebug()<<m_name<<" id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<" returns:"<<time<<"="<<t<<""<<lmt;
+    if ( t.isValid() && t < lmt ) kError()<<m_name<<" id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<" t < lmt:"<<"t="<<t<<" lmt="<<lmt;
     return t;
 }
 
