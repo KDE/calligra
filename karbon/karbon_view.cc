@@ -93,6 +93,7 @@
 #include <KoPathShape.h>
 #include <KoPathCombineCommand.h>
 #include <KoPathSeparateCommand.h>
+#include <KoPathReverseCommand.h>
 #include <KoToolBoxFactory.h>
 #include <KoParameterShape.h>
 #include <KoRulerController.h>
@@ -862,6 +863,15 @@ KarbonView::separatePath()
         m_canvas->addCommand( new KoPathSeparateCommand( part(), paths ) );
 }
 
+void KarbonView::reversePath()
+{
+    debugView("KarbonView::reversePath()");
+
+    QList<KoPathShape*> paths = selectedPathShapes();
+    if( paths.size() )
+        m_canvas->addCommand( new KoPathReverseCommand( paths ) );
+}
+
 void KarbonView::intersectPaths()
 {
     booleanOperation( KarbonBooleanCommand::Intersection );
@@ -1119,6 +1129,12 @@ KarbonView::initActions()
     m_separatePath->setEnabled( false );
     connect(m_separatePath, SIGNAL(triggered()), this, SLOT(separatePath()));
 
+    m_reversePath  = new KAction(i18n("Re&verse Path"), this);
+    actionCollection()->addAction("reverse_path", m_reversePath );
+    m_reversePath->setShortcut(QKeySequence("Ctrl+R"));
+    m_reversePath->setEnabled( false );
+    connect(m_reversePath, SIGNAL(triggered()), this, SLOT(reversePath()));
+
     m_intersectPath = new KAction(i18n("Intersect Paths"), this);
     actionCollection()->addAction("intersect_path", m_intersectPath );
     //m_intersectPath->setShortcut(QKeySequence("Shift+Ctrl+K"));
@@ -1355,6 +1371,7 @@ KarbonView::selectionChanged()
         //m_closePath->setEnabled( selectedPaths > 0 );
         m_combinePath->setEnabled( selectedPaths > 1 );
         m_separatePath->setEnabled( selectedPaths > 0 );
+        m_reversePath->setEnabled( selectedPaths > 0 );
         m_intersectPath->setEnabled( selectedPaths == 2 );
         m_subtractPath->setEnabled( selectedPaths == 2 );
         m_unitePath->setEnabled( selectedPaths == 2 );
@@ -1438,6 +1455,28 @@ void KarbonView::updateUnit( KoUnit unit )
     m_vertRuler->setUnit( unit );
     m_TransformDocker->setUnit( unit );
     m_canvas->resourceProvider()->setUnitChanged();
+}
+
+QList<KoPathShape*> KarbonView::selectedPathShapes()
+{
+    KoSelection* selection = m_canvas->shapeManager()->selection();
+    if( ! selection )
+        return QList<KoPathShape*>();
+
+    QList<KoShape*> selectedShapes = selection->selectedShapes();
+    QList<KoPathShape*> paths;
+
+    foreach( KoShape* shape, selectedShapes )
+    {
+        KoPathShape *path = dynamic_cast<KoPathShape*>( shape );
+        if( path )
+        {
+            paths << path;
+            selection->deselect( shape );
+        }
+    }
+
+    return paths;
 }
 
 #include "karbon_view.moc"

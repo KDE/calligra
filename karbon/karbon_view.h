@@ -135,6 +135,7 @@ public slots:
     void closePath();
     void combinePath();
     void separatePath();
+    void reversePath();
 
     void intersectPaths();
     void subtractPaths();
@@ -194,6 +195,9 @@ private:
 
     void booleanOperation( KarbonBooleanCommand::BooleanOperation operation );
 
+    /// Returns a list of all selected path shapes
+    QList<KoPathShape*> selectedPathShapes();
+
     KarbonPart        *m_part;
     KarbonCanvas        *m_canvas;
     KoCanvasController    *m_canvasController;
@@ -208,6 +212,7 @@ private:
     KAction            *m_closePath;
     KAction            *m_combinePath;
     KAction            *m_separatePath;
+    KAction * m_reversePath;
     KAction * m_intersectPath;
     KAction * m_subtractPath;
     KAction * m_unitePath;
