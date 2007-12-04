@@ -44,6 +44,7 @@
   <Action name="view_snaptogrid"/>
   <Separator/>
   <Action name="view_zoom"/>
+  <Action name="view_fullscreen"/>
  </Menu>
  <Menu name="insert"><text context="Insert menu">&amp;Insert</text>
   <!-- Inside the text, simple things (e.g. one char) -->

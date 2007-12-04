@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="kpresenter" version="117">
+<kpartgui name="kpresenter" version="118">
     <MenuBar>
         <Menu name="edit"><text>&amp;Edit</text>
             <Action name="edit_undo"/>
@@ -25,10 +25,6 @@
             <Separator/>
             <ActionList name="view_split"/>
             <Separator/>
-            <Action name="zoom_out"/>
-            <Action name="zoom_in"/>
-            <Action name="view_zoom"/>
-            <Separator/>
             <Action name="view_masterpages"/>
             <Separator/>
             <Action name="view_mode"/>
@@ -37,6 +33,11 @@
             <Separator/>
             <Action name="view_grid"/>
             <Action name="view_snaptogrid"/>
+            <Separator/>
+            <Action name="zoom_out"/>
+            <Action name="zoom_in"/>
+            <Action name="view_zoom"/>
+            <Action name="view_fullscreen"/>
         </Menu>
         <Menu name="insert"><text>&amp;Insert</text>
             <Action name="insert_variable"/> <!-- menu -->
