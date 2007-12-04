@@ -137,6 +137,7 @@ signals:
     
 public slots:
     void slotUpdate();
+    void slotCreateTemplate();
     void slotAddResource( ResourceGroup *group );
     void slotEditResource();
     void slotEditCut();
@@ -274,6 +275,9 @@ private:
     ScheduleManager *m_manager;
     
     bool m_readWrite;
+    
+    // ------ File
+    QAction *actionCreateTemplate;
     
     // ------ Edit
     QAction *actionCut;

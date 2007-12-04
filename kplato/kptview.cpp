@@ -67,10 +67,13 @@
 #include <kdesktopfile.h>
 #include <k3command.h>
 #include <ktoggleaction.h>
+#include <ktemporaryfile.h>
 #include <kfiledialog.h>
 #include <kparts/event.h>
 #include <kparts/partmanager.h>
+
 #include <KoQueryTrader.h>
+#include <KoTemplateCreateDia.h>
 
 #include "kptviewbase.h"
 #include "kptaccountsview.h"
@@ -175,6 +178,11 @@ View::View( Part* part, QWidget* parent )
     connect( m_tab, SIGNAL( currentChanged( int ) ), this, SLOT( slotCurrentChanged( int ) ) );
 
     // The menu items
+    // ------ File
+    actionCreateTemplate = new KAction( i18n( "&Create Template From Document..." ), this );
+    actionCollection()->addAction("file_createtemplate", actionCreateTemplate );
+    connect( actionCreateTemplate, SIGNAL( triggered( bool ) ), SLOT( slotCreateTemplate() ) );
+    
     // ------ Edit
     actionCut = actionCollection()->addAction(KStandardAction::Cut,  "edit_cut", this, SLOT( slotEditCut() ));
     actionCopy = actionCollection()->addAction(KStandardAction::Copy,  "edit_copy", this, SLOT( slotEditCopy() ));
@@ -329,6 +337,24 @@ View::~View()
 ViewAdaptor* View::dbusObject()
 {
     return m_dbus;
+}
+
+void View::slotCreateTemplate()
+{
+    int width = 60;
+    int height = 60;
+    QPixmap pix = getPart()->generatePreview(QSize(width, height));
+
+    KTemporaryFile tempFile;
+    tempFile.setSuffix( ".kplatot" );
+    //Check that creation of temp file was successful
+    if ( tempFile.status() != 0 ) {
+        qWarning("Creation of temprary file to store template failed.");
+        return;
+    }
+
+    getPart()->saveNativeFormat( tempFile.name() );
+    KoTemplateCreateDia::createTemplate( "kplato_template", Factory::global(), tempFile.name(), pix, this );
 }
 
 void View::createViews()
