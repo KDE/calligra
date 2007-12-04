@@ -14,7 +14,6 @@ ADD_DEFINITIONS(
 -DYYERROR_VERBOSE=1
 )
 
-
 ########### generate parser/lexer files ###############
 # as described at http://public.kitware.com/pipermail/cmake/2002-September/003028.html
 
@@ -81,6 +80,12 @@ target_link_libraries(kexidb
    ${KDE4_KDECORE_LIBS} ${KDE4_KIO_LIBS} ${KDE4_KPARTS_LIBS} kexiutils )
 
 set_target_properties(kexidb PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+
+if(MSVC)
+   # avoid LNK1169 errors
+   set_target_properties(kexidb PROPERTIES LINK_FLAGS /FORCE:MULTIPLE)
+endif(MSVC)
+
 install(TARGETS kexidb  DESTINATION ${LIB_INSTALL_DIR})
 
 

@@ -39,10 +39,6 @@
 
 #define KEXICSV_OTHER_DELIMITER_INDEX 4
 
-#ifdef MSC_VER
-Q_TEMPLATE_EXTERN template class Q_CORE_EXPORT QVector<QString>;
-#endif
-
 class KexiCSVDelimiterWidget::Private
 {
 	public:

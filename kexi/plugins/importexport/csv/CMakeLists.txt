@@ -20,6 +20,11 @@ kde4_add_plugin(kexihandler_csv_importexport ${kexihandler_csv_importexport_PART
 
 target_link_libraries(kexihandler_csv_importexport  ${KDE4_KDECORE_LIBS} kexicore keximigrate )
 
+if(MSVC)
+   # avoid LNK1169 errors
+   set_target_properties(kexihandler_csv_importexport PROPERTIES LINK_FLAGS /FORCE:MULTIPLE)
+endif(MSVC)
+
 install(TARGETS kexihandler_csv_importexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
