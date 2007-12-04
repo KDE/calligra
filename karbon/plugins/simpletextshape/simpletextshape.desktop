@@ -1,0 +1,8 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Simple Text Shape
+ServiceTypes=KOffice/Shape
+Type=Service
+X-KDE-Library=simpletextshape
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1
