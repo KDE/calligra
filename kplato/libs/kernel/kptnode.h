@@ -626,7 +626,7 @@ public:
 class KPLATOKERNEL_EXPORT Estimate {
 public:
     /// Constructor
-    Estimate( Node *parent = 0 );
+    explicit Estimate( Node *parent = 0 );
     /// Copy constructor.
     Estimate (const Estimate &estimate);
     /// Destructor

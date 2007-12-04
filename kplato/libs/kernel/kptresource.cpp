@@ -659,7 +659,7 @@ void Resource::makeAppointment(Schedule *node) {
 
 // the amount of effort we can do within the duration
 Duration Resource::effort(const DateTime &start, const Duration &duration, bool backward, bool *ok) const {
-    //kDebug()<<m_name<<":"<<start.date().toString()<<" for duration"<<duration.toString(Duration::Format_Day);
+    //kDebug()<<m_name<<":"<<start<<" for duration"<<duration.toString(Duration::Format_Day);
     bool sts=false;
     Duration e;
     if (duration == 0) {
@@ -688,7 +688,7 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
             e = (cal->effort(t, limit, m_currentSchedule) * m_units)/100;
         }
     }
-    //kDebug()<<start.toString()<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")";
+    //kDebug()<<start<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")";
     if (ok) *ok = sts;
     return e;
 }
@@ -1132,7 +1132,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
             end = start;
             break;
         }
-        //kDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
+        //kDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
     }
     //kDebug()<<"duration"<<(backward?"backward":"forward:")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts;
     d = Duration(0, 0, 1); // 1 minute

@@ -52,7 +52,9 @@ Node::Node(Node &node, Node *parent)
     : QObject( 0 ), // Don't set parent, we handle parent/child ourselves
       m_nodes(), 
       m_dependChildNodes(), 
-      m_dependParentNodes() {
+      m_dependParentNodes(),
+      m_estimate( 0 )
+{
     //kDebug()<<"("<<this<<")";
     m_parent = parent;
     init();
@@ -1084,7 +1086,8 @@ Estimate::Estimate( Node *parent )
     m_risktype = Risk_None;
 }
 
-Estimate::Estimate(const Estimate &estimate) 
+Estimate::Estimate(const Estimate &estimate)
+    : m_parent( 0 )
 {
     copy( estimate );
 }

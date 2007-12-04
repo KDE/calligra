@@ -919,8 +919,11 @@ Duration Calendar::effort(const QDate &date, const QTime &start, const QTime &en
 Duration Calendar::effort(const DateTime &start, const DateTime &end, Schedule *sch) const {
     //kDebug()<<m_name<<":"<<start<<" to"<<end;
     Duration eff;
-    if (!start.isValid() || !end.isValid() || end <= start) {
+    if (!start.isValid() || !end.isValid() || end < start) {
         kError()<<"Illegal datetime: "<<start.toString()<<", "<<end.toString()<<endl;
+        return eff;
+    }
+    if ( start == end ) {
         return eff;
     }
     // convert to calendar's timezone in case caller use a different timezone

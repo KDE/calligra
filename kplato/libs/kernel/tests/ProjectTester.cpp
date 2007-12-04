@@ -652,6 +652,104 @@ void ProjectTester::schedule()
 
     QCOMPARE( m_project->startTime(), t->startTime() );
 
+    // Calculate forward
+    kDebug()<<"Calculate forwards, 2 Task, no overbooking ----------";
+    m_project->setConstraint( Node::MustStartOn );
+    m_project->setConstraintStartTime( DateTime( today, QTime() ) );
+    t->setConstraint( Node::ASAP );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 2.0 );
+    
+    Task *tsk2 = m_project->createTask( *t, m_project );
+    tsk2->setName( "T2" );
+    m_project->addTask( tsk2, m_project );
+    
+    gr = new ResourceGroupRequest( g );
+    tsk2->addRequest( gr );
+    rr = new ResourceRequest( r, 100 );
+    gr->addResourceRequest( rr );
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    sm->setAllowOverbooking( false );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+//     kDebug()<<"earlyStart :"<<t->earlyStart();
+//     kDebug()<<"lateStart  :"<<t->lateStart();
+//     kDebug()<<"earlyFinish:"<<t->earlyFinish();
+//     kDebug()<<"lateFinish :"<<t->lateFinish();
+//     kDebug()<<"startTime  :"<<t->startTime();
+//     kDebug()<<"endTime    :"<<t->endTime();
+//     
+//     kDebug()<<"earlyStart :"<<tsk2->earlyStart();
+//     kDebug()<<"lateStart  :"<<tsk2->lateStart();
+//     kDebug()<<"earlyFinish:"<<tsk2->earlyFinish();
+//     kDebug()<<"lateFinish :"<<tsk2->lateFinish();
+//     kDebug()<<"startTime  :"<<tsk2->startTime();
+//     kDebug()<<"endTime    :"<<tsk2->endTime();
+
+    QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
+    QCOMPARE( t->lateStart(), tsk2->startTime() );
+    QCOMPARE( t->earlyFinish(), DateTime( tomorrow, t2 ) );
+    QCOMPARE( t->lateFinish(), t->lateFinish() );
+
+    QCOMPARE( t->startTime(), DateTime( today, t1 ) );
+    QCOMPARE( t->endTime(), t->earlyFinish() );
+    QVERIFY( t->schedulingError() == false );
+
+    //NOTE: lateStart will be earlier than earlyFinish in this test because
+    //      T2 will be scheduled to run earlier than T1 if scheduled ALAP:
+    //      T1 is scheduled first so is scheduled to run as late as possible,
+    //      T2 will then have to be scheduled to run earlier because the resource
+    //      is booked by T1.
+    QCOMPARE( tsk2->earlyStart(), t->earlyStart() );
+    QCOMPARE( tsk2->lateStart(), DateTime( today, t1 ) );
+    QCOMPARE( tsk2->earlyFinish(), DateTime( tomorrow.addDays( 2 ), t2 ) );
+    QCOMPARE( tsk2->lateFinish(), tsk2->earlyFinish() );
+
+    QCOMPARE( tsk2->startTime(), DateTime( tomorrow.addDays( 1 ), t1 ) );
+    QCOMPARE( tsk2->endTime(), tsk2->earlyFinish() );
+    QVERIFY( tsk2->schedulingError() == false );
+    
+    QCOMPARE( m_project->endTime(), tsk2->endTime() );
+
+    // Calculate forward
+    kDebug()<<"Calculate forwards, 2 Task, relation ---------------";
+    m_project->setConstraint( Node::MustStartOn );
+    m_project->setConstraintStartTime( DateTime( today, QTime() ) );
+    t->setConstraint( Node::ASAP );
+    t->estimate()->setUnit( Duration::Unit_d );
+    t->estimate()->setExpectedEstimate( 2.0 );
+    
+    Relation *rel = new Relation( t, tsk2 );
+    bool relationAdded = m_project->addRelation( rel );
+    QVERIFY( relationAdded );
+    
+    sm = m_project->createScheduleManager( "Test Plan" );
+    sm->setAllowOverbooking( true );
+    m_project->addScheduleManager( sm );
+    m_project->calculate( *sm );
+
+    QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
+    QCOMPARE( t->lateStart(), DateTime( today, t1 ) );
+    QCOMPARE( t->earlyFinish(), DateTime( tomorrow, t2 ) );
+    QCOMPARE( t->lateFinish(), t->lateFinish() );
+
+    QCOMPARE( t->startTime(), DateTime( today, t1 ) );
+    QCOMPARE( t->endTime(), t->earlyFinish() );
+    QVERIFY( t->schedulingError() == false );
+
+    QCOMPARE( tsk2->earlyStart(), t->earlyFinish() );
+    QCOMPARE( tsk2->lateStart(), DateTime( tomorrow.addDays( 1 ), t1 ) );
+    QCOMPARE( tsk2->earlyFinish(), DateTime( tomorrow.addDays( 2 ), t2 ) );
+    QCOMPARE( tsk2->lateFinish(), tsk2->earlyFinish() );
+
+    QCOMPARE( tsk2->startTime(), DateTime( tomorrow.addDays( 1 ), t1 ) );
+    QCOMPARE( tsk2->endTime(), tsk2->earlyFinish() );
+    QVERIFY( tsk2->schedulingError() == false );
+    
+    QCOMPARE( m_project->endTime(), tsk2->endTime() );
+
 }
 
 

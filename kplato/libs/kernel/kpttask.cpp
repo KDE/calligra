@@ -68,6 +68,7 @@ Task::Task(Task &task, Node *parent)
     //kDebug()<<"("<<this<<")";
     m_requests = 0;
     
+    delete m_estimate;
     if ( task.estimate() ) {
         m_estimate = new Estimate( *( task.estimate() ) );
     } else {
@@ -773,7 +774,7 @@ DateTime Task::calculateEarlyFinish(int use) {
             {
                 m_durationForward = duration(cs->earlyStart, use, false);
                 cs->earlyFinish = cs->earlyStart + m_durationForward;
-                //kDebug()<<m_name<<":"<<cs->earlyStart<<"+"<<m_durationForward.toString()<<"="<<cs->earlyFinish;
+                //kDebug()<<m_name<<" ASAP/ALAP:"<<cs->earlyStart<<"+"<<m_durationForward.toString()<<"="<<cs->earlyFinish;
                 if ( !cs->allowOverbooking() ) {
                     cs->startTime = cs->earlyStart;
                     cs->endTime = cs->earlyFinish;
@@ -983,6 +984,7 @@ DateTime Task::calculateLateStart(int use) {
             case Node::ALAP:
                 m_durationBackward = duration(cs->lateFinish, use, true);
                 cs->lateStart = cs->lateFinish - m_durationBackward;
+                //kDebug()<<m_name<<" ASAP/ALAP:"<<cs->lateFinish<<"-"<<m_durationBackward.toString()<<"="<<cs->lateStart;
                 if ( !cs->allowOverbooking() ) {
                     cs->startTime = cs->lateStart;
                     cs->endTime = cs->lateFinish;
