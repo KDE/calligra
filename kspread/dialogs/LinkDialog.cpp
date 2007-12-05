@@ -81,7 +81,7 @@ LinkDialog::LinkDialog( View* view, const char* )
     d->internetPage = new QWidget();
     d->p1 = addPage( d->internetPage, i18n( "Internet" ) );
     d->p1->setHeader( i18n("Link to Internet Address") );
-    d->p1->setIcon( KIcon("network") );
+    d->p1->setIcon( KIcon("internet-web-browser") );
     QVBoxLayout* iLayout = new QVBoxLayout( d->internetPage );
     iLayout->addWidget( new QLabel( i18n("Text to display:" ), d->internetPage ) );
     d->internetText = new KLineEdit( d->internetPage );
@@ -97,7 +97,7 @@ LinkDialog::LinkDialog( View* view, const char* )
     d->mailPage = new QWidget();
     d->p2 = addPage( d->mailPage, i18n( "Mail" ) );
     d->p2->setHeader( i18n("Link to Mail Address") );
-    d->p2->setIcon( KIcon("mail") );
+    d->p2->setIcon( KIcon("internet-mail") );
     QVBoxLayout* mLayout = new QVBoxLayout( d->mailPage );
     mLayout->addWidget( new QLabel( i18n("Text to display:" ), d->mailPage ) );
     d->mailText = new KLineEdit( d->mailPage );
@@ -116,7 +116,7 @@ LinkDialog::LinkDialog( View* view, const char* )
     d->filePage = new QWidget();
     d->p3 = addPage( d->filePage, i18n( "File" ) );
     d->p3->setHeader( i18n("Link to File") );
-    d->p3->setIcon( KIcon("document-open") );
+    d->p3->setIcon( KIcon("system-file-manager") );
     QVBoxLayout* fLayout = new QVBoxLayout( d->filePage );
     fLayout->addWidget( new QLabel( i18n("Text to display:" ), d->filePage ) );
     d->fileText = new KLineEdit( d->filePage );
