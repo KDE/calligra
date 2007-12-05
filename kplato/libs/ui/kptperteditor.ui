@@ -5,64 +5,36 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>503</width>
-    <height>383</height>
+    <width>564</width>
+    <height>434</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
-   <property name="margin" >
+  <layout class="QHBoxLayout" >
+   <property name="spacing" >
     <number>0</number>
    </property>
-   <property name="spacing" >
-    <number>6</number>
+   <property name="leftMargin" >
+    <number>0</number>
    </property>
-   <item row="0" column="0" >
-    <widget class="QSplitter" name="splitter" >
-     <property name="orientation" >
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="handleWidth" >
-      <number>6</number>
-     </property>
-     <widget class="QWidget" name="layoutWidget" >
-      <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <item>
-        <widget class="QLabel" name="label" >
-         <property name="text" >
-          <string>Tasks :</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTreeWidget" name="tableTaskWidget" >
-         <column>
-          <property name="text" >
-           <string>Tasks</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-     <widget class="QWidget" name="layoutWidget" >
-      <layout class="QVBoxLayout" >
-       <property name="margin" >
-        <number>0</number>
-       </property>
-       <property name="spacing" >
-        <number>6</number>
-       </property>
-       <item>
-        <widget class="KActionSelector" native="1" name="assignList" />
-       </item>
-      </layout>
-     </widget>
+   <property name="topMargin" >
+    <number>0</number>
+   </property>
+   <property name="rightMargin" >
+    <number>0</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>0</number>
+   </property>
+   <item>
+    <widget class="KActionSelector" name="assignList" />
+   </item>
+   <item>
+    <widget class="QTreeWidget" name="tableTaskWidget" >
+     <column>
+      <property name="text" >
+       <string>Tasks</string>
+      </property>
+     </column>
     </widget>
    </item>
   </layout>

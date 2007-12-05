@@ -101,6 +101,9 @@ public:
     /// Save context info from this view. Reimplement.
     virtual void saveContext( QDomElement &/*context*/ ) const {}
     
+    virtual QList<QAction*> viewlistActionList() const { return m_viewlistActionList; }
+    void addViewlistAction( QAction *action ) { m_viewlistActionList.append( action ); }
+    
     virtual QList<QAction*> contextActionList() const { return m_contextActionList; }
     void addContextAction( QAction *action ) { m_contextActionList.append( action ); }
     
@@ -118,7 +121,10 @@ protected:
     /// List of all menu/toolbar actions (used for plug/unplug)
     QMap<QString, QList<QAction*> > m_actionListMap;
 
-    /// List of actions that will be shown in the view selectors context menu
+    /// List of actions that will be shown in the viewlist context menu
+    QList<QAction*> m_viewlistActionList;
+    
+    /// List of actions that will be shown in the views header context menu
     QList<QAction*> m_contextActionList;
 };
 

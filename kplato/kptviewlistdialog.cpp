@@ -72,7 +72,8 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << i18n( "Task Editor" )
             << i18n( "Work & Vacation Editor" )
             << i18n( "Accounts Editor" )
-            << i18n( "Dependency Editor" )
+            << i18n( "Dependency Editor (Graphic)" )
+            << i18n( "Dependency Editor (List)" )
             << i18n( "Schedule Handler" )
             << i18n( "Task Status" )
             << i18n( "Task View" )
@@ -117,34 +118,37 @@ bool AddViewPanel::ok()
         case 3: // Accounts Editor
             m_view->createAccountsEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 4: // Dependency Editor
+        case 4: // Dependency Editor (Graphic)
             m_view->createDependencyEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 5: // Schedules Handler
+        case 5: // Dependency Editor (List)
+            m_view->createPertEditor( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            break;
+        case 6: // Schedules Handler
             m_view->createScheduleHandler( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 6: // Task status
+        case 7: // Task status
             m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 7: // Task status
+        case 8: // Task status
             m_view->createTaskView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 8: // Gantt View
+        case 9: // Gantt View
             m_view->createGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 9: // Milestone Gantt View
+        case 10: // Milestone Gantt View
             m_view->createMilestoneGanttView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 10: // Resource Assignments
+        case 11: // Resource Assignments
             m_view->createResourceAppointmentsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 11: // Cost Breakdown
+        case 12: // Cost Breakdown
             m_view->createAccountsView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 12: // Performance Chart
+        case 13: // Performance Chart
             m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 13: // Tasks by Resources
+        case 14: // Tasks by Resources
             m_view->createResourceAssignmentView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
         default:

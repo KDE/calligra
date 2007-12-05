@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
   Copyright (C) 2007 Florian Piquemal <flotueur@yahoo.fr>
   Copyright (C) 2007 Alexis Ménard <darktears31@gmail.com>
+  Copyright (C) 2007 Dag Andersen <kplato@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -37,6 +38,7 @@
 #include <QVBoxLayout>
 #include <QTreeWidget>
 #include <QFont>
+#include <QTimer>
 
 #include <QtCore/QVariant>
 #include <QtGui>
@@ -83,7 +85,8 @@ public:
     void draw();
     void drawSubTasksName( QTreeWidgetItem *parent,Node * currentNode);
     void loadRequiredTasksList(Node * taskNode);
-    Node * itemToNode(QString itemName, Node * startNode);
+    Node *itemToNode( QTreeWidgetItem *item );
+    Node *itemToNode( QListWidgetItem *item );
     QList<Node*> listNodeNotView(Node * node);
 
 signals:
@@ -91,6 +94,7 @@ signals:
 
 private slots:
     void dispAvailableTasks();
+    void dispAvailableTasks( Node *parent, Node *selectedTask );
     void dispAvailableTasks( Relation *rel );
     void addTaskInRequiredList(QListWidgetItem * currentItem);
     void removeTaskFromRequiredList(QListWidgetItem * currentItem);
@@ -105,6 +109,7 @@ private:
     Project * m_project;
     QList<Node *> list_nodeNotView;
     Ui::PertEditor widget;
+    
 };
 
 }  //KPlato namespace

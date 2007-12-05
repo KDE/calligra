@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
   Copyright (C) 2007 Florian Piquemal <flotueur@yahoo.fr>
   Copyright (C) 2007 Alexis Ménard <darktears31@gmail.com>
+  Copyright (C) 2007 Dag Andersen <kplato@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -56,30 +57,24 @@ void PertEditor::draw()
         return;
     }
     
-    foreach(Node * currentNode, m_project->projectNode()->childNodeIterator()){
+    foreach(Node *currentNode, m_project->childNodeIterator()){
         kDebug() << currentNode->type();
-        if (currentNode->type()!=4){
-            QTreeWidgetItem * item = new QTreeWidgetItem( m_tasktree );
-            item->setText( 0, currentNode->name());
-            drawSubTasksName(item,currentNode);
-        }
-        //kDebug() <<"[void KPlato::PertEditor::draw( Project &project )] TASK FOUNDED";
+        QTreeWidgetItem * item = new QTreeWidgetItem( m_tasktree );
+        item->setText( 0, currentNode->name());
+        item->setData( 0, Qt::UserRole + 1, currentNode->id() );
+        drawSubTasksName(item,currentNode);
+        //kDebug() << "TASK FOUND";
     }
-    
-
 }
 
 void PertEditor::drawSubTasksName( QTreeWidgetItem *parent, Node * currentNode)
 {
-    if (currentNode->numChildren() > 0){
-        foreach(Node * currentChild, currentNode->childNodeIterator()){
-            if (currentChild->type()!=4){
-                QTreeWidgetItem * item = new QTreeWidgetItem( parent );
-                item->setText( 0, currentChild->name());
-                drawSubTasksName( item, currentChild);
-            }
-            //kDebug() <<"[void KPlato::PertEditor::draw( Project &project )] SUBTASK FOUNDED";
-        }
+    foreach(Node * currentChild, currentNode->childNodeIterator()){
+        QTreeWidgetItem * item = new QTreeWidgetItem( parent );
+        item->setText( 0, currentChild->name());
+        item->setData( 0, Qt::UserRole + 1, currentChild->id() );
+        drawSubTasksName( item, currentChild);
+        //kDebug() << SUBTASK FOUND";
     }
 }
 
@@ -110,7 +105,8 @@ PertEditor::PertEditor( KoDocument *part, QWidget *parent )
     connect( m_assignList, SIGNAL(added(QListWidgetItem *)), this, SLOT(addTaskInRequiredList(QListWidgetItem * )) );
     connect( m_assignList, SIGNAL(removed(QListWidgetItem *)), this, SLOT(removeTaskFromRequiredList(QListWidgetItem * )) );
 
-    // connects used to refresh the kactionselector after an undo/redo
+    m_assignList->setAvailableInsertionPolicy( KActionSelector::AtBottom );
+    //m_assignList->setButtonsEnabled();
 }
 
 void PertEditor::updateReadWrite( bool rw )
@@ -122,52 +118,64 @@ void PertEditor::dispAvailableTasks( Relation *rel ){
     dispAvailableTasks();
 }
 
+void PertEditor::dispAvailableTasks( Node *parent, Node *selectedTask )
+{
+    foreach(Node * currentNode, parent->childNodeIterator() )
+    {
+        //TODO: we need to use QTreeWidget instead of QListWidget
+        QString indent = QString( "%1" ).arg( "", (currentNode->level()-1)*2 );
+        kDebug()<<indent+currentNode->name()<<"level="<<currentNode->level();
+        // Checks it isn't the same as the selected task in the m_tasktree
+        if ( selectedTask != 0 && currentNode != selectedTask
+             && (m_assignList->selectedListWidget()->findItems(currentNode->name(),0)).empty()
+             && m_project->legalToLink( currentNode, selectedTask ) )
+        {
+            QListWidgetItem *item = new QListWidgetItem(indent+currentNode->name());
+            item->setData( Qt::UserRole + 1, currentNode->id() );
+            m_assignList->availableListWidget()->addItem(item);
+        }
+        else
+        {
+            QFont* fakeItemFont = new QFont();
+            QBrush* fakeItemBrush = new QBrush();
+            fakeItemFont->setItalic(true);
+            fakeItemBrush->setColor(QColor ( Qt::lightGray));
+            QListWidgetItem* fakeItem = new QListWidgetItem();
+            fakeItem->setData( Qt::UserRole + 1, currentNode->id() );
+            fakeItem->setText(indent+currentNode->name());
+            fakeItem->setFont(*fakeItemFont);
+            fakeItem->setForeground(*fakeItemBrush);
+            fakeItem->setFlags(Qt::ItemIsEnabled);
+            m_assignList->availableListWidget()->addItem(fakeItem);
+        }
+        dispAvailableTasks( currentNode, selectedTask );
+    }
+    //m_assignList->setButtonsEnabled();
+}
 
 void PertEditor::dispAvailableTasks(){
 
     list_nodeNotView.clear();
 
-    list_nodeNotView.begin();
+//    list_nodeNotView.begin();
 
     QList<QTreeWidgetItem*> selectedItemList=m_tasktree->selectedItems();
     
+    if ( m_project == 0 ) {
+        return;
+    }
     if(!(selectedItemList.count()<1))
     {
-        QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
+        Node *selectedTask = itemToNode(m_tasktree->selectedItems().first());
         m_assignList->availableListWidget()->clear();
         m_assignList->selectedListWidget()->clear();
         
-        loadRequiredTasksList(itemToNode(selectedTaskName, m_node));
+        loadRequiredTasksList(selectedTask);
         
-        listNodeNotView(itemToNode(selectedTaskName, m_node));
+//        listNodeNotView(selectedTask);
         
-        foreach(Node * currentNode, m_node->childNodeIterator() )
-        {
-            // Checks if the curent node is not a milestone
-            // and if it isn't the same as the selected task in the m_tasktree
-            if ( currentNode->type() != Node::Type_Milestone 
-		&& currentNode->type() != Node::Type_Summarytask 
-		&& currentNode->name() != selectedTaskName
-                &&  !list_nodeNotView.contains(currentNode)
-                && (m_assignList->selectedListWidget()->findItems(currentNode->name(),0)).empty())
-            {
-                m_assignList->availableListWidget()->addItem(currentNode->name());
-            }
-            else
-            {
-                QFont* fakeItemFont = new QFont();
-                QBrush* fakeItemBrush = new QBrush();
-                    fakeItemFont->setItalic(true);
-                    fakeItemBrush->setColor(QColor ( Qt::lightGray));
-                QListWidgetItem* fakeItem = new QListWidgetItem();
-                    fakeItem->setText(currentNode->name());
-                    fakeItem->setFont(*fakeItemFont);
-                    fakeItem->setForeground(*fakeItemBrush);
-                    fakeItem->setFlags(Qt::ItemIsEnabled);
-                m_assignList->availableListWidget()->addItem(fakeItem);
-            }
-        }
-
+        dispAvailableTasks( m_project, selectedTask );
+        
         list_nodeNotView.clear();
     }
     else
@@ -180,6 +188,9 @@ void PertEditor::dispAvailableTasks(){
 //return parents of the node
 QList<Node*> PertEditor::listNodeNotView(Node * node)
 {
+    if ( m_project == 0 ) {
+        return QList<Node*>();
+    }
     list_nodeNotView = node->getParentNodes();
     foreach(Node* currentNode,m_node->childNodeIterator())
     {
@@ -192,48 +203,75 @@ QList<Node*> PertEditor::listNodeNotView(Node * node)
 }
 
 
-Node * PertEditor::itemToNode(QString itemName, Node * startNode){
-    Node * result = 0;
-    if (startNode->numChildren() > 0){
-        foreach(Node * currentNode, startNode->childNodeIterator() ){
-            if (currentNode->name() == itemName) {
-                return currentNode;
-            } else {
-                result=itemToNode(itemName, currentNode);
-            }
-        }
+Node * PertEditor::itemToNode( QTreeWidgetItem *item )
+{
+    if ( m_project == 0 ) {
+        return 0;
     }
-    return result;
+    return m_project->findNode( item->data( 0, Qt::UserRole + 1 ).toString() );
 }
 
-void PertEditor::addTaskInRequiredList(QListWidgetItem * currentItem){
-    // add the relation between the selected task and the current task
-    QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
+Node * PertEditor::itemToNode( QListWidgetItem *item )
+{
+    if ( m_project == 0 ) {
+        return 0;
+    }
+    return m_project->findNode( item->data( Qt::UserRole + 1 ).toString() );
+}
 
-    Relation* m_rel=new Relation (itemToNode(currentItem->text(), m_node),itemToNode(selectedTaskName, m_node));
+void PertEditor::addTaskInRequiredList(QListWidgetItem * currentItem)
+{
+    kDebug()<<currentItem;
+    if ( currentItem == 0 ) {
+        return;
+    }
+    if ( m_project == 0 ) {
+        return;
+    }
+    // add the relation between the selected task and the current task
+    QTreeWidgetItem *selectedTask = m_tasktree->selectedItems().first();
+    if ( selectedTask == 0 ) {
+        return;
+    }
+
+    Node *par = itemToNode( currentItem );
+    Node *child = itemToNode( selectedTask );
+    if ( par == 0 || child == 0 ) {
+        return;
+    }
+    Relation *m_rel = new Relation ( par, child );
     AddRelationCmd * addCmd= new AddRelationCmd(*m_project,m_rel,currentItem->text());
     m_part->addCommand( addCmd );
 
 }
 
 void PertEditor::removeTaskFromRequiredList(QListWidgetItem * currentItem){
+    kDebug()<<currentItem;
+    if ( currentItem == 0 ) {
+        return;
+    }
     // remove the relation between the selected task and the current task
-    QString selectedTaskName = m_tasktree->selectedItems().first()->text(0);
-
+    QTreeWidgetItem *selectedTask = m_tasktree->selectedItems().first();
     // remove the relation
-    Relation* m_rel = itemToNode(selectedTaskName, m_node)->findParentRelation(itemToNode(currentItem->text(), m_node));
+    Relation* m_rel = itemToNode(selectedTask)->findParentRelation(itemToNode(currentItem));
     DeleteRelationCmd * delCmd= new DeleteRelationCmd(*m_project,m_rel,currentItem->text());
     m_part->addCommand( delCmd );
 
-    emit refreshAvailableTaskList();
+//    dispAvailableTasks();
 }
 
 void PertEditor::loadRequiredTasksList(Node * taskNode){
+    if ( taskNode == 0 ) {
+        kWarning()<<"No current node";
+        return;
+    }
     // Display the required task list into the rigth side of m_assignList
     m_assignList->selectedListWidget()->clear();
     foreach(Relation * currentRelation, taskNode->dependParentNodes()){
-            m_assignList->selectedListWidget()->addItem(currentRelation->parent()->name());
-        }
+        QListWidgetItem *item = new QListWidgetItem(currentRelation->parent()->name());
+        item->setData( Qt::UserRole + 1, currentRelation->parent()->id() );
+        m_assignList->selectedListWidget()->addItem(item);
+    }
 }
 
 void PertEditor::slotUpdate(){

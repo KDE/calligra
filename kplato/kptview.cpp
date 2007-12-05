@@ -392,38 +392,38 @@ void View::createViews()
                     QString tag = e1.attribute( "tag" );
                     QString name = e1.attribute( "name" );
                     QString tip = e1.attribute( "tooltip" );
-                    //FIXME: Remove KPlato:: from type
-                    if ( type == "KPlato::CalendarEditor" ) {
+                    //NOTE: type is the same as classname (so if it is changed...)
+                    if ( type == "CalendarEditor" ) {
                         v = createCalendarEditor( cat, tag, name, tip );
-                    } else if ( type == "KPlato::AccountsEditor" ) {
+                    } else if ( type == "AccountsEditor" ) {
                         v = createAccountsEditor( cat, tag, name, tip );
-                    } else if ( type == "KPlato::ResourceEditor" ) {
+                    } else if ( type == "ResourceEditor" ) {
                         v = createResourcEditor( cat, tag, name, tip );
-                    } else if ( type == "KPlato::TaskEditor" ) {
+                    } else if ( type == "TaskEditor" ) {
                         v = createTaskEditor( cat, tag, name, tip );
-                    } else if ( type == "KPlato::DependencyEditor" ) {
+                    } else if ( type == "DependencyEditor" ) {
                         v = createDependencyEditor( cat, tag, name, tip );
-                    } else if ( type == "KPlato::PertEditor" ) {
+                    } else if ( type == "PertEditor" ) {
                         v = createPertEditor( cat, tag, name, tip );
-                    } else if ( type == "KPlato::ScheduleEditor" ) {
+                    } else if ( type == "ScheduleEditor" ) {
                         v = createScheduleEditor( cat, tag, name, tip );
-                    } else if ( type == "KPlato::ScheduleHandlerView" ) {
+                    } else if ( type == "ScheduleHandlerView" ) {
                         v = createScheduleHandler( cat, tag, name, tip );
-                    } else if ( type == "KPlato::TaskStatusView" ) {
+                    } else if ( type == "TaskStatusView" ) {
                         v = createTaskStatusView( cat, tag, name, tip );
-                    } else if ( type == "KPlato::TaskView" ) {
+                    } else if ( type == "TaskView" ) {
                         v = createTaskView( cat, tag, name, tip );
-                    } else if ( type == "KPlato::GanttView" ) {
+                    } else if ( type == "GanttView" ) {
                         v = createGanttView( cat, tag, name, tip );
-                    } else if ( type == "KPlato::MilestoneGanttView" ) {
+                    } else if ( type == "MilestoneGanttView" ) {
                         v = createMilestoneGanttView( cat, tag, name, tip );
-                    } else if ( type == "KPlato::ResourceAppointmentsView" ) {
+                    } else if ( type == "ResourceAppointmentsView" ) {
                         v = createResourceAppointmentsView( cat, tag, name, tip );
-                    } else if ( type == "KPlato::AccountsView" ) {
+                    } else if ( type == "AccountsView" ) {
                         v = createAccountsView( cat, tag, name, tip );
-                    } else if ( type == "KPlato::ResourceAssignmentView" ) {
+                    } else if ( type == "ResourceAssignmentView" ) {
                         v = createResourceAssignmentView( cat, tag, name, tip );
-                    } else if ( type == "KPlato::ChartView" ) {
+                    } else if ( type == "ChartView" ) {
                         v = createChartView( cat, tag, name, tip );
                     } else  {
                         kWarning()<<"Unknown viewtype: "<<type<<endl;
@@ -456,9 +456,9 @@ void View::createViews()
 
         createTaskEditor( cat, "TaskEditor", i18n( "Tasks" ), i18n( "Edit work breakdown structure" ) );
         
-        createDependencyEditor( cat, "DependencyEditor", i18n( "Dependencies" ), i18n( "Edit task dependenies" ) );
+        createDependencyEditor( cat, "DependencyEditor", i18n( "Dependencies (Graphic)" ), i18n( "Edit task dependenies" ) );
         
-        createPertEditor( cat, "PertEditor", i18n( "Pert" ), i18n( "Edit task dependencies" ) );
+        createPertEditor( cat, "PertEditor", i18n( "Dependencies (List)" ), i18n( "Edit task dependencies" ) );
         
         createScheduleHandler( cat, "ScheduleHandler", i18n( "Schedules" ), i18n( "Calculate and analyze project schedules" ) );
     
@@ -2014,9 +2014,6 @@ void View::updateView( QWidget * )
     if ( m_updateResourceAssignmentView )
         static_cast<ViewBase*>( widget2 ) ->draw( getProject() );
     m_updateResourceAssignmentView = false;
-
-    widget2 = m_viewlist->findView( "PertEditor" );
-        static_cast<ViewBase*>( widget2 ) -> draw( getProject() );
 
     QApplication::restoreOverrideCursor();
 }

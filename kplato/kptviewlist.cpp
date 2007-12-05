@@ -170,7 +170,12 @@ void ViewListItem::save( QDomElement &element ) const
     element.setAttribute( "name", text( 0 ) );
     element.setAttribute( "tooltip", toolTip( 0 ) );
     if ( type() == ItemType_SubView ) {
-        element.setAttribute( "viewtype", view()->metaObject()->className() );
+        QString name = view()->metaObject()->className();
+        if ( name.contains( ':' ) ) {
+            name = name.remove( 0, name.lastIndexOf( ':' ) + 1 );
+        }
+        kDebug()<<view()->metaObject()->className()<<" -> "<<name;
+        element.setAttribute( "viewtype", name );
     }
 }
 
@@ -631,7 +636,7 @@ void ViewListWidget::setupContextMenus()
     action = new QAction( KIcon( "list-remove" ), i18n( "Remove" ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotRemoveCategory() ) );
     m_editcategory.append( action );
-    action = new QAction( KIcon( "configure" ), i18n( "Entry..." ), this );
+    action = new QAction( KIcon( "configure" ), i18n( "Configure..." ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotConfigureItem() ) );
     m_editcategory.append( action );
 
@@ -642,7 +647,7 @@ void ViewListWidget::setupContextMenus()
     action = new QAction( KIcon( "list-remove" ), i18n( "Remove" ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotRemoveView() ) );
     m_editview.append( action );
-    action = new QAction( KIcon( "configure" ), i18n( "Entry..." ), this );
+    action = new QAction( KIcon( "configure" ), i18n( "Configure..." ), this );
     connect( action, SIGNAL( triggered( bool ) ), this, SLOT( slotConfigureItem() ) );
     m_editview.append( action );
 
@@ -675,7 +680,7 @@ void ViewListWidget::contextMenuEvent ( QContextMenuEvent *event )
             lst += m_editview;
             ViewBase *v = dynamic_cast<ViewBase*>( m_contextitem->view() );
             if ( v ) {
-                lst += v->contextActionList();
+                lst += v->viewlistActionList();
             }
         } else if ( m_contextitem->type() == ViewListItem::ItemType_ChildDocument ) {
             lst += m_editdocument;
