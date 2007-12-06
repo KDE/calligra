@@ -126,7 +126,16 @@ void KDChart::AbstractCartesianDiagram::setCoordinatePlane( AbstractCoordinatePl
 {
     if( coordinatePlane() ) disconnect( coordinatePlane() );
     AbstractDiagram::setCoordinatePlane(plane);
-
+    if( plane != 0 ) {
+        connect( attributesModel(), SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
+                 plane, SLOT( layoutPlanes() ) );
+        connect( attributesModel(), SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
+                 plane, SLOT( layoutPlanes() ) );
+        connect( attributesModel(), SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ),
+                 plane, SLOT( layoutPlanes() ) );
+        connect( attributesModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
+                 plane, SLOT( layoutPlanes() ) );
+    }
     // show the axes, after all have been adjusted
     // (because they might be dependend on each other)
     /*

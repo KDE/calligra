@@ -99,10 +99,14 @@ namespace KDChart {
         const DataPoint& data( const CachePosition& ) const;
 
     private Q_SLOTS:
+        void slotRowsAboutToBeInserted( const QModelIndex&, int, int );
         void slotRowsInserted( const QModelIndex&, int, int );
+        void slotRowsAboutToBeRemoved( const QModelIndex&, int, int );
         void slotRowsRemoved( const QModelIndex&, int, int );
 
+        void slotColumnsAboutToBeInserted( const QModelIndex&, int, int );
         void slotColumnsInserted( const QModelIndex&, int, int );
+        void slotColumnsAboutToBeRemoved( const QModelIndex&, int, int );
         void slotColumnsRemoved( const QModelIndex&, int, int );
 
         void slotModelHeaderDataChanged( Qt::Orientation, int, int );

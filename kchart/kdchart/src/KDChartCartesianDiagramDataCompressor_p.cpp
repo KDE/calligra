@@ -46,7 +46,7 @@ CartesianDiagramDataCompressor::CartesianDiagramDataCompressor( QObject* parent 
     calculateSampleStepWidth();
 }
 
-void CartesianDiagramDataCompressor::slotRowsInserted( const QModelIndex& parent, int start, int end )
+void CartesianDiagramDataCompressor::slotRowsAboutToBeInserted( const QModelIndex& parent, int start, int end )
 {
     Q_UNUSED( parent );
     Q_ASSERT( start <= end );
@@ -59,13 +59,67 @@ void CartesianDiagramDataCompressor::slotRowsInserted( const QModelIndex& parent
     
     static const CachePosition NullPosition( -1, -1 );
     if( startPos == NullPosition )
-        return rebuildCache();
-
+    {
+        rebuildCache();
+        return;
+    }
+    
     for( int i = 0; i < m_data.size(); ++i )
     {
         Q_ASSERT( start >= 0 && start <= m_data[ i ].size() );
         m_data[ i ].insert( start, end - start + 1, DataPoint() );
     }
+}
+
+void CartesianDiagramDataCompressor::slotRowsInserted( const QModelIndex& parent, int start, int end )
+{
+    Q_UNUSED( parent );
+    Q_ASSERT( start <= end );
+    
+    const CachePosition startPos = mapToCache( start, 0 );
+    const CachePosition endPos = mapToCache( end, 0 );
+
+    start = startPos.first;
+    end = endPos.first;
+    
+    static const CachePosition NullPosition( -1, -1 );
+    if( startPos == NullPosition )
+    {
+        // Since we should already have rebuilt the cache, it won't help.
+        // Do not Q_ASSERT() though, since the resolution might simply not be set
+        return;
+    }
+    
+    for( int i = 0; i < m_data.size(); ++i )
+    {
+        for( int j = 0; j < m_data[i].size(); ++j ) {
+            retrieveModelData( CachePosition( j, i ) );
+        }
+    }
+}
+
+void CartesianDiagramDataCompressor::slotColumnsAboutToBeInserted( const QModelIndex& parent, int start, int end )
+{
+    Q_UNUSED( parent );
+    Q_ASSERT( start <= end );
+
+
+    const CachePosition startPos = mapToCache( 0, start );
+    const CachePosition endPos = mapToCache( 0, end );
+
+    static const CachePosition NullPosition( -1, -1 );
+    if( startPos == NullPosition )
+    {
+        rebuildCache();
+        return;
+    }
+
+    start = startPos.second;
+    end = endPos.second;
+
+    const int rowCount = qMin( m_model ? m_model->rowCount( m_rootIndex ) : 0, m_xResolution );
+    Q_ASSERT( start >= 0 && start <= m_data.size() );
+    m_data.insert( start, end - start + 1, QVector< DataPoint >( rowCount ) );
 }
 
 void CartesianDiagramDataCompressor::slotColumnsInserted( const QModelIndex& parent, int start, int end )
@@ -77,33 +131,95 @@ void CartesianDiagramDataCompressor::slotColumnsInserted( const QModelIndex& par
     const CachePosition startPos = mapToCache( 0, start );
     const CachePosition endPos = mapToCache( 0, end );
 
-    static const CachePosition NullPosition( -1, -1 );
-    if( startPos == NullPosition )
-        return rebuildCache();
-
     start = startPos.second;
     end = endPos.second;
+    
+    static const CachePosition NullPosition( -1, -1 );
+    if( startPos == NullPosition )
+    {
+        // Since we should already have rebuilt the cache, it won't help.
+        // Do not Q_ASSERT() though, since the resolution might simply not be set
+        return;
+    }
 
-    const int rowCount = qMin( m_model ? m_model->rowCount( m_rootIndex ) : 0, m_xResolution );
-    Q_ASSERT( start >= 0 && start <= m_data.size() );
-    m_data.insert( start, end - start + 1, QVector< DataPoint >( rowCount ) );
+    for( int i = 0; i < m_data.size(); ++i )
+    {
+        for(int j = end + 1; j < m_data[i].size(); ++j ) {
+            retrieveModelData( CachePosition( j, i ) );
+        }
+    }
 }
 
-void CartesianDiagramDataCompressor::slotRowsRemoved( const QModelIndex& parent, int start, int end )
+void CartesianDiagramDataCompressor::slotRowsAboutToBeRemoved( const QModelIndex& parent, int start, int end )
 {
     Q_UNUSED( parent );
     Q_ASSERT( start <= end );
-
+    
     const CachePosition startPos = mapToCache( start, 0 );
     const CachePosition endPos = mapToCache( end, 0 );
 
     start = startPos.first;
     end = endPos.first;
 
+    static const CachePosition NullPosition( -1, -1 );
+    if( startPos == NullPosition )
+    {
+        rebuildCache();
+        return;
+    }
+
     for( int i = 0; i < m_data.size(); ++i )
     {
         m_data[ i ].remove( start, end - start + 1 );
     }
+}
+
+void CartesianDiagramDataCompressor::slotRowsRemoved( const QModelIndex& parent, int start, int end )
+{
+    Q_UNUSED( parent );
+    Q_ASSERT( start <= end );
+    
+    const CachePosition startPos = mapToCache( start, 0 );
+    const CachePosition endPos = mapToCache( end, 0 );
+    
+    start = startPos.first;
+    end = endPos.first;
+    
+    static const CachePosition NullPosition( -1, -1 );
+    if( startPos == NullPosition )
+    {
+        
+        // Since we should already have rebuilt the cache, it won't help.
+        // Do not Q_ASSERT() though, since the resolution might simply not be set
+        return;
+    }
+    
+    for( int i = 0; i < m_data.size(); ++i ) {
+        for(int j = start; j < m_data[i].size(); ++j ) {
+            retrieveModelData( CachePosition( j, i ) );
+        }
+    }
+}
+
+void CartesianDiagramDataCompressor::slotColumnsAboutToBeRemoved( const QModelIndex& parent, int start, int end )
+{
+    Q_UNUSED( parent );
+    Q_ASSERT( start <= end );
+
+    const CachePosition startPos = mapToCache( 0, start );
+    const CachePosition endPos = mapToCache( 0, end );
+
+    start = startPos.second;
+    end = endPos.second;
+
+    static const CachePosition NullPosition( -1, -1 );
+    if( startPos == NullPosition )
+    {
+        rebuildCache();
+        return;
+    }
+
+    m_data.remove( start, end - start + 1 );
 }
 
 void CartesianDiagramDataCompressor::slotColumnsRemoved( const QModelIndex& parent, int start, int end )
@@ -116,8 +232,20 @@ void CartesianDiagramDataCompressor::slotColumnsRemoved( const QModelIndex& pare
 
     start = startPos.second;
     end = endPos.second;
+    
+    static const CachePosition NullPosition( -1, -1 );
+    if( startPos == NullPosition )
+    {
+        // Since we should already have rebuilt the cache, it won't help.
+        // Do not Q_ASSERT() though, since the resolution might simply not be set
+        return;
+    }
 
-    m_data.remove( start, end - start + 1 );
+    for( int i = start; i < m_data.size(); ++i ) {
+        for( int j = 0; j < m_data[i].size(); ++j ) {
+            retrieveModelData( CachePosition( j, i ) );
+        }
+    }
 }
 
 void CartesianDiagramDataCompressor::slotModelHeaderDataChanged( Qt::Orientation orientation, int first, int last )
@@ -192,19 +320,27 @@ void CartesianDiagramDataCompressor::setModel( QAbstractItemModel* model )
 {
     if ( m_model != 0 && m_model != model ) {
         disconnect( m_model, SIGNAL( headerDataChanged( Qt::Orientation, int, int ) ),
-                    this, SLOT( slotModelHeaderDataChanged( Qt::Orientation, int, int ) ) );
+                 this, SLOT( slotModelHeaderDataChanged( Qt::Orientation, int, int ) ) );
         disconnect( m_model, SIGNAL( dataChanged( QModelIndex, QModelIndex ) ),
-                    this, SLOT( slotModelDataChanged( QModelIndex, QModelIndex ) ) );
+                 this, SLOT( slotModelDataChanged( QModelIndex, QModelIndex ) ) );
         disconnect( m_model, SIGNAL( layoutChanged() ),
-                    this, SLOT( slotModelLayoutChanged() ) );
+                 this, SLOT( slotModelLayoutChanged() ) );
+        disconnect( m_model, SIGNAL( rowsAboutToBeInserted( QModelIndex, int, int ) ),
+                 this, SLOT( slotRowsAboutToBeInserted( QModelIndex, int, int ) ) );
         disconnect( m_model, SIGNAL( rowsInserted( QModelIndex, int, int ) ),
-                    this, SLOT( slotRowsInserted( QModelIndex, int, int ) ) );
+                 this, SLOT( slotRowsInserted( QModelIndex, int, int ) ) );
+        disconnect( m_model, SIGNAL( rowsAboutToBeRemoved( QModelIndex, int, int ) ),
+                 this, SLOT( slotRowsAboutToBeRemoved( QModelIndex, int, int ) ) );
         disconnect( m_model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ),
-                    this, SLOT( slotRowsRemoved( QModelIndex, int, int ) ) );
+                 this, SLOT( slotRowsRemoved( QModelIndex, int, int ) ) );
+        disconnect( m_model, SIGNAL( columnsAboutToBeInserted( QModelIndex, int, int ) ),
+                 this, SLOT( slotColumnsAboutToBeInserted( QModelIndex, int, int ) ) );
         disconnect( m_model, SIGNAL( columnsInserted( QModelIndex, int, int ) ),
-                    this, SLOT( slotColumnsInserted( QModelIndex, int, int ) ) );
+                 this, SLOT( slotColumnsInserted( QModelIndex, int, int ) ) );
         disconnect( m_model, SIGNAL( columnsRemoved( QModelIndex, int, int ) ),
-                    this, SLOT( slotColumnsRemoved( QModelIndex, int, int ) ) );
+                 this, SLOT( slotColumnsRemoved( QModelIndex, int, int ) ) );
+        disconnect( m_model, SIGNAL( columnsAboutToBeRemoved( QModelIndex, int, int ) ),
+                 this, SLOT( slotColumnsAboutToBeRemoved( QModelIndex, int, int ) ) );
         m_model = 0;
     }
 
@@ -216,14 +352,22 @@ void CartesianDiagramDataCompressor::setModel( QAbstractItemModel* model )
                  SLOT( slotModelDataChanged( QModelIndex, QModelIndex ) ) );
         connect( m_model, SIGNAL( layoutChanged() ),
                  SLOT( slotModelLayoutChanged() ) );
+        connect( m_model, SIGNAL( rowsAboutToBeInserted( QModelIndex, int, int ) ),
+                 SLOT( slotRowsAboutToBeInserted( QModelIndex, int, int ) ) );
         connect( m_model, SIGNAL( rowsInserted( QModelIndex, int, int ) ),
                  SLOT( slotRowsInserted( QModelIndex, int, int ) ) );
+        connect( m_model, SIGNAL( rowsAboutToBeRemoved( QModelIndex, int, int ) ),
+                 SLOT( slotRowsAboutToBeRemoved( QModelIndex, int, int ) ) );
         connect( m_model, SIGNAL( rowsRemoved( QModelIndex, int, int ) ),
                  SLOT( slotRowsRemoved( QModelIndex, int, int ) ) );
+        connect( m_model, SIGNAL( columnsAboutToBeInserted( QModelIndex, int, int ) ),
+                 SLOT( slotColumnsAboutToBeInserted( QModelIndex, int, int ) ) );
         connect( m_model, SIGNAL( columnsInserted( QModelIndex, int, int ) ),
                  SLOT( slotColumnsInserted( QModelIndex, int, int ) ) );
         connect( m_model, SIGNAL( columnsRemoved( QModelIndex, int, int ) ),
                  SLOT( slotColumnsRemoved( QModelIndex, int, int ) ) );
+        connect( m_model, SIGNAL( columnsAboutToBeRemoved( QModelIndex, int, int ) ),
+                 SLOT( slotColumnsAboutToBeRemoved( QModelIndex, int, int ) ) );
     }
 
     rebuildCache();
