@@ -309,9 +309,9 @@ void ChartProxyModel::setFirstColumnIsLabel( bool b )
 
 void ChartProxyModel::setDataDirection( Qt::Orientation orientation )
 {
-    emit layoutAboutToBeChanged();
+    
     d->dataDirection = orientation;
-    emit layoutChanged();
+    reset();
     
     dataChanged();
 }
