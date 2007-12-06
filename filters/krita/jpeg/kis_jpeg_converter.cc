@@ -432,10 +432,12 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     // Initialize output stream
     jpeg_stdio_dest(&cinfo, fp);
 
+    const KoColorSpace * cs = img->colorSpace();
+
     cinfo.image_width = width;  // image width and height, in pixels
     cinfo.image_height = height;
-    cinfo.input_components = img->colorSpace()->colorChannelCount(); // number of color channels per pixel */
-    J_COLOR_SPACE color_type = getColorTypeforColorSpace(img->colorSpace());
+    cinfo.input_components = cs->colorChannelCount(); // number of color channels per pixel */
+    J_COLOR_SPACE color_type = getColorTypeforColorSpace(cs);
     if(color_type == JCS_UNKNOWN)
     {
         KIO::del(uri); // async, but I guess that's ok
@@ -549,7 +551,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
 
     JSAMPROW row_pointer = new JSAMPLE[width*cinfo.input_components];
     int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->channelCount();
-
+    
     for (; cinfo.next_scanline < height;) {
         KisHLineConstIterator it = layer->paintDevice()->createHLineConstIterator(0, cinfo.next_scanline, width);
         quint8 *dst = row_pointer;
@@ -559,8 +561,9 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
                 if(color_nb_bits == 16)
                 {
                     while (!it.isDone()) {
-                        const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
-                        *(dst++) = d[0] / quint8_MAX;
+                        //const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
+                        const quint8 *d = it.rawData();
+                        *(dst++) = cs->scaleToU8(d, 0);//d[0] / quint8_MAX;
                         ++it;
                     }
                 } else {
@@ -575,10 +578,11 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
                 if(color_nb_bits == 16)
                 {
                     while (!it.isDone()) {
-                        const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
-                        *(dst++) = d[2] / quint8_MAX;
-                        *(dst++) = d[1] / quint8_MAX;
-                        *(dst++) = d[0] / quint8_MAX;
+                        //const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
+                        const quint8 *d = it.rawData();
+                        *(dst++) = cs->scaleToU8(d, 2); //d[2] / quint8_MAX;
+                        *(dst++) = cs->scaleToU8(d, 1); //d[1] / quint8_MAX;
+                        *(dst++) = cs->scaleToU8(d, 0); //d[0] / quint8_MAX;
                         ++it;
                     }
                 } else {
@@ -595,11 +599,12 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
                 if(color_nb_bits == 16)
                 {
                     while (!it.isDone()) {
-                        const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
-                        *(dst++) = quint8_MAX - d[0] / quint8_MAX;
-                        *(dst++) = quint8_MAX - d[1] / quint8_MAX;
-                        *(dst++) = quint8_MAX - d[2] / quint8_MAX;
-                        *(dst++) = quint8_MAX - d[3] / quint8_MAX;
+                        //const quint16 *d = reinterpret_cast<const quint16 *>(it.rawData());
+                        const quint8 *d = it.rawData();
+                        *(dst++) = cs->scaleToU8(d, 0);//quint8_MAX - d[0] / quint8_MAX;
+                        *(dst++) = cs->scaleToU8(d, 1);//quint8_MAX - d[1] / quint8_MAX;
+                        *(dst++) = cs->scaleToU8(d, 2);//quint8_MAX - d[2] / quint8_MAX;
+                        *(dst++) = cs->scaleToU8(d, 3);//quint8_MAX - d[3] / quint8_MAX;
                         ++it;
                     }
                 } else {
