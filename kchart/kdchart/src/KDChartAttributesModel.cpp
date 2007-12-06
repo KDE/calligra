@@ -551,6 +551,8 @@ void AttributesModel::setSourceModel( QAbstractItemModel* sourceModel )
                                   this, SIGNAL( columnsAboutToBeInserted( const QModelIndex&, int, int ) ) );
         disconnect( this->sourceModel(), SIGNAL( columnsAboutToBeRemoved( const QModelIndex&, int, int ) ),
                                   this, SIGNAL( columnsAboutToBeRemoved( const QModelIndex&, int, int ) ) );
+        disconnect( this->sourceModel(), SIGNAL( modelReset() ),
+                                  this, SIGNAL( modelReset() ) );
     }
     QAbstractProxyModel::setSourceModel( sourceModel );
     if( this->sourceModel() != NULL )
@@ -573,6 +575,8 @@ void AttributesModel::setSourceModel( QAbstractItemModel* sourceModel )
                                 this, SIGNAL( columnsAboutToBeInserted( const QModelIndex&, int, int ) ) );
         connect( this->sourceModel(), SIGNAL( columnsAboutToBeRemoved( const QModelIndex&, int, int ) ),
                                 this, SIGNAL( columnsAboutToBeRemoved( const QModelIndex&, int, int ) ) );
+        connect( this->sourceModel(), SIGNAL( modelReset() ),
+                                this, SIGNAL( modelReset() ) );
     }
 }
 

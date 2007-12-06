@@ -341,6 +341,8 @@ void CartesianDiagramDataCompressor::setModel( QAbstractItemModel* model )
                  this, SLOT( slotColumnsRemoved( QModelIndex, int, int ) ) );
         disconnect( m_model, SIGNAL( columnsAboutToBeRemoved( QModelIndex, int, int ) ),
                  this, SLOT( slotColumnsAboutToBeRemoved( QModelIndex, int, int ) ) );
+        disconnect( m_model, SIGNAL( modelReset() ),
+                    this, SLOT( rebuildCache() ) );
         m_model = 0;
     }
 
@@ -368,6 +370,8 @@ void CartesianDiagramDataCompressor::setModel( QAbstractItemModel* model )
                  SLOT( slotColumnsRemoved( QModelIndex, int, int ) ) );
         connect( m_model, SIGNAL( columnsAboutToBeRemoved( QModelIndex, int, int ) ),
                  SLOT( slotColumnsAboutToBeRemoved( QModelIndex, int, int ) ) );
+        connect( m_model, SIGNAL( modelReset() ),
+                    this, SLOT( rebuildCache() ) );
     }
 
     rebuildCache();

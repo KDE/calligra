@@ -115,12 +115,12 @@ namespace KDChart {
         // FIXME resolution changes and root index changes should all
         // be catchable with this method:
         void slotDiagramLayoutChanged( AbstractDiagram* );
-
-    private:
         // geometry has changed
         void rebuildCache() const;
         // reset all cached values, without changing the cache geometry
         void clearCache();
+
+    private:
         // mark a cache position as invalid
         void invalidate( const CachePosition& );
         // verify it is within the range
