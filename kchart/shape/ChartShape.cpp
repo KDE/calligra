@@ -558,6 +558,7 @@ void ChartShape::setFirstColumnIsLabel( bool b )
 void ChartShape::setDataDirection( Qt::Orientation orientation )
 {
     d->chartModel->setDataDirection( orientation );
+    d->chart->coordinatePlane()->relayout();
 }
 
 void ChartShape::setLegendTitle( const QString &title )
