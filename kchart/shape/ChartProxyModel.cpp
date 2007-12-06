@@ -273,21 +273,46 @@ int ChartProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() *
 
 void ChartProxyModel::setFirstRowIsLabel( bool b )
 {
+    if ( b == d->firstRowIsLabel )
+        return;
+    
+    if ( b )
+        beginRemoveRows( QModelIndex(), 0, 0 );
+    else
+        beginInsertRows( QModelIndex(), 0, 0 );
     d->firstRowIsLabel = b;
+    if ( b )
+        endRemoveRows();
+    else
+        endInsertRows();
+    
     dataChanged();
 }
-
+ 
 void ChartProxyModel::setFirstColumnIsLabel( bool b )
 {
+    if ( b == d->firstColumnIsLabel )
+        return;
+    
+    if ( b )
+        beginRemoveColumns( QModelIndex(), 0, 0 );
+    else
+        beginInsertColumns( QModelIndex(), 0, 0 );
     d->firstColumnIsLabel = b;
+    if ( b )
+        endRemoveColumns();
+    else
+        endInsertColumns();
+    
     dataChanged();
 }
 
 void ChartProxyModel::setDataDirection( Qt::Orientation orientation )
 {
+    emit layoutAboutToBeChanged();
     d->dataDirection = orientation;
-
-    // Update the entire data set
+    emit layoutChanged();
+    
     dataChanged();
 }
 
