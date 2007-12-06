@@ -1566,7 +1566,7 @@ void ChartShape::dataChanged( const QModelIndex &topLeft, const QModelIndex &bot
     update();
 }
 
-void ChartShape::update()
+void ChartShape::update() const
 {
     d->diagram->doItemsLayout();
     d->chart->update();

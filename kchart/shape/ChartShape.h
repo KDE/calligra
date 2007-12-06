@@ -110,7 +110,7 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
 
 
  public Q_SLOTS:
-    virtual void update();
+    virtual void update() const;
     void dataChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight );
 
     /// Set new chart type and subtype.
