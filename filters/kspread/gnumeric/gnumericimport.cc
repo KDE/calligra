@@ -961,6 +961,7 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
     kspread_cell->format()->setCurrency( 1, "$" );
     lastPos = 1;
   }
+  #if 0
   else if (formatString[0] == '�')
   {
     kspread_cell->format()->setFormatType(Money_format);
@@ -979,6 +980,7 @@ void GNUMERICFilter::ParseFormat(QString const & formatString, Cell * kspread_ce
     kspread_cell->format()->setCurrency( 1, "�" );
     lastPos = 1;
   }
+  #endif
   else if (l > 1)
   {
     if ((formatString[0] == '[') && (formatString[1] == '$'))
