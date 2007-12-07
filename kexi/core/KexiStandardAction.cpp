@@ -49,11 +49,11 @@ static const Info g_rgActionInfo[] =
 	{ SortAscending, KShortcut(), "data_sort_az", I18N_NOOP("&Ascending"), 
 		I18N_NOOP("Sort data in ascending order"), 
 		I18N_NOOP("Sorts data in ascending order (from A to Z and from 0 to 9). Data from selected column is used for sorting."), 
-		"sort_az" },
+		"view-sort-ascending" },
 	{ SortDescending, KShortcut(), "data_sort_za", I18N_NOOP("&Descending"), 
 		I18N_NOOP("Sort data in descending order"),
 		I18N_NOOP("Sorts data in descending (from Z to A and from 9 to 0). Data from selected column is used for sorting."),
-		"sort_za" },
+		"view-sort-descending" },
 
 	{ ActionNone, KShortcut(), 0, 0, 0, 0, 0 }
 };

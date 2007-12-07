@@ -71,7 +71,7 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
   connect(this, SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
   KVBox *page2 = new KVBox();
   p2 = addPage(page2, i18n("Locale Settings"));
-  p2->setIcon( KIcon( BarIcon("go-home",KIconLoader::SizeMedium) ) );
+  p2->setIcon(KIcon("preferences-desktop-locale"));
  _localePage=new parameterLocale(parent,page2 );
 
   KVBox *page3 = new KVBox();
@@ -86,7 +86,7 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
 
   KVBox *page5 = new KVBox();
   p5 = addPage(page5, i18n("Color"));
-  p5->setIcon( KIcon( BarIcon("color-fill",KIconLoader::SizeMedium) ) );
+  p5->setIcon(KIcon("preferences-desktop-color"));
   _colorParameter=new colorParameters(parent,page5 );
 
   KVBox *page6 = new KVBox();
