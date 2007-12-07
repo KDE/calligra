@@ -36,51 +36,54 @@ namespace KPlato
 {
 
 DurationSpinBox::DurationSpinBox(QWidget *parent)
-    : QDoubleSpinBox(parent)
+    : QDoubleSpinBox(parent),
+    m_unit( Duration::Unit_d ),
+    m_minunit( Duration::Unit_h ),
+    m_maxunit( Duration::Unit_d )
 {
-    //setAlignment( Qt::AlignRight );
     setUnit( Duration::Unit_h );
-    setMaximum(140737488355328.0);
-
-    msToFromSec = 1000.0;
-    secToFromMin = 60.0;
-    minToFromHour = 60.0;
-    hourToFromDay = 24.0;
+    setMaximum(140737488355328.0); //Hmmmm
 }
-
-// void DurationSpinBox::setValue( const Duration &value )
-// {
-//     //kDebug()<<value.milliseconds();
-//     QDoubleSpinBox::setValue( durationToDouble( value, m_unit ) );
-// }
-
-// void DurationSpinBox::setValue( const qint64 value )
-// {
-//     //kDebug()<<value;
-//     setValue( Duration( value ) );
-// }
-
-// qint64 DurationSpinBox::value() const
-// {
-//     return durationValue().milliseconds();
-// }
-
-// Duration DurationSpinBox::durationValue() const
-// {
-//     return durationFromDouble( QDoubleSpinBox::value(), m_unit );
-// }
 
 void DurationSpinBox::setUnit( Duration::Unit unit )
 {
-//    Duration v = durationValue();
+    if ( unit < m_maxunit ) {
+        m_maxunit = unit;
+    } else if ( unit > m_minunit ) {
+        m_minunit = unit;
+    }
     m_unit = unit;
-//    setValue( v );
+    setSuffix( Duration::unitToString( m_unit, true ) );
+}
+
+void DurationSpinBox::setMaximumUnit( Duration::Unit unit )
+{
+    //NOTE Day = 0, Milliseconds = 3 !!!
+    m_maxunit = unit;
+    if ( m_minunit < unit ) {
+        m_minunit = unit;
+    }
+    if ( m_unit < unit ) {
+        setUnit( unit );
+    }
+}
+
+void DurationSpinBox::setMinimumUnit( Duration::Unit unit )
+{
+    //NOTE Day = 0, Milliseconds = 3 !!!
+    m_minunit = unit;
+    if ( m_maxunit > unit ) {
+        m_maxunit = unit;
+    }
+    if ( m_unit > unit ) {
+        setUnit( unit );
+    }
 }
 
 void DurationSpinBox::stepUnitUp()
 {
-    //kDebug()<<m_unit<<" >"<<Duration::Unit_d;
-    if ( m_unit > Duration::Unit_d ) {
+    //kDebug()<<m_unit<<">"<<m_maxunit;
+    if ( m_unit > m_maxunit ) {
         setUnit( static_cast<Duration::Unit>(m_unit - 1) );
         // line may change length, make sure cursor stays within unit
         lineEdit()->setCursorPosition( lineEdit()->displayText().length() );
@@ -89,8 +92,8 @@ void DurationSpinBox::stepUnitUp()
 
 void DurationSpinBox::stepUnitDown()
 {
-    //kDebug()<<m_unit<<" <"<<Duration::Unit_ms;
-    if ( m_unit < Duration::Unit_ms ) {
+    //kDebug()<<m_unit<<"<"<<m_minunit;
+    if ( m_unit < m_minunit ) {
         setUnit( static_cast<Duration::Unit>(m_unit + 1) );
         // line may change length, make sure cursor stays within unit
         lineEdit()->setCursorPosition( lineEdit()->displayText().length() );
@@ -112,60 +115,21 @@ void DurationSpinBox::stepBy( int steps )
     QDoubleSpinBox::stepBy( steps );
 }
 
-// prepare the text to be displayed
-QString DurationSpinBox::textFromValue(double value) const
-{
-    QString s = QDoubleSpinBox::textFromValue( value );
-    s += Duration::unitToString( m_unit, true );
-    //kDebug()<<value<<" ->"<<s;
-    return s;
-}
-
-// extract the value from the text
-double DurationSpinBox::valueFromText(const QString &text) const
-{
-    QString t = text;
-    t = t.remove( Duration::unitToString( m_unit, true ) );
-    double s = QDoubleSpinBox::valueFromText( t );
-    //kDebug()<<text<<","<<t<<" ->"<<s;
-    return s;
-}
-
-// validate, need to handle my unit
-QValidator::State DurationSpinBox::validate(QString &txt, int &pos) const
-{
-    QString unit = Duration::unitToString( m_unit, true );
-    QString t = txt;
-    QValidator::State s;
-    if ( !unit.isEmpty() ) {
-        if ( txt.indexOf( unit ) < txt.length() - unit.length() ) {
-            // no unit or unit in the middle of the value
-            //kDebug()<<t<<","<<pos<<";"<<s;
-            return QValidator::Invalid;
-        } else if ( pos > txt.length() - unit.length() ) {
-            // inside unit
-            if ( txt.indexOf( unit ) == -1 ) {
-                //kDebug()<<t<<","<<pos<<";"<<s;
-                return QValidator::Invalid;
-            }
-        }
-        t.remove( unit );
-    }
-    s = QDoubleSpinBox::validate( t, pos );
-    //kDebug()<<t<<","<<pos<<";"<<s;
-    return s;
-}
-
-
 QAbstractSpinBox::StepEnabled DurationSpinBox::stepEnabled () const
 {
-    if ( QDoubleSpinBox::value() <= minimum() && m_unit == Duration::Unit_ms ) {
-        return QAbstractSpinBox::StepUpEnabled;
+    if ( lineEdit()->cursorPosition() > text().size() - suffix().size() ) {
+        if ( m_unit >= m_minunit ) {
+            //kDebug()<<"inside unit, up"<<m_unit<<m_minunit<<m_maxunit;
+            return QAbstractSpinBox::StepUpEnabled;
+        }
+        if ( m_unit <= m_maxunit ) {
+            //kDebug()<<"inside unit, down"<<m_unit<<m_minunit<<m_maxunit;
+            return QAbstractSpinBox::StepDownEnabled;
+        }
+        //kDebug()<<"inside unit, up|down"<<m_unit<<m_minunit<<m_maxunit;
+        return QAbstractSpinBox::StepUpEnabled | QAbstractSpinBox::StepDownEnabled;
     }
-    if ( QDoubleSpinBox::value() >= maximum() && m_unit == Duration::Unit_d ) {
-        return QAbstractSpinBox::StepDownEnabled;
-    }
-    return StepUpEnabled| StepDownEnabled;
+    return QDoubleSpinBox::stepEnabled();
 }
 
 void DurationSpinBox::keyPressEvent( QKeyEvent * event )
@@ -190,40 +154,6 @@ void DurationSpinBox::keyPressEvent( QKeyEvent * event )
     QDoubleSpinBox::keyPressEvent(event);
 }
 
-// void DurationSpinBox::setScales( const QVariant &scales )
-// {
-//     QVariantList lst = scales.toList();
-//     switch ( lst.count() ) {
-//         case 4: msToFromSec = lst[3].toDouble();
-//         case 3: secToFromMin = lst[2].toDouble();
-//         case 2: minToFromHour = lst[1].toDouble();
-//         case 1: hourToFromDay = lst[0].toDouble();
-//     }
-// }
-
-// void DurationSpinBox::setScales( const QList<double> &scales )
-// {
-//     switch ( scales.count() ) {
-//         case 4: msToFromSec = scales[3];
-//         case 3: secToFromMin = scales[2];
-//         case 2: minToFromHour = scales[1];
-//         case 1: hourToFromDay = scales[0];
-//     }
-// }
-
-/*double DurationSpinBox::durationToDouble( const Duration &value, Duration::Unit unit) const
-{
-    QList<double> lst;
-    lst << hourToFromDay << minToFromHour << secToFromMin << msToFromSec;
-    return Estimate::scale( value, unit, lst );
-}
-*/
-// Duration DurationSpinBox::durationFromDouble( double value, Duration::Unit unit) const
-// {
-//     QList<double> lst;
-//     lst << hourToFromDay << minToFromHour << secToFromMin << msToFromSec;
-//     return Estimate::scale( value, unit, lst );
-// }
 
 } //namespace KPlato
 

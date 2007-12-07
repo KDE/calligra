@@ -32,12 +32,14 @@ namespace KPlato
 /**
  * The DurationSpinBox provides a spinbox and a line edit to display and edit durations.
  *
- * DurationSpinBox is a QDoubleSpinBox with the addition of units and scales.
+ * DurationSpinBox is a QDoubleSpinBox with the addition of adjustable units,
+ * defined as Duration::Unit.
  * The unit can be Day, Hour, Minute, Second and Millisecond.
  * The user can select the unit the duration is displayed in by placing the cursor
- * on the unit and step up or -down. The value is scaled accordingly.
- *
- * The scales to use for conversion between the different units can be set with setScales().
+ * on the unit and step up or -down.
+ * Maximum- and minimum unit can be set with setMaximumUnit() and setMinimumUnit().
+ * Defaults are: maximum unit Day, minimum unit Hour.
+ * 
  */
 class KPLATOMODELS_EXPORT DurationSpinBox : public QDoubleSpinBox
 {
@@ -45,48 +47,20 @@ class KPLATOMODELS_EXPORT DurationSpinBox : public QDoubleSpinBox
 public:
     explicit DurationSpinBox(QWidget *parent = 0);
 
-    /// Return value as a Duration (in milliseconds)
-//    Duration durationValue() const;
-    /// Return value in milliseconds
-//    qint64 value() const;
     /// Return the current unit
     Duration::Unit unit() const { return m_unit; }
     
-    virtual QValidator::State validate(QString &input, int &pos) const;
-    virtual double valueFromText(const QString &text) const;
-    virtual QString textFromValue(double val) const;
-
     /// step the value steps step. If inside unit, steps unit +/- 1 step.
     virtual void stepBy( int steps );
+    /// Set maximum unit to @p unit.
+    void setMaximumUnit( Duration::Unit unit );
+    /// Set maximum unit to @p unit.
+    void setMinimumUnit( Duration::Unit unit );
     
 public slots:
-    /// Set spinbox to value, scaled by current unit
-//    void setValue( const Duration &value );
-    /// Set spinbox to value, scaled by current unit.
-//    void setValue( const qint64 value );
-    /// Set the current unit. The displayed value is rescaled.
+    /// Set the current unit.
+    /// If unit is outside minimum- or maximum unit, the limit is ajusted.
     void setUnit( Duration::Unit unit);
-    /**
-     * Set the scales used for conversion between different units.
-     * @p scales is a QVariant<QVariantList> where entry
-     * 0 is number of hours in a day,
-     * 1 is number of minutes in an hour,
-     * 2 is number of seconds in a minute,
-     * 3 is number of milliseconds in a second.
-     * If the list is shorter, default values are used for the missing values.
-     */
-//    void setScales( const QVariant &scales );
-
-    /**
-     * Set the scales used for conversion between different units.
-     * @p scales is a list of doubles where entry
-     * 0 is number of hours in a day,
-     * 1 is number of minutes in an hour,
-     * 2 is number of seconds in a minute,
-     * 3 is number of milliseconds in a second.
-     * If the list is shorter, default values are used for the missing values.
-     */
-//    void setScales( const QList<double> &scales );
 
 protected:
     void keyPressEvent( QKeyEvent * event );
@@ -95,17 +69,10 @@ protected:
     void stepUnitUp();
     void stepUnitDown();
 
-    /// Convert a Duration into a double, scaled to unit
-//    double durationToDouble( const Duration &value, Duration::Unit unit) const;
-    /// Convert a double in unit into a Duration
-//    Duration durationFromDouble( double value, Duration::Unit unit) const;
-
 private:
     Duration::Unit m_unit;
-    double msToFromSec; // 1000
-    double secToFromMin; // 60
-    double minToFromHour; // 60
-    double hourToFromDay; // 24
+    Duration::Unit m_minunit;
+    Duration::Unit m_maxunit;
 };
 
 } //namespace KPlato
