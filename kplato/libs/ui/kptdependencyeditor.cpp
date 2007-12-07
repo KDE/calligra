@@ -1196,7 +1196,7 @@ void DependencyEditor::slotCreateRelation( DependencyConnectorItem *pred, Depend
     //kDebug();
     Node *par = pred->node();
     Node *ch = succ->node();
-    Relation::Type type = Relation::None;
+    Relation::Type type = Relation::FinishStart;
     if ( pred->ctype() == DependencyNodeItem::Start ) {
         if ( succ->ctype() == DependencyNodeItem::Start ) {
             type = Relation::StartStart;

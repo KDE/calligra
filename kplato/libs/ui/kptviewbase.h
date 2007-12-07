@@ -250,6 +250,8 @@ public:
     bool isViewSplit() const { return m_mode; }
     KAction *actionSplitView() const { return m_actionSplitView; }
     
+    void setRootIsDecorated ( bool show );
+
 signals:
     /// Context menu requested from the viewport, pointer over @p index at global position @p pos
     void contextMenuRequested( QModelIndex index, const QPoint& pos );

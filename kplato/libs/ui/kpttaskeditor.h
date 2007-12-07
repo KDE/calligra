@@ -53,7 +53,7 @@ class KPLATOUI_EXPORT NodeTreeView : public DoubleTreeViewBase
 {
     Q_OBJECT
 public:
-    NodeTreeView( KoDocument *part, QWidget *parent );
+    NodeTreeView( QWidget *parent );
     
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 

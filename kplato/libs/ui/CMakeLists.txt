@@ -24,6 +24,7 @@ set(kplatoui_LIB_SRCS
     
     kptitemviewsettup.cpp
     kptsplitterview.cpp
+    kptrelationeditor.cpp
     kptdependencyeditor.cpp
     kptusedefforteditor.cpp
     kpttaskstatusview.cpp

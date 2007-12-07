@@ -80,6 +80,7 @@ TreeViewBase::TreeViewBase( QWidget *parent )
 
 void TreeViewBase::setReadWrite( bool rw )
 {
+    m_readWrite = rw;
     if ( model() ) {
         model()->setReadWrite( rw );
     }
@@ -487,9 +488,8 @@ void DoubleTreeViewBase::slotToLeftView( const QModelIndex &index )
 void DoubleTreeViewBase::setReadWrite( bool rw )
 {
     m_readWrite = rw;
-    if ( model() ) {
-        model()->setReadWrite( rw );
-    }
+    m_leftview->setReadWrite( rw );
+    m_rightview->setReadWrite( rw );
 }
 
 void DoubleTreeViewBase::setModel( ItemModelBase *model )
@@ -689,6 +689,12 @@ void DoubleTreeViewBase::setViewSplitMode( bool split )
         m_leftview->setVerticalScrollBarPolicy( Qt::ScrollBarAsNeeded );
         m_leftview->setHorizontalScrollBarPolicy( Qt::ScrollBarAsNeeded );
     }
+}
+
+void DoubleTreeViewBase::setRootIsDecorated ( bool show )
+{
+    m_leftview->setRootIsDecorated( show );
+    m_rightview->setRootIsDecorated( show );
 }
 
 

@@ -47,7 +47,7 @@ class Project;
   */
 class KPLATOKERNEL_EXPORT Relation {
 public:
-    enum Type { None, FinishStart, FinishFinish, StartStart };
+    enum Type { FinishStart, FinishFinish, StartStart };
 
     Relation(Node *parent, Node *child, Type type, Duration lag);
     Relation(Node *parent=0, Node *child=0, Type type=FinishStart);
@@ -59,14 +59,26 @@ public:
     */
     virtual ~Relation();
 
+    /// Set relation type
     void setType(Type );
+    /// Set relation type
+    void setType( const QString &type );
+    /// Return relation type
     Type type() const { return m_type; }
-
-    /** returns the lag.
-    *  The lag of a relation is the time it takes between the parent starting/stopping
-    *  and the start of the child.
+    /// Return relation type as a string. Translated if @p trans = true.
+    QString typeToString( bool trans = false ) const;
+    /// Convert @type to a valid relation type
+    static Type typeFromString( const QString &type );
+    /// Return a stringlist of relation types. Translated if @p trans = true
+    static QStringList typeList( bool trans = false );
+    
+    /**
+    * Returns the lag.
+    * The lag of a relation is the time it takes between the parent starting/stopping
+    * and the start of the child.
     */
     const Duration &lag() const { return m_lag; }
+    /// Set relaion time lag
     void setLag(Duration lag) { m_lag = lag; }
 
     /**

@@ -59,10 +59,10 @@ namespace KPlato
 {
 
 //--------------------
-NodeTreeView::NodeTreeView( KoDocument *part, QWidget *parent )
+NodeTreeView::NodeTreeView( QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
-    setModel( new NodeItemModel( part ) );
+    setModel( new NodeItemModel() );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
@@ -87,7 +87,7 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
     kDebug()<<"----------------- Create TaskEditor ----------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_view = new NodeTreeView( part, this );
+    m_view = new NodeTreeView( this );
     l->addWidget( m_view );
     kDebug()<<m_view->actionSplitView();
     setupGui();
@@ -453,7 +453,7 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
 {
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_view = new NodeTreeView( part, this );
+    m_view = new NodeTreeView( this );
     l->addWidget( m_view );
     updateReadWrite( false );
     setupGui();

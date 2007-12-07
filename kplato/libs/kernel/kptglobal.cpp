@@ -120,6 +120,11 @@ namespace KPlato
     QString ToolTip::calendarName() { return i18n( "The name of the calendar" ); }
     QString ToolTip::calendarTimeZone() { return i18n( "The timezone of the calendar" ); }
 
+    QString ToolTip::relationParent() { return i18n( "The name of the required task" ); }
+    QString ToolTip::relationChild() { return i18n( "The name of the dependent task" ); }
+    QString ToolTip::relationType() { return i18n( "The type of relation" ); }
+    QString ToolTip::relationLag() { return i18n( "The relations time lag" ); }
+
 //} //namespace ToolTip
 
 // namespace WhatsThis

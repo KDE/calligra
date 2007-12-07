@@ -23,6 +23,7 @@
 #include "kptproject.h"
 
 #include <qdom.h>
+#include <QStringList>
 
 #include <kdebug.h>
 
@@ -65,6 +66,30 @@ void Relation::setType(Type type) {
     m_type=type;
 }
 
+void Relation::setType( const QString &type )
+{
+    int t = typeList().indexOf( type );
+    if ( t == -1 ) {
+        t = FinishStart;
+    }
+    m_type = static_cast<Type>( t );
+}
+
+QString Relation::typeToString( bool trans ) const
+{
+    return typeList( trans ).at( m_type );
+}
+
+QStringList Relation::typeList( bool trans )
+{
+    //NOTE: must match enum
+    QStringList lst;
+    lst << ( trans ? i18n( "Finish-Start" ) : "Finish-Start" );
+    lst << ( trans ? i18n( "Finish-Finish" ) : "Finish-Finish" );
+    lst << ( trans ? i18n( "Start-Start" ) : "Start-Start" );
+    return lst;
+}
+
 
 bool Relation::load(KoXmlElement &element, Project &project) {
     m_parent = project.findNode(element.attribute("parent-id"));
@@ -86,15 +111,7 @@ bool Relation::load(KoXmlElement &element, Project &project) {
     if (!m_parent->legalToLink(m_child))
         return false;
         
-    QString tr = element.attribute("type");
-    if ( tr == "Finish-Start" )
-        m_type = FinishStart;
-    else if ( tr == "Finish-Finish" )
-        m_type = FinishFinish;
-    else if ( tr == "Start-Start" )
-        m_type = StartStart;
-    else
-        m_type = FinishStart;
+    setType( element.attribute("type") );
 
     m_lag = Duration::fromString(element.attribute("lag"));
 

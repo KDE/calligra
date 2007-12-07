@@ -143,6 +143,11 @@ struct KPLATOKERNEL_EXPORT ToolTip
     static QString calendarName();
     static QString calendarTimeZone();
 
+    static QString relationParent();
+    static QString relationChild();
+    static QString relationType();
+    static QString relationLag();
+
 }; //namespace ToolTip
 
 struct KPLATOKERNEL_EXPORT WhatsThis

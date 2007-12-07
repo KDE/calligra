@@ -24,8 +24,8 @@
 
 #include "kplatoui_export.h"
 
-#include <kptviewbase.h>
-#include <kptitemmodelbase.h>
+#include "kptviewbase.h"
+#include "kptitemmodelbase.h"
 
 #include <QMenu>
 #include <QPainter>
@@ -37,6 +37,7 @@
 #include <QStringList>
 #include <QVBoxLayout>
 #include <QTreeWidget>
+#include <QTableWidget>
 #include <QFont>
 #include <QTimer>
 
@@ -65,13 +66,14 @@
 class KoDocument;
 
 class QTreeWidgetItem;
-
+class QUndoCommand;
 
 namespace KPlato
 {
 
 class View;
 class Project;
+class RelationTreeView;
 
 class KPLATOUI_EXPORT PertEditor : public ViewBase
 {
@@ -84,32 +86,51 @@ public:
     void draw( Project &project );
     void draw();
     void drawSubTasksName( QTreeWidgetItem *parent,Node * currentNode);
+    void clearRequiredList();
     void loadRequiredTasksList(Node * taskNode);
     Node *itemToNode( QTreeWidgetItem *item );
-    Node *itemToNode( QListWidgetItem *item );
+    QTreeWidgetItem *nodeToItem( Node *node, QTreeWidgetItem *item );
     QList<Node*> listNodeNotView(Node * node);
 
+    void updateAvailableTasks( QTreeWidgetItem *item = 0 );
+    void setAvailableItemEnabled( QTreeWidgetItem *item );
+    void setAvailableItemEnabled( Node *node );
+    
 signals:
-    void refreshAvailableTaskList();
+    void executeCommand( QUndoCommand* );
 
+protected:
+    bool isInRequiredList( Node *node );
+    QTreeWidgetItem *findNodeItem( Node *node, QTreeWidgetItem *item );
+    QTableWidgetItem *findRequiredItem( Node *node );
+    
 private slots:
+    void slotNodeAdded( Node* );
+    void slotNodeRemoved( Node* );
+    void slotNodeChanged( Node* );
+    
     void dispAvailableTasks();
     void dispAvailableTasks( Node *parent, Node *selectedTask );
     void dispAvailableTasks( Relation *rel );
-    void addTaskInRequiredList(QListWidgetItem * currentItem);
-    void removeTaskFromRequiredList(QListWidgetItem * currentItem);
+    void addTaskInRequiredList(QTreeWidgetItem * currentItem);
+    void removeTaskFromRequiredList();
     void slotUpdate();
 
+    void slotCurrentTaskChanged( QTreeWidgetItem *curr, QTreeWidgetItem *prev );
+    void slotAvailableChanged( QTreeWidgetItem *item );
+    void slotAddClicked();
+    void slotRemoveClicked();
 
 private:
-    QTreeWidget * m_tasktree;
-    KActionSelector * m_assignList;
-    KoDocument * m_part;
-    Node * m_node;
     Project * m_project;
-    QList<Node *> list_nodeNotView;
+    QTreeWidget *m_tasktree;
+    QTreeWidget *m_availableList;
+    RelationTreeView *m_requiredList;
+    
     Ui::PertEditor widget;
     
+    QFont m_disabledFont, m_enabledFont;
+    QBrush m_disabledBrush, m_enabledBrush;
 };
 
 }  //KPlato namespace

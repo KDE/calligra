@@ -1599,8 +1599,15 @@ bool Project::legalToLink( Node *par, Node *child )
         return false;
     }
     bool legal = true;
+    // see if relation already exists
+    foreach ( Relation *r, par->dependChildNodes() ) {
+        if ( r->child() == child ) {
+            legal = false;
+            break;
+        }
+    }
     // see if par/child is related
-    if ( par->isParentOf( child ) || child->isParentOf( par ) ) {
+    if ( legal && ( par->isParentOf( child ) || child->isParentOf( par ) ) ) {
         legal = false;
     }
     if ( legal )

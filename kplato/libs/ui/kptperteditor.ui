@@ -1,18 +1,15 @@
 <ui version="4.0" >
- <class>PertEditor</class>
- <widget class="QWidget" name="PertEditor" >
+ <class>KPlato::PertEditor</class>
+ <widget class="QWidget" name="KPlato::PertEditor" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>564</width>
-    <height>434</height>
+    <width>638</width>
+    <height>196</height>
    </rect>
   </property>
-  <layout class="QHBoxLayout" >
-   <property name="spacing" >
-    <number>0</number>
-   </property>
+  <layout class="QVBoxLayout" >
    <property name="leftMargin" >
     <number>0</number>
    </property>
@@ -26,25 +23,107 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="KActionSelector" name="assignList" />
-   </item>
-   <item>
-    <widget class="QTreeWidget" name="tableTaskWidget" >
-     <column>
-      <property name="text" >
-       <string>Tasks</string>
+    <widget class="QFrame" name="frame" >
+     <property name="frameShape" >
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow" >
+      <enum>QFrame::Sunken</enum>
+     </property>
+     <layout class="QHBoxLayout" >
+      <property name="leftMargin" >
+       <number>0</number>
       </property>
-     </column>
+      <property name="topMargin" >
+       <number>0</number>
+      </property>
+      <property name="rightMargin" >
+       <number>0</number>
+      </property>
+      <property name="bottomMargin" >
+       <number>0</number>
+      </property>
+      <item>
+       <widget class="QTreeWidget" name="available" >
+        <column>
+         <property name="text" >
+          <string>Available tasks</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" >
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="addBtn" >
+          <property name="toolTip" >
+           <string>Add required task</string>
+          </property>
+          <property name="text" >
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="removeBtn" >
+          <property name="toolTip" >
+           <string>Remove required task</string>
+          </property>
+          <property name="text" >
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer>
+          <property name="orientation" >
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" >
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="RelationTreeView" name="required" />
+      </item>
+      <item>
+       <widget class="QTreeWidget" name="taskList" >
+        <column>
+         <property name="text" >
+          <string>Tasks</string>
+         </property>
+        </column>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
   </layout>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>KActionSelector</class>
-   <extends>QWidget</extends>
-   <header>kactionselector.h</header>
-   <container>1</container>
+   <class>RelationTreeView</class>
+   <extends>QTreeView</extends>
+   <header>kptrelationeditor.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
