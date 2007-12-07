@@ -24,7 +24,7 @@
 #include <QWidget>
 
 KPrSlideWipeEffect::KPrSlideWipeEffect()
-: KPrPageEffect()
+: KPrPageEffect( SlideWipeEffectId )
 {
 }
 

@@ -22,6 +22,8 @@
 
 #include "KPrPageEffect.h"
 
+#define SlideWipeEffectId "SlideWipeEffect"
+
 class KPrSlideWipeEffect : public KPrPageEffect
 {
 public:

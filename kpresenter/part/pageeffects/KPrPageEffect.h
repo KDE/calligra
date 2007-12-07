@@ -34,6 +34,16 @@ class KPrPageEffect
 {
 public:
     /**
+     * Sub type of the effect 
+     */
+    enum SubType {
+        LeftToRight,
+        RightToLeft,
+        TopToBottom,
+        BottomToTop
+    };
+
+    /**
      * Data used by the effect
      *
      * The effect itself contains no status about the effect. All data
@@ -60,7 +70,7 @@ public:
         int m_lastTime;
     };
 
-    KPrPageEffect();
+    KPrPageEffect( const QString & id );
     virtual ~KPrPageEffect();
 
     virtual void setup( const Data &data, QTimeLine &timeLine ) = 0;
@@ -106,10 +116,25 @@ public:
      *
      * @return The duration of the page effect.
      */
-    int duration();
+    int duration() const;
+
+    /**
+     * Get the id of the page effect.
+     *
+     * @return id of the page effect
+     */
+    const QString & id() const;
+
+    /**
+     * Get the sub type of the page effect.
+     *
+     * @return The sub type of the page effect.
+     */
+    //tz not yet used SubType subType() const = 0;
 
 protected:
     int m_duration;
+    QString m_id;
 };
 
 #endif // KPRPAGEEFFECT2_H
