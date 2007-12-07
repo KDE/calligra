@@ -585,12 +585,12 @@ void View::Private::initActions()
   connect( actions->selectFontSize, SIGNAL( fontSizeChanged( int ) ),
                     view, SLOT( fontSizeSelected( int ) ) );
 
-  actions->fontSizeUp  = new KAction(KIcon( "fontsizeup" ), i18n("Increase Font Size"), view);
+  actions->fontSizeUp  = new KAction(KIcon( "format-font-size-more" ), i18n("Increase Font Size"), view);
   ac->addAction("increaseFontSize", actions->fontSizeUp );
   connect(actions->fontSizeUp, SIGNAL(triggered(bool)), view, SLOT( increaseFontSize() ));
 
 
-  actions->fontSizeDown  = new KAction(KIcon( "fontsizedown" ), i18n("Decrease Font Size"), view);
+  actions->fontSizeDown  = new KAction(KIcon( "format-font-size-less" ), i18n("Decrease Font Size"), view);
   ac->addAction("decreaseFontSize", actions->fontSizeDown );
   connect(actions->fontSizeDown, SIGNAL(triggered(bool)), view, SLOT( decreaseFontSize() ));
 
@@ -668,12 +668,12 @@ void View::Private::initActions()
                     view, SLOT( verticalText( bool ) ) );
   actions->verticalText->setToolTip(i18n("Print cell contents vertically"));
 
-  actions->increaseIndent  = new KAction(KIcon( QApplication::isRightToLeft() ? "format_decreaseindent" : "format_increaseindent" ), i18n("Increase Indent"), view);
+  actions->increaseIndent  = new KAction(KIcon( QApplication::isRightToLeft() ? "format-indent-less" : "format-indent-more" ), i18n("Increase Indent"), view);
   ac->addAction("increaseindent", actions->increaseIndent );
   connect(actions->increaseIndent, SIGNAL(triggered(bool)), view, SLOT( increaseIndent() ));
   actions->increaseIndent->setToolTip(i18n("Increase the indentation"));
 
-  actions->decreaseIndent  = new KAction(KIcon( QApplication::isRightToLeft() ? "format_increaseindent" : "format_decreaseindent" ), i18n("Decrease Indent"), view);
+  actions->decreaseIndent  = new KAction(KIcon( QApplication::isRightToLeft() ? "format-indent-more" : "format-indent-less" ), i18n("Decrease Indent"), view);
   ac->addAction("decreaseindent", actions->decreaseIndent );
   connect(actions->decreaseIndent, SIGNAL(triggered(bool)), view, SLOT( decreaseIndent() ));
   actions->decreaseIndent->setToolTip(i18n("Decrease the indentation"));
@@ -726,7 +726,7 @@ void View::Private::initActions()
   connect(actions->firstLetterUpper, SIGNAL(triggered(bool)), view, SLOT( firstLetterUpper() ));
   actions->firstLetterUpper->setToolTip(i18n("Capitalize the first letter"));
 
-  actions->bgColor = new KAction(KIcon("color_fill"), i18n("Background Color"), view);
+  actions->bgColor = new KAction(KIcon("color-fill"), i18n("Background Color"), view);
   ac->addAction("backgroundColor", actions->bgColor);
   connect(actions->bgColor, SIGNAL(triggered(bool)), view, SLOT(changeBackgroundColor()));
   actions->bgColor->setToolTip(i18n("Set the background color"));
@@ -773,7 +773,7 @@ void View::Private::initActions()
   connect(actions->borderOutline, SIGNAL(triggered(bool)), view, SLOT( borderOutline() ));
   actions->borderOutline->setToolTip(i18n("Set a border to the outline of the selected area"));
 
-  actions->borderColor = new KAction(KIcon("color_line"), i18n("Border Color"), view);
+  actions->borderColor = new KAction(KIcon("color-line"), i18n("Border Color"), view);
   ac->addAction("borderColor", actions->borderColor);
   connect(actions->borderColor, SIGNAL(triggered(bool)), view, SLOT(changeBorderColor()));
   actions->borderColor->setToolTip(i18n("Select a new border color"));
@@ -1080,12 +1080,12 @@ void View::Private::initActions()
   connect(actions->sort, SIGNAL(triggered(bool)),view, SLOT( sort() ));
   actions->sort->setToolTip(i18n("Sort a group of cells"));
 
-  actions->sortDec  = new KAction(KIcon( "sort_decrease" ), i18n("Sort &Decreasing"), view);
+  actions->sortDec  = new KAction(KIcon( "view-sort-descending" ), i18n("Sort &Decreasing"), view);
   ac->addAction("sortDec", actions->sortDec );
   connect(actions->sortDec, SIGNAL(triggered(bool)), view, SLOT( sortDec() ));
   actions->sortDec->setToolTip(i18n("Sort a group of cells in decreasing (last to first) order"));
 
-  actions->sortInc  = new KAction(KIcon( "sort_incr" ), i18n("Sort &Increasing"), view);
+  actions->sortInc  = new KAction(KIcon( "view-sort-ascending" ), i18n("Sort &Increasing"), view);
   ac->addAction("sortInc", actions->sortInc );
   connect(actions->sortInc, SIGNAL(triggered(bool)), view, SLOT( sortInc() ));
   actions->sortInc->setToolTip(i18n("Sort a group of cells in ascending (first to last) order"));
