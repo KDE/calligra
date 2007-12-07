@@ -3,7 +3,7 @@
 include_directories( ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${CMAKE_SOURCE_DIR}/kexi/core ${KDE4_INCLUDES}  )
 
 # temp
-ADD_DEFINITIONS( -DNO_GUI=1 )
+#ADD_DEFINITIONS( -DNO_GUI=1 )
 
 
 ########### next target ###############
@@ -12,7 +12,7 @@ set(kexidbtest_SRCS main.cpp )
 
 kde4_add_executable(kexidbtest NOGUI ${kexidbtest_SRCS})
 
-target_link_libraries(kexidbtest  ${KDE4_KDECORE_LIBS} kexidb ) #kexiextendedwidgets )
+target_link_libraries(kexidbtest  ${KDE4_KDECORE_LIBS} kexidb kexiextendedwidgets kexidatatable )
 
 
 ########### install files ###############

@@ -23,6 +23,8 @@
 #include <widget/tableview/kexidatatableview.h>
 #include <kexidb/cursor.h>
 
+#include <QDesktopWidget>
+
 int tableViewTest()
 {
 	if (!conn->useDatabase( db_name )) {
@@ -46,7 +48,7 @@ int tableViewTest()
 		return 1;
 	}
 
-	KexiDataTableView *tv = new KexiDataTableView(0, "tv", cursor);
+	KexiDataTableView *tv = new KexiDataTableView(0, cursor);
 
 	app->setMainWidget(tv);
 	tv->move((qApp->desktop()->width() - tv->width())/2, (qApp->desktop()->height() - tv->height())/2);
