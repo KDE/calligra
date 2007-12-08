@@ -119,7 +119,7 @@ void KPrView::createPageEffect()
 {
     // this does not work in master pages
     if ( dynamic_cast<KPrPage *>( activePage() ) ) {
-        KPrPageEffectSetCommand * command = new KPrPageEffectSetCommand( activePage(), new KPrSlideWipeEffect() );
+        KPrPageEffectSetCommand * command = new KPrPageEffectSetCommand( activePage(), new KPrSlideWipeEffect( 5000 ) );
         m_canvas->addCommand( command );
     }
 }

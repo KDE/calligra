@@ -70,7 +70,13 @@ public:
         int m_lastTime;
     };
 
-    KPrPageEffect( const QString & id );
+    /**
+     * Constructor
+     *
+     * @param duration The duration in milliseconds
+     * @param id The id of the page effect
+     */
+    KPrPageEffect( int duration, const QString & id );
     virtual ~KPrPageEffect();
 
     virtual void setup( const Data &data, QTimeLine &timeLine ) = 0;

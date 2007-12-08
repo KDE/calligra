@@ -27,7 +27,7 @@
 class KPrSlideWipeEffect : public KPrPageEffect
 {
 public:
-    KPrSlideWipeEffect();
+    KPrSlideWipeEffect( int duration );
 
     // reimplemented
     virtual void setup( const Data &data, QTimeLine &timeLine );

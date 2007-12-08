@@ -21,8 +21,8 @@
 
 #include <QWidget>
 
-KPrPageEffect::KPrPageEffect( const QString & id )
-: m_duration( 5000 )
+KPrPageEffect::KPrPageEffect( int duration, const QString & id )
+: m_duration( duration )
 , m_id( id )
 {
 }

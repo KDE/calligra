@@ -23,8 +23,8 @@
 #include <QPixmap>
 #include <QWidget>
 
-KPrSlideWipeEffect::KPrSlideWipeEffect()
-: KPrPageEffect( SlideWipeEffectId )
+KPrSlideWipeEffect::KPrSlideWipeEffect( int duration )
+: KPrPageEffect( duration, SlideWipeEffectId )
 {
 }
 
