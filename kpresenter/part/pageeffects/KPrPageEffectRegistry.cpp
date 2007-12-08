@@ -22,7 +22,6 @@
 #include <kglobal.h>
 
 #include "KPrSlideWipeEffectFactory.h"
-#include "KPrBarWipeEffectFactory.h"
 
 class KPrPageEffectRegistry::Singleton
 {
