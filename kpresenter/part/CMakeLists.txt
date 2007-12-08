@@ -32,7 +32,9 @@ set( kpresenterprivate_LIB_SRCS
      pageeffects/KPrPageEffectRunner.cpp
      pageeffects/KPrPageEffect.cpp
      pageeffects/KPrPageEffectFactory.cpp
+     pageeffects/KPrPageEffectRegistry.cpp
      pageeffects/KPrSlideWipeEffect.cpp
+     pageeffects/KPrSlideWipeEffectFactory.cpp
      shapeanimations/KPrShapeAnimation.cpp
      shapeanimations/KPrTranslateAnimation.cpp
      shapeanimations/KPrAnimationMoveAppear.cpp
