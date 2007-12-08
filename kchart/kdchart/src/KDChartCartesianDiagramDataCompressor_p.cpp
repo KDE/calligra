@@ -130,9 +130,6 @@ void CartesianDiagramDataCompressor::slotColumnsInserted( const QModelIndex& par
 
     const CachePosition startPos = mapToCache( 0, start );
     const CachePosition endPos = mapToCache( 0, end );
-
-    start = startPos.second;
-    end = endPos.second;
     
     static const CachePosition NullPosition( -1, -1 );
     if( startPos == NullPosition )
@@ -141,6 +138,9 @@ void CartesianDiagramDataCompressor::slotColumnsInserted( const QModelIndex& par
         // Do not Q_ASSERT() though, since the resolution might simply not be set
         return;
     }
+
+    start = startPos.second;
+    end = endPos.second;
 
     for( int i = 0; i < m_data.size(); ++i )
     {
