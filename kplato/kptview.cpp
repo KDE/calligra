@@ -201,20 +201,20 @@ View::View( Part* part, QWidget* parent )
     // ------ Insert
 
     // ------ Project
-    actionEditMainProject  = new KAction(KIcon( "object-edit" ), i18n("Edit Main Project..."), this);
+    actionEditMainProject  = new KAction(KIcon( "document-properties" ), i18n("Edit Main Project..."), this);
     actionCollection()->addAction("project_edit", actionEditMainProject );
     connect( actionEditMainProject, SIGNAL( triggered( bool ) ), SLOT( slotProjectEdit() ) );
 
-    actionEditStandardWorktime  = new KAction(KIcon( "object-edit" ), i18n("Edit Standard Worktime..."), this);
+    actionEditStandardWorktime  = new KAction(KIcon( "document-properties" ), i18n("Edit Standard Worktime..."), this);
     actionCollection()->addAction("project_worktime", actionEditStandardWorktime );
     connect( actionEditStandardWorktime, SIGNAL( triggered( bool ) ), SLOT( slotProjectWorktime() ) );
     actionEditCalendarList  = new KAction(KIcon( "preferences-system-time" ), i18n("Edit Calendar..."), this);
     actionCollection()->addAction("project_calendar", actionEditCalendarList );
     connect( actionEditCalendarList, SIGNAL( triggered( bool ) ), SLOT( slotProjectCalendar() ) );
-    actionEditAccounts  = new KAction(KIcon( "users" ), i18n("Edit Accounts..."), this);
+    actionEditAccounts  = new KAction(KIcon( "system-users" ), i18n("Edit Accounts..."), this);
     actionCollection()->addAction("project_accounts", actionEditAccounts );
     connect( actionEditAccounts, SIGNAL( triggered( bool ) ), SLOT( slotProjectAccounts() ) );
-    actionEditResources  = new KAction(KIcon( "object-edit" ), i18n("Edit Resources..."), this);
+    actionEditResources  = new KAction(KIcon( "document-properties" ), i18n("Edit Resources..."), this);
     actionCollection()->addAction("project_resources", actionEditResources );
     connect( actionEditResources, SIGNAL( triggered( bool ) ), SLOT( slotProjectResources() ) );
 
@@ -250,21 +250,21 @@ View::View( Part* part, QWidget* parent )
     connect( actionConfigure, SIGNAL( triggered( bool ) ), SLOT( slotConfigure() ) );
 
     // ------ Popup
-    actionOpenNode  = new KAction(KIcon( "object-edit" ), i18n("Edit..."), this);
+    actionOpenNode  = new KAction(KIcon( "document-properties" ), i18n("Edit..."), this);
     actionCollection()->addAction("node_properties", actionOpenNode );
     connect( actionOpenNode, SIGNAL( triggered( bool ) ), SLOT( slotOpenNode() ) );
-    actionTaskProgress  = new KAction(KIcon( "object-edit" ), i18n("Progress..."), this);
+    actionTaskProgress  = new KAction(KIcon( "document-properties" ), i18n("Progress..."), this);
     actionCollection()->addAction("task_progress", actionTaskProgress );
     connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
     actionDeleteTask  = new KAction(KIcon( "edit-delete" ), i18n("Delete Task"), this);
     actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
     
-    actionTaskWorkpackage  = new KAction(KIcon( "object-edit" ), i18n("Work Package Control..."), this);
+    actionTaskWorkpackage  = new KAction(KIcon( "document-properties" ), i18n("Work Package Control..."), this);
     actionCollection()->addAction("task_workpackagecontrol", actionTaskWorkpackage );
     connect( actionTaskWorkpackage, SIGNAL( triggered( bool ) ), SLOT( slotTaskWorkpackage() ) );
 
-    actionEditResource  = new KAction(KIcon( "object-edit" ), i18n("Edit Resource..."), this);
+    actionEditResource  = new KAction(KIcon( "document-properties" ), i18n("Edit Resource..."), this);
     actionCollection()->addAction("edit_resource", actionEditResource );
     connect( actionEditResource, SIGNAL( triggered( bool ) ), SLOT( slotEditResource() ) );
 
@@ -272,7 +272,7 @@ View::View( Part* part, QWidget* parent )
     actionCollection()->addAction("edit_calendar", actionEditCalendar );
     connect( actionEditCalendar, SIGNAL( triggered( bool ) ), SLOT( slotEditCalendar() ) );
 
-    actionEditRelation  = new KAction(KIcon( "object-edit" ), i18n("Edit Dependency..."), this);
+    actionEditRelation  = new KAction(KIcon( "document-properties" ), i18n("Edit Dependency..."), this);
     actionCollection()->addAction("edit_dependency", actionEditRelation );
     connect( actionEditRelation, SIGNAL( triggered( bool ) ), SLOT( slotModifyRelation() ) );
     actionDeleteRelation  = new KAction(KIcon( "edit-delete" ), i18n("Delete Dependency..."), this);
