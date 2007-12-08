@@ -24,7 +24,7 @@
 /**
  * Base class for a page effect factories
  */
-class KPrPageEffectFactory : public QObject
+class KPrPageEffectFactory
 {
 public:
     struct Properties {
