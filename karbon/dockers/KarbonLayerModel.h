@@ -36,6 +36,9 @@ public:
     /// Triggers an update of the complete model
     void update();
 
+    /// Sets a new document to show contents of
+    void setDocument( VDocument * newDocument );
+
     // from QAbstractItemModel
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
     virtual int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -48,6 +51,7 @@ public:
     virtual QStringList mimeTypes() const;
     virtual QMimeData * mimeData( const QModelIndexList & indexes ) const;
     virtual bool dropMimeData( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent );
+
 private:
     /// Returns properties of the given shape
     PropertyList properties( KoShape* shape ) const;

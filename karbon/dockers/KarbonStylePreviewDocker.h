@@ -22,27 +22,34 @@
 
 #include <QDockWidget>
 #include <KoDockFactory.h>
+#include <KoCanvasObserver.h>
 
 class KarbonStylePreview;
 class KarbonStyleButtonBox;
 class QBrush;
 class KoShapeBorderModel;
+class KoCanvasBase;
 
-class KarbonStylePreviewDocker : public QDockWidget
+class KarbonStylePreviewDocker : public QDockWidget, public KoCanvasObserver
 {
     Q_OBJECT
 public:
     explicit KarbonStylePreviewDocker( QWidget * parent = 0L );
     ~KarbonStylePreviewDocker();
 
+    /// reimplemented from KoCanvasObserver
+    virtual void setCanvas(KoCanvasBase *canvas);
+
     bool strokeIsSelected() const;
     void updateStyle( const KoShapeBorderModel * stroke, const QBrush & fill );
 private slots:
     void fillSelected();
     void strokeSelected();
+    void selectionChanged();
 private:
     KarbonStylePreview * m_preview;
     KarbonStyleButtonBox * m_buttons;
+    KoCanvasBase * m_canvas;
 };
 
 class KarbonStylePreviewDockerFactory : public KoDockFactory

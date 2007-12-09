@@ -21,6 +21,7 @@
 #include "KarbonLayerModel.h"
 
 #include <vdocument.h>
+#include <karbon_part.h>
 #include <KarbonLayerReorderCommand.h>
 
 #include <KoDocumentSectionView.h>
@@ -42,6 +43,7 @@
 #include <kiconloader.h>
 #include <kinputdialog.h>
 #include <kmessagebox.h>
+#include <kparts/part.h>
 
 #include <QtGui/QGridLayout>
 #include <QtGui/QPushButton>
@@ -55,8 +57,7 @@ enum ButtonIds
     Button_Delete
 };
 
-KarbonLayerDockerFactory::KarbonLayerDockerFactory( KoShapeControllerBase *shapeController, VDocument *document )
-    : m_shapeController( shapeController ), m_document( document )
+KarbonLayerDockerFactory::KarbonLayerDockerFactory()
 {
 }
 
@@ -67,14 +68,14 @@ QString KarbonLayerDockerFactory::id() const
 
 QDockWidget* KarbonLayerDockerFactory::createDockWidget()
 {
-    KarbonLayerDocker* widget = new KarbonLayerDocker( m_shapeController, m_document);
+    KarbonLayerDocker* widget = new KarbonLayerDocker();
     widget->setObjectName(id());
 
     return widget;
 }
 
-KarbonLayerDocker::KarbonLayerDocker( KoShapeControllerBase *shapeController, VDocument *document )
-    : m_shapeController( shapeController ), m_document( document ), m_model( 0 )
+KarbonLayerDocker::KarbonLayerDocker()
+    : m_part( 0 ), m_model( 0 )
 {
     setWindowTitle( i18n( "Layer view" ) );
 
@@ -116,7 +117,7 @@ KarbonLayerDocker::KarbonLayerDocker( KoShapeControllerBase *shapeController, VD
 
     connect( buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 
-    m_model = new KarbonLayerModel( m_document );
+    m_model = new KarbonLayerModel( m_part ? &m_part->document() : 0 );
     m_layerView->setItemsExpandable( true );
     m_layerView->setModel( m_model );
     m_layerView->setDisplayMode( KoDocumentSectionView::MinimalMode );
@@ -135,6 +136,15 @@ KarbonLayerDocker::~KarbonLayerDocker()
 void KarbonLayerDocker::updateView()
 {
     m_model->update();
+}
+
+void KarbonLayerDocker::setPart( KParts::Part * part )
+{
+    m_part = dynamic_cast<KarbonPart*>( part );
+    if( ! m_part )
+        m_model->setDocument( 0 );
+    else
+        m_model->setDocument( &m_part->document() );
 }
 
 void KarbonLayerDocker::slotButtonClicked( int buttonId )
@@ -203,7 +213,7 @@ void KarbonLayerDocker::addLayer()
         KoShapeLayer* layer = new KoShapeLayer();
         layer->setName( name );
         KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-        QUndoCommand *cmd = new KoShapeCreateCommand( m_shapeController, layer, 0 );
+        QUndoCommand *cmd = new KoShapeCreateCommand( m_part, layer, 0 );
         cmd->setText( i18n( "Create Layer") );
         canvasController->canvas()->addCommand( cmd );
         m_model->update();
@@ -222,7 +232,7 @@ void KarbonLayerDocker::deleteItem()
 
     if( selectedLayers.count() )
     {
-        if( m_document->layers().count() > selectedLayers.count() )
+        if( m_part->document().layers().count() > selectedLayers.count() )
         {
             QList<KoShape*> deleteShapes;
             foreach( KoShapeLayer* layer, selectedLayers )
@@ -230,7 +240,7 @@ void KarbonLayerDocker::deleteItem()
                 deleteShapes += layer->iterator();
                 deleteShapes.append( layer );
             }
-            cmd = new KoShapeDeleteCommand( m_shapeController, deleteShapes );
+            cmd = new KoShapeDeleteCommand( m_part, deleteShapes );
             cmd->setText( i18n( "Delete Layer" ) );
         }
         else
@@ -240,7 +250,7 @@ void KarbonLayerDocker::deleteItem()
     }
     else if( selectedShapes.count() )
     {
-        cmd = new KoShapeDeleteCommand( m_shapeController, selectedShapes );
+        cmd = new KoShapeDeleteCommand( m_part, selectedShapes );
     }
 
     if( cmd )
@@ -267,10 +277,10 @@ void KarbonLayerDocker::raiseItem()
     {
         // check if all layers could be raised
         foreach( KoShapeLayer* layer, selectedLayers )
-            if( ! m_document->canRaiseLayer( layer ) )
+            if( ! m_part->document().canRaiseLayer( layer ) )
                 return;
 
-        cmd = new KarbonLayerReorderCommand( m_document, selectedLayers, KarbonLayerReorderCommand::RaiseLayer );
+        cmd = new KarbonLayerReorderCommand( &m_part->document(), selectedLayers, KarbonLayerReorderCommand::RaiseLayer );
     }
     else if( selectedShapes.count() )
     {
@@ -300,10 +310,10 @@ void KarbonLayerDocker::lowerItem()
     {
         // check if all layers could be raised
         foreach( KoShapeLayer* layer, selectedLayers )
-            if( ! m_document->canLowerLayer( layer ) )
+            if( ! m_part->document().canLowerLayer( layer ) )
                 return;
 
-        cmd = new KarbonLayerReorderCommand( m_document, selectedLayers, KarbonLayerReorderCommand::LowerLayer );
+        cmd = new KarbonLayerReorderCommand( &m_part->document(), selectedLayers, KarbonLayerReorderCommand::LowerLayer );
     }
     else if( selectedShapes.count() )
     {

@@ -114,6 +114,7 @@
 #include <kstatusbar.h>
 #include <kfiledialog.h>
 #include <kstandardaction.h>
+#include <kparts/partmanager.h>
 
 // qt header
 #include <QtGui/QIcon>
@@ -124,7 +125,6 @@
 #include <QtGui/QPixmap>
 #include <QtGui/QDropEvent>
 #include <QtGui/QGridLayout>
-#include <QtGui/QToolBar>
 #include <QtGui/QLabel>
 #include <QtCore/QTimer>
 #include <QtCore/QEvent>
@@ -1331,24 +1331,6 @@ KarbonView::selectionChanged()
 
     if( count > 0 )
     {
-        KoShape *shape = *selection->selectedShapes().begin();
-        if( shape )
-        {
-            if ( shell() ) {
-                //if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
-                    m_stylePreview->updateStyle( shape->border(), shape->background() );
-                //}
-            }
-        }
-        else
-        {
-            if ( shell() ) {
-                //if ( this == shell()->rootView() || koDocument()->isEmbedded() ) {
-                    m_stylePreview->updateStyle( 0, QBrush( Qt::NoBrush ) );
-                //}
-            }
-        }
-
         uint selectedPaths = 0;
         uint selectedGroups = 0;
         uint selectedParametrics = 0;
@@ -1376,12 +1358,7 @@ KarbonView::selectionChanged()
         m_subtractPath->setEnabled( selectedPaths == 2 );
         m_unitePath->setEnabled( selectedPaths == 2 );
     }
-    else
-    {
-        if ( shell() )
-            //if ( this == shell()->rootView() || koDocument()->isEmbedded() && m_stylePreview )
-            m_stylePreview->updateStyle( 0, QBrush( Qt::NoBrush ) );
-    }
+
     emit selectionChange();
 }
 void
@@ -1408,9 +1385,12 @@ void KarbonView::createLayersTabDock()
 {
     debugView("KarbonView::createLayersTabDock()");
 
-    KarbonLayerDockerFactory layerFactory( m_part, &part()->document() );
+    KarbonLayerDockerFactory layerFactory;
     m_layerDocker = qobject_cast<KarbonLayerDocker*>(createDockWidget(&layerFactory));
+    m_layerDocker->setPart( m_part );
     connect( this, SIGNAL( selectionChange() ), m_layerDocker, SLOT( updateView() ) );
+    connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * )),
+             m_layerDocker, SLOT( setPart( KParts::Part * ) ) );
 }
 
 void KarbonView::createColorDock()

@@ -56,8 +56,17 @@ void KarbonLayerModel::update()
     emit layoutChanged();
 }
 
+void KarbonLayerModel::setDocument( VDocument * newDocument )
+{
+    m_document = newDocument;
+    reset();
+}
+
 int KarbonLayerModel::rowCount( const QModelIndex &parent ) const
 {
+    if( ! m_document )
+        return 0;
+
     // check if parent is root node
     if( ! parent.isValid() )
         return m_document->layers().count();
@@ -74,11 +83,17 @@ int KarbonLayerModel::rowCount( const QModelIndex &parent ) const
 
 int KarbonLayerModel::columnCount( const QModelIndex & ) const
 {
-    return 1;
+    if( ! m_document )
+        return 0;
+    else
+        return 1;
 }
 
 QModelIndex KarbonLayerModel::index( int row, int column, const QModelIndex &parent ) const
 {
+    if( ! m_document )
+        return QModelIndex();
+
     // check if parent is root node
     if( ! parent.isValid() )
     {
@@ -104,7 +119,7 @@ QModelIndex KarbonLayerModel::index( int row, int column, const QModelIndex &par
 QModelIndex KarbonLayerModel::parent( const QModelIndex &child ) const
 {
     // check if child is root node
-    if( ! child.isValid() )
+    if( ! m_document || ! child.isValid() )
         return QModelIndex();
 
     Q_ASSERT(child.model() == this);
@@ -498,6 +513,9 @@ bool KarbonLayerModel::dropMimeData( const QMimeData * data, Qt::DropAction acti
 
 QModelIndex KarbonLayerModel::parentIndexFromShape( const KoShape * child )
 {
+    if( ! m_document )
+        return QModelIndex();
+
     // check if child shape is a layer, and return invalid model index if it is
     const KoShapeLayer *childlayer = dynamic_cast<const KoShapeLayer*>( child );
     if( childlayer )

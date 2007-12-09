@@ -28,18 +28,21 @@ class KoShapeControllerBase;
 class KoShape;
 class KoShapeLayer;
 class KarbonLayerModel;
+class KarbonPart;
 class QModelIndex;
+
+namespace KParts
+{
+    class Part;
+}
 
 class KarbonLayerDockerFactory : public KoDockFactory
 {
 public:
-    KarbonLayerDockerFactory( KoShapeControllerBase *shapeController, VDocument *document );
+    KarbonLayerDockerFactory();
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
-private:
-    KoShapeControllerBase * m_shapeController;
-    VDocument *m_document;
 };
 
 class KarbonLayerDocker : public QDockWidget
@@ -47,10 +50,11 @@ class KarbonLayerDocker : public QDockWidget
 Q_OBJECT
 
 public:
-    KarbonLayerDocker( KoShapeControllerBase *shapeController, VDocument *document );
+    KarbonLayerDocker();
     virtual ~KarbonLayerDocker();
 public slots:
     void updateView();
+    void setPart( KParts::Part * part );
 private slots:
     void slotButtonClicked( int buttonId );
     void addLayer();
@@ -60,10 +64,9 @@ private slots:
     void itemClicked( const QModelIndex &index );
 private:
     void extractSelectedLayersAndShapes( QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes );
-    KoShapeControllerBase *m_shapeController;
-    VDocument *m_document;
-    KoDocumentSectionView *m_layerView;
-    KarbonLayerModel *m_model;
+    KarbonPart * m_part;
+    KarbonLayerModel * m_model;
+    KoDocumentSectionView * m_layerView;
 };
 
 #endif // KARBONLAYERDOCKER_H

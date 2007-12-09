@@ -26,13 +26,15 @@
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>
 #include <KoCanvasResourceProvider.h>
+#include <KoShapeManager.h>
+#include <KoSelection.h>
 
 #include <klocale.h>
 
 #include <QVBoxLayout>
 
 KarbonStylePreviewDocker::KarbonStylePreviewDocker( QWidget * parent )
-    : QDockWidget( parent )
+    : QDockWidget( parent ), m_canvas(0)
 {
     setWindowTitle( i18n( "Styles" ) );
 
@@ -53,10 +55,46 @@ KarbonStylePreviewDocker::KarbonStylePreviewDocker( QWidget * parent )
     connect( m_preview, SIGNAL(strokeSelected()), this, SLOT(strokeSelected()) );
 
     setWidget( mainWidget );
+
+    m_canvas = KoToolManager::instance()->activeCanvasController()->canvas();
+    if( m_canvas )
+        connect( m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
+                 this, SLOT(selectionChanged()));
 }
 
 KarbonStylePreviewDocker::~KarbonStylePreviewDocker()
 {
+}
+
+void KarbonStylePreviewDocker::setCanvas( KoCanvasBase * canvas )
+{
+    m_canvas = canvas;
+    if( ! m_canvas )
+    {
+        updateStyle( 0, QBrush( Qt::NoBrush ) );
+        return;
+    }
+
+    connect( m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
+                this, SLOT(selectionChanged()));
+
+    KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    if( shape )
+        updateStyle( shape->border(), shape->background() );
+    else
+        updateStyle( 0, QBrush( Qt::NoBrush ) );
+}
+
+void KarbonStylePreviewDocker::selectionChanged()
+{
+    if( ! m_canvas )
+        return;
+
+    KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    if( shape )
+        updateStyle( shape->border(), shape->background() );
+    else
+        updateStyle( 0, QBrush( Qt::NoBrush ) );
 }
 
 bool KarbonStylePreviewDocker::strokeIsSelected() const
@@ -71,15 +109,19 @@ void KarbonStylePreviewDocker::updateStyle( const KoShapeBorderModel * stroke, c
 
 void KarbonStylePreviewDocker::fillSelected()
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    canvasController->canvas()->resourceProvider()->setResource( Karbon::ActiveStyle, Karbon::Background );
+    if( ! m_canvas )
+        return;
+
+    m_canvas->resourceProvider()->setResource( Karbon::ActiveStyle, Karbon::Background );
     m_buttons->setFill();
 }
 
 void KarbonStylePreviewDocker::strokeSelected()
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    canvasController->canvas()->resourceProvider()->setResource( Karbon::ActiveStyle, Karbon::Foreground );
+    if( ! m_canvas )
+        return;
+
+    m_canvas->resourceProvider()->setResource( Karbon::ActiveStyle, Karbon::Foreground );
     m_buttons->setStroke();
 }
 
