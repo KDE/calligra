@@ -14,6 +14,9 @@ IF (POSTGRESQL_FOUND AND PQXX_FOUND)
    add_subdirectory( pqxx )
 ENDIF (POSTGRESQL_FOUND AND PQXX_FOUND)
 
+# todo: add suitable search command for freetds-dev here !
+#add_subdirectory(sybase)
+
 #message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(pgsql_dir)")
 #message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(mysql_dir)")
 

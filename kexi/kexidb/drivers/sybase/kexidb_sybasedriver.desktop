@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Sybase
+Name[x-test]=xxSybasexx
+X-KDE-Library=kexidb_sybasedriver
+ServiceTypes=Kexi/DBDriver
+Type=Service
+InitialPreference=8
+X-Kexi-DriverName=Sybase
+X-Kexi-DriverType=Network
+X-Kexi-KexiDBVersion=1.9
