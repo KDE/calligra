@@ -1,5 +1,5 @@
 
-include_directories( ${CMAKE_BINARY_DIR}/filters/ ${POPPLER_QT4_INCLUDE_DIR} )
+include_directories( ${CMAKE_BINARY_DIR}/filters/ ${POPPLER_INCLUDE_DIR} )
 
 
 ########### next target ###############
@@ -12,7 +12,7 @@ kde4_add_plugin(kritapdfimport WITH_PREFIX ${kritapdfimport_PART_SRCS})
 
 
 
-target_link_libraries(kritapdfimport kritaui ${POPPLER_QT4_LIBRARIES})
+target_link_libraries(kritapdfimport kritaui ${POPPLER_LIBRARY})
 
 install(TARGETS kritapdfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############

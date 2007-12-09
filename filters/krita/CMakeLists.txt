@@ -14,7 +14,7 @@ macro_log_feature(TIFF_FOUND "tiff" "The Krita TIFF filter will not be built" "h
 macro_log_feature(PNG_FOUND "png" "The Krita PNG filter will not be built" "http://www.libpng.org/pub/png/libpng.html" FALSE "")
 macro_log_feature(OPENEXR_FOUND "OpenEXR" "The Krita OpenEXR filter will not be built" "http://www.openexr.com" FALSE "")
 macro_log_feature(GRAPHICSMAGICK_FOUND "GraphicsMagick" "The Krita GraphicsMagick filter for various file formats (including PSD, XCF) will not be built" "http://www.graphicsmagick.org" FALSE "")
-macro_log_feature(POPPLER_QT4_FOUND "poppler-qt4" "The Krita PDF filter will not be built (version 0.5.x is currently required)" "http://poppler.freedesktop.org" FALSE "")
+macro_log_feature( HAVE_POPPLER_0_6 "poppler-qt4" "The Krita PDF filter will not be built (version 0.6.x is currently required)" "http://poppler.freedesktop.org" FALSE "")
 
 include_directories(${KRITA_INCLUDES})
 
@@ -45,8 +45,8 @@ if(GRAPHICSMAGICK_FOUND)
 #    add_subdirectory(gmagick)
 endif(GRAPHICSMAGICK_FOUND)
 
-if(POPPLER_QT4_FOUND AND NOT HAVE_POPPLER_0_6)
+if(POPPLER_FOUND AND HAVE_POPPLER_0_6)
     add_subdirectory(pdf)
-endif(POPPLER_QT4_FOUND AND NOT HAVE_POPPLER_0_6)
+endif(POPPLER_FOUND AND HAVE_POPPLER_0_6)
 
 add_subdirectory(bmp)

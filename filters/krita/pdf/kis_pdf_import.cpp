@@ -134,7 +134,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 
     doc -> prepareForImport();
     // Create the krita image
-    KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(KoID("RGBA"), "");
+    const KoColorSpace* cs = KoColorSpaceRegistry::instance()->colorSpace(KoID("RGBA"), "");
     int width = wdg->intWidth->value();
     int height = wdg->intHeight->value();
     KisImageSP img = new KisImage(doc->undoAdapter(), width, height, cs, "built image");
@@ -144,7 +144,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
     for(QList<int>::const_iterator it = pages.begin(); it != pages.end(); ++it)
     {
         KisPaintLayer* layer = new KisPaintLayer(img.data(), QString(i18n("Page %1")).arg( QString::number(*it) + 1), quint8_MAX);
-        layer->paintDevice()->convertFromQImage( pdoc->page( *it )->splashRenderToImage(wdg->intHorizontal->value(), wdg->intVertical->value() ), "");
+        layer->paintDevice()->convertFromQImage( pdoc->page( *it )->renderToImage(wdg->intHorizontal->value(), wdg->intVertical->value() ), "");
         img->addLayer(layer, img->rootLayer(), 0);
         layer->setDirty();
     }
