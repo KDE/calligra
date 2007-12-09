@@ -149,15 +149,6 @@ void KFormulaPartView::resizeEvent( QResizeEvent * )
     m_canvasController->setGeometry( 0, 0, width(), height() );
 }
 
-void KFormulaPartView::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
-{
-}
-
-void KFormulaPartView::print( QPrinter& printer, QPrintDialog &printDialog )
-{
-    Q_UNUSED( printer );
-}
-
 void KFormulaPartView::cursorChanged( bool visible, bool selecting )
 {
     m_cutAction->setEnabled( visible && selecting );

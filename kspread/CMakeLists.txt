@@ -149,6 +149,7 @@ SET (ui_DIR_SRCS
 	ui/Editors.cpp
 	ui/SheetView.cpp
 	ui/View.cpp
+	ui/PrintJob.cpp
 	)
 
 SET (kspreadcommon_LIB_SRCS

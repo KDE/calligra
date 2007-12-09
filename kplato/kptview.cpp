@@ -828,34 +828,22 @@ void View::setZoom( double )
     //TODO
 }
 
-void View::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
-{
-    //kDebug();
-}
-
+/* TODO
 void View::print( QPrinter &printer, QPrintDialog &printDialog )
 {
-    //kDebug();
-/*    if ( printer.previewOnly() ) {
-        //HACK: KoMainWindow shows setup on print, but not on print preview!
-        if ( !printer.setup() ) {
-            return ;
-        }
-    }*/
-/* TODO
     if ( m_tab->currentWidget() == ganttview ) {
         ganttview->print( printer );
     } else if ( m_tab->currentWidget() == m_resourceview ) {
         m_resourceview->print( printer );
     } else if ( m_tab->currentWidget() == m_accountsview ) {
         m_accountsview->print( printer );
-    }*/
+    }
     // 	else if (m_tab->currentWidget() == m_reportview)
     // 	{
     //         m_reportview->print(printer);
     // 	}
-
 }
+*/
 
 void View::slotEditCut()
 {

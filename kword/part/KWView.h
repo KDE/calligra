@@ -89,14 +89,13 @@ public:
 
 private:
     void setupActions();
+    virtual KoPrintJob * createPrintJob();
 
 private slots:
     void editFrameProperties();
 
     void selectionChanged();
 
-    // actions
-    void print();
     void insertFrameBreak();
     void editDeleteFrame();
     void toggleHeader();

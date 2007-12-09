@@ -115,7 +115,7 @@ KWView::KWView( const QString& viewMode, KWDocument* document, QWidget *parent )
 
     KWStatisticsDockerFactory statisticsFactory(this);
     KWStatisticsDocker *docker = dynamic_cast<KWStatisticsDocker *>(createDockWidget(&statisticsFactory));
-    if (docker->view() != this) docker->setView(this);
+    if (docker && docker->view() != this) docker->setView(this);
 
     m_statusBar = statusBar() ? new KWStatusBar( statusBar(), this ) : 0;
 }
@@ -144,10 +144,6 @@ void KWView::setupActions() {
     m_actionFormatFrameSet->setWhatsThis( i18n( "Alter frameset properties.<p>Currently you can change the frame background." ) );
     connect(m_actionFormatFrameSet, SIGNAL(triggered()), this, SLOT(editFrameProperties()));
 
-    QAction *print  = new KAction(i18n("Export as PDF..."), this);
-    print->setIcon(KIcon("pdf"));
-    actionCollection()->addAction("file_my_print", print );
-    connect(print, SIGNAL(triggered()), this, SLOT(print()));
     m_actionInsertFrameBreak  = new KAction(QString(), this);
     actionCollection()->addAction("insert_framebreak", m_actionInsertFrameBreak );
     m_actionInsertFrameBreak->setShortcut( KShortcut( Qt::CTRL + Qt::Key_Return));
@@ -786,29 +782,11 @@ void KWView::editFrameProperties() {
     delete frameDialog;
 }
 
-void KWView::print() {
-// options;
-//   DPI
-//   pages
-//   fontEmbeddingEnabled();
-//   duplex
-// const bool clipToPage=false; // should become a setting in the GUI
-
-    QString file = KFileDialog::getSaveFileName(KUrl("kfiledialog:///KWordExportPdf"),"application/pdf", this, i18n("Export as PDF..."));
-    if(! file.isEmpty()) {
-        KWPrintingDialog *dia = new KWPrintingDialog(this);
-        dia->printer().setOutputFormat(QPrinter::PdfFormat);
-        dia->printer().setCreator("KWord 2.0");
-        dia->printer().setDocName("Export as PDF");
-        dia->printer().setOutputFileName(file);
-        dia->printer().setResolution(600);
-        dia->printer().setFullPage(true); // ignore printer margins
-        QList<int> pages;
-        for(int i=m_document->startPage(); i <= m_document->lastPage(); i++)
-            pages.append(i);
-        dia->setPageRange(pages);
-        dia->show();
-    }
+KoPrintJob * KWView::createPrintJob() {
+    KWPrintingDialog *dia = new KWPrintingDialog(this);
+    dia->printer().setCreator("KWord 2.0");
+    dia->printer().setFullPage(true); // ignore printer margins
+    return dia;
 }
 
 void KWView::insertFrameBreak() {

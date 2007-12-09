@@ -52,6 +52,7 @@ set(karboncommon_LIB_SRCS
 #karbon_resourceserver.cc 
    karbon_part.cc 
    karbon_view.cc 
+   KarbonPrintJob.cpp
 #   karbon_drag.cpp 
 )
 

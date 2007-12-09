@@ -16,38 +16,29 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KWPRINTINGDIALOG_H
-#define KWPRINTINGDIALOG_H
+#ifndef PRINTJOB_H
+#define PRINTJOB_H
 
 #include <KoPrintingDialog.h>
 
-#include "frames/KWImageFrame.h"
+namespace KSpread {
+class View;
+class SheetSelectPage;
 
-#include <QMap>
-#include <QRectF>
-
-class KWView;
-class KWDocument;
-
-class KWPrintingDialog : public KoPrintingDialog {
+class PrintJob : public KoPrintingDialog {
 public:
-    KWPrintingDialog(KWView *view);
-    ~KWPrintingDialog();
-
-    void setClipToPage(bool on) { m_clipToPage = on; }
-
-    virtual QList<QWidget*> createOptionWidgets() const;
+    PrintJob(View *view);
 
 protected:
-    virtual void preparePage(int pageNumber);
+    virtual void printPage(int pageNumber, QPainter &painter);
     virtual QList<KoShape*> shapesOnPage(int pageNumber);
-    virtual void printingDone();
+    virtual QList<QWidget*> createOptionWidgets() const;
 
 private:
-    KWDocument *m_document;
-    bool m_clipToPage;
-    QMap<KWImageFrame*, KWImageFrame::ImageQuality> m_originalImages;
-    QRectF m_currentPage;
+    View *m_view;
+    SheetSelectPage *m_sheetSelectPage;
 };
+
+}  //KSPread namespace
 
 #endif

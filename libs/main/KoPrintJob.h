@@ -16,38 +16,35 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KWPRINTINGDIALOG_H
-#define KWPRINTINGDIALOG_H
 
-#include <KoPrintingDialog.h>
+#ifndef KOPRINTJOB_H
+#define KOPRINTJOB_H
 
-#include "frames/KWImageFrame.h"
+#include <QtCore/QObject>
+#include <QtCore/QList>
+#include <QtGui/QPrinter>
 
-#include <QMap>
-#include <QRectF>
+#include "komain_export.h"
 
-class KWView;
-class KWDocument;
+class QWidget;
 
-class KWPrintingDialog : public KoPrintingDialog {
+/// interface class for printing
+class KOMAIN_EXPORT KoPrintJob : public QObject {
+    Q_OBJECT
 public:
-    KWPrintingDialog(KWView *view);
-    ~KWPrintingDialog();
+    KoPrintJob(QWidget *parent = 0);
+    virtual ~KoPrintJob();
 
-    void setClipToPage(bool on) { m_clipToPage = on; }
+    enum RemovePolicy {
+        DeleteWhenDone,
+        DoNotDelete
+    };
 
-    virtual QList<QWidget*> createOptionWidgets() const;
+    virtual QPrinter &printer() = 0;
+    virtual QList<QWidget*> createOptionWidgets() const = 0;
 
-protected:
-    virtual void preparePage(int pageNumber);
-    virtual QList<KoShape*> shapesOnPage(int pageNumber);
-    virtual void printingDone();
-
-private:
-    KWDocument *m_document;
-    bool m_clipToPage;
-    QMap<KWImageFrame*, KWImageFrame::ImageQuality> m_originalImages;
-    QRectF m_currentPage;
+public slots:
+    virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 };
 
 #endif

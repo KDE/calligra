@@ -147,6 +147,7 @@
 #include "Util.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
+#include "PrintJob.h"
 
 // commands
 #include "commands/AutoFilterCommand.h"
@@ -352,9 +353,6 @@ public:
     // On timeout this will execute the status bar operation (e.g. SUM).
     // This is delayed to speed up the selection.
     QTimer statusBarOpTimer;
-
-    //Temporary until Qt4.4 provides API for add/set/get of pages
-    SheetSelectPage *m_sheetpage;
 };
 
 class ViewActions
@@ -4800,135 +4798,6 @@ void View::insertFromClipboard()
       dialog.exec();
 }
 
-void View::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
-{
-     kDebug() <<"Entering KSpread setupPrinter.";
-    if (!activeSheet())
-      return;
-
-    SheetPrint* print = d->activeSheet->print();
-
-    //apply page layout parameters
-    KoPageFormat::Format pageFormat = print->paperFormat();
-
-    printer.setPageSize( static_cast<QPrinter::PageSize>( KoPageFormat::printerPageSize( pageFormat ) ) );
-
-    if ( print->orientation() == KoPageFormat::Landscape || pageFormat == KoPageFormat::ScreenSize )
-        printer.setOrientation( QPrinter::Landscape );
-    else
-        printer.setOrientation( QPrinter::Portrait );
-
-    printer.setFullPage( true );
-
-    //add possibility to select the sheets to print:
-     kDebug() <<"Adding sheet selection page.";
-    d->m_sheetpage = new SheetSelectPage();
-
-     kDebug() <<"Iterating through available sheets and initializing list of available sheets.";
-    QList<Sheet*> sheetList = doc()->map()->sheetList();
-    for ( int i = sheetList.count()-1; i >= 0; --i )
-    {
-      Sheet* sheet = sheetList[ i ];
-      kDebug() <<"Adding" << sheet->sheetName();
-      d->m_sheetpage->prependAvailableSheet(sheet->sheetName());
-    }
-     kDebug() <<"Exiting KSpread setupPrinter.";
-}
-
-void View::print( QPrinter &printer, QPrintDialog &printDialog )
-{
-     kDebug() <<"Entering KSpread print.";
-    if (!activeSheet())
-      return;
-
-    //save the current active sheet for later, so we can restore it at the end
-    Sheet* selectedsheet = this->activeSheet();
-
-    //print all sheets in the order given by the print dialog (Sheet Selection)
-    QStringList sheetlist = d->m_sheetpage->selectedSheets();
-
-    if (sheetlist.empty())
-    {
-      kDebug() <<"No sheet for printing selected, printing active sheet";
-      sheetlist.append(d->activeSheet->sheetName());
-    }
-
-    QPainter painter;
-    painter.begin( &printer );
-
-    bool firstpage = true;
-
-    QStringList::iterator sheetlistiterator;
-    for (sheetlistiterator = sheetlist.begin(); sheetlistiterator != sheetlist.end(); ++sheetlistiterator)
-    {
-        kDebug() <<"  printing sheet" << *sheetlistiterator;
-        Sheet* sheet = doc()->map()->findSheet(*sheetlistiterator);
-        if (sheet == 0)
-        {
-          kWarning() << i18n("Sheet %1 could not be found for printing",*sheetlistiterator);
-          continue;
-        }
-
-        setActiveSheet(sheet,false);
-
-        SheetPrint* print = d->activeSheet->print();
-
-        if (firstpage)
-          firstpage=false;
-        else
-        {
-          kDebug() <<" inserting new page";
-          printer.newPage();
-        }
-
-        if ( d->canvas->editor() )
-        {
-            d->canvas->deleteEditor( true ); // save changes
-        }
-
-        //store the current setting in a temporary variable
-        KoPageFormat::Orientation _orient = print->orientation();
-
-        //use the current orientation from print dialog
-        if ( printer.orientation() == QPrinter::Landscape )
-        {
-            print->setPaperOrientation( KoPageFormat::Landscape );
-        }
-        else
-        {
-            print->setPaperOrientation( KoPageFormat::Portrait );
-        }
-
-        bool result = print->print( painter, &printer );
-
-        //Restore original orientation
-        print->setPaperOrientation( _orient );
-
-        // Nothing to print
-        if( !result )
-        {
-            // not required in Qt
-            //if( !printer.previewOnly() )
-            //{
-                KMessageBox::information( 0,
-                i18n("Nothing to print for sheet %1.",
-                d->activeSheet->sheetName()) );
-                //@todo: make sure we really can comment this out,
-                //       what to do with partially broken printouts?
-//                 printer.abort();
-            //}
-        }
-    }
-
-    painter.end();
-    this->setActiveSheet(selectedsheet);
-}
-
-QList<QWidget*> View::printDialogPages()
-{
-    return QList<QWidget*>() << d->m_sheetpage;
-}
-
 void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
 {
     if ( !d->activeSheet )
@@ -7294,6 +7163,13 @@ void View::runInspector()
     KSpread::Inspector* ins = new KSpread::Inspector( cell );
     ins->exec();
     delete ins;
+}
+
+KoPrintJob * View::createPrintJob()
+{
+    if (!activeSheet())
+        return 0;
+    return new PrintJob(this);
 }
 
 } // namespace KSpread

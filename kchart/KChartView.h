@@ -66,9 +66,6 @@ public slots:
     void  loadConfig();
     void  defaultConfig();
 
-    void  print(QPrinter &printer, QPrintDialog &printDialog);
-    void  setupPrinter(QPrinter &printer, QPrintDialog &printDialog);
-
     void  slotRepaint();
 
     void  slotConfigPageLayout();
@@ -88,6 +85,8 @@ protected:
     virtual void  updateReadWrite( bool readwrite );
 
     virtual void  mousePressEvent ( QMouseEvent * );
+
+    virtual KoPrintJob * createPrintJob();
 
 private:
     KAction  *m_importData;

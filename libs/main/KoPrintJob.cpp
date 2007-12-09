@@ -16,38 +16,22 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KWPRINTINGDIALOG_H
-#define KWPRINTINGDIALOG_H
 
-#include <KoPrintingDialog.h>
+#include "KoPrintJob.h"
 
-#include "frames/KWImageFrame.h"
+#include <QWidget>
 
-#include <QMap>
-#include <QRectF>
+KoPrintJob::KoPrintJob(QWidget *parent)
+    : QObject(parent)
+{
+}
 
-class KWView;
-class KWDocument;
+KoPrintJob::~KoPrintJob()
+{
+}
 
-class KWPrintingDialog : public KoPrintingDialog {
-public:
-    KWPrintingDialog(KWView *view);
-    ~KWPrintingDialog();
+void KoPrintJob::startPrinting(RemovePolicy removePolicy)
+{
+}
 
-    void setClipToPage(bool on) { m_clipToPage = on; }
-
-    virtual QList<QWidget*> createOptionWidgets() const;
-
-protected:
-    virtual void preparePage(int pageNumber);
-    virtual QList<KoShape*> shapesOnPage(int pageNumber);
-    virtual void printingDone();
-
-private:
-    KWDocument *m_document;
-    bool m_clipToPage;
-    QMap<KWImageFrame*, KWImageFrame::ImageQuality> m_originalImages;
-    QRectF m_currentPage;
-};
-
-#endif
+#include <KoPrintJob.moc>

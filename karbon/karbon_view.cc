@@ -61,6 +61,7 @@
 #include "karbon_part.h"
 #include "vglobal.h"
 #include "KarbonCanvas.h"
+#include "KarbonPrintJob.h"
 //#include "karbon_drag.h"
 
 #include <KoMainWindow.h>
@@ -356,31 +357,6 @@ void KarbonView::dropEvent( QDropEvent *e )
         m_part->addCommand( cmd, true );
     }
 */
-}
-
-void KarbonView::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
-{
-    Q_UNUSED( printer );
-    Q_UNUSED( printDialog );
-}
-
-void KarbonView::print( QPrinter &printer, QPrintDialog &printDialog )
-{
-    Q_UNUSED( printDialog );
-    debugView("KarbonView::print(QPrinter)");
-
-    const int resolution = 600;
-    printer.setResolution( resolution );
-    printer.setFullPage( true );
-
-    KoZoomHandler zoomHandler;
-    zoomHandler.setZoomAndResolution( 100, resolution, resolution );
-
-    QPainter painter;
-
-    painter.begin( &printer );
-    m_canvas->shapeManager()->paint( painter, zoomHandler, true );
-    painter.end();
 }
 
 void
@@ -1457,6 +1433,11 @@ QList<KoPathShape*> KarbonView::selectedPathShapes()
     }
 
     return paths;
+}
+
+KoPrintJob * KarbonView::createPrintJob()
+{
+    return new KarbonPrintJob(this);
 }
 
 #include "karbon_view.moc"

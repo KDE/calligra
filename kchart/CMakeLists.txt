@@ -25,6 +25,7 @@ set(kchartcommon_LIB_SRCS
    KChartView.cpp
    KChartCanvas.cpp
    KChartViewAdaptor.cpp
+    KChartPrintJob.cpp
 
    dialogs/KCPageLayout.cpp
    dialogs/KCPrinterDialog.cpp

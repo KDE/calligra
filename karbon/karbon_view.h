@@ -84,10 +84,6 @@ public:
 
     KarbonCanvas* canvasWidget() const { return m_canvas; }
 
-    // printing support, override from KoView
-    virtual void setupPrinter( QPrinter &printer, QPrintDialog &printDialog );
-    virtual void print( QPrinter& printer, QPrintDialog &printDialog );
-
     KoContextHelpAction* contextHelpAction() const { return m_contextHelpAction; }
 
     void reorganizeGUI();
@@ -185,6 +181,7 @@ protected:
     void createResourceDock();
 
     void addSelectionToClipboard() const;
+    virtual KoPrintJob * createPrintJob();
 
 private:
     void initActions();

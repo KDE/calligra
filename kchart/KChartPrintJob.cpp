@@ -16,38 +16,34 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KWPRINTINGDIALOG_H
-#define KWPRINTINGDIALOG_H
 
-#include <KoPrintingDialog.h>
+#include "KChartPrintJob.h"
+#include "KChartView.h"
+#include "KChartCanvas.h"
 
-#include "frames/KWImageFrame.h"
+#include <KoShapeManager.h>
 
-#include <QMap>
-#include <QRectF>
+namespace KChart
+{
 
-class KWView;
-class KWDocument;
+KChartPrintJob::KChartPrintJob(KChartView *view)
+    : KoPrintingDialog(view),
+    m_view(view)
+{
+    setShapeManager(static_cast<KChartCanvas*>(m_view->canvas())->shapeManager());
+    printer().setFromTo(1, 1);
+}
 
-class KWPrintingDialog : public KoPrintingDialog {
-public:
-    KWPrintingDialog(KWView *view);
-    ~KWPrintingDialog();
+QList<KoShape*> KChartPrintJob::shapesOnPage(int pageNumber)
+{
+    Q_UNUSED(pageNumber);
+    return shapeManager()->shapes();
+}
 
-    void setClipToPage(bool on) { m_clipToPage = on; }
+QList<QWidget*> KChartPrintJob::createOptionWidgets() const
+{
+    return QList<QWidget*>();
+}
 
-    virtual QList<QWidget*> createOptionWidgets() const;
+}  //KChart namespace
 
-protected:
-    virtual void preparePage(int pageNumber);
-    virtual QList<KoShape*> shapesOnPage(int pageNumber);
-    virtual void printingDone();
-
-private:
-    KWDocument *m_document;
-    bool m_clipToPage;
-    QMap<KWImageFrame*, KWImageFrame::ImageQuality> m_originalImages;
-    QRectF m_currentPage;
-};
-
-#endif

@@ -16,38 +16,26 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KWPRINTINGDIALOG_H
-#define KWPRINTINGDIALOG_H
+#ifndef KCHARTPRINTJOB_H
+#define KCHARTPRINTJOB_H
 
 #include <KoPrintingDialog.h>
 
-#include "frames/KWImageFrame.h"
+namespace KChart {
+class KChartView;
 
-#include <QMap>
-#include <QRectF>
-
-class KWView;
-class KWDocument;
-
-class KWPrintingDialog : public KoPrintingDialog {
+class KChartPrintJob : public KoPrintingDialog {
 public:
-    KWPrintingDialog(KWView *view);
-    ~KWPrintingDialog();
-
-    void setClipToPage(bool on) { m_clipToPage = on; }
-
-    virtual QList<QWidget*> createOptionWidgets() const;
+    KChartPrintJob(KChartView *view);
 
 protected:
-    virtual void preparePage(int pageNumber);
     virtual QList<KoShape*> shapesOnPage(int pageNumber);
-    virtual void printingDone();
+    virtual QList<QWidget*> createOptionWidgets() const;
 
 private:
-    KWDocument *m_document;
-    bool m_clipToPage;
-    QMap<KWImageFrame*, KWImageFrame::ImageQuality> m_originalImages;
-    QRectF m_currentPage;
+    KChartView *m_view;
 };
+
+}  //KChart namespace
 
 #endif

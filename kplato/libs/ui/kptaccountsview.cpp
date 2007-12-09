@@ -375,6 +375,7 @@ void AccountsView::slotUpdate()
     QApplication::restoreOverrideCursor();
 }
 
+#if 0
 void AccountsView::print( QPrinter &printer, QPrintDialog &printDialog )
 {
     //kDebug();
@@ -399,6 +400,7 @@ void AccountsView::print( QPrinter &printer, QPrintDialog &printDialog )
     m_dlv->paintContents( &p );
     p.end();
 }
+#endif
 
 bool AccountsView::loadContext( const KoXmlElement &context )
 {

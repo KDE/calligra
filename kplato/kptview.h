@@ -34,10 +34,7 @@
 class QProgressBar;
 class QStackedWidget;
 class QSplitter;
-class QPrinter;
-class QPrintDialog;
 
-class KPrinter;
 class KAction;
 class KToggleAction;
 class QLabel;
@@ -94,9 +91,6 @@ public:
     Part *getPart() const;
 
     Project& getProject() const;
-
-    virtual void setupPrinter( QPrinter &printer, QPrintDialog &printDialog );
-    virtual void print( QPrinter &printer, QPrintDialog &printDialog );
 
     QMenu *popupMenu( const QString& name );
 

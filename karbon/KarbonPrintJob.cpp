@@ -16,38 +16,34 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KWPRINTINGDIALOG_H
-#define KWPRINTINGDIALOG_H
 
-#include <KoPrintingDialog.h>
+#include "KarbonPrintJob.h"
+#include "karbon_view.h"
+#include "KarbonCanvas.h"
 
-#include "frames/KWImageFrame.h"
+#include <KoShapeManager.h>
 
-#include <QMap>
-#include <QRectF>
+KarbonPrintJob::KarbonPrintJob(KarbonView *view)
+    : KoPrintingDialog(view),
+    m_view(view)
+{
+    setShapeManager( m_view->canvasWidget()->shapeManager() );
+    printer().setFromTo(1, 1);
+}
 
-class KWView;
-class KWDocument;
+void KarbonPrintJob::preparePage(int)
+{
+    // if we have any custom tabs, here is where can can read them out and do our thing.
 
-class KWPrintingDialog : public KoPrintingDialog {
-public:
-    KWPrintingDialog(KWView *view);
-    ~KWPrintingDialog();
+    //TODO  clip to document
+}
 
-    void setClipToPage(bool on) { m_clipToPage = on; }
+QList<KoShape*> KarbonPrintJob::shapesOnPage(int)
+{
+    return shapeManager()->shapes();
+}
 
-    virtual QList<QWidget*> createOptionWidgets() const;
-
-protected:
-    virtual void preparePage(int pageNumber);
-    virtual QList<KoShape*> shapesOnPage(int pageNumber);
-    virtual void printingDone();
-
-private:
-    KWDocument *m_document;
-    bool m_clipToPage;
-    QMap<KWImageFrame*, KWImageFrame::ImageQuality> m_originalImages;
-    QRectF m_currentPage;
-};
-
-#endif
+QList<QWidget*> KarbonPrintJob::createOptionWidgets() const
+{
+    return QList<QWidget*>();
+}

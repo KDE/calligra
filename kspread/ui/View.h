@@ -185,10 +185,6 @@ public:
 
    // void insertPicture( const QRect& _geometry, KUrl& _file );
 
-    virtual void print( QPrinter &printer, QPrintDialog &printDialog );
-    virtual void setupPrinter( QPrinter &printer, QPrintDialog &printDialog );
-    virtual QList<QWidget*> printDialogPages();
-
     /**
      * Fills the @ref EditWidget with the current cells
      * content. This function is usually called after the
@@ -632,6 +628,8 @@ protected:
 
     void initFindReplace();
     Cell findNextCell();
+
+    virtual KoPrintJob * createPrintJob();
 
 private:
     Q_DISABLE_COPY( View )

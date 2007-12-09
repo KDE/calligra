@@ -22,6 +22,7 @@
 
 // Local
 #include "KChartView.h"
+#include "KChartPrintJob.h"
 
 // Qt
 #include <QFile>
@@ -271,7 +272,12 @@ void KChartView::slotConfigPageLayout()
     delete dialog;
 }
 
+KoPrintJob * KChartView::createPrintJob()
+{
+    return new KChartPrintJob(this);
+}
 
+#if 0                           // Disable printing for now.
 void KChartView::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
 {
 /*  In Qt dialogs get added to QPrintDialog, when prinitn gets ativated again will need to fix
@@ -284,7 +290,6 @@ void KChartView::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
 void KChartView::print(QPrinter &printer, QPrintDialog &printDialog)
 {
     Q_UNUSED( printer );
-#if 0                           // Disable printing for now.
     printer.setFullPage( false );
 
     QPainter painter;
@@ -312,8 +317,8 @@ void KChartView::print(QPrinter &printer, QPrintDialog &printDialog)
 		   0, 		// regions
 		   &rect);
     painter.end();
-#endif
 }
+#endif
 
 
 // Import data from a Comma Separated Values file.
