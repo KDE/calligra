@@ -2460,7 +2460,7 @@ tristate Connection::querySingleRecordInternal(RecordData &data, const QString* 
 	Q_ASSERT(sql || query);
 //! @todo does not work with non-SQL data sources
 	if (sql)
-		m_sql = addLimitTo1 ? (*sql + " LIMIT 1") : *sql; // is this safe?
+		m_sql = m_driver->addLimitTo1(*sql, addLimitTo1);
 	KexiDB::Cursor *cursor;
 	if (!(cursor = sql ? executeQuery( m_sql ) : executeQuery( *query ))) {
 		KexiDBWarn << "Connection::querySingleRecord(): !executeQuery() " << m_sql << endl;
@@ -2501,7 +2501,7 @@ bool Connection::checkIfColumnExists(Cursor *cursor, uint column)
 tristate Connection::querySingleString(const QString& sql, QString &value, uint column, bool addLimitTo1)
 {
 	KexiDB::Cursor *cursor;
-	m_sql = addLimitTo1 ? (sql + " LIMIT 1") : sql; // is this safe?;
+	m_sql = m_driver->addLimitTo1(sql, addLimitTo1);
 	if (!(cursor = executeQuery( m_sql ))) {
 		KexiDBWarn << "Connection::querySingleRecord(): !executeQuery() " << m_sql << endl;
 		return false;
@@ -2569,13 +2569,13 @@ bool Connection::resultExists(const QString& sql, bool &success, bool addLimitTo
 	if (m_driver->beh->SELECT_1_SUBQUERY_SUPPORTED) {
 		//this is at least for sqlite
 		if (addLimitTo1 && sql.left(6).toUpper() == "SELECT")
-			m_sql = QString("SELECT 1 FROM (") + sql + ") LIMIT 1"; // is this safe?;
+			m_sql = m_driver->addLimitTo1(QString::fromLatin1("SELECT 1 FROM (") + sql + ")", addLimitTo1);
 		else
 			m_sql = sql;
 	}
 	else {
 		if (addLimitTo1 && sql.left(6).toUpper() == "SELECT")
-			m_sql = sql + " LIMIT 1"; //not always safe!
+			m_sql = m_driver->addLimitTo1(sql, addLimitTo1);
 		else
 			m_sql = sql;
 	}

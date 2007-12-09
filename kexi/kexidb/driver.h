@@ -351,6 +351,13 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 			\a keywords should be 0-terminated array of null-terminated strings. */
 		void initDriverSpecificKeywords(const char** keywords);
 
+		/* \return SQL statement @a sql modified by adding limiting command, 
+		 (if possible and if @add is true). Used for optimization for the server side.
+		 Can be reimplemented for other drivers. */
+		inline virtual QString addLimitTo1(const QString& sql, bool add) {
+			return add ? (sql + QString::fromLatin1(" LIMIT 1")) : sql;
+		}
+
 	friend class Connection;
 	friend class Cursor;
 	friend class DriverManagerInternal;
