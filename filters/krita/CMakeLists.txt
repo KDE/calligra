@@ -48,3 +48,5 @@ endif(GRAPHICSMAGICK_FOUND)
 if(POPPLER_QT4_FOUND AND NOT HAVE_POPPLER_0_6)
     add_subdirectory(pdf)
 endif(POPPLER_QT4_FOUND AND NOT HAVE_POPPLER_0_6)
+
+add_subdirectory(bmp)
