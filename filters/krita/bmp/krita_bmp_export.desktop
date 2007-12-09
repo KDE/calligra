@@ -1,6 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Krita BMP Export Filter
+Name[ga]=Scagaire Easpórtála BMP Krita
+Name[x-test]=xxKrita BMP Export Filterxx
 X-KDE-Export=image/bmp
 ServiceTypes=KOfficeFilter
 Type=Service

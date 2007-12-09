@@ -6,6 +6,7 @@ Name[ga]=Cruth Simplí Téacs
 Name[pt]=Forma de Texto Simples
 Name[pt_BR]=Forma de Texto Simples
 Name[sv]=Enkel textform
+Name[x-test]=xxSimple Text Shapexx
 ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=simpletextshape
