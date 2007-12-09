@@ -75,6 +75,7 @@ private:
     void updateSizeAndPosition();
     void cacheOutlines();
     bool pathHasChanged() const;
+    virtual void notifyShapeChanged( KoShape * shape, ChangeType type );
 
     QPainterPath textOutline() const;
     QString m_text; ///< the text content

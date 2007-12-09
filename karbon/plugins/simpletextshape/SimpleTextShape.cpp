@@ -36,13 +36,12 @@ SimpleTextShape::SimpleTextShape()
 
 SimpleTextShape::~SimpleTextShape()
 {
+    if( m_path )
+        m_path->KoShape::removeDependee( this );
 }
 
 void SimpleTextShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
-    if( m_path )
-        updateSizeAndPosition();
-
     applyConversion( painter, converter );
 
     QFontMetricsF metrics( m_font );
@@ -172,6 +171,7 @@ bool SimpleTextShape::attach( KoPathShape * path )
 
     update();
     m_path = path;
+    m_path->addDependee( this );
     updateSizeAndPosition();
     update();
 
@@ -181,6 +181,8 @@ bool SimpleTextShape::attach( KoPathShape * path )
 void SimpleTextShape::detach()
 {
     update();
+    if( m_path )
+        m_path->removeDependee( this );
     m_path = 0;
     updateSizeAndPosition();
     update();
@@ -212,5 +214,15 @@ void SimpleTextShape::cacheOutlines()
         QPainterPath charOutline;
         charOutline.addText( QPointF(), m_font, actChar );
         m_charOutlines.append( charOutline );
+    }
+}
+
+void SimpleTextShape::notifyShapeChanged( KoShape * shape, ChangeType type )
+{
+    if( shape == m_path )
+    {
+        update();
+        updateSizeAndPosition();
+        update();
     }
 }
