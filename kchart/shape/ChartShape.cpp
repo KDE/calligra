@@ -1041,6 +1041,76 @@ bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement,
     // 4. KOffice specific title name
     KDChart::Legend *old = d->legend;
     d->legend = new KDChart::Legend( d->diagram, d->chart );
+    
+    if ( !legendElement.isNull() ) {
+        QString lp;
+        if ( legendElement.hasAttributeNS( KoXmlNS::chart, "legend-position" ) )
+        {
+            lp = legendElement.attributeNS( KoXmlNS::chart, "legend-position", QString() );
+        }
+        QString lalign;
+        if ( legendElement.hasAttributeNS( KoXmlNS::chart, "legend-align" ) )
+        {
+            lalign = legendElement.attributeNS( KoXmlNS::chart, "legend-align", QString() );
+        }
+        
+        if ( lalign == "start" )
+        {
+            setLegendAlignment( Qt::AlignLeft );
+        }
+        else if ( lalign == "end" )
+        {
+            setLegendAlignment( Qt::AlignRight );
+        } 
+        else
+        {
+            setLegendAlignment( Qt::AlignCenter );
+        }
+
+        if ( lp == "start" )
+        {
+            setLegendFixedPosition( KDChart::Position::West );
+        }
+        else if ( lp == "top" )
+        {
+            setLegendFixedPosition( KDChart::Position::North );
+        }
+        else if ( lp == "bottom" )
+        {
+            setLegendFixedPosition( KDChart::Position::South );
+        }
+        else if ( lp == "top-start" )
+        {
+            setLegendFixedPosition( KDChart::Position::NorthWest );
+        }
+        else if ( lp == "bottom-start" )
+        {
+            setLegendFixedPosition( KDChart::Position::SouthWest );
+        }
+        else if ( lp == "top-end" )
+        {
+            setLegendFixedPosition( KDChart::Position::NorthEast );
+        }
+        else if ( lp == "bottom-end" )
+        {
+            setLegendFixedPosition( KDChart::Position::SouthEast );
+        }
+        else
+        {
+            setLegendFixedPosition( KDChart::Position::East );
+        }
+        
+        if ( legendElement.hasAttributeNS( KoXmlNS::koffice, "title" ) )
+        {
+            setLegendTitle( legendElement.attributeNS( KoXmlNS::koffice, "title", QString() ) );
+        }
+    }
+    else
+    {
+        setLegendFixedPosition( KDChart::Position::North );
+        setLegendAlignment( Qt::AlignCenter );
+    }
+    
     d->chart->replaceLegend( d->legend, old );
     return true;
 }
