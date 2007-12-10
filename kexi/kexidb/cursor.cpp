@@ -229,7 +229,13 @@ bool Cursor::moveFirst()
 				m_afterLast = !getNextRecord();
 				return !m_afterLast;
 			}
-		}
+		}  else {
+                       // not buffered
+		       m_at = 0;
+		       m_afterLast = !getNextRecord();
+		       return !m_afterLast;
+	        }
+		
 		if (m_afterLast && m_at==0) //failure if already no records
 			return false;
 		if (!reopen()) //try reopen
