@@ -163,19 +163,6 @@ QModelIndex AccountItemModel::parent( const QModelIndex &index ) const
     return QModelIndex();
 }
 
-bool AccountItemModel::hasChildren( const QModelIndex &parent ) const
-{
-    //kDebug()<<parent.internalPointer()<<":"<<parent.row()<<","<<parent.column();
-    if ( m_project == 0 ) {
-        return false;
-    }
-    Account *par = account( parent );
-    if ( par == 0 ) {
-        return ! m_project->accounts().accountList().isEmpty();
-    }
-    return ! par->isElement();
-}
-
 QModelIndex AccountItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {

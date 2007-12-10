@@ -49,7 +49,6 @@ public:
     CalendarDay *day( const QModelIndex &index ) const;
     TimeInterval *interval( const QModelIndex &index ) const;
     
-    QItemDelegate *createDelegate( int column, QWidget *parent ) const;
     QModelIndex insertInterval ( TimeInterval *ti, CalendarDay *day );
     void removeInterval( TimeInterval *ti );
     
@@ -76,7 +75,6 @@ public:
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
 
     virtual QModelIndex parent( const QModelIndex & index ) const;
-    virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
     QModelIndex index( const Calendar* calendar ) const;
 

@@ -1554,28 +1554,22 @@ QModelIndex NodeItemModel::parent( const QModelIndex &index ) const
     if ( p == 0 || p->type() == Node::Type_Project ) {
         return QModelIndex();
     }
-    int row = p->parentNode()->findChildNode( p );
-    return createIndex( row, 0, p );
-}
-
-bool NodeItemModel::hasChildren( const QModelIndex &parent ) const
-{
-    if ( m_project == 0 ) {
-        return 0;
+    int row = p->parentNode()->indexOf( p );
+    if ( row == -1 ) {
+        return QModelIndex();
     }
-    Node *p = node( parent );
-    return p->numChildren() > 0;
+    return createIndex( row, 0, p );
 }
 
 QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
-        //kDebug()<<"No index for"<<row<<","<<column;
+        //kDebug()<<m_project<<parent<<"No index for"<<row<<","<<column;
         return QModelIndex();
     }
     Node *p = node( parent );
     if ( row >= p->numChildren() ) {
-        //kDebug()<<p->name()<<" row too high"<<row<<","<<column;
+        kError()<<p->name()<<" row too high"<<row<<","<<column;
         return QModelIndex();
     }
     // now get the internal pointer for the index
@@ -2055,7 +2049,7 @@ int NodeItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 int NodeItemModel::rowCount( const QModelIndex &parent ) const
 {
     Node *p = node( parent );
-    return p->numChildren();
+    return p == 0 ? 0 : p->numChildren();
 }
 
 Qt::DropActions NodeItemModel::supportedDropActions() const
@@ -2445,12 +2439,6 @@ Qt::ItemFlags MilestoneItemModel::flags( const QModelIndex &index ) const
 QModelIndex MilestoneItemModel::parent( const QModelIndex &index ) const
 {
     return QModelIndex();
-}
-
-bool MilestoneItemModel::hasChildren( const QModelIndex &parent ) const
-{
-    //kDebug()<<parent<<rowCount();
-    return rowCount( parent ) > 0;
 }
 
 QModelIndex MilestoneItemModel::index( int row, int column, const QModelIndex &parent ) const

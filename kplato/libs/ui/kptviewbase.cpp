@@ -86,6 +86,16 @@ void TreeViewBase::setReadWrite( bool rw )
     }
 }
 
+void TreeViewBase::createItemDelegates()
+{
+    for ( int c = 0; c < model()->columnCount(); ++c ) {
+        QItemDelegate *delegate = model()->createDelegate( c, this );
+        if ( delegate ) {
+            setItemDelegateForColumn( c, delegate );
+        }
+    }
+}
+
 void TreeViewBase::slotHeaderContextMenuRequested( const QPoint& pos )
 {
     kDebug();
@@ -198,7 +208,7 @@ void TreeViewBase::keyPressEvent(QKeyEvent *event)
                 if ( itemsExpandable()) {
                     if ( model()->hasChildren( current ) ) {
                         QTreeView::keyPressEvent( event );
-                    //HACK: Bug in qt??
+                        //HACK: Bug in qt??
                         selectionModel()->setCurrentIndex(current, QItemSelectionModel::NoUpdate);
                     }
                     event->accept();
@@ -209,7 +219,7 @@ void TreeViewBase::keyPressEvent(QKeyEvent *event)
                 if ( itemsExpandable() ) {
                     if ( model()->hasChildren( current ) ) {
                         QTreeView::keyPressEvent( event );
-                    //HACK: Bug in qt??
+                        //HACK: Bug in qt??
                         selectionModel()->setCurrentIndex(current, QItemSelectionModel::NoUpdate);
                     }
                     event->accept();
@@ -219,6 +229,59 @@ void TreeViewBase::keyPressEvent(QKeyEvent *event)
         }
     }
     QTreeView::keyPressEvent(event);
+}
+
+/*
+    Reimplemented from QTreeView to make tab/backtab in editor work reasonably well.
+    Move the cursor in the way described by \a cursorAction, *not* using the
+    information provided by the button \a modifiers.
+ */
+QModelIndex TreeViewBase::moveCursor( CursorAction cursorAction, Qt::KeyboardModifiers modifiers )
+{
+    executeDelayedItemsLayout();
+
+    QModelIndex current = currentIndex();
+    kDebug()<<cursorAction<<"("<<MoveNext<<","<<MovePrevious<<")"<<current;
+    if (!current.isValid()) {
+        return QTreeView::moveCursor( cursorAction, modifiers );
+    }
+    switch (cursorAction) {
+        case MoveNext: {
+            // TODO: span
+            
+            // Fetch the index below current.
+            // This should be the next non-hidden row, same column as current,
+            // that has a column in current.column()
+            QModelIndex ix = indexBelow( current );
+            int col = current.column();
+            while ( ix.isValid() && col >= model()->columnCount(ix.parent()) ) {
+                kDebug()<<col<<model()->columnCount(ix.parent())<<ix;
+                ix = indexBelow( ix );
+            }
+            if ( ix.isValid() ) {
+                ix = model()->index( ix.row(), col, ix.parent() );
+            } // else Here we could go to the top
+            return ix; 
+        }
+        case MovePrevious: {
+            // TODO: span
+            
+            // Fetch the index above current.
+            // This should be the previous non-hidden row, same column as current,
+            // that has a column in current.column()
+            QModelIndex ix = indexAbove( current );
+            int col = current.column();
+            while ( ix.isValid() && col >= model()->columnCount(ix.parent()) ) {
+                ix = indexAbove( ix );
+            }
+            if ( ix.isValid() ) {
+                ix = model()->index( ix.row(), col, ix.parent() );
+            } // else Here we could go to the bottom
+            return ix;
+        }
+        default: break;
+    }
+    return QTreeView::moveCursor( cursorAction, modifiers );
 }
 
 QItemSelectionModel::SelectionFlags TreeViewBase::selectionCommand(const QModelIndex &index, const QEvent *event) const
@@ -544,6 +607,12 @@ void DoubleTreeViewBase::setItemDelegateForColumn( int col, QAbstractItemDelegat
 {
     m_leftview->setItemDelegateForColumn( col, delegate );
     m_rightview->setItemDelegateForColumn( col, delegate );
+}
+
+void DoubleTreeViewBase::createItemDelegates()
+{
+    m_leftview->createItemDelegates();
+    m_rightview->createItemDelegates();
 }
 
 void DoubleTreeViewBase::setEditTriggers( QAbstractItemView::EditTriggers mode )

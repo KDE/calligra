@@ -135,7 +135,7 @@ public:
     explicit TreeViewBase( QWidget *parent );
 
     void setReadWrite( bool rw );
-
+    virtual void createItemDelegates();
     void setArrowKeyNavigation( bool on ) { m_arrowKeyNavigation = on; }
     bool arrowKeyNavigation() const { return m_arrowKeyNavigation; }
 
@@ -172,6 +172,7 @@ signals:
 
 protected:
     void keyPressEvent(QKeyEvent *event);
+    QModelIndex moveCursor( CursorAction cursorAction, Qt::KeyboardModifiers modifiers );
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const;
 
     void contextMenuEvent ( QContextMenuEvent * event );
@@ -210,6 +211,7 @@ public:
     void setSelectionModel( QItemSelectionModel *model );
     void setSelectionMode( QAbstractItemView::SelectionMode mode );
     void setSelectionBehavior( QAbstractItemView::SelectionBehavior mode );
+    virtual void createItemDelegates();
     void setItemDelegateForColumn( int col, QAbstractItemDelegate * delegate );
     void setEditTriggers ( QAbstractItemView::EditTriggers );
     QAbstractItemView::EditTriggers editTriggers() const;

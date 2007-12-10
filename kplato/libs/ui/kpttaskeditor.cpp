@@ -67,12 +67,7 @@ NodeTreeView::NodeTreeView( QWidget *parent )
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     
-    for ( int c = 0; c < model()->columnCount(); ++c ) {
-        QItemDelegate *delegate = model()->createDelegate( c, this );
-        if ( delegate ) {
-            setItemDelegateForColumn( c, delegate );
-        }
-    }
+    createItemDelegates();
 }
 
 void NodeTreeView::slotActivated( const QModelIndex index )

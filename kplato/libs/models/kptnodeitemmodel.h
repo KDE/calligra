@@ -151,7 +151,6 @@ public:
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
     
     virtual QModelIndex parent( const QModelIndex & index ) const;
-    virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex index( const Node *node ) const;
     
@@ -229,7 +228,6 @@ public:
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
 
     virtual QModelIndex parent( const QModelIndex & index ) const;
-    virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex index( const Node *node ) const;
 
@@ -248,7 +246,7 @@ public:
     virtual bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
 
     Node *node( const QModelIndex &index ) const;
-    QItemDelegate *createDelegate( int column, QWidget *parent ) const;
+    virtual QItemDelegate *createDelegate( int column, QWidget *parent ) const;
 
     QModelIndex insertTask( Node *node, Node *after );
     QModelIndex insertSubtask( Node *node, Node *parent );

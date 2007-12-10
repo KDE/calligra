@@ -36,6 +36,7 @@ class KoDocument;
 class QDomElement;
 class QUndoCommand;
 
+/// The main namespace
 namespace KPlato
 {
 
@@ -172,7 +173,12 @@ public:
      */
     virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
     
+    /// Create the correct delegate for @p column. @p parent is the delegates parent widget.
+    /// If default should be used, return 0.
+    virtual QItemDelegate *createDelegate( int column, QWidget *parent ) const { return 0; }
+
 signals:
+    /// Connect to this signal if your model modifies data using undo commands.
     void executeCommand( QUndoCommand* );
     
 protected slots:

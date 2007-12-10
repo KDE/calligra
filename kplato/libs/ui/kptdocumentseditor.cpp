@@ -72,12 +72,7 @@ DocumentTreeView::DocumentTreeView( QWidget *parent )
     setSelectionBehavior( QAbstractItemView::SelectRows );
     setSelectionMode( QAbstractItemView::SingleSelection );
 
-    for ( int col = 0; col < m->columnCount(); ++col ) {
-        QItemDelegate *delegate = m->createDelegate( col, this );
-        if ( delegate ) {
-            setItemDelegateForColumn( col, delegate );
-        }
-    }
+    createItemDelegates();
 
     setAcceptDrops( true );
     setDropIndicatorShown( true );

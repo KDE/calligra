@@ -46,7 +46,6 @@ public:
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
 
     virtual QModelIndex parent( const QModelIndex & index ) const;
-    virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
     QModelIndex index( const ResourceGroup *group ) const;
     QModelIndex index( const Resource *resource ) const;
@@ -64,7 +63,8 @@ public:
     virtual Qt::DropActions supportedDropActions() const;
     virtual bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
 
-
+    QItemDelegate *createDelegate( int col, QWidget *parent ) const;
+    
     QObject *object( const QModelIndex &index ) const;
     QModelIndex insertGroup( ResourceGroup *g );
     QModelIndex insertResource( ResourceGroup *g, Resource *r, Resource *after = 0 );

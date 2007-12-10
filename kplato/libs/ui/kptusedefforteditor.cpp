@@ -259,11 +259,6 @@ int UsedEffortItemModel::rowCount(const QModelIndex & ) const
     return rows;
 }
 
-bool UsedEffortItemModel::hasChildren ( const QModelIndex &parent ) const
-{
-    return ! parent.isValid();
-}
-
 QModelIndex UsedEffortItemModel::index ( int row, int column, const QModelIndex &parent ) const
 {
     if ( parent.isValid() ) {
@@ -723,11 +718,6 @@ int CompletionEntryItemModel::rowCount(const QModelIndex &idx ) const
         return 0;
     }
     return m_datelist.count();
-}
-
-bool CompletionEntryItemModel::hasChildren ( const QModelIndex &parent ) const
-{
-    return ! parent.isValid();
 }
 
 QModelIndex CompletionEntryItemModel::index ( int row, int column, const QModelIndex &parent ) const

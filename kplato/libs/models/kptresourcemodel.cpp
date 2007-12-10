@@ -224,22 +224,6 @@ QModelIndex ResourceItemModel::parent( const QModelIndex &index ) const
     return QModelIndex();
 }
 
-bool ResourceItemModel::hasChildren( const QModelIndex &parent ) const
-{
-    //kDebug()<<parent.internalPointer()<<":"<<parent.row()<<","<<parent.column();
-    if ( m_project == 0 ) {
-        return false;
-    }
-    if ( ! parent.isValid() ) {
-        return m_project->numResourceGroups() > 0;
-    }
-    ResourceGroup *g = qobject_cast<ResourceGroup*>( object( parent ) );
-    if ( g ) {
-        return g->numResources() > 0;
-    }
-    return false;
-}
-
 QModelIndex ResourceItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
@@ -870,6 +854,16 @@ QVariant ResourceItemModel::headerData( int section, Qt::Orientation orientation
         }
     }
     return ItemModelBase::headerData(section, orientation, role);
+}
+
+QItemDelegate *ResourceItemModel::createDelegate( int col, QWidget *parent ) const
+{
+    switch ( col ) {
+        case 1: return new EnumDelegate( parent );
+        case 4: return new EnumDelegate( parent );
+        default: break;
+    }
+    return 0;
 }
 
 QObject *ResourceItemModel::object( const QModelIndex &index ) const

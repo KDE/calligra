@@ -74,8 +74,7 @@ ResourceTreeView::ResourceTreeView( QWidget *parent )
     
     setSelectionMode( QAbstractItemView::ExtendedSelection );
 
-    setItemDelegateForColumn( 1, new EnumDelegate( this ) );
-    setItemDelegateForColumn( 4, new EnumDelegate( this ) );
+    createItemDelegates();
 
     setAcceptDrops( true );
     setDropIndicatorShown( true );

@@ -197,12 +197,6 @@ QModelIndex ScheduleItemModel::parent( const QModelIndex &inx ) const
     return index( sm->parentManager() );
 }
 
-bool ScheduleItemModel::hasChildren( const QModelIndex &parent ) const
-{
-    //kDebug()<<parent.internalPointer()<<":"<<parent.row()<<","<<parent.column();
-    return rowCount( parent ) > 0;
-}
-
 QModelIndex ScheduleItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
     //kDebug()<<m_project<<":"<<row<<","<<column;

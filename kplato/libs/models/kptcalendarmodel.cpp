@@ -209,19 +209,6 @@ QModelIndex CalendarItemModel::parent( const QModelIndex &index ) const
     return QModelIndex();
 }
 
-bool CalendarItemModel::hasChildren( const QModelIndex &parent ) const
-{
-    //kDebug()<<parent.internalPointer()<<":"<<parent.row()<<","<<parent.column();
-    if ( m_project == 0 ) {
-        return false;
-    }
-    Calendar *par = calendar( parent );
-    if ( par == 0 ) {
-        return ! m_project->calendars().isEmpty();
-    }
-    return ! par->calendars().isEmpty();
-}
-
 QModelIndex CalendarItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {

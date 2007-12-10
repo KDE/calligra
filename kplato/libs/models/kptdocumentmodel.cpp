@@ -276,11 +276,6 @@ QModelIndex DocumentItemModel::parent( const QModelIndex &/*index*/ ) const
     return QModelIndex();
 }
 
-bool DocumentItemModel::hasChildren( const QModelIndex &parent ) const
-{
-    return rowCount( parent ) > 0;
-}
-
 QModelIndex DocumentItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
     if ( parent.isValid() ) {

@@ -65,7 +65,6 @@ public:
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
 
     virtual QModelIndex parent( const QModelIndex & index ) const;
-    virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
     virtual QModelIndex index( const Document *doc ) const;
 

@@ -236,11 +236,6 @@ QModelIndex TaskStatusItemModel::parent( const QModelIndex &index ) const
     return createIndex( m_top.indexOf( lst ), 0, lst );
 }
 
-bool TaskStatusItemModel::hasChildren( const QModelIndex &parent ) const
-{
-    return rowCount( parent ) > 0;
-}
-
 QModelIndex TaskStatusItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {

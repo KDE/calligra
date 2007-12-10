@@ -42,7 +42,6 @@ public:
     void setProject( Project *project ) { m_project = project; }
     
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
-    virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
     virtual QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
     virtual bool setData( const QModelIndex &index, const QVariant & value, int role = Qt::EditRole );
     virtual QVariant headerData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
@@ -103,7 +102,6 @@ public:
     void setTask( Task *t ) { m_node = t; }
     
     virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
-    virtual bool hasChildren( const QModelIndex & parent = QModelIndex() ) const;
     virtual QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
     virtual bool setData( const QModelIndex &index, const QVariant & value, int role = Qt::EditRole );
     virtual QVariant headerData ( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
