@@ -82,6 +82,13 @@ class ConnectionDataBase
 		*/
 		QString hostName;
 
+
+                /*!
+                \brief Server name of the server to be connected to
+                
+                */
+                QString serverName;
+ 
 		/*!
 		\brief Port used for the remote connection. 
 		

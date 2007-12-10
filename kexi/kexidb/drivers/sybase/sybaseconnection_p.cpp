@@ -23,6 +23,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <QFile>
 
 #include <KDebug>
+#include <KTemporaryFile>
 
 #include "sybaseconnection_p.h"
 
@@ -112,6 +113,13 @@ bool SybaseConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 	QByteArray localSocket;
 	QString hostName = data.hostName;
 
+
+        if ( data.serverName.isEmpty() ) {
+            KexiDBDrvDbg<<"Can't connect without server name";
+            return false;
+        }
+
+
         // set error handlers
         // set message handlers
 
@@ -122,6 +130,8 @@ bool SybaseConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
             //dbexit();
             return false;
         }
+
+
 
         // umm, copied from pqxx driver.
         if (hostName.isEmpty() || hostName.toLower()=="localhost") {
@@ -148,23 +158,44 @@ bool SybaseConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
  		}
  	}
 
-        // set Login parameters
 
+        KTemporaryFile confFile;
+        confFile.setSuffix(".conf");
+        confFile.open();
+
+        QTextStream out( &confFile );
+
+        // write global portion
+        out<< "[global]"<<"\n";
+        out<< " text size = "<<64512<<"\n" ; // Copied from default freetds.conf. is there a more reasonable number?
+
+
+        // write server portion
+        out<<'['<<data.serverName<<']'<<"\n";
+        out<<" host = "<<hostName<<"\n";
+
+        if ( data.port == 0 )
+            out<<" port = "<<2638<<"\n"; // default port to be used
+        else
+            out<<" port = "<<data.port<<"\n";
+
+        out<<" tds version = "<<5.0<<"\n";
+
+        // set the file to be read as confFile
+        dbsetifile( confFile.fileName().toLatin1().data() );
+
+        // set Login parameters
 	QByteArray pwd( data.password.isNull() ? QByteArray() : data.password.toLatin1() );
 
-        // is the host requied ?
-        DBSETLHOST( login, hostName.toLatin1() );
         DBSETLUSER( login, data.userName.toLatin1() );
         DBSETLPWD( login, pwd );
         DBSETLAPP( login, qApp->applicationName().toLatin1() );
-
-        // should dbifile() be used ?
 
         // make the connection
         // Host name assumed to be same as servername
         // where are ports specified ? ( in the interfaces file ? )
 
-        dbProcess = dbopen( login, hostName.toLatin1().data() );
+        dbProcess = dbopen( login, data.serverName.toLatin1().data() );
 
         dbloginfree( login );
 
