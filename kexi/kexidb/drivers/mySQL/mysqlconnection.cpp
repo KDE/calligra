@@ -137,9 +137,9 @@ bool MySqlConnection::drv_dropDatabase( const QString &dbName) {
 //TODO is here escaping needed
 	return drv_executeSQL("drop database "+dbName);
 }
-                
+
 bool MySqlConnection::drv_executeSQL( const QString& statement ) {
-  return d->executeSQL(statement);
+	return d->executeSQL(statement);
 }
 
 quint64 MySqlConnection::drv_lastInsertRowID()
@@ -179,7 +179,6 @@ bool MySqlConnection::drv_containsTable( const QString &tableName )
 
 bool MySqlConnection::drv_getTablesList( QStringList &list )
 {
-        list.clear();
 	return queryStringList( "show tables", list );
 }
 
