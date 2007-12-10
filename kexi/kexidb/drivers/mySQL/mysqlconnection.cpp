@@ -179,23 +179,8 @@ bool MySqlConnection::drv_containsTable( const QString &tableName )
 
 bool MySqlConnection::drv_getTablesList( QStringList &list )
 {
-	KexiDB::Cursor *cursor;
-	m_sql = "show tables";
-	if (!(cursor = executeQuery( m_sql ))) {
-		KexiDBDbg << "Connection::drv_getTablesList(): !executeQuery()" << endl;
-		return false;
-	}
-	list.clear();
-	cursor->moveFirst();
-	while (!cursor->eof() && !cursor->error()) {
-		list += cursor->value(0).toString();
-		cursor->moveNext();
-	}
-	if (cursor->error()) {
-		deleteCursor(cursor);
-		return false;
-	}
-	return deleteCursor(cursor);
+        list.clear();
+	return queryStringList( "show tables", list );
 }
 
 PreparedStatement::Ptr MySqlConnection::prepareStatement(PreparedStatement::StatementType type, 
