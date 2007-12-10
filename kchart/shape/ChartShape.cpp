@@ -1255,7 +1255,7 @@ void ChartShape::saveOdfLegend( KoXmlWriter &bodyWriter,
             lp = "top-end";
             break;
         case KDChartEnums::PositionEast:
-            lp = "bottom";
+            lp = "end";
             lalign = "center";
             break;
         case KDChartEnums::PositionSouthEast:
