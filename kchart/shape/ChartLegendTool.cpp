@@ -118,6 +118,11 @@ QWidget *ChartLegendTool::createOptionWidget()
 
     connect( widget, SIGNAL( legendFixedPositionChanged( KDChart::Position ) ),
              this,   SLOT( setLegendFixedPosition( KDChart::Position ) ) );
+    
+    connect( widget, SIGNAL( legendBackgroundColorChanged( const QColor& ) ) ,
+             this,   SLOT( setLegendBackgroundColor( const QColor& ) ) );
+    connect( widget, SIGNAL( legendFrameColorChanged( const QColor& ) ) ,
+             this,   SLOT( setLegendFrameColor( const QColor& ) ) );
 
     return widget;
 }
@@ -167,3 +172,14 @@ void ChartLegendTool::setLegendFixedPosition( KDChart::Position position )
     m_currentShape->setLegendFixedPosition( position );
     ( ( ChartLegendConfigWidget* ) optionWidget() )->updateFixedPosition( position );
 }
+
+void ChartLegendTool::setLegendBackgroundColor( const QColor& color )
+{
+    m_currentShape->setLegendBackgroundColor( color );
+}
+
+void ChartLegendTool::setLegendFrameColor( const QColor& color )
+{
+    m_currentShape->setLegendFrameColor( color );
+}
+

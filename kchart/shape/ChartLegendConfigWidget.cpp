@@ -141,6 +141,11 @@ void ChartLegendConfigWidget::setupUi()
              this,            SIGNAL( legendShowLinesToggled( bool ) ) );
     connect( d->ui.showTitle, SIGNAL( toggled( bool ) ),
              this,            SLOT( setLegendShowTitle( bool ) ) );
+    
+    connect( d->ui.backgroundColor, SIGNAL( changed( const QColor& ) ),
+             this,                  SIGNAL( legendBackgroundColorChanged( const QColor& ) ) );
+    connect( d->ui.frameColor, SIGNAL( changed( const QColor& ) ),
+             this,             SIGNAL( legendFrameColorChanged( const QColor& ) ) );
 
     connect( d->ui.orientation, SIGNAL( currentIndexChanged( int ) ),
              this,              SLOT( setLegendOrientation( int ) ) );

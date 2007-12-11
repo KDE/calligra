@@ -256,6 +256,10 @@ KDChart::Chart* ChartShape::chart() const
 
 void ChartShape::setChartDefaults()
 {
+    KDChart::BackgroundAttributes attributes;
+    attributes.setBrush( Qt::white );
+    attributes.setVisible( true );
+    d->legend->setBackgroundAttributes( attributes );
     d->legend->setPosition( KDChart::Position::East );
     d->legend->setAlignment( Qt::AlignRight );
     d->legend->setShowLines( false );
@@ -600,6 +604,22 @@ void ChartShape::setLegendSpacing( int spacing )
 void ChartShape::setLegendShowLines( bool b )
 {
     d->legend->setShowLines( b );
+    update();
+}
+
+void ChartShape::setLegendBackgroundColor( const QColor& color )
+{
+    KDChart::BackgroundAttributes attributes = d->legend->backgroundAttributes();
+    attributes.setBrush( color );
+    d->legend->setBackgroundAttributes( attributes );
+    update();
+}
+
+void ChartShape::setLegendFrameColor( const QColor& color )
+{
+    KDChart::FrameAttributes attributes = d->legend->frameAttributes();
+    attributes.setPen( color );
+    d->legend->setFrameAttributes( attributes );
     update();
 }
 

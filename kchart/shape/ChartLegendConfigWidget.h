@@ -69,6 +69,8 @@ signals:
     void legendOrientationChanged( Qt::Orientation orientation );
     void legendAlignmentChanged( Qt::Alignment alignment );
     void legendFixedPositionChanged( KDChart::Position position );
+    void legendBackgroundColorChanged( const QColor& color );
+    void legendFrameColorChanged( const QColor& color );
 
 private:
     class Private;
