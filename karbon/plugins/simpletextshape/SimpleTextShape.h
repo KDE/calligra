@@ -77,18 +77,27 @@ public:
     /// Returns the start offset for text on path
     qreal startOffset() const;
 
+    /**
+     * Returns the y-offset from the top-left corner to the baseline.
+     * This is usable for being able to exactly position the texts baseline.
+     * Note: The value makes only sense for text not attached to a path.
+     */
+    qreal baselineOffset() const;
+
 private:
     void updateSizeAndPosition();
-    void cacheOutlines();
+    void cacheGlyphOutlines();
     bool pathHasChanged() const;
     virtual void notifyShapeChanged( KoShape * shape, ChangeType type );
 
-    QPainterPath textOutline() const;
+    void createOutline();
     QString m_text; ///< the text content
     QFont m_font; ///< the font to use for drawing
     KoPathShape * m_path; ///< the path shape we are attached to
     QList<QPainterPath> m_charOutlines; ///< cached character oulines
-    qreal m_startOffset;
+    qreal m_startOffset; ///< the offset from the attached path start point
+    qreal m_baselineOffset; ///< the y-offset from the top-left corner to the baseline
+    QPainterPath m_outline; ///< the actual outline
 };
 
 #endif // SIMPLETEXTSHAPE_H

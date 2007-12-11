@@ -29,10 +29,11 @@
 
 SimpleTextShape::SimpleTextShape()
     : m_text( i18n( "Simple Text" ) ), m_font( "ComicSans", 20 )
-    , m_path(0), m_startOffset(0.0)
+    , m_path(0), m_startOffset(0.0), m_baselineOffset(0.0)
 {
     setShapeId( SimpleTextShapeID );
-    cacheOutlines();
+    cacheGlyphOutlines();
+    updateSizeAndPosition();
 }
 
 SimpleTextShape::~SimpleTextShape()
@@ -76,20 +77,16 @@ void SimpleTextShape::setSize( const QSizeF & )
 
 const QPainterPath SimpleTextShape::outline() const
 {
-    QPainterPath p = textOutline();
-    QRectF bb = p.boundingRect();
-    QMatrix m;
-    m.translate( -bb.topLeft().x(), -bb.topLeft().y() );
-
-    return m.map( p );
+    return m_outline;
 }
 
-QPainterPath SimpleTextShape::textOutline() const
+void SimpleTextShape::createOutline()
 {
-    QFontMetricsF metrics( m_font );
-    QPainterPath textOutline;
+    m_outline = QPainterPath();
+
     if( m_path )
     {
+        QFontMetricsF metrics( m_font );
         QPainterPath pathOutline = m_path->absoluteTransformation(0).map( m_path->outline() );
         int textLength = m_text.length();
         qreal charPos = m_startOffset * pathOutline.length();
@@ -112,21 +109,15 @@ QPainterPath SimpleTextShape::textOutline() const
             QMatrix m;
             m.translate( pathPoint.x(), pathPoint.y() );
             m.rotate( angle );
-            textOutline.addPath( m.map( m_charOutlines[charIdx] ) );
+            m_outline.addPath( m.map( m_charOutlines[charIdx] ) );
 
             charPos += metrics.width( actChar );
         }
     }
     else
     {
-        textOutline.addText( QPointF(), m_font, m_text );
-        QPointF translate = absolutePosition( KoFlake::TopLeftCorner ) - textOutline.boundingRect().topLeft();
-        QMatrix m;
-        m.translate( translate.x(), translate.y() );
-        textOutline = m.map( textOutline );
+        m_outline.addText( QPointF(), m_font, m_text );
     }
-
-    return textOutline;
 }
 
 void SimpleTextShape::setText( const QString & text )
@@ -136,7 +127,7 @@ void SimpleTextShape::setText( const QString & text )
 
     update();
     m_text = text;
-    cacheOutlines();
+    cacheGlyphOutlines();
     updateSizeAndPosition();
     update();
 }
@@ -153,7 +144,7 @@ void SimpleTextShape::setFont( const QFont & font )
 
     update();
     m_font = font;
-    cacheOutlines();
+    cacheGlyphOutlines();
     updateSizeAndPosition();
     update();
 }
@@ -179,6 +170,11 @@ void SimpleTextShape::setStartOffset( qreal offset )
 qreal SimpleTextShape::startOffset() const
 {
     return m_startOffset;
+}
+
+qreal SimpleTextShape::baselineOffset() const
+{
+    return m_baselineOffset;
 }
 
 bool SimpleTextShape::attach( KoPathShape * path )
@@ -215,15 +211,34 @@ bool SimpleTextShape::isAttached() const
 
 void SimpleTextShape::updateSizeAndPosition()
 {
-    if( ! m_path )
-        return;
+    // the actual position
+    QPointF position = absolutePosition( KoFlake::TopLeftCorner );
 
-    QRectF bbox = textOutline().boundingRect();
-    setAbsolutePosition( bbox.topLeft(), KoFlake::TopLeftCorner );
+    createOutline();
+
+    QRectF bbox = m_outline.boundingRect();
+
+    if( m_path )
+    {
+        // the outline position is in document coordinates
+        // so we adjust our position
+        setAbsolutePosition( bbox.topLeft(), KoFlake::TopLeftCorner );
+    }
+    else
+    {
+        // the text outlines baseline is at 0,0
+        m_baselineOffset = -bbox.topLeft().y();
+    }
+
     setSize( bbox.size() );
+
+    // map outline to shape coordinate system
+    QMatrix normalizeMatrix;
+    normalizeMatrix.translate( -bbox.topLeft().x(), -bbox.topLeft().y() );
+    m_outline = normalizeMatrix.map( m_outline );
 }
 
-void SimpleTextShape::cacheOutlines()
+void SimpleTextShape::cacheGlyphOutlines()
 {
     m_charOutlines.clear();
 
