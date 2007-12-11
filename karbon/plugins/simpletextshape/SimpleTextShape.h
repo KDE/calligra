@@ -71,6 +71,12 @@ public:
     /// Returns if shape is attached to a path shape
     bool isAttached() const;
 
+    /// Sets the offset for for text on path
+    void setStartOffset( qreal offset );
+
+    /// Returns the start offset for text on path
+    qreal startOffset() const;
+
 private:
     void updateSizeAndPosition();
     void cacheOutlines();
@@ -82,6 +88,7 @@ private:
     QFont m_font; ///< the font to use for drawing
     KoPathShape * m_path; ///< the path shape we are attached to
     QList<QPainterPath> m_charOutlines; ///< cached character oulines
+    qreal m_startOffset;
 };
 
 #endif // SIMPLETEXTSHAPE_H

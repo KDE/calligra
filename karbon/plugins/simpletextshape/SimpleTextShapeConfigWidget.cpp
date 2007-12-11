@@ -36,6 +36,17 @@ SimpleTextShapeConfigWidget::SimpleTextShapeConfigWidget()
     connect( widget.bold, SIGNAL(toggled(bool)), this, SIGNAL(propertyChanged()));
     connect( widget.italic, SIGNAL(toggled(bool)), this, SIGNAL(propertyChanged()));
     connect( widget.text, SIGNAL(textChanged(const QString&)), this, SIGNAL(propertyChanged()));
+    connect( widget.startOffset, SIGNAL(valueChanged(int)), this, SIGNAL(propertyChanged()));
+}
+
+void SimpleTextShapeConfigWidget::blockChildSignals( bool block )
+{
+    widget.fontFamily->blockSignals( block );
+    widget.fontSize->blockSignals( block );
+    widget.text->blockSignals( block );
+    widget.bold->blockSignals( block );
+    widget.italic->blockSignals( block );
+    widget.startOffset->blockSignals( block );
 }
 
 void SimpleTextShapeConfigWidget::open(KoShape *shape)
@@ -44,27 +55,22 @@ void SimpleTextShapeConfigWidget::open(KoShape *shape)
     if( ! m_shape )
         return;
 
-    widget.fontFamily->blockSignals( true );
-    widget.fontSize->blockSignals( true );
-    widget.text->blockSignals( true );
-    widget.bold->blockSignals( true );
-    widget.italic->blockSignals( true );
+    blockChildSignals( true );
 
     QFont font = m_shape->font();
 
     widget.text->setText( m_shape->text() );
     widget.fontSize->setValue( font.pointSize() );
-    font.setPointSize( 10 );
+    font.setPointSize( 8 );
 
     widget.fontFamily->setFont( font );
     widget.bold->setChecked( font.bold() );
     widget.italic->setChecked( font.italic() );
+    widget.startOffset->setValue( static_cast<int>( m_shape->startOffset() * 100.0 ) );
+    widget.startOffset->setVisible( m_shape->isAttached() );
+    widget.labelStartOffset->setVisible( m_shape->isAttached() );
 
-    widget.fontFamily->blockSignals( false );
-    widget.fontSize->blockSignals( false );
-    widget.text->blockSignals( false );
-    widget.bold->blockSignals( false );
-    widget.italic->blockSignals( false );
+    blockChildSignals( false );
 }
 
 void SimpleTextShapeConfigWidget::save()
@@ -79,6 +85,7 @@ void SimpleTextShapeConfigWidget::save()
 
     m_shape->setFont( font );
     m_shape->setText( widget.text->text() );
+    m_shape->setStartOffset( static_cast<qreal>(widget.startOffset->value()) / 100.0 );
 }
 
 QUndoCommand * SimpleTextShapeConfigWidget::createCommand()

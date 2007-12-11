@@ -28,7 +28,8 @@
 #include <QtGui/QPainter>
 
 SimpleTextShape::SimpleTextShape()
-    : m_text( i18n( "Simple Text" ) ), m_font( "ComicSans", 20 ), m_path(0)
+    : m_text( i18n( "Simple Text" ) ), m_font( "ComicSans", 20 )
+    , m_path(0), m_startOffset(0.0)
 {
     setShapeId( SimpleTextShapeID );
     cacheOutlines();
@@ -43,9 +44,6 @@ SimpleTextShape::~SimpleTextShape()
 void SimpleTextShape::paint(QPainter &painter, const KoViewConverter &converter)
 {
     applyConversion( painter, converter );
-
-    QFontMetricsF metrics( m_font );
-
     painter.setFont( m_font );
     painter.setBrush( background() );
     painter.drawPath( outline() );
@@ -78,8 +76,6 @@ void SimpleTextShape::setSize( const QSizeF & )
 
 const QPainterPath SimpleTextShape::outline() const
 {
-    // TODO we need a way to determine if the path has changed
-
     QPainterPath p = textOutline();
     QRectF bb = p.boundingRect();
     QMatrix m;
@@ -96,7 +92,7 @@ QPainterPath SimpleTextShape::textOutline() const
     {
         QPainterPath pathOutline = m_path->absoluteTransformation(0).map( m_path->outline() );
         int textLength = m_text.length();
-        qreal charPos = 0.0;
+        qreal charPos = m_startOffset * pathOutline.length();
         for( int charIdx = 0; charIdx < textLength; ++charIdx )
         {
             QString actChar( m_text[charIdx] );
@@ -135,6 +131,9 @@ QPainterPath SimpleTextShape::textOutline() const
 
 void SimpleTextShape::setText( const QString & text )
 {
+    if( m_text == text )
+        return;
+
     update();
     m_text = text;
     cacheOutlines();
@@ -149,6 +148,9 @@ QString SimpleTextShape::text() const
 
 void SimpleTextShape::setFont( const QFont & font )
 {
+    if( m_font == font )
+        return;
+
     update();
     m_font = font;
     cacheOutlines();
@@ -159,6 +161,24 @@ void SimpleTextShape::setFont( const QFont & font )
 QFont SimpleTextShape::font() const
 {
     return m_font;
+}
+
+void SimpleTextShape::setStartOffset( qreal offset )
+{
+    if( m_startOffset == offset )
+        return;
+
+    update();
+    m_startOffset = offset;
+    m_startOffset = qMin( 1.0, m_startOffset );
+    m_startOffset = qMax( 0.0, m_startOffset );
+    updateSizeAndPosition();
+    update();
+}
+
+qreal SimpleTextShape::startOffset() const
+{
+    return m_startOffset;
 }
 
 bool SimpleTextShape::attach( KoPathShape * path )

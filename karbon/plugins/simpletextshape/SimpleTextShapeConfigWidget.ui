@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>343</width>
-    <height>196</height>
+    <width>351</width>
+    <height>206</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -18,7 +18,19 @@
     </widget>
    </item>
    <item row="0" column="1" >
-    <widget class="QFontComboBox" name="fontFamily" />
+    <widget class="QFontComboBox" name="fontFamily" >
+     <property name="editable" >
+      <bool>false</bool>
+     </property>
+     <property name="sizeAdjustPolicy" >
+      <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+     </property>
+     <property name="currentFont" >
+      <font>
+       <family>DejaVu Sans</family>
+      </font>
+     </property>
+    </widget>
    </item>
    <item row="1" column="0" >
     <widget class="QLabel" name="label_2" >
@@ -40,12 +52,19 @@
    <item row="2" column="1" >
     <widget class="QWidget" native="1" name="widget" >
      <layout class="QHBoxLayout" >
-      <property name="leftMargin" >
-       <number>0</number>
-      </property>
-      <property name="rightMargin" >
-       <number>0</number>
-      </property>
+      <item>
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>61</width>
+          <height>29</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
       <item>
        <widget class="QToolButton" name="bold" >
         <property name="text" >
@@ -60,19 +79,6 @@
         </property>
        </widget>
       </item>
-      <item>
-       <spacer>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" >
-         <size>
-          <width>21</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
      </layout>
     </widget>
    </item>
@@ -86,7 +92,24 @@
    <item row="3" column="1" >
     <widget class="QLineEdit" name="text" />
    </item>
+   <item row="4" column="0" >
+    <widget class="QLabel" name="labelStartOffset" >
+     <property name="text" >
+      <string>Offset:</string>
+     </property>
+    </widget>
+   </item>
    <item row="4" column="1" >
+    <widget class="QSlider" name="startOffset" >
+     <property name="maximum" >
+      <number>100</number>
+     </property>
+     <property name="orientation" >
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>

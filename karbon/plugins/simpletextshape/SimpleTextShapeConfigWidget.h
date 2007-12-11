@@ -39,8 +39,8 @@ public:
     virtual bool showOnShapeCreate() { return false; }
     /// reimplemented
     virtual QUndoCommand * createCommand();
-private slots:
 private:
+    void blockChildSignals( bool block );
     Ui::SimpleTextShapeConfigWidget widget;
     SimpleTextShape * m_shape;
 };
