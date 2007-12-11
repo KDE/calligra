@@ -55,7 +55,7 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
         m_effectCombo->addItem( factory->name(), factory->id() );
     }
 
-    connect( m_effectCombo, SIGNAL( currectIndexChanged( int ) ),
+    connect( m_effectCombo, SIGNAL( currentIndexChanged( int ) ),
              this, SLOT( slotEffectChanged( int ) ) );
 
     // setup widget layout
@@ -90,6 +90,16 @@ void KPrPageEffectDocker::slotActivePageChanged()
         this->setEnabled( true );
 
         KPrPageApplicationData * pageData = KPrPage::pageData( page );
+        KPrPageEffect * pageEffect = pageData->pageEffect();
+        QString effectId = pageEffect ? pageEffect->id() : "";
+
+        for ( int i = 0; i < m_effectCombo->count(); ++i )
+        {
+            if ( m_effectCombo->itemData( i ).toString() == effectId ) {
+                m_effectCombo->setCurrentIndex( i );
+                break;
+            }
+        }
 
 /*
     QPainter p( m_activePageBuffer );
@@ -100,7 +110,7 @@ void KPrPageEffectDocker::slotActivePageChanged()
 */
     }
     else {
-        // diable the page effect docker as effects are only there on a normal page
+        // disable the page effect docker as effects are only there on a normal page
         this->setEnabled( false );
     }
 
@@ -124,7 +134,7 @@ void KPrPageEffectDocker::setView( KPrView* view )
     Q_ASSERT( view );
     m_view = view;
     connect( view, SIGNAL( activePageChanged() ),
-            this, SLOT( slotActivePageChanged() ) );
+             this, SLOT( slotActivePageChanged() ) );
 }
 
 #include "KPrPageEffectDocker.moc"
