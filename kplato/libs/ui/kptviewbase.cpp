@@ -174,7 +174,6 @@ void TreeViewBase::scrollTo(const QModelIndex &index, ScrollHint hint)
     if (hint == PositionAtCenter) {
         horizontalScrollBar()->setValue(horizontalPosition - ((viewportWidth - cellWidth) / 2));
     } else {
-        qDebug()<<"TreeViewBase::scrollTo"<<index;
         if (horizontalPosition - horizontalOffset < 0 || cellWidth > viewportWidth)
             horizontalScrollBar()->setValue(horizontalPosition);
         else if (horizontalPosition - horizontalOffset + cellWidth > viewportWidth)
@@ -297,6 +296,8 @@ QModelIndex TreeViewBase::moveCursor( CursorAction cursorAction, Qt::KeyboardMod
     if (!current.isValid()) {
         return QTreeView::moveCursor( cursorAction, modifiers );
     }
+    int col = current.column();
+    QModelIndex ix;
     switch (cursorAction) {
         case MoveNext: {
             // TODO: span
@@ -304,8 +305,7 @@ QModelIndex TreeViewBase::moveCursor( CursorAction cursorAction, Qt::KeyboardMod
             // Fetch the index below current.
             // This should be the next non-hidden row, same column as current,
             // that has a column in current.column()
-            QModelIndex ix = indexBelow( current );
-            int col = current.column();
+            ix = indexBelow( current );
             while ( ix.isValid() && col >= model()->columnCount(ix.parent()) ) {
                 kDebug()<<col<<model()->columnCount(ix.parent())<<ix;
                 ix = indexBelow( ix );
@@ -321,8 +321,7 @@ QModelIndex TreeViewBase::moveCursor( CursorAction cursorAction, Qt::KeyboardMod
             // Fetch the index above current.
             // This should be the previous non-hidden row, same column as current,
             // that has a column in current.column()
-            QModelIndex ix = indexAbove( current );
-            int col = current.column();
+            ix = indexAbove( current );
             while ( ix.isValid() && col >= model()->columnCount(ix.parent()) ) {
                 ix = indexAbove( ix );
             }
@@ -331,30 +330,46 @@ QModelIndex TreeViewBase::moveCursor( CursorAction cursorAction, Qt::KeyboardMod
             } // else Here we could go to the bottom
             return ix;
         }
+        case MovePageUp:
+        case MovePageDown: {
+            ix = QTreeView::moveCursor( cursorAction, modifiers );
+            // Now we are at the correct row, so move to correct column
+            if ( ix.isValid() ) {
+                ix = model()->index( ix.row(), col, ix.parent() );
+            } // else Here we could go to the bottom
+            return ix;
+        }
+        case MoveHome: {
+            if ( ( modifiers & Qt::ControlModifier ) == 0 ) {
+                ix = QTreeView::moveCursor( cursorAction, modifiers ); // move to first row
+            } else { //stay at this row
+                ix = current;
+            }
+            for ( int s = 0; s < header()->count(); ++s ) {
+                if ( ! header()->isSectionHidden( s ) ) {
+                    ix = model()->index( ix.row(), header()->logicalIndex( s ), ix.parent() );
+                    break;
+                }
+            }
+            return ix;
+        }
+        case MoveEnd: {
+            if ( ( modifiers & Qt::ControlModifier ) == 0 ) {
+                ix = QTreeView::moveCursor( cursorAction, modifiers ); // move to last row
+            } else { //stay at this row
+                ix = current;
+            }
+            for ( int s = header()->count() - 1; s >= 0; --s ) {
+                if ( ! header()->isSectionHidden( s ) ) {
+                    ix = model()->index( ix.row(), header()->logicalIndex( s ), ix.parent() );
+                    break;
+                }
+            }
+            return ix;
+        }
         default: break;
     }
     return QTreeView::moveCursor( cursorAction, modifiers );
-}
-
-QItemSelectionModel::SelectionFlags TreeViewBase::selectionCommand(const QModelIndex &index, const QEvent *event) const
-{
-    /*    if ( event && event->type() == QEvent::KeyPress && selectionMode() == QAbstractItemView::ExtendedSelection ) {
-    if ( static_cast<const QKeyEvent*>(event)->key() == Qt::Key_Space ) {
-    Qt::KeyboardModifiers modifiers = QApplication::keyboardModifiers();
-    QItemSelectionModel::SelectionFlags bflags = QItemSelectionModel::Rows;
-    // 
-    if ( modifiers && Qt::ShiftModifier ) {
-    return QItemSelectionModel::SelectCurrent|bflags;
-}
-    // Toggle on Ctrl-Qt::Key_Space
-    if ( modifiers & Qt::ControlModifier ) {
-    return QItemSelectionModel::Toggle|bflags;
-}
-    // Select on Space alone
-    return QItemSelectionModel::ClearAndSelect|bflags;
-}
-}*/
-    return QTreeView::selectionCommand( index, event );
 }
 
 void TreeViewBase::contextMenuEvent ( QContextMenuEvent *event )

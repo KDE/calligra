@@ -190,7 +190,6 @@ protected:
       information provided by the button \a modifiers.
     */
     QModelIndex moveCursor( CursorAction cursorAction, Qt::KeyboardModifiers modifiers );
-    QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const;
 
     void contextMenuEvent ( QContextMenuEvent * event );
 
