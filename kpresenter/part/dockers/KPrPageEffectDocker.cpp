@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,14 +27,15 @@
 #include <QPainter>
 #include <klocale.h>
 
-// hard code
-#include "pageeffects/KPrSlideWipeEffect.h"
+#include "KPrPage.h"
+#include "KPrPageApplicationData.h"
+#include "pageeffects/KPrPageEffectRegistry.h"
+#include "pageeffects/KPrPageEffectFactory.h"
 
 KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags )
-                   : QDockWidget( parent, flags )
+: QDockWidget( parent, flags )
+, m_view( 0 )
 {
-    m_view = 0;
-
     setWindowTitle( i18n( "Page effects" ) );
 
     QWidget* base = new QWidget( this );
@@ -43,10 +45,16 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     m_preview->installEventFilter( this );
     m_preview->setFrameShape( QFrame::Box );
 
-    // setup the effect chooser combo box
     m_effectCombo = new QComboBox( base );
-    m_effectCombo->addItem( i18n( "No Effect" ) );
-    m_effectCombo->addItem( i18n( "Cover down effect" ) );
+    m_effectCombo->addItem( i18n( "No Effect" ), QString( "" ) );
+
+    QList<KPrPageEffectFactory*> factories = KPrPageEffectRegistry::instance()->values();
+
+    foreach ( KPrPageEffectFactory * factory, factories )
+    {
+        m_effectCombo->addItem( factory->name(), factory->id() );
+    }
+
     connect( m_effectCombo, SIGNAL( currectIndexChanged( int ) ),
              this, SLOT( slotEffectChanged( int ) ) );
 
@@ -75,7 +83,13 @@ void KPrPageEffectDocker::slotActivePageChanged()
     if ( !m_view )
         return;
 
-    // get the active page and set the combo box according to the page's effect
+    // get the active page 
+    KPrPage * page = dynamic_cast<KPrPage*>( m_view->activePage() );
+    if ( page ) {
+        // set the combo box according to the page's effect
+        this->setEnabled( true );
+
+        KPrPageApplicationData * pageData = KPrPage::pageData( page );
 
 /*
     QPainter p( m_activePageBuffer );
@@ -83,7 +97,14 @@ void KPrPageEffectDocker::slotActivePageChanged()
     KoViewConverter converter;
     m_view->kopaCanvas()->masterShapeManager()->paint( p, converter, false );
     m_view->kopaCanvas()->shapeManager()->paint( p, converter, false ); 
-*/}
+*/
+    }
+    else {
+        // diable the page effect docker as effects are only there on a normal page
+        this->setEnabled( false );
+    }
+
+}
 
 void KPrPageEffectDocker::slotEffectChanged( int index )
 {
@@ -100,9 +121,10 @@ void KPrPageEffectDocker::slotEffectChanged( int index )
 
 void KPrPageEffectDocker::setView( KPrView* view )
 {
+    Q_ASSERT( view );
     m_view = view;
     connect( view, SIGNAL( activePageChanged() ),
-             this, SLOT( slotActivePageChanged() ) );
+            this, SLOT( slotActivePageChanged() ) );
 }
 
 #include "KPrPageEffectDocker.moc"
