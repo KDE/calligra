@@ -161,6 +161,18 @@ public:
     /// Save context info from this view. Reimplement.
     virtual void saveContext( QDomElement &/*context*/ ) const;
 
+    /**
+      Reimplemented to fix qt bug 160083: Doesn't scroll horisontally.
+    
+      Scroll the contents of the tree view until the given model item
+      \a index is visible. The \a hint parameter specifies more
+      precisely where the item should be located after the
+      operation.
+      If any of the parents of the model item are collapsed, they will
+      be expanded to ensure that the model item is visible.
+    */
+    void scrollTo(const QModelIndex &index, ScrollHint hint = EnsureVisible);
+    
 signals:
     /// Context menu requested from viewport at global position @p pos
     void contextMenuRequested( QModelIndex, const QPoint &pos );
@@ -172,6 +184,11 @@ signals:
 
 protected:
     void keyPressEvent(QKeyEvent *event);
+    /**
+      Reimplemented from QTreeView to make tab/backtab in editor work reasonably well.
+      Move the cursor in the way described by \a cursorAction, *not* using the
+      information provided by the button \a modifiers.
+    */
     QModelIndex moveCursor( CursorAction cursorAction, Qt::KeyboardModifiers modifiers );
     QItemSelectionModel::SelectionFlags selectionCommand(const QModelIndex &index, const QEvent *event) const;
 
@@ -184,6 +201,8 @@ protected slots:
     void slotHeaderContextMenuRequested( const QPoint& );
 
 protected:
+    virtual void focusInEvent(QFocusEvent *event);
+    
     bool m_arrowKeyNavigation;
     bool m_acceptDropsOnView;
     QList<int> m_hideList;

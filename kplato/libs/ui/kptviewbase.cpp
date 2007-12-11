@@ -149,12 +149,64 @@ QModelIndex TreeViewBase::previousColumn( const QModelIndex &curr ) const
     return model()->index( curr.row(), header()->logicalIndex( s ), curr.parent() );
 }
 
+/*
+    Reimplemented to fix qt bug 160083: Doesn't scroll horisontally.
+    
+    Scroll the contents of the tree view until the given model item
+    \a index is visible. The \a hint parameter specifies more
+    precisely where the item should be located after the
+    operation.
+    If any of the parents of the model item are collapsed, they will
+    be expanded to ensure that the model item is visible.
+ */
+void TreeViewBase::scrollTo(const QModelIndex &index, ScrollHint hint)
+{
+    QTreeView::scrollTo( index, hint ); // scrolls vertically
+    if ( ! index.isValid() ) {
+        return;
+    }
+    // horizontal
+    int viewportWidth = viewport()->width();
+    int horizontalOffset = header()->offset();
+    int horizontalPosition = header()->sectionPosition(index.column());
+    int cellWidth = header()->sectionSize(index.column());
+
+    if (hint == PositionAtCenter) {
+        horizontalScrollBar()->setValue(horizontalPosition - ((viewportWidth - cellWidth) / 2));
+    } else {
+        qDebug()<<"TreeViewBase::scrollTo"<<index;
+        if (horizontalPosition - horizontalOffset < 0 || cellWidth > viewportWidth)
+            horizontalScrollBar()->setValue(horizontalPosition);
+        else if (horizontalPosition - horizontalOffset + cellWidth > viewportWidth)
+            horizontalScrollBar()->setValue(horizontalPosition - viewportWidth + cellWidth);
+    }
+}
+
+void TreeViewBase::focusInEvent(QFocusEvent *event)
+{
+    QAbstractItemView::focusInEvent(event);
+    QModelIndex curr = currentIndex();
+    if ( ! curr.isValid() || ! isIndexHidden( curr ) ) {
+        return;
+    }
+    QModelIndex idx = curr;
+    for ( int c = 0; c < model()->columnCount(); ++c)
+    {
+        idx = model()->index( curr.row(), c, curr.parent() );
+        if ( ! isIndexHidden( idx ) ) {
+            selectionModel()->setCurrentIndex(idx, QItemSelectionModel::NoUpdate);
+            scrollTo( idx );
+            break;
+        }
+    }
+}
+
 /*!
     \reimp
  */
 void TreeViewBase::keyPressEvent(QKeyEvent *event)
 {
-    kDebug()<<event->key()<<","<<m_arrowKeyNavigation;
+    kDebug()<<objectName()<<event->key()<<","<<m_arrowKeyNavigation;
     if ( !m_arrowKeyNavigation ) {
         QTreeView::keyPressEvent( event );
         return;
@@ -468,7 +520,9 @@ void DoubleTreeViewBase::init()
     setOrientation( Qt::Horizontal );
     setHandleWidth( 3 );
     m_leftview = new TreeViewBase( this );
+    m_leftview->setObjectName("Left view");
     m_rightview = new TreeViewBase( this );
+    m_rightview->setObjectName("Right view");
 
     connect( m_leftview, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ) );
     connect( m_leftview, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotLeftHeaderContextMenuRequested( const QPoint& ) ) );
