@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,8 +33,6 @@
 #include "KPrPageApplicationData.h"
 #include "KPrViewModePresentation.h"
 #include "commands/KPrAnimationCreateCommand.h"
-#include "commands/KPrPageEffectSetCommand.h"
-#include "pageeffects/KPrSlideWipeEffect.h"
 #include "dockers/KPrPageEffectDocker.h"
 #include "dockers/KPrPageEffectDockerFactory.h"
 #include "shapeanimations/KPrAnimationMoveAppear.h"
@@ -84,14 +82,6 @@ void KPrView::initActions()
     m_actionCreateAnimation = new KAction( "Create Appear Animation", this );
     actionCollection()->addAction( "edit_createanimation", m_actionCreateAnimation );
     connect( m_actionCreateAnimation, SIGNAL( activated() ), this, SLOT( createAnimation() ) );
-
-    m_actionCreatePageEffect = new KAction( "Create Page Effect", this );
-    actionCollection()->addAction( "edit_createpageeffect", m_actionCreatePageEffect );
-    connect( m_actionCreatePageEffect, SIGNAL( activated() ), this, SLOT( createPageEffect() ) );
-
-    m_actionDeletePageEffect = new KAction( "Delete Page Effect", this );
-    actionCollection()->addAction( "edit_deletepageeffect", m_actionDeletePageEffect );
-    connect( m_actionDeletePageEffect, SIGNAL( activated() ), this, SLOT( deletePageEffect() ) );
 }
 
 void KPrView::startPresentation()
@@ -113,24 +103,6 @@ void KPrView::createAnimation()
         m_canvas->addCommand( command );
     }
     animationcount = ( animationcount + 1 ) % 3;
-}
-
-void KPrView::createPageEffect()
-{
-    // this does not work in master pages
-    if ( dynamic_cast<KPrPage *>( activePage() ) ) {
-        KPrPageEffectSetCommand * command = new KPrPageEffectSetCommand( activePage(), new KPrSlideWipeEffect( 5000 ) );
-        m_canvas->addCommand( command );
-    }
-}
-
-void KPrView::deletePageEffect()
-{
-    // this does not work in master pages
-    if ( dynamic_cast<KPrPage *>( activePage() ) && KPrPage::pageData( activePage() )->pageEffect() ) {
-        KPrPageEffectSetCommand * command = new KPrPageEffectSetCommand( activePage(), 0 );
-        m_canvas->addCommand( command );
-    }
 }
 
 #include "KPrView.moc"

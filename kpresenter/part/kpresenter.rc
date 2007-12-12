@@ -15,9 +15,6 @@
             <Action name="edit_deletepage"/>
             <Separator/>
             <Action name="edit_createanimation"/>
-            <Separator/>
-            <Action name="edit_createpageeffect"/>
-            <Action name="edit_deletepageeffect"/>
         </Menu>
         <Menu name="view"><text>&amp;View</text>
             <Action name="view_newview"/>
