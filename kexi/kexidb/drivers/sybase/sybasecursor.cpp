@@ -17,9 +17,13 @@
  * Boston, MA 02110-1301, USA.
 */
 
+
 #include "sybasecursor.h"
 #include "sybaseconnection.h"
 #include "sybaseconnection_p.h"
+
+#include <QtGlobal>
+
 #include <kexidb/error.h>
 #include <kexidb/utils.h>
 #include <klocale.h>
@@ -143,19 +147,21 @@ QVariant SybaseCursor::value(uint pos) {
         // db-library indexes its columns from 1
         pos = pos + 1;
 
-        int columnDataLength = ( int )dbdatlen( d->dbProcess, pos );
+        long int columnDataLength = dbdatlen( d->dbProcess, pos );
 
-        // hmm, columnDataLength + 1 is definitely too short
-        // conversion to string will take more space. How much is "enough" ?
-        BYTE* columnValue = new unsigned char[columnDataLength + 1] ;
+        // 512 is
+        // 1. the length used internally in dblib for allocating data to each column in function dbprrow()
+        // 2. it's greater than all the values returned in the dblib internal function _get_printable_size
+        int pointerLength = qMax( columnDataLength , ( long int )512 );
+
+        BYTE* columnValue = new unsigned char[pointerLength + 1] ;
 
         // convert to string representation. All values are convertible to string
-        dbconvert( d->dbProcess , dbcoltype(d->dbProcess , pos), dbdata(d->dbProcess , pos ), columnDataLength, (SYBCHAR), columnValue, -2 );
+        dbconvert( d->dbProcess , dbcoltype(d->dbProcess , pos), dbdata(d->dbProcess , pos ), columnDataLength , (SYBCHAR), columnValue, -2 );
 
 	QVariant returnValue =  KexiDB::cstringToVariant( ( const char* )columnValue , f, strlen( ( const char* )columnValue ) );
 
-        // should we delete columnValue here ?
-        //delete[] columnValue
+        delete[] columnValue;
 
         return returnValue;
 }
@@ -177,21 +183,21 @@ bool SybaseCursor::drv_storeCurrentRow(RecordData& data) const
 		if (m_fieldsExpanded && !f)
 			continue;
 
-                // db-library indexes its columns from 1
-                int columnDataLength = ( int )dbdatlen( d->dbProcess, i + 1 );
+                long int columnDataLength = dbdatlen( d->dbProcess, i+1 );
 
-                // columnDataLength+1 is too short!! How much is enough for a string representation of a column ?
-                BYTE* columnValue = new unsigned char[columnDataLength + 1] ;
+                // 512 is
+                // 1. the length used internally in dblib for allocating data to each column in function dbprrow()
+                // 2. it's greater than all the values returned in the dblib internal function _get_printable_size
+                int pointerLength = qMax( columnDataLength , ( long int )512 );
+
+                BYTE* columnValue = new unsigned char[pointerLength + 1] ;
 
                 // convert to string representation. All values are convertible to string
-                dbconvert( d->dbProcess , dbcoltype(d->dbProcess , i+1 ), dbdata(d->dbProcess , i+1 ), columnDataLength, (SYBCHAR), columnValue, -2 );
-
-                KexiDBDrvDbg<<"column value "<<i+1<<columnValue;
+                dbconvert( d->dbProcess , dbcoltype(d->dbProcess , i+1 ), dbdata(d->dbProcess , i+1 ), columnDataLength , (SYBCHAR), columnValue, -2 );
 
       	        data[i] =  KexiDB::cstringToVariant( ( const char* )columnValue , f,  strlen( ( const char* )columnValue ) );
 
-                // should we delete columnValue here ?
-                // delete[] columnValue;
+                delete[] columnValue;
 	}
 	return true;
 }
