@@ -110,7 +110,7 @@
 		<Action name="view_zoom"/>
 		<Action name="help_context"/>
 	</ToolBar>
-	<ToolBar name="object_toolbar" fullWidth="false">
+	<ToolBar name="object_toolbar" hidden="true" fullWidth="false">
 		<Text>Object</Text>
 		<Action name="object_move_totop"/>
 		<Action name="object_move_up"/>
