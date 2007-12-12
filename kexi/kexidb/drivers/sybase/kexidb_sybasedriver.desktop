@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Sybase
+Comment=Kexi database driver for accessing Sybase servers
 X-KDE-Library=kexidb_sybasedriver
 ServiceTypes=Kexi/DBDriver
 Type=Service
