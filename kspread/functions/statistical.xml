@@ -1289,7 +1289,6 @@
       <Help><Related>SUMXMY2</Related></Help>
     </Function>
 
-
     <Function>
       <Name>SUMPRODUCT</Name>
       <Type>Float</Type>
@@ -1365,6 +1364,55 @@
         <Syntax>TDIST(number;degrees_freedom;mode)</Syntax>
         <Example>TDIST(12;5;1) returns 0.000035</Example>
       </Help>
+    </Function>
+
+    <Function>
+      <Name>TREND</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>KnownY</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+        <Comment>KnownX</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+        <Comment>NumberSequence newX</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter optional="true">
+        <Comment>allowOffset</Comment>
+        <Type>Bool</Type>
+      </Parameter>
+      <Help>
+        <Text>The TREND() function calculates a sequence of values based on a linear regression of known value pairs.</Text>
+        <Text>Constraints: COUNT(knownY) = COUNT(knownX).</Text>
+        <Syntax>TREND(knownY[;knownX[;newX[;allowOffset = TRUE]]])</Syntax>
+      </Help>
+      <Related>INTERSECTION</Related>
+      <Related>SLOPE</Related>
+      <Related>STEYX</Related>
+    </Function>
+
+    <Function>
+      <Name>TRIMMEAN</Name>
+      <Type>Float</Type>
+      <Parameter>
+        <Comment>dataSet</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Parameter>
+        <Comment>cutOffFraction</Comment>
+        <Type>Float</Type>
+      </Parameter>
+      <Help>
+        <Text>The TRIMMEAN() function calculates the mean of a data set's fraction.</Text>
+        <Syntax>TRIMMEAN(dataSet; cutOffFraction)</Syntax>
+      </Help>
+      <Related>AVERAGE</Related>
+      <Related>GEOMEAN</Related>
+      <Related>HARMEAN</Related>
     </Function>
 
     <Function>
