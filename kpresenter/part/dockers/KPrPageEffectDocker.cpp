@@ -19,7 +19,7 @@
 */
 
 #include "KPrPageEffectDocker.h"
-#include <KPrView.h>
+
 #include <QVBoxLayout>
 #include <QComboBox>
 #include <QLabel>
@@ -27,10 +27,13 @@
 #include <QPainter>
 #include <klocale.h>
 
+#include <KoPACanvas.h>
+#include "KPrView.h"
 #include "KPrPage.h"
 #include "KPrPageApplicationData.h"
 #include "pageeffects/KPrPageEffectRegistry.h"
 #include "pageeffects/KPrPageEffectFactory.h"
+#include "commands/KPrPageEffectSetCommand.h"
 
 KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags )
 : QDockWidget( parent, flags )
@@ -55,7 +58,7 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
         m_effectCombo->addItem( factory->name(), factory->id() );
     }
 
-    connect( m_effectCombo, SIGNAL( currentIndexChanged( int ) ),
+    connect( m_effectCombo, SIGNAL( activated( int ) ),
              this, SLOT( slotEffectChanged( int ) ) );
 
     // setup widget layout
@@ -119,10 +122,25 @@ void KPrPageEffectDocker::slotActivePageChanged()
 void KPrPageEffectDocker::slotEffectChanged( int index )
 {
     // provide a preview of the chosen page effect
-    if ( index == 0 ) // don't do nothing when it is NoEffect
-        return;
+    KPrPageEffect * pageEffect = 0;
+    QString pageEffectId = m_effectCombo->itemData( index ).toString();
+    if ( pageEffectId != "" ) {
+        KPrPageEffectFactory::Properties properties( 5000 ); // TODO get data from input
+        const KPrPageEffectFactory * factory = KPrPageEffectRegistry::instance()->value( pageEffectId );
+        pageEffect = factory->createPageEffect( properties );
+    }
+    else {
+        // this is to avoid the asser that checks if the effect is different then the last one
+        // The problem is that a undo is not yet reflected in the UI so it is possible to get the
+        // same effect twice.
+        // TODO
+        KPrPageApplicationData * pageData = KPrPage::pageData( m_view->activePage() );
+        if ( pageData->pageEffect() == 0 ) {
+            return;
+        }
+    }
 
-    // TODO: Use the registry to obtain the effect object
+    m_view->kopaCanvas()->addCommand( new KPrPageEffectSetCommand( m_view->activePage(), pageEffect ) );
 
     // start hard coded
 //    KPrSlideWipeEffect effect;
