@@ -226,7 +226,6 @@ private:
 
     //dockers
     VDocumentTab        *m_DocumentTab;
-    VColorDocker        *m_ColorManager;
     VStyleDocker        *m_styleDocker;
     KarbonTransformDocker *m_TransformDocker;
     KarbonLayerDocker        *m_layerDocker;

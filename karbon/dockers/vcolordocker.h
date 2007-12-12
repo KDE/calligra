@@ -30,11 +30,13 @@
 
 #include <KoColor.h>
 #include <KoDockFactory.h>
+#include <KoCanvasObserver.h>
 
 #include <QtGui/QMouseEvent>
 #include <QtGui/QDockWidget>
 
 class KoUniColorChooser;
+class KoCanvasBase;
 
 class VColorDockerFactory : public KoDockFactory
 {
@@ -46,7 +48,7 @@ public:
     virtual KoDockFactory::DockPosition defaultDockPosition() const;
 };
 
-class VColorDocker : public QDockWidget
+class VColorDocker : public QDockWidget, public KoCanvasObserver
 {
     Q_OBJECT
 
@@ -57,6 +59,8 @@ public:
     virtual bool isStrokeDocker() { return m_isStrokeDocker; }
     KoColor color() { return m_color; }
 
+    /// reimplemented from KoCanvasObserver
+    virtual void setCanvas(KoCanvasBase *canvas);
 public slots:
     virtual void setFillDocker();
     virtual void setStrokeDocker();
@@ -69,13 +73,14 @@ signals:
 
 private slots:
     void updateColor( const KoColor &c );
-
+    void resourceChanged(int key, const QVariant & value);
 private:
 
     KoUniColorChooser *m_colorChooser;
     bool m_isStrokeDocker; //Are we setting stroke color ( true ) or fill color ( false )
     KoColor m_color;
     KoColor m_oldColor;
+    KoCanvasBase * m_canvas;
 };
 
 #endif

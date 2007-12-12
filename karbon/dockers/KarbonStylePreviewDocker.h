@@ -46,6 +46,7 @@ private slots:
     void fillSelected();
     void strokeSelected();
     void selectionChanged();
+    void resourceChanged( int key, const QVariant& );
 private:
     KarbonStylePreview * m_preview;
     KarbonStyleButtonBox * m_buttons;

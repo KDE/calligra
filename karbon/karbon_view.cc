@@ -204,7 +204,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
     m_DocumentTab = 0L;
     m_stylePreview = 0L;
-    m_ColorManager = 0L;
     m_styleDocker = 0L;
     m_TransformDocker = 0L;
     m_layerDocker = 0L;
@@ -1374,9 +1373,7 @@ void KarbonView::createColorDock()
     debugView("KarbonView::createColorDock()");
 
     VColorDockerFactory colorFactory;
-    m_ColorManager = qobject_cast<VColorDocker*>(createDockWidget(&colorFactory));
-
-    connect( this, SIGNAL( selectionChange() ), m_ColorManager, SLOT( update() ) );
+    createDockWidget(&colorFactory);
 }
 
 void KarbonView::createTransformDock()

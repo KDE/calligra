@@ -56,10 +56,7 @@ KarbonStylePreviewDocker::KarbonStylePreviewDocker( QWidget * parent )
 
     setWidget( mainWidget );
 
-    m_canvas = KoToolManager::instance()->activeCanvasController()->canvas();
-    if( m_canvas )
-        connect( m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
-                 this, SLOT(selectionChanged()));
+    setCanvas( KoToolManager::instance()->activeCanvasController()->canvas() );
 }
 
 KarbonStylePreviewDocker::~KarbonStylePreviewDocker()
@@ -75,8 +72,11 @@ void KarbonStylePreviewDocker::setCanvas( KoCanvasBase * canvas )
         return;
     }
 
-    connect( m_canvas->shapeManager()->selection(), SIGNAL(selectionChanged()),
-                this, SLOT(selectionChanged()));
+    connect( m_canvas->shapeManager(), SIGNAL(selectionChanged()),
+            this, SLOT(selectionChanged()));
+
+    connect( m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant&)),
+             this, SLOT(resourceChanged(int, const QVariant&)));
 
     KoShape * shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
     if( shape )
@@ -123,6 +123,17 @@ void KarbonStylePreviewDocker::strokeSelected()
 
     m_canvas->resourceProvider()->setResource( Karbon::ActiveStyle, Karbon::Foreground );
     m_buttons->setStroke();
+}
+
+void KarbonStylePreviewDocker::resourceChanged( int key, const QVariant& )
+{
+    switch( key )
+    {
+        case KoCanvasResource::ForegroundColor:
+        case KoCanvasResource::BackgroundColor:
+            selectionChanged();
+            break;
+    }
 }
 
 KarbonStylePreviewDockerFactory::KarbonStylePreviewDockerFactory()

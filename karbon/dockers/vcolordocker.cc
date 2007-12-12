@@ -47,7 +47,6 @@
 #include <KoShape.h>
 
 #include <klocale.h>
-#include <kdebug.h>
 
 #include <QtCore/QEvent>
 #include <QtGui/QMouseEvent>
@@ -79,7 +78,7 @@ KoDockFactory::DockPosition VColorDockerFactory::defaultDockPosition() const
 }
 
 VColorDocker::VColorDocker()
-: m_isStrokeDocker( false )
+: m_isStrokeDocker( false ), m_canvas(0)
 {
     setWindowTitle( i18n( "Color Chooser" ) );
 
@@ -92,6 +91,8 @@ VColorDocker::VColorDocker()
 
     connect( m_colorChooser, SIGNAL( sigColorChanged( const KoColor &) ), this, SLOT( updateColor( const KoColor &) ) );
     connect(this, SIGNAL(colorChanged(const KoColor &)), m_colorChooser, SLOT(setColor(const KoColor &)));
+
+    setCanvas( KoToolManager::instance()->activeCanvasController()->canvas() );
 }
 
 VColorDocker::~VColorDocker()
@@ -100,8 +101,10 @@ VColorDocker::~VColorDocker()
 
 void VColorDocker::updateColor( const KoColor &c )
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    if( ! m_canvas )
+        return;
+
+    KoSelection *selection = m_canvas->shapeManager()->selection();
     if( ! selection || ! selection->count() )
         return;
 
@@ -110,7 +113,7 @@ void VColorDocker::updateColor( const KoColor &c )
     c.toQColor(&color, &opacity);
     color.setAlpha(opacity);
 
-    KoCanvasResourceProvider * provider = canvasController->canvas()->resourceProvider();
+    KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
     int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
 
     // check which color to set foreground == border, background == fill
@@ -129,14 +132,14 @@ void VColorDocker::updateColor( const KoColor &c )
             newBorder = new KoLineBorder( 1.0, color );
 
         KoShapeBorderCommand * cmd = new KoShapeBorderCommand( selection->selectedShapes(), newBorder );
-        canvasController->canvas()->addCommand( cmd );
-        canvasController->canvas()->resourceProvider()->setForegroundColor( c );
+        m_canvas->addCommand( cmd );
+        m_canvas->resourceProvider()->setForegroundColor( c );
     }
     else
     {
         KoShapeBackgroundCommand *cmd = new KoShapeBackgroundCommand( selection->selectedShapes(), QBrush( color ) );
-        canvasController->canvas()->addCommand( cmd );
-        canvasController->canvas()->resourceProvider()->setBackgroundColor( c );
+        m_canvas->addCommand( cmd );
+        m_canvas->resourceProvider()->setBackgroundColor( c );
     }
 }
 
@@ -152,13 +155,15 @@ void VColorDocker::setStrokeDocker()
 
 void VColorDocker::update()
 {
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
+    if( ! m_canvas )
+        return;
+
+    KoSelection *selection = m_canvas->shapeManager()->selection();
     if( ! selection || ! selection->count() )
         return;
 
     KoShape * shape = selection->firstSelectedShape();
-    KoCanvasResourceProvider * provider = canvasController->canvas()->resourceProvider();
+    KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
     int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
 
     if( activeStyle == Karbon::Foreground )
@@ -177,6 +182,26 @@ void VColorDocker::update()
         c.fromQColor( shape->background().color() );
         m_colorChooser->setColor( c );
     }
+}
+
+void VColorDocker::setCanvas(KoCanvasBase *canvas)
+{
+    m_canvas = canvas;
+    if( ! m_canvas )
+        return;
+
+    connect( m_canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant&)),
+            this, SLOT( resourceChanged(int, const QVariant&)));
+    connect( m_canvas->shapeManager(), SIGNAL(selectionChanged()),
+            this, SLOT(update()));
+
+    update();
+}
+
+void VColorDocker::resourceChanged(int key, const QVariant & value)
+{
+    if( key == Karbon::ActiveStyle )
+        update();
 }
 
 #include "vcolordocker.moc"
