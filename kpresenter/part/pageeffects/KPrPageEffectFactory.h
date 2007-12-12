@@ -28,6 +28,10 @@ class KPrPageEffectFactory
 {
 public:
     struct Properties {
+        Properties( int duration )
+        : duration( duration )
+        {}
+
         int duration;
         KPrPageEffect::SubType subType;
     };
