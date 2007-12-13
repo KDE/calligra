@@ -12,6 +12,7 @@ Comment[pt]=Folha de cálculo do KSpread
 Comment[pt_BR]=Planilha do KSpread
 Comment[sv]=Kspread kalkylark
 Comment[x-test]=xxKSpread Spreadsheetxx
+Comment[zh_TW]=KSpread 資料表
 Version=4
 
 [Event/DocumentLoaded]
@@ -23,6 +24,7 @@ Name[pt]=Documento carregado
 Name[pt_BR]=Documento carregado
 Name[sv]=Dokument laddat
 Name[x-test]=xxDocument loadedxx
+Name[zh_TW]=文件已載入
 Comment=A document was loaded
 Comment[el]=Ένα έγγραφο φορτώθηκε
 Comment[fi]=Asiakirja ladattiin
@@ -31,6 +33,7 @@ Comment[pt]=Foi carregado um documento
 Comment[pt_BR]=Um documento foi carregado
 Comment[sv]=Ett dokument laddades
 Comment[x-test]=xxA document was loadedxx
+Comment[zh_TW]=文件已載入
 Action=None
 
 [Event/DocumentSaved]
@@ -42,6 +45,7 @@ Name[pt]=Documento gravado
 Name[pt_BR]=Documentos salvo
 Name[sv]=Dokument sparat
 Name[x-test]=xxDocument savedxx
+Name[zh_TW]=文件已儲存
 Comment=A document was saved
 Comment[el]=Ένα έγγραφο αποθηκεύτηκε
 Comment[fi]=Asiakirja tallennettiin
@@ -50,6 +54,7 @@ Comment[pt]=Foi gravado um documento
 Comment[pt_BR]=Um documento foi salvo
 Comment[sv]=Ett dokument sparades
 Comment[x-test]=xxA document was savedxx
+Comment[zh_TW]=文件已儲存
 Action=None
 
 [Event/LinkActivated]
@@ -60,6 +65,7 @@ Name[pt]=Ligação activada
 Name[pt_BR]=Ligação ativada
 Name[sv]=Länk aktiverad
 Name[x-test]=xxLink activatedxx
+Name[zh_TW]=連結已啟動
 Comment=A hyperlink was activated
 Comment[el]=Ένας υπερδεσμός ενεργοποιήθηκε
 Comment[fi]=Hyperlinkki aktivoitiin
@@ -67,6 +73,7 @@ Comment[pt]=Foi activada uma hiperligação
 Comment[pt_BR]=Uma hiperligação foi ativada
 Comment[sv]=En hyperlänk aktiverades
 Comment[x-test]=xxA hyperlink was activatedxx
+Comment[zh_TW]=超連結已啟動
 Action=None
 
 [Event/ValidityError]
@@ -77,6 +84,7 @@ Name[pt]=A validação falhou
 Name[pt_BR]=Validação falhou
 Name[sv]=Validering misslyckades
 Name[x-test]=xxValidity failedxx
+Name[zh_TW]=正確性檢查失敗
 Comment=Validation for a cell failed
 Comment[el]=Ο έλεγχος εγκυρότητας ενός κελιού απέτυχε
 Comment[fi]=Solun kelvollisuustarkistus epäonnistui
@@ -84,4 +92,5 @@ Comment[pt]=Falhou a validação de uma célula
 Comment[pt_BR]=A validação de uma célula falhou
 Comment[sv]=Validering av en cell misslyckades
 Comment[x-test]=xxValidation for a cell failedxx
+Comment[zh_TW]=儲存格的正確性檢查失敗
 Action=None

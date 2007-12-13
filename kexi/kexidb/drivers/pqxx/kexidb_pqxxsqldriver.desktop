@@ -1,9 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=PostgreSQL
-Comment=Kexi database driver for accessing PostgreSQL servers
 Name[ne]=पोस्टग्रे SQL
 Name[x-test]=xxPostgreSQLxx
+Comment=Kexi database driver for accessing PostgreSQL servers
 X-KDE-Library=kexidb_pqxxsqldriver
 ServiceTypes=Kexi/DBDriver
 Type=Service

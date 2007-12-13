@@ -15,6 +15,7 @@ GenericName[pt]=Folha de cálculo
 GenericName[pt_BR]=Planilha
 GenericName[sv]=Kalkylark
 GenericName[x-test]=xxSpreadsheetxx
+GenericName[zh_TW]=資料表
 MimeType=application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/vnd.ms-excel;text/csv;application/x-quattropro;
 Type=Application
 Icon=kspread
