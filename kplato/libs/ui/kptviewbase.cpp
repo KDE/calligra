@@ -71,6 +71,7 @@ TreeViewBase::TreeViewBase( QWidget *parent )
     m_readWrite( false )
 
 {
+    setItemDelegate( new ItemDelegate( this ) );
     setAlternatingRowColors ( true );
 
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
@@ -149,16 +150,7 @@ QModelIndex TreeViewBase::previousColumn( const QModelIndex &curr ) const
     return model()->index( curr.row(), header()->logicalIndex( s ), curr.parent() );
 }
 
-/*
-    Reimplemented to fix qt bug 160083: Doesn't scroll horisontally.
-    
-    Scroll the contents of the tree view until the given model item
-    \a index is visible. The \a hint parameter specifies more
-    precisely where the item should be located after the
-    operation.
-    If any of the parents of the model item are collapsed, they will
-    be expanded to ensure that the model item is visible.
- */
+// Reimplemented to fix qt bug 160083: Doesn't scroll horisontally.
 void TreeViewBase::scrollTo(const QModelIndex &index, ScrollHint hint)
 {
     QTreeView::scrollTo( index, hint ); // scrolls vertically
@@ -282,6 +274,50 @@ void TreeViewBase::keyPressEvent(QKeyEvent *event)
     QTreeView::keyPressEvent(event);
 }
 
+void TreeViewBase::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint)
+{
+    kDebug()<<editor<<hint;
+    ItemDelegate *delegate = ::qobject_cast<ItemDelegate*>( sender() );
+    if ( delegate == 0 ) {
+        kWarning()<<"Not a KPlato::ItemDelegate, try standard treatment"<<editor<<hint;
+        return QTreeView::closeEditor( editor, hint );
+    }
+    // Hacky, if only hint was an int!
+    Delegate::EndEditHint endHint = delegate->endEditHint();
+    // Close editor, do nothing else
+    QTreeView::closeEditor( editor, QAbstractItemDelegate::NoHint );
+    
+    
+    QModelIndex index;
+    switch ( endHint ) {
+        case Delegate::EditLeftItem:
+            index = moveCursor(MoveLeft, Qt::NoModifier);
+            break;
+        case Delegate::EditRightItem:
+            index = moveCursor(MoveRight, Qt::NoModifier);
+            break;
+        case Delegate::EditDownItem:
+            index = moveCursor(MoveDown, Qt::NoModifier);
+            break;
+        case Delegate::EditUpItem:
+            index = moveCursor(MoveUp, Qt::NoModifier);
+            break;
+        default:
+            //kDebug()<<"Standard treatment"<<editor<<hint;
+            return QTreeView::closeEditor( editor, hint ); // standard treatment
+    }
+    if (index.isValid()) {
+        QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::ClearAndSelect | selectionBehaviorFlags();
+        kDebug()<<flags;
+        QPersistentModelIndex persistent(index);
+        selectionModel()->setCurrentIndex(persistent, flags);
+        // currentChanged signal would have already started editing
+        if (!(editTriggers() & QAbstractItemView::CurrentChanged)) {
+            edit(persistent);
+        }
+    }
+}
+
 /*
     Reimplemented from QTreeView to make tab/backtab in editor work reasonably well.
     Move the cursor in the way described by \a cursorAction, *not* using the
@@ -299,7 +335,7 @@ QModelIndex TreeViewBase::moveCursor( CursorAction cursorAction, Qt::KeyboardMod
     int col = current.column();
     QModelIndex ix;
     switch (cursorAction) {
-        case MoveNext: {
+        case MoveDown: {
             // TODO: span
             
             // Fetch the index below current.
@@ -315,7 +351,7 @@ QModelIndex TreeViewBase::moveCursor( CursorAction cursorAction, Qt::KeyboardMod
             } // else Here we could go to the top
             return ix; 
         }
-        case MovePrevious: {
+        case MoveUp: {
             // TODO: span
             
             // Fetch the index above current.
@@ -328,6 +364,26 @@ QModelIndex TreeViewBase::moveCursor( CursorAction cursorAction, Qt::KeyboardMod
             if ( ix.isValid() ) {
                 ix = model()->index( ix.row(), col, ix.parent() );
             } // else Here we could go to the bottom
+            return ix;
+        }
+        case MovePrevious:
+        case MoveLeft: {
+            for ( int s = header()->visualIndex( col ) - 1; s >= 0; --s ) {
+                if ( ! header()->isSectionHidden( s ) ) {
+                    ix = model()->index( current.row(), header()->logicalIndex( s ), current.parent() );
+                    break;
+                }
+            }
+            return ix;
+        }
+        case MoveNext:
+        case MoveRight: {
+            for ( int s = header()->visualIndex( col ) + 1; s < header()->count(); ++s ) {
+                if ( ! header()->isSectionHidden( s ) ) {
+                    ix = model()->index( current.row(), header()->logicalIndex( s ), current.parent() );
+                    break;
+                }
+            }
             return ix;
         }
         case MovePageUp:

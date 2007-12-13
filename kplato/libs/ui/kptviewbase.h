@@ -21,6 +21,7 @@
 #define KPLATO_VIEWBASE
 
 #include "kplatoui_export.h"
+#include "kptitemmodelbase.h"
 
 #include <KoView.h>
 
@@ -196,8 +197,22 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event);
 
 protected slots:
+    /// Close the @p editor, using sender()->endEditHint().
+    /// Use @p hint if sender is not of type ItemDelegate.
+    virtual void closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint);
+    
     virtual void slotCurrentChanged ( const QModelIndex & current, const QModelIndex & previous );
     void slotHeaderContextMenuRequested( const QPoint& );
+
+    //Copied from QAbstractItemView
+    inline QItemSelectionModel::SelectionFlags selectionBehaviorFlags() const
+    {
+        switch (selectionBehavior()) {
+            case QAbstractItemView::SelectRows: return QItemSelectionModel::Rows;
+            case QAbstractItemView::SelectColumns: return QItemSelectionModel::Columns;
+            case QAbstractItemView::SelectItems: default: return QItemSelectionModel::NoUpdate;
+        }
+    }
 
 protected:
     virtual void focusInEvent(QFocusEvent *event);

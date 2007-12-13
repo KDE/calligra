@@ -22,6 +22,7 @@
 #include "kptproject.h"
 #include "kptdurationspinbox.h"
 
+#include <QApplication>
 #include <QComboBox>
 #include <QHeaderView>
 #include <QItemSelectionModel>
@@ -29,6 +30,7 @@
 #include <QModelIndex>
 #include <QStyleOptionViewItem>
 #include <QTimeEdit>
+#include <QPainter>
 
 #include <klineedit.h>
 #include <kdebug.h>
@@ -36,9 +38,72 @@
 namespace KPlato
 {
 
+bool ItemDelegate::eventFilter(QObject *object, QEvent *event)
+{
+    QWidget *editor = ::qobject_cast<QWidget*>(object);
+    if (!editor) {
+        return false;
+    }
+    m_lastHint = Delegate::NoHint;
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent *e = static_cast<QKeyEvent *>(event);
+        if ( e->modifiers() & Qt::ControlModifier ) {
+            switch ( e->key() ) {
+                case Qt::Key_Left:
+                    m_lastHint = Delegate::EditLeftItem;
+                    emit commitData(editor);
+                    emit closeEditor(editor, QAbstractItemDelegate::NoHint );
+                    return true;
+                case Qt::Key_Right:
+                    m_lastHint = Delegate::EditRightItem;
+                    emit commitData(editor);
+                    emit closeEditor( editor, QAbstractItemDelegate::NoHint );
+                    return true;
+                case Qt::Key_Down:
+                    m_lastHint = Delegate::EditDownItem;
+                    emit commitData(editor);
+                    emit closeEditor(editor, QAbstractItemDelegate::NoHint );
+                    return true;
+                case Qt::Key_Up:
+                    m_lastHint = Delegate::EditUpItem;
+                    emit commitData(editor);
+                    emit closeEditor(editor, QAbstractItemDelegate::NoHint );
+                    return true;
+                default:
+                    break;
+            }
+        }
+    }
+    return QItemDelegate::eventFilter( object, event );
+}
+
+void ItemDelegate::drawFocus( QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect ) const
+{
+    if ((option.state & QStyle::State_HasFocus) == 0 || !rect.isValid())
+        return;
+    
+    QStyleOptionFocusRect o;
+    o.QStyleOption::operator=(option);
+    o.rect = rect;
+    o.state |= QStyle::State_KeyboardFocusChange;
+    o.state |= QStyle::State_Item;
+    QPalette::ColorGroup cg = (option.state & QStyle::State_Enabled)
+            ? QPalette::Normal : QPalette::Disabled;
+    o.backgroundColor = option.palette.color(cg, (option.state & QStyle::State_Selected)
+            ? QPalette::Highlight : QPalette::Window);
+    
+    if ( option.state & QStyle::State_Enabled ) {
+        painter->setPen( QColor( Qt::black ) );
+        painter->drawRect( rect.adjusted( 0, 0, -1, -1 ) );
+    } else {
+        QStyle *style = QApplication::style();
+        style->drawPrimitive(QStyle::PE_FrameFocusRect, &o, painter, 0);
+    }
+}
+
 // Hmmm, a bit hacky, but this makes it possible to use index specific editors...
 SelectorDelegate::SelectorDelegate( QObject *parent )
-: QItemDelegate( parent )
+    : ItemDelegate( parent )
 {
 }
 
@@ -105,7 +170,7 @@ void SelectorDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionV
 }
 
 EnumDelegate::EnumDelegate( QObject *parent )
-: QItemDelegate( parent )
+    : ItemDelegate( parent )
 {
 }
 
@@ -144,7 +209,7 @@ void EnumDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewI
 
 //----------------------
 DurationSpinBoxDelegate::DurationSpinBoxDelegate( QObject *parent )
-    : QItemDelegate( parent )
+    : ItemDelegate( parent )
 {
 }
 
@@ -182,7 +247,7 @@ void DurationSpinBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyle
 
 //---------------------------
 SpinBoxDelegate::SpinBoxDelegate( QObject *parent )
-    : QItemDelegate( parent )
+    : ItemDelegate( parent )
 {
 }
 
@@ -221,7 +286,7 @@ void SpinBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionVi
 
 //---------------------------
 DoubleSpinBoxDelegate::DoubleSpinBoxDelegate( QObject *parent )
-    : QItemDelegate( parent )
+    : ItemDelegate( parent )
 {
 }
 
@@ -260,7 +325,7 @@ void DoubleSpinBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOp
 
 //---------------------------
 MoneyDelegate::MoneyDelegate( QObject *parent )
-    : QItemDelegate( parent )
+    : ItemDelegate( parent )
 {
 }
 
@@ -294,7 +359,7 @@ void MoneyDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionView
 
 //---------------------------
 TimeDelegate::TimeDelegate( QObject *parent )
-    : QItemDelegate( parent )
+    : ItemDelegate( parent )
 {
 }
 

@@ -40,14 +40,51 @@ class QUndoCommand;
 namespace KPlato
 {
 
-namespace Delegate
-{
-    enum EditorType { EnumEditor, TimeEditor };
-}
-
 class Project;
 
-class KPLATOMODELS_EXPORT SelectorDelegate : public QItemDelegate
+/// Namespace for item delegate specific enums
+namespace Delegate
+{
+    /// For selector delegate
+    enum EditorType { EnumEditor, TimeEditor };
+    /// Controls action when editor is closed. See QAbstractItemDelegate::EndEditHint.
+    enum EndEditHint { 
+        NoHint = QAbstractItemDelegate::NoHint,
+        EditNextItem = QAbstractItemDelegate::EditNextItem,
+        EditPreviousItem = QAbstractItemDelegate::EditPreviousItem,
+        SubmitModelCache = QAbstractItemDelegate::SubmitModelCache,
+        RevertModelCache = QAbstractItemDelegate::RevertModelCache,
+        EditLeftItem = 100,
+        EditRightItem = 101,
+        EditDownItem = 102,
+        EditUpItem = 103
+    };
+}
+
+/// ItemDelegate implements improved control over closeEditor
+class KPLATOMODELS_EXPORT ItemDelegate : public QItemDelegate
+{
+    Q_OBJECT
+public:
+    /// Constructor
+    explicit ItemDelegate(QObject *parent = 0)
+    : QItemDelegate( parent ),
+    m_lastHint( Delegate::NoHint )
+    {}
+    
+    Delegate::EndEditHint endEditHint() const { return m_lastHint; }
+
+protected:
+    /// Implements arrow key navigation
+    bool eventFilter(QObject *object, QEvent *event);
+    /// Draw custom focus
+    virtual void drawFocus(QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect ) const;
+    
+private:
+    Delegate::EndEditHint m_lastHint;
+};
+
+class KPLATOMODELS_EXPORT SelectorDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
@@ -61,7 +98,7 @@ public:
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
-class KPLATOMODELS_EXPORT EnumDelegate : public QItemDelegate
+class KPLATOMODELS_EXPORT EnumDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
@@ -75,7 +112,7 @@ public:
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
-class KPLATOMODELS_EXPORT DurationSpinBoxDelegate : public QItemDelegate
+class KPLATOMODELS_EXPORT DurationSpinBoxDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
@@ -89,7 +126,7 @@ public:
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
-class KPLATOMODELS_EXPORT SpinBoxDelegate : public QItemDelegate
+class KPLATOMODELS_EXPORT SpinBoxDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
@@ -103,7 +140,7 @@ public:
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
-class KPLATOMODELS_EXPORT DoubleSpinBoxDelegate : public QItemDelegate
+class KPLATOMODELS_EXPORT DoubleSpinBoxDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
@@ -117,7 +154,7 @@ public:
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
-class KPLATOMODELS_EXPORT MoneyDelegate : public QItemDelegate
+class KPLATOMODELS_EXPORT MoneyDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
@@ -131,7 +168,7 @@ public:
     void updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 };
 
-class KPLATOMODELS_EXPORT TimeDelegate : public QItemDelegate
+class KPLATOMODELS_EXPORT TimeDelegate : public ItemDelegate
 {
     Q_OBJECT
 public:
