@@ -247,28 +247,7 @@ void TreeViewBase::keyPressEvent(QKeyEvent *event)
                 return;
                 break;
             }
-            case Qt::Key_Plus:
-                if ( itemsExpandable()) {
-                    if ( model()->hasChildren( current ) ) {
-                        QTreeView::keyPressEvent( event );
-                        //HACK: Bug in qt??
-                        selectionModel()->setCurrentIndex(current, QItemSelectionModel::NoUpdate);
-                    }
-                    event->accept();
-                    return;
-                }
-                break;
-            case Qt::Key_Minus:
-                if ( itemsExpandable() ) {
-                    if ( model()->hasChildren( current ) ) {
-                        QTreeView::keyPressEvent( event );
-                        //HACK: Bug in qt??
-                        selectionModel()->setCurrentIndex(current, QItemSelectionModel::NoUpdate);
-                    }
-                    event->accept();
-                    return;
-                }
-                break;
+            default: break;
         }
     }
     QTreeView::keyPressEvent(event);
@@ -608,6 +587,9 @@ void DoubleTreeViewBase::init()
 
     connect( m_leftview, SIGNAL( expanded( const QModelIndex & ) ), m_rightview, SLOT( expand( const QModelIndex & ) ) );
     connect( m_leftview, SIGNAL( collapsed( const QModelIndex & ) ), m_rightview, SLOT( collapse( const QModelIndex & ) ) );
+    
+    connect( m_rightview, SIGNAL( expanded( const QModelIndex & ) ), m_leftview, SLOT( expand( const QModelIndex & ) ) );
+    connect( m_rightview, SIGNAL( collapsed( const QModelIndex & ) ), m_leftview, SLOT( collapse( const QModelIndex & ) ) );
     
     m_actionSplitView = new KAction(KIcon("splitview"), "Hmmmm", this);
     kDebug()<<m_actionSplitView;
