@@ -124,6 +124,9 @@ void TreeViewBase::setColumnsHidden( const QList<int> &lst )
 
 QModelIndex TreeViewBase::nextColumn( const QModelIndex &curr ) const
 {
+    if ( ! curr.isValid() ) {
+        return QModelIndex();
+    }
     int s = header()->visualIndex( curr.column() ) + 1;
     while ( isColumnHidden( header()->logicalIndex( s ) ) ) {
         if ( s >= header()->count() ) {
@@ -138,6 +141,9 @@ QModelIndex TreeViewBase::nextColumn( const QModelIndex &curr ) const
 
 QModelIndex TreeViewBase::previousColumn( const QModelIndex &curr ) const
 {
+    if ( ! curr.isValid() ) {
+        return QModelIndex();
+    }
     int s = header()->visualIndex( curr.column() ) - 1;
     while ( isColumnHidden( header()->logicalIndex( s ) ) ) {
         if ( s < 0 ) {
@@ -303,7 +309,16 @@ QModelIndex TreeViewBase::nextEditable( const QModelIndex &index, CursorAction c
     do {
         ix = moveCursor( ix, cursorAction );
     } while ( ix.isValid() &&  ! ( model()->flags( ix ) & Qt::ItemIsEditable ) );
-    
+    kDebug()<<ix;
+    if ( ! ix.isValid() ) {
+        switch ( cursorAction ) {
+            case MovePrevious:
+            case MoveLeft: emit editBeforeFirstColumn( index ); break;
+            case MoveNext:
+            case MoveRight: emit editAfterLastColumn( index ); break;
+            default: break;
+        }
+    }
     return ix;
 }
 
@@ -602,6 +617,9 @@ void DoubleTreeViewBase::init()
     connect( m_leftview, SIGNAL( moveAfterLastColumn( const QModelIndex & ) ), this, SLOT( slotToRightView( const QModelIndex & ) ) );
     connect( m_rightview, SIGNAL( moveBeforeFirstColumn( const QModelIndex & ) ), this, SLOT( slotToLeftView( const QModelIndex & ) ) );
 
+    connect( m_leftview, SIGNAL( editAfterLastColumn( const QModelIndex & ) ), this, SLOT( slotEditToRightView( const QModelIndex & ) ) );
+    connect( m_rightview, SIGNAL( editBeforeFirstColumn( const QModelIndex & ) ), this, SLOT( slotEditToLeftView( const QModelIndex & ) ) );
+
     connect( m_leftview, SIGNAL( expanded( const QModelIndex & ) ), m_rightview, SLOT( expand( const QModelIndex & ) ) );
     connect( m_leftview, SIGNAL( collapsed( const QModelIndex & ) ), m_rightview, SLOT( collapse( const QModelIndex & ) ) );
     
@@ -671,6 +689,45 @@ void DoubleTreeViewBase::slotToLeftView( const QModelIndex &index )
         m_selectionmodel->setCurrentIndex( prv, QItemSelectionModel::NoUpdate );
     }
 }
+
+void DoubleTreeViewBase::slotEditToRightView( const QModelIndex &index )
+{
+    kDebug()<<index.column()<<endl;
+    if ( m_rightview->isHidden() ) {
+        return;
+    }
+    m_rightview->setFocus();
+    QModelIndex nxt = m_rightview->nextColumn( index );
+    while ( nxt.isValid() && ! ( model()->flags( nxt ) & Qt::ItemIsEditable ) ) {
+        nxt = m_rightview->nextColumn( nxt );
+    }
+    if ( nxt.isValid() && ( model()->flags( nxt ) & Qt::ItemIsEditable ) ) {
+        m_selectionmodel->setCurrentIndex( nxt, QItemSelectionModel::NoUpdate );
+        m_rightview->edit( nxt );
+    } else {
+        slotToRightView( index );
+    }
+}
+
+void DoubleTreeViewBase::slotEditToLeftView( const QModelIndex &index )
+{
+    kDebug()<<index.column()<<endl;
+    if ( m_leftview->isHidden() ) {
+        return;
+    }
+    m_leftview->setFocus();
+    QModelIndex nxt = m_leftview->previousColumn( index );
+    while ( nxt.isValid() && ! ( model()->flags( nxt ) & Qt::ItemIsEditable ) ) {
+        nxt = m_leftview->previousColumn( nxt );
+    }
+    if ( nxt.isValid() && ( model()->flags( nxt ) & Qt::ItemIsEditable ) ) {
+        m_selectionmodel->setCurrentIndex( nxt, QItemSelectionModel::NoUpdate );
+        m_leftview->edit( nxt );
+    } else {
+        slotToLeftView( index );
+    }
+}
+
 
 void DoubleTreeViewBase::setReadWrite( bool rw )
 {

@@ -182,6 +182,8 @@ signals:
 
     void moveAfterLastColumn( const QModelIndex & );
     void moveBeforeFirstColumn( const QModelIndex & );
+    void editAfterLastColumn( const QModelIndex & );
+    void editBeforeFirstColumn( const QModelIndex & );
 
 protected:
     void keyPressEvent(QKeyEvent *event);
@@ -311,6 +313,8 @@ protected slots:
     void slotSelectionChanged( const QItemSelection &sel, const QItemSelection & );
     void slotToRightView( const QModelIndex &index );
     void slotToLeftView( const QModelIndex &index );
+    void slotEditToRightView( const QModelIndex &index );
+    void slotEditToLeftView( const QModelIndex &index );
 
     void slotRightHeaderContextMenuRequested( const QPoint &pos );
     void slotLeftHeaderContextMenuRequested( const QPoint &pos );
