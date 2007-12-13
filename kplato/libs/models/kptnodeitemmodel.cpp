@@ -1470,7 +1470,8 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
         }
         return flags;
     }
-    if ( m_readWrite ) {
+    Node *n = node( index );
+    if ( m_readWrite && n != 0 ) {
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
             case 0: // name
@@ -1481,32 +1482,40 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 flags |= Qt::ItemIsEditable;
                 break;
             case 3: // allocation
+                if ( n->type() == Node::Type_Task ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
             case 4: // estimateType
+                if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
             case 5: // estimate
             case 6: // optimisticRatio
             case 7: // pessimisticRatio
             {
-                Node *n = node( index );
-                if ( n && (n->type() == Node::Type_Task || n->type() == Node::Type_Milestone )) {
+                if ( n->type() == Node::Type_Task ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             }
             case 8: // risktype
             {
-                Node *n = node( index );
-                if ( n && n->type() == Node::Type_Task ) {
+                if ( n->type() == Node::Type_Task ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             }
             case 9: // constraint type
-                flags |= Qt::ItemIsEditable;
+                if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+                    flags |= Qt::ItemIsEditable;
+                }
                 break;
             case 10: { // constraint start
-                Node *n = node( index );
-                if ( n == 0 )
+                if ( ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     break;
+                }
                 int c = n->constraint();
                 if ( c == Node::MustStartOn || c == Node::StartNotEarlier || c == Node::FixedInterval ) {
                     flags |= Qt::ItemIsEditable;
@@ -1514,9 +1523,9 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 break;
             }
             case 11: { // constraint end
-                Node *n = node( index );
-                if ( n == 0 )
+                if ( ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     break;
+                }
                 int c = n->constraint();
                 if ( c == Node::MustFinishOn || c == Node::FinishNotLater || c ==  Node::FixedInterval ) {
                     flags |= Qt::ItemIsEditable;
@@ -1524,12 +1533,15 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 break;
             }
             case 12: // running account
+                if ( n->type() == Node::Type_Task ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
             case 13: // startup account
             case 14: // startup cost
             case 15: // shutdown account
             case 16: { // shutdown cost
-                Node *n = node( index );
-                if ( n && (n->type() == Node::Type_Task || n->type() == Node::Type_Milestone) ) {
+                if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
