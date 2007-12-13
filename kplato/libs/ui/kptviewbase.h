@@ -191,7 +191,11 @@ protected:
       information provided by the button \a modifiers.
     */
     QModelIndex moveCursor( CursorAction cursorAction, Qt::KeyboardModifiers modifiers );
-
+    /// Move cursor from @p index in direction @p cursorAction. @p modifiers is not used.
+    QModelIndex moveCursor(  const QModelIndex &index, CursorAction cursorAction, Qt::KeyboardModifiers = Qt::NoModifier );
+    /// Move from @p index to next editable item, in direction @p cursorAction.
+    QModelIndex nextEditable( const QModelIndex &index, CursorAction cursorAction );
+    
     void contextMenuEvent ( QContextMenuEvent * event );
 
     void dragMoveEvent(QDragMoveEvent *event);

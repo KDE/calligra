@@ -270,16 +270,16 @@ void TreeViewBase::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHi
     QModelIndex index;
     switch ( endHint ) {
         case Delegate::EditLeftItem:
-            index = moveCursor(MoveLeft, Qt::NoModifier);
+            index = nextEditable( currentIndex(), MoveLeft );
             break;
         case Delegate::EditRightItem:
-            index = moveCursor(MoveRight, Qt::NoModifier);
+            index = nextEditable( currentIndex(), MoveRight );
             break;
         case Delegate::EditDownItem:
-            index = moveCursor(MoveDown, Qt::NoModifier);
+            index = nextEditable( currentIndex(), MoveDown );
             break;
         case Delegate::EditUpItem:
-            index = moveCursor(MoveUp, Qt::NoModifier);
+            index = nextEditable( currentIndex(), MoveUp );
             break;
         default:
             //kDebug()<<"Standard treatment"<<editor<<hint;
@@ -297,20 +297,37 @@ void TreeViewBase::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHi
     }
 }
 
+QModelIndex TreeViewBase::nextEditable( const QModelIndex &index, CursorAction cursorAction )
+{
+    QModelIndex ix = index;
+    do {
+        ix = moveCursor( ix, cursorAction );
+    } while ( ix.isValid() &&  ! ( model()->flags( ix ) & Qt::ItemIsEditable ) );
+    
+    return ix;
+}
+
+
 /*
     Reimplemented from QTreeView to make tab/backtab in editor work reasonably well.
     Move the cursor in the way described by \a cursorAction, *not* using the
     information provided by the button \a modifiers.
  */
+
 QModelIndex TreeViewBase::moveCursor( CursorAction cursorAction, Qt::KeyboardModifiers modifiers )
 {
-    executeDelayedItemsLayout();
-
     QModelIndex current = currentIndex();
     kDebug()<<cursorAction<<"("<<MoveNext<<","<<MovePrevious<<")"<<current;
     if (!current.isValid()) {
         return QTreeView::moveCursor( cursorAction, modifiers );
     }
+    return moveCursor( current, cursorAction, modifiers );
+}
+
+QModelIndex TreeViewBase::moveCursor( const QModelIndex &index, CursorAction cursorAction, Qt::KeyboardModifiers modifiers )
+{
+    executeDelayedItemsLayout();
+    QModelIndex current = index;
     int col = current.column();
     QModelIndex ix;
     switch (cursorAction) {
@@ -404,7 +421,7 @@ QModelIndex TreeViewBase::moveCursor( CursorAction cursorAction, Qt::KeyboardMod
         }
         default: break;
     }
-    return QTreeView::moveCursor( cursorAction, modifiers );
+    return ix;
 }
 
 void TreeViewBase::contextMenuEvent ( QContextMenuEvent *event )
