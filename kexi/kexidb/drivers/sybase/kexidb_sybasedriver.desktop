@@ -2,6 +2,10 @@
 Encoding=UTF-8
 Name=Sybase
 Comment=Kexi database driver for accessing Sybase servers
+Comment[ga]=Tiománaí bunachair sonraí Kexi lenar féidir freastalaithe Sybase a rochtain
+Comment[pt]=Controlador de bases de dados do Kexi para aceder a servidores Sybase
+Comment[pt_BR]=Controlador de bases de dados do Kexi para aceder a servidores Sybase
+Comment[sv]=Databasdrivrutin i Kexi för att komma åt Sybase-servrar
 X-KDE-Library=kexidb_sybasedriver
 ServiceTypes=Kexi/DBDriver
 Type=Service
