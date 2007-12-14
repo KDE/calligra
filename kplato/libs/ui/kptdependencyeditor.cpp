@@ -189,7 +189,6 @@ DependencyLinkItem::DependencyLinkItem( DependencyNodeItem *predecessor, Depende
 
     m_arrow->setBrush( Qt::black );
 
-    setFlag( QGraphicsItem::ItemIsSelectable );
 }
 
 DependencyLinkItem::~DependencyLinkItem()
@@ -261,7 +260,6 @@ QPointF DependencyLinkItem::endPoint() const
 
 void DependencyLinkItem::hoverEnterEvent( QGraphicsSceneHoverEvent */*event*/ )
 {
-    //kDebug();
     setZValue( zValue() + 1 );
     m_pen = pen();
     setPen( QPen( Qt::black, 2 ) );
@@ -378,6 +376,8 @@ DependencyConnectorItem::DependencyConnectorItem( DependencyNodeItem::ConnectorT
     setCursor( Qt::UpArrowCursor );
     setAcceptsHoverEvents( true );
     setZValue( 500.0 );
+
+//    setFlag( QGraphicsItem::ItemIsSelectable );
 }
 
 DependencyScene *DependencyConnectorItem::itemScene() const
@@ -398,13 +398,11 @@ QPointF DependencyConnectorItem::connectorPoint() const
 
 void DependencyConnectorItem::hoverEnterEvent( QGraphicsSceneHoverEvent */*event*/ )
 {
-    //kDebug();
     itemScene()->connectorEntered( this, true );
 }
 
 void DependencyConnectorItem::hoverLeaveEvent( QGraphicsSceneHoverEvent */*event*/ )
 {
-    //kDebug();
     itemScene()->connectorEntered( this, false );
 }
 
@@ -437,7 +435,16 @@ void DependencyConnectorItem::paint(QPainter *painter, const QStyleOptionGraphic
     if ( itemScene()->fromItem() == this ) {
         const_cast<QStyleOptionGraphicsItem*>( option )->state |= QStyle::State_Selected;
     }
-    QGraphicsRectItem::paint( painter, option, widget );
+    if (option->state & QStyle::State_Selected) {
+        QPalette::ColorGroup cg = option->state & QStyle::State_Enabled
+                ? QPalette::Normal : QPalette::Disabled;
+        if (cg == QPalette::Normal && !(option->state & QStyle::State_Active))
+            cg = QPalette::Inactive;
+
+        painter->setPen( Qt::NoPen );
+        painter->setBrush( option->palette.brush(cg, QPalette::Highlight) );
+        painter->drawRect( rect() );
+    }
 }
 
 
@@ -573,12 +580,12 @@ void DependencyNodeItem::setRectangle( const QRectF &rect )
     setRect( rect );
 
     qreal connection = static_cast<DependencyScene*>( scene() )->connectorWidth();
-    m_start->setRect( rect.x(), rect.y(), -connection, rect.height() );
-    m_finish->setRect( rect.right(), rect.y(), connection, rect.height() );
+    m_start->setRect( rect.x() + connection, rect.y(), -connection, rect.height() );
+    m_finish->setRect( rect.right() - connection, rect.y(), connection, rect.height() );
     
     m_text->setPos( m_finish->rect().right() + 2.0, itemScene()->gridY(  row() ) );
     
-    m_symbol->setPos( rect.topLeft() + QPointF( 2.0, 2.0 ) );
+    m_symbol->setPos( rect.topLeft() + QPointF( connection, 0 ) + QPointF( 2.0, 2.0 ) );
 }
 
 void DependencyNodeItem::moveToY( qreal y )
@@ -679,6 +686,22 @@ void DependencyNodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
+void DependencyNodeItem::paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * )
+{
+    QBrush b = brush();
+    if (option->state & QStyle::State_Selected) {
+        QPalette::ColorGroup cg = option->state & QStyle::State_Enabled
+                ? QPalette::Normal : QPalette::Disabled;
+        if (cg == QPalette::Normal && !(option->state & QStyle::State_Active))
+            cg = QPalette::Inactive;
+
+        b = option->palette.brush(cg, QPalette::Highlight);
+    }
+    painter->setPen( pen() );
+    painter->setBrush( b );
+    painter->drawRect( rect() );
+}
+
 //--------------------
 DependencyScene::DependencyScene( QWidget *parent )
     : QGraphicsScene( parent ),
@@ -703,10 +726,19 @@ void DependencyScene::setFromItem( DependencyConnectorItem *item )
         old->update();
     }
     if ( item ) {
+        foreach ( QGraphicsItem *item, items() ) {
+            if ( item != m_connectionitem && item->type() != DependencyConnectorItem::Type )
+                item->setAcceptsHoverEvents( false );
+        }
         item->setCursor( Qt::UpArrowCursor );
         m_connectionitem->setPredConnector( item );
         m_connectionitem->show();
         item->update();
+    } else {
+        foreach ( QGraphicsItem *item, items() ) {
+            if ( item != m_connectionitem && item->type() != DependencyConnectorItem::Type )
+                item->setAcceptsHoverEvents( true );
+        }
     }
 }
 

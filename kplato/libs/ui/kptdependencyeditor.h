@@ -186,6 +186,7 @@ protected:
     void moveToY( qreal y );
     void moveToX( qreal x );
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget );
     
 private:
     int nodeLevel( Node *node, int current ) const;

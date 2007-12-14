@@ -275,7 +275,7 @@ View::View( Part* part, QWidget* parent )
     actionEditRelation  = new KAction(KIcon( "document-properties" ), i18n("Edit Dependency..."), this);
     actionCollection()->addAction("edit_dependency", actionEditRelation );
     connect( actionEditRelation, SIGNAL( triggered( bool ) ), SLOT( slotModifyRelation() ) );
-    actionDeleteRelation  = new KAction(KIcon( "edit-delete" ), i18n("Delete Dependency..."), this);
+    actionDeleteRelation  = new KAction(KIcon( "edit-delete" ), i18n("Delete Dependency"), this);
     actionCollection()->addAction("delete_dependency", actionDeleteRelation );
     connect( actionDeleteRelation, SIGNAL( triggered( bool ) ), SLOT( slotDeleteRelation() ) );
 
