@@ -626,7 +626,7 @@ void DoubleTreeViewBase::init()
     connect( m_rightview, SIGNAL( expanded( const QModelIndex & ) ), m_leftview, SLOT( expand( const QModelIndex & ) ) );
     connect( m_rightview, SIGNAL( collapsed( const QModelIndex & ) ), m_leftview, SLOT( collapse( const QModelIndex & ) ) );
     
-    m_actionSplitView = new KAction(KIcon("splitview"), "Hmmmm", this);
+    m_actionSplitView = new KAction(KIcon("fileview-split"), "", this);
     kDebug()<<m_actionSplitView;
     setViewSplitMode( true );
 }
@@ -897,7 +897,13 @@ void DoubleTreeViewBase::saveContext( QDomElement &element ) const
 
 void DoubleTreeViewBase::setViewSplitMode( bool split )
 {
-    m_actionSplitView->setText( split ? i18n( "Unsplit View" ) : i18n( "Split View" ) );
+    if ( split ) {
+        m_actionSplitView->setText( i18n( "Unsplit View" ) );
+        m_actionSplitView->setIcon( KIcon( "fileview-close-right" ) );
+    } else {
+        m_actionSplitView->setText( i18n( "Split View" ) );
+        m_actionSplitView->setIcon( KIcon( "fileview-split" ) );
+    }
     
     if ( m_mode == split ) {
         return;
