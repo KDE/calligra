@@ -780,6 +780,17 @@ private:
     QList<Appointment*> m_appointments;
 };
 
+class KPLATOKERNEL_EXPORT MoveResourceCmd : public NamedCommand
+{
+public:
+    MoveResourceCmd( ResourceGroup *group, Resource *resource, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    MacroCommand cmd;
+};
+
 class KPLATOKERNEL_EXPORT ModifyResourceNameCmd : public NamedCommand
 {
 public:

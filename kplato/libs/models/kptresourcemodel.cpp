@@ -191,12 +191,14 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
     if ( !m_readWrite ) {
         return flags &= ~Qt::ItemIsEditable;
     }
-    if ( qobject_cast<Resource*>( object ( index ) ) ) {
-        switch ( index.column() ) {
-            default: flags |= Qt::ItemIsEditable;
+    Resource *r = qobject_cast<Resource*>( object ( index ) );
+    if ( r != 0 ) {
+        flags |= Qt::ItemIsEditable;
+        if ( ! r->isScheduled() ) {
+            flags |= Qt::ItemIsDragEnabled;
         }
     } else if ( qobject_cast<ResourceGroup*>( object( index ) ) ) {
-        flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
+        flags |= Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
             case 0: flags |= Qt::ItemIsEditable; break;
             case 1: flags |= Qt::ItemIsEditable; break;
@@ -906,21 +908,23 @@ void ResourceItemModel::slotResourceGroupChanged( ResourceGroup *res )
 
 Qt::DropActions ResourceItemModel::supportedDropActions() const
 {
-    return Qt::CopyAction;
+    return Qt::MoveAction | Qt::CopyAction;
 }
 
 
 QStringList ResourceItemModel::mimeTypes() const
 {
-    return QStringList() << "text/x-vcard";
+    return QStringList() 
+            << "text/x-vcard"
+            << "application/x-vnd.kde.kplato.resourceitemmodel.internal";
 }
 
 bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent )
 {
     kDebug()<<row<<" p:"<<parent.row();
-    if (action == Qt::IgnoreAction)
+    if (action == Qt::IgnoreAction) {
         return true;
-
+    }
     if (column > 0) {
         return false;
     }
@@ -935,8 +939,11 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
         return false;
     }
     //kDebug()<<data->formats();
-    MacroCommand *m = 0;
     if ( data->hasFormat( "text/x-vcard" ) ) {
+        if ( action != Qt::CopyAction ) {
+            return false;
+        }
+        MacroCommand *m = 0;
         QByteArray vcard = data->data( "text/x-vcard" );
         KABC::VCardConverter vc;
         KABC::Addressee::List lst = vc.parseVCards( vcard );
@@ -947,11 +954,81 @@ bool ResourceItemModel::dropMimeData( const QMimeData *data, Qt::DropAction acti
             r->setEmail( a.preferredEmail() );
             m->addCommand( new AddResourceCmd( g, r ) );
         }
+        if ( m ) {
+            emit executeCommand( m );
+        }
+        return true;
     }
-    if ( m ) {
-        emit executeCommand( m );
+    if ( data->hasFormat( "application/x-vnd.kde.kplato.resourceitemmodel.internal" ) ) {
+        if ( action != Qt::MoveAction ) {
+            return false;
+        }
+        MacroCommand *m = 0;
+        QByteArray encodedData = data->data( "application/x-vnd.kde.kplato.resourceitemmodel.internal" );
+        QDataStream stream(&encodedData, QIODevice::ReadOnly);
+        int i = 0;
+        foreach ( Resource *r, resourceList( stream ) ) {
+            if ( r->parentGroup() == g ) {
+                continue;
+            }
+            if ( m == 0 ) m = new MacroCommand( "" );
+            m->addCommand( new MoveResourceCmd( g, r ) );
+            ++i;
+        }
+        if ( m ) {
+            QString msg = i18np( "Move resource", "Move %1 resources", i );
+            MacroCommand *c = new MacroCommand( msg );
+            c->addCommand( m );
+            emit executeCommand( c );
+        }
+        return true;
     }
-    return true;
+    return false;
+}
+
+QList<Resource*> ResourceItemModel::resourceList( QDataStream &stream )
+{
+    QList<Resource*> lst;
+    while (!stream.atEnd()) {
+        QString id;
+        stream >> id;
+        Resource *r = m_project->findResource( id );
+        if ( r ) {
+            lst << r;
+        }
+    }
+    return lst;
+}
+
+QMimeData *ResourceItemModel::mimeData( const QModelIndexList & indexes ) const
+{
+    QMimeData *m = new QMimeData();
+    QByteArray encodedData;
+    QDataStream stream(&encodedData, QIODevice::WriteOnly);
+    QList<int> rows;
+    foreach (QModelIndex index, indexes) {
+        if ( index.isValid() && !rows.contains( index.row() ) ) {
+            //kDebug()<<index.row();
+            Resource *r = ::qobject_cast<Resource*>( object( index ) );
+            if ( r ) {
+                if ( r->isScheduled() ) {
+                    rows.clear();
+                    break;
+                }
+                rows << index.row();
+                stream << r->id();
+            } else if ( ::qobject_cast<ResourceGroup*>( object( index ) ) ) {
+                rows.clear();
+                break;
+            }
+        }
+    }
+    if ( rows.isEmpty() ) {
+        delete m;
+        return 0;
+    }
+    m->setData("application/x-vnd.kde.kplato.resourceitemmodel.internal", encodedData);
+    return m;
 }
 
 QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )

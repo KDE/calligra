@@ -76,6 +76,7 @@ ResourceTreeView::ResourceTreeView( QWidget *parent )
 
     createItemDelegates();
 
+    setDragDropMode( QAbstractItemView::DragDrop );
     setAcceptDrops( true );
     setDropIndicatorShown( true );
     

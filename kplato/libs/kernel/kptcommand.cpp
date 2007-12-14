@@ -1602,6 +1602,21 @@ void RemoveResourceCmd::unexecute()
     setSchScheduled();
 }
 
+MoveResourceCmd::MoveResourceCmd( ResourceGroup *group, Resource *resource, const QString& name )
+    : NamedCommand( name )
+{
+    cmd.addCommand( new RemoveResourceCmd( resource->parentGroup(), resource ) );
+    cmd.addCommand( new AddResourceCmd( group, new Resource( resource ) ) );
+}
+void MoveResourceCmd::execute()
+{
+    cmd.execute();
+}
+void MoveResourceCmd::unexecute()
+{
+    cmd.unexecute();
+}
+
 ModifyResourceNameCmd::ModifyResourceNameCmd( Resource *resource, const QString& value, const QString& name )
         : NamedCommand( name ),
         m_resource( resource ),

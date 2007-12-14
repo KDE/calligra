@@ -62,7 +62,8 @@ public:
     virtual QStringList mimeTypes () const;
     virtual Qt::DropActions supportedDropActions() const;
     virtual bool dropMimeData( const QMimeData *data, Qt::DropAction action, int row, int column, const QModelIndex &parent );
-
+    QMimeData *mimeData( const QModelIndexList & indexes ) const;
+    
     QItemDelegate *createDelegate( int col, QWidget *parent ) const;
     
     QObject *object( const QModelIndex &index ) const;
@@ -122,6 +123,8 @@ protected:
     QVariant fixedCost( const Resource *res, int role ) const;
     bool setFixedCost( Resource *res, const QVariant &value, int role );
 
+    QList<Resource*> resourceList( QDataStream &stream );
+    
 private:
     ResourceGroup *m_group; // Used for sanity checks
     Resource *m_resource; // Used for sanity checks
