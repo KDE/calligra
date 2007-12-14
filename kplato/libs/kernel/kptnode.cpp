@@ -216,12 +216,12 @@ void Node::addChildNode( Node *node, Node *after) {
     }
 }
 
-int Node::findChildNode( Node* node )
+int Node::findChildNode( const Node* node ) const
 {
-    return m_nodes.indexOf( node );
+    return m_nodes.indexOf( const_cast<Node*>( node ) );
 }
 
-bool Node::isChildOf( Node* node )
+bool Node::isChildOf( const Node* node ) const
 {
     if ( node == 0 || m_parent == 0 ) {
         return false;
@@ -330,8 +330,9 @@ void Node::takeDependParentNode( Relation *rel ) {
     }
 }
 
-bool Node::isParentOf(Node *node) {
-    if (m_nodes.indexOf(node) != -1)
+bool Node::isParentOf( const Node *node ) const
+{
+    if (m_nodes.indexOf( const_cast<Node*>( node ) ) != -1)
         return true;
 
     QListIterator<Node*> nit(childNodeIterator());
@@ -342,7 +343,8 @@ bool Node::isParentOf(Node *node) {
     return false;
 }
 
-Relation *Node::findParentRelation(Node *node) {
+Relation *Node::findParentRelation( const Node *node ) const
+{
     for (int i=0; i<numDependParentNodes(); i++) {
         Relation *rel = getDependParentNode(i);
         if (rel->parent() == node)
@@ -351,7 +353,8 @@ Relation *Node::findParentRelation(Node *node) {
     return (Relation *)0;
 }
 
-Relation *Node::findChildRelation(Node *node) {
+Relation *Node::findChildRelation( const Node *node) const
+{
     for (int i=0; i<numDependChildNodes(); i++) {
         Relation *rel = getDependChildNode(i);
         if (rel->child() == node)
@@ -360,26 +363,28 @@ Relation *Node::findChildRelation(Node *node) {
     return (Relation *)0;
 }
 
-Relation *Node::findRelation(Node *node) {
+Relation *Node::findRelation( const Node *node ) const
+{
     Relation *rel = findParentRelation(node);
     if (!rel)
         rel = findChildRelation(node);
     return rel;
 }
 
-bool Node::isDependChildOf(Node *node) {
+bool Node::isDependChildOf( const Node *node ) const
+{
     //kDebug()<<" '"<<m_name<<"' checking against '"<<node->name()<<"'";
     for (int i=0; i<numDependParentNodes(); i++) {
         Relation *rel = getDependParentNode(i);
         if (rel->parent() == node)
             return true;
-		if (rel->parent()->isDependChildOf(node))
-		    return true;
+        if (rel->parent()->isDependChildOf(node))
+            return true;
     }
-	return false;
+    return false;
 }
 
- QList<Node*> Node::getParentNodes()
+QList<Node*> Node::getParentNodes()
 {
     this->m_parentNodes.clear();
     foreach(Relation * currentRelation, this->dependParentNodes())
@@ -392,7 +397,7 @@ bool Node::isDependChildOf(Node *node) {
     return this->m_parentNodes;
 }
 
-bool Node::canMoveTo( Node *newParent )
+bool Node::canMoveTo( const Node *newParent ) const
 {
     if ( m_parent == newParent ) {
         return true;
@@ -758,8 +763,9 @@ bool Node::moveChildDown(Node* node)
     return true;
 }
 
-bool Node::legalToLink(Node *node) {
-    Node *p = projectNode();
+bool Node::legalToLink( const Node *node ) const
+{
+    Node *p = const_cast<Node*>(this)->projectNode();
     if (p)
         return p->legalToLink(this, node);
     return false;

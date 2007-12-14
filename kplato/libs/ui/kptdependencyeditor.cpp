@@ -717,7 +717,7 @@ bool DependencyScene::connectionIsValid( DependencyConnectorItem *pred, Dependen
     }
     Node *par = static_cast<DependencyNodeItem*>( pred->parentItem() )->node();
     Node *ch = static_cast<DependencyNodeItem*>( succ->parentItem() )->node();
-    return m_project->legalToLink( par, ch );
+    return m_project->linkExists( par, ch ) || m_project->legalToLink( par, ch );
 }
 
 void DependencyScene::connectorEntered( DependencyConnectorItem *item, bool entered )

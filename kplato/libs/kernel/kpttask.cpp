@@ -672,10 +672,12 @@ void Task::initiateCalculationLists(MainSchedule &sch) {
         sch.insertSummaryTask(this);
         // propagate my relations to my children and dependent nodes
         foreach (Node *n, m_nodes) {
-            if (!dependParentNodes().isEmpty()) 
-                n->addParentProxyRelations(dependParentNodes());
-            if (!dependChildNodes().isEmpty()) 
-                n->addChildProxyRelations(dependChildNodes());
+            if (!dependParentNodes().isEmpty()) {
+                n->addParentProxyRelations( dependParentNodes() );
+            }
+            if (!dependChildNodes().isEmpty()) {
+                n->addChildProxyRelations( dependChildNodes() );
+            }
             n->initiateCalculationLists(sch);
         }
     } else {
@@ -1808,7 +1810,8 @@ void Task::clearProxyRelations() {
     m_childProxyRelations.clear();
 }
 
-void Task::addParentProxyRelations(QList<Relation*> &list) {
+void Task::addParentProxyRelations( const QList<Relation*> &list )
+{
     //kDebug()<<m_name;
     if (type() == Type_Summarytask) {
         // propagate to my children
@@ -1828,7 +1831,7 @@ void Task::addParentProxyRelations(QList<Relation*> &list) {
     }
 }
 
-void Task::addChildProxyRelations(QList<Relation*> &list) {
+void Task::addChildProxyRelations( const QList<Relation*> &list) {
     //kDebug()<<m_name;
     if (type() == Type_Summarytask) {
         // propagate to my children

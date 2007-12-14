@@ -617,8 +617,8 @@ protected:
     // Proxy relations are relations to/from summarytasks. 
     // These relations are distributed to the child tasks before calculation.
     virtual void clearProxyRelations();
-    virtual void addParentProxyRelations(QList<Relation*> &);
-    virtual void addChildProxyRelations(QList<Relation*> &);
+    virtual void addParentProxyRelations( const QList<Relation*> & );
+    virtual void addChildProxyRelations( const QList<Relation*> & );
     virtual void addParentProxyRelation(Node *, const Relation *);
     virtual void addChildProxyRelation(Node *, const Relation *);
 

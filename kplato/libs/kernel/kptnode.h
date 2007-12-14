@@ -131,8 +131,8 @@ public:
     void takeChildNode(int number );
     Node* childNode(int number);
     const Node* childNode(int number) const;
-    int findChildNode( Node* node );
-    bool isChildOf( Node *node );
+    int findChildNode( const Node* node ) const;
+    bool isChildOf( const Node *node ) const;
     int indexOf( const Node *node ) const;
 
     // Time-dependent child-node-management.
@@ -154,10 +154,10 @@ public:
      * Takes the relation rel from this node only.
      */
     void takeDependChildNode( Relation *rel );
-    Relation *getDependChildNode( int number ) {
+    Relation *getDependChildNode( int number ) const {
         return m_dependChildNodes.at(number);
     }
-    QList<Relation*> &dependChildNodes() { return m_dependChildNodes; }
+    QList<Relation*> dependChildNodes() const { return m_dependChildNodes; }
 
     int numDependParentNodes() const { return m_dependParentNodes.count(); }
     /// Adds relation if type @p to both this node and @p node
@@ -172,18 +172,18 @@ public:
      * Takes the relation @p rel from this node only.
      */
     void takeDependParentNode( Relation *rel );
-    Relation *getDependParentNode( int number ) {
+    Relation *getDependParentNode( int number ) const {
         return m_dependParentNodes.at(number);
     }
-    QList<Relation*> &dependParentNodes() { return m_dependParentNodes; }
+    QList<Relation*> dependParentNodes() const { return m_dependParentNodes; }
     QList<Node*> getParentNodes();
-    bool isParentOf(Node *node);
-    bool isDependChildOf(Node *node);
-    virtual bool canMoveTo( Node *newParent );
+    bool isParentOf( const Node *node ) const;
+    bool isDependChildOf( const Node *node ) const;
+    virtual bool canMoveTo( const Node *newParent ) const;
     
-    Relation *findParentRelation(Node *node);
-    Relation *findChildRelation(Node *node);
-    Relation *findRelation(Node *node);
+    Relation *findParentRelation( const Node *node) const;
+    Relation *findChildRelation( const Node *node ) const;
+    Relation *findRelation( const Node *node ) const;
 
     /// Set the scheduled start time
     void setStartTime(DateTime startTime, long id = -1 );
@@ -348,9 +348,9 @@ public:
     bool moveChildDown(Node *node);
     
     /// Check if this node can be linked to node
-    bool legalToLink(Node *node);
+    bool legalToLink( const Node *node ) const;
     /// Check if node par can be linked to node child. (Reimplement)
-    virtual bool legalToLink(Node *, Node *) { return false; }
+    virtual bool legalToLink( const Node *, const Node *) const { return false; }
 
     /// Save appointments for schedule with id
     virtual void saveAppointments(QDomElement &element, long id) const;
@@ -535,8 +535,8 @@ public:
     virtual void addAppointment(ResourceSchedule *resource, DateTime &start, DateTime &end, double load=100);
     
     virtual void clearProxyRelations() {}
-    virtual void addParentProxyRelations(QList<Relation*> &) {}
-    virtual void addChildProxyRelations(QList<Relation*> &) {}
+    virtual void addParentProxyRelations( const QList<Relation*> & ) {}
+    virtual void addChildProxyRelations( const QList<Relation*> & ) {}
     virtual void addParentProxyRelation(Node *, const Relation *) {}
     virtual void addChildProxyRelation(Node *, const Relation *) {}
     

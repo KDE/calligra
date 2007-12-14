@@ -1591,21 +1591,30 @@ void Project::setStandardWorktime( StandardWorktime * worktime )
     }
 }
 
-bool Project::legalToLink( Node *par, Node *child )
+bool Project::linkExists( const Node *par, const Node *child ) const
+{
+    if ( par == 0 || child == 0 || par == child || par->isDependChildOf( child ) ) {
+        return false;
+    }
+    foreach ( Relation *r, par->dependChildNodes() ) {
+        if ( r->child() == child ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Project::legalToLink( const Node *par, const Node *child ) const
 {
     //kDebug()<<par.name()<<" ("<<par.numDependParentNodes()<<" parents)"<<child.name()<<" ("<<child.numDependChildNodes()<<" children)";
 
     if ( par == 0 || child == 0 || par == child || par->isDependChildOf( child ) ) {
         return false;
     }
-    bool legal = true;
-    // see if relation already exists
-    foreach ( Relation *r, par->dependChildNodes() ) {
-        if ( r->child() == child ) {
-            legal = false;
-            break;
-        }
+    if ( linkExists( par, child ) ) {
+        return false;
     }
+    bool legal = true;
     // see if par/child is related
     if ( legal && ( par->isParentOf( child ) || child->isParentOf( par ) ) ) {
         legal = false;
@@ -1618,7 +1627,7 @@ bool Project::legalToLink( Node *par, Node *child )
     return legal;
 }
 
-bool Project::legalParents( Node *par, Node *child )
+bool Project::legalParents( const Node *par, const Node *child ) const
 {
     bool legal = true;
     //kDebug()<<par->name()<<" ("<<par->numDependParentNodes()<<" parents)"<<child->name()<<" ("<<child->numDependChildNodes()<<" children)";
@@ -1636,7 +1645,7 @@ bool Project::legalParents( Node *par, Node *child )
     return legal;
 }
 
-bool Project::legalChildren( Node *par, Node *child )
+bool Project::legalChildren( const Node *par, const Node *child ) const
 {
     bool legal = true;
     //kDebug()<<par->name()<<" ("<<par->numDependParentNodes()<<" parents)"<<child->name()<<" ("<<child->numDependChildNodes()<<" children)";

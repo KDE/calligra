@@ -265,8 +265,11 @@ public:
     StandardWorktime *standardWorktime() { return m_standardWorktime; }
     void setStandardWorktime( StandardWorktime * worktime );
 
-    /// Check if node par can be linked to node child.
-    bool legalToLink( Node *par, Node *child );
+    /// Check if a link exists between node @p par and @p child.
+    bool linkExists( const Node *par, const Node *child ) const;
+    /// Check if node @p par can be linked to node @p child.
+    bool legalToLink( const Node *par, const Node *child ) const;
+    using Node::legalToLink;
 
     virtual const QHash<QString, Node*> &nodeDict() { return nodeIdDict; }
     /// Return a list of all nodes in the project
@@ -543,8 +546,8 @@ protected:
     void initiateCalculation( MainSchedule &sch );
     void initiateCalculationLists( MainSchedule &sch );
 
-    bool legalParents( Node *par, Node *child );
-    bool legalChildren( Node *par, Node *child );
+    bool legalParents( const Node *par, const Node *child ) const;
+    bool legalChildren( const Node *par, const Node *child ) const;
 
 private:
     void init();
