@@ -97,7 +97,7 @@ LinkDialog::LinkDialog( View* view, const char* )
     d->mailPage = new QWidget();
     d->p2 = addPage( d->mailPage, i18n( "Mail" ) );
     d->p2->setHeader( i18n("Link to Mail Address") );
-    d->p2->setIcon( KIcon("internet-mail") );
+    d->p2->setIcon( KIcon("mail-message") );
     QVBoxLayout* mLayout = new QVBoxLayout( d->mailPage );
     mLayout->addWidget( new QLabel( i18n("Text to display:" ), d->mailPage ) );
     d->mailText = new KLineEdit( d->mailPage );

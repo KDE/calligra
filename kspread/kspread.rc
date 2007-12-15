@@ -13,7 +13,7 @@
   <Action name="paste"/>
   <Action name="specialPaste"/>
   <Action name="insertCellCopy"/>
-  <Menu name="Fill" icon="fill"><text>Fi&amp;ll</text>
+  <Menu name="Fill"><text>Fi&amp;ll</text>
         <Action name="fillDown"/>
         <Action name="fillRight"/>
         <Action name="fillUp"/>
