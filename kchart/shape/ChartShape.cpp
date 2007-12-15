@@ -1133,7 +1133,7 @@ bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement,
             setLegendTitle( legendElement.attributeNS( KoXmlNS::koffice, "title", QString() ) );
         }
         
-        if ( legendElement.hasAttributeNS( KoXmlNS::koffice, "legend-orientation" ) )
+        if ( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
         {
             QString styleName = legendElement.attributeNS( KoXmlNS::chart, "style-name", QString() );
             const KoXmlElement *styleElement = context.koLoadingContext().stylesReader().findStyle( styleName, "chart" );
