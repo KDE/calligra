@@ -42,6 +42,7 @@
 #include <KoXmlWriter.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlNS.h>
+#include <KoOdfStylesReader.h>
 #include <KoOasisLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 
@@ -1055,10 +1056,8 @@ bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement,
 				KoShapeLoadingContext &context )
 {
     // TODO: Read optional attributes
-    // 1. Legend placement
-    // 2. Legend expansion
-    // 3. Legend styling
-    // 4. KOffice specific title name
+    // 1. Legend expansion
+    // 2. Advanced legend styling
     KDChart::Legend *old = d->legend;
     d->legend = new KDChart::Legend( d->diagram, d->chart );
     
@@ -1072,6 +1071,15 @@ bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement,
         if ( legendElement.hasAttributeNS( KoXmlNS::chart, "legend-align" ) )
         {
             lalign = legendElement.attributeNS( KoXmlNS::chart, "legend-align", QString() );
+        }
+        
+        if ( legendElement.hasAttributeNS( KoXmlNS::koffice, "legend-orientation" ) )
+        {
+            QString legendOrientation = legendElement.attributeNS( KoXmlNS::koffice, "legend-orientation", QString() );
+            if ( legendOrientation == "horizontal" )
+                setLegendOrientation( Qt::Horizontal );
+            else
+                setLegendOrientation( Qt::Vertical );
         }
         
         if ( lalign == "start" )
@@ -1123,6 +1131,37 @@ bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement,
         if ( legendElement.hasAttributeNS( KoXmlNS::koffice, "title" ) )
         {
             setLegendTitle( legendElement.attributeNS( KoXmlNS::koffice, "title", QString() ) );
+        }
+        
+        if ( legendElement.hasAttributeNS( KoXmlNS::koffice, "legend-orientation" ) )
+        {
+            QString styleName = legendElement.attributeNS( KoXmlNS::chart, "style-name", QString() );
+            const KoXmlElement *styleElement = context.koLoadingContext().stylesReader().findStyle( styleName, "chart" );
+            if ( styleElement ) {
+                KoXmlNode graphicsPropertiesNode = styleElement->namedItemNS( KoXmlNS::style, "graphic-properties" );
+                KoXmlElement graphicsPropertiesElement = *( ( KoXmlElement* )( &graphicsPropertiesNode ) );
+                if ( !graphicsPropertiesElement.isNull() )
+                {
+                    if ( graphicsPropertiesElement.hasAttributeNS( KoXmlNS::draw, "stroke" ) )
+                    {
+                        // TODO (Johannes): set stroke type of legend border
+                        QString stroke = graphicsPropertiesElement.attributeNS( KoXmlNS::draw, "stroke", QString() );
+                        QString strokeColor = graphicsPropertiesElement.attributeNS( KoXmlNS::draw, "stroke-color", QString() );
+                        // use overloaded QColor constructor to convert QString (in form of "#rrggbb") to QColor
+                        setLegendFrameColor( strokeColor );
+                    }
+                    if ( graphicsPropertiesElement.hasAttributeNS( KoXmlNS::draw, "fill" ) )
+                    {
+                        QString fill = graphicsPropertiesElement.attributeNS( KoXmlNS::draw, "fill", QString() );
+                        if ( fill == "solid" )
+                        {
+                            QString fillColor = graphicsPropertiesElement.attributeNS( KoXmlNS::draw, "fill-color", QString() );
+                            // use overloaded QColor constructor to convert QString (in form of "#rrggbb") to QColor
+                            setLegendBackgroundColor( fillColor );
+                        }
+                    }
+                }
+            }
         }
     }
     else
@@ -1310,7 +1349,26 @@ void ChartShape::saveOdfLegend( KoXmlWriter &bodyWriter,
         }
             
         KDChart::TextAttributes ta = d->legend->titleTextAttributes();
-        bodyWriter.addAttribute( "chart:style-name", saveOdfFont( mainStyles, ta.font(), ta.pen().color() ) );
+        QString styleName = saveOdfFont( mainStyles, ta.font(), ta.pen().color() );
+        bodyWriter.addAttribute( "chart:style-name", styleName );
+        
+        KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
+        KoGenStyle *style = ( KoGenStyle* )( mainStyles.style( styleName ) );
+        if ( style )
+        {
+            style->addProperty( "draw:stroke", "solid", gt );
+            style->addProperty( "draw:stroke-color", d->legend->frameAttributes().pen().color().name(), gt );
+            style->addProperty( "draw:fill", "solid", gt );
+            style->addProperty( "draw:fill-color", d->legend->backgroundAttributes().brush().color().name(), gt );
+        }
+        
+        QString lorientation;
+        if ( d->legend->orientation() == Qt::Vertical )
+            lorientation = "vertical";
+        else
+            lorientation = "horizontal";
+        
+        bodyWriter.addAttribute( "koffice:legend-orientation", lorientation );
         bodyWriter.addAttribute( "koffice:title", d->legend->titleText() );
         bodyWriter.endElement(); // chart:legend
     }
