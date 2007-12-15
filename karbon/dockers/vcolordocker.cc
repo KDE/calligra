@@ -44,6 +44,7 @@
 #include <KoCanvasResourceProvider.h>
 #include <KoLineBorder.h>
 #include <KoColor.h>
+#include <KoColorSpaceRegistry.h>
 #include <KoShape.h>
 
 #include <klocale.h>
@@ -166,22 +167,20 @@ void VColorDocker::update()
     KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
     int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
 
+    QColor qColor( Qt::black );
     if( activeStyle == Karbon::Foreground )
     {
         KoLineBorder * border = dynamic_cast<KoLineBorder*>( shape->border() );
         if( border )
-        {
-            KoColor c;
-            c.fromQColor( border->color() );
-            m_colorChooser->setColor( c );
-        }
+            qColor = border->color();
     }
     else
     {
-        KoColor c;
-        c.fromQColor( shape->background().color() );
-        m_colorChooser->setColor( c );
+        if( shape->background().style() == Qt::SolidPattern )
+            qColor = shape->background().color();
     }
+    KoColor c( qColor, qColor.alpha(), KoColorSpaceRegistry::instance()->rgb8() );
+    m_colorChooser->setColor( c );
 }
 
 void VColorDocker::setCanvas(KoCanvasBase *canvas)
