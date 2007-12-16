@@ -80,7 +80,7 @@ void ChartDatasetTool::mousePressEvent( KoPointerEvent *event )
     QModelIndex selection = d->shape->chart()->coordinatePlane()->diagram()->indexAt( point.toPoint() );
     
     if ( d->selection.isValid() ) {
-        d->shape->chart()->coordinatePlane()->diagram()->setPen( d->selection, d->selectionPen );
+        d->shape->chart()->coordinatePlane()->diagram()->setPen( d->selection.column(), d->selectionPen );
         d->shape->chart()->coordinatePlane()->diagram()->setBrush( d->selection, d->selectionBrush );
     }
     if ( selection.isValid() ) {
@@ -89,9 +89,9 @@ void ChartDatasetTool::mousePressEvent( KoPointerEvent *event )
         pen.setWidth( 1 );
         
         d->selectionBrush = d->shape->chart()->coordinatePlane()->diagram()->brush( selection );
-        d->selectionPen   = d->shape->chart()->coordinatePlane()->diagram()->pen( selection );
+        d->selectionPen   = d->shape->chart()->coordinatePlane()->diagram()->pen( selection.column() );
         
-        d->shape->chart()->coordinatePlane()->diagram()->setPen( selection, pen );
+        d->shape->chart()->coordinatePlane()->diagram()->setPen( selection.column(), pen );
         d->shape->chart()->coordinatePlane()->diagram()->setBrush( selection, QBrush( Qt::lightGray ) );
         
         d->selection = selection;
