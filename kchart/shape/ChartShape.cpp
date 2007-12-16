@@ -442,6 +442,14 @@ void ChartShape::setChartType( OdfChartType    newType,
         if ( isPolar( d->chartType ) && isCartesian( newType ) ) {
             cartPlane = new KDChart::CartesianCoordinatePlane( d->chart );
             d->chart->replaceCoordinatePlane( cartPlane );
+            
+            // We need two new axes when changing from non-cartesian to cartesian
+            KDChart::CartesianAxis  *xAxis = new KDChart::CartesianAxis( ( KDChart::AbstractCartesianDiagram* )new_diagram );
+            KDChart::CartesianAxis  *yAxis = new KDChart::CartesianAxis( ( KDChart::AbstractCartesianDiagram* )new_diagram );
+            xAxis->setPosition( KDChart::CartesianAxis::Bottom );
+            yAxis->setPosition( KDChart::CartesianAxis::Left );
+            ( ( KDChart::AbstractCartesianDiagram* ) new_diagram )->addAxis( xAxis );
+            ( ( KDChart::AbstractCartesianDiagram* ) new_diagram )->addAxis( yAxis );
         }
         else if ( isCartesian( d->chartType ) && isPolar( newType ) ) {
             polPlane = new KDChart::PolarCoordinatePlane( d->chart );
