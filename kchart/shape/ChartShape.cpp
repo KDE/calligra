@@ -564,6 +564,7 @@ void ChartShape::setThreeDMode( bool threeD )
             {
                 KDChart::ThreeDBarAttributes attributes( ( ( KDChart::BarDiagram* )d->diagram )->threeDBarAttributes() );
                 attributes.setEnabled( threeD );
+                attributes.setDepth( 15.0 );
                 ( ( KDChart::BarDiagram* )d->diagram )->setThreeDBarAttributes( attributes );
             }
             break;
@@ -571,6 +572,7 @@ void ChartShape::setThreeDMode( bool threeD )
             {
                 KDChart::ThreeDLineAttributes attributes( ( ( KDChart::LineDiagram* )d->diagram )->threeDLineAttributes() );
                 attributes.setEnabled( threeD );
+                attributes.setDepth( 15.0 );
                 ( ( KDChart::LineDiagram* )d->diagram )->setThreeDLineAttributes( attributes );
             }
             break;
@@ -578,6 +580,7 @@ void ChartShape::setThreeDMode( bool threeD )
             {
                 KDChart::ThreeDPieAttributes attributes( ( ( KDChart::PieDiagram* )d->diagram )->threeDPieAttributes() );
                 attributes.setEnabled( threeD );
+                attributes.setDepth( 15.0 );
                 ( ( KDChart::PieDiagram* )d->diagram )->setThreeDPieAttributes( attributes );
             }
             break;
