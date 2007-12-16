@@ -45,7 +45,7 @@ class Sheet;
  * Cell value changes are blocked while doing this, i.e. they do not
  * trigger a new recalculation event.
  */
-class RecalcManager
+class KSPREAD_EXPORT RecalcManager
 {
 public:
   /**
