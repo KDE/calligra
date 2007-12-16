@@ -5,22 +5,42 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>357</width>
+    <width>253</width>
     <height>358</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
    <item row="0" column="0" >
-    <widget class="QLabel" name="label" >
+    <widget class="QLabel" name="label_2" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text" >
-      <string>Please select a dataset from the diagram.</string>
+      <string>Color:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="4" >
+    <widget class="QLabel" name="note" >
+     <property name="text" >
+      <string>&lt;i>Note&lt;/i>: To modify a dataset, select it from the diagram.</string>
      </property>
      <property name="wordWrap" >
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="1" column="0" >
+   <item row="0" column="1" colspan="3" >
+    <widget class="KColorButton" name="color" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2" >
     <spacer>
      <property name="orientation" >
       <enum>Qt::Vertical</enum>
@@ -28,13 +48,20 @@
      <property name="sizeHint" >
       <size>
        <width>20</width>
-       <height>40</height>
+       <height>201</height>
       </size>
      </property>
     </spacer>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KColorButton</class>
+   <extends>QPushButton</extends>
+   <header>kcolorbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

@@ -35,6 +35,10 @@
 #include "ui_ChartDatasetConfigWidget.h"
 #include "ChartShape.h"
 
+#include <KDChartChart>
+#include <KDChartAbstractDiagram>
+#include <KDChartAbstractCoordinatePlane>
+
 
 using namespace KChart;
 
@@ -46,10 +50,13 @@ public:
 
     ChartShape                  *chart;
     Ui::ChartDatasetConfigWidget  ui;
+    int                           dataset;
 };
 
 ChartDatasetConfigWidget::Private::Private()
 {
+    chart   = 0;
+    dataset = -1;
 }
 
 ChartDatasetConfigWidget::Private::~Private()
@@ -76,10 +83,34 @@ void ChartDatasetConfigWidget::setupUi()
 void ChartDatasetConfigWidget::open( KoShape* chart )
 {
     d->chart = dynamic_cast<ChartShape*>( chart );
+    connect( d->ui.color, SIGNAL( changed( const QColor& ) ),
+             this,        SLOT( colorChanged( const QColor& ) ) );
 }
 
 void ChartDatasetConfigWidget::save()
 {
+}
+
+void ChartDatasetConfigWidget::selectDataset( int dataset )
+{
+    if ( dataset >= 0 ) {
+        d->ui.note->hide();
+        d->ui.color->setEnabled( true );
+        d->ui.color->blockSignals( true );
+        if ( d->chart && d->chart->chart() && d->chart->chart()->coordinatePlane() ) {
+            d->ui.color->setColor( d->chart->chart()->coordinatePlane()->diagram()->brush( dataset ).color() );
+        }
+        d->ui.color->blockSignals( false );
+    } else {
+        d->ui.note->show();
+        d->ui.color->setEnabled( false );
+    }
+    d->dataset = dataset;
+}
+
+void ChartDatasetConfigWidget::colorChanged( const QColor& color )
+{
+    emit datasetColorChanged( d->dataset, color );
 }
 
 KAction* ChartDatasetConfigWidget::createAction()

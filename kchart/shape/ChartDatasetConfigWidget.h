@@ -48,6 +48,14 @@ public:
     void save();
     /// reimplemented
     KAction *createAction();
+    
+    void selectDataset( int dataset );
+    
+public slots:
+    void colorChanged( const QColor& color );
+    
+signals:
+    void datasetColorChanged( int dataset, const QColor& color );
 
 private:
     class Private;

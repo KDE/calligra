@@ -57,6 +57,11 @@ public:
     /// reimplemented from superclass
     virtual QWidget *createOptionWidget();
     
+    void updateWidget();
+    
+public slots:
+    void setDatasetColor( int dataset, const QColor& color );
+    
 private:
     void updateActions();
     
