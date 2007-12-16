@@ -123,8 +123,8 @@ KoShape* ChartShapeFactory::createShape( const KoProperties* params ) const
 QList<KoShapeConfigWidgetBase*> ChartShapeFactory::createShapeOptionPanels()
 {
     QList<KoShapeConfigWidgetBase*>  answer;
-    answer.append(new ChartTypeConfigWidget());
-    answer.append(new ChartLegendConfigWidget());
+    //answer.append(new ChartLegendConfigWidget());
+    //answer.append(new ChartTypeConfigWidget());
 
     // TODO Stefan: Axes
     return answer;
