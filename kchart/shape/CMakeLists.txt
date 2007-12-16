@@ -17,6 +17,9 @@ SET (chartshape_LIB_SRCS
     ChartLegendTool.cpp
     ChartLegendToolFactory.cpp
     ChartLegendConfigWidget.cpp
+    ChartDatasetTool.cpp
+    ChartDatasetToolFactory.cpp
+    ChartDatasetConfigWidget.cpp
     ../commands/ChartTypeCommand.cpp
 )
 
@@ -24,6 +27,7 @@ kde4_add_ui_files(chartshape_LIB_SRCS
     ChartTypeConfigWidget.ui
     ChartDataConfigWidget.ui
     ChartLegendConfigWidget.ui
+    ChartDatasetConfigWidget.ui
     ChartTableEditor.ui
 )
 

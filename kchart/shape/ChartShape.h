@@ -56,6 +56,8 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     virtual ~ChartShape();
 
     void refreshPixmap( QPainter& painter, const KoViewConverter& converter );
+    // Query a repaint without updating
+    void repaint() const;
 
     KDChart::Chart* chart() const;
 
@@ -64,6 +66,9 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     void setInternalModel( QAbstractItemModel *model );
     bool hasInternalModel();
     QAbstractItemModel *model();
+    
+    int borderWidth() const;
+    int borderHeight() const;
     
     /// reimplemented
     virtual void paint( QPainter& painter, const KoViewConverter& converter );

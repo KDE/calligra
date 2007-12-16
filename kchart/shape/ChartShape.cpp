@@ -1777,10 +1777,26 @@ void ChartShape::dataChanged( const QModelIndex &topLeft, const QModelIndex &bot
     update();
 }
 
+int ChartShape::borderWidth() const
+{
+    return d->borderWidth;
+}
+
+int ChartShape::borderHeight() const
+{
+    return d->borderWidth;
+}
+
 void ChartShape::update() const
 {
     d->diagram->doItemsLayout();
     d->chart->update();
+    d->pixmapRepaintRequested = true;
+    KoShape::update();
+}
+
+void ChartShape::repaint() const
+{
     d->pixmapRepaintRequested = true;
     KoShape::update();
 }

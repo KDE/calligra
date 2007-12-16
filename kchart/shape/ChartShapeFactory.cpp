@@ -38,6 +38,7 @@
 #include "ChartShape.h"
 #include "ChartTypeToolFactory.h"
 #include "ChartLegendToolFactory.h"
+#include "ChartDatasetToolFactory.h"
 #include "ChartTypeConfigWidget.h"
 #include "ChartLegendConfigWidget.h"
 
@@ -54,6 +55,7 @@ ChartShapePlugin::ChartShapePlugin( QObject * parent,  const QStringList& )
     // Register all tools for the chart shape.
     KoToolRegistry::instance()->add( new ChartTypeToolFactory( parent ) );
     KoToolRegistry::instance()->add( new ChartLegendToolFactory( parent ) );
+    KoToolRegistry::instance()->add( new ChartDatasetToolFactory( parent ) );
 }
 
 
