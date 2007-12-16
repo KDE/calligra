@@ -123,6 +123,8 @@ QWidget *ChartLegendTool::createOptionWidget()
              this,   SLOT( setLegendBackgroundColor( const QColor& ) ) );
     connect( widget, SIGNAL( legendFrameColorChanged( const QColor& ) ) ,
              this,   SLOT( setLegendFrameColor( const QColor& ) ) );
+    connect( widget, SIGNAL( legendShowFrameChanged( bool ) ) ,
+             this,   SLOT( setLegendShowFrame( bool ) ) );
 
     return widget;
 }
@@ -132,6 +134,7 @@ void ChartLegendTool::setLegendTitle( const QString &title )
     m_currentShape->setLegendTitle( title );
 }
 
+// Deprecated method
 void ChartLegendTool::setLegendTitleFont( const QFont &font )
 {
     m_currentShape->setLegendTitleFont( font );
@@ -139,7 +142,9 @@ void ChartLegendTool::setLegendTitleFont( const QFont &font )
 
 void ChartLegendTool::setLegendFont( const QFont &font )
 {
+    // There only is a general font, for the legend items and the legend title
     m_currentShape->setLegendFont( font );
+    m_currentShape->setLegendTitleFont( font );
 }
 
 void ChartLegendTool::setLegendSpacing( int spacing )
@@ -181,5 +186,10 @@ void ChartLegendTool::setLegendBackgroundColor( const QColor& color )
 void ChartLegendTool::setLegendFrameColor( const QColor& color )
 {
     m_currentShape->setLegendFrameColor( color );
+}
+
+void ChartLegendTool::setLegendShowFrame( bool show )
+{
+    m_currentShape->setLegendShowFrame( show );
 }
 

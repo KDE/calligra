@@ -134,11 +134,12 @@ QWidget *ChartTypeTool::createOptionWidget()
     
     ChartDataConfigWidget  *widget1 = new ChartDataConfigWidget();
     widget1->open( m_currentShape );
-    tabWidget->addTab( widget1, i18n( "Data" ) );
 
     ChartTypeConfigWidget  *widget2 = new ChartTypeConfigWidget();
     widget2->open( m_currentShape );
+    
     tabWidget->addTab( widget2, i18n( "Type" ) );
+    tabWidget->addTab( widget1, i18n( "Data" ) );
 
     connect( widget1, SIGNAL( dataDirectionChanged( Qt::Orientation ) ),
              this,    SLOT( setDataDirection( Qt::Orientation ) ) );

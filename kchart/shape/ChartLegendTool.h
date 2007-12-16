@@ -70,6 +70,7 @@ private slots:
     void setLegendFixedPosition( KDChart::Position position );
     void setLegendBackgroundColor( const QColor& color );
     void setLegendFrameColor( const QColor& color );
+    void setLegendShowFrame( bool show );
 
 private:
     void updateActions();

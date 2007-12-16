@@ -126,19 +126,13 @@ void ChartLegendConfigWidget::setupUi()
     d->ui.alignment->addItem( i18n( "Bottom" ), Qt::AlignBottom );
 
     d->ui.alignment->setCurrentIndex( 1 );
-
-    d->ui.font->setSampleText( i18n( "ABC" ) );
     
     connect( d->ui.title, SIGNAL( textChanged( const QString& ) ),
              this,        SIGNAL( legendTitleChanged( const QString& ) ) );
-    connect( d->ui.titleFont, SIGNAL( fontSelected( const QFont& ) ),
-             this,       SIGNAL( legendTitleFontChanged( const QFont& ) ) );
-    connect( d->ui.font, SIGNAL( fontSelected( const QFont& ) ),
+    connect( d->ui.font, SIGNAL( currentFontChanged( const QFont& ) ),
              this,       SIGNAL( legendFontChanged( const QFont& ) ) );
     connect( d->ui.spacing, SIGNAL( valueChanged( int ) ),
              this,       SIGNAL( legendSpacingChanged( int ) ) );
-    connect( d->ui.showLines, SIGNAL( toggled( bool ) ),
-             this,            SIGNAL( legendShowLinesToggled( bool ) ) );
     connect( d->ui.showTitle, SIGNAL( toggled( bool ) ),
              this,            SLOT( setLegendShowTitle( bool ) ) );
     
@@ -146,6 +140,8 @@ void ChartLegendConfigWidget::setupUi()
              this,                  SIGNAL( legendBackgroundColorChanged( const QColor& ) ) );
     connect( d->ui.frameColor, SIGNAL( changed( const QColor& ) ),
              this,             SIGNAL( legendFrameColorChanged( const QColor& ) ) );
+    connect( d->ui.showFrame, SIGNAL( toggled( bool ) ),
+             this,            SIGNAL( legendShowFrameChanged( bool ) ) );
 
     connect( d->ui.orientation, SIGNAL( currentIndexChanged( int ) ),
              this,              SLOT( setLegendOrientation( int ) ) );
@@ -164,8 +160,10 @@ void ChartLegendConfigWidget::setLegendOrientation( int boxEntryIndex )
 void ChartLegendConfigWidget::setLegendShowTitle( bool show )
 {
     if ( show ) {
+        d->ui.title->setEnabled( true );
         emit legendTitleChanged( d->ui.title->text() );
     } else {
+        d->ui.title->setEnabled( false );
         emit legendTitleChanged( "" );
     }
 }

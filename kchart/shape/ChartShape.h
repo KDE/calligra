@@ -129,6 +129,7 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     void setLegendShowLines( bool b );
     void setLegendBackgroundColor( const QColor& color );
     void setLegendFrameColor( const QColor& color );
+    void setLegendShowFrame( bool show );
     void setLegendOrientation( Qt::Orientation orientation );
     void setLegendAlignment( Qt::Alignment alignment );
     void setLegendFixedPosition( KDChart::Position position );

@@ -675,6 +675,14 @@ void ChartShape::setLegendFrameColor( const QColor& color )
     update();
 }
 
+void ChartShape::setLegendShowFrame( bool show )
+{
+    KDChart::FrameAttributes attributes = d->legend->frameAttributes();
+    attributes.setVisible( show );
+    d->legend->setFrameAttributes( attributes );
+    update();
+}
+
 void ChartShape::setLegendOrientation( Qt::Orientation orientation )
 {
     d->legend->setOrientation( orientation );

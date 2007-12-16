@@ -71,6 +71,7 @@ signals:
     void legendFixedPositionChanged( KDChart::Position position );
     void legendBackgroundColorChanged( const QColor& color );
     void legendFrameColorChanged( const QColor& color );
+    void legendShowFrameChanged( bool show );
 
 private:
     class Private;

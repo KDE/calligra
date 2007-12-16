@@ -5,8 +5,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>355</width>
-    <height>406</height>
+    <width>357</width>
+    <height>358</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -30,96 +30,63 @@
       </attribute>
       <layout class="QGridLayout" >
        <item row="0" column="0" >
-        <widget class="QGroupBox" name="showTitle" >
-         <property name="toolTip" >
-          <string/>
+        <widget class="QCheckBox" name="showTitle" >
+         <property name="layoutDirection" >
+          <enum>Qt::LeftToRight</enum>
          </property>
-         <property name="title" >
-          <string>Title</string>
+         <property name="text" >
+          <string> Title:</string>
          </property>
-         <property name="checkable" >
+         <property name="checked" >
           <bool>true</bool>
          </property>
-         <layout class="QGridLayout" >
-          <item row="0" column="0" >
-           <widget class="QLineEdit" name="title" >
-            <property name="text" >
-             <string>Legend</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0" >
-           <widget class="KFontRequester" name="titleFont" />
-          </item>
-         </layout>
         </widget>
        </item>
-       <item row="1" column="0" >
+       <item row="0" column="1" >
+        <widget class="QLineEdit" name="title" >
+         <property name="text" >
+          <string>Legend</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="2" >
         <widget class="QGroupBox" name="groupBox_2" >
          <property name="title" >
-          <string>Layout</string>
+          <string>Look</string>
          </property>
          <layout class="QGridLayout" >
-          <item row="1" column="0" >
-           <widget class="QCheckBox" name="showLines" >
+          <item row="0" column="0" >
+           <widget class="QLabel" name="label" >
             <property name="text" >
-             <string>Show Lines</string>
+             <string>Font:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="0" >
+          <item row="0" column="1" >
+           <widget class="QFontComboBox" name="font" >
+            <property name="sizeAdjustPolicy" >
+             <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0" >
            <widget class="QLabel" name="label_5" >
             <property name="text" >
              <string>Spacing:</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="1" >
+          <item row="1" column="1" >
            <widget class="QSpinBox" name="spacing" />
           </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="3" column="0" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="2" column="0" >
-        <widget class="QGroupBox" name="groupBox" >
-         <property name="title" >
-          <string>Decoration</string>
-         </property>
-         <layout class="QGridLayout" >
-          <item row="0" column="0" >
-           <widget class="QCheckBox" name="customBackgroundColor" >
+          <item row="2" column="0" >
+           <widget class="QLabel" name="label_2" >
             <property name="text" >
              <string>Background:</string>
             </property>
-            <property name="checked" >
-             <bool>true</bool>
-            </property>
            </widget>
           </item>
-          <item row="1" column="0" >
-           <widget class="QCheckBox" name="customFrameColor" >
-            <property name="text" >
-             <string>Frame:</string>
-            </property>
-            <property name="checked" >
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1" >
+          <item row="2" column="1" >
            <widget class="KColorButton" name="backgroundColor" >
             <property name="text" >
              <string/>
@@ -140,7 +107,14 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="1" >
+          <item row="3" column="0" >
+           <widget class="QCheckBox" name="showFrame" >
+            <property name="text" >
+             <string>Frame:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1" >
            <widget class="KColorButton" name="frameColor" >
             <property name="color" >
              <color>
@@ -153,6 +127,19 @@
           </item>
          </layout>
         </widget>
+       </item>
+       <item row="2" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
        </item>
       </layout>
      </widget>
@@ -193,7 +180,7 @@
           <string>Note: Instead of using a pre-defined position, you can drag the legend to any point in the chart.</string>
          </property>
          <property name="title" >
-          <string>Use pre-defined position</string>
+          <string>Use fixed position</string>
          </property>
          <property name="flat" >
           <bool>false</bool>
@@ -351,36 +338,6 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tabLabels" >
-      <attribute name="title" >
-       <string>Labels</string>
-      </attribute>
-      <layout class="QGridLayout" >
-       <item row="0" column="0" >
-        <widget class="QLabel" name="label" >
-         <property name="text" >
-          <string>Font:</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1" >
-        <widget class="KFontRequester" name="font" />
-       </item>
-       <item row="1" column="0" >
-        <spacer>
-         <property name="orientation" >
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" >
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
     </widget>
    </item>
   </layout>
@@ -390,11 +347,6 @@
    <class>KColorButton</class>
    <extends>QPushButton</extends>
    <header>kcolorbutton.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KFontRequester</class>
-   <extends>QWidget</extends>
-   <header>kfontrequester.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
