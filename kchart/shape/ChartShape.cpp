@@ -1216,7 +1216,10 @@ bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement,
                         {
                             QString fillColor = graphicsPropertiesElement.attributeNS( KoXmlNS::draw, "fill-color", QString() );
                             // use overloaded QColor constructor to convert QString (in form of "#rrggbb") to QColor
-                            setLegendBackgroundColor( fillColor );
+                            KDChart::BackgroundAttributes attributes = d->legend->backgroundAttributes();
+                            attributes.setVisible( true );
+                            attributes.setBrush( QColor( fillColor ) );
+                            d->legend->setBackgroundAttributes( attributes );
                         }
                     }
                 }
