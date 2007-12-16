@@ -40,7 +40,7 @@ Item                                                                   Prio Stat
      - circle (pie)                                                     --
      - ring                                                             --
      - radar                                                            --
-     - scatter                                                          --
+     - scatter                                                          josi
      - stock                                                            --
      - bubble                                                           josi
      - gantt                                                            --
@@ -58,8 +58,8 @@ Item                                                                   Prio Stat
     - footer                                                    --      --
     - Data in rows / columns                                    done    done
   + Legend                                                      ----    ----
-    - title                                                     --      --
-    - orientation                                               --      --
+    - title                                                     done    done
+    - orientation                                               done    done
     - font                                                      --      --
   + Axes                                                        ----    ----
     - Axis labels                                               --      --
@@ -78,14 +78,14 @@ Item                                                                   Prio Stat
      - Create KoChartModel                                              --
      - Edit the interface in koffice/interfaces                         --
      - Document interface                                               --
-     - Function that tells the chart to use own data or external        --
+     - Function that tells the chart to use own data or external        done
   + KSpread                                                             ----
      - Make it possible to have > 1 chart and edit the selected one     --
      - Make it possible to delete a chart                               --
      - Make the chart selected when it is created                       --
      - Save correct ODF (as embedded document and not just drawing?)    --
   + KWord                                                               ----
-     - Set chartshape to use own data                                   --
+     - Set chartshape to use own data                                   done
 
 
 Before release of KOffice 2.0.1
