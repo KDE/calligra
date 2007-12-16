@@ -257,15 +257,28 @@ KDChart::Chart* ChartShape::chart() const
 
 void ChartShape::setChartDefaults()
 {
-    KDChart::BackgroundAttributes attributes;
-    attributes.setBrush( Qt::white );
-    attributes.setVisible( true );
-    d->legend->setBackgroundAttributes( attributes );
+    // The legend shall have a white background by default
+    // and no frame
+    KDChart::BackgroundAttributes legendBackgroundAttributes = d->legend->backgroundAttributes();
+    legendBackgroundAttributes.setBrush( Qt::white );
+    legendBackgroundAttributes.setVisible( true );
+    d->legend->setBackgroundAttributes( legendBackgroundAttributes );
+    
+    KDChart::FrameAttributes legendFrameAttributes = d->legend->frameAttributes();
+    legendFrameAttributes.setVisible( false );
+    d->legend->setFrameAttributes( legendFrameAttributes );
+    
     d->legend->setPosition( KDChart::Position::East );
     d->legend->setAlignment( Qt::AlignRight );
     d->legend->setShowLines( false );
     d->legend->setTitleText( i18n( "Legend" ) );
     d->legend->setOrientation( Qt::Vertical );
+    
+    // Hide the frame around the diagram as the shape itself
+    // can have a more flexible one
+    KDChart::FrameAttributes frameAttributes = d->chart->frameAttributes();
+    frameAttributes.setVisible( false );
+    d->chart->setFrameAttributes( frameAttributes );
 
     setDiagramDefaults( d->chartType );
 }
@@ -277,10 +290,32 @@ void ChartShape::setDiagramDefaults( OdfChartType type  /* = LastChartType */ )
 
     switch ( type )
     {
+        case BarChartType:
+        case AreaChartType:
+        case LineChartType:
+        case ScatterChartType:
+        {
+            KDChart::GridAttributes gridAttributes = ( ( KDChart::CartesianCoordinatePlane* ) d->chart->coordinatePlane() )->gridAttributes( Qt::Vertical );
+            gridAttributes.setGridGranularitySequence( KDChartEnums::GranularitySequence_25_50 );
+            ( ( KDChart::CartesianCoordinatePlane* ) d->chart->coordinatePlane() )->setGridAttributes(  Qt::Vertical, gridAttributes );
+        }
+    }
+    
+    switch ( type )
+    {
+        case BarChartType:
+        {
+            // Grouped bars shall be displayed with no gap
+            KDChart::BarAttributes attributes = ((KDChart::BarDiagram*) d->diagram)->barAttributes();
+            attributes.setUseFixedBarWidth( true );
+            attributes.setBarGapFactor( 0 );
+            ((KDChart::BarDiagram*) d->diagram)->setBarAttributes( attributes );
+        }
+        break;
+        
         case AreaChartType:
         {
-            KDChart::LineAttributes attributes;
-            attributes = ((KDChart::LineDiagram*) d->diagram)->lineAttributes();
+            KDChart::LineAttributes attributes = ((KDChart::LineDiagram*) d->diagram)->lineAttributes();
             attributes.setDisplayArea( true );
             ((KDChart::LineDiagram*) d->diagram)->setLineAttributes( attributes );
         }
