@@ -164,6 +164,9 @@ void VColorDocker::update()
         return;
 
     KoShape * shape = selection->firstSelectedShape();
+    if( ! shape )
+        return;
+
     KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
     int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
 
@@ -197,7 +200,7 @@ void VColorDocker::setCanvas(KoCanvasBase *canvas)
     update();
 }
 
-void VColorDocker::resourceChanged(int key, const QVariant & value)
+void VColorDocker::resourceChanged(int key, const QVariant &)
 {
     if( key == Karbon::ActiveStyle )
         update();
