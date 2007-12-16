@@ -134,6 +134,8 @@ public:
     QPointF  lastZoomLevel;
     QSizeF   lastSize;
     bool     pixmapRepaintRequested;
+    
+    int borderWidth;
 
     // ----------------------------------------------------------------
     // Data that are not immediately applicable to the chart itself.
@@ -172,6 +174,7 @@ ChartShape::Private::Private()
     title                  = 0;
     subTitle               = 0;
     footer                 = 0;
+    borderWidth            = 10;
 }
 
 
@@ -247,6 +250,7 @@ void ChartShape::refreshPixmap( QPainter &painter, const KoViewConverter &conver
 
     // Paint the background
     pixmapPainter.fillRect( paintRect, KApplication::palette().base() );
+    pixmapPainter.setViewport( pixmapPainter.viewport().adjusted( d->borderWidth, d->borderWidth, -d->borderWidth, -d->borderWidth ) );
     d->chart->paint( &pixmapPainter, paintRect );
 }
 
