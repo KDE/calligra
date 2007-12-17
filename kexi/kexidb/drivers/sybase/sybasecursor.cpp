@@ -152,7 +152,7 @@ QVariant SybaseCursor::value(uint pos) {
         // 512 is
         // 1. the length used internally in dblib for allocating data to each column in function dbprrow()
         // 2. it's greater than all the values returned in the dblib internal function _get_printable_size
-        int pointerLength = qMax( columnDataLength , ( long int )512 );
+        long int pointerLength = qMax( columnDataLength , ( long int )512 );
 
         BYTE* columnValue = new unsigned char[pointerLength + 1] ;
 
@@ -188,7 +188,7 @@ bool SybaseCursor::drv_storeCurrentRow(RecordData& data) const
                 // 512 is
                 // 1. the length used internally in dblib for allocating data to each column in function dbprrow()
                 // 2. it's greater than all the values returned in the dblib internal function _get_printable_size
-                int pointerLength = qMax( columnDataLength , ( long int )512 );
+                long int pointerLength = qMax( columnDataLength , ( long int )512 );
 
                 BYTE* columnValue = new unsigned char[pointerLength + 1] ;
 
