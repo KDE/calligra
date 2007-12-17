@@ -140,8 +140,18 @@ public:
     void setArrowKeyNavigation( bool on ) { m_arrowKeyNavigation = on; }
     bool arrowKeyNavigation() const { return m_arrowKeyNavigation; }
 
-    QModelIndex nextColumn( const QModelIndex &current ) const;
-    QModelIndex previousColumn( const QModelIndex &current ) const;
+    /// Move move to first visual
+    QModelIndex firstColumn( int row, const QModelIndex &parent );
+    /// Move move to last visual
+    QModelIndex lastColumn( int row, const QModelIndex &parent );
+    /// Move from @p current to next item
+    QModelIndex nextColumn( const QModelIndex &current );
+    /// Move from @p current to next item
+    QModelIndex previousColumn( const QModelIndex &current );
+    /// Move to first editable index in @p row with @parent
+    QModelIndex firstEditable( int row, const QModelIndex &parent );
+    /// Move to last editable index in @p row with @parent
+    QModelIndex lastEditable( int row, const QModelIndex &parent );
 
     void setAcceptDropsOnView( bool mode ) { m_acceptDropsOnView = mode; }
 
@@ -196,7 +206,7 @@ protected:
     /// Move cursor from @p index in direction @p cursorAction. @p modifiers is not used.
     QModelIndex moveCursor(  const QModelIndex &index, CursorAction cursorAction, Qt::KeyboardModifiers = Qt::NoModifier );
     /// Move from @p index to next editable item, in direction @p cursorAction.
-    QModelIndex nextEditable( const QModelIndex &index, CursorAction cursorAction );
+    QModelIndex moveToEditable( const QModelIndex &index, CursorAction cursorAction );
     
     void contextMenuEvent ( QContextMenuEvent * event );
 

@@ -47,7 +47,7 @@ bool ItemDelegate::eventFilter(QObject *object, QEvent *event)
     m_lastHint = Delegate::NoHint;
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent *e = static_cast<QKeyEvent *>(event);
-        if ( e->modifiers() & Qt::ControlModifier ) {
+        if ( e->modifiers() & Qt::AltModifier && e->modifiers() & Qt::ControlModifier ) {
             switch ( e->key() ) {
                 case Qt::Key_Left:
                     m_lastHint = Delegate::EditLeftItem;

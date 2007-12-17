@@ -122,43 +122,60 @@ void TreeViewBase::setColumnsHidden( const QList<int> &lst )
     }
 }
 
-QModelIndex TreeViewBase::nextColumn( const QModelIndex &curr ) const
+QModelIndex TreeViewBase::firstColumn( int row, const QModelIndex &parent )
 {
-    if ( ! curr.isValid() ) {
-        return QModelIndex();
-    }
-    int s = header()->visualIndex( curr.column() ) + 1;
-    while ( isColumnHidden( header()->logicalIndex( s ) ) ) {
-        if ( s >= header()->count() ) {
-            kDebug()<<curr.column()<<": -1";
-            return QModelIndex();
-        }
-        ++s;
-    }
-    kDebug()<<curr.column()<<": next="<<header()->logicalIndex( s )<<","<<s;
-    return model()->index( curr.row(), header()->logicalIndex( s ), curr.parent() );
+    return model()->index( row, header()->logicalIndex( 0 ), parent );
 }
 
-QModelIndex TreeViewBase::previousColumn( const QModelIndex &curr ) const
+QModelIndex TreeViewBase::lastColumn( int row, const QModelIndex &parent )
 {
-    if ( ! curr.isValid() ) {
+    int s;
+    for ( s = header()->count() - 1; s >= 0; --s ) {
+        if ( ! header()->isSectionHidden( s ) ) {
+            break;
+        }
+    }
+    if ( s == -1 ) {
         return QModelIndex();
     }
-    int s = header()->visualIndex( curr.column() ) - 1;
-    while ( isColumnHidden( header()->logicalIndex( s ) ) ) {
-        if ( s < 0 ) {
-            kDebug()<<curr.column()<<": -1";
-            return QModelIndex();
-        }
-        --s;
+    return model()->index( row, header()->logicalIndex( s ), parent );
+}
+
+QModelIndex TreeViewBase::nextColumn( const QModelIndex &curr )
+{
+    return moveCursor( curr, QAbstractItemView::MoveRight );
+}
+
+QModelIndex TreeViewBase::previousColumn( const QModelIndex &curr )
+{
+    return moveCursor( curr, QAbstractItemView::MoveLeft );
+}
+
+QModelIndex TreeViewBase::firstEditable( int row, const QModelIndex &parent )
+{
+    QModelIndex index = firstColumn( row, parent );
+    if ( model()->flags( index ) & Qt::ItemIsEditable ) {
+        return index;
     }
-    kDebug()<<curr.column()<<": prev="<<header()->logicalIndex( s )<<","<<s;
-    return model()->index( curr.row(), header()->logicalIndex( s ), curr.parent() );
+    return moveToEditable( index, QAbstractItemView::MoveRight );
+}
+
+QModelIndex TreeViewBase::lastEditable( int row, const QModelIndex &parent )
+{
+    QModelIndex index = lastColumn( row, parent );
+    if ( model()->flags( index ) & Qt::ItemIsEditable ) {
+        return index;
+    }
+    return moveToEditable( index, QAbstractItemView::MoveLeft );
 }
 
 // Reimplemented to fix qt bug 160083: Doesn't scroll horisontally.
 void TreeViewBase::scrollTo(const QModelIndex &index, ScrollHint hint)
 {
+    //kDebug()<<objectName()<<index<<hint;
+    if ( ! hasFocus() ) {
+        return;
+    }
     QTreeView::scrollTo( index, hint ); // scrolls vertically
     if ( ! index.isValid() ) {
         return;
@@ -203,7 +220,7 @@ void TreeViewBase::focusInEvent(QFocusEvent *event)
  */
 void TreeViewBase::keyPressEvent(QKeyEvent *event)
 {
-    kDebug()<<objectName()<<event->key()<<","<<m_arrowKeyNavigation;
+    //kDebug()<<objectName()<<event->key()<<","<<m_arrowKeyNavigation;
     if ( !m_arrowKeyNavigation ) {
         QTreeView::keyPressEvent( event );
         return;
@@ -212,7 +229,7 @@ void TreeViewBase::keyPressEvent(QKeyEvent *event)
     if ( current.isValid() ) {
         switch (event->key()) {
             case Qt::Key_Right: {
-                QModelIndex nxt = nextColumn( current );
+                QModelIndex nxt = moveCursor( MoveRight, Qt::NoModifier );
                 if ( nxt.isValid() ) {
                     selectionModel()->setCurrentIndex( nxt, QItemSelectionModel::NoUpdate );
                 } else {
@@ -223,7 +240,7 @@ void TreeViewBase::keyPressEvent(QKeyEvent *event)
                 break;
             }
             case Qt::Key_Left: {
-                QModelIndex prv = previousColumn( current );
+                QModelIndex prv = moveCursor( MoveLeft, Qt::NoModifier );
                 if ( prv.isValid() ) {
                     selectionModel()->setCurrentIndex( prv, QItemSelectionModel::NoUpdate );
                 } else {
@@ -234,9 +251,8 @@ void TreeViewBase::keyPressEvent(QKeyEvent *event)
                 break;
             }
             case Qt::Key_Down: {
-                QModelIndex i = indexBelow( current );
+                QModelIndex i = moveCursor( MoveDown, Qt::NoModifier );
                 if ( i.isValid() ) {
-                    i = model()->index( i.row(), current.column(), i.parent() );
                     selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
                 }
                 event->accept();
@@ -244,9 +260,8 @@ void TreeViewBase::keyPressEvent(QKeyEvent *event)
                 break;
             }
             case Qt::Key_Up: {
-                QModelIndex i = indexAbove( current );
+                QModelIndex i = moveCursor( MoveUp, Qt::NoModifier );
                 if ( i.isValid() ) {
-                    i = model()->index( i.row(), current.column(), i.parent() );
                     selectionModel()->setCurrentIndex( i, QItemSelectionModel::NoUpdate );
                 }
                 event->accept();
@@ -261,7 +276,7 @@ void TreeViewBase::keyPressEvent(QKeyEvent *event)
 
 void TreeViewBase::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHint hint)
 {
-    kDebug()<<editor<<hint;
+    //kDebug()<<editor<<hint;
     ItemDelegate *delegate = ::qobject_cast<ItemDelegate*>( sender() );
     if ( delegate == 0 ) {
         kWarning()<<"Not a KPlato::ItemDelegate, try standard treatment"<<editor<<hint;
@@ -276,16 +291,16 @@ void TreeViewBase::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHi
     QModelIndex index;
     switch ( endHint ) {
         case Delegate::EditLeftItem:
-            index = nextEditable( currentIndex(), MoveLeft );
+            index = moveToEditable( currentIndex(), MoveLeft );
             break;
         case Delegate::EditRightItem:
-            index = nextEditable( currentIndex(), MoveRight );
+            index = moveToEditable( currentIndex(), MoveRight );
             break;
         case Delegate::EditDownItem:
-            index = nextEditable( currentIndex(), MoveDown );
+            index = moveToEditable( currentIndex(), MoveDown );
             break;
         case Delegate::EditUpItem:
-            index = nextEditable( currentIndex(), MoveUp );
+            index = moveToEditable( currentIndex(), MoveUp );
             break;
         default:
             //kDebug()<<"Standard treatment"<<editor<<hint;
@@ -293,7 +308,7 @@ void TreeViewBase::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHi
     }
     if (index.isValid()) {
         QItemSelectionModel::SelectionFlags flags = QItemSelectionModel::ClearAndSelect | selectionBehaviorFlags();
-        kDebug()<<flags;
+        //kDebug()<<flags;
         QPersistentModelIndex persistent(index);
         selectionModel()->setCurrentIndex(persistent, flags);
         // currentChanged signal would have already started editing
@@ -303,13 +318,13 @@ void TreeViewBase::closeEditor(QWidget *editor, QAbstractItemDelegate::EndEditHi
     }
 }
 
-QModelIndex TreeViewBase::nextEditable( const QModelIndex &index, CursorAction cursorAction )
+QModelIndex TreeViewBase::moveToEditable( const QModelIndex &index, CursorAction cursorAction )
 {
     QModelIndex ix = index;
     do {
         ix = moveCursor( ix, cursorAction );
     } while ( ix.isValid() &&  ! ( model()->flags( ix ) & Qt::ItemIsEditable ) );
-    kDebug()<<ix;
+    //kDebug()<<ix;
     if ( ! ix.isValid() ) {
         switch ( cursorAction ) {
             case MovePrevious:
@@ -332,7 +347,7 @@ QModelIndex TreeViewBase::nextEditable( const QModelIndex &index, CursorAction c
 QModelIndex TreeViewBase::moveCursor( CursorAction cursorAction, Qt::KeyboardModifiers modifiers )
 {
     QModelIndex current = currentIndex();
-    kDebug()<<cursorAction<<"("<<MoveNext<<","<<MovePrevious<<")"<<current;
+    //kDebug()<<cursorAction<<current;
     if (!current.isValid()) {
         return QTreeView::moveCursor( cursorAction, modifiers );
     }
@@ -354,7 +369,7 @@ QModelIndex TreeViewBase::moveCursor( const QModelIndex &index, CursorAction cur
             // that has a column in current.column()
             ix = indexBelow( current );
             while ( ix.isValid() && col >= model()->columnCount(ix.parent()) ) {
-                kDebug()<<col<<model()->columnCount(ix.parent())<<ix;
+                //kDebug()<<col<<model()->columnCount(ix.parent())<<ix;
                 ix = indexBelow( ix );
             }
             if ( ix.isValid() ) {
@@ -380,7 +395,7 @@ QModelIndex TreeViewBase::moveCursor( const QModelIndex &index, CursorAction cur
         case MovePrevious:
         case MoveLeft: {
             for ( int s = header()->visualIndex( col ) - 1; s >= 0; --s ) {
-                if ( ! header()->isSectionHidden( s ) ) {
+                if ( ! header()->isSectionHidden( header()->logicalIndex( s ) ) ) {
                     ix = model()->index( current.row(), header()->logicalIndex( s ), current.parent() );
                     break;
                 }
@@ -390,7 +405,7 @@ QModelIndex TreeViewBase::moveCursor( const QModelIndex &index, CursorAction cur
         case MoveNext:
         case MoveRight: {
             for ( int s = header()->visualIndex( col ) + 1; s < header()->count(); ++s ) {
-                if ( ! header()->isSectionHidden( s ) ) {
+                if ( ! header()->isSectionHidden( header()->logicalIndex( s ) ) ) {
                     ix = model()->index( current.row(), header()->logicalIndex( s ), current.parent() );
                     break;
                 }
@@ -627,7 +642,6 @@ void DoubleTreeViewBase::init()
     connect( m_rightview, SIGNAL( collapsed( const QModelIndex & ) ), m_leftview, SLOT( collapse( const QModelIndex & ) ) );
     
     m_actionSplitView = new KAction(KIcon("fileview-split"), "", this);
-    kDebug()<<m_actionSplitView;
     setViewSplitMode( true );
 }
 
@@ -669,12 +683,9 @@ void DoubleTreeViewBase::hideColumns( const QList<int> &masterList, QList<int> s
 
 void DoubleTreeViewBase::slotToRightView( const QModelIndex &index )
 {
-    kDebug()<<index.column()<<endl;
-    if ( m_rightview->isHidden() ) {
-        return;
-    }
+    //kDebug()<<index.column();
+    QModelIndex nxt = m_rightview->firstColumn( index.row(), model()->parent( index ) );
     m_rightview->setFocus();
-    QModelIndex nxt = m_rightview->nextColumn( index );
     if ( nxt.isValid() ) {
         m_selectionmodel->setCurrentIndex( nxt, QItemSelectionModel::NoUpdate );
     }
@@ -682,9 +693,9 @@ void DoubleTreeViewBase::slotToRightView( const QModelIndex &index )
 
 void DoubleTreeViewBase::slotToLeftView( const QModelIndex &index )
 {
-    kDebug()<<index.column();
+    //kDebug()<<index.column();
+    QModelIndex prv = m_leftview->lastColumn( index.row(), model()->parent( index ) );
     m_leftview->setFocus();
-    QModelIndex prv = m_leftview->previousColumn( index );
     if ( prv.isValid() ) {
         m_selectionmodel->setCurrentIndex( prv, QItemSelectionModel::NoUpdate );
     }
@@ -692,15 +703,12 @@ void DoubleTreeViewBase::slotToLeftView( const QModelIndex &index )
 
 void DoubleTreeViewBase::slotEditToRightView( const QModelIndex &index )
 {
-    kDebug()<<index.column()<<endl;
+    //kDebug()<<index.column()<<endl;
     if ( m_rightview->isHidden() ) {
         return;
     }
     m_rightview->setFocus();
-    QModelIndex nxt = m_rightview->nextColumn( index );
-    while ( nxt.isValid() && ! ( model()->flags( nxt ) & Qt::ItemIsEditable ) ) {
-        nxt = m_rightview->nextColumn( nxt );
-    }
+    QModelIndex nxt = m_rightview->firstEditable( index.row(), model()->parent ( index ) );
     if ( nxt.isValid() && ( model()->flags( nxt ) & Qt::ItemIsEditable ) ) {
         m_selectionmodel->setCurrentIndex( nxt, QItemSelectionModel::NoUpdate );
         m_rightview->edit( nxt );
@@ -711,15 +719,12 @@ void DoubleTreeViewBase::slotEditToRightView( const QModelIndex &index )
 
 void DoubleTreeViewBase::slotEditToLeftView( const QModelIndex &index )
 {
-    kDebug()<<index.column()<<endl;
+    //kDebug()<<index.column()<<endl;
     if ( m_leftview->isHidden() ) {
         return;
     }
     m_leftview->setFocus();
-    QModelIndex nxt = m_leftview->previousColumn( index );
-    while ( nxt.isValid() && ! ( model()->flags( nxt ) & Qt::ItemIsEditable ) ) {
-        nxt = m_leftview->previousColumn( nxt );
-    }
+    QModelIndex nxt = m_leftview->lastEditable( index.row(), model()->parent ( index ) );
     if ( nxt.isValid() && ( model()->flags( nxt ) & Qt::ItemIsEditable ) ) {
         m_selectionmodel->setCurrentIndex( nxt, QItemSelectionModel::NoUpdate );
         m_leftview->edit( nxt );
@@ -851,21 +856,21 @@ void DoubleTreeViewBase::setAcceptDropsOnView( bool mode )
 
 void DoubleTreeViewBase::slotRightHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug();
+    //kDebug();
     emit slaveHeaderContextMenuRequested( pos );
     emit headerContextMenuRequested( pos );
 }
 
 void DoubleTreeViewBase::slotLeftHeaderContextMenuRequested( const QPoint &pos )
 {
-    kDebug();
+    //kDebug();
     emit masterHeaderContextMenuRequested( pos );
     emit headerContextMenuRequested( pos );
 }
 
 bool DoubleTreeViewBase::loadContext( const KoXmlElement &element )
 {
-    kDebug()<<endl;
+    //kDebug()<<endl;
     QList<int> lst1;
     QList<int> lst2;
     KoXmlElement e = element.namedItem( "master" ).toElement();
@@ -910,7 +915,6 @@ void DoubleTreeViewBase::setViewSplitMode( bool split )
     }
 
     m_mode = split;
-    kDebug()<<split;
     if ( split ) {
         m_leftview->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
         m_leftview->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
