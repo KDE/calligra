@@ -105,7 +105,6 @@ class KexiCSVImportDialog : public KDialog
 		KexiCSVDelimiterWidget* m_delimiterWidget;
 		bool m_detectDelimiter; //!< true if delimiter should be detected 
 		                        //!< (true by default, set to false if user sets delimiter)
-		QString m_formatComboText;
 		QLabel* m_formatLabel;
 		KComboBox* m_formatCombo;
 		KIntSpinBox *m_startAtLineSpinBox;

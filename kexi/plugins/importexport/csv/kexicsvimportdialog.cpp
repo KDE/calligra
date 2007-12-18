@@ -223,7 +223,6 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, QWidget * parent)
 	glyr->addMultiCellWidget( delimiterLabel, 0, 0, 0, 0 );
 
 	// Format: number, text, currency,
-	m_formatComboText = i18n( "Format for column %1:" );
 	m_formatCombo = new KComboBox(page);
 	m_formatCombo->setObjectName("m_formatCombo");
 	m_formatCombo->addItem(i18n("Text"));
@@ -1331,7 +1330,7 @@ void KexiCSVImportDialog::currentCellChanged(int, int col)
 		type=_NUMBER_TYPE; //we're simplifying that for now
 
 	m_formatCombo->setCurrentIndex( type );
-	m_formatLabel->setText( m_formatComboText.arg(col+1) );
+	m_formatLabel->setText( i18n( "Format for column %1:", col+1 ) );
 	m_primaryKeyField->setEnabled( _NUMBER_TYPE == m_detectedTypes[col]);
 	m_primaryKeyField->blockSignals(true); //block to disable executing slotPrimaryKeyFieldToggled()
 	 m_primaryKeyField->setChecked( m_primaryKeyColumn == col );
