@@ -1,6 +1,6 @@
 
 
-include_directories( ${KRITA_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/image/metadata)
+include_directories( ${KRITA_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/image/metadata ${EXIV2_INCLUDE_DIR})
 
 set(libkritaconverter_LIB_SRCS
     kis_jpeg_converter.cc
