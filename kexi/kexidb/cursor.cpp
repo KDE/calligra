@@ -229,13 +229,15 @@ bool Cursor::moveFirst()
 				m_afterLast = !getNextRecord();
 				return !m_afterLast;
 			}
-		}  else {
-                       // not buffered
-		       m_at = 0;
-		       m_afterLast = !getNextRecord();
-		       return !m_afterLast;
-	        }
-		
+		}
+#if 0 // reverted; todo: fix for sybase only - reopen() does the job below for other drivers...
+		else {
+			// not buffered
+			m_at = 0;
+			m_afterLast = !getNextRecord();
+			return !m_afterLast;
+		}
+#endif		
 		if (m_afterLast && m_at==0) //failure if already no records
 			return false;
 		if (!reopen()) //try reopen
