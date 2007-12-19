@@ -196,6 +196,20 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         TIFFClose(image);
         return KisImageBuilder_RESULT_INVALID_ARG;
     }
+
+    float xres;
+    if (TIFFGetField(image, TIFFTAG_XRESOLUTION, &xres) == 0) {
+        kDebug(41008) << "Image does not define x resolution";
+        // but we don't stop
+        xres = 100; 
+    }
+    float yres;
+    if (TIFFGetField(image, TIFFTAG_YRESOLUTION, &yres) == 0) {
+        kDebug(41008) << "Image does not define y resolution";
+        // but we don't stop
+        yres = 100; 
+    }
+
     uint16 depth;
     if((TIFFGetField(image, TIFFTAG_BITSPERSAMPLE, &depth) == 0)){
         kDebug(41008) <<"Image does not define its depth";
@@ -328,6 +342,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     // Creating the KisImageSP
     if( ! m_img ) {
         m_img = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
+        m_img->setResolution(xres / 72.0, yres / 72.0);
         m_img->lock();
         Q_CHECK_PTR(m_img);
         if(profile)
