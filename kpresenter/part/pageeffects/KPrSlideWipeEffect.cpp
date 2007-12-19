@@ -22,6 +22,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QWidget>
+#include <KDebug>
 
 KPrSlideWipeEffect::KPrSlideWipeEffect( int duration )
 : KPrPageEffect( duration, SlideWipeEffectId )
@@ -51,7 +52,8 @@ bool KPrSlideWipeEffect::paint( QPainter &p, const Data &data )
         int width = data.m_widget->width();
         QRect rect1( 0, currPos, width, height - currPos );
         QRect rect2( 0, height - currPos, width, currPos );
-        p.drawPixmap( QPoint( 0, currPos ), data.m_oldPage, rect1 );
+        if (data.m_currentTime == 0)
+            p.drawPixmap( QPoint( 0, currPos ), data.m_oldPage, rect1 );
         p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, rect2 );
     }
     else {
