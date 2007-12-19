@@ -27,23 +27,18 @@ set( kpresenterprivate_LIB_SRCS
      KPrShapeApplicationData.cpp
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
-     dockers/KPrShapeAnimationDockerFactory.cpp
-     dockers/KPrShapeAnimationDocker.cpp
      dockers/KPrPageEffectDockerFactory.cpp
      dockers/KPrPageEffectDocker.cpp
      pageeffects/KPrPageEffectRunner.cpp
      pageeffects/KPrPageEffect.cpp
      pageeffects/KPrPageEffectFactory.cpp
      pageeffects/KPrPageEffectRegistry.cpp
-     pageeffects/KPrLeftToRightEffect.cpp
-     pageeffects/KPrBarWipeEffectFactory.cpp
      pageeffects/KPrSlideWipeEffect.cpp
      pageeffects/KPrSlideWipeEffectFactory.cpp
      shapeanimations/KPrShapeAnimation.cpp
      shapeanimations/KPrTranslateAnimation.cpp
      shapeanimations/KPrAnimationMoveAppear.cpp
      shapeanimations/KPrAnimationDisappear.cpp
-     shapeanimations/KPrAnimationMoveDisappear.cpp
    )
 
 #kde4_add_ui_files(kpresenterprivate_LIB_SRCS xxxx.ui)
