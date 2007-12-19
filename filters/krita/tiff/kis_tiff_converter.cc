@@ -664,6 +664,10 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KUrl& uri, KisImageSP i
         TIFFSetField(image, TIFFTAG_ARTIST, author.toAscii().data());
     }
 
+    kDebug() << "xres: " << img->xRes()*72;
+    TIFFSetField(image, TIFFTAG_XRESOLUTION, img->xRes()*72);
+    TIFFSetField(image, TIFFTAG_YRESOLUTION, img->yRes()*72);
+
     KisGroupLayer* root = dynamic_cast<KisGroupLayer*>(img->rootLayer().data());
     if(root == 0)
     {
