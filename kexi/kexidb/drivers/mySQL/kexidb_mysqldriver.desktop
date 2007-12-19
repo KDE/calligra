@@ -1,6 +1,7 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=MySQL
+Name[sk]=mySQL
 Name[x-test]=xxMySQLxx
 Comment=Kexi database driver for accessing MySQL servers
 Comment[el]=Οδηγός βάσης δεδομένων του Kexi για πρόσβαση σε εξυπηρετητές MySQL
