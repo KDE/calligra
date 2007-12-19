@@ -25,6 +25,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrMasterPage.cpp
      KPrPageApplicationData.cpp
      KPrShapeApplicationData.cpp
+     KPrCustomSlideShows.cpp
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
      dockers/KPrPageEffectDockerFactory.cpp
