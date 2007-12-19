@@ -1,11 +1,9 @@
 project(kpresenter)
 
-include_directories(${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES}
-${KOPAGEAPP_INCLUDES} ${Boost_INCLUDE_DIR})
+include_directories(${KOGUIUTILS_INCLUDES} ${KOTEXT_INCLUDES} ${KOPAGEAPP_INCLUDES} ${Boost_INCLUDE_DIR})
 
 if(KDE4_BUILD_TESTS)
-    # only with this definition will the KPRESENTER_TEST_EXPORT macro do
-something
+    # only with this definition will the KPRESENTER_TEST_EXPORT macro do something
     add_definitions(-DCOMPILING_TESTS)
 endif(KDE4_BUILD_TESTS)
 
@@ -27,32 +25,34 @@ set( kpresenterprivate_LIB_SRCS
      KPrMasterPage.cpp
      KPrPageApplicationData.cpp
      KPrShapeApplicationData.cpp
-     KPrCustomSlideShows.cpp
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
+     dockers/KPrShapeAnimationDockerFactory.cpp
+     dockers/KPrShapeAnimationDocker.cpp
      dockers/KPrPageEffectDockerFactory.cpp
      dockers/KPrPageEffectDocker.cpp
      pageeffects/KPrPageEffectRunner.cpp
      pageeffects/KPrPageEffect.cpp
      pageeffects/KPrPageEffectFactory.cpp
      pageeffects/KPrPageEffectRegistry.cpp
+     pageeffects/KPrLeftToRightEffect.cpp
+     pageeffects/KPrBarWipeEffectFactory.cpp
      pageeffects/KPrSlideWipeEffect.cpp
      pageeffects/KPrSlideWipeEffectFactory.cpp
      shapeanimations/KPrShapeAnimation.cpp
      shapeanimations/KPrTranslateAnimation.cpp
      shapeanimations/KPrAnimationMoveAppear.cpp
      shapeanimations/KPrAnimationDisappear.cpp
+     shapeanimations/KPrAnimationMoveDisappear.cpp
    )
 
 #kde4_add_ui_files(kpresenterprivate_LIB_SRCS xxxx.ui)
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 
-target_link_libraries(kpresenterprivate ${KDE4_KDECORE_LIBS} koguiutils flake
-kotext kopageapp)
+target_link_libraries(kpresenterprivate ${KDE4_KDECORE_LIBS} koguiutils flake kotext kopageapp)
 
-set_target_properties(kpresenterprivate PROPERTIES VERSION
-${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+set_target_properties(kpresenterprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kpresenterprivate  DESTINATION ${LIB_INSTALL_DIR})
 
 ### kpresenterpart ###
@@ -83,5 +83,4 @@ install( FILES kpresenterpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES kpresenter.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 
 ### GUI files ###
-install( FILES kpresenter.rc kpresenter_readonly.rc DESTINATION
-${DATA_INSTALL_DIR}/kpresenter)
+install( FILES kpresenter.rc kpresenter_readonly.rc DESTINATION ${DATA_INSTALL_DIR}/kpresenter)
