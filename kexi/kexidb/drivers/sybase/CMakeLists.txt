@@ -1,6 +1,6 @@
 
 
-include_directories( ${SYBASE_INCLUDE_DIR} 
+include_directories( ${FreeTDS_INCLUDE_DIR} 
 ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/kexidb ${KDE4_INCLUDES}  )
 
 ADD_DEFINITIONS( -D__KEXIDB__= )
@@ -18,7 +18,7 @@ set(kexidb_sybasedriver_PART_SRCS
 
 kde4_add_plugin(kexidb_sybasedriver ${kexidb_sybasedriver_PART_SRCS})
 
-target_link_libraries(kexidb_sybasedriver tds sybdb 
+target_link_libraries(kexidb_sybasedriver ${FreeTDS_LIBRARIES}
  ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kexidb )
 
 install(TARGETS kexidb_sybasedriver  DESTINATION ${PLUGIN_INSTALL_DIR})
