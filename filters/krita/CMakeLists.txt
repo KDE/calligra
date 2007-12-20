@@ -50,3 +50,4 @@ if(POPPLER_FOUND AND HAVE_POPPLER_0_6)
 endif(POPPLER_FOUND AND HAVE_POPPLER_0_6)
 
 add_subdirectory(bmp)
+add_subdirectory(ora)
