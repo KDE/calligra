@@ -145,7 +145,7 @@ class ConnectionPrivate
 			tables_byname.insert(tableSchema.name(), &tableSchema);
 		}
 
-		/*! @internal Removes \a tableSchema from internal structures and 
+		/*! @internal Removes \a tableSchema from internal structures and
 		 destroys it. Does not make any change at the backend. */
 		inline void removeTable(TableSchema &tableSchema)
 		{
@@ -177,7 +177,7 @@ class ConnectionPrivate
 			tables_byname.clear();
 			qDeleteAll(_kexiDBSystemTables);
 			_kexiDBSystemTables.clear();
-			takeTableEnabled = false; //!< needed because otherwise 'tables' hash will 
+			takeTableEnabled = false; //!< needed because otherwise 'tables' hash will
 			                          //!< be touched by takeTable() what's not allowed during qDeleteAll()
 			qDeleteAll(tables);
 			takeTableEnabled = true;
@@ -197,7 +197,7 @@ class ConnectionPrivate
 			queries_byname.insert(query.name(), &query);
 		}
 
-		/*! @internal Removes \a querySchema from internal structures and 
+		/*! @internal Removes \a querySchema from internal structures and
 		 destroys it. Does not make any change at the backend. */
 		inline void removeQuery(QuerySchema &querySchema)
 		{
@@ -234,7 +234,7 @@ class ConnectionPrivate
 		//! to collect obsolete queries. THese are deleted on connection deleting.
 		QSet<QuerySchema*> obsoleteQueries;
 
-		//! server version information for this connection. 
+		//! server version information for this connection.
 		KexiDB::ServerVersionInfo serverVersion;
 
 		//! Daabase version information for this connection.
@@ -284,7 +284,7 @@ class ConnectionPrivate
 		//! Query schemas retrieved on demand with querySchema()
 		QHash<int, QuerySchema*> queries;
 		QHash<QString, QuerySchema*> queries_byname;
-		bool takeTableEnabled : 1; //!< used by takeTable() needed because otherwise 'tables' hash will 
+		bool takeTableEnabled : 1; //!< used by takeTable() needed because otherwise 'tables' hash will
 			                         //!< be touched by takeTable() what's not allowed during qDeleteAll()
 };
 
@@ -1166,7 +1166,7 @@ bool Connection::executeSQL( const QString& statement )
 }
 
 QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
-	const QList<QVariant>& params, 
+	const QList<QVariant>& params,
 	const SelectStatementOptions& options) const
 {
 //"SELECT FROM ..." is theoretically allowed "
@@ -1287,7 +1287,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 //							s_additional_fields += (internalUniqueTableAlias + "." //escapeIdentifier(visibleField->table()->name(), options.identifierEscaping) + "."
 //									escapeIdentifier(visibleField->name(), options.identifierEscaping));
 //! @todo Add lookup schema option for separator other than ' ' or even option for placeholders like "Name ? ?"
-//! @todo Add possibility for joining the values at client side. 
+//! @todo Add possibility for joining the values at client side.
 						s_additional_fields += visibleColumns->sqlFieldsList(
 							driver(), " || ' ' || ", internalUniqueTableAlias, options.identifierEscaping);
 					}
@@ -1317,7 +1317,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 					//add LEFT OUTER JOIN
 					if (!s_additional_joins.isEmpty())
 						s_additional_joins += QString::fromLatin1(" ");
-					QString internalUniqueQueryAlias( 
+					QString internalUniqueQueryAlias(
 						kexidb_subquery_prefix + lookupQuery->name() + "_"
 						+ QString::number(internalUniqueQueryAliasNumber++) );
 					s_additional_joins += QString("LEFT OUTER JOIN (%1) AS %2 ON %3.%4=%5.%6")
@@ -1334,7 +1334,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 					QString expression;
 					foreach (uint visibleColumnIndex, visibleColumns) {
 //! @todo Add lookup schema option for separator other than ' ' or even option for placeholders like "Name ? ?"
-//! @todo Add possibility for joining the values at client side. 
+//! @todo Add possibility for joining the values at client side.
 						if ((uint)fieldsExpanded.count() <= visibleColumnIndex) {
 							KexiDBWarn << "Connection::selectStatement(): fieldsExpanded.count() <= (*visibleColumnsIt) : "
 								<< fieldsExpanded.count() << " <= " << visibleColumnIndex << endl;
@@ -1342,7 +1342,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 						}
 						if (!expression.isEmpty())
 							expression += " || ' ' || ";
-						expression += (internalUniqueQueryAlias + "." + 
+						expression += (internalUniqueQueryAlias + "." +
 							escapeIdentifier(fieldsExpanded.value( visibleColumnIndex )->aliasOrName(),
 								options.identifierEscaping));
 					}
@@ -1350,7 +1350,7 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 //subqueries_for_lookup_data.append(lookupQuery);
 				}
 				else {
-					KexiDBWarn << "Connection::selectStatement(): unsupported row source type " 
+					KexiDBWarn << "Connection::selectStatement(): unsupported row source type "
 						<< rowSource.typeName() << endl;
 					return QString();
 				}
@@ -1460,12 +1460,12 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 		sql += QString::fromLatin1(" WHERE ") + s_where;
 //! \todo (js) add other sql parts
 	//(use wasWhere here)
-	
+
 	// ORDER BY
-	QString orderByString( 
-		querySchema.orderByColumnList().toSQLString(!singleTable/*includeTableName*/, 
+	QString orderByString(
+		querySchema.orderByColumnList().toSQLString(!singleTable/*includeTableName*/,
 			driver(), options.identifierEscaping) );
-	const QVector<int> pkeyFieldsOrder( querySchema.pkeyFieldsOrder() ); 
+	const QVector<int> pkeyFieldsOrder( querySchema.pkeyFieldsOrder() );
 	if (orderByString.isEmpty() && !pkeyFieldsOrder.isEmpty()) {
 		//add automatic ORDER BY if there is no explicity defined (especially helps when there are complex JOINs)
 		OrderByColumnList automaticPKOrderBy;
@@ -1474,19 +1474,19 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 			if (pkeyFieldsIndex < 0) // no field mentioned in this query
 				continue;
 			if (pkeyFieldsIndex >= (int)fieldsExpanded.count()) {
-				KexiDBWarn << "Connection::selectStatement(): ORDER BY: (*it) >= fieldsExpanded.count() - " 
+				KexiDBWarn << "Connection::selectStatement(): ORDER BY: (*it) >= fieldsExpanded.count() - "
 					<< pkeyFieldsIndex << " >= " << fieldsExpanded.count() << endl;
 				continue;
 			}
 			QueryColumnInfo *ci = fieldsExpanded[ pkeyFieldsIndex ];
 			automaticPKOrderBy.appendColumn( *ci );
 		}
-		orderByString = automaticPKOrderBy.toSQLString(!singleTable/*includeTableName*/, 
+		orderByString = automaticPKOrderBy.toSQLString(!singleTable/*includeTableName*/,
 			driver(), options.identifierEscaping);
 	}
 	if (!orderByString.isEmpty())
 		sql += (" ORDER BY " + orderByString);
-	
+
 	//KexiDBDbg << sql << endl;
 	return sql;
 }
@@ -1564,10 +1564,10 @@ void buildValuesForKexi__Fields(QList<QVariant>& vals, Field* f)
 	<< QVariant(f->isFPNumericType() ? f->precision() : 0)
 	<< QVariant(f->constraints())
 	<< QVariant(f->options())
-		// KexiDB::variantToString() is needed here because the value can be of any QVariant type, 
+		// KexiDB::variantToString() is needed here because the value can be of any QVariant type,
 		// depending on f->type()
-	<< (f->defaultValue().isNull() 
-			? QVariant() : QVariant(KexiDB::variantToString( f->defaultValue() ))) 
+	<< (f->defaultValue().isNull()
+			? QVariant() : QVariant(KexiDB::variantToString( f->defaultValue() )))
 	<< QVariant(f->order())
 	<< QVariant(f->caption())
 	<< QVariant(f->description());
@@ -1594,7 +1594,7 @@ bool Connection::storeMainFieldSchema(Field *field)
 		++valsIt;
 	}
 	delete fl;
-	
+
 	sql.append(QString(" WHERE t_id=") + QString::number( field->table()->id() )
 		+ " AND f_name=" + m_driver->valueToSQL( Field::Text, field->name() ) );
 	return executeSQL( sql );
@@ -1633,7 +1633,7 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 	if (!internalTable) {
 		if (m_driver->isSystemObjectName( tableName )) {
 			clearError();
-			setError(ERR_SYSTEM_NAME_RESERVED, i18n("System name \"%1\" cannot be used as table name.", 
+			setError(ERR_SYSTEM_NAME_RESERVED, i18n("System name \"%1\" cannot be used as table name.",
 				tableSchema->name()));
 			return false;
 		}
@@ -2297,7 +2297,7 @@ Cursor* Connection::executeQuery( const QString& statement, uint cursor_options 
 	return c;
 }
 
-Cursor* Connection::executeQuery( QuerySchema& query, const QList<QVariant>& params, 
+Cursor* Connection::executeQuery( QuerySchema& query, const QList<QVariant>& params,
 	uint cursor_options )
 {
 	Cursor *c = prepareQuery( query, params, cursor_options );
@@ -2326,7 +2326,7 @@ Cursor* Connection::prepareQuery( TableSchema& table, uint cursor_options )
 	return prepareQuery( *table.query(), cursor_options );
 }
 
-Cursor* Connection::prepareQuery( QuerySchema& query, const QList<QVariant>& params, 
+Cursor* Connection::prepareQuery( QuerySchema& query, const QList<QVariant>& params,
 	uint cursor_options )
 {
 	Cursor* cursor = prepareQuery(query, cursor_options);
@@ -2454,7 +2454,7 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 		.arg(m_driver->valueToSQL(KexiDB::Field::Text, sdata.description())) );
 }
 
-tristate Connection::querySingleRecordInternal(RecordData &data, const QString* sql, QuerySchema* query, 
+tristate Connection::querySingleRecordInternal(RecordData &data, const QString* sql, QuerySchema* query,
 	bool addLimitTo1)
 {
 	Q_ASSERT(sql || query);
@@ -2615,7 +2615,7 @@ static void createExtendedTableSchemaMainElementIfNeeded(
 }
 
 //! Used by addFieldPropertyToExtendedTableSchemaData()
-static void createExtendedTableSchemaFieldElementIfNeeded(QDomDocument& doc, 
+static void createExtendedTableSchemaFieldElementIfNeeded(QDomDocument& doc,
 	QDomElement& extendedTableSchemaMainEl, const QString& fieldName, QDomElement& extendedTableSchemaFieldEl,
 	bool append = true)
 {
@@ -2630,12 +2630,12 @@ static void createExtendedTableSchemaFieldElementIfNeeded(QDomDocument& doc,
 /*! @internal used by storeExtendedTableSchemaData()
  Creates DOM node for \a propertyName and \a propertyValue.
  Creates enclosing EXTENDED_TABLE_SCHEMA element if EXTENDED_TABLE_SCHEMA is true.
- Updates extendedTableSchemaStringIsEmpty and extendedTableSchemaMainEl afterwards. 
- If extendedTableSchemaFieldEl is null, creates <field> element (with optional 
+ Updates extendedTableSchemaStringIsEmpty and extendedTableSchemaMainEl afterwards.
+ If extendedTableSchemaFieldEl is null, creates <field> element (with optional
  "custom" attribute is \a custom is false). */
-static void addFieldPropertyToExtendedTableSchemaData( 
-	Field *f, const char* propertyName, const QVariant& propertyValue, 
-	QDomDocument& doc, QDomElement& extendedTableSchemaMainEl, 
+static void addFieldPropertyToExtendedTableSchemaData(
+	Field *f, const char* propertyName, const QVariant& propertyValue,
+	QDomDocument& doc, QDomElement& extendedTableSchemaMainEl,
 	QDomElement& extendedTableSchemaFieldEl,
 	bool& extendedTableSchemaStringIsEmpty,
 	bool custom = false )
@@ -2674,7 +2674,7 @@ static void addFieldPropertyToExtendedTableSchemaData(
 		KexiDBFatal << "addFieldPropertyToExtendedTableSchemaData(): impl. error" << endl;
 	}
 	extendedTableSchemaFieldPropertyEl.appendChild( extendedTableSchemaFieldPropertyValueEl );
-	extendedTableSchemaFieldPropertyValueEl.appendChild( 
+	extendedTableSchemaFieldPropertyValueEl.appendChild(
 		doc.createTextNode( propertyValue.toString() ) );
 }
 
@@ -2689,9 +2689,9 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 	foreach (Field* f, *tableSchema.fields()) {
 		QDomElement extendedTableSchemaFieldEl;
 		if (f->visibleDecimalPlaces()>=0/*nondefault*/ && KexiDB::supportsVisibleDecimalPlacesProperty(f->type())) {
-			addFieldPropertyToExtendedTableSchemaData( 
-				f, "visibleDecimalPlaces", f->visibleDecimalPlaces(), doc, 
-				extendedTableSchemaMainEl, extendedTableSchemaFieldEl, 
+			addFieldPropertyToExtendedTableSchemaData(
+				f, "visibleDecimalPlaces", f->visibleDecimalPlaces(), doc,
+				extendedTableSchemaMainEl, extendedTableSchemaFieldEl,
 				extendedTableSchemaStringIsEmpty );
 		}
 		// boolean field with "not null"
@@ -2699,10 +2699,10 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 		// add custom properties
 		const Field::CustomPropertiesMap customProperties(f->customProperties());
 		for( Field::CustomPropertiesMap::ConstIterator itCustom = customProperties.constBegin();
-			itCustom!=customProperties.constEnd(); ++itCustom ) 
+			itCustom!=customProperties.constEnd(); ++itCustom )
 		{
-			addFieldPropertyToExtendedTableSchemaData( 
-				f, itCustom.key(), itCustom.value(), doc, 
+			addFieldPropertyToExtendedTableSchemaData(
+				f, itCustom.key(), itCustom.value(), doc,
 				extendedTableSchemaMainEl, extendedTableSchemaFieldEl, extendedTableSchemaStringIsEmpty,
 				/*custom*/true );
 		}
@@ -2715,7 +2715,7 @@ bool Connection::storeExtendedTableSchemaData(TableSchema& tableSchema)
 
 			if (extendedTableSchemaFieldEl.hasChildNodes()) {
 				// this element provides the definition, so let's append it now
-				createExtendedTableSchemaMainElementIfNeeded(doc, extendedTableSchemaMainEl, 
+				createExtendedTableSchemaMainElementIfNeeded(doc, extendedTableSchemaMainEl,
 					extendedTableSchemaStringIsEmpty);
 				extendedTableSchemaMainEl.appendChild( extendedTableSchemaFieldEl );
 			}
@@ -2808,7 +2808,7 @@ bool Connection::loadExtendedTableSchemaData(TableSchema& tableSchema)
 						QByteArray propertyName = propEl.attribute("name").toLatin1();
 						if (propEl.attribute("custom")=="true") {
 							//custom property
-							f->setCustomProperty(propertyName, 
+							f->setCustomProperty(propertyName,
 								KexiDB::loadPropertyValueFromDom( propEl.firstChild() ));
 						}
 						else if (propertyName == "visibleDecimalPlaces"
@@ -2872,7 +2872,7 @@ KexiDB::Field* Connection::setupField( const RecordData &data )
 
 	f->setDefaultValue( KexiDB::stringToVariant(data.at(7).toString(), Field::variantType( f_type ), ok) );
 	if (!ok) {
-		KexiDBWarn << "Connection::setupTableSchema() problem with KexiDB::stringToVariant(" 
+		KexiDBWarn << "Connection::setupTableSchema() problem with KexiDB::stringToVariant("
 			<< data.at(7).toString() << ")" << endl;
 	}
 	ok = true; //problem with defaultValue is not critical
@@ -3030,7 +3030,7 @@ KexiDB::QuerySchema* Connection::setupQuerySchema( const RecordData &data )
 	QString sqlText;
 	if (!loadDataBlock( objID, sqlText, "sql" )) {
 		setError(ERR_OBJECT_NOT_FOUND,
-			i18n("Could not find definition for query \"%1\". Removing this query is recommended.", 
+			i18n("Could not find definition for query \"%1\". Removing this query is recommended.",
 				data[2].toString()));
 		return 0;
 	}
@@ -3214,7 +3214,7 @@ void Connection::setAvailableDatabaseName(const QString& dbName)
 	d->availableDatabaseName = dbName;
 }
 
-//! @internal used in updateRow(), insertRow(), 
+//! @internal used in updateRow(), insertRow(),
 inline void updateRowDataWithNewValues(QuerySchema &query, RecordData& data, KexiDB::RowEditBuffer::DBMap& b,
 	QHash<QueryColumnInfo*,int>& columnsOrderExpanded)
 {
@@ -3350,8 +3350,8 @@ bool Connection::insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
 	uint fieldsExpandedCount = fieldsExpanded.count();
 	for (uint i=0; i < fieldsExpandedCount; i++) {
 		QueryColumnInfo *ci = fieldsExpanded.at(i);
-		if (ci->field && KexiDB::isDefaultValueAllowed(ci->field) 
-			&& !ci->field->defaultValue().isNull() 
+		if (ci->field && KexiDB::isDefaultValueAllowed(ci->field)
+			&& !ci->field->defaultValue().isNull()
 			&& !b.contains( ci ))
 		{
 			KexiDBDbg << "Connection::insertRow(): adding default value '" << ci->field->defaultValue().toString()
@@ -3510,7 +3510,7 @@ bool Connection::deleteRow(QuerySchema &query, RecordData& data, bool useROWID)
 				sqlwhere+=" AND ";
 			QVariant val( data.at( pkeyFieldsOrder.at(i) ) );
 			if (val.isNull() || !val.isValid()) {
-				setError(ERR_DELETE_NULL_PKEY_FIELD, i18n("Primary key's field \"%1\" cannot be empty.", 
+				setError(ERR_DELETE_NULL_PKEY_FIELD, i18n("Primary key's field \"%1\" cannot be empty.",
 					f->name()));
 //js todo: pass the field's name somewhere!
 				return false;

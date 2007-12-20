@@ -112,7 +112,7 @@ bool MySqlConnection::drv_getDatabasesList( QStringList &list ) {
 
 bool MySqlConnection::drv_createDatabase( const QString &dbName) {
 	KexiDBDrvDbg << "MySqlConnection::drv_createDatabase: " << dbName << endl;
-	// mysql_create_db deprecated, use SQL here. 
+	// mysql_create_db deprecated, use SQL here.
 	if (drv_executeSQL("CREATE DATABASE " + (dbName)))
 		return true;
 	d->storeResult();
@@ -128,7 +128,7 @@ bool MySqlConnection::drv_useDatabase(const QString &dbName, bool *cancelled, Me
 }
 
 bool MySqlConnection::drv_closeDatabase() {
-//TODO free resources 
+//TODO free resources
 //As far as I know, mysql doesn't support that
 	return true;
 }
@@ -182,7 +182,7 @@ bool MySqlConnection::drv_getTablesList( QStringList &list )
 	return queryStringList( "show tables", list );
 }
 
-PreparedStatement::Ptr MySqlConnection::prepareStatement(PreparedStatement::StatementType type, 
+PreparedStatement::Ptr MySqlConnection::prepareStatement(PreparedStatement::StatementType type,
 	FieldList& fields)
 {
 	return KSharedPtr<PreparedStatement>( new MySqlPreparedStatement(type, *d, fields) );
