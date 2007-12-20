@@ -5,6 +5,6 @@ Name=Krita ora Import Filter
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=application/x-krita
-X-KDE-Import=image/ora
+X-KDE-Import=image/openraster-archiving
 X-KDE-Library=libkritaoraimport
 X-KDE-Weight=1
