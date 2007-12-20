@@ -265,20 +265,8 @@ void KarbonPatternTool::importPattern()
     QString filter( "*.jpg *.gif *.png *.tif *.xpm *.bmp" );
     QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose Pattern to Add" ) );
 
-    QFileInfo fi( filename );
-    if( fi.exists() == false )
-        return;
-
-    KoPattern* pattern = new KoPattern( filename );
-    pattern->load();
-    if( !pattern->valid())
-        return;
-
-    QString newFilename = KGlobal::mainComponent().dirs()->saveLocation("ko_patterns" ) + fi.baseName() + ".pat";
-    pattern->setFilename(newFilename);
-
-    KoResourceServer<KoPattern>* srv = KoResourceServerProvider::instance()->patternServer();;
-    srv->addResource(pattern);
+    KoResourceServer<KoPattern>* srv = KoResourceServerProvider::instance()->patternServer();
+    KoPattern* pattern = srv->importResource(filename);
 
     if( pattern )
         m_patternChooser->addItem( new KarbonPatternItem( pattern ) );
