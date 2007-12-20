@@ -1052,9 +1052,6 @@ bool CalendarDayItemModel::setIntervalStart( TimeInterval *ti, const QVariant &v
         case Qt::EditRole: {
             QTime start = value.toTime();
             TimeInterval t = TimeInterval( start, ti->second );
-            if ( start > t.second ) {
-                t.second = start;
-            }
             emit executeCommand( new CalendarModifyTimeIntervalCmd( m_calendar, t, ti,  "Modify Calendar Working Interval" ) );
             return true;
         }
@@ -1065,31 +1062,18 @@ bool CalendarDayItemModel::setIntervalStart( TimeInterval *ti, const QVariant &v
 QVariant CalendarDayItemModel::intervalEnd( const TimeInterval *ti, int role ) const
 {
     //kDebug()<<res->name()<<","<<role;
+    KLocale *locale = KGlobal::locale();
+    double value = (double)(ti->second) / ( 1000 * 60 * 60 );
     switch ( role ) {
         case Qt::DisplayRole:
-            return ti->second;
+            return locale->formatNumber( value ) + Duration::unitToString( Duration::Unit_h, true );
         case Qt::ToolTipRole:
+            return i18n( "Work interval length: %1", locale->formatNumber( value ) );
         case Qt::EditRole:
-            return ti->second;
+            return value;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
-        case Role::Minimum: {
-            return QTime();
-/*            CalendarDay *d = m_days.value( const_cast<TimeInterval*>( ti ) );
-            if ( d == 0 ) {
-                return QTime();
-            }
-            return d->minEndTime( ti );*/
-        }
-        case Role::Maximum: {
-            return QTime();
-/*            CalendarDay *d = m_days.value( const_cast<TimeInterval*>( ti ) );
-            if ( d == 0 ) {
-                return QTime();
-            }
-            return d->maxEndTime( ti );*/
-        }
         case Role::EditorType:
             return Delegate::TimeEditor;
     }
@@ -1100,11 +1084,8 @@ bool CalendarDayItemModel::setIntervalEnd( TimeInterval *ti, const QVariant &val
 {
     switch ( role ) {
         case Qt::EditRole: {
-            QTime end = value.toTime();
+            int end = value.toInt();
             TimeInterval t = TimeInterval( ti->first, end );
-            if ( end < t.first ) {
-                t.first = end;
-            }
             emit executeCommand( new CalendarModifyTimeIntervalCmd( m_calendar, t, ti,  "Modify Calendar Working Interval" ) );
             return true;
         }
@@ -1138,7 +1119,7 @@ QVariant CalendarDayItemModel::intervalDuration( const TimeInterval *ti, int rol
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-            Duration d( Duration( (qint64)(ti->first.msecsTo( ti->second ) ) ) );
+            Duration d( Duration( (qint64)(ti->second ) ) );
             return KGlobal::locale()->formatNumber( d.toDouble( Duration::Unit_h ), 1 ) + Duration::unitToString( Duration::Unit_h );
         }
         case Qt::EditRole:

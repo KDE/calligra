@@ -107,7 +107,8 @@ void ProjectTester::schedule()
     QDate nextweek = today.addDays( 7 );
     QTime t1( 9, 0, 0 );
     QTime t2 ( 17, 0, 0 );
-    
+    int length = t1.msecsTo( t2 );
+
     Task *t = m_project->createTask( m_project );
     t->setName( "T1" );
     m_project->addTask( t, m_project );
@@ -128,7 +129,7 @@ void ProjectTester::schedule()
     for ( int i=1; i <= 7; ++i ) {
         CalendarDay *d = c->weekday( i );
         d->setState( CalendarDay::Working );
-        d->addInterval( t1, t2 );
+        d->addInterval( t1, length );
     }
     m_project->addCalendar( c );
     
@@ -145,7 +146,7 @@ void ProjectTester::schedule()
     gr->addResourceRequest( rr );
     t->estimate()->setType( Estimate::Type_Effort );
     
-    kDebug()<<"Calculate forward, Task: ASAP -----------------------------------";
+    //kDebug()<<"Calculate forward, Task: ASAP -----------------------------------";
     m_project->setConstraintStartTime( DateTime( today, QTime() ) );
     sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
@@ -160,7 +161,7 @@ void ProjectTester::schedule()
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
 
-    kDebug()<<"Calculate forward, Task: ASAP, Resource 50% load ------------------";
+    //kDebug()<<"Calculate forward, Task: ASAP, Resource 50% load ------------------";
     r->setUnits( 50 );
     sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
@@ -175,7 +176,7 @@ void ProjectTester::schedule()
     QCOMPARE( t->endTime(), t->startTime() + Duration( 1, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
     
-    kDebug()<<"Calculate forward, Task: ASAP, Resource available tomorrow --------";
+    //kDebug()<<"Calculate forward, Task: ASAP, Resource available tomorrow --------";
     r->setAvailableFrom( QDateTime( tomorrow, QTime() ) );
     r->setUnits( 100 );
     sm = m_project->createScheduleManager( "Test Plan" );
@@ -191,8 +192,8 @@ void ProjectTester::schedule()
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
     
-    kDebug()<<"Calculate forward, Task: ALAP -----------------------------------";
-    m_project->setConstraintStartTime( DateTime( today, QTime() ) );
+    //kDebug()<<"Calculate forward, Task: ALAP -----------------------------------";
+    m_project->setConstraintStartTime( DateTime( today, QTime(0,0,0) ) );
     t->setConstraint( Node::ALAP );
     r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
     sm = m_project->createScheduleManager( "Test Plan" );
@@ -208,7 +209,7 @@ void ProjectTester::schedule()
     QCOMPARE( t->endTime(), t->startTime() + Duration( 0, 8, 0 ) );
     QVERIFY( t->schedulingError() == false );
 
-    kDebug()<<"Calculate forward, Task: MustStartOn -----------------------------------";
+    //kDebug()<<"Calculate forward, Task: MustStartOn -----------------------------------";
     r->setAvailableFrom( QDateTime( yesterday, QTime() ) );
     t->setConstraint( Node::MustStartOn );
     t->setConstraintStartTime( DateTime( nextweek, t1 ) );
@@ -226,7 +227,7 @@ void ProjectTester::schedule()
     QVERIFY( t->schedulingError() == false );
     
     // Calculate backwards
-    kDebug()<<"Calculate backward, Task: MustStartOn -----------------------------------";
+    //kDebug()<<"Calculate backward, Task: MustStartOn -----------------------------------";
     m_project->setConstraint( Node::MustFinishOn );
     m_project->setConstraintEndTime( DateTime( nextweek.addDays( 1 ), QTime() ) );
     sm = m_project->createScheduleManager( "Test Plan" );
@@ -243,7 +244,7 @@ void ProjectTester::schedule()
     QVERIFY( t->schedulingError() == false );
 
     // Calculate backword
-    kDebug()<<"Calculate backwards, Task: MustFinishOn -----------------------------------";
+    //kDebug()<<"Calculate backwards, Task: MustFinishOn -----------------------------------";
     m_project->setConstraint( Node::MustFinishOn );
     m_project->setConstraintEndTime( DateTime( nextweek.addDays( 1 ), QTime() ) );
     t->setConstraint( Node::MustFinishOn );
@@ -262,7 +263,7 @@ void ProjectTester::schedule()
     QVERIFY( t->schedulingError() == false );
 
     // Calculate forward
-    kDebug()<<"Calculate forwards, Task: MustFinishOn -----------------------------------";
+    //kDebug()<<"Calculate forwards, Task: MustFinishOn -----------------------------------";
     m_project->setConstraint( Node::MustStartOn );
     m_project->setConstraintStartTime( DateTime( today, QTime() ) );
     t->setConstraint( Node::MustFinishOn );
@@ -281,7 +282,7 @@ void ProjectTester::schedule()
     QVERIFY( t->schedulingError() == false );
 
     // Calculate forward
-    kDebug()<<"Calculate forwards, Task: StartNotEarlier -----------------------------------";
+    //kDebug()<<"Calculate forwards, Task: StartNotEarlier -----------------------------------";
     m_project->setConstraint( Node::MustStartOn );
     m_project->setConstraintStartTime( DateTime( today, QTime() ) );
     t->setConstraint( Node::StartNotEarlier );
@@ -300,7 +301,7 @@ void ProjectTester::schedule()
     QVERIFY( t->schedulingError() == false );
 
     // Calculate backward
-    kDebug()<<"Calculate backwards, Task: StartNotEarlier -----------------------------------";
+    //kDebug()<<"Calculate backwards, Task: StartNotEarlier -----------------------------------";
     m_project->setConstraint( Node::MustFinishOn );
     m_project->setConstraintEndTime( DateTime( nextweek, QTime() ) );
     t->setConstraint( Node::StartNotEarlier );
@@ -319,7 +320,7 @@ void ProjectTester::schedule()
     QVERIFY( t->schedulingError() == false );
 
     // Calculate forward
-    kDebug()<<"Calculate forwards, Task: FinishNotLater -----------------------------------";
+    //kDebug()<<"Calculate forwards, Task: FinishNotLater -----------------------------------";
     m_project->setConstraint( Node::MustStartOn );
     m_project->setConstraintStartTime( DateTime( today, QTime() ) );
     t->setConstraint( Node::FinishNotLater );
@@ -339,7 +340,7 @@ void ProjectTester::schedule()
     QVERIFY( t->schedulingError() == false );
 
     // Calculate backward
-    kDebug()<<"Calculate backwards, Task: FinishNotLater -----------------------------------";
+    //kDebug()<<"Calculate backwards, Task: FinishNotLater -----------------------------------";
     m_project->setConstraint( Node::MustFinishOn );
     m_project->setConstraintStartTime( DateTime( nextweek, QTime() ) );
     t->setConstraint( Node::FinishNotLater );
@@ -359,7 +360,7 @@ void ProjectTester::schedule()
     QVERIFY( t->schedulingError() == false );
 
     // Calculate forward
-    kDebug()<<"Calculate forwards, Task: FixedInterval -----------------------------------";
+    //kDebug()<<"Calculate forwards, Task: FixedInterval -----------------------------------";
     m_project->setConstraint( Node::MustStartOn );
     m_project->setConstraintStartTime( DateTime( today, QTime() ) );
     t->setConstraint( Node::FixedInterval );
@@ -380,7 +381,7 @@ void ProjectTester::schedule()
     QVERIFY( t->schedulingError() == false );
 
     // Calculate forward
-    kDebug()<<"Calculate forwards, Task: FixedInterval -----------------------------------";
+    //kDebug()<<"Calculate forwards, Task: FixedInterval -----------------------------------";
     m_project->setConstraint( Node::MustStartOn );
     m_project->setConstraintStartTime( DateTime( today, QTime() ) );
     t->setConstraint( Node::FixedInterval );
@@ -401,7 +402,7 @@ void ProjectTester::schedule()
     QVERIFY( t->schedulingError() == false );
 
     // Calculate forward
-    kDebug()<<"Calculate forwards, Task: Milestone, ASAP-------------------------";
+    //kDebug()<<"Calculate forwards, Task: Milestone, ASAP-------------------------";
     m_project->setConstraint( Node::MustStartOn );
     m_project->setConstraintStartTime( DateTime( today, QTime() ) );
     t->setConstraint( Node::ASAP );
@@ -410,6 +411,11 @@ void ProjectTester::schedule()
     sm = m_project->createScheduleManager( "Test Plan" );
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
+
+    //kDebug()<<t->earlyStart()<<m_project->constraintStartTime();
+    //kDebug()<<t->lateStart()<<t->earlyStart();
+    //kDebug()<<t->earlyFinish()<<t->earlyStart();
+    //kDebug()<<t->lateFinish()<<t->earlyFinish();
 
     QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
     QCOMPARE( t->lateStart(), t->earlyStart() );
@@ -421,7 +427,7 @@ void ProjectTester::schedule()
     QVERIFY( t->schedulingError() == false );
 
     // Calculate backward
-    kDebug()<<"Calculate backwards, Task: Milestone, ASAP-------------------------";
+    //kDebug()<<"Calculate backwards, Task: Milestone, ASAP-------------------------";
     m_project->setConstraint( Node::MustFinishOn );
     m_project->setConstraintEndTime( DateTime( today, QTime() ) );
     t->setConstraint( Node::ASAP );
@@ -441,7 +447,7 @@ void ProjectTester::schedule()
     QVERIFY( t->schedulingError() == false );
 
     // Calculate forward
-    kDebug()<<"Calculate forwards, Task: Milestone, ALAP-------------------------";
+    //kDebug()<<"Calculate forwards, Task: Milestone, ALAP-------------------------";
     m_project->setConstraint( Node::MustStartOn );
     m_project->setConstraintStartTime( DateTime( today, QTime() ) );
     t->setConstraint( Node::ALAP );
@@ -461,7 +467,7 @@ void ProjectTester::schedule()
     QVERIFY( t->schedulingError() == false );
 
     // Calculate backward
-    kDebug()<<"Calculate backwards, Task: Milestone, ALAP-------------------------";
+    //kDebug()<<"Calculate backwards, Task: Milestone, ALAP-------------------------";
     m_project->setConstraint( Node::MustFinishOn );
     m_project->setConstraintEndTime( DateTime( today, QTime() ) );
     t->setConstraint( Node::ALAP );
@@ -481,7 +487,7 @@ void ProjectTester::schedule()
     QVERIFY( t->schedulingError() == false );
 
     // Calculate forward
-    kDebug()<<"Calculate forwards, Task: Milestone, MustStartOn ------------------";
+    //kDebug()<<"Calculate forwards, Task: Milestone, MustStartOn ------------------";
     m_project->setConstraint( Node::MustStartOn );
     m_project->setConstraintStartTime( DateTime( today, QTime() ) );
     t->setConstraint( Node::MustStartOn );
@@ -501,7 +507,7 @@ void ProjectTester::schedule()
     QVERIFY( t->schedulingError() == false );
 
     // Calculate backward
-    kDebug()<<"Calculate backwards, Task: Milestone, MustStartOn ------------------";
+    //kDebug()<<"Calculate backwards, Task: Milestone, MustStartOn ------------------";
     m_project->setConstraint( Node::MustFinishOn );
     m_project->setConstraintEndTime( DateTime( tomorrow, QTime() ) );
     t->setConstraint( Node::MustStartOn );
@@ -521,7 +527,7 @@ void ProjectTester::schedule()
     QVERIFY( t->schedulingError() == false );
 
     // Calculate forward
-    kDebug()<<"Calculate forwards, Task: Milestone, MustFinishOn ------------------";
+    //kDebug()<<"Calculate forwards, Task: Milestone, MustFinishOn ------------------";
     m_project->setConstraint( Node::MustStartOn );
     m_project->setConstraintStartTime( DateTime( today, QTime() ) );
     t->setConstraint( Node::MustFinishOn );
@@ -543,7 +549,7 @@ void ProjectTester::schedule()
     QCOMPARE( m_project->endTime(), t->endTime() );
 
     // Calculate backward
-    kDebug()<<"Calculate backwards, Task: Milestone, MustFinishOn ------------------";
+    //kDebug()<<"Calculate backwards, Task: Milestone, MustFinishOn ------------------";
     m_project->setConstraint( Node::MustFinishOn );
     m_project->setConstraintEndTime( DateTime( tomorrow, QTime() ) );
     t->setConstraint( Node::MustFinishOn );
@@ -565,7 +571,7 @@ void ProjectTester::schedule()
     QCOMPARE( m_project->startTime(), t->startTime() );
 
     // Calculate forward
-    kDebug()<<"Calculate forwards, Task: Milestone, StartNotEarlier ---------------";
+    //kDebug()<<"Calculate forwards, Task: Milestone, StartNotEarlier ---------------";
     m_project->setConstraint( Node::MustStartOn );
     m_project->setConstraintStartTime( DateTime( today, QTime() ) );
     t->setConstraint( Node::StartNotEarlier );
@@ -587,7 +593,7 @@ void ProjectTester::schedule()
     QCOMPARE( m_project->endTime(), t->endTime() );
 
     // Calculate backward
-    kDebug()<<"Calculate backwards, Task: Milestone, StartNotEarlier ---------------";
+    //kDebug()<<"Calculate backwards, Task: Milestone, StartNotEarlier ---------------";
     m_project->setConstraint( Node::MustFinishOn );
     m_project->setConstraintEndTime( DateTime( tomorrow, QTime() ) );
     t->setConstraint( Node::StartNotEarlier );
@@ -609,7 +615,7 @@ void ProjectTester::schedule()
     QCOMPARE( m_project->startTime(), t->startTime() );
 
     // Calculate forward
-    kDebug()<<"Calculate forwards, Task: Milestone, FinishNotLater ---------------";
+    //kDebug()<<"Calculate forwards, Task: Milestone, FinishNotLater ---------------";
     m_project->setConstraint( Node::MustStartOn );
     m_project->setConstraintStartTime( DateTime( today, QTime() ) );
     t->setConstraint( Node::FinishNotLater );
@@ -631,7 +637,7 @@ void ProjectTester::schedule()
     QCOMPARE( m_project->endTime(), t->endTime() );
 
     // Calculate backward
-    kDebug()<<"Calculate backwards, Task: Milestone, FinishNotLater ---------------";
+    //kDebug()<<"Calculate backwards, Task: Milestone, FinishNotLater ---------------";
     m_project->setConstraint( Node::MustFinishOn );
     m_project->setConstraintEndTime( DateTime( tomorrow, QTime() ) );
     t->setConstraint( Node::FinishNotLater );
@@ -653,7 +659,7 @@ void ProjectTester::schedule()
     QCOMPARE( m_project->startTime(), t->startTime() );
 
     // Calculate forward
-    kDebug()<<"Calculate forwards, 2 Task, no overbooking ----------";
+    //kDebug()<<"Calculate forwards, 2 Task, no overbooking ----------";
     m_project->setConstraint( Node::MustStartOn );
     m_project->setConstraintStartTime( DateTime( today, QTime() ) );
     t->setConstraint( Node::ASAP );
@@ -674,19 +680,21 @@ void ProjectTester::schedule()
     m_project->addScheduleManager( sm );
     m_project->calculate( *sm );
 
-//     kDebug()<<"earlyStart :"<<t->earlyStart();
-//     kDebug()<<"lateStart  :"<<t->lateStart();
-//     kDebug()<<"earlyFinish:"<<t->earlyFinish();
-//     kDebug()<<"lateFinish :"<<t->lateFinish();
-//     kDebug()<<"startTime  :"<<t->startTime();
-//     kDebug()<<"endTime    :"<<t->endTime();
-//     
-//     kDebug()<<"earlyStart :"<<tsk2->earlyStart();
-//     kDebug()<<"lateStart  :"<<tsk2->lateStart();
-//     kDebug()<<"earlyFinish:"<<tsk2->earlyFinish();
-//     kDebug()<<"lateFinish :"<<tsk2->lateFinish();
-//     kDebug()<<"startTime  :"<<tsk2->startTime();
-//     kDebug()<<"endTime    :"<<tsk2->endTime();
+    //kDebug()<<"estimate   :"<<t->estimate()->expectedEstimate()<<Duration::unitToString(t->estimate()->unit());
+    //kDebug()<<"earlyStart :"<<t->earlyStart();
+    //kDebug()<<"lateStart  :"<<t->lateStart();
+    //kDebug()<<"earlyFinish:"<<t->earlyFinish();
+    //kDebug()<<"lateFinish :"<<t->lateFinish();
+    //kDebug()<<"startTime  :"<<t->startTime();
+    //kDebug()<<"endTime    :"<<t->endTime();
+    
+    //kDebug()<<"estimate   :"<<tsk2->estimate()->expectedEstimate()<<Duration::unitToString(tsk2->estimate()->unit());
+    //kDebug()<<"earlyStart :"<<tsk2->earlyStart();
+    //kDebug()<<"lateStart  :"<<tsk2->lateStart();
+    //kDebug()<<"earlyFinish:"<<tsk2->earlyFinish();
+    //kDebug()<<"lateFinish :"<<tsk2->lateFinish();
+    //kDebug()<<"startTime  :"<<tsk2->startTime();
+    //kDebug()<<"endTime    :"<<tsk2->endTime();
 
     QCOMPARE( t->earlyStart(), m_project->constraintStartTime() );
     QCOMPARE( t->lateStart(), tsk2->startTime() );
@@ -714,7 +722,7 @@ void ProjectTester::schedule()
     QCOMPARE( m_project->endTime(), tsk2->endTime() );
 
     // Calculate forward
-    kDebug()<<"Calculate forwards, 2 Task, relation ---------------";
+    //kDebug()<<"Calculate forwards, 2 Task, relation ---------------";
     m_project->setConstraint( Node::MustStartOn );
     m_project->setConstraintStartTime( DateTime( today, QTime() ) );
     t->setConstraint( Node::ASAP );

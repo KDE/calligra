@@ -112,12 +112,28 @@ bool CalendarDay::load( KoXmlElement &element, XMLLoaderObject &status ) {
         if (e.tagName() == "interval") {
             //kDebug()<<"Interval start="<<e.attribute("start")<<" end="<<e.attribute("end");
             QString st = e.attribute("start");
-            QString en = e.attribute("end");
-            if (!st.isEmpty() && !en.isEmpty()) {
-                QTime start = QTime::fromString(st);
-                QTime end = QTime::fromString(en);
-                addInterval(new TimeInterval(start,end));
+            if (st.isEmpty() ) {
+                kError()<<"Empty interval";
+                continue;
             }
+            QTime start = QTime::fromString(st);
+            int length = 0;
+            if ( status.version() <= "0.6.1" ) {
+                QString en = e.attribute("end");
+                if ( en.isEmpty() ) {
+                    kError()<<"Invalid interval end";
+                    continue;
+                }
+                QTime end = QTime::fromString(en);
+                length = start.msecsTo( end );
+            } else {
+                length = e.attribute("length", "0").toInt();
+            }
+            if ( length <= 0 ) {
+                kError()<<"Invalid interval length";
+                continue;
+            }
+            addInterval( new TimeInterval( start, length) );
         }
     }
     return true;
@@ -137,7 +153,7 @@ void CalendarDay::save(QDomElement &element) const {
     foreach (TimeInterval *i, m_workingIntervals) {
         QDomElement me = element.ownerDocument().createElement("interval");
         element.appendChild(me);
-        me.setAttribute("end", i->second.toString());
+        me.setAttribute("length", i->second);
         me.setAttribute("start", i->first.toString());
     }
 } 
@@ -146,33 +162,6 @@ void CalendarDay::addInterval(TimeInterval *interval) {
     m_workingIntervals.append(interval);
 }
 
-QTime CalendarDay::startOfDay() const {
-    QTime t;
-    if (!m_workingIntervals.isEmpty()) {
-        QListIterator<TimeInterval*> it = m_workingIntervals;
-        t = it.next()->first;
-        while (it.hasNext()) {
-            TimeInterval *i = it.next();
-            if (t > i->first)
-                t = i->first;
-        }
-    }
-    return t;
-}
-
-QTime CalendarDay::endOfDay() const {
-    QTime t;
-    if (!m_workingIntervals.isEmpty()) {
-        QListIterator<TimeInterval*> it = m_workingIntervals;
-        t = it.next()->second;
-        while (it.hasNext()) {
-            TimeInterval *i = it.next();
-            if (t > i->second)
-                t = i->second;
-        }
-    }
-    return t;
-}
     
 bool CalendarDay::operator==(const CalendarDay *day) const {
     return operator==(*day);
@@ -218,12 +207,12 @@ bool CalendarDay::operator!=(const CalendarDay &day) const {
     return !operator==(day);
 }
 
-Duration CalendarDay::effort(const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch) {
+Duration CalendarDay::effort(const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) {
     //kDebug()<<start<<" -"<<end;
-    return effort( m_date, start, end, spec, sch );
+    return effort( m_date, start, length, spec, sch );
 }
 
-Duration CalendarDay::effort(const QDate &date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch) {
+Duration CalendarDay::effort(const QDate &date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) {
     if ( !date.isValid() ) {
         return Duration::zeroDuration;
     }
@@ -233,13 +222,33 @@ Duration CalendarDay::effort(const QDate &date, const QTime &start, const QTime 
         //kDebug()<<"Non working day";
         return eff;
     }
+    int l = 0;
     foreach (TimeInterval *i, m_workingIntervals) {
-        QTime t1 = start < i->first ? i->first : start;
-        QTime t2 = end > i->second ? i->second : end;
-        //kDebug()<<"Interval:"<<t1<<" -"<<t2;
-        DateTimeInterval dti( DateTime( date, t1, spec ), DateTime( date, t2, spec ) );
+        if (start >= i->first.addMSecs(i->second) ) {
+            //kDebug()<<"Skip:"<<start<<">="<<i->first.addMSecs(i->second);
+            continue;
+        }
+        QTime t1 = start.addMSecs( length );
+        if ( t1 != QTime( 0, 0, 0 ) && t1 < i->first ) {
+            //kDebug()<<"Skip:"<<t1<<"<"<<i->first;
+            continue;
+        }
+        QTime end = i->first.addMSecs( i->second );
+        t1 = qMax( start, i->first );
+        if ( end == QTime( 0, 0, 0 ) ) {
+            l = t1.msecsTo( QTime( 23, 59, 59, 999 ) ) + 1;
+        } else {
+            l = t1.msecsTo( end );
+        }
+        l = qMin( l, length - start.msecsTo( t1 ) );
+        if ( l <= 0 ) {
+            continue;
+        }
+        //kDebug()<<"Interval:"<<t1<<"->"<<l;
+        DateTime dt1( date, t1, spec );
+        DateTimeInterval dti( dt1, dt1.addMSecs( l ) );
         if ( sch ) {
-            dti = sch->available( dti );
+            dti = sch->available( dti ); //FIXME needs an effort method
             //kDebug()<<"Checked sch:"<<dti.first<<" -"<<dti.second;
         }
         eff += dti.second - dti.first;
@@ -258,88 +267,90 @@ Duration CalendarDay::workDuration() const
     }
     foreach (TimeInterval *i, m_workingIntervals) {
         //kDebug()<<"Interval:"<<i->first<<" -"<<i->second;
-        d += Duration( (qint64)(i->first.msecsTo( i->second )) );
+        d += Duration( (qint64)i->second );
     }
     return d;
 }
 
 
-TimeInterval CalendarDay::interval(const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch) const {
+TimeInterval CalendarDay::interval(const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const {
     //kDebug();
-    return interval( m_date, start, end, spec, sch );
+    return interval( m_date, start, length, spec, sch );
 }
 
-TimeInterval CalendarDay::interval(const QDate date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch) const {
-    //kDebug();
-    QTime t1, t2;
-    if ( hasInterval() ) {
-        foreach (TimeInterval *i, m_workingIntervals) {
-            if (start < i->second && end > i->first) {
-                QTime t1 = start < i->first ? i->first : start;
-                QTime t2 = end > i->second ? i->second : end;
-                TimeInterval ti( t1, t2 );
-                //kDebug()<<"---->"<<sch<<""<<date<<","<<t1<<t2;
-                if ( sch ) {
-                    // check if booked
-                    //kDebug()<<"---->"<<date<<","<<t1<<t2;
-                    DateTimeInterval dti( DateTime( date, t1, spec ), DateTime( date, t2, spec ) );
-                    dti = sch->available( dti );
-                    //kDebug()<<"Checked sch:"<<ti.first<<" -"<<ti.second;
-                    ti = TimeInterval( dti.first.toTimeSpec( spec ).time(), dti.second.toTimeSpec( spec ).time() );
-                }
-                if ( !ti.first.isNull() && !ti.second.isNull() && ti.first < ti.second ) {
-                    //kDebug()<<"true:"<<""<<ti.first<<" -"<<ti.second;
-                    return ti;
-                }
-                return TimeInterval( QTime(), QTime() );
-            }
+TimeInterval CalendarDay::interval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const
+{
+    //kDebug()<<"Inp:"<<date<<start<<"+"<<length<<"="<<start.addMSecs( length );
+    Q_ASSERT( length > 0 );
+    Q_ASSERT( QTime(0,0,0).msecsTo( start ) + length <= 1000*60*60*24 );
+    QTime t1;
+    int l = 0;
+    if ( ! hasInterval() ) {
+        return TimeInterval( QTime(), 0 );
+    }
+    foreach (TimeInterval *i, m_workingIntervals) {
+        //kDebug()<<"Interval:"<<i->first<<i->second<<i->first.addMSecs(i->second);
+        if (start >= i->first.addMSecs(i->second) ) {
+            //kDebug()<<"Skip:"<<start<<">="<<i->first.addMSecs(i->second);
+            continue;
+        }
+        QTime t1 = start.addMSecs( length );
+        if ( t1 != QTime( 0, 0, 0 ) && t1 < i->first ) {
+            //kDebug()<<"Skip:"<<t1<<"<"<<i->first;
+            continue;
+        }
+        QTime end = i->first.addMSecs( i->second );
+        t1 = qMax( start, i->first );
+        if ( end == QTime( 0, 0, 0 ) ) {
+            l = t1.msecsTo( QTime( 23, 59, 59, 999 ) ) + 1;
+        } else {
+            l = t1.msecsTo( end );
+        }
+        l = qMin( l, length - start.msecsTo( t1 ) );
+        if ( l <= 0 ) {
+            continue;
+        }
+        TimeInterval ti( t1, l );
+        //kDebug()<<"Day give:"<<date<<","<<t1<<"->"<<l;
+        if ( sch ) {
+            // check if booked
+            //kDebug()<<"Booked?"<<date<<","<<t1<<"+"<<l<<"="<<t1.addMSecs( l );
+            DateTime dt1( DateTime( date, t1, spec ) );
+            DateTimeInterval dti( dt1, dt1.addMSecs( l ) );
+            dti = sch->available( dti );
+            //kDebug()<<"Checked sch:"<<ti.first<<","<<ti.second<<"="<<dti;
+            dt1 = dti.first.toTimeSpec( spec );
+            l = ( DateTime(dti.second.toTimeSpec( spec )) - dt1 ).milliseconds();
+            ti = TimeInterval( dt1.time(), l );
+        }
+        if ( !ti.first.isNull() && ti.second > 0 ) {
+            //kDebug()<<"Return:"<<ti.first<<"+"<<ti.second<<"="<<ti.first.addMSecs( ti.second );
+            return ti;
         }
     }
-    //kError()<<"No interval "<<m_date<<": "<<start<<","<<end<<endl;
-    return TimeInterval(t1, t2);
+    return TimeInterval(t1, l);
 }
 
-bool CalendarDay::hasInterval() const {
+bool CalendarDay::hasInterval() const
+{
     return m_state == Working && m_workingIntervals.count() > 0;
 }
 
-bool CalendarDay::hasInterval(const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch) const {
+bool CalendarDay::hasInterval(const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const {
     //kDebug()<<(m_date.isValid()?m_date.toString(Qt::ISODate):"Weekday")<<""<<start.toString()<<" -"<<end.toString();
-    return hasInterval( m_date, start, end, spec, sch );
+    return hasInterval( m_date, start, length, spec, sch );
 }
 
-bool CalendarDay::hasInterval(const QDate date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch) const {
-    //kDebug()<<(m_date.isValid()?m_date.toString(Qt::ISODate):"Weekday")<<""<<start.toString()<<" -"<<end.toString();
-    if ( ! hasInterval() ) {
-        return false;
-    }
-    foreach (TimeInterval *i, m_workingIntervals) {
-        if (start < i->second && end > i->first) {
-            if ( sch ) {
-                // check if booked
-                QTime t1 = start < i->first ? i->first : start;
-                QTime t2 = end > i->second ? i->second : end;
-                //kDebug()<<"---->"<<date<<","<<t1<<t2;
-                DateTimeInterval dti( DateTime( date, t1, spec ), DateTime( date, t2, spec ) );
-                dti = sch->available( dti );
-                if ( dti.first.isValid() && dti.second.isValid() && dti.first < dti.second ) {
-                    //kDebug()<<"true:"<<""<<dti.first<<dti.second;
-                    return true;
-                }
-            } else {
-                return true;
-            }
-        }
-    }
-    return false;
+bool CalendarDay::hasInterval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const
+{
+    //kDebug()<<(m_date.isValid()?m_date.toString(Qt::ISODate):"Weekday")<<""<<start<<"->"<<length;
+    return ! interval( date, start, length, spec, sch ).first.isNull();
 }
 
 Duration CalendarDay::duration() const {
     Duration dur;
     foreach (TimeInterval *i, m_workingIntervals) {
-        DateTime start(QDate::currentDate(), i->first);
-        DateTime end(QDate::currentDate(), i->second);
-        dur += end - start;
+        dur += Duration( (qint64)i->second );
     }
     return dur;
 }
@@ -509,33 +520,35 @@ bool CalendarWeekdays::operator!=(const CalendarWeekdays *wd) const {
     return operator==( wd ) == false;
 }
 
-Duration CalendarWeekdays::effort(const QDate &date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch) {
+Duration CalendarWeekdays::effort(const QDate &date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) {
     //kDebug()<<"Day of week="<<date.dayOfWeek();
+    Q_ASSERT( QTime(0,0,0).msecsTo( start ) + length <= 1000*60*60*24 );
     CalendarDay *day = weekday( date.dayOfWeek() );
     if (day && day->state() == CalendarDay::Working) {
-        return day->effort(date, start, end, spec, sch);
+        return day->effort(date, start, length, spec, sch);
     }
     return Duration::zeroDuration;
 }
 
-TimeInterval CalendarWeekdays::interval(const QDate date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch) const {
+TimeInterval CalendarWeekdays::interval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const
+{
     //kDebug();
     CalendarDay *day = weekday( date.dayOfWeek() );
     if (day && day->state() == CalendarDay::Working) {
-        if (day->hasInterval(date, start, end, spec, sch)) {
-            return day->interval(date, start, end, spec, sch);
-        }
+        return day->interval(date, start, length, spec, sch);
     }
-    return TimeInterval(QTime(), QTime());
+    return TimeInterval(QTime(), 0);
 }
 
-bool CalendarWeekdays::hasInterval(const QDate date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch) const {
-    //kDebug()<<date.toString()<<":"<<start.toString()<<" -"<<end.toString();
+bool CalendarWeekdays::hasInterval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const
+{
+    //kDebug()<<date<<":"<<start<<"+"<<length;
     CalendarDay *day = weekday( date.dayOfWeek() );
-    return day && day->hasInterval(date, start, end, spec, sch);
+    return day && day->hasInterval(date, start, length, spec, sch);
 }
 
-bool CalendarWeekdays::hasInterval() const {
+bool CalendarWeekdays::hasInterval() const
+{
     //kDebug();
     foreach ( CalendarDay *d, m_weekdays.values() ) {
         if (d->hasInterval())
@@ -561,20 +574,6 @@ Duration CalendarWeekdays::duration(int _weekday) const {
     if (day)
         return day->duration();
     return Duration();
-}
-
-QTime CalendarWeekdays::startOfDay(int _weekday) const {
-    CalendarDay *day = weekday(_weekday);
-    if (day)
-        return day->startOfDay();
-    return QTime();
-}
-
-QTime CalendarWeekdays::endOfDay(int _weekday) const {
-    CalendarDay *day = weekday(_weekday);
-    if (day)
-        return day->endOfDay();
-    return QTime();
 }
 
 int CalendarWeekdays::indexOf( const CalendarDay *day ) const
@@ -780,11 +779,11 @@ void Calendar::save(QDomElement &element) const {
     
 }
 
-CalendarDay *Calendar::findDay(const QDate &date, bool skipNone) const {
+CalendarDay *Calendar::findDay(const QDate &date, bool skipUndefined) const {
     //kDebug()<<date.toString();
     foreach (CalendarDay *d, m_days) {
         if (d->date() == date) {
-            if (skipNone  && d->state() == CalendarDay::None) {
+            if (skipUndefined  && d->state() == CalendarDay::Undefined) {
                 continue; // hmmm, break?
             }
             return d;
@@ -878,22 +877,16 @@ bool Calendar::hasParent(Calendar *cal) {
     return m_parent->hasParent(cal);
 }
 
-Duration Calendar::effort(const QDate &date, const QTime &start, const QTime &end, Schedule *sch) const {
-    //kDebug()<<m_name<<":"<<date.toString(Qt::ISODate)<<""<<start.toString()<<" -"<<end.toString();
-    if (start == end) {
+Duration Calendar::effort(const QDate &date, const QTime &start, int length, Schedule *sch) const {
+    //kDebug()<<m_name<<":"<<date<<""<<start<<"->"<<length;
+    if (length <= 0) {
         return Duration::zeroDuration;
-    }
-    QTime _start = start;
-    QTime _end = end;
-    if (start > end) {
-        _start = end;
-        _end = start;
     }
     // first, check my own day
     CalendarDay *day = findDay(date, true);
     if (day) {
         if (day->state() == CalendarDay::Working) {
-            return day->effort(_start, _end, m_spec, sch);
+            return day->effort(start, length, m_spec, sch);
         } else if (day->state() == CalendarDay::NonWorking) {
             return Duration::zeroDuration;
         } else {
@@ -904,14 +897,14 @@ Duration Calendar::effort(const QDate &date, const QTime &start, const QTime &en
     // check my own weekdays
     if (m_weekdays) {
         if (m_weekdays->state(date) == CalendarDay::Working) {
-            return m_weekdays->effort(date, _start, _end, m_spec, sch);
+            return m_weekdays->effort(date, start, length, m_spec, sch);
         }
         if (m_weekdays->state(date) == CalendarDay::NonWorking) {
             return Duration::zeroDuration;
         }
     }
     if (m_parent) {
-        return m_parent->effort(date, start, end, sch);
+        return m_parent->effort(date, start, length, sch);
     }
     return Duration::zeroDuration;
 }
@@ -933,41 +926,55 @@ Duration Calendar::effort(const DateTime &start, const DateTime &end, Schedule *
     QDate date = s.date();
     QTime startTime = s.time();
     QTime endTime = e.time();
-    if (e.date() > date) {
-        endTime.setHMS(23, 59, 59, 999);
+    int length = 0;
+    if ( date == e.date() ) {
+        // single day
+        length = startTime.msecsTo( endTime );
+        return effort( date, startTime, length, sch );
     }
-    eff = effort(date, startTime, endTime, sch); // first day
+    length = startTime.msecsTo( QTime( 23, 59, 59, 999 ) ) + 1;
+    QTime t0(0, 0, 0);
+    int aday = t0.msecsTo( QTime( 23, 59, 59, 999 ) ) + 1;
+    eff = effort(date, startTime, length, sch); // first day
     // Now get all the rest of the days
     for (date = date.addDays(1); date <= e.date(); date = date.addDays(1)) {
         if (date < e.date()) {
-             eff += effort(date, QTime(0, 0, 0), endTime, sch); // whole days
+            eff += effort(date, t0, aday, sch); // whole days
         } else {
-             eff += effort(date, QTime(0, 0, 0), e.time(), sch); // last day
+            if ( endTime == t0 ) {
+                break;
+            }
+            eff += effort(date, t0, t0.msecsTo( endTime ), sch); // last day
         }
         //kDebug()<<": eff now="<<eff.toString(Duration::Format_Day);
     }
-    //kDebug()<<start.date().toString()<<"-"<<end.date().toString()<<": total="<<eff.toString(Duration::Format_Day);
+    //kDebug()<<start<<"-"<<end<<": total="<<eff.toString();
     return eff;
 }
 
 
-TimeInterval Calendar::firstInterval(const QDate &date, const QTime &startTime, const QTime &endTime, Schedule *sch) const {
+TimeInterval Calendar::firstInterval(const QDate &date, const QTime &startTime, int length, Schedule *sch) const {
+    //kDebug();
     CalendarDay *day = findDay(date, true);
     if (day) {
-        return day->interval(startTime, endTime, m_spec, sch);
+        return day->interval(startTime, length, m_spec, sch);
     }
     if (m_weekdays) {
         if (m_weekdays->state(date) == CalendarDay::Working) {
-            return m_weekdays->interval(date, startTime, endTime, m_spec, sch);
+            //kDebug()<<"Check weekday";
+            TimeInterval i = m_weekdays->interval(date, startTime, length, m_spec, sch);
+            //kDebug()<<"Checked weekday, got"<<i;
+            return i;
         }
         if (m_weekdays->state(date) == CalendarDay::NonWorking) {
-            return TimeInterval(QTime(), QTime());
+            return TimeInterval(QTime(), 0);
         }
     }
     if (m_parent) {
-        return m_parent->firstInterval(date, startTime, endTime, sch);
+        //kDebug()<<"Check parent";
+        return m_parent->firstInterval(date, startTime, length, sch);
     }
-    return TimeInterval(QTime(), QTime());
+    return TimeInterval(QTime(), 0);
 }
 
 DateTimeInterval Calendar::firstInterval(const DateTime &start, const DateTime &end, Schedule *sch) const {
@@ -980,87 +987,73 @@ DateTimeInterval Calendar::firstInterval(const DateTime &start, const DateTime &
         kWarning()<<"Invalid end time";
         return DateTimeInterval(DateTime(), DateTime());
     }
+    KDateTime::Spec es = start.timeSpec();
     // convert to calendar's timezone in case caller use a different timezone
     DateTime s = DateTime( start.toTimeSpec( m_spec ) );
     DateTime e = DateTime( end.toTimeSpec( m_spec ) );
+    if ( s == e || s > e ) {
+        kWarning()<<"Invalid interval";
+        return DateTimeInterval();
+    }
+    TimeInterval res;
+    QTime startTime = s.time();
+    int length = 0;
+    if ( s.date() == e.date() ) {
+        // Handle single day
+        length = startTime.msecsTo( e.time() );
+        if ( length <= 0 ) {
+            return DateTimeInterval();
+        }
+        //kDebug()<<"Check single day:"<<s.date()<<s.time()<<length;
+        res = firstInterval(s.date(), s.time(), length, sch);
+        if ( res.first.isNull() || res.second <= 0 ) {
+            return DateTimeInterval();
+        }
+        DateTime dt1 = DateTime( s.date(), res.first, m_spec ).toTimeSpec(es);
+        DateTimeInterval dti( dt1, dt1.addMSecs( res.second ) );
+        //kDebug()<<"Got:"<<dti;
+        return dti;
+    }
     //kDebug()<<"tospec:"<<s.toString()<<" -"<<e.toString();
-    QTime startTime;
-    QTime endTime;
-    QDate date = start.date();
-    for (; date <= e.date(); date = date.addDays(1)) {
-        if (date < e.date())
-            endTime = QTime(23, 59, 59, 999);
-        else
-            endTime = e.time();
-        if (date > start.date())
+    // Multiple days
+    for ( QDate date = start.date(); date <= e.date(); date = date.addDays(1) ) {
+        if (date > start.date()) {
             startTime = QTime(0, 0, 0);
-        else 
-            startTime = s.time();
-            
-        TimeInterval res = firstInterval(date, startTime, endTime, sch);
-        if (!res.first.isNull() && !res.second.isNull() && res.first < res.second) {
+        }
+        if (date < e.date()) {
+            length = startTime.msecsTo( QTime(23, 59, 59, 999) ) + 1;
+        } else {
+            length = startTime.msecsTo( e.time() );
+        }
+        if ( length <= 0 ) {
+            break;
+        }
+        //kDebug()<<"Check:"<<date<<startTime<<"+"<<length<<"="<<startTime.addMSecs( length );
+        res = firstInterval(date, startTime, length, sch);
+        if ( ! res.first.isNull() && res.second > 0 ) {
+            //kDebug()<<"inp:"<<start<<"-"<<end;
             //kDebug()<<"Found an interval ("<<date<<","<<res.first<<","<<res.second<<")";
             // return result in callers timezone
-            KDateTime::Spec es = start.timeSpec();
-            DateTimeInterval dti( DateTime( date,res.first, m_spec ).toTimeSpec(es), DateTime( date, res.second, m_spec ).toTimeSpec(es) );
+            DateTime dt1 = DateTime( date,res.first, m_spec ).toTimeSpec(es);
+            DateTimeInterval dti( dt1, dt1.addMSecs( res.second ) );
             //kDebug()<<"Result:"<<dti.first.toString()<<","<<dti.second.toString();
             return dti;
         }
     }
-    //kError()<<"Didn't find an interval ("<<start<<", "<<end<<")"<<endl;
+    //kWarning()<<"Didn't find an interval ("<<start<<", "<<end<<")"<<endl;
     return DateTimeInterval(DateTime(), DateTime());
 }
 
 
-bool Calendar::hasInterval(const QDate &date, const QTime &startTime, const QTime &endTime, Schedule *sch) const {
-    CalendarDay *day = findDay(date, true);
-    if (day) {
-        //kDebug()<<m_name<<""<<date<<":"<<startTime<<" to"<<endTime;
-        return day->hasInterval(startTime, endTime, m_spec, sch);
-    } 
-    if (m_weekdays) {
-        if (m_weekdays->state(date) == CalendarDay::Working) {
-            return m_weekdays->hasInterval(date, startTime, endTime, m_spec, sch);
-        } else if (m_weekdays->state(date) == CalendarDay::NonWorking) {
-            return false;
-        }
-    }
-    if (m_parent) {
-        return m_parent->hasInterval(date, startTime, endTime, sch);
-    }
-    return false;
+bool Calendar::hasInterval(const QDate &date, const QTime &startTime, int length, Schedule *sch) const
+{
+    //kDebug();
+    return ! firstInterval( date, startTime, length, sch ).first.isNull();
 }
 
 bool Calendar::hasInterval(const DateTime &start, const DateTime &end, Schedule *sch) const {
-    //kDebug()<<m_name<<":"<<start<<" -"<<end;
-    if (!start.isValid() || !end.isValid() || end < start) {
-        kError()<<"Invalid input: "<<(start.isValid()?"":"(start invalid) ")<<(end.isValid()?"":"(end invalid) ")<<(start>end?"":"(start>end)");
-        //kDebug()<<kBacktrace(8);
-        return false;
-    }
-    if ( end == start ) {
-        return false;
-    }
-    // convert to calendar's timezone in case caller use a different timezone
-    DateTime s = start.toTimeSpec( m_spec );
-    DateTime e = end.toTimeSpec( m_spec );
-    QTime startTime;
-    QTime endTime;
-    QDate date = s.date();
-    for (; date <= e.date(); date = date.addDays(1)) {
-        if (date < e.date())
-            endTime = QTime(23, 59, 59, 999); //Hmmmm
-        else
-            endTime = e.time();
-        if (date > s.date())
-            startTime = QTime(0, 0, 0);
-        else 
-            startTime = s.time();
-
-        if (hasInterval(date, startTime, endTime, sch))
-            return true;
-    }
-    return false;
+    //kDebug();
+    return ! firstInterval( start, end, sch ).first.isNull();
 }
 
 DateTime Calendar::firstAvailableAfter(const DateTime &time, const DateTime &limit, Schedule *sch ) {
@@ -1072,16 +1065,13 @@ DateTime Calendar::firstAvailableAfter(const DateTime &time, const DateTime &lim
     if ( time == limit ) {
         return DateTime();
     }
-    if (!hasInterval(time, limit, sch)) {
-        return DateTime();
-    }
     DateTime t = firstInterval(time, limit, sch).first;
     //kDebug()<<m_name<<":"<<t;
     return t;
 }
 
 DateTime Calendar::firstAvailableBefore(const DateTime &time, const DateTime &limit, Schedule *sch) {
-    //kDebug()<<m_name<<": check from"<<time.toString()<<" limit="<<limit.toString();
+    //kDebug()<<m_name<<": check from"<<time<<" limit="<<limit;
     if (!time.isValid() || !limit.isValid() || time < limit) {
         kError()<<"Invalid input: "<<(time.isValid()?"":"(time invalid) ")<<(limit.isValid()?"":"(limit invalid) ")<<(time<limit?"":"(time<limit)");
         return DateTime();

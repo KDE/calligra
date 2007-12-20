@@ -39,6 +39,7 @@ class Q3ButtonGroup;
 class QPushButton;
 class Q3ListView;
 class Q3TimeEdit;
+class QDoubleSpinBox;
 
 namespace KPlato
 {
@@ -61,7 +62,7 @@ public:
     Q3GroupBox* groupBox4;
     QTreeWidget* intervalList;
     Q3TimeEdit* startTime;
-    Q3TimeEdit* endTime;
+    QDoubleSpinBox *length;
     QPushButton* bClear;
     QPushButton* bAddInterval;
     QComboBox *tz;

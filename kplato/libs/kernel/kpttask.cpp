@@ -774,6 +774,7 @@ DateTime Task::calculateEarlyFinish(int use) {
             case Node::ASAP:
             case Node::ALAP:
             {
+                //kDebug()<<m_name<<" ASAP/ALAP:"<<cs->earlyStart;
                 m_durationForward = duration(cs->earlyStart, use, false);
                 cs->earlyFinish = cs->earlyStart + m_durationForward;
                 //kDebug()<<m_name<<" ASAP/ALAP:"<<cs->earlyStart<<"+"<<m_durationForward.toString()<<"="<<cs->earlyFinish;
@@ -984,6 +985,7 @@ DateTime Task::calculateLateStart(int use) {
         switch (constraint()) {
             case Node::ASAP:
             case Node::ALAP:
+                //kDebug()<<m_name<<" ASAP/ALAP:"<<cs->lateFinish;
                 m_durationBackward = duration(cs->lateFinish, use, true);
                 cs->lateStart = cs->lateFinish - m_durationBackward;
                 //kDebug()<<m_name<<" ASAP/ALAP:"<<cs->lateFinish<<"-"<<m_durationBackward.toString()<<"="<<cs->lateStart;
@@ -1193,6 +1195,7 @@ DateTime Task::scheduleFromStartTime(int use) {
         switch (m_constraint) {
         case Node::ASAP:
             // cs->startTime calculated above
+            //kDebug()<<m_name<<"ASAP:"<<cs->startTime<<"earliest:"<<cs->earlyStart;
             if ( m_estimate->type() != Estimate::Type_FixedDuration ) {
                 cs->startTime = workStartAfter( cs->startTime );
             }
@@ -1210,6 +1213,7 @@ DateTime Task::scheduleFromStartTime(int use) {
             break;
         case Node::ALAP:
             // cs->startTime calculated above
+            //kDebug()<<m_name<<"ALAP:"<<cs->startTime<<cs->endTime<<" latest="<<cs->lateFinish;
             if ( estimate()->type() != Estimate::Type_FixedDuration ) {
                 cs->endTime = workFinishBefore( cs->lateFinish );
             }

@@ -335,31 +335,34 @@ public:
     const QList<ResourceRequest*> &requests() const
     { return m_requests; }
 
+    /// Returns the effort that can be done starting at @p start within @p duration.
+    /// If @p  backward is true, checks backward in time.
+    /// Status is returned in @p ok
     Duration effort( const DateTime &start, const Duration &duration, bool backward, bool *ok = 0 ) const;
 
     /**
-     * Find the first available time after time, within limit.
+     * Find the first available time after @p time, within @p limit.
      * Returns invalid DateTime if not available.
      * Uses the current schedule to check for appointments.
      */
     DateTime availableAfter( const DateTime &time, const DateTime limit = DateTime() ) const;
     /**
-     * Find the first available time before time, within limit.
+     * Find the first available time before @p time, within @p limit.
      * Returns invalid DateTime if not available.
      * Uses the current schedule to check for appointments.
      */
     DateTime availableBefore( const DateTime &time, const DateTime limit = DateTime()) const;
 
     /**
-     * Find the first available time after time, within limit.
+     * Find the first available time after @p time, within @p limit.
      * Returns invalid DateTime if not available.
-     * If sch == 0, Appointments are not checked.
+     * If @p sch == 0, Appointments are not checked.
      */
     DateTime availableAfter( const DateTime &time, const DateTime limit, Schedule *sch ) const;
     /**
-     * Find the first available time before time, within limit.
+     * Find the first available time before @p time, within @p limit.
      * Returns invalid DateTime if not available.
-     * If sch == 0, Appointments are not checked.
+     * If @p sch == 0, Appointments are not checked.
      */
     DateTime availableBefore( const DateTime &time, const DateTime limit, Schedule *sch ) const;
 

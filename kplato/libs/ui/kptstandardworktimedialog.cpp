@@ -22,7 +22,6 @@
 #include "kptproject.h"
 #include "kptcalendar.h"
 #include "kptcommand.h"
-#include "kptintervaledit.h"
 
 #include <QGroupBox>
 #include <QHeaderView>
@@ -32,6 +31,7 @@
 #include <QLabel>
 #include <QLayout>
 #include <QLineEdit>
+#include <QTreeWidgetItem>
 
 #include <kcalendarsystem.h>
 #include <kdebug.h>

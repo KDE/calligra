@@ -61,7 +61,7 @@ void IntervalEditImpl::slotClearClicked() {
 }
 
 void IntervalEditImpl::slotAddIntervalClicked() {
-    new IntervalItem(intervalList, startTime->time(), endTime->time());
+    new IntervalItem(intervalList, startTime->time(), (int)length->value() * 1000 * 60 *60 );
     emit changed();
 }
 
@@ -72,7 +72,7 @@ void IntervalEditImpl::slotIntervalSelectionChanged() {
     
     IntervalItem *ii = static_cast<IntervalItem *>(lst[0]);
     startTime->setTime(ii->interval().first);
-    endTime->setTime(ii->interval().second);
+    length->setValue((double)ii->interval().second / (1000*60*60));
 }
 
 QList<TimeInterval*> IntervalEditImpl::intervals() const {

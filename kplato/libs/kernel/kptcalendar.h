@@ -52,7 +52,9 @@ class Project;
 class Schedule;
 class XMLLoaderObject;
 
-typedef QPair<QTime, QTime> TimeInterval;
+/// TimeInterval is defined as a start time and a length.
+/// The end time (start + length) must not exceed midnight
+typedef QPair<QTime, int> TimeInterval;
 typedef QPair<DateTime, DateTime> DateTimeInterval;
         
 class KPLATOKERNEL_EXPORT CalendarDay {
@@ -72,7 +74,7 @@ public:
     void save(QDomElement &element) const;
 
     const QList<TimeInterval*> &workingIntervals() const { return m_workingIntervals; }
-    void addInterval( const QTime &t1, const QTime &t2 ) { addInterval( TimeInterval( t1, t2 ) ); }
+    void addInterval( const QTime &t1, int length ) { addInterval( TimeInterval( t1, length ) ); }
     void addInterval(TimeInterval *interval);
     void addInterval(TimeInterval interval) { addInterval(new TimeInterval(interval)); }
     void clearIntervals() { m_workingIntervals.clear(); }
@@ -84,9 +86,6 @@ public:
     TimeInterval *intervalAt( int index ) const;
     int indexOf( const TimeInterval *ti ) const;
     int numIntervals() const;
-    
-    QTime startOfDay() const;
-    QTime endOfDay() const;
     
     QDate date() const { return m_date; }
     void setDate(const QDate& date) { m_date = date; }
@@ -103,26 +102,26 @@ public:
      * Returns the amount of 'worktime' that can be done on
      * this day between the times start and end.
      */
-    Duration effort(const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch=0);
+    Duration effort(const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch=0);
     /**
      * Returns the amount of 'worktime' that can be done on
      * this day between the times start and end.
      */
-    Duration effort(const QDate &date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch=0);
+    Duration effort(const QDate &date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch=0);
 
     /**
      * Returns the actual 'work interval' for the interval start to end.
      * If no 'work interval' exists, returns the interval start, end.
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
-    TimeInterval interval(const QTime &start, const QTime &end, const KDateTime::Spec &spec,  Schedule *sch=0) const;
+    TimeInterval interval(const QTime &start, int length, const KDateTime::Spec &spec,  Schedule *sch=0) const;
     
     /**
      * Returns the actual 'work interval' for the interval start to end.
      * If no 'work interval' exists, returns the interval start, end.
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
-    TimeInterval interval(const QDate date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch=0) const;
+    TimeInterval interval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch=0) const;
     
     bool hasInterval() const;
 
@@ -130,14 +129,15 @@ public:
      * Returns true if at least a part of a 'work interval' exists 
      * for the interval start to end.
      */
-    bool hasInterval(const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch=0) const;
+    bool hasInterval(const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch=0) const;
     
     /**
      * Returns true if at least a part of a 'work interval' exists 
-     * for the interval start to end.
+     * for the interval @p start to @p start + @p length.
      * Assumes this day is date. (Used by weekday hasInterval().)
+     * If @p sch is not 0, the schedule is checked for availability.
      */
-    bool hasInterval(const QDate date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch=0) const;
+    bool hasInterval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch=0) const;
     
     Duration duration() const;
     
@@ -208,29 +208,25 @@ public:
     bool operator==(const CalendarWeekdays *weekdays) const;
     bool operator!=(const CalendarWeekdays *weekdays) const;
 
-    Duration effort(const QDate &date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch=0);
+    Duration effort(const QDate &date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch=0);
     
     /**
      * Returns the actual 'work interval' on the weekday defined by date
-     * for the interval start to end.
+     * for the interval @p start to @p start + @p length.
      * If no 'work interval' exists, returns the interval start, end.
      * Use @ref hasInterval() to check if a 'work interval' exists.
+     * If @p sch is not 0, the schedule is checked for availability.
      */
-    TimeInterval interval(const QDate date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch) const;
+    TimeInterval interval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const;
     /**
      * Returns true if at least a part of a 'work interval' exists 
      * on the weekday defined by date for the interval start to end.
      */
-    bool hasInterval(const QDate date, const QTime &start, const QTime &end, const KDateTime::Spec &spec, Schedule *sch) const;
+    bool hasInterval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const;
     bool hasInterval() const;
 
     Duration duration() const;
     Duration duration(int weekday) const;
-
-    /// Returns the time when the  weekday starts
-    QTime startOfDay(int weekday) const;
-    /// Returns the time when the  weekday ends
-    QTime endOfDay(int weekday) const;
 
     const CalendarWeekdays &copy(const CalendarWeekdays &weekdays);
 
@@ -248,10 +244,10 @@ public:
 
 /**
  * Calendar defines the working and nonworking days and hours.
- * A day can have the three states None (Undefined), NonWorking, or Working.
+ * A day can have the three states Undefined, NonWorking, or Working.
  * A calendar can have a parent calendar that defines the days that are 
  * undefined in this calendar. 
- * If a calendar have no parent an undefined day defaults to Nonworking.
+ * If a calendar have no parent, an undefined day defaults to Nonworking.
  * A Working day has one or more work intervals to define the work hours.
  *
  * The definition can consist of two parts: Weekdays and Day.
@@ -283,7 +279,7 @@ public:
 
     Calendar *parentCal() const { return m_parent; }
     /**
-     * Set parent calendar.
+     * Set parent calendar to @parent.
      * Removes myself from current parent and
      * inserts myself as child to new parent.
      */
@@ -311,8 +307,8 @@ public:
     void setWorkInterval( TimeInterval *ti, const TimeInterval &value );
 
     /**
-     * Find the definition for the day date.
-     * If skipUndefined=true the day is NOT returned if it has state None (Undefined).
+     * Find the definition for the day @p date.
+     * If @p skipUndefined = true the day is NOT returned if it has state Undefined.
      */
     CalendarDay *findDay(const QDate &date, bool skipUndefined=false) const;
     void addDay(CalendarDay *day);
@@ -334,7 +330,7 @@ public:
     const QList<CalendarDay*> weekdayList() const { return m_weekdays->weekdays(); }
     int numWeekdays() const { return weekdayList().count(); }
     
-    /// Sets the weekdays data to the data in day
+    /// Sets the @p weekday data to the data in @p day
     void setWeekday( int weekday, const CalendarDay &day );
     
     QString parentId() const { return m_parentId; }
@@ -342,54 +338,38 @@ public:
     bool hasParent(Calendar *cal);
 
     /**
-     * Returns the amount of 'worktime' that can be done on
-     * the date  date between the times  start and  end.
-     * The date and times are in timespecification spec.
-     */
-    Duration effort(const QDate &date, const QTime &start, const QTime &end, Schedule *sch=0) const;
-    /**
      * Returns the amount of 'worktime' that can be done in the
-     * interval from start to end
+     * interval from @p start to @p end
+     * If @p sch is not 0, the schedule is checked for availability.
      */
     Duration effort(const DateTime &start, const DateTime &end, Schedule *sch=0) const;
 
     /**
      * Returns the first 'work interval' for the interval 
-     * starting at start and ending at end.
+     * starting at @p start and ending at @p end.
      * If no 'work interval' exists, returns an interval with invalid DateTime.
      * You can also use @ref hasInterval() to check if a 'work interval' exists.
+     * If @p sch is not 0, the schedule is checked for availability.
      */
     DateTimeInterval firstInterval(const DateTime &start, const DateTime &end, Schedule *sch=0) const;
     
     /**
-     * Returns the first 'work interval' on date for the interval 
-     * starting at start and ending at end.
-     * If no 'work interval' exists, returns an interval with first==second.
-     * You can also use @ref hasInterval() to check if a 'work interval' exists.
-     * The date and times are in timespecification spec.
-     */
-    TimeInterval firstInterval(const QDate &date, const QTime &start, const QTime &end, Schedule *sch=0) const;
-    
-    /**
      * Returns true if at least a part of a 'work interval' exists 
-     * for the interval starting at start and ending at end.
+     * for the interval starting at @p start and ending at @p end.
+     * If @p sch is not 0, the schedule is checked for availability.
      */
     bool hasInterval(const DateTime &start, const DateTime &end, Schedule *sch=0) const;
         
-    /**
-     * Returns true if at least a part of a 'work interval' exists 
-     * for the interval on date, starting at start and ending at end.
-     */
-    bool hasInterval(const QDate &date, const QTime &start, const QTime &end, Schedule *sch=0) const;
-        
     /** 
-     * Find the first available time after time before limit.
+     * Find the first available time after @p time before @p limit.
      * Return invalid datetime if not available.
+     * If @p sch is not 0, the schedule is checked for availability.
      */
     DateTime firstAvailableAfter(const DateTime &time, const DateTime &limit, Schedule *sch = 0);
     /** 
-     * Find the first available time backwards from time. Search until limit.
+     * Find the first available time backwards from @p time. Search until @p limit.
      * Return invalid datetime if not available.
+     * If @p sch is not 0, the schedule is checked for availability.
      */
     DateTime firstAvailableBefore(const DateTime &time, const DateTime &limit, Schedule *sch = 0);
 
@@ -430,6 +410,30 @@ protected:
     void init();
     const Calendar &copy(const Calendar &calendar);
     
+    /**
+     * Returns the amount of 'worktime' that can be done on
+     * the @p date between the times @p start and @p start + @p length.
+     * The date and times are in timespecification @p spec.
+     * If @p sch is not 0, the schedule is checked for availability.
+     */
+    Duration effort(const QDate &date, const QTime &start, int length, Schedule *sch=0) const;
+    /**
+     * Returns the first 'work interval' on date for the interval 
+     * starting at @p start and ending at @p start + @p length.
+     * If no 'work interval' exists, returns a null interval.
+     * You can also use @ref hasInterval() to check if a 'work interval' exists.
+     * The date and times are in timespecification spec.
+     * If @p sch is not 0, the schedule is checked for availability.
+     */
+    TimeInterval firstInterval(const QDate &date, const QTime &start, int length, Schedule *sch=0) const;
+    
+    /**
+     * Returns true if at least a part of a 'work interval' exists 
+     * for the interval on date, starting at @p start and ending at @p start + @p length.
+     * If @p sch is not 0, the schedule is checked for availability.
+     */
+    bool hasInterval(const QDate &date, const QTime &start, int length, Schedule *sch=0) const;
+
 private:
     QString m_name;
     Calendar *m_parent;

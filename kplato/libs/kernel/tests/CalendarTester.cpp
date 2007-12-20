@@ -38,8 +38,9 @@ void CalendarTester::testSingleDay() {
     QTime t2(10,0,0);
     DateTime wdt1(wdate, t1);
     DateTime wdt2(wdate, t2);
-    CalendarDay *day = new CalendarDay(QDate(2006,1,2), CalendarDay::Working);
-    day->addInterval(QPair<QTime, QTime>(t1, t2));
+    int length = t1.msecsTo( t2 );
+    CalendarDay *day = new CalendarDay(wdate, CalendarDay::Working);
+    day->addInterval(TimeInterval(t1, length));
     t.addDay(day);
     QVERIFY(t.findDay(wdate) == day);
     
@@ -52,11 +53,11 @@ void CalendarTester::testSingleDay() {
     QVERIFY((t.firstAvailableAfter(after, DateTime(after.addDays(10)))).isValid() == false);
     QVERIFY((t.firstAvailableBefore(before, DateTime(before.addDays(-10)))).isValid() == false);
     
-    QCOMPARE(t.firstAvailableAfter(before,after).toString(), wdt1.toString());
-    QCOMPARE(t.firstAvailableBefore(after, before).toString(), wdt2.toString());
+    QCOMPARE(t.firstAvailableAfter(before,after), wdt1);
+    QCOMPARE(t.firstAvailableBefore(after, before), wdt2);
     
     Duration e(0, 2, 0);
-    QVERIFY((t.effort(before, after)).toString() == e.toString());
+    QCOMPARE((t.effort(before, after)).toString(), e.toString());
 }
 
 void CalendarTester::testWeekdays() {
@@ -66,18 +67,19 @@ void CalendarTester::testWeekdays() {
     DateTime after = DateTime(wdate.addDays(2), QTime());
     QTime t1(8,0,0);
     QTime t2(10,0,0);
-    
+    int length = t1.msecsTo( t2 );
+
     CalendarDay *wd1 = t.weekday(Qt::Wednesday);
     QVERIFY(wd1 != 0);
     
     wd1->setState(CalendarDay::Working);
-    wd1->addInterval(QPair<QTime, QTime>(t1, t2));
+    wd1->addInterval(TimeInterval(t1, length));
 
-    QVERIFY(t.firstAvailableAfter(before, after).toString() == DateTime(QDate(2006, 1, 4), QTime(8,0,0)).toString());
-    QVERIFY((t.firstAvailableBefore(after, before)).toString() == DateTime(QDate(2006, 1, 4), QTime(10,0,0)).toString());
+    QCOMPARE(t.firstAvailableAfter(before, after), DateTime(QDate(2006, 1, 4), QTime(8,0,0)));
+    QCOMPARE((t.firstAvailableBefore(after, before)), DateTime(QDate(2006, 1, 4), QTime(10,0,0)));
     
-    QVERIFY(t.firstAvailableAfter(after, DateTime(QDate(QDate(2006,1,14)), QTime())).toString() == DateTime(QDate(2006, 1, 11), QTime(8,0,0)).toString());
-    QVERIFY(t.firstAvailableBefore(before, DateTime(QDate(2005,12,25), QTime())).toString() == DateTime(QDate(2005, 12, 28), QTime(10,0,0)).toString());
+    QCOMPARE(t.firstAvailableAfter(after, DateTime(QDate(QDate(2006,1,14)), QTime())), DateTime(QDate(2006, 1, 11), QTime(8,0,0)));
+    QCOMPARE(t.firstAvailableBefore(before, DateTime(QDate(2005,12,25), QTime())), DateTime(QDate(2005, 12, 28), QTime(10,0,0)));
 }
 
 void CalendarTester::testCalendarWithParent() {
@@ -89,11 +91,12 @@ void CalendarTester::testCalendarWithParent() {
     DateTime after = DateTime(wdate.addDays(1), QTime());
     QTime t1(8,0,0);
     QTime t2(10,0,0);
+    int length = t1.msecsTo( t2 );
     DateTime wdt1(wdate, t1);
     DateTime wdt2(wdate, t2);
     
     CalendarDay *day = new CalendarDay(wdate, CalendarDay::Working);
-    day->addInterval(QPair<QTime, QTime>(t1, t2));
+    day->addInterval(TimeInterval(t1, length));
     p.addDay(day);
     QVERIFY(p.findDay(wdate) == day);
     
@@ -114,7 +117,7 @@ void CalendarTester::testCalendarWithParent() {
     QCOMPARE(t.firstAvailableBefore(after, before), wdt2);
     
     Duration e(0, 2, 0);
-    QVERIFY((t.effort(before, after)).toString() == e.toString());
+    QCOMPARE((t.effort(before, after)).toString(), e.toString());
     
 }
 

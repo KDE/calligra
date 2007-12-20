@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2007 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,19 +29,25 @@ namespace KPlato
 class IntervalItem : public QTreeWidgetItem
 {
 public:
-    IntervalItem(QTreeWidget * parent, QTime start, QTime end)
+    explicit IntervalItem(QTreeWidget * parent, QTime start, int length)
+    : QTreeWidgetItem(parent),
+      m_start(start)
+    {
+        m_length = (double)(length) / (1000 * 60 * 60 ); // ms -> hours
+    }
+    explicit IntervalItem(QTreeWidget * parent, QTime start, double length)
     : QTreeWidgetItem(parent),
       m_start(start),
-      m_end(end)
+      m_length(length)
     {
-        setText(0, QString("%1  -  %2").arg(start.toString(), end.toString()));
+        setText( 0, QString("%1  -  %2" ).arg( start.toString() ).arg( length ) );
     }
       
-    TimeInterval interval() { return TimeInterval(m_start, m_end); }
+    TimeInterval interval() { return TimeInterval(m_start, ( (int)(m_length) * 1000 * 60 * 60 ) ); }
 
 private:
     QTime m_start;
-    QTime m_end;
+    double m_length; // In hours
 };
 
 }  //KPlato namespace

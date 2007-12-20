@@ -40,6 +40,7 @@
 #include <QLayout>
 #include <QToolTip>
 #include <q3whatsthis.h>
+#include <QDoubleSpinBox>
 
 namespace KPlato
 {
@@ -101,8 +102,8 @@ CalendarEditBase::CalendarEditBase( QWidget* parent, Qt::WFlags fl )
     startTime = new Q3TimeEdit( groupBox4, "startTime" );
     layout6->addWidget( startTime );
 
-    endTime = new Q3TimeEdit( groupBox4, "endTime" );
-    layout6->addWidget( endTime );
+    length = new QDoubleSpinBox( groupBox4);
+    layout6->addWidget( length );
     groupBox4Layout->addLayout( layout6 );
 
     layout5 = new Q3HBoxLayout( 0, 0, 6, "layout5");

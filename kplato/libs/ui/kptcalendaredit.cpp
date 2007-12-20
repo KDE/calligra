@@ -38,6 +38,7 @@
 #include <qtabwidget.h>
 #include <q3textbrowser.h>
 #include <QMap>
+#include <QDoubleSpinBox>
 
 #include <k3command.h>
 #include <klocale.h>
@@ -97,21 +98,21 @@ void CalendarEdit::slotStateActivated(int id) {
     //kDebug()<<"id="<<id;
     if (id == 0) { // undefined
         startTime->setEnabled(false);
-        endTime->setEnabled(false);
+        length->setEnabled(false);
         bClear->setEnabled(false);
         bAddInterval->setEnabled(false);
         intervalList->setEnabled(false);
         bApply->setEnabled(true);
     } else if (id == 1) { // non working
         startTime->setEnabled(false);
-        endTime->setEnabled(false);
+        length->setEnabled(false);
         bClear->setEnabled(false);
         bAddInterval->setEnabled(false);
         intervalList->setEnabled(false);
         bApply->setEnabled(true);
     } else if (id == 2) { //working
         startTime->setEnabled(true);
-        endTime->setEnabled(true);
+        length->setEnabled(true);
         bClear->setEnabled(true);
         bAddInterval->setEnabled(true);
         intervalList->setEnabled(true);
@@ -126,7 +127,7 @@ void CalendarEdit::slotClearClicked() {
 }
 void CalendarEdit::slotAddIntervalClicked() {
     //kDebug();
-    intervalList->addTopLevelItem(new IntervalItem(intervalList, startTime->time(), endTime->time()));
+    intervalList->addTopLevelItem( new IntervalItem(intervalList, startTime->time(), length->value() ) );
     bApply->setEnabled(true);
 }
 
@@ -226,8 +227,8 @@ void CalendarEdit::clearEditPart() {
     intervalList->setEnabled(false);
     startTime->setEnabled(false);
     startTime->setTime(QTime(8, 0, 0)); //FIXME
-    endTime->setEnabled(false);
-    endTime->setTime(QTime(16, 0, 0)); //FIXME
+    length->setEnabled(false);
+    length->setValue( 8.0 ); //FIXME
 
     bAddInterval->setEnabled(false);
     bClear->setEnabled(false);

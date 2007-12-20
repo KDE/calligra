@@ -99,7 +99,8 @@ public:
     void saveCommonXML( QDomElement &element ) const;
     void saveAppointments( QDomElement &element ) const;
 
-    virtual TimeInterval available( const DateTime &date, const TimeInterval &interval ) const;
+    /// Return the effort available in the @p interval
+    virtual Duration effort( const DateTimeInterval &interval ) const;
     virtual DateTimeInterval available( const DateTimeInterval &interval ) const;
 
     enum CalculationMode { Scheduling, CalculateForward, CalculateBackward };
@@ -333,7 +334,8 @@ public:
     virtual Resource *resource() const { return m_resource; }
     virtual double normalRatePrHour() const;
 
-    virtual TimeInterval available( const DateTime &date, const TimeInterval &interval ) const;
+    /// Return the effort available in the @p interval
+    virtual Duration effort( const DateTimeInterval &interval ) const;
     virtual DateTimeInterval available( const DateTimeInterval &interval ) const;
     
 private:

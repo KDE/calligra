@@ -173,9 +173,9 @@ void Schedule::setScheduled( bool on )
     changed( this );
 }
 
-TimeInterval Schedule::available( const DateTime &, const TimeInterval &interval ) const
+Duration Schedule::effort( const DateTimeInterval &interval ) const
 {
-    return TimeInterval( interval.first, interval.second );
+    return interval.second - interval.first;
 }
 
 DateTimeInterval Schedule::available( const DateTimeInterval &interval ) const
@@ -798,10 +798,30 @@ double ResourceSchedule::normalRatePrHour() const
     return m_resource ? m_resource->normalRate() : 0.0;
 }
 
-TimeInterval ResourceSchedule::available( const DateTime &date, const TimeInterval &i ) const
+//TODO change to return the booked effort
+Duration ResourceSchedule::effort( const DateTimeInterval &interval ) const
 {
-    DateTimeInterval dti = available( DateTimeInterval( DateTime( date.date(), i.first ), DateTime( date.date(), i.second ) ) );
-    return TimeInterval( dti.first.time(), dti.second.time() );
+    Duration eff = interval.second - interval.first;
+    if ( allowOverbooking() ) {
+        return eff;
+    }
+    Appointment a = appointmentIntervals( m_calculationMode );
+    if ( a.isEmpty() || a.startTime() >= interval.second || a.endTime() <= interval.first ) {
+        return eff;
+    }
+    foreach ( AppointmentInterval *i, a.intervals() ) {
+        if ( interval.second <= i->startTime() ) {
+            break;
+        }
+        if ( interval.first >= i->startTime() ) {
+            DateTime et = i->endTime() < interval.second ? i->endTime() : interval.second;
+            eff -= ( et - interval.first ) * ((double)i->load()/100.0 );
+        } else {
+            DateTime et = i->endTime() < interval.second ? i->endTime() : interval.second;
+            eff -= ( et - i->startTime() ) * ((double)i->load()/100.0 );
+        }
+    }
+    return eff;
 }
 
 DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval ) const
