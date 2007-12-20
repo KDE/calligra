@@ -32,6 +32,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <ktimezone.h>
+#include <kdebug.h>
 
 #include <KoXmlReader.h>
 
@@ -52,11 +53,58 @@ class Project;
 class Schedule;
 class XMLLoaderObject;
 
+typedef QPair<DateTime, DateTime> DateTimeInterval;
+
 /// TimeInterval is defined as a start time and a length.
 /// The end time (start + length) must not exceed midnight
-typedef QPair<QTime, int> TimeInterval;
-typedef QPair<DateTime, DateTime> DateTimeInterval;
-        
+class KPLATOKERNEL_EXPORT TimeInterval : public QPair<QTime, int>
+{
+public:
+    TimeInterval()
+    : QPair<QTime, int>( QTime(), -1 )
+    {}
+    explicit TimeInterval( const QPair<QTime, int> &value )
+    : QPair<QTime, int>( value )
+    {
+        init();
+    }
+    TimeInterval( const QTime &start, int length )
+    : QPair<QTime, int>( start, length )
+    {
+        init();
+    }
+    TimeInterval( const TimeInterval &value )
+    : QPair<QTime, int>( value.first, value.second )
+    {
+        init();
+    }
+    /// Return the intervals start time
+    QTime startTime() const { return first; }
+    /// Return the intervals calculated end time. Note: It may return QTime(0,0,0)
+    QTime endTime() const { return first.addMSecs( second ); }
+    /// Returns true if this interval ends at midnight, and thus endTime() returns QTime(0,0,0)
+    bool endsMidnight() const { return endTime() == QTime( 0, 0, 0 ); }
+
+    bool isValid() const { return first.isValid() && second > 0; }
+    bool isNull() const { return first.isNull() || second < 0; }
+
+    TimeInterval &operator=( const TimeInterval &ti ) { 
+        first = ti.first;
+        second = ti.second;
+        return *this;
+    }
+protected:
+    void init()
+    {
+        int s = QTime( 0, 0, 0 ).msecsTo( first );
+        if ( ( s + second ) > 86400000 ) {
+            second = 86400000 - s;
+            kError()<<"Overflow, limiting length to"<<second;
+        }
+    }
+};
+
+
 class KPLATOKERNEL_EXPORT CalendarDay {
 
 public:
@@ -74,7 +122,7 @@ public:
     void save(QDomElement &element) const;
 
     const QList<TimeInterval*> &workingIntervals() const { return m_workingIntervals; }
-    void addInterval( const QTime &t1, int length ) { addInterval( TimeInterval( t1, length ) ); }
+    void addInterval( const QTime &t1, int length ) { addInterval( new TimeInterval( t1, length ) ); }
     void addInterval(TimeInterval *interval);
     void addInterval(TimeInterval interval) { addInterval(new TimeInterval(interval)); }
     void clearIntervals() { m_workingIntervals.clear(); }

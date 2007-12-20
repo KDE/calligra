@@ -84,7 +84,7 @@ const CalendarDay &CalendarDay::copy(const CalendarDay &day) {
     m_state = day.state();
     m_workingIntervals.clear();
     foreach (TimeInterval *i, day.workingIntervals()) {
-        m_workingIntervals.append(new TimeInterval(i->first, i->second));
+        m_workingIntervals.append( new TimeInterval( *i ) );
     }
     return *this;
 }
@@ -133,7 +133,7 @@ bool CalendarDay::load( KoXmlElement &element, XMLLoaderObject &status ) {
                 kError()<<"Invalid interval length";
                 continue;
             }
-            addInterval( new TimeInterval( start, length) );
+            addInterval( new TimeInterval( start, length ) );
         }
     }
     return true;
@@ -188,7 +188,7 @@ bool CalendarDay::operator==(const CalendarDay &day) const {
     foreach (TimeInterval *a, m_workingIntervals) {
         bool res = false;
         foreach (TimeInterval *b, day.workingIntervals()) {
-            if (a->first == b->first && a->second == b->second) {
+            if (a == b ) {
                 res = true;
                 break;
             }
@@ -224,7 +224,7 @@ Duration CalendarDay::effort(const QDate &date, const QTime &start, int length, 
     }
     int l = 0;
     foreach (TimeInterval *i, m_workingIntervals) {
-        if (start >= i->first.addMSecs(i->second) ) {
+        if ( ! i->endsMidnight() && start >= i->endTime() ) {
             //kDebug()<<"Skip:"<<start<<">="<<i->first.addMSecs(i->second);
             continue;
         }
@@ -233,12 +233,11 @@ Duration CalendarDay::effort(const QDate &date, const QTime &start, int length, 
             //kDebug()<<"Skip:"<<t1<<"<"<<i->first;
             continue;
         }
-        QTime end = i->first.addMSecs( i->second );
         t1 = qMax( start, i->first );
-        if ( end == QTime( 0, 0, 0 ) ) {
+        if ( i->endsMidnight() ) {
             l = t1.msecsTo( QTime( 23, 59, 59, 999 ) ) + 1;
         } else {
-            l = t1.msecsTo( end );
+            l = t1.msecsTo( i->endTime() );
         }
         l = qMin( l, length - start.msecsTo( t1 ) );
         if ( l <= 0 ) {
@@ -286,11 +285,11 @@ TimeInterval CalendarDay::interval(const QDate date, const QTime &start, int len
     QTime t1;
     int l = 0;
     if ( ! hasInterval() ) {
-        return TimeInterval( QTime(), 0 );
+        return TimeInterval();
     }
     foreach (TimeInterval *i, m_workingIntervals) {
         //kDebug()<<"Interval:"<<i->first<<i->second<<i->first.addMSecs(i->second);
-        if (start >= i->first.addMSecs(i->second) ) {
+        if ( ! i->endsMidnight() && start >= i->endTime() ) {
             //kDebug()<<"Skip:"<<start<<">="<<i->first.addMSecs(i->second);
             continue;
         }
@@ -299,12 +298,11 @@ TimeInterval CalendarDay::interval(const QDate date, const QTime &start, int len
             //kDebug()<<"Skip:"<<t1<<"<"<<i->first;
             continue;
         }
-        QTime end = i->first.addMSecs( i->second );
         t1 = qMax( start, i->first );
-        if ( end == QTime( 0, 0, 0 ) ) {
+        if ( i->endsMidnight() ) {
             l = t1.msecsTo( QTime( 23, 59, 59, 999 ) ) + 1;
         } else {
-            l = t1.msecsTo( end );
+            l = t1.msecsTo( i->endTime() );
         }
         l = qMin( l, length - start.msecsTo( t1 ) );
         if ( l <= 0 ) {
@@ -323,7 +321,7 @@ TimeInterval CalendarDay::interval(const QDate date, const QTime &start, int len
             l = ( DateTime(dti.second.toTimeSpec( spec )) - dt1 ).milliseconds();
             ti = TimeInterval( dt1.time(), l );
         }
-        if ( !ti.first.isNull() && ti.second > 0 ) {
+        if ( ti.isValid() ) {
             //kDebug()<<"Return:"<<ti.first<<"+"<<ti.second<<"="<<ti.first.addMSecs( ti.second );
             return ti;
         }
@@ -344,7 +342,7 @@ bool CalendarDay::hasInterval(const QTime &start, int length, const KDateTime::S
 bool CalendarDay::hasInterval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const
 {
     //kDebug()<<(m_date.isValid()?m_date.toString(Qt::ISODate):"Weekday")<<""<<start<<"->"<<length;
-    return ! interval( date, start, length, spec, sch ).first.isNull();
+    return interval( date, start, length, spec, sch ).first.isValid();
 }
 
 Duration CalendarDay::duration() const {
@@ -537,7 +535,7 @@ TimeInterval CalendarWeekdays::interval(const QDate date, const QTime &start, in
     if (day && day->state() == CalendarDay::Working) {
         return day->interval(date, start, length, spec, sch);
     }
-    return TimeInterval(QTime(), 0);
+    return TimeInterval();
 }
 
 bool CalendarWeekdays::hasInterval(const QDate date, const QTime &start, int length, const KDateTime::Spec &spec, Schedule *sch) const
@@ -820,8 +818,7 @@ void Calendar::takeWorkInterval( CalendarDay *day, TimeInterval *ti )
 
 void Calendar::setWorkInterval( TimeInterval *ti, const TimeInterval &value )
 {
-    ti->first = value.first;
-    ti->second = value.second;
+    *ti = value;
     emit changed( ti );
 }
 
@@ -861,7 +858,7 @@ void Calendar::setWeekday( int dayno, const CalendarDay &day )
     wd->setState( day.state() );
     emit changed( wd );
     foreach ( TimeInterval *ti, day.workingIntervals() ) {
-        TimeInterval *t = new TimeInterval( ti->first, ti->second );
+        TimeInterval *t = new TimeInterval( *ti );
         emit workIntervalToBeAdded( wd, t, wd->numIntervals() ); // hmmmm
         wd->addInterval( t );
         emit workIntervalAdded( wd, t );
@@ -918,6 +915,7 @@ Duration Calendar::effort(const DateTime &start, const DateTime &end, Schedule *
         return eff;
     }
     if ( start == end ) {
+        //kDebug()<<"start == end";
         return eff;
     }
     // convert to calendar's timezone in case caller use a different timezone
@@ -940,10 +938,7 @@ Duration Calendar::effort(const DateTime &start, const DateTime &end, Schedule *
     for (date = date.addDays(1); date <= e.date(); date = date.addDays(1)) {
         if (date < e.date()) {
             eff += effort(date, t0, aday, sch); // whole days
-        } else {
-            if ( endTime == t0 ) {
-                break;
-            }
+        } else if ( endTime > t0 ) {
             eff += effort(date, t0, t0.msecsTo( endTime ), sch); // last day
         }
         //kDebug()<<": eff now="<<eff.toString(Duration::Format_Day);
@@ -967,14 +962,14 @@ TimeInterval Calendar::firstInterval(const QDate &date, const QTime &startTime, 
             return i;
         }
         if (m_weekdays->state(date) == CalendarDay::NonWorking) {
-            return TimeInterval(QTime(), 0);
+            return TimeInterval();
         }
     }
     if (m_parent) {
         //kDebug()<<"Check parent";
         return m_parent->firstInterval(date, startTime, length, sch);
     }
-    return TimeInterval(QTime(), 0);
+    return TimeInterval();
 }
 
 DateTimeInterval Calendar::firstInterval(const DateTime &start, const DateTime &end, Schedule *sch) const {
@@ -1002,11 +997,12 @@ DateTimeInterval Calendar::firstInterval(const DateTime &start, const DateTime &
         // Handle single day
         length = startTime.msecsTo( e.time() );
         if ( length <= 0 ) {
+            kWarning()<<"Invalid length"<<length;
             return DateTimeInterval();
         }
         //kDebug()<<"Check single day:"<<s.date()<<s.time()<<length;
         res = firstInterval(s.date(), s.time(), length, sch);
-        if ( res.first.isNull() || res.second <= 0 ) {
+        if ( ! res.isValid() ) {
             return DateTimeInterval();
         }
         DateTime dt1 = DateTime( s.date(), res.first, m_spec ).toTimeSpec(es);
@@ -1030,7 +1026,7 @@ DateTimeInterval Calendar::firstInterval(const DateTime &start, const DateTime &
         }
         //kDebug()<<"Check:"<<date<<startTime<<"+"<<length<<"="<<startTime.addMSecs( length );
         res = firstInterval(date, startTime, length, sch);
-        if ( ! res.first.isNull() && res.second > 0 ) {
+        if ( res.isValid() ) {
             //kDebug()<<"inp:"<<start<<"-"<<end;
             //kDebug()<<"Found an interval ("<<date<<","<<res.first<<","<<res.second<<")";
             // return result in callers timezone

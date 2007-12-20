@@ -27,7 +27,7 @@
 #include <klocale.h>
 
 // This is used both for *.kplato and *.kplatowork files as the syntax is identical
-#define XML_FILE_SYNTAX_VERSION "0.6.1"
+#define XML_FILE_SYNTAX_VERSION "0.6.2"
 
 namespace KPlato
 {
