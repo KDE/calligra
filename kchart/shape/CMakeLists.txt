@@ -10,24 +10,14 @@ SET (chartshape_LIB_SRCS
     ChartTableView.cpp
     ChartShape.cpp
     ChartShapeFactory.cpp
-    ChartTypeTool.cpp
-    ChartTypeToolFactory.cpp
-    ChartTypeConfigWidget.cpp
-    ChartDataConfigWidget.cpp
-    ChartLegendTool.cpp
-    ChartLegendToolFactory.cpp
-    ChartLegendConfigWidget.cpp
-    ChartDatasetTool.cpp
-    ChartDatasetToolFactory.cpp
-    ChartDatasetConfigWidget.cpp
+    ChartTool.cpp
+    ChartToolFactory.cpp
+    ChartConfigWidget.cpp
     ../commands/ChartTypeCommand.cpp
 )
 
 kde4_add_ui_files(chartshape_LIB_SRCS
-    ChartTypeConfigWidget.ui
-    ChartDataConfigWidget.ui
-    ChartLegendConfigWidget.ui
-    ChartDatasetConfigWidget.ui
+    ChartConfigWidget.ui
     ChartTableEditor.ui
 )
 

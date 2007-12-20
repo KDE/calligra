@@ -37,12 +37,12 @@ namespace KChart
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
  */
-class ChartTypeTool : public KoTool
+class ChartTool : public KoTool
 {
     Q_OBJECT
 public:
-    explicit ChartTypeTool(KoCanvasBase *canvas);
-    ~ChartTypeTool();
+    explicit ChartTool(KoCanvasBase *canvas);
+    ~ChartTool();
 
     /// reimplemented from superclass
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
@@ -68,10 +68,28 @@ private slots:
     void setFirstRowIsLabel( bool b );
     void setFirstColumnIsLabel( bool b );
 
+    // Datasets
+    void setDatasetColor( int dataset, const QColor& color );
+
+    // Legend
+    void setLegendTitle( const QString& title );
+    void setLegendTitleFont( const QFont& font );
+    void setLegendFont( const QFont& font );
+    void setLegendFontSize( int size );
+    void setLegendSpacing( int spacing );
+    void setLegendShowLines( bool b );
+    void setLegendOrientation( Qt::Orientation );
+    void setLegendAlignment( Qt::Alignment );
+    void setLegendFixedPosition( KDChart::Position position );
+    void setLegendBackgroundColor( const QColor& color );
+    void setLegendFrameColor( const QColor& color );
+    void setLegendShowFrame( bool show );
+
 private:
     void updateActions();
 
-    ChartShape  *m_currentShape;
+    class Private;
+    Private * const d;
 };
 
 } // namespace KChart

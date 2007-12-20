@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
- *
- * Copyright 2007 Johannes Simon <johannes.simon@gmail.com>
+ * Copyright (C) 2007      Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,33 +17,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "ChartLegendToolFactory.h"
-#include "ChartLegendTool.h"
-#include "ChartShape.h"
+#ifndef CHARTTYPETOOLFACTORY_H
+#define CHARTTYPETOOLFACTORY_H
 
-#include <KLocale>
+#include "kchart_export.h"
+#include <KoToolFactory.h>
 
-using namespace KChart;
+#include <QStringList>
 
-
-ChartLegendToolFactory::ChartLegendToolFactory( QObject *parent )
-    : KoToolFactory( parent, "ChartLegendToolFactory_ID", i18n( "ChartLegend tool" ) )
+namespace KChart
 {
-    setToolTip( i18n( "Edit the chart's legend" ) );
-    setToolType( dynamicToolType() );
-    // TODO: We need an icon
-    //setIcon ("");
-    setPriority( 2 );
-    setActivationShapeId( ChartShapeId );
-}
 
-ChartLegendToolFactory::~ChartLegendToolFactory()
+class CHARTSHAPELIB_EXPORT ChartToolFactory : public KoToolFactory
 {
-}
+    Q_OBJECT
 
-KoTool * ChartLegendToolFactory::createTool( KoCanvasBase *canvas )
-{
-    return new ChartLegendTool( canvas );
-}
+public:
+    explicit ChartToolFactory( QObject *parent );
+    ~ChartToolFactory();
 
-#include "ChartLegendToolFactory.moc"
+    KoTool * createTool( KoCanvasBase *canvas );
+};
+
+} // namespace KChart
+
+
+#endif

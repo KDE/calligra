@@ -1,0 +1,314 @@
+<ui version="4.0" >
+ <class>ChartConfigWidget</class>
+ <widget class="QWidget" name="ChartConfigWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>297</width>
+    <height>396</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" >
+   <item rowspan="2" row="0" column="0" >
+    <widget class="QPushButton" name="pushButton" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="icon" >
+      <iconset>../../../../koffice/kchart/pics/chart_area_normal.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QCheckBox" name="threeDLook" >
+     <property name="text" >
+      <string>3D</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" >
+    <widget class="QCheckBox" name="showLegend" >
+     <property name="text" >
+      <string>Show Legend</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="2" >
+    <widget class="QPushButton" name="editData" >
+     <property name="text" >
+      <string>Edit Data...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2" >
+    <widget class="QTabWidget" name="tabWidget" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="currentIndex" >
+      <number>1</number>
+     </property>
+     <widget class="QWidget" name="tab" >
+      <attribute name="title" >
+       <string>Axis</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="1" >
+        <widget class="QLineEdit" name="titleAbscissa" />
+       </item>
+       <item row="1" column="1" >
+        <widget class="QLineEdit" name="titleOrdinate" />
+       </item>
+       <item row="2" column="0" colspan="2" >
+        <widget class="Line" name="line" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2" >
+        <widget class="QPushButton" name="pushButton_5" >
+         <property name="text" >
+          <string>Step widths...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2" >
+        <widget class="Line" name="line_2" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2" >
+        <widget class="QCheckBox" name="showVerticalLines" >
+         <property name="text" >
+          <string>Show vertical lines</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2" >
+        <widget class="QCheckBox" name="showHorizontalLines" >
+         <property name="text" >
+          <string>Show horizontal lines</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>198</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="label_3" >
+         <property name="text" >
+          <string>Ordinate</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_2" >
+         <property name="text" >
+          <string>Abscissa</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2" >
+      <attribute name="title" >
+       <string>Datasets</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_4" >
+         <property name="text" >
+          <string>Gap between bars</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" >
+        <widget class="QSpinBox" name="datasetGap1" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="suffix" >
+          <string>%</string>
+         </property>
+         <property name="maximum" >
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="label_5" >
+         <property name="text" >
+          <string>Gap between sets</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" >
+        <widget class="QSpinBox" name="spinBox_2" >
+         <property name="suffix" >
+          <string>%</string>
+         </property>
+         <property name="maximum" >
+          <number>100</number>
+         </property>
+         <property name="value" >
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2" >
+        <widget class="Line" name="line_3" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2" >
+        <widget class="QLabel" name="label_6" >
+         <property name="text" >
+          <string>&lt;b>Dataset Properties&lt;/b></string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>129</width>
+           <height>101</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="4" column="0" >
+        <widget class="QLabel" name="label_7" >
+         <property name="text" >
+          <string>&lt;i>Select a dataset...&lt;/i></string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3" >
+      <attribute name="title" >
+       <string>Legend</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <widget class="QLabel" name="label_8" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text" >
+          <string>Title</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" colspan="3" >
+        <widget class="QLineEdit" name="legendTitle" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="MinimumExpanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="4" >
+        <widget class="QCheckBox" name="showLegendFrame" >
+         <property name="text" >
+          <string>Frame</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2" >
+        <widget class="QLabel" name="label" >
+         <property name="text" >
+          <string>Orientation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="2" >
+        <widget class="QRadioButton" name="legendOrientationIsVertical" >
+         <property name="text" >
+          <string>v</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="3" >
+        <widget class="QRadioButton" name="legendOrientationIsHorizontal" >
+         <property name="text" >
+          <string>h</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="4" >
+        <widget class="QPushButton" name="pushButton_3" >
+         <property name="text" >
+          <string>Position and Alignment...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="4" >
+        <widget class="QPushButton" name="pushButton_4" >
+         <property name="text" >
+          <string>Font and Colors...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

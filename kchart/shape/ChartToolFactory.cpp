@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
- *
- * Copyright 2007 Johannes Simon <johannes.simon@gmail.com>
+ * Copyright (C) 2007      Inge Wallin <inge@lysator.liu.se>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -18,33 +17,34 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "ChartDatasetToolFactory.h"
-#include "ChartDatasetTool.h"
+#include "ChartToolFactory.h"
+#include "ChartTool.h"
 #include "ChartShape.h"
 
 #include <KLocale>
 
+
 using namespace KChart;
 
 
-ChartDatasetToolFactory::ChartDatasetToolFactory( QObject *parent )
-    : KoToolFactory( parent, "ChartLegendDatasetFactory_ID", i18n( "Diagram Dataset Editor" ) )
+ChartToolFactory::ChartToolFactory( QObject *parent )
+    : KoToolFactory( parent, "ChartToolFactory_ID", i18n( "Chart Tool" ) )
 {
-    setToolTip( i18n( "Diagram Dataset Editor" ) );
-    setToolType( dynamicToolType() );
-    // TODO: We need an icon
+    setToolTip ( i18n( "Chart Editing Tool" ) );
+    setToolType ( dynamicToolType() );
     //setIcon ("");
-    setPriority( 3 );
-    setActivationShapeId( ChartShapeId );
+    setPriority ( 1 );
+    setActivationShapeId ( ChartShapeId );
 }
 
-ChartDatasetToolFactory::~ChartDatasetToolFactory()
+ChartToolFactory::~ChartToolFactory()
 {
 }
 
-KoTool * ChartDatasetToolFactory::createTool( KoCanvasBase *canvas )
+KoTool *ChartToolFactory::createTool( KoCanvasBase *canvas )
 {
-    return new ChartDatasetTool( canvas );
+    return new ChartTool( canvas );
 }
 
-#include "ChartDatasetToolFactory.moc"
+
+#include "ChartToolFactory.moc"
