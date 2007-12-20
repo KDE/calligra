@@ -21,9 +21,11 @@
 #include<QList>
 #include<QString>
 
+#include "kpresenter_export.h"
+
 class KoPAPageBase;
 
-class KPrCustomSlideShows
+class KPRESENTER_TEST_EXPORT KPrCustomSlideShows
 {
 public:
     KPrCustomSlideShows();
@@ -57,7 +59,7 @@ public:
      *
      */
     const QList<QString> customSlideShowsNames() const;
-    
+
     /**
      * @brief Ask if a name is in use and return the object
      * 

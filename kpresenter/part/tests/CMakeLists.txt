@@ -9,3 +9,11 @@ kde4_add_unit_test(TestShapeAnimations TESTNAME kpresenter-part-TestShapeAnimati
 
 target_link_libraries(TestShapeAnimations kpresenterprivate ${QT_QTTEST_LIBRARY})
 
+########### next target ###############
+
+set(TestCustomSlideShows_test_SRCS TestCustomSlideShows.cpp )
+
+kde4_add_unit_test(TestCustomSlideShows TESTNAME kpresenter-part-TestCustomSlideShows  ${TestCustomSlideShows_test_SRCS})
+
+target_link_libraries(TestCustomSlideShows kpresenterprivate ${QT_QTTEST_LIBRARY})
+
