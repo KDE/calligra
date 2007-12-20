@@ -32,10 +32,15 @@ OraSaveContext::OraSaveContext(KoStore* _store) : m_id(0), m_store(_store)
 }
 QString OraSaveContext::saveDeviceData(KisPaintLayerSP layer)
 {
-    QString filename = QString("data/%1.png").arg( m_id++ );
+    QString filename = QString("data/layer%1.png").arg( m_id++ );
     if( m_store->open(filename))
     {
         KoStoreDevice io ( m_store );
+        if ( not io.open( QIODevice::WriteOnly ) )
+        {
+            kDebug(41008) <<"Couldn't open for writing:" << filename;
+            return "";
+        }
         KisPNGConverter pngconv(0, layer->image()->undoAdapter());
         vKisAnnotationSP_it annotIt = 0;
         if( pngconv.buildFile(&io, layer->image(), layer->paintDevice(), annotIt, annotIt, 0, false, true) != KisImageBuilder_RESULT_OK)
@@ -61,6 +66,8 @@ void OraSaveContext::saveStack(const QDomDocument& doc)
     {
         KoStoreDevice io ( m_store );
         io.write( doc.toByteArray());
+        io.close();
+        m_store->close();
     } else {
         kDebug(41008) <<"Opening of the stack.xml file failed :";
     }
