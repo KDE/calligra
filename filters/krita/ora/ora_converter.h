@@ -60,8 +60,6 @@ class OraConverter : public QObject {
          * Retrieve the constructed image
          */
         KisImageSP image();
-    private:
-        KisImageBuilder_Result decode(const KUrl& uri);
     public slots:
         virtual void cancel();
     private:

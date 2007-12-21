@@ -27,10 +27,12 @@
 #include <kis_doc2.h>
 #include <kis_group_layer.h>
 #include <kis_image.h>
+#include <kis_open_raster_stack_load_visitor.h>
 #include <kis_open_raster_stack_save_visitor.h>
 #include <kis_paint_layer.h>
 #include <kis_undo_adapter.h>
 
+#include "ora_load_context.h"
 #include "ora_save_context.h"
 
 OraConverter::OraConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
@@ -44,27 +46,6 @@ OraConverter::OraConverter(KisDoc2 *doc, KisUndoAdapter *adapter)
 OraConverter::~OraConverter()
 {
 }
-
-KisImageBuilder_Result OraConverter::decode(const KUrl& uri)
-{
-    // open the file
-#if 0
-     FILE *fp = fopen(QFile::encodeName(uri.path()), "rb");
-    if (!fp)
-    {
-        return (KisImageBuilder_RESULT_NOT_EXIST);
-    }
-    // Creating the KisImageSP
-    if( ! m_img) {
-        m_img = new KisImage(m_doc->undoAdapter(),  cinfo.image_width,  cinfo.image_height, cs, "built image");
-        Q_CHECK_PTR(m_img);
-    }
-    KisPaintLayerSP layer = new KisPaintLayer(m_img.data(), m_img -> nextLayerName(), quint8_MAX));
-#endif
-
-    return KisImageBuilder_RESULT_OK;
-}
-
 
 
 KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
@@ -80,14 +61,18 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
     KisImageBuilder_Result result = KisImageBuilder_RESULT_FAILURE;
     QString tmpFile;
 
-    if (KIO::NetAccess::download(uri, tmpFile, qApp -> mainWidget())) {
-        KUrl uriTF;
-        uriTF.setPath( tmpFile );
-        result = decode(uriTF);
-        KIO::NetAccess::removeTempFile(tmpFile);
+    KoStore* store = KoStore::createStore( qApp->mainWidget(), uri, KoStore::Read, "odr", KoStore::Zip);
+    if( not store)
+    {
+        return KisImageBuilder_RESULT_FAILURE;
     }
 
-    return result;
+    OraLoadContext olc( store );
+    KisOpenRasterStackLoadVisitor orslv(m_doc, &olc);
+    orslv.loadImage();
+    m_img = orslv.image();
+    return KisImageBuilder_RESULT_OK;
+
 }
 
 

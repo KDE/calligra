@@ -3,6 +3,7 @@ include_directories( ${KRITA_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/ui/openrastertk
 
 set(libkritaconverter_LIB_SRCS
     ora_converter.cc
+    ora_load_context.cc
     ora_save_context.cc
     )
 
