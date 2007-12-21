@@ -92,6 +92,37 @@ ChartConfigWidget::ChartConfigWidget()
     d->subtype = KChart::NormalChartSubtype;
     setObjectName("Chart Type");
     d->ui.setupUi( this );
+    
+    // Quick-access settings
+    connect( d->ui.threeDLook, SIGNAL( toggled( bool ) ),
+             this, SLOT( setThreeDMode( bool ) ) );
+    connect( d->ui.showLegend, SIGNAL( toggled( bool ) ),
+             this, SIGNAL( showLegendChanged( bool ) ) );
+    connect( d->ui.editData, SIGNAL( clicked( bool ) ),
+             this, SLOT( slotShowTableEditor( bool ) ) );
+    
+    // "Axis Tab"
+    connect( d->ui.xAxisTitle, SIGNAL( textChanged( const QString& ) ),
+             this, SIGNAL( xAxisTitleChanged( const QString& ) ) );
+    connect( d->ui.yAxisTitle, SIGNAL( textChanged( const QString& ) ),
+             this, SIGNAL( yAxisTitleChanged( const QString& ) ) );
+    connect( d->ui.showVerticalLines, SIGNAL( toggled( bool ) ),
+             this, SIGNAL( showVerticalLinesChanged( bool ) ) );
+    connect( d->ui.showHorizontalLines, SIGNAL( toggled( bool ) ),
+             this, SIGNAL( showHorizontalLinesChanged( bool ) ) );
+    
+    // "Datasets" Tab
+    connect( d->ui.gapBetweenBars, SIGNAL( valueChanged( int ) ),
+             this, SIGNAL( gapBetweenBarsChanged( int ) ) );
+    connect( d->ui.gapBetweenSets, SIGNAL( valueChanged( int ) ),
+             this, SIGNAL( gapBetweenSetsChanged( int ) ) );
+    
+    // "Legend" Tab
+    connect( d->ui.legendTitle, SIGNAL( textChanged( const QString& ) ),
+             this, SIGNAL( legendTitleChanged( const QString& ) ) );
+    connect( d->ui.legendShowFrame, SIGNAL( toggled( bool ) ),
+             this, SIGNAL( legendShowFrameChanged( bool ) ) );
+    
     /*
     d->ui.typeCombobox->addItem( KIcon("chart_bar"), i18n("Bar Chart"), BarChartType );
     d->ui.typeCombobox->addItem( KIcon("chart_line"), i18n("Line Chart"), LineChartType );
@@ -128,10 +159,6 @@ ChartConfigWidget::ChartConfigWidget()
     //connect( subtypeButtonGroup, SIGNAL( buttonClicked( int ) ),
     //         this, SLOT( chartSubtypeSelected( int ) ) );
 
-    connect( d->ui.threeDLook, SIGNAL( toggled( bool ) ),
-             this, SLOT( setThreeDMode( bool ) ) );
-
-    d->shape = 0;
     d->tableEditorDialog = new QDialog( this );
     d->tableEditor.setupUi( d->tableEditorDialog );
     d->tableView = new ChartTableView;
@@ -153,8 +180,6 @@ ChartConfigWidget::ChartConfigWidget()
     //         this,                    SIGNAL( firstRowIsLabelChanged( bool ) ) );
     //connect( d->ui.m_firstColumnAsLabel, SIGNAL( toggled( bool ) ),
     //         this,                       SIGNAL( firstColumnIsLabelChanged( bool ) ) );
-    connect( d->ui.editData, SIGNAL( clicked( bool ) ),
-             this, SLOT( slotShowTableEditor( bool ) ) );
 }
 
 ChartConfigWidget::~ChartConfigWidget()

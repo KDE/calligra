@@ -166,6 +166,22 @@ QWidget *ChartTool::createOptionWidget()
              this,    SLOT( setFirstRowIsLabel( bool ) ) );
     connect( widget, SIGNAL( firstColumnIsLabelChanged( bool ) ),
              this,    SLOT( setFirstColumnIsLabel( bool ) ) );
+    connect( widget, SIGNAL( xAxisTitleChanged( const QString& ) ),
+             this,   SLOT( setXAxisTitle( const QString& ) ) );
+    connect( widget, SIGNAL( yAxisTitleChanged( const QString& ) ),
+             this,   SLOT( setYAxisTitle( const QString& ) ) );
+    connect( widget, SIGNAL( showVerticalLinesChanged( bool ) ),
+             this,   SLOT( setShowVerticalLines( bool ) ) );
+    connect( widget, SIGNAL( showHorizontalLinesChanged( bool ) ),
+             this,   SLOT( setShowHorizontalLines( bool ) ) );
+    
+    connect( widget, SIGNAL( gapBetweenBarsChanged( int ) ),
+             this,   SLOT( setGapBetweenBars( int ) ) );
+    connect( widget, SIGNAL( gapBetweenSetsChanged( int ) ),
+             this,   SLOT( setGapBetweenSets( int ) ) );
+    
+    connect( widget, SIGNAL( showLegendChanged( bool ) ),
+             this,   SLOT( setShowLegend( bool ) ));
 
     connect( widget, SIGNAL( chartTypeChange( KChart::OdfChartType ) ),
 	     this,    SLOT( setChartType( KChart::OdfChartType ) ) );
@@ -316,6 +332,41 @@ void ChartTool::setDatasetColor( int dataset, const QColor& color )
         return;
     d->shape->chart()->coordinatePlane()->diagram()->setBrush( dataset, QBrush( color ) );
     d->shape->repaint();
+}
+
+void ChartTool::setXAxisTitle( const QString& title )
+{
+    d->currentShape->setXAxisTitle( title );
+}
+
+void ChartTool::setYAxisTitle( const QString& title )
+{
+    d->currentShape->setYAxisTitle( title );
+}
+
+void ChartTool::setShowVerticalLines( bool b )
+{
+    d->currentShape->setShowVerticalLines( b );
+}
+
+void ChartTool::setShowHorizontalLines( bool b )
+{
+    d->currentShape->setShowHorizontalLines( b );
+}
+
+void ChartTool::setGapBetweenBars( int percent )
+{
+    d->currentShape->setGapBetweenBars( percent );
+}
+
+void ChartTool::setGapBetweenSets( int percent )
+{
+    d->currentShape->setGapBetweenSets( percent );
+}
+
+void ChartTool::setShowLegend( bool b )
+{
+    d->currentShape->setShowLegend( b );
 }
 
 #include "ChartTool.moc"

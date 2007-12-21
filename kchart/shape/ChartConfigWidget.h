@@ -57,6 +57,17 @@ signals:
     void chartTypeChange( KChart::OdfChartType );
     void chartSubtypeChange( KChart::OdfChartSubtype );
     void threeDModeToggled( bool threeD );
+    
+    void showVerticalLinesChanged( bool b );
+    void showHorizontalLinesChanged( bool b );
+    
+    void gapBetweenBarsChanged( int percent );
+    void gapBetweenSetsChanged( int percent );
+    
+    void xAxisTitleChanged( const QString& title );
+    void yAxisTitleChanged( const QString& title );
+    
+    void showLegendChanged( bool b );
 
     void dataDirectionChanged( Qt::Orientation );
     void firstRowIsLabelChanged( bool b );

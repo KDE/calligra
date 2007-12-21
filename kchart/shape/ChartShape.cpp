@@ -118,6 +118,9 @@ public:
     KDChart::HeaderFooter     *title;
     KDChart::HeaderFooter     *subTitle;
     KDChart::HeaderFooter     *footer;
+    
+    QString                    xAxisTitle;
+    QString                    yAxisTitle;
 
     // About the data
     bool                       firstRowIsLabel;
@@ -1799,4 +1802,88 @@ void ChartShape::repaint() const
 {
     d->pixmapRepaintRequested = true;
     KoShape::update();
+}
+
+void ChartShape::setXAxisTitle( const QString& title )
+{
+    d->xAxisTitle = title;
+    if ( !isCartesian( d->chartType ) )
+        return;
+    
+    if( ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes()[0] )
+        ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes()[0]->setTitleText( title );
+        
+    repaint();
+}
+
+void ChartShape::setYAxisTitle( const QString& title )
+{
+    d->yAxisTitle = title;
+    if ( !isCartesian( d->chartType ) )
+        return;
+    
+    if ( ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes()[1] );
+        ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes()[1]->setTitleText( title );
+        
+    repaint();
+}
+
+void ChartShape::setShowVerticalLines( bool b )
+{
+    if ( !isCartesian( d->chartType ) )
+        return;
+    KDChart::GridAttributes gridAttributes = ( ( KDChart::CartesianCoordinatePlane* ) d->chart->coordinatePlane() )->gridAttributes( Qt::Vertical );
+    gridAttributes.setGridVisible( b );
+    ( ( KDChart::CartesianCoordinatePlane* ) d->chart->coordinatePlane() )->setGridAttributes( Qt::Vertical, gridAttributes );
+        
+    repaint();
+}
+
+void ChartShape::setShowHorizontalLines( bool b )
+{
+    if ( !isCartesian( d->chartType ) )
+        return;
+    
+    KDChart::GridAttributes gridAttributes = ( ( KDChart::CartesianCoordinatePlane* ) d->chart->coordinatePlane() )->gridAttributes( Qt::Horizontal );
+    gridAttributes.setGridVisible( b );
+    ( ( KDChart::CartesianCoordinatePlane* ) d->chart->coordinatePlane() )->setGridAttributes( Qt::Horizontal, gridAttributes );
+        
+    repaint();
+}
+
+void ChartShape::setGapBetweenBars( int percent )
+{
+    if ( d->chartType != BarChartType )
+        return;
+    
+    KDChart::BarAttributes attributes = ((KDChart::BarDiagram*) d->diagram)->barAttributes();
+    attributes.setBarGapFactor( (float)percent / 100.0 );
+    ((KDChart::BarDiagram*) d->diagram)->setBarAttributes( attributes );
+        
+    repaint();
+}
+
+void ChartShape::setGapBetweenSets( int percent )
+{
+    if ( d->chartType != BarChartType )
+        return;
+    
+    KDChart::BarAttributes attributes = ((KDChart::BarDiagram*) d->diagram)->barAttributes();
+    attributes.setGroupGapFactor( (float)percent / 100.0 );
+    ((KDChart::BarDiagram*) d->diagram)->setBarAttributes( attributes );
+        
+    repaint();
+}
+
+void ChartShape::setShowLegend( bool b )
+{
+    if ( !b ) {
+        if( d->chart->legend() )
+            d->chart->takeLegend( d->legend );
+    } else {
+        if( !d->chart->legend() )
+            d->chart->addLegend( d->legend );
+    }
+    
+    repaint();
 }

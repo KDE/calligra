@@ -126,6 +126,16 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     void setFirstRowIsLabel( bool b );
     void setFirstColumnIsLabel( bool b);
     void setDataDirection( Qt::Orientation orientation );
+    
+    void setXAxisTitle( const QString& title );
+    void setYAxisTitle( const QString& title );
+    void setShowVerticalLines( bool b );
+    void setShowHorizontalLines( bool b );
+    
+    void setGapBetweenBars( int percent );
+    void setGapBetweenSets( int percent );
+    
+    void setShowLegend( bool b );
     void setLegendTitle( const QString& title );
     void setLegendTitleFont( const QFont& font );
     void setLegendFont( const QFont& font );
@@ -138,6 +148,7 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     void setLegendOrientation( Qt::Orientation orientation );
     void setLegendAlignment( Qt::Alignment alignment );
     void setLegendFixedPosition( KDChart::Position position );
+    
     void modelChanged();
 
     void saveChartTypeOptions();
