@@ -23,11 +23,14 @@
 #include "kplatoui_export.h"
 
 #include "kptviewbase.h"
+#include "kptitemmodelbase.h"
+#include "kptcalendar.h" 
 #include "kptcalendarmodel.h"
-#include "kptcalendar.h"
 
-#include <QTreeWidget>
+#include <QTableView>
 #include <QAbstractProxyModel>
+
+#include "kcalendar/kdatetable.h"
 
 class QPoint;
 class QDragMoveEvent;
@@ -41,6 +44,7 @@ class View;
 class Project;
 class Calendar;
 class CalendarDay;
+class DateTableDataModel;
 
 class KPLATOUI_EXPORT CalendarTreeView : public TreeViewBase
 {
@@ -79,7 +83,7 @@ protected:
     void dragMoveEvent(QDragMoveEvent *event);
 };
 
-class KPLATOUI_EXPORT CalendarDayView : public TreeViewBase
+class KPLATOUI_EXPORT CalendarDayView : public QTableView
 {
     Q_OBJECT
 public:
@@ -170,6 +174,8 @@ private:
     CalendarTreeView *m_calendarview;
     CalendarDayView *m_dayview;
     
+    DateTableDataModel *m_model;
+    
     KAction *actionAddCalendar;
     KAction *actionAddSubCalendar;
     KAction *actionDeleteSelection;
@@ -179,6 +185,7 @@ private:
     KAction *actionDeleteDaySelection;
 
 };
+
 
 }  //KPlato namespace
 

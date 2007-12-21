@@ -19,6 +19,9 @@
 
 #include "kptcalendareditor.h"
 
+#include "kcalendar/kdatepicker.h"
+#include "kcalendar/kdatetable.h"
+//#include "kptcalendarpanel.h"
 #include "kptcommand.h"
 #include "kptcalendarmodel.h"
 #include "kptcalendar.h"
@@ -46,6 +49,7 @@
 #include <kaction.h>
 #include <kicon.h>
 #include <kglobal.h>
+#include <kglobalsettings.h>
 #include <klocale.h>
 #include <kcalendarsystem.h>
 #include <kactioncollection.h>
@@ -198,27 +202,12 @@ void CalendarTreeView::dragMoveEvent(QDragMoveEvent *event)
 
 //--------------------
 CalendarDayView::CalendarDayView( QWidget *parent )
-    : TreeViewBase( parent )
+    : QTableView( parent )
 {
-    header()->setContextMenuPolicy( Qt::CustomContextMenu );
-    m_model = new CalendarDayItemModel( this );
-    setModel(m_model);
-    // TODO: sort on date & weekday number
-    for ( int c = 0; c < m_model->columnCount(); ++c ) {
-        QItemDelegate *delegate = m_model->createDelegate( c, this );
-        if ( delegate ) {
-            setItemDelegateForColumn( c, delegate );
-        }
-    }
-    setSelectionBehavior( QAbstractItemView::SelectRows );
-    setSelectionMode( QAbstractItemView::SingleSelection );
-    setItemsExpandable( true );
-    
-    setAcceptDrops( false );
-    setDropIndicatorShown( false );
-    
-    connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
-    connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
+     m_model = new CalendarDayItemModel( this );
+     setModel(m_model);
+     verticalHeader()->hide();
+     //resizeColumnsToContents();
 }
 
 void CalendarDayView::setCurrentCalendar( Calendar *calendar )
@@ -233,7 +222,7 @@ void CalendarDayView::slotActivated( const QModelIndex index )
 
 void CalendarDayView::headerContextMenuRequested( const QPoint &pos )
 {
-    kDebug()<<header()->logicalIndexAt(pos)<<" at"<<pos;
+//    kDebug()<<k_funcinfo<<header()->logicalIndexAt(pos)<<" at"<<pos;
 }
 
 void CalendarDayView::contextMenuEvent ( QContextMenuEvent *event )
@@ -245,14 +234,14 @@ void CalendarDayView::contextMenuEvent ( QContextMenuEvent *event )
 void CalendarDayView::focusInEvent ( QFocusEvent *event )
 {
     //kDebug();
-    TreeViewBase::focusInEvent( event );
+//    TreeViewBase::focusInEvent( event );
     emit focusChanged();
 }
 
 void CalendarDayView::focusOutEvent ( QFocusEvent * event )
 {
     //kDebug();
-    TreeViewBase::focusInEvent( event );
+//    TreeViewBase::focusInEvent( event );
     emit focusChanged();
 }
 
@@ -260,14 +249,14 @@ void CalendarDayView::selectionChanged( const QItemSelection &sel, const QItemSe
 {
     //kDebug()<<sel.indexes().count();
     //foreach( QModelIndex i, selectionModel()->selectedIndexes() ) { kDebug()<<i.row()<<","<<i.column(); }
-    TreeViewBase::selectionChanged( sel, desel );
+//    TreeViewBase::selectionChanged( sel, desel );
     emit selectionChanged( selectionModel()->selectedIndexes() );
 }
 
 void CalendarDayView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
 {
     //kDebug();
-    TreeViewBase::currentChanged( current, previous );
+//    TreeViewBase::currentChanged( current, previous );
     selectionModel()->select( current, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
     emit currentChanged( current );
 }
@@ -281,28 +270,46 @@ CalendarDay *CalendarDayView::selectedDay() const
     return 0;
 }
 
-TimeInterval *CalendarDayView::selectedInterval() const
-{
-    QModelIndexList lst = selectionModel()->selectedRows();
-    if ( lst.count() == 1 ) {
-        return model()->interval( lst.first() );
-    }
-    return 0;
-}
-
 //-----------------------------------
 CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent )
+    : ViewBase( part, parent ),
+    m_model( new DateTableDataModel( this ) )
 {
     setupGui();
     
-    QVBoxLayout * l = new QVBoxLayout( this );
+    QVBoxLayout *l = new QVBoxLayout( this );
     l->setMargin( 0 );
     QSplitter *sp = new QSplitter( this );
     l->addWidget( sp );
 
     m_calendarview = new CalendarTreeView( sp );
+    sp = new QSplitter( sp );
+    sp->setOrientation( Qt::Vertical );
+    
+    sp = new QSplitter( sp );
+    sp->setOrientation( Qt::Vertical );
+    
     m_dayview = new CalendarDayView( sp );
+    
+    QFrame *f = new QFrame( sp );
+    f->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
+    l = new QVBoxLayout( f );
+    l->setMargin( 0 );
+
+    KDatePicker *w = new KDatePicker( f );
+    l->addWidget( w );
+    w->dateTable()->setWeekNumbersEnabled( true );
+    w->dateTable()->setGridEnabled( true );
+    w->dateTable()->setSelectionMode( KDateTable::ExtendedSelection );
+    w->dateTable()->setDateDelegate( new DateTableDateDelegate() );
+    w->dateTable()->setModel( m_model );
+    
+/*    const QDate date(2007,7,19);
+    const QColor fgColor(Qt::darkGray);
+    KDateTable::BackgroundMode bgMode = KDateTable::CircleMode;
+    const QColor bgColor( Qt::lightGray);
+    w->dateTable()->setCustomDatePainting( date, fgColor, bgMode, bgColor );*/
+    
     
     m_calendarview->setEditTriggers( m_calendarview->editTriggers() | QAbstractItemView::EditKeyPressed );
     
@@ -398,9 +405,12 @@ void CalendarEditor::slotCurrentCalendarChanged(  const QModelIndex & )
 {
     //kDebug()<<curr.row()<<","<<curr.column();
     m_dayview->setCurrentCalendar( currentCalendar() );
+    if ( m_model ) {
+        m_model->setCalendar( currentCalendar() );
+    }
 }
 
-void CalendarEditor::slotCalendarSelectionChanged( const QModelIndexList )
+void CalendarEditor::slotCalendarSelectionChanged( const QModelIndexList list )
 {
     //kDebug()<<list.count();
     updateActionsEnabled( true );
@@ -438,18 +448,11 @@ void CalendarEditor::updateActionsEnabled(  bool on )
     CalendarDay *d = m_dayview->selectedDay();
     if ( on ) {
         o = d == 0 ? false : d->state() == CalendarDay::Working;
-        if ( !o ) {
-            ti = m_dayview->selectedInterval();
-            if ( ti ) {
-                d = m_dayview->model()->parentDay( ti );
-                o = d->state() == CalendarDay::Working;
-            }
-        }
     }
-    actionAddDay->setEnabled( on && day && !ti && ( d == 0 || m_dayview->model()->isDate( d ) ) );
+    actionAddDay->setEnabled( on && day && d == 0 );
     actionAddWorkInterval->setEnabled( on && o && day );
     
-    bool act = on && day && ( ti || ( d && m_dayview->model()->isDate( d ) ) );
+    bool act = on && day && d;
     actionDeleteDaySelection->setEnabled( act );
 }
 
@@ -491,16 +494,16 @@ void CalendarEditor::setupGui()
     coll->addAction("delete_day_selection", actionDeleteDaySelection );
     connect( actionDeleteDaySelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteDaySelection() ) );
     
-    addAction( name, actionAddWorkInterval  );
+/*    addAction( name, actionAddWorkInterval  );
     addAction( name, actionAddDay  );
-    addAction( name, actionDeleteDaySelection );
+    addAction( name, actionDeleteDaySelection );*/
     
 }
 
 void CalendarEditor::updateReadWrite( bool readwrite )
 {
     m_calendarview->setReadWrite( readwrite );
-    m_dayview->setReadWrite( readwrite );
+//    m_dayview->setReadWrite( readwrite );
 }
 
 void CalendarEditor::slotAddCalendar ()
@@ -542,7 +545,7 @@ void CalendarEditor::slotDeleteCalendar()
 void CalendarEditor::slotAddInterval ()
 {
     //kDebug();
-    CalendarDay *parent = m_dayview->selectedDay ();
+/*    CalendarDay *parent = m_dayview->selectedDay ();
     if ( parent == 0 ) {
         TimeInterval *ti = m_dayview->selectedInterval();
         if ( ti == 0 ) {
@@ -559,13 +562,13 @@ void CalendarEditor::slotAddInterval ()
         m_dayview->setExpanded( p, true );
         m_dayview->setCurrentIndex( i );
         m_dayview->edit( i );
-    }
+    }*/
 }
 
 void CalendarEditor::slotDeleteDaySelection()
 {
     //kDebug();
-    TimeInterval *ti = m_dayview->selectedInterval();
+/*    TimeInterval *ti = m_dayview->selectedInterval();
     if ( ti != 0 ) {
         m_dayview->model()->removeInterval( ti );
         return;
@@ -573,13 +576,13 @@ void CalendarEditor::slotDeleteDaySelection()
     CalendarDay *day = m_dayview->selectedDay();
     if ( day != 0 ) {
         m_dayview->model()->removeDay( day );
-    }
+    }*/
 }
 
 void CalendarEditor::slotAddDay ()
 {
     //kDebug();
-    Calendar *c = currentCalendar();
+/*    Calendar *c = currentCalendar();
     if ( c == 0 ) {
         return;
     }
@@ -593,7 +596,7 @@ void CalendarEditor::slotAddDay ()
         m_dayview->setExpanded( p, true );
         m_dayview->setCurrentIndex( i );
         m_dayview->edit( i );
-    }
+    }*/
 }
 
 

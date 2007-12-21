@@ -24,9 +24,13 @@
 
 #include "kptitemmodelbase.h"
 #include "kptcalendar.h"
+#include "kptcalendarmodel.h"
+
+#include "kcalendar/kdatetable.h"
 
 class QPoint;
 class QDragMoveEvent;
+class QPainter;
 
 namespace KPlato
 {
@@ -47,19 +51,19 @@ public:
     virtual void setProject( Project *project );
 
     CalendarDay *day( const QModelIndex &index ) const;
-    TimeInterval *interval( const QModelIndex &index ) const;
+//    TimeInterval *interval( const QModelIndex &index ) const;
     
-    QModelIndex insertInterval ( TimeInterval *ti, CalendarDay *day );
-    void removeInterval( TimeInterval *ti );
+//    QModelIndex insertInterval ( TimeInterval *ti, CalendarDay *day );
+//    void removeInterval( TimeInterval *ti );
     
-    CalendarDay *parentDay( const TimeInterval *ti ) const { return m_days.value( const_cast<TimeInterval*>( ti ) ); }
+//    CalendarDay *parentDay( const TimeInterval *ti ) const { return m_days.value( const_cast<TimeInterval*>( ti ) ); }
     
 protected slots:
     void slotCalendarToBeRemoved( const Calendar *calendar );
 
 protected:
     Calendar *m_calendar; // current calendar
-    QMap<TimeInterval*, CalendarDay*> m_days;
+//    QMap<TimeInterval*, CalendarDay*> m_days;
 };
 
 
@@ -86,8 +90,6 @@ public:
 
 
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-
-    virtual void sort( int column, Qt::SortOrder order = Qt::AscendingOrder );
     
     virtual QMimeData * mimeData( const QModelIndexList & indexes ) const;
     virtual QStringList mimeTypes () const;
@@ -146,8 +148,6 @@ public:
 
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
-    virtual void sort( int column, Qt::SortOrder order = Qt::AscendingOrder );
-
     CalendarDay *day( const QModelIndex &index ) const;
     TimeInterval *interval( const QModelIndex &index ) const;
     
@@ -164,51 +164,69 @@ protected slots:
     void slotDayChanged( CalendarDay *day );
     void slotTimeIntervalChanged( TimeInterval *ti );
     
-    void slotDayToBeAdded( CalendarDay *day, int row );
+/*    void slotDayToBeAdded( CalendarDay *day, int row );
     void slotDayAdded( CalendarDay *day );
     void slotDayToBeRemoved( CalendarDay *day );
-    void slotDayRemoved( CalendarDay *day );
+    void slotDayRemoved( CalendarDay *day );*/
     
-    void slotWorkIntervalToBeAdded( CalendarDay *day, TimeInterval *ti, int row );
+//    void slotWorkIntervalToBeAdded( CalendarDay *day, TimeInterval *ti, int row );
     void slotWorkIntervalAdded( CalendarDay *day, TimeInterval *ti );
-    void slotWorkIntervalToBeRemoved( CalendarDay *day, TimeInterval *ti );
+//    void slotWorkIntervalToBeRemoved( CalendarDay *day, TimeInterval *ti );
     void slotWorkIntervalRemoved( CalendarDay *day, TimeInterval *ti );
 
 protected:
-    QVariant date( const CalendarDay *day, int role ) const;
-    bool setDate( CalendarDay *day, const QVariant &value, int role );
+/*    QVariant date( const CalendarDay *day, int role ) const;
+    bool setDate( CalendarDay *day, const QVariant &value, int role );*/
     QVariant name( int weekday, int role ) const;
     QVariant dayState( const CalendarDay *day, int role ) const;
     bool setDayState( CalendarDay *day, const QVariant &value, int role );
-    QVariant intervalStart( const TimeInterval *ti, int role ) const;
+/*    QVariant intervalStart( const TimeInterval *ti, int role ) const;
     bool setIntervalStart( TimeInterval *ti, const QVariant &value, int role );
     QVariant intervalEnd( const TimeInterval *ti, int role ) const;
-    bool setIntervalEnd( TimeInterval *ti, const QVariant &value, int role );
+    bool setIntervalEnd( TimeInterval *ti, const QVariant &value, int role );*/
     QVariant workDuration( const CalendarDay *day, int role ) const;
-    QVariant intervalDuration( const TimeInterval *ti, int role ) const;
+//    QVariant intervalDuration( const TimeInterval *ti, int role ) const;
     
     void addIntervals( CalendarDay *day );
     void removeIntervals( CalendarDay *day );
     
-    void setDayMap( CalendarDay *day );
-    void clearDayMap( CalendarDay *day );
-    virtual void setDayMap( Calendar *calendar );
-    
-    class TopLevelType
-    {
-    public:
-        TopLevelType( QString n = "") { name = n; }
-        QString name;
-    };
-    bool isDate( const QModelIndex &index ) const;
-    bool isWeekday( const  QModelIndex &index ) const;
-    bool isTopLevel( const  QModelIndex &index ) const { return isDate( index ) || isWeekday( index ); }
+};
 
+//----->
+class KPLATOMODELS_EXPORT DateTableDataModel : public KDateTableDataModel
+{
+    Q_OBJECT
+public:
+    DateTableDataModel( QObject *parent );
+
+    /// Fetch data for @p date, @p dataType specifies the type of data
+    virtual QVariant data( const QDate &date, int role = Qt::DisplayRole,  int dataType = -1 ) const;
+    virtual QVariant weekDayData( int day, int role = Qt::DisplayRole ) const;
+    virtual QVariant weekNumberData( int week, int role = Qt::DisplayRole ) const;
+
+public slots:
+    void setCalendar( Calendar *calendar );
+
+signals:
+    void reset();
+    void dataChanged( const QDate &start, const QDate &end );
 
 private:
-    TopLevelType *typeWeekday;
-    TopLevelType *typeDate;
+    Calendar *m_calendar;
 };
+
+//-------
+class KPLATOMODELS_EXPORT DateTableDateDelegate : public KDateTableDateDelegate
+{
+    Q_OBJECT
+public:
+    DateTableDateDelegate();
+    ~DateTableDateDelegate() {}
+
+    virtual QRectF paint( QPainter *painter, const StyleOptionViewItem &option, const QDate &date,  KDateTableDataModel *model );
+    
+};
+
 
 }  //KPlato namespace
 

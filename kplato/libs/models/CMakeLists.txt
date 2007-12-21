@@ -11,6 +11,9 @@ include_directories(
 ########### KPlato data models library ###############
 
 set(kplatomodels_LIB_SRCS
+    kcalendar/kdatetable.cpp
+    kcalendar/kdatepicker.cpp
+    
     kptrelationmodel.cpp
     kptworkpackagemodel.cpp
     kptdocumentmodel.cpp
