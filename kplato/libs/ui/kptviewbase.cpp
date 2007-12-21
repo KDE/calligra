@@ -124,14 +124,23 @@ void TreeViewBase::setColumnsHidden( const QList<int> &lst )
 
 QModelIndex TreeViewBase::firstColumn( int row, const QModelIndex &parent )
 {
-    return model()->index( row, header()->logicalIndex( 0 ), parent );
+    int s;
+    for ( s = 0; s < header()->count(); ++s ) {
+        if ( ! header()->isSectionHidden( header()->logicalIndex( s ) ) ) {
+            break;
+        }
+    }
+    if ( s == -1 ) {
+        return QModelIndex();
+    }
+    return model()->index( row, header()->logicalIndex( s ), parent );
 }
 
 QModelIndex TreeViewBase::lastColumn( int row, const QModelIndex &parent )
 {
     int s;
     for ( s = header()->count() - 1; s >= 0; --s ) {
-        if ( ! header()->isSectionHidden( s ) ) {
+        if ( ! header()->isSectionHidden( header()->logicalIndex( s ) ) ) {
             break;
         }
     }
