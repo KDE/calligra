@@ -323,17 +323,7 @@ KarbonPart::loadOasisSettings( const KoXmlDocument&settingsDoc )
 
 bool KarbonPart::saveOdf( SavingContext &documentContext )
 {
-    KoGenStyles mainStyles;
-
-    /*
-    KoGenStyle pageLayout = m_pageLayout.saveOasis();
-    QString layoutName = mainStyles.lookup( pageLayout, "PL" );
-    KoGenStyle masterPage( KoGenStyle::StyleMaster );
-    masterPage.addAttribute( "style:page-layout-name", layoutName );
-    mainStyles.lookup( masterPage, "Default", KoGenStyles::DontForceNumbering );
-    */
-
-    if( ! m_doc.saveOasis( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter(), mainStyles ) )
+    if( ! m_doc.saveOdf( documentContext ) )
         return false;
 
     setModified( false );

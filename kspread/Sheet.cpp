@@ -3611,8 +3611,10 @@ void Sheet::saveOasisSettings( KoXmlWriter &settingsWriter ) const
   settingsWriter.addConfigItem( "ShowColumnNumber", getShowColumnNumber() );
 }
 
-bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenValidationStyles &valStyle, KoStore *store, KoXmlWriter* /*manifestWriter*/, int &indexObj, int &partIndexObj )
+bool Sheet::saveOasis( KoShapeSavingContext &savingContext, GenValidationStyles &valStyle )
 {
+    KoXmlWriter & xmlWriter = savingContext.xmlWriter();
+    KoGenStyles & mainStyles = savingContext.mainStyles();
     xmlWriter.startElement( "table:table" );
     xmlWriter.addAttribute( "table:name", sheetName() );
     xmlWriter.addAttribute( "table:style-name", saveOasisSheetStyleName(mainStyles )  );
@@ -3639,8 +3641,7 @@ bool Sheet::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenVali
     const QRect usedArea = this->usedArea();
     saveOasisColRowCell( xmlWriter, mainStyles, usedArea.width(), usedArea.height(), valStyle );
 
-    KoShapeSavingContext shapeSavingContext( xmlWriter, mainStyles );
-    d->shapeContainer->saveOdf( shapeSavingContext );
+    d->shapeContainer->saveOdf( savingContext );
 
     xmlWriter.endElement();
     return true;

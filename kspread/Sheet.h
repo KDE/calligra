@@ -50,6 +50,7 @@ class KoGenStyles;
 class KoOasisLoadingContext;
 class KoOasisSettings;
 class KoOdfStylesReader;
+class KoShapeSavingContext;
 class KoPicture;
 class KoXmlWriter;
 
@@ -312,10 +313,8 @@ public:
     /**
      * \ingroup OpenDocument
      */
-    bool saveOasis( KoXmlWriter& xmlWriter, KoGenStyles& mainStyles,
-                    GenValidationStyles& valStyle, KoStore* store,
-                    KoXmlWriter* manifestWriter,
-                    int& indexObj, int& partIndexObj );
+    bool saveOasis( KoShapeSavingContext &savingContext,
+                    GenValidationStyles& valStyle );
 
     /**
      * \ingroup OpenDocument

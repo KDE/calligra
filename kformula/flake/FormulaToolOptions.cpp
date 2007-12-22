@@ -32,6 +32,7 @@
 #include <KoOasisLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoGenStyles.h>
+#include <KoEmbeddedDocumentSaver.h>
 
 #include <KFileDialog>
 #include <KMessageBox>
@@ -112,8 +113,10 @@ void FormulaToolOptions::slotSaveFormula()
     QFile file( url.path() );
     KoXmlWriter writer( &file );
     KoGenStyles styles;
-    KoShapeSavingContext shapeSavingContext( writer, styles );
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoShapeSavingContext shapeSavingContext( writer, styles, embeddedSaver );
 
+    // TODO this should not use saveOdf 
     m_tool->shape()->saveOdf( shapeSavingContext );
 }
 

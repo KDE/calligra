@@ -889,7 +889,7 @@ bool KChartPart::saveOdf( SavingContext & documentContext )
 
     // Write the chart itself.
     KoGenStyles      mainStyles;
-    KoShapeSavingContext shapeSavingContext( contentTmpWriter, mainStyles );
+    KoShapeSavingContext shapeSavingContext( contentTmpWriter, mainStyles, documentContext.embeddedSaver );
     m_chartShape->saveOdf( shapeSavingContext );
 
     contentTmpWriter.endElement(); // office:chart

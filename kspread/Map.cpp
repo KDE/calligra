@@ -32,6 +32,8 @@
 #include <KoGenStyles.h>
 #include <KoOasisSettings.h>
 #include <KoOasisLoadingContext.h>
+#include <KoEmbeddedDocumentSaver.h>
+#include <KoShapeSavingContext.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
@@ -255,11 +257,12 @@ bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore 
 
     KoXmlWriter bodyTmpWriter( &bodyTmpFile );
 
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoShapeSavingContext savingContext( bodyTmpWriter, mainStyles, embeddedSaver );
 
     foreach ( Sheet* sheet, d->lstSheets )
     {
-        sheet->saveOasis( bodyTmpWriter, mainStyles, valStyle, store,
-                          manifestWriter, _indexObj, _partIndexObj );
+        sheet->saveOasis( savingContext, valStyle );
     }
 
     valStyle.writeStyle( xmlWriter );

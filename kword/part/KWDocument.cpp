@@ -166,7 +166,7 @@ bool KWDocument::saveOdf( SavingContext &documentContext ) {
     contentTmpWriter.startElement( "office:text" );
 
     KoGenStyles mainStyles;
-    KoShapeSavingContext context (contentTmpWriter, mainStyles);
+    KoShapeSavingContext context(contentTmpWriter, mainStyles, documentContext.embeddedSaver);
 
     KWTextFrameSet *mainTextFrame = 0;
 

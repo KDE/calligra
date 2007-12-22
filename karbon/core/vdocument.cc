@@ -43,6 +43,7 @@
 #include <KoShapeRegistry.h>
 #include <KoStoreDevice.h>
 #include <KoOdfWriteStore.h>
+#include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeStyleWriter.h>
 #include <KoImageCollection.h>
 
@@ -373,8 +374,11 @@ KoImageCollection * VDocument::imageCollection()
 // ODF saving
 //#############################################################################
 
-bool VDocument::saveOasis( KoStore *store, KoXmlWriter *manifestWriter, KoGenStyles &mainStyles )
+bool VDocument::saveOdf( KoDocument::SavingContext &documentContext )
 {
+    KoStore * store = documentContext.odfStore.store();
+    KoXmlWriter * manifestWriter = documentContext.odfStore.manifestWriter();
+
     if( !store->open( "content.xml" ) )
         return false;
 
@@ -392,6 +396,7 @@ bool VDocument::saveOasis( KoStore *store, KoXmlWriter *manifestWriter, KoGenSty
     page.width = pageSize().width();
     page.height = pageSize().height();
 
+    KoGenStyles mainStyles;
     KoGenStyle pageLayout = page.saveOasis();
     QString layoutName = mainStyles.lookup( pageLayout, "PL" );
     KoGenStyle masterPage( KoGenStyle::StyleMaster );
@@ -405,7 +410,7 @@ bool VDocument::saveOasis( KoStore *store, KoXmlWriter *manifestWriter, KoGenSty
     contentTmpWriter.startElement( "office:body" );
     contentTmpWriter.startElement( "office:drawing" );
 
-    KoShapeSavingContext shapeContext( contentTmpWriter, mainStyles );
+    KoShapeSavingContext shapeContext( contentTmpWriter, mainStyles, documentContext.embeddedSaver );
     saveOasis( shapeContext ); // Save contents
 
     contentTmpWriter.endElement(); // office:drawing

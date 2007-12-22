@@ -31,6 +31,8 @@ DESCRIPTION
 #include <KoStoreDevice.h>
 #include <KoOdfWriteStore.h>
 #include <KoGenStyles.h>
+#include <KoDocument.h>
+#include <KoEmbeddedDocumentSaver.h>
 
 typedef KGenericFactory<WMFImport> WMFImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libwmfimport, WMFImportFactory( "kofficefilters" ) )
@@ -72,15 +74,15 @@ KoFilter::ConversionStatus WMFImport::convert( const QByteArray& from, const QBy
 
     // Tell KoStore not to touch the file names
     storeout->disallowNameExpansion();
-    KoOdfWriteStore oasisStore( storeout );
-    KoXmlWriter* manifestWriter = oasisStore.manifestWriter( to );
+    KoOdfWriteStore odfStore( storeout );
+    KoXmlWriter* manifestWriter = odfStore.manifestWriter( to );
+    KoEmbeddedDocumentSaver embeddedSaver;
+    KoDocument::SavingContext documentContext( odfStore, embeddedSaver );
 
-    KoGenStyles mainStyles;
-
-    bool success = document.saveOasis( storeout, manifestWriter, mainStyles );
+    bool success = document.saveOdf( documentContext );
 
     // cleanup
-    oasisStore.closeManifestWriter();
+    odfStore.closeManifestWriter();
     delete storeout;
 
     if( ! success )

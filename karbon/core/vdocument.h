@@ -39,6 +39,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoGenStyle.h>
 #include <KoXmlReader.h>
+#include <KoDocument.h>
 
 class VSelection;
 class KoShape;
@@ -179,7 +180,7 @@ public:
 
     QDomDocument saveXML() const;
     void saveOasis( KoShapeSavingContext & context ) const;
-    bool saveOasis( KoStore *store, KoXmlWriter *manifestWriter, KoGenStyles &mainStyles );
+    bool saveOdf( KoDocument::SavingContext & documentContext );
 
     bool loadXML( const KoXmlElement& doc );
     virtual bool loadOasis( const KoXmlElement &element, KoShapeLoadingContext &context );
