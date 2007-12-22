@@ -39,6 +39,10 @@
 #include "ChartToolFactory.h"
 #include "ChartConfigWidget.h"
 
+// KDChart
+#include <KDChartChart>
+#include <KDChartAbstractCartesianDiagram>
+
 
 using namespace KChart;
 
@@ -83,15 +87,18 @@ KoShape* ChartShapeFactory::createDefaultShape() const
     for ( uint row = 0; row < 4; ++row ) {
         // The first column has row labels, except the upper left
         // corner which is unused.
-        if ( row > 0 )
-            m_chartData->setItem( row, 0,
-                                  new QStandardItem( i18n( "Row %1", row ) ) );
+        if ( row == 1 )
+            m_chartData->setItem( row, 0, new QStandardItem( i18n( "January" ) ) );
+        else if( row == 2 )
+            m_chartData->setItem( row, 0, new QStandardItem( i18n( "July" ) ) );
+        else if( row == 3 )
+            m_chartData->setItem( row, 0, new QStandardItem( i18n( "December" ) ) );
 
         for ( uint col = 1; col < 5; ++col ) {
             if ( row == 0 )
                 // First row has column labels
                 m_chartData->setData( m_chartData->index( 0, col ),
-                                      i18n( "Column %1", col ),
+                                      i18n( "Item %1", col ),
                                       Qt::EditRole | Qt::DisplayRole );
             else
                 m_chartData->setData( m_chartData->index( row, col ),
@@ -105,6 +112,9 @@ KoShape* ChartShapeFactory::createDefaultShape() const
     shape->setFirstRowIsLabel( true );
     shape->setFirstColumnIsLabel( true );
     shape->setSize( QSizeF( CM_TO_POINT( 12 ), CM_TO_POINT( 8 ) ) );
+    
+    shape->setXAxisTitle( "Month" );
+    shape->setYAxisTitle( "Growth in %" );
 
     return shape;
 }
