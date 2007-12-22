@@ -57,7 +57,7 @@ TaskStatusItemModel::TaskStatusItemModel( QObject *parent )
     m_top.append(&m_finished );
     
     m_topNames << i18n( "Next Period" );
-    m_top.append(&m_upcomming );
+    m_top.append(&m_upcoming );
     
 /*    connect( this, SIGNAL( modelAboutToBeReset() ), SLOT( slotAboutToBeReset() ) );
     connect( this, SIGNAL( modelReset() ), SLOT( slotReset() ) );*/
@@ -189,7 +189,7 @@ void TaskStatusItemModel::refresh()
             m_notstarted.append( t );
         } else if ( t->startTime( m_id ).date() <= end ) {
             // start next period
-            m_upcomming.append( t );
+            m_upcoming.append( t );
         }
     }
     foreach ( NodeList *l, m_top ) {

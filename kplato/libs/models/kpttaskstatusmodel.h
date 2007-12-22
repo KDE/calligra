@@ -104,7 +104,7 @@ private:
     NodeList m_notstarted;
     NodeList m_running;
     NodeList m_finished;
-    NodeList m_upcomming;
+    NodeList m_upcoming;
     
     long m_id; // schedule id
     int m_period;
