@@ -58,11 +58,9 @@ public:
     ~Private();
 
     ChartShape  *shape;
-    QModelIndex  selection;
-    QBrush       selectionBrush;
-    QPen         selectionPen;
-
-    ChartShape  *currentShape;
+    QModelIndex  datasetSelection;
+    QPen         datasetSelectionPen;
+    QBrush       datasetSelectionBrush;
 };
 
 ChartTool::Private::Private()
@@ -104,7 +102,36 @@ void ChartTool::paint( QPainter &painter, const KoViewConverter &converter)
 
 void ChartTool::mousePressEvent( KoPointerEvent *event )
 {
-    event->ignore();
+    // Select dataset
+    if (    !d->shape || !d->shape->chart() || ! d->shape->chart()->coordinatePlane()
+         || !d->shape->chart()->coordinatePlane()->diagram() )
+        return;
+    QPointF point = event->point - d->shape->position();
+    QModelIndex selection = d->shape->chart()->coordinatePlane()->diagram()->indexAt( point.toPoint() );
+    // Note: the dataset will always stay column() due to the transformations being
+    // done internally by the ChartProxyModel
+    int dataset = selection.column();
+    
+    if ( d->datasetSelection.isValid() ) {
+        d->shape->chart()->coordinatePlane()->diagram()->setPen( d->datasetSelection.column(), d->datasetSelectionPen );
+        //d->shape->chart()->coordinatePlane()->diagram()->setBrush( d->datasetSelection, d->datasetSelectionBrush );
+    }
+    if ( selection.isValid() ) {
+        d->datasetSelection = selection;
+        
+        QPen pen( Qt::DotLine );
+        pen.setColor( Qt::darkGray );
+        pen.setWidth( 1 );
+        
+        d->datasetSelectionBrush = d->shape->chart()->coordinatePlane()->diagram()->brush( selection );
+        d->datasetSelectionPen   = d->shape->chart()->coordinatePlane()->diagram()->pen( dataset );
+        
+        d->shape->chart()->coordinatePlane()->diagram()->setPen( dataset, pen );
+        //d->shape->chart()->coordinatePlane()->diagram()->setBrush( selection, QBrush( Qt::lightGray ) );
+    }
+    ((ChartConfigWidget*)optionWidget())->selectDataset( dataset );
+        
+    d->shape->update();
 }
 
 void ChartTool::mouseMoveEvent( KoPointerEvent *event )
@@ -120,14 +147,14 @@ void ChartTool::mouseReleaseEvent( KoPointerEvent *event )
 void ChartTool::activate( bool )
 {
     // Get the shape that the tool is working on. 
-    // Let d->currentShape point to it.
+    // Let d->shape point to it.
     KoSelection *selection = m_canvas->shapeManager()->selection();
     foreach ( KoShape *shape, selection->selectedShapes() ) {
-        d->currentShape = dynamic_cast<ChartShape*>( shape );
-        if ( d->currentShape )
+        d->shape = dynamic_cast<ChartShape*>( shape );
+        if ( d->shape )
             break;
     }
-    if ( !d->currentShape ) { // none found
+    if ( !d->shape ) { // none found
         emit done();
         return;
     }
@@ -139,13 +166,13 @@ void ChartTool::activate( bool )
 
 void ChartTool::deactivate()
 {
-    d->currentShape = 0;
+    d->shape = 0;
 }
 
 void ChartTool::updateActions()
 {
 #if 0 // Taken from DivineProportion
-    switch(d->currentShape->orientation()) {
+    switch(d->shape->orientation()) {
         case ChartTypeShape::BottomRight: m_bottomRightOrientation->setChecked(true); break;
         case ChartTypeShape::BottomLeft: m_bottomLeftOrientation->setChecked(true); break;
         case ChartTypeShape::TopRight: m_topRightOrientation->setChecked(true); break;
@@ -158,7 +185,7 @@ void ChartTool::updateActions()
 QWidget *ChartTool::createOptionWidget()
 {
     ChartConfigWidget  *widget = new ChartConfigWidget();
-    widget->open( d->currentShape );
+    widget->open( d->shape );
 
     connect( widget, SIGNAL( dataDirectionChanged( Qt::Orientation ) ),
              this,    SLOT( setDataDirection( Qt::Orientation ) ) );
@@ -183,10 +210,10 @@ QWidget *ChartTool::createOptionWidget()
     connect( widget, SIGNAL( showLegendChanged( bool ) ),
              this,   SLOT( setShowLegend( bool ) ));
 
-    connect( widget, SIGNAL( chartTypeChange( KChart::OdfChartType ) ),
-	     this,    SLOT( setChartType( KChart::OdfChartType ) ) );
-    connect( widget, SIGNAL( chartSubtypeChange( KChart::OdfChartSubtype ) ),
-             this,    SLOT( setChartSubtype( KChart::OdfChartSubtype ) ) );
+    connect( widget, SIGNAL( chartTypeChanged( OdfChartType, OdfChartSubtype ) ),
+	     this,    SLOT( setChartType( OdfChartType, OdfChartSubtype ) ) );
+    connect( widget, SIGNAL( chartSubtypeChanged( OdfChartSubtype ) ),
+             this,    SLOT( setChartSubtype( OdfChartSubtype ) ) );
     connect( widget, SIGNAL( threeDModeToggled( bool ) ),
              this,    SLOT( setThreeDMode( bool ) ) );
 
@@ -222,106 +249,106 @@ QWidget *ChartTool::createOptionWidget()
 }
 
 
-void ChartTool::setChartType( OdfChartType type )
+void ChartTool::setChartType( OdfChartType type, OdfChartSubtype subtype )
 {
-    if ( d->currentShape != 0 )
-        d->currentShape->setChartType( type );
+    if ( d->shape != 0 )
+        d->shape->setChartType( type, subtype );
 }
 
 
 void ChartTool::setChartSubtype( OdfChartSubtype subtype )
 {
-    if ( d->currentShape != 0 )
-        d->currentShape->setChartSubtype( subtype );
+    if ( d->shape != 0 )
+        d->shape->setChartSubtype( subtype );
 }
 
 void ChartTool::setThreeDMode( bool threeD )
 {
-    if ( d->currentShape != 0 )
-        d->currentShape->setThreeDMode( threeD );
+    if ( d->shape != 0 )
+        d->shape->setThreeDMode( threeD );
 }
 
 void ChartTool::setDataDirection( Qt::Orientation direction )
 {
-    if ( d->currentShape != 0 )
-        d->currentShape->setDataDirection( direction );
+    if ( d->shape != 0 )
+        d->shape->setDataDirection( direction );
 }
 
 void ChartTool::setFirstRowIsLabel( bool b )
 {
-    if ( d->currentShape != 0 )
-        d->currentShape->setFirstRowIsLabel( b );
+    if ( d->shape != 0 )
+        d->shape->setFirstRowIsLabel( b );
 }
 
 void ChartTool::setFirstColumnIsLabel( bool b )
 {
-    if ( d->currentShape != 0 )
-        d->currentShape->setFirstColumnIsLabel( b );
+    if ( d->shape != 0 )
+        d->shape->setFirstColumnIsLabel( b );
 }
 
 
 void ChartTool::setLegendTitle( const QString &title )
 {
-    d->currentShape->setLegendTitle( title );
+    d->shape->setLegendTitle( title );
 }
 
 // Deprecated method
 void ChartTool::setLegendTitleFont( const QFont &font )
 {
-    d->currentShape->setLegendTitleFont( font );
+    d->shape->setLegendTitleFont( font );
 }
 
 void ChartTool::setLegendFont( const QFont &font )
 {
     // There only is a general font, for the legend items and the legend title
-    d->currentShape->setLegendFont( font );
-    d->currentShape->setLegendTitleFont( font );
+    d->shape->setLegendFont( font );
+    d->shape->setLegendTitleFont( font );
 }
 
 void ChartTool::setLegendSpacing( int spacing )
 {
-    d->currentShape->setLegendSpacing( spacing );
+    d->shape->setLegendSpacing( spacing );
 }
 
 void ChartTool::setLegendFontSize( int size )
 {
-    d->currentShape->setLegendFontSize( size );
+    d->shape->setLegendFontSize( size );
 }
 
 void ChartTool::setLegendShowLines( bool b )
 {
-    d->currentShape->setLegendShowLines( b );
+    d->shape->setLegendShowLines( b );
 }
 
 void ChartTool::setLegendOrientation( Qt::Orientation orientation )
 {
-    d->currentShape->setLegendOrientation( orientation );
+    d->shape->setLegendOrientation( orientation );
 }
 
 void ChartTool::setLegendAlignment( Qt::Alignment alignment )
 {
-    d->currentShape->setLegendAlignment( alignment );
+    d->shape->setLegendAlignment( alignment );
 }
 
 void ChartTool::setLegendFixedPosition( KDChart::Position position )
 {
-    d->currentShape->setLegendFixedPosition( position );
+    d->shape->setLegendFixedPosition( position );
     ( ( ChartConfigWidget* ) optionWidget() )->updateFixedPosition( position );
 }
 
 void ChartTool::setLegendBackgroundColor( const QColor& color )
 {
-    d->currentShape->setLegendBackgroundColor( color );
+    d->shape->setLegendBackgroundColor( color );
 }
 
 void ChartTool::setLegendFrameColor( const QColor& color )
 {
-    d->currentShape->setLegendFrameColor( color );
+    d->shape->setLegendFrameColor( color );
 }
 
 void ChartTool::setLegendShowFrame( bool show )
 {
-    d->currentShape->setLegendShowFrame( show );
+    d->shape->setLegendShowFrame( show );
 }
 
 
@@ -336,37 +363,37 @@ void ChartTool::setDatasetColor( int dataset, const QColor& color )
 
 void ChartTool::setXAxisTitle( const QString& title )
 {
-    d->currentShape->setXAxisTitle( title );
+    d->shape->setXAxisTitle( title );
 }
 
 void ChartTool::setYAxisTitle( const QString& title )
 {
-    d->currentShape->setYAxisTitle( title );
+    d->shape->setYAxisTitle( title );
 }
 
 void ChartTool::setShowVerticalLines( bool b )
 {
-    d->currentShape->setShowVerticalLines( b );
+    d->shape->setShowVerticalLines( b );
 }
 
 void ChartTool::setShowHorizontalLines( bool b )
 {
-    d->currentShape->setShowHorizontalLines( b );
+    d->shape->setShowHorizontalLines( b );
 }
 
 void ChartTool::setGapBetweenBars( int percent )
 {
-    d->currentShape->setGapBetweenBars( percent );
+    d->shape->setGapBetweenBars( percent );
 }
 
 void ChartTool::setGapBetweenSets( int percent )
 {
-    d->currentShape->setGapBetweenSets( percent );
+    d->shape->setGapBetweenSets( percent );
 }
 
 void ChartTool::setShowLegend( bool b )
 {
-    d->currentShape->setShowLegend( b );
+    d->shape->setShowLegend( b );
 }
 
 #include "ChartTool.moc"

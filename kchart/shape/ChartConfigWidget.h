@@ -40,22 +40,25 @@ public:
 
 public slots:
     void chartSubtypeSelected( int type );
-    void chartTypeSelected( int type );
+    void chartTypeSelected( QAction *action );
     void setThreeDMode( bool threeD );
     void updateChartTypeOptions( ChartTypeOptions options );
 
     void setDataInRows( bool checked );
     void slotShowTableEditor( bool show );
 
+    void setLegendOrientationIsVertical( bool );
     void setLegendOrientation( int boxEntryIndex );
     void setLegendAlignment( int boxEntryIndex );
     void setLegendFixedPosition( int buttonGroupIndex );
     //void setLegendShowTitle( bool toggled );
     void updateFixedPosition( const KDChart::Position );
+    void selectDataset( int dataset );
 
 signals:
-    void chartTypeChange( KChart::OdfChartType );
-    void chartSubtypeChange( KChart::OdfChartSubtype );
+    void chartTypeChanged( OdfChartType type, OdfChartSubtype subType );
+    void chartTypeChanged( OdfChartType );
+    void chartSubtypeChanged( OdfChartSubtype );
     void threeDModeToggled( bool threeD );
     
     void showVerticalLinesChanged( bool b );

@@ -7,6 +7,7 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 #include <QToolButton>
+#include <QMenu>
 
 // KDE
 #include <KLocale>
@@ -16,10 +17,13 @@
 // KDChart
 #include <KDChartChart>
 #include <KDChartPosition>
+#include <KDChartAbstractCartesianDiagram>
+#include <KDChartLegend>
 
 // KChart
 #include "kchart_global.h"
 #include "ChartShape.h"
+#include "ChartProxyModel.h"
 #include "ui_ChartTableEditor.h"
 #include "ui_ChartConfigWidget.h"
 #include "ChartTableView.h"
@@ -58,6 +62,15 @@ public:
     QVBoxLayout* leftLayout;
     QVBoxLayout* rightLayout;
     Ui::ChartConfigWidget ui;
+    
+    // chart type selection actions
+    QAction *normalBarChartAction;
+    QAction *stackedBarChartAction;
+    QAction *percentBarChartAction;
+    
+    QAction *normalLineChartAction;
+    QAction *stackedLineChartAction;
+    QAction *percentLineChartAction;
 
     // Table Editor
     Ui::ChartTableEditor       tableEditor;
@@ -70,6 +83,8 @@ public:
     int                          lastVerticalAlignment;
     KDChart::Position            fixedPosition;
     KDChart::Position            lastFixedPosition;
+    
+    int                          selectedDataset;
 };
 
 ChartConfigWidget::Private::Private()
@@ -93,7 +108,31 @@ ChartConfigWidget::ChartConfigWidget()
     setObjectName("Chart Type");
     d->ui.setupUi( this );
     
+    // Chart type button
+    QMenu *chartTypeMenu = new QMenu( this );
+    chartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
+    
+    QMenu *barChartMenu = chartTypeMenu->addMenu( KIcon( "chart_bar" ), "Bar Chart" );
+    d->normalBarChartAction = barChartMenu->addAction( KIcon( "chart_bar_beside" ), i18n("Normal") );
+    d->stackedBarChartAction = barChartMenu->addAction( KIcon( "chart_bar_layer" ), i18n("Stacked") );
+    d->percentBarChartAction = barChartMenu->addAction( KIcon( "chart_bar_percent" ), i18n("Percent") );
+    
+    QMenu *lineChartMenu = chartTypeMenu->addMenu( KIcon( "chart_line" ), "Line Chart" );
+    d->normalLineChartAction = lineChartMenu->addAction( KIcon( "chart_line_normal" ), i18n("Normal") );
+    d->stackedLineChartAction = lineChartMenu->addAction( KIcon( "chart_line_stacked" ), i18n("Stacked") );
+    d->percentLineChartAction = lineChartMenu->addAction( KIcon( "chart_line_percent" ), i18n("Percent") );
+    
+    d->ui.chartTypeMenu->setMenu( chartTypeMenu );
+    
+    connect( chartTypeMenu, SIGNAL( triggered( QAction* ) ), this, SLOT( chartTypeSelected( QAction* ) ) );
+    
     // Quick-access settings
+    d->tableEditorDialog = new QDialog( this );
+    d->tableEditor.setupUi( d->tableEditorDialog );
+    d->tableView = new ChartTableView;
+    d->tableEditor.gridLayout->addWidget( d->tableView );
+    d->tableEditorDialog->hide();
+    
     connect( d->ui.threeDLook, SIGNAL( toggled( bool ) ),
              this, SLOT( setThreeDMode( bool ) ) );
     connect( d->ui.showLegend, SIGNAL( toggled( bool ) ),
@@ -122,53 +161,8 @@ ChartConfigWidget::ChartConfigWidget()
              this, SIGNAL( legendTitleChanged( const QString& ) ) );
     connect( d->ui.legendShowFrame, SIGNAL( toggled( bool ) ),
              this, SIGNAL( legendShowFrameChanged( bool ) ) );
-    
-    /*
-    d->ui.typeCombobox->addItem( KIcon("chart_bar"), i18n("Bar Chart"), BarChartType );
-    d->ui.typeCombobox->addItem( KIcon("chart_line"), i18n("Line Chart"), LineChartType );
-    d->ui.typeCombobox->addItem( KIcon("chart_area"), i18n("Area Chart"), AreaChartType );
-    d->ui.typeCombobox->addItem( KIcon("chart_pie"), i18n("Pie Chart"), CircleChartType );
-    d->ui.typeCombobox->addItem( KIcon("chart_ring"), i18n("Ring Chart"), RingChartType );
-    d->ui.typeCombobox->addItem( KIcon("chart_point"), i18n("Scatter Chart"), ScatterChartType );
-    d->ui.typeCombobox->addItem( KIcon("chart_pie"), i18n("Radar Chart"), RadarChartType );
-    */
-    // TODO (Johannes): stock and bubble charts are not yet implemented in KDChart.
-    //d->ui.typeCombobox->addItem( KIcon("chart_stock"), i18n("Stock Chart"), StockChartType );
-    //d->ui.typeCombobox->addItem( KIcon("chart_bubble"), i18n("Bubble Chart"), BubbleChartType );
-
-    //connect( d->ui.typeCombobox, SIGNAL( currentIndexChanged( int ) ),
-    //         this, SLOT( chartTypeSelected( int ) ) );
-
-    /*
-    QButtonGroup *subtypeButtonGroup = new QButtonGroup( this );
-    subtypeButtonGroup->setExclusive( true );
-    d->ui.subtypeNormal->setChecked( true );
-    d->ui.subtypeNormal->setIcon(  KIcon("chart_bar_beside" ) );
-    d->ui.subtypeStacked->setIcon( KIcon("chart_bar_layer" ) );
-    d->ui.subtypePercent->setIcon( KIcon("chart_bar_percent" ) );
-
-    subtypeButtonGroup->addButton( d->ui.subtypeNormal, NormalChartSubtype );
-    subtypeButtonGroup->addButton( d->ui.subtypeStacked, StackedChartSubtype );
-    subtypeButtonGroup->addButton( d->ui.subtypePercent, PercentChartSubtype );
-    */
-
-    // The default chart is a BarChartType, so let's prepare for that
-    //d->ui.linesInBarChart->hide();
-    //d->ui.linesInBarChartArea->hide();
-
-    //connect( subtypeButtonGroup, SIGNAL( buttonClicked( int ) ),
-    //         this, SLOT( chartSubtypeSelected( int ) ) );
-
-    d->tableEditorDialog = new QDialog( this );
-    d->tableEditor.setupUi( d->tableEditorDialog );
-    d->tableView = new ChartTableView;
-    d->tableEditor.gridLayout->addWidget( d->tableView );
-    d->tableEditorDialog->hide();
-
-    //d->ui.m_firstRowAsLabel->setChecked( true );
-    //d->ui.m_firstColumnAsLabel->setChecked( true );
-    //d->ui.areaLabel->hide();
-    //d->ui.area->hide();
+    connect( d->ui.legendOrientationIsVertical, SIGNAL( toggled( bool ) ),
+             this, SLOT( setLegendOrientationIsVertical( bool ) ) );
 
     createActions();
 
@@ -190,6 +184,16 @@ ChartConfigWidget::~ChartConfigWidget()
 void ChartConfigWidget::open( KoShape* shape )
 {
     d->shape = dynamic_cast<ChartShape*>( shape );
+    
+    // Update the axis titles
+    d->ui.xAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[0]->titleText() );
+    d->ui.yAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[1]->titleText() );
+    
+    // Update the legend title
+    d->ui.legendTitle->setText( d->shape->chart()->legend()->titleText() );
+    
+    // Fill the data table
+    d->tableView->setModel( ((ChartProxyModel*)d->shape->model()) );
 }
 
 void ChartConfigWidget::save()
@@ -204,10 +208,37 @@ KAction* ChartConfigWidget::createAction()
     return 0;
 }
 
-void ChartConfigWidget::chartTypeSelected( int type )
+void ChartConfigWidget::chartTypeSelected( QAction *action )
 {
-    d->type = ( OdfChartType )type;
-    emit chartTypeChange( d->type );
+    OdfChartType type;
+    OdfChartSubtype subtype;
+    
+    if ( action == d->normalBarChartAction ) {
+        type    = BarChartType;
+        subtype = NormalChartSubtype;
+    } else if ( action == d->stackedBarChartAction ) {
+        type    = BarChartType;
+        subtype = StackedChartSubtype;
+    } else if ( action == d->percentBarChartAction ) {
+        type    = BarChartType;
+        subtype = PercentChartSubtype;
+    } else if ( action == d->normalLineChartAction ) {
+        type    = LineChartType;
+        subtype = NormalChartSubtype;
+    } else if ( action == d->stackedLineChartAction ) {
+        type    = LineChartType;
+        subtype = StackedChartSubtype;
+    } else if ( action == d->percentLineChartAction ) {
+        type    = LineChartType;
+        subtype = PercentChartSubtype;
+    }
+    
+    if ( type == d->type && subtype == d->subtype )
+        return;
+    d->type    = type;
+    d->subtype = subtype;
+    
+    emit chartTypeChanged( type, subtype );
 
     switch ( type ) {
         case BarChartType:
@@ -247,7 +278,7 @@ void ChartConfigWidget::chartTypeSelected( int type )
 void ChartConfigWidget::chartSubtypeSelected( int type )
 {
     d->subtype = (OdfChartSubtype) type;
-    emit chartSubtypeChange( d->subtype );
+    emit chartSubtypeChanged( d->subtype );
 }
 
 void ChartConfigWidget::setThreeDMode( bool threeD )
@@ -263,16 +294,40 @@ void ChartConfigWidget::updateChartTypeOptions( ChartTypeOptions options )
             //d->ui.subtypeNormal->blockSignals( true );
             //d->ui.subtypeNormal->setChecked( true );
             //d->ui.subtypeNormal->blockSignals( false );
+            switch ( d->type ) {
+                case BarChartType:
+                    d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
+                    break;
+                case LineChartType:
+                    d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_normal" ) );
+                    break;
+            }
             break;
         case StackedChartSubtype:
             //d->ui.subtypeStacked->blockSignals( true );
             //d->ui.subtypeStacked->setChecked( true );
             //d->ui.subtypeStacked->blockSignals( false );
+            switch ( d->type ) {
+                case BarChartType:
+                    d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_layer" ) );
+                    break;
+                case LineChartType:
+                    d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_stacked" ) );
+                    break;
+            }
             break;
         case PercentChartSubtype:
             //d->ui.subtypePercent->blockSignals( true );
             //d->ui.subtypePercent->setChecked( true );
             //d->ui.subtypePercent->blockSignals( false );
+            switch ( d->type ) {
+                case BarChartType:
+                    d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_percent" ) );
+                    break;
+                case LineChartType:
+                    d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_percent" ) );
+                    break;
+            }
             break;
         case NoChartSubtype:
         default:
@@ -426,6 +481,40 @@ void ChartConfigWidget::createActions()
     d->tableView->addAction( insertCellsAction );
 
     d->tableView->setContextMenuPolicy( Qt::ActionsContextMenu );
+}
+
+void ChartConfigWidget::selectDataset( int dataset )
+{
+    if ( dataset >= 0 ) {
+        // Hide "Select a dataset..." note
+        d->ui.selectDatasetNote->hide();
+        d->ui.datasetColorLabel->setEnabled( true );
+        d->ui.datasetColor->setEnabled( true );
+        d->ui.datasetLabelLabel->setEnabled( true );
+        d->ui.datasetLabel->setEnabled( true );
+        
+        d->ui.datasetColor->blockSignals( true );
+        if ( d->shape && d->shape->chart() && d->shape->chart()->coordinatePlane() ) {
+            d->ui.datasetColor->setColor( d->shape->chart()->coordinatePlane()->diagram()->brush( dataset ).color() );
+        }
+        d->ui.datasetColor->blockSignals( false );
+    } else {
+        // Hide "Select a dataset..." note
+        d->ui.selectDatasetNote->show();
+        d->ui.datasetColorLabel->setEnabled( false );
+        d->ui.datasetColor->setEnabled( false );
+        d->ui.datasetLabelLabel->setEnabled( false );
+        d->ui.datasetLabel->setEnabled( false );
+    }
+    d->selectedDataset = dataset;
+}
+
+void ChartConfigWidget::setLegendOrientationIsVertical( bool b )
+{
+    if ( b )
+        emit legendOrientationChanged( Qt::Vertical );
+    else
+        emit legendOrientationChanged( Qt::Horizontal );
 }
 
 #include "ChartConfigWidget.moc"

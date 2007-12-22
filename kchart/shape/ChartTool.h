@@ -61,8 +61,8 @@ public:
     virtual QWidget *createOptionWidget();
 
 private slots:
-    void setChartType( KChart::OdfChartType type );
-    void setChartSubtype( KChart::OdfChartSubtype subtype );
+    void setChartType( OdfChartType type, OdfChartSubtype subtype = NoChartSubtype );
+    void setChartSubtype( OdfChartSubtype subtype );
     void setThreeDMode( bool );
     void setDataDirection( Qt::Orientation );
     void setFirstRowIsLabel( bool b );
