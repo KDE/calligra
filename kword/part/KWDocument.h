@@ -75,7 +75,7 @@ public:
     /// reimplemented from KoDocument
     virtual bool loadOdf(KoOdfReadStore & odfStore);
     /// reimplemented from KoDocument
-    virtual bool saveOasis(KoStore*, KoXmlWriter*);
+    virtual bool saveOdf(SavingContext & documentContext );
     /// reimplemented from KoDocument
     KoView* createViewInstance(QWidget*);
 

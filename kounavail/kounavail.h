@@ -36,7 +36,7 @@ public:
     virtual void paintContent( QPainter& painter, const QRect& rect);
 
     virtual bool loadOdf( KoOdfReadStore & odfStore );
-    virtual bool saveOasis(KoStore*, KoXmlWriter*);
+    virtual bool saveOdf( SavingContext & documentContext );
 
     virtual bool loadXML( QIODevice *, const KoXmlDocument & );
     virtual bool saveFile();

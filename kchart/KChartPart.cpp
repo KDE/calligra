@@ -852,8 +852,10 @@ bool KChartPart::loadOasisData( const KoXmlElement& tableElem )
 }
 
 
-bool KChartPart::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
+bool KChartPart::saveOdf( SavingContext & documentContext )
 {
+    KoStore * store = documentContext.odfStore.store();
+    KoXmlWriter * manifestWriter = documentContext.odfStore.manifestWriter();
     // Check if we can create the content.xml file inside the store.
     if ( !store->open( "content.xml" ) )
         return false;

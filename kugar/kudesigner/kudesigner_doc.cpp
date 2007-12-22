@@ -85,7 +85,7 @@ bool KudesignerDoc::loadOasis( const KoXmlDocument&, KoOdfStylesReader&, const K
     return false;
 }
 
-bool KudesignerDoc::saveOasis( KoStore*, KoXmlWriter* )
+bool KudesignerDoc::saveOdf( SavingContext & )
 {
     return false;
 }

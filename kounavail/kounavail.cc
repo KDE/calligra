@@ -72,8 +72,9 @@ QDomDocument KoUnavailPart::saveXML()
 }
 
 
-bool KoUnavailPart::saveOasis(KoStore*, KoXmlWriter*)
+bool KoUnavailPart::saveOdf( SavingContext & documentContext )
 {
+    Q_UNUSED( documentContext );
     // TODO
     return false;
 }

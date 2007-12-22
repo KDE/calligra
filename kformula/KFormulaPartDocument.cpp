@@ -72,10 +72,9 @@ void KFormulaPartDocument::removeShape (KoShape *shape)
     Q_UNUSED( shape );
 }
 
-bool KFormulaPartDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
+bool KFormulaPartDocument::saveOdf( SavingContext &documentContext )
 {
-    Q_UNUSED( store );
-    Q_UNUSED( manifestWriter );
+    Q_UNUSED( documentContext );
 /*  KoStoreDevice dev( store );
  
     KoXmlWriter* contentWriter = KoOdfWriteStore::createOasisXmlWriter( &dev, "math:math" );

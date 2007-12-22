@@ -506,14 +506,14 @@ public:
    * @param picture must be set when saveFlag==SaveSelected.
    *        It returns the selected picture, when exactly one picture was selected.
    */
-  bool saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
+  bool saveOasisHelper( SavingContext &documentContext, SaveFlag saveFlag,
                         QString* plainText = 0, KoPicture* picture = 0 );
 
   /**
    * \ingroup OpenDocument
    * Main saving method.
    */
-  virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
+  virtual bool saveOdf( SavingContext &documentContext );
 
   /**
    * \ingroup OpenDocument

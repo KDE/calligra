@@ -100,8 +100,7 @@ public:
     virtual QDomDocument  saveXML();
     virtual bool          loadXML( QIODevice *, const KoXmlDocument& doc );
     virtual bool          loadOdf( KoOdfReadStore & odfStore );
-    virtual bool          saveOasis( KoStore* store,
-                                     KoXmlWriter* manifestWriter );
+    virtual bool          saveOdf( SavingContext &documentContext );
 
     bool  canChangeValue()   const             { return m_bCanChangeValue; }
 

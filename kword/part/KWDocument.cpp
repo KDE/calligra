@@ -143,7 +143,9 @@ void KWDocument::paintContent(QPainter&, const QRect& rect) {
     // TODO
 }
 
-bool KWDocument::saveOasis(KoStore* store, KoXmlWriter* manifestWriter) {
+bool KWDocument::saveOdf( SavingContext &documentContext ) {
+    KoStore * store = documentContext.odfStore.store();
+    KoXmlWriter * manifestWriter = documentContext.odfStore.manifestWriter();
     if ( !store->open( "content.xml" ) )
         return false;
 

@@ -24,7 +24,7 @@ public:
 
     virtual bool loadOasis( const KoXmlDocument&, KoOdfStylesReader&,
                             const KoXmlDocument&, KoStore* );
-    virtual bool saveOasis( KoStore*, KoXmlWriter* );
+    virtual bool saveOdf( SavingContext );
 
     virtual bool loadXML( QIODevice *, const KoXmlDocument & );
     //  virtual QDomDocument saveXML();

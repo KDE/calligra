@@ -64,7 +64,7 @@ public:
     /// Save a workpackage file containing @node with schedule identity @id
     QDomDocument saveWorkPackageXML( const Node *node, long id = -1 );
     
-    bool saveOasis( KoStore*, KoXmlWriter* ) { return false; }
+    bool saveOdf( SavingContext &documentContext ) { return false; }
     bool loadOdf( KoOdfReadStore & odfStore );
 
     Config &config() { return m_config; }

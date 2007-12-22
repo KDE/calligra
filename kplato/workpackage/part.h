@@ -111,7 +111,7 @@ public:
     /// Check if we have documents open for editing before saving
     virtual bool completeSaving( KoStore* store );
 
-    bool saveOasis( KoStore*, KoXmlWriter* ) { return false; }
+    bool saveOdf( SavingContext &documentContext ) { return false; }
     bool loadOdf( KoOdfReadStore & odfStore );
 
     /// Extract document file from the store to disk

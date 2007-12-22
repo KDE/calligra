@@ -51,6 +51,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoOasisLoadingContext.h>
 #include <KoOdfReadStore.h>
+#include <KoOdfWriteStore.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
@@ -320,7 +321,7 @@ KarbonPart::loadOasisSettings( const KoXmlDocument&settingsDoc )
 }
 
 
-bool KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
+bool KarbonPart::saveOdf( SavingContext &documentContext )
 {
     KoGenStyles mainStyles;
 
@@ -332,7 +333,7 @@ bool KarbonPart::saveOasis( KoStore *store, KoXmlWriter *manifestWriter )
     mainStyles.lookup( masterPage, "Default", KoGenStyles::DontForceNumbering );
     */
 
-    if( ! m_doc.saveOasis( store, manifestWriter, mainStyles ) )
+    if( ! m_doc.saveOasis( documentContext.odfStore.store(), documentContext.odfStore.manifestWriter(), mainStyles ) )
         return false;
 
     setModified( false );

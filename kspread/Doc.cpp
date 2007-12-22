@@ -614,20 +614,22 @@ bool Doc::loadChildren( KoStore* _store )
     return map()->loadChildren( _store );
 }
 
-bool Doc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
+bool Doc::saveOdf( SavingContext &documentContext )
 {
     ElapsedTime et("OpenDocument Saving", ElapsedTime::PrintOnlyTime);
 
   emitBeginOperation(true);
-    bool result=saveOasisHelper( store, manifestWriter, SaveAll );
+    bool result=saveOasisHelper( documentContext, SaveAll );
   emitEndOperation();
 
   return result;
 }
 
-bool Doc::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
+bool Doc::saveOasisHelper( SavingContext & documentContext, SaveFlag saveFlag,
                             QString* /*plainText*/, KoPicture* /*picture*/ )
 {
+    KoStore * store = documentContext.odfStore.store();
+    KoXmlWriter * manifestWriter = documentContext.odfStore.manifestWriter();
     d->m_pictureCollection.assignUniqueIds();
     d->m_savingWholeDocument = saveFlag == SaveAll ? true : false;
 

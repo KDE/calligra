@@ -50,7 +50,7 @@ bool KugarPart::loadOasis( const KoXmlDocument&, KoOdfStylesReader&,
     return false;
 }
 
-bool KugarPart::saveOasis( KoStore*, KoXmlWriter* )
+bool KugarPart::saveOdf( SavingContext & )
 {
     return false;
 }

@@ -73,7 +73,7 @@ public:
     bool loadOdf( KoOdfReadStore & odfStore );
 
     /// reimplemented from KoDocument
-    bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
+    bool saveOdf( SavingContext &documentContext );
 
     /// reimplemented from KoDocument
     bool showEmbedInitDialog(QWidget* parent);
