@@ -150,7 +150,7 @@ void KexiFormPart::initInstanceActions( int mode, KActionCollection *col )
 	if (mode==Kexi::DesignViewMode) {
 		KFormDesigner::FormManager::self()->createActions(col, 0);
 		new KAction(i18n("Edit Tab Order..."), "tab_order", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(editTabOrder()), col, "taborder");
-		new KAction(i18n("Adjust Size"), "zoom-best-fit", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(ajustWidgetSize()), col, "adjust");
+		new KAction(i18n("Adjust Size"), "zoom-best-fit", KShortcut(0), KFormDesigner::FormManager::self(), SLOT(adjustWidgetSize()), col, "adjust");
 	}
 	//TODO
 }

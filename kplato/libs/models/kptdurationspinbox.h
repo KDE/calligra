@@ -59,7 +59,7 @@ public:
     
 public slots:
     /// Set the current unit.
-    /// If unit is outside minimum- or maximum unit, the limit is ajusted.
+    /// If unit is outside minimum- or maximum unit, the limit is adjusted.
     void setUnit( Duration::Unit unit);
 
 protected:
