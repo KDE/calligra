@@ -10,7 +10,7 @@ The available tests so far:
   Dependencies           passed  4/ 4
   Engineering            passed 26/26
   StatisticalFunctions   passed 69/71
-  FinancialFunctions     passed 47/53
+  FinancialFunctions     passed 48/53
   Formula                passed 10/11
   OpenFormula            passed  6/ 6
   RTree                  passed 12/12
