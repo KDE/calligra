@@ -16,6 +16,8 @@ inge    Inge has taken this subtask
 JOSI    Johannes Simon has taken this task
 josi    Johannes Simon has taken this subtask
 
+!!!!    The purpose or the up-to-dateness of this task needs to be discussed
+!!      This purpose or the up-to-dateness of this subtask needs to be discussed
 
 Before release of KOffice 2.0.0
 ===============================
@@ -26,7 +28,7 @@ Item                                                                   Prio Stat
 * KChart, the application
   + Make tools work                                                     DONE
   + Import data (should this be in ChartShape?)                         ----
-  + Drag & drop a chart                                                 ----
+  + Drag & drop a chart                                                 !!!!
   + Export                                                              ----
      - SVG                                                              --
      - PNG and other bitmap formats                                     --
@@ -60,22 +62,25 @@ Item                                                                   Prio Stat
   + Legend                                                      ----    ----
     - title                                                     done    done
     - orientation                                               done    done
-    - font                                                      --      --
+    - font                                                      done    done
   + Axes                                                        ----    ----
-    - Axis labels                                               --      --
+    - Axis labels                                               josi    done
+    - Axis scale                                                --      --
   + Data Series                                                 ----    ----
   + Data                                                        INGE    INGE
 
 * Configuration with tools
+  + Axis                                                                ----
   + Legend                                                              JOSI
-  + Data editor                                                         ----
+  + Data Series                                                         ----
+  + Data Editor                                                         ----
 
 * Infrastructure
   + Switch KDChart to version 2.1                                       DONE
 
 * External programs and embedding
   + KChart itself                                                       ----
-     - Create KoChartModel                                              --
+     - Create KoChartModel                                              !!
      - Edit the interface in koffice/interfaces                         --
      - Document interface                                               --
      - Function that tells the chart to use own data or external        done
