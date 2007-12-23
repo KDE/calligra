@@ -750,7 +750,32 @@ void TestFinancialFunctions::testODDLPRICE()
 void TestFinancialFunctions::testODDLYIELD()
 {
   // ODF tests
-  CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100;2)",      Value( 4.997775351/100.0 ) ); // 
+
+  // Basis 0
+//   CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;2  )", Value( 4.997775351/100.0 ) ); // Without Basis parameter
+//   CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;1;0)", Value( 4.997775351/100.0 ) ); // With Frequency=1 and Basis=0
+//   CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;2;0)", Value( 4.997775351/100.0 ) ); // With Frequency=2 and Basis=0
+//   CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;91;100 ;4;0)", Value( 4.997775351/100.0 ) ); // With Frequency=4 and Basis=0
+
+  // Basis 1
+  CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;1;1)", Value( 1.408788601/100.0 ) ); // With Frequency=1 and Basis=1
+//   CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;2;1)", Value( 1.408379719/100.0 ) ); // With Frequency=2 and Basis=1
+//   CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;4;1)", Value( 1.408325114/100.0 ) ); // With Frequency=4 and Basis=1
+
+  // Basis 2
+//   CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100;1;2)", Value( 1.408788601/100.0 ) ); // With Frequency=1 and Basis=2
+  CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;4;2)", Value( 1.408379719/100.0 ) ); // With Frequency=2 and Basis=2
+  CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;103;100 ;2;2)", Value( 1.408325114/100.0 ) ); // With Frequency=4 and Basis=2
+
+  // Basis 3
+  CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;795;1000;1;3)", Value( 4.987800402/100.0 ) ); // With Frequency=1 and Basis=3
+  CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;795;1000;2;3)", Value( 4.990550494/100.0 ) ); // With Frequency=2 and Basis=3
+  CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);3%;795;1000;4;3)", Value( 4.990918451/100.0 ) ); // With Frequency=4 and Basis=3
+
+  // Basis 4
+  CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;933;1000;1;4)", Value( 1.499836493/100.0 ) ); // With Frequency=1 and Basis=4
+  CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;933;1000;2;4)", Value( 1.499836493/100.0 ) ); // With Frequency=2 and Basis=4
+  CHECK_EVAL( "ODDLYIELD(DATE(1990;6;1);DATE(1995;12;31);DATE(1990;1;1);2%;933;1000;4;4)", Value( 1.499836493/100.0 ) ); // With Frequency=4 and Basis=4
 }
 
 // PDURATION
