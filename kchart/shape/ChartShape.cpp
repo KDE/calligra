@@ -263,6 +263,23 @@ KDChart::Chart* ChartShape::chart() const
     return d->chart;
 }
 
+KDChart::AbstractDiagram* ChartShape::diagram() const
+{
+    return d->diagram;
+}
+
+KDChart::Legend* ChartShape::legend() const
+{
+    return d->legend;
+}
+
+KDChart::AbstractCoordinatePlane* ChartShape::coordinatePlane() const
+{
+    if ( !d->chart )
+        return 0;
+    return d->chart->coordinatePlane();
+}
+
 void ChartShape::setChartDefaults()
 {
     // The legend shall have a white background by default
@@ -1573,14 +1590,41 @@ void ChartShape::saveOdfPlotarea( KoXmlWriter& xmlWriter,
     const QString  styleName = mainStyles.lookup( plotAreaStyle, "ch" );
     xmlWriter.addAttribute( "chart:style-name", styleName );
 
-#if 0
-    saveOasisAxis( xmlWriter, mainStyles, KDChartAxisParams::AxisPosBottom, "x" );
-    saveOasisAxis( xmlWriter, mainStyles, KDChartAxisParams::AxisPosLeft, "y" );
-#endif
+    saveOdfAxes( xmlWriter, mainStyles );
 
     // TODO chart:series
     // TODO chart:wall
+    // TODO chart:grid
     // TODO chart:floor
+}
+
+void ChartShape::saveOdfAxes( KoXmlWriter &bodyWriter,
+                              KoGenStyles& mainStyles ) const
+{
+    // Check if diagram is cartesian
+    if ( isCartesian( d->chartType ) ) {
+        foreach( KDChart::CartesianAxis *axis, ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes() ) {
+            bodyWriter.startElement( "chart:axis" );
+
+            KoGenStyle axisStyle( KoGenStyle::StyleAuto, "chart" );
+            axisStyle.addProperty( "chart:display-label", "true" );
+
+            const QString styleName = mainStyles.lookup( axisStyle, "ch" );
+            bodyWriter.addAttribute( "chart:style-name", styleName );
+
+            // TODO scale: logarithmic/linear
+            // TODO visibility
+
+            if ( axis->isAbscissa() )
+                bodyWriter.addAttribute( "chart:dimension", "x" );
+            else if( axis->isOrdinate() )
+                bodyWriter.addAttribute( "chart:dimension", "y" );
+
+            bodyWriter.addAttribute( "chart:axis-name", axis->titleText() );
+
+            bodyWriter.endElement(); // chart:axis
+        }
+    }
 }
 
 

@@ -490,8 +490,6 @@ void ChartConfigWidget::selectDataset( int dataset )
         d->ui.selectDatasetNote->hide();
         d->ui.datasetColorLabel->setEnabled( true );
         d->ui.datasetColor->setEnabled( true );
-        d->ui.datasetLabelLabel->setEnabled( true );
-        d->ui.datasetLabel->setEnabled( true );
         
         d->ui.datasetColor->blockSignals( true );
         if ( d->shape && d->shape->chart() && d->shape->chart()->coordinatePlane() ) {
@@ -503,8 +501,6 @@ void ChartConfigWidget::selectDataset( int dataset )
         d->ui.selectDatasetNote->show();
         d->ui.datasetColorLabel->setEnabled( false );
         d->ui.datasetColor->setEnabled( false );
-        d->ui.datasetLabelLabel->setEnabled( false );
-        d->ui.datasetLabel->setEnabled( false );
     }
     d->selectedDataset = dataset;
 }

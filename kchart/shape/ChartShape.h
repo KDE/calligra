@@ -43,6 +43,8 @@ namespace KDChart
 {
     class Chart;
     class AbstractDiagram;
+    class Legend;
+    class AbstractCoordinatePlane;
     class Position;
 }
 
@@ -60,6 +62,9 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     void repaint() const;
 
     KDChart::Chart* chart() const;
+    KDChart::AbstractDiagram *diagram() const;
+    KDChart::Legend* legend() const;
+    KDChart::AbstractCoordinatePlane *coordinatePlane() const;
 
     /// reimplemented
     virtual void setModel( QAbstractItemModel *model, bool takeOwnershipOfModel = false );
@@ -105,6 +110,8 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
                         KoGenStyles &mainStyles ) const;
     void saveOdfLegend( KoXmlWriter &bodyWriter,
                         KoGenStyles &mainStyles ) const;
+    void saveOdfAxes( KoXmlWriter &bodyWriter,
+                      KoGenStyles &mainStyles ) const;
     void saveOdfPlotarea( KoXmlWriter &xmlWriter,
                           KoGenStyles &mainStyles) const;
     void saveOdfData( KoXmlWriter& bodyWriter,

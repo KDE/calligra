@@ -40,6 +40,12 @@
      <property name="icon" >
       <iconset>../../../../koffice/kchart/pics/chart_area_normal.png</iconset>
      </property>
+     <property name="iconSize" >
+      <size>
+       <width>24</width>
+       <height>24</height>
+      </size>
+     </property>
     </widget>
    </item>
    <item row="0" column="1" >
@@ -75,7 +81,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex" >
-      <number>0</number>
+      <number>2</number>
      </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
@@ -224,23 +230,6 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="4" column="0" >
-        <widget class="QLabel" name="datasetLabelLabel" >
-         <property name="enabled" >
-          <bool>false</bool>
-         </property>
-         <property name="text" >
-          <string>Label</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1" colspan="2" >
-        <widget class="QLineEdit" name="datasetLabel" >
-         <property name="enabled" >
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0" >
         <widget class="QLabel" name="datasetColorLabel" >
          <property name="enabled" >
           <bool>false</bool>
@@ -250,14 +239,14 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="5" column="1" colspan="2" >
+       <item row="4" column="1" colspan="2" >
         <widget class="KColorButton" name="datasetColor" >
          <property name="enabled" >
           <bool>false</bool>
          </property>
         </widget>
        </item>
-       <item row="6" column="0" colspan="2" >
+       <item row="5" column="0" colspan="2" >
         <widget class="QLabel" name="selectDatasetNote" >
          <property name="text" >
           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
@@ -267,7 +256,7 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="7" column="0" colspan="3" >
+       <item row="6" column="0" colspan="3" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
@@ -384,7 +373,6 @@ p, li { white-space: pre-wrap; }
    <header>kcolorbutton.h</header>
   </customwidget>
  </customwidgets>
- <includes/>
  <resources/>
  <connections/>
 </ui>
