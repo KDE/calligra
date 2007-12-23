@@ -1,0 +1,37 @@
+This is a TODO list for things that are left to be done for KOffice2.0
+
+Make a config dialog again.
+  We need to investigate how many options still really are configurable and
+  not blindly reinstate what was there.
+
+Port actions
+  KWView has a big list of actions still commented out, most of which
+  either should be added there again, or should be added in the text shape.
+
+End notes.
+  We want them, there is not much for them yet. (only some code in frames/KWFrameLayout)
+  Note that footnotes are now in the text-shape. End notes should be done using frames, though.
+
+Add action;  remove/detach outline
+
+export number of pictures and number of tables to the canvasresource
+
+Finish page delete command
+ * delete all frames that are _on_ the page (instead of not moving them)
+
+Finish statistics dialog
+    * selected text.
+    * code to determine the amount of words/syllables.
+
+Finish page insert command
+    In the redo a frame may be created due to going from a normal to a page-spread.
+    This frame should be deleted in the undo again.
+
+Make shape manipulations undo-able
+    If I alter options in the edit frameset dialog those are not done by actions.
+    Maybe this requires reverting commit 692305.
+
+(re)create an insert-text frame menu option.  Similar to the one we had in 1.x
+So people can use that instead of the shape-selector.
+
+
