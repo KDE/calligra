@@ -2,10 +2,13 @@
 Encoding=UTF-8
 Icon=
 Name=Krita ora Export Filter
+Name[el]=Φίλτρο εξαγωγής ora του Krita
 Name[ga]=Scagaire Easpórtála ora Krita
+Name[ja]=Krita ora エクスポートフィルタ
 Name[pt]=Filtro de Exportação de ORA para o Krita
-Name[pt_BR]=Filtro de Exportação de ORA para o Krita
+Name[pt_BR]=Filtro de Exportação ORA para o Krita
 Name[sv]=Krita ora-exportfilter
+Name[x-test]=xxKrita ora Export Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/openraster-archiving
