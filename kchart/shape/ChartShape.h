@@ -43,6 +43,7 @@ namespace KDChart
 {
     class Chart;
     class AbstractDiagram;
+    class CartesianAxis;
     class Legend;
     class AbstractCoordinatePlane;
     class Position;
@@ -94,6 +95,8 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
 			KoShapeLoadingContext &context );
     bool loadOdfPlotarea( const KoXmlElement    &plotareaElement, 
 			  KoShapeLoadingContext &context );
+    bool loadOdfAxis( const KoXmlElement    &axisElement, 
+			  KoShapeLoadingContext &context );
     bool loadOdfData( const KoXmlElement    &plotareaElement, 
                         KoShapeLoadingContext &context );
     bool loadOdfTitle( const KoXmlElement &titleElement, 
@@ -110,8 +113,9 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
                         KoGenStyles &mainStyles ) const;
     void saveOdfLegend( KoXmlWriter &bodyWriter,
                         KoGenStyles &mainStyles ) const;
-    void saveOdfAxes( KoXmlWriter &bodyWriter,
-                      KoGenStyles &mainStyles ) const;
+    void saveOdfAxis( KoXmlWriter &bodyWriter,
+                      KoGenStyles &mainStyles,
+                      const KDChart::CartesianAxis *axis ) const;
     void saveOdfPlotarea( KoXmlWriter &xmlWriter,
                           KoGenStyles &mainStyles) const;
     void saveOdfData( KoXmlWriter& bodyWriter,

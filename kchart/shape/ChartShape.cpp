@@ -1259,6 +1259,44 @@ bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement,
 bool ChartShape::loadOdfPlotarea( const KoXmlElement    &plotareaElement, 
 				  KoShapeLoadingContext &context )
 {
+    // 1. Load Axes
+    if ( isCartesian( d->chartType ) ) {
+        foreach( KDChart::CartesianAxis *axis, ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes() ) {
+            ((KDChart::AbstractCartesianDiagram*)d->diagram)->takeAxis( axis );
+        }
+
+        KoXmlElement e;
+        forEachElement( e, plotareaElement ) {
+            const KoXmlElement axisElement = e;
+            if ( e.localName() == "axis" && e.namespaceURI() == KoXmlNS::chart ) {
+                loadOdfAxis( axisElement, context );
+            }
+        }
+    }
+    return true;
+}
+
+bool ChartShape::loadOdfAxis( const KoXmlElement    &axisElement, 
+			      KoShapeLoadingContext &context )
+{
+    Q_ASSERT( d->diagram );
+    
+    KDChart::CartesianAxis *axis = new KDChart::CartesianAxis( (KDChart::AbstractCartesianDiagram*)d->diagram );
+    if ( !axisElement.isNull() ) {
+        if ( axisElement.hasAttributeNS( KoXmlNS::chart, "axis-name" ) ) {
+            const QString name = axisElement.attributeNS( KoXmlNS::chart, "axis-name", QString() );
+            axis->setTitleText( name );
+        }
+        if ( axisElement.hasAttributeNS( KoXmlNS::chart, "dimension" ) ) {
+            const QString dimension = axisElement.attributeNS( KoXmlNS::chart, "dimension", QString() );
+            if ( dimension == "x" )
+                axis->setPosition( KDChart::CartesianAxis::Bottom );
+            if ( dimension == "y" )
+                axis->setPosition( KDChart::CartesianAxis::Left );
+        }
+        
+        ((KDChart::AbstractCartesianDiagram*)d->diagram)->addAxis( axis );
+    }
     return true;
 }
 
@@ -1590,7 +1628,11 @@ void ChartShape::saveOdfPlotarea( KoXmlWriter& xmlWriter,
     const QString  styleName = mainStyles.lookup( plotAreaStyle, "ch" );
     xmlWriter.addAttribute( "chart:style-name", styleName );
 
-    saveOdfAxes( xmlWriter, mainStyles );
+    if ( isCartesian( d->chartType ) ) {
+        foreach( KDChart::CartesianAxis *axis, ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes() ) {
+            saveOdfAxis( xmlWriter, mainStyles, axis );
+        }
+    }
 
     // TODO chart:series
     // TODO chart:wall
@@ -1598,33 +1640,29 @@ void ChartShape::saveOdfPlotarea( KoXmlWriter& xmlWriter,
     // TODO chart:floor
 }
 
-void ChartShape::saveOdfAxes( KoXmlWriter &bodyWriter,
-                              KoGenStyles& mainStyles ) const
-{
-    // Check if diagram is cartesian
-    if ( isCartesian( d->chartType ) ) {
-        foreach( KDChart::CartesianAxis *axis, ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes() ) {
-            bodyWriter.startElement( "chart:axis" );
+void ChartShape::saveOdfAxis( KoXmlWriter &bodyWriter,
+                              KoGenStyles& mainStyles,
+                              const KDChart::CartesianAxis *axis ) const
+{ 
+    bodyWriter.startElement( "chart:axis" );
 
-            KoGenStyle axisStyle( KoGenStyle::StyleAuto, "chart" );
-            axisStyle.addProperty( "chart:display-label", "true" );
+    KoGenStyle axisStyle( KoGenStyle::StyleAuto, "chart" );
+    axisStyle.addProperty( "chart:display-label", "true" );
 
-            const QString styleName = mainStyles.lookup( axisStyle, "ch" );
-            bodyWriter.addAttribute( "chart:style-name", styleName );
+    const QString styleName = mainStyles.lookup( axisStyle, "ch" );
+    bodyWriter.addAttribute( "chart:style-name", styleName );
 
-            // TODO scale: logarithmic/linear
-            // TODO visibility
+    // TODO scale: logarithmic/linear
+    // TODO visibility
 
-            if ( axis->isAbscissa() )
-                bodyWriter.addAttribute( "chart:dimension", "x" );
-            else if( axis->isOrdinate() )
-                bodyWriter.addAttribute( "chart:dimension", "y" );
+    if ( axis->isAbscissa() )
+        bodyWriter.addAttribute( "chart:dimension", "x" );
+    else if( axis->isOrdinate() )
+        bodyWriter.addAttribute( "chart:dimension", "y" );
 
-            bodyWriter.addAttribute( "chart:axis-name", axis->titleText() );
+    bodyWriter.addAttribute( "chart:axis-name", axis->titleText() );
 
-            bodyWriter.endElement(); // chart:axis
-        }
-    }
+    bodyWriter.endElement(); // chart:axis
 }
 
 
