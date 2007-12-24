@@ -31,6 +31,10 @@
 #include <k3listbox.h>
 #include <knuminput.h>
 
+// For ceil()
+#include <math.h>
+
+
 KisPDFImportWidget::KisPDFImportWidget(Poppler::Document* pdfDoc, QWidget * parent, const char * name)
     : QWidget(parent, name), m_pdfDoc(pdfDoc)
 {
@@ -104,7 +108,7 @@ void KisPDFImportWidget::updateMaxCanvasSize() {
     for(QList<int>::const_iterator it = m_pages.begin(); it != m_pages.end(); ++it)
     {
         Poppler::Page *p = m_pdfDoc->page(*it );
-        QSize size = p->pageSize();
+        QSizeF size = p->pageSizeF();
         if(size.width() > m_maxWidthInch)
         {
             m_maxWidthInch = size.width();
@@ -124,13 +128,13 @@ void KisPDFImportWidget::updateMaxCanvasSize() {
 void KisPDFImportWidget::updateWidth()
 {
     intWidth->blockSignals(true);
-    intWidth->setValue( (int) m_maxWidthInch * intHorizontal->value() + 1 );
+    intWidth->setValue( (int) ceil(m_maxWidthInch * intHorizontal->value()));
     intWidth->blockSignals(false);
 }
 void KisPDFImportWidget::updateHeight()
 {
     intHeight->blockSignals(true);
-    intHeight->setValue( (int) m_maxHeightInch * intVertical->value() + 1  );
+    intHeight->setValue( (int) ceil(m_maxHeightInch * intVertical->value()));
     intHeight->blockSignals(false);
 }
 void KisPDFImportWidget::updateHRes()

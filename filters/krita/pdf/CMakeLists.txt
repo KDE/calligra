@@ -12,7 +12,7 @@ kde4_add_plugin(kritapdfimport WITH_PREFIX ${kritapdfimport_PART_SRCS})
 
 
 
-target_link_libraries(kritapdfimport kritaui ${POPPLER_LIBRARY})
+target_link_libraries(kritapdfimport kritaui ${POPPLER_LIBRARY} m)
 
 install(TARGETS kritapdfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 ########### install files ###############
