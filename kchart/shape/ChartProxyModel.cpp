@@ -86,7 +86,7 @@ bool ChartProxyModel::setData( const QModelIndex &index,
 
 void ChartProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight )
 {
-    emit QAbstractProxyModel::dataChanged( mapFromSource( topLeft ), mapFromSource( bottomRight ) );
+    emit QAbstractProxyModel::dataChanged( topLeft, bottomRight );
     d->shape->dataChanged( topLeft, bottomRight );
 }
 
@@ -276,15 +276,29 @@ void ChartProxyModel::setFirstRowIsLabel( bool b )
     if ( b == d->firstRowIsLabel )
         return;
     
-    if ( b )
-        beginRemoveRows( QModelIndex(), 0, 0 );
-    else
-        beginInsertRows( QModelIndex(), 0, 0 );
+    if ( b ) {
+        if ( d->dataDirection == Qt::Horizontal )
+            beginRemoveColumns( QModelIndex(), 0, 0 );
+        else
+            beginRemoveRows( QModelIndex(), 0, 0 );
+    } else {
+        if ( d->dataDirection == Qt::Horizontal )
+            beginInsertColumns( QModelIndex(), 0, 0 );
+        else
+            beginInsertRows( QModelIndex(), 0, 0 );
+    }
     d->firstRowIsLabel = b;
-    if ( b )
-        endRemoveRows();
-    else
-        endInsertRows();
+    if ( b ) {
+        if ( d->dataDirection == Qt::Horizontal )
+            endRemoveColumns();
+        else
+            endRemoveRows();
+    } else {
+        if ( d->dataDirection == Qt::Horizontal )
+            endInsertColumns();
+        else
+            endInsertRows();
+    }
     
     dataChanged();
 }
@@ -294,15 +308,29 @@ void ChartProxyModel::setFirstColumnIsLabel( bool b )
     if ( b == d->firstColumnIsLabel )
         return;
     
-    if ( b )
-        beginRemoveColumns( QModelIndex(), 0, 0 );
-    else
-        beginInsertColumns( QModelIndex(), 0, 0 );
+    if ( b ) {
+        if ( d->dataDirection == Qt::Vertical )
+            beginRemoveColumns( QModelIndex(), 0, 0 );
+        else
+            beginRemoveRows( QModelIndex(), 0, 0 );
+    } else {
+        if ( d->dataDirection == Qt::Vertical )
+            beginInsertColumns( QModelIndex(), 0, 0 );
+        else
+            beginInsertRows( QModelIndex(), 0, 0 );
+    }
     d->firstColumnIsLabel = b;
-    if ( b )
-        endRemoveColumns();
-    else
-        endInsertColumns();
+    if ( b ) {
+        if ( d->dataDirection == Qt::Vertical )
+            endRemoveColumns();
+        else
+            endRemoveRows();
+    } else {
+        if ( d->dataDirection == Qt::Vertical )
+            endInsertColumns();
+        else
+            endInsertRows();
+    }
     
     dataChanged();
 }
