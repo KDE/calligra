@@ -42,7 +42,7 @@ public slots:
     void chartSubtypeSelected( int type );
     void chartTypeSelected( QAction *action );
     void setThreeDMode( bool threeD );
-    void updateChartTypeOptions( ChartTypeOptions options );
+    void update();
 
     void setDataInRows( bool checked );
     void slotShowTableEditor( bool show );

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>266</width>
+    <width>331</width>
     <height>444</height>
    </rect>
   </property>
@@ -34,11 +34,14 @@
        <height>50</height>
       </size>
      </property>
+     <property name="layoutDirection" >
+      <enum>Qt::LeftToRight</enum>
+     </property>
      <property name="text" >
       <string/>
      </property>
      <property name="icon" >
-      <iconset>../../../../koffice/kchart/pics/chart_area_normal.png</iconset>
+      <iconset/>
      </property>
      <property name="iconSize" >
       <size>

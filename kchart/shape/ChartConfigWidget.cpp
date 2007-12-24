@@ -103,8 +103,8 @@ ChartConfigWidget::ChartConfigWidget()
     : d(new Private)
 {
     d->shape = 0;
-    d->type = KChart::BarChartType;
-    d->subtype = KChart::NormalChartSubtype;
+    d->type = KChart::LastChartType;
+    d->subtype = KChart::NoChartSubtype;
     setObjectName("Chart Type");
     d->ui.setupUi( this );
     
@@ -194,6 +194,8 @@ void ChartConfigWidget::open( KoShape* shape )
     
     // Fill the data table
     d->tableView->setModel( ((ChartProxyModel*)d->shape->model()) );
+    
+    update();
 }
 
 void ChartConfigWidget::save()
@@ -233,46 +235,9 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
         subtype = PercentChartSubtype;
     }
     
-    if ( type == d->type && subtype == d->subtype )
-        return;
-    d->type    = type;
-    d->subtype = subtype;
-    
     emit chartTypeChanged( type, subtype );
-
-    switch ( type ) {
-        case BarChartType:
-            // Hide them for now, as the functionality for it is not yet implemented
-            /*
-            d->ui.linesInBarChart->show();
-            d->ui.linesInBarChartArea->show();
-            */
-            //d->ui.linesInBarChart->hide();
-            //d->ui.linesInBarChartArea->hide();
-            d->ui.threeDLook->setEnabled( true );
-            break;
-        case LineChartType:
-            //d->ui.linesInBarChart->hide();
-            //d->ui.linesInBarChartArea->hide();
-            d->ui.threeDLook->setEnabled( true );
-            break;
-        case ScatterChartType:
-            d->ui.threeDLook->setEnabled( false );
-            break;
-        case AreaChartType:
-            //d->ui.linesInBarChart->hide();
-            //d->ui.linesInBarChartArea->hide();
-            d->ui.threeDLook->setEnabled( false );
-            break;
-        case CircleChartType:
-        case BubbleChartType:
-            d->ui.threeDLook->setEnabled( true );
-            break;
-        default:
-            d->ui.threeDLook->setEnabled( false );
-            break;
-    }
-    updateChartTypeOptions( d->shape->chartTypeOptions( d->type ) );
+    
+    update();
 }
 
 void ChartConfigWidget::chartSubtypeSelected( int type )
@@ -287,53 +252,69 @@ void ChartConfigWidget::setThreeDMode( bool threeD )
     emit threeDModeToggled( threeD );
 }
 
-void ChartConfigWidget::updateChartTypeOptions( ChartTypeOptions options )
+void ChartConfigWidget::update()
 {
-    switch ( options.subtype ) {
-        case NormalChartSubtype:
-            //d->ui.subtypeNormal->blockSignals( true );
-            //d->ui.subtypeNormal->setChecked( true );
-            //d->ui.subtypeNormal->blockSignals( false );
-            switch ( d->type ) {
-                case BarChartType:
-                    d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
-                    break;
-                case LineChartType:
-                    d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_normal" ) );
-                    break;
-            }
-            break;
-        case StackedChartSubtype:
-            //d->ui.subtypeStacked->blockSignals( true );
-            //d->ui.subtypeStacked->setChecked( true );
-            //d->ui.subtypeStacked->blockSignals( false );
-            switch ( d->type ) {
-                case BarChartType:
-                    d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_layer" ) );
-                    break;
-                case LineChartType:
-                    d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_stacked" ) );
-                    break;
-            }
-            break;
-        case PercentChartSubtype:
-            //d->ui.subtypePercent->blockSignals( true );
-            //d->ui.subtypePercent->setChecked( true );
-            //d->ui.subtypePercent->blockSignals( false );
-            switch ( d->type ) {
-                case BarChartType:
-                    d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_percent" ) );
-                    break;
-                case LineChartType:
-                    d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_percent" ) );
-                    break;
-            }
-            break;
-        case NoChartSubtype:
-        default:
-            break;
+    if ( !d->shape )
+        return;
+    
+    // We only want to update this widget according to the current
+    // state of the shape
+    blockSignals( true );
+    
+    if (    d->type    != d->shape->chartType()
+         || d->subtype != d->shape->chartSubtype() )
+    {
+        switch ( d->shape->chartSubtype() ) {
+            case NormalChartSubtype:
+                switch ( d->shape->chartType() ) {
+                    case BarChartType:
+                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
+                        break;
+                    case LineChartType:
+                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_normal" ) );
+                        break;
+                }
+                break;
+            case StackedChartSubtype:
+                //d->ui.subtypeStacked->blockSignals( true );
+                //d->ui.subtypeStacked->setChecked( true );
+                //d->ui.subtypeStacked->blockSignals( false );
+                switch ( d->shape->chartType() ) {
+                    case BarChartType:
+                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_layer" ) );
+                        break;
+                    case LineChartType:
+                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_stacked" ) );
+                        break;
+                }
+                break;
+            case PercentChartSubtype:
+                //d->ui.subtypePercent->blockSignals( true );
+                //d->ui.subtypePercent->setChecked( true );
+                //d->ui.subtypePercent->blockSignals( false );
+                switch ( d->shape->chartType() ) {
+                    case BarChartType:
+                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_percent" ) );
+                        break;
+                    case LineChartType:
+                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_percent" ) );
+                        break;
+                }
+                break;
+            case NoChartSubtype:
+            default:
+                break;
+        }
+        d->type = d->shape->chartType();
+        d->subtype = d->shape->chartSubtype();
     }
+    
     d->ui.threeDLook->setChecked( d->shape->threeDMode() );
+    if ( d->shape->legend() ) {
+        d->ui.legendTitle->setText( d->shape->legend()->titleText() );
+    }
+    
+    blockSignals( false );
 }
 
 
