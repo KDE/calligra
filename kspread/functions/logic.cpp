@@ -77,71 +77,50 @@ void RegisterLogicFunctions()
   repo->add (f);
 }
 
-// Function: FALSE
-Value func_false (valVector, ValueCalc *, FuncExtra *)
-{
-  return Value (false);
-}
-
-// Function: TRUE
-Value func_true (valVector, ValueCalc *, FuncExtra *)
-{
-  return Value (true);
-}
-
 // helper for most logical functions
 bool asBool (Value val, ValueCalc *calc)
 {
   return calc->conv()->asBoolean (val).asBoolean ();
 }
 
-// Function: NOT
-Value func_not (valVector args, ValueCalc *calc, FuncExtra *)
-{
-  if ( args[0].isError() )
-    return Value::errorNA();
+///////////////////////////////////////////////////////////////////////////////
 
-  bool val = asBool (args[0], calc) ? false : true;
-  return Value (val);
-}
 
-// Function: OR
-void awOr (ValueCalc *calc, Value &res, Value value, Value)
-{
-  if (! res.asBoolean())
-    res = Value ( asBool (value, calc) );
-}
-Value func_or (valVector args, ValueCalc *calc, FuncExtra *)
-{
-  Value result(false);
-  int cnt = args.count();
-  for (int i = 0; i < cnt; ++i) {
-    if ( args[i].isError() )
-      return Value::errorNA();
-  }
-  for (int i = 0; i < cnt; ++i) {
-    calc->arrayWalk (args[i], result, awOr, Value(0));
-    if (result.asBoolean())
-      // if any value is true, return true
-      return result;
-  }
-  // nothing is true -> return false
-  return result;
-}
-
-// Function: NOR
-Value func_nor (valVector args, ValueCalc *calc, FuncExtra *extra)
-{
-  // OR in reverse
-  return Value(! func_or(args, calc, extra).asBoolean());
-}
-
-// Function: AND
+//
+// ArrayWalker: AND
+//
 void awAnd (ValueCalc *calc, Value &res, Value value, Value)
 {
   if (res.asBoolean())
     res = Value ( asBool (value, calc) );
 }
+
+
+//
+// ArrayWalker: OR
+//
+void awOr (ValueCalc *calc, Value &res, Value value, Value)
+{
+  if (! res.asBoolean())
+    res = Value ( asBool (value, calc) );
+}
+
+
+//
+// ArrayWalker: XOR
+//
+void awXor (ValueCalc *calc, Value &count, Value value, Value)
+{
+  if (asBool (value, calc))
+    count = Value( count.asInteger() + 1 );
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+
+//
+// Function: AND
+//
 Value func_and (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value result(true);
@@ -160,34 +139,19 @@ Value func_and (valVector args, ValueCalc *calc, FuncExtra *)
   return result;
 }
 
-// Function: NAND
-Value func_nand (valVector args, ValueCalc *calc, FuncExtra *extra)
+
+//
+// Function: FALSE
+//
+Value func_false (valVector, ValueCalc *, FuncExtra *)
 {
-  // AND in reverse
-  return Value(! func_and(args, calc, extra).asBoolean());
+  return Value (false);
 }
 
-// Function: XOR
-void awXor (ValueCalc *calc, Value &count, Value value, Value)
-{
-  if (asBool (value, calc))
-    count = Value( count.asInteger() + 1 );
-}
-Value func_xor (valVector args, ValueCalc *calc, FuncExtra *)
-{
-  // exclusive OR - exactly one value must be true
-  int cnt = args.count();
-  Value count(0);
-  for (int i = 0; i < cnt; ++i) {
-    if ( args[i].isError() )
-      return Value::errorNA();
-  }
-  for (int i = 0; i < cnt; ++i)
-    calc->arrayWalk (args[i], count, awXor, Value(0));
-  return Value (count.asInteger() == 1);
-}
 
+//
 // Function: IF
+//
 Value func_if (valVector args, ValueCalc *calc, FuncExtra *)
 {
   if ( ( !args[0].isBoolean() ) && ( !args[0].isInteger() ) )
@@ -219,3 +183,84 @@ Value func_if (valVector args, ValueCalc *calc, FuncExtra *)
   }
 }
 
+
+//
+// Function: NAND
+//
+Value func_nand (valVector args, ValueCalc *calc, FuncExtra *extra)
+{
+  // AND in reverse
+  return Value(! func_and(args, calc, extra).asBoolean());
+}
+
+
+//
+// Function: NOR
+//
+Value func_nor (valVector args, ValueCalc *calc, FuncExtra *extra)
+{
+  // OR in reverse
+  return Value(! func_or(args, calc, extra).asBoolean());
+}
+
+
+//
+// Function: NOT
+//
+Value func_not (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  if ( args[0].isError() )
+    return Value::errorNA();
+
+  bool val = asBool (args[0], calc) ? false : true;
+  return Value (val);
+}
+
+
+//
+// Function: OR
+//
+Value func_or (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  Value result(false);
+  int cnt = args.count();
+  for (int i = 0; i < cnt; ++i) {
+    if ( args[i].isError() )
+      return Value::errorNA();
+  }
+  for (int i = 0; i < cnt; ++i) {
+    calc->arrayWalk (args[i], result, awOr, Value(0));
+    if (result.asBoolean())
+      // if any value is true, return true
+      return result;
+  }
+  // nothing is true -> return false
+  return result;
+}
+
+
+//
+// Function: TRUE
+//
+Value func_true (valVector, ValueCalc *, FuncExtra *)
+{
+  return Value (true);
+}
+
+
+//
+// Function: XOR
+//
+Value func_xor (valVector args, ValueCalc *calc, FuncExtra *)
+{
+  // exclusive OR - exactly one value must be true
+  int cnt = args.count();
+  Value count(0);
+  for (int i = 0; i < cnt; ++i) {
+    if ( args[i].isError() )
+      return Value::errorNA();
+  }
+  for (int i = 0; i < cnt; ++i)
+    calc->arrayWalk (args[i], count, awXor, Value(0));
+  return Value (count.asInteger() == 1);
+}
