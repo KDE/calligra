@@ -210,7 +210,7 @@ KexiQueryDesignerSQLView::KexiQueryDesignerSQLView(QWidget *parent)
 	connect(a, SIGNAL(triggered()), this, SLOT(slotCheckQuery()));
 
 	viewActions << (d->action_toggle_history = new KAction(
-		KIcon("history"), i18n("Show SQL History"), this ));
+		KIcon("view-history"), i18n("Show SQL History"), this ));
 	a = d->action_toggle_history;
 	a->setCheckable(true);
 	a->setObjectName("querypart_view_toggle_history");
