@@ -753,7 +753,7 @@ void KexiMainWindow::setupActions()
 	else {
 		ac->addAction( "project_import_data_table",
 			d->action_project_import_data_table = new KAction(
-			KIcon("document-import"),
+			KIcon("table"), /*! @todo: change to "file_import" with a table or so */
 			i18nc("Import->Table Data From File...", "Table Data From &File..."), this) );
 		d->action_project_import_data_table->setToolTip(i18n("Import table data from a file"));
 		d->action_project_import_data_table->setWhatsThis(i18n("Imports table data from a file."));
@@ -763,7 +763,7 @@ void KexiMainWindow::setupActions()
 
 	ac->addAction( "project_export_data_table",
 		d->action_project_export_data_table = new KAction(
-			KIcon("document-export"),
+			KIcon("table"), /*! @todo: change to "file_export" with a table or so */
 			i18nc("Export->Table or Query Data to File...", "Table or Query Data to &File..."), this) );
 	d->action_project_export_data_table->setToolTip(
 		i18n("Export data from the active table or query data to a file"));
@@ -774,7 +774,7 @@ void KexiMainWindow::setupActions()
 
 //TODO	new KAction(i18n("From File..."), "document-open", 0,
 //TODO		this, SLOT(slotImportFile()), actionCollection(), "project_import_file");
-//TODO	new KAction(i18n("From Server..."), "server", 0,
+//TODO	new KAction(i18n("From Server..."), "network-server-database", 0,
 //TODO		this, SLOT(slotImportServer()), actionCollection(), "project_import_server");
 
 	ac->addAction( "project_print",
