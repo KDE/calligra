@@ -27,7 +27,7 @@
 #include <QStringList>
 //Added by qt3to4:
 #include <QByteArray>
-
+#include <QPen>
 #include <gnumericimport.h>
 #include <kmessagebox.h>
 #include <kfilterdev.h>
