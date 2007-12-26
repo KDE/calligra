@@ -25,6 +25,7 @@
 #include <QTextStream>
 #include <QTreeWidget>
 #include <QVBoxLayout>
+#include <QPen>
 
 #include <kpagedialog.h>
 
