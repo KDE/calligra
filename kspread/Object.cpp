@@ -34,7 +34,6 @@
 #include <QBuffer>
 #include <QCursor>
 #include <qdom.h>
-#include <QFileInfo>
 #include <QImage>
 #include <QPainter>
 #include <QPixmap>

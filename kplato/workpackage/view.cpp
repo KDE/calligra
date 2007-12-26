@@ -27,17 +27,11 @@
 #include <KoDocumentChild.h>
 
 #include <QApplication>
-#include <QIcon>
-#include <QLayout>
-#include <QColor>
 #include <QLabel>
 #include <QString>
-#include <QStringList>
 #include <qsize.h>
 #include <QTabWidget>
-#include <QRect>
 #include <QVBoxLayout>
-#include <QStyle>
 #include <QPrinter>
 #include <QPrintDialog>
 

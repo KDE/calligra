@@ -23,8 +23,6 @@
 
 #include <ctype.h>
 
-#include <QRegExp>
-#include <QList>
 
 #include <kdebug.h>
 
@@ -36,6 +34,8 @@
 #include "Region.h"
 #include "Sheet.h"
 #include "Style.h"
+
+#include <QPen>
 
 using namespace KSpread;
 

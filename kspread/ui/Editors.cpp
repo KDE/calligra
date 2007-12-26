@@ -56,11 +56,11 @@
 #include <QKeyEvent>
 #include <QLabel>
 #include <QResizeEvent>
-#include <QScrollBar>
 #include <QTimer>
 #include <QToolButton>
 #include <QToolTip>
 #include <QVBoxLayout>
+#include <QScrollBar>
 
 #include "commands/NamedAreaCommand.h"
 

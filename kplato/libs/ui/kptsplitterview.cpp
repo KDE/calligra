@@ -21,7 +21,6 @@
 
 #include "KoDocument.h"
 
-#include <QApplication>
 #include <QVBoxLayout>
 #include <QSplitter>
 #include <QTabWidget>

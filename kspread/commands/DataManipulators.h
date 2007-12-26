@@ -27,7 +27,6 @@
 #include "Value.h"
 #include "kspread_export.h"
 
-#include <QStringList>
 
 namespace KSpread
 {

@@ -30,6 +30,7 @@
 
 #include <QHeaderView>
 #include <QPoint>
+#include <QScrollBar>
 
 namespace KPlato
 {

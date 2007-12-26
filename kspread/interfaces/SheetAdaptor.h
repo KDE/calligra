@@ -29,7 +29,6 @@
 
 #include <QtDBus/QtDBus>
 #include "kspread_export.h"
-#include <QRect>
 #include <QString>
 
 namespace KSpread

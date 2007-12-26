@@ -31,7 +31,6 @@
 
 #include <QStringList>
 //Added by qt3to4:
-#include <QCloseEvent>
 #include <kdialog.h>
 
 class KLineEdit;

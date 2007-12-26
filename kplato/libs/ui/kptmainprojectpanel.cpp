@@ -21,7 +21,6 @@
 
 #include <QCheckBox>
 #include <QPushButton>
-#include <QLabel>
 
 #include <klineedit.h>
 #include <ktextedit.h>

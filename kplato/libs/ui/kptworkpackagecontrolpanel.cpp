@@ -28,7 +28,6 @@
 #include <kdebug.h>
 
 #include <QPushButton>
-#include <QTableWidget>
 
 namespace KPlato
 {

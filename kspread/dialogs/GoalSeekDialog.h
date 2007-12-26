@@ -33,7 +33,6 @@
 #include <QLabel>
 #include <QGridLayout>
 #include <QFrame>
-#include <QEvent>
 #include <QCloseEvent>
 
 #include <kdialog.h>

@@ -20,9 +20,7 @@
 #ifndef KSPREAD_RTREE
 #define KSPREAD_RTREE
 
-#include <QMultiMap>
 #include <QRect>
-#include <QString>
 #include <QVector>
 
 #include <kdebug.h>

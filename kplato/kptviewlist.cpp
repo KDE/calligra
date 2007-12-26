@@ -21,13 +21,11 @@
 
 #include <QString>
 #include <QStringList>
-#include <QHeaderView>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QItemDelegate>
 #include <QStyle>
-#include <QVariant>
-
+#include <QHeaderView>
 #include <kmenu.h>
 
 #include "KoDocument.h"

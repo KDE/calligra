@@ -28,7 +28,6 @@
 #include "ScriptingListener.h"
 
 #include <QPointer>
-#include <QApplication>
 #include <QLayout>
 #include <kdebug.h>
 

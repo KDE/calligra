@@ -26,8 +26,6 @@
 #include "ShowDialog.h"
 
 #include <QLabel>
-#include <QLayout>
-#include <QUndoCommand>
 #include <QVBoxLayout>
 //Added by qt3to4:
 #include <q3listbox.h>

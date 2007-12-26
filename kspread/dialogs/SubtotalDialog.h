@@ -23,7 +23,6 @@
 #ifndef KSPREAD_SUBTOTAL_DIALOG
 #define KSPREAD_SUBTOTAL_DIALOG
 
-#include <QPoint>
 #include <QRect>
 
 #include <kdialog.h>

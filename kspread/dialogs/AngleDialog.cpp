@@ -24,8 +24,6 @@
 // Local
 #include "AngleDialog.h"
 
-#include <QFrame>
-#include <QLayout>
 #include <QPushButton>
 #include <QVBoxLayout>
 

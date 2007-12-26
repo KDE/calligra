@@ -22,7 +22,6 @@
 
 #include <kwindowsystem.h>
 
-#include <QLayout>
 #include <QSpinBox>
 #include <QObject>
 //Added by qt3to4:

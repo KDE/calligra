@@ -24,8 +24,6 @@
 
 #include <QApplication>
 #include <QComboBox>
-#include <QHeaderView>
-#include <QItemSelectionModel>
 #include <QKeyEvent>
 #include <QModelIndex>
 #include <QStyleOptionViewItem>

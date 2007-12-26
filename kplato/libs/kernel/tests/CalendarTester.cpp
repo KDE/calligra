@@ -22,7 +22,6 @@
 #include <kptduration.h>
 #include <kptmap.h>
 
-#include <QString>
 
 #include <qtest_kde.h>
 

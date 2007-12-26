@@ -27,10 +27,7 @@
 #include <KoDocument.h>
 
 #include <QApplication>
-#include <QComboBox>
-#include <QDateTime>
 #include <QLabel>
-#include <QLayout>
 #include <QPainter>
 #include <qpalette.h>
 #include <QPushButton>

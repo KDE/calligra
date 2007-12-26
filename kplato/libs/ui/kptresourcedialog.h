@@ -28,7 +28,6 @@
 #include <kdialog.h>
 
 #include <QMap>
-#include <QComboBox>
 
 class QString;
 

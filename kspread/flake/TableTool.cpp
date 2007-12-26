@@ -26,11 +26,9 @@
 #include <QLabel>
 #include <QPainter>
 #include <QSpinBox>
-#include <QAction>
 #include <QToolBar>
 #include <QComboBox>
 #include <QPushButton>
-#include <QListWidget>
 
 #include <kdebug.h>
 #include <klineedit.h>

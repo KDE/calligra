@@ -20,7 +20,6 @@
 // Local
 #include "ValidityCommand.h"
 
-#include <QColor>
 
 #include <klocale.h>
 

@@ -33,18 +33,9 @@
 
 #include <KoDocument.h>
 
-#include <QDragEnterEvent>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QMimeData>
 #include <QMenu>
-#include <QPainter>
-#include <QStyle>
 #include <QList>
-#include <QHeaderView>
 #include <QObject>
-#include <QTreeWidget>
-#include <QStringList>
 #include <QVBoxLayout>
 
 

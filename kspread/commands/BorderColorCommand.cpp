@@ -30,6 +30,8 @@
 #include "Style.h"
 #include "StyleStorage.h"
 
+#include <QPen>
+
 using namespace KSpread;
 
 BorderColorCommand::BorderColorCommand()

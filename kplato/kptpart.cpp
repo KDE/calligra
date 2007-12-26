@@ -38,8 +38,6 @@
 #include <QApplication>
 #include <qpainter.h>
 #include <qfileinfo.h>
-#include <QTimer>
-#include <QUndoCommand>
 
 #include <kdebug.h>
 #include <kconfig.h>

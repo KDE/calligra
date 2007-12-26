@@ -29,23 +29,14 @@
 #include <KoDocumentChild.h>
 
 #include <QApplication>
-#include <QDockWidget>
-#include <QIcon>
-#include <QLayout>
-#include <QColor>
 #include <QLabel>
 #include <QString>
 #include <QStringList>
 #include <qsize.h>
 #include <QStackedWidget>
-#include <QHeaderView>
-#include <QRect>
 #include <QVBoxLayout>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
-#include <QItemDelegate>
-#include <QStyle>
-#include <QVariant>
 #include <QPrinter>
 #include <QPrintDialog>
 

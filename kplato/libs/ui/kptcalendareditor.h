@@ -28,7 +28,6 @@
 #include "kptcalendarmodel.h"
 
 #include <QTableView>
-#include <QAbstractProxyModel>
 
 #include "kcalendar/kdatetable.h"
 

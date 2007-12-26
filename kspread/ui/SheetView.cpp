@@ -21,7 +21,6 @@
 #include "SheetView.h"
 
 #include <QCache>
-#include <QList>
 #include <QRect>
 
 #include <KoViewConverter.h>

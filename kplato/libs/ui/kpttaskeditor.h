@@ -26,11 +26,6 @@
 #include "kptnodeitemmodel.h"
 #include "kptviewbase.h"
 
-#include <QAbstractItemModel>
-#include <QFrame>
-#include <QItemDelegate>
-#include <QMenu>
-#include <QTreeView>
 
 #include <klocale.h>
 

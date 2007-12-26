@@ -29,7 +29,6 @@
 #include "kptschedule.h"
 #include "kptdatetime.h"
 
-#include <QList>
 #include <QObject>
 #include <QStringList>
 

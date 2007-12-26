@@ -25,7 +25,6 @@
 #include <kptviewbase.h>
 
 #include <QTableView>
-#include <QTextCursor>
 
 class KoDocument;
 

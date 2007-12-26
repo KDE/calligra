@@ -28,21 +28,9 @@
 
 #include <KoDocument.h>
 
-#include <QAbstractItemModel>
-#include <QApplication>
-#include <QComboBox>
-#include <QDragEnterEvent>
 #include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QMimeData>
-#include <QHeaderView>
-#include <QItemDelegate>
-#include <QItemSelectionModel>
-#include <QLineEdit>
-#include <QMap>
 #include <QMenu>
 #include <QModelIndex>
-#include <QStyleOptionViewItem>
 #include <QVBoxLayout>
 #include <QWidget>
 

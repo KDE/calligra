@@ -26,9 +26,6 @@
 
 #include <QAbstractItemModel>
 #include <QItemDelegate>
-#include <QSplitter>
-#include <QScrollBar>
-#include <QTreeView>
 
 #include <KoXmlReaderForward.h>
 

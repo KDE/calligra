@@ -21,7 +21,6 @@
 #ifndef KSPREAD_DEPENDENCY_MANAGER
 #define KSPREAD_DEPENDENCY_MANAGER
 
-#include <QLinkedList>
 #include <QObject>
 
 #include "Region.h"

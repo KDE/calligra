@@ -34,7 +34,6 @@
 
 //Qt Includes
 #include <QCheckBox>
-#include <QCloseEvent>
 #include <QGridLayout>
 #include <QLabel>
 #include <QPushButton>

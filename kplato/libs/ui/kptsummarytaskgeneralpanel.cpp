@@ -32,9 +32,6 @@
 #include <kabc/addresseedialog.h>
 
 #include <QPushButton>
-#include <QLayout>
-#include <QLabel>
-#include <QGroupBox>
 #include <kdebug.h>
 
 namespace KPlato

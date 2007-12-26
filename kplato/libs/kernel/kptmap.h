@@ -26,7 +26,6 @@
 #include <QMap>
 #include <qdatetime.h>
 #include <QString>
-#include <QStringList>
 #include <QPair>
 
 #include <kdebug.h>

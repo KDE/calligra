@@ -26,7 +26,6 @@
 
 #include <q3multilineedit.h>
 #include <QPushButton>
-#include <QLayout>
 #include <QVBoxLayout>
 
 #include <klocale.h>

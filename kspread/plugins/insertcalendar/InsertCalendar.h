@@ -26,7 +26,6 @@
 
 #include <kparts/plugin.h>
 
-#include <QDateTime>
 
 class KAboutData;
 

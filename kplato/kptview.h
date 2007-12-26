@@ -28,7 +28,6 @@
 
 #include <QMenu>
 #include <QDockWidget>
-#include <QTreeWidget>
 
 
 class QProgressBar;

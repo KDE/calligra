@@ -21,7 +21,6 @@
 #define INTERVALITEM_H
 
 #include <QTreeWidgetItem>
-#include <QDateTime>
 
 namespace KPlato
 {

@@ -45,7 +45,6 @@
 #include <qfileinfo.h>
 #include <q3header.h>
 #include <q3popupmenu.h>
-#include <QLayout>
 #include <qdom.h>
 #include <qstringlist.h>
 

@@ -24,7 +24,6 @@
 
 #include <QList>
 #include <QObject>
-#include <QPixmap>
 #include <QtGui/QPrinter>
 
 #include <kmessagebox.h>

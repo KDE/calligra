@@ -33,15 +33,10 @@
 #include <KoDocument.h>
 
 #include <QMenu>
-#include <QPainter>
-#include <QStyle>
 #include <QList>
-#include <QHeaderView>
 #include <QObject>
-#include <QTreeWidget>
-#include <QStringList>
 #include <QVBoxLayout>
-
+#include <QHeaderView>
 
 #include <kaction.h>
 #include <kicon.h>

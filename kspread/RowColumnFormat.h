@@ -22,9 +22,6 @@
 #define KSPREAD_ROW_COLUMN_FORMAT
 
 #include <QBrush>
-#include <QColor>
-#include <QFont>
-#include <QPen>
 
 #include "kspread_export.h"
 #include <KoXmlReader.h>

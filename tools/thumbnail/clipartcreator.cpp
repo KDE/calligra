@@ -23,7 +23,6 @@
 
 #include <QImage>
 #include <QPainter>
-#include <QFile>
 #include <QPixmap>
 
 #include <KoPicture.h>

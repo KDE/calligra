@@ -26,7 +26,6 @@
 #include "kptresource.h"
 #include "ui_resourcespanelbase.h"
 
-#include <QString>
 
 namespace KPlato
 {

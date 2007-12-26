@@ -26,12 +26,8 @@
 #include "kpttask.h"
 
 #include <QAbstractItemModel>
-#include <QDragEnterEvent>
-#include <QDragMoveEvent>
-#include <QDropEvent>
 #include <QMimeData>
 #include <QItemDelegate>
-#include <QItemSelectionModel>
 #include <QModelIndex>
 
 #include <kglobal.h>

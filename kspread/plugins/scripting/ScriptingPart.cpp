@@ -23,7 +23,6 @@
 #include "ScriptingPart.h"
 #include "ScriptingModule.h"
 // Qt
-#include <QApplication>
 #include <QFileInfo>
 // KDE
 #include <kgenericfactory.h>

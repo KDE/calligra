@@ -20,7 +20,6 @@
 #ifndef KSPREAD_POINT_STORAGE
 #define KSPREAD_POINT_STORAGE
 
-#include <QDebug>
 #include <QRect>
 #include <QString>
 #include <QVector>

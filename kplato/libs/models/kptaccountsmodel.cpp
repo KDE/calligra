@@ -28,13 +28,8 @@
 #include "kptaccount.h"
 #include "kptdatetime.h"
 
-#include <QDragEnterEvent>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QMimeData>
 #include <QList>
 #include <QObject>
-#include <QStringList>
 
 
 #include <kglobal.h>

@@ -23,22 +23,17 @@
 
 #include <klocale.h>
 
-#include <QVariant>
 #include <QPushButton>
 #include <q3groupbox.h>
 
 #include <Q3VBoxLayout>
 #include <Q3HBoxLayout>
 #include <Q3GridLayout>
-#include <QLabel>
 #include <QComboBox>
 #include <q3buttongroup.h>
-#include <QHeaderView>
 #include <QTreeWidget>
 #include <q3listview.h>
 #include <q3datetimeedit.h>
-#include <QLayout>
-#include <QToolTip>
 #include <q3whatsthis.h>
 #include <QDoubleSpinBox>
 

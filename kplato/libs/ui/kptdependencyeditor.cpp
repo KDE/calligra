@@ -25,26 +25,15 @@
 #include "kptproject.h"
 #include "kptrelation.h"
 
-#include <QAbstractItemModel>
-#include <QApplication>
-#include <QComboBox>
-#include <QCursor>
-#include <QDragEnterEvent>
-#include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QMimeData>
 #include <QGraphicsSceneMouseEvent>
-#include <QHeaderView>
-#include <QItemDelegate>
 #include <QItemSelectionModel>
-#include <QLineEdit>
-#include <QMap>
 #include <QModelIndex>
 #include <QPainterPath>
 #include <QPalette>
 #include <QStyleOptionViewItem>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QTimer>
 
 #include <kicon.h>
 #include <kaction.h>

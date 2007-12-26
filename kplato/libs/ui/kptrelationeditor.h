@@ -26,7 +26,6 @@
 #include "kptviewbase.h"
 #include "kptrelationmodel.h"
 
-#include <QItemSelectionModel>
 
 class KoDocument;
 

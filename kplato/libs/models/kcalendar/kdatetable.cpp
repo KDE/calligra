@@ -58,8 +58,6 @@
 #include <QtGui/QActionEvent>
 #include <QtCore/QHash>
 #include <QtGui/QApplication>
-#include <QStyleOptionHeader>
-#include <QStyleOptionViewItem>
 
 #include <assert.h>
 

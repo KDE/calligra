@@ -26,20 +26,16 @@
 #include "intervalitem.h"
 
 #include <q3buttongroup.h>
-#include <QHeaderView>
 #include <QPushButton>
 #include <qradiobutton.h>
-#include <QComboBox>
-#include <QLabel>
 #include <q3textedit.h>
-#include <QLineEdit>
 #include <q3datetimeedit.h>
 #include <qdatetime.h>
 #include <qtabwidget.h>
 #include <q3textbrowser.h>
-#include <QMap>
+#include <QComboBox>
 #include <QDoubleSpinBox>
-
+#include <QHeaderView>
 #include <k3command.h>
 #include <klocale.h>
 #include <kdebug.h>

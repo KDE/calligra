@@ -37,13 +37,10 @@
 #include <kabc/addresseedialog.h>
 #include <kdatewidget.h>
 
-#include <QLayout>
-#include <QLabel>
 #include <qdatetime.h>
 #include <q3datetimeedit.h>
 #include <q3groupbox.h>
 #include <QPushButton>
-#include <QSpinBox>
 
 #include <kdebug.h>
 

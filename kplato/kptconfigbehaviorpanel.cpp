@@ -33,7 +33,6 @@
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
-#include <QLayout>
 #include <qdatetime.h> 
 #include <q3buttongroup.h> 
 #include <QCheckBox> 

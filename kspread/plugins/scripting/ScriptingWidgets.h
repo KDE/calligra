@@ -21,9 +21,7 @@
 #ifndef SCRIPTINGWIDGETS_H
 #define SCRIPTINGWIDGETS_H
 
-#include <QObject>
 #include <QVariant>
-#include <QStringList>
 #include <QWidget>
 
 class QTreeView;

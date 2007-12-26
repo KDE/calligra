@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-#include <QDateTime>
+#include <QDate>
 
 #include <math.h>
 

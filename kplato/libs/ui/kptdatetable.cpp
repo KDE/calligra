@@ -26,7 +26,6 @@
 #include <kcalendarsystem.h>
 
 #include <QApplication>
-#include <QDateTime>
 #include <QString>
 #include <QPen>
 #include <QPainter>
@@ -39,7 +38,6 @@
 #include <QResizeEvent>
 #include <QMouseEvent>
 #include <assert.h>
-#include <QLayout>
 #include <QDesktopWidget>
 
 #include <kglobalsettings.h>

@@ -43,10 +43,7 @@
 // Local
 #include "DefaultTool.h"
 
-#include <QGridLayout>
-#include <QLabel>
 #include <QPainter>
-#include <QSpinBox>
 
 #include <kdebug.h>
 #include <klocale.h>

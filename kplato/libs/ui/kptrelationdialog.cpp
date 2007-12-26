@@ -22,8 +22,6 @@
 #include "kptnode.h"
 #include "kptcommand.h"
 
-#include <QLayout>
-#include <QLabel>
 
 #include <kmessagebox.h>
 #include <klocale.h>

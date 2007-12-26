@@ -26,7 +26,6 @@
 #include <kptitemmodelbase.h>
 #include <kptdocumentmodel.h>
 
-#include <QTreeWidget>
 
 
 class QPoint;

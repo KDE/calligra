@@ -32,15 +32,9 @@
 #include <q3listview.h>
 #include <q3popupmenu.h>
 
-#include <QLineEdit>
 #include <QWidget>
-#include <QLabel>
-#include <QLayout>
-#include <QSpinBox>
 #include <QSplitter>
 #include <QStringList>
-#include <QTabWidget>
-#include <QPainter>
 #include <QCursor>
 
 #include <klocale.h>

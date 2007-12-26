@@ -23,9 +23,7 @@
 
 #include <KoViewAdaptor.h>
 
-#include <QString>
 #include <qrect.h>
-#include <QColor>
 
 namespace KPlato
 {

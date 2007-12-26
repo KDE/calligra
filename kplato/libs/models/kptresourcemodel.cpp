@@ -29,9 +29,6 @@
 #include "kptresource.h"
 #include "kptdatetime.h"
 
-#include <QDragEnterEvent>
-#include <QDragMoveEvent>
-#include <QDropEvent>
 #include <QMimeData>
 #include <QObject>
 #include <QStringList>

@@ -24,6 +24,7 @@
 
 #include <QFontMetricsF>
 #include <QWidget>
+#include <QPen>
 
 #include <klocale.h>
 

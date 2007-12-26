@@ -22,7 +22,6 @@
 
 #include <QByteArray>
 #include <QLinkedList>
-#include <QList>
 #include <QMap>
 #include <QRect>
 #include <QStack>

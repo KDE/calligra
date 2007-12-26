@@ -23,9 +23,7 @@
 
 #include "ui_kptcalendarlistpanel.h"
 
-#include <QVariant>
 #include <QWidget>
-#include <QLabel>
 
 
 namespace KPlato

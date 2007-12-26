@@ -23,7 +23,6 @@
 #include "kptitemmodelbase.h"
 #include "kptschedule.h"
 
-#include <QDate>
 #include <QItemDelegate>
 
 class QMimeData;

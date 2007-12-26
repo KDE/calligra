@@ -22,10 +22,8 @@
 #include "kptitemmodelbase.h"
 
 #include <QCheckBox>
-#include <QComboBox>
 #include <QDate>
 #include <QTableWidget>
-#include <QTableWidgetItem>
 
 #include <kglobal.h>
 #include <klocale.h>

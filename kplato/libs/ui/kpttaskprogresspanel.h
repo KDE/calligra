@@ -26,7 +26,6 @@
 #include "kpttask.h"
 
 #include <QWidget>
-#include <QTableView>
 
 
 namespace KPlato

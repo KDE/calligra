@@ -23,6 +23,7 @@
 #include "kptglobal.h"
 
 #include <kdebug.h>
+#include <QMimeData>
 
 class KoDocument;
 

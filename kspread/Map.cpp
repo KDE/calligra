@@ -23,7 +23,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include <QFile>
 
 #include <kcodecs.h>
 #include <ktemporaryfile.h>

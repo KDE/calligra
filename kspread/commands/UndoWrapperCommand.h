@@ -21,7 +21,6 @@
 #ifndef KSPREAD_UNDO_WRAPPER_COMMAND
 #define KSPREAD_UNDO_WRAPPER_COMMAND
 
-#include <QString>
 #include <QUndoCommand>
 
 /**

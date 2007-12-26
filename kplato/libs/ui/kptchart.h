@@ -24,7 +24,6 @@
 #include <klocale.h>
 
 #include <kdebug.h>
-#include <QDateTime>
 #include <QVector>
 #include <QDate>
 #include "kptproject.h"

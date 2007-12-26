@@ -25,8 +25,6 @@
 #include <QClipboard>
 #include <QHash>
 #include <QList>
-#include <QLinkedList>
-#include <QPen>
 #include <QPixmap>
 #include <QRect>
 //#include <QWidget>

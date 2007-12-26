@@ -24,7 +24,6 @@
 // Local
 #include "SpecialPasteDialog.h"
 
-#include <QRadioButton>
 
 #include <klocale.h>
 

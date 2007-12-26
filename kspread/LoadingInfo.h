@@ -21,7 +21,6 @@
 #define KSPLOADINGINFO_H
 
 #include <QPoint>
-#include <QStringList>
 
 #include <QPointF>
 #include <KoXmlReader.h>

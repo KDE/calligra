@@ -21,7 +21,6 @@
 #ifndef KSPREAD_DAMAGES
 #define KSPREAD_DAMAGES
 
-#include <QFlags>
 
 #include "kdebug.h"
 

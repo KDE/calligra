@@ -23,14 +23,7 @@
 #include "kptcalendar.h"
 #include "kptcommand.h"
 
-#include <QGroupBox>
-#include <QHeaderView>
 #include <QPushButton>
-#include <QSpinBox>
-#include <QComboBox>
-#include <QLabel>
-#include <QLayout>
-#include <QLineEdit>
 #include <QTreeWidgetItem>
 
 #include <kcalendarsystem.h>

@@ -24,7 +24,6 @@
 #include "ScriptingModule.h"
 
 #include <QString>
-#include <QStringList>
 #include <QObject>
 #include <klocale.h>
 

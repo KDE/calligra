@@ -25,7 +25,6 @@
 // Local
 #include "MapAdaptor.h"
 
-#include <QList>
 
 #include <kdebug.h>
 

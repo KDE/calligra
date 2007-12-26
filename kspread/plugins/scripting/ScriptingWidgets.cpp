@@ -21,7 +21,6 @@
 #include "ScriptingWidgets.h"
 #include "ScriptingModule.h"
 
-#include <QMetaObject>
 #include <QMetaEnum>
 #include <QVBoxLayout>
 #include <QTreeView>

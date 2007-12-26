@@ -47,13 +47,9 @@
 
 #include <QFrame>
 #include <QLabel>
-#include <QLayout>
 #include <QApplication>
-#include <QToolTip>
-#include <QVariant>
 #include <QVBoxLayout>
 #include <QGridLayout>
-#include <QEvent>
 #include <QCloseEvent>
 
 #include <math.h>

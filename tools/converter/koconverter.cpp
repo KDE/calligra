@@ -19,7 +19,6 @@
 */
 
 #include "koconverter.h"
-#include <QFile>
 
 #include <kaboutdata.h>
 #include <kimageio.h>

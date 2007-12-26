@@ -35,8 +35,6 @@
 #define KSPREAD_CELL
 
 #include <QDate>
-#include <QLinkedList>
-#include <QList>
 #include <QSharedDataPointer>
 
 #include <KoXmlReader.h>

@@ -26,7 +26,6 @@
 #include "GotoDialog.h"
 
 #include <QLabel>
-#include <QLayout>
 #include <QVBoxLayout>
 #include <QComboBox>
 

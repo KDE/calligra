@@ -21,10 +21,8 @@
 #include "kptusedefforteditor.h"
 
 #include <QCheckBox>
-#include <QComboBox>
 #include <QDate>
 #include <QTableWidget>
-#include <QTableWidgetItem>
 
 #include <klineedit.h>
 #include <ktextedit.h>

@@ -28,7 +28,6 @@
 
 #include <KoXmlReaderForward.h>
 
-#include <QTreeWidget>
 
 class KoDocument;
 

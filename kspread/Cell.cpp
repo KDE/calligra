@@ -46,10 +46,6 @@
 #include <float.h>
 #include <math.h>
 
-#include <QApplication>
-#include <QPainter>
-#include <QPolygon>
-#include <QRegExp>
 
 #include "CellStorage.h"
 #include "Condition.h"

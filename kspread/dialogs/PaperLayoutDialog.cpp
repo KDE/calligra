@@ -38,7 +38,6 @@
 #include <QLabel>
 #include <QRadioButton>
 #include <q3buttongroup.h>
-#include <QLayout>
 #include <QGroupBox>
 //#include <qhgroupbox.h>
 //Added by qt3to4:

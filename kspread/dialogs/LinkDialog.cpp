@@ -30,7 +30,6 @@
 #include "Selection.h"
 #include "NamedAreaManager.h"
 
-#include <QFrame>
 #include <QLabel>
 #include <QVBoxLayout>
 #include <QComboBox>

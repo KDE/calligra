@@ -25,8 +25,6 @@
 
 #include <kdialog.h>
 
-#include <QString>
-#include <QPair>
 #include <QWidget>
 
 namespace KPlato

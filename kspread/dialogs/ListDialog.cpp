@@ -23,7 +23,6 @@
 #include "ListDialog.h"
 
 #include <QLabel>
-#include <QLayout>
 #include <q3listbox.h>
 #include <q3multilineedit.h>
 #include <QPushButton>

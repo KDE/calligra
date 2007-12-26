@@ -29,13 +29,10 @@
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
 
-#include <QGroupBox>
-#include <QHeaderView>
 #include <QListWidget>
-#include <QLineEdit>
 #include <QPushButton>
 #include <QList>
-
+#include <QHeaderView>
 ////////////////////////////   Private classes   //////////////////////////////////
 
 namespace KPlato

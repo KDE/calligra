@@ -30,12 +30,8 @@
 #include "kptdatetime.h"
 #include "kcalendar/kdatetable.h"
 
-#include <QDragEnterEvent>
-#include <QDragMoveEvent>
-#include <QDropEvent>
 #include <QMimeData>
 #include <QList>
-#include <QHeaderView>
 #include <QObject>
 #include <QPainter>
 

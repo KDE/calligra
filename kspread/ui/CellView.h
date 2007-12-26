@@ -35,7 +35,6 @@
 #define KSPREAD_CELL_VIEW
 
 // Qt
-#include <QLinkedList>
 #include <QSharedDataPointer>
 
 // KSpread

@@ -23,7 +23,6 @@
 #include "ui_kptchartpanelbase.h"
 #include "kptchartwidget.h"
 #include <qevent.h>
-#include <QList>
 #include <QHash>
 
 class QTreeWidget;

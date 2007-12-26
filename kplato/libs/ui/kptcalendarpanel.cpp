@@ -35,7 +35,6 @@
 #include <qdialog.h>
 #include <qstyle.h>
 #include <qtoolbutton.h>
-#include <QToolTip>
 #include <QApplication>
 #include <QFont>
 #include <QKeyEvent>

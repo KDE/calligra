@@ -23,8 +23,6 @@
 
 #include <QString>
 #include <QRect>
-#include <QDateTime>
-#include <QLinkedList>
 
 #include "kspread_export.h"
 #include <KoXmlReader.h>

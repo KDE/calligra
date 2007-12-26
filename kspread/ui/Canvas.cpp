@@ -69,7 +69,6 @@
 #include <QPoint>
 #include <QScrollBar>
 #include <QTextStream>
-#include <QTimer>
 #include <QToolTip>
 #include <QWidget>
 

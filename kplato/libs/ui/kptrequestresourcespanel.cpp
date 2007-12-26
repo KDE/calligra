@@ -29,12 +29,8 @@
 #include <kptcommand.h>
 
 #include <QPushButton>
-#include <QLineEdit>
 #include <QString>
-#include <QSpinBox>
 #include <qvalidator.h>
-#include <QComboBox>
-#include <QDateTime>
 //#include <QTableWidgetItem>
 #include <qtablewidget.h>
 

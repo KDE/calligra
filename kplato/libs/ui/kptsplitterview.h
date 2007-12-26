@@ -26,7 +26,6 @@
 
 #include <KoXmlReaderForward.h>
 
-#include <QMap>
 
 class KoDocument;
 

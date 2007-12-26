@@ -33,9 +33,6 @@
 #include "kptdatetime.h"
 
 #include <QDate>
-#include <QDragEnterEvent>
-#include <QDragMoveEvent>
-#include <QDropEvent>
 #include <QMimeData>
 #include <QList>
 #include <QObject>

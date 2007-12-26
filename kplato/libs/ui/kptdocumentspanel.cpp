@@ -25,7 +25,6 @@
 #include "kptcommand.h"
 
 #include <QDialog>
-#include <QList>
 #include <QString>
 #include <QModelIndex>
 #include <QVBoxLayout>

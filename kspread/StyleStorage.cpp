@@ -22,7 +22,6 @@
 
 #include <QCache>
 #include <QRegion>
-#include <QSet>
 #include <QTimer>
 
 #include "Doc.h"

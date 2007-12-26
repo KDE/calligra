@@ -28,9 +28,7 @@
 #include <kptpertcpmmodel.h>
 
 #include <QList>
-#include <QStringList>
 
-#include <QtGui>
 
 #include <kdebug.h>
 

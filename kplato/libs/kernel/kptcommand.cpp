@@ -31,7 +31,6 @@
 #include <klocale.h>
 
 #include <QHash>
-#include <QLineEdit>
 #include <QMap>
 
 namespace KPlato

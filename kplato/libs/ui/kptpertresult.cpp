@@ -27,8 +27,7 @@
 
 #include <KoDocument.h>
 
-#include <QTreeView>
-#include <QStringList>
+#include <QMenu>
 
 #include <kicon.h>
 #include <kaction.h>

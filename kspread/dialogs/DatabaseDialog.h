@@ -22,14 +22,13 @@
 #ifndef KSPREAD_DATABASE_DIALOG
 #define KSPREAD_DATABASE_DIALOG
 
-#include <QDialog>
 #include <QRect>
 //Added by qt3to4:
 #include <QFrame>
 #include <QLabel>
-#include <QtSql/QSqlDatabase>
 
 #include <kassistantdialog.h>
+#include <QSqlDatabase>
 
 class QCheckBox;
 class KComboBox;

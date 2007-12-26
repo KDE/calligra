@@ -25,7 +25,6 @@
 #include <kptviewbase.h>
 #include <kptresourcemodel.h>
 
-#include <QTreeWidget>
 
 class KoDocument;
 

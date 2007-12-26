@@ -21,8 +21,7 @@
 #define KSPREAD_BORDER_COLOR_COMMAND
 
 #include <QPair>
-#include <QPen>
-
+#include <QColor>
 #include "AbstractRegionCommand.h"
 #include "Style.h"
 

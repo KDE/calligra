@@ -39,9 +39,7 @@
 #include <pwd.h>
 
 #include <QApplication>
-#include <QFileInfo>
 #include <QFont>
-#include <QPair>
 #include <QTimer>
 //Added by qt3to4:
 #include <Q3ValueList>

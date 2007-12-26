@@ -32,7 +32,6 @@
 
 #include <QObject>
 #include <QHash>
-#include <QRect>
 #include <QString>
 
 #include <KoXmlReader.h>

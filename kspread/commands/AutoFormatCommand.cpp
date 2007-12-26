@@ -26,6 +26,8 @@
 
 #include <klocale.h>
 
+#include <QPen>
+
 #include "CellStorage_p.h"
 
 using namespace KSpread;

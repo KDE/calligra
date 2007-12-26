@@ -36,7 +36,6 @@
 #include <KoXmlNS.h>
 #include <kdebug.h>
 #include <qdom.h>
-#include <QBuffer>
 
 using namespace KSpread;
 

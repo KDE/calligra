@@ -49,11 +49,10 @@
 #include <QLabel>
 #include <QPainter>
 #include <QRubberBand>
-#include <QScrollBar>
 #include <QStyle>
 #include <QTextLayout>
-#include <QTimer>
 #include <QToolTip>
+#include <QScrollBar>
 
 // KDE
 #include <klocale.h>

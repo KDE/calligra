@@ -45,9 +45,7 @@
 #include <QFrame>
 #include <QGridLayout>
 #include <QHBoxLayout>
-#include <QVBoxLayout>
 #include <QLabel>
-#include <QLayout>
 #include <QPushButton>
 #include <QRadioButton>
 #include <qsqldatabase.h>
@@ -55,7 +53,6 @@
 #include <qsqlfield.h>
 #include <qsqlquery.h>
 #include <qsqlrecord.h>
-#include <QToolTip>
 #include <QVariant>
 #include <QWidget>
 

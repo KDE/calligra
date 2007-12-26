@@ -26,7 +26,6 @@
 
 #include <ui_InsertCalendarDialog.h>
 
-#include <QDateTime>
 
 class KDatePicker;
 

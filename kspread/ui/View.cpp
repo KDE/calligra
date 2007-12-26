@@ -46,9 +46,7 @@
 #include <QKeyEvent>
 #include <QList>
 #include <QMenu>
-#include <QPainter>
 #include <QPixmap>
-#include <QRegExp>
 #include <QResizeEvent>
 #include <QTimer>
 #include <QToolButton>

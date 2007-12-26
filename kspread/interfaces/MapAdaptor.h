@@ -21,7 +21,6 @@
 #ifndef KSPREAD_MAP_ADAPTOR
 #define KSPREAD_MAP_ADAPTOR
 
-#include <QList>
 #include <QStringList>
 
 #include <QtDBus/QtDBus>

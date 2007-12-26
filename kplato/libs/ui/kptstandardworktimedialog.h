@@ -28,7 +28,6 @@
 
 #include <kdialog.h>
 
-#include <QString>
 #include <QWidget>
 
 

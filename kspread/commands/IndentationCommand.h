@@ -20,8 +20,6 @@
 #ifndef KSPREAD_INDENTATION_COMMAND
 #define KSPREAD_INDENTATION_COMMAND
 
-#include <QPair>
-#include <QPen>
 
 #include "AbstractRegionCommand.h"
 #include "Style.h"

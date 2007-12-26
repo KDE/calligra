@@ -31,7 +31,6 @@
 #define KSPREAD_DOC
 
 #include <QList>
-#include <QMap>
 #include <QRect>
 #include <QString>
 

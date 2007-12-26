@@ -20,7 +20,6 @@
 #ifndef KSPREAD_TABLE_TOOL_FACTORY
 #define KSPREAD_TABLE_TOOL_FACTORY
 
-#include <QStringList>
 
 #include <KoToolFactory.h>
 

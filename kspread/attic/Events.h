@@ -21,7 +21,6 @@
 #define KSPREAD_EVENTS
 
 #include <QEvent>
-#include <QRect>
 #include <QString>
 
 #include <string.h>

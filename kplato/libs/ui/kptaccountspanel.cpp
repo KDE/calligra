@@ -22,12 +22,11 @@
 #include "kptcommand.h"
 #include "kptproject.h"
 
-#include <QComboBox>
-#include <QHeaderView>
 #include <QTreeWidget>
 #include <QPushButton>
 #include <QString>
 #include <QStringList>
+#include <QHeaderView>
 
 #include <klocale.h>
 

@@ -22,17 +22,12 @@
 #include "kptproject.h"
 
 #include <QPainter>
-#include <QLayout>
-#include <QMap>
 #include <QSplitter>
 #include <QString>
-#include <QList>
-#include <QPoint>
 #include <QTreeWidgetItem>
 #include <QRect>
-#include <QScrollBar>
 #include <QHeaderView>
-
+#include <QScrollBar>
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <klocale.h>

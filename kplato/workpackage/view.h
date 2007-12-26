@@ -23,9 +23,7 @@
 
 #include <KoView.h>
 
-#include <QFileInfo>
 #include <QMenu>
-#include <QProcess>
 
 #include <kprocess.h>
 

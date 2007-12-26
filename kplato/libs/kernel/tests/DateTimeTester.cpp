@@ -21,7 +21,6 @@
 #include <kptdatetime.h>
 #include <kptduration.h>
 
-#include <QDateTime>
 
 #include <qtest_kde.h>
 #include <kdebug.h>

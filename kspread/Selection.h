@@ -23,7 +23,6 @@
 
 #include <QColor>
 #include <QList>
-#include <QMetaType>
 #include <QObject>
 
 #include <kdebug.h>

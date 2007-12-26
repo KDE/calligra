@@ -27,14 +27,8 @@
 #include "kpttaskeditor.h"
 #include "kptviewbase.h"
 
-#include <QAbstractItemModel>
-#include <QFrame>
 #include <QGraphicsView>
 #include <QGraphicsItem>
-#include <QItemDelegate>
-#include <QSplitter>
-#include <QTreeView>
-#include <QTimer>
 
 #include <klocale.h>
 

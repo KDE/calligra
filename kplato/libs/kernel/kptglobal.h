@@ -22,7 +22,6 @@
 
 #include "kplatokernel_export.h"
 
-#include <QtCore>
 
 #include <klocale.h>
 

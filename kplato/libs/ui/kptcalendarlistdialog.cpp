@@ -23,12 +23,9 @@
 #include "kptcommand.h"
 
 #include <QPushButton>
-#include <QComboBox>
-#include <QHeaderView>
-#include <QLabel>
-#include <QLineEdit>
 #include <QList>
 #include <QTreeWidget>
+#include <QHeaderView>
 
 #include <klocale.h>
 

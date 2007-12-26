@@ -24,10 +24,6 @@
 #include "kptcalendar.h"
 
 #include <QPushButton>
-#include <QLabel>
-#include <QLineEdit>
-#include <QComboBox>
-#include <QSpinBox>
 #include <QList>
 #include <qstringlist.h>
 

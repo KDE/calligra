@@ -27,7 +27,8 @@
 
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
-
+#include <QFileInfo>
+#include <QProcess>
 class KoView;
 class KoStore;
 

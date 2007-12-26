@@ -20,7 +20,6 @@
 #ifndef KSPREAD_ABSTRACT_REGION_COMMAND
 #define KSPREAD_ABSTRACT_REGION_COMMAND
 
-#include <QString>
 #include <QUndoCommand>
 
 #include "Region.h"

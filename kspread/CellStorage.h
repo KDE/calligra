@@ -22,7 +22,6 @@
 
 #include <QPair>
 #include <QRect>
-#include <QVector>
 
 #include "Binding.h"
 #include "Cell.h"

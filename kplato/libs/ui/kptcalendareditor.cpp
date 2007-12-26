@@ -31,20 +31,11 @@
 #include "kpttask.h"
 #include "kptdatetime.h"
 
-#include <QDragEnterEvent>
 #include <QDragMoveEvent>
-#include <QDropEvent>
-#include <QMimeData>
-#include <QMenu>
-#include <QPainter>
-#include <QStyle>
 #include <QList>
-#include <QHeaderView>
-#include <QObject>
-#include <QTreeWidget>
-#include <QStringList>
 #include <QSplitter>
 #include <QVBoxLayout>
+#include <QHeaderView>
 
 #include <kaction.h>
 #include <kicon.h>

@@ -89,4 +89,3 @@ void ViewAdaptor::slotConfigure()
 
 }  //KPlato namespace
 
-#include "KPtViewAdaptor.moc"

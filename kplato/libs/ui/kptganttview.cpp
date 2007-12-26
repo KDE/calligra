@@ -37,9 +37,9 @@
 
 #include <kdebug.h>
 
-#include <QHeaderView>
-#include <QLayout>
 #include <QSplitter>
+#include <QVBoxLayout>
+#include <QHeaderView>
 
 #include <klocale.h>
 #include <kglobal.h>

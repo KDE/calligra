@@ -35,12 +35,8 @@
 #include <kabc/addresseedialog.h>
 #include <kdatewidget.h>
 
-#include <QLayout>
-#include <QLabel>
 #include <QDateTime>
-#include <QTimeEdit>
 #include <QPushButton>
-#include <QSpinBox>
 
 #include <kdebug.h>
 

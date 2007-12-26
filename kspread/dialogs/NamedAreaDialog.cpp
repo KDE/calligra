@@ -29,12 +29,9 @@
 
 // Qt
 #include <QGridLayout>
-#include <QHBoxLayout>
 #include <QLabel>
-#include <QLayout>
 #include <QList>
 #include <QPushButton>
-#include <QVariant>
 #include <QVBoxLayout>
 
 // KDE

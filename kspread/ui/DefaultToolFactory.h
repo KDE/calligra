@@ -20,7 +20,6 @@
 #ifndef KSPREAD_DEFAULT_TOOL_FACTORY
 #define KSPREAD_DEFAULT_TOOL_FACTORY
 
-#include <QStringList>
 
 #include <KoToolFactory.h>
 

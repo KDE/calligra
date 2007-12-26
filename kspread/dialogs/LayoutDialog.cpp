@@ -35,16 +35,13 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <QBitmap>
 #include <QCheckBox>
 #include <QFrame>
 #include <QLabel>
-#include <QLayout>
 #include <q3listbox.h>
 #include <QFontDatabase>
 #include <QPainter>
 #include <QRadioButton>
-#include <QSlider>
 
 //Added by qt3to4:
 #include <QPaintEvent>

@@ -27,14 +27,8 @@
 #include <q3ptrlist.h>
 #include <QTreeWidget>
 
-#include <QMenu>
-#include <QPainter>
-#include <QStyle>
 #include <QList>
-#include <QHeaderView>
-#include <QObject>
 #include <QTreeWidget>
-#include <QStringList>
 #include <QVBoxLayout>
 #include <QTreeWidget>
 

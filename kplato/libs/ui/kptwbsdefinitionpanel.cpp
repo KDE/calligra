@@ -25,14 +25,10 @@
 #include <kdebug.h>
 
 #include <QComboBox>
-#include <QLineEdit>
 #include <QCheckBox>
-#include <QGroupBox>
 #include <QPushButton>
 #include <QComboBox>
-#include <QSpinBox>
 #include <QTableWidget>
-#include <QHeaderView>
 #include <QStringList>
 
 namespace KPlato

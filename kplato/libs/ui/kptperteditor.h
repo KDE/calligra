@@ -27,22 +27,13 @@
 #include "kptviewbase.h"
 #include "kptitemmodelbase.h"
 
-#include <QMenu>
-#include <QPainter>
-#include <QStyle>
 #include <QList>
-#include <QHeaderView>
-#include <QObject>
 #include <QTreeWidget>
-#include <QStringList>
-#include <QVBoxLayout>
 #include <QTreeWidget>
 #include <QTableWidget>
 #include <QFont>
-#include <QTimer>
 
 #include <QtCore/QVariant>
-#include <QtGui>
 
 #include <qwidget.h>
 

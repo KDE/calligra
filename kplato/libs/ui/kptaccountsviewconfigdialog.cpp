@@ -20,7 +20,6 @@
 #include "kptaccountsviewconfigdialog.h"
 
 #include <QCheckBox>
-#include <QComboBox>
 #include <q3datetimeedit.h>
 #include <qdatetime.h>
 #include <QString>

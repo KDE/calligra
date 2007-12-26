@@ -28,7 +28,6 @@
 #include <QCheckBox>
 #include <QPushButton>
 #include <QLabel>
-#include <QLayout>
 #include <QGridLayout>
 #include <QFrame>
 

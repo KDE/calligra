@@ -21,10 +21,6 @@
 #include "intervalitem.h"
 
 #include <QPushButton>
-#include <QComboBox>
-#include <QHeaderView>
-#include <QLabel>
-#include <QLineEdit>
 #include <QTreeWidget>
 #include <QList>
 

@@ -20,7 +20,6 @@
 // Local
 #include "CommentCommand.h"
 
-#include <QColor>
 
 #include <klocale.h>
 
