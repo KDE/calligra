@@ -310,7 +310,7 @@ class ActionToExecuteListView : public ActionsListViewBase
 			item->setPixmap(0, SmallIcon("document-new"));
 			if (supportedViewModes & Kexi::DesignViewMode) {
 				item = new ActionSelectorDialogListItem("design", this, i18n("Open in Design View"));
-				item->setPixmap(0, SmallIcon("object-edit"));
+				item->setPixmap(0, SmallIcon("document-properties"));
 			}
 			if (supportedViewModes & Kexi::TextViewMode) {
 				item = new ActionSelectorDialogListItem("editText", this, i18n("Open in Text View"));

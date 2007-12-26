@@ -108,7 +108,7 @@ KexiReportFactory::createWidget(const Q3CString &c, QWidget *p, const char *n,
 	if(c == "Label")
 		return new Label(text, p, n);
 	else if(c == "PicLabel")
-		return new PicLabel(DesktopIcon("image"), p, n);
+		return new PicLabel(DesktopIcon("image-x-generic"), p, n);
 	else if(c == "ReportLine")
 		return new ReportLine(p, n);
 	else if(c == "KexiSubReport")
@@ -125,7 +125,7 @@ KexiReportFactory::createMenuActions(const Q3CString &classname, QWidget *w,
 	Q_UNUSED(container);
 	if(classname == "Label") {
 		/*! @todo use KAction */
-		menu->insertItem(KIcon("object-edit"), i18n("Edit Rich Text"), this, SLOT(editText()));
+		menu->insertItem(KIcon("document-properties"), i18n("Edit Rich Text"), this, SLOT(editText()));
 		return true;
 	}
 	return false;

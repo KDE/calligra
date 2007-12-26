@@ -154,7 +154,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
 			i18n("Delete object"), i18n("Deletes the object selected in the list."),
 			SLOT(slotRemove()));
 
-		m_renameAction = addAction("edit_rename", KIcon(), i18n("&Rename"),
+		m_renameAction = addAction("edit_rename", KIcon("edit-rename"), i18n("&Rename"),
 			i18n("Rename object"), i18n("Renames the object selected in the list."),
 			SLOT(slotRename()));
 #ifdef KEXI_SHOW_UNIMPLEMENTED
@@ -163,7 +163,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
 		//todo	plugSharedAction("edit_paste",SLOT(slotPaste()));
 #endif
 
-		m_designAction = addAction("design_object", KIcon("object-edit"), i18n("&Design"),
+		m_designAction = addAction("design_object", KIcon("document-properties"), i18n("&Design"),
 			i18n("Design object"), i18n("Starts designing of the object selected in the list."),
 			SLOT(slotDesignObject()));
 		if (m_features & Toolbar) {
@@ -216,7 +216,7 @@ KexiBrowser::KexiBrowser(QWidget* parent, Features features)
 		i18n("Prints data from the currently selected table or query."),
 		SLOT(slotPrintObject()));
 		
-	m_pageSetupAction = addAction("pageSetupForObject", KIcon(), i18n("Page Setup..."),
+	m_pageSetupAction = addAction("pageSetupForObject", KIcon(/*"document-page-setup" not yet in Oxygen */), i18n("Page Setup..."),
 		i18n("Page setup for data"),
 		i18n("Shows page setup for printing the active table or query."),
 		SLOT(slotPageSetupForObject()));

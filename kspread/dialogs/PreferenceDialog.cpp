@@ -76,12 +76,12 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
 
   KVBox *page3 = new KVBox();
   p3 = addPage(page3, i18n("Interface"));
-  p3->setIcon( KIcon( BarIcon("signature",KIconLoader::SizeMedium) ) );
+  p3->setIcon( KIcon( BarIcon("preferences-desktop-theme",KIconLoader::SizeMedium) ) );
   _configure = new  configure(parent,page3 );
 
   KVBox *page4 = new KVBox();
   p4 = addPage(page4, i18n("Misc"));
-  p4->setIcon( KIcon( BarIcon("object-edit",KIconLoader::SizeMedium) ) );
+  p4->setIcon( KIcon( BarIcon("preferences-other",KIconLoader::SizeMedium) ) );
   _miscParameter = new  miscParameters(parent,page4 );
 
   KVBox *page5 = new KVBox();
@@ -91,7 +91,7 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
 
   KVBox *page6 = new KVBox();
   p6 = addPage(page6, i18n("Page Layout"));
-  p6->setIcon( KIcon( BarIcon("datashow",KIconLoader::SizeMedium) ) );
+  p6->setIcon( KIcon( BarIcon("document-properties" /*"document-page-setup" is not yet in Oxygen*/,KIconLoader::SizeMedium) ) );
   _layoutPage=new configureLayoutPage(parent,page6 );
 
   KVBox *page7 = new KVBox();

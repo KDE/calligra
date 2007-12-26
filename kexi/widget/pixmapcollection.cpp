@@ -261,7 +261,7 @@ PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWi
 	connect(newItemName, SIGNAL(clicked()), this, SLOT(newItemByName()));
 
 	QToolButton *delItem = new QToolButton(frame);
-	delItem->setIconSet(KIcon("edit_remove"));
+	delItem->setIconSet(KIcon("list-remove"));
 	delItem->setTextLabel(i18n("&Remove Selected Item"), true);
 	vlayout->addWidget(delItem);
 	m_buttons.insert(BDelItem, delItem);
@@ -368,7 +368,7 @@ PixmapCollectionEditor::displayMenu(Q3IconViewItem *it, const QPoint &p)
 {
 	if(!it) return;
 	KMenu *menu = new KMenu();
-	menu->insertItem(KIcon("object-edit"), i18n("Rename Item"), this, SLOT(renameItem()));
+	menu->insertItem(KIcon("edit-rename"), i18n("Rename Item"), this, SLOT(renameItem()));
 	menu->insertItem(KIcon("list-remove"), i18n("Remove Item"), this, SLOT(removeItem()));
 	menu->exec(p);
 }

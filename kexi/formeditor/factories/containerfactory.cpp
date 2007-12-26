@@ -682,8 +682,8 @@ ContainerFactory::createMenuActions(const Q3CString &classname, QWidget *w,
 		}
 
 		int id = menu->insertItem(KIcon("tab-new"), i18n("Add Page"), this, SLOT(addTabPage()) );
-		id = menu->insertItem(KIcon("object-edit"), i18n("Rename Page..."), this, SLOT(renameTabPage()));
-		id = menu->insertItem(KIcon("tab-remove"), i18n("Remove Page"), this, SLOT(removeTabPage()));
+		id = menu->insertItem(KIcon("edit-rename"), i18n("Rename Page..."), this, SLOT(renameTabPage()));
+		id = menu->insertItem(KIcon("tab-close"), i18n("Remove Page"), this, SLOT(removeTabPage()));
 //		if( dynamic_cast<TabWidgetBase*>(m_widget)->count() == 1)
 		if( dynamic_cast<TabWidgetBase*>(widget())->count() == 1)
 			menu->setItemEnabled(id, false);
@@ -702,16 +702,16 @@ ContainerFactory::createMenuActions(const Q3CString &classname, QWidget *w,
 
 		int id = menu->insertItem(KIcon("tab-new"), i18n("Add Page"), this, SLOT(addStackPage()) );
 
-		id = menu->insertItem(KIcon("tab-remove"), i18n("Remove Page"), this, SLOT(removeStackPage()) );
+		id = menu->insertItem(KIcon("tab-close"), i18n("Remove Page"), this, SLOT(removeStackPage()) );
 //		if( ((QWidgetStack*)m_widget)->children()->count() == 4) // == the stack has only one page
 		if(stack->children().count() == 4) // == the stack has only one page
 			menu->setItemEnabled(id, false);
 
-		id = menu->insertItem(KIcon("edit-find-next"), i18n("Jump to Next Page"), this, SLOT(nextStackPage()));
+		id = menu->insertItem(KIcon("go-down-search"), i18n("Jump to Next Page"), this, SLOT(nextStackPage()));
 		if(!stack->widget(stack->id(stack->visibleWidget())+1))
 			menu->setItemEnabled(id, false);
 
-		id = menu->insertItem(KIcon("edit-find-previous"), i18n("Jump to Previous Page"), this, SLOT(prevStackPage()));
+		id = menu->insertItem(KIcon("go-up-search"), i18n("Jump to Previous Page"), this, SLOT(prevStackPage()));
 		if(!stack->widget(stack->id(stack->visibleWidget()) -1) )
 			menu->setItemEnabled(id, false);
 		return true;
