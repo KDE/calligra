@@ -62,7 +62,7 @@ void ChartProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
     QAbstractProxyModel::setSourceModel( sourceModel );
 
     // Update the entire data set
-    dataChanged();
+    reset();
 }
 
 QVariant ChartProxyModel::data( const QModelIndex &index,
