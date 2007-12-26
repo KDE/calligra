@@ -3,7 +3,6 @@
 #include <BasicElement.h>
 #include <AttributeManager.h>
 #include <KoXmlReader.h>
-#include <QColor>
 
 void TestAttributeManager::initTestCase()
 {

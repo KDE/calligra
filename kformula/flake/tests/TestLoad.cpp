@@ -21,7 +21,6 @@
 
 #include <QtTest/QtTest>
 #include <QtCore/QBuffer>
-#include <QtXml/QDomDocument>
 
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>

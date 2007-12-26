@@ -21,7 +21,6 @@
 #define KOFORMULATOOL_H
 
 #include <KoTool.h>
-#include <QStack>
 
 class KoFormulaShape;
 class BasicElement;

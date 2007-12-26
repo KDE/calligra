@@ -22,8 +22,6 @@
 #include <QLabel>
 #include <QStringList>
 #include <QTextEdit>
-#include <QToolTip>
-#include <QVariant>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 

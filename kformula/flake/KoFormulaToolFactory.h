@@ -21,7 +21,6 @@
 #define KOFORMULATOOLFACTORY_H
 
 #include <KoToolFactory.h>
-#include <QStringList>
 
 /**
  * @short The factory for KoFormulaTool

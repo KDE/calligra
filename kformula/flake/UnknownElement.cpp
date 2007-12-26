@@ -24,7 +24,6 @@
 #include "AttributeManager.h"
 #include <KoXmlReader.h>
 #include <QPainter>
-#include <QPen>
 #include <kdebug.h>
 
 UnknownElement::UnknownElement( BasicElement* parent ) : BasicElement( parent )

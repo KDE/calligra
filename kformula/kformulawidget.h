@@ -21,7 +21,6 @@
 #ifndef KFORMULAWIDGET_H
 #define KFORMULAWIDGET_H
 
-#include <QDomDocument>
 #include <QPixmap>
 #include <QPoint>
 #include <QWidget>

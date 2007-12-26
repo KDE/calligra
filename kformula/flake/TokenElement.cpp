@@ -22,7 +22,6 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <QPainter>
-#include <QFontMetricsF>
 #include <kdebug.h>
 
 TokenElement::TokenElement( BasicElement* parent ) : BasicElement( parent )

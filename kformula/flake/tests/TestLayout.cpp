@@ -23,7 +23,6 @@
 #include <QtTest/QtTest>
 #include <QtGui/QFont>
 #include <QtGui/QFontMetrics>
-#include <QtXml/QDomDocument>
 
 #include "AttributeManager.h"
 #include "IdentifierElement.h"

@@ -19,7 +19,6 @@
 
 #include "GlyphElement.h"
 #include "AttributeManager.h"
-#include <QFontMetrics>
 #include <QFontDatabase>
 #include <QPainter>
 

@@ -28,8 +28,6 @@
 
 #include <QPainter>
 #include <QString>
-#include <QFile>
-#include <QTextStream>
 
 #include <KoGlobal.h>
 #include <KoXmlWriter.h>
@@ -146,4 +144,3 @@ QString KFormulaPartDocument::configFile() const
     return QString();
 }
 
-#include "KFormulaPartDocument.moc"
