@@ -32,6 +32,7 @@
 #include <q3sortedlist.h>
 #include <QFile>
 #include <QTextStream>
+#include <QPen>
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QByteArray>
