@@ -1880,6 +1880,14 @@ void ChartShape::update() const
     KoShape::update();
 }
 
+void ChartShape::setSize( const QSizeF& size )
+{
+    // Usually, this is done by signals from the QWidget that we resize.
+    // But since a KoShape is not a QWidget, we need to do this manually.
+    d->chart->resize( size.toSize() );
+    KoShape::setSize( size );
+}
+
 void ChartShape::repaint() const
 {
     d->pixmapRepaintRequested = true;
