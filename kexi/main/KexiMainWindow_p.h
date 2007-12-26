@@ -225,7 +225,7 @@ KexiTabbedToolBar::KexiTabbedToolBar(QWidget *parent)
 	addAction(tbar, "help_whats_this");
 	addAction(tbar, "help_report_bug");
 	a = d->ac->action("help_report_bug");
-	a->setIcon(KIcon("kbugbuster"));
+	a->setIcon(KIcon("tools-report-bug"));
 	addAction(tbar, "help_about_app");
 	addAction(tbar, "help_about_kde");
 */

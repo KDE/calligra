@@ -1138,7 +1138,7 @@ void KexiMainWindow::setupActions()
 	d->helpMenu = new KHelpMenu( this, KGlobal::mainComponent().aboutData(), 
 		true/*showWhatsThis*/, ac);
 	QAction* help_report_bug_action = ac->action("help_report_bug");
-	help_report_bug_action->setIcon(KIcon("kbugbuster")); // good icon for toolbar
+	help_report_bug_action->setIcon(KIcon("tools-report-bug")); // good icon for toolbar
 	help_report_bug_action->setWhatsThis(i18n("Shows bug reporting tool for Kexi application."));
 	QAction* help_whats_this_action =  ac->action("help_whats_this");
 	help_whats_this_action->setWhatsThis(i18n("Shows \"What's This\" tool."));
