@@ -59,8 +59,8 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     virtual ~ChartShape();
 
     void refreshPixmap( QPainter& painter, const KoViewConverter& converter );
-    // Query a repaint without updating
-    void repaint() const;
+    // This is more time-consuming than update()
+    void relayout() const;
 
     KDChart::Chart* chart() const;
     KDChart::AbstractDiagram *diagram() const;
@@ -126,7 +126,7 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
 
 
  public Q_SLOTS:
-    virtual void update() const;
+    void update() const;
     void setSize( const QSizeF& size );
     void dataChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight );
 

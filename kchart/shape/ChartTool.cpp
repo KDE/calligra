@@ -358,7 +358,7 @@ void ChartTool::setDatasetColor( int dataset, const QColor& color )
          || !d->shape->chart()->coordinatePlane()->diagram() )
         return;
     d->shape->chart()->coordinatePlane()->diagram()->setBrush( dataset, QBrush( color ) );
-    d->shape->repaint();
+    d->shape->update();
 }
 
 void ChartTool::setXAxisTitle( const QString& title )

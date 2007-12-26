@@ -87,7 +87,7 @@ bool ChartProxyModel::setData( const QModelIndex &index,
 void ChartProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight )
 {
     emit QAbstractProxyModel::dataChanged( topLeft, bottomRight );
-    d->shape->dataChanged( topLeft, bottomRight );
+    d->shape->relayout();
 }
 
 void ChartProxyModel::dataChanged()

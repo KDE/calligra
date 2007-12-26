@@ -1874,8 +1874,6 @@ int ChartShape::borderHeight() const
 
 void ChartShape::update() const
 {
-    d->diagram->doItemsLayout();
-    d->chart->update();
     d->pixmapRepaintRequested = true;
     KoShape::update();
 }
@@ -1888,8 +1886,9 @@ void ChartShape::setSize( const QSizeF& size )
     KoShape::setSize( size );
 }
 
-void ChartShape::repaint() const
+void ChartShape::relayout() const
 {
+    d->diagram->doItemsLayout();
     d->pixmapRepaintRequested = true;
     KoShape::update();
 }
@@ -1903,7 +1902,7 @@ void ChartShape::setXAxisTitle( const QString& title )
     if( ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes()[0] )
         ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes()[0]->setTitleText( title );
         
-    repaint();
+    update();
 }
 
 void ChartShape::setYAxisTitle( const QString& title )
@@ -1915,7 +1914,7 @@ void ChartShape::setYAxisTitle( const QString& title )
     if ( ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes()[1] );
         ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes()[1]->setTitleText( title );
         
-    repaint();
+    update();
 }
 
 void ChartShape::setShowVerticalLines( bool b )
@@ -1926,7 +1925,7 @@ void ChartShape::setShowVerticalLines( bool b )
     gridAttributes.setGridVisible( b );
     ( ( KDChart::CartesianCoordinatePlane* ) d->chart->coordinatePlane() )->setGridAttributes( Qt::Vertical, gridAttributes );
         
-    repaint();
+    update();
 }
 
 void ChartShape::setShowHorizontalLines( bool b )
@@ -1938,7 +1937,7 @@ void ChartShape::setShowHorizontalLines( bool b )
     gridAttributes.setGridVisible( b );
     ( ( KDChart::CartesianCoordinatePlane* ) d->chart->coordinatePlane() )->setGridAttributes( Qt::Horizontal, gridAttributes );
         
-    repaint();
+    update();
 }
 
 void ChartShape::setGapBetweenBars( int percent )
@@ -1950,7 +1949,7 @@ void ChartShape::setGapBetweenBars( int percent )
     attributes.setBarGapFactor( (float)percent / 100.0 );
     ((KDChart::BarDiagram*) d->diagram)->setBarAttributes( attributes );
         
-    repaint();
+    update();
 }
 
 void ChartShape::setGapBetweenSets( int percent )
@@ -1962,7 +1961,7 @@ void ChartShape::setGapBetweenSets( int percent )
     attributes.setGroupGapFactor( (float)percent / 100.0 );
     ((KDChart::BarDiagram*) d->diagram)->setBarAttributes( attributes );
         
-    repaint();
+    update();
 }
 
 void ChartShape::setShowLegend( bool b )
@@ -1975,5 +1974,5 @@ void ChartShape::setShowLegend( bool b )
             d->chart->addLegend( d->legend );
     }
     
-    repaint();
+    update();
 }
