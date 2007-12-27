@@ -202,6 +202,8 @@ QWidget *ChartTool::createOptionWidget()
     connect( widget, SIGNAL( showHorizontalLinesChanged( bool ) ),
              this,   SLOT( setShowHorizontalLines( bool ) ) );
     
+    connect( widget, SIGNAL( datasetColorChanged( int, const QColor& ) ),
+             this, SLOT( setDatasetColor( int, const QColor& ) ) );
     connect( widget, SIGNAL( gapBetweenBarsChanged( int ) ),
              this,   SLOT( setGapBetweenBars( int ) ) );
     connect( widget, SIGNAL( gapBetweenSetsChanged( int ) ),
@@ -253,6 +255,8 @@ void ChartTool::setChartType( OdfChartType type, OdfChartSubtype subtype )
 {
     if ( d->shape != 0 )
         d->shape->setChartType( type, subtype );
+    if ( optionWidget() )
+        optionWidget()->update();
 }
 
 

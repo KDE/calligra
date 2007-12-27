@@ -84,7 +84,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex" >
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
@@ -209,7 +209,7 @@ p, li { white-space: pre-wrap; }
           <bool>false</bool>
          </property>
          <property name="text" >
-          <string>Stroke</string>
+          <string>Color</string>
          </property>
         </widget>
        </item>
@@ -220,17 +220,7 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="2" column="0" >
-        <widget class="QLabel" name="label_7" >
-         <property name="text" >
-          <string>Brush</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1" colspan="2" >
-        <widget class="KColorButton" name="kcolorbutton" />
-       </item>
-       <item row="3" column="0" colspan="3" >
+       <item row="2" column="0" colspan="3" >
         <widget class="QPushButton" name="pushButton" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
@@ -243,7 +233,7 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="4" column="0" colspan="2" >
+       <item row="3" column="0" colspan="2" >
         <widget class="QLabel" name="selectDatasetNote" >
          <property name="text" >
           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
@@ -253,15 +243,15 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="5" column="0" colspan="3" >
-        <widget class="Line" name="line_3" >
+       <item row="4" column="0" colspan="3" >
+        <widget class="Line" name="propertiesSeparator" >
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="6" column="0" colspan="3" >
-        <widget class="QLabel" name="label_10" >
+       <item row="5" column="0" colspan="3" >
+        <widget class="QLabel" name="barPropertiesLabel" >
          <property name="text" >
           <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
@@ -270,14 +260,14 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="7" column="0" colspan="2" >
-        <widget class="QLabel" name="label_4" >
+       <item row="6" column="0" colspan="2" >
+        <widget class="QLabel" name="gapBetweenBarsLabel" >
          <property name="text" >
           <string>Gap Between Bars</string>
          </property>
         </widget>
        </item>
-       <item row="7" column="2" >
+       <item row="6" column="2" >
         <widget class="QSpinBox" name="gapBetweenBars" >
          <property name="sizePolicy" >
           <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
@@ -293,14 +283,14 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="8" column="0" colspan="2" >
-        <widget class="QLabel" name="label_5" >
+       <item row="7" column="0" colspan="2" >
+        <widget class="QLabel" name="gapBetweenSetsLabel" >
          <property name="text" >
           <string>Gap Between Sets</string>
          </property>
         </widget>
        </item>
-       <item row="8" column="2" >
+       <item row="7" column="2" >
         <widget class="QSpinBox" name="gapBetweenSets" >
          <property name="suffix" >
           <string>%</string>
@@ -313,7 +303,7 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="9" column="0" >
+       <item row="8" column="0" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>

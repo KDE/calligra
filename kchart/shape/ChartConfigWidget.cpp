@@ -151,6 +151,8 @@ ChartConfigWidget::ChartConfigWidget()
              this, SIGNAL( showHorizontalLinesChanged( bool ) ) );
     
     // "Datasets" Tab
+    connect( d->ui.datasetColor, SIGNAL( changed( const QColor& ) ),
+             this, SLOT( datasetColorSelected( const QColor& ) ) );
     connect( d->ui.gapBetweenBars, SIGNAL( valueChanged( int ) ),
              this, SIGNAL( gapBetweenBarsChanged( int ) ) );
     connect( d->ui.gapBetweenSets, SIGNAL( valueChanged( int ) ),
@@ -246,6 +248,11 @@ void ChartConfigWidget::chartSubtypeSelected( int type )
     emit chartSubtypeChanged( d->subtype );
 }
 
+void ChartConfigWidget::datasetColorSelected( const QColor& color )
+{
+    emit datasetColorChanged( d->selectedDataset, color );
+}
+
 void ChartConfigWidget::setThreeDMode( bool threeD )
 {
     d->threeDMode = threeD;
@@ -264,6 +271,22 @@ void ChartConfigWidget::update()
     if (    d->type    != d->shape->chartType()
          || d->subtype != d->shape->chartSubtype() )
     {
+        bool needSeparator = false;
+        if ( d->shape->chartType() == BarChartType) {
+            d->ui.barPropertiesLabel->show();
+            d->ui.gapBetweenBarsLabel->show();
+            d->ui.gapBetweenSetsLabel->show();
+            d->ui.gapBetweenBars->show();
+            d->ui.gapBetweenSets->show();
+            needSeparator = true;
+        } else {
+            d->ui.barPropertiesLabel->hide();
+            d->ui.gapBetweenBarsLabel->hide();
+            d->ui.gapBetweenSetsLabel->hide();
+            d->ui.gapBetweenBars->hide();
+            d->ui.gapBetweenSets->hide();
+        }
+        d->ui.propertiesSeparator->setVisible( needSeparator );
         switch ( d->shape->chartSubtype() ) {
             case NormalChartSubtype:
                 switch ( d->shape->chartType() ) {
