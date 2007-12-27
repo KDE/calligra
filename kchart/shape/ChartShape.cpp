@@ -240,17 +240,14 @@ ChartShape::~ChartShape()
 
 void ChartShape::refreshPixmap( QPainter &painter, const KoViewConverter &converter )
 {
-    // Adjust the size of the pixmap to the current zoom level
-    // Add QSize( 1, 1 ) due to possible rounding errors
-    d->pixmap = QPixmap( converter.documentToView( size() ).toSize() + QSize( 1, 1 ) );
-    const QRect paintRect = QRect( QPoint( 0, 0 ), size().toSize() + QSize( 1, 1 ) );
+    // Adjust the size of the painting area to the current zoom level
+    QSize paintRectSize = converter.documentToView( size() ).toSize();
+    d->pixmap = QPixmap( paintRectSize );
+    const QRect paintRect = QRect( QPoint( 0, 0 ), paintRectSize );
 
     // Copy the painter's render hints, such as antialiasing
     QPainter pixmapPainter( &d->pixmap );
     pixmapPainter.setRenderHints( painter.renderHints() );
-
-    // Adjust the pixmapPainter's coordinate system to the current zoom level
-    applyConversion( pixmapPainter, converter );
 
     // Paint the background
     pixmapPainter.fillRect( paintRect, KApplication::palette().base() );
