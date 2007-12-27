@@ -17,11 +17,9 @@
  * Boston, MA 02110-1301, USA.
  */
 #include "KWQtSqlEasyFilter.h"
-#include "KWQtSqlEasyFilter.moc"
 #include <q3table.h>
 #include <q3scrollview.h>
 #include <klocale.h>
-#include <QLayout>
 #include <QCheckBox>
 
 KWQtSqlEasyFilter::KWQtSqlEasyFilter( QWidget *parent)

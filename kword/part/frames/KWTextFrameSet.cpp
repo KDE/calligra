@@ -31,7 +31,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <QTextDocument>
-#include <QTimer>
 
 KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
     : m_document( new QTextDocument() ),
@@ -269,4 +268,3 @@ void KWTextFrameSet::printDebug() {
 }
 #endif
 
-#include "KWTextFrameSet.moc"

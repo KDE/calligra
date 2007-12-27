@@ -22,7 +22,6 @@
 
 #include <KoTextDocumentLayout.h>
 
-#include <QList>
 
 class KoTextAnchor;
 class KWAnchorStrategy;

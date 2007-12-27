@@ -18,9 +18,7 @@
 */
 
 #include "KWQtSqlSerialDataSourceBase.h"
-#include "KWQtSqlSerialDataSourceBase.moc"
 #include "KWQtSqlMailMergeOpen.h"
-#include <QLayout>
 #include <qdom.h>
 //Added by qt3to4:
 #include <QSqlError>

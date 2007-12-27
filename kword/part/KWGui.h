@@ -22,7 +22,6 @@
 
 
 #include <QWidget>
-#include <QScrollBar>
 
 class KWView;
 class KWCanvas;

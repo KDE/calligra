@@ -194,4 +194,3 @@ void KWFrameGeometry::updateAspectRatio(bool keep) {
         widget.height->changeValue(m_originalSize.width() / m_originalSize.height() * widget.width->value());
 }
 
-#include "KWFrameGeometry.moc"

@@ -19,23 +19,18 @@
 */
 
 #include "KWClassicSerialDataSource.h"
-#include "KWClassicSerialDataSource.moc"
 #include "KWMailMergeDataBase.h"
 #include <kinputdialog.h>
-#include <QLabel>
 
-#include <QLayout>
 
 #include <QPushButton>
 #include <QLineEdit>
-#include <QValidator>
 //Added by qt3to4:
 #include <QResizeEvent>
 #include <Q3VBoxLayout>
 #include <klocale.h>
 #include <kdebug.h>
 #include <QToolButton>
-#include <QToolTip>
 #include <kiconloader.h>
 #include <q3header.h>
 #include <kvbox.h>

@@ -25,7 +25,6 @@
 #include <QTextList>
 #include <QTextBlock>
 #include <QTextCursor>
-#include <QTextListFormat>
 #include <kdebug.h>
 
 #include <KoParagraphStyle.h>

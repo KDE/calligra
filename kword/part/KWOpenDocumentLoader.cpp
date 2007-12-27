@@ -51,9 +51,9 @@
 
 // KDE + Qt includes
 #include <QTextCursor>
-#include <QTextBlock>
 #include <klocale.h>
 #include <kdebug.h>
+#include <QTextBlock>
 
 /**
 * The KWOpenDocumentFrameLoader class implements a KoTextFrameLoader to
@@ -692,4 +692,3 @@ void KWOpenDocumentLoader::loadFrame(KoTextLoadingContext& context, const KoXmlE
     d->frameLoader->loadFrame(context, frameElem, cursor);
 }
 
-#include "KWOpenDocumentLoader.moc"

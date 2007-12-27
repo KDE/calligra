@@ -25,7 +25,6 @@
 
 #include <KoShapeConfigWidgetBase.h>
 
-#include <QWidget>
 #include <QList>
 
 class KWFrame;

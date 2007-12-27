@@ -35,11 +35,12 @@
 #include <KoToolBoxFactory.h>
 #include <KoToolDockerFactory.h>
 #include <KoRulerController.h>
-
 #include <KActionCollection>
+
 #include <QGridLayout>
 #include <QTimer>
 #include <QAction>
+#include <QScrollBar>
 
 KWGui::KWGui( const QString& viewMode, KWView *parent )
   : QWidget( parent),
@@ -169,4 +170,3 @@ void KWGui::setupUnitActions() {
     m_horizontalRuler->setPopupActionList(unitActions);
 }
 
-#include "KWGui.moc"

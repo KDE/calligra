@@ -104,4 +104,3 @@ void KWPageSettingsDialog::showTextDirection(bool on) {
     m_pageLayoutWidget->showTextDirection(on);
 }
 
-#include <KWPageSettingsDialog.moc>

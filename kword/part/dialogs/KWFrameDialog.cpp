@@ -89,4 +89,3 @@ QList<KoShapeConfigFactory *> KWFrameDialog::panels(KWDocument *doc) {
     return answer;
 }
 
-#include "KWFrameDialog.moc"

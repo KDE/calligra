@@ -23,8 +23,6 @@
 #include "Variable.h"
 
 // qt
-#include <QApplication>
-#include <QDockWidget>
 // kde
 #include <klocale.h>
 #include <kgenericfactory.h>
@@ -86,4 +84,3 @@ KWScriptingPart::~KWScriptingPart()
     delete d;
 }
 
-#include "KWScriptingPart.moc"

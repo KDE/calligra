@@ -18,11 +18,9 @@
 */
 
 #include "KWQtSqlMailMergeOpen.h"
-#include "KWQtSqlMailMergeOpen.moc"
 #include <kcombobox.h>
 #include <klineedit.h>
 #include <kdebug.h>
-#include <QLayout>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 #include <kconfig.h>
@@ -30,7 +28,6 @@
 #include <klineeditdlg.h>
 #include <kiconloader.h>
 #include <qsqldatabase.h>
-#include <QPointer>
 #include <klocale.h>
 
 /******************************************************************

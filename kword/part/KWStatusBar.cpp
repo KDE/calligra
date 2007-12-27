@@ -21,7 +21,6 @@
 
 #include <QPoint>
 #include <QLabel>
-#include <QTextDocument>
 #include <QTextCursor>
 #include <QFontMetrics>
 #include <QPointer>
@@ -266,4 +265,3 @@ void KWStatusBar::slotMousePositionChanged(const QPoint& pos)
     d->mousePosLabel->setText( QString("%1:%2").arg(pos.x()).arg(pos.y()) );
 }
 
-#include "KWStatusBar.moc"

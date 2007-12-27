@@ -22,7 +22,6 @@
 
 #include <QPointer>
 #include <QObject>
-#include <QTextDocument>
 #include <kdebug.h>
 
 #include <KoShapeRegistry.h>

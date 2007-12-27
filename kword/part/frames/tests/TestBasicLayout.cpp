@@ -9,7 +9,6 @@
 #include "KWTextFrame.h"
 #include "KWord.h"
 
-#include <QList>
 #include <kcomponentdata.h>
 
 class Helper {

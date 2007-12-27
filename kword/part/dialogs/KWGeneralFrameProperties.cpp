@@ -171,4 +171,3 @@ void KWGeneralFrameProperties::keepAspectChanged() {
     m_state->setKeepAspectRatio( widget.keepAspectRatio->checkState() == Qt::Checked );
 }
 
-#include "KWGeneralFrameProperties.moc"

@@ -65,8 +65,6 @@
 
 // KDE + Qt includes
 #include <QHBoxLayout>
-#include <QTextDocument>
-#include <QTimer>
 #include <QMenu>
 #include <klocale.h>
 #include <kdebug.h>
@@ -1052,4 +1050,3 @@ void KWView::selectionChanged()
     }
 }
 
-#include "KWView.moc"

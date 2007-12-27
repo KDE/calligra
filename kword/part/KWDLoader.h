@@ -21,9 +21,9 @@
 #define KWDLOADER_H
 
 #include <QObject>
-#include <QTextCursor>
 
 #include <KoXmlReader.h>
+#include <QTextDocument>
 
 class KWDocument;
 class KWFrameSet;

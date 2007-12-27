@@ -22,7 +22,6 @@
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWTextFrame.h"
 
-#include <QHeaderView>
 
 KWFrameConnectSelector::KWFrameConnectSelector(FrameConfigSharedState *state)
     : m_state(state),
@@ -131,4 +130,3 @@ void KWFrameConnectSelector::open(KoShape *shape) {
     open(frame);
 }
 
-#include "KWFrameConnectSelector.moc"

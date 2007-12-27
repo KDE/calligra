@@ -24,8 +24,6 @@
 
 #include <KoTextDocumentLayout.h>
 
-#include <QRectF>
-#include <QSizeF>
 
 class KWTextFrameSet;
 class KWAnchorStrategy;

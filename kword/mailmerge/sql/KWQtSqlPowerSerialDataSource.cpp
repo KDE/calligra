@@ -18,9 +18,7 @@
 */
 
 #include "KWQtSqlPowerSerialDataSource.h"
-#include "KWQtSqlPowerSerialDataSource.moc"
 #include "KWQtSqlMailMergeOpen.h"
-#include <QLayout>
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
@@ -28,7 +26,6 @@
 #include <klineedit.h>
 #include <kpushbutton.h>
 #include <qsqldatabase.h>
-#include <QMessageBox>
 #include <kpassworddialog.h>
 #include <qsqlrecord.h>
 #include <q3sqlcursor.h>

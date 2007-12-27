@@ -286,4 +286,3 @@ KoText::Direction KWPageLayout::textDirection() const {
     }
 }
 
-#include <KWPageLayout.moc>

@@ -20,8 +20,6 @@
 
 
 #include <q3vbox.h>
-#include <QLayout>
-#include <QLineEdit>
 //Added by qt3to4:
 #include <Q3VBoxLayout>
 
@@ -549,4 +547,3 @@ QString KWMailMergeKABCConfigListItem::text( int column ) const
     }
 }
 
-#include "KWMailMergeKABCConfig.moc"

@@ -25,7 +25,6 @@
 //#include <QStringList>
 #include <QObject>
 #include <QAction>
-#include <QPointer>
 #include <QSignalMapper>
 
 #include <kdebug.h>

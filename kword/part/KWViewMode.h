@@ -28,7 +28,6 @@ class KWCanvas;
 #include <QRectF>
 #include <QSizeF>
 #include <QObject>
-#include <QMap>
 #include <QRect>
 
 /**

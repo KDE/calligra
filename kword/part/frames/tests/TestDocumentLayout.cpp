@@ -9,7 +9,6 @@
 #include <KoTextBlockData.h>
 #include <KoStyleManager.h>
 
-#include <QtGui>
 
 #include <kdebug.h>
 #include <kcomponentdata.h>

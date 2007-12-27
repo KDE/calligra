@@ -86,4 +86,3 @@ void KWFrameSet::printDebug(KWFrame *frame) {
 }
 #endif
 
-#include "KWFrameSet.moc"

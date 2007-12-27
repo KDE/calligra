@@ -34,4 +34,3 @@ KWStatisticsDialog::KWStatisticsDialog (KWView *parent)
 KWStatisticsDialog::~KWStatisticsDialog() {
 }
 
-#include "KWStatisticsDialog.moc"

@@ -74,5 +74,4 @@ QDockWidget* KWStatisticsDockerFactory::createDockWidget()
     return widget;
 }
 
-#include "KWStatisticsDocker.moc"
 

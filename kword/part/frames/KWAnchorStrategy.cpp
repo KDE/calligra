@@ -25,7 +25,6 @@
 
 #include <QTextBlock>
 #include <QTextLine>
-#include <QTextDocument>
 
 #include <KDebug>
 

@@ -23,10 +23,6 @@
 #include <KoViewConverter.h>
 #include <KoTextShapeData.h>
 
-#include <QTextFrame>
-#include <QTextDocument>
-#include <QTextBlock>
-#include <QTextFragment>
 #include <kdebug.h>
 
 KWTextFrame::KWTextFrame(KoShape *shape, KWTextFrameSet *parent)

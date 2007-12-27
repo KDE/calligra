@@ -281,4 +281,3 @@ void KWCanvas::paintEvent(QPaintEvent * ev) {
     painter.end();
 }
 
-#include "KWCanvas.moc"

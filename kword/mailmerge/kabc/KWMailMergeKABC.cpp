@@ -33,7 +33,6 @@
 #include "KWMailMergeKABC.h"
 #include "KWMailMergeKABCConfig.h"
 //Added by qt3to4:
-#include <Q3ValueList>
 
 KWMailMergeKABC::KWMailMergeKABC( const KComponentData &inst, QObject *parent )
         : KWMailMergeDataSource( inst, parent )
@@ -548,6 +547,5 @@ extern "C"
 
 
 
-#include "KWMailMergeKABC.moc"
 
 

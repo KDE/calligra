@@ -30,9 +30,9 @@
 #include <KoSelection.h>
 #include <KoShape.h>
 
+#include <QTextLayout>
 #include <QTextDocument>
 #include <QTextBlock>
-#include <QTextLayout>
 #include <QTimer>
 
 KWStatistics::KWStatistics(KoCanvasResourceProvider *provider, KWDocument* document, KoSelection *selection, QWidget *parent)
@@ -290,4 +290,3 @@ void KWStatistics::selectionChanged()
     }
 }
 
-#include <KWStatistics.moc>

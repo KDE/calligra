@@ -688,4 +688,3 @@ KWTextFrameSet *KWFrameLayout::mainFrameSet() const {
     return m_maintext;
 }
 
-#include "KWFrameLayout.moc"

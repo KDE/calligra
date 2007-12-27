@@ -1131,4 +1131,3 @@ void KWDLoader::insertAnchors() {
     m_anchors.clear();
 }
 
-#include "KWDLoader.moc"

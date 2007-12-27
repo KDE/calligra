@@ -18,11 +18,9 @@
 */
 
 #include "KWQtSqlSerialDataSource.h"
-#include "KWQtSqlSerialDataSource.moc"
 #include "KWQtSqlEasyFilter.h"
 
 #include <klocale.h>
-#include <QLayout>
 #include <q3sqlcursor.h>
 #include <q3datatable.h>
 #include <QCheckBox>

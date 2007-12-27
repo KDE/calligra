@@ -123,4 +123,3 @@ void KWPagePreview::setColumns(const KoColumns &columns) {
     update();
 }
 
-#include "KWPagePreview.moc"

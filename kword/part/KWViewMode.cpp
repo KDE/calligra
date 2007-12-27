@@ -59,4 +59,3 @@ KWViewMode *KWViewMode::create( const QString& viewModeType, KWCanvas* canvas ) 
     return new KWViewModeNormal(canvas);
 }
 
-#include "KWViewMode.moc"

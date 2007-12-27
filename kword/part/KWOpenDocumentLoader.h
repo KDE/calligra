@@ -23,7 +23,6 @@
 #ifndef KWOPENDOCUMENTLOADER_H
 #define KWOPENDOCUMENTLOADER_H
 
-#include <QObject>
 #include <KoStore.h>
 #include <KoTextLoader.h>
 

@@ -23,7 +23,6 @@
 #include <QPointer>
 #include <QObject>
 #include <QTextDocument>
-#include <QAbstractTextDocumentLayout>
 #include <kdebug.h>
 #include <KoVariable.h>
 #include <KoVariableManager.h>

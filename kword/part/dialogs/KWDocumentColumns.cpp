@@ -59,4 +59,3 @@ void KWDocumentColumns::optionsChanged() {
     emit columnsChanged(m_columns);
 }
 
-#include <KWDocumentColumns.moc>

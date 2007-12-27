@@ -67,7 +67,6 @@
 #include <QTimer>
 #include <QThread>
 #include <QCoreApplication>
-#include <QUrl>
 
 KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewMode )
     : KoDocument(parentWidget, parent, singleViewMode),
@@ -782,4 +781,3 @@ void PageProcessingQueue::process() {
     m_pages.clear();
     deleteLater();
 }
-#include "KWDocument.moc"

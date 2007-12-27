@@ -101,4 +101,3 @@ void KWStartupWidget::buttonClicked() {
     emit documentSelected();
 }
 
-#include <KWStartupWidget.moc>

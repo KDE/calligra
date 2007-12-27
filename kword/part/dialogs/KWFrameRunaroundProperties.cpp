@@ -106,4 +106,3 @@ void KWFrameRunaroundProperties::save() {
     m_state->removeUser();
 }
 
-#include "KWFrameRunaroundProperties.moc"

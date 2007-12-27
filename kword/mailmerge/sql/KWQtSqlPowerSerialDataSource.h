@@ -29,7 +29,6 @@
 #include <q3sqlcursor.h>
 #include <qsqldriver.h>
 /* END FOR THE DIRTY HACK */
-#include <QPointer>
 
 #include "defs.h"
 #include "KWMailMergeDataSource.h"

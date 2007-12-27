@@ -29,7 +29,6 @@
 #include <KoInsets.h>
 #include <KoShapeManager.h>
 
-#include <QPainter>
 
 // #define PRINT_VIA_KRITA
 

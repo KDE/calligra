@@ -30,8 +30,7 @@
 // #include "KWFrameViewManager.h"
 // #include "KWFrameView.h"
 // #include "KWGUI.h"
-// #include <QApplication>
-// #include <kdebug.h>
+// // #include <kdebug.h>
 
 
 KWViewModePreview::KWViewModePreview( KWCanvas* canvas )

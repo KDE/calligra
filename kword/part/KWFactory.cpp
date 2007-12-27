@@ -78,4 +78,3 @@ const KComponentData &KWFactory::componentData()
     return *s_instance;
 }
 
-#include "KWFactory.moc"
