@@ -177,7 +177,7 @@ ChartShape::Private::Private()
     title                  = 0;
     subTitle               = 0;
     footer                 = 0;
-    borderWidth            = 10;
+    borderWidth            = 15;
 }
 
 
@@ -241,7 +241,7 @@ ChartShape::~ChartShape()
 void ChartShape::refreshPixmap( QPainter &painter, const KoViewConverter &converter )
 {
     // Adjust the size of the painting area to the current zoom level
-    QSize paintRectSize = converter.documentToView( size() ).toSize();
+    const QSize paintRectSize = converter.documentToView( size() ).toSize();
     d->pixmap = QPixmap( paintRectSize );
     const QRect paintRect = QRect( QPoint( 0, 0 ), paintRectSize );
 
@@ -251,8 +251,11 @@ void ChartShape::refreshPixmap( QPainter &painter, const KoViewConverter &conver
 
     // Paint the background
     pixmapPainter.fillRect( paintRect, KApplication::palette().base() );
-    pixmapPainter.setViewport( pixmapPainter.viewport().adjusted( d->borderWidth, d->borderWidth, -d->borderWidth, -d->borderWidth ) );
-    d->chart->paint( &pixmapPainter, paintRect );
+
+    // scale the painter's coordinate system to fit the current zoom level
+    applyConversion( pixmapPainter, converter );
+
+    d->chart->paint( &pixmapPainter, QRect( QPoint( 0, 0 ), size().toSize() ) );
 }
 
 KDChart::Chart* ChartShape::chart() const
@@ -791,10 +794,9 @@ ChartTypeOptions ChartShape::chartTypeOptions( OdfChartType type ) const
 void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
     // Calculate the clipping rect
-    QRectF clipRect  = painter.clipRegion().boundingRect();
-    QRectF paintRect = converter.documentToView( QRectF( position(), size() ) );
-    clipRect.intersect( paintRect );
-    painter.setClipRect( clipRect );
+    QRectF paintRect = QRectF( QPointF( 0, 0 ), size() );
+    //clipRect.intersect( paintRect );
+    painter.setClipRect( converter.documentToView( paintRect ) );
 
     // Get the current zoom level
     QPointF zoomLevel;
