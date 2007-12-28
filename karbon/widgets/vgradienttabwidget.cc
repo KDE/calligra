@@ -607,11 +607,8 @@ void VGradientTabWidget::importGradient()
     QString filter( "*.svg *.ggr" );
     QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose Gradient to Add" ) );
 
-    KoResourceServer<KoAbstractGradient>* srv = KoResourceServerProvider::instance()->gradientServer();
-    KoAbstractGradient* grad = srv->importResource(filename);
-
-    if( grad )
-        m_predefGradientsView->addItem( new KarbonGradientItem( grad ) );
+    if(m_resourceAdapter)
+        m_resourceAdapter->importResource(filename);
 }
 
 void VGradientTabWidget::deletePredef()
