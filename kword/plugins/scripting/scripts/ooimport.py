@@ -58,10 +58,10 @@ class Importer:
         filters.append("*|All Files")
         openwidget.setFilter("\n".join(filters))
 
-        configpage = dialog.addPage("Connect","OpenOffice.org UNO Connection","connect-no")
+        configpage = dialog.addPage("Connect","OpenOffice.org UNO Connection","network-server")
         configwidget = self.forms.createWidgetFromUIFile(configpage, os.path.join(self.action.currentPath(),"ooimportconfig.ui"))
 
-        importpage = dialog.addPage("Options","Import Options","configure")
+        importpage = dialog.addPage("Options","Import Options","preferences-other")
         importwidget = self.forms.createWidgetFromUIFile(importpage, os.path.join(self.action.currentPath(),"ooimport.ui"))
 
         while True:
