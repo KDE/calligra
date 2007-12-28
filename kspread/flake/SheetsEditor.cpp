@@ -70,7 +70,7 @@ SheetsEditor::SheetsEditor(TableShape* tableShape, QWidget* parent)
     connect(d->renamebtn, SIGNAL(clicked()), this, SLOT(renameClicked()));
     btnlayout->addWidget(d->renamebtn);
 
-    d->addbtn = new QPushButton(/*KIcon("edit-add"),*/ i18n("Add"), this);
+    d->addbtn = new QPushButton(/*KIcon("list-add"),*/ i18n("Add"), this);
     connect(d->addbtn, SIGNAL(clicked()), this, SLOT(addClicked()));
     btnlayout->addWidget(d->addbtn);
 
