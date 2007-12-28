@@ -290,7 +290,7 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 }
 
 VGradientTabWidget::VGradientTabWidget( QWidget* parent )
-    : QTabWidget( parent ), m_gradient( 0 ), m_resourceServer( 0 ), m_gradOpacity( 1.0 )
+    : QTabWidget( parent ), m_gradient( 0 ), m_resourceServer( 0 ), m_resourceAdapter(0), m_gradOpacity( 1.0 )
 {
     // create a default gradient
     m_gradient = new QLinearGradient( QPointF(0,0), QPointF(100,100) );
@@ -303,6 +303,7 @@ VGradientTabWidget::VGradientTabWidget( QWidget* parent )
 
 VGradientTabWidget::~VGradientTabWidget()
 {
+    delete m_resourceAdapter;
     delete m_gradient;
 }
 
@@ -454,8 +455,16 @@ void VGradientTabWidget::setTarget( VGradientTarget target )
 
 void VGradientTabWidget::setResourceServer( KoResourceServer<KoAbstractGradient>* server )
 {
+    delete m_resourceAdapter;
+    m_resourceAdapter = 0;
     m_resourceServer = server;
-    updatePredefGradients();
+
+    if( m_resourceServer )
+    {
+        m_resourceAdapter = new KoResourceServerAdapter<KoAbstractGradient>( m_resourceServer );
+        connect( m_resourceAdapter, SIGNAL(resourceAdded(KoResource*)), 
+                 this, SLOT(addResource(KoResource*)));
+    }
 }
 
 void VGradientTabWidget::combosChange( int )
@@ -619,6 +628,14 @@ void VGradientTabWidget::stopsChanged()
 {
     m_gradient->setStops( m_gradientWidget->stops() );
     emit changed();
+}
+
+void VGradientTabWidget::addResource(KoResource* resource)
+{
+    KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>( resource );
+
+    if( gradient && gradient->valid() )
+        m_predefGradientsView->addItem( new KarbonGradientItem( gradient ) );
 }
 
 #include "vgradienttabwidget.moc"

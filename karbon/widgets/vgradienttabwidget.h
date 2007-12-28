@@ -30,6 +30,7 @@
 #include <QtGui/QTableWidgetItem>
 
 #include <KoResourceServer.h>
+#include <KoResourceServerAdapter.h>
 #include <KoAbstractGradient.h>
 
 class KComboBox;
@@ -133,6 +134,7 @@ protected Q_SLOTS:
     void deletePredef();
     void opacityChanged( int );
     void stopsChanged();
+    void addResource(KoResource* resource);
 
 protected:
     virtual void resizeEvent ( QResizeEvent * event );
@@ -154,6 +156,7 @@ private:
 
     QGradient * m_gradient; /// the actual edited gradient
     KoResourceServer<KoAbstractGradient>* m_resourceServer; ///< the predefined gradients list.
+    KoResourceServerAdapter<KoAbstractGradient> * m_resourceAdapter;
     double m_gradOpacity;    ///< the gradient opacity
 };
 
