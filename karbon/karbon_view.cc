@@ -242,6 +242,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     if( shell() )
     {
         KoToolManager::instance()->addController( m_canvasController );
+        KoToolManager::instance()->registerTools( actionCollection(), m_canvasController );
         // set the first layer active
         m_canvasController->canvas()->shapeManager()->selection()->setActiveLayer( part()->document().layers().first() );
 
