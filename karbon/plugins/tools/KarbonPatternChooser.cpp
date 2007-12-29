@@ -28,12 +28,12 @@
 KarbonPatternChooser::KarbonPatternChooser( QWidget *parent )
     : KoResourceItemChooser( parent )
 {
-    m_resourceAdapter = new KoResourceServerAdapter<KoPattern>( 0 );
+    m_resourceAdapter = new KoResourceServerAdapter<KoPattern>(KoResourceServerProvider::instance()->patternServer());
 
     connect( m_resourceAdapter, SIGNAL(resourceAdded(KoResource*)),
              this, SLOT(addPattern(KoResource*)));
 
-    m_resourceAdapter->setResourceServer( KoResourceServerProvider::instance()->patternServer() );
+    m_resourceAdapter->connectToResourceServer();
 
     connect( this, SIGNAL( importClicked() ), this, SLOT( importPattern() ) );
     connect( this, SIGNAL( deleteClicked() ), this, SLOT( deletePattern() ) );
