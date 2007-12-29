@@ -22,7 +22,6 @@
 #include "KarbonPatternEditStrategy.h"
 #include "KarbonPatternItem.h"
 
-#include <KoResourceItemChooser.h>
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
@@ -31,27 +30,13 @@
 #include <KoShapeBackgroundCommand.h>
 #include <KoPointerEvent.h>
 #include <KoPattern.h>
-#include <KoResourceServer.h>
-#include <KoResourceServerProvider.h>
 
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kfiledialog.h>
-#include <kdebug.h>
-#include <kglobal.h>
-#include <kcomponentdata.h>
-#include <kstandarddirs.h>
-
-#include <QPainter>
-#include <QWidget>
-#include <QGridLayout>
-#include <QButtonGroup>
-#include <QPushButton>
-#include <QFileInfo>
-#include <QUndoCommand>
+#include <QtGui/QPainter>
+#include <QtGui/QWidget>
+#include <QtGui/QUndoCommand>
 
 KarbonPatternTool::KarbonPatternTool(KoCanvasBase *canvas)
-: KoTool( canvas ), m_patternChooser( 0 ), m_currentStrategy( 0 )
+: KoTool( canvas ), m_currentStrategy( 0 )
 {
 }
 

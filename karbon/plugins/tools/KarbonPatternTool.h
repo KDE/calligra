@@ -23,11 +23,8 @@
 #include <KoTool.h>
 
 class QPainter;
-class QButtonGroup;
 class QTableWidgetItem;
-class KoResourceItemChooser;
 class KarbonPatternEditStrategy;
-class KarbonPatternItem;
 
 class KarbonPatternTool : public KoTool
 {
@@ -54,9 +51,8 @@ private slots:
     virtual void resourceChanged( int key, const QVariant & res );
     void patternSelected( QTableWidgetItem * item );
     void initialize();
-private:
-    KoResourceItemChooser * m_patternChooser;
 
+private:
     QList<KarbonPatternEditStrategy*> m_patterns;  ///< the list of editing strategies, one for each shape
     KarbonPatternEditStrategy * m_currentStrategy; ///< the current editing strategy
 };
