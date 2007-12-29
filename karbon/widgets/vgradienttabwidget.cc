@@ -461,9 +461,10 @@ void VGradientTabWidget::setResourceServer( KoResourceServer<KoAbstractGradient>
 
     if( m_resourceServer )
     {
-        m_resourceAdapter = new KoResourceServerAdapter<KoAbstractGradient>( m_resourceServer );
+        m_resourceAdapter = new KoResourceServerAdapter<KoAbstractGradient>( 0 );
         connect( m_resourceAdapter, SIGNAL(resourceAdded(KoResource*)), 
                  this, SLOT(addResource(KoResource*)));
+        m_resourceAdapter->setResourceServer( m_resourceServer );
     }
 }
 
