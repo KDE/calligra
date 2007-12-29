@@ -53,12 +53,9 @@ protected:
 private slots:
     virtual void resourceChanged( int key, const QVariant & res );
     void patternSelected( QTableWidgetItem * item );
-    void importPattern();
-    void deletePattern();
     void initialize();
 private:
     KoResourceItemChooser * m_patternChooser;
-    KarbonPatternItem * m_currentPattern;
 
     QList<KarbonPatternEditStrategy*> m_patterns;  ///< the list of editing strategies, one for each shape
     KarbonPatternEditStrategy * m_currentStrategy; ///< the current editing strategy

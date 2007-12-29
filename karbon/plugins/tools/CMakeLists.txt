@@ -14,6 +14,7 @@ set(karbon_tools_PART_SRCS
    KarbonPatternToolFactory.cpp
    KarbonPatternEditStrategy.cpp
    KarbonPatternItem.cpp
+   KarbonPatternChooser.cpp
 )
 
 
