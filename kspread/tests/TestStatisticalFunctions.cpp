@@ -254,6 +254,18 @@ void TestStatisticalFunctions::initTestCase()
     storage->setValue(9,31, Value(  1 ) );
 }
 
+void TestStatisticalFunctions::testAVEDEV()
+{
+    // ODF-tests
+    CHECK_EVAL("AVEDEV(1;2;3;4)",              Value( 1 ) ); //
+}
+
+void TestStatisticalFunctions::testAVERAGE()
+{
+    // ODF-tests
+    CHECK_EVAL("AVERAGE(2; 4)",                Value( 3 ) ); //
+}
+
 void TestStatisticalFunctions::testAVERAGEA()
 {
     // ODF-tests

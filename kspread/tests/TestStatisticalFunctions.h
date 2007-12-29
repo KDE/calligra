@@ -39,8 +39,8 @@ private slots:
     void initTestCase();
 
 //     void testARRANG(); // alias PERMUT
-//     void testAVEDEV();
-//     void testAVERAGE();
+    void testAVEDEV();
+    void testAVERAGE();
     void testAVERAGEA();
     void testBETADIST();    
     void testBETAINV();
