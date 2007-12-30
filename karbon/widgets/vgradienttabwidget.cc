@@ -568,9 +568,7 @@ void VGradientTabWidget::addGradientToPredefs()
     g->setFilename( fileInfo.filePath() );
     g->setValid( true );
 
-    if( m_resourceServer->addResource( g ) )
-        m_predefGradientsView->addItem( new KarbonGradientItem( g ) );
-    else
+    if( !m_resourceServer->addResource( g ) )
         delete g;
 }
 
