@@ -40,7 +40,7 @@ KisPaintDeviceSP OraLoadContext::loadDeviceData( QString filename)
         KoStoreDevice io ( m_store );
         if ( !io.open( QIODevice::ReadOnly ) )
         {
-            kDebug(41008) <<"Couldn't open for reading:" << filename;
+            dbgFile <<"Couldn't open for reading:" << filename;
             return 0;
         }
         KisPNGConverter pngConv(0, 0 );

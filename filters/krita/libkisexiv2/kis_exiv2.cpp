@@ -23,7 +23,7 @@
 
 #include <kis_meta_data_value.h>
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include <QtCore/QDateTime>
 
@@ -38,11 +38,11 @@ KisMetaData::Value exivValueToKMDValue( const Exiv2::Value::AutoPtr value )
         case Exiv2::invalidTypeId:
         case Exiv2::lastTypeId:
         case Exiv2::directory:
-            kDebug() <<"Invalid value :" << value->typeId() <<" value =" << value->toString().c_str();
+            dbgFile <<"Invalid value :" << value->typeId() <<" value =" << value->toString().c_str();
             return KisMetaData::Value();
         case Exiv2::undefined:
         {
-            kDebug() <<"Undefined value :" << value->typeId() <<" value =" << value->toString().c_str();
+            dbgFile <<"Undefined value :" << value->typeId() <<" value =" << value->toString().c_str();
             QByteArray array( value->count() ,0);
             value->copy((Exiv2::byte*)array.data(), Exiv2::invalidByteOrder);
             return KisMetaData::Value(array);
@@ -75,7 +75,7 @@ KisMetaData::Value exivValueToKMDValue( const Exiv2::Value::AutoPtr value )
         case Exiv2::time:
             return KisMetaData::Value(QDateTime::fromString(value->toString().c_str(), Qt::ISODate));
     }
-    kDebug() <<"Unknown type id :" << value->typeId() <<" value =" << value->toString().c_str();
+    dbgFile <<"Unknown type id :" << value->typeId() <<" value =" << value->toString().c_str();
     Q_ASSERT(false); // This point must never be reached !
     return KisMetaData::Value();
 }
@@ -119,7 +119,7 @@ Exiv2::Value* variantToExivValue( const QVariant& variant, Exiv2::TypeId type )
         case Exiv2::comment:
             return new Exiv2::CommentValue(qPrintable(variant.toString()));
         default:
-            kDebug() <<"Unhandled type:" << type;
+            dbgFile <<"Unhandled type:" << type;
             Q_ASSERT(false);
             return 0;
     }

@@ -39,7 +39,7 @@ OraImport::~OraImport()
 
 KoFilter::ConversionStatus OraImport::convert(const QByteArray&, const QByteArray& to)
 {
-    kDebug(41008) <<"Importing using ORAImport!";
+    dbgFile <<"Importing using ORAImport!";
 
     if (to != "application/x-krita")
         return KoFilter::BadMimeType;

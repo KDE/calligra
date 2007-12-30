@@ -27,7 +27,7 @@
 #include <qradiobutton.h>
 
 // KDE's headers
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <k3listbox.h>
 #include <knuminput.h>
 
@@ -120,7 +120,7 @@ void KisPDFImportWidget::updateMaxCanvasSize() {
     }
     m_maxWidthInch /= 72.;
     m_maxHeightInch /= 72.;
-    kDebug() << m_maxWidthInch <<"" << m_maxHeightInch;
+    dbgFile << m_maxWidthInch <<"" << m_maxHeightInch;
     updateWidth();
     updateHeight();
 }

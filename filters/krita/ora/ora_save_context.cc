@@ -38,14 +38,14 @@ QString OraSaveContext::saveDeviceData(KisPaintLayerSP layer)
         KoStoreDevice io ( m_store );
         if ( not io.open( QIODevice::WriteOnly ) )
         {
-            kDebug(41008) <<"Couldn't open for writing:" << filename;
+            dbgFile <<"Couldn't open for writing:" << filename;
             return "";
         }
         KisPNGConverter pngconv(0, layer->image()->undoAdapter());
         vKisAnnotationSP_it annotIt = 0;
         if( pngconv.buildFile(&io, layer->image(), layer->paintDevice(), annotIt, annotIt, 0, false, true) != KisImageBuilder_RESULT_OK)
         {
-            kDebug(41008) <<"Saving PNG failed:" << filename;
+            dbgFile <<"Saving PNG failed:" << filename;
             return "";
         }
         io.close();
@@ -54,7 +54,7 @@ QString OraSaveContext::saveDeviceData(KisPaintLayerSP layer)
             return "";
         }
     } else {
-        kDebug(41008) <<"Opening of data file failed :" << filename;
+        dbgFile <<"Opening of data file failed :" << filename;
         return "";
     }
     
@@ -69,6 +69,6 @@ void OraSaveContext::saveStack(const QDomDocument& doc)
         io.close();
         m_store->close();
     } else {
-        kDebug(41008) <<"Opening of the stack.xml file failed :";
+        dbgFile <<"Opening of the stack.xml file failed :";
     }
 }

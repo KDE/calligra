@@ -100,7 +100,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
         return KoFilter::NotImplemented;
     }
 
-    kDebug(41008) <<"Krita importing from Raw";
+    dbgFile <<"Krita importing from Raw";
 
     KisDoc2 * doc = dynamic_cast<KisDoc2*>(m_chain -> outputDocument());
     if (!doc) {
@@ -201,7 +201,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
             else {
                cs  = KoColorSpaceRegistry::instance()->colorSpace( "RGBA", profile() );
             }
-            if (cs == 0) { kDebug() <<"No CS"; return KoFilter::InternalError; }
+            if (cs == 0) { dbgFile <<"No CS"; return KoFilter::InternalError; }
 
             image = new KisImage(doc->undoAdapter(), img.width(), img.height(), cs, filename);
             if (image.isNull()) return KoFilter::CreationError;
@@ -221,7 +221,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
             quint32 startOfImagedata = 0;
             QSize sz = determineSize(startOfImagedata);
 
-            kDebug(41008) <<"Total bytes:" << m_data->size()
+            dbgFile <<"Total bytes:" << m_data->size()
                     << "\n start of image data: " << startOfImagedata
                     << "\n bytes for pixels left: " << m_data->size() - startOfImagedata
                     << "\n total pixels: " << sz.width() * sz.height()
@@ -290,11 +290,11 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
             }
         }
         layer->setDirty();
-        kDebug() <<"going to set image";
+        dbgFile <<"going to set image";
         doc -> setCurrentImage(image);
         doc -> undoAdapter() -> setUndo(true);
         doc -> setModified(false);
-        kDebug() <<"everything ok";
+        dbgFile <<"everything ok";
 
         QApplication::restoreOverrideCursor();
         image->unlock();
@@ -316,7 +316,7 @@ void KisRawImport::slotUpdatePreview()
     QApplication::setOverrideCursor(Qt::WaitCursor);
     getImageData(createArgumentList(true));
 
-    kDebug(41008) <<"Retrieved" << m_data->size() <<" bytes of image data";
+    dbgFile <<"Retrieved" << m_data->size() <<" bytes of image data";
 
     if (m_data->isNull()) return;
 
@@ -332,7 +332,7 @@ void KisRawImport::slotUpdatePreview()
         quint32 startOfImagedata = 0;
         QSize sz = determineSize(startOfImagedata);
 
-        kDebug(41008) <<"Total bytes:" << m_data->size()
+        dbgFile <<"Total bytes:" << m_data->size()
                   << "\n start of image data: " << startOfImagedata
                   << "\n bytes for pixels left: " << m_data->size() - startOfImagedata
                   << "\n total pixels: " << sz.width() * sz.height()
@@ -401,7 +401,7 @@ void KisRawImport::getImageData( QStringList arguments )
     //    delete m_process;
     delete m_data;
 
-    kDebug(41008) <<"getImageData" << arguments.join("") <<"";
+    dbgFile <<"getImageData" << arguments.join("") <<"";
     K3Process process (this);
     m_data = new QByteArray(0);
 
@@ -415,22 +415,22 @@ void KisRawImport::getImageData( QStringList arguments )
     connect(&process, SIGNAL(processExited(K3Process *)), this, SLOT(slotProcessDone()));
 
 
-    kDebug(41008) <<"Starting process";
+    dbgFile <<"Starting process";
 
     if (!process.start(K3Process::NotifyOnExit, K3Process::AllOutput)) {
         KMessageBox::error( 0, i18n("Cannot convert RAW files because the dcraw executable could not be started."));
     }
     while (process.isRunning()) {
-        //kDebug(41008) <<"Waiting...";
+        //dbgFile <<"Waiting...";
         qApp->processEvents(QEventLoop::ExcludeUserInput);
         //process.wait(2);
     }
 
     if (process.normalExit()) {
-        kDebug(41008) <<"Return value of process:" << process.exitStatus() <<"";
+        dbgFile <<"Return value of process:" << process.exitStatus() <<"";
     }
     else {
-        kDebug(41008) <<"Process did not exit normally. Exit signal:" << process.exitSignal() <<"";
+        dbgFile <<"Process did not exit normally. Exit signal:" << process.exitSignal() <<"";
     }
 
 }
@@ -438,13 +438,13 @@ void KisRawImport::getImageData( QStringList arguments )
 
 void KisRawImport::slotProcessDone()
 {
-    kDebug(41008) <<"process done!";
+    dbgFile <<"process done!";
 }
 
 void KisRawImport::slotReceivedStdout(K3Process *, char *buffer, int buflen)
 {
-    //kDebug(41008) <<"stdout received" << buflen <<" bytes on stdout.";
-    //kDebug(41008) << QString::fromAscii(buffer, buflen) <<"";
+    //dbgFile <<"stdout received" << buflen <<" bytes on stdout.";
+    //dbgFile << QString::fromAscii(buffer, buflen) <<"";
     int oldSize = m_data->size();
     m_data->resize(oldSize + buflen);
     memcpy(m_data->data() + oldSize, buffer, buflen);
@@ -454,7 +454,7 @@ void KisRawImport::slotReceivedStderr(K3Process *, char *buffer, int buflen)
 {
     QByteArray b(buflen);
     memcpy(b.data(), buffer, buflen);
-    kDebug(41008) << QString(b) <<"";
+    dbgFile << QString(b) <<"";
     //KMessageBox::error(0, i18n("dcraw says: ") + QString(b));
 }
 
@@ -546,7 +546,7 @@ QSize KisRawImport::determineSize(quint32& startOfImageData)
 
     QString magick = QString::fromAscii(m_data->data(), 2);
     if (magick != "P6") {
-        kDebug(41008) <<" Bad magick!" << magick <<"";
+        dbgFile <<" Bad magick!" << magick <<"";
         startOfImageData = 0;
         return QSize(0,0);
     }
@@ -564,7 +564,7 @@ QSize KisRawImport::determineSize(quint32& startOfImageData)
     }
 
     QString size = QStringList::split("\n", QString::fromAscii(m_data->data(), i))[1];
-    kDebug(41008) <<"Header:" << QString::fromAscii(m_data->data(), i) <<"";
+    dbgFile <<"Header:" << QString::fromAscii(m_data->data(), i) <<"";
     QStringList sizelist = QStringList::split(" ", size);
     qint32 w = sizelist[0].toInt();
     qint32 h = sizelist[1].toInt();

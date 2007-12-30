@@ -60,7 +60,7 @@ bool hasVisibleWidgets()
 
 KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    kDebug(41008) <<"Png export! From:" << from <<", To:" << to <<"";
+    dbgFile <<"Png export! From:" << from <<", To:" << to <<"";
 
     KisDoc2 *output = dynamic_cast<KisDoc2*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
@@ -126,10 +126,10 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     KisImageBuilder_Result res;
 
     if ( (res = kpc.buildFile(url, img, l->paintDevice(), beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
-        kDebug(41008) <<"success !";
+        dbgFile <<"success !";
         return KoFilter::OK;
     }
-    kDebug(41008) <<" Result =" << res;
+    dbgFile <<" Result =" << res;
     return KoFilter::InternalError;
 }
 

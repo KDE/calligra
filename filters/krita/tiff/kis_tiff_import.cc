@@ -43,7 +43,7 @@ KisTIFFImport::~KisTIFFImport()
 
 KoFilter::ConversionStatus KisTIFFImport::convert(const QByteArray&, const QByteArray& to)
 {
-    kDebug(41008) <<"Importing using TIFFImport!";
+    dbgFile <<"Importing using TIFFImport!";
 
     if (to != "application/x-krita")
         return KoFilter::BadMimeType;

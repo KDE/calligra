@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include <kdebug.h>
+#include <kis_debug.h>
 
 #include "kis_iptc_io.h"
 
@@ -120,16 +120,16 @@ bool KisIptcIO::canSaveAllEntries(KisMetaData::Store* store) const
 bool KisIptcIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
 {
     initMappingsTable();
-    kDebug() <<"Loading IPTC Tags";
+    dbgFile <<"Loading IPTC Tags";
     ioDevice->open(QIODevice::ReadOnly);
     QByteArray arr = ioDevice->readAll();
     Exiv2::IptcData iptcData;
     iptcData.load((const Exiv2::byte*)arr.data(), arr.size());
-    kDebug() <<"There are" << iptcData.count() <<" entries in the IPTC section";
+    dbgFile <<"There are" << iptcData.count() <<" entries in the IPTC section";
     for(Exiv2::IptcMetadata::const_iterator it = iptcData.begin();
         it != iptcData.end(); ++it)
     {
-        kDebug() <<"Reading info for key" << it->key().c_str();
+        dbgFile <<"Reading info for key" << it->key().c_str();
         if(d->iptcToKMD.contains(it->key().c_str()))
         {
             const IPTCToKMD& iptcToKMd = d->iptcToKMD[it->key().c_str()];

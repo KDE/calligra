@@ -83,7 +83,7 @@ namespace {
     }
 
     QString getColorSpaceForColorType(J_COLOR_SPACE color_type) {
-        kDebug(41008) <<"color_type =" << color_type;
+        dbgFile <<"color_type =" << color_type;
         if(color_type == JCS_GRAYSCALE)
         {
             return "GRAYA";
@@ -141,7 +141,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     // Get the colorspace
     QString csName = getColorSpaceForColorType(cinfo.out_color_space);
     if(csName.isEmpty()) {
-        kDebug(41008) <<"unsupported colorspace :" << cinfo.out_color_space;
+        dbgFile <<"unsupported colorspace :" << cinfo.out_color_space;
         jpeg_destroy_decompress(&cinfo);
         fclose(fp);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
@@ -159,10 +159,10 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         if (hProfile != (cmsHPROFILE) NULL) {
             profile = new KoIccColorProfile( profile_rawdata);
             Q_CHECK_PTR(profile);
-//             kDebug(41008) <<"profile name:" << profile->productName() <<" profile description:" << profile->productDescription() <<" information sur le produit:" << profile->productInfo();
+//             dbgFile <<"profile name:" << profile->productName() <<" profile description:" << profile->productDescription() <<" information sur le produit:" << profile->productInfo();
             if(!profile->isSuitableForOutput())
             {
-                kDebug(41008) <<"the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
+                dbgFile <<"the profile is not suitable for output and therefore cannot be used in krita, we need to convert the image to a standard profile"; // TODO: in ko2 popup a selection menu to inform the user
             }
         }
     }
@@ -171,7 +171,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     const KoColorSpace* cs;
     if (profile && profile->isSuitableForOutput())
     {
-        kDebug(41008) <<"image has embedded profile:" << profile -> name() <<"";
+        dbgFile <<"image has embedded profile:" << profile -> name() <<"";
         cs = KoColorSpaceRegistry::instance()->colorSpace(csName, profile);
     }
     else
@@ -179,7 +179,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     if(cs == 0)
     {
-        kDebug(41008) <<"unknown colorspace";
+        dbgFile <<"unknown colorspace";
         jpeg_destroy_decompress(&cinfo);
         fclose(fp);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
@@ -260,10 +260,10 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     // Read exif information
 
-    kDebug(41008) <<"Looking for exif information";
+    dbgFile <<"Looking for exif information";
 
     for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
-        kDebug(41008) <<"Marker is" << marker->marker;
+        dbgFile <<"Marker is" << marker->marker;
         if (marker->marker != (JOCTET) (JPEG_APP0 + 1) ||
             marker->data_length < 14)
             continue; /* Exif data is in an APP1 marker of at least 14 octets */
@@ -275,7 +275,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
             GETJOCTET (marker->data[4]) != (JOCTET) 0x00 ||
             GETJOCTET (marker->data[5]) != (JOCTET) 0x00)
             continue; /* no Exif header */
-        kDebug(41008) <<"Found exif information of length :"<< marker->data_length;
+        dbgFile <<"Found exif information of length :"<< marker->data_length;
         KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
         Q_ASSERT(exifIO);
         QByteArray byteArray( (const char*)marker->data + 6, marker->data_length - 6);
@@ -320,10 +320,10 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         break;
     }
 
-    kDebug(41008) <<"Looking for IPTC information";
+    dbgFile <<"Looking for IPTC information";
 
     for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
-        kDebug(41008) <<"Marker is" << marker->marker;
+        dbgFile <<"Marker is" << marker->marker;
         if (marker->marker != (JOCTET) (JPEG_APP0 + 13) ||
             marker->data_length < 14)
             continue; /* IPTC data is in an APP13 marker of at least 16 octets */
@@ -332,13 +332,13 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         {
             for(int i = 0; i < 14; i++)
             {
-                kDebug() << (int)(*(marker->data+i)) <<"" << (int)(photoshopMarker[i]);
+                dbgFile << (int)(*(marker->data+i)) <<"" << (int)(photoshopMarker[i]);
             }
-            kDebug(41008) <<"No photoshop marker";
+            dbgFile <<"No photoshop marker";
             break; /* No IPTC Header */
         }
 
-        kDebug(41008) <<"Found Photoshop information of length :"<< marker->data_length;
+        dbgFile <<"Found Photoshop information of length :"<< marker->data_length;
         KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
         Q_ASSERT(iptcIO);
         const Exiv2::byte *record = 0;
@@ -353,7 +353,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
                 QByteArray byteArray( (const char*)(record + sizeHdr), sizeIptc );
                 iptcIO->loadFrom( layer->metaData(), new QBuffer( &byteArray ) );
             } else {
-                kDebug() <<"IPTC Not found in Photoshop marker";
+                dbgFile <<"IPTC Not found in Photoshop marker";
             }
         }
         break;
@@ -464,7 +464,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     {
         // Save EXIF
         {
-            kDebug(41008) <<"Trying to save exif information";
+            dbgFile <<"Trying to save exif information";
 
             KisMetaData::IOBackend* exifIO = KisMetaData::IOBackendRegistry::instance()->value("exif");
             Q_ASSERT(exifIO);
@@ -472,7 +472,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
             QBuffer buffer;
             exifIO->saveTo( metaData, &buffer);
 
-            kDebug(41008) <<"Exif information size is" << buffer.data().size();
+            dbgFile <<"Exif information size is" << buffer.data().size();
             QByteArray header(6,0);
             header[0] = 0x45;
             header[1] = 0x78;
@@ -487,12 +487,12 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
             {
                 jpeg_write_marker(&cinfo, JPEG_APP0 + 1, (const JOCTET*)data.data(), data.size());
             } else {
-                kDebug(41008) <<"EXIF information couldn't be saved."; // TODO: warn the user ?
+                dbgFile <<"EXIF information couldn't be saved."; // TODO: warn the user ?
             }
         }
         // Save IPTC
         {
-            kDebug(41008) <<"Trying to save exif information";
+            dbgFile <<"Trying to save exif information";
             KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
             Q_ASSERT(iptcIO);
 
@@ -513,14 +513,14 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
             sizeArray[3] =  (char)(size & 0x000000ff);
             header.append( sizeArray);
 
-            kDebug(41008) <<"IPTC information size is" << buffer.data().size() <<" and header is of size =" << header.size();
+            dbgFile <<"IPTC information size is" << buffer.data().size() <<" and header is of size =" << header.size();
             QByteArray data = buffer.data();
             data.prepend(header);
             if (data.size() < MAX_DATA_BYTES_IN_MARKER)
             {
                 jpeg_write_marker(&cinfo, JPEG_APP0 + 13, (const JOCTET*)data.data(), data.size());
             } else {
-                kDebug(41008) <<"IPTC information couldn't be saved."; // TODO: warn the user ?
+                dbgFile <<"IPTC information couldn't be saved."; // TODO: warn the user ?
             }
         }
     }
@@ -529,16 +529,16 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     vKisAnnotationSP_it it = annotationsStart;
     while(it != annotationsEnd) {
         if (!(*it) || (*it) -> type() == QString()) {
-            kDebug(41008) <<"Warning: empty annotation";
+            dbgFile <<"Warning: empty annotation";
             ++it;
             continue;
         }
 
-        kDebug(41008) <<"Trying to store annotation of type" << (*it) -> type() <<" of size" << (*it) -> annotation() . size();
+        dbgFile <<"Trying to store annotation of type" << (*it) -> type() <<" of size" << (*it) -> annotation() . size();
 
         if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
             // FIXME
-            kDebug(41008) <<"can't save this annotation :" << (*it) -> type();
+            dbgFile <<"can't save this annotation :" << (*it) -> type();
         } else { // Profile
             //char* name = new char[(*it)->type().length()+1];
             write_icc_profile(& cinfo, (uchar*)(*it)->annotation().data(), (*it)->annotation().size());

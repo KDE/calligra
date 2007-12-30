@@ -65,7 +65,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QByteArray& from, con
         return KoFilter::NotImplemented;
     }
 
-    kDebug(41008) <<"Krita exporting to OpenEXR";
+    dbgFile <<"Krita exporting to OpenEXR";
 
     // XXX: Add dialog about flattening layers here
 

@@ -30,7 +30,7 @@
 
 // KDE's headers
 #include <kapplication.h>
-#include <kdebug.h>
+#include <kis_debug.h>
 #include <kdialog.h>
 #include <kgenericfactory.h>
 #include <knuminput.h>
@@ -66,7 +66,7 @@ KisPDFImport::~KisPDFImport()
 KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const QByteArray& )
 {
     QString filename = m_chain -> inputFile();
-    kDebug(41008) <<"Importing using PDFImport!" << filename;
+    dbgFile <<"Importing using PDFImport!" << filename;
 
     if (filename.isEmpty())
         return KoFilter::FileNotFound;
@@ -90,7 +90,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 
     if ( !pdoc)
     {
-        kDebug(41008) <<"Error when reading the PDF";
+        dbgFile <<"Error when reading the PDF";
         return KoFilter::StorageCreationError;
     }
 
@@ -102,7 +102,7 @@ KisPDFImport::ConversionStatus KisPDFImport::convert(const QByteArray& , const Q
 	dlg.setWindowTitle( i18n("A password is required to read that pdf") );
 	if( dlg.exec() != QDialog::Accepted )
 	{
-            kDebug(41008) <<"Password canceled";
+            dbgFile <<"Password canceled";
             return KoFilter::StorageCreationError;
 	}
 	else

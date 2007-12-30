@@ -133,7 +133,7 @@ bool KisTIFFWriterVisitor::copyDataToStrips( KisHLineConstIterator it, tdata_t b
 
 bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
 {
-    kDebug(41008) <<"visiting on paint layer" << layer->name() <<"";
+    dbgFile <<"visiting on paint layer" << layer->name() <<"";
     KisPaintDeviceSP pd = layer->paintDevice();
     // Save depth
     int depth = 8 * pd->pixelSize() / pd->channelCount();
@@ -230,7 +230,7 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
 }
 bool KisTIFFWriterVisitor::visit(KisGroupLayer *layer)
 {
-    kDebug(41008) <<"Visiting on grouplayer" << layer->name() <<"";
+    dbgFile <<"Visiting on grouplayer" << layer->name() <<"";
     return visitAll( layer, true );
 }
 

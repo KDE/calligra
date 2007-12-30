@@ -43,7 +43,7 @@ KisPNGImport::~KisPNGImport()
 
 KoFilter::ConversionStatus KisPNGImport::convert(const QByteArray&, const QByteArray& to)
 {
-    kDebug(41008) <<"Importing using PNGImport!";
+    dbgFile <<"Importing using PNGImport!";
 
     if (to != "application/x-krita")
         return KoFilter::BadMimeType;

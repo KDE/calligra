@@ -68,7 +68,7 @@ class KisExifInfoVisitor : public KisNodeVisitor
         }
         virtual bool visit(KisGroupLayer* layer)
         {
-            kDebug(41008) <<"Visiting on grouplayer" << layer->name() <<"";
+            dbgFile <<"Visiting on grouplayer" << layer->name() <<"";
             return visitAll( layer, true );
         }
         virtual bool visit(KisAdjustmentLayer* ) {  return true; }
@@ -94,7 +94,7 @@ KisJPEGExport::~KisJPEGExport()
 
 KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const QByteArray& to)
 {
-    kDebug(41008) <<"JPEG export! From:" << from <<", To:" << to <<"";
+    dbgFile <<"JPEG export! From:" << from <<", To:" << to <<"";
 
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
@@ -150,10 +150,10 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
         eI = eIV.exifInfo();
 
     if ( (res = kpc.buildFile(url, l, beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
-        kDebug(41008) <<"success !";
+        dbgFile <<"success !";
         return KoFilter::OK;
     }
-    kDebug(41008) <<" Result =" << res;
+    dbgFile <<" Result =" << res;
     return KoFilter::InternalError;
 }
 
