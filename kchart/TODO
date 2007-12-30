@@ -70,17 +70,26 @@ Item                                                                   Prio Stat
   + Data                                                        INGE    INGE
 
 * Configuration with tools
-  + Axis                                                                ----
+  + General                                                             ----
+     - Title                                                            --
+     - Subtitle                                                         --
+     - Footer                                                           --
+  + Plot area                                                           ----
+     - Axis                                                             --
+     - Grid                                                             --
+  + Datasets                                                            ----
+     - Color                                                            --
   + Legend                                                              JOSI
-  + Data Series                                                         ----
-  + Data Editor                                                         ----
-
-* Infrastructure
-  + Switch KDChart to version 2.1                                       DONE
+     - Title                                                            --
+     - Frame                                                            --
+     - Orientation                                                      --
+     - Position                                                         --
+  + Data Editor                                                         INGE
+     - Insert/delete row/column                                         --
+     - Close button                                                     --
 
 * External programs and embedding
   + KChart itself                                                       ----
-     - Create KoChartModel                                              !!
      - Edit the interface in koffice/interfaces                         --
      - Document interface                                               --
      - Function that tells the chart to use own data or external        done
@@ -88,9 +97,10 @@ Item                                                                   Prio Stat
      - Make it possible to have > 1 chart and edit the selected one     --
      - Make it possible to delete a chart                               --
      - Make the chart selected when it is created                       --
-     - Save correct ODF (as embedded document and not just drawing?)    --
+     - Save as embedded document                                        --
   + KWord                                                               ----
      - Set chartshape to use own data                                   done
+     - Save as embedded document                                        --
 
 
 Before release of KOffice 2.0.1
