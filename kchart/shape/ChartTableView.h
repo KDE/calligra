@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef CHART_CHART_TABLE_VIEW
-#define CHRT_CHART_TABLE_VIEW
+#ifndef CHART_TABLE_VIEW
+#define CHART_TABLE_VIEW
 
 #include <QTableView>
 
