@@ -130,6 +130,10 @@ public:
     bool                       firstColIsLabel;
 
     // Proxy model that holds the actual QAbstractItemModel
+    // The reason for it is things like:
+    //  - data in rows/cols
+    //  - first row/col as heading
+    // ...which cannot otherwise be visualized by kdchart.
     ChartProxyModel           *chartModel;
     QAbstractItemModel        *internalModel;
     QAbstractItemModel        *externalModel;
@@ -233,13 +237,13 @@ ChartShape::ChartShape()
     d->chart->addLegend( d->legend );
 
     setChartDefaults();
-
 }
 
 ChartShape::~ChartShape()
 {
     delete d;
 }
+
 
 void ChartShape::refreshPixmap( QPainter &painter, const KoViewConverter &converter )
 {
@@ -285,29 +289,30 @@ KDChart::AbstractCoordinatePlane* ChartShape::coordinatePlane() const
 
 void ChartShape::setChartDefaults()
 {
-    // The legend shall have a white background by default
-    // and no frame
-    KDChart::BackgroundAttributes legendBackgroundAttributes = d->legend->backgroundAttributes();
+    // The legend shall have a white background by default and no frame
+    KDChart::BackgroundAttributes  legendBackgroundAttributes = d->legend->backgroundAttributes();
     legendBackgroundAttributes.setBrush( Qt::white );
     legendBackgroundAttributes.setVisible( true );
     d->legend->setBackgroundAttributes( legendBackgroundAttributes );
     
-    KDChart::FrameAttributes legendFrameAttributes = d->legend->frameAttributes();
+    KDChart::FrameAttributes  legendFrameAttributes = d->legend->frameAttributes();
     legendFrameAttributes.setVisible( false );
     d->legend->setFrameAttributes( legendFrameAttributes );
-    
+
+    // The legend is to the right, with title "Legend"
     d->legend->setPosition( KDChart::Position::East );
     d->legend->setAlignment( Qt::AlignRight );
     d->legend->setShowLines( false );
     d->legend->setTitleText( i18n( "Legend" ) );
     d->legend->setOrientation( Qt::Vertical );
     
-    // Hide the frame around the diagram as the shape itself
-    // can have a more flexible one
+    // Hide the frame around the diagram as the shape itself can have
+    // a more flexible one.
     KDChart::FrameAttributes frameAttributes = d->chart->frameAttributes();
     frameAttributes.setVisible( false );
     d->chart->setFrameAttributes( frameAttributes );
 
+    // The diagram itself has its own setDefaults function.
     setDiagramDefaults( d->chartType );
 }
 
@@ -316,8 +321,8 @@ void ChartShape::setDiagramDefaults( OdfChartType type  /* = LastChartType */ )
     if ( type != LineChartType && type != ScatterChartType )
         d->diagram->setPen( QPen( Qt::black, 0.4 ) );
 
-    switch ( type )
-    {
+    // Set Grid attributes.
+    switch ( type ) {
         case BarChartType:
         case AreaChartType:
         case LineChartType:
@@ -328,9 +333,9 @@ void ChartShape::setDiagramDefaults( OdfChartType type  /* = LastChartType */ )
             ( ( KDChart::CartesianCoordinatePlane* ) d->chart->coordinatePlane() )->setGridAttributes(  Qt::Vertical, gridAttributes );
         }
     }
-    
-    switch ( type )
-    {
+
+    // Set type dependent defaults.
+    switch ( type ) {
         case BarChartType:
         {
             // Grouped bars shall be displayed with no gap
@@ -456,7 +461,6 @@ void ChartShape::setChartType( OdfChartType    newType,
         default:
             return;
             break;
-
         }
     }
 
@@ -490,8 +494,10 @@ void ChartShape::setChartType( OdfChartType    newType,
 
         new_diagram->setModel( d->chartModel );
 
+        // Set the diagram for the Legend.
+        //
         // This will crash if the new model for new_diagram is not set.
-        // Thus, put it after new_diagram->setModel().
+        // Thus, it has to be after new_diagram->setModel().
         KDChart::LegendList legends = d->chart->legends();
         foreach ( KDChart::Legend* legend, legends )
             legend->setDiagram( new_diagram );
@@ -518,8 +524,9 @@ void ChartShape::setChartType( OdfChartType    newType,
 
     restoreChartTypeOptions( d->chartType );
 
-    // Only set the new subtype if it's valid, and if the argument
-    // was provided ( that is, if the argument is not at it's default defined in ChartShape.h )
+    // Only set the new subtype if it's valid, and if the argument was
+    // provided ( that is, if the argument is not at it's default
+    // defined in ChartShape.h )
     if( newSubtype != NoChartSubtype )
         setChartSubtype( newSubtype );
 }
@@ -530,7 +537,7 @@ void ChartShape::setChartSubtype( OdfChartSubtype newSubtype )
     if ( d->chartSubtype == newSubtype )
         return;
 
-    // Convert between ODF subtypes and KDChart subtypes..
+    // Convert between ODF subtypes and KDChart subtypes.
     
     switch ( d->chartType ) {
     case BarChartType:
@@ -565,21 +572,13 @@ void ChartShape::setChartSubtype( OdfChartSubtype newSubtype )
         }
 
     case CircleChartType:
-        break;
     case RingChartType:
-        break;
     case ScatterChartType:
-        break;
     case RadarChartType:
-        break;
     case StockChartType:
-        break;
     case BubbleChartType:
-        break;
     case SurfaceChartType:
-        break;
     case GanttChartType:
-        break;
     default:
         break;
     }
@@ -743,7 +742,8 @@ void ChartShape::restoreChartTypeOptions( OdfChartType type )
     setThreeDMode( d->threeDMode );
 }
 
-void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel /* = false */ )
+void ChartShape::setModel( QAbstractItemModel *model, 
+                           bool takeOwnershipOfModel /* = false */ )
 {
     d->externalModel = model;
     d->chartModel->setSourceModel( model );

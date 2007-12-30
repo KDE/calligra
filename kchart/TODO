@@ -53,7 +53,7 @@ Item                                                                   Prio Stat
   Item                                                          Load    Save
   ----------------------------------------------------------------------------
   + Handle all chart types                                      DONE    DONE
-  + Handle subtypes                                             --      done
+     - Handle subtypes                                          --      done
   + Plot area                                                   ----    ----
     - title                                                     --      --
     - subtitle                                                  --      --
@@ -70,6 +70,14 @@ Item                                                                   Prio Stat
   + Data                                                        INGE    INGE
 
 * Configuration with tools
+  + Types and subtypes                                                  ----
+     - Barchart                                                         done
+     - Line chart                                                       done
+     - Area chart                                                       --
+     - Scatter chart                                                    --
+     - Pie chart (Circle)                                               --
+     - Ring chart                                                       --
+     - Radar chart                                                      --
   + General                                                             ----
      - Title                                                            --
      - Subtitle                                                         --
@@ -101,6 +109,10 @@ Item                                                                   Prio Stat
   + KWord                                                               ----
      - Set chartshape to use own data                                   done
      - Save as embedded document                                        --
+
+* KDChart
+  + Lying bars                                                          JOSI
+  + Ring chart                                                          JOSI
 
 
 Before release of KOffice 2.0.1
