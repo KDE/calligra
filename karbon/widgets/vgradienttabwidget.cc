@@ -25,33 +25,27 @@
 
 #include <KoAbstractGradient.h>
 #include <KoStopGradient.h>
-#include <KoSegmentGradient.h>
 #include <KoResourceItemChooser.h>
 #include <KoResourceServer.h>
-#include <KoResourceServerProvider.h>
+#include <KoSliderCombo.h>
 
-#include <knuminput.h>
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kiconloader.h>
-#include <klistwidget.h>
 #include <kfiledialog.h>
 #include <kurl.h>
-#include <kcomponentdata.h>
-#include <kstandarddirs.h>
 
-#include <QLabel>
-#include <QPainter>
-#include <QLayout>
-#include <QPushButton>
-#include <QFileInfo>
-#include <QPaintEvent>
-#include <QGridLayout>
-#include <Q3PtrList>
-#include <QPointF>
-#include <QRadialGradient>
-#include <QLinearGradient>
-#include <QConicalGradient>
+#include <QtGui/QLabel>
+#include <QtGui/QPainter>
+#include <QtGui/QLayout>
+#include <QtGui/QPushButton>
+#include <QtCore/QFileInfo>
+#include <QtGui/QPaintEvent>
+#include <QtGui/QGridLayout>
+#include <QtCore/QPointF>
+#include <QtGui/QRadialGradient>
+#include <QtGui/QLinearGradient>
+#include <QtGui/QConicalGradient>
 
 #include <math.h>
 
@@ -264,11 +258,8 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 
     QRect rect = QRect( 0, 0, width(), height() );
 
-    // TODO draw a checker board as background?
-    //painter.setBrush( QBrush( SmallIcon( "karbon" ) ) );
+    // draw checker board
     painter.fillRect( rect, QBrush(checker));
-    //painter.setBrush( palette().base() );
-    //painter.drawRect( rect ) ) );
 
     if( ! m_gradient )
         return;
@@ -344,9 +335,9 @@ void VGradientTabWidget::setupUI()
     editLayout->addWidget( m_gradientWidget, 4, 0, 1, 2 );
 
     editLayout->addWidget( new QLabel( i18n( "Overall opacity:" ), m_editTab ), 5, 0 );
-    m_opacity = new KIntNumInput( 100, m_editTab );
-    m_opacity->setRange( 0, 100 );
-    m_opacity->setValue( 100 );
+
+    m_opacity = new KoSliderCombo( m_editTab );
+    m_opacity->setDecimals(0);
     editLayout->addWidget( m_opacity, 5, 1 );
 
     m_addToPredefs = new QPushButton( i18n( "&Add to Predefined Gradients" ), m_editTab );
@@ -380,7 +371,7 @@ void VGradientTabWidget::setupConnections()
     connect( m_predefGradientsView, SIGNAL( itemDoubleClicked( QTableWidgetItem * ) ), this, SLOT( changeToPredef( QTableWidgetItem* ) ) );
     connect( m_predefGradientsView, SIGNAL( deleteClicked() ), this, SLOT( deletePredef() ) );
     connect( m_predefGradientsView, SIGNAL( importClicked() ), this, SLOT( importGradient() ) );
-    connect( m_opacity, SIGNAL( valueChanged( int ) ), this, SLOT( opacityChanged( int ) ) );
+    connect( m_opacity, SIGNAL( valueChanged( double, bool ) ), this, SLOT( opacityChanged( double, bool ) ) );
 }
 
 void VGradientTabWidget::blockChildSignals( bool block )
@@ -395,10 +386,30 @@ void VGradientTabWidget::blockChildSignals( bool block )
 
 void VGradientTabWidget::updateUI()
 {
+    blockChildSignals( true );
+
     m_gradientType->setCurrentIndex( m_gradient->type() );
     m_gradientRepeat->setCurrentIndex( m_gradient->spread() );
-    m_opacity->setValue( 100 );
+
+    QGradientStops stops = m_gradient->stops();
+    uint stopCount = stops.count();
+    qreal opacity = stops[0].second.alphaF();
+    bool equalOpacity = true;
+    for( uint i = 1; i < stopCount; ++i )
+    {
+        if( opacity != stops[i].second.alphaF() )
+        {
+            equalOpacity = false;
+            break;
+        }
+    }
+    if( equalOpacity )
+        m_opacity->setValue( opacity * 100 );
+    else
+        m_opacity->setValue( 100 );
     m_gradientWidget->setStops( m_gradient->stops() );
+
+    blockChildSignals( false );
 }
 
 void VGradientTabWidget::updatePredefGradients()
@@ -537,7 +548,8 @@ void VGradientTabWidget::combosChange( int )
     emit changed();
 }
 
-void VGradientTabWidget::opacityChanged( int value )
+//void VGradientTabWidget::opacityChanged( int value )
+void VGradientTabWidget::opacityChanged( double value, bool final )
 {
     m_gradOpacity = value / 100.0;
 

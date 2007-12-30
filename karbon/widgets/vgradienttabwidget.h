@@ -26,7 +26,6 @@
 
 #include <QWidget>
 #include <QTabWidget>
-#include <QPixmap>
 #include <QtGui/QTableWidgetItem>
 
 #include <KoResourceServer.h>
@@ -36,9 +35,9 @@
 class KComboBox;
 class VGradientWidget;
 class KListWidget;
-class KIntNumInput;
 class QPushButton;
 class KoResourceItemChooser;
+class KoSliderCombo;
 class KoResourceItem;
 
 /// A widget to preview a gradient
@@ -133,7 +132,8 @@ protected Q_SLOTS:
     void changeToPredef( QTableWidgetItem* );
     void importGradient();
     void deletePredef();
-    void opacityChanged( int );
+    //void opacityChanged( int );
+    void opacityChanged( double value, bool final );
     void stopsChanged();
     void addResource(KoResource* resource);
     void removeResource(KoResource* resource);
@@ -154,7 +154,7 @@ private:
     KComboBox        *m_gradientType;
     KoResourceItemChooser *m_predefGradientsView;
     QPushButton      *m_addToPredefs;
-    KIntNumInput     *m_opacity;
+    KoSliderCombo * m_opacity;
 
     QGradient * m_gradient; /// the actual edited gradient
     KoResourceServer<KoAbstractGradient>* m_resourceServer; ///< the predefined gradients list.
