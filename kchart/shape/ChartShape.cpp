@@ -135,8 +135,7 @@ public:
     //  - first row/col as heading
     // ...which cannot otherwise be visualized by kdchart.
     ChartProxyModel           *chartModel;
-    QAbstractItemModel        *internalModel;
-    QAbstractItemModel        *externalModel;
+    QAbstractItemModel        *sourceModel;
     bool                       takeOwnershipOfModel;
 
     // We can rerender faster if we cache KDChart's output
@@ -175,8 +174,7 @@ ChartShape::Private::Private()
         chartTypeOptions[i].subtype = defaultSubtypes[i];  
     threeDMode             = false;
     takeOwnershipOfModel   = false;
-    internalModel          = 0;
-    externalModel          = 0;
+    sourceModel            = 0;
     pixmapRepaintRequested = true;
     chart                  = 0;
     diagram                = 0;
@@ -190,10 +188,8 @@ ChartShape::Private::Private()
 
 ChartShape::Private::~Private()
 {
-    if ( takeOwnershipOfModel && externalModel != 0 )
-        delete externalModel;
-    if ( internalModel != 0 )
-        delete internalModel;
+    if ( takeOwnershipOfModel && sourceModel != 0 )
+        delete sourceModel;
     delete chartModel;
     delete diagram;
     delete chart;
@@ -745,29 +741,14 @@ void ChartShape::restoreChartTypeOptions( OdfChartType type )
 void ChartShape::setModel( QAbstractItemModel *model, 
                            bool takeOwnershipOfModel /* = false */ )
 {
-    d->externalModel = model;
+    d->sourceModel = model;
     d->chartModel->setSourceModel( model );
     d->takeOwnershipOfModel = takeOwnershipOfModel;
-
-    delete d->internalModel;
-    d->internalModel = 0;
 }
 
-void ChartShape::setInternalModel( QAbstractItemModel *model )
+QAbstractItemModel *ChartShape::model() const
 {
-    d->internalModel = model;
-    d->chartModel->setSourceModel( model );
-}
-
-bool ChartShape::hasInternalModel()
-{
-    if ( d->internalModel == 0 )
-        return false;
-    return true;
-}
-
-QAbstractItemModel *ChartShape::model()
-{
+    // FIXME: Should return the source model!!
     return d->chartModel;
 }
 

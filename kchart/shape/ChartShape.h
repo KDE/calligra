@@ -68,10 +68,9 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     KDChart::AbstractCoordinatePlane *coordinatePlane() const;
 
     /// reimplemented
-    virtual void setModel( QAbstractItemModel *model, bool takeOwnershipOfModel = false );
-    void setInternalModel( QAbstractItemModel *model );
-    bool hasInternalModel();
-    QAbstractItemModel *model();
+    virtual void setModel( QAbstractItemModel *model, 
+                           bool takeOwnershipOfModel = false );
+    QAbstractItemModel *model() const;
     
     int borderWidth() const;
     int borderHeight() const;
