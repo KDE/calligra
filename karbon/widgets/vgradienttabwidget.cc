@@ -464,6 +464,8 @@ void VGradientTabWidget::setResourceServer( KoResourceServer<KoAbstractGradient>
         m_resourceAdapter = new KoResourceServerAdapter<KoAbstractGradient>( m_resourceServer );
         connect( m_resourceAdapter, SIGNAL(resourceAdded(KoResource*)), 
                  this, SLOT(addResource(KoResource*)));
+        connect( m_resourceAdapter, SIGNAL(removingResource(KoResource*)), 
+                 this, SLOT(removeResource(KoResource*)));
         m_resourceAdapter->connectToResourceServer();
     }
 }
@@ -603,7 +605,7 @@ void VGradientTabWidget::changeToPredef( QTableWidgetItem * item )
 
 void VGradientTabWidget::importGradient()
 {
-    QString filter( "*.svg *.ggr" );
+    QString filter( "*.svg *.kgr *.ggr" );
     QString filename = KFileDialog::getOpenFileName( KUrl(), filter, 0, i18n( "Choose Gradient to Add" ) );
 
     if(m_resourceAdapter)
@@ -616,8 +618,7 @@ void VGradientTabWidget::deletePredef()
      if( ! item )
          return;
 
-     if( m_resourceServer->removeResource( item->gradient() ) )
-         m_predefGradientsView->removeItem( item );
+     m_resourceServer->removeResource( item->gradient() );
 }
 
 void VGradientTabWidget::stopsChanged()
@@ -630,8 +631,21 @@ void VGradientTabWidget::addResource(KoResource* resource)
 {
     KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>( resource );
 
-    if( gradient && gradient->valid() )
-        m_predefGradientsView->addItem( new KarbonGradientItem( gradient ) );
+    if( gradient && gradient->valid() ) {
+        KarbonGradientItem* item = new KarbonGradientItem( gradient );
+        m_itemMap[resource] = item;
+        m_predefGradientsView->addItem(item);
+    }
+}
+
+void VGradientTabWidget::removeResource(KoResource* resource)
+{
+    KoResourceItem *item = m_itemMap[resource];
+
+    if(item) {
+        m_itemMap.remove(item->resource());
+        m_predefGradientsView->removeItem( item );
+    }
 }
 
 #include "vgradienttabwidget.moc"

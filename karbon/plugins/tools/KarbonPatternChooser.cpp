@@ -32,6 +32,8 @@ KarbonPatternChooser::KarbonPatternChooser( QWidget *parent )
 
     connect( m_resourceAdapter, SIGNAL(resourceAdded(KoResource*)),
              this, SLOT(addPattern(KoResource*)));
+    connect( m_resourceAdapter, SIGNAL(removingResource(KoResource*)), 
+             this, SLOT(removePattern(KoResource*)));
 
     m_resourceAdapter->connectToResourceServer();
 
@@ -47,12 +49,21 @@ KarbonPatternChooser::~KarbonPatternChooser()
 void KarbonPatternChooser::addPattern(KoResource* resource)
 {
     KoPattern * pattern = dynamic_cast<KoPattern*>( resource );
-    if( pattern && pattern->valid() )
-        addItem( new KarbonPatternItem( pattern ) );
+    if( pattern && pattern->valid() ) {
+        KarbonPatternItem* item = new KarbonPatternItem( pattern );
+        m_itemMap[resource] = item;
+        addItem( item );
+    }
 }
 
 void KarbonPatternChooser::removePattern(KoResource* resource)
 {
+    KoResourceItem *item = m_itemMap[resource];
+
+    if(item) {
+        m_itemMap.remove(item->resource());
+        removeItem( item );
+    }
 }
 
 void KarbonPatternChooser::importPattern()
@@ -69,9 +80,7 @@ void KarbonPatternChooser::deletePattern()
         return;
 
     KoPattern * pattern = static_cast<KarbonPatternItem*>( currentItem() )->pattern();
-
-    if( m_resourceAdapter->removeResource( pattern ) )
-        removeItem( static_cast<KoResourceItem*>( currentItem() ) );
+    m_resourceAdapter->removeResource( pattern );
 }
 
 #include "KarbonPatternChooser.moc"

@@ -39,6 +39,7 @@ class KListWidget;
 class KIntNumInput;
 class QPushButton;
 class KoResourceItemChooser;
+class KoResourceItem;
 
 /// A widget to preview a gradient
 class VGradientPreview : public QWidget
@@ -135,6 +136,7 @@ protected Q_SLOTS:
     void opacityChanged( int );
     void stopsChanged();
     void addResource(KoResource* resource);
+    void removeResource(KoResource* resource);
 
 protected:
     virtual void resizeEvent ( QResizeEvent * event );
@@ -158,6 +160,7 @@ private:
     KoResourceServer<KoAbstractGradient>* m_resourceServer; ///< the predefined gradients list.
     KoResourceServerAdapter<KoAbstractGradient> * m_resourceAdapter;
     double m_gradOpacity;    ///< the gradient opacity
+    QMap<KoResource*, KoResourceItem*> m_itemMap;
 };
 
 /// helper function to clone a gradient

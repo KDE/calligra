@@ -37,7 +37,7 @@ private slots:
     void deletePattern();
 private:
     KoResourceServerAdapter<KoPattern> * m_resourceAdapter;
-
+    QMap<KoResource*, KoResourceItem*> m_itemMap;
 };
 
 #endif // KARBONPATTERNCHOOSER_H
