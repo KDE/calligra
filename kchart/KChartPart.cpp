@@ -888,8 +888,9 @@ bool KChartPart::saveOdf( SavingContext & documentContext )
     contentTmpWriter.startElement( "office:chart" );
 
     // Write the chart itself.
-    KoGenStyles      mainStyles;
-    KoShapeSavingContext shapeSavingContext( contentTmpWriter, mainStyles, documentContext.embeddedSaver );
+    KoGenStyles           mainStyles;
+    KoShapeSavingContext  shapeSavingContext( contentTmpWriter, mainStyles, 
+                                              documentContext.embeddedSaver );
     m_chartShape->saveOdf( shapeSavingContext );
 
     contentTmpWriter.endElement(); // office:chart
@@ -911,7 +912,7 @@ bool KChartPart::saveOdf( SavingContext & documentContext )
     // Phase 3: Add the contents to the file
     contentWriter->addCompleteElement( &contentTmpFile );
 
-    contentWriter->endElement(); // root element
+    contentWriter->endElement(); // office:automatic-styles
     contentWriter->endDocument();
     delete contentWriter;
 
@@ -936,7 +937,7 @@ bool KChartPart::saveOdf( SavingContext & documentContext )
         return false;
 
 
-    if(!store->open("settings.xml"))
+    if( !store->open("settings.xml") )
         return false;
 
     // Write settings

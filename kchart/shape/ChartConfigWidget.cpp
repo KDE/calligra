@@ -31,6 +31,9 @@
 
 using namespace KChart;
 
+
+// FIXME: What is this button for?
+//
 class Button : public QToolButton
 {
 public:
@@ -47,7 +50,9 @@ public:
     }
 };
 
+
 // ================================================================
+
 
 class ChartConfigWidget::Private
 {
@@ -55,36 +60,37 @@ public:
     Private();
     ~Private();
 
-    ChartShape* shape;
-    OdfChartType type;
-    OdfChartSubtype subtype;
-    bool threeDMode;
-    QVBoxLayout* leftLayout;
-    QVBoxLayout* rightLayout;
-    Ui::ChartConfigWidget ui;
+    // Basic properties of the chart.
+    ChartShape            *shape;
+    OdfChartType           type;
+    OdfChartSubtype        subtype;
+    bool                   threeDMode;
+    QVBoxLayout           *leftLayout;
+    QVBoxLayout           *rightLayout;
+    Ui::ChartConfigWidget  ui;
     
     // chart type selection actions
-    QAction *normalBarChartAction;
-    QAction *stackedBarChartAction;
-    QAction *percentBarChartAction;
+    QAction  *normalBarChartAction;
+    QAction  *stackedBarChartAction;
+    QAction  *percentBarChartAction;
     
-    QAction *normalLineChartAction;
-    QAction *stackedLineChartAction;
-    QAction *percentLineChartAction;
+    QAction  *normalLineChartAction;
+    QAction  *stackedLineChartAction;
+    QAction  *percentLineChartAction;
 
     // Table Editor
-    Ui::ChartTableEditor       tableEditor;
-    QDialog                   *tableEditorDialog;
-    ChartTableView            *tableView;
+    Ui::ChartTableEditor  tableEditor;
+    QDialog              *tableEditorDialog;
+    ChartTableView       *tableView;
 
     // Legend
-    QButtonGroup                *positionButtonGroup;
-    int                          lastHorizontalAlignment;
-    int                          lastVerticalAlignment;
-    KDChart::Position            fixedPosition;
-    KDChart::Position            lastFixedPosition;
+    QButtonGroup         *positionButtonGroup;
+    int                   lastHorizontalAlignment;
+    int                   lastVerticalAlignment;
+    KDChart::Position     fixedPosition;
+    KDChart::Position     lastFixedPosition;
     
-    int                          selectedDataset;
+    int                   selectedDataset;
 };
 
 ChartConfigWidget::Private::Private()
@@ -99,11 +105,12 @@ ChartConfigWidget::Private::~Private()
 {
 }
 
+
 ChartConfigWidget::ChartConfigWidget()
     : d(new Private)
 {
     d->shape = 0;
-    d->type = KChart::LastChartType;
+    d->type    = KChart::LastChartType;
     d->subtype = KChart::NoChartSubtype;
     setObjectName("Chart Type");
     d->ui.setupUi( this );
@@ -124,7 +131,8 @@ ChartConfigWidget::ChartConfigWidget()
     
     d->ui.chartTypeMenu->setMenu( chartTypeMenu );
     
-    connect( chartTypeMenu, SIGNAL( triggered( QAction* ) ), this, SLOT( chartTypeSelected( QAction* ) ) );
+    connect( chartTypeMenu, SIGNAL( triggered( QAction* ) ), 
+             this,          SLOT( chartTypeSelected( QAction* ) ) );
     
     // Quick-access settings
     d->tableEditorDialog = new QDialog( this );
@@ -214,8 +222,8 @@ KAction* ChartConfigWidget::createAction()
 
 void ChartConfigWidget::chartTypeSelected( QAction *action )
 {
-    OdfChartType type;
-    OdfChartSubtype subtype;
+    OdfChartType     type;
+    OdfChartSubtype  subtype;
     
     if ( action == d->normalBarChartAction ) {
         type    = BarChartType;
@@ -272,7 +280,7 @@ void ChartConfigWidget::update()
          || d->subtype != d->shape->chartSubtype() )
     {
         bool needSeparator = false;
-        if ( d->shape->chartType() == BarChartType) {
+        if ( d->shape->chartType() == BarChartType ) {
             d->ui.barPropertiesLabel->show();
             d->ui.gapBetweenBarsLabel->show();
             d->ui.gapBetweenSetsLabel->show();
@@ -328,7 +336,7 @@ void ChartConfigWidget::update()
             default:
                 break;
         }
-        d->type = d->shape->chartType();
+        d->type    = d->shape->chartType();
         d->subtype = d->shape->chartSubtype();
     }
     
@@ -453,16 +461,16 @@ void ChartConfigWidget::createActions()
 {
     QAction *cutRowsAction       = new QAction( KIcon( "edit-cut" ), i18n( "Cut Rows" ),    d->tableView );
     QAction *cutColumnsAction    = new QAction( KIcon( "edit-cut" ), i18n( "Cut Columns" ), d->tableView );
-    QAction *cutCellsAction    = new QAction( KIcon( "edit-cut" ), i18n( "Cut Cells" ), d->tableView );
+    QAction *cutCellsAction      = new QAction( KIcon( "edit-cut" ), i18n( "Cut Cells" ), d->tableView );
     QAction *copyRowsAction      = new QAction( KIcon( "edit-copy" ), i18n( "Copy Rows" ), d->tableView );
     QAction *copyColumnsAction   = new QAction( KIcon( "edit-copy" ), i18n( "Copy Columns" ), d->tableView );
-    QAction *copyCellsAction   = new QAction( KIcon( "edit-copy" ), i18n( "Copy Cells" ), d->tableView );
+    QAction *copyCellsAction     = new QAction( KIcon( "edit-copy" ), i18n( "Copy Cells" ), d->tableView );
     QAction *deleteRowsAction    = new QAction( KIcon( "edit-delete" ), i18n( "Delete Rows" ), d->tableView );
     QAction *deleteColumnsAction = new QAction( KIcon( "edit-delete" ), i18n( "Delete Columns" ), d->tableView );
-    QAction *deleteCellsAction = new QAction( KIcon( "edit-delete" ), i18n( "Delete Cells" ), d->tableView );
+    QAction *deleteCellsAction   = new QAction( KIcon( "edit-delete" ), i18n( "Delete Cells" ), d->tableView );
     QAction *insertRowsAction    = new QAction( KIcon( "edit-paste" ), i18n( "Insert Rows" ), d->tableView );
     QAction *insertColumnsAction = new QAction( KIcon( "edit-paste" ), i18n( "Insert Columns" ), d->tableView );
-    QAction *insertCellsAction = new QAction( KIcon( "edit-paste" ), i18n( "Insert Cells" ), d->tableView );
+    QAction *insertCellsAction   = new QAction( KIcon( "edit-paste" ), i18n( "Insert Cells" ), d->tableView );
 
     QAction *separator1 = new QAction( d->tableView );
     QAction *separator2 = new QAction( d->tableView );

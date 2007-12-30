@@ -1,5 +1,6 @@
-This file documents the chart tool's GUI. It contains information about what can be
-modified through the GUI, and where the properties are placed in the GUI.
+This file documents the chart tool's GUI. It contains information
+about what can be modified through the GUI, and where the properties
+are placed in the GUI.
 
 This document reflects the final design goal, and not the current state.
 

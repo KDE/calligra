@@ -119,8 +119,11 @@ public:
     KDChart::HeaderFooter     *subTitle;
     KDChart::HeaderFooter     *footer;
     
+    // Axes
     QString                    xAxisTitle;
     QString                    yAxisTitle;
+    // Lin/log for the X axis
+    // Lin/log for the Y axis
 
     // About the data
     bool                       firstRowIsLabel;
@@ -885,16 +888,16 @@ bool ChartShape::loadOdf( const KoXmlElement    &chartElement,
     // 2. Load the title.
     KoXmlElement titleElem = KoXml::namedItemNS( chartElement, 
                                                     KoXmlNS::chart, "title" );
-    if( !titleElem.isNull() ) {
-        if( !loadOdfTitle( titleElem, context) )
+    if ( !titleElem.isNull() ) {
+        if ( !loadOdfTitle( titleElem, context) )
             return false;
     }
 
     // 3. Load the subtitle.
     KoXmlElement subTitleElem = KoXml::namedItemNS( chartElement, 
                                                     KoXmlNS::chart, "subtitle" );
-    if( !subTitleElem.isNull() ) {
-        if( !loadOdfSubTitle( subTitleElem, context) )
+    if ( !subTitleElem.isNull() ) {
+        if ( !loadOdfSubTitle( subTitleElem, context) )
             return false;
     }
 
@@ -987,85 +990,71 @@ bool ChartShape::loadOdf( const KoXmlElement    &chartElement,
         setLegendTitleTextColor( color );
         loadingContext.styleStack().restore();
         QString lp;
-        if ( legendElem.hasAttributeNS( KoXmlNS::chart, "legend-position" ) )
-        {
+        if ( legendElem.hasAttributeNS( KoXmlNS::chart, "legend-position" ) ) {
             lp = legendElem.attributeNS( KoXmlNS::chart, "legend-position", QString() );
         }
         QString lalign;
-        if ( legendElem.hasAttributeNS( KoXmlNS::chart, "legend-align" ) )
-        {
+        if ( legendElem.hasAttributeNS( KoXmlNS::chart, "legend-align" ) ) {
             lalign = legendElem.attributeNS( KoXmlNS::chart, "legend-align", QString() );
         }
 
         LegendPosition lpos = NoLegend;
         int align = 1;
-        if ( lalign == "start" )
-        {
+        if ( lalign == "start" ) {
             align = 0;
         }
-        else if ( lalign == "end" )
-        {
+        else if ( lalign == "end" ) {
             align = 2;
         }
 
-        if ( lp == "start" )
-        {
+        if ( lp == "start" ) {
             lpos = LegendLeft;
             if ( align == 0 )
                 lpos = LegendTopLeftLeft;
             else if ( align == 2 )    
                 lpos = LegendBottomLeftLeft;
         }
-        else if ( lp == "end" )
-        {
+        else if ( lp == "end" ) {
             lpos = LegendRight;
             if ( align == 0 )
                 lpos = LegendTopRightRight;
             else if ( align == 2 )    
                 lpos = LegendBottomRightRight;
         }
-        else if ( lp == "top" )
-        {
+        else if ( lp == "top" ) {
             lpos = LegendTop;
             if ( align == 0 )
                 lpos = LegendTopLeftTop;
             else if ( align == 2 )    
                 lpos = LegendTopRightTop;
         }
-        else if ( lp == "bottom" )
-        {
+        else if ( lp == "bottom" ) {
             lpos = LegendBottom;
             if ( align == 0 )
                 lpos = LegendBottomLeftBottom;
             else if ( align == 2 )    
                 lpos = LegendBottomRightBottom;
         }
-        else if ( lp == "top-start" )
-        {
+        else if ( lp == "top-start" ) {
             lpos = LegendTopLeft;
         }
-        else if ( lp == "bottom-start" )
-        {
+        else if ( lp == "bottom-start" ) {
             lpos = LegendBottomLeft;
         }
-        else if ( lp == "top-end" )
-        {
+        else if ( lp == "top-end" ) {
             lpos = LegendTopRight;
         }
-        else if ( lp == "bottom-end" )
-        {
+        else if ( lp == "bottom-end" ) {
             lpos = LegendBottomRight;
         }
 
         setLegendPosition( lpos );
         //bodyWriter->addAttribute( "koffice:title", legendTitleText() );
-        if ( legendElem.hasAttributeNS( KoXmlNS::koffice, "title" ) )
-        {
+        if ( legendElem.hasAttributeNS( KoXmlNS::koffice, "title" ) ) {
             setLegendTitleText( legendElem.attributeNS( KoXmlNS::koffice, "title", QString() ) );
         }
     }
-    else
-    {
+    else {
         setLegendPosition( NoLegend );
     }
 
@@ -1305,9 +1294,9 @@ bool ChartShape::loadOdfData( const KoXmlElement    &dataElement,
     return true;
 }
 
+
 // ----------------------------------------------------------------
 //                             Saving
-
 
 
 
@@ -1412,6 +1401,7 @@ void ChartShape::saveOdfFooter( KoXmlWriter& bodyWriter,
     }
 }
 
+
 void ChartShape::saveOdfLegend( KoXmlWriter &bodyWriter,
                                 KoGenStyles& mainStyles ) const
 {
@@ -1492,6 +1482,7 @@ void ChartShape::saveOdfLegend( KoXmlWriter &bodyWriter,
         bodyWriter.endElement(); // chart:legend
     }
 }
+
 
 QString ChartShape::saveOdfFont( KoGenStyles& mainStyles, 
                                  const QFont& font,
@@ -1855,7 +1846,8 @@ void ChartShape::saveOdfData( KoXmlWriter& bodyWriter,
 //                         Private methods
 
 
-void ChartShape::dataChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight )
+void ChartShape::dataChanged( const QModelIndex &topLeft,
+                              const QModelIndex &bottomRight )
 {
     d->diagram->dataChanged( topLeft, bottomRight );
     update();
