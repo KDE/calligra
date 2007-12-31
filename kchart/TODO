@@ -54,11 +54,13 @@ Item                                                                   Prio Stat
   ----------------------------------------------------------------------------
   + Handle all chart types                                      DONE    DONE
      - Handle subtypes                                          --      done
-  + Plot area                                                   ----    ----
+  + General                                                     ----    ----
     - title                                                     --      --
     - subtitle                                                  --      --
     - footer                                                    --      --
-    - Data in rows / columns                                    done    done
+  + Plot area                                                   ----    ----
+    - Data in rows / columns                                    --      --
+    - First row / column as label                               done    done
   + Legend                                                      ----    ----
     - title                                                     done    done
     - orientation                                               done    done

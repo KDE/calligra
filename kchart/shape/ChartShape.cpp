@@ -1046,8 +1046,8 @@ bool ChartShape::loadOdf( const KoXmlElement    &chartElement,
 }
 
 
-bool ChartShape::loadOdfTitle ( const KoXmlElement &titleElement,
-                                    KoShapeLoadingContext &context ) 
+bool ChartShape::loadOdfTitle ( const KoXmlElement    &titleElement,
+                                KoShapeLoadingContext &context ) 
 {
     // TODO: Read optional attributes
     // 1. Table range
@@ -1064,8 +1064,8 @@ bool ChartShape::loadOdfTitle ( const KoXmlElement &titleElement,
     return true;
 }
 
-bool ChartShape::loadOdfSubTitle ( const KoXmlElement &titleElement,
-                                    KoShapeLoadingContext &context ) 
+bool ChartShape::loadOdfSubTitle ( const KoXmlElement    &titleElement,
+                                   KoShapeLoadingContext &context ) 
 {
     // TODO: Read optional attributes
     // 1. Table range
@@ -1082,7 +1082,7 @@ bool ChartShape::loadOdfSubTitle ( const KoXmlElement &titleElement,
     return true;
 }
 
-bool ChartShape::loadOdfFooter ( const KoXmlElement &footerElement,
+bool ChartShape::loadOdfFooter ( const KoXmlElement    &footerElement,
                                  KoShapeLoadingContext &context ) 
 {
     // TODO: Read optional attributes
@@ -1228,6 +1228,35 @@ bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement,
 bool ChartShape::loadOdfPlotarea( const KoXmlElement    &plotareaElement, 
 				  KoShapeLoadingContext &context )
 {
+    KoXmlElement dataHasLabelsElem = KoXml::namedItemNS( plotareaElement, 
+                                                         KoXmlNS::chart, "data-source-has-labels" );
+    if ( plotareaElement.hasAttributeNS( KoXmlNS::chart,
+                                         "data-source-has-labels" ) ) {
+
+        const QString  dataSourceHasLabels
+            = plotareaElement.attributeNS( KoXmlNS::chart,
+                                           "data-source-has-labels" );
+        if ( dataSourceHasLabels == "both" ) {
+            setFirstRowIsLabel( true );
+            setFirstColumnIsLabel( true );
+        } else if ( dataSourceHasLabels == "row" ) {
+            setFirstRowIsLabel( true );
+            setFirstColumnIsLabel( false );
+        } else if ( dataSourceHasLabels == "column" ) {
+            setFirstRowIsLabel( false );
+            setFirstColumnIsLabel( true );
+        } else {
+            // dataSourceHasLabels == "none" or wrong value
+            setFirstRowIsLabel( false );
+            setFirstColumnIsLabel( false );
+        }
+    }
+    else {
+        // No info about if first row / column contains labels.
+        setFirstRowIsLabel( false );
+        setFirstColumnIsLabel( false );
+    }
+
     // 1. Load Axes
     if ( isCartesian( d->chartType ) ) {
         foreach( KDChart::CartesianAxis *axis, ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes() ) {
@@ -1484,20 +1513,6 @@ QString ChartShape::saveOdfFont( KoGenStyles& mainStyles,
 void ChartShape::saveOdfPlotarea( KoXmlWriter& xmlWriter,
                                   KoGenStyles& mainStyles ) const
 {
-#if 0
-    QString  dataSourceHasLabels;
-    if ( m_firstRowIsLabel )
-        if ( m_firstColIsLabel )
-            dataSourceHasLabels = "both";
-        else
-            dataSourceHasLabels = "row";
-    else
-        if ( m_firstColIsLabel )
-            dataSourceHasLabels = "column";
-        else
-            dataSourceHasLabels = "none";
-    bodyWriter->addAttribute( "chart:data-source-has-labels", dataSourceHasLabels );
-#endif
     // Prepare the style for the plot area
     KoGenStyle plotAreaStyle( KoGenStyle::StyleAuto, "chart" );
 
@@ -1589,8 +1604,23 @@ void ChartShape::saveOdfPlotarea( KoXmlWriter& xmlWriter,
         break;
     }
 
+    // About the data:
+    //   Save if the first row / column contain headers.
+    QString  dataSourceHasLabels;
+    if ( d->firstRowIsLabel )
+        if ( d->firstColIsLabel )
+            dataSourceHasLabels = "both";
+        else
+            dataSourceHasLabels = "row";
+    else
+        if ( d->firstColIsLabel )
+            dataSourceHasLabels = "column";
+        else
+            dataSourceHasLabels = "none";
+    xmlWriter.addAttribute( "chart:data-source-has-labels", dataSourceHasLabels );
+
 #if 0
-    // Data direction
+    //   Data direction
     plotAreaStyle.addProperty( "chart:series-source",
 			       ( dataDirection() == DataRows ) ? "rows" : "columns" );
 #endif
