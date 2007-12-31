@@ -544,6 +544,22 @@ void TestStatisticalFunctions::testGAUSS()
     CHECK_EVAL("GAUSS(-0.25)", Value( -0.0987063257 ) ); // check neg. values. test for fixes gauss_func
 }
 
+void TestStatisticalFunctions::testGROWTH()
+{
+    // constraints
+    CHECK_EVAL("GROWTH({}; C19:C23; 1)", Value::errorNA() );          // empty knownY matrix
+    CHECK_EVAL("GROWTH({5.0;\"a\"}; C19:C23; 1)", Value::errorNA() ); // knownY matrix constains chars
+
+    // ODF-tests
+    Value res( Value::Array );
+    
+    res.setElement(0, 0, Value( 2.5198420998 ) );
+    CHECK_EVAL("GROWTH( A19:A23; C19:C23; 1 )",          res ); // with offset
+    
+    res.setElement(0, 0, Value( 1.4859942891 ) );
+    CHECK_EVAL("GROWTH( A19:A23; C19:C23; 1; FALSE() )", res ); // without offset
+}
+
 void TestStatisticalFunctions::testGEOMEAN()
 {
     // ODF-tests

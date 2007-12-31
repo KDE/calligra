@@ -53,7 +53,7 @@ private slots:
     void testCORREL();
     void testCOVAR();
     void testDEVSQ();
-//     void testDEVSQA();
+//     void testDEVSQA(); // no ODF-test available
     void testEXPONDIST();
     void testFDIST();    
     void testFINV();   
@@ -62,10 +62,10 @@ private slots:
     void testFREQUENCY();
     void testFTEST();
     void testGAMMADIST();
-    void testGAMMAINV(); // to be implemented
+    void testGAMMAINV();
 //     void testGAMMALN(); in -> TestMathFunctions
     void testGAUSS();
-//     void testGROWTH(); // TODO check implemented?
+    void testGROWTH(); // to be implemented
     void testGEOMEAN();
     void testHARMEAN();
     void testHYPGEOMDIST();
