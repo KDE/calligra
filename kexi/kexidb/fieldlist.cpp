@@ -271,7 +271,8 @@ Field::List* FieldList::autoIncrementFields()
 		return m_autoinc_fields;
 
 	m_autoinc_fields = new Field::List();
-	foreach (Field *f, m_fields) {
+        m_autoinc_fields->setAutoDelete( false );
+        foreach (Field *f, m_fields) {
 		if (f->isAutoIncrement()) {
 			m_autoinc_fields->append( f );
 		}
