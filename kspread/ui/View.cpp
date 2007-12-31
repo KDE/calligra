@@ -537,7 +537,7 @@ void View::Private::initActions()
   connect(actions->cellLayout, SIGNAL(triggered(bool)), view, SLOT( layoutDlg() ));
   actions->cellLayout->setToolTip( i18n("Set the cell formatting") );
 
-  actions->actionExtraProperties  = new KAction(KIcon( "penbrush" ), i18n("&Properties"), view);
+  actions->actionExtraProperties  = new KAction(KIcon( "document-properties" ), i18n("&Properties"), view);
   ac->addAction("extra_properties", actions->actionExtraProperties );
   connect(actions->actionExtraProperties, SIGNAL(triggered(bool)), view, SLOT( extraProperties() ));
 
@@ -960,7 +960,7 @@ void View::Private::initActions()
   connect(actions->sheetProperties, SIGNAL(triggered(bool)),view, SLOT( sheetProperties() ));
   actions->sheetProperties->setToolTip(i18n("Modify current sheet's properties"));
 
-    actions->insertSheet = new KAction(KIcon("inserttable"), i18n("Sheet"), view);
+    actions->insertSheet = new KAction(KIcon("insert-table"), i18n("Sheet"), view);
     actions->insertSheet->setIconText(i18n("Insert Sheet"));
     actions->insertSheet->setToolTip(i18n("Insert a new sheet"));
     ac->addAction("insertSheet", actions->insertSheet );
@@ -971,7 +971,7 @@ void View::Private::initActions()
     ac->addAction("duplicateSheet", actions->duplicateSheet);
     connect(actions->duplicateSheet, SIGNAL(triggered(bool)), view, SLOT(duplicateSheet()));
 
-    actions->deleteSheet = new KAction(KIcon("delete_table"), i18n("Sheet"), view);
+    actions->deleteSheet = new KAction(KIcon("edit-delete"), i18n("Sheet"), view);
     actions->deleteSheet->setIconText(i18n("Remove Sheet"));
     actions->deleteSheet->setToolTip(i18n("Remove the active sheet"));
     ac->addAction("deleteSheet", actions->deleteSheet);
@@ -1031,7 +1031,7 @@ void View::Private::initActions()
   ac->addAction("clearHyperlink", actions->clearHyperlink);
   connect(actions->clearHyperlink, SIGNAL(triggered(bool)), view, SLOT(clearHyperlink()));
 
-  actions->insertSpecialChar = new KAction(KIcon("char"), i18n("S&pecial Character..."), view);
+  actions->insertSpecialChar = new KAction(KIcon("accessories-character-map"), i18n("S&pecial Character..."), view);
   ac->addAction("insertSpecialChar", actions->insertSpecialChar);
   actions->insertSpecialChar->setToolTip(i18n("Insert one or more symbols or letters not found on the keyboard"));
   connect(actions->insertSpecialChar, SIGNAL(triggered(bool)), view, SLOT(insertSpecialChar()));
@@ -1852,9 +1852,9 @@ void View::initView()
     connect( d->formulaButton, SIGNAL( clicked() ), SLOT( insertMathExpr() ) );
     d->formulaBarLayout->addSpacing( 2 );
 
-    d->cancelButton = d->newIconButton( "cancel", true, d->toolWidget );
+    d->cancelButton = d->newIconButton( "dialog-cancel", true, d->toolWidget );
     d->formulaBarLayout->addWidget( d->cancelButton );
-    d->okButton = d->newIconButton( "ok", true, d->toolWidget );
+    d->okButton = d->newIconButton( "dialog-ok", true, d->toolWidget );
     d->formulaBarLayout->addWidget( d->okButton );
     d->formulaBarLayout->addSpacing( 4 );
 
@@ -6937,7 +6937,7 @@ void View::popupTabBarMenu( const QPoint & _point )
     {
         QMenu* const menu = static_cast<QMenu*>(factory()->container("menupage_popup", this));
 
-        QAction* insertSheet = new KAction(KIcon("inserttable"), i18n("Insert Sheet"), this);
+        QAction* insertSheet = new KAction(KIcon("insert-table"), i18n("Insert Sheet"), this);
         insertSheet->setToolTip(i18n("Remove the active sheet"));
         connect(insertSheet, SIGNAL(triggered(bool)), this, SLOT(insertSheet()));
         menu->insertAction(d->actions->duplicateSheet, insertSheet);
