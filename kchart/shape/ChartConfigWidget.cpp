@@ -525,8 +525,6 @@ void ChartConfigWidget::createActions()
 void ChartConfigWidget::selectDataset( int dataset )
 {
     if ( dataset >= 0 ) {
-        // Hide "Select a dataset..." note
-        d->ui.selectDatasetNote->hide();
         d->ui.datasetColorLabel->setEnabled( true );
         d->ui.datasetColor->setEnabled( true );
         
@@ -536,8 +534,6 @@ void ChartConfigWidget::selectDataset( int dataset )
         }
         d->ui.datasetColor->blockSignals( false );
     } else {
-        // Hide "Select a dataset..." note
-        d->ui.selectDatasetNote->show();
         d->ui.datasetColorLabel->setEnabled( false );
         d->ui.datasetColor->setEnabled( false );
     }
