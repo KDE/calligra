@@ -19,10 +19,11 @@ josi    Johannes Simon has taken this subtask
 !!!!    The purpose or the up-to-dateness of this task needs to be discussed
 !!      This purpose or the up-to-dateness of this subtask needs to be discussed
 
+
 Before release of KOffice 2.0.0
 ===============================
 
-Item                                                                   Prio Status
+Item                                                                   Status
 ------------------------------------------------------------------------------
 
 * KChart, the application
@@ -61,6 +62,8 @@ Item                                                                   Prio Stat
   + Plot area                                                   ----    ----
     - Data in rows / columns                                    --      --
     - First row / column as label                               done    done
+    - Axes (see below)
+    - Background                                                --      --
   + Legend                                                      ----    ----
     - title                                                     done    done
     - orientation                                               done    done
@@ -75,7 +78,7 @@ Item                                                                   Prio Stat
   + Types and subtypes                                                  ----
      - Barchart                                                         done
      - Line chart                                                       done
-     - Area chart                                                       --
+     - Area chart                                                       done
      - Scatter chart                                                    --
      - Pie chart (Circle)                                               --
      - Ring chart                                                       --

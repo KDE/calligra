@@ -78,6 +78,10 @@ public:
     QAction  *stackedLineChartAction;
     QAction  *percentLineChartAction;
 
+    QAction  *normalAreaChartAction;
+    QAction  *stackedAreaChartAction;
+    QAction  *percentAreaChartAction;
+
     // Table Editor
     Ui::ChartTableEditor  tableEditor;
     QDialog              *tableEditorDialog;
@@ -120,14 +124,19 @@ ChartConfigWidget::ChartConfigWidget()
     chartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
     
     QMenu *barChartMenu = chartTypeMenu->addMenu( KIcon( "chart_bar" ), "Bar Chart" );
-    d->normalBarChartAction = barChartMenu->addAction( KIcon( "chart_bar_beside" ), i18n("Normal") );
+    d->normalBarChartAction  = barChartMenu->addAction( KIcon( "chart_bar_beside" ), i18n("Normal") );
     d->stackedBarChartAction = barChartMenu->addAction( KIcon( "chart_bar_layer" ), i18n("Stacked") );
     d->percentBarChartAction = barChartMenu->addAction( KIcon( "chart_bar_percent" ), i18n("Percent") );
     
     QMenu *lineChartMenu = chartTypeMenu->addMenu( KIcon( "chart_line" ), "Line Chart" );
-    d->normalLineChartAction = lineChartMenu->addAction( KIcon( "chart_line_normal" ), i18n("Normal") );
+    d->normalLineChartAction  = lineChartMenu->addAction( KIcon( "chart_line_normal" ), i18n("Normal") );
     d->stackedLineChartAction = lineChartMenu->addAction( KIcon( "chart_line_stacked" ), i18n("Stacked") );
     d->percentLineChartAction = lineChartMenu->addAction( KIcon( "chart_line_percent" ), i18n("Percent") );
+    
+    QMenu *areaChartMenu = chartTypeMenu->addMenu( KIcon( "chart_area" ), "Area Chart" );
+    d->normalAreaChartAction  = areaChartMenu->addAction( KIcon( "chart_area_normal" ), i18n("Normal") );
+    d->stackedAreaChartAction = areaChartMenu->addAction( KIcon( "chart_area_stacked" ), i18n("Stacked") );
+    d->percentAreaChartAction = areaChartMenu->addAction( KIcon( "chart_area_percent" ), i18n("Percent") );
     
     d->ui.chartTypeMenu->setMenu( chartTypeMenu );
     
@@ -243,6 +252,15 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
     } else if ( action == d->percentLineChartAction ) {
         type    = LineChartType;
         subtype = PercentChartSubtype;
+    } else if ( action == d->normalAreaChartAction ) {
+        type    = AreaChartType;
+        subtype = NormalChartSubtype;
+    } else if ( action == d->stackedAreaChartAction ) {
+        type    = AreaChartType;
+        subtype = StackedChartSubtype;
+    } else if ( action == d->percentAreaChartAction ) {
+        type    = AreaChartType;
+        subtype = PercentChartSubtype;
     }
     
     emit chartTypeChanged( type, subtype );
@@ -304,6 +322,9 @@ void ChartConfigWidget::update()
                     case LineChartType:
                         d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_normal" ) );
                         break;
+                    case AreaChartType:
+                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_area_normal" ) );
+                        break;
                 }
                 break;
             case StackedChartSubtype:
@@ -317,6 +338,9 @@ void ChartConfigWidget::update()
                     case LineChartType:
                         d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_stacked" ) );
                         break;
+                    case AreaChartType:
+                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_area_stacked" ) );
+                        break;
                 }
                 break;
             case PercentChartSubtype:
@@ -329,6 +353,9 @@ void ChartConfigWidget::update()
                         break;
                     case LineChartType:
                         d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_percent" ) );
+                        break;
+                    case AreaChartType:
+                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_area_percent" ) );
                         break;
                 }
                 break;
