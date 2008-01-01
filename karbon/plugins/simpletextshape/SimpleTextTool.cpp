@@ -112,19 +112,19 @@ void SimpleTextTool::deactivate()
 void SimpleTextTool::updateActions()
 {
     m_attachPath->setEnabled( m_path != 0 );
-    m_detachPath->setEnabled( m_currentShape->isAttached() );
+    m_detachPath->setEnabled( m_currentShape->isOnPath() );
 }
 
 void SimpleTextTool::attachPath()
 {
     if( m_path )
-        m_currentShape->attach( m_path );
+        m_currentShape->putOnPath( m_path );
 }
 
 void SimpleTextTool::detachPath()
 {
-    if( m_currentShape->isAttached() )
-        m_currentShape->detach();
+    if( m_currentShape->isOnPath() )
+        m_currentShape->removeFromPath();
 }
 
 QWidget *SimpleTextTool::createOptionWidget()

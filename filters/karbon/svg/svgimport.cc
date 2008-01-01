@@ -25,6 +25,8 @@
 #include <karbon_part.h>
 
 #include <KoShape.h>
+#include <KoShapeRegistry.h>
+#include <KoShapeFactory.h>
 #include <KoShapeLayer.h>
 #include <KoShapeContainer.h>
 #include <KoShapeGroup.h>
@@ -42,10 +44,10 @@
 #include <pictureshape/PictureShape.h>
 #include <pathshapes/rectangle/KoRectangleShape.h>
 #include <pathshapes/ellipse/KoEllipseShape.h>
-#include <textshape/TextShape.h>
+#include <plugins/simpletextshape/SimpleTextShape.h>
 
 #include <kgenericfactory.h>
-#include <kdebug.h>
+//#include <kdebug.h>
 #include <kfilterdev.h>
 
 #include <QtGui/QColor>
@@ -146,11 +148,11 @@ void SvgImport::convert()
         // allow for viewbox def with ',' or whitespace
         QString viewbox = docElem.attribute( "viewBox" );
         QStringList points = viewbox.replace( ',', ' ').simplified().split( ' ' );
-	if( points.count() == 4 )
-	{
-            viewBox.setWidth( points[2].toFloat() );
-            viewBox.setHeight( points[3].toFloat() );
-	}
+        if( points.count() == 4 )
+        {
+                viewBox.setWidth( points[2].toFloat() );
+                viewBox.setHeight( points[3].toFloat() );
+        }
     }
 
     double width = !docElem.attribute( "width" ).isEmpty() ? parseUnit( docElem.attribute( "width" ), true, false, viewBox ) : 550.0;
@@ -201,7 +203,7 @@ void SvgImport::convert()
     }
 }
 
-#define DPI 90
+#define DPI 72.0
 
 // Helper functions
 // ---------------------------------------------------------------------------------------
@@ -382,6 +384,21 @@ QMatrix SvgImport::parseTransform( const QString &transform )
     return result;
 }
 
+KoShape * SvgImport::findObject( const QString &name, const QList<KoShape*> & shapes )
+{
+    foreach( KoShape * shape, shapes )
+    {
+        if( shape->name() == name )
+            return shape;
+
+        KoShape * resultShape = findObject( name, dynamic_cast<KoShapeContainer*>( shape ) );
+        if( resultShape )
+            return resultShape;
+    }
+
+    return 0;
+}
+
 KoShape * SvgImport::findObject( const QString &name, KoShapeContainer * group )
 {
     if( ! group )
@@ -519,8 +536,6 @@ double SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, QRectF 
             value = ( value / 25.4 ) * DPI;
         else if( unit.right( 2 ) == "in" )
             value = value * DPI;
-        else if( unit.right( 2 ) == "pt" )
-            value = ( value / 72.0 ) * DPI;
         else if( unit.right( 2 ) == "em" )
             value = value * m_gc.top()->font.pointSize() / ( sqrt( pow( m_gc.top()->matrix.m11(), 2 ) + pow( m_gc.top()->matrix.m22(), 2 ) ) / sqrt( 2.0 ) );
         else if( unit.right( 1 ) == "%" )
@@ -919,8 +934,8 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
     else if( command == "font-size" )
     {
         float pointSize = parseUnit( params );
-	pointSize *= getScalingFromMatrix( gc->matrix );
-	if( pointSize > 0.0f ) 
+        pointSize *= getScalingFromMatrix( gc->matrix ) * KoGlobal::dpiY() / DPI;
+        if( pointSize > 0.0f ) 
             gc->font.setPointSizeF( pointSize );
     }
     else if( command == "font-weight" )
@@ -1213,7 +1228,7 @@ QList<KoShape*> SvgImport::parseGroup( const QDomElement &e )
         }
         else if( b.tagName() == "text" )
         {
-            KoShape * shape = createText( b );
+            KoShape * shape = createText( b, shapes );
             if( shape )
                 shapes.append( shape );
             continue;
@@ -1248,14 +1263,14 @@ void SvgImport::parseDefs( const QDomElement &e )
 // Creating functions
 // ---------------------------------------------------------------------------------------
 
-KoShape * SvgImport::createText( const QDomElement &b )
+KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & shapes )
 {
     QString content;
     QString anchor;
     double offset = 0.0;
 
     QPointF textPosition;
-    TextShape * text = 0;
+    SimpleTextShape * text = 0;
 
     addGraphicContext();
     setupTransform( b );
@@ -1266,8 +1281,6 @@ KoShape * SvgImport::createText( const QDomElement &b )
     if( ! b.attribute( "text-anchor" ).isEmpty() )
         anchor = b.attribute( "text-anchor" );
 
-    kDebug() << "creating text object";
-
     if( b.hasChildNodes() )
     {
         if( textPosition.isNull() && ! b.attribute( "x" ).isEmpty() && ! b.attribute( "y" ).isEmpty() )
@@ -1276,8 +1289,12 @@ KoShape * SvgImport::createText( const QDomElement &b )
             textPosition.setY( parseUnit( b.attribute( "y" ) ) );
         }
 
-        text = new TextShape();
-        QTextDocument * textDoc = text->textShapeData()->document();
+        text = static_cast<SimpleTextShape*>( createShape( SimpleTextShapeID ) );
+        if( ! text )
+            return 0;
+
+        KoPathShape * path = 0;
+        bool pathInDocument = false;
 
         for( QDomNode n = b.firstChild(); !n.isNull(); n = n.nextSibling() )
         {
@@ -1286,9 +1303,6 @@ KoShape * SvgImport::createText( const QDomElement &b )
             {
                 content += n.toCharacterData().data();
             }
-            /*
-
-            // TODO implement text on path support
             else if( e.tagName() == "textPath" )
             {
                 if( e.attribute( "xlink:href" ).isEmpty() )
@@ -1301,18 +1315,22 @@ KoShape * SvgImport::createText( const QDomElement &b )
                     KoShape * obj = findObject( key );
                     // try to find referenced object in actual group, which is not yet part of document
                     if( ! obj )
-                        obj = findObject( key, grp );
-                    if( obj ) 
-                        path = dynamic_cast<VPath*>( obj );
+                        obj = findObject( key, shapes );
+                    if( obj )
+                        path = dynamic_cast<KoPathShape*>( obj );
+                    if( path )
+                        pathInDocument = true;
                 }
                 else
                 {
                     QDomElement p = m_defs[key];
-                    createObject( grp, p, VObject::deleted);
+                    path = dynamic_cast<KoPathShape*>( createObject( p ) );
+                    pathInDocument = false;
+                    path->applyAbsoluteTransformation( m_gc.top()->matrix.inverted() );
                 }
                 if( ! path )
                     continue;
-                base = *path->paths().getFirst();
+
                 content += e.text();
 
                 if( ! e.attribute( "startOffset" ).isEmpty() )
@@ -1322,12 +1340,7 @@ KoShape * SvgImport::createText( const QDomElement &b )
                         offset = 0.01 * start.remove( '%' ).toDouble();
                     else
                     {
-                        float pathLength = 0;
-                        VSubpathIterator pIt( base );
-
-                        for( ; pIt.current(); ++pIt )
-                            pathLength += pIt.current()->length();
-
+                        float pathLength = path->outline().length();
                         if( pathLength > 0.0 )
                             offset = start.toDouble() / pathLength;
                     }
@@ -1336,7 +1349,7 @@ KoShape * SvgImport::createText( const QDomElement &b )
             else if( e.tagName() == "tspan" )
             {
                 // only use text of tspan element, as we are not supporting text 
-                // with different styles
+                // with different styles yet
                 content += e.text();
                 if( textPosition.isNull() && ! e.attribute( "x" ).isEmpty() && ! e.attribute( "y" ).isEmpty() )
                 {
@@ -1361,9 +1374,9 @@ KoShape * SvgImport::createText( const QDomElement &b )
                     KoShape * obj = findObject( key );
                     // try to find referenced object in actual group, which is not yet part of document
                     if( ! obj )
-                        obj = findObject( key, grp );
+                        obj = findObject( key, shapes );
                     if( obj ) 
-                        content += dynamic_cast<VText*>( obj )->text();
+                        content += dynamic_cast<SimpleTextShape*>( obj )->text();
                 }
                 else
                 {
@@ -1376,31 +1389,36 @@ KoShape * SvgImport::createText( const QDomElement &b )
 
             if( ! e.attribute( "text-anchor" ).isEmpty() )
                 anchor = e.attribute( "text-anchor" );
-            */
         }
-        QTextCursor cursor( textDoc );
-        QTextCharFormat format;
-        format.setFont( m_gc.top()->font );
-        format.setForeground( m_gc.top()->fill );
-        cursor.insertText( content.simplified(), format );
-        applySizeFromContent( text, content.simplified() );
-        textPosition -= QPointF( 0, text->size().height() );
+
+        text->setFont( m_gc.top()->font );
+        text->setText( content.simplified() );
+        textPosition -= QPointF( 0, text->baselineOffset() );
         text->setPosition( textPosition );
+
+        if( path )
+        {
+            if( pathInDocument )
+                text->putOnPath( path );
+            else
+                text->putOnPath( path->absoluteTransformation(0).map( path->outline() ) );
+        }
+
+        if( offset > 0.0 )
+            text->setStartOffset( offset );
     }
     else
     {
-        kDebug() << "single text line";
         // a single text line
         textPosition.setX( parseUnit( b.attribute( "x" ) ) );
         textPosition.setY( parseUnit( b.attribute( "y" ) ) );
-        text = new TextShape();
-        QTextDocument * textDoc = text->textShapeData()->document();
-        QTextCursor cursor( textDoc );
-        QTextCharFormat format;
-        format.setFont( m_gc.top()->font );
-        format.setForeground( m_gc.top()->fill );
-        cursor.insertText( b.text().simplified(), format );
-        applySizeFromContent( text, content.simplified() );
+
+        text = static_cast<SimpleTextShape*>( createShape( SimpleTextShapeID ) );
+        if( ! text )
+            return 0;
+
+        text->setFont( m_gc.top()->font );
+        text->setText( b.text().simplified() );
         text->setPosition( textPosition );
     }
 
@@ -1412,48 +1430,20 @@ KoShape * SvgImport::createText( const QDomElement &b )
 
     parseStyle( text, b );
 
-    // the fill applies to the text foreground
-    text->setBackground( QBrush() );
-
+    text->setBackground( m_gc.top()->fill );
     text->applyAbsoluteTransformation( m_gc.top()->matrix );
 
     if( !b.attribute("id").isEmpty() )
         text->setName( b.attribute("id") );
 
-    /*
     if( anchor == "middle" )
-        text->setAlignment( VText::Center );
+        text->setTextAnchor( SimpleTextShape::AnchorMiddle );
     else if( anchor == "end" )
-        text->setAlignment( VText::Right );
-    */
-
-    //if( offset > 0.0 )
-    //    text->setOffset( offset );
+        text->setTextAnchor( SimpleTextShape::AnchorEnd );
 
     removeGraphicContext();
 
-    // mark dirty
-    text->textShapeData()->faul();
-
     return text;
-}
-
-void SvgImport::applySizeFromContent( TextShape * shape, const QString &content )
-{
-    if( ! shape )
-        return;
-
-    QFontMetrics metrics( m_gc.top()->font );
-    QSize pixelSize( metrics.width( content ), metrics.height()  );
-    KoZoomHandler zoomHandler;
-    QSizeF pointSize = zoomHandler.viewToDocument( pixelSize );
-    KoInsets inset = shape->textShapeData()->shapeMargins();
-    pointSize.rheight() += inset.top + inset.bottom;
-    pointSize.rwidth() += inset.left + inset.right;
-    // the following two lines are a hack to make the text appear
-    pointSize.rheight() += 10;
-    pointSize.rwidth() += 10;
-    shape->setSize( pointSize );
 }
 
 KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &style )
@@ -1479,7 +1469,10 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
         if( ! hasRx && hasRy )
             rx = ry;
 
-        KoRectangleShape * rect = new KoRectangleShape();
+        KoRectangleShape * rect = static_cast<KoRectangleShape*>( createShape( KoRectangleShapeId ) );
+        if( ! rect )
+            return 0;
+
         rect->setSize( QSizeF(w,h) );
         rect->setPosition( QPointF(x,y) );
         if( rx >= 0.0 )
@@ -1495,7 +1488,9 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
         double ry   = parseUnit( b.attribute( "ry" ) );
         double left = parseUnit( b.attribute( "cx" ) ) - rx;
         double top  = parseUnit( b.attribute( "cy" ) ) - ry;
-        obj = new KoEllipseShape();
+        obj = createShape( KoEllipseShapeId );
+        if( ! obj )
+            return 0;
         obj->setSize( QSizeF(2*rx, 2*ry) );
         obj->setPosition( QPointF(left,top) );
     }
@@ -1504,13 +1499,18 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
         double r    = parseUnit( b.attribute( "r" ) );
         double left = parseUnit( b.attribute( "cx" ) ) - r;
         double top  = parseUnit( b.attribute( "cy" ) ) - r;
-        obj = new KoEllipseShape();
+        obj = createShape( KoEllipseShapeId );
+        if( ! obj )
+            return 0;
         obj->setSize( QSizeF(2*r, 2*r) );
         obj->setPosition( QPointF(left,top) );
     }
     else if( b.tagName() == "line" )
     {
-        KoPathShape * path = new KoPathShape();
+        KoPathShape * path = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
+        if( ! path )
+            return 0;
+
         double x1 = b.attribute( "x1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x1" ) );
         double y1 = b.attribute( "y1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y1" ) );
         double x2 = b.attribute( "x2" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x2" ) );
@@ -1521,7 +1521,10 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
     }
     else if( b.tagName() == "polyline" || b.tagName() == "polygon" )
     {
-        KoPathShape * path = new KoPathShape();
+        KoPathShape * path = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
+        if( ! path )
+            return 0;
+
         bool bFirst = true;
 
         QString points = b.attribute( "points" ).simplified();
@@ -1552,7 +1555,10 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
     }
     else if( b.tagName() == "path" )
     {
-        KoPathShape *path = new KoPathShape();
+        KoPathShape * path = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
+        if( ! path )
+            return 0;
+
         KoPathShapeLoader loader( path );
         loader.parseSvg( b.attribute( "d" ), true );
         path->setPosition( path->normalize() );
@@ -1642,6 +1648,22 @@ QString SvgImport::absoluteFilePath( const QString &href, const QString &xmlBase
     QString absFile = pathInfo.absolutePath() + '/' + relFile;
 
     return absFile;
+}
+
+KoShape * SvgImport::createShape( const QString &shapeID )
+{
+    KoShapeFactory * factory = KoShapeRegistry::instance()->get( shapeID );
+    if( ! factory )
+    {
+        kWarning(30514) << "Could not find factory for shape id" << shapeID;
+        return 0;
+    }
+
+    KoShape * shape = factory->createDefaultShape();
+    if( shape && shape->shapeId().isEmpty() )
+        shape->setShapeId( factory->id() );
+
+    return shape;
 }
 
 #include <svgimport.moc>

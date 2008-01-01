@@ -43,6 +43,7 @@ private:
     void blockChildSignals( bool block );
     Ui::SimpleTextShapeConfigWidget widget;
     SimpleTextShape * m_shape;
+    QButtonGroup * m_anchorGroup;
 };
 
 #endif // SIMPLETEXTSHAPECONFIGWIDGET_H

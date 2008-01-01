@@ -36,7 +36,6 @@
 class KoShape;
 class KoShapeContainer;
 class KoShapeGroup;
-class TextShape;
 
 class SvgImport : public KoFilter
 {
@@ -87,12 +86,14 @@ protected:
     /// Creates an object from the given xml element
     KoShape * createObject( const QDomElement &, const QDomElement &style = QDomElement() );
     /// Create text object from the given xml element
-    KoShape * createText( const QDomElement & );
+    KoShape * createText( const QDomElement &, const QList<KoShape*> & shapes );
     void parseFont( const QDomElement & );
     /// find object with given id in document
     KoShape * findObject( const QString &name );
     /// find object with given id in given group
     KoShape * findObject( const QString &name, KoShapeContainer * );
+    /// find object with given if in given shape list
+    KoShape * findObject( const QString &name, const QList<KoShape*> & shapes );
     /// find gradient with given id in gradient map
     SvgGradientHelper* findGradient( const QString &id, const QString &href = 0 );
 
@@ -111,7 +112,8 @@ protected:
     /// Constructs an absolute file path from the fiven href and base directory
     QString absoluteFilePath( const QString &href, const QString &xmlBase );
 
-    void applySizeFromContent( TextShape * shape, const QString &content );
+    /// creates a shape from the given shape id
+    KoShape * createShape( const QString &shapeID );
 
 private:
     VDocument *                    m_document;

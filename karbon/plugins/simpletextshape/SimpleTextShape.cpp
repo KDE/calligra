@@ -30,6 +30,7 @@
 SimpleTextShape::SimpleTextShape()
     : m_text( i18n( "Simple Text" ) ), m_font( "ComicSans", 20 )
     , m_path(0), m_startOffset(0.0), m_baselineOffset(0.0)
+    , m_textAnchor( AnchorStart )
 {
     setShapeId( SimpleTextShapeID );
     cacheGlyphOutlines();
@@ -39,7 +40,7 @@ SimpleTextShape::SimpleTextShape()
 SimpleTextShape::~SimpleTextShape()
 {
     if( m_path )
-        m_path->KoShape::removeDependee( this );
+        m_path->removeDependee( this );
 }
 
 void SimpleTextShape::paint(QPainter &painter, const KoViewConverter &converter)
@@ -70,9 +71,14 @@ QSizeF SimpleTextShape::size() const
     return outline().boundingRect().size();
 }
 
-void SimpleTextShape::setSize( const QSizeF & )
+void SimpleTextShape::setSize( const QSizeF &newSize )
 {
-    // TODO alter font size here ?
+    QSizeF oldSize = size();
+    double zoomX = newSize.width() / oldSize.width(); 
+    double zoomY = newSize.height() / oldSize.height(); 
+    QMatrix matrix( zoomX, 0, 0, zoomY, 0, 0 );
+
+    applyTransformation( matrix );
 }
 
 const QPainterPath SimpleTextShape::outline() const
@@ -84,34 +90,45 @@ void SimpleTextShape::createOutline()
 {
     m_outline = QPainterPath();
 
-    if( m_path )
+    if( isOnPath() )
     {
         QFontMetricsF metrics( m_font );
-        QPainterPath pathOutline = m_path->absoluteTransformation(0).map( m_path->outline() );
         int textLength = m_text.length();
-        qreal charPos = m_startOffset * pathOutline.length();
+        qreal charPos = m_startOffset * m_baseline.length();
+
+        qreal anchorPoint = 0.0;
+        if( m_textAnchor == AnchorMiddle )
+            anchorPoint = 0.5 * metrics.width( m_text );
+        else if( m_textAnchor == AnchorEnd )
+            anchorPoint = metrics.width( m_text );
+
+        charPos -= anchorPoint;
+
         for( int charIdx = 0; charIdx < textLength; ++charIdx )
         {
             QString actChar( m_text[charIdx] );
             // get the percent value of the actual char position
-            qreal t = pathOutline.percentAtLength( charPos );
+            qreal t = m_baseline.percentAtLength( charPos );
             if( t >= 1.0 )
                 break;
             // get the path point of the given path position
-            QPointF pathPoint = pathOutline.pointAtPercent( t );
+            QPointF pathPoint = m_baseline.pointAtPercent( t );
 
-            t = pathOutline.percentAtLength( charPos + 0.5 * metrics.width( actChar ) );
+            t = m_baseline.percentAtLength( charPos + 0.5 * metrics.width( actChar ) );
+
+            charPos += metrics.width( actChar );
+            if( t <= 0.0 )
+                continue;
+
             // get the angle at the given path position
             if( t >= 1.0 )
                 break;
-            qreal angle = pathOutline.angleAtPercent( t );
+            qreal angle = m_baseline.angleAtPercent( t );
 
             QMatrix m;
             m.translate( pathPoint.x(), pathPoint.y() );
             m.rotate( angle );
             m_outline.addPath( m.map( m_charOutlines[charIdx] ) );
-
-            charPos += metrics.width( actChar );
         }
     }
     else
@@ -177,7 +194,20 @@ qreal SimpleTextShape::baselineOffset() const
     return m_baselineOffset;
 }
 
-bool SimpleTextShape::attach( KoPathShape * path )
+void SimpleTextShape::setTextAnchor( TextAnchor anchor )
+{
+    m_textAnchor = anchor;
+    update();
+    updateSizeAndPosition();
+    update();
+}
+
+SimpleTextShape::TextAnchor SimpleTextShape::textAnchor() const
+{
+    return m_textAnchor;
+}
+
+bool SimpleTextShape::putOnPath( KoPathShape * path )
 {
     if( ! path )
         return false;
@@ -186,27 +216,46 @@ bool SimpleTextShape::attach( KoPathShape * path )
         return false;
 
     update();
+
     m_path = path;
     m_path->addDependee( this );
+    // use the paths outline converted to document coordinates as the baseline
+    m_baseline = m_path->absoluteTransformation(0).map( m_path->outline() );
+
     updateSizeAndPosition();
     update();
 
     return true;
 }
 
-void SimpleTextShape::detach()
+void SimpleTextShape::putOnPath( const QPainterPath &path )
+{
+    if( path.isEmpty() )
+        return;
+
+    update();
+    if( m_path )
+        m_path->removeDependee( this );
+    m_path = 0;
+    m_baseline = path;
+    updateSizeAndPosition();
+    update();
+}
+
+void SimpleTextShape::removeFromPath()
 {
     update();
     if( m_path )
         m_path->removeDependee( this );
     m_path = 0;
+    m_baseline = QPainterPath();
     updateSizeAndPosition();
     update();
 }
 
-bool SimpleTextShape::isAttached() const
+bool SimpleTextShape::isOnPath() const
 {
-    return (m_path != 0);
+    return (m_path != 0 || ! m_baseline.isEmpty() );
 }
 
 void SimpleTextShape::updateSizeAndPosition()
@@ -218,7 +267,7 @@ void SimpleTextShape::updateSizeAndPosition()
 
     QRectF bbox = m_outline.boundingRect();
 
-    if( m_path )
+    if( isOnPath() )
     {
         // the outline position is in document coordinates
         // so we adjust our position
@@ -257,6 +306,8 @@ void SimpleTextShape::notifyShapeChanged( KoShape * shape, ChangeType type )
     if( shape == m_path )
     {
         update();
+        // use the paths outline converted to document coordinates as the baseline
+        m_baseline = m_path->absoluteTransformation(0).map( m_path->outline() );
         updateSizeAndPosition();
         update();
     }

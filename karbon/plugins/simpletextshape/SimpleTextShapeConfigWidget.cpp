@@ -19,9 +19,10 @@
 
 #include "SimpleTextShapeConfigWidget.h"
 #include "SimpleTextShape.h"
+#include <QtGui/QButtonGroup>
 
 SimpleTextShapeConfigWidget::SimpleTextShapeConfigWidget()
-    : m_shape(0)
+    : m_shape(0), m_anchorGroup(0)
 {
     widget.setupUi( this );
 
@@ -29,7 +30,18 @@ SimpleTextShapeConfigWidget::SimpleTextShapeConfigWidget()
     widget.bold->setIcon( KIcon( "format-text-bold" ) );
     widget.italic->setCheckable( true );
     widget.italic->setIcon( KIcon( "format-text-italic" ) );
+    widget.anchorStart->setIcon( KIcon( "format-justify-left" ) );
+    widget.anchorStart->setCheckable( true );
+    widget.anchorMiddle->setIcon( KIcon( "format-justify-center" ) );
+    widget.anchorMiddle->setCheckable( true );
+    widget.anchorEnd->setIcon( KIcon( "format-justify-right" ) );
+    widget.anchorEnd->setCheckable( true );
     widget.fontSize->setRange( 2, 72 );
+
+    m_anchorGroup = new QButtonGroup(this);
+    m_anchorGroup->addButton( widget.anchorStart );
+    m_anchorGroup->addButton( widget.anchorMiddle );
+    m_anchorGroup->addButton( widget.anchorEnd );
 
     connect( widget.fontFamily, SIGNAL(currentFontChanged(const QFont&)), this, SIGNAL(propertyChanged()));
     connect( widget.fontSize, SIGNAL(valueChanged(int)), this, SIGNAL(propertyChanged()));
@@ -37,6 +49,7 @@ SimpleTextShapeConfigWidget::SimpleTextShapeConfigWidget()
     connect( widget.italic, SIGNAL(toggled(bool)), this, SIGNAL(propertyChanged()));
     connect( widget.text, SIGNAL(textChanged(const QString&)), this, SIGNAL(propertyChanged()));
     connect( widget.startOffset, SIGNAL(valueChanged(int)), this, SIGNAL(propertyChanged()));
+    connect( m_anchorGroup, SIGNAL(buttonClicked(int)), this, SIGNAL(propertyChanged()));
 }
 
 void SimpleTextShapeConfigWidget::blockChildSignals( bool block )
@@ -47,6 +60,7 @@ void SimpleTextShapeConfigWidget::blockChildSignals( bool block )
     widget.bold->blockSignals( block );
     widget.italic->blockSignals( block );
     widget.startOffset->blockSignals( block );
+    m_anchorGroup->blockSignals( block );
 }
 
 void SimpleTextShapeConfigWidget::open(KoShape *shape)
@@ -66,9 +80,15 @@ void SimpleTextShapeConfigWidget::open(KoShape *shape)
     widget.fontFamily->setFont( font );
     widget.bold->setChecked( font.bold() );
     widget.italic->setChecked( font.italic() );
+    if( m_shape->textAnchor() == SimpleTextShape::AnchorStart )
+        widget.anchorStart->setChecked( true );
+    else if( m_shape->textAnchor() == SimpleTextShape::AnchorMiddle )
+        widget.anchorMiddle->setChecked( true );
+    else
+        widget.anchorEnd->setChecked( true );
     widget.startOffset->setValue( static_cast<int>( m_shape->startOffset() * 100.0 ) );
-    widget.startOffset->setVisible( m_shape->isAttached() );
-    widget.labelStartOffset->setVisible( m_shape->isAttached() );
+    widget.startOffset->setVisible( m_shape->isOnPath() );
+    widget.labelStartOffset->setVisible( m_shape->isOnPath() );
 
     blockChildSignals( false );
 }
@@ -86,6 +106,12 @@ void SimpleTextShapeConfigWidget::save()
     m_shape->setFont( font );
     m_shape->setText( widget.text->text() );
     m_shape->setStartOffset( static_cast<qreal>(widget.startOffset->value()) / 100.0 );
+    if( widget.anchorStart->isChecked() )
+        m_shape->setTextAnchor( SimpleTextShape::AnchorStart );
+    else if( widget.anchorMiddle->isChecked() )
+        m_shape->setTextAnchor( SimpleTextShape::AnchorMiddle );
+    else
+        m_shape->setTextAnchor( SimpleTextShape::AnchorEnd );
 }
 
 QUndoCommand * SimpleTextShapeConfigWidget::createCommand()

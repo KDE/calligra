@@ -32,6 +32,8 @@ class KoPathShape;
 class SimpleTextShape : public KoShape
 {
 public:
+    enum TextAnchor { AnchorStart, AnchorMiddle, AnchorEnd };
+
     SimpleTextShape();
     virtual ~SimpleTextShape();
 
@@ -63,13 +65,16 @@ public:
     QFont font() const;
 
     /// Attaches this text shape to the given path shape
-    bool attach( KoPathShape * path );
+    bool putOnPath( KoPathShape * path );
+
+    /// Puts the text on the given path, the path is expected to be in document coordinates
+    void putOnPath( const QPainterPath &path );
 
     /// Detaches this text shape from an already attached path shape
-    void detach();
+    void removeFromPath();
 
     /// Returns if shape is attached to a path shape
-    bool isAttached() const;
+    bool isOnPath() const;
 
     /// Sets the offset for for text on path
     void setStartOffset( qreal offset );
@@ -83,6 +88,12 @@ public:
      * Note: The value makes only sense for text not attached to a path.
      */
     qreal baselineOffset() const;
+
+    /// Sets the text anchor
+    void setTextAnchor( TextAnchor anchor );
+
+    /// Returns the actual text anchor
+    TextAnchor textAnchor() const;
 
 private:
     void updateSizeAndPosition();
@@ -98,6 +109,8 @@ private:
     qreal m_startOffset; ///< the offset from the attached path start point
     qreal m_baselineOffset; ///< the y-offset from the top-left corner to the baseline
     QPainterPath m_outline; ///< the actual outline
+    QPainterPath m_baseline; ///< the baseline path the text is on
+    TextAnchor m_textAnchor; ///< the actual text anchor
 };
 
 #endif // SIMPLETEXTSHAPE_H
