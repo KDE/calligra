@@ -149,14 +149,14 @@ ChartConfigWidget::ChartConfigWidget()
              this, SLOT( slotShowTableEditor( bool ) ) );
     
     // "Axis Tab"
-    connect( d->ui.xAxisTitle, SIGNAL( textChanged( const QString& ) ),
-             this, SIGNAL( xAxisTitleChanged( const QString& ) ) );
-    connect( d->ui.yAxisTitle, SIGNAL( textChanged( const QString& ) ),
-             this, SIGNAL( yAxisTitleChanged( const QString& ) ) );
-    connect( d->ui.showVerticalLines, SIGNAL( toggled( bool ) ),
-             this, SIGNAL( showVerticalLinesChanged( bool ) ) );
-    connect( d->ui.showHorizontalLines, SIGNAL( toggled( bool ) ),
-             this, SIGNAL( showHorizontalLinesChanged( bool ) ) );
+    //connect( d->ui.xAxisTitle, SIGNAL( textChanged( const QString& ) ),
+    //         this, SIGNAL( xAxisTitleChanged( const QString& ) ) );
+    //connect( d->ui.yAxisTitle, SIGNAL( textChanged( const QString& ) ),
+    //         this, SIGNAL( yAxisTitleChanged( const QString& ) ) );
+    //connect( d->ui.showVerticalLines, SIGNAL( toggled( bool ) ),
+    //         this, SIGNAL( showVerticalLinesChanged( bool ) ) );
+    //connect( d->ui.showHorizontalLines, SIGNAL( toggled( bool ) ),
+    //         this, SIGNAL( showHorizontalLinesChanged( bool ) ) );
     
     // "Datasets" Tab
     connect( d->ui.datasetColor, SIGNAL( changed( const QColor& ) ),
@@ -196,14 +196,14 @@ void ChartConfigWidget::open( KoShape* shape )
     d->shape = dynamic_cast<ChartShape*>( shape );
     
     // Update the axis titles
-    d->ui.xAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[0]->titleText() );
-    d->ui.yAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[1]->titleText() );
+    //d->ui.xAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[0]->titleText() );
+    //d->ui.yAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[1]->titleText() );
     
     // Update the legend title
-    d->ui.legendTitle->setText( d->shape->chart()->legend()->titleText() );
+    //d->ui.legendTitle->setText( d->shape->chart()->legend()->titleText() );
     
     // Fill the data table
-    d->tableView->setModel( ((ChartProxyModel*)d->shape->model()) );
+    //d->tableView->setModel( ((ChartProxyModel*)d->shape->model()) );
     
     update();
 }

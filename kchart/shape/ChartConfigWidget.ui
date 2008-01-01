@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>331</width>
-    <height>444</height>
+    <width>284</width>
+    <height>438</height>
    </rect>
   </property>
   <property name="windowTitle" >
@@ -51,14 +51,14 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1" >
+   <item row="0" column="1" colspan="2" >
     <widget class="QCheckBox" name="threeDLook" >
      <property name="text" >
       <string>3D</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
+   <item row="1" column="1" colspan="2" >
     <widget class="QCheckBox" name="showLegend" >
      <property name="text" >
       <string>Show Legend</string>
@@ -75,7 +75,14 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0" colspan="2" >
+   <item row="2" column="2" >
+    <widget class="QPushButton" name="pushButton_5" >
+     <property name="text" >
+      <string>Themes...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="3" >
     <widget class="QTabWidget" name="tabWidget" >
      <property name="sizePolicy" >
       <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
@@ -84,96 +91,110 @@
       </sizepolicy>
      </property>
      <property name="currentIndex" >
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
        <string>Plot Area</string>
       </attribute>
       <layout class="QGridLayout" >
-       <item row="0" column="0" colspan="2" >
-        <widget class="QPushButton" name="pushButton_6" >
+       <item row="0" column="0" >
+        <widget class="QCheckBox" name="checkBox" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text" >
-          <string>Configure Background...</string>
+          <string>Title</string>
          </property>
         </widget>
+       </item>
+       <item row="0" column="1" colspan="3" >
+        <widget class="QLineEdit" name="lineEdit" />
        </item>
        <item row="1" column="0" >
-        <widget class="QLabel" name="label_2" >
+        <widget class="QCheckBox" name="checkBox_2" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text" >
-          <string>&lt;b>Axes&lt;/b></string>
+          <string>Subtitle</string>
          </property>
         </widget>
+       </item>
+       <item row="1" column="1" colspan="3" >
+        <widget class="QLineEdit" name="lineEdit_2" />
        </item>
        <item row="2" column="0" >
-        <widget class="QCheckBox" name="checkBox" >
+        <widget class="QCheckBox" name="checkBox_3" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="text" >
-          <string>Abscissa</string>
+          <string>Footer</string>
          </property>
         </widget>
        </item>
-       <item row="2" column="1" >
-        <widget class="QLineEdit" name="xAxisTitle" />
+       <item row="2" column="1" colspan="3" >
+        <widget class="QLineEdit" name="lineEdit_3" />
        </item>
-       <item row="3" column="0" >
-        <widget class="QCheckBox" name="checkBox_2" >
-         <property name="text" >
-          <string>Ordinate</string>
+       <item row="3" column="0" colspan="4" >
+        <widget class="Line" name="line_2" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
          </property>
         </widget>
-       </item>
-       <item row="3" column="1" >
-        <widget class="QLineEdit" name="yAxisTitle" />
        </item>
        <item row="4" column="0" colspan="2" >
+        <widget class="QComboBox" name="axisSelection" />
+       </item>
+       <item row="4" column="2" >
+        <widget class="QToolButton" name="addAxis" >
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="3" >
+        <widget class="QToolButton" name="removeAxis" >
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" >
+        <widget class="QCheckBox" name="checkBox_4" >
+         <property name="text" >
+          <string>Label</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="1" colspan="3" >
+        <widget class="QLineEdit" name="lineEdit_4" />
+       </item>
+       <item row="6" column="0" colspan="4" >
+        <widget class="QCheckBox" name="checkBox_5" >
+         <property name="text" >
+          <string>Show Grid Lines</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="4" >
         <widget class="QPushButton" name="pushButton_2" >
          <property name="text" >
           <string>Scaling...</string>
          </property>
         </widget>
        </item>
-       <item row="5" column="0" colspan="2" >
-        <widget class="Line" name="line" >
-         <property name="orientation" >
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0" >
-        <widget class="QLabel" name="label_9" >
-         <property name="text" >
-          <string>&lt;b>Grid&lt;/b></string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="0" colspan="2" >
-        <widget class="QCheckBox" name="showVerticalLines" >
-         <property name="text" >
-          <string>Show Vertical Lines</string>
-         </property>
-         <property name="checked" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0" colspan="2" >
-        <widget class="QCheckBox" name="showHorizontalLines" >
-         <property name="text" >
-          <string>Show Horizontal Lines</string>
-         </property>
-         <property name="checked" >
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0" colspan="2" >
-        <widget class="QPushButton" name="pushButton_5" >
-         <property name="text" >
-          <string>Line Colors and Stroke...</string>
-         </property>
-        </widget>
-       </item>
-       <item row="10" column="0" >
+       <item row="8" column="0" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
