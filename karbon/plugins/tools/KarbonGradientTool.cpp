@@ -211,6 +211,8 @@ void KarbonGradientTool::initialize()
     m_gradients.first()->setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
     delete m_gradient;
     m_gradient = cloneGradient( m_gradients.first()->gradient() );
+    if( m_gradientWidget )
+        m_gradientWidget->setGradient( m_gradient );
 }
 
 void KarbonGradientTool::deactivate()
