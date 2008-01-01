@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2008 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -49,30 +49,32 @@ KAboutData* Kexi::createAboutData()
 #endif
 		, ki18n(description), 
 		KAboutData::License_LGPL_V2,
-		ki18n(	"(c) 2002-2007, Kexi Team\n"
-					"(c) 2003-2007, OpenOffice Polska LLC\n"),
-		ki18n(	"This software is developed by Kexi Team - an international group\n"
-					"of independent developers, with additional assistance and support\n"
-					"from the OpenOffice Polska company.\n\n"
-					"Visit the company Home Page: http://www.openoffice.com.pl"),
+		ki18n("(c) 2002-2008, Kexi Team\n"
+			"(c) 2003-2008, OpenOffice Polska LLC\n"),
+		ki18n("This software is developed by Kexi Team - an international group\n"
+			"of independent developers, with additional assistance and support\n"
+			"from the OpenOffice Polska company.\n\n"
+			"Visit the company Home Page: http://www.openoffice.com.pl"),
 		"http://www.koffice.org/kexi",
 		"submit@bugs.kde.org"
 	);
-	// authors sorted by last contribution date
+	// authors sorted by last nontrivial contribution date
 	aboutData->addAuthor(
 		ki18n("Jarosław Staniek / OpenOffice Polska"), ki18n("Project maintainer & developer, design, KexiDB, commercially supported version, win32 port"), "js@iidea.pl");
 	aboutData->addAuthor(
-		ki18n("Lucijan Busch"),ki18n("Former project maintainer & developer"), "lucijan@kde.org");
-	aboutData->addAuthor(
-		ki18n("Cedric Pasteur"), ki18n("KexiPropertyEditor and FormDesigner"), "cedric.pasteur@free.fr");
+		ki18n("Sebastian Sauer"), ki18n("Scripting module (KROSS), Python language bindings, design"), "mail@dipe.org");
 	aboutData->addAuthor(
 		ki18n("Adam Pigg"), ki18n("PostgreSQL database driver, Migration module"), "adam@piggz.fsnet.co.uk");
 	aboutData->addAuthor(
+		ki18n("Sharan Rao"),ki18n("Sybase/MSSQL Server driver, improvements for KexiDB"), "sharanrao@gmail.com");
+	aboutData->addAuthor(
+		ki18n("Cedric Pasteur"), ki18n("KexiPropertyEditor and FormDesigner"), "cedric.pasteur@free.fr");
+	aboutData->addAuthor(
 		ki18n("Martin Ellis"), ki18n("Contributions for MySQL and KexiDB, fixes, Migration module, MDB support"), "martin.ellis@kdemail.net");
 	aboutData->addAuthor(
-		ki18n("Sebastian Sauer"), ki18n("Scripting module (KROSS), Python language bindings, design"), "mail@dipe.org");
-	aboutData->addAuthor(
 		ki18n("Christian Nitschkowski"), ki18n("Graphics effects, helper dialogs"), "segfault_ii@web.de");
+	aboutData->addAuthor(
+		ki18n("Lucijan Busch"),ki18n("Former project maintainer & developer"), "lucijan@kde.org");
 	aboutData->addAuthor(
 		ki18n("Peter Simonsson"),ki18n("Former developer"),"psn@linux.se");
 	aboutData->addAuthor(
