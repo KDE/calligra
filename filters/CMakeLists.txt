@@ -33,7 +33,7 @@ set(KWMF_INCLUDES ${CMAKE_SOURCE_DIR}/filters/libkowmf)
 
 add_subdirectory( generic_wrapper )
 add_subdirectory( libkowmf )
-# macro_optional_add_subdirectory(kchart)
+macro_optional_add_subdirectory(kchart)
 macro_optional_add_subdirectory(kword)
 if(SHOULD_BUILD_KPRESENTER)
 #    macro_optional_add_subdirectory(kpresenter)

@@ -19,6 +19,7 @@
 
 #include <q3picture.h>
 #include <QPainter>
+#include <QDomDocument>
 //Added by qt3to4:
 #include <QByteArray>
 
@@ -29,7 +30,7 @@
 //#include <KoStoreDevice.h>
 #include <kgenericfactory.h>
 
-#include "kchart_part.h"
+#include "KChartPart.h"
 
 #include "svgexport.h"
 
@@ -63,9 +64,9 @@ SvgExport::convert(const QByteArray& from, const QByteArray& to)
     }
 
     // Get the XML tree.
-    QDomDocument  domIn;
+    KoXmlDocument  domIn;
     domIn.setContent( storeIn );
-    QDomElement   docNode = domIn.documentElement();
+    KoXmlElement   docNode = domIn.documentElement();
 
     // Read the document from the XML tree.
     KChart::KChartPart  kchartDoc;

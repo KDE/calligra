@@ -28,9 +28,11 @@
 #include <KoStore.h>
 #include <kgenericfactory.h>
 #include <KoDocument.h>
+#include <KoXmlReader.h>
 #include <exportsizedia.h>
 #include "genericimageexport.h"
-#include "kchart_part.h"
+#include "KChartPart.h"
+
 
 typedef KGenericFactory<GenericImageExport> GenericImageExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkchartgenericimageexport, GenericImageExportFactory( "genericimageexport" ) )
@@ -68,9 +70,9 @@ GenericImageExport::convert(const QByteArray& from, const QByteArray& to)
     }
 
     // Get the XML tree.
-    QDomDocument  domIn;
+    KoXmlDocument  domIn;
     domIn.setContent( storeIn );
-    QDomElement   docNode = domIn.documentElement();
+    KoXmlElement   docNode = domIn.documentElement();
 
     // Read the document from the XML tree.
     KChart::KChartPart  kchartDoc;
