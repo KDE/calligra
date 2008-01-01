@@ -651,7 +651,7 @@ void DoubleTreeViewBase::init()
     connect( m_rightview, SIGNAL( expanded( const QModelIndex & ) ), m_leftview, SLOT( expand( const QModelIndex & ) ) );
     connect( m_rightview, SIGNAL( collapsed( const QModelIndex & ) ), m_leftview, SLOT( collapse( const QModelIndex & ) ) );
     
-    m_actionSplitView = new KAction(KIcon("view-split-vertical"), "", this);
+    m_actionSplitView = new KAction(KIcon("view-left-right"), "", this);
     setViewSplitMode( true );
 }
 
@@ -917,7 +917,7 @@ void DoubleTreeViewBase::setViewSplitMode( bool split )
         m_actionSplitView->setIcon( KIcon( "view-close" ) );
     } else {
         m_actionSplitView->setText( i18n( "Split View" ) );
-        m_actionSplitView->setIcon( KIcon( "view-split-vertical" ) );
+        m_actionSplitView->setIcon( KIcon( "view-left-right" ) );
     }
     
     if ( m_mode == split ) {
