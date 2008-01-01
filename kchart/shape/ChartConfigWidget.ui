@@ -6,485 +6,441 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>284</width>
-    <height>469</height>
+    <width>270</width>
+    <height>449</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Form</string>
   </property>
-  <widget class="QPushButton" name="chartTypeMenu" >
-   <property name="geometry" >
-    <rect>
-     <x>4</x>
-     <y>4</y>
-     <width>50</width>
-     <height>50</height>
-    </rect>
-   </property>
-   <property name="sizePolicy" >
-    <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="minimumSize" >
-    <size>
-     <width>50</width>
-     <height>50</height>
-    </size>
-   </property>
-   <property name="maximumSize" >
-    <size>
-     <width>50</width>
-     <height>50</height>
-    </size>
-   </property>
-   <property name="layoutDirection" >
-    <enum>Qt::LeftToRight</enum>
-   </property>
-   <property name="text" >
-    <string/>
-   </property>
-   <property name="icon" >
-    <iconset/>
-   </property>
-   <property name="iconSize" >
-    <size>
-     <width>24</width>
-     <height>24</height>
-    </size>
-   </property>
-  </widget>
-  <widget class="QCheckBox" name="threeDLook" >
-   <property name="geometry" >
-    <rect>
-     <x>58</x>
-     <y>17</y>
-     <width>222</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>3D</string>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="editData" >
-   <property name="geometry" >
-    <rect>
-     <x>4</x>
-     <y>58</y>
-     <width>163</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Edit Data...</string>
-   </property>
-  </widget>
-  <widget class="QTabWidget" name="tabWidget" >
-   <property name="geometry" >
-    <rect>
-     <x>4</x>
-     <y>92</y>
-     <width>276</width>
-     <height>373</height>
-    </rect>
-   </property>
-   <property name="sizePolicy" >
-    <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
-     <horstretch>0</horstretch>
-     <verstretch>0</verstretch>
-    </sizepolicy>
-   </property>
-   <property name="currentIndex" >
-    <number>2</number>
-   </property>
-   <widget class="QWidget" name="tab" >
-    <attribute name="title" >
-     <string>Plot Area</string>
-    </attribute>
-    <layout class="QGridLayout" >
-     <item row="0" column="0" >
-      <widget class="QCheckBox" name="checkBox" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text" >
-        <string>Title</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1" colspan="3" >
-      <widget class="QLineEdit" name="lineEdit" />
-     </item>
-     <item row="1" column="0" >
-      <widget class="QCheckBox" name="checkBox_2" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text" >
-        <string>Subtitle</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1" colspan="3" >
-      <widget class="QLineEdit" name="lineEdit_2" />
-     </item>
-     <item row="2" column="0" >
-      <widget class="QCheckBox" name="checkBox_3" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text" >
-        <string>Footer</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1" colspan="3" >
-      <widget class="QLineEdit" name="lineEdit_3" />
-     </item>
-     <item row="3" column="0" colspan="4" >
-      <widget class="Line" name="line_3" >
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0" colspan="4" >
-      <widget class="QPushButton" name="pushButton_4" >
-       <property name="text" >
-        <string>Background...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0" colspan="4" >
-      <widget class="Line" name="line_2" >
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0" >
-      <widget class="QLabel" name="label_2" >
-       <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+  <layout class="QGridLayout" >
+   <item rowspan="2" row="0" column="0" >
+    <widget class="QPushButton" name="chartTypeMenu" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize" >
+      <size>
+       <width>50</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="maximumSize" >
+      <size>
+       <width>50</width>
+       <height>50</height>
+      </size>
+     </property>
+     <property name="layoutDirection" >
+      <enum>Qt::LeftToRight</enum>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+     <property name="icon" >
+      <iconset/>
+     </property>
+     <property name="iconSize" >
+      <size>
+       <width>24</width>
+       <height>24</height>
+      </size>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" >
+    <widget class="QCheckBox" name="threeDLook" >
+     <property name="text" >
+      <string>3D</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2" >
+    <widget class="QPushButton" name="editData" >
+     <property name="text" >
+      <string>Edit Data...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2" >
+    <widget class="QPushButton" name="pushButton_5" >
+     <property name="text" >
+      <string>Themes...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="3" >
+    <widget class="QTabWidget" name="tabWidget" >
+     <property name="sizePolicy" >
+      <sizepolicy vsizetype="Expanding" hsizetype="Expanding" >
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab" >
+      <attribute name="title" >
+       <string>Plot Area</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
+        <widget class="QCheckBox" name="checkBox" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text" >
+          <string>Title</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1" colspan="3" >
+        <widget class="QLineEdit" name="lineEdit" />
+       </item>
+       <item row="1" column="0" >
+        <widget class="QCheckBox" name="checkBox_2" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text" >
+          <string>Subtitle</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="3" >
+        <widget class="QLineEdit" name="lineEdit_2" />
+       </item>
+       <item row="2" column="0" >
+        <widget class="QCheckBox" name="checkBox_3" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text" >
+          <string>Footer</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="3" >
+        <widget class="QLineEdit" name="lineEdit_3" />
+       </item>
+       <item row="3" column="0" colspan="4" >
+        <widget class="Line" name="line_3" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="4" >
+        <widget class="QPushButton" name="pushButton_4" >
+         <property name="text" >
+          <string>Background...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="4" >
+        <widget class="Line" name="line_2" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" >
+        <widget class="QLabel" name="label_2" >
+         <property name="text" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">Axes&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0" colspan="2" >
-      <widget class="QComboBox" name="axisSelection" />
-     </item>
-     <item row="7" column="2" >
-      <widget class="QToolButton" name="addAxis" >
-       <property name="text" >
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="3" >
-      <widget class="QToolButton" name="removeAxis" >
-       <property name="text" >
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0" >
-      <widget class="QCheckBox" name="checkBox_4" >
-       <property name="text" >
-        <string>Label</string>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="1" colspan="3" >
-      <widget class="QLineEdit" name="lineEdit_4" />
-     </item>
-     <item row="9" column="0" colspan="4" >
-      <widget class="QCheckBox" name="checkBox_5" >
-       <property name="text" >
-        <string>Show Grid Lines</string>
-       </property>
-      </widget>
-     </item>
-     <item row="10" column="0" colspan="4" >
-      <widget class="QPushButton" name="pushButton_2" >
-       <property name="text" >
-        <string>Scaling...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="11" column="0" >
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>61</width>
-         <height>71</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="tab_2" >
-    <attribute name="title" >
-     <string>Data Sets</string>
-    </attribute>
-    <layout class="QGridLayout" >
-     <item row="0" column="0" colspan="3" >
-      <widget class="QLabel" name="label_6" >
-       <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">Selected Data Set&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" >
-      <widget class="QLabel" name="datasetColorLabel" >
-       <property name="enabled" >
-        <bool>false</bool>
-       </property>
-       <property name="text" >
-        <string>Color</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1" colspan="2" >
-      <widget class="KColorButton" name="datasetColor" >
-       <property name="enabled" >
-        <bool>false</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0" colspan="3" >
-      <widget class="QPushButton" name="pushButton" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Minimum" hsizetype="Minimum" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text" >
-        <string>Labels and Values...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" colspan="2" >
-      <widget class="QLabel" name="selectDatasetNote" >
-       <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
-p, li { white-space: pre-wrap; }
-&lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
-&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-style:italic;">Click on a data set...&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0" colspan="3" >
-      <widget class="Line" name="propertiesSeparator" >
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0" colspan="3" >
-      <widget class="QLabel" name="barPropertiesLabel" >
-       <property name="text" >
-        <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2" >
+        <widget class="QComboBox" name="axisSelection" />
+       </item>
+       <item row="7" column="2" >
+        <widget class="QToolButton" name="addAxis" >
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="3" >
+        <widget class="QToolButton" name="removeAxis" >
+         <property name="text" >
+          <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0" >
+        <widget class="QCheckBox" name="checkBox_4" >
+         <property name="text" >
+          <string>Label</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="1" colspan="3" >
+        <widget class="QLineEdit" name="lineEdit_4" />
+       </item>
+       <item row="9" column="0" colspan="4" >
+        <widget class="QCheckBox" name="checkBox_5" >
+         <property name="text" >
+          <string>Show Grid Lines</string>
+         </property>
+        </widget>
+       </item>
+       <item row="10" column="0" colspan="4" >
+        <widget class="QPushButton" name="pushButton_2" >
+         <property name="text" >
+          <string>Scaling...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>61</width>
+           <height>71</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2" >
+      <attribute name="title" >
+       <string>Data Sets</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" colspan="3" >
+        <widget class="QComboBox" name="comboBox" />
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="datasetColorLabel" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+         <property name="text" >
+          <string>Color</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1" colspan="2" >
+        <widget class="KColorButton" name="datasetColor" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="3" >
+        <widget class="QCheckBox" name="checkBox_6" >
+         <property name="text" >
+          <string>Display Values</string>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="3" >
+        <widget class="QCheckBox" name="checkBox_7" >
+         <property name="text" >
+          <string>Show Labels</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="3" >
+        <widget class="Line" name="propertiesSeparator" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="3" >
+        <widget class="QLabel" name="barPropertiesLabel" >
+         <property name="text" >
+          <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;style type="text/css">
 p, li { white-space: pre-wrap; }
 &lt;/style>&lt;/head>&lt;body style=" font-family:'Sans Serif'; font-size:10pt; font-weight:400; font-style:normal;">
 &lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">&lt;span style=" font-weight:600;">Bar Properties&lt;/span>&lt;/p>&lt;/body>&lt;/html></string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0" colspan="2" >
-      <widget class="QLabel" name="gapBetweenBarsLabel" >
-       <property name="text" >
-        <string>Gap Between Bars</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="2" >
-      <widget class="QSpinBox" name="gapBetweenBars" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="suffix" >
-        <string>%</string>
-       </property>
-       <property name="maximum" >
-        <number>100</number>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="0" colspan="2" >
-      <widget class="QLabel" name="gapBetweenSetsLabel" >
-       <property name="text" >
-        <string>Gap Between Sets</string>
-       </property>
-      </widget>
-     </item>
-     <item row="7" column="2" >
-      <widget class="QSpinBox" name="gapBetweenSets" >
-       <property name="suffix" >
-        <string>%</string>
-       </property>
-       <property name="maximum" >
-        <number>100</number>
-       </property>
-       <property name="value" >
-        <number>100</number>
-       </property>
-      </widget>
-     </item>
-     <item row="8" column="0" >
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>31</width>
-         <height>94</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="tab_3" >
-    <attribute name="title" >
-     <string>Legend</string>
-    </attribute>
-    <layout class="QGridLayout" >
-     <item row="0" column="0" colspan="3" >
-      <widget class="QCheckBox" name="showLegend" >
-       <property name="text" >
-        <string>Show Legend</string>
-       </property>
-       <property name="checked" >
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0" colspan="4" >
-      <widget class="Line" name="line" >
-       <property name="orientation" >
-        <enum>Qt::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="0" >
-      <widget class="QLabel" name="label_8" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text" >
-        <string>Title</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1" colspan="3" >
-      <widget class="QLineEdit" name="legendTitle" >
-       <property name="sizePolicy" >
-        <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="0" colspan="2" >
-      <widget class="QCheckBox" name="legendShowFrame" >
-       <property name="text" >
-        <string>Show Frame</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="0" colspan="2" >
-      <widget class="QLabel" name="label" >
-       <property name="text" >
-        <string>Orientation</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2" >
-      <widget class="QRadioButton" name="legendOrientationIsVertical" >
-       <property name="text" >
-        <string>v</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="3" >
-      <widget class="QRadioButton" name="legendOrientationIsHorizontal" >
-       <property name="layoutDirection" >
-        <enum>Qt::LeftToRight</enum>
-       </property>
-       <property name="text" >
-        <string>h</string>
-       </property>
-       <property name="icon" >
-        <iconset/>
-       </property>
-      </widget>
-     </item>
-     <item row="5" column="0" colspan="4" >
-      <widget class="QPushButton" name="pushButton_3" >
-       <property name="text" >
-        <string>Position and Alignment...</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="0" colspan="2" >
-      <spacer>
-       <property name="orientation" >
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeHint" >
-        <size>
-         <width>101</width>
-         <height>121</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-    </layout>
-   </widget>
-  </widget>
-  <widget class="QPushButton" name="pushButton_5" >
-   <property name="geometry" >
-    <rect>
-     <x>171</x>
-     <y>58</y>
-     <width>109</width>
-     <height>30</height>
-    </rect>
-   </property>
-   <property name="text" >
-    <string>Themes...</string>
-   </property>
-  </widget>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2" >
+        <widget class="QLabel" name="gapBetweenBarsLabel" >
+         <property name="text" >
+          <string>Gap Between Bars</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="2" >
+        <widget class="QSpinBox" name="gapBetweenBars" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="suffix" >
+          <string>%</string>
+         </property>
+         <property name="maximum" >
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0" colspan="2" >
+        <widget class="QLabel" name="gapBetweenSetsLabel" >
+         <property name="text" >
+          <string>Gap Between Sets</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="2" >
+        <widget class="QSpinBox" name="gapBetweenSets" >
+         <property name="suffix" >
+          <string>%</string>
+         </property>
+         <property name="maximum" >
+          <number>100</number>
+         </property>
+         <property name="value" >
+          <number>100</number>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>31</width>
+           <height>94</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3" >
+      <attribute name="title" >
+       <string>Legend</string>
+      </attribute>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" colspan="3" >
+        <widget class="QCheckBox" name="showLegend" >
+         <property name="text" >
+          <string>Show Legend</string>
+         </property>
+         <property name="checked" >
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" colspan="4" >
+        <widget class="Line" name="line" >
+         <property name="orientation" >
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" >
+        <widget class="QLabel" name="label_8" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text" >
+          <string>Title</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1" colspan="3" >
+        <widget class="QLineEdit" name="legendTitle" >
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Expanding" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2" >
+        <widget class="QCheckBox" name="legendShowFrame" >
+         <property name="text" >
+          <string>Show Frame</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2" >
+        <widget class="QLabel" name="label" >
+         <property name="text" >
+          <string>Orientation</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="2" >
+        <widget class="QRadioButton" name="legendOrientationIsVertical" >
+         <property name="text" >
+          <string>v</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="3" >
+        <widget class="QRadioButton" name="legendOrientationIsHorizontal" >
+         <property name="layoutDirection" >
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text" >
+          <string>h</string>
+         </property>
+         <property name="icon" >
+          <iconset/>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="4" >
+        <widget class="QPushButton" name="pushButton_3" >
+         <property name="text" >
+          <string>Position and Alignment...</string>
+         </property>
+        </widget>
+       </item>
+       <item row="6" column="0" colspan="2" >
+        <spacer>
+         <property name="orientation" >
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" >
+          <size>
+           <width>101</width>
+           <height>121</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <customwidgets>
   <customwidget>
