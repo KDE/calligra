@@ -43,7 +43,7 @@ KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent,
 		foreach(QString caption, captionsForFileBasedDrivers) {
 			const KexiDB::Driver::Info& info = driversInfo[ fileBasedDriversDict[ caption ] ];
 			//! @todo change this if better icon is available
-			addItem( KIcon("gear"), info.caption );
+			addItem( KIcon("application-x-executable"), info.caption );
 			m_drivers.insert(info.caption, info.name.toLower());
 		}
 	}
@@ -52,7 +52,7 @@ KexiDBDriverComboBox::KexiDBDriverComboBox(QWidget* parent,
 		foreach(QString caption, captionsForServerBasedDrivers) {
 			const KexiDB::Driver::Info& info = driversInfo[ serverBasedDriversDict[ caption ] ];
 			//! @todo change this if better icon is available
-			addItem( KIcon("gear"), info.caption );
+			addItem( KIcon("application-x-executable"), info.caption );
 			m_drivers.insert(info.caption, info.name.toLower());
 		}
 	}
