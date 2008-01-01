@@ -229,15 +229,13 @@ bool Cursor::moveFirst()
 				m_afterLast = !getNextRecord();
 				return !m_afterLast;
 			}
-		}
-#if 0 // reverted; todo: fix for sybase only - reopen() does the job below for other drivers...
-		else {
+		} else if ( !( m_conn->driver()->beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY ) )  {
 			// not buffered
 			m_at = 0;
 			m_afterLast = !getNextRecord();
 			return !m_afterLast;
 		}
-#endif		
+
 		if (m_afterLast && m_at==0) //failure if already no records
 			return false;
 		if (!reopen()) //try reopen
