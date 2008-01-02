@@ -117,6 +117,8 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
                       const KDChart::CartesianAxis *axis ) const;
     void saveOdfPlotarea( KoXmlWriter &xmlWriter,
                           KoGenStyles &mainStyles) const;
+    void saveOdfSubtype( KoXmlWriter& xmlWriter,
+                         KoGenStyle& plotAreaStyle ) const;
     void saveOdfData( KoXmlWriter& bodyWriter,
                       KoGenStyles& mainStyles ) const;
     QString saveOdfFont( KoGenStyles& mainStyles, 
@@ -127,7 +129,8 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
  public Q_SLOTS:
     void update() const;
     void setSize( const QSizeF& size );
-    void dataChanged( const QModelIndex &topLeft, const QModelIndex &bottomRight );
+    void dataChanged( const QModelIndex &topLeft, 
+                      const QModelIndex &bottomRight );
 
     /// Set new chart type and subtype.
     void setChartType( OdfChartType newType, 

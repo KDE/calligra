@@ -320,20 +320,32 @@ void ChartShape::setDiagramDefaults( OdfChartType type  /* = LastChartType */ )
 
     // Set Grid attributes.
     switch ( type ) {
-        case BarChartType:
-        case AreaChartType:
-        case LineChartType:
-        case ScatterChartType:
+    case BarChartType:
+    case AreaChartType:
+    case LineChartType:
+    case ScatterChartType:
         {
             KDChart::GridAttributes gridAttributes = ( ( KDChart::CartesianCoordinatePlane* ) d->chart->coordinatePlane() )->gridAttributes( Qt::Vertical );
             gridAttributes.setGridGranularitySequence( KDChartEnums::GranularitySequence_25_50 );
             ( ( KDChart::CartesianCoordinatePlane* ) d->chart->coordinatePlane() )->setGridAttributes(  Qt::Vertical, gridAttributes );
         }
+        break;
+
+    case CircleChartType:
+    case RingChartType:
+    case RadarChartType:
+    case StockChartType:
+    case BubbleChartType:
+    case SurfaceChartType:
+    case GanttChartType:
+    case LastChartType:
+    default:
+        break;
     }
 
     // Set type dependent defaults.
     switch ( type ) {
-        case BarChartType:
+    case BarChartType:
         {
             // Grouped bars shall be displayed with no gap
             KDChart::BarAttributes attributes = ((KDChart::BarDiagram*) d->diagram)->barAttributes();
@@ -343,7 +355,7 @@ void ChartShape::setDiagramDefaults( OdfChartType type  /* = LastChartType */ )
         }
         break;
         
-        case AreaChartType:
+    case AreaChartType:
         {
             KDChart::LineAttributes attributes = ((KDChart::LineDiagram*) d->diagram)->lineAttributes();
             attributes.setDisplayArea( true );
@@ -351,7 +363,7 @@ void ChartShape::setDiagramDefaults( OdfChartType type  /* = LastChartType */ )
         }
         break;
 
-        case ScatterChartType:
+    case ScatterChartType:
         {
             KDChart::DataValueAttributes attributes = ((KDChart::LineDiagram*) d->diagram)->dataValueAttributes();
             KDChart::MarkerAttributes markerAttributes = attributes.markerAttributes();
@@ -368,7 +380,14 @@ void ChartShape::setDiagramDefaults( OdfChartType type  /* = LastChartType */ )
         }
         break;
 
-        case BubbleChartType:
+    case CircleChartType:
+    case RingChartType:
+    case RadarChartType:
+    case StockChartType:
+        // No chart specific defaults here
+        break;
+
+    case BubbleChartType:
         {
             KDChart::DataValueAttributes attributes       = ((KDChart::LineDiagram*) d->diagram)->dataValueAttributes();
             KDChart::MarkerAttributes    markerAttributes = attributes.markerAttributes();
@@ -389,7 +408,12 @@ void ChartShape::setDiagramDefaults( OdfChartType type  /* = LastChartType */ )
         }
         break;
 
-        default:
+    case SurfaceChartType:
+    case GanttChartType:
+    case LastChartType:
+        // No chart specific defaults here
+        break;
+    default:
         break;
     };
 }
@@ -1520,6 +1544,52 @@ void ChartShape::saveOdfPlotarea( KoXmlWriter& xmlWriter,
     KoGenStyle  plotAreaStyle( KoGenStyle::StyleAuto, "chart" );
 
     // Save chart subtype
+    saveOdfSubtype( xmlWriter, plotAreaStyle );
+
+    // About the data:
+    //   Save if the first row / column contain headers.
+    QString  dataSourceHasLabels;
+    if ( d->firstRowIsLabel )
+        if ( d->firstColIsLabel )
+            dataSourceHasLabels = "both";
+        else
+            dataSourceHasLabels = "row";
+    else
+        if ( d->firstColIsLabel )
+            dataSourceHasLabels = "column";
+        else
+            dataSourceHasLabels = "none";
+    // Note: this is saved in the plotarea attributes and not the style.
+    xmlWriter.addAttribute( "chart:data-source-has-labels",
+                            dataSourceHasLabels );
+
+    // Data direction
+    {
+        Qt::Orientation  direction = d->chartModel->dataDirection();
+        plotAreaStyle.addProperty( "chart:series-source",  
+                                   ( direction == Qt::Horizontal )
+                                   ? "rows" : "columns" );
+    }
+
+    // Register the style, and get back its auto-generated name
+    const QString  styleName = mainStyles.lookup( plotAreaStyle, "ch" );
+    xmlWriter.addAttribute( "chart:style-name", styleName );
+
+    if ( isCartesian( d->chartType ) ) {
+        foreach( KDChart::CartesianAxis *axis, ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes() ) {
+            saveOdfAxis( xmlWriter, mainStyles, axis );
+        }
+    }
+
+    // TODO chart:series
+    // TODO chart:wall
+    // TODO chart:grid
+    // TODO chart:floor
+}
+
+void ChartShape::saveOdfSubtype( KoXmlWriter& xmlWriter,
+                                 KoGenStyle& plotAreaStyle ) const
+{
     switch ( d->chartType ) {
     case BarChartType:
         switch( d->chartSubtype ) {
@@ -1606,46 +1676,6 @@ void ChartShape::saveOdfPlotarea( KoXmlWriter& xmlWriter,
         // FIXME
         break;
     }
-
-    // About the data:
-    //   Save if the first row / column contain headers.
-    QString  dataSourceHasLabels;
-    if ( d->firstRowIsLabel )
-        if ( d->firstColIsLabel )
-            dataSourceHasLabels = "both";
-        else
-            dataSourceHasLabels = "row";
-    else
-        if ( d->firstColIsLabel )
-            dataSourceHasLabels = "column";
-        else
-            dataSourceHasLabels = "none";
-    // Note: this is saved in the plotarea attributes and not the style.
-    xmlWriter.addAttribute( "chart:data-source-has-labels",
-                            dataSourceHasLabels );
-
-    // Data direction
-    {
-        Qt::Orientation  direction = d->chartModel->dataDirection();
-        plotAreaStyle.addProperty( "chart:series-source",  
-                                   ( direction == Qt::Horizontal )
-                                   ? "rows" : "columns" );
-    }
-
-    // Register the style, and get back its auto-generated name
-    const QString  styleName = mainStyles.lookup( plotAreaStyle, "ch" );
-    xmlWriter.addAttribute( "chart:style-name", styleName );
-
-    if ( isCartesian( d->chartType ) ) {
-        foreach( KDChart::CartesianAxis *axis, ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes() ) {
-            saveOdfAxis( xmlWriter, mainStyles, axis );
-        }
-    }
-
-    // TODO chart:series
-    // TODO chart:wall
-    // TODO chart:grid
-    // TODO chart:floor
 }
 
 void ChartShape::saveOdfAxis( KoXmlWriter &bodyWriter,

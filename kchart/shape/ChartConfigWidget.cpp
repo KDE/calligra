@@ -314,54 +314,84 @@ void ChartConfigWidget::update()
         }
         d->ui.propertiesSeparator->setVisible( needSeparator );
         switch ( d->shape->chartSubtype() ) {
-            case NormalChartSubtype:
-                switch ( d->shape->chartType() ) {
-                    case BarChartType:
-                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
-                        break;
-                    case LineChartType:
-                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_normal" ) );
-                        break;
-                    case AreaChartType:
-                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_area_normal" ) );
-                        break;
-                }
+        case NormalChartSubtype:
+            switch ( d->shape->chartType() ) {
+            case BarChartType:
+                d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
                 break;
-            case StackedChartSubtype:
-                //d->ui.subtypeStacked->blockSignals( true );
-                //d->ui.subtypeStacked->setChecked( true );
-                //d->ui.subtypeStacked->blockSignals( false );
-                switch ( d->shape->chartType() ) {
-                    case BarChartType:
-                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_layer" ) );
-                        break;
-                    case LineChartType:
-                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_stacked" ) );
-                        break;
-                    case AreaChartType:
-                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_area_stacked" ) );
-                        break;
-                }
+            case LineChartType:
+                d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_normal" ) );
                 break;
-            case PercentChartSubtype:
-                //d->ui.subtypePercent->blockSignals( true );
-                //d->ui.subtypePercent->setChecked( true );
-                //d->ui.subtypePercent->blockSignals( false );
-                switch ( d->shape->chartType() ) {
-                    case BarChartType:
-                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_percent" ) );
-                        break;
-                    case LineChartType:
-                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_percent" ) );
-                        break;
-                    case AreaChartType:
-                        d->ui.chartTypeMenu->setIcon( KIcon( "chart_area_percent" ) );
-                        break;
-                }
+            case AreaChartType:
+                d->ui.chartTypeMenu->setIcon( KIcon( "chart_area_normal" ) );
                 break;
-            case NoChartSubtype:
+            case CircleChartType:
+            case RingChartType:
+            case RadarChartType:
+            case StockChartType:
+            case BubbleChartType:
+            case SurfaceChartType:
+            case GanttChartType:
+            case LastChartType:
             default:
                 break;
+            }
+            break;
+        case StackedChartSubtype:
+            //d->ui.subtypeStacked->blockSignals( true );
+            //d->ui.subtypeStacked->setChecked( true );
+            //d->ui.subtypeStacked->blockSignals( false );
+            switch ( d->shape->chartType() ) {
+            case BarChartType:
+                d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_layer" ) );
+                break;
+            case LineChartType:
+                d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_stacked" ) );
+                break;
+            case AreaChartType:
+                d->ui.chartTypeMenu->setIcon( KIcon( "chart_area_stacked" ) );
+                break;
+            case CircleChartType:
+            case RingChartType:
+            case RadarChartType:
+            case StockChartType:
+            case BubbleChartType:
+            case SurfaceChartType:
+            case GanttChartType:
+            case LastChartType:
+            default:
+                break;
+            }
+            break;
+        case PercentChartSubtype:
+            //d->ui.subtypePercent->blockSignals( true );
+            //d->ui.subtypePercent->setChecked( true );
+            //d->ui.subtypePercent->blockSignals( false );
+            switch ( d->shape->chartType() ) {
+            case BarChartType:
+                d->ui.chartTypeMenu->setIcon( KIcon( "chart_bar_percent" ) );
+                break;
+            case LineChartType:
+                d->ui.chartTypeMenu->setIcon( KIcon( "chart_line_percent" ) );
+                break;
+            case AreaChartType:
+                d->ui.chartTypeMenu->setIcon( KIcon( "chart_area_percent" ) );
+                break;
+            case CircleChartType:
+            case RingChartType:
+            case RadarChartType:
+            case StockChartType:
+            case BubbleChartType:
+            case SurfaceChartType:
+            case GanttChartType:
+            case LastChartType:
+            default:
+                break;
+            }
+            break;
+        case NoChartSubtype:
+        default:
+            break;
         }
         d->type    = d->shape->chartType();
         d->subtype = d->shape->chartSubtype();
