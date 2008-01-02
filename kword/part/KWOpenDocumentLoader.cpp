@@ -3,7 +3,7 @@
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
  * Copyright (C) 2007 Pierre Ducroquet <pinaraf@gmail.com>
- * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -437,7 +437,7 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
     if ( !loadMasterPageStyle(context, d->currentMasterPage) )
         return false;
 
-    loadSettings(context, odfStore.settingsDoc() );
+    loadSettings( odfStore.settingsDoc() );
 
 #if 0 //1.6:
     // This sets the columns and header/footer flags, and calls recalcFrames, so it must be done last.
@@ -455,9 +455,8 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
     return true;
 }
 
-void KWOpenDocumentLoader::loadSettings(KoTextLoadingContext& context, const KoXmlDocument& settingsDoc)
+void KWOpenDocumentLoader::loadSettings( const KoXmlDocument& settingsDoc )
 {
-    Q_UNUSED(context);
     if ( settingsDoc.isNull() )
         return;
 
@@ -477,7 +476,7 @@ void KWOpenDocumentLoader::loadSettings(KoTextLoadingContext& context, const KoX
     //1.6: d->document->variableCollection()->variableSetting()->loadOasis( settings );
 }
 
-bool KWOpenDocumentLoader::loadPageLayout(KoTextLoadingContext& context, const QString& masterPageName)
+bool KWOpenDocumentLoader::loadPageLayout(KoOasisLoadingContext& context, const QString& masterPageName)
 {
     kDebug(32001)<<"KWOpenDocumentLoader::loadPageLayout masterPageName="<<masterPageName;
     const KoOdfStylesReader& styles = context.stylesReader();

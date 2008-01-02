@@ -2,7 +2,7 @@
  * Copyright (C) 2005 David Faure <faure@kde.org>
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  * Copyright (C) 2007 Sebastian Sauer <mail@dipe.org>
- * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -30,6 +30,7 @@ class KWDocument;
 class KWPageManager;
 class KWTextFrameSet;
 class KoOdfReadStore;
+class KoOasisLoadingContext;
 class KoTextLoadingContext;
 class KoTextAnchor;
 class KoXmlDocument;
@@ -64,8 +65,8 @@ public:
     bool load( KoOdfReadStore & odfStore );
 
 protected:
-    virtual void loadSettings(KoTextLoadingContext& context, const KoXmlDocument& settings);
-    virtual bool loadPageLayout(KoTextLoadingContext& context, const QString& masterPageName);
+    virtual void loadSettings( const KoXmlDocument& settings );
+    virtual bool loadPageLayout( KoOasisLoadingContext& context, const QString& masterPageName );
     virtual bool loadMasterPageStyle(KoTextLoadingContext& context, const QString& masterPageName);
 
     virtual void loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
