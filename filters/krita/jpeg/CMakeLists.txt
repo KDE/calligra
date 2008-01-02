@@ -27,7 +27,7 @@ set(kritajpegexport_PART_SRCS
     ${libkritaconverter_LIB_SRCS}
     )
 
-kde4_add_ui3_files(kritajpegexport_PART_SRCS kis_wdg_options_jpeg.ui )
+kde4_add_ui_files(kritajpegexport_PART_SRCS kis_wdg_options_jpeg.ui )
 
 kde4_add_plugin(kritajpegexport WITH_PREFIX ${kritajpegexport_PART_SRCS})
 

@@ -33,12 +33,13 @@
 #include <kis_group_layer.h>
 #include <kis_paint_layer.h>
 
+#include <kis_meta_data_store.h>
 #include <kis_node_visitor.h>
 
 #include "kis_jpeg_converter.h"
-#include "kis_wdg_options_jpeg.h"
 
-#include "kis_meta_data_store.h"
+
+#include "ui_kis_wdg_options_jpeg.h"
 
 class KisExternalLayer;
 
@@ -104,7 +105,11 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     kdb->setWindowTitle( i18n("JPEG Export Options") );
     kdb->setButtons( KDialog::Ok | KDialog::Cancel );
 
-    KisWdgOptionsJPEG* wdg = new KisWdgOptionsJPEG(kdb);
+    Ui::WdgOptionsJPEG wdgUi;
+//     = new Ui::WdgOptionsJPEG(kdb);
+    QWidget* wdg = new QWidget(kdb);
+    wdgUi.setupUi(wdg);
+    
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
     if(kdb->exec() == QDialog::Rejected)
@@ -112,8 +117,8 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
         return KoFilter::OK; // FIXME Cancel doesn't exist :(
     }
     KisJPEGOptions options;
-    options.progressive = wdg->progressive->isChecked();
-    options.quality = wdg->qualityLevel->value();
+    options.progressive = wdgUi.progressive->isChecked();
+    options.quality = wdgUi.qualityLevel->value();
 
     delete kdb;
     // XXX: Add dialog about flattening layers here
