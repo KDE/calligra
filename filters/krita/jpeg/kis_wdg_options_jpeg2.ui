@@ -5,13 +5,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>336</width>
-    <height>296</height>
+    <width>545</width>
+    <height>270</height>
    </rect>
   </property>
   <layout class="QVBoxLayout" >
    <item>
     <widget class="QCheckBox" name="checkBox" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
      <property name="text" >
       <string>Preview image</string>
      </property>
@@ -19,6 +22,9 @@
    </item>
    <item>
     <widget class="QLabel" name="label" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
      <property name="text" >
       <string>Size: 100KB</string>
      </property>
@@ -180,7 +186,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkBox_6" >
+        <widget class="QCheckBox" name="progressive" >
          <property name="text" >
           <string>Progressive</string>
          </property>
@@ -207,7 +213,7 @@
       </attribute>
       <layout class="QVBoxLayout" >
        <item>
-        <widget class="QCheckBox" name="checkBox_7" >
+        <widget class="QCheckBox" name="optimize" >
          <property name="text" >
           <string>Optimize</string>
          </property>
@@ -223,7 +229,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QSlider" name="horizontalSlider" >
+          <widget class="QSlider" name="smooth" >
            <property name="orientation" >
             <enum>Qt::Horizontal</enum>
            </property>
@@ -238,7 +244,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QCheckBox" name="checkBox_9" >
+        <widget class="QCheckBox" name="baseLineJPEG" >
          <property name="text" >
           <string>Force baseline JPEG</string>
          </property>
@@ -254,7 +260,7 @@
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="comboBox" >
+          <widget class="QComboBox" name="subsampling" >
            <item>
             <property name="text" >
              <string>2x2, 1x1, 1x1</string>
@@ -280,17 +286,20 @@
       <attribute name="title" >
        <string>Metadata</string>
       </attribute>
-      <layout class="QVBoxLayout" >
-       <item>
+      <layout class="QGridLayout" >
+       <item row="0" column="0" >
         <widget class="QGroupBox" name="groupBox" >
          <property name="title" >
-          <string>Formats</string>
+          <string>Formats:</string>
          </property>
          <layout class="QVBoxLayout" >
           <item>
            <widget class="QCheckBox" name="checkBox_2" >
             <property name="text" >
              <string>Exif</string>
+            </property>
+            <property name="checked" >
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -299,34 +308,58 @@
             <property name="text" >
              <string>IPTC</string>
             </property>
+            <property name="checked" >
+             <bool>true</bool>
+            </property>
            </widget>
           </item>
           <item>
            <widget class="QCheckBox" name="checkBox_4" >
+            <property name="enabled" >
+             <bool>false</bool>
+            </property>
             <property name="text" >
              <string>XMP</string>
             </property>
            </widget>
           </item>
+          <item>
+           <spacer>
+            <property name="orientation" >
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" >
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
          </layout>
         </widget>
        </item>
-       <item>
-        <widget class="QCheckBox" name="checkBox_5" >
-         <property name="text" >
-          <string>Anonymous metadata</string>
+       <item row="0" column="1" >
+        <widget class="QGroupBox" name="groupBox_2" >
+         <property name="title" >
+          <string>Filters:</string>
          </property>
+         <layout class="QGridLayout" >
+          <item row="0" column="0" >
+           <widget class="QListView" name="metaDataFilters" />
+          </item>
+         </layout>
         </widget>
        </item>
-       <item>
+       <item row="1" column="0" colspan="2" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
          </property>
          <property name="sizeHint" >
           <size>
-           <width>20</width>
-           <height>40</height>
+           <width>505</width>
+           <height>16</height>
           </size>
          </property>
         </spacer>
