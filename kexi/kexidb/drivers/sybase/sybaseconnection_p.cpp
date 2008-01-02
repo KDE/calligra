@@ -175,7 +175,7 @@ bool SybaseConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
         out<<" host = "<<hostName<<"\n";
 
         if ( data.port == 0 )
-            out<<" port = "<<2638<<"\n"; // default port to be used
+            out<<" port = "<<5000<<"\n"; // default port to be used
         else
             out<<" port = "<<data.port<<"\n";
 
@@ -241,8 +241,8 @@ bool SybaseConnectionInternal::useDatabase(const QString &dbName)
        if ( dbuse( dbProcess, dbName.toLatin1().data() ) == SUCCEED ) {
            return true;
        }
-//       return false;
-       return true; // for testing
+
+       return false;
 }
 
 /*! Executes the given SQL statement on the server.

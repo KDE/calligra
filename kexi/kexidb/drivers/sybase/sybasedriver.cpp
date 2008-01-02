@@ -57,7 +57,9 @@ SybaseDriver::SybaseDriver(QObject *parent, const QStringList &args) :
         beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=false;
         beh->USING_DATABASE_REQUIRED_TO_CONNECT=false;
 
-        beh->AUTO_INCREMENT_FIELD_OPTION="DEFAULT AUTOINCREMENT";
+        // for Sybase ASA this field is "DEFAULT AUTOINCREMENT"
+        // for MSSQL and Sybase ASE it's IDENTITY
+        beh->AUTO_INCREMENT_FIELD_OPTION="IDENTITY";
         beh->AUTO_INCREMENT_PK_FIELD_OPTION = beh->AUTO_INCREMENT_FIELD_OPTION + " PRIMARY KEY ";
 
         // confirm
@@ -169,12 +171,13 @@ QByteArray SybaseDriver::drv_escapeIdentifier(const QByteArray& str) const
             + QByteArray( "\"" ) ;
 }
 
-QString SybaseDriver::addLimitTo1(const QString& sql, bool add)
+QString SybaseDriver::addLimitTo1(const QString& sql, bool add )
 {
     // length of "select" is 6
     // eg: before:  select foo from foobar
     //     after:   select TOP 1 foo from foobar
-    return add ? sql.trimmed().insert( 6 , " TOP 1 " ) : sql;
+    QString returnString = sql.trimmed().insert( 6, " TOP 1 " );
+    return add ? returnString : sql;
 }
 
 #include "sybasedriver.moc"

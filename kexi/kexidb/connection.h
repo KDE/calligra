@@ -1001,7 +1001,57 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		*/
 		virtual bool drv_rollbackTransaction(TransactionData* trans);
 
-		/*! Changes autocommiting option for established connection.
+
+		/*! Preprocessing (if any) required by drivers before execution of an 
+		    Insert statement.
+		    Reimplement this method in your driver if there are any special processing steps to be
+		    executed before an Insert statement.
+		  \sa drv_afterInsert()
+		*/
+		virtual bool drv_beforeInsert(const QString& table, FieldList& fields){
+		    Q_UNUSED(table);
+		    Q_UNUSED(fields);
+		    return true;
+		}
+
+		/*! Postprocessing (if any) required by drivers before execution of an 
+		    Insert statement.
+		    Reimplement this method in your driver if there are any special processing steps to be
+		    executed after an Insert statement.
+		  \sa drv_beforeInsert()
+                */
+		virtual bool drv_afterInsert(const QString& table, FieldList& fields){
+		    Q_UNUSED(table);
+		    Q_UNUSED(fields);
+		    return true;		    
+		}
+
+		/*! Preprocessing required by drivers before execution of an 
+		    Update statement.
+		    Reimplement this method in your driver if there are any special processing steps to be
+		    executed before an Update statement.
+		\sa drv_afterUpdate()
+		*/
+		virtual bool drv_beforeUpdate(const QString& table, FieldList& fields){
+		    Q_UNUSED(table);
+		    Q_UNUSED(fields);
+		    return true;
+		}
+ 
+		/*! Postprocessing required by drivers before execution of an 
+		    Insert statement.
+		    Reimplement this method in your driver if there are any special processing steps to be
+		    executed after an Update statement.
+		  \sa drv_beforeUpdate()
+		*/
+		virtual bool drv_afterUpdate(const QString& table, FieldList& fields){
+		    Q_UNUSED(table);
+		    Q_UNUSED(fields);
+		    return true;
+		}
+
+
+ 		/*! Changes autocommiting option for established connection.
 		 \return true on success.
 		 
 		 Note for driver developers: reimplement this only if your engine

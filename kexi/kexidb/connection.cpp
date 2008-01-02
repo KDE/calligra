@@ -1045,9 +1045,18 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 
 #define C_INS_REC(args, vals) \
 	bool Connection::insertRecord(KexiDB::TableSchema &tableSchema args) {\
-		return executeSQL( \
-		 QString("INSERT INTO ") + escapeIdentifier(tableSchema.name()) + " VALUES (" + vals + ")" \
-		); \
+		if ( !drv_beforeInsert( tableSchema.name(), tableSchema ) )  \
+			return false;                                      \
+                                                                        \
+		bool res = executeSQL(                                      \
+		 QString("INSERT INTO ") + escapeIdentifier(tableSchema.name()) \
+                 + " (" + tableSchema.sqlFieldsList(m_driver) + ") VALUES (" + vals + ")"      \
+		 ); \
+                                                                          \
+		if ( !drv_afterInsert( tableSchema.name(),tableSchema ) ) \
+			return false;                                      \
+                                                                        \
+		return res;                                             \
 	}
 
 #define C_INS_REC_ALL \
@@ -1078,10 +1087,15 @@ C_INS_REC_ALL
 		vals \
 		it.toFront(); \
 		QString tableName( (it.hasNext() && it.peekNext()->table()) ? it.next()->table()->name() : "??" ); \
-		return executeSQL( \
+		if ( !drv_beforeInsert( tableName, fields ) )            \
+			return false;                                       \
+		bool res = executeSQL(                                  \
 			QString("INSERT INTO ") + escapeIdentifier(tableName) \
 			+ "(" + fields.sqlFieldsList(m_driver) + ") VALUES (" + value + ")" \
 		); \
+		if ( !drv_afterInsert( tableName, fields ) )    \
+			return false;                               \
+		return res;                             \
 	}
 
 C_INS_REC_ALL
@@ -1119,7 +1133,13 @@ bool Connection::insertRecord(TableSchema &tableSchema, const QList<QVariant>& v
 	m_sql += ")";
 
 //	KexiDBDbg<<"******** "<< m_sql << endl;
-	return executeSQL(m_sql);
+	if ( !drv_beforeInsert( tableSchema.name(), tableSchema ) )
+		return false;
+	bool res = executeSQL(m_sql);
+	if ( !drv_afterInsert( tableSchema.name(), tableSchema ) )
+		return false;
+
+	return res;
 }
 
 bool Connection::insertRecord(FieldList& fields, const QList<QVariant>& values)
@@ -1135,10 +1155,11 @@ bool Connection::insertRecord(FieldList& fields, const QList<QVariant>& values)
 	m_sql.clear();
 	QList<QVariant>::ConstIterator it = values.constBegin();
 //	int i=0;
+        QString tableName = escapeIdentifier( flist->first()->table()->name() );
 	while (f && (it!=values.constEnd())) {
 		if (m_sql.isEmpty())
 			m_sql = QString("INSERT INTO ") +
-				escapeIdentifier(flist->first()->table()->name()) + "(" +
+				tableName + "(" +
 				fields.sqlFieldsList(m_driver) + ") VALUES (";
 		else
 			m_sql += ",";
@@ -1150,7 +1171,13 @@ bool Connection::insertRecord(FieldList& fields, const QList<QVariant>& values)
 	}
 	m_sql += ")";
 
-	return executeSQL(m_sql);
+	if ( !drv_beforeInsert( tableName, fields ) )
+		return false;
+	bool res = executeSQL(m_sql);
+	if ( !drv_afterInsert( tableName, fields ) )
+		return false;
+
+	return res;
 }
 
 bool Connection::executeSQL( const QString& statement )
@@ -3306,7 +3333,17 @@ bool Connection::updateRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
 	m_sql += (sqlset + " WHERE " + sqlwhere);
 	KexiDBDbg << " -- SQL == " << ((m_sql.length() > 400) ? (m_sql.left(400)+"[.....]") : m_sql) << endl;
 
-	if (!executeSQL(m_sql)) {
+        // preprocessing before update
+        if ( !drv_beforeUpdate( mt->name(), query ) )
+            return false;
+
+        bool res = executeSQL( m_sql );
+
+        // postprocessing after update
+        if ( !drv_afterUpdate( mt->name(), query ) )
+            return false;
+
+	if (!res) {
 		setError(ERR_UPDATE_SERVER_ERROR, i18n("Row updating on the server failed."));
 		return false;
 	}
@@ -3409,7 +3446,15 @@ bool Connection::insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
 	m_sql += (sqlcols + ") VALUES (" + sqlvals + ")");
 //	KexiDBDbg << " -- SQL == " << m_sql << endl;
 
+        // do driver specific pre-processing
+	if ( !drv_beforeInsert( mt->name(), query) )
+		return false;
+
 	bool res = executeSQL(m_sql);
+
+	// do driver specific post-processing
+	if ( !drv_afterInsert( mt->name(), query) )
+		return false;
 
 	if (!res) {
 		setError(ERR_INSERT_SERVER_ERROR, i18n("Row inserting on the server failed."));

@@ -73,6 +73,12 @@ class SybaseConnection : public Connection
 //TODO: move this somewhere to low level class (MIGRATION?)
 		virtual bool drv_containsTable( const QString &tableName );
 
+                virtual bool drv_beforeInsert( const QString& table, FieldList& fields );
+                virtual bool drv_afterInsert( const QString& table, FieldList& fields );
+                
+                virtual bool drv_beforeUpdate( const QString& table, FieldList& fields );
+                virtual bool drv_afterUpdate( const QString& table, FieldList& fields );
+
 		SybaseConnectionInternal* d;
 
 		friend class SybaseDriver;
