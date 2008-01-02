@@ -28,6 +28,7 @@
 
 #include <KoInsets.h>
 #include <KoShapeManager.h>
+#include <kdeversion.h>
 
 
 // #define PRINT_VIA_KRITA
@@ -57,7 +58,10 @@ void KWPrintingDialog::preparePage(int pageNumber) {
         return;
     QRectF pageRect = page->rect(pageNumber);
     pageRect.adjust(-bleed.left, -bleed.top, bleed.right, bleed.bottom);
+
+#if QT_VERSION < KDE_MAKE_VERSION(4,4,0)
     printer().setPaperSize(pageRect.size(), QPrinter::Point);
+#endif
 //qDebug() << "paperSize for page " << pageNumber << printer().paperSize(QPrinter::Point);
     const double offsetInDocument = page->offsetInDocument();
     // find images
