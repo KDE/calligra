@@ -93,7 +93,7 @@ bool SybaseConnection::drv_getDatabasesList( QStringList &list ) {
 
 	// select * from master..sysdatabases ?
 	// todo: verify.
-	return queryStringList( "Select name from master..sysdatabases", list ) )
+	return queryStringList( "Select name from master..sysdatabases", list ) ;
 }
 
 bool SybaseConnection::drv_createDatabase( const QString &dbName)
