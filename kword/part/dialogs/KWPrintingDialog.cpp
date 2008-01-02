@@ -59,7 +59,7 @@ void KWPrintingDialog::preparePage(int pageNumber) {
     QRectF pageRect = page->rect(pageNumber);
     pageRect.adjust(-bleed.left, -bleed.top, bleed.right, bleed.bottom);
 
-#if QT_VERSION < KDE_MAKE_VERSION(4,4,0)
+#if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     printer().setPaperSize(pageRect.size(), QPrinter::Point);
 #endif
 //qDebug() << "paperSize for page " << pageNumber << printer().paperSize(QPrinter::Point);
