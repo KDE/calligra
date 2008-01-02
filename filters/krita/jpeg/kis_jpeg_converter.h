@@ -65,6 +65,9 @@ struct KisJPEGOptions {
     int smooth;
     bool baseLineJPEG;
     int subsampling;
+    bool exif;
+    bool iptc;
+    bool xmp;
 };
 
 namespace KisMetaData {

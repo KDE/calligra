@@ -119,10 +119,15 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     KisJPEGOptions options;
     options.progressive = wdgUi.progressive->isChecked();
     options.quality = wdgUi.qualityLevel->value();
+    // Advanced
     options.optimize = wdgUi.optimize->isChecked();
     options.smooth = wdgUi.smoothLevel->value();
     options.baseLineJPEG = wdgUi.baseLineJPEG->isChecked();
     options.subsampling = wdgUi.subsampling->currentItem();
+    // Jpeg
+    options.exif = wdgUi.exif->isChecked();
+    options.iptc = wdgUi.iptc->isChecked();
+    options.xmp = wdgUi.xmp->isChecked();
 
     delete kdb;
     // XXX: Add dialog about flattening layers here

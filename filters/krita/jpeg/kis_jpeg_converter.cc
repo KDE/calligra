@@ -515,6 +515,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     if(metaData and not metaData->empty())
     {
         // Save EXIF
+        if( options.exif )
         {
             dbgFile <<"Trying to save exif information";
 
@@ -543,6 +544,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
             }
         }
         // Save IPTC
+        if( options.iptc )
         {
             dbgFile <<"Trying to save exif information";
             KisMetaData::IOBackend* iptcIO = KisMetaData::IOBackendRegistry::instance()->value("iptc");
