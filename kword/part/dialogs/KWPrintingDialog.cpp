@@ -55,6 +55,10 @@ void KWPrintingDialog::preparePage(int pageNumber) {
     KWPage *page = m_document->pageManager()->page(pageNumber);
     if(! page)
         return;
+    QRectF pageRect = page->rect(pageNumber);
+    pageRect.adjust(-bleed.left, -bleed.top, bleed.right, bleed.bottom);
+    printer().setPaperSize(pageRect.size(), QPrinter::Point);
+//qDebug() << "paperSize for page " << pageNumber << printer().paperSize(QPrinter::Point);
     const double offsetInDocument = page->offsetInDocument();
     // find images
     foreach(KWFrameSet *fs, m_document->frameSets()) {
