@@ -34,6 +34,7 @@
 #include <kis_paint_layer.h>
 
 #include <kis_meta_data_store.h>
+#include <kis_meta_data_filter_registry_model.h>
 #include <kis_node_visitor.h>
 
 #include "kis_jpeg_converter.h"
@@ -109,6 +110,8 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
 //     = new Ui::WdgOptionsJPEG(kdb);
     QWidget* wdg = new QWidget(kdb);
     wdgUi.setupUi(wdg);
+    KisMetaData::FilterRegistryModel frm;
+    wdgUi.metaDataFilters->setModel( &frm );
     
     kdb->setMainWidget(wdg);
     kapp->restoreOverrideCursor();
