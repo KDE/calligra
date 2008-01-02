@@ -514,6 +514,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
 
     if(metaData and not metaData->empty())
     {
+        metaData->applyFilters( options.filters );
         // Save EXIF
         if( options.exif )
         {

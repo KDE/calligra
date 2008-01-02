@@ -38,6 +38,10 @@ class KisDoc2;
 class KisUndoAdapter;
 class KisExifInfo;
 
+namespace KisMetaData {
+    class Filter;
+}
+
 /**
  * Image import/export plugins can use these results to report about success or failure.
  */
@@ -68,6 +72,7 @@ struct KisJPEGOptions {
     bool exif;
     bool iptc;
     bool xmp;
+    QList<KisMetaData::Filter*> filters;
 };
 
 namespace KisMetaData {

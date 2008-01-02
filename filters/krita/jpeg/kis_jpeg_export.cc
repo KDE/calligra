@@ -131,6 +131,7 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     options.exif = wdgUi.exif->isChecked();
     options.iptc = wdgUi.iptc->isChecked();
     options.xmp = wdgUi.xmp->isChecked();
+    options.filters = frm.enabledFilters();
 
     delete kdb;
     // XXX: Add dialog about flattening layers here
@@ -165,11 +166,17 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QByteArray& from, const 
     KisMetaData::Store* eI = 0;
     if(eIV.countPaintLayer() == 1)
         eI = eIV.exifInfo();
-
+    if(eI)
+    {
+        KisMetaData::Store* copy = new KisMetaData::Store( *eI );
+        eI = copy;
+    }
     if ( (res = kpc.buildFile(url, l, beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
         dbgFile <<"success !";
+        delete eI;
         return KoFilter::OK;
     }
+    delete eI;
     dbgFile <<" Result =" << res;
     return KoFilter::InternalError;
 }
