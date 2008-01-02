@@ -61,6 +61,10 @@ enum KisImageBuilder_Result {
 struct KisJPEGOptions {
     int quality;
     bool progressive;
+    bool optimize;
+    int smooth;
+    bool baseLineJPEG;
+    int subsampling;
 };
 
 namespace KisMetaData {

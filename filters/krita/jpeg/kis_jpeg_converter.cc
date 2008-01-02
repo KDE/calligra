@@ -449,13 +449,65 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     // Set default compression parameters
     jpeg_set_defaults(&cinfo);
     // Customize them
-    jpeg_set_quality(&cinfo, options.quality, true);
+    jpeg_set_quality(&cinfo, options.quality, options.baseLineJPEG );
 
     if(options.progressive)
     {
         jpeg_simple_progression (&cinfo);
     }
+    // Optimize ?
+    cinfo.optimize_coding = options.optimize;
 
+    // Smoothing
+    cinfo.smoothing_factor = options.smooth;
+    
+    // Subsampling
+    switch(options.subsampling)
+    {
+        default:
+        case 0:
+        {
+            cinfo.comp_info[0].h_samp_factor = 2;
+            cinfo.comp_info[0].v_samp_factor = 2;
+            cinfo.comp_info[1].h_samp_factor = 1;
+            cinfo.comp_info[1].v_samp_factor = 1;
+            cinfo.comp_info[2].h_samp_factor = 1;
+            cinfo.comp_info[2].v_samp_factor = 1;
+
+        }
+            break;
+        case 1:
+        {
+            cinfo.comp_info[0].h_samp_factor = 2;
+            cinfo.comp_info[0].v_samp_factor = 1;
+            cinfo.comp_info[1].h_samp_factor = 1;
+            cinfo.comp_info[1].v_samp_factor = 1;
+            cinfo.comp_info[2].h_samp_factor = 1;
+            cinfo.comp_info[2].v_samp_factor = 1;
+        }
+            break;
+        case 2:
+        {
+            cinfo.comp_info[0].h_samp_factor = 1;
+            cinfo.comp_info[0].v_samp_factor = 2;
+            cinfo.comp_info[1].h_samp_factor = 1;
+            cinfo.comp_info[1].v_samp_factor = 1;
+            cinfo.comp_info[2].h_samp_factor = 1;
+            cinfo.comp_info[2].v_samp_factor = 1;
+        }
+            break;
+        case 3:
+        {
+            cinfo.comp_info[0].h_samp_factor = 1;
+            cinfo.comp_info[0].v_samp_factor = 1;
+            cinfo.comp_info[1].h_samp_factor = 1;
+            cinfo.comp_info[1].v_samp_factor = 1;
+            cinfo.comp_info[2].h_samp_factor = 1;
+            cinfo.comp_info[2].v_samp_factor = 1;
+        }
+            break;
+    }
+    
     // Start compression
     jpeg_start_compress(&cinfo, true);
     // Save exif and iptc information if any available
