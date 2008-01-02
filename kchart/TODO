@@ -28,6 +28,7 @@ Item                                                                   Status
 
 * KChart, the application
   + Make tools work                                                     DONE
+  + Make the chart always be selected and the tool always active        ----
   + Import data (should this be in ChartShape?)                         ----
   + Drag & drop a chart                                                 !!!!
   + Export                                                              ----
@@ -60,7 +61,7 @@ Item                                                                   Status
     - subtitle                                                  --      --
     - footer                                                    --      --
   + Plot area                                                   ----    ----
-    - Data in rows / columns                                    --      --
+    - Data in rows / columns                                    --      done
     - First row / column as label                               done    done
     - Axes (see below)
     - Background                                                --      --
@@ -91,7 +92,7 @@ Item                                                                   Status
      - Axis                                                             --
      - Grid                                                             --
   + Datasets                                                            ----
-     - Color                                                            --
+     - Color                                                            done
   + Legend                                                              JOSI
      - Title                                                            --
      - Frame                                                            --

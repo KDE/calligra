@@ -29,10 +29,10 @@ class ChartProxyModel::Private {
 public:
     Private();
 
-    ChartShape *shape;
-    bool firstRowIsLabel;
-    bool firstColumnIsLabel;
-    Qt::Orientation dataDirection;
+    ChartShape      *shape;
+    bool             firstRowIsLabel;
+    bool             firstColumnIsLabel;
+    Qt::Orientation  dataDirection;
 };
 
 ChartProxyModel::Private::Private()
@@ -342,6 +342,11 @@ void ChartProxyModel::setDataDirection( Qt::Orientation orientation )
     reset();
     
     dataChanged();
+}
+
+Qt::Orientation ChartProxyModel::dataDirection()
+{
+    return d->dataDirection;
 }
 
 } // namespace KChart

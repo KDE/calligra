@@ -67,6 +67,7 @@ public slots:
     void setFirstRowIsLabel( bool b );
     void setFirstColumnIsLabel( bool b );
     void setDataDirection( Qt::Orientation orientation );
+    Qt::Orientation dataDirection();
 
 private:
     class Private;

@@ -122,8 +122,8 @@ public:
     // Axes
     QString                    xAxisTitle;
     QString                    yAxisTitle;
-    // Lin/log for the X axis
-    // Lin/log for the Y axis
+    // FIXME: Lin/log for the X axis
+    // FIXME: Lin/log for the Y axis
 
     // About the data
     bool                       firstRowIsLabel;
@@ -285,12 +285,13 @@ KDChart::AbstractCoordinatePlane* ChartShape::coordinatePlane() const
 
 void ChartShape::setChartDefaults()
 {
-    // The legend shall have a white background by default and no frame
+    // The legend shall have a white background by default.
     KDChart::BackgroundAttributes  legendBackgroundAttributes = d->legend->backgroundAttributes();
     legendBackgroundAttributes.setBrush( Qt::white );
     legendBackgroundAttributes.setVisible( true );
     d->legend->setBackgroundAttributes( legendBackgroundAttributes );
-    
+
+    // The default is no frame for the legend.
     KDChart::FrameAttributes  legendFrameAttributes = d->legend->frameAttributes();
     legendFrameAttributes.setVisible( false );
     d->legend->setFrameAttributes( legendFrameAttributes );
@@ -397,9 +398,10 @@ void ChartShape::setChartType( OdfChartType    newType,
                                OdfChartSubtype newSubtype )
 {
     KDChart::AbstractDiagram           *new_diagram = 0;
-    KDChart::CartesianCoordinatePlane  *cartPlane = 0;
-    KDChart::PolarCoordinatePlane      *polPlane  = 0;
+    KDChart::CartesianCoordinatePlane  *cartPlane   = 0;
+    KDChart::PolarCoordinatePlane      *polPlane    = 0;
 
+    // No need to do anything if we already have the wanted type and subtype.
     if (d->chartType == newType && d->chartSubtype == newSubtype)
         return;
 
@@ -461,7 +463,7 @@ void ChartShape::setChartType( OdfChartType    newType,
     }
 
     // Check if we need another type of coordinate plane than we
-    // already have before.
+    // already have before.  Also generate any new axes that we need.
     if ( new_diagram != NULL ) {
         if ( isPolar( d->chartType ) && isCartesian( newType ) ) {
             cartPlane = new KDChart::CartesianCoordinatePlane( d->chart );
@@ -501,7 +503,7 @@ void ChartShape::setChartType( OdfChartType    newType,
         // FIXME: Aren't we leaking memory by not doing this?
         // KDChartAbstractDiagram::~KDChartAbstractDiagram() will try to delete
         // its KDChartAttributesModel instance, which would cause a crash.
-        if( new_diagram != 0 ) {
+        if ( new_diagram != 0 ) {
             d->chart->coordinatePlane()->replaceDiagram( new_diagram );
             d->diagram = new_diagram;
             setDiagramDefaults( newType );
@@ -523,7 +525,7 @@ void ChartShape::setChartType( OdfChartType    newType,
     // Only set the new subtype if it's valid, and if the argument was
     // provided ( that is, if the argument is not at it's default
     // defined in ChartShape.h )
-    if( newSubtype != NoChartSubtype )
+    if ( newSubtype != NoChartSubtype )
         setChartSubtype( newSubtype );
 }
 
@@ -632,6 +634,7 @@ void ChartShape::setFirstColumnIsLabel( bool b )
 void ChartShape::setDataDirection( Qt::Orientation orientation )
 {
     d->chartModel->setDataDirection( orientation );
+    // FIXME: this is unnecessary if the chartModel emits the right signal.
     d->chart->coordinatePlane()->relayout();
 }
 
@@ -719,10 +722,11 @@ void ChartShape::setLegendFixedPosition( KDChart::Position position )
     update();
 }
 
+
 void ChartShape::saveChartTypeOptions()
 {
     // Check if the int value is in range of the OdfChartType enumeration
-    if( d->chartType < BarChartType && d->chartType >= LastChartType )
+    if ( d->chartType < BarChartType && d->chartType >= LastChartType )
         return;
 
     d->chartTypeOptions[( int )d->chartType].subtype = d->chartSubtype;
@@ -731,7 +735,7 @@ void ChartShape::saveChartTypeOptions()
 void ChartShape::restoreChartTypeOptions( OdfChartType type )
 {
     // Check if the int value is in range of the OdfChartType enumeration
-    if( type < BarChartType && type >= LastChartType )
+    if ( type < BarChartType && type >= LastChartType )
         return;
 
     setChartSubtype( d->chartTypeOptions[( int )type].subtype );
@@ -868,7 +872,7 @@ bool ChartShape::loadOdf( const KoXmlElement    &chartElement,
 
     // 2. Load the title.
     KoXmlElement titleElem = KoXml::namedItemNS( chartElement, 
-                                                    KoXmlNS::chart, "title" );
+                                                 KoXmlNS::chart, "title" );
     if ( !titleElem.isNull() ) {
         if ( !loadOdfTitle( titleElem, context) )
             return false;
@@ -885,8 +889,8 @@ bool ChartShape::loadOdf( const KoXmlElement    &chartElement,
     // 4. Load the footer.
     KoXmlElement footerElem = KoXml::namedItemNS( chartElement, 
                                                   KoXmlNS::chart, "footer" );
-    if( !footerElem.isNull() ) {
-        if( !loadOdfFooter( footerElem, context) )
+    if ( !footerElem.isNull() ) {
+        if ( !loadOdfFooter( footerElem, context) )
             return false;
     }
 
@@ -1456,7 +1460,7 @@ void ChartShape::saveOdfLegend( KoXmlWriter &bodyWriter,
         case KDChartEnums::PositionUnknown:
             // TODO: Unhandled
             // There's no direct ODF equivalent for PositionCenter.
-            // Absolute coordiantes could be used for Floating and Unknown
+            // Absolute coordinates could be used for Floating and Unknown
             break;
         }
 
@@ -1473,15 +1477,14 @@ void ChartShape::saveOdfLegend( KoXmlWriter &bodyWriter,
         
         KoGenStyle::PropertyType gt = KoGenStyle::GraphicType;
         KoGenStyle *style = ( KoGenStyle* )( mainStyles.style( styleName ) );
-        if ( style )
-        {
+        if ( style ) {
             style->addProperty( "draw:stroke", "solid", gt );
             style->addProperty( "draw:stroke-color", d->legend->frameAttributes().pen().color().name(), gt );
             style->addProperty( "draw:fill", "solid", gt );
             style->addProperty( "draw:fill-color", d->legend->backgroundAttributes().brush().color().name(), gt );
         }
         
-        QString lorientation;
+        QString  lorientation;
         if ( d->legend->orientation() == Qt::Vertical )
             lorientation = "vertical";
         else
@@ -1514,7 +1517,7 @@ void ChartShape::saveOdfPlotarea( KoXmlWriter& xmlWriter,
                                   KoGenStyles& mainStyles ) const
 {
     // Prepare the style for the plot area
-    KoGenStyle plotAreaStyle( KoGenStyle::StyleAuto, "chart" );
+    KoGenStyle  plotAreaStyle( KoGenStyle::StyleAuto, "chart" );
 
     // Save chart subtype
     switch ( d->chartType ) {
@@ -1617,13 +1620,17 @@ void ChartShape::saveOdfPlotarea( KoXmlWriter& xmlWriter,
             dataSourceHasLabels = "column";
         else
             dataSourceHasLabels = "none";
-    xmlWriter.addAttribute( "chart:data-source-has-labels", dataSourceHasLabels );
+    // Note: this is saved in the plotarea attributes and not the style.
+    xmlWriter.addAttribute( "chart:data-source-has-labels",
+                            dataSourceHasLabels );
 
-#if 0
-    //   Data direction
-    plotAreaStyle.addProperty( "chart:series-source",
-			       ( dataDirection() == DataRows ) ? "rows" : "columns" );
-#endif
+    // Data direction
+    {
+        Qt::Orientation  direction = d->chartModel->dataDirection();
+        plotAreaStyle.addProperty( "chart:series-source",  
+                                   ( direction == Qt::Horizontal )
+                                   ? "rows" : "columns" );
+    }
 
     // Register the style, and get back its auto-generated name
     const QString  styleName = mainStyles.lookup( plotAreaStyle, "ch" );
@@ -1658,7 +1665,7 @@ void ChartShape::saveOdfAxis( KoXmlWriter &bodyWriter,
 
     if ( axis->isAbscissa() )
         bodyWriter.addAttribute( "chart:dimension", "x" );
-    else if( axis->isOrdinate() )
+    else if ( axis->isOrdinate() )
         bodyWriter.addAttribute( "chart:dimension", "y" );
 
     bodyWriter.addAttribute( "chart:axis-name", axis->titleText() );
@@ -1901,8 +1908,8 @@ void ChartShape::setXAxisTitle( const QString& title )
     if ( !isCartesian( d->chartType ) )
         return;
     
-    if( ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes()[0] )
-        ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes()[0]->setTitleText( title );
+    if ( ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes()[0] )
+         ((KDChart::AbstractCartesianDiagram*)d->diagram)->axes()[0]->setTitleText( title );
         
     update();
 }
@@ -1969,10 +1976,10 @@ void ChartShape::setGapBetweenSets( int percent )
 void ChartShape::setShowLegend( bool b )
 {
     if ( !b ) {
-        if( d->chart->legend() )
+        if ( d->chart->legend() )
             d->chart->takeLegend( d->legend );
     } else {
-        if( !d->chart->legend() )
+        if ( !d->chart->legend() )
             d->chart->addLegend( d->legend );
     }
     
