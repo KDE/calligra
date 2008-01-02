@@ -62,7 +62,6 @@ void KWPrintingDialog::preparePage(int pageNumber) {
 #if QT_VERSION >= KDE_MAKE_VERSION(4,4,0)
     printer().setPaperSize(pageRect.size(), QPrinter::Point);
 #endif
-//qDebug() << "paperSize for page " << pageNumber << printer().paperSize(QPrinter::Point);
     const double offsetInDocument = page->offsetInDocument();
     // find images
     foreach(KWFrameSet *fs, m_document->frameSets()) {
@@ -115,6 +114,14 @@ void KWPrintingDialog::printingDone() {
 
 QList<QWidget*> KWPrintingDialog::createOptionWidgets() const {
     return QList<QWidget*>();
+}
+
+int KWPrintingDialog::documentFirstPage() const {
+    return m_document->startPage();
+}
+
+int KWPrintingDialog::documentLastPage() const {
+    return m_document->lastPage();
 }
 
 // options;

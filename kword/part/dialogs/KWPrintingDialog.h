@@ -42,6 +42,8 @@ protected:
     virtual void preparePage(int pageNumber);
     virtual QList<KoShape*> shapesOnPage(int pageNumber);
     virtual void printingDone();
+    virtual int documentFirstPage() const;
+    virtual int documentLastPage() const;
 
 private:
     KWDocument *m_document;
