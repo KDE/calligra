@@ -225,7 +225,7 @@ KWTextDocumentLayout::KWTextDocumentLayout(KWTextFrameSet *frameSet)
         KoTextShapeData *data = dynamic_cast<KoTextShapeData*> (m_frameSet->frames().first()->shape()->userData());
         if(data) { // reset layout.
             data->setEndPosition(-1);
-            data->faul();
+            data->foul();
         }
     }
 }
@@ -270,7 +270,7 @@ void KWTextDocumentLayout::relayout() {
             if(frame == firstDirtyFrame)
                 break;
             if(dirtyFrames.contains(frame)) {
-                static_cast<KoTextShapeData*> (frame->shape()->userData())->faul();
+                static_cast<KoTextShapeData*> (frame->shape()->userData())->foul();
                 // just the first is enough.
                 break;
             }

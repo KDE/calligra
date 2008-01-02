@@ -112,7 +112,7 @@ void KWTextFrameSet::setupFrame(KWFrame *frame) {
     else {
         data->setDocument(m_document, false);
         data->setEndPosition(-1);
-        data->faul();
+        data->foul();
         updateTextLayout();
     }
     connect (data, SIGNAL(relayout()), this, SLOT(updateTextLayout()));
