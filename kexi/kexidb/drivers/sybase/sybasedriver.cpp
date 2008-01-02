@@ -12,7 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 Library General Public License for more details.
 
 You should have received a copy of the GNU Library General Public License
-along with this program; see the file COPYING.  If not, write to
+along with this program; see the file COPYING.	If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
@@ -46,59 +46,59 @@ SybaseDriver::SybaseDriver(QObject *parent, const QStringList &args) :
 
 	d->isFileDriver= false ;
 
-        // Sybase supports Nested Transactions. Ignore for now
- 	d->features= IgnoreTransactions | CursorForward;
+	// Sybase supports Nested Transactions. Ignore for now
+	d->features= IgnoreTransactions | CursorForward;
 
-        // Last value assigned is stored in variable @@IDENTITY
+	// Last value assigned is stored in variable @@IDENTITY
 	beh->ROW_ID_FIELD_NAME="@@IDENTITY";
 
-        beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE = true ;
+	beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE = true ;
 
-        beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=false;
-        beh->USING_DATABASE_REQUIRED_TO_CONNECT=false;
+	beh->_1ST_ROW_READ_AHEAD_REQUIRED_TO_KNOW_IF_THE_RESULT_IS_EMPTY=false;
+	beh->USING_DATABASE_REQUIRED_TO_CONNECT=false;
 
-        // for Sybase ASA this field is "DEFAULT AUTOINCREMENT"
-        // for MSSQL and Sybase ASE it's IDENTITY
-        beh->AUTO_INCREMENT_FIELD_OPTION="IDENTITY";
-        beh->AUTO_INCREMENT_PK_FIELD_OPTION = beh->AUTO_INCREMENT_FIELD_OPTION + " PRIMARY KEY ";
+	// for Sybase ASA this field is "DEFAULT AUTOINCREMENT"
+	// for MSSQL and Sybase ASE it's IDENTITY
+	beh->AUTO_INCREMENT_FIELD_OPTION="IDENTITY";
+	beh->AUTO_INCREMENT_PK_FIELD_OPTION = beh->AUTO_INCREMENT_FIELD_OPTION + " PRIMARY KEY ";
 
-        // confirm
-        beh->SELECT_1_SUBQUERY_SUPPORTED = true;
+	// confirm
+	beh->SELECT_1_SUBQUERY_SUPPORTED = true;
 
-        beh->QUOTATION_MARKS_FOR_IDENTIFIER='"';
+	beh->QUOTATION_MARKS_FOR_IDENTIFIER='"';
 
-        initDriverSpecificKeywords(keywords);
+	initDriverSpecificKeywords(keywords);
 
 
 	//predefined properties
 	d->properties["client_library_version"] = "";//TODO
 	d->properties["default_server_encoding"] = ""; //TODO
 
-        // datatypes
-        // integers
+	// datatypes
+	// integers
 	d->typeNames[Field::Byte]="TINYINT";
 	d->typeNames[Field::ShortInteger]="SMALLINT";
 	d->typeNames[Field::Integer]="INT";
 	d->typeNames[Field::BigInteger]="BIGINT";
 
-        // boolean
+	// boolean
 	d->typeNames[Field::Boolean]="BIT";
 
-        // date and time
+	// date and time
 	d->typeNames[Field::Date]="DATE";
 	d->typeNames[Field::DateTime]="DATETIME";
 	d->typeNames[Field::Time]="TIME";
 
-        // floating point
+	// floating point
 	d->typeNames[Field::Float]="FLOAT";
 	d->typeNames[Field::Double]="DOUBLE";
 
-        // strings
+	// strings
 	d->typeNames[Field::Text]="VARCHAR";
 	d->typeNames[Field::LongText]="TEXT";
 
-        // Large Binary Objects
-        d->typeNames[Field::BLOB]="IMAGE";
+	// Large Binary Objects
+	d->typeNames[Field::BLOB]="IMAGE";
 }
 
 SybaseDriver::~SybaseDriver()
@@ -113,22 +113,22 @@ SybaseDriver::drv_createConnection( ConnectionData &conn_data )
 
 bool SybaseDriver::isSystemDatabaseName(const QString &n) const
 {
-    QStringList systemDatabases;
-    systemDatabases<<QString::fromLatin1( "master" )
-               <<QString::fromLatin1( "model" )
-               <<QString::fromLatin1( "sybsystemprocs" )
-               <<QString::fromLatin1( "tempdb" )
-               <<QString::fromLatin1( "sybsecurity" )
-               <<QString::fromLatin1( "sybsystemdb" )
-               <<QString::fromLatin1( "pubs2" )
-               <<QString::fromLatin1( "pubs3" )
-               <<QString::fromLatin1( "dbccdb" );
+	QStringList systemDatabases;
+	systemDatabases<<QString::fromLatin1( "master" )
+		<<QString::fromLatin1( "model" )
+		<<QString::fromLatin1( "sybsystemprocs" )
+		<<QString::fromLatin1( "tempdb" )
+		<<QString::fromLatin1( "sybsecurity" )
+		<<QString::fromLatin1( "sybsystemdb" )
+		<<QString::fromLatin1( "pubs2" )
+		<<QString::fromLatin1( "pubs3" )
+		<<QString::fromLatin1( "dbccdb" );
 
-    QStringList::iterator i = qFind( systemDatabases.begin(),systemDatabases.end(), n.toLower() );
-    if ( i!=systemDatabases.end() )
-        return true;
+	QStringList::iterator i = qFind( systemDatabases.begin(),systemDatabases.end(), n.toLower() );
+	if ( i!=systemDatabases.end() )
+		return true;
 
-    return Driver::isSystemObjectName(n);
+	return Driver::isSystemObjectName(n);
 }
 
 bool SybaseDriver::drv_isSystemFieldName(const QString&) const {
@@ -137,9 +137,9 @@ bool SybaseDriver::drv_isSystemFieldName(const QString&) const {
 
 QString SybaseDriver::escapeString(const QString& str) const
 {
-    return QString::fromLatin1("'") +
-           QString( str ).replace( "\'", "\\''" ) +
-           QString::fromLatin1( "'" );
+	return QString::fromLatin1("'") +
+		QString( str ).replace( "\'", "\\''" ) +
+		QString::fromLatin1( "'" );
 }
 
 QString SybaseDriver::escapeBLOB(const QByteArray& array) const
@@ -149,35 +149,35 @@ QString SybaseDriver::escapeBLOB(const QByteArray& array) const
 
 QByteArray SybaseDriver::escapeString(const QByteArray& str) const
 {
-    // needs any modification ?
-    return QByteArray("'")+QByteArray(str)
+	// needs any modification ?
+	return QByteArray("'")+QByteArray(str)
 		.replace( "\'", "\\''" )
-           + QByteArray("'");
+		+ QByteArray("'");
 }
 
 QString SybaseDriver::drv_escapeIdentifier(const QString& str) const
 {
-    // verify
-    return QString("\"") + QString(str).replace( "\\","\\\\").replace( "\"", "\"\"")
-         + QString("\"");
+	// verify
+	return QString("\"") + QString(str).replace( "\\","\\\\").replace( "\"", "\"\"")
+		+ QString("\"");
 }
 
 QByteArray SybaseDriver::drv_escapeIdentifier(const QByteArray& str) const
 {
-    // verify
-    return QByteArray("\"") + QByteArray(str)
-            .replace( "\\", "\\\\" )
-            .replace( "\"", "\"\"" )
-            + QByteArray( "\"" ) ;
+	// verify
+	return QByteArray("\"") + QByteArray(str)
+		.replace( "\\", "\\\\" )
+		.replace( "\"", "\"\"" )
+		+ QByteArray( "\"" ) ;
 }
 
 QString SybaseDriver::addLimitTo1(const QString& sql, bool add )
 {
-    // length of "select" is 6
-    // eg: before:  select foo from foobar
-    //     after:   select TOP 1 foo from foobar
-    QString returnString = sql.trimmed().insert( 6, " TOP 1 " );
-    return add ? returnString : sql;
+	// length of "select" is 6
+	// eg: before:  select foo from foobar
+	// after:   select TOP 1 foo from foobar
+	QString returnString = sql.trimmed().insert( 6, " TOP 1 " );
+	return add ? returnString : sql;
 }
 
 #include "sybasedriver.moc"

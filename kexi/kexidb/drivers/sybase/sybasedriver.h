@@ -12,7 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 Library General Public License for more details.
 
 You should have received a copy of the GNU Library General Public License
-along with this program; see the file COPYING.  If not, write to
+along with this program; see the file COPYING.	If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
@@ -48,7 +48,7 @@ class SybaseDriver : public Driver
 		virtual QByteArray drv_escapeIdentifier(const QByteArray& str) const;
 		virtual Connection *drv_createConnection( ConnectionData &conn_data );
 		virtual bool drv_isSystemFieldName( const QString& n ) const;
-                virtual QString addLimitTo1(const QString& sql, bool add);
+		virtual QString addLimitTo1(const QString& sql, bool add);
 
 	private:
 		static const char *keywords[];

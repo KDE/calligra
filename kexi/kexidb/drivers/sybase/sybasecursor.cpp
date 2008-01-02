@@ -8,7 +8,7 @@
 
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -40,9 +40,9 @@ SybaseCursor::SybaseCursor(KexiDB::Connection* conn, const QString& statement, u
 	, d( new SybaseCursorData(conn) )
 {
 
-       //m_options |= Buffered;
+	//m_options |= Buffered;
 
-        d->dbProcess = static_cast<SybaseConnection*>(conn)->d->dbProcess;
+	d->dbProcess = static_cast<SybaseConnection*>(conn)->d->dbProcess;
 //	KexiDBDrvDbg << "SybaseCursor: constructor for query statement" << endl;
 }
 
@@ -50,7 +50,7 @@ SybaseCursor::SybaseCursor(Connection* conn, QuerySchema& query, uint options )
 	: Cursor( conn, query, options )
 	, d( new SybaseCursorData(conn) )
 {
-        //  m_options |= Buffered;
+	//  m_options |= Buffered;
 
 	d->dbProcess = static_cast<SybaseConnection*>(conn)->d->dbProcess;
 //	KexiDBDrvDbg << "SybaseCursor: constructor for query statement" << endl;
@@ -62,60 +62,60 @@ SybaseCursor::~SybaseCursor() {
 
 bool SybaseCursor::drv_open() {
 
-        /* Pseudo Code
-         *
-         * Execute Query
-         * If no error
-         *   Store Result in buffer ( d-> ?? )
-         *   Store fieldcount ( no. of columns ) in m_fieldCount
-         *   Set m_fieldsToStoreInRow equal to m_fieldCount
-         *   Store number of rows in d->numRows
-         *   Set pointer at 0 ( m_at = 0 )
-         *
-         *   Set opened flag as true ( m_opened = true )
-         *   Set numberoOfRecordsInbuffer as d->numRows ( m_records_in_buf = d->numRows )
-         *   Set Buffering Complete flag = true
-         *   Set After Last flag = false
-         *
-         */
+	/* Pseudo Code
+	 *
+	 * Execute Query
+	 * If no error
+	 *   Store Result in buffer ( d-> ?? )
+	 *   Store fieldcount ( no. of columns ) in m_fieldCount
+	 *   Set m_fieldsToStoreInRow equal to m_fieldCount
+	 *   Store number of rows in d->numRows
+	 *   Set pointer at 0 ( m_at = 0 )
+	 *
+	 *   Set opened flag as true ( m_opened = true )
+	 *   Set numberoOfRecordsInbuffer as d->numRows ( m_records_in_buf = d->numRows )
+	 *   Set Buffering Complete flag = true
+	 *   Set After Last flag = false
+	 *
+	 */
 
-        // clear all previous results ( if remaining )
-        if ( dbcancel( d->dbProcess ) == FAIL )
-            KexiDBDrvDbg<<"drv_open"<<"dead DBPROCESS ?";
+	// clear all previous results ( if remaining )
+	if ( dbcancel( d->dbProcess ) == FAIL )
+		KexiDBDrvDbg<<"drv_open"<<"dead DBPROCESS ?";
 
-        // insert into command buffer
-        dbcmd( d->dbProcess, m_sql.toUtf8() );
-        // execute query
-        dbsqlexec( d->dbProcess );
+	// insert into command buffer
+	dbcmd( d->dbProcess, m_sql.toUtf8() );
+	// execute query
+	dbsqlexec( d->dbProcess );
 
-        if ( dbresults( d->dbProcess ) == SUCCEED ) {
-            // result set goes directly into dbProcess' buffer
-            m_fieldCount = dbnumcols( d->dbProcess );
-            m_fieldsToStoreInRow = m_fieldCount;
+	if ( dbresults( d->dbProcess ) == SUCCEED ) {
+		// result set goes directly into dbProcess' buffer
+		m_fieldCount = dbnumcols( d->dbProcess );
+		m_fieldsToStoreInRow = m_fieldCount;
 
-            // only relevant if buffering will ever work
-            // <ignore>
-            d->numRows = DBLASTROW( d->dbProcess ); // only true if buffering enabled
-            m_records_in_buf = d->numRows;
-            m_buffering_completed = true;
-            // </ignore>
+		// only relevant if buffering will ever work
+		// <ignore>
+		d->numRows = DBLASTROW( d->dbProcess ); // only true if buffering enabled
+		m_records_in_buf = d->numRows;
+		m_buffering_completed = true;
+		// </ignore>
 
-            m_afterLast = false;
-            m_opened = true;
-            m_at = 0;
+		m_afterLast = false;
+		m_opened = true;
+		m_at = 0;
 
-            return true;
-        }
+		return true;
+	}
 
-        setError(ERR_DB_SPECIFIC, static_cast<SybaseConnection*>( connection() )->d->errmsg);
+	setError(ERR_DB_SPECIFIC, static_cast<SybaseConnection*>( connection() )->d->errmsg);
 	return false;
 }
 
 
 bool SybaseCursor::drv_close() {
 
-        m_opened=false;
-        d->numRows=0;
+	m_opened=false;
+	d->numRows=0;
 	return true;
 }
 
@@ -126,13 +126,13 @@ bool SybaseCursor::drv_close() {
 void SybaseCursor::drv_getNextRecord() {
 //	KexiDBDrvDbg << "SybaseCursor::drv_getNextRecord" << endl;
 
-       // no buffering , and we don't know how many rows are there in result set
+	// no buffering , and we don't know how many rows are there in result set
 
-       if ( dbnextrow( d->dbProcess ) != NO_MORE_ROWS )
-           m_result = FetchOK;
-       else {
-           m_result = FetchEnd;
-       }
+	if ( dbnextrow( d->dbProcess ) != NO_MORE_ROWS )
+	m_result = FetchOK;
+	else {
+		m_result = FetchEnd;
+	}
 
 }
 
@@ -144,26 +144,26 @@ QVariant SybaseCursor::value(uint pos) {
 	KexiDB::Field *f = (m_fieldsExpanded && pos<m_fieldsExpanded->count())
 		? m_fieldsExpanded->at(pos)->field : 0;
 
-        // db-library indexes its columns from 1
-        pos = pos + 1;
+	// db-library indexes its columns from 1
+	pos = pos + 1;
 
-        long int columnDataLength = dbdatlen( d->dbProcess, pos );
+	long int columnDataLength = dbdatlen( d->dbProcess, pos );
 
-        // 512 is
-        // 1. the length used internally in dblib for allocating data to each column in function dbprrow()
-        // 2. it's greater than all the values returned in the dblib internal function _get_printable_size
-        long int pointerLength = qMax( columnDataLength , ( long int )512 );
+	// 512 is
+	// 1. the length used internally in dblib for allocating data to each column in function dbprrow()
+	// 2. it's greater than all the values returned in the dblib internal function _get_printable_size
+	long int pointerLength = qMax( columnDataLength , ( long int )512 );
 
-        BYTE* columnValue = new unsigned char[pointerLength + 1] ;
+	BYTE* columnValue = new unsigned char[pointerLength + 1] ;
 
-        // convert to string representation. All values are convertible to string
-        dbconvert( d->dbProcess , dbcoltype(d->dbProcess , pos), dbdata(d->dbProcess , pos ), columnDataLength , (SYBCHAR), columnValue, -2 );
+	// convert to string representation. All values are convertible to string
+	dbconvert( d->dbProcess , dbcoltype(d->dbProcess , pos), dbdata(d->dbProcess , pos ), columnDataLength , (SYBCHAR), columnValue, -2 );
 
-	QVariant returnValue =  KexiDB::cstringToVariant( ( const char* )columnValue , f, strlen( ( const char* )columnValue ) );
+	QVariant returnValue =	KexiDB::cstringToVariant( ( const char* )columnValue , f, strlen( ( const char* )columnValue ) );
 
-        delete[] columnValue;
+	delete[] columnValue;
 
-        return returnValue;
+	return returnValue;
 }
 
 
@@ -183,21 +183,21 @@ bool SybaseCursor::drv_storeCurrentRow(RecordData& data) const
 		if (m_fieldsExpanded && !f)
 			continue;
 
-                long int columnDataLength = dbdatlen( d->dbProcess, i+1 );
+		long int columnDataLength = dbdatlen( d->dbProcess, i+1 );
 
-                // 512 is
-                // 1. the length used internally in dblib for allocating data to each column in function dbprrow()
-                // 2. it's greater than all the values returned in the dblib internal function _get_printable_size
-                long int pointerLength = qMax( columnDataLength , ( long int )512 );
+		// 512 is
+		// 1. the length used internally in dblib for allocating data to each column in function dbprrow()
+		// 2. it's greater than all the values returned in the dblib internal function _get_printable_size
+		long int pointerLength = qMax( columnDataLength , ( long int )512 );
 
-                BYTE* columnValue = new unsigned char[pointerLength + 1] ;
+		BYTE* columnValue = new unsigned char[pointerLength + 1] ;
 
-                // convert to string representation. All values are convertible to string
-                dbconvert( d->dbProcess , dbcoltype(d->dbProcess , i+1 ), dbdata(d->dbProcess , i+1 ), columnDataLength , (SYBCHAR), columnValue, -2 );
+		// convert to string representation. All values are convertible to string
+		dbconvert( d->dbProcess , dbcoltype(d->dbProcess , i+1 ), dbdata(d->dbProcess , i+1 ), columnDataLength , (SYBCHAR), columnValue, -2 );
 
-      	        data[i] =  KexiDB::cstringToVariant( ( const char* )columnValue , f,  strlen( ( const char* )columnValue ) );
+		data[i] =  KexiDB::cstringToVariant( ( const char* )columnValue , f,  strlen( ( const char* )columnValue ) );
 
-                delete[] columnValue;
+		delete[] columnValue;
 	}
 	return true;
 }

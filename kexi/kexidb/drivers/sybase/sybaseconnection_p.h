@@ -12,7 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 Library General Public License for more details.
 
 You should have received a copy of the GNU Library General Public License
-along with this program; see the file COPYING.  If not, write to
+along with this program; see the file COPYING.	If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
@@ -36,7 +36,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #endif
 
 namespace KexiDB {
-    class ConnectionData;
+	class ConnectionData;
 }
 
 namespace NAMESPACE {
@@ -71,17 +71,17 @@ class SybaseConnectionInternal : public KexiDB::ConnectionInternal
 		//! Escapes a table, database or column name
 		QString escapeIdentifier(const QString& str) const;
 
-                // message handler called by call back function
-                void messageHandler(DBINT msgno, int msgstate, int severity, char* msgtext
+		// message handler called by call back function
+		void messageHandler(DBINT msgno, int msgstate, int severity, char* msgtext
 				   , char* srvname, char* procname, int line);
 	     
-                // dbProcess-Connection map
-                static QMap<DBPROCESS*,SybaseConnectionInternal*> dbProcessConnectionMap;
+		// dbProcess-Connection map
+		static QMap<DBPROCESS*,SybaseConnectionInternal*> dbProcessConnectionMap;
 
-                // Server specific stuff
+		// Server specific stuff
 		DBPROCESS *dbProcess;
 
-                bool sybase_owned; //!< true if dbprocess should be closed on destruction
+		bool sybase_owned; //!< true if dbprocess should be closed on destruction
 		QString errmsg; //!< server-specific message of last operation
 		int res; //!< result code of last operation on server
 

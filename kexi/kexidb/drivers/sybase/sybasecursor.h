@@ -12,7 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 Library General Public License for more details.
 
 You should have received a copy of the GNU Library General Public License
-along with this program; see the file COPYING.  If not, write to
+along with this program; see the file COPYING.	If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
@@ -35,9 +35,9 @@ public:
 	virtual ~SybaseCursor();
 	virtual bool drv_open();
 	virtual bool drv_close();
-//        virtual bool drv_moveFirst();
+//	  virtual bool drv_moveFirst();
 	virtual void drv_getNextRecord();
-        //virtual bool drv_getPrevRecord();
+	//virtual bool drv_getPrevRecord();
 	virtual QVariant value(uint);
 
 	virtual void drv_clearServerResult();
@@ -47,7 +47,7 @@ public:
 	virtual void drv_bufferMovePointerTo(qint64 to);
 	virtual const char** rowData() const;
 	virtual bool drv_storeCurrentRow(RecordData &data) const;
-//        virtual bool save(RecordData& data, RowEditBuffer& buf);
+//	  virtual bool save(RecordData& data, RowEditBuffer& buf);
 
 	virtual int serverResult();
 	virtual QString serverResultName();

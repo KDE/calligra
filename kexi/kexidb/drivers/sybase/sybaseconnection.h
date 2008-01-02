@@ -12,7 +12,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 Library General Public License for more details.
 
 You should have received a copy of the GNU Library General Public License
-along with this program; see the file COPYING.  If not, write to
+along with this program; see the file COPYING.	If not, write to
 the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
@@ -73,11 +73,11 @@ class SybaseConnection : public Connection
 //TODO: move this somewhere to low level class (MIGRATION?)
 		virtual bool drv_containsTable( const QString &tableName );
 
-                virtual bool drv_beforeInsert( const QString& table, FieldList& fields );
-                virtual bool drv_afterInsert( const QString& table, FieldList& fields );
-                
-                virtual bool drv_beforeUpdate( const QString& table, FieldList& fields );
-                virtual bool drv_afterUpdate( const QString& table, FieldList& fields );
+		virtual bool drv_beforeInsert( const QString& table, FieldList& fields );
+		virtual bool drv_afterInsert( const QString& table, FieldList& fields );
+		
+		virtual bool drv_beforeUpdate( const QString& table, FieldList& fields );
+		virtual bool drv_afterUpdate( const QString& table, FieldList& fields );
 
 		SybaseConnectionInternal* d;
 
