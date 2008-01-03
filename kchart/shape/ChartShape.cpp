@@ -1134,23 +1134,20 @@ bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement,
     // TODO: Read optional attributes
     // 1. Legend expansion
     // 2. Advanced legend styling
-    KDChart::Legend *old = d->legend;
+    KDChart::Legend  *oldLegend = d->legend;
     d->legend = new KDChart::Legend( d->diagram, d->chart );
     
     if ( !legendElement.isNull() ) {
         QString lp;
-        if ( legendElement.hasAttributeNS( KoXmlNS::chart, "legend-position" ) )
-        {
+        if ( legendElement.hasAttributeNS( KoXmlNS::chart, "legend-position" ) ) {
             lp = legendElement.attributeNS( KoXmlNS::chart, "legend-position", QString() );
         }
         QString lalign;
-        if ( legendElement.hasAttributeNS( KoXmlNS::chart, "legend-align" ) )
-        {
+        if ( legendElement.hasAttributeNS( KoXmlNS::chart, "legend-align" ) ) {
             lalign = legendElement.attributeNS( KoXmlNS::chart, "legend-align", QString() );
         }
         
-        if ( legendElement.hasAttributeNS( KoXmlNS::koffice, "legend-orientation" ) )
-        {
+        if ( legendElement.hasAttributeNS( KoXmlNS::koffice, "legend-orientation" ) ) {
             QString legendOrientation = legendElement.attributeNS( KoXmlNS::koffice, "legend-orientation", QString() );
             if ( legendOrientation == "horizontal" )
                 setLegendOrientation( Qt::Horizontal );
@@ -1158,79 +1155,63 @@ bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement,
                 setLegendOrientation( Qt::Vertical );
         }
         
-        if ( lalign == "start" )
-        {
+        if ( lalign == "start" ) {
             setLegendAlignment( Qt::AlignLeft );
         }
-        else if ( lalign == "end" )
-        {
+        else if ( lalign == "end" ) {
             setLegendAlignment( Qt::AlignRight );
-        } 
-        else
-        {
+        }
+        else {
             setLegendAlignment( Qt::AlignCenter );
         }
 
-        if ( lp == "start" )
-        {
+        if ( lp == "start" ) {
             setLegendFixedPosition( KDChart::Position::West );
         }
-        else if ( lp == "top" )
-        {
+        else if ( lp == "top" ) {
             setLegendFixedPosition( KDChart::Position::North );
         }
-        else if ( lp == "bottom" )
-        {
+        else if ( lp == "bottom" ) {
             setLegendFixedPosition( KDChart::Position::South );
         }
-        else if ( lp == "top-start" )
-        {
+        else if ( lp == "top-start" ) {
             setLegendFixedPosition( KDChart::Position::NorthWest );
         }
-        else if ( lp == "bottom-start" )
-        {
+        else if ( lp == "bottom-start" ) {
             setLegendFixedPosition( KDChart::Position::SouthWest );
         }
-        else if ( lp == "top-end" )
-        {
+        else if ( lp == "top-end" ) {
             setLegendFixedPosition( KDChart::Position::NorthEast );
         }
-        else if ( lp == "bottom-end" )
-        {
+        else if ( lp == "bottom-end" ) {
             setLegendFixedPosition( KDChart::Position::SouthEast );
         }
-        else
-        {
+        else {
             setLegendFixedPosition( KDChart::Position::East );
         }
         
-        if ( legendElement.hasAttributeNS( KoXmlNS::koffice, "title" ) )
-        {
-            setLegendTitle( legendElement.attributeNS( KoXmlNS::koffice, "title", QString() ) );
+        if ( legendElement.hasAttributeNS( KoXmlNS::koffice, "title" ) ) {
+            setLegendTitle( legendElement.attributeNS( KoXmlNS::koffice, 
+                                                       "title", QString() ) );
         }
         
-        if ( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
-        {
+        if ( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
             QString styleName = legendElement.attributeNS( KoXmlNS::chart, "style-name", QString() );
             const KoXmlElement *styleElement = context.koLoadingContext().stylesReader().findStyle( styleName, "chart" );
             if ( styleElement ) {
                 KoXmlNode graphicsPropertiesNode = styleElement->namedItemNS( KoXmlNS::style, "graphic-properties" );
                 KoXmlElement graphicsPropertiesElement = *( ( KoXmlElement* )( &graphicsPropertiesNode ) );
-                if ( !graphicsPropertiesElement.isNull() )
-                {
-                    if ( graphicsPropertiesElement.hasAttributeNS( KoXmlNS::draw, "stroke" ) )
-                    {
+                if ( !graphicsPropertiesElement.isNull() ) {
+                    if ( graphicsPropertiesElement.hasAttributeNS( KoXmlNS::draw, "stroke" ) ) {
                         // TODO (Johannes): set stroke type of legend border
                         QString stroke = graphicsPropertiesElement.attributeNS( KoXmlNS::draw, "stroke", QString() );
                         QString strokeColor = graphicsPropertiesElement.attributeNS( KoXmlNS::draw, "stroke-color", QString() );
                         // use overloaded QColor constructor to convert QString (in form of "#rrggbb") to QColor
                         setLegendFrameColor( strokeColor );
                     }
-                    if ( graphicsPropertiesElement.hasAttributeNS( KoXmlNS::draw, "fill" ) )
-                    {
+                    if ( graphicsPropertiesElement.hasAttributeNS( KoXmlNS::draw, "fill" ) ) {
                         QString fill = graphicsPropertiesElement.attributeNS( KoXmlNS::draw, "fill", QString() );
-                        if ( fill == "solid" )
-                        {
+                        if ( fill == "solid" ) {
                             QString fillColor = graphicsPropertiesElement.attributeNS( KoXmlNS::draw, "fill-color", QString() );
                             // use overloaded QColor constructor to convert QString (in form of "#rrggbb") to QColor
                             KDChart::BackgroundAttributes attributes = d->legend->backgroundAttributes();
@@ -1243,13 +1224,15 @@ bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement,
             }
         }
     }
-    else
-    {
+    else {
+        // No legend element, use default legend.
+        // FIXME: North??  Isn't that a bit strange as default? /IW
         setLegendFixedPosition( KDChart::Position::North );
         setLegendAlignment( Qt::AlignCenter );
     }
     
-    d->chart->replaceLegend( d->legend, old );
+    d->chart->replaceLegend( d->legend, oldLegend );
+
     return true;
 }
 
