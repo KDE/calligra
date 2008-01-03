@@ -37,6 +37,7 @@
 #include <KoShapeDeleteCommand.h>
 #include <KoShapeReorderCommand.h>
 #include <KoShapeLayer.h>
+#include <KoShapeGroup.h>
 
 #include <klocale.h>
 #include <kicon.h>
@@ -267,7 +268,7 @@ void KarbonLayerDocker::raiseItem()
     QList<KoShape*> selectedShapes;
 
     // separate selected layers and selected shapes
-    extractSelectedLayersAndShapes( selectedLayers, selectedShapes );
+    extractSelectedLayersAndShapes( selectedLayers, selectedShapes, true );
 
     KoCanvasBase* canvas = KoToolManager::instance()->activeCanvasController()->canvas();
 
@@ -300,7 +301,7 @@ void KarbonLayerDocker::lowerItem()
     QList<KoShape*> selectedShapes;
 
     // separate selected layers and selected shapes
-    extractSelectedLayersAndShapes( selectedLayers, selectedShapes );
+    extractSelectedLayersAndShapes( selectedLayers, selectedShapes, true );
 
     KoCanvasBase* canvas = KoToolManager::instance()->activeCanvasController()->canvas();
 
@@ -327,7 +328,8 @@ void KarbonLayerDocker::lowerItem()
     }
 }
 
-void KarbonLayerDocker::extractSelectedLayersAndShapes( QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes )
+void KarbonLayerDocker::extractSelectedLayersAndShapes( 
+        QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes, bool addChilds )
 {
     layers.clear();
     shapes.clear();
@@ -344,7 +346,24 @@ void KarbonLayerDocker::extractSelectedLayersAndShapes( QList<KoShapeLayer*> &la
         if( layer )
             layers.append( layer );
         else if( ! selectedItems.contains( index.parent() ) )
+        {
             shapes.append( shape );
+            KoShapeGroup * group = dynamic_cast<KoShapeGroup*>( shape );
+            if( group && addChilds )
+                addChildsRecursive( group, shapes );
+        }
+    }
+}
+
+void KarbonLayerDocker::addChildsRecursive( KoShapeGroup * parent, QList<KoShape*> &shapes )
+{
+    foreach( KoShape * child, parent->iterator() )
+    {
+        if( ! shapes.contains( child ) )
+            shapes.append( child );
+        KoShapeGroup * group = dynamic_cast<KoShapeGroup*>( child );
+        if( group )
+            addChildsRecursive( group, shapes );
     }
 }
 
