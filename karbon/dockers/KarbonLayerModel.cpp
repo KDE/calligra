@@ -53,6 +53,7 @@ KarbonLayerModel::KarbonLayerModel( VDocument *document )
 
 void KarbonLayerModel::update()
 {
+    emit layoutAboutToBeChanged();
     emit layoutChanged();
 }
 
@@ -98,7 +99,10 @@ QModelIndex KarbonLayerModel::index( int row, int column, const QModelIndex &par
     if( ! parent.isValid() )
     {
         if( row >= 0 && row < m_document->layers().count() )
-            return createIndex( row, column, m_document->layers().at(m_document->layers().count()-1-row) );
+        {
+            int index = indexOf( m_document->layers().count(), row );
+            return createIndex( row, column, m_document->layers().at( index ) );
+        }
         else
             return QModelIndex();
     }
@@ -129,6 +133,8 @@ QModelIndex KarbonLayerModel::parent( const QModelIndex &child ) const
     if( ! childShape )
         return QModelIndex();
 
+    return parentIndexFromShape( childShape );
+
     // check if child shape is a layer, and return invalid model index if it is
     KoShapeLayer *childlayer = dynamic_cast<KoShapeLayer*>( childShape );
     if( childlayer )
@@ -142,7 +148,10 @@ QModelIndex KarbonLayerModel::parent( const QModelIndex &child ) const
     // check if the parent is a layer
     KoShapeLayer *parentLayer = dynamic_cast<KoShapeLayer*>( parentShape );
     if( parentLayer )
-        return createIndex( m_document->layers().count()-1-m_document->layers().indexOf( parentLayer ), 0, parentShape );
+    {
+        int index = indexOf( m_document->layers().count(), m_document->layers().indexOf( parentLayer ) );
+        return createIndex( index, 0, parentShape );
+    }
 
     // get the grandparent to determine the row of the parent shape
     KoShapeContainer *grandParentShape = parentShape->parent();
@@ -312,28 +321,24 @@ QImage KarbonLayerModel::createThumbnail( KoShape* shape, const QSize &thumbSize
 
 KoShape * KarbonLayerModel::childFromIndex( KoShapeContainer *parent, int row ) const
 {
-    return parent->iterator().at(row);
-
     if( parent != m_lastContainer )
     {
         m_lastContainer = parent;
         m_childs = parent->iterator();
         qSort( m_childs.begin(), m_childs.end(), KoShape::compareShapeZIndex );
     }
-    return m_childs.at( row );
+    return m_childs.at( indexOf( m_childs.count(), row ) );
 }
 
 int KarbonLayerModel::indexFromChild( KoShapeContainer *parent, KoShape *child ) const
 {
-    return parent->iterator().indexOf( child );
-
     if( parent != m_lastContainer )
     {
         m_lastContainer = parent;
         m_childs = parent->iterator();
         qSort( m_childs.begin(), m_childs.end(), KoShape::compareShapeZIndex );
     }
-    return m_childs.indexOf( child );
+    return indexOf( m_childs.count(), m_childs.indexOf( child ) );
 }
 
 Qt::DropActions KarbonLayerModel::supportedDropActions () const
@@ -511,7 +516,7 @@ bool KarbonLayerModel::dropMimeData( const QMimeData * data, Qt::DropAction acti
     return true;
 }
 
-QModelIndex KarbonLayerModel::parentIndexFromShape( const KoShape * child )
+QModelIndex KarbonLayerModel::parentIndexFromShape( const KoShape * child ) const
 {
     if( ! m_document )
         return QModelIndex();
@@ -529,7 +534,10 @@ QModelIndex KarbonLayerModel::parentIndexFromShape( const KoShape * child )
     // check if the parent is a layer
     KoShapeLayer *parentLayer = dynamic_cast<KoShapeLayer*>( parentShape );
     if( parentLayer )
-        return createIndex( m_document->layers().count()-1-m_document->layers().indexOf( parentLayer ), 0, parentShape );
+    {
+        int index = indexOf( m_document->layers().count(), m_document->layers().indexOf( parentLayer ) );
+        return createIndex( index, 0, parentShape );
+    }
 
     // get the grandparent to determine the row of the parent shape
     KoShapeContainer *grandParentShape = parentShape->parent();
@@ -537,6 +545,11 @@ QModelIndex KarbonLayerModel::parentIndexFromShape( const KoShape * child )
         return QModelIndex();
 
     return createIndex( indexFromChild( grandParentShape, parentShape ), 0, parentShape );
+}
+
+int KarbonLayerModel::indexOf( int count, int row ) const
+{
+    return count - 1 - row;
 }
 
 #include "KarbonLayerModel.moc"

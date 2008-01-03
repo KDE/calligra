@@ -64,7 +64,9 @@ private:
     /// Returns the zero based index of a child shape within its parent shape
     int indexFromChild( KoShapeContainer *parent, KoShape *child ) const;
     /// Returns the parent model index from the given child shape
-    QModelIndex parentIndexFromShape( const KoShape * child );
+    QModelIndex parentIndexFromShape( const KoShape * child ) const;
+
+    int indexOf( int count, int row ) const;
 
     VDocument *m_document; ///< the undelying data structure
     KoShape *m_shape;
