@@ -198,7 +198,7 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
     coll->action( "mkdir" )->setWhatsThis(i18n("Click this button to create a new directory."));
 
     d->bookmarkHandler = new KFileBookmarkHandler( this );
-    toolbar->insertButton(QString::fromLatin1("bookmark"),
+    toolbar->insertButton(QString::fromLatin1("bookmarks"),
                           (int)HOTLIST_BUTTON, true,
                           i18n("Bookmarks"));
     toolbar->getButton(HOTLIST_BUTTON)->setPopup( d->bookmarkHandler->menu(),
