@@ -30,6 +30,7 @@
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptdatetime.h"
+#include "kptintervaledit.h"
 
 #include <QDragMoveEvent>
 #include <QList>
@@ -49,6 +50,7 @@
 #include <ktimezone.h>
 #include <kabc/addressee.h>
 #include <kabc/vcardconverter.h>
+#include <kmenu.h>
 
 #include <kdebug.h>
 
@@ -199,6 +201,59 @@ CalendarDayView::CalendarDayView( QWidget *parent )
      setModel(m_model);
      verticalHeader()->hide();
      //resizeColumnsToContents();
+
+     actionSetWork = new KAction( i18n( "Work..." ), this );
+     connect( actionSetWork, SIGNAL( triggered( bool ) ), SLOT( slotSetWork() ) );
+     actionSetVacation = new KAction( i18n( "Non-working" ), this );
+     connect( actionSetVacation, SIGNAL( triggered( bool ) ), SLOT( slotSetVacation() ) );
+     actionSetUndefined = new KAction( i18n( "Undefined" ), this );
+     connect( actionSetUndefined, SIGNAL( triggered( bool ) ), SLOT( slotSetUndefined() ) );
+}
+
+void CalendarDayView::slotSetWork()
+{
+    kDebug();
+    if ( receivers( SIGNAL( executeCommand( QUndoCommand* ) ) ) == 0 ) {
+        return;
+    }
+    CalendarDay *day = model()->day( currentIndex() );
+    if ( day == 0 ) {
+        return;
+    }
+    IntervalEditDialog dlg( day );
+    if ( dlg.exec() == QDialog::Accepted ) {
+        MacroCommand *cmd = dlg.buildCommand( model()->calendar(), day );
+        if ( cmd ) {
+            cmd->setText( i18n( "Modify Weekday Work Interval" ) );
+            emit executeCommand( cmd );
+        }
+    }
+}
+
+void CalendarDayView::slotSetVacation()
+{
+    kDebug();
+    if ( receivers( SIGNAL( executeCommand( QUndoCommand* ) ) ) == 0 ) {
+        return;
+    }
+    CalendarDay *day = model()->day( currentIndex() );
+    if ( day == 0 || day->state() == CalendarDay::NonWorking ) {
+        return;
+    }
+    emit executeCommand( new CalendarModifyStateCmd( model()->calendar(), day, CalendarDay::NonWorking, i18n( "Modify Weekday State" ) ) );
+}
+
+void CalendarDayView::slotSetUndefined()
+{
+    kDebug();
+    if ( receivers( SIGNAL( executeCommand( QUndoCommand* ) ) ) == 0 ) {
+        return;
+    }
+    CalendarDay *day = model()->day( currentIndex() );
+    if ( day == 0 || day->state() == CalendarDay::Undefined ) {
+        return;
+    }
+    emit executeCommand( new CalendarModifyStateCmd( model()->calendar(), day, CalendarDay::Undefined, i18n( "Modify Weekday State" ) ) );
 }
 
 void CalendarDayView::setCurrentCalendar( Calendar *calendar )
@@ -219,20 +274,27 @@ void CalendarDayView::headerContextMenuRequested( const QPoint &pos )
 void CalendarDayView::contextMenuEvent ( QContextMenuEvent *event )
 {
     //kDebug();
-    emit contextMenuRequested( indexAt(event->pos()), event->globalPos() );
+    KMenu menu;
+    menu.addAction( actionSetWork );
+    menu.addAction( actionSetVacation );
+    menu.addAction( actionSetUndefined );
+    
+    menu.exec( event->globalPos(), actionSetWork );
+    
+    //emit contextMenuRequested( indexAt(event->pos()), event->globalPos() );
 }
 
 void CalendarDayView::focusInEvent ( QFocusEvent *event )
 {
     //kDebug();
-//    TreeViewBase::focusInEvent( event );
+    QTableView::focusInEvent( event );
     emit focusChanged();
 }
 
 void CalendarDayView::focusOutEvent ( QFocusEvent * event )
 {
     //kDebug();
-//    TreeViewBase::focusInEvent( event );
+    QTableView::focusInEvent( event );
     emit focusChanged();
 }
 
@@ -240,21 +302,21 @@ void CalendarDayView::selectionChanged( const QItemSelection &sel, const QItemSe
 {
     //kDebug()<<sel.indexes().count();
     //foreach( QModelIndex i, selectionModel()->selectedIndexes() ) { kDebug()<<i.row()<<","<<i.column(); }
-//    TreeViewBase::selectionChanged( sel, desel );
+    QTableView::selectionChanged( sel, desel );
     emit selectionChanged( selectionModel()->selectedIndexes() );
 }
 
 void CalendarDayView::currentChanged( const QModelIndex & current, const QModelIndex & previous )
 {
     //kDebug();
-//    TreeViewBase::currentChanged( current, previous );
-    selectionModel()->select( current, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
+    QTableView::currentChanged( current, previous );
+//    selectionModel()->select( current, QItemSelectionModel::ClearAndSelect | QItemSelectionModel::Rows );
     emit currentChanged( current );
 }
 
 CalendarDay *CalendarDayView::selectedDay() const
 {
-    QModelIndexList lst = selectionModel()->selectedRows();
+    QModelIndexList lst = selectionModel()->selectedIndexes();
     if ( lst.count() == 1 ) {
         return model()->day( lst.first() );
     }
@@ -294,6 +356,8 @@ CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
     w->dateTable()->setSelectionMode( KDateTable::ExtendedSelection );
     w->dateTable()->setDateDelegate( new DateTableDateDelegate() );
     w->dateTable()->setModel( m_model );
+    w->dateTable()->setPopupMenuEnabled( true );
+    connect( w->dateTable(), SIGNAL( aboutToShowContextMenu( KMenu*, const QDate& ) ), SLOT( slotContextMenuDate( KMenu*, const QDate& ) ) );
     
 /*    const QDate date(2007,7,19);
     const QColor fgColor(Qt::darkGray);
@@ -313,6 +377,7 @@ CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
     
     connect( m_calendarview->model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
     connect( m_dayview->model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
+    connect( m_dayview, SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
 
     connect( m_calendarview, SIGNAL( currentChanged( QModelIndex ) ), this, SLOT( slotCurrentCalendarChanged( QModelIndex ) ) );
     connect( m_calendarview, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotCalendarSelectionChanged( const QModelIndexList ) ) );
@@ -350,6 +415,18 @@ void CalendarEditor::setGuiActive( bool activate )
         }
         //slotSelectionChanged( m_calendarview->selectionModel()->selectedRows() );
     }
+}
+
+void CalendarEditor::slotContextMenuDate( KMenu *menu, const QDate &date )
+{
+    kDebug()<<menu<<date;
+    if ( ! date.isValid() ) {
+        return;
+    }
+    m_currentMenuDate = date;
+    menu->addAction( actionSetWork );
+    menu->addAction( actionSetVacation );
+    menu->addAction( actionSetUndefined );
 }
 
 void CalendarEditor::slotContextMenuCalendar( QModelIndex index, const QPoint& pos )
@@ -489,6 +566,14 @@ void CalendarEditor::setupGui()
     addAction( name, actionAddDay  );
     addAction( name, actionDeleteDaySelection );*/
     
+    
+    actionSetWork = new KAction( i18n( "Work..." ), this );
+    connect( actionSetWork, SIGNAL( triggered( bool ) ), SLOT( slotSetWork() ) );
+    actionSetVacation = new KAction( i18n( "Non-working" ), this );
+    connect( actionSetVacation, SIGNAL( triggered( bool ) ), SLOT( slotSetVacation() ) );
+    actionSetUndefined = new KAction( i18n( "Undefined" ), this );
+    connect( actionSetUndefined, SIGNAL( triggered( bool ) ), SLOT( slotSetUndefined() ) );
+
 }
 
 void CalendarEditor::updateReadWrite( bool readwrite )
@@ -588,6 +673,65 @@ void CalendarEditor::slotAddDay ()
         m_dayview->setCurrentIndex( i );
         m_dayview->edit( i );
     }*/
+}
+
+void CalendarEditor::slotSetWork()
+{
+    kDebug()<<currentCalendar()<<m_currentMenuDate;
+    if ( ! m_currentMenuDate.isValid() || currentCalendar() == 0 ) {
+        kDebug()<<currentCalendar()<<m_currentMenuDate;
+        return;
+    }
+    CalendarDay *day = currentCalendar()->findDay( m_currentMenuDate );
+    IntervalEditDialog dlg( day );
+    if ( dlg.exec() == QDialog::Accepted ) {
+        if ( day == 0 ) {
+            day = new CalendarDay( m_currentMenuDate, CalendarDay::Working );
+            day->setIntervals( dlg.intervals() );
+            kDebug()<<m_currentMenuDate<<"Add day"<<day;
+            part()->addCommand( new CalendarAddDayCmd( currentCalendar(), day, i18n( "%1: Set to Working", m_currentMenuDate.toString() ) ) );
+            return;
+        }
+        MacroCommand *cmd = dlg.buildCommand( currentCalendar(), day );
+        if ( cmd ) {
+            kDebug()<<m_currentMenuDate<<"Modify day"<<day;
+            cmd->setText( i18n( "%1: Modify Work Interval", m_currentMenuDate.toString() ) );
+            part()->addCommand( cmd );
+            return;
+        }
+    }
+    m_currentMenuDate = QDate();
+}
+
+void CalendarEditor::slotSetVacation()
+{
+    kDebug();
+    if ( ! m_currentMenuDate.isValid() || currentCalendar() == 0 ) {
+        m_currentMenuDate = QDate();
+        return;
+    }
+    CalendarDay *day = currentCalendar()->findDay( m_currentMenuDate );
+    if ( day == 0 ) {
+        day = new CalendarDay( m_currentMenuDate, CalendarDay::NonWorking );
+        part()->addCommand( new CalendarAddDayCmd( currentCalendar(), day, i18n(  "%1: Set to Non-Working", m_currentMenuDate.toString() ) ) );
+    } else if ( day->state() != CalendarDay::NonWorking ) {
+        part()->addCommand( new CalendarModifyStateCmd( currentCalendar(), day, CalendarDay::NonWorking, i18n( "%1: Set to Non-Working", m_currentMenuDate.toString() ) ) );
+    }
+    m_currentMenuDate = QDate();
+}
+
+void CalendarEditor::slotSetUndefined()
+{
+    kDebug();
+    if ( ! m_currentMenuDate.isValid() || currentCalendar() == 0 ) {
+        m_currentMenuDate = QDate();
+        return;
+    }
+    CalendarDay *day = currentCalendar()->findDay( m_currentMenuDate );
+    if ( day && day->state() != CalendarDay::Undefined ) {
+        part()->addCommand( new CalendarRemoveDayCmd( currentCalendar(), day, i18n( "Set %1 to Undefined", m_currentMenuDate.toString() ) ) );
+    }
+    m_currentMenuDate = QDate();
 }
 
 

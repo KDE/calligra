@@ -33,13 +33,16 @@ public:
       m_start(start)
     {
         m_length = (double)(length) / (1000 * 60 * 60 ); // ms -> hours
+        setText( 0, start.toString() );
+        setText( 1, QString("%1" ).arg( m_length ) );
     }
     explicit IntervalItem(QTreeWidget * parent, QTime start, double length)
     : QTreeWidgetItem(parent),
       m_start(start),
       m_length(length)
     {
-        setText( 0, QString("%1  -  %2" ).arg( start.toString() ).arg( length ) );
+        setText( 0, start.toString() );
+        setText( 1, QString("%1" ).arg( length ) );
     }
       
     TimeInterval interval() { return TimeInterval(m_start, ( (int)(m_length) * 1000 * 60 * 60 ) ); }

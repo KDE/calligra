@@ -246,6 +246,8 @@ protected:
     virtual void focusInEvent( QFocusEvent *e );
     virtual void focusOutEvent( QFocusEvent *e );
 
+    virtual bool event( QEvent *e );
+
 Q_SIGNALS:
     /**
      * The selected date changed.
@@ -327,6 +329,7 @@ public:
 
     virtual QRectF paint( QPainter *painter, const StyleOptionViewItem &option, const QDate &date,  KDateTableDataModel *model );
     
+    virtual QVariant data(  const QDate &date, int role, KDateTableDataModel *model );
 };
 
 class KPLATOMODELS_EXPORT KDateTableCustomDateDelegate : public KDateTableDateDelegate
@@ -354,6 +357,8 @@ public:
     ~KDateTableWeekDayDelegate() {}
 
     virtual QRectF paint( QPainter *painter, const StyleOptionHeader &option, int weekday,  KDateTableDataModel *model );
+
+    virtual QVariant data(  int day, int role, KDateTableDataModel *model );
 };
 
 class KPLATOMODELS_EXPORT KDateTableWeekNumberDelegate : public QObject
@@ -364,6 +369,8 @@ public:
     ~KDateTableWeekNumberDelegate() {}
 
     virtual QRectF paint( QPainter *painter, const StyleOptionHeader &option, int week,  KDateTableDataModel *model );
+    
+    virtual QVariant data(  int week, int role, KDateTableDataModel *model );
 };
 
 class StyleOptionHeader : public QStyleOptionHeader

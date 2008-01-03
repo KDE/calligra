@@ -19,11 +19,13 @@
 
 #include "kptintervaledit.h"
 #include "intervalitem.h"
+#include "kptcommand.h"
 
 #include <QPushButton>
 #include <QTreeWidget>
 #include <QList>
 
+#include <kdialog.h>
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -39,10 +41,18 @@ IntervalEdit::IntervalEdit(QWidget *parent)
 
 //--------------------------------------------
 IntervalEditImpl::IntervalEditImpl(QWidget *parent)
-    : IntervalEditBase(parent) {
-  
-    intervalList->setSortingEnabled(true);
+    : IntervalEditBase(parent) 
+{
+    intervalList->setColumnCount( 2 );
+    QStringList lst;
+    lst << i18nc( "Interval start time", "Start" )
+        << i18nc( "Interval length", "Length" );
+    intervalList->setHeaderLabels( lst );
 
+    intervalList->setRootIsDecorated( false );
+    intervalList->setSortingEnabled( true );
+    intervalList->sortByColumn( 0, Qt::Ascending );
+    
     connect(bClear, SIGNAL(clicked()), SLOT(slotClearClicked()));
     connect(bAddInterval, SIGNAL(clicked()), SLOT(slotAddIntervalClicked()));
     connect(intervalList, SIGNAL(itemSelectionChanged()), SLOT(slotIntervalSelectionChanged()));
@@ -84,8 +94,60 @@ QList<TimeInterval*> IntervalEditImpl::intervals() const {
 void IntervalEditImpl::setIntervals(const QList<TimeInterval*> &intervals) const {
     intervalList->clear();
     foreach (TimeInterval *i, intervals) {
+        kDebug()<<i->first<<i->second;
         new IntervalItem(intervalList, i->first, i->second);
     }
+}
+
+//-------------------------------------------------------------
+IntervalEditDialog::IntervalEditDialog( CalendarDay *day, QWidget *parent)
+    : KDialog( parent ),
+    m_day( day )
+{
+    //kDebug();
+    setCaption( i18n("Edit Work Intervals") );
+    setButtons( Ok|Cancel );
+    setDefaultButton( Ok );
+    showButtonSeparator( true );
+    //kDebug()<<&p;
+    m_panel = new IntervalEdit( this );
+    if ( day ) {
+        m_panel->setIntervals( day->workingIntervals() );
+    }
+    setMainWidget( m_panel );
+    enableButtonOk( false );
+
+    connect( m_panel, SIGNAL( changed() ), SLOT( slotChanged() ) );
+}
+
+void IntervalEditDialog::slotChanged()
+{
+    enableButtonOk( true );
+}
+
+MacroCommand *IntervalEditDialog::buildCommand( Calendar *calendar, CalendarDay *day )
+{
+    kDebug();
+    const QList<TimeInterval*> lst = m_panel->intervals();
+    const QList<TimeInterval*> org = day->workingIntervals();
+    if ( lst == org ) {
+        return 0;
+    }
+    MacroCommand *cmd = 0;
+    foreach ( TimeInterval *i, org ) {
+        CalendarRemoveTimeIntervalCmd *c = new CalendarRemoveTimeIntervalCmd( calendar, day, i );
+        if (cmd == 0) cmd = new MacroCommand("");
+        cmd->addCommand(c);
+    }
+    foreach ( TimeInterval *i, lst ) {
+        CalendarAddTimeIntervalCmd *c = new CalendarAddTimeIntervalCmd( calendar, day, i );
+        if (cmd == 0) cmd = new MacroCommand("");
+        cmd->addCommand(c);
+    }
+    if (cmd) {
+        cmd->setText( i18n( "Modify Work Interval" ) );
+    }
+    return cmd;
 }
 
 }  //KPlato namespace

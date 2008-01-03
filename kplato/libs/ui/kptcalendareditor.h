@@ -33,6 +33,7 @@
 
 class QPoint;
 class QDragMoveEvent;
+class QUndoCommand;
 
 class KoDocument;
 
@@ -104,6 +105,8 @@ signals:
     void contextMenuRequested( QModelIndex, const QPoint& );
     void focusChanged();
     
+    void executeCommand( QUndoCommand *cmd );
+    
 public slots:
     void setCurrentCalendar( Calendar *calendar );
     
@@ -113,6 +116,10 @@ protected slots:
     virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
     virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
 
+    void slotSetWork();
+    void slotSetVacation();
+    void slotSetUndefined();
+
 protected:
     void contextMenuEvent ( QContextMenuEvent * event );
     void focusInEvent ( QFocusEvent * event );
@@ -120,6 +127,11 @@ protected:
     
 private:
     CalendarDayItemModel *m_model;
+    
+    KAction *actionSetUndefined;
+    KAction *actionSetVacation;
+    KAction *actionSetWork;
+
 };
 
 class KPLATOUI_EXPORT CalendarEditor : public ViewBase
@@ -152,6 +164,7 @@ protected:
 private slots:
     void slotContextMenuCalendar( QModelIndex index, const QPoint& pos );
     void slotContextMenuDay( QModelIndex index, const QPoint& pos );
+    void slotContextMenuDate( KMenu*, const QDate& );
     
     void slotCalendarSelectionChanged( const QModelIndexList );
     void slotCurrentCalendarChanged( const QModelIndex& );
@@ -169,6 +182,10 @@ private slots:
     void slotAddInterval();
     void slotDeleteDaySelection();
 
+    void slotSetWork();
+    void slotSetVacation();
+    void slotSetUndefined();
+
 private:
     CalendarTreeView *m_calendarview;
     CalendarDayView *m_dayview;
@@ -182,6 +199,12 @@ private:
     KAction *actionAddDay;
     KAction *actionAddWorkInterval;
     KAction *actionDeleteDaySelection;
+
+    KAction *actionSetUndefined;
+    KAction *actionSetVacation;
+    KAction *actionSetWork;
+    
+    QDate m_currentMenuDate;
 
 };
 

@@ -77,6 +77,7 @@ bool ItemDelegate::eventFilter(QObject *object, QEvent *event)
 
 void ItemDelegate::drawFocus( QPainter *painter, const QStyleOptionViewItem &option, const QRect &rect ) const
 {
+    return QItemDelegate::drawFocus( painter, option, rect );
     if ((option.state & QStyle::State_HasFocus) == 0 || !rect.isValid())
         return;
     

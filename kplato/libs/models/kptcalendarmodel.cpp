@@ -758,7 +758,7 @@ bool CalendarDayItemModel::setDayState( CalendarDay *d, const QVariant &value, i
 
 QVariant CalendarDayItemModel::workDuration( const CalendarDay *day, int role ) const
 {
-    //kDebug()<<res->name()<<","<<role;
+    //kDebug()<<day->date()<<","<<role;
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
@@ -786,7 +786,14 @@ QVariant CalendarDayItemModel::data( const QModelIndex &index, int role ) const
     }
     CalendarDay *d = day( index );
     if ( d ) {
-        result = workDuration( d, role );
+        switch ( d->state() ) {
+            case CalendarDay::Working:
+                result = workDuration( d, role );
+                break;
+            default:
+                result = dayState( d, role );
+                break;
+        }
     }
     if ( result.isValid() ) {
         if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
@@ -855,12 +862,39 @@ DateTableDataModel::DateTableDataModel( QObject *parent )
 
 void DateTableDataModel::setCalendar( Calendar *calendar )
 {
+    if ( m_calendar ) {
+        disconnect( m_calendar, SIGNAL( dayAdded( CalendarDay* ) ), this, SIGNAL( reset() ) );
+        disconnect( m_calendar, SIGNAL( dayRemoved( CalendarDay* ) ), this, SIGNAL( reset() ) );
+        disconnect( m_calendar, SIGNAL( changed( CalendarDay* ) ), this, SIGNAL( reset() ) );
+    }
     m_calendar = calendar;
+    if ( m_calendar ) {
+        connect( m_calendar, SIGNAL( dayAdded( CalendarDay* ) ), this, SIGNAL( reset() ) );
+        connect( m_calendar, SIGNAL( dayRemoved( CalendarDay* ) ), this, SIGNAL( reset() ) );
+        connect( m_calendar, SIGNAL( changed( CalendarDay* ) ), this, SIGNAL( reset() ) );
+    }
     emit reset();
 }
 
 QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) const
 {
+    //kDebug()<<date<<role<<dataType;
+    if ( role ==  Qt::ToolTipRole ) {
+        if ( m_calendar == 0 ) {
+            return QVariant();
+        }
+        CalendarDay *day = m_calendar->findDay( date );
+        if ( day == 0 || day->state() == CalendarDay::Undefined ) {
+            return i18n( "Undefined" );
+        }
+        if ( day->state() == CalendarDay::NonWorking ) {
+            return i18n( "Non-working" );
+        }
+        double v;
+        v = day->workDuration().toDouble( Duration::Unit_h );
+        return KGlobal::locale()->formatNumber( v, 1 );
+    }
+
     switch ( dataType ) {
         case -1: { //default (date)
             switch ( role ) {
@@ -870,9 +904,9 @@ QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) c
                 case Qt::TextAlignmentRole:
                     return (uint)Qt::AlignLeft | Qt::AlignTop;
                 case Qt::FontRole:
-                    //return QFont( "Helvetica", 6 );
+                    break;//return QFont( "Helvetica", 6 );
                 case Qt::BackgroundRole:
-                    //return QColor( "red" );
+                    break;//return QColor( "red" );
                 default:
                     break;
             }
@@ -889,7 +923,7 @@ QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) c
                         return "";
                     }
                     if ( day->state() == CalendarDay::NonWorking ) {
-                        return "-";
+                        return i18nc( "NonWorking", "NW" );
                     }
                     double v;
                     v = day->workDuration().toDouble( Duration::Unit_h );
@@ -930,7 +964,7 @@ QRectF DateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIte
     QRectF r;
     StyleOptionViewItem style = option;
     style.font.setPointSize( style.font.pointSize() - 4 );
-    kDebug()<<" fonts: "<<option.font.pointSize()<<style.font.pointSize()<<endl;
+    //kDebug()<<" fonts: "<<option.font.pointSize()<<style.font.pointSize()<<endl;
     r = KDateTableDateDelegate::paint( painter, style, date, model );
     if ( model == 0 ) {
         return r;
@@ -940,7 +974,7 @@ QRectF DateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIte
 
     painter->translate( r.width(), 0.0 );
     QRectF rect( 1, 1, option.rectF.right() - r.width(), option.rectF.bottom() );
-    kDebug()<<" rects: "<<r<<rect<<endl;
+    //kDebug()<<" rects: "<<r<<rect<<endl;
 
     QString text = model->data( date, Qt::DisplayRole, 0 ).toString();
     int align = model->data( date, Qt::TextAlignmentRole, 0 ).toInt();

@@ -48,6 +48,7 @@ public:
     ~CalendarDayItemModelBase();
 
     virtual void setCalendar( Calendar *calendar );
+    virtual Calendar *calendar() const { return m_calendar; }
     virtual void setProject( Project *project );
 
     CalendarDay *day( const QModelIndex &index ) const;

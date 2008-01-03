@@ -20,6 +20,8 @@
 #ifndef KPTINTERVALEDIT_H
 #define KPTINTERVALEDIT_H
 
+#include "kplatoui_export.h"
+
 #include "ui_kptintervaleditbase.h"
 #include "kptcalendar.h"
 
@@ -29,6 +31,8 @@
 
 namespace KPlato
 {
+
+class MacroCommand;
 
 class IntervalEditBase : public QWidget, public Ui::IntervalEditBase
 {
@@ -60,6 +64,23 @@ class IntervalEdit : public IntervalEditImpl {
 public:
     explicit IntervalEdit(QWidget *parent=0);
 
+};
+
+class KPLATOUI_EXPORT IntervalEditDialog : public KDialog
+{
+    Q_OBJECT
+public:
+    explicit IntervalEditDialog( CalendarDay *day, QWidget *parent = 0 );
+
+    MacroCommand *buildCommand( Calendar *calendar, CalendarDay *day );
+    QList<TimeInterval*> intervals() const { return m_panel->intervals(); }
+    
+protected slots:
+    void slotChanged();
+    
+private:
+    IntervalEdit *m_panel;
+    CalendarDay *m_day;
 };
 
 }  //KPlato namespace

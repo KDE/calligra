@@ -58,6 +58,7 @@
 #include <QtGui/QActionEvent>
 #include <QtCore/QHash>
 #include <QtGui/QApplication>
+#include <QToolTip>
 
 #include <assert.h>
 
@@ -390,6 +391,60 @@ QDate KDateTable::dateFromPos( int pos )
   return pCellDate;
 }
 
+bool KDateTable::event( QEvent *event )
+{
+    if ( event->type() == QEvent::ToolTip ) {
+        //kDebug()<<"Tooltip";
+        QHelpEvent *e = static_cast<QHelpEvent*>( event );
+
+        double cellWidth = width() / ( d->m_paintweeknumbers ?  8.0 : 7.0 );
+        double cellHeight = height() / 7.0;
+        int column = (int)floor(e->pos().x() / cellWidth);
+        int row = (int)floor(e->pos().y() / cellHeight);
+        QString text;
+        if ( row == 0 && column == 0 && d->m_paintweeknumbers ) {
+            // corner
+        } else if ( row == 0 ) { // we are drawing the headline (weekdays)
+            int col = d->m_paintweeknumbers ? column - 1 : column;
+            int firstWeekDay = KGlobal::locale()->weekStartDay();
+            int day = ( col+firstWeekDay < 8 ) ? col+firstWeekDay : col+firstWeekDay-7;
+            if ( d->m_weekDayDelegate )
+            {
+                text = d->m_weekDayDelegate->data( day, Qt::ToolTipRole, d->m_model ).toString();
+            }
+        }
+        else if ( d->m_paintweeknumbers && column == 0 )
+        {
+            int pos=7*(row-1);
+            QDate pCellDate = dateFromPos( pos );
+            if ( d->m_weekNumberDelegate )
+            {
+                const KCalendarSystem * calendar = KGlobal::locale()->calendar();
+                text = d->m_weekNumberDelegate->data( calendar->weekNumber( pCellDate ), Qt::ToolTipRole, d->m_model ).toString();
+            }
+        }
+        else
+        {
+            // draw the dates
+            int col = d->m_paintweeknumbers ? column - 1 : column;
+            int pos=7*(row-1)+col;
+            QDate pCellDate = dateFromPos( pos );
+            if ( d->m_dateDelegate ) {
+                text = d->m_dateDelegate->data( pCellDate, Qt::ToolTipRole, d->m_model ).toString();
+            }
+        }
+        //kDebug()<<row<<column<<text;
+        if ( text.isEmpty() ) {
+            QToolTip::hideText();
+        } else {
+            QToolTip::showText( e->globalPos(), text );
+        }
+        e->accept();
+        return true;
+    }
+    return QWidget::event( event );
+}
+
 void KDateTable::paintEvent(QPaintEvent *e)
 {
   QPainter p(this);
@@ -484,7 +539,7 @@ KDateTable::paintCell(QPainter *painter, int row, int column)
         }
         rect = rect.adjusted(pw, pw, 0, 0 );
         painter->restore();
-        kDebug()<<d->m_grid<<" "<<pw<<" "<<rect<<endl;
+        //kDebug()<<d->m_grid<<" "<<pw<<" "<<rect<<endl;
     }
     
     d->m_styleOptionDate.rectF = rect;
@@ -628,7 +683,6 @@ KDateTable::wheelEvent ( QWheelEvent * e )
 void
 KDateTable::mousePressEvent(QMouseEvent *e)
 {
-
   if(e->type()!=QEvent::MouseButtonPress)
     { // the KDatePicker only reacts on mouse press events:
       return;
@@ -646,15 +700,15 @@ KDateTable::mousePressEvent(QMouseEvent *e)
   mouseCoord = e->pos();
   row=mouseCoord.y() / ( height() / 7 );
   col=mouseCoord.x() / ( width() / ( d->m_paintweeknumbers ? 8 : 7 ) );
-  kDebug()<<k_funcinfo<<d->maxCell<<", "<<size()<<row<<", "<<col<<", "<<mouseCoord<<endl;
+  //kDebug()<<k_funcinfo<<d->maxCell<<", "<<size()<<row<<", "<<col<<", "<<mouseCoord<<endl;
   if(row<1 )
   { // the user clicked on the frame of the table
-      kDebug()<<k_funcinfo<<"weekday "<<col<<endl;
+      //kDebug()<<k_funcinfo<<"weekday "<<col<<endl;
       return;
   }
   if ( col < ( d->m_paintweeknumbers ? 1 : 0 ) )
   {
-      kDebug()<<k_funcinfo<<"weeknumber "<<row<<endl;
+      //kDebug()<<k_funcinfo<<"weeknumber "<<row<<endl;
       return;
   }
   if ( d->m_paintweeknumbers ) {
@@ -678,7 +732,7 @@ KDateTable::mousePressEvent(QMouseEvent *e)
           emit selectionChanged( d->m_selectedDates );*/
           break;
       case ExtendedSelection:
-          kDebug()<<k_funcinfo<<"extended "<<e->modifiers()<<", "<<clickedDate<<endl;
+          //kDebug()<<k_funcinfo<<"extended "<<e->modifiers()<<", "<<clickedDate<<endl;
           if ( e->modifiers() & Qt::ShiftModifier )
           {
               if ( d->m_selectedDates.isEmpty() )
@@ -1034,6 +1088,15 @@ KDateTableDateDelegate::KDateTableDateDelegate()
 {
 }
 
+QVariant KDateTableDateDelegate::data( const QDate &date, int role, KDateTableDataModel *model )
+{
+    //kDebug()<<date<<role<<model;
+    if ( model == 0 ) {
+        return QVariant();
+    }
+    return model->data( date, role );
+}
+
 QRectF KDateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewItem &option, const QDate &date, KDateTableDataModel *model )
 {
     //kDebug()<<k_funcinfo<<date<<endl;
@@ -1089,16 +1152,16 @@ QRectF KDateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIt
       if ( option.state & QStyle::State_Selected )
       {
         // draw the currently selected date
-        kDebug()<<k_funcinfo<<"selected: "<<date<<endl;
+        //kDebug()<<k_funcinfo<<"selected: "<<date<<endl;
         if ( option.state & QStyle::State_Enabled )
         {
-          kDebug()<<k_funcinfo<<"enabled & selected: "<<date<<endl;
+          //kDebug()<<k_funcinfo<<"enabled & selected: "<<date<<endl;
           painter->setPen(option.palette.color(QPalette::Highlight));
           painter->setBrush(option.palette.color(QPalette::Highlight));
         }
         else
         {
-          kDebug()<<k_funcinfo<<"disabled & selected: "<<date<<endl;
+          //kDebug()<<k_funcinfo<<"disabled & selected: "<<date<<endl;
           painter->setPen(option.palette.color(QPalette::Text));
           painter->setBrush(option.palette.color(QPalette::Text));
         }
@@ -1174,16 +1237,16 @@ QRectF KDateTableCustomDateDelegate::paint( QPainter *painter, const StyleOption
       if ( option.state & QStyle::State_Selected )
       {
         // draw the currently selected date
-        kDebug()<<k_funcinfo<<"selected: "<<date<<endl;
+        //kDebug()<<k_funcinfo<<"selected: "<<date<<endl;
         if ( option.state & QStyle::State_Enabled )
         {
-          kDebug()<<k_funcinfo<<"enabled & selected: "<<date<<endl;
+          //kDebug()<<k_funcinfo<<"enabled & selected: "<<date<<endl;
           painter->setPen(option.palette.color(QPalette::Highlight));
           painter->setBrush(option.palette.color(QPalette::Highlight));
         }
         else
         {
-          kDebug()<<k_funcinfo<<"disabled & selected: "<<date<<endl;
+          //kDebug()<<k_funcinfo<<"disabled & selected: "<<date<<endl;
           painter->setPen(option.palette.color(QPalette::Text));
           painter->setBrush(option.palette.color(QPalette::Text));
         }
@@ -1225,12 +1288,27 @@ KDateTableWeekDayDelegate::KDateTableWeekDayDelegate()
 {
 }
 
+QVariant KDateTableWeekDayDelegate::data( int day, int role, KDateTableDataModel *model )
+{
+    //kDebug()<<day<<role<<model;
+    if ( model == 0 ) {
+        return QVariant();
+    }
+    return model->weekDayData( day, role );
+}
+
 QRectF KDateTableWeekDayDelegate::paint( QPainter *painter, const StyleOptionHeader &option, int daynum, KDateTableDataModel *model )
 {
     //kDebug()<<k_funcinfo<<daynum<<endl;
     painter->save();
     const KCalendarSystem * calendar = KGlobal::locale()->calendar();
     
+    QPalette palette = option.palette;
+    if ( option.state & QStyle::State_Enabled ) {
+        palette.setCurrentColorGroup( QPalette::Active );
+    } else {
+        palette.setCurrentColorGroup( QPalette::Inactive );
+    }
     QRectF rect;
     QFont font = KGlobalSettings::generalFont();
     font.setBold(true);
@@ -1242,24 +1320,15 @@ QRectF KDateTableWeekDayDelegate::paint( QPainter *painter, const StyleOptionHea
         ( daynum == 6 && calendar->calendarType() == "gregorian" ) )
         normalday=false;
 
-    QBrush brushInvertTitle(option.palette.base());
+    QBrush brushInvertTitle( palette.base() );
     
-    QColor titleColor(option.state & QStyle::State_Enabled ? ( KGlobalSettings::activeTitleColor() ):( KGlobalSettings::inactiveTitleColor() ) );
+    QColor titleColor( palette.button() );
     
-    QColor textColor(option.state & QStyle::State_Enabled ? ( KGlobalSettings::activeTextColor() ):( KGlobalSettings::inactiveTextColor() ) );
+    QColor textColor( palette.buttonText() );
 
-    if (!normalday)
-    {
-        painter->setPen(textColor);
-        painter->setBrush(textColor);
-        painter->drawRect(option.rectF);
-        painter->setPen(titleColor);
-    } else {
-        painter->setPen(titleColor);
-        painter->setBrush(titleColor);
-        painter->drawRect(option.rectF);
-        painter->setPen(textColor);
-    }
+    painter->setPen(titleColor);
+    painter->setBrush(titleColor);
+    painter->drawRect(option.rectF);
     
     QString value = calendar->weekDayName( daynum, KCalendarSystem::ShortDayName );
     //kDebug()<<k_funcinfo<<daynum<<": "<<value<<endl;
@@ -1271,11 +1340,11 @@ QRectF KDateTableWeekDayDelegate::paint( QPainter *painter, const StyleOptionHea
             value = v.toString();
         }
     }
-    painter->setPen( option.palette.color(QPalette::Text) );
+    painter->setPen( textColor );
 
     painter->drawText(option.rectF, option.textAlignment, value, &rect);
     
-    painter->setPen(option.palette.color(QPalette::Text));
+    painter->setPen( palette.color(QPalette::Text) );
     painter->drawLine(QPointF(0, option.rectF.height()), QPointF(option.rectF.width(), option.rectF.height()));
 
     painter->restore();
@@ -1285,6 +1354,15 @@ QRectF KDateTableWeekDayDelegate::paint( QPainter *painter, const StyleOptionHea
 //---------
 KDateTableWeekNumberDelegate::KDateTableWeekNumberDelegate()
 {
+}
+
+QVariant KDateTableWeekNumberDelegate::data( int week, int role, KDateTableDataModel *model )
+{
+    //kDebug()<<week<<role<<model;
+    if ( model == 0 ) {
+        return QVariant();
+    }
+    return model->weekNumberData( week, role );
 }
 
 QRectF KDateTableWeekNumberDelegate::paint( QPainter *painter, const StyleOptionHeader &option, int week, KDateTableDataModel *model )

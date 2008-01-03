@@ -122,6 +122,7 @@ public:
     void save(QDomElement &element) const;
 
     const QList<TimeInterval*> &workingIntervals() const { return m_workingIntervals; }
+    QList<TimeInterval*> workingIntervals() { return m_workingIntervals; }
     void addInterval( const QTime &t1, int length ) { addInterval( new TimeInterval( t1, length ) ); }
     void addInterval(TimeInterval *interval);
     void addInterval(TimeInterval interval) { addInterval(new TimeInterval(interval)); }
