@@ -57,7 +57,7 @@ SelectTool::SelectTool( KivioView* parent ) : Kivio::MouseTool(parent, "Selectio
   m_selectAction = new KRadioAction(i18n("&Select"), "select", selectShortCut, actionCollection(), "select");
   connect(m_selectAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
 
-  m_textEditAction = new KAction(i18n("&Edit Text..."), "text", Qt::Key_F2,
+  m_textEditAction = new KAction(i18n("&Edit Text..."), "edit-rename", Qt::Key_F2,
                                  this, SLOT(editStencilText()), actionCollection(), "editText");
   (void) new KAction(i18n("Format &Stencils && Connectors..."), 0, 0, view(), SLOT(stencilFormat()),
                           actionCollection(), "formatStencil");
