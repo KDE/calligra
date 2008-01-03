@@ -221,7 +221,7 @@ void KudesignerView::initActions()
     actionCollection()->addAction("dfooter", sectionsDetailFooter );
     connect(sectionsDetailFooter, SIGNAL(triggered(bool) ), SLOT( slotAddDetailFooter() ));
 
-    itemsNothing  = new KToggleAction(KIcon("frame-edit"), i18n("Clear Selection"), this);
+    itemsNothing  = new KToggleAction(KIcon("select-rectangular"), i18n("Clear Selection"), this);
     actionCollection()->addAction("nothing", itemsNothing );
     connect(itemsNothing, SIGNAL(triggered(bool)), SLOT( slotAddItemNothing() ));
     itemsNothing->setChecked( true );
