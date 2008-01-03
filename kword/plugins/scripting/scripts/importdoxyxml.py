@@ -355,10 +355,10 @@ class ImportDialog:
         #openwidget.minimumHeight = 400
         openwidget.setFilter("*.xml|XML Files\n*|All Files")
 
-        configpage = self.dialog.addPage("Options","Import Options","configure")
+        configpage = self.dialog.addPage("Options","Import Options","preferences-other")
         configwidget = forms.createWidgetFromUIFile(configpage, os.path.join(action.currentPath(),"importdoxyxmloptions.ui"))
 
-        stylepage = self.dialog.addPage("Styles","Cascading Style Sheet","color-fill")
+        stylepage = self.dialog.addPage("Styles","Cascading Style Sheet","preferences-web-browser-stylesheets")
         stylewidget = forms.createWidgetFromUIFile(stylepage, os.path.join(action.currentPath(),"importdoxyxmlstyle.ui"))
         styleedit = stylewidget["textEdit"]
 

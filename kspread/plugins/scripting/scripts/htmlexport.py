@@ -379,7 +379,7 @@ class Dialog:
             w = self.infoswidget[i]
             w.setText( self.exporter.reader.infos[i] )
 
-        layoutpage = self.dialog.addPage("Styles","Style of the HTML Document","color-fill")
+        layoutpage = self.dialog.addPage("Styles","Style of the HTML Document","fill-color")
         layoutwidget = self.forms.createWidgetFromUI(layoutpage,
             '<ui version="4.0" >'
             ' <class>Form</class>'

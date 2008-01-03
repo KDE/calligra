@@ -722,7 +722,7 @@ void View::Private::initActions()
   connect(actions->firstLetterUpper, SIGNAL(triggered(bool)), view, SLOT( firstLetterUpper() ));
   actions->firstLetterUpper->setToolTip(i18n("Capitalize the first letter"));
 
-  actions->bgColor = new KAction(KIcon("color-fill"), i18n("Background Color"), view);
+  actions->bgColor = new KAction(KIcon("format-fill-color"), i18n("Background Color"), view);
   ac->addAction("backgroundColor", actions->bgColor);
   connect(actions->bgColor, SIGNAL(triggered(bool)), view, SLOT(changeBackgroundColor()));
   actions->bgColor->setToolTip(i18n("Set the background color"));
@@ -769,7 +769,7 @@ void View::Private::initActions()
   connect(actions->borderOutline, SIGNAL(triggered(bool)), view, SLOT( borderOutline() ));
   actions->borderOutline->setToolTip(i18n("Set a border to the outline of the selected area"));
 
-  actions->borderColor = new KAction(KIcon("color-line"), i18n("Border Color"), view);
+  actions->borderColor = new KAction(KIcon("format-stroke-color"), i18n("Border Color"), view);
   ac->addAction("borderColor", actions->borderColor);
   connect(actions->borderColor, SIGNAL(triggered(bool)), view, SLOT(changeBorderColor()));
   actions->borderColor->setToolTip(i18n("Select a new border color"));
