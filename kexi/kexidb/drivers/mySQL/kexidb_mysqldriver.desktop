@@ -5,6 +5,7 @@ Name[sk]=mySQL
 Name[x-test]=xxMySQLxx
 Comment=Kexi database driver for accessing MySQL servers
 Comment[el]=Οδηγός βάσης δεδομένων του Kexi για πρόσβαση σε εξυπηρετητές MySQL
+Comment[es]=Controlador de bases de datos de Kexi para acceder a servidores MySQL
 Comment[ja]=MySQL サーバにアクセスするための Kexi データベースドライバ
 Comment[pt]=Controlador de bases de dados do Kexi para aceder a servidores de MySQL
 Comment[pt_BR]=Controlador de bancos de dados do Kexi para acesso a servidores de MySQL

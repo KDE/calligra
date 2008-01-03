@@ -4,6 +4,7 @@ Name=Sybase
 Name[x-test]=xxSybasexx
 Comment=Kexi database driver for accessing Sybase servers
 Comment[el]=Οδηγός βάσης δεδομένων του Kexi για πρόσβαση σε εξυπηρετητές Sybase
+Comment[es]=Controlador de bases de datos de Kexi para acceder a servidores Sybase
 Comment[ga]=Tiománaí bunachair sonraí Kexi lenar féidir freastalaithe Sybase a rochtain
 Comment[ja]=Sybase サーバにアクセスするための Kexi データベースドライバ
 Comment[pt]=Controlador de bases de dados do Kexi para aceder a servidores Sybase
