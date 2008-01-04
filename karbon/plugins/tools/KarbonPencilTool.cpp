@@ -37,6 +37,7 @@
 #include <QtGui/QCheckBox>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QPainter>
+#include <QtGui/QLabel>
 
 #include <math.h>
 
@@ -250,11 +251,16 @@ QWidget * KarbonPencilTool::createOptionWidget()
     QWidget *optionWidget = new QWidget();
     QVBoxLayout * layout = new QVBoxLayout( optionWidget );
 
+    QHBoxLayout *modeLayout = new QHBoxLayout( optionWidget );
+    modeLayout->setSpacing( 3 );
+    QLabel *modeLabel = new QLabel( i18n( "Precision:" ), optionWidget );
     KComboBox * modeBox = new KComboBox( optionWidget );
     modeBox->addItem( i18nc( "The raw line data", "Raw" ) );
     modeBox->addItem( i18n( "Curve" ) );
     modeBox->addItem( i18n( "Straight" ) );
-    layout->addWidget( modeBox );
+    modeLayout->addWidget( modeLabel );
+    modeLayout->addWidget( modeBox, 1 );
+    layout->addLayout( modeLayout );
 
     QStackedWidget * stackedWidget = new QStackedWidget( optionWidget );
 
