@@ -384,27 +384,27 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
             dbgFile << it->key().c_str() <<" is ignored";
         } if(it->key() == "Exif.Photo.MakerNote") {
             const KisMetaData::Schema* makerNoteSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::MakerNoteSchemaUri);
-            store->addEntry(KisMetaData::Entry("RawData", makerNoteSchema, exivValueToKMDValue(it->getValue())));
+            store->addEntry(KisMetaData::Entry(makerNoteSchema, "RawData", exivValueToKMDValue(it->getValue())));
         } else if(it->key() == "Exif.Image.DateTime")
         { // load as xmp:ModifyDate
-            store->addEntry( KisMetaData::Entry("ModifyDate", xmpSchema, KisMetaData::Value(exivValueToDateTime(it->getValue())) ));
+            store->addEntry( KisMetaData::Entry(xmpSchema, "ModifyDate", KisMetaData::Value(exivValueToDateTime(it->getValue())) ));
         } else if(it->key() == "Exif.Image.ImageDescription")
         { // load as "dc:description"
-            store->addEntry( KisMetaData::Entry("description", dcSchema, exivValueToKMDValue(it->getValue())) );
+            store->addEntry( KisMetaData::Entry(dcSchema, "description", exivValueToKMDValue(it->getValue())) );
         } else if(it->key() == "Exif.Image.Software")
         { // load as "xmp:CreatorTool"
-            store->addEntry(KisMetaData::Entry("CreatorTool", xmpSchema, exivValueToKMDValue(it->getValue()) ));
+            store->addEntry(KisMetaData::Entry(xmpSchema, "CreatorTool", exivValueToKMDValue(it->getValue()) ));
         } else if(it->key() == "Exif.Image.Artist")
         { // load as dc:creator
             QList<KisMetaData::Value> creators;
             creators.push_back(exivValueToKMDValue(it->getValue()));
-            store->addEntry(KisMetaData::Entry("creator", dcSchema, KisMetaData::Value(creators, KisMetaData::Value::OrderedArray) ));
+            store->addEntry(KisMetaData::Entry(dcSchema, "creator", KisMetaData::Value(creators, KisMetaData::Value::OrderedArray) ));
         } else if(it->key() == "Exif.Image.Copyright")
         { // load as dc:rights
-            store->addEntry(KisMetaData::Entry("rights", dcSchema, exivValueToKMDValue(it->getValue()) ));
+            store->addEntry(KisMetaData::Entry(dcSchema, "rights", exivValueToKMDValue(it->getValue()) ));
         } else if(it->groupName() == "Image") {
             // Tiff tags
-            store->addEntry(KisMetaData::Entry(it->tagName().c_str(), tiffSchema, exivValueToKMDValue(it->getValue()))) ;
+            store->addEntry(KisMetaData::Entry(tiffSchema, it->tagName().c_str(), exivValueToKMDValue(it->getValue()))) ;
         } else if(it->groupName() == "Photo" or (it->groupName() == "GPS") ) {
             // Exif tags (and GPS tags)
             KisMetaData::Value v;
@@ -429,7 +429,7 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
             else {
                 v = exivValueToKMDValue(it->getValue());
             }
-            store->addEntry(KisMetaData::Entry(it->tagName().c_str(), exifSchema, v ));
+            store->addEntry(KisMetaData::Entry(exifSchema, it->tagName().c_str(), v ));
         } else if(it->groupName() == "Thumbnail") {
             dbgFile <<"Ignoring thumbnail tag :" << it->key().c_str();
         } else {

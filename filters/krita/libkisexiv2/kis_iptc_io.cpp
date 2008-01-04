@@ -133,8 +133,9 @@ bool KisIptcIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
         if(d->iptcToKMD.contains(it->key().c_str()))
         {
             const IPTCToKMD& iptcToKMd = d->iptcToKMD[it->key().c_str()];
-            store->addEntry(KisMetaData::Entry(iptcToKMd.name,
+            store->addEntry(KisMetaData::Entry(
                             KisMetaData::SchemaRegistry::instance()->schemaFromUri(iptcToKMd.namespaceUri),
+                            iptcToKMd.name,
                             exivValueToKMDValue(it->getValue())));
         }
     }
