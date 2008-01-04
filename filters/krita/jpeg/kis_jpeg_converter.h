@@ -72,7 +72,7 @@ struct KisJPEGOptions {
     bool exif;
     bool iptc;
     bool xmp;
-    QList<KisMetaData::Filter*> filters;
+    QList<const KisMetaData::Filter*> filters;
 };
 
 namespace KisMetaData {
