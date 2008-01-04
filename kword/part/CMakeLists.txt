@@ -29,6 +29,7 @@ set(kwordprivate_LIB_SRCS
     frames/KWFrame.cpp
     frames/KWFrameSet.cpp
     frames/KWTextFrame.cpp
+    frames/KWTableFrame.cpp
     frames/KWTextFrameSet.cpp
     frames/KWCopyShape.cpp
     frames/KWAnchorStrategy.cpp
@@ -49,7 +50,9 @@ set(kwordprivate_LIB_SRCS
     dialogs/KWStatistics.cpp
     dialogs/KWStatisticsDialog.cpp
     dialogs/KWPrintingDialog.cpp
+
     dockers/KWStatisticsDocker.cpp
+#    dockers/KWPagesDocker.cpp
 
     commands/KWPagePropertiesCommand.cpp
     commands/KWPageInsertCommand.cpp
