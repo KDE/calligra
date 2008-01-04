@@ -26,6 +26,7 @@
 #include "kptitemmodelbase.h"
 #include "kpttaskeditor.h"
 #include "kptviewbase.h"
+#include "kptnode.h"
 
 #include <QGraphicsView>
 #include <QGraphicsItem>
@@ -42,7 +43,7 @@ namespace KPlato
 {
 
 class Project;
-class Node;
+//class Node;
 class Relation;
 
 class DependencyConnectorItem;
@@ -176,14 +177,13 @@ public:
     
     void setSymbol();
     
+    int nodeLevel() const { return m_node == 0 ? 0 : m_node->level() - 1; }
+    
 protected:
     void moveToY( qreal y );
     void moveToX( qreal x );
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget );
-    
-private:
-    int nodeLevel( Node *node, int current ) const;
     
 private:
     Node *m_node;

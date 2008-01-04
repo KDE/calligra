@@ -106,7 +106,7 @@ void DependencyLinkItemBase::createPath( const QPointF &sp, int starttype, const
         x += endtype == DependencyNodeItem::Start ? 6 : -6;
         link.quadTo(  cp, QPointF( x, y ) );
     } else if ( right && starttype == DependencyNodeItem::Start ) {
-        x = sp.x() - hgap/2 - 6;
+        x = sp.x() - hgap/2 + 6;
         link.lineTo( x, y );
         x -= 6;
         QPointF cp( x, y );
@@ -611,14 +611,14 @@ void DependencyNodeItem::moveToX( qreal x )
         i->createPath();
     }
     foreach ( DependencyLinkItem *i, m_childrelations ) {
-        
         i->createPath();
     }
 }
 
 void DependencyNodeItem::setColumn()
 {
-    int col = 0;
+    int col = m_parent == 0 ? 0 : m_parent->column() + 1;
+    kDebug()<<this<<text();
     foreach ( DependencyLinkItem *i, m_parentrelations ) {
         col = QMAX( col, i->newChildColumn() );
     }
@@ -627,8 +627,11 @@ void DependencyNodeItem::setColumn()
         foreach ( DependencyLinkItem *i, m_childrelations ) {
             i->succItem->setColumn();
         }
+        kDebug()<<m_children.count()<<"Column="<<column()<<","<<text();
+        foreach ( DependencyNodeItem *i, m_children ) {
+            i->setColumn();
+        }
     }
-    //kDebug()<<column()<<","<<text();
 }
 
 void DependencyNodeItem::setColumn( int col )
@@ -884,7 +887,7 @@ DependencyNodeItem *DependencyScene::createItem( Node *node )
         addItem( item );
     }
     //kDebug()<<item->text()<<item;
-    item->setRectangle( QRectF( itemX(), itemY(), itemWidth(), itemHeight() ) );
+    item->setRectangle( QRectF( itemX( item->nodeLevel() ), itemY(), itemWidth(), itemHeight() ) );
     m_allItems.insert( i+1, item );
     setItemVisible( item, true );
     return item;
