@@ -211,6 +211,24 @@ class KWOpenDocumentFrameLoader : public KoTextFrameLoader
             return shape;
         }
 
+        virtual KoShape * loadTableShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor) {
+            KoShapeFactory * factory = KoShapeRegistry::instance()->value(TableShape_SHAPEID);
+            if (!factory) {
+                kDebug() << "No table shape";
+                return 0;
+            }
+            
+            KoProperties props;
+            KoShape *shape = factory->createShape(&props);
+            
+            if (!shape) {
+                kDebug() << "No table shape";
+                return 0;
+            }
+
+        }
+        
+
     private:
         KWOpenDocumentLoader* m_loader;
 };
