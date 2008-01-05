@@ -35,7 +35,7 @@
 #include "svgexport.h"
 
 #include <KarbonDocument.h>
-#include <karbon_part.h>
+#include <KarbonPart.h>
 
 #include <KoDocument.h>
 #include <KoFilterChain.h>

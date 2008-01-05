@@ -50,7 +50,7 @@ add_subdirectory( templates )
 set(karboncommon_LIB_SRCS 
    karbon_factory.cc 
 #karbon_resourceserver.cc 
-   karbon_part.cc 
+   KarbonPart.cpp
    karbon_view.cc 
    KarbonPrintJob.cpp
 #   karbon_drag.cpp 

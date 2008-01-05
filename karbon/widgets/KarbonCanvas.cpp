@@ -30,7 +30,7 @@
 
 #include "KarbonCanvas.h"
 #include "KarbonDocument.h"
-#include "karbon_part.h"
+#include "KarbonPart.h"
 
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>

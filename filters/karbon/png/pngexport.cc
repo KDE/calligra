@@ -30,7 +30,7 @@
 #include "pngexport.h"
 
 #include <KarbonDocument.h>
-#include <karbon_part.h>
+#include <KarbonPart.h>
 #include <KoShapePainter.h>
 
 #include <KoFilter.h>

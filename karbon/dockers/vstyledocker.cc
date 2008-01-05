@@ -40,7 +40,7 @@
 #include <KoShapeManager.h>
 #include <kfiledialog.h>
 
-#include "karbon_part.h"
+#include "KarbonPart.h"
 #include "karbon_view.h"
 #include "karbon_factory.h"
 #include "karbon_resourceserver.h"

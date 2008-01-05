@@ -29,8 +29,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __KARBON_PART_H__
-#define __KARBON_PART_H__
+#ifndef KARBON_PART_H
+#define KARBON_PART_H
 
 #include <KoShapeControllerBase.h>
 
@@ -111,5 +111,5 @@ private:
     unsigned int m_maxRecentFiles;                /// max. number of files shown in open recent menu item
 };
 
-#endif
+#endif // KARBON_PART_H
 

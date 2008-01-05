@@ -40,7 +40,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "karbon_part.h"
+#include "KarbonPart.h"
 #include "karbon_factory.h"
 #include "karbon_view.h"
 #include "vglobal.h"
@@ -507,5 +507,5 @@ void KarbonPart::setPageSize( const QSizeF &pageSize )
     }
 }
 
-#include "karbon_part.moc"
+#include "KarbonPart.moc"
 

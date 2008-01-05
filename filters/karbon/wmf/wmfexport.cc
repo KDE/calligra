@@ -21,7 +21,7 @@
 #include <kowmfwrite.h>
 
 #include <KarbonDocument.h>
-#include <karbon_part.h>
+#include <KarbonPart.h>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>

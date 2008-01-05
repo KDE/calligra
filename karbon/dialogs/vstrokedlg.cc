@@ -34,7 +34,7 @@
 
 #include "KoUnitDoubleSpinBox.h"
 
-#include "karbon_part.h"
+#include "KarbonPart.h"
 #include "vcolor.h"
 #include "vselection.h"
 #include "vstroke.h"

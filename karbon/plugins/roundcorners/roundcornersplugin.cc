@@ -19,7 +19,7 @@
 
 #include "roundcornersplugin.h"
 #include <karbon_view.h>
-#include <karbon_part.h>
+#include <KarbonPart.h>
 #include <core/vpath.h>
 #include <core/vsegment.h>
 #include <kgenericfactory.h>

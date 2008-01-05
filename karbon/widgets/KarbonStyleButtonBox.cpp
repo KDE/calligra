@@ -247,7 +247,7 @@ static const char* const buttonwinding[]={
 
 
 #include "KarbonStyleButtonBox.h"
-#include "karbon_part.h"
+#include "KarbonPart.h"
 
 #include <KoCanvasBase.h>
 #include <KoCanvasController.h>

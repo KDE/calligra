@@ -21,7 +21,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include "KarbonConfigureDialog.h"
 
 #include "karbon_view.h"
-#include "karbon_part.h"
+#include "KarbonPart.h"
 #include "karbon_factory.h"
 
 #include <KoGridData.h>
