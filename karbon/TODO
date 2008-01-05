@@ -25,10 +25,6 @@ Layers:
 
 Shapes/Tools:
 ---------------
-- check if the KoTextShape provided by KWord is flexible enough for our use cases (i.e. text along a path)
-  KoText intends to have a shape that does most of what karbon needs.  Text along a path is an exception,
-  but that feature will be provided by Qt4.3 (in QPainterPath) [TZ]
-  see example code form zack rusin http://labs.trolltech.com/page/Graphics/Examples
 - add support for adding shapes like sinus, spiral, etc. (see odf spec for custom shape/enhanced geometry)
 - implement changing a single path point's type from line to curve and vice versa
 - implement something like kword/part/frames/KWCopyShape.h
@@ -37,6 +33,8 @@ Shapes/Tools:
 - implement "drawing" the gradient on shapes which have no gradient yet
 - find a way to save/load the roundness of the star shape (e.g. flower)
 - implement pattern resizing
+
+- saving/loading of simple text for odf, svg, wmf, ...
 
 ODF support:
 ------------
@@ -75,6 +73,11 @@ General:
 
 Resources:
 -----------
+
+Toolbars:
+-----------
+- View toolbar with Zoom to Selection, to Document Content (or add them to the zoom action???)
+
 
 All time favourites :)
 -----------------------
