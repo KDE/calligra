@@ -19,7 +19,7 @@
 
 #include "shadoweffectplugin.h"
 #include "klocale.h"
-#include <karbon_view.h>
+#include <KarbonView.h>
 #include <KarbonPart.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>

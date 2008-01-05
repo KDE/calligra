@@ -20,7 +20,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "KarbonConfigureDialog.h"
 
-#include "karbon_view.h"
+#include "KarbonView.h"
 #include "KarbonPart.h"
 #include "karbon_factory.h"
 

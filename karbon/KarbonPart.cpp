@@ -42,7 +42,7 @@
 
 #include "KarbonPart.h"
 #include "karbon_factory.h"
-#include "karbon_view.h"
+#include "KarbonView.h"
 #include "vglobal.h"
 #include "KarbonCanvas.h"
 #include "vdocumentdocker.h"

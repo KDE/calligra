@@ -20,7 +20,7 @@
 
 #include <dcopclient.h>
 
-#include "karbon_view.h"
+#include "KarbonView.h"
 #include "karbon_view_iface.h"
 
 KarbonViewIface::KarbonViewIface( KarbonView* view )

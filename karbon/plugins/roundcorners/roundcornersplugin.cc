@@ -18,7 +18,7 @@
 */
 
 #include "roundcornersplugin.h"
-#include <karbon_view.h>
+#include <KarbonView.h>
 #include <KarbonPart.h>
 #include <core/vpath.h>
 #include <core/vsegment.h>

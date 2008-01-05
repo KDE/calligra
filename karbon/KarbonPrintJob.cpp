@@ -18,7 +18,7 @@
  */
 
 #include "KarbonPrintJob.h"
-#include "karbon_view.h"
+#include "KarbonView.h"
 #include "KarbonCanvas.h"
 
 #include <KoShapeManager.h>

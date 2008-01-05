@@ -43,7 +43,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "karbon_view.h"
+#include "KarbonView.h"
 
 // Dialogs.
 #include "KarbonConfigureDialog.h"
@@ -1438,5 +1438,5 @@ KoPrintJob * KarbonView::createPrintJob()
     return new KarbonPrintJob(this);
 }
 
-#include "karbon_view.moc"
+#include "KarbonView.moc"
 
