@@ -153,8 +153,10 @@ public slots:
 protected slots:
     // Object related operations.
 
-    // View.
+    // View
     void viewModeChanged();
+    void zoomSelection();
+    void zoomDrawing();
 
     /// Called by the zoom action to set the zoom
     void zoomChanged( KoZoomMode::Mode mode, double zoom );
@@ -203,18 +205,18 @@ private:
 
     KarbonStylePreviewDocker * m_stylePreview;
 
+    // actions:
     KAction            *m_groupObjects;
     KAction            *m_ungroupObjects;
 
-    KAction            *m_closePath;
-    KAction            *m_combinePath;
-    KAction            *m_separatePath;
+    KAction * m_closePath;
+    KAction * m_combinePath;
+    KAction * m_separatePath;
     KAction * m_reversePath;
     KAction * m_intersectPath;
     KAction * m_subtractPath;
     KAction * m_unitePath;
 
-    // actions:
     KSelectAction        *m_viewAction;
     KAction                *m_configureAction;
     KToggleAction        *m_showRulerAction;

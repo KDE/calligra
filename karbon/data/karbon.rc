@@ -108,6 +108,8 @@
 		<Text>View</Text>
 		<Action name="view_mode"/>
 		<Action name="view_zoom"/>
+        <Action name="view_zoom_selection"/>
+        <Action name="view_zoom_drawing"/>
 		<Action name="help_context"/>
 	</ToolBar>
 	<ToolBar name="object_toolbar" hidden="true" fullWidth="false">

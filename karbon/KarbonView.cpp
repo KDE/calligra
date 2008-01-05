@@ -891,8 +891,7 @@ void KarbonView::booleanOperation( KarbonBooleanCommand::BooleanOperation operat
     }
 }
 
-void
-KarbonView::viewModeChanged()
+void KarbonView::viewModeChanged()
 {
     debugView("KarbonView::viewModeChanged()");
 
@@ -904,6 +903,39 @@ KarbonView::viewModeChanged()
         m_painterFactory->setPainter( canvasWidget()->pixmap(), width(), height() );*/
 
     m_canvas->updateCanvas(m_canvas->canvasWidget()->rect());
+}
+
+void KarbonView::zoomSelection()
+{
+    KoSelection* selection = m_canvas->shapeManager()->selection();
+    if( ! selection )
+        return;
+
+    if( ! selection->count() )
+        return;
+
+    const KoZoomHandler * zoomHandler = dynamic_cast<const KoZoomHandler*>( m_canvas->viewConverter() );
+    if( ! zoomHandler )
+        return;
+
+    QRectF bbox = selection->boundingRect();
+    QRect viewRect = zoomHandler->documentToView( bbox ).toRect();
+
+    m_canvasController->zoomTo( viewRect.translated( m_canvas->documentOrigin() ) );
+}
+
+void KarbonView::zoomDrawing()
+{
+    const KoZoomHandler * zoomHandler = dynamic_cast<const KoZoomHandler*>( m_canvas->viewConverter() );
+    if( ! zoomHandler )
+        return;
+
+    QRectF bbox = m_part->document().contentRect();
+    if( bbox.isNull() )
+        return;
+
+    QRect viewRect = zoomHandler->documentToView( bbox ).toRect();
+    m_canvasController->zoomTo( viewRect.translated( m_canvas->documentOrigin() ) );
 }
 
 void KarbonView::zoomChanged( KoZoomMode::Mode mode, double zoom )
@@ -1138,7 +1170,17 @@ KarbonView::initActions()
     actionCollection()->addAction("page_layout", actionPageLayout );
     connect(actionPageLayout, SIGNAL(triggered()), this, SLOT(pageLayout()));
 
+    // view ---->
+    KAction * zoomSelection = new KAction(KIcon("zoom_selection"), i18n("Zoom to Selection"), this );
+    actionCollection()->addAction( "view_zoom_selection", zoomSelection );
+    connect(zoomSelection, SIGNAL(triggered()), this, SLOT(zoomSelection()));
+
+    KAction * zoomDrawing = new KAction(KIcon("zoom_drawing"), i18n("Zoom to Drawing"), this );
+    actionCollection()->addAction( "view_zoom_drawing", zoomDrawing );
+    connect(zoomDrawing, SIGNAL(triggered()), this, SLOT(zoomDrawing()));
+
     m_contextHelpAction = new KoContextHelpAction( actionCollection(), this );
+    // view <-----
 }
 
 void
