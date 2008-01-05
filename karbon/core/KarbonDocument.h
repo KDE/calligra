@@ -41,7 +41,6 @@
 #include <KoXmlReader.h>
 #include <KoDocument.h>
 
-class VSelection;
 class KoShape;
 class KoShapeSavingContext;
 class KoShapeLayer;
@@ -60,13 +59,6 @@ typedef QList<KoShapeLayer*> VLayerList;
 class KARBONBASE_EXPORT KarbonDocument
 {
 public:
-    /** The different selection modes */
-    enum VSelectionMode {
-        ActiveLayer,    /**< selection within the active layer */
-        VisibleLayers,    /**< selection within all visible layers */
-        SelectedLayers,    /**< selection within all selected layers */
-        AllLayers        /**< selection within all layers */
-    };
 
     /**
      * Constructs a new document.
