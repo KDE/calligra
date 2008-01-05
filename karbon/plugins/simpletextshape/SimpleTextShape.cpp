@@ -305,10 +305,17 @@ void SimpleTextShape::notifyShapeChanged( KoShape * shape, ChangeType type )
 {
     if( shape == m_path )
     {
-        update();
-        // use the paths outline converted to document coordinates as the baseline
-        m_baseline = m_path->absoluteTransformation(0).map( m_path->outline() );
-        updateSizeAndPosition();
-        update();
+        if( type == KoShape::Deleted )
+        {
+            m_path = 0;
+        }
+        else
+        {
+            update();
+            // use the paths outline converted to document coordinates as the baseline
+            m_baseline = m_path->absoluteTransformation(0).map( m_path->outline() );
+            updateSizeAndPosition();
+            update();
+        }
     }
 }
