@@ -34,7 +34,7 @@
 
 #include "svgexport.h"
 
-#include <vdocument.h>
+#include <KarbonDocument.h>
 #include <karbon_part.h>
 
 #include <KoDocument.h>
@@ -105,7 +105,7 @@ KoFilter::ConversionStatus SvgExport::convert( const QByteArray& from, const QBy
     return KoFilter::OK;
 }
 
-void SvgExport::saveDocument( VDocument& document )
+void SvgExport::saveDocument( KarbonDocument& document )
 {
     // get the bounding box of the page
     QSizeF pageSize = document.pageSize();

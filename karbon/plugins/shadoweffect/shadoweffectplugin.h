@@ -68,7 +68,7 @@ private:
 class VCreateShadowCmd : public VCommand
 {
 public:
-	VCreateShadowCmd( VDocument* doc, int distance, int angle, float opacity );
+	VCreateShadowCmd( KarbonDocument* doc, int distance, int angle, float opacity );
 	virtual ~VCreateShadowCmd();
 
 	virtual void redo();

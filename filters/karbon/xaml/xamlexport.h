@@ -35,7 +35,7 @@
 class QTextStream;
 class VColor;
 class VPath;
-class VDocument;
+class KarbonDocument;
 class VFill;
 class VGroup;
 class VLayer;
@@ -56,7 +56,7 @@ public:
 
 private:
 	virtual void visitVPath( VPath& composite );
-	virtual void visitVDocument( VDocument& document );
+	virtual void visitVDocument( KarbonDocument& document );
 	virtual void visitVGroup( VGroup& group );
 	virtual void visitVSubpath( VSubpath& path );
 	//virtual void visitVText( VText& text );

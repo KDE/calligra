@@ -22,7 +22,7 @@
 
 #include <KoDocumentSectionModel.h>
 
-class VDocument;
+class KarbonDocument;
 class KoShape;
 class KoShapeContainer;
 class QAbstractItemModel;
@@ -32,12 +32,12 @@ class KarbonLayerModel : public KoDocumentSectionModel
 {
 public:
     /// Constructs a new layer model using the specified documents data
-    KarbonLayerModel( VDocument *document );
+    KarbonLayerModel( KarbonDocument *document );
     /// Triggers an update of the complete model
     void update();
 
     /// Sets a new document to show contents of
-    void setDocument( VDocument * newDocument );
+    void setDocument( KarbonDocument * newDocument );
 
     // from QAbstractItemModel
     virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -68,7 +68,7 @@ private:
 
     int indexOf( int count, int row ) const;
 
-    VDocument *m_document; ///< the undelying data structure
+    KarbonDocument *m_document; ///< the undelying data structure
     KoShape *m_shape;
     mutable QList<KoShape*> m_childs;
     mutable KoShapeContainer *m_lastContainer;

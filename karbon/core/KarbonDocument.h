@@ -27,8 +27,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef VDOCUMENT_H
-#define VDOCUMENT_H
+#ifndef KARBONDOCUMENT_H
+#define KARBONDOCUMENT_H
 
 #include <QString>
 #include <QMap>
@@ -57,7 +57,7 @@ typedef QList<KoShapeLayer*> VLayerList;
  * the visually oriented karbon part.
  */
 
-class KARBONBASE_EXPORT VDocument
+class KARBONBASE_EXPORT KarbonDocument
 {
 public:
     /** The different selection modes */
@@ -71,19 +71,19 @@ public:
     /**
      * Constructs a new document.
      */
-    VDocument();
+    KarbonDocument();
 
     /**
      * Copy constructor.
      *
      * @param document the document to copy properties from
      */
-    VDocument( const VDocument& document );
+    KarbonDocument( const KarbonDocument& document );
 
     /** 
      * Destroys the document and all of the layers.
      */
-    virtual ~VDocument();
+    virtual ~KarbonDocument();
 
     /**
      * Returns document unit.
@@ -188,7 +188,7 @@ public:
     virtual void load( const KoXmlElement& element );
     void loadDocumentContent( const KoXmlElement& doc );
 
-    virtual VDocument* clone() const;
+    virtual KarbonDocument* clone() const;
 
 
     /**
@@ -230,5 +230,5 @@ private:
     Private * const d;
 };
 
-#endif
+#endif // KARBONDOCUMENT_H
 

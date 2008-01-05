@@ -24,7 +24,7 @@
 
 class KoShape;
 class KoPathShape;
-class VDocument;
+class KarbonDocument;
 
 /**
  * WMFImportParser inherit KoWmfRead
@@ -39,9 +39,9 @@ public:
     ~WMFImportParser() { }
 
     /**
-     * play WMF file on a VDocument. Return true on success.
+     * play WMF file on a KarbonDocument. Return true on success.
      */
-    bool play( VDocument& doc );
+    bool play( KarbonDocument& doc );
 
 
 private:
@@ -104,7 +104,7 @@ private:
     void  drawText( int x, int y, int w, int h, int flags, const QString &s, double rotation );
 
     // matrix transformation : only used in some bitmap manipulation
-    void  setMatrix( const QMatrix &, bool combine=false );
+    void  setMatrix( const QMatrix &matrix, bool combine=false );
 
     //-----------------------------------------------------------------------------
     // Utilities 
@@ -120,7 +120,7 @@ private:
     double scaleH( int height );
 
 private:
-    VDocument *mDoc;
+    KarbonDocument *mDoc;
     QRegion   mClippingRegion;
     QPen      mPen;
     QBrush    mBrush;

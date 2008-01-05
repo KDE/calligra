@@ -63,7 +63,7 @@ class VSubpath;
 class VRoundCornersCmd : public VReplacingCmd
 {
 public:
-	VRoundCornersCmd( VDocument* doc, double radius );
+	VRoundCornersCmd( KarbonDocument* doc, double radius );
 	virtual ~VRoundCornersCmd() {}
 
 	virtual void visitVSubpath( VSubpath& path );

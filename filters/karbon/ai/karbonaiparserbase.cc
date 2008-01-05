@@ -53,7 +53,7 @@ KarbonAIParserBase::KarbonAIParserBase() : m_pot(POT_Other), m_ptt (PTT_Output),
 
   m_curKarbonPath = new VPath( 0L );
 
-  m_document = new VDocument();
+  m_document = new KarbonDocument();
   m_layer = NULL;
   m_combination = NULL;
 

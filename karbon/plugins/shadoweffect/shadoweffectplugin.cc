@@ -34,7 +34,7 @@
 #include <core/vpath.h>
 #include <core/vsegment.h>
 #include <core/vselection.h>
-#include <core/vdocument.h>
+#include <core/KarbonDocument.h>
 #include "vshadowdecorator.h"
 
 typedef KGenericFactory<ShadowEffectPlugin, KarbonView> ShadowEffectPluginFactory;
@@ -140,7 +140,7 @@ VShadowEffectDlg::opacity() const
 	return m_opacity->value();
 }
 
-VCreateShadowCmd::VCreateShadowCmd( VDocument* doc, int distance, int angle, float opacity )
+VCreateShadowCmd::VCreateShadowCmd( KarbonDocument* doc, int distance, int angle, float opacity )
 	: VCommand( doc, i18n( "Create Shadow" ) ), m_distance( distance ), m_angle( angle ), m_opacity( opacity )
 {
 	// Set members.

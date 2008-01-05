@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, Sven Lüppken <sven@kde.org>
+   Copyright (C) 2002, Sven Lï¿½ppken <sven@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,7 +24,7 @@
 #include <qdom.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <core/vdocument.h>
+#include <core/KarbonDocument.h>
 
 class KontourImport : public KoFilter
 {
@@ -44,7 +44,7 @@ protected:
 private:
 	void parseGObject( VObject *, const QDomElement & );
 	void parseGroup( const QDomElement & );
-	VDocument m_document;
+	KarbonDocument m_document;
 };
 
 #endif // __KONTOURIMPORT_H__

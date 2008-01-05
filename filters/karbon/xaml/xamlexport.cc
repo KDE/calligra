@@ -37,7 +37,7 @@
 #include "vcolor.h"
 #include "vcomposite.h"
 #include "vdashpattern.h"
-#include "vdocument.h"
+#include "KarbonDocument.h"
 #include "vfill.h"
 #include "vgradient.h"
 #include "vgroup.h"
@@ -94,7 +94,7 @@ XAMLExport::convert( const QByteArray& from, const QByteArray& to )
 
 
 	// load the document and export it:
-	VDocument doc;
+	KarbonDocument doc;
 	doc.load( docNode );
 	doc.accept( *this );
 
@@ -111,7 +111,7 @@ XAMLExport::convert( const QByteArray& from, const QByteArray& to )
 }
 
 void
-XAMLExport::visitVDocument( VDocument& document )
+XAMLExport::visitVDocument( KarbonDocument& document )
 {
 	// select all objects:
 	document.selection()->append();

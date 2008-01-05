@@ -24,11 +24,11 @@
 */
 
 #include "KarbonLayerReorderCommand.h"
-#include "vdocument.h"
+#include "KarbonDocument.h"
 #include <KoShapeLayer.h>
 #include <klocale.h>
 
-KarbonLayerReorderCommand::KarbonLayerReorderCommand( VDocument* document, KoShapeLayer* layer, ReorderType commandType, QUndoCommand* parent )
+KarbonLayerReorderCommand::KarbonLayerReorderCommand( KarbonDocument* document, KoShapeLayer* layer, ReorderType commandType, QUndoCommand* parent )
 : QUndoCommand( parent ), m_document( document ), m_cmdType( commandType )
 {
     m_layers.append( layer );
@@ -39,7 +39,7 @@ KarbonLayerReorderCommand::KarbonLayerReorderCommand( VDocument* document, KoSha
         setText( i18n( "Lower Layer") );
 }
 
-KarbonLayerReorderCommand::KarbonLayerReorderCommand( VDocument* document, QList<KoShapeLayer*> layers, ReorderType commandType, QUndoCommand* parent )
+KarbonLayerReorderCommand::KarbonLayerReorderCommand( KarbonDocument* document, QList<KoShapeLayer*> layers, ReorderType commandType, QUndoCommand* parent )
 : QUndoCommand( parent ), m_document( document ), m_layers( layers ), m_cmdType( commandType )
 {
     if( m_cmdType == RaiseLayer )

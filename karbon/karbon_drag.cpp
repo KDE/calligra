@@ -23,7 +23,7 @@
 #include <qdom.h>
 #include <qtextstream.h>
 
-#include "vdocument.h"
+#include "KarbonDocument.h"
 
 Q3CString KarbonDrag::m_encodeFormats[NumEncodeFmts];
 Q3CString KarbonDrag::m_decodeFormats[NumDecodeFmts];
@@ -82,7 +82,7 @@ KarbonDrag::canDecode(const QMimeData* e)
 }
 
 bool
-KarbonDrag::decode( const QMimeData* e, VObjectList& sl, VDocument& vdoc )
+KarbonDrag::decode( const QMimeData* e, VObjectList& sl, KarbonDocument& vdoc )
 {
 	if( e->hasFormat( m_decodeFormats[0] ) )
 	{

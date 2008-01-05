@@ -29,7 +29,7 @@ class QPointF;
 class QLabel;
 class QPixmap;
 
-class VDocument;
+class KarbonDocument;
 class KarbonView;
 class VCommand;
 
@@ -52,7 +52,7 @@ class VDocumentPreview : public QWidget
 		virtual bool eventFilter( QObject* object, QEvent* event );
 
 	private:
-		VDocument	*m_document;
+		KarbonDocument	*m_document;
 		KarbonView	*m_view;
 		QPointF		m_firstPoint;
 		QPointF		m_lastPoint;

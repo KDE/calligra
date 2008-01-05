@@ -20,7 +20,7 @@
 #ifndef KARBON_IMPORT_H
 #define KARBON_IMPORT_H
 
-#include <vdocument.h>
+#include <KarbonDocument.h>
 
 #include <KoFilter.h>
 #include <KoXmlReader.h>
@@ -72,7 +72,7 @@ protected:
     int getAttribute(KoXmlElement &element, const char *attributeName, int defaultValue);
 
 private:
-    VDocument m_document;
+    KarbonDocument m_document;
     QMatrix m_mirrorMatrix;
 };
 

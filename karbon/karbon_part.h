@@ -36,7 +36,7 @@
 
 #include <KoDocument.h>
 #include <KoUnit.h>
-#include "vdocument.h"
+#include "KarbonDocument.h"
 #include "karbon_export.h"
 
 class QRect;
@@ -68,7 +68,7 @@ public:
     virtual bool saveOdf( SavingContext &documentContext );
 
     // access static document:
-    VDocument& document() { return m_doc; }
+    KarbonDocument& document() { return m_doc; }
 
     bool showStatusBar() const
     {
@@ -104,7 +104,7 @@ protected:
     void updateDocumentSize();
     void setPageSize( const QSizeF &pageSize );
 private:
-    VDocument m_doc;                    /// store non-visual doc info
+    KarbonDocument m_doc;                    /// store non-visual doc info
 
     bool m_bShowStatusBar;                /// enable/disable status bar in attached view(s)
     bool m_merge;

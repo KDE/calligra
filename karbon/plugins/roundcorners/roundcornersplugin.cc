@@ -101,7 +101,7 @@ VRoundCornersDlg::setRadius( double value )
 
 
 
-VRoundCornersCmd::VRoundCornersCmd( VDocument* doc, double radius )
+VRoundCornersCmd::VRoundCornersCmd( KarbonDocument* doc, double radius )
 	: VReplacingCmd( doc, i18n( "Round Corners" ) )
 {
 	// Set members.

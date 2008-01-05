@@ -42,7 +42,7 @@ DESCRIPTION
 #include <Q3ValueList>
 #include <kdebug.h>
 
-#include <core/vdocument.h>
+#include <core/KarbonDocument.h>
 namespace std { };
 using namespace std;
 

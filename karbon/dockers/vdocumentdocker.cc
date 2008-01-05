@@ -41,7 +41,7 @@
 #include "karbon_view.h"
 #include "karbon_factory.h"
 #include "karbon_resourceserver.h"
-#include "vdocument.h"
+#include "KarbonDocument.h"
 #include "vqpainter.h"
 #include "vselection.h"
 #include "vstroke.h"

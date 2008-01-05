@@ -26,7 +26,7 @@
 
 #include "vgroup.h"
 
-class VDocument;
+class KarbonDocument;
 
 #define NumEncodeFmts 1
 #define NumDecodeFmts 1
@@ -39,7 +39,7 @@ public:
 	const char* format( int i ) const;
 	QByteArray encodedData( const char* mimetype ) const;
 	static bool canDecode( const QMimeData * );
-	static bool decode( const QMimeData* e, VObjectList& sl, VDocument& vdoc );
+	static bool decode( const QMimeData* e, VObjectList& sl, KarbonDocument& vdoc );
 	void setObjectList( VObjectList l );
 
 private:

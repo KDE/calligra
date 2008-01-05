@@ -29,7 +29,7 @@
 #include <KoFilterChain.h>
 #include <KoStore.h>
 
-#include "vdocument.h"
+#include "KarbonDocument.h"
 #include "vlayer.h"
 #include "xcfexport.h"
 
@@ -81,7 +81,7 @@ XcfExport::convert( const QByteArray& from, const QByteArray& to )
 
 
 	// Load the document.
-	VDocument doc;
+	KarbonDocument doc;
 	doc.load( docNode );
 
 	// Process the document.
@@ -95,7 +95,7 @@ XcfExport::convert( const QByteArray& from, const QByteArray& to )
 }
 
 void
-XcfExport::visitVDocument( VDocument& document )
+XcfExport::visitVDocument( KarbonDocument& document )
 {
 	// Offsets.
 	qlonglong current = 0;

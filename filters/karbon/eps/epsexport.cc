@@ -38,7 +38,7 @@
 #include "vcolor.h"
 #include "vcomposite.h"
 #include "vdashpattern.h"
-#include "vdocument.h"
+#include "KarbonDocument.h"
 #include "vfill.h"
 #include "vgroup.h"
 #include "vlayer.h"
@@ -131,7 +131,7 @@ EpsExport::convert( const QByteArray& from, const QByteArray& to )
 		m_stream = new QTextStream( &fileOut );
 
 		// Load the document.
-		VDocument doc;
+		KarbonDocument doc;
 		doc.load( docNode );
 
 		// Process the document.
@@ -153,7 +153,7 @@ EpsExport::convert( const QByteArray& from, const QByteArray& to )
 }
 
 void
-EpsExport::visitVDocument( VDocument& document )
+EpsExport::visitVDocument( KarbonDocument& document )
 {
 	// Select all objects.
 	document.selection()->append();

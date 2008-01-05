@@ -20,7 +20,7 @@
 #include "wmfexport.h"
 #include <kowmfwrite.h>
 
-#include <vdocument.h>
+#include <KarbonDocument.h>
 #include <karbon_part.h>
 
 #include <kdebug.h>
@@ -76,7 +76,7 @@ KoFilter::ConversionStatus WmfExport::convert( const QByteArray& from, const QBy
     return KoFilter::OK;
 }
 
-void WmfExport::paintDocument( VDocument& document ) {
+void WmfExport::paintDocument( KarbonDocument& document ) {
 
     // resolution
     mDpi = 1000;

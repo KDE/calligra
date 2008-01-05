@@ -29,7 +29,7 @@
 */
 
 #include "KarbonCanvas.h"
-#include "vdocument.h"
+#include "KarbonDocument.h"
 #include "karbon_part.h"
 
 #include <QtGui/QPainter>
@@ -71,7 +71,7 @@ public:
 
     KoToolProxy *toolProxy;
 
-    VDocument *document;
+    KarbonDocument *document;
     KarbonPart *part;
     QPoint origin;         ///< the origin of the document page rect
     bool showMargins;      ///< should page margins be shown

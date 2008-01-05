@@ -26,7 +26,7 @@
 #include <q3ptrstack.h>
 //Added by qt3to4:
 #include <Q3CString>
-#include <core/vdocument.h>
+#include <core/KarbonDocument.h>
 #include <core/vgradient.h>
 #include <core/vfill.h>
 #include <core/vstroke.h>
@@ -83,7 +83,7 @@ protected:
 	VObject* findObject( const QString &name, VGroup * );
 
 private:
-	VDocument						m_document;
+	KarbonDocument						m_document;
 	Q3PtrStack<XAMLGraphicsContext>	m_gc;
 	QMap<QString, GradientHelper>	m_gradients;
 	QMap<QString, QDomElement>		m_paths;

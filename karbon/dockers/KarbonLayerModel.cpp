@@ -19,7 +19,7 @@
 
 #include "KarbonLayerModel.h"
 
-#include <vdocument.h>
+#include <KarbonDocument.h>
 #include <KoShapePainter.h>
 
 #include <KoShapeManager.h>
@@ -44,7 +44,7 @@
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QMimeData>
 
-KarbonLayerModel::KarbonLayerModel( VDocument *document )
+KarbonLayerModel::KarbonLayerModel( KarbonDocument *document )
 : m_document( document )
 , m_lastContainer( 0 )
 {
@@ -57,7 +57,7 @@ void KarbonLayerModel::update()
     emit layoutChanged();
 }
 
-void KarbonLayerModel::setDocument( VDocument * newDocument )
+void KarbonLayerModel::setDocument( KarbonDocument * newDocument )
 {
     m_document = newDocument;
     reset();

@@ -22,7 +22,7 @@
 #include <core/vstroke.h>
 #include <render/vpainter.h>
 #include <core/vvisitor.h>
-#include <core/vdocument.h>
+#include <core/KarbonDocument.h>
 #include <core/vselection.h>
 #include <commands/vtransformcmd.h>
 

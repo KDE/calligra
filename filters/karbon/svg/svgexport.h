@@ -32,7 +32,7 @@
 #include <KoFilter.h>
 #include <QtGui/QGradient>
 
-class VDocument;
+class KarbonDocument;
 class KoShapeLayer;
 class KoShapeContainer;
 class KoShape;
@@ -55,7 +55,7 @@ public:
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 
 private:
-    void saveDocument( VDocument& document );
+    void saveDocument( KarbonDocument& document );
     void saveLayer( KoShapeLayer * layer );
     void saveGroup( KoShapeContainer * group );
     void saveShape( KoShape * shape );

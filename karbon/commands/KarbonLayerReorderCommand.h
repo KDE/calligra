@@ -27,7 +27,7 @@
 
 #include <QUndoCommand>
 
-class VDocument;
+class KarbonDocument;
 class KoShapeLayer;
 
 /// Command for raising or lowering layers
@@ -47,7 +47,7 @@ public:
      * @param layer the layer which is subject to the command
      * @param commandType the type of the command to redo
      */
-    KarbonLayerReorderCommand( VDocument* document, KoShapeLayer* layer, ReorderType commandType, QUndoCommand* parent = 0 );
+    KarbonLayerReorderCommand( KarbonDocument* document, KoShapeLayer* layer, ReorderType commandType, QUndoCommand* parent = 0 );
 
     /**
      * Layer command which works on a single layer.
@@ -55,7 +55,7 @@ public:
      * @param layers the list of layers which are subject to the command
      * @param commandType the type of the command to redo
      */
-    KarbonLayerReorderCommand( VDocument* document, QList<KoShapeLayer*> layers, ReorderType commandType, QUndoCommand* parent = 0 );
+    KarbonLayerReorderCommand( KarbonDocument* document, QList<KoShapeLayer*> layers, ReorderType commandType, QUndoCommand* parent = 0 );
 
     virtual ~KarbonLayerReorderCommand();
 
@@ -65,7 +65,7 @@ public:
     virtual void undo ();
 
 private:
-    VDocument *m_document;         ///< the document to work on
+    KarbonDocument *m_document;         ///< the document to work on
     QList<KoShapeLayer*> m_layers; ///< the list of layers subject to the command
     ReorderType m_cmdType;         ///< the type of the command to redo
 };

@@ -19,7 +19,7 @@
 
 #include "wmfimportparser.h"
 
-#include <core/vdocument.h>
+#include <core/KarbonDocument.h>
 
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
@@ -40,7 +40,7 @@ WMFImportParser::WMFImportParser() : KoWmfRead() {
 }
 
 
-bool WMFImportParser::play( VDocument& doc )
+bool WMFImportParser::play( KarbonDocument& doc )
 {
     mDoc = &doc;
     mScaleX = mScaleY = 1;
@@ -98,6 +98,12 @@ bool WMFImportParser::begin() {
         mScaleX = mDoc->pageSize().width() / (double)bounding.width();
         mScaleY = mDoc->pageSize().height() / (double)bounding.height();
     }
+
+    kDebug() << "bounding rect =" << bounding;
+    kDebug() << "page size =" << mDoc->pageSize();
+    kDebug() << "scale x =" << mScaleX;
+    kDebug() << "scale y =" << mScaleY;
+
     return true;
 }
 
@@ -160,7 +166,9 @@ void WMFImportParser::setWindowExt( int width, int height ) {
 }
 
 
-void WMFImportParser::setMatrix( const QMatrix &, bool  ) {
+void WMFImportParser::setMatrix( const QMatrix &matrix, bool combine ) {
+    kDebug() << "matrix =" << matrix;
+    kDebug() << "combine =" << combine;
 }
 
 
@@ -341,7 +349,7 @@ void WMFImportParser::drawPolyPolygon( QList<QPolygon>& listPa, bool winding ) {
 }
 
 
-void WMFImportParser::drawImage( int x, int y, const QImage &image, int , int , int sw, int sh ) {
+void WMFImportParser::drawImage( int x, int y, const QImage &image, int sx, int sy, int sw, int sh ) {
     KoImageData * data = new KoImageData( mDoc->imageCollection() );
     data->setImage( image );
 
@@ -355,6 +363,9 @@ void WMFImportParser::drawImage( int x, int y, const QImage &image, int , int , 
     pic->setSize( QSizeF(sw,sh) );
 
     kDebug() << "image data size =" << data->pixmap().size();
+    kDebug() << "source image size =" << image.size();
+    kDebug() << "source position =" << QPointF( sx, sy );
+    kDebug() << "source size =" << QPointF( scaleW(sw), scaleH(sh) );
 
     mDoc->add( pic );
 }

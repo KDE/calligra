@@ -29,7 +29,7 @@
 
 
 class QDataStream;
-class VDocument;
+class KarbonDocument;
 class VLayer;
 
 
@@ -43,7 +43,7 @@ public:
 
 	virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 
-	virtual void visitVDocument( VDocument& document );
+	virtual void visitVDocument( KarbonDocument& document );
 	virtual void visitVLayer( VLayer& layer );
 
 private:

@@ -3,7 +3,7 @@ include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${KOGUIUTILS_INCLUDES} $
 #add_definitions(${FREETYPE_INCLUDE_DIR})
 
 set(karboncore_SRCS
-    vdocument.cc 
+    KarbonDocument.cpp
     vglobal.cc 
     vcursor.cc
     )

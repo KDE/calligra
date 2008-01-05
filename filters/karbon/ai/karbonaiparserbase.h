@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002, Dirk Schönberger <dirk.schoenberger@sz-online.de>
+   Copyright (C) 2002, Dirk Schï¿½nberger <dirk.schoenberger@sz-online.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,7 +29,7 @@
 
 #include <KoPoint.h>
 #include <core/vcomposite.h>
-#include <core/vdocument.h>
+#include <core/KarbonDocument.h>
 #include <core/vlayer.h>
 #include <core/vgroup.h>
 #include <core/vfill.h>
@@ -135,7 +135,7 @@ public:
   bool parse (QIODevice& fin, QDomDocument &doc);
 private:
   VPath *m_curKarbonPath;
-  VDocument *m_document;
+  KarbonDocument *m_document;
   VLayer *m_layer;
   VPath *m_combination;
   Q3PtrStack<VGroup> m_groupStack;

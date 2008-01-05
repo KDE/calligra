@@ -23,7 +23,7 @@ DESCRIPTION
 #include "wmfimport.h"
 #include "wmfimportparser.h"
 
-#include <core/vdocument.h>
+#include <core/KarbonDocument.h>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -58,7 +58,7 @@ KoFilter::ConversionStatus WMFImport::convert( const QByteArray& from, const QBy
     }
 
     // Do the conversion!
-    VDocument document;
+    KarbonDocument document;
     if (!wmfParser.play( document )) {
         return KoFilter::WrongFormat;
     }

@@ -29,7 +29,7 @@
 //Added by qt3to4:
 #include <Q3CString>
 #include <KoStyleStack.h>
-#include <core/vdocument.h>
+#include <core/KarbonDocument.h>
 #include <core/vcomposite.h>
 #include <core/vstroke.h>
 
@@ -67,7 +67,7 @@ private:
 	KoFilter::ConversionStatus openFile();
 	KoFilter::ConversionStatus loadAndParse(const QString& filename, QDomDocument& doc);
 
-	VDocument			m_document;
+	KarbonDocument			m_document;
 	QDomDocument			m_content;
 	QDomDocument			m_meta;
 	QDomDocument			m_settings;

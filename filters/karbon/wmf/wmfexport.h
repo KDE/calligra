@@ -24,7 +24,7 @@
 #include <KoFilter.h>
 
 class KoWmfWrite;
-class VDocument;
+class KarbonDocument;
 class KoShape;
 class KoShapeBorderModel;
 class QPainterPath;
@@ -40,7 +40,7 @@ public:
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 
 private:
-    void paintDocument( VDocument& document );
+    void paintDocument( KarbonDocument& document );
     void paintShape( KoShape * shape );
 
     QPen getPen( const KoShapeBorderModel *stroke );

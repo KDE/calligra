@@ -24,7 +24,7 @@
 #include "SvgGradientHelper.h"
 #include "svggraphiccontext.h"
 
-#include <core/vdocument.h>
+#include <core/KarbonDocument.h>
 
 #include <KoFilter.h>
 
@@ -116,7 +116,7 @@ protected:
     KoShape * createShape( const QString &shapeID );
 
 private:
-    VDocument *                    m_document;
+    KarbonDocument * m_document;
     QStack<SvgGraphicsContext*>    m_gc;
     QMap<QString, SvgGradientHelper>  m_gradients;
     QMap<QString, QDomElement>     m_defs;

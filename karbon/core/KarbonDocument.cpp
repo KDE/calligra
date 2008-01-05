@@ -30,7 +30,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "vdocument.h"
+#include "KarbonDocument.h"
 
 #include <KoStore.h>
 #include <KoPageLayout.h>
@@ -54,7 +54,7 @@
 #include <QRectF>
 
 
-class VDocument::Private
+class KarbonDocument::Private
 {
 public:
     Private()
@@ -83,81 +83,81 @@ public:
     bool saveAsPath;
 };
 
-VDocument::VDocument()
+KarbonDocument::KarbonDocument()
 : d( new Private )
 {
     // create a layer. we need at least one:
     insertLayer( new KoShapeLayer() );
 }
 
-VDocument::VDocument( const VDocument& document )
+KarbonDocument::KarbonDocument( const KarbonDocument& document )
 : d( new Private )
 {
     d->layers = document.layers();
 // TODO
 }
 
-VDocument::~VDocument()
+KarbonDocument::~KarbonDocument()
 {
     delete d;
 }
 
-void VDocument::insertLayer( KoShapeLayer* layer )
+void KarbonDocument::insertLayer( KoShapeLayer* layer )
 {
     d->layers.append( layer );
 }
 
-void VDocument::removeLayer( KoShapeLayer* layer )
+void KarbonDocument::removeLayer( KoShapeLayer* layer )
 {
     d->layers.removeAt( d->layers.indexOf( layer ) );
     if ( d->layers.count() == 0 )
         d->layers.append( new KoShapeLayer() );
 }
 
-bool VDocument::canRaiseLayer( KoShapeLayer* layer )
+bool KarbonDocument::canRaiseLayer( KoShapeLayer* layer )
 {
     int pos = d->layers.indexOf( layer );
     return (pos != int( d->layers.count() ) - 1 && pos >= 0 );
 }
 
-bool VDocument::canLowerLayer( KoShapeLayer* layer )
+bool KarbonDocument::canLowerLayer( KoShapeLayer* layer )
 {
     int pos = d->layers.indexOf( layer );
     return (pos>0);
 }
 
-void VDocument::raiseLayer( KoShapeLayer* layer )
+void KarbonDocument::raiseLayer( KoShapeLayer* layer )
 {
     int pos = d->layers.indexOf( layer );
     if( pos != int( d->layers.count() ) - 1 && pos >= 0 )
         d->layers.move( pos, pos + 1 );
 }
 
-void VDocument::lowerLayer( KoShapeLayer* layer )
+void KarbonDocument::lowerLayer( KoShapeLayer* layer )
 {
     int pos = d->layers.indexOf( layer );
     if ( pos > 0 )
         d->layers.move( pos, pos - 1 );
 }
 
-int VDocument::layerPos( KoShapeLayer* layer )
+int KarbonDocument::layerPos( KoShapeLayer* layer )
 {
     return d->layers.indexOf( layer );
 }
 
-void VDocument::add( KoShape* shape )
+void KarbonDocument::add( KoShape* shape )
 {
     if( ! d->objects.contains( shape ) )
         d->objects.append( shape );
 }
 
-void VDocument::remove( KoShape* shape )
+void KarbonDocument::remove( KoShape* shape )
 {
     d->objects.removeAt( d->objects.indexOf( shape ) );
 }
 
 QDomDocument
-VDocument::saveXML() const
+KarbonDocument::saveXML() const
 {
     QDomDocument doc;
     QDomElement me = doc.createElement( "DOC" );
@@ -166,7 +166,7 @@ VDocument::saveXML() const
     return doc;
  }
 
-void VDocument::saveOasis( KoShapeSavingContext & context ) const
+void KarbonDocument::saveOasis( KoShapeSavingContext & context ) const
 {
     context.xmlWriter().startElement( "draw:page" );
     context.xmlWriter().addAttribute( "draw:name", "" );
@@ -180,7 +180,7 @@ void VDocument::saveOasis( KoShapeSavingContext & context ) const
 }
 
 void
-VDocument::save( QDomElement& me ) const
+KarbonDocument::save( QDomElement& me ) const
 {
     me.setAttribute( "mime", "application/x-karbon" ),
     me.setAttribute( "version", "0.1" );
@@ -201,19 +201,19 @@ VDocument::save( QDomElement& me ) const
     */
 }
 
-VDocument*
-VDocument::clone() const
+KarbonDocument*
+KarbonDocument::clone() const
 {
-    return new VDocument( *this );
+    return new KarbonDocument( *this );
 }
 
 void
-VDocument::load( const KoXmlElement& doc )
+KarbonDocument::load( const KoXmlElement& doc )
 {
     loadXML( doc );
 }
 
-bool VDocument::loadXML( const KoXmlElement& doc )
+bool KarbonDocument::loadXML( const KoXmlElement& doc )
 {
     if( doc.attribute( "mime" ) != "application/x-karbon" ||
         doc.attribute( "syntaxVersion" ) != "0.1" )
@@ -240,7 +240,7 @@ bool VDocument::loadXML( const KoXmlElement& doc )
 }
 
 void
-VDocument::loadDocumentContent( const KoXmlElement& doc )
+KarbonDocument::loadDocumentContent( const KoXmlElement& doc )
 {
     KoXmlElement e;
     forEachElement(e, doc)
@@ -255,7 +255,7 @@ VDocument::loadDocumentContent( const KoXmlElement& doc )
     }
 }
 
-bool VDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingContext &context )
+bool KarbonDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingContext &context )
 {
     qDeleteAll( d->layers );
     d->layers.clear();
@@ -306,12 +306,12 @@ bool VDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingContext &c
     return true;
 }
 
-QRectF VDocument::boundingRect() const
+QRectF KarbonDocument::boundingRect() const
 {
     return contentRect().united( QRectF( QPointF(0,0), d->pageSize ) );
 }
 
-QRectF VDocument::contentRect() const
+QRectF KarbonDocument::contentRect() const
 {
     QRectF bb;
     foreach( KoShape* layer, d->layers )
@@ -325,47 +325,47 @@ QRectF VDocument::contentRect() const
     return bb;
 }
 
-QSizeF VDocument::pageSize() const
+QSizeF KarbonDocument::pageSize() const
 {
     return d->pageSize;
 }
 
-void VDocument::setPageSize( QSizeF pageSize )
+void KarbonDocument::setPageSize( QSizeF pageSize )
 {
     d->pageSize = pageSize;
 }
 
-const QList<KoShape*> VDocument::shapes() const
+const QList<KoShape*> KarbonDocument::shapes() const
 {
     return d->objects;
 }
 
-bool VDocument::saveAsPath() const
+bool KarbonDocument::saveAsPath() const
 {
     return d->saveAsPath;
 }
 
-void VDocument::saveAsPath( bool b )
+void KarbonDocument::saveAsPath( bool b )
 {
     d->saveAsPath = b;
 }
 
-KoUnit VDocument::unit() const
+KoUnit KarbonDocument::unit() const
 {
     return d->unit;
 }
 
-void VDocument::setUnit( KoUnit unit )
+void KarbonDocument::setUnit( KoUnit unit )
 {
     d->unit = unit;
 }
 
-const VLayerList& VDocument::layers() const
+const VLayerList& KarbonDocument::layers() const
 {
     return d->layers;
 }
 
-KoImageCollection * VDocument::imageCollection()
+KoImageCollection * KarbonDocument::imageCollection()
 {
     return &d->imageCollection;
 }
@@ -374,7 +374,7 @@ KoImageCollection * VDocument::imageCollection()
 // ODF saving
 //#############################################################################
 
-bool VDocument::saveOdf( KoDocument::SavingContext &documentContext )
+bool KarbonDocument::saveOdf( KoDocument::SavingContext &documentContext )
 {
     KoStore * store = documentContext.odfStore.store();
     KoXmlWriter * manifestWriter = documentContext.odfStore.manifestWriter();
@@ -451,7 +451,7 @@ bool VDocument::saveOdf( KoDocument::SavingContext &documentContext )
     return true;
 }
 
-void VDocument::saveOasisSettings( KoStore * store )
+void KarbonDocument::saveOasisSettings( KoStore * store )
 {
     KoStoreDevice settingsDev( store );
     KoXmlWriter * settingsWriter = KoOdfWriteStore::createOasisXmlWriter( &settingsDev, "office:document-settings");

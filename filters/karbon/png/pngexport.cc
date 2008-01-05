@@ -29,7 +29,7 @@
 
 #include "pngexport.h"
 
-#include <vdocument.h>
+#include <KarbonDocument.h>
 #include <karbon_part.h>
 #include <KoShapePainter.h>
 

@@ -22,7 +22,6 @@
 #include <QDockWidget>
 #include <KoDockFactory.h>
 
-class VDocument;
 class KoDocumentSectionView;
 class KoShapeControllerBase;
 class KoShape;
