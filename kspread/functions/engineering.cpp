@@ -214,7 +214,10 @@ void RegisterEngineeringFunctions()
   repo->add (f);
 }
 
+
+//
 // Function: BASE
+//
 Value func_base (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int base = 10;
@@ -231,7 +234,10 @@ Value func_base (valVector args, ValueCalc *calc, FuncExtra *)
   return calc->base (args[0], base, 0, minLength);
 }
 
+
+//
 // Function: BESSELI
+//
 Value func_besseli (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value x = args[0];
@@ -239,7 +245,10 @@ Value func_besseli (valVector args, ValueCalc *calc, FuncExtra *)
   return calc->besseli (y, x);
 }
 
+
+//
 // Function: BESSELJ
+//
 Value func_besselj (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value x = args[0];
@@ -247,7 +256,10 @@ Value func_besselj (valVector args, ValueCalc *calc, FuncExtra *)
   return calc->besselj (y, x);
 }
 
+
+//
 // Function: BESSELK
+//
 Value func_besselk (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value x = args[0];
@@ -255,7 +267,10 @@ Value func_besselk (valVector args, ValueCalc *calc, FuncExtra *)
   return calc->besselk (y, x);
 }
 
+
+//
 // Function: BESSELY
+//
 Value func_bessely (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value x = args[0];
@@ -263,7 +278,10 @@ Value func_bessely (valVector args, ValueCalc *calc, FuncExtra *)
   return calc->besseln (y, x);
 }
 
+
+//
 // Function: DEC2HEX
+//
 Value func_dec2hex (valVector args, ValueCalc *calc, FuncExtra *)
 {
     QRegExp rx("[0-9]+");
@@ -281,7 +299,10 @@ Value func_dec2hex (valVector args, ValueCalc *calc, FuncExtra *)
     }
 }
 
+
+//
 // Function: DEC2OCT
+//
 Value func_dec2oct (valVector args, ValueCalc *calc, FuncExtra *)
 {
     QRegExp rx("[0-9]+");
@@ -299,7 +320,10 @@ Value func_dec2oct (valVector args, ValueCalc *calc, FuncExtra *)
     }
 }
 
+
+//
 // Function: DEC2BIN
+//
 Value func_dec2bin (valVector args, ValueCalc *calc, FuncExtra *)
 {
     QRegExp rx("[0-9]+");
@@ -317,13 +341,19 @@ Value func_dec2bin (valVector args, ValueCalc *calc, FuncExtra *)
     }
 }
 
+
+//
 // Function: BIN2DEC
+//
 Value func_bin2dec (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->fromBase (args[0], 2);
 }
 
+
+//
 // Function: BIN2OCT
+//
 Value func_bin2oct (valVector args, ValueCalc *calc, FuncExtra *)
 {
     QRegExp rx("[01]+");
@@ -341,7 +371,10 @@ Value func_bin2oct (valVector args, ValueCalc *calc, FuncExtra *)
     }
 }
 
+
+//
 // Function: BIN2HEX
+//
 Value func_bin2hex (valVector args, ValueCalc *calc, FuncExtra *)
 {
     QRegExp rx("[01]+");
@@ -360,13 +393,19 @@ Value func_bin2hex (valVector args, ValueCalc *calc, FuncExtra *)
 
 }
 
+
+//
 // Function: OCT2DEC
+//
 Value func_oct2dec (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->fromBase (args[0], 8);
 }
 
+
+//
 // Function: OCT2BIN
+//
 Value func_oct2bin (valVector args, ValueCalc *calc, FuncExtra *)
 {
     QRegExp rx("[01234567]+");
@@ -384,7 +423,10 @@ Value func_oct2bin (valVector args, ValueCalc *calc, FuncExtra *)
     }
 }
 
+
+//
 // Function: OCT2HEX
+//
 Value func_oct2hex (valVector args, ValueCalc *calc, FuncExtra *)
 {
     QRegExp rx("[01234567]+");
@@ -402,13 +444,19 @@ Value func_oct2hex (valVector args, ValueCalc *calc, FuncExtra *)
     }
 }
 
+
+//
 // Function: HEX2DEC
+//
 Value func_hex2dec (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->fromBase (args[0], 16);
 }
 
+
+//
 // Function: HEX2BIN
+//
 Value func_hex2bin (valVector args, ValueCalc *calc, FuncExtra *)
 {
     QRegExp rx("[0123456789ABCDEFabcdef]+");
@@ -426,7 +474,10 @@ Value func_hex2bin (valVector args, ValueCalc *calc, FuncExtra *)
     }
 }
 
+
+//
 // Function: HEX2OCT
+//
 Value func_hex2oct (valVector args, ValueCalc *calc, FuncExtra *)
 {
     QRegExp rx("[0123456789ABCDEFabcdef]+");
@@ -444,7 +495,10 @@ Value func_hex2oct (valVector args, ValueCalc *calc, FuncExtra *)
     }
 }
 
+
+//
 // Function: DECIMAL
+//
 Value func_decimal (valVector args, ValueCalc *calc, FuncExtra *)
 {
     QString text = calc->conv()->asString( args[0] ).asString();
@@ -468,13 +522,16 @@ Value func_decimal (valVector args, ValueCalc *calc, FuncExtra *)
     return calc->fromBase ( Value( text ), radix );
 }
 
+//
+// convert prefix
+//
+
 // check if unit may contain prefix, for example "kPa" is "Pa" with
 // return prefix factor found in unit, or 1.0 for no prefix
 // also modify the unit, i.e stripping the prefix from it
 // example: "kPa" will return 1e3 and change unit into "Pa"
 static double kspread_convert_prefix( QMap<QString,double> map, QString& unit )
 {
-//   kDebug()<<"unit="<<unit;
   if( map.contains( unit ) )
     return 1.0;
 
@@ -517,24 +574,25 @@ static double kspread_convert_prefix( QMap<QString,double> map, QString& unit )
 
   // check for possible prefix
   QString prefix = unit.left(2).toLatin1();
-//   kDebug()<<"prefix="<<prefix;  
 
   if ( prefixMap.contains(prefix) )
   {
     unit.remove( 0, 2);
-//     kDebug()<<"new unit="<<unit<<" Value="<<prefixMap[prefix];
     return prefixMap[prefix];
   }
   else if ( prefixMap.contains(prefix.left(1)) )
   {
     unit.remove( 0, 1);
-//     kDebug()<<"new unit="<<unit<<" Value="<<prefixMap[prefix.left(1)];
     return prefixMap[prefix.left(1)];
   }
   // fail miserably
   return 0.0;
 }
 
+
+//
+// convert masses
+//
 static bool kspread_convert_mass( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -544,18 +602,19 @@ static bool kspread_convert_mass( const QString& fromUnit,
   if( massMap.isEmpty() )
   {
     massMap[ "g" ]        = 1.0; // Gram (the reference )
-    massMap[ "sg" ]       = 6.8522050005347800E-05; // Pieces
-    massMap[ "lbm" ]      = 2.2046229146913400E-03; // Pound
-    massMap[ "u" ]        = 6.0221370000000000E23; // U (atomic mass)
-    massMap[ "ozm" ]      = 3.5273971800362700E-02; // Ounce
-    massMap[ "stone" ]    = 1.574730e-04; // Stone
-    massMap[ "ton" ]      = 1.102311e-06; // Ton
-    massMap[ "grain" ]    = 1.543236E01;  // Grain
-    massMap[ "pweight" ]  = 7.054792E-01; // Pennyweight
-    massMap[ "hweight" ]  = 1.968413E-05; // Hundredweight
-    massMap[ "shweight" ] = 2.204623E-05; // Shorthundredweight
-    massMap[ "brton" ]    = 9.842065E-07; // Gross Registered Ton
-    massMap[ "uk_ton" ]    = 1.0/2240*2.2046229146913400E-03; // It's long ton or Imperial ton, 2240 lbm.
+
+    massMap[ "sg" ]       = 6.8522050005347800E-05;          // Pieces
+    massMap[ "lbm" ]      = 2.2046229146913400E-03;          // Pound
+    massMap[ "u" ]        = 6.0221370000000000E23;           // U (atomic mass)
+    massMap[ "ozm" ]      = 3.5273971800362700E-02;          // Ounce
+    massMap[ "stone" ]    = 1.574730e-04;                    // Stone
+    massMap[ "ton" ]      = 1.102311e-06;                    // Ton
+    massMap[ "grain" ]    = 1.543236E01;                     // Grain
+    massMap[ "pweight" ]  = 7.054792E-01;                    // Pennyweight
+    massMap[ "hweight" ]  = 1.968413E-05;                    // Hundredweight
+    massMap[ "shweight" ] = 2.204623E-05;                    // Shorthundredweight
+    massMap[ "brton" ]    = 9.842065E-07;                    // Gross Registered Ton
+    massMap[ "uk_ton" ]   = 1.0/2240*2.2046229146913400E-03; // It's long ton or Imperial ton, 2240 lbm.
   }
 
   QString fromU = fromUnit;
@@ -573,6 +632,9 @@ static bool kspread_convert_mass( const QString& fromUnit,
 }
 
 
+//
+// convert distances
+//
 static bool kspread_convert_distance( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -612,6 +674,10 @@ static bool kspread_convert_distance( const QString& fromUnit,
   return true;
 }
 
+
+//
+// convert pressures
+//
 static bool kspread_convert_pressure( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -643,6 +709,10 @@ static bool kspread_convert_pressure( const QString& fromUnit,
   return true;
 }
 
+
+//
+// convert forces
+//
 static bool kspread_convert_force( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -652,6 +722,7 @@ static bool kspread_convert_force( const QString& fromUnit,
   if( forceMap.isEmpty() )
   {
     forceMap[ "N" ]      = 1.0;          // Newton (reference)
+
     forceMap[ "dy" ]     = 1.0e5;        // dyne
     forceMap[ "dyn" ]    = 1.0e5;        // dyne
     forceMap[ "lbf" ]    = 1.0/4.448222; // Pound force (see "lbm" for pound mass)
@@ -672,6 +743,10 @@ static bool kspread_convert_force( const QString& fromUnit,
   return true;
 }
 
+
+//
+// convert energies
+//
 static bool kspread_convert_energy( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -681,6 +756,7 @@ static bool kspread_convert_energy( const QString& fromUnit,
   if( energyMap.isEmpty() )
   {
     energyMap[ "J" ]   = 1.0;                 // Joule (the reference)
+
     energyMap[ "e" ]   = 1.0e7;               // erg
     energyMap[ "c" ]   = 0.239006249473467;   // thermodynamical calorie
     energyMap[ "cal" ] = 0.238846190642017;   // calorie
@@ -705,6 +781,10 @@ static bool kspread_convert_energy( const QString& fromUnit,
   return true;
 }
 
+
+//
+// convert powers
+//
 static bool kspread_convert_power( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -714,6 +794,7 @@ static bool kspread_convert_power( const QString& fromUnit,
   if( powerMap.isEmpty() )
   {
     powerMap[ "W" ]   = 1.0; // Watt (the reference)
+
 //     powerMap[ "HP" ]  = 1.341022e-3; // Horsepower
     powerMap[ "HP" ]  = 1.0/745.701; // Horsepower (UK)
     powerMap[ "PS" ]  = 1.359622e-3; // Pferdestaerke (German)
@@ -733,6 +814,10 @@ static bool kspread_convert_power( const QString& fromUnit,
   return true;
 }
 
+
+//
+// convert magnetism
+//
 static bool kspread_convert_magnetism( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -760,6 +845,10 @@ static bool kspread_convert_magnetism( const QString& fromUnit,
   return true;
 }
 
+
+//
+// convert temperatures
+//
 static bool kspread_convert_temperature( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -785,6 +874,10 @@ static bool kspread_convert_temperature( const QString& fromUnit,
   return true;
 }
 
+
+//
+// convert volumes
+//
 static bool kspread_convert_volume( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -833,6 +926,10 @@ static bool kspread_convert_volume( const QString& fromUnit,
   return true;
 }
 
+
+//
+// convert areas
+//
 static bool kspread_convert_area( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -873,6 +970,10 @@ static bool kspread_convert_area( const QString& fromUnit,
   return true;
 }
 
+
+//
+// convert speeds
+//
 static bool kspread_convert_speed( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -882,6 +983,7 @@ static bool kspread_convert_speed( const QString& fromUnit,
   if( speedMap.isEmpty() )
   {
     speedMap[ "m/s" ] = 1.0; // meters per second (the reference)
+
     speedMap[ "m/h" ] = 3.6e3; // meters per hour
     speedMap[ "mph" ] = 2.2369362920544023; // miles per hour
     speedMap[ "kn" ]  = 1.9438444924406048; // knot
@@ -901,6 +1003,10 @@ static bool kspread_convert_speed( const QString& fromUnit,
   return true;
 }
 
+
+//
+// convert times
+//
 static bool kspread_convert_time( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -911,6 +1017,7 @@ static bool kspread_convert_time( const QString& fromUnit,
   {
     timeMap[ "s" ]   = 1.0;                          // second (the reference)
     timeMap[ "sec" ] = 1.0;                          // second (the reference)
+
     timeMap[ "mn" ]  = 1.0 / 60;                     // 24 hour per day
     timeMap[ "min" ] = 1.0 / 60;                     // 24 hour per day
     timeMap[ "hr" ]  = 1.0 / 3600;                   // 3600 seconds per hour
@@ -933,6 +1040,10 @@ static bool kspread_convert_time( const QString& fromUnit,
   return true;
 }
 
+
+//
+// convert IT
+//
 static bool kspread_convert_info( const QString& fromUnit,
   const QString& toUnit, double value, double& result )
 {
@@ -959,7 +1070,9 @@ static bool kspread_convert_info( const QString& fromUnit,
   return true;
 }
 
+//
 // Function: CONVERT
+//
 Value func_convert (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // This function won't support arbitrary precision.
@@ -993,7 +1106,10 @@ Value func_convert (valVector args, ValueCalc *calc, FuncExtra *)
 // these may eventually end up being merged into ValueCalc and friends
 // then complex numbers will be handled transparently in most functions
 
+
+//
 // Function: COMPLEX
+//
 Value func_complex (valVector args, ValueCalc *calc, FuncExtra *)
 {
     const double real = numToDouble (calc->conv()->toFloat( args[0] ));
@@ -1001,18 +1117,28 @@ Value func_complex (valVector args, ValueCalc *calc, FuncExtra *)
     return Value( complex<Number>( real, imag ) );
 }
 
+
+//
 // Function: IMAGINARY
+//
 Value func_complex_imag (valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value( calc->conv()->toComplex( args[0] ).imag() );
 }
 
+
+//
 // Function: IMREAL
+//
 Value func_complex_real (valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value( calc->conv()->toComplex( args[0] ).real() );
 }
 
+
+//
+//
+//
 void awImSum (ValueCalc *c, Value &res, Value val, Value)
 {
     const complex<Number> c1 = c->conv()->toComplex( res );
@@ -1020,6 +1146,10 @@ void awImSum (ValueCalc *c, Value &res, Value val, Value)
     res = Value( c1 + c2 );
 }
 
+
+//
+//
+//
 void awImSub (ValueCalc *c, Value &res, Value val, Value)
 {
     const complex<Number> c1 = c->conv()->toComplex( res );
@@ -1027,6 +1157,10 @@ void awImSub (ValueCalc *c, Value &res, Value val, Value)
     res = Value( c1 - c2 );
 }
 
+
+//
+//
+//
 void awImMul (ValueCalc *c, Value &res, Value val, Value)
 {
     const complex<Number> c1 = c->conv()->toComplex( res );
@@ -1034,6 +1168,10 @@ void awImMul (ValueCalc *c, Value &res, Value val, Value)
     res = Value( c1 * c2 );
 }
 
+
+//
+//
+//
 void awImDiv (ValueCalc *c, Value &res, Value val, Value)
 {
     const complex<Number> c1 = c->conv()->toComplex( res );
@@ -1041,7 +1179,9 @@ void awImDiv (ValueCalc *c, Value &res, Value val, Value)
     res = Value( c1 / c2 );
 }
 
+//
 // Function: IMSUM
+//
 Value func_imsum (valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value result;
@@ -1049,7 +1189,10 @@ Value func_imsum (valVector args, ValueCalc *calc, FuncExtra *)
     return result;
 }
 
+
+//
 // Function: IMSUB
+//
 Value func_imsub (valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value result;
@@ -1064,7 +1207,10 @@ Value func_imsub (valVector args, ValueCalc *calc, FuncExtra *)
     return result;
 }
 
+
+//
 // Function: IMPRODUCT
+//
 Value func_improduct (valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value result;
@@ -1082,7 +1228,10 @@ Value func_improduct (valVector args, ValueCalc *calc, FuncExtra *)
     return result;
 }
 
+
+//
 // Function: IMDIV
+//
 Value func_imdiv (valVector args, ValueCalc *calc, FuncExtra *)
 {
     Value result;
@@ -1100,99 +1249,146 @@ Value func_imdiv (valVector args, ValueCalc *calc, FuncExtra *)
     return result;
 }
 
+
+//
 // Function: IMCONJUGATE
+//
 Value func_imconjugate (valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value( std::conj( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
+
+//
 // Function: IMARGUMENT
+//
 Value func_imargument (valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value( std::arg( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
+
+//
 // Function: IMABS
+//
 Value func_imabs (valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value( std::abs( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
+
+//
 // Function: IMCOS
+//
 Value func_imcos (valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value( std::cos( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
+
+//
 // Function: IMSIN
+//
 Value func_imsin (valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value( std::sin( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
+
+//
 // Function: IMTAN
+//
 Value func_imtan( valVector args, ValueCalc *calc, FuncExtra* )
 {
     return Value( std::tan( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
+
+//
 // Function: IMCOSH
+//
 Value func_imcosh( valVector args, ValueCalc *calc, FuncExtra* )
 {
     return Value( std::cosh( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
+
+//
 // Function: IMSINH
+//
 Value func_imsinh( valVector args, ValueCalc *calc, FuncExtra* )
 {
     return Value( std::sinh( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
+
+//
 // Function: IMTANH
+//
 Value func_imtanh( valVector args, ValueCalc *calc, FuncExtra* )
 {
     return Value( std::tanh( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
+
+//
 // Function: IMLN
+//
 Value func_imln (valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value( std::log( calc->conv()->asComplex( args[0] ).asComplex() ) );
 }
 
+
+//
 // Function: IMLOG2
+//
 Value func_imlog2 (valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value( std::log( calc->conv()->toComplex( args[0] )) / static_cast<Number>( double (M_LN2l) ) );
 }
 
+
+//
 // Function: IMLOG10
+//
 Value func_imlog10 (valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value( std::log10( calc->conv()->toComplex( args[0] ) ) );
 }
 
 
+//
 // Function: IMEXP
+//
 Value func_imexp (valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value( std::exp( calc->conv()->toComplex( args[0] ) ) );
 }
 
+
+//
 // Function: IMSQRT
+//
 Value func_imsqrt (valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value( std::sqrt( calc->conv()->toComplex( args[0] ) ) );
 }
 
+
+//
 // Function: IMPOWER
+//
 Value func_impower (valVector args, ValueCalc *calc, FuncExtra *)
 {
     return Value( std::pow( calc->conv()->toComplex( args[0] ),
                             calc->conv()->toComplex( args[1] ) ) );
 }
 
+
+//
 // Function: DELTA
+//
 Value func_delta (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value val1 = args[0];
@@ -1203,7 +1399,10 @@ Value func_delta (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (calc->approxEqual (val1, val2) ? 1 : 0);
 }
 
+
+//
 // Function: ERF
+//
 Value func_erf (valVector args, ValueCalc *calc, FuncExtra *)
 {
   if (args.count() == 2)
@@ -1211,7 +1410,10 @@ Value func_erf (valVector args, ValueCalc *calc, FuncExtra *)
   return calc->erf (args[0]);
 }
 
+
+//
 // Function: ERFC
+//
 Value func_erfc (valVector args, ValueCalc *calc, FuncExtra *)
 {
   if (args.count() == 2)
@@ -1219,7 +1421,10 @@ Value func_erfc (valVector args, ValueCalc *calc, FuncExtra *)
   return calc->erfc (args[0]);
 }
 
+
+//
 // Function: GESTEP
+//
 Value func_gestep (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value x = args[0];
@@ -1236,4 +1441,3 @@ Value func_gestep (valVector args, ValueCalc *calc, FuncExtra *)
 
   return Value (result);
 }
-
