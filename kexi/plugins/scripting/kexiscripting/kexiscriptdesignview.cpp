@@ -99,9 +99,31 @@ KexiScriptDesignView::KexiScriptDesignView(
     d->statusbrowser->installEventFilter(this);
     splitter->setResizeMode(d->statusbrowser, QSplitter::KeepSize);
 
+    /*
     plugSharedAction( "data_execute", this, SLOT(execute()) );
     if(KexiEditor::isAdvancedEditor()) // the configeditor is only in advanced mode avaiable.
         plugSharedAction( "script_config_editor", d->editor, SLOT(slotConfigureEditor()) );
+    */
+
+    // setup local actions
+    QList<QAction*> viewActions;
+    if(KexiEditor::isAdvancedEditor()) { // the configeditor is only in advanced mode avaiable.
+        QAction* a = new KAction(KIcon("configure"), i18n("Configure"), this);
+        a->setObjectName("script_config_editor");
+        a->setToolTip(i18n("Configure the scripting editor"));
+        a->setWhatsThis(i18n("Configure the scripting editor"));
+        connect(a, SIGNAL(triggered()), d->editor, SLOT(slotConfigureEditor()));
+        viewActions << a;
+    }
+    {
+        QAction* a = new KAction(KIcon("media-playback-start"), i18n("Execute"), this);
+        a->setObjectName("script_execute");
+        a->setToolTip(i18n("Execute the scripting code"));
+        a->setWhatsThis(i18n("Execute the scripting code"));
+        connect(a, SIGNAL(triggered()), this, SLOT(execute()));
+        viewActions << a;
+    }
+    setViewActions(viewActions);
 
     loadData();
 
