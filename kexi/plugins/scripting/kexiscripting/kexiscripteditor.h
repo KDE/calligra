@@ -25,9 +25,9 @@
 
 #include <kexieditor.h>
 
-namespace Kross { namespace Api {
-  class ScriptAction;
-}}
+namespace Kross {
+  class Action;
+}
 
 /**
  * The KexiEditor class embeds text editor
@@ -42,7 +42,7 @@ class KexiScriptEditor : public KexiEditor
         /**
          * Constructor.
          */
-        KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent);
+        KexiScriptEditor(QWidget *parent);
 
         /**
          * Destructor.
@@ -61,7 +61,7 @@ class KexiScriptEditor : public KexiEditor
          * highlighter will be reset, undo/redo are cleared and
          * setDirty(false) is set.
          */
-        void initialize(Kross::Api::ScriptAction* scriptaction);
+        void initialize(Kross::Action* scriptaction);
 
     public slots:
         void slotTextChanged();

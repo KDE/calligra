@@ -1,21 +1,18 @@
-
-
-include_directories( ${CMAKE_SOURCE_DIR}/lib ${CMAKE_SOURCE_DIR}/kexi/core ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/widget ${KDE4_INCLUDES}  )
-
+include_directories(
+    ${CMAKE_SOURCE_DIR}/lib
+    ${CMAKE_SOURCE_DIR}/kexi/core
+    ${CMAKE_SOURCE_DIR}/kexi
+    ${CMAKE_SOURCE_DIR}/kexi/widget
+    ${KDE4_INCLUDES}
+    ${KOKROSS_INCLUDES}
+)
 
 ########### next target ###############
 
 set(kexihandler_script_PART_SRCS kexiscriptpart.cpp kexiscripteditor.cpp kexiscriptdesignview.cpp )
-
-
 kde4_add_plugin(kexihandler_script ${kexihandler_script_PART_SRCS})
-
-
-
-target_link_libraries(kexihandler_script  ${KDE4_KDECORE_LIBS} krossmain kexicore kexiextendedwidgets koproperty )
-
+target_link_libraries(kexihandler_script  ${KDE4_KDECORE_LIBS} kexiextendedwidgets koproperty ${KDE4_KROSSUI_LIBS} kokross)
 install(TARGETS kexihandler_script  DESTINATION ${PLUGIN_INSTALL_DIR})
-
 
 ########### install files ###############
 

@@ -22,18 +22,19 @@
 #include "kexiscriptpart.h"
 #include "kexiscriptdesignview.h"
 
-#include <KexiView.h"
+#include <KexiView.h>
+#include <KexiWindow.h>
 #include <KexiMainWindowIface.h>
 #include <kexiproject.h>
 
-#include <kross/main/manager.h>
-#include <kross/main/scriptaction.h>
-#include <kross/main/scriptguiclient.h>
+#include <kross/core/manager.h>
+#include <kross/core/action.h>
+#include <kross/core/actioncollection.h>
 
 #include <kgenericfactory.h>
 #include <kexipartitem.h>
 #include <kxmlguiclient.h>
-#include <kexidialogbase.h>
+//#include <kexidialogbase.h>
 #include <kconfig.h>
 #include <kdebug.h>
 //Added by qt3to4:
@@ -44,10 +45,10 @@
 class KexiScriptPart::Private
 {
 	public:
-		Private() : scriptguiclient(0) {}
-		~Private() { delete scriptguiclient; }
+		Private() : actioncollection(0) {}
+		~Private() { delete actioncollection; }
 
-		Kross::Api::ScriptGUIClient* scriptguiclient;
+		Kross::ActionCollection* actioncollection;
 };
 
 KexiScriptPart::KexiScriptPart(QObject *parent, const QStringList &l)
@@ -63,6 +64,9 @@ KexiScriptPart::KexiScriptPart(QObject *parent, const QStringList &l)
 	setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new script"));
 	setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new script."));
 	setSupportedViewModes(Kexi::DesignViewMode);
+
+//setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);
+//setInternalPropertyValue("newObjectsAreDirty", true);
 }
 
 KexiScriptPart::~KexiScriptPart()
@@ -72,23 +76,25 @@ KexiScriptPart::~KexiScriptPart()
 
 bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
 {
+kDebug();
 	Q_UNUSED(sender);
 
 	if(! item) {
-		kWarning() << "KexiScriptPart::execute: Invalid item." << endl;
+		kWarning() << "KexiScriptPart::execute: Invalid item.";
 		return false;
 	}
 
+#if 0
 	KexiDialogBase* dialog = new KexiDialogBase(m_mainWin);
 	dialog->setId( item->identifier() );
 	KexiScriptDesignView* view = dynamic_cast<KexiScriptDesignView*>( 
 		createView(dialog, dialog, *item, Kexi::DesignViewMode) );
 	if(! view) {
-		kWarning() << "KexiScriptPart::execute: Failed to create a view." << endl;
+		kWarning() << "KexiScriptPart::execute: Failed to create a view.";
 		return false;
 	}
 
-	Kross::Api::ScriptAction* scriptaction = view->scriptAction();
+	Kross::Action* scriptaction = view->scriptAction();
 	if(scriptaction) {
 
 		const QString dontAskAgainName = "askExecuteScript";
@@ -111,17 +117,22 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
 	}
 
 	view->deleteLater(); // not needed any longer.
+#else
+    #warning Port It!!!
+#endif
 	return true;
 }
 
 void KexiScriptPart::initPartActions()
 {
+kDebug()<<"............. initPartActions";
+#if 0
 	if(m_mainWin) {
 		// At this stage the KexiPart::Part::m_mainWin should be defined, so
 		// that we are able to use it's KXMLGUIClient.
 
 		// Initialize the ScriptGUIClient.
-		d->scriptguiclient = new Kross::Api::ScriptGUIClient( m_mainWin );
+        d->scriptguiclient = new Kross::Api::ScriptGUIClient( m_mainWin );
 
 		// Publish the KexiMainWindow singelton instance. At least the KexiApp 
 		// scripting-plugin depends on this instance and loading the plugin will 
@@ -154,39 +165,59 @@ void KexiScriptPart::initPartActions()
 			}
 		}
 	}
+#else
+    kDebug();
+    #warning Port It!!!
+#endif
 }
 
 void KexiScriptPart::initInstanceActions()
 {
+kDebug();
 	//createSharedAction(Kexi::DesignViewMode, i18n("Execute Script"), "media-playback-start", 0, "data_execute");
-	createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), "configure", 0, "script_config_editor");
+	createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), "configure", KShortcut(), "script_config_editor");
 }
 
-KexiView* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item& item,
-	Kexi::ViewMode viewMode, QMap<QString,QString>*)
+KexiView* KexiScriptPart::createView(QWidget *parent, 
+                                     KexiWindow *window, 
+                                     KexiPart::Item &item,
+                                     Kexi::ViewMode viewMode,
+                                     QMap<QString,QString>* staticObjectArgs)
+//QWidget *parent, KexiDialogBase* dialog, KexiPart::Item& item, Kexi::ViewMode viewMode, QMap<QString,QString>*)
 {
+kDebug()<<"............. createView";
 	QString partname = item.name();
 	if( ! partname.isNull() ) {
+        if( ! d->actioncollection )
+            d->actioncollection = new Kross::ActionCollection("projectscripts");
+
+        Kross::Action *action = d->actioncollection->action(partname);
+        if( ! action ) {
+            action = new Kross::Action(this, partname);
+            d->actioncollection->addAction(action);
+        }
+#if 0
 		KexiMainWindow *win = dialog->mainWin();
 		if(!win || !win->project() || !win->project()->dbConnection())
 			return 0;
-
 		Kross::Api::ScriptActionCollection* collection = d->scriptguiclient->getActionCollection("projectscripts");
 		if(! collection) {
 			collection = new Kross::Api::ScriptActionCollection( i18n("Scripts"), d->scriptguiclient->actionCollection(), "projectscripts" );
 			d->scriptguiclient->addActionCollection("projectscripts", collection);
 		}
-
 		const char* name = partname.toLatin1();
 		Kross::Api::ScriptAction::Ptr scriptaction = collection->action(name);
 		if(! scriptaction) {
 			scriptaction = new Kross::Api::ScriptAction(partname);
 			collection->attach(scriptaction); //TODO remove again on unload!
 		}
+#else
+    #warning Port It!!!
 
-		if(viewMode == Kexi::DesignViewMode) {
-			return new KexiScriptDesignView(win, parent, scriptaction);
-		}
+        if(viewMode == Kexi::DesignViewMode) {
+            return new KexiScriptDesignView(parent, action);
+        }
+#endif
 	}
 	return 0;
 }

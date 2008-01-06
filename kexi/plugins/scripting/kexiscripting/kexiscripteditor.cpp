@@ -22,7 +22,7 @@
 
 #include "kexiscripteditor.h"
 
-#include <kross/main/scriptaction.h>
+#include <kross/core/action.h>
 
 #include <kdebug.h>
 //#include <kparts/factory.h>
@@ -31,13 +31,13 @@
 //#include <kxmlguiwindow.h>
 #include <kmenu.h>
 
-#include <kexidialogbase.h>
+//#include <kexidialogbase.h>
 
 /// \internal d-pointer class
 class KexiScriptEditor::Private
 {
     public:
-        Kross::Api::ScriptAction* scriptaction;
+        Kross::Action* scriptaction;
         Private() : scriptaction(0) {}
 };
 
@@ -57,17 +57,18 @@ bool KexiScriptEditor::isInitialized() const
     return d->scriptaction != 0;
 }
 
-void KexiScriptEditor::initialize(Kross::Api::ScriptAction* scriptaction)
+void KexiScriptEditor::initialize(Kross::Action* scriptaction)
 {
     d->scriptaction = scriptaction;
     Q_ASSERT(d->scriptaction);
 
     disconnect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 
-    QString code = d->scriptaction->getCode();
+    QString code = d->scriptaction->code();
     if(code.isNull()) {
         // If there is no code we just add some information.
 ///@todo remove after release
+#if 0
         code = "# " + QStringList::split("\n", i18n(
             "This note will appear for a user in the script's source code "
             "as a comment. Keep every row not longer than 60 characters and use '\n.'",
@@ -77,11 +78,12 @@ void KexiScriptEditor::initialize(Kross::Api::ScriptAction* scriptaction)
             "in the next Kexi version.\n"
             "For more information and documentation see\n%1"
         ).arg("http://www.kexi-project.org/scripting/"), true).join("\n# ") + "\n";
+#endif
     }
     KexiEditor::setText(code);
     // We assume Kross and the HighlightingInterface are using same
     // names for the support languages...
-    setHighlightMode(d->scriptaction->getInterpreterName());
+    setHighlightMode( d->scriptaction->interpreter() );
 
     clearUndoRedo();
     KexiEditor::setDirty(false);
@@ -92,7 +94,7 @@ void KexiScriptEditor::slotTextChanged()
 {
     KexiScriptEditor::setDirty(true);
     if(d->scriptaction)
-        d->scriptaction->setCode( KexiEditor::text() );
+        d->scriptaction->setCode( KexiEditor::text().toUtf8() );
 }
 
 void KexiScriptEditor::setLineNo(long lineno)

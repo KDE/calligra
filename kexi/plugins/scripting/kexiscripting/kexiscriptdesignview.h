@@ -32,9 +32,9 @@
 class KexiScriptEditor;
 class KexiScriptDesignViewPrivate;
 
-namespace Kross { namespace Api {
-  class ScriptAction;
-}}
+namespace Kross {
+  class Action;
+}
 
 /**
  * The KexiScriptDesignView class provides the KexiView to
@@ -51,7 +51,7 @@ class KexiScriptDesignView : public KexiView
         /**
          * Constructor.
          */
-        KexiScriptDesignView(QWidget *parent, Kross::Api::ScriptAction* scriptaction);
+        KexiScriptDesignView(QWidget *parent, Kross::Action* scriptaction);
 
         /**
          * Destructor.
@@ -59,10 +59,10 @@ class KexiScriptDesignView : public KexiView
         virtual ~KexiScriptDesignView();
 
         /**
-         * \return the \a Kross::Api::ScriptAction this \a KexiScriptDesignView
+         * \return the \a Kross::Action this \a KexiScriptDesignView
          * is responsible for.
          */
-        Kross::Api::ScriptAction* scriptAction() const;
+        Kross::Action* scriptAction() const;
 
         /**
          * \return a property set for this view.
@@ -115,7 +115,7 @@ class KexiScriptDesignView : public KexiView
 
         /**
          * Load the data from XML source and fill the internally
-         * used \a Kross::Api::ScriptContainer instance.
+         * used \a Kross::Action instance.
          */
         bool loadData();
 };
