@@ -117,7 +117,9 @@ kDebug();
 
 	view->deleteLater(); // not needed any longer.
 #else
-    #warning Port It!!!
+    #ifdef __GNUC__
+        #warning Port It!!!
+    #endif
 #endif
 	return true;
 }
@@ -165,8 +167,9 @@ kDebug()<<"............. initPartActions";
 		}
 	}
 #else
-    kDebug();
-    #warning Port It!!!
+    #ifdef __GNUC__
+        #warning Port It!!!
+    #endif
 #endif
 }
 
@@ -211,7 +214,9 @@ kDebug()<<"............. createView";
 			collection->attach(scriptaction); //TODO remove again on unload!
 		}
 #else
-    #warning Port It!!!
+    #ifdef __GNUC__
+        #warning Port It!!!
+    #endif
 
         if(viewMode == Kexi::DesignViewMode) {
             return new KexiScriptDesignView(parent, action);
