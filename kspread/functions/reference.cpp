@@ -101,7 +101,10 @@ void RegisterReferenceFunctions()
   repo->add (f);
 }
 
+
+//
 // Function: ADDRESS
+//
 Value func_address (valVector args, ValueCalc *calc, FuncExtra *)
 {
   bool r1c1 = false;
@@ -176,7 +179,10 @@ Value func_address (valVector args, ValueCalc *calc, FuncExtra *)
   return Value (result);
 }
 
+
+//
 // Function: AREAS
+//
 Value func_areas (valVector args, ValueCalc *calc, FuncExtra *e)
 {
   if (e) {
@@ -213,7 +219,10 @@ Value func_areas (valVector args, ValueCalc *calc, FuncExtra *e)
   return Value (num);
 }
 
+
+//
 // Function: CHOOSE
+//
 Value func_choose (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int cnt = args.count () - 1;
@@ -223,7 +232,37 @@ Value func_choose (valVector args, ValueCalc *calc, FuncExtra *)
   return args[num];
 }
 
+
+//
+// Function: COLUMN
+//
+Value func_column (valVector args, ValueCalc *, FuncExtra *e)
+{
+  int col = e ? e->mycol : 0;
+  if (e && args.count())
+    col = e->ranges[0].col1;
+  if (col > 0)
+    return Value (col);
+  return Value::errorVALUE();
+}
+
+
+//
+// Function: COLUMNS
+//
+Value func_columns (valVector, ValueCalc *, FuncExtra *e)
+{
+  int col1 = e->ranges[0].col1;
+  int col2 = e->ranges[0].col2;
+  if ((col1 == -1) || (col2 == -1))
+    return Value::errorVALUE();
+  return Value (col2 - col1 + 1);
+}
+
+
+//
 // Function: HLOOKUP
+//
 Value func_hlookup (valVector args, ValueCalc *calc, FuncExtra *)
 {
     const Value key = args[0];
@@ -248,7 +287,10 @@ Value func_hlookup (valVector args, ValueCalc *calc, FuncExtra *)
     return Value::errorNA();
 }
 
+
+//
 // Function: INDEX
+//
 Value func_index (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // first argument can be either a range, then we return a given cell's
@@ -264,7 +306,40 @@ Value func_index (valVector args, ValueCalc *calc, FuncExtra *)
   return val.element (col, row);
 }
 
+
+//
+// Function: INDIRECT
+//
+Value func_indirect (valVector args, ValueCalc *calc, FuncExtra *e)
+{
+  bool r1c1 = false;
+  QString ref = calc->conv()->asString (args[0]).asString();
+  if (args.count() == 2)
+    r1c1 = !(calc->conv()->asBoolean (args[1]).asBoolean());
+
+  if (ref.isEmpty())
+    return Value::errorVALUE();
+
+  if ( r1c1 )
+  {
+    // TODO: translate the r1c1 style to a1 style
+    ref = ref;
+  }
+
+  const KSpread::Region region(ref, e->sheet->map(), e->sheet);
+  if (!region.isValid() || !region.isSingular())
+    return Value::errorVALUE();
+
+  const Cell cell(region.firstSheet(), region.firstRange().topLeft());
+  if ( !cell.isNull() )
+    return cell.value();
+  return Value::errorVALUE();
+}
+
+
+//
 // Function: LOOKUP
+//
 Value func_lookup (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value num = calc->conv()->asNumeric (args[0]);
@@ -292,18 +367,10 @@ Value func_lookup (valVector args, ValueCalc *calc, FuncExtra *)
   return res;
 }
 
-// Function: COLUMN
-Value func_column (valVector args, ValueCalc *, FuncExtra *e)
-{
-  int col = e ? e->mycol : 0;
-  if (e && args.count())
-    col = e->ranges[0].col1;
-  if (col > 0)
-    return Value (col);
-  return Value::errorVALUE();
-}
 
+//
 // Function: ROW
+//
 Value func_row (valVector args, ValueCalc *, FuncExtra *e)
 {
   int row = e ? e->myrow : 0;
@@ -314,17 +381,10 @@ Value func_row (valVector args, ValueCalc *, FuncExtra *e)
   return Value::errorVALUE();
 }
 
-// Function: COLUMNS
-Value func_columns (valVector, ValueCalc *, FuncExtra *e)
-{
-  int col1 = e->ranges[0].col1;
-  int col2 = e->ranges[0].col2;
-  if ((col1 == -1) || (col2 == -1))
-    return Value::errorVALUE();
-  return Value (col2 - col1 + 1);
-}
 
+//
 // Function: ROWS
+//
 Value func_rows (valVector, ValueCalc *, FuncExtra *e)
 {
   int row1 = e->ranges[0].row1;
@@ -335,34 +395,9 @@ Value func_rows (valVector, ValueCalc *, FuncExtra *e)
 }
 
 
-// Function: INDIRECT
-Value func_indirect (valVector args, ValueCalc *calc, FuncExtra *e)
-{
-  bool r1c1 = false;
-  QString ref = calc->conv()->asString (args[0]).asString();
-  if (args.count() == 2)
-    r1c1 = !(calc->conv()->asBoolean (args[1]).asBoolean());
-
-  if (ref.isEmpty())
-    return Value::errorVALUE();
-
-  if ( r1c1 )
-  {
-    // TODO: translate the r1c1 style to a1 style
-    ref = ref;
-  }
-
-  const KSpread::Region region(ref, e->sheet->map(), e->sheet);
-  if (!region.isValid() || !region.isSingular())
-    return Value::errorVALUE();
-
-  const Cell cell(region.firstSheet(), region.firstRange().topLeft());
-  if ( !cell.isNull() )
-    return cell.value();
-  return Value::errorVALUE();
-}
-
+//
 // Function: VLOOKUP
+//
 Value func_vlookup (valVector args, ValueCalc *calc, FuncExtra *)
 {
     const Value key = args[0];
