@@ -1419,6 +1419,7 @@ Value func_gauss (valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
 {
+  kDebug()<<"GROWTH"; // Debug
   Value known_Y = args[0];
 
   // default
@@ -1470,17 +1471,24 @@ Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
 
   Value known_X ( Value::Array );
 
+  //
+  // knownX is given ...
+  //
   if (args.count() > 1)
   {
+    //
+    // get X-Matrix and print size
+    //
     known_X = args[1];
 
-    // get size X-Matrix
     rows_X = known_Y.rows();
     cols_X = known_X.columns();
     kDebug()<<"X has "<<rows_X<<" rows";
     kDebug()<<"X has "<<cols_X<<" cols";
   
+    //
     // check if array known_X contains only numbers
+    //
     for (uint i=0; i < known_X.count(); i++)
     {
         if ( !known_X.element( i ).isNumber() )
@@ -1490,11 +1498,12 @@ Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
         }
     }
 
+    //
+    // check for simple regression
+    //
     if (cols_X == cols_Y && rows_X == rows_Y)
-    {
       nCase = 1;
-      kDebug()<<"Simple regression detected";
-    }
+
     else if (cols_Y != 1 && rows_Y != 1)
     {
 	kDebug()<<"Y-Matrix only has one row or column";
@@ -1502,37 +1511,57 @@ Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
     }
     else if (cols_Y == 1)
     {
-      kDebug()<<"--> row aligned";
+      //
+      // row alignment
+      //
       if (rows_X != rows_Y)
       {
+        kDebug()<<"--> row aligned";
 	kDebug()<<"row sizes not equal";
 	return Value::errorNA();
       }
       else
       {
-	nCase = 2; // rows
+        kDebug()<<"--> row aligned";
+	nCase = 2; // row alignment
 	N = rows_Y;
 	M = cols_X;
       }
     }
+
+    //
+    // only column alignment left
+    //
     else if (cols_X != cols_Y)
     {
       kDebug()<<"--> col aligned";
       kDebug()<<"col sizes not equal";
+      return Value::errorNA();
     }
     else
     {
-      nCase = 3; // cols
+      kDebug()<<"--> col aligned";
+      nCase = 3; // column alignment
       N = cols_Y;
       M = rows_X;
     }
   }
-//   else
-//   {
-//     // if known_X is empty it has to be set to the sequence 1,2,3... n (n number of counts knownY) 
-//     for (uint i=1; i < known_Y.count()+1; i++)
-//       //known_X.append(i);// TODO setElement
-//   }
+  else
+  //
+  // if known_X is empty it has to be set to 
+  // the sequence 1,2,3... n (n number of counts knownY) in one row.
+  //
+  {
+    kDebug()<<"fill X-Matrix with 0,1,2,3 .. sequence"; 
+    for (int i=0; i < known_Y.count(); i++)
+      known_X.setElement(i,0,Value(i));
+
+    cols_X = cols_Y;
+    rows_X = rows_Y;
+
+    // simple regression
+    nCase = 1;
+  }
 
   Value newX( Value::Array );
   int cols_newX, rows_newX;
@@ -1543,7 +1572,7 @@ Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
     kDebug()<<"no newX-Matrix --> copy X-Matrix";
     cols_newX = cols_X;
     rows_newX = rows_X;
-    //count_newX = count_X;
+    count_newX = count_X;
     newX = known_X;
   }
   else
@@ -1552,8 +1581,6 @@ Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
     // get dimensions
     cols_newX = newX.columns();
     rows_newX = newX.rows();
-    //kDebug()<<"newX has "<<rows_newX<<" rows";
-    //kDebug()<<"newX has "<<cols_newX<<" cols";
 
     if ((nCase == 2 && cols_X != cols_newX) || (nCase == 3 && rows_X != rows_newX))
     {
@@ -1569,18 +1596,24 @@ Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
         kDebug()<<"newX ("<<i<<") is non Value";
         return Value::errorNA();
       }
-      kDebug()<<"newX="<<newX.element( i );
     }
   }
+
+  kDebug()<<"known_X = "<<known_X;
+  kDebug()<<"newX = "<<newX;
+  kDebug()<<"newX has "<<rows_newX<<" rows";
+  kDebug()<<"newX has "<<cols_newX<<" cols";
 
   // create the resulting matrix
   Value res( Value::Array );
 
   //
-  // Einfache Regression
+  // simple regression
   //
   if (nCase == 1)
   {
+    kDebug()<<"Simple regression detected"; // Debug
+
     double count   = 0.0;
     double sumX    = 0.0;
     double sumSqrX = 0.0;
@@ -1593,67 +1626,71 @@ Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
     // Gehe über Matrix Reihen/Spaltenweise
     //
     for (int c=0; c<cols_Y; c++)
+    {
       for (int r=0; r<rows_Y; r++)
+      {
+        valX = known_X.element(c,r).asFloat();
+        valY = known_Y.element(c,r).asFloat();
+        sumX    += valX;
+        sumSqrX += valX * valX;
+        sumY    += valY;
+        sumSqrY += valY * valY;
+        sumXY   += valX * valY;
+        count++;
+      }
+    }
+
+    if (count < 1.0)
+    {
+      kDebug()<<"count less than 1.0";
+      return Value::errorNA();
+    }
+    else
+    {
+      double f1 = count*sumXY-sumX*sumY;
+      double X  = count*sumSqrX-sumX*sumX;
+      double b, m;
+
+      if (withOffset)
+      {
+        // with offset
+        b = sumY/count - f1/X*sumX/count;
+        m = f1/X;
+      }
+      else
+      {
+        // without offset
+        b = 0.0;
+        m = sumXY/sumSqrX;
+      }
+
+      //
+      // Fill result matrix
+      //
+      for (int c=0; c<cols_newX; c++)
+      {
+        for (int r=0; r<rows_newX; r++)
         {
-          kDebug()<<"c="<<c<<" r="<<r;
-          valX = known_X.element(c,r).asFloat();
-          valY = known_Y.element(c,r).asFloat();
-          kDebug()<<"x= "<<valX<<" y= "<<valY;
-          sumX    += valX;
-          sumSqrX += valX * valX;
-          sumY    += valY;
-          sumSqrY += valY * valY;
-          sumXY   += valX * valY;
-          count++;
+          double result=0.0;
+          result = exp(newX.element(c,r).asFloat()*m+b);
+          kDebug()<<"res("<<c<<","<<r<<") = "<<result;
+          res.setElement(c,r, Value(result));
         }
-
-//         kDebug()<<"count ="<<count;
-//         kDebug()<<"sumX ="<<sumX;
-//         kDebug()<<"sumY ="<<sumY;
-//         kDebug()<<"sumSqrX ="<<sumSqrX;
-//         kDebug()<<"sumSqrY ="<<sumSqrY;
-//         kDebug()<<"sumXY ="<<sumXY;
-
-
-        if (count < 1.0)
-        {
-          kDebug()<<"count less than 1.0";
-          return Value::errorNA();
-        }
-        else
-        {
-          double f1 = count*sumXY-sumX*sumY;
-          double X  = count*sumSqrX-sumX*sumX;
-          double b, m;
-          if (withOffset)
-          {
-            // with offset
-            b = sumY/count - f1/X*sumX/count;
-            m = f1/X;
-          }
-          else
-          {
-            // without offset
-            b = 0.0;
-            m = sumXY/sumSqrX;
-          }
-
-          //kDebug()<<"m="<<m;
-          //kDebug()<<"b="<<b;
-
-          //
-          // Fill result matrix
-          //
-          for (int c=0; c<cols_newX; c++)
-            for (int r=0; r<rows_newX; r++)
-              {
-                double result=0.0;
-                //kDebug()<<"newX*m+b="<<newX.element(c,r).asFloat()*m+b;
-                result = exp(newX.element(c,r).asFloat()*m+b);
-                //kDebug()<<"res("<<c<<","<<r<<") = "<<result;
-                res.setElement(c,r, Value(result));
-              }
-        }
+      }
+    }
+    kDebug()<<res;
+  }
+  else
+  {
+     int i,j,k;
+     if (nCase == 2)
+     {
+        kDebug()<<"column alignment";
+     }
+     else
+     {
+       kDebug()<<"row alignment";
+     }
   }
 
   return (res);   // return array
