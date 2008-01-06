@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
  * Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@
 #include <KoSelection.h>
 #include <KoPointerEvent.h>
 #include <KoShapeBackgroundCommand.h>
+#include <KoShapeBorderCommand.h>
 #include <KoResourceServerProvider.h>
 
 #include <QGridLayout>
@@ -131,7 +132,13 @@ void KarbonGradientTool::mouseReleaseEvent( KoPointerEvent *event )
         m_currentStrategy->setEditing( false );
         m_canvas->addCommand( m_currentStrategy->createCommand() );
         if( m_gradientWidget )
+        {
             m_gradientWidget->setGradient( m_currentStrategy->gradient() );
+            if( m_currentStrategy->target() == GradientStrategy::Fill )
+                m_gradientWidget->setTarget( VGradientTabWidget::FillGradient );
+            else
+                m_gradientWidget->setTarget( VGradientTabWidget::StrokeGradient );
+        }
     }
 }
 
@@ -179,24 +186,60 @@ void KarbonGradientTool::initialize()
     foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
     {
         const QBrush &background = shape->background();
+        GradientStrategy::Target target = GradientStrategy::Fill;
+
+        GradientStrategy * fillStrategy = 0;
         if( background.style() == Qt::LinearGradientPattern )
         {
             const QLinearGradient *gradient = static_cast<const QLinearGradient*>( background.gradient() );
-            m_gradients.append( new LinearGradientStrategy( shape, gradient ) );
+            fillStrategy = new LinearGradientStrategy( shape, gradient, target );
         }
         else if( background.style() == Qt::RadialGradientPattern )
         {
             const QRadialGradient *gradient = static_cast<const QRadialGradient*>( background.gradient() );
-            m_gradients.append( new RadialGradientStrategy( shape, gradient ) );
+            fillStrategy = new RadialGradientStrategy( shape, gradient, target );
         }
         else if( background.style() == Qt::ConicalGradientPattern )
         {
             const QConicalGradient *gradient = static_cast<const QConicalGradient*>( background.gradient() );
-            m_gradients.append( new ConicalGradientStrategy( shape, gradient ) );
+            fillStrategy = new ConicalGradientStrategy( shape, gradient, target );
         }
-        else
+
+        if( fillStrategy )
+        {
+            m_gradients.append( fillStrategy );
+            fillStrategy->repaint();
+        }
+
+        KoLineBorder * stroke = dynamic_cast<KoLineBorder*>( shape->border() );
+        if( ! stroke )
             continue;
-        m_gradients.last()->repaint();
+
+        GradientStrategy * strokeStrategy = 0;
+
+        QBrush lineBrush = stroke->lineBrush();
+        target = GradientStrategy::Stroke;
+        if( lineBrush.style() == Qt::LinearGradientPattern )
+        {
+            const QLinearGradient *gradient = static_cast<const QLinearGradient*>( lineBrush.gradient() );
+            strokeStrategy = new LinearGradientStrategy( shape, gradient, target );
+        }
+        else if( lineBrush.style() == Qt::RadialGradientPattern )
+        {
+            const QRadialGradient *gradient = static_cast<const QRadialGradient*>( lineBrush.gradient() );
+            strokeStrategy = new RadialGradientStrategy( shape, gradient, target );
+        }
+        else if( lineBrush.style() == Qt::ConicalGradientPattern )
+        {
+            const QConicalGradient *gradient = static_cast<const QConicalGradient*>( lineBrush.gradient() );
+            strokeStrategy = new ConicalGradientStrategy( shape, gradient, target );
+        }
+
+        if( strokeStrategy )
+        {
+            m_gradients.append( strokeStrategy );
+            strokeStrategy->repaint();
+        }
     }
 
     if( m_gradients.count() == 0 )
@@ -210,9 +253,16 @@ void KarbonGradientTool::initialize()
 
     m_gradients.first()->setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
     delete m_gradient;
-    m_gradient = cloneGradient( m_gradients.first()->gradient() );
+    GradientStrategy * strategy = m_gradients.first();
+    m_gradient = cloneGradient( strategy->gradient() );
     if( m_gradientWidget )
+    {
         m_gradientWidget->setGradient( m_gradient );
+        if( strategy->target() == GradientStrategy::Fill )
+            m_gradientWidget->setTarget( VGradientTabWidget::FillGradient );
+        else
+            m_gradientWidget->setTarget( VGradientTabWidget::StrokeGradient );
+    }
 }
 
 void KarbonGradientTool::deactivate()
@@ -261,7 +311,26 @@ void KarbonGradientTool::gradientChanged()
 {
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
     QBrush newBrush( *m_gradientWidget->gradient() );
-    m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newBrush ) );
+    if( m_gradientWidget->target() == VGradientTabWidget::FillGradient )
+    {
+        m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newBrush ) );
+    }
+    else
+    {
+        QList<KoShapeBorderModel*> newBorders;
+        foreach( KoShape * shape, selectedShapes )
+        {
+            KoLineBorder * border = dynamic_cast<KoLineBorder*>( shape->border() );
+            KoLineBorder * newBorder = 0;
+            if( border )
+                newBorder = new KoLineBorder( *border );
+            else
+                newBorder = new KoLineBorder( 1.0 );
+            newBorder->setLineBrush( newBrush );
+            newBorders.append( newBorder );
+        }
+        m_canvas->addCommand( new KoShapeBorderCommand( selectedShapes, newBorders ) );
+    }
     initialize();
 }
 

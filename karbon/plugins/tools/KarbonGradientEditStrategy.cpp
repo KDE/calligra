@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,6 +22,7 @@
 #include <KoShape.h>
 #include <KoViewConverter.h>
 #include <KoShapeBackgroundCommand.h>
+#include <KoShapeBorderCommand.h>
 
 #include <QBrush>
 #include <QGradient>
@@ -34,10 +35,20 @@
 
 int GradientStrategy::m_handleRadius = 3;
 
-GradientStrategy::GradientStrategy( KoShape *shape )
+GradientStrategy::GradientStrategy( KoShape *shape, Target target )
 : m_shape( shape ),m_selectedHandle( -1 ), m_selectedLine(false), m_editing( false )
+, m_target( target )
 {
-    m_matrix = m_shape->background().matrix() * m_shape->absoluteTransformation( 0 );
+    if( m_target == Fill )
+    {
+        m_matrix = m_shape->background().matrix() * m_shape->absoluteTransformation( 0 );
+    }
+    else
+    {
+        KoLineBorder * stroke = dynamic_cast<KoLineBorder*>( m_shape->border() );
+        if( stroke )
+            m_matrix = stroke->lineBrush().matrix() * m_shape->absoluteTransformation( 0 );
+    }
 }
 
 void GradientStrategy::setEditing( bool on )
@@ -46,7 +57,21 @@ void GradientStrategy::setEditing( bool on )
     // if we are going into editing mode, save the old background
     // for use inside the command emitted when finished
     if( on )
-        m_oldBackground = m_shape->background();
+    {
+        if( m_target == Fill )
+        {
+            m_oldBrush = m_shape->background();
+        }
+        else
+        {
+            KoLineBorder * stroke = dynamic_cast<KoLineBorder*>( m_shape->border() );
+            if( stroke )
+            {
+                m_oldStroke = *stroke;
+                m_oldBrush = stroke->lineBrush();
+            }
+        }
+    }
 }
 
 bool GradientStrategy::selectHandle( const QPointF &mousePos )
@@ -122,8 +147,9 @@ void GradientStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Keyboar
     if( m_selectedLine )
     {
         uint handleCount = m_handles.count();
+        QPointF delta = invMatrix.map( mouseLocation ) - invMatrix.map( m_lastMousePos );
         for( uint i = 0; i < handleCount; ++i )
-            m_handles[i] += mouseLocation - m_lastMousePos;
+            m_handles[i] += delta;
         m_lastMousePos = mouseLocation;
     }
     else
@@ -131,15 +157,41 @@ void GradientStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Keyboar
         m_handles[m_selectedHandle] = invMatrix.map( mouseLocation );
     }
 
-    m_newBackground = background();
-    m_shape->setBackground( m_newBackground );
+    m_newBrush = brush();
+    if( m_target == Fill )
+    {
+        m_shape->setBackground( m_newBrush );
+    }
+    else
+    {
+        KoLineBorder * stroke = dynamic_cast<KoLineBorder*>( m_shape->border() );
+        if( stroke )
+            stroke->setLineBrush( m_newBrush );
+    }
 }
 
 QUndoCommand * GradientStrategy::createCommand()
 {
-    m_shape->setBackground( m_oldBackground );
-    QList<KoShape*> shapes;
-    return new KoShapeBackgroundCommand( shapes << m_shape, m_newBackground, 0 );
+    if( m_target == Fill )
+    {
+        m_shape->setBackground( m_oldBrush );
+        QList<KoShape*> shapes;
+        return new KoShapeBackgroundCommand( shapes << m_shape, m_newBrush );
+    }
+    else
+    {
+        KoLineBorder * stroke = dynamic_cast<KoLineBorder*>( m_shape->border() );
+        if( stroke )
+        {
+            *stroke = m_oldStroke;
+            KoLineBorder * newStroke = new KoLineBorder( *stroke );
+            newStroke->setLineBrush( m_newBrush );
+            QList<KoShape*> shapes;
+            return new KoShapeBorderCommand( shapes << m_shape, newStroke );
+        }
+    }
+
+    return 0;
 }
 
 QRectF GradientStrategy::boundingRect() const
@@ -164,11 +216,31 @@ void GradientStrategy::repaint() const
 
 const QGradient * GradientStrategy::gradient()
 {
-    return m_shape->background().gradient();
+    if( m_target == Fill )
+    {
+        return m_shape->background().gradient();
+    }
+    else
+    {
+        KoLineBorder * stroke = dynamic_cast<KoLineBorder*>( m_shape->border() );
+        if( ! stroke )
+            return 0;
+        return stroke->lineBrush().gradient();
+    }
 }
 
-LinearGradientStrategy::LinearGradientStrategy( KoShape *shape, const QLinearGradient *gradient )
-: GradientStrategy( shape )
+/// Returns the gradient target
+GradientStrategy::Target GradientStrategy::target() const
+{
+    return m_target;
+}
+
+/////////////////////////////////////////////////////////////////
+// strategy implementations
+/////////////////////////////////////////////////////////////////
+
+LinearGradientStrategy::LinearGradientStrategy( KoShape *shape, const QLinearGradient *gradient, Target target )
+: GradientStrategy( shape, target )
 {
     m_handles.append( gradient->start() );
     m_handles.append( gradient->finalStop() );
@@ -194,18 +266,18 @@ bool LinearGradientStrategy::selectLine( const QPointF &mousePos )
     return m_selectedLine;
 }
 
-QBrush LinearGradientStrategy::background()
+QBrush LinearGradientStrategy::brush()
 {
     QLinearGradient gradient( m_handles[start], m_handles[stop] );
-    gradient.setStops( m_oldBackground.gradient()->stops() );
-    gradient.setSpread( m_oldBackground.gradient()->spread() );
-    QBrush background = QBrush( gradient );
-    background.setMatrix( m_oldBackground.matrix() );
-    return background;
+    gradient.setStops( m_oldBrush.gradient()->stops() );
+    gradient.setSpread( m_oldBrush.gradient()->spread() );
+    QBrush brush = QBrush( gradient );
+    brush.setMatrix( m_oldBrush.matrix() );
+    return brush;
 }
 
-RadialGradientStrategy::RadialGradientStrategy( KoShape *shape, const QRadialGradient *gradient )
-: GradientStrategy( shape )
+RadialGradientStrategy::RadialGradientStrategy( KoShape *shape, const QRadialGradient *gradient, Target target )
+: GradientStrategy( shape, target )
 {
     m_handles.append( gradient->center() );
     m_handles.append( gradient->focalPoint() );
@@ -234,20 +306,20 @@ bool RadialGradientStrategy::selectLine( const QPointF &mousePos )
     return m_selectedLine;
 }
 
-QBrush RadialGradientStrategy::background()
+QBrush RadialGradientStrategy::brush()
 {
     QPointF d = m_handles[radius]-m_handles[center];
     double r = sqrt( d.x()*d.x() + d.y()*d.y() );
     QRadialGradient gradient( m_handles[center], r, m_handles[focal] );
-    gradient.setStops( m_oldBackground.gradient()->stops() );
-    gradient.setSpread( m_oldBackground.gradient()->spread() );
-    QBrush background = QBrush( gradient );
-    background.setMatrix( m_oldBackground.matrix() );
-    return background;
+    gradient.setStops( m_oldBrush.gradient()->stops() );
+    gradient.setSpread( m_oldBrush.gradient()->spread() );
+    QBrush brush = QBrush( gradient );
+    brush.setMatrix( m_oldBrush.matrix() );
+    return brush;
 }
 
-ConicalGradientStrategy::ConicalGradientStrategy( KoShape *shape, const QConicalGradient *gradient )
-: GradientStrategy( shape )
+ConicalGradientStrategy::ConicalGradientStrategy( KoShape *shape, const QConicalGradient *gradient, Target target )
+: GradientStrategy( shape, target )
 {
     double angle = gradient->angle() * M_PI / 180.0;
     double scale = 0.25 * ( shape->size().height() + shape->size().width() );
@@ -275,16 +347,16 @@ bool ConicalGradientStrategy::selectLine( const QPointF &mousePos )
     return m_selectedLine;
 }
 
-QBrush ConicalGradientStrategy::background()
+QBrush ConicalGradientStrategy::brush()
 {
     QPointF d = m_handles[direction]-m_handles[center];
     double angle = atan2( -d.y(), d.x() ) / M_PI * 180.0;
     if( angle < 0.0 )
         angle += 360;
     QConicalGradient gradient( m_handles[center], angle );
-    gradient.setStops( m_oldBackground.gradient()->stops() );
-    gradient.setSpread( m_oldBackground.gradient()->spread() );
-    QBrush background = QBrush( gradient );
-    background.setMatrix( m_oldBackground.matrix() );
-    return background;
+    gradient.setStops( m_oldBrush.gradient()->stops() );
+    gradient.setSpread( m_oldBrush.gradient()->spread() );
+    QBrush brush = QBrush( gradient );
+    brush.setMatrix( m_oldBrush.matrix() );
+    return brush;
 }

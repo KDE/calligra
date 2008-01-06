@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -22,6 +22,7 @@
 
 #include <QRectF>
 #include <QBrush>
+#include <KoLineBorder.h>
 
 class QPainter;
 class QUndoCommand;
@@ -35,8 +36,11 @@ class KoViewConverter;
 class GradientStrategy
 {
 public:
-    /// constructs new strategy on the specified shape
-    explicit GradientStrategy( KoShape *shape );
+    /// The different targets of the gradients
+    enum Target { Fill, Stroke };
+
+    /// constructs new strategy on the specified shape and target
+    explicit GradientStrategy( KoShape *shape, Target target );
 
     virtual ~GradientStrategy() {}
 
@@ -75,6 +79,10 @@ public:
 
     /// returns the actual gradient
     const QGradient * gradient();
+
+    /// Returns the gradient target
+    Target target() const;
+
 protected:
     /// paints a handle at the given position
     void paintHandle( QPainter &painter, const KoViewConverter &converter, const QPointF &position );
@@ -85,31 +93,33 @@ protected:
     /// checks if given mouse position is on specified line segment
     bool mouseAtLineSegment( const QPointF &mousePos, const QPointF &segStart, const QPointF &segStop );
 
-    /// creates an updated background brush from the actual data
-    virtual QBrush background() = 0;
+    /// creates an updated brush from the actual data
+    virtual QBrush brush() = 0;
 
     KoShape *m_shape;         ///< the shape we are working on
     int m_selectedHandle;     ///< index of currently deleted handle or -1 if none selected
     bool m_selectedLine;      ///< is gradinet line selected
-    QBrush m_oldBackground;   ///< the old background brush
-    QBrush m_newBackground;   ///< the new background brush
+    QBrush m_oldBrush;   ///< the old background brush
+    QBrush m_newBrush;   ///< the new background brush
     QList<QPointF> m_handles; ///< the list of handles
     QMatrix m_matrix;         ///< matrix to map handle into document coordinate system
     QPointF m_lastMousePos;   ///< last mouse position
+    KoLineBorder m_oldStroke; ///< the old stroke
 private:
     static int m_handleRadius; ///< the handle radius for all gradient strategies
     bool m_editing; /// the edit mode flag
+    Target m_target; ///< the gradient target
 };
 
 /// Strategy for editing a linear gradient
 class LinearGradientStrategy : public GradientStrategy
 {
 public:
-    LinearGradientStrategy( KoShape *shape, const QLinearGradient *gradient );
+    LinearGradientStrategy( KoShape *shape, const QLinearGradient *gradient, Target target );
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
     virtual bool selectLine( const QPointF &mousePos );
 private:
-    virtual QBrush background();
+    virtual QBrush brush();
     enum Handles { start, stop };
 };
 
@@ -117,11 +127,11 @@ private:
 class RadialGradientStrategy : public GradientStrategy
 {
 public:
-    RadialGradientStrategy( KoShape *shape, const QRadialGradient *gradient );
+    RadialGradientStrategy( KoShape *shape, const QRadialGradient *gradient, Target target );
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
     virtual bool selectLine( const QPointF &mousePos );
 private:
-    virtual QBrush background();
+    virtual QBrush brush();
     enum Handles { center, focal, radius };
 };
 
@@ -129,11 +139,11 @@ private:
 class ConicalGradientStrategy : public GradientStrategy
 {
 public:
-    ConicalGradientStrategy( KoShape *shape, const QConicalGradient *gradient );
+    ConicalGradientStrategy( KoShape *shape, const QConicalGradient *gradient, Target target );
     virtual void paint( QPainter &painter, const KoViewConverter &converter );
     virtual bool selectLine( const QPointF &mousePos );
 private:
-    virtual QBrush background();
+    virtual QBrush brush();
     enum Handles { center, direction };
 };
 
