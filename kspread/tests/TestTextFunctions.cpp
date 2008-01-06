@@ -21,7 +21,6 @@
 
 #include "TestTextFunctions.h"
 
-
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
 
 Value TestTextFunctions::evaluate(const QString& formula, Value& ex)
@@ -239,15 +238,17 @@ void TestTextFunctions::testTRIM()
 void TestTextFunctions::testUNICHAR()
 {
     CHECK_EVAL( "UNICHAR(65)", Value( "A" ) );
-    CHECK_EVAL( "UNICHAR(8364)", Value( "€" ) );
+    CHECK_EVAL( "UNICHAR(8364)", Value( QChar(8364) ) );
 }
 
 void TestTextFunctions::testUNICODE()
 {
+    QChar euro( 8364 );
+
     CHECK_EVAL( "UNICODE(\"A\")", Value( 65 ) );
     CHECK_EVAL( "UNICODE(\"AB€C\")", Value( 65 ) );
-    CHECK_EVAL( "UNICODE(\"€\")", Value( 8364 ) );
-    CHECK_EVAL( "UNICODE(\"€F\")", Value( 8364 ) );
+    CHECK_EVAL( QString("UNICODE(\"%1\")").arg(euro), Value( 8364 ) );
+    CHECK_EVAL( QString("UNICODE(\"%1F\")").arg(euro), Value( 8364 ) );
 }
 
 void TestTextFunctions::testUPPER()
