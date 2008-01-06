@@ -64,7 +64,6 @@ KexiScriptPart::KexiScriptPart(QObject *parent, const QStringList &l)
 	setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new script"));
 	setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new script."));
 	setSupportedViewModes(Kexi::DesignViewMode);
-
 //setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);
 //setInternalPropertyValue("newObjectsAreDirty", true);
 }

@@ -79,15 +79,17 @@ KexiScriptDesignView::KexiScriptDesignView(
 
     QSplitter* splitter = new QSplitter(this);
     splitter->setOrientation(Qt::Vertical);
-    Q3HBoxLayout* layout = new Q3HBoxLayout(this);
-    layout->addWidget(splitter);
+    //QHBoxLayout* layout = new QHBoxLayout(this);
+    //layout->addWidget(splitter);
 
     d->editor = new KexiScriptEditor(splitter);
+    splitter->addWidget(d->editor);
     splitter->setFocusProxy(d->editor);
-    addChildView(d->editor);
-    setViewWidget(d->editor);
+    //addChildView(d->editor);
+    setViewWidget(splitter);
 
     d->statusbrowser = new KTextBrowser(splitter);
+    splitter->addWidget(d->statusbrowser);
     d->statusbrowser->setObjectName("ScriptStatusBrowser");
     d->statusbrowser->setReadOnly(true);
 #if 0
