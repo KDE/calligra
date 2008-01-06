@@ -321,7 +321,7 @@ QImage KarbonLayerModel::createThumbnail( KoShape* shape, const QSize &thumbSize
 
 KoShape * KarbonLayerModel::childFromIndex( KoShapeContainer *parent, int row ) const
 {
-    if( parent != m_lastContainer )
+    if( parent != m_lastContainer || row >= m_childs.count() )
     {
         m_lastContainer = parent;
         m_childs = parent->iterator();
