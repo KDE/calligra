@@ -247,7 +247,7 @@ void KexiScriptDesignView::execute()
     d->statusbrowser->clear();
     QTime time;
     time.start();
-    d->statusbrowser->append( i18n("Execution of the script \"%1\" started.").arg(d->scriptaction->name()) );
+    d->statusbrowser->append( i18n("Execution of the script \"%1\" started.", d->scriptaction->name()) );
 
     d->scriptaction->trigger();
     if( d->scriptaction->hadError() ) {
@@ -262,7 +262,7 @@ void KexiScriptDesignView::execute()
             d->editor->setLineNo(lineno);
     }
     else {
-        d->statusbrowser->append( i18n("Successfully executed. Time elapsed: %1ms").arg(time.elapsed()) );
+        d->statusbrowser->append( i18n("Successfully executed. Time elapsed: %1ms", time.elapsed()) );
     }
 }
 
