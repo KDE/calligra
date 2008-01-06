@@ -41,7 +41,7 @@ class QTextCursor;
 /**
  * Class that has a lot of the OpenDocument (ODF) loading code for KWord.
  */
-class KWOpenDocumentLoader : public KoTextLoader
+class KWOpenDocumentLoader : public QObject
 {
     Q_OBJECT
 public:
@@ -62,6 +62,14 @@ public:
      *  This implements the KoDocument::loadOdf method.
      */
     bool load( KoOdfReadStore & odfStore );
+
+signals:
+    /**
+     * This signal is emitted during loading with a percentage within 1-100 range
+     * \param percent the progress as a percentage
+     */
+    void sigProgress( int percent );
+
 
 protected:
     virtual void loadSettings( const KoXmlDocument& settings );

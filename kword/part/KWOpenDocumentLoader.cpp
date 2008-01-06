@@ -29,6 +29,7 @@
 
 // koffice
 #include <KoTextLoadingContext.h>
+#include <KoTextSharedLoadingData.h>
 #include <KoOdfStylesReader.h>
 #include <KoOasisSettings.h>
 #include <KoOdfReadStore.h>
@@ -59,10 +60,10 @@
 * The KWOpenDocumentFrameLoader class implements a KoTextFrameLoader to
 * handle loading of frames (e.g. images) within KWord.
 */
-class KWOpenDocumentFrameLoader : public KoTextFrameLoader
+class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextFrameLoader
 {
     public:
-        explicit KWOpenDocumentFrameLoader(KWOpenDocumentLoader* loader) : KoTextFrameLoader(loader), m_loader(loader) {}
+        explicit KWOpenDocumentFrameLoader(KWOpenDocumentLoader* loader) /*: KoTextFrameLoader(loader), m_loader(loader)*/ {}
         virtual ~KWOpenDocumentFrameLoader() {}
 
         virtual KoShape* loadImageShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor)
@@ -177,6 +178,7 @@ class KWOpenDocumentFrameLoader : public KoTextFrameLoader
         }
         
         virtual KoShape* loadTextShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor) {
+#if 0 // TODO do differently not frame loading for now
             const QString anchortype = frameElem.attribute("anchor-type");
             KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
             Q_ASSERT(factory);
@@ -209,6 +211,7 @@ class KWOpenDocumentFrameLoader : public KoTextFrameLoader
                 kDebug() << "Support for '" << anchortype << "' is going to wait.";
             }
             return shape;
+#endif
         }
 
         virtual KoShape * loadTableShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor) {
@@ -248,8 +251,8 @@ class KWOpenDocumentLoader::Private
 };
 
 KWOpenDocumentLoader::KWOpenDocumentLoader(KWDocument *document)
-    : KoTextLoader(document->styleManager())
-    , d(new Private())
+: QObject()
+, d(new Private())
 {
     d->document = document;
     d->frameLoader = 0;
@@ -296,7 +299,17 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
 
     // TODO check versions and mimetypes etc.
 
-    KoTextLoadingContext context( this, d->document, odfStore.styles(), odfStore.store() );
+    KoOasisLoadingContext oasisContext( d->document, odfStore.styles(), odfStore.store() );
+    KoShapeLoadingContext sc( oasisContext );
+
+    // Load all styles before the corresponding paragraphs try to use them!
+    KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
+    sharedData->loadOdfStyles( oasisContext, d->document->styleManager(), true );
+    sc.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
+
+    KoTextLoader * loader = new KoTextLoader( sc );
+    KoTextLoadingContext context( loader, d->document, odfStore.styles(), odfStore.store() );
+
 
     KoColumns columns;
     columns.columns = 1;
@@ -336,7 +349,6 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
 #endif
 
     // Load all styles before the corresponding paragraphs try to use them!
-    loadAllStyles( context );
 
 #if 0 //1.6:
     if ( m_frameStyleColl->loadOasisStyles( context ) == 0 ) {
@@ -437,7 +449,6 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
     Q_ASSERT(textShapeData);
     textShapeData->setDocument( fs->document(), false /*transferOwnership*/ );
     // Let the TextShape handle loading the body element.
-    KoShapeLoadingContext sc(context);
     shape->loadOdf(body, sc);
 /*
     QTextCursor cursor( fs->document() );
@@ -690,12 +701,14 @@ void KWOpenDocumentLoader::loadHeaderFooter(KoTextLoadingContext& context, const
 
     QTextCursor cursor( fs->document() );
 
+#if 0 // TODO use a KoTextLoader
     if ( !leftElem.isNull() ) // if "header-left" or "footer-left" was defined, the content is within the leftElem
         loadBody(context, leftElem, cursor);
     else if( hasFirst ) // if there was a "header-first" or "footer-first" defined, the content is within the firstElem
         loadBody(context, firstElem, cursor);
     else // else the content is within the elem
         loadBody(context, elem, cursor);
+#endif
 
     // restore use of auto-styles from content.xml, not those from styles.xml
     context.setUseStylesAutoStyles( false );
@@ -705,7 +718,9 @@ void KWOpenDocumentLoader::loadHeaderFooter(KoTextLoadingContext& context, const
 
 void KWOpenDocumentLoader::loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor)
 {
+#if 0 // TODO differently
     Q_ASSERT(d->frameLoader);
     d->frameLoader->loadFrame(context, frameElem, cursor);
+#endif
 }
 
