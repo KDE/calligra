@@ -1585,7 +1585,7 @@ QVector<int> QuerySchema::pkeyFieldsOrder()
 	//get order of PKEY fields (e.g. for rows updating or inserting )
 	IndexSchema *pkey = tbl->primaryKey();
 	pkey->debug();
-	debug();
+	//debug(); //20080107, sebsauer; this seems to crash in kexi on query SQL text view
 	d->pkeyFieldsOrder = new QVector<int>( pkey->fieldCount(), -1 );
 
 	const uint fCount = fieldsExpanded().count();
