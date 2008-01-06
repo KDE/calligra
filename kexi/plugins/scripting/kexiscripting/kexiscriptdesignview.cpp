@@ -148,8 +148,10 @@ Kross::Action* KexiScriptDesignView::scriptAction() const
 
 void KexiScriptDesignView::initialize()
 {
+    setDirty(false);
     updateProperties();
     d->editor->initialize( d->scriptaction );
+    connect(d->editor, SIGNAL(textChanged()), this, SLOT(setDirty()));
 }
 
 void KexiScriptDesignView::updateProperties()

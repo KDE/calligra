@@ -92,9 +92,10 @@ void KexiScriptEditor::initialize(Kross::Action* scriptaction)
 
 void KexiScriptEditor::slotTextChanged()
 {
-    KexiScriptEditor::setDirty(true);
-    if(d->scriptaction)
+    KexiEditor::setDirty(true);
+    if(d->scriptaction) {
         d->scriptaction->setCode( KexiEditor::text().toUtf8() );
+    }
 }
 
 void KexiScriptEditor::setLineNo(long lineno)
