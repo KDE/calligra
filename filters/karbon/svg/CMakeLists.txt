@@ -27,4 +27,4 @@ install(TARGETS karbonsvgimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  karbon_svg_export.desktop karbon_svg_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES  karbon_svg_export.desktop karbon_svg_import.desktop karbon_svgz_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})

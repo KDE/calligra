@@ -74,7 +74,9 @@ SvgImport::~SvgImport()
 KoFilter::ConversionStatus SvgImport::convert(const QByteArray& from, const QByteArray& to)
 {
     // check for proper conversion
-    if( to != "application/vnd.oasis.opendocument.graphics" || from != "image/svg+xml" )
+    if( to != "application/vnd.oasis.opendocument.graphics" )
+        return KoFilter::NotImplemented;
+    if( from != "image/svg+xml" && from != "image/svg+xml-compressed" )
         return KoFilter::NotImplemented;
 
     //Find the last extension
@@ -846,25 +848,34 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
     {
         if( params == "none" )
             gc->stroke.setLineStyle( Qt::NoPen, QVector<qreal>() );
-        /* TODO add gradient support to borders
         else if( params.startsWith( "url(" ) )
         {
-            unsigned int start = params.find("#") + 1;
-            unsigned int end = params.findRev(")");
+            unsigned int start = params.indexOf('#') + 1;
+            unsigned int end = params.lastIndexOf(')');
             QString key = params.mid( start, end - start );
-
-            GradientHelper *gradHelper = findGradient( key );
-            if( gradHelper )
+            SvgGradientHelper * gradHelper = findGradient( key );
+            kDebug(30514) << "gradient =" << gradHelper << "key =" << key;
+            if( gradHelper && obj )
             {
-                gc->stroke.gradient() = gradHelper->gradient;
-                gc->stroke.gradient().transform( gradHelper->gradientTransform );
-                gc->stroke.gradient().transform( gc->matrix );
-                gc->stroke.setType( VStroke::grad );
+                QBrush brush;
+                if( gradHelper->boundboxUnits() )
+                {
+                    // adjust to bbox
+                    QRectF bbox = QRectF( QPoint(), obj->size() );
+                    brush = gradHelper->adjustedFill( bbox );
+                    brush.setMatrix( gradHelper->transform() );
+                }
+                else
+                {
+                    brush = QBrush( *gradHelper->gradient() );
+                    brush.setMatrix( gradHelper->transform() * gc->matrix * obj->transformation().inverted() );
+                }
+                gc->stroke.setLineBrush( brush );
+                gc->stroke.setLineStyle( Qt::SolidLine, QVector<qreal>() );
             }
-            else 
-                gc->stroke.setType( VStroke::none );
+            else
+                gc->stroke.setLineStyle( Qt::NoPen, QVector<qreal>() );
         }
-        */
         else
         {
             parseColor( strokecolor, params );
