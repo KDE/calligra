@@ -42,7 +42,39 @@ using namespace KSpread;
 //  - accuracy problem due to propagated error in the implementation
 #define CHECK_EVAL(x,y) QCOMPARE(TestDouble(x,y,6),y)
 #define CHECK_EVAL_SHORT(x,y) QCOMPARE(TestDouble(x,y,10),y)
+#define CHECK_ARRAY(x,y) QCOMPARE(TestArray(x,y,10),true)
 #define ROUND(x) (roundf(1e15 * x) / 1e15)
+
+bool TestStatisticalFunctions::TestArray(const QString& formula, const QString& _Array, int accuracy)
+{
+  // define epsilon
+  double epsilon = DBL_EPSILON*pow(10.0,(double)(accuracy));
+
+  Value Array = evaluate(_Array);
+  kDebug()<<"Array = "<<Array;
+
+  Value result = evaluate(formula);
+
+  // test match size
+  if(  Array.rows() != result.rows() || Array.columns() != result.columns() )
+  {
+    kDebug()<<"Array size do not match";
+    return false;
+  }
+
+  for (int e=0; e<Array.count(); e++)
+  {
+    kDebug()<<"check element ("<<e<<") "<<Array.element(e).asFloat()<<" "<<result.element(e).asFloat();
+    bool res = fabs(Array.element(e).asFloat()-result.element(e).asFloat())<epsilon;
+    if( !res )
+    {
+      kDebug()<<"check failed -->" <<"Element(" << e <<") " << Array.element(e).asFloat() <<" to" << result.element(e).asFloat() <<"  diff =" << Array.element(e).asFloat()-result.element(e).asFloat();
+      return false;
+    }
+  }
+  // test passed
+  return true;
+}
 
 Value TestStatisticalFunctions::TestDouble(const QString& formula, const Value& v2, int accuracy)
 {
@@ -142,7 +174,7 @@ void TestStatisticalFunctions::initTestCase()
     storage->setValue(2,15, Value(      2    ) );
     storage->setValue(2,16, Value(      3    ) );
     storage->setValue(2,17, Value(      4    ) );
-
+CHECK_EVAL("AVEDEV(1;2;3;4)",              Value( 1 ) );
 
     // C4:C6
     storage->setValue(3, 4, Value( 4 ) );
@@ -545,20 +577,20 @@ void TestStatisticalFunctions::testGAUSS()
 }
 
 void TestStatisticalFunctions::testGROWTH()
-{
+{   
     // constraints
-    CHECK_EVAL("GROWTH({}; C19:C23; 1)", Value::errorNA() );          // empty knownY matrix
+    CHECK_EVAL("GROWTH({}; C19:C23; 1)",          Value::errorNA() ); // empty knownY matrix
     CHECK_EVAL("GROWTH({5.0;\"a\"}; C19:C23; 1)", Value::errorNA() ); // knownY matrix constains chars
-
+ 
     // ODF-tests
-    Value res( Value::Array );
-    
-    res.setElement(0, 0, Value( 2.5198420998 ) );
-    CHECK_EVAL("GROWTH( A19:A23; C19:C23; 1 )",          res ); // with offset
-    
-    res.setElement(0, 0, Value( 1.4859942891 ) );
-    CHECK_EVAL("GROWTH( A19:A23; C19:C23; 1; FALSE() )", res ); // without offset
-}
+    CHECK_ARRAY("GROWTH( A19:A23; C19:C23; 1 )",          "{2.5198420998}" ); // with offset
+    CHECK_ARRAY("GROWTH( A19:A23; C19:C23; 1; FALSE() )", "{1.4859942891}" ); // without offset
+
+    // http://www.techonthenet.com/excel/formulas/growth.php
+    CHECK_ARRAY("GROWTH({4;5;6};{10;20;30};{15;30;45})", "{4.4569483434;6.0409611796;8.1879369384}" ); // 
+    CHECK_ARRAY("GROWTH({4;5;6};{10;20;30})",            "{4.0273074534;4.9324241487;6.0409611796}" ); //
+    CHECK_ARRAY("GROWTH({4;5;6})",                       "{4.0273074534}"  ); // TODO test failed. GROWTH returns 4
+ }
 
 void TestStatisticalFunctions::testGEOMEAN()
 {
@@ -1077,13 +1109,9 @@ void TestStatisticalFunctions::testTREND()
     //  A21  |   4        C21  |  2
     //  A22  |   8        C22  |  5
     //  A23  |  16        C23  |  3
-
-    // ODF-tests
-    Value res( Value::Array );
-    res.setElement(0, 0, Value( 4.7555555555 ) );
-    CHECK_EVAL("TREND(A19:A23; C19:C23; 1)     ", res ); // with    offset
-    res.setElement(0, 0, Value( 1.6825396825 ) );
-    CHECK_EVAL("TREND(A19:A23; C19:C23; 1; 0 ) ", res ); // without offset
+   
+    CHECK_ARRAY("TREND(A19:A23; C19:C23; 1)     ", "{4.7555555555}" ); // with    offset
+    CHECK_ARRAY("TREND(A19:A23; C19:C23; 1; 0 ) ", "{1.6825396825}" ); // without offset
 }
 
 void TestStatisticalFunctions::testTRIMMEAN()
