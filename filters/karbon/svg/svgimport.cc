@@ -1522,6 +1522,8 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
         if( ! path )
             return 0;
 
+        path->clear();
+
         double x1 = b.attribute( "x1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x1" ) );
         double y1 = b.attribute( "y1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y1" ) );
         double x2 = b.attribute( "x2" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x2" ) );
@@ -1535,6 +1537,8 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
         KoPathShape * path = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
         if( ! path )
             return 0;
+
+        path->clear();
 
         bool bFirst = true;
 
@@ -1569,6 +1573,8 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
         KoPathShape * path = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
         if( ! path )
             return 0;
+
+        path->clear();
 
         KoPathShapeLoader loader( path );
         loader.parseSvg( b.attribute( "d" ), true );
