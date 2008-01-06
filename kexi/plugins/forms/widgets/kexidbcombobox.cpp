@@ -30,7 +30,7 @@
 #include <qstyle.h>
 #include <qdrawutil.h>
 #include <qcursor.h>
-#include <QSet>
+#include <QList>
 
 #include <kexidb/queryschema.h>
 #include <widget/tableview/kexicomboboxpopup.h>
@@ -52,8 +52,6 @@ class KexiDBComboBox::Private
 		}
 		~Private()
 		{
-			delete subWidgetsWithDisabledEvents;
-			subWidgetsWithDisabledEvents = 0;
 		}
 
 	KexiComboBoxPopup *popup;
@@ -62,7 +60,7 @@ class KexiDBComboBox::Private
 	                //!< rebuilt by KexiDBComboBox::fontChange() and KexiDBComboBox::styleChange()
 	KexiDB::QueryColumnInfo* visibleColumnInfo;
 	//! used for collecting subwidgets and their childrens (if isEditable is false)
-	QSet<QWidget*> *subWidgetsWithDisabledEvents;
+	QList<QWidget*> subWidgetsWithDisabledEvents;
 	bool isEditable : 1; //!< true is the combo box is editable
 	bool buttonPressed : 1;
 	bool mouseOver : 1;
@@ -206,15 +204,12 @@ void KexiDBComboBox::createEditor()
 			subwidgetPalette.setColor(QPalette::Active, QColorGroup::Base, 
 				subwidgetPalette.color(QPalette::Active, QColorGroup::Button));
 			m_subwidget->setPalette( subwidgetPalette );
-			if (d->subWidgetsWithDisabledEvents)
-				d->subWidgetsWithDisabledEvents->clear();
-			else
-				d->subWidgetsWithDisabledEvents = new QSet<QWidget*>();
-			d->subWidgetsWithDisabledEvents->insert(m_subwidget);
+			d->subWidgetsWithDisabledEvents.clear();
+			d->subWidgetsWithDisabledEvents << m_subwidget;
 			m_subwidget->installEventFilter(this);
 			QList<QWidget*> widgets( m_subwidget->findChildren<QWidget*>() );
 			foreach ( QWidget *widget, widgets ) {
-				d->subWidgetsWithDisabledEvents->insert(widget);
+				d->subWidgetsWithDisabledEvents << widget;
 				widget->installEventFilter(this);
 			}
 		}
@@ -395,7 +390,7 @@ bool KexiDBComboBox::eventFilter( QObject *o, QEvent *e )
 			}
 		}
 	}
-	else if (!d->isEditable && d->subWidgetsWithDisabledEvents && d->subWidgetsWithDisabledEvents->contains(dynamic_cast<QWidget*>(o))) {
+	else if (!d->isEditable && d->subWidgetsWithDisabledEvents.contains(dynamic_cast<QWidget*>(o))) {
 		if (e->type()==QEvent::MouseButtonPress) {
 			// clicking the subwidget should mean the same as clicking the combo box (i.e. show the popup)
 			if (handleMousePressEvent(static_cast<QMouseEvent*>(e)))
