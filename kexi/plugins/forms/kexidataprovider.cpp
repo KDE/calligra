@@ -273,10 +273,12 @@ void KexiFormDataProvider::invalidateDataSources( const QSet<QString>& invalidSo
 	//i = 0;
 	m_disableFillDuplicatedDataItems = true; // temporary disable fillDuplicatedDataItems()
 	                                         // because setColumnInfo() can activate it
-	KexiFormDataItemInterface *item;
 	for (QList<KexiFormDataItemInterface*>::iterator it( m_dataItems.begin() ); 
-		(item = *it);)
+        it != m_dataItems.end(); )
 	{
+        KexiFormDataItemInterface *item = *it;
+        Q_ASSERT(item);
+
 		if (invalidSources.contains( item->dataSource().toLower() )) {
 			item->setInvalidState( QString::fromLatin1("#%1?").arg(i18n("NAME")) );
 			it = m_dataItems.erase(it);
