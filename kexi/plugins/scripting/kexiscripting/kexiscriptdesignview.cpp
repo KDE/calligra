@@ -117,7 +117,7 @@ KexiScriptDesignView::KexiScriptDesignView(
         menu->addAction(a);
     if(KexiEditor::isAdvancedEditor()) { // the configeditor is only in advanced mode avaiable.
         menu->addSeparator();
-        QAction* a = new KAction(KIcon("configure"), i18n("Configure Editor"), this);
+        QAction* a = new KAction(KIcon("configure"), i18n("Configure Editor..."), this);
         a->setObjectName("script_config_editor");
         a->setToolTip(i18n("Configure the scripting editor"));
         a->setWhatsThis(i18n("Configure the scripting editor"));
