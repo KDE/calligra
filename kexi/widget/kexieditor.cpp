@@ -121,6 +121,8 @@ KexiEditor::KexiEditor(QWidget *parent)
 #else
 #pragma WARNING( TODO	d->view->setContextMenu(pop); )
 #endif
+    //d->view->defaultContextMenu();
+
 /*	KTextEditor::PopupMenuInterface *popupInt = dynamic_cast<KTextEditor::PopupMenuInterface*>( d->view );
 	if(popupInt) {
 		Q3PopupMenu *pop = (Q3PopupMenu*) mainWin->factory()->container("edit", mainWin);
@@ -195,19 +197,22 @@ void KexiEditor::setHighlightMode(const QString& highlightmodename)
 {
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
 #else
-	if (!d->doc->setMode(highlightmodename)) {
-//! @todo display warning
+    QString n = highlightmodename;
+    if( n == "javascript" || n == "qtscript" )
+        n = "JavaScript";
+    else if( n.size() > 0 )
+        n = n[0].toLower() + n.mid(1);
+	if (!d->doc->setMode(n))
 		d->doc->setMode(QString()); // don't highlight
-	}
-/*	KTextEditor::HighlightingInterface *hl = KTextEditor::highlightingInterface( d->doc );
-	for(uint i = 0; i < hl->hlModeCount(); i++) {
-			//kDebug() << "hlmode("<<i<<"): " << hl->hlModeName(i) << endl;
-			if (hl->hlModeName(i).contains(highlightmodename, false))  {
-				hl->setHlMode(i);
-				return;
-			}
-	}
-	hl->setHlMode(0); // 0=None, don't highlight anything. */
+	if (!d->doc->setHighlightingMode(n) )
+        d->doc->setHighlightingMode(QString()); //hl->setHlMode(0); // 0=None, don't highlight anything.
+
+//d->view->viewModeChanged(d->view);
+//d->view->reloadXML();
+
+QMetaObject::invokeMethod(d->view, "modeChanged", Q_ARG(KTextEditor::Document*, d->doc));
+QMetaObject::invokeMethod(d->view, "highlightingModeChanged", Q_ARG(KTextEditor::Document*, d->doc));
+
 #endif
 }
 

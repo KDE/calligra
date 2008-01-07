@@ -36,8 +36,10 @@
 #include <kxmlguiclient.h>
 //#include <kexidialogbase.h>
 #include <kconfig.h>
+#include <kconfiggroup.h>
 #include <kdebug.h>
-//Added by qt3to4:
+
+#include <QMetaObject>
 #include <Q3PopupMenu>
 #include <Q3CString>
 
@@ -55,6 +57,8 @@ KexiScriptPart::KexiScriptPart(QObject *parent, const QStringList &l)
 	: KexiPart::Part((int)KexiPart::ScriptObjectType, parent, l)
 	, d( new Private() )
 {
+    d->actioncollection = new Kross::ActionCollection("projectscripts");
+
 	setInternalPropertyValue("instanceName",
 		i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
@@ -75,9 +79,6 @@ KexiScriptPart::~KexiScriptPart()
 
 bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
 {
-kDebug();
-	Q_UNUSED(sender);
-
 	if(! item) {
 		kWarning() << "KexiScriptPart::execute: Invalid item.";
 		return false;
@@ -117,9 +118,47 @@ kDebug();
 
 	view->deleteLater(); // not needed any longer.
 #else
-    #ifdef __GNUC__
-        #warning Port It!!!
-    #endif
+
+//QWidget *mainwin = KexiMainWindowIface::global()->thisWidget();
+//KexiScriptDesignView view(mainwin, );
+    Kross::Action *action = d->actioncollection->action(item->name());
+    if( ! action ) {
+        action = new Kross::Action(this, item->name());
+        d->actioncollection->addAction(action);
+    }
+    kDebug();
+    action->trigger();
+
+/*
+//QObject* obj = parent(); //KexiPart::Manager
+//QObject* obj = KexiMainWindowIface::global()->thisWidget(); // KexiMainWindow
+KexiWindow *mainWin = KexiMainWindowIface::global()->currentWindow();
+if( ! mainWin ) {
+    mainWin = ;
+};
+//Q_ASSERT(obj);
+//kDebug()<<"===============>"<<obj->objectName()<<obj->metaObject()->className();
+    //KexiWindow *mainWin = dynamic_cast<KexiWindow*>( obj );
+    //Q_ASSERT(mainWin);
+//KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
+    //KexiDialogBase* dialog = new KexiDialogBase(mainWin);
+    //dialog->setId( item->identifier() );
+    QMap<QString,QString> staticObjectArgs;
+    staticObjectArgs.insert("identifier", QString::number(item->identifier()));
+    staticObjectArgs.insert("sender", sender ? sender->objectName() : "");
+    KexiScriptDesignView* view = dynamic_cast<KexiScriptDesignView*>( 
+        createView(mainWin, mainWin, *item, Kexi::DesignViewMode, &staticObjectArgs) );
+    Q_ASSERT(view);
+
+    Kross::Action* scriptaction = view->scriptAction();
+    if(scriptaction) {
+        ////QTimer::singleShot(10, scriptaction, SLOT(activate()));
+        //d->scriptguiclient->executeScriptAction( scriptaction );
+scriptaction->trigger();
+    }
+
+    view->deleteLater(); // not needed any longer.
+*/
 #endif
 	return true;
 }
@@ -190,9 +229,6 @@ KexiView* KexiScriptPart::createView(QWidget *parent,
 kDebug()<<"............. createView";
 	QString partname = item.name();
 	if( ! partname.isNull() ) {
-        if( ! d->actioncollection )
-            d->actioncollection = new Kross::ActionCollection("projectscripts");
-
         Kross::Action *action = d->actioncollection->action(partname);
         if( ! action ) {
             action = new Kross::Action(this, partname);

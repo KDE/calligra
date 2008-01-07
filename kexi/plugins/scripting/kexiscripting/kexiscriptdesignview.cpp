@@ -168,7 +168,7 @@ void KexiScriptDesignView::updateProperties()
     {
         // if interpreter isn't defined or invalid, try to fallback.
         QStringList list;
-        list << "python" << "ruby";
+        list << "python" << "ruby" << "qtscript" << "javascript" << "java";
         QStringList::ConstIterator it( list.constBegin() ), end( list.constEnd() );
         while( (! info) && (it != end) ) {
             interpretername = (*it);
@@ -221,6 +221,8 @@ KoProperty::Set* KexiScriptDesignView::propertySet()
 
 void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& /*set*/, KoProperty::Property& property)
 {
+kDebug();
+
     if(property.isNull()) 
         return;
 
