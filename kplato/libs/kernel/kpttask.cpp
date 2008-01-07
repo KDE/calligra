@@ -2841,6 +2841,8 @@ void Completion::printDebug(const QByteArray& _indent) const {
     }
 }
 
+#endif
+
 
 // Those method are used by the pert editor to link tasks between each others
 void Task::addRequiredTask(Node * taskLinked){
@@ -2922,8 +2924,6 @@ void Task::setActivityFreeMargin(int value)
     m_activityFreeMargin=value;
 }
 
-
-#endif
 
 }  //KPlato namespace
 
