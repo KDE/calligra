@@ -53,7 +53,7 @@ bool hasVisibleWidgets()
     QWidgetList wl = QApplication::allWidgets();
     foreach(QWidget* w, wl)
     {
-        if(w->isVisible() and w->metaObject()->className() != "QDesktopWidget")
+        if(w->isVisible() and strcmp(w->metaObject()->className(), "QDesktopWidget"))
         {
             dbgFile << "Widget " << w << " " << w->objectName() << " " << w->metaObject()->className() << " is visible";
             return true;
