@@ -17,6 +17,18 @@
    <string>These values are used when you estimate the effort needed to complete a task.</string>
   </property>
   <layout class="QGridLayout" >
+   <property name="leftMargin" >
+    <number>0</number>
+   </property>
+   <property name="topMargin" >
+    <number>0</number>
+   </property>
+   <property name="rightMargin" >
+    <number>0</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>0</number>
+   </property>
    <item row="0" column="0" >
     <widget class="QLabel" name="textLabel1" >
      <property name="text" >
@@ -119,11 +131,7 @@
  </widget>
  <layoutdefault spacing="6" margin="11" />
  <pixmapfunction>qPixmapFromMimeSource</pixmapfunction>
- <includes>
-  <include location="local" >knuminput.h</include>
-  <include location="local" >k3listview.h</include>
-  <include location="local" >kcombobox.h</include>
- </includes>
+ <includes/>
  <resources/>
  <connections/>
 </ui>
