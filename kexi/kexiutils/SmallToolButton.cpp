@@ -88,8 +88,16 @@ KexiSmallToolButton::KexiSmallToolButton(QAction* action, QWidget* parent)
 		setToolTip(d->action->toolTip());
 		setWhatsThis(d->action->whatsThis());
 		setCheckable(d->action->isCheckable());
-		connect(this, SIGNAL(toggled(bool)), this, SLOT(slotButtonToggled(bool)));
-		connect(d->action, SIGNAL(toggled(bool)), this, SLOT(slotActionToggled(bool)));
+		if (d->action->menu()) {
+			setPopupMode(QToolButton::InstantPopup); //QToolButton::MenuButtonPopup);
+			//setArrowType(Qt::DownArrow);
+			//setToolButtonStyle(Qt::ToolButtonTextOnly);
+			setMenu(d->action->menu());
+		}
+		else {
+			connect(this, SIGNAL(toggled(bool)), this, SLOT(slotButtonToggled(bool)));
+			connect(d->action, SIGNAL(toggled(bool)), this, SLOT(slotActionToggled(bool)));
+		}
 	}
 	connect(this, SIGNAL(clicked()), action, SLOT(trigger()));
 //	connect(action, SIGNAL(enabled(bool)), this, SLOT(setEnabled(bool)));

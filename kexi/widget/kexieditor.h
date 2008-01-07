@@ -89,6 +89,11 @@ class KEXIEXTWIDGETS_EXPORT KexiEditor : public KexiView
 		*/
 		void clearUndoRedo();
 
+        /**
+        * \return a default context menu implementation.
+        */
+        virtual QMenu* defaultContextMenu();
+
 	public slots:
 		/*! Sets editor's text to \a text. 'Dirty' flag remains unchanged. */
 		void setText(const QString &text);

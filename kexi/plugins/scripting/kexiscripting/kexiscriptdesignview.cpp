@@ -37,6 +37,8 @@
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <ktextbrowser.h>
+#include <kmenu.h>
+#include <kactionmenu.h>
 #include <kdebug.h>
 
 #include <KexiMainWindowIface.h>
@@ -108,12 +110,20 @@ KexiScriptDesignView::KexiScriptDesignView(
     // setup local actions
     QList<QAction*> viewActions;
     if(KexiEditor::isAdvancedEditor()) { // the configeditor is only in advanced mode avaiable.
-        QAction* a = new KAction(KIcon("configure"), i18n("Configure"), this);
+        KActionMenu* menu = new KActionMenu(KIcon("document-properties"), i18n("Edit"), this);
+        menu->setObjectName("script_edit_menu");
+        menu->setToolTip(i18n("Edit actions"));
+        menu->setWhatsThis(i18n("Edit actions"));
+        foreach(QAction *a, d->editor->defaultContextMenu()->actions())
+            menu->addAction(a);
+        menu->addSeparator();
+        QAction* a = new KAction(KIcon("configure"), i18n("Configure Editor"), this);
         a->setObjectName("script_config_editor");
         a->setToolTip(i18n("Configure the scripting editor"));
         a->setWhatsThis(i18n("Configure the scripting editor"));
         connect(a, SIGNAL(triggered()), d->editor, SLOT(slotConfigureEditor()));
-        viewActions << a;
+        menu->addAction(a);
+        viewActions << menu;
     }
     {
         QAction* a = new KAction(KIcon("media-playback-start"), i18n("Execute"), this);

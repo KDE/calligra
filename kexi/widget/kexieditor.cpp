@@ -293,4 +293,13 @@ void KexiEditor::slotTextChanged(KTextEditor::Document *)
 	emit textChanged();
 }
 
+QMenu* KexiEditor::defaultContextMenu()
+{
+#ifdef KTEXTEDIT_BASED_SQL_EDITOR
+    return d->view->createStandardContextMenu();
+#else
+    return d->view->defaultContextMenu();
+#endif
+}
+
 #include "kexieditor.moc"
