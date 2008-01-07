@@ -8,7 +8,7 @@
    Copyright (C) 2005 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
    Copyright (C) 2005 Thomas Zander <zander@kde.org>
-   Copyright (C) 2005,2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2005,2007-2008 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
    Copyright (C) 2006 Martin Pfeiffer <hubipete@gmx.net>
    Copyright (C) 2006 Gábor Lehel <illissius@gmail.com>
@@ -195,8 +195,8 @@ void SvgExport::savePath( KoPathShape * path )
     printIndentation( m_body, m_indent );
     *m_body << "<path" << getID( path );
 
-    getFill( path->background(), m_body );
-    getStroke( path->border(), m_body );
+    getFill( path, m_body );
+    getStroke( path, m_body );
 
     *m_body << " d=\"" << path->toString( path->absoluteTransformation(0) ) << "\" ";
 
@@ -213,6 +213,16 @@ QString SvgExport::getID( KoShape *obj )
     if( obj && !obj->name().isEmpty() )
         return QString( " id=\"%1\"" ).arg( obj->name() );
     return QString();
+}
+
+QString SvgExport::getTransform( const QMatrix &matrix )
+{
+    QString transform = QString( "matrix(%1 %2 %3 %4 %5 %6)" )
+            .arg( matrix.m11() ).arg( matrix.m12() )
+            .arg( matrix.m21() ).arg( matrix.m22() )
+            .arg( matrix.dx() ) .arg( matrix.dy() );
+
+    return transform;
 }
 
 static QString createUID()
@@ -236,13 +246,19 @@ void SvgExport::getColorStops( const QGradientStops & colorStops )
     m_indent2--;
 }
 
-void SvgExport::getGradient( const QGradient * grad )
+void SvgExport::getGradient( KoShape * shape, const QBrush &brush )
 {
     const QString spreadMethod[3] = {
         QString("spreadMethod=\"pad\" "),
         QString("spreadMethod=\"reflect\" "),
         QString("spreadMethod=\"repeat\" ")
     };
+
+    const QGradient * grad = brush.gradient();
+    if( ! grad )
+        return;
+
+    QMatrix matrix = brush.matrix() * shape->absoluteTransformation(0);
 
     QString uid = createUID();
     if( grad->type() == QGradient::LinearGradient )
@@ -252,6 +268,7 @@ void SvgExport::getGradient( const QGradient * grad )
         printIndentation( m_defs, m_indent2 );
         *m_defs << "<linearGradient id=\"" << uid << "\" ";
         *m_defs << "gradientUnits=\"userSpaceOnUse\" ";
+        *m_defs << "gradientTransform=\"" << getTransform( matrix ) << "\" ";
         *m_defs << "x1=\"" << g->start().x() << "\" ";
         *m_defs << "y1=\"" << g->start().y() << "\" ";
         *m_defs << "x2=\"" << g->finalStop().x() << "\" ";
@@ -273,6 +290,7 @@ void SvgExport::getGradient( const QGradient * grad )
         printIndentation( m_defs, m_indent2 );
         *m_defs << "<radialGradient id=\"" << uid << "\" ";
         *m_defs << "gradientUnits=\"userSpaceOnUse\" ";
+        *m_defs << "gradientTransform=\"" << getTransform( matrix ) << "\" ";
         *m_defs << "cx=\"" << g->center().x() << "\" ";
         *m_defs << "cy=\"" << g->center().y() << "\" ";
         *m_defs << "fx=\"" << g->focalPoint().x() << "\" ";
@@ -333,8 +351,10 @@ void SvgExport::getPattern( const QPixmap & )
     *m_body << "url(#" << uid << ")";
 }
 
-void SvgExport::getFill( const QBrush& fill, QTextStream *stream )
+void SvgExport::getFill( KoShape * shape, QTextStream *stream )
 {
+    QBrush fill = shape->background();
+
     *stream << " fill=\"";
 
     switch( fill.style() )
@@ -345,7 +365,7 @@ void SvgExport::getFill( const QBrush& fill, QTextStream *stream )
         case Qt::LinearGradientPattern:
         case Qt::RadialGradientPattern:
         case Qt::ConicalGradientPattern:
-            getGradient( fill.gradient() );
+            getGradient( shape, fill );
             break;
         case Qt::TexturePattern:
             getPattern( fill.texture() );
@@ -362,19 +382,17 @@ void SvgExport::getFill( const QBrush& fill, QTextStream *stream )
     *stream << " fill-opacity=\"" << fill.color().alphaF() << "\"";
 }
 
-void SvgExport::getStroke( const KoShapeBorderModel * stroke, QTextStream *stream )
+void SvgExport::getStroke( KoShape *shape, QTextStream *stream )
 {
-    const KoLineBorder * line = dynamic_cast<const KoLineBorder*>( stroke );
+    const KoLineBorder * line = dynamic_cast<const KoLineBorder*>( shape->border() );
     if( ! line )
         return;
 
     *stream << " stroke=\"";
     if( line->lineStyle() == Qt::NoPen )
         *stream << "none";
-    /*
-    else if( line->type() == VStroke::grad )
-        getGradient( line->gradient() );
-    */
+    else if( line->lineBrush().gradient() )
+        getGradient( shape, line->lineBrush() );
     else
         getHexColor( stream, line->color() );
     *stream << "\"";

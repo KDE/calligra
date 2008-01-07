@@ -64,13 +64,14 @@ private:
     void saveImage( QImage& image );
     //void saveText( VText& text );
 
-    void getFill( const QBrush & fill, QTextStream *stream );
-
-    void getStroke( const KoShapeBorderModel * stroke, QTextStream *stream );
+    void getFill( KoShape * shape, QTextStream *stream );
+    void getStroke( KoShape * shape, QTextStream *stream );
     void getColorStops( const QGradientStops & colorStops );
-    void getGradient( const QGradient * grad );
+    void getGradient( KoShape * shape, const QBrush & brush );
     void getPattern( const QPixmap& patt );
     void getHexColor( QTextStream *, const QColor & color  );
+    QString getTransform( const QMatrix &matrix );
+
     QString getID( KoShape *obj );
 
     QTextStream* m_stream;
