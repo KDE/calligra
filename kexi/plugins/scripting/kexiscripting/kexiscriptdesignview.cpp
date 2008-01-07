@@ -109,13 +109,13 @@ KexiScriptDesignView::KexiScriptDesignView(
 
     // setup local actions
     QList<QAction*> viewActions;
+    KActionMenu* menu = new KActionMenu(KIcon("document-properties"), i18n("Edit"), this);
+    menu->setObjectName("script_edit_menu");
+    menu->setToolTip(i18n("Edit actions"));
+    menu->setWhatsThis(i18n("Edit actions"));
+    foreach(QAction *a, d->editor->defaultContextMenu()->actions())
+        menu->addAction(a);
     if(KexiEditor::isAdvancedEditor()) { // the configeditor is only in advanced mode avaiable.
-        KActionMenu* menu = new KActionMenu(KIcon("document-properties"), i18n("Edit"), this);
-        menu->setObjectName("script_edit_menu");
-        menu->setToolTip(i18n("Edit actions"));
-        menu->setWhatsThis(i18n("Edit actions"));
-        foreach(QAction *a, d->editor->defaultContextMenu()->actions())
-            menu->addAction(a);
         menu->addSeparator();
         QAction* a = new KAction(KIcon("configure"), i18n("Configure Editor"), this);
         a->setObjectName("script_config_editor");
@@ -123,8 +123,8 @@ KexiScriptDesignView::KexiScriptDesignView(
         a->setWhatsThis(i18n("Configure the scripting editor"));
         connect(a, SIGNAL(triggered()), d->editor, SLOT(slotConfigureEditor()));
         menu->addAction(a);
-        viewActions << menu;
     }
+    viewActions << menu;
     {
         QAction* a = new KAction(KIcon("media-playback-start"), i18n("Execute"), this);
         a->setObjectName("script_execute");
