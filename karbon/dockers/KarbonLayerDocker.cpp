@@ -19,6 +19,7 @@
 
 #include "KarbonLayerDocker.h"
 #include "KarbonLayerModel.h"
+#include "KarbonLayerSortingModel.h"
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
@@ -119,12 +120,15 @@ KarbonLayerDocker::KarbonLayerDocker()
     connect( buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 
     m_model = new KarbonLayerModel( m_part ? &m_part->document() : 0 );
+    m_sortModel = new KarbonLayerSortingModel(this);
+    m_sortModel->setSourceModel( m_model );
     m_layerView->setItemsExpandable( true );
-    m_layerView->setModel( m_model );
+    m_layerView->setModel( m_sortModel );
     m_layerView->setDisplayMode( KoDocumentSectionView::MinimalMode );
     m_layerView->setSelectionMode( QAbstractItemView::ExtendedSelection );
     m_layerView->setSelectionBehavior( QAbstractItemView::SelectRows );
     m_layerView->setDragDropMode( QAbstractItemView::InternalMove );
+    m_layerView->setSortingEnabled(true);
 
     connect( m_layerView, SIGNAL(clicked(const QModelIndex&)), this, SLOT(itemClicked(const QModelIndex&)));
 }
@@ -169,12 +173,7 @@ void KarbonLayerDocker::slotButtonClicked( int buttonId )
 
 void KarbonLayerDocker::itemClicked( const QModelIndex &index )
 {
-    Q_ASSERT(index.internalPointer());
-
-    if( ! index.isValid() )
-        return;
-
-    KoShape *shape = static_cast<KoShape*>( index.internalPointer() );
+    KoShape *shape = shapeFromIndex( index );
     if( ! shape )
         return;
     if( dynamic_cast<KoShapeLayer*>( shape ) )
@@ -341,7 +340,7 @@ void KarbonLayerDocker::extractSelectedLayersAndShapes(
     // separate selected layers and selected shapes
     foreach( QModelIndex index, selectedItems )
     {
-        KoShape *shape = static_cast<KoShape*>( index.internalPointer() );
+        KoShape *shape = shapeFromIndex( index );
         KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
         if( layer )
             layers.append( layer );
@@ -365,6 +364,20 @@ void KarbonLayerDocker::addChildsRecursive( KoShapeGroup * parent, QList<KoShape
         if( group )
             addChildsRecursive( group, shapes );
     }
+}
+
+KoShape * KarbonLayerDocker::shapeFromIndex( const QModelIndex &index )
+{
+    Q_ASSERT(index.internalPointer());
+
+    QModelIndex sourceIndex = index;
+    if( index.model() != m_model )
+        sourceIndex = m_sortModel->mapToSource( index );
+
+    if( ! sourceIndex.isValid() )
+        return 0;
+
+    return static_cast<KoShape*>( sourceIndex.internalPointer() );
 }
 
 #include "KarbonLayerDocker.moc"

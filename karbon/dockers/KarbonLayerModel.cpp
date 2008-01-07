@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -46,7 +46,6 @@
 
 KarbonLayerModel::KarbonLayerModel( KarbonDocument *document )
 : m_document( document )
-, m_lastContainer( 0 )
 {
     setSupportedDragActions( Qt::MoveAction );
 }
@@ -99,10 +98,7 @@ QModelIndex KarbonLayerModel::index( int row, int column, const QModelIndex &par
     if( ! parent.isValid() )
     {
         if( row >= 0 && row < m_document->layers().count() )
-        {
-            int index = indexOf( m_document->layers().count(), row );
-            return createIndex( row, column, m_document->layers().at( index ) );
-        }
+            return createIndex( row, column, m_document->layers().at( row ) );
         else
             return QModelIndex();
     }
@@ -148,10 +144,7 @@ QModelIndex KarbonLayerModel::parent( const QModelIndex &child ) const
     // check if the parent is a layer
     KoShapeLayer *parentLayer = dynamic_cast<KoShapeLayer*>( parentShape );
     if( parentLayer )
-    {
-        int index = indexOf( m_document->layers().count(), m_document->layers().indexOf( parentLayer ) );
-        return createIndex( index, 0, parentShape );
-    }
+        return createIndex( m_document->layers().indexOf( parentLayer ), 0, parentShape );
 
     // get the grandparent to determine the row of the parent shape
     KoShapeContainer *grandParentShape = parentShape->parent();
@@ -321,24 +314,12 @@ QImage KarbonLayerModel::createThumbnail( KoShape* shape, const QSize &thumbSize
 
 KoShape * KarbonLayerModel::childFromIndex( KoShapeContainer *parent, int row ) const
 {
-    if( parent != m_lastContainer || row >= m_childs.count() )
-    {
-        m_lastContainer = parent;
-        m_childs = parent->iterator();
-        qSort( m_childs.begin(), m_childs.end(), KoShape::compareShapeZIndex );
-    }
-    return m_childs.at( indexOf( m_childs.count(), row ) );
+    return parent->iterator().at( row );
 }
 
 int KarbonLayerModel::indexFromChild( KoShapeContainer *parent, KoShape *child ) const
 {
-    if( parent != m_lastContainer )
-    {
-        m_lastContainer = parent;
-        m_childs = parent->iterator();
-        qSort( m_childs.begin(), m_childs.end(), KoShape::compareShapeZIndex );
-    }
-    return indexOf( m_childs.count(), m_childs.indexOf( child ) );
+    return parent->iterator().indexOf( child );
 }
 
 Qt::DropActions KarbonLayerModel::supportedDropActions () const
@@ -534,10 +515,7 @@ QModelIndex KarbonLayerModel::parentIndexFromShape( const KoShape * child ) cons
     // check if the parent is a layer
     KoShapeLayer *parentLayer = dynamic_cast<KoShapeLayer*>( parentShape );
     if( parentLayer )
-    {
-        int index = indexOf( m_document->layers().count(), m_document->layers().indexOf( parentLayer ) );
-        return createIndex( index, 0, parentShape );
-    }
+        return createIndex( m_document->layers().indexOf( parentLayer ), 0, parentShape );
 
     // get the grandparent to determine the row of the parent shape
     KoShapeContainer *grandParentShape = parentShape->parent();
@@ -545,11 +523,6 @@ QModelIndex KarbonLayerModel::parentIndexFromShape( const KoShape * child ) cons
         return QModelIndex();
 
     return createIndex( indexFromChild( grandParentShape, parentShape ), 0, parentShape );
-}
-
-int KarbonLayerModel::indexOf( int count, int row ) const
-{
-    return count - 1 - row;
 }
 
 #include "KarbonLayerModel.moc"

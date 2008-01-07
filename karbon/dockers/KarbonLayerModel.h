@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -51,7 +51,6 @@ public:
     virtual QStringList mimeTypes() const;
     virtual QMimeData * mimeData( const QModelIndexList & indexes ) const;
     virtual bool dropMimeData( const QMimeData * data, Qt::DropAction action, int row, int column, const QModelIndex & parent );
-
 private:
     /// Returns properties of the given shape
     PropertyList properties( KoShape* shape ) const;
@@ -66,12 +65,7 @@ private:
     /// Returns the parent model index from the given child shape
     QModelIndex parentIndexFromShape( const KoShape * child ) const;
 
-    int indexOf( int count, int row ) const;
-
     KarbonDocument *m_document; ///< the undelying data structure
-    KoShape *m_shape;
-    mutable QList<KoShape*> m_childs;
-    mutable KoShapeContainer *m_lastContainer;
 };
 
 #endif // KARBONLAYERMODEL_H

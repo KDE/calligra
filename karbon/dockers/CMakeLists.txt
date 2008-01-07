@@ -7,6 +7,7 @@ set(karbondockers_SRCS
     KarbonTransformDocker.cpp
     KarbonLayerDocker.cpp
     KarbonLayerModel.cpp
+    KarbonLayerSortingModel.cpp
     KarbonStylePreviewDocker.cpp
     )
 

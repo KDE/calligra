@@ -28,6 +28,7 @@ class KoShape;
 class KoShapeLayer;
 class KoShapeGroup;
 class KarbonLayerModel;
+class KarbonLayerSortingModel;
 class KarbonPart;
 class QModelIndex;
 
@@ -65,8 +66,12 @@ private slots:
 private:
     void extractSelectedLayersAndShapes( QList<KoShapeLayer*> &layers, QList<KoShape*> &shapes, bool addChilds = false );
     void addChildsRecursive( KoShapeGroup * parent, QList<KoShape*> &shapes );
+
+    KoShape * shapeFromIndex( const QModelIndex &index );
+
     KarbonPart * m_part;
     KarbonLayerModel * m_model;
+    KarbonLayerSortingModel * m_sortModel;
     KoDocumentSectionView * m_layerView;
 };
 
