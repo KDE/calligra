@@ -119,9 +119,11 @@ KarbonLayerDocker::KarbonLayerDocker()
 
     connect( buttonGroup, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonClicked( int ) ) );
 
-    m_model = new KarbonLayerModel( m_part ? &m_part->document() : 0 );
+    m_model = new KarbonLayerModel( this );
+    m_model->setDocument( m_part ? &m_part->document() : 0 );
     m_sortModel = new KarbonLayerSortingModel(this);
     m_sortModel->setSourceModel( m_model );
+
     m_layerView->setItemsExpandable( true );
     m_layerView->setModel( m_sortModel );
     m_layerView->setDisplayMode( KoDocumentSectionView::MinimalMode );
@@ -135,7 +137,6 @@ KarbonLayerDocker::KarbonLayerDocker()
 
 KarbonLayerDocker::~KarbonLayerDocker()
 {
-    delete m_model;
 }
 
 void KarbonLayerDocker::updateView()

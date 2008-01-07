@@ -44,8 +44,8 @@
 #include <QtCore/QAbstractItemModel>
 #include <QtCore/QMimeData>
 
-KarbonLayerModel::KarbonLayerModel( KarbonDocument *document )
-: m_document( document )
+KarbonLayerModel::KarbonLayerModel( QObject * parent )
+    : KoDocumentSectionModel(parent), m_document(0)
 {
     setSupportedDragActions( Qt::MoveAction );
 }

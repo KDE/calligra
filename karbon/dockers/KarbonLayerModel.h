@@ -30,9 +30,11 @@ class KoViewConverter;
 
 class KarbonLayerModel : public KoDocumentSectionModel
 {
+    Q_OBJECT
+
 public:
     /// Constructs a new layer model using the specified documents data
-    KarbonLayerModel( KarbonDocument *document );
+    KarbonLayerModel( QObject * parent = 0 );
     /// Triggers an update of the complete model
     void update();
 
