@@ -1968,17 +1968,6 @@ void Project::printCalendarDebug( const QByteArray& _indent )
         m_standardWorktime->printDebug();
 }
 #endif
-//use in pert to have the project slack
-void Project::setProjectSlack(const int& theValue)
-{
-    m_projectSlack = theValue;
-}
-
-int Project::projectSlack() const
-{
-    return m_projectSlack;
-}
-
 
 
 }  //KPlato namespace

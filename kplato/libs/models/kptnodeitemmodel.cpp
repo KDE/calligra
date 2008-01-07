@@ -2448,7 +2448,7 @@ QModelIndex MilestoneItemModel::index( int row, int column, const QModelIndex &p
 {
     //kDebug()<<parent<<row<<", "<<m_mslist.count();
     if ( m_project == 0 || row < 0 || column < 0 ) {
-        kDebug()<<"No project or illegal row, column";
+        //kDebug()<<"No project"<<m_project<<" or illegal row, column"<<row<<column;
         return QModelIndex();
     }
     if ( parent.isValid() || row >= m_mslist.count() ) {

@@ -395,9 +395,6 @@ public:
     void sendScheduleRemoved( const MainSchedule *sch );
     void sendScheduleToBeRemoved( const MainSchedule *sch );
 
-    void setProjectSlack(const int& theValue);
-    int projectSlack() const;
-
     /// Return the time spec used in this project
     const KDateTime::Spec &timeSpec() const { return m_spec; }
     /// Return the time zone used in this project

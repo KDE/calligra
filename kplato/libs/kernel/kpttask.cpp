@@ -2027,7 +2027,8 @@ bool Task::calcCriticalPath(bool fromEnd)
     return m_currentSchedule->inCriticalPath;
 }
 
-void Task::calcFreeFloat() {
+void Task::calcFreeFloat()
+{
     //kDebug()<<m_name<<endl;
     if ( type() == Node::Type_Summarytask ) {
         Node::calcFreeFloat();
@@ -2056,8 +2057,8 @@ void Task::calcFreeFloat() {
     }
 }
 
-
-void Task::setCurrentSchedule(long id) {
+void Task::setCurrentSchedule(long id)
+{
     setCurrentSchedulePtr(findSchedule(id));
     Node::setCurrentSchedule(id);
 }
@@ -2106,6 +2107,68 @@ uint Task::state( long id ) const
     }
     return st;
 }
+
+DateTime Task::earlyStartDate()
+{
+    return m_earlyStartDate;
+}
+
+void Task::setEarlyStartDate(DateTime value)
+{
+    m_earlyStartDate=value;
+}
+
+
+DateTime Task::earlyFinishDate()
+{
+    return m_earlyFinishDate;
+}
+
+void Task::setEarlyFinishDate(DateTime value)
+{
+    m_earlyFinishDate=value;
+}
+
+DateTime Task::lateStartDate()
+{
+    return m_lateStartDate;
+}
+
+void Task::setLateStartDate(DateTime value)
+{
+    m_lateStartDate=value;
+}
+
+DateTime Task::lateFinishDate()
+{
+    return m_lateFinishDate;
+}
+
+void Task::setLateFinishDate(DateTime value)
+{
+    m_lateFinishDate=value;
+}
+
+int Task::activitySlack()
+{
+    return(m_activitySlack);
+}
+
+void Task::setActivitySlack(int value)
+{
+    m_activitySlack=value;
+}
+
+int Task::activityFreeMargin()
+{
+    return(m_activityFreeMargin);
+}
+
+void Task::setActivityFreeMargin(int value)
+{
+    m_activityFreeMargin=value;
+}
+
 
 //------------------------------------------
 
@@ -2842,87 +2905,6 @@ void Completion::printDebug(const QByteArray& _indent) const {
 }
 
 #endif
-
-
-// Those method are used by the pert editor to link tasks between each others
-void Task::addRequiredTask(Node * taskLinked){
-    m_requiredTasks.append(taskLinked);
-}
-
-void Task::remRequiredTask(Node * taskLinked){
-    int taskIndex;
-    // Do nothing if the taskLinked is wrong
-    taskIndex = m_requiredTasks.indexOf(taskLinked);
-    if (taskIndex!=-1)
-        m_requiredTasks.removeAt(taskIndex);
-    else
-        kDebug()<<"Task not found!";
-}
-
-/*QList<Node *> Task::requiredTaskIterator() const{
-    return m_requiredTasks;
-}*/
-
-DateTime Task::earlyStartDate()
-{
-    return m_earlyStartDate;
-}
-
-void Task::setEarlyStartDate(DateTime value)
-{
-    m_earlyStartDate=value;
-}
-
-
-DateTime Task::earlyFinishDate()
-{
-    return m_earlyFinishDate;
-}
-
-void Task::setEarlyFinishDate(DateTime value)
-{
-    m_earlyFinishDate=value;
-}
-
-DateTime Task::lateStartDate()
-{
-    return m_lateStartDate;
-}
-
-void Task::setLateStartDate(DateTime value)
-{
-    m_lateStartDate=value;
-}
-
-DateTime Task::lateFinishDate()
-{
-    return m_lateFinishDate;
-}
-
-void Task::setLateFinishDate(DateTime value)
-{
-    m_lateFinishDate=value;
-}
-
-int Task::activitySlack()
-{
-    return(m_activitySlack);
-}
-
-void Task::setActivitySlack(int value)
-{
-    m_activitySlack=value;
-}
-
-int Task::activityFreeMargin()
-{
-    return(m_activityFreeMargin);
-}
-
-void Task::setActivityFreeMargin(int value)
-{
-    m_activityFreeMargin=value;
-}
 
 
 }  //KPlato namespace
