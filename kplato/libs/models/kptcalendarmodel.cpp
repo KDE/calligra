@@ -373,7 +373,7 @@ bool CalendarItemModel::setData( const QModelIndex &index, const QVariant &value
         case 0: return setName( a, value, role );
         case 1: return setTimeZone( a, value, role );
         default:
-            kWarning()<<"data: invalid display value column "<<index.column()<<endl;
+            kWarning()<<"data: invalid display value column "<<index.column();
             return false;
     }
     return false;
@@ -600,7 +600,7 @@ void CalendarDayItemModel::slotDayChanged( CalendarDay *day )
     if ( c == -1 ) {
         return;
     }
-    kDebug()<<k_funcinfo<<day<<", "<<c<<endl;
+    kDebug()<<day<<", "<<c;
     emit dataChanged( createIndex( 0, c, day ), createIndex( 0, c, day ) );
 }
 
@@ -960,11 +960,11 @@ DateTableDateDelegate::DateTableDateDelegate()
 
 QRectF DateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewItem &option, const QDate &date, KDateTableDataModel *model )
 {
-    //kDebug()<<k_funcinfo<<date<<endl;
+    //kDebug()<<date;
     QRectF r;
     StyleOptionViewItem style = option;
-    style.font.setPointSize( style.font.pointSize() - 4 );
-    //kDebug()<<" fonts: "<<option.font.pointSize()<<style.font.pointSize()<<endl;
+    style.font.setPointSize( style.font.pointSize() - 2 );
+    //kDebug()<<" fonts: "<<option.font.pointSize()<<style.font.pointSize();
     r = KDateTableDateDelegate::paint( painter, style, date, model );
     if ( model == 0 ) {
         return r;
@@ -974,7 +974,7 @@ QRectF DateTableDateDelegate::paint( QPainter *painter, const StyleOptionViewIte
 
     painter->translate( r.width(), 0.0 );
     QRectF rect( 1, 1, option.rectF.right() - r.width(), option.rectF.bottom() );
-    //kDebug()<<" rects: "<<r<<rect<<endl;
+    //kDebug()<<" rects: "<<r<<rect;
 
     QString text = model->data( date, Qt::DisplayRole, 0 ).toString();
     int align = model->data( date, Qt::TextAlignmentRole, 0 ).toInt();
