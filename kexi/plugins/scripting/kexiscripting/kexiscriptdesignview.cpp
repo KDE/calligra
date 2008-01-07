@@ -204,21 +204,19 @@ void KexiScriptDesignView::updateProperties()
         );
         d->properties->addProperty(prop);
 
-#if 0
-        QVariantMap options = info->options();
-        QVariantMap::ConstIterator it, end( options.constEnd() );
+        Kross::InterpreterInfo::Option::Map options = info->options();
+        Kross::InterpreterInfo::Option::Map::ConstIterator it, end( options.constEnd() );
         for( it = options.constBegin(); it != end; ++it) {
-            QVariant option = it.value();
+            Kross::InterpreterInfo::Option* option = it.value();
             KoProperty::Property* prop = new KoProperty::Property(
-                    it.key().toUtf8(), // name
-                    d->scriptaction->option(it.key(), it.value()), // value
-                    it.key(), // caption
-                    QString(), // description
-                    KoProperty::Auto // type
+                it.key().toLatin1(), // name
+                d->scriptaction->option(it.key(), option->value), // value
+                it.key(), // caption
+                option->comment, // description
+                KoProperty::Auto // type
             );
             d->properties->addProperty(prop);
         }
-#endif
     }
 
     //propertySetSwitched();
@@ -314,18 +312,16 @@ bool KexiScriptDesignView::loadData()
     if(info) {
         d->scriptaction->setInterpreter(interpretername);
 
-#if 0
-        QVariantMap options = info->options();
-        QVariantMap::ConstIterator it, end = options.constEnd();
+        Kross::InterpreterInfo::Option::Map options = info->options();
+        Kross::InterpreterInfo::Option::Map::ConstIterator it, end = options.constEnd();
         for( it = options.constBegin(); it != end; ++it) {
             QString value = scriptelem.attribute( it.key() );
             if(! value.isNull()) {
                 QVariant v(value);
-                if( v.cast( it.value().type() ) ) // preserve the QVariant's type
+                if( v.cast( it.value()->value.type() ) ) // preserve the QVariant's type
                     d->scriptaction->setOption(it.key(), v);
             }
-        }
-#endif
+         }
     }
 
     d->scriptaction->setCode( scriptelem.text().toUtf8() );
@@ -368,16 +364,12 @@ tristate KexiScriptDesignView::storeData(bool /*dontAsk*/)
 
     Kross::InterpreterInfo* info = Kross::Manager::self().interpreterInfo(language);
     if(info) {
-#if 0
-        QVariantMap defoptions = info->options();
-        QVariantMap options = d->scriptaction->options();
-	    QVariantMap::ConstIterator it, end( options.constEnd() );
-        for( it = options.constBegin(); it != end; ++it) {
-            if( defoptions.contains(it.key()) ) { // only remember options which the InterpreterInfo knows about...
+        Kross::InterpreterInfo::Option::Map defoptions = info->options();
+        QMap<QString, QVariant> options = d->scriptaction->options();
+        QMap<QString, QVariant>::ConstIterator it, end( options.constEnd() );
+        for( it = options.constBegin(); it != end; ++it)
+            if( defoptions.contains(it.key()) ) // only remember options which the InterpreterInfo knows about...
                 scriptelem.setAttribute(it.key(), it.value().toString());
-            }
-        }
-#endif
     }
 
     QDomText scriptcode = domdoc.createTextNode( d->scriptaction->code() );
