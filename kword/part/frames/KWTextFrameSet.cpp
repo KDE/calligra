@@ -26,7 +26,6 @@
 #include "KWDocument.h"
 
 #include <KoTextShapeData.h>
-#include <KoInlineTextObjectManager.h>
 
 #include <klocale.h>
 #include <kdebug.h>

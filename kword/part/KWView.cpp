@@ -54,7 +54,6 @@
 #include <KoToolManager.h>
 #include <KoMainWindow.h>
 #include <KoTextSelectionHandler.h>
-#include <KoInlineObjectRegistry.h>
 #include <KoToolProxy.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoTextAnchor.h>
