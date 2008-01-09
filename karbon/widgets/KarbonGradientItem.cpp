@@ -26,6 +26,8 @@
 
 #include <QtGui/QPainter>
 
+KoCheckerBoardPainter KarbonGradientItem::m_checkerPainter( 4 );
+
 KarbonGradientItem::KarbonGradientItem( KoAbstractGradient * gradient )
     : KoResourceItem( gradient )
 {
@@ -43,17 +45,9 @@ QImage KarbonGradientItem::thumbnail( const QSize &thumbSize ) const
     paintGradient.setStart( QPointF( 0, 0 ) );
     paintGradient.setFinalStop( QPointF( thumbSize.width() - 1, 0 ) );
 
-    QPixmap checker(8, 8);
-    QPainter p(&checker);
-    p.fillRect(0, 0, 4, 4, Qt::lightGray);
-    p.fillRect(4, 0, 4, 4, Qt::darkGray);
-    p.fillRect(0, 4, 4, 4, Qt::darkGray);
-    p.fillRect(4, 4, 4, 4, Qt::lightGray);
-    p.end();
-
     QImage image( thumbSize, QImage::Format_ARGB32 );
     QPainter painter( &image );
-    painter.fillRect( QRect( 0, 0, image.width(), image.height() ), QBrush( checker ) );
+    m_checkerPainter.paint( painter, image.rect() );
     painter.fillRect( QRect( 0, 0, image.width(), image.height() ), QBrush( paintGradient ) );
 
     delete g;

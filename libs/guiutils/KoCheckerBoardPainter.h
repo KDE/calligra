@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,27 +17,30 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KARBONGRADIENTITEM_H
-#define KARBONGRADIENTITEM_H
+#ifndef KOCHECKERBOARDPAINTER_H
+#define KOCHECKERBOARDPAINTER_H
 
-#include <KoResourceItemChooser.h>
-#include <KoCheckerBoardPainter.h>
+#include "koguiutils_export.h"
 
-class KoAbstractGradient;
+#include <QtGui/QPixmap>
+#include <QtGui/QColor>
 
-class KarbonGradientItem : public KoResourceItem
+class QPainter;
+
+class KOGUIUTILS_EXPORT KoCheckerBoardPainter
 {
 public:
-    KarbonGradientItem( KoAbstractGradient * gradient );
-
-    /// reimplemented from QTableWidgetItem
-    virtual QVariant data ( int role ) const;
-
-    KoAbstractGradient * gradient();
+    KoCheckerBoardPainter( int checkerSize );
+    void setCheckerColors( const QColor &lightColor, const QColor &darkColor );
+    void setCheckerSize( int checkerSize );
+    void paint( QPainter &painter, const QRectF &rect ) const;
 
 private:
-    static KoCheckerBoardPainter m_checkerPainter;
-    QImage thumbnail( const QSize &thumbSize ) const;
+    void createChecker();
+    int m_checkerSize;
+    QPixmap m_checker;
+    QColor m_lightColor;
+    QColor m_darkColor;
 };
 
-#endif // KARBONGRADIENTITEM_H
+#endif // KOCHECKERBOARDPAINTER_H

@@ -23,6 +23,7 @@
 #ifndef KARBONSTYLEPREVIEW_H
 #define KARBONSTYLEPREVIEW_H
 
+#include <KoCheckerBoardPainter.h>
 #include <QFrame>
 
 class QEvent;
@@ -82,6 +83,7 @@ private:
     const KoShapeBorderModel * m_stroke; ///< the stroke to preview
     QRectF m_strokeRect;
     QRectF m_fillRect;
+    KoCheckerBoardPainter m_checkerPainter;
 };
 
 #endif // KARBONSTYLEPREVIEW_H

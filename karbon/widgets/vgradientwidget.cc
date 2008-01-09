@@ -64,7 +64,7 @@ static unsigned char colorStop_bits[] = {
 };
 
 VGradientWidget::VGradientWidget( QWidget* parent )
-: QWidget( parent ), m_currentStop( -1 )
+: QWidget( parent ), m_currentStop( -1 ), m_checkerPainter( 4 )
 {
     // initialize the gradient with some sane values
     m_gradient.setColorAt( 0.0, Qt::white );
@@ -126,18 +126,7 @@ void VGradientWidget::paintEvent( QPaintEvent* )
     m_gradient.setStart( QPointF( 2, 2 ) );
     m_gradient.setFinalStop( QPointF( width()-2, 2 ) );
 
-    QPixmap checker(8, 8);
-    QPainter p(&checker);
-    p.fillRect(0, 0, 4, 4, Qt::lightGray);
-    p.fillRect(4, 0, 4, 4, Qt::darkGray);
-    p.fillRect(0, 4, 4, 4, Qt::darkGray);
-    p.fillRect(4, 4, 4, 4, Qt::lightGray);
-    p.end();
-    painter.fillRect( QRectF( 2, 2, w, gh ), QBrush(checker));
-
-    //painter.setBrush( QBrush( SmallIcon( "karbon" ) ) );
-//     painter.setBrush( palette().base() );
-//     painter.drawRect( QRectF( 2, 2, w, gh ) );
+    m_checkerPainter.paint( painter, QRectF( 2, 2, w, gh ) );
 
     painter.setBrush( QBrush( m_gradient ) );
     painter.drawRect( QRectF( 2, 2, w, gh ) );

@@ -26,9 +26,9 @@
 #ifndef _VGRADIENTWIDGET_H_
 #define _VGRADIENTWIDGET_H_
 
-#include <QWidget>
-
 #include <karbon_export.h>
+#include <KoCheckerBoardPainter.h>
+#include <QWidget>
 
 class QGradient;
 class QPainter;
@@ -88,6 +88,8 @@ private:
     int m_currentStop; ///< the stop to modify.
 
     QRect m_pntArea; ///< the area where the gradient is painted
+
+    KoCheckerBoardPainter m_checkerPainter;
 };
 
 #endif /* _VGRADIENTWIDGET_H_ */

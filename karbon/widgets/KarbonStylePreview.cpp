@@ -42,6 +42,7 @@
 KarbonStylePreview::KarbonStylePreview( QWidget * parent )
     : QFrame( parent ), m_strokeWidget( false ), m_fill( Qt::NoBrush ), m_stroke( 0 )
     , m_strokeRect( 5.0, 5.0, 30.0, 30.0 ), m_fillRect(15.0, 15.0, 30.0, 30.0 )
+    , m_checkerPainter( 10 )
 {
     setFocusPolicy( Qt::NoFocus );
 
@@ -62,20 +63,8 @@ void KarbonStylePreview::paintEvent( QPaintEvent* event )
     QPainter painter( this );
     painter.setClipRect( event->rect() );
 
-    // the checker board colors
-    QColor dark( 120, 120, 120 );
-    QColor light( 200, 200, 200 );
+    m_checkerPainter.paint( painter, rect() );
 
-    // draw checkerboard
-    painter.setPen( Qt::NoPen );
-    for( int y = 0; y < height(); y += 10 )
-    {
-        for( int x = 0; x < width(); x += 10 )
-        {
-            painter.setBrush( ( ( ( x + y ) % 20 ) == 0 ) ? light : dark );
-            painter.drawRect( x, y, 10, 10 );
-        }
-    }
     painter.translate( QPoint( int(( width() - PANEL_SIZEX ) / 2), int(( height() - PANEL_SIZEY ) / 2 )));
 
     if ( m_strokeWidget )
