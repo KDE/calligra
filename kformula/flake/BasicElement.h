@@ -25,17 +25,17 @@
 
 #include "kformula_export.h"
 #include "ElementFactory.h"
-#include "FormulaCursor.h"
 
 #include <QHash>
 #include <QList>
 #include <QString>
 #include <QRectF>
-#include <QVariant>
 class QPainter;
+class QVariant;
 class KoXmlWriter;
 class KoXmlElement;
 class AttributeManager;
+class FormulaCursor;
 
 #define DEBUGID 40000
 
@@ -116,49 +116,49 @@ public:
      * @param direction Indicates whether the cursor moves up, down, right or left
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    virtual BasicElement* acceptCursor( FormulaCursor* cursor );
+    virtual BasicElement* acceptCursor( const FormulaCursor* cursor );
 
     /// @return The element's ElementType
     virtual ElementType elementType() const;
-    
-    /// @return The height of the element
-    double height() const;
-
-    /// @return The width of the element
-    double width() const;
-
-    /// @return The baseline of the element
-    double baseLine() const;
-
-    /// @return The element's origin 
-    QPointF origin() const;
-
-    /// @return The bounding rectangle of the element
-    const QRectF& boundingRect() const;
-
-    /// @return The elements scale factor
-    double scaleFactor() const;
 
     /// Set the element's width to @p width
     void setWidth( double width );
 
+    /// @return The width of the element
+    double width() const;
+
     /// Set the element's height to @p height
     void setHeight( double height );
+
+    /// @return The height of the element
+    double height() const;
     
+    /// @return The bounding rectangle of the element
+    const QRectF& boundingRect() const;
+
     /// Set the element's baseline to @p baseLine
     void setBaseLine( double baseLine );
+
+    /// @return The baseline of the element
+    double baseLine() const;
 
     /// Set the element's origin inside the m_parentElement to @p origin
     void setOrigin( QPointF origin );
 
+    /// @return The element's origin 
+    QPointF origin() const;
+
     /// Set the element's m_parentElement to @p parent
     void setParentElement( BasicElement* parent );
+
+    /// @return The parent element of this BasicElement
+    BasicElement* parentElement() const;
 
     /// Set the element's m_scaleFactor to @p scaleFactor
     void setScaleFactor( double scaleFactor );
 
-    /// @return The parent element of this BasicElement
-    BasicElement* parentElement() const;
+    /// @return The elements scale factor
+    double scaleFactor() const;
 
     /**
      * Set an attribute's value

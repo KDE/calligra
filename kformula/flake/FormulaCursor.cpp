@@ -31,11 +31,14 @@ FormulaCursor::FormulaCursor( BasicElement* element )
 {
     m_positionInElement = 0;
     m_direction = NoDirection;
+    m_ascending = false;
 }
 
 void FormulaCursor::paint( QPainter& painter ) const
 {
-    Q_ASSERT(m_currentElement); if(!m_currentElement) return;
+    if( !m_currentElement )
+        return;
+
     QPointF top = m_currentElement->boundingRect().topLeft();
      
     if( m_currentElement->childElements().isEmpty() )  // set the cursor in the middle
@@ -44,10 +47,11 @@ void FormulaCursor::paint( QPainter& painter ) const
     { 
         // determine the x coordinate by summing up the elements' width before the cursor
         for( int i = 0; i < m_positionInElement; i++ )
-            top += QPointF( m_currentElement->childElements().value(i)->width(), 0 );
+            top += QPointF( m_currentElement->childElements()[ i ]->width(), 0.0 );
     }
-    
-    QPointF bottom = top + QPointF( 0, m_currentElement->height() );
+   
+    // setup a 1px pen and draw the cursor line with it 
+    QPointF bottom = top + QPointF( 0.0, m_currentElement->height() );
     QPen pen;
     pen.setWidth( 0 );
     painter.setPen( pen );
@@ -56,7 +60,10 @@ void FormulaCursor::paint( QPainter& painter ) const
 
 void FormulaCursor::insertText( const QString& text )
 {
-/*    if( text.size() != 1 ) // check for single char input after key press
+/*    if ( text == "\\" && m_currentElement != TokenElement )
+       -> go to latex processing
+
+    if( text.size() != 1 ) // check for single char input after key press
         // TODO check for text excapting element due to paste of text
 
 
@@ -84,60 +91,38 @@ void FormulaCursor::remove( bool elementBeforePosition )
 {
 }
 
-void FormulaCursor::moveLeft()
+void FormulaCursor::move( CursorDirection direction )
 {
-    BasicElement* tmp;
-    if( isHome() )
-    {
-        tmp = m_currentElement->parentElement();
-        m_direction = LeftToParent;
-        while( tmp != tmp->acceptCursor( this ) && tmp->elementType() != Formula )
-            tmp = tmp->acceptCursor( this );
-    }
-    else
-    {
-        tmp = m_currentElement;
-        m_direction = LeftToChild;
-        while( tmp != m_currentElement->acceptCursor( this ) )
-            tmp = tmp->acceptCursor( this );
-    }
+    m_direction = direction;
+    BasicElement* tmp = m_currentElement;
 
-    if( !isHome() && tmp == m_currentElement )
-        m_positionInElement--;
-    else
-        m_currentElement = tmp;
-}
-
-void FormulaCursor::moveRight()
-{
-    BasicElement* tmp;
-    if( isEnd() )
-    {
-        tmp = m_currentElement->parentElement();
-        m_direction = RightToParent;
-        while( tmp != tmp->acceptCursor( this ) && tmp->elementType() != Formula )
-            tmp = tmp->acceptCursor( this );
-    }
-    else
-    {
-        tmp = m_currentElement;
-        m_direction = RightToChild;
-        while( tmp != m_currentElement->acceptCursor( this ) )
-            tmp = tmp->acceptCursor( this );
+    // loop through the element tree and try to find an element that accepts the cursor
+    while( tmp ) {
+        if( tmp->acceptCursor( this ) == tmp )  // an element accepts the cursor
+            break;
+        else if( tmp->acceptCursor( this ) == tmp->parentElement() )
+            m_ascending = true;
+        else
+            m_ascending = false;
+     
+        tmp = tmp->acceptCursor( this );        
     }
 
-    if( !isEnd() && tmp == m_currentElement )
-        m_positionInElement++;
-    else
-        m_currentElement = tmp;
-}
-
-void FormulaCursor::moveUp()
-{
-}
-
-void FormulaCursor::moveDown()
-{
+    if( !tmp )    // no element accepted or error so quit
+        return;
+    else if( tmp == m_currentElement ) {       // alter the position inside the element
+        if( ( isHome() && m_direction == MoveLeft ) ||
+            ( isEnd() && m_direction == MoveRight ) ||
+            m_direction == MoveUp || m_direction == MoveDown )
+            return;
+    }
+    else {
+        m_currentElement = tmp;           // asign the new element to the cursor
+        if( m_direction == MoveRight )    // and set position according to movement
+            moveEnd();
+        else
+            moveHome();
+    }
 }
 
 void FormulaCursor::moveHome()
@@ -181,6 +166,11 @@ CursorDirection FormulaCursor::direction() const
     return m_direction;
 }
 
+bool FormulaCursor::ascending() const
+{
+    return m_ascending;
+}
+
 bool FormulaCursor::hasSelection() const
 {
     return m_selecting;
@@ -191,7 +181,3 @@ void FormulaCursor::setSelecting( bool selecting )
     m_selecting = selecting;
 }
 
-void FormulaCursor::setWordMovement( bool wordMovement )
-{
-    m_wordMovement = wordMovement;
-}

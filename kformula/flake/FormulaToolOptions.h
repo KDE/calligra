@@ -23,6 +23,7 @@
 #include <QWidget>
 
 class KoFormulaTool;
+class KoXmlElement;
 class QPushButton;
 class QComboBox;
 class QListWidget;
@@ -62,6 +63,8 @@ private slots:
 private:
     /// Load the templates from path @p p into the @p list
     void loadTemplates( QList<QListWidgetItem*>* list, const QString& p );
+
+    QListWidgetItem* createListItem( const KoXmlElement& xml );
 
     /// The KoFormulaTool this options widget belongs to
     KoFormulaTool* m_tool;

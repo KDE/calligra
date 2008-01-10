@@ -27,6 +27,7 @@
 #include <QPainterPath>
 
 class GlyphElement;
+class FormulaCursor;
 
 /**
  * @short Baseclass for all token elements
@@ -66,7 +67,7 @@ public:
      * @param direction Indicates whether the cursor moves up, down, right or left
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    BasicElement* acceptCursor( CursorDirection direction );
+    BasicElement* acceptCursor( const FormulaCursor* cursor );
 
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs

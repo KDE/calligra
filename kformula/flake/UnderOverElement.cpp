@@ -77,7 +77,7 @@ void UnderOverElement::layout( const AttributeManager* am )
     setBaseLine( m_baseElement->origin().y() + m_baseElement->baseLine() );
 }
 
-BasicElement* UnderOverElement::acceptCursor( CursorDirection direction )
+BasicElement* UnderOverElement::acceptCursor( const FormulaCursor* cursor )
 {
     return 0;
 }

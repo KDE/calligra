@@ -114,7 +114,7 @@ void RootElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 }
 */
 
-BasicElement* RootElement::acceptCursor( CursorDirection direction )
+BasicElement* RootElement::acceptCursor( const FormulaCursor* cursor )
 {
     return 0;
 }

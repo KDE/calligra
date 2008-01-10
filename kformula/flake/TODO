@@ -1,22 +1,25 @@
+- make load and save working for every element
+  -> update test suite
+- finish implementation of the TableElement
+- implement inheritsAttribute() method in every element class
+- finish the scriptLevel implementation in AttributeManager
+- solve viewConverter problem in AttributeManager
+- implement a AttributeManager test for scriptLevel
+- setBaseLIne in TableElement
+- rowlines in TableElement
 - add defaultAttributevalues to mstyle
 *done add PenStyle parsing to mtable element
 - solve KoViewConverter issue in AttributeManager, make it always set...
 - correct mathspace parsing in operator element.
-
-- create template files - decide what kind of templates should be in place
 - implement rendering in all token elements
-
-*done correct the TokenElement class rendering wise to create OperatorElement
-*done implement scripts to generator Dictionary.cpp file
-*done create SquareRootElement class to reflect differences between Root and SquareRoot
-- test rendering of implemented elements and create a list of errors
-- try to fix the rendering errors of previously tested elements
 - make FormulaCursor class able to insert elements
 - add functionality to FormulaToolOptions so that user can insert elements
-- add description to main APIDOX page
 - implement cursor movement with acceptCursor() method
-- update APIDOX according to new cursor handling
-- control that there are no save / restore in per element painting
+
+mid term ( potential prerelease ) goals:
+- create template files - decide what kind of templates should be in place
+- add attribute caching as member variables in elements so that paint()
+  does not need a AttributeManager
 
 long term goals:
 - add selecting to FormulaCursor class

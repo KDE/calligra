@@ -19,31 +19,30 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef MATRIXELEMENT_H
-#define MATRIXELEMENT_H
+#ifndef TABLEELEMENT_H
+#define TABLEELEMENT_H
 
 #include "BasicElement.h"
 #include "kformula_export.h"
 #include <QPainterPath>
 
-class MatrixRowElement;
-class MatrixEntryElement;
+class TableRowElement;
 	
 /**
  * @short A matrix or table element in a formula
  *
- * A matrix element contains a list of rows which are of class MatrixRowElement.
- * These rows contain single entries which are of class MatrixEntryElement. The
- * MatrixElement takes care that the different MatrixRowElements are informed how
+ * A table element contains a list of rows which are of class TableRowElement.
+ * These rows contain single entries which are of class TableEntryElement. The
+ * TableElement takes care that the different TableRowElements are informed how
  * to lay out their children correctly as they need to be synced.
  */
-class KOFORMULA_EXPORT MatrixElement : public BasicElement {
+class KOFORMULA_EXPORT TableElement : public BasicElement {
 public:
     /// The standard constructor
-    MatrixElement( BasicElement* parent = 0 );
+    TableElement( BasicElement* parent = 0 );
     
     /// The standard destructor
-    ~MatrixElement();
+    ~TableElement();
 
     /**
      * Render the element to the given QPainter
@@ -69,10 +68,16 @@ public:
      * @param direction Indicates whether the cursor moves up, down, right or left
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    BasicElement* acceptCursor( FormulaCursor* cursor );
+    BasicElement* acceptCursor( const FormulaCursor* cursor );
 
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const;
+
+    /// @return The width of the column with the index @p column
+    double columnWidth( int column );
+
+    /// @return The height of the @p TableRowElement
+    double rowHeight( TableRowElement* row );
 
 protected:
     /// Read all content from the node - reimplemented by child elements
@@ -85,19 +90,24 @@ private:
     /// @return The base line computed out of the align attribute
     double parseTableAlign() const;
 
-    Qt::PenStyle parsePenStyle( const QString& value ) const;
+    /// Calculate the dimensions of each row and column at a centralised point
+    void determineDimensions();
 
-    /// @return The index of @p row in m_matrixRowElements
-    int indexOfRow( BasicElement* row ) const;
+    /// Storage for heights of each row calculated in determineDimensions()
+    QList<double> m_rowHeights;
+
+    /// Storage for widths of each column calculated in determineDimensions()
+    QList<double> m_colWidths;
     
     /// The rows a matrix contains
-    QList<MatrixRowElement*> m_matrixRowElements;
-
-    /// Path to store borders and grid to be painted
-    QPainterPath m_matrixPath;
+    QList<TableRowElement*> m_rows;
 
     /// Buffer for the pen style used for the table's frame
     Qt::PenStyle m_framePenStyle;
+
+    QList<Qt::PenStyle> m_rowLinePenStyles;
+
+    QList<Qt::PenStyle> m_colLinePenStyles;
 };
 
-#endif // MATRIXELEMENT_H
+#endif // TABLEELEMENT_H

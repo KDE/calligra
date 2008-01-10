@@ -609,12 +609,8 @@ void TestLoadAndSave::fractionElement_data()
     // TODO
     addRow( "<mfrac><mi>x</mi><mi>y</mi></mfrac>",
             "<mfrac>\n"
-            " <mrow>\n"
-            "  <mi>x</mi>\n"
-            " </mrow>\n"
-            " <mrow>\n"
-            "  <mi>y</mi>\n"
-            " </mrow>\n"
+            " <mi>x</mi>\n"
+            " <mi>y</mi>\n"
             "</mfrac>");
 }
 
@@ -622,8 +618,6 @@ void TestLoadAndSave::rootElement_data()
 {
     QTest::addColumn<QString>("input");
     QTest::addColumn<QString>("output");
-
-    addRow( "<msqrt><mi>x</mi></msqrt>" );
 
     addRow( "<mroot><mi>x</mi><mn>2</mn></mroot>" );
 }
@@ -634,7 +628,7 @@ void TestLoadAndSave::styleElement_data()
     QTest::addColumn<QString>("output");
 
     // TODO
-    addRow( "" );
+    addRow( "<mstyle></mstyle>" );
 }
 
 void TestLoadAndSave::errorElement_data()
@@ -643,7 +637,7 @@ void TestLoadAndSave::errorElement_data()
     QTest::addColumn<QString>("output");
 
     // TODO
-    addRow( "" );
+    addRow( "<merror></merror>" );
 }
 
 void TestLoadAndSave::paddedElement_data()
@@ -652,7 +646,7 @@ void TestLoadAndSave::paddedElement_data()
     QTest::addColumn<QString>("output");
 
     // TODO
-    addRow( "" );
+    addRow( "<mpadded></mpadded>" );
 }
 
 void TestLoadAndSave::phantomElement_data()
@@ -661,7 +655,7 @@ void TestLoadAndSave::phantomElement_data()
     QTest::addColumn<QString>("output");
 
     // TODO
-    addRow( "" );
+    addRow( "<mphantom></mphantom>" );
 }
 
 void TestLoadAndSave::fencedElement_data()
@@ -670,7 +664,7 @@ void TestLoadAndSave::fencedElement_data()
     QTest::addColumn<QString>("output");
 
     // TODO
-    addRow( "" );
+    addRow( "<mfenced></mfenced>" );
 }
 
 void TestLoadAndSave::encloseElement_data()
@@ -679,7 +673,7 @@ void TestLoadAndSave::encloseElement_data()
     QTest::addColumn<QString>("output");
 
     // TODO
-    addRow( "" );
+    addRow( "<menclose></menclose>" );
 }
 
 void TestLoadAndSave::subElement_data()
@@ -688,7 +682,7 @@ void TestLoadAndSave::subElement_data()
     QTest::addColumn<QString>("output");
 
     // TODO
-    addRow( "" );
+    addRow( "<msub></msub>" );
 }
 
 void TestLoadAndSave::supElement_data()
@@ -697,7 +691,7 @@ void TestLoadAndSave::supElement_data()
     QTest::addColumn<QString>("output");
 
     // TODO
-    addRow( "" );
+    addRow( "<msup></msup>" );
 }
 
 void TestLoadAndSave::subsupElement_data()
@@ -706,7 +700,7 @@ void TestLoadAndSave::subsupElement_data()
     QTest::addColumn<QString>("output");
 
     // TODO
-    addRow( "" );
+    addRow( "<" );
 }
 
 void TestLoadAndSave::underElement_data()
@@ -947,22 +941,22 @@ void TestLoadAndSave::multiscriptsElement()
 
 void TestLoadAndSave::tableElement()
 {
-    test( new MatrixElement );
+    test( new TableElement );
 }
 
 void TestLoadAndSave::trElement()
 {
-    test( new MatrixRowElement );
+    test( new TableRowElement );
 }
 
 void TestLoadAndSave::labeledtrElement()
 {
-    test( new MatrixRowElement );
+    test( new TableRowElement );
 }
 
 void TestLoadAndSave::tdElement()
 {
-    test( new MatrixEntryElement );
+    test( new TableEntryElement );
 }
 
 void TestLoadAndSave::actionElement()

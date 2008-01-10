@@ -55,7 +55,8 @@ QString AttributeManager::findValue( const QString& attribute, const BasicElemen
     return element->attributesDefaultValue( attribute );
 }
 
-bool AttributeManager::boolOf( const QString& attribute, const BasicElement* element ) const
+bool AttributeManager::boolOf( const QString& attribute,
+                               const BasicElement* element ) const
 {
     return findValue( attribute, element ) == "true";
 }
@@ -63,29 +64,23 @@ bool AttributeManager::boolOf( const QString& attribute, const BasicElement* ele
 double AttributeManager::doubleOf( const QString& attribute,
                                    const BasicElement* element ) const
 {
-    // lookup value
-    QString tmpValue = findValue( attribute, element );
+    return parseUnit( findValue( attribute, element ), element );
+}
 
-    // test for value without unit
-    if( tmpValue.toDouble() != 0 )
-        return tmpValue.toDouble();
+QList<double> AttributeManager::doubleListOf( const QString& attribute,
+                                              const BasicElement* element ) const
+{
+    QList<double> doubleList;
+    QStringList tmp = findValue( attribute, element ).split( " " );
+    foreach( QString doubleValue, tmp )
+        doubleList << parseUnit( doubleValue, element );
 
-    // process values with units
-    QString unit = tmpValue.right( 2 );
-    tmpValue.endsWith( "%" ) ? tmpValue.chop( 1 ) : tmpValue.chop( 2 );
+    return doubleList;
+}
 
-    if( unit == "in" || unit == "cm" || unit == "pc" || unit == "mm" || unit == "pt" )
-        return KoUnit::parseValue( tmpValue + unit );
-//    else if( tmpValue.endsWith( '%' ) )
-//        return defaultValueOf( m_attribute ) * ( tmpValue.toDouble()/100 );
-    else if( unit == "em" )
-        return calculateEmEx( font( element ), tmpValue.toDouble(), true );
-    else if( unit == "ex" )
-        return calculateEmEx( font( element ), tmpValue.toDouble(), false );
-    else if( unit == "px" )
-        return m_viewConverter->viewToDocumentX( tmpValue.toInt() );
-    else
-        return 0.0;   // actually a value should never be 0.0
+QString AttributeManager::stringOf( const QString& attribute, BasicElement* element ) const
+{
+    return findValue( attribute, element );
 }
 
 QColor AttributeManager::colorOf( const QString& attribute, BasicElement* element ) const
@@ -112,6 +107,24 @@ QList<Align> AttributeManager::alignListOf( const QString& attribute,
         alignList << parseAlign( tmp );
 
     return alignList;
+}
+
+Qt::PenStyle AttributeManager::penStyleOf( const QString& attribute,
+                                           BasicElement* element ) const
+{
+    return parsePenStyle( findValue( attribute, element ) );
+}
+
+QList<Qt::PenStyle> AttributeManager::penStyleListOf( const QString& attribute,
+                                                      BasicElement* element ) const
+{
+    QList<Qt::PenStyle> penStyleList;
+    QStringList tmpList = findValue( attribute, element ).split( " " );
+
+    foreach( QString tmp, tmpList )
+        penStyleList << parsePenStyle( tmp );
+
+    return penStyleList;
 }
 
 double AttributeManager::scriptLevelScaling( const BasicElement* element ) const
@@ -165,15 +178,34 @@ QFont AttributeManager::font( const BasicElement* element ) const
 double AttributeManager::layoutSpacing( const BasicElement* element ) const
 {
     // return a thinmathspace which is a good value for layouting
-    return calculateEmEx( font( element ), 0.166667, true );
+    return parseUnit( "0.166667em", element );
 }
 
-double AttributeManager::calculateEmEx( QFont font, double value, bool isEm ) const
+double AttributeManager::parseUnit( const QString& value,
+                                    const BasicElement* element ) const
 {
-    // use a postscript paint device so that font metrics returns postscript points
-    KoPostscriptPaintDevice paintDevice;
-    QFontMetricsF fm( font, &paintDevice );
-    return isEm ? value*fm.width( 'm' ) : value*fm.xHeight();
+    // test for value without unit
+    if( value.toDouble() != 0 )
+        return value.toDouble();
+
+    // process values with units
+    QString unit = value.right( value.endsWith( "%" ) ? 1 : 2 );
+    double v = value.left( value.length() - unit.length() ).toDouble();
+
+    if( unit == "in" || unit == "cm" || unit == "pc" || unit == "mm" || unit == "pt" )
+        return KoUnit::parseValue( QString::number( v ) + unit );
+    else if( unit == "em" || unit == "ex" ) {
+        // use a postscript paint device so that font metrics returns postscript points
+        KoPostscriptPaintDevice paintDevice;
+        QFontMetricsF fm( font( element ), &paintDevice );
+        return ( unit == "em" ) ? v*fm.width( 'm' ) : v*fm.xHeight();
+    }
+//    else if( unit == "px" )
+//        return m_viewConverter->viewToDocumentX( v.toInt() );
+//    else if( tmpValue.endsWith( '%' ) )
+//        return defaultValueOf( m_attribute ) * ( tmpValue.toDouble()/100 ); 
+    else
+        return 0.0;   // actually a value should never be 0.0
 }
 
 Align AttributeManager::parseAlign( const QString& value ) const
@@ -196,42 +228,36 @@ Align AttributeManager::parseAlign( const QString& value ) const
         return InvalidAlign;
 }
 
+Qt::PenStyle AttributeManager::parsePenStyle( const QString& value ) const
+{
+    if( value == "solid" )
+        return Qt::SolidLine;
+    else if( value == "dashed" )
+        return Qt::DashLine;
+    else
+        return Qt::NoPen;
+}
+
 void AttributeManager::setViewConverter( KoViewConverter* converter )
 {
     m_viewConverter = converter;
 }
 
-
-
-
-double AttributeManager::mathSize( BasicElement* element )
+double AttributeManager::maxHeightOfChildren( BasicElement* element ) const
 {
-    QString value = findValue( "mathsize", element );
-/*    if( value == "small" )
-    else if( value == "normal" )
-    else if( value == "big" )
-     | number v-unit*/
-    return 0.0;
+    double maxHeight = 0.0;
+    foreach( BasicElement* tmp, element->childElements() )
+        maxHeight = qMax( maxHeight, tmp->height() );
+
+    return maxHeight; 
 }
 
-QString AttributeManager::stringOf( const QString& attribute, BasicElement* element ) const
+double AttributeManager::maxWidthOfChildren( BasicElement* element ) const
 {
-    return findValue( attribute, element );
-}
+    double maxWidth = 0.0;
+    foreach( BasicElement* tmp, element->childElements() )
+        maxWidth = qMax( maxWidth, tmp->width() );
 
-QStringList AttributeManager::stringListOf( const QString& attribute,
-                                            BasicElement* element ) const
-{
-    // TODO implement parsing
-    return QStringList();
-}
-
-
-
-
-
-int AttributeManager::intOf( const QString& attribute, BasicElement* element ) const
-{
-    return findValue( attribute, element ).toInt();
+    return maxWidth; 
 }
 

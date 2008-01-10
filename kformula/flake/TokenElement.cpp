@@ -80,7 +80,7 @@ void TokenElement::layout( const AttributeManager* am )
     setHeight( m_contentPath.boundingRect().height() );
 }
 
-BasicElement* TokenElement::acceptCursor( CursorDirection direction )
+BasicElement* TokenElement::acceptCursor( const FormulaCursor* cursor )
 {
     return 0;
 }

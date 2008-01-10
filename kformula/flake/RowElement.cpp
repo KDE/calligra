@@ -81,7 +81,7 @@ ElementType RowElement::elementType() const
     return Row;
 }
 
-BasicElement* RowElement::acceptCursor( CursorDirection direction )
+BasicElement* RowElement::acceptCursor( const FormulaCursor* cursor )
 {
     return 0;
 }
@@ -93,7 +93,7 @@ bool RowElement::readMathMLContent( const KoXmlElement& parent )
     forEachElement( tmp, parent )
     {
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
-        Q_ASSERT(tmpElement);
+        Q_ASSERT( tmpElement );
         m_childElements << tmpElement;
         if( !tmpElement->readMathML( tmp ) )
             return false;

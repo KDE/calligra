@@ -52,7 +52,7 @@
 BasicElement* ElementFactory::createElement( const QString& tagName,
                                              BasicElement* parent )
 {
-    kWarning( DEBUGID ) << "Creating element: " << tagName;
+//    kWarning( DEBUGID ) << "Creating element: " << tagName;
     if( tagName == "mi" )
         return new IdentifierElement( parent );
     else if ( tagName == "mo" )
@@ -149,11 +149,11 @@ QString ElementFactory::elementName( ElementType type )
             return "mroot";
         case SquareRoot:
             return "msqrt";
-        case Matrix:
+        case Table:
             return "mtable";
-        case MatrixRow:
+        case TableRow:
             return "mtr"; // TODO: Check for mlabeledtr
-        case MatrixEntry:
+        case TableEntry:
             return "mtd";
         case Action:
             return "maction";

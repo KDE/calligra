@@ -29,11 +29,8 @@ void EncloseElement::paint( QPainter& painter, AttributeManager* )
 {
     QPen pen( painter.pen() );
     pen.setWidth( 1 );
-
-    painter.save();
     painter.setPen( pen );
     painter.drawPath( m_enclosePath );
-    painter.restore();
 }
 
 void EncloseElement::layout( const AttributeManager* am )

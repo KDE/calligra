@@ -49,6 +49,7 @@
 FormulaToolOptions::FormulaToolOptions( QWidget* parent, Qt::WindowFlags f )
                   : QWidget( parent, f )
 {
+    // create a combo box with the different categories of templates
     m_templateCombo = new QComboBox( this );
     m_templateCombo->setInsertPolicy( QComboBox::NoInsert );
     m_templateCombo->addItem( "General" );
@@ -56,6 +57,7 @@ FormulaToolOptions::FormulaToolOptions( QWidget* parent, Qt::WindowFlags f )
     m_templateCombo->addItem( "Functions" );
     m_templateCombo->addItem( "Custom" );
 
+    // setup a list widget and some buttons
     m_templateList = new QListWidget( this );
     m_templateList->setViewMode( QListView::IconMode );
     m_templateList->setSelectionMode( QAbstractItemView::SingleSelection );
@@ -66,6 +68,7 @@ FormulaToolOptions::FormulaToolOptions( QWidget* parent, Qt::WindowFlags f )
     m_saveFormula->setText( "Save Formula" );
     m_saveFormula->setEnabled( false );
 
+    // put the gui elements into a simple layout
     m_layout = new QGridLayout( this );
     m_layout->addWidget( m_templateCombo, 0, 0, 1, 2 );
     m_layout->addWidget( m_templateList, 1, 0, 1, 2 );
@@ -87,10 +90,12 @@ FormulaToolOptions::~FormulaToolOptions()
 
 void FormulaToolOptions::slotLoadFormula()
 {
+    // get an url
     KUrl url = KFileDialog::getOpenUrl();
     if( url.isEmpty() || !m_tool->shape() )
         return;
 
+    // open the file the url points to
     QFile file( url.path() );
     if( !file.open( QIODevice::ReadOnly | QIODevice::Text ) )
         return;
@@ -99,6 +104,7 @@ void FormulaToolOptions::slotLoadFormula()
     KoOasisLoadingContext oasisContext( 0, stylesReader, 0 );
     KoShapeLoadingContext shapeContext( oasisContext );
 
+    // setup a DOM structure and start the actual loading process
     KoXmlDocument tmpDocument;
     tmpDocument.setContent( &file, false, 0, 0, 0 );
     m_tool->shape()->loadOdf( tmpDocument.documentElement(), shapeContext );
@@ -153,45 +159,59 @@ void FormulaToolOptions::slotTemplateComboIndexChange( int index )
 
 void FormulaToolOptions::loadTemplates( QList<QListWidgetItem*>* list, const QString& p )
 {
-    QFile file( p );  // open template file
+    // open template file
+    QFile file( p );
     if( !file.open( QIODevice::ReadOnly | QIODevice::Text ) ) {
         KMessageBox::error( this, "Could not find all template files.",
                                   "Formula shape template error" );
         return;
     }
 
-    KoXmlDocument tmpDocument;  // setup DOM for parsing templates
+    // setup DOM for parsing templates
+    KoXmlDocument tmpDocument;
     tmpDocument.setContent( &file, false, 0, 0, 0 );
     if( tmpDocument.documentElement().tagName() != "formulashapetemplates" ) {
-        // TODO error not a formula template
+        KMessageBox::error( this, "Formula template files corrupted.",
+                                  "Formula shape template error" );
+        return;
     }
 
-    QBuffer buffer;
-    KoXmlWriter writer( &buffer );
+    // Split the raw data into the single element raw data
+    QString fileContent( file.readAll() );
+    fileContent.remove( "<formulashapetemplates>" );
+    fileContent.remove( "</formulashapetemplates>" );
+    fileContent.remove( "</template>" );
+    QStringList elementsRawString = fileContent.split( "<template>" );
+
+    // iterate through the template elements and create all valid templates
+    KoXmlElement tmpElement;
+    QListWidgetItem* tmpItem = 0;
+    int i = 0;
+    forEachElement( tmpDocument.documentElement(), tmpElement ) {
+        tmpItem = createListItem( tmpElement.firstChild().toElement() );
+        tmpItem->setData( Qt::UserRole, elementsRawString[ i ] );
+        list->append( tmpItem );
+        i++;
+    }
+}
+
+QListWidgetItem* FormulaToolOptions::createListItem( const KoXmlElement& xml )
+{
+    // create an element out of DOM
+    BasicElement* tmpElement = ElementFactory::createElement( xml.tagName(), 0 );
+    tmpElement->readMathML( xml );
+
+    // render the element into a pixmap buffer for icon 
+    FormulaRenderer renderer;
     QPixmap tmpPixmap;
     QPainter painter( &tmpPixmap );
-    AttributeManager manager;
-    FormulaRenderer renderer;
-    QListWidgetItem* tmpItem = 0;
-    BasicElement* tmpElement = 0;
-    KoXmlElement tmp;
-    forEachElement( tmpDocument.documentElement(), tmp ) {
-        if( tmp.tagName() != "template" )
-            return;
-        tmp = tmp.firstChild().toElement();
-        buffer.open( QBuffer::ReadWrite );
-        tmpElement = ElementFactory::createElement( tmp.tagName(), 0 );
-        tmpElement->readMathML( tmp );
-        tmpElement->writeMathML( &writer ); 
-        renderer.layoutElement( tmpElement );
-        renderer.paintElement( painter, tmpElement );
-        tmpItem = new QListWidgetItem( m_templateList );
-        tmpItem->setIcon( QIcon( tmpPixmap ) );
-        tmpItem->setData( Qt::UserRole, QString( buffer.data() ) );
-        list->append( tmpItem );
-        delete tmpElement;
-        buffer.close();
-    }
+    renderer.layoutElement( tmpElement );
+    renderer.paintElement( painter, tmpElement );
+ 
+    // fix size of the pixmap, cleanup and return the new list item
+    tmpPixmap = tmpPixmap.scaled( 32, 32, Qt::KeepAspectRatio, Qt::SmoothTransformation );
+    delete tmpElement;
+    return new QListWidgetItem( QIcon( tmpPixmap ), QString(), m_templateList );
 }
 
 void FormulaToolOptions::setFormulaTool( KoFormulaTool* tool )

@@ -862,13 +862,13 @@ void TestLoad::tdElement_data()
 
     // Basic content
     addRow( "<mtd></mtd>", 1 );
-    addRow( "<mtd><mrow></mrow></mtd>", 1 );
-    addRow( "<mtd><mi>x</mi></mtd>", 1, 2 );
+    addRow( "<mtd><mrow></mrow></mtd>", 1, 1 );
+    addRow( "<mtd><mi>x</mi></mtd>", 1, 1 );
     addRow( "<mtd><mrow><mi>x</mi></mrow></mtd>", 1, 2 );
 
     // Be sure attributes don't break anything
-    addRow( "<mtd rowspan=\"3\"><mi>x</mi></mtd>", 1, 2 );
-    addRow( "<mtd groupalign=\"left\"><mi>x</mi></mtd>", 1, 2 );
+    addRow( "<mtd rowspan=\"3\"><mi>x</mi></mtd>", 1, 1 );
+    addRow( "<mtd groupalign=\"left\"><mi>x</mi></mtd>", 1, 1 );
 }
     
 void TestLoad::actionElement_data()
@@ -878,9 +878,9 @@ void TestLoad::actionElement_data()
     QTest::addColumn<int>("outputRecursive");
 
     // Basic content
-    addRow( "<maction actiontype=\"toggle\" selection=\"positive-integer><mrow></mrow><mrow></mrow></maction>", 2 );
-    addRow( "<maction actiontype=\"statusline\" <mrow></mrow><mrow></mrow></maction>", 2 );
-    addRow( "<maction actiontype=\"tooltip\" <mrow></mrow><mrow></mrow></maction>", 2 );
+    addRow( "<maction actiontype=\"toggle\" selection=\"positive-integer\"><mrow></mrow><mrow></mrow></maction>", 2 );
+    addRow( "<maction actiontype=\"statusline\"><mrow></mrow><mrow></mrow></maction>", 2 );
+    addRow( "<maction actiontype=\"tooltip\"><mrow></mrow><mrow></mrow></maction>", 2 );
     addRow( "<maction actiontype=\"highlight\" my:color=\"red\" my:background=\"yellow\"><mrow></mrow></maction>", 1 );
 }
         
@@ -1001,22 +1001,22 @@ void TestLoad::multiscriptsElement()
 
 void TestLoad::tableElement()
 {
-    test( new MatrixElement );
+    test( new TableElement );
 }
 
 void TestLoad::trElement()
 {
-    test( new MatrixRowElement );
+    test( new TableRowElement );
 }
 
 void TestLoad::labeledtrElement()
 {
-    test( new MatrixRowElement );
+    test( new TableRowElement );
 }
 
 void TestLoad::tdElement()
 {
-    test( new MatrixEntryElement );
+    test( new TableEntryElement );
 }
 
 void TestLoad::actionElement()

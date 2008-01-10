@@ -57,9 +57,9 @@ void UnknownElement::insertChild( FormulaCursor* cursor, BasicElement* child )
     Q_UNUSED( child )
 }
 
-BasicElement* UnknownElement::acceptCursor( CursorDirection direction )
+BasicElement* UnknownElement::acceptCursor( const FormulaCursor* cursor )
 {
-    Q_UNUSED( direction )
+    Q_UNUSED( cursor )
     return 0;
 }
 

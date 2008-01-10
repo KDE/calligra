@@ -20,6 +20,7 @@
 */
 
 #include "FractionElement.h"
+#include "FormulaCursor.h"
 #include "AttributeManager.h"
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
@@ -114,18 +115,22 @@ const QList<BasicElement*> FractionElement::childElements()
     return list;
 }
 
-BasicElement* FractionElement::acceptCursor( CursorDirection direction )
+BasicElement* FractionElement::acceptCursor( const FormulaCursor* cursor )
 {
-    switch( direction ) {
+/*    switch( cursor->direction() ) {
         case RightToChild:
             return m_numerator;
-            break;
         case LeftToChild:
             return m_denominator;
-            break;
+        case UpToParent:
+            if( cursor->currentElement() == m_denominator )
+                return m_numerator;
+        case DownToParent:
+            if( cursor->currentElement() == m_numerator )
+                return m_denominator;
         default:
-            return parentElement();
-    }
+            return 0;
+    }*/
 }
 
 void FractionElement::insertChild( FormulaCursor* cursor, BasicElement* child )

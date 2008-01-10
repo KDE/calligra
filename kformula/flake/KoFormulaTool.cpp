@@ -138,7 +138,6 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
     if( !m_formulaCursor )
         return;
 
-    m_formulaCursor->setWordMovement( event->modifiers() & Qt::ControlModifier );
     m_formulaCursor->setSelecting( event->modifiers() & Qt::ShiftModifier );
 
     switch( event->key() )                           // map key to movement or action
@@ -150,16 +149,16 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
 	    remove( false );
             break;
         case Qt::Key_Left:
-	    m_formulaCursor->moveLeft();
+	    m_formulaCursor->move( MoveLeft );
             break;
         case Qt::Key_Up:
-            m_formulaCursor->moveUp();
+            m_formulaCursor->move( MoveUp );
             break;
         case Qt::Key_Right:
-	    m_formulaCursor->moveRight();
+	    m_formulaCursor->move( MoveRight );
             break;
         case Qt::Key_Down:
-	    m_formulaCursor->moveDown();
+	    m_formulaCursor->move( MoveDown );
             break;
         case Qt::Key_End:
 	    m_formulaCursor->moveEnd();

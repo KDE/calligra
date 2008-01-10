@@ -41,12 +41,10 @@ void GlyphElement::layout( const AttributeManager* am )
     if( db.families().contains( fontFamily ) )
     {
         tmpFont.setFamily( fontFamily );
-        tmpString += QChar( am->intOf( "index", this ) ); 
+        tmpString += QChar( am->stringOf( "index", this ).toInt() ); 
     }
     else // if not found paint alt text
-    {
         tmpString = am->stringOf( "alt", this );
-    }
 
     m_glyphPath = QPainterPath();
     m_glyphPath.addText( QPointF( 0, 0 ), tmpFont, tmpString );

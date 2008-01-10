@@ -59,7 +59,7 @@ public:
      * @param direction Indicates whether the cursor moves up, down, right or left
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    BasicElement* acceptCursor( CursorDirection direction );
+    BasicElement* acceptCursor( const FormulaCursor* cursor );
 
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const; 

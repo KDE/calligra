@@ -25,6 +25,7 @@
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <QPainter>
+#include <QVariant>
 
 #include <kdebug.h>
 
@@ -54,7 +55,7 @@ void BasicElement::paint( QPainter& painter, AttributeManager* )
 void BasicElement::layout( const AttributeManager* )
 { /* do nothing */ }
 
-BasicElement* BasicElement::acceptCursor( FormulaCursor* cursor )
+BasicElement* BasicElement::acceptCursor( const FormulaCursor* cursor )
 {
     Q_UNUSED( cursor )
     return 0;

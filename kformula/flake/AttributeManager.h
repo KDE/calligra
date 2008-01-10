@@ -87,20 +87,21 @@ public:
     double doubleOf( const QString& attribute, const BasicElement* element ) const;
 
     /**
+     * Obtain the @p attribute's value as list of doubles
+     * @param attribute A string with the attribute to look up
+     * @param element The element the value is looked up for
+     * @return The value that was looked up
+     */
+    QList<double> doubleListOf( const QString& attribute,
+                                const BasicElement* element ) const;
+
+    /**
      * Obtain the @p attribute's value as string
      * @param attribute A string with the attribute to look up
      * @param element The element the value is looked up for
      * @return The value that was looked up
      */
     QString stringOf( const QString& attribute, BasicElement* element ) const;
-
-    /**
-     * Obtain the @p attribute's value as string list
-     * @param attribute A string with the attribute to look up
-     * @param element The element the value is looked up for
-     * @return The value that was looked up
-     */
-    QStringList stringListOf( const QString& attribute, BasicElement* element ) const;
 
     /**
      * Obtain the @p attribute's value as align
@@ -119,6 +120,23 @@ public:
     QList<Align> alignListOf( const QString& attribute, BasicElement* element ) const;
 
     /**
+     * Obtain the @p attribute's value as Qt::PenStyle
+     * @param attribute A string with the attribute to look up
+     * @param element The element the value is looked up for
+     * @return The value that was looked up
+     */
+    Qt::PenStyle penStyleOf( const QString& attribute, BasicElement* element ) const;
+
+    /**
+     * Obtain the @p attribute's value as list of Qt::PenStyles
+     * @param attribute A string with the attribute to look up
+     * @param element The element the value is looked up for
+     * @return The value that was looked up
+     */
+    QList<Qt::PenStyle> penStyleListOf( const QString& attribute,
+                                        BasicElement* element ) const;
+
+    /**
      * Obtain @p element's scaling factor based on the script level
      * @param element The element which scaling is determined
      * @return The scaling factor
@@ -132,38 +150,34 @@ public:
     double layoutSpacing( const BasicElement* element ) const;
 
     /**
-     * Calculates the pt values of a passes em or ex value
-     * @param font The font used as base for the calculation
-     * @param value The em or ex value to be used for calculation
-     * @param isEm Indicates whether to calculate an ex or em value
-     * @return The calculated pt value
+     * Determine the maximal height of an given element's child elements
+     * @param element The element whos children are used
+     * @return The maximal height
      */
-    double calculateEmEx( QFont font, double value, bool isEm ) const;
-
-
-
-
-
-    /// @return The value of the mathSize attribute for @p element
-    double mathSize( BasicElement* element );
+    double maxHeightOfChildren( BasicElement* element ) const;
 
     /**
-     * Obtain the @p attribute's value as integer
-     * @param attribute A string with the attribute to look up
-     * @param element The element the value is looked up for
-     * @return The value that was looked up
+     * Determine the maximal height of an given element's child elements
+     * @param element The element whos children are used
+     * @return The maximal height
      */
-    int intOf( const QString& attribute, BasicElement* element ) const;
+    double maxWidthOfChildren( BasicElement* element ) const;
+
+    /// @return The Align value that was passed as QString @p value
+    Align parseAlign( const QString& value ) const;
 
     /// Set the KoViewConverter to use
     void setViewConverter( KoViewConverter* converter );
 
 private:
+    /// @return The parsed the @p value into a Qt::PenStyle
+    Qt::PenStyle parsePenStyle( const QString& value ) const;
+
+    /// @return The parsed @p value which is given with a unit
+    double parseUnit( const QString& value, const BasicElement* element ) const;
+
     /// Find a value for @p attribute that applies to @p element
     QString findValue( const QString& attribute, const BasicElement* element ) const;
-
-    /// @return The Align value that was passed as QString @p value
-    Align parseAlign( const QString& value ) const;
 
     /// The KoViewConverter used to determine the point values of pixels
     KoViewConverter* m_viewConverter;

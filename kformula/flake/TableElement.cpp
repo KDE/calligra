@@ -22,81 +22,132 @@
 #include "TableElement.h"
 #include "AttributeManager.h"
 #include "TableRowElement.h"
-#include "TableEntryElement.h"
 #include <KoXmlReader.h>
 #include <QPainter>
+#include <QList>
 
-MatrixElement::MatrixElement( BasicElement* parent ) : BasicElement( parent )
+TableElement::TableElement( BasicElement* parent ) : BasicElement( parent )
 {
     m_framePenStyle = Qt::NoPen;
 }
 
-MatrixElement::~MatrixElement()
+TableElement::~TableElement()
 {}
 
-void MatrixElement::paint( QPainter& painter, AttributeManager* am )
+void TableElement::paint( QPainter& painter, AttributeManager* am )
 {
-    // TODO lookup attributes according to the thickness of the frame...
-
     // draw frame
     if( m_framePenStyle != Qt::NoPen ) {
         painter.setPen( QPen( m_framePenStyle ) );
-        painter.drawRect( 0.0, 0.0, width(), height() );
+        painter.drawRect( QRectF( 0.0, 0.0, width(), height() ) );
     }
 
-    painter.drawPath( m_matrixPath );
+    // draw rowlines
+    double offset = 0.0;
+    for( int i = 0; i < m_rowHeights.count(); i++ ) {
+        offset += m_rowHeights[ i ];
+        painter.drawLine( QPointF( 0.0, offset ), QPointF( width(), offset ) );     
+    }
+
+    // draw columnlines
+    offset = 0.0;
+    for( int i = 0; i < m_colWidths.count(); i++ ) {
+        offset += m_colWidths[ i ];
+        painter.drawLine( QPointF( offset, 0.0 ), QPointF( offset, height() ) );
+    }
 }
 
-void MatrixElement::layout( const AttributeManager* am )
+void TableElement::layout( const AttributeManager* am )
 {
-    m_framePenStyle = parsePenStyle( am->stringOf( "frame", this ) );
+    // lookup attribute values needed for this table
+    m_framePenStyle = am->penStyleOf( "frame", this );
+    m_rowLinePenStyles = am->penStyleListOf( "rowlines", this );
+    m_colLinePenStyles = am->penStyleListOf( "columnlines", this );
+    QList<double> frameSpacing = am->doubleListOf( "framespacing", this );
+    QList<double> rowSpacing = am->doubleListOf( "rowspacing", this );
 
-/*    
-
-    QList<Align> columnAlign = am->alignListOf( "", this );
-
-
-    setBaseLine( parseTableAlign() );
-
-
-    // get attributes
-    rowspacing
-    columnspacin
-    rowlines
-    columnlines
-    rowalign
-    columnalign
-
-    // TODO implement rowspacing
-    double tmpHeight = 0.0;
-    double tmpWidth = 0.0;
-    QPointF tmpOrigin = origin();
-    for( int col = 0; col < m_matrixRowElement.first()->childElements().count(); col++ )
-    foreach( MatrixRowElement* tmpRow, m_matrixRowElements )
-    {
-        tmpWidth = qMax( tmpRow->width(), tmpWidth );
-	tmpHeight += tmpRow->height();
-	tmpRow->setOrigin( tmpOrigin );
-	tmpOrigin = origin() + QPointF( 0, tmpHeight ); 
+    // layout the rows vertically
+    double tmpX = frameSpacing[ 0 ];
+    double tmpY = frameSpacing[ 1 ];
+    for( int i = 0; i < m_rows.count(); i++ ) {
+        m_rows[ i ]->setOrigin( QPointF( tmpX, tmpY ) );
+        tmpY += m_rows[ i ]->height();
+        tmpY += ( i < rowSpacing.count() ) ? rowSpacing[ i ] : rowSpacing.last();
     }
-    setHeight( tmpHeight );
-    setWidth( tmpWidth );*/
+
+    // add the spacing to tmpX and tmpY
+    tmpX += m_rows.first()->width();
+    tmpX += frameSpacing[ 0 ];
+    tmpY += frameSpacing[ 1 ];
+    setWidth( tmpX );
+    setHeight( tmpY );
+    setBaseLine( height() / 2 );
 }
 
-const QList<BasicElement*> MatrixElement::childElements()
+void TableElement::determineDimensions()
+{
+    AttributeManager am;
+    bool equalRows = am.boolOf( "equalrows", this );
+    bool equalColumns = am.boolOf( "equalcolumns", this );
+
+    // determine the dimensions of each row and col based on the biggest element in it
+    BasicElement* entry;
+    double maxWidth = 0.0;
+    double maxHeight = 0.0;
+    for( int row = 0; row < m_rows.count(); row++ ) {
+        m_rowHeights << 0.0;
+        for( int col = 0; col < m_rows.first()->childElements().count(); col++ ) {
+             if( m_colWidths.count() <= col )
+                 m_colWidths << 0.0;
+
+             entry = m_rows[ row ]->childElements()[ col ];
+             m_colWidths[ col ] = qMax( m_colWidths[ col ], entry->width() );
+             m_rowHeights[ row ] = qMax( m_rowHeights[ row ], entry->height() );
+             maxWidth = qMax( entry->width(), maxWidth );
+        }
+        maxHeight = qMax( m_rowHeights[ row ], maxHeight );
+    }
+
+    // treat equalcol and equalrow attributes
+    if( equalRows )
+        for( int i = 0; i < m_rowHeights.count(); i++ )
+            m_rowHeights.replace( i, maxHeight );
+
+    if( equalColumns )
+        for( int i = 0; i < m_colWidths.count(); i++ )
+            m_colWidths.replace( i, maxWidth );
+}
+
+double TableElement::columnWidth( int column )
+{
+    if( m_colWidths.isEmpty() )
+        determineDimensions();
+
+    return m_colWidths[ column ];
+}
+
+double TableElement::rowHeight( TableRowElement* row )
+{
+    if( m_rowHeights.isEmpty() )
+        determineDimensions();
+
+    return m_rowHeights[ m_rows.indexOf( row ) ];
+}
+
+const QList<BasicElement*> TableElement::childElements()
 {
     QList<BasicElement*> tmp;
-    foreach( MatrixRowElement* tmpRow, m_matrixRowElements )
+    foreach( TableRowElement* tmpRow, m_rows )
         tmp << tmpRow;
     return tmp;
 }
 
-BasicElement* MatrixElement::acceptCursor( FormulaCursor* cursor )
+BasicElement* TableElement::acceptCursor( const FormulaCursor* cursor )
 {
     return 0;
 }
 
-QString MatrixElement::attributesDefaultValue( const QString& attribute ) const
+QString TableElement::attributesDefaultValue( const QString& attribute ) const
 {
     if( attribute == "align" )
         return "axis";
@@ -132,52 +183,23 @@ QString MatrixElement::attributesDefaultValue( const QString& attribute ) const
         return QString();
 }
 
-Qt::PenStyle MatrixElement::parsePenStyle( const QString& value ) const
-{
-    return Qt::NoPen;
-}
-
-bool MatrixElement::readMathMLContent( const KoXmlElement& element )
+bool TableElement::readMathMLContent( const KoXmlElement& element )
 {  
-    MatrixRowElement* tmpElement = 0;
+    TableRowElement* tmpElement = 0;
     KoXmlElement tmp;
     forEachElement( tmp, element )   // iterate over the elements
     {
-        tmpElement = new MatrixRowElement( this );
-        m_matrixRowElements << tmpElement;
+        tmpElement = new TableRowElement( this );
+        m_rows << tmpElement;
 	tmpElement->readMathML( tmp );
     }
 
     return true;
 }
 
-void MatrixElement::writeMathMLContent( KoXmlWriter* writer ) const
+void TableElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
-    foreach( MatrixRowElement* tmpRow, m_matrixRowElements )  // write each mtr element
+    foreach( TableRowElement* tmpRow, m_rows )  // write each mtr element
 	tmpRow->writeMathML( writer );
 }
-
-int MatrixElement::indexOfRow( BasicElement* row ) const
-{
-    for( int i = 0; i < m_matrixRowElements.count(); i++ )
-        if( m_matrixRowElements[ i ] == row )
-            return i;
-    return 0;
-}
-/*
-int MatrixElement::rows() const
-{
-    return m_matrixRowElements.count();
-}
-
-int MatrixElement::cols() const
-{
-    return m_matrixRowElements[ 0 ]->childElements().count();
-}
-
-MatrixEntryElement* MatrixElement::matrixEntryAt( int row, int col )
-{
-    return m_matrixRowElements[ row ]->entryAtPosition( col );
-}
-*/
 

@@ -20,24 +20,42 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef MATRIXROWELEMENT_H
-#define MATRIXROWELEMENT_H
+#ifndef TABLEROWELEMENT_H
+#define TABLEROWELEMENT_H
 
 #include "BasicElement.h"
+#include "AttributeManager.h"
 #include "kformula_export.h"
 
-class MatrixEntryElement;
+class TableEntryElement;
 
 /**
  * @short Representing the MathML mtr element.
+ *
+ * Each row is responsible for painting the rowline which is placed over its content.
+ * For layouting each row in a table will query a list of height and width values
+ * from the parental TableElement which can determine these without hussel.
  */
-class KOFORMULA_EXPORT MatrixRowElement : public BasicElement {
+class KOFORMULA_EXPORT TableRowElement : public BasicElement {
 public:
     /// The standard constructor
-    MatrixRowElement( BasicElement* parent = 0 );
+    TableRowElement( BasicElement* parent = 0 );
 
     /// The standard destructor
-    ~MatrixRowElement();
+    ~TableRowElement();
+
+    /**
+     * Render the element to the given QPainter
+     * @param painter The QPainter to paint the element to
+     * @param am AttributeManager containing style info
+     */
+    void paint( QPainter& painter, AttributeManager* am );
+
+    /**
+     * Calculate the size of the element and the positions of its children
+     * @param am The AttributeManager providing information about attributes values
+     */
+    void layout( const AttributeManager* am );
 
     /**
      * Obtain a list of all child elements of this element
@@ -63,13 +81,7 @@ public:
      * @param direction Indicates whether the cursor moves up, down, right or left
      * @return A this pointer if the element accepts if not the element to asked instead
      */
-    BasicElement* acceptCursor( CursorDirection direction );
-
-    /// @return The position of the given @p entry   
-    int positionOfEntry( BasicElement* entry ) const;
-
-    /// @return The MatrixEntryElement at the @p pos position in the MatrixRowElement
-    MatrixEntryElement* entryAt( int pos );
+    BasicElement* acceptCursor( const FormulaCursor* cursor );
 
     /// @return The element's ElementType
     ElementType elementType() const;
@@ -82,8 +94,11 @@ protected:
     void writeMathMLContent( KoXmlWriter* writer ) const;
 
 private:
-    /// The list of entries in this row of the matrix 
-    QList<MatrixEntryElement*> m_matrixEntryElements;
+    /// @return A list of alignments in @p orientation for each element of the table
+    QList<Align> alignments( Qt::Orientation orientation );
+
+    /// The list of entries in this row of the table 
+    QList<TableEntryElement*> m_entries;
 };
 
 #endif

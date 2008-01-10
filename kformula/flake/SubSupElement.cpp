@@ -87,7 +87,7 @@ void SubSupElement::layout( const AttributeManager* am )
         setHeight( yOffset + m_baseElement->height() );
 }
 
-BasicElement* SubSupElement::acceptCursor( CursorDirection direction )
+BasicElement* SubSupElement::acceptCursor( const FormulaCursor* cursor )
 {
     return 0;
 }

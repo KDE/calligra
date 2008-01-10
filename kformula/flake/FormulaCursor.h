@@ -29,14 +29,10 @@ class QString;
 class QPainter;
 
 enum CursorDirection {
-    RightToParent,
-    RightToChild,
-    LeftToParent,
-    LeftToChild,
-    UpToParent,
-    UpToChild,
-    DownToParent,
-    DownToChild,
+    MoveRight,
+    MoveLeft,
+    MoveUp,
+    MoveDown,
     NoDirection
 };
 
@@ -55,6 +51,9 @@ enum CursorDirection {
  * The FormulaCursor class is also used to save a certain place in the formula. With
  * the currentElement() and position() methods it is possible to act with a special
  * place.
+ * Implementing cursor behaviour in an element means reimplementing the acceptCursor
+ * method. The element should return a pointer to itsself if it accepts the cursor
+ * means if it wants the cursor to be set to itsself.
  */
 class KOFORMULA_EXPORT FormulaCursor {
 public:
@@ -88,17 +87,11 @@ public:
      */
     void remove( bool elementBeforePosition );
 
-    /// Move the cursor to the left
-    void moveLeft();
-
-    /// Move the cursor to the right
-    void moveRight();
-
-    /// Move the cursor up
-    void moveUp();
-
-    /// Move the cursor down
-    void moveDown();
+    /**
+     * Move the cursor in the specified @p direction
+     * @param direction Indicates the direction to move to
+     */
+    void move( CursorDirection direction );
 
     /// Move the cursor to the first position in the current element
     void moveHome();
@@ -121,6 +114,9 @@ public:
     /// @return The current direction the cursor is moving in
     CursorDirection direction() const;
 
+    /// @return whether the cursor is moving up or down in the element tree hierachy
+    bool ascending() const;
+
     /**
      * Make the cursor selecting
      * @param selecting When true the cursor is selecting
@@ -130,25 +126,21 @@ public:
     /// @return @c true when the cursor is selecting
     bool hasSelection() const;
 
-    /**
-     * Make the cursor move a whole element
-     * @param wordMovement When true the cursor moves a whole element
-     */
-    void setWordMovement( bool wordMovement );
-
 private:
     /// The element that is currently left to the cursor
     BasicElement* m_currentElement;
 
+    /// The position of the cursor in the current element
     int m_positionInElement;
 
-    /// Indicates whether the cursor should move a whole element
-    bool m_wordMovement;
+    /// The direction the cursor is moving to
+    CursorDirection m_direction;
 
     /// Indicates whether the cursor is currently selecting
     bool m_selecting;
 
-    CursorDirection m_direction;
+    /// Indicates whether the cursor moves up or down in the element tree
+    bool m_ascending;
 };
 
 #endif // FORMULACURSOR_H

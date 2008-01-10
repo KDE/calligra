@@ -22,13 +22,13 @@
 #include "TableEntryElement.h"
 #include <KoXmlWriter.h>
 
-MatrixEntryElement::MatrixEntryElement( BasicElement* parent ) : RowElement( parent )
+TableEntryElement::TableEntryElement( BasicElement* parent ) : RowElement( parent )
 {}
 
-void MatrixEntryElement::layout( const AttributeManager* am )
+void TableEntryElement::layout( const AttributeManager* am )
 {}
 
-QString MatrixEntryElement::attributesDefaultValue( const QString& attribute ) const
+QString TableEntryElement::attributesDefaultValue( const QString& attribute ) const
 {
     if( attribute == "rowspan" || attribute == "columnspan" )
         return "1";
@@ -36,8 +36,8 @@ QString MatrixEntryElement::attributesDefaultValue( const QString& attribute ) c
         return QString();
 } 
 
-ElementType MatrixEntryElement::elementType() const
+ElementType TableEntryElement::elementType() const
 {
-    return MatrixEntry;
+    return TableEntry;
 }
 

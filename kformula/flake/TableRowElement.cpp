@@ -21,174 +21,134 @@
 */
 
 #include "TableRowElement.h"
+#include "TableElement.h"
 #include "TableEntryElement.h"
+#include "AttributeManager.h"
 #include <KoXmlReader.h>
-#include <QPainter>
-#include <QList>
+#include <QStringList>
 
-MatrixRowElement::MatrixRowElement( BasicElement* parent ) : BasicElement( parent )
+TableRowElement::TableRowElement( BasicElement* parent ) : BasicElement( parent )
 {
-    m_matrixEntryElements.append( new MatrixEntryElement( this ) );
+    m_entries.append( new TableEntryElement( this ) );
 }
 
-MatrixRowElement::~MatrixRowElement()
+TableRowElement::~TableRowElement()
 {
+    qDeleteAll( m_entries );
 }
 
-BasicElement* MatrixRowElement::acceptCursor( CursorDirection direction )
+void TableRowElement::paint( QPainter& painter, AttributeManager* am )
+{
+    // nothing to paint
+    Q_UNUSED( painter )
+    Q_UNUSED( am )
+}
+
+void TableRowElement::layout( const AttributeManager* am )
+{
+    // Get the parent table to query width/ height values
+    TableElement* parentTable = static_cast<TableElement*>( parentElement() );
+    setHeight( parentTable->rowHeight( this ) );
+
+    // Get alignment for every table entry
+    QList<Align> verticalAlign = alignments( Qt::Vertical );
+    QList<Align> horizontalAlign = alignments( Qt::Horizontal );
+
+    // align the row's entries
+    QPointF origin;
+    double hOffset = 0.0;
+    for ( int i = 0; i < m_entries.count(); i++ ) {
+        origin = QPointF();
+        hOffset = 0.0;
+        if( verticalAlign[ i ] == Bottom )
+            origin.setY( height() - m_entries[ i ]->height() );
+        else if( verticalAlign[ i ] == Center || verticalAlign[ i ] == BaseLine )
+            origin.setY( ( height() - m_entries[ i ]->height() ) / 2 );
+            // Baseline is treated like Center for the moment until someone also refines
+            // TableElement::determineDimensions so that it pays attention to baseline.
+            // Axis as alignment option is ignored as it is tought to be an option for
+            // the table itsself.
+     
+        if( horizontalAlign[ i ] == Center )
+            hOffset = ( parentTable->columnWidth( i ) - m_entries[ i ]->width() ) / 2;
+        else if( horizontalAlign[ i ] == Right )
+            hOffset = parentTable->columnWidth( i ) - m_entries[ i ]->width();
+
+        m_entries[ i ]->setOrigin( origin + QPointF( hOffset, 0.0 ) );
+        origin += QPointF( parentTable->columnWidth( i ), 0.0 );
+    }
+
+    setWidth( origin.x() );
+    // setting of the baseline should not be needed as the table row will only occur
+    // inside a table where it does not matter if a table row has a baseline or not
+}
+
+BasicElement* TableRowElement::acceptCursor( const FormulaCursor* cursor )
 {
     return 0;
 }
 
-int MatrixRowElement::positionOfEntry( BasicElement* entry ) const
-{
-    for( int i = 0; i < m_matrixEntryElements.count(); i++ )
-         if( m_matrixEntryElements[ i ] == entry )
-             return i;
-    return 0;
-}
-
-MatrixEntryElement* MatrixRowElement::entryAt( int pos )
-{
-    return m_matrixEntryElements[ pos ];
-}
-
-void MatrixRowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
+void TableRowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
 }
 
-void MatrixRowElement::removeChild( BasicElement* element )
+void TableRowElement::removeChild( BasicElement* element )
 {
 }
 
-const QList<BasicElement*> MatrixRowElement::childElements()
+const QList<BasicElement*> TableRowElement::childElements()
 {
     QList<BasicElement*> tmp;
-    foreach( MatrixEntryElement* element, m_matrixEntryElements )
-        tmp.append( element );
+    foreach( TableEntryElement* element, m_entries )
+        tmp << element;
 
     return tmp;
 }
 
-bool MatrixRowElement::readMathMLContent( const KoXmlElement& element )
+QList<Align> TableRowElement::alignments( Qt::Orientation orientation )
 {
-    MatrixEntryElement* tmpEntry = 0;
+    // choose name of the attribute to query
+    QString align = ( orientation == Qt::Horizontal ) ? "columnalign" : "rowalign";
+
+    // get the alignment values of the parental TableElement
+    AttributeManager am;
+    QList<Align> parentAlignList = am.alignListOf( align, this );
+
+    // iterate over all entries and look on per entry specification of alignment
+    QList<Align> alignList;
+    for( int i = 0; i < m_entries.count(); i++ ) {
+        // element got own value for align
+        if( !m_entries[ i ]->attribute( align ).isEmpty() )
+            alignList << am.alignOf( align, m_entries[ i ] );
+        else if( i < parentAlignList.count() )
+            alignList << parentAlignList[ i ];
+        else
+            alignList << parentAlignList.last();
+    } 
+}
+
+bool TableRowElement::readMathMLContent( const KoXmlElement& element )
+{
+    TableEntryElement* tmpEntry = 0;
     KoXmlElement tmp;
     forEachElement( tmp, element )
     {
-        tmpEntry = new MatrixEntryElement( this );
-	m_matrixEntryElements << tmpEntry;
+        tmpEntry = new TableEntryElement( this );
+	m_entries << tmpEntry;
 	tmpEntry->readMathML( tmp );
     }
 
     return true;
 }
 
-void MatrixRowElement::writeMathMLContent( KoXmlWriter* writer ) const
+void TableRowElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
-    foreach( MatrixEntryElement* tmpEntry, m_matrixEntryElements )
+    foreach( TableEntryElement* tmpEntry, m_entries )
         tmpEntry->writeMathML( writer );
 }
 
-ElementType MatrixRowElement::elementType() const
+ElementType TableRowElement::elementType() const
 {
-    return MatrixRow;
+    return TableRow;
 }
-
-#if 0
-void MatrixRowElement::calcSizes( const ContextStyle& context,
-                                  ContextStyle::TextStyle tstyle,
-                                  ContextStyle::IndexStyle istyle,
-                                  StyleAttributes& style )
-{
-    double factor = style.sizeFactor();
-    luPt mySize = context.getAdjustedSize( tstyle, factor );
-    QFont font = context.getDefaultFont();
-    font.setPointSizeF( context.layoutUnitPtToPt( mySize ) );
-    QFontMetrics fm( font );
-    luPixel leading = context.ptToLayoutUnitPt( fm.leading() );
-    luPixel distY = context.ptToPixelY( context.getThinSpace( tstyle, factor ) );
-
-    int count = m_matrixEntryElements.count();
-    luPixel height = -leading;
-    luPixel width = 0;
-    int tabCount = 0;
-    for ( int i = 0; i < count; ++i ) {
-        MatrixEntryElement* line = m_matrixEntryElements[i];
-        line->calcSizes( context, tstyle, istyle, style );
-        tabCount = qMax( tabCount, line->tabCount() );
-
-        height += leading;
-        line->setX( 0 );
-        line->setY( height );
-        height += line->getHeight() + distY;
-        width = qMax( line->getWidth(), width );
-    }
-
-    // calculate the tab positions
-    for ( int t = 0; t < tabCount; ++t ) {
-        luPixel pos = 0;
-        for ( int i = 0; i < count; ++i ) {
-            MatrixEntryElement* line = m_matrixEntryElements[i];
-            if ( t < line->tabCount() ) {
-                pos = qMax( pos, line->tab( t )->getX() );
-            }
-            else {
-                pos = qMax( pos, line->getWidth() );
-            }
-        }
-        for ( int i = 0; i < count; ++i ) {
-            MatrixEntryElement* line = m_matrixEntryElements[i];
-            if ( t < line->tabCount() ) {
-                line->moveTabTo( t, pos );
-                width = qMax( width, line->getWidth() );
-            }
-        }
-    }
-
-    setHeight( height );
-    setWidth( width );
-    if ( count == 1 ) {
-        setBaseline( m_matrixEntryElements.at( 0 )->getBaseline() );
-    }
-    else {
-        // There's always a first line. No formulas without lines.
-        setBaseline( height/2 + context.axisHeight( tstyle, factor ) );
-    }
-}
-
-void MatrixRowElement::draw( QPainter& painter, const LuPixelRect& r,
-                             const ContextStyle& context,
-                             ContextStyle::TextStyle tstyle,
-                             ContextStyle::IndexStyle istyle,
-                             StyleAttributes& style,
-                             const LuPixelPoint& parentOrigin )
-{
-    LuPixelPoint myPos( parentOrigin.x() + getX(), parentOrigin.y() + getY() );
-    int count = m_matrixEntryElements.count();
-
-    if ( context.edit() ) {
-        int tabCount = 0;
-        painter.setPen( context.getHelpColor() );
-        for ( int i = 0; i < count; ++i ) {
-            MatrixEntryElement* line = m_matrixEntryElements[i];
-            if ( tabCount < line->tabCount() ) {
-                for ( int t = tabCount; t < line->tabCount(); ++t ) {
-                    BasicElement* marker = line->tab( t );
-                    painter.drawLine( context.layoutUnitToPixelX( myPos.x()+marker->getX() ),
-                                      context.layoutUnitToPixelY( myPos.y() ),
-                                      context.layoutUnitToPixelX( myPos.x()+marker->getX() ),
-                                      context.layoutUnitToPixelY( myPos.y()+getHeight() ) );
-                }
-                tabCount = line->tabCount();
-            }
-        }
-    }
-
-    for ( int i = 0; i < count; ++i ) {
-        MatrixEntryElement* line = m_matrixEntryElements[i];
-        line->draw( painter, r, context, tstyle, istyle, style, myPos );
-    }
-}
-#endif
 
