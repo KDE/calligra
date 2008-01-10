@@ -81,6 +81,9 @@ public:
     void saveOdf( KoShapeSavingContext& context ) const;
 
 private:
+    /// reimplemented from KoShape
+    virtual KoShape * cloneShape() const;
+
     /// The element at the highest level in the formula tree, contains all other elements
     BasicElement* m_formulaElement;
 

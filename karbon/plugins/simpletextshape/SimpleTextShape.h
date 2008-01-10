@@ -100,6 +100,8 @@ private:
     void cacheGlyphOutlines();
     bool pathHasChanged() const;
     virtual void notifyShapeChanged( KoShape * shape, ChangeType type );
+    /// reimplemented from KoShape
+    virtual KoShape * cloneShape() const;
 
     void createOutline();
     QString m_text; ///< the text content

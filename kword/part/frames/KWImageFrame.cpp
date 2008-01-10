@@ -30,6 +30,7 @@ public:
     void paint(QPainter &, const KoViewConverter &) {}
     void saveOdf(KoShapeSavingContext &) const { }
     bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return false; }
+    virtual KoShape * cloneShape() const { return 0; }
 };
 
 static KoShape *createShape(const KoImageData &image) {

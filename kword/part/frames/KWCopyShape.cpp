@@ -35,6 +35,12 @@ KWCopyShape::KWCopyShape(KoShape *original)
 KWCopyShape::~KWCopyShape() {
 }
 
+KoShape * KWCopyShape::cloneShape() const
+{
+    // TODO implement cloning
+    return 0;
+}
+
 void KWCopyShape::paint(QPainter &painter, const KoViewConverter &converter) {
     painter.setClipRect(QRectF(QPointF(0, 0), converter.documentToView(size()))
             .adjusted(-2, -2, 2, 2), // adjust for anti aliassing.

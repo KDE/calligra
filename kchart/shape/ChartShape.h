@@ -172,6 +172,9 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     void setChartDefaults();
     void setDiagramDefaults( OdfChartType type = LastChartType );
 
+    /// reimplemented from KoShape
+    virtual KoShape * cloneShape() const;
+
     //static bool  isCartesian( OdfChartType type );
     //static bool  isPolar( OdfChartType type );
     Q_DISABLE_COPY( ChartShape )

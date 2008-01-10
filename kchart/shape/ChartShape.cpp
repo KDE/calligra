@@ -240,6 +240,11 @@ ChartShape::~ChartShape()
     delete d;
 }
 
+KoShape * ChartShape::cloneShape() const
+{
+    // TODO implement cloning
+    return 0;
+}
 
 void ChartShape::refreshPixmap( QPainter &painter, const KoViewConverter &converter )
 {

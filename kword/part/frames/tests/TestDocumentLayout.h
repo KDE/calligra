@@ -45,6 +45,7 @@ class MockTextShape : public KoShape {
     virtual void paint(QPainter &, const KoViewConverter &) { }
     virtual void saveOdf( KoShapeSavingContext & ) const {}
     virtual bool loadOdf( const KoXmlElement &, KoShapeLoadingContext &) { return false; }
+    virtual KoShape * cloneShape() const { return 0; }
 };
 
 #endif
