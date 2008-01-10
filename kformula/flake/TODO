@@ -1,12 +1,12 @@
 - make load and save working for every element
   -> update test suite
-- finish implementation of the TableElement
+* finish implementation of the TableElement
 - implement inheritsAttribute() method in every element class
 - finish the scriptLevel implementation in AttributeManager
 - solve viewConverter problem in AttributeManager
 - implement a AttributeManager test for scriptLevel
-- setBaseLIne in TableElement
-- rowlines in TableElement
+* setBaseLIne in TableElement
+* rowlines in TableElement
 - add defaultAttributevalues to mstyle
 *done add PenStyle parsing to mtable element
 - solve KoViewConverter issue in AttributeManager, make it always set...
