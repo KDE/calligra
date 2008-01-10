@@ -400,13 +400,9 @@ Field::Type BinaryExpr::type()
 	if (ltInt && rtInt)
 		return KexiDB::maximumForIntegerTypes(lt, rt);
 
-	if (Field::isFPNumericType(lt) && rtInt)
+	if (Field::isFPNumericType(lt) && (rtInt || lt==rt))
 		return lt;
-	if (Field::isFPNumericType(rt) && ltInt)
-		return rt;
-	if ((lt==Field::Double || lt==Field::Float) && rtInt)
-		return lt;
-	if ((rt==Field::Double || rt==Field::Float) && ltInt)
+	if (Field::isFPNumericType(rt) && (ltInt || lt==rt))
 		return rt;
 
 	return Field::Boolean;
