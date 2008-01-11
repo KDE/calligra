@@ -65,6 +65,7 @@ const KComponentData &KivioFactory::componentData()
     s_instance = new KComponentData(aboutData());
 
     s_instance->dirs()->addResourceType("kivio_template", "data", "kivio/templates/");
+    s_instance->dirs()->addResourceType("app_shape_collections", "data", "kivio/shapecollections/");
     KIconLoader::global()->addAppDir("koffice");
   }
 

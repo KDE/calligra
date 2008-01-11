@@ -24,7 +24,6 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoPACanvas.h>
-#include <KoPADocumentStructureDocker.h>
 
 #include "KivioDocument.h"
 
