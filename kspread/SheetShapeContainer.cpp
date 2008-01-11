@@ -50,7 +50,7 @@ SheetShapeContainer::SheetShapeContainer(const SheetShapeContainer& other, Sheet
     QList<KoShape*> shapes = other.iterator();
     for (int i = 0; i < shapes.count(); ++i)
     {
-        shape = KoShapeRegistry::instance()->value(shapes[i]->shapeId())->createDefaultShape();
+        shape = KoShapeRegistry::instance()->value(shapes[i]->shapeId())->createDefaultShape( 0 );
         shape->copySettings(shapes[i]);
         addChild(shape);
     }
