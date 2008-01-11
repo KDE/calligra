@@ -42,10 +42,21 @@ WPControlPanel::WPControlPanel( View *view, Task &task, QWidget *p )
     : WorkPackageControlPanel( view->getProject(), task, p ),
     m_view( view )
 {
+    transferWP->hide(); //
 }
 
 void WPControlPanel::slotTransferWPClicked()
 {
+}
+
+void WPControlPanel::slotLoadWPClicked()
+{
+    kDebug();
+}
+
+void WPControlPanel::slotMailToClicked()
+{
+    kDebug();
     KTemporaryFile tmpfile;
     tmpfile.setAutoRemove( false );
     tmpfile.setSuffix( ".kplatowork" );
@@ -63,7 +74,12 @@ void WPControlPanel::slotTransferWPClicked()
     }
     QStringList attachURLs;
     attachURLs << url.url();
-    QString to;
+    QStringList lst;
+    lst << m_task.leader();
+    foreach ( Resource *r, m_task.workPackage().resources() ) {
+        lst << r->name() + " <" + r->email() + '>';
+    }
+    QString to = lst.join( "," );
     QString cc;
     QString bcc;
     QString subject = i18n( "Work Package: %1", m_task.name() );
@@ -71,17 +87,6 @@ void WPControlPanel::slotTransferWPClicked()
     QString messageFile;
 
     KToolInvocation::invokeMailer( to, cc, bcc, subject, body, messageFile, attachURLs );
-    
-}
-
-void WPControlPanel::slotLoadWPClicked()
-{
-    kDebug();
-}
-
-void WPControlPanel::slotMailToClicked()
-{
-    kDebug();
 }
 
 

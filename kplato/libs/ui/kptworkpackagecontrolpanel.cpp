@@ -40,6 +40,7 @@ WorkPackageControlPanel::WorkPackageControlPanel( Project &project, Task &task, 
 {
     setupUi( this );
     
+    responsible->setText( m_task.leader() );
     task.workPackage().setScheduleManager( 0 );
     
     resourceTable->itemModel()->setProject( &project );
