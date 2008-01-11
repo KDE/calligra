@@ -222,7 +222,7 @@ class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextF
             }
             
             KoProperties props;
-            KoShape *shape = factory->createShape(&props);
+            KoShape *shape = factory->createShape( &props, 0 );
             
             if (!shape) {
                 kDebug() << "No table shape";
@@ -428,7 +428,7 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
     KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     Q_ASSERT(factory);
     // Create a TextShape
-    KoShape *shape = factory->createDefaultShape();
+    KoShape *shape = factory->createDefaultShape( 0 );
     Q_ASSERT(shape);
     // The TextShape will be displayed within a KWTextFrame
     KWTextFrame *frame = new KWTextFrame(shape, fs);
@@ -694,7 +694,7 @@ void KWOpenDocumentLoader::loadHeaderFooter(KoTextLoadingContext& context, const
     fs->setName(fsTypeName);
     KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     Q_ASSERT(factory);
-    KoShape *shape = factory->createDefaultShape();
+    KoShape *shape = factory->createDefaultShape( 0 );
     KWTextFrame *frame = new KWTextFrame(shape, fs);
     d->currentFramesetName = fs->name();
     d->document->addFrameSet(fs);

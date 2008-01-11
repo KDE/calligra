@@ -36,7 +36,7 @@ public:
 static KoShape *createShape(const KoImageData &image) {
     KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape");
     if(factory) {
-        KoShape *shape = factory->createDefaultShape();
+        KoShape *shape = factory->createDefaultShape( 0 );
         shape->setUserData(new KoImageData(image));
         return shape;
     }
@@ -61,7 +61,7 @@ void KWImageFrame::setImageQuality(KWImageFrame::ImageQuality quality) {
         // create and initialize a krita shape.
         KoShapeFactory *factory = KoShapeRegistry::instance()->value("KritaShape");
         if(factory) {
-            KoShape *shape = factory->createDefaultShape();
+            KoShape *shape = factory->createDefaultShape( 0 );
             shape->setUserData(new KoImageData(m_imageData));
             setShape(shape);
             m_imageData.setImageQuality(KoImageData::NoPreviewImage); // flush pixmap from imageData object.

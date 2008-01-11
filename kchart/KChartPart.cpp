@@ -98,7 +98,7 @@ KChartPart::KChartPart( QWidget *parentWidget,
     m_chartData( 0 )
 {
     // A KChart part contains a single chart Flake shape. 
-    m_chartShape = ( ChartShape* )( KoShapeRegistry::instance()->value("ChartShape") )->createDefaultShape();
+    m_chartShape = ( ChartShape* )( KoShapeRegistry::instance()->value("ChartShape") )->createDefaultShape( 0 );
     setComponentData( KChartFactory::global(), false );
     setTemplateType( "kchart_template" );
 
