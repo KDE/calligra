@@ -288,8 +288,6 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
 
     m_doc.loadOasis( page, shapeContext );
 
-    shapeContext.transferShapesToDocument( this );
-
     if( m_doc.pageSize().isEmpty() )
     {
         QSizeF pageSize = m_doc.contentRect().united( QRectF(0,0,1,1) ).size();
