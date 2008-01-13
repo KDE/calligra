@@ -36,7 +36,7 @@ SimpleTextShapeConfigWidget::SimpleTextShapeConfigWidget()
     widget.anchorMiddle->setCheckable( true );
     widget.anchorEnd->setIcon( KIcon( "format-justify-right" ) );
     widget.anchorEnd->setCheckable( true );
-    widget.fontSize->setRange( 2, 72 );
+    widget.fontSize->setRange( 2, 1000 );
 
     m_anchorGroup = new QButtonGroup(this);
     m_anchorGroup->addButton( widget.anchorStart );
