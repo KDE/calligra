@@ -47,7 +47,7 @@
 #include <plugins/simpletextshape/SimpleTextShape.h>
 
 #include <kgenericfactory.h>
-//#include <kdebug.h>
+#include <kdebug.h>
 #include <kfilterdev.h>
 
 #include <QtGui/QColor>
@@ -56,6 +56,8 @@
 #include <QtCore/QDir>
 #include <QtGui/QTextCursor>
 #include <QtGui/QTextCharFormat>
+
+#define DPI 72.0
 
 K_PLUGIN_FACTORY( SvgImportFactory, registerPlugin<SvgImport>(); )
 K_EXPORT_PLUGIN( SvgImportFactory( "kofficefilters" ) )
@@ -152,13 +154,17 @@ void SvgImport::convert()
         QStringList points = viewbox.replace( ',', ' ').simplified().split( ' ' );
         if( points.count() == 4 )
         {
-                viewBox.setWidth( points[2].toFloat() );
-                viewBox.setHeight( points[3].toFloat() );
+            viewBox.setWidth( fromUserSpace( points[2].toFloat() ) );
+            viewBox.setHeight( fromUserSpace( points[3].toFloat() ) );
         }
     }
 
-    double width = !docElem.attribute( "width" ).isEmpty() ? parseUnit( docElem.attribute( "width" ), true, false, viewBox ) : 550.0;
-    double height = !docElem.attribute( "height" ).isEmpty() ? parseUnit( docElem.attribute( "height" ), false, true, viewBox ) : 841.0;
+    double width = 550.0;
+    if( ! docElem.attribute( "width" ).isEmpty() )
+        width = parseUnit( docElem.attribute( "width" ), true, false, viewBox );
+    double height = 841.0;
+    if( ! docElem.attribute( "height" ).isEmpty() )
+        height = parseUnit( docElem.attribute( "height" ), false, true, viewBox );
     m_document->setPageSize( QSizeF( width, height ) );
     m_outerRect = QRectF( QPointF(0,0), m_document->pageSize() );
 
@@ -205,8 +211,6 @@ void SvgImport::convert()
     }
 }
 
-#define DPI 72.0
-
 // Helper functions
 // ---------------------------------------------------------------------------------------
 
@@ -224,6 +228,11 @@ double SvgImport::fromPercentage( QString s )
         return s.remove( '%' ).toDouble() / 100.0;
     else
         return s.toDouble();
+}
+
+double SvgImport::fromUserSpace( double value )
+{
+    return (value * DPI ) / 90.0;
 }
 
 double SvgImport::getScalingFromMatrix( QMatrix &matrix )
@@ -359,9 +368,9 @@ QMatrix SvgImport::parseTransform( const QString &transform )
         else if(subtransform[0] == "translate")
         {
             if(params.count() == 2)
-                result.translate(params[0].toDouble(), params[1].toDouble());
+                result.translate( fromUserSpace(params[0].toDouble()), fromUserSpace(params[1].toDouble()));
             else    // Spec : if only one param given, assume 2nd param to be 0
-                result.translate(params[0].toDouble() , 0);
+                result.translate( fromUserSpace(params[0].toDouble()) , 0);
         }
         else if(subtransform[0] == "scale")
         {
@@ -379,7 +388,7 @@ QMatrix SvgImport::parseTransform( const QString &transform )
         else if(subtransform[0] == "matrix")
         {
             if(params.count() >= 6)
-                result.setMatrix(params[0].toDouble(), params[1].toDouble(), params[2].toDouble(), params[3].toDouble(), params[4].toDouble(), params[5].toDouble());
+                result.setMatrix(params[0].toDouble(), params[1].toDouble(), params[2].toDouble(), params[3].toDouble(), fromUserSpace(params[4].toDouble()), fromUserSpace(params[5].toDouble()));
         }
     }
 
@@ -528,18 +537,23 @@ double SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, QRectF 
 
     if( int( end - start ) < unit.length() )
     {
-        if( unit.right( 2 ) == "pt" )
-            value = ( value / 72.0 ) * DPI;
+        if( unit.right( 2 ) == "px" )
+            value = fromUserSpace( value );
         else if( unit.right( 2 ) == "cm" )
-            value = ( value / 2.54 ) * DPI;
+            value = CM_TO_POINT( value );
         else if( unit.right( 2 ) == "pc" )
-            value = ( value / 6.0 ) * DPI;
+            value = PI_TO_POINT( value );
         else if( unit.right( 2 ) == "mm" )
-            value = ( value / 25.4 ) * DPI;
+            value = MM_TO_POINT( value );
         else if( unit.right( 2 ) == "in" )
-            value = value * DPI;
+            value = INCH_TO_POINT( value );
         else if( unit.right( 2 ) == "em" )
-            value = value * m_gc.top()->font.pointSize() / ( sqrt( pow( m_gc.top()->matrix.m11(), 2 ) + pow( m_gc.top()->matrix.m22(), 2 ) ) / sqrt( 2.0 ) );
+            value = value * m_gc.top()->font.pointSize();
+        else if( unit.right( 2 ) == "ex" )
+        {
+            QFontMetrics metrics( m_gc.top()->font );
+            value = value * metrics.xHeight();
+        }
         else if( unit.right( 1 ) == "%" )
         {
             if( horiz && vert )
@@ -549,6 +563,10 @@ double SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, QRectF 
             else if( vert )
                 value = ( value / 100.0 ) * bbox.height();
         }
+    }
+    else
+    {
+        value = fromUserSpace( value );
     }
     /*else
     {
@@ -562,6 +580,8 @@ double SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, QRectF 
                 value /= m_gc.top()->matrix.m22();
         }
     }*/
+    //value *= 90.0 / DPI;
+
     return value;
 }
 
@@ -744,8 +764,10 @@ void SvgImport::parseGradient( const QDomElement &e , const QDomElement &referen
         }
         else
         {
-            g->setStart( QPointF( b.attribute( "x1" ).toDouble(), b.attribute( "y1" ).toDouble() ) );
-            g->setFinalStop( QPointF( b.attribute( "x2" ).toDouble(), b.attribute( "y2" ).toDouble() ) );
+            g->setStart( QPointF( fromUserSpace(b.attribute( "x1" ).toDouble()),
+                                  fromUserSpace( b.attribute( "y1" ).toDouble() ) ) );
+            g->setFinalStop( QPointF( fromUserSpace( b.attribute( "x2" ).toDouble() ), 
+                                      fromUserSpace( b.attribute( "y2" ).toDouble() ) ) );
         }
         // preserve color stops
         if( gradhelper.gradient() )
@@ -763,9 +785,11 @@ void SvgImport::parseGradient( const QDomElement &e , const QDomElement &referen
         }
         else
         {
-            g->setCenter( QPointF( b.attribute( "cx" ).toDouble(), b.attribute( "cy" ).toDouble() ) );
-            g->setFocalPoint( QPointF( b.attribute( "fx" ).toDouble(), b.attribute( "fy" ).toDouble() ) );
-            g->setRadius( b.attribute( "r" ).toDouble() );
+            g->setCenter( QPointF( fromUserSpace( b.attribute( "cx" ).toDouble() ), 
+                                   fromUserSpace( b.attribute( "cy" ).toDouble() ) ) );
+            g->setFocalPoint( QPointF( fromUserSpace( b.attribute( "fx" ).toDouble() ), 
+                                       fromUserSpace( b.attribute( "fy" ).toDouble() ) ) );
+            g->setRadius( fromUserSpace( b.attribute( "r" ).toDouble() ) );
         }
         // preserve color stops
         if( gradhelper.gradient() )
@@ -854,7 +878,6 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
             unsigned int end = params.lastIndexOf(')');
             QString key = params.mid( start, end - start );
             SvgGradientHelper * gradHelper = findGradient( key );
-            kDebug(30514) << "gradient =" << gradHelper << "key =" << key;
             if( gradHelper && obj )
             {
                 QBrush brush;
@@ -945,7 +968,6 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
     else if( command == "font-size" )
     {
         float pointSize = parseUnit( params );
-        pointSize *= getScalingFromMatrix( gc->matrix ) * KoGlobal::dpiY() / DPI;
         if( pointSize > 0.0f ) 
             gc->font.setPointSizeF( pointSize );
     }
@@ -1106,17 +1128,17 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
 
 void SvgImport::parseFont( const QDomElement &e )
 {
-    SvgGraphicsContext *gc = m_gc.top();
+    SvgGraphicsContext * gc = m_gc.top();
     if( !gc ) return;
 
-    if( ! e.attribute( "font-family" ).isEmpty() )	
-        parsePA( 0L, m_gc.top(), "font-family", e.attribute( "font-family" ) );
-    if( ! e.attribute( "font-size" ).isEmpty() )	
-        parsePA( 0L, m_gc.top(), "font-size", e.attribute( "font-size" ) );
-    if( ! e.attribute( "font-weight" ).isEmpty() )	
-        parsePA( 0L, m_gc.top(), "font-weight", e.attribute( "font-weight" ) );
+    if( ! e.attribute( "font-family" ).isEmpty() )
+        parsePA( 0L, gc, "font-family", e.attribute( "font-family" ) );
+    if( ! e.attribute( "font-size" ).isEmpty() )
+        parsePA( 0L, gc, "font-size", e.attribute( "font-size" ) );
+    if( ! e.attribute( "font-weight" ).isEmpty() )
+        parsePA( 0L, gc, "font-weight", e.attribute( "font-weight" ) );
     if( ! e.attribute( "text-decoration" ).isEmpty() )
-        parsePA( 0L, m_gc.top(), "text-decoration", e.attribute( "text-decoration" ) );
+        parsePA( 0L, gc, "text-decoration", e.attribute( "text-decoration" ) );
 }
 
 QList<KoShape*> SvgImport::parseUse( const QDomElement &e )
@@ -1287,8 +1309,6 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
     setupTransform( b );
     updateContext( b );
 
-    parseFont( b );
-
     if( ! b.attribute( "text-anchor" ).isEmpty() )
         anchor = b.attribute( "text-anchor" );
 
@@ -1402,9 +1422,9 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
                 anchor = e.attribute( "text-anchor" );
         }
 
-        text->setFont( m_gc.top()->font );
         text->setText( content.simplified() );
         textPosition -= QPointF( 0, text->baselineOffset() );
+        kDebug(30514) << "with childs -> baseline offset =" << text->baselineOffset();
         text->setPosition( textPosition );
 
         if( path )
@@ -1413,10 +1433,10 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
                 text->putOnPath( path );
             else
                 text->putOnPath( path->absoluteTransformation(0).map( path->outline() ) );
-        }
 
-        if( offset > 0.0 )
-            text->setStartOffset( offset );
+            if( offset > 0.0 )
+                text->setStartOffset( offset );
+        }
     }
     else
     {
@@ -1428,8 +1448,9 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
         if( ! text )
             return 0;
 
-        text->setFont( m_gc.top()->font );
         text->setText( b.text().simplified() );
+        kDebug(30514) << "baseline offset =" << text->baselineOffset();
+        textPosition -= QPointF( 0, text->baselineOffset() );
         text->setPosition( textPosition );
     }
 
@@ -1440,17 +1461,19 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
     }
 
     parseStyle( text, b );
-
-    text->setBackground( m_gc.top()->fill );
-    text->applyAbsoluteTransformation( m_gc.top()->matrix );
-
-    if( !b.attribute("id").isEmpty() )
-        text->setName( b.attribute("id") );
+    parseFont( b );
 
     if( anchor == "middle" )
         text->setTextAnchor( SimpleTextShape::AnchorMiddle );
     else if( anchor == "end" )
         text->setTextAnchor( SimpleTextShape::AnchorEnd );
+
+    text->setFont( m_gc.top()->font );
+    text->setBackground( m_gc.top()->fill );
+    text->applyAbsoluteTransformation( m_gc.top()->matrix );
+
+    if( !b.attribute("id").isEmpty() )
+        text->setName( b.attribute("id") );
 
     removeGraphicContext();
 
@@ -1481,17 +1504,17 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
             rx = ry;
 
         KoRectangleShape * rect = static_cast<KoRectangleShape*>( createShape( KoRectangleShapeId ) );
-        if( ! rect )
-            return 0;
-
-        rect->setSize( QSizeF(w,h) );
-        rect->setPosition( QPointF(x,y) );
-        if( rx >= 0.0 )
-            rect->setCornerRadiusX( qMin( 100.0, rx / (0.5 * w) * 100.0 ) );
-        rect->setPosition( QPointF(x,y) );
-        if( ry >= 0.0 )
-            rect->setCornerRadiusY( qMin( 100.0, ry / (0.5 * h) * 100.0 ) );
-        obj = rect;
+        if( rect )
+        {
+            rect->setSize( QSizeF(w,h) );
+            rect->setPosition( QPointF(x,y) );
+            if( rx >= 0.0 )
+                rect->setCornerRadiusX( qMin( 100.0, rx / (0.5 * w) * 100.0 ) );
+            rect->setPosition( QPointF(x,y) );
+            if( ry >= 0.0 )
+                rect->setCornerRadiusY( qMin( 100.0, ry / (0.5 * h) * 100.0 ) );
+            obj = rect;
+        }
     }
     else if( b.tagName() == "ellipse" )
     {
@@ -1500,10 +1523,11 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
         double left = parseUnit( b.attribute( "cx" ) ) - rx;
         double top  = parseUnit( b.attribute( "cy" ) ) - ry;
         obj = createShape( KoEllipseShapeId );
-        if( ! obj )
-            return 0;
-        obj->setSize( QSizeF(2*rx, 2*ry) );
-        obj->setPosition( QPointF(left,top) );
+        if( obj )
+        {
+            obj->setSize( QSizeF(2*rx, 2*ry) );
+            obj->setPosition( QPointF(left,top) );
+        }
     }
     else if( b.tagName() == "circle" )
     {
@@ -1511,108 +1535,116 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
         double left = parseUnit( b.attribute( "cx" ) ) - r;
         double top  = parseUnit( b.attribute( "cy" ) ) - r;
         obj = createShape( KoEllipseShapeId );
-        if( ! obj )
-            return 0;
-        obj->setSize( QSizeF(2*r, 2*r) );
-        obj->setPosition( QPointF(left,top) );
+        if( obj )
+        {
+            obj->setSize( QSizeF(2*r, 2*r) );
+            obj->setPosition( QPointF(left,top) );
+        }
     }
     else if( b.tagName() == "line" )
     {
         KoPathShape * path = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
-        if( ! path )
-            return 0;
-
-        path->clear();
-
-        double x1 = b.attribute( "x1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x1" ) );
-        double y1 = b.attribute( "y1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y1" ) );
-        double x2 = b.attribute( "x2" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x2" ) );
-        double y2 = b.attribute( "y2" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y2" ) );
-        path->moveTo( QPointF( x1, y1 ) );
-        path->lineTo( QPointF( x2, y2 ) );
-        obj = path;
+        if( path )
+        {
+            double x1 = b.attribute( "x1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x1" ) );
+            double y1 = b.attribute( "y1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y1" ) );
+            double x2 = b.attribute( "x2" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x2" ) );
+            double y2 = b.attribute( "y2" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y2" ) );
+            path->clear();
+            path->moveTo( QPointF( x1, y1 ) );
+            path->lineTo( QPointF( x2, y2 ) );
+            obj = path;
+        }
     }
     else if( b.tagName() == "polyline" || b.tagName() == "polygon" )
     {
         KoPathShape * path = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
-        if( ! path )
-            return 0;
-
-        path->clear();
-
-        bool bFirst = true;
-
-        QString points = b.attribute( "points" ).simplified();
-        points.replace( ',', ' ' );
-        points.remove( '\r' );
-        points.remove( '\n' );
-        QStringList pointList = points.split( ' ' );
-        for( QStringList::Iterator it = pointList.begin(); it != pointList.end(); ++it)
+        if( path )
         {
-            QPointF point;
-            point.setX( (*it).toDouble() );
-            ++it;
-            point.setY( (*it).toDouble() );
-            if( bFirst )
+            path->clear();
+
+            bool bFirst = true;
+            QString points = b.attribute( "points" ).simplified();
+            points.replace( ',', ' ' );
+            points.remove( '\r' );
+            points.remove( '\n' );
+            QStringList pointList = points.split( ' ' );
+            for( QStringList::Iterator it = pointList.begin(); it != pointList.end(); ++it)
             {
-                path->moveTo( point );
-                bFirst = false;
+                QPointF point;
+                point.setX( fromUserSpace( (*it).toDouble() ) );
+                ++it;
+                point.setY( fromUserSpace( (*it).toDouble() ) );
+                if( bFirst )
+                {
+                    path->moveTo( point );
+                    bFirst = false;
+                }
+                else
+                    path->lineTo( point );
             }
-            else
-                path->lineTo( point );
+            if( b.tagName() == "polygon" ) 
+                path->close();
+
+            path->setPosition( path->normalize() );
+
+            obj = path;
         }
-        if( b.tagName() == "polygon" ) 
-            path->close();
-
-        path->setPosition( path->normalize() );
-
-        obj = path;
     }
     else if( b.tagName() == "path" )
     {
         KoPathShape * path = static_cast<KoPathShape*>( createShape( KoPathShapeId ) );
-        if( ! path )
-            return 0;
+        if( path )
+        {
+            path->clear();
 
-        path->clear();
+            KoPathShapeLoader loader( path );
+            loader.parseSvg( b.attribute( "d" ), true );
+            path->setPosition( path->normalize() );
 
-        KoPathShapeLoader loader( path );
-        loader.parseSvg( b.attribute( "d" ), true );
-        path->setPosition( path->normalize() );
-        obj = path;
+            QPointF newPosition = QPointF( fromUserSpace( path->position().x() ), fromUserSpace( path->position().y() ) );
+            QSizeF newSize = QSizeF( fromUserSpace( path->size().width() ), fromUserSpace( path->size().height() ) );
+
+            path->setSize( newSize );
+            path->setPosition( newPosition );
+
+            obj = path;
+        }
     }
     else if( b.tagName() == "image" )
     {
         QString fname = b.attribute("xlink:href");
         QImage img;
+        bool imageLoaded = false;
         if( fname.startsWith( "data:" ) )
         {
             int start = fname.indexOf( "base64," );
-            if( start < 0 )
-                return 0;
-            if( ! img.loadFromData( QByteArray::fromBase64( fname.mid( start + 7 ).toLatin1() ) ) )
-                return 0;
+            if( start > 0 && img.loadFromData( QByteArray::fromBase64( fname.mid( start + 7 ).toLatin1() ) ) )
+                imageLoaded = true;
         }
-        else if( ! img.load( absoluteFilePath( fname, m_gc.top()->xmlBaseDir ) ) )
-            return 0;
+        else if( img.load( absoluteFilePath( fname, m_gc.top()->xmlBaseDir ) ) )
+            imageLoaded = true;
 
-        KoImageData * data = new KoImageData( m_document->imageCollection() );
-        data->setImage( img );
+        if( imageLoaded )
+        {
+            KoImageData * data = new KoImageData( m_document->imageCollection() );
+            data->setImage( img );
 
-        double x = parseUnit( b.attribute( "x" ) );
-        double y = parseUnit( b.attribute( "y" ) );
-        double w = parseUnit( b.attribute( "width" ) );
-        double h = parseUnit( b.attribute( "height" ) );
+            double x = parseUnit( b.attribute( "x" ) );
+            double y = parseUnit( b.attribute( "y" ) );
+            double w = parseUnit( b.attribute( "width" ) );
+            double h = parseUnit( b.attribute( "height" ) );
 
-        PictureShape * picture = new PictureShape();
-        picture->setUserData( data );
-        picture->setSize( QSizeF(w,h) );
-        picture->setPosition( QPointF(x,y) );
+            PictureShape * picture = new PictureShape();
+            picture->setUserData( data );
+            picture->setSize( QSizeF(w,h) );
+            picture->setPosition( QPointF(x,y) );
 
-        obj = picture;
+            obj = picture;
+        }
     }
 
-    if( !obj )
+    if( ! obj )
     {
         removeGraphicContext();
         return 0;

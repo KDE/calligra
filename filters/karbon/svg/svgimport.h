@@ -77,6 +77,7 @@ protected:
 
     double toPercentage( QString );
     double fromPercentage( QString );
+    double fromUserSpace( double value );
 
     void setupTransform( const QDomElement & );
     void updateContext( const QDomElement & );
