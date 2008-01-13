@@ -122,8 +122,9 @@ KoShape* ChartShapeFactory::createDefaultShape() const
 KoShape* ChartShapeFactory::createShape( const KoProperties* params ) const
 {
     Q_UNUSED( params );
-
-    return new ChartShape();
+    
+    // TODO Use KoProperties to create a custom shape
+    return createDefaultShape();
 }
 
 
