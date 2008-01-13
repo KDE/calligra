@@ -736,11 +736,16 @@ void KWDocument::printDebug() {
 }
 #endif
 
-QWidget* KWDocument::createCustomDocumentWidget(QWidget *parent) {
+QList<KoDocument::CustomDocumentWidgetItem> KWDocument::createCustomDocumentWidgets(QWidget *parent) {
     KoColumns columns;
     columns.columns = 1;
     columns.columnSpacing = m_config.defaultColumnSpacing();
-    return new KWStartupWidget(parent, this, columns);
+
+    QList<KoDocument::CustomDocumentWidgetItem> widgetList;
+    KoDocument::CustomDocumentWidgetItem item;
+    item.widget = new KWStartupWidget(parent, this, columns);
+    widgetList << item;
+    return widgetList;
 }
 
 void KWDocument::saveConfig()

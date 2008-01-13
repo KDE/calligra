@@ -192,7 +192,7 @@ public:
     KoInlineTextObjectManager *inlineTextObjectManager() const { return m_inlineTextObjectManager; }
 
     /// reimplemented from super
-    QWidget* createCustomDocumentWidget(QWidget *parent);
+    QList<KoDocument::CustomDocumentWidgetItem> createCustomDocumentWidgets(QWidget *parent);
 
     KWApplicationConfig &config() { return m_config; }
     const KWApplicationConfig &config() const { return m_config; }
