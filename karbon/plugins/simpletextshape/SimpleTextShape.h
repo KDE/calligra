@@ -34,6 +34,12 @@ class SimpleTextShape : public KoShape
 public:
     enum TextAnchor { AnchorStart, AnchorMiddle, AnchorEnd };
 
+    enum LayoutMode {
+        Straight,    ///< baseline is a straight line
+        OnPath,      ///< baseline is a QPainterPath
+        OnPathShape  ///< baseline is the outline of a path shape
+    };
+
     SimpleTextShape();
     virtual ~SimpleTextShape();
 
@@ -58,7 +64,11 @@ public:
     /// Returns the text content
     QString text() const;
 
-    /// Sets the font used for drawing
+    /**
+     * Sets the font used for drawing
+     * Note that it is expected that the font has its point size set
+     * in postscript points.
+     */
     void setFont( const QFont & font );
 
     /// Returns the font
@@ -68,7 +78,7 @@ public:
     bool putOnPath( KoPathShape * path );
 
     /// Puts the text on the given path, the path is expected to be in document coordinates
-    void putOnPath( const QPainterPath &path );
+    bool putOnPath( const QPainterPath &path );
 
     /// Detaches this text shape from an already attached path shape
     void removeFromPath();
@@ -95,6 +105,14 @@ public:
     /// Returns the actual text anchor
     TextAnchor textAnchor() const;
 
+    /// Returns the current layout mode
+    LayoutMode layout() const;
+
+    /// Returns the baseline path
+    QPainterPath baseline() const;
+
+    /// Returns a pointer to the shape used as baseline
+    const KoPathShape * baselineShape() const;
 private:
     void updateSizeAndPosition();
     void cacheGlyphOutlines();

@@ -20,15 +20,19 @@
 #include "SimpleTextShape.h"
 
 #include <KoPathShape.h>
+#include <KoGlobal.h>
 
 #include <KLocale>
-#include <KDebug>
 
 #include <QtGui/QPen>
 #include <QtGui/QPainter>
+#include <QtGui/QFont>
+
+#define FROM_PS_SIZE(x) (72.0 / KoGlobal::dpiY() * x)
+#define TO_PS_SIZE(x) ( KoGlobal::dpiY() / 72.0 * x)
 
 SimpleTextShape::SimpleTextShape()
-    : m_text( i18n( "Simple Text" ) ), m_font( "ComicSans", 20 )
+    : m_text( i18n( "Simple Text" ) ), m_font( "ComicSans", FROM_PS_SIZE(20) )
     , m_path(0), m_startOffset(0.0), m_baselineOffset(0.0)
     , m_textAnchor( AnchorStart )
 {
@@ -84,7 +88,9 @@ void SimpleTextShape::setSize( const QSizeF &newSize )
     double zoomY = newSize.height() / oldSize.height(); 
     QMatrix matrix( zoomX, 0, 0, zoomY, 0, 0 );
 
+    update();
     applyTransformation( matrix );
+    update();
 }
 
 const QPainterPath SimpleTextShape::outline() const
@@ -110,6 +116,8 @@ void SimpleTextShape::createOutline()
 
         charPos -= anchorPoint;
 
+        QPointF pathPoint;
+
         for( int charIdx = 0; charIdx < textLength; ++charIdx )
         {
             QString actChar( m_text[charIdx] );
@@ -117,13 +125,17 @@ void SimpleTextShape::createOutline()
             qreal t = m_baseline.percentAtLength( charPos );
             if( t >= 1.0 )
                 break;
-            // get the path point of the given path position
-            QPointF pathPoint = m_baseline.pointAtPercent( t );
 
-            t = m_baseline.percentAtLength( charPos + 0.5 * metrics.width( actChar ) );
+            if( t >= 0.0 )
+            {
+                // get the path point of the given path position
+                pathPoint = m_baseline.pointAtPercent( t );
+
+                t = m_baseline.percentAtLength( charPos + 0.5 * metrics.width( actChar ) );
+            }
 
             charPos += metrics.width( actChar );
-            if( t <= 0.0 )
+            if( t < 0.0 )
                 continue;
 
             // get the angle at the given path position
@@ -167,6 +179,7 @@ void SimpleTextShape::setFont( const QFont & font )
 
     update();
     m_font = font;
+    m_font.setPointSizeF( FROM_PS_SIZE( font.pointSizeF() ) );
     cacheGlyphOutlines();
     updateSizeAndPosition();
     update();
@@ -174,7 +187,9 @@ void SimpleTextShape::setFont( const QFont & font )
 
 QFont SimpleTextShape::font() const
 {
-    return m_font;
+    QFont font( m_font );
+    font.setPointSizeF( TO_PS_SIZE( font.pointSizeF() ) );
+    return font;
 }
 
 void SimpleTextShape::setStartOffset( qreal offset )
@@ -234,10 +249,10 @@ bool SimpleTextShape::putOnPath( KoPathShape * path )
     return true;
 }
 
-void SimpleTextShape::putOnPath( const QPainterPath &path )
+bool SimpleTextShape::putOnPath( const QPainterPath &path )
 {
     if( path.isEmpty() )
-        return;
+        return false;
 
     update();
     if( m_path )
@@ -246,6 +261,8 @@ void SimpleTextShape::putOnPath( const QPainterPath &path )
     m_baseline = path;
     updateSizeAndPosition();
     update();
+
+    return true;
 }
 
 void SimpleTextShape::removeFromPath()
@@ -262,6 +279,27 @@ void SimpleTextShape::removeFromPath()
 bool SimpleTextShape::isOnPath() const
 {
     return (m_path != 0 || ! m_baseline.isEmpty() );
+}
+
+SimpleTextShape::LayoutMode SimpleTextShape::layout() const
+{
+    if( m_path )
+        return OnPathShape;
+    else if( ! m_baseline.isEmpty() )
+        return OnPath;
+    else
+        return Straight;
+}
+
+
+QPainterPath SimpleTextShape::baseline() const
+{
+    return m_baseline;
+}
+
+const KoPathShape * SimpleTextShape::baselineShape() const
+{
+    return m_path;
 }
 
 void SimpleTextShape::updateSizeAndPosition()
