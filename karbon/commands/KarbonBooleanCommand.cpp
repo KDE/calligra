@@ -86,7 +86,7 @@ void KarbonBooleanCommand::redo()
                 pr = pa.united( pb );
         }
 
-        d->resultingPath = shapeFromPath( pr );
+        d->resultingPath = KoPathShape::fromQPainterPath( pr );
         d->resultingPath->setBorder( d->pathA->border() );
         d->resultingPath->setBackground( d->pathA->background() );
         d->resultingPath->setShapeId( d->pathA->shapeId() );
@@ -117,34 +117,4 @@ void KarbonBooleanCommand::undo()
     }
 
     d->isExecuted = false;
-}
-
-KoPathShape * KarbonBooleanCommand::shapeFromPath( const QPainterPath &path )
-{
-    KoPathShape * shape = new KoPathShape();
-
-    int elementCount = path.elementCount();
-    for( int i = 0; i < elementCount; i++ )
-    {
-        QPainterPath::Element element = path.elementAt( i );
-        switch( element.type )
-        {
-            case QPainterPath::MoveToElement:
-                shape->moveTo( QPointF( element.x, element.y ) );
-                break;
-            case QPainterPath::LineToElement:
-                shape->lineTo( QPointF( element.x, element.y ) );
-                break;
-            case QPainterPath::CurveToElement:
-                shape->curveTo( QPointF( element.x, element.y ),
-                                QPointF( path.elementAt(i+1).x, path.elementAt(i+1).y),
-                                QPointF( path.elementAt(i+2).x, path.elementAt(i+2).y) );
-                break;
-            default:
-                continue;
-        }
-    }
-
-    shape->normalize();
-    return shape;
 }

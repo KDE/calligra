@@ -52,7 +52,6 @@ public:
     /// revert the actions done in redo
     void undo();
 private:
-    KoPathShape * shapeFromPath( const QPainterPath &path );
     class Private;
     Private * const d;
 };
