@@ -634,7 +634,7 @@ bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
 #endif
 
     KoOasisLoadingContext  context( this, odfStore.styles(), odfStore.store() );
-    KoShapeLoadingContext  shapeContext( context );
+    KoShapeLoadingContext  shapeContext( context, this );
 
     // ----------------------------------------------------------------
     // FIXME: Load chart here.

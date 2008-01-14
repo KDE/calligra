@@ -2761,7 +2761,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                 }
                 else if ( rowElement.localName() == "shapes" )
                 {
-                    KoShapeLoadingContext shapeLoadingContext( oasisContext );
+                    KoShapeLoadingContext shapeLoadingContext( oasisContext, doc() );
                     d->shapeContainer->loadOdf( rowElement, shapeLoadingContext );
                 }
             }

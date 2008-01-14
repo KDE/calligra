@@ -86,7 +86,7 @@ class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextF
                 return 0;
             }
 
-            KoShapeLoadingContext shapecontext(context);
+            KoShapeLoadingContext shapecontext(context, m_loader->document() );
             if( ! shape->loadOdf(frameElem, shapecontext) ) {
                 kWarning(32500) << "KoTextFrameLoader::loadImage Failed to load odf for picture shape" << endl;
             }
@@ -300,7 +300,7 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
     // TODO check versions and mimetypes etc.
 
     KoOasisLoadingContext oasisContext( d->document, odfStore.styles(), odfStore.store() );
-    KoShapeLoadingContext sc( oasisContext );
+    KoShapeLoadingContext sc( oasisContext, d->document );
 
     // Load all styles before the corresponding paragraphs try to use them!
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();

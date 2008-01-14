@@ -102,7 +102,7 @@ void FormulaToolOptions::slotLoadFormula()
 
     KoOdfStylesReader stylesReader;
     KoOasisLoadingContext oasisContext( 0, stylesReader, 0 );
-    KoShapeLoadingContext shapeContext( oasisContext );
+    KoShapeLoadingContext shapeContext( oasisContext, 0 );
 
     // setup a DOM structure and start the actual loading process
     KoXmlDocument tmpDocument;
