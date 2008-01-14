@@ -4,7 +4,10 @@ ${CMAKE_SOURCE_DIR}/karbon/core ${CMAKE_SOURCE_DIR}/plugins/pathshapes ${KOGUIUT
 
 ########### next target ###############
 
-set(karbonsvgexport_PART_SRCS svgexport.cc )
+set(karbonsvgexport_PART_SRCS 
+    svgexport.cc
+    ${SHAPES_SOURCES} 
+)
 
 kde4_add_plugin(karbonsvgexport WITH_PREFIX ${karbonsvgexport_PART_SRCS})
 
@@ -17,7 +20,8 @@ install(TARGETS karbonsvgexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 set(karbonsvgimport_PART_SRCS 
     svgimport.cc
     SvgGradientHelper.cpp
-    ${SHAPES_SOURCES} )
+    ${SHAPES_SOURCES} 
+)
 
 kde4_add_plugin(karbonsvgimport WITH_PREFIX ${karbonsvgimport_PART_SRCS})
 

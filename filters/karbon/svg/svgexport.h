@@ -38,6 +38,7 @@ class KoShapeContainer;
 class KoShape;
 class KoPathShape;
 class KoShapeBorderModel;
+class SimpleTextShape;
 class QTextStream;
 class QPixmap;
 class QImage;
@@ -62,7 +63,7 @@ private:
     void savePath( KoPathShape * path );
 
     void saveImage( QImage& image );
-    //void saveText( VText& text );
+    void saveText( SimpleTextShape * text );
 
     void getFill( KoShape * shape, QTextStream *stream );
     void getStroke( KoShape * shape, QTextStream *stream );
@@ -72,7 +73,7 @@ private:
     void getHexColor( QTextStream *, const QColor & color  );
     QString getTransform( const QMatrix &matrix );
 
-    QString getID( KoShape *obj );
+    QString getID( const KoShape *obj );
 
     QTextStream* m_stream;
     QTextStream* m_defs;
@@ -80,6 +81,11 @@ private:
 
     unsigned int m_indent;
     unsigned int m_indent2;
+
+    QMap<const KoShape*, QString> m_shapeIds;
+
+    QMatrix m_userSpaceMatrix;
+
 };
 
 #endif

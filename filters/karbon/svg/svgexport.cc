@@ -42,6 +42,7 @@
 #include <KoShapeLayer.h>
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
+#include <plugins/simpletextshape/SimpleTextShape.h>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -66,6 +67,7 @@ K_EXPORT_COMPONENT_FACTORY( libkarbonsvgexport, SvgExportFactory( "kofficefilter
 SvgExport::SvgExport( QObject*parent, const QStringList& )
     : KoFilter(parent), m_indent( 0 ), m_indent2( 0 )
 {
+    m_userSpaceMatrix.scale( 90.0 / 72.0, 90.0 / 72.0 );
 }
 
 KoFilter::ConversionStatus SvgExport::convert( const QByteArray& from, const QByteArray& to )
@@ -123,7 +125,7 @@ void SvgExport::saveDocument( KarbonDocument& document )
 
     *m_defs <<
         "<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"" <<
-        pageSize.width() << "px\" height=\"" << pageSize.height() << "px\">" << endl;
+        pageSize.width() << "pt\" height=\"" << pageSize.height() << "pt\">" << endl;
     printIndentation( m_defs, ++m_indent2 );
     *m_defs << "<defs>" << endl;
 
@@ -186,6 +188,10 @@ void SvgExport::saveShape( KoShape * shape )
     }
     else
     {
+        if( shape->shapeId() == SimpleTextShapeID )
+        {
+            saveText( static_cast<SimpleTextShape*>( shape ) );
+        }
         // TODO export text and images
     }
 }
@@ -198,7 +204,7 @@ void SvgExport::savePath( KoPathShape * path )
     getFill( path, m_body );
     getStroke( path, m_body );
 
-    *m_body << " d=\"" << path->toString( path->absoluteTransformation(0) ) << "\" ";
+    *m_body << " d=\"" << path->toString( path->absoluteTransformation(0) * m_userSpaceMatrix ) << "\" ";
 
     if( path->fillRule() == Qt::OddEvenFill )
         *m_body << " fill-rule=\"evenodd\"";
@@ -208,11 +214,27 @@ void SvgExport::savePath( KoPathShape * path )
     *m_body << " />" << endl;
 }
 
-QString SvgExport::getID( KoShape *obj )
+static QString createUID()
 {
-    if( obj && !obj->name().isEmpty() )
-        return QString( " id=\"%1\"" ).arg( obj->name() );
-    return QString();
+    static unsigned int nr = 0;
+
+    return "defitem" + QString().setNum( nr++ );
+}
+
+QString SvgExport::getID( const KoShape *obj )
+{
+    QString id;
+    if( ! m_shapeIds.contains( obj ) )
+    {
+        id = obj->name().isEmpty() ? createUID() : obj->name();
+        m_shapeIds.insert( obj, id );
+    }
+    else
+    {
+        id = m_shapeIds[obj];
+    }
+
+    return QString( " id=\"%1\"" ).arg( id );
 }
 
 QString SvgExport::getTransform( const QMatrix &matrix )
@@ -223,13 +245,6 @@ QString SvgExport::getTransform( const QMatrix &matrix )
             .arg( matrix.dx() ) .arg( matrix.dy() );
 
     return transform;
-}
-
-static QString createUID()
-{
-    static unsigned int nr = 0;
-
-    return "defitem" + QString().setNum( nr++ );
 }
 
 void SvgExport::getColorStops( const QGradientStops & colorStops )
@@ -441,45 +456,65 @@ void SvgExport::getHexColor( QTextStream *stream, const QColor & color )
     *stream << Output;
 }
 
-/*
-void SvgExport::visitVText( VText& text )
+
+void SvgExport::saveText( SimpleTextShape * text )
 {
-	VPath path( 0L );
-	path.combinePath( text.basePath() );
+    printIndentation( m_body, m_indent++ );
+    *m_body << "<text" << getID( text );
+    // *m_body << " transform=\"scale(1, -1) translate(0, -" << text.document()->height() << ")\"";
+    getFill( text, m_body );
+    getStroke( text, m_body );
 
-	QString id = createUID();
-	writePathToStream( path, " id=\""+ id + "\"", m_defs, m_indent2 );
+    QFont font = text->font();
 
-	printIndentation( m_body, m_indent++ );
-	*m_body << "<text" << getID( &text );
-	// *m_body << " transform=\"scale(1, -1) translate(0, -" << text.document()->height() << ")\"";
-	getFill( *( text.fill() ), m_body );
-	getStroke( *( text.stroke() ), m_body );
+    *m_body << " font-family=\"" << font.family() << "\"";
+    *m_body << " font-size=\"" << font.pointSize() << "pt\"";
 
-	*m_body << " font-family=\"" << text.font().family() << "\"";
-	*m_body << " font-size=\"" << text.font().pointSize() << "\"";
-	if( text.font().bold() )
-		*m_body << " font-weight=\"bold\"";
-	if( text.font().italic() )
-		*m_body << " font-style=\"italic\"";
-	if( text.alignment() == VText::Center )
-		*m_body << " text-anchor=\"middle\"";
-	else if( text.alignment() == VText::Right )
-		*m_body << " text-anchor=\"end\"";
+    if( font.bold() )
+        *m_body << " font-weight=\"bold\"";
+    if( font.italic() )
+        *m_body << " font-style=\"italic\"";
+    if( text->textAnchor() == SimpleTextShape::AnchorMiddle )
+        *m_body << " text-anchor=\"middle\"";
+    else if( text->textAnchor() == SimpleTextShape::AnchorEnd )
+        *m_body << " text-anchor=\"end\"";
 
-	*m_body << ">" << endl;
-	
-	printIndentation( m_body, m_indent );
-	*m_body << "<textPath xlink:href=\"#" << id << "\"";
-	if( text.offset() > 0.0 )
-		*m_body << " startOffset=\"" << text.offset() * 100.0 << "%\"";	
-	*m_body << ">";
-	*m_body << text.text();
-	*m_body << "</textPath>" << endl;
-	printIndentation( m_body, --m_indent );
-	*m_body << "</text>" << endl;
+    printIndentation( m_body, m_indent );
+
+    // check if we are set on a path
+    if( text->layout() == SimpleTextShape::Straight )
+    {
+        *m_body << " transform=\"" << getTransform( text->transformation() ) << "\" ";
+        *m_body << ">" << endl;
+        *m_body << text->text();
+    }
+    else
+    {
+        KoPathShape * baseline = KoPathShape::fromQPainterPath( text->baseline() );
+
+        QString id;
+
+        printIndentation( m_defs, m_indent );
+
+        id = createUID();
+        *m_defs << "<path id=\"" << id << "\"";
+        *m_defs << " d=\"" << baseline->toString( baseline->absoluteTransformation(0) * m_userSpaceMatrix ) << "\" ";
+        *m_defs << " />" << endl;
+
+        *m_body << ">" << endl;
+        *m_body << "<textPath xlink:href=\"#" << id << "\"";
+        if( text->startOffset() > 0.0 )
+            *m_body << " startOffset=\"" << text->startOffset() * 100.0 << "%\"";	
+        *m_body << ">";
+        *m_body << text->text();
+        *m_body << "</textPath>" << endl;
+
+        delete baseline;
+    }
+
+    printIndentation( m_body, --m_indent );
+    *m_body << "</text>" << endl;
 }
-*/
 
 // horrible but at least something gets exported now
 // will need this for patterns
