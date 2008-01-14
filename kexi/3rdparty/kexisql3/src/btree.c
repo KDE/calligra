@@ -9,7 +9,6 @@
 **    May you share freely, never taking more than you give.
 **
 *************************************************************************
-** $Id$
 **
 ** This file implements a external (disk-based) database using BTrees.
 ** For a detailed discussion of BTrees, refer to

@@ -12,7 +12,6 @@
 ** This file contains code to implement the "sqlite" command line
 ** utility for accessing SQLite databases.
 **
-** $Id$
 */
 #include <stdlib.h>
 #include <string.h>
@@ -361,7 +360,7 @@ static void output_csv(struct callback_data *p, const char *z, int bSep){
     output_c_string(p->out, z);
   }
   if( bSep ){
-    fprintf(p->out, p->separator);
+    fprintf(p->out, "%s", p->separator);
   }
 }
 
