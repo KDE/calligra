@@ -12,7 +12,6 @@
 ** This file contains routines used to translate between UTF-8, 
 ** UTF-16, UTF-16BE, and UTF-16LE.
 **
-** $Id$
 **
 ** Notes on UTF-8:
 **

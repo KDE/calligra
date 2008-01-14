@@ -15,7 +15,6 @@
 ** individual tokens and sends those tokens one-by-one over to the
 ** parser for analysis.
 **
-** $Id$
 */
 #include "sqliteInt.h"
 #include "os.h"

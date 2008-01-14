@@ -14,7 +14,6 @@
 ** other files are for internal use by SQLite and should not be
 ** accessed by users of the library.
 **
-** $Id$
 */
 
 #include "sqliteInt.h"

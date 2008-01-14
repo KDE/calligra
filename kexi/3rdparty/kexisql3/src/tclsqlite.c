@@ -11,7 +11,6 @@
 *************************************************************************
 ** A TCL Interface to SQLite
 **
-** $Id$
 */
 #ifndef NO_TCL     /* Omit this whole file if TCL is unavailable */
 

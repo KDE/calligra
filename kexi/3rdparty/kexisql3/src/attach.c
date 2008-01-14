@@ -11,7 +11,6 @@
 *************************************************************************
 ** This file contains code used to implement the ATTACH and DETACH commands.
 **
-** $Id$
 */
 #include "sqliteInt.h"
 

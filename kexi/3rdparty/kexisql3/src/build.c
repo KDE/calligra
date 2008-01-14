@@ -22,7 +22,6 @@
 **     COMMIT
 **     ROLLBACK
 **
-** $Id$
 */
 #include "sqliteInt.h"
 #include <ctype.h>

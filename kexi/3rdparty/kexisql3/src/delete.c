@@ -12,7 +12,6 @@
 ** This file contains C code routines that are called by the parser
 ** in order to generate code for DELETE FROM statements.
 **
-** $Id$
 */
 #include "sqliteInt.h"
 

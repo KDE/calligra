@@ -18,7 +18,6 @@
 ** file simultaneously, or one process from reading the database while
 ** another is writing.
 **
-** @(#) $Id$
 */
 #ifndef SQLITE_OMIT_DISKIO
 #include "sqliteInt.h"
