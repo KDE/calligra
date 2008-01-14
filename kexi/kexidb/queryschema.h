@@ -541,7 +541,11 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		   will return the same pointer.
 		 - Calling field("T.A") will return the same pointer as field("A").
 		 */
-		virtual Field* field(const QString& name, bool expanded = true);
+		virtual Field* field(const QString& name, bool expanded);
+
+		/*! This is overloaded method Field* field(const QString& name, bool expanded)
+		 with expanded = true. This method is also a product of inheritance from FieldList.  */
+		inline virtual Field* field(const QString& name) { return field(name, true); }
 
 		/*! \return field id or NULL if there is no such a field. */
 		inline Field* field(uint id) { return FieldList::field(id); }
