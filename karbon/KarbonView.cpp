@@ -13,7 +13,7 @@
    Copyright (C) 2005-2006 Tim Beaulen <tbscope@gmail.com>
    Copyright (C) 2005 Yann Bodson <yann.bodson@online.fr>
    Copyright (C) 2005-2006 Boudewijn Rempt <boud@valdyas.org>
-   Copyright (C) 2005-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2005-2008 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2005-2006 Peter Simonsson <psn@linux.se>
    Copyright (C) 2005-2006 Sven Langkamp <sven.langkamp@gmail.com>
    Copyright (C) 2005-2006 Inge Wallin <inge@lysator.liu.se>
@@ -87,6 +87,7 @@
 #include <KoShapeReorderCommand.h>
 #include <KoShapeBorderCommand.h>
 #include <KoShapeBackgroundCommand.h>
+#include <KoParameterToPathCommand.h>
 #include <KoSelection.h>
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
@@ -884,10 +885,17 @@ void KarbonView::booleanOperation( KarbonBooleanCommand::BooleanOperation operat
 
     if( paths.size() == 2 )
     {
-        KarbonBooleanCommand * cmd = new KarbonBooleanCommand( part(), paths[0], paths[1], operation );
-        new KoShapeDeleteCommand( part(), paths[0], cmd );
-        new KoShapeDeleteCommand( part(), paths[1], cmd );
-        m_canvas->addCommand( cmd );
+        QUndoCommand * macro = new QUndoCommand( i18n("Boolean Operation") );
+        KoParameterShape * paramShape = dynamic_cast<KoParameterShape*>( paths[0] );
+        if( paramShape && paramShape->isParametricShape() )
+            new KoParameterToPathCommand( paramShape, macro );
+        paramShape = dynamic_cast<KoParameterShape*>( paths[1] );
+        if( paramShape && paramShape->isParametricShape() )
+            new KoParameterToPathCommand( paramShape, macro );
+        new KarbonBooleanCommand( part(), paths[0], paths[1], operation, macro );
+        new KoShapeDeleteCommand( part(), paths[0], macro );
+        new KoShapeDeleteCommand( part(), paths[1], macro );
+        m_canvas->addCommand( macro );
     }
 }
 
@@ -1372,9 +1380,9 @@ KarbonView::selectionChanged()
         m_combinePath->setEnabled( selectedPaths > 1 );
         m_separatePath->setEnabled( selectedPaths > 0 );
         m_reversePath->setEnabled( selectedPaths > 0 );
-        m_intersectPath->setEnabled( selectedPaths == 2 );
-        m_subtractPath->setEnabled( selectedPaths == 2 );
-        m_unitePath->setEnabled( selectedPaths == 2 );
+        m_intersectPath->setEnabled( selectedPaths + selectedParametrics == 2 );
+        m_subtractPath->setEnabled( selectedPaths + selectedParametrics == 2 );
+        m_unitePath->setEnabled( selectedPaths + selectedParametrics == 2 );
     }
 
     emit selectionChange();

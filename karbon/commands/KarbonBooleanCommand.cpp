@@ -36,7 +36,7 @@ public:
 
     ~Private()
     {
-        if( isExecuted )
+        if( ! isExecuted )
             delete resultingPath;
     }
 
@@ -49,8 +49,10 @@ public:
     bool isExecuted;
 };
 
-KarbonBooleanCommand::KarbonBooleanCommand( KoShapeControllerBase *controller, KoPathShape* pathA, KoPathShape * pathB, 
-                                            BooleanOperation operation, QUndoCommand *parent )
+KarbonBooleanCommand::KarbonBooleanCommand( 
+    KoShapeControllerBase *controller, KoPathShape* pathA, KoPathShape * pathB, 
+    BooleanOperation operation, QUndoCommand *parent 
+)
     : QUndoCommand( parent ), d( new Private( controller ) )
 {
     Q_ASSERT( controller );
