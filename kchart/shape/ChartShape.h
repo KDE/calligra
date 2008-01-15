@@ -140,11 +140,14 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     void setFirstRowIsLabel( bool b );
     void setFirstColumnIsLabel( bool b);
     void setDataDirection( Qt::Orientation orientation );
+
     
+    // Axes
+    void setAxisTitle( KDChart::CartesianAxis *axis, const QString& title );
+    void setAxisShowGridLines( KDChart::CartesianAxis *axis, bool b );
+    // direct setter methods for convenience
     void setXAxisTitle( const QString& title );
     void setYAxisTitle( const QString& title );
-    void setShowVerticalLines( bool b );
-    void setShowHorizontalLines( bool b );
     
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );

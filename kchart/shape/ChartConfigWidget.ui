@@ -81,7 +81,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex" >
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
@@ -168,7 +168,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="7" column="0" colspan="2" >
-        <widget class="QComboBox" name="axisSelection" />
+        <widget class="QComboBox" name="axes" />
        </item>
        <item row="7" column="2" >
         <widget class="QToolButton" name="addAxis" >
@@ -185,24 +185,24 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="8" column="0" >
-        <widget class="QCheckBox" name="checkBox_4" >
+        <widget class="QCheckBox" name="axisShowTitle" >
          <property name="text" >
           <string>Label</string>
          </property>
         </widget>
        </item>
        <item row="8" column="1" colspan="3" >
-        <widget class="QLineEdit" name="lineEdit_4" />
+        <widget class="QLineEdit" name="axisTitle" />
        </item>
        <item row="9" column="0" colspan="4" >
-        <widget class="QCheckBox" name="checkBox_5" >
+        <widget class="QCheckBox" name="axisShowGridLines" >
          <property name="text" >
           <string>Show Grid Lines</string>
          </property>
         </widget>
        </item>
        <item row="10" column="0" colspan="4" >
-        <widget class="QPushButton" name="pushButton_2" >
+        <widget class="QPushButton" name="axisScalingDialog" >
          <property name="text" >
           <string>Scaling...</string>
          </property>
@@ -400,6 +400,9 @@ p, li { white-space: pre-wrap; }
         <widget class="QRadioButton" name="legendOrientationIsVertical" >
          <property name="text" >
           <string>v</string>
+         </property>
+         <property name="checked" >
+          <bool>true</bool>
          </property>
         </widget>
        </item>

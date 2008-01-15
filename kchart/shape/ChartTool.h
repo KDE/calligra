@@ -67,16 +67,15 @@ private slots:
     void setDataDirection( Qt::Orientation );
     void setFirstRowIsLabel( bool b );
     void setFirstColumnIsLabel( bool b );
-    
-    void setXAxisTitle( const QString& title );
-    void setYAxisTitle( const QString& title );
-    void setShowVerticalLines( bool b );
-    void setShowHorizontalLines( bool b );
 
     // Datasets
     void setDatasetColor( int dataset, const QColor& color );
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );
+    
+    // Axes
+    void setAxisTitle( KDChart::CartesianAxis *axis, const QString& title );
+    void setAxisShowGridLines( KDChart::CartesianAxis *axis, bool b );
 
     // Legend
     void setShowLegend( bool b );

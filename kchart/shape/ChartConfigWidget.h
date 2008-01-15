@@ -14,6 +14,7 @@ class KoShape;
 namespace KDChart
 {
     class Position;
+    class CartesianAxis;
 }; 
 
 namespace KChart
@@ -55,6 +56,11 @@ public slots:
     //void setLegendShowTitle( bool toggled );
     void updateFixedPosition( const KDChart::Position );
     void selectDataset( int dataset );
+    
+    void ui_axisSelectionChanged( int index );
+    void ui_axisTitleChanged( const QString& title );
+    void ui_axisShowTitleChanged( bool );
+    void ui_axisShowGridLinesChanged( bool );
 
 signals:
     void chartTypeChanged( OdfChartType type, OdfChartSubtype subType );
@@ -69,14 +75,14 @@ signals:
     void gapBetweenBarsChanged( int percent );
     void gapBetweenSetsChanged( int percent );
     
-    void xAxisTitleChanged( const QString& title );
-    void yAxisTitleChanged( const QString& title );
-    
     void showLegendChanged( bool b );
 
     void dataDirectionChanged( Qt::Orientation );
     void firstRowIsLabelChanged( bool b );
     void firstColumnIsLabelChanged( bool b );
+    
+    void axisTitleChanged( KDChart::CartesianAxis* axis, const QString& title );
+    void axisShowGridLinesChanged( KDChart::CartesianAxis* axis, bool b );
 
     void legendTitleChanged( const QString& );
     void legendFontChanged( const QFont& font );

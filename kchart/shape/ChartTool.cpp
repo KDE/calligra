@@ -45,7 +45,10 @@
 
 // KDChart
 #include <KDChartChart>
-#include <KDChartAbstractCoordinatePlane>
+#include <KDChartCartesianAxis>
+#include <KDChartGridAttributes>
+#include <KDChartAbstractCartesianDiagram>
+#include <KDChartCartesianCoordinatePlane>
 #include <KDChartPosition>
 
 using namespace KChart;
@@ -193,14 +196,6 @@ QWidget *ChartTool::createOptionWidget()
              this,    SLOT( setFirstRowIsLabel( bool ) ) );
     connect( widget, SIGNAL( firstColumnIsLabelChanged( bool ) ),
              this,    SLOT( setFirstColumnIsLabel( bool ) ) );
-    connect( widget, SIGNAL( xAxisTitleChanged( const QString& ) ),
-             this,   SLOT( setXAxisTitle( const QString& ) ) );
-    connect( widget, SIGNAL( yAxisTitleChanged( const QString& ) ),
-             this,   SLOT( setYAxisTitle( const QString& ) ) );
-    connect( widget, SIGNAL( showVerticalLinesChanged( bool ) ),
-             this,   SLOT( setShowVerticalLines( bool ) ) );
-    connect( widget, SIGNAL( showHorizontalLinesChanged( bool ) ),
-             this,   SLOT( setShowHorizontalLines( bool ) ) );
     
     connect( widget, SIGNAL( datasetColorChanged( int, const QColor& ) ),
              this, SLOT( setDatasetColor( int, const QColor& ) ) );
@@ -218,6 +213,11 @@ QWidget *ChartTool::createOptionWidget()
              this,    SLOT( setChartSubtype( OdfChartSubtype ) ) );
     connect( widget, SIGNAL( threeDModeToggled( bool ) ),
              this,    SLOT( setThreeDMode( bool ) ) );
+
+    connect( widget, SIGNAL( axisTitleChanged( KDChart::CartesianAxis*, const QString& ) ),
+    		 this,   SLOT( setAxisTitle( KDChart::CartesianAxis*, const QString& ) ) );
+    connect( widget, SIGNAL( axisShowGridLinesChanged( KDChart::CartesianAxis*, bool ) ),
+    		 this,   SLOT( setAxisShowGridLines( KDChart::CartesianAxis*, bool ) ) );
 
     connect( widget, SIGNAL( legendTitleChanged( const QString& ) ),
              this,   SLOT( setLegendTitle( const QString& ) ) );
@@ -358,31 +358,20 @@ void ChartTool::setLegendShowFrame( bool show )
 
 void ChartTool::setDatasetColor( int dataset, const QColor& color )
 {
-    if (    !d->shape || !d->shape->chart() || ! d->shape->chart()->coordinatePlane()
-         || !d->shape->chart()->coordinatePlane()->diagram() )
+    if (    !d->shape || !d->shape->diagram() )
         return;
-    d->shape->chart()->coordinatePlane()->diagram()->setBrush( dataset, QBrush( color ) );
+    d->shape->diagram()->setBrush( dataset, QBrush( color ) );
     d->shape->update();
 }
 
-void ChartTool::setXAxisTitle( const QString& title )
-{
-    d->shape->setXAxisTitle( title );
+void ChartTool::setAxisTitle( KDChart::CartesianAxis *axis, const QString& title ) {
+	Q_ASSERT( d->shape );
+	d->shape->setAxisTitle( axis, title );
 }
 
-void ChartTool::setYAxisTitle( const QString& title )
-{
-    d->shape->setYAxisTitle( title );
-}
-
-void ChartTool::setShowVerticalLines( bool b )
-{
-    d->shape->setShowVerticalLines( b );
-}
-
-void ChartTool::setShowHorizontalLines( bool b )
-{
-    d->shape->setShowHorizontalLines( b );
+void ChartTool::setAxisShowGridLines( KDChart::CartesianAxis *axis, bool b ) {
+	Q_ASSERT( d->shape );
+	d->shape->setAxisShowGridLines( axis, b );
 }
 
 void ChartTool::setGapBetweenBars( int percent )

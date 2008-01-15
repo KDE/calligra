@@ -1944,27 +1944,29 @@ void ChartShape::setYAxisTitle( const QString& title )
     update();
 }
 
-void ChartShape::setShowVerticalLines( bool b )
-{
-    if ( !isCartesian( d->chartType ) )
-        return;
-    KDChart::GridAttributes gridAttributes = ( ( KDChart::CartesianCoordinatePlane* ) d->chart->coordinatePlane() )->gridAttributes( Qt::Vertical );
-    gridAttributes.setGridVisible( b );
-    ( ( KDChart::CartesianCoordinatePlane* ) d->chart->coordinatePlane() )->setGridAttributes( Qt::Vertical, gridAttributes );
-        
-    update();
+void ChartShape::setAxisTitle( KDChart::CartesianAxis *axis, const QString& title ) {
+	Q_ASSERT( axis );
+	if ( !axis )
+		return;
+	
+	axis->setTitleText( title );
+	update();
 }
 
-void ChartShape::setShowHorizontalLines( bool b )
-{
-    if ( !isCartesian( d->chartType ) )
-        return;
-    
-    KDChart::GridAttributes gridAttributes = ( ( KDChart::CartesianCoordinatePlane* ) d->chart->coordinatePlane() )->gridAttributes( Qt::Horizontal );
-    gridAttributes.setGridVisible( b );
-    ( ( KDChart::CartesianCoordinatePlane* ) d->chart->coordinatePlane() )->setGridAttributes( Qt::Horizontal, gridAttributes );
-        
-    update();
+void ChartShape::setAxisShowGridLines( KDChart::CartesianAxis *axis, bool b ) {
+	Q_ASSERT( axis );
+	if ( !axis )
+		return;
+	KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( d->diagram->coordinatePlane() );
+	if ( !plane )
+		return;
+	const Qt::Orientation axisOrientation = ( axis->position() == KDChart::CartesianAxis::Top || axis->position() == KDChart::CartesianAxis::Bottom ) ?
+								            Qt::Horizontal : Qt::Vertical;
+	KDChart::GridAttributes attributes = plane->gridAttributes( axisOrientation );
+	attributes.setGridVisible( b );
+	plane->setGridAttributes( axisOrientation, attributes );
+	
+	update();
 }
 
 void ChartShape::setGapBetweenBars( int percent )

@@ -17,6 +17,8 @@
 // KDChart
 #include <KDChartChart>
 #include <KDChartPosition>
+#include <KDChartCartesianAxis>
+#include <KDChartGridAttributes>
 #include <KDChartAbstractCartesianDiagram>
 #include <KDChartLegend>
 
@@ -95,6 +97,8 @@ public:
     KDChart::Position     lastFixedPosition;
     
     int                   selectedDataset;
+    
+    QList<KDChart::CartesianAxis*> axes;
 };
 
 ChartConfigWidget::Private::Private()
@@ -182,6 +186,18 @@ ChartConfigWidget::ChartConfigWidget()
              this, SIGNAL( legendShowFrameChanged( bool ) ) );
     connect( d->ui.legendOrientationIsVertical, SIGNAL( toggled( bool ) ),
              this, SLOT( setLegendOrientationIsVertical( bool ) ) );
+    
+	d->ui.addAxis->setIcon( KIcon( "list-add" ) );
+	d->ui.removeAxis->setIcon( KIcon( "list-remove" ) );
+	
+	connect( d->ui.axisTitle, SIGNAL( textChanged( const QString& ) ),
+			 this, SLOT( ui_axisTitleChanged( const QString& ) ) );
+	connect( d->ui.axisShowTitle, SIGNAL( toggled( bool ) ),
+			 this, SLOT( ui_axisShowTitleChanged( bool ) ) );
+	connect( d->ui.axisShowGridLines, SIGNAL( toggled( bool ) ),
+			 this, SLOT( ui_axisShowGridLinesChanged( bool ) ) );
+	connect ( d->ui.axes, SIGNAL( currentIndexChanged( int ) ),
+			  this, SLOT( ui_axisSelectionChanged( int ) ) );
 
     createActions();
 
@@ -293,6 +309,34 @@ void ChartConfigWidget::update()
     // We only want to update this widget according to the current
     // state of the shape
     blockSignals( true );
+    
+    const KDChart::AbstractCartesianDiagram *cartesianDiagram = dynamic_cast<KDChart::AbstractCartesianDiagram*>(d->shape->diagram());
+    
+    // Update cartesian diagram-specific properties
+    if ( cartesianDiagram ) {
+    	if ( d->axes != cartesianDiagram->axes() ) {
+    		d->axes = cartesianDiagram->axes();
+    		
+    		for ( int item = 0; item < d->ui.axes->count(); item++ ) {
+    			d->ui.axes->removeItem( item );
+    		}
+    		foreach ( KDChart::CartesianAxis *axis, cartesianDiagram->axes() ) {
+    			d->ui.axes->addItem( axis->titleText(), axis );
+    		}
+    		
+    		const KDChart::CartesianAxis *selectedAxis = cartesianDiagram->axes().first();
+    		const KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>(d->shape->coordinatePlane());
+    		
+    		Q_ASSERT( plane );
+    		
+    		const Qt::Orientation axisOrientation = (   selectedAxis->position() == KDChart::CartesianAxis::Top
+			                                         || selectedAxis->position() == KDChart::CartesianAxis::Bottom ) ?
+			                                            Qt::Horizontal : Qt::Vertical;
+    		d->ui.axisShowGridLines->setChecked( plane->gridAttributes( axisOrientation ).isGridVisible() );
+    		d->ui.axisShowTitle->setChecked( !selectedAxis->titleText().isEmpty() );
+    		d->ui.axisTitle->setText( selectedAxis->titleText() );
+    	}
+    }
     
     if (    d->type    != d->shape->chartType()
          || d->subtype != d->shape->chartSubtype() )
@@ -576,6 +620,45 @@ void ChartConfigWidget::setLegendOrientationIsVertical( bool b )
         emit legendOrientationChanged( Qt::Vertical );
     else
         emit legendOrientationChanged( Qt::Horizontal );
+}
+
+void ChartConfigWidget::ui_axisSelectionChanged( int index ) {
+	Q_ASSERT( d->axes.size() > index );
+	
+	const KDChart::CartesianAxis *axis = d->axes[ index ];
+	d->ui.axisTitle->setText( axis->titleText() );
+	d->ui.axisShowTitle->setChecked( !axis->titleText().isEmpty() );
+	
+	KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( d->shape->diagram()->coordinatePlane() );
+	
+	// Avoid crash since having a non-cartesian coordinate plane means we can't set
+	// properties for cartesian axes, but is not fatal
+	if ( !plane )
+		return;
+	
+	const Qt::Orientation axisOrientation = ( axis->position() == KDChart::CartesianAxis::Top || axis->position() == KDChart::CartesianAxis::Bottom ) ?
+								            Qt::Horizontal : Qt::Vertical;
+	KDChart::GridAttributes attributes = plane->gridAttributes( axisOrientation );
+	d->ui.axisShowGridLines->setChecked( attributes.isGridVisible() );
+}
+
+void ChartConfigWidget::ui_axisTitleChanged( const QString& title ) {
+	Q_ASSERT( d->axes.size() > d->ui.axes->currentIndex() );
+	
+	emit axisTitleChanged( d->axes[ d->ui.axes->currentIndex() ], title );
+}
+
+void ChartConfigWidget::ui_axisShowTitleChanged( bool b ) {
+	Q_ASSERT( d->axes.size() > d->ui.axes->currentIndex() );
+	
+	// To hide the axis title, we pass an empty string
+	emit axisTitleChanged( d->axes[ d->ui.axes->currentIndex() ], b ? d->ui.axisTitle->text() : "" );
+}
+
+void ChartConfigWidget::ui_axisShowGridLinesChanged( bool b ) {
+	Q_ASSERT( d->axes.size() > d->ui.axes->currentIndex() );
+	
+	emit axisShowGridLinesChanged( d->axes[ d->ui.axes->currentIndex() ], b );
 }
 
 #include "ChartConfigWidget.moc"
