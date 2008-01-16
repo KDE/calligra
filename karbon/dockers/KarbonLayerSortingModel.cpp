@@ -32,5 +32,10 @@ bool KarbonLayerSortingModel::lessThan(const QModelIndex &left, const QModelInde
     KoShape * leftShape = static_cast<KoShape*>( left.internalPointer() );
     KoShape * rightShape = static_cast<KoShape*>( right.internalPointer() );
 
+    if( ! leftShape || ! rightShape )
+        return false;
+
     return leftShape->zIndex() < rightShape->zIndex();
 }
+
+#include "KarbonLayerSortingModel.moc"

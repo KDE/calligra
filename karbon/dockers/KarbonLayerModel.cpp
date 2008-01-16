@@ -388,6 +388,10 @@ bool KarbonLayerModel::dropMimeData( const QMimeData * data, Qt::DropAction acti
         shapes.append( static_cast<KoShape*>( (void*)v.value<qulonglong>() ) );
     }
 
+    // no shapes to drop, exit gracefully
+    if( shapes.count() == 0 )
+        return false;
+
     QList<KoShape*> toplevelShapes;
     QList<KoShapeLayer*> layers;
     // remove shapes having its parent in the list
@@ -431,6 +435,8 @@ bool KarbonLayerModel::dropMimeData( const QMimeData * data, Qt::DropAction acti
             if( ! toplevelShapes.count() )
                 return false;
 
+            emit layoutAboutToBeChanged();
+
             beginInsertRows( parent, group->childCount(), group->childCount()+toplevelShapes.count() );
 
             QUndoCommand * cmd = new QUndoCommand();
@@ -444,12 +450,16 @@ bool KarbonLayerModel::dropMimeData( const QMimeData * data, Qt::DropAction acti
             canvasController->canvas()->addCommand( cmd );
 
             endInsertRows();
+
+            emit layoutChanged();
         }
         else
         {
             kDebug(38000) <<"KarbonLayerModel::dropMimeData parent = container";
             if( toplevelShapes.count() )
             {
+                emit layoutAboutToBeChanged();
+
                 beginInsertRows( parent, container->childCount(), container->childCount()+toplevelShapes.count() );
 
                 QUndoCommand * cmd = new QUndoCommand();
@@ -467,12 +477,15 @@ bool KarbonLayerModel::dropMimeData( const QMimeData * data, Qt::DropAction acti
                     clipped.append( shape->parent()->childClipped( shape ) );
                     new KoShapeUngroupCommand( shape->parent(), QList<KoShape*>() << shape, cmd );
                 }
+
                 // shapes are dropped on a container, so add them to the container
                 new KoShapeGroupCommand( container, toplevelShapes, clipped, cmd ); 
                 KoCanvasController * canvasController = KoToolManager::instance()->activeCanvasController();
                 canvasController->canvas()->addCommand( cmd );
 
                 endInsertRows();
+
+                emit layoutChanged();
             }
             else if( layers.count() )
             {
