@@ -24,6 +24,7 @@
 #include "KWPageSettings.h"
 #include "KWPage.h"
 #include "KWCopyShape.h"
+#include "KWDocument.h"
 
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
@@ -575,7 +576,7 @@ void KWFrameLayout::setup() {
 KoShape *KWFrameLayout::createTextShape(KWPage *page) {
     KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     Q_ASSERT(factory);
-    KoShape *shape = factory->createDefaultShape( 0 );
+    KoShape *shape = factory->createDefaultShape( const_cast<KWDocument *>( m_document ) );
     shape->setPosition(QPointF(0, page->offsetInDocument()));
     return shape;
 }

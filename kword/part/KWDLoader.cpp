@@ -550,7 +550,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem) {
         {
             KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
             Q_ASSERT(factory);
-            KoShape *shape = factory->createDefaultShape( 0 );
+            KoShape *shape = factory->createDefaultShape( m_document );
             KWTextFrame *frame = new KWTextFrame(shape, fs);
             fill(frame, frameElem);
 
