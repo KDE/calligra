@@ -48,7 +48,7 @@ class QRect;
  * Finally a dcop interface is set up here.
  */
 
-class KARBONCOMMON_EXPORT KarbonPart : public KoDocument, public KoShapeControllerBase
+class KARBONUI_EXPORT KarbonPart : public KoDocument, public KoShapeControllerBase
 {
     Q_OBJECT
 public:

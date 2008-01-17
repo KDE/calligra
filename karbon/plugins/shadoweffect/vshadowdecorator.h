@@ -27,7 +27,7 @@
 
 /**
  */
-class KARBONBASE_EXPORT VShadowDecorator : public VObject
+class KARBONCOMMON_EXPORT VShadowDecorator : public VObject
 {
 public:
 	VShadowDecorator( VObject* object, VObject* parent, int distance = 2, int angle = 0, float opacity = 1.0 );

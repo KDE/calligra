@@ -31,14 +31,12 @@ include_directories(
 		${CMAKE_SOURCE_DIR}/karbon/dialogs 
 		${CMAKE_BINARY_DIR}/karbon/dialogs
 		${FREETYPE_INCLUDE_DIR}
+        ${FreeType2_INCLUDE_DIR} 
+        ${FONTCONFIG_INCLUDE_DIR} 
 		${LCMS_INCLUDE_DIR}
+        ${FLAKE_INCLUDES}        
         ${KOTEXT_INCLUDES})
 
-add_subdirectory( commands )
-add_subdirectory( core )
-add_subdirectory( widgets )
-add_subdirectory( dialogs )
-add_subdirectory( dockers )
 add_subdirectory( plugins )
 add_subdirectory( data )
 add_subdirectory( pics )
@@ -46,22 +44,69 @@ add_subdirectory( templates )
 
 
 ########### next target ###############
-
 set(karboncommon_LIB_SRCS 
-   karbon_factory.cc 
-#karbon_resourceserver.cc 
-   KarbonPart.cpp
-   KarbonView.cpp
-   KarbonPrintJob.cpp
-#   karbon_drag.cpp 
+    core/KarbonDocument.cpp
+    core/vglobal.cc 
+    core/vcursor.cc
+
+    commands/KarbonLayerReorderCommand.cpp
+    commands/KarbonBooleanCommand.cpp
+
 )
 
-kde4_add_library(karboncommon SHARED ${karboncommon_LIB_SRCS})
 
-target_link_libraries(karboncommon  ${KDE4_KDECORE_LIBS} komain koguiutils kotext karbondockers karbonwidgets karboncore karboncommands karbondialogs )
+kde4_add_library( karboncommon SHARED ${karboncommon_LIB_SRCS} )
+
+target_link_libraries( karboncommon ${KDE4_KDECORE_LIBS} 
+                                    ${FREETYPE_LIBRARIES}
+                                    ${FONTCONFIG_LIBRARIES}
+                                    komain 
+                                    koguiutils 
+                                    kotext )
 
 set_target_properties(karboncommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+
 install(TARGETS karboncommon  DESTINATION ${LIB_INSTALL_DIR})
+
+########### next target ###############
+set(karbonui_SRCS
+    karbon_factory.cc 
+
+    KarbonPart.cpp 
+    KarbonView.cpp 
+    KarbonPrintJob.cpp
+    dialogs/KarbonConfigureDialog.cpp
+
+    dockers/vcolordocker.cc
+    dockers/KarbonTransformDocker.cpp
+    dockers/KarbonLayerDocker.cpp
+    dockers/KarbonLayerModel.cpp
+    dockers/KarbonLayerSortingModel.cpp
+    dockers/KarbonStylePreviewDocker.cpp
+
+    widgets/KarbonCanvas.cpp
+    widgets/vcolorslider.cc
+    widgets/vgradientwidget.cc
+    widgets/KarbonGradientItem.cpp
+    widgets/vgradienttabwidget.cc
+    widgets/KarbonStylePreview.cpp
+    widgets/KarbonStyleButtonBox.cpp
+    
+)
+
+
+kde4_add_library( karbonui SHARED ${karbonui_SRCS} )
+
+target_link_libraries( karbonui ${KDE4_KDECORE_LIBS} 
+                                karboncommon
+                                komain 
+                                koguiutils 
+                                kotext
+                                flake )
+
+set_target_properties(karbonui PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+
+install(TARGETS karbonui  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### next target ###############
 
@@ -69,7 +114,7 @@ set(karbonpart_PART_SRCS karbon_factory_init.cc )
 
 kde4_add_plugin(karbonpart WITH_PREFIX ${karbonpart_PART_SRCS})
 
-target_link_libraries(karbonpart  ${KDE4_KDECORE_LIBS} karboncommon )
+target_link_libraries(karbonpart  ${KDE4_KDECORE_LIBS} karboncommon karbonui )
 
 install(TARGETS karbonpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -79,7 +124,7 @@ set(karbon_KDEINIT_SRCS main.cc )
 
 kde4_add_kdeinit_executable( karbon ${karbon_KDEINIT_SRCS})
 
-target_link_libraries(kdeinit_karbon  ${KDE4_KDECORE_LIBS} karboncommon )
+target_link_libraries(kdeinit_karbon  ${KDE4_KDECORE_LIBS} karboncommon karbonui )
 
 install(TARGETS kdeinit_karbon  DESTINATION ${LIB_INSTALL_DIR})
 

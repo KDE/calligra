@@ -36,31 +36,20 @@
 # endif
 #endif
 
-#ifndef KARBONBASE_EXPORT
-# if defined(MAKE_KARBONBASE_LIB)
+#ifndef KARBONUI_EXPORT
+# if defined(MAKE_KARBONUI_LIB)
    /* We are building this library */
-#  define KARBONBASE_EXPORT KDE_EXPORT
+#  define KARBONUI_EXPORT KDE_EXPORT
 # else
    /* We are using this library */
-#  define KARBONBASE_EXPORT KDE_IMPORT
-# endif
-#endif
-
-#ifndef KARBONCOMMAND_EXPORT
-# if defined(MAKE_KARBONCOMMAND_LIB)
-   /* We are building this library */
-#  define KARBONCOMMAND_EXPORT KDE_EXPORT
-# else
-   /* We are using this library */
-#  define KARBONCOMMAND_EXPORT KDE_IMPORT
+#  define KARBONUI_EXPORT KDE_IMPORT
 # endif
 #endif
 
 #else /* UNIX */
 
 #define KARBONCOMMON_EXPORT KDE_EXPORT
-#define KARBONBASE_EXPORT KDE_EXPORT
-#define KARBONCOMMAND_EXPORT KDE_EXPORT
+#define KARBONUI_EXPORT KDE_EXPORT
 
 #endif
 

@@ -29,7 +29,7 @@
 * One can create a predefined unthemed cursor or create a cursor from two given XMPs, 
 * the cursor bitmap and the cursor mask.
 */
-class KARBONBASE_EXPORT VCursor
+class KARBONCOMMON_EXPORT VCursor
 {
 public:
 	/** Predefined cursor types */

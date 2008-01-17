@@ -39,7 +39,7 @@ class QColor;
 /**
  * A widget for editing a gradients color stops.
  */
-class KARBONBASE_EXPORT VGradientWidget : public QWidget
+class KARBONUI_EXPORT VGradientWidget : public QWidget
 {
     Q_OBJECT
 

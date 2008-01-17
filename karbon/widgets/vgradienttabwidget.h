@@ -41,7 +41,7 @@ class KoSliderCombo;
 class KoResourceItem;
 
 /// A widget to preview a gradient
-class KARBONBASE_EXPORT VGradientPreview : public QWidget
+class KARBONUI_EXPORT VGradientPreview : public QWidget
 {
 public:
     /// Constructs a gradient preview with the givne parent
@@ -68,7 +68,7 @@ private:
  * It has one tab to edit a selected gradients type, spread method and color stops.
  * Another tab contains a list with predefined gradients to choose from.
  */
-class KARBONBASE_EXPORT VGradientTabWidget : public QTabWidget
+class KARBONUI_EXPORT VGradientTabWidget : public QTabWidget
 {
 Q_OBJECT
 

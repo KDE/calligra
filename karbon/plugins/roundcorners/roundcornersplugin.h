@@ -28,7 +28,7 @@
 class KarbonView;
 class VRoundCornersDlg;
 
-class KARBONBASE_EXPORT VRoundCornersPlugin : public KParts::Plugin
+class KARBONCOMMON_EXPORT VRoundCornersPlugin : public KParts::Plugin
 {
 	Q_OBJECT
 public:

@@ -55,8 +55,7 @@ typedef QList<KoShapeLayer*> VLayerList;
  * Filters can use this class as well instead of
  * the visually oriented karbon part.
  */
-
-class KARBONBASE_EXPORT KarbonDocument
+class KARBONCOMMON_EXPORT KarbonDocument
 {
 public:
 

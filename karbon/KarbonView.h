@@ -70,7 +70,7 @@ class VPainterFactory;
 class KarbonCanvas;
 class KarbonStylePreviewDocker;
 
-class KARBONCOMMON_EXPORT KarbonView : public KoView, public KXMLGUIBuilder
+class KARBONUI_EXPORT KarbonView : public KoView, public KXMLGUIBuilder
 {
     Q_OBJECT
 

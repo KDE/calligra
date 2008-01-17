@@ -37,7 +37,7 @@ class KComponentData;
 class KarbonResourceServer;
 
 
-class KARBONCOMMON_EXPORT KarbonFactory : public KoFactory
+class KARBONUI_EXPORT KarbonFactory : public KoFactory
 {
 	Q_OBJECT
 
