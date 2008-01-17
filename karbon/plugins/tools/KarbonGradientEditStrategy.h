@@ -63,7 +63,7 @@ public:
     bool isEditing() { return m_editing; }
 
     /// create the command for changing the shapes background
-    QUndoCommand * createCommand();
+    QUndoCommand * createCommand( QUndoCommand * parent );
 
     /// schedules a repaint of the shape and gradient handles
     void repaint() const;
@@ -82,6 +82,9 @@ public:
 
     /// Returns the gradient target
     Target target() const;
+
+    /// Starts drawing the gradient at the given mouse position
+    void startDrawing( const QPointF &mousePos );
 
 protected:
     /// paints a handle at the given position

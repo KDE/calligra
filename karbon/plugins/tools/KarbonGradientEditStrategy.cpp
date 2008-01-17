@@ -170,13 +170,12 @@ void GradientStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Keyboar
     }
 }
 
-QUndoCommand * GradientStrategy::createCommand()
+QUndoCommand * GradientStrategy::createCommand( QUndoCommand * parent )
 {
     if( m_target == Fill )
     {
         m_shape->setBackground( m_oldBrush );
-        QList<KoShape*> shapes;
-        return new KoShapeBackgroundCommand( shapes << m_shape, m_newBrush );
+        return new KoShapeBackgroundCommand( m_shape, m_newBrush, parent );
     }
     else
     {
@@ -186,8 +185,7 @@ QUndoCommand * GradientStrategy::createCommand()
             *stroke = m_oldStroke;
             KoLineBorder * newStroke = new KoLineBorder( *stroke );
             newStroke->setLineBrush( m_newBrush );
-            QList<KoShape*> shapes;
-            return new KoShapeBorderCommand( shapes << m_shape, newStroke );
+            return new KoShapeBorderCommand( m_shape, newStroke, parent );
         }
     }
 
@@ -229,10 +227,21 @@ const QGradient * GradientStrategy::gradient()
     }
 }
 
-/// Returns the gradient target
 GradientStrategy::Target GradientStrategy::target() const
 {
     return m_target;
+}
+
+void GradientStrategy::startDrawing( const QPointF &mousePos )
+{
+    QMatrix invMatrix = m_matrix.inverted();
+
+    int handleCount = m_handles.count();
+    for( int handleId = 0; handleId < handleCount; ++handleId )
+        m_handles[handleId] = invMatrix.map( mousePos );
+
+    m_selectedHandle = handleCount-1;
+    setEditing( true );
 }
 
 /////////////////////////////////////////////////////////////////

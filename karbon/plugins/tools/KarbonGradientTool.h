@@ -25,6 +25,7 @@
 
 class GradientStrategy;
 class VGradientTabWidget;
+class QUndoCommand;
 
 /**
  * A tool for editing gradient backgrounds of shapes.
@@ -61,6 +62,7 @@ private:
     QList<GradientStrategy*> m_gradients; ///< the list of editing strategies, one for each shape
     GradientStrategy* m_currentStrategy;  ///< the current editing strategy
     VGradientTabWidget * m_gradientWidget;
+    QUndoCommand * m_currentCmd;
 };
 
 #endif // _KARBONGRADIENTTOOL_H_
