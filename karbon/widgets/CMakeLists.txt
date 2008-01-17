@@ -10,8 +10,9 @@ set(karbonwidgets_SRCS
 #vsmallpreview.cc
     KarbonStyleButtonBox.cpp
     )
-
-
+if(WIN32)
+add_definitions(-DMAKE_KARBONBASE_LIB)
+endif(WIN32)
 kde4_add_library(karbonwidgets ${karbonwidgets_SRCS})
 
 target_link_libraries(karbonwidgets flake)

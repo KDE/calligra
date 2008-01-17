@@ -41,7 +41,7 @@ class KoSliderCombo;
 class KoResourceItem;
 
 /// A widget to preview a gradient
-class VGradientPreview : public QWidget
+class KARBONBASE_EXPORT VGradientPreview : public QWidget
 {
 public:
     /// Constructs a gradient preview with the givne parent
