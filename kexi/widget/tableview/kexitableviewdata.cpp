@@ -628,7 +628,7 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item,
 //(taken here for optimization)
 #define GET_VALUE if (!val) { \
 	val = m_cursor \
-				? m_pRowEditBuffer->at( *it_f.current()->columnInfo, true /* useDefaultValueIfPossible */ ) \
+				? m_pRowEditBuffer->at( *it_f.current()->columnInfo, (*it_r).isNull() /* useDefaultValueIfPossible */ ) \
 				: m_pRowEditBuffer->at( *f ); \
 	if (!val) \
 		val = &(*it_r); /* get old value */ \
