@@ -281,7 +281,8 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 }
 
 VGradientTabWidget::VGradientTabWidget( QWidget* parent )
-    : QTabWidget( parent ), m_gradient( 0 ), m_resourceServer( 0 ), m_resourceAdapter(0), m_gradOpacity( 1.0 )
+    : QTabWidget( parent ), m_gradient( 0 ), m_resourceServer( 0 ), m_resourceAdapter(0)
+    , m_gradOpacity( 1.0 ), m_checkerPainter( 4 )
 {
     // create a default gradient
     m_gradient = new QLinearGradient( QPointF(0,0), QPointF(100,100) );
@@ -422,7 +423,7 @@ void VGradientTabWidget::updatePredefGradients()
     if( gradients.count() > 0 )
     {
         foreach( KoAbstractGradient * gradient, gradients ) {
-            m_predefGradientsView->addItem( new KarbonGradientItem( gradient ) );
+            m_predefGradientsView->addItem( new KarbonGradientItem( gradient, &m_checkerPainter ) );
         }
     }
 }
@@ -644,7 +645,7 @@ void VGradientTabWidget::addResource(KoResource* resource)
     KoAbstractGradient * gradient = dynamic_cast<KoAbstractGradient*>( resource );
 
     if( gradient && gradient->valid() ) {
-        KarbonGradientItem* item = new KarbonGradientItem( gradient );
+        KarbonGradientItem* item = new KarbonGradientItem( gradient, &m_checkerPainter );
         m_itemMap[resource] = item;
         m_predefGradientsView->addItem(item);
     }

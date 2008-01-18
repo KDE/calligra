@@ -28,7 +28,7 @@ class KoAbstractGradient;
 class KarbonGradientItem : public KoResourceItem
 {
 public:
-    KarbonGradientItem( KoAbstractGradient * gradient );
+    KarbonGradientItem( KoAbstractGradient * gradient, KoCheckerBoardPainter * checkerPainter );
 
     /// reimplemented from QTableWidgetItem
     virtual QVariant data ( int role ) const;
@@ -36,7 +36,7 @@ public:
     KoAbstractGradient * gradient();
 
 private:
-    static KoCheckerBoardPainter m_checkerPainter;
+    KoCheckerBoardPainter * m_checkerPainter;
     QImage thumbnail( const QSize &thumbSize ) const;
 };
 

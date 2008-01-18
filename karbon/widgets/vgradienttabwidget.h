@@ -31,6 +31,7 @@
 #include <KoResourceServer.h>
 #include <KoResourceServerAdapter.h>
 #include <KoAbstractGradient.h>
+#include <KoCheckerBoardPainter.h>
 
 class KComboBox;
 class VGradientWidget;
@@ -161,6 +162,7 @@ private:
     KoResourceServerAdapter<KoAbstractGradient> * m_resourceAdapter;
     double m_gradOpacity;    ///< the gradient opacity
     QMap<KoResource*, KoResourceItem*> m_itemMap;
+    KoCheckerBoardPainter m_checkerPainter;
 };
 
 /// helper function to clone a gradient

@@ -26,10 +26,8 @@
 
 #include <QtGui/QPainter>
 
-KoCheckerBoardPainter KarbonGradientItem::m_checkerPainter( 4 );
-
-KarbonGradientItem::KarbonGradientItem( KoAbstractGradient * gradient )
-    : KoResourceItem( gradient )
+KarbonGradientItem::KarbonGradientItem( KoAbstractGradient * gradient, KoCheckerBoardPainter * checkerPainter )
+    : KoResourceItem( gradient ), m_checkerPainter( checkerPainter )
 {
     Q_ASSERT( gradient );
     //setSizeHint( QSize( 200, 16 ) );
@@ -47,7 +45,8 @@ QImage KarbonGradientItem::thumbnail( const QSize &thumbSize ) const
 
     QImage image( thumbSize, QImage::Format_ARGB32 );
     QPainter painter( &image );
-    m_checkerPainter.paint( painter, image.rect() );
+    if( m_checkerPainter )
+        m_checkerPainter->paint( painter, image.rect() );
     painter.fillRect( QRect( 0, 0, image.width(), image.height() ), QBrush( paintGradient ) );
 
     delete g;
