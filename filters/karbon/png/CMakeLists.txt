@@ -12,7 +12,7 @@ kde4_add_plugin(karbonpngexport WITH_PREFIX ${karbonpngexport_PART_SRCS})
 
 
 
-target_link_libraries(karbonpngexport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon )
+target_link_libraries(karbonpngexport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon karbonui )
 
 install(TARGETS karbonpngexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 

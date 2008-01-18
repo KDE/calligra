@@ -10,7 +10,7 @@ set(wmfimport_PART_SRCS
 
 kde4_add_plugin(wmfimport WITH_PREFIX ${wmfimport_PART_SRCS})
 
-target_link_libraries(wmfimport  ${KDE4_KDECORE_LIBS} kowmf koguiutils karboncommon )
+target_link_libraries(wmfimport  ${KDE4_KDECORE_LIBS} kowmf koguiutils karboncommon karbonui )
 
 install(TARGETS wmfimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
@@ -20,7 +20,7 @@ set(wmfexport_PART_SRCS wmfexport.cc )
 
 kde4_add_plugin(wmfexport WITH_PREFIX ${wmfexport_PART_SRCS})
 
-target_link_libraries(wmfexport  ${KDE4_KDECORE_LIBS} kowmf karboncommon )
+target_link_libraries(wmfexport  ${KDE4_KDECORE_LIBS} kowmf karboncommon karbonui )
 
 install(TARGETS wmfexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
