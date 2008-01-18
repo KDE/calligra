@@ -19,6 +19,12 @@ KoPathShape:
   - nearest point on curve
 - fix combine path command
 
+TextShape:
+----------
+
+- make it a parameter shape and a handle for the position on path
+- saving and loading to/from odf
+
 Layers:
 -------
 - drag and drop of items raising/lowering them (see dockers)
@@ -30,7 +36,6 @@ Shapes/Tools:
 - implement something like kword/part/frames/KWCopyShape.h
 - implement a SpiralShape
 - implement a Inkscape like calligraphy tool (http://www.inkscape.org/doc/calligraphy/tutorial-calligraphy.htm)
-- implement "drawing" the gradient on shapes which have no gradient yet
 - find a way to save/load the roundness of the star shape (e.g. flower)
 - implement pattern resizing
 
@@ -44,6 +49,7 @@ ODF support:
 Dockers:
 --------
 - implement reordering of shapes and layers in the layer docker (d'n'd)
+- double click on style preview buttons should bring up color chooser/gradient widget etc
 
 Plugins:
 --------
@@ -52,14 +58,14 @@ Plugins:
 - port the zoom tool plugin ??? there is an koffice wide zoom tool underway
 - gradient tool:
     - implement a way to remove the gradient fill (and/or set a solid fill)
-    - implement setting a gradient as stroke
 - implement a tracing plugin for tracing images (potrace...)
 
 Filters:
 --------
 - port the filters to create a document with flake shapes
 - fix the eps and ps filters (maybe using ps2pdf and then use a pdf import filter)
-- text support for wmf and svg import filter
+- text support for wmf import filter
+- allow png export to set DPI option
 
 Cleanup:
 --------
@@ -71,13 +77,8 @@ General:
 - consider the old todos and wishes when implementing/porting the above parts
 - replace VColor with KoColor
 
-Resources:
------------
-
-Toolbars:
------------
-- View toolbar with Zoom to Selection, to Document Content (or add them to the zoom action???)
-
+- check if we still need the KarbonDocument::shapes() method or the complete list of shapes
+- fix the zooming focus (i.e. the centered point)
 
 All time favourites :)
 -----------------------
