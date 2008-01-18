@@ -164,6 +164,6 @@ private:
 };
 
 /// helper function to clone a gradient
-QGradient * cloneGradient( const QGradient * gradient );
+KARBONUI_EXPORT QGradient * cloneGradient( const QGradient * gradient );
 
 #endif /* _VGRADIENTTABWIDGET_H_ */

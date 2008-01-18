@@ -20,13 +20,14 @@
 #ifndef _KARBONBOOLEANCOMMAND_H_
 #define _KARBONBOOLEANCOMMAND_H_
 
+#include <karbon_export.h>
 #include <QtGui/QUndoCommand>
 
 class KoShapeControllerBase;
 class KoPathShape;
 class QPainterPath;
 
-class KarbonBooleanCommand : public QUndoCommand
+class KARBONCOMMON_EXPORT KarbonBooleanCommand : public QUndoCommand
 {
 public:
     enum BooleanOperation
