@@ -143,6 +143,8 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
 
     
     // Axes
+    void addAxis( KDChart::CartesianAxis *axis );
+    void addAxis( AxisPosition, const QString& title = "" );
     void setAxisTitle( KDChart::CartesianAxis *axis, const QString& title );
     void setAxisShowGridLines( KDChart::CartesianAxis *axis, bool b );
     // direct setter methods for convenience

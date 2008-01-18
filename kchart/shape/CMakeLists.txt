@@ -1,6 +1,7 @@
 include_directories( ${CMAKE_SOURCE_DIR}/kchart
                      ${CMAKE_SOURCE_DIR}/kchart/kdchart/include
                      ${CMAKE_SOURCE_DIR}/interfaces
+                     ${CMAKE_SOURCE_DIR}/kchart/shape/dialogs
                      ${KOGUIUTILS_INCLUDES} )
 
 ########### Flake Plugin library ###############
@@ -13,12 +14,14 @@ SET (chartshape_LIB_SRCS
     ChartTool.cpp
     ChartToolFactory.cpp
     ChartConfigWidget.cpp
+    dialogs/NewAxisDialog.cpp
     ../commands/ChartTypeCommand.cpp
 )
 
 kde4_add_ui_files(chartshape_LIB_SRCS
     ChartConfigWidget.ui
     ChartTableEditor.ui
+    dialogs/NewAxisDialog.ui
 )
 
 kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})

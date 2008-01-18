@@ -74,6 +74,7 @@ private slots:
     void setGapBetweenSets( int percent );
     
     // Axes
+    void addAxis( AxisPosition, const QString& title = "" );
     void setAxisTitle( KDChart::CartesianAxis *axis, const QString& title );
     void setAxisShowGridLines( KDChart::CartesianAxis *axis, bool b );
 

@@ -28,6 +28,7 @@
 #include "ChartProxyModel.h"
 #include "ui_ChartTableEditor.h"
 #include "ui_ChartConfigWidget.h"
+#include "NewAxisDialog.h"
 #include "ChartTableView.h"
 #include "commands/ChartTypeCommand.h"
 
@@ -99,6 +100,9 @@ public:
     int                   selectedDataset;
     
     QList<KDChart::CartesianAxis*> axes;
+
+    // Dialogs
+    NewAxisDialog newAxisDialog;
 };
 
 ChartConfigWidget::Private::Private()
@@ -161,16 +165,6 @@ ChartConfigWidget::ChartConfigWidget()
     connect( d->ui.editData, SIGNAL( clicked( bool ) ),
              this, SLOT( slotShowTableEditor( bool ) ) );
     
-    // "Axis Tab"
-    //connect( d->ui.xAxisTitle, SIGNAL( textChanged( const QString& ) ),
-    //         this, SIGNAL( xAxisTitleChanged( const QString& ) ) );
-    //connect( d->ui.yAxisTitle, SIGNAL( textChanged( const QString& ) ),
-    //         this, SIGNAL( yAxisTitleChanged( const QString& ) ) );
-    //connect( d->ui.showVerticalLines, SIGNAL( toggled( bool ) ),
-    //         this, SIGNAL( showVerticalLinesChanged( bool ) ) );
-    //connect( d->ui.showHorizontalLines, SIGNAL( toggled( bool ) ),
-    //         this, SIGNAL( showHorizontalLinesChanged( bool ) ) );
-    
     // "Datasets" Tab
     connect( d->ui.datasetColor, SIGNAL( changed( const QColor& ) ),
              this, SLOT( datasetColorSelected( const QColor& ) ) );
@@ -189,7 +183,7 @@ ChartConfigWidget::ChartConfigWidget()
     
 	d->ui.addAxis->setIcon( KIcon( "list-add" ) );
 	d->ui.removeAxis->setIcon( KIcon( "list-remove" ) );
-	
+
 	connect( d->ui.axisTitle, SIGNAL( textChanged( const QString& ) ),
 			 this, SLOT( ui_axisTitleChanged( const QString& ) ) );
 	connect( d->ui.axisShowTitle, SIGNAL( toggled( bool ) ),
@@ -199,6 +193,7 @@ ChartConfigWidget::ChartConfigWidget()
 	connect ( d->ui.axes, SIGNAL( currentIndexChanged( int ) ),
 			  this, SLOT( ui_axisSelectionChanged( int ) ) );
 
+    setupDialogs();
     createActions();
 
     // We need only connect one of the data direction buttons, since
@@ -315,13 +310,13 @@ void ChartConfigWidget::update()
     // Update cartesian diagram-specific properties
     if ( cartesianDiagram ) {
     	if ( d->axes != cartesianDiagram->axes() ) {
-    		d->axes = cartesianDiagram->axes();
+            // Remove old items from the combo box
+   			d->ui.axes->clear();
+            // Sync the internal list
+            d->axes = cartesianDiagram->axes();
     		
-    		for ( int item = 0; item < d->ui.axes->count(); item++ ) {
-    			d->ui.axes->removeItem( item );
-    		}
-    		foreach ( KDChart::CartesianAxis *axis, cartesianDiagram->axes() ) {
-    			d->ui.axes->addItem( axis->titleText(), axis );
+            foreach ( KDChart::CartesianAxis *axis, cartesianDiagram->axes() ) {
+    			d->ui.axes->addItem( axis->titleText() );
     		}
     		
     		const KDChart::CartesianAxis *selectedAxis = cartesianDiagram->axes().first();
@@ -558,6 +553,14 @@ void ChartConfigWidget::updateFixedPosition( const KDChart::Position position )
 }
 
 
+void ChartConfigWidget::setupDialogs()
+{
+    connect( d->ui.addAxis, SIGNAL( clicked() ),
+             this, SLOT( ui_addAxisClicked() ) );
+    connect( &d->newAxisDialog, SIGNAL( accepted() ),
+             this, SLOT( ui_axisAdded() ) );
+}
+
 void ChartConfigWidget::createActions()
 {
     QAction *cutRowsAction       = new QAction( KIcon( "edit-cut" ), i18n( "Cut Rows" ),    d->tableView );
@@ -623,6 +626,9 @@ void ChartConfigWidget::setLegendOrientationIsVertical( bool b )
 }
 
 void ChartConfigWidget::ui_axisSelectionChanged( int index ) {
+    // Check for valid index
+    if ( index < 0 )
+        return;
 	Q_ASSERT( d->axes.size() > index );
 	
 	const KDChart::CartesianAxis *axis = d->axes[ index ];
@@ -661,4 +667,27 @@ void ChartConfigWidget::ui_axisShowGridLinesChanged( bool b ) {
 	emit axisShowGridLinesChanged( d->axes[ d->ui.axes->currentIndex() ], b );
 }
 
+void ChartConfigWidget::ui_axisAdded() {
+    AxisPosition position;
+    if ( d->newAxisDialog.positionIsTop->isChecked() )
+        position = Top;
+    else if ( d->newAxisDialog.positionIsBottom->isChecked() )
+        position = Bottom;
+    else if ( d->newAxisDialog.positionIsLeft->isChecked() )
+        position = Left;
+    else
+        position = Right;
+
+    emit axisAdded( position, d->newAxisDialog.title->text() );
+    update();
+}
+
+void ChartConfigWidget::ui_addAxisClicked() {
+    d->newAxisDialog.show();
+}
+
+void ChartConfigWidget::ui_removeAxisClicked() {
+}
+
 #include "ChartConfigWidget.moc"
+

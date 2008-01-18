@@ -61,6 +61,9 @@ public slots:
     void ui_axisTitleChanged( const QString& title );
     void ui_axisShowTitleChanged( bool );
     void ui_axisShowGridLinesChanged( bool );
+    void ui_axisAdded();
+    void ui_addAxisClicked();
+    void ui_removeAxisClicked();
 
 signals:
     void chartTypeChanged( OdfChartType type, OdfChartSubtype subType );
@@ -80,7 +83,8 @@ signals:
     void dataDirectionChanged( Qt::Orientation );
     void firstRowIsLabelChanged( bool b );
     void firstColumnIsLabelChanged( bool b );
-    
+
+    void axisAdded( AxisPosition, const QString& title );    
     void axisTitleChanged( KDChart::CartesianAxis* axis, const QString& title );
     void axisShowGridLinesChanged( KDChart::CartesianAxis* axis, bool b );
 
@@ -98,6 +102,7 @@ signals:
     void legendShowFrameChanged( bool show );
 
 private:
+    void setupDialogs();
     void createActions();
 
     class Private;

@@ -208,12 +208,14 @@ QWidget *ChartTool::createOptionWidget()
              this,   SLOT( setShowLegend( bool ) ));
 
     connect( widget, SIGNAL( chartTypeChanged( OdfChartType, OdfChartSubtype ) ),
-	     this,    SLOT( setChartType( OdfChartType, OdfChartSubtype ) ) );
+             this,    SLOT( setChartType( OdfChartType, OdfChartSubtype ) ) );
     connect( widget, SIGNAL( chartSubtypeChanged( OdfChartSubtype ) ),
              this,    SLOT( setChartSubtype( OdfChartSubtype ) ) );
     connect( widget, SIGNAL( threeDModeToggled( bool ) ),
              this,    SLOT( setThreeDMode( bool ) ) );
 
+    connect( widget, SIGNAL( axisAdded( AxisPosition, const QString& ) ),
+             this,   SLOT( addAxis( AxisPosition, const QString& ) ) );
     connect( widget, SIGNAL( axisTitleChanged( KDChart::CartesianAxis*, const QString& ) ),
     		 this,   SLOT( setAxisTitle( KDChart::CartesianAxis*, const QString& ) ) );
     connect( widget, SIGNAL( axisShowGridLinesChanged( KDChart::CartesianAxis*, bool ) ),
@@ -253,6 +255,7 @@ QWidget *ChartTool::createOptionWidget()
 
 void ChartTool::setChartType( OdfChartType type, OdfChartSubtype subtype )
 {
+    Q_ASSERT( d->shape );
     if ( d->shape != 0 )
         d->shape->setChartType( type, subtype );
     if ( optionWidget() )
@@ -262,30 +265,35 @@ void ChartTool::setChartType( OdfChartType type, OdfChartSubtype subtype )
 
 void ChartTool::setChartSubtype( OdfChartSubtype subtype )
 {
+    Q_ASSERT( d->shape );
     if ( d->shape != 0 )
         d->shape->setChartSubtype( subtype );
 }
 
 void ChartTool::setThreeDMode( bool threeD )
 {
+    Q_ASSERT( d->shape );
     if ( d->shape != 0 )
         d->shape->setThreeDMode( threeD );
 }
 
 void ChartTool::setDataDirection( Qt::Orientation direction )
 {
+    Q_ASSERT( d->shape );
     if ( d->shape != 0 )
         d->shape->setDataDirection( direction );
 }
 
 void ChartTool::setFirstRowIsLabel( bool b )
 {
+    Q_ASSERT( d->shape );
     if ( d->shape != 0 )
         d->shape->setFirstRowIsLabel( b );
 }
 
 void ChartTool::setFirstColumnIsLabel( bool b )
 {
+    Q_ASSERT( d->shape );
     if ( d->shape != 0 )
         d->shape->setFirstColumnIsLabel( b );
 }
@@ -293,17 +301,20 @@ void ChartTool::setFirstColumnIsLabel( bool b )
 
 void ChartTool::setLegendTitle( const QString &title )
 {
+    Q_ASSERT( d->shape );
     d->shape->setLegendTitle( title );
 }
 
 // Deprecated method
 void ChartTool::setLegendTitleFont( const QFont &font )
 {
+    Q_ASSERT( d->shape );
     d->shape->setLegendTitleFont( font );
 }
 
 void ChartTool::setLegendFont( const QFont &font )
 {
+    Q_ASSERT( d->shape );
     // There only is a general font, for the legend items and the legend title
     d->shape->setLegendFont( font );
     d->shape->setLegendTitleFont( font );
@@ -311,47 +322,56 @@ void ChartTool::setLegendFont( const QFont &font )
 
 void ChartTool::setLegendSpacing( int spacing )
 {
+    Q_ASSERT( d->shape );
     d->shape->setLegendSpacing( spacing );
 }
 
 void ChartTool::setLegendFontSize( int size )
 {
+    Q_ASSERT( d->shape );
     d->shape->setLegendFontSize( size );
 }
 
 void ChartTool::setLegendShowLines( bool b )
 {
+    Q_ASSERT( d->shape );
     d->shape->setLegendShowLines( b );
 }
 
 void ChartTool::setLegendOrientation( Qt::Orientation orientation )
 {
+    Q_ASSERT( d->shape );
     d->shape->setLegendOrientation( orientation );
 }
 
 void ChartTool::setLegendAlignment( Qt::Alignment alignment )
 {
+    Q_ASSERT( d->shape );
     d->shape->setLegendAlignment( alignment );
 }
 
 void ChartTool::setLegendFixedPosition( KDChart::Position position )
 {
+    Q_ASSERT( d->shape );
     d->shape->setLegendFixedPosition( position );
     ( ( ChartConfigWidget* ) optionWidget() )->updateFixedPosition( position );
 }
 
 void ChartTool::setLegendBackgroundColor( const QColor& color )
 {
+    Q_ASSERT( d->shape );
     d->shape->setLegendBackgroundColor( color );
 }
 
 void ChartTool::setLegendFrameColor( const QColor& color )
 {
+    Q_ASSERT( d->shape );
     d->shape->setLegendFrameColor( color );
 }
 
 void ChartTool::setLegendShowFrame( bool show )
 {
+    Q_ASSERT( d->shape );
     d->shape->setLegendShowFrame( show );
 }
 
@@ -362,6 +382,11 @@ void ChartTool::setDatasetColor( int dataset, const QColor& color )
         return;
     d->shape->diagram()->setBrush( dataset, QBrush( color ) );
     d->shape->update();
+}
+
+void ChartTool::addAxis( AxisPosition position, const QString& title ) {
+    Q_ASSERT( d->shape );
+    d->shape->addAxis( position, title );
 }
 
 void ChartTool::setAxisTitle( KDChart::CartesianAxis *axis, const QString& title ) {
@@ -376,16 +401,19 @@ void ChartTool::setAxisShowGridLines( KDChart::CartesianAxis *axis, bool b ) {
 
 void ChartTool::setGapBetweenBars( int percent )
 {
+    Q_ASSERT( d->shape );
     d->shape->setGapBetweenBars( percent );
 }
 
 void ChartTool::setGapBetweenSets( int percent )
 {
+    Q_ASSERT( d->shape );
     d->shape->setGapBetweenSets( percent );
 }
 
 void ChartTool::setShowLegend( bool b )
 {
+    Q_ASSERT( d->shape );
     d->shape->setShowLegend( b );
 }
 

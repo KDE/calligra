@@ -1944,6 +1944,36 @@ void ChartShape::setYAxisTitle( const QString& title )
     update();
 }
 
+void ChartShape::addAxis( KDChart::CartesianAxis *axis ) {
+    Q_ASSERT( axis );
+    if ( !axis )
+        return;
+
+    KDChart::AbstractCartesianDiagram *cartesianDiagram = dynamic_cast<KDChart::AbstractCartesianDiagram*>(d->diagram);
+    Q_ASSERT( cartesianDiagram );
+    if ( !cartesianDiagram )
+        return;
+
+    cartesianDiagram->addAxis( axis );
+    update();
+}
+
+void ChartShape::addAxis( AxisPosition position, const QString &title ) {
+    KDChart::CartesianAxis *axis = new KDChart::CartesianAxis;
+
+    KDChart::CartesianAxis::Position pos;
+    switch ( position ) {
+        case Top:    pos = KDChart::CartesianAxis::Top; break;
+        case Bottom: pos = KDChart::CartesianAxis::Bottom; break;
+        case Left:   pos = KDChart::CartesianAxis::Left; break;
+        case Right:  pos = KDChart::CartesianAxis::Right; break;
+    }
+    axis->setPosition( pos );
+    axis->setTitleText( title );
+    addAxis( axis );
+}
+    
+
 void ChartShape::setAxisTitle( KDChart::CartesianAxis *axis, const QString& title ) {
 	Q_ASSERT( axis );
 	if ( !axis )
