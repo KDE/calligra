@@ -35,11 +35,11 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <kicon.h>
 #include <kvbox.h>
 #include <kconfig.h>
+#include <kcombobox.h>
 
 #include <QtGui/QCheckBox>
 #include <QtGui/QLabel>
 #include <QtGui/QGroupBox>
-#include <QtGui/QComboBox>
 #include <QtGui/QGridLayout>
 
 #include <float.h>
@@ -229,7 +229,7 @@ ConfigMiscPage::ConfigMiscPage( KarbonView* view, char* name )
 
     grid->addWidget( new QLabel(  i18n(  "Units:" ), tmpQGroupBox ), 0, 0 );
 
-    m_unit = new QComboBox( tmpQGroupBox );
+    m_unit = new KComboBox( tmpQGroupBox );
     m_unit->addItems( KoUnit::listOfUnitName() );
     grid->addWidget( m_unit, 0, 1 );
     m_oldUnit = KoUnit::unit( unitType );
