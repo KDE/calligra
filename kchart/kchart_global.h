@@ -21,7 +21,6 @@
 #ifndef KCHART_GLOBAL_H
 #define KCHART_GLOBAL_H
 
-
 namespace KChart
 {
 
@@ -52,6 +51,13 @@ typedef enum {
     StackedChartSubtype,
     PercentChartSubtype
 } OdfChartSubtype;
+
+typedef enum {
+    Bottom,
+    Top,
+    Right,
+    Left
+} AxisPosition;
 
 struct ChartTypeOptions
 {
