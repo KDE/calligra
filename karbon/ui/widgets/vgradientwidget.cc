@@ -26,6 +26,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "vgradientwidget.h"
+#include "vcursor.h"
+
+#include <KoUniColorDialog.h>
+
+#include <klocale.h>
+#include <kiconloader.h>
+
 #include <QLabel>
 #include <QBitmap>
 #include <QPaintEvent>
@@ -35,13 +43,6 @@
 #include <QRectF>
 #include <QPainter>
 
-#include <klocale.h>
-#include <kiconloader.h>
-
-#include <KoUniColorDialog.h>
-
-#include "vgradientwidget.h"
-#include "vcursor.h"
 
 #define midPoint_width 7
 #define midPoint_height 10

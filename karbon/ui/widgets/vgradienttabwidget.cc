@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "vgradientwidget.h"
 #include "vgradienttabwidget.h"
+#include "vgradientwidget.h"
 #include "KarbonGradientItem.h"
 
 #include <KoAbstractGradient.h>

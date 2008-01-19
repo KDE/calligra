@@ -16,8 +16,9 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KCHARTPRINTJOB_H
-#define KCHARTPRINTJOB_H
+
+#ifndef KARBONPRINTJOB_H
+#define KARBONPRINTJOB_H
 
 #include <KoPrintingDialog.h>
 
@@ -36,4 +37,4 @@ private:
     KarbonView *m_view;
 };
 
-#endif
+#endif // KARBONPRINTJOB_H
