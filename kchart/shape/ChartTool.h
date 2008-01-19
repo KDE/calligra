@@ -75,8 +75,12 @@ private slots:
     
     // Axes
     void addAxis( AxisPosition, const QString& title = "" );
+    void removeAxis( KDChart::CartesianAxis *axis );
     void setAxisTitle( KDChart::CartesianAxis *axis, const QString& title );
-    void setAxisShowGridLines( KDChart::CartesianAxis *axis, bool b );
+    void setAxisShowGridLines( KDChart::CartesianAxis *axis, bool b = true );
+    void setAxisUseLogarithmicScaling( KDChart::CartesianAxis *axis, bool b = true );
+    void setAxisStepWidth( KDChart::CartesianAxis *axis, double width );
+    void setAxisSubStepWidth( KDChart::CartesianAxis *axis, double width );
 
     // Legend
     void setShowLegend( bool b );

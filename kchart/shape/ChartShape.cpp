@@ -120,8 +120,6 @@ public:
     KDChart::HeaderFooter     *footer;
     
     // Axes
-    QString                    xAxisTitle;
-    QString                    yAxisTitle;
     // FIXME: Lin/log for the X axis
     // FIXME: Lin/log for the Y axis
 
@@ -1922,7 +1920,6 @@ void ChartShape::relayout() const
 
 void ChartShape::setXAxisTitle( const QString& title )
 {
-    d->xAxisTitle = title;
     if ( !isCartesian( d->chartType ) )
         return;
     
@@ -1934,7 +1931,6 @@ void ChartShape::setXAxisTitle( const QString& title )
 
 void ChartShape::setYAxisTitle( const QString& title )
 {
-    d->yAxisTitle = title;
     if ( !isCartesian( d->chartType ) )
         return;
     
@@ -1943,6 +1939,7 @@ void ChartShape::setYAxisTitle( const QString& title )
         
     update();
 }
+
 
 void ChartShape::addAxis( KDChart::CartesianAxis *axis ) {
     Q_ASSERT( axis );
@@ -1971,8 +1968,21 @@ void ChartShape::addAxis( AxisPosition position, const QString &title ) {
     axis->setPosition( pos );
     axis->setTitleText( title );
     addAxis( axis );
+}    
+
+void ChartShape::removeAxis( KDChart::CartesianAxis *axis ) {
+    Q_ASSERT( axis );
+    if ( !axis )
+        return;
+
+    KDChart::AbstractCartesianDiagram *cartesianDiagram = dynamic_cast<KDChart::AbstractCartesianDiagram*>(d->diagram);
+    Q_ASSERT( cartesianDiagram );
+    if ( !cartesianDiagram )
+        return;
+
+    cartesianDiagram->takeAxis( axis );
+    update();
 }
-    
 
 void ChartShape::setAxisTitle( KDChart::CartesianAxis *axis, const QString& title ) {
 	Q_ASSERT( axis );
@@ -1994,6 +2004,56 @@ void ChartShape::setAxisShowGridLines( KDChart::CartesianAxis *axis, bool b ) {
 								            Qt::Horizontal : Qt::Vertical;
 	KDChart::GridAttributes attributes = plane->gridAttributes( axisOrientation );
 	attributes.setGridVisible( b );
+	plane->setGridAttributes( axisOrientation, attributes );
+	
+	update();
+}
+
+void ChartShape::setAxisUseLogarithmicScaling( KDChart::CartesianAxis *axis, bool b ) {
+	Q_ASSERT( axis );
+	if ( !axis )
+		return;
+    
+    // Logarithmic scaling is only supported for y-axes
+    if ( !axis->isOrdinate() )
+        return;
+	
+    KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( d->diagram->coordinatePlane() );
+	if ( !plane )
+		return;
+
+    plane->setAxesCalcModeY( b ? KDChart::AbstractCoordinatePlane::Logarithmic : KDChart::AbstractCoordinatePlane::Linear );
+	
+	update();
+}
+
+void ChartShape::setAxisStepWidth( KDChart::CartesianAxis *axis, double width ) {
+	Q_ASSERT( axis );
+	if ( !axis )
+		return;
+	KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( d->diagram->coordinatePlane() );
+	if ( !plane )
+		return;
+	const Qt::Orientation axisOrientation = ( axis->position() == KDChart::CartesianAxis::Top || axis->position() == KDChart::CartesianAxis::Bottom ) ?
+								            Qt::Horizontal : Qt::Vertical;
+	KDChart::GridAttributes attributes = plane->gridAttributes( axisOrientation );
+	attributes.setGridStepWidth( width );
+	plane->setGridAttributes( axisOrientation, attributes );
+	
+	update();
+}
+
+void ChartShape::setAxisSubStepWidth( KDChart::CartesianAxis *axis, double width ) {
+	Q_ASSERT( axis );
+	if ( !axis )
+		return;
+	KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( d->diagram->coordinatePlane() );
+	if ( !plane )
+		return;
+	const Qt::Orientation axisOrientation = ( axis->position() == KDChart::CartesianAxis::Top || axis->position() == KDChart::CartesianAxis::Bottom ) ?
+								            Qt::Horizontal : Qt::Vertical;
+	KDChart::GridAttributes attributes = plane->gridAttributes( axisOrientation );
+	attributes.setGridSubStepWidth( width );
 	plane->setGridAttributes( axisOrientation, attributes );
 	
 	update();

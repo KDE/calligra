@@ -59,8 +59,12 @@ public slots:
     
     void ui_axisSelectionChanged( int index );
     void ui_axisTitleChanged( const QString& title );
-    void ui_axisShowTitleChanged( bool );
-    void ui_axisShowGridLinesChanged( bool );
+    void ui_axisShowTitleChanged( bool b );
+    void ui_axisShowGridLinesChanged( bool b );
+    void ui_axisUseLogarithmicScalingChanged( bool b );
+    void ui_axisStepWidthChanged( double width );
+    void ui_axisSubStepWidthChanged( double width );
+    void ui_axisScalingButtonClicked();
     void ui_axisAdded();
     void ui_addAxisClicked();
     void ui_removeAxisClicked();
@@ -85,8 +89,12 @@ signals:
     void firstColumnIsLabelChanged( bool b );
 
     void axisAdded( AxisPosition, const QString& title );    
+    void axisRemoved( KDChart::CartesianAxis *axis );
     void axisTitleChanged( KDChart::CartesianAxis* axis, const QString& title );
     void axisShowGridLinesChanged( KDChart::CartesianAxis* axis, bool b );
+    void axisUseLogarithmicScalingChanged( KDChart::CartesianAxis *axis, bool b );
+    void axisStepWidthChanged( KDChart::CartesianAxis *axis, double width );
+    void axisSubStepWidthChanged( KDChart::CartesianAxis *axis, double width );
 
     void legendTitleChanged( const QString& );
     void legendFontChanged( const QFont& font );

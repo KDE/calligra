@@ -13,6 +13,7 @@
 #include <KLocale>
 #include <KIconLoader>
 #include <KDebug>
+#include <KMessageBox>
 
 // KDChart
 #include <KDChartChart>
@@ -29,6 +30,7 @@
 #include "ui_ChartTableEditor.h"
 #include "ui_ChartConfigWidget.h"
 #include "NewAxisDialog.h"
+#include "AxisScalingDialog.h"
 #include "ChartTableView.h"
 #include "commands/ChartTypeCommand.h"
 
@@ -102,7 +104,8 @@ public:
     QList<KDChart::CartesianAxis*> axes;
 
     // Dialogs
-    NewAxisDialog newAxisDialog;
+    NewAxisDialog     newAxisDialog;
+    AxisScalingDialog axisScalingDialog;
 };
 
 ChartConfigWidget::Private::Private()
@@ -314,22 +317,42 @@ void ChartConfigWidget::update()
    			d->ui.axes->clear();
             // Sync the internal list
             d->axes = cartesianDiagram->axes();
-    		
-            foreach ( KDChart::CartesianAxis *axis, cartesianDiagram->axes() ) {
-    			d->ui.axes->addItem( axis->titleText() );
-    		}
-    		
-    		const KDChart::CartesianAxis *selectedAxis = cartesianDiagram->axes().first();
-    		const KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>(d->shape->coordinatePlane());
-    		
-    		Q_ASSERT( plane );
-    		
-    		const Qt::Orientation axisOrientation = (   selectedAxis->position() == KDChart::CartesianAxis::Top
-			                                         || selectedAxis->position() == KDChart::CartesianAxis::Bottom ) ?
-			                                            Qt::Horizontal : Qt::Vertical;
-    		d->ui.axisShowGridLines->setChecked( plane->gridAttributes( axisOrientation ).isGridVisible() );
-    		d->ui.axisShowTitle->setChecked( !selectedAxis->titleText().isEmpty() );
-    		d->ui.axisTitle->setText( selectedAxis->titleText() );
+    	
+            if ( !d->axes.isEmpty()	) {
+                foreach ( KDChart::CartesianAxis *axis, cartesianDiagram->axes() ) {
+        			d->ui.axes->addItem( axis->titleText() );
+        		}
+        		
+        		const KDChart::CartesianAxis *selectedAxis = cartesianDiagram->axes().first();
+        		const KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>(d->shape->coordinatePlane());
+        		
+        		Q_ASSERT( plane );
+        		
+        		const Qt::Orientation axisOrientation = (   selectedAxis->position() == KDChart::CartesianAxis::Top
+    			                                         || selectedAxis->position() == KDChart::CartesianAxis::Bottom ) ?
+    			                                            Qt::Horizontal : Qt::Vertical;
+                d->ui.axisShowGridLines->setEnabled( true );
+        		d->ui.axisShowGridLines->setChecked( plane->gridAttributes( axisOrientation ).isGridVisible() );
+                d->ui.axisShowTitle->setEnabled( true );
+        		d->ui.axisShowTitle->setChecked( !selectedAxis->titleText().isEmpty() );
+                d->ui.axisTitle->setEnabled( true );
+        		d->ui.axisTitle->setText( selectedAxis->titleText() );
+            } else {
+                d->ui.axisShowGridLines->blockSignals( true );
+                d->ui.axisShowGridLines->setChecked( false );
+                d->ui.axisShowGridLines->setEnabled( false );
+                d->ui.axisShowGridLines->blockSignals( false );
+
+                d->ui.axisShowTitle->blockSignals( true );
+                d->ui.axisShowTitle->setChecked( false );
+                d->ui.axisShowTitle->setEnabled( false );
+                d->ui.axisShowTitle->blockSignals( false );
+
+                d->ui.axisTitle->blockSignals( true );
+                d->ui.axisTitle->setText( "" );
+                d->ui.axisTitle->setEnabled( false );
+                d->ui.axisTitle->blockSignals( false );
+            }
     	}
     }
     
@@ -555,10 +578,23 @@ void ChartConfigWidget::updateFixedPosition( const KDChart::Position position )
 
 void ChartConfigWidget::setupDialogs()
 {
+    // Adding/removing axes
     connect( d->ui.addAxis, SIGNAL( clicked() ),
              this, SLOT( ui_addAxisClicked() ) );
+    connect( d->ui.removeAxis, SIGNAL( clicked() ),
+             this, SLOT( ui_removeAxisClicked() ) );
     connect( &d->newAxisDialog, SIGNAL( accepted() ),
              this, SLOT( ui_axisAdded() ) );
+
+    // Axis scaling
+    connect( d->ui.axisScalingButton, SIGNAL( clicked() ),
+             this, SLOT( ui_axisScalingButtonClicked() ) );
+    connect( d->axisScalingDialog.logarithmicScaling, SIGNAL( toggled( bool ) ),
+             this, SLOT( ui_axisUseLogarithmicScalingChanged( bool ) ) );
+    connect( d->axisScalingDialog.stepWidth, SIGNAL( valueChanged( double ) ),
+             this, SLOT( ui_axisStepWidthChanged( double ) ) );
+    connect( d->axisScalingDialog.subStepWidth, SIGNAL( valueChanged( double ) ),
+             this, SLOT( ui_axisSubStepWidthChanged( double ) ) );
 }
 
 void ChartConfigWidget::createActions()
@@ -680,6 +716,10 @@ void ChartConfigWidget::ui_axisAdded() {
 
     emit axisAdded( position, d->newAxisDialog.title->text() );
     update();
+
+    Q_ASSERT( d->ui.axes->count() > 0 );
+
+    d->ui.axes->setCurrentIndex( d->ui.axes->count() - 1 );
 }
 
 void ChartConfigWidget::ui_addAxisClicked() {
@@ -687,6 +727,63 @@ void ChartConfigWidget::ui_addAxisClicked() {
 }
 
 void ChartConfigWidget::ui_removeAxisClicked() {
+    int index = d->ui.axes->currentIndex();
+    // Check for valid index
+    if ( index < 0 )
+        return;
+	Q_ASSERT( d->axes.size() > index );
+
+    if ( KMessageBox::questionYesNo( this,
+                                     "Are you sure you want to remove this axis? All settings specific to this axis will be lost.",
+                                     "Axis Removal Confirmation" ) != KMessageBox::Yes )
+        return;
+
+    emit axisRemoved( d->axes[ index ] );
+    update();
+
+    // Select the axis after the current selection, if possible
+    if ( d->ui.axes->count() > 0 ) {
+        index = qMin( index, d->ui.axes->count() - 1 );
+        d->ui.axes->setCurrentIndex( index );
+    }
+}
+
+void ChartConfigWidget::ui_axisUseLogarithmicScalingChanged( bool b )
+{
+    int index = d->ui.axes->currentIndex();
+    // Check for valid index
+    if ( index < 0 )
+        return;
+	Q_ASSERT( d->axes.size() > index );
+
+    emit axisUseLogarithmicScalingChanged( d->axes[ index ], b );
+}
+
+void ChartConfigWidget::ui_axisStepWidthChanged( double width )
+{
+    int index = d->ui.axes->currentIndex();
+    // Check for valid index
+    if ( index < 0 )
+        return;
+	Q_ASSERT( d->axes.size() > index );
+
+    emit axisStepWidthChanged( d->axes[ index ], width );
+}
+
+void ChartConfigWidget::ui_axisSubStepWidthChanged( double width )
+{
+    int index = d->ui.axes->currentIndex();
+    // Check for valid index
+    if ( index < 0 )
+        return;
+	Q_ASSERT( d->axes.size() > index );
+
+    emit axisSubStepWidthChanged( d->axes[ index ], width );
+}
+
+void ChartConfigWidget::ui_axisScalingButtonClicked()
+{
+    d->axisScalingDialog.show();
 }
 
 #include "ChartConfigWidget.moc"

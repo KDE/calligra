@@ -15,6 +15,7 @@ SET (chartshape_LIB_SRCS
     ChartToolFactory.cpp
     ChartConfigWidget.cpp
     dialogs/NewAxisDialog.cpp
+    dialogs/AxisScalingDialog.cpp
     ../commands/ChartTypeCommand.cpp
 )
 
@@ -22,6 +23,7 @@ kde4_add_ui_files(chartshape_LIB_SRCS
     ChartConfigWidget.ui
     ChartTableEditor.ui
     dialogs/NewAxisDialog.ui
+    dialogs/AxisScalingDialog.ui
 )
 
 kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})

@@ -216,10 +216,18 @@ QWidget *ChartTool::createOptionWidget()
 
     connect( widget, SIGNAL( axisAdded( AxisPosition, const QString& ) ),
              this,   SLOT( addAxis( AxisPosition, const QString& ) ) );
+    connect( widget, SIGNAL( axisRemoved( KDChart::CartesianAxis* ) ),
+             this,   SLOT( removeAxis( KDChart::CartesianAxis* ) ) );
     connect( widget, SIGNAL( axisTitleChanged( KDChart::CartesianAxis*, const QString& ) ),
     		 this,   SLOT( setAxisTitle( KDChart::CartesianAxis*, const QString& ) ) );
     connect( widget, SIGNAL( axisShowGridLinesChanged( KDChart::CartesianAxis*, bool ) ),
     		 this,   SLOT( setAxisShowGridLines( KDChart::CartesianAxis*, bool ) ) );
+    connect( widget, SIGNAL( axisUseLogarithmicScalingChanged( KDChart::CartesianAxis*, bool ) ),
+    		 this,   SLOT( setAxisUseLogarithmicScaling( KDChart::CartesianAxis*, bool ) ) );
+    connect( widget, SIGNAL( axisStepWidthChanged( KDChart::CartesianAxis*, double ) ),
+    		 this,   SLOT( setAxisStepWidth( KDChart::CartesianAxis*, double ) ) );
+    connect( widget, SIGNAL( axisSubStepWidthChanged( KDChart::CartesianAxis*, double ) ),
+    		 this,   SLOT( setAxisSubStepWidth( KDChart::CartesianAxis*, double ) ) );
 
     connect( widget, SIGNAL( legendTitleChanged( const QString& ) ),
              this,   SLOT( setLegendTitle( const QString& ) ) );
@@ -384,20 +392,48 @@ void ChartTool::setDatasetColor( int dataset, const QColor& color )
     d->shape->update();
 }
 
+
 void ChartTool::addAxis( AxisPosition position, const QString& title ) {
     Q_ASSERT( d->shape );
     d->shape->addAxis( position, title );
 }
 
-void ChartTool::setAxisTitle( KDChart::CartesianAxis *axis, const QString& title ) {
+void ChartTool::removeAxis( KDChart::CartesianAxis *axis )
+{
+    Q_ASSERT( d->shape );
+    d->shape->removeAxis( axis );
+}
+
+void ChartTool::setAxisTitle( KDChart::CartesianAxis *axis, const QString& title )
+{
 	Q_ASSERT( d->shape );
 	d->shape->setAxisTitle( axis, title );
 }
 
-void ChartTool::setAxisShowGridLines( KDChart::CartesianAxis *axis, bool b ) {
+void ChartTool::setAxisShowGridLines( KDChart::CartesianAxis *axis, bool b )
+{
 	Q_ASSERT( d->shape );
 	d->shape->setAxisShowGridLines( axis, b );
 }
+
+void ChartTool::setAxisUseLogarithmicScaling( KDChart::CartesianAxis *axis, bool b )
+{
+    Q_ASSERT( d->shape );
+    d->shape->setAxisUseLogarithmicScaling( axis, b );
+}
+
+void ChartTool::setAxisStepWidth( KDChart::CartesianAxis *axis, double width )
+{
+    Q_ASSERT( d->shape );
+    d->shape->setAxisStepWidth( axis, width );
+}
+
+void ChartTool::setAxisSubStepWidth( KDChart::CartesianAxis *axis, double width )
+{
+    Q_ASSERT( d->shape );
+    d->shape->setAxisSubStepWidth( axis, width );
+}
+
 
 void ChartTool::setGapBetweenBars( int percent )
 {
