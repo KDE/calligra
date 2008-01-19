@@ -53,6 +53,8 @@ public:
 private slots:
     void attachPath();
     void detachPath();
+    void convertText();
+
 private:
     void updateActions();
 
@@ -62,6 +64,7 @@ private:
 
     QAction * m_attachPath;
     QAction * m_detachPath;
+    QAction * m_convertText;
 };
 
 #endif // SIMPLETEXTTOOL_H

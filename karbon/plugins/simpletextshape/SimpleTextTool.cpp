@@ -24,6 +24,7 @@
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoPathShape.h>
+#include <KoShapeController.h>
 
 #include <KLocale>
 #include <KIcon>
@@ -42,6 +43,10 @@ SimpleTextTool::SimpleTextTool(KoCanvasBase *canvas)
     m_detachPath  = new QAction(KIcon("detach-path"), i18n("Detach Path"), this);
     m_detachPath->setEnabled( false );
     connect( m_detachPath, SIGNAL(triggered()), this, SLOT(detachPath()) );
+
+    m_convertText  = new QAction(KIcon("pathshape"), i18n("Convert to Path"), this);
+    m_convertText->setEnabled( false );
+    connect( m_convertText, SIGNAL(triggered()), this, SLOT(convertText()) );
 }
 
 SimpleTextTool::~SimpleTextTool()
@@ -113,6 +118,7 @@ void SimpleTextTool::updateActions()
 {
     m_attachPath->setEnabled( m_path != 0 );
     m_detachPath->setEnabled( m_currentShape->isOnPath() );
+    m_convertText->setEnabled( m_currentShape != 0 );
 }
 
 void SimpleTextTool::attachPath()
@@ -127,16 +133,41 @@ void SimpleTextTool::detachPath()
         m_currentShape->removeFromPath();
 }
 
+void SimpleTextTool::convertText()
+{
+    KoPathShape * path = KoPathShape::fromQPainterPath( m_currentShape->outline() );
+    path->setParent( m_currentShape->parent() );
+    path->setZIndex( m_currentShape->zIndex() );
+    path->setBorder( m_currentShape->border() );
+    path->setBackground( m_currentShape->background() );
+    path->setTransformation( m_currentShape->transformation() );
+    path->setShapeId( KoPathShapeId );
+
+    QUndoCommand * cmd = m_canvas->shapeController()->addShapeDirect( path );
+    m_canvas->shapeController()->removeShape( m_currentShape, cmd );
+    m_canvas->addCommand( cmd );
+
+    m_currentShape = 0;
+    deactivate();
+}
+
 QWidget *SimpleTextTool::createOptionWidget()
 {
     QWidget * widget = new QWidget();
     QGridLayout * layout = new QGridLayout(widget);
+
     QToolButton * attachButton = new QToolButton(widget);
     attachButton->setDefaultAction( m_attachPath );
     layout->addWidget( attachButton, 0, 0 );
+
     QToolButton * detachButton = new QToolButton(widget);
     detachButton->setDefaultAction( m_detachPath );
     layout->addWidget( detachButton, 0, 1 );
+
+    QToolButton * convertButton = new QToolButton(widget);
+    convertButton->setDefaultAction( m_convertText );
+    layout->addWidget( convertButton, 0, 3 );
+
     layout->setSpacing(0);
     layout->setMargin(6);
     layout->setRowStretch(3, 1);
