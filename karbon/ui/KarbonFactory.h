@@ -29,7 +29,7 @@
 #define __KARBON_FACTORY_H__
 
 #include <KoFactory.h>
-#include <karbon_export.h>
+#include <karbonui_export.h>
 
 class KAboutData;
 class KComponentData;

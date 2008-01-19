@@ -22,7 +22,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "KarbonView.h"
 #include "KarbonPart.h"
-#include "karbon_factory.h"
+#include "KarbonFactory.h"
 
 #include <KoGridData.h>
 #include <KoUnitDoubleSpinBox.h>

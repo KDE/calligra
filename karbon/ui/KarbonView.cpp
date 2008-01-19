@@ -57,7 +57,7 @@
 #include "KarbonStylePreviewDocker.h"
 
 // The rest.
-#include "karbon_factory.h"
+#include "KarbonFactory.h"
 #include "KarbonPart.h"
 #include "vglobal.h"
 #include "KarbonCanvas.h"

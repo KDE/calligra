@@ -34,7 +34,7 @@
 #include <QMap>
 #include <QRectF>
 
-#include <karbon_export.h>
+#include <karboncommon_export.h>
 #include <KoUnit.h>
 #include <KoShapeLoadingContext.h>
 #include <KoGenStyle.h>

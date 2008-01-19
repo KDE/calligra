@@ -23,7 +23,7 @@ DESCRIPTION
 #include "wmfimport.h"
 #include "wmfimportparser.h"
 
-#include <core/KarbonDocument.h>
+#include <KarbonDocument.h>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>

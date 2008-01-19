@@ -36,8 +36,9 @@
 
 #include <KoDocument.h>
 #include <KoUnit.h>
-#include "KarbonDocument.h"
-#include "karbon_export.h"
+#include <KarbonDocument.h>
+
+#include <karbonui_export.h>
 
 class QRect;
 

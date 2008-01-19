@@ -19,7 +19,7 @@
 
 #include "wmfimportparser.h"
 
-#include <core/KarbonDocument.h>
+#include <KarbonDocument.h>
 
 #include <KoPathShape.h>
 #include <KoLineBorder.h>

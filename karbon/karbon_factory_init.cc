@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "karbon_factory.h"
+#include <KarbonFactory.h>
 
 K_EXPORT_COMPONENT_FACTORY( libkarbonpart, KarbonFactory() )
 

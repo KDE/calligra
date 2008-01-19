@@ -26,7 +26,7 @@
 #define KARBONLAYERREORDERCOMMAND_H
 
 #include <QUndoCommand>
-#include <karbon_export.h>
+#include <karboncommon_export.h>
 
 class KarbonDocument;
 class KoShapeLayer;

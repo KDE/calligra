@@ -1,4 +1,11 @@
-include_directories( ${KDE4_INCLUDE_DIR} ${QT_INCLUDES} ${CMAKE_SOURCE_DIR}/karbon )
+include_directories(
+    ${QT_INCLUDES} 
+    ${KDE4_INCLUDE_DIR}
+    ${FLAKE_INCLUDES}
+    ${CMAKE_SOURCE_DIR}/karbon 
+    ${CMAKE_SOURCE_DIR}/karbon/ui
+    ${CMAKE_SOURCE_DIR}/karbon/ui/widgets 
+)
 
 ########### next target ###############
 

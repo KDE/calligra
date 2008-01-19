@@ -32,7 +32,7 @@
 #include <klocale.h>
 #include <KoApplication.h>
 
-#include "karbon_factory.h"
+#include <KarbonFactory.h>
 
 
 extern "C" KDE_EXPORT int kdemain( int argc, char* argv[] )

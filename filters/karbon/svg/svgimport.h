@@ -24,7 +24,7 @@
 #include "SvgGradientHelper.h"
 #include "svggraphiccontext.h"
 
-#include <core/KarbonDocument.h>
+#include <KarbonDocument.h>
 
 #include <KoFilter.h>
 

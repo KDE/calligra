@@ -41,7 +41,7 @@
 #include <KoShapeAlignCommand.h>
 #include <KoShapeDistributeCommand.h>
 #include <KoZoomMode.h>
-#include <karbon_export.h>
+#include <karbonui_export.h>
 #include "KarbonBooleanCommand.h"
 
 class QLabel;

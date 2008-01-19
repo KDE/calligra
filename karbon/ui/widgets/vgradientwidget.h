@@ -26,7 +26,7 @@
 #ifndef _VGRADIENTWIDGET_H_
 #define _VGRADIENTWIDGET_H_
 
-#include <karbon_export.h>
+#include <karbonui_export.h>
 #include <KoCheckerBoardPainter.h>
 #include <QWidget>
 

@@ -14,8 +14,8 @@ include_directories(
         ${KOMAIN_INCLUDES}
         ${FLAKE_INCLUDES}
         ${CMAKE_SOURCE_DIR}/karbon
-        ${CMAKE_SOURCE_DIR}/karbon/core
-        ${CMAKE_SOURCE_DIR}/karbon/visitors
+        ${CMAKE_SOURCE_DIR}/karbon/common
+        ${CMAKE_SOURCE_DIR}/karbon/ui
         ${CMAKE_BINARY_DIR}/karbon
         ${KDE4_INCLUDES}
         ${CMAKE_SOURCE_DIR}/plugins/ )

@@ -20,7 +20,7 @@
 #ifndef _KARBONBOOLEANCOMMAND_H_
 #define _KARBONBOOLEANCOMMAND_H_
 
-#include <karbon_export.h>
+#include <karboncommon_export.h>
 #include <QtGui/QUndoCommand>
 
 class KoShapeControllerBase;

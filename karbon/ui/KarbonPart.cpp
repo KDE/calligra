@@ -41,11 +41,11 @@
 */
 
 #include "KarbonPart.h"
-#include "karbon_factory.h"
+#include "KarbonFactory.h"
 #include "KarbonView.h"
 #include "vglobal.h"
-#include "KarbonCanvas.h"
-#include "vdocumentdocker.h"
+#include <KarbonCanvas.h>
+#include <vdocumentdocker.h>
 
 #include <KoApplication.h>
 #include <KoOdfStylesReader.h>

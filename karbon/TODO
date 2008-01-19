@@ -80,6 +80,8 @@ General:
 - check if we still need the KarbonDocument::shapes() method or the complete list of shapes
 - fix the zooming focus (i.e. the centered point)
 
+- move KorulerController from KoText to guiutils so we can remove the KOTEXT_INCLUDES from the CMakeLists.txt
+
 All time favourites :)
 -----------------------
 

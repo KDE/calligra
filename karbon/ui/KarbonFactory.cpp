@@ -29,10 +29,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "karbon_factory.h"
+#include "KarbonFactory.h"
 #include "KarbonPart.h"
 //#include "karbon_resourceserver.h"
-#include "karbon_aboutdata.h"
+#include "KarbonAboutData.h"
 
 #include <kaboutdata.h>
 #include <kglobal.h>
@@ -141,5 +141,5 @@ KarbonResourceServer *KarbonFactory::rServer()
 	return s_rserver;
 }
 */
-#include "karbon_factory.moc"
+#include "KarbonFactory.moc"
 

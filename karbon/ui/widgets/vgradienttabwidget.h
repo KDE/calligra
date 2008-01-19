@@ -22,7 +22,7 @@
 #ifndef _VGRADIENTTABWIDGET_H_
 #define _VGRADIENTTABWIDGET_H_
 
-#include <karbon_export.h>
+#include <karbonui_export.h>
 
 #include <QWidget>
 #include <QTabWidget>

@@ -32,7 +32,7 @@
 #ifndef KARBONCANVAS_H
 #define KARBONCANVAS_H
 
-#include <karbon_export.h>
+#include <karbonui_export.h>
 
 #include <KoCanvasBase.h>
 

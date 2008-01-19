@@ -21,7 +21,7 @@
 #define __VCURSOR_H__
 
 #include <qcursor.h>
-#include <karbon_export.h>
+#include <karboncommon_export.h>
 
 /**
 * A helper class for easily creating cursors from XPMs.
