@@ -5,7 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 ########### next target ###############
 
-set(karbon_flattenpathplugin_PART_SRCS flattenpathplugin.cc KarbonPathFlattenCommand.cpp )
+set(karbon_flattenpathplugin_PART_SRCS FlattenPathPlugin.cpp KarbonPathFlattenCommand.cpp )
 
 
 kde4_add_plugin(karbon_flattenpathplugin ${karbon_flattenpathplugin_PART_SRCS})
@@ -19,6 +19,6 @@ install(TARGETS karbon_flattenpathplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  flattenpathplugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/kpartplugins)
+install( FILES  FlattenPathPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/kpartplugins)
 
 

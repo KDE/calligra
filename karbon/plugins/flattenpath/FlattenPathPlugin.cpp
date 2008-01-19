@@ -26,7 +26,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "flattenpathplugin.h"
+#include "FlattenPathPlugin.h"
 #include "KarbonPathFlattenCommand.h"
 
 #include <KoToolManager.h>
@@ -124,5 +124,5 @@ void FlattenDlg::setFlatness( double value )
     m_flatness->setValue( value);
 }
 
-#include "flattenpathplugin.moc"
+#include "FlattenPathPlugin.moc"
 
