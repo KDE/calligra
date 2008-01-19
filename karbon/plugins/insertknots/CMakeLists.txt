@@ -1,23 +1,16 @@
 
-
 include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core ${KDE4_INCLUDES}  )
-
 
 ########### next target ###############
 
-set(karbon_insertknotsplugin_PART_SRCS insertknotsplugin.cc KarbonPathRefineCommand.cpp )
+set(karbon_refinepathplugin_PART_SRCS RefinePathPlugin.cpp KarbonPathRefineCommand.cpp )
 
+kde4_add_plugin(karbon_refinepathplugin ${karbon_refinepathplugin_PART_SRCS})
 
-kde4_add_plugin(karbon_insertknotsplugin ${karbon_insertknotsplugin_PART_SRCS})
+target_link_libraries(karbon_refinepathplugin  ${KDE4_KPARTS_LIBS} karboncommon )
 
-
-
-target_link_libraries(karbon_insertknotsplugin  ${KDE4_KPARTS_LIBS} karboncommon )
-
-install(TARGETS karbon_insertknotsplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
-
+install(TARGETS karbon_refinepathplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  insertknotsplugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/kpartplugins)
-
+install( FILES RefinePathPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/kpartplugins)

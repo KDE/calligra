@@ -20,36 +20,36 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef INSERTKNOTSPLUGIN_H
-#define INSERTKNOTSPLUGIN_H
+#ifndef REFINEPATHPLUGIN_H
+#define REFINEPATHPLUGIN_H
 
 #include <kparts/plugin.h>
 #include <kdialog.h>
 
-class InsertKnotsDlg;
+class RefinePathDlg;
 
-class InsertKnotsPlugin : public KParts::Plugin
+class RefinePathPlugin : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    InsertKnotsPlugin( QWidget *parent, const QStringList & );
-    virtual ~InsertKnotsPlugin() {}
+    RefinePathPlugin( QWidget *parent, const QStringList & );
+    virtual ~RefinePathPlugin() {}
 
 private slots:
-    void slotInsertKnots();
+    void slotRefinePath();
 
 private:
-    InsertKnotsDlg * m_insertKnotsDlg;
+    RefinePathDlg * m_RefinePathDlg;
 };
 
 class KIntSpinBox;
 
-class InsertKnotsDlg : public KDialog
+class RefinePathDlg : public KDialog
 {
     Q_OBJECT
 
 public:
-    explicit InsertKnotsDlg( QWidget* parent = 0L, const char* name = 0L );
+    explicit RefinePathDlg( QWidget* parent = 0L, const char* name = 0L );
 
     uint knots() const;
     void setKnots( uint value );
@@ -58,5 +58,5 @@ private:
     KIntSpinBox * m_knots;
 };
 
-#endif
+#endif // REFINEPATHPLUGIN_H
 
