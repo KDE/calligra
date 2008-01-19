@@ -29,7 +29,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "whirlpinchplugin.h"
+#include "WhirlPinchPlugin.h"
 #include "KarbonWhirlPinchCommand.h"
 
 #include <KoUnitDoubleSpinBox.h>
@@ -180,5 +180,5 @@ void WhirlPinchDlg::setUnit( const KoUnit &unit )
     m_radius->setUnit( unit );
 }
 
-#include "whirlpinchplugin.moc"
+#include "WhirlPinchPlugin.moc"
 
