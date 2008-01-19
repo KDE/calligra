@@ -593,8 +593,12 @@ void ChartConfigWidget::setupDialogs()
              this, SLOT( ui_axisUseLogarithmicScalingChanged( bool ) ) );
     connect( d->axisScalingDialog.stepWidth, SIGNAL( valueChanged( double ) ),
              this, SLOT( ui_axisStepWidthChanged( double ) ) );
+    connect ( d->axisScalingDialog.automaticStepWidth, SIGNAL( toggled( bool ) ),
+              this, SLOT( ui_axisUseAutomaticStepWidthChanged( bool ) ) );
     connect( d->axisScalingDialog.subStepWidth, SIGNAL( valueChanged( double ) ),
              this, SLOT( ui_axisSubStepWidthChanged( double ) ) );
+    connect ( d->axisScalingDialog.automaticSubStepWidth, SIGNAL( toggled( bool ) ),
+              this, SLOT( ui_axisUseAutomaticSubStepWidthChanged( bool ) ) );
 }
 
 void ChartConfigWidget::createActions()
@@ -779,6 +783,16 @@ void ChartConfigWidget::ui_axisSubStepWidthChanged( double width )
 	Q_ASSERT( d->axes.size() > index );
 
     emit axisSubStepWidthChanged( d->axes[ index ], width );
+}
+
+void ChartConfigWidget::ui_axisUseAutomaticStepWidthChanged( bool b )
+{
+    ui_axisStepWidthChanged( b ? 0.0 : d->axisScalingDialog.stepWidth->value() );
+}
+
+void ChartConfigWidget::ui_axisUseAutomaticSubStepWidthChanged( bool b )
+{
+    ui_axisSubStepWidthChanged( b ? 0.0 : d->axisScalingDialog.subStepWidth->value() );
 }
 
 void ChartConfigWidget::ui_axisScalingButtonClicked()
