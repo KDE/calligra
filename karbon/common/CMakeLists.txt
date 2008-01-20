@@ -1,7 +1,7 @@
 set(karboncommon_LIB_SRCS 
     KarbonDocument.cpp
     vglobal.cc 
-    vcursor.cc
+    KarbonCursor.cpp
 
     commands/KarbonLayerReorderCommand.cpp
     commands/KarbonBooleanCommand.cpp

@@ -27,7 +27,7 @@
 */
 
 #include "vgradientwidget.h"
-#include "vcursor.h"
+#include "KarbonCursor.h"
 
 #include <KoUniColorDialog.h>
 
@@ -191,7 +191,7 @@ void VGradientWidget::mousePressEvent( QMouseEvent* e )
             // found ramp point at position
             m_currentStop = i;
             if( e->button() == Qt::LeftButton )
-                setCursor( VCursor::horzMove() );
+                setCursor( KarbonCursor::horzMove() );
             return;
         }
     }

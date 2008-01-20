@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef __VCURSOR_H__
-#define __VCURSOR_H__
+#ifndef KARBONCURSOR_H
+#define KARBONCURSOR_H
 
 #include <qcursor.h>
 #include <karboncommon_export.h>
@@ -29,46 +29,46 @@
 * One can create a predefined unthemed cursor or create a cursor from two given XMPs, 
 * the cursor bitmap and the cursor mask.
 */
-class KARBONCOMMON_EXPORT VCursor
+class KARBONCOMMON_EXPORT KarbonCursor
 {
 public:
-	/** Predefined cursor types */
-	enum CursorType
-	{
-		CrossHair = 0, /**< unthemed crosshair cursor */
-		ZoomPlus  = 1, /**< zoom in cursor */
-		ZoomMinus = 2, /**< zoom out cursor */
-		NeedleArrow = 3  /**< needle arrow */
-	};
+    /** Predefined cursor types */
+    enum CursorType
+    {
+        CrossHair = 0, /**< unthemed crosshair cursor */
+        ZoomPlus  = 1, /**< zoom in cursor */
+        ZoomMinus = 2, /**< zoom out cursor */
+        NeedleArrow = 3  /**< needle arrow */
+    };
 
-	/**
-	 * Creates a predefined cursor of the specified type.
-	 *
-	 * @param type the requested cursor id
-	 * @return the predefined cursor
-	 */
-	static QCursor createCursor( CursorType type );
-	
-	/**
-	 * Creates a cursor from two specified XPM images.
-	 * This is only a wrapper function for a QCursor ctor.
-	 */
-	static QCursor createCursor( const char * bitmap[], const char * mask[], int hotX = -1, int hotY = -1 );
+    /**
+    * Creates a predefined cursor of the specified type.
+    *
+    * @param type the requested cursor id
+    * @return the predefined cursor
+    */
+    static QCursor createCursor( CursorType type );
 
-	/** crosshair cursor */
-	static QCursor crossHair();
-	
-	/** needle arraow cursor */
-	static QCursor needleArrow();
+    /**
+    * Creates a cursor from two specified XPM images.
+    * This is only a wrapper function for a QCursor ctor.
+    */
+    static QCursor createCursor( const char * bitmap[], const char * mask[], int hotX = -1, int hotY = -1 );
 
-	/** needle arrow with four way arrow */
-	static QCursor needleMoveArrow();
+    /** crosshair cursor */
+    static QCursor crossHair();
 
-	static QCursor horzMove();
+    /** needle arraow cursor */
+    static QCursor needleArrow();
+
+    /** needle arrow with four way arrow */
+    static QCursor needleMoveArrow();
+
+    static QCursor horzMove();
 
 private:
-	// prevent instantiation
-	VCursor() {}
+    // prevent instantiation
+    KarbonCursor() {}
 };
 
-#endif
+#endif // KARBONCURSOR_H
