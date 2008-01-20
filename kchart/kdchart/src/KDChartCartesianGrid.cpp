@@ -465,9 +465,12 @@ DataDimension CartesianGrid::calculateGridXY(
                 max = fastPow10( maxLog+1 );
             else
                 max = fastPow10( maxLog );
-            dim.start = min;
-            dim.end   = max;
-            dim.stepWidth = qAbs(max - min) / 10.0;
+            if( adjustLower )
+                dim.start = min;
+            if( adjustUpper )
+                dim.end   = max;
+            //dim.stepWidth = qAbs(max - min) / 10.0;
+            dim.stepWidth = pow( 10.0, ceil( log10( qAbs( max - min ) / 10.0 ) ) );
             //qDebug() << "CartesianGrid::calculateGridXY() returns logarithmic:  min " << min << " and max" << max;
         }
     }else{

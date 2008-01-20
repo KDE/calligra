@@ -2024,7 +2024,7 @@ void ChartShape::setAxisUseLogarithmicScaling( KDChart::CartesianAxis *axis, boo
 
     plane->setAxesCalcModeY( b ? KDChart::AbstractCoordinatePlane::Logarithmic : KDChart::AbstractCoordinatePlane::Linear );
 	
-	update();
+	relayout();
 }
 
 void ChartShape::setAxisStepWidth( KDChart::CartesianAxis *axis, double width ) {
