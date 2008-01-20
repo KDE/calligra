@@ -22,6 +22,7 @@
 #include "KarbonGradientEditStrategy.h"
 
 #include <vgradienttabwidget.h>
+#include <KarbonCursor.h>
 
 #include <KoShape.h>
 #include <KoCanvasBase.h>
@@ -177,28 +178,39 @@ void KarbonGradientTool::mouseMoveEvent( KoPointerEvent *event )
     // first check if we hit any handles
     foreach( GradientStrategy *strategy, m_gradients )
     {
-        if( strategy->selectHandle( event->point ) )
+        if( strategy->selectHandle( event->point, *m_canvas->viewConverter() ) )
         {
             m_currentStrategy = strategy;
             m_currentStrategy->repaint();
-            useCursor(Qt::SizeAllCursor);
+            useCursor( KarbonCursor::needleMoveArrow() );
+            return;
+        }
+    }
+    // now check if we hit any gradient stops
+    foreach( GradientStrategy *strategy, m_gradients )
+    {
+        if( strategy->selectStop( event->point, *m_canvas->viewConverter() ) )
+        {
+            m_currentStrategy = strategy;
+            m_currentStrategy->repaint();
+            useCursor( KarbonCursor::needleMoveArrow() );
             return;
         }
     }
     // now check if we hit any lines
     foreach( GradientStrategy *strategy, m_gradients )
     {
-        if( strategy->selectLine( event->point ) )
+        if( strategy->selectLine( event->point, *m_canvas->viewConverter() ) )
         {
             m_currentStrategy = strategy;
             m_currentStrategy->repaint();
-            useCursor(Qt::SizeAllCursor);
+            useCursor( Qt::SizeAllCursor );
             return;
         }
     }
 
     m_currentStrategy = 0;
-    useCursor(Qt::ArrowCursor);
+    useCursor( KarbonCursor::needleArrow() );
 }
 
 void KarbonGradientTool::mouseReleaseEvent( KoPointerEvent *event )
@@ -255,7 +267,7 @@ void KarbonGradientTool::activate( bool temporary )
     initialize();
     repaintDecorations();
 
-    useCursor(Qt::ArrowCursor, true);
+    useCursor( KarbonCursor::needleArrow(), true);
 }
 
 void KarbonGradientTool::initialize()
