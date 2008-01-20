@@ -282,7 +282,7 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
        <item row="3" column="0" colspan="3" >
-        <widget class="QCheckBox" name="checkBox_6" >
+        <widget class="QCheckBox" name="datasetShowValues" >
          <property name="text" >
           <string>Display Data Values</string>
          </property>
@@ -291,7 +291,7 @@ p, li { white-space: pre-wrap; }
        <item row="4" column="0" colspan="3" >
         <widget class="QCheckBox" name="checkBox_7" >
          <property name="text" >
-          <string>Show Label</string>
+          <string>Show Labels</string>
          </property>
         </widget>
        </item>

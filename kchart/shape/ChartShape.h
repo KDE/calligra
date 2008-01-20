@@ -155,9 +155,10 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
     void setXAxisTitle( const QString& title );
     void setYAxisTitle( const QString& title );
     
+    void setDatasetShowValues( int dataset, bool b = true );
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );
-    
+
     void setShowLegend( bool b );
     void setLegendTitle( const QString& title );
     void setLegendTitleFont( const QFont& font );

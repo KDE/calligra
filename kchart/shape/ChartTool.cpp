@@ -199,6 +199,8 @@ QWidget *ChartTool::createOptionWidget()
     
     connect( widget, SIGNAL( datasetColorChanged( int, const QColor& ) ),
              this, SLOT( setDatasetColor( int, const QColor& ) ) );
+    connect( widget, SIGNAL( datasetShowValuesChanged( int, bool ) ),
+             this, SLOT( setDatasetShowValues( int, bool ) ) );
     connect( widget, SIGNAL( gapBetweenBarsChanged( int ) ),
              this,   SLOT( setGapBetweenBars( int ) ) );
     connect( widget, SIGNAL( gapBetweenSetsChanged( int ) ),
@@ -392,6 +394,11 @@ void ChartTool::setDatasetColor( int dataset, const QColor& color )
     d->shape->update();
 }
 
+void ChartTool::setDatasetShowValues( int dataset, bool b )
+{
+    Q_ASSERT( d->shape );
+    d->shape->setDatasetShowValues( dataset, b );
+}
 
 void ChartTool::addAxis( AxisPosition position, const QString& title ) {
     Q_ASSERT( d->shape );

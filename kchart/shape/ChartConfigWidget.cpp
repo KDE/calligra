@@ -22,6 +22,7 @@
 #include <KDChartGridAttributes>
 #include <KDChartAbstractCartesianDiagram>
 #include <KDChartLegend>
+#include <KDChartDataValueAttributes>
 
 // KChart
 #include "kchart_global.h"
@@ -171,6 +172,8 @@ ChartConfigWidget::ChartConfigWidget()
     // "Datasets" Tab
     connect( d->ui.datasetColor, SIGNAL( changed( const QColor& ) ),
              this, SLOT( datasetColorSelected( const QColor& ) ) );
+    connect( d->ui.datasetShowValues, SIGNAL( toggled( bool ) ),
+             this, SLOT( ui_datasetShowValuesChanged( bool ) ) );
     connect( d->ui.gapBetweenBars, SIGNAL( valueChanged( int ) ),
              this, SIGNAL( gapBetweenBarsChanged( int ) ) );
     connect( d->ui.gapBetweenSets, SIGNAL( valueChanged( int ) ),
@@ -646,10 +649,12 @@ void ChartConfigWidget::selectDataset( int dataset )
         d->ui.datasetColor->setEnabled( true );
         
         d->ui.datasetColor->blockSignals( true );
-        if ( d->shape && d->shape->chart() && d->shape->chart()->coordinatePlane() ) {
-            d->ui.datasetColor->setColor( d->shape->chart()->coordinatePlane()->diagram()->brush( dataset ).color() );
-        }
+        d->ui.datasetColor->setColor( d->shape->diagram()->brush( dataset ).color() );
         d->ui.datasetColor->blockSignals( false );
+
+        d->ui.datasetShowValues->blockSignals( true );
+        d->ui.datasetShowValues->setChecked( d->shape->diagram()->dataValueAttributes( dataset ).isVisible() );
+        d->ui.datasetShowValues->blockSignals( false );
     } else {
         d->ui.datasetColorLabel->setEnabled( false );
         d->ui.datasetColor->setEnabled( false );
@@ -798,6 +803,11 @@ void ChartConfigWidget::ui_axisUseAutomaticSubStepWidthChanged( bool b )
 void ChartConfigWidget::ui_axisScalingButtonClicked()
 {
     d->axisScalingDialog.show();
+}
+
+void ChartConfigWidget::ui_datasetShowValuesChanged( bool b )
+{
+    emit datasetShowValuesChanged( d->selectedDataset, b ); 
 }
 
 #include "ChartConfigWidget.moc"

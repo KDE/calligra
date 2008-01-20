@@ -49,6 +49,8 @@ public slots:
     void slotShowTableEditor( bool show );
 
     void datasetColorSelected( const QColor& color );
+    void ui_datasetShowValuesChanged( bool b );
+
     void setLegendOrientationIsVertical( bool );
     void setLegendOrientation( int boxEntryIndex );
     void setLegendAlignment( int boxEntryIndex );
@@ -81,6 +83,7 @@ signals:
     void showHorizontalLinesChanged( bool b );
     
     void datasetColorChanged( int, const QColor& color );
+    void datasetShowValuesChanged( int dataset, bool b );
     void gapBetweenBarsChanged( int percent );
     void gapBetweenSetsChanged( int percent );
     

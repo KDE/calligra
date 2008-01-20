@@ -69,6 +69,7 @@ private slots:
     void setFirstColumnIsLabel( bool b );
 
     // Datasets
+    void setDatasetShowValues( int dataset, bool b );
     void setDatasetColor( int dataset, const QColor& color );
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );

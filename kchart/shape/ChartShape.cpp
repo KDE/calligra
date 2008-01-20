@@ -2083,6 +2083,15 @@ void ChartShape::setGapBetweenSets( int percent )
     update();
 }
 
+void ChartShape::setDatasetShowValues( int dataset, bool b )
+{
+    KDChart::DataValueAttributes attributes = d->diagram->dataValueAttributes( dataset );
+    attributes.setVisible( b );
+    d->diagram->setDataValueAttributes( dataset, attributes );
+
+    update();
+}
+
 void ChartShape::setShowLegend( bool b )
 {
     if ( !b ) {
