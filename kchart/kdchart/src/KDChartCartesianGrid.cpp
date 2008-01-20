@@ -458,7 +458,7 @@ DataDimension CartesianGrid::calculateGridXY(
 
             qreal max;
             const qreal maxRaw = qMax( qMax( dim.start, dim.end ), 0.0 );
-            const int maxLog = static_cast<int>(trunc( log10( maxRaw ) ) );
+            const int maxLog = static_cast<int>(ceil( log10( maxRaw ) ) );
             if( maxLog <= 0 )
                 max = 1;
             else if( fastPow10( maxLog ) < maxRaw )
