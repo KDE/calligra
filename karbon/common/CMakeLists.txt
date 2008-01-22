@@ -1,6 +1,6 @@
 set(karboncommon_LIB_SRCS 
     KarbonDocument.cpp
-    vglobal.cc 
+    KarbonGlobal.cpp
     KarbonCursor.cpp
 
     commands/KarbonLayerReorderCommand.cpp

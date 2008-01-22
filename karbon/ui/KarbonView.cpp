@@ -59,7 +59,6 @@
 // The rest.
 #include "KarbonFactory.h"
 #include "KarbonPart.h"
-#include "vglobal.h"
 #include "KarbonCanvas.h"
 #include "KarbonPrintJob.h"
 //#include "karbon_drag.h"
