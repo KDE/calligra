@@ -273,8 +273,7 @@ bool KarbonCanvas::snapToGrid() const {
 
 void KarbonCanvas::addCommand(QUndoCommand *command) {
 
-    //kDebug(38000) <<"KarbonCanvas::addCommand";
-    d->part->KoDocument::addCommand(command);
+    d->part->addCommand(command);
     adjustOrigin();
 }
 
