@@ -14,7 +14,6 @@ Comment[km]=កម្មវិធី​បញ្ជា​មូលដ្ឋា�
 Comment[pt]=Controlador de bases de dados do Kexi para aceder a servidores Sybase
 Comment[pt_BR]=Controlador de bancos de dados do Kexi para acesso a servidores Sybase
 Comment[sv]=Databasdrivrutin i Kexi för att komma åt Sybase-servrar
-Comment[uk]=Драйвер бази даних Kexi для доступу до серверів Sybase
 Comment[x-test]=xxKexi database driver for accessing Sybase serversxx
 Comment[zh_TW]=存取 Sybase 伺服器的 Kexi 資料庫驅動程式
 X-KDE-Library=kexidb_sybasedriver
