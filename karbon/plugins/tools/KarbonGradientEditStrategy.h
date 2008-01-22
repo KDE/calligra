@@ -78,7 +78,7 @@ public:
     static int handleRadius() { return m_handleRadius; }
 
     /// returns the gradient handles bounding rect
-    QRectF boundingRect() const;
+    QRectF boundingRect( const KoViewConverter &converter ) const;
 
     /// returns the actual gradient
     const QGradient * gradient();
@@ -113,21 +113,25 @@ protected:
     /// creates an updated brush from the actual data
     virtual QBrush brush() = 0;
 
-    KoShape *m_shape;         ///< the shape we are working on
-    SelectionType m_selection; ///< the actual selection type
-    int m_selectionIndex;      ///< the actual selection index
-    QBrush m_oldBrush;   ///< the old background brush
-    QBrush m_newBrush;   ///< the new background brush
-    QList<QPointF> m_handles; ///< the list of handles
-    QGradientStops m_stops;   ///< the gradient stops
-    QMatrix m_matrix;         ///< matrix to map handle into document coordinate system
-    QPointF m_lastMousePos;   ///< last mouse position
-    KoLineBorder m_oldStroke; ///< the old stroke
+    KoShape *m_shape;          ///< the shape we are working on
+    QBrush m_oldBrush;         ///< the old background brush
+    QBrush m_newBrush;         ///< the new background brush
+    QList<QPointF> m_handles;  ///< the list of handles
+    QGradientStops m_stops;    ///< the gradient stops
+    QMatrix m_matrix;          ///< matrix to map handle into document coordinate system
+    KoLineBorder m_oldStroke;  ///< the old stroke
 private:
+    typedef QPair<QPointF,QPointF> StopHandle;
+    QColor invertedColor( const QColor &color );
+    QList<StopHandle> stopHandles( const KoViewConverter &converter ) const;
+
     static int m_handleRadius; ///< the handle radius for all gradient strategies
     bool m_editing; /// the edit mode flag
     Target m_target; ///< the gradient target
     QPair<int,int> m_gradientLine; ///< the handle indices defining the gradient line
+    QPointF m_lastMousePos;    ///< last mouse position
+    SelectionType m_selection; ///< the actual selection type
+    int m_selectionIndex;      ///< the actual selection index
 };
 
 /// Strategy for editing a linear gradient

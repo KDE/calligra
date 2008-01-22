@@ -18,6 +18,7 @@
  */
 
 #include "KarbonGradientEditStrategy.h"
+#include <KarbonGlobal.h>
 
 #include <KoShape.h>
 #include <KoViewConverter.h>
@@ -74,6 +75,7 @@ void GradientStrategy::setEditing( bool on )
                 m_oldBrush = stroke->lineBrush();
             }
         }
+        m_newBrush = m_oldBrush;
     }
 }
 
@@ -117,6 +119,24 @@ bool GradientStrategy::selectLine( const QPointF &mousePos, const KoViewConverte
 
 bool GradientStrategy::selectStop( const QPointF &mousePos, const KoViewConverter &converter )
 {
+    QRectF hr = handleRect( converter );
+
+    QList<StopHandle> handles = stopHandles( converter );
+
+    int stopCount = m_stops.count();
+    for( int i = 0; i < stopCount; ++i )
+    {
+        hr.moveCenter( handles[i].second );
+        if( hr.contains( mousePos ) )
+        {
+            setSelection( Stop, i );
+            m_lastMousePos = mousePos;
+            return true;
+        }
+    }
+
+    setSelection( None );
+
     return false;
 }
 
@@ -131,23 +151,19 @@ void GradientStrategy::paintStops( QPainter &painter, const KoViewConverter &con
 {
     painter.save();
 
-    // calculate orthogonal vector to the gradient line
-    // using the cross product of the line vector and the z-axis
-    QPointF diff = stop-start;
-    QPointF ortho( -diff.y(), diff.x() );
-    double orthoLength = sqrt( ortho.x()*ortho.x() + ortho.y()*ortho.y() );
-    ortho *= stopDistance / orthoLength;
-
     QRectF hr = handleRect( converter );
-    ortho = converter.viewToDocument( ortho );
 
-    foreach( QGradientStop stop, m_stops )
+    QPen defPen = painter.pen();
+    QList<StopHandle> handles = stopHandles( converter );
+    int stopCount = m_stops.count();
+    for( int i = 0; i < stopCount; ++i )
     {
-        QPointF p1 = start + stop.first * diff;
-        QPointF p2 = p1 + ortho;
-        painter.drawLine( p1, p2 );
-        hr.moveCenter( p2 );
-        painter.setBrush( stop.second );
+        hr.moveCenter( handles[i].second );
+
+        painter.setPen( defPen );
+        painter.drawLine( handles[i].first, handles[i].second );
+        painter.setBrush( m_stops[i].second );
+        painter.setPen( invertedColor( m_stops[i].second ) );
         painter.drawEllipse( hr );
     }
 
@@ -213,6 +229,21 @@ void GradientStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Keyboar
         case Handle:
             m_handles[m_selectionIndex] = invMatrix.map( mouseLocation );
             break;
+        case Stop:
+        {
+            QPointF startPoint = m_matrix.map( m_handles[m_gradientLine.first] );
+            QPointF stopPoint = m_matrix.map( m_handles[m_gradientLine.second] );
+            QPointF diff = stopPoint - startPoint;
+            double diffLength = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+            // project mouse position relative to stop position on gradient line
+            double scalar = KarbonGlobal::scalarProduct( mouseLocation-startPoint, diff / diffLength );
+            scalar /= diffLength;
+            scalar = qMax( 0.0, scalar );
+            scalar = qMin( scalar, 1.0 );
+            m_stops[m_selectionIndex].first = scalar;
+            m_lastMousePos = mouseLocation;
+            break;
+        }
         default:
             return;
     }
@@ -232,6 +263,9 @@ void GradientStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Keyboar
 
 QUndoCommand * GradientStrategy::createCommand( QUndoCommand * parent )
 {
+    if( m_newBrush == m_oldBrush )
+        return 0;
+
     if( m_target == Fill )
     {
         m_shape->setBackground( m_oldBrush );
@@ -252,7 +286,7 @@ QUndoCommand * GradientStrategy::createCommand( QUndoCommand * parent )
     return 0;
 }
 
-QRectF GradientStrategy::boundingRect() const
+QRectF GradientStrategy::boundingRect( const KoViewConverter &converter ) const
 {
     // calculate the bounding rect of the handles
     QRectF bbox( m_matrix.map( m_handles[0] ), QSize(0,0) );
@@ -264,8 +298,17 @@ QRectF GradientStrategy::boundingRect() const
         bbox.setTop( qMin( handle.y(), bbox.top() ) );
         bbox.setBottom( qMax( handle.y(), bbox.bottom() ) );
     }
+    QList<StopHandle> handles = stopHandles( converter );
+    foreach( StopHandle stopHandle, handles )
+    {
+        QPointF handle = stopHandle.second;
+        bbox.setLeft( qMin( handle.x(), bbox.left() ) );
+        bbox.setRight( qMax( handle.x(), bbox.right() ) );
+        bbox.setTop( qMin( handle.y(), bbox.top() ) );
+        bbox.setBottom( qMax( handle.y(), bbox.bottom() ) );
+    }
     // quick hack for gradient stops
-    bbox.adjust( -stopDistance, -stopDistance, stopDistance, stopDistance );
+    //bbox.adjust( -stopDistance, -stopDistance, stopDistance, stopDistance );
     return bbox.adjusted( -m_handleRadius, -m_handleRadius, m_handleRadius, m_handleRadius );
 }
 
@@ -322,6 +365,38 @@ void GradientStrategy::setSelection( SelectionType selection, int index )
     m_selectionIndex = index;
 }
 
+QColor GradientStrategy::invertedColor( const QColor &color )
+{
+    return QColor( 255-color.red(), 255-color.green(), 255-color.blue() );
+}
+
+QList<GradientStrategy::StopHandle> GradientStrategy::stopHandles( const KoViewConverter &converter ) const
+{
+    // get the gradient line start and end point in document coordinates
+    QPointF start = m_matrix.map( m_handles[m_gradientLine.first] );
+    QPointF stop = m_matrix.map( m_handles[m_gradientLine.second] );
+
+    // calculate orthogonal vector to the gradient line
+    // using the cross product of the line vector and the negative z-axis
+    QPointF diff = stop-start;
+    QPointF ortho( -diff.y(), diff.x() );
+    double orthoLength = sqrt( ortho.x()*ortho.x() + ortho.y()*ortho.y() );
+    ortho *= stopDistance / orthoLength;
+
+    // make handles have always the same distance to the gradient line
+    // independent of acual zooming
+    ortho = converter.viewToDocument( ortho );
+
+    QList<StopHandle> handles;
+    foreach( QGradientStop stop, m_stops )
+    {
+        QPointF base = start + stop.first * diff;
+        handles.append( StopHandle( base, base + ortho ) );
+    }
+
+    return handles;
+}
+
 /////////////////////////////////////////////////////////////////
 // strategy implementations
 /////////////////////////////////////////////////////////////////
@@ -336,7 +411,7 @@ LinearGradientStrategy::LinearGradientStrategy( KoShape *shape, const QLinearGra
 QBrush LinearGradientStrategy::brush()
 {
     QLinearGradient gradient( m_handles[start], m_handles[stop] );
-    gradient.setStops( m_oldBrush.gradient()->stops() );
+    gradient.setStops( m_stops );
     gradient.setSpread( m_oldBrush.gradient()->spread() );
     QBrush brush = QBrush( gradient );
     brush.setMatrix( m_oldBrush.matrix() );
@@ -357,7 +432,7 @@ QBrush RadialGradientStrategy::brush()
     QPointF d = m_handles[radius]-m_handles[center];
     double r = sqrt( d.x()*d.x() + d.y()*d.y() );
     QRadialGradient gradient( m_handles[center], r, m_handles[focal] );
-    gradient.setStops( m_oldBrush.gradient()->stops() );
+    gradient.setStops( m_stops );
     gradient.setSpread( m_oldBrush.gradient()->spread() );
     QBrush brush = QBrush( gradient );
     brush.setMatrix( m_oldBrush.matrix() );
@@ -380,7 +455,7 @@ QBrush ConicalGradientStrategy::brush()
     if( angle < 0.0 )
         angle += 360;
     QConicalGradient gradient( m_handles[center], angle );
-    gradient.setStops( m_oldBrush.gradient()->stops() );
+    gradient.setStops( m_stops );
     gradient.setSpread( m_oldBrush.gradient()->spread() );
     QBrush brush = QBrush( gradient );
     brush.setMatrix( m_oldBrush.matrix() );

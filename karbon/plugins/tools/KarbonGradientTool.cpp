@@ -91,7 +91,7 @@ void KarbonGradientTool::paint( QPainter &painter, const KoViewConverter &conver
 void KarbonGradientTool::repaintDecorations()
 {
     foreach( GradientStrategy *strategy, m_gradients )
-        m_canvas->updateCanvas( strategy->boundingRect() );
+        m_canvas->updateCanvas( strategy->boundingRect( *m_canvas->viewConverter() ) );
 }
 
 
