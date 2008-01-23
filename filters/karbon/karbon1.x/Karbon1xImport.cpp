@@ -19,7 +19,7 @@
 
 #include "Karbon1xImport.h"
 
-#include <karbonglobal.h>
+#include <KarbonGlobal.h>
 
 #include <KoFilterChain.h>
 #include <KoStoreDevice.h>
