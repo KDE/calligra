@@ -57,4 +57,9 @@
         <Action name="format_super"/>
         <Action name="format_sub"/>
     </ToolBar>
+    <Menu name="default_canvas_popup">
+        <ActionList name="toolproxy_action_list"/>
+        <Seperator/>
+        <Action name="edit_delete"/>
+    </Menu>
 </kpartgui>

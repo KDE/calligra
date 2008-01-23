@@ -35,4 +35,9 @@
       <Action name="view_snaptogrid"/>
     </Menu>
   </MenuBar>
+  <Menu name="default_canvas_popup">
+      <ActionList name="toolproxy_action_list"/>
+      <Seperator/>
+      <Action name="edit_delete"/>
+  </Menu>
 </kpartgui>
