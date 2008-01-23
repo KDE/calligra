@@ -380,11 +380,11 @@ QMatrix SvgImport::parseTransform( const QString &transform )
                 result.scale(params[0].toDouble(), params[0].toDouble());
         }
         else if(subtransform[0] == "skewx")
-            result.shear(tan(params[0].toDouble() * VGlobal::pi_180), 0.0F);
+            result.shear(tan(params[0].toDouble() * KarbonGlobal::pi_180), 0.0F);
         else if(subtransform[0] == "skewy")
-            result.shear(tan(params[0].toDouble() * VGlobal::pi_180), 0.0F);
+            result.shear(tan(params[0].toDouble() * KarbonGlobal::pi_180), 0.0F);
         else if(subtransform[0] == "skewy")
-            result.shear(0.0F, tan(params[0].toDouble() * VGlobal::pi_180));
+            result.shear(0.0F, tan(params[0].toDouble() * KarbonGlobal::pi_180));
         else if(subtransform[0] == "matrix")
         {
             if(params.count() >= 6)
