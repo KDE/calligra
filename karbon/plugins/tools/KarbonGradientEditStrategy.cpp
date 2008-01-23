@@ -273,13 +273,28 @@ bool GradientStrategy::handleDoubleClick( const QPointF &mouseLocation )
             if( stop.first < nextStop.first && stop.first > scalar )
                 nextStop = stop;
         }
-        // linear interpolate colors between framing stops
-        QColor newColor, prevColor = prevStop.second, nextColor = nextStop.second;
-        double colorScale = (scalar - prevStop.first) / (nextStop.first - prevStop.first);
-        newColor.setRedF( prevColor.redF() + colorScale * (nextColor.redF()-prevColor.redF()) );
-        newColor.setGreenF( prevColor.greenF() + colorScale * (nextColor.greenF()-prevColor.greenF()) );
-        newColor.setBlueF( prevColor.blueF() + colorScale * (nextColor.blueF()-prevColor.blueF()) );
-        newColor.setAlphaF( prevColor.alphaF() + colorScale * (nextColor.alphaF()-prevColor.alphaF()) );
+        QColor newColor;
+
+        if( prevStop.first < 0.0 )
+        {
+            // new stop is before the first stop
+            newColor = nextStop.second;
+        }
+        else if( nextStop.first > 1.0 )
+        {
+            // new stop is after the last stop
+            newColor = prevStop.second;
+        }
+        else
+        {
+            // linear interpolate colors between framing stops
+            QColor prevColor = prevStop.second, nextColor = nextStop.second;
+            double colorScale = (scalar - prevStop.first) / (nextStop.first - prevStop.first);
+            newColor.setRedF( prevColor.redF() + colorScale * (nextColor.redF()-prevColor.redF()) );
+            newColor.setGreenF( prevColor.greenF() + colorScale * (nextColor.greenF()-prevColor.greenF()) );
+            newColor.setBlueF( prevColor.blueF() + colorScale * (nextColor.blueF()-prevColor.blueF()) );
+            newColor.setAlphaF( prevColor.alphaF() + colorScale * (nextColor.alphaF()-prevColor.alphaF()) );
+        }
         m_stops.append( QGradientStop( scalar, newColor ) );
     }
     else if( m_selection == Stop )
