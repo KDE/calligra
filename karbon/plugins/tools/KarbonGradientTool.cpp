@@ -221,15 +221,17 @@ void KarbonGradientTool::mouseReleaseEvent( KoPointerEvent *event )
     {
         m_currentStrategy->setEditing( false );
         QUndoCommand * cmd = m_currentStrategy->createCommand( m_currentCmd );
-        m_canvas->addCommand( m_currentCmd ? m_currentCmd : cmd );
-        m_currentCmd = 0;
-        if( m_gradientWidget )
-        {
-            m_gradientWidget->setGradient( m_currentStrategy->gradient() );
-            if( m_currentStrategy->target() == GradientStrategy::Fill )
-                m_gradientWidget->setTarget( VGradientTabWidget::FillGradient );
-            else
-                m_gradientWidget->setTarget( VGradientTabWidget::StrokeGradient );
+	if ( cmd || m_currentCmd ) {
+            m_canvas->addCommand( m_currentCmd ? m_currentCmd : cmd );
+            m_currentCmd = 0;
+            if( m_gradientWidget )
+            {
+                m_gradientWidget->setGradient( m_currentStrategy->gradient() );
+                if( m_currentStrategy->target() == GradientStrategy::Fill )
+                    m_gradientWidget->setTarget( VGradientTabWidget::FillGradient );
+                else
+                    m_gradientWidget->setTarget( VGradientTabWidget::StrokeGradient );
+            }
         }
     }
 }
