@@ -19,7 +19,7 @@
 
 #include "Karbon1xImport.h"
 
-#include <vglobal.h>
+#include <karbonglobal.h>
 
 #include <KoFilterChain.h>
 #include <KoStoreDevice.h>
@@ -859,15 +859,15 @@ KoShape * KarbonImport::loadSinus( const KoXmlElement &element )
     for ( uint i = 0; i < periods; ++i )
     {
         p1.setX( i + 1.0/24.0 );
-        p1.setY( ( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7 );
+        p1.setY( ( 2.0 * KarbonGlobal::sqrt2 - 1.0 ) * KarbonGlobal::one_7 );
         p2.setX( i + 1.0/12.0 );
-        p2.setY( ( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7 );
+        p2.setY( ( 4.0 * KarbonGlobal::sqrt2 - 2.0 ) * KarbonGlobal::one_7 );
         p3.setX( i + 1.0/8.0 );
-        p3.setY( VGlobal::sqrt2 * 0.5 );
+        p3.setY( KarbonGlobal::sqrt2 * 0.5 );
         sinus->curveTo( p1, p2, p3 );
 
         p1.setX( i + 1.0/6.0 );
-        p1.setY( ( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7 );
+        p1.setY( ( 3.0 * KarbonGlobal::sqrt2 + 2.0 ) * KarbonGlobal::one_7 );
         p2.setX( i + 5.0/24.0 );
         p2.setY( 1.0 );
         p3.setX( i + 1.0/4.0 );
@@ -877,29 +877,29 @@ KoShape * KarbonImport::loadSinus( const KoXmlElement &element )
         p1.setX( i + 7.0/24.0 );
         p1.setY( 1.0 );
         p2.setX( i + 1.0/3.0 );
-        p2.setY( ( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7 );
+        p2.setY( ( 3.0 * KarbonGlobal::sqrt2 + 2.0 ) * KarbonGlobal::one_7 );
         p3.setX( i + 3.0/8.0 );
-        p3.setY( VGlobal::sqrt2 * 0.5 );
+        p3.setY( KarbonGlobal::sqrt2 * 0.5 );
         sinus->curveTo( p1, p2, p3 );
 
         p1.setX( i + 5.0/12.0 );
-        p1.setY( ( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7 );
+        p1.setY( ( 4.0 * KarbonGlobal::sqrt2 - 2.0 ) * KarbonGlobal::one_7 );
         p2.setX( i + 11.0/24.0 );
-        p2.setY( ( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7 );
+        p2.setY( ( 2.0 * KarbonGlobal::sqrt2 - 1.0 ) * KarbonGlobal::one_7 );
         p3.setX( i + 1.0/2.0 );
         p3.setY( 0.0 );
         sinus->curveTo( p1, p2, p3 );
 
         p1.setX( i + 13.0/24.0 );
-        p1.setY( -( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7 );
+        p1.setY( -( 2.0 * KarbonGlobal::sqrt2 - 1.0 ) * KarbonGlobal::one_7 );
         p2.setX( i + 7.0/12.0 );
-        p2.setY( -( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7 );
+        p2.setY( -( 4.0 * KarbonGlobal::sqrt2 - 2.0 ) * KarbonGlobal::one_7 );
         p3.setX( i + 5.0/8.0 );
-        p3.setY( -VGlobal::sqrt2 * 0.5 );
+        p3.setY( -KarbonGlobal::sqrt2 * 0.5 );
         sinus->curveTo( p1, p2, p3 );
 
         p1.setX( i + 2.0/3.0 );
-        p1.setY( -( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7 );
+        p1.setY( -( 3.0 * KarbonGlobal::sqrt2 + 2.0 ) * KarbonGlobal::one_7 );
         p2.setX( i + 17.0/24.0 );
         p2.setY( -1.0 );
         p3.setX( i + 3.0/4.0 );
@@ -909,15 +909,15 @@ KoShape * KarbonImport::loadSinus( const KoXmlElement &element )
         p1.setX( i + 19.0/24.0 );
         p1.setY( -1.0 );
         p2.setX( i + 5.0/6.0 );
-        p2.setY( -( 3.0 * VGlobal::sqrt2 + 2.0 ) * VGlobal::one_7 );
+        p2.setY( -( 3.0 * KarbonGlobal::sqrt2 + 2.0 ) * KarbonGlobal::one_7 );
         p3.setX( i + 7.0/8.0 );
-        p3.setY( -VGlobal::sqrt2 * 0.5 );
+        p3.setY( -KarbonGlobal::sqrt2 * 0.5 );
         sinus->curveTo( p1, p2, p3 );
 
         p1.setX( i + 11.0/12.0 );
-        p1.setY( -( 4.0 * VGlobal::sqrt2 - 2.0 ) * VGlobal::one_7 );
+        p1.setY( -( 4.0 * KarbonGlobal::sqrt2 - 2.0 ) * KarbonGlobal::one_7 );
         p2.setX( i + 23.0/24.0 );
-        p2.setY( -( 2.0 * VGlobal::sqrt2 - 1.0 ) * VGlobal::one_7 );
+        p2.setY( -( 2.0 * KarbonGlobal::sqrt2 - 1.0 ) * KarbonGlobal::one_7 );
         p3.setX( i + 1.0 );
         p3.setY( 0.0 );
         sinus->curveTo( p1, p2, p3 );
@@ -970,7 +970,7 @@ KoShape * KarbonImport::loadSpiral( const KoXmlElement &element )
 
     // advance by pi/2 clockwise or cclockwise?
     double adv_ang = ( clockwise ? 1.0 : -1.0 ) * 90.0;
-	double adv_rad = ( clockwise ? -1.0 : 1.0 ) * VGlobal::pi_2;
+	double adv_rad = ( clockwise ? -1.0 : 1.0 ) * KarbonGlobal::pi_2;
     // radius of first segment is non-faded radius:
     double r = radius;
 
@@ -1012,7 +1012,7 @@ KoShape * KarbonImport::loadSpiral( const KoXmlElement &element )
     // sadly it's not feasible to simply add angle while creation.
     // make cw-spiral start at mouse-pointer
     // one_pi_180 = 1/(pi/180) = 180/pi.
-    m.rotate( ( angle + ( clockwise ? VGlobal::pi : 0.0 ) ) * VGlobal::one_pi_180 );
+    m.rotate( ( angle + ( clockwise ? KarbonGlobal::pi : 0.0 ) ) * KarbonGlobal::one_pi_180 );
 
     spiral->applyAbsoluteTransformation( m );
     spiral->setAbsolutePosition( spiral->absolutePosition() + QPointF( cx, cy ) );
@@ -1057,7 +1057,7 @@ KoShape * KarbonImport::loadStar( const KoXmlElement &element )
         QPointF centerPos = paramStar->absolutePosition( KoFlake::TopLeftCorner) + paramStar->starCenter();
         QMatrix m;
         m.translate( centerPos.x(), centerPos.y() );
-        m.rotate( ( angle + VGlobal::pi ) * VGlobal::one_pi_180 );
+        m.rotate( ( angle + KarbonGlobal::pi ) * KarbonGlobal::one_pi_180 );
         paramStar->applyAbsoluteTransformation( m );
 
         starShape = paramStar;
@@ -1067,14 +1067,14 @@ KoShape * KarbonImport::loadStar( const KoXmlElement &element )
 
         KoPathShape * pathStar = new KoPathShape();
 
-        // We start at angle + VGlobal::pi_2:
+        // We start at angle + KarbonGlobal::pi_2:
         QPointF p2, p3;
         QPointF p(
-            outerRadius * cos( angle + VGlobal::pi_2 ),
-            outerRadius * sin( angle + VGlobal::pi_2 ) );
+            outerRadius * cos( angle + KarbonGlobal::pi_2 ),
+            outerRadius * sin( angle + KarbonGlobal::pi_2 ) );
         pathStar->moveTo( p );
 
-        double inAngle = VGlobal::twopi / 360 * innerAngle;
+        double inAngle = KarbonGlobal::twopi / 360 * innerAngle;
 
         if( type == star )
         {
@@ -1083,34 +1083,34 @@ KoShape * KarbonImport::loadStar( const KoXmlElement &element )
             int jumpto = 0;
             bool discontinueous = ( edges % 4 == 2 );
 
-            double outerRoundness = ( VGlobal::twopi * outerRadius * roundness ) / edges;
+            double outerRoundness = ( KarbonGlobal::twopi * outerRadius * roundness ) / edges;
             double nextOuterAngle;
 
             for ( uint i = 1; i < edges + 1; ++i )
             {
-                double nextInnerAngle = angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto + 0.5 );
+                double nextInnerAngle = angle + inAngle + KarbonGlobal::pi_2 + KarbonGlobal::twopi / edges * ( jumpto + 0.5 );
                 p.setX( innerRadius * cos( nextInnerAngle ) );
                 p.setY( innerRadius * sin( nextInnerAngle ) );
                 if( roundness == 0.0 )
                     pathStar->lineTo( p );
                 else
                 {
-                    nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
+                    nextOuterAngle = angle + KarbonGlobal::pi_2 + KarbonGlobal::twopi / edges * jumpto;
                     p2.setX( outerRadius * cos( nextOuterAngle ) -
-                        cos( angle + VGlobal::twopi / edges * jumpto ) * outerRoundness );
+                        cos( angle + KarbonGlobal::twopi / edges * jumpto ) * outerRoundness );
                     p2.setY( outerRadius * sin( nextOuterAngle ) -
-                        sin( angle + VGlobal::twopi / edges * jumpto ) * outerRoundness );
+                        sin( angle + KarbonGlobal::twopi / edges * jumpto ) * outerRoundness );
 
                     pathStar->curveTo( p2, p, p );
                 }
 
                 jumpto = ( i * j ) % edges;
-                nextInnerAngle = angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( jumpto - 0.5 );
+                nextInnerAngle = angle + inAngle + KarbonGlobal::pi_2 + KarbonGlobal::twopi / edges * ( jumpto - 0.5 );
                 p.setX( innerRadius * cos( nextInnerAngle ) );
                 p.setY( innerRadius * sin( nextInnerAngle ) );
                 pathStar->lineTo( p );
 
-                nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
+                nextOuterAngle = angle + KarbonGlobal::pi_2 + KarbonGlobal::twopi / edges * jumpto;
                 p.setX( outerRadius * cos( nextOuterAngle ) );
                 p.setY( outerRadius * sin( nextOuterAngle ) );
 
@@ -1122,16 +1122,16 @@ KoShape * KarbonImport::loadStar( const KoXmlElement &element )
                     p2.setY( innerRadius * sin( nextInnerAngle ) );
 
                     p3.setX( outerRadius * cos( nextOuterAngle ) +
-                        cos( angle + VGlobal::twopi / edges * jumpto ) * outerRoundness );
+                        cos( angle + KarbonGlobal::twopi / edges * jumpto ) * outerRoundness );
                     p3.setY( outerRadius * sin( nextOuterAngle ) +
-                        sin( angle + VGlobal::twopi / edges * jumpto ) * outerRoundness );
+                        sin( angle + KarbonGlobal::twopi / edges * jumpto ) * outerRoundness );
 
                     pathStar->curveTo( p2, p3, p );
                 }
                 if( discontinueous && i == ( edges / 2 ) )
                 {
-                    angle += VGlobal::pi;
-                    nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * jumpto;
+                    angle += KarbonGlobal::pi;
+                    nextOuterAngle = angle + KarbonGlobal::pi_2 + KarbonGlobal::twopi / edges * jumpto;
                     p.setX( outerRadius * cos( nextOuterAngle ) );
                     p.setY( outerRadius * sin( nextOuterAngle ) );
                     pathStar->moveTo( p );
@@ -1143,13 +1143,13 @@ KoShape * KarbonImport::loadStar( const KoXmlElement &element )
             if( type == wheel || type == spoke )
                 innerRadius = 0.0;
 
-            double innerRoundness = ( VGlobal::twopi * innerRadius * roundness ) / edges;
-            double outerRoundness = ( VGlobal::twopi * outerRadius * roundness ) / edges;
+            double innerRoundness = ( KarbonGlobal::twopi * innerRadius * roundness ) / edges;
+            double outerRoundness = ( KarbonGlobal::twopi * outerRadius * roundness ) / edges;
 
             for ( uint i = 0; i < edges; ++i )
             {
-                double nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 );
-                double nextInnerAngle = angle + inAngle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 0.5 );
+                double nextOuterAngle = angle + KarbonGlobal::pi_2 + KarbonGlobal::twopi / edges * ( i + 1.0 );
+                double nextInnerAngle = angle + inAngle + KarbonGlobal::pi_2 + KarbonGlobal::twopi / edges * ( i + 0.5 );
                 if( type != polygon )
                 {
                     p.setX( innerRadius * cos( nextInnerAngle ) );
@@ -1160,16 +1160,16 @@ KoShape * KarbonImport::loadStar( const KoXmlElement &element )
                     else
                     {
                         p2.setX( outerRadius *
-                            cos( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i ) ) -
-                            cos( angle + VGlobal::twopi / edges * ( i ) ) * outerRoundness );
+                            cos( angle + KarbonGlobal::pi_2 + KarbonGlobal::twopi / edges * ( i ) ) -
+                            cos( angle + KarbonGlobal::twopi / edges * ( i ) ) * outerRoundness );
                         p2.setY( outerRadius *
-                            sin( angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i ) ) -
-                            sin( angle + VGlobal::twopi / edges * ( i ) ) * outerRoundness );
+                            sin( angle + KarbonGlobal::pi_2 + KarbonGlobal::twopi / edges * ( i ) ) -
+                            sin( angle + KarbonGlobal::twopi / edges * ( i ) ) * outerRoundness );
 
                         p3.setX( innerRadius * cos( nextInnerAngle ) +
-                            cos( angle + inAngle + VGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
+                            cos( angle + inAngle + KarbonGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
                         p3.setY( innerRadius * sin( nextInnerAngle ) +
-                            sin( angle + inAngle + VGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
+                            sin( angle + inAngle + KarbonGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
 
                         if( type == gear )
                         {
@@ -1190,14 +1190,14 @@ KoShape * KarbonImport::loadStar( const KoXmlElement &element )
                 else
                 {
                     p2.setX( innerRadius * cos( nextInnerAngle ) -
-                        cos( angle + inAngle + VGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
+                        cos( angle + inAngle + KarbonGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
                     p2.setY( innerRadius * sin( nextInnerAngle ) -
-                        sin( angle + inAngle + VGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
+                        sin( angle + inAngle + KarbonGlobal::twopi / edges * ( i + 0.5 ) ) * innerRoundness );
 
                     p3.setX( outerRadius * cos( nextOuterAngle ) +
-                        cos( angle + VGlobal::twopi / edges * ( i + 1.0 ) ) * outerRoundness );
+                        cos( angle + KarbonGlobal::twopi / edges * ( i + 1.0 ) ) * outerRoundness );
                     p3.setY( outerRadius * sin( nextOuterAngle ) +
-                        sin( angle + VGlobal::twopi / edges * ( i + 1.0 ) ) * outerRoundness );
+                        sin( angle + KarbonGlobal::twopi / edges * ( i + 1.0 ) ) * outerRoundness );
 
                     if( type == gear )
                     {
@@ -1215,7 +1215,7 @@ KoShape * KarbonImport::loadStar( const KoXmlElement &element )
             pathStar->close();
             for ( int i = edges - 1; i >= 0; --i )
             {
-                double nextOuterAngle = angle + VGlobal::pi_2 + VGlobal::twopi / edges * ( i + 1.0 );
+                double nextOuterAngle = angle + KarbonGlobal::pi_2 + KarbonGlobal::twopi / edges * ( i + 1.0 );
                 p.setX( outerRadius * cos( nextOuterAngle ) );
                 p.setY( outerRadius * sin( nextOuterAngle ) );
                 pathStar->lineTo( p );
