@@ -236,6 +236,30 @@ void KarbonGradientTool::mouseReleaseEvent( KoPointerEvent *event )
     }
 }
 
+void KarbonGradientTool::mouseDoubleClickEvent( KoPointerEvent *event )
+{
+    if( ! m_currentStrategy )
+        return;
+
+    m_canvas->updateCanvas( m_currentStrategy->boundingRect( *m_canvas->viewConverter() ) );
+
+    if( m_currentStrategy->handleDoubleClick( event->point ) )
+    {
+        QUndoCommand * cmd = m_currentStrategy->createCommand( m_currentCmd );
+        m_canvas->addCommand( m_currentCmd ? m_currentCmd : cmd );
+        m_currentCmd = 0;
+        if( m_gradientWidget )
+        {
+            m_gradientWidget->setGradient( m_currentStrategy->gradient() );
+            if( m_currentStrategy->target() == GradientStrategy::Fill )
+                m_gradientWidget->setTarget( VGradientTabWidget::FillGradient );
+            else
+                m_gradientWidget->setTarget( VGradientTabWidget::StrokeGradient );
+        }
+        m_canvas->updateCanvas( m_currentStrategy->boundingRect( *m_canvas->viewConverter() ) );
+    }
+}
+
 void KarbonGradientTool::keyPressEvent(QKeyEvent *event)
 {
     switch(event->key())

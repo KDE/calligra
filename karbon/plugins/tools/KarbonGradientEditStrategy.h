@@ -59,6 +59,9 @@ public:
     /// mouse position handling for moving handles
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
 
+    /// mouse double click handling
+    bool handleDoubleClick( const QPointF &mouseLocation );
+
     /// sets the strategy into editing mode
     void setEditing( bool on );
 
@@ -102,7 +105,7 @@ protected:
     void paintStops( QPainter &painter, const KoViewConverter &converter, const QPointF &start, const QPointF &stop );
 
     /// checks if given mouse position is on specified line segment
-    bool mouseAtLineSegment( const QPointF &mousePos, const QPointF &segStart, const QPointF &segStop, double maxDistance );
+    bool mouseAtLineSegment( const QPointF &mousePos, double maxDistance );
 
     /// Sets the handle indices defining the gradient line
     void setGradientLine( int start, int stop );
@@ -124,6 +127,11 @@ private:
     typedef QPair<QPointF,QPointF> StopHandle;
     QColor invertedColor( const QColor &color );
     QList<StopHandle> stopHandles( const KoViewConverter &converter ) const;
+
+    /// Projects point onto gradient line returning the position on the line
+    double projectToGradientLine( const QPointF &point );
+
+    void applyChanges();
 
     static int m_handleRadius; ///< the handle radius for all gradient strategies
     bool m_editing; /// the edit mode flag

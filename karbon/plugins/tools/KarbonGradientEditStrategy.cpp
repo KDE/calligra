@@ -102,10 +102,8 @@ bool GradientStrategy::selectHandle( const QPointF &mousePos, const KoViewConver
 
 bool GradientStrategy::selectLine( const QPointF &mousePos, const KoViewConverter &converter )
 {
-    QPointF start = m_matrix.map( m_handles[m_gradientLine.first] );
-    QPointF stop = m_matrix.map( m_handles[m_gradientLine.second] );
     double maxDistance = handleRect( converter ).size().width();
-    if( mouseAtLineSegment( mousePos, start, stop, maxDistance ) )
+    if( mouseAtLineSegment( mousePos, maxDistance ) )
     {
         m_lastMousePos = mousePos;
         setSelection( Line );
@@ -188,21 +186,26 @@ void GradientStrategy::paint( QPainter &painter, const KoViewConverter &converte
         paintHandle( painter, converter, m_matrix.map( handle ) );
 }
 
-bool GradientStrategy::mouseAtLineSegment( const QPointF &mousePos, const QPointF &segStart, const QPointF &segStop, double maxDistance )
+double GradientStrategy::projectToGradientLine( const QPointF &point )
 {
-    QPointF seg = segStop - segStart;
-    double segLength = sqrt( seg.x()*seg.x() + seg.y()*seg.y() );
-    // calculate normalized segment vector
-    QPointF normSeg = seg / segLength;
-    // mouse position relative to segment start point
-    QPointF relMousePos = mousePos - segStart;
-    // project relative mouse position onto segment
-    double scalar = normSeg.x()*relMousePos.x() + normSeg.y()*relMousePos.y();
-    // check if projection is between start and stop point
-    if( scalar < 0.0 || scalar > segLength )
+    QPointF startPoint = m_matrix.map( m_handles[m_gradientLine.first] );
+    QPointF stopPoint = m_matrix.map( m_handles[m_gradientLine.second] );
+    QPointF diff = stopPoint - startPoint;
+    double diffLength = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
+        // project mouse position relative to stop position on gradient line
+    double scalar = KarbonGlobal::scalarProduct( point-startPoint, diff / diffLength );
+    return scalar /= diffLength;
+}
+
+bool GradientStrategy::mouseAtLineSegment( const QPointF &mousePos, double maxDistance )
+{
+    double scalar = projectToGradientLine( mousePos );
+    if( scalar < 0.0 || scalar > 1.0 )
         return false;
     // calculate vector between relative mouse position and projected mouse position
-    QPointF distVec = scalar * normSeg - relMousePos;
+    QPointF startPoint = m_matrix.map( m_handles[m_gradientLine.first] );
+    QPointF stopPoint = m_matrix.map( m_handles[m_gradientLine.second] );
+    QPointF distVec = startPoint + scalar * (stopPoint-startPoint) - mousePos;
     double dist = distVec.x()*distVec.x() + distVec.y()*distVec.y();
     if( dist > maxDistance*maxDistance )
         return false;
@@ -231,13 +234,7 @@ void GradientStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Keyboar
             break;
         case Stop:
         {
-            QPointF startPoint = m_matrix.map( m_handles[m_gradientLine.first] );
-            QPointF stopPoint = m_matrix.map( m_handles[m_gradientLine.second] );
-            QPointF diff = stopPoint - startPoint;
-            double diffLength = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
-            // project mouse position relative to stop position on gradient line
-            double scalar = KarbonGlobal::scalarProduct( mouseLocation-startPoint, diff / diffLength );
-            scalar /= diffLength;
+            double scalar = projectToGradientLine( mouseLocation ); 
             scalar = qMax( 0.0, scalar );
             scalar = qMin( scalar, 1.0 );
             m_stops[m_selectionIndex].first = scalar;
@@ -248,6 +245,63 @@ void GradientStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::Keyboar
             return;
     }
 
+    applyChanges();
+}
+
+bool GradientStrategy::handleDoubleClick( const QPointF &mouseLocation )
+{
+    if( m_selection == Line )
+    {
+        // double click on gradient line inserts a new gradient stop
+
+        double scalar = projectToGradientLine( mouseLocation );
+        // calculate distance to gradient line
+        QPointF startPoint = m_matrix.map( m_handles[m_gradientLine.first] );
+        QPointF stopPoint = m_matrix.map( m_handles[m_gradientLine.second] );
+        QPointF diff = stopPoint - startPoint;
+        QPointF diffToLine = startPoint + scalar * diff - mouseLocation;
+        if( diffToLine.x()*diffToLine.x() + diffToLine.y()*diffToLine.y() > m_handleRadius*m_handleRadius )
+            return false;
+
+        QGradientStop prevStop( -1.0, QColor() );
+        QGradientStop nextStop( 2.0, QColor() );
+        // find framing gradient stops
+        foreach( QGradientStop stop, m_stops )
+        {
+            if( stop.first > prevStop.first && stop.first < scalar )
+                prevStop = stop;
+            if( stop.first < nextStop.first && stop.first > scalar )
+                nextStop = stop;
+        }
+        // linear interpolate colors between framing stops
+        QColor newColor, prevColor = prevStop.second, nextColor = nextStop.second;
+        double colorScale = (scalar - prevStop.first) / (nextStop.first - prevStop.first);
+        newColor.setRedF( prevColor.redF() + colorScale * (nextColor.redF()-prevColor.redF()) );
+        newColor.setGreenF( prevColor.greenF() + colorScale * (nextColor.greenF()-prevColor.greenF()) );
+        newColor.setBlueF( prevColor.blueF() + colorScale * (nextColor.blueF()-prevColor.blueF()) );
+        newColor.setAlphaF( prevColor.alphaF() + colorScale * (nextColor.alphaF()-prevColor.alphaF()) );
+        m_stops.append( QGradientStop( scalar, newColor ) );
+    }
+    else if( m_selection == Stop )
+    {
+        // double click on stop handle removes gradient stop
+
+        // do not allow removing one of the last two stops
+        if( m_stops.count() <= 2 )
+            return false;
+        m_stops.remove( m_selectionIndex );
+        setSelection( None );
+    }
+    else
+        return false;
+
+    applyChanges();
+
+    return true;
+}
+
+void GradientStrategy::applyChanges()
+{
     m_newBrush = brush();
     if( m_target == Fill )
     {
