@@ -21,7 +21,7 @@
 #include "svgimport.h"
 #include "color.h"
 
-#include <vglobal.h>
+#include <KarbonGlobal.h>
 #include <KarbonPart.h>
 
 #include <KoShape.h>
