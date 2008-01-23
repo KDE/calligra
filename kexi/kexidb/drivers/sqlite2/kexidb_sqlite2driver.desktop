@@ -15,6 +15,7 @@ Comment[km]=SQLite 2 គឺ​ចាស់ និង​លែង​ប្រើ�
 Comment[pt]=O SQLite 2 é a versão antiga e obsoleta do motor de SQL incorporado por omissão do Kexi
 Comment[pt_BR]=O SQLite 2 é a versão antiga e obsoleta do motor de SQL embutido do Kexi
 Comment[sv]=Sqlite 2 är den gamla och föråldrade versionen av Kexis inbyggda SQL-databas
+Comment[uk]=SQLite 2- це стара і вже застаріла версія рушія SQL, вбудованого в Kexi
 Comment[x-test]=xxSQLite 2 is the old and obsolete version of Kexi embedded SQL enginexx
 Comment[zh_TW]=SQLite 2 是已過時的 Kexi 的嵌入式 SQL 引擎
 X-KDE-Library=kexidb_sqlite2driver
