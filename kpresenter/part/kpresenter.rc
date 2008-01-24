@@ -12,6 +12,7 @@
             <Action name="edit_select_all"/>
             <Action name="edit_deselect_all"/>
             <Action name="edit_delete"/>
+            <Action name="edit_customslideshows"/>
             <Separator/>
             <Action name="edit_insertpage"/>
             <Action name="edit_copypage"/>

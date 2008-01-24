@@ -16,6 +16,7 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+#include<kdialog.h>
 
 #include "KPrView.h"
 
@@ -79,9 +80,13 @@ void KPrView::initActions()
     actionCollection()->addAction( "view_mode", m_actionStartPresentation );
     connect( m_actionStartPresentation, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
 
-    m_actionCreateAnimation = new KAction( "Create Appear Animation", this );
+    m_actionCreateAnimation = new KAction( i18n( "Create Appear Animation" ), this );
     actionCollection()->addAction( "edit_createanimation", m_actionCreateAnimation );
     connect( m_actionCreateAnimation, SIGNAL( activated() ), this, SLOT( createAnimation() ) );
+
+    m_actionCreateCustomSlideShowsDialog = new KAction( i18n( "Edit custom slideshows..." ), this );
+    actionCollection()->addAction( "edit_customslideshows", m_actionCreateCustomSlideShowsDialog );
+    connect( m_actionCreateCustomSlideShowsDialog, SIGNAL( activated() ), this, SLOT( dialogCustomSlideShows() ) );
 }
 
 void KPrView::startPresentation()
@@ -103,6 +108,11 @@ void KPrView::createAnimation()
         m_canvas->addCommand( command );
     }
     animationcount = ( animationcount + 1 ) % 3;
+}
+
+void KPrView::dialogCustomSlideShows()
+{
+
 }
 
 #include "KPrView.moc"

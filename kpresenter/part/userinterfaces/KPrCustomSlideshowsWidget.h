@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2008 Carlos Licea <carlos.licea@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,40 +17,30 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRVIEW_H
-#define KPRVIEW_H
+#ifndef KPRCUSTOMSLIDESHOWSWIDGET_H
+#define KPRCUSTOMSLIDESHOWSWIDGET_H
 
+#include <QtGui/QDialog>
 #include <QObject>
 
-#include <KoPAView.h>
+#include "ui_KPrCustomSlideShowsWidget.h"
 
-class KPrDocument;
-class KPrViewModePresentation;
+class KPrCustomSlideShows;  
 
-class KPrView : public KoPAView
-{
+class KPrCustomSlideShowsWidget : public QDialog {
     Q_OBJECT
-public:
-    explicit KPrView( KPrDocument * document, QWidget * parent = 0 );
-    ~KPrView();
+    
+    public:
+        KPrCustomSlideShowsWidget( QWidget *parent, 
+                                KPrCustomSlideShows *slideShows);
+        ~KPrCustomSlideShowsWidget();
+    private Q_SLOTS:
+        void changedSelectedSlideshow();
 
-    virtual KoViewConverter * viewConverter();
+//     Q_SIGNALS:
+    private:
+            Ui::CustomSlideShowsWidget m_uiWidget;
+            KPrCustomSlideShows *m_slideShows;
 
-protected:
-    void initGUI();
-    void initActions();
-
-protected slots:
-    void startPresentation();
-    void createAnimation();
-    void dialogCustomSlideShows();
-
-private:
-    KAction *m_actionStartPresentation;
-    KAction *m_actionCreateAnimation;
-    KAction *m_actionCreateCustomSlideShowsDialog;
-    KPrViewModePresentation *m_presentationMode;
-    KoPAViewMode *m_normalMode;
-};
-
-#endif /* KPRVIEW_H */
+}
+#endif
