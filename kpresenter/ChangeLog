@@ -1,0 +1,7 @@
+2008-01-23  Carlos Licea  <carlos.licea@kdemail.net>
+    - Added the directory userinterfaces for UI files and their
+      wrappers .cpp and .h
+    - Added:
+        *userinterfaces/KPrCustomSlideShowsWidget.cpp
+        *userinterfaces/KPrCustomSlideShowsWidget.h
+        *userinterfaces/KPrCustomSlideShowsWidget.ui
