@@ -24,6 +24,8 @@ TextShape:
 
 - make it a parameter shape and a handle for the position on path
 - saving and loading to/from odf
+- add cursor?
+- add selection?
 
 Layers:
 -------
