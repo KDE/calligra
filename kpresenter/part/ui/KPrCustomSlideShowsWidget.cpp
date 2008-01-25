@@ -17,27 +17,30 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include"CustomSlideShowsWidget.h"
 #include <QStringList>
 #include <QListWidgetItem>
 #include <QIcon>
+
+#include<KoPAPageBase.h>
+#include"KPrCustomSlideShowsWidget.h"
+#include"../KPrCustomSlideShows.h"
 
 KPrCustomSlideShowsWidget::KPrCustomSlideShowsWidget( QWidget *parent, 
                                                       KPrCustomSlideShows *slideShows,
                                                       QList<KoPAPageBase*> *allPages )
 : QDialog(parent), m_slideShows(slideShows)
 {
-    m_uiWidget.customSlideshowNamesList->addItems( QStringList( m_slideShows->customSlideShowsNames() ));
-    const unsigned int pagesCount( allPages->count() );
+    m_uiWidget.customSlideShowsList->addItems( QStringList( m_slideShows->customSlideShowsNames() ));
+    const int pagesCount= allPages->count();
     for( int i=0; i<=pagesCount; ++i ) {
-        m_uiWidget.avaliableSlidesList.insertItem( 
             QListWidgetItem(
+                QIcon(),
                 m_slideShows->customSlideShowsNames().at( i ),
-                QIcon() );
+                m_uiWidget.avaliableSlidesList );
     }
 //         const unsigned int slideShowsCount( allPages->count() );
 //     for( int i=0; i<=slideShowsCount; ++i ) {
-//         m_uiWidget.currentSlideshowSlidesList.insertItem( 
+//         m_uiWidget.currentSlideshowSlidesList.insertItem(
 //             QListWidgetItem(
 //                 m_slideShows->customSlideShowsNames().at( i ),
 //                 QIcon() );

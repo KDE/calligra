@@ -23,10 +23,10 @@
 #include <QObject>
 
 #include <KoPADocument.h>
+#include "KPrCustomSlideShows.h"
 
 class KPrShapeAnimation;
 class KPrShapeAnimations;
-class KPrCustomSlideShows;
 
 class KPrDocument : public KoPADocument
 {

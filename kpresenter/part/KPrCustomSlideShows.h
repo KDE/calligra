@@ -16,6 +16,8 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+#ifndef KPRCUSTOMSLIDESHOWS_H
+#define KPRCUSTOMSLIDESHOWS_H
 
 #include<QMap>
 #include<QList>
@@ -75,7 +77,7 @@ public:
      * 
      * @param slide slide to be inserted
      * @param position the position at which the slide will be inserted.
-     * If it's 0 it will be prepended to the list, if it's the size it will be appended to the list. 
+     * If it's 0 it will be prepended to the list, if it's the size it will be appended to the list.
      * Negative numbers can be used to count backwards.
      */
     void addSlideToAllCustomSlideShows( KoPAPageBase* page, unsigned int position );
@@ -106,3 +108,4 @@ public:
 private:
     QMap< QString, QList<KoPAPageBase*> > m_customSlideShows;
 };
+#endif /* KPRCUSTOMSLIDESHOWS_H */

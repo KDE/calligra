@@ -26,23 +26,31 @@ set( kpresenterprivate_LIB_SRCS
      KPrPageApplicationData.cpp
      KPrShapeApplicationData.cpp
      KPrCustomSlideShows.cpp
+
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp
+
      dockers/KPrPageEffectDockerFactory.cpp
      dockers/KPrPageEffectDocker.cpp
+
      pageeffects/KPrPageEffectRunner.cpp
      pageeffects/KPrPageEffect.cpp
      pageeffects/KPrPageEffectFactory.cpp
      pageeffects/KPrPageEffectRegistry.cpp
      pageeffects/KPrSlideWipeEffect.cpp
      pageeffects/KPrSlideWipeEffectFactory.cpp
+
      shapeanimations/KPrShapeAnimation.cpp
      shapeanimations/KPrTranslateAnimation.cpp
      shapeanimations/KPrAnimationMoveAppear.cpp
      shapeanimations/KPrAnimationDisappear.cpp
+
+     ui/KPrCustomSlideShowsWidget.cpp
    )
 
-#kde4_add_ui_files(kpresenterprivate_LIB_SRCS xxxx.ui)
+kde4_add_ui_files(kpresenterprivate_LIB_SRCS
+     ui/KPrCustomSlideShowsWidget.ui
+   )
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 

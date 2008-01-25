@@ -40,7 +40,7 @@
 #include "shapeanimations/KPrAnimationMoveAppear.h"
 
 #include "KPrCustomSlideShows.h"
-#include "KPrCustomSlideShowsWidget.h"
+#include "ui/KPrCustomSlideShowsWidget.h"
 
 KPrView::KPrView( KPrDocument *document, QWidget *parent )
 : KoPAView( document, parent )
@@ -118,10 +118,10 @@ void KPrView::dialogCustomSlideShows()
 {
     KPrDocument *doc = dynamic_cast<KPrDocument *>( m_doc );
     
-    KPrCustomSlideShowsWidget widget( this, m_doc->customSlideShows(), m_doc->pages() );
-    widget->show();
-    widget->rise();
-    widget->activateWindow();
+    KPrCustomSlideShowsWidget widget( (QWidget*) this, doc->customSlideShows(), &doc->pages() );
+    widget.show();
+    widget.raise();
+    widget.activateWindow();
 }
 
 #include "KPrView.moc"

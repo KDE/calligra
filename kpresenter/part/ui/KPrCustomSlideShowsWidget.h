@@ -23,6 +23,8 @@
 #include <QtGui/QDialog>
 #include <QObject>
 
+#include <KoPAPageBase.h>
+
 #include "ui_KPrCustomSlideShowsWidget.h"
 
 class KPrCustomSlideShows;  
