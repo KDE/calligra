@@ -19,15 +19,29 @@
 
 #include"CustomSlideShowsWidget.h"
 #include <QStringList>
+#include <QListWidgetItem>
+#include <QIcon>
 
 KPrCustomSlideShowsWidget::KPrCustomSlideShowsWidget( QWidget *parent, 
-                                                KPrCustomSlideShows *slideShows )
+                                                      KPrCustomSlideShows *slideShows,
+                                                      QList<KoPAPageBase*> *allPages )
 : QDialog(parent), m_slideShows(slideShows)
 {
     m_uiWidget.customSlideshowNamesList->addItems( QStringList( m_slideShows->customSlideShowsNames() ));
-    
-    for(int i=0; i<= ){
+    const unsigned int pagesCount( allPages->count() );
+    for( int i=0; i<=pagesCount; ++i ) {
+        m_uiWidget.avaliableSlidesList.insertItem( 
+            QListWidgetItem(
+                m_slideShows->customSlideShowsNames().at( i ),
+                QIcon() );
     }
+//         const unsigned int slideShowsCount( allPages->count() );
+//     for( int i=0; i<=slideShowsCount; ++i ) {
+//         m_uiWidget.currentSlideshowSlidesList.insertItem( 
+//             QListWidgetItem(
+//                 m_slideShows->customSlideShowsNames().at( i ),
+//                 QIcon() );
+//     }
 }
 
 KPrCustomSlideShowsWidget::~KPrCustomSlideShowsWidget()
@@ -35,3 +49,4 @@ KPrCustomSlideShowsWidget::~KPrCustomSlideShowsWidget()
     delete m_slideShows;
 }
 
+#include"KPrCustomSlideShowsWidget.moc"

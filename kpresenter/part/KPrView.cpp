@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2006-2007 Thorsten Zachmann <zachmann@kde.org>
-
+   Copyright (C) 2008 Carlos Licea <carlos.licea@kdemail.org>
+   
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -37,6 +38,9 @@
 #include "dockers/KPrPageEffectDocker.h"
 #include "dockers/KPrPageEffectDockerFactory.h"
 #include "shapeanimations/KPrAnimationMoveAppear.h"
+
+#include "KPrCustomSlideShows.h"
+#include "KPrCustomSlideShowsWidget.h"
 
 KPrView::KPrView( KPrDocument *document, QWidget *parent )
 : KoPAView( document, parent )
@@ -112,7 +116,12 @@ void KPrView::createAnimation()
 
 void KPrView::dialogCustomSlideShows()
 {
-
+    KPrDocument *doc = dynamic_cast<KPrDocument *>( m_doc );
+    
+    KPrCustomSlideShowsWidget widget( this, m_doc->customSlideShows(), m_doc->pages() );
+    widget->show();
+    widget->rise();
+    widget->activateWindow();
 }
 
 #include "KPrView.moc"

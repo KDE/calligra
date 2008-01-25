@@ -32,7 +32,8 @@ class KPrCustomSlideShowsWidget : public QDialog {
     
     public:
         KPrCustomSlideShowsWidget( QWidget *parent, 
-                                KPrCustomSlideShows *slideShows);
+                                   KPrCustomSlideShows *slideShows,
+                                   QList<KoPAPageBase*> *allPages );
         ~KPrCustomSlideShowsWidget();
     private Q_SLOTS:
         void changedSelectedSlideshow();
@@ -42,5 +43,5 @@ class KPrCustomSlideShowsWidget : public QDialog {
             Ui::CustomSlideShowsWidget m_uiWidget;
             KPrCustomSlideShows *m_slideShows;
 
-}
+};
 #endif

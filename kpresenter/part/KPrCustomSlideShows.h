@@ -70,15 +70,19 @@ public:
     QList<KoPAPageBase*> getCustomSlideShowByName( const QString &name ) const;
 
     /**
-     * @brief Insert a slide to the right of the given position of all the known custom SlideShows. If the position is higher than the size of the list of the SlideShow, the slide is inserted at the end.
+     * @brief Insert a slide to the right of the given position of all the known custom SlideShows.
+     * If the position is higher than the size of the list of the SlideShow, the slide is inserted at the end.
      * 
      * @param slide slide to be inserted
-     * @param position the position at which the slide will be inserted. If it's 0 it will be prepended to the list, if it's the size it will be appended to the list. Negative numbers can be used to count backwards.
+     * @param position the position at which the slide will be inserted.
+     * If it's 0 it will be prepended to the list, if it's the size it will be appended to the list. 
+     * Negative numbers can be used to count backwards.
      */
     void addSlideToAllCustomSlideShows( KoPAPageBase* page, unsigned int position );
 
     /**
-     * @brief Insert a  list of slides to the right of the given position of all the known custom SlideShows. If the position is higher than the size of the list of the SlideShow, the list of slides are inserted at the end.
+     * @brief Insert a  list of slides to the right of the given position of all the known custom SlideShows.
+     * If the position is higher than the size of the list of the SlideShow, the list of slides are inserted at the end.
      *
      * @param slideShow list of slides to be inserted
      * @param position the position at which the slide will be inserted

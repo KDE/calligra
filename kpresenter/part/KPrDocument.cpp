@@ -27,7 +27,8 @@
 #include "KPrFactory.h"
 
 KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
-: KoPADocument( parentWidget, parent, singleViewMode )
+: KoPADocument( parentWidget, parent, singleViewMode ), 
+  m_customSlideShows(new KPrCustomSlideShows)
 {
     setComponentData(KPrFactory::componentData(), false);
     setTemplateType( "kpresenter_template" );
@@ -35,6 +36,7 @@ KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleVie
 
 KPrDocument::~KPrDocument()
 {
+    delete m_customSlideShows;
 }
 
 void KPrDocument::paintContent( QPainter &painter, const QRect &rect, bool transparent,
@@ -140,5 +142,9 @@ KPrShapeAnimations & KPrDocument::animationsByPage( KoPAPageBase * page )
     return controller->animations();
 }
 
+KPrCustomSlideShows* KPrDocument::customSlideShows()
+{
+    return m_customSlideShows;
+}
 
 #include "KPrDocument.moc"

@@ -26,6 +26,7 @@
 
 class KPrShapeAnimation;
 class KPrShapeAnimations;
+class KPrCustomSlideShows;
 
 class KPrDocument : public KoPADocument
 {
@@ -63,6 +64,11 @@ public:
      */
     void removeAnimation( KPrShapeAnimation * animation, bool removeFromApplicationData = true );
 
+    /**
+     * @brief get the slideShows defined for this document
+     */
+    KPrCustomSlideShows* customSlideShows();
+
 protected:
     /// reimplemented
     virtual KoView * createViewInstance( QWidget *parent );
@@ -78,6 +84,8 @@ protected:
      * @brief get the animations of the page
      */
     KPrShapeAnimations & animationsByPage( KoPAPageBase * page );
+    
+    KPrCustomSlideShows *m_customSlideShows;
 };
 
 #endif /* KPRDOCUMENT_H */
