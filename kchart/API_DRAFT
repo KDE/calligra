@@ -139,3 +139,5 @@ CLASS AbstractArea:
   setPosition( QPointF )
   setWidth( int )
 
+CLASS Wall, Floor: inherit AbstractArea
+
