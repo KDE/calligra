@@ -61,16 +61,16 @@ void SimpleTextShape::paint(QPainter &painter, const KoViewConverter &converter)
     painter.drawPath( outline() );
 }
 
-void SimpleTextShape::paintDecorations(QPainter &painter, const KoViewConverter &converter, const KoCanvasBase *canvas)
+void SimpleTextShape::paintDecorations(QPainter &/*painter*/, const KoViewConverter &/*converter*/, const KoCanvasBase * /*canvas*/)
 {
 }
 
-void SimpleTextShape::saveOdf(KoShapeSavingContext & context) const
+void SimpleTextShape::saveOdf(KoShapeSavingContext & /*context*/) const
 {
     // TODO
 }
 
-bool SimpleTextShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+bool SimpleTextShape::loadOdf( const KoXmlElement & /*element*/, KoShapeLoadingContext &/*context*/ )
 {
     // TODO
     return false;
@@ -84,13 +84,15 @@ QSizeF SimpleTextShape::size() const
 void SimpleTextShape::setSize( const QSizeF &newSize )
 {
     QSizeF oldSize = size();
-    double zoomX = newSize.width() / oldSize.width(); 
-    double zoomY = newSize.height() / oldSize.height(); 
-    QMatrix matrix( zoomX, 0, 0, zoomY, 0, 0 );
+    if ( !oldSize.isNull() ) {
+        double zoomX = newSize.width() / oldSize.width(); 
+        double zoomY = newSize.height() / oldSize.height(); 
+        QMatrix matrix( zoomX, 0, 0, zoomY, 0, 0 );
 
-    update();
-    applyTransformation( matrix );
-    update();
+        update();
+        applyTransformation( matrix );
+        update();
+    }
 }
 
 const QPainterPath SimpleTextShape::outline() const
