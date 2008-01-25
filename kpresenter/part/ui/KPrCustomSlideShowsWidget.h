@@ -38,7 +38,7 @@ class KPrCustomSlideShowsWidget : public QDialog {
                                    QList<KoPAPageBase*> *allPages );
         ~KPrCustomSlideShowsWidget();
     private Q_SLOTS:
-        void changedSelectedSlideshow();
+        //void changedSelectedSlideshow();
 
 //     Q_SIGNALS:
     private:

@@ -52,4 +52,4 @@ KPrCustomSlideShowsWidget::~KPrCustomSlideShowsWidget()
     delete m_slideShows;
 }
 
-#include"KPrCustomSlideShowsWidget.moc"
+#include "KPrCustomSlideShowsWidget.moc"
