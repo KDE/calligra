@@ -1,6 +1,9 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, The Karbon Developers
-   Copyright (C) 2002, The Karbon Developers
+   Copyright (C) 2002 Lennart Kudling <kudling@kde.org>
+   Copyright (C) 2004 Laurent Montel <montel@kde.org>
+   Copyright (C) 2005-2006 Thomas Zander <zander@kde.org>
+   Copyright (C) 2006 Tim Beaulen <tbscope@gmail.com>
+   Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
