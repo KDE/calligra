@@ -39,6 +39,7 @@
 #include <KoShapeBackgroundCommand.h>
 #include <KoPathFillRuleCommand.h>
 #include <KoPathShape.h>
+#include <KoColorSpaceRegistry.h>
 
 #include <klocale.h>
 
@@ -137,6 +138,24 @@ bool KarbonStylePreviewDocker::strokeIsSelected() const
 
 void KarbonStylePreviewDocker::updateStyle( const KoShapeBorderModel * stroke, const QBrush & fill )
 {
+    KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
+    int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
+
+    QColor qColor( Qt::black );
+    if( activeStyle == Karbon::Foreground )
+    {
+        const KoLineBorder * border = dynamic_cast<const KoLineBorder*>( stroke );
+        if( border )
+            qColor = border->color();
+    }
+    else
+    {
+        if( fill.style() == Qt::SolidPattern )
+            qColor = fill.color();
+    }
+    KoColor c( qColor, qColor.alpha(), KoColorSpaceRegistry::instance()->rgb8() );
+    m_colorChooser->setColor( c );
+
     m_preview->update( stroke, fill );
 }
 
