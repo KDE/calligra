@@ -117,9 +117,7 @@ void KPrView::dialogCustomSlideShows()
     KPrDocument *doc = dynamic_cast<KPrDocument *>( m_doc );
     KPrCustomSlideShowsWidget widget( this, doc->customSlideShows(), &doc->pages() );
     widget.setModal( true );
-    widget.show();
-    widget.raise();
-    widget.activateWindow();
+    widget.exec();
 }
 
 #include "KPrView.moc"
