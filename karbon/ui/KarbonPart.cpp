@@ -385,7 +385,6 @@ KarbonPart::initConfig()
         m_maxRecentFiles = interfaceGroup.readEntry( "NbRecentFile", 10 );
         setShowStatusBar( interfaceGroup.readEntry( "ShowStatusBar" , true ) );
         setBackupFile( interfaceGroup.readEntry( "BackupFile", true ) );
-        m_doc.saveAsPath( interfaceGroup.readEntry( "SaveAsPath", false ) );
     }
     int undos = 30;
     if( config->hasGroup( "Misc" ) )

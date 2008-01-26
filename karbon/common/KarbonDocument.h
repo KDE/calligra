@@ -196,9 +196,6 @@ public:
     */
     void remove( KoShape* shape );
 
-    bool saveAsPath() const;
-    void saveAsPath( bool b );
-
     /// Returns the united bounding rectangle of the documents content and the document page
     QRectF boundingRect() const;
 

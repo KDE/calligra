@@ -381,14 +381,11 @@ ConfigDefaultPage::ConfigDefaultPage( KarbonView* view, char* name )
 
     m_oldBackupFile = true;
 
-    m_oldSaveAsPath = true;
-
     if( m_config->hasGroup( "Interface" ) )
     {
         KConfigGroup interfaceGroup = m_config->group( "Interface" );
         m_oldAutoSave = interfaceGroup.readEntry( "AutoSave", m_oldAutoSave );
         m_oldBackupFile = interfaceGroup.readEntry( "BackupFile", m_oldBackupFile );
-        m_oldSaveAsPath = interfaceGroup.readEntry( "SaveAsPath", m_oldSaveAsPath );
     }
 
     m_autoSave = new KIntNumInput( m_oldAutoSave, gbDocumentSettings );
@@ -402,9 +399,6 @@ ConfigDefaultPage::ConfigDefaultPage( KarbonView* view, char* name )
     m_createBackupFile->setChecked( m_oldBackupFile );
     layout->addWidget( m_createBackupFile );
 
-    m_saveAsPath = new QCheckBox( i18n( "Save as path" ), gbDocumentSettings );
-    m_saveAsPath->setChecked( m_oldSaveAsPath );
-    layout->addWidget( m_saveAsPath );
     layout->addStretch();
 }
 
@@ -429,22 +423,12 @@ void ConfigDefaultPage::apply()
         m_view->part()->setBackupFile( state );
         m_oldBackupFile = state;
     }
-
-    state = m_saveAsPath->isChecked();
-
-    //if( state != m_oldSaveAsPath )
-    //{
-        interfaceGroup.writeEntry( "SaveAsPath", state );
-        m_view->part()->document().saveAsPath( state );
-        m_oldSaveAsPath = state;
-    //}
 }
 
 void ConfigDefaultPage::slotDefault()
 {
     m_autoSave->setValue( m_view->part()->defaultAutoSave() / 60 );
     m_createBackupFile->setChecked( true );
-    m_saveAsPath->setChecked( true );
 }
 
 #include "KarbonConfigureDialog.moc"

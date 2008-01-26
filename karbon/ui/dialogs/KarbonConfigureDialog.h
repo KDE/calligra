@@ -129,8 +129,6 @@ private:
     int m_oldAutoSave;
     QCheckBox *m_createBackupFile;
     bool m_oldBackupFile;
-    QCheckBox *m_saveAsPath;
-    bool m_oldSaveAsPath;
 };
 
 class ConfigGridPage : public QWidget

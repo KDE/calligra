@@ -60,7 +60,6 @@ public:
     Private()
     : pageSize(0.0, 0.0)
     , unit( KoUnit::Millimeter )
-    , saveAsPath(true)
     {}
 
     ~Private()
@@ -78,9 +77,6 @@ public:
 
     KoUnit unit; ///< The unit.
     KoImageCollection imageCollection; ///< the image collection
-
-    // TODO this flag is used nowhere, can we remove it?
-    bool saveAsPath;
 };
 
 KarbonDocument::KarbonDocument()
@@ -338,16 +334,6 @@ void KarbonDocument::setPageSize( QSizeF pageSize )
 const QList<KoShape*> KarbonDocument::shapes() const
 {
     return d->objects;
-}
-
-bool KarbonDocument::saveAsPath() const
-{
-    return d->saveAsPath;
-}
-
-void KarbonDocument::saveAsPath( bool b )
-{
-    d->saveAsPath = b;
 }
 
 KoUnit KarbonDocument::unit() const
