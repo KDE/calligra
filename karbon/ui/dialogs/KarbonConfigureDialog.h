@@ -38,6 +38,7 @@ class KIntNumInput;
 class KColorButton;
 class QCheckBox;
 class QComboBox;
+class QToolButton;;
 
 class KarbonConfigureDialog : public KPageDialog
 {
@@ -143,6 +144,9 @@ public:
 public slots:
     void slotDefault();
     void slotUnitChanged( int );
+    void linkSpacingToggled(bool);
+    void spinBoxHSpacingChanged( double );
+    void spinBoxVSpacingChanged( double );
 
 private:
     void setValuesFromGrid( const KoGridData &grid );
@@ -154,6 +158,8 @@ private:
     QCheckBox* m_snapChBox;
     KColorButton* m_gridColorBtn;
     KSharedConfigPtr m_config;
+    QToolButton* m_bnLinkSpacing;
+    bool m_linkSpacing;
 };
 
 #endif // KARBONCONFIGUREDIALOG_H
