@@ -21,9 +21,9 @@
 #include <QListWidgetItem>
 #include <QIcon>
 
-#include<KoPAPageBase.h>
-#include"KPrCustomSlideShowsWidget.h"
-#include"KPrCustomSlideShows.h"
+#include <KoPAPageBase.h>
+#include "KPrCustomSlideShowsWidget.h"
+#include "KPrCustomSlideShows.h"
 
 KPrCustomSlideShowsWidget::KPrCustomSlideShowsWidget( QWidget *parent, KPrCustomSlideShows *slideShows,
                                                       QList<KoPAPageBase*> *allPages )
@@ -36,7 +36,7 @@ KPrCustomSlideShowsWidget::KPrCustomSlideShowsWidget( QWidget *parent, KPrCustom
     if( m_slideShows->customSlideShowsNames().count() != 0 )
     {
         for( int i=0; i<pagesCount; ++i ) {
-            QListWidgetItem( QIcon(), m_slideShows->customSlideShowsNames().at( i ), m_uiWidget.avaliableSlidesList );
+            QListWidgetItem( QIcon(), m_slideShows->customSlideShowsNames().at( i ), m_uiWidget.availableSlidesList );
         }
     }
 }

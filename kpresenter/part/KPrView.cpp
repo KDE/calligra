@@ -115,9 +115,7 @@ void KPrView::createAnimation()
 void KPrView::dialogCustomSlideShows()
 {
     KPrDocument *doc = dynamic_cast<KPrDocument *>( m_doc );
-    QWidget * thisWidget = dynamic_cast<QWidget *>( this );
-    Q_ASSERT( thisWidget );
-    KPrCustomSlideShowsWidget widget( thisWidget, doc->customSlideShows(), &doc->pages() );
+    KPrCustomSlideShowsWidget widget( this, doc->customSlideShows(), &doc->pages() );
     widget.setModal( true );
     widget.show();
     widget.raise();

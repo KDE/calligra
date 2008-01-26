@@ -72,12 +72,12 @@
          <item>
           <widget class="QLabel" name="label_3" >
            <property name="text" >
-            <string>Avaliable Slides</string>
+            <string>Available Slides</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QListWidget" name="avaliableSlidesList" />
+          <widget class="QListWidget" name="availableSlidesList" />
          </item>
          <item>
           <layout class="QHBoxLayout" >
