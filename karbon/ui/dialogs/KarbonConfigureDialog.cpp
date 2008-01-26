@@ -326,13 +326,17 @@ ConfigGridPage::ConfigGridPage( KarbonView* view, char* name )
     m_bnLinkSpacing->setChecked(link);
     hboxLayout->addWidget(m_bnLinkSpacing);
 
-    QGridLayout* gl = new QGridLayout( this );
+    QVBoxLayout *mainLayout = new QVBoxLayout( this );
+
+    QGridLayout* gl = new QGridLayout();
     gl->setSpacing( KDialog::spacingHint() );
     gl->setMargin(KDialog::marginHint());
     gl->addWidget( generalGrp, 0, 0, 1, 2 );
     gl->addItem( new QSpacerItem( 0, 0 ), 1, 1 );
     gl->addWidget( spacingGrp, 2, 0, 1, 2 );
     gl->addItem( new QSpacerItem( 0, 0 ), 4, 0, 1, 2 );
+    mainLayout->addLayout( gl );
+    mainLayout->addStretch();
 
     setValuesFromGrid( view->part()->gridData() );
 
