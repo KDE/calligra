@@ -28,8 +28,6 @@
 #include <QTabWidget>
 #include <QtGui/QTableWidgetItem>
 
-#include <KoResourceServer.h>
-#include <KoResourceServerAdapter.h>
 #include <KoAbstractGradient.h>
 #include <KoCheckerBoardPainter.h>
 
@@ -37,7 +35,7 @@ class KComboBox;
 class VGradientWidget;
 class KListWidget;
 class QPushButton;
-class KoResourceItemChooser;
+class KarbonGradientChooser;
 class KoSliderCombo;
 class KoResourceItem;
 
@@ -117,12 +115,6 @@ public:
     /// Sets the gradients opacity to @p opacity
     void setOpacity( double opacity );
 
-    /**
-     * Sets the resource server to get the predefined gradients from.
-     * @param server the new resource server to use
-     */
-    void setResourceServer( KoResourceServer<KoAbstractGradient>* server );
-
 Q_SIGNALS:
     /// Is emmited a soon as the gradient changes
     void changed();
@@ -131,16 +123,10 @@ protected Q_SLOTS:
     void combosChange( int );
     void addGradientToPredefs();
     void changeToPredef( QTableWidgetItem* );
-    void importGradient();
-    void deletePredef();
-    //void opacityChanged( int );
     void opacityChanged( double value, bool final );
     void stopsChanged();
-    void addResource(KoResource* resource);
-    void removeResource(KoResource* resource);
 
 protected:
-    virtual void resizeEvent ( QResizeEvent * event );
     void setupUI();
     void updateUI();
     void updatePredefGradients();
@@ -153,15 +139,12 @@ private:
     KComboBox        *m_gradientTarget;
     KComboBox        *m_gradientRepeat;
     KComboBox        *m_gradientType;
-    KoResourceItemChooser *m_predefGradientsView;
+    KarbonGradientChooser *m_predefGradientsView;
     QPushButton      *m_addToPredefs;
     KoSliderCombo * m_opacity;
 
     QGradient * m_gradient; /// the actual edited gradient
-    KoResourceServer<KoAbstractGradient>* m_resourceServer; ///< the predefined gradients list.
-    KoResourceServerAdapter<KoAbstractGradient> * m_resourceAdapter;
     double m_gradOpacity;    ///< the gradient opacity
-    QMap<KoResource*, KoResourceItem*> m_itemMap;
     KoCheckerBoardPainter m_checkerPainter;
 };
 

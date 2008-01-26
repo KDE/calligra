@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -21,6 +21,10 @@
 #include "KarbonStylePreview.h"
 #include "KarbonStyleButtonBox.h"
 #include "Karbon.h"
+#include <KarbonPatternChooser.h>
+#include <KarbonPatternItem.h>
+#include <KarbonGradientChooser.h>
+#include <KarbonGradientItem.h>
 
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
@@ -28,10 +32,16 @@
 #include <KoCanvasResourceProvider.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
+#include <KoUniColorChooser.h>
+#include <KoCheckerBoardPainter.h>
+#include <KoLineBorder.h>
+#include <KoShapeBorderCommand.h>
+#include <KoShapeBackgroundCommand.h>
 
 #include <klocale.h>
 
-#include <QVBoxLayout>
+#include <QtGui/QGridLayout>
+#include <QtGui/QStackedWidget>
 
 KarbonStylePreviewDocker::KarbonStylePreviewDocker( QWidget * parent )
     : QDockWidget( parent ), m_canvas(0)
@@ -39,20 +49,41 @@ KarbonStylePreviewDocker::KarbonStylePreviewDocker( QWidget * parent )
     setWindowTitle( i18n( "Styles" ) );
 
     QWidget *mainWidget = new QWidget( this );
-    QVBoxLayout * layout = new QVBoxLayout( mainWidget );
+    QGridLayout * layout = new QGridLayout( mainWidget );
 
     m_preview = new KarbonStylePreview( mainWidget );
-    layout->addWidget( m_preview );
+    layout->addWidget( m_preview, 0, 0 );
 
     m_buttons = new KarbonStyleButtonBox( mainWidget );
-    layout->addWidget( m_buttons );
+    layout->addWidget( m_buttons, 1, 0 );
 
-    layout->addStretch( 1 );
-    layout->setMargin( 1 );
-    layout->setSpacing( 1 );
+    m_stack = new QStackedWidget( mainWidget );
+    layout->addWidget( m_stack, 0, 1, 2, 1 );
+
+    layout->setColumnStretch( 0, 1 );
+    layout->setColumnStretch( 1, 3 );
+
+    m_colorChooser = new KoUniColorChooser( m_stack, true );
+    m_colorChooser->changeLayout( KoUniColorChooser::SimpleLayout );
+    m_stack->addWidget( m_colorChooser );
+
+    m_gradientChooser = new KarbonGradientChooser( m_stack );
+    m_gradientChooser->showButtons( false );
+    m_stack->addWidget( m_gradientChooser );
+
+    m_patternChooser = new KarbonPatternChooser( m_stack );
+    m_patternChooser->showButtons( false );
+    m_stack->addWidget( m_patternChooser );
 
     connect( m_preview, SIGNAL(fillSelected()), this, SLOT(fillSelected()) );
     connect( m_preview, SIGNAL(strokeSelected()), this, SLOT(strokeSelected()) );
+    connect( m_buttons, SIGNAL(buttonPressed(int)), this, SLOT(styleButtonPressed(int)));
+    connect( m_colorChooser, SIGNAL( sigColorChanged( const KoColor &) ), 
+             this, SLOT( updateColor( const KoColor &) ) );
+    connect( m_gradientChooser, SIGNAL( itemDoubleClicked( QTableWidgetItem * ) ), 
+             this, SLOT( updateGradient( QTableWidgetItem* ) ) );
+    connect( m_patternChooser, SIGNAL( itemDoubleClicked( QTableWidgetItem * ) ), 
+             this, SLOT( updatePattern( QTableWidgetItem* ) ) );
 
     setWidget( mainWidget );
 
@@ -135,6 +166,125 @@ void KarbonStylePreviewDocker::resourceChanged( int key, const QVariant& )
             break;
     }
 }
+
+void KarbonStylePreviewDocker::styleButtonPressed( int buttonId )
+{
+    switch( buttonId )
+    {
+        case KarbonStyleButtonBox::None:
+        case KarbonStyleButtonBox::Solid:
+            m_stack->setCurrentIndex( 0 );
+            break;
+        case KarbonStyleButtonBox::Gradient:
+            m_stack->setCurrentIndex( 1 );
+            break;
+        case KarbonStyleButtonBox::Pattern:
+            m_stack->setCurrentIndex( 2 );
+            break;
+    }
+}
+
+void KarbonStylePreviewDocker::updateColor( const KoColor &c )
+{
+    if( ! m_canvas )
+        return;
+
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+    if( ! selection || ! selection->count() )
+        return;
+
+    QColor color;
+    quint8 opacity;
+    c.toQColor(&color, &opacity);
+    color.setAlpha(opacity);
+
+    KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
+    int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
+
+    // check which color to set foreground == border, background == fill
+    if( activeStyle == Karbon::Foreground )
+    {
+        // get the border of the first selected shape and check if it is a line border
+        KoLineBorder * oldBorder = dynamic_cast<KoLineBorder*>( selection->firstSelectedShape()->border() );
+        KoLineBorder * newBorder = 0;
+        if( oldBorder )
+        {
+            // preserve the properties of the old border if it is a line border
+            newBorder = new KoLineBorder( *oldBorder );
+            newBorder->setColor( color );
+        }
+        else
+            newBorder = new KoLineBorder( 1.0, color );
+
+        KoShapeBorderCommand * cmd = new KoShapeBorderCommand( selection->selectedShapes(), newBorder );
+        m_canvas->addCommand( cmd );
+        m_canvas->resourceProvider()->setForegroundColor( c );
+    }
+    else
+    {
+        KoShapeBackgroundCommand *cmd = new KoShapeBackgroundCommand( selection->selectedShapes(), QBrush( color ) );
+        m_canvas->addCommand( cmd );
+        m_canvas->resourceProvider()->setBackgroundColor( c );
+    }
+}
+
+void KarbonStylePreviewDocker::updateGradient( QTableWidgetItem * item )
+{
+    if( ! item )
+        return;
+
+    KarbonGradientItem * gradientItem = dynamic_cast<KarbonGradientItem*>(item);
+    if( ! gradientItem )
+        return;
+
+    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
+    if( ! selectedShapes.count() )
+        return;
+
+    QGradient * newGradient = gradientItem->gradient()->toQGradient();
+    QBrush newBrush( *newGradient );
+    delete newGradient;
+
+    KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
+    int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
+
+    // check which color to set foreground == border, background == fill
+    if( activeStyle == Karbon::Background )
+    {
+        m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newBrush ) );
+    }
+    else
+    {
+        QList<KoShapeBorderModel*> newBorders;
+        foreach( KoShape * shape, selectedShapes )
+        {
+            KoLineBorder * border = dynamic_cast<KoLineBorder*>( shape->border() );
+            KoLineBorder * newBorder = 0;
+            if( border )
+                newBorder = new KoLineBorder( *border );
+            else
+                newBorder = new KoLineBorder( 1.0 );
+            newBorder->setLineBrush( newBrush );
+            newBorders.append( newBorder );
+        }
+        m_canvas->addCommand( new KoShapeBorderCommand( selectedShapes, newBorders ) );
+    }
+}
+
+void KarbonStylePreviewDocker::updatePattern( QTableWidgetItem * item )
+{
+    KarbonPatternItem * currentPattern = dynamic_cast<KarbonPatternItem*>(item);
+    if( ! currentPattern || ! currentPattern->pattern()->valid() )
+        return;
+
+    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
+    if( ! selectedShapes.count() )
+        return;
+
+    QBrush newBrush( currentPattern->pattern()->img() );
+    m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newBrush ) );
+}
+
 
 KarbonStylePreviewDockerFactory::KarbonStylePreviewDockerFactory()
 {

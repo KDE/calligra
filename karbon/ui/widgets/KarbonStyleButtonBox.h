@@ -47,6 +47,9 @@ public slots:
     void setFill();
     void setStroke();
 
+signals:
+    void buttonPressed( int button );
+
 private:
     void manipulateFills( int id );
     void manipulateStrokes( int id );

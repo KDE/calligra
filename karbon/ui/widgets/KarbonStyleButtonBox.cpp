@@ -342,13 +342,15 @@ void KarbonStyleButtonBox::slotButtonPressed( int id )
 {
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    if( ! selection || ! selection->count() )
-        return;
+    if( selection && selection->count() )
+    {
+        if ( m_isStrokeManipulator )
+            manipulateStrokes( id );
+        else
+            manipulateFills( id );
+    }
 
-    if ( m_isStrokeManipulator )
-        manipulateStrokes( id );
-    else
-        manipulateFills( id );
+    emit buttonPressed( id );
 }
 
 void KarbonStyleButtonBox::setStroke()

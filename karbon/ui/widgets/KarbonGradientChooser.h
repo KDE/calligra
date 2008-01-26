@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,22 +17,33 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KARBONPATTERNITEM_H
-#define KARBONPATTERNITEM_H
+#ifndef KARBONGRADIENTCHOOSER_H
+#define KARBONGRADIENTCHOOSER_H
 
 #include <KoResourceItemChooser.h>
+#include <KoAbstractGradient.h>
+#include <KoResourceServerAdapter.h>
+#include <KoCheckerBoardPainter.h>
 
-class KoPattern;
+class QResizeEvent;
 
-class KarbonPatternItem : public KoResourceItem
+class KarbonGradientChooser : public KoResourceItemChooser
 {
+    Q_OBJECT
 public:
-    KarbonPatternItem( KoPattern * pattern );
+    KarbonGradientChooser( QWidget *parent = 0 );
+    ~KarbonGradientChooser();
+private slots:
+    void addGradient(KoResource* resource);
+    void removeGradient(KoResource* resource);
+    void importGradient();
+    void deleteGradient();
+private:
+    virtual void resizeEvent ( QResizeEvent * event );
 
-    /// reimplemented from QTableWidgetItem
-    virtual QVariant data ( int role ) const;
-
-    KoPattern * pattern();
+    KoResourceServerAdapter<KoAbstractGradient> * m_resourceAdapter;
+    QMap<KoResource*, KoResourceItem*> m_itemMap;
+    KoCheckerBoardPainter m_checkerPainter;
 };
 
-#endif // KARBONPATTERNITEM_H
+#endif // KARBONGRADIENTCHOOSER_H

@@ -30,8 +30,6 @@ KarbonGradientItem::KarbonGradientItem( KoAbstractGradient * gradient, KoChecker
     : KoResourceItem( gradient ), m_checkerPainter( checkerPainter )
 {
     Q_ASSERT( gradient );
-    //setSizeHint( QSize( 200, 16 ) );
-    setIcon( QIcon( QPixmap::fromImage( thumbnail( QSize( 300, 20 ) ) ) ) );
 }
 
 QImage KarbonGradientItem::thumbnail( const QSize &thumbSize ) const
@@ -59,6 +57,10 @@ QVariant KarbonGradientItem::data( int role ) const
     if( role == KoResourceChooser::LargeThumbnailRole )
     {
         return thumbnail( QSize( 100,100 ) );
+    }
+    else if( role == Qt::DecorationRole )
+    {
+        return thumbnail( tableWidget()->iconSize() - QSize(0,2) );
     }
     else
         return QTableWidgetItem::data( role );

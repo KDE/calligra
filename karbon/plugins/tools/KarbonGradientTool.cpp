@@ -377,7 +377,6 @@ QWidget * KarbonGradientTool::createOptionWidget()
 
     m_gradientWidget = new VGradientTabWidget( optionWidget );
     m_gradientWidget->setGradient( m_gradient );
-    m_gradientWidget->setResourceServer( KoResourceServerProvider::instance()->gradientServer() );
     layout->addWidget( m_gradientWidget );
 
     connect( m_gradientWidget, SIGNAL(changed()), this, SLOT(gradientChanged()) );

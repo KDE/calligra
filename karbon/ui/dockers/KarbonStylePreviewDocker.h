@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -26,9 +26,15 @@
 
 class KarbonStylePreview;
 class KarbonStyleButtonBox;
-class QBrush;
+class KarbonPatternChooser;
+class KarbonGradientChooser;
 class KoShapeBorderModel;
 class KoCanvasBase;
+class KoUniColorChooser;
+class KoColor;
+class QBrush;
+class QStackedWidget;
+class QTableWidgetItem;
 
 class KarbonStylePreviewDocker : public QDockWidget, public KoCanvasObserver
 {
@@ -42,15 +48,25 @@ public:
 
     bool strokeIsSelected() const;
     void updateStyle( const KoShapeBorderModel * stroke, const QBrush & fill );
+
 private slots:
     void fillSelected();
     void strokeSelected();
     void selectionChanged();
     void resourceChanged( int key, const QVariant& );
+    void styleButtonPressed( int buttonId );
+    void updateColor( const KoColor &c );
+    void updateGradient( QTableWidgetItem * item );
+    void updatePattern( QTableWidgetItem * item );
+
 private:
     KarbonStylePreview * m_preview;
     KarbonStyleButtonBox * m_buttons;
+    QStackedWidget * m_stack;
     KoCanvasBase * m_canvas;
+    KoUniColorChooser * m_colorChooser;
+    KarbonGradientChooser * m_gradientChooser;
+    KarbonPatternChooser * m_patternChooser;
 };
 
 class KarbonStylePreviewDockerFactory : public KoDockFactory

@@ -24,7 +24,9 @@
 #include <KoPattern.h>
 #include <KoResourceServerAdapter.h>
 
-class KarbonPatternChooser : public KoResourceItemChooser
+#include <karbonui_export.h>
+
+class KARBONUI_EXPORT KarbonPatternChooser : public KoResourceItemChooser
 {
     Q_OBJECT
 public:

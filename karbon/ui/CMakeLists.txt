@@ -27,10 +27,13 @@ set(karbonui_SRCS
     widgets/KarbonCanvas.cpp
     widgets/vcolorslider.cc
     widgets/vgradientwidget.cc
+    widgets/KarbonGradientChooser.cpp
     widgets/KarbonGradientItem.cpp
     widgets/vgradienttabwidget.cc
     widgets/KarbonStylePreview.cpp
     widgets/KarbonStyleButtonBox.cpp
+    widgets/KarbonPatternChooser.cpp
+    widgets/KarbonPatternItem.cpp
 )
 
 

@@ -17,27 +17,23 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KARBONGRADIENTITEM_H
-#define KARBONGRADIENTITEM_H
+#ifndef KARBONPATTERNITEM_H
+#define KARBONPATTERNITEM_H
 
 #include <KoResourceItemChooser.h>
-#include <KoCheckerBoardPainter.h>
+#include <karbonui_export.h>
 
-class KoAbstractGradient;
+class KoPattern;
 
-class KarbonGradientItem : public KoResourceItem
+class KARBONUI_EXPORT KarbonPatternItem : public KoResourceItem
 {
 public:
-    KarbonGradientItem( KoAbstractGradient * gradient, KoCheckerBoardPainter * checkerPainter );
+    KarbonPatternItem( KoPattern * pattern );
 
     /// reimplemented from QTableWidgetItem
     virtual QVariant data ( int role ) const;
 
-    KoAbstractGradient * gradient();
-
-private:
-    KoCheckerBoardPainter * m_checkerPainter;
-    virtual QImage thumbnail( const QSize &thumbSize ) const;
+    KoPattern * pattern();
 };
 
-#endif // KARBONGRADIENTITEM_H
+#endif // KARBONPATTERNITEM_H
