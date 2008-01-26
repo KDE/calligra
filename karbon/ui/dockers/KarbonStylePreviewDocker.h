@@ -58,6 +58,7 @@ private slots:
     void updateColor( const KoColor &c );
     void updateGradient( QTableWidgetItem * item );
     void updatePattern( QTableWidgetItem * item );
+    void updateFillRule( Qt::FillRule fillRule );
 
 private:
     KarbonStylePreview * m_preview;

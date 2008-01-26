@@ -249,20 +249,6 @@ static const char* const buttonwinding[]={
 #include "KarbonStyleButtonBox.h"
 #include "KarbonPart.h"
 
-#include <KoCanvasBase.h>
-#include <KoCanvasController.h>
-#include <KoToolManager.h>
-#include <KoSelection.h>
-#include <KoShapeManager.h>
-#include <KoShapeBackgroundCommand.h>
-#include <KoShapeBorderCommand.h>
-#include <KoCanvasResourceProvider.h>
-#include <KoShapeBorderModel.h>
-#include <KoLineBorder.h>
-#include <KoColor.h>
-#include <KoPathFillRuleCommand.h>
-#include <KoPathShape.h>
-
 #include <klocale.h>
 
 #include <QtGui/QPixmap>
@@ -272,7 +258,7 @@ static const char* const buttonwinding[]={
 #include <QtGui/QGridLayout>
 
 KarbonStyleButtonBox::KarbonStyleButtonBox( QWidget* parent )
-    : QFrame( parent ), m_isStrokeManipulator( false )
+    : QFrame( parent )
 {
     setFrameStyle( QFrame::GroupBoxPanel | QFrame::Sunken );
     setMinimumSize( 45, 70 );
@@ -335,111 +321,19 @@ KarbonStyleButtonBox::KarbonStyleButtonBox( QWidget* parent )
 
     m_group = group;
 
-    connect( group, SIGNAL( buttonClicked( int ) ), this, SLOT( slotButtonPressed( int ) ) );
-}
-
-void KarbonStyleButtonBox::slotButtonPressed( int id )
-{
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    if( selection && selection->count() )
-    {
-        if ( m_isStrokeManipulator )
-            manipulateStrokes( id );
-        else
-            manipulateFills( id );
-    }
-
-    emit buttonPressed( id );
+    connect( group, SIGNAL( buttonClicked( int ) ), this, SIGNAL( buttonPressed( int ) ) );
 }
 
 void KarbonStyleButtonBox::setStroke()
 {
-    m_isStrokeManipulator = true;
     m_group->button( EvenOdd )->setEnabled( false );
     m_group->button( Winding )->setEnabled( false );
 }
 
 void KarbonStyleButtonBox::setFill()
 {
-    m_isStrokeManipulator = false;
     m_group->button( EvenOdd )->setEnabled( true );
     m_group->button( Winding )->setEnabled( true );
-}
-
-bool KarbonStyleButtonBox::isStrokeManipulator() const
-{
-    return m_isStrokeManipulator;
-}
-
-void KarbonStyleButtonBox::manipulateFills( int id )
-{
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-
-    QUndoCommand * cmd = 0;
-
-    switch( id )
-    {
-        case None:
-            cmd = new KoShapeBackgroundCommand( selection->selectedShapes(), QBrush() );
-            break;
-        case Solid:
-        {
-            QBrush fill = QBrush( canvasController->canvas()->resourceProvider()->backgroundColor().toQColor() );
-            cmd = new KoShapeBackgroundCommand( selection->selectedShapes(), fill );
-            break;
-        }
-        case Gradient:
-            //m_fill.setType( VFill::grad );
-            break;
-        case Pattern:
-            //m_fill.setType( VFill::patt );
-            break;
-        case EvenOdd:
-        case Winding:
-        {
-            Qt::FillRule fillRule = id == EvenOdd ? Qt::OddEvenFill : Qt::WindingFill;
-            QList<KoPathShape*> shapes;
-            foreach( KoShape * shape, selection->selectedShapes() )
-            {
-                KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
-                if( path && path->fillRule() != fillRule )
-                    shapes.append( path );
-            }
-            if( shapes.count() )
-                cmd = new KoPathFillRuleCommand( shapes, fillRule );
-            break;
-        }
-    }
-    if( cmd )
-        canvasController->canvas()->addCommand( cmd );
-}
-
-void KarbonStyleButtonBox::manipulateStrokes( int id )
-{
-    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
-    // TODO get the actual border stroke from the ResourceProvider
-    KoShapeBorderModel * border = 0;
-    switch( id )
-    {
-        case None:
-        break;
-        case Solid:
-        {
-            QColor color = canvasController->canvas()->resourceProvider()->foregroundColor().toQColor();
-            border = new KoLineBorder( 1.0, color );
-            break;
-        }
-        case Gradient:
-            //m_stroke.setType( VStroke::grad );
-            break;
-        case Pattern:
-            //m_stroke.setType( VStroke::patt );
-            break;
-    }
-    KoSelection *selection = canvasController->canvas()->shapeManager()->selection();
-    canvasController->canvas()->addCommand( new KoShapeBorderCommand( selection->selectedShapes(), border ) );
 }
 
 #include "KarbonStyleButtonBox.moc"

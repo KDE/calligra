@@ -40,21 +40,15 @@ public:
     };
 
     KarbonStyleButtonBox( QWidget* parent = 0L );
-    bool isStrokeManipulator() const;
 
 public slots:
-    void slotButtonPressed( int id );
     void setFill();
     void setStroke();
 
 signals:
-    void buttonPressed( int button );
+    void buttonPressed( int buttonId );
 
 private:
-    void manipulateFills( int id );
-    void manipulateStrokes( int id );
-
-    bool m_isStrokeManipulator; ///< are we manipulating stroke or fill ?
     QButtonGroup * m_group;
 };
 
