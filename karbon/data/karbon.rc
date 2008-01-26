@@ -95,10 +95,11 @@
   		<Action name="configure" group="settings_configure"/>
 	</Menu>
 	</MenuBar>
-	<ToolBar name="edit_toolbar" fullWidth="false">
+	<ToolBar name="edit_toolbar" position="top">
 		<Text>Edit</Text>
 		<Action name="edit_undo"/>
 		<Action name="edit_redo"/>
+                <Separator/>
 		<Action name="edit_cut"/>
 		<Action name="edit_copy"/>
 		<Action name="edit_paste"/>
