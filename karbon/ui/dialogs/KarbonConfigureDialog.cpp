@@ -58,12 +58,12 @@ KarbonConfigureDialog::KarbonConfigureDialog( KarbonView* parent )
     m_interfacePage = new ConfigInterfacePage( parent );
     KPageWidgetItem* item = addPage( m_interfacePage, i18n( "Interface" ) );
     item->setHeader( i18n( "Interface" ) );
-    item->setIcon(KIcon(BarIcon("misc", KIconLoader::SizeMedium)));
+    item->setIcon(KIcon(BarIcon("preferences-desktop-theme", KIconLoader::SizeMedium)));
 
     m_miscPage = new ConfigMiscPage( parent );
     item = addPage( m_miscPage, i18n( "Misc" ) );
     item->setHeader( i18n( "Misc" ) );
-    item->setIcon(KIcon(BarIcon("misc", KIconLoader::SizeMedium)));
+    item->setIcon(KIcon(BarIcon("preferences-other", KIconLoader::SizeMedium)));
 
     m_gridPage = new ConfigGridPage( parent );
     item = addPage( m_gridPage, i18n( "Grid" ) );
@@ -75,7 +75,7 @@ KarbonConfigureDialog::KarbonConfigureDialog( KarbonView* parent )
     m_defaultDocPage = new ConfigDefaultPage( parent );
     item = addPage( m_defaultDocPage, i18nc( "@title:tab Document settings page", "Document" ) );
     item->setHeader( i18n( "Document Settings" ) );
-    item->setIcon(KIcon(BarIcon("document", KIconLoader::SizeMedium)));
+    item->setIcon(KIcon(BarIcon("document-properties", KIconLoader::SizeMedium)));
 
     connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
     connect( this, SIGNAL( defaultClicked() ), this, SLOT( slotDefault() ) );
@@ -136,18 +136,21 @@ ConfigInterfacePage::ConfigInterfacePage( KarbonView* view, char* name )
     m_showStatusBar->setChecked( oldShowStatusBar );
     grpLayout->addWidget( m_showStatusBar );
 
-    m_recentFiles = new KIntNumInput( m_oldRecentFiles, tmpQGroupBox );
+    m_recentFiles = new KIntNumInput( tmpQGroupBox );
     m_recentFiles->setRange( 1, 20, 1 );
+    m_recentFiles->setValue( m_oldRecentFiles );
     m_recentFiles->setLabel( i18n( "Number of recent files:" ) );
     grpLayout->addWidget( m_recentFiles );
 
     m_copyOffset = new KIntNumInput( m_oldCopyOffset, tmpQGroupBox );
     m_copyOffset->setRange( 1, 50, 1 );
+    m_copyOffset->setValue( m_oldCopyOffset );
     m_copyOffset->setLabel( i18n( "Copy offset:" ) );
     grpLayout->addWidget( m_copyOffset );
 
-    m_dockerFontSize = new KIntNumInput( m_oldDockerFontSize, tmpQGroupBox );
+    m_dockerFontSize = new KIntNumInput( tmpQGroupBox );
     m_dockerFontSize->setRange( 5, 20, 1 );
+    m_dockerFontSize->setValue( m_oldDockerFontSize );
     m_dockerFontSize->setLabel( i18n( "Palette font size:" ) );
     grpLayout->addWidget( m_dockerFontSize );
     grpLayout->addStretch();
