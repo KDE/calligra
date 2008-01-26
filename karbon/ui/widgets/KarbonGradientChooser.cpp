@@ -95,4 +95,10 @@ void KarbonGradientChooser::resizeEvent ( QResizeEvent * event )
     setIconSize( newSize );
 }
 
+void KarbonGradientChooser::showEvent( QShowEvent * event )
+{
+    QSize newSize( viewportSize().width(), iconSize().height() );
+    setIconSize( newSize );
+}
+
 #include "KarbonGradientChooser.moc"

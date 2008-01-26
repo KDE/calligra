@@ -40,6 +40,7 @@ private slots:
     void deleteGradient();
 private:
     virtual void resizeEvent ( QResizeEvent * event );
+    virtual void showEvent ( QShowEvent * event );
 
     KoResourceServerAdapter<KoAbstractGradient> * m_resourceAdapter;
     QMap<KoResource*, KoResourceItem*> m_itemMap;
