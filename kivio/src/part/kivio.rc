@@ -40,4 +40,14 @@
       <Seperator/>
       <Action name="edit_delete"/>
   </Menu>
+	<ToolBar name="edit_toolbar" position="top">
+		<Text>Edit</Text>
+		<Action name="edit_undo"/>
+		<Action name="edit_redo"/>
+                <Separator/>
+		<Action name="edit_cut"/>
+		<Action name="edit_copy"/>
+		<Action name="edit_paste"/>
+		<Action name="edit_delete"/>
+	</ToolBar>
 </kpartgui>
