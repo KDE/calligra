@@ -87,9 +87,9 @@ public:
         QPointF q[4] =
         {
             p1->point(),
-                      p1->activeControlPoint2() ? p1->controlPoint2() : p1->point(),
-                                              p2->activeControlPoint1() ? p2->controlPoint1() : p2->point(),
-                                                      p2->point()
+            p1->activeControlPoint2() ? p1->controlPoint2() : p1->point(),
+            p2->activeControlPoint1() ? p2->controlPoint1() : p2->point(),
+            p2->point()
         };
 
         QPointF p[3];
