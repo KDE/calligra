@@ -25,6 +25,7 @@
 #include <KarbonPatternItem.h>
 #include <KarbonGradientChooser.h>
 #include <KarbonGradientItem.h>
+#include <KarbonGradientHelper.h>
 
 #include <KoToolManager.h>
 #include <KoCanvasBase.h>
@@ -284,7 +285,10 @@ void KarbonStylePreviewDocker::updateGradient( QTableWidgetItem * item )
         return;
 
     QGradient * newGradient = gradientItem->gradient()->toQGradient();
-    QBrush newBrush( *newGradient );
+    if( ! newGradient )
+        return;
+
+    QGradientStops newStops = newGradient->stops();
     delete newGradient;
 
     KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
@@ -293,20 +297,35 @@ void KarbonStylePreviewDocker::updateGradient( QTableWidgetItem * item )
     // check which color to set foreground == border, background == fill
     if( activeStyle == Karbon::Background )
     {
-        m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newBrush ) );
+        QUndoCommand * firstCommand = 0;
+        foreach( KoShape * shape, selectedShapes )
+        {
+            QBrush brush = KarbonGradientHelper::applyGradientStops( shape, newStops, true );
+            if( brush.style() == Qt::NoBrush )
+                continue;
+            if( ! firstCommand )
+                firstCommand = new KoShapeBackgroundCommand( shape, brush );
+            else
+                new KoShapeBackgroundCommand( shape, brush, firstCommand );
+        }
+        m_canvas->addCommand( firstCommand );
     }
     else
     {
         QList<KoShapeBorderModel*> newBorders;
         foreach( KoShape * shape, selectedShapes )
         {
+            QBrush brush = KarbonGradientHelper::applyGradientStops( shape, newStops, false );
+            if( brush.style() == Qt::NoBrush )
+                continue;
+
             KoLineBorder * border = dynamic_cast<KoLineBorder*>( shape->border() );
             KoLineBorder * newBorder = 0;
             if( border )
                 newBorder = new KoLineBorder( *border );
             else
                 newBorder = new KoLineBorder( 1.0 );
-            newBorder->setLineBrush( newBrush );
+            newBorder->setLineBrush( brush );
             newBorders.append( newBorder );
         }
         m_canvas->addCommand( new KoShapeBorderCommand( selectedShapes, newBorders ) );

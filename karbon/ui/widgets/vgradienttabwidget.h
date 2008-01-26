@@ -148,7 +148,4 @@ private:
     KoCheckerBoardPainter m_checkerPainter;
 };
 
-/// helper function to clone a gradient
-KARBONUI_EXPORT QGradient * cloneGradient( const QGradient * gradient );
-
 #endif /* _VGRADIENTTABWIDGET_H_ */

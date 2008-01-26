@@ -23,6 +23,7 @@
 #include "vgradientwidget.h"
 #include "KarbonGradientItem.h"
 #include "KarbonGradientChooser.h"
+#include "KarbonGradientHelper.h"
 
 #include <KoAbstractGradient.h>
 #include <KoStopGradient.h>
@@ -49,44 +50,6 @@
 #include <QtGui/QConicalGradient>
 
 #include <math.h>
-
-/// helper function to clone a gradient
-QGradient * cloneGradient( const QGradient * gradient )
-{
-    if( ! gradient )
-        return 0;
-
-    QGradient * clone = 0;
-
-    switch( gradient->type() )
-    {
-        case QGradient::LinearGradient:
-        {
-            const QLinearGradient * lg = static_cast<const QLinearGradient*>( gradient );
-            clone = new QLinearGradient( lg->start(), lg->finalStop() );
-            break;
-        }
-        case QGradient::RadialGradient:
-        {
-            const QRadialGradient * rg = static_cast<const QRadialGradient*>( gradient );
-            clone = new QRadialGradient( rg->center(), rg->radius(), rg->focalPoint() );
-            break;
-        }
-        case QGradient::ConicalGradient:
-        {
-            const QConicalGradient * cg = static_cast<const QConicalGradient*>( gradient );
-            clone = new QConicalGradient( cg->center(), cg->angle() );
-            break;
-        }
-        default:
-            return 0;
-    }
-
-    clone->setSpread( gradient->spread() );
-    clone->setStops( gradient->stops() );
-
-    return clone;
-}
 
 void transferGradientPosition( const QGradient * srcGradient, QGradient * dstGradient )
 {
@@ -211,7 +174,7 @@ VGradientPreview::~VGradientPreview()
 void VGradientPreview::setGradient( const QGradient *gradient )
 {
     delete m_gradient;
-    m_gradient = cloneGradient( gradient );
+    m_gradient = KarbonGradientHelper::cloneGradient( gradient );
 
     switch( m_gradient->type() )
     {
@@ -427,7 +390,7 @@ const QGradient * VGradientTabWidget::gradient()
 void VGradientTabWidget::setGradient( const QGradient* gradient )
 {
     delete m_gradient;
-    m_gradient = cloneGradient( gradient );
+    m_gradient = KarbonGradientHelper::cloneGradient( gradient );
 
     updateUI();
 }

@@ -23,6 +23,7 @@
 
 #include <vgradienttabwidget.h>
 #include <KarbonCursor.h>
+#include <KarbonGradientHelper.h>
 
 #include <KoShape.h>
 #include <KoCanvasBase.h>
@@ -332,7 +333,7 @@ void KarbonGradientTool::initialize()
     m_gradients.first()->setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
     delete m_gradient;
     GradientStrategy * strategy = m_gradients.first();
-    m_gradient = cloneGradient( strategy->gradient() );
+    m_gradient = KarbonGradientHelper::cloneGradient( strategy->gradient() );
     if( m_gradientWidget )
     {
         m_gradientWidget->setGradient( m_gradient );
