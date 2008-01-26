@@ -23,33 +23,26 @@
 
 #include<KoPAPageBase.h>
 #include"KPrCustomSlideShowsWidget.h"
-#include"../KPrCustomSlideShows.h"
+#include"KPrCustomSlideShows.h"
 
-KPrCustomSlideShowsWidget::KPrCustomSlideShowsWidget( QWidget *parent, 
-                                                      KPrCustomSlideShows *slideShows,
+KPrCustomSlideShowsWidget::KPrCustomSlideShowsWidget( QWidget *parent, KPrCustomSlideShows *slideShows,
                                                       QList<KoPAPageBase*> *allPages )
-: QDialog(parent), m_slideShows(slideShows)
+: QDialog(parent)
+, m_slideShows(slideShows)
 {
+    m_uiWidget.setupUi( this );
     m_uiWidget.customSlideShowsList->addItems( QStringList( m_slideShows->customSlideShowsNames() ));
     const int pagesCount= allPages->count();
-    for( int i=0; i<=pagesCount; ++i ) {
-            QListWidgetItem(
-                QIcon(),
-                m_slideShows->customSlideShowsNames().at( i ),
-                m_uiWidget.avaliableSlidesList );
+    if( m_slideShows->customSlideShowsNames().count() != 0 )
+    {
+        for( int i=0; i<pagesCount; ++i ) {
+            QListWidgetItem( QIcon(), m_slideShows->customSlideShowsNames().at( i ), m_uiWidget.avaliableSlidesList );
+        }
     }
-//         const unsigned int slideShowsCount( allPages->count() );
-//     for( int i=0; i<=slideShowsCount; ++i ) {
-//         m_uiWidget.currentSlideshowSlidesList.insertItem(
-//             QListWidgetItem(
-//                 m_slideShows->customSlideShowsNames().at( i ),
-//                 QIcon() );
-//     }
 }
 
 KPrCustomSlideShowsWidget::~KPrCustomSlideShowsWidget()
 {
-    delete m_slideShows;
 }
 
 #include "KPrCustomSlideShowsWidget.moc"

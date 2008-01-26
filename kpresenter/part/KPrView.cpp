@@ -17,8 +17,6 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-#include<kdialog.h>
-
 #include "KPrView.h"
 
 #include <klocale.h>
@@ -88,7 +86,7 @@ void KPrView::initActions()
     actionCollection()->addAction( "edit_createanimation", m_actionCreateAnimation );
     connect( m_actionCreateAnimation, SIGNAL( activated() ), this, SLOT( createAnimation() ) );
 
-    m_actionCreateCustomSlideShowsDialog = new KAction( i18n( "Edit custom slideshows..." ), this );
+    m_actionCreateCustomSlideShowsDialog = new KAction( i18n( "Edit Custom Slide Shows..." ), this );
     actionCollection()->addAction( "edit_customslideshows", m_actionCreateCustomSlideShowsDialog );
     connect( m_actionCreateCustomSlideShowsDialog, SIGNAL( activated() ), this, SLOT( dialogCustomSlideShows() ) );
 }
@@ -117,8 +115,10 @@ void KPrView::createAnimation()
 void KPrView::dialogCustomSlideShows()
 {
     KPrDocument *doc = dynamic_cast<KPrDocument *>( m_doc );
-    
-    KPrCustomSlideShowsWidget widget( (QWidget*) this, doc->customSlideShows(), &doc->pages() );
+    QWidget * thisWidget = dynamic_cast<QWidget *>( this );
+    Q_ASSERT( thisWidget );
+    KPrCustomSlideShowsWidget widget( thisWidget, doc->customSlideShows(), &doc->pages() );
+    widget.setModal( true );
     widget.show();
     widget.raise();
     widget.activateWindow();

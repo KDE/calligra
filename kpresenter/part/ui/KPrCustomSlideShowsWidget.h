@@ -21,29 +21,26 @@
 #define KPRCUSTOMSLIDESHOWSWIDGET_H
 
 #include <QtGui/QDialog>
-#include <QObject>
-
-#include <KoPAPageBase.h>
 
 #include "ui_KPrCustomSlideShowsWidget.h"
 
-class KPrCustomSlideShows;  
+class KPrCustomSlideShows;
+class KoPAPageBase;
 
-class KPrCustomSlideShowsWidget : public QDialog {
+class KPrCustomSlideShowsWidget : public QDialog
+{
     Q_OBJECT
-    
-    public:
-        KPrCustomSlideShowsWidget( QWidget *parent, 
-                                   KPrCustomSlideShows *slideShows,
-                                   QList<KoPAPageBase*> *allPages );
-        ~KPrCustomSlideShowsWidget();
-    private Q_SLOTS:
-        //void changedSelectedSlideshow();
+
+public:
+    KPrCustomSlideShowsWidget( QWidget *parent, KPrCustomSlideShows *slideShows, QList<KoPAPageBase*> *allPages );
+    ~KPrCustomSlideShowsWidget();
+private Q_SLOTS:
+//     void changedSelectedSlideshow();
 
 //     Q_SIGNALS:
-    private:
-            Ui::CustomSlideShowsWidget m_uiWidget;
-            KPrCustomSlideShows *m_slideShows;
+private:
+        Ui::CustomSlideShowsWidget m_uiWidget;
+        KPrCustomSlideShows *m_slideShows;
 
 };
 #endif
