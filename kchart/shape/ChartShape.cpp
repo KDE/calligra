@@ -137,7 +137,7 @@ public:
     bool                       takeOwnershipOfModel;
 
     // We can rerender faster if we cache KDChart's output
-    QPixmap  pixmap;
+    QImage   pixmap;
     QPointF  lastZoomLevel;
     QSizeF   lastSize;
     bool     pixmapRepaintRequested;
@@ -254,6 +254,7 @@ void ChartShape::refreshPixmap( QPainter &painter, const KoViewConverter &conver
     // Copy the painter's render hints, such as antialiasing
     QPainter pixmapPainter( &d->pixmap );
     pixmapPainter.setRenderHints( painter.renderHints() );
+    pixmapPainter.setRenderHint( QPainter::Antialiasing, false );
 
     // Paint the background
     pixmapPainter.fillRect( paintRect, KApplication::palette().base() );
@@ -319,7 +320,8 @@ void ChartShape::setChartDefaults()
 void ChartShape::setDiagramDefaults( OdfChartType type  /* = LastChartType */ )
 {
     if ( type != LineChartType && type != ScatterChartType )
-        d->diagram->setPen( QPen( Qt::black, 0.4 ) );
+        d->diagram->setPen( QPen( Qt::black, 0 ) );
+    d->diagram->setAntiAliasing( false );
 
     // Set Grid attributes.
     switch ( type ) {
@@ -828,7 +830,7 @@ void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
     }
 
     // Paint the cached pixmap
-    painter.drawPixmap( 0, 0, d->pixmap );
+    painter.drawImage( 0, 0, d->pixmap );
 }
 
 
