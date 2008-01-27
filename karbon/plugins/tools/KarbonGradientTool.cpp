@@ -61,6 +61,7 @@ KarbonGradientTool::KarbonGradientTool(KoCanvasBase *canvas)
 , m_gradientWidget( 0 )
 , m_currentCmd( 0 )
 {
+    connect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
 }
 
 KarbonGradientTool::~KarbonGradientTool()
