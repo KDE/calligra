@@ -11,6 +11,7 @@ Name[tr]=Kpresenter
 Name[x-test]=xxKPresenterxx
 Exec=kpresenter %u
 GenericName=Presentation
+GenericName[ca]=Presentació
 GenericName[el]=Παρουσίαση
 GenericName[es]=Presentación
 GenericName[et]=Esitlus

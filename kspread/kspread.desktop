@@ -7,6 +7,7 @@ Name[sv]=Kspread
 Name[x-test]=xxKSpreadxx
 Exec=kspread %u
 GenericName=Spreadsheet
+GenericName[ca]=Full de càlcul
 GenericName[el]=Λογιστικό φύλλο
 GenericName[es]=Hoja de cálculo
 GenericName[et]=Tabelitöötlus

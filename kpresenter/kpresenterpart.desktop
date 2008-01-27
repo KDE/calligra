@@ -17,6 +17,7 @@ X-KDE-NativeMimeType=application/vnd.oasis.opendocument.presentation
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.presentation
 X-KDE-ExtraNativeMimeTypes=application/x-kpresenter,application/vnd.oasis.opendocument.presentation-template
 GenericName=Presentation
+GenericName[ca]=Presentació
 GenericName[el]=Παρουσίαση
 GenericName[es]=Presentación
 GenericName[et]=Esitlus

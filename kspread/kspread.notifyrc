@@ -6,6 +6,7 @@ Name[ne]=केडीई स्प्रेड
 Name[sv]=Kspread
 Name[x-test]=xxKSpreadxx
 Comment=KSpread Spreadsheet
+Comment[ca]=Full de càlcul KSpread
 Comment[el]=Λογιστικό φύλλο του KSpread
 Comment[es]=Hoja de cálculo KSpread
 Comment[et]=KSpreadi tabelitöötlus
@@ -23,6 +24,7 @@ Version=4
 
 [Event/DocumentLoaded]
 Name=Document loaded
+Name[ca]=Document carregat
 Name[el]=Το έγγραφο φορτώθηκε
 Name[es]=Documento cargado
 Name[et]=Dokument laaditud
@@ -38,6 +40,7 @@ Name[uk]=Документ завантажено
 Name[x-test]=xxDocument loadedxx
 Name[zh_TW]=文件已載入
 Comment=A document was loaded
+Comment[ca]=S'ha carregat un document
 Comment[el]=Ένα έγγραφο φορτώθηκε
 Comment[es]=Se ha cargado un documento
 Comment[et]=Laaditi dokument
@@ -56,6 +59,7 @@ Action=None
 
 [Event/DocumentSaved]
 Name=Document saved
+Name[ca]=Document desat
 Name[el]=Το έγγραφο αποθηκεύτηκε
 Name[es]=Documento guardado
 Name[et]=Dokument salvestatud
@@ -71,6 +75,7 @@ Name[uk]=Документ збережено
 Name[x-test]=xxDocument savedxx
 Name[zh_TW]=文件已儲存
 Comment=A document was saved
+Comment[ca]=S'ha desat un document
 Comment[el]=Ένα έγγραφο αποθηκεύτηκε
 Comment[es]=Se ha guardado un documento
 Comment[et]=Salvestati dokument
@@ -89,6 +94,7 @@ Action=None
 
 [Event/LinkActivated]
 Name=Link activated
+Name[ca]=Enllaç activat
 Name[el]=Ο δεσμός ενεργοποιήθηκε
 Name[es]=Enlace activado
 Name[et]=Link aktiveeritud
@@ -104,6 +110,7 @@ Name[uk]=Посилання активовано
 Name[x-test]=xxLink activatedxx
 Name[zh_TW]=連結已啟動
 Comment=A hyperlink was activated
+Comment[ca]=S'ha activat un hiperenllaç
 Comment[el]=Ένας υπερδεσμός ενεργοποιήθηκε
 Comment[es]=Se ha activado un hiperenlace
 Comment[et]=Aktiveeriti hüperlink
@@ -122,6 +129,7 @@ Action=None
 
 [Event/ValidityError]
 Name=Validity failed
+Name[ca]=Ha fallat la validació
 Name[el]=Ο έλεγχος εγκυρότητας απέτυχε
 Name[es]=Validez fallida
 Name[et]=Kontroll nurjus
@@ -135,6 +143,7 @@ Name[uk]=Перевірка зазнала невдачі
 Name[x-test]=xxValidity failedxx
 Name[zh_TW]=正確性檢查失敗
 Comment=Validation for a cell failed
+Comment[ca]=Ha fallat la validació d'una cel·la
 Comment[el]=Ο έλεγχος εγκυρότητας ενός κελιού απέτυχε
 Comment[es]=Ha fallado la validación de la celda
 Comment[et]=Lahtri valideerimine nurjus

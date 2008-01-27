@@ -4,6 +4,7 @@ Name=PostgreSQL
 Name[ne]=पोस्टग्रे SQL
 Name[x-test]=xxPostgreSQLxx
 Comment=Kexi database driver for accessing PostgreSQL servers
+Comment[ca]=Controlador de bases de dades Kexi per a accedir a servidors PostgresSQL
 Comment[el]=Οδηγός βάσης δεδομένων του Kexi για πρόσβαση σε εξυπηρετητές PostgreSQL
 Comment[es]=Controlador de bases de datos de Kexi para acceder a servidores PostgreSQL
 Comment[et]=Kexi andmebaasidraiver PostgreSQL serverite kasutamiseks

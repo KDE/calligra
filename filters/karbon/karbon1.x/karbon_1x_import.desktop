@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Karbon 1.x Import Filter
+Name[ca]=Filtre d'importació Karbon 1.x
 Name[de]=Karbon 1.x Importfilter
 Name[el]=Φίλτρο εισαγωγής του Karbon 1.x
 Name[eo]=Karbon-1.x-importfiltrilo
