@@ -3291,13 +3291,18 @@ bool Connection::updateRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
 	sqlset.reserve(1024);
 	sqlwhere.reserve(1024);
 	KexiDB::RowEditBuffer::DBMap b = buf.dbBuffer();
+
+	//gather the fields which are updated ( have values in RowEditBuffer)
+	FieldList affectedFields;
 	for (KexiDB::RowEditBuffer::DBMap::ConstIterator it=b.constBegin();it!=b.constEnd();++it) {
 		if (it.key()->field->table()!=mt)
 			continue; // skip values for fields outside of the master table (e.g. a "visible value" of the lookup field)
 		if (!sqlset.isEmpty())
 			sqlset+=",";
-		sqlset += (escapeIdentifier(it.key()->field->name()) + "=" +
-			m_driver->valueToSQL(it.key()->field, it.value()));
+		Field* currentField = it.key()->field;
+		affectedFields.addField(currentField);
+		sqlset += (escapeIdentifier(currentField->name()) + "=" +
+			m_driver->valueToSQL(currentField, it.value()));
 	}
 	if (pkey) {
 		const QVector<int> pkeyFieldsOrder( query.pkeyFieldsOrder() );
@@ -3334,13 +3339,13 @@ bool Connection::updateRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
 	KexiDBDbg << " -- SQL == " << ((m_sql.length() > 400) ? (m_sql.left(400)+"[.....]") : m_sql) << endl;
 
         // preprocessing before update
-        if ( !drv_beforeUpdate( mt->name(), query ) )
+        if ( !drv_beforeUpdate( mt->name(), affectedFields ) )
             return false;
 
         bool res = executeSQL( m_sql );
 
         // postprocessing after update
-        if ( !drv_afterUpdate( mt->name(), query ) )
+        if ( !drv_afterUpdate( mt->name(), affectedFields ) )
             return false;
 
 	if (!res) {
@@ -3397,6 +3402,9 @@ bool Connection::insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
 		}
 	}
 
+	//collect fields which have values in RowEditBuffer
+	FieldList affectedFields;
+
 	if (b.isEmpty()) {
 		// empty row inserting requested:
 		if (!getROWID && !pkey) {
@@ -3429,6 +3437,7 @@ bool Connection::insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
 		}
 		sqlcols += escapeIdentifier(anyField->name());
 		sqlvals += m_driver->valueToSQL(anyField,QVariant()/*NULL*/);
+		affectedFields.addField(anyField);
 	}
 	else {
 		// non-empty row inserting requested:
@@ -3439,21 +3448,23 @@ bool Connection::insertRow(QuerySchema &query, RecordData& data, RowEditBuffer& 
 				sqlcols+=",";
 				sqlvals+=",";
 			}
-			sqlcols += escapeIdentifier(it.key()->field->name());
-			sqlvals += m_driver->valueToSQL(it.key()->field, it.value());
+			Field* currentField = it.key()->field;
+			affectedFields.addField(currentField);
+			sqlcols += escapeIdentifier(currentField->name());
+			sqlvals += m_driver->valueToSQL(currentField, it.value());
 		}
 	}
 	m_sql += (sqlcols + ") VALUES (" + sqlvals + ")");
 //	KexiDBDbg << " -- SQL == " << m_sql << endl;
 
         // do driver specific pre-processing
-	if ( !drv_beforeInsert( mt->name(), query) )
+	if ( !drv_beforeInsert( mt->name(), affectedFields) )
 		return false;
 
 	bool res = executeSQL(m_sql);
 
 	// do driver specific post-processing
-	if ( !drv_afterInsert( mt->name(), query) )
+	if ( !drv_afterInsert( mt->name(), affectedFields) )
 		return false;
 
 	if (!res) {
