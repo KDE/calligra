@@ -34,7 +34,7 @@
 SimpleTextShape::SimpleTextShape()
     : m_text( i18n( "Simple Text" ) ), m_font( "ComicSans", FROM_PS_SIZE(20) )
     , m_path(0), m_startOffset(0.0), m_baselineOffset(0.0)
-    , m_textAnchor( AnchorStart )
+    , m_textAnchor( AnchorStart ), m_textCursor( - 1 )
 {
     setShapeId( SimpleTextShapeID );
     cacheGlyphOutlines();
@@ -59,13 +59,28 @@ void SimpleTextShape::paint(QPainter &painter, const KoViewConverter &converter)
     painter.setFont( m_font );
     painter.setBrush( background() );
     painter.drawPath( outline() );
+    if ( m_textCursor > -1 ) {
+        if( isOnPath() ) {
+        } else {
+            QFontMetrics metrics( m_font );
+	    int x = 1;
+	    if ( m_text.length() == m_textCursor ) {
+                x = outline().boundingRect().width();
+	    } else if ( m_textCursor > 0 ) {
+                int w = metrics.width( m_text.left( m_textCursor + 1 ) );
+	        int w2 = metrics.charWidth( m_text, m_textCursor );
+	        x = w - w2;
+	    }
+            painter.fillRect( x - 1, 1, 1, size().height() - 1, Qt::black );
+	}
+    }
 }
 
 void SimpleTextShape::paintDecorations(QPainter &/*painter*/, const KoViewConverter &/*converter*/, const KoCanvasBase * /*canvas*/)
 {
 }
 
-void SimpleTextShape::saveOdf(KoShapeSavingContext & /*context*/) const
+void SimpleTextShape::saveOdf(KoShapeSavingContext &/*context*/) const
 {
     // TODO
 }
@@ -304,10 +319,63 @@ const KoPathShape * SimpleTextShape::baselineShape() const
     return m_path;
 }
 
+void SimpleTextShape::enableTextCursor( bool enable )
+{
+    if ( enable ) {
+        setTextCursorInternal( text().length() );
+    } else {
+        setTextCursorInternal( -1 );
+    }
+}
+
+void SimpleTextShape::setTextCursor( int textCursor )
+{
+    if ( m_textCursor == textCursor || textCursor < 0 || textCursor > m_text.length() )
+        return;
+
+    setTextCursorInternal( textCursor);
+}
+
+void SimpleTextShape::setTextCursorInternal( int textCursor )
+{
+    update();
+    m_textCursor = textCursor;
+    update();
+}
+
+void SimpleTextShape::removeFromTextCursor( unsigned int nr )
+{
+    if ( m_textCursor > 0 && m_textCursor >= nr ) {
+        update();
+	m_textCursor -= nr;
+        m_text.remove( m_textCursor, nr );
+        cacheGlyphOutlines();
+        updateSizeAndPosition();
+        update();
+    }
+}
+
+void SimpleTextShape::addToTextCursor( const QString &str )
+{
+    if ( !str.isEmpty() && m_textCursor > -1 ) {
+        int oldTextCursor = m_textCursor;
+        for ( int i = 0;i < str.length();i++ ) {
+            if ( str[i].isPrint() )
+                m_text.insert( m_textCursor++, str[i] );
+        }
+        if ( oldTextCursor < m_textCursor ) {
+            update();
+            cacheGlyphOutlines();
+            updateSizeAndPosition();
+            update();
+        }
+    }
+}
+
 void SimpleTextShape::updateSizeAndPosition()
 {
     // the actual position
-    QPointF position = absolutePosition( KoFlake::TopLeftCorner );
+//    QPointF position = absolutePosition( KoFlake::TopLeftCorner );
 
     createOutline();
 

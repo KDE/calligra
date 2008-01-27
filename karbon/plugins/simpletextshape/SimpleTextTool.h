@@ -49,6 +49,8 @@ public:
     virtual void deactivate();
     /// reimplemented
     virtual QWidget *createOptionWidget();
+    /// reimplemented
+    virtual void keyPressEvent(QKeyEvent *event);
 
 private slots:
     void attachPath();

@@ -32,6 +32,7 @@
 #include <QGridLayout>
 #include <QToolButton>
 #include <QCheckBox>
+#include <QPainter>
 
 SimpleTextTool::SimpleTextTool(KoCanvasBase *canvas)
     : KoTool(canvas), m_currentShape(0), m_path(0), m_tmpPath(0)
@@ -80,13 +81,31 @@ void SimpleTextTool::mouseMoveEvent( KoPointerEvent *event )
     if( m_tmpPath )
         useCursor( QCursor( Qt::PointingHandCursor ) );
     else
-        useCursor( QCursor( Qt::ForbiddenCursor ) );
+        useCursor( QCursor( Qt::IBeamCursor ) );
 }
 
 void SimpleTextTool::mouseReleaseEvent( KoPointerEvent *event )
 {
     m_path = m_tmpPath;
     updateActions();
+}
+
+void SimpleTextTool::keyPressEvent(QKeyEvent *event)
+{
+    event->accept();
+    if ( m_currentShape && m_currentShape->textCursor() > -1 ) {
+        if ( event->key() == Qt::Key_Backspace ) {
+	    m_currentShape->removeFromTextCursor( 1 );
+        } else if ((event->key() == Qt::Key_Right)) {
+            m_currentShape->setTextCursor( m_currentShape->textCursor() + 1 );
+	} else if ((event->key() == Qt::Key_Left)) {
+            m_currentShape->setTextCursor( m_currentShape->textCursor() - 1 );
+        } else {
+	    m_currentShape->addToTextCursor( event->text() );
+        }
+    } else {
+        event->ignore();
+    }
 }
 
 void SimpleTextTool::activate( bool )
@@ -105,12 +124,17 @@ void SimpleTextTool::activate( bool )
         return;
     }
 
+    m_currentShape->enableTextCursor( true );
+
     updateActions();
 }
 
 void SimpleTextTool::deactivate()
 {
-    m_currentShape = 0;
+    if ( m_currentShape ) {
+        m_currentShape->enableTextCursor( false );
+        m_currentShape = 0;
+    }
     m_path = 0;
 }
 

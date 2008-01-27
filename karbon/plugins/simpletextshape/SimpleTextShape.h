@@ -113,6 +113,13 @@ public:
 
     /// Returns a pointer to the shape used as baseline
     const KoPathShape * baselineShape() const;
+
+    void enableTextCursor( bool enable );
+    int textCursor() const { return m_textCursor; }
+    void setTextCursor( int textCursor );
+    void removeFromTextCursor( unsigned int nr );
+    void addToTextCursor( const QString &str );
+
 private:
     void updateSizeAndPosition();
     void cacheGlyphOutlines();
@@ -120,6 +127,8 @@ private:
     virtual void notifyShapeChanged( KoShape * shape, ChangeType type );
     /// reimplemented from KoShape
     virtual KoShape * cloneShape() const;
+
+    void setTextCursorInternal( int textCursor );
 
     void createOutline();
     QString m_text; ///< the text content
@@ -131,6 +140,7 @@ private:
     QPainterPath m_outline; ///< the actual outline
     QPainterPath m_baseline; ///< the baseline path the text is on
     TextAnchor m_textAnchor; ///< the actual text anchor
+    int m_textCursor;
 };
 
 #endif // SIMPLETEXTSHAPE_H
