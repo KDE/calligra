@@ -139,6 +139,9 @@ void KarbonPatternTool::keyPressEvent(QKeyEvent *event)
 
 void KarbonPatternTool::initialize()
 {
+    if( m_currentStrategy && m_currentStrategy->isEditing() )
+        return;
+
     m_currentStrategy = 0;
 
     foreach( KarbonPatternEditStrategy* strategy, m_patterns )

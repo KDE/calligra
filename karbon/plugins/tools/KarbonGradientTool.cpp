@@ -298,6 +298,9 @@ void KarbonGradientTool::activate( bool temporary )
 
 void KarbonGradientTool::initialize()
 {
+    if( m_currentStrategy && m_currentStrategy->isEditing() )
+        return;
+
     m_gradients.clear();
     m_currentStrategy = 0;
 
