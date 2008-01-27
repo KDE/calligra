@@ -111,12 +111,10 @@ namespace KarbonGlobal
     */
     double gammaLn( double x );
 
-    QPointF transformPoint(const QPointF &p, const QMatrix &m);
-    double multiplyPoints(const QPointF &p1, const QPointF &p2);
-    bool pointsAreNear(const QPointF &p1, const QPointF &p2, double range);
-
     /// Returns scalar product of two given vectors
-    KARBONCOMMON_EXPORT double scalarProduct( const QPointF &v1, const QPointF &v2 );
+    KARBONCOMMON_EXPORT double scalarProduct(const QPointF &p1, const QPointF &p2);
+
+    bool pointsAreNear(const QPointF &p1, const QPointF &p2, double range);
 
     /// Returns the cross product of two given vectors 
     QPointF crossProduct( const QPointF &v1, const QPointF &v2 );

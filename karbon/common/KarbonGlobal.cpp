@@ -21,11 +21,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
-#include <math.h>
-
 #include "KarbonGlobal.h"
-
+#include <math.h>
 
 int KarbonGlobal::binomialCoeff( unsigned n, unsigned k )
 {
@@ -88,14 +85,7 @@ double KarbonGlobal::gammaLn( double x )
     return -tmp + log( 2.5066282746310005 * ser / x );
 }
 
-QPointF KarbonGlobal::transformPoint(const QPointF &p, const QMatrix &m)
-{
-    double x, y;
-    m.map(p.x(), p.y(), &x, &y);
-    return QPointF(x, y);
-}
-
-double KarbonGlobal::multiplyPoints(const QPointF &p1, const QPointF &p2)
+double KarbonGlobal::scalarProduct(const QPointF &p1, const QPointF &p2)
 {
     return p1.x() * p2.x() + p1.y() * p2.y();
 }
@@ -103,11 +93,6 @@ double KarbonGlobal::multiplyPoints(const QPointF &p1, const QPointF &p2)
 bool KarbonGlobal::pointsAreNear(const QPointF &p1, const QPointF &p2, double range)
 {
     return (p2.x() >= p1.x() - range && p2.x() <= p1.x() + range && p2.y() >= p1.y() - range && p2.y() <= p1.y() + range);
-}
-
-double KarbonGlobal::scalarProduct( const QPointF &v1, const QPointF &v2 )
-{
-    return v1.x()*v2.x() + v1.y()*v2.y();
 }
 
 QPointF KarbonGlobal::crossProduct( const QPointF &v1, const QPointF &v2 )
