@@ -38,6 +38,7 @@
 KarbonPatternTool::KarbonPatternTool(KoCanvasBase *canvas)
 : KoTool( canvas ), m_currentStrategy( 0 )
 {
+    connect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
 }
 
 KarbonPatternTool::~KarbonPatternTool()
