@@ -110,9 +110,7 @@ void VColorDocker::updateColor( const KoColor &c )
         return;
 
     QColor color;
-    quint8 opacity;
-    c.toQColor(&color, &opacity);
-    color.setAlpha(opacity);
+    c.toQColor(&color );
 
     KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
     int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
@@ -182,7 +180,7 @@ void VColorDocker::update()
         if( shape->background().style() == Qt::SolidPattern )
             qColor = shape->background().color();
     }
-    KoColor c( qColor, qColor.alpha(), KoColorSpaceRegistry::instance()->rgb8() );
+    KoColor c( qColor, KoColorSpaceRegistry::instance()->rgb8() );
     m_colorChooser->setColor( c );
 }
 

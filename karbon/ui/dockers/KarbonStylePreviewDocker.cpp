@@ -154,7 +154,7 @@ void KarbonStylePreviewDocker::updateStyle( const KoShapeBorderModel * stroke, c
         if( fill.style() == Qt::SolidPattern )
             qColor = fill.color();
     }
-    KoColor c( qColor, qColor.alpha(), KoColorSpaceRegistry::instance()->rgb8() );
+    KoColor c( qColor, KoColorSpaceRegistry::instance()->rgb8() );
     m_colorChooser->setColor( c );
 
     m_preview->update( stroke, fill );
@@ -236,9 +236,7 @@ void KarbonStylePreviewDocker::updateColor( const KoColor &c )
         return;
 
     QColor color;
-    quint8 opacity;
-    c.toQColor(&color, &opacity);
-    color.setAlpha(opacity);
+    c.toQColor(&color);
 
     KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
     int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
