@@ -102,7 +102,9 @@ void MySqlCursor::drv_getNextRecord() {
 		m_result = FetchEnd;
 	}
 	else {
-		m_result = FetchError;
+		// control will reach here only when at() < 0 ( which is usually -1 )
+		// -1 is same as "1 beyond the End"
+		m_result = FetchEnd;
 	}
 }
 

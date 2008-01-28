@@ -406,11 +406,14 @@ bool Cursor::getNextRecord()
 					m_afterLast = true;
 //js					m_at = m_records_in_buf;
 					m_at = -1; //position is invalid now and will not be used
-					if ((FetchResult) m_result == FetchEnd) {
+//					if ((FetchResult) m_result == FetchEnd) {
+//						return false;
+//					}
+					if( (FetchResult) m_result == FetchError) {
+						setError(ERR_CURSOR_RECORD_FETCHING, i18n("Cannot fetch next record."));\
 						return false;
 					}
-					setError(ERR_CURSOR_RECORD_FETCHING, i18n("Cannot fetch next record."));
-					return false;
+					return false; // in case of m_result = FetchEnd or m_result = -1
 				}
 				//we have a record: store this record's values in the buffer
 				drv_appendCurrentRecordToBuffer();
