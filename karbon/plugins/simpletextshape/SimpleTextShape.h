@@ -141,6 +141,7 @@ private:
     QPainterPath m_baseline; ///< the baseline path the text is on
     TextAnchor m_textAnchor; ///< the actual text anchor
     int m_textCursor;
+    QVector<qreal> m_charOffsets;
 };
 
 #endif // SIMPLETEXTSHAPE_H
