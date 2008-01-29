@@ -25,8 +25,8 @@
 //kde
 #include <kdebug.h>
 // koffice
-#include <KoInlineObjectRegistry.h>
-#include <KoInlineObjectFactory.h>
+#include <KoVariableRegistry.h>
+#include <KoVariableFactory.h>
 #include <KoVariable.h>
 #include <KoProperties.h>
 // kdelibs/kross
@@ -162,13 +162,13 @@ namespace Scripting {
 
     /** \internal implementation of a factory for \a Variable instances used
     by KWord to create variables on demand. */
-    class VariableFactory : public KoInlineObjectFactory
+    class VariableFactory : public KoVariableFactory
     {
         protected:
             explicit VariableFactory(Kross::Action* action)
-                : KoInlineObjectFactory(action, action->objectName()), m_action(action)
+                : KoVariableFactory(action->objectName()), m_action(action)
             {
-                KoInlineObjectTemplate var;
+                KoVariableTemplate var;
                 var.id = action->objectName();
                 var.name = action->text();
                 KoProperties *props = new KoProperties();
@@ -188,15 +188,16 @@ namespace Scripting {
 
             Kross::Action* action() const { return m_action; }
 
-            virtual KoInlineObject *createInlineObject(const KoProperties* props) const
+            virtual KoVariable *createVariable(const KoProperties* props) const
             {
                 Q_ASSERT(props);
                 return new Variable(m_action, props);
             }
 
-            virtual ObjectType type() const
+            virtual KoVariable *createVariable() const
             {
-                return TextVariable;
+                //TODO
+                return 0;
             }
 
             static VariableFactory* create(Kross::Action* action)
@@ -206,12 +207,12 @@ namespace Scripting {
                     kDebug(32010) <<"Scripting::VariableFactory::create: Action has empty objectName";
                     return 0;
                 }
-                if( KoInlineObjectRegistry::instance()->contains(action->objectName()) ) {
+                if( KoVariableRegistry::instance()->contains(action->objectName()) ) {
                     kDebug(32010) <<"Scripting::VariableFactory::create: Action \"" << action->objectName() <<"\" already exist";
                     return 0;
                 }
                 VariableFactory* factory = new VariableFactory(action);
-                KoInlineObjectRegistry::instance()->add(factory);
+                KoVariableRegistry::instance()->add(factory);
                 return factory;
             }
 
