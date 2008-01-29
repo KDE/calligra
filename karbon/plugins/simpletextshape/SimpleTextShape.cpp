@@ -61,12 +61,25 @@ void SimpleTextShape::paint(QPainter &painter, const KoViewConverter &converter)
     painter.drawPath( outline() );
     if ( m_textCursor > -1 ) {
         if( isOnPath() ) {
+	    qreal t = m_charOffsets[ qMin( m_textCursor, m_charOffsets.size() - 1 ) ];
+	    if ( t >= 0.0 ) {
+		painter.save();
+                QPointF pathPoint = m_baseline.pointAtPercent( t );
+                qreal angle = m_baseline.angleAtPercent( t );
+ 	        QPointF pos = absolutePosition( KoFlake::TopLeftCorner );
+                painter.translate( pathPoint.x() - pos.x(), pathPoint.y() - pos.y() );
+                painter.rotate( angle );
+	        QFontMetrics metrics( m_font );
+                painter.translate( 0, metrics.descent() );
+                painter.fillRect( QRectF( 0, 0, 1, - ( metrics.xHeight() + metrics.ascent() ) ), Qt::black );
+		painter.restore();
+            }
         } else {
-            QFontMetrics metrics( m_font );
 	    int x = 1;
 	    if ( m_text.length() == m_textCursor ) {
                 x = outline().boundingRect().width();
 	    } else if ( m_textCursor > 0 ) {
+                QFontMetrics metrics( m_font );
                 int w = metrics.width( m_text.left( m_textCursor + 1 ) );
 	        int w2 = metrics.charWidth( m_text, m_textCursor );
 	        x = w - w2;
@@ -121,6 +134,7 @@ void SimpleTextShape::createOutline()
 
     if( isOnPath() )
     {
+        m_charOffsets.clear();
         QFontMetricsF metrics( m_font );
         int textLength = m_text.length();
         qreal charPos = m_startOffset * m_baseline.length();
@@ -135,11 +149,13 @@ void SimpleTextShape::createOutline()
 
         QPointF pathPoint;
 
+        m_charOffsets.resize( textLength );
         for( int charIdx = 0; charIdx < textLength; ++charIdx )
         {
             QString actChar( m_text[charIdx] );
             // get the percent value of the actual char position
             qreal t = m_baseline.percentAtLength( charPos );
+	    m_charOffsets[ charIdx ] = -1;
             if( t >= 1.0 )
                 break;
 
@@ -151,6 +167,7 @@ void SimpleTextShape::createOutline()
                 t = m_baseline.percentAtLength( charPos + 0.5 * metrics.width( actChar ) );
             }
 
+	    m_charOffsets[ charIdx ] = m_baseline.percentAtLength( charPos );
             charPos += metrics.width( actChar );
             if( t < 0.0 )
                 continue;
@@ -345,7 +362,7 @@ void SimpleTextShape::setTextCursorInternal( int textCursor )
 
 void SimpleTextShape::removeFromTextCursor( unsigned int nr )
 {
-    if ( m_textCursor > 0 && m_textCursor >= nr ) {
+    if ( m_textCursor > 0 && m_textCursor >= int( nr ) ) {
         update();
 	m_textCursor -= nr;
         m_text.remove( m_textCursor, nr );
@@ -374,9 +391,6 @@ void SimpleTextShape::addToTextCursor( const QString &str )
 
 void SimpleTextShape::updateSizeAndPosition()
 {
-    // the actual position
-//    QPointF position = absolutePosition( KoFlake::TopLeftCorner );
-
     createOutline();
 
     QRectF bbox = m_outline.boundingRect();
