@@ -35,6 +35,7 @@ public:
     KPrCustomSlideShowsWidget( QWidget *parent, KPrCustomSlideShows *slideShows, QList<KoPAPageBase*> *allPages );
     ~KPrCustomSlideShowsWidget();
 private Q_SLOTS:
+    void addCustomSlideShow();
 //     void changedSelectedSlideshow();
 
 //     Q_SIGNALS:

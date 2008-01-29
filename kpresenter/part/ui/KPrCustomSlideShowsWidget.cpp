@@ -31,18 +31,25 @@ KPrCustomSlideShowsWidget::KPrCustomSlideShowsWidget( QWidget *parent, KPrCustom
 , m_slideShows(slideShows)
 {
     m_uiWidget.setupUi( this );
+    connect( m_uiWidget.addButton, SIGNAL( clicked() ), this, SLOT( addCustomSlideShow() ) );
+
     m_uiWidget.customSlideShowsList->addItems( QStringList( m_slideShows->customSlideShowsNames() ));
-    const int pagesCount= allPages->count();
-    if( m_slideShows->customSlideShowsNames().count() != 0 )
-    {
-        for( int i=0; i<pagesCount; ++i ) {
-            QListWidgetItem( QIcon(), m_slideShows->customSlideShowsNames().at( i ), m_uiWidget.availableSlidesList );
-        }
+
+    int currentPage = 1;
+    foreach( KoPAPageBase* page, *allPages ) {
+        new QListWidgetItem( QIcon(), i18n("Slide %1", currentPage++), m_uiWidget.availableSlidesList );
     }
 }
 
 KPrCustomSlideShowsWidget::~KPrCustomSlideShowsWidget()
 {
+}
+
+void KPrCustomSlideShowsWidget::addCustomSlideShow()
+{
+    m_uiWidget.customSlideShowsList->addItem( i18n("New Slide Show") );
+    m_uiWidget.customSlideShowsList->editItem(
+        m_uiWidget.customSlideShowsList->item( m_uiWidget.customSlideShowsList->count() ) );
 }
 
 #include "KPrCustomSlideShowsWidget.moc"
