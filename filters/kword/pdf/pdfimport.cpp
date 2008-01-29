@@ -24,11 +24,11 @@
 #include <qdatetime.h> // debug
 
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>
 #include <KoGlobal.h>
 #include <KoStore.h>
-#include <kapplication.h>
 #include <kprogress.h>
 
 #include "data.h"
@@ -67,13 +67,20 @@ KoFilter::ConversionStatus PdfImport::convert(const QCString& from,
         = _doc.init(m_chain->inputFile(), QString::null, QString::null);
     if ( result!=KoFilter::OK ) return result;
 
-    // options dialog
+    const KoFilterManager* filterManager = m_chain->manager();
+    if (!filterManager || filterManager->getBatchMode())
     {
+        // options dialog
         Dialog dialog(_doc.nbPages(), _doc.isEncrypted(), 0);
         dialog.exec();
         if ( dialog.result()==QDialog::Rejected )
             return KoFilter::UserCancelled;
         _options = dialog.options();
+    } else {
+        // batch mode, assume all pages and sane defaults
+        _options.range = SelectionRange( QString("1-%1").arg(_doc.nbPages()) );
+        _options.importImages = true;
+        _options.smart = true;
     }
 
     // progress dialog
