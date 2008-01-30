@@ -25,6 +25,8 @@
 #include <KoPointerEvent.h>
 #include <KoPathShape.h>
 #include <KoShapeController.h>
+#include <KoShapeContainer.h>
+#include <KoLineBorder.h>
 
 #include <KLocale>
 #include <KIcon>
@@ -33,9 +35,10 @@
 #include <QToolButton>
 #include <QCheckBox>
 #include <QPainter>
+#include <QPainterPath>
 
 SimpleTextTool::SimpleTextTool(KoCanvasBase *canvas)
-    : KoTool(canvas), m_currentShape(0), m_path(0), m_tmpPath(0)
+    : KoTool(canvas), m_currentShape(0), m_path(0), m_tmpPath(0), m_textCursor( -1 )
 {
     m_attachPath  = new QAction(KIcon("attach-path"), i18n("Attach Path"), this);
     m_attachPath->setEnabled( false );
@@ -56,6 +59,17 @@ SimpleTextTool::~SimpleTextTool()
 
 void SimpleTextTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
+    m_currentShape->applyConversion( painter, converter );
+    painter.setBrush( Qt::black );
+    QPointF pos = m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
+    painter.translate( pos.x(), pos.y() );
+    m_currentShape->getCharPositionAt( m_textCursor, pos );
+    painter.translate( pos.x() - 1, pos.y() );
+    qreal angle;
+    m_currentShape->getCharAngleAt( m_textCursor, angle );
+    painter.rotate( angle );
+    // QFontMetrics metrics( m_font );
+    painter.drawPath( m_textCursorShape );
 }
 
 void SimpleTextTool::mousePressEvent( KoPointerEvent *event )
@@ -93,15 +107,15 @@ void SimpleTextTool::mouseReleaseEvent( KoPointerEvent *event )
 void SimpleTextTool::keyPressEvent(QKeyEvent *event)
 {
     event->accept();
-    if ( m_currentShape && m_currentShape->textCursor() > -1 ) {
+    if ( m_currentShape && textCursor() > -1 ) {
         if ( event->key() == Qt::Key_Backspace ) {
-	    m_currentShape->removeFromTextCursor( 1 );
+	    removeFromTextCursor( 1 );
         } else if ((event->key() == Qt::Key_Right)) {
-            m_currentShape->setTextCursor( m_currentShape->textCursor() + 1 );
+            setTextCursor( textCursor() + 1 );
 	} else if ((event->key() == Qt::Key_Left)) {
-            m_currentShape->setTextCursor( m_currentShape->textCursor() - 1 );
+            setTextCursor( textCursor() - 1 );
         } else {
-	    m_currentShape->addToTextCursor( event->text() );
+	    addToTextCursor( event->text() );
         }
     } else {
         event->ignore();
@@ -124,7 +138,9 @@ void SimpleTextTool::activate( bool )
         return;
     }
 
-    m_currentShape->enableTextCursor( true );
+    enableTextCursor( true );
+
+    createTextCursorShape();
 
     updateActions();
 }
@@ -132,7 +148,7 @@ void SimpleTextTool::activate( bool )
 void SimpleTextTool::deactivate()
 {
     if ( m_currentShape ) {
-        m_currentShape->enableTextCursor( false );
+        enableTextCursor( false );
         m_currentShape = 0;
     }
     m_path = 0;
@@ -198,6 +214,70 @@ QWidget *SimpleTextTool::createOptionWidget()
     layout->setColumnStretch(2, 1);
 
     return widget;
+}
+
+void SimpleTextTool::enableTextCursor( bool enable )
+{
+    if ( enable ) {
+        setTextCursorInternal( m_currentShape->text().length() );
+    } else {
+        setTextCursorInternal( -1 );
+    }
+}
+
+void SimpleTextTool::setTextCursor( int textCursor )
+{
+    if ( m_textCursor == textCursor || textCursor < 0 || textCursor > m_currentShape->text().length() )
+        return;
+
+    setTextCursorInternal( textCursor );
+}
+
+void SimpleTextTool::setTextCursorInternal( int textCursor )
+{
+    if ( m_currentShape )
+        m_currentShape->update();
+    m_textCursor = textCursor;
+    if ( m_currentShape ) {
+        createTextCursorShape();
+        m_currentShape->update();
+    }
+}
+
+void SimpleTextTool::createTextCursorShape()
+{
+    if ( m_textCursor < 0 ) return;
+    m_textCursorShape = QPainterPath();
+    QRectF extents;
+    m_currentShape->getCharExtentsAt( m_textCursor, extents );
+    m_textCursorShape.addRect( 0, 0, 1, extents.height() );
+    m_textCursorShape.closeSubpath();
+}
+
+void SimpleTextTool::removeFromTextCursor( unsigned int nr )
+{
+    if ( m_textCursor > 0 && m_textCursor >= int( nr ) ) {
+        m_textCursor -= nr;
+        m_currentShape->removeRange( m_textCursor, nr );
+        setTextCursorInternal( m_textCursor );
+    }
+}
+
+void SimpleTextTool::addToTextCursor( const QString &str )
+{
+    if ( !str.isEmpty() && m_textCursor > -1 ) {
+        QString printable;
+        for ( int i = 0;i < str.length();i++ ) {
+            if ( str[i].isPrint() )
+                printable.append( str[i] );
+        }
+	unsigned int len = printable.length();
+        if ( len ) {
+	    m_currentShape->addRange( m_textCursor, printable );
+	    m_textCursor += len;
+	    setTextCursorInternal( m_textCursor );
+        }
+    }
 }
 
 #include "SimpleTextTool.moc"

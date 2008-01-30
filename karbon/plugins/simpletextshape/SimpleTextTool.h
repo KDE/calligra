@@ -52,6 +52,13 @@ public:
     /// reimplemented
     virtual void keyPressEvent(QKeyEvent *event);
 
+protected:
+    void enableTextCursor( bool enable );
+    int textCursor() const { return m_textCursor; }
+    void setTextCursor( int textCursor );
+    void removeFromTextCursor( unsigned int nr );
+    void addToTextCursor( const QString &str );
+
 private slots:
     void attachPath();
     void detachPath();
@@ -59,14 +66,19 @@ private slots:
 
 private:
     void updateActions();
+    void setTextCursorInternal( int textCursor );
+    void createTextCursorShape();
 
     SimpleTextShape * m_currentShape;
     KoPathShape * m_path;
     KoPathShape * m_tmpPath;
+    QPainterPath m_textCursorShape;
 
     QAction * m_attachPath;
     QAction * m_detachPath;
     QAction * m_convertText;
+
+    int m_textCursor;
 };
 
 #endif // SIMPLETEXTTOOL_H
