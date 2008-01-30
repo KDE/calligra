@@ -47,3 +47,4 @@ X-KDE-Import=image/x-raw
 X-KDE-Weight=1
 X-KDE-Library=libkrita_raw_import
 ServiceTypes=KOfficeFilter
+NoDisplay=true

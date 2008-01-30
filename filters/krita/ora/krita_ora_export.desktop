@@ -22,3 +22,4 @@ X-KDE-Export=image/openraster-archiving
 X-KDE-Import=application/x-krita
 X-KDE-Library=libkritaoraexport
 X-KDE-Weight=1
+NoDisplay=true

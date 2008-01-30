@@ -55,3 +55,4 @@ X-KDE-Import=image/x-xcf-gimp,image/gif,image/cgm,image/x-bmp,image/x-ico,image/
 X-KDE-Weight=1
 X-KDE-Library=libkritagmagickimport
 ServiceTypes=KOfficeFilter
+NoDisplay=true

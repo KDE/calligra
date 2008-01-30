@@ -48,3 +48,4 @@ X-KDE-Import=image/x-exr
 X-KDE-Weight=1
 X-KDE-Library=libkrita_openexr_import
 ServiceTypes=KOfficeFilter
+NoDisplay=true

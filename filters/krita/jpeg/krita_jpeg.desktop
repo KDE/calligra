@@ -53,3 +53,4 @@ X-DBUS-StartupType=multi
 X-KDE-StartupNotify=true
 X-KDE-SubstituteUID=false
 X-KDE-Username=
+NoDisplay=true

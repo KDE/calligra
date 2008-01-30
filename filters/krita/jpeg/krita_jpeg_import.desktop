@@ -27,3 +27,4 @@ X-KDE-Export=application/x-krita
 X-KDE-Import=image/jpeg
 X-KDE-Library=libkritajpegimport
 X-KDE-Weight=1
+NoDisplay=true

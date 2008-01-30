@@ -47,3 +47,4 @@ X-KDE-Import=image/png
 X-KDE-Weight=1
 X-KDE-Library=libkritapngimport
 ServiceTypes=KOfficeFilter
+NoDisplay=true

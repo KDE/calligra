@@ -47,3 +47,4 @@ Type=Service
 X-KDE-Import=application/x-krita
 X-KDE-Weight=1
 X-KDE-Library=libkritapngexport
+NoDisplay=true

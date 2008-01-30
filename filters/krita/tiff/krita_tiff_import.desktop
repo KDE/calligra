@@ -48,3 +48,4 @@ X-KDE-Export=application/x-krita
 X-KDE-Import=image/tiff
 X-KDE-Library=libkritatiffimport
 X-KDE-Weight=1
+NoDisplay=true

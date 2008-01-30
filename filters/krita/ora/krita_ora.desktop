@@ -56,3 +56,4 @@ X-DCOP-ServiceType=
 X-KDE-StartupNotify=true
 X-KDE-SubstituteUID=false
 X-KDE-Username=
+NoDisplay=true
