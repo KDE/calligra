@@ -80,6 +80,11 @@ Document *DocumentTreeView::currentDocument() const
     return model()->document( selectionModel()->currentIndex() );
 }
 
+QModelIndexList DocumentTreeView::selectedRows() const
+{
+    return selectionModel()->selectedRows();
+}
+
 void DocumentTreeView::slotSelectionChanged( const QItemSelection &selected )
 {
     emit selectionChanged( selected.indexes() );

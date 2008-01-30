@@ -49,9 +49,11 @@ public:
     Document *currentDocument() const;
     QList<Document*> selectedDocuments() const;
     
+    QModelIndexList selectedRows() const;
+    
     using QTreeView::selectionChanged;
 signals:
-    void selectionChanged( QModelIndexList );
+    void selectionChanged( const QModelIndexList& );
     
 protected slots:
     void slotSelectionChanged( const QItemSelection &selected );

@@ -28,8 +28,7 @@
 
 #include <QWidget>
 #include <QUndoStack>
-
-class QModelIndex;
+#include <QModelIndex>
 
 namespace KPlato
 {
@@ -51,7 +50,7 @@ public:
     Ui::DocumentsPanel widget;
 
     DocumentItemModel* model() const;
-    Document *currentDocument() const;
+    Document *selectedDocument() const;
     
 signals:
     void changed();
@@ -64,7 +63,8 @@ protected slots:
     
     void dataChanged( const QModelIndex& );
     
-    void currentChanged( const QModelIndex &index ) const;
+    void slotSelectionChanged( const QModelIndexList& );
+    void currentChanged( const QModelIndex &index );
     
 private:
     Node &m_node;
