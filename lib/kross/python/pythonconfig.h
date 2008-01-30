@@ -30,6 +30,15 @@
   #undef _POSIX_C_SOURCE
 #endif
 
+// Prevent multiple conflicting definitions of swab
+// from stdlib.h and unistd.h
+// See http://bugs.kde.org/show_bug.cgi?id=156950
+#if defined(__sun) || defined(sun)
+    #if defined(_XPG4)
+        #undef _XPG4
+    #endif
+#endif
+
 // The Python.h needs to be included first.
 #include <Python.h>
 #include <object.h>
