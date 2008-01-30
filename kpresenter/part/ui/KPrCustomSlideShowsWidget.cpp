@@ -47,9 +47,10 @@ KPrCustomSlideShowsWidget::~KPrCustomSlideShowsWidget()
 
 void KPrCustomSlideShowsWidget::addCustomSlideShow()
 {
-    m_uiWidget.customSlideShowsList->addItem( i18n("New Slide Show") );
-    m_uiWidget.customSlideShowsList->editItem(
-        m_uiWidget.customSlideShowsList->item( m_uiWidget.customSlideShowsList->count() ) );
+    QListWidgetItem * item = new QListWidgetItem( i18n("New Slide Show") );
+    item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled );
+    m_uiWidget.customSlideShowsList->addItem( item );
+    m_uiWidget.customSlideShowsList->editItem( item );
 }
 
 #include "KPrCustomSlideShowsWidget.moc"
