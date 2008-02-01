@@ -124,20 +124,38 @@ CLASS Axis:
 CLASS DataSet:
  o GETTER METHODS
   DataRange         dataRange()
-  QList<DataRange*> dataRangeDomains()
+  QList<DataRange>  dataRangeDomains()
   QString           title()
   ChartType         chartType()
-  // SOME KIND OF REFERENCE DIAGRAM?
   Axis*             attachedAxis()
+  bool              showMeanValue()
+  QPen              meanValuePen()
+  bool              showErrorIndicator()
+  QPen              errorIndicatorPen()
+
+ o SETTER METHODS
+  setDataRange( DataRange )
+  setDataRangeDomains( QList<DataRange> )
+  setTitle( QString )
+  setChartType( chartType )
+  setShowMeanValue( bool )
+  setMeanValuePen( QPen )
+  setShowErrorIndicator( bool )
+  setErrorIndicatorPen( QPen )
+  
 
 CLASS AbstractArea:
  o GETTER METHODS
   QPointF position()
   int     width()
+  QBrush  brush()
+  QPen    framePen()
 
  o SETTER METHODS
   setPosition( QPointF )
   setWidth( int )
+  setBrush( QBrush )
+  setFramePen( QPen )
 
 CLASS Wall, Floor: inherit AbstractArea
 
