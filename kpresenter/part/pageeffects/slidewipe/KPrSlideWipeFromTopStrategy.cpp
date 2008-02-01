@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,51 +17,36 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KPrSlideWipeEffect.h"
+#include "KPrSlideWipeFromTopStrategy.h"
 
-#include <QPainter>
-#include <QPixmap>
 #include <QWidget>
+#include <QPainter>
 
-KPrSlideWipeEffect::KPrSlideWipeEffect( int duration )
-: KPrPageEffect( duration, SlideWipeEffectId )
+KPrSlideWipeFromTopStrategy::KPrSlideWipeFromTopStrategy()
+: KPrPageEffectStrategy( KPrPageEffect::FromTop )
 {
 }
 
-void KPrSlideWipeEffect::setup( const Data &data, QTimeLine &timeLine )
+KPrSlideWipeFromTopStrategy::~KPrSlideWipeFromTopStrategy()
 {
-    timeLine.setDuration( m_duration );
+}
+
+void KPrSlideWipeFromTopStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
+{
     timeLine.setFrameRange( 0, data.m_widget->height() );
-    timeLine.setCurveShape( QTimeLine::LinearCurve );
 }
 
-bool KPrSlideWipeEffect::paint( QPainter &p, const Data &data )
+void KPrSlideWipeFromTopStrategy::paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data )
 {
     int height = data.m_widget->height();
-
-    int currPos = data.m_timeLine.frameForTime( data.m_currentTime );
-
-    bool finish = data.m_finished;
-
-    if ( currPos >= height ) {
-        finish = true;
-    }
-
-    if ( ! finish ) {
-        int width = data.m_widget->width();
-        QRect rect1( 0, currPos, width, height - currPos );
-        QRect rect2( 0, height - currPos, width, currPos );
-        p.drawPixmap( QPoint( 0, currPos ), data.m_oldPage, rect1 );
-        p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, rect2 );
-    }
-    else {
-        p.drawPixmap( 0, 0, data.m_newPage );
-    }
-
-    return !finish;
+    int width = data.m_widget->width();
+    QRect rect1( 0, currPos, width, height - currPos );
+    QRect rect2( 0, height - currPos, width, currPos );
+    p.drawPixmap( QPoint( 0, currPos ), data.m_oldPage, rect1 );
+    p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, rect2 );
 }
 
-void KPrSlideWipeEffect::next( const Data &data )
+void KPrSlideWipeFromTopStrategy::next( const KPrPageEffect::Data &data )
 {
     int currPos = data.m_timeLine.frameForTime( data.m_currentTime );
     data.m_widget->update( 0, 0, data.m_widget->width(), currPos );

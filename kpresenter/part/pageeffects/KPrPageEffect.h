@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include <QTimeLine>
 
 class QPainter;
+class KPrPageEffectStrategy;
 
 /**
  * This is the base class for all page effects.
@@ -37,10 +38,14 @@ public:
      * Sub type of the effect 
      */
     enum SubType {
-        LeftToRight,
-        RightToLeft,
-        TopToBottom,
-        BottomToTop
+        FromLeft,       // the new page is comming from the left
+        FromRight,      // the new page is comming from the right
+        FromTop,        // the new page is comming from the top
+        FromBottom,     // the new page is comming from the bottom
+        ToLeft,         // the old page is leaving from the left
+        ToRight,        // the old page is leaving from the right
+        ToTop,          // the old page is leaving from the top
+        ToBottom        // the old page is leaving from the bottom
     };
 
     /**
@@ -76,10 +81,10 @@ public:
      * @param duration The duration in milliseconds
      * @param id The id of the page effect
      */
-    KPrPageEffect( int duration, const QString & id );
+    KPrPageEffect( int duration, const QString & id, KPrPageEffectStrategy * strategy );
     virtual ~KPrPageEffect();
 
-    virtual void setup( const Data &data, QTimeLine &timeLine ) = 0;
+    virtual void setup( const Data &data, QTimeLine &timeLine );
 
     /**
      * Paint the page effect
@@ -93,7 +98,7 @@ public:
      *
      * @see next()
      */
-    virtual bool paint( QPainter &painter, const Data &data ) = 0;
+    virtual bool paint( QPainter &painter, const Data &data );
 
     /**
      * Trigger the next paint paint event.
@@ -136,11 +141,12 @@ public:
      *
      * @return The sub type of the page effect.
      */
-    //tz not yet used SubType subType() const = 0;
+    SubType subType() const;
 
 protected:
     int m_duration;
     QString m_id;
+    KPrPageEffectStrategy * m_strategy;
 };
 
 #endif // KPRPAGEEFFECT2_H

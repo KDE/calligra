@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,21 +17,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRSLIDEWIPEEFFECTFACTORY_H
-#define KPRSLIDEWIPEEFFECTFACTORY_H
+#ifndef KPRSLIDEWIPEFROMRIGHTSTRATEGY_H
+#define KPRSLIDEWIPEFROMRIGHTSTRATEGY_H
 
-#include "KPrPageEffectFactory.h"
+#include "pageeffects/KPrPageEffectStrategy.h"
 
-class KPrSlideWipeEffectFactory : public KPrPageEffectFactory
+class KPrSlideWipeFromRightStrategy : public KPrPageEffectStrategy
 {
 public:
-    KPrSlideWipeEffectFactory();
-    virtual ~KPrSlideWipeEffectFactory();
+    KPrSlideWipeFromRightStrategy();
+    virtual ~KPrSlideWipeFromRightStrategy();
 
-    virtual KPrPageEffect * createPageEffect( const Properties & properties ) const;
+    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
 
-private:
-    static QList<KPrPageEffect::SubType> initSubTypes();
+    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+
+    virtual void next( const KPrPageEffect::Data &data );
 };
 
-#endif /* KPRSLIDEWIPEEFFECTFACTORY_H */
+#endif // KPRSLIDEWIPEFROMRIGHTSTRATEGY_H

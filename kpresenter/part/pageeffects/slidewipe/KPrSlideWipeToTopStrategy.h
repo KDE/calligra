@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,29 +17,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KPrSlideWipeEffectFactory.h"
+#ifndef KPRSLIDEWIPETOTOPSTRATEGY_H
+#define KPRSLIDEWIPETOTOPSTRATEGY_H
 
-#include <klocale.h>
+#include "pageeffects/KPrPageEffectStrategy.h"
 
-#include "KPrSlideWipeEffect.h"
-
-QList<KPrPageEffect::SubType> KPrSlideWipeEffectFactory::initSubTypes()
+class KPrSlideWipeToTopStrategy : public KPrPageEffectStrategy
 {
-    QList<KPrPageEffect::SubType> subTypes;
-    subTypes << KPrPageEffect::LeftToRight << KPrPageEffect::RightToLeft << KPrPageEffect::TopToBottom << KPrPageEffect::BottomToTop;
-    return subTypes;
-}
+public:
+    KPrSlideWipeToTopStrategy();
+    virtual ~KPrSlideWipeToTopStrategy();
 
-KPrSlideWipeEffectFactory::KPrSlideWipeEffectFactory()
-: KPrPageEffectFactory( SlideWipeEffectId, i18n( "Slide Wipe Effect" ), initSubTypes() )
-{
-}
+    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
 
-KPrSlideWipeEffectFactory::~KPrSlideWipeEffectFactory()
-{
-}
+    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
 
-KPrPageEffect * KPrSlideWipeEffectFactory::createPageEffect( const Properties & properties ) const
-{
-    return new KPrSlideWipeEffect( properties.duration );
-}
+    virtual void next( const KPrPageEffect::Data &data );
+};
+
+#endif // KPRSLIDEWIPETOTOPSTRATEGY_H

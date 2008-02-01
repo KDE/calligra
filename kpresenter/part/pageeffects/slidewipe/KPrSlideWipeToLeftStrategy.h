@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,27 +17,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRPAGEEFFECTREGISTRY_H
-#define KPRPAGEEFFECTREGISTRY_H
+#ifndef KPRSLIDEWIPETOLEFTSTRATEGY_H
+#define KPRSLIDEWIPETOLEFTSTRATEGY_H
 
-#include <KoGenericRegistry.h>
+#include "pageeffects/KPrPageEffectStrategy.h"
 
-class KoXmlElement;
-class KPrPageEffect;
-class KPrPageEffectFactory;
-
-class KPrPageEffectRegistry : public KoGenericRegistry<KPrPageEffectFactory *>
+class KPrSlideWipeToLeftStrategy : public KPrPageEffectStrategy
 {
 public:
-    class Singleton;
-    static KPrPageEffectRegistry * instance();
+    KPrSlideWipeToLeftStrategy();
+    virtual ~KPrSlideWipeToLeftStrategy();
 
-    KPrPageEffect * createPageEffect( const KoXmlElement & element );
+    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
 
-private:
-    friend class Singleton;
-    KPrPageEffectRegistry();
-    ~KPrPageEffectRegistry();
+    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+
+    virtual void next( const KPrPageEffect::Data &data );
 };
 
-#endif /* KPRPAGEEFFECTREGISTRY_H */
+#endif // KPRSLIDEWIPETOLEFTSTRATEGY_H

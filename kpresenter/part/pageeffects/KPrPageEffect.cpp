@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,25 +20,58 @@
 #include "KPrPageEffect.h"
 
 #include <QWidget>
+#include <QPainter>
 
-KPrPageEffect::KPrPageEffect( int duration, const QString & id )
+#include "KPrPageEffectStrategy.h"
+
+KPrPageEffect::KPrPageEffect( int duration, const QString & id, KPrPageEffectStrategy * strategy )
 : m_duration( duration )
 , m_id( id )
+, m_strategy( strategy )
 {
+    Q_ASSERT( strategy );
 }
 
 KPrPageEffect::~KPrPageEffect()
 {
+    delete m_strategy;
+}
+
+void KPrPageEffect::setup( const Data &data, QTimeLine &timeLine )
+{
+    timeLine.setDuration( m_duration );
+    m_strategy->setup( data, timeLine );
+    timeLine.setCurveShape( QTimeLine::LinearCurve );
+}
+
+bool KPrPageEffect::paint( QPainter &p, const Data &data )
+{
+    int currPos = data.m_timeLine.frameForTime( data.m_currentTime );
+
+    bool finish = data.m_finished;
+
+    if ( currPos >= data.m_timeLine.endFrame() ) {
+        finish = true;
+    }
+
+    if ( ! finish ) {
+        m_strategy->paintStep( p, currPos, data );
+    }
+    else {
+        p.drawPixmap( 0, 0, data.m_newPage );
+    }
+
+    return !finish;
 }
 
 void KPrPageEffect::next( const Data &data )
 {
-    data.m_widget->update();
+    m_strategy->next( data );
 }
 
 void KPrPageEffect::finish( const Data &data )
 {
-    data.m_widget->update();
+    m_strategy->finish( data );
 }
 
 int KPrPageEffect::duration() const
@@ -49,4 +82,9 @@ int KPrPageEffect::duration() const
 const QString & KPrPageEffect::id() const
 {
     return m_id;
+}
+
+KPrPageEffect::SubType KPrPageEffect::subType() const
+{
+    return m_strategy->subType();
 }

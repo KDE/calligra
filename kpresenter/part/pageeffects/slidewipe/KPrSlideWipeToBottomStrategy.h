@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,26 +17,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRSLIDEWIPEEFFECT_H
-#define KPRSLIDEWIPEEFFECT_H
+#ifndef KPRSLIDEWIPETOBOTTOMSTRATEGY_H
+#define KPRSLIDEWIPETOBOTTOMSTRATEGY_H
 
-#include "KPrPageEffect.h"
+#include "pageeffects/KPrPageEffectStrategy.h"
 
-#define SlideWipeEffectId "SlideWipeEffect"
-
-class KPrSlideWipeEffect : public KPrPageEffect
+class KPrSlideWipeToBottomStrategy : public KPrPageEffectStrategy
 {
 public:
-    KPrSlideWipeEffect( int duration );
+    KPrSlideWipeToBottomStrategy();
+    virtual ~KPrSlideWipeToBottomStrategy();
 
-    // reimplemented
-    virtual void setup( const Data &data, QTimeLine &timeLine );
+    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
 
-    // reimplemented
-    virtual bool paint( QPainter &p, const Data &data );
+    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
 
-    // reimplemented
-    virtual void next( const Data &data );
+    virtual void next( const KPrPageEffect::Data &data );
 };
 
-#endif // KPRSLIDEWIPEEFFECT_H
+#endif // KPRSLIDEWIPETOBOTTOMSTRATEGY_H

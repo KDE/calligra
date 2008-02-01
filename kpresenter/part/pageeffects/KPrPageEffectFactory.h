@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -28,8 +28,9 @@ class KPrPageEffectFactory
 {
 public:
     struct Properties {
-        Properties( int duration )
+        Properties( int duration, KPrPageEffect::SubType subType )
         : duration( duration )
+        , subType( subType )
         {}
 
         int duration;

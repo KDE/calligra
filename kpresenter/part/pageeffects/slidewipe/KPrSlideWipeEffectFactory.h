@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,27 +17,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRPAGEEFFECTREGISTRY_H
-#define KPRPAGEEFFECTREGISTRY_H
+#ifndef KPRSLIDEWIPEEFFECTFACTORY_H
+#define KPRSLIDEWIPEEFFECTFACTORY_H
 
-#include <KoGenericRegistry.h>
+#include "pageeffects/KPrPageEffectFactory.h"
 
-class KoXmlElement;
-class KPrPageEffect;
-class KPrPageEffectFactory;
-
-class KPrPageEffectRegistry : public KoGenericRegistry<KPrPageEffectFactory *>
+class KPrSlideWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
-    class Singleton;
-    static KPrPageEffectRegistry * instance();
+    KPrSlideWipeEffectFactory();
+    virtual ~KPrSlideWipeEffectFactory();
 
-    KPrPageEffect * createPageEffect( const KoXmlElement & element );
+    virtual KPrPageEffect * createPageEffect( const Properties & properties ) const;
 
 private:
-    friend class Singleton;
-    KPrPageEffectRegistry();
-    ~KPrPageEffectRegistry();
+    static QList<KPrPageEffect::SubType> initSubTypes();
 };
 
-#endif /* KPRPAGEEFFECTREGISTRY_H */
+#endif /* KPRSLIDEWIPEEFFECTFACTORY_H */

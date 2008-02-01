@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,27 +17,25 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRPAGEEFFECTREGISTRY_H
-#define KPRPAGEEFFECTREGISTRY_H
+#include "KPrPageEffectStrategy.h"
 
-#include <KoGenericRegistry.h>
+#include <QWidget>
 
-class KoXmlElement;
-class KPrPageEffect;
-class KPrPageEffectFactory;
-
-class KPrPageEffectRegistry : public KoGenericRegistry<KPrPageEffectFactory *>
+KPrPageEffectStrategy::KPrPageEffectStrategy( KPrPageEffect::SubType subType )
+: m_subType( subType )
 {
-public:
-    class Singleton;
-    static KPrPageEffectRegistry * instance();
+}
 
-    KPrPageEffect * createPageEffect( const KoXmlElement & element );
+KPrPageEffectStrategy::~KPrPageEffectStrategy()
+{
+}
 
-private:
-    friend class Singleton;
-    KPrPageEffectRegistry();
-    ~KPrPageEffectRegistry();
-};
+KPrPageEffect::SubType KPrPageEffectStrategy::subType() const
+{
+    return m_subType;
+}
 
-#endif /* KPRPAGEEFFECTREGISTRY_H */
+void KPrPageEffectStrategy::finish( const KPrPageEffect::Data &data )
+{
+    data.m_widget->update();
+}
