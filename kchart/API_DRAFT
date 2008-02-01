@@ -6,7 +6,7 @@
 |- Legend
 |+ Plot Area
  |+ Series
- |+ Areas
+ |+ Surfaces
   |- Wall
   |- Floor
  |+ Axes
@@ -85,7 +85,7 @@ CLASS Legend:
   setTitle( TextLabel* )
   setFrameIsVisible( bool )
   setFramePen( QPen )
-  setColor( QColor )
+  setFramColor( QColor )
   setBackgroundBrush( QBrush )
   setBackgroundColor( QColor )
 
@@ -144,7 +144,7 @@ CLASS DataSet:
   setErrorIndicatorPen( QPen )
   
 
-CLASS AbstractArea:
+CLASS Surface:
  o GETTER METHODS
   QPointF position()
   int     width()
@@ -156,6 +156,4 @@ CLASS AbstractArea:
   setWidth( int )
   setBrush( QBrush )
   setFramePen( QPen )
-
-CLASS Wall, Floor: inherit AbstractArea
 
