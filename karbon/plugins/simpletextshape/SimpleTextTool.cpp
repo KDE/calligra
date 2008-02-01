@@ -59,6 +59,9 @@ SimpleTextTool::~SimpleTextTool()
 
 void SimpleTextTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
+    if( ! m_currentShape )
+        return;
+
     m_currentShape->applyConversion( painter, converter );
     painter.setBrush( Qt::black );
     QPointF pos = m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
