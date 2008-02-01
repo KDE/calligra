@@ -40,6 +40,8 @@ class KUrl;
 
 class KoView;
 
+class KPlatoWork_MainWindow;
+
 namespace KPlato
 {
 
@@ -115,9 +117,13 @@ public:
     
     bool viewDocument( const KUrl &filename );
     
+    KPlatoWork_MainWindow *kplatoWorkMainWindow() const;
+    
 signals:
     void currentScheduleManagerChanged( ScheduleManager *sm );
-    
+    void openInternalDocument( KoStore * );
+    void sigUpdateReadWrite( bool );
+
 public slots:
     void slotUpdate();
     
@@ -146,6 +152,8 @@ protected slots:
 
     void slotEditDocument( Document *doc );
     void slotViewDocument( Document *doc );
+    
+    void slotTaskProgress();
     
 protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
@@ -186,6 +194,7 @@ private:
     // ------ Settings
     KAction *actionConfigure;
 
+    KAction *actionTaskProgress;
 };
 
 } //KplatoWork namespace

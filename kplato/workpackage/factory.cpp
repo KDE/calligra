@@ -84,7 +84,9 @@ const KComponentData &Factory::global()
 
         // Add any application-specific resource directories here
         s_global->dirs()->addResourceType("kplatowork_template", "data", "kplatowork/templates/");
-        s_global->dirs()->addResourceType( "expression", "data", "kplatowork/expression/");
+        s_global->dirs()->addResourceType("expression", "data", "kplatowork/expression/");
+        s_global->dirs()->addResourceType("projects", "data", "kplatowork/projects/");
+        
         s_global->dirs()->addResourceType("toolbar", "data", "koffice/toolbar/");
 
         // Tell the iconloader about share/apps/koffice/icons

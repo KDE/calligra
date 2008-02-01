@@ -17,16 +17,21 @@
  * Boston, MA 02110-1301, USA.
 */
 
+
+#include "kplatowork_export.h"
 #include "aboutdata.h"
+#include "application.h"
 
 #include <kdemacros.h>
-#include <KoApplication.h>
 #include <kcmdlineargs.h>
+#include <kmessagebox.h>
+#include <kdesktopfile.h>
+#include <kstandarddirs.h>
+#include <kiconloader.h>
+#include <kdebug.h>
 
-namespace KPlatoWork
-{
-
-}  //KPlatoWork namespace
+#include <QtDBus/QtDBus>
+#include <QFile>
 
 
 extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
@@ -35,7 +40,7 @@ extern "C" KDE_EXPORT int kdemain( int argc, char **argv ) {
     options.add("+[file]", ki18n("File to open"));
     KCmdLineArgs::addCmdLineOptions( options );
 
-    KoApplication app;
+    KPlatoWork_Application app;
 
     // This is disabled for now so the crude test below will run
     if (!app.start()) {

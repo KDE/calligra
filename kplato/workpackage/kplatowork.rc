@@ -5,10 +5,7 @@
             <Action name="edit_undo"/>
             <Action name="edit_redo"/>
             <Separator/>
-<!--            <Action name="edit_cut"/>
-            <Action name="edit_copy"/>
-            <Action name="edit_paste"/>
-            <Separator/> -->
+            <Action name="task_progress"/>
         </Menu>
         <Menu name="view"><text>&amp;View</text>
         </Menu>
@@ -19,6 +16,8 @@
     <ToolBar name="edit" position="top"><Text>Project</Text>
         <Action name="edit_undo"/>
         <Action name="edit_redo"/>
+        <Separator/>
+        <Action name="task_progress"/>
         <ActionList name="documentseditor_edit_list"/>
     </ToolBar>
 </kpartgui>

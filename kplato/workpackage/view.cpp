@@ -19,6 +19,7 @@
 */
 
 #include "view.h"
+#include "mainwindow.h"
 
 #include "KoDocumentInfo.h"
 #include <KoMainWindow.h>
@@ -77,6 +78,7 @@
 #include "kpttask.h"
 #include "kptcommand.h"
 #include "kptdocuments.h"
+#include "kpttaskprogressdialog.h"
 
 #include <assert.h>
 
@@ -84,20 +86,24 @@ namespace KPlatoWork
 {
 
 View::View( Part* part, QWidget* parent )
-        : KoView( part, parent ),
-        m_currentWidget( 0 ),
-        m_scheduleActionGroup( new QActionGroup( this ) ),
-        m_manager( 0 ),
-        m_readWrite( false )
+    : KoView( part, parent ),
+    m_currentWidget( 0 ),
+    m_scheduleActionGroup( new QActionGroup( this ) ),
+    m_manager( 0 )
 {
     //kDebug();
 
     setComponentData( Factory::global() );
-    if ( !part->isReadWrite() )
+    
+    if ( part->isSingleViewMode() ) { // NOTE: don't use part->isReadWrite() here
         setXMLFile( "kplatowork_readonly.rc" );
-    else
+    } else {
         setXMLFile( "kplatowork.rc" );
+    }
 
+    m_readWrite = part->isReadWrite();
+    kDebug()<<m_readWrite;
+    
 //    m_dbus = new ViewAdaptor( this );
 //    QDBusConnection::sessionBus().registerObject( '/' + objectName(), this );
     
@@ -144,6 +150,10 @@ View::View( Part* part, QWidget* parent )
     
     connect( m_scheduleActionGroup, SIGNAL( triggered( QAction* ) ), SLOT( slotViewSchedule( QAction* ) ) );
     
+    actionTaskProgress  = new KAction(KIcon( "document-properties" ), i18n("Progress..."), this);
+    actionCollection()->addAction("task_progress", actionTaskProgress );
+    connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
+
     //kDebug()<<" end";
 }
 
@@ -179,7 +189,10 @@ ViewBase *View::createTaskInfoView()
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-    v->updateReadWrite( false );
+    
+    connect( this, SIGNAL( sigUpdateReadWrite( bool ) ), v, SLOT( slotUpdateReadWrite( bool ) ) );
+    
+    v->updateReadWrite( m_readWrite );
     return v;
 }
 
@@ -201,7 +214,10 @@ ViewBase *View::createDocumentsView()
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
     connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
-    v->updateReadWrite( false );
+    
+    connect( this, SIGNAL( sigUpdateReadWrite( bool ) ), v, SLOT( slotUpdateReadWrite( bool ) ) );
+    
+    v->updateReadWrite( m_readWrite );
     return v;
 }
 
@@ -213,6 +229,11 @@ Project& View::getProject() const
 void View::setZoom( double )
 {
     //TODO
+}
+
+KPlatoWork_MainWindow *View::kplatoWorkMainWindow() const
+{
+    return dynamic_cast<KPlatoWork_MainWindow*>( topLevelWidget() );
 }
 
 void View::setupPrinter( QPrinter &printer, QPrintDialog &printDialog )
@@ -427,7 +448,7 @@ void View::slotViewSchedule( QAction *act )
     } else {
         m_manager = 0;
     }
-    kDebug()<<m_manager<<endl;
+    kDebug()<<m_manager;
     setLabel();
     emit currentScheduleManagerChanged( m_manager );
 }
@@ -513,7 +534,9 @@ long View::currentScheduleId() const
 
 void View::updateReadWrite( bool readwrite )
 {
+    kDebug()<<m_readWrite<<"->"<<readwrite;
     m_readWrite = readwrite;
+    emit sigUpdateReadWrite( readwrite );
 }
 
 Part *View::getPart() const
@@ -591,7 +614,7 @@ bool View::viewDocument( const KUrl &filename )
 {
     kDebug()<<"url:"<<filename;
     if ( ! filename.isValid() ) {
-        kDebug()<<"Invalid url:"<<filename;
+        //KMessageBox::error( 0, i18n( "Cannot open document. Invalid url: %1", filename.pathOrUrl() ) );
         return false;
     }
     KRun *run = new KRun( filename, 0 );
@@ -609,7 +632,12 @@ void View::slotEditDocument( Document *doc )
         KMessageBox::error( 0, i18n( "This file is not editable" ) );
         return;
     }
-    getPart()->editDocument( doc );
+    KPlatoWork_MainWindow *mw = kplatoWorkMainWindow();
+    if ( mw == 0 ) {
+        kWarning()<<"Not a KPlatoWork main window, can't edit";
+        return;
+    }
+    mw->editDocument( getPart(), doc );
 }
 
 void View::slotViewDocument( Document *doc )
@@ -630,6 +658,30 @@ void View::slotViewDocument( Document *doc )
     kDebug()<<"<----------";
 }
 
+void View::slotTaskProgress()
+{
+    //kDebug();
+    Node * node = getPart()->node();
+    if ( node == 0 ) {
+        return ;
+    }
+    switch ( node->type() ) {
+        case Node::Type_Task: {
+            Task *task = static_cast<Task *>( node );
+            TaskProgressDialog *dia = new TaskProgressDialog( *task, currentScheduleManager(),  getProject().standardWorktime() );
+            if ( dia->exec()  == QDialog::Accepted) {
+                QUndoCommand * m = dia->buildCommand();
+                if ( m ) {
+                    getPart() ->addCommand( m );
+                }
+            }
+            delete dia;
+            break;
+        }
+        default:
+            break; // avoid warnings
+    }
+}
 
 }  //KPlatoWork namespace
 
