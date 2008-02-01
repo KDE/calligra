@@ -62,7 +62,7 @@ class KoView;
 
 class KPlatoWork_MainGUIClient;
 
-class KPLATOWORK_EXPORT KPlatoWork_Application : public KoApplication
+class KPLATOWORKAPP_EXPORT KPlatoWork_Application : public KoApplication
 {
     Q_OBJECT
 public:
