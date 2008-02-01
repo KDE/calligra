@@ -8,6 +8,18 @@ macro_optional_find_package(JPEG)
 macro_optional_find_package(GraphicsMagick)
 macro_optional_find_package(Poppler)
 
+  if(EXIV2_FOUND)
+    # query pkg-config asking for a Exiv2 >= 0.16
+    EXEC_PROGRAM(${PKGCONFIG_EXECUTABLE} ARGS --atleast-version=0.16 exiv2 RETURN_VALUE _return_VALUE OUTPUT_VARIABLE _pkgconfigDevNull )
+    if(_return_VALUE STREQUAL "0")
+      message(STATUS "Found Exiv2 release >= 0.16")
+    else(_return_VALUE STREQUAL "0")
+      set(EXIV2_FOUND FALSE)
+      message(STATUS "Found Exiv2 release < 0.16")
+    endif(_return_VALUE STREQUAL "0")
+  endif(_EXIV2LinkFlags)
+
+
 macro_log_feature(JPEG_FOUND "jpeg" "The Krita JPEG filter will not be built" "http://www.ijg.org" FALSE "")
 macro_log_feature(EXIV2_FOUND "Exiv2" "The Krita JPEG filter will not be built" "http://www.exiv2.org" FALSE "")
 macro_log_feature(TIFF_FOUND "tiff" "The Krita TIFF filter will not be built" "http://www.remotesensing.org/libtiff" FALSE "")

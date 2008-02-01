@@ -34,7 +34,7 @@ KisMetaData::Value exivValueToKMDValue( const Exiv2::Value::AutoPtr value )
 {
     switch(value->typeId())
     {
-        case Exiv2::invalid6:
+        case Exiv2::signedByte:
         case Exiv2::invalidTypeId:
         case Exiv2::lastTypeId:
         case Exiv2::directory:
