@@ -92,6 +92,9 @@ public:
     /// Starts drawing the gradient at the given mouse position
     void startDrawing( const QPointF &mousePos );
 
+    /// Shows/hides stops of the gradient strategy
+    void showStops( bool show );
+
 protected:
     enum SelectionType { None, Handle, Line, Stop };
 
@@ -102,7 +105,7 @@ protected:
     void paintHandle( QPainter &painter, const KoViewConverter &converter, const QPointF &position );
 
     /// paints the 
-    void paintStops( QPainter &painter, const KoViewConverter &converter, const QPointF &start, const QPointF &stop );
+    void paintStops( QPainter &painter, const KoViewConverter &converter );
 
     /// checks if given mouse position is on specified line segment
     bool mouseAtLineSegment( const QPointF &mousePos, double maxDistance );
@@ -135,6 +138,7 @@ private:
 
     static int m_handleRadius; ///< the handle radius for all gradient strategies
     bool m_editing; /// the edit mode flag
+    bool m_stopsVisible;       ///< indicates if gradient stops are visible
     Target m_target; ///< the gradient target
     QPair<int,int> m_gradientLine; ///< the handle indices defining the gradient line
     QPointF m_lastMousePos;    ///< last mouse position

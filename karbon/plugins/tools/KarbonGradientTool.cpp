@@ -167,6 +167,17 @@ void KarbonGradientTool::mousePressEvent( KoPointerEvent *event )
 
 void KarbonGradientTool::mouseMoveEvent( KoPointerEvent *event )
 {
+    // enable all gradient stops of gradients the mouse is over
+    foreach( GradientStrategy *strategy, m_gradients )
+    {
+        strategy->repaint();
+        if( strategy->boundingRect( *m_canvas->viewConverter() ).contains( event->point ) )
+            strategy->showStops( true );
+        else
+            strategy->showStops( false );
+        strategy->repaint();
+    }
+
     if( m_currentStrategy )
     {
         m_currentStrategy->repaint();
@@ -177,6 +188,7 @@ void KarbonGradientTool::mouseMoveEvent( KoPointerEvent *event )
             return;
         }
     }
+
     // first check if we hit any handles
     foreach( GradientStrategy *strategy, m_gradients )
     {

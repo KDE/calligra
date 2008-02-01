@@ -39,8 +39,9 @@ const double stopDistance = 15.0;
 
 
 GradientStrategy::GradientStrategy( KoShape *shape, const QGradient * gradient, Target target )
-: m_shape( shape ), m_selection( None ), m_selectionIndex(0)
-, m_editing( false ), m_target( target ), m_gradientLine( 0, 1 )
+    : m_shape( shape ), m_editing( false ), m_stopsVisible(false)
+    , m_target( target ), m_gradientLine( 0, 1 )
+    , m_selection( None ), m_selectionIndex(0)
 {
     if( m_target == Fill )
     {
@@ -145,7 +146,7 @@ void GradientStrategy::paintHandle( QPainter &painter, const KoViewConverter &co
     painter.drawRect( hr );
 }
 
-void GradientStrategy::paintStops( QPainter &painter, const KoViewConverter &converter, const QPointF &start, const QPointF &stop )
+void GradientStrategy::paintStops( QPainter &painter, const KoViewConverter &converter )
 {
     painter.save();
 
@@ -179,7 +180,8 @@ void GradientStrategy::paint( QPainter &painter, const KoViewConverter &converte
     painter.drawLine( startPoint, stopPoint );
 
     // draw the gradient stops
-    paintStops( painter, converter, startPoint, stopPoint );
+    if( m_stopsVisible )
+        paintStops( painter, converter );
 
     // draw the gradient handles
     foreach( QPointF handle, m_handles )
@@ -416,6 +418,11 @@ void GradientStrategy::startDrawing( const QPointF &mousePos )
 
     setSelection( Handle, handleCount-1 );
     setEditing( true );
+}
+
+void GradientStrategy::showStops( bool show )
+{
+    m_stopsVisible = show;
 }
 
 void GradientStrategy::setGradientLine( int start, int stop )
