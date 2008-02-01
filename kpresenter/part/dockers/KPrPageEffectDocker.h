@@ -26,6 +26,7 @@
 class QLabel;
 class QComboBox;
 class KPrPageEffectRunner;
+class KPrPageEffectFactory;
 class KPrView;
 
 /**
@@ -47,11 +48,16 @@ public slots:
 
 protected:
     bool eventFilter( QObject* object, QEvent* event );
+    void updateSubTypes( const KPrPageEffectFactory * factory );
+
+protected slots:
+    void slotSubTypeChanged( int index );
 
 private:
     KPrPageEffectRunner* m_runner;
     KPrView* m_view;
     QComboBox* m_effectCombo;
+    QComboBox* m_subTypeCombo;
     QLabel* m_preview;
     QPixmap m_activePageBuffer;
 };

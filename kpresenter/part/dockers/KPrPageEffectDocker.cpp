@@ -35,6 +35,17 @@
 #include "pageeffects/KPrPageEffectFactory.h"
 #include "commands/KPrPageEffectSetCommand.h"
 
+static const char* s_subTypes[] = {
+    I18N_NOOP( "From Left" ),
+    I18N_NOOP( "From Right" ),
+    I18N_NOOP( "From Top" ),
+    I18N_NOOP( "From Bottom" ),
+    I18N_NOOP( "To Left" ),
+    I18N_NOOP( "To Right" ),
+    I18N_NOOP( "To Top" ),
+    I18N_NOOP( "To Bottom" ),
+};
+
 KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags )
 : QDockWidget( parent, flags )
 , m_view( 0 )
@@ -61,9 +72,15 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     connect( m_effectCombo, SIGNAL( activated( int ) ),
              this, SLOT( slotEffectChanged( int ) ) );
 
+    m_subTypeCombo = new QComboBox( base );
+
+    connect( m_subTypeCombo, SIGNAL( activated( int ) ),
+             this, SLOT( slotSubTypeChanged( int ) ) );
+
     // setup widget layout
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget( m_effectCombo );
+    layout->addWidget( m_subTypeCombo );
     layout->addWidget( m_preview);
     base->setLayout( layout );
     setWidget( base );
@@ -79,6 +96,21 @@ bool KPrPageEffectDocker::eventFilter( QObject* object, QEvent* event )
     }
     else
         return QObject::eventFilter( object, event );  // standard event processing
+}
+
+void KPrPageEffectDocker::updateSubTypes( const KPrPageEffectFactory * factory )
+{
+    if ( factory ) {
+        m_subTypeCombo->setEnabled( true );
+        foreach( KPrPageEffect::SubType subType, factory->subTypes() ) {
+            QString subTypeString = i18n( s_subTypes[subType] );
+            m_subTypeCombo->addItem( subTypeString, subType );
+        }
+    }
+    else {
+        m_subTypeCombo->setEnabled( false );
+        m_subTypeCombo->clear();
+    }
 }
 
 void KPrPageEffectDocker::slotActivePageChanged()
@@ -104,6 +136,9 @@ void KPrPageEffectDocker::slotActivePageChanged()
             }
         }
 
+        const KPrPageEffectFactory * factory = pageEffect ? KPrPageEffectRegistry::instance()->value( effectId ) : 0;
+        updateSubTypes( factory );
+
 /*
     QPainter p( m_activePageBuffer );
 
@@ -123,14 +158,15 @@ void KPrPageEffectDocker::slotEffectChanged( int index )
 {
     // provide a preview of the chosen page effect
     KPrPageEffect * pageEffect = 0;
-    QString pageEffectId = m_effectCombo->itemData( index ).toString();
-    if ( pageEffectId != "" ) {
-        KPrPageEffectFactory::Properties properties( 5000 ); // TODO get data from input
-        const KPrPageEffectFactory * factory = KPrPageEffectRegistry::instance()->value( pageEffectId );
+    QString effectId = m_effectCombo->itemData( index ).toString();
+    const KPrPageEffectFactory * factory = effectId != "" ? KPrPageEffectRegistry::instance()->value( effectId ) : 0;
+    updateSubTypes( factory );
+    if ( factory ) {
+        KPrPageEffectFactory::Properties properties( 5000, KPrPageEffect::FromTop ); // TODO get data from input
         pageEffect = factory->createPageEffect( properties );
     }
     else {
-        // this is to avoid the asser that checks if the effect is different then the last one
+        // this is to avoid the assert that checks if the effect is different then the last one
         // The problem is that a undo is not yet reflected in the UI so it is possible to get the
         // same effect twice.
         // TODO
@@ -145,6 +181,10 @@ void KPrPageEffectDocker::slotEffectChanged( int index )
     // start hard coded
 //    KPrSlideWipeEffect effect;
 //    effect->setup( m_preview );
+}
+
+void KPrPageEffectDocker::slotSubTypeChanged( int index )
+{
 }
 
 void KPrPageEffectDocker::setView( KPrView* view )
