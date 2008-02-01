@@ -37,7 +37,8 @@ namespace KPlato
     
 //--------------
 ViewBase::ViewBase(KoDocument *doc, QWidget *parent)
-    : KoView( doc, parent )
+    : KoView( doc, parent ),
+    m_readWrite( false )
 {
 }
     
@@ -46,8 +47,9 @@ KoDocument *ViewBase::part() const
      return koDocument();
 }
 
-void ViewBase::updateReadWrite( bool /*readwrite*/ )
+void ViewBase::updateReadWrite( bool readwrite )
 {
+    m_readWrite = readwrite;
 }
 
 void ViewBase::setGuiActive( bool active ) // virtual slot
@@ -62,6 +64,10 @@ ViewBase *ViewBase::hitView( const QPoint &glpos )
     return this;
 }
 
+void ViewBase::slotUpdateReadWrite( bool rw )
+{
+    updateReadWrite( rw );
+}
 
 //------------------------------------------------
 

@@ -129,7 +129,10 @@ DocumentsEditor::DocumentsEditor( KoDocument *part, QWidget *parent )
 
 void DocumentsEditor::updateReadWrite( bool readwrite )
 {
+    kDebug()<<isReadWrite()<<"->"<<readwrite;
+    ViewBase::updateReadWrite( readwrite );
     m_view->setReadWrite( readwrite );
+    updateActionsEnabled( readwrite );
 }
 
 void DocumentsEditor::draw( Documents &docs )
@@ -197,14 +200,15 @@ void DocumentsEditor::slotEnableActions( bool on )
 
 void DocumentsEditor::updateActionsEnabled(  bool on )
 {
-    Document *doc = currentDocument();
-    if ( doc == 0 ) {
+    QList<Document*> lst = m_view->selectedDocuments();
+    if ( lst.isEmpty() || lst.count() > 1 ) {
         actionEditDocument->setEnabled( false );
         actionViewDocument->setEnabled( false );
         return;
     }
+    Document *doc = lst.first();
     actionViewDocument->setEnabled( on );
-    actionEditDocument->setEnabled( on && doc->type() == Document::Type_Product );
+    actionEditDocument->setEnabled( on && doc->type() == Document::Type_Product && isReadWrite() );
 }
 
 void DocumentsEditor::setupGui()

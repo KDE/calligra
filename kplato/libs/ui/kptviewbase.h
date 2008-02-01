@@ -78,6 +78,7 @@ public:
     virtual void drawChanges(Project &project) { draw(project); }
     /// Set readWrite mode
     virtual void updateReadWrite( bool );
+    bool isReadWrite() const { return m_readWrite; }
 
     /// Reimplement if your view handles nodes
     virtual Node* currentNode() const { return 0; }
@@ -114,6 +115,8 @@ public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
+    void slotUpdateReadWrite( bool );
+    
 signals:
     /// Emitted when the gui has been activated or deactivated
     void guiActivated( ViewBase*, bool );
@@ -127,6 +130,8 @@ protected:
     
     /// List of actions that will be shown in the views header context menu
     QList<QAction*> m_contextActionList;
+    
+    bool m_readWrite;
 };
 
 class KPLATOUI_EXPORT TreeViewBase : public QTreeView
