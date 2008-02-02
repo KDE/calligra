@@ -15,6 +15,11 @@ IF (POSTGRESQL_FOUND AND PQXX_FOUND)
 	add_subdirectory( pqxx )
 ENDIF (POSTGRESQL_FOUND AND PQXX_FOUND)
 
+INCLUDE(FindFreeTDS)
+IF(FreeTDS_FOUND)
+	add_subdirectory( sybase )
+ENDIF(FreeTDS_FOUND)
+
 #todo add_subdirectory( mdb )
 
 ########### next target ###############
