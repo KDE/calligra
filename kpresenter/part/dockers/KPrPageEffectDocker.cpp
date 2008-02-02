@@ -100,6 +100,7 @@ bool KPrPageEffectDocker::eventFilter( QObject* object, QEvent* event )
 
 void KPrPageEffectDocker::updateSubTypes( const KPrPageEffectFactory * factory )
 {
+    m_subTypeCombo->clear();
     if ( factory ) {
         m_subTypeCombo->setEnabled( true );
         foreach( KPrPageEffect::SubType subType, factory->subTypes() ) {
@@ -109,7 +110,6 @@ void KPrPageEffectDocker::updateSubTypes( const KPrPageEffectFactory * factory )
     }
     else {
         m_subTypeCombo->setEnabled( false );
-        m_subTypeCombo->clear();
     }
 }
 
@@ -139,6 +139,13 @@ void KPrPageEffectDocker::slotActivePageChanged()
         const KPrPageEffectFactory * factory = pageEffect ? KPrPageEffectRegistry::instance()->value( effectId ) : 0;
         updateSubTypes( factory );
 
+        for ( int i = 0; i < m_subTypeCombo->count(); ++i )
+        {
+            if ( m_subTypeCombo->itemData( i ).toInt() == pageEffect->subType() ) {
+                m_subTypeCombo->setCurrentIndex( i );
+                break;
+            }
+        }
 /*
     QPainter p( m_activePageBuffer );
 
@@ -162,8 +169,7 @@ void KPrPageEffectDocker::slotEffectChanged( int index )
     const KPrPageEffectFactory * factory = effectId != "" ? KPrPageEffectRegistry::instance()->value( effectId ) : 0;
     updateSubTypes( factory );
     if ( factory ) {
-        KPrPageEffectFactory::Properties properties( 5000, KPrPageEffect::FromTop ); // TODO get data from input
-        pageEffect = factory->createPageEffect( properties );
+        pageEffect = createPageEffect( factory, m_subTypeCombo->itemData( m_subTypeCombo->currentIndex() ).toInt());
     }
     else {
         // this is to avoid the assert that checks if the effect is different then the last one
@@ -185,6 +191,19 @@ void KPrPageEffectDocker::slotEffectChanged( int index )
 
 void KPrPageEffectDocker::slotSubTypeChanged( int index )
 {
+    QString effectId = m_effectCombo->itemData( m_effectCombo->currentIndex() ).toString();
+    const KPrPageEffectFactory * factory = KPrPageEffectRegistry::instance()->value( effectId );
+    KPrPageEffect * pageEffect( createPageEffect( factory, m_subTypeCombo->itemData( index ).toInt() ) );
+
+    m_view->kopaCanvas()->addCommand( new KPrPageEffectSetCommand( m_view->activePage(), pageEffect ) );
+}
+
+KPrPageEffect * KPrPageEffectDocker::createPageEffect( const KPrPageEffectFactory * factory, int subType )
+{
+    Q_ASSERT( factory );
+    // TODO get data from input
+    KPrPageEffectFactory::Properties properties( 5000, KPrPageEffect::SubType( subType ) );
+    return factory->createPageEffect( properties );
 }
 
 void KPrPageEffectDocker::setView( KPrView* view )
