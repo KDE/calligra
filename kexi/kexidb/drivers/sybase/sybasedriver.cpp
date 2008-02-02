@@ -63,7 +63,7 @@ SybaseDriver::SybaseDriver(QObject *parent, const QStringList &args) :
 	beh->AUTO_INCREMENT_PK_FIELD_OPTION = beh->AUTO_INCREMENT_FIELD_OPTION + " PRIMARY KEY ";
 
 	// confirm
-	beh->SELECT_1_SUBQUERY_SUPPORTED = true;
+	//beh->SELECT_1_SUBQUERY_SUPPORTED = true;
 
 	beh->QUOTATION_MARKS_FOR_IDENTIFIER='"';
 
@@ -84,14 +84,15 @@ SybaseDriver::SybaseDriver(QObject *parent, const QStringList &args) :
 	// boolean
 	d->typeNames[Field::Boolean]="BIT";
 
-	// date and time
-	d->typeNames[Field::Date]="DATE";
+	// date and time. There's only one integrated datetime datatype in Sybase
+        // Though there are smalldatetime (4 bytes) and datetime (8 bytes) data types
+	d->typeNames[Field::Date]="DATETIME";
 	d->typeNames[Field::DateTime]="DATETIME";
-	d->typeNames[Field::Time]="TIME";
+	d->typeNames[Field::Time]="DATETIME"; // or should we use timestamp ?
 
 	// floating point
-	d->typeNames[Field::Float]="FLOAT";
-	d->typeNames[Field::Double]="DOUBLE";
+	d->typeNames[Field::Float]="REAL"; // 4 bytes
+	d->typeNames[Field::Double]="DOUBLE PRECISION"; // 8 bytes
 
 	// strings
 	d->typeNames[Field::Text]="VARCHAR";
