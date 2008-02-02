@@ -57,7 +57,7 @@
 
 #else /* UNIX */
 
-#define KPLATOWORK_EXPORT KDE_EXPORT
+#define KPLATOWORKAPP_EXPORT KDE_EXPORT
 
 #endif
 /* Now the same for KPLATOWORK_TEST_EXPORT, if compiling with unit tests enabled */
