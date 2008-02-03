@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2007 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2008 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU Lesser General Public License as published by
@@ -15,28 +15,26 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_EXIV2_IO_H_
-#define _KIS_EXIV2_IO_H_
+#ifndef _KIS_XMP_IO_H_
+#define _KIS_XMP_IO_H_
 
 #include <kis_meta_data_io_backend.h>
 
 #include <klocale.h>
 
-class KisExifIO : public KisMetaData::IOBackend {
+class KisXMPIO : public KisMetaData::IOBackend {
     struct Private;
     public:
-        KisExifIO();
-        virtual ~KisExifIO() {}
-        virtual QString id() const { return "exif"; }
-        virtual QString name() const { return i18n("Exif"); }
-        virtual BackendType type() const { return Binary; }
+        KisXMPIO();
+        virtual ~KisXMPIO();
+        virtual QString id() const { return "xmp"; }
+        virtual QString name() const { return i18n("XMP"); }
+        virtual BackendType type() const { return Text; }
         virtual bool supportSaving() const { return true; }
         virtual bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const;
-        virtual bool canSaveAllEntries(KisMetaData::Store* store) const;
+        virtual bool canSaveAllEntries(KisMetaData::Store* ) const { return true; }
         virtual bool supportLoading() const { return true; }
         virtual bool loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const;
-    private:
-        Private* const d;
 };
 
 #endif

@@ -60,21 +60,22 @@ extern "C" {
 const char photoshopMarker[] = "Photoshop 3.0\0";
 const char photoshopBimId_[] = "8BIM";
 const uint16_t photoshopIptc = 0x0404;
+const char xmpMarker[] = "http://ns.adobe.com/xap/1.0/\0";
 const QByteArray photoshopIptc_((char*)&photoshopIptc, 2);
 
 namespace {
 
     J_COLOR_SPACE getColorTypeforColorSpace( const KoColorSpace * cs)
     {
-        if ( KoID(cs->id()) == KoID("GRAYA") || KoID(cs->id()) == KoID("GRAYA16") )
+        if ( KoID(cs->id()) == KoID("GRAYA") or KoID(cs->id()) == KoID("GRAYA16") )
         {
             return JCS_GRAYSCALE;
         }
-        if ( KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16") )
+        if ( KoID(cs->id()) == KoID("RGBA") or KoID(cs->id()) == KoID("RGBA16") )
         {
             return JCS_RGB;
         }
-        if ( KoID(cs->id()) == KoID("CMYK") || KoID(cs->id()) == KoID("CMYK16") )
+        if ( KoID(cs->id()) == KoID("CMYK") or KoID(cs->id()) == KoID("CMYK16") )
         {
             return JCS_CMYK;
         }
@@ -264,15 +265,15 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
         dbgFile <<"Marker is" << marker->marker;
-        if (marker->marker != (JOCTET) (JPEG_APP0 + 1) ||
+        if (marker->marker != (JOCTET) (JPEG_APP0 + 1) or
             marker->data_length < 14)
             continue; /* Exif data is in an APP1 marker of at least 14 octets */
 
-        if (GETJOCTET (marker->data[0]) != (JOCTET) 0x45 ||
-            GETJOCTET (marker->data[1]) != (JOCTET) 0x78 ||
-            GETJOCTET (marker->data[2]) != (JOCTET) 0x69 ||
-            GETJOCTET (marker->data[3]) != (JOCTET) 0x66 ||
-            GETJOCTET (marker->data[4]) != (JOCTET) 0x00 ||
+        if (GETJOCTET (marker->data[0]) != (JOCTET) 0x45 or
+            GETJOCTET (marker->data[1]) != (JOCTET) 0x78 or
+            GETJOCTET (marker->data[2]) != (JOCTET) 0x69 or
+            GETJOCTET (marker->data[3]) != (JOCTET) 0x66 or
+            GETJOCTET (marker->data[4]) != (JOCTET) 0x00 or
             GETJOCTET (marker->data[5]) != (JOCTET) 0x00)
             continue; /* no Exif header */
         dbgFile <<"Found exif information of length :"<< marker->data_length;
@@ -324,7 +325,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
         dbgFile <<"Marker is" << marker->marker;
-        if (marker->marker != (JOCTET) (JPEG_APP0 + 13) ||
+        if (marker->marker != (JOCTET) (JPEG_APP0 + 13) or
             marker->data_length < 14)
             continue; /* IPTC data is in an APP13 marker of at least 16 octets */
 
@@ -335,7 +336,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
                 dbgFile << (int)(*(marker->data+i)) <<"" << (int)(photoshopMarker[i]);
             }
             dbgFile <<"No photoshop marker";
-            break; /* No IPTC Header */
+            continue; /* No IPTC Header */
         }
 
         dbgFile <<"Found Photoshop information of length :"<< marker->data_length;
@@ -358,6 +359,28 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
         }
         break;
     }
+    
+    dbgFile <<"Looking for XMP information";
+    
+    for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
+        dbgFile <<"Marker is" << marker->marker;
+        if (marker->marker != (JOCTET) (JPEG_APP0 + 1) or marker->data_length < 31)
+        {
+            continue; /* XMP data is in an APP1 marker of at least 31 octets */
+        }
+        if( memcmp(marker->data, xmpMarker, 29) != 0 )
+        {
+            dbgFile <<"Not XMP marker";
+            continue; /* No xmp Header */
+        }
+        dbgFile << "Found XMP Marker of length " << marker->data_length;
+        QByteArray byteArray( (const char*)marker->data + 29, marker->data_length - 29);
+        KisMetaData::IOBackend* xmpIO = KisMetaData::IOBackendRegistry::instance()->value("xmp");
+        Q_ASSERT(xmpIO);
+        xmpIO->loadFrom( layer->metaData(), new QBuffer( &byteArray ) );
+        break;
+    }
+    
     // Dump loaded metadata
     layer->metaData()->debugDump();
 
@@ -583,7 +606,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     // Save annotation
     vKisAnnotationSP_it it = annotationsStart;
     while(it != annotationsEnd) {
-        if (!(*it) || (*it) -> type() == QString()) {
+        if (!(*it) or (*it) -> type() == QString()) {
             dbgFile <<"Warning: empty annotation";
             ++it;
             continue;
