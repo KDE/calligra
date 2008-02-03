@@ -32,6 +32,7 @@
 #include <kis_group_layer.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
+#include <kis_paint_device.h>
 
 
 #include "kis_tiff_converter.h"

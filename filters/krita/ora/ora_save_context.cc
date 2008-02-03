@@ -23,6 +23,8 @@
 #include <KoStoreDevice.h>
 
 #include <kis_paint_layer.h>
+#include <kis_paint_device.h>
+#include <kis_image.h>
 
 #include "kis_png_converter.h"
 

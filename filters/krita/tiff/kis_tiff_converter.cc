@@ -32,6 +32,8 @@
 #include <kio/deletejob.h>
 
 #include <KoColorSpaceRegistry.h>
+#include <KoColorSpace.h>
+
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
