@@ -68,6 +68,7 @@ private:
     void updateActions();
     void setTextCursorInternal( int textCursor );
     void createTextCursorShape();
+    void updateTextCursorArea() const;
 
     SimpleTextShape * m_currentShape;
     KoPathShape * m_path;

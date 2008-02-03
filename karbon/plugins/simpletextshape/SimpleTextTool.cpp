@@ -64,14 +64,15 @@ void SimpleTextTool::paint( QPainter &painter, const KoViewConverter &converter)
 
     m_currentShape->applyConversion( painter, converter );
     painter.setBrush( Qt::black );
+    QTransform transform;
     QPointF pos = m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
-    painter.translate( pos.x(), pos.y() );
+    transform.translate( pos.x(), pos.y() );
     m_currentShape->getCharPositionAt( m_textCursor, pos );
-    painter.translate( pos.x() - 1, pos.y() );
+    transform.translate( pos.x() - 1, pos.y() );
     qreal angle;
     m_currentShape->getCharAngleAt( m_textCursor, angle );
-    painter.rotate( angle );
-    // QFontMetrics metrics( m_font );
+    transform.rotate( angle );
+    painter.setWorldTransform( transform, true );
     painter.drawPath( m_textCursorShape );
 }
 
@@ -236,14 +237,29 @@ void SimpleTextTool::setTextCursor( int textCursor )
     setTextCursorInternal( textCursor );
 }
 
+void SimpleTextTool::updateTextCursorArea() const
+{
+    QRectF bbox = m_textCursorShape.boundingRect();
+    QTransform transform;
+    QPointF pos = m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
+    transform.translate( pos.x(), pos.y() );
+    m_currentShape->getCharPositionAt( m_textCursor, pos );
+    transform.translate( pos.x() - 1, pos.y() );
+    qreal angle;
+    m_currentShape->getCharAngleAt( m_textCursor, angle );
+    transform.rotate( angle );
+    bbox = transform.mapRect( bbox );
+    m_canvas->updateCanvas( bbox );
+}
+
 void SimpleTextTool::setTextCursorInternal( int textCursor )
 {
-    if ( m_currentShape )
-        m_currentShape->update();
+    if ( m_currentShape ) {
+        updateTextCursorArea();
+    }
     m_textCursor = textCursor;
     if ( m_currentShape ) {
-        createTextCursorShape();
-        m_currentShape->update();
+        updateTextCursorArea();
     }
 }
 
@@ -253,16 +269,15 @@ void SimpleTextTool::createTextCursorShape()
     m_textCursorShape = QPainterPath();
     QRectF extents;
     m_currentShape->getCharExtentsAt( m_textCursor, extents );
-    m_textCursorShape.addRect( 0, 0, 1, extents.height() );
+    m_textCursorShape.addRect( 0, 0, 1, -extents.height() );
     m_textCursorShape.closeSubpath();
 }
 
 void SimpleTextTool::removeFromTextCursor( unsigned int nr )
 {
     if ( m_textCursor > 0 && m_textCursor >= int( nr ) ) {
-        m_textCursor -= nr;
+        setTextCursorInternal( m_textCursor - nr );
         m_currentShape->removeRange( m_textCursor, nr );
-        setTextCursorInternal( m_textCursor );
     }
 }
 
@@ -277,8 +292,7 @@ void SimpleTextTool::addToTextCursor( const QString &str )
 	unsigned int len = printable.length();
         if ( len ) {
 	    m_currentShape->addRange( m_textCursor, printable );
-	    m_textCursor += len;
-	    setTextCursorInternal( m_textCursor );
+	    setTextCursorInternal( m_textCursor + len );
         }
     }
 }

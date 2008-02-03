@@ -361,7 +361,7 @@ void SimpleTextShape::getCharExtentsAt( unsigned int charNum, QRectF &extents ) 
 {
     QFontMetrics metrics( m_font );
     int w = metrics.charWidth( m_text, qMin( int( charNum ), m_text.length() - 1 ) );
-    extents = QRectF( 0, 0, w, - ( metrics.height() ) );
+    extents = QRectF( 0, 0, w, metrics.height() );
 }
 
 void SimpleTextShape::updateSizeAndPosition()
