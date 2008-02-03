@@ -261,7 +261,7 @@ bool KarbonDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingConte
     context.setImageCollection( &d->imageCollection );
 
     KoXmlElement layerElement;
-    forEachElement( layerElement, context.koLoadingContext().stylesReader().layerSet() )
+    forEachElement( layerElement, context.odfLoadingContext().stylesReader().layerSet() )
     {
         KoShapeLayer * l = new KoShapeLayer();
         if( l->loadOdf( layerElement, context ) )

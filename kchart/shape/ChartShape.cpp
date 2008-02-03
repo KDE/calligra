@@ -1202,7 +1202,7 @@ bool ChartShape::loadOdfLegend( const KoXmlElement    &legendElement,
         
         if ( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
             QString styleName = legendElement.attributeNS( KoXmlNS::chart, "style-name", QString() );
-            const KoXmlElement *styleElement = context.koLoadingContext().stylesReader().findStyle( styleName, "chart" );
+            const KoXmlElement *styleElement = context.odfLoadingContext().stylesReader().findStyle( styleName, "chart" );
             if ( styleElement ) {
                 KoXmlNode graphicsPropertiesNode = styleElement->namedItemNS( KoXmlNS::style, "graphic-properties" );
                 KoXmlElement graphicsPropertiesElement = *( ( KoXmlElement* )( &graphicsPropertiesNode ) );
