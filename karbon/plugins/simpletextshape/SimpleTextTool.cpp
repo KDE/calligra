@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -36,6 +37,8 @@
 #include <QCheckBox>
 #include <QPainter>
 #include <QPainterPath>
+
+#include <float.h>
 
 SimpleTextTool::SimpleTextTool(KoCanvasBase *canvas)
     : KoTool(canvas), m_currentShape(0), m_path(0), m_tmpPath(0), m_textCursor( -1 )
@@ -78,6 +81,23 @@ void SimpleTextTool::paint( QPainter &painter, const KoViewConverter &converter)
 
 void SimpleTextTool::mousePressEvent( KoPointerEvent *event )
 {
+    if ( m_currentShape && m_currentShape->hitTest( event->point ) ) {
+         QPointF pos = event->point;
+         pos -= m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
+	 const int len = m_currentShape->text().length();
+	 int hit = len;
+	 double mindist = DBL_MAX;
+	 for ( int i = 0; i < len;++i ) {
+	     QPointF center;
+             m_currentShape->getCharPositionAt( i, center );
+	     center = pos - center;
+	     if ( (fabs(center.x()) + fabs(center.y())) < mindist ) {
+	         hit = i;
+		 mindist = fabs(center.x()) + fabs(center.y());
+	     }
+	 }
+	 setTextCursorInternal( hit );
+    }
     event->ignore();
 }
 
