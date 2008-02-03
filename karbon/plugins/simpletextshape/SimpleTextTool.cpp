@@ -274,11 +274,11 @@ void SimpleTextTool::updateTextCursorArea() const
 
 void SimpleTextTool::setTextCursorInternal( int textCursor )
 {
-    if ( m_currentShape ) {
+    if ( m_currentShape && m_textCursor > -1 ) {
         updateTextCursorArea();
     }
     m_textCursor = textCursor;
-    if ( m_currentShape ) {
+    if ( m_currentShape && m_textCursor > -1 ) {
         updateTextCursorArea();
     }
 }
