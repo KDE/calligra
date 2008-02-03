@@ -29,7 +29,7 @@
 
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoGenStyles.h>
 #include <KoEmbeddedDocumentSaver.h>
@@ -101,8 +101,8 @@ void FormulaToolOptions::slotLoadFormula()
         return;
 
     KoOdfStylesReader stylesReader;
-    KoOasisLoadingContext oasisContext( 0, stylesReader, 0 );
-    KoShapeLoadingContext shapeContext( oasisContext, 0 );
+    KoOdfLoadingContext odfContext( stylesReader, 0 );
+    KoShapeLoadingContext shapeContext( odfContext, 0 );
 
     // setup a DOM structure and start the actual loading process
     KoXmlDocument tmpDocument;

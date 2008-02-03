@@ -95,7 +95,7 @@
 #include <KoCharSelectDia.h>
 #include <KoColor.h>
 #include <KoMainWindow.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoPartSelectAction.h>
@@ -4105,7 +4105,7 @@ void View::paste()
       return;
     }
 
-    KoOasisLoadingContext context( d->doc, stylesReader, store );
+    KoOdfLoadingContext context( stylesReader, store );
     Q_ASSERT( !stylesReader.officeStyle().isNull() );
 
     //load in first

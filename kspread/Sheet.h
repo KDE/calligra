@@ -45,7 +45,7 @@ class QWidget;
 class KoDocumentEntry;
 class KoStyleStack;
 class KoGenStyles;
-class KoOasisLoadingContext;
+class KoOdfLoadingContext;
 class KoOasisSettings;
 class KoOdfStylesReader;
 class KoShapeSavingContext;
@@ -304,7 +304,7 @@ public:
      * \ingroup OpenDocument
      */
     bool loadOasis( const KoXmlElement& sheet,
-                    KoOasisLoadingContext& oasisContext,
+                    KoOdfLoadingContext& odfContext,
                     const Styles& autoStyles,
                     const QHash<QString, Conditions>& conditionalStyles );
 
@@ -322,7 +322,7 @@ public:
     /**
      * \ingroup OpenDocument
      */
-    void loadOasisObjects( const KoXmlElement& e, KoOasisLoadingContext& oasisContext );
+    void loadOasisObjects( const KoXmlElement& e, KoOdfLoadingContext& odfContext );
 
     /**
      * \ingroup OpenDocument
@@ -1031,7 +1031,7 @@ protected:
      * \ingroup OpenDocument
      */
     bool loadRowFormat( const KoXmlElement& row, int &rowIndex,
-                        KoOasisLoadingContext& oasisContext,
+                        KoOdfLoadingContext& odfContext,
                         QHash<QString, QRegion>& rowStyleRegions,
                         QHash<QString, QRegion>& cellStyleRegions );
 

@@ -30,7 +30,7 @@
 #include <KoDom.h>
 #include <KoGenStyles.h>
 #include <KoOasisSettings.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlNS.h>
@@ -310,7 +310,7 @@ QDomElement Map::save( QDomDocument& doc )
   return mymap;
 }
 
-bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisContext )
+bool Map::loadOasis( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
 {
     if ( body.hasAttributeNS( KoXmlNS::table, "structure-protected" ) )
     {
@@ -358,7 +358,7 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
 
     //pre-load auto styles
     QHash<QString, Conditions> conditionalStyles;
-    Styles autoStyles = doc()->styleManager()->loadOasisAutoStyles( oasisContext.stylesReader(), conditionalStyles );
+    Styles autoStyles = doc()->styleManager()->loadOasisAutoStyles( odfContext.stylesReader(), conditionalStyles );
 
     // load the sheet
     sheetNode = body.firstChild();
@@ -379,7 +379,7 @@ bool Map::loadOasis( const KoXmlElement& body, KoOasisLoadingContext& oasisConte
                     Sheet* sheet = findSheet( name );
                     if( sheet )
                     {
-                        sheet->loadOasis( sheetElement, oasisContext, autoStyles, conditionalStyles );
+                        sheet->loadOasis( sheetElement, odfContext, autoStyles, conditionalStyles );
                     }
                 }
             }

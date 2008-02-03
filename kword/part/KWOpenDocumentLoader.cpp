@@ -300,16 +300,16 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
 
     // TODO check versions and mimetypes etc.
 
-    KoOasisLoadingContext oasisContext( d->document, odfStore.styles(), odfStore.store() );
-    KoShapeLoadingContext sc( oasisContext, d->document );
+    KoOdfLoadingContext odfContext( odfStore.styles(), odfStore.store() );
+    KoShapeLoadingContext sc( odfContext, d->document );
 
     // Load all styles before the corresponding paragraphs try to use them!
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
-    sharedData->loadOdfStyles( oasisContext, d->document->styleManager(), true );
+    sharedData->loadOdfStyles( odfContext, d->document->styleManager(), true );
     sc.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
 
     KoTextLoader * loader = new KoTextLoader( sc );
-    KoTextLoadingContext context( loader, d->document, odfStore.styles(), odfStore.store() );
+    KoTextLoadingContext context( loader, odfStore.styles(), odfStore.store() );
 
 
     KoColumns columns;
@@ -506,7 +506,7 @@ void KWOpenDocumentLoader::loadSettings( const KoXmlDocument& settingsDoc )
     //1.6: d->document->variableCollection()->variableSetting()->loadOasis( settings );
 }
 
-bool KWOpenDocumentLoader::loadPageLayout(KoOasisLoadingContext& context, const QString& masterPageName)
+bool KWOpenDocumentLoader::loadPageLayout(KoOdfLoadingContext& context, const QString& masterPageName)
 {
     kDebug(32001)<<"KWOpenDocumentLoader::loadPageLayout masterPageName="<<masterPageName;
     const KoOdfStylesReader& styles = context.stylesReader();

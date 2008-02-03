@@ -41,7 +41,7 @@
 
 #include <KoDom.h>
 #include <KoDocumentInfo.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoOasisSettings.h>
 #include <KoOdfStylesReader.h>
 #include <KoQueryTrader.h>
@@ -2643,7 +2643,7 @@ QString Sheet::getPart( const KoXmlNode & part )
 
 
 bool Sheet::loadOasis( const KoXmlElement& sheetElement,
-                       KoOasisLoadingContext& oasisContext,
+                       KoOdfLoadingContext& odfContext,
                        const Styles& autoStyles,
                        const QHash<QString, Conditions>& conditionalStyles )
 {
@@ -2652,7 +2652,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     {
         QString stylename = sheetElement.attributeNS( KoXmlNS::table, "style-name", QString() );
         //kDebug(36003)<<" style of table :"<<stylename;
-        const KoXmlElement *style = oasisContext.stylesReader().findStyle( stylename, "table" );
+        const KoXmlElement *style = odfContext.stylesReader().findStyle( stylename, "table" );
         Q_ASSERT( style );
         //kDebug(36003)<<" style :"<<style;
         if ( style )
@@ -2670,7 +2670,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
             {
                 QString masterPageStyleName = style->attributeNS( KoXmlNS::style, "master-page-name", QString() );
                 //kDebug()<<"style->attribute( style:master-page-name ) :"<<masterPageStyleName;
-                KoXmlElement *masterStyle = oasisContext.stylesReader().masterPages()[masterPageStyleName];
+                KoXmlElement *masterStyle = odfContext.stylesReader().masterPages()[masterPageStyleName];
                 //kDebug()<<"stylesReader.styles()[masterPageStyleName] :"<<masterStyle;
                 if ( masterStyle )
                 {
@@ -2679,7 +2679,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                     {
                         QString masterPageLayoutStyleName = masterStyle->attributeNS( KoXmlNS::style, "page-layout-name", QString() );
                         //kDebug(36003)<<"masterPageLayoutStyleName :"<<masterPageLayoutStyleName;
-                        const KoXmlElement *masterLayoutStyle = oasisContext.stylesReader().findStyle( masterPageLayoutStyleName );
+                        const KoXmlElement *masterLayoutStyle = odfContext.stylesReader().findStyle( masterPageLayoutStyleName );
                       if ( masterLayoutStyle )
                       {
                         //kDebug(36003)<<"masterLayoutStyle :"<<masterLayoutStyle;
@@ -2727,7 +2727,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                   {
                     // NOTE Handle header cols as ordinary ones
                     //      as long as they're not supported.
-                    loadColumnFormat( headerColumnNode.toElement(), oasisContext.stylesReader(),
+                    loadColumnFormat( headerColumnNode.toElement(), odfContext.stylesReader(),
                                       indexCol, columnStyleRegions );
                     headerColumnNode = headerColumnNode.nextSibling();
                   }
@@ -2735,7 +2735,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                 else if ( rowElement.localName()=="table-column" && indexCol <= KS_colMax )
                 {
                     kDebug(36003)<<" table-column found : index column before"<< indexCol;
-                    loadColumnFormat( rowElement, oasisContext.stylesReader(), indexCol, columnStyleRegions );
+                    loadColumnFormat( rowElement, odfContext.stylesReader(), indexCol, columnStyleRegions );
                     kDebug(36003)<<" table-column found : index column after"<< indexCol;
                     maxColumn = qMax( maxColumn, indexCol - 1 );
                 }
@@ -2747,7 +2747,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                     // NOTE Handle header rows as ordinary ones
                     //      as long as they're not supported.
                     loadRowFormat( headerRowNode.toElement(), rowIndex,
-                                   oasisContext, rowStyleRegions,
+                                   odfContext, rowStyleRegions,
                                    cellStyleRegions );
                     headerRowNode = headerRowNode.nextSibling();
                   }
@@ -2755,13 +2755,13 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                 else if( rowElement.localName() == "table-row" )
                 {
                     kDebug(36003)<<" table-row found :index row before"<<rowIndex;
-                    loadRowFormat( rowElement, rowIndex, oasisContext,
+                    loadRowFormat( rowElement, rowIndex, odfContext,
                                    rowStyleRegions, cellStyleRegions );
                     kDebug(36003)<<" table-row found :index row after"<<rowIndex;
                 }
                 else if ( rowElement.localName() == "shapes" )
                 {
-                    KoShapeLoadingContext shapeLoadingContext( oasisContext, doc() );
+                    KoShapeLoadingContext shapeLoadingContext( odfContext, doc() );
                     d->shapeContainer->loadOdf( rowElement, shapeLoadingContext );
                 }
             }
@@ -2814,7 +2814,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
 }
 
 
-void Sheet::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& oasisContext )
+void Sheet::loadOasisObjects( const KoXmlElement &parent, KoOdfLoadingContext& odfContext )
 {
 #if 0 // KSPREAD_KOPART_EMBEDDING
     KoXmlElement e;
@@ -2844,7 +2844,7 @@ void Sheet::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext&
 
           if ( obj )
           {
-            obj->loadOasis( e, oasisContext );
+            obj->loadOasis( e, odfContext );
             insertObject( obj );
           }
         }
@@ -3151,7 +3151,7 @@ void Sheet::loadOasisInsertStyles( const Styles& autoStyles,
 }
 
 bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
-                           KoOasisLoadingContext& oasisContext,
+                           KoOdfLoadingContext& odfContext,
                            QHash<QString, QRegion>& rowStyleRegions,
                            QHash<QString, QRegion>& cellStyleRegions )
 {
@@ -3163,7 +3163,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
     if ( row.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
       QString str = row.attributeNS( KoXmlNS::table, "style-name", QString() );
-      const KoXmlElement *style = oasisContext.stylesReader().findStyle( str, "table-row" );
+      const KoXmlElement *style = odfContext.stylesReader().findStyle( str, "table-row" );
       if ( style )
       {
         styleStack.push( *style );
@@ -3252,7 +3252,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
             continue;
 
         Cell cell(this, columnIndex, rowIndex);
-        cell.loadOasis(cellElement, oasisContext);
+        cell.loadOasis(cellElement, odfContext);
 
         bool ok = false;
         const int n = cellElement.attributeNS(KoXmlNS::table, "number-columns-repeated", QString()).toInt(&ok);

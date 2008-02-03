@@ -25,7 +25,7 @@
 #include <klocale.h>
 #include <KoChild.h>
 #include <KoDom.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoPictureCollection.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
@@ -162,7 +162,7 @@ class EmbeddedObject
     };
 
     virtual bool load( const KoXmlElement& element );
-    virtual void loadOasis(const KoXmlElement &element, KoOasisLoadingContext & context );
+    virtual void loadOasis(const KoXmlElement &element, KoOdfLoadingContext & context );
     virtual QDomElement save( QDomDocument& doc );
     virtual bool saveOasisObject( KSpreadOasisSaveContext &sc ) const;
     virtual void draw( QPainter *_painter );
@@ -234,7 +234,7 @@ class EmbeddedKOfficeObject : public EmbeddedObject
     KoDocumentChild *embeddedObject();
 
     bool load( const KoXmlElement& element );
-    virtual void loadOasis(const KoXmlElement &element, KoOasisLoadingContext & context );
+    virtual void loadOasis(const KoXmlElement &element, KoOdfLoadingContext & context );
     QDomElement save( QDomDocument& doc );
     virtual void draw( QPainter *_painter );
 
@@ -273,7 +273,7 @@ class EmbeddedChart : public EmbeddedKOfficeObject
     void update();
 
     bool load( const KoXmlElement& element );
-    virtual void loadOasis(const KoXmlElement &element, KoOasisLoadingContext & context );
+    virtual void loadOasis(const KoXmlElement &element, KoOdfLoadingContext & context );
     QDomElement save( QDomDocument& doc );
     virtual void draw( QPainter *_painter );
 
@@ -309,7 +309,7 @@ class EmbeddedPictureObject : public EmbeddedObject
     virtual QString getTypeString() const
         { return i18n("Picture"); }
     bool load( const KoXmlElement& element );
-    virtual void loadOasis(const KoXmlElement &element, KoOasisLoadingContext & context );
+    virtual void loadOasis(const KoXmlElement &element, KoOdfLoadingContext & context );
     QDomElement save( QDomDocument& doc );
     virtual void draw( QPainter *_painter );
 
@@ -338,7 +338,7 @@ class EmbeddedPictureObject : public EmbeddedObject
     //virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
 
     //virtual double load(const KoXmlElement &element);
-    //virtual void loadOasis(const KoXmlElement &element, KoOasisLoadingContext & context, KPRLoadingInfo *info);
+    //virtual void loadOasis(const KoXmlElement &element, KoOdfLoadingContext & context, KPRLoadingInfo *info);
 
 //     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 //                        int /* page */, SelectionMode selectionMode, bool drawContour = false );
@@ -379,7 +379,7 @@ class EmbeddedPictureObject : public EmbeddedObject
 
     QPixmap changePictureSettings( const QPixmap& _tmpPixmap );
     virtual void saveOasisPictureElement( KoGenStyle &styleobjectauto ) const;
-    void loadOasisPictureEffect(KoOasisLoadingContext & context );
+    void loadOasisPictureEffect(KoOdfLoadingContext & context );
     virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
 
     /**

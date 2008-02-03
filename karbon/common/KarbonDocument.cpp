@@ -35,7 +35,7 @@
 #include <KoStore.h>
 #include <KoPageLayout.h>
 #include <KoXmlWriter.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoShapeSavingContext.h>
 #include <KoShapeLoadingContext.h>

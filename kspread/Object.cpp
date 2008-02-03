@@ -100,7 +100,7 @@ bool EmbeddedObject::load( const KoXmlElement& /*element*/ )
     return false;
 }
 
-void EmbeddedObject::loadOasis(const KoXmlElement &element, KoOasisLoadingContext & context )
+void EmbeddedObject::loadOasis(const KoXmlElement &element, KoOdfLoadingContext & context )
 {
   if(element.hasAttributeNS( KoXmlNS::draw, "name" ))
     m_objectName = element.attributeNS( KoXmlNS::draw, "name", QString());
@@ -404,7 +404,7 @@ bool EmbeddedKOfficeObject::load( const KoXmlElement& element )
     return result;
 }
 
-void EmbeddedKOfficeObject::loadOasis(const KoXmlElement &element, KoOasisLoadingContext &context/*, KPRLoadingInfo *info*/)
+void EmbeddedKOfficeObject::loadOasis(const KoXmlElement &element, KoOdfLoadingContext &context/*, KPRLoadingInfo *info*/)
 {
     kDebug()<<"void EmbeddedKOfficeObject::loadOasis(const KoXmlElement &element)******************";
     EmbeddedObject::loadOasis( element, context );
@@ -568,7 +568,7 @@ bool EmbeddedChart::load( const KoXmlElement& element )
     return true;
 }
 
-void EmbeddedChart::loadOasis(const KoXmlElement &element, KoOasisLoadingContext &context/*, KPRLoadingInfo *info*/)
+void EmbeddedChart::loadOasis(const KoXmlElement &element, KoOdfLoadingContext &context/*, KPRLoadingInfo *info*/)
 {
     kDebug()<<"void EmbeddedChart::loadOasis(const KoXmlElement &element)******************";
     EmbeddedKOfficeObject::loadOasis( element, context );
@@ -904,7 +904,7 @@ void EmbeddedPictureObject::reload( void )
 //     return fragment;
 // }
 
-void EmbeddedPictureObject::loadOasisPictureEffect(KoOasisLoadingContext & context )
+void EmbeddedPictureObject::loadOasisPictureEffect(KoOdfLoadingContext & context )
 {
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
@@ -963,7 +963,7 @@ void EmbeddedPictureObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles&
      saveOasisPictureElement( styleObjectAuto );
 }
 
-void EmbeddedPictureObject::loadOasis(const KoXmlElement &element, KoOasisLoadingContext & context/*, KPRLoadingInfo *info*/)
+void EmbeddedPictureObject::loadOasis(const KoXmlElement &element, KoOdfLoadingContext & context/*, KPRLoadingInfo *info*/)
 {
     //load it into kpresenter_doc
     EmbeddedObject::loadOasis( element, context );

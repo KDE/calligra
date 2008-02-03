@@ -29,7 +29,7 @@
 #include <KoXmlReader.h>
 
 class KoStore;
-class KoOasisLoadingContext;
+class KoOdfLoadingContext;
 
 class QDomElement;
 class QDomDocument;
@@ -86,7 +86,7 @@ public:
   /**
    * \ingroup OpenDocument
    */
-  bool loadOasis( const KoXmlElement& mymap, KoOasisLoadingContext& oasisContext );
+  bool loadOasis( const KoXmlElement& mymap, KoOdfLoadingContext& odfContext );
 
   /**
    * \ingroup NativeFormat

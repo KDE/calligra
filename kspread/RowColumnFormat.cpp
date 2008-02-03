@@ -33,7 +33,7 @@
 #include <KoGenStyles.h>
 #include <KoGlobal.h>
 #include <KoStyleStack.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 
 #include "CellStorage.h"

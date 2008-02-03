@@ -1288,7 +1288,7 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
   };
 }
 
-bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisContext )
+bool Cell::loadOasis( const KoXmlElement& element, KoOdfLoadingContext& odfContext )
 {
     kDebug(36003) <<"*** Loading cell properties ***** at" << name();
 
@@ -1555,7 +1555,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisC
 
     KoXmlElement frame = KoDom::namedItemNS( element, KoXmlNS::draw, "frame" );
     if ( !frame.isNull() )
-      loadOasisObjects( frame, oasisContext );
+      loadOasisObjects( frame, odfContext );
 
     return true;
 }
@@ -1614,7 +1614,7 @@ void Cell::loadOasisCellText( const KoXmlElement& parent )
     }
 }
 
-void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& oasisContext )
+void Cell::loadOasisObjects( const KoXmlElement &parent, KoOdfLoadingContext& odfContext )
 {
 #if 0 // KSPREAD_KOPART_EMBEDDING
     for( KoXmlElement e = parent; !e.isNull(); e = e.nextSibling().toElement() )
@@ -1641,7 +1641,7 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOasisLoadingContext& 
 
           if ( obj )
           {
-            obj->loadOasis( e, oasisContext );
+            obj->loadOasis( e, odfContext );
             doc()->insertObject( obj );
 
             QString ref = e.attributeNS( KoXmlNS::table, "end-cell-address", QString() );

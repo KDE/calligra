@@ -43,7 +43,7 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlNS.h>
 #include <KoOdfStylesReader.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoShapeLoadingContext.h>
 
 // KDChart

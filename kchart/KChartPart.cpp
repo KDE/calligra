@@ -61,7 +61,7 @@ using std::cerr;
 #include <KoStoreDevice.h>
 #include <KoShapeSavingContext.h>
 #include <KoToolManager.h>
-#include <KoOasisLoadingContext.h>
+#include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
@@ -633,7 +633,7 @@ bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
     styleManager()->loadOasisStyleTemplate( stylesReader, this );
 #endif
 
-    KoOasisLoadingContext  context( this, odfStore.styles(), odfStore.store() );
+    KoOdfLoadingContext  context( odfStore.styles(), odfStore.store() );
     KoShapeLoadingContext  shapeContext( context, this );
 
     // ----------------------------------------------------------------
@@ -694,7 +694,7 @@ bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
     }
 
     // Get the loading context and stylestack from the styles.
-    KoOasisLoadingContext  loadingContext( this, stylesReader, store );
+    KoOdfLoadingContext  loadingContext( stylesReader, store );
     //KoStyleStack          &styleStack = loadingContext.styleStack();
 
 #if 0  // Example code!!

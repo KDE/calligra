@@ -30,7 +30,7 @@ class KWDocument;
 class KWPageManager;
 class KWTextFrameSet;
 class KoOdfReadStore;
-class KoOasisLoadingContext;
+class KoOdfLoadingContext;
 class KoTextLoadingContext;
 class KoTextAnchor;
 class KoXmlDocument;
@@ -73,7 +73,7 @@ signals:
 
 protected:
     virtual void loadSettings( const KoXmlDocument& settings );
-    virtual bool loadPageLayout( KoOasisLoadingContext& context, const QString& masterPageName );
+    virtual bool loadPageLayout( KoOdfLoadingContext& context, const QString& masterPageName );
     virtual bool loadMasterPageStyle(KoTextLoadingContext& context, const QString& masterPageName);
 
     virtual void loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);

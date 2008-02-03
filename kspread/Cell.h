@@ -55,7 +55,7 @@ class KLocale;
 class KoXmlWriter;
 class KoGenStyles;
 class KoGenStyle;
-class KoOasisLoadingContext;
+class KoOdfLoadingContext;
 
 namespace KSpread
 {
@@ -335,9 +335,9 @@ public:
      * \ingroup OpenDocument
      * Loads a cell from an OASIS XML element.
      * @param element An OASIS XML element
-     * @param oasisContext The loading context assoiated with the XML element
+     * @param odfContext The loading context assoiated with the XML element
      */
-    bool loadOasis( const KoXmlElement& element, KoOasisLoadingContext& oasisContext );
+    bool loadOasis( const KoXmlElement& element, KoOdfLoadingContext& odfContext );
 
     /**
      * \ingroup OpenDocument
@@ -576,7 +576,7 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    void loadOasisObjects( const KoXmlElement& e, KoOasisLoadingContext& oasisContext );
+    void loadOasisObjects( const KoXmlElement& e, KoOdfLoadingContext& odfContext );
 
     /**
      * \ingroup OpenDocument

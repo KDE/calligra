@@ -836,7 +836,7 @@ bool Doc::loadOdf( KoOdfReadStore & odfStore )
         return false;
     }
 
-    KoOasisLoadingContext context( this, odfStore.styles(), odfStore.store() );
+    KoOdfLoadingContext context( odfStore.styles(), odfStore.store() );
 
     //load in first
     styleManager()->loadOasisStyleTemplate( odfStore.styles(), this );
