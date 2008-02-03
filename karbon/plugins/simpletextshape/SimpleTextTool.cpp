@@ -65,6 +65,7 @@ void SimpleTextTool::paint( QPainter &painter, const KoViewConverter &converter)
     if ( ! m_currentShape || !m_showCursor )
         return;
 
+    painter.save();
     m_currentShape->applyConversion( painter, converter );
     painter.setBrush( Qt::black );
     QTransform transform;
@@ -75,8 +76,15 @@ void SimpleTextTool::paint( QPainter &painter, const KoViewConverter &converter)
     qreal angle;
     m_currentShape->getCharAngleAt( m_textCursor, angle );
     transform.rotate( angle );
+    if ( m_currentShape->isOnPath() ) {
+        QFont f = m_currentShape->font();
+	QFontMetrics metrics(f);
+        transform.translate( 0, metrics.descent() );
+    }
     painter.setWorldTransform( transform, true );
+    painter.setClipping( false );
     painter.drawPath( m_textCursorShape );
+    painter.restore();
 }
 
 void SimpleTextTool::mousePressEvent( KoPointerEvent *event )
@@ -286,6 +294,11 @@ void SimpleTextTool::updateTextCursorArea() const
     qreal angle;
     m_currentShape->getCharAngleAt( m_textCursor, angle );
     transform.rotate( angle );
+    if ( m_currentShape->isOnPath() ) {
+        QFont f = m_currentShape->font();
+	QFontMetrics metrics(f);
+        transform.translate( 0, metrics.descent() );
+    }
     bbox = transform.mapRect( bbox );
     m_canvas->updateCanvas( bbox );
 }
