@@ -107,7 +107,7 @@ tristate KexiQueryView::executeQuery(KexiDB::QuerySchema *query)
 	return true;
 }
 
-tristate KexiQueryView::afterSwitchFrom(int mode)
+tristate KexiQueryView::afterSwitchFrom(Kexi::ViewMode mode)
 {
 	if (mode==Kexi::NoViewMode) {
 		KexiDB::QuerySchema *querySchema = static_cast<KexiDB::QuerySchema *>(window()->schemaData());

@@ -37,7 +37,7 @@ class KexiQueryView : public KexiDataTable
 		virtual ~KexiQueryView();
 
 	protected:
-		virtual tristate afterSwitchFrom(int mode);
+		virtual tristate afterSwitchFrom(Kexi::ViewMode mode);
 
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 
