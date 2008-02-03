@@ -200,8 +200,13 @@ void SimpleTextTool::updateActions()
 
 void SimpleTextTool::attachPath()
 {
-    if( m_path )
+    if( m_path ) {
+        m_blinkingCursor.stop();
+        m_showCursor = false;
+        updateTextCursorArea();
         m_currentShape->putOnPath( m_path );
+        m_blinkingCursor.start( 500 );
+    }
 }
 
 void SimpleTextTool::detachPath()
