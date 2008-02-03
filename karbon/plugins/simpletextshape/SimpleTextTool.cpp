@@ -118,8 +118,10 @@ void SimpleTextTool::mouseMoveEvent( KoPointerEvent *event )
     }
     if( m_tmpPath )
         useCursor( QCursor( Qt::PointingHandCursor ) );
-    else
+    else if ( m_currentShape && m_currentShape->hitTest( event->point ) )
         useCursor( QCursor( Qt::IBeamCursor ) );
+    else
+        useCursor( QCursor( Qt::ArrowCursor ) );
 }
 
 void SimpleTextTool::mouseReleaseEvent( KoPointerEvent *event )
