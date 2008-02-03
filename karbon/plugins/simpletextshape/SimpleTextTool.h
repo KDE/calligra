@@ -24,6 +24,8 @@
 
 #include <KoTool.h>
 
+#include <QTimer>
+
 class QAction;
 
 /// This is the tool for the simple text shape.
@@ -63,6 +65,7 @@ private slots:
     void attachPath();
     void detachPath();
     void convertText();
+    void blinkCursor();
 
 private:
     void updateActions();
@@ -80,6 +83,8 @@ private:
     QAction * m_convertText;
 
     int m_textCursor;
+    QTimer m_blinkingCursor;
+    bool m_showCursor;
 };
 
 #endif // SIMPLETEXTTOOL_H

@@ -41,7 +41,7 @@
 #include <float.h>
 
 SimpleTextTool::SimpleTextTool(KoCanvasBase *canvas)
-    : KoTool(canvas), m_currentShape(0), m_path(0), m_tmpPath(0), m_textCursor( -1 )
+    : KoTool(canvas), m_currentShape(0), m_path(0), m_tmpPath(0), m_textCursor( -1 ), m_showCursor( true )
 {
     m_attachPath  = new QAction(KIcon("attach-path"), i18n("Attach Path"), this);
     m_attachPath->setEnabled( false );
@@ -62,7 +62,7 @@ SimpleTextTool::~SimpleTextTool()
 
 void SimpleTextTool::paint( QPainter &painter, const KoViewConverter &converter)
 {
-    if( ! m_currentShape )
+    if ( ! m_currentShape || !m_showCursor )
         return;
 
     m_currentShape->applyConversion( painter, converter );
@@ -163,15 +163,26 @@ void SimpleTextTool::activate( bool )
     }
 
     enableTextCursor( true );
+    connect( &m_blinkingCursor, SIGNAL(timeout()), this, SLOT(blinkCursor()) );
+    m_blinkingCursor.start( 500 );
 
     createTextCursorShape();
 
     updateActions();
 }
 
+void SimpleTextTool::blinkCursor()
+{
+    updateTextCursorArea();
+    m_showCursor = !m_showCursor;
+    updateTextCursorArea();
+}
+
 void SimpleTextTool::deactivate()
 {
     if ( m_currentShape ) {
+        m_blinkingCursor.stop();
+        disconnect( &m_blinkingCursor, SIGNAL(timeout()), this, SLOT(blinkCursor()) );
         enableTextCursor( false );
         m_currentShape = 0;
     }
