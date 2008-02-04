@@ -373,6 +373,7 @@ void KPlatoWork_MainWindow::updateCaption( const QString &caption, bool modified
     if ( m_activePage == -1 ) {
         return setCaption( caption, modified );
     }
+    kDebug()<<m_activePage<<m_lstPages.count();
     if ( m_lstPages[ m_activePage ].isMainDocument ) {
         QString c = caption + i18nc( "Main document", " [main]" );
         if ( ! m_lstPages[ m_activePage ].m_pDoc->isReadWrite() ) {
@@ -448,19 +449,29 @@ void KPlatoWork_MainWindow::removePage( KParts::PartBase *doc )
     // Don't delete the document, the main document takes care of that
     for( int pi = 0; pi < m_lstPages.count(); ++pi )
     {
-        Page &p = m_lstPages[ pi ];
+        Page p = m_lstPages[ pi ];
         if ( p.isKParts ) {
             if ( p.part != doc ) {
                 continue;
             }
-            m_lstPages.removeAt( pi );
+            int i = m_pFrame->indexOf( p.part->widget() );
+            if ( i != -1 ) {
+                if ( m_activePage >= pi ) {
+                    switchToPage( -1 );
+                }
+                m_lstPages.removeAt( pi );
+            }
             break;
         } else if( p.m_pDoc == doc ) {
             int i = m_pFrame->indexOf( p.m_pView );
             if ( i != -1 ) {
+                kDebug()<<pi<<"curr="<<m_activePage;
+                if ( m_activePage >= pi ) {
+                    switchToPage( -1 );
+                }
+                m_lstPages.removeAt( pi );
                 p.m_pDoc->removeShell( this );
                 delete p.m_pView;
-                m_lstPages.removeAt( pi );
                 break;
             }
         }
@@ -489,12 +500,17 @@ void KPlatoWork_MainWindow::slotUpdatePart( QWidget* widget )
 void KPlatoWork_MainWindow::switchToPage( int index )
 {
     if ( m_activePage != -1 ) {
-        kDebug()<<"Deactivate current part";
+        kDebug()<<"Deactivate current part"<<m_activePage;
         partManager()->setActivePart( 0, 0 );
         setRootDocumentDirect( 0, Q3PtrList<KoView>() );
     }
     // Select new active page (view)
     m_activePage = index;
+    if ( index == -1 ) {
+        kDebug()<<"No new page:"<<m_activePage;
+        enableHelp( false );
+        return;
+    }
     const Page &page = m_lstPages[ index ];
     if ( page.isKParts ) {
         kDebug() <<"KParts document: setting active kpart to" << page.part;
@@ -523,6 +539,11 @@ void KPlatoWork_MainWindow::switchToPage( int index )
 
 void KPlatoWork_MainWindow::enableHelp( bool enable )
 {
+    if ( ! enable || m_activePage == -1 ) {
+        partSpecificHelpAction->setEnabled(false);
+        partSpecificHelpAction->setText( i18n( "Part Handbook" ) );
+        return;
+    }
     const Page &page = m_lstPages[ m_activePage ];
     if ( page.isKParts ) {
         return; //TODO
