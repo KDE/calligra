@@ -2,6 +2,8 @@
 Encoding=UTF-8
 Name=sybase
 Comment=Sybase Migration Driver for Kexi
+Comment[ga]=Tiománaí Ascnaimh Sybase le haghaidh Kexi
+Comment[it]=Driver di migrazione Sybase per Kexi
 X-KDE-Library=keximigrate_sybase
 ServiceTypes=Kexi/MigrationDriver
 Type=Service
