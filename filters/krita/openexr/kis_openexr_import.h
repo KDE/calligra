@@ -21,6 +21,7 @@
 #define KIS_OPENEXR_IMPORT_H_
 
 #include <KoFilter.h>
+#include <half.h>
 
 class KisOpenEXRImport : public KoFilter {
     Q_OBJECT

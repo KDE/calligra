@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "kis_openexr_export.h"
 
 #include <QFile>
 #include <Q3MemArray>
@@ -43,7 +44,6 @@
 // #include "kis_rgb_f32_colorspace.h"
 // #include "kis_rgb_f16half_colorspace.h"
 
-#include "kis_openexr_export.h"
 
 using namespace std;
 using namespace Imf;

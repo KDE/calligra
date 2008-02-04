@@ -63,7 +63,7 @@ private:
 
     QStringList createArgumentList(bool forPreview = false);
     QSize determineSize(quint32& startOfImageData);
-    void getImageData(QStringList arguments);
+    void getImageData(const QStringList & arguments);
     KoColorProfile * profile();
     KoID colorSpace();
     

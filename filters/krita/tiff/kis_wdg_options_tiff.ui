@@ -68,7 +68,7 @@
                         <widget class="KComboBox">
                             <item>
                                 <property name="text">
-                                    <string>None</string>
+                                    <string comment="do not compress the file at all">None</string>
                                 </property>
                             </item>
                             <item>
@@ -136,7 +136,7 @@
                         <widget class="KComboBox">
                             <item>
                                 <property name="text">
-                                    <string>None</string>
+                                    <string comment="do not use any predictor">None</string>
                                 </property>
                             </item>
                             <item>
@@ -447,11 +447,11 @@ You can uncheck the box if you are not using transparency and you want to make t
                                             <enum>Both</enum>
                                         </property>
                                         <property name="toolTip" stdset="0">
-                                            <string>Note: the compression level doesn't change the quality of the result</string>
+                                            <string>Note: the compression level does not change the quality of the result</string>
                                         </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note: the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
+&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
                                         </property>
                                     </widget>
                                     <widget class="QLayoutWidget">
@@ -467,11 +467,11 @@ You can uncheck the box if you are not using transparency and you want to make t
                                                     <cstring>textLabel3_2</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>Fast</string>
+                                                    <string comment="save the file quickly, but don't compress very well">Fast</string>
                                                 </property>
                                                 <property name="whatsThis" stdset="0">
                                                     <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note: the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
+&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
                                                 </property>
                                             </widget>
                                             <widget class="QLabel">
@@ -479,14 +479,14 @@ You can uncheck the box if you are not using transparency and you want to make t
                                                     <cstring>textLabel4_2</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>Small</string>
+                                                    <string comment="make the file small, at the price of a longer saving time">Small</string>
                                                 </property>
                                                 <property name="alignment">
                                                     <set>Qt::AlignVCenter|Qt::AlignRight</set>
                                                 </property>
                                                 <property name="whatsThis" stdset="0">
                                                     <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note: the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
+&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
                                                 </property>
                                             </widget>
                                         </hbox>
@@ -544,17 +544,17 @@ You can uncheck the box if you are not using transparency and you want to make t
                             <widget class="KComboBox">
                                 <item>
                                     <property name="text">
-                                        <string>Classic</string>
+                                        <string comment="classic fax mode file format">Classic</string>
                                     </property>
                                 </item>
                                 <item>
                                     <property name="text">
-                                        <string>No RTC</string>
+                                        <string comment="fax mode file format without rtc">No RTC</string>
                                     </property>
                                 </item>
                                 <item>
                                     <property name="text">
-                                        <string>No EOL</string>
+                                        <string comment="fax mode file format without end-of-line (EOL)">No EOL</string>
                                     </property>
                                 </item>
                                 <property name="name">
@@ -650,11 +650,11 @@ You can uncheck the box if you are not using transparency and you want to make t
                                             <enum>Both</enum>
                                         </property>
                                         <property name="toolTip" stdset="0">
-                                            <string>Note: the compression level doesn't change the quality of the result</string>
+                                            <string>Note: the compression level does not change the quality of the result</string>
                                         </property>
                                         <property name="whatsThis" stdset="0">
                                             <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note: the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
+&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
                                         </property>
                                     </widget>
                                     <widget class="QLayoutWidget">
@@ -674,7 +674,7 @@ You can uncheck the box if you are not using transparency and you want to make t
                                                 </property>
                                                 <property name="whatsThis" stdset="0">
                                                     <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note: the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
+&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
                                                 </property>
                                             </widget>
                                             <widget class="QLabel">
@@ -689,7 +689,7 @@ You can uncheck the box if you are not using transparency and you want to make t
                                                 </property>
                                                 <property name="whatsThis" stdset="0">
                                                     <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note: the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
+&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
                                                 </property>
                                             </widget>
                                         </hbox>

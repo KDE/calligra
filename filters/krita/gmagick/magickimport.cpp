@@ -16,9 +16,10 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include <qstring.h>
- 
 #include <magickimport.h>
+
+#include <qstring.h>
+
 #include <kgenericfactory.h>
 #include <KoDocument.h>
 #include <KoFilterChain.h>

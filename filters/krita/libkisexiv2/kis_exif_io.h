@@ -15,8 +15,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KIS_EXIV2_IO_H_
-#define _KIS_EXIV2_IO_H_
+#ifndef _KIS_EXIF_IO_H_
+#define _KIS_EXIF_IO_H_
 
 #include <kis_meta_data_io_backend.h>
 

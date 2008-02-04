@@ -16,7 +16,7 @@
       <bool>false</bool>
      </property>
      <property name="text" >
-      <string>Preview image</string>
+      <string comment="Show a preview of the image after saving to assess the quality difference">Preview image</string>
      </property>
     </widget>
    </item>
@@ -37,7 +37,7 @@
      </property>
      <widget class="QWidget" name="tab" >
       <attribute name="title" >
-       <string>Basic</string>
+       <string comment="simple options for average users">Basic</string>
       </attribute>
       <layout class="QVBoxLayout" >
        <item>
@@ -60,7 +60,7 @@
            <item>
             <widget class="QLabel" name="textLabel3" >
              <property name="text" >
-              <string>Small</string>
+              <string comment="the file will be much compressed, thus small, but quality will be bad">Small</string>
              </property>
              <property name="wordWrap" >
               <bool>false</bool>
@@ -83,7 +83,7 @@
            <item>
             <widget class="QLabel" name="label_2" >
              <property name="text" >
-              <string>Big</string>
+              <string comment="the file will be good quality, but big">Big</string>
              </property>
             </widget>
            </item>
@@ -142,7 +142,7 @@
            <item>
             <widget class="QLabel" name="textLabel4_2" >
              <property name="text" >
-              <string>Bad</string>
+              <string comment="the file will be much compressed, so the quality will be bad">Bad</string>
              </property>
              <property name="alignment" >
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -168,7 +168,7 @@
            <item>
             <widget class="QLabel" name="textLabel4" >
              <property name="text" >
-              <string>Good</string>
+              <string comment="the quality will be good but the file will not be much compressed">Good</string>
              </property>
              <property name="alignment" >
               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -185,7 +185,7 @@
        <item>
         <widget class="QCheckBox" name="progressive" >
          <property name="text" >
-          <string>Progressive</string>
+          <string comment="A progressive jpeg file can be displayed while loading.">Progressive</string>
          </property>
         </widget>
        </item>
@@ -224,7 +224,7 @@
          <item>
           <widget class="QLabel" name="label_3" >
            <property name="text" >
-            <string>Smooth:</string>
+            <string comment="the result will be artificially smoothed to hide jpeg artefacts">Smooth:</string>
            </property>
           </widget>
          </item>

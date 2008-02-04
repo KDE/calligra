@@ -40,7 +40,7 @@ QString OraSaveContext::saveDeviceData(KisPaintLayerSP layer)
         KoStoreDevice io ( m_store );
         if ( not io.open( QIODevice::WriteOnly ) )
         {
-            dbgFile <<"Couldn't open for writing:" << filename;
+            dbgFile <<"Could not open for writing:" << filename;
             return "";
         }
         KisPNGConverter pngconv(0, layer->image()->undoAdapter());

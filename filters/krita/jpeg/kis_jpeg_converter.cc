@@ -119,7 +119,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     jpeg_create_decompress(&cinfo);
 
     // open the file
-    FILE *fp = fopen(QFile::encodeName(uri.path()), "rb");
+    FILE *fp = KDE_fopen(QFile::encodeName(uri.path()), "rb");
     if (!fp)
     {
         return (KisImageBuilder_RESULT_NOT_EXIST);
@@ -439,7 +439,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
     // Open file for writing
-    FILE *fp = fopen(QFile::encodeName(uri.path()), "wb");
+    FILE *fp = KDE_fopen(QFile::encodeName(uri.path()), "wb");
     if (!fp)
     {
         return (KisImageBuilder_RESULT_FAILURE);
@@ -564,7 +564,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
             {
                 jpeg_write_marker(&cinfo, JPEG_APP0 + 1, (const JOCTET*)data.data(), data.size());
             } else {
-                dbgFile <<"EXIF information couldn't be saved."; // TODO: warn the user ?
+                dbgFile <<"EXIF information could not be saved."; // TODO: warn the user ?
             }
         }
         // Save IPTC
@@ -598,7 +598,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
             {
                 jpeg_write_marker(&cinfo, JPEG_APP0 + 13, (const JOCTET*)data.data(), data.size());
             } else {
-                dbgFile <<"IPTC information couldn't be saved."; // TODO: warn the user ?
+                dbgFile <<"IPTC information could not be saved."; // TODO: warn the user ?
             }
         }
     }
@@ -616,7 +616,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
 
         if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
             // FIXME
-            dbgFile <<"can't save this annotation :" << (*it) -> type();
+            dbgFile <<"cannot save this annotation :" << (*it) -> type();
         } else { // Profile
             //char* name = new char[(*it)->type().length()+1];
             write_icc_profile(& cinfo, (uchar*)(*it)->annotation().data(), (*it)->annotation().size());

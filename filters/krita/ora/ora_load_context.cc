@@ -36,13 +36,13 @@ OraLoadContext::~OraLoadContext()
 {
 }
 
-KisPaintDeviceSP OraLoadContext::loadDeviceData( QString filename)
+KisPaintDeviceSP OraLoadContext::loadDeviceData(const QString & filename)
 {
     if (m_store->open(filename) ) {
         KoStoreDevice io ( m_store );
         if ( !io.open( QIODevice::ReadOnly ) )
         {
-            dbgFile <<"Couldn't open for reading:" << filename;
+            dbgFile <<"Could not open for reading:" << filename;
             return 0;
         }
         KisPNGConverter pngConv(0, 0 );

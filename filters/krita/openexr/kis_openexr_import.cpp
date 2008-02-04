@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "kis_openexr_import.h"
 
 #include <QString>
 #include <QFile>
@@ -27,10 +28,6 @@
 
 #include <half.h>
 #include <ImfRgbaFile.h>
-//#include <ImfStringAttribute.h>
-//#include <ImfMatrixAttribute.h>
-//#include <ImfArray.h>
-//#include <drawImage.h>
 
 #include <KoCompositeOp.h>
 #include <KoColorSpace.h>
@@ -38,19 +35,16 @@
 #include <iostream>
 
 #include <kis_paint_device.h>
-#include "kis_types.h"
-#include "kis_openexr_import.h"
-#include "kis_doc2.h"
-#include "kis_image.h"
-#include "kis_layer.h"
-#include "kis_group_layer.h"
-#include "kis_paint_layer.h"
-#include "kis_annotation.h"
-#include "KoColorSpaceRegistry.h"
-#include "kis_iterators_pixel.h"
-#include "kis_undo_adapter.h"
-// #include "kis_rgb_f32_colorspace.h"
-// #include "kis_rgb_f16half_colorspace.h"
+#include <kis_types.h>
+#include <kis_doc2.h>
+#include <kis_image.h>
+#include <kis_layer.h>
+#include <kis_group_layer.h>
+#include <kis_paint_layer.h>
+#include <kis_annotation.h>
+#include <KoColorSpaceRegistry.h>
+#include <kis_iterators_pixel.h>
+#include <kis_undo_adapter.h>
 
 using namespace std;
 using namespace Imf;

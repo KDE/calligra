@@ -15,18 +15,16 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
+#include "kis_exiv2.h"
+
+#include <QtCore/QDateTime>
 
 #include "kis_iptc_io.h"
 #include "kis_exif_io.h"
 #include "kis_xmp_io.h"
 
-#include "kis_exiv2.h"
-
 #include <kis_meta_data_value.h>
-
 #include <kis_debug.h>
-
-#include <QtCore/QDateTime>
 
 // ---- Generic convertion functions ---- //
 

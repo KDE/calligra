@@ -26,18 +26,10 @@
 #include <stdio.h>
 #include <tiffio.h>
 
-// #include <qvaluevector.h>
-// #include <kio/job.h>
-//  
-
 #include <kis_paint_device.h>
-
-#include "kis_types.h"
-#include "kis_global.h"
-// #include "kis_annotation.h"
-
+#include <kis_types.h>
+#include <kis_global.h>
 #include <kis_iterator.h>
-#include <kis_paint_device.h>
 
 #define quint32_MAX 4294967295u
 

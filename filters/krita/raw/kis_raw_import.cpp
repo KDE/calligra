@@ -16,6 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#include "kis_raw_import.h"
 
 #include <sys/types.h>
 #include <netinet/in.h>
@@ -32,7 +33,7 @@
 #include <QApplication>
 #include <QCursor>
 #include <QEventLoop>
-#include <QProgressDialog>
+#include <KProgressDialog>
 #include <QTimer>
 
 #include <kglobal.h>
@@ -51,7 +52,6 @@
 #include "kis_config.h"
 #include "kis_cmb_idlist.h"
 #include "kis_types.h"
-#include "kis_raw_import.h"
 #include "kis_doc2.h"
 #include "kis_image.h"
 #include "kis_layer.h"
@@ -168,7 +168,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QByteArray& from, const Q
 
         QApplication::setOverrideCursor(Qt::WaitCursor);
         // Create a busy indicator to show that we didn't die or so
-        m_progress = new QProgressDialog();
+        m_progress = new KProgressDialog();
         m_progress -> setMaximum(0);
         m_progress -> setCancelButton(0);
         QTimer timer;
@@ -396,7 +396,7 @@ void KisRawImport::slotUpdatePreview()
 }
 
 
-void KisRawImport::getImageData( QStringList arguments )
+void KisRawImport::getImageData(const QStringList & arguments )
 {
     //    delete m_process;
     delete m_data;

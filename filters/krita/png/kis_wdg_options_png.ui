@@ -6,35 +6,56 @@
     <x>0</x>
     <y>0</y>
     <width>432</width>
-    <height>125</height>
+    <height>129</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Options of Your PNG</string>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="margin" >
-    <number>9</number>
-   </property>
    <property name="spacing" >
     <number>0</number>
    </property>
+   <property name="leftMargin" >
+    <number>9</number>
+   </property>
+   <property name="topMargin" >
+    <number>9</number>
+   </property>
+   <property name="rightMargin" >
+    <number>9</number>
+   </property>
+   <property name="bottomMargin" >
+    <number>9</number>
+   </property>
    <item>
     <layout class="QGridLayout" >
-     <property name="margin" >
+     <property name="leftMargin" >
       <number>0</number>
      </property>
-     <property name="spacing" >
+     <property name="topMargin" >
+      <number>0</number>
+     </property>
+     <property name="rightMargin" >
+      <number>0</number>
+     </property>
+     <property name="bottomMargin" >
+      <number>0</number>
+     </property>
+     <property name="horizontalSpacing" >
+      <number>0</number>
+     </property>
+     <property name="verticalSpacing" >
       <number>0</number>
      </property>
      <item row="1" column="1" colspan="2" >
       <widget class="QSlider" name="compressionLevel" >
        <property name="toolTip" >
-        <string>Note: the compression level doesn't change the quality of the result</string>
+        <string>Note: the compression level does not change the quality of the result</string>
        </property>
        <property name="whatsThis" >
         <string>&lt;p>Adjust the compression time. Better compression takes longer.
-&lt;br>Note: the compression level doesn't change the quality of the result.&lt;/p></string>
+&lt;br>Note: the compression level does not change the quality of the result.&lt;/p></string>
        </property>
        <property name="minimum" >
         <number>1</number>
@@ -74,10 +95,10 @@
       <widget class="QLabel" name="textLabel4_2" >
        <property name="whatsThis" >
         <string>&lt;p>Adjust the compression time. Better compression takes longer.
-&lt;br>Note: the compression level doesn't change the quality of the result.&lt;/p></string>
+&lt;br>Note: the compression level does not change the quality of the result.&lt;/p></string>
        </property>
        <property name="text" >
-        <string>Slow</string>
+        <string comment="The compression will take a long time; saving the file will be slow." >Slow</string>
        </property>
        <property name="alignment" >
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -88,10 +109,10 @@
       <widget class="QLabel" name="textLabel3" >
        <property name="whatsThis" >
         <string>&lt;p>Adjust the compression time. Better compression takes longer.
-&lt;br>Note: the compression level doesn't change the quality of the result.&lt;/p></string>
+&lt;br>Note: the compression level does not change the quality of the result.&lt;/p></string>
        </property>
        <property name="text" >
-        <string>Fast</string>
+        <string comment="The file will save fast but will not be compressed a lot">Fast</string>
        </property>
       </widget>
      </item>
@@ -99,10 +120,10 @@
       <widget class="QLabel" name="textLabel4" >
        <property name="whatsThis" >
         <string>&lt;p>Adjust the compression time. Better compression takes longer.
-&lt;br>Note: the compression level doesn't change the quality of the result.&lt;/p></string>
+&lt;br>Note: the compression level does not change the quality of the result.&lt;/p></string>
        </property>
        <property name="text" >
-        <string>Small</string>
+        <string "the file will be small" >Small</string>
        </property>
        <property name="alignment" >
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -113,10 +134,10 @@
       <widget class="QLabel" name="textLabel3_2" >
        <property name="whatsThis" >
         <string>&lt;p>Adjust the compression time. Better compression takes longer.
-&lt;br>Note: the compression level doesn't change the quality of the result.&lt;/p></string>
+&lt;br>Note: the compression level does not change the quality of the result.&lt;/p></string>
        </property>
        <property name="text" >
-        <string>Big</string>
+        <string comment="the file will be big">Big</string>
        </property>
       </widget>
      </item>

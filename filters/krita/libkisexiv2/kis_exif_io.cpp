@@ -276,7 +276,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const
         {
             exivKey = "Exif.Image." + entry.name();
         } else if(entry.schema()->uri() == KisMetaData::Schema::EXIFSchemaUri)
-        { // Seperate between exif and gps
+        { // Distinguish between exif and gps
             if( entry.name().left(3) == "GPS")
             {
                 exivKey = "Exif.GPS." + entry.name();
@@ -432,7 +432,7 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
         } else if(it->groupName() == "Thumbnail") {
             dbgFile <<"Ignoring thumbnail tag :" << it->key().c_str();
         } else {
-            dbgFile <<"Unknown exif tag, can't load:" << it->key().c_str();
+            dbgFile <<"Unknown exif tag, cannot load:" << it->key().c_str();
         }
     }
     ioDevice->close();

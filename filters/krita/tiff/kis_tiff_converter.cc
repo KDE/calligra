@@ -118,7 +118,7 @@ namespace {
                         dbgFile << ink_names[i];
                     }
                 } else {
-                    dbgFile <<"inknames aren't defined !";
+                    dbgFile <<"inknames are not defined !";
                     // To be able to read stupid adobe files, if there are no information about inks and four channels, then it's a CMYK file :
                     if( nbchannels - extrasamplescount != 4)
                     {
@@ -168,7 +168,7 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KUrl& uri)
     // Opent the TIFF file
     TIFF *image = 0;
     if((image = TIFFOpen(QFile::encodeName(uri.path()), "r")) == NULL){
-        dbgFile <<"Could not open the file, either it doesn't exist, either it is not a TIFF :" << uri.path();
+        dbgFile <<"Could not open the file, either it does not exist, either it is not a TIFF :" << uri.path();
 
         return (KisImageBuilder_RESULT_BAD_FETCH);
     }
