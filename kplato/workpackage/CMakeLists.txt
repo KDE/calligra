@@ -1,7 +1,7 @@
 #project(kplatowork)
 
 add_subdirectory( templates )
-#add_subdirectory( pics )
+add_subdirectory( pics )
 #add_subdirectory( toolbar )
 #add_subdirectory( tests )
 
