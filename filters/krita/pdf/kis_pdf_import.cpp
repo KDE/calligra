@@ -31,6 +31,7 @@
 // KDE's headers
 #include <kapplication.h>
 #include <kis_debug.h>
+#include <kis_paint_device.h>
 #include <kdialog.h>
 #include <kgenericfactory.h>
 #include <knuminput.h>
