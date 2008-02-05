@@ -89,7 +89,25 @@ void SimpleTextTool::paint( QPainter &painter, const KoViewConverter &converter)
 
 void SimpleTextTool::mousePressEvent( KoPointerEvent *event )
 {
-    if ( m_currentShape && m_currentShape->hitTest( event->point ) ) {
+    SimpleTextShape *hit = 0;
+    QRectF roi( event->point, QSizeF(1,1) );
+    QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt( roi );
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+    foreach( KoShape *shape, shapes ) 
+    {
+        hit = dynamic_cast<SimpleTextShape*>( shape );
+        if( hit ) {
+	    if ( hit != m_currentShape ) {
+	        selection->deselectAll();
+		enableTextCursor( false );
+	        m_currentShape = hit;
+		enableTextCursor( true );
+	        selection->select( m_currentShape );
+	    }
+            break;
+	}
+    }
+    if ( hit ) {
          QPointF pos = event->point;
          pos -= m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
 	 const int len = m_currentShape->text().length();
@@ -143,7 +161,10 @@ void SimpleTextTool::keyPressEvent(QKeyEvent *event)
     event->accept();
     if ( m_currentShape && textCursor() > -1 ) {
         if ( event->key() == Qt::Key_Backspace ) {
-	    removeFromTextCursor( 1 );
+	    removeFromTextCursor( m_textCursor, 1 );
+        } else if ( event->key() == Qt::Key_Delete ) {
+	    removeFromTextCursor( m_textCursor + 1, 1 );
+            event->ignore();
         } else if ((event->key() == Qt::Key_Right)) {
             setTextCursor( textCursor() + 1 );
 	} else if ((event->key() == Qt::Key_Left)) {
@@ -173,8 +194,6 @@ void SimpleTextTool::activate( bool )
     }
 
     enableTextCursor( true );
-    connect( &m_blinkingCursor, SIGNAL(timeout()), this, SLOT(blinkCursor()) );
-    m_blinkingCursor.start( 500 );
 
     createTextCursorShape();
 
@@ -191,8 +210,6 @@ void SimpleTextTool::blinkCursor()
 void SimpleTextTool::deactivate()
 {
     if ( m_currentShape ) {
-        m_blinkingCursor.stop();
-        disconnect( &m_blinkingCursor, SIGNAL(timeout()), this, SLOT(blinkCursor()) );
         enableTextCursor( false );
         m_currentShape = 0;
     }
@@ -270,7 +287,11 @@ void SimpleTextTool::enableTextCursor( bool enable )
 {
     if ( enable ) {
         setTextCursorInternal( m_currentShape->text().length() );
+        connect( &m_blinkingCursor, SIGNAL(timeout()), this, SLOT(blinkCursor()) );
+        m_blinkingCursor.start( 500 );
     } else {
+        m_blinkingCursor.stop();
+        disconnect( &m_blinkingCursor, SIGNAL(timeout()), this, SLOT(blinkCursor()) );
         setTextCursorInternal( -1 );
     }
 }
@@ -324,10 +345,10 @@ void SimpleTextTool::createTextCursorShape()
     m_textCursorShape.closeSubpath();
 }
 
-void SimpleTextTool::removeFromTextCursor( unsigned int nr )
+void SimpleTextTool::removeFromTextCursor( int from, unsigned int nr )
 {
-    if ( m_textCursor > 0 && m_textCursor >= int( nr ) ) {
-        setTextCursorInternal( m_textCursor - nr );
+    if ( from > 0 && from >= int( nr ) ) {
+        setTextCursorInternal( from - nr );
         m_currentShape->removeRange( m_textCursor, nr );
     }
 }

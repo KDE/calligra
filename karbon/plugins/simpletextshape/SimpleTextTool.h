@@ -58,7 +58,7 @@ protected:
     void enableTextCursor( bool enable );
     int textCursor() const { return m_textCursor; }
     void setTextCursor( int textCursor );
-    void removeFromTextCursor( unsigned int nr );
+    void removeFromTextCursor( int from, unsigned int nr );
     void addToTextCursor( const QString &str );
 
 private slots:
