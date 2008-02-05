@@ -154,6 +154,7 @@ View::View( Part* part, QWidget* parent )
     actionCollection()->addAction("task_progress", actionTaskProgress );
     connect( actionTaskProgress, SIGNAL( triggered( bool ) ), SLOT( slotTaskProgress() ) );
 
+    updateReadWrite( m_readWrite );
     //kDebug()<<" end";
 }
 
@@ -536,6 +537,9 @@ void View::updateReadWrite( bool readwrite )
 {
     kDebug()<<m_readWrite<<"->"<<readwrite;
     m_readWrite = readwrite;
+    
+    actionTaskProgress->setEnabled( readwrite );
+    
     emit sigUpdateReadWrite( readwrite );
 }
 
