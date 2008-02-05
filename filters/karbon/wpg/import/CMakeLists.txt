@@ -1,45 +1,17 @@
 
 
-include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg ${CMAKE_BINARY_DIR}/filters/)
-
-
-set(libwpg_SRCS 
-  ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg/WPG1Parser.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg/WPGBrush.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg/WPGGradient.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg/WPGOLEStream.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg/WPGPen.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg/WPGraphics.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg/WPGStreamImplementation.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg/WPGSVGGenerator.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg/WPG2Parser.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg/WPGColor.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg/WPGHeader.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg/WPGPath.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg/WPGPoint.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg/WPGRect.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg/WPGString.cpp
-  ${CMAKE_CURRENT_SOURCE_DIR}/../libwpg/WPGXParser.cpp
-)
-
+include_directories(${CMAKE_BINARY_DIR}/filters/ (${LIBWPD_INCLUDE_DIR}/libwpd-0.8 ${LIBWPG_INCLUDE_DIR}/libwpg-0.1)
 
 set(wpgimport_PART_SRCS 
 WPGImport.cpp 
 OdgExporter.cxx
 FileOutputHandler.cxx
-GraphicsElement.cxx
-${libwpg_SRCS})
+GraphicsElement.cxx)
 
 kde4_add_plugin(wpgimport WITH_PREFIX ${wpgimport_PART_SRCS})
 
-
-
-target_link_libraries(wpgimport komain)
+target_link_libraries(wpgimport komain ${LIBWPG_LIBRARIES} ${LIBWPG_STREAM_LIBRARIES})
 
 install(TARGETS wpgimport  DESTINATION ${PLUGIN_INSTALL_DIR})
-
-
 install( FILES  karbon_wpg_import.desktop  DESTINATION ${SERVICES_INSTALL_DIR})
-
-
 

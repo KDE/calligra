@@ -20,9 +20,13 @@ include_directories(
         ${KDE4_INCLUDES}
         ${CMAKE_SOURCE_DIR}/plugins/ )
 
+macro_optional_find_package(WPG)
+
 add_subdirectory( png )
 add_subdirectory( svg )
-add_subdirectory( wpg )
+if (LIBWPD AND LIBWPG_FOUND)
+  add_subdirectory( wpg )
+endif (LIBWPD AND LIBWPG_FOUND)
 add_subdirectory( wmf )
 add_subdirectory( karbon1.x )
 
