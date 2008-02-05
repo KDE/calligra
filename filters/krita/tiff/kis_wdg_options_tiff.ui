@@ -682,7 +682,7 @@ You can uncheck the box if you are not using transparency and you want to make t
                                                     <cstring>textLabel4_2_2</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string "make a very small file, but take a long time saving">Small</string>
+                                                    <string comment="make a very small file, but take a long time saving">Small</string>
                                                 </property>
                                                 <property name="alignment">
                                                     <set>Qt::AlignVCenter|Qt::AlignRight</set>
