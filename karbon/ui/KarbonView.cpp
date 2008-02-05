@@ -498,13 +498,7 @@ void KarbonView::editDeleteSelection()
     if( ! selection )
         return;
 
-    QList<KoShape*> selectedShapes = selection->selectedShapes();
-    if( selectedShapes.count() < 1)
-        return;
-    selection->deselectAll();
-
-    KoShapeDeleteCommand *cmd = new KoShapeDeleteCommand( part(), selectedShapes );
-    m_canvas->addCommand( cmd );
+    m_canvas->toolProxy()->deleteSelection();
 }
 
 void

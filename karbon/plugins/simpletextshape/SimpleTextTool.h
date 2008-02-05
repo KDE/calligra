@@ -53,6 +53,8 @@ public:
     virtual QWidget *createOptionWidget();
     /// reimplemented
     virtual void keyPressEvent(QKeyEvent *event);
+    /// reimplemented
+    virtual void deleteSelection();
 
 protected:
     void enableTextCursor( bool enable );

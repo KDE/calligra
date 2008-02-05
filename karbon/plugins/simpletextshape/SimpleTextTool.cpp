@@ -169,9 +169,6 @@ void SimpleTextTool::keyPressEvent(QKeyEvent *event)
     if ( m_currentShape && textCursor() > -1 ) {
         if ( event->key() == Qt::Key_Backspace ) {
 	    removeFromTextCursor( m_textCursor, 1 );
-        } else if ( event->key() == Qt::Key_Delete ) {
-	    removeFromTextCursor( m_textCursor + 1, 1 );
-            event->ignore();
         } else if ((event->key() == Qt::Key_Right)) {
             setTextCursor( textCursor() + 1 );
 	} else if ((event->key() == Qt::Key_Left)) {
@@ -373,6 +370,13 @@ void SimpleTextTool::addToTextCursor( const QString &str )
 	    m_currentShape->addRange( m_textCursor, printable );
 	    setTextCursorInternal( m_textCursor + len );
         }
+    }
+}
+
+void SimpleTextTool::deleteSelection()
+{
+    if ( m_currentShape ) {
+        removeFromTextCursor( m_textCursor + 1, 1 );
     }
 }
 
