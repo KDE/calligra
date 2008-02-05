@@ -19,6 +19,8 @@
 #ifndef _KIS_EXIV2_H_
 #define _KIS_EXIV2_H_
 
+class QVariant;
+
 namespace KisMetaData {
     class Value;
 }

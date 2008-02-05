@@ -29,17 +29,20 @@ extern "C" {
 #include <exiv2/jpgimage.hpp>
 
 #include <QFile>
+#include <QBuffer>
 
 #include <kapplication.h>
 #include <kmessagebox.h>
 #include <klocale.h>
-
-#include <KoDocumentInfo.h>
+#include <kde_file.h>
 
 #include <kio/netaccess.h>
 #include <kio/deletejob.h>
 
+#include <KoDocumentInfo.h>
+#include <KoColorSpace.h>
 #include <KoColorSpaceRegistry.h>
+
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
@@ -49,6 +52,7 @@ extern "C" {
 #include <kis_meta_data_value.h>
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_io_backend.h>
+#include <kis_paint_device.h>
 
 #include <colorprofiles/KoIccColorProfile.h>
 
