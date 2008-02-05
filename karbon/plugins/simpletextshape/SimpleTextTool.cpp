@@ -130,13 +130,20 @@ void SimpleTextTool::mousePressEvent( KoPointerEvent *event )
 void SimpleTextTool::mouseMoveEvent( KoPointerEvent *event )
 {
     m_tmpPath = 0;
+    SimpleTextShape *textShape = 0;
 
     QRectF roi( event->point, QSizeF(1,1) );
     QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt( roi );
     foreach( KoShape * shape, shapes )
     {
+        SimpleTextShape * text = dynamic_cast<SimpleTextShape*>( shape );
+        if ( text )
+        {
+            textShape = text;
+            break;
+        }
         KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
-        if( path )
+        if ( path )
         {
             m_tmpPath = path;
             break;
@@ -144,7 +151,7 @@ void SimpleTextTool::mouseMoveEvent( KoPointerEvent *event )
     }
     if( m_tmpPath )
         useCursor( QCursor( Qt::PointingHandCursor ) );
-    else if ( m_currentShape && m_currentShape->hitTest( event->point ) )
+    else if ( textShape )
         useCursor( QCursor( Qt::IBeamCursor ) );
     else
         useCursor( QCursor( Qt::ArrowCursor ) );
