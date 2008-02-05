@@ -467,7 +467,7 @@ You can uncheck the box if you are not using transparency and you want to make t
                                                     <cstring>textLabel3_2</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string comment="save the file quickly, but don't compress very well">Fast</string>
+                                                    <string comment="save the file quickly, but do not compress very well">Fast</string>
                                                 </property>
                                                 <property name="whatsThis" stdset="0">
                                                     <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
@@ -670,7 +670,7 @@ You can uncheck the box if you are not using transparency and you want to make t
                                                     <cstring>textLabel3_2_2</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>Fast</string>
+                                                    <string comment="save quickly, but do not compress a lot">Fast</string>
                                                 </property>
                                                 <property name="whatsThis" stdset="0">
                                                     <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
@@ -682,7 +682,7 @@ You can uncheck the box if you are not using transparency and you want to make t
                                                     <cstring>textLabel4_2_2</cstring>
                                                 </property>
                                                 <property name="text">
-                                                    <string>Small</string>
+                                                    <string "make a very small file, but take a long time saving">Small</string>
                                                 </property>
                                                 <property name="alignment">
                                                     <set>Qt::AlignVCenter|Qt::AlignRight</set>
