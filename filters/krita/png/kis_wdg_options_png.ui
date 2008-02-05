@@ -123,7 +123,7 @@
 &lt;br>Note: the compression level does not change the quality of the result.&lt;/p></string>
        </property>
        <property name="text" >
-        <string "the file will be small" >Small</string>
+        <string comment="the file will be small" >Small</string>
        </property>
        <property name="alignment" >
         <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
