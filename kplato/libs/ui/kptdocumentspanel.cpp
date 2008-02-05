@@ -190,13 +190,15 @@ MacroCommand *DocumentsPanel::buildCommand()
     QMap<Document*, State>::const_iterator i = m_state.constBegin();
     for ( ; i != m_state.constEnd(); ++i) {
         kDebug()<<i.key()<<i.value();
-        d = docs.findDocument( m_orgurl[ i.key() ] );
-        Q_ASSERT( d );
         if ( i.value() & Removed ) {
+            d = docs.findDocument( m_orgurl[ i.key() ] );
+            Q_ASSERT( d );
             if ( m == 0 ) m = new MacroCommand( txt );
             kDebug()<<"remove document "<<i.key();
             m->addCommand( new DocumentRemoveCmd( m_node.documents(), d, i18n( "Remove Document" ) ) );
         } else if ( ( i.value() & Added ) == 0 && i.value() & Modified ) {
+            d = docs.findDocument( m_orgurl[ i.key() ] );
+            Q_ASSERT( d );
             // do plain modifications before additions
             kDebug()<<"modify document "<<d;
             if ( i.key()->url() != d->url() ) {
