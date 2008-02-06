@@ -49,12 +49,12 @@
 #include <QtGui/QHBoxLayout>
 
 typedef KGenericFactory<RefinePathPlugin,QWidget> RefinePathPluginFactory;
-K_EXPORT_COMPONENT_FACTORY( karbon_RefinePathPlugin, RefinePathPluginFactory( "karbonrefinepathplugin" ) )
+K_EXPORT_COMPONENT_FACTORY( karbon_refinepathplugin, RefinePathPluginFactory( "karbonrefinepathplugin" ) )
 
 RefinePathPlugin::RefinePathPlugin( QWidget *parent, const QStringList & ) : Plugin( parent )
 {
-    QAction *actionRefinePath  = new KAction(KIcon("14_RefinePath"), i18n("&Refine Path..."), this);
-    actionCollection()->addAction("path_insert_knots", actionRefinePath );
+    QAction *actionRefinePath  = new KAction(KIcon("14_refine"), i18n("&Refine Path..."), this);
+    actionCollection()->addAction("path_refine", actionRefinePath );
     connect(actionRefinePath, SIGNAL(triggered()), this, SLOT(slotRefinePath()));
 
     m_RefinePathDlg = new RefinePathDlg( parent );
