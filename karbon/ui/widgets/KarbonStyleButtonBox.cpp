@@ -318,6 +318,7 @@ KarbonStyleButtonBox::KarbonStyleButtonBox( QWidget* parent )
     layout->setSpacing( 1 );
     layout->setColumnStretch( 0, 1 );
     layout->setColumnStretch( 1, 1 );
+    layout->setRowStretch( 3, 1 );
 
     m_group = group;
 
