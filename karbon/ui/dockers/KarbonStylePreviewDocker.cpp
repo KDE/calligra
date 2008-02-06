@@ -84,9 +84,9 @@ KarbonStylePreviewDocker::KarbonStylePreviewDocker( QWidget * parent )
     connect( m_buttons, SIGNAL(buttonPressed(int)), this, SLOT(styleButtonPressed(int)));
     connect( m_colorChooser, SIGNAL( sigColorChanged( const KoColor &) ), 
              this, SLOT( updateColor( const KoColor &) ) );
-    connect( m_gradientChooser, SIGNAL( itemDoubleClicked( QTableWidgetItem * ) ), 
+    connect( m_gradientChooser, SIGNAL( selected( QTableWidgetItem * ) ), 
              this, SLOT( updateGradient( QTableWidgetItem* ) ) );
-    connect( m_patternChooser, SIGNAL( itemDoubleClicked( QTableWidgetItem * ) ), 
+    connect( m_patternChooser, SIGNAL( selected( QTableWidgetItem * ) ), 
              this, SLOT( updatePattern( QTableWidgetItem* ) ) );
 
     setWidget( mainWidget );
