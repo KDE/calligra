@@ -68,9 +68,8 @@ void SimpleTextTool::paint( QPainter &painter, const KoViewConverter &converter)
     painter.save();
     m_currentShape->applyConversion( painter, converter );
     painter.setBrush( Qt::black );
-    QTransform transform;
-    QPointF pos = m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
-    transform.translate( pos.x(), pos.y() );
+    QTransform transform( m_currentShape->transformation() );
+    QPointF pos;
     m_currentShape->getCharPositionAt( m_textCursor, pos );
     transform.translate( pos.x() - 1, pos.y() );
     qreal angle;
@@ -311,9 +310,8 @@ void SimpleTextTool::setTextCursor( int textCursor )
 void SimpleTextTool::updateTextCursorArea() const
 {
     QRectF bbox = m_textCursorShape.boundingRect();
-    QTransform transform;
-    QPointF pos = m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
-    transform.translate( pos.x(), pos.y() );
+    QTransform transform( m_currentShape->transformation() );
+    QPointF pos;
     m_currentShape->getCharPositionAt( m_textCursor, pos );
     transform.translate( pos.x() - 1, pos.y() );
     qreal angle;
