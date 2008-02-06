@@ -42,6 +42,8 @@ WPControlPanel::WPControlPanel( View *view, Task &task, QWidget *p )
     : WorkPackageControlPanel( view->getProject(), task, p ),
     m_view( view )
 {
+    task.workPackage().setScheduleManager( view->currentScheduleManager() );
+    
     transferWP->hide(); //
 }
 
