@@ -145,6 +145,7 @@ public:
     
     void addChild( DependencyNodeItem *ch ) { m_children.append( ch ); }
     DependencyNodeItem *takeChild( DependencyNodeItem *ch );
+    QList<DependencyNodeItem*> children() const { return m_children; }
     
     DependencyScene *itemScene() const;
     
@@ -284,6 +285,10 @@ public:
     void multiConnectorClicked( DependencyConnectorItem *item );
     bool connectionIsValid( DependencyConnectorItem *pred, DependencyConnectorItem *succ );
     void clearConnection();
+    
+    /// Used when a node has been moved
+    void moveItem( DependencyNodeItem *item, const QList<Node*> &lst );
+    QList<DependencyNodeItem*> removeChildItems( DependencyNodeItem *item );
     
 signals:
     void connectorClicked( DependencyConnectorItem *item );

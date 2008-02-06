@@ -618,7 +618,7 @@ void DependencyNodeItem::moveToX( qreal x )
 void DependencyNodeItem::setColumn()
 {
     int col = m_parent == 0 ? 0 : m_parent->column() + 1;
-    kDebug()<<this<<text();
+    //kDebug()<<this<<text();
     foreach ( DependencyLinkItem *i, m_parentrelations ) {
         col = QMAX( col, i->newChildColumn() );
     }
@@ -627,7 +627,7 @@ void DependencyNodeItem::setColumn()
         foreach ( DependencyLinkItem *i, m_childrelations ) {
             i->succItem->setColumn();
         }
-        kDebug()<<m_children.count()<<"Column="<<column()<<","<<text();
+        //kDebug()<<m_children.count()<<"Column="<<column()<<","<<text();
         foreach ( DependencyNodeItem *i, m_children ) {
             i->setColumn();
         }
@@ -828,6 +828,47 @@ void DependencyScene::clear()
     //kDebug();
 }
 
+QList<DependencyNodeItem*> DependencyScene::removeChildItems( DependencyNodeItem *item )
+{
+    QList<DependencyNodeItem*> lst;
+    foreach ( DependencyNodeItem *i, item->children() ) {
+        m_allItems.removeAt( m_allItems.indexOf( i ) );
+        lst << i;
+        lst += removeChildItems( i );
+    }
+    return lst;
+}
+
+void DependencyScene::moveItem( DependencyNodeItem *item, const QList<Node*> &lst )
+{
+    //kDebug()<<item->text();
+    int idx = m_allItems.indexOf( item );
+    int ndx = lst.indexOf( item->node() );
+    Q_ASSERT( idx != -1 && ndx != -1 );
+    Node *oldParent = item->parentItem() == 0 ? 0 : item->parentItem()->node();
+    Node *newParent = item->node()->parentNode();
+    if ( newParent == m_project ) {
+        newParent = 0;
+    } else kDebug()<<newParent->name()<<newParent->level();
+    if ( idx != ndx || oldParent != newParent ) {
+        // If I have childeren, these must be moved too.
+        QList<DependencyNodeItem*> items = removeChildItems( item );
+        
+        m_allItems.removeAt( idx );
+        m_allItems.insert( ndx, item );
+        item->setParentItem( m_allItems.value( lst.indexOf( newParent ) ) );
+        item->setColumn();
+        //kDebug()<<item->text()<<":"<<idx<<"->"<<ndx<<", "<<item->column()<<r;
+        if ( ! items.isEmpty() ) {
+            foreach ( DependencyNodeItem *i, items ) {
+                m_allItems.insert( ++ndx, i );
+                i->setColumn();
+                //kDebug()<<i->text()<<": ->"<<ndx<<", "<<i->column()<<r;
+            }
+        }
+    }
+}
+
 void DependencyScene::setItemVisible( DependencyNodeItem *item, bool show )
 {
     //kDebug()<<"Visible count="<<m_visibleItems.count()<<" total="<<m_allItems.count();
@@ -837,6 +878,9 @@ void DependencyScene::setItemVisible( DependencyNodeItem *item, bool show )
         kDebug()<<"Unknown item!!";
         return;
     }
+    if ( show && m_hiddenItems.values().contains( item ) ) {
+        moveItem( item, m_project->flatNodeList() ); // might have been moved
+    }
     m_hiddenItems.clear();
     m_visibleItems.clear();
     int viewrow = 0;
@@ -844,10 +888,8 @@ void DependencyScene::setItemVisible( DependencyNodeItem *item, bool show )
         DependencyNodeItem *itm = m_allItems[ i ];
         if ( itm->isVisible() ) {
             m_visibleItems.insert( i, itm );
-            if ( i >= row ) {
-                //kDebug()<<itm->text()<<":"<<viewrow;
-                itm->setRow( viewrow );
-            }
+            //kDebug()<<itm->text()<<":"<<i<<viewrow;
+            itm->setRow( viewrow );
             ++viewrow;
         } else {
             m_hiddenItems.insert( i, itm );
@@ -1117,7 +1159,7 @@ void DependencyView::slotNodeAdded( Node *node )
     if ( item == 0 ) {
         item = createItem( node );
     } else {
-        kDebug()<<node->name();
+        //kDebug()<<node->name();
         itemScene()->setItemVisible( item, true );
     }
 }
@@ -1126,9 +1168,8 @@ void DependencyView::slotNodeRemoved( Node *node )
 {
     DependencyNodeItem *item = findItem( node );
     if ( item ) {
-        kDebug()<<node->name();
+        //kDebug()<<node->name();
         itemScene()->setItemVisible( item, false );
-        //kDebug();
     } else kDebug()<<"Node does not exist!";
 }
 

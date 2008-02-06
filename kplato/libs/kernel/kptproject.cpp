@@ -940,9 +940,11 @@ bool Project::moveTask( Node* node, Node *newParent, int newPos )
         return false;
     }
     const Node *before = newParent->childNode( newPos );
+    emit nodeToBeMoved( node );
     takeTask( node );
     int i = before == 0 ? newParent->numChildren() : newPos;
     addSubTask( node, i, newParent );
+    emit nodeMoved( node );
     return true;
 }
 
@@ -1942,6 +1944,20 @@ void Project::setRelationLag( Relation *rel, const Duration &lag )
     rel->setLag( lag );
     emit relationModified( rel );
     emit changed();
+}
+
+QList<Node*> Project::flatNodeList( Node *parent )
+{
+    QList<Node*> lst;
+    Node *p = parent == 0 ? this : parent;
+    //kDebug()<<p->name()<<lst.count();
+    foreach ( Node *n, p->childNodeIterator() ) {
+        lst.append( n );
+        if ( n->numChildren() > 0 ) {
+            lst += flatNodeList( n );
+        }
+    }
+    return lst;
 }
 
 #ifndef NDEBUG

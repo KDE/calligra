@@ -435,6 +435,9 @@ public:
     const QList< QList<Node*> > *criticalPathList( long id = -1 );
     QList<Node*> criticalPath( long id = -1, int index = 0 );
 
+    /// Returns a flat list af all nodes
+    QList<Node*> flatNodeList( Node *parent = 0 );
+    
 signals:
     /// Emitted when anything in the project is changed (use with care)
     void changed();
