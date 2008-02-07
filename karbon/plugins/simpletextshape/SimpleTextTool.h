@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -25,6 +26,7 @@
 #include <KoTool.h>
 
 #include <QTimer>
+#include <QUndoCommand>
 
 class QAction;
 
@@ -68,6 +70,69 @@ private slots:
     void detachPath();
     void convertText();
     void blinkCursor();
+
+private:
+class AddTextRange : public QUndoCommand
+{
+public:
+    AddTextRange( SimpleTextTool *tool, const QString &text, unsigned int from )
+        : m_tool( tool ), m_text( text ), m_from( from )
+    {
+        m_shape = tool->m_currentShape;
+        setText( "Add text range" );
+    }
+    virtual void undo()
+    {
+        if ( m_shape ) {
+            m_tool->setTextCursorInternal( m_from );
+            m_shape->removeRange( m_from, m_text.length() );
+	}
+    }
+    virtual void redo()
+    {
+        if ( m_shape ) {
+            m_shape->addRange( m_from, m_text );
+            m_tool->setTextCursorInternal( m_from + m_text.length() );
+	}
+    }
+private:
+    SimpleTextTool *m_tool;
+    SimpleTextShape *m_shape;
+    QString m_text;
+    unsigned int m_from;
+};
+
+class RemoveTextRange : public QUndoCommand
+{
+public:
+    RemoveTextRange( SimpleTextTool *tool, int from, unsigned int nr )
+        : m_tool( tool ), m_from( from ), m_nr( nr )
+    {
+        m_shape = tool->m_currentShape;
+        setText( "Remove text range" );
+    }
+    virtual void undo()
+    {
+        if ( m_shape ) {
+            m_shape->addRange( m_from, m_text );
+            m_tool->setTextCursorInternal( m_from + m_nr );
+	}
+    }
+    virtual void redo()
+    {
+        if ( m_shape ) {
+            m_tool->setTextCursorInternal( m_from );
+            m_text = m_shape->removeRange( m_from, m_nr );
+        }
+    }
+
+private:
+    SimpleTextTool *m_tool;
+    SimpleTextShape *m_shape;
+    int m_from;
+    unsigned int m_nr;
+    QString m_text;
+};
 
 private:
     void updateActions();

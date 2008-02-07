@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -310,13 +311,15 @@ const KoPathShape * SimpleTextShape::baselineShape() const
     return m_path;
 }
 
-void SimpleTextShape::removeRange( unsigned int from, unsigned int nr )
+QString SimpleTextShape::removeRange( unsigned int from, unsigned int nr )
 {
     update();
+    QString ret = m_text.mid( from, nr );
     m_text.remove( from, nr );
     cacheGlyphOutlines();
     updateSizeAndPosition();
     update();
+    return ret;
 }
 
 void SimpleTextShape::addRange( unsigned int index, const QString &str )

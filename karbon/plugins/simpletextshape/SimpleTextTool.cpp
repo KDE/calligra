@@ -77,7 +77,7 @@ void SimpleTextTool::paint( QPainter &painter, const KoViewConverter &converter)
     transform.rotate( angle );
     if ( m_currentShape->isOnPath() ) {
         QFont f = m_currentShape->font();
-	QFontMetrics metrics(f);
+        QFontMetrics metrics(f);
         transform.translate( 0, metrics.descent() );
     }
     painter.setWorldTransform( transform, true );
@@ -96,32 +96,32 @@ void SimpleTextTool::mousePressEvent( KoPointerEvent *event )
     {
         hit = dynamic_cast<SimpleTextShape*>( shape );
         if( hit ) {
-	    if ( hit != m_currentShape ) {
-	        selection->deselectAll();
-		enableTextCursor( false );
-	        m_currentShape = hit;
-		enableTextCursor( true );
-	        selection->select( m_currentShape );
-	    }
+            if ( hit != m_currentShape ) {
+                selection->deselectAll();
+                enableTextCursor( false );
+                m_currentShape = hit;
+                enableTextCursor( true );
+                selection->select( m_currentShape );
+            }
             break;
-	}
+        }
     }
     if ( hit ) {
          QPointF pos = event->point;
          pos -= m_currentShape->absolutePosition( KoFlake::TopLeftCorner );
-	 const int len = m_currentShape->text().length();
-	 int hit = len;
-	 double mindist = DBL_MAX;
-	 for ( int i = 0; i < len;++i ) {
-	     QPointF center;
+         const int len = m_currentShape->text().length();
+         int hit = len;
+         double mindist = DBL_MAX;
+         for ( int i = 0; i < len;++i ) {
+             QPointF center;
              m_currentShape->getCharPositionAt( i, center );
-	     center = pos - center;
-	     if ( (fabs(center.x()) + fabs(center.y())) < mindist ) {
-	         hit = i;
-		 mindist = fabs(center.x()) + fabs(center.y());
-	     }
-	 }
-	 setTextCursorInternal( hit );
+             center = pos - center;
+             if ( (fabs(center.x()) + fabs(center.y())) < mindist ) {
+                 hit = i;
+                 mindist = fabs(center.x()) + fabs(center.y());
+             }
+         }
+         setTextCursorInternal( hit );
     }
     event->ignore();
 }
@@ -167,13 +167,13 @@ void SimpleTextTool::keyPressEvent(QKeyEvent *event)
     event->accept();
     if ( m_currentShape && textCursor() > -1 ) {
         if ( event->key() == Qt::Key_Backspace ) {
-	    removeFromTextCursor( m_textCursor, 1 );
+            removeFromTextCursor( m_textCursor, 1 );
         } else if ((event->key() == Qt::Key_Right)) {
             setTextCursor( textCursor() + 1 );
-	} else if ((event->key() == Qt::Key_Left)) {
+        } else if ((event->key() == Qt::Key_Left)) {
             setTextCursor( textCursor() - 1 );
         } else {
-	    addToTextCursor( event->text() );
+            addToTextCursor( event->text() );
         }
     } else {
         event->ignore();
@@ -319,7 +319,7 @@ void SimpleTextTool::updateTextCursorArea() const
     transform.rotate( angle );
     if ( m_currentShape->isOnPath() ) {
         QFont f = m_currentShape->font();
-	QFontMetrics metrics(f);
+        QFontMetrics metrics(f);
         transform.translate( 0, metrics.descent() );
     }
     bbox = transform.mapRect( bbox );
@@ -350,8 +350,8 @@ void SimpleTextTool::createTextCursorShape()
 void SimpleTextTool::removeFromTextCursor( int from, unsigned int nr )
 {
     if ( from > 0 && from >= int( nr ) ) {
-        setTextCursorInternal( from - nr );
-        m_currentShape->removeRange( m_textCursor, nr );
+        QUndoCommand *cmd = new RemoveTextRange( this, from - nr, nr );
+        m_canvas->addCommand( cmd );
     }
 }
 
@@ -363,10 +363,10 @@ void SimpleTextTool::addToTextCursor( const QString &str )
             if ( str[i].isPrint() )
                 printable.append( str[i] );
         }
-	unsigned int len = printable.length();
+        unsigned int len = printable.length();
         if ( len ) {
-	    m_currentShape->addRange( m_textCursor, printable );
-	    setTextCursorInternal( m_textCursor + len );
+            QUndoCommand *cmd = new AddTextRange( this, printable, m_textCursor );
+            m_canvas->addCommand( cmd );
         }
     }
 }

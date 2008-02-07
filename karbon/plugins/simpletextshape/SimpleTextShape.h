@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -114,7 +115,7 @@ public:
     /// Returns a pointer to the shape used as baseline
     const KoPathShape * baselineShape() const;
 
-    void removeRange( unsigned int index, unsigned int nr );
+    QString removeRange( unsigned int index, unsigned int nr );
     void addRange( unsigned int index, const QString &text );
 
     void getCharAngleAt( unsigned int charNum, qreal &angle ) const;
