@@ -21,6 +21,11 @@
 #include "SimpleTextShape.h"
 #include <QtGui/QButtonGroup>
 
+#include <KoCanvasController.h>
+#include <KoToolManager.h>
+#include <KoShapeManager.h>
+#include <KoCanvasBase.h>
+
 SimpleTextShapeConfigWidget::SimpleTextShapeConfigWidget()
     : m_shape(0), m_anchorGroup(0)
 {
@@ -50,6 +55,12 @@ SimpleTextShapeConfigWidget::SimpleTextShapeConfigWidget()
     connect( widget.text, SIGNAL(textChanged(const QString&)), this, SIGNAL(propertyChanged()));
     connect( widget.startOffset, SIGNAL(valueChanged(int)), this, SIGNAL(propertyChanged()));
     connect( m_anchorGroup, SIGNAL(buttonClicked(int)), this, SIGNAL(propertyChanged()));
+
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    if ( canvasController ) {
+        KoShapeManager *manager = canvasController->canvas()->shapeManager();
+        connect( manager, SIGNAL(selectionContentChanged()), this, SLOT(slotTextChanged()));
+    }
 }
 
 void SimpleTextShapeConfigWidget::blockChildSignals( bool block )
@@ -120,3 +131,12 @@ QUndoCommand * SimpleTextShapeConfigWidget::createCommand()
 
     return 0;
 }
+
+void SimpleTextShapeConfigWidget::slotTextChanged()
+{
+    if ( ! m_shape )
+        return;
+
+    widget.text->setText( m_shape->text() );
+}
+

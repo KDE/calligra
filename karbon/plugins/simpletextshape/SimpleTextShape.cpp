@@ -319,6 +319,7 @@ QString SimpleTextShape::removeRange( unsigned int from, unsigned int nr )
     cacheGlyphOutlines();
     updateSizeAndPosition();
     update();
+    notifyChanged();
     return ret;
 }
 
@@ -329,6 +330,7 @@ void SimpleTextShape::addRange( unsigned int index, const QString &str )
     cacheGlyphOutlines();
     updateSizeAndPosition();
     update();
+    notifyChanged();
 }
 
 void SimpleTextShape::getCharAngleAt( unsigned int charNum, qreal &angle ) const
