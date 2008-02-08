@@ -31,6 +31,15 @@
 #include "KarbonCanvas.h"
 #include "KarbonDocument.h"
 #include "KarbonPart.h"
+#include <KarbonOutlinePaintingStrategy.h>
+
+#include <KoZoomHandler.h>
+#include <KoShapeManager.h>
+#include <KoToolProxy.h>
+#include <KoShapeManagerPaintingStrategy.h>
+
+#include <kdebug.h>
+#include <klocale.h>
 
 #include <QtGui/QPainter>
 #include <QtGui/QPaintEvent>
@@ -39,13 +48,6 @@
 #include <QtGui/QMouseEvent>
 #include <QtCore/QEvent>
 #include <QtCore/QSizeF>
-
-#include <KoZoomHandler.h>
-#include <KoShapeManager.h>
-#include <KoToolProxy.h>
-
-#include <kdebug.h>
-#include <klocale.h>
 
 class KarbonCanvas::KarbonCanvasPrivate
 {
@@ -314,6 +316,16 @@ void KarbonCanvas::adjustOrigin()
 
 void KarbonCanvas::setDocumentOffset(const QPoint &offset) {
     d->documentOffset = offset;
+}
+
+void KarbonCanvas::enableOutlineMode( bool on )
+{
+    if( on )
+        new KarbonOutlinePaintingStrategy( d->shapeManager );
+    else
+    {
+        d->shapeManager->setPaintingStrategy( new KoShapeManagerPaintingStrategy( d->shapeManager ) );
+    }
 }
 
 QPoint KarbonCanvas::widgetToView( const QPoint& p ) const {

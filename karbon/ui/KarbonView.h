@@ -154,7 +154,7 @@ protected slots:
     // Object related operations.
 
     // View
-    void viewModeChanged();
+    void viewModeChanged(bool);
     void zoomSelection();
     void zoomDrawing();
 
@@ -217,7 +217,7 @@ private:
     KAction * m_subtractPath;
     KAction * m_unitePath;
 
-    KSelectAction        *m_viewAction;
+    KToggleAction        *m_viewAction;
     KAction                *m_configureAction;
     KToggleAction        *m_showRulerAction;
     KToggleAction        *m_showGridAction;

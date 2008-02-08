@@ -111,6 +111,9 @@ public slots:
     void adjustOrigin();
     void setDocumentOffset(const QPoint &offset);
 
+    /// Enables/disables outline painting mode
+    void enableOutlineMode( bool on );
+
 signals:
 
     /**

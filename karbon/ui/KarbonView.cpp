@@ -892,17 +892,11 @@ void KarbonView::booleanOperation( KarbonBooleanCommand::BooleanOperation operat
     }
 }
 
-void KarbonView::viewModeChanged()
+void KarbonView::viewModeChanged(bool outlineMode)
 {
     debugView("KarbonView::viewModeChanged()");
 
-    // TODO: port: canvasWidget()->pixmap()->fill();
-
-    /* TODO: port: if( m_viewAction->currentItem() == 1 )
-        m_painterFactory->setWireframePainter( canvasWidget()->pixmap(), width(), height() );
-    else
-        m_painterFactory->setPainter( canvasWidget()->pixmap(), width(), height() );*/
-
+    m_canvas->enableOutlineMode( outlineMode );
     m_canvas->updateCanvas(m_canvas->canvasWidget()->rect());
 }
 
@@ -974,11 +968,9 @@ KarbonView::initActions()
     debugView("KarbonView::initActions()");
 
     // view ----->
-    /*
-    m_viewAction  = new KSelectAction(i18n("View &Mode"), this);
+    m_viewAction  = new KToggleAction(i18n("Outline &Mode"), this);
     actionCollection()->addAction("view_mode", m_viewAction );
-    connect(m_viewAction, SIGNAL(triggered()), this, SLOT(viewModeChanged()));
-    */
+    connect(m_viewAction, SIGNAL(toggled(bool)), this, SLOT(viewModeChanged(bool)));
 
     m_showPageMargins  = new KToggleAction(KIcon("view_margins"), i18n("Show Page Margins"), this);
     actionCollection()->addAction("view_show_margins", m_showPageMargins );
