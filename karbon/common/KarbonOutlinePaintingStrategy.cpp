@@ -23,19 +23,23 @@
 #include <KoLineBorder.h>
 
 KarbonOutlinePaintingStrategy::KarbonOutlinePaintingStrategy( KoShapeManager * shapeManager )
-    : KoShapeManagerPaintingStrategy( shapeManager )
+    : KoShapeManagerPaintingStrategy( shapeManager ), m_border( new KoLineBorder(0.0) )
 {
     Q_ASSERT( shapeManager );
     shapeManager->setPaintingStrategy( this );
 }
 
-void KarbonOutlinePaintingStrategy::paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool forPrint )
+KarbonOutlinePaintingStrategy::~KarbonOutlinePaintingStrategy()
+{
+    delete m_border;
+}
+
+void KarbonOutlinePaintingStrategy::paint( KoShape * shape, QPainter &painter, const KoViewConverter &converter, bool )
 {
     painter.save();
     painter.setMatrix( shape->absoluteTransformation(&converter) * painter.matrix() );
 
-    KoLineBorder border( 0.0 );
-    border.paintBorder( shape, painter, converter );
+    m_border->paintBorder( shape, painter, converter );
 
     painter.restore();
 }
