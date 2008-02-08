@@ -83,6 +83,12 @@ BasicElement* ElementFactory::createElement( const QString& tagName,
           return new PaddedElement( parent );
     else if ( tagName == "mphantom" )
           return new PhantomElement( parent );
+    else if ( tagName == "mtable" )
+          return new TableElement( parent );
+    else if ( tagName == "mtr" )
+          return new TableRowElement( parent );
+    else if ( tagName == "mtd" )
+          return new TableEntryElement( parent );
     else if ( tagName == "mfenced" )
           return new FencedElement( parent );
     else if ( tagName == "menclose" )

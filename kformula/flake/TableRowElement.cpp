@@ -14,7 +14,7 @@
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
-   You should have received a copy of the GNU Library General Public License
+   You shouldlemente received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
@@ -28,14 +28,10 @@
 #include <QStringList>
 
 TableRowElement::TableRowElement( BasicElement* parent ) : BasicElement( parent )
-{
-    m_entries.append( new TableEntryElement( this ) );
-}
+{}
 
 TableRowElement::~TableRowElement()
-{
-    qDeleteAll( m_entries );
-}
+{}
 
 void TableRowElement::paint( QPainter& painter, AttributeManager* am )
 {
@@ -124,18 +120,22 @@ QList<Align> TableRowElement::alignments( Qt::Orientation orientation )
             alignList << parentAlignList[ i ];
         else
             alignList << parentAlignList.last();
-    } 
+    }
+    return alignList;
 }
 
 bool TableRowElement::readMathMLContent( const KoXmlElement& element )
 {
-    TableEntryElement* tmpEntry = 0;
+    BasicElement* tmpElement = 0;
     KoXmlElement tmp;
     forEachElement( tmp, element )
     {
-        tmpEntry = new TableEntryElement( this );
-	m_entries << tmpEntry;
-	tmpEntry->readMathML( tmp );
+        tmpElement = ElementFactory::createElement( tmp.tagName(), this );
+	if( tmpElement->elementType() != TableEntry )
+            return false;
+
+        m_entries << static_cast<TableEntryElement*>( tmpElement );
+	tmpElement->readMathML( tmp );
     }
 
     return true;

@@ -118,7 +118,7 @@ const QList<BasicElement*> FractionElement::childElements()
 BasicElement* FractionElement::acceptCursor( const FormulaCursor* cursor )
 {
 /*    switch( cursor->direction() ) {
-        case RightToChild:
+        case MoveRight:
             return m_numerator;
         case LeftToChild:
             return m_denominator;

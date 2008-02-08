@@ -36,6 +36,7 @@ FormulaRenderer::~FormulaRenderer()
 void FormulaRenderer::paintElement( QPainter& p, BasicElement* element )
 {   
     p.save();
+    p.setRenderHint( QPainter::Antialiasing );
     p.translate( element->origin() );          // setup painter
     p.scale( element->scaleFactor(), element->scaleFactor() );
     element->paint( p, m_attributeManager );   // let element paint itsself

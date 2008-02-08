@@ -88,7 +88,7 @@ BasicElement* TokenElement::acceptCursor( const FormulaCursor* cursor )
 bool TokenElement::readMathMLContent( const KoXmlElement& element )
 {
     BasicElement* tmpGlyph;
-    kDebug() << "child element count: " << element.childNodesCount();
+//    kDebug() << "child element count: " << element.childNodesCount();
     KoXmlNode node = element.firstChild();
     while( !node.isNull() ) {
         if( node.isElement() ) {
@@ -99,7 +99,7 @@ bool TokenElement::readMathMLContent( const KoXmlElement& element )
         }
         else {
             m_rawStringList << node.toText().data().trimmed();
-            kDebug() << "Node text: " << node.toText().data().trimmed();
+//            kDebug() << "Node text: " << node.toText().data().trimmed();
             m_content << this;
         }
         node = node.nextSibling();

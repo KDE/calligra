@@ -117,6 +117,9 @@ public:
     /// @return whether the cursor is moving up or down in the element tree hierachy
     bool ascending() const;
 
+    /// @return the buffer with the last user input
+    QString insertBuffer() const;
+
     /**
      * Make the cursor selecting
      * @param selecting When true the cursor is selecting
@@ -135,6 +138,9 @@ private:
 
     /// The direction the cursor is moving to
     CursorDirection m_direction;
+
+    /// Buffer for the user input
+//    QString m_insertBuffer;
 
     /// Indicates whether the cursor is currently selecting
     bool m_selecting;

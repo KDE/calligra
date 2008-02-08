@@ -185,12 +185,15 @@ QString TableElement::attributesDefaultValue( const QString& attribute ) const
 
 bool TableElement::readMathMLContent( const KoXmlElement& element )
 {  
-    TableRowElement* tmpElement = 0;
+    BasicElement* tmpElement = 0;
     KoXmlElement tmp;
     forEachElement( tmp, element )   // iterate over the elements
     {
-        tmpElement = new TableRowElement( this );
-        m_rows << tmpElement;
+        tmpElement = ElementFactory::createElement( tmp.tagName(), this );
+        if( tmpElement->elementType() != TableRow )
+            return false;
+
+        m_rows << static_cast<TableRowElement*>( tmpElement );
 	tmpElement->readMathML( tmp );
     }
 

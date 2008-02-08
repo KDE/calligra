@@ -60,27 +60,29 @@ void FormulaCursor::paint( QPainter& painter ) const
 
 void FormulaCursor::insertText( const QString& text )
 {
-/*    if ( text == "\\" && m_currentElement != TokenElement )
-       -> go to latex processing
+//    if ( text == "\\" && m_currentElement != TokenElement )
+//    TODO   -> go to latex processing
 
-    if( text.size() != 1 ) // check for single char input after key press
+//    if( text.size() != 1 ) // check for single char input after key press
         // TODO check for text excapting element due to paste of text
 
-
+    // Filter for things that can be typed in with the keyboard
+    // - most important: numbers
+    // - operators like: / * + - | ^ % ( )
+    // - other text is put into text accepting elements
+/*    m_buffer = text;
     QChar tmpChar( text );
     if( tmpChar.isNumber() ) {
-        if( m_currentElement->elementType() == Number )
-            // TODO insert stuff somehow
-
-    }
-    else if( tmpChar.isSpace() )
+        if( m_currentElement->elementType() != Number ) {
+            NumberElement* tmpNumber = new NumberElement( m_currentElement );
+            m_currentElement->insertChild( this, tmpNumber );
+            m_currentElement = tmpNumber;
+        }
+        m_currentElement->insertChild( this, 0 );
+    }*/
+    //else if( tmpChar.isSpace() )
         // what to do ???
-    else if( tmpChar.isLetter() )
- Filters for things that can be typed in with the keyboard
-- most important: numbers
-- second operators like: / *-+ |^%( )
-- text input is only allowed inside of text accepting elements
-*/
+    //else if( tmpChar.isLetter() )
 }
 
 void FormulaCursor::insert( BasicElement* element )
