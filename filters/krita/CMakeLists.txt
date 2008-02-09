@@ -17,7 +17,6 @@ if(EXIV2_FOUND)
       set(EXIV2_FOUND FALSE)
       message(STATUS "Found Exiv2 release < 0.16")
     endif(_return_VALUE STREQUAL "0")
-  endif(_EXIV2LinkFlags)
 endif(EXIV2_FOUND)
 
 macro_log_feature(JPEG_FOUND "jpeg" "The Krita JPEG filter will not be built" "http://www.ijg.org" FALSE "")
