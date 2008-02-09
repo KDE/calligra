@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -76,6 +77,36 @@ private:
         SimpleTextShape *m_shape;
         QFont m_font;
         QFont m_oldFont;
+    };
+    class ChangeText : public QUndoCommand
+    {
+    public:
+        ChangeText( SimpleTextShapeConfigWidget *widget, const QString &text )
+            : m_widget( widget ), m_text( text )
+        {
+            m_shape = widget->m_shape;
+            setText( "Change text" );
+        }
+        virtual void undo()
+        {
+            if ( m_shape ) {
+                m_shape->setText( m_oldText );
+                m_widget->open( m_shape );
+            }
+        }
+        virtual void redo()
+        {
+            if ( m_shape ) {
+                m_oldText = m_shape->text();
+                m_shape->setText( m_text );
+                m_widget->open( m_shape );
+            }
+        }
+    private:
+        SimpleTextShapeConfigWidget *m_widget;
+        SimpleTextShape *m_shape;
+        QString m_text;
+        QString m_oldText;
     };
 
 private:

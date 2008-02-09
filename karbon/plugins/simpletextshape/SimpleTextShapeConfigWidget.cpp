@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2008 Rob Buis <buis@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -117,11 +118,13 @@ void SimpleTextShapeConfigWidget::save()
     KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
     if ( canvasController ) {
         KoCanvasBase *canvas = canvasController->canvas();
-        QUndoCommand *cmd = new ChangeFont( this, font );
-        canvas->addCommand( cmd );
+	if ( widget.text->text() != m_shape->text() ) {
+            canvas->addCommand( new ChangeText( this, widget.text->text() ) );
+	} else if ( font != m_shape->font() ) {
+            canvas->addCommand( new ChangeFont( this, font ) );
+	}
     }
 
-    m_shape->setText( widget.text->text() );
     m_shape->setStartOffset( static_cast<qreal>(widget.startOffset->value()) / 100.0 );
     if( widget.anchorStart->isChecked() )
         m_shape->setTextAnchor( SimpleTextShape::AnchorStart );
