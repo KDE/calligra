@@ -140,55 +140,13 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
 
     paintMargins( gc, d->zoomHandler );
     gc.setRenderHint(QPainter::Antialiasing, false);
-    paintGrid( gc, d->zoomHandler, d->zoomHandler.viewToDocument( widgetToView( clipRect ) ) );
+    d->part->gridData().paintGrid( gc, d->zoomHandler, d->zoomHandler.viewToDocument( widgetToView( clipRect ) ) );
     gc.setRenderHint(QPainter::Antialiasing);
 
     d->shapeManager->paint( gc, d->zoomHandler, false );
     d->toolProxy->paint( gc, d->zoomHandler );
 
     gc.end();
-}
-
-void KarbonCanvas::paintGrid( QPainter &painter, const KoViewConverter &converter, const QRectF &area )
-{
-    if( ! d->part->gridData().showGrid() )
-        return;
-
-    painter.setPen( d->part->gridData().gridColor() );
-
-    double gridX = d->part->gridData().gridX();
-
-    double x = 0.0;
-    do {
-        painter.drawLine( converter.documentToView( QPointF( x, area.top() ) ), 
-                          converter.documentToView( QPointF( x, area.bottom() ) ) );
-        x += gridX;
-    } while( x <= area.right() );
-
-    x = - gridX;
-    while( x >= area.left() )
-    {
-        painter.drawLine( converter.documentToView( QPointF( x, area.top() ) ),
-                          converter.documentToView( QPointF( x, area.bottom() ) ) );
-        x -= gridX;
-    };
-
-    double gridY = d->part->gridData().gridY();
-
-    double y = 0.0;
-    do {
-        painter.drawLine( converter.documentToView( QPointF( area.left(), y ) ), 
-                          converter.documentToView( QPointF( area.right(), y ) ) );
-        y += gridY;
-    } while( y <= area.bottom() );
-
-    y = - gridY;
-    while( y >= area.top() )
-    {
-        painter.drawLine( converter.documentToView( QPointF( area.left(), y ) ), 
-                          converter.documentToView( QPointF( area.right(), y ) ) );
-        y -= gridY;
-    };
 }
 
 void KarbonCanvas::paintMargins( QPainter &painter, const KoViewConverter &converter )

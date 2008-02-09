@@ -155,8 +155,6 @@ protected:
     QRect viewToWidget( const QRect& r ) const;
 
 private:
-    /// paint the grid
-    void paintGrid( QPainter &painter, const KoViewConverter &converter, const QRectF &area );
     /// paint page margins
     void paintMargins( QPainter &painter, const KoViewConverter &converter );
 
