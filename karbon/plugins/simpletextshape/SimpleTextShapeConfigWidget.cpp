@@ -114,7 +114,13 @@ void SimpleTextShapeConfigWidget::save()
     font.setItalic( widget.italic->isChecked() );
     font.setPointSize( widget.fontSize->value() );
 
-    m_shape->setFont( font );
+    KoCanvasController* canvasController = KoToolManager::instance()->activeCanvasController();
+    if ( canvasController ) {
+        KoCanvasBase *canvas = canvasController->canvas();
+        QUndoCommand *cmd = new ChangeFont( this, font );
+        canvas->addCommand( cmd );
+    }
+
     m_shape->setText( widget.text->text() );
     m_shape->setStartOffset( static_cast<qreal>(widget.startOffset->value()) / 100.0 );
     if( widget.anchorStart->isChecked() )
