@@ -53,6 +53,7 @@
 #include <QtGui/QLinearGradient>
 #include <QtGui/QRadialGradient>
 
+const double ScaleToUserSpace = 90.0 / 72.0;
 
 static void printIndentation( QTextStream *stream, unsigned int indent )
 {
@@ -67,7 +68,7 @@ K_EXPORT_COMPONENT_FACTORY( libkarbonsvgexport, SvgExportFactory( "kofficefilter
 SvgExport::SvgExport( QObject*parent, const QStringList& )
     : KoFilter(parent), m_indent( 0 ), m_indent2( 0 )
 {
-    m_userSpaceMatrix.scale( 90.0 / 72.0, 90.0 / 72.0 );
+    m_userSpaceMatrix.scale( ScaleToUserSpace, ScaleToUserSpace );
 }
 
 KoFilter::ConversionStatus SvgExport::convert( const QByteArray& from, const QByteArray& to )
@@ -242,7 +243,7 @@ QString SvgExport::getTransform( const QMatrix &matrix )
     QString transform = QString( "matrix(%1 %2 %3 %4 %5 %6)" )
             .arg( matrix.m11() ).arg( matrix.m12() )
             .arg( matrix.m21() ).arg( matrix.m22() )
-            .arg( matrix.dx() ) .arg( matrix.dy() );
+            .arg( toUserSpace(matrix.dx()) ) .arg( toUserSpace(matrix.dy()) );
 
     return transform;
 }
@@ -284,10 +285,10 @@ void SvgExport::getGradient( KoShape * shape, const QBrush &brush )
         *m_defs << "<linearGradient id=\"" << uid << "\" ";
         *m_defs << "gradientUnits=\"userSpaceOnUse\" ";
         *m_defs << "gradientTransform=\"" << getTransform( matrix ) << "\" ";
-        *m_defs << "x1=\"" << g->start().x() << "\" ";
-        *m_defs << "y1=\"" << g->start().y() << "\" ";
-        *m_defs << "x2=\"" << g->finalStop().x() << "\" ";
-        *m_defs << "y2=\"" << g->finalStop().y() << "\" ";
+        *m_defs << "x1=\"" << toUserSpace( g->start().x() ) << "\" ";
+        *m_defs << "y1=\"" << toUserSpace( g->start().y() ) << "\" ";
+        *m_defs << "x2=\"" << toUserSpace( g->finalStop().x() ) << "\" ";
+        *m_defs << "y2=\"" << toUserSpace( g->finalStop().y() ) << "\" ";
         *m_defs << spreadMethod[g->spread()];
         *m_defs << ">" << endl;
 
@@ -306,11 +307,11 @@ void SvgExport::getGradient( KoShape * shape, const QBrush &brush )
         *m_defs << "<radialGradient id=\"" << uid << "\" ";
         *m_defs << "gradientUnits=\"userSpaceOnUse\" ";
         *m_defs << "gradientTransform=\"" << getTransform( matrix ) << "\" ";
-        *m_defs << "cx=\"" << g->center().x() << "\" ";
-        *m_defs << "cy=\"" << g->center().y() << "\" ";
-        *m_defs << "fx=\"" << g->focalPoint().x() << "\" ";
-        *m_defs << "fy=\"" << g->focalPoint().y() << "\" ";
-        *m_defs << "r=\"" << QString().setNum( g->radius() ) << "\" ";
+        *m_defs << "cx=\"" << toUserSpace( g->center().x() ) << "\" ";
+        *m_defs << "cy=\"" << toUserSpace( g->center().y() ) << "\" ";
+        *m_defs << "fx=\"" << toUserSpace( g->focalPoint().x() ) << "\" ";
+        *m_defs << "fy=\"" << toUserSpace( g->focalPoint().y() ) << "\" ";
+        *m_defs << "r=\"" << QString().setNum( toUserSpace( g->radius() ) ) << "\" ";
         *m_defs << spreadMethod[g->spread()];
         *m_defs << ">" << endl;
 
@@ -456,7 +457,6 @@ void SvgExport::getHexColor( QTextStream *stream, const QColor & color )
     *stream << Output;
 }
 
-
 void SvgExport::saveText( SimpleTextShape * text )
 {
     printIndentation( m_body, m_indent++ );
@@ -530,6 +530,12 @@ void SvgExport::saveImage( QImage& )
     *m_body << "xlink:href=\"" << "\"";
     *m_body << " />" << endl;
 }
+
+double SvgExport::toUserSpace( double value )
+{
+    return value * ScaleToUserSpace;
+}
+
 
 #include "svgexport.moc"
 

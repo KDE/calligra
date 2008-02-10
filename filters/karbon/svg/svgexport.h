@@ -6,7 +6,7 @@
    Copyright (C) 2005 Boudewijn Rempt <boud@valdyas.org>
    Copyright (C) 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
    Copyright (C) 2005 Thomas Zander <zander@kde.org>
-   Copyright (C) 2005,2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2005,2008 Jan Hambrecht <jaham@gmx.net>
    Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
 
@@ -74,6 +74,8 @@ private:
     QString getTransform( const QMatrix &matrix );
 
     QString getID( const KoShape *obj );
+
+    double toUserSpace( double value );
 
     QTextStream* m_stream;
     QTextStream* m_defs;
