@@ -10,7 +10,6 @@ Name[x-test]=xxKritaxx
 Path=
 StartupNotify=true
 Terminal=false
-TerminalOptions=
 Type=Application
 X-DBUS-StartupType=multi
 X-KDE-StartupNotify=true
