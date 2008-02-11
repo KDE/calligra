@@ -98,6 +98,9 @@ public:
     virtual bool loadContext();
     virtual void saveContext( QDomElement &context ) const;
 
+    /// Load the workpackage from @p url into @p project. Return true if successfull, else false.
+    bool loadWorkPackage( Project &project, const KUrl &url );
+    
     QWidget *canvas() const;
 
     //virtual QDockWidget *createToolBox();

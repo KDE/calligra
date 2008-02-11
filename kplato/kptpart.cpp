@@ -320,6 +320,125 @@ bool Part::saveWorkPackageUrl( const KUrl & _url, const Node *node, long id  )
     return ret;
 }
 
+bool Part::loadWorkPackage( Project &project, const KUrl &url )
+{
+    kDebug()<<url;
+    if ( ! url.isLocalFile() ) {
+        kDebug()<<"TODO: download if url not local";
+        return false;
+    }
+    KoStore * store = KoStore::createStore( url.path(), KoStore::Read, "", KoStore::Auto );
+    if ( store->bad() ) {
+//        d->lastErrorMessage = i18n( "Not a valid KOffice file: %1", file );
+        kDebug()<<"bad store"<<url.prettyUrl();
+        delete store;
+//        QApplication::restoreOverrideCursor();
+        return false;
+    }
+    if ( ! store->open( "root" ) ) { // "old" file format (maindoc.xml)
+        // i18n( "File does not have a maindoc.xml: %1", file );
+        kDebug()<<"No root"<<url.prettyUrl();
+        delete store;
+//        QApplication::restoreOverrideCursor();
+        return false;
+    }
+    KoXmlDocument doc;
+    QString errorMsg; // Error variables for QDomDocument::setContent
+    int errorLine, errorColumn;
+    bool ok = doc.setContent( store->device(), &errorMsg, &errorLine, &errorColumn );
+    if ( ! ok ) {
+        kError(30003) << "Parsing error in " << url.url() << "! Aborting!" << endl
+                << " In line: " << errorLine << ", column: " << errorColumn << endl
+                << " Error message: " << errorMsg << endl;
+        //d->lastErrorMessage = i18n( "Parsing error in %1 at line %2, column %3\nError message: %4",filename  ,errorLine, errorColumn , QCoreApplication::translate("QXml", errorMsg.toUtf8(), 0, QCoreApplication::UnicodeUTF8));
+    } else {
+        ok = loadWorkPackageXML( project, store->device(), doc );
+    }
+    store->close();
+    delete store;
+    if ( ! ok ) {
+//        QApplication::restoreOverrideCursor();
+        return false;
+    }
+    return true;
+}
+
+bool Part::loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document )
+{
+    kDebug();
+    QTime dt;
+    dt.start();
+    emit sigProgress( 0 );
+
+    QString value;
+    KoXmlElement plan = document.documentElement();
+
+    // Check if this is the right app
+    value = plan.attribute( "mime", QString() );
+    if ( value.isEmpty() ) {
+        kError() << "No mime type specified!" << endl;
+        setErrorMessage( i18n( "Invalid document. No mimetype specified." ) );
+        return false;
+    } else if ( value != "application/x-vnd.kde.kplato.work" ) {
+        kError() << "Unknown mime type " << value << endl;
+        setErrorMessage( i18n( "Invalid document. Expected mimetype application/x-vnd.kde.kplato.work, got %1", value ) );
+        return false;
+    }
+    QString m_syntaxVersion = plan.attribute( "version", CURRENT_SYNTAX_VERSION );
+    m_xmlLoader.setVersion( m_syntaxVersion );
+    if ( m_syntaxVersion > CURRENT_SYNTAX_VERSION ) {
+        int ret = KMessageBox::warningContinueCancel(
+                0, i18n( "This document was created with a newer version of KPlatoWork (syntax version: %1)\n"
+                "Opening it in this version of KPlatoWork will lose some information.", m_syntaxVersion ),
+                i18n( "File-Format Mismatch" ), KGuiItem( i18n( "Continue" ) ) );
+        if ( ret == KMessageBox::Cancel ) {
+            setErrorMessage( "USER_CANCELED" );
+            return false;
+        }
+    }
+    emit sigProgress( 5 );
+
+#ifdef KOXML_USE_QDOM
+    int numNodes = plan.childNodes().count();
+#else
+    int numNodes = plan.childNodesCount();
+#endif
+    if ( numNodes > 2 ) {
+        //TODO: Make a proper bitching about this
+        kDebug() <<"*** Error ***";
+        kDebug() <<"  Children count should be maximum 2, but is" << numNodes;
+        return false;
+    }
+    emit sigProgress( 100 ); // the rest is only processing, not loading
+
+    kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
+
+    bool ok;
+    m_xmlLoader.startLoad();
+    KoXmlNode n = plan.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if ( e.tagName() == "project" ) {
+            m_xmlLoader.setProject( &project );
+            ok = project.load( e, m_xmlLoader );
+            if ( ! ok ) {
+                m_xmlLoader.addMsg( XMLLoaderObject::Errors, "Loading of work package failed" );
+                //TODO add some ui here
+            }
+        }
+    }
+    m_xmlLoader.stopLoad();
+    emit sigProgress( 100 ); // the rest is only processing, not loading
+
+    kDebug() <<"Loading took" << ( float ) ( dt.elapsed() ) / 1000 <<" seconds";
+
+    emit sigProgress( -1 );
+    return ok;
+}
+
 
 void Part::paintContent( QPainter &, const QRect &)
 {

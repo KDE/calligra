@@ -82,6 +82,10 @@ public:
     bool saveWorkPackageFormat( const QString &file, const Node *node, long id  );
     bool saveWorkPackageUrl( const KUrl & _url, const Node *node, long id  );
 
+    /// Load the workpackage from @p url into @p project. Return true if successfull, else false.
+    bool loadWorkPackage( Project &project, const KUrl &url );
+    bool loadWorkPackageXML( Project &project, QIODevice *, const KoXmlDocument &document );
+    
 signals:
     void changed();
     

@@ -71,12 +71,14 @@ protected:
     int m_year;
 };
 
-class TaskProgressPanel : public TaskProgressPanelImpl {
+class KPLATOUI_EXPORT TaskProgressPanel : public TaskProgressPanelImpl {
     Q_OBJECT
 public:
     explicit TaskProgressPanel( Task &task, ScheduleManager *sm, StandardWorktime *workTime=0, QWidget *parent=0 );
 
     MacroCommand *buildCommand();
+    
+    static MacroCommand *buildCommand( const Project &project, Completion &org, Completion &curr );
     
     bool ok();
 

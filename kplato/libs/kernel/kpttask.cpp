@@ -2626,6 +2626,7 @@ void WorkPackage::saveXML(QDomElement &element) const
 
 QList<Resource*> WorkPackage::fetchResources()
 {
+    kDebug()<<m_task.name();
     QList<Resource*> lst;
     if ( id() == -1 ) {
         kDebug()<<"No schedule";

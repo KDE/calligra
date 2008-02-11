@@ -2067,6 +2067,11 @@ void View::saveContext( QDomElement &me ) const
     m_viewlist->save( me );
 }
 
+bool View::loadWorkPackage( Project &project, const KUrl &url )
+{
+    return getPart()->loadWorkPackage( project, url );
+}
+
 void View::setLabel()
 {
     //kDebug();

@@ -125,64 +125,79 @@ bool TaskProgressPanel::ok() {
     return true;
 }
 
-MacroCommand *TaskProgressPanel::buildCommand() {
+MacroCommand *TaskProgressPanel::buildCommand()
+{
+    Project *project = dynamic_cast<Project*>( m_task.projectNode() );
+    if ( project == 0 ) {
+        return 0;
+    }
+    return buildCommand( *project, m_original, m_completion );
+}
+
+MacroCommand *TaskProgressPanel::buildCommand( const Project &project, Completion &org, Completion &curr )
+{
     MacroCommand *cmd = 0;
     QString c = i18n("Modify task completion");
     
-    if ( m_original.entrymode() != m_completion.entrymode() ) {
+    if ( org.entrymode() != curr.entrymode() ) {
         if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionEntrymodeCmd(m_original, m_completion.entrymode() ) );
+        cmd->addCommand( new ModifyCompletionEntrymodeCmd(org, curr.entrymode() ) );
     }
-    if ( m_original.isStarted() != started->isChecked() ) {
+    if ( org.isStarted() != curr.isStarted() ) {
         if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionStartedCmd(m_original, started->isChecked() ) );
+        cmd->addCommand( new ModifyCompletionStartedCmd(org, curr.isStarted() ) );
     }
-    if ( m_original.isFinished() != finished->isChecked() ) {
+    if ( org.isFinished() != curr.isFinished() ) {
         if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionFinishedCmd(m_original, finished->isChecked() ) );
+        cmd->addCommand( new ModifyCompletionFinishedCmd(org, curr.isFinished() ) );
     }
-    if ( m_original.startTime().dateTime() != startTime->dateTime() ) {
+    if ( org.startTime() != curr.startTime() ) {
         if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionStartTimeCmd(m_original, startTime->dateTime() ) );
+        cmd->addCommand( new ModifyCompletionStartTimeCmd(org, curr.startTime().dateTime() ) );
     }
-    if ( m_original.finishTime().dateTime() != finishTime->dateTime() ) {
+    if ( org.finishTime() != curr.finishTime() ) {
         if ( cmd == 0 ) cmd = new MacroCommand( c );
-        cmd->addCommand( new ModifyCompletionFinishTimeCmd(m_original, finishTime->dateTime() ) );
+        cmd->addCommand( new ModifyCompletionFinishTimeCmd(org, curr.finishTime().dateTime() ) );
     }
-    QList<QDate> org = m_original.entries().keys();
-    QList<QDate> curr = m_completion.entries().keys();
-    foreach ( QDate d, org ) {
-        if ( curr.contains( d ) ) {
-            if ( m_completion.entry( d ) == m_original.entry( d ) ) {
+    QList<QDate> orgdates = org.entries().keys();
+    QList<QDate> currdates = curr.entries().keys();
+    foreach ( QDate d, orgdates ) {
+        if ( currdates.contains( d ) ) {
+            if ( curr.entry( d ) == org.entry( d ) ) {
                 continue;
             }
             if ( cmd == 0 ) cmd = new MacroCommand( c );
-            kDebug()<<"modify entry "<<d<<endl;
-            Completion::Entry *e = new Completion::Entry( *( m_completion.entry( d ) ) );
-            cmd->addCommand( new ModifyCompletionEntryCmd(m_original, d, e ) );
+            kDebug()<<"modify entry "<<d;
+            Completion::Entry *e = new Completion::Entry( *( curr.entry( d ) ) );
+            cmd->addCommand( new ModifyCompletionEntryCmd(org, d, e ) );
         } else {
             if ( cmd == 0 ) cmd = new MacroCommand( c );
-            kDebug()<<"remove entry "<<d<<endl;
-            cmd->addCommand( new RemoveCompletionEntryCmd(m_original, d ) );
+            kDebug()<<"remove entry "<<d;
+            cmd->addCommand( new RemoveCompletionEntryCmd(org, d ) );
         }
     }
-    foreach ( QDate d, curr ) {
-        if ( ! org.contains( d ) ) {
+    foreach ( QDate d, currdates ) {
+        if ( ! orgdates.contains( d ) ) {
             if ( cmd == 0 ) cmd = new MacroCommand( c );
-            Completion::Entry *e = new Completion::Entry( * ( m_completion.entry( d ) ) );
-            kDebug()<<"add entry "<<d<<e<<endl;
-            cmd->addCommand( new AddCompletionEntryCmd(m_original, d, e ) );
+            Completion::Entry *e = new Completion::Entry( * ( curr.entry( d ) ) );
+            kDebug()<<"add entry "<<d<<e;
+            cmd->addCommand( new AddCompletionEntryCmd(org, d, e ) );
         }
     }
-    const Completion::ResourceUsedEffortMap &map = m_completion.usedEffortMap();
-    foreach ( const Resource *r, map.keys() ) {
+    const Completion::ResourceUsedEffortMap &map = curr.usedEffortMap();
+    foreach ( const Resource *res, map.keys() ) {
+        Resource *r = project.findResource( res->id() );
+        if ( r == 0 ) {
+            kWarning()<<"Can't find resource:"<<res->id()<<res->name();
+            continue;
+        }
         Completion::UsedEffort *ue = map[ r ];
         if ( ue == 0 ) {
             continue;
         }
-        if ( m_original.usedEffort( r ) == 0 || *ue != *(m_original.usedEffort( r )) ) {
+        if ( org.usedEffort( r ) == 0 || *ue != *(org.usedEffort( r )) ) {
             if ( cmd == 0 ) cmd = new MacroCommand( c );
-            cmd->addCommand( new AddCompletionUsedEffortCmd( m_original, r, new Completion::UsedEffort( *ue ) ) );
+            cmd->addCommand( new AddCompletionUsedEffortCmd( org, r, new Completion::UsedEffort( *ue ) ) );
         }
     }
     return cmd;
@@ -213,13 +228,13 @@ void TaskProgressPanel::slotWeekNumberChanged( int index )
 
 void TaskProgressPanel::slotAddResource()
 {
-    kDebug()<<endl;
+    kDebug();
     resourceTable->addResource();
 }
 
 void TaskProgressPanel::slotEntryAdded( const QDate date )
 {
-    kDebug()<<endl;
+    kDebug();
 }
 
 //-------------------------------------
@@ -273,8 +288,10 @@ void TaskProgressPanelImpl::optionChanged( int id )
 }
 
 void TaskProgressPanelImpl::slotStartedChanged(bool state) {
+    m_completion.setStarted( state );
     if (state) {
-        startTime->setDateTime(QDateTime::currentDateTime());
+        m_completion.setStartTime( KDateTime::currentLocalDateTime() );
+        startTime->setDateTime( m_completion.startTime().dateTime() );
         slotCalculateEffort();
     }
     enableWidgets();
@@ -282,12 +299,14 @@ void TaskProgressPanelImpl::slotStartedChanged(bool state) {
 
 
 void TaskProgressPanelImpl::slotFinishedChanged(bool state) {
-    kDebug()<<endl;
+    kDebug()<<state;
+    m_completion.setFinished( state );
     if (state) {
-        kDebug()<<state<<endl;
+        kDebug()<<state;
 //        percentFinished->setValue(100);
-        finishTime->setDateTime(QDateTime::currentDateTime());
-        kDebug()<<finishTime->dateTime()<<endl;
+        m_completion.setFinishTime( KDateTime::currentLocalDateTime() );
+        finishTime->setDateTime( m_completion.finishTime().dateTime() );
+        kDebug()<<finishTime->dateTime();
         slotCalculateEffort();
     }   
     enableWidgets();
