@@ -26,6 +26,9 @@ class KoShape;
 
 class SimpleTextShapeFactory : public KoShapeFactory
 {
+    using KoShapeFactory::createDefaultShape;
+    using KoShapeFactory::createShape;
+
     Q_OBJECT
 
 public:

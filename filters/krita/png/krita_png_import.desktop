@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=Krita PNG Import Filter
 Name[bg]=Филтър за импортиране от PNG в Krita
@@ -47,5 +46,5 @@ X-KDE-Export=application/x-krita
 X-KDE-Import=image/png
 X-KDE-Weight=1
 X-KDE-Library=libkritapngimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 NoDisplay=true

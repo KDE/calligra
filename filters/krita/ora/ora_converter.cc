@@ -62,7 +62,7 @@ KisImageBuilder_Result OraConverter::buildImage(const KUrl& uri)
     QString tmpFile;
 
     KoStore* store = KoStore::createStore( qApp->mainWidget(), uri, KoStore::Read, "odr", KoStore::Zip);
-    if( not store)
+    if( !store)
     {
         return KisImageBuilder_RESULT_FAILURE;
     }
@@ -88,11 +88,11 @@ KisImageBuilder_Result OraConverter::buildFile(const KUrl& uri, KisImageSP image
     if (uri.isEmpty())
         return KisImageBuilder_RESULT_NO_URI;
 
-    if (not uri.isLocalFile())
+    if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
     // Open file for writing
     KoStore* store = KoStore::createStore( qApp -> mainWidget(), uri, KoStore::Write, "odr", KoStore::Zip);
-    if( not store)
+    if(!store)
     {
         return KisImageBuilder_RESULT_FAILURE;
     }

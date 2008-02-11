@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Krita Magick Export Filter
 Name[bg]=Филтър за експортиране от Krita в Magick
 Name[br]=Sil ezporzh Magick evit Krita
@@ -47,7 +46,7 @@ Name[x-test]=xxKrita Magick Export Filterxx
 Name[zh_CN]=Krita Magick 导出过滤器
 Name[zh_TW]=Krita Magick 匯出過濾程式
 X-KDE-Export=image/gif,image/cgm,image/x-pcx,image/x-portable-pixmap,image/x-targa,image/x-xbm,image/x-xpm,image/x-rgb,image/x-eps
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Import=application/x-krita
 X-KDE-Weight=1

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=Quattro Pro Import Filter for KSpread
 Name[af]=Quattro Pro In voer Filter vir Kspread
@@ -60,4 +59,4 @@ X-KDE-Library=libqproimport
 X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
 X-KDE-LibraryDependencies=
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

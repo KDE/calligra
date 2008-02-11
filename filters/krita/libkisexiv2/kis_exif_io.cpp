@@ -145,7 +145,7 @@ Exiv2::Value* kmdOECFStructureToExifOECF(const KisMetaData::Value& value)
     QList<KisMetaData::Value> values = oecfStructure["Values"].asArray();
     Q_ASSERT(columns*rows == values.size());
     int length = 4 + rows*columns*8; // The 4 byte for storing rows/columns and the rows*columns*sizeof(rational)
-    bool saveNames = (not names.empty() and names[0].asVariant().toString().size() > 0);
+    bool saveNames = (!names.empty() && names[0].asVariant().toString().size() > 0);
     if(saveNames)
     {
         for(int i = 0; i < columns; i++)
@@ -318,7 +318,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const
         } else {
             Exiv2::ExifKey exifKey(qPrintable(exivKey));
             Exiv2::Value* v;
-            if(exivKey == "Exif.Photo.ExifVersion" or exivKey == "Exif.Photo.FlashpixVersion")
+            if(exivKey == "Exif.Photo.ExifVersion" || exivKey == "Exif.Photo.FlashpixVersion")
             {
                 v = kmdValueToExifVersion( entry.value() );
             } else if(exivKey == "Exif.Photo.FileSource") {
@@ -342,7 +342,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const
             } else {
                 v = kmdValueToExivValue( entry.value(), Exiv2::ExifTags::tagType( exifKey.tag(), exifKey.ifdId()  ) );
             }
-            if( v and v->typeId() != Exiv2::invalidTypeId )
+            if( v && v->typeId() != Exiv2::invalidTypeId )
             {
 //                 dbgFile <<"Saving key" << exivKey <<" of KMD value" << entry.value();
                 exifData.add(exifKey, v );
@@ -378,36 +378,47 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
         it != exifData.end(); ++it)
     {
         dbgFile <<"Reading info for key" << it->key().c_str();
-        if(it->key() == "Exif.Photo.StripOffsets" or it->key() == "RowsPerStrip" or it->key() == "StripByteCounts" or it->key() == "JPEGInterchangeFormat" or it->key() == "JPEGInterchangeFormatLength")
-        {
+        if (   it->key() == "Exif.Photo.StripOffsets"
+            || it->key() == "RowsPerStrip"
+            || it->key() == "StripByteCounts"
+            || it->key() == "JPEGInterchangeFormat"
+            || it->key() == "JPEGInterchangeFormatLength") {
             dbgFile << it->key().c_str() <<" is ignored";
-        } if(it->key() == "Exif.Photo.MakerNote") {
+        }
+        if (it->key() == "Exif.Photo.MakerNote") {
             const KisMetaData::Schema* makerNoteSchema = KisMetaData::SchemaRegistry::instance()->schemaFromUri(KisMetaData::Schema::MakerNoteSchemaUri);
             store->addEntry(KisMetaData::Entry(makerNoteSchema, "RawData", exivValueToKMDValue(it->getValue())));
-        } else if(it->key() == "Exif.Image.DateTime")
+        }
+        else if(it->key() == "Exif.Image.DateTime")
         { // load as xmp:ModifyDate
             store->addEntry( KisMetaData::Entry(xmpSchema, "ModifyDate", KisMetaData::Value(exivValueToDateTime(it->getValue())) ));
-        } else if(it->key() == "Exif.Image.ImageDescription")
+        }
+        else if(it->key() == "Exif.Image.ImageDescription")
         { // load as "dc:description"
             store->addEntry( KisMetaData::Entry(dcSchema, "description", exivValueToKMDValue(it->getValue())) );
-        } else if(it->key() == "Exif.Image.Software")
+        }
+        else if(it->key() == "Exif.Image.Software")
         { // load as "xmp:CreatorTool"
             store->addEntry(KisMetaData::Entry(xmpSchema, "CreatorTool", exivValueToKMDValue(it->getValue()) ));
-        } else if(it->key() == "Exif.Image.Artist")
+        }
+        else if (it->key() == "Exif.Image.Artist")
         { // load as dc:creator
             QList<KisMetaData::Value> creators;
             creators.push_back(exivValueToKMDValue(it->getValue()));
             store->addEntry(KisMetaData::Entry(dcSchema, "creator", KisMetaData::Value(creators, KisMetaData::Value::OrderedArray) ));
-        } else if(it->key() == "Exif.Image.Copyright")
+        }
+        else if (it->key() == "Exif.Image.Copyright")
         { // load as dc:rights
             store->addEntry(KisMetaData::Entry(dcSchema, "rights", exivValueToKMDValue(it->getValue()) ));
-        } else if(it->groupName() == "Image") {
+        }
+        else if (it->groupName() == "Image") {
             // Tiff tags
             store->addEntry(KisMetaData::Entry(tiffSchema, it->tagName().c_str(), exivValueToKMDValue(it->getValue()))) ;
-        } else if(it->groupName() == "Photo" or (it->groupName() == "GPS") ) {
+        }
+        else if (it->groupName() == "Photo" || (it->groupName() == "GPS") ) {
             // Exif tags (and GPS tags)
             KisMetaData::Value v;
-            if(it->key() == "Exif.Photo.ExifVersion" or it->key() == "Exif.Photo.FlashpixVersion")
+            if(it->key() == "Exif.Photo.ExifVersion" || it->key() == "Exif.Photo.FlashpixVersion")
             {
                 v = exifVersionToKMDValue(it->getValue());
             } else if(it->key() == "Exif.Photo.FileSource") {
@@ -418,7 +429,7 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 v = exifArrayToKMDIntOrderedArray(it->getValue());
             } else if(it->key() == "Exif.Photo.OECF") {
                 v = exifOECFToKMDOECFStructure(it->getValue());
-            } else if(it->key() == "Exif.Photo.DateTimeDigitized" or it->key() == "Exif.Photo.DateTimeOriginal") {
+            } else if(it->key() == "Exif.Photo.DateTimeDigitized" || it->key() == "Exif.Photo.DateTimeOriginal") {
                 v = KisMetaData::Value(exivValueToDateTime(it->getValue()));
             } else if(it->key() == "Exif.Photo.DeviceSettingDescription" ) {
                 v = deviceSettingDescriptionExifToKMD(it->getValue());
@@ -429,9 +440,11 @@ bool KisExifIO::loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const
                 v = exivValueToKMDValue(it->getValue());
             }
             store->addEntry(KisMetaData::Entry(exifSchema, it->tagName().c_str(), v ));
-        } else if(it->groupName() == "Thumbnail") {
+        }
+        else if(it->groupName() == "Thumbnail") {
             dbgFile <<"Ignoring thumbnail tag :" << it->key().c_str();
-        } else {
+        }
+        else {
             dbgFile <<"Unknown exif tag, cannot load:" << it->key().c_str();
         }
     }

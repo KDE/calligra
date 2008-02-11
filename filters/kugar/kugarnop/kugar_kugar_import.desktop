@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=Kugar KugarXML Import Filter
 Name[bg]=Филтър за импортиране от KugarXML в Kugar
@@ -56,4 +55,4 @@ ImportDescription=Kugar
 X-KDE-Export=application/x-vnd.kde.kugar.mixed
 ExportDescription=Kugar Mixed
 X-KDE-Library=libkugarnopimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

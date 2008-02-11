@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=OpenOffice.org Writer Import Filter for KWord
 Name[bg]=Филтър за импортиране от OpenOffice.org Writer в KWord
@@ -56,4 +55,4 @@ X-KDE-Library=liboowriterimport
 X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
 X-KDE-LibraryDependencies=
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

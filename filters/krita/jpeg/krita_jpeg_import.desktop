@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Icon=
 Name=Krita JPEG Import Filter
 Name[bg]=Филтър за импортиране от JPEG в Krita
@@ -22,7 +21,7 @@ Name[tr]=Krita JPEG Alma Filtresi
 Name[uk]=Фільтр імпорту JPEG у Krita
 Name[x-test]=xxKrita JPEG Import Filterxx
 Name[zh_TW]=Krita JPEG 匯入過濾程式
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/jpeg

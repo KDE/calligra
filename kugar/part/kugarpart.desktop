@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=KOffice Report Generator Component
 Name[bg]=Компонент за генератор на отчети в KOffice
 Name[ca]=Component generador d'informes del KOffice
@@ -45,7 +44,7 @@ Name[zh_TW]=KOffice 報告產生元件
 MimeType=application/x-kugar;application/x-vnd.kde.kugar.mixed;
 Type=Service
 Terminal=false
-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,Browser/View
+X-KDE-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,Browser/View
 X-KDE-Library=libkugarpart
 X-KDE-NativeMimeType=application/x-vnd.kde.kugar.mixed
 GenericName=Report Generator

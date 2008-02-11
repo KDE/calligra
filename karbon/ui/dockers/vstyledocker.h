@@ -39,7 +39,7 @@ class ClipartChooser : public KoResourceChooser
 {
 public:
 	ClipartChooser( const QSize &iconSize, QWidget *parent = 0L, const char *name = 0L );
-	virtual void startDrag();
+	virtual void startDrag(Qt::DropActions supportedActions);
 };
 
 class ClipartWidget : public QWidget

@@ -1,7 +1,6 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
-ServiceTypes=KWord/MailMergePlugin
+X-KDE-ServiceTypes=KWord/MailMergePlugin
 
 Name=KDE Addressbook Plugin
 Name[bg]=Приставка за адресника на KDE

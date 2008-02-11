@@ -351,7 +351,8 @@ void SimpleTextShape::getCharPositionAt( unsigned int charNum, QPointF &pos ) co
         pos -= absolutePosition( KoFlake::TopLeftCorner );
     } else {
         QFontMetrics metrics( m_font );
-        if ( charNum >= m_text.length() ) {
+        uint l = m_text.length();
+        if ( charNum >= l) {
             int w = metrics.width( m_text );
             pos = QPointF( w, size().height() );
         } else {

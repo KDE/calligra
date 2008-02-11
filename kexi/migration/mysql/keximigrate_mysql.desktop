@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=MySQL
 Name[sk]=mySQL
 Name[x-test]=xxMySQLxx
@@ -46,7 +45,7 @@ Comment[x-test]=xxMySQL Migration Driver for Kexixx
 Comment[zh_CN]=Kexi MySQL 升迁驱动程序
 Comment[zh_TW]=Kexi 的 MySQL 轉移驅動程式
 X-KDE-Library=keximigrate_mysql
-ServiceTypes=Kexi/MigrationDriver
+X-KDE-ServiceTypes=Kexi/MigrationDriver
 Type=Service
 InitialPreference=8
 X-Kexi-MigrationDriverName=MySQL

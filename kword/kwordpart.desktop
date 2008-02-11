@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KOffice Word Processing Component
 Name[bg]=Компонент за текстообработка в KOffice
@@ -49,7 +48,7 @@ X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.text
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.text-template,application/x-kword
 MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/x-kword;application/msword;application/rtf;text/plain;application/x-mswrite;
-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 GenericName=Text Documents
 GenericName[bg]=Текстови документи
 GenericName[br]=Teulioù skrid

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 X-KDE-Export=text/x-tex
 ExportDescription=LATEX
 Icon=
@@ -58,6 +57,6 @@ Name[x-test]=xxKFormula LaTeX Export Filterxx
 Name[xh]=Isihluzi Sokurhweba ngaphandle se KFormula LaTeX
 Name[zh_CN]=KFormula LaTeX 导出过滤器
 Name[zh_TW]=KFormula LaTeX 匯出過濾程式
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Library=libkfolatexexport

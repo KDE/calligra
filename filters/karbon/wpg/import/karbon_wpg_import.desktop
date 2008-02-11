@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=Karbon WPG Import Filter
 Name[bg]=Филтър за импортиране от WPG в Karbon
@@ -27,4 +26,4 @@ X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=application/x-wpg
 X-KDE-Weight=1
 X-KDE-Library=libwpgimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

@@ -1,6 +1,5 @@
 [Desktop Entry]
 Categories=Qt;KDE;Office;Graphics;
-Encoding=UTF-8
 Exec=krita %u
 Icon=krita
 MimeType=image/tiff;

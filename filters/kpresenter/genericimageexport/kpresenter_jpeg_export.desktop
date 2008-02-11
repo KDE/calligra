@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KPresenter JPEG Export Filter
 Name[bg]=Филтър за експортиране от Kpresenter в JPEG
@@ -47,4 +46,4 @@ X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/jpeg
 X-KDE-Weight=1
 X-KDE-Library=kpresentergenericimageexport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

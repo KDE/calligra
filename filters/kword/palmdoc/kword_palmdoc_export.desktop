@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KWord Palm Doc Export Filter
 Name[af]=Kword Palm Dok Voer uit Filter
@@ -57,4 +56,4 @@ X-KDE-Export=application/vnd.palm
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
 X-KDE-Library=libpalmdocexport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

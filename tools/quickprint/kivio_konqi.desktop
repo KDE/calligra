@@ -1,6 +1,5 @@
 [Desktop Entry]
-Encoding=UTF-8
-ServiceTypes=KonqPopupMenu/Plugin,application/x-kivio
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin,application/x-kivio
 Type=Service
 Actions=Print;
 

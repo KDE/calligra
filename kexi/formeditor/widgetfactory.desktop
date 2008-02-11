@@ -1,6 +1,5 @@
 [Desktop Entry]
-Encoding=UTF-8
-Type=ServiceType
+Type=X-KDE-ServiceType
 X-KDE-ServiceType=KFormDesigner/WidgetFactory
 Comment=Widget Factory Base
 Comment[bg]=Създаване на графични обекти

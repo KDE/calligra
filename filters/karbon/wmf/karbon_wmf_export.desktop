@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Icon=
 Name=Karbon14 WMF Export Filter
 Name[bg]=Филтър за експортиране от Karbon14 в WMF
@@ -51,7 +50,7 @@ Name[uz]=Karbon14 WMF экспорт филтери
 Name[x-test]=xxKarbon14 WMF Export Filterxx
 Name[zh_CN]=Karbon14 WMF 导出过滤器
 Name[zh_TW]=Karbon14 WMF 匯出過濾程式
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/x-wmf
 X-KDE-Import=application/vnd.oasis.opendocument.graphics

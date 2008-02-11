@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KWord Ascii Export Filter
 Name[af]=Kword Ascii Voer uit Filter
@@ -58,4 +57,4 @@ X-KDE-Export=text/plain
 X-KDE-Import=application/x-kword
 X-KDE-Weight=50
 X-KDE-Library=libasciiexport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

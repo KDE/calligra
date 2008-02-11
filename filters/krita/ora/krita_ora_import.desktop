@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Icon=
 Name=Krita ora Import Filter
 Name[ca]=Filtre d'importació ora per al Krita
@@ -17,7 +16,7 @@ Name[tr]=Krita ora Alma Filtresi
 Name[uk]=Фільтр імпорту ora у Krita
 Name[x-test]=xxKrita ora Import Filterxx
 Name[zh_TW]=Krita ora 匯入過濾程式
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/openraster-archiving

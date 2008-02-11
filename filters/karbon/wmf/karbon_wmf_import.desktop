@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=Karbon WMF Import Filter
 Name[af]=Karbon Wmf In voer Filter
@@ -57,4 +56,4 @@ X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=image/x-wmf
 X-KDE-Weight=1
 X-KDE-Library=libwmfimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

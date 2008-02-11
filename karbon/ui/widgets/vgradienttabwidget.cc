@@ -475,6 +475,8 @@ void VGradientTabWidget::combosChange( int )
 //void VGradientTabWidget::opacityChanged( int value )
 void VGradientTabWidget::opacityChanged( double value, bool final )
 {
+    Q_UNUSED(final);
+    
     m_gradOpacity = value / 100.0;
 
     QGradientStops stops = m_gradient->stops();

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KWord HTML Import Filter
 Name[af]=Kword Html In voer Filter
@@ -58,4 +57,4 @@ X-KDE-Export=application/x-kword
 X-KDE-Import=text/html
 X-KDE-Weight=1
 X-KDE-Library=libhtmlimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

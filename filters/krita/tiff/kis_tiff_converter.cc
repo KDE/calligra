@@ -353,7 +353,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             // XXX we hardcode icc, this is correct for lcms?
             // XXX productName(), or just "ICC Profile"?
             KoIccColorProfile* iccprofile = dynamic_cast<KoIccColorProfile*>(profile);
-            if ( iccprofile and !iccprofile->rawData().isEmpty())
+            if ( iccprofile && !iccprofile->rawData().isEmpty())
                 annotation = new  KisAnnotation("icc", iccprofile->name(), iccprofile->rawData());
 
             m_img -> addAnnotation( annotation );

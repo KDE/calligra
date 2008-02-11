@@ -1,6 +1,5 @@
 [Desktop Entry]
-Encoding=UTF-8
-ServiceTypes=KonqPopupMenu/Plugin,application/x-kpresenter
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin,application/x-kpresenter
 Type=Service
 Actions=Print;
 

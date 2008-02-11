@@ -1,7 +1,6 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
-ServiceTypes=Kexi/Handler
+X-KDE-ServiceTypes=Kexi/Handler
 
 GenericName=Migration Plugin
 GenericName[be]=Міграцыя

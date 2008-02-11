@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=KOffice Flowchart & Diagram Editing Component
 Name[bg]=Компонент за диаграми и схеми в KOffice
 Name[ca]=Component editor de diagrames de fluxos i diagrames del KOffice
@@ -47,7 +46,7 @@ Name[zh_TW]=KOffice 流程圖 & 圖表編輯元件
 X-KDE-Library=libkiviopart
 MimeType=application/vnd.oasis.opendocument.graphics;application/x-kivio;
 Type=Service
-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.graphics
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.graphics,application/vnd.oasis.opendocument.graphics-template,application/x-kivio

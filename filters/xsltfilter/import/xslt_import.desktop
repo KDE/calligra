@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 X-KDE-Export=application/x-kword,application/x-kontour,application/x-kpresenter,application/x-kivio,application/x-kchart
 ExportDescription=KOffice
 Icon=
@@ -58,6 +57,6 @@ Name[x-test]=xxKOffice XSLT Import Filterxx
 Name[xh]=Isihluzi Sokurhweba se KOffice XSLT
 Name[zh_CN]=KOffice XSLT 导入过滤器
 Name[zh_TW]=KOffice XSLT 匯入過濾程式
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Library=libxsltimport

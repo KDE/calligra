@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=OpenOffice.org Draw Import Filter for Karbon14
 Name[bg]=Филтър за импортиране от OpenOffice.org Draw в Karbon14
@@ -56,4 +55,4 @@ X-KDE-Library=liboodrawimport
 X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
 X-KDE-LibraryDependencies=
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=OpenOffice.org Writer Export Filter for KWord
 Name[bg]=Филтър за експортиране от KWord в OpenOffice.org Writer
@@ -53,4 +52,4 @@ X-KDE-Export=application/vnd.sun.xml.writer
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
 X-KDE-Library=liboowriterexport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

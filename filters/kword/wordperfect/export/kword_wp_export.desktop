@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KWord WordPerfect Export Filter
 Name[af]=Kword Wordperfect Voer uit Filter
@@ -57,4 +56,4 @@ X-KDE-Import=application/x-kword
 X-KDE-Weight=1
 X-KDE-Export=application/wordperfect
 X-KDE-Library=libwpexport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Karbon Tools
 Name[bg]=Инструменти на Karbon
 Name[ca]=Eines del Karbon
@@ -22,7 +21,7 @@ Name[uk]=Засоби Karbon
 Name[x-test]=xxKarbon Toolsxx
 Name[zh_CN]=Karbon 工具
 Name[zh_TW]=Karbon 工具
-ServiceTypes=KOffice/Tool
+X-KDE-ServiceTypes=KOffice/Tool
 Type=Service
 X-KDE-Library=karbontools
 X-Flake-MinVersion=0

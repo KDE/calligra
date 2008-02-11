@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 X-KDE-Export=application/x-kword
 ExportDescription=KWord
 Icon=
@@ -55,6 +54,6 @@ Name[uz]=KWord LaTeX импорт филтери
 Name[x-test]=xxKWord Latex Import Filterxx
 Name[zh_CN]=KWord Latex 导入过滤器
 Name[zh_TW]=KWord Latex 匯入過濾程式
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Library=libkwordlateximport

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KWord AbiWord Export Filter
 Name[af]=Kword Abiword Voer uit Filter
@@ -57,4 +56,4 @@ X-KDE-Export=application/x-abiword
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
 X-KDE-Library=libabiwordexport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

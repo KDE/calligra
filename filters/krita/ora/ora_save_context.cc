@@ -38,7 +38,7 @@ QString OraSaveContext::saveDeviceData(KisPaintLayerSP layer)
     if( m_store->open(filename))
     {
         KoStoreDevice io ( m_store );
-        if ( not io.open( QIODevice::WriteOnly ) )
+        if ( !io.open( QIODevice::WriteOnly ) )
         {
             dbgFile <<"Could not open for writing:" << filename;
             return "";
@@ -47,16 +47,16 @@ QString OraSaveContext::saveDeviceData(KisPaintLayerSP layer)
         vKisAnnotationSP_it annotIt = 0;
         if( pngconv.buildFile(&io, layer->image(), layer->paintDevice(), annotIt, annotIt, 0, false, true) != KisImageBuilder_RESULT_OK)
         {
-            dbgFile <<"Saving PNG failed:" << filename;
+            dbgFile << "Saving PNG failed:" << filename;
             return "";
         }
         io.close();
-        if(not m_store->close())
+        if(!m_store->close())
         {
             return "";
         }
     } else {
-        dbgFile <<"Opening of data file failed :" << filename;
+        dbgFile << "Opening of data file failed :" << filename;
         return "";
     }
     

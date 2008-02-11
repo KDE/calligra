@@ -1,6 +1,5 @@
 # KDE Config File
 [Desktop Entry]
-Encoding=UTF-8
 Type=Application
 Exec=kudesigner %u
 Icon=kudesigner
@@ -139,6 +138,6 @@ Comment[zh_TW]=簡報設計家
 MimeType=application/x-kudesigner;
 X-KDE-NativeMimeType=application/x-kudesigner
 X-KDE-Library=libkudesignerpart
-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 
 Categories=Qt;KDE;Office;X-KDE-More;

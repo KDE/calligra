@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KWord SGML DocBook Export Filter
 Name[af]=Kword Sgml Docbook Voer uit Filter
@@ -57,4 +56,4 @@ X-KDE-Export=text/sgml
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
 X-KDE-Library=libdocbookexport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KWord RTF Import Filter
 Name[af]=Kword Rtf In voer Filter
@@ -59,4 +58,4 @@ ImportDescription=RTF
 X-KDE-Export=application/x-kword
 ExportDescription=KWord
 X-KDE-Library=librtfimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=MySQL
 Name[sk]=mySQL
 Name[x-test]=xxMySQLxx
@@ -18,7 +17,7 @@ Comment[uk]=Драйвер бази даних Kexi для доступу до �
 Comment[x-test]=xxKexi database driver for accessing MySQL serversxx
 Comment[zh_TW]=存取 MySQL 伺服器的 Kexi 資料庫驅動程式
 X-KDE-Library=kexidb_mysqldriver
-ServiceTypes=Kexi/DBDriver
+X-KDE-ServiceTypes=Kexi/DBDriver
 Type=Service
 InitialPreference=8
 X-Kexi-DriverName=MySQL

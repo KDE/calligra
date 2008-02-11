@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=Karbon 1.x Import Filter
 Name[ca]=Filtre d'importació Karbon 1.x
@@ -24,4 +23,4 @@ X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=application/x-karbon
 X-KDE-Weight=1
 X-KDE-Library=libkarbon1ximport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

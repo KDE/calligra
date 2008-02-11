@@ -46,7 +46,7 @@
 
 #include <kdebug.h>
 
-KarbonResourceServer* KarbonFactory::s_rserver = 0;
+//KarbonResourceServer* KarbonFactory::s_rserver = 0;
 
 KComponentData* KarbonFactory::s_instance = 0L;
 KAboutData* KarbonFactory::s_aboutData = 0L;
@@ -82,8 +82,8 @@ KarbonFactory::~KarbonFactory()
 	s_instance = 0L;
 	delete s_aboutData;
 	s_aboutData = 0L;
-	delete s_rserver;
-	s_rserver = 0L;
+//	delete s_rserver;
+//	s_rserver = 0L;
 }
 
 KParts::Part*

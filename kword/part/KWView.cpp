@@ -901,7 +901,9 @@ void KWView::inlineFrame() {
             // TODO check distance between frames or something.
         }
     }
-if(frameForAnchor == 0) {/* can't happen later on... */ kDebug() <<"spliting..."; return; }
+
+    if(frameForAnchor == 0) {/* can't happen later on... */ kDebug() <<"splitting..."; return; }
+    
     selection->select(frameForAnchor->shape());
 
     QPointF absPos = targetShape->absolutePosition();
@@ -986,7 +988,6 @@ void KWView::viewGrid(bool on) {
 
 void KWView::createCustomOutline() {
     QList<KWFrame *> frames = selectedFrames();
-kDebug() <<" createCustomOutline" << frames.count();
     if(frames.count() == 0)
         return;
     if(frames.count() == 1) {

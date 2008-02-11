@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KWord Microsoft Write Import Filter
 Name[af]=Kword Microsoft Skryf In voer Filter
@@ -56,4 +55,4 @@ X-KDE-Export=application/x-kword
 X-KDE-Import=application/x-mswrite
 X-KDE-Weight=1
 X-KDE-Library=libmswriteimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

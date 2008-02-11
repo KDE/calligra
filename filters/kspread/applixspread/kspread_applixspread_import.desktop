@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KSpread Applix Spreadsheet Import Filter
 Name[af]=Kspread Applix Spreiblad In voer Filter
@@ -57,4 +56,4 @@ X-KDE-Export=application/x-kspread
 X-KDE-Import=application/x-applix-spreadsheet
 X-KDE-Weight=1
 X-KDE-Library=libapplixspreadimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

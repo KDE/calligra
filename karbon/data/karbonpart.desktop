@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=KOffice Scalable Graphics Component
 Name[bg]=Компонент за векторна графика в KOffice
 Name[ca]=Component de gràfics escalables de KOffice
@@ -50,7 +49,7 @@ MimeType=application/x-karbon;application/illustrator;image/x-eps;application/po
 # kghostview has 6 for application/postscript, we need to be under that...
 InitialPreference=5
 Type=Service
-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.graphics
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.graphics,application/vnd.oasis.opendocument.graphics-template

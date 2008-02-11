@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=KOffice Spreadsheet Component
 Name[bg]=Компонент за електронна таблица за KOffice
 Name[ca]=Component de full de càlcul del KOffice
@@ -46,7 +45,7 @@ Name[zh_TW]=KOffice 工作表元件
 X-KDE-Library=libkspreadpart
 MimeType=application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.spreadsheet-template;application/x-kspread;application/vnd.ms-excel;text/csv;application/x-quattropro;
 Type=Service
-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-KDE-ExtraNativeMimeTypes=application/vnd.oasis.opendocument.spreadsheet-template,application/x-kspread

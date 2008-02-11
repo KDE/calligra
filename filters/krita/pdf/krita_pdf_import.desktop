@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Krita PDF Import Filter
 Name[bg]=Филтър за импортиране от PDF в Krita
 Name[br]=Sil enporzh PDF evit Krita
@@ -39,7 +38,7 @@ Name[uk]=Фільтр імпорту PDF для Krita
 Name[uz]=Krita учун PDF импорт филтери
 Name[x-test]=xxKrita PDF Import Filterxx
 Name[zh_TW]=Krita PDF 匯入過濾程式
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=application/x-krita
 X-KDE-Import=application/pdf

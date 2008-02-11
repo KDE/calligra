@@ -1,7 +1,6 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
-ServiceTypes=KWord/MailMergePlugin
+X-KDE-ServiceTypes=KWord/MailMergePlugin
 
 Name=Qt-SQL Source (power user)
 Name[bg]=Източник Qt-SQL (за напреднали)

@@ -76,7 +76,7 @@ void KisIptcIO::initMappingsTable() const
     // For some reason, initializing the tables in the constructor makes the it crash
     if(d->iptcToKMD.size() == 0)
     {
-        for(int i = 0; not mappings[i].exivTag.isEmpty(); i++)
+        for(int i = 0; !mappings[i].exivTag.isEmpty(); i++)
         {
             d->iptcToKMD[mappings[i].exivTag] = mappings[i];
             d->kmdToIPTC[

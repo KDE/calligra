@@ -61,7 +61,7 @@ ClipartChooser::ClipartChooser( const QSize &iconSize, QWidget *parent, const ch
 }
 
 void
-ClipartChooser::startDrag()
+ClipartChooser::startDrag(Qt::DropActions supportedActions)
 {
 //	KoResourceChooser::startDrag();
 	KarbonDrag* kd = new KarbonDrag( this );

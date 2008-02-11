@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=Karbon's MS Office Drawing Import Filter
 Name[be]=Фільтр імпарту малюнкаў MS Office у Karbon
@@ -55,4 +54,4 @@ X-KDE-Export=application/x-karbon
 X-KDE-Import=image/x-msod
 X-KDE-Weight=1
 X-KDE-Library=libkarbonmsodimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

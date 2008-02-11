@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Krita PNG Export Filter
 Name[bg]=Филтър за експортиране от Krita в PNG
 Name[br]=Sil ezporzh PNG evit Krita
@@ -43,7 +42,7 @@ Name[x-test]=xxKrita PNG Export Filterxx
 Name[zh_CN]=Krita PNG 导出过滤器
 Name[zh_TW]=Krita PNG 匯出過濾程式
 X-KDE-Export=image/png
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Import=application/x-krita
 X-KDE-Weight=1

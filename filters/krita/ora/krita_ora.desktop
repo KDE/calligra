@@ -1,7 +1,6 @@
 [Desktop Entry]
 Categories=Qt;KDE;Office;Graphics;
 Comment=
-Encoding=UTF-8
 Exec=krita %u
 Icon=krita
 MimeType=image/openraster-archiving;
@@ -14,7 +13,7 @@ Terminal=false
 TerminalOptions=
 Type=Application
 X-DBUS-StartupType=multi
-X-DCOP-ServiceType=
+X-DCOP-X-KDE-ServiceType=
 X-KDE-StartupNotify=true
 X-KDE-SubstituteUID=false
 X-KDE-Username=

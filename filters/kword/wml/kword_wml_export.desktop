@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KWord WML Export Filter
 Name[bg]=Филтър за експортиране от KWord в WML
@@ -56,4 +55,4 @@ X-KDE-Export=text/vnd.wap.wml
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
 X-KDE-Library=libwmlexport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

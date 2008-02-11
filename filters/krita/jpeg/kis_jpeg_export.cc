@@ -64,7 +64,7 @@ class KisExifInfoVisitor : public KisNodeVisitor
 
         virtual bool visit(KisPaintLayer* layer) {
             m_countPaintLayer++;
-            if(not layer->metaData()->empty())
+            if (!layer->metaData()->empty())
             {
                 m_exifInfo = layer->metaData();
             }

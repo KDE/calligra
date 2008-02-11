@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=SQLite2
 Name[sv]=Sqlite 2
 Name[x-test]=xxSQLite2xx
@@ -19,7 +18,7 @@ Comment[uk]=SQLite 2- це стара і вже застаріла версія 
 Comment[x-test]=xxSQLite 2 is the old and obsolete version of Kexi embedded SQL enginexx
 Comment[zh_TW]=SQLite 2 是已過時的 Kexi 的嵌入式 SQL 引擎
 X-KDE-Library=kexidb_sqlite2driver
-ServiceTypes=Kexi/DBDriver
+X-KDE-ServiceTypes=Kexi/DBDriver
 Type=Service
 InitialPreference=8
 X-Kexi-DriverName=SQLite2

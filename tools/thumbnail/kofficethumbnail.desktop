@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KOffice Files
 Name[af]=Koffice Lêers
@@ -54,7 +53,7 @@ Name[x-test]=xxKOffice Filesxx
 Name[xh]=Iifayile ze KOffice
 Name[zh_CN]=KOffice 文件
 Name[zh_TW]=KOffice 檔案
-ServiceTypes=ThumbCreator
+X-KDE-ServiceTypes=ThumbCreator
 MimeType=application/x-kword;application/x-kspread;application/x-kpresenter;application/x-karbon;application/x-krita;application/x-kchart;application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocument.text-template;application/vnd.oasis.opendocument.graphics;application/vnd.oasis.opendocument.graphics-template;application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/vnd.oasis.opendocument.spreadsheet;application/vnd.oasis.opendocument.spreadsheet-template;application/vnd.oasis.opendocument.chart;application/vnd.oasis.opendocument.chart-template;application/vnd.oasis.opendocument.formula;application/vnd.oasis.opendocument.formula-template;
 X-KDE-Library=kofficethumbnail
 CacheThumbnail=true

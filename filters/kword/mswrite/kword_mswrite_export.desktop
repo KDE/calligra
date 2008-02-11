@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KWord Microsoft Write Export Filter
 Name[bg]=Филтър за експортиране от KWord в Microsoft Write
@@ -54,4 +53,4 @@ X-KDE-Export=application/x-mswrite
 X-KDE-Import=application/x-kword
 X-KDE-Weight=1
 X-KDE-Library=libmswriteexport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

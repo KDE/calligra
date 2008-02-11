@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Icon=
 Name=Krita TIFF Import Filter
 Name[bg]=Филтър за импортиране от TIFF в Krita
@@ -43,7 +42,7 @@ Name[uz]=Krita TIFF импорт филтери
 Name[x-test]=xxKrita TIFF Import Filterxx
 Name[zh_CN]=Krita TIFF 导入过滤器
 Name[zh_TW]=Krita TIFF 匯入過濾程式
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/tiff

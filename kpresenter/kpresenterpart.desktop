@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=KPresenter
 Name[af]=Kpresenter
 Name[cy]=KCyflwynydd
@@ -12,7 +11,7 @@ Name[x-test]=xxKPresenterxx
 X-KDE-Library=libkpresenterpart
 MimeType=application/vnd.oasis.opendocument.presentation;application/vnd.oasis.opendocument.presentation-template;application/x-kpresenter;application/mspowerpoint;
 Type=Service
-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.presentation
 X-KDE-NativeOasisMimeType=application/vnd.oasis.opendocument.presentation
 X-KDE-ExtraNativeMimeTypes=application/x-kpresenter,application/vnd.oasis.opendocument.presentation-template

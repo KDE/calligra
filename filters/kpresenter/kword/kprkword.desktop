@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KPresenter KWord Filter
 Name[bg]=Филтър KPresenter-> KWord
@@ -52,4 +51,4 @@ X-KDE-Import=application/x-kpresenter
 X-KDE-Weight=1
 X-KDE-Export=application/x-kword
 X-KDE-Library=libkprkword
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=Karbon SVGZ Import Filter
 Name[ca]=Filtre d'importació SVGZ per al Karbon
@@ -16,4 +15,4 @@ X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=image/svg+xml-compressed
 X-KDE-Weight=1
 X-KDE-Library=libkarbonsvgimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

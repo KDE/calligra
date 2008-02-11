@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KWord ASCII Import Filter
 Name[bg]=Филтър за импортиране ASCII в KWord
@@ -52,4 +51,4 @@ X-KDE-Export=application/x-kword
 X-KDE-Import=text/plain
 X-KDE-Weight=1
 X-KDE-Library=libasciiimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

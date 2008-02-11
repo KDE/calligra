@@ -1,7 +1,6 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
-ServiceTypes=KFormDesigner/WidgetFactory
+X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Kexi Report Widgets
 Name[bg]=Графични елементи за отчети на Kexi

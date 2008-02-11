@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=Karbon XFig Import Filter
 Name[bg]=Филтър за импортиране от XFig в Karbon
@@ -55,4 +54,4 @@ X-KDE-Export=application/x-karbon
 X-KDE-Import=image/x-xfig
 X-KDE-Weight=1
 X-KDE-Library=libxfigimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

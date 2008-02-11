@@ -1029,6 +1029,8 @@ void CellStorage::insertShiftDown( const QRect& rect )
 
 Cell CellStorage::firstInColumn(int col, Visiting visiting) const
 {
+    Q_UNUSED(visiting);
+    
     int newRow = 0;
     int tmpRow = 0;
     d->formulaStorage->firstInColumn( col, &tmpRow );

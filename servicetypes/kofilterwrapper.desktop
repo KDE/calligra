@@ -1,6 +1,5 @@
 [Desktop Entry]
-Encoding=UTF-8
-Type=ServiceType
+Type=X-KDE-ServiceType
 X-KDE-ServiceType=KOfficeGenericFilter
 Comment=KOffice Filter Wrapper
 Comment[bg]=Обвивка за филтър на KOffice

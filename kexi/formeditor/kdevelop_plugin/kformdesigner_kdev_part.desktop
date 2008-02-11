@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Form Designer KDevelop Plugin
 Name[bg]=Приставка на KDevelop за проектиране на форми
 Name[ca]=Endollat de disseny de formulari de KDevelop
@@ -43,7 +42,7 @@ Name[x-test]=xxForm Designer KDevelop Pluginxx
 Name[zh_CN]=表单设计器 KDevelop 插件
 Name[zh_TW]=表單設計師 KDevelop 外掛程式
 MimeType=application/x-designer;
-ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-Library=libkformdesigner_kdev_part
 Type=Service
 InitialPreference=0

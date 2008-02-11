@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KChart PNG Export Filter
 Name[bg]=Филтър за експортиране от KChart в PNG
@@ -52,4 +51,4 @@ X-KDE-Import=application/x-kchart
 X-KDE-Export=image/png
 X-KDE-Weight=1
 X-KDE-Library=libkchartgenericimageexport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

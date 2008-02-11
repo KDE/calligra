@@ -1,7 +1,6 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
-ServiceTypes=KWord/MailMergePlugin
+X-KDE-ServiceTypes=KWord/MailMergePlugin
 
 Name=KSpread Table Source
 Name[bg]=Източник на данни от KSpread

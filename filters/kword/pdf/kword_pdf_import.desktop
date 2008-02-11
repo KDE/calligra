@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KWord PDF Import Filter
 Name[bg]=Филтър за импортиране от PDF в KWord
@@ -54,4 +53,4 @@ X-KDE-Export=application/x-kword
 X-KDE-Import=application/pdf
 X-KDE-Weight=1
 X-KDE-Library=libpdfimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

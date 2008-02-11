@@ -158,6 +158,7 @@ void SimpleTextTool::mouseMoveEvent( KoPointerEvent *event )
 
 void SimpleTextTool::mouseReleaseEvent( KoPointerEvent *event )
 {
+    Q_UNUSED(event);
     m_path = m_tmpPath;
     updateActions();
 }

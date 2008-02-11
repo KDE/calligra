@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=OpenOffice.org Impress Import Filter for KPresenter
 Name[bg]=Филтър за импортиране от OpenOffice.org Impress в KPresenter
@@ -57,4 +56,4 @@ X-KDE-Library=libooimpressimport
 X-KDE-LibraryMajor=1
 X-KDE-LibraryMinor=0
 X-KDE-LibraryDependencies=
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

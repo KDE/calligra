@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Unavailable KOffice Document
 Name[af]=Onbeskikbaar Koffice Dokument
 Name[bg]=Неналичен документ на KOffice
@@ -52,4 +51,4 @@ Name[zh_CN]=不可用的 KOffice 文档
 Name[zh_TW]=無法取得的 KOffice 文件
 X-KDE-Library=libkounavailpart
 Type=Service
-ServiceTypes=KOfficePart
+X-KDE-ServiceTypes=KOfficePart

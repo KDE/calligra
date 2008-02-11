@@ -71,15 +71,15 @@ namespace {
 
     J_COLOR_SPACE getColorTypeforColorSpace( const KoColorSpace * cs)
     {
-        if ( KoID(cs->id()) == KoID("GRAYA") or KoID(cs->id()) == KoID("GRAYA16") )
+        if ( KoID(cs->id()) == KoID("GRAYA") || KoID(cs->id()) == KoID("GRAYA16") )
         {
             return JCS_GRAYSCALE;
         }
-        if ( KoID(cs->id()) == KoID("RGBA") or KoID(cs->id()) == KoID("RGBA16") )
+        if ( KoID(cs->id()) == KoID("RGBA") || KoID(cs->id()) == KoID("RGBA16") )
         {
             return JCS_RGB;
         }
-        if ( KoID(cs->id()) == KoID("CMYK") or KoID(cs->id()) == KoID("CMYK16") )
+        if ( KoID(cs->id()) == KoID("CMYK") || KoID(cs->id()) == KoID("CMYK16") )
         {
             return JCS_CMYK;
         }
@@ -269,15 +269,17 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
         dbgFile <<"Marker is" << marker->marker;
-        if (marker->marker != (JOCTET) (JPEG_APP0 + 1) or
-            marker->data_length < 14)
+        if (  marker->marker != (JOCTET) (JPEG_APP0 + 1) 
+            || marker->data_length < 14)
+        {
             continue; /* Exif data is in an APP1 marker of at least 14 octets */
-
-        if (GETJOCTET (marker->data[0]) != (JOCTET) 0x45 or
-            GETJOCTET (marker->data[1]) != (JOCTET) 0x78 or
-            GETJOCTET (marker->data[2]) != (JOCTET) 0x69 or
-            GETJOCTET (marker->data[3]) != (JOCTET) 0x66 or
-            GETJOCTET (marker->data[4]) != (JOCTET) 0x00 or
+        }
+        
+        if (GETJOCTET (marker->data[0]) != (JOCTET) 0x45 ||
+            GETJOCTET (marker->data[1]) != (JOCTET) 0x78 ||
+            GETJOCTET (marker->data[2]) != (JOCTET) 0x69 ||
+            GETJOCTET (marker->data[3]) != (JOCTET) 0x66 ||
+            GETJOCTET (marker->data[4]) != (JOCTET) 0x00 ||
             GETJOCTET (marker->data[5]) != (JOCTET) 0x00)
             continue; /* no Exif header */
         dbgFile <<"Found exif information of length :"<< marker->data_length;
@@ -329,10 +331,9 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
 
     for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
         dbgFile <<"Marker is" << marker->marker;
-        if (marker->marker != (JOCTET) (JPEG_APP0 + 13) or
-            marker->data_length < 14)
+        if (marker->marker != (JOCTET) (JPEG_APP0 + 13) ||  marker->data_length < 14) {
             continue; /* IPTC data is in an APP13 marker of at least 16 octets */
-
+        }
         if( memcmp(marker->data, photoshopMarker, 14) != 0 )
         {
             for(int i = 0; i < 14; i++)
@@ -368,7 +369,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KUrl& uri)
     
     for (jpeg_saved_marker_ptr marker = cinfo.marker_list; marker != NULL; marker = marker->next) {
         dbgFile <<"Marker is" << marker->marker;
-        if (marker->marker != (JOCTET) (JPEG_APP0 + 1) or marker->data_length < 31)
+        if (marker->marker != (JOCTET) (JPEG_APP0 + 1) || marker->data_length < 31)
         {
             continue; /* XMP data is in an APP1 marker of at least 31 octets */
         }
@@ -539,7 +540,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     jpeg_start_compress(&cinfo, true);
     // Save exif and iptc information if any available
 
-    if(metaData and not metaData->empty())
+    if(metaData && !metaData->empty())
     {
         metaData->applyFilters( options.filters );
         // Save EXIF
@@ -610,7 +611,7 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
     // Save annotation
     vKisAnnotationSP_it it = annotationsStart;
     while(it != annotationsEnd) {
-        if (!(*it) or (*it) -> type() == QString()) {
+        if (!(*it) || (*it) -> type() == QString()) {
             dbgFile <<"Warning: empty annotation";
             ++it;
             continue;
@@ -622,7 +623,6 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
             // FIXME
             dbgFile <<"cannot save this annotation :" << (*it) -> type();
         } else { // Profile
-            //char* name = new char[(*it)->type().length()+1];
             write_icc_profile(& cinfo, (uchar*)(*it)->annotation().data(), (*it)->annotation().size());
         }
         ++it;

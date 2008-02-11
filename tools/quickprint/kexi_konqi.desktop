@@ -1,6 +1,5 @@
 [Desktop Entry]
-Encoding=UTF-8
-ServiceTypes=KonqPopupMenu/Plugin,application/x-kexi
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin,application/x-kexi
 Type=Service
 Actions=Print;
 

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=SQLite3
 Name[sv]=Sqlite 3
 Name[x-test]=xxSQLite3xx
@@ -47,7 +46,7 @@ Comment[x-test]=xxSQLite is default Kexi embedded SQL enginexx
 Comment[zh_CN]=SQLite 是嵌入 Kexi 的默认 SQL 引擎
 Comment[zh_TW]=SQLite 是 Kexi 預設內建的 SQL 引擎
 X-KDE-Library=kexidb_sqlite3driver
-ServiceTypes=Kexi/DBDriver
+X-KDE-ServiceTypes=Kexi/DBDriver
 Type=Service
 InitialPreference=8
 X-Kexi-DriverName=SQLite3

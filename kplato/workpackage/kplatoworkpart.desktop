@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=KOffice Project Management Component
 Name[bg]=Компонент за управление на компоненти в KOffice
 Name[ca]=Component de gestió de projectes del KOffice
@@ -46,7 +45,7 @@ Name[zh_TW]=KOffice 專案管理元件
 X-KDE-Library=libkplatoworkpart
 MimeType=application/x-vnd.kde.kplato.work;
 Type=Service
-ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-ServiceTypes=KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-vnd.kde.kplato.work
 GenericName=Project Management
 GenericName[bg]=Управление на проекти

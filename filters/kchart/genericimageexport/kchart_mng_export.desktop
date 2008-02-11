@@ -1,11 +1,10 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 X-KDE-Import=application/x-kchart
 X-KDE-Export=video/x-mng
 X-KDE-Weight=1
 X-KDE-Library=libkchartgenericimageexport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 Name=KChart MNG Export Filter
 Name[bg]=Филтър за експортиране от KChart в MNG
 Name[ca]=Filtre d'exportació MNG per al KChart

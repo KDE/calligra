@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=Karbon SVG Import Filter
 Name[af]=Karbon Svg In voer Filter
@@ -57,4 +56,4 @@ X-KDE-Export=application/vnd.oasis.opendocument.graphics
 X-KDE-Import=image/svg+xml
 X-KDE-Weight=1
 X-KDE-Library=libkarbonsvgimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

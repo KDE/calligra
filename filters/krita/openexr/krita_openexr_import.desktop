@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=Krita OpenEXR Import Filter
 Name[bg]=Филтър за импортиране от OpenEXR в Krita
@@ -48,5 +47,5 @@ X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-exr
 X-KDE-Weight=1
 X-KDE-Library=libkrita_openexr_import
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 NoDisplay=true

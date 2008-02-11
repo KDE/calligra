@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=KOffice Database Component
 Name[bg]=Компонент за БД в KOffice
 Name[ca]=Component de bases de dades del KOffice
@@ -25,7 +24,7 @@ Name[zh_TW]=KOffice 資料庫元件
 X-KDE-Library=libkexipart
 MimeType=application/x-kexiproject-sqlite;application/x-sqlite2;application/x-kexiproject-shortcut;application/x-kexiproject-sqlite2;application/x-kexiproject-sqlite3;application/x-sqlite3;application/x-kexi-connectiondata;application/x-msaccess;
 Type=Service
-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
+X-KDE-ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 X-KDE-NativeMimeType=application/x-kexiproject-sqlite
 X-KDE-NOTKoDocumentEmbeddable=true
 GenericName=Database Creator

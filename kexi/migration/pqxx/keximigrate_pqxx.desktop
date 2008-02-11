@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=PostgreSQL
 Name[ne]=पोस्टग्रे SQL
 Name[x-test]=xxPostgreSQLxx
@@ -45,7 +44,7 @@ Comment[x-test]=xxPostgreSQL Migration Driver for Kexixx
 Comment[zh_CN]=Kexi PostgreSQL 升迁驱动程序
 Comment[zh_TW]=Kexi 的 PostgreSQL 轉移驅動程式
 X-KDE-Library=keximigrate_pqxx
-ServiceTypes=Kexi/MigrationDriver
+X-KDE-ServiceTypes=Kexi/MigrationDriver
 Type=Service
 InitialPreference=8
 X-Kexi-MigrationDriverName=PostgreSQL

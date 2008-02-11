@@ -89,6 +89,7 @@ void KarbonGradientChooser::deleteGradient()
 
 void KarbonGradientChooser::resizeEvent ( QResizeEvent * event )
 {
+    Q_UNUSED(event);
 //     KoResourceItemChooser::resizeEvent( event );
 
     QSize newSize( viewportSize().width(), iconSize().height() );
@@ -97,6 +98,7 @@ void KarbonGradientChooser::resizeEvent ( QResizeEvent * event )
 
 void KarbonGradientChooser::showEvent( QShowEvent * event )
 {
+    Q_UNUSED(event);
     QSize newSize( viewportSize().width(), iconSize().height() );
     setIconSize( newSize );
 }

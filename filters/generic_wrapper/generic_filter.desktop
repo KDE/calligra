@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Generic KOffice Filter
 Name[be]=Фільтр KOffice
 Name[bg]=Общ филтър за KOffice
@@ -55,5 +54,5 @@ X-KDE-Export=application/x-kpresenter
 X-KDE-Import=application/x-magicpoint
 X-KDE-Weight=1
 Type=Service
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 X-KDE-Library=libgenerickofilter

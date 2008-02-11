@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=Kontour Applixgraphics Import Filter
 Name[af]=Kontoer Applixgrafika In voer Filter
@@ -58,4 +57,4 @@ X-KDE-Export=application/x-kontour
 X-KDE-Import=application/x-applix-graphics
 X-KDE-Weight=1
 X-KDE-Library=libapplixgraphicimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

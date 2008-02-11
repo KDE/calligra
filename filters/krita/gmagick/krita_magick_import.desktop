@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=Krita Magick Import Filter
 Name[bg]=Филтър за импортиране от Magick в Krita
@@ -54,5 +53,5 @@ X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-xcf-gimp,image/gif,image/cgm,image/x-bmp,image/x-ico,image/x-pcx,image/x-portable-pixmap,image/x-targa,image/x-xbm,image/x-xcf,image/x-xpm,image/x-vnd.adobe.photoshop,image/x-rgb,image/x-eps,application/dicom
 X-KDE-Weight=1
 X-KDE-Library=libkritagmagickimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 NoDisplay=true

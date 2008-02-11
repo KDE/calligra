@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Formula Shape
 Name[bg]=Форма на формула
 Name[ca]=Forma de la fórmula
@@ -21,7 +20,7 @@ Name[uk]=Форма формули
 Name[x-test]=xxFormula Shapexx
 Name[zh_CN]=公式形状
 Name[zh_TW]=公式元件
-ServiceTypes=KOffice/Flake
+X-KDE-ServiceTypes=KOffice/Flake
 Type=Service
 X-KDE-Library=formulashape
 X-Flake-MinVersion=0

@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Icon=
 Name=KWord StarWriter 5.x Import Filter
 Name[bg]=Филтър за импортиране от KWord в StarWriter 5.x
@@ -51,7 +50,7 @@ Name[x-test]=xxKWord StarWriter 5.x Import Filterxx
 Name[xh]=Isihluzi Sokurhweba se KWord StarWriter 5.x
 Name[zh_CN]=KWord StarWriter 5.x 导入过滤器
 Name[zh_TW]=KWord StarWriter 5.x 匯入過濾程式
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=application/x-kword
 X-KDE-Import=application/vnd.stardivision.writer

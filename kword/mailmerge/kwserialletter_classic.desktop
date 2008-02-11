@@ -1,7 +1,6 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
-ServiceTypes=KWord/MailMergePlugin
+X-KDE-ServiceTypes=KWord/MailMergePlugin
 
 Name=Internal Storage
 Name[af]=Intern Stoorplek

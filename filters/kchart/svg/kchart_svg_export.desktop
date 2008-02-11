@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KChart SVG Export Filter
 Name[bg]=Филтър за експортиране от KChart в SVG
@@ -52,4 +51,4 @@ X-KDE-Import=application/x-kchart
 X-KDE-Export=image/svg+xml
 X-KDE-Weight=1
 X-KDE-Library=libkchartsvgexport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

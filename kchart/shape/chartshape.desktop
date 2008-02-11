@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Name=Chart Shape
 Name[ca]=Forma del diagrama
 Name[de]=Diagramm-Objekt
@@ -21,7 +20,7 @@ Name[uk]=Форма діаграми
 Name[x-test]=xxChart Shapexx
 Name[zh_CN]=图表形状
 Name[zh_TW]=圖表元件
-ServiceTypes=KOffice/Shape
+X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=chartshape
 X-Flake-MinVersion=0

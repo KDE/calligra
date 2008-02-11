@@ -1,7 +1,6 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
-ServiceTypes=KFormDesigner/WidgetFactory
+X-KDE-ServiceTypes=KFormDesigner/WidgetFactory
 
 Name=Basic Widgets
 Name[bg]=Основни графични обекти

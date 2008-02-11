@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=CSV Import Filter for KSpread
 Name[af]=Cvs In voer Filter vir Kspread
@@ -58,4 +57,4 @@ X-KDE-Export=application/x-kspread
 X-KDE-Import=text/csv,text/plain
 X-KDE-Weight=50
 X-KDE-Library=libcsvimport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter

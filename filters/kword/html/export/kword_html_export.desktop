@@ -1,5 +1,4 @@
 [Desktop Entry]
-Encoding=UTF-8
 Type=Service
 Name=KWord HTML Export Filter
 Name[af]=Kword Html Voer uit Filter
@@ -58,4 +57,4 @@ X-KDE-Import=application/x-kword
 X-KDE-Weight=1
 X-KDE-Export=text/html
 X-KDE-Library=libhtmlexport
-ServiceTypes=KOfficeFilter
+X-KDE-ServiceTypes=KOfficeFilter
