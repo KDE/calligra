@@ -9,6 +9,7 @@ Comment[it]=Driver di migrazione Sybase per Kexi
 Comment[pt]=Controlador de Migração de Sybase do Kexi
 Comment[pt_BR]=Controlador de Migração de Sybase do Kexi
 Comment[tr]=Kexi için Sybase Taşıma Sürücüsü
+Comment[uk]=Драйвер міграції Sybase для Kexi
 X-KDE-Library=keximigrate_sybase
 ServiceTypes=Kexi/MigrationDriver
 Type=Service
