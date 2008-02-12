@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Jiggle and Wiggle
+Comment=Jiggle and Wiggle that Shape!
+X-KDE-ServiceTypes=KPresenter/ShapeAnimation
+Type=Service
+X-KDE-Library=kpr_shapeanimation_example
+X-KPresenter-Version=1

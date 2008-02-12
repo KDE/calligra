@@ -20,6 +20,7 @@
 #include "KPrPageEffectRegistry.h"
 
 #include <kglobal.h>
+#include <KoPluginLoader.h>
 
 #include "slidewipe/KPrSlideWipeEffectFactory.h"
 
@@ -29,6 +30,22 @@ public:
     Singleton()
     {
         q.add( new KPrSlideWipeEffectFactory() );
+        loadPlugins();
+
+    }
+
+    void loadPlugins()
+    {
+        KoPluginLoader::PluginsConfig config;
+        config.whiteList = "PageEffectPlugins";
+        config.blacklist = "PageEffectPluginsDisabled";
+        config.group = "kpresenter";
+        
+        // XXX: Use minversion here?
+        // The plugins are responsible for adding a factory to the registry
+        KoPluginLoader::instance()->load( QString::fromLatin1("KPresenter/PageEffect"),
+                                          QString::fromLatin1("[X-KPresenter-Version] <= 0"),
+                                          config);
     }
 
     KPrPageEffectRegistry q;
@@ -43,6 +60,7 @@ KPrPageEffectRegistry * KPrPageEffectRegistry::instance()
 
 KPrPageEffect * KPrPageEffectRegistry::createPageEffect( const KoXmlElement & element )
 {
+    Q_UNUSED(element);
     //TODO
     return 0;
 }

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Exploding Page
+Comment=Exploding Page Page Effect
+X-KDE-ServiceTypes=KPresenter/PageEffect
+Type=Service
+X-KDE-Library=kpr_pageeffect_example
+X-KPresenter-Version=1
