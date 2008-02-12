@@ -52,6 +52,8 @@ set( kpresenterprivate_LIB_SRCS
      shapeanimations/KPrTranslateAnimation.cpp
      shapeanimations/KPrAnimationMoveAppear.cpp
      shapeanimations/KPrAnimationDisappear.cpp
+     shapeanimations/KPrShapeAnimationFactory.cpp
+     shapeanimations/KPrShapeAnimationRegistry.cpp
 
      ui/KPrCustomSlideShowsWidget.cpp
    )
