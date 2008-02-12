@@ -1,5 +1,5 @@
 [Desktop Entry]
-Type=X-KDE-ServiceType
+Type=ServiceType
 X-KDE-ServiceType=Kexi/DBDriver
 Comment=Kexi SQL-Driver plugin
 Comment[bg]=Приставка на Kexi за SQL драйвери

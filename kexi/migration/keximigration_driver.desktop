@@ -1,5 +1,5 @@
 [Desktop Entry]
-Type=X-KDE-ServiceType
+Type=ServiceType
 X-KDE-ServiceType=Kexi/MigrationDriver
 Comment=Kexi Data Migration Driver
 Comment[bg]=Драйвер на Kexi за мигриране на данни
