@@ -84,6 +84,10 @@ void KarbonBooleanCommand::redo()
             case Subtraction:
                 pr = pa.subtracted( pb );
                 break;
+            case Exclusion:
+                pr = pa.subtracted( pb );
+                pr.addPath( pb.subtracted( pa ) );
+                break;
             case Union:
                 pr = pa.united( pb );
         }

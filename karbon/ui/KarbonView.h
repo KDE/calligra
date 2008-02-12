@@ -136,6 +136,7 @@ public slots:
     void intersectPaths();
     void subtractPaths();
     void unitePaths();
+    void excludePaths();
 
     void configure();
 
@@ -216,6 +217,7 @@ private:
     KAction * m_intersectPath;
     KAction * m_subtractPath;
     KAction * m_unitePath;
+    KAction * m_excludePath;
 
     KToggleAction        *m_viewAction;
     KAction                *m_configureAction;

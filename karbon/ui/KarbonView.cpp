@@ -857,6 +857,11 @@ void KarbonView::unitePaths()
     booleanOperation( KarbonBooleanCommand::Union );
 }
 
+void KarbonView::excludePaths()
+{
+    booleanOperation( KarbonBooleanCommand::Exclusion );
+}
+
 void KarbonView::booleanOperation( KarbonBooleanCommand::BooleanOperation operation )
 {
     KoSelection* selection = m_canvas->shapeManager()->selection();
@@ -1153,6 +1158,12 @@ KarbonView::initActions()
     //m_unitePath->setShortcut(QKeySequence("Shift+Ctrl+K"));
     m_unitePath->setEnabled( false );
     connect(m_unitePath, SIGNAL(triggered()), this, SLOT(unitePaths()));
+
+    m_excludePath = new KAction(i18n("Exclude Paths"), this);
+    actionCollection()->addAction("exclude_path", m_excludePath );
+    //m_excludePath->setShortcut(QKeySequence("Shift+Ctrl+K"));
+    m_excludePath->setEnabled( false );
+    connect(m_excludePath, SIGNAL(triggered()), this, SLOT(excludePaths()));
     // path <-----
 
     m_configureAction  = new KAction(KIcon("configure"), i18n("Configure Karbon..."), this);
@@ -1333,6 +1344,7 @@ KarbonView::selectionChanged()
     m_ungroupObjects->setEnabled( false );
     m_closePath->setEnabled( false );
     m_combinePath->setEnabled( false );
+    m_excludePath->setEnabled( false );
     m_intersectPath->setEnabled( false );
     m_subtractPath->setEnabled( false );
     m_unitePath->setEnabled( false );
@@ -1365,6 +1377,7 @@ KarbonView::selectionChanged()
         m_combinePath->setEnabled( selectedPaths > 1 );
         m_separatePath->setEnabled( selectedPaths > 0 );
         m_reversePath->setEnabled( selectedPaths > 0 );
+        m_excludePath->setEnabled( selectedPaths + selectedParametrics == 2 );
         m_intersectPath->setEnabled( selectedPaths + selectedParametrics == 2 );
         m_subtractPath->setEnabled( selectedPaths + selectedParametrics == 2 );
         m_unitePath->setEnabled( selectedPaths + selectedParametrics == 2 );

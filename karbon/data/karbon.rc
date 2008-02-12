@@ -80,6 +80,7 @@
 		<Action name="separate_path"/>
         <Action name="reverse_path"/>
         <Separator/>
+        <Action name="exclude_path"/>
         <Action name="intersect_path"/>
         <Action name="subtract_path"/>
         <Action name="unite_path"/>

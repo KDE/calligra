@@ -34,7 +34,8 @@ public:
     {
         Intersection, ///< the intersection of A and B
         Subtraction,  ///< the subtraction A - B
-        Union         ///< the union A + B
+        Union,        ///< the union A + B
+	Exclusion
     };
 
     /**
