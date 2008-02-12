@@ -1,5 +1,5 @@
 [Desktop Entry]
-Type=X-KDE-ServiceType
+Type=ServiceType
 X-KDE-ServiceType=KOfficeGenericFilter
 Comment=KOffice Filter Wrapper
 Comment[bg]=Обвивка за филтър на KOffice
