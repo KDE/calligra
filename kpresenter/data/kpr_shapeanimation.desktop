@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=X-KDE-ServiceType
+X-KDE-ServiceType=KPresenter/ShapeAnimation
+Comment=Shape animation plugin for KPresenter
+[PropertyDef::X-KPresenter-Version]
+Type=int

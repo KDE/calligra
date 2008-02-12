@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=X-KDE-ServiceType
+X-KDE-ServiceType=KPresenter/PageEffect
+Comment=Page effect plugin for KPresenter
+[PropertyDef::X-KPresenter-Version]
+Type=int
