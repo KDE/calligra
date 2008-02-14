@@ -30,16 +30,16 @@
 #include <sstream>
 #include <string>
 
-#include <libwpg.h>
+#include <libwpg/libwpg.h>
 #include "GraphicsElement.hxx"
 
 class OdgExporter : public libwpg::WPGPaintInterface {
 public:
-	OdgExporter(GraphicsHandler *pHandler);
+	OdgExporter(GraphicsHandler *pHandler, const bool isFlatXML = false);
 	~OdgExporter();
 
-	void startDocument(double imageWidth, double imageHeight);
-	void endDocument();
+	void startGraphics(double imageWidth, double imageHeight);
+	void endGraphics();
 	void startLayer(unsigned int id);
 	void endLayer(unsigned int id);
 
@@ -52,10 +52,13 @@ public:
 	void drawPolygon(const libwpg::WPGPointArray& vertices);
 	void drawPath(const libwpg::WPGPath& path);
 	void drawBitmap(const libwpg::WPGBitmap& bitmap);
+	void drawImageObject(const libwpg::WPGBinaryData& binaryData);
 
 private:
-	std::vector <GraphicsElement *> mpBodyElements;
-	std::vector <GraphicsElement *> mpStylesElements;
+	std::vector <GraphicsElement *> mBodyElements;
+	std::vector <GraphicsElement *> mAutomaticStylesElements;
+	std::vector <GraphicsElement *> mStrokeDashElements;
+	std::vector <GraphicsElement *> mGradientElements;
 	GraphicsHandler *mpHandler;
 
 	libwpg::WPGPen m_pen;
@@ -66,6 +69,8 @@ private:
 	int m_styleIndex;
 	void writeStyle();
 	std::ostringstream m_value, m_name;
+	double m_width, m_height;
+	const bool m_isFlatXML;
 };
 
 #endif // __ODGEXPORTER_H__

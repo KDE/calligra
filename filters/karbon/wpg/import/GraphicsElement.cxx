@@ -59,3 +59,8 @@ void CloseTagGraphicsElement::write(GraphicsHandler *pHandler) const
 
 	pHandler->endElement(getTagName().c_str());
 }
+
+void CharDataGraphicsElement::write(GraphicsHandler *pHandler) const
+{
+	pHandler->characters(msData);
+}

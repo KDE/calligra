@@ -71,4 +71,14 @@ public:
 	virtual void write(GraphicsHandler *pHandler) const;
 };
 
+class CharDataGraphicsElement : public GraphicsElement
+{
+public:
+	CharDataGraphicsElement(const char *sData) : GraphicsElement(), msData(sData) {}
+	virtual void write(GraphicsHandler *pHandler) const;
+private:
+	std::string msData;
+};
+
+
 #endif
