@@ -45,18 +45,17 @@
         </Menu>
     </MenuBar>
     <ToolBar name="mainToolBar">
-        <Action name="view_zoom"/>
-        <Action name="view_zoom_out"/>
-        <Action name="view_zoom_in"/>
-    </ToolBar>
-    <ToolBar name="charformat_toolbar" position="top"><Text>Format</Text>
-        <Action name="format_bold"/>
-        <Action name="format_italic"/>
-        <Action name="format_underline"/>
-        <Action name="format_strike"/>
         <Separator/>
-        <Action name="format_super"/>
-        <Action name="format_sub"/>
+        <Action name="edit_insertpage"/>
+        <Action name="view_mode"/>
+        <Separator/>
+        <Action name="edit_undo"/>
+        <Action name="edit_redo"/>
+        <Separator/>
+        <Action name="edit_cut"/>
+        <Action name="edit_copy"/>
+        <Action name="edit_paste"/>
+        <Action name="edit_delete"/>
     </ToolBar>
     <Menu name="default_canvas_popup">
         <ActionList name="toolproxy_action_list"/>

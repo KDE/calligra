@@ -78,7 +78,7 @@ void KPrView::initActions()
        setXMLFile( "kpresenter.rc" );
 
     // do special kpresenter stuff here
-    m_actionStartPresentation = new KAction( i18n( "Start Presentation" ), this );
+    m_actionStartPresentation = new KAction( KIcon("media-playback-start"), i18n( "Start Presentation" ), this );
     actionCollection()->addAction( "view_mode", m_actionStartPresentation );
     connect( m_actionStartPresentation, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
 

@@ -1,53 +1,57 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
 <kpartgui name="kivio" version="30">
-  <MenuBar>
-    <Menu name="edit"><text>&amp;Edit</text>
-      <Action name="edit_undo"/>
-      <Action name="edit_redo"/>
-      <Separator/>
-      <Action name="edit_cut"/>
-      <Action name="edit_copy"/>
-      <Action name="edit_paste"/>
-      <Action name="edit_select_all"/>
-      <Action name="edit_deselect_all"/>
-      <Action name="edit_delete"/>
-      <Separator/>
-      <Action name="edit_insertpage"/>
-      <Action name="edit_copypage"/>
-      <Action name="edit_deletepage"/>
+    <MenuBar>
+        <Menu name="edit">
+            <Text>&amp;Edit</Text>
+            <Action name="edit_undo"/>
+            <Action name="edit_redo"/>
+            <Separator/>
+            <Action name="edit_cut"/>
+            <Action name="edit_copy"/>
+            <Action name="edit_paste"/>
+            <Action name="edit_select_all"/>
+            <Action name="edit_deselect_all"/>
+            <Action name="edit_delete"/>
+            <Separator/>
+            <Action name="edit_insertpage"/>
+            <Action name="edit_copypage"/>
+            <Action name="edit_deletepage"/>
+        </Menu>
+        <Menu name="view">
+            <Text>&amp;View</Text>
+            <Action name="view_newview"/>
+            <ActionList name="view_closeallviews"/>
+            <Separator/>
+            <ActionList name="view_split"/>
+            <Separator/>
+            <Action name="zoom_out"/>
+            <Action name="zoom_in"/>
+            <Action name="view_zoom"/>
+            <Separator/>
+            <Action name="view_masterpages"/>
+            <Separator/>
+            <Action name="view_rulers"/>
+            <Separator/>
+            <Action name="view_grid"/>
+            <Action name="view_snaptogrid"/>
+        </Menu>
+    </MenuBar>
+
+    <Menu name="default_canvas_popup">
+        <ActionList name="toolproxy_action_list"/>
+        <Seperator/>
+        <Action name="edit_delete"/>
     </Menu>
-    <Menu name="view"><text>&amp;View</text>
-      <Action name="view_newview"/>
-      <ActionList name="view_closeallviews"/>
-      <Separator/>
-      <ActionList name="view_split"/>
-      <Separator/>
-      <Action name="zoom_out"/>
-      <Action name="zoom_in"/>
-      <Action name="view_zoom"/>
-      <Separator/>
-      <Action name="view_masterpages"/>
-      <Separator/>
-      <Action name="view_rulers"/>
-      <Separator/>
-      <Action name="view_grid"/>
-      <Action name="view_snaptogrid"/>
-    </Menu>
-  </MenuBar>
-  <Menu name="default_canvas_popup">
-      <ActionList name="toolproxy_action_list"/>
-      <Seperator/>
-      <Action name="edit_delete"/>
-  </Menu>
-	<ToolBar name="edit_toolbar" position="top">
-		<Text>Edit</Text>
-		<Action name="edit_undo"/>
-		<Action name="edit_redo"/>
-                <Separator/>
-		<Action name="edit_cut"/>
-		<Action name="edit_copy"/>
-		<Action name="edit_paste"/>
-		<Action name="edit_delete"/>
-	</ToolBar>
+
+    <ToolBar name="mainToolBar">
+        <Separator/>
+        <Action name="edit_undo"/>
+        <Action name="edit_redo"/>
+        <Separator/>
+        <Action name="edit_cut"/>
+        <Action name="edit_copy"/>
+        <Action name="edit_paste"/>
+        <Action name="edit_delete"/>
+    </ToolBar>
 </kpartgui>
