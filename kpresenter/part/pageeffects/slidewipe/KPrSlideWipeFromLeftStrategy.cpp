@@ -23,7 +23,7 @@
 #include <QPainter>
 
 KPrSlideWipeFromLeftStrategy::KPrSlideWipeFromLeftStrategy()
-: KPrPageEffectStrategy( KPrPageEffect::FromLeft )
+: KPrPageEffectStrategy( KPrPageEffect::FromLeft, "slideWipe", "fromLeft", false )
 {
 }
 

@@ -25,7 +25,7 @@
 class KPrPageEffectStrategy
 {
 public:
-    KPrPageEffectStrategy( KPrPageEffect::SubType subType );
+    KPrPageEffectStrategy( KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse );
     virtual ~KPrPageEffectStrategy();
 
     KPrPageEffect::SubType subType() const;
@@ -42,8 +42,29 @@ public:
      */
     virtual void finish( const KPrPageEffect::Data &data );
 
+    void saveOdfSmilAttributes( KoXmlWriter & xmlWriter ) const;
+
+    /**
+     * Save transition as part of the style
+     */
+    void saveOdfSmilAttributes( KoGenStyle & style ) const;
+
 private:
+    struct SmilData
+    {
+        SmilData( const char * type, const char * subType, bool reverse )
+        : type( type )
+        , subType( subType )
+        , reverse( reverse )
+        {}
+
+        const char * type;
+        const char * subType;
+        bool reverse;
+    };
+
     KPrPageEffect::SubType m_subType;
+    SmilData m_smilData;
 };
 
 #endif /* KPRPAGEEFFECTSTRATEGY_H */

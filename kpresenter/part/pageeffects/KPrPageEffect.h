@@ -24,6 +24,8 @@
 #include <QTimeLine>
 
 class QPainter;
+class KoXmlWriter;
+class KoGenStyle;
 class KPrPageEffectStrategy;
 
 /**
@@ -142,6 +144,18 @@ public:
      * @return The sub type of the page effect.
      */
     SubType subType() const;
+
+    /**
+     * Save the smil attributes of the effect
+     *
+     * @param xmlWriter The xml writer used for saving
+     */
+    void saveOdfSmilAttributes( KoXmlWriter & xmlWriter ) const;
+
+    /**
+     * Save transition as part of the style
+     */
+    void saveOdfSmilAttributes( KoGenStyle & style ) const;
 
 protected:
     int m_duration;

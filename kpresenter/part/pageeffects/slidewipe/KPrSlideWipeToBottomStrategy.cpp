@@ -23,7 +23,7 @@
 #include <QPainter>
 
 KPrSlideWipeToBottomStrategy::KPrSlideWipeToBottomStrategy()
-: KPrPageEffectStrategy( KPrPageEffect::ToBottom )
+: KPrPageEffectStrategy( KPrPageEffect::ToBottom, "slideWipe", "fromTop", true )
 {
 }
 

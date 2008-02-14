@@ -88,3 +88,13 @@ KPrPageEffect::SubType KPrPageEffect::subType() const
 {
     return m_strategy->subType();
 }
+
+void KPrPageEffect::saveOdfSmilAttributes( KoXmlWriter & xmlWriter ) const
+{
+    return m_strategy->saveOdfSmilAttributes( xmlWriter );
+}
+
+void KPrPageEffect::saveOdfSmilAttributes( KoGenStyle & style ) const
+{
+    return m_strategy->saveOdfSmilAttributes( style );
+}

@@ -21,8 +21,12 @@
 
 #include <QWidget>
 
-KPrPageEffectStrategy::KPrPageEffectStrategy( KPrPageEffect::SubType subType )
+#include <KoXmlWriter.h>
+#include <KoGenStyle.h>
+
+KPrPageEffectStrategy::KPrPageEffectStrategy( KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse )
 : m_subType( subType )
+, m_smilData( smilType, smilSubType, reverse )
 {
 }
 
@@ -38,4 +42,22 @@ KPrPageEffect::SubType KPrPageEffectStrategy::subType() const
 void KPrPageEffectStrategy::finish( const KPrPageEffect::Data &data )
 {
     data.m_widget->update();
+}
+
+void KPrPageEffectStrategy::saveOdfSmilAttributes( KoXmlWriter & xmlWriter ) const
+{
+    xmlWriter.addAttribute( "smil:type", m_smilData.type );
+    xmlWriter.addAttribute( "smil:subtype", m_smilData.subType );
+    if ( m_smilData.reverse ) {
+        xmlWriter.addAttribute( "smil:direction", "reverse" );
+    }
+}
+
+void KPrPageEffectStrategy::saveOdfSmilAttributes( KoGenStyle & style ) const
+{
+    style.addProperty( "smil:type", m_smilData.type );
+    style.addProperty( "smil:subtype", m_smilData.subType );
+    if ( m_smilData.reverse ) {
+        style.addProperty( "smil:direction", "reverse" );
+    }
 }
