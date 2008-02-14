@@ -1567,7 +1567,7 @@ QModelIndex NodeItemModel::parent( const QModelIndex &index ) const
 QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
-        //kDebug()<<m_project<<parent<<"No index for"<<row<<","<<column;
+        kDebug()<<m_project<<parent<<"No index for"<<row<<","<<column;
         return QModelIndex();
     }
     Node *p = node( parent );
@@ -1577,8 +1577,9 @@ QModelIndex NodeItemModel::index( int row, int column, const QModelIndex &parent
     }
     // now get the internal pointer for the index
     Node *n = p->childNode( row );
-
-    return createIndex(row, column, n);
+    QModelIndex idx = createIndex(row, column, n);
+    kDebug()<<idx;
+    return idx;
 }
 
 QModelIndex NodeItemModel::index( const Node *node ) const
@@ -1951,12 +1952,12 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
     Node *n = node( index );
     if ( n != 0 ) {
         // Special for kdgantt
-        if ( index.column() == 18 && role ==  KDGantt::StartTimeRole ) {
+        if ( index.column() == 22 && role ==  KDGantt::StartTimeRole ) {
             QDateTime t = n->startTime( m_nodemodel.id() ).dateTime();
             //kDebug()<<n->name()<<": "<<index.column()<<", "<<role<<t<<endl;
             return t;
         }
-        if ( index.column() == 19 && role == KDGantt::EndTimeRole ) {
+        if ( index.column() == 23 && role == KDGantt::EndTimeRole ) {
             QDateTime t = n->endTime( m_nodemodel.id() ).dateTime();
             //kDebug()<<n->name()<<": "<<index.column()<<", "<<role<<t<<endl;
             return t;

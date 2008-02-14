@@ -60,15 +60,18 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
     m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole );
     m->setRole( KDGantt::StartTimeRole, KDGantt::StartTimeRole );
     m->setRole( KDGantt::EndTimeRole, KDGantt::EndTimeRole );
-    m->setColumn( KDGantt::StartTimeRole, 18 );
-    m->setColumn( KDGantt::EndTimeRole, 19 );
+    m->setColumn( KDGantt::StartTimeRole, 22 );
+    m->setColumn( KDGantt::EndTimeRole, 23 );
     m_model = new NodeItemModel( this );
     setModel( m_model );
     QTreeView *tv = dynamic_cast<QTreeView*>( leftView() ); //FIXME ?
     if ( tv ) {
         tv->header()->setStretchLastSection( true );
-        // Only show name in treeview ;)
+        // Only show name, start- end endtime in treeview ;)
         for ( int i = 1; i < m_model->columnCount(); ++i ) {
+            if ( i == 22 || i == 23 ) {
+                continue;
+            }
             tv->hideColumn( i );
         }
     } else kDebug()<<"No treeview !!!"<<endl;
