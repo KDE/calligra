@@ -38,7 +38,7 @@ class KIntNumInput;
 class KColorButton;
 class QCheckBox;
 class QComboBox;
-class QToolButton;;
+class QToolButton;
 
 class KarbonConfigureDialog : public KPageDialog
 {
