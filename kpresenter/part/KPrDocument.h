@@ -68,7 +68,7 @@ public:
      * @brief get the slideShows defined for this document
      */
     KPrCustomSlideShows* customSlideShows();
-
+    void setCustomSlideShows( KPrCustomSlideShows* replacement );
 protected:
     /// reimplemented
     virtual KoView * createViewInstance( QWidget *parent );

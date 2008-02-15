@@ -147,4 +147,10 @@ KPrCustomSlideShows* KPrDocument::customSlideShows()
     return m_customSlideShows;
 }
 
+void KPrDocument::setCustomSlideShows( KPrCustomSlideShows* replacement )
+{
+    delete m_customSlideShows;
+    m_customSlideShows = replacement;
+}
+
 #include "KPrDocument.moc"

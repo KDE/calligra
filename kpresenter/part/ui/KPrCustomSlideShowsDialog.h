@@ -17,31 +17,37 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRCUSTOMSLIDESHOWSWIDGET_H
-#define KPRCUSTOMSLIDESHOWSWIDGET_H
+#ifndef KPRCUSTOMSLIDESHOWSDIALOG_H
+#define KPRCUSTOMSLIDESHOWSDIALOG_H
 
 #include <QtGui/QDialog>
 
-#include "ui_KPrCustomSlideShowsWidget.h"
+#include "ui_KPrCustomSlideShowsDialog.h"
+#include "KPrCustomSlideShows.h"
 
 class KPrCustomSlideShows;
 class KoPAPageBase;
 
-class KPrCustomSlideShowsWidget : public QDialog
+class KPrCustomSlideShowsDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    KPrCustomSlideShowsWidget( QWidget *parent, KPrCustomSlideShows *slideShows, QList<KoPAPageBase*> *allPages );
-    ~KPrCustomSlideShowsWidget();
+    KPrCustomSlideShowsDialog( QWidget *parent, KPrCustomSlideShows *slideShows, QList<KoPAPageBase*> *allPages, KPrCustomSlideShows &newSlideShows );
+    ~KPrCustomSlideShowsDialog();
 private Q_SLOTS:
     void addCustomSlideShow();
 //     void changedSelectedSlideshow();
 
 //     Q_SIGNALS:
 private:
-        Ui::CustomSlideShowsWidget m_uiWidget;
-        KPrCustomSlideShows *m_slideShows;
+    enum {
+        SlideShowName = 33
+    };
+
+    Ui::CustomSlideShowsWidget m_uiWidget;
+    KPrCustomSlideShows m_slideShows;
+    int m_newSlideShowsCount;
 
 };
 #endif
