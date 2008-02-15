@@ -77,7 +77,7 @@ public:
         ConditionStyles = 0x20,
         Validities      = 0x40,
         VisitContent    = 0x03, ///< just visit the cell contents: values, formulas
-        VisitAll        = 0xFF, ///< visit all: cell contents, styles, comments, ...
+        VisitAll        = 0xFF  ///< visit all: cell contents, styles, comments, ...
     };
 
     /**
