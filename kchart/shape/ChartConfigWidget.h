@@ -15,7 +15,7 @@ namespace KDChart
 {
     class Position;
     class CartesianAxis;
-}; 
+}
 
 namespace KChart
 {
