@@ -63,6 +63,6 @@ class pqxxSqlDriver : public Driver
 		static const char *keywords[];
 };
 
-};
+}
 
 #endif
