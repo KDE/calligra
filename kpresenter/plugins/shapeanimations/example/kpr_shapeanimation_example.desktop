@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Jiggle and Wiggle
+Name[it]=Scuoti e dondola
 Comment=Jiggle and Wiggle that Shape!
+Comment[it]=Scuoti e dondola quella forma!
 X-KDE-ServiceTypes=KPresenter/ShapeAnimation
 Type=Service
 X-KDE-Library=kpr_shapeanimation_example

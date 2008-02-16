@@ -2,5 +2,6 @@
 Type=ServiceType
 X-KDE-ServiceType=KPresenter/ShapeAnimation
 Comment=Shape animation plugin for KPresenter
+Comment[it]=Plugin per l'animazione delle forme per KPresenter
 [PropertyDef::X-KPresenter-Version]
 Type=int

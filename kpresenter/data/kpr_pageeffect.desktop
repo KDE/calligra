@@ -2,5 +2,6 @@
 Type=ServiceType
 X-KDE-ServiceType=KPresenter/PageEffect
 Comment=Page effect plugin for KPresenter
+Comment[it]=Name=Plugin per gli effetti di pagina per KPresenter
 [PropertyDef::X-KPresenter-Version]
 Type=int
