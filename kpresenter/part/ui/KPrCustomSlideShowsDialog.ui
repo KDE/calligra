@@ -45,6 +45,9 @@
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
+       <property name="selectionMode" >
+        <enum>QAbstractItemView::ExtendedSelection</enum>
+       </property>
       </widget>
      </item>
      <item>
@@ -71,7 +74,17 @@
     </widget>
    </item>
    <item row="1" column="1" >
-    <widget class="QListWidget" name="availableSlidesList" />
+    <widget class="QListWidget" name="availableSlidesList" >
+     <property name="dragDropMode" >
+      <enum>QAbstractItemView::NoDragDrop</enum>
+     </property>
+     <property name="flow" >
+      <enum>QListView::LeftToRight</enum>
+     </property>
+     <property name="viewMode" >
+      <enum>QListView::ListMode</enum>
+     </property>
+    </widget>
    </item>
    <item row="2" column="1" >
     <layout class="QHBoxLayout" >
@@ -112,7 +125,20 @@
     </layout>
    </item>
    <item row="3" column="1" >
-    <widget class="QListWidget" name="currentSlidesList" />
+    <widget class="QListWidget" name="currentSlidesList" >
+     <property name="verticalScrollBarPolicy" >
+      <enum>Qt::ScrollBarAsNeeded</enum>
+     </property>
+     <property name="dragDropMode" >
+      <enum>QAbstractItemView::DragDrop</enum>
+     </property>
+     <property name="movement" >
+      <enum>QListView::Snap</enum>
+     </property>
+     <property name="flow" >
+      <enum>QListView::LeftToRight</enum>
+     </property>
+    </widget>
    </item>
    <item row="4" column="1" >
     <layout class="QHBoxLayout" >

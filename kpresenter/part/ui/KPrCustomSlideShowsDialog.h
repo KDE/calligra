@@ -23,21 +23,24 @@
 #include <QtGui/QDialog>
 
 #include "ui_KPrCustomSlideShowsDialog.h"
-#include "KPrCustomSlideShows.h"
 
 class KPrCustomSlideShows;
 class KoPAPageBase;
+class QListWidgetItem;
+class KPrCustomSlideShows;
 
 class KPrCustomSlideShowsDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    KPrCustomSlideShowsDialog( QWidget *parent, KPrCustomSlideShows *slideShows, QList<KoPAPageBase*> *allPages, KPrCustomSlideShows &newSlideShows );
+    KPrCustomSlideShowsDialog( QWidget *parent, KPrCustomSlideShows *slideShows, QList<KoPAPageBase*> *allPages, KPrCustomSlideShows *newSlideShows );
     ~KPrCustomSlideShowsDialog();
 private Q_SLOTS:
     void addCustomSlideShow();
-//     void changedSelectedSlideshow();
+    void deleteCustomSlideShow();
+    void renameCustomSlideShow( QListWidgetItem *item );
+//     void changedSelectedSlideshow( QListWidgetItem *item );
 
 //     Q_SIGNALS:
 private:
@@ -46,8 +49,7 @@ private:
     };
 
     Ui::CustomSlideShowsWidget m_uiWidget;
-    KPrCustomSlideShows m_slideShows;
-    int m_newSlideShowsCount;
+    KPrCustomSlideShows *m_slideShows;
 
 };
 #endif

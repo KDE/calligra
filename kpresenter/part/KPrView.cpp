@@ -118,7 +118,7 @@ void KPrView::dialogCustomSlideShows()
     KPrCustomSlideShows finalSlideShows;
 
     doc->customSlideShows()->insert("Name", QList<KoPAPageBase*>() );
-    KPrCustomSlideShowsDialog dialog( this, doc->customSlideShows(), &doc->pages(), finalSlideShows );
+    KPrCustomSlideShowsDialog dialog( this, doc->customSlideShows(), &doc->pages(), &finalSlideShows );
     dialog.setModal( true );
     if ( dialog.exec() == QDialog::Accepted ) {
         doc->setCustomSlideShows( &finalSlideShows );

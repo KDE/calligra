@@ -16,32 +16,35 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
-
+#include <QDebug>
 #include <QStringList>
 #include <QListWidgetItem>
 #include <QIcon>
+#include <QListWidgetItem>
 
 #include <KoPAPageBase.h>
 #include "KPrCustomSlideShowsDialog.h"
+#include <KPrCustomSlideShows.h>
 
 KPrCustomSlideShowsDialog::KPrCustomSlideShowsDialog( QWidget *parent, KPrCustomSlideShows *slideShows,
-                                                      QList<KoPAPageBase*> *allPages, KPrCustomSlideShows &newSlideShows )
+                                                      QList<KoPAPageBase*> *allPages, KPrCustomSlideShows *newSlideShows )
 : QDialog(parent)
-, m_slideShows( newSlideShows )
+, m_slideShows( new KPrCustomSlideShows(*newSlideShows) )
 {
     m_uiWidget.setupUi( this );
     connect( m_uiWidget.addButton, SIGNAL( clicked() ), this, SLOT( addCustomSlideShow() ) );
     connect( m_uiWidget.okButton, SIGNAL( clicked() ), this, SLOT( accept() ) );
+    connect( m_uiWidget.deleteButton, SIGNAL( clicked() ), this, SLOT( deleteCustomSlideShow() ) );
 
-    m_newSlideShowsCount = 1;
-
-    m_slideShows = KPrCustomSlideShows( *slideShows );
     QListWidgetItem * item;
-    foreach( QString slideShowName, m_slideShows.names() ) {
+    foreach( QString slideShowName, m_slideShows->names() ) {
         item = new QListWidgetItem( slideShowName, m_uiWidget.customSlideShowsList );
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled );
         item->setData( SlideShowName, QVariant(slideShowName) );
     }
+
+    connect( m_uiWidget.customSlideShowsList, SIGNAL( itemChanged( QListWidgetItem*) ),
+            this, SLOT( renameCustomSlideShow(QListWidgetItem*) ) );
 
     int currentPage = 1;
     foreach( KoPAPageBase* page, *allPages ) {
@@ -56,13 +59,30 @@ KPrCustomSlideShowsDialog::~KPrCustomSlideShowsDialog()
 
 void KPrCustomSlideShowsDialog::addCustomSlideShow()
 {
-    QListWidgetItem * item = new QListWidgetItem( i18n("New Slide Show %1", m_newSlideShowsCount++) );
+    static int newSlideShowsCount = 1;
+    QListWidgetItem * item = new QListWidgetItem( i18n("New Slide Show %1", newSlideShowsCount++) );
     item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled );
-    item->setData( SlideShowName, QVariant(i18n("New Slide Show %1", m_newSlideShowsCount)) );
+    item->setData( SlideShowName, QVariant(i18n("New Slide Show %1", newSlideShowsCount)) );
     m_uiWidget.customSlideShowsList->addItem( item );
-    m_slideShows.insert( i18n("New Slide Show %1", m_newSlideShowsCount), QList<KoPAPageBase*>() );
+    m_slideShows->insert( i18n("New Slide Show %1", newSlideShowsCount), QList<KoPAPageBase*>() );
 
     m_uiWidget.customSlideShowsList->editItem( item );
 }
 
+void KPrCustomSlideShowsDialog::renameCustomSlideShow( QListWidgetItem *item )
+{
+    if(item->data( SlideShowName ).toString() != item->data( Qt::DisplayRole ).toString() ) {
+        m_slideShows->rename( item->data( SlideShowName ).toString(), item->data( Qt::DisplayRole ).toString() );
+        item->setData( SlideShowName, item->data( Qt::DisplayRole ) );
+    }
+}
+
+void KPrCustomSlideShowsDialog::deleteCustomSlideShow()
+{
+    QListWidgetItem* item = m_uiWidget.customSlideShowsList->currentItem();
+    if( !item ){
+        m_slideShows->remove( item->data(SlideShowName).toString() );
+        m_uiWidget.customSlideShowsList->removeItemWidget( item );
+    }
+}
 #include "KPrCustomSlideShowsDialog.moc"
