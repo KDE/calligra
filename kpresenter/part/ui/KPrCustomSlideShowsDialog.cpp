@@ -27,14 +27,16 @@
 #include <KPrCustomSlideShows.h>
 
 KPrCustomSlideShowsDialog::KPrCustomSlideShowsDialog( QWidget *parent, KPrCustomSlideShows *slideShows,
-                                                      QList<KoPAPageBase*> *allPages, KPrCustomSlideShows *newSlideShows )
+                                                      QList<KoPAPageBase*> *allPages, KPrCustomSlideShows *&newSlideShows )
 : QDialog(parent)
-, m_slideShows( new KPrCustomSlideShows(*newSlideShows) )
+, m_slideShows( new KPrCustomSlideShows(*slideShows) )
 {
     m_uiWidget.setupUi( this );
     connect( m_uiWidget.addButton, SIGNAL( clicked() ), this, SLOT( addCustomSlideShow() ) );
     connect( m_uiWidget.okButton, SIGNAL( clicked() ), this, SLOT( accept() ) );
     connect( m_uiWidget.deleteButton, SIGNAL( clicked() ), this, SLOT( deleteCustomSlideShow() ) );
+
+    newSlideShows = m_slideShows;
 
     QListWidgetItem * item;
     foreach( QString slideShowName, m_slideShows->names() ) {

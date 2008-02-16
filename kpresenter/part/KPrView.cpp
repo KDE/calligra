@@ -39,12 +39,15 @@
 
 #include "KPrCustomSlideShows.h"
 #include "ui/KPrCustomSlideShowsDialog.h"
+#include <QDebug>
 
 KPrView::KPrView( KPrDocument *document, QWidget *parent )
 : KoPAView( document, parent )
 , m_presentationMode( new KPrViewModePresentation( this, m_canvas ))
 , m_normalMode( 0 )
 {
+    KPrDocument *doc = dynamic_cast<KPrDocument *>( m_doc );
+    doc->customSlideShows()->insert("Name", QList<KoPAPageBase*>() );
     initGUI();
     initActions();
 }
@@ -115,13 +118,15 @@ void KPrView::createAnimation()
 void KPrView::dialogCustomSlideShows()
 {
     KPrDocument *doc = dynamic_cast<KPrDocument *>( m_doc );
-    KPrCustomSlideShows finalSlideShows;
+    KPrCustomSlideShows *finalSlideShows;
 
-    doc->customSlideShows()->insert("Name", QList<KoPAPageBase*>() );
-    KPrCustomSlideShowsDialog dialog( this, doc->customSlideShows(), &doc->pages(), &finalSlideShows );
+    KPrCustomSlideShowsDialog dialog( this, doc->customSlideShows(), &doc->pages(), finalSlideShows );
     dialog.setModal( true );
     if ( dialog.exec() == QDialog::Accepted ) {
-        doc->setCustomSlideShows( &finalSlideShows );
+        doc->setCustomSlideShows( finalSlideShows );
+    }
+    else {
+        delete finalSlideShows;
     }
 }
 

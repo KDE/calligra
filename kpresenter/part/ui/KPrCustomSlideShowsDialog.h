@@ -34,7 +34,7 @@ class KPrCustomSlideShowsDialog : public QDialog
     Q_OBJECT
 
 public:
-    KPrCustomSlideShowsDialog( QWidget *parent, KPrCustomSlideShows *slideShows, QList<KoPAPageBase*> *allPages, KPrCustomSlideShows *newSlideShows );
+    KPrCustomSlideShowsDialog( QWidget *parent, KPrCustomSlideShows *slideShows, QList<KoPAPageBase*> *allPages, KPrCustomSlideShows *&newSlideShows );
     ~KPrCustomSlideShowsDialog();
 private Q_SLOTS:
     void addCustomSlideShow();
