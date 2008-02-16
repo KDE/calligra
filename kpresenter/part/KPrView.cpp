@@ -46,8 +46,6 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
 , m_presentationMode( new KPrViewModePresentation( this, m_canvas ))
 , m_normalMode( 0 )
 {
-    KPrDocument *doc = dynamic_cast<KPrDocument *>( m_doc );
-    doc->customSlideShows()->insert("Name", QList<KoPAPageBase*>() );
     initGUI();
     initActions();
 }

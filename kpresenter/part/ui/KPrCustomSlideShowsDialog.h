@@ -40,16 +40,20 @@ private Q_SLOTS:
     void addCustomSlideShow();
     void deleteCustomSlideShow();
     void renameCustomSlideShow( QListWidgetItem *item );
+    void loadCustomSlideShowsData();
 //     void changedSelectedSlideshow( QListWidgetItem *item );
 
 //     Q_SIGNALS:
 private:
     enum {
-        SlideShowName = 33
+        SlideShowNameData = 33
     };
+
+    bool m_firstTime;
 
     Ui::CustomSlideShowsWidget m_uiWidget;
     KPrCustomSlideShows *m_slideShows;
+    KPrCustomSlideShows *m_oldSlideShows;
 
 };
 #endif
