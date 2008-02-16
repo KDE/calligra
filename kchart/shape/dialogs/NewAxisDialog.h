@@ -12,6 +12,6 @@ public:
     ~NewAxisDialog();
 };
 
-}; // Namespace KChart
+} // Namespace KChart
 
 #endif // KCHART_NEW_AXIS_DIALOG
