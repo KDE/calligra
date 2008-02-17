@@ -49,6 +49,20 @@ public:
      */
     void saveOdfSmilAttributes( KoGenStyle & style ) const;
 
+    /**
+     * Get the smil:subtype
+     *
+     * @return the subtype used for saving
+     */
+    const QString & smilSubType() const;
+
+    /**
+     * Get the smil:direction
+     *
+     * @return true if smil:direction is reverse, false otherwise 
+     */
+    bool reverse() const;
+
 private:
     struct SmilData
     {
@@ -58,8 +72,8 @@ private:
         , reverse( reverse )
         {}
 
-        const char * type;
-        const char * subType;
+        QString type;
+        QString subType;
         bool reverse;
     };
 

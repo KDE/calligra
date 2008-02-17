@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Timothee Lacroix <dakeyras.khan@gmail.com>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,12 +28,6 @@ class KPrBarWipeEffectFactory : public KPrPageEffectFactory
 public:
     KPrBarWipeEffectFactory();
     virtual ~KPrBarWipeEffectFactory();
-
-    virtual KPrPageEffect * createPageEffect( const Properties & properties ) const;
-    KPrPageEffect * createPageEffect( const KoXmlElement & element ) const;
-
-private:
-    static QList<KPrPageEffect::SubType> initSubTypes();
 };
 
 #endif /* KPRBARWIPEEFFECTFACTORY_H */

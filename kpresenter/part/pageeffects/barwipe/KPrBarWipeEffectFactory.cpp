@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2007 Timothee Lacroix <dakeyras.khan@gmail.com>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,42 +27,14 @@
 
 #define BarWipeEffectId "BarWipeEffect"
 
-QList<KPrPageEffect::SubType> KPrBarWipeEffectFactory::initSubTypes()
-{
-    QList<KPrPageEffect::SubType> subTypes;
-    subTypes << KPrPageEffect::FromLeft << KPrPageEffect::FromTop;
-    return subTypes;
-}
-
 KPrBarWipeEffectFactory::KPrBarWipeEffectFactory()
-: KPrPageEffectFactory( BarWipeEffectId, i18n( "Bar Wipe Effect" ), initSubTypes() )
+: KPrPageEffectFactory( BarWipeEffectId, i18n( "Bar Wipe Effect" ) )
 {
+    addStrategy( new KPrBarWipeFromTopStrategy() );
+    addStrategy( new KPrBarWipeFromLeftStrategy() );
 }
 
 KPrBarWipeEffectFactory::~KPrBarWipeEffectFactory()
 {
 }
 
-KPrPageEffect * KPrBarWipeEffectFactory::createPageEffect( const Properties & properties ) const
-{
-    KPrPageEffectStrategy * strategy = 0;
-
-    switch ( properties.subType )
-    {
-        case KPrPageEffect::FromTop:
-            strategy = new KPrBarWipeFromTopStrategy();
-            break;
-        case KPrPageEffect::FromLeft:
-            strategy = new KPrBarWipeFromLeftStrategy();
-            break;
-        default:
-            //TODO error message
-            strategy = new KPrBarWipeFromTopStrategy();
-            break;
-    }
-    return new KPrPageEffect( properties.duration, BarWipeEffectId, strategy );
-}
-
-KPrPageEffect * KPrBarWipeEffectFactory::createPageEffect( const KoXmlElement & element ) const
-{
-}

@@ -61,3 +61,13 @@ void KPrPageEffectStrategy::saveOdfSmilAttributes( KoGenStyle & style ) const
         style.addProperty( "smil:direction", "reverse" );
     }
 }
+
+const QString & KPrPageEffectStrategy::smilSubType() const
+{
+    return m_smilData.subType;
+}
+
+bool KPrPageEffectStrategy::reverse() const
+{
+    return m_smilData.reverse;
+}

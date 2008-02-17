@@ -34,7 +34,6 @@ KPrPageEffect::KPrPageEffect( int duration, const QString & id, KPrPageEffectStr
 
 KPrPageEffect::~KPrPageEffect()
 {
-    delete m_strategy;
 }
 
 void KPrPageEffect::setup( const Data &data, QTimeLine &timeLine )

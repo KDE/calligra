@@ -44,8 +44,7 @@ public:
      * @param name The name of the effect. This name is used in the UI
      * @param subTypes The possible subtypes of the page effect
      */
-    KPrPageEffectFactory( const QString & id, const QString & name,
-                          const QList<KPrPageEffect::SubType> & subTypes );
+    KPrPageEffectFactory( const QString & id, const QString & name );
 
     virtual ~KPrPageEffectFactory();
 
@@ -54,7 +53,7 @@ public:
      *
      * @param properties The properties for creating a page effect
      */
-    virtual KPrPageEffect * createPageEffect( const Properties & properties ) const = 0;
+    KPrPageEffect * createPageEffect( const Properties & properties ) const;
 
     /**
      * Create a page effect 
@@ -63,7 +62,7 @@ public:
      *
      * @param element The element containing the informations for creating the page effect
      */
-    virtual KPrPageEffect * createPageEffect( const KoXmlElement & element ) const = 0;
+    KPrPageEffect * createPageEffect( const KoXmlElement & element ) const;
 
     /**
      * Get the id of the page effect
@@ -79,6 +78,14 @@ public:
      * Get the sub types of the page effect
      */
     QList<KPrPageEffect::SubType> subTypes() const;
+
+protected:
+    /**
+     * Add a strategy to the factory
+     *
+     * @param strategy The strategy to add
+     */
+    void addStrategy( KPrPageEffectStrategy * strategy );
 
 private:
     struct Private;
