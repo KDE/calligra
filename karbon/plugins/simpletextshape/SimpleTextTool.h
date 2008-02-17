@@ -84,6 +84,11 @@ public:
     virtual void undo()
     {
         if ( m_shape ) {
+	    if ( m_tool->m_currentShape != m_shape ) {
+	        m_tool->enableTextCursor( false );
+		m_tool->m_currentShape = m_shape;
+	        m_tool->enableTextCursor( true );
+	    }
             m_tool->setTextCursorInternal( m_from );
             m_shape->removeRange( m_from, m_text.length() );
 	}
@@ -91,6 +96,11 @@ public:
     virtual void redo()
     {
         if ( m_shape ) {
+	    if ( m_tool->m_currentShape != m_shape ) {
+	        m_tool->enableTextCursor( false );
+		m_tool->m_currentShape = m_shape;
+	        m_tool->enableTextCursor( true );
+	    }
             m_shape->addRange( m_from, m_text );
             m_tool->setTextCursorInternal( m_from + m_text.length() );
 	}
@@ -114,6 +124,12 @@ public:
     virtual void undo()
     {
         if ( m_shape ) {
+	    if ( m_tool->m_currentShape != m_shape ) {
+	        m_tool->enableTextCursor( false );
+		m_tool->m_currentShape = m_shape;
+	        m_tool->enableTextCursor( true );
+	    }
+	    m_tool->m_currentShape = m_shape;
             m_shape->addRange( m_from, m_text );
             m_tool->setTextCursorInternal( m_from + m_nr );
 	}
@@ -121,6 +137,11 @@ public:
     virtual void redo()
     {
         if ( m_shape ) {
+	    if ( m_tool->m_currentShape != m_shape ) {
+	        m_tool->enableTextCursor( false );
+		m_tool->m_currentShape = m_shape;
+	        m_tool->enableTextCursor( true );
+	    }
             m_tool->setTextCursorInternal( m_from );
             m_text = m_shape->removeRange( m_from, m_nr );
         }
