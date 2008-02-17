@@ -85,7 +85,9 @@ void SimpleTextShapeConfigWidget::open(KoShape *shape)
 
     QFont font = m_shape->font();
 
+    int cursorPos = widget.text->cursorPosition();
     widget.text->setText( m_shape->text() );
+    widget.text->setCursorPosition( cursorPos );
     widget.fontSize->setValue( font.pointSize() );
     font.setPointSize( 8 );
 
@@ -151,8 +153,10 @@ void SimpleTextShapeConfigWidget::slotTextChanged()
     if ( ! m_shape )
         return;
 
+    int cursorPos = widget.text->cursorPosition();
     blockChildSignals( true );
     widget.text->setText( m_shape->text() );
     blockChildSignals( false );
+    widget.text->setCursorPosition( cursorPos );
 }
 
