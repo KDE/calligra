@@ -74,7 +74,7 @@ void SimpleTextTool::paint( QPainter &painter, const KoViewConverter &converter)
     transform.translate( pos.x() - 1, pos.y() );
     qreal angle;
     m_currentShape->getCharAngleAt( m_textCursor, angle );
-    transform.rotate( angle );
+    transform.rotate( 360. - angle );
     if ( m_currentShape->isOnPath() ) {
         QFont f = m_currentShape->font();
         QFontMetrics metrics(f);
@@ -317,7 +317,7 @@ void SimpleTextTool::updateTextCursorArea() const
     transform.translate( pos.x() - 1, pos.y() );
     qreal angle;
     m_currentShape->getCharAngleAt( m_textCursor, angle );
-    transform.rotate( angle );
+    transform.rotate( 360. - angle );
     if ( m_currentShape->isOnPath() ) {
         QFont f = m_currentShape->font();
         QFontMetrics metrics(f);

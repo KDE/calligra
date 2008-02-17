@@ -153,7 +153,7 @@ void SimpleTextShape::createOutline()
 
             QMatrix m;
             m.translate( pathPoint.x(), pathPoint.y() );
-            m.rotate( angle );
+            m.rotate( 360. - angle );
             m_outline.addPath( m.map( m_charOutlines[charIdx] ) );
         }
 	m_charOffsets[ charIdx ] = m_baseline.percentAtLength( charPos );
