@@ -47,6 +47,9 @@ set( kpresenterprivate_LIB_SRCS
      pageeffects/slidewipe/KPrSlideWipeToLeftStrategy.cpp
      pageeffects/slidewipe/KPrSlideWipeToRightStrategy.cpp
      pageeffects/slidewipe/KPrSlideWipeToTopStrategy.cpp
+     pageeffects/barwipe/KPrBarWipeEffectFactory.cpp
+     pageeffects/barwipe/KPrBarWipeFromLeftStrategy.cpp
+     pageeffects/barwipe/KPrBarWipeFromTopStrategy.cpp
 
      shapeanimations/KPrShapeAnimation.cpp
      shapeanimations/KPrTranslateAnimation.cpp
