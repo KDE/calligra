@@ -118,7 +118,7 @@ void KPrView::dialogCustomSlideShows()
     KPrDocument *doc = dynamic_cast<KPrDocument *>( m_doc );
     KPrCustomSlideShows *finalSlideShows;
 
-    KPrCustomSlideShowsDialog dialog( this, doc->customSlideShows(), &doc->pages(), finalSlideShows );
+    KPrCustomSlideShowsDialog dialog( this, doc->customSlideShows(), doc, finalSlideShows );
     dialog.setModal( true );
     if ( dialog.exec() == QDialog::Accepted ) {
         doc->setCustomSlideShows( finalSlideShows );

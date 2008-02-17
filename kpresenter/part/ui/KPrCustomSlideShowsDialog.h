@@ -28,32 +28,39 @@ class KPrCustomSlideShows;
 class KoPAPageBase;
 class QListWidgetItem;
 class KPrCustomSlideShows;
+class KPrDocument;
 
 class KPrCustomSlideShowsDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    KPrCustomSlideShowsDialog( QWidget *parent, KPrCustomSlideShows *slideShows, QList<KoPAPageBase*> *allPages, KPrCustomSlideShows *&newSlideShows );
+    KPrCustomSlideShowsDialog( QWidget *parent, KPrCustomSlideShows *slideShows, KPrDocument *doc, KPrCustomSlideShows *&newSlideShows );
     ~KPrCustomSlideShowsDialog();
 private Q_SLOTS:
     void addCustomSlideShow();
+    void addSlidesToCurrentSlideShow();
     void deleteCustomSlideShow();
     void renameCustomSlideShow( QListWidgetItem *item );
     void loadCustomSlideShowsData();
-//     void changedSelectedSlideshow( QListWidgetItem *item );
+    void changedSelectedSlideshow( QListWidgetItem *current, QListWidgetItem *previous );
+    void removeSlidesFromCurrentSlideShow();
 
 //     Q_SIGNALS:
 private:
     enum {
-        SlideShowNameData = 33
+        SlideShowNameData = 33,
+        SlideData = 34,
+        SlidePositionData = 35,
+        KoPAPageBaseType = 128
     };
 
     bool m_firstTime;
+    QString m_selectedSlideShowName;
 
     Ui::CustomSlideShowsWidget m_uiWidget;
     KPrCustomSlideShows *m_slideShows;
     KPrCustomSlideShows *m_oldSlideShows;
-
+    KPrDocument *m_doc;
 };
 #endif
