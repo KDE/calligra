@@ -122,16 +122,21 @@ void SimpleTextShapeConfigWidget::save()
             canvas->addCommand( new ChangeText( this, widget.text->text() ) );
 	} else if ( font != m_shape->font() ) {
             canvas->addCommand( new ChangeFont( this, font ) );
+	} else {
+	    SimpleTextShape::TextAnchor anchor;
+            if ( widget.anchorStart->isChecked() )
+                anchor = SimpleTextShape::AnchorStart;
+            else if ( widget.anchorMiddle->isChecked() )
+                anchor = SimpleTextShape::AnchorMiddle;
+            else
+                anchor = SimpleTextShape::AnchorEnd;
+            if ( anchor != m_shape->textAnchor() ) {
+                canvas->addCommand( new ChangeAnchor( this, anchor ) );
+	    }
 	}
     }
 
     m_shape->setStartOffset( static_cast<qreal>(widget.startOffset->value()) / 100.0 );
-    if( widget.anchorStart->isChecked() )
-        m_shape->setTextAnchor( SimpleTextShape::AnchorStart );
-    else if( widget.anchorMiddle->isChecked() )
-        m_shape->setTextAnchor( SimpleTextShape::AnchorMiddle );
-    else
-        m_shape->setTextAnchor( SimpleTextShape::AnchorEnd );
 }
 
 QUndoCommand * SimpleTextShapeConfigWidget::createCommand()

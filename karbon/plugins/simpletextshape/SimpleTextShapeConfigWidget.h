@@ -108,6 +108,36 @@ private:
         QString m_text;
         QString m_oldText;
     };
+    class ChangeAnchor : public QUndoCommand
+    {
+    public:
+        ChangeAnchor( SimpleTextShapeConfigWidget *widget, SimpleTextShape::TextAnchor anchor )
+            : m_widget( widget ), m_anchor( anchor )
+        {
+            m_shape = widget->m_shape;
+            setText( "Change text anchor" );
+        }
+        virtual void undo()
+        {
+            if ( m_shape ) {
+                m_shape->setTextAnchor( m_oldAnchor );
+                m_widget->open( m_shape );
+            }
+        }
+        virtual void redo()
+        {
+            if ( m_shape ) {
+                m_oldAnchor = m_shape->textAnchor();
+                m_shape->setTextAnchor( m_anchor );
+                m_widget->open( m_shape );
+            }
+        }
+    private:
+        SimpleTextShapeConfigWidget *m_widget;
+        SimpleTextShape *m_shape;
+        SimpleTextShape::TextAnchor m_anchor;
+        SimpleTextShape::TextAnchor m_oldAnchor;
+    };
 
 private:
     void blockChildSignals( bool block );
