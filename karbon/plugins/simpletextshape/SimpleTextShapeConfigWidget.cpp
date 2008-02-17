@@ -151,6 +151,8 @@ void SimpleTextShapeConfigWidget::slotTextChanged()
     if ( ! m_shape )
         return;
 
+    blockChildSignals( true );
     widget.text->setText( m_shape->text() );
+    blockChildSignals( false );
 }
 
