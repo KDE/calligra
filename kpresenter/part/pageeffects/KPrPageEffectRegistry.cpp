@@ -19,10 +19,15 @@
 
 #include "KPrPageEffectRegistry.h"
 
+#include <QString>
+
 #include <kglobal.h>
+#include <KoXmlNS.h>
+#include <KoXmlReader.h>
 #include <KoPluginLoader.h>
 
 #include "slidewipe/KPrSlideWipeEffectFactory.h"
+#include "barwipe/KPrBarWipeEffectFactory.h"
 
 class KPrPageEffectRegistry::Singleton
 {
@@ -30,8 +35,8 @@ public:
     Singleton()
     {
         q.add( new KPrSlideWipeEffectFactory() );
+        q.add( new KPrBarWipeEffectFactory() );
         loadPlugins();
-
     }
 
     void loadPlugins()
@@ -40,7 +45,7 @@ public:
         config.whiteList = "PageEffectPlugins";
         config.blacklist = "PageEffectPluginsDisabled";
         config.group = "kpresenter";
-        
+
         // XXX: Use minversion here?
         // The plugins are responsible for adding a factory to the registry
         KoPluginLoader::instance()->load( QString::fromLatin1("KPresenter/PageEffect"),
@@ -61,8 +66,18 @@ KPrPageEffectRegistry * KPrPageEffectRegistry::instance()
 KPrPageEffect * KPrPageEffectRegistry::createPageEffect( const KoXmlElement & element )
 {
     Q_UNUSED(element);
+
+    KPrPageEffect * pageEffect = 0;
     //TODO
-    return 0;
+    // get the correct factory 
+    // we need the smil:type to get the factory so we need a mapping from the type to the factory
+    // this should be based on the smil:type and maybe smil:reverse
+    if ( element.hasAttributeNS( KoXmlNS::smil, "type" ) ) {
+        QString type( element.attributeNS( KoXmlNS::smil, "type" ) );
+    // call the factory to create the page effect 
+    }
+    // return it
+    return pageEffect;
 }
 
 KPrPageEffectRegistry::KPrPageEffectRegistry()

@@ -24,6 +24,7 @@
 #include <QTimeLine>
 
 class QPainter;
+class KoXmlElement;
 class KoXmlWriter;
 class KoGenStyle;
 class KPrPageEffectStrategy;
@@ -156,6 +157,14 @@ public:
      * Save transition as part of the style
      */
     void saveOdfSmilAttributes( KoGenStyle & style ) const;
+
+    /**
+     * Load effect from odf.
+     *
+     * Only generic data is loaded here. e.g. the duration of the effect
+     * is loaded here
+     */
+    void loadOdf( const KoXmlElement & element );
 
 protected:
     int m_duration;

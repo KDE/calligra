@@ -57,6 +57,15 @@ public:
     virtual KPrPageEffect * createPageEffect( const Properties & properties ) const = 0;
 
     /**
+     * Create a page effect 
+     *
+     * This is used for loading a page effect from odf
+     *
+     * @param element The element containing the informations for creating the page effect
+     */
+    virtual KPrPageEffect * createPageEffect( const KoXmlElement & element ) const = 0;
+
+    /**
      * Get the id of the page effect
      */
     QString id() const;

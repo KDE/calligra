@@ -20,6 +20,7 @@
 #include "KPrPage.h"
 
 #include "KPrPageApplicationData.h"
+#include "pageeffects/KPrPageEffect.h"
 
 KPrPage::KPrPage( KoPAMasterPage * masterPage )
 : KoPAPage( masterPage )
@@ -36,4 +37,16 @@ KPrPageApplicationData * KPrPage::pageData( KoPAPageBase * page )
     KPrPageApplicationData * data = dynamic_cast<KPrPageApplicationData *>( page->applicationData() );
     Q_ASSERT( data );
     return data;
+}
+
+void KPrPage::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const
+{
+    KoPAPageBase::saveOdfPageStyleData( style, paContext );
+    KPrPageApplicationData * data = dynamic_cast<KPrPageApplicationData *>( applicationData() );
+    Q_ASSERT( data );
+    KPrPageEffect * pageEffect = data->pageEffect();
+
+    if ( pageEffect ) {
+        pageEffect->saveOdfSmilAttributes( style );
+    }
 }

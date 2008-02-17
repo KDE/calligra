@@ -86,3 +86,7 @@ KPrPageEffect * KPrSlideWipeEffectFactory::createPageEffect( const Properties & 
     }
     return new KPrPageEffect( properties.duration, SlideWipeEffectId, strategy );
 }
+
+KPrPageEffect * KPrSlideWipeEffectFactory::createPageEffect( const KoXmlElement & element ) const
+{
+}

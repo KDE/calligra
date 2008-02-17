@@ -41,6 +41,8 @@ public:
      * assertion when it is not possible to retrieve.
      */
     static KPrPageApplicationData * pageData( KoPAPageBase * page );
+
+    virtual void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const;
 };
 
 #endif /* KPRPAGE_H */

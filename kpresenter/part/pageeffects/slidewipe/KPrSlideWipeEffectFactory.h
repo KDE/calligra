@@ -28,7 +28,11 @@ public:
     KPrSlideWipeEffectFactory();
     virtual ~KPrSlideWipeEffectFactory();
 
+    /// reimplemented
     virtual KPrPageEffect * createPageEffect( const Properties & properties ) const;
+
+    /// reimplemented
+    virtual KPrPageEffect * createPageEffect( const KoXmlElement & element ) const;
 
 private:
     static QList<KPrPageEffect::SubType> initSubTypes();
