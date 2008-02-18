@@ -56,13 +56,20 @@ struct KPrPageEffectFactory::Private
 
     ~Private()
     {
-        // TODO delete strategies
+        EffectStrategies::const_iterator it = strategies.begin();
+        for ( ; it != strategies.end(); ++it ) {
+            delete *it;
+        }
     }
 
     QString id;
     QString name;
     QList<KPrPageEffect::SubType> subTypes;
     EffectStrategies strategies;
+    // this defines for which smil:type and smil:direction this factory
+    // is responsible. If the bool is false the smil:direction is forward if 
+    // it is true the smil:direction is reverse.
+    QList<QPair<QString, bool> > tags;
 };
 
 KPrPageEffectFactory::KPrPageEffectFactory( const QString & id, const QString & name )
@@ -110,9 +117,18 @@ QList<KPrPageEffect::SubType> KPrPageEffectFactory::subTypes() const
     return d->subTypes;
 }
 
+QList<QPair<QString, bool> > KPrPageEffectFactory::tags() const
+{
+    return d->tags;
+}
+
 void KPrPageEffectFactory::addStrategy( KPrPageEffectStrategy * strategy )
 {
     bool inserted = d->strategies.insert( strategy ).second;
     Q_ASSERT( inserted == true );
     d->subTypes.append( strategy->subType() );
+    QPair<QString, bool> tag( strategy->smilType(), strategy->reverse() );
+    if ( !d->tags.contains( tag ) ) {
+        d->tags.append( tag );
+    }
 }

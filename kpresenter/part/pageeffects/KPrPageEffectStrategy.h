@@ -50,6 +50,13 @@ public:
     void saveOdfSmilAttributes( KoGenStyle & style ) const;
 
     /**
+     * Get the smil:type
+     *
+     * @return the type used for saving
+     */
+    const QString & smilType() const;
+
+    /**
      * Get the smil:subtype
      *
      * @return the subtype used for saving

@@ -56,6 +56,11 @@ public:
     KPrPageEffectRegistry q;
 };
 
+struct KPrPageEffectRegistry::Private
+{
+    QHash<QPair<QString, bool>, KPrPageEffectFactory *> tagToFactory;
+};
+
 K_GLOBAL_STATIC( KPrPageEffectRegistry::Singleton, singleton )
 
 KPrPageEffectRegistry * KPrPageEffectRegistry::instance()
@@ -73,14 +78,19 @@ KPrPageEffect * KPrPageEffectRegistry::createPageEffect( const KoXmlElement & el
     // we need the smil:type to get the factory so we need a mapping from the type to the factory
     // this should be based on the smil:type and maybe smil:reverse
     if ( element.hasAttributeNS( KoXmlNS::smil, "type" ) ) {
-        QString type( element.attributeNS( KoXmlNS::smil, "type" ) );
-    // call the factory to create the page effect 
+        QString smilType( element.attributeNS( KoXmlNS::smil, "type" ) );
+        bool reverse = false;
+        if ( element.hasAttributeNS( KoXmlNS::smil, "direction" ) && element.attributeNS( KoXmlNS::smil, "direction" ) == "reverse" ) {
+            reverse = true;
+        }
+        // call the factory to create the page effect 
     }
     // return it
     return pageEffect;
 }
 
 KPrPageEffectRegistry::KPrPageEffectRegistry()
+: d( new Private() )
 {
 }
 
@@ -89,5 +99,19 @@ KPrPageEffectRegistry::~KPrPageEffectRegistry()
     foreach ( KPrPageEffectFactory* factory, values() )
     {
         delete factory;
+    }
+    delete d;
+}
+
+void KPrPageEffectRegistry::init()
+{
+    QList<KPrPageEffectFactory*> factories = values();
+
+    foreach ( KPrPageEffectFactory * factory, factories ) {
+        QList<QPair<QString, bool> > tags( factory->tags() );
+        QList<QPair<QString, bool> >::iterator it( tags.begin() );
+        for ( ; it != tags.end(); ++it ) {
+            d->tagToFactory.insert( *it, factory );
+        }
     }
 }

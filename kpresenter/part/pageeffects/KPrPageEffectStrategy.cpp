@@ -62,6 +62,11 @@ void KPrPageEffectStrategy::saveOdfSmilAttributes( KoGenStyle & style ) const
     }
 }
 
+const QString & KPrPageEffectStrategy::smilType() const
+{
+    return m_smilData.type;
+}
+
 const QString & KPrPageEffectStrategy::smilSubType() const
 {
     return m_smilData.subType;

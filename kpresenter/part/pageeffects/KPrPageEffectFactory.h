@@ -19,6 +19,8 @@
 #ifndef KPRPAGEEFFECTFACTORY_H
 #define KPRPAGEEFFECTFACTORY_H
 
+#include <QPair>
+
 #include "KPrPageEffect.h"
 
 /**
@@ -78,6 +80,15 @@ public:
      * Get the sub types of the page effect
      */
     QList<KPrPageEffect::SubType> subTypes() const;
+
+    /**
+     * Get the tags the factory is responsible for
+     * 
+     * This defines for which smil:type and smil:direction this factory is responsible. 
+     * If the bool is false the smil:direction is forward if it is true the smil:direction 
+     * is reverse.
+     */
+    QList<QPair<QString, bool> > tags() const;
 
 protected:
     /**

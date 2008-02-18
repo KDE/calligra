@@ -35,9 +35,15 @@ public:
     KPrPageEffect * createPageEffect( const KoXmlElement & element );
 
 private:
-    friend class Singleton;
+    void init();
+
     KPrPageEffectRegistry();
     ~KPrPageEffectRegistry();
+
+    friend class Singleton;
+
+    struct Private;
+    Private * const d;
 };
 
 #endif /* KPRPAGEEFFECTREGISTRY_H */
