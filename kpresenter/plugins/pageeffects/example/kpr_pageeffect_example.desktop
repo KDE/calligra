@@ -1,8 +1,16 @@
 [Desktop Entry]
 Name=Exploding Page
 Name[it]=Pagina esplosiva
+Name[pt]=Página em Explosão
+Name[pt_BR]=Página em Explosão
+Name[sv]=Exploderande sida
+Name[uk]=Вибух сторінки
 Comment=Exploding Page Page Effect
 Comment[it]=Effetto per far esplodere la pagina
+Comment[pt]=Efeito de Explosão da Página
+Comment[pt_BR]=Efeito de Explosão da Página
+Comment[sv]=Sideffekt: Exploderande sida
+Comment[uk]=Ефект вибуху сторінки
 X-KDE-ServiceTypes=KPresenter/PageEffect
 Type=Service
 X-KDE-Library=kpr_pageeffect_example

@@ -1,7 +1,6 @@
 [Desktop Entry]
 Type=Application
 Name=KOffice
-Name[sv]=Koffice
 Name[x-test]=xxKOfficexx
 NoDisplay=true
 DocPath=koffice/index.html
