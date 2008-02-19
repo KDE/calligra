@@ -1985,12 +1985,12 @@ void View::updateView( QWidget * )
     QWidget *widget2;
 
     widget2 = m_viewlist->findView( "AccountsView" );
-    if ( m_updateAccountsview )
+    if ( widget2 && m_updateAccountsview )
         static_cast<ViewBase*>( widget2 ) ->draw();
     m_updateAccountsview = false;
 
     widget2 = m_viewlist->findView( "ResourceAssignmentView" );
-    if ( m_updateResourceAssignmentView )
+    if ( widget2 && m_updateResourceAssignmentView )
         static_cast<ViewBase*>( widget2 ) ->draw( getProject() );
     m_updateResourceAssignmentView = false;
 
