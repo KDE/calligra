@@ -126,7 +126,7 @@ class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInt
                          const QColor& color ) const;
 
 
- public Q_SLOTS:
+ public:
     void update() const;
     void setSize( const QSizeF& size );
     void dataChanged( const QModelIndex &topLeft, 
