@@ -32,6 +32,7 @@
 
 #include <kdganttproxymodel.h>
 #include <kdganttconstraintmodel.h>
+#include <kdganttdatetimegrid.h>
 
 #include <KoDocument.h>
 
@@ -40,6 +41,7 @@
 #include <QSplitter>
 #include <QVBoxLayout>
 #include <QHeaderView>
+#include <QDateTime>
 
 #include <klocale.h>
 #include <kglobal.h>
@@ -56,12 +58,16 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
     kDebug()<<"------------------- create MyKDGanttView -----------------------"<<endl;
     setConstraintModel( new KDGantt::ConstraintModel() );
     KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( ganttProxyModel() );
-    //m->setColumn( KDGantt::ItemTypeRole, 1 );
-    m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole );
-    m->setRole( KDGantt::StartTimeRole, KDGantt::StartTimeRole );
-    m->setRole( KDGantt::EndTimeRole, KDGantt::EndTimeRole );
+
+    m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole ); // To provide correct format
+    m->setRole( KDGantt::StartTimeRole, KDGantt::StartTimeRole ); // To provide correct format
+    m->setRole( KDGantt::EndTimeRole, KDGantt::EndTimeRole ); // To provide correct format
+    
+    m->setColumn( KDGantt::ItemTypeRole, 1 );
     m->setColumn( KDGantt::StartTimeRole, 22 );
     m->setColumn( KDGantt::EndTimeRole, 23 );
+    m->setColumn( KDGantt::TaskCompletionRole, 39 );
+    
     m_model = new NodeItemModel( this );
     setModel( m_model );
     QTreeView *tv = dynamic_cast<QTreeView*>( leftView() ); //FIXME ?
@@ -75,6 +81,8 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
             tv->hideColumn( i );
         }
     } else kDebug()<<"No treeview !!!"<<endl;
+    
+    static_cast<KDGantt::DateTimeGrid*>( grid() )->setDayWidth( 30 );
 }
 
 void MyKDGanttView::update()
@@ -115,12 +123,20 @@ void MyKDGanttView::setScheduleManager( ScheduleManager *sm )
     m_model->setManager( sm );
     m_manager = sm;
     createDependencies();
+    if ( sm && m_project ) {
+        QDateTime start = m_project->startTime( sm->id() ).dateTime().addDays( -1 );
+        KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+        if ( g->startDateTime() !=  start ) {
+            g->setStartDateTime( start );
+        }
+    }
 }
 
 
 void MyKDGanttView::addDependency( Relation *rel )
 {
-    QModelIndex par = m_model->index( rel->parent() );
+    // FIXME: KDGantt doesn't handle relations yet.
+/*    QModelIndex par = m_model->index( rel->parent() );
     QModelIndex ch = m_model->index( rel->child() );
     qDebug()<<"addDependency() "<<m_model<<par.model();
     if ( par.isValid() && ch.isValid() ) {
@@ -128,7 +144,7 @@ void MyKDGanttView::addDependency( Relation *rel )
         if ( ! constraintModel()->hasConstraint( con ) ) {
             constraintModel()->addConstraint( con );
         }
-    }
+    }*/
 }
 
 void MyKDGanttView::removeDependency( Relation *rel )
@@ -363,21 +379,30 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
 {
     kDebug()<<"------------------- create MilestoneKDGanttView -----------------------"<<endl;
     KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( ganttProxyModel() );
-    //m->setColumn( KDGantt::ItemTypeRole, 1 );
-    m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole );
-    m->setRole( KDGantt::StartTimeRole, KDGantt::StartTimeRole );
-    m->setRole( KDGantt::EndTimeRole, KDGantt::EndTimeRole );
-    m->setColumn( KDGantt::StartTimeRole, 18 );
-    m->setColumn( KDGantt::EndTimeRole, 19 );
+    
+    m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole ); // To provide correct format
+    m->setRole( KDGantt::StartTimeRole, KDGantt::StartTimeRole ); // To provide correct format
+    m->setRole( KDGantt::EndTimeRole, KDGantt::EndTimeRole ); // To provide correct format
+    
+    m->setColumn( KDGantt::ItemTypeRole, 1 );
+    m->setColumn( KDGantt::StartTimeRole, 22 );
+    m->setColumn( KDGantt::EndTimeRole, 22 );
+    m->setColumn( KDGantt::TaskCompletionRole, 39 );
+
     setModel( m_model );
     QTreeView *tv = dynamic_cast<QTreeView*>( leftView() ); //FIXME ?
     if ( tv ) {
         tv->header()->setStretchLastSection( true );
-        // Only show name in treeview ;)
+        // Only show name and start time in treeview ;)
         for ( int i = 1; i < m_model->columnCount(); ++i ) {
+            if ( i == 22 ) {
+                continue;
+            }
             tv->hideColumn( i );
         }
     } else kDebug()<<"No treeview !!!"<<endl;
+
+    static_cast<KDGantt::DateTimeGrid*>( grid() )->setDayWidth( 30 );
 }
 
 void MilestoneKDGanttView::update()
@@ -408,6 +433,22 @@ void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
     //kDebug()<<id<<endl;
     m_model->setManager( sm );
     m_manager = sm;
+    if ( sm && m_project ) {
+        QDateTime start;
+        foreach ( const Node *n, m_model->mileStones() ) {
+            if ( ! start.isValid() || start > n->startTime().dateTime() ) {
+                start = n->startTime( sm->id() ).dateTime();
+            }
+        }
+        if ( ! start.isValid() ) {
+            start = m_project->startTime( sm->id() ).dateTime();
+        }
+        KDGantt::DateTimeGrid *g = static_cast<KDGantt::DateTimeGrid*>( grid() );
+        start = start.addDays( -1 );
+        if ( g->startDateTime() !=  start ) {
+            g->setStartDateTime( start );
+        }
+    }
 }
 
 

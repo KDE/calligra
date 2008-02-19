@@ -257,6 +257,8 @@ public:
 
     virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
 
+    const QList<Node*> &mileStones() const { return m_mslist; }
+    
 protected slots:
     void slotNodeChanged( Node* );
     void slotNodeToBeInserted( Node *node, int row );
