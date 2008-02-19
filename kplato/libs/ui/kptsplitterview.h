@@ -71,9 +71,9 @@ public:
     virtual void updateReadWrite( bool );
 
     /// Returns the list of action lists that shall be plugged/unplugged
-    QStringList actionListNames() const;
+    virtual QStringList actionListNames() const;
     /// Returns the list of actions associated with the action list name
-    QList<QAction*> actionList( const QString name ) const;
+    virtual QList<QAction*> actionList( const QString name ) const;
     
     /// Sets context info to this view. Reimplement.
     virtual bool setContext( const Context &/*context*/ ) { return false; }
@@ -89,7 +89,7 @@ public:
     /// Return the active view at @p pos
     ViewBase *findView( const QPoint &pos ) const;
     /// Return the hit view at global position @p glpos
-    ViewBase *hitView( const QPoint &glpos );
+    virtual ViewBase *hitView( const QPoint &glpos );
 
     /// Loads context info into this view. Reimplement.
     virtual bool loadContext( const KoXmlElement &/*context*/ );
@@ -101,9 +101,9 @@ public slots:
     virtual void setGuiActive( bool activate );
 
 protected slots:
-    void slotGuiActivated( ViewBase *v, bool active );
+    virtual void slotGuiActivated( ViewBase *v, bool active );
     
-private:
+protected:
     QSplitter *m_splitter;
     ViewBase *m_activeview;
 };

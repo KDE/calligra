@@ -107,6 +107,7 @@ ScheduleEditor::ScheduleEditor( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent )
 {
     setupGui();
+    slotEnableActions( 0 );
     
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
@@ -194,8 +195,12 @@ void ScheduleEditor::slotSelectionChanged( const QModelIndexList list)
 
 void ScheduleEditor::slotEnableActions( const ScheduleManager *sm )
 {
-    actionDeleteSelection->setEnabled( sm != 0 );
-    actionCalculateSchedule->setEnabled( sm != 0 );
+    bool on = isReadWrite() && sm != 0;
+    actionDeleteSelection->setEnabled( on );
+    actionCalculateSchedule->setEnabled( on );
+    actionAddSubSchedule->setEnabled( on );
+    
+    actionAddSchedule->setEnabled( isReadWrite() );
 }
 
 void ScheduleEditor::setupGui()
@@ -230,7 +235,10 @@ void ScheduleEditor::setupGui()
 
 void ScheduleEditor::updateReadWrite( bool readwrite )
 {
+    kDebug()<<readwrite;
+    ViewBase::updateReadWrite( readwrite );
     m_view->setReadWrite( readwrite );
+    slotEnableActions( m_view->currentManager() );
 }
 
 void ScheduleEditor::slotOptions()
@@ -323,6 +331,78 @@ ScheduleHandlerView::ScheduleHandlerView( KoDocument *part, QWidget *parent )
     
 }
 
+ViewBase *ScheduleHandlerView::hitView( const QPoint &glpos )
+{
+    //kDebug()<<this<<glpos<<"->"<<mapFromGlobal( glpos )<<"in"<<frameGeometry();
+    return this;
+}
+
+
+void ScheduleHandlerView::setGuiActive( bool active ) // virtual slot
+{
+    //kDebug()<<active;
+    for ( int i = 0; i < m_splitter->count(); ++i ) {
+        ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
+        if ( v  ) {
+            v->setGuiActive( active );
+        } else {
+            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
+            if (tw ) {
+                v = dynamic_cast<ViewBase*>( tw->currentWidget() );
+                if ( v ) {
+                    v->setGuiActive( active );
+                }
+            }
+        }
+    }
+    m_activeview = active ? this : 0;
+    emit guiActivated( this, active );
+}
+
+void ScheduleHandlerView::slotGuiActivated( ViewBase *, bool )
+{
+}
+
+QStringList ScheduleHandlerView::actionListNames() const
+{
+    QStringList lst;
+    for ( int i = 0; i < m_splitter->count(); ++i ) {
+        ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
+        if ( v  ) {
+            lst += v->actionListNames();
+        } else {
+            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
+            if (tw ) {
+                v = dynamic_cast<ViewBase*>( tw->currentWidget() );
+                lst += v->actionListNames();
+            }
+        }
+    }
+    //kDebug()<<lst;
+    return lst;
+}
+    
+QList<QAction*> ScheduleHandlerView::actionList( const QString name ) const
+{
+    //kDebug()<<name;
+    QList<QAction*> lst;
+    for ( int i = 0; i < m_splitter->count(); ++i ) {
+        ViewBase *v = dynamic_cast<ViewBase*>( m_splitter->widget( i ) );
+        if ( v ) {
+            lst += v->actionList( name );
+        } else {
+            QTabWidget *tw = dynamic_cast<QTabWidget*>( m_splitter->widget( i ) );
+            if (tw ) {
+                v = dynamic_cast<ViewBase*>( tw->currentWidget() );
+                if ( v  ) {
+                    lst += v->actionList( name );
+                }
+            }
+        }
+    }
+    //kDebug()<<lst;
+    return lst;
+}
 
 } // namespace KPlato
 

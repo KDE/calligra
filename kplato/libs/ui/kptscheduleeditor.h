@@ -149,9 +149,23 @@ public:
     ScheduleHandlerView( KoDocument *part, QWidget *parent );
     
     ScheduleEditor *scheduleEditor() const { return m_scheduleEditor; }
+    /// Returns a list of actionlist names for all shown views
+    QStringList actionListNames() const;
+    /// Returns the list of actions associated with the action list @p name
+    virtual QList<QAction*> actionList( const QString name ) const;
+    /// Allways returns this (if we are called, we are hit)
+    virtual ViewBase *hitView( const QPoint &glpos );
 
 signals:
     void currentScheduleManagerChanged( ScheduleManager* );
+
+public slots:
+    /// Activate/deactivate the gui (also of subviews)
+    virtual void setGuiActive( bool activate );
+
+protected slots:
+    /// Noop, we handle subviews ourselves
+    virtual void slotGuiActivated( ViewBase *v, bool active );
 
 private:
     ScheduleEditor *m_scheduleEditor;
