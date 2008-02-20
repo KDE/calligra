@@ -43,6 +43,8 @@ public:
     static KPrPageApplicationData * pageData( KoPAPageBase * page );
 
     virtual void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const;
+
+    virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
 };
 
 #endif /* KPRPAGE_H */

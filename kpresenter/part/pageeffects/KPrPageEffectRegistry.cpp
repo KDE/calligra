@@ -29,6 +29,8 @@
 #include "slidewipe/KPrSlideWipeEffectFactory.h"
 #include "barwipe/KPrBarWipeEffectFactory.h"
 
+#include <kdebug.h>
+
 class KPrPageEffectRegistry::Singleton
 {
 public:
@@ -37,6 +39,7 @@ public:
         q.add( new KPrSlideWipeEffectFactory() );
         q.add( new KPrBarWipeEffectFactory() );
         loadPlugins();
+        q.init();
     }
 
     void loadPlugins()
@@ -83,7 +86,16 @@ KPrPageEffect * KPrPageEffectRegistry::createPageEffect( const KoXmlElement & el
         if ( element.hasAttributeNS( KoXmlNS::smil, "direction" ) && element.attributeNS( KoXmlNS::smil, "direction" ) == "reverse" ) {
             reverse = true;
         }
+
+        QHash<QPair<QString, bool>, KPrPageEffectFactory *>::iterator it( d->tagToFactory.find( QPair<QString, bool>( smilType, reverse ) ) );
+
         // call the factory to create the page effect 
+        if ( it != d->tagToFactory.end() ) {
+            pageEffect = it.value()->createPageEffect( element );
+        }
+        else {
+            kWarning(33002) << "page effect of smil:type" << smilType << "not supported";
+        }
     }
     // return it
     return pageEffect;

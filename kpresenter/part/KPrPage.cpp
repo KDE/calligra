@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -19,7 +19,13 @@
 
 #include "KPrPage.h"
 
+#include <KoXmlNS.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfStylesReader.h>
+#include <KoPALoadingContext.h>
+
 #include "KPrPageApplicationData.h"
+#include "pageeffects/KPrPageEffectRegistry.h"
 #include "pageeffects/KPrPageEffect.h"
 
 KPrPage::KPrPage( KoPAMasterPage * masterPage )
@@ -48,5 +54,19 @@ void KPrPage::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paCont
 
     if ( pageEffect ) {
         pageEffect->saveOdfSmilAttributes( style );
+    }
+}
+
+void KPrPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )
+{
+    KoPAPage::loadOdfPageTag( element, loadingContext );
+    KPrPageApplicationData * data = dynamic_cast<KPrPageApplicationData *>( applicationData() );
+    Q_ASSERT( data );
+
+    KoOdfStylesReader& stylesReader = loadingContext.odfLoadingContext().stylesReader();
+    const KoXmlElement * styleElement = stylesReader.findContentAutoStyle( element.attributeNS( KoXmlNS::draw, "style-name" ), "drawing-page" );
+    KoXmlNode node = styleElement->namedItemNS( KoXmlNS::style, "drawing-page-properties" );
+    if ( node.isElement() ) {
+        data->setPageEffect( KPrPageEffectRegistry::instance()->createPageEffect( node.toElement() ) );
     }
 }

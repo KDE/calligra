@@ -24,7 +24,12 @@
 #include <boost/multi_index/mem_fun.hpp>
 #include <boost/multi_index/ordered_index.hpp>
 
+#include <KoXmlReader.h>
+#include <KoXmlNS.h>
+
 #include "KPrPageEffectStrategy.h"
+
+#include <kdebug.h>
 
 struct SmilData : boost::multi_index::composite_key<
     KPrPageEffectStrategy,
@@ -98,8 +103,28 @@ KPrPageEffect * KPrPageEffectFactory::createPageEffect( const Properties & prope
 
 KPrPageEffect * KPrPageEffectFactory::createPageEffect( const KoXmlElement & element ) const
 {
-    // TODO
-    return 0;
+    KPrPageEffectStrategy * strategy = 0;
+    KPrPageEffect * pageEffect = 0;
+
+    if ( element.hasAttributeNS( KoXmlNS::smil, "subtype" ) ) {
+        QString smilSubType( element.attributeNS( KoXmlNS::smil, "subtype" ) );
+        bool reverse = false;
+        if ( element.hasAttributeNS( KoXmlNS::smil, "direction" ) && element.attributeNS( KoXmlNS::smil, "direction" ) == "reverse" ) {
+            reverse = true;
+        }
+
+        EffectStrategies::nth_index<1>::type::iterator it( d->strategies.get<1>().find( boost::make_tuple( smilSubType, reverse ) ) );
+
+        if ( it != d->strategies.get<1>().end() ) {
+            strategy = *it;
+            pageEffect = new KPrPageEffect( 5000, d->id, strategy );
+        }
+        else {
+            kWarning(33002) << "effect for " << d->id << smilSubType << reverse << "not supported";
+        }
+    }
+
+    return pageEffect;
 }
 
 QString KPrPageEffectFactory::id() const
