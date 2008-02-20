@@ -23,7 +23,7 @@
 #include <QPainter>
 
 KPrBarWipeFromTopStrategy::KPrBarWipeFromTopStrategy()
-: KPrPageEffectStrategy( KPrPageEffect::FromTop, "barwipe", "fromTop", false )
+: KPrPageEffectStrategy( KPrPageEffect::FromTop, "barwipe", "topToBottom", false )
 {
 }
 
