@@ -23,7 +23,7 @@
 #include <QPainter>
 
 KPrBarWipeFromLeftStrategy::KPrBarWipeFromLeftStrategy()
-: KPrPageEffectStrategy( KPrPageEffect::FromLeft, "barwipe", "leftToRight", false )
+: KPrPageEffectStrategy( KPrPageEffect::FromLeft, "barWipe", "leftToRight", false )
 {
 }
 
