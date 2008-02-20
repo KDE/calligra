@@ -52,7 +52,6 @@ private:
         SlideShowNameData = 33,
         SlideData = 34,
         SlidePositionData = 35,
-        KoPAPageBaseType = 128
     };
 
     bool m_firstTime;

@@ -18,6 +18,7 @@
 */
 
 #include"KPrCustomSlideShows.h"
+#include <QDebug>
 
 KPrCustomSlideShows::KPrCustomSlideShows()
 {
@@ -63,11 +64,12 @@ const QList<QString> KPrCustomSlideShows::names() const
 
 QList<KoPAPageBase*> KPrCustomSlideShows::getByName( const QString &name ) const
 {
-    QMap< QString, QList<KoPAPageBase*> >::const_iterator it = m_customSlideShows.find( name );
-    Q_ASSERT( it !=  m_customSlideShows.end() );
-    if( it == m_customSlideShows.end() ) {
-        return QList<KoPAPageBase*>();
-    }
+    QMap< QString, QList<KoPAPageBase*> >::const_iterator it = m_customSlideShows.constFind( name );
+    Q_ASSERT( it !=  m_customSlideShows.constEnd() );
+//     if( it == m_customSlideShows.constEnd() ) {
+//         return QList<KoPAPageBase*>();
+//     }
+    qDebug()<<"Found by getByName:"<<it.value();
     return it.value();
 }
 
