@@ -2,7 +2,9 @@ Overview
 --------
 Strategy:
 The strategy is responsible for doing the page effect. For each effect we have one object that is instanciated on 
-program start and is shared by all page effects that use these strategy.
+program start and is shared by all page effects that use these strategy. The strategy need to repaint always the
+full screen. Qt will make sure only to update the parts that where requested for update in KPrPageEffectStrategy::next().
+
 For evey subType and direction of en effect a strategy is needed.
 
 Factory:
@@ -38,6 +40,8 @@ Effects
 -------
 The list describe the Transition type and Transition subtypes. The list is copied from the specification mentioned
 above.
+
+Each type of effect should be put into its own directoy.
 
 Please add you name under the page effect when you like to work on it.
 When you are finihed put a done under it.
