@@ -1,0 +1,98 @@
+Overview
+--------
+Strategy:
+The strategy is responsible for doing the page effect. For each effect we have one object that is instanciated on 
+program start and is shared by all page effects that use these strategy.
+For evey subType and direction of en effect a strategy is needed.
+
+Factory:
+The factory is derived from KPrPageEffectFactory. All  you need to do is to add the strategies the factory supports.
+Example:
+
+KPrBarWipeEffectFactory::KPrBarWipeEffectFactory()
+: KPrPageEffectFactory( BarWipeEffectId, i18n( "Bar Wipe Effect" ) )
+{
+    addStrategy( new KPrBarWipeFromTopStrategy() );
+    addStrategy( new KPrBarWipeFromLeftStrategy() );
+}
+
+
+New enums for not yet existing KPrPageEffect::SubType have to be added in KPrPageEffect.h. The UI representation 
+of the sub types are defined in dockers/KPrPageEffectDocker.cpp. 
+Sub types don't have to corrospond to the ones used in smil. They are used for the representation in the UI.
+E.g. the barWipe effect has in smil::subType leftToReight and topToBottom. It also supports the reverse for these
+sub types are mapped like the following:
+smil:subType  smil:direction  KPrPageEffect::SubType
+----------------------------------------------------
+leftToReight  forward         FromLeft
+leftToReight  reverse         FromRight
+topToBottom   forward         FromTop
+topToBottom   reverse         FromBottom
+
+Specification
+-------------
+The specification is defined in SMIL. See http://www.w3.org/TR/2005/REC-SMIL2-20050107/smil-transitions.html for 
+information about the different effects.
+
+Effects
+-------
+The list describe the Transition type and Transition subtypes. The list is copied from the specification mentioned
+above.
+
+Please add you name under the page effect when you like to work on it.
+When you are finihed put a done under it.
+
+Edge Wipes - wipes occur along an edge
+--------------------------------------
+"barWipe"  "leftToRight" (1) [default], "topToBottom" (2)
+  partly done Lacroix Timothee
+"boxWipe"  "topLeft" (3) [default], "topRight" (4), "bottomRight" (5), "bottomLeft" (6), "topCenter" (23), "rightCenter" (24), "bottomCenter" (25), "leftCenter" (26)
+"fourBoxWipe"  "cornersIn" (7) [default], "cornersOut" (8)
+"barnDoorWipe"  "vertical" (21) [default], "horizontal" (22), "diagonalBottomLeft" (45), "diagonalTopLeft" (46)
+"diagonalWipe"  "topLeft" (41) [default], "topRight" (42)
+"bowTieWipe"  "vertical" (43) [default], "horizontal" (44)
+  Lacroix Timothee
+"miscDiagonalWipe"  "doubleBarnDoor" (47) [default], "doubleDiamond" (48)
+"veeWipe"  "down" (61) [default], "left" (62), "up" (63), "right" (64)
+"barnVeeWipe"  "down" (65) [default], "left" (66), "up" (67), "right" (68)
+"zigZagWipe"  "leftToRight" (71) [default], "topToBottom" (72)
+"barnZigZagWipe"  "vertical" (73) [default], "horizontal" (74)
+
+Iris Wipes - shapes expand from the center of the media
+-------------------------------------------------------
+"irisWipe"  "rectangle" (101) [default], "diamond" (102)
+"triangleWipe"  "up" (103) [default], "right" (104), "down" (105), "left" (106)
+"arrowHeadWipe"  "up" (107) [default], "right" (108), "down" (109), "left" (110)
+"pentagonWipe"  "up" (111) [default], "down" (112)
+"hexagonWipe"  "horizontal" (113) [default], "vertical" (114)
+"ellipseWipe"  "circle" (119) [default], "horizontal" (120), "vertical" (121)
+"eyeWipe"  "horizontal" (122) [default], "vertical" (123)
+"roundRectWipe"  "horizontal" (124) [default], "vertical" (125)
+"starWipe"  "fourPoint" (127) [default], "fivePoint" (128), "sixPoint" (129)
+"miscShapeWipe"  "heart" (130) [default], "keyhole" (131)
+
+Clock Wipes - rotate around a center point
+------------------------------------------
+"clockWipe"  "clockwiseTwelve" (201) [default], "clockwiseThree" (202), "clockwiseSix" (203), "clockwiseNine" (204)
+"pinWheelWipe"  "twoBladeVertical" (205) [default], "twoBladeHorizontal" (206), "fourBlade" (207)
+"singleSweepWipe"  "clockwiseTop" (221) [default], "clockwiseRight" (222), "clockwiseBottom" (223), "clockwiseLeft" (224), "clockwiseTopLeft" (241), "counterClockwiseBottomLeft" (242), "clockwiseBottomRight" (243), "counterClockwiseTopRight" (244)
+"fanWipe"  "centerTop" (211) [default], "centerRight" (212), "top" (231), "right" (232), "bottom" (233), "left" (234)
+"doubleFanWipe"  "fanOutVertical" (213) [default], "fanOutHorizontal" (214), "fanInVertical" (235), "fanInHorizontal" (236)
+"doubleSweepWipe"  "parallelVertical" (225) [default], "parallelDiagonal" (226), "oppositeVertical" (227), "oppositeHorizontal" (228), "parallelDiagonalTopLeft" (245), "parallelDiagonalBottomLeft" (246)
+"saloonDoorWipe"  "top" (251) [default], "left" (252), "bottom" (253), "right" (254)
+"windshieldWipe"  "right" (261) [default], "up" (262), "vertical" (263), "horizontal" (264)
+
+Matrix Wipes - media is revealed in squares following a pattern
+---------------------------------------------------------------
+"snakeWipe"  "topLeftHorizontal" (301) [default], "topLeftVertical" (302), "topLeftDiagonal" (303), "topRightDiagonal" (304), "bottomRightDiagonal" (305), "bottomLeftDiagonal" (306)
+"spiralWipe"  "topLeftClockwise" (310) [default], "topRightClockwise" (311), "bottomRightClockwise" (312), "bottomLeftClockwise" (313), "topLeftCounterClockwise" (314), "topRightCounterClockwise" (315), "bottomRightCounterClockwise" (316), "bottomLeftCounterClockwise" (317)
+"parallelSnakesWipe"  "verticalTopSame" (320), [default] "verticalBottomSame" (321), "verticalTopLeftOpposite" (322), "verticalBottomLeftOpposite" (323), "horizontalLeftSame" (324), "horizontalRightSame" (325), "horizontalTopLeftOpposite" (326), "horizontalTopRightOpposite" (327), "diagonalBottomLeftOpposite" (328), "diagonalTopLeftOpposite" (329)
+"boxSnakesWipe"  "twoBoxTop" (340) [default], "twoBoxBottom" (341), "twoBoxLeft" (342), "twoBoxRight" (343), "fourBoxVertical (344), "fourBoxHorizontal" (345)
+"waterfallWipe"  "verticalLeft" (350) [default], "verticalRight" (351), "horizontalLeft" (352), "horizontalRight" (353)
+
+Non-SMPTE Wipes
+---------------
+"pushWipe"  "fromLeft" [default], "fromTop", "fromRight", "fromBottom" 
+"slideWipe"  "fromLeft" [default], "fromTop", "fromRight", "fromBottom"
+ done Thorsten Zachmann
+"fade"  "crossfade" [default], "fadeToColor", "fadeFromColor"
