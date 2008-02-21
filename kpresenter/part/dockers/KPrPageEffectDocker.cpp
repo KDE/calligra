@@ -44,6 +44,10 @@ static const char* s_subTypes[] = {
     I18N_NOOP( "To Right" ),
     I18N_NOOP( "To Top" ),
     I18N_NOOP( "To Bottom" ),
+    I18N_NOOP( "From Top Left" ),
+    I18N_NOOP( "From Top Right" ),
+    I18N_NOOP( "From Bottom Left" ),
+    I18N_NOOP( "From Bottom Right" )
 };
 
 KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags )
@@ -118,7 +122,7 @@ void KPrPageEffectDocker::slotActivePageChanged()
     if ( !m_view )
         return;
 
-    // get the active page 
+    // get the active page
     KPrPage * page = dynamic_cast<KPrPage*>( m_view->activePage() );
     if ( page ) {
         // set the combo box according to the page's effect
@@ -151,7 +155,7 @@ void KPrPageEffectDocker::slotActivePageChanged()
 
     KoViewConverter converter;
     m_view->kopaCanvas()->masterShapeManager()->paint( p, converter, false );
-    m_view->kopaCanvas()->shapeManager()->paint( p, converter, false ); 
+    m_view->kopaCanvas()->shapeManager()->paint( p, converter, false );
 */
     }
     else {

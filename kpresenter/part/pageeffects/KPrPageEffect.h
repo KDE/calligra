@@ -31,31 +31,35 @@ class KPrPageEffectStrategy;
 
 /**
  * This is the base class for all page effects.
- * It uses an internaly a QTimeLine for calulating the position. The timeline is 
+ * It uses an internaly a QTimeLine for calulating the position. The timeline is
  * feed by the time of an external timeline.
  */
 class KPrPageEffect
 {
 public:
     /**
-     * Sub type of the effect 
+     * Sub type of the effect
      */
     enum SubType {
-        FromLeft,       // the new page is comming from the left
-        FromRight,      // the new page is comming from the right
-        FromTop,        // the new page is comming from the top
-        FromBottom,     // the new page is comming from the bottom
+        FromLeft,       // the new page is coming from the left
+        FromRight,      // the new page is coming from the right
+        FromTop,        // the new page is coming from the top
+        FromBottom,     // the new page is coming from the bottom
         ToLeft,         // the old page is leaving from the left
         ToRight,        // the old page is leaving from the right
         ToTop,          // the old page is leaving from the top
-        ToBottom        // the old page is leaving from the bottom
+        ToBottom,       // the old page is leaving from the bottom
+        FromTopLeft,    // the new page is coming from the top-left
+        FromTopRight,   // the new page is coming from the top-right
+        FromBottomLeft, // the new page is coming from the bottom-left
+        FromBottomRight // the new page is coming from the bottom-right
     };
 
     /**
      * Data used by the effect
      *
      * The effect itself contains no status about the effect. All data
-     * is kept in this struct. It contains the old and new pixmap, the 
+     * is kept in this struct. It contains the old and new pixmap, the
      * widget on which the effect is painted and the time values.
      */
     struct Data
@@ -106,8 +110,8 @@ public:
     /**
      * Trigger the next paint paint event.
      *
-     * Trigger a repaint of the part of the widget that changed since 
-     * the last time to this call. The default implementation repaints 
+     * Trigger a repaint of the part of the widget that changed since
+     * the last time to this call. The default implementation repaints
      * the full widget.
      *
      * @param data The data used for the effect.
@@ -117,8 +121,8 @@ public:
     /**
      * Finish the the page effect.
      *
-     * Trigger a repaint of the part of the widget that changed since 
-     * the last call to next. The default implementation repaints the 
+     * Trigger a repaint of the part of the widget that changed since
+     * the last call to next. The default implementation repaints the
      * full widget.
      *
      * @param data The data used for the effect.

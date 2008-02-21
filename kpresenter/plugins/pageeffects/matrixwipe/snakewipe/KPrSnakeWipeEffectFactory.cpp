@@ -25,16 +25,24 @@
 #include "KPrSnakeWipeBottomRightVerticalStrategy.h"
 #include "KPrSnakeWipeTopLeftHorizontalStrategy.h"
 #include "KPrSnakeWipeTopLeftVerticalStrategy.h"
+#include "KPrSnakeWipeTopLeftDiagonalStrategy.h"
+#include "KPrSnakeWipeTopRightDiagonalStrategy.h"
+#include "KPrSnakeWipeBottomLeftDiagonalStrategy.h"
+#include "KPrSnakeWipeBottomRightDiagonalStrategy.h"
 
 #define SnakeWipeEffectId "SnakeWipeEffect"
 
 KPrSnakeWipeEffectFactory::KPrSnakeWipeEffectFactory()
 : KPrPageEffectFactory( SnakeWipeEffectId, i18n( "Snake Wipe Effect" ) )
 {
-    addStrategy( new KPrSnakeWipeBottomRightHorizontalStrategy() );
-    addStrategy( new KPrSnakeWipeBottomRightVerticalStrategy() );
     addStrategy( new KPrSnakeWipeTopLeftHorizontalStrategy() );
+    addStrategy( new KPrSnakeWipeBottomRightHorizontalStrategy() );
     addStrategy( new KPrSnakeWipeTopLeftVerticalStrategy() );
+    addStrategy( new KPrSnakeWipeBottomRightVerticalStrategy() );
+    addStrategy( new KPrSnakeWipeTopLeftDiagonalStrategy() );
+    addStrategy( new KPrSnakeWipeTopRightDiagonalStrategy() );
+    addStrategy( new KPrSnakeWipeBottomRightDiagonalStrategy() );
+    addStrategy( new KPrSnakeWipeBottomLeftDiagonalStrategy() );
 }
 
 KPrSnakeWipeEffectFactory::~KPrSnakeWipeEffectFactory()

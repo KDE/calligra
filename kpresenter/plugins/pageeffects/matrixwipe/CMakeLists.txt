@@ -9,6 +9,11 @@ set(kpr_pageeffect_matrixwipe_SRCS
     snakewipe/KPrSnakeWipeBottomRightVerticalStrategy.cpp
     snakewipe/KPrSnakeWipeTopLeftHorizontalStrategy.cpp
     snakewipe/KPrSnakeWipeTopLeftVerticalStrategy.cpp
+    snakewipe/KPrSnakeWipeDiagonalStrategy.cpp
+    snakewipe/KPrSnakeWipeTopLeftDiagonalStrategy.cpp
+    snakewipe/KPrSnakeWipeTopRightDiagonalStrategy.cpp
+    snakewipe/KPrSnakeWipeBottomRightDiagonalStrategy.cpp
+    snakewipe/KPrSnakeWipeBottomLeftDiagonalStrategy.cpp
     )
 
 kde4_add_plugin(kpr_pageeffect_matrixwipe ${kpr_pageeffect_matrixwipe_SRCS})

@@ -37,7 +37,7 @@ KPrMatrixWipeStrategy::~KPrMatrixWipeStrategy()
 
 void KPrMatrixWipeStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
 {
-    timeLine.setFrameRange( 0, maxIndex(squaresPerCol, squaresPerRow) );
+    timeLine.setFrameRange( 0, maxIndex(squaresPerRow, squaresPerCol) );
 }
 
 static inline int floor(double d) { return (int) (d + 1e-5); }
