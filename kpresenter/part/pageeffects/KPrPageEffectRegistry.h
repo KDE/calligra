@@ -22,11 +22,13 @@
 
 #include <KoGenericRegistry.h>
 
+#include "kpresenter_export.h"
+
 class KoXmlElement;
 class KPrPageEffect;
 class KPrPageEffectFactory;
 
-class KPrPageEffectRegistry : public KoGenericRegistry<KPrPageEffectFactory *>
+class KPRESENTER_EXPORT KPrPageEffectRegistry : public KoGenericRegistry<KPrPageEffectFactory *>
 {
 public:
     class Singleton;

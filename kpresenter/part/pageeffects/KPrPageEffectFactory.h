@@ -23,10 +23,12 @@
 
 #include "KPrPageEffect.h"
 
+#include "kpresenter_export.h"
+
 /**
  * Base class for a page effect factories
  */
-class KPrPageEffectFactory
+class KPRESENTER_EXPORT KPrPageEffectFactory
 {
 public:
     struct Properties {

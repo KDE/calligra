@@ -22,7 +22,9 @@
 
 #include "KPrPageEffect.h"
 
-class KPrPageEffectStrategy
+#include "kpresenter_export.h"
+
+class KPRESENTER_EXPORT KPrPageEffectStrategy
 {
 public:
     /**
