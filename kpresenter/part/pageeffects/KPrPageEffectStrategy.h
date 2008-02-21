@@ -25,15 +25,51 @@
 class KPrPageEffectStrategy
 {
 public:
+    /**
+     * Constructor
+     *
+     * @param subType The sub type used for the UI
+     * @param smilType The smil:type used for loading/saving
+     * @param smilSubType The smil:subType used for loading/saving
+     * @param revers The flag for the smil:direction used for loading/saving true means reverse false means forward
+     */
     KPrPageEffectStrategy( KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse );
     virtual ~KPrPageEffectStrategy();
 
+    /**
+     * Get the sub type of this strategy
+     *
+     * This is not the smil:subType but the sub type that is used for displaying a common UI string for the effect.
+     */
     KPrPageEffect::SubType subType() const;
 
+    /**
+     * Setup the timeline used by this strategy
+     */
     virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine ) = 0;
 
+    /**
+     * Paint the page effect
+     *
+     * This should repaint the whole widget. Due to clipping only the
+     * relevant parts are repainted.
+     *
+     * @param p painter used for painting the effect.
+     * @param curPos The current position (frame to the current time)
+     * @param data The data used for painting the effect.
+     *
+     * @see next()
+     */
     virtual void paintStep( QPainter &p, int curPos, const KPrPageEffect::Data &data ) = 0;
 
+    /**
+     * Trigger the next paint paint event.
+     *
+     * Trigger a repaint of the part of the widget that changed since 
+     * the last time to this call.
+     *
+     * @param data The data used for the effect.
+     */
     virtual void next( const KPrPageEffect::Data &data ) = 0;
 
     /**
@@ -42,6 +78,9 @@ public:
      */
     virtual void finish( const KPrPageEffect::Data &data );
 
+    /**
+     * Save transitions in an xml writer
+     */
     void saveOdfSmilAttributes( KoXmlWriter & xmlWriter ) const;
 
     /**
