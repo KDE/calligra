@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Matrix wipe
+Comment=Matrix wipe Page Effects
+X-KDE-ServiceTypes=KPresenter/PageEffect
+Type=Service
+X-KDE-Library=kpr_pageeffect_matrixwipe
+X-KPresenter-Version=0
