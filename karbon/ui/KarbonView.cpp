@@ -163,12 +163,14 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     else
         setXMLFile( QString::fromLatin1( "karbon.rc" ) );
 
+    const int viewMargin = 250;
     m_canvas = new KarbonCanvas( p );
     m_canvas->setParent( this );
-    m_canvas->setDocumentViewMargin( 250 );
+    m_canvas->setDocumentViewMargin( viewMargin );
     connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
 
     m_canvasController = new KoCanvasController(this);
+    m_canvasController->setMinimumSize( QSize(viewMargin+50,viewMargin+50) ); 
     m_canvasController->setCanvas(m_canvas);
     m_canvasController->setCanvasMode( KoCanvasController::Infinite );
     m_canvasController->show();
