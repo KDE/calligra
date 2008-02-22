@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Slide Wipe
+Comment=Slide Wipe Page Effect
+X-KDE-ServiceTypes=KPresenter/PageEffect
+Type=Service
+X-KDE-Library=kpr_pageeffect_slidewipe
+X-KPresenter-Version=1
