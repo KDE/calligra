@@ -51,26 +51,6 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
 
     DateTime st = project.constraintStartTime();
     DateTime et = project.constraintEndTime();
-    QString s = i18n("Scheduling");
-    Schedule *sch = project.currentSchedule();
-    if (sch) {
-        s = i18n("Scheduling (%1)", sch->typeToString(true));
-    }
-    schedulingGroup->setTitle(s);
-    if (project.constraint() == Node::MustStartOn) {
-        bStartDate->setChecked(true);
-        if (sch)
-            et = project.endTime();
-    } else if (project.constraint() == Node::MustFinishOn) {
-        bEndDate->setChecked(true);
-        if (sch)
-            st = project.startTime();
-    } else {
-        kWarning()<<"Illegal constraint: "<<project.constraint()<<endl;
-        bStartDate->setDown(true);;
-        if (sch)
-            et = project.endTime();
-    }
     startDate->setDate(st.date());
     startTime->setTime(st.time());
     endDate->setDate(et.date());
@@ -108,19 +88,11 @@ MacroCommand *MainProjectPanel::buildCommand() {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new NodeModifyDescriptionCmd(project, descriptionfield->text()));
     }
-    if (bStartDate->isChecked() && project.constraint() != Node::MustStartOn) {
-        if (!m) m = new MacroCommand(c);
-        m->addCommand(new ProjectModifyConstraintCmd(project, Node::MustStartOn));
-    }
-    if (bEndDate->isChecked() && project.constraint() != Node::MustFinishOn) {
-        if (!m) m = new MacroCommand(c);
-        m->addCommand(new ProjectModifyConstraintCmd(project, Node::MustFinishOn));
-    }
-    if (bStartDate->isChecked() && startDateTime() != project.constraintStartTime().dateTime()) {
+    if (startDateTime() != project.constraintStartTime().dateTime()) {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new ProjectModifyStartTimeCmd(project, startDateTime()));
     }
-    if (bEndDate->isChecked() && endDateTime() != project.constraintEndTime().dateTime()) {
+    if (endDateTime() != project.constraintEndTime().dateTime()) {
         if (!m) m = new MacroCommand(c);
         m->addCommand(new ProjectModifyEndTimeCmd(project, endDateTime()));
     }
@@ -134,10 +106,6 @@ MainProjectPanelImpl::MainProjectPanelImpl(QWidget *parent, const char *name)
     setObjectName(name);
     setupUi(this);
     // signals and slots connections
-    connect( bStartDate, SIGNAL( toggled(bool) ), this, SLOT( slotStartDateClicked() ) );
-    connect( bEndDate, SIGNAL( toggled(bool) ), this, SLOT( slotEndDateClicked() ) );
-    connect( bStartDate, SIGNAL( toggled(bool) ), this, SLOT( slotCheckAllFieldsFilled() ) );
-    connect( bEndDate, SIGNAL( toggled(bool) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( descriptionfield, SIGNAL( textChanged() ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( endDate, SIGNAL( dateChanged(const QDate&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
     connect( endTime, SIGNAL( timeChanged(const QTime&) ), this, SLOT( slotCheckAllFieldsFilled() ) );
@@ -181,22 +149,11 @@ void MainProjectPanelImpl::slotEndDateClicked()
 
 void MainProjectPanelImpl::enableDateTime()
 {
-    if (bStartDate->isChecked())
-    {
-        kDebug();
-        startTime->setEnabled(true);
-        startDate->setEnabled(true);
-        endTime->setEnabled(false);
-        endDate->setEnabled(false);
-    }
-    if (bEndDate->isChecked())
-    {
-        kDebug();
-        startTime->setEnabled(false);
-        startDate->setEnabled(false);
-        endTime->setEnabled(true);
-        endDate->setEnabled(true);
-    }
+    kDebug();
+    startTime->setEnabled(true);
+    startDate->setEnabled(true);
+    endTime->setEnabled(true);
+    endDate->setEnabled(true);
 }
 
 

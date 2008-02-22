@@ -85,6 +85,9 @@ public:
     virtual bool isDeleted() const;
     virtual void setDeleted( bool on );
     virtual bool recalculate() const { return m_parent == 0 ? false : m_parent->recalculate(); }
+    virtual DateTime recalculateFrom() const { return m_parent == 0 ? DateTime() : m_parent->recalculateFrom(); }
+
+    virtual long parentScheduleId() const { return m_parent == 0 ? -2 : m_parent->parentScheduleId(); }
 
     virtual Resource *resource() const { return 0; }
     virtual Node *node() const { return 0; }
@@ -369,6 +372,8 @@ public:
     void setManager( ScheduleManager *sm ) { m_manager = sm; }
     ScheduleManager *manager() const { return m_manager; }
     virtual bool recalculate() const;
+    virtual DateTime recalculateFrom() const;
+    virtual long parentScheduleId() const;
     
     DateTime calculateForward( int use );
     DateTime calculateBackward( int use );
@@ -452,7 +457,7 @@ public:
     void setParentManager( ScheduleManager *sm );
     ScheduleManager *parentManager() const { return m_parent; }
     
-    long id() const { return m_expected == 0 ? -1 : m_expected->id(); }
+    long id() const { return m_expected == 0 ? -2 : m_expected->id(); }
     
     int removeChild( const ScheduleManager *sm );
     void insertChild( ScheduleManager *sm, int index = -1 );
@@ -465,8 +470,9 @@ public:
     
     bool recalculate() const { return m_recalculate; }
     void setRecalculate( bool on ) { m_recalculate = on; }
-    DateTime fromDateTime() { return KDateTime::currentLocalDateTime(); }
-    
+    DateTime recalculateFrom() const { return m_recalculateFrom; }
+    void setRecalculateFrom( const DateTime &dt ) { m_recalculateFrom = dt; }
+    long parentScheduleId() const { return m_parent == 0 ? -2 : m_parent->id(); }
     void createSchedules();
     
     void setDeleted( bool on );
@@ -493,6 +499,9 @@ public:
     void setCalculateAll( bool on );
     bool calculateAll() const { return m_calculateAll; }
 
+    void setSchedulingDirection( bool on );
+    bool schedulingDirection() const { return m_schedulingDirection; }
+
     QList<MainSchedule*> schedules() const;
     int numSchedules() const;
     int indexOf( const MainSchedule *sch ) const;
@@ -516,6 +525,8 @@ protected:
     bool m_calculateAll;
     bool m_usePert;
     bool m_recalculate;
+    DateTime m_recalculateFrom;
+    bool m_schedulingDirection;
     MainSchedule *m_expected;
     MainSchedule *m_optimistic;
     MainSchedule *m_pessimistic;

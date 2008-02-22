@@ -174,6 +174,13 @@ Qt::ItemFlags ScheduleItemModel::flags( const QModelIndex &index ) const
     if ( sm ) {
         switch ( index.column() ) {
             case 1: break;
+            case 2:
+                if ( sm->parentManager() == 0 ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            case 6: break;
+            case 7: break;
             default: flags |= Qt::ItemIsEditable; break;
         }
         return flags;
@@ -222,7 +229,7 @@ QModelIndex ScheduleItemModel::index( const ScheduleManager *manager ) const
 
 int ScheduleItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    return 7;
+    return 8;
 }
 
 int ScheduleItemModel::rowCount( const QModelIndex &parent ) const
@@ -474,6 +481,46 @@ QVariant ScheduleItemModel::projectEnd( const QModelIndex &index, int role ) con
     return QVariant();
 }
 
+QVariant ScheduleItemModel::schedulingDirection( const QModelIndex &index, int role ) const
+{
+    ScheduleManager *sm = manager ( index );
+    if ( sm == 0 ) {
+        return QVariant();
+    }
+    switch ( role ) {
+        case Qt::EditRole: 
+            return sm->schedulingDirection();
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole:
+            return sm->schedulingDirection() ? i18n( "Backwards" ) : i18n( "Forward" );
+        case Role::EnumList:
+            return QStringList() << i18n( "Forward" ) << i18n( "Backwards" );
+        case Role::EnumListValue:
+            return sm->schedulingDirection() ? 1 : 0;
+        case Qt::TextAlignmentRole:
+            return Qt::AlignCenter;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+bool ScheduleItemModel::setSchedulingDirection( const QModelIndex &index, const QVariant &value, int role )
+{
+    ScheduleManager *sm = manager ( index );
+    if ( sm == 0 ) {
+        return false;
+    }
+    switch ( role ) {
+        case Qt::EditRole:
+            emit executeCommand(new ModifyScheduleManagerSchedulingDirectionCmd( *sm, value.toBool(), "Modify Scheduling Direction" ) );
+            emit slotManagerChanged( static_cast<ScheduleManager*>( sm ) );
+            return true;
+    }
+    return false;
+}
+
 QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
 {
     //kDebug()<<index.row()<<","<<index.column();
@@ -481,11 +528,12 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
     switch ( index.column() ) {
         case 0: result = name( index, role ); break;
         case 1: result = state( index, role ); break;
-        case 2: result = allowOverbooking( index, role ); break;
-        case 3: result = usePert( index, role ); break;
-        case 4: result = calculateAll( index, role ); break;
-        case 5: result = projectStart(  index, role ); break;
-        case 6: result = projectEnd( index, role ); break;
+        case 2: result = schedulingDirection( index, role ); break;
+        case 3: result = allowOverbooking( index, role ); break;
+        case 4: result = usePert( index, role ); break;
+        case 5: result = calculateAll( index, role ); break;
+        case 6: result = projectStart(  index, role ); break;
+        case 7: result = projectEnd( index, role ); break;
         default:
             kDebug()<<"data: invalid display value column"<<index.column();;
             return QVariant();
@@ -508,11 +556,12 @@ bool ScheduleItemModel::setData( const QModelIndex &index, const QVariant &value
     switch (index.column()) {
         case 0: return setName( index, value, role );
         case 1: return setState( index, value, role );
-        case 2: return setAllowOverbooking( index, value, role );
-        case 3: return setUsePert( index, value, role );
-        case 4: return setCalculateAll( index, value, role );
-        case 5: return false;
+        case 2: return setSchedulingDirection( index, value, role );
+        case 3: return setAllowOverbooking( index, value, role );
+        case 4: return setUsePert( index, value, role );
+        case 5: return setCalculateAll( index, value, role );
         case 6: return false;
+        case 7: return false;
         default:
             qWarning("data: invalid display value column %d", index.column());
             break;
@@ -527,11 +576,12 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
             switch ( section ) {
                 case 0: return i18n( "Name" );
                 case 1: return i18n( "State" );
-                case 2: return i18n( "Overbooking" );
-                case 3: return i18n( "Distribution" );
-                case 4: return i18n( "Calculate" );
-                case 5: return i18n( "Start" );
-                case 6: return i18n( "Finish" );
+                case 2: return i18n( "Direction" );
+                case 3: return i18n( "Overbooking" );
+                case 4: return i18n( "Distribution" );
+                case 5: return i18n( "Calculate" );
+                case 6: return i18n( "Planned Start" );
+                case 7: return i18n( "Planned Finish" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -544,11 +594,12 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
         switch ( section ) {
             case 0: return ToolTip::scheduleName();
             case 1: return ToolTip::scheduleState();
-            case 2: return ToolTip::scheduleOverbooking();
-            case 3: return ToolTip::scheduleDistribution();
-            case 4: return ToolTip::scheduleCalculate();
-            case 5: return ToolTip::scheduleStart();
-            case 6: return ToolTip::scheduleFinish();
+            case 2: return ToolTip::schedulingDirection();
+            case 3: return ToolTip::scheduleOverbooking();
+            case 4: return ToolTip::scheduleDistribution();
+            case 5: return ToolTip::scheduleCalculate();
+            case 6: return ToolTip::scheduleStart();
+            case 7: return ToolTip::scheduleFinish();
             default: return QVariant();
         }
     }
@@ -561,6 +612,7 @@ QItemDelegate *ScheduleItemModel::createDelegate( int column, QWidget *parent ) 
         case 2: return new EnumDelegate( parent );
         case 3: return new EnumDelegate( parent );
         case 4: return new EnumDelegate( parent );
+        case 5: return new EnumDelegate( parent );
     }
     return 0;
 }

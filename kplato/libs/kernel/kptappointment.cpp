@@ -214,6 +214,31 @@ Appointment::~Appointment() {
     qDeleteAll( m_intervals );
 }
 
+AppointmentIntervalList Appointment::intervals( const DateTime &start, const DateTime &end ) const
+{
+    kDebug()<<start<<end;
+    AppointmentIntervalList lst;
+    foreach ( AppointmentInterval *i, m_intervals ) {
+        if ( i->startTime() >= end || i->endTime() <= start ) {
+            continue;
+        }
+        AppointmentInterval *ai = new AppointmentInterval( *i );
+        if ( ai->startTime() < start ) {
+            ai->setStartTime( start );
+        }
+        if ( ai->endTime() > end ) {
+            ai->setEndTime( end );
+        }
+        lst.inSort( ai );
+        kDebug()<<ai->startTime().toString()<<ai->endTime().toString();
+    }
+    return lst;
+}
+
+void Appointment::setIntervals(const AppointmentIntervalList &lst) {
+    m_intervals = lst;
+}
+
 void Appointment::addInterval(AppointmentInterval *a) {
     Q_ASSERT( a->startTime() < a->endTime() );
     m_intervals.inSort(a);

@@ -1469,7 +1469,7 @@ QList<double> Estimate::scales() const
 void Node::printDebug(bool children, const QByteArray& _indent) {
     QByteArray indent = _indent;
     kDebug()<<indent<<"  Unique node identity="<<m_id;
-    m_estimate->printDebug(indent);
+    if ( m_estimate ) m_estimate->printDebug(indent);
     QString s = "  Constraint: " + constraintToString();
     if (m_constraint == MustStartOn || m_constraint == StartNotEarlier || m_constraint == FixedInterval)
         kDebug()<<indent<<s<<" ("<<constraintStartTime().toString()<<")";

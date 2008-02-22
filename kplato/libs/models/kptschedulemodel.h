@@ -100,6 +100,12 @@ protected:
     QVariant projectStart( const QModelIndex &index, int role ) const;
     QVariant projectEnd( const QModelIndex &index, int role ) const;
 
+    QVariant schedulingDirection( const QModelIndex &index, int role ) const;
+    bool setSchedulingDirection( const QModelIndex &index, const QVariant &value, int role );
+
+    QVariant schedulingStartTime( const QModelIndex &index, int role ) const;
+    bool setSchedulingStartTime( const QModelIndex &index, const QVariant &value, int role );
+
 private:
     ScheduleManager *m_manager; // for sanety check
     

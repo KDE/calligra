@@ -2095,9 +2095,9 @@ void View::slotPrintDebug()
 }
 void View::slotPrintSelectedDebug()
 {
-/*TODO
-    if ( m_tab->currentWidget() == ganttview ) {
-        Node * curr = ganttview->currentNode();
+
+    if ( m_tab->currentWidget() == m_viewlist->findView( "TaskEditor" ) ) {
+        Node *curr = static_cast<ViewBase*>( m_tab->currentWidget() )->currentNode();
         if ( curr ) {
             kDebug() <<"-------- Debug printout: Selected node";
             curr->printDebug( true, "" );
@@ -2118,7 +2118,7 @@ void View::slotPrintSelectedDebug()
             return;
         }
     }
-    slotPrintDebug();*/
+    slotPrintDebug();
 }
 void View::slotPrintCalendarDebug()
 {

@@ -149,8 +149,11 @@ public:
         { addInterval(new AppointmentInterval(a)); }
     void addInterval(const DateTime &start, const DateTime &end, double load=100);
     void addInterval(const DateTime &start, const Duration &duration, double load=100);
+    void setIntervals(const AppointmentIntervalList &lst);
     
     const AppointmentIntervalList &intervals() const { return m_intervals; }
+    /// Return intervals between @p start and @p end
+    AppointmentIntervalList intervals( const DateTime &start, const DateTime &end ) const;
 
     bool loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedule &sch);
     void saveXML(QDomElement &element) const;
@@ -190,9 +193,9 @@ public:
     void setCalculationMode( int mode ) { m_calculationMode = mode; }
     int calculationMode() const { return m_calculationMode; }
     
+    void merge(const Appointment &app);
 protected:
     void copy(const Appointment &app);
-    void merge(const Appointment &app);
     
 private:
     Schedule *m_node;

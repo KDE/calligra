@@ -67,7 +67,7 @@ void Project::init()
     if ( m_parent == 0 ) {
         // set sensible defaults for a project wo parent
         m_constraintStartTime = DateTime( QDate::currentDate(), QTime(), m_spec );
-        m_constraintEndTime = m_constraintStartTime.addDays( 1 );
+        m_constraintEndTime = m_constraintStartTime.addYears( 2 );
     }
 }
 
@@ -102,22 +102,22 @@ void Project::calculate( const DateTime &dt )
         kError() << "No current schedule to calculate" << endl;
         return ;
     }
+    DateTime time = dt.isValid() ? dt : DateTime( KDateTime::currentLocalDateTime() );
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     Estimate::Use estType = ( Estimate::Use ) cs->type();
     if ( type() == Type_Project ) {
         initiateCalculation( *cs );
         initiateCalculationLists( *cs ); // must be after initiateCalculation() !!
-        //kDebug()<<"Node="<<m_name<<" Start="<<m_constraintStartTime.toString();
-        cs->startTime = dt;
-        cs->earlyStart = dt;
-        // Calculate from start time
-        propagateEarliestStart( cs->earlyStart );
+        kDebug()<<"Node="<<m_name<<" Start="<<time.toString();
+        propagateEarliestStart( time );
+        // Calculate lateFinish from time. If a task has started, remaingEffort is used.
         cs->lateFinish = calculateForward( estType );
         propagateLatestFinish( cs->lateFinish );
+        // Calculate earlyFinish. If a task has started, remaingEffort is used.
         cs->calculateBackward( estType );
+        // Schedule. If a task has started, remaingEffort is used and appointments are copied from parent
         cs->endTime = scheduleForward( cs->startTime, estType );
         calcCriticalPath( false );
-        //makeAppointments();
         calcResourceOverbooked();
         cs->notScheduled = false;
         calcFreeFloat();
@@ -137,7 +137,12 @@ void Project::calculate( ScheduleManager &sm )
     if ( sm.recalculate() ) {
         sm.setCalculateAll( false );
         sm.createSchedules();
-        calculate( sm.expected(), sm.fromDateTime() );
+        sm.setRecalculateFrom( KDateTime::currentLocalDateTime() );
+        if ( sm.parentManager() ) {
+            sm.expected()->startTime = sm.parentManager()->expected()->startTime;
+            sm.expected()->earlyStart = sm.parentManager()->expected()->earlyStart;
+        }
+        calculate( sm.expected(), KDateTime::currentLocalDateTime() );
     } else {
         sm.createSchedules();
         calculate( sm.expected() );
@@ -173,12 +178,16 @@ void Project::calculate()
         return ;
     }
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
+    bool backwards = false;
+    if ( cs->manager() ) {
+        backwards = cs->manager()->schedulingDirection();
+    }
     Estimate::Use estType = ( Estimate::Use ) cs->type();
     if ( type() == Type_Project ) {
         initiateCalculation( *cs );
         initiateCalculationLists( *cs ); // must be after initiateCalculation() !!
-        if ( m_constraint == Node::MustStartOn ) {
-            //kDebug()<<"Node="<<m_name<<" Start="<<m_constraintStartTime.toString();
+        if ( ! backwards ) {
+            kDebug()<<"Node="<<m_name<<" Start="<<m_constraintStartTime.toString();
             cs->startTime = m_constraintStartTime;
             cs->earlyStart = m_constraintStartTime;
             // Calculate from start time
@@ -668,14 +677,6 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
             //kDebug()<<"Node schedules<---";
         }
     }
-    //kDebug()<<"Project schedules--->";
-    foreach ( Schedule * s, m_schedules ) {
-        if ( m_constraint == Node::MustFinishOn )
-            m_constraintEndTime = s->endTime;
-        else
-            m_constraintStartTime = s->startTime;
-    }
-    //kDebug()<<"Project schedules<---";
     //kDebug()<<"<---";
     return true;
 }

@@ -111,6 +111,7 @@ namespace KPlato
     QString ToolTip::scheduleCalculate() { return i18n( "Defines the schedules to be calculated" ); }
     QString ToolTip::scheduleStart() { return i18n( "The scheduled start time" ); }
     QString ToolTip::scheduleFinish() { return i18n( "The scheduled finish time" ); }
+    QString ToolTip::schedulingDirection() { return i18n( "The scheduling direction" ); }
 
     QString ToolTip::documentUrl() { return i18n( "The url of the document" ); }
     QString ToolTip::documentType() { return i18n( "The type of the document" ); }

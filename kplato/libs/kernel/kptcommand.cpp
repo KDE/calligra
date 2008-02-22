@@ -2707,6 +2707,24 @@ void ModifyScheduleManagerCalculateAllCmd::unexecute()
     m_sm.setCalculateAll( oldvalue );
 }
 
+ModifyScheduleManagerSchedulingDirectionCmd::ModifyScheduleManagerSchedulingDirectionCmd( ScheduleManager &sm, bool value, const QString& name )
+    : NamedCommand( name ),
+    m_sm( sm ),
+    oldvalue( sm.schedulingDirection() ),
+    newvalue( value )
+{
+}
+
+void ModifyScheduleManagerSchedulingDirectionCmd::execute()
+{
+    m_sm.setSchedulingDirection( newvalue );
+}
+
+void ModifyScheduleManagerSchedulingDirectionCmd::unexecute()
+{
+    m_sm.setSchedulingDirection( oldvalue );
+}
+
 CalculateScheduleCmd::CalculateScheduleCmd( Project &node, ScheduleManager &sm, const QString& name )
     : NamedCommand( name ),
     m_node( node ),

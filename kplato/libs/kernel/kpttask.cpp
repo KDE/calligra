@@ -207,6 +207,95 @@ void Task::makeAppointments() {
     }
 }
 
+void Task::copySchedule()
+{
+    if ( m_currentSchedule == 0 || type() != Node::Type_Task ) {
+        return;
+    }
+    int id = m_currentSchedule->parentScheduleId();
+    NodeSchedule *ns = static_cast<NodeSchedule*>( findSchedule( id ) );
+    if ( ns == 0 ) {
+        return;
+    }
+    if ( type() == Node::Type_Task ) {
+        copyAppointments( ns->startTime, ns->endTime );
+    }
+    m_currentSchedule->startTime = ns->startTime;
+    m_currentSchedule->earlyStart = ns->earlyStart;
+    m_currentSchedule->endTime = ns->endTime;
+    m_currentSchedule->lateFinish = ns->lateFinish;
+    m_currentSchedule->duration = ns->duration;
+    // TODO: status flags, etc
+    kDebug();
+}
+
+void Task::copyAppointments()
+{
+    copyAppointments( DateTime(), m_currentSchedule->startTime );
+}
+
+void Task::copyAppointments( const DateTime &start, const DateTime &end )
+{
+    if ( m_currentSchedule == 0 || type() != Node::Type_Task ) {
+        return;
+    }
+    int id = m_currentSchedule->parentScheduleId();
+    NodeSchedule *ns = static_cast<NodeSchedule*>( findSchedule( id ) );
+    if ( ns == 0 ) {
+        return;
+    }
+    DateTime st = start.isValid() ? start : ns->startTime;
+    DateTime et = end.isValid() ? end : ns->endTime;
+    kDebug()<<m_name<<st.toString()<<et.toString();
+    foreach ( Appointment *a, ns->appointments() ) {
+        Resource *r = a->resource() == 0 ? 0 : a->resource()->resource();
+        if ( r == 0 ) {
+            kError()<<"No resource";
+            continue;
+        }
+        AppointmentIntervalList lst = a->intervals(  st, et );
+        if ( lst.isEmpty() ) {
+            kDebug()<<"No intervals to copy from"<<a;
+            continue;
+        }
+        Appointment *curr = 0;
+        foreach ( Appointment *c, m_currentSchedule->appointments() ) {
+            if ( c->resource()->resource() == r ) {
+                kDebug()<<"Found current appointment to"<<a->resource()->resource()->name();
+                curr = c;
+                break;
+            }
+        }
+        if ( curr == 0 ) {
+            curr = new Appointment();
+            m_currentSchedule->add( curr );
+            curr->setNode( m_currentSchedule );
+            kDebug()<<"Created new appointment";
+        }
+        ResourceSchedule *rs = static_cast<ResourceSchedule*>( r->findSchedule( m_currentSchedule->id() ) );
+        if ( rs == 0 ) {
+            rs = r->createSchedule( m_currentSchedule->parent() );
+            rs->setId( m_currentSchedule->id() );
+            rs->setName( m_currentSchedule->name() );
+            rs->setType( m_currentSchedule->type() );
+            kDebug()<<"Resource schedule not found, id="<<m_currentSchedule->id();
+        }
+        if ( ! rs->appointments().contains( curr ) ) {
+            rs->add( curr );
+            curr->setResource( rs );
+        }
+        Appointment app;
+        app.setIntervals( lst );
+        foreach ( AppointmentInterval *i, curr->intervals() ) {
+            kDebug()<<i->startTime().toString()<<i->endTime().toString();
+        }
+        curr->merge( app );
+        kDebug()<<"Appointments added";
+    }
+    m_currentSchedule->startTime = ns->startTime;
+    m_currentSchedule->earlyStart = ns->earlyStart;
+}
+
 void Task::calcResourceOverbooked() {
     if (m_currentSchedule)
         m_currentSchedule->calcResourceOverbooked();
@@ -1186,8 +1275,7 @@ DateTime Task::scheduleFromStartTime(int use) {
     //kDebug()<<m_name<<" startTime="<<cs->startTime;
     if(type() == Node::Type_Task) {
         if ( cs->recalculate() && completion().isFinished() ) {
-            cs->startTime = completion().startTime();
-            cs->endTime = completion().finishTime();
+            copySchedule();
             m_visitedForward = true;
             return cs->endTime;
         }
@@ -1202,13 +1290,15 @@ DateTime Task::scheduleFromStartTime(int use) {
             cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
             makeAppointments();
+            if ( cs->recalculate() && completion().isStarted() ) {
+                // copy start times + appointments from parent schedule
+                copyAppointments();
+                cs->duration = cs->endTime - cs->startTime;
+            }
             if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
                 cs->positiveFloat = cs->lateFinish - cs->endTime;
             } else {
                 cs->positiveFloat = workTimeBefore( cs->lateFinish ) - cs->endTime;
-            }
-            if ( cs->recalculate() && completion().isStarted() ) {
-                cs->earlyStart = cs->startTime = completion().startTime();
             }
             break;
         case Node::ALAP:

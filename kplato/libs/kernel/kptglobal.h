@@ -133,6 +133,7 @@ struct KPLATOKERNEL_EXPORT ToolTip
     static QString scheduleCalculate();
     static QString scheduleStart();
     static QString scheduleFinish();
+    static QString schedulingDirection();
 
     static QString documentUrl();
     static QString documentType();

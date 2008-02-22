@@ -524,6 +524,13 @@ public:
     virtual uint state( long id = -1 ) const;
 
 protected:
+    /// Copy info from parent schedule
+    void copySchedule();
+    /// Copy intervals from parent schedule
+    void copyAppointments();
+    /// Copy intervals from parent schedule in the range @p start, @p end
+    void copyAppointments( const DateTime &start, const DateTime &end = DateTime() );
+    
     /// Check if this node has any dependent child nodes
     virtual bool isEndNode() const;
     /// Check if this node has any dependent parent nodes

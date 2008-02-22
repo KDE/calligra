@@ -7,46 +7,28 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>300</height>
+    <height>322</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>ProjectPanelBase</string>
   </property>
+  <property name="locale" >
+   <locale country="AnyCountry" language="C" />
+  </property>
   <layout class="QVBoxLayout" >
    <property name="spacing" >
     <number>6</number>
    </property>
-   <property name="leftMargin" >
-    <number>9</number>
-   </property>
-   <property name="topMargin" >
-    <number>9</number>
-   </property>
-   <property name="rightMargin" >
-    <number>9</number>
-   </property>
-   <property name="bottomMargin" >
+   <property name="margin" >
     <number>9</number>
    </property>
    <item>
     <layout class="QGridLayout" >
-     <property name="leftMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
-      <number>0</number>
-     </property>
-     <property name="horizontalSpacing" >
-      <number>6</number>
-     </property>
-     <property name="verticalSpacing" >
+     <property name="spacing" >
       <number>6</number>
      </property>
      <item row="2" column="1" colspan="4" >
@@ -118,7 +100,7 @@
        <property name="sizeType" >
         <enum>QSizePolicy::Expanding</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>270</width>
          <height>20</height>
@@ -201,65 +183,41 @@
    </item>
    <item>
     <widget class="QGroupBox" name="schedulingGroup" >
-     <property name="whatsThis" >
-      <string>Here you define when the project shall start or end.
-
-If start time is defined, the project is scheduled forward from this time. When the project has been calculated, end time shows when the project is planned to end.
-If end time is defined, the project is scheduled backwards from this time. When the project has been calculated, start time shows when the project must start in order to finish in time.</string>
-     </property>
      <property name="title" >
-      <string>Scheduling</string>
+      <string>Scheduling Range</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="leftMargin" >
+      <property name="margin" >
        <number>9</number>
       </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
-      <property name="horizontalSpacing" >
+      <property name="spacing" >
        <number>6</number>
       </property>
-      <property name="verticalSpacing" >
-       <number>6</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QRadioButton" name="bStartDate" >
-        <property name="toolTip" >
-         <string>Select this to schedule the project forward from start time</string>
-        </property>
-        <property name="text" >
-         <string>Start date:</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="1" >
        <widget class="QDateEdit" name="startDate" />
       </item>
       <item row="0" column="2" >
        <widget class="QTimeEdit" name="startTime" />
       </item>
-      <item row="1" column="0" >
-       <widget class="QRadioButton" name="bEndDate" >
-        <property name="toolTip" >
-         <string>Select this to schedule the project backward from end time</string>
-        </property>
-        <property name="text" >
-         <string>End date:</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1" >
        <widget class="QDateEdit" name="endDate" />
       </item>
       <item row="1" column="2" >
        <widget class="QTimeEdit" name="endTime" />
+      </item>
+      <item row="0" column="0" >
+       <widget class="QLabel" name="label" >
+        <property name="text" >
+         <string>Earliest start:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QLabel" name="label_2" >
+        <property name="text" >
+         <string>Latest finish:</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -319,8 +277,6 @@ Here you can enter any additional text you want to be stored with the project. T
   <tabstop>namefield</tabstop>
   <tabstop>leaderfield</tabstop>
   <tabstop>chooseLeader</tabstop>
-  <tabstop>bStartDate</tabstop>
-  <tabstop>bEndDate</tabstop>
   <tabstop>descriptionfield</tabstop>
   <tabstop>idfield</tabstop>
  </tabstops>

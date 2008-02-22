@@ -1045,6 +1045,16 @@ bool MainSchedule::recalculate() const
     return m_manager == 0 ? false : m_manager->recalculate();
 }
 
+DateTime MainSchedule::recalculateFrom() const
+{
+    return m_manager == 0 ? DateTime() : m_manager->recalculateFrom();
+}
+
+long MainSchedule::parentScheduleId() const
+{
+    return m_manager == 0 ? -2 : m_manager->parentScheduleId();
+}
+
 void MainSchedule::clearCriticalPathList()
 {
     m_pathlists.clear();
@@ -1085,6 +1095,7 @@ ScheduleManager::ScheduleManager( Project &project, const QString name )
     m_calculateAll( false ),
     m_usePert( false ),
     m_recalculate( false ),
+    m_schedulingDirection( false ),
     m_expected( 0 ),
     m_optimistic( 0 ),
     m_pessimistic( 0 )
@@ -1232,6 +1243,13 @@ void ScheduleManager::setCalculateAll( bool on )
      m_project.changed( this );
 }
 
+void ScheduleManager::setSchedulingDirection( bool on )
+{
+    //kDebug()<<on;
+    m_schedulingDirection = on;
+    m_project.changed( this );
+}
+
 void ScheduleManager::setDeleted( bool on )
 {
     if ( m_expected ) {
@@ -1372,6 +1390,7 @@ bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
     m_name = element.attribute( "name" );
     m_usePert = (bool)(element.attribute( "distribution" ).toInt());
     m_allowOverbooking = (bool)(element.attribute( "overbooking" ).toInt());
+    m_schedulingDirection = (bool)(element.attribute( "scheduling-direction" ).toInt());
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -1426,6 +1445,7 @@ void ScheduleManager::saveXML( QDomElement &element ) const
     el.setAttribute( "name", m_name );
     el.setAttribute( "distribution", m_usePert );
     el.setAttribute( "overbooking", m_allowOverbooking );
+    el.setAttribute( "scheduling-direction", m_schedulingDirection );
     foreach ( MainSchedule *s, schedules() ) {
         //kDebug()<<m_name<<" id="<<s->id()<<(s->isDeleted()?"  Deleted":"");
         if ( !s->isDeleted() && s->isScheduled() ) {
@@ -1448,6 +1468,7 @@ void ScheduleManager::saveWorkPackageXML( QDomElement &element, const Node &node
     el.setAttribute( "name", m_name );
     el.setAttribute( "distribution", m_usePert );
     el.setAttribute( "overbooking", m_allowOverbooking );
+    el.setAttribute( "scheduling-direction", m_schedulingDirection );
     if ( m_expected && ! m_expected->isDeleted() ) {
         QDomElement schs = el.ownerDocument().createElement( "schedule" );
         el.appendChild( schs );

@@ -1388,6 +1388,19 @@ private:
     MainSchedule *m_newpessimistic;
 };
 
+class KPLATOKERNEL_EXPORT ModifyScheduleManagerSchedulingDirectionCmd : public NamedCommand
+{
+public:
+    ModifyScheduleManagerSchedulingDirectionCmd( ScheduleManager &sm, bool value, const QString& name = 0 );
+    void execute();
+    void unexecute();
+
+private:
+    ScheduleManager &m_sm;
+    bool oldvalue, newvalue;
+};
+
+
 class KPLATOKERNEL_EXPORT ModifyStandardWorktimeYearCmd : public NamedCommand
 {
 public:
