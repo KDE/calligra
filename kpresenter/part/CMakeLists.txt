@@ -38,18 +38,6 @@ set( kpresenterprivate_LIB_SRCS
      pageeffects/KPrPageEffectStrategy.cpp
      pageeffects/KPrPageEffectFactory.cpp
      pageeffects/KPrPageEffectRegistry.cpp
-     pageeffects/slidewipe/KPrSlideWipeEffectFactory.cpp
-     pageeffects/slidewipe/KPrSlideWipeFromBottomStrategy.cpp
-     pageeffects/slidewipe/KPrSlideWipeFromLeftStrategy.cpp
-     pageeffects/slidewipe/KPrSlideWipeFromRightStrategy.cpp
-     pageeffects/slidewipe/KPrSlideWipeFromTopStrategy.cpp
-     pageeffects/slidewipe/KPrSlideWipeToBottomStrategy.cpp
-     pageeffects/slidewipe/KPrSlideWipeToLeftStrategy.cpp
-     pageeffects/slidewipe/KPrSlideWipeToRightStrategy.cpp
-     pageeffects/slidewipe/KPrSlideWipeToTopStrategy.cpp
-     pageeffects/barwipe/KPrBarWipeEffectFactory.cpp
-     pageeffects/barwipe/KPrBarWipeFromLeftStrategy.cpp
-     pageeffects/barwipe/KPrBarWipeFromTopStrategy.cpp
 
      shapeanimations/KPrShapeAnimation.cpp
      shapeanimations/KPrTranslateAnimation.cpp

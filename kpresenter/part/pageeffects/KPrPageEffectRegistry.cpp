@@ -25,10 +25,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoPluginLoader.h>
-
-#include "slidewipe/KPrSlideWipeEffectFactory.h"
-#include "barwipe/KPrBarWipeEffectFactory.h"
-
+#include <pageeffects/KPrPageEffectFactory.h>
 #include <kdebug.h>
 
 class KPrPageEffectRegistry::Singleton
@@ -36,8 +33,6 @@ class KPrPageEffectRegistry::Singleton
 public:
     Singleton()
     {
-        q.add( new KPrSlideWipeEffectFactory() );
-        q.add( new KPrBarWipeEffectFactory() );
         loadPlugins();
         q.init();
     }
