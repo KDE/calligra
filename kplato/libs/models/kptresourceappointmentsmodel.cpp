@@ -323,7 +323,7 @@ void ResourceAppointmentsItemModel::refresh()
             //kDebug()<<a->node()->node()->name()<<": "<<s<<e<<": "<<m_effortMap[ a ].totalEffort().toDouble(Duration::Unit_h)<<endl;
         }
     }
-    int cols = QMAX( 2 + start.daysTo( end ), 3 );
+    int cols = 3 + start.daysTo( end );
     m_groups.clear();
     m_resources.clear();
     m_appointments.clear();
@@ -621,7 +621,7 @@ QVariant ResourceAppointmentsItemModel::headerData( int section, Qt::Orientation
                 case 0: return i18n( "Name" );
                 case 1: return i18n( "Total" );
                 default: {
-                    //kDebug()<<section<<", "<<m_start<<m_end<<endl;
+                    kDebug()<<section<<", "<<m_start<<m_end;
                     if ( section < m_columnCount && m_start.isValid() && m_end.isValid() ) {
                         QDate d = m_start.addDays( section - 2 );
                         if ( d <= m_end ) {
