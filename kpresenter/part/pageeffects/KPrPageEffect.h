@@ -52,7 +52,15 @@ public:
         FromTopLeft,    // the new page is coming from the top-left
         FromTopRight,   // the new page is coming from the top-right
         FromBottomLeft, // the new page is coming from the bottom-left
-        FromBottomRight // the new page is coming from the bottom-right
+        FromBottomRight,// the new page is coming from the bottom-right
+        FromTwelveClockwise,
+        FromThreeClockwise,
+        FromSixClockwise,
+        FromNineClockwise,
+        FromTwelveCounterClockwise,
+        FromThreeCounterClockwise,
+        FromSixCounterClockwise,
+        FromNineCounterClockwise
     };
 
     /**
