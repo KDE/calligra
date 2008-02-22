@@ -37,7 +37,7 @@ class KPrAnimationData;
 /**
  * This is the base class for shape animations.
  *
- * In the animtion itself the state of the animation is not stored.
+ * In the animation itself the state of the animation is not stored.
  * With this design it is possible to use the same animation object 
  * for running the same animation e.g. on different views or at a 
  * different time.
