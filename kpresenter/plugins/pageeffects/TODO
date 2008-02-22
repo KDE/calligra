@@ -65,6 +65,7 @@ Edge Wipes - wipes occur along an edge
 Iris Wipes - shapes expand from the center of the media
 -------------------------------------------------------
 "irisWipe"  "rectangle" (101) [default], "diamond" (102)
+  Fredy Yanardi
 "triangleWipe"  "up" (103) [default], "right" (104), "down" (105), "left" (106)
 "arrowHeadWipe"  "up" (107) [default], "right" (108), "down" (109), "left" (110)
 "pentagonWipe"  "up" (111) [default], "down" (112)
