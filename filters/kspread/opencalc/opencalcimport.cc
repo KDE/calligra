@@ -41,7 +41,6 @@
 #include <KoGlobal.h>
 #include <KoUnit.h>
 #include <KoStyleStack.h>
-#include <KoDom.h>
 #include <ooutils.h>
 
 #include <kspread/Cell.h>
