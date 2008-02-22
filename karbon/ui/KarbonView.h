@@ -58,13 +58,13 @@ class KToggleAction;
 class KoContextHelpAction;
 class KoCanvasController;
 class KoRuler;
-class KoZoomController;
 
 class VDocumentTab;
 class VColorDocker;
 class VStyleDocker;
 class KarbonTransformDocker;
 class KarbonLayerDocker;
+class KarbonZoomController;
 
 class VPainterFactory;
 class KarbonCanvas;
@@ -159,9 +159,6 @@ protected slots:
     void zoomSelection();
     void zoomDrawing();
 
-    /// Called by the zoom action to set the zoom
-    void zoomChanged( KoZoomMode::Mode mode, double zoom );
-
     void mousePositionChanged( const QPoint &position );
     void pageOffsetChanged();
 
@@ -238,7 +235,7 @@ private:
     QLabel                *m_status;       // Ordinary status
     QLabel                *m_cursorCoords; // Cursor coordinates
 
-    KoZoomController * m_zoomController;
+    KarbonZoomController * m_zoomController;
 };
 
 #endif

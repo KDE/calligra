@@ -262,10 +262,10 @@ void KarbonCanvas::adjustOrigin()
     // distribute them evenly on both sides
     int widthDiff = size().width() - documentRect.width();
     if( widthDiff > 0 )
-        d->origin.rx() += widthDiff;
+        d->origin.rx() += qRound( 0.5 * widthDiff );
     int heightDiff = size().height() - documentRect.height();
     if( heightDiff > 0 )
-        d->origin.ry() += heightDiff;
+        d->origin.ry() += qRound( 0.5 * heightDiff );
 
     // check if the origin has changed and emit signal if it has
     if( d->origin != oldOrigin )

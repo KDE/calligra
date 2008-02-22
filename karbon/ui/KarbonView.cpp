@@ -61,6 +61,7 @@
 #include "KarbonPart.h"
 #include "KarbonCanvas.h"
 #include "KarbonPrintJob.h"
+#include "KarbonZoomController.h"
 //#include "karbon_drag.h"
 
 #include <KoMainWindow.h>
@@ -90,7 +91,6 @@
 #include <KoSelection.h>
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
-#include <KoZoomController.h>
 #include <KoPathShape.h>
 #include <KoPathCombineCommand.h>
 #include <KoPathSeparateCommand.h>
@@ -173,6 +173,10 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     m_canvasController->setMinimumSize( QSize(viewMargin+50,viewMargin+50) ); 
     m_canvasController->setCanvas(m_canvas);
     m_canvasController->setCanvasMode( KoCanvasController::Infinite );
+    // always show srollbars which fixes some nasty infinite
+    // recursion when scrollbars are disabled during resizing
+    m_canvasController->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
+    m_canvasController->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOn );
     m_canvasController->show();
 
     // set up status bar message
@@ -186,15 +190,10 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     addStatusBarItem( m_cursorCoords, 0 );
 
     // TODO maybe the zoomHandler should be a member of the view and not the canvas.
-    m_zoomController = new KoZoomController( m_canvasController, dynamic_cast<KoZoomHandler*>(const_cast<KoViewConverter*>(m_canvas->viewConverter())), actionCollection(), false );
+    // set up the zoom controller
+    m_zoomController = new KarbonZoomController( m_canvasController, actionCollection() );
     m_zoomController->setPageSize( m_part->document().pageSize() );
-    m_zoomController->setDocumentSize( m_canvas->documentViewRect().size() );
-    m_zoomController->setFitMargin( 25 );
-    KoZoomAction * zoomAction = m_zoomController->zoomAction();
-    zoomAction->setZoomModes( KoZoomMode::ZOOM_WIDTH | KoZoomMode::ZOOM_PAGE );
-    addStatusBarItem( zoomAction->createWidget( statusBar() ), 0 );
-    connect( m_zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
-             this, SLOT(zoomChanged(KoZoomMode::Mode, double)));
+    addStatusBarItem( m_zoomController->zoomAction()->createWidget( statusBar() ), 0 );
     m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
 
     // layout:
@@ -924,6 +923,8 @@ void KarbonView::zoomSelection()
     QRect viewRect = zoomHandler->documentToView( bbox ).toRect();
 
     m_canvasController->zoomTo( viewRect.translated( m_canvas->documentOrigin() ) );
+    QPointF newCenter = m_canvas->documentOrigin() + zoomHandler->documentToView( bbox.center() );
+    m_canvasController->setPreferredCenter( newCenter.toPoint() );
 }
 
 void KarbonView::zoomDrawing()
@@ -938,35 +939,18 @@ void KarbonView::zoomDrawing()
 
     QRect viewRect = zoomHandler->documentToView( bbox ).toRect();
     m_canvasController->zoomTo( viewRect.translated( m_canvas->documentOrigin() ) );
-}
-
-void KarbonView::zoomChanged( KoZoomMode::Mode mode, double zoom )
-{
-    static KoZoomMode::Mode lastMode = KoZoomMode::ZOOM_CONSTANT;
-
-    debugView(QString("KarbonView::zoomChanged( mode = %1, zoom = %2) )").arg(mode).arg(zoom));
-
-    QRectF documentViewRect = m_canvas->documentViewRect();
-    m_zoomController->setDocumentSize( documentViewRect.size() );
-    m_canvas->adjustOrigin();
-    if( mode != KoZoomMode::ZOOM_CONSTANT )
-    {
-        // center the page rect when change the zoom mode to ZOOM_PAGE or ZOOM_WIDTH
-        QRectF pageRect( -documentViewRect.topLeft(), m_part->document().pageSize() );
-        QPointF center = m_canvas->viewConverter()->documentToView( pageRect.center() );
-        m_canvasController->setPreferredCenter( center.toPoint() );
-    }
-    m_canvas->update();
-
-    lastMode = mode;
+    QPointF newCenter = m_canvas->documentOrigin() + zoomHandler->documentToView( bbox.center() );
+    m_canvasController->setPreferredCenter( newCenter.toPoint() );
 }
 
 void KarbonView::documentViewRectChanged( const QRectF &viewRect )
 {
     debugView("KarbonView::documentViewRectChanged()");
-    m_zoomController->setDocumentSize( viewRect.size() );
+    m_canvasController->setDocumentSize( viewRect.size().toSize() );
     m_canvas->update();
-    m_canvasController->ensureVisible( m_canvas->shapeManager()->selection()->boundingRect() );
+    KoSelection * selection = m_canvas->shapeManager()->selection();
+    if( selection->count() )
+        m_canvasController->ensureVisible( selection->boundingRect() );
 }
 
 void

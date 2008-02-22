@@ -14,6 +14,7 @@ set(karbonui_SRCS
     KarbonPart.cpp 
     KarbonView.cpp 
     KarbonPrintJob.cpp
+    KarbonZoomController.cpp
 
     dialogs/KarbonConfigureDialog.cpp
 
