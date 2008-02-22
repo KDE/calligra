@@ -234,6 +234,7 @@ QModelIndex TaskStatusItemModel::parent( const QModelIndex &index ) const
 
 QModelIndex TaskStatusItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
+    kDebug()<<row<<column<<parent;
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
         return QModelIndex();
     }
@@ -243,8 +244,12 @@ QModelIndex TaskStatusItemModel::index( int row, int column, const QModelIndex &
         }
         return createIndex(row, column, m_top.value( row ) );
     }
-    NodeList *l = m_top.value( parent.row() );
+    NodeList *l = list( parent );
     if ( l == 0 ) {
+        return QModelIndex();
+    }
+    if ( row >= rowCount( parent ) ) {
+        kWarning()<<"Row >= rowCount, Qt4.4 asks, so we need to handle it";
         return QModelIndex();
     }
     QModelIndex i = createIndex(row, column, l->value( row ) );
@@ -366,12 +371,12 @@ int TaskStatusItemModel::columnCount( const QModelIndex & ) const
 int TaskStatusItemModel::rowCount( const QModelIndex &parent ) const
 {
     if ( ! parent.isValid() ) {
-        //kDebug()<<"top="<<m_top.count();
+        kDebug()<<"top="<<m_top.count()<<m_top;
         return m_top.count();
     }
     NodeList *l = list( parent );
     if ( l ) {
-        //kDebug()<<"list"<<parent.row()<<":"<<l->count();
+        kDebug()<<"list"<<parent.row()<<":"<<l->count()<<l;
         return l->count();
     }
     //kDebug()<<"node"<<parent.row();
