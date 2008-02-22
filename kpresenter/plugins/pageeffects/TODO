@@ -64,6 +64,7 @@ Edge Wipes - wipes occur along an edge
 
 Iris Wipes - shapes expand from the center of the media
 -------------------------------------------------------
+    ->Expirements are being done by Carutsu to implement all of them in one go, please don't start implementing them just yet.
 "irisWipe"  "rectangle" (101) [default], "diamond" (102)
   Fredy Yanardi
 "triangleWipe"  "up" (103) [default], "right" (104), "down" (105), "left" (106)
