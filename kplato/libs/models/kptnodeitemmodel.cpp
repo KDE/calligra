@@ -1478,15 +1478,11 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 }
                 break;
             case 4: // estimateType
-                if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
-                    flags |= Qt::ItemIsEditable;
-                }
-                break;
             case 5: // estimate
             case 6: // optimisticRatio
             case 7: // pessimisticRatio
             {
-                if ( n->type() == Node::Type_Task ) {
+                if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
