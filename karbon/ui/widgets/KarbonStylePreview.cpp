@@ -77,6 +77,7 @@ void KarbonStylePreview::paintEvent( QPaintEvent* event )
         drawStroke( painter, m_stroke );
         drawFill( painter, m_fill );
     }
+    painter.end();
 
     QFrame::paintEvent( event );
 }
