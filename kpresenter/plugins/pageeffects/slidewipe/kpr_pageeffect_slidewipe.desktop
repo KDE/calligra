@@ -1,6 +1,12 @@
 [Desktop Entry]
 Name=Slide Wipe
+Name[it]=Transizione a inserimento
+Name[pt]=Varrimento Deslizante
+Name[pt_BR]=Varrimento Deslizante
 Comment=Slide Wipe Page Effect
+Comment[it]=Effetto di transizione a inserimento delle pagine
+Comment[pt]=Efeito de Varrimento da Página do 'Slide'
+Comment[pt_BR]=Efeito de Varrimento da Página do 'Slide'
 X-KDE-ServiceTypes=KPresenter/PageEffect
 Type=Service
 X-KDE-Library=kpr_pageeffect_slidewipe

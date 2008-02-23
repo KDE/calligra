@@ -1,6 +1,12 @@
 [Desktop Entry]
 Name=Matrix wipe
+Name[it]=Transizione a matrice
+Name[pt]=Varrimento em Matriz
+Name[pt_BR]=Varrimento em Matriz
 Comment=Matrix wipe Page Effects
+Comment[it]=Effetto di transizione a matrice delle pagine
+Comment[pt]=Efeitos de Varrimento da Página em Matriz
+Comment[pt_BR]=Efeitos de Varrimento da Página em Matriz
 X-KDE-ServiceTypes=KPresenter/PageEffect
 Type=Service
 X-KDE-Library=kpr_pageeffect_matrixwipe
