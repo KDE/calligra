@@ -25,7 +25,7 @@
 #include <QString>
 #include <qstringlist.h>
 
-#include "KoDom.h"
+#include <KoXmlReader.h>
 
 namespace KPlato
 {
