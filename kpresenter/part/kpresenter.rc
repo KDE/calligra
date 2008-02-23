@@ -56,7 +56,7 @@
     </MenuBar>
     <ToolBar name="mainToolBar">
         <Separator/>
-        <Action name="edit_insertpage"/>
+        <Action name="page_insertpage"/>
         <Action name="view_mode"/>
         <Separator/>
         <Action name="edit_undo"/>

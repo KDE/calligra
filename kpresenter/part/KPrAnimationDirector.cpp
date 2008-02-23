@@ -39,19 +39,24 @@
 #include "shapeanimations/KPrAnimationData.h"
 #include "shapeanimations/KPrShapeAnimation.h"
 
-KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, const QList<KoPAPageBase*> & pages )
+KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, const QList<KoPAPageBase*> & pages, KoPAPageBase* currentPage )
 : m_view( view )
 , m_canvas( view->kopaCanvas() )
 , m_pages( pages )
 , m_pageEffectRunner( 0 )
-, m_pageIndex( 0 )
 , m_stepIndex( 0 )
 , m_maxShapeDuration( 0 )
 , m_hasAnimation( false )
 {
     Q_ASSERT( !m_pages.empty() );
 
-    updateActivePage( m_pages[0] );
+    if( !currentPage || !pages.contains(currentPage))
+        updateActivePage( m_pages[0] );
+    else
+        updateActivePage( currentPage );
+
+    m_pageIndex = m_pages.indexOf( m_view->activePage() );
+
     updateAnimations();
     connect( &m_timeLine, SIGNAL( valueChanged( qreal ) ), this, SLOT( animate() ) );
     // this is needed as after a call to m_canvas->showFullScreen the canvas is not made fullscreen right away

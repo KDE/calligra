@@ -48,7 +48,9 @@ KPrViewModePresentation::~KPrViewModePresentation()
 
 KoViewConverter * KPrViewModePresentation::viewConverter()
 {
-    // this is dangerous as m_animationDirector might be 0
+    if(!m_animationDirector)
+        return 0;
+
     return m_animationDirector->viewConverter();
 }
 
@@ -113,7 +115,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     m_canvas->showFullScreen();                       // detach widget to make
     m_canvas->setFocus();                             // it shown full screen
 
-    m_animationDirector = new KPrAnimationDirector( m_view, m_view->kopaDocument()->pages() );
+    m_animationDirector = new KPrAnimationDirector( m_view, m_view->kopaDocument()->pages(), m_view->activePage() );
 }
 
 void KPrViewModePresentation::deactivate()
@@ -121,9 +123,9 @@ void KPrViewModePresentation::deactivate()
     m_canvas->setParent( m_savedParent, Qt::Widget );
     m_canvas->setFocus();
     m_canvas->showNormal();
-    m_canvas->canvasController ()->setDocumentSize (m_canvas->size ());
     delete m_animationDirector;
     m_animationDirector = 0;
+    m_view->updateActivePage(m_view->activePage());
 }
 
 void KPrViewModePresentation::activateSavedViewMode()
