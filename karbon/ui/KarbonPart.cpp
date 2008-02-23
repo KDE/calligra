@@ -54,7 +54,6 @@
 #include <KoShapeSavingContext.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
-#include <KoDom.h>
 #include <KoOasisSettings.h>
 #include <KoMainWindow.h>
 #include <KoCanvasController.h>
@@ -241,7 +240,7 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
     kDebug(38000) <<"Start loading OASIS contents..." << contents.lastChild().localName();
     kDebug(38000) <<"Start loading OASIS contents..." << contents.lastChild().namespaceURI();
     kDebug(38000) <<"Start loading OASIS contents..." << contents.lastChild().isElement();
-    KoXmlElement body( KoDom::namedItemNS( contents, KoXmlNS::office, "body" ) );
+    KoXmlElement body( KoXml::namedItemNS( contents, KoXmlNS::office, "body" ) );
     kDebug(38000) <<"Start loading OASIS document..." << body.text();
     if( body.isNull() )
     {
@@ -250,7 +249,7 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
         return false;
     }
 
-    body = KoDom::namedItemNS( body, KoXmlNS::office, "drawing");
+    body = KoXml::namedItemNS( body, KoXmlNS::office, "drawing");
     if(body.isNull())
     {
         kDebug(38000) <<"No office:drawing found!";
@@ -258,7 +257,7 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
         return false;
     }
 
-    KoXmlElement page( KoDom::namedItemNS( body, KoXmlNS::draw, "page" ) );
+    KoXmlElement page( KoXml::namedItemNS( body, KoXmlNS::draw, "page" ) );
     if(page.isNull())
     {
         kDebug(38000) <<"No office:drawing found!";
