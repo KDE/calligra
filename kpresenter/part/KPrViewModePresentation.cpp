@@ -26,6 +26,7 @@
 #include <kdebug.h>
 
 #include <KoPointerEvent.h>
+#include <KoCanvasController.h>
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
 #include <KoPAView.h>
@@ -120,6 +121,7 @@ void KPrViewModePresentation::deactivate()
     m_canvas->setParent( m_savedParent, Qt::Widget );
     m_canvas->setFocus();
     m_canvas->showNormal();
+    m_canvas->canvasController ()->setDocumentSize (m_canvas->size ());
     delete m_animationDirector;
     m_animationDirector = 0;
 }
