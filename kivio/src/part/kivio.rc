@@ -10,13 +10,10 @@
             <Action name="edit_cut"/>
             <Action name="edit_copy"/>
             <Action name="edit_paste"/>
-            <Action name="edit_select_all"/>
-            <Action name="edit_deselect_all"/>
             <Action name="edit_delete"/>
             <Separator/>
-            <Action name="edit_insertpage"/>
-            <Action name="edit_copypage"/>
-            <Action name="edit_deletepage"/>
+            <Action name="edit_select_all"/>
+            <Action name="edit_deselect_all"/>
         </Menu>
         <Menu name="view">
             <Text>&amp;View</Text>
@@ -35,6 +32,18 @@
             <Separator/>
             <Action name="view_grid"/>
             <Action name="view_snaptogrid"/>
+        </Menu>
+        <Menu name="page">
+            <Text>&amp;Page</Text>
+            <Action name="page_insertpage"/>
+            <Action name="page_copypage"/>
+            <Action name="page_deletepage"/>
+            <Separator/>
+            <Action name="page_previous"/>
+            <Action name="page_next"/>
+            <Separator/>
+            <Action name="page_first"/>
+            <Action name="page_last"/>
         </Menu>
     </MenuBar>
 
