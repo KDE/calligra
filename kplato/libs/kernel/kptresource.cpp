@@ -657,8 +657,13 @@ void Resource::makeAppointment(Schedule *node) {
     makeAppointment(node, time, end);
 }
 
+Duration Resource::effort( const DateTime &start, const Duration &duration, bool backward, bool *ok) const
+{
+    return effort( m_currentSchedule, start, duration, backward, ok );
+}
+
 // the amount of effort we can do within the duration
-Duration Resource::effort(const DateTime &start, const Duration &duration, bool backward, bool *ok) const {
+Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &duration, bool backward, bool *ok) const {
     //kDebug()<<m_name<<":"<<start<<" for duration"<<duration.toString(Duration::Format_Day);
     bool sts=false;
     Duration e;
@@ -677,7 +682,7 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
         if (t.isValid()) {
             sts = true;
             if ( t < limit ) kError()<<m_name<<"backward, t < limit: t="<<t<<" limit="<<limit;
-            e = (cal->effort(limit, t, m_currentSchedule) * m_units)/100;
+            e = (cal->effort(limit, t, sch) * m_units)/100;
         } else {
             //kDebug()<<m_name<<": Not available (start="<<start<<","<<limit<<")";
         }
@@ -687,7 +692,7 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
         if (t.isValid()) {
             sts = true;
             if ( t > limit ) kError()<<m_name<<"forward, t > limit: t="<<t<<" limit="<<limit;
-            e = (cal->effort(t, limit, m_currentSchedule) * m_units)/100;
+            e = (cal->effort(t, limit, sch) * m_units)/100;
         }
     }
     //kDebug()<<start<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")";

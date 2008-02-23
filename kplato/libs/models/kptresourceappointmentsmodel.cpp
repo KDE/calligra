@@ -444,7 +444,10 @@ QVariant ResourceAppointmentsItemModel::total( const Resource *res, const QDate 
                     d += m_effortMap[ a ].effortOnDate( date );
                 }
             }
-            return KGlobal::locale()->formatNumber( d.toDouble( Duration::Unit_h ), 1 );
+            QString ds = KGlobal::locale()->formatNumber( d.toDouble( Duration::Unit_h ), 1 );
+            Duration avail = res->effort( 0, DateTime( date, QTime(0,0,0) ), Duration( 1.0, Duration::Unit_d ) );
+            QString avails = KGlobal::locale()->formatNumber( avail.toDouble( Duration::Unit_h ), 1 );
+            return QString( "%1(%2)").arg( ds).arg( avails );
         }
         case Qt::EditRole:
         case Qt::ToolTipRole:
@@ -621,7 +624,7 @@ QVariant ResourceAppointmentsItemModel::headerData( int section, Qt::Orientation
                 case 0: return i18n( "Name" );
                 case 1: return i18n( "Total" );
                 default: {
-                    kDebug()<<section<<", "<<m_start<<m_end;
+                    //kDebug()<<section<<", "<<m_start<<m_end;
                     if ( section < m_columnCount && m_start.isValid() && m_end.isValid() ) {
                         QDate d = m_start.addDays( section - 2 );
                         if ( d <= m_end ) {

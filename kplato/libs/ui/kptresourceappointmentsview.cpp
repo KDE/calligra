@@ -64,6 +64,7 @@ ResourceAppointmentsTreeView::ResourceAppointmentsTreeView( QWidget *parent )
     
     ResourceAppointmentsItemModel *m = new ResourceAppointmentsItemModel();
     setModel( m );
+    setSelectionMode( QAbstractItemView::ExtendedSelection );
     QList<int> lst1; lst1 << 2 << -1;
     QList<int> lst2; lst2 << 0 << 1;
     hideColumns( lst1, lst2 );

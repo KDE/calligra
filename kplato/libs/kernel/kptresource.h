@@ -336,9 +336,17 @@ public:
     { return m_requests; }
 
     /// Returns the effort that can be done starting at @p start within @p duration.
+    /// The current schedule is used to check for appointments.
     /// If @p  backward is true, checks backward in time.
     /// Status is returned in @p ok
-    Duration effort( const DateTime &start, const Duration &duration, bool backward, bool *ok = 0 ) const;
+    Duration effort( const DateTime &start, const Duration &duration, bool backward = false, bool *ok = 0 ) const;
+
+    /// Returns the effort that can be done starting at @p start within @p duration.
+    /// The schedule @p sch is used to check for appointments.
+    /// If @p  backward is true, checks backward in time.
+    /// Status is returned in @p ok
+    Duration effort( Schedule *sch, const DateTime &start, const Duration &duration, bool backward = false, bool *ok = 0 ) const;
+
 
     /**
      * Find the first available time after @p time, within @p limit.
