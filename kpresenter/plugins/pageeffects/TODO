@@ -57,6 +57,7 @@ Edge Wipes - wipes occur along an edge
 "bowTieWipe"  "vertical" (43) [default], "horizontal" (44)
   Lacroix Timothee
 "miscDiagonalWipe"  "doubleBarnDoor" (47) [default], "doubleDiamond" (48)
+Jan Hambrecht
 "veeWipe"  "down" (61) [default], "left" (62), "up" (63), "right" (64)
 "barnVeeWipe"  "down" (65) [default], "left" (66), "up" (67), "right" (68)
 "zigZagWipe"  "leftToRight" (71) [default], "topToBottom" (72)
