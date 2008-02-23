@@ -22,6 +22,7 @@
 #include <klocale.h>
 #include <ktoggleaction.h>
 #include <kactioncollection.h>
+#include <kactionmenu.h>
 
 #include <KoSelection.h>
 #include <KoShapeManager.h>
@@ -79,9 +80,15 @@ void KPrView::initActions()
        setXMLFile( "kpresenter.rc" );
 
     // do special kpresenter stuff here
-    m_actionStartPresentation = new KAction( KIcon("media-playback-start"), i18n( "Start Presentation" ), this );
+    m_actionStartPresentation = new KActionMenu( KIcon("media-playback-start"), i18n( "Start Presentation" ), this );
     actionCollection()->addAction( "view_mode", m_actionStartPresentation );
     connect( m_actionStartPresentation, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
+    KAction* action = new KAction( i18n( "From Current Page" ), this );
+    m_actionStartPresentation->addAction( action );
+    connect( action, SIGNAL( activated() ), this, SLOT( startPresentation() ) );
+    action = new KAction( i18n( "From First Page" ), this );
+    m_actionStartPresentation->addAction( action );
+    connect( action, SIGNAL( activated() ), this, SLOT( startPresentationFromBeginning() ) );
 
     m_actionCreateAnimation = new KAction( i18n( "Create Appear Animation" ), this );
     actionCollection()->addAction( "edit_createanimation", m_actionCreateAnimation );
@@ -94,6 +101,12 @@ void KPrView::initActions()
 
 void KPrView::startPresentation()
 {
+    setViewMode( m_presentationMode );
+}
+
+void KPrView::startPresentationFromBeginning()
+{
+    setActivePage( m_doc->pageByNavigation( activePage(), KoPageApp::PageFirst ) );
     setViewMode( m_presentationMode );
 }
 

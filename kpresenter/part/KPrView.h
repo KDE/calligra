@@ -26,6 +26,7 @@
 
 class KPrDocument;
 class KPrViewModePresentation;
+class KActionMenu;
 
 class KPrView : public KoPAView
 {
@@ -42,11 +43,12 @@ protected:
 
 protected slots:
     void startPresentation();
+    void startPresentationFromBeginning();
     void createAnimation();
     void dialogCustomSlideShows();
 
 private:
-    KAction *m_actionStartPresentation;
+    KActionMenu *m_actionStartPresentation;
     KAction *m_actionCreateAnimation;
     KAction *m_actionCreateCustomSlideShowsDialog;
     KPrViewModePresentation *m_presentationMode;
