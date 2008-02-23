@@ -42,7 +42,7 @@
 #include <QFile>
 #include <QBuffer>
 #include <QPushButton>
-#include <QComboBox>
+#include <kcombobox.h>
 #include <QListWidget>
 #include <QGridLayout>
 
@@ -50,7 +50,7 @@ FormulaToolOptions::FormulaToolOptions( QWidget* parent, Qt::WindowFlags f )
                   : QWidget( parent, f )
 {
     // create a combo box with the different categories of templates
-    m_templateCombo = new QComboBox( this );
+    m_templateCombo = new KComboBox( this );
     m_templateCombo->setInsertPolicy( QComboBox::NoInsert );
     m_templateCombo->addItem( "General" );
     m_templateCombo->addItem( "Operators" );
