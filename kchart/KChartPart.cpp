@@ -50,7 +50,6 @@ using std::cerr;
 
 // KOffice
 #include <KoZoomHandler.h>
-#include <KoDom.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
@@ -593,7 +592,7 @@ bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
     KoXmlElement  content = odfStore.contentDoc().documentElement();
 
     // Find office:body
-    KoXmlElement  realBody ( KoDom::namedItemNS( content, 
+    KoXmlElement  realBody ( KoXml::namedItemNS( content, 
                                                  KoXmlNS::office, "body" ) );
     if ( realBody.isNull() ) {
         setErrorMessage( i18n( "Invalid OpenDocument file. No office:body tag found." ));
@@ -601,7 +600,7 @@ bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
     }
 
     // Find office:chart
-    KoXmlElement bodyElement = KoDom::namedItemNS( realBody,
+    KoXmlElement bodyElement = KoXml::namedItemNS( realBody,
                                                    KoXmlNS::office, "chart" );
     if ( bodyElement.isNull() ) {
         kError(32001) << "No office:chart found!" << endl;
@@ -620,7 +619,7 @@ bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
     }
 
     // Find chart:chart
-    KoXmlElement chartElement = KoDom::namedItemNS( bodyElement, 
+    KoXmlElement chartElement = KoXml::namedItemNS( bodyElement, 
                                                     KoXmlNS::chart, "chart" );
     if ( chartElement.isNull() ) {
         setErrorMessage( i18n( "No chart found in the file" ) );
@@ -659,7 +658,7 @@ bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
     setChartDefaults();
 
     KoXmlElement  content = doc.documentElement();
-    KoXmlElement  bodyElem ( KoDom::namedItemNS( content,
+    KoXmlElement  bodyElem ( KoXml::namedItemNS( content,
 						KoXmlNS::office, "body" ) );
     if ( bodyElem.isNull() ) {
         kError(32001) << "No office:body found!" << endl;
@@ -668,7 +667,7 @@ bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
     }
 
     // Get the office:chart element.
-    KoXmlElement officeChartElem = KoDom::namedItemNS( bodyElem,
+    KoXmlElement officeChartElem = KoXml::namedItemNS( bodyElem,
 						      KoXmlNS::office, "chart" );
     if ( officeChartElem.isNull() ) {
         kError(32001) << "No office:chart found!" << endl;
@@ -686,7 +685,7 @@ bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
         return false;
     }
 
-    KoXmlElement chartElem = KoDom::namedItemNS( officeChartElem,
+    KoXmlElement chartElem = KoXml::namedItemNS( officeChartElem,
 						KoXmlNS::chart, "chart" );
     if ( chartElem.isNull() ) {
         setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No chart:chart tag found." ) );
@@ -722,7 +721,7 @@ bool KChartPart::loadOdf( KoOdfReadStore & odfStore )
     // TODO Load data direction (see loadAuxiliary)
 
     // Load the data table.
-    KoXmlElement tableElem = KoDom::namedItemNS( chartElem,
+    KoXmlElement tableElem = KoXml::namedItemNS( chartElem,
 						KoXmlNS::table, "table" );
     if ( !tableElem.isNull() ) {
         ok = loadOasisData( tableElem );
@@ -740,7 +739,7 @@ bool KChartPart::loadOasisData( const KoXmlElement& tableElem )
     Q_UNUSED( tableElem );
 #if 0
     int          numberHeaderColumns = 0;
-    KoXmlElement  tableHeaderColumns = KoDom::namedItemNS( tableElem,
+    KoXmlElement  tableHeaderColumns = KoXml::namedItemNS( tableElem,
 							  KoXmlNS::table,
 							  "table-header-columns" );
 
@@ -756,7 +755,7 @@ bool KChartPart::loadOasisData( const KoXmlElement& tableElem )
     Q_ASSERT( numberHeaderColumns == 1 );
 
     int numberDataColumns = 0;
-    KoXmlElement tableColumns = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-columns" );
+    KoXmlElement tableColumns = KoXml::namedItemNS( tableElem, KoXmlNS::table, "table-columns" );
     forEachElement( elem, tableColumns ) {
         if ( elem.localName() == "table-column" ) {
             int repeated = elem.attributeNS( KoXmlNS::table, "number-columns-repeated", QString() ).toInt();
@@ -766,10 +765,10 @@ bool KChartPart::loadOasisData( const KoXmlElement& tableElem )
 
     // Parse table-header-rows for the column names.
     m_colLabels.clear();
-    KoXmlElement tableHeaderRows = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-header-rows" );
+    KoXmlElement tableHeaderRows = KoXml::namedItemNS( tableElem, KoXmlNS::table, "table-header-rows" );
     if ( tableHeaderRows.isNull() )
         kWarning(35001) << "No table-header-rows element found!" << endl;
-    KoXmlElement tableHeaderRow = KoDom::namedItemNS( tableHeaderRows, KoXmlNS::table, "table-row" );
+    KoXmlElement tableHeaderRow = KoXml::namedItemNS( tableHeaderRows, KoXmlNS::table, "table-row" );
     if ( tableHeaderRow.isNull() )
         kWarning(35001) << "No table-row inside table-header-rows!" << endl;
 
@@ -778,7 +777,7 @@ bool KChartPart::loadOasisData( const KoXmlElement& tableElem )
         if ( elem.localName() == "table-cell" ) {
             ++cellNum;
             if ( cellNum > numberHeaderColumns ) {
-                KoXmlElement pElem = KoDom::namedItemNS( elem, KoXmlNS::text, "p" );
+                KoXmlElement pElem = KoXml::namedItemNS( elem, KoXmlNS::text, "p" );
                 m_colLabels.append( pElem.text() );
             }
         }
@@ -791,7 +790,7 @@ bool KChartPart::loadOasisData( const KoXmlElement& tableElem )
 
     // Get the number of rows, and read row labels
     int          numberDataRows = 0;
-    KoXmlElement  tableRows = KoDom::namedItemNS( tableElem, KoXmlNS::table, "table-rows" );
+    KoXmlElement  tableRows = KoXml::namedItemNS( tableElem, KoXmlNS::table, "table-rows" );
 
     m_rowLabels.clear();
     forEachElement( elem, tableRows ) {
@@ -800,8 +799,8 @@ bool KChartPart::loadOasisData( const KoXmlElement& tableElem )
             Q_ASSERT( repeated <= 1 ); // we don't handle yet the case where data rows are repeated (can this really happen?)
             numberDataRows += qMax( 1, repeated );
             if ( numberHeaderColumns > 0 ) {
-                KoXmlElement firstCell = KoDom::namedItemNS( elem, KoXmlNS::table, "table-cell" );
-                KoXmlElement pElem = KoDom::namedItemNS( firstCell, KoXmlNS::text, "p" );
+                KoXmlElement firstCell = KoXml::namedItemNS( elem, KoXmlNS::table, "table-cell" );
+                KoXmlElement pElem = KoXml::namedItemNS( firstCell, KoXmlNS::text, "p" );
                 m_rowLabels.append( pElem.text() );
             }
         }
