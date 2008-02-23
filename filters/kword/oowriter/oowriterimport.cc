@@ -46,8 +46,6 @@
 #include <KoPageLayout.h>
 #include <KoPicture.h>
 #include "conversion.h"
-#include <KoDom.h>
-
 
 typedef KGenericFactory<OoWriterImport> OoWriterImportFactory;
 K_EXPORT_COMPONENT_FACTORY( liboowriterimport, OoWriterImportFactory(  "kofficefilters" ) )
@@ -195,7 +193,7 @@ void OoWriterImport::createStyles( QDomDocument& doc )
     QDomElement stylesElem = doc.createElement( "STYLES" );
     doc.documentElement().appendChild( stylesElem );
 
-    KoXmlNode fixedStyles = KoDom::namedItemNS( m_stylesDoc.documentElement(), ooNS::office, "styles" );
+    KoXmlNode fixedStyles = KoXml::namedItemNS( m_stylesDoc.documentElement(), ooNS::office, "styles" );
     Q_ASSERT( !fixedStyles.isNull() );
     KoXmlElement e;
     forEachElement( e, fixedStyles )
@@ -358,7 +356,7 @@ void OoWriterImport::createDocumentContent( QDomDocument &doc, QDomElement& main
 {
     KoXmlElement content = m_content.documentElement();
 
-    KoXmlElement body ( KoDom::namedItemNS( content, ooNS::office, "body" ) );
+    KoXmlElement body ( KoXml::namedItemNS( content, ooNS::office, "body" ) );
     if ( body.isNull() )
     {
         kError(30518) << "No office:body found!" << endl;
@@ -388,7 +386,7 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
     Q_ASSERT( style );
     if ( style )
     {
-        KoXmlElement properties( KoDom::namedItemNS( *style, ooNS::style, "properties" ) );
+        KoXmlElement properties( KoXml::namedItemNS( *style, ooNS::style, "properties" ) );
         Q_ASSERT( !properties.isNull() );
         orientation = ( (properties.attributeNS( ooNS::style, "print-orientation", QString()) != "portrait") ? KoPageFormat::Landscape : KoPageFormat::Portrait );
         width = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "page-width", QString()));
@@ -405,7 +403,7 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
         marginRight = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "margin-right", QString()));
         marginBottom = KoUnit::parseValue(properties.attributeNS( ooNS::fo, "margin-bottom", QString()));
 
-        KoXmlElement footnoteSep = KoDom::namedItemNS( properties, ooNS::style, "footnote-sep" );
+        KoXmlElement footnoteSep = KoXml::namedItemNS( properties, ooNS::style, "footnote-sep" );
         if ( !footnoteSep.isNull() ) {
             // style:width="0.018cm" style:distance-before-sep="0.101cm"
             // style:distance-after-sep="0.101cm" style:adjustment="left"
@@ -424,25 +422,25 @@ void OoWriterImport::writePageLayout( QDomDocument& mainDocument, const QString&
 
 
         // Header/Footer
-        KoXmlElement headerStyle = KoDom::namedItemNS( *style, ooNS::style, "header-style" );
-        KoXmlElement footerStyle = KoDom::namedItemNS( *style, ooNS::style, "footer-style" );
-        KoXmlElement headerLeftElem = KoDom::namedItemNS( *masterPage, ooNS::style, "header-left" );
+        KoXmlElement headerStyle = KoXml::namedItemNS( *style, ooNS::style, "header-style" );
+        KoXmlElement footerStyle = KoXml::namedItemNS( *style, ooNS::style, "footer-style" );
+        KoXmlElement headerLeftElem = KoXml::namedItemNS( *masterPage, ooNS::style, "header-left" );
         if ( !headerLeftElem.isNull() ) {
             kDebug(30518) <<"Found header-left";
             hasEvenOddHeader = true;
             importHeaderFooter( mainDocument, headerLeftElem, hasEvenOddHeader, headerStyle );
         }
-        KoXmlElement headerElem = KoDom::namedItemNS( *masterPage, ooNS::style, "header" );
+        KoXmlElement headerElem = KoXml::namedItemNS( *masterPage, ooNS::style, "header" );
         if ( !headerElem.isNull() ) {
             kDebug(30518) <<"Found header";
             importHeaderFooter( mainDocument, headerElem, hasEvenOddHeader, headerStyle );
         }
-        KoXmlElement footerLeftElem = KoDom::namedItemNS( *masterPage, ooNS::style, "footer-left" );
+        KoXmlElement footerLeftElem = KoXml::namedItemNS( *masterPage, ooNS::style, "footer-left" );
         if ( !footerLeftElem.isNull() ) {
             kDebug(30518) <<"Found footer-left";
             importHeaderFooter( mainDocument, footerLeftElem, hasEvenOddFooter, footerStyle );
         }
-        KoXmlElement footerElem = KoDom::namedItemNS( *masterPage, ooNS::style, "footer" );
+        KoXmlElement footerElem = KoXml::namedItemNS( *masterPage, ooNS::style, "footer" );
         if ( !footerElem.isNull() ) {
             kDebug(30518) <<"Found footer";
             importHeaderFooter( mainDocument, footerElem, hasEvenOddFooter, footerStyle );
@@ -499,19 +497,19 @@ void OoWriterImport::prepareDocument( QDomDocument& mainDocument, QDomElement& f
     // Now create VARIABLESETTINGS, mostly from meta.xml
     QDomElement varSettings = mainDocument.createElement( "VARIABLESETTINGS" );
     docElement.appendChild( varSettings );
-    KoXmlNode meta   = KoDom::namedItemNS( m_meta, ooNS::office, "document-meta" );
-    KoXmlNode office = KoDom::namedItemNS( meta, ooNS::office, "meta" );
+    KoXmlNode meta   = KoXml::namedItemNS( m_meta, ooNS::office, "document-meta" );
+    KoXmlNode office = KoXml::namedItemNS( meta, ooNS::office, "meta" );
     if ( !office.isNull() ) {
-        KoXmlElement date = KoDom::namedItemNS( office, ooNS::dc, "date" );
+        KoXmlElement date = KoXml::namedItemNS( office, ooNS::dc, "date" );
         if ( !date.isNull() && !date.text().isEmpty() ) {
             // Both use ISO-8601, no conversion needed.
             varSettings.setAttribute( "modificationDate", date.text() );
         }
-        date = KoDom::namedItemNS( office, ooNS::meta, "creation-date" );
+        date = KoXml::namedItemNS( office, ooNS::meta, "creation-date" );
         if ( !date.isNull() && !date.text().isEmpty() ) {
             varSettings.setAttribute( "creationDate", date.text() );
         }
-        date = KoDom::namedItemNS( office, ooNS::meta, "print-date" );
+        date = KoXml::namedItemNS( office, ooNS::meta, "print-date" );
         if ( !date.isNull() && !date.text().isEmpty() ) {
             varSettings.setAttribute( "lastPrintingDate", date.text() );
         }
@@ -582,7 +580,7 @@ void OoWriterImport::createDocumentInfo( QDomDocument &docinfo )
 bool OoWriterImport::createStyleMap( const KoXmlDocument & styles, QDomDocument& doc )
 {
   KoXmlElement docElement  = styles.documentElement();
-  KoXmlNode docStyles   = KoDom::namedItemNS( docElement, ooNS::office, "document-styles" );
+  KoXmlNode docStyles   = KoXml::namedItemNS( docElement, ooNS::office, "document-styles" );
 
   if ( docElement.hasAttributeNS( ooNS::office, "version" ) )
   {
@@ -602,7 +600,7 @@ bool OoWriterImport::createStyleMap( const KoXmlDocument & styles, QDomDocument&
     }
   }
 
-  KoXmlNode fontStyles = KoDom::namedItemNS( docElement, ooNS::office, "font-decls" );
+  KoXmlNode fontStyles = KoXml::namedItemNS( docElement, ooNS::office, "font-decls" );
 
   if ( !fontStyles.isNull() )
   {
@@ -615,7 +613,7 @@ bool OoWriterImport::createStyleMap( const KoXmlDocument & styles, QDomDocument&
 
   kDebug(30518) <<"Starting reading in office:automatic-styles";
 
-  KoXmlNode autoStyles = KoDom::namedItemNS( docElement, ooNS::office, "automatic-styles" );
+  KoXmlNode autoStyles = KoXml::namedItemNS( docElement, ooNS::office, "automatic-styles" );
   if ( !autoStyles.isNull() )
   {
       insertStyles( autoStyles.toElement(), doc );
@@ -626,7 +624,7 @@ bool OoWriterImport::createStyleMap( const KoXmlDocument & styles, QDomDocument&
 
   kDebug(30518) <<"Reading in master styles";
 
-  KoXmlNode masterStyles = KoDom::namedItemNS( docElement, ooNS::office, "master-styles" );
+  KoXmlNode masterStyles = KoXml::namedItemNS( docElement, ooNS::office, "master-styles" );
 
   if ( !masterStyles.isNull() )
   {
@@ -647,7 +645,7 @@ bool OoWriterImport::createStyleMap( const KoXmlDocument & styles, QDomDocument&
 
   kDebug(30518) <<"Starting reading in office:styles";
 
-  KoXmlNode fixedStyles = KoDom::namedItemNS( docElement, ooNS::office, "styles" );
+  KoXmlNode fixedStyles = KoXml::namedItemNS( docElement, ooNS::office, "styles" );
 
   if ( !fixedStyles.isNull() )
     insertStyles( fixedStyles.toElement(), doc );
@@ -1764,7 +1762,7 @@ QString OoWriterImport::appendTextBox(QDomDocument& doc, const KoXmlElement& obj
 void OoWriterImport::importFootnote( QDomDocument& doc, const KoXmlElement& object, QDomElement& formats, uint pos, const QString& localName )
 {
     const QString frameName( object.attributeNS( ooNS::text, "id", QString()) );
-    KoXmlElement citationElem = KoDom::namedItemNS( object, ooNS::text, (localName+"-citation").latin1() ).toElement();
+    KoXmlElement citationElem = KoXml::namedItemNS( object, ooNS::text, (localName+"-citation").latin1() ).toElement();
 
     bool endnote = localName == "endnote";
 
@@ -1794,7 +1792,7 @@ void OoWriterImport::importFootnote( QDomDocument& doc, const KoXmlElement& obje
     // TODO importCommonFrameProperties ?
 
     // The text inside the frameset
-    KoXmlElement bodyElem = KoDom::namedItemNS( object, ooNS::text, (localName+"-body").latin1() ).toElement();
+    KoXmlElement bodyElem = KoXml::namedItemNS( object, ooNS::text, (localName+"-body").latin1() ).toElement();
     parseBodyOrSimilar( doc, bodyElem, framesetElement );
 }
 
@@ -2237,7 +2235,7 @@ void OoWriterImport::parseTable( QDomDocument &doc, const KoXmlElement& parent, 
             double width=0.0;
             if (style)
             {
-                const KoXmlElement elemProps( KoDom::namedItemNS( *style, ooNS::style, "properties") );
+                const KoXmlElement elemProps( KoXml::namedItemNS( *style, ooNS::style, "properties") );
                 if (elemProps.isNull())
                 {
                     kWarning(30518) << "Could not find table column style properties!";
@@ -2426,7 +2424,7 @@ void OoWriterImport::appendTOC( QDomDocument& doc, const KoXmlElement& toc )
     //{
     //}
 
-    KoXmlElement tocIndexBody = KoDom::namedItemNS( toc, ooNS::text, "index-body" );
+    KoXmlElement tocIndexBody = KoXml::namedItemNS( toc, ooNS::text, "index-body" );
     KoXmlElement t;
     forEachElement( t, tocIndexBody )
     {

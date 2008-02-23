@@ -20,8 +20,6 @@
 
 #include "liststylestack.h"
 #include "ooutils.h" // for ooNS
-#include <qdom.h>
-#include <KoDom.h>
 
 ListStyleStack::ListStyleStack()
     : m_initialLevel( 0 )
@@ -54,24 +52,8 @@ KoXmlElement ListStyleStack::currentListStyle() const
     return m_stack.top();
 }
 
-KoXmlElement _namedItemNS( const KoXmlElement& e, const QString& nsURI, const QString& name )
-{
-  KoXmlNode node = e.firstChild();
-  while ( !node.isNull() ) 
-  {
-    if( node.prefix().isNull() )
-    if( node.namespaceURI() == nsURI )
-    if( node.localName() == name )
-      return node.toElement();
-    node = node.nextSibling();
-  }
-
-  // not found
-  return KoXmlElement();
-}
-
 KoXmlElement ListStyleStack::currentListStyleProperties() const
 {
     KoXmlElement style = currentListStyle();
-    return _namedItemNS( style, ooNS::style, "properties" );
+    return KoXml::namedItemNS( style, ooNS::style, "properties" );
 }

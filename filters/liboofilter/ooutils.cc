@@ -30,7 +30,6 @@
 #include <QRegExp>
 #include <kdebug.h>
 #include <kzip.h>
-#include <KoDom.h>
 #include <QtXml>
 
 const char* const ooNS::office="http://openoffice.org/2000/office";
@@ -485,7 +484,7 @@ void OoUtils::createDocumentInfo(KoXmlDocument &_meta, QDomDocument & docinfo)
             about = docinfo.createElement( "about" );
             elementDocInfo.appendChild( about );
         }
-        KoXmlElement tmp = KoDom::namedItemNS( e, ooNS::meta, "keyword" );
+        KoXmlElement tmp = KoXml::namedItemNS( e, ooNS::meta, "keyword" );
         if ( !tmp.isNull() && !tmp.text().isEmpty() )
         {
             QDomElement keyword = docinfo.createElement( "keyword" );
