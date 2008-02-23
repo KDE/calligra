@@ -34,7 +34,6 @@
 #include <QHash>
 
 // KOffice
-#include <KoDom.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
@@ -173,7 +172,7 @@ void NamedAreaManager::updateAllNamedAreas()
 
 void NamedAreaManager::loadOdf(const KoXmlElement& body)
 {
-    KoXmlNode namedAreas = KoDom::namedItemNS(body, KoXmlNS::table, "named-expressions");
+    KoXmlNode namedAreas = KoXml::namedItemNS(body, KoXmlNS::table, "named-expressions");
     if (!namedAreas.isNull())
     {
         kDebug(36003) <<"Loading named areas...";

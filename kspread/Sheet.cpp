@@ -39,7 +39,6 @@
 #include <kreplacedialog.h>
 #include <kurl.h>
 
-#include <KoDom.h>
 #include <KoDocumentInfo.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOasisSettings.h>
@@ -2511,12 +2510,12 @@ bool Sheet::loadSheetStyleFormat( KoXmlElement *style )
 {
     QString hleft, hmiddle, hright;
     QString fleft, fmiddle, fright;
-    KoXmlNode header = KoDom::namedItemNS( *style, KoXmlNS::style, "header" );
+    KoXmlNode header = KoXml::namedItemNS( *style, KoXmlNS::style, "header" );
 
     if ( !header.isNull() )
     {
         kDebug(36003) <<"Header exists";
-        KoXmlNode part = KoDom::namedItemNS( header, KoXmlNS::style, "region-left" );
+        KoXmlNode part = KoXml::namedItemNS( header, KoXmlNS::style, "region-left" );
         if ( !part.isNull() )
         {
             hleft = getPart( part );
@@ -2524,13 +2523,13 @@ bool Sheet::loadSheetStyleFormat( KoXmlElement *style )
         }
         else
             kDebug(36003) <<"Style:region:left doesn't exist!";
-        part = KoDom::namedItemNS( header, KoXmlNS::style, "region-center" );
+        part = KoXml::namedItemNS( header, KoXmlNS::style, "region-center" );
         if ( !part.isNull() )
         {
             hmiddle = getPart( part );
             kDebug(36003) <<"Header middle:" << hmiddle;
         }
-        part = KoDom::namedItemNS( header, KoXmlNS::style, "region-right" );
+        part = KoXml::namedItemNS( header, KoXmlNS::style, "region-right" );
         if ( !part.isNull() )
         {
             hright = getPart( part );
@@ -2538,7 +2537,7 @@ bool Sheet::loadSheetStyleFormat( KoXmlElement *style )
         }
     }
     //TODO implement it under kspread
-    KoXmlNode headerleft = KoDom::namedItemNS( *style, KoXmlNS::style, "header-left" );
+    KoXmlNode headerleft = KoXml::namedItemNS( *style, KoXmlNS::style, "header-left" );
     if ( !headerleft.isNull() )
     {
         KoXmlElement e = headerleft.toElement();
@@ -2548,7 +2547,7 @@ bool Sheet::loadSheetStyleFormat( KoXmlElement *style )
             kDebug(36003)<<"header left doesn't has attribute  style:display";
     }
     //TODO implement it under kspread
-    KoXmlNode footerleft = KoDom::namedItemNS( *style, KoXmlNS::style, "footer-left" );
+    KoXmlNode footerleft = KoXml::namedItemNS( *style, KoXmlNS::style, "footer-left" );
     if ( !footerleft.isNull() )
     {
         KoXmlElement e = footerleft.toElement();
@@ -2558,23 +2557,23 @@ bool Sheet::loadSheetStyleFormat( KoXmlElement *style )
             kDebug(36003)<<"footer left doesn't has attribute  style:display";
     }
 
-    KoXmlNode footer = KoDom::namedItemNS( *style, KoXmlNS::style, "footer" );
+    KoXmlNode footer = KoXml::namedItemNS( *style, KoXmlNS::style, "footer" );
 
     if ( !footer.isNull() )
     {
-        KoXmlNode part = KoDom::namedItemNS( footer, KoXmlNS::style, "region-left" );
+        KoXmlNode part = KoXml::namedItemNS( footer, KoXmlNS::style, "region-left" );
         if ( !part.isNull() )
         {
             fleft = getPart( part );
             kDebug(36003) <<"Footer left:" << fleft;
         }
-        part = KoDom::namedItemNS( footer, KoXmlNS::style, "region-center" );
+        part = KoXml::namedItemNS( footer, KoXmlNS::style, "region-center" );
         if ( !part.isNull() )
         {
             fmiddle = getPart( part );
             kDebug(36003) <<"Footer middle:" << fmiddle;
         }
-        part = KoDom::namedItemNS( footer, KoXmlNS::style, "region-right" );
+        part = KoXml::namedItemNS( footer, KoXmlNS::style, "region-right" );
         if ( !part.isNull() )
         {
             fright = getPart( part );
@@ -2597,37 +2596,37 @@ void Sheet::replaceMacro( QString & text, const QString & old, const QString & n
 QString Sheet::getPart( const KoXmlNode & part )
 {
   QString result;
-  KoXmlElement e = KoDom::namedItemNS( part, KoXmlNS::text, "p" );
+  KoXmlElement e = KoXml::namedItemNS( part, KoXmlNS::text, "p" );
   while ( !e.isNull() )
   {
     QString text = e.text();
     kDebug() <<"PART:" << text;
 
-    KoXmlElement macro = KoDom::namedItemNS( e, KoXmlNS::text, "time" );
+    KoXmlElement macro = KoXml::namedItemNS( e, KoXmlNS::text, "time" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<time>" );
 
-    macro = KoDom::namedItemNS( e, KoXmlNS::text, "date" );
+    macro = KoXml::namedItemNS( e, KoXmlNS::text, "date" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<date>" );
 
-    macro = KoDom::namedItemNS( e, KoXmlNS::text, "page-number" );
+    macro = KoXml::namedItemNS( e, KoXmlNS::text, "page-number" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<page>" );
 
-    macro = KoDom::namedItemNS( e, KoXmlNS::text, "page-count" );
+    macro = KoXml::namedItemNS( e, KoXmlNS::text, "page-count" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<pages>" );
 
-    macro = KoDom::namedItemNS( e, KoXmlNS::text, "sheet-name" );
+    macro = KoXml::namedItemNS( e, KoXmlNS::text, "sheet-name" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<sheet>" );
 
-    macro = KoDom::namedItemNS( e, KoXmlNS::text, "title" );
+    macro = KoXml::namedItemNS( e, KoXmlNS::text, "title" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<name>" );
 
-    macro = KoDom::namedItemNS( e, KoXmlNS::text, "file-name" );
+    macro = KoXml::namedItemNS( e, KoXmlNS::text, "file-name" );
     if ( !macro.isNull() )
       replaceMacro( text, macro.text(), "<file>" );
 
@@ -2657,7 +2656,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
         //kDebug(36003)<<" style :"<<style;
         if ( style )
         {
-            KoXmlElement properties( KoDom::namedItemNS( *style, KoXmlNS::style, "table-properties" ) );
+            KoXmlElement properties( KoXml::namedItemNS( *style, KoXmlNS::style, "table-properties" ) );
             if ( !properties.isNull() )
             {
                 if ( properties.hasAttributeNS( KoXmlNS::table, "display" ) )
@@ -2825,7 +2824,7 @@ void Sheet::loadOasisObjects( const KoXmlElement &parent, KoOdfLoadingContext& o
         if ( e.localName() == "frame" && e.namespaceURI() == KoXmlNS::draw )
         {
           EmbeddedObject *obj = 0;
-          KoXmlNode object = KoDom::namedItemNS( e, KoXmlNS::draw, "object" );
+          KoXmlNode object = KoXml::namedItemNS( e, KoXmlNS::draw, "object" );
           if ( !object.isNull() )
           {
             if ( !object.toElement().attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString()).isNull() )
@@ -2835,7 +2834,7 @@ void Sheet::loadOasisObjects( const KoXmlElement &parent, KoOdfLoadingContext& o
           }
           else
           {
-            KoXmlNode image = KoDom::namedItemNS( e, KoXmlNS::draw, "image" );
+            KoXmlNode image = KoXml::namedItemNS( e, KoXmlNS::draw, "image" );
             if ( !image.isNull() )
               obj = new EmbeddedPictureObject( this, doc()->pictureCollection() );
             else

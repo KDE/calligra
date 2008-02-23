@@ -21,7 +21,6 @@
 
 #include <QHash>
 
-#include <KoDom.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
@@ -61,7 +60,7 @@ QString DatabaseManager::createUniqueName() const
 
 bool DatabaseManager::loadOdf(const KoXmlElement& body)
 {
-    const KoXmlNode databaseRanges = KoDom::namedItemNS(body, KoXmlNS::table, "database-ranges");
+    const KoXmlNode databaseRanges = KoXml::namedItemNS(body, KoXmlNS::table, "database-ranges");
     KoXmlElement element;
     forEachElement(element, databaseRanges)
     {

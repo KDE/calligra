@@ -56,7 +56,6 @@
 #include <KoGlobal.h>
 #include <KoApplication.h>
 #include <KoDocumentInfo.h>
-#include <KoDom.h>
 #include <KoMainWindow.h>
 #include <KoOasisSettings.h>
 #include <KoOdfStylesReader.h>
@@ -811,14 +810,14 @@ bool Doc::loadOdf( KoOdfReadStore & odfStore )
     d->spellListIgnoreAll.clear();
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
-    KoXmlElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+    KoXmlElement realBody ( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( realBody.isNull() )
     {
         setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ));
         deleteLoadingInfo();
         return false;
     }
-    KoXmlElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "spreadsheet" );
+    KoXmlElement body = KoXml::namedItemNS( realBody, KoXmlNS::office, "spreadsheet" );
 
     if ( body.isNull() )
     {
@@ -1590,7 +1589,7 @@ void Doc::paintRegion( QPainter &painter, const QRectF &viewRegion,
 
 void Doc::loadOasisCellValidation( const KoXmlElement&body )
 {
-    KoXmlNode validation = KoDom::namedItemNS( body, KoXmlNS::table, "content-validations" );
+    KoXmlNode validation = KoXml::namedItemNS( body, KoXmlNS::table, "content-validations" );
     kDebug()<<"void Doc::loadOasisCellValidation( const KoXmlElement&body )";
     kDebug()<<"validation.isNull ?"<<validation.isNull();
     if ( !validation.isNull() )
@@ -1616,7 +1615,7 @@ void Doc::loadOasisCellValidation( const KoXmlElement&body )
 
 void Doc::loadOasisCalculationSettings( const KoXmlElement& body )
 {
-    KoXmlNode settings = KoDom::namedItemNS( body, KoXmlNS::table, "calculation-settings" );
+    KoXmlNode settings = KoXml::namedItemNS( body, KoXmlNS::table, "calculation-settings" );
     kDebug() <<"Calculation settings found?"<< !settings.isNull();
     if ( !settings.isNull() )
     {

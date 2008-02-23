@@ -4086,13 +4086,13 @@ void View::paste()
 
     // from KSpreadDoc::loadOasis:
     KoXmlElement content = doc.documentElement();
-    KoXmlElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+    KoXmlElement realBody ( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( realBody.isNull() )
     {
       kDebug(36005) <<"Invalid OASIS OpenDocument file. No office:body tag found.";
       return;
     }
-    KoXmlElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "spreadsheet" );
+    KoXmlElement body = KoXml::namedItemNS( realBody, KoXmlNS::office, "spreadsheet" );
 
     if ( body.isNull() )
     {

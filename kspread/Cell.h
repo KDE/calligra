@@ -37,8 +37,6 @@
 #include <QDate>
 #include <QSharedDataPointer>
 
-#include <KoXmlReader.h>
-
 #include "Condition.h"
 #include "Global.h"
 #include "Format.h"

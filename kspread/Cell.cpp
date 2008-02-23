@@ -72,7 +72,7 @@
 
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>
-#include <KoDom.h>
+#include <KoXmlReader.h>
 #include <KoOdfStylesReader.h>
 #include <KoXmlWriter.h>
 
@@ -1532,7 +1532,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOdfLoadingContext& odfConte
     //
     // cell comment/annotation
     //
-    KoXmlElement annotationElement = KoDom::namedItemNS( element, KoXmlNS::office, "annotation" );
+    KoXmlElement annotationElement = KoXml::namedItemNS( element, KoXmlNS::office, "annotation" );
     if ( !annotationElement.isNull() )
     {
         QString comment;
@@ -1553,7 +1553,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOdfLoadingContext& odfConte
             setComment( comment );
     }
 
-    KoXmlElement frame = KoDom::namedItemNS( element, KoXmlNS::draw, "frame" );
+    KoXmlElement frame = KoXml::namedItemNS( element, KoXmlNS::draw, "frame" );
     if ( !frame.isNull() )
       loadOasisObjects( frame, odfContext );
 
@@ -1582,7 +1582,7 @@ void Cell::loadOasisCellText( const KoXmlElement& parent )
                 multipleTextParagraphsFound=true;
             }
 
-            KoXmlElement textA = KoDom::namedItemNS( textParagraphElement, KoXmlNS::text, "a" );
+            KoXmlElement textA = KoXml::namedItemNS( textParagraphElement, KoXmlNS::text, "a" );
             if( !textA.isNull() )
             {
                 if ( textA.hasAttributeNS( KoXmlNS::xlink, "href" ) )
@@ -1622,7 +1622,7 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOdfLoadingContext& od
         if ( e.localName() == "frame" && e.namespaceURI() == KoXmlNS::draw )
         {
           EmbeddedObject *obj = 0;
-          KoXmlNode object = KoDom::namedItemNS( e, KoXmlNS::draw, "object" );
+          KoXmlNode object = KoXml::namedItemNS( e, KoXmlNS::draw, "object" );
           if ( !object.isNull() )
           {
             if ( !object.toElement().attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString()).isNull() )
@@ -1632,7 +1632,7 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOdfLoadingContext& od
           }
           else
           {
-            KoXmlNode image = KoDom::namedItemNS( e, KoXmlNS::draw, "image" );
+            KoXmlNode image = KoXml::namedItemNS( e, KoXmlNS::draw, "image" );
             if ( !image.isNull() )
               obj = new EmbeddedPictureObject( sheet(), doc()->pictureCollection() );
             else

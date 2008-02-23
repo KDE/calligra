@@ -27,7 +27,6 @@
 #include <kcodecs.h>
 #include <ktemporaryfile.h>
 
-#include <KoDom.h>
 #include <KoGenStyles.h>
 #include <KoOasisSettings.h>
 #include <KoOdfLoadingContext.h>
@@ -324,7 +323,7 @@ bool Map::loadOasis( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
         d->strPassword = passwd;
     }
 
-    KoXmlNode sheetNode = KoDom::namedItemNS( body, KoXmlNS::table, "table" );
+    KoXmlNode sheetNode = KoXml::namedItemNS( body, KoXmlNS::table, "table" );
     // sanity check
     if ( sheetNode.isNull() ) return false;
 

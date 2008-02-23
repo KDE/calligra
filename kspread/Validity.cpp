@@ -30,7 +30,7 @@
 #include <knotification.h>
 
 // KOffice
-#include <KoDom.h>
+#include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
 // KSpread
@@ -382,7 +382,7 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
         //todo what is it ?
     }
 
-    KoXmlElement help = KoDom::namedItemNS( element, KoXmlNS::table, "help-message" );
+    KoXmlElement help = KoXml::namedItemNS( element, KoXmlNS::table, "help-message" );
     if ( !help.isNull() )
     {
         if ( help.hasAttributeNS( KoXmlNS::table, "title" ) )
@@ -395,7 +395,7 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
             kDebug(36003)<<"help.attribute( table:display ) :"<<help.attributeNS( KoXmlNS::table,"display", QString() );
             setDisplayValidationInformation( ( ( help.attributeNS( KoXmlNS::table, "display", QString() )=="true" ) ? true : false ) );
         }
-        KoXmlElement attrText = KoDom::namedItemNS( help, KoXmlNS::text, "p" );
+        KoXmlElement attrText = KoXml::namedItemNS( help, KoXmlNS::text, "p" );
         if ( !attrText.isNull() )
         {
             kDebug(36003)<<"help text :"<<attrText.text();
@@ -403,7 +403,7 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
         }
     }
 
-    KoXmlElement error = KoDom::namedItemNS( element, KoXmlNS::table, "error-message" );
+    KoXmlElement error = KoXml::namedItemNS( element, KoXmlNS::table, "error-message" );
     if ( !error.isNull() )
     {
         if ( error.hasAttributeNS( KoXmlNS::table, "title" ) )
@@ -426,7 +426,7 @@ void Validity::loadOasisValidation( Cell* const cell, const QString& validationN
             kDebug(36003)<<" display message :"<<error.attributeNS( KoXmlNS::table,"display", QString() );
             setDisplayMessage( (error.attributeNS( KoXmlNS::table, "display", QString() )=="true") );
         }
-        KoXmlElement attrText = KoDom::namedItemNS( error, KoXmlNS::text, "p" );
+        KoXmlElement attrText = KoXml::namedItemNS( error, KoXmlNS::text, "p" );
         if ( !attrText.isNull() )
             setMessage( attrText.text() );
     }

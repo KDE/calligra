@@ -24,7 +24,6 @@
 
 #include <klocale.h>
 #include <KoChild.h>
-#include <KoDom.h>
 #include <KoOdfLoadingContext.h>
 #include <KoPictureCollection.h>
 #include <KoStore.h>

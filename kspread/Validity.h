@@ -41,11 +41,12 @@
 #include <QTime>
 
 // KOffice
-#include <KoXmlReader.h>
 #include "kspread_export.h"
 
 // KSpread
 #include "Condition.h"
+
+class KoXmlElement;
 
 namespace KSpread
 {

@@ -41,7 +41,6 @@
 
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
-#include <KoDom.h>
 #include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
 
@@ -409,7 +408,7 @@ void EmbeddedKOfficeObject::loadOasis(const KoXmlElement &element, KoOdfLoadingC
     kDebug()<<"void EmbeddedKOfficeObject::loadOasis(const KoXmlElement &element)******************";
     EmbeddedObject::loadOasis( element, context );
 
-    KoXmlElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
+    KoXmlElement objectElement = KoXml::namedItemNS( element, KoXmlNS::draw, "object" );
     m_embeddedObject->loadOasis( element, objectElement );
     if( element.hasAttributeNS( KoXmlNS::draw, "name" ) )
         m_objectName = element.attributeNS( KoXmlNS::draw, "name", QString());
@@ -573,7 +572,7 @@ void EmbeddedChart::loadOasis(const KoXmlElement &element, KoOdfLoadingContext &
     kDebug()<<"void EmbeddedChart::loadOasis(const KoXmlElement &element)******************";
     EmbeddedKOfficeObject::loadOasis( element, context );
 
-    KoXmlElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
+    KoXmlElement objectElement = KoXml::namedItemNS( element, KoXmlNS::draw, "object" );
     QString str_range = objectElement.attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString());
 
     if ( !str_range.isNull() )
@@ -968,7 +967,7 @@ void EmbeddedPictureObject::loadOasis(const KoXmlElement &element, KoOdfLoadingC
     //load it into kpresenter_doc
     EmbeddedObject::loadOasis( element, context );
     loadOasisPictureEffect( context );
-    KoXmlNode imageBox = KoDom::namedItemNS( element, KoXmlNS::draw, "image" );
+    KoXmlNode imageBox = KoXml::namedItemNS( element, KoXmlNS::draw, "image" );
     const QString href( imageBox.toElement().attributeNS( KoXmlNS::xlink, "href", QString()) );
     kDebug()<<" href:"<<href;
     if ( !href.isEmpty() /*&& href[0] == '#'*/ )
