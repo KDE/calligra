@@ -2,9 +2,10 @@ include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOGUIUTILS_INCLUDES}
 
 set(kpr_pageeffect_clockwipe_SRCS
     Plugin.cpp
+    KPrClockWipeStrategy.cpp
 
     clockwipe/KPrClockWipeEffectFactory.cpp
-    clockwipe/KPrClockWipeStrategy.cpp
+    pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp
     )
 
 kde4_add_plugin(kpr_pageeffect_clockwipe ${kpr_pageeffect_clockwipe_SRCS})

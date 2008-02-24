@@ -66,7 +66,13 @@ public:
         CornersIn,
         CornersInReverse,
         CornersOut,
-        CornersOutReverse
+        CornersOutReverse,
+        TwoBladeVerticalClockwise,
+        TwoBladeHorizontalClockwise,
+        FourBladeClockwise,
+        TwoBladeVerticalCounterClockwise,
+        TwoBladeHorizontalCounterClockwise,
+        FourBladeCounterClockwise
     };
 
     /**

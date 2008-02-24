@@ -27,14 +27,14 @@
 KPrClockWipeEffectFactory::KPrClockWipeEffectFactory()
 : KPrPageEffectFactory( ClockWipeEffectId, i18n( "Clock Wipe Effect" ) )
 {
-    addStrategy( new KPrClockWipeStrategy( 270, KPrPageEffect::FromTwelveClockwise, "clockWipe", "clockwiseTwelve", false ) );
-    addStrategy( new KPrClockWipeStrategy( 0, KPrPageEffect::FromThreeClockwise, "clockWipe", "clockwiseThree", false ) );
-    addStrategy( new KPrClockWipeStrategy( 90, KPrPageEffect::FromSixClockwise, "clockWipe", "clockwiseSix", false ) );
-    addStrategy( new KPrClockWipeStrategy( 180, KPrPageEffect::FromNineClockwise, "clockWipe", "clockwiseNine", false ) );
-    addStrategy( new KPrClockWipeStrategy( 270, KPrPageEffect::FromTwelveCounterClockwise, "clockWipe", "clockwiseTwelve", true ) );
-    addStrategy( new KPrClockWipeStrategy( 0, KPrPageEffect::FromThreeCounterClockwise, "clockWipe", "clockwiseThree", true ) );
-    addStrategy( new KPrClockWipeStrategy( 90, KPrPageEffect::FromSixCounterClockwise, "clockWipe", "clockwiseSix", true ) );
-    addStrategy( new KPrClockWipeStrategy( 180, KPrPageEffect::FromNineCounterClockwise, "clockWipe", "clockwiseNine", true ) );
+    addStrategy( new KPrClockWipeStrategy( 270, 1, KPrPageEffect::FromTwelveClockwise, "clockWipe", "clockwiseTwelve", false ) );
+    addStrategy( new KPrClockWipeStrategy( 0, 1, KPrPageEffect::FromThreeClockwise, "clockWipe", "clockwiseThree", false ) );
+    addStrategy( new KPrClockWipeStrategy( 90, 1, KPrPageEffect::FromSixClockwise, "clockWipe", "clockwiseSix", false ) );
+    addStrategy( new KPrClockWipeStrategy( 180, 1, KPrPageEffect::FromNineClockwise, "clockWipe", "clockwiseNine", false ) );
+    addStrategy( new KPrClockWipeStrategy( 270, 1, KPrPageEffect::FromTwelveCounterClockwise, "clockWipe", "clockwiseTwelve", true ) );
+    addStrategy( new KPrClockWipeStrategy( 0, 1, KPrPageEffect::FromThreeCounterClockwise, "clockWipe", "clockwiseThree", true ) );
+    addStrategy( new KPrClockWipeStrategy( 90, 1, KPrPageEffect::FromSixCounterClockwise, "clockWipe", "clockwiseSix", true ) );
+    addStrategy( new KPrClockWipeStrategy( 180, 1, KPrPageEffect::FromNineCounterClockwise, "clockWipe", "clockwiseNine", true ) );
 }
 
 KPrClockWipeEffectFactory::~KPrClockWipeEffectFactory()

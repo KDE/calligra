@@ -61,7 +61,13 @@ static const char* s_subTypes[] = {
     I18N_NOOP( "Corners In" ),
     I18N_NOOP( "Corners In Reverse" ),
     I18N_NOOP( "Corners Out" ),
-    I18N_NOOP( "Corners Out Reverse" )
+    I18N_NOOP( "Corners Out Reverse" ),
+    I18N_NOOP( "Two Blades Vertical Clockwise" ),
+    I18N_NOOP( "Two Blades Horizontal Clockwise" ),
+    I18N_NOOP( "Four Blades Horizontal Clockwise" ),
+    I18N_NOOP( "Two Blades Vertical Counterclockwise" ),
+    I18N_NOOP( "Two Blades Horizontal Counterclockwise" ),
+    I18N_NOOP( "Four Blades Horizontal Counterclockwise" )
 };
 
 KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags )

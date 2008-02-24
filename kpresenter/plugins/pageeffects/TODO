@@ -82,8 +82,9 @@ Iris Wipes - shapes expand from the center of the media
 Clock Wipes - rotate around a center point
 ------------------------------------------
 "clockWipe"  "clockwiseTwelve" (201) [default], "clockwiseThree" (202), "clockwiseSix" (203), "clockwiseNine" (204)
-  Sven Langkamp
+  done Sven Langkamp
 "pinWheelWipe"  "twoBladeVertical" (205) [default], "twoBladeHorizontal" (206), "fourBlade" (207)
+  done Sven Langkamp
 "singleSweepWipe"  "clockwiseTop" (221) [default], "clockwiseRight" (222), "clockwiseBottom" (223), "clockwiseLeft" (224), "clockwiseTopLeft" (241), "counterClockwiseBottomLeft" (242), "clockwiseBottomRight" (243), "counterClockwiseTopRight" (244)
 "fanWipe"  "centerTop" (211) [default], "centerRight" (212), "top" (231), "right" (232), "bottom" (233), "left" (234)
 "doubleFanWipe"  "fanOutVertical" (213) [default], "fanOutHorizontal" (214), "fanInVertical" (235), "fanInHorizontal" (236)
