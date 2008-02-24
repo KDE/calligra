@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
- *
- * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,23 +16,24 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include <kgenericfactory.h>
-#include <KPrPageEffectRegistry.h>
 
-#include "diagonalwipe/DiagonalWipeEffectFactory.h"
-#include "miscdiagonalwipe/MiscDiagonalWipeEffectFactory.h"
-#include "fourboxwipe/FourBoxWipeEffectFactory.h"
+#include "DiagonalWipeEffectFactory.h"
+#include <klocale.h>
 
-K_EXPORT_COMPONENT_FACTORY( kpr_pageeffect_edgewipe, KGenericFactory<Plugin>( "KPrPageEffect" ) )
+#include "DiagonalWipeStrategy.h"
 
-Plugin::Plugin(QObject *parent, const QStringList &)
-    : QObject(parent)
+#define DiagonalWipeEffectId "DiagonalWipeEffect"
+
+DiagonalWipeEffectFactory::DiagonalWipeEffectFactory()
+: KPrPageEffectFactory( DiagonalWipeEffectId, i18n( "Diagonal Wipe Effect" ) )
 {
-    KPrPageEffectRegistry::instance()->add(new DiagonalWipeEffectFactory());
-    KPrPageEffectRegistry::instance()->add(new MiscDiagonalWipeEffectFactory());
-    KPrPageEffectRegistry::instance()->add(new FourBoxWipeEffectFactory());
+    addStrategy( new DiagonalWipeStrategy( KPrPageEffect::FromTopLeft, "topLeft", false ) );
+    addStrategy( new DiagonalWipeStrategy( KPrPageEffect::FromBottomRight, "topLeft", true ) );
+    addStrategy( new DiagonalWipeStrategy( KPrPageEffect::FromTopRight, "topRight", false ) );
+    addStrategy( new DiagonalWipeStrategy( KPrPageEffect::FromBottomLeft, "topRight", true ) );
 }
 
-#include "Plugin.moc"
+DiagonalWipeEffectFactory::~DiagonalWipeEffectFactory()
+{
+}
 

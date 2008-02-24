@@ -55,7 +55,7 @@ Edge Wipes - wipes occur along an edge
 done Jan Hambrecht
 "barnDoorWipe"  "vertical" (21) [default], "horizontal" (22), "diagonalBottomLeft" (45), "diagonalTopLeft" (46)
 "diagonalWipe"  "topLeft" (41) [default], "topRight" (42)
-Jan Hambrecht
+done Jan Hambrecht
 "bowTieWipe"  "vertical" (43) [default], "horizontal" (44)
   Lacroix Timothee
 "miscDiagonalWipe"  "doubleBarnDoor" (47) [default], "doubleDiamond" (48)
