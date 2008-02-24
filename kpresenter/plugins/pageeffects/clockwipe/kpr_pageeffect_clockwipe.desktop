@@ -1,6 +1,10 @@
 [Desktop Entry]
 Name=Clock wipe
+Name[pt]=Varrimento em relógio
+Name[pt_BR]=Varrimento em relógio
 Comment=Clock wipe Page Effects
+Comment[pt]=Efeitos de Varrimento da Página em Relógio
+Comment[pt_BR]=Efeitos de Varrimento da Página em Relógio
 X-KDE-ServiceTypes=KPresenter/PageEffect
 Type=Service
 X-KDE-Library=kpr_pageeffect_clockwipe
