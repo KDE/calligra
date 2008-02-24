@@ -37,8 +37,8 @@ public:
     virtual void next( const KPrPageEffect::Data &data );
 
 private:
-    /// calculates clip region for given step
-    QRegion clipRegion( int step, const QRect &area );
+    /// calculates clip path for given step
+    QPainterPath clipPath( int step, const QRect &area );
 };
 
 #endif // DIAGONALWIPESTRATEGY_H

@@ -21,7 +21,7 @@
 #include <QtGui/QWidget>
 #include <QtGui/QPainter>
 
-const int StepCount = 150;
+const int StepCount = 250;
 
 DiagonalWipeStrategy::DiagonalWipeStrategy( KPrPageEffect::SubType subtype, const char *smilSubType, bool reverse )
     : KPrPageEffectStrategy( subtype, "diagonalWipe", smilSubType, reverse )
@@ -34,63 +34,58 @@ DiagonalWipeStrategy::~DiagonalWipeStrategy()
 
 void DiagonalWipeStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
 {
+    Q_UNUSED( data );
     timeLine.setFrameRange( 0, StepCount );
 }
 
 void DiagonalWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data )
 {
     p.drawPixmap( QPoint( 0, 0 ), data.m_oldPage, data.m_widget->rect() );
-    // remove next line to make it fast ;-)
-    p.setClipRegion( clipRegion( currPos, data.m_widget->rect() ) );
+    p.setClipPath( clipPath( currPos, data.m_widget->rect() ) );
     p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, data.m_widget->rect() );
 }
 
 void DiagonalWipeStrategy::next( const KPrPageEffect::Data &data )
 {
-    int lastPos = data.m_timeLine.frameForTime( data.m_lastTime );
-    int currPos = data.m_timeLine.frameForTime( data.m_currentTime );
-    if( lastPos == currPos )
-        return;
-
-    QRegion oldRegion = clipRegion( lastPos, data.m_widget->rect() );
-    QRegion newRegion = clipRegion( currPos, data.m_widget->rect() );
-    data.m_widget->update( newRegion.subtracted( oldRegion ) );
+    data.m_widget->update();
 }
 
-QRegion DiagonalWipeStrategy::clipRegion( int step, const QRect &area )
+QPainterPath DiagonalWipeStrategy::clipPath( int step, const QRect &area )
 {
     qreal percent = static_cast<qreal>(step) / static_cast<qreal>(StepCount);
-
-    QPolygon poly;
 
     QPoint vecx( static_cast<int>(2.0 * area.width() * percent), 0 ) ;
     QPoint vecy( 0, static_cast<int>( 2.0 * area.height() * percent ) );
 
+    QPainterPath path;
+
     switch( subType() )
     {
         case KPrPageEffect::FromTopLeft:
-            poly.append( area.topLeft() );
-            poly.append( area.topLeft() + vecx );
-            poly.append( area.topLeft() + vecy );
+            path.moveTo( area.topLeft() );
+            path.lineTo( area.topLeft() + vecx );
+            path.lineTo( area.topLeft() + vecy );
             break;
         case KPrPageEffect::FromTopRight:
-            poly.append( area.topRight() );
-            poly.append( area.topRight() - vecx );
-            poly.append( area.topRight() + vecy );
+            path.moveTo( area.topRight() );
+            path.lineTo( area.topRight() - vecx );
+            path.lineTo( area.topRight() + vecy );
             break;
         case KPrPageEffect::FromBottomLeft:
-            poly.append( area.bottomLeft() );
-            poly.append( area.bottomLeft() + vecx );
-            poly.append( area.bottomLeft() - vecy );
+            path.moveTo( area.bottomLeft() );
+            path.lineTo( area.bottomLeft() + vecx );
+            path.lineTo( area.bottomLeft() - vecy );
             break;
         case KPrPageEffect::FromBottomRight:
-            poly.append( area.bottomRight() );
-            poly.append( area.bottomRight() - vecx );
-            poly.append( area.bottomRight() - vecy );
+            path.moveTo( area.bottomRight() );
+            path.lineTo( area.bottomRight() - vecx );
+            path.lineTo( area.bottomRight() - vecy );
             break;
         default:
-            return QRegion();
+            return QPainterPath();
     }
 
-    return QRegion( poly ).intersected( QRegion( area ) );
+    path.closeSubpath();
+
+    return path;
 }

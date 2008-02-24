@@ -21,7 +21,7 @@
 #include <QtGui/QWidget>
 #include <QtGui/QPainter>
 
-const int StepCount = 150;
+const int StepCount = 250;
 
 DoubleDiamondWipeStrategy::DoubleDiamondWipeStrategy()
     : KPrPageEffectStrategy( KPrPageEffect::DoubleDiamond, "miscDiagonalWipe", "doubleDiamond", false )
@@ -34,28 +34,23 @@ DoubleDiamondWipeStrategy::~DoubleDiamondWipeStrategy()
 
 void DoubleDiamondWipeStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
 {
+    Q_UNUSED( data );
     timeLine.setFrameRange( 0, StepCount );
 }
 
 void DoubleDiamondWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data )
 {
     p.drawPixmap( QPoint( 0, 0 ), data.m_oldPage, data.m_widget->rect() );
+    p.setClipPath( clipPath( currPos, data.m_widget->rect() ) );
     p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, data.m_widget->rect() );
 }
 
 void DoubleDiamondWipeStrategy::next( const KPrPageEffect::Data &data )
 {
-    int lastPos = data.m_timeLine.frameForTime( data.m_lastTime );
-    int currPos = data.m_timeLine.frameForTime( data.m_currentTime );
-    if( lastPos == currPos )
-        return;
-
-    QRegion oldRegion = clipRegion( lastPos, data.m_widget->rect() );
-    QRegion newRegion = clipRegion( currPos, data.m_widget->rect() );
-    data.m_widget->update( newRegion.subtracted( oldRegion ) );
+    data.m_widget->update();
 }
 
-QRegion DoubleDiamondWipeStrategy::clipRegion( int step, const QRect &area )
+QPainterPath DoubleDiamondWipeStrategy::clipPath( int step, const QRect &area )
 {
     int width_2 = area.width() >> 1;
     int height_2 = area.height() >> 1;
@@ -64,21 +59,23 @@ QRegion DoubleDiamondWipeStrategy::clipRegion( int step, const QRect &area )
     int stepx = static_cast<int>( width_2 * percent );
     int stepy = static_cast<int>( height_2 * percent );
 
-    QPolygon outerPoly;
-    outerPoly.append( area.topLeft() + QPoint( stepx, 0 ) );
-    outerPoly.append( area.topRight() - QPoint( stepx, 0 ) );
-    outerPoly.append( area.topRight() + QPoint( 0, stepy ) );
-    outerPoly.append( area.bottomRight() - QPoint( 0, stepy ) );
-    outerPoly.append( area.bottomRight() - QPoint( stepx, 0 ) );
-    outerPoly.append( area.bottomLeft() + QPoint( stepx, 0 ) );
-    outerPoly.append( area.bottomLeft() - QPoint( 0, stepy ) );
-    outerPoly.append( area.topLeft() + QPoint( 0, stepy ) );
+    QPainterPath outerPath;
+    outerPath.moveTo( area.topLeft() + QPoint( stepx, 0 ) );
+    outerPath.lineTo( area.topRight() - QPoint( stepx, 0 ) );
+    outerPath.lineTo( area.topRight() + QPoint( 0, stepy ) );
+    outerPath.lineTo( area.bottomRight() - QPoint( 0, stepy ) );
+    outerPath.lineTo( area.bottomRight() - QPoint( stepx, 0 ) );
+    outerPath.lineTo( area.bottomLeft() + QPoint( stepx, 0 ) );
+    outerPath.lineTo( area.bottomLeft() - QPoint( 0, stepy ) );
+    outerPath.lineTo( area.topLeft() + QPoint( 0, stepy ) );
+    outerPath.closeSubpath();
 
-    QPolygon innerPoly;
-    innerPoly.append( area.center() - QPoint( 0, stepy ) );
-    innerPoly.append( area.center() + QPoint( stepx, 0 ) );
-    innerPoly.append( area.center() + QPoint( 0, stepy ) );
-    innerPoly.append( area.center() - QPoint( stepx, 0 ) );
+    QPainterPath innerPath;
+    innerPath.moveTo( area.center() - QPoint( 0, stepy ) );
+    innerPath.lineTo( area.center() + QPoint( stepx, 0 ) );
+    innerPath.lineTo( area.center() + QPoint( 0, stepy ) );
+    innerPath.lineTo( area.center() - QPoint( stepx, 0 ) );
+    innerPath.closeSubpath();
 
-    return QRegion( outerPoly ).subtracted( QRegion( innerPoly ) );
+    return outerPath.subtracted( innerPath );
 }

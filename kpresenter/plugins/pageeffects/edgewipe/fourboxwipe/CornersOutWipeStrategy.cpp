@@ -21,7 +21,7 @@
 #include <QtGui/QWidget>
 #include <QtGui/QPainter>
 
-const int StepCount = 150;
+const int StepCount = 250;
 
 CornersOutWipeStrategy::CornersOutWipeStrategy( bool reverse )
     : KPrPageEffectStrategy( reverse ? KPrPageEffect::CornersOutReverse : KPrPageEffect::CornersOut, "fourBoxWipe", "cornersOut", reverse )
@@ -34,29 +34,23 @@ CornersOutWipeStrategy::~CornersOutWipeStrategy()
 
 void CornersOutWipeStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
 {
+    Q_UNUSED( data );
     timeLine.setFrameRange( 0, StepCount );
 }
 
 void CornersOutWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data )
 {
     p.drawPixmap( QPoint( 0, 0 ), data.m_oldPage, data.m_widget->rect() );
-    p.setClipRegion( clipRegion( currPos, data.m_widget->rect() ) );
+    p.setClipPath( clipPath( currPos, data.m_widget->rect() ) );
     p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, data.m_widget->rect() );
 }
 
 void CornersOutWipeStrategy::next( const KPrPageEffect::Data &data )
 {
-    int lastPos = data.m_timeLine.frameForTime( data.m_lastTime );
-    int currPos = data.m_timeLine.frameForTime( data.m_currentTime );
-    if( lastPos == currPos )
-        return;
-
-    QRegion oldRegion = clipRegion( lastPos, data.m_widget->rect() );
-    QRegion newRegion = clipRegion( currPos, data.m_widget->rect() );
-    data.m_widget->update( newRegion.subtracted( oldRegion ) );
+    data.m_widget->update();
 }
 
-QRegion CornersOutWipeStrategy::clipRegion( int step, const QRect &area )
+QPainterPath CornersOutWipeStrategy::clipPath( int step, const QRect &area )
 {
     int width_2 = area.width() >> 1;
     int height_2 = area.height() >> 1;
@@ -70,13 +64,9 @@ QRegion CornersOutWipeStrategy::clipRegion( int step, const QRect &area )
     QRect templateRect;
 
     if( reverse() )
-    {
         templateRect = QRect( QPoint(0,0), QSize( width_2 - stepx, height_2 - stepy ) );
-    }
     else
-    {
         templateRect = QRect( QPoint(0,0), QSize( stepx, stepy ) );
-    }
 
     QRect topLeft = templateRect;
     topLeft.moveCenter( QPoint( width_4, height_4 ) );
@@ -87,13 +77,18 @@ QRegion CornersOutWipeStrategy::clipRegion( int step, const QRect &area )
     QRect bottomLeft = templateRect;
     bottomLeft.moveCenter( QPoint( width_4, height_2 + height_4 ) );
 
-    QRegion r = QRegion(topLeft) | QRegion(topRight) | QRegion(bottomRight) | QRegion(bottomLeft);
+    QPainterPath path;
+    path.addRect( topLeft );
+    path.addRect( topRight );
+    path.addRect( bottomRight );
+    path.addRect( bottomLeft );
+
     if( reverse() )
     {
-        return QRegion(area).subtracted( r );
+        QPainterPath areaPath;
+        areaPath.addRect( area );
+        path = areaPath.subtracted( path );
     }
-    else
-    {
-        return r;
-    }
+
+    return path;
 }
