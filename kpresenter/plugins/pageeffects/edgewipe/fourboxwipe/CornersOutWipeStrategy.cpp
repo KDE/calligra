@@ -17,34 +17,34 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "DoubleBarnDoorWipeStrategy.h"
+#include "CornersOutWipeStrategy.h"
 #include <QtGui/QWidget>
 #include <QtGui/QPainter>
 
 const int StepCount = 150;
 
-DoubleBarnDoorWipeStrategy::DoubleBarnDoorWipeStrategy()
-    : KPrPageEffectStrategy( KPrPageEffect::DoubleBarnDoor, "miscDiagonalWipe", "doubleBarnDoor", false )
+CornersOutWipeStrategy::CornersOutWipeStrategy( bool reverse )
+    : KPrPageEffectStrategy( reverse ? KPrPageEffect::CornersOutReverse : KPrPageEffect::CornersOut, "fourBoxWipe", "cornersOut", reverse )
 {
 }
 
-DoubleBarnDoorWipeStrategy::~DoubleBarnDoorWipeStrategy()
+CornersOutWipeStrategy::~CornersOutWipeStrategy()
 {
 }
 
-void DoubleBarnDoorWipeStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
+void CornersOutWipeStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
 {
     timeLine.setFrameRange( 0, StepCount );
 }
 
-void DoubleBarnDoorWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data )
+void CornersOutWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data )
 {
     p.drawPixmap( QPoint( 0, 0 ), data.m_oldPage, data.m_widget->rect() );
     p.setClipRegion( clipRegion( currPos, data.m_widget->rect() ) );
     p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, data.m_widget->rect() );
 }
 
-void DoubleBarnDoorWipeStrategy::next( const KPrPageEffect::Data &data )
+void CornersOutWipeStrategy::next( const KPrPageEffect::Data &data )
 {
     int lastPos = data.m_timeLine.frameForTime( data.m_lastTime );
     int currPos = data.m_timeLine.frameForTime( data.m_currentTime );
@@ -56,32 +56,44 @@ void DoubleBarnDoorWipeStrategy::next( const KPrPageEffect::Data &data )
     data.m_widget->update( newRegion.subtracted( oldRegion ) );
 }
 
-QRegion DoubleBarnDoorWipeStrategy::clipRegion( int step, const QRect &area )
+QRegion CornersOutWipeStrategy::clipRegion( int step, const QRect &area )
 {
     int width_2 = area.width() >> 1;
     int height_2 = area.height() >> 1;
+    int width_4 = width_2 >> 1;
+    int height_4 = height_2 >> 1;
 
-    qreal percent = static_cast<qreal>( step ) / static_cast<qreal>( StepCount );
+    qreal percent = static_cast<qreal>(step) / static_cast<qreal>(StepCount);
     int stepx = static_cast<int>( width_2 * percent );
     int stepy = static_cast<int>( height_2 * percent );
 
-    QPolygon poly;
-    poly.append( area.topLeft() );
-    poly.append( area.topLeft() + QPoint( stepx, 0 ) );
-    poly.append( area.center() - QPoint( 0, stepy ) );
-    poly.append( area.topRight() - QPoint( stepx, 0 ) );
-    poly.append( area.topRight() );
-    poly.append( area.topRight() + QPoint( 0, stepy ) );
-    poly.append( area.center() + QPoint( stepx, 0 ) );
-    poly.append( area.bottomRight() - QPoint( 0, stepy ) );
-    poly.append( area.bottomRight() );
-    poly.append( area.bottomRight() - QPoint( stepx, 0 ) );
-    poly.append( area.center() + QPoint( 0, stepy ) );
-    poly.append( area.bottomLeft() + QPoint( stepx, 0 ) );
-    poly.append( area.bottomLeft() );
-    poly.append( area.bottomLeft() - QPoint( 0, stepy ) );
-    poly.append( area.center() - QPoint( stepx, 0 ) );
-    poly.append( area.topLeft() + QPoint( 0, stepy ) );
+    QRect templateRect;
 
-    return QRegion( poly );
+    if( reverse() )
+    {
+        templateRect = QRect( QPoint(0,0), QSize( width_2 - stepx, height_2 - stepy ) );
+    }
+    else
+    {
+        templateRect = QRect( QPoint(0,0), QSize( stepx, stepy ) );
+    }
+
+    QRect topLeft = templateRect;
+    topLeft.moveCenter( QPoint( width_4, height_4 ) );
+    QRect topRight = templateRect;
+    topRight.moveCenter( QPoint( width_2 + width_4, height_4 ) );
+    QRect bottomRight = templateRect;
+    bottomRight.moveCenter( QPoint( width_2+width_4, height_2 + height_4 ) );
+    QRect bottomLeft = templateRect;
+    bottomLeft.moveCenter( QPoint( width_4, height_2 + height_4 ) );
+
+    QRegion r = QRegion(topLeft) | QRegion(topRight) | QRegion(bottomRight) | QRegion(bottomLeft);
+    if( reverse() )
+    {
+        return QRegion(area).subtracted( r );
+    }
+    else
+    {
+        return r;
+    }
 }

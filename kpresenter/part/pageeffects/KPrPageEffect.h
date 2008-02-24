@@ -62,7 +62,11 @@ public:
         FromSixCounterClockwise,
         FromNineCounterClockwise,
         DoubleBarnDoor,
-        DoubleDiamond
+        DoubleDiamond,
+        CornersIn,
+        CornersInReverse,
+        CornersOut,
+        CornersOutReverse
     };
 
     /**

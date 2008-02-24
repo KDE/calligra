@@ -6,6 +6,10 @@ set(kpr_pageeffect_edgewipe_SRCS
     miscdiagonalwipe/MiscDiagonalWipeEffectFactory.cpp
     miscdiagonalwipe/DoubleBarnDoorWipeStrategy.cpp
     miscdiagonalwipe/DoubleDiamondWipeStrategy.cpp
+
+    fourboxwipe/FourBoxWipeEffectFactory.cpp
+    fourboxwipe/CornersInWipeStrategy.cpp
+    fourboxwipe/CornersOutWipeStrategy.cpp
     )
 
 kde4_add_plugin(kpr_pageeffect_edgewipe ${kpr_pageeffect_edgewipe_SRCS})

@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
- *
- * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,21 +16,25 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include <kgenericfactory.h>
-#include <KPrPageEffectRegistry.h>
 
-#include "miscdiagonalwipe/MiscDiagonalWipeEffectFactory.h"
-#include "fourboxwipe/FourBoxWipeEffectFactory.h"
+#include "FourBoxWipeEffectFactory.h"
+#include <klocale.h>
 
-K_EXPORT_COMPONENT_FACTORY( kpr_pageeffect_edgewipe, KGenericFactory<Plugin>( "KPrPageEffect" ) )
+#include "CornersInWipeStrategy.h"
+#include "CornersOutWipeStrategy.h"
 
-Plugin::Plugin(QObject *parent, const QStringList &)
-    : QObject(parent)
+#define FourBoxWipeEffectId "FourBoxWipeEffect"
+
+FourBoxWipeEffectFactory::FourBoxWipeEffectFactory()
+: KPrPageEffectFactory( FourBoxWipeEffectId, i18n( "Four Box Wipe Effect" ) )
 {
-    KPrPageEffectRegistry::instance()->add(new MiscDiagonalWipeEffectFactory());
-    KPrPageEffectRegistry::instance()->add(new FourBoxWipeEffectFactory());
+    addStrategy( new CornersInWipeStrategy(false) );
+    addStrategy( new CornersInWipeStrategy(true) );
+    addStrategy( new CornersOutWipeStrategy(false) );
+    addStrategy( new CornersOutWipeStrategy(true) );
 }
 
-#include "Plugin.moc"
+FourBoxWipeEffectFactory::~FourBoxWipeEffectFactory()
+{
+}
 

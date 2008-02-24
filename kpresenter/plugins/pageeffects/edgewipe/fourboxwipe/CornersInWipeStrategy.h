@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
- *
- * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
+ * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,21 +16,28 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include <kgenericfactory.h>
-#include <KPrPageEffectRegistry.h>
 
-#include "miscdiagonalwipe/MiscDiagonalWipeEffectFactory.h"
-#include "fourboxwipe/FourBoxWipeEffectFactory.h"
+#ifndef CORNERSINWIPESTRATEGY_H
+#define CORNERSINWIPESTRATEGY_H
 
-K_EXPORT_COMPONENT_FACTORY( kpr_pageeffect_edgewipe, KGenericFactory<Plugin>( "KPrPageEffect" ) )
+#include <KPrPageEffectStrategy.h>
 
-Plugin::Plugin(QObject *parent, const QStringList &)
-    : QObject(parent)
+class CornersInWipeStrategy : public KPrPageEffectStrategy
 {
-    KPrPageEffectRegistry::instance()->add(new MiscDiagonalWipeEffectFactory());
-    KPrPageEffectRegistry::instance()->add(new FourBoxWipeEffectFactory());
-}
+public:
+    CornersInWipeStrategy( bool reverse );
+    virtual ~CornersInWipeStrategy();
 
-#include "Plugin.moc"
+    /// reimplemented from KPrPageEffectStrategy
+    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
+    /// reimplemented from KPrPageEffectStrategy
+    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+    /// reimplemented from KPrPageEffectStrategy
+    virtual void next( const KPrPageEffect::Data &data );
 
+private:
+    /// calculates clip region for given step
+    QRegion clipRegion( int step, const QRect &area );
+};
+
+#endif // CORNERSINWIPESTRATEGY_H

@@ -17,34 +17,34 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "DoubleBarnDoorWipeStrategy.h"
+#include "CornersInWipeStrategy.h"
 #include <QtGui/QWidget>
 #include <QtGui/QPainter>
 
 const int StepCount = 150;
 
-DoubleBarnDoorWipeStrategy::DoubleBarnDoorWipeStrategy()
-    : KPrPageEffectStrategy( KPrPageEffect::DoubleBarnDoor, "miscDiagonalWipe", "doubleBarnDoor", false )
+CornersInWipeStrategy::CornersInWipeStrategy( bool reverse )
+    : KPrPageEffectStrategy( reverse ? KPrPageEffect::CornersInReverse : KPrPageEffect::CornersIn, "fourBoxWipe", "cornersIn", reverse )
 {
 }
 
-DoubleBarnDoorWipeStrategy::~DoubleBarnDoorWipeStrategy()
+CornersInWipeStrategy::~CornersInWipeStrategy()
 {
 }
 
-void DoubleBarnDoorWipeStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
+void CornersInWipeStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
 {
     timeLine.setFrameRange( 0, StepCount );
 }
 
-void DoubleBarnDoorWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data )
+void CornersInWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data )
 {
     p.drawPixmap( QPoint( 0, 0 ), data.m_oldPage, data.m_widget->rect() );
     p.setClipRegion( clipRegion( currPos, data.m_widget->rect() ) );
     p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, data.m_widget->rect() );
 }
 
-void DoubleBarnDoorWipeStrategy::next( const KPrPageEffect::Data &data )
+void CornersInWipeStrategy::next( const KPrPageEffect::Data &data )
 {
     int lastPos = data.m_timeLine.frameForTime( data.m_lastTime );
     int currPos = data.m_timeLine.frameForTime( data.m_currentTime );
@@ -56,32 +56,33 @@ void DoubleBarnDoorWipeStrategy::next( const KPrPageEffect::Data &data )
     data.m_widget->update( newRegion.subtracted( oldRegion ) );
 }
 
-QRegion DoubleBarnDoorWipeStrategy::clipRegion( int step, const QRect &area )
+QRegion CornersInWipeStrategy::clipRegion( int step, const QRect &area )
 {
     int width_2 = area.width() >> 1;
     int height_2 = area.height() >> 1;
 
-    qreal percent = static_cast<qreal>( step ) / static_cast<qreal>( StepCount );
+    qreal percent = static_cast<qreal>(step) / static_cast<qreal>(StepCount);
     int stepx = static_cast<int>( width_2 * percent );
     int stepy = static_cast<int>( height_2 * percent );
 
-    QPolygon poly;
-    poly.append( area.topLeft() );
-    poly.append( area.topLeft() + QPoint( stepx, 0 ) );
-    poly.append( area.center() - QPoint( 0, stepy ) );
-    poly.append( area.topRight() - QPoint( stepx, 0 ) );
-    poly.append( area.topRight() );
-    poly.append( area.topRight() + QPoint( 0, stepy ) );
-    poly.append( area.center() + QPoint( stepx, 0 ) );
-    poly.append( area.bottomRight() - QPoint( 0, stepy ) );
-    poly.append( area.bottomRight() );
-    poly.append( area.bottomRight() - QPoint( stepx, 0 ) );
-    poly.append( area.center() + QPoint( 0, stepy ) );
-    poly.append( area.bottomLeft() + QPoint( stepx, 0 ) );
-    poly.append( area.bottomLeft() );
-    poly.append( area.bottomLeft() - QPoint( 0, stepy ) );
-    poly.append( area.center() - QPoint( stepx, 0 ) );
-    poly.append( area.topLeft() + QPoint( 0, stepy ) );
+    if( ! reverse() )
+    {
+        QSize rectSize( stepx, stepy );
 
-    return QRegion( poly );
+        QRect topLeft( area.topLeft(), rectSize );
+        QRect topRight( area.topRight() - QPoint( stepx, 0 ), rectSize );
+        QRect bottomRight( area.bottomRight() - QPoint( stepx, stepy), rectSize );
+        QRect bottomLeft( area.bottomLeft() - QPoint( 0, stepy ), rectSize );
+
+        return QRegion(topLeft) | QRegion(topRight) | QRegion(bottomRight) | QRegion(bottomLeft);
+    }
+    else
+    {
+        QRect horzRect( QPoint( 0, 0 ), QSize( 2 * stepx, area.height() ) );
+        horzRect.moveCenter( area.center() );
+        QRect vertRect( QPoint( 0, 0 ), QSize( area.width(), 2 * stepy ) );
+        vertRect.moveCenter( area.center() );
+
+        return QRegion(horzRect) | QRegion(vertRect);
+    }
 }
