@@ -55,7 +55,9 @@ static const char* s_subTypes[] = {
     I18N_NOOP( "From Twelve Counterclockwise" ),
     I18N_NOOP( "From Three Counterclockwise" ),
     I18N_NOOP( "From Six Counterclockwise" ),
-    I18N_NOOP( "From Nine Counterclockwise" )
+    I18N_NOOP( "From Nine Counterclockwise" ),
+    I18N_NOOP( "Double Barn Door" ),
+    I18N_NOOP( "Double Diamond" )
 };
 
 KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags )
