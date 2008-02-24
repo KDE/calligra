@@ -35,7 +35,6 @@
 #include <KoOdfReadStore.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
-#include <KoDom.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 #include <KoImageData.h>
@@ -277,14 +276,14 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
     kDebug(32001) <<"========================> KWOpenDocumentLoader::load START";
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
-    KoXmlElement realBody ( KoDom::namedItemNS( content, KoXmlNS::office, "body" ) );
+    KoXmlElement realBody ( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
     if ( realBody.isNull() ) {
         kError(32001) << "No office:body found!" << endl;
         d->document->setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ) );
         return false;
     }
 
-    KoXmlElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "text" );
+    KoXmlElement body = KoXml::namedItemNS( realBody, KoXmlNS::office, "text" );
     if ( body.isNull() ) {
         kError(32001) << "No office:text found!" << endl;
         KoXmlElement childElem;
@@ -330,7 +329,7 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
 #if 0 //1.6:
     KWOasisLoader oasisLoader( this );
     // <text:page-sequence> oasis extension for DTP (2003-10-27 post by Daniel)
-    m_processingType = ( !KoDom::namedItemNS( body, KoXmlNS::text, "page-sequence" ).isNull() ) ? DTP : WP;
+    m_processingType = ( !KoXml::namedItemNS( body, KoXmlNS::text, "page-sequence" ).isNull() ) ? DTP : WP;
     m_hasTOC = false;
     m_tabStop = MM_TO_POINT(15);
     const KoXmlElement* defaultParagStyle = styles.defaultStyle( "paragraph" );
@@ -518,8 +517,8 @@ bool KWOpenDocumentLoader::loadPageLayout(KoOdfLoadingContext& context, const QS
         //d->document->m_pageManager.setDefaultPage(pageLayout);
         d->document->setDefaultPageLayout(pageLayout);
 #if 0 //1.6:
-        const KoXmlElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
-        const KoXmlElement footnoteSep = KoDom::namedItemNS( properties, KoXmlNS::style, "footnote-sep" );
+        const KoXmlElement properties( KoXml::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
+        const KoXmlElement footnoteSep = KoXml::namedItemNS( properties, KoXmlNS::style, "footnote-sep" );
         if ( !footnoteSep.isNull() ) {
             // style:width="0.018cm" style:distance-before-sep="0.101cm"
             // style:distance-after-sep="0.101cm" style:adjustment="left"
@@ -544,7 +543,7 @@ bool KWOpenDocumentLoader::loadPageLayout(KoOdfLoadingContext& context, const QS
             else if ( pos == "right") m_footNoteSeparatorLinePos = SLP_RIGHT;
             else // if ( pos == "left" ) m_footNoteSeparatorLinePos = SLP_LEFT;
         }
-        const KoXmlElement columnsElem = KoDom::namedItemNS( properties, KoXmlNS::style, "columns" );
+        const KoXmlElement columnsElem = KoXml::namedItemNS( properties, KoXmlNS::style, "columns" );
         if ( !columnsElem.isNull() ) {
             columns.columns = columnsElem.attributeNS( KoXmlNS::fo, "column-count", QString::null ).toInt();
             if ( columns.columns == 0 ) columns.columns = 1;
@@ -588,7 +587,7 @@ bool KWOpenDocumentLoader::loadMasterPageStyle(KoTextLoadingContext& context, co
     // has no page information but the first paragraph points to a master-page that does (#129585)
     if ( m_pageLayout.ptWidth <= 1e-13 || m_pageLayout.ptHeight <= 1e-13 ) {
         // Loading page layout failed, try to see why.
-        KoXmlElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
+        KoXmlElement properties( KoXml::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
         //if ( properties.isNull() )
         //    setErrorMessage( i18n( "Invalid document. No page layout properties were found. The application which produced this document isn't OASIS-compliant." ) );
         //else if ( properties.hasAttributeNS( KoXmlNS::fo, "page-width" ) )
@@ -612,9 +611,9 @@ bool KWOpenDocumentLoader::loadMasterPageStyle(KoTextLoadingContext& context, co
 void KWOpenDocumentLoader::loadHeaderFooter(KoTextLoadingContext& context, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader)
 {
     // Not OpenDocument compliant element to define the first header/footer.
-    KoXmlElement firstElem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-first" : "footer-first" );
+    KoXmlElement firstElem = KoXml::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-first" : "footer-first" );
     // The actual content of the header/footer.
-    KoXmlElement elem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header" : "footer" );
+    KoXmlElement elem = KoXml::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header" : "footer" );
 
     const bool hasFirst = !firstElem.isNull();
     if ( !hasFirst && elem.isNull() )
@@ -624,11 +623,11 @@ void KWOpenDocumentLoader::loadHeaderFooter(KoTextLoadingContext& context, const
     kDebug()<<"KWOpenDocumentLoader::loadHeaderFooter localName="<<localName<<" isHeader="<<isHeader<<" hasFirst="<<hasFirst;
 
     // Formatting properties for headers and footers on a page.
-    KoXmlElement styleElem = KoDom::namedItemNS( masterPageStyle, KoXmlNS::style, isHeader ? "header-style" : "footer-style" );
+    KoXmlElement styleElem = KoXml::namedItemNS( masterPageStyle, KoXmlNS::style, isHeader ? "header-style" : "footer-style" );
 
     // The two additional elements <style:header-left> and <style:footer-left> specifies if defined that even and odd pages
     // should be displayed different. If they are missing, the conent of odd and even (aka left and right) pages are the same.
-    KoXmlElement leftElem = KoDom::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-left" : "footer-left" );
+    KoXmlElement leftElem = KoXml::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-left" : "footer-left" );
 
     // Determinate the type of the frameset used for the header/footer.
     QString fsTypeName;
