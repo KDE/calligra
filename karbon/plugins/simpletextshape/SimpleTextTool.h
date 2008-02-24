@@ -70,6 +70,7 @@ private slots:
     void detachPath();
     void convertText();
     void blinkCursor();
+    void textChanged();
 
 private:
 class AddTextRange : public QUndoCommand
@@ -90,6 +91,7 @@ public:
 	        m_tool->enableTextCursor( true );
 	    }
             m_tool->setTextCursorInternal( m_from );
+	    m_tool->m_currentText.remove( m_from, m_text.length() );
             m_shape->removeRange( m_from, m_text.length() );
 	}
     }
@@ -130,6 +132,7 @@ public:
 	        m_tool->enableTextCursor( true );
 	    }
 	    m_tool->m_currentShape = m_shape;
+	    m_tool->m_currentText.insert( m_from, m_text );
             m_shape->addRange( m_from, m_text );
             m_tool->setTextCursorInternal( m_from + m_nr );
 	}
@@ -173,6 +176,7 @@ private:
     int m_textCursor;
     QTimer m_blinkingCursor;
     bool m_showCursor;
+    QString m_currentText;
 };
 
 #endif // SIMPLETEXTTOOL_H

@@ -54,6 +54,9 @@ SimpleTextTool::SimpleTextTool(KoCanvasBase *canvas)
     m_convertText  = new QAction(KIcon("pathshape"), i18n("Convert to Path"), this);
     m_convertText->setEnabled( false );
     connect( m_convertText, SIGNAL(triggered()), this, SLOT(convertText()) );
+
+    KoShapeManager *manager = m_canvas->shapeManager();
+    connect( manager, SIGNAL(selectionContentChanged()), this, SLOT(textChanged()));
 }
 
 SimpleTextTool::~SimpleTextTool()
@@ -122,6 +125,7 @@ void SimpleTextTool::mousePressEvent( KoPointerEvent *event )
              }
          }
          setTextCursorInternal( hit );
+	 m_currentText = m_currentShape->text();
     }
     event->ignore();
 }
@@ -351,6 +355,7 @@ void SimpleTextTool::createTextCursorShape()
 void SimpleTextTool::removeFromTextCursor( int from, unsigned int nr )
 {
     if ( from > 0 && from >= int( nr ) ) {
+        m_currentText.remove( from - nr, nr );
         QUndoCommand *cmd = new RemoveTextRange( this, from - nr, nr );
         m_canvas->addCommand( cmd );
     }
@@ -366,6 +371,7 @@ void SimpleTextTool::addToTextCursor( const QString &str )
         }
         unsigned int len = printable.length();
         if ( len ) {
+            m_currentText.insert( m_textCursor, printable );
             QUndoCommand *cmd = new AddTextRange( this, printable, m_textCursor );
             m_canvas->addCommand( cmd );
         }
@@ -377,6 +383,14 @@ void SimpleTextTool::deleteSelection()
     if ( m_currentShape ) {
         removeFromTextCursor( m_textCursor + 1, 1 );
     }
+}
+
+void SimpleTextTool::textChanged()
+{
+    if ( !m_currentShape || m_currentShape->text() == m_currentText )
+        return;
+
+    setTextCursorInternal( m_currentShape->text().length() );
 }
 
 #include "SimpleTextTool.moc"
