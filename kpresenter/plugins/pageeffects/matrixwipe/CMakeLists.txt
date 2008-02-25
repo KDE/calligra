@@ -15,6 +15,9 @@ set(kpr_pageeffect_matrixwipe_SRCS
     snakewipe/KPrSnakeWipeBottomRightDiagonalStrategy.cpp
     snakewipe/KPrSnakeWipeBottomLeftDiagonalStrategy.cpp
 
+    spiralwipe/KPrSpiralWipeEffectFactory.cpp
+    spiralwipe/KPrSpiralWipeStrategy.cpp
+
     waterfallwipe/KPrWaterfallWipeEffectFactory.cpp
     waterfallwipe/KPrWaterfallWipeTopLeftStrategy.cpp
     waterfallwipe/KPrWaterfallWipeTopRightStrategy.cpp

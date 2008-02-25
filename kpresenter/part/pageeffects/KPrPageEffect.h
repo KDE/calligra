@@ -110,7 +110,23 @@ public:
         BottomLeftVertical,
         BottomLeftHorizontal,
         BottomRightVertical,
-        BottomRightHorizontal
+        BottomRightHorizontal,
+        ClockwiseTopLeftIn,
+        ClockwiseTopLeftOut,
+        ClockwiseTopRightIn,
+        ClockwiseTopRightOut,
+        ClockwiseBottomLeftIn,
+        ClockwiseBottomLeftOut,
+        ClockwiseBottomRightIn,
+        ClockwiseBottomRightOut,
+        CounterClockwiseTopLeftIn,
+        CounterClockwiseTopLeftOut,
+        CounterClockwiseTopRightIn,
+        CounterClockwiseTopRightOut,
+        CounterClockwiseBottomLeftIn,
+        CounterClockwiseBottomLeftOut,
+        CounterClockwiseBottomRightIn,
+        CounterClockwiseBottomRightOut
     };
 
     /**
