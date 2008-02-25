@@ -49,11 +49,11 @@ static QRect tileRect(KPrMatrixWipeStrategy::Direction direction, int step, cons
         case KPrMatrixWipeStrategy::TopToBottom:
             return QRect(base.topLeft(), QSize(base.width(), base.height() * step / framesPerSquare));
         case KPrMatrixWipeStrategy::BottomToTop:
-            return QRect(QPoint(base.left(), base.top() + base.height() * step / framesPerSquare), base.bottomRight());
+            return QRect(QPoint(base.left(), base.bottom() - base.height() * step / framesPerSquare), base.bottomRight());
         case KPrMatrixWipeStrategy::LeftToRight:
             return QRect(base.topLeft(), QSize(base.width() * step / framesPerSquare, base.height()));
         case KPrMatrixWipeStrategy::RightToLeft:
-            return QRect(QPoint(base.left() + base.width() * step / framesPerSquare, base.top()), base.bottomRight());
+            return QRect(QPoint(base.right() - base.width() * step / framesPerSquare, base.top()), base.bottomRight());
         default:
             return base;
     }
@@ -63,7 +63,6 @@ void KPrMatrixWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPageEf
 {
     int width = data.m_widget->width();
     int height = data.m_widget->height();
-    kDebug() << "width:" << width << "height:" << height;
 
     int curSquare = currPos / (m_smooth ? framesPerSquare : 1);
 
@@ -76,6 +75,10 @@ void KPrMatrixWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPageEf
                 if (square == curSquare && m_smooth) {
                     int squarePos = currPos % framesPerSquare;
                     p.drawPixmap( rect.topLeft(), data.m_oldPage, rect );
+                    rect = tileRect(squareDirection(i, j, squaresPerRow, squaresPerCol), squarePos, rect);
+                    if (rect.width() > 0 && rect.height() > 0) {
+                        p.drawPixmap( rect.topLeft(), data.m_newPage, rect );
+                    }
                 } else {
                     p.drawPixmap( rect.topLeft(), data.m_newPage, rect );
                 }
@@ -93,12 +96,16 @@ void KPrMatrixWipeStrategy::next( const KPrPageEffect::Data &data )
 
     int width = data.m_widget->width();
     int height = data.m_widget->height();
+
+    int curSquare = currPos / (m_smooth ? framesPerSquare : 1);
+    int lastSquare = lastPos / (m_smooth ? framesPerSquare : 1);
+
     for (int i = 0; i < squaresPerRow; ++i) {
         for (int j = 0; j < squaresPerCol; ++j) {
             QRect rect(floor(qreal(width) / squaresPerRow * i), floor(qreal(height) / squaresPerCol * j),
                 ceil(qreal(width) / squaresPerRow), ceil(qreal(height) / squaresPerCol));
             int square = squareIndex(i, j, squaresPerRow, squaresPerCol);
-            if (square <= currPos && square >= lastPos) {
+            if (square <= curSquare && square >= lastSquare) {
                 data.m_widget->update(rect);
             }
         }

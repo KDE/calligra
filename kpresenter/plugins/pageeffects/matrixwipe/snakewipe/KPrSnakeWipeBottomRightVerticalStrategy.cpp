@@ -20,7 +20,7 @@
 #include "KPrSnakeWipeBottomRightVerticalStrategy.h"
 
 KPrSnakeWipeBottomRightVerticalStrategy::KPrSnakeWipeBottomRightVerticalStrategy()
-    : KPrMatrixWipeStrategy( KPrPageEffect::FromRight, "snakeWipe", "topLeftVertical", true )
+    : KPrMatrixWipeStrategy( KPrPageEffect::FromRight, "snakeWipe", "topLeftVertical", true, true )
 {
 }
 
