@@ -97,7 +97,15 @@ static const char* s_subTypes[] = {
     I18N_NOOP( "Diagonal Bottom Left" ),
     I18N_NOOP( "Diagonal Bottom Left Reverse" ),
     I18N_NOOP( "Diagonal Top Left" ),
-    I18N_NOOP( "Diagonal Top Left Reverse" )
+    I18N_NOOP( "Diagonal Top Left Reverse" ),
+    I18N_NOOP( "Top Left Vertical" ),
+    I18N_NOOP( "Top Left Horizontal" ),
+    I18N_NOOP( "Top Right Vertical" ),
+    I18N_NOOP( "Top Right Horizontal" ),
+    I18N_NOOP( "Bottom Left Vertical" ),
+    I18N_NOOP( "Bottom Left Horizontal" ),
+    I18N_NOOP( "Bottom Right Vertical" ),
+    I18N_NOOP( "Bottom Right Horizontal" )
 };
 
 KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags )

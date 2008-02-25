@@ -102,7 +102,15 @@ public:
         DiagonalBottomLeft,
         DiagonalBottomLeftReverse,
         DiagonalTopLeft,
-        DiagonalTopLeftReverse
+        DiagonalTopLeftReverse,
+        TopLeftVertical,
+        TopLeftHorizontal,
+        TopRightVertical,
+        TopRightHorizontal,
+        BottomLeftVertical,
+        BottomLeftHorizontal,
+        BottomRightVertical,
+        BottomRightHorizontal
     };
 
     /**
