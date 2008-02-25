@@ -32,26 +32,12 @@ class KPrPageEffectRegistry::Singleton
 {
 public:
     Singleton()
+    : initDone( false )
     {
-        loadPlugins();
-        q.init();
-    }
-
-    void loadPlugins()
-    {
-        KoPluginLoader::PluginsConfig config;
-        config.whiteList = "PageEffectPlugins";
-        config.blacklist = "PageEffectPluginsDisabled";
-        config.group = "kpresenter";
-
-        // XXX: Use minversion here?
-        // The plugins are responsible for adding a factory to the registry
-        KoPluginLoader::instance()->load( QString::fromLatin1("KPresenter/PageEffect"),
-                                          QString::fromLatin1("[X-KPresenter-Version] <= 0"),
-                                          config);
     }
 
     KPrPageEffectRegistry q;
+    bool initDone;
 };
 
 struct KPrPageEffectRegistry::Private
@@ -63,7 +49,12 @@ K_GLOBAL_STATIC( KPrPageEffectRegistry::Singleton, singleton )
 
 KPrPageEffectRegistry * KPrPageEffectRegistry::instance()
 {
-    return &( singleton->q );
+    KPrPageEffectRegistry * registry = &( singleton->q );
+    if ( ! singleton->initDone ) {
+        singleton->initDone = true;
+        registry->init();
+    }
+    return registry;
 }
 
 KPrPageEffect * KPrPageEffectRegistry::createPageEffect( const KoXmlElement & element )
@@ -112,6 +103,17 @@ KPrPageEffectRegistry::~KPrPageEffectRegistry()
 
 void KPrPageEffectRegistry::init()
 {
+    KoPluginLoader::PluginsConfig config;
+    config.whiteList = "PageEffectPlugins";
+    config.blacklist = "PageEffectPluginsDisabled";
+    config.group = "kpresenter";
+
+    // XXX: Use minversion here?
+    // The plugins are responsible for adding a factory to the registry
+    KoPluginLoader::instance()->load( QString::fromLatin1("KPresenter/PageEffect"),
+            QString::fromLatin1("[X-KPresenter-Version] <= 0"),
+            config);
+
     QList<KPrPageEffectFactory*> factories = values();
 
     foreach ( KPrPageEffectFactory * factory, factories ) {
