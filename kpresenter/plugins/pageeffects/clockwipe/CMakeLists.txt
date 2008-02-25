@@ -6,6 +6,8 @@ set(kpr_pageeffect_clockwipe_SRCS
 
     clockwipe/KPrClockWipeEffectFactory.cpp
     pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp
+    singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp
+    singlesweepwipe/KPrSingleSweepWipeStrategy.cpp
     )
 
 kde4_add_plugin(kpr_pageeffect_clockwipe ${kpr_pageeffect_clockwipe_SRCS})

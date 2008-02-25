@@ -23,6 +23,7 @@
 
 #include "clockwipe/KPrClockWipeEffectFactory.h"
 #include "pinwheelwipe/KPrPinWheelWipeEffectFactory.h"
+#include "singlesweepwipe/KPrSingleSweepWipeEffectFactory.h"
 
 K_EXPORT_COMPONENT_FACTORY( kpr_pageeffect_clockwipe, KGenericFactory<Plugin>( "KPrPageEffect" ) )
 
@@ -31,6 +32,7 @@ Plugin::Plugin(QObject *parent, const QStringList &)
 {
     KPrPageEffectRegistry::instance()->add(new KPrClockWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new KPrPinWheelWipeEffectFactory());
+    KPrPageEffectRegistry::instance()->add(new KPrSingleSweepWipeEffectFactory());
 }
 
 #include "Plugin.moc"

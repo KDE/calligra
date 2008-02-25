@@ -86,8 +86,9 @@ Clock Wipes - rotate around a center point
 "pinWheelWipe"  "twoBladeVertical" (205) [default], "twoBladeHorizontal" (206), "fourBlade" (207)
   done Sven Langkamp
 "singleSweepWipe"  "clockwiseTop" (221) [default], "clockwiseRight" (222), "clockwiseBottom" (223), "clockwiseLeft" (224), "clockwiseTopLeft" (241), "counterClockwiseBottomLeft" (242), "clockwiseBottomRight" (243), "counterClockwiseTopRight" (244)
-  Sven Langkamp
+  done Sven Langkamp
 "fanWipe"  "centerTop" (211) [default], "centerRight" (212), "top" (231), "right" (232), "bottom" (233), "left" (234)
+  Sven Langkamp
 "doubleFanWipe"  "fanOutVertical" (213) [default], "fanOutHorizontal" (214), "fanInVertical" (235), "fanInHorizontal" (236)
 "doubleSweepWipe"  "parallelVertical" (225) [default], "parallelDiagonal" (226), "oppositeVertical" (227), "oppositeHorizontal" (228), "parallelDiagonalTopLeft" (245), "parallelDiagonalBottomLeft" (246)
 "saloonDoorWipe"  "top" (251) [default], "left" (252), "bottom" (253), "right" (254)

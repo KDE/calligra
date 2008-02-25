@@ -72,7 +72,23 @@ public:
         FourBladeClockwise,
         TwoBladeVerticalCounterClockwise,
         TwoBladeHorizontalCounterClockwise,
-        FourBladeCounterClockwise
+        FourBladeCounterClockwise,
+        ClockwiseTop,
+        ClockwiseRight,
+        ClockwiseBottom,
+        ClockwiseLeft,
+        ClockwiseTopLeft,
+        CounterClockwiseBottomLeft,
+        ClockwiseBottomRight,
+        CounterClockwiseTopRight,
+        CounterClockwiseTop,
+        CounterClockwiseRight,
+        CounterClockwiseBottom,
+        CounterClockwiseLeft,
+        CounterClockwiseTopLeft,
+        ClockwiseBottomLeft,
+        CounterClockwiseBottomRight,
+        ClockwiseTopRight
     };
 
     /**
