@@ -108,7 +108,8 @@ public:
     KoDocument *hitTest( const QPoint &viewPos );
 
     ScheduleManager *currentScheduleManager() const;
-    long currentScheduleId() const;
+    long activeScheduleId() const;
+    void setActiveSchedule( long id ) const;
     
     ViewBase *createTaskEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
     ViewBase *createResourcEditor( ViewListItem *cat, const QString tag, const QString &name, const QString &tip );
@@ -225,7 +226,7 @@ protected:
     virtual void updateReadWrite( bool readwrite );
 
     QAction *addScheduleAction( Schedule *sch );
-    void setLabel();
+    void setLabel( ScheduleManager *sm = 0 );
     Node *currentTask();
     Resource *currentResource();
     ResourceGroup *currentResourceGroup();
@@ -268,7 +269,6 @@ private:
 
     QActionGroup *m_scheduleActionGroup;
     QMap<QAction*, Schedule*> m_scheduleActions;
-    ScheduleManager *m_manager;
     
     bool m_readWrite;
     

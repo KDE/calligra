@@ -120,7 +120,7 @@ void WPControlPanel::slotMailToClicked()
     }
     KUrl url;
     url.setPath( tmpfile.fileName() );
-    if ( ! m_view->getPart()->saveWorkPackageUrl( url, &m_task, m_view->currentScheduleId() ) ) {
+    if ( ! m_view->getPart()->saveWorkPackageUrl( url, &m_task, m_view->activeScheduleId() ) ) {
         kDebug()<<"Failed to save to file";
         KMessageBox::error(0, i18n("Failed to save to temporary file: %1", url.url() ) );
         return;

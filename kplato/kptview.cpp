@@ -124,7 +124,6 @@ View::View( Part* part, QWidget* parent )
         : KoView( part, parent ),
         m_currentEstimateType( Estimate::Use_Expected ),
         m_scheduleActionGroup( new QActionGroup( this ) ),
-        m_manager( 0 ),
         m_readWrite( false )
 {
     //kDebug();
@@ -310,11 +309,12 @@ View::View( Part* part, QWidget* parent )
 
     m_viewlist->setSelected( m_viewlist->findItem( "TaskEditor" ) );
     
-    loadContext();
     
     connect( part, SIGNAL( changed() ), SLOT( slotUpdate() ) );
     
     connect( m_scheduleActionGroup, SIGNAL( triggered( QAction* ) ), SLOT( slotViewSchedule( QAction* ) ) );
+    
+    loadContext();
     
     //kDebug()<<" end";
 }
@@ -352,10 +352,10 @@ void View::createViews()
 {
     Context *ctx = getPart()->context();
     if ( ctx && ctx->isLoaded() ) {
-        kDebug()<<"isLoaded"<<endl;
+        kDebug()<<"isLoaded";
         KoXmlNode n = ctx->context().namedItem( "categories" );
         if ( n.isNull() ) {
-            kWarning()<<"No categories"<<endl;
+            kWarning()<<"No categories";
         } else {
             n = n.firstChild();
             for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -366,7 +366,7 @@ void View::createViews()
                 if (e.tagName() != "category") {
                     continue;
                 }
-                kDebug()<<"category: "<<e.attribute( "tag" )<<endl;
+                kDebug()<<"category: "<<e.attribute( "tag" );
                 ViewListItem *cat;
                 cat = m_viewlist->addCategory( e.attribute( "tag" ), e.attribute( "name" ) );
                 KoXmlNode n1 = e.firstChild();
@@ -417,7 +417,7 @@ void View::createViews()
                     } else if ( type == "ChartView" ) {
                         v = createChartView( cat, tag, name, tip );
                     } else  {
-                        kWarning()<<"Unknown viewtype: "<<type<<endl;
+                        kWarning()<<"Unknown viewtype: "<<type;
                     }
                     //KoXmlNode settings = e1.namedItem( "settings " ); ????
                     KoXmlNode settings = e1.firstChild();
@@ -427,7 +427,7 @@ void View::createViews()
                         }
                     }
                     if ( v && settings.isElement() ) {
-                        kDebug()<<" settings"<<endl;
+                        kDebug()<<" settings";
                         v->loadContext( settings.toElement() );
                     }
                 }
@@ -435,7 +435,7 @@ void View::createViews()
         }
     }
     if ( m_tab->count() == 0 ) {
-        kDebug()<<"Default"<<endl;
+        kDebug()<<"Default";
         ViewListItem *cat;
         cat = m_viewlist->addCategory( "Editors", i18n( "Editors" ) );
         
@@ -1009,7 +1009,7 @@ QAction *View::addScheduleAction( Schedule *sch )
     QAction *act = 0;
     if ( ! sch->isDeleted() ) {
         QString n = sch->name();
-        QAction *act = new KToggleAction( n, this);
+        act = new KToggleAction( n, this);
         actionCollection()->addAction(n, act );
         m_scheduleActions.insert( act, sch );
         m_scheduleActionGroup->addAction( act );
@@ -1021,35 +1021,33 @@ QAction *View::addScheduleAction( Schedule *sch )
 
 void View::slotViewSchedule( QAction *act )
 {
-    //kDebug();
+    //kDebug()<<act;
+    ScheduleManager *sm = 0;
     if ( act != 0 ) {
         Schedule *sch = m_scheduleActions.value( act, 0 );
-        m_manager = sch->manager();
-    } else {
-        m_manager = 0;
+        sm = sch->manager();
     }
-    kDebug()<<m_manager<<endl;
-    setLabel();
-    emit currentScheduleManagerChanged( m_manager );
+    setLabel( sm );
+    emit currentScheduleManagerChanged( sm );
 }
 
 void View::slotActionDestroyed( QObject *o )
 {
     //kDebug()<<o->name();
     m_scheduleActions.remove( static_cast<QAction*>( o ) );
-    slotViewSchedule( m_scheduleActionGroup->checkedAction() );
+//    slotViewSchedule( m_scheduleActionGroup->checkedAction() );
 }
 
 void View::slotPlugScheduleActions()
 {
-    //kDebug();
+    //kDebug()<<activeScheduleId();
+    long id = activeScheduleId();
     unplugActionList( "view_schedule_list" );
     foreach( QAction *act, m_scheduleActions.keys() ) {
         m_scheduleActionGroup->removeAction( act );
         delete act;
     }
     m_scheduleActions.clear();
-    Schedule *cs = getProject().currentSchedule();
     QAction *ca = 0;
     foreach( ScheduleManager *sm, getProject().allScheduleManagers() ) {
         Schedule *sch = sm->expected();
@@ -1057,10 +1055,8 @@ void View::slotPlugScheduleActions()
             continue;
         }
         QAction *act = addScheduleAction( sch );
-        if ( act ) {
-            if ( ca == 0 && cs == sch ) {
-                ca = act;
-            }
+        if ( act && id == sch->id() ) {
+            ca = act;
         }
     }
     plugActionList( "view_schedule_list", m_scheduleActions.keys() );
@@ -1287,7 +1283,6 @@ void View::slotOpenNode( Node *node )
             //TODO
             break;
         case Node::Type_Task: {
-            kDebug()<<0;
             Task *task = dynamic_cast<Task *>( node );
                 Q_ASSERT( task );
                 TaskDialog *dia = new TaskDialog( *task, getProject().accounts() );
@@ -1297,9 +1292,7 @@ void View::slotOpenNode( Node *node )
                         getPart() ->addCommand( m );
                     }
                 }
-                kDebug()<<1;
                 delete dia;
-                kDebug()<<2;
                 break;
             }
         case Node::Type_Milestone: {
@@ -1343,10 +1336,23 @@ ScheduleManager *View::currentScheduleManager() const
     return s == 0 ? 0 : s->manager();
 }
 
-long View::currentScheduleId() const
+long View::activeScheduleId() const
 {
     Schedule *s = m_scheduleActions.value( m_scheduleActionGroup->checkedAction() );
     return s == 0 ? -1 : s->id();
+}
+
+void View::setActiveSchedule( long id ) const
+{
+    if ( id != -1 ) {
+        QMap<QAction*, Schedule*>::const_iterator it = m_scheduleActions.constBegin();
+        for (; it != m_scheduleActions.constEnd(); ++it ) {
+            if ( it.value()->id() == id ) {
+                it.key()->setChecked( true );
+                break;
+            }
+        }
+    }
 }
 
 void View::slotTaskProgress()
@@ -1474,7 +1480,7 @@ void View::slotTaskWorkpackage()
     Task *task = static_cast<Task*>( node );
     WPControlDialog *dlg = new WPControlDialog( this, *task, this );
     dlg->exec();
-//    getPart()->saveWorkPackageUrl( KUrl( "workpackage.kplatowork" ), node, currentScheduleId() );
+//    getPart()->saveWorkPackageUrl( KUrl( "workpackage.kplatowork" ), node, activeScheduleId() );
 }
 
 void View::slotIndentTask()
@@ -1847,7 +1853,7 @@ void View::createChildDocumentViews()
             DocumentChild *c = static_cast<DocumentChild*>( ch );
             QTreeWidgetItem *cat = m_viewlist->findItem( c->category(), 0 );
             if ( cat == 0 ) {
-                kDebug()<<"New category: Documents"<<endl;
+                kDebug()<<"New category: Documents";
                 cat = m_viewlist->addCategory( "Documents", i18n( "Documents" ) );
                 cat->setIcon( 0, KIcon( "koshell" ) );
             }
@@ -1859,7 +1865,7 @@ void View::createChildDocumentViews()
 
 ViewListItem *View::createChildDocumentView( DocumentChild *ch )
 {
-    kDebug()<<ch->title()<<endl;
+    kDebug()<<ch->title();
     KoDocument *doc = ch->document();
 
     QString title = ch->title();
@@ -2024,45 +2030,35 @@ void View::slotPopupMenu( const QString& menuname, const QPoint &pos, ViewListIt
 
 bool View::loadContext()
 {
-    //kDebug()<<endl;
+    kDebug();
     Context *ctx = getPart()->context();
     if ( ctx == 0 || ! ctx->isLoaded() ) {
         return true;
     }
-    KoXmlNode n = ctx->context().namedItem( "current-view" );
-    if ( n.isNull() || ! n.isElement() ) {
-        kWarning()<<"No current view"<<endl;
-    } else {
-        QString cv = n.toElement().attribute( "current-view" );
-        if ( ! cv.isEmpty() ) {
-            m_viewlist->setSelected( m_viewlist->findItem( cv ) );
-        }
-    }
-
-    n = ctx->context().namedItem( "current-schedule" );
-    if ( n.isNull() || ! n.isElement() ) {
-        kWarning()<<"No current schedule"<<endl;
-    } else {
-        QString id = n.toElement().attribute( "current-schedule", "" );
-        if ( ! id.isEmpty() ) {
-            kDebug()<<"current-schedule="<<id<<endl;
-        }
-    }
+    KoXmlElement n = ctx->context();
+    QString cv = n.attribute( "current-view" );
+    if ( ! cv.isEmpty() ) {
+        m_viewlist->setSelected( m_viewlist->findItem( cv ) );
+    } else kDebug()<<"No current view";
     
-//    slotUpdate();
+    long id = n.attribute( "current-schedule", "-1" ).toLong();
+    if ( id != -1 ) {
+        setActiveSchedule( id );
+    } else kDebug()<<"No current schedule";
+
     return true;
 }
 
 void View::saveContext( QDomElement &me ) const
 {
-    //kDebug()<<endl;
-    if ( currentScheduleManager() ) {
-        me.setAttribute( "current-schedule", currentScheduleManager()->name() );
+    //kDebug();
+    long id = activeScheduleId();
+    if ( id != -1 ) {
+        me.setAttribute( "current-schedule", (qlonglong)id );
     }
     ViewListItem *item = m_viewlist->findItem( m_tab->currentWidget() );
     if ( item ) {
         me.setAttribute("current-view", item->tag() );
-        kDebug()<<"Context currentview: "<<item->text( 0 )<<endl;
     }
     m_viewlist->save( me );
 }
@@ -2072,12 +2068,12 @@ bool View::loadWorkPackage( Project &project, const KUrl &url )
     return getPart()->loadWorkPackage( project, url );
 }
 
-void View::setLabel()
+void View::setLabel( ScheduleManager *sm )
 {
     //kDebug();
-    Schedule *s = m_manager == 0 ? 0 : m_manager->expected();
+    Schedule *s = sm == 0 ? 0 : sm->expected();
     if ( s && !s->isDeleted() && s->isScheduled() ) {
-        m_estlabel->setText( m_manager->name() );
+        m_estlabel->setText( sm->name() );
         return;
     }
     m_estlabel->setText( i18n( "Not scheduled" ) );
