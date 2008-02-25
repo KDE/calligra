@@ -29,6 +29,7 @@ public:
     virtual ~KPrSnakeWipeTopLeftHorizontalStrategy();
 protected:
     virtual int squareIndex(int x, int y, int collumns, int rows);
+    virtual Direction squareDirection(int x, int y, int collumns, int rows);
     virtual int maxIndex(int collumns, int rows);
 };
 

@@ -35,6 +35,12 @@ int KPrSnakeWipeTopLeftVerticalStrategy::squareIndex(int x, int y, int collumns,
     return Y + x * rows;
 }
 
+KPrMatrixWipeStrategy::Direction KPrSnakeWipeTopLeftVerticalStrategy::squareDirection(int x, int y, int collumns, int rows)
+{
+    if (x & 1) return BottomToTop;
+    else return TopToBottom;
+}
+
 int KPrSnakeWipeTopLeftVerticalStrategy::maxIndex(int collumns, int rows)
 {
     return collumns * rows;

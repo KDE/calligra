@@ -25,7 +25,7 @@
 class KPrMatrixWipeStrategy : public KPrPageEffectStrategy
 {
 public:
-    KPrMatrixWipeStrategy(KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse);
+    KPrMatrixWipeStrategy(KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse, bool smooth = false);
     virtual ~KPrMatrixWipeStrategy();
 
     virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
@@ -33,9 +33,18 @@ public:
     virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
 
     virtual void next( const KPrPageEffect::Data &data );
+    enum Direction {
+        NotSmooth,
+        TopToBottom,
+        BottomToTop,
+        LeftToRight,
+        RightToLeft
+    };
 protected:
     virtual int squareIndex(int x, int y, int collumns, int rows) = 0;
+    virtual Direction squareDirection(int x, int y, int collumns, int rows);
     virtual int maxIndex(int collumns, int rows) = 0;
+    bool m_smooth;
 };
 
 #endif // KPRMATRIXWIPESTRATEGY_H
