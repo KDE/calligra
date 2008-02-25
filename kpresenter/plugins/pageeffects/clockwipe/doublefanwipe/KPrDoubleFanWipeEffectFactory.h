@@ -17,26 +17,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRSINGLESWEEPWIPESTRATEGY_H
-#define KPRSINGLESWEEPWIPESTRATEGY_H
+#ifndef KPRDOUBLEFANWIPEEFFECTFACTORY_H
+#define KPRDOUBLEFANWIPEEFFECTFACTORY_H
 
-#include <KPrPageEffectStrategy.h>
+#include <KPrPageEffectFactory.h>
 
-class KPrSingleSweepWipeStrategy : public KPrPageEffectStrategy
+class KPrDoubleFanWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
-    KPrSingleSweepWipeStrategy( double rotationX, double rotationY, int startAngle, int rotationAngle, KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse );
-    virtual ~KPrSingleSweepWipeStrategy();
-
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
-    virtual void next( const KPrPageEffect::Data &data );
-
-private:
-    double m_startAngle;
-    double m_rotationAngle;
-    double m_rotationX;
-    double m_rotationY;
+    KPrDoubleFanWipeEffectFactory();
+    virtual ~KPrDoubleFanWipeEffectFactory();
 };
 
-#endif // KPRSINGLESWEEPWIPESTRATEGY_H
+#endif /* KPRDOUBLEFANWIPEEFFECTFACTORY_H */

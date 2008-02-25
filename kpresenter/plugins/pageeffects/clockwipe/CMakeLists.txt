@@ -3,11 +3,14 @@ include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOGUIUTILS_INCLUDES}
 set(kpr_pageeffect_clockwipe_SRCS
     Plugin.cpp
     KPrClockWipeStrategy.cpp
+    KPrCenterFanWipeStrategy.cpp
 
     clockwipe/KPrClockWipeEffectFactory.cpp
     pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp
     singlesweepwipe/KPrSingleSweepWipeEffectFactory.cpp
     singlesweepwipe/KPrSingleSweepWipeStrategy.cpp
+    fanwipe/KPrFanWipeEffectFactory.cpp
+    doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp
     )
 
 kde4_add_plugin(kpr_pageeffect_clockwipe ${kpr_pageeffect_clockwipe_SRCS})

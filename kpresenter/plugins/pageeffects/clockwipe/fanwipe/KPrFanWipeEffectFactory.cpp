@@ -17,26 +17,23 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRSINGLESWEEPWIPESTRATEGY_H
-#define KPRSINGLESWEEPWIPESTRATEGY_H
+#include "KPrFanWipeEffectFactory.h"
+#include <klocale.h>
 
-#include <KPrPageEffectStrategy.h>
+#include "KPrCenterFanWipeStrategy.h"
 
-class KPrSingleSweepWipeStrategy : public KPrPageEffectStrategy
+#define FanWipeEffectId  "FanWipeEffect"
+
+KPrFanWipeEffectFactory::KPrFanWipeEffectFactory()
+: KPrPageEffectFactory( FanWipeEffectId, i18n( "Fan Wipe Effect" ) )
 {
-public:
-    KPrSingleSweepWipeStrategy( double rotationX, double rotationY, int startAngle, int rotationAngle, KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse );
-    virtual ~KPrSingleSweepWipeStrategy();
+    addStrategy( new KPrCenterFanWipeStrategy( 0, 1, KPrPageEffect::CenterRight, "fanWipe", "centerRight", false ) );
+    addStrategy( new KPrCenterFanWipeStrategy( 270, 1, KPrPageEffect::CenterTop, "fanWipe", "centerTop", false ) );
+    addStrategy( new KPrCenterFanWipeStrategy( 180, 1, KPrPageEffect::CenterLeft, "fanWipe", "centerRight", true ) );
+    addStrategy( new KPrCenterFanWipeStrategy( 90, 1, KPrPageEffect::CenterBottom, "fanWipe", "centerTop", true ) );
+}
 
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
-    virtual void next( const KPrPageEffect::Data &data );
+KPrFanWipeEffectFactory::~KPrFanWipeEffectFactory()
+{
+}
 
-private:
-    double m_startAngle;
-    double m_rotationAngle;
-    double m_rotationX;
-    double m_rotationY;
-};
-
-#endif // KPRSINGLESWEEPWIPESTRATEGY_H

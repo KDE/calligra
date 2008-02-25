@@ -88,7 +88,13 @@ public:
         CounterClockwiseTopLeft,
         ClockwiseBottomLeft,
         CounterClockwiseBottomRight,
-        ClockwiseTopRight
+        ClockwiseTopRight,
+        CenterRight,
+        CenterTop,
+        CenterLeft,
+        CenterBottom,
+        FanOutVertical,
+        FanOutHorizontal
     };
 
     /**

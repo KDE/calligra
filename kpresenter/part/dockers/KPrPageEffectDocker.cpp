@@ -83,7 +83,13 @@ static const char* s_subTypes[] = {
     I18N_NOOP( "Counterclockwise Top Left" ),
     I18N_NOOP( "Clockwise Bottom Left" ),
     I18N_NOOP( "Counterclockwise Bottom Right" ),
-    I18N_NOOP( "Clockwise Top Right" )
+    I18N_NOOP( "Clockwise Top Right" ),
+    I18N_NOOP( "Center Right" ),
+    I18N_NOOP( "Center Top" ),
+    I18N_NOOP( "Center Left" ),
+    I18N_NOOP( "Center Bottom" ),
+    I18N_NOOP( "Fan Out Vertical" ),
+    I18N_NOOP( "Fan Out Horizontal" )
 };
 
 KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags )
