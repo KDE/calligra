@@ -1,6 +1,4 @@
 /* This file is part of the KDE project
- *
- * Copyright (C) 2008 Boudewijn Rempt <boud@valdyas.org>
  * Copyright (C) 2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
@@ -18,25 +16,29 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#include "Plugin.h"
-#include <kgenericfactory.h>
-#include <KPrPageEffectRegistry.h>
 
-#include "diagonalwipe/DiagonalWipeEffectFactory.h"
-#include "miscdiagonalwipe/MiscDiagonalWipeEffectFactory.h"
-#include "fourboxwipe/FourBoxWipeEffectFactory.h"
-#include "barndoorwipe/BarnDoorWipeEffectFactory.h"
+#ifndef BARNDOORWIPESTRATEGY_H
+#define BARNDOORWIPESTRATEGY_H
 
-K_EXPORT_COMPONENT_FACTORY( kpr_pageeffect_edgewipe, KGenericFactory<Plugin>( "KPrPageEffect" ) )
+#include <KPrPageEffectStrategy.h>
+#include <KPrPageEffect.h>
 
-Plugin::Plugin(QObject *parent, const QStringList &)
-    : QObject(parent)
+class BarnDoorWipeStrategy : public KPrPageEffectStrategy
 {
-    KPrPageEffectRegistry::instance()->add(new DiagonalWipeEffectFactory());
-    KPrPageEffectRegistry::instance()->add(new MiscDiagonalWipeEffectFactory());
-    KPrPageEffectRegistry::instance()->add(new FourBoxWipeEffectFactory());
-    KPrPageEffectRegistry::instance()->add(new BarnDoorWipeEffectFactory());
-}
+public:
+    BarnDoorWipeStrategy( KPrPageEffect::SubType subtype, const char *smilSubType, bool reverse );
+    virtual ~BarnDoorWipeStrategy();
 
-#include "Plugin.moc"
+    /// reimplemented from KPrPageEffectStrategy
+    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
+    /// reimplemented from KPrPageEffectStrategy
+    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
+    /// reimplemented from KPrPageEffectStrategy
+    virtual void next( const KPrPageEffect::Data &data );
 
+private:
+    /// calculates clip path for given step
+    QPainterPath clipPath( int step, const QRect &area );
+};
+
+#endif // BARNDOORWIPESTRATEGY_H

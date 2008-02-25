@@ -94,7 +94,15 @@ public:
         CenterLeft,
         CenterBottom,
         FanOutVertical,
-        FanOutHorizontal
+        FanOutHorizontal,
+        Vertical,
+        VerticalReverse,
+        Horizontal,
+        HorizontalReverse,
+        DiagonalBottomLeft,
+        DiagonalBottomLeftReverse,
+        DiagonalTopLeft,
+        DiagonalTopLeftReverse
     };
 
     /**
