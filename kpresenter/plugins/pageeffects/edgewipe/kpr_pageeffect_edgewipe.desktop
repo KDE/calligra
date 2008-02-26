@@ -1,6 +1,8 @@
 [Desktop Entry]
 Name=Edge wipe
+Name[zh_TW]=邊緣掃描
 Comment=Edge Wipe Page Effects
+Comment[zh_TW]=邊緣掃描頁面效果
 X-KDE-ServiceTypes=KPresenter/PageEffect
 Type=Service
 X-KDE-Library=kpr_pageeffect_edgewipe

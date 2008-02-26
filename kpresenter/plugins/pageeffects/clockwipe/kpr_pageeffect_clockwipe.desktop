@@ -2,9 +2,11 @@
 Name=Clock wipe
 Name[pt]=Varrimento em relógio
 Name[pt_BR]=Varrimento em relógio
+Name[zh_TW]=時鐘掃描
 Comment=Clock wipe Page Effects
 Comment[pt]=Efeitos de Varrimento da Página em Relógio
 Comment[pt_BR]=Efeitos de Varrimento da Página em Relógio
+Comment[zh_TW]=時鐘掃描頁面效果
 X-KDE-ServiceTypes=KPresenter/PageEffect
 Type=Service
 X-KDE-Library=kpr_pageeffect_clockwipe

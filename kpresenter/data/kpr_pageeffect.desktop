@@ -7,5 +7,6 @@ Comment[pt]='Plugin' de efeitos das páginas do KPresenter
 Comment[pt_BR]='Plugin' de efeitos das páginas do KPresenter
 Comment[sv]=Insticksprogram med sideffekter för KPresenter
 Comment[uk]=Втулка ефектів сторінки для KPresenter
+Comment[zh_TW]=KPresenter 頁面效果外掛程式
 [PropertyDef::X-KPresenter-Version]
 Type=int
