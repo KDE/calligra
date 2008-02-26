@@ -321,6 +321,12 @@ DateTime Project::endTime(  long id ) const
     return s ? s->endTime : m_constraintEndTime;
 }
 
+Duration Project::duration( long id ) const
+{
+    Schedule *s = schedule( id );
+    return s ? s->duration : Duration::zeroDuration;
+}
+
 Duration *Project::getRandomDuration()
 {
     return 0L;

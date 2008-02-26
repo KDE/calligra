@@ -63,8 +63,9 @@ public:
     Node *node( const QModelIndex &index ) const;
     void setManager( ScheduleManager *sm );
     ScheduleManager *manager() const { return m_manager; }
-    
-    Duration::Unit presentationUnit() const { return Duration::Unit_d; }
+
+    /// Select a proper unit for total path values, dependent on @p duration
+    Duration::Unit presentationUnit( const Duration &duration ) const;
     
 protected slots:
     void slotNodeChanged( Node* );

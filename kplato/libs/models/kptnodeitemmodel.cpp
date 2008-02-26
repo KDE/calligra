@@ -1261,8 +1261,8 @@ QVariant NodeModel::headerData( int section, int role )
             // Based on scheduled values
             case 34: return i18n( "Duration" );
             case 35: return i18n( "Variance (Dur)" );
-            case 36: return i18n( "Optimistic" );
-            case 37: return i18n( "Pessimistic" );
+            case 36: return i18n( "Optimistic (Dur)" );
+            case 37: return i18n( "Pessimistic (Dur)" );
 
             // Completion
             case 38: return i18n( "Status" );

@@ -133,6 +133,14 @@ QModelIndex CriticalPathItemModel::index( int row, int column, const QModelIndex
     return i;
 }
 
+Duration::Unit CriticalPathItemModel::presentationUnit( const Duration &dur ) const
+{
+    if ( dur.toDouble( Duration::Unit_d ) < 1.0 ) {
+        return Duration::Unit_h;
+    }
+    return Duration::Unit_d;
+}
+
 QVariant CriticalPathItemModel::name( int role ) const
 {
     switch ( role ) {
@@ -151,8 +159,10 @@ QVariant CriticalPathItemModel::duration( int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::ToolTipRole:
-            return KGlobal::locale()->formatNumber( m_project->duration( m_manager->id() ) .toDouble( presentationUnit() ), 1 );
+        case Qt::ToolTipRole: {
+            Duration v = m_project->duration( m_manager->id() );
+            return KGlobal::locale()->formatNumber( v.toDouble( presentationUnit( v ) ), 1 ) + Duration::unitToString( presentationUnit( v ) );
+        }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -167,7 +177,8 @@ QVariant CriticalPathItemModel::variance( int role ) const
         case Qt::ToolTipRole: {
             double v = 0.0;
             foreach ( Node *n, m_path ) {
-                v += n->variance( m_manager->id(), presentationUnit() );
+                long id = m_manager->id();
+                v += n->variance( id, presentationUnit( m_project->duration( id ) ) );
             }
             return KGlobal::locale()->formatNumber( v, 1 );
             break;
@@ -210,8 +221,8 @@ QVariant CriticalPathItemModel::data( const QModelIndex &index, int role ) const
     if ( n == 0 ) {
         switch ( index.column() ) {
             case 0: result = name( role ); break;
-            case 33: result = duration( role ); break;
-            case 34: result = variance( role ); break;
+            case 34: result = duration( role ); break;
+            case 35: result = variance( role ); break;
             default:
                 result = notUsed( role ); break;
         }

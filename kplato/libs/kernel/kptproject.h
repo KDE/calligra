@@ -94,6 +94,9 @@ public:
     virtual DateTime startTime( long id = -1 ) const;
     virtual DateTime endTime( long id = -1 ) const;
 
+    /// Returns the calculated duration for schedule @p id
+    Duration duration( long id = -1 ) const;
+    using Node::duration;
     /**
      * Instead of using the expected duration, generate a random value using
      * the Distribution of each Task. This can be used for Monte-Carlo
