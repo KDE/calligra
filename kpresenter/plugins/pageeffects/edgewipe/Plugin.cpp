@@ -24,6 +24,7 @@
 
 #include "diagonalwipe/DiagonalWipeEffectFactory.h"
 #include "miscdiagonalwipe/MiscDiagonalWipeEffectFactory.h"
+#include "boxwipe/BoxWipeEffectFactory.h"
 #include "fourboxwipe/FourBoxWipeEffectFactory.h"
 #include "barndoorwipe/BarnDoorWipeEffectFactory.h"
 
@@ -34,6 +35,7 @@ Plugin::Plugin(QObject *parent, const QStringList &)
 {
     KPrPageEffectRegistry::instance()->add(new DiagonalWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new MiscDiagonalWipeEffectFactory());
+    KPrPageEffectRegistry::instance()->add(new BoxWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new FourBoxWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new BarnDoorWipeEffectFactory());
 }

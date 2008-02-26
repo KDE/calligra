@@ -51,7 +51,7 @@ Edge Wipes - wipes occur along an edge
 "barWipe"  "leftToRight" (1) [default], "topToBottom" (2)
   partly done Lacroix Timothee
 "boxWipe"  "topLeft" (3) [default], "topRight" (4), "bottomRight" (5), "bottomLeft" (6), "topCenter" (23), "rightCenter" (24), "bottomCenter" (25), "leftCenter" (26)
-Jan Hambrecht
+done Jan Hambrecht
 "fourBoxWipe"  "cornersIn" (7) [default], "cornersOut" (8)
 done Jan Hambrecht
 "barnDoorWipe"  "vertical" (21) [default], "horizontal" (22), "diagonalBottomLeft" (45), "diagonalTopLeft" (46)

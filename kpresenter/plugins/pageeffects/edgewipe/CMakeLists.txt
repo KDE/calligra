@@ -16,6 +16,9 @@ set(kpr_pageeffect_edgewipe_SRCS
 
     barndoorwipe/BarnDoorWipeEffectFactory.cpp
     barndoorwipe/BarnDoorWipeStrategy.cpp
+
+    boxwipe/BoxWipeEffectFactory.cpp
+    boxwipe/BoxWipeStrategy.cpp
     )
 
 kde4_add_plugin(kpr_pageeffect_edgewipe ${kpr_pageeffect_edgewipe_SRCS})
