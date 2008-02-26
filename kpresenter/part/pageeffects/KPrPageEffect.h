@@ -126,7 +126,27 @@ public:
         CounterClockwiseBottomLeftIn,
         CounterClockwiseBottomLeftOut,
         CounterClockwiseBottomRightIn,
-        CounterClockwiseBottomRightOut
+        CounterClockwiseBottomRightOut,
+        VerticalTopSameIn,
+        VerticalTopSameOut,
+        VerticalBottomSameIn,
+        VerticalBottomSameOut,
+        VerticalTopLeftOppositeIn,
+        VerticalTopLeftOppositeOut,
+        VerticalBottomLeftOppositeIn,
+        VerticalBottomLeftOppositeOut,
+        HorizontalLeftSameIn,
+        HorizontalLeftSameOut,
+        HorizontalRightSameIn,
+        HorizontalRightSameOut,
+        HorizontalTopLeftOppositeIn,
+        HorizontalTopLeftOppositeOut,
+        HorizontalTopRightOppositeIn,
+        HorizontalTopRightOppositeOut,
+        DiagonalBottomLeftOppositeIn,
+        DiagonalBottomLeftOppositeOut,
+        DiagonalTopLeftOppositeIn,
+        DiagonalTopLeftOppositeOut
     };
 
     /**

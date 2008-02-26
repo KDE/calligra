@@ -23,6 +23,7 @@
 
 #include "snakewipe/KPrSnakeWipeEffectFactory.h"
 #include "spiralwipe/KPrSpiralWipeEffectFactory.h"
+#include "parallelsnakes/KPrParallelSnakesWipeEffectFactory.h"
 #include "waterfallwipe/KPrWaterfallWipeEffectFactory.h"
 
 K_EXPORT_COMPONENT_FACTORY( kpr_pageeffect_matrixwipe, KGenericFactory<Plugin>( "KPrPageEffect" ) )
@@ -32,6 +33,7 @@ Plugin::Plugin(QObject *parent, const QStringList &)
 {
     KPrPageEffectRegistry::instance()->add(new KPrSnakeWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new KPrSpiralWipeEffectFactory());
+    KPrPageEffectRegistry::instance()->add(new KPrParallelSnakesWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new KPrWaterfallWipeEffectFactory());
 }
 

@@ -17,37 +17,23 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRMATRIXWIPESTRATEGY_H
-#define KPRMATRIXWIPESTRATEGY_H
+#ifndef KPRSNAKEWIPETOPLEFTHORIZONTALSTRATEGY_H
+#define KPRSNAKEWIPETOPLEFTHORIZONTALSTRATEGY_H
 
-#include <KPrPageEffectStrategy.h>
+#include "../KPrMatrixWipeStrategy.h"
 
-class KPrMatrixWipeStrategy : public KPrPageEffectStrategy
+class KPrParallelSnakesWipeHorizontalStrategy : public KPrMatrixWipeStrategy
 {
 public:
-    KPrMatrixWipeStrategy(KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse, bool smooth = false);
-    virtual ~KPrMatrixWipeStrategy();
-
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
-
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
-
-    virtual void next( const KPrPageEffect::Data &data );
-    enum Direction {
-        NotSmooth,
-        TopToBottom,
-        BottomToTop,
-        LeftToRight,
-        RightToLeft
-    };
+    KPrParallelSnakesWipeHorizontalStrategy(bool reverseTop, bool reverseBottom, bool reverse);
+    virtual ~KPrParallelSnakesWipeHorizontalStrategy();
 protected:
-    virtual int squareIndex(int x, int y, int collumns, int rows) = 0;
+    virtual int squareIndex(int x, int y, int collumns, int rows);
     virtual Direction squareDirection(int x, int y, int collumns, int rows);
-    virtual int maxIndex(int collumns, int rows) = 0;
-    void setNeedEvenSquares();
-    bool m_smooth;
+    virtual int maxIndex(int collumns, int rows);
 private:
-    int m_squaresPerRow, m_squaresPerCol;
+    bool m_reverseTop;
+    bool m_reverseBottom;
 };
 
-#endif // KPRMATRIXWIPESTRATEGY_H
+#endif // KPRSNAKEWIPETOPLEFTHORIZONTALSTRATEGY_H

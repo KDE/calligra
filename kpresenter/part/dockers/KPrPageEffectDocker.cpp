@@ -121,7 +121,27 @@ static const char* s_subTypes[] = {
     I18N_NOOP( "Counterclockwise Bottom Left In" ),
     I18N_NOOP( "Counterclockwise Bottom Left Out" ),
     I18N_NOOP( "Counterclockwise Bottom Right In" ),
-    I18N_NOOP( "Counterclockwise Bottom Right Out" )
+    I18N_NOOP( "Counterclockwise Bottom Right Out" ),
+    I18N_NOOP( "Vertical Top Same In" ),
+    I18N_NOOP( "Vertical Top Same Out" ),
+    I18N_NOOP( "Vertical Bottom Same In" ),
+    I18N_NOOP( "Vertical Bottom Same Out" ),
+    I18N_NOOP( "Vertical Top Left Opposite In" ),
+    I18N_NOOP( "Vertical Top Left Opposite Out" ),
+    I18N_NOOP( "Vertical Bottom Left Opposite In" ),
+    I18N_NOOP( "Vertical Bottom Left Opposite Out" ),
+    I18N_NOOP( "Horizontal Left Same In" ),
+    I18N_NOOP( "Horizontal Left Same Out" ),
+    I18N_NOOP( "Horizontal Right Same In" ),
+    I18N_NOOP( "Horizontal Right Same Out" ),
+    I18N_NOOP( "Horizontal Top Left Opposite In" ),
+    I18N_NOOP( "Horizontal Top Left Opposite Out" ),
+    I18N_NOOP( "Horizontal Top Right Opposite In" ),
+    I18N_NOOP( "Horizontal Top Right Opposite Out" ),
+    I18N_NOOP( "Diagonal Bottom Left Opposite In" ),
+    I18N_NOOP( "Diagonal Bottom Left Opposite Out" ),
+    I18N_NOOP( "Diagonal Top Left Opposite in" ),
+    I18N_NOOP( "Diagonal Top Left Opposite Out" )
 };
 
 KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags )

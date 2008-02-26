@@ -28,7 +28,8 @@ static const int squaresPerCol = 11;
 static const int framesPerSquare = 16;
 
 KPrMatrixWipeStrategy::KPrMatrixWipeStrategy(KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse, bool smooth)
-    : KPrPageEffectStrategy( subType, smilType, smilSubType, reverse ), m_smooth(smooth)
+    : KPrPageEffectStrategy( subType, smilType, smilSubType, reverse ), m_smooth(smooth),
+    m_squaresPerRow(squaresPerRow), m_squaresPerCol(squaresPerCol)
 {
 }
 
@@ -36,9 +37,15 @@ KPrMatrixWipeStrategy::~KPrMatrixWipeStrategy()
 {
 }
 
+void KPrMatrixWipeStrategy::setNeedEvenSquares()
+{
+    m_squaresPerRow++;
+    m_squaresPerCol++;
+}
+
 void KPrMatrixWipeStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
 {
-    timeLine.setFrameRange( 0, (m_smooth ? framesPerSquare : 1) * maxIndex(squaresPerRow, squaresPerCol) );
+    timeLine.setFrameRange( 0, (m_smooth ? framesPerSquare : 1) * maxIndex(m_squaresPerRow, m_squaresPerCol) );
 }
 
 static inline int floor(double d) { return (int) (d + 1e-5); }
@@ -66,16 +73,16 @@ void KPrMatrixWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPageEf
 
     int curSquare = currPos / (m_smooth ? framesPerSquare : 1);
 
-    for (int i = 0; i < squaresPerRow; ++i) {
-        for (int j = 0; j < squaresPerCol; ++j) {
-            QRect rect(floor(qreal(width) / squaresPerRow * i), floor(qreal(height) / squaresPerCol * j),
-                ceil(qreal(width) / squaresPerRow), ceil(qreal(height) / squaresPerCol));
-            int square = squareIndex(i, j, squaresPerRow, squaresPerCol);
+    for (int i = 0; i < m_squaresPerRow; ++i) {
+        for (int j = 0; j < m_squaresPerCol; ++j) {
+            QRect rect(floor(qreal(width) / m_squaresPerRow * i), floor(qreal(height) / m_squaresPerCol * j),
+                ceil(qreal(width) / m_squaresPerRow), ceil(qreal(height) / m_squaresPerCol));
+            int square = squareIndex(i, j, m_squaresPerRow, m_squaresPerCol);
             if (square <= curSquare) {
                 if (square == curSquare && m_smooth) {
                     int squarePos = currPos % framesPerSquare;
                     p.drawPixmap( rect.topLeft(), data.m_oldPage, rect );
-                    rect = tileRect(squareDirection(i, j, squaresPerRow, squaresPerCol), squarePos, rect);
+                    rect = tileRect(squareDirection(i, j, m_squaresPerRow, m_squaresPerCol), squarePos, rect);
                     if (rect.width() > 0 && rect.height() > 0) {
                         p.drawPixmap( rect.topLeft(), data.m_newPage, rect );
                     }
@@ -100,11 +107,11 @@ void KPrMatrixWipeStrategy::next( const KPrPageEffect::Data &data )
     int curSquare = currPos / (m_smooth ? framesPerSquare : 1);
     int lastSquare = lastPos / (m_smooth ? framesPerSquare : 1);
 
-    for (int i = 0; i < squaresPerRow; ++i) {
-        for (int j = 0; j < squaresPerCol; ++j) {
-            QRect rect(floor(qreal(width) / squaresPerRow * i), floor(qreal(height) / squaresPerCol * j),
-                ceil(qreal(width) / squaresPerRow), ceil(qreal(height) / squaresPerCol));
-            int square = squareIndex(i, j, squaresPerRow, squaresPerCol);
+    for (int i = 0; i < m_squaresPerRow; ++i) {
+        for (int j = 0; j < m_squaresPerCol; ++j) {
+            QRect rect(floor(qreal(width) / m_squaresPerRow * i), floor(qreal(height) / m_squaresPerCol * j),
+                ceil(qreal(width) / m_squaresPerRow), ceil(qreal(height) / m_squaresPerCol));
+            int square = squareIndex(i, j, m_squaresPerRow, m_squaresPerCol);
             if (square <= curSquare && square >= lastSquare) {
                 data.m_widget->update(rect);
             }

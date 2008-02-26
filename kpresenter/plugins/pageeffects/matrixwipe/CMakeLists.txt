@@ -18,6 +18,9 @@ set(kpr_pageeffect_matrixwipe_SRCS
     spiralwipe/KPrSpiralWipeEffectFactory.cpp
     spiralwipe/KPrSpiralWipeStrategy.cpp
 
+    parallelsnakes/KPrParallelSnakesWipeEffectFactory.cpp
+    parallelsnakes/KPrParallelSnakesWipeHorizontalStrategy.cpp
+
     waterfallwipe/KPrWaterfallWipeEffectFactory.cpp
     waterfallwipe/KPrWaterfallWipeTopLeftStrategy.cpp
     waterfallwipe/KPrWaterfallWipeTopRightStrategy.cpp
