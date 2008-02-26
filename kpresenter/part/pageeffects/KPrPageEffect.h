@@ -146,7 +146,19 @@ public:
         DiagonalBottomLeftOppositeIn,
         DiagonalBottomLeftOppositeOut,
         DiagonalTopLeftOppositeIn,
-        DiagonalTopLeftOppositeOut
+        DiagonalTopLeftOppositeOut,
+        TwoBoxTopIn,
+        TwoBoxBottomIn,
+        TwoBoxLeftIn,
+        TwoBoxRightIn,
+        FourBoxVerticalIn,
+        FourBoxHorizontalIn,
+        TwoBoxTopOut,
+        TwoBoxBottomOut,
+        TwoBoxLeftOut,
+        TwoBoxRightOut,
+        FourBoxVerticalOut,
+        FourBoxHorizontalOut
     };
 
     /**

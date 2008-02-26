@@ -140,8 +140,20 @@ static const char* s_subTypes[] = {
     I18N_NOOP( "Horizontal Top Right Opposite Out" ),
     I18N_NOOP( "Diagonal Bottom Left Opposite In" ),
     I18N_NOOP( "Diagonal Bottom Left Opposite Out" ),
-    I18N_NOOP( "Diagonal Top Left Opposite in" ),
-    I18N_NOOP( "Diagonal Top Left Opposite Out" )
+    I18N_NOOP( "Diagonal Top Left Opposite In" ),
+    I18N_NOOP( "Diagonal Top Left Opposite Out" ),
+    I18N_NOOP( "Two Box Top In" ),
+    I18N_NOOP( "Two Box Bottom In" ),
+    I18N_NOOP( "Two Box Left In" ),
+    I18N_NOOP( "Two Box Right In" ),
+    I18N_NOOP( "Four Box Vertical In" ),
+    I18N_NOOP( "Four Box Horizontal In" ),
+    I18N_NOOP( "Two Box Top Out" ),
+    I18N_NOOP( "Two Box Bottom Out" ),
+    I18N_NOOP( "Two Box Left Out" ),
+    I18N_NOOP( "Two Box Right Out" ),
+    I18N_NOOP( "Four Box Vertical Out" ),
+    I18N_NOOP( "Four Box Horizontal Out" )
 };
 
 KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags )
