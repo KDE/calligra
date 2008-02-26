@@ -17,23 +17,23 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRPARALLELSNAKESWIPEHORIZONTALSTRATEGY_H
-#define KPRPARALLELSNAKESWIPEHORIZONTALSTRATEGY_H
+#ifndef KPRPARALLELSNAKESWIPEVERTICALSTRATEGY_H
+#define KPRPARALLELSNAKESWIPEVERTICALSTRATEGY_H
 
 #include "../KPrMatrixWipeStrategy.h"
 
-class KPrParallelSnakesWipeHorizontalStrategy : public KPrMatrixWipeStrategy
+class KPrParallelSnakesWipeVerticalStrategy : public KPrMatrixWipeStrategy
 {
 public:
-    KPrParallelSnakesWipeHorizontalStrategy(bool reverseTop, bool reverseBottom, bool reverse);
-    virtual ~KPrParallelSnakesWipeHorizontalStrategy();
+    KPrParallelSnakesWipeVerticalStrategy(bool reverseLeft, bool reverseRight, bool reverse);
+    virtual ~KPrParallelSnakesWipeVerticalStrategy();
 protected:
     virtual int squareIndex(int x, int y, int collumns, int rows);
     virtual Direction squareDirection(int x, int y, int collumns, int rows);
     virtual int maxIndex(int collumns, int rows);
 private:
-    bool m_reverseTop;
-    bool m_reverseBottom;
+    bool m_reverseLeft;
+    bool m_reverseRight;
 };
 
-#endif // KPRPARALLELSNAKESWIPEHORIZONTALSTRATEGY_H
+#endif // KPRPARALLELSNAKESWIPEVERTICALSTRATEGY_H

@@ -21,6 +21,7 @@
 
 #include <klocale.h>
 
+#include "KPrParallelSnakesWipeVerticalStrategy.h"
 #include "KPrParallelSnakesWipeHorizontalStrategy.h"
 
 #define ParallelSnakesWipeEffectId "ParallelSnakesWipeEffect"
@@ -28,6 +29,14 @@
 KPrParallelSnakesWipeEffectFactory::KPrParallelSnakesWipeEffectFactory()
     : KPrPageEffectFactory( ParallelSnakesWipeEffectId, i18n( "Parallel Snakes Wipe Effect" ) )
 {
+    addStrategy( new KPrParallelSnakesWipeVerticalStrategy(false, false, false) );
+    addStrategy( new KPrParallelSnakesWipeVerticalStrategy(true, true, false) );
+    addStrategy( new KPrParallelSnakesWipeVerticalStrategy(false, true, false) );
+    addStrategy( new KPrParallelSnakesWipeVerticalStrategy(true, false, false) );
+    addStrategy( new KPrParallelSnakesWipeVerticalStrategy(false, false, true) );
+    addStrategy( new KPrParallelSnakesWipeVerticalStrategy(true, true, true) );
+    addStrategy( new KPrParallelSnakesWipeVerticalStrategy(false, true, true) );
+    addStrategy( new KPrParallelSnakesWipeVerticalStrategy(true, false, true) );
     addStrategy( new KPrParallelSnakesWipeHorizontalStrategy(false, false, false) );
     addStrategy( new KPrParallelSnakesWipeHorizontalStrategy(true, true, false) );
     addStrategy( new KPrParallelSnakesWipeHorizontalStrategy(false, true, false) );
