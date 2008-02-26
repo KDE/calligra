@@ -19,6 +19,9 @@ set(kpr_pageeffect_edgewipe_SRCS
 
     boxwipe/BoxWipeEffectFactory.cpp
     boxwipe/BoxWipeStrategy.cpp
+
+    veewipe/VeeWipeEffectFactory.cpp
+    veewipe/VeeWipeStrategy.cpp
     )
 
 kde4_add_plugin(kpr_pageeffect_edgewipe ${kpr_pageeffect_edgewipe_SRCS})

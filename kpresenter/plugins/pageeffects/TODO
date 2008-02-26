@@ -63,7 +63,7 @@ done Jan Hambrecht
 "miscDiagonalWipe"  "doubleBarnDoor" (47) [default], "doubleDiamond" (48)
 done Jan Hambrecht
 "veeWipe"  "down" (61) [default], "left" (62), "up" (63), "right" (64)
-Jan Hambrecht
+done Jan Hambrecht
 "barnVeeWipe"  "down" (65) [default], "left" (66), "up" (67), "right" (68)
 "zigZagWipe"  "leftToRight" (71) [default], "topToBottom" (72)
 "barnZigZagWipe"  "vertical" (73) [default], "horizontal" (74)
