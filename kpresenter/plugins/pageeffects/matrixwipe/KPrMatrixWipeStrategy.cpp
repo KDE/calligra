@@ -37,10 +37,10 @@ KPrMatrixWipeStrategy::~KPrMatrixWipeStrategy()
 {
 }
 
-void KPrMatrixWipeStrategy::setNeedEvenSquares()
+void KPrMatrixWipeStrategy::setNeedEvenSquares(bool hor, bool vert)
 {
-    m_squaresPerRow++;
-    m_squaresPerCol++;
+    if (hor) m_squaresPerRow++;
+    if (vert) m_squaresPerCol++;
 }
 
 void KPrMatrixWipeStrategy::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )

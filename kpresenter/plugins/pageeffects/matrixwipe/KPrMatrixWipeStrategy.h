@@ -44,7 +44,7 @@ protected:
     virtual int squareIndex(int x, int y, int collumns, int rows) = 0;
     virtual Direction squareDirection(int x, int y, int collumns, int rows);
     virtual int maxIndex(int collumns, int rows) = 0;
-    void setNeedEvenSquares();
+    void setNeedEvenSquares(bool hor = true, bool vert = true);
     bool m_smooth;
 private:
     int m_squaresPerRow, m_squaresPerCol;

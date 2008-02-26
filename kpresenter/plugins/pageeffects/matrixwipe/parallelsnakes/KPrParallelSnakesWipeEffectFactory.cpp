@@ -23,6 +23,7 @@
 
 #include "KPrParallelSnakesWipeVerticalStrategy.h"
 #include "KPrParallelSnakesWipeHorizontalStrategy.h"
+#include "KPrParallelSnakesWipeDiagonalStrategy.h"
 
 #define ParallelSnakesWipeEffectId "ParallelSnakesWipeEffect"
 
@@ -45,6 +46,10 @@ KPrParallelSnakesWipeEffectFactory::KPrParallelSnakesWipeEffectFactory()
     addStrategy( new KPrParallelSnakesWipeHorizontalStrategy(true, true, true) );
     addStrategy( new KPrParallelSnakesWipeHorizontalStrategy(false, true, true) );
     addStrategy( new KPrParallelSnakesWipeHorizontalStrategy(true, false, true) );
+    addStrategy( new KPrParallelSnakesWipeDiagonalStrategy(false, true) );
+    addStrategy( new KPrParallelSnakesWipeDiagonalStrategy(true, true) );
+    addStrategy( new KPrParallelSnakesWipeDiagonalStrategy(false, false) );
+    addStrategy( new KPrParallelSnakesWipeDiagonalStrategy(true, false) );
 }
 
 KPrParallelSnakesWipeEffectFactory::~KPrParallelSnakesWipeEffectFactory()
