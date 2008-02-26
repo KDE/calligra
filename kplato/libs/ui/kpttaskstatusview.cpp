@@ -53,19 +53,33 @@ TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
     setContextMenuPolicy( Qt::CustomContextMenu );
-    setModel( new TaskStatusItemModel() );
+    TaskStatusItemModel *m = new TaskStatusItemModel();
+    setModel( m );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setStretchLastSection( false );
     
     connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
 
-    QList<int> lst1; lst1 << 1 << -1;
-    QList<int> lst2;
-    for ( int i = 0; i < 38; ++i ) {
-        lst2 << i;
+    QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
+    QList<int> show;
+    show << NodeStatus
+            << NodeCompleted
+            << NodePlannedEffort
+            << NodeActualEffort
+            << NodeRemainingEffort
+            << NodePlannedCost
+            << NodeActualCost
+            << NodeStarted
+            << NodeFinished
+            << NodeStatusNote;
+
+    QList<int> lst2; 
+    for ( int i = 0; i < m->columnCount(); ++i ) {
+        if ( ! show.contains( i ) ) {
+            lst2 << i;
+        }
     }
-    lst2 << 48 << -1;
     hideColumns( lst1, lst2 );
 }
 
@@ -265,7 +279,7 @@ void TaskStatusView::slotOptions()
 
 bool TaskStatusView::loadContext( const KoXmlElement &context )
 {
-    kDebug()<<endl;
+    kDebug();
     return m_view->loadContext( context );
 }
 

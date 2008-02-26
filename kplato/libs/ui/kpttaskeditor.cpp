@@ -51,10 +51,39 @@ namespace KPlato
 NodeTreeView::NodeTreeView( QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
-    setModel( new NodeItemModel() );
+    NodeItemModel *m = new NodeItemModel();
+    setModel( m );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
+    
+    QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
+    QList<int> show;
+    show << NodeType
+            << NodeResponsible
+            << NodeAllocation
+            << NodeEstimateType
+            << NodeEstimate
+            << NodeOptimisticRatio
+            << NodePessimisticRatio
+            << NodeRisk
+            << NodeConstraint 
+            << NodeConstraintStart 
+            << NodeConstraintEnd 
+            << NodeRunningAccount 
+            << NodeStartupAccount 
+            << NodeStartupCost 
+            << NodeShutdownAccount 
+            << NodeShutdownCost 
+            << NodeDescription;
+
+    QList<int> lst2; 
+    for ( int i = 0; i < m->columnCount(); ++i ) {
+        if ( ! show.contains( i ) ) {
+            lst2 << i;
+        }
+    }
+    hideColumns( lst1, lst2 );
     
     createItemDelegates();
 }
@@ -77,10 +106,6 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
     setupGui();
 
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
-    QList<int> lst1; lst1 << 1 << -1;
-    QList<int> lst2; lst2 << 0 << 18 << -1;
-    m_view->hideColumns( lst1, lst2 );
-
 
     m_view->setDragDropMode( QAbstractItemView::InternalMove );
     m_view->setDropIndicatorShown( true );

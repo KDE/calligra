@@ -100,12 +100,24 @@ PertResult::PertResult( KoDocument *part, QWidget *parent )
     current_schedule=0;
 
         
-    QList<int> lst1; lst1 << 1 << -1;
+    QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
+    QList<int> show;
+    show << NodeEarlyStart
+            << NodeEarlyFinish
+            << NodeLateStart
+            << NodeLateFinish
+            << NodePositiveFloat
+            << NodeFreeFloat
+            << NodeNegativeFloat
+            << NodeStartFloat
+            << NodeFinishFloat;
+
     QList<int> lst2; 
-    for ( int i = 0; i < 24; ++i ) {
-        lst2 << i;
+    for ( int i = 0; i < m->columnCount(); ++i ) {
+        if ( ! show.contains( i ) ) {
+            lst2 << i;
+        }
     }
-    lst2 << 33 << -1;
     widget.treeWidgetTaskResult->hideColumns( lst1, lst2 );
     
     connect( widget.treeWidgetTaskResult, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
@@ -417,8 +429,18 @@ PertCpmView::PertCpmView( KoDocument *part, QWidget *parent )
     
     setupGui();
     
-    QList<int> lst1; lst1 << 1 << -1;
-    QList<int> show; show << 5 << 18 << 19 << 20 << 21  << 34 << 35 << 36 << 37;
+    QList<int> lst1; lst1 << 1 << -1; // only display first column (NodeName) in left view
+    QList<int> show; 
+    show << NodeEstimate
+            << NodeExpected
+            << NodeVarianceEstimate
+            << NodeOptimistic
+            << NodePessimistic
+            << NodeDuration
+            << NodeVarianceDuration
+            << NodeOptimisticDuration
+            << NodePessimisticDuration;
+
     QList<int> lst2;
     for ( int i = 0; i < m->columnCount(); ++i ) {
         if ( ! show.contains( i ) ) {
@@ -431,15 +453,15 @@ PertCpmView::PertCpmView( KoDocument *part, QWidget *parent )
         v = widget.cpmTable->masterView();
     }
     int i = 1;
-    v->mapToSection( 34, i++ );
-    v->mapToSection( 35, i++ );
-    v->mapToSection( 36, i++ );
-    v->mapToSection( 37, i++ );
-    v->mapToSection( 5, i++ );
-    v->mapToSection( 18, i++ );
-    v->mapToSection( 19, i++ );
-    v->mapToSection( 20, i++ );
-    v->mapToSection( 21, i++ );
+    v->mapToSection( NodeDuration, i++ );
+    v->mapToSection( NodeVarianceDuration, i++ );
+    v->mapToSection( NodeOptimisticDuration, i++ );
+    v->mapToSection( NodePessimisticDuration, i++ );
+    v->mapToSection( NodeEstimate, i++ );
+    v->mapToSection( NodeExpected, i++ );
+    v->mapToSection( NodeVarianceEstimate, i++ );
+    v->mapToSection( NodeOptimistic, i++ );
+    v->mapToSection( NodePessimistic, i++ );
     
     connect( widget.cpmTable, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
     

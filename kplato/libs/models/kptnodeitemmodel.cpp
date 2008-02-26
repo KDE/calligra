@@ -1128,75 +1128,91 @@ QVariant NodeModel::effortNotMet( const Node *node, int role ) const
     return QVariant();
 }
 
+QVariant NodeModel::wbsCode( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return node->wbs();
+            break;
+        case Qt::ToolTipRole:
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 QVariant NodeModel::data( const Node *n, int property, int role ) const
 {
     QVariant result;
     switch ( property ) {
         // Edited by user
-        case 0: result = name( n, role ); break;
-        case 1: result = type( n, role ); break;
-        case 2: result = leader( n, role ); break;
-        case 3: result = allocation( n, role ); break;
-        case 4: result = estimateType( n, role ); break;
-        case 5: result = estimate( n, role ); break;
-        case 6: result = optimisticRatio( n, role ); break;
-        case 7: result = pessimisticRatio( n, role ); break;
-        case 8: result = riskType( n, role ); break;
-        case 9: result = constraint( n, role ); break;
-        case 10: result = constraintStartTime( n, role ); break;
-        case 11: result = constraintEndTime( n, role ); break;
-        case 12: result = runningAccount( n, role ); break;
-        case 13: result = startupAccount( n, role ); break;
-        case 14: result = startupCost( n, role ); break;
-        case 15: result = shutdownAccount( n, role ); break;
-        case 16: result = shutdownCost( n, role ); break;
-        case 17: result = description( n, role ); break;
+        case NodeName: result = name( n, role ); break;
+        case NodeType: result = type( n, role ); break;
+        case NodeResponsible: result = leader( n, role ); break;
+        case NodeAllocation: result = allocation( n, role ); break;
+        case NodeEstimateType: result = estimateType( n, role ); break;
+        case NodeEstimate: result = estimate( n, role ); break;
+        case NodeOptimisticRatio: result = optimisticRatio( n, role ); break;
+        case NodePessimisticRatio: result = pessimisticRatio( n, role ); break;
+        case NodeRisk: result = riskType( n, role ); break;
+        case NodeConstraint: result = constraint( n, role ); break;
+        case NodeConstraintStart: result = constraintStartTime( n, role ); break;
+        case NodeConstraintEnd: result = constraintEndTime( n, role ); break;
+        case NodeRunningAccount: result = runningAccount( n, role ); break;
+        case NodeStartupAccount: result = startupAccount( n, role ); break;
+        case NodeStartupCost: result = startupCost( n, role ); break;
+        case NodeShutdownAccount: result = shutdownAccount( n, role ); break;
+        case NodeShutdownCost: result = shutdownCost( n, role ); break;
+        case NodeDescription: result = description( n, role ); break;
         
         // Based on edited values
-        case 18: result = pertExpected( n->estimate(), role ); break;
-        case 19: result = varianceEstimate( n->estimate(), role ); break;
-        case 20: result = optimisticEstimate( n->estimate(), role ); break;
-        case 21: result = pessimisticEstimate( n->estimate(), role ); break;
+        case NodeExpected: result = pertExpected( n->estimate(), role ); break;
+        case NodeVarianceEstimate: result = varianceEstimate( n->estimate(), role ); break;
+        case NodeOptimistic: result = optimisticEstimate( n->estimate(), role ); break;
+        case NodePessimistic: result = pessimisticEstimate( n->estimate(), role ); break;
 
         // After scheduling
-        case 22: result = startTime( n, role ); break;
-        case 23: result = endTime( n, role ); break;
-        case 24: result = earlyStart( n, role ); break;
-        case 25: result = earlyFinish( n, role ); break;
-        case 26: result = lateStart( n, role ); break;
-        case 27: result = lateFinish( n, role ); break;
-        case 28: result = positiveFloat( n, role ); break;
-        case 29: result = freeFloat( n, role ); break;
-        case 30: result = negativeFloat( n, role ); break;
-        case 31: result = startFloat( n, role ); break;
-        case 32: result = finishFloat( n, role ); break;
-        case 33: result = assignedResources( n, role ); break;
+        case NodeStartTime: result = startTime( n, role ); break;
+        case NodeEndTime: result = endTime( n, role ); break;
+        case NodeEarlyStart: result = earlyStart( n, role ); break;
+        case NodeEarlyFinish: result = earlyFinish( n, role ); break;
+        case NodeLateStart: result = lateStart( n, role ); break;
+        case NodeLateFinish: result = lateFinish( n, role ); break;
+        case NodePositiveFloat: result = positiveFloat( n, role ); break;
+        case NodeFreeFloat: result = freeFloat( n, role ); break;
+        case NodeNegativeFloat: result = negativeFloat( n, role ); break;
+        case NodeStartFloat: result = startFloat( n, role ); break;
+        case NodeFinishFloat: result = finishFloat( n, role ); break;
+        case NodeAssigments: result = assignedResources( n, role ); break;
 
         // Based on scheduled values
-        case 34: result = duration( n, role ); break;
-        case 35: result = varianceDuration( n, role ); break;
-        case 36: result = optimisticDuration( n, role ); break;
-        case 37: result = pessimisticDuration( n, role ); break;
+        case NodeDuration: result = duration( n, role ); break;
+        case NodeVarianceDuration: result = varianceDuration( n, role ); break;
+        case NodeOptimisticDuration: result = optimisticDuration( n, role ); break;
+        case NodePessimisticDuration: result = pessimisticDuration( n, role ); break;
         
         // Completion
-        case 38: result = status( n, role ); break;
-        case 39: result = completed( n, role ); break;
-        case 40: result = plannedEffortTo( n, role ); break;
-        case 41: result = actualEffortTo( n, role ); break;
-        case 42: result = remainingEffort( n, role ); break;
-        case 43: result = plannedCostTo( n, role ); break;
-        case 44: result = actualCostTo( n, role ); break;
-        case 45: result = startedTime( n, role ); break;
-        case 46: result = finishedTime( n, role ); break;
-        case 47: result = note( n, role ); break;
+        case NodeStatus: result = status( n, role ); break;
+        case NodeCompleted: result = completed( n, role ); break;
+        case NodePlannedEffort: result = plannedEffortTo( n, role ); break;
+        case NodeActualEffort: result = actualEffortTo( n, role ); break;
+        case NodeRemainingEffort: result = remainingEffort( n, role ); break;
+        case NodePlannedCost: result = plannedCostTo( n, role ); break;
+        case NodeActualCost: result = actualCostTo( n, role ); break;
+        case NodeStarted: result = startedTime( n, role ); break;
+        case NodeFinished: result = finishedTime( n, role ); break;
+        case NodeStatusNote: result = note( n, role ); break;
         
         // Scheduling errors
-        case 48: result = nodeIsNotScheduled( n, role ); break;
-        case 49: result = resourceIsMissing( n, role ); break;
-        case 50: result = resourceIsOverbooked( n, role ); break;
-        case 51: result = resourceIsNotAvailable( n, role ); break;
-        case 52: result = schedulingConstraintsError( n, role ); break;
-        case 53: result = effortNotMet( n, role ); break;
+        case NodeNotScheduled: result = nodeIsNotScheduled( n, role ); break;
+        case NodeAssigmentMissing: result = resourceIsMissing( n, role ); break;
+        case NodeResourceOverbooked: result = resourceIsOverbooked( n, role ); break;
+        case NodeResourceUnavailable: result = resourceIsNotAvailable( n, role ); break;
+        case NodeConstraintsError: result = schedulingConstraintsError( n, role ); break;
+        case NodeEffortNotMet: result = effortNotMet( n, role ); break;
+        
+        case NodeWBSCode: result = wbsCode( n, role ); break;
         
         default:
             //kDebug()<<"Invalid property number: "<<property;;
@@ -1207,7 +1223,7 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
 
 int NodeModel::propertyCount()
 {
-    return 54;
+    return NODE_PROPERTY_COUNT;
 }
 
 bool NodeModel::setData( Node *node, int property, const QVariant & value, int role )
@@ -1219,141 +1235,145 @@ QVariant NodeModel::headerData( int section, int role )
 {
     if ( role == Qt::DisplayRole ) {
         switch ( section ) {
-            case 0: return i18n( "Name" );
-            case 1: return i18n( "Type" );
-            case 2: return i18n( "Responsible" );
-            case 3: return i18n( "Allocation" );
-            case 4: return i18n( "Estimate Type" );
-            case 5: return i18n( "Estimate" );
-            case 6: return i18n( "Optimistic" ); // Ratio
-            case 7: return i18n( "Pessimistic" ); // Ratio
-            case 8: return i18n( "Risk" );
-            case 9: return i18n( "Constraint" );
-            case 10: return i18n( "Constraint Start" );
-            case 11: return i18n( "Constraint End" );
-            case 12: return i18n( "Running Account" );
-            case 13: return i18n( "Startup Account" );
-            case 14: return i18n( "Startup Cost" );
-            case 15: return i18n( "Shutdown Account" );
-            case 16: return i18n( "Shutdown Cost" );
-            case 17: return i18n( "Description" );
+            case NodeName: return i18n( "Name" );
+            case NodeType: return i18n( "Type" );
+            case NodeResponsible: return i18n( "Responsible" );
+            case NodeAllocation: return i18n( "Allocation" );
+            case NodeEstimateType: return i18n( "Estimate Type" );
+            case NodeEstimate: return i18n( "Estimate" );
+            case NodeOptimisticRatio: return i18n( "Optimistic" ); // Ratio
+            case NodePessimisticRatio: return i18n( "Pessimistic" ); // Ratio
+            case NodeRisk: return i18n( "Risk" );
+            case NodeConstraint: return i18n( "Constraint" );
+            case NodeConstraintStart: return i18n( "Constraint Start" );
+            case NodeConstraintEnd: return i18n( "Constraint End" );
+            case NodeRunningAccount: return i18n( "Running Account" );
+            case NodeStartupAccount: return i18n( "Startup Account" );
+            case NodeStartupCost: return i18n( "Startup Cost" );
+            case NodeShutdownAccount: return i18n( "Shutdown Account" );
+            case NodeShutdownCost: return i18n( "Shutdown Cost" );
+            case NodeDescription: return i18n( "Description" );
             
             // Based on edited values
-            case 18: return i18n( "Expected" );
-            case 19: return i18n( "Variance (Est)" );
-            case 20: return i18n( "Optimistic" );
-            case 21: return i18n( "Pessimistic" );
+            case NodeExpected: return i18n( "Expected" );
+            case NodeVarianceEstimate: return i18n( "Variance (Est)" );
+            case NodeOptimistic: return i18n( "Optimistic" );
+            case NodePessimistic: return i18n( "Pessimistic" );
             
             // After scheduling
-            case 22: return i18n( "Start Time" );
-            case 23: return i18n( "End Time" );
-            case 24: return i18n( "Early Start" );
-            case 25: return i18n( "Early Finish" );
-            case 26: return i18n( "Late Start" );
-            case 27: return i18n( "Late Finish" );
-            case 28: return i18n( "Positive Float" );
-            case 29: return i18n( "Free Float" );
-            case 30: return i18n( "Negative Float" );
-            case 31: return i18n( "Start Float" );
-            case 32: return i18n( "Finish Float" );
-            case 33: return i18n( "Assigments" );
+            case NodeStartTime: return i18n( "Start Time" );
+            case NodeEndTime: return i18n( "End Time" );
+            case NodeEarlyStart: return i18n( "Early Start" );
+            case NodeEarlyFinish: return i18n( "Early Finish" );
+            case NodeLateStart: return i18n( "Late Start" );
+            case NodeLateFinish: return i18n( "Late Finish" );
+            case NodePositiveFloat: return i18n( "Positive Float" );
+            case NodeFreeFloat: return i18n( "Free Float" );
+            case NodeNegativeFloat: return i18n( "Negative Float" );
+            case NodeStartFloat: return i18n( "Start Float" );
+            case NodeFinishFloat: return i18n( "Finish Float" );
+            case NodeAssigments: return i18n( "Assigments" );
             
             // Based on scheduled values
-            case 34: return i18n( "Duration" );
-            case 35: return i18n( "Variance (Dur)" );
-            case 36: return i18n( "Optimistic (Dur)" );
-            case 37: return i18n( "Pessimistic (Dur)" );
+            case NodeDuration: return i18n( "Duration" );
+            case NodeVarianceDuration: return i18n( "Variance (Dur)" );
+            case NodeOptimisticDuration: return i18n( "Optimistic (Dur)" );
+            case NodePessimisticDuration: return i18n( "Pessimistic (Dur)" );
 
             // Completion
-            case 38: return i18n( "Status" );
+            case NodeStatus: return i18n( "Status" );
             // xgettext: no-c-format
-            case 39: return i18n( "% Completed" );
-            case 40: return i18n( "Planned Effort" );
-            case 41: return i18n( "Actual Effort" );
-            case 42: return i18n( "Remaining Effort" );
-            case 43: return i18n( "Planned Cost" );
-            case 44: return i18n( "Actual Cost" );
-            case 45: return i18n( "Started" );
-            case 46: return i18n( "Finished" );
-            case 47: return i18n( "Status Note" );
+            case NodeCompleted: return i18n( "% Completed" );
+            case NodePlannedEffort: return i18n( "Planned Effort" );
+            case NodeActualEffort: return i18n( "Actual Effort" );
+            case NodeRemainingEffort: return i18n( "Remaining Effort" );
+            case NodePlannedCost: return i18n( "Planned Cost" );
+            case NodeActualCost: return i18n( "Actual Cost" );
+            case NodeStarted: return i18n( "Started" );
+            case NodeFinished: return i18n( "Finished" );
+            case NodeStatusNote: return i18n( "Status Note" );
             
             // Scheduling errors
-            case 48: return i18n( "Not Scheduled" );
-            case 49: return i18n( "Assigment Missing" );
-            case 50: return i18n( "Resource Overbooked" );
-            case 51: return i18n( "Resource Unavailable" );
-            case 52: return i18n( "Constraints Error" );
-            case 53: return i18n( "Effort Not Met" );
+            case NodeNotScheduled: return i18n( "Not Scheduled" );
+            case NodeAssigmentMissing: return i18n( "Assigment Missing" );
+            case NodeResourceOverbooked: return i18n( "Resource Overbooked" );
+            case NodeResourceUnavailable: return i18n( "Resource Unavailable" );
+            case NodeConstraintsError: return i18n( "Constraints Error" );
+            case NodeEffortNotMet: return i18n( "Effort Not Met" );
+            
+            case NodeWBSCode: return i18n( "WBS Code" );
             
             default: return QVariant();
         }
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-            case 0: return ToolTip::nodeName();
-            case 1: return ToolTip::nodeType();
-            case 2: return ToolTip::nodeResponsible();
-            case 3: return ToolTip::allocation();
-            case 4: return ToolTip::estimateType();
-            case 5: return ToolTip::estimate();
-            case 6: return ToolTip::optimisticRatio();
-            case 7: return ToolTip::pessimisticRatio();
-            case 8: return ToolTip::riskType();
-            case 9: return ToolTip::nodeConstraint();
-            case 10: return ToolTip::nodeConstraintStart();
-            case 11: return ToolTip::nodeConstraintEnd();
-            case 12: return ToolTip::nodeRunningAccount();
-            case 13: return ToolTip::nodeStartupAccount();
-            case 14: return ToolTip::nodeStartupCost();
-            case 15: return ToolTip::nodeShutdownAccount();
-            case 16: return ToolTip::nodeShutdownCost();
-            case 17: return ToolTip::nodeDescription();
+            case NodeName: return ToolTip::nodeName();
+            case NodeType: return ToolTip::nodeType();
+            case NodeResponsible: return ToolTip::nodeResponsible();
+            case NodeAllocation: return ToolTip::allocation();
+            case NodeEstimateType: return ToolTip::estimateType();
+            case NodeEstimate: return ToolTip::estimate();
+            case NodeOptimisticRatio: return ToolTip::optimisticRatio();
+            case NodePessimisticRatio: return ToolTip::pessimisticRatio();
+            case NodeRisk: return ToolTip::riskType();
+            case NodeConstraint: return ToolTip::nodeConstraint();
+            case NodeConstraintStart: return ToolTip::nodeConstraintStart();
+            case NodeConstraintEnd: return ToolTip::nodeConstraintEnd();
+            case NodeRunningAccount: return ToolTip::nodeRunningAccount();
+            case NodeStartupAccount: return ToolTip::nodeStartupAccount();
+            case NodeStartupCost: return ToolTip::nodeStartupCost();
+            case NodeShutdownAccount: return ToolTip::nodeShutdownAccount();
+            case NodeShutdownCost: return ToolTip::nodeShutdownCost();
+            case NodeDescription: return ToolTip::nodeDescription();
 
             // Based on edited values
-            case 18: return ToolTip::estimateExpected();
-            case 19: return ToolTip::estimateVariance();
-            case 20: return ToolTip::estimateOptimistic();
-            case 21: return ToolTip::estimatePessimistic();
+            case NodeExpected: return ToolTip::estimateExpected();
+            case NodeVarianceEstimate: return ToolTip::estimateVariance();
+            case NodeOptimistic: return ToolTip::estimateOptimistic();
+            case NodePessimistic: return ToolTip::estimatePessimistic();
             
             // After scheduling
-            case 22: return ToolTip::nodeStartTime();
-            case 23: return ToolTip::nodeEndTime();
-            case 24: return ToolTip::nodeEarlyStart();
-            case 25: return ToolTip::nodeEarlyFinish();
-            case 26: return ToolTip::nodeLateStart();
-            case 27: return ToolTip::nodeLateFinish();
-            case 28: return ToolTip::nodePositiveFloat();
-            case 29: return ToolTip::nodeFreeFloat();
-            case 30: return ToolTip::nodeNegativeFloat();
-            case 31: return ToolTip::nodeStartFloat();
-            case 32: return ToolTip::nodeFinishFloat();
-            case 33: return ToolTip::nodeAssignment();
+            case NodeStartTime: return ToolTip::nodeStartTime();
+            case NodeEndTime: return ToolTip::nodeEndTime();
+            case NodeEarlyStart: return ToolTip::nodeEarlyStart();
+            case NodeEarlyFinish: return ToolTip::nodeEarlyFinish();
+            case NodeLateStart: return ToolTip::nodeLateStart();
+            case NodeLateFinish: return ToolTip::nodeLateFinish();
+            case NodePositiveFloat: return ToolTip::nodePositiveFloat();
+            case NodeFreeFloat: return ToolTip::nodeFreeFloat();
+            case NodeNegativeFloat: return ToolTip::nodeNegativeFloat();
+            case NodeStartFloat: return ToolTip::nodeStartFloat();
+            case NodeFinishFloat: return ToolTip::nodeFinishFloat();
+            case NodeAssigments: return ToolTip::nodeAssignment();
 
             // Based on scheduled values
-            case 34: return ToolTip::nodeDuration();
-            case 35: return ToolTip::nodeVarianceDuration();
-            case 36: return ToolTip::nodeOptimisticDuration();
-            case 37: return ToolTip::nodePessimisticDuration();
+            case NodeDuration: return ToolTip::nodeDuration();
+            case NodeVarianceDuration: return ToolTip::nodeVarianceDuration();
+            case NodeOptimisticDuration: return ToolTip::nodeOptimisticDuration();
+            case NodePessimisticDuration: return ToolTip::nodePessimisticDuration();
 
             // Completion
-            case 38: return ToolTip::nodeStatus();
-            case 39: return ToolTip::nodeCompletion();
-            case 40: return ToolTip::nodePlannedEffortTo();
-            case 41: return ToolTip::nodeActualEffortTo();
-            case 42: return ToolTip::nodeRemainingEffort();
-            case 43: return ToolTip::nodePlannedCostTo();
-            case 44: return ToolTip::nodeActualCostTo();
-            case 45: return ToolTip::completionStartedTime();
-            case 46: return ToolTip::completionFinishedTime();
-            case 47: return ToolTip::completionStatusNote();
+            case NodeStatus: return ToolTip::nodeStatus();
+            case NodeCompleted: return ToolTip::nodeCompletion();
+            case NodePlannedEffort: return ToolTip::nodePlannedEffortTo();
+            case NodeActualEffort: return ToolTip::nodeActualEffortTo();
+            case NodeRemainingEffort: return ToolTip::nodeRemainingEffort();
+            case NodePlannedCost: return ToolTip::nodePlannedCostTo();
+            case NodeActualCost: return ToolTip::nodeActualCostTo();
+            case NodeStarted: return ToolTip::completionStartedTime();
+            case NodeFinished: return ToolTip::completionFinishedTime();
+            case NodeStatusNote: return ToolTip::completionStatusNote();
     
             // Scheduling errors
-            case 48: return ToolTip::nodeNotScheduled();
-            case 49: return ToolTip::nodeAssigmentMissing();
-            case 50: return ToolTip::nodeResourceOverbooked();
-            case 51: return ToolTip::nodeResourceUnavailable();
-            case 52: return ToolTip::nodeConstraintsError();
-            case 53: return ToolTip::nodeEffortNotMet();
+            case NodeNotScheduled: return ToolTip::nodeNotScheduled();
+            case NodeAssigmentMissing: return ToolTip::nodeAssigmentMissing();
+            case NodeResourceOverbooked: return ToolTip::nodeResourceOverbooked();
+            case NodeResourceUnavailable: return ToolTip::nodeResourceUnavailable();
+            case NodeConstraintsError: return ToolTip::nodeConstraintsError();
+            case NodeEffortNotMet: return ToolTip::nodeEffortNotMet();
+            
+            case NodeWBSCode: return ToolTip::nodeWBS();
             
             default: return QVariant();
         }
@@ -1465,41 +1485,41 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
     if ( m_readWrite && n != 0 ) {
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
-            case 0: // name
+            case NodeName: // name
                 flags |= Qt::ItemIsEditable;
                 break;
-            case 1: break; // Node type
-            case 2: // Responsible
+            case NodeType: break; // Node type
+            case NodeResponsible: // Responsible
                 flags |= Qt::ItemIsEditable;
                 break;
-            case 3: // allocation
+            case NodeAllocation: // allocation
                 if ( n->type() == Node::Type_Task ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
-            case 4: // estimateType
-            case 5: // estimate
-            case 6: // optimisticRatio
-            case 7: // pessimisticRatio
+            case NodeEstimateType: // estimateType
+            case NodeEstimate: // estimate
+            case NodeOptimisticRatio: // optimisticRatio
+            case NodePessimisticRatio: // pessimisticRatio
             {
                 if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             }
-            case 8: // risktype
+            case NodeRisk: // risktype
             {
                 if ( n->type() == Node::Type_Task ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             }
-            case 9: // constraint type
+            case NodeConstraint: // constraint type
                 if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
-            case 10: { // constraint start
+            case NodeConstraintStart: { // constraint start
                 if ( ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     break;
                 }
@@ -1509,7 +1529,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 }
                 break;
             }
-            case 11: { // constraint end
+            case NodeConstraintEnd: { // constraint end
                 if ( ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     break;
                 }
@@ -1519,21 +1539,21 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 }
                 break;
             }
-            case 12: // running account
+            case NodeRunningAccount: // running account
                 if ( n->type() == Node::Type_Task ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
-            case 13: // startup account
-            case 14: // startup cost
-            case 15: // shutdown account
-            case 16: { // shutdown cost
+            case NodeStartupAccount: // startup account
+            case NodeStartupCost: // startup cost
+            case NodeShutdownAccount: // shutdown account
+            case NodeShutdownCost: { // shutdown cost
                 if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             }
-            case 17: // description
+            case NodeDescription: // description
                 break;
             default: 
                 flags &= ~Qt::ItemIsEditable;
@@ -1979,24 +1999,24 @@ bool NodeItemModel::setData( const QModelIndex &index, const QVariant &value, in
     }
     Node *n = node( index );
     switch (index.column()) {
-        case 0: return setName( n, value, role );
-        case 1: return setType( n, value, role );
-        case 2: return setLeader( n, value, role );
-        case 3: return setAllocation( n, value, role );
-        case 4: return setEstimateType( n, value, role );
-        case 5: return setEstimate( n, value, role );
-        case 6: return setOptimisticRatio( n, value, role );
-        case 7: return setPessimisticRatio( n, value, role );
-        case 8: return setRiskType( n, value, role );
-        case 9: return setConstraint( n, value, role );
-        case 10: return setConstraintStartTime( n, value, role );
-        case 11: return setConstraintEndTime( n, value, role );
-        case 12: return setRunningAccount( n, value, role );
-        case 13: return setStartupAccount( n, value, role );
-        case 14: return setStartupCost( n, value, role );
-        case 15: return setShutdownAccount( n, value, role );
-        case 16: return setShutdownCost( n, value, role );
-        case 17: return setDescription( n, value, role );
+        case NodeName: return setName( n, value, role );
+        case NodeType: return setType( n, value, role );
+        case NodeResponsible: return setLeader( n, value, role );
+        case NodeAllocation: return setAllocation( n, value, role );
+        case NodeEstimateType: return setEstimateType( n, value, role );
+        case NodeEstimate: return setEstimate( n, value, role );
+        case NodeOptimisticRatio: return setOptimisticRatio( n, value, role );
+        case NodePessimisticRatio: return setPessimisticRatio( n, value, role );
+        case NodeRisk: return setRiskType( n, value, role );
+        case NodeConstraint: return setConstraint( n, value, role );
+        case NodeConstraintStart: return setConstraintStartTime( n, value, role );
+        case NodeConstraintEnd: return setConstraintEndTime( n, value, role );
+        case NodeRunningAccount: return setRunningAccount( n, value, role );
+        case NodeStartupAccount: return setStartupAccount( n, value, role );
+        case NodeStartupCost: return setStartupCost( n, value, role );
+        case NodeShutdownAccount: return setShutdownAccount( n, value, role );
+        case NodeShutdownCost: return setShutdownCost( n, value, role );
+        case NodeDescription: return setDescription( n, value, role );
         default:
             qWarning("data: invalid display value column %d", index.column());
             return false;
@@ -2011,7 +2031,7 @@ QVariant NodeItemModel::headerData( int section, Qt::Orientation orientation, in
             return m_nodemodel.headerData( section, role );
         } else if ( role == Qt::TextAlignmentRole ) {
             switch (section) {
-                case 1: return Qt::AlignCenter;
+                case NodeType: return Qt::AlignCenter;
                 default: return QVariant();
             }
         }
@@ -2025,18 +2045,18 @@ QVariant NodeItemModel::headerData( int section, Qt::Orientation orientation, in
 QItemDelegate *NodeItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
-        //case 3: return new ??Delegate( parent );
-        case 4: return new EnumDelegate( parent );
-        case 5: return new DurationSpinBoxDelegate( parent );
-        case 6: return new SpinBoxDelegate( parent );
-        case 7: return new SpinBoxDelegate( parent );
-        case 8: return new EnumDelegate( parent );
-        case 9: return new EnumDelegate( parent );
-        case 12: return new EnumDelegate( parent );
-        case 13: return new EnumDelegate( parent );
-        case 14: return new MoneyDelegate( parent );
-        case 15: return new EnumDelegate( parent );
-        case 16: return new MoneyDelegate( parent );
+        //case NodeAllocation: return new ??Delegate( parent );
+        case NodeEstimateType: return new EnumDelegate( parent );
+        case NodeEstimate: return new DurationSpinBoxDelegate( parent );
+        case NodeOptimisticRatio: return new SpinBoxDelegate( parent );
+        case NodePessimisticRatio: return new SpinBoxDelegate( parent );
+        case NodeRisk: return new EnumDelegate( parent );
+        case NodeConstraint: return new EnumDelegate( parent );
+        case NodeRunningAccount: return new EnumDelegate( parent );
+        case NodeStartupAccount: return new EnumDelegate( parent );
+        case NodeStartupCost: return new MoneyDelegate( parent );
+        case NodeShutdownAccount: return new EnumDelegate( parent );
+        case NodeShutdownCost: return new MoneyDelegate( parent );
         default: return 0;
     }
     return 0;
@@ -2381,23 +2401,17 @@ Qt::ItemFlags MilestoneItemModel::flags( const QModelIndex &index ) const
     if ( m_readWrite ) {
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
-            case 0: // name
+            case NodeName: // name
                 flags |= Qt::ItemIsEditable;
                 break;
-            case 1: break; // Node type
-            case 2: // Responsible
+            case NodeType: break; // Node type
+            case NodeResponsible: // Responsible
                 flags |= Qt::ItemIsEditable;
                 break;
-/*            case 3: // allocation
-            case 4: // estimateType
-            case 5: // estimate
-            case 6: // optimisticRatio
-            case 7: // pessimisticRatio
-            case 8: // risktype*/
-            case 9: // constraint type
+            case NodeConstraint: // constraint type
                 flags |= Qt::ItemIsEditable;
                 break;
-            case 10: { // constraint start
+            case NodeConstraintStart: { // constraint start
                 Node *n = node( index );
                 if ( n == 0 )
                     break;
@@ -2407,7 +2421,7 @@ Qt::ItemFlags MilestoneItemModel::flags( const QModelIndex &index ) const
                 }
                 break;
             }
-            case 11: { // constraint end
+            case NodeConstraintEnd: { // constraint end
                 Node *n = node( index );
                 if ( n == 0 )
                     break;
@@ -2417,18 +2431,17 @@ Qt::ItemFlags MilestoneItemModel::flags( const QModelIndex &index ) const
                 }
                 break;
             }
-//            case 12: // running account
-            case 13: // startup account
-            case 14: // startup cost
-            case 15: // shutdown account
-            case 16: { // shutdown cost
+            case NodeStartupAccount: // startup account
+            case NodeStartupCost: // startup cost
+            case NodeShutdownAccount: // shutdown account
+            case NodeShutdownCost: { // shutdown cost
                 Node *n = node( index );
                 if ( n && (n->type() == Node::Type_Task || n->type() == Node::Type_Milestone) ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             }
-            case 17: // description
+            case NodeDescription: // description
                 break;
             default: 
                 flags &= ~Qt::ItemIsEditable;
@@ -2671,19 +2684,19 @@ bool MilestoneItemModel::setData( const QModelIndex &index, const QVariant &valu
     }
     Node *n = node( index );
     switch (index.column()) {
-        case 0: return setName( n, value, role );
-        case 1: return setType( n, value, role );
-        case 2: return setLeader( n, value, role );
-        case 3: return false;
-        case 9: return setConstraint( n, value, role );
-        case 10: return setConstraintStartTime( n, value, role );
-        case 11: return setConstraintEndTime( n, value, role );
-        case 12: return setRunningAccount( n, value, role );
-        case 13: return setStartupAccount( n, value, role );
-        case 14: return setStartupCost( n, value, role );
-        case 15: return setShutdownAccount( n, value, role );
-        case 16: return setShutdownCost( n, value, role );
-        case 17: return setDescription( n, value, role );
+        case NodeName: return setName( n, value, role );
+        case NodeType: return setType( n, value, role );
+        case NodeResponsible: return setLeader( n, value, role );
+        case NodeAllocation: return false;
+        case NodeConstraint: return setConstraint( n, value, role );
+        case NodeConstraintStart: return setConstraintStartTime( n, value, role );
+        case NodeConstraintEnd: return setConstraintEndTime( n, value, role );
+        case NodeRunningAccount: return setRunningAccount( n, value, role );
+        case NodeStartupAccount: return setStartupAccount( n, value, role );
+        case NodeStartupCost: return setStartupCost( n, value, role );
+        case NodeShutdownAccount: return setShutdownAccount( n, value, role );
+        case NodeShutdownCost: return setShutdownCost( n, value, role );
+        case NodeDescription: return setDescription( n, value, role );
         default:
             qWarning("data: invalid display value column %d", index.column());
             return false;
@@ -2698,7 +2711,7 @@ QVariant MilestoneItemModel::headerData( int section, Qt::Orientation orientatio
             return m_nodemodel.headerData( section, role );
         } else if ( role == Qt::TextAlignmentRole ) {
             switch (section) {
-                case 1: return Qt::AlignCenter;
+                case NodeType: return Qt::AlignCenter;
                 default: return QVariant();
             }
         }
@@ -2712,12 +2725,12 @@ QVariant MilestoneItemModel::headerData( int section, Qt::Orientation orientatio
 QItemDelegate *MilestoneItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
-        case 9: return new EnumDelegate( parent );
-        case 12: return new EnumDelegate( parent );
-        case 13: return new EnumDelegate( parent );
-        case 14: return new MoneyDelegate( parent );
-        case 15: return new EnumDelegate( parent );
-        case 16: return new MoneyDelegate( parent );
+        case NodeConstraint: return new EnumDelegate( parent );
+        case NodeRunningAccount: return new EnumDelegate( parent );
+        case NodeStartupAccount: return new EnumDelegate( parent );
+        case NodeStartupCost: return new MoneyDelegate( parent );
+        case NodeShutdownAccount: return new EnumDelegate( parent );
+        case NodeShutdownCost: return new MoneyDelegate( parent );
         default: return 0;
     }
     return 0;

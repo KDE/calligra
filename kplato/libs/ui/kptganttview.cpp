@@ -63,19 +63,19 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
     m->setRole( KDGantt::StartTimeRole, KDGantt::StartTimeRole ); // To provide correct format
     m->setRole( KDGantt::EndTimeRole, KDGantt::EndTimeRole ); // To provide correct format
     
-    m->setColumn( KDGantt::ItemTypeRole, 1 );
-    m->setColumn( KDGantt::StartTimeRole, 22 );
-    m->setColumn( KDGantt::EndTimeRole, 23 );
-    m->setColumn( KDGantt::TaskCompletionRole, 39 );
+    m->setColumn( KDGantt::ItemTypeRole, NodeType );
+    m->setColumn( KDGantt::StartTimeRole, NodeStartTime );
+    m->setColumn( KDGantt::EndTimeRole, NodeEndTime );
+    m->setColumn( KDGantt::TaskCompletionRole, NodeCompleted );
     
     m_model = new NodeItemModel( this );
     setModel( m_model );
     QTreeView *tv = dynamic_cast<QTreeView*>( leftView() ); //FIXME ?
     if ( tv ) {
         tv->header()->setStretchLastSection( true );
-        // Only show name, start- end endtime in treeview ;)
-        for ( int i = 1; i < m_model->columnCount(); ++i ) {
-            if ( i == 22 || i == 23 ) {
+        // Only show name, start- end endtime in treeview
+        for ( int i = 0; i < m_model->columnCount(); ++i ) {
+            if ( i == NodeName || i == NodeStartTime || i == NodeEndTime ) {
                 continue;
             }
             tv->hideColumn( i );
@@ -384,18 +384,18 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
     m->setRole( KDGantt::StartTimeRole, KDGantt::StartTimeRole ); // To provide correct format
     m->setRole( KDGantt::EndTimeRole, KDGantt::EndTimeRole ); // To provide correct format
     
-    m->setColumn( KDGantt::ItemTypeRole, 1 );
-    m->setColumn( KDGantt::StartTimeRole, 22 );
-    m->setColumn( KDGantt::EndTimeRole, 22 );
-    m->setColumn( KDGantt::TaskCompletionRole, 39 );
+    m->setColumn( KDGantt::ItemTypeRole, NodeType );
+    m->setColumn( KDGantt::StartTimeRole, NodeStartTime );
+    m->setColumn( KDGantt::EndTimeRole, NodeEndTime );
+    m->setColumn( KDGantt::TaskCompletionRole, NodeCompleted );
 
     setModel( m_model );
     QTreeView *tv = dynamic_cast<QTreeView*>( leftView() ); //FIXME ?
     if ( tv ) {
         tv->header()->setStretchLastSection( true );
-        // Only show name and start time in treeview ;)
-        for ( int i = 1; i < m_model->columnCount(); ++i ) {
-            if ( i == 22 ) {
+        // Only show name and start time in treeview
+        for ( int i = 0; i < m_model->columnCount(); ++i ) {
+            if ( i == NodeName || i == 22 ) {
                 continue;
             }
             tv->hideColumn( i );

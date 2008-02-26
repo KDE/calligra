@@ -29,6 +29,76 @@
 class QMimeData;
 class QModelIndex;
 
+#define NodeName 0
+#define NodeType 1
+#define NodeResponsible 2
+#define NodeAllocation 3
+#define NodeEstimateType 4
+#define NodeEstimate 5
+#define NodeOptimisticRatio 6
+#define NodePessimisticRatio 7
+#define NodeRisk 8
+#define NodeConstraint 9
+#define NodeConstraintStart 10
+#define NodeConstraintEnd 11
+#define NodeRunningAccount 12
+#define NodeStartupAccount 13
+#define NodeStartupCost 14
+#define NodeShutdownAccount 15
+#define NodeShutdownCost 16
+#define NodeDescription 17
+
+// Based on edited values
+#define NodeExpected 18
+#define NodeVarianceEstimate 19
+#define NodeOptimistic 20
+#define NodePessimistic 21
+
+// After scheduling
+#define NodeStartTime 22
+#define NodeEndTime 23
+#define NodeEarlyStart 24
+#define NodeEarlyFinish 25
+#define NodeLateStart 26
+#define NodeLateFinish 27
+#define NodePositiveFloat 28
+#define NodeFreeFloat 29
+#define NodeNegativeFloat 30
+#define NodeStartFloat 31
+#define NodeFinishFloat 32
+#define NodeAssigments 33
+
+// Based on scheduled values
+#define NodeDuration 34
+#define NodeVarianceDuration 35
+#define NodeOptimisticDuration 36
+#define NodePessimisticDuration 37
+
+// Completion
+#define NodeStatus 38
+#define NodeCompleted 39
+#define NodePlannedEffort 40
+#define NodeActualEffort 41
+#define NodeRemainingEffort 42
+#define NodePlannedCost 43
+#define NodeActualCost 44
+#define NodeStarted 45
+#define NodeFinished 46
+#define NodeStatusNote 47
+            
+// Scheduling errors
+#define NodeNotScheduled 48
+#define NodeAssigmentMissing 49
+#define NodeResourceOverbooked 50
+#define NodeResourceUnavailable 51
+#define NodeConstraintsError 52
+#define NodeEffortNotMet 53
+
+#define NodeWBSCode 54
+
+// Update this if you add/remove something
+#define NODE_PROPERTY_COUNT 55;
+
 namespace KPlato
 {
 
@@ -131,6 +201,8 @@ public:
     /// Resources could not fullfill estimate
     QVariant effortNotMet( const Node *node, int role ) const;
 
+    QVariant wbsCode( const Node *node, int role ) const;
+    
 private:
     Project *m_project;
     ScheduleManager *m_manager;

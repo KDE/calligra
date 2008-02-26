@@ -220,9 +220,9 @@ QVariant CriticalPathItemModel::data( const QModelIndex &index, int role ) const
     Node *n = node( index );
     if ( n == 0 ) {
         switch ( index.column() ) {
-            case 0: result = name( role ); break;
-            case 34: result = duration( role ); break;
-            case 35: result = variance( role ); break;
+            case NodeName: result = name( role ); break;
+            case NodeDuration: result = duration( role ); break;
+            case NodeVarianceDuration: result = variance( role ); break;
             default:
                 result = notUsed( role ); break;
         }
@@ -257,7 +257,7 @@ QVariant CriticalPathItemModel::headerData( int section, Qt::Orientation orienta
 QVariant CriticalPathItemModel::alignment( int column ) const
 {
     switch ( column ) {
-        case 0: return QVariant(); // use default
+        case 0: return QVariant(); // use default for column 0
         default: return Qt::AlignCenter;
     }
     return QVariant();
@@ -727,33 +727,11 @@ QVariant PertResultItemModel::data( const QModelIndex &index, int role ) const
     }
     if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
         result = m_nodemodel.data( n, index.column(), role );
-/*        Task *t = static_cast<Task*>( n );
-        switch ( index.column() ) {
-            case 0: result = name( t, role ); break;
-            case 1: result = earlyStart( t, role ); break;
-            case 2: result = earlyFinish( t, role ); break;
-            case 3: result = lateStart( t, role ); break;
-            case 4: result = lateFinish( t, role ); break;
-            case 5: result = positiveFloat( t, role ); break;
-            case 6: result = freeFloat( t, role ); break;
-            case 7: result = negativeFloat( t, role ); break;
-            case 8: result = startFloat( t, role ); break;
-            case 9: result = finishFloat( t, role ); break;
-            default:
-                kDebug()<<"data: invalid display value column "<<index.column();
-                return QVariant();
-        }*/
     }
     if ( n->type() == Node::Type_Project ) {
         Project *p = static_cast<Project*>( n );
         switch ( index.column() ) {
-            case 0: result = name( 0, role ); break;
-/*            case 1: result = earlyStart( p, role ); break;
-            case 2: result = earlyFinish( p, role ); break;
-            case 3: result = lateStart( p, role ); break;
-            case 4: result = lateFinish( p, role ); break;
-            case 5: result = positiveFloat( p, role ); break;
-            case 6: result = freeFloat( p, role ); break;*/
+            case NodeName: result = name( NodeName, role ); break;
             default:
                 //kDebug()<<"data: invalid display value column "<<index.column();
                 return QVariant();
@@ -779,38 +757,12 @@ QVariant PertResultItemModel::headerData( int section, Qt::Orientation orientati
     if ( orientation == Qt::Horizontal ) {
         if ( role == Qt::DisplayRole ) {
             return m_nodemodel.headerData( section, role );
-/*            switch ( section ) {
-                case 0: return i18n( "Name" );
-                case 1: return i18n( "Early Start" );
-                case 2: return i18n( "Early Finish" );
-                case 3: return i18n( "Late Start" );
-                case 4: return i18n( "Late Finish" );
-                case 5: return i18n( "Positive Float" );
-                case 6: return i18n( "Free Float" );
-                case 7: return i18n( "Negative Float" );
-                case 8: return i18n( "Start Float" );
-                case 9: return i18n( "Finish Float" );
-                default: return QVariant();
-            }*/
         } else if ( role == Qt::TextAlignmentRole ) {
             return alignment( section );
         }
     }
     if ( role == Qt::ToolTipRole ) {
         return m_nodemodel.headerData( section, role );
-/*        switch ( section ) {
-            case 0: return ToolTip::NodeName;
-            case 1: return ToolTip::NodeEarlyStart;
-            case 2: return ToolTip::NodeEarlyFinish;
-            case 3: return ToolTip::NodeLateStart;
-            case 4: return ToolTip::NodeLateFinish;
-            case 5: return ToolTip::NodePositiveFloat;
-            case 6: return ToolTip::NodeFreeFloat;
-            case 7: return ToolTip::NodeNegativeFloat;
-            case 8: return ToolTip::NodeStartFloat;
-            case 9: return ToolTip::NodeFinishFloat;
-            default: return QVariant();
-        }*/
     }
     return ItemModelBase::headerData(section, orientation, role);
 }
@@ -818,7 +770,7 @@ QVariant PertResultItemModel::headerData( int section, Qt::Orientation orientati
 QVariant PertResultItemModel::alignment( int column ) const
 {
     switch ( column ) {
-        case 0: return QVariant(); // use default
+        case 0: return QVariant(); // use default for column 0
         default: return Qt::AlignCenter;
     }
     return QVariant();
