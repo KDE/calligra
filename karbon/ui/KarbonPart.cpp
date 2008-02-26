@@ -47,6 +47,7 @@
 #include <vdocumentdocker.h>
 
 #include <KoApplication.h>
+#include <KoDataCenter.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
@@ -60,7 +61,7 @@
 #include <KoToolManager.h>
 #include <KoShapeManager.h>
 #include <KoShapeLayer.h>
-#include <KoImageCollection.h>
+#include <KoShapeRegistry.h>
 #include <KoCanvasResourceProvider.h>
 
 #include <kconfig.h>
@@ -94,6 +95,13 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
 
     m_maxRecentFiles = 10;
 
+    // Ask every shapefactory to populate the dataCenterMap
+    foreach(QString id, KoShapeRegistry::instance()->keys())
+    {
+	KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
+        shapeFactory->populateDataCenterMap(m_dataCenterMap);
+    }
+
     // set as default paper
     m_pageLayout.format = KoPageFormat::defaultFormat();
     m_pageLayout.orientation = KoPageFormat::Portrait;
@@ -104,6 +112,7 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
 
 KarbonPart::~KarbonPart()
 {
+    qDeleteAll( m_dataCenterMap );
 }
 
 void
@@ -299,7 +308,13 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
 
 bool KarbonPart::completeLoading( KoStore* store )
 {
-    return m_doc.imageCollection()->loadFromStore( store );
+    bool ok=true;
+    foreach(KoDataCenter *dataCenter, m_dataCenterMap)
+    {
+	ok = ok && dataCenter->completeLoading(store);
+    }
+    return ok;
+
 }
 
 void

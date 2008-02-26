@@ -55,6 +55,7 @@
 #include <KoDocumentInfo.h>
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
+#include <KoDataCenter.h>
 
 // KDE + Qt includes
 #include <klocale.h>
@@ -71,8 +72,7 @@
 KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewMode )
     : KoDocument(parentWidget, parent, singleViewMode),
       m_hasTOC(false),
-      m_frameLayout(pageManager(), m_frameSets, &m_pageSettings),
-    m_imageCollection(new KoImageCollection())
+      m_frameLayout(pageManager(), m_frameSets, &m_pageSettings)
 {
     m_frameLayout.setDocument(this);
     m_styleManager = new KoStyleManager(this);
@@ -86,9 +86,14 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
     connect (&m_frameLayout, SIGNAL(newFrameSet(KWFrameSet*)), this, SLOT(addFrameSet(KWFrameSet*)));
 
     // Init shape Factories with our frame based configuration panels.
+    // and ask every shapefactory to populate the dataCenterMap
     QList<KoShapeConfigFactory *> panels = KWFrameDialog::panels(this);
     foreach(QString id, KoShapeRegistry::instance()->keys())
-        KoShapeRegistry::instance()->value(id)->setOptionPanels(panels);
+    {
+	KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
+        shapeFactory->setOptionPanels(panels);
+        shapeFactory->populateDataCenterMap(m_dataCenterMap);
+    }
 
     m_config.load(this);
     clear();
@@ -97,8 +102,7 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
 KWDocument::~KWDocument() {
     saveConfig();
     qDeleteAll(m_frameSets);
-    delete m_imageCollection;
-    m_imageCollection = 0;
+    qDeleteAll(m_dataCenterMap);
     delete m_inlineTextObjectManager;
     m_inlineTextObjectManager = 0;
 }
@@ -638,7 +642,11 @@ void KWDocument::endOfLoading() // called by both oasis and oldxml
 }
 
 bool KWDocument::completeLoading (KoStore *store) {
-    const bool ok = m_imageCollection->loadFromStore(store);
+    bool ok = true;
+    foreach(KoDataCenter *dataCenter, m_dataCenterMap)
+    {
+        ok = ok && dataCenter->completeLoading(store);
+    }
     foreach(KoView *view, views()) {
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
         canvas->resourceProvider()->setResource(KoCanvasResource::DocumentIsLoading, false);

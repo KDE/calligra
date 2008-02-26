@@ -55,6 +55,7 @@
 
 #include <KoGlobal.h>
 #include <KoApplication.h>
+#include <KoDataCenter.h>
 #include <KoDocumentInfo.h>
 #include <KoMainWindow.h>
 #include <KoOasisSettings.h>
@@ -131,6 +132,8 @@ public:
   ValueFormatter *formatter;
   ValueConverter *converter;
   ValueCalc *calc;
+  QMap<QString, KoDataCenter *>  dataCenterMap;
+
 
     // default objects
     ColumnFormat* defaultColumnFormat;
@@ -243,6 +246,13 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->defaultRowFormat->setHeight( font.pointSizeF() + 3 );
   d->defaultColumnFormat->setWidth( ( font.pointSizeF() + 3 ) * 5 );
 
+  // Ask every shapefactory to populate the dataCenterMap
+  foreach(QString id, KoShapeRegistry::instance()->keys())
+  {
+    KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
+    shapeFactory->populateDataCenterMap(d->dataCenterMap);
+  }
+
   documents().append( this );
 
   setComponentData( Factory::global(), false );
@@ -318,6 +328,7 @@ Doc::~Doc()
   delete d->formatter;
   delete d->converter;
   delete d->calc;
+  qDeleteAll( d->dataCenterMap );
 
   delete d;
 }
@@ -469,6 +480,11 @@ void Doc::removeShape( KoShape* shape )
         if ( canvas->activeSheet()->shapeContainer() == shapeContainer )
             canvas->shapeManager()->remove( shape );
     }
+}
+
+QMap<QString, KoDataCenter *> Doc::dataCenterMap()
+{
+    return d->dataCenterMap;
 }
 
 void Doc::saveConfig()
@@ -1130,7 +1146,7 @@ void Doc::finishLoading()
     disconnect(this, SIGNAL(completed()), this, SLOT(finishLoading()));
 }
 
-bool Doc::completeLoading( KoStore* /* _store */ )
+bool Doc::completeLoading( KoStore* store )
 {
   kDebug(36001) <<"------------------------ COMPLETING --------------------";
 
@@ -1142,7 +1158,12 @@ bool Doc::completeLoading( KoStore* /* _store */ )
   kDebug(36001) <<"------------------------ COMPLETION DONE --------------------";
 
   setModified( false );
-  return true;
+  bool ok=true;
+  foreach(KoDataCenter *dataCenter, d->dataCenterMap)
+  {
+    ok = ok && dataCenter->completeLoading(store);
+  }
+  return ok;
 }
 
 

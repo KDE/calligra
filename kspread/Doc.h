@@ -31,6 +31,7 @@
 #define KSPREAD_DOC
 
 #include <QList>
+#include <QMap>
 #include <QRect>
 #include <QString>
 
@@ -57,6 +58,7 @@ class KoPictureCollection;
 class KoPictureKey;
 class KoStore;
 class KoXmlWriter;
+class KoDataCenter;
 
 #define MIME_TYPE "application/x-kspread"
 
@@ -138,6 +140,8 @@ public:
     virtual void addShape( KoShape* shape );
     /// reimplemented method from KoShapeControllerBase
     virtual void removeShape(KoShape* shape);
+    /// reimplemented method from KoShapeControllerBase
+    virtual QMap<QString, KoDataCenter*> dataCenterMap ();
 
   /**
    * A sheet could use a different localization as the KDE default.

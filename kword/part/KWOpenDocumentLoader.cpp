@@ -70,13 +70,10 @@ class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextF
             const QString href = imageElem.attribute("href");
             const QString anchortype = frameElem.attribute("anchor-type");
 
-            KoImageData data( m_loader->document()->imageCollection() );
-            data.setStoreHref( href );
-
             KWFrameSet* fs = new KWFrameSet();
             fs->setName(href);
 
-            KWImageFrame *imageFrame = new KWImageFrame(data, fs);
+            KWImageFrame *imageFrame = new KWImageFrame(fs);
 
             m_loader->document()->addFrameSet(fs);
             KoShape* shape = imageFrame->shape();
@@ -173,6 +170,7 @@ class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextF
                 kWarning(32001)<<"KWOpenDocumentLoader::loadImage Unknown anchor-type: "<<anchortype<<endl;
             if (anchor)
                 imageFrame->attachAnchor(anchor);
+
             return shape;
         }
         

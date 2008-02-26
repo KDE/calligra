@@ -40,14 +40,13 @@ public:
         EditableQuality 
     };
 
-    KWImageFrame(const KoImageData &imageData, KWFrameSet *parent);
+    KWImageFrame(KWFrameSet *parent);
     ~KWImageFrame();
 
     void setImageQuality(ImageQuality quality);
     ImageQuality imageQuality() const;
 
 private:
-    KoImageData m_imageData;
     bool m_fullKritaShape;
     KWImageFrame::ImageQuality  m_quality;
 };

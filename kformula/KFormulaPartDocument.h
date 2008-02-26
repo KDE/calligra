@@ -23,6 +23,7 @@
 #ifndef KFORMULAPARTDOCUMENT_H
 #define KFORMULAPARTDOCUMENT_H
 
+#include <QMap>
 #include <KoDocument.h>
 #include <KoShapeControllerBase.h>
 #include "KFormulaPartView.h"
@@ -32,6 +33,7 @@
 
 class QIODevice;
 class KoXmlWriter;
+class KoDataCenter;
 
 class FormulaElement;
 
@@ -57,6 +59,8 @@ public:
     void addShape (KoShape *shape);
     /// reimplemented from KoShapeControllerBase
     void removeShape (KoShape *shape);
+    /// reimplemented from KoShapeControllerBase
+    QMap<QString, KoDataCenter *> dataCenterMap();
 
 
     // KoDocument interface

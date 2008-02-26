@@ -41,7 +41,6 @@ class KWPage;
 class KWFrameSet;
 
 class KoStyleManager;
-class KoImageCollection;
 class KoInlineTextObjectManager;
 
 class KLocalizedString;
@@ -98,10 +97,8 @@ public:
      */
     void setPageSettings(const KWPageSettings &newPageSettings);
 
-    /// @return the image collection for this document.
-    KoImageCollection *imageCollection() { return m_imageCollection; }
-    /// @return the image collection for this document.
-    const KoImageCollection *imageCollection() const { return m_imageCollection; }
+    /// @return the data center map for this document.
+   QMap<QString, KoDataCenter *>  dataCenterMap(  )  { return m_dataCenterMap; }
 
     /**
      * Insert a new page after another,
@@ -265,7 +262,7 @@ private:
     KWApplicationConfig m_config;
 
     KoStyleManager *m_styleManager;
-    KoImageCollection *m_imageCollection;
+    QMap<QString, KoDataCenter *>  m_dataCenterMap;
 
     KoInlineTextObjectManager *m_inlineTextObjectManager;
 };

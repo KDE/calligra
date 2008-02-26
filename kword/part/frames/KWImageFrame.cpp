@@ -33,29 +33,27 @@ public:
     virtual KoShape * cloneShape() const { return 0; }
 };
 
-static KoShape *createShape(const KoImageData &image) {
+static KoShape *createShape() {
     KoShapeFactory *factory = KoShapeRegistry::instance()->value("PictureShape");
     if(factory) {
         KoShape *shape = factory->createDefaultShape( 0 );
-        shape->setUserData(new KoImageData(image));
         return shape;
     }
     return new DummyShape();
 }
 
-KWImageFrame::KWImageFrame(const KoImageData &image, KWFrameSet *parent)
-    : KWFrame(createShape(image), parent),
-    m_imageData(image),
+KWImageFrame::KWImageFrame(KWFrameSet *parent)
+    : KWFrame(createShape(), parent),
     m_fullKritaShape(false)
 {
-    m_quality = static_cast<KWImageFrame::ImageQuality> (m_imageData.imageQuality());
+    //m_quality = static_cast<KWImageFrame::ImageQuality> (m_imageData.imageQuality());
 }
 
 KWImageFrame::~KWImageFrame() {
 }
 
 void KWImageFrame::setImageQuality(KWImageFrame::ImageQuality quality) {
-    if(m_quality == quality)
+/*    if(m_quality == quality)
         return;
     if(quality == EditableQuality) {
         // create and initialize a krita shape.
@@ -77,11 +75,13 @@ void KWImageFrame::setImageQuality(KWImageFrame::ImageQuality quality) {
         m_imageData.setImageQuality( static_cast<KoImageData::ImageQuality>(quality));
     }
     m_quality = quality;
+*/
 }
 
 KWImageFrame::ImageQuality KWImageFrame::imageQuality() const {
     if(m_quality == EditableQuality)
         return EditableQuality;
-    return static_cast<KWImageFrame::ImageQuality> (m_imageData.imageQuality());
+return m_quality;
+//    return static_cast<KWImageFrame::ImageQuality> (m_imageData.imageQuality());
 }
 

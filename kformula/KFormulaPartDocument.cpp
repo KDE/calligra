@@ -70,6 +70,14 @@ void KFormulaPartDocument::removeShape (KoShape *shape)
     Q_UNUSED( shape );
 }
 
+QMap<QString, KoDataCenter *> KFormulaPartDocument::dataCenterMap()
+{
+    Q_ASSERT(false);
+    // if the formula app ever supports more than a single shape this should be implemented
+    // along with several other methods - see any other app or ask boemann
+    return QMap<QString, KoDataCenter *>() ;
+}
+
 bool KFormulaPartDocument::saveOdf( SavingContext &documentContext )
 {
     Q_UNUSED( documentContext );

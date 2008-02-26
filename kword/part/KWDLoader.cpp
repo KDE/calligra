@@ -498,12 +498,13 @@ KWFrameSet *KWDLoader::loadFrameSet( const KoXmlElement &framesetElem, bool load
         KWFrameSet *fs = new KWFrameSet();
         fill(fs, framesetElem);
         fs->setName(fsname);
-
+/*TODO this no longer works after imagecollection is not directly accessable
         KoImageData data(m_document->imageCollection());
         data.setStoreHref(imageKey.filename);
         KWImageFrame *imageFrame = new KWImageFrame(data, fs);
         imageFrame->shape()->setKeepAspectRatio(image.attribute("keepAspectRatio", "true") == "true");
         fill(imageFrame, frame);
+*/
         m_document->addFrameSet(fs);
         return fs;
     }
