@@ -1319,6 +1319,9 @@ public:
     DeleteScheduleManagerCmd( Project &project, ScheduleManager *sm, const QString& name = 0 );
     void execute();
     void unexecute();
+
+private:
+    MacroCommand cmd;
 };
 
 class KPLATOKERNEL_EXPORT ModifyScheduleManagerNameCmd : public NamedCommand

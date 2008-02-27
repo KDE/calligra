@@ -1763,6 +1763,9 @@ void Project::addScheduleManager( ScheduleManager *sm, ScheduleManager *parent )
 
 int Project::takeScheduleManager( ScheduleManager *sm )
 {
+    foreach ( ScheduleManager *s, sm->children() ) {
+        takeScheduleManager( s );
+    }
     int index = -1;
     if ( sm->parentManager() ) {
         int index = sm->parentManager()->indexOf( sm );

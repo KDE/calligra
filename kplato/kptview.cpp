@@ -943,8 +943,18 @@ void View::slotProjectResources()
     delete dia;
 }
 
+QList<QAction*> View::sortedActionList()
+{
+    QMap<QString, QAction*> lst;
+    foreach ( QAction *a, m_scheduleActions.keys() ) {
+        lst.insert( a->objectName(), a );
+    }
+    return lst.values();
+}
+
 void View::slotScheduleRemoved( const MainSchedule *sch )
 {
+    kDebug()<<sch<<sch->name();
     QAction *a = 0;
     QAction *checked = m_scheduleActionGroup->checkedAction();
     QMapIterator<QAction*, Schedule*> i( m_scheduleActions );
@@ -958,7 +968,7 @@ void View::slotScheduleRemoved( const MainSchedule *sch )
     if ( a ) {
         unplugActionList( "view_schedule_list" );
         delete a;
-        plugActionList( "view_schedule_list", m_scheduleActions.keys() );
+        plugActionList( "view_schedule_list", sortedActionList() );
         if ( checked && checked != a ) {
             checked->setChecked( true );
         } else if ( ! m_scheduleActions.isEmpty() ) {
@@ -979,7 +989,7 @@ void View::slotScheduleAdded( const MainSchedule *sch )
     if ( ! sch->isDeleted() && sch->isScheduled() ) {
         unplugActionList( "view_schedule_list" );
         QAction *act = addScheduleAction( s );
-        plugActionList( "view_schedule_list", m_scheduleActions.keys() );
+        plugActionList( "view_schedule_list", sortedActionList() );
         if ( checked ) {
             checked->setChecked( true );
         } else if ( act ) {
@@ -1059,7 +1069,7 @@ void View::slotPlugScheduleActions()
             ca = act;
         }
     }
-    plugActionList( "view_schedule_list", m_scheduleActions.keys() );
+    plugActionList( "view_schedule_list", sortedActionList() );
     if ( ca == 0 && m_scheduleActionGroup->actions().count() > 0 ) {
         ca = m_scheduleActionGroup->actions().first();
     }

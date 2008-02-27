@@ -2623,16 +2623,21 @@ DeleteScheduleManagerCmd::DeleteScheduleManagerCmd( Project &node, ScheduleManag
     : AddScheduleManagerCmd( node, sm, name )
 {
     m_mine = false;
+    foreach ( ScheduleManager *s, sm->children() ) {
+        cmd.addCommand( new DeleteScheduleManagerCmd( node, s ) );
+    }
 }
 
 void DeleteScheduleManagerCmd::execute()
 {
+    cmd.execute();
     AddScheduleManagerCmd::unexecute();
 }
 
 void DeleteScheduleManagerCmd::unexecute()
 {
     AddScheduleManagerCmd::execute();
+    cmd.unexecute();
 }
 
 ModifyScheduleManagerNameCmd::ModifyScheduleManagerNameCmd( ScheduleManager &sm, const QString& value, const QString& name )

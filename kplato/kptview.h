@@ -225,6 +225,7 @@ protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *event );
     virtual void updateReadWrite( bool readwrite );
 
+    QList<QAction*> sortedActionList();
     QAction *addScheduleAction( Schedule *sch );
     void setLabel( ScheduleManager *sm = 0 );
     Node *currentTask();
