@@ -158,7 +158,9 @@ public:
         TwoBoxLeftOut,
         TwoBoxRightOut,
         FourBoxVerticalOut,
-        FourBoxHorizontalOut
+        FourBoxHorizontalOut,
+        Rectangle,
+        Diamond
     };
 
     /**

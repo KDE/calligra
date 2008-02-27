@@ -153,7 +153,9 @@ static const char* s_subTypes[] = {
     I18N_NOOP( "Two Box Left Out" ),
     I18N_NOOP( "Two Box Right Out" ),
     I18N_NOOP( "Four Box Vertical Out" ),
-    I18N_NOOP( "Four Box Horizontal Out" )
+    I18N_NOOP( "Four Box Horizontal Out" ),
+    I18N_NOOP( "Rectangular" ),
+    I18N_NOOP( "Diamond" )
 };
 
 KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags )
