@@ -42,12 +42,6 @@ public:
 
 protected:
     QPainterPath m_shape;
-
-private:
-    int m_width;
-    int m_height;
-    qreal m_scaleStep;
-    QPainterPath m_modifiedShape;
 };
 
 #endif // KPRIRISWIPESTRATEGYBASE_H

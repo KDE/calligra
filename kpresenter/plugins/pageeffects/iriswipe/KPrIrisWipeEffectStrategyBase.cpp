@@ -33,42 +33,71 @@ KPrIrisWipeEffectStrategyBase::~KPrIrisWipeEffectStrategyBase()
 
 void KPrIrisWipeEffectStrategyBase::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
 {
-    setShape();
-    m_width = data.m_widget->width();
-    m_height = data.m_widget->height();
-
-    if( m_width > m_height )
+    //Check if m_shape hasn't been initialized already
+    //weird things happen if we don't check it
+    if ( m_shape.isEmpty() )
     {
-        timeLine.setFrameRange( 0, data.m_widget->width() );
-        m_scaleStep = 1 / m_shape.boundingRect().width();
+        setShape();
+    }
+
+    const int width = data.m_widget->width();
+    const int height = data.m_widget->height();
+
+    if( width > height )
+    {
+        timeLine.setFrameRange( 0, width );
     }
     else
     {
-        timeLine.setFrameRange( 0, data.m_widget->height() );
-        m_scaleStep = 1 / m_shape.boundingRect().height();
+        timeLine.setFrameRange( 0, height );
     }
 }
 
 void KPrIrisWipeEffectStrategyBase::paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data )
 {
-    QRect rect( 0, 0, m_width, m_height );
+    const int width = data.m_widget->width();
+    const int height = data.m_widget->height();
+    qreal scaleStep;
+    if( width > height )
+    {
+        scaleStep = 1 / m_shape.boundingRect().width();
+    }
+    else
+    {
+        scaleStep = 1 / m_shape.boundingRect().height();
+    }
+
+    QRect rect( 0, 0, width, height );
     p.drawPixmap( QPoint( 0, 0 ), data.m_oldPage, rect );
 
-    p.setClipPath( m_modifiedShape );
+    QMatrix matrix;
+    matrix.translate( width/2, height/2 );
+    matrix.scale( currPos*scaleStep, currPos*scaleStep );
+
+    p.setClipPath( matrix.map(m_shape) );
     p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, rect );
 }
 
 
 void KPrIrisWipeEffectStrategyBase::next( const KPrPageEffect::Data &data )
 {
+    const int width = data.m_widget->width();
+    const int height = data.m_widget->height();
     const int currPos = data.m_timeLine.frameForTime( data.m_currentTime );
+    qreal scaleStep;
+    if( width > height )
+    {
+        scaleStep = 1 / m_shape.boundingRect().width();
+    }
+    else
+    {
+        scaleStep = 1 / m_shape.boundingRect().height();
+    }
 
-    QPainterPath newPath;
     QMatrix matrix;
-    matrix.translate( m_width/2, m_height/2 );
-    matrix.scale( currPos*m_scaleStep, currPos*m_scaleStep );
-    newPath = matrix.map( m_shape );
+    matrix.translate( width/2, height/2 );
+    matrix.scale( currPos*scaleStep, currPos*scaleStep );
+    QPainterPath newPath ( matrix.map( m_shape ) );
 
-    data.m_widget->update( newPath.substracted( m_modifiedShape ) );
-    m_modifiedShape = newPath;
+    data.m_widget->update( newPath.boundingRect().toRect() );
 }
