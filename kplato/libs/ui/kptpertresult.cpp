@@ -27,6 +27,7 @@
 
 #include <KoDocument.h>
 
+#include <QAbstractItemView>
 #include <QMenu>
 
 #include <kicon.h>
@@ -88,11 +89,12 @@ PertResult::PertResult( KoDocument *part, QWidget *parent )
     m_node( 0 ),
     m_project( 0 )
 {
-    kDebug() << " ---------------- KPlato: Creating PertResult ----------------" << endl;
+    kDebug() << " ---------------- KPlato: Creating PertResult ----------------";
     widget.setupUi(this);
     PertResultItemModel *m = new PertResultItemModel();
     widget.treeWidgetTaskResult->setModel( m );
     widget.treeWidgetTaskResult->setStretchLastSection( false );
+    widget.treeWidgetTaskResult->setSelectionMode( QAbstractItemView::ExtendedSelection );
 
 //    QHeaderView *header=widget.treeWidgetTaskResult->header();
     setupGui();
@@ -419,8 +421,9 @@ PertCpmView::PertCpmView( KoDocument *part, QWidget *parent )
     current_schedule( 0 ),
     block( false )
 {
-    kDebug() << " ---------------- KPlato: Creating PertCpmView ----------------" << endl;
+    kDebug() << " ---------------- KPlato: Creating PertCpmView ----------------";
     widget.setupUi(this);
+    widget.cpmTable->setSelectionMode( QAbstractItemView::ExtendedSelection );
     widget.probabilityFrame->setVisible( false );
 
     widget.cpmTable->setStretchLastSection ( false );
@@ -569,13 +572,21 @@ void PertCpmView::draw( Project &project )
 void PertCpmView::draw()
 {
     widget.scheduleName->setText( i18n( "None" ) );
+    widget.probabilityFrame->setVisible( false );
     if ( m_project && current_schedule && current_schedule->isScheduled() ) {
         long id = current_schedule->id();
         if ( id == -1 ) {
             return;
         }
+        widget.probabilityFrame->setVisible( true );
         widget.scheduleName->setText( current_schedule->name() );
         widget.finishTime->setDateTime( m_project->endTime( id ).dateTime() );
+        bool ro = model()->variance( Qt::EditRole ).toDouble() == 0.0;
+        if ( ro ) {
+            widget.probability->setValue( 50 );
+        }
+        widget.finishTime->setReadOnly( ro );
+        widget.probability->setEnabled( ! ro );
     }
 }
 
