@@ -20,7 +20,11 @@ KPrBarWipeEffectFactory::KPrBarWipeEffectFactory()
 
 
 New enums for not yet existing KPrPageEffect::SubType have to be added in KPrPageEffect.h. The UI representation 
-of the sub types are defined in dockers/KPrPageEffectDocker.cpp. 
+of the sub types are defined in dockers/KPrPageEffectDocker.cpp.
+
+It would really be better to have the specific page effects provide these user visible strings as that
+is more maintainable and would not make it necessary to change kpresenter when adding a new page effect plugin.
+
 Sub types don't have to corrospond to the ones used in smil. They are used for the representation in the UI.
 E.g. the barWipe effect has in smil::subType leftToReight and topToBottom. It also supports the reverse for these
 sub types are mapped like the following:
@@ -65,7 +69,7 @@ done Jan Hambrecht
 "veeWipe"  "down" (61) [default], "left" (62), "up" (63), "right" (64)
 done Jan Hambrecht
 "barnVeeWipe"  "down" (65) [default], "left" (66), "up" (67), "right" (68)
-Jan Hambrecht
+done Jan Hambrecht
 "zigZagWipe"  "leftToRight" (71) [default], "topToBottom" (72)
 "barnZigZagWipe"  "vertical" (73) [default], "horizontal" (74)
 

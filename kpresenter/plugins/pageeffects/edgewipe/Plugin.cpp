@@ -28,6 +28,7 @@
 #include "fourboxwipe/FourBoxWipeEffectFactory.h"
 #include "barndoorwipe/BarnDoorWipeEffectFactory.h"
 #include "veewipe/VeeWipeEffectFactory.h"
+#include "barnveewipe/BarnVeeWipeEffectFactory.h"
 
 K_EXPORT_COMPONENT_FACTORY( kpr_pageeffect_edgewipe, KGenericFactory<Plugin>( "KPrPageEffect" ) )
 
@@ -40,6 +41,7 @@ Plugin::Plugin(QObject *parent, const QStringList &)
     KPrPageEffectRegistry::instance()->add(new FourBoxWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new BarnDoorWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new VeeWipeEffectFactory());
+    KPrPageEffectRegistry::instance()->add(new BarnVeeWipeEffectFactory());
 }
 
 #include "Plugin.moc"

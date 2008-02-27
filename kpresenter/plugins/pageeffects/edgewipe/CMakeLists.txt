@@ -22,6 +22,9 @@ set(kpr_pageeffect_edgewipe_SRCS
 
     veewipe/VeeWipeEffectFactory.cpp
     veewipe/VeeWipeStrategy.cpp
+
+    barnveewipe/BarnVeeWipeEffectFactory.cpp
+    barnveewipe/BarnVeeWipeStrategy.cpp
     )
 
 kde4_add_plugin(kpr_pageeffect_edgewipe ${kpr_pageeffect_edgewipe_SRCS})
