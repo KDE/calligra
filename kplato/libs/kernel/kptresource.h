@@ -321,6 +321,8 @@ public:
     Calendar *calendar( const QString& id ) const;
     void setCalendar( Calendar *calendar ) { m_calendar = calendar; changed(); }
 
+    /// Delete all requests for me
+    void removeRequests();
     /**
      * Used to clean up requests when the resource is deleted.
      */

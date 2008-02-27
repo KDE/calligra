@@ -45,6 +45,7 @@ ResourceDialogImpl::ResourceDialogImpl (QWidget *parent)
 {
     setupUi(this);
 
+    connect(group, SIGNAL(activated(int)), SLOT(slotChanged()));
     connect(type, SIGNAL(activated(int)), SLOT(slotChanged()));
     connect(units, SIGNAL(valueChanged(int)), SLOT(slotChanged()));
     connect(nameEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
@@ -126,6 +127,17 @@ ResourceDialog::ResourceDialog(Project &project, Resource *resource, QWidget *pa
     setMainWidget(dia);
     KDialog::enableButtonOk(false);
 
+    if ( resource->parentGroup() == 0 ) {
+        //HACK to handle calls from ResourcesPanel
+        dia->groupLabel->hide();
+        dia->group->hide();
+    } else {
+        foreach ( ResourceGroup *g, project.resourceGroups() ) {
+            m_groups.insert( g->name(), g );
+        }
+        dia->group->addItems( m_groups.keys() );
+        dia->group->setCurrentIndex( m_groups.values().indexOf( resource->parentGroup() ) );
+    }
     dia->nameEdit->setText(resource->name());
     dia->initialsEdit->setText(resource->initials());
     dia->emailEdit->setText(resource->email());
@@ -167,6 +179,10 @@ void ResourceDialog::slotCalculationNeeded() {
 }
 
 void ResourceDialog::slotOk() {
+    if ( ! m_groups.isEmpty() ) {
+        //HACK to handle calls from ResourcesPanel
+        m_resource.setParentGroup( m_groups.value( dia->group->currentText() ) );
+    }
     m_resource.setName(dia->nameEdit->text());
     m_resource.setInitials(dia->initialsEdit->text());
     m_resource.setEmail(dia->emailEdit->text());
@@ -193,6 +209,10 @@ MacroCommand *ResourceDialog::buildCommand() {
 MacroCommand *ResourceDialog::buildCommand(Resource *original, Resource &resource) {
     MacroCommand *m=0;
     QString n = i18n("Modify Resource");
+    if (resource.parentGroup() != 0 && resource.parentGroup() != original->parentGroup()) {
+        if (!m) m = new MacroCommand(n);
+        m->addCommand(new MoveResourceCmd(resource.parentGroup(), original));
+    }
     if (resource.name() != original->name()) {
         if (!m) m = new MacroCommand(n);
         m->addCommand(new ModifyResourceNameCmd(original, resource.name()));

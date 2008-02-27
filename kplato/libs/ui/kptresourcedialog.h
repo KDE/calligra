@@ -83,6 +83,7 @@ private:
     bool m_calculationNeeded;
     
     QMap<int, Calendar*> m_calendars;
+    QMap<QString, ResourceGroup*> m_groups;
 };
 
 } //KPlato namespace

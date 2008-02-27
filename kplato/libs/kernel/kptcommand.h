@@ -788,6 +788,9 @@ public:
     void unexecute();
 
 private:
+    Project &m_project;
+    Resource *m_resource;
+    ResourceGroup *m_oldvalue, *m_newvalue;
     MacroCommand cmd;
 };
 

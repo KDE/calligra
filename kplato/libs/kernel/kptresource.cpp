@@ -284,14 +284,16 @@ Resource::~Resource() {
     if (findId() == this) {
         removeId(); // only remove myself (I may be just a working copy)
     }
-    foreach (ResourceRequest *r, m_requests) {
-        r->setResource(0); // avoid the request to mess with my list
-    }
-    foreach (ResourceRequest *r, m_requests) {
-        r->parent()->deleteResourceRequest(r);
-    }
+    removeRequests();
     foreach (long key, m_schedules.keys()) {
         delete m_schedules.take(key);
+    }
+}
+
+void Resource::removeRequests() {
+    foreach (ResourceRequest *r, m_requests) {
+        r->setResource(0); // avoid the request to mess with my list
+        r->parent()->deleteResourceRequest(r);
     }
 }
 
@@ -1525,6 +1527,9 @@ void Resource::printDebug(const QString& _indent)
     QString indent = _indent;
     kDebug()<<indent<<"  + Resource:"<<m_name<<" id="<<m_id/*<<" Overbooked="<<isOverbooked()*/;
     indent += "      ";
+    foreach (ResourceRequest *r, m_requests) {
+        r->printDebug(indent);
+    }
     foreach (Schedule *s, m_schedules) {
         s->printDebug(indent);
     }

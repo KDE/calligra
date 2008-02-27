@@ -179,6 +179,8 @@ public:
      * Always use this to remove resources.
      */ 
     Resource *takeResource( ResourceGroup *group, Resource *resource );
+    /// Move @p resource to the new @p group. Requests are removed.
+    void moveResource( ResourceGroup *group, Resource *resource );
     /// Returns the resource with identity id.
     Resource *resource( const QString& id );
     /// Returns the resource with matching name, 0 if no match is found.

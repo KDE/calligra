@@ -850,11 +850,22 @@ Resource *Project::takeResource( ResourceGroup *group, Resource *resource )
 {
     emit resourceToBeRemoved( resource );
     Q_ASSERT( removeResourceId( resource->id() ) == true );
+    resource->removeRequests(); // not valid anymore
     Resource *r = group->takeResource( resource );
     Q_ASSERT( resource == r );
     emit resourceRemoved( resource );
     emit changed();
     return r;
+}
+
+void Project::moveResource( ResourceGroup *group, Resource *resource )
+{
+    if ( group == resource->parentGroup() ) {
+        return;
+    }
+    takeResource( resource->parentGroup(), resource );
+    addResource( group, resource );
+    return;
 }
 
 

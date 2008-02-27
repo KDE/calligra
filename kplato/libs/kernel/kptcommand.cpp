@@ -1602,17 +1602,24 @@ void RemoveResourceCmd::unexecute()
 }
 
 MoveResourceCmd::MoveResourceCmd( ResourceGroup *group, Resource *resource, const QString& name )
-    : NamedCommand( name )
+    : NamedCommand( name ),
+    m_project( *(group->project()) ),
+    m_resource( resource ),
+    m_oldvalue( resource->parentGroup() ),
+    m_newvalue( group )
 {
-    cmd.addCommand( new RemoveResourceCmd( resource->parentGroup(), resource ) );
-    cmd.addCommand( new AddResourceCmd( group, new Resource( resource ) ) );
+    foreach ( ResourceRequest * r, resource->requests() ) {
+        cmd.addCommand( new RemoveResourceRequestCmd( r->parent(), r ) );
+    }
 }
 void MoveResourceCmd::execute()
 {
     cmd.execute();
+    m_project.moveResource( m_newvalue, m_resource );
 }
 void MoveResourceCmd::unexecute()
 {
+    m_project.moveResource( m_oldvalue, m_resource );
     cmd.unexecute();
 }
 
