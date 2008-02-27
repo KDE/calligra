@@ -65,6 +65,7 @@ done Jan Hambrecht
 "veeWipe"  "down" (61) [default], "left" (62), "up" (63), "right" (64)
 done Jan Hambrecht
 "barnVeeWipe"  "down" (65) [default], "left" (66), "up" (67), "right" (68)
+Jan Hambrecht
 "zigZagWipe"  "leftToRight" (71) [default], "topToBottom" (72)
 "barnZigZagWipe"  "vertical" (73) [default], "horizontal" (74)
 
