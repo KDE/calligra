@@ -123,9 +123,9 @@ void KPrViewModePresentation::deactivate()
     m_canvas->setParent( m_savedParent, Qt::Widget );
     m_canvas->setFocus();
     m_canvas->showNormal();
+    m_view->updateActivePage(m_view->activePage());
     delete m_animationDirector;
     m_animationDirector = 0;
-    m_view->updateActivePage(m_view->activePage());
 }
 
 void KPrViewModePresentation::activateSavedViewMode()
