@@ -14,12 +14,12 @@ SET (tableshape_LIB_SRCS
     SheetsEditor.cpp
     )
 
-kde4_add_plugin(tableshape ${tableshape_LIB_SRCS})
+kde4_add_plugin(spreadsheetshape ${tableshape_LIB_SRCS})
 
-target_link_libraries(tableshape kspreadcommon flake)
-install(TARGETS tableshape DESTINATION ${PLUGIN_INSTALL_DIR})
+target_link_libraries(spreadsheetshape kspreadcommon flake)
+install(TARGETS spreadsheetshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES tableshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+install( FILES spreadsheetshape.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 kde4_install_icons( ${DATA_INSTALL_DIR}/koffice/icons )

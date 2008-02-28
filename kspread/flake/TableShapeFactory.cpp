@@ -34,7 +34,7 @@
 
 using namespace KSpread;
 
-K_EXPORT_COMPONENT_FACTORY( tableshape, KGenericFactory<TableShapePlugin>( "TableShape" ) )
+K_EXPORT_COMPONENT_FACTORY( spreadsheetshape, KGenericFactory<TableShapePlugin>( "TableShape" ) )
 
 TableShapePlugin::TableShapePlugin( QObject * parent,  const QStringList& )
 {
@@ -47,7 +47,7 @@ TableShapeFactory::TableShapeFactory( QObject* parent )
     : KoShapeFactory( parent, TableShapeId, i18n( "Table" ) )
 {
     setToolTip( i18n( "A shape that shows a table" ) );
-    setIcon( "tableshape" );
+    setIcon( "spreadsheetshape" );
 
 #if 0
     KoShapeTemplate t;

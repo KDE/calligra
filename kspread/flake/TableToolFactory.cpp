@@ -31,7 +31,7 @@ TableToolFactory::TableToolFactory( QObject* parent )
     : KoToolFactory( parent, "TableToolFactoryId", i18n( "Table tool" ) )
 {
     setToolTip( i18n( "Table editing tool" ) );
-    setIcon( "tableshape" );
+    setIcon( "spreadsheetshape" );
     setToolType( dynamicToolType() );
     setPriority( 1 );
     setActivationShapeId( TableShapeId );

@@ -21,6 +21,6 @@ Name[x-test]=xxTable Shapexx
 Name[zh_TW]=表格元件
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
-X-KDE-Library=tableshape
+X-KDE-Library=spreadsheetshape
 X-Flake-MinVersion=0
 X-Flake-PluginVersion=1
