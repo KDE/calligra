@@ -160,7 +160,19 @@ public:
         FourBoxVerticalOut,
         FourBoxHorizontalOut,
         Rectangle,
-        Diamond
+        Diamond,
+        FanOutTop,
+        FanOutRight,
+        FanOutBottom,
+        FanOutLeft,
+        FanInTop,
+        FanInRight,
+        FanInBottom,
+        FanInLeft,
+        FanInVertical,
+        FanInHorizontal,
+        FanInVerticalReverse,
+        FanInHorizontalReverse
     };
 
     /**

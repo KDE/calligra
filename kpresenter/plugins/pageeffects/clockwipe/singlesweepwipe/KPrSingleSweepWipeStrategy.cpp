@@ -24,6 +24,10 @@
 #include <QPainter>
 #include <QPainterPath>
 
+#include "KPrClockWipeSubpathHelper.h"
+
+#include <kdebug.h>
+
 KPrSingleSweepWipeStrategy::KPrSingleSweepWipeStrategy( double rotationX, double rotationY, int startAngle, int rotationAngle, KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse )
     : KPrPageEffectStrategy( subType, smilType, smilSubType, reverse )
     , m_rotationX(rotationX)
@@ -49,49 +53,32 @@ void KPrSingleSweepWipeStrategy::paintStep( QPainter &p, int currPos, const KPrP
     QRect rect( 0, 0, width, height );
     p.drawPixmap( QPoint( 0, 0 ), data.m_oldPage, rect );
 
+    QPoint center(width/2, height/2);
     QPoint rotationCenter(width*m_rotationX, height*m_rotationY);
-    double maxRadius = sqrt(width*width + height*height);
-    double cornerAngle = 0.25*M_PI;
-    double angle = m_rotationAngle/180*currPos;
+
+    double startAngle;
+    double endAngle;
+
+    if(m_rotationAngle > 0) {
+        startAngle = m_startAngle;
+        endAngle = startAngle + m_rotationAngle*currPos/180;
+    }
+    else {
+        endAngle = m_startAngle;
+        startAngle = endAngle + m_rotationAngle*currPos/180;
+    }
+
+    QRect boundingRect( 0, 0, width + 2*abs(rotationCenter.x() - center.x()), height + 2*abs(rotationCenter.y() - center.y() ));
+    boundingRect.moveCenter(rotationCenter);
 
     QPainterPath clipPath;
-    clipPath.moveTo(rotationCenter);
-    clipPath.lineTo(QPoint( rotationCenter.x() + maxRadius*cos(m_startAngle), rotationCenter.y() + maxRadius*sin(m_startAngle)));
-
-    while((m_rotationAngle > 0 && cornerAngle < angle) || (m_rotationAngle < 0 && cornerAngle > angle)) {
-        int cornerX = cos(m_startAngle + cornerAngle) < 0 ? 0 : width;
-        int cornerY = sin(m_startAngle + cornerAngle) < 0 ? 0 : height;
-        clipPath.lineTo(QPoint( cornerX, cornerY));
-
-        if(m_rotationAngle > 0)
-            cornerAngle += 0.5*M_PI;
-        else
-            cornerAngle -= 0.5*M_PI;
-    }
-    clipPath.lineTo(QPoint(rotationCenter.x() + maxRadius*cos(m_startAngle + angle), rotationCenter.y() + maxRadius*sin(m_startAngle + angle)));
-    clipPath.closeSubpath();
+    KPrClockWipeSubpathHelper::addSubpathForCircularArc(&clipPath, boundingRect, startAngle, endAngle);
     p.setClipPath(clipPath);
 
-   p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, rect );
+    p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, rect );
 }
 
 void KPrSingleSweepWipeStrategy::next( const KPrPageEffect::Data &data )
 {
-    int lastPos = data.m_timeLine.frameForTime( data.m_lastTime );
-    int currPos = data.m_timeLine.frameForTime( data.m_currentTime );
-
-    int width = data.m_widget->width();
-    int height = data.m_widget->height();
-    double maxRadius = sqrt(width*width + height*height);
-
-    QPoint rotationCenter(width*m_rotationX, height*m_rotationY);
-    double oldAngle = m_rotationAngle/180*lastPos;
-    double newAngle = m_rotationAngle/180*currPos;
-
-    QPoint oldEndPoint(QPoint(rotationCenter.x() + maxRadius*cos(m_startAngle + oldAngle), rotationCenter.y() + maxRadius*sin(m_startAngle + oldAngle)));
-    QPoint newEndPoint(QPoint(rotationCenter.x() + maxRadius*cos(m_startAngle + newAngle), rotationCenter.y() + maxRadius*sin(m_startAngle + newAngle)));
-
-    QRect oldRect(rotationCenter, oldEndPoint);
-    QRect newRect(rotationCenter, newEndPoint);
-    data.m_widget->update(oldRect.united(newRect));
+    data.m_widget->update();
 }

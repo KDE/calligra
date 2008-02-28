@@ -4,6 +4,8 @@ set(kpr_pageeffect_clockwipe_SRCS
     Plugin.cpp
     KPrClockWipeStrategy.cpp
     KPrCenterFanWipeStrategy.cpp
+    KPrSideFanWipeStrategy.cpp
+    KPrClockWipeSubpathHelper.cpp
 
     clockwipe/KPrClockWipeEffectFactory.cpp
     pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp

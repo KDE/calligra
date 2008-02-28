@@ -21,6 +21,7 @@
 #include <klocale.h>
 
 #include "KPrCenterFanWipeStrategy.h"
+#include "KPrSideFanWipeStrategy.h"
 
 #define DoubleFanWipeEffectId  "DoubleFanWipeEffect"
 
@@ -29,6 +30,11 @@ KPrDoubleFanWipeEffectFactory::KPrDoubleFanWipeEffectFactory()
 {
     addStrategy( new KPrCenterFanWipeStrategy( 90, 2, KPrPageEffect::FanOutVertical, "doubleFanWipe", "fanOutVertical", false ) );
     addStrategy( new KPrCenterFanWipeStrategy( 0, 2, KPrPageEffect::FanOutHorizontal, "doubleFanWipe", "fanOutHorizontal", false ) );
+
+    addStrategy( new KPrSideFanWipeStrategy( 90, 2, KPrPageEffect::FanInVertical, "doubleFanWipe", "fanInVertical", false ) );
+    addStrategy( new KPrSideFanWipeStrategy( 180, 2, KPrPageEffect::FanInHorizontal, "doubleFanWipe", "fanInHorizontal", false ) );
+    addStrategy( new KPrSideFanWipeStrategy( 90, 2, KPrPageEffect::FanInVerticalReverse, "doubleFanWipe", "fanInVertical", true ) );
+    addStrategy( new KPrSideFanWipeStrategy( 180, 2, KPrPageEffect::FanInHorizontalReverse, "doubleFanWipe", "fanInHorizontal", true ) );
 }
 
 KPrDoubleFanWipeEffectFactory::~KPrDoubleFanWipeEffectFactory()

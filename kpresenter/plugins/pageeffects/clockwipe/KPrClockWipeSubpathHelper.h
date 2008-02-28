@@ -17,24 +17,20 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRCLOCKWIPESTRATEGY_H
-#define KPRCLOCKWIPESTRATEGY_H
+#ifndef KPRCLOCKWIPESUBPATHHELPER_H
+#define KPRCLOCKWIPESUBPATHHELPER_H
 
-#include <KPrPageEffectStrategy.h>
+#include <QRect>
 
-class KPrClockWipeStrategy : public KPrPageEffectStrategy
+class QPainterPath;
+
+class KPrClockWipeSubpathHelper
 {
 public:
-    KPrClockWipeStrategy(int startAngle, int bladeCount, KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse );
-    virtual ~KPrClockWipeStrategy();
+    KPrClockWipeSubpathHelper();
+    virtual ~KPrClockWipeSubpathHelper();
 
-    virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
-    virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
-    virtual void next( const KPrPageEffect::Data &data );
-
-private:
-    double m_startAngle;
-    int m_bladeCount;
+    static void addSubpathForCircularArc(QPainterPath* clipPath, QRect& boundingRect, double startAngle, double endAngle);
 };
 
-#endif // KPRCLOCKWIPESTRATEGY_H
+#endif // KPRCLOCKWIPESUBPATHHELPER_H

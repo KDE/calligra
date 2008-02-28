@@ -27,37 +27,37 @@
 KPrSingleSweepWipeEffectFactory::KPrSingleSweepWipeEffectFactory()
 : KPrPageEffectFactory( SingleSweepWipeEffectId, i18n( "Single Sweep Wipe Effect" ) )
 {
-    addStrategy( new KPrSingleSweepWipeStrategy( 0.5, 0.0, 0, 180,
+    addStrategy( new KPrSingleSweepWipeStrategy( 0.5, 0.0, 0, -180,
                                                  KPrPageEffect::ClockwiseTop, "singleSweepWipe", "clockwiseTop", false ) );
-    addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 0.5, 90, 180,
-                                                 KPrPageEffect::ClockwiseRight, "singleSweepWipe", "clockwiseRight", false ) );
-    addStrategy( new KPrSingleSweepWipeStrategy( 0.5, 1.0, 180, 180,
-                                                 KPrPageEffect::ClockwiseBottom, "singleSweepWipe", "clockwiseBottom", false ) );
-    addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 0.5, 270, 180,
-                                                 KPrPageEffect::ClockwiseLeft, "singleSweepWipe", "clockwiseLeft", false ) );
-    addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 0.0, 0, 90,
-                                                 KPrPageEffect::ClockwiseTopLeft, "singleSweepWipe", "clockwiseTopLeft", false ) );
-    addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 1.0, 0, -90,
-                                                 KPrPageEffect::CounterClockwiseBottomLeft, "singleSweepWipe", "counterClockwiseBottomLeft", false ) );
-    addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 1.0, 180, 90,
-                                                 KPrPageEffect::ClockwiseBottomRight, "singleSweepWipe", "clockwiseBottomRight", false ) );
-    addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 0.0, 180, -90,
-                                                 KPrPageEffect::CounterClockwiseTopRight, "singleSweepWipe", "counterClockwiseTopRight", false ) );
-    addStrategy( new KPrSingleSweepWipeStrategy( 0.5, 0.0, 180, -180,
-                                                 KPrPageEffect::CounterClockwiseTop, "singleSweepWipe", "clockwiseTop", true ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 0.5, 270, -180,
-                                                 KPrPageEffect::CounterClockwiseRight, "singleSweepWipe", "clockwiseRight", true ) );
-    addStrategy( new KPrSingleSweepWipeStrategy( 0.5, 1.0, 0, -180,
-                                                 KPrPageEffect::CounterClockwiseBottom, "singleSweepWipe", "clockwiseBottom", true ) );
+                                                 KPrPageEffect::ClockwiseRight, "singleSweepWipe", "clockwiseRight", false ) );
+    addStrategy( new KPrSingleSweepWipeStrategy( 0.5, 1.0, 180, -180,
+                                                 KPrPageEffect::ClockwiseBottom, "singleSweepWipe", "clockwiseBottom", false ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 0.5, 90, -180,
+                                                 KPrPageEffect::ClockwiseLeft, "singleSweepWipe", "clockwiseLeft", false ) );
+    addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 0.0, 0, -90,
+                                                 KPrPageEffect::ClockwiseTopLeft, "singleSweepWipe", "clockwiseTopLeft", false ) );
+    addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 1.0, 0, 90,
+                                                 KPrPageEffect::CounterClockwiseBottomLeft, "singleSweepWipe", "counterClockwiseBottomLeft", false ) );
+    addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 1.0, 180, -90,
+                                                 KPrPageEffect::ClockwiseBottomRight, "singleSweepWipe", "clockwiseBottomRight", false ) );
+    addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 0.0, 180, 90,
+                                                 KPrPageEffect::CounterClockwiseTopRight, "singleSweepWipe", "counterClockwiseTopRight", false ) );
+    addStrategy( new KPrSingleSweepWipeStrategy( 0.5, 0.0, 180, 180,
+                                                 KPrPageEffect::CounterClockwiseTop, "singleSweepWipe", "clockwiseTop", true ) );
+    addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 0.5, 90, 180,
+                                                 KPrPageEffect::CounterClockwiseRight, "singleSweepWipe", "clockwiseRight", true ) );
+    addStrategy( new KPrSingleSweepWipeStrategy( 0.5, 1.0, 0, 180,
+                                                 KPrPageEffect::CounterClockwiseBottom, "singleSweepWipe", "clockwiseBottom", true ) );
+    addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 0.5, 270, 180,
                                                  KPrPageEffect::CounterClockwiseLeft, "singleSweepWipe", "clockwiseLeft", true ) );
-    addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 0.0, 90, -90,
+    addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 0.0, 270, 90,
                                                  KPrPageEffect::CounterClockwiseTopLeft, "singleSweepWipe", "clockwiseTopLeft", true ) );
-    addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 1.0, 270, 90,
+    addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 1.0, 90, -90,
                                                  KPrPageEffect::ClockwiseBottomLeft, "singleSweepWipe", "counterClockwiseBottomLeft", true ) );
-    addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 1.0, 270, -90,
+    addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 1.0, 90, 90,
                                                  KPrPageEffect::CounterClockwiseBottomRight, "singleSweepWipe", "clockwiseBottomRight", true ) );
-    addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 0.0, 90, 90,
+    addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 0.0, 270, -90,
                                                  KPrPageEffect::ClockwiseTopRight, "singleSweepWipe", "counterClockwiseTopRight", true ) );
 }
 

@@ -155,7 +155,19 @@ static const char* s_subTypes[] = {
     I18N_NOOP( "Four Box Vertical Out" ),
     I18N_NOOP( "Four Box Horizontal Out" ),
     I18N_NOOP( "Rectangular" ),
-    I18N_NOOP( "Diamond" )
+    I18N_NOOP( "Diamond" ),
+    I18N_NOOP( "Fan Out Top" ),
+    I18N_NOOP( "Fan Out Right" ),
+    I18N_NOOP( "Fan Out Bottom" ),
+    I18N_NOOP( "Fan Out Left" ),
+    I18N_NOOP( "Fan In Top" ),
+    I18N_NOOP( "Fan In Right" ),
+    I18N_NOOP( "Fan In Bottom" ),
+    I18N_NOOP( "Fan In Left" ),
+    I18N_NOOP( "Fan In Vertical" ),
+    I18N_NOOP( "Fan In Horizontal" ),
+    I18N_NOOP( "Fan In Vertical Reverse" ),
+    I18N_NOOP( "Fan In Horizontal Reverse" )
 };
 
 KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags )

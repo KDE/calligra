@@ -21,6 +21,7 @@
 #include <klocale.h>
 
 #include "KPrCenterFanWipeStrategy.h"
+#include "KPrSideFanWipeStrategy.h"
 
 #define FanWipeEffectId  "FanWipeEffect"
 
@@ -28,9 +29,18 @@ KPrFanWipeEffectFactory::KPrFanWipeEffectFactory()
 : KPrPageEffectFactory( FanWipeEffectId, i18n( "Fan Wipe Effect" ) )
 {
     addStrategy( new KPrCenterFanWipeStrategy( 0, 1, KPrPageEffect::CenterRight, "fanWipe", "centerRight", false ) );
-    addStrategy( new KPrCenterFanWipeStrategy( 270, 1, KPrPageEffect::CenterTop, "fanWipe", "centerTop", false ) );
+    addStrategy( new KPrCenterFanWipeStrategy( 90, 1, KPrPageEffect::CenterTop, "fanWipe", "centerTop", false ) );
     addStrategy( new KPrCenterFanWipeStrategy( 180, 1, KPrPageEffect::CenterLeft, "fanWipe", "centerRight", true ) );
-    addStrategy( new KPrCenterFanWipeStrategy( 90, 1, KPrPageEffect::CenterBottom, "fanWipe", "centerTop", true ) );
+    addStrategy( new KPrCenterFanWipeStrategy( 270, 1, KPrPageEffect::CenterBottom, "fanWipe", "centerTop", true ) );
+
+    addStrategy( new KPrSideFanWipeStrategy( 90, 1, KPrPageEffect::FanOutTop, "fanWipe", "top", false ) );
+    addStrategy( new KPrSideFanWipeStrategy( 0, 1, KPrPageEffect::FanOutRight, "fanWipe", "right", false ) );
+    addStrategy( new KPrSideFanWipeStrategy( 270, 1, KPrPageEffect::FanOutBottom, "fanWipe", "bottom", false ) );
+    addStrategy( new KPrSideFanWipeStrategy( 180, 1, KPrPageEffect::FanOutLeft, "fanWipe", "left", false ) );
+    addStrategy( new KPrSideFanWipeStrategy( 90, 1, KPrPageEffect::FanInTop, "fanWipe", "top", true ) );
+    addStrategy( new KPrSideFanWipeStrategy( 0, 1, KPrPageEffect::FanInRight, "fanWipe", "right", true ) );
+    addStrategy( new KPrSideFanWipeStrategy( 270, 1, KPrPageEffect::FanInBottom, "fanWipe", "bottom", true ) );
+    addStrategy( new KPrSideFanWipeStrategy( 180, 1, KPrPageEffect::FanInLeft, "fanWipe", "left", true ) );
 }
 
 KPrFanWipeEffectFactory::~KPrFanWipeEffectFactory()

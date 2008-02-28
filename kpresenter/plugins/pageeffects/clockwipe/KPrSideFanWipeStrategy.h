@@ -17,16 +17,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRCLOCKWIPESTRATEGY_H
-#define KPRCLOCKWIPESTRATEGY_H
+#ifndef KPRSIDEFANWIPESTRATEGY_H
+#define KPRSIDEFANWIPESTRATEGY_H
 
 #include <KPrPageEffectStrategy.h>
 
-class KPrClockWipeStrategy : public KPrPageEffectStrategy
+class KPrSideFanWipeStrategy : public KPrPageEffectStrategy
 {
 public:
-    KPrClockWipeStrategy(int startAngle, int bladeCount, KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse );
-    virtual ~KPrClockWipeStrategy();
+    KPrSideFanWipeStrategy(int positionAngle, int fanCount, KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse );
+    virtual ~KPrSideFanWipeStrategy();
 
     virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );
     virtual void paintStep( QPainter &p, int currPos, const KPrPageEffect::Data &data );
@@ -34,7 +34,8 @@ public:
 
 private:
     double m_startAngle;
-    int m_bladeCount;
+    double m_positionAngle;
+    int m_fanCount;
 };
 
-#endif // KPRCLOCKWIPESTRATEGY_H
+#endif // KPRSIDEFANWIPESTRATEGY_H
