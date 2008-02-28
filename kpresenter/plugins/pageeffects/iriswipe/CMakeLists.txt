@@ -4,9 +4,7 @@ set(kpr_pageeffect_iriswipe_SRCS
     Plugin.cpp
 
     KPrIrisWipeEffectStrategyBase.cpp
-    iriswipe/KPrIrisWipeEffectFactory.cpp
-    iriswipe/KPrIrisWipeEffectRectangleStrategy.cpp
-    iriswipe/KPrIrisWipeEffectDiamondStrategy.cpp
+    KPrIrisWipeEffectFactory.cpp
     )
 
 kde4_add_plugin(kpr_pageeffect_iriswipe ${kpr_pageeffect_iriswipe_SRCS})

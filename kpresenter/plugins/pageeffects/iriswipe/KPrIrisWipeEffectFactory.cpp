@@ -20,16 +20,25 @@
 #include <klocale.h>
 
 #include "KPrIrisWipeEffectFactory.h"
-#include "KPrIrisWipeEffectRectangleStrategy.h"
-#include "KPrIrisWipeEffectDiamondStrategy.h"
+#include "KPrIrisWipeEffectStrategyBase.h"
 
 #define IrisWipeEffectId "IrisWipeEffect"
 
 KPrIrisWipeEffectFactory::KPrIrisWipeEffectFactory()
 : KPrPageEffectFactory( IrisWipeEffectId, i18n("Iris Wipe Effect") )
 {
-    addStrategy(new KPrIrisWipeEffectRectangleStrategy() );
-    addStrategy(new KPrIrisWipeEffectDiamondStrategy() );
+    QPainterPath shape;
+
+    shape.addRect( -50, -50, 100, 100 );
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, KPrPageEffect::Rectangle, "irisWipe", "rectangle", false) );
+
+    shape = QPainterPath();
+    shape.moveTo( 0, -50);
+    shape.lineTo( 50, 0 );
+    shape.lineTo( 0, 50 );
+    shape.lineTo(-50, 0 );
+    shape.closeSubpath();
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, KPrPageEffect::Diamond, "irisWipe", "diamond", false) );
 }
 
 KPrIrisWipeEffectFactory::~KPrIrisWipeEffectFactory()

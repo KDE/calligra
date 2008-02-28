@@ -22,8 +22,9 @@
 #include <QWidget>
 #include <QPainter>
 
-KPrIrisWipeEffectStrategyBase::KPrIrisWipeEffectStrategyBase(KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse)
+KPrIrisWipeEffectStrategyBase::KPrIrisWipeEffectStrategyBase( QPainterPath shape, KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse)
 : KPrPageEffectStrategy( subType, smilType, smilSubType, reverse )
+, m_shape( shape )
 {
 }
 
@@ -33,13 +34,6 @@ KPrIrisWipeEffectStrategyBase::~KPrIrisWipeEffectStrategyBase()
 
 void KPrIrisWipeEffectStrategyBase::setup( const KPrPageEffect::Data &data, QTimeLine &timeLine )
 {
-    //Check if m_shape hasn't been initialized already
-    //weird things happen if we don't check it
-    if ( m_shape.isEmpty() )
-    {
-        setShape();
-    }
-
     const int width = data.m_widget->width();
     const int height = data.m_widget->height();
 

@@ -21,7 +21,7 @@
 #include <kgenericfactory.h>
 #include <KPrPageEffectRegistry.h>
 
-#include "iriswipe/KPrIrisWipeEffectFactory.h"
+#include "KPrIrisWipeEffectFactory.h"
 
 K_EXPORT_COMPONENT_FACTORY( kpr_pageeffect_iriswipe, KGenericFactory<Plugin>( "KPrPageEffect" ) )
 
