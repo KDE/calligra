@@ -22,9 +22,8 @@
 
 #include "kformula_export.h"
 #include "BasicElement.h"
-#include <QList>
-#include <QStringList>
 #include <QPainterPath>
+#include <QFont>
 
 class GlyphElement;
 class FormulaCursor;
@@ -37,6 +36,11 @@ class FormulaCursor;
  * similarity between the token elements loading, saving, painting and layouting
  * code can mostly be shared. This is because token elements hold some text or
  * string that has to be dealt with.
+ * The handling of embedded glyphs is also implemented in TokenEa list of the embedded GlyphElements. The TokenElement's QString
+ * m_rawString is the string that holds the raw data for the TokenElement. This
+ * string contains also QChar that are set to the QChar::ObjectReplacementCharacter
+ * category. For rendering these QChar's are replaced with the content of the glyph
+ * elements they represent in the raw string.
  */
 class KOFORMULA_EXPORT TokenElement : public BasicElement {
 public:
@@ -63,11 +67,28 @@ public:
     void layout( const AttributeManager* am );
 
     /**
+     * Insert new content that the user typed at the cursor position
+     * @param cursor The cursor holding the position where to inser
+     * @param child A BasicElement to insert
+     */
+    void insertChild( FormulaCursor* cursor, BasicElement* child );
+
+    /**
      * Implement the cursor behaviour for the element
      * @param direction Indicates whether the cursor moves up, down, right or left
      * @return A this pointer if the element accepts if not the element to asked instead
      */
     BasicElement* acceptCursor( const FormulaCursor* cursor );
+
+    /**
+     * Obtain the x position of the cursor inside this token element
+     * @oaram cursor The FormulaCursor who is supposed to be used for calculation
+     * @return The offset from the left origin
+     */
+    double cursorOffset( const FormulaCursor* cursor ) const;
+
+    /// Process @p raw and render it to @p path
+    virtual void renderToPath( const QString& raw, QPainterPath& path ) = 0;
 
 protected:
     /// Read contents of the token element. Content should be unicode text strings or mglyphs
@@ -76,15 +97,18 @@ protected:
     /// Write all content to the KoXmlWriter - reimplemented by the child elements
     void writeMathMLContent( KoXmlWriter* writer ) const;
 
-    /// Process @p raw and render it to @p path
-    virtual void renderToPath( const QString& raw, QPainterPath& path ) const = 0;
+    /// @return The font to use
+    QFont font() const;
 
 private:
     /// The raw string like it is read and written from MathML
-    QStringList m_rawStringList;
+    QString m_rawString;
 
-    /// A list of this pointers for raw strings and pointers to embedded GlyphElements
-    QList<BasicElement*> m_content;
+    /// The cache for the chosen font
+    QFont m_font;
+
+    /// A list of pointers to embedded GlyphElements
+    QList<GlyphElement*> m_glyphs;
 
     /// A painter path holding text content for fast painting
     QPainterPath m_contentPath;

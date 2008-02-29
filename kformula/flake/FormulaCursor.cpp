@@ -21,6 +21,8 @@
 
 #include "FormulaCursor.h"
 #include "BasicElement.h"
+#include "NumberElement.h"
+#include "ElementFactory.h"
 #include <QPainter>
 #include <QPen>
 
@@ -39,9 +41,16 @@ void FormulaCursor::paint( QPainter& painter ) const
     if( !m_currentElement )
         return;
 
+    // start with the topLeft corner of the bounding rect and move the cursor to its pos
     QPointF top = m_currentElement->boundingRect().topLeft();
-     
-    if( m_currentElement->childElements().isEmpty() )  // set the cursor in the middle
+    
+    if( insideToken() ) {
+        // inside tokens let the token calculate the cursor x offset
+        double tmp = static_cast<TokenElement*>( m_currentElement )->cursorOffset( this );
+        top += QPointF( tmp, 0 );
+    }
+    else if( m_currentElement->childElements().isEmpty() )
+        // center cursor in elements that have no childs - mostly BasicElements
         top += QPointF( m_currentElement->width()/2, 0 );
     else
     { 
@@ -67,11 +76,11 @@ void FormulaCursor::insertText( const QString& text )
         // TODO check for text excapting element due to paste of text
 
     // Filter for things that can be typed in with the keyboard
-    // - most important: numbers
     // - operators like: / * + - | ^ % ( )
     // - other text is put into text accepting elements
-/*    m_buffer = text;
-    QChar tmpChar( text );
+    // - lim, max min
+    m_inputBuffer = text;
+    QChar tmpChar( text[ 0 ] );
     if( tmpChar.isNumber() ) {
         if( m_currentElement->elementType() != Number ) {
             NumberElement* tmpNumber = new NumberElement( m_currentElement );
@@ -79,18 +88,41 @@ void FormulaCursor::insertText( const QString& text )
             m_currentElement = tmpNumber;
         }
         m_currentElement->insertChild( this, 0 );
+        m_positionInElement++;
+    }
+/*    else if ( m_inputBuffer == '*' || m_inputBuffer == '+' || m_inputBuffer == '-' ||
+              m_inputBuffer == '=' || m_inputBuffer == '>' || m_inputBuffer == '<' ||
+              m_inputBuffer == '!' || m_inputBuffer == '.' || m_inputBuffer == '/' ||
+              m_inputBuffer == '?' || m_inputBuffer == ',' || m_inputBuffer == ':' ) {
+        if( m_currentElement->elementType() != Operator ) {
+            OperatorElement* tmpOperator = new OperatorElement( m_currentElement );
+            m_currentElement->insertChild( this, tmpNumber );
+            m_currentElement = tmpNumber;
+        }
+        m_currentElement->insertChild( this, 0 );
+         
     }*/
     //else if( tmpChar.isSpace() )
         // what to do ???
-    //else if( tmpChar.isLetter() )
+/*    else if( tmpChar.isLetter() ) {
+        if( m_currentElement->elementType() != Identifier ) {
+            IdentifierElement* tmpIdentifier = new IdentifierElement( m_currentElement );
+            m_currentElement->insertChild( this, tmpIdentifier );
+            m_currentElement = tmpNumber;
+        }
+        m_currentElement->insertChild( this, 0 );
+        m_positionInElement++;
+    }*/
 }
 
 void FormulaCursor::insert( BasicElement* element )
 {
+
 }
 
 void FormulaCursor::remove( bool elementBeforePosition )
 {
+     
 }
 
 void FormulaCursor::move( CursorDirection direction )
@@ -153,6 +185,16 @@ bool FormulaCursor::isEnd() const
 	return ( m_positionInElement == 1 );
 }
 
+bool FormulaCursor::insideToken() const
+{
+    if( m_currentElement->elementType() == Number ||
+        m_currentElement->elementType() == Operator ||
+        m_currentElement->elementType() == Identifier )
+        return true;
+
+    return false;
+}
+
 BasicElement* FormulaCursor::currentElement() const
 {
     return m_currentElement;
@@ -171,6 +213,11 @@ CursorDirection FormulaCursor::direction() const
 bool FormulaCursor::ascending() const
 {
     return m_ascending;
+}
+
+QString FormulaCursor::inputBuffer() const
+{
+    return m_inputBuffer;
 }
 
 bool FormulaCursor::hasSelection() const

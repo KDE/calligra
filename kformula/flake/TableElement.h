@@ -90,7 +90,7 @@ private:
     /// @return The base line computed out of the align attribute
     double parseTableAlign() const;
 
-    /// Calculate the dimensions of each row and column at a centralised point
+    /// Calculate the dimensions of each row and column at a centralized point
     void determineDimensions();
 
     /// Storage for heights of each row calculated in determineDimensions()

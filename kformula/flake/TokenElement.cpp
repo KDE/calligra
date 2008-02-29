@@ -19,6 +19,8 @@
 
 #include "TokenElement.h"
 #include "AttributeManager.h"
+#include "FormulaCursor.h"
+#include "GlyphElement.h"
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <QPainter>
@@ -31,9 +33,8 @@ const QList<BasicElement*> TokenElement::childElements()
 {
     // only return the mglyph elements
     QList<BasicElement*> tmpList;
-    foreach( BasicElement* tmp, m_content )
-        if( tmp != this )
-            tmpList << tmp;
+    foreach( GlyphElement* tmp, m_glyphs )
+        tmpList << tmp;
 
     return tmpList;
 }
@@ -54,25 +55,25 @@ void TokenElement::paint( QPainter& painter, AttributeManager* am )
 
 void TokenElement::layout( const AttributeManager* am )
 {
-    kDebug( DEBUGID ) << "TokenElement::layout()";
-    kDebug( DEBUGID ) << m_content.count();
+    // Query the font to use
+    m_font = am->font( this );
 
-    m_contentPath = QPainterPath();             // save the token in an empty path
-    int rawCounter = 0;
-    foreach( BasicElement* tmp, m_content )
-        if( tmp == this )                       // a normal token
-        {
-            kDebug( DEBUGID ) << "renderToPath";
-            renderToPath( m_rawStringList[ rawCounter ], m_contentPath );
-            rawCounter++;
+    // save the token in an empty path
+    m_contentPath = QPainterPath();
+
+    // replace all the object replacement characters with glyphs
+    QString chunk;
+    int counter = 0;
+    for( int i = 0; i < m_rawString.length(); i++ ) {
+        if( m_rawString[ i ] != QChar::ObjectReplacementCharacter )
+            chunk.append( m_rawString[ i ] );
+        else {
+            renderToPath( chunk, m_contentPath );
+            m_glyphs[ counter ]->renderToPath( QString(), m_contentPath );
+            counter++;
         }
-        else                                    // a mglyph element
-        {
-            kDebug() << "glyph element ???";
-            tmp->setOrigin( QPointF( m_contentPath.boundingRect().right(), 0.0 ) );
-            m_contentPath.moveTo( tmp->origin().x()+ tmp->width(), 0.0 );
-        }    
-    
+    }
+
     // As the text is added to ( 0 / 0 ) the baseline equals the top edge of the
     // elements bounding rect, while translating it down the text's baseline moves too
     setBaseLine( -m_contentPath.boundingRect().y() ); // set baseline accordingly
@@ -80,28 +81,56 @@ void TokenElement::layout( const AttributeManager* am )
     setHeight( m_contentPath.boundingRect().height() );
 }
 
+void TokenElement::insertChild( FormulaCursor* cursor, BasicElement* child )
+{
+/*    if( child && child->elementType() == Glyph ) {
+        m_rawString.insert( QChar( QChar::ObjectReplacementCharacter ) );
+        m_glyphs.insert();
+    }
+    else*/ if( !child )
+        m_rawString.insert( cursor->position(), cursor->inputBuffer() );
+}
+
 BasicElement* TokenElement::acceptCursor( const FormulaCursor* cursor )
 {
-    return 0;
+    Q_UNUSED( cursor )
+    return this;
+}
+
+double TokenElement::cursorOffset( const FormulaCursor* cursor ) const
+{
+    if( m_rawString.contains( QChar::ObjectReplacementCharacter ) ) {
+        // TODO do something special
+    }
+
+    QFontMetrics fm( m_font );
+    double space = fm.width( cursor->position() + 1 ) - fm.width( cursor->position() );
+    return space - fm.width( m_rawString[ cursor->position() + 1 ] );
+}
+
+QFont TokenElement::font() const
+{
+    return m_font;
 }
 
 bool TokenElement::readMathMLContent( const KoXmlElement& element )
 {
-    BasicElement* tmpGlyph;
-//    kDebug() << "child element count: " << element.childNodesCount();
+    // iterate over all child elements ( possible embedded glyphs ) and put the text
+    // content in the m_rawString and mark glyph positions with
+    // QChar::ObjectReplacementCharacter
+    GlyphElement* tmpGlyph;
     KoXmlNode node = element.firstChild();
     while( !node.isNull() ) {
-        if( node.isElement() ) {
-            KoXmlElement tmp = node.toElement();
-            tmpGlyph = ElementFactory::createElement( tmp.tagName(), this );
-            m_content << tmpGlyph;
-            tmpGlyph->readMathML( tmp );
+        if( node.isElement() && node.toElement().tagName() == "mglyph" ) {
+            tmpGlyph = new GlyphElement( this );
+            m_rawString.append( QChar( QChar::ObjectReplacementCharacter ) );
+            tmpGlyph->readMathML( node.toElement() );
         }
-        else {
-            m_rawStringList << node.toText().data().trimmed();
-//            kDebug() << "Node text: " << node.toText().data().trimmed();
-            m_content << this;
-        }
+        else if( node.isElement() )
+            return false;
+        else
+            m_rawString.append( node.toText().data().trimmed() );
+
         node = node.nextSibling();
     }
     return true;
@@ -109,14 +138,18 @@ bool TokenElement::readMathMLContent( const KoXmlElement& element )
 
 void TokenElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
-    int rawCounter = 0;
-    foreach( BasicElement* tmp, m_content )
-        if( tmp == this )
-        {
-            writer->addTextNode( m_rawStringList[ rawCounter ] );
-            rawCounter++;
+    // split the m_rawString into text content chunks that are devided by glyphs 
+    // which are represented as ObjectReplacementCharacter and write each chunk
+    QStringList tmp = m_rawString.split( QChar( QChar::ObjectReplacementCharacter ) );
+    for ( int i = 0; i < tmp.count(); i++ ) {
+        if( m_rawString.startsWith( QChar( QChar::ObjectReplacementCharacter ) ) ) {
+            m_glyphs[ i ]->writeMathML( writer );
+            writer->addTextNode( tmp[ i ] );
         }
-        else
-            tmp->writeMathML( writer );
+        else {
+            writer->addTextNode( tmp[ i ] );       
+            m_glyphs[ i ]->writeMathML( writer );
+        }
+    }
 }
 

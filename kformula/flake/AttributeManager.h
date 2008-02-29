@@ -131,7 +131,7 @@ public:
      * Obtain the @p attribute's value as list of Qt::PenStyles
      * @param attribute A string with the attribute to look up
      * @param element The element the value is looked up for
-     * @return The value that was looked up
+     * @return The valuefont  that was looked up
      */
     QList<Qt::PenStyle> penStyleListOf( const QString& attribute,
                                         BasicElement* element ) const;
@@ -142,9 +142,6 @@ public:
      * @return The scaling factor
      */
     double scriptLevelScaling( const BasicElement* element ) const;
-
-    /// @return The font used for @p element
-    QFont font( const BasicElement* element ) const;
 
     /// @return A value used for spacing tasks during layouting
     double layoutSpacing( const BasicElement* element ) const;
@@ -165,6 +162,9 @@ public:
 
     /// @return The Align value that was passed as QString @p value
     Align parseAlign( const QString& value ) const;
+
+    /// @return The font that is set for @p element 
+    QFont font( const BasicElement* element ) const;
 
     /// Set the KoViewConverter to use
     void setViewConverter( KoViewConverter* converter );

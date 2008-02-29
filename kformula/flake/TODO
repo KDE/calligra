@@ -1,14 +1,13 @@
+- implement the new tool widget
+- change removeChild( BasicElement* element ) to removeChild( FormulaCursor* cursor, BasicElement* child ) 
+- implement insertText completly
+
 - make load and save working for every element
   -> update test suite
-* finish implementation of the TableElement
 - implement inheritsAttribute() method in every element class
 - finish the scriptLevel implementation in AttributeManager
-- solve viewConverter problem in AttributeManager
 - implement a AttributeManager test for scriptLevel
-* setBaseLIne in TableElement
-* rowlines in TableElement
 - add defaultAttributevalues to mstyle
-*done add PenStyle parsing to mtable element
 - solve KoViewConverter issue in AttributeManager, make it always set...
 - correct mathspace parsing in operator element.
 - implement rendering in all token elements
@@ -25,27 +24,3 @@ long term goals:
 - add selecting to FormulaCursor class
 - iron the loading process out so that it won't crash on errors and report them
 
-02/09/2007
-
-SpaceElement:
-	* painting implemented
-	* linebreaking not implemented, move parsing and enum to SpaceElement??
-	-> how to implement that ??
-	* not tested yet...
-	* make it derive from TokenElement?
-	* loading and saving not present...
-
-RowElement:
-	* layout works
-	* nothing to paint
-	- implement insertChild()
-	- implement removeChild()
-
-RootElement:
-	- correct layout
-	- correct painting
-	- correct saving/ loading
-
-SquareRootElement:
-	- correct layout
-	- correct painting

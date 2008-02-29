@@ -20,6 +20,7 @@
 */
 
 #include "RowElement.h"
+#include "FormulaCursor.h"
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
 #include <QPainter>
@@ -70,20 +71,22 @@ const QList<BasicElement*> RowElement::childElements()
 
 void RowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
+    m_childElements.insert( cursor->position(), child );
 }
 
-void RowElement::removeChild( BasicElement* element )
+void RowElement::removeChild( BasicElement* child )
 {
-}
-
-ElementType RowElement::elementType() const
-{
-    return Row;
+    m_childElements.remove( child );
 }
 
 BasicElement* RowElement::acceptCursor( const FormulaCursor* cursor )
 {
     return 0;
+}
+
+ElementType RowElement::elementType() const
+{
+    return Row;
 }
 
 bool RowElement::readMathMLContent( const KoXmlElement& parent )

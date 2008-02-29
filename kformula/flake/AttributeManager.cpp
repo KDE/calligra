@@ -163,18 +163,6 @@ double AttributeManager::scriptLevelScaling( const BasicElement* element ) const
         return 1.0;
 }
 
-QFont AttributeManager::font( const BasicElement* element ) const
-{
-    
-    // TODO process the mathvariant values partly
-    // normal -> do nothing.
-    // if contains bold -> font.setBold( true )
-    // if contains italic -> font.setItalic( true )
-    // if contains sans-serif setStyleHint( SansSerif ) --> Helvetica
-  
-    return QFont();
-}
-
 double AttributeManager::layoutSpacing( const BasicElement* element ) const
 {
     // return a thinmathspace which is a good value for layouting
@@ -189,7 +177,7 @@ double AttributeManager::parseUnit( const QString& value,
         return value.toDouble();
 
     // process values with units
-    QString unit = value.right( value.endsWith( "%" ) ? 1 : 2 );
+    QString unit = value.right( value.endsWith( '%' ) ? 1 : 2 );
     double v = value.left( value.length() - unit.length() ).toDouble();
 
     if( unit == "in" || unit == "cm" || unit == "pc" || unit == "mm" || unit == "pt" )
@@ -236,6 +224,18 @@ Qt::PenStyle AttributeManager::parsePenStyle( const QString& value ) const
         return Qt::DashLine;
     else
         return Qt::NoPen;
+}
+
+QFont AttributeManager::font( const BasicElement* element ) const
+{
+    
+    // TODO process the mathvariant values partly
+    // normal -> do nothing.
+    // if contains bold -> font.setBold( true )
+    // if contains italic -> font.setItalic( true )
+    // if contains sans-serif setStyleHint( SansSerif ) --> Helvetica
+  
+    return QFont();
 }
 
 void AttributeManager::setViewConverter( KoViewConverter* converter )

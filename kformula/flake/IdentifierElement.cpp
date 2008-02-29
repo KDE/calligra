@@ -26,11 +26,11 @@
 IdentifierElement::IdentifierElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
-void IdentifierElement::renderToPath( const QString& raw, QPainterPath& path ) const
+void IdentifierElement::renderToPath( const QString& raw, QPainterPath& path )
 {
     AttributeManager manager;
 
-    if( raw.startsWith( "&" ) && raw.endsWith( ";" ) ) {
+    if( raw.startsWith( '&' ) && raw.endsWith( ';' ) ) {
         Dictionary dict;
         QChar mappedEntity = dict.mapEntity( raw );
         kDebug() << "mappenEntity: " << mappedEntity;

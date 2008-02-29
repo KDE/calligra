@@ -21,7 +21,7 @@
 #define GLYPHELEMENT_H
 
 #include "kformula_export.h"
-#include "BasicElement.h"
+#include "TokenElement.h"
 #include <QPainterPath>
 
 /**
@@ -30,29 +30,16 @@
  * GlyphElement uses the the QT font database classes to load the additional fonts to
  * display its contents.
  */
-class KOFORMULA_EXPORT GlyphElement : public BasicElement {
+class KOFORMULA_EXPORT GlyphElement : public TokenElement {
 public:
     /// The standart constructor
     GlyphElement( BasicElement* parent = 0 );
 
-    /**
-     * Render the element to the given QPainter
-     * @param painter The QPainter to paint the element to
-     */
-    void paint( QPainter& painter, AttributeManager* am );
-
-    /**
-     * Calculate the size of the element and the positions of its children
-     * @param am The AttributeManager providing information about attributes values
-     */
-    void layout( const AttributeManager* am );
-
     /// @return The element's ElementType
     ElementType elementType() const;
 
-private:
-    /// The content as QPainterPath - ready to paint
-    QPainterPath m_glyphPath;
+    /// Process @p raw and render it to @p path
+    void renderToPath( const QString& raw, QPainterPath& path );
 };
 
 #endif // GLYPHELEMENT_H

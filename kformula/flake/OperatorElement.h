@@ -47,10 +47,10 @@ public:
     /// @return The element's ElementType
     ElementType elementType() const;
 
-protected:
     /// Process @p raw and render it to @p path
-    void renderToPath( const QString& raw, QPainterPath& path ) const;
+    void renderToPath( const QString& raw, QPainterPath& path );
 
+private:
     /// @return The Form value that was passed as QString @p value
     Form parseForm( const QString& value ) const;
 

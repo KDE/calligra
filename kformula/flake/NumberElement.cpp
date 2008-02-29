@@ -19,15 +19,13 @@
 */
 
 #include "NumberElement.h"
-#include "AttributeManager.h"
 
 NumberElement::NumberElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
-void NumberElement::renderToPath( const QString& rawString, QPainterPath& path ) const
+void NumberElement::renderToPath( const QString& rawString, QPainterPath& path )
 {
-    AttributeManager manager;
-    path.addText( path.currentPosition(), manager.font( this ), rawString );
+    path.addText( path.currentPosition(), font(), rawString );
 }
 
 ElementType NumberElement::elementType() const

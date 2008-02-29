@@ -23,6 +23,7 @@
 #define FORMULACURSOR_H
 
 #include "kformula_export.h"
+#include <QString>
 
 class BasicElement;
 class QString;
@@ -118,7 +119,7 @@ public:
     bool ascending() const;
 
     /// @return the buffer with the last user input
-    QString insertBuffer() const;
+    QString inputBuffer() const;
 
     /**
      * Make the cursor selecting
@@ -128,6 +129,10 @@ public:
 
     /// @return @c true when the cursor is selecting
     bool hasSelection() const;
+
+private:
+    /// @return true when the cursor is inside a token element
+    bool insideToken() const;
 
 private:
     /// The element that is currently left to the cursor
@@ -140,7 +145,7 @@ private:
     CursorDirection m_direction;
 
     /// Buffer for the user input
-//    QString m_insertBuffer;
+    QString m_inputBuffer;
 
     /// Indicates whether the cursor is currently selecting
     bool m_selecting;

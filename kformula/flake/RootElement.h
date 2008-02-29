@@ -72,7 +72,7 @@ public:
 
     /**
      * Implement the cursor behaviour for the element
-     * @param direction Indicates whether the cursor moves up, down, right or left
+     * @param cursor The FormulaCursor that is moved around
      * @return A this pointer if the element accepts if not the element to asked instead
      */
     BasicElement* acceptCursor( const FormulaCursor* cursor );

@@ -17,18 +17,13 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef FORMULATOOLOPTIONS_H
-#define FORMULATOOLOPTIONS_H
+#ifndef FORMULATOOLWIDGET_H
+#define FORMULATOOLWIDGET_H
 
-#include <QWidget>
+#include <QTabWidget>
+#include "ui_FormulaToolWidget.h"
 
 class KoFormulaTool;
-class KoXmlElement;
-class QPushButton;
-class QComboBox;
-class QListWidget;
-class QListWidgetItem;
-class QGridLayout;
 
 /**
  * @short A widget providing options for the FormulaTool
@@ -38,14 +33,14 @@ class QGridLayout;
  * widget provides two buttons - save and load formula. For saving and loading it
  * uses the loadOdf() and saveOdf() methods of KoFormulaShape.
  */
-class FormulaToolOptions : public QWidget {
+class FormulaToolWidget : public QTabWidget, Ui::mainTabWidget {
 Q_OBJECT
 public:
     /// Standart constructor
-    explicit FormulaToolOptions( QWidget* parent = 0, Qt::WindowFlags f = 0 );
+    explicit FormulaToolWidget( QWidget* parent = 0 );
 
     /// Standart destructor
-    ~FormulaToolOptions();
+    ~FormulaToolWidget();
 
     /// Set the KoFormulaTool @p tool this options widget belongs to
     void setFormulaTool( KoFormulaTool* tool );
@@ -57,40 +52,9 @@ private slots:
     /// Slot connected to click of save formula button - initiates saving of a formula
     void slotSaveFormula();
 
-    /// Called whenever the currently selected template class changes in the combo
-    void slotTemplateComboIndexChange( int index );
-
 private:
-    /// Load the templates from path @p p into the @p list
-    void loadTemplates( QList<QListWidgetItem*>* list, const QString& p );
-
-    QListWidgetItem* createListItem( const KoXmlElement& xml );
-
     /// The KoFormulaTool this options widget belongs to
     KoFormulaTool* m_tool;
-
-    /// The list widget which displays the templates for the user to insert
-    QListWidget* m_templateList;
-
-    /// The layout that is used for this widget
-    QGridLayout* m_layout;
-
-    /// The combo box to switch between the template lists
-    QComboBox* m_templateCombo;
-
-    /// The push button which is clicked for loading a formula
-    QPushButton* m_loadFormula;
-
-    /// The push button which is clicked for saving a formula 
-    QPushButton* m_saveFormula;
-
-    QList<QListWidgetItem*> m_operators;
-
-    QList<QListWidgetItem*> m_functions;
-
-    QList<QListWidgetItem*> m_general;
-
-    QList<QListWidgetItem*> m_custom;
 };
 
-#endif // FORMULATOOLOPTIONS_H
+#endif // FORMULATOOLWIDGET_H

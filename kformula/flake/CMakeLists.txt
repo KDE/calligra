@@ -38,7 +38,6 @@ set( kformulalib_PART_SRCS
    Dictionary.cpp
 )
 
-
 kde4_add_library(kformulalib SHARED ${kformulalib_PART_SRCS})
 
 target_link_libraries(kformulalib  ${KDE4_KDEUI_LIBS} koguiutils)
@@ -55,7 +54,11 @@ set( formulashape_PART_SRCS
    KoFormulaShapeFactory.cpp
    KoFormulaTool.cpp
    KoFormulaToolFactory.cpp
-   FormulaToolOptions.cpp
+   FormulaToolWidget.cpp
+)
+
+kde4_add_ui_files( formulashape_PART_SRCS
+    FormulaToolWidget.ui
 )
 
 kde4_add_plugin(formulashape ${formulashape_PART_SRCS})

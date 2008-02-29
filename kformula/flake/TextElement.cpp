@@ -20,17 +20,14 @@
 */
 
 #include "TextElement.h"
-#include "AttributeManager.h"
 #include <KoXmlWriter.h>
-#include <QPainter>
 
 TextElement::TextElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
-void TextElement::renderToPath( const QString& raw, QPainterPath& path ) const
+void TextElement::renderToPath( const QString& raw, QPainterPath& path )
 {
-    AttributeManager manager;
-    path.addText( path.currentPosition(), manager.font( this ), raw );
+    path.addText( path.currentPosition(), font(), raw );
 }
 
 ElementType TextElement::elementType() const

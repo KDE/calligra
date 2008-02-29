@@ -20,37 +20,27 @@
 #include "GlyphElement.h"
 #include "AttributeManager.h"
 #include <QFontDatabase>
-#include <QPainter>
 
-GlyphElement::GlyphElement( BasicElement* parent ) : BasicElement( parent )
+GlyphElement::GlyphElement( BasicElement* parent ) : TokenElement( parent )
 {}
 
-void GlyphElement::paint( QPainter& painter, AttributeManager* )
+void GlyphElement::renderToPath( const QString& raw, QPainterPath& path )
 {
-    painter.drawPath( m_glyphPath );
-}
-
-void GlyphElement::layout( const AttributeManager* am )
-{
-    QString fontFamily = am->stringOf( "fontfamily", this );
+    // try to lookup the char in the font database
+    AttributeManager am;
+    QString fontFamily = am.stringOf( "fontfamily", this );
     QFontDatabase db;
     QFont tmpFont;
-    QString tmpString;
 
     // determine if the specified font and glyph can be found
     if( db.families().contains( fontFamily ) )
     {
         tmpFont.setFamily( fontFamily );
-        tmpString += QChar( am->stringOf( "index", this ).toInt() ); 
+        path.addText( path.currentPosition(), tmpFont,
+                      QChar( am.stringOf( "index", this ).toInt() ) ); 
     }
-    else // if not found paint alt text
-        tmpString = am->stringOf( "alt", this );
-
-    m_glyphPath = QPainterPath();
-    m_glyphPath.addText( QPointF( 0, 0 ), tmpFont, tmpString );
-    setHeight( m_glyphPath.boundingRect().height() );
-    setWidth( m_glyphPath.boundingRect().width() );
-    setBaseLine( m_glyphPath.boundingRect().height() );
+    else // if not found use alt text
+        path.addText( path.currentPosition(), font(), am.stringOf( "alt", this ) );
 }
 
 ElementType GlyphElement::elementType() const

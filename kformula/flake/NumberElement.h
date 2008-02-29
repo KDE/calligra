@@ -38,9 +38,8 @@ public:
     /// @return The element's ElementType
     ElementType elementType() const;
 
-protected:
     /// Process @p raw and render it to @p path
-    void renderToPath( const QString& rawString, QPainterPath& path ) const;
+    void renderToPath( const QString& raw, QPainterPath& path );
 };
 
 #endif // NUMBERELEMENT_H

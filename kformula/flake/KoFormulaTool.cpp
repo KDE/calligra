@@ -20,7 +20,7 @@
 #include "KoFormulaTool.h"
 #include "KoFormulaShape.h"
 #include "FormulaCursor.h"
-#include "FormulaToolOptions.h"
+#include "FormulaToolWidget.h"
 #include "BasicElement.h"
 #include <KoCanvasBase.h>
 #include <KoSelection.h>
@@ -170,6 +170,7 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
             if( event->text().length() == 0 )
                 return;
             m_formulaCursor->insertText( event->text() );
+            m_formulaShape->update();
     }
 
     event->accept();
@@ -183,13 +184,13 @@ void KoFormulaTool::keyReleaseEvent( QKeyEvent *event )
 void KoFormulaTool::remove( bool backSpace )
 {
     Q_UNUSED( backSpace )
-
+/*
     if( m_formulaCursor->hasSelection() )  // remove the selection
     {
 	 // TODO set the cursor according to backSpace
 //        m_formulaCursor->setCursorTo( );
     }
-    else                                  // remove only the current element
+    else         */                         // remove only the current element
         m_formulaCursor->remove( backSpace );
 }
 
@@ -203,7 +204,7 @@ void KoFormulaTool::insertAtCursor( QList<BasicElement*> elements )
 
 QWidget* KoFormulaTool::createOptionWidget()
 {
-    FormulaToolOptions* options = new FormulaToolOptions();
+    FormulaToolWidget* options = new FormulaToolWidget();
     options->setFormulaTool( this );
     return options;
 }
