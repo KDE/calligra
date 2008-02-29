@@ -1,11 +1,15 @@
 [Desktop Entry]
 Name=Clock wipe
+Name[it]=Transizione a orologio
 Name[pt]=Varrimento em relógio
 Name[pt_BR]=Varrimento em relógio
+Name[uk]=Витирання по колу
 Name[zh_TW]=時鐘掃描
 Comment=Clock wipe Page Effects
+Comment[it]=Effetti di transizione a orologio delle pagine
 Comment[pt]=Efeitos de Varrimento da Página em Relógio
 Comment[pt_BR]=Efeitos de Varrimento da Página em Relógio
+Comment[uk]=Ефект витирання по колу
 Comment[zh_TW]=時鐘掃描頁面效果
 X-KDE-ServiceTypes=KPresenter/PageEffect
 Type=Service

@@ -1,11 +1,15 @@
 [Desktop Entry]
 Name=Edge wipe
+Name[it]=Transizione a bordo
 Name[pt]=Varrimento do extremo
 Name[pt_BR]=Varrimento do extremo
+Name[uk]=Витирання з країв
 Name[zh_TW]=邊緣掃描
 Comment=Edge Wipe Page Effects
+Comment[it]=Effetti di transizione a bordo delle pagine
 Comment[pt]=Efeito de Varrimento da Página pelo Extremo
 Comment[pt_BR]=Efeito de Varrimento da Página pelo Extremo
+Comment[uk]=Ефект витирання сторінки з країв
 Comment[zh_TW]=邊緣掃描頁面效果
 X-KDE-ServiceTypes=KPresenter/PageEffect
 Type=Service
