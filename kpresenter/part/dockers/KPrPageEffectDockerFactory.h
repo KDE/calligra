@@ -29,6 +29,10 @@ public:
 
     QString id() const;
     QDockWidget* createDockWidget();
+    DockPosition defaultDockPosition() const
+    {
+        return DockRight;
+    }
 };
 
 #endif // KPRPAGEEFFECTDOCKERFACTORY_H

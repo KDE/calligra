@@ -44,6 +44,10 @@ public:
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
+    DockPosition defaultDockPosition() const
+    {
+        return DockRight;
+    }
 };
 
 class KarbonLayerDocker : public QDockWidget

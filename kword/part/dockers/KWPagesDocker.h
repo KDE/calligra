@@ -37,7 +37,10 @@ public:
 
     virtual QString id() const;
     virtual QDockWidget* createDockWidget();
-
+    DockPosition defaultDockPosition() const
+    {
+        return DockRight;
+    }
 private:
     KWCanvas* m_canvas;
 };
