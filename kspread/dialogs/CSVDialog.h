@@ -52,8 +52,10 @@ public:
 
   bool canceled();
 
-protected:
+protected Q_SLOTS:
   void init();
+
+protected:
   void accept();
 
 private:
@@ -61,6 +63,7 @@ private:
   bool    m_canceled;
   QRect   m_targetRect;
   Mode    m_mode;
+  QString m_filename;
 };
 
 } // namespace KSpread

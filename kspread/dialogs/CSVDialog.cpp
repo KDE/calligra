@@ -27,6 +27,7 @@
 #include <QByteArray>
 #include <QMimeData>
 #include <QString>
+#include <QTimer>
 
 #include <kdebug.h>
 #include <kdialog.h>
@@ -52,16 +53,6 @@ CSVDialog::CSVDialog( View * parent, QRect const & rect, Mode mode)
     m_targetRect( rect ),
     m_mode( mode )
 {
-    init();
-}
-
-CSVDialog::~CSVDialog()
-{
-  // no need to delete child widgets, Qt does it all for us
-}
-
-void CSVDialog::init()
-{
   // Limit the range
   int column = m_targetRect.left();
   Cell lastCell = m_pView->activeSheet()->cellStorage()->lastInColumn( column );
@@ -77,31 +68,57 @@ void CSVDialog::init()
     {
       KMessageBox::information( this, i18n("There is no data in the clipboard.") );
       m_canceled = true;
-      return;
     }
-
     if ( !mime->hasText() )
     {
       KMessageBox::information( this, i18n("There is no usable data in the clipboard.") );
       m_canceled = true;
-      return;
     }
-    setData(QByteArray(mime->text().toUtf8()));
   }
   else if ( m_mode == File )
   {
     setWindowTitle( i18n( "Inserting Text File" ) );
-    QString file = KFileDialog::getOpenFileName(KUrl("kfiledialog:///"),
+    m_filename = KFileDialog::getOpenFileName(KUrl("kfiledialog:///"),
                                                 "text/plain",
                                                 this);
     //cancel action !
-    if ( file.isEmpty() )
+    if ( m_filename.isEmpty() )
     {
         enableButton( Ok, false );
         m_canceled = true;
-        return;
     }
-    QFile in(file);
+  }
+  else // if ( m_mode == Column )
+  {
+    setWindowTitle( i18n( "Text to Columns" ) );
+    setDataWidgetEnabled(false);
+  }
+
+  if ( ! m_canceled )
+    QTimer::singleShot(0, this, SLOT(init()));
+}
+
+CSVDialog::~CSVDialog()
+{
+  // no need to delete child widgets, Qt does it all for us
+}
+
+void CSVDialog::init()
+{
+  if ( m_canceled )
+    return;
+
+  if ( m_mode == Clipboard )
+  {
+    const QMimeData* mime = QApplication::clipboard()->mimeData();
+    Q_ASSERT( mime );
+    Q_ASSERT( mime->hasText() );
+    setData(QByteArray(mime->text().toUtf8()));
+  }
+  else if ( m_mode == File )
+  {
+    Q_ASSERT( ! m_filename.isEmpty() );
+    QFile in(m_filename);
     if (!in.open(QIODevice::ReadOnly))
     {
       KMessageBox::sorry( this, i18n("Cannot open input file.") );
@@ -115,8 +132,6 @@ void CSVDialog::init()
   }
   else // if ( m_mode == Column )
   {
-    setWindowTitle( i18n( "Text to Columns" ) );
-    setDataWidgetEnabled(false);
     setData(QByteArray());
     Cell cell;
     Sheet * sheet = m_pView->activeSheet();
