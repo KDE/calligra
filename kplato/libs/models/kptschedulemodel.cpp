@@ -41,6 +41,25 @@
 namespace KPlato
 {
 
+ScheduleColumnMap ScheduleItemModel::columnMap;
+
+ScheduleColumnMap::ScheduleColumnMap()
+    : ColumnMap()
+{
+    if ( columnMap.isEmpty() ) {
+        columnMap.insert( "ScheduleName", ScheduleName );
+        columnMap.insert( "ScheduleState", ScheduleState );
+        columnMap.insert( "ScheduleDirection", ScheduleDirection );
+        columnMap.insert( "ScheduleOverbooking", ScheduleOverbooking );
+        columnMap.insert( "ScheduleDistribution", ScheduleDistribution );
+        columnMap.insert( "ScheduleCalculate", ScheduleCalculate );
+        columnMap.insert( "SchedulePlannedStart", SchedulePlannedStart );
+        columnMap.insert( "SchedulePlannedFinish", SchedulePlannedFinish );
+    }
+}
+
+//--------------------------------------
+
 ScheduleItemModel::ScheduleItemModel( QObject *parent )
     : ItemModelBase( parent ),
     m_manager( 0 )
@@ -173,14 +192,14 @@ Qt::ItemFlags ScheduleItemModel::flags( const QModelIndex &index ) const
     ScheduleManager *sm = manager( index );
     if ( sm ) {
         switch ( index.column() ) {
-            case 1: break;
-            case 2:
+            case ScheduleState: break;
+            case ScheduleDirection:
                 if ( sm->parentManager() == 0 ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
-            case 6: break;
-            case 7: break;
+            case SchedulePlannedStart: break;
+            case SchedulePlannedFinish: break;
             default: flags |= Qt::ItemIsEditable; break;
         }
         return flags;
@@ -229,7 +248,7 @@ QModelIndex ScheduleItemModel::index( const ScheduleManager *manager ) const
 
 int ScheduleItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    return 8;
+    return SCHEDULE_PROPERTY_COUNT;
 }
 
 int ScheduleItemModel::rowCount( const QModelIndex &parent ) const
@@ -526,14 +545,14 @@ QVariant ScheduleItemModel::data( const QModelIndex &index, int role ) const
     //kDebug()<<index.row()<<","<<index.column();
     QVariant result;
     switch ( index.column() ) {
-        case 0: result = name( index, role ); break;
-        case 1: result = state( index, role ); break;
-        case 2: result = schedulingDirection( index, role ); break;
-        case 3: result = allowOverbooking( index, role ); break;
-        case 4: result = usePert( index, role ); break;
-        case 5: result = calculateAll( index, role ); break;
-        case 6: result = projectStart(  index, role ); break;
-        case 7: result = projectEnd( index, role ); break;
+        case ScheduleName: result = name( index, role ); break;
+        case ScheduleState: result = state( index, role ); break;
+        case ScheduleDirection: result = schedulingDirection( index, role ); break;
+        case ScheduleOverbooking: result = allowOverbooking( index, role ); break;
+        case ScheduleDistribution: result = usePert( index, role ); break;
+        case ScheduleCalculate: result = calculateAll( index, role ); break;
+        case SchedulePlannedStart: result = projectStart(  index, role ); break;
+        case SchedulePlannedFinish: result = projectEnd( index, role ); break;
         default:
             kDebug()<<"data: invalid display value column"<<index.column();;
             return QVariant();
@@ -554,14 +573,14 @@ bool ScheduleItemModel::setData( const QModelIndex &index, const QVariant &value
         return false;
     }
     switch (index.column()) {
-        case 0: return setName( index, value, role );
-        case 1: return setState( index, value, role );
-        case 2: return setSchedulingDirection( index, value, role );
-        case 3: return setAllowOverbooking( index, value, role );
-        case 4: return setUsePert( index, value, role );
-        case 5: return setCalculateAll( index, value, role );
-        case 6: return false;
-        case 7: return false;
+        case ScheduleName: return setName( index, value, role );
+        case ScheduleState: return setState( index, value, role );
+        case ScheduleDirection: return setSchedulingDirection( index, value, role );
+        case ScheduleOverbooking: return setAllowOverbooking( index, value, role );
+        case ScheduleDistribution: return setUsePert( index, value, role );
+        case ScheduleCalculate: return setCalculateAll( index, value, role );
+        case SchedulePlannedStart: return false;
+        case SchedulePlannedFinish: return false;
         default:
             qWarning("data: invalid display value column %d", index.column());
             break;
@@ -574,14 +593,14 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
     if ( orientation == Qt::Horizontal ) {
         if ( role == Qt::DisplayRole ) {
             switch ( section ) {
-                case 0: return i18n( "Name" );
-                case 1: return i18n( "State" );
-                case 2: return i18n( "Direction" );
-                case 3: return i18n( "Overbooking" );
-                case 4: return i18n( "Distribution" );
-                case 5: return i18n( "Calculate" );
-                case 6: return i18n( "Planned Start" );
-                case 7: return i18n( "Planned Finish" );
+                case ScheduleName: return i18n( "Name" );
+                case ScheduleState: return i18n( "State" );
+                case ScheduleDirection: return i18n( "Direction" );
+                case ScheduleOverbooking: return i18n( "Overbooking" );
+                case ScheduleDistribution: return i18n( "Distribution" );
+                case ScheduleCalculate: return i18n( "Calculate" );
+                case SchedulePlannedStart: return i18n( "Planned Start" );
+                case SchedulePlannedFinish: return i18n( "Planned Finish" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
@@ -592,14 +611,14 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-            case 0: return ToolTip::scheduleName();
-            case 1: return ToolTip::scheduleState();
-            case 2: return ToolTip::schedulingDirection();
-            case 3: return ToolTip::scheduleOverbooking();
-            case 4: return ToolTip::scheduleDistribution();
-            case 5: return ToolTip::scheduleCalculate();
-            case 6: return ToolTip::scheduleStart();
-            case 7: return ToolTip::scheduleFinish();
+            case ScheduleName: return ToolTip::scheduleName();
+            case ScheduleState: return ToolTip::scheduleState();
+            case ScheduleDirection: return ToolTip::schedulingDirection();
+            case ScheduleOverbooking: return ToolTip::scheduleOverbooking();
+            case ScheduleDistribution: return ToolTip::scheduleDistribution();
+            case ScheduleCalculate: return ToolTip::scheduleCalculate();
+            case SchedulePlannedStart: return ToolTip::scheduleStart();
+            case SchedulePlannedFinish: return ToolTip::scheduleFinish();
             default: return QVariant();
         }
     }
@@ -609,10 +628,10 @@ QVariant ScheduleItemModel::headerData( int section, Qt::Orientation orientation
 QItemDelegate *ScheduleItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
-        case 2: return new EnumDelegate( parent );
-        case 3: return new EnumDelegate( parent );
-        case 4: return new EnumDelegate( parent );
-        case 5: return new EnumDelegate( parent );
+        case ScheduleDirection: return new EnumDelegate( parent );
+        case ScheduleOverbooking: return new EnumDelegate( parent );
+        case ScheduleDistribution: return new EnumDelegate( parent );
+        case ScheduleCalculate: return new EnumDelegate( parent );
     }
     return 0;
 }

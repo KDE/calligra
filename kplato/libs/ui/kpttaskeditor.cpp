@@ -57,33 +57,6 @@ NodeTreeView::NodeTreeView( QWidget *parent )
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     
-    QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
-    QList<int> show;
-    show << NodeType
-            << NodeResponsible
-            << NodeAllocation
-            << NodeEstimateType
-            << NodeEstimate
-            << NodeOptimisticRatio
-            << NodePessimisticRatio
-            << NodeRisk
-            << NodeConstraint 
-            << NodeConstraintStart 
-            << NodeConstraintEnd 
-            << NodeRunningAccount 
-            << NodeStartupAccount 
-            << NodeStartupCost 
-            << NodeShutdownAccount 
-            << NodeShutdownCost 
-            << NodeDescription;
-
-    QList<int> lst2; 
-    for ( int i = 0; i < m->columnCount(); ++i ) {
-        if ( ! show.contains( i ) ) {
-            lst2 << i;
-        }
-    }
-    hideColumns( lst1, lst2 );
     
     createItemDelegates();
 }
@@ -112,6 +85,36 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
     m_view->setDragEnabled ( true );
     m_view->setAcceptDrops( true );
     m_view->setAcceptDropsOnView( true );
+    
+    QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
+    QList<int> show;
+    show << NodeType
+            << NodeResponsible
+            << NodeAllocation
+            << NodeEstimateType
+            << NodeEstimate
+            << NodeOptimisticRatio
+            << NodePessimisticRatio
+            << NodeRisk
+            << NodeConstraint 
+            << NodeConstraintStart 
+            << NodeConstraintEnd 
+            << NodeRunningAccount 
+            << NodeStartupAccount 
+            << NodeStartupCost 
+            << NodeShutdownAccount 
+            << NodeShutdownCost 
+            << NodeDescription;
+
+    QList<int> lst2; 
+    for ( int i = 0; i < model()->columnCount(); ++i ) {
+        if ( ! show.contains( i ) ) {
+            lst2 << i;
+        }
+    }
+    m_view->hideColumns( lst1, lst2 );
+    m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
+    m_view->slaveView()->setDefaultColumns( show );
     
     connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
     
@@ -326,13 +329,7 @@ void TaskEditor::slotSplitView()
 void TaskEditor::slotOptions()
 {
     kDebug();
-    bool col0 = false;
-    TreeViewBase *v = m_view->slaveView();
-    if ( v->isHidden() ) {
-        v = m_view->masterView();
-        col0 = true;
-    }
-    ItemViewSettupDialog dlg( v, col0 );
+    SplitItemViewSettupDialog dlg( m_view );
     dlg.exec();
 }
 
@@ -447,13 +444,13 @@ void TaskEditor::slotMoveTaskDown()
 
 bool TaskEditor::loadContext( const KoXmlElement &context )
 {
-    kDebug()<<endl;
-    return m_view->loadContext( context );
+    kDebug();
+    return m_view->loadContext( context, model()->columnNames() );
 }
 
 void TaskEditor::saveContext( QDomElement &context ) const
 {
-   m_view->saveContext( context );
+   m_view->saveContext( context, model()->columnNames() );
 }
 
 //-----------------------------------
@@ -468,26 +465,34 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
     setupGui();
 
     //m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
-    QList<int> lst1; lst1 << 1 << -1;
-    QList<int> lst2; lst2 << 0 << 1 << 3 << 4 << 5 << 6 << 7 << 8 << 9 << 10 << 11 << 12 << 13 << 14 << 15 << 16 << 18 << 19 << 20 << 21 << 22 << 23 << 24 << 25 << 26 << 27 << 28 << 29 << 30 << 31 << 32 << 34 << 35 << 36 << 37 << 40 << -1;
-    m_view->hideColumns( lst1, lst2 );
-    
-    TreeViewBase *v = m_view->slaveView();
-    if ( v == 0 ) {
-        v = m_view->masterView();
-    }
-    v->mapToSection( 38, 1 );
-    v->mapToSection( 39, 2 );
-    v->mapToSection( 2, 3 );
-    v->mapToSection( 33, 4 );
-    v->mapToSection( 17, 5 );
-
     m_view->setDragDropMode( QAbstractItemView::InternalMove );
     m_view->setDropIndicatorShown( false );
     m_view->setDragEnabled ( true );
     m_view->setAcceptDrops( false );
     m_view->setAcceptDropsOnView( false );
+
+    QList<int> lst1; lst1 << 1 << -1;
+    QList<int> show; 
+    show << NodeStatus
+            << NodeCompleted
+            << NodeResponsible
+            << NodeAssigments
+            << NodeDescription;
     
+    for ( int s = 0; s < show.count(); ++s ) {
+        m_view->slaveView()->mapToSection( show[s], s );
+    }
+    QList<int> lst2; 
+    for ( int i = 0; i < m_view->model()->columnCount(); ++i ) {
+        if ( ! show.contains( i ) ) {
+            lst2 << i;
+        }
+    }
+    m_view->hideColumns( lst1, lst2 );
+    m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
+    m_view->slaveView()->setDefaultColumns( show );
+    
+
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
 
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT ( slotSelectionChanged( const QModelIndexList ) ) );
@@ -643,25 +648,19 @@ void TaskView::slotSplitView()
 void TaskView::slotOptions()
 {
     kDebug();
-    bool col0 = false;
-    TreeViewBase *v = m_view->slaveView();
-    if ( v->isHidden() ) {
-        v = m_view->masterView();
-        col0 = true;
-    }
-    ItemViewSettupDialog dlg( v, col0 );
+    SplitItemViewSettupDialog dlg( m_view );
     dlg.exec();
 }
 
 bool TaskView::loadContext( const KoXmlElement &context )
 {
-    kDebug()<<endl;
-    return m_view->loadContext( context );
+    kDebug();
+    return m_view->loadContext( context, m_view->model()->columnNames() );
 }
 
 void TaskView::saveContext( QDomElement &context ) const
 {
-    m_view->saveContext( context );
+    m_view->saveContext( context, m_view->model()->columnNames() );
 }
 
 

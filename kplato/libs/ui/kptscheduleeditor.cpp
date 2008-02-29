@@ -62,8 +62,6 @@ ScheduleTreeView::ScheduleTreeView( QWidget *parent )
     
     createItemDelegates();
 
-    hideColumn( 4 );
-    
     connect( header(), SIGNAL( customContextMenuRequested ( const QPoint& ) ), this, SLOT( headerContextMenuRequested( const QPoint& ) ) );
     connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
 
@@ -114,6 +112,25 @@ ScheduleEditor::ScheduleEditor( KoDocument *part, QWidget *parent )
     m_view = new ScheduleTreeView( this );
     l->addWidget( m_view );
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
+
+    QList<int> show;
+    show << ScheduleName
+        << ScheduleState
+        << ScheduleDirection
+        << ScheduleOverbooking
+        << ScheduleDistribution
+        << SchedulePlannedStart
+        << SchedulePlannedFinish;
+
+    QList<int> lst;
+    for ( int c = 0; c < model()->columnCount(); ++c ) {
+        if ( ! show.contains( c ) ) {
+            lst << c;
+        }
+    }
+    m_view->setColumnsHidden( lst );
+    m_view->setDefaultColumns( show );
+    
 
     connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
 
@@ -244,7 +261,7 @@ void ScheduleEditor::updateReadWrite( bool readwrite )
 void ScheduleEditor::slotOptions()
 {
     kDebug()<<endl;
-    ItemViewSettupDialog dlg( m_view );
+    ItemViewSettupDialog dlg( m_view, true );
     dlg.exec();
 }
 

@@ -555,16 +555,24 @@ void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
     //kDebug()<<event->isAccepted();
 }
 
-bool TreeViewBase::loadContext( const KoXmlElement &element )
+bool TreeViewBase::loadContext( const KoXmlElement &element, const ColumnMap &map )
 {
-    kDebug()<<objectName()<<endl;
+    kDebug()<<objectName();
     KoXmlElement e = element.namedItem( "columns" ).toElement();
     if ( ! e.isNull() ) {
-        for ( int i = model()->columnCount() - 1; i >= 0; --i ) {
-            if ( e.attribute( QString( "column-%1" ).arg( i ), "" ) == "hidden" ) {
-                hideColumn( i );
-            } else {
-                showColumn( i );
+        if ( map.isEmpty() ) {
+            // try numbers
+            for ( int i = model()->columnCount() - 1; i >= 0; --i ) {
+                if ( e.attribute( QString( "column-%1" ).arg( i ), "" ) == "hidden" ) {
+                    hideColumn( i );
+                }
+            }
+        } else {
+            for ( int i = model()->columnCount() - 1; i >= 0; --i ) {
+                QString n = map.columnName( i );
+                if ( ! n.isEmpty() && e.attribute( n, "" ) == "hidden" ) {
+                    hideColumn( i );
+                }
             }
         }
     }
@@ -572,23 +580,43 @@ bool TreeViewBase::loadContext( const KoXmlElement &element )
     if ( ! e.isNull() ) {
         QHeaderView *h = header();
         QString s( "section-%1" );
-        for ( int i = 0; i < h->count(); ++i ) {
-            if ( e.hasAttribute( s.arg( i ) ) ) {
-                int pos = h->visualIndex( e.attribute( s.arg( i ), "-1" ).toInt() );
-                header()->moveSection( pos, i );
+        if ( map.isEmpty() ) {
+            // try numbers
+            for ( int i = 0; i < h->count(); ++i ) {
+                if ( e.hasAttribute( s.arg( i ) ) ) {
+                    int pos = h->visualIndex( e.attribute( s.arg( i ), "-1" ).toInt() );
+                    header()->moveSection( pos, i );
+                }
+            }
+        } else {
+            for ( int i = 0; i < h->count(); ++i ) {
+                QString n = map.columnName( i );
+                if ( ! n.isEmpty() ) {
+                    int col = map.columnNumber( e.attribute( s.arg( i ), "" ) );
+                    if ( col != -1 ) {
+                        header()->moveSection( h->visualIndex( col ), i );
+                    }
+                }
             }
         }
     }
     return true;
 }
 
-void TreeViewBase::saveContext( QDomElement &element ) const
+void TreeViewBase::saveContext( QDomElement &element, const ColumnMap &map ) const
 {
     QDomElement e = element.ownerDocument().createElement( "columns" );
     element.appendChild( e );
     for ( int i = 0; i < model()->columnCount(); ++i ) {
         if ( isColumnHidden( i ) ) {
-            e.setAttribute( QString( "column-%1" ).arg( i ), "hidden" );
+            if ( map.isEmpty() ) {
+                e.setAttribute( QString( "column-%1" ).arg( i ), "hidden" );
+            } else {
+                QString n = map.columnName( i );
+                if ( ! n.isEmpty() ) {
+                    e.setAttribute( n, "hidden" );
+                }
+            }
         }
     }
     e = element.ownerDocument().createElement( "sections" );
@@ -596,7 +624,14 @@ void TreeViewBase::saveContext( QDomElement &element ) const
     QHeaderView *h = header();
     for ( int i = 0; i < h->count(); ++i ) {
         if ( ! isColumnHidden( h->logicalIndex( i ) ) ) {
-            e.setAttribute( QString( "section-%1" ).arg( i ), h->logicalIndex( i ) );
+            if ( map.isEmpty() ) {
+                e.setAttribute( QString( "section-%1" ).arg( i ), h->logicalIndex( i ) );
+            } else {
+                QString n = map.columnName( h->logicalIndex( i ) );
+                if ( ! n.isEmpty() ) {
+                    e.setAttribute( QString( "section-%1" ).arg( i ), n );
+                }
+            }
         }
     }
 }
@@ -886,18 +921,18 @@ void DoubleTreeViewBase::slotLeftHeaderContextMenuRequested( const QPoint &pos )
     emit headerContextMenuRequested( pos );
 }
 
-bool DoubleTreeViewBase::loadContext( const KoXmlElement &element )
+bool DoubleTreeViewBase::loadContext( const KoXmlElement &element, const ColumnMap &map )
 {
     //kDebug()<<endl;
     QList<int> lst1;
     QList<int> lst2;
     KoXmlElement e = element.namedItem( "master" ).toElement();
     if ( ! e.isNull() ) {
-        m_leftview->loadContext( e );
+        m_leftview->loadContext( e, map );
     }
     e = element.namedItem( "slave" ).toElement();
     if ( ! e.isNull() ) {
-        m_rightview->loadContext( e );
+        m_rightview->loadContext( e, map );
         if ( e.attribute( "hidden", "false" ) == "true" ) {
             setViewSplitMode( false );
         }
@@ -905,17 +940,17 @@ bool DoubleTreeViewBase::loadContext( const KoXmlElement &element )
     return true;
 }
 
-void DoubleTreeViewBase::saveContext( QDomElement &element ) const
+void DoubleTreeViewBase::saveContext( QDomElement &element, const ColumnMap &map ) const
 {
     QDomElement e = element.ownerDocument().createElement( "master" );
     element.appendChild( e );
-    m_leftview->saveContext( e );
+    m_leftview->saveContext( e, map );
     e = element.ownerDocument().createElement( "slave" );
     element.appendChild( e );
     if ( m_rightview->isHidden() ) {
         e.setAttribute( "hidden", "true" );
     }
-    m_rightview->saveContext( e );
+    m_rightview->saveContext( e, map );
 }
 
 void DoubleTreeViewBase::setViewSplitMode( bool split )

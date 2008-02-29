@@ -43,6 +43,9 @@ public:
     explicit TaskStatusItemModel( QObject *parent = 0 );
     ~TaskStatusItemModel();
     
+    /// Returns a column number/- name map for this model
+    virtual const ColumnMap &columnNames() const { return m_nodemodel.columnNames(); }
+
     virtual void setProject( Project *project );
     void setManager( ScheduleManager *sm );
     

@@ -71,9 +71,6 @@ ResourceTreeView::ResourceTreeView( QWidget *parent )
     setAcceptDrops( true );
     setDropIndicatorShown( true );
     
-    QList<int> lst1; lst1 << 1 << -1;
-    QList<int> lst2; lst2 << 0;
-    hideColumns( lst1, lst2 );
 }
 
 void ResourceTreeView::slotActivated( const QModelIndex index )
@@ -130,6 +127,17 @@ ResourceEditor::ResourceEditor( KoDocument *part, QWidget *parent )
     setupGui();
     
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
+
+    QList<int> lst1; lst1 << 1 << -1;
+    QList<int> lst2; lst2 << 0;
+    m_view->hideColumns( lst1, lst2 );
+    
+    m_view->masterView()->setDefaultColumns( QList<int>() << 0 );
+    QList<int> show;
+    for ( int c = 1; c < model()->columnCount(); ++c ) {
+        show << c;
+    }
+    m_view->slaveView()->setDefaultColumns( show );
 
     connect( model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
 
@@ -279,13 +287,7 @@ void ResourceEditor::slotSplitView()
 void ResourceEditor::slotOptions()
 {
     kDebug();
-    bool col0 = false;
-    TreeViewBase *v = m_view->slaveView();
-    if ( v->isHidden() ) {
-        v = m_view->masterView();
-        col0 = true;
-    }
-    ItemViewSettupDialog dlg( v, col0 );
+    SplitItemViewSettupDialog dlg( m_view );
     dlg.exec();
 }
 
@@ -342,12 +344,12 @@ void ResourceEditor::slotDeleteSelection()
 bool ResourceEditor::loadContext( const KoXmlElement &context )
 {
     kDebug()<<endl;
-    return m_view->loadContext( context );
+    return m_view->loadContext( context, model()->columnNames() );
 }
 
 void ResourceEditor::saveContext( QDomElement &context ) const
 {
-    m_view->saveContext( context );
+    m_view->saveContext( context, model()->columnNames() );
 }
 
 

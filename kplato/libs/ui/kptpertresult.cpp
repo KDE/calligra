@@ -121,6 +121,8 @@ PertResult::PertResult( KoDocument *part, QWidget *parent )
         }
     }
     widget.treeWidgetTaskResult->hideColumns( lst1, lst2 );
+    widget.treeWidgetTaskResult->masterView()->setDefaultColumns( QList<int>() << 0 );
+    widget.treeWidgetTaskResult->slaveView()->setDefaultColumns( show );
     
     connect( widget.treeWidgetTaskResult, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
@@ -337,13 +339,7 @@ void PertResult::slotHeaderContextMenuRequested( const QPoint &pos )
 void PertResult::slotOptions()
 {
     kDebug();
-    bool col0 = false;
-    TreeViewBase *v = widget.treeWidgetTaskResult->slaveView();
-    if ( v->isHidden() ) {
-        v = widget.treeWidgetTaskResult->masterView();
-        col0 = true;
-    }
-    ItemViewSettupDialog dlg( v, col0 );
+    SplitItemViewSettupDialog dlg( widget.treeWidgetTaskResult );
     dlg.exec();
 }
 
@@ -405,12 +401,12 @@ void PertResult::setProject( Project *project )
 bool PertResult::loadContext( const KoXmlElement &context )
 {
     kDebug();
-    return widget.treeWidgetTaskResult->loadContext( context );
+    return widget.treeWidgetTaskResult->loadContext( context, model()->columnNames() );
 }
 
 void PertResult::saveContext( QDomElement &context ) const
 {
-    widget.treeWidgetTaskResult->saveContext( context );
+    widget.treeWidgetTaskResult->saveContext( context, model()->columnNames() );
 }
 
 
@@ -433,16 +429,18 @@ PertCpmView::PertCpmView( KoDocument *part, QWidget *parent )
     setupGui();
     
     QList<int> lst1; lst1 << 1 << -1; // only display first column (NodeName) in left view
-    QList<int> show; 
-    show << NodeEstimate
+    widget.cpmTable->masterView()->setDefaultColumns( QList<int>() << 0 );
+    
+    QList<int> show;
+    show << NodeDuration
+            << NodeVarianceDuration
+            << NodeOptimisticDuration
+            << NodePessimisticDuration
+            << NodeEstimate
             << NodeExpected
             << NodeVarianceEstimate
             << NodeOptimistic
-            << NodePessimistic
-            << NodeDuration
-            << NodeVarianceDuration
-            << NodeOptimisticDuration
-            << NodePessimisticDuration;
+            << NodePessimistic;
 
     QList<int> lst2;
     for ( int i = 0; i < m->columnCount(); ++i ) {
@@ -451,20 +449,11 @@ PertCpmView::PertCpmView( KoDocument *part, QWidget *parent )
         }
     }
     widget.cpmTable->hideColumns( lst1, lst2 );
-    TreeViewBase *v = widget.cpmTable->slaveView();
-    if ( v == 0 ) {
-        v = widget.cpmTable->masterView();
+    
+    for ( int s = 0; s < show.count(); ++s ) {
+        widget.cpmTable->slaveView()->mapToSection( show[s], s );
     }
-    int i = 1;
-    v->mapToSection( NodeDuration, i++ );
-    v->mapToSection( NodeVarianceDuration, i++ );
-    v->mapToSection( NodeOptimisticDuration, i++ );
-    v->mapToSection( NodePessimisticDuration, i++ );
-    v->mapToSection( NodeEstimate, i++ );
-    v->mapToSection( NodeExpected, i++ );
-    v->mapToSection( NodeVarianceEstimate, i++ );
-    v->mapToSection( NodeOptimistic, i++ );
-    v->mapToSection( NodePessimistic, i++ );
+    widget.cpmTable->slaveView()->setDefaultColumns( show );
     
     connect( widget.cpmTable, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
     
@@ -502,13 +491,7 @@ void PertCpmView::slotHeaderContextMenuRequested( const QPoint &pos )
 void PertCpmView::slotOptions()
 {
     kDebug();
-    bool col0 = false;
-    TreeViewBase *v = widget.cpmTable->slaveView();
-    if ( v->isHidden() ) {
-        v = widget.cpmTable->masterView();
-        col0 = true;
-    }
-    ItemViewSettupDialog dlg( v, col0 );
+    SplitItemViewSettupDialog dlg( widget.cpmTable );
     dlg.exec();
 }
 
@@ -664,12 +647,12 @@ void PertCpmView::slotUpdate()
 bool PertCpmView::loadContext( const KoXmlElement &context )
 {
     kDebug()<<objectName();
-    return widget.cpmTable->loadContext( context );
+    return widget.cpmTable->loadContext( context, model()->columnNames() );
 }
 
 void PertCpmView::saveContext( QDomElement &context ) const
 {
-    widget.cpmTable->saveContext( context );
+    widget.cpmTable->saveContext( context, model()->columnNames() );
 }
 
 } // namespace KPlato

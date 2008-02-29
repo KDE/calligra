@@ -26,10 +26,12 @@
 #include <QWidget>
 
 #include <kdialog.h>
+#include <kpagedialog.h>
 
 namespace KPlato
 {
 
+class DoubleTreeViewBase;
 class TreeViewBase;
 
 class ItemViewSettup : public QWidget, public Ui::ItemViewSettings
@@ -54,9 +56,11 @@ signals:
 public slots:
     void changed();
     void slotOk();
+    void setDefault();
     
 private:
     TreeViewBase *m_view;
+    bool m_includeColumn0;
 };
 
 class ItemViewSettupDialog : public KDialog
@@ -65,12 +69,21 @@ class ItemViewSettupDialog : public KDialog
 public:
     explicit ItemViewSettupDialog( TreeViewBase *view, bool includeColumn0 = false, QWidget *parent = 0 );
 
-protected slots:
-    void slotOk();
-    
 private:
     ItemViewSettup *m_panel;
 };
+
+class SplitItemViewSettupDialog : public KPageDialog
+{
+    Q_OBJECT
+public:
+    explicit SplitItemViewSettupDialog( DoubleTreeViewBase *view, QWidget *parent = 0 );
+
+private:
+    ItemViewSettup *m_page1;
+    ItemViewSettup *m_page2;
+};
+
 
 } //namespace KPlato
 

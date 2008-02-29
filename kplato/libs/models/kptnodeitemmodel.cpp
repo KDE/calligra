@@ -49,6 +49,91 @@
 namespace KPlato
 {
 
+NodeColumnMap NodeModel::columnMap;
+
+NodeColumnMap::NodeColumnMap()
+    : ColumnMap()
+{
+    if ( columnMap.isEmpty() ) {
+        columnMap.insert( "NodeName", 0 );
+        columnMap.insert( "NodeType", 1 );
+        columnMap.insert( "NodeResponsible", 2 );
+        columnMap.insert( "NodeAllocation", 3 );
+        columnMap.insert( "NodeEstimateType", 4 );
+        columnMap.insert( "NodeEstimate", 5 );
+        columnMap.insert( "NodeOptimisticRatio", 6 );
+        columnMap.insert( "NodePessimisticRatio", 7 );
+        columnMap.insert( "NodeRisk", 8 );
+        columnMap.insert( "NodeConstraint", 9 );
+        columnMap.insert( "NodeConstraintStart", 10 );
+        columnMap.insert( "NodeConstraintEnd", 11 );
+        columnMap.insert( "NodeRunningAccount", 12 );
+        columnMap.insert( "NodeStartupAccount", 13 );
+        columnMap.insert( "NodeStartupCost", 14 );
+        columnMap.insert( "NodeShutdownAccount", 15 );
+        columnMap.insert( "NodeShutdownCost", 16 );
+        columnMap.insert( "NodeDescription", 17 );
+
+        // Based on edited values
+        columnMap.insert( "NodeExpected", 18 );
+        columnMap.insert( "NodeVarianceEstimate", 19 );
+        columnMap.insert( "NodeOptimistic", 20 );
+        columnMap.insert( "NodePessimistic", 21 );
+
+        // After scheduling
+        columnMap.insert( "NodeStartTime", 22 );
+        columnMap.insert( "NodeEndTime", 23 );
+        columnMap.insert( "NodeEarlyStart", 24 );
+        columnMap.insert( "NodeEarlyFinish", 25 );
+        columnMap.insert( "NodeLateStart", 26 );
+        columnMap.insert( "NodeLateFinish", 27 );
+        columnMap.insert( "NodePositiveFloat", 28 );
+        columnMap.insert( "NodeFreeFloat", 29 );
+        columnMap.insert( "NodeNegativeFloat", 30 );
+        columnMap.insert( "NodeStartFloat", 31 );
+        columnMap.insert( "NodeFinishFloat", 32 );
+        columnMap.insert( "NodeAssigments", 33 );
+
+        // Based on scheduled values
+        columnMap.insert( "NodeDuration", 34 );
+        columnMap.insert( "NodeVarianceDuration", 35 );
+        columnMap.insert( "NodeOptimisticDuration", 36 );
+        columnMap.insert( "NodePessimisticDuration", 37 );
+
+        // Completion
+        columnMap.insert( "NodeStatus", 38 );
+        columnMap.insert( "NodeCompleted", 39 );
+        columnMap.insert( "NodePlannedEffort", 40 );
+        columnMap.insert( "NodeActualEffort", 41 );
+        columnMap.insert( "NodeRemainingEffort", 42 );
+        columnMap.insert( "NodePlannedCost", 43 );
+        columnMap.insert( "NodeActualCost", 44 );
+        columnMap.insert( "NodeStarted", 45 );
+        columnMap.insert( "NodeFinished", 46 );
+        columnMap.insert( "NodeStatusNote", 47 );
+
+        // Scheduling errors
+        columnMap.insert( "NodeNotScheduled", 48 );
+        columnMap.insert( "NodeAssigmentMissing", 49 );
+        columnMap.insert( "NodeResourceOverbooked", 50 );
+        columnMap.insert( "NodeResourceUnavailable", 51 );
+        columnMap.insert( "NodeConstraintsError", 52 );
+        columnMap.insert( "NodeEffortNotMet", 53 );
+
+        columnMap.insert( "NodeWBSCode", 54 );
+    }
+}
+
+//--------------------------------------
+NodeModel::NodeModel()
+    : QObject(),
+    m_project( 0 ),
+    m_manager( 0 ),
+    m_now( QDate::currentDate() ),
+    m_prec( 1 )
+{
+}
+
 void NodeModel::setProject( Project *project )
 {
     kDebug()<<m_project<<"->"<<project;

@@ -39,6 +39,22 @@ namespace KPlato
 
 class Project;
 
+/// Base class for assigning names to columns
+class KPLATOMODELS_EXPORT ColumnMap
+{
+public:
+    ColumnMap();
+    ~ColumnMap();
+    int columnNumber( const QString &name ) const;
+    QString columnName( int column ) const;
+    void insert( const QString &name, int column );
+    bool isEmpty() const { return columnMap.isEmpty(); }
+    
+protected:
+    QMap<QString, int> columnMap;
+};
+
+
 /// Namespace for item delegate specific enums
 namespace Delegate
 {

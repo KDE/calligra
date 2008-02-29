@@ -26,6 +26,7 @@
 #include <QHeaderView>
 
 #include <kactionselector.h>
+#include <kpushbutton.h>
 #include <kdebug.h>
 
 namespace KPlato
@@ -50,7 +51,8 @@ bool ItemViewSettup::Item::operator<( const QListWidgetItem & other ) const
 //--------------------------
 ItemViewSettup::ItemViewSettup( TreeViewBase *view, bool includeColumn0, QWidget *parent )
     : QWidget( parent ),
-    m_view( view )
+    m_view( view ),
+    m_includeColumn0( includeColumn0 )
 {
     setupUi( this );
     
@@ -105,26 +107,74 @@ void ItemViewSettup::slotOk()
     m_view->setStretchLastSection( stretchLastSection->isChecked() );
 }
 
+void ItemViewSettup::setDefault()
+{
+    kDebug();
+    selector->availableListWidget()->clear();
+    selector->selectedListWidget()->clear();
+    ItemModelBase *model = m_view->model();
+    int c = m_includeColumn0 ? 0 : 1;
+    QList<int> def = m_view->defaultColumns();
+    for ( ; c < m_view->model()->columnCount(); ++c ) {
+        if ( ! def.contains( c ) ) {
+            Item *item = new Item( c, model->headerData( c, Qt::Horizontal ).toString() );
+            item->setToolTip( model->headerData( c, Qt::Horizontal, Qt::ToolTipRole ).toString() );
+            selector->availableListWidget()->addItem( item );
+        }
+    }
+    foreach ( int i, def ) {
+        Item *item = new Item( i, model->headerData( i, Qt::Horizontal ).toString() );
+        item->setToolTip( model->headerData( i, Qt::Horizontal, Qt::ToolTipRole ).toString() );
+        selector->selectedListWidget()->addItem( item );
+    }
+}
+
+
 //---------------------------
 ItemViewSettupDialog::ItemViewSettupDialog( TreeViewBase *view, bool includeColumn0, QWidget *parent )
     : KDialog( parent )
 {
     setCaption( i18n("View Settings") );
-    setButtons( Ok|Cancel );
+    setButtons( Ok|Cancel|Default );
     setDefaultButton( Ok );
     showButtonSeparator( true );
 
+    button( Default )->setEnabled( ! view->defaultColumns().isEmpty() );
+    
     m_panel = new ItemViewSettup( view, includeColumn0, this );
     setMainWidget( m_panel );
     
     connect( m_panel, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
     
-    connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
+    connect( this, SIGNAL( okClicked() ), m_panel, SLOT( slotOk() ) );
+    connect( this, SIGNAL( defaultClicked() ), m_panel, SLOT( setDefault() ) );
 }
 
-void ItemViewSettupDialog::slotOk()
+//-------------------------------
+SplitItemViewSettupDialog::SplitItemViewSettupDialog( DoubleTreeViewBase *view, QWidget *parent )
+    : KPageDialog( parent )
 {
-    m_panel->slotOk();
+    setCaption( i18n("View Settings") );
+    setButtons( Ok|Cancel|Default );
+    setDefaultButton( Ok );
+    showButtonSeparator( true );
+
+    bool nodef = view->masterView()->defaultColumns().isEmpty() || view->slaveView()->defaultColumns().isEmpty();
+    button( Default )->setEnabled( ! nodef );
+    
+    m_page1 = new ItemViewSettup( view->masterView(), true, this );
+    m_page2 = new ItemViewSettup( view->slaveView(), true, this );
+    
+    addPage( m_page1, i18n( "Master" ) );
+    addPage( m_page2, i18n( "Slave" ) );
+    
+    connect( m_page1, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
+    connect( m_page2, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
+    
+    connect( this, SIGNAL( okClicked() ), m_page1, SLOT( slotOk() ) );
+    connect( this, SIGNAL( okClicked() ), m_page2, SLOT( slotOk() ) );
+    connect( this, SIGNAL( defaultClicked() ), m_page1, SLOT( setDefault() ) );
+    connect( this, SIGNAL( defaultClicked() ), m_page2, SLOT( setDefault() ) );
 }
 
 } //namespace KPlato

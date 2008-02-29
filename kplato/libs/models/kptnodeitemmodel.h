@@ -106,18 +106,21 @@ class Project;
 class Node;
 class Estimate;
 
+class NodeColumnMap : public ColumnMap
+{
+public:
+    NodeColumnMap();
+};
+
+
 class KPLATOMODELS_EXPORT NodeModel : public QObject
 {
     Q_OBJECT
 public:
-    NodeModel()
-        : QObject(), 
-        m_project( 0 ), 
-        m_manager( 0 ), 
-        m_now( QDate::currentDate() ),
-        m_prec( 1 )
-     {}
+    NodeModel();
     ~NodeModel() {}
+    
+    const ColumnMap &columnNames() const { return columnMap; }
     
     void setProject( Project *project );
     void setManager( ScheduleManager *sm );
@@ -208,6 +211,8 @@ private:
     ScheduleManager *m_manager;
     QDate m_now;
     int m_prec;
+    
+    static NodeColumnMap columnMap;
 };
 
 class KPLATOMODELS_EXPORT NodeItemModel : public ItemModelBase
@@ -216,6 +221,9 @@ class KPLATOMODELS_EXPORT NodeItemModel : public ItemModelBase
 public:
     explicit NodeItemModel( QObject *parent = 0 );
     ~NodeItemModel();
+    
+    /// Returns a column number/- name map for this model
+    virtual const ColumnMap &columnNames() const { return m_nodemodel.columnNames(); }
     
     virtual void setProject( Project *project );
     void setManager( ScheduleManager *sm );

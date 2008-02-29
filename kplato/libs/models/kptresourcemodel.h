@@ -26,6 +26,20 @@
 
 class QPoint;
 
+#define ResourceName 0
+#define ResourceType 1
+#define ResourceInitials 2
+#define ResourceEmail 3
+#define ResourceCalendar 4
+#define ResourceLimit 5
+#define ResourceAvailableFrom 6
+#define ResourceAvailableUntil 7
+#define ResourceNormalRate 8 
+#define ResourceOvertimeRate 9
+
+#define RESOURCE_PROPERTY_COUNT 10;
+
+
 namespace KPlato
 {
 
@@ -34,12 +48,21 @@ class Resource;
 class ResourceGroup;
 class Calendar;
 
+class ResourceColumnMap : public ColumnMap
+{
+public:
+    ResourceColumnMap();
+};
+
+
 class KPLATOMODELS_EXPORT ResourceItemModel : public ItemModelBase
 {
     Q_OBJECT
 public:
     explicit ResourceItemModel( QObject *parent = 0 );
     ~ResourceItemModel();
+
+    const ColumnMap &columnNames() const { return columnMap; }
 
     virtual void setProject( Project *project );
 
@@ -128,6 +151,9 @@ protected:
 private:
     ResourceGroup *m_group; // Used for sanity checks
     Resource *m_resource; // Used for sanity checks
+    
+    static ResourceColumnMap columnMap;
+
 };
 
 

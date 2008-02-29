@@ -47,6 +47,27 @@
 namespace KPlato
 {
 
+ResourceColumnMap ResourceItemModel::columnMap;
+
+ResourceColumnMap::ResourceColumnMap()
+    : ColumnMap()
+{
+    if ( columnMap.isEmpty() ) {
+        columnMap.insert( "ResourceName", ResourceName );
+        columnMap.insert( "ResourceType", ResourceType );
+        columnMap.insert( "ResourceInitials", ResourceInitials );
+        columnMap.insert( "ResourceEmail", ResourceEmail );
+        columnMap.insert( "ResourceCalendar", ResourceCalendar );
+        columnMap.insert( "ResourceLimit", ResourceLimit );
+        columnMap.insert( "ResourceAvailableFrom", ResourceAvailableFrom );
+        columnMap.insert( "ResourceAvailableUntil", ResourceAvailableUntil );
+        columnMap.insert( "ResourceNormalRate", ResourceNormalRate );
+        columnMap.insert( "ResourceOvertimeRate", ResourceOvertimeRate );
+    }
+}
+
+//--------------------------------------
+
 ResourceItemModel::ResourceItemModel( QObject *parent )
     : ItemModelBase( parent ),
     m_group( 0 ),
@@ -197,8 +218,8 @@ Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
     } else if ( qobject_cast<ResourceGroup*>( object( index ) ) ) {
         flags |= Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
-            case 0: flags |= Qt::ItemIsEditable; break;
-            case 1: flags |= Qt::ItemIsEditable; break;
+            case ResourceName: flags |= Qt::ItemIsEditable; break;
+            case ResourceType: flags |= Qt::ItemIsEditable; break;
             default: flags &= ~Qt::ItemIsEditable;
         }
     }
@@ -273,7 +294,7 @@ QModelIndex ResourceItemModel::index( const ResourceGroup *group ) const
 
 int ResourceItemModel::columnCount( const QModelIndex &/*parent*/ ) const
 {
-    return 10;
+    return RESOURCE_PROPERTY_COUNT;
 }
 
 int ResourceItemModel::rowCount( const QModelIndex &parent ) const
@@ -718,16 +739,16 @@ QVariant ResourceItemModel::data( const QModelIndex &index, int role ) const
     Resource *r = qobject_cast<Resource*>( obj );
     if ( r ) {
         switch ( index.column() ) {
-            case 0: result = name( r, role ); break;
-            case 1: result = type( r, role ); break;
-            case 2: result = initials( r, role ); break;
-            case 3: result = email( r, role ); break;
-            case 4: result = calendar( r, role ); break;
-            case 5: result = units( r, role ); break;
-            case 6: result = availableFrom( r, role ); break;
-            case 7: result = availableUntil( r, role ); break;
-            case 8: result = normalRate( r, role ); break;
-            case 9: result = overtimeRate( r, role ); break;
+            case ResourceName: result = name( r, role ); break;
+            case ResourceType: result = type( r, role ); break;
+            case ResourceInitials: result = initials( r, role ); break;
+            case ResourceEmail: result = email( r, role ); break;
+            case ResourceCalendar: result = calendar( r, role ); break;
+            case ResourceLimit: result = units( r, role ); break;
+            case ResourceAvailableFrom: result = availableFrom( r, role ); break;
+            case ResourceAvailableUntil: result = availableUntil( r, role ); break;
+            case ResourceNormalRate: result = normalRate( r, role ); break;
+            case ResourceOvertimeRate: result = overtimeRate( r, role ); break;
             default:
                 kDebug()<<"data: invalid display value column"<<index.column();;
                 return QVariant();
@@ -743,8 +764,8 @@ QVariant ResourceItemModel::data( const QModelIndex &index, int role ) const
         ResourceGroup *g = qobject_cast<ResourceGroup*>( obj );
         if ( g ) {
             switch ( index.column() ) {
-                case 0: result = name( g, role ); break;
-                case 1: result = type( g, role ); break;
+                case ResourceName: result = name( g, role ); break;
+                case ResourceType: result = type( g, role ); break;
                 default:
                     if ( index.column() < columnCount() ) {
                         result = notUsed( g, role );
@@ -776,16 +797,16 @@ bool ResourceItemModel::setData( const QModelIndex &index, const QVariant &value
     Resource *r = qobject_cast<Resource*>( obj );
     if ( r ) {
         switch (index.column()) {
-            case 0: return setName( r, value, role );
-            case 1: return setType( r, value, role );
-            case 2: return setInitials( r, value, role );
-            case 3: return setEmail( r, value, role );
-            case 4: return setCalendar( r, value, role );
-            case 5: return setUnits( r, value, role );
-            case 6: return setAvailableFrom( r, value, role );
-            case 7: return setAvailableUntil( r, value, role );
-            case 8: return setNormalRate( r, value, role );
-            case 9: return setOvertimeRate( r, value, role );
+            case ResourceName: return setName( r, value, role );
+            case ResourceType: return setType( r, value, role );
+            case ResourceInitials: return setInitials( r, value, role );
+            case ResourceEmail: return setEmail( r, value, role );
+            case ResourceCalendar: return setCalendar( r, value, role );
+            case ResourceLimit: return setUnits( r, value, role );
+            case ResourceAvailableFrom: return setAvailableFrom( r, value, role );
+            case ResourceAvailableUntil: return setAvailableUntil( r, value, role );
+            case ResourceNormalRate: return setNormalRate( r, value, role );
+            case ResourceOvertimeRate: return setOvertimeRate( r, value, role );
             default:
                 qWarning("data: invalid display value column %d", index.column());
                 return false;
@@ -794,8 +815,8 @@ bool ResourceItemModel::setData( const QModelIndex &index, const QVariant &value
         ResourceGroup *g = qobject_cast<ResourceGroup*>( obj );
         if ( g ) {
             switch (index.column()) {
-                case 0: return setName( g, value, role );
-                case 1: return setType( g, value, role );
+                case ResourceName: return setName( g, value, role );
+                case ResourceType: return setType( g, value, role );
                 default:
                     qWarning("data: invalid display value column %d", index.column());
                     return false;
@@ -810,45 +831,37 @@ QVariant ResourceItemModel::headerData( int section, Qt::Orientation orientation
     if ( orientation == Qt::Horizontal ) {
         if ( role == Qt::DisplayRole ) {
             switch ( section ) {
-                case 0: return i18n( "Name" );
-                case 1: return i18n( "Type" );
-                case 2: return i18n( "Initials" );
-                case 3: return i18n( "Email" );
-                case 4: return i18n( "Calendar" );
-                case 5: return i18n( "Limit (%)" );
-                case 6: return i18n( "Available From" );
-                case 7: return i18n( "Available Until" );
-                case 8: return i18n( "Normal Rate" );
-                case 9: return i18n( "Overtime Rate" );
+                case ResourceName: return i18n( "Name" );
+                case ResourceType: return i18n( "Type" );
+                case ResourceInitials: return i18n( "Initials" );
+                case ResourceEmail: return i18n( "Email" );
+                case ResourceCalendar: return i18n( "Calendar" );
+                case ResourceLimit: return i18n( "Limit (%)" );
+                case ResourceAvailableFrom: return i18n( "Available From" );
+                case ResourceAvailableUntil: return i18n( "Available Until" );
+                case ResourceNormalRate: return i18n( "Normal Rate" );
+                case ResourceOvertimeRate: return i18n( "Overtime Rate" );
                 default: return QVariant();
             }
         } else if ( role == Qt::TextAlignmentRole ) {
             switch (section) {
-                case 1: return Qt::AlignCenter;
-                case 2: return Qt::AlignCenter;
-                case 3: return Qt::AlignCenter;
-                case 4: return Qt::AlignCenter;
-                case 5: return Qt::AlignCenter;
-                case 6: return Qt::AlignCenter;
-                case 7: return Qt::AlignCenter;
-                case 8: return Qt::AlignCenter;
-                case 9: return Qt::AlignCenter;
-                default: return QVariant();
+                case 0: return QVariant();
+                default: return Qt::AlignCenter;
             }
         }
     }
     if ( role == Qt::ToolTipRole ) {
         switch ( section ) {
-            case 0: return ToolTip::resourceName();
-            case 1: return ToolTip::resourceType();
-            case 2: return ToolTip::resourceInitials();
-            case 3: return ToolTip::resourceEMail();
-            case 4: return ToolTip::resourceCalendar();
-            case 5: return ToolTip::resourceUnits();
-            case 6: return ToolTip::resourceAvailableFrom();
-            case 7: return ToolTip::resourceAvailableUntil();
-            case 8: return ToolTip::resourceNormalRate();
-            case 9: return ToolTip::resourceOvertimeRate();
+            case ResourceName: return ToolTip::resourceName();
+            case ResourceType: return ToolTip::resourceType();
+            case ResourceInitials: return ToolTip::resourceInitials();
+            case ResourceEmail: return ToolTip::resourceEMail();
+            case ResourceCalendar: return ToolTip::resourceCalendar();
+            case ResourceLimit: return ToolTip::resourceUnits();
+            case ResourceAvailableFrom: return ToolTip::resourceAvailableFrom();
+            case ResourceAvailableUntil: return ToolTip::resourceAvailableUntil();
+            case ResourceNormalRate: return ToolTip::resourceNormalRate();
+            case ResourceOvertimeRate: return ToolTip::resourceOvertimeRate();
             default: return QVariant();
         }
     }
@@ -858,8 +871,8 @@ QVariant ResourceItemModel::headerData( int section, Qt::Orientation orientation
 QItemDelegate *ResourceItemModel::createDelegate( int col, QWidget *parent ) const
 {
     switch ( col ) {
-        case 1: return new EnumDelegate( parent );
-        case 4: return new EnumDelegate( parent );
+        case ResourceType: return new EnumDelegate( parent );
+        case ResourceCalendar: return new EnumDelegate( parent );
         default: break;
     }
     return 0;

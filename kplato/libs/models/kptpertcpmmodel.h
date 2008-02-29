@@ -48,6 +48,8 @@ public:
     explicit CriticalPathItemModel( QObject *parent = 0 );
     ~CriticalPathItemModel();
     
+    const ColumnMap &columnNames() const { return m_nodemodel.columnNames(); }
+    
     virtual void setProject( Project *project );
     
     virtual QModelIndex parent( const QModelIndex & index ) const;
@@ -100,6 +102,8 @@ class KPLATOMODELS_EXPORT PertResultItemModel : public ItemModelBase
 public:
     explicit PertResultItemModel( QObject *parent = 0 );
     ~PertResultItemModel();
+    
+    const ColumnMap &columnNames() const { return m_nodemodel.columnNames(); }
     
     virtual void setProject( Project *project );
     

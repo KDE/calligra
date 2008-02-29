@@ -62,6 +62,7 @@ TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
     connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
 
     QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
+    masterView()->setDefaultColumns( QList<int>() << 0 );
     QList<int> show;
     show << NodeStatus
             << NodeCompleted
@@ -74,6 +75,7 @@ TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
             << NodeFinished
             << NodeStatusNote;
 
+    slaveView()->setDefaultColumns( show );
     QList<int> lst2; 
     for ( int i = 0; i < m->columnCount(); ++i ) {
         if ( ! show.contains( i ) ) {
@@ -267,25 +269,19 @@ void TaskStatusView::slotSplitView()
 void TaskStatusView::slotOptions()
 {
     kDebug();
-    bool col0 = false;
-    TreeViewBase *v = m_view->slaveView();
-    if ( v->isHidden() ) {
-        v = m_view->masterView();
-        col0 = true;
-    }
-    ItemViewSettupDialog dlg( v, col0 );
+    SplitItemViewSettupDialog dlg( m_view );
     dlg.exec();
 }
 
 bool TaskStatusView::loadContext( const KoXmlElement &context )
 {
     kDebug();
-    return m_view->loadContext( context );
+    return m_view->loadContext( context, model()->columnNames() );
 }
 
 void TaskStatusView::saveContext( QDomElement &context ) const
 {
-    m_view->saveContext( context );
+    m_view->saveContext( context, model()->columnNames() );
 }
 
 
