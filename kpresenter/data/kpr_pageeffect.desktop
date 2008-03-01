@@ -2,6 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=KPresenter/PageEffect
 Comment=Page effect plugin for KPresenter
+Comment[el]=Πρόσθετο εφέ σελίδας για το KPresenter
 Comment[it]=Name=Plugin per gli effetti di pagina per KPresenter
 Comment[pt]='Plugin' de efeitos das páginas do KPresenter
 Comment[pt_BR]='Plugin' de efeitos das páginas do KPresenter

@@ -1,6 +1,10 @@
 [Desktop Entry]
 Name=Iris Wipe
+Name[pt]=Varrimento em Íris
+Name[pt_BR]=Varrimento em Íris
 Comment=Iris Wipe Page Effects
+Comment[pt]=Efeito de Varrimento da Página em Íris
+Comment[pt_BR]=Efeito de Varrimento da Página em Íris
 X-KDE-ServiceTypes=KPresenter/PageEffect
 Type=Service
 X-KDE-Library=kpr_pageeffect_iriswipe
