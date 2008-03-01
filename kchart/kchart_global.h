@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Inge Wallin <inge@lysator.liu.se>
+
+   Copyright 2007 Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,8 +26,7 @@ namespace KChart
 {
 
 // Chart types for OpenDocument
-
-typedef enum {
+enum ChartType {
     BarChartType,
     LineChartType,
     AreaChartType,
@@ -40,37 +40,71 @@ typedef enum {
     GanttChartType,
 
     LastChartType               // Not an actual type, just a place holder
-} OdfChartType;
+};
 const int NUM_CHARTTYPES = int ( LastChartType );
 
 
 // Chart subtypes, applicable to Bar, Line, Area, and Radar
-typedef enum {
+enum ChartSubtype {
     NoChartSubtype,             // for charts with no subtypes
     NormalChartSubtype,         // For bar, line and area charts
     StackedChartSubtype,
     PercentChartSubtype
-} OdfChartSubtype;
+};
 
-typedef enum {
-    Bottom,
-    Top,
-    Right,
-    Left
-} AxisPosition;
+enum AxisPosition {
+    BottomAxisPosition,
+    TopAxisPosition,
+    RightAxisPosition,
+    LeftAxisPosition
+};
+
+enum AxisDimension {
+    XAxisDimension,
+    YAxisDimension,
+    ZAxisDimension
+};
 
 struct ChartTypeOptions
 {
-    OdfChartSubtype subtype;
+    ChartSubtype subtype;
 };
 
-// Data direction
-typedef  enum {
-    DataRowsDirection    = 0,
-    DataColumnsDirection = 1
-} DataDirection;
+enum LegendPosition {
+    StartLegendPosition,
+    TopLegendPosition,
+    BottomLegendPosition,
+    TopStartLegendPosition,
+    BottomStartLegendPosition,
+    TopEndLegendPosition,
+    BottomEndLegendPosition,
+    EndLegendPosition,
+    
+    FloatingLegendPosition
+};
 
+enum LegendExpansion {
+	WideLegendExpansion,
+	HighLegendExpansion,
+	BalancedLegendExpansion
+};
 
-}  //KChart namespace
+enum ErrorCategory {
+	NoErrorCategory,
+	VarianceErrorCategory,
+	StandardDeviationErrorCategory,
+	StandardErrorErrorCategory,
+	PercentageErrorCategory,
+	ErrorMarginErrorCategory,
+	ConstantErrorCategory
+};
+
+enum LabelType {
+    TitleLabelType,
+    SubTitleLabelType,
+    FooterLabelType
+};
+
+} // Namespace KChart
 
 #endif

@@ -58,11 +58,17 @@ public:
     void setExpansion( LegendExpansion expansion );
     void setAlignment( Qt::Alignment alignment );
     void setLegendPosition( LegendPosition position );
+    void setSize( const QSizeF &size );
     
     void paint( QPainter &painter, const KoViewConverter &converter );   
     
-    bool loadOdf( KoXmlElement &legendElement, KoShapeLoadingContext &context );
+    bool loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &context );
     void saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
+    void saveOdf( KoShapeSavingContext &context ) const;
+    
+    KDChart::Legend *kdLegend() const;
+    
+    KoShape *cloneShape() const;
 
 private:
     class Private;

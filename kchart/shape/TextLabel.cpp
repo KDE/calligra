@@ -42,6 +42,15 @@ public:
     ChartShape *chart;
 };
 
+TextLabel::Private::Private()
+{
+    type = TitleLabelType;
+}
+
+TextLabel::Private::~Private()
+{
+}
+
 TextLabel::TextLabel( ChartShape *parent )
     : d( new Private ),
       SimpleTextShape()

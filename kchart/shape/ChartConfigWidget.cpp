@@ -25,9 +25,11 @@
 #include <KDChartDataValueAttributes>
 
 // KChart
-#include "kchart_global.h"
-#include "ChartShape.h"
-#include "ChartProxyModel.h"
+#include "ProxyModel.h"
+#include "PlotArea.h"
+#include "Legend.h"
+#include "DataSet.h"
+#include "Axis.h"
 #include "ui_ChartTableEditor.h"
 #include "ui_ChartConfigWidget.h"
 #include "NewAxisDialog.h"
@@ -68,8 +70,8 @@ public:
 
     // Basic properties of the chart.
     ChartShape            *shape;
-    OdfChartType           type;
-    OdfChartSubtype        subtype;
+    ChartType           type;
+    ChartSubtype        subtype;
     bool                   threeDMode;
     QVBoxLayout           *leftLayout;
     QVBoxLayout           *rightLayout;
@@ -87,6 +89,19 @@ public:
     QAction  *normalAreaChartAction;
     QAction  *stackedAreaChartAction;
     QAction  *percentAreaChartAction;
+    
+    // chart type selection actions
+    QAction  *dataSetNormalBarChartAction;
+    QAction  *dataSetStackedBarChartAction;
+    QAction  *dataSetPercentBarChartAction;
+    
+    QAction  *dataSetNormalLineChartAction;
+    QAction  *dataSetStackedLineChartAction;
+    QAction  *dataSetPercentLineChartAction;
+
+    QAction  *dataSetNormalAreaChartAction;
+    QAction  *dataSetStackedAreaChartAction;
+    QAction  *dataSetPercentAreaChartAction;
 
     // Table Editor
     Ui::ChartTableEditor  tableEditor;
@@ -102,7 +117,8 @@ public:
     
     int                   selectedDataset;
     
-    QList<KDChart::CartesianAxis*> axes;
+    QList<Axis*> axes;
+    QList<DataSet*> dataSets;
 
     // Dialogs
     NewAxisDialog     newAxisDialog;
@@ -155,6 +171,30 @@ ChartConfigWidget::ChartConfigWidget()
     connect( chartTypeMenu, SIGNAL( triggered( QAction* ) ), 
              this,          SLOT( chartTypeSelected( QAction* ) ) );
     
+    // Data set chart type button
+    QMenu *dataSetChartTypeMenu = new QMenu( this );
+    dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
+    
+    QMenu *dataSetBarChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_bar" ), "Bar Chart" );
+    d->dataSetNormalBarChartAction  = dataSetBarChartMenu->addAction( KIcon( "chart_bar_beside" ), i18n("Normal") );
+    d->dataSetStackedBarChartAction = dataSetBarChartMenu->addAction( KIcon( "chart_bar_layer" ), i18n("Stacked") );
+    d->percentBarChartAction = dataSetBarChartMenu->addAction( KIcon( "chart_bar_percent" ), i18n("Percent") );
+    
+    QMenu *dataSetLineChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_line" ), "Line Chart" );
+    d->dataSetNormalLineChartAction  = dataSetLineChartMenu->addAction( KIcon( "chart_line_normal" ), i18n("Normal") );
+    d->dataSetStackedLineChartAction = dataSetLineChartMenu->addAction( KIcon( "chart_line_stacked" ), i18n("Stacked") );
+    d->percentLineChartAction = dataSetLineChartMenu->addAction( KIcon( "chart_line_percent" ), i18n("Percent") );
+    
+    QMenu *dataSetAreaChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_area" ), "Area Chart" );
+    d->dataSetNormalAreaChartAction  = dataSetAreaChartMenu->addAction( KIcon( "chart_area_normal" ), i18n("Normal") );
+    d->dataSetStackedAreaChartAction = dataSetAreaChartMenu->addAction( KIcon( "chart_area_stacked" ), i18n("Stacked") );
+    d->dataSetPercentAreaChartAction = dataSetAreaChartMenu->addAction( KIcon( "chart_area_percent" ), i18n("Percent") );
+    
+    d->ui.dataSetChartTypeMenu->setMenu( dataSetChartTypeMenu );
+    
+    connect( dataSetChartTypeMenu, SIGNAL( triggered( QAction* ) ), 
+             this,          SLOT( dataSetChartTypeSelected( QAction* ) ) );
+    
     // Quick-access settings
     d->tableEditorDialog = new QDialog( this );
     d->tableEditor.setupUi( d->tableEditorDialog );
@@ -198,6 +238,11 @@ ChartConfigWidget::ChartConfigWidget()
 			 this, SLOT( ui_axisShowGridLinesChanged( bool ) ) );
 	connect ( d->ui.axes, SIGNAL( currentIndexChanged( int ) ),
 			  this, SLOT( ui_axisSelectionChanged( int ) ) );
+	
+	connect( d->ui.dataSets, SIGNAL( currentIndexChanged( int ) ),
+	         this, SLOT( ui_dataSetSelectionChanged( int ) ) );
+	connect( d->ui.dataSetAxes, SIGNAL( currentIndexChanged( int ) ),
+	        this, SLOT( ui_dataSetAxisSelectionChanged( int ) ) );
 
     setupDialogs();
     createActions();
@@ -226,10 +271,10 @@ void ChartConfigWidget::open( KoShape* shape )
     //d->ui.yAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[1]->titleText() );
     
     // Update the legend title
-    //d->ui.legendTitle->setText( d->shape->chart()->legend()->titleText() );
+    //d->ui.legendTitle->setText( d->shape->legend()->title() );
     
     // Fill the data table
-    //d->tableView->setModel( ((ChartProxyModel*)d->shape->model()) );
+    d->tableView->setModel( d->shape->model() );
     
     update();
 }
@@ -248,8 +293,8 @@ KAction* ChartConfigWidget::createAction()
 
 void ChartConfigWidget::chartTypeSelected( QAction *action )
 {
-    OdfChartType     type;
-    OdfChartSubtype  subtype;
+    ChartType     type;
+    ChartSubtype  subtype;
     
     if ( action == d->normalBarChartAction ) {
         type    = BarChartType;
@@ -280,15 +325,59 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
         subtype = PercentChartSubtype;
     }
     
-    emit chartTypeChanged( type, subtype );
+    emit chartTypeChanged( type );
+    emit chartSubTypeChanged( subtype );
     
     update();
 }
 
-void ChartConfigWidget::chartSubtypeSelected( int type )
+void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
 {
-    d->subtype = (OdfChartSubtype) type;
-    emit chartSubtypeChanged( d->subtype );
+    if ( d->ui.dataSets->currentIndex() < 0 )
+        return;
+    
+    ChartType     type;
+    ChartSubtype  subtype;
+    
+    if ( action == d->dataSetNormalBarChartAction ) {
+        type    = BarChartType;
+        subtype = NormalChartSubtype;
+    } else if ( action == d->dataSetStackedBarChartAction ) {
+        type    = BarChartType;
+        subtype = StackedChartSubtype;
+    } else if ( action == d->dataSetPercentBarChartAction ) {
+        type    = BarChartType;
+        subtype = PercentChartSubtype;
+    } else if ( action == d->dataSetNormalLineChartAction ) {
+        type    = LineChartType;
+        subtype = NormalChartSubtype;
+    } else if ( action == d->dataSetStackedLineChartAction ) {
+        type    = LineChartType;
+        subtype = StackedChartSubtype;
+    } else if ( action == d->dataSetPercentLineChartAction ) {
+        type    = LineChartType;
+        subtype = PercentChartSubtype;
+    } else if ( action == d->dataSetNormalAreaChartAction ) {
+        type    = AreaChartType;
+        subtype = NormalChartSubtype;
+    } else if ( action == d->dataSetStackedAreaChartAction ) {
+        type    = AreaChartType;
+        subtype = StackedChartSubtype;
+    } else if ( action == d->dataSetPercentAreaChartAction ) {
+        type    = AreaChartType;
+        subtype = PercentChartSubtype;
+    }
+    
+    emit dataSetChartTypeChanged( d->dataSets[ d->ui.dataSets->currentIndex() ], type );
+    emit dataSetChartSubTypeChanged( d->dataSets[ d->ui.dataSets->currentIndex() ], subtype );
+    
+    update();
+}
+
+void ChartConfigWidget::chartSubTypeSelected( int type )
+{
+    d->subtype = (ChartSubtype) type;
+    emit chartSubTypeChanged( d->subtype );
 }
 
 void ChartConfigWidget::datasetColorSelected( const QColor& color )
@@ -311,56 +400,49 @@ void ChartConfigWidget::update()
     // state of the shape
     blockSignals( true );
     
-    const KDChart::AbstractCartesianDiagram *cartesianDiagram = dynamic_cast<KDChart::AbstractCartesianDiagram*>(d->shape->diagram());
-    
     // Update cartesian diagram-specific properties
-    if ( cartesianDiagram ) {
-    	if ( d->axes != cartesianDiagram->axes() ) {
-            // Remove old items from the combo box
-   			d->ui.axes->clear();
-            // Sync the internal list
-            d->axes = cartesianDiagram->axes();
-    	
-            if ( !d->axes.isEmpty()	) {
-                foreach ( KDChart::CartesianAxis *axis, cartesianDiagram->axes() ) {
-        			d->ui.axes->addItem( axis->titleText() );
-        		}
-        		
-        		const KDChart::CartesianAxis *selectedAxis = cartesianDiagram->axes().first();
-        		const KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>(d->shape->coordinatePlane());
-        		
-        		Q_ASSERT( plane );
-        		
-        		const Qt::Orientation axisOrientation = (   selectedAxis->position() == KDChart::CartesianAxis::Top
-    			                                         || selectedAxis->position() == KDChart::CartesianAxis::Bottom ) ?
-    			                                            Qt::Horizontal : Qt::Vertical;
-                d->ui.axisShowGridLines->setEnabled( true );
-        		d->ui.axisShowGridLines->setChecked( plane->gridAttributes( axisOrientation ).isGridVisible() );
-                d->ui.axisShowTitle->setEnabled( true );
-        		d->ui.axisShowTitle->setChecked( !selectedAxis->titleText().isEmpty() );
-                d->ui.axisTitle->setEnabled( true );
-        		d->ui.axisTitle->setText( selectedAxis->titleText() );
-            } else {
-                d->ui.axisShowGridLines->blockSignals( true );
-                d->ui.axisShowGridLines->setChecked( false );
-                d->ui.axisShowGridLines->setEnabled( false );
-                d->ui.axisShowGridLines->blockSignals( false );
+	if ( d->axes != d->shape->plotArea()->axes() ) {
+        // Remove old items from the combo box
+		d->ui.axes->clear();
+        // Sync the internal list
+        d->axes = d->shape->plotArea()->axes();
+	
+        if ( !d->axes.isEmpty()	) {
+            d->ui.axes->clear();
+            d->ui.dataSetAxes->clear();
+            foreach ( Axis *axis, d->axes ) {
+    			d->ui.axes->addItem( axis->titleText() );
+    			d->ui.dataSetAxes->addItem( axis->titleText() );
+    		}
+    		
+    		const Axis *selectedAxis = d->shape->plotArea()->axes().first();
 
-                d->ui.axisShowTitle->blockSignals( true );
-                d->ui.axisShowTitle->setChecked( false );
-                d->ui.axisShowTitle->setEnabled( false );
-                d->ui.axisShowTitle->blockSignals( false );
+            d->ui.axisShowGridLines->setEnabled( true );
+    		d->ui.axisShowGridLines->setChecked( selectedAxis->showGrid() );
+            d->ui.axisShowTitle->setEnabled( true );
+    		d->ui.axisShowTitle->setChecked( !selectedAxis->titleText().isEmpty() );
+            d->ui.axisTitle->setEnabled( true );
+    		d->ui.axisTitle->setText( selectedAxis->titleText() );
+        } else {
+            d->ui.axisShowGridLines->blockSignals( true );
+            d->ui.axisShowGridLines->setChecked( false );
+            d->ui.axisShowGridLines->setEnabled( false );
+            d->ui.axisShowGridLines->blockSignals( false );
 
-                d->ui.axisTitle->blockSignals( true );
-                d->ui.axisTitle->setText( "" );
-                d->ui.axisTitle->setEnabled( false );
-                d->ui.axisTitle->blockSignals( false );
-            }
-    	}
-    }
+            d->ui.axisShowTitle->blockSignals( true );
+            d->ui.axisShowTitle->setChecked( false );
+            d->ui.axisShowTitle->setEnabled( false );
+            d->ui.axisShowTitle->blockSignals( false );
+
+            d->ui.axisTitle->blockSignals( true );
+            d->ui.axisTitle->setText( "" );
+            d->ui.axisTitle->setEnabled( false );
+            d->ui.axisTitle->blockSignals( false );
+        }
+	}
     
     if (    d->type    != d->shape->chartType()
-         || d->subtype != d->shape->chartSubtype() )
+         || d->subtype != d->shape->chartSubType() )
     {
         bool needSeparator = false;
         if ( d->shape->chartType() == BarChartType ) {
@@ -378,7 +460,7 @@ void ChartConfigWidget::update()
             d->ui.gapBetweenSets->hide();
         }
         d->ui.propertiesSeparator->setVisible( needSeparator );
-        switch ( d->shape->chartSubtype() ) {
+        switch ( d->shape->chartSubType() ) {
         case NormalChartSubtype:
             switch ( d->shape->chartType() ) {
             case BarChartType:
@@ -459,12 +541,24 @@ void ChartConfigWidget::update()
             break;
         }
         d->type    = d->shape->chartType();
-        d->subtype = d->shape->chartSubtype();
+        d->subtype = d->shape->chartSubType();
     }
     
-    d->ui.threeDLook->setChecked( d->shape->threeDMode() );
+    if ( d->shape->plotArea()->dataSets() != d->dataSets ) {
+        d->dataSets = d->shape->plotArea()->dataSets();
+        d->ui.dataSets->clear();
+        d->ui.dataSets->blockSignals( true );
+        foreach ( DataSet *dataSet, d->dataSets ) {
+            d->ui.dataSets->addItem( dataSet->labelData().toString() );
+        }
+        d->ui.dataSets->blockSignals( false );
+    }
+    
+    d->ui.threeDLook->setChecked( d->shape->isThreeD() );
     if ( d->shape->legend() ) {
-        d->ui.legendTitle->setText( d->shape->legend()->titleText() );
+        d->ui.legendTitle->blockSignals( true );
+        d->ui.legendTitle->setText( d->shape->legend()->title() );
+        d->ui.legendTitle->blockSignals( false );
     }
     
     blockSignals( false );
@@ -523,7 +617,7 @@ void ChartConfigWidget::setLegendFixedPosition( int buttonGroupIndex )
     //emit legendFixedPositionChanged( buttonIndexToFixedPosition[ buttonGroupIndex ] );
 }
 
-void ChartConfigWidget::updateFixedPosition( const KDChart::Position position )
+void ChartConfigWidget::updateFixedPosition( LegendPosition position )
 {
 /*
     if (    position == KDChart::Position::North
@@ -649,11 +743,11 @@ void ChartConfigWidget::selectDataset( int dataset )
         d->ui.datasetColor->setEnabled( true );
         
         d->ui.datasetColor->blockSignals( true );
-        d->ui.datasetColor->setColor( d->shape->diagram()->brush( dataset ).color() );
+        //d->ui.datasetColor->setColor( d->shape->plotArea()->kdDiagram()->brush( dataset ).color() );
         d->ui.datasetColor->blockSignals( false );
 
         d->ui.datasetShowValues->blockSignals( true );
-        d->ui.datasetShowValues->setChecked( d->shape->diagram()->dataValueAttributes( dataset ).isVisible() );
+        //d->ui.datasetShowValues->setChecked( d->shape->plotArea()->kdDiagram()->dataValueAttributes( dataset ).isVisible() );
         d->ui.datasetShowValues->blockSignals( false );
     } else {
         d->ui.datasetColorLabel->setEnabled( false );
@@ -676,21 +770,37 @@ void ChartConfigWidget::ui_axisSelectionChanged( int index ) {
         return;
 	Q_ASSERT( d->axes.size() > index );
 	
-	const KDChart::CartesianAxis *axis = d->axes[ index ];
+	Axis *axis = d->axes[ index ];
 	d->ui.axisTitle->setText( axis->titleText() );
 	d->ui.axisShowTitle->setChecked( !axis->titleText().isEmpty() );
-	
-	KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( d->shape->diagram()->coordinatePlane() );
-	
-	// Avoid crash since having a non-cartesian coordinate plane means we can't set
-	// properties for cartesian axes, but is not fatal
-	if ( !plane )
-		return;
-	
-	const Qt::Orientation axisOrientation = ( axis->position() == KDChart::CartesianAxis::Top || axis->position() == KDChart::CartesianAxis::Bottom ) ?
-								            Qt::Horizontal : Qt::Vertical;
-	KDChart::GridAttributes attributes = plane->gridAttributes( axisOrientation );
-	d->ui.axisShowGridLines->setChecked( attributes.isGridVisible() );
+	d->ui.axisShowGridLines->setChecked( axis->showGrid() );
+}
+
+void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
+    // Check for valid index
+    if ( index < 0 )
+        return;
+    Q_ASSERT( d->dataSets.size() >= index );
+    
+    DataSet *dataSet = d->dataSets[ index ];
+    //d->ui.datasetColor->setText( axis->titleText() );
+    d->ui.dataSetAxes->setCurrentIndex( d->axes.indexOf( dataSet->attachedAxis() ) );
+    d->ui.datasetShowValues->setChecked( dataSet->showValues() );
+    d->ui.dataSetShowLabels->setChecked( dataSet->showLabels() );
+}
+
+void ChartConfigWidget::ui_dataSetAxisSelectionChanged( int index ) {
+    if ( index < 0 )
+        return;
+    Q_ASSERT( d->axes.size() >= index );
+    
+    if ( d->ui.dataSets->currentIndex() < 0 )
+        return;
+    DataSet *dataSet = d->dataSets[ d->ui.dataSets->currentIndex() ];
+    
+    Axis *axis = d->axes[ index ];
+    dataSet->attachedAxis()->detachDataSet( dataSet );
+    axis->attachDataSet( dataSet );
 }
 
 void ChartConfigWidget::ui_axisTitleChanged( const QString& title ) {
@@ -715,13 +825,13 @@ void ChartConfigWidget::ui_axisShowGridLinesChanged( bool b ) {
 void ChartConfigWidget::ui_axisAdded() {
     AxisPosition position;
     if ( d->newAxisDialog.positionIsTop->isChecked() )
-        position = Top;
+        position = TopAxisPosition;
     else if ( d->newAxisDialog.positionIsBottom->isChecked() )
-        position = Bottom;
+        position = BottomAxisPosition;
     else if ( d->newAxisDialog.positionIsLeft->isChecked() )
-        position = Left;
+        position = LeftAxisPosition;
     else
-        position = Right;
+        position = RightAxisPosition;
 
     emit axisAdded( position, d->newAxisDialog.title->text() );
     update();

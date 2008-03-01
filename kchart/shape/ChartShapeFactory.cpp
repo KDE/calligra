@@ -20,7 +20,7 @@
 // Local
 #include "ChartShapeFactory.h"
 
-// QT
+// Qt
 #include <QStringList>
 #include <QStandardItemModel>
 
@@ -35,9 +35,11 @@
 #include <KoShapeRegistry.h>
 
 // Chart shape
-#include "ChartShape.h"
 #include "ChartToolFactory.h"
 #include "ChartConfigWidget.h"
+#include "ProxyModel.h"
+#include "PlotArea.h"
+#include "Axis.h"
 
 // KDChart
 #include <KDChartChart>
@@ -108,13 +110,15 @@ KoShape* ChartShapeFactory::createDefaultShape() const
     }
 
     // We want the chart shape to take over and handle this model itself
-    shape->setModel( m_chartData, true );
-    shape->setFirstRowIsLabel( true );
-    shape->setFirstColumnIsLabel( true );
+    shape->setModel( m_chartData  );
+    shape->proxyModel()->setFirstRowIsLabel( true );
+    shape->proxyModel()->setFirstColumnIsLabel( true );
     shape->setSize( QSizeF( CM_TO_POINT( 12 ), CM_TO_POINT( 8 ) ) );
     
-    shape->setXAxisTitle( "Month" );
-    shape->setYAxisTitle( "Growth in %" );
+    if ( shape->plotArea()->xAxis() )
+        shape->plotArea()->xAxis()->setTitleText( "Month" );
+    if ( shape->plotArea()->yAxis() )
+        shape->plotArea()->yAxis()->setTitleText( "Growth in %" );
 
     return shape;
 }

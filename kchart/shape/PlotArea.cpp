@@ -47,6 +47,7 @@
 #include <KDChartBarAttributes>
 #include <KDChartPolarCoordinatePlane>
 // Attribute Classes
+#include <KDChartFrameAttributes>
 #include <KDChartDataValueAttributes>
 #include <KDChartGridAttributes>
 #include <KDChartTextAttributes>
@@ -78,30 +79,29 @@ public:
 
     // The list of axes
     QList<Axis*> axes;
-
-    // The list of data sets in the diagram
-    QList<DataSet*> dataSets;
+    
+    QList<KDChart::AbstractDiagram*> registeredKdDiagrams;
+    
+    KDChart::Chart *kdChart;
+    KDChart::AbstractCoordinatePlane *kdPlane;
     
     Surface *wall;
     Surface *floor;
     
     ChartType chartType;
-    ChartSubType chartSubType;
+    ChartSubtype chartSubtype;
     bool threeD;
     
     ThreeDScene *threeDScene;
     
     int gapBetweenBars;
     int gapBetweenSets;
-    
-    ProxyModel *model;
-    
-    KDChart::AbstractDiagram *kdDiagram;
-    KDChart::AbstractCoordinatePlane *kdCoordinatePlane;
 };
 
 PlotArea::Private::Private()
 {
+    kdChart = new KDChart::Chart();
+    kdPlane = new KDChart::CartesianCoordinatePlane( kdChart );
 }
 
 PlotArea::Private::~Private()
@@ -113,24 +113,39 @@ PlotArea::PlotArea( ChartShape *parent )
     : d( new Private )
 {
     d->shape = parent;
-    d->model = parent->model();
     
-    d->kdCoordinatePlane = new KDChart::CartesianCoordinatePlane( d->shape->kdChart() );
-    d->kdDiagram = new KDChart::BarDiagram( 0, static_cast<KDChart::CartesianCoordinatePlane*>(d->kdCoordinatePlane) );
-    d->kdDiagram->setModel( d->model );
+    d->kdChart->resize( size().toSize() );
+    d->kdChart->replaceCoordinatePlane( d->kdPlane );
+    KDChart::FrameAttributes attr = d->kdChart->frameAttributes();
+    attr.setVisible( false );
+    d->kdChart->setFrameAttributes( attr );
     
+    // There need to be at least these two axes. Do not delete, but hide them instead.
     Axis *xAxis = new Axis( this );
     xAxis->setPosition( BottomAxisPosition );
     Axis *yAxis = new Axis( this );
     yAxis->setPosition( LeftAxisPosition );
     d->axes.append( xAxis );
     d->axes.append( yAxis );
-    static_cast<KDChart::AbstractCartesianDiagram*>(d->kdDiagram)->addAxis( xAxis->kdAxis() );
-    static_cast<KDChart::AbstractCartesianDiagram*>(d->kdDiagram)->addAxis( yAxis->kdAxis() );
-    // TODO: Connect signals from the chart's proxy model
-    // here to update the data set count
 };
 
+PlotArea::~PlotArea()
+{
+}
+
+
+ProxyModel *PlotArea::proxyModel() const
+{
+    return d->shape->proxyModel();
+}
+
+void PlotArea::init()
+{
+    foreach( DataSet *dataSet, proxyModel()->dataSets() )
+    {
+        yAxis()->attachDataSet( dataSet );
+    }
+}
 
 QPointF PlotArea::position() const
 {
@@ -154,17 +169,18 @@ void PlotArea::setSize( const QSizeF &size )
 
 QList<Axis*> PlotArea::axes() const
 {
+    qDebug() << "PlotArea::axes() = " << d->axes;
     return d->axes;
 }
 
 QList<DataSet*> PlotArea::dataSets() const
 {
-    return d->dataSets;
+    return proxyModel()->dataSets();
 }
 
 int PlotArea::dataSetCount() const
 {
-    return d->dataSets.size();
+    return proxyModel()->dataSets().size();
 }
 
 Surface *PlotArea::wall() const
@@ -176,6 +192,71 @@ Surface *PlotArea::floor() const
 {
     return d->floor;
 }
+
+Axis *PlotArea::xAxis() const
+{
+    foreach( Axis *axis, d->axes )
+    {
+        if ( axis->orientation() == Qt::Horizontal )
+            return axis;
+    }
+    return 0;
+};
+
+Axis *PlotArea::yAxis() const
+{
+    foreach( Axis *axis, d->axes )
+    {
+        if ( axis->orientation() == Qt::Vertical )
+            return axis;
+    }
+    return 0;
+};
+
+Axis *PlotArea::secondaryXAxis() const
+{
+    bool firstXAxisFound = false;
+    foreach( Axis *axis, d->axes )
+    {
+        if ( axis->orientation() == Qt::Horizontal ) {
+            if ( firstXAxisFound )
+                return axis;
+            else
+                firstXAxisFound = true;
+        }
+    }
+    return 0;
+};
+
+Axis *PlotArea::secondaryYAxis() const
+{
+    bool firstYAxisFound = false;
+    foreach( Axis *axis, d->axes )
+    {
+        if ( axis->orientation() == Qt::Vertical ) {
+            if ( firstYAxisFound )
+                return axis;
+            else
+                firstYAxisFound = true;
+        }
+    }
+    return 0;
+};
+
+ChartType PlotArea::chartType() const
+{
+    return d->chartType;
+};
+
+ChartSubtype PlotArea::chartSubType() const
+{
+    return d->chartSubtype;
+};
+
+bool PlotArea::isThreeD() const
+{
+    return d->threeD;
+};
 
 ThreeDScene *PlotArea::threeDScene() const
 {
@@ -198,8 +279,13 @@ bool PlotArea::addAxis( Axis *axis )
         return false;
     d->axes.append( axis );
     
-    if ( isCartesian( d->chartType ) )
-        ((KDChart::AbstractCartesianDiagram*)d->kdDiagram)->addAxis( axis->kdAxis() );
+    foreach ( KDChart::AbstractDiagram *diagram, d->registeredKdDiagrams )
+    {
+        KDChart::AbstractCartesianDiagram *cartesianDiagram = dynamic_cast<KDChart::AbstractCartesianDiagram*>(diagram);
+        if ( cartesianDiagram )
+            cartesianDiagram->addAxis( axis->kdAxis() );
+    }
+
     return true;
 }
 
@@ -209,10 +295,51 @@ bool PlotArea::removeAxis( Axis *axis )
         return false;
     d->axes.removeAll( axis );
     
-    if ( isCartesian( d->chartType ) )
-            ((KDChart::AbstractCartesianDiagram*)d->kdDiagram)->takeAxis( axis->kdAxis() );
+    foreach ( KDChart::AbstractDiagram *diagram, d->registeredKdDiagrams )
+    {
+        KDChart::AbstractCartesianDiagram *cartesianDiagram = dynamic_cast<KDChart::AbstractCartesianDiagram*>(diagram);
+        if ( cartesianDiagram )
+            cartesianDiagram->takeAxis( axis->kdAxis() );
+    }
+    
     return true;
 }
+
+
+
+void PlotArea::setChartType( ChartType type )
+{
+    qDebug() << "Chart type change requested: " << type;
+    d->chartType = type;
+    
+    foreach( DataSet *dataSet, proxyModel()->dataSets() ) {
+        qDebug() << "Setting...";
+        dataSet->setChartType( type );
+    }
+
+    update();
+}
+
+void PlotArea::setChartSubType( ChartSubtype subType )
+{
+    d->chartSubtype = subType;
+    
+    foreach( DataSet *dataSet, proxyModel()->dataSets() )
+        dataSet->setChartSubType( subType );
+
+    update();
+}
+
+void PlotArea::setThreeD( bool threeD )
+{
+    d->threeD = threeD;
+    
+    foreach( Axis *axis, d->axes )
+        axis->setThreeD( threeD );
+
+    update();
+}
+
 
 bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingContext &context )
 {
@@ -225,24 +352,24 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
             = plotAreaElement.attributeNS( KoXmlNS::chart,
                                            "data-source-has-labels" );
         if ( dataSourceHasLabels == "both" ) {
-            d->model->setFirstRowIsLabel( true );
-            d->model->setFirstColumnIsLabel( true );
+            proxyModel()->setFirstRowIsLabel( true );
+            proxyModel()->setFirstColumnIsLabel( true );
         } else if ( dataSourceHasLabels == "row" ) {
-            d->model->setFirstRowIsLabel( true );
-            d->model->setFirstColumnIsLabel( false );
+            proxyModel()->setFirstRowIsLabel( true );
+            proxyModel()->setFirstColumnIsLabel( false );
         } else if ( dataSourceHasLabels == "column" ) {
-            d->model->setFirstRowIsLabel( false );
-            d->model->setFirstColumnIsLabel( true );
+            proxyModel()->setFirstRowIsLabel( false );
+            proxyModel()->setFirstColumnIsLabel( true );
         } else {
             // dataSourceHasLabels == "none" or wrong value
-            d->model->setFirstRowIsLabel( false );
-            d->model->setFirstColumnIsLabel( false );
+            proxyModel()->setFirstRowIsLabel( false );
+            proxyModel()->setFirstColumnIsLabel( false );
         }
     }
     else {
         // No info about if first row / column contains labels.
-        d->model->setFirstRowIsLabel( false );
-        d->model->setFirstColumnIsLabel( false );
+        proxyModel()->setFirstRowIsLabel( false );
+        proxyModel()->setFirstColumnIsLabel( false );
     }
 
     // 1. Load Axes
@@ -272,13 +399,13 @@ void PlotArea::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
     // About the data:
     //   Save if the first row / column contain headers.
     QString  dataSourceHasLabels;
-    if ( d->model->firstRowIsLabel() )
-        if ( d->model->firstColumnIsLabel() )
+    if ( proxyModel()->firstRowIsLabel() )
+        if ( proxyModel()->firstColumnIsLabel() )
             dataSourceHasLabels = "both";
         else
             dataSourceHasLabels = "row";
     else
-        if ( d->model->firstColumnIsLabel() )
+        if ( proxyModel()->firstColumnIsLabel() )
             dataSourceHasLabels = "column";
         else
             dataSourceHasLabels = "none";
@@ -288,7 +415,7 @@ void PlotArea::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
 
     // Data direction
     {
-        Qt::Orientation  direction = d->model->dataDirection();
+        Qt::Orientation  direction = proxyModel()->dataDirection();
         plotAreaStyle.addProperty( "chart:series-source",  
                                    ( direction == Qt::Horizontal )
                                    ? "rows" : "columns" );
@@ -314,14 +441,14 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter, KoGenStyle& plotAreaStyle
 {
     switch ( d->chartType ) {
     case BarChartType:
-        switch( d->chartSubType ) {
-        case NoChartSubType:
-        case NormalChartSubType:
+        switch( d->chartSubtype ) {
+        case NoChartSubtype:
+        case NormalChartSubtype:
             break;
-        case StackedChartSubType:
+        case StackedChartSubtype:
             plotAreaStyle.addProperty( "chart:stacked", "true" );
             break;
-        case PercentChartSubType:
+        case PercentChartSubtype:
             plotAreaStyle.addProperty( "chart:percentage", "true" );
             break;
         }
@@ -334,14 +461,14 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter, KoGenStyle& plotAreaStyle
         break;
 
     case LineChartType:
-        switch( d->chartSubType ) {
-        case NoChartSubType:
-        case NormalChartSubType:
+        switch( d->chartSubtype ) {
+        case NoChartSubtype:
+        case NormalChartSubtype:
             break;
-        case StackedChartSubType:
+        case StackedChartSubtype:
             plotAreaStyle.addProperty( "chart:stacked", "true" );
             break;
-        case PercentChartSubType:
+        case PercentChartSubtype:
             plotAreaStyle.addProperty( "chart:percentage", "true" );
             break;
         }
@@ -354,14 +481,14 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter, KoGenStyle& plotAreaStyle
         break;
 
     case AreaChartType:
-        switch( d->chartSubType ) {
-        case NoChartSubType:
-        case NormalChartSubType:
+        switch( d->chartSubtype ) {
+        case NoChartSubtype:
+        case NormalChartSubtype:
         break;
-    case StackedChartSubType:
+    case StackedChartSubtype:
             plotAreaStyle.addProperty( "chart:stacked", "true" );
             break;
-        case PercentChartSubType:
+        case PercentChartSubtype:
             plotAreaStyle.addProperty( "chart:percentage", "true" );
             break;
         }
@@ -395,21 +522,16 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter, KoGenStyle& plotAreaStyle
     }
 }
 
-KDChart::AbstractDiagram *PlotArea::kdDiagram() const
-{
-    return d->kdDiagram;
-}
-
 void PlotArea::setGapBetweenBars( int percent )
 {
     if ( d->chartType != BarChartType )
         return;
     
-    KDChart::BarAttributes attributes = ((KDChart::BarDiagram*) d->kdDiagram)->barAttributes();
-    attributes.setBarGapFactor( (float)percent / 100.0 );
-    ((KDChart::BarDiagram*) d->kdDiagram)->setBarAttributes( attributes );
-        
-    d->shape->update();
+    //KDChart::BarAttributes attributes = ((KDChart::BarDiagram*) d->kdDiagram)->barAttributes();
+    //attributes.setBarGapFactor( (float)percent / 100.0 );
+    //((KDChart::BarDiagram*) d->kdDiagram)->setBarAttributes( attributes );
+
+    update();
 }
 
 void PlotArea::setGapBetweenSets( int percent )
@@ -417,9 +539,36 @@ void PlotArea::setGapBetweenSets( int percent )
     if ( d->chartType != BarChartType )
         return;
     
-    KDChart::BarAttributes attributes = ((KDChart::BarDiagram*) d->kdDiagram)->barAttributes();
-    attributes.setGroupGapFactor( (float)percent / 100.0 );
-    ((KDChart::BarDiagram*) d->kdDiagram)->setBarAttributes( attributes );
-        
-    d->shape->update();
+    //KDChart::BarAttributes attributes = ((KDChart::BarDiagram*) d->kdDiagram)->barAttributes();
+    //attributes.setGroupGapFactor( (float)percent / 100.0 );
+    //((KDChart::BarDiagram*) d->kdDiagram)->setBarAttributes( attributes );
+
+    update();
+}
+
+ChartShape *PlotArea::parent() const
+{
+    return d->shape;
+}
+
+KDChart::AbstractCoordinatePlane *PlotArea::kdPlane() const
+{
+    return d->kdPlane;
+}
+
+KDChart::Chart *PlotArea::kdChart() const
+{
+    return d->kdChart;
+}
+
+void PlotArea::update() const
+{
+    foreach( Axis* axis, d->axes )
+        axis->update();
+    d->shape->relayout();
+}
+
+void PlotArea::paint( QPainter &painter )
+{
+    d->kdChart->paint( &painter, QRect( QPoint( 0, 0 ), d->shape->size().toSize() ) );
 }

@@ -58,12 +58,13 @@ void ChartTypeCommand::redo()
  
    // save the old type
     m_oldType    = m_chart->chartType();
-    m_oldSubtype = m_chart->chartSubtype();
+    m_oldSubtype = m_chart->chartSubType();
     if ( m_oldType == m_newType && m_oldSubtype == m_newSubtype )
         return;
 
     // Actually do the work
-    m_chart->setChartType( m_newType, m_newSubtype );
+    m_chart->setChartType( m_newType );
+    m_chart->setChartSubType( m_newSubtype );
 }
 
 void ChartTypeCommand::undo()
@@ -72,11 +73,12 @@ void ChartTypeCommand::undo()
         return;
 
     kDebug() << m_oldType;
-    m_chart->setChartType( m_oldType, m_oldSubtype );
+    m_chart->setChartType( m_oldType );
+    m_chart->setChartSubType( m_oldSubtype );
 }
 
 
-void ChartTypeCommand::setChartType(OdfChartType type, OdfChartSubtype subtype)
+void ChartTypeCommand::setChartType(ChartType type, ChartSubtype subtype)
 {
     m_newType    = type;
     m_newSubtype = subtype;

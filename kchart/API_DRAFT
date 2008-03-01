@@ -70,14 +70,15 @@ CLASS TextLabel:
 
 CLASS Legend:
  o GETTER METHODS
-  QPointF    position()
-  bool       isVisible()
-  TextLabel* title()
-  bool       frameIsVisible()
-  QPen       framePen()
-  QColor     frameColor()
-  QBrush     backgroundBrush()
-  QColor     backgroundColor()
+  QPointF         position()
+  bool            isVisible()
+  TextLabel*      title()
+  bool            frameIsVisible()
+  QPen            framePen()
+  QColor          frameColor()
+  QBrush          backgroundBrush()
+  QColor          backgroundColor()
+  LegendExpansion expansion()
 
  o SETTER METHODS
   setPosition( QPointF )
@@ -88,6 +89,7 @@ CLASS Legend:
   setFramColor( QColor )
   setBackgroundBrush( QBrush )
   setBackgroundColor( QColor )
+  setExpansion( LegendExpansion )
 
 CLASS PlotArea:
  o GETTER METHODS

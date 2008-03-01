@@ -63,6 +63,7 @@ public:
 	
 	// Setter methods
 	void setChartType( ChartType type );
+    void setChartSubType( ChartSubtype type );
 	void setAttachedAxis( Axis *axis );
 	
 	void setShowValues( bool showValues );
@@ -83,6 +84,15 @@ public:
 	void setErrorMargin( double margin );
 	void setLowerErrorLimit( double limit );
 	void setUpperErrorLimit( double limit );
+	
+	QVariant xData( int index );
+	QVariant yData( int index );
+	QVariant customData( int index );
+    QVariant labelData();
+	int size() const;
+	
+	void setKdDiagram( KDChart::AbstractDiagram *diagram );
+	void setKdDataSetNumber( int number );
 	
 private:
     class Private;

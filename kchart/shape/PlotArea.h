@@ -37,6 +37,10 @@ class PlotArea : public QObject
 public:
     PlotArea( ChartShape *parent );
     ~PlotArea();
+    
+    ProxyModel *proxyModel() const;
+    
+    void init();
 
     QPointF position() const;
     QSizeF  size() const;
@@ -46,6 +50,13 @@ public:
     Surface *wall() const;
     Surface *floor() const;
     ThreeDScene *threeDScene() const;
+    Axis *xAxis() const;
+    Axis *yAxis() const;
+    Axis *secondaryXAxis() const;
+    Axis *secondaryYAxis() const;
+    bool isThreeD() const;
+    ChartType chartType() const;
+    ChartSubtype chartSubType() const;
     
     int gapBetweenBars() const;
     int gapBetweenSets() const;
@@ -62,10 +73,19 @@ public:
     void saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
     void saveOdfSubType( KoXmlWriter &bodyWriter, KoGenStyle &plotAreaStyle ) const;
     
-    KDChart::AbstractDiagram *kdDiagram() const;
+    void setChartType( ChartType type );
+    void setChartSubType( ChartSubtype subType );
     
-public slots:
-    void updateDataSets();
+    void setThreeD( bool threeD );
+    
+    ChartShape *parent() const;
+    
+    void paint( QPainter &painter );
+    
+    KDChart::AbstractCoordinatePlane *kdPlane() const;
+    KDChart::Chart *kdChart() const;
+    
+    void update() const;
 
 private:
     class Private;

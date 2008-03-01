@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KCHART_CHART_PROXY_MODEL
-#define KCHART_CHART_PROXY_MODEL
+#ifndef KCHART_PROXYMODEL_H
+#define KCHART_PROXYMODEL_H
 
 // Local
 #include "ChartShape.h"
@@ -29,12 +29,14 @@
 
 namespace KChart {
 
+class PlotArea;
+
 class ProxyModel : public QAbstractProxyModel
 {
     Q_OBJECT
 
 public:
-    ProxyModel( QObject *parent = 0 );
+    ProxyModel( PlotArea *parent );
     ~ProxyModel();
 
 public slots:
@@ -43,11 +45,7 @@ public slots:
     virtual QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
-    virtual bool setData( const QModelIndex &index, const QVariant& data, int role = Qt::EditRole );
-
     virtual void dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
-    // Overloaded method for convenience. It marks the entire dataset as changed.
-    void dataChanged();
 
     virtual QMap<int, QVariant> itemData( const QModelIndex &index ) const;
 
@@ -71,9 +69,14 @@ public slots:
     bool firstColumnIsLabel() const;
     Qt::Orientation dataDirection();
     
+    QVariant xData( DataSet *dataSet, int column ) const;
+    QVariant yData( DataSet *dataSet, int column ) const;
+    QVariant customData( DataSet *dataSet, int column ) const;
+    QVariant labelData( DataSet *dataSet ) const;
+    
     QList<DataSet*> dataSets() const;
-    DataSet *dataSet( int dataSet ) const;
-    int      dataSet( DataSet *dataSet ) const;
+    
+    void rebuildDataMap();
 
 private:
     class Private;
@@ -82,4 +85,4 @@ private:
 
 } // namespace KChart
 
-#endif
+#endif // KCHART_PROXYMODEL_H

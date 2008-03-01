@@ -21,6 +21,7 @@
 // Local
 #include "Legend.h"
 #include "PlotArea.h"
+#include "KDChartConvertions.h"
 
 // Qt
 #include <QString>
@@ -73,6 +74,7 @@ Legend::Private::Private()
     backgroundBrush = QBrush();
     expansion = HighLegendExpansion;
     alignment = Qt::AlignRight;
+    kdLegend = new KDChart::Legend();
 }
 
 Legend::Private::~Private()
@@ -88,8 +90,6 @@ Legend::Legend( ChartShape *parent )
     d->shape = parent;
     
     parent->addChild( this );
-    d->kdLegend = new KDChart::Legend();
-    d->kdLegend->addDiagram( parent->plotArea()->kdDiagram() );
 }
 
 Legend::~Legend()
@@ -249,14 +249,32 @@ void Legend::setLegendPosition( LegendPosition position )
     d->position = position;
 }
 
+void Legend::setSize( const QSizeF &size )
+{
+    d->kdLegend->resizeLayout( size.toSize() );
+    KoShape::setSize( size );
+}
+
 
 void Legend::paint( QPainter &painter, const KoViewConverter &converter )
 {
+    // Adjust the size of the painting area to the current zoom level
+    const QSize paintRectSize = converter.documentToView( size() ).toSize();
+    const QRect paintRect = QRect( QPoint( 0, 0 ), paintRectSize );
+    
+    painter.setClipRect( paintRect );
+
+    // Paint the background
+    painter.fillRect( paintRect, Qt::white );
+
+    // scale the painter's coordinate system to fit the current zoom level
+    applyConversion( painter, converter );
+
     d->kdLegend->paint( &painter );
 }
 
 
-bool Legend::loadOdf( KoXmlElement &legendElement, KoShapeLoadingContext &context )
+bool Legend::loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &context )
 {
     // TODO: Read optional attributes
     // 1. Legend expansion
@@ -407,4 +425,19 @@ void Legend::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
     if ( !title().isEmpty() )
         bodyWriter.addAttribute( "koffice:title", title() );
     bodyWriter.endElement(); // chart:legend
+}
+
+void Legend::saveOdf( KoShapeSavingContext &context ) const
+{
+    Q_UNUSED( context );
+}
+
+KDChart::Legend *Legend::kdLegend() const
+{
+    return d->kdLegend;
+}
+
+KoShape *Legend::cloneShape() const
+{
+    return 0;
 }

@@ -17,8 +17,16 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
+// Local
 #include "ChartTool.h"
+#include "ProxyModel.h"
+#include "Surface.h"
+#include "PlotArea.h"
+#include "Axis.h"
+#include "TextLabel.h"
+#include "DataSet.h"
+#include "Legend.h"
+#include "KDChartConvertions.h"
 
 // Qt
 #include <QAction>
@@ -105,19 +113,21 @@ void ChartTool::paint( QPainter &painter, const KoViewConverter &converter)
 
 void ChartTool::mousePressEvent( KoPointerEvent *event )
 {
+    return;
+    /*
     // Select dataset
-    if (    !d->shape || !d->shape->chart() || ! d->shape->chart()->coordinatePlane()
-         || !d->shape->chart()->coordinatePlane()->diagram() )
+    if (    !d->shape || !d->shape->kdChart() || ! d->shape->kdChart()->coordinatePlane()
+         || !d->shape->kdChart()->coordinatePlane()->diagram() )
         return;
     QPointF point = event->point - d->shape->position();
-    QModelIndex selection = d->shape->chart()->coordinatePlane()->diagram()->indexAt( point.toPoint() );
+    QModelIndex selection = d->shape->kdChart()->coordinatePlane()->diagram()->indexAt( point.toPoint() );
     // Note: the dataset will always stay column() due to the transformations being
     // done internally by the ChartProxyModel
     int dataset = selection.column();
     
     if ( d->datasetSelection.isValid() ) {
-        d->shape->chart()->coordinatePlane()->diagram()->setPen( d->datasetSelection.column(), d->datasetSelectionPen );
-        //d->shape->chart()->coordinatePlane()->diagram()->setBrush( d->datasetSelection, d->datasetSelectionBrush );
+        d->shape->kdChart()->coordinatePlane()->diagram()->setPen( d->datasetSelection.column(), d->datasetSelectionPen );
+        //d->shape->kdChart()->coordinatePlane()->diagram()->setBrush( d->datasetSelection, d->datasetSelectionBrush );
     }
     if ( selection.isValid() ) {
         d->datasetSelection = selection;
@@ -126,15 +136,16 @@ void ChartTool::mousePressEvent( KoPointerEvent *event )
         pen.setColor( Qt::darkGray );
         pen.setWidth( 1 );
         
-        d->datasetSelectionBrush = d->shape->chart()->coordinatePlane()->diagram()->brush( selection );
-        d->datasetSelectionPen   = d->shape->chart()->coordinatePlane()->diagram()->pen( dataset );
+        d->datasetSelectionBrush = d->shape->kdChart()->coordinatePlane()->diagram()->brush( selection );
+        d->datasetSelectionPen   = d->shape->kdChart()->coordinatePlane()->diagram()->pen( dataset );
         
-        d->shape->chart()->coordinatePlane()->diagram()->setPen( dataset, pen );
-        //d->shape->chart()->coordinatePlane()->diagram()->setBrush( selection, QBrush( Qt::lightGray ) );
+        d->shape->kdChart()->coordinatePlane()->diagram()->setPen( dataset, pen );
+        //d->shape->kdChart()->coordinatePlane()->diagram()->setBrush( selection, QBrush( Qt::lightGray ) );
     }
     ((ChartConfigWidget*)optionWidget())->selectDataset( dataset );
         
     d->shape->update();
+    */
 }
 
 void ChartTool::mouseMoveEvent( KoPointerEvent *event )
@@ -197,6 +208,10 @@ QWidget *ChartTool::createOptionWidget()
     connect( widget, SIGNAL( firstColumnIsLabelChanged( bool ) ),
              this,    SLOT( setFirstColumnIsLabel( bool ) ) );
     
+    connect( widget, SIGNAL( dataSetChartTypeChanged( DataSet*, ChartType ) ),
+             this,   SLOT( setDataSetChartType( DataSet*, ChartType ) ) );
+    connect( widget, SIGNAL( dataSetChartSubTypeChanged( DataSet*, ChartSubtype ) ),
+             this,   SLOT( setDataSetChartSubType( DataSet*, ChartSubtype ) ) );
     connect( widget, SIGNAL( datasetColorChanged( int, const QColor& ) ),
              this, SLOT( setDatasetColor( int, const QColor& ) ) );
     connect( widget, SIGNAL( datasetShowValuesChanged( int, bool ) ),
@@ -209,48 +224,42 @@ QWidget *ChartTool::createOptionWidget()
     connect( widget, SIGNAL( showLegendChanged( bool ) ),
              this,   SLOT( setShowLegend( bool ) ));
 
-    connect( widget, SIGNAL( chartTypeChanged( OdfChartType, OdfChartSubtype ) ),
-             this,    SLOT( setChartType( OdfChartType, OdfChartSubtype ) ) );
-    connect( widget, SIGNAL( chartSubtypeChanged( OdfChartSubtype ) ),
-             this,    SLOT( setChartSubtype( OdfChartSubtype ) ) );
+    connect( widget, SIGNAL( chartTypeChanged( ChartType ) ),
+             this,    SLOT( setChartType( ChartType ) ) );
+    connect( widget, SIGNAL( chartSubtypeChanged( ChartSubtype ) ),
+             this,    SLOT( setChartSubtype( ChartSubtype ) ) );
     connect( widget, SIGNAL( threeDModeToggled( bool ) ),
              this,    SLOT( setThreeDMode( bool ) ) );
 
     connect( widget, SIGNAL( axisAdded( AxisPosition, const QString& ) ),
              this,   SLOT( addAxis( AxisPosition, const QString& ) ) );
-    connect( widget, SIGNAL( axisRemoved( KDChart::CartesianAxis* ) ),
-             this,   SLOT( removeAxis( KDChart::CartesianAxis* ) ) );
-    connect( widget, SIGNAL( axisTitleChanged( KDChart::CartesianAxis*, const QString& ) ),
-    		 this,   SLOT( setAxisTitle( KDChart::CartesianAxis*, const QString& ) ) );
-    connect( widget, SIGNAL( axisShowGridLinesChanged( KDChart::CartesianAxis*, bool ) ),
-    		 this,   SLOT( setAxisShowGridLines( KDChart::CartesianAxis*, bool ) ) );
-    connect( widget, SIGNAL( axisUseLogarithmicScalingChanged( KDChart::CartesianAxis*, bool ) ),
-    		 this,   SLOT( setAxisUseLogarithmicScaling( KDChart::CartesianAxis*, bool ) ) );
-    connect( widget, SIGNAL( axisStepWidthChanged( KDChart::CartesianAxis*, double ) ),
-    		 this,   SLOT( setAxisStepWidth( KDChart::CartesianAxis*, double ) ) );
-    connect( widget, SIGNAL( axisSubStepWidthChanged( KDChart::CartesianAxis*, double ) ),
-    		 this,   SLOT( setAxisSubStepWidth( KDChart::CartesianAxis*, double ) ) );
+    connect( widget, SIGNAL( axisRemoved( Axis* ) ),
+             this,   SLOT( removeAxis( Axis* ) ) );
+    connect( widget, SIGNAL( axisTitleChanged( Axis*, const QString& ) ),
+    		 this,   SLOT( setAxisTitle( Axis*, const QString& ) ) );
+    connect( widget, SIGNAL( axisShowGridLinesChanged( Axis*, bool ) ),
+    		 this,   SLOT( setAxisShowGridLines( Axis*, bool ) ) );
+    connect( widget, SIGNAL( axisUseLogarithmicScalingChanged( Axis*, bool ) ),
+    		 this,   SLOT( setAxisUseLogarithmicScaling( Axis*, bool ) ) );
+    connect( widget, SIGNAL( axisStepWidthChanged( Axis*, double ) ),
+    		 this,   SLOT( setAxisStepWidth( Axis*, double ) ) );
+    connect( widget, SIGNAL( axisSubStepWidthChanged( Axis*, double ) ),
+    		 this,   SLOT( setAxisSubStepWidth( Axis*, double ) ) );
 
     connect( widget, SIGNAL( legendTitleChanged( const QString& ) ),
              this,   SLOT( setLegendTitle( const QString& ) ) );
-    connect( widget, SIGNAL( legendTitleFontChanged( const QFont& ) ),
-             this,   SLOT( setLegendTitleFont( const QFont& ) ) );
     connect( widget, SIGNAL( legendFontChanged( const QFont& ) ),
              this,   SLOT( setLegendFont( const QFont& ) ) );
-    connect( widget, SIGNAL( legendSpacingChanged( int ) ),
-             this,   SLOT( setLegendSpacing( int ) ) );
     connect( widget, SIGNAL( legendFontSizeChanged( int ) ),
              this,   SLOT( setLegendFontSize( int ) ) );
-    connect( widget, SIGNAL( legendShowLinesToggled( bool ) ),
-             this,   SLOT( setLegendShowLines( bool ) ) );
 
     connect( widget, SIGNAL( legendOrientationChanged( Qt::Orientation ) ),
              this,   SLOT( setLegendOrientation( Qt::Orientation ) ) );
     connect( widget, SIGNAL( legendAlignmentChanged( Qt::Alignment ) ),
              this,   SLOT( setLegendAlignment( Qt::Alignment ) ) );
 
-    connect( widget, SIGNAL( legendFixedPositionChanged( KDChart::Position ) ),
-             this,   SLOT( setLegendFixedPosition( KDChart::Position ) ) );
+    connect( widget, SIGNAL( legendFixedPositionChanged( LegendPosition ) ),
+             this,   SLOT( setLegendFixedPosition( LegendPosition ) ) );
     
     connect( widget, SIGNAL( legendBackgroundColorChanged( const QColor& ) ) ,
              this,   SLOT( setLegendBackgroundColor( const QColor& ) ) );
@@ -263,201 +272,207 @@ QWidget *ChartTool::createOptionWidget()
 }
 
 
-void ChartTool::setChartType( OdfChartType type, OdfChartSubtype subtype )
+void ChartTool::setChartType( ChartType type, ChartSubtype subtype )
 {
     Q_ASSERT( d->shape );
-    if ( d->shape != 0 )
-        d->shape->setChartType( type, subtype );
+    if ( d->shape != 0 ) {
+        d->shape->setChartType( type );
+        d->shape->setChartSubType( subtype );
+    }
     if ( optionWidget() )
         optionWidget()->update();
 }
 
 
-void ChartTool::setChartSubtype( OdfChartSubtype subtype )
+void ChartTool::setChartSubtype( ChartSubtype subtype )
 {
     Q_ASSERT( d->shape );
     if ( d->shape != 0 )
-        d->shape->setChartSubtype( subtype );
+        d->shape->setChartSubType( subtype );
+}
+
+void ChartTool::setDataSetChartType( DataSet *dataSet, ChartType type )
+{
+    Q_ASSERT( dataSet );
+    if ( dataSet )
+        dataSet->setChartType( type );
+}
+
+void ChartTool::setDataSetChartSubType( DataSet *dataSet, ChartSubtype subType )
+{
+    Q_ASSERT( dataSet );
+    if ( dataSet )
+        dataSet->setChartSubType( subType );
 }
 
 void ChartTool::setThreeDMode( bool threeD )
 {
     Q_ASSERT( d->shape );
     if ( d->shape != 0 )
-        d->shape->setThreeDMode( threeD );
+        d->shape->setThreeD( threeD );
 }
 
 void ChartTool::setDataDirection( Qt::Orientation direction )
 {
     Q_ASSERT( d->shape );
     if ( d->shape != 0 )
-        d->shape->setDataDirection( direction );
+        d->shape->proxyModel()->setDataDirection( direction );
 }
 
 void ChartTool::setFirstRowIsLabel( bool b )
 {
     Q_ASSERT( d->shape );
     if ( d->shape != 0 )
-        d->shape->setFirstRowIsLabel( b );
+        d->shape->proxyModel()->setFirstRowIsLabel( b );
 }
 
 void ChartTool::setFirstColumnIsLabel( bool b )
 {
     Q_ASSERT( d->shape );
     if ( d->shape != 0 )
-        d->shape->setFirstColumnIsLabel( b );
+        d->shape->proxyModel()->setFirstColumnIsLabel( b );
 }
 
 
 void ChartTool::setLegendTitle( const QString &title )
 {
     Q_ASSERT( d->shape );
-    d->shape->setLegendTitle( title );
-}
-
-// Deprecated method
-void ChartTool::setLegendTitleFont( const QFont &font )
-{
-    Q_ASSERT( d->shape );
-    d->shape->setLegendTitleFont( font );
+    d->shape->legend()->setTitle( title );
 }
 
 void ChartTool::setLegendFont( const QFont &font )
 {
     Q_ASSERT( d->shape );
     // There only is a general font, for the legend items and the legend title
-    d->shape->setLegendFont( font );
-    d->shape->setLegendTitleFont( font );
+    d->shape->legend()->setFont( font );
 }
-
-void ChartTool::setLegendSpacing( int spacing )
-{
-    Q_ASSERT( d->shape );
-    d->shape->setLegendSpacing( spacing );
-}
-
 void ChartTool::setLegendFontSize( int size )
 {
     Q_ASSERT( d->shape );
-    d->shape->setLegendFontSize( size );
-}
-
-void ChartTool::setLegendShowLines( bool b )
-{
-    Q_ASSERT( d->shape );
-    d->shape->setLegendShowLines( b );
+    d->shape->legend()->setFontSize( size );
 }
 
 void ChartTool::setLegendOrientation( Qt::Orientation orientation )
 {
     Q_ASSERT( d->shape );
-    d->shape->setLegendOrientation( orientation );
+    d->shape->legend()->setExpansion( QtOrientationToLegendExpansion( orientation ) );
 }
 
 void ChartTool::setLegendAlignment( Qt::Alignment alignment )
 {
     Q_ASSERT( d->shape );
-    d->shape->setLegendAlignment( alignment );
+    d->shape->legend()->setAlignment( alignment );
 }
 
-void ChartTool::setLegendFixedPosition( KDChart::Position position )
+void ChartTool::setLegendFixedPosition( LegendPosition position )
 {
     Q_ASSERT( d->shape );
-    d->shape->setLegendFixedPosition( position );
+    d->shape->legend()->setLegendPosition( position );
     ( ( ChartConfigWidget* ) optionWidget() )->updateFixedPosition( position );
 }
 
 void ChartTool::setLegendBackgroundColor( const QColor& color )
 {
     Q_ASSERT( d->shape );
-    d->shape->setLegendBackgroundColor( color );
+    d->shape->legend()->setBackgroundColor( color );
 }
 
 void ChartTool::setLegendFrameColor( const QColor& color )
 {
     Q_ASSERT( d->shape );
-    d->shape->setLegendFrameColor( color );
+    d->shape->legend()->setFrameColor( color );
 }
 
 void ChartTool::setLegendShowFrame( bool show )
 {
     Q_ASSERT( d->shape );
-    d->shape->setLegendShowFrame( show );
+    d->shape->legend()->setShowFrame( show );
 }
 
 
 void ChartTool::setDatasetColor( int dataset, const QColor& color )
 {
-    if (    !d->shape || !d->shape->diagram() )
+    Q_ASSERT( d->shape );
+    
+    /*
+    DataSet *set = d->shape->model()->dataSet( dataset );
+    if ( !set )
         return;
-    d->shape->diagram()->setBrush( dataset, QBrush( color ) );
+    set->setColor( color );
     d->shape->update();
+    */
 }
 
 void ChartTool::setDatasetShowValues( int dataset, bool b )
 {
+    /*
     Q_ASSERT( d->shape );
-    d->shape->setDatasetShowValues( dataset, b );
+    
+    DataSet *set = d->shape->model()->dataSet( dataset );
+    if ( !set )
+        return;
+    set->setShowValues( b );
+    d->shape->update();
+    */
 }
 
 void ChartTool::addAxis( AxisPosition position, const QString& title ) {
     Q_ASSERT( d->shape );
-    d->shape->addAxis( position, title );
+    Axis *axis = new Axis( d->shape->plotArea() );
+    axis->setPosition( position );
+    axis->setTitleText( title );
+    d->shape->plotArea()->addAxis( axis );
 }
 
-void ChartTool::removeAxis( KDChart::CartesianAxis *axis )
+void ChartTool::removeAxis( Axis *axis )
 {
     Q_ASSERT( d->shape );
-    d->shape->removeAxis( axis );
+    d->shape->plotArea()->removeAxis( axis );
 }
 
-void ChartTool::setAxisTitle( KDChart::CartesianAxis *axis, const QString& title )
+void ChartTool::setAxisTitle( Axis *axis, const QString& title )
 {
-	Q_ASSERT( d->shape );
-	d->shape->setAxisTitle( axis, title );
+	axis->setTitleText( title );
 }
 
-void ChartTool::setAxisShowGridLines( KDChart::CartesianAxis *axis, bool b )
+void ChartTool::setAxisShowGridLines( Axis *axis, bool b )
 {
-	Q_ASSERT( d->shape );
-	d->shape->setAxisShowGridLines( axis, b );
+	axis->setShowGrid( b );
 }
 
-void ChartTool::setAxisUseLogarithmicScaling( KDChart::CartesianAxis *axis, bool b )
+void ChartTool::setAxisUseLogarithmicScaling( Axis *axis, bool b )
 {
-    Q_ASSERT( d->shape );
-    d->shape->setAxisUseLogarithmicScaling( axis, b );
+    axis->setScalingLogarithmic( b );
 }
 
-void ChartTool::setAxisStepWidth( KDChart::CartesianAxis *axis, double width )
+void ChartTool::setAxisStepWidth( Axis *axis, double width )
 {
-    Q_ASSERT( d->shape );
-    d->shape->setAxisStepWidth( axis, width );
+    axis->setMajorInterval( width );
 }
 
-void ChartTool::setAxisSubStepWidth( KDChart::CartesianAxis *axis, double width )
+void ChartTool::setAxisSubStepWidth( Axis *axis, double width )
 {
-    Q_ASSERT( d->shape );
-    d->shape->setAxisSubStepWidth( axis, width );
+    axis->setMinorInterval( width );
 }
 
 
 void ChartTool::setGapBetweenBars( int percent )
 {
     Q_ASSERT( d->shape );
-    d->shape->setGapBetweenBars( percent );
+    d->shape->plotArea()->setGapBetweenBars( percent );
 }
 
 void ChartTool::setGapBetweenSets( int percent )
 {
     Q_ASSERT( d->shape );
-    d->shape->setGapBetweenSets( percent );
+    d->shape->plotArea()->setGapBetweenSets( percent );
 }
 
 void ChartTool::setShowLegend( bool b )
 {
     Q_ASSERT( d->shape );
-    d->shape->setShowLegend( b );
+    d->shape->legend()->setVisible( b );
+    d->shape->legend()->update();
 }
 
 #include "ChartTool.moc"

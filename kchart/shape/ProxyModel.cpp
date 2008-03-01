@@ -20,6 +20,7 @@
 
 // Local
 #include "ProxyModel.h"
+#include "PlotArea.h"
 #include "DataSet.h"
 
 // KDE
@@ -34,26 +35,77 @@ public:
     bool             firstRowIsLabel;
     bool             firstColumnIsLabel;
     Qt::Orientation  dataDirection;
-    
+    int dataDimensions;
+    QMap<int, int> dataMap;
     QList<DataSet*> dataSets;
+    PlotArea *plotArea;
 };
 
 ProxyModel::Private::Private()
 {
     firstRowIsLabel    = false;
     firstColumnIsLabel = false;
+    dataDimensions = 1;
 
     dataDirection = Qt::Vertical;
 }
 
-ProxyModel::ProxyModel( QObject *parent /* = 0 */ )
-    : QAbstractProxyModel( parent ),
+ProxyModel::ProxyModel( PlotArea *parent )
+    : QAbstractProxyModel( 0 ),
       d( new Private )
 {
+    d->plotArea = parent;
+    connect( this, SIGNAL( modelReset() ), this, SLOT( rebuildDataMap() ) );
 }
 
 ProxyModel::~ProxyModel()
 {
+}
+
+void ProxyModel::rebuildDataMap()
+{
+    int numRows = rowCount();
+    int dataSetCount = 0;
+    int rowInSourceModel = 0;
+    d->dataMap.clear();
+    
+    // If we have 2 dimensions or more, the x data comes from
+    // the first row by default.;
+    if ( d->dataDimensions > 1 )
+        rowInSourceModel = 1;
+    
+    for ( int i = 0; i < numRows; i += d->dataDimensions )
+    {
+        dataSetCount++;
+        // Only insert a new data set if we don't already have it
+        if ( dataSetCount > d->dataSets.count() )
+            d->dataSets.append( new DataSet( d->plotArea ) );
+        
+        if ( d->dataDimensions == 1 )
+        {
+            d->dataMap.insert( i, rowInSourceModel );
+        }
+        else if ( d->dataDimensions == 2 )
+        {
+            d->dataMap.insert( i    , 0 );
+            d->dataMap.insert( i + 1, rowInSourceModel );
+        }
+        else if ( d->dataDimensions == 3 )
+        {
+            // TODO (Johannes): Handle third data dimension
+        }
+        rowInSourceModel++;
+    }
+    
+    // Some rows have apparently been removed from the model.
+    // Remove remaining data sets from the list.
+    while ( dataSetCount > d->dataSets.count() )
+    {
+        DataSet *dataSet = d->dataSets.takeLast();
+        // TODO (Johannes): Keep the data sets to re-add them later
+        // when the row count is increased again
+        delete dataSet;
+    }
 }
 
 void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
@@ -76,30 +128,15 @@ QVariant ProxyModel::data( const QModelIndex &index,
     return sourceModel()->data( mapToSource( index ), role );
 }
 
-bool ProxyModel::setData( const QModelIndex &index,
-                                   const QVariant &data,
-                                   int role /* = Qt::EditRole */ )
-{
-    if ( sourceModel() == 0 )
-        return false;
-    
-    return sourceModel()->setData( mapToSource( index ), data, role );
-}
-
 void ProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight )
 {
+    // TODO (Johannes): Emit dataChanged() for all datasets that have references to these rows
     emit QAbstractProxyModel::dataChanged( topLeft, bottomRight );
 }
 
-void ProxyModel::dataChanged()
-{
-    // Update the entire data set
-    dataChanged( index( 0, 0 ), index( rowCount() - 1, columnCount() - 1 ) );
-}
-
 QVariant ProxyModel::headerData( int section,
-                                      Qt::Orientation orientation,
-                                      int role /* = Qt::DisplayRole */ ) const
+                                 Qt::Orientation orientation,
+                                 int role /* = Qt::DisplayRole */ ) const
 {
     if ( sourceModel() == 0 )
         return QVariant();
@@ -163,6 +200,15 @@ QModelIndex ProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
             row--;
         if ( d->firstColumnIsLabel )
             column--;
+        
+        // Find the first occurance of row in the map
+        for ( int i = 0; i < d->dataMap.size(); i++ )
+        {
+            if ( d->dataMap[i] == row ) {
+                row = i;
+                break;
+            }
+        }
     }
     else {
         row = sourceIndex.column();
@@ -172,7 +218,17 @@ QModelIndex ProxyModel::mapFromSource( const QModelIndex &sourceIndex ) const
             row--;
         if ( d->firstColumnIsLabel )
             column--;
+        
+        // Find the first occurance of column in the map
+        for ( int i = 0; i < d->dataMap.size(); i++ )
+        {
+            if ( d->dataMap[i] == column ) {
+                column = i;
+                break;
+            }
+        }
     }
+    
     return sourceModel()->index( row, column );
 }
 
@@ -180,23 +236,19 @@ QModelIndex ProxyModel::mapToSource( const QModelIndex &proxyIndex ) const
 {
     int row, column;
     if ( d->dataDirection == Qt::Vertical ) {
-        row = proxyIndex.row();
+        row = d->dataMap[ proxyIndex.row() ];
         column = proxyIndex.column();
-
-        if ( d->firstRowIsLabel )
-            row++;
-        if ( d->firstColumnIsLabel )
-            column++;
     }
     else {
         row = proxyIndex.column();
-        column = proxyIndex.row();
-
-        if ( d->firstRowIsLabel )
-            row++;
-        if ( d->firstColumnIsLabel )
-            column++;
+        column = d->dataMap[ proxyIndex.row() ];
     }
+
+    if ( d->firstRowIsLabel )
+        row++;
+    if ( d->firstColumnIsLabel )
+        column++;
+    
     return sourceModel()->index( row, column );
 }
 
@@ -245,6 +297,8 @@ int ProxyModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) cons
 
     if ( rowCount > 0 && firstRowIsLabel )
         rowCount--;
+    
+    rowCount *= d->dataDimensions;
 
     return rowCount;
 }
@@ -301,7 +355,7 @@ void ProxyModel::setFirstRowIsLabel( bool b )
             endInsertRows();
     }
     
-    dataChanged();
+    reset();
 }
  
 void ProxyModel::setFirstColumnIsLabel( bool b )
@@ -333,7 +387,7 @@ void ProxyModel::setFirstColumnIsLabel( bool b )
             endInsertRows();
     }
     
-    dataChanged();
+    reset();
 }
 
 Qt::Orientation ProxyModel::dataDirection()
@@ -346,8 +400,6 @@ void ProxyModel::setDataDirection( Qt::Orientation orientation )
     
     d->dataDirection = orientation;
     reset();
-    
-    dataChanged();
 }
 
 bool ProxyModel::firstRowIsLabel() const
@@ -360,21 +412,34 @@ bool ProxyModel::firstColumnIsLabel() const
     return d->firstColumnIsLabel;
 }
 
+QVariant ProxyModel::xData( DataSet *dataSet, int column ) const
+{
+    int dataSetNumber = d->dataSets.indexOf( dataSet );
+    return data( index( d->dataMap[dataSetNumber] + 1, column ) );
+}
+
+QVariant ProxyModel::yData( DataSet *dataSet, int column ) const
+{
+    int dataSetNumber = d->dataSets.indexOf( dataSet );
+    qDebug() << "y data of data set " << dataSet << " = data( " << d->dataMap[dataSetNumber] + 1 << ", " << column << " )";
+    return data( index( d->dataMap[dataSetNumber], column ) );
+}
+
+QVariant ProxyModel::customData( DataSet *dataSet, int column ) const
+{
+    int dataSetNumber = d->dataSets.indexOf( dataSet );
+    return data( index( d->dataMap[dataSetNumber] + 2, column ) );
+}
+
+QVariant ProxyModel::labelData( DataSet *dataSet ) const
+{
+    int dataSetNumber = d->dataSets.indexOf( dataSet );
+    return headerData( dataSetNumber, d->dataDirection );
+}
+
 QList<DataSet*> ProxyModel::dataSets() const
 {
     return d->dataSets;
-}
-
-DataSet *ProxyModel::dataSet( int dataSet ) const
-{
-    if ( dataSet >= d->dataSets.size() )
-        return 0;
-    return d->dataSets[dataSet];
-}
-
-int ProxyModel::dataSet( DataSet *dataSet ) const
-{
-    return d->dataSets.indexOf( dataSet );
 }
 
 } // namespace KChart

@@ -2,12 +2,12 @@
 #ifndef KCHART_CHART_CONFIG_WIDGET
 #define KCHART_CHART_CONFIG_WIDGET
 
-#include "KoShapeConfigWidgetBase.h"
-
-#include "kchart_export.h"
-#include "kchart_global.h"
-
+// Local
+#include "ChartShape.h"
 #include "ui_ChartConfigWidget.h"
+
+// KOffice
+#include <KoShapeConfigWidgetBase.h>
 
 class KoShape;
 
@@ -40,7 +40,7 @@ public:
     virtual bool showOnShapeCreate() { return true; }
 
 public slots:
-    void chartSubtypeSelected( int type );
+    void chartSubTypeSelected( int type );
     void chartTypeSelected( QAction *action );
     void setThreeDMode( bool threeD );
     void update();
@@ -48,15 +48,18 @@ public slots:
     void setDataInRows( bool checked );
     void slotShowTableEditor( bool show );
 
+    void dataSetChartTypeSelected( QAction *action );
     void datasetColorSelected( const QColor& color );
     void ui_datasetShowValuesChanged( bool b );
+    void ui_dataSetSelectionChanged( int index );
+    void ui_dataSetAxisSelectionChanged( int index );
 
     void setLegendOrientationIsVertical( bool );
     void setLegendOrientation( int boxEntryIndex );
     void setLegendAlignment( int boxEntryIndex );
     void setLegendFixedPosition( int buttonGroupIndex );
     //void setLegendShowTitle( bool toggled );
-    void updateFixedPosition( const KDChart::Position );
+    void updateFixedPosition( LegendPosition position );
     void selectDataset( int dataset );
     
     void ui_axisSelectionChanged( int index );
@@ -74,9 +77,10 @@ public slots:
     void ui_removeAxisClicked();
 
 signals:
-    void chartTypeChanged( OdfChartType type, OdfChartSubtype subType );
-    void chartTypeChanged( OdfChartType );
-    void chartSubtypeChanged( OdfChartSubtype );
+    void chartTypeChanged( ChartType type );
+    void chartSubTypeChanged( ChartSubtype subType );
+    void dataSetChartTypeChanged( DataSet *dataSet, ChartType type );
+    void dataSetChartSubTypeChanged( DataSet *dataSet, ChartSubtype subType );
     void threeDModeToggled( bool threeD );
     
     void showVerticalLinesChanged( bool b );
@@ -94,12 +98,12 @@ signals:
     void firstColumnIsLabelChanged( bool b );
 
     void axisAdded( AxisPosition, const QString& title );    
-    void axisRemoved( KDChart::CartesianAxis *axis );
-    void axisTitleChanged( KDChart::CartesianAxis* axis, const QString& title );
-    void axisShowGridLinesChanged( KDChart::CartesianAxis* axis, bool b );
-    void axisUseLogarithmicScalingChanged( KDChart::CartesianAxis *axis, bool b );
-    void axisStepWidthChanged( KDChart::CartesianAxis *axis, double width );
-    void axisSubStepWidthChanged( KDChart::CartesianAxis *axis, double width );
+    void axisRemoved( Axis *axis );
+    void axisTitleChanged( Axis *axis, const QString& title );
+    void axisShowGridLinesChanged( Axis *axis, bool b );
+    void axisUseLogarithmicScalingChanged( Axis *axis, bool b );
+    void axisStepWidthChanged( Axis *axis, double width );
+    void axisSubStepWidthChanged( Axis *axis, double width );
 
     void legendTitleChanged( const QString& );
     void legendFontChanged( const QFont& font );
@@ -109,7 +113,7 @@ signals:
     void legendShowLinesToggled( bool toggled );
     void legendOrientationChanged( Qt::Orientation orientation );
     void legendAlignmentChanged( Qt::Alignment alignment );
-    void legendFixedPositionChanged( KDChart::Position position );
+    void legendFixedPositionChanged( LegendPosition position );
     void legendBackgroundColorChanged( const QColor& color );
     void legendFrameColorChanged( const QColor& color );
     void legendShowFrameChanged( bool show );

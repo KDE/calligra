@@ -34,6 +34,7 @@ public:
 	
     AxisPosition position() const;
     TextLabel *title() const;
+    QString titleText() const;
     QString id() const;
     AxisDimension dimension() const;
     QList<DataSet*> dataSets() const;
@@ -46,10 +47,10 @@ public:
     bool showOuterMajorTicks() const;
     bool scalingIsLogarithmic() const;
     bool showGrid() const;
+    Qt::Orientation orientation();
 	
     void setPosition( AxisPosition position );
     void setTitleText( const QString &text );
-    void setDimension( AxisDimension );
     bool attachDataSet( DataSet *dataSet );
     bool detachDataSet( DataSet *dataSet );
     void setMajorInterval( double interval );
@@ -61,16 +62,17 @@ public:
     void setShowOuterMajorTicks( bool showTicks );
     void setScalingLogarithmic( bool logarithmicScaling );
     void setShowGrid( bool showGrid );
+    void setThreeD( bool threeD );
     
     bool loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &context );
     void saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles );
     
     KDChart::CartesianAxis *kdAxis() const;
-    KDChart::AbstractDiagram *kdDiagram() const;
+    KDChart::AbstractCoordinatePlane *kdPlane() const;
+    
+    void update() const;
     
 private:
-    Qt::Orientation orientation();
-    void update();
     
     class Private;
     Private *const d;

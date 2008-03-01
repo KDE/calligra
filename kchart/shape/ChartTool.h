@@ -18,13 +18,14 @@
  */
 
 
-#ifndef CHARTTYPETOOL_H
-#define CHARTTYPETOOL_H
+#ifndef KCHART_CHARTTOOL_H
+#define KCHART_CHARTTOOL_H
 
-
-#include <KoTool.h>
-
+// Local
 #include "ChartShape.h"
+
+// KOffice
+#include <KoTool.h>
 
 
 class QAction;
@@ -61,14 +62,16 @@ public:
     virtual QWidget *createOptionWidget();
 
 private slots:
-    void setChartType( OdfChartType type, OdfChartSubtype subtype = NoChartSubtype );
-    void setChartSubtype( OdfChartSubtype subtype );
+    void setChartType( ChartType type, ChartSubtype subtype = NoChartSubtype );
+    void setChartSubtype( ChartSubtype subtype );
     void setThreeDMode( bool );
     void setDataDirection( Qt::Orientation );
     void setFirstRowIsLabel( bool b );
     void setFirstColumnIsLabel( bool b );
 
     // Datasets
+    void setDataSetChartType( DataSet *dataSet, ChartType type );
+    void setDataSetChartSubType( DataSet *dataSet, ChartSubtype subType );
     void setDatasetShowValues( int dataset, bool b );
     void setDatasetColor( int dataset, const QColor& color );
     void setGapBetweenBars( int percent );
@@ -76,24 +79,21 @@ private slots:
     
     // Axes
     void addAxis( AxisPosition, const QString& title = "" );
-    void removeAxis( KDChart::CartesianAxis *axis );
-    void setAxisTitle( KDChart::CartesianAxis *axis, const QString& title );
-    void setAxisShowGridLines( KDChart::CartesianAxis *axis, bool b = true );
-    void setAxisUseLogarithmicScaling( KDChart::CartesianAxis *axis, bool b = true );
-    void setAxisStepWidth( KDChart::CartesianAxis *axis, double width );
-    void setAxisSubStepWidth( KDChart::CartesianAxis *axis, double width );
+    void removeAxis( Axis *axis );
+    void setAxisTitle( Axis *axis, const QString& title );
+    void setAxisShowGridLines( Axis *axis, bool b = true );
+    void setAxisUseLogarithmicScaling(Axis *axis, bool b = true );
+    void setAxisStepWidth( Axis *axis, double width );
+    void setAxisSubStepWidth( Axis *axis, double width );
 
     // Legend
     void setShowLegend( bool b );
     void setLegendTitle( const QString& title );
-    void setLegendTitleFont( const QFont& font );
     void setLegendFont( const QFont& font );
     void setLegendFontSize( int size );
-    void setLegendSpacing( int spacing );
-    void setLegendShowLines( bool b );
     void setLegendOrientation( Qt::Orientation );
     void setLegendAlignment( Qt::Alignment );
-    void setLegendFixedPosition( KDChart::Position position );
+    void setLegendFixedPosition( LegendPosition position );
     void setLegendBackgroundColor( const QColor& color );
     void setLegendFrameColor( const QColor& color );
     void setLegendShowFrame( bool show );
@@ -108,4 +108,4 @@ private:
 } // namespace KChart
 
 
-#endif
+#endif // KCHART_CHARTTOOL_H

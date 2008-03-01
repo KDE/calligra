@@ -22,8 +22,10 @@
 #include <KDebug>
 
 // KChart
-#include "ChartProxyModel.h"
 #include "ChartTableView.h"
+
+// Qt
+#include <QAbstractItemModel>
 
 using namespace KChart;
 
@@ -31,12 +33,12 @@ class ChartTableView::Private
 {
 public:
     Private();
-    ChartProxyModel *sourceModel;
+    QAbstractItemModel *model;
 };
 
 ChartTableView::Private::Private()
 {
-    sourceModel = 0;
+    model = 0;
 }
 
 ChartTableView::ChartTableView( QWidget *parent /* = 0 */ )
@@ -50,20 +52,20 @@ ChartTableView::~ChartTableView()
     delete d;
 }
 
-void ChartTableView::setModel( ChartProxyModel *model )
+void ChartTableView::setModel( QAbstractItemModel *model )
 {
-    d->sourceModel = model;
-    QTableView::setModel( ( QAbstractItemModel* )model->sourceModel() );
+    d->model = model;
+    QTableView::setModel( model );
 }
 
-ChartProxyModel *ChartTableView::model()
+QAbstractItemModel *ChartTableView::model()
 {
-    return d->sourceModel;
+    return d->model;
 }
 
 void ChartTableView::commitData( QWidget *editor )
 {
     QTableView::commitData( editor );
-    d->sourceModel->dataChanged();
+    //d->sourceModel->dataChanged();
 }
 

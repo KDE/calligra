@@ -25,16 +25,14 @@
 
 namespace KChart {
 
-class ChartProxyModel;
-
 class ChartTableView : public QTableView
 {
 public:
     ChartTableView( QWidget *parent = 0 );
     ~ChartTableView();
 
-   void setModel( ChartProxyModel *model );
-   ChartProxyModel *model();
+   void setModel( QAbstractItemModel *model );
+   QAbstractItemModel *model();
 
    virtual void commitData( QWidget *editor );
 

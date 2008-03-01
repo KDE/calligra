@@ -20,8 +20,13 @@
 #ifndef KCHART_CHART_SHAPE_FACTORY
 #define KCHART_CHART_SHAPE_FACTORY
 
+// Local
+#include "ChartShape.h"
+
+// Qt
 #include <QStringList>
 
+// KOffice
 #include <KoShapeFactory.h>
 
 class KoShape;

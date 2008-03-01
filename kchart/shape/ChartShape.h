@@ -1,7 +1,6 @@
 /* This file is part of the KDE project
 
-   Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
-   Copyright 2007 Inge Wallin     <inge@lysator.liu.se>
+   Copyright 2007-2008 Johannes Simon <johannes.simon@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,183 +18,119 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KCHART_CHART_SHAPE
-#define KCHART_CHART_SHAPE
+#ifndef KCHART_CHART_H
+#define KCHART_CHART_H
 
-
-// Qt
-#include <QModelIndex>
-
-// KOffice
-#include <KoShape.h>
-#include "koChart.h"
-
-// KChart
+// Local
 #include "kchart_export.h"
 #include "kchart_global.h"
+#include "koChart.h"
 
+// KOffice
+#include <KoShapeContainer.h>
 
-#define ChartShapeId "ChartShape"
+// Qt
+#include <Qt>
 
 class QAbstractItemModel;
 
-namespace KDChart
-{
+class QPointF;
+class QSizeF;
+class QPen;
+class QBrush;
+class QColor;
+class QString;
+class QFont;
+
+class KoShapeLoadingContext;
+class KoShapeSavingContext;
+class KoXmlElement;
+class KoXmlWriter;
+class KoGenStyles;
+
+namespace KDChart {
     class Chart;
-    class AbstractDiagram;
-    class CartesianAxis;
     class Legend;
+    class CartesianAxis;
+    class CartesianCoordinatePlane;
     class AbstractCoordinatePlane;
-    class Position;
+    class AbstractDiagram;
 }
 
-namespace KChart
-{
+namespace KChart {
 
-class CHARTSHAPELIB_EXPORT ChartShape : public KoShape, public KoChart::ChartInterface
+class DataSet;
+class ProxyModel;
+class TextLabel;
+class Legend;
+class PlotArea;
+class Surface;
+class Axis;
+class ThreeDScene;
+
+extern bool isPolar( ChartType type );
+extern bool isCartesian( ChartType type );
+extern QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color );
+
+#define ChartShapeId "ChartShape"
+
+class ChartShape : public KoShapeContainer, public KoChart::ChartInterface
 {
- public:
+public:
     ChartShape();
-    virtual ~ChartShape();
-
-    void refreshPixmap( QPainter& painter, const KoViewConverter& converter );
-    // This is more time-consuming than update()
-    void relayout() const;
-
-    KDChart::Chart* chart() const;
-    KDChart::AbstractDiagram *diagram() const;
-    KDChart::Legend* legend() const;
-    KDChart::AbstractCoordinatePlane *coordinatePlane() const;
-
-    /// reimplemented
-    virtual void setModel( QAbstractItemModel *model, 
-                           bool takeOwnershipOfModel = false );
+    ~ChartShape();
+    
+    // Getter methods
     QAbstractItemModel *model() const;
+    ProxyModel *proxyModel() const;
     
-    int borderWidth() const;
-    int borderHeight() const;
+    TextLabel *title() const;
+    TextLabel *subTitle() const;
+    TextLabel *footer() const;
+    Legend *legend() const;
+    PlotArea *plotArea() const;
+    Surface *wall() const;
+    Surface *floor() const;
+    
+    // Setter methods
+    void setModel( QAbstractItemModel *model, bool takeOwnershipOfModel = false );
+    bool addAxis( Axis *axis );
+    bool removeAxis( Axis *axis );
+    
+    void setPosition( const QPointF &size );
+    void setSize( const QSizeF &size );
+    
+    ChartType chartType() const;
+    ChartSubtype chartSubType() const;
+    bool isThreeD() const;
+    
+    void setChartType( ChartType type );
+    void setChartSubType( ChartSubtype subType );
+    void setThreeD( bool threeD );
     
     /// reimplemented
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
+    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paintComponent( QPainter &painter, const KoViewConverter &converter );
+    
     /// reimplemented
-    virtual bool loadOdf( const KoXmlElement    &chartElement,
-                          KoShapeLoadingContext &context );
+    bool loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
+    bool loadOdfData( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
     /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
-
-    OdfChartType    chartType() const;
-    OdfChartSubtype chartSubtype() const;
-    bool            threeDMode() const;
-
-    ChartTypeOptions chartTypeOptions( OdfChartType type ) const;
-
- private:
-    bool loadOdfLegend( const KoXmlElement    &legendElement, 
-			KoShapeLoadingContext &context );
-    bool loadOdfPlotarea( const KoXmlElement    &plotareaElement, 
-			  KoShapeLoadingContext &context );
-    bool loadOdfAxis( const KoXmlElement    &axisElement, 
-			  KoShapeLoadingContext &context );
-    bool loadOdfData( const KoXmlElement    &plotareaElement, 
-                        KoShapeLoadingContext &context );
-    bool loadOdfTitle( const KoXmlElement &titleElement, 
-                        KoShapeLoadingContext &context );
-    bool loadOdfSubTitle( const KoXmlElement &titleElement, 
-                        KoShapeLoadingContext &context );
-    bool loadOdfFooter( const KoXmlElement &footerElement,
-                        KoShapeLoadingContext &context );
-    void saveOdfTitle( KoXmlWriter &bodyWriter,
-                       KoGenStyles &mainStyles ) const;
-    void saveOdfSubTitle( KoXmlWriter &bodyWriter,
-                          KoGenStyles &mainStyles ) const;
-    void saveOdfFooter( KoXmlWriter &bodyWriter,
-                        KoGenStyles &mainStyles ) const;
-    void saveOdfLegend( KoXmlWriter &bodyWriter,
-                        KoGenStyles &mainStyles ) const;
-    void saveOdfAxis( KoXmlWriter &bodyWriter,
-                      KoGenStyles &mainStyles,
-                      const KDChart::CartesianAxis *axis ) const;
-    void saveOdfPlotarea( KoXmlWriter &xmlWriter,
-                          KoGenStyles &mainStyles) const;
-    void saveOdfSubtype( KoXmlWriter& xmlWriter,
-                         KoGenStyle& plotAreaStyle ) const;
-    void saveOdfData( KoXmlWriter& bodyWriter,
-                      KoGenStyles& mainStyles ) const;
-    QString saveOdfFont( KoGenStyles& mainStyles, 
-                         const QFont& font,
-                         const QColor& color ) const;
-
-
- public:
+    void saveOdf( KoShapeSavingContext &context ) const;
+    void saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
+    
+    KoShape *cloneShape() const;
+    
     void update() const;
-    void setSize( const QSizeF& size );
-    void dataChanged( const QModelIndex &topLeft, 
-                      const QModelIndex &bottomRight );
-
-    /// Set new chart type and subtype.
-    void setChartType( OdfChartType newType, 
-		       OdfChartSubtype newSubtype = NoChartSubtype );
-    void setChartSubtype( OdfChartSubtype newSubtype );
-    void setThreeDMode( bool threeD );
-    void setFirstRowIsLabel( bool b );
-    void setFirstColumnIsLabel( bool b);
-    void setDataDirection( Qt::Orientation orientation );
-
+    void relayout() const;
     
-    // Axes
-    void addAxis( KDChart::CartesianAxis *axis );
-    void removeAxis( KDChart::CartesianAxis *axis );
-    void addAxis( AxisPosition position, const QString& title = "" );
-    void setAxisTitle( KDChart::CartesianAxis *axis, const QString& title );
-    void setAxisShowGridLines( KDChart::CartesianAxis *axis, bool b = true );
-    void setAxisUseLogarithmicScaling( KDChart::CartesianAxis *axis, bool b = true );
-    void setAxisStepWidth( KDChart::CartesianAxis *axis, double width );
-    void setAxisSubStepWidth( KDChart::CartesianAxis *axis, double width );
-    // direct setter methods for convenience
-    void setXAxisTitle( const QString& title );
-    void setYAxisTitle( const QString& title );
+private:
+    void paintPixmap( QPainter &painter, const KoViewConverter &converter );
     
-    void setDatasetShowValues( int dataset, bool b = true );
-    void setGapBetweenBars( int percent );
-    void setGapBetweenSets( int percent );
-
-    void setShowLegend( bool b );
-    void setLegendTitle( const QString& title );
-    void setLegendTitleFont( const QFont& font );
-    void setLegendFont( const QFont& font );
-    void setLegendFontSize( int size );
-    void setLegendSpacing( int spacing );
-    void setLegendShowLines( bool b );
-    void setLegendBackgroundColor( const QColor& color );
-    void setLegendFrameColor( const QColor& color );
-    void setLegendShowFrame( bool show );
-    void setLegendOrientation( Qt::Orientation orientation );
-    void setLegendAlignment( Qt::Alignment alignment );
-    void setLegendFixedPosition( KDChart::Position position );
-    
-    void modelChanged();
-
-    void saveChartTypeOptions();
-    void restoreChartTypeOptions( OdfChartType type );
-
- private:
-    void setChartDefaults();
-    void setDiagramDefaults( OdfChartType type = LastChartType );
-
-    /// reimplemented from KoShape
-    virtual KoShape * cloneShape() const;
-
-    //static bool  isCartesian( OdfChartType type );
-    //static bool  isPolar( OdfChartType type );
-    Q_DISABLE_COPY( ChartShape )
-
- private:
     class Private;
-    Private * const d;
-
+    Private *const d;
 };
 
-} // namespace KChart
+}; // Namespace KChart
 
-
-#endif // KCHART_CHART_SHAPE
+#endif

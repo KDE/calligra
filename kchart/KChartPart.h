@@ -75,7 +75,7 @@ public:
 
     virtual void addShape( KoShape* );
     virtual void removeShape( KoShape* );
-    virtual QMap<QString, KoDataCenter *>  dataCenterMap( );
+    //virtual QMap<QString, KoDataCenter *>  dataCenterMap( );
 
     // Methods unique to KChart, and available in the new interface
     // (see /interfaces/koChart.h.)
@@ -94,8 +94,8 @@ public:
     QStandardItemModel *data()      const { return m_chartData; }
 
     // Convenience functions: Types
-    OdfChartType     chartType()    const { return m_chartShape->chartType(); }
-    OdfChartSubtype  chartSubtype() const { return m_chartShape->chartSubtype(); }
+    ChartType     chartType()    const { return m_chartShape->chartType(); }
+    ChartSubtype  chartSubtype() const { return m_chartShape->chartSubType(); }
 
     // Save and load
     virtual QDomDocument  saveXML();

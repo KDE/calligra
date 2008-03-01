@@ -58,14 +58,17 @@ public:
     double upperErrorLimit;
     QPen pen;
     
-    ProxyModel *model;
     PlotArea *plotArea;
     
+    ProxyModel *model;
     KDChart::AbstractDiagram *kdDiagram;
+    int kdDataSetNumber;
 };
 
 DataSet::Private::Private()
 {
+    chartType = LastChartType;
+    kdDataSetNumber = 0;
 }
 
 DataSet::Private::~Private()
@@ -77,16 +80,19 @@ DataSet::DataSet( PlotArea *plotArea )
     : d( new Private )
 {
     d->plotArea = plotArea;
+    d->model = d->plotArea->proxyModel();
 }
 
 DataSet::~DataSet()
-{   
+{
 }
 
 
 ChartType DataSet::chartType() const
 {
-    return d->chartType;
+    // Return the global chart type of the plot area
+    // if no custom type was specified for this data set
+    return ( d->chartType == LastChartType ) ? d->plotArea->chartType() : d->chartType;
 }
 
 Axis *DataSet::attachedAxis() const
@@ -167,21 +173,42 @@ double DataSet::upperErrorLimit() const
 
 void DataSet::setChartType( ChartType type )
 {
+    Axis *axis = d->attachedAxis;
+    axis->detachDataSet( this );
+    
     d->chartType = type;
+    
+    axis->attachDataSet( this );
 }
+
+void DataSet::setChartSubType( ChartSubtype subType )
+{
+    // TODO (Johannes): Set the data set's chart sub type
+}
+
 
 void DataSet::setAttachedAxis( Axis *axis )
 {
     d->attachedAxis = axis;
 }
 
+bool DataSet::showValues() const
+{
+    return d->showValues;
+}
+
+bool DataSet::showLabels() const
+{
+    return d->showLabels;
+}
+
 void DataSet::setShowValues( bool showValues )
 {
     d->showValues = showValues;
     
-    KDChart::DataValueAttributes attributes = d->kdDiagram->dataValueAttributes( d->model->dataSet( this ) );
+    KDChart::DataValueAttributes attributes = d->kdDiagram->dataValueAttributes( d->kdDataSetNumber );
     attributes.setVisible( showValues );
-    d->kdDiagram->setDataValueAttributes( d->model->dataSet( this ), attributes );
+    d->kdDiagram->setDataValueAttributes( d->kdDataSetNumber, attributes );
 }
 
 void DataSet::setShowLabels( bool showLabels )
@@ -196,7 +223,7 @@ QPen DataSet::pen() const
 
 void DataSet::setPen( const QPen &pen )
 {
-    d->attachedAxis->kdDiagram()->setPen( d->model->dataSet( this ), pen );
+    d->kdDiagram->setPen( d->kdDataSetNumber, pen );
 }
 
 QColor DataSet::color() const
@@ -206,9 +233,9 @@ QColor DataSet::color() const
 
 void DataSet::setColor( const QColor &color )
 {
-    QPen pen = d->attachedAxis->kdDiagram()->pen( d->model->dataSet( this ) );
+    QPen pen = d->kdDiagram->pen( d->kdDataSetNumber );
     pen.setColor( color );
-    d->attachedAxis->kdDiagram()->setPen( pen );
+    d->kdDiagram->setPen( pen );
 }
 
 void DataSet::setShowMeanValue( bool show )
@@ -265,4 +292,39 @@ void DataSet::setLowerErrorLimit( double limit )
 void DataSet::setUpperErrorLimit( double limit )
 {
     d->upperErrorLimit = limit;
+}
+
+QVariant DataSet::xData( int index )
+{
+    return d->model->xData( this, index );
+}
+
+QVariant DataSet::yData( int index )
+{
+    return d->model->yData( this, index );
+}
+
+QVariant DataSet::customData( int index )
+{
+    return d->model->customData( this, index );
+}
+
+QVariant DataSet::labelData()
+{
+    return d->model->labelData( this );
+}
+
+int DataSet::size() const
+{
+    return d->model->columnCount();
+}
+
+void DataSet::setKdDiagram( KDChart::AbstractDiagram *diagram )
+{
+    d->kdDiagram = diagram;
+}
+
+void DataSet::setKdDataSetNumber( int number )
+{
+    d->kdDataSetNumber = number;
 }

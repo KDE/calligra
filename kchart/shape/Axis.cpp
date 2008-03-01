@@ -21,6 +21,11 @@
 // Local
 #include "Axis.h"
 #include "TextLabel.h"
+#include "PlotArea.h"
+#include "KDChartModel.h"
+#include "DataSet.h"
+#include "Legend.h"
+#include "KDChartConvertions.h"
 
 // KOffice
 #include <KoShapeLoadingContext.h>
@@ -30,10 +35,15 @@
 #include <KoXmlNS.h>
 
 // KDChart
+#include <KDChartChart>
+#include <KDChartLegend>
 #include <KDChartCartesianAxis>
 #include <KDChartCartesianCoordinatePlane>
 #include <KDChartGridAttributes>
-#include <KDChartAbstractDiagram>
+#include <KDChartBarDiagram>
+#include <KDChartLineDiagram>
+#include <KDChartThreeDBarAttributes>
+#include <KDChartThreeDLineAttributes>
 
 // Qt
 #include <QList>
@@ -52,7 +62,6 @@ public:
     AxisPosition position;
     TextLabel *title;
     QString id;
-    AxisDimension dimension;
     QList<DataSet*> dataSets;
     double majorInterval;
     int minorIntervalDevisor;
@@ -64,11 +73,21 @@ public:
     bool showGrid;
     
     KDChart::CartesianAxis *kdAxis;
-    KDChart::AbstractDiagram *kdDiagram;
+    KDChart::CartesianCoordinatePlane *kdPlane;
+    
+    KDChart::BarDiagram *kdBarDiagram;
+    KDChart::LineDiagram *kdLineDiagram;
+
+    KDChartModel *kdBarDiagramModel;
+    KDChartModel *kdLineDiagramModel;
 };
 
 Axis::Private::Private()
 {
+    kdBarDiagram = 0;
+    kdLineDiagram = 0;
+    kdBarDiagramModel = 0;
+    kdLineDiagramModel = 0;
 }
 
 Axis::Private::~Private()
@@ -76,10 +95,35 @@ Axis::Private::~Private()
 }
 
 Axis::Axis( PlotArea *parent )
-    : d( new Private() )
+    : d( new Private )
 {
+    Q_ASSERT( parent );
+    
     d->plotArea = parent;
     d->kdAxis = new KDChart::CartesianAxis();
+    d->kdPlane = new KDChart::CartesianCoordinatePlane();
+    d->kdPlane->setReferenceCoordinatePlane( d->plotArea->kdPlane() );
+    
+    KDChart::GridAttributes gridAttributes = d->kdPlane->gridAttributes( Qt::Vertical );
+    gridAttributes.setGridVisible( false );
+    d->kdPlane->setGridAttributes( Qt::Vertical, gridAttributes );
+
+    gridAttributes = d->kdPlane->gridAttributes( Qt::Horizontal );
+    gridAttributes.setGridVisible( false );
+    d->kdPlane->setGridAttributes( Qt::Horizontal, gridAttributes );
+    
+    d->plotArea->kdChart()->addCoordinatePlane( d->kdPlane );
+    
+    d->kdBarDiagram = new KDChart::BarDiagram( d->plotArea->kdChart(), d->kdPlane );
+    d->kdBarDiagram->setPen( QPen( Qt::black, 0.0 ) );
+    
+    d->kdBarDiagram->addAxis( d->kdAxis );
+    d->kdBarDiagramModel = new KDChartModel;
+    d->kdBarDiagram->setModel( d->kdBarDiagramModel );
+    d->kdPlane->addDiagram( d->kdBarDiagram );
+    //d->plotArea->parent()->legend()->kdLegend()->addDiagram( d->kdBarDiagram );
+    
+    d->title = new TextLabel( d->plotArea->parent() );
 }
 
 Axis::~Axis()
@@ -95,14 +139,25 @@ void Axis::setPosition( AxisPosition position )
 {
     d->position = position;
     
+    if ( position == LeftAxisPosition )
+        d->title->rotate( -90 );
+    else if ( position == RightAxisPosition )
+        d->title->rotate( 90 );
+    
     // KDChart
     d->kdAxis->setPosition( AxisPositionToKDChartAxisPosition( position ) );
+    
     update();
 }
 
 TextLabel *Axis::title() const
 {
     return d->title;
+}
+
+QString Axis::titleText() const
+{
+    return d->title->text();
 }
 
 QString Axis::id() const
@@ -112,13 +167,9 @@ QString Axis::id() const
 
 AxisDimension Axis::dimension() const
 {
-    return d->dimension;
-}
-
-void Axis::setDimension( AxisDimension dimension )
-{
-    d->dimension = dimension;
-    update();
+    if ( d->position == LeftAxisPosition || d->position == RightAxisPosition )
+        return YAxisDimension;
+    return XAxisDimension;
 }
 
 QList<DataSet*> Axis::dataSets() const
@@ -131,6 +182,47 @@ bool Axis::attachDataSet( DataSet *dataSet )
     if ( d->dataSets.contains( dataSet ) )
         return false;
     d->dataSets.append( dataSet );
+    dataSet->setAttachedAxis( this );
+    
+    switch ( dataSet->chartType() )
+    {
+    case BarChartType:
+    {
+        if ( d->kdBarDiagramModel == 0 )
+            d->kdBarDiagramModel = new KDChartModel;
+        d->kdBarDiagramModel->addDataSet( dataSet );
+        if ( d->kdBarDiagram == 0 )
+        {
+            d->kdBarDiagram = new KDChart::BarDiagram( d->plotArea->kdChart(), d->kdPlane );
+            d->kdBarDiagram->setModel( d->kdBarDiagramModel );
+            d->kdBarDiagram->setPen( QPen( Qt::black, 0.0 ) );
+            
+            //d->plotArea->parent()->legend()->kdLegend()->addDiagram( d->kdBarDiagram );
+            d->kdBarDiagram->addAxis( d->kdAxis );
+            d->kdPlane->addDiagram( d->kdBarDiagram );
+        }
+    }
+    break;
+    case LineChartType:
+    {
+        if ( d->kdLineDiagramModel == 0 )
+            d->kdLineDiagramModel = new KDChartModel;
+        d->kdLineDiagramModel->addDataSet( dataSet );
+        if ( d->kdLineDiagram == 0 )
+        {
+            d->kdLineDiagram = new KDChart::LineDiagram( d->plotArea->kdChart(), d->kdPlane );
+            d->kdLineDiagram->setModel( d->kdLineDiagramModel );
+            
+            //d->plotArea->parent()->legend()->kdLegend()->addDiagram( d->kdLineDiagram );
+            d->kdLineDiagram->addAxis( d->kdAxis );
+            d->kdPlane->addDiagram( d->kdLineDiagram );
+        }
+    }
+    break;
+    }
+    
+    update();
+    
     return true;
 }
 
@@ -139,6 +231,34 @@ bool Axis::detachDataSet( DataSet *dataSet )
     if ( !d->dataSets.contains( dataSet ) )
         return false;
     d->dataSets.removeAll( dataSet );
+    dataSet->setAttachedAxis( 0 );
+    
+    switch ( dataSet->chartType() )
+    {
+    case BarChartType:
+    {
+        if ( d->kdBarDiagramModel )
+        {
+            // TODO (Johannes): Remove diagram if no
+            // datasets are displayed on it anymore
+            d->kdBarDiagramModel->removeDataSet( dataSet );
+        }
+    }
+    break;
+    case LineChartType:
+    {
+        if ( d->kdLineDiagramModel )
+        {
+            // TODO (Johannes): Remove diagram if no
+            // datasets are displayed on it anymore
+            d->kdLineDiagramModel->removeDataSet( dataSet );
+        }
+    }
+    break;
+    }
+    
+    update();
+    
     return true; 
 }
 
@@ -153,10 +273,11 @@ void Axis::setMajorInterval( double interval )
     if ( interval != 0.0 )
         d->majorInterval = interval;
     
-    KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( d->kdAxis->diagram()->coordinatePlane() );
-    Q_ASSERT( plane );
+    // KDChart
+    KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>(d->kdPlane);
     if ( !plane )
         return;
+    
     KDChart::GridAttributes attributes = plane->gridAttributes( orientation() );
     attributes.setGridStepWidth( interval );
     plane->setGridAttributes( orientation(), attributes );
@@ -183,10 +304,12 @@ void Axis::setMinorIntervalDevisor( int devisor )
 {
     d->minorIntervalDevisor = devisor;
     
-    KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( d->kdAxis->diagram()->coordinatePlane() );
-    Q_ASSERT( plane );
-    if ( !plane )
-        return;
+    // KDChart
+    KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>(d->kdPlane);
+        if ( !plane )
+            return;
+        
+        
     KDChart::GridAttributes attributes = plane->gridAttributes( orientation() );
     attributes.setGridSubStepWidth( d->majorInterval / devisor );
     plane->setGridAttributes( orientation(), attributes );
@@ -220,15 +343,9 @@ void Axis::setScalingLogarithmic( bool logarithmicScaling )
     
     if ( dimension() != YAxisDimension )
         return;
-    
-    KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( d->kdAxis->diagram()->coordinatePlane() );
-    Q_ASSERT( plane );
-    if ( !plane )
-        return;
 
-    plane->setAxesCalcModeY( d->logarithmicScaling ? KDChart::AbstractCoordinatePlane::Logarithmic : KDChart::AbstractCoordinatePlane::Linear );
+    d->kdPlane->setAxesCalcModeY( d->logarithmicScaling ? KDChart::AbstractCoordinatePlane::Logarithmic : KDChart::AbstractCoordinatePlane::Linear );
     
-    //d->kdAxis->coordinatePlane()->relayout();
     update();
 }
 
@@ -247,11 +364,12 @@ void Axis::setShowGrid( bool showGrid )
     d->showGrid = showGrid;
 
     // KDChart
-	KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>( d->kdAxis->diagram()->coordinatePlane() );
-    Q_ASSERT( plane );
-	if ( !plane )
-		return;
-	KDChart::GridAttributes attributes = plane->gridAttributes( orientation() );
+    KDChart::CartesianCoordinatePlane *plane = dynamic_cast<KDChart::CartesianCoordinatePlane*>(d->kdPlane);
+        if ( !plane )
+            return;
+        
+        
+    KDChart::GridAttributes attributes = plane->gridAttributes( orientation() );
 	attributes.setGridVisible( d->showGrid );
 	plane->setGridAttributes( orientation(), attributes );
 	
@@ -261,9 +379,6 @@ void Axis::setShowGrid( bool showGrid )
 void Axis::setTitleText( const QString &text )
 {
     d->title->setText( text );
-    
-    // KDChart
-    d->kdAxis->setTitleText( text );
     
     update();
 }
@@ -317,9 +432,13 @@ void Axis::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
     bodyWriter.endElement(); // chart:axis
 }
 
-void Axis::update()
+void Axis::update() const
 {
-    // TODO: Update diagram here
+    if ( d->kdBarDiagram )
+        d->kdBarDiagram->doItemsLayout();
+    if ( d->kdLineDiagram )
+        d->kdLineDiagram->doItemsLayout();
+    d->plotArea->parent()->relayout();
 }
 
 KDChart::CartesianAxis *Axis::kdAxis() const
@@ -327,8 +446,28 @@ KDChart::CartesianAxis *Axis::kdAxis() const
     return d->kdAxis;
 }
 
-KDChart::AbstractDiagram *Axis::kdDiagram() const
+KDChart::AbstractCoordinatePlane *Axis::kdPlane() const
 {
-    return d->kdDiagram;
+    return d->kdPlane;
 }
 
+void Axis::setThreeD( bool threeD )
+{
+    // KDChart
+    if ( d->kdBarDiagram )
+    {
+                KDChart::ThreeDBarAttributes attributes( d->kdBarDiagram->threeDBarAttributes() );
+                attributes.setEnabled( threeD );
+                attributes.setDepth( 15.0 );
+                d->kdBarDiagram->setThreeDBarAttributes( attributes );
+    }
+    if ( d->kdLineDiagram )
+    {
+        KDChart::ThreeDLineAttributes attributes( d->kdLineDiagram->threeDLineAttributes() );
+        attributes.setEnabled( threeD );
+        attributes.setDepth( 15.0 );
+        d->kdLineDiagram->setThreeDLineAttributes( attributes );
+    }
+
+    update();
+}

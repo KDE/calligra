@@ -72,16 +72,16 @@ public:
     /**
      * Sets the new chart type.
      */
-    void setChartType(OdfChartType type, OdfChartSubtype subType);
+    void setChartType(ChartType type, ChartSubtype subType);
 
 
 private:
     ChartShape                        *m_chart;
     //KDChart::Chart                    *m_chart;
-    OdfChartType                       m_oldType;
-    OdfChartType                       m_newType;
-    OdfChartSubtype                    m_oldSubtype;
-    OdfChartSubtype                    m_newSubtype;
+    ChartType                       m_oldType;
+    ChartType                       m_newType;
+    ChartSubtype                    m_oldSubtype;
+    ChartSubtype                    m_newSubtype;
     //KDChart::AbstractCoordinatePlane  *m_oldCoordinatePlane;
     //KDChart::AbstractDiagram          *m_oldDiagram;
 };
