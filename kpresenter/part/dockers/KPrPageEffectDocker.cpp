@@ -167,7 +167,19 @@ static const char* s_subTypes[] = {
     I18N_NOOP( "Fan In Vertical" ),
     I18N_NOOP( "Fan In Horizontal" ),
     I18N_NOOP( "Fan In Vertical Reverse" ),
-    I18N_NOOP( "Fan In Horizontal Reverse" )
+    I18N_NOOP( "Fan In Horizontal Reverse" ),
+    I18N_NOOP( "Parallel Vertical In" ),
+    I18N_NOOP( "Parallel Diagonal" ),
+    I18N_NOOP( "Opposite Vertical" ),
+    I18N_NOOP( "Opposite Horizontal" ),
+    I18N_NOOP( "Parallel Diagonal Top Left" ),
+    I18N_NOOP( "Parallel Diagonal Bottom Left" ),
+    I18N_NOOP( "Parallel Vertical Reverse" ),
+    I18N_NOOP( "Parallel Diagonal Reverse" ),
+    I18N_NOOP( "OppositeVertical Reverse" ),
+    I18N_NOOP( "OppositeHorizontal Reverse" ),
+    I18N_NOOP( "Parallel Diagonal Top Left Reverse" ),
+    I18N_NOOP( "Parallel Diagonal Bottom Left Reverse" )
 };
 
 KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags )

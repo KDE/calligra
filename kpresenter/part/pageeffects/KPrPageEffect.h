@@ -172,7 +172,19 @@ public:
         FanInVertical,
         FanInHorizontal,
         FanInVerticalReverse,
-        FanInHorizontalReverse
+        FanInHorizontalReverse,
+        ParallelVertical,
+        ParallelDiagonal,
+        OppositeVertical,
+        OppositeHorizontal,
+        ParallelDiagonalTopLeft,
+        ParallelDiagonalBottomLeft,
+        ParallelVerticalReverse,
+        ParallelDiagonalReverse,
+        OppositeVerticalReverse,
+        OppositeHorizontalReverse,
+        ParallelDiagonalTopLeftReverse,
+        ParallelDiagonalBottomLeftReverse
     };
 
     /**

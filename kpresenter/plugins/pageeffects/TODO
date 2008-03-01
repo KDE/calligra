@@ -100,9 +100,11 @@ Clock Wipes - rotate around a center point
 "doubleFanWipe"  "fanOutVertical" (213) [default], "fanOutHorizontal" (214), "fanInVertical" (235), "fanInHorizontal" (236)
   done Sven Langkamp
 "doubleSweepWipe"  "parallelVertical" (225) [default], "parallelDiagonal" (226), "oppositeVertical" (227), "oppositeHorizontal" (228), "parallelDiagonalTopLeft" (245), "parallelDiagonalBottomLeft" (246)
-  Sven Langkamp
+  done Sven Langkamp
 "saloonDoorWipe"  "top" (251) [default], "left" (252), "bottom" (253), "right" (254)
+  done Sven Langkamp
 "windshieldWipe"  "right" (261) [default], "up" (262), "vertical" (263), "horizontal" (264)
+  Sven Langkamp
 
 Matrix Wipes - media is revealed in squares following a pattern
 ---------------------------------------------------------------

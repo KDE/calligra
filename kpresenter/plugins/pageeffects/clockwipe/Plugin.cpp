@@ -26,6 +26,9 @@
 #include "singlesweepwipe/KPrSingleSweepWipeEffectFactory.h"
 #include "fanwipe/KPrFanWipeEffectFactory.h"
 #include "doublefanwipe/KPrDoubleFanWipeEffectFactory.h"
+#include "doublesweepwipe/KPrDoubleSweepWipeEffectFactory.h"
+#include "saloondoorwipe/KPrSaloonDoorWipeEffectFactory.h"
+
 
 K_EXPORT_COMPONENT_FACTORY( kpr_pageeffect_clockwipe, KGenericFactory<Plugin>( "KPrPageEffect" ) )
 
@@ -37,6 +40,9 @@ Plugin::Plugin(QObject *parent, const QStringList &)
     KPrPageEffectRegistry::instance()->add(new KPrSingleSweepWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new KPrFanWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new KPrDoubleFanWipeEffectFactory());
+    KPrPageEffectRegistry::instance()->add(new KPrDoubleSweepWipeEffectFactory());
+    KPrPageEffectRegistry::instance()->add(new KPrSaloonDoorWipeEffectFactory());
+
 }
 
 #include "Plugin.moc"

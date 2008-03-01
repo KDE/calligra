@@ -6,6 +6,7 @@ set(kpr_pageeffect_clockwipe_SRCS
     KPrCenterFanWipeStrategy.cpp
     KPrSideFanWipeStrategy.cpp
     KPrClockWipeSubpathHelper.cpp
+    KPrSweepWipeStrategy.cpp
 
     clockwipe/KPrClockWipeEffectFactory.cpp
     pinwheelwipe/KPrPinWheelWipeEffectFactory.cpp
@@ -13,6 +14,10 @@ set(kpr_pageeffect_clockwipe_SRCS
     singlesweepwipe/KPrSingleSweepWipeStrategy.cpp
     fanwipe/KPrFanWipeEffectFactory.cpp
     doublefanwipe/KPrDoubleFanWipeEffectFactory.cpp
+    doublesweepwipe/KPrDoubleSweepWipeEffectFactory.cpp
+    doublesweepwipe/KPrDoubleSweepWipeStrategy.cpp
+    saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp
+    saloondoorwipe/KPrSaloonDoorWipeStrategy.cpp
     )
 
 kde4_add_plugin(kpr_pageeffect_clockwipe ${kpr_pageeffect_clockwipe_SRCS})
