@@ -66,6 +66,7 @@ using std::cerr;
 #include <KoOdfWriteStore.h>
 #include <KoShapeLoadingContext.h>
 #include <KoShapeRegistry.h>
+#include <KoDataCenter.h>
 
 // KDChart
 #include "KDChartChart"
