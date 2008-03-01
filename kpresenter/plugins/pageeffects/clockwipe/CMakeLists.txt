@@ -18,6 +18,8 @@ set(kpr_pageeffect_clockwipe_SRCS
     doublesweepwipe/KPrDoubleSweepWipeStrategy.cpp
     saloondoorwipe/KPrSaloonDoorWipeEffectFactory.cpp
     saloondoorwipe/KPrSaloonDoorWipeStrategy.cpp
+    windshieldwipe/KPrWindShieldWipeEffectFactory.cpp
+    windshieldwipe/KPrWindShieldWipeStrategy.cpp
     )
 
 kde4_add_plugin(kpr_pageeffect_clockwipe ${kpr_pageeffect_clockwipe_SRCS})

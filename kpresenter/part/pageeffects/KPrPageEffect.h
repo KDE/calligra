@@ -184,7 +184,11 @@ public:
         OppositeVerticalReverse,
         OppositeHorizontalReverse,
         ParallelDiagonalTopLeftReverse,
-        ParallelDiagonalBottomLeftReverse
+        ParallelDiagonalBottomLeftReverse,
+        Right,
+        Up,
+        RightReverse,
+        UpReverse,
     };
 
     /**

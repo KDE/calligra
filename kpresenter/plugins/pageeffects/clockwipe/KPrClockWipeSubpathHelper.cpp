@@ -73,9 +73,9 @@ void KPrClockWipeSubpathHelper::addSubpathForCircularArc(QPainterPath* clipPath,
 
     while(cornerAngle < endAngle) {
 
-        int cornerX = cos(cornerAngle) < 0 ?  -width/2 : width/2;
-        int cornerY = sin(cornerAngle) < 0 ?  -height/2 : height/2;
-        clipPath->lineTo(QPoint( center.x() + cornerX, center.y() - cornerY));
+        int cornerX = cos(cornerAngle) < 0 ?  0 : width;
+        int cornerY = sin(cornerAngle) < 0 ?  height : 0;
+        clipPath->lineTo(QPoint( boundingRect.x() + cornerX, boundingRect.y() + cornerY));
 
         quadrantAngle = static_cast<int>(cornerAngle / (0.5*M_PI))*(0.5*M_PI);
         cornerAngleInQuadrant = cornerAngle - quadrantAngle;
