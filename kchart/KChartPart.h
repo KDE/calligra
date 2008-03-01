@@ -75,7 +75,7 @@ public:
 
     virtual void addShape( KoShape* );
     virtual void removeShape( KoShape* );
-    //virtual QMap<QString, KoDataCenter *>  dataCenterMap( );
+    virtual QMap<QString, KoDataCenter *>  dataCenterMap( );
 
     // Methods unique to KChart, and available in the new interface
     // (see /interfaces/koChart.h.)

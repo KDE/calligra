@@ -322,7 +322,6 @@ void KChartPart::removeShape( KoShape* )
 {
 }
 
-/*
 QMap<QString, KoDataCenter *> KChartPart::dataCenterMap()
 {
     Q_ASSERT(false);
@@ -330,7 +329,6 @@ QMap<QString, KoDataCenter *> KChartPart::dataCenterMap()
     // along with several other methods - see any other app or ask boemann
     return QMap<QString, KoDataCenter *>() ;
 }
-*/
 
 // ----------------------------------------------------------------
 
