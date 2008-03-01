@@ -97,6 +97,12 @@ private slots:
     void selectionChanged();
 
     void insertFrameBreak();
+    /// insert a bookmark on current text cursor location or selection
+    void addBookmark();
+    /// go to previously bookmarked text cursor location or selection
+    void selectBookmark();
+    /// delete previously bookmarked text cursor location or selection (from the Select Bookmark dialog)
+    void deleteBookmark(const QString &name);
     void editDeleteFrame();
     void toggleHeader();
     void toggleFooter();
@@ -142,6 +148,7 @@ private:
 
     KAction *m_actionFormatFrameSet;
     KAction *m_actionInsertFrameBreak;
+    KAction *m_actionAddBookmark;
     KAction *m_actionFormatFont;
     KAction *m_actionEditDelFrame;
     KAction *m_actionRaiseFrame;

@@ -35,6 +35,8 @@
 #include "dialogs/KWPageSettingsDialog.h"
 #include "dialogs/KWStatisticsDialog.h"
 #include "dialogs/KWPrintingDialog.h"
+#include "dialogs/KWCreateBookmarkDialog.h"
+#include "dialogs/KWSelectBookmarkDialog.h"
 #include "dockers/KWStatisticsDocker.h"
 #include "commands/KWFrameCreateCommand.h"
 #include "commands/KWPageRemoveCommand.h"
@@ -60,6 +62,7 @@
 #include <KoShapeGroupCommand.h>
 #include <KoZoomController.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoBookmark.h>
 
 // KDE + Qt includes
 #include <QHBoxLayout>
@@ -205,7 +208,18 @@ void KWView::setupActions() {
         actionMenu->addAction(action);
     actionCollection()->addAction("insert_variable", actionMenu);
 
-    QAction *action = new QAction( i18n( "Frame Borders" ), this);
+    m_actionAddBookmark = new KAction(KIcon("bookmark-new"), i18n("Bookmark..."), this);
+    m_actionAddBookmark->setShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_G );
+    actionCollection()->addAction("add_bookmark", m_actionAddBookmark);
+    connect(m_actionAddBookmark, SIGNAL(triggered()), this, SLOT( addBookmark() ));
+    
+    QAction *action = new QAction(i18n("Select Bookmark..."), this);
+    action->setIcon(KIcon("bookmarks"));
+    action->setShortcut( Qt::CTRL+ Qt::Key_G);
+    actionCollection()->addAction("select_bookmark", action);
+    connect(action, SIGNAL(triggered()), this, SLOT( selectBookmark() ));
+
+    action = new QAction( i18n( "Frame Borders" ), this);
     action->setToolTip( i18n( "Turns the border display on and off" ) );
     action->setCheckable(true);
     actionCollection()->addAction("view_frameborders", action);
@@ -792,6 +806,113 @@ void KWView::insertFrameBreak() {
         handler->insertFrameBreak();
 }
 
+void KWView::addBookmark()
+{
+    QString name, suggestedName;
+
+    KoSelection *selection = kwcanvas()->shapeManager()->selection();
+    KoShape *shape = 0;
+    shape = selection->firstSelectedShape();
+    if (shape == 0) return; // no shape selected
+
+    KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
+    Q_ASSERT(frame);
+    KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
+    if (fs == 0) return;
+
+    QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
+    KoToolManager::instance()->switchToolRequested(tool);
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
+    Q_ASSERT(handler);
+
+    KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
+    if (handler->hasSelection())
+        suggestedName = handler->selectedText();
+
+    KWCreateBookmarkDialog *dia = new KWCreateBookmarkDialog(manager->bookmarkNameList(), suggestedName, m_canvas->canvasWidget());
+    if (dia->exec() == QDialog::Accepted)
+        name = dia->newBookmarkName();
+    else {
+        delete dia;
+        return;
+    }
+    delete dia;
+
+    handler->addBookmark(name, shape);
+}
+
+void KWView::selectBookmark()
+{
+    QString name;
+    KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
+
+    KWSelectBookmarkDialog *dia = new KWSelectBookmarkDialog(manager->bookmarkNameList(), m_canvas->canvasWidget());
+    connect( dia, SIGNAL( nameChanged(const QString &, const QString &) ),
+             manager, SLOT( rename(const QString &, const QString &) ) );
+    connect( dia, SIGNAL( bookmarkDeleted(const QString &) ),
+             this, SLOT( deleteBookmark(const QString &) ) );
+    if (dia->exec() == QDialog::Accepted)
+        name = dia->selectedBookmarkName();
+    else {
+        delete dia;
+        return;
+    }
+    delete dia;
+
+    KoBookmark *bookmark = manager->retrieveBookmark(name);
+    KoShape *shape = bookmark->shape();
+    KoSelection *selection = kwcanvas()->shapeManager()->selection();
+    selection->deselectAll();
+    selection->select(shape);
+
+    QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
+    KoToolManager::instance()->switchToolRequested(tool);
+
+    KoCanvasResourceProvider *provider = m_canvas->resourceProvider();
+
+    if (bookmark->hasSelection()) {
+        provider->setResource(KoText::CurrentTextPosition, bookmark->position());
+        provider->setResource(KoText::CurrentTextAnchor, bookmark->endBookmark()->position() + 1);
+        provider->clearResource(KoText::SelectedTextPosition);
+        provider->clearResource(KoText::SelectedTextAnchor);
+    }
+    else
+        provider->setResource(KoText::CurrentTextPosition, bookmark->position() + 1);
+}
+
+void KWView::deleteBookmark(const QString &name)
+{
+    if (name.isNull()) return;
+
+    int endPosition = -1;
+
+    KoBookmarkManager *manager = m_document->inlineTextObjectManager()->bookmarkManager();
+    KoBookmark *bookmark = manager->retrieveBookmark(name);
+    KoShape *shape = bookmark->shape();
+
+    KoSelection *selection = kwcanvas()->shapeManager()->selection();
+    selection->deselectAll();
+    selection->select(shape);
+
+    QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
+    KoToolManager::instance()->switchToolRequested(tool);
+    KoTextSelectionHandler *handler = qobject_cast<KoTextSelectionHandler*> (kwcanvas()->toolProxy()->selection());
+    Q_ASSERT(handler);
+
+    KoCanvasResourceProvider *provider = m_canvas->resourceProvider();
+
+    if (bookmark->hasSelection())
+        endPosition = bookmark->endBookmark()->position() - 1;
+
+    provider->setResource(KoText::CurrentTextPosition, bookmark->position());
+    handler->deleteInlineObjects(false);
+
+    if (endPosition != -1) {
+        provider->setResource(KoText::CurrentTextPosition, endPosition);
+        handler->deleteInlineObjects(false);
+    }
+}
+
 void KWView::editDeleteFrame() {
     QList<KoShape*> frames;
     foreach(KoShape *shape, kwcanvas()->shapeManager()->selection()->selectedShapes(KoFlake::TopLevelSelection)) {
@@ -1020,6 +1141,7 @@ void KWView::selectionChanged()
 {
     KoShape *shape = kwcanvas()->shapeManager()->selection()-> firstSelectedShape();
     m_actionFormatFrameSet->setEnabled( shape != 0 );
+    m_actionAddBookmark->setEnabled( shape != 0 );
     if(shape) {
         KWPage *currentPage = m_document->pageManager()->page(shape);
         if (currentPage != m_currentPage) {
@@ -1027,6 +1149,12 @@ void KWView::selectionChanged()
             m_canvas->resourceProvider()->setResource(KWord::CurrentPage, m_currentPage->pageNumber());
             m_zoomController->setPageSize(m_currentPage->rect().size());
         }
+        KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
+        KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
+        if (fs)
+            m_actionAddBookmark->setEnabled(true);
+        else
+            m_actionAddBookmark->setEnabled(false);
     }
     // actions need at least one shape selected
     actionCollection()->action("create_linked_frame")->setEnabled(shape);

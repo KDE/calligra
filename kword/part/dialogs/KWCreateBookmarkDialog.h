@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2007-2008 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,39 +17,39 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef CREATENEWBOOKMARKDIALOG_H
-#define CREATENEWBOOKMARKDIALOG_H
+#ifndef KWCREATEBOOKMARKDIALOG_H
+#define KWCREATEBOOKMARKDIALOG_H
 
-#include "ui_CreateNewBookmark.h"
+#include "ui_KWCreateBookmark.h"
 
 #include <QWidget>
 #include <QList>
 #include <KDialog>
 
-class CreateNewBookmark : public QWidget {
+class KWCreateBookmark : public QWidget {
     Q_OBJECT
 public:
-    CreateNewBookmark(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent = 0);
+    KWCreateBookmark(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent = 0);
     QString bookmarkName();
 
 signals:
     void bookmarkNameChanged(const QString &name);
 
 private:
-    Ui::CreateNewBookmark widget;
+    Ui::CreateBookmark widget;
 };
 
-class CreateNewBookmarkDialog : public KDialog {
+class KWCreateBookmarkDialog : public KDialog {
     Q_OBJECT
 public:
-    CreateNewBookmarkDialog(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent = 0);
+    KWCreateBookmarkDialog(const QList<QString> &nameList, const QString &suggestedName, QWidget *parent = 0);
     QString newBookmarkName();
 
 private slots:
     void nameChanged(const QString &name);
 
 private:
-    CreateNewBookmark *ui;
+    KWCreateBookmark *ui;
     QList<QString> m_nameList;
 };
 

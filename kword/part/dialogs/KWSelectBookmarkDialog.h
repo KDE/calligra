@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2007-2008 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,18 +17,18 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SELECTBOOKMARKDIALOG_H
-#define SELECTBOOKMARKDIALOG_H
+#ifndef KWSELECTBOOKMARKDIALOG_H
+#define KWSELECTBOOKMARKDIALOG_H
 
-#include "ui_SelectBookmark.h"
+#include "ui_KWSelectBookmark.h"
 
 #include <QWidget>
 #include <KDialog>
 
-class SelectBookmark : public QWidget {
+class KWSelectBookmark : public QWidget {
     Q_OBJECT
 public:
-    explicit SelectBookmark(QList<QString> nameList, QWidget *parent = 0);
+    explicit KWSelectBookmark(QList<QString> nameList, QWidget *parent = 0);
     QString bookmarkName() const;
     int bookmarkRow() const;
 
@@ -49,10 +49,10 @@ private:
     QWidget *parentWidget;
 };
 
-class SelectBookmarkDialog : public KDialog {
+class KWSelectBookmarkDialog : public KDialog {
     Q_OBJECT
 public:
-    explicit SelectBookmarkDialog(QList<QString> nameList, QWidget *parent = 0);
+    explicit KWSelectBookmarkDialog(QList<QString> nameList, QWidget *parent = 0);
     QString selectedBookmarkName();
 
 signals:
@@ -64,7 +64,7 @@ private slots:
     void bookmarkDoubleClicked(QListWidgetItem *item);
 
 private:
-    SelectBookmark *ui;
+    KWSelectBookmark *ui;
 };
 
 #endif

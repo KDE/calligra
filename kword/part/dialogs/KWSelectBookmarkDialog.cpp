@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Fredy Yanardi <fyanardi@gmail.com>
+ * Copyright (C) 2007-2008 Fredy Yanardi <fyanardi@gmail.com>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,14 +17,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "SelectBookmarkDialog.h"
+#include "KWSelectBookmarkDialog.h"
 
 #include <kmessagebox.h>
 #include <kinputdialog.h>
 
 static QString lastBookMarkItem;
 
-SelectBookmark::SelectBookmark(QList<QString> nameList, QWidget *parent)
+KWSelectBookmark::KWSelectBookmark(QList<QString> nameList, QWidget *parent)
     : QWidget(parent),
     parentWidget(parent)
 {
@@ -51,25 +51,25 @@ SelectBookmark::SelectBookmark(QList<QString> nameList, QWidget *parent)
     selectionChanged( bookmarkRow() );
 }
 
-QString SelectBookmark::bookmarkName() const
+QString KWSelectBookmark::bookmarkName() const
 {
     const QListWidgetItem* item = widget.bookmarkList->currentItem();
     return item ? item->text() : QString();
 }
 
-int SelectBookmark::bookmarkRow() const
+int KWSelectBookmark::bookmarkRow() const
 {
     return widget.bookmarkList->currentRow();
 }
 
-void SelectBookmark::selectionChanged(int currentRow)
+void KWSelectBookmark::selectionChanged(int currentRow)
 {
     widget.buttonRename->setEnabled( currentRow != -1 );
     widget.buttonDelete->setEnabled( currentRow != -1 );
     emit bookmarkSelectionChanged(currentRow);
 }
 
-void SelectBookmark::slotBookmarkRename()
+void KWSelectBookmark::slotBookmarkRename()
 {
     QListWidgetItem* item = widget.bookmarkList->currentItem();
     Q_ASSERT( item );
@@ -96,7 +96,7 @@ void SelectBookmark::slotBookmarkRename()
     }
 }
 
-void SelectBookmark::slotBookmarkDelete()
+void KWSelectBookmark::slotBookmarkDelete()
 {
     int currentRow = widget.bookmarkList->currentRow();
     Q_ASSERT( currentRow >= 0 );
@@ -106,17 +106,17 @@ void SelectBookmark::slotBookmarkDelete()
     delete deletedItem;
 }
 
-void SelectBookmark::slotBookmarkItemActivated(QListWidgetItem *item)
+void KWSelectBookmark::slotBookmarkItemActivated(QListWidgetItem *item)
 {
     Q_ASSERT(item);
     lastBookMarkItem = item->text();
     emit bookmarkItemDoubleClicked(item);
 }
 
-SelectBookmarkDialog::SelectBookmarkDialog(QList<QString> nameList, QWidget *parent)
+KWSelectBookmarkDialog::KWSelectBookmarkDialog(QList<QString> nameList, QWidget *parent)
     : KDialog(parent)
 {
-    ui = new SelectBookmark( nameList, this );
+    ui = new KWSelectBookmark( nameList, this );
     setMainWidget( ui );
     setCaption(i18n("Select Bookmark") );
     setModal( true );
@@ -133,20 +133,20 @@ SelectBookmarkDialog::SelectBookmarkDialog(QList<QString> nameList, QWidget *par
     selectionChanged( ui->bookmarkRow() );
 }
 
-QString SelectBookmarkDialog::selectedBookmarkName()
+QString KWSelectBookmarkDialog::selectedBookmarkName()
 {
     return ui->bookmarkName();
 }
 
-void SelectBookmarkDialog::selectionChanged(int currentRow)
+void KWSelectBookmarkDialog::selectionChanged(int currentRow)
 {
     enableButtonOk( currentRow != -1 );
 }
 
-void SelectBookmarkDialog::bookmarkDoubleClicked(QListWidgetItem *item) {
+void KWSelectBookmarkDialog::bookmarkDoubleClicked(QListWidgetItem *item) {
     Q_UNUSED(item);
     accept();
 }
 
-#include <SelectBookmarkDialog.moc>
+#include <KWSelectBookmarkDialog.moc>
 

@@ -1,6 +1,6 @@
 <ui version="4.0" >
- <class>CreateNewBookmark</class>
- <widget class="QWidget" name="CreateNewBookmark" >
+ <class>CreateBookmark</class>
+ <widget class="QWidget" name="CreateBookmark" >
   <property name="geometry" >
    <rect>
     <x>0</x>
