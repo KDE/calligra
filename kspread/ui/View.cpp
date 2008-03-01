@@ -1049,22 +1049,25 @@ void View::Private::initActions()
   connect(actions->insertPicture, SIGNAL(triggered(bool)),view, SLOT( insertPicture() ));
   actions->insertPicture->setToolTip(i18n("Insert a picture"));
 
-#ifndef QT_NO_SQL
-  actions->insertFromDatabase  = new KAction(i18n("From &Database..."), view);
-  ac->addAction("insertFromDatabase", actions->insertFromDatabase );
-  connect(actions->insertFromDatabase, SIGNAL(triggered(bool)),view, SLOT( insertFromDatabase() ));
-  actions->insertFromDatabase->setToolTip(i18n("Insert data from a SQL database"));
-#endif
+  actions->insertFromClipboard  = new KAction(KIcon("klipper"), i18n("Insert From &Clipboard..."), view);
+  actions->insertFromClipboard->setIconText(i18n("Clipboard"));
+  ac->addAction("insertFromClipboard", actions->insertFromClipboard );
+  connect(actions->insertFromClipboard, SIGNAL(triggered(bool)),view, SLOT( insertFromClipboard() ));
+  actions->insertFromClipboard->setToolTip(i18n("Insert CSV data from the clipboard to the current cursor position/selection"));
 
-  actions->insertFromTextfile  = new KAction(i18n("From &Text File..."), view);
+  actions->insertFromTextfile  = new KAction(KIcon("text-plain"), i18n("Insert From &Text File..."), view);
+  actions->insertFromTextfile->setIconText(i18n("Text File"));
   ac->addAction("insertFromTextfile", actions->insertFromTextfile );
   connect(actions->insertFromTextfile, SIGNAL(triggered(bool)),view,  SLOT( insertFromTextfile() ));
   actions->insertFromTextfile->setToolTip(i18n("Insert data from a text file to the current cursor position/selection"));
 
-  actions->insertFromClipboard  = new KAction(i18n("From &Clipboard..."), view);
-  ac->addAction("insertFromClipboard", actions->insertFromClipboard );
-  connect(actions->insertFromClipboard, SIGNAL(triggered(bool)),view, SLOT( insertFromClipboard() ));
-  actions->insertFromClipboard->setToolTip(i18n("Insert CSV data from the clipboard to the current cursor position/selection"));
+#ifndef QT_NO_SQL
+  actions->insertFromDatabase = new KAction(KIcon("network-server-database"), i18n("Insert From &Database..."), view);
+  actions->insertFromDatabase->setIconText(i18n("Database"));
+  ac->addAction("insertFromDatabase", actions->insertFromDatabase );
+  connect(actions->insertFromDatabase, SIGNAL(triggered(bool)),view, SLOT( insertFromDatabase() ));
+  actions->insertFromDatabase->setToolTip(i18n("Insert data from a SQL database"));
+#endif
 
 //   actions->transform = new KAction( i18n("Transform Object..."), "rotate",
 //       0, view, SLOT( transformPart() ), ac, "transform" );
