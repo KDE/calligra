@@ -82,9 +82,9 @@
 -->
   <Separator/>
   <Menu name="ExternalData"><text>&amp;External Data</text>
-    <Action name="insertFromDatabase"/>
-    <Action name="insertFromTextfile"/>
     <Action name="insertFromClipboard"/>
+    <Action name="insertFromTextfile"/>
+    <Action name="insertFromDatabase"/>
   </Menu>
  </Menu>
  <Menu name="Format"><text>F&amp;ormat</text>
