@@ -210,7 +210,7 @@ private:
 
   /**
    * \ingroup Layout
-   * Checks, wether horizontal neighbours could be obscured
+   * Checks, whether horizontal neighbours could be obscured
    * and does so, if necessary.
    *
    * \internal Called from makeLayout().
@@ -219,7 +219,7 @@ private:
 
   /**
    * \ingroup Layout
-   * Checks, wether vertical neighbours could be obscured
+   * Checks, whether vertical neighbours could be obscured
    * and does so, if necessary.
    *
    * \internal Called from makeLayout().

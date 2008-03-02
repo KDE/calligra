@@ -1860,14 +1860,14 @@ void CellView::makeLayout( SheetView* sheetView, const Cell& cell )
     const QFontMetricsF fontMetrics(font, sheetView->paintDevice());
 
     // Then calculate text dimensions, i.e. d->textWidth and d->textHeight,
-    // and check wether the text fits into the cell dimension by the way.
+    // and check whether the text fits into the cell dimension by the way.
     d->calculateTextSize(font, fontMetrics);
 
     // Obscure horizontal cells, if necessary.
     if (!d->fittingWidth)
     {
         obscureHorizontalCells(sheetView, cell);
-        // Recalculate the text dimensions and check wether the text fits.
+        // Recalculate the text dimensions and check whether the text fits.
         d->calculateTextSize(font, fontMetrics);
     }
 
@@ -1875,7 +1875,7 @@ void CellView::makeLayout( SheetView* sheetView, const Cell& cell )
     if (!d->fittingHeight)
     {
         obscureVerticalCells(sheetView, cell);
-        // Recalculate the text dimensions and check wether the text fits.
+        // Recalculate the text dimensions and check whether the text fits.
         d->calculateTextSize(font, fontMetrics);
     }
 
@@ -1885,7 +1885,7 @@ void CellView::makeLayout( SheetView* sheetView, const Cell& cell )
         // Truncate the output text.
         d->displayText = textDisplaying(fontMetrics, cell);
 //         d->truncateText(font, fontMetrics);
-//         // Recalculate the text dimensions and check wether the text fits.
+//         // Recalculate the text dimensions and check whether the text fits.
 //         d->calculateTextSize(font, fontMetrics);
     }
 

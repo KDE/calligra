@@ -1336,7 +1336,7 @@ bool LocationEditWidget::activateItem()
     m_pView->canvasWidget()->setFocus();
 
     const QString text = this->text();
-    // check wether an already existing named area was entered
+    // check whether an already existing named area was entered
     Region region = m_pView->doc()->namedAreaManager()->namedArea(text);
     if (region.isValid())
     {
@@ -1344,7 +1344,7 @@ bool LocationEditWidget::activateItem()
         return true;
     }
 
-    // check wether a valid cell region was entered
+    // check whether a valid cell region was entered
     region = Region(text, m_pView->doc()->map(), m_pView->activeSheet());
     if (region.isValid())
     {
@@ -1493,7 +1493,7 @@ void EditWidget::slotDoneEdit()
 
 void EditWidget::keyPressEvent ( QKeyEvent* _ev )
 {
-    // Dont handle special keys and accelerators, except Enter ones
+    // Don't handle special keys and accelerators, except Enter ones
     if (( ( _ev->modifiers() & ( Qt::AltModifier | Qt::ControlModifier ) )
          || ( _ev->modifiers() & Qt::ShiftModifier )
          || ( _ev->key() == Qt::Key_Shift )

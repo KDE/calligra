@@ -249,7 +249,7 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
     switch (event->button())
     {
         case Qt::LeftButton:
-            // Check, wether a filter button was hit.
+            // Check, whether a filter button was hit.
             {
                 QPointF p1(xpos, ypos);
                 p1 -= QPointF( d->canvas->xOffset(), d->canvas->yOffset() );
@@ -370,7 +370,7 @@ void DefaultTool::mouseReleaseEvent( KoPointerEvent* )
 
 void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
 {
-    // Dont allow modifications, if document is readonly. Selecting is no modification
+    // Don't allow modifications, if document is readonly. Selecting is no modification
     if ( (!d->canvas->view()->doc()->isReadWrite()) && (d->mouseAction!=Private::Mark))
         return;
 
@@ -478,7 +478,7 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
         d->anchor = anchor;
     }
 
-    // Test wether mouse is over the Selection.handle
+    // Test whether mouse is over the Selection.handle
     const QRectF selectionHandle = d->canvas->view()->selection()->selectionHandleArea(d->canvas->view()->zoomHandler());
     if ( selectionHandle.contains( QPointF( position.x(), position.y() ) ) )
     {
@@ -538,7 +538,7 @@ void DefaultTool::keyPressEvent( QKeyEvent* event )
     if ( !sheet || d->canvas->formatKeyPress( event ) )
         return;
 
-    // Dont handle the remaining special keys.
+    // Don't handle the remaining special keys.
     if ( event->modifiers() & ( Qt::AltModifier | Qt::ControlModifier ) &&
          (event->key() != Qt::Key_Down) &&
          (event->key() != Qt::Key_Up) &&

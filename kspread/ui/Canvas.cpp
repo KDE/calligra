@@ -711,7 +711,7 @@ void Canvas::keyPressEvent ( QKeyEvent* event )
     d->toolProxy->keyPressEvent( event );
     if ( event->isAccepted() )
         return;
-    // Dont eat accelerators
+    // Don't eat accelerators
     if ( !( event->modifiers() & ( Qt::AltModifier | Qt::ControlModifier ) ) )
         event->accept();
 }

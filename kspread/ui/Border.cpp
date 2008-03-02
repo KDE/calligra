@@ -449,7 +449,7 @@ void VBorder::paintSizeIndicator( int mouseY )
 
     m_iResizePos = mouseY;
 
-    // Dont make the row have a height < 2 pixel.
+    // Don't make the row have a height < 2 pixel.
     double y = m_pView->zoomHandler()->zoomItY( sheet->rowPosition( m_iResizedRow ) - m_pCanvas->yOffset() );
     if ( m_iResizePos < y + 2 )
         m_iResizePos = (int) y;
@@ -1136,7 +1136,7 @@ void HBorder::paintSizeIndicator( int mouseX )
     else
       m_iResizePos = mouseX;
 
-    // Dont make the column have a width < 2 pixels.
+    // Don't make the column have a width < 2 pixels.
     double x = m_pView->zoomHandler()->zoomItX( sheet->columnPosition( m_iResizedColumn ) - m_pCanvas->xOffset() );
 
     if ( sheet->layoutDirection() == Qt::RightToLeft )

@@ -3171,7 +3171,7 @@ void View::fontSelected( const QString & _font )
     manipulator->add( *selection() );
     manipulator->execute();
 
-    // Dont leave the focus in the toolbars combo box ...
+    // Don't leave the focus in the toolbars combo box ...
     if ( d->canvas->editor() )
     {
         const Style style = Cell( d->activeSheet, selection()->marker() ).style();
@@ -3339,7 +3339,7 @@ void View::fontSizeSelected( int _size )
     manipulator->add( *selection() );
     manipulator->execute();
 
-    // Dont leave the focus in the toolbars combo box ...
+    // Don't leave the focus in the toolbars combo box ...
     if ( d->canvas->editor() )
     {
         Cell cell( d->activeSheet, d->selection->marker() );
@@ -5187,7 +5187,7 @@ void View::lastSheet()
 
 void View::keyPressEvent ( QKeyEvent* _ev )
 {
-  // Dont eat accelerators
+  // Don't eat accelerators
   if ( _ev->modifiers() & ( Qt::AltModifier | Qt::ControlModifier ) )
   {
     if ( _ev->modifiers() & ( Qt::ControlModifier ) )
