@@ -99,7 +99,7 @@ void ProxyModel::rebuildDataMap()
     
     // Some rows have apparently been removed from the model.
     // Remove remaining data sets from the list.
-    while ( dataSetCount > d->dataSets.count() )
+    while ( d->dataSets.count() > dataSetCount )
     {
         DataSet *dataSet = d->dataSets.takeLast();
         // TODO (Johannes): Keep the data sets to re-add them later
@@ -163,6 +163,17 @@ QVariant ProxyModel::headerData( int section,
         column = section;
         if ( d->firstColumnIsLabel )
             column++;
+    }
+    
+    if ( row >= sourceModel()->rowCount() )
+    {
+        qDebug() << "Warning: Requesting header data for row >= rowCount";
+        return QVariant();
+    }
+    if ( column >= sourceModel()->columnCount() )
+    {
+        qDebug() << "Warning: Requesting header data for column >= columnCount";
+        return QVariant();
     }
 
     return sourceModel()->data( sourceModel()->index( row, column ), role );
@@ -421,7 +432,6 @@ QVariant ProxyModel::xData( DataSet *dataSet, int column ) const
 QVariant ProxyModel::yData( DataSet *dataSet, int column ) const
 {
     int dataSetNumber = d->dataSets.indexOf( dataSet );
-    qDebug() << "y data of data set " << dataSet << " = data( " << d->dataMap[dataSetNumber] + 1 << ", " << column << " )";
     return data( index( d->dataMap[dataSetNumber], column ) );
 }
 
