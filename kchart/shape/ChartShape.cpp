@@ -288,10 +288,14 @@ void ChartShape::setSize( const QSizeF &size )
     {
         TextLabel *title = axis->title();
         QPointF titlePosition;
-        if ( axis->orientation() == Qt::Horizontal )
+        if ( axis->position() == BottomAxisPosition )
+            titlePosition = QPointF( size.width() / 2.0 - title->size().width() / 2.0, size.height() );
+        else if ( axis->position() == TopAxisPosition )
             titlePosition = QPointF( size.width() / 2.0, -title->size().height() );
-        else if ( axis->orientation() == Qt::Vertical )
+        else if ( axis->position() == LeftAxisPosition )
             titlePosition = QPointF( -title->size().height(), size.height() / 2.0 );
+        else if ( axis->position() == RightAxisPosition )
+            titlePosition = QPointF( size.width(), size.height() / 2.0 );
         title->setPosition( titlePosition );
     }
     // Usually, this is done by signals from the QWidget that we resize.
