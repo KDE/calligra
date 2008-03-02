@@ -174,6 +174,7 @@ ChartShape::ChartShape()
     setShapeId( ChartShapeId );
     
     d->legend = new Legend( this );
+    d->legend->setVisible( false );
     
     d->plotArea = new PlotArea( this );
     d->model = new ProxyModel ( d->plotArea );
@@ -184,14 +185,17 @@ ChartShape::ChartShape()
     d->title = new TextLabel( this );
     d->title->setType( TitleLabelType );
     d->title->setText( i18n( "Title" ) );
+    d->title->setVisible( false );
     
     d->subTitle = new TextLabel( this );
     d->subTitle->setType( SubTitleLabelType );
     d->subTitle->setText( i18n( "Subtitle" ) );
+    d->subTitle->setVisible( false );
     
     d->footer = new TextLabel( this );
     d->footer->setType( FooterLabelType );
     d->footer->setText( i18n( "Footer" ) );
+    d->footer->setVisible( false );
     
     d->floor = new Surface( d->plotArea );
     d->wall = new Surface( d->plotArea );
@@ -280,10 +284,32 @@ void ChartShape::setPosition( const QPointF &pos )
 
 void ChartShape::setSize( const QSizeF &size )
 {
+    foreach( Axis *axis, d->plotArea->axes() )
+    {
+        TextLabel *title = axis->title();
+        QPointF titlePosition;
+        if ( axis->orientation() == Qt::Horizontal )
+            titlePosition = QPointF( size.width() / 2.0, -title->size().height() );
+        else if ( axis->orientation() == Qt::Vertical )
+            titlePosition = QPointF( -title->size().height(), size.height() / 2.0 );
+        title->setPosition( titlePosition );
+    }
     // Usually, this is done by signals from the QWidget that we resize.
     // But since a KoShape is not a QWidget, we need to do this manually.
     d->plotArea->kdChart()->resize( size.toSize() );
     KoShape::setSize( size );
+}
+
+QRectF ChartShape::boundingRect() const
+{
+    QRectF rect = KoShape::boundingRect();
+    
+    foreach( KoShape *shape, iterator() )
+    {
+        rect = rect.united( shape->boundingRect() );
+    }
+    
+    return rect;
 }
 
 ChartType ChartShape::chartType() const
