@@ -225,11 +225,17 @@ QWidget *ChartTool::createOptionWidget()
              this,   SLOT( setShowLegend( bool ) ));
 
     connect( widget, SIGNAL( chartTypeChanged( ChartType ) ),
-             this,    SLOT( setChartType( ChartType ) ) );
+             this,   SLOT( setChartType( ChartType ) ) );
     connect( widget, SIGNAL( chartSubTypeChanged( ChartSubtype ) ),
-             this,    SLOT( setChartSubType( ChartSubtype ) ) );
+             this,   SLOT( setChartSubType( ChartSubtype ) ) );
     connect( widget, SIGNAL( threeDModeToggled( bool ) ),
-             this,    SLOT( setThreeDMode( bool ) ) );
+             this,   SLOT( setThreeDMode( bool ) ) );
+    connect( widget, SIGNAL( showTitleChanged( bool ) ),
+             this,   SLOT( setShowTitle( bool ) ) );
+    connect( widget, SIGNAL( showSubTitleChanged( bool ) ),
+             this,   SLOT( setShowSubTitle( bool ) ) );
+    connect( widget, SIGNAL( showFooterChanged( bool ) ),
+             this,   SLOT( setShowFooter( bool ) ) );
 
     connect( widget, SIGNAL( axisAdded( AxisPosition, const QString& ) ),
              this,   SLOT( addAxis( AxisPosition, const QString& ) ) );
@@ -317,22 +323,28 @@ void ChartTool::setThreeDMode( bool threeD )
 void ChartTool::setShowTitle( bool show )
 {
     Q_ASSERT( d->shape );
-    if ( d->shape )
+    if ( d->shape ) {
         d->shape->title()->setVisible( show );
+        d->shape->update();
+    }
 }
 
 void ChartTool::setShowSubTitle( bool show )
 {
     Q_ASSERT( d->shape );
-    if ( d->shape )
+    if ( d->shape ) {
         d->shape->subTitle()->setVisible( show );
+        d->shape->update();
+    }
 }
 
 void ChartTool::setShowFooter( bool show )
 {
     Q_ASSERT( d->shape );
-    if ( d->shape )
+    if ( d->shape ) {
         d->shape->footer()->setVisible( show );
+        d->shape->update();
+    }
 }
 
 void ChartTool::setDataDirection( Qt::Orientation direction )
