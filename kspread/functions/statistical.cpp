@@ -597,7 +597,7 @@ static Value IterateInverse( const double unknown, const QString formula, double
   }
 
   // error no convergence - set flag
-  convergenceError = TRUE;
+  convergenceError = true;
   return Value(0.0);
 }
 
