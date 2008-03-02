@@ -80,8 +80,6 @@ public:
     // The list of axes
     QList<Axis*> axes;
     
-    QList<KDChart::AbstractDiagram*> registeredKdDiagrams;
-    
     KDChart::Chart *kdChart;
     KDChart::AbstractCoordinatePlane *kdPlane;
     
@@ -125,6 +123,7 @@ PlotArea::PlotArea( ChartShape *parent )
     xAxis->setPosition( BottomAxisPosition );
     Axis *yAxis = new Axis( this );
     yAxis->setPosition( LeftAxisPosition );
+    yAxis->setShowGrid( true );
     d->axes.append( xAxis );
     d->axes.append( yAxis );
 };
@@ -169,7 +168,6 @@ void PlotArea::setSize( const QSizeF &size )
 
 QList<Axis*> PlotArea::axes() const
 {
-    qDebug() << "PlotArea::axes() = " << d->axes;
     return d->axes;
 }
 
@@ -278,13 +276,6 @@ bool PlotArea::addAxis( Axis *axis )
     if ( d->axes.contains( axis ) )
         return false;
     d->axes.append( axis );
-    
-    foreach ( KDChart::AbstractDiagram *diagram, d->registeredKdDiagrams )
-    {
-        KDChart::AbstractCartesianDiagram *cartesianDiagram = dynamic_cast<KDChart::AbstractCartesianDiagram*>(diagram);
-        if ( cartesianDiagram )
-            cartesianDiagram->addAxis( axis->kdAxis() );
-    }
 
     return true;
 }
@@ -295,13 +286,6 @@ bool PlotArea::removeAxis( Axis *axis )
         return false;
     d->axes.removeAll( axis );
     
-    foreach ( KDChart::AbstractDiagram *diagram, d->registeredKdDiagrams )
-    {
-        KDChart::AbstractCartesianDiagram *cartesianDiagram = dynamic_cast<KDChart::AbstractCartesianDiagram*>(diagram);
-        if ( cartesianDiagram )
-            cartesianDiagram->takeAxis( axis->kdAxis() );
-    }
-    
     return true;
 }
 
@@ -309,11 +293,9 @@ bool PlotArea::removeAxis( Axis *axis )
 
 void PlotArea::setChartType( ChartType type )
 {
-    qDebug() << "Chart type change requested: " << type;
     d->chartType = type;
     
     foreach( DataSet *dataSet, proxyModel()->dataSets() ) {
-        qDebug() << "Setting...";
         dataSet->setChartType( type );
     }
 

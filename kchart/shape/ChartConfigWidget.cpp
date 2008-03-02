@@ -411,8 +411,12 @@ void ChartConfigWidget::update()
             d->ui.axes->clear();
             d->ui.dataSetAxes->clear();
             foreach ( Axis *axis, d->axes ) {
+                if ( axis->dimension() != YAxisDimension )
+                    continue;
     			d->ui.axes->addItem( axis->titleText() );
+    			d->ui.dataSetAxes->blockSignals( true );
     			d->ui.dataSetAxes->addItem( axis->titleText() );
+                d->ui.dataSetAxes->blockSignals( false );
     		}
     		
     		const Axis *selectedAxis = d->shape->plotArea()->axes().first();
@@ -771,9 +775,15 @@ void ChartConfigWidget::ui_axisSelectionChanged( int index ) {
 	Q_ASSERT( d->axes.size() > index );
 	
 	Axis *axis = d->axes[ index ];
+	d->ui.axisTitle->blockSignals( true );
 	d->ui.axisTitle->setText( axis->titleText() );
+	d->ui.axisTitle->blockSignals( false );
+	d->ui.axisShowTitle->blockSignals( true );
 	d->ui.axisShowTitle->setChecked( !axis->titleText().isEmpty() );
+	d->ui.axisShowTitle->blockSignals( false );
+	d->ui.axisShowGridLines->blockSignals( true );
 	d->ui.axisShowGridLines->setChecked( axis->showGrid() );
+	d->ui.axisShowGridLines->blockSignals( false );
 }
 
 void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
@@ -784,9 +794,15 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
     
     DataSet *dataSet = d->dataSets[ index ];
     //d->ui.datasetColor->setText( axis->titleText() );
+    d->ui.dataSetAxes->blockSignals( true );
     d->ui.dataSetAxes->setCurrentIndex( d->axes.indexOf( dataSet->attachedAxis() ) );
+    d->ui.dataSetAxes->blockSignals( false );
+    d->ui.datasetShowValues->blockSignals( true );
     d->ui.datasetShowValues->setChecked( dataSet->showValues() );
+    d->ui.datasetShowValues->blockSignals( false );
+    d->ui.dataSetShowLabels->blockSignals( true );
     d->ui.dataSetShowLabels->setChecked( dataSet->showLabels() );
+    d->ui.dataSetShowLabels->blockSignals( false );
 }
 
 void ChartConfigWidget::ui_dataSetAxisSelectionChanged( int index ) {

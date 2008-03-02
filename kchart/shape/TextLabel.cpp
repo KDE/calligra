@@ -57,6 +57,8 @@ TextLabel::TextLabel( ChartShape *parent )
 {
     Q_ASSERT( parent );
     
+    setBackground( QBrush( Qt::black ) );
+    
     d->chart = parent;
     parent->addChild( this );
 }

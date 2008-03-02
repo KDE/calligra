@@ -226,8 +226,8 @@ QWidget *ChartTool::createOptionWidget()
 
     connect( widget, SIGNAL( chartTypeChanged( ChartType ) ),
              this,    SLOT( setChartType( ChartType ) ) );
-    connect( widget, SIGNAL( chartSubtypeChanged( ChartSubtype ) ),
-             this,    SLOT( setChartSubtype( ChartSubtype ) ) );
+    connect( widget, SIGNAL( chartSubTypeChanged( ChartSubtype ) ),
+             this,    SLOT( setChartSubType( ChartSubtype ) ) );
     connect( widget, SIGNAL( threeDModeToggled( bool ) ),
              this,    SLOT( setThreeDMode( bool ) ) );
 
