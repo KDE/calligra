@@ -50,7 +50,7 @@ void FormulaCursor::paint( QPainter& painter ) const
         top += QPointF( tmp, 0 );
     }
     else if( m_currentElement->childElements().isEmpty() )
-        // center cursor in elements that have no childs - mostly BasicElements
+        // center cursor in elements that have no children - mostly BasicElements
         top += QPointF( m_currentElement->width()/2, 0 );
     else
     { 

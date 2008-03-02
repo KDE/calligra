@@ -126,7 +126,7 @@
     <item row="2" column="0" >
      <widget class="QPushButton" name="buttonLoad" >
       <property name="text" >
-       <string>Load...</string>
+       <string comment="This button opens a file dialog to load a MathML file" >Load...</string>
       </property>
      </widget>
     </item>

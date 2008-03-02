@@ -103,9 +103,8 @@ double TokenElement::cursorOffset( const FormulaCursor* cursor ) const
         // TODO do something special
     }
 
-    QFontMetrics fm( m_font );
-    double space = fm.width( cursor->position() + 1 ) - fm.width( cursor->position() );
-    return space - fm.width( m_rawString[ cursor->position() + 1 ] );
+    QFontMetricsF fm( m_font );
+    return fm.width( m_rawString.left( cursor->position() ) );
 }
 
 QFont TokenElement::font() const
@@ -138,7 +137,7 @@ bool TokenElement::readMathMLContent( const KoXmlElement& element )
 
 void TokenElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
-    // split the m_rawString into text content chunks that are devided by glyphs 
+    // split the m_rawString into text content chunks that are divided by glyphs 
     // which are represented as ObjectReplacementCharacter and write each chunk
     QStringList tmp = m_rawString.split( QChar( QChar::ObjectReplacementCharacter ) );
     for ( int i = 0; i < tmp.count(); i++ ) {
