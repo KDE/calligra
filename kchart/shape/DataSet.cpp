@@ -85,6 +85,8 @@ DataSet::DataSet( PlotArea *plotArea )
 
 DataSet::~DataSet()
 {
+    if ( d->attachedAxis )
+        d->attachedAxis->detachDataSet( this );
 }
 
 
