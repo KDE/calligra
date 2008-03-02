@@ -719,8 +719,9 @@ void FormulaDialog::slotDoubleClicked( QModelIndex item )
     slotChangeText( "" );
 }
 
-void FormulaDialog::slotSelected( QString function )
+void FormulaDialog::slotSelected( const QString& afunction )
 {
+    QString function = afunction;
     if( function.isNull() )
         function = proxyModel->data( functions->currentIndex() ).toString();
 

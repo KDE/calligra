@@ -46,7 +46,7 @@ class SheetSelectPage : public QWidget
     /**
      * @see printOptionPrefix()
      */
-    void setAvailableSheets(QStringList sheetlist);
+    void setAvailableSheets(const QStringList& sheetlist);
 
     /**
      * @return false if no sheet is selected for printing.

@@ -487,7 +487,7 @@ Value func_covar_helper (Value range1, Value range2,
 //
 // helper: GetValue - Returns result of a formula.
 //
-static double GetValue( const QString formula, const double x )
+static double GetValue( const QString& formula, const double x )
 {  
   Formula f;
   QString expr = formula;
@@ -506,7 +506,7 @@ static double GetValue( const QString formula, const double x )
 //
 // helper: IterateInverse - Returns the unknown value
 //
-static Value IterateInverse( const double unknown, const QString formula, double x0, double x1, bool& convergenceError)
+static Value IterateInverse( const double unknown, const QString& formula, double x0, double x1, bool& convergenceError)
 {
   convergenceError = false; // reset error flag
   double eps = 1.0E-7;      // define Epsilon
