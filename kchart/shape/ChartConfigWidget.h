@@ -82,6 +82,9 @@ signals:
     void dataSetChartTypeChanged( DataSet *dataSet, ChartType type );
     void dataSetChartSubTypeChanged( DataSet *dataSet, ChartSubtype subType );
     void threeDModeToggled( bool threeD );
+    void showTitleChanged( bool );
+    void showSubTitleChanged( bool );
+    void showFooterChanged( bool );
     
     void showVerticalLinesChanged( bool b );
     void showHorizontalLinesChanged( bool b );
@@ -99,6 +102,7 @@ signals:
 
     void axisAdded( AxisPosition, const QString& title );    
     void axisRemoved( Axis *axis );
+    void axisShowTitleChanged( Axis *axis, bool b );
     void axisTitleChanged( Axis *axis, const QString& title );
     void axisShowGridLinesChanged( Axis *axis, bool b );
     void axisUseLogarithmicScalingChanged( Axis *axis, bool b );

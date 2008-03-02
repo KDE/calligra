@@ -237,6 +237,8 @@ QWidget *ChartTool::createOptionWidget()
              this,   SLOT( removeAxis( Axis* ) ) );
     connect( widget, SIGNAL( axisTitleChanged( Axis*, const QString& ) ),
     		 this,   SLOT( setAxisTitle( Axis*, const QString& ) ) );
+    connect( widget, SIGNAL( axisShowTitleChanged( Axis*, bool ) ),
+             this,   SLOT( setAxisShowTitle( Axis*, bool ) ) );
     connect( widget, SIGNAL( axisShowGridLinesChanged( Axis*, bool ) ),
     		 this,   SLOT( setAxisShowGridLines( Axis*, bool ) ) );
     connect( widget, SIGNAL( axisUseLogarithmicScalingChanged( Axis*, bool ) ),
@@ -284,7 +286,7 @@ void ChartTool::setChartType( ChartType type, ChartSubtype subtype )
 }
 
 
-void ChartTool::setChartSubtype( ChartSubtype subtype )
+void ChartTool::setChartSubType( ChartSubtype subtype )
 {
     Q_ASSERT( d->shape );
     if ( d->shape != 0 )
@@ -310,6 +312,27 @@ void ChartTool::setThreeDMode( bool threeD )
     Q_ASSERT( d->shape );
     if ( d->shape != 0 )
         d->shape->setThreeD( threeD );
+}
+
+void ChartTool::setShowTitle( bool show )
+{
+    Q_ASSERT( d->shape );
+    if ( d->shape )
+        d->shape->title()->setVisible( show );
+}
+
+void ChartTool::setShowSubTitle( bool show )
+{
+    Q_ASSERT( d->shape );
+    if ( d->shape )
+        d->shape->subTitle()->setVisible( show );
+}
+
+void ChartTool::setShowFooter( bool show )
+{
+    Q_ASSERT( d->shape );
+    if ( d->shape )
+        d->shape->footer()->setVisible( show );
 }
 
 void ChartTool::setDataDirection( Qt::Orientation direction )
@@ -433,6 +456,13 @@ void ChartTool::removeAxis( Axis *axis )
 void ChartTool::setAxisTitle( Axis *axis, const QString& title )
 {
 	axis->setTitleText( title );
+}
+
+void ChartTool::setAxisShowTitle( Axis *axis, bool show )
+{
+    Q_ASSERT( d->shape );
+    axis->title()->setVisible( show );
+    d->shape->update();
 }
 
 void ChartTool::setAxisShowGridLines( Axis *axis, bool b )

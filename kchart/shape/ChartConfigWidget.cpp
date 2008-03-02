@@ -29,6 +29,7 @@
 #include "PlotArea.h"
 #include "Legend.h"
 #include "DataSet.h"
+#include "TextLabel.h"
 #include "Axis.h"
 #include "ui_ChartTableEditor.h"
 #include "ui_ChartConfigWidget.h"
@@ -202,6 +203,13 @@ ChartConfigWidget::ChartConfigWidget()
     d->tableView = new ChartTableView;
     d->tableEditor.gridLayout->addWidget( d->tableView );
     d->tableEditorDialog->hide();
+    
+    connect( d->ui.showTitle, SIGNAL( toggled( bool ) ),
+             this, SIGNAL( showTitleChanged( bool ) ) );
+    connect( d->ui.showSubTitle, SIGNAL( toggled( bool ) ),
+             this, SIGNAL( showSubTitleChanged( bool ) ) );
+    connect( d->ui.showFooter, SIGNAL( toggled( bool ) ),
+             this, SIGNAL( showFooterChanged( bool ) ) );
     
     connect( d->ui.threeDLook, SIGNAL( toggled( bool ) ),
              this, SLOT( setThreeDMode( bool ) ) );
@@ -783,18 +791,28 @@ void ChartConfigWidget::ui_axisSelectionChanged( int index ) {
     // Check for valid index
     if ( index < 0 )
         return;
-	Q_ASSERT( d->axes.size() > index );
+	Q_ASSERT( d->axes.size() >= index );
 	
 	Axis *axis = d->axes[ index ];
+
+    qDebug() << axis;
+    
 	d->ui.axisTitle->blockSignals( true );
 	d->ui.axisTitle->setText( axis->titleText() );
 	d->ui.axisTitle->blockSignals( false );
 	d->ui.axisShowTitle->blockSignals( true );
-	d->ui.axisShowTitle->setChecked( !axis->titleText().isEmpty() );
+	d->ui.axisShowTitle->setChecked( axis->title()->isVisible() );
 	d->ui.axisShowTitle->blockSignals( false );
 	d->ui.axisShowGridLines->blockSignals( true );
 	d->ui.axisShowGridLines->setChecked( axis->showGrid() );
 	d->ui.axisShowGridLines->blockSignals( false );
+	
+	d->axisScalingDialog.logarithmicScaling->blockSignals( true );
+	if ( axis->dimension() == YAxisDimension )
+        d->axisScalingDialog.logarithmicScaling->setEnabled( true );
+	else
+	    d->axisScalingDialog.logarithmicScaling->setEnabled( false );
+    d->axisScalingDialog.logarithmicScaling->blockSignals( false );
 }
 
 void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
@@ -840,7 +858,7 @@ void ChartConfigWidget::ui_axisShowTitleChanged( bool b ) {
 	Q_ASSERT( d->axes.size() > d->ui.axes->currentIndex() );
 	
 	// To hide the axis title, we pass an empty string
-	emit axisTitleChanged( d->axes[ d->ui.axes->currentIndex() ], b ? d->ui.axisTitle->text() : "" );
+	emit axisShowTitleChanged( d->axes[ d->ui.axes->currentIndex() ], b );
 }
 
 void ChartConfigWidget::ui_axisShowGridLinesChanged( bool b ) {

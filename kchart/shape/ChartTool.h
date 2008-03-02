@@ -63,11 +63,14 @@ public:
 
 private slots:
     void setChartType( ChartType type, ChartSubtype subtype = NoChartSubtype );
-    void setChartSubtype( ChartSubtype subtype );
-    void setThreeDMode( bool );
+    void setChartSubType( ChartSubtype subtype );
+    void setThreeDMode( bool threeD );
     void setDataDirection( Qt::Orientation );
     void setFirstRowIsLabel( bool b );
     void setFirstColumnIsLabel( bool b );
+    void setShowTitle( bool show );
+    void setShowSubTitle( bool show );
+    void setShowFooter( bool show );
 
     // Datasets
     void setDataSetChartType( DataSet *dataSet, ChartType type );
@@ -80,6 +83,7 @@ private slots:
     // Axes
     void addAxis( AxisPosition, const QString& title = "" );
     void removeAxis( Axis *axis );
+    void setAxisShowTitle( Axis *axis, bool show );
     void setAxisTitle( Axis *axis, const QString& title );
     void setAxisShowGridLines( Axis *axis, bool b = true );
     void setAxisUseLogarithmicScaling(Axis *axis, bool b = true );

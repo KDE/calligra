@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>252</width>
+    <width>250</width>
     <height>422</height>
    </rect>
   </property>
@@ -87,7 +87,7 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>232</width>
+        <width>230</width>
         <height>306</height>
        </rect>
       </property>
@@ -122,20 +122,6 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="6" column="0" colspan="3" >
         <widget class="QComboBox" name="axes" />
-       </item>
-       <item row="7" column="0" >
-        <widget class="QCheckBox" name="axisShowTitle" >
-         <property name="text" >
-          <string>Label</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="0" colspan="5" >
-        <widget class="QCheckBox" name="axisShowGridLines" >
-         <property name="text" >
-          <string>Show Grid Lines</string>
-         </property>
-        </widget>
        </item>
        <item row="9" column="0" colspan="5" >
         <widget class="QPushButton" name="axisScalingButton" >
@@ -189,13 +175,10 @@ p, li { white-space: pre-wrap; }
          </property>
         </widget>
        </item>
-       <item row="7" column="1" colspan="4" >
-        <widget class="QLineEdit" name="axisTitle" />
-       </item>
        <item row="1" column="0" colspan="5" >
         <layout class="QHBoxLayout" name="horizontalLayout" >
          <item>
-          <widget class="QCheckBox" name="checkBox" >
+          <widget class="QCheckBox" name="showTitle" >
            <property name="sizePolicy" >
             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
              <horstretch>0</horstretch>
@@ -208,7 +191,7 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox_2" >
+          <widget class="QCheckBox" name="showSubTitle" >
            <property name="sizePolicy" >
             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
              <horstretch>0</horstretch>
@@ -221,7 +204,7 @@ p, li { white-space: pre-wrap; }
           </widget>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox_3" >
+          <widget class="QCheckBox" name="showFooter" >
            <property name="sizePolicy" >
             <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
              <horstretch>0</horstretch>
@@ -235,14 +218,46 @@ p, li { white-space: pre-wrap; }
          </item>
         </layout>
        </item>
+       <item row="7" column="0" >
+        <widget class="QCheckBox" name="axisShowTitle" >
+         <property name="text" >
+          <string>Label</string>
+         </property>
+        </widget>
+       </item>
+       <item row="8" column="0" colspan="5" >
+        <widget class="QCheckBox" name="axisShowGridLines" >
+         <property name="text" >
+          <string>Show Grid Lines</string>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="1" colspan="4" >
+        <widget class="QLineEdit" name="axisTitle" />
+       </item>
       </layout>
+      <zorder>pushButton_4</zorder>
+      <zorder>line_2</zorder>
+      <zorder>label_2</zorder>
+      <zorder>axes</zorder>
+      <zorder>axisScalingButton</zorder>
+      <zorder>addAxis</zorder>
+      <zorder>removeAxis</zorder>
+      <zorder>line_3</zorder>
+      <zorder>label_4</zorder>
+      <zorder>axisTitle</zorder>
+      <zorder>horizontalLayoutWidget_2</zorder>
+      <zorder>axisShowTitle</zorder>
+      <zorder>commandLinkButton</zorder>
+      <zorder>commandLinkButton_2</zorder>
+      <zorder>axisShowGridLines</zorder>
      </widget>
      <widget class="QWidget" name="tab_2" >
       <property name="geometry" >
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>232</width>
+        <width>207</width>
         <height>306</height>
        </rect>
       </property>
@@ -416,7 +431,7 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>232</width>
+        <width>207</width>
         <height>306</height>
        </rect>
       </property>

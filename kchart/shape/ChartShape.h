@@ -115,6 +115,8 @@ public:
     void paint( QPainter &painter, const KoViewConverter &converter );
     void paintComponent( QPainter &painter, const KoViewConverter &converter );
     
+    QRectF boundingRect() const;
+    
     /// reimplemented
     bool loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
     bool loadOdfData( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
