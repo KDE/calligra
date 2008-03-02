@@ -104,11 +104,7 @@ Axis::Axis( PlotArea *parent )
     d->kdPlane = new KDChart::CartesianCoordinatePlane();
     d->kdPlane->setReferenceCoordinatePlane( d->plotArea->kdPlane() );
     
-    KDChart::GridAttributes gridAttributes = d->kdPlane->gridAttributes( Qt::Vertical );
-    gridAttributes.setGridVisible( false );
-    d->kdPlane->setGridAttributes( Qt::Vertical, gridAttributes );
-
-    gridAttributes = d->kdPlane->gridAttributes( Qt::Horizontal );
+    KDChart::GridAttributes gridAttributes = d->kdPlane->gridAttributes( Qt::Horizontal );
     gridAttributes.setGridVisible( false );
     d->kdPlane->setGridAttributes( Qt::Horizontal, gridAttributes );
     
@@ -122,6 +118,8 @@ Axis::Axis( PlotArea *parent )
     d->kdBarDiagram->setModel( d->kdBarDiagramModel );
     d->kdPlane->addDiagram( d->kdBarDiagram );
     //d->plotArea->parent()->legend()->kdLegend()->addDiagram( d->kdBarDiagram );
+    
+    setShowGrid( false );
     
     d->title = new TextLabel( d->plotArea->parent() );
 }
