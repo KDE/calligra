@@ -117,6 +117,7 @@ public:
     
     int                   selectedDataset;
     
+    QList<Axis*> dataSetAxes;
     QList<Axis*> axes;
     QList<DataSet*> dataSets;
 
@@ -342,30 +343,39 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
     if ( action == d->dataSetNormalBarChartAction ) {
         type    = BarChartType;
         subtype = NormalChartSubtype;
+        d->ui.dataSetChartTypeMenu->setText( i18n( "Normal Bar Chart" ) );
     } else if ( action == d->dataSetStackedBarChartAction ) {
         type    = BarChartType;
         subtype = StackedChartSubtype;
+        d->ui.dataSetChartTypeMenu->setText( i18n( "Stacked Bar Chart" ) );
     } else if ( action == d->dataSetPercentBarChartAction ) {
         type    = BarChartType;
         subtype = PercentChartSubtype;
+        d->ui.dataSetChartTypeMenu->setText( i18n( "Percent Bar Chart" ) );
     } else if ( action == d->dataSetNormalLineChartAction ) {
         type    = LineChartType;
         subtype = NormalChartSubtype;
+        d->ui.dataSetChartTypeMenu->setText( i18n( "Normal Line Chart" ) );
     } else if ( action == d->dataSetStackedLineChartAction ) {
         type    = LineChartType;
         subtype = StackedChartSubtype;
+        d->ui.dataSetChartTypeMenu->setText( i18n( "Stacked Line Chart" ) );
     } else if ( action == d->dataSetPercentLineChartAction ) {
         type    = LineChartType;
         subtype = PercentChartSubtype;
+        d->ui.dataSetChartTypeMenu->setText( i18n( "Percent Line Chart" ) );
     } else if ( action == d->dataSetNormalAreaChartAction ) {
         type    = AreaChartType;
         subtype = NormalChartSubtype;
+        d->ui.dataSetChartTypeMenu->setText( i18n( "Normal Area Chart" ) );
     } else if ( action == d->dataSetStackedAreaChartAction ) {
         type    = AreaChartType;
         subtype = StackedChartSubtype;
+        d->ui.dataSetChartTypeMenu->setText( i18n( "Stacked Area Chart" ) );
     } else if ( action == d->dataSetPercentAreaChartAction ) {
         type    = AreaChartType;
         subtype = PercentChartSubtype;
+        d->ui.dataSetChartTypeMenu->setText( i18n( "Percent Area Chart" ) );
     }
     
     emit dataSetChartTypeChanged( d->dataSets[ d->ui.dataSets->currentIndex() ], type );
@@ -411,12 +421,13 @@ void ChartConfigWidget::update()
             d->ui.axes->clear();
             d->ui.dataSetAxes->clear();
             foreach ( Axis *axis, d->axes ) {
-                if ( axis->dimension() != YAxisDimension )
-                    continue;
     			d->ui.axes->addItem( axis->titleText() );
-    			d->ui.dataSetAxes->blockSignals( true );
-    			d->ui.dataSetAxes->addItem( axis->titleText() );
-                d->ui.dataSetAxes->blockSignals( false );
+                if ( axis->dimension() == YAxisDimension ) {
+                    d->dataSetAxes.append( axis );
+                    d->ui.dataSetAxes->blockSignals( true );
+    			    d->ui.dataSetAxes->addItem( axis->titleText() );
+                    d->ui.dataSetAxes->blockSignals( false );
+                }
     		}
     		
     		const Axis *selectedAxis = d->shape->plotArea()->axes().first();
