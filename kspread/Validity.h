@@ -104,7 +104,7 @@ public:
     bool isEmpty() const;
 
     /**
-     * Tests wether the content of \p cell is allowed.
+     * Tests whether the content of \p cell is allowed.
      * \return \c true if the content is valid
      */
     bool testValidity( const Cell* cell ) const;

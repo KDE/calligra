@@ -200,7 +200,7 @@ static int opPrecedence( Token::Op op )
     case Token::LessEqual    : prec = 1; break;
     case Token::GreaterEqual : prec = 1; break;
 #ifdef KSPREAD_INLINE_ARRAYS
-    // FIXME Stefan: I don't know wether zero is right for this case. :-(
+    // FIXME Stefan: I don't know whether zero is right for this case. :-(
     case Token::CurlyBra     : prec = 0; break;
     case Token::CurlyKet     : prec = 0; break;
     case Token::Pipe         : prec = 0; break;

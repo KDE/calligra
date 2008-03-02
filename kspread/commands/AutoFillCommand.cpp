@@ -596,7 +596,7 @@ static QList<Value> findInterval(const AutoFillSequence& _seqList)
 
         // Verify the delta by looking at cells intervalLength.._seqList.count().
         // We only looked at the cells 0..2*intervalLength-1.
-        // Now test wether the cells from "(i-1) * intervalLength + s" share the same delta
+        // Now test whether the cells from "(i-1) * intervalLength + s" share the same delta
         // with the cell "i * intervalLength + s" for all test=1..._seqList.count()/intervalLength
         // and for all s=0...intervalLength-1.
         for (int i = 1; (i+1) * intervalLength < _seqList.count(); ++i)

@@ -38,7 +38,7 @@ class Sheet;
  * A cell could refer to other cells, which need to be recalculated
  * before. The order of recalculation is determined by the depth of
  * references, i.e. first the cells, which do not refer to other cells,
- * are recalculated. Cells refering to those are next. Then cells, which
+ * are recalculated. Cells referring to those are next. Then cells, which
  * refer to the ones in the last step follow and so on until all cells
  * have been updated.
  *
@@ -61,7 +61,7 @@ public:
   ~RecalcManager();
 
   /**
-   * Recalculates the cells refering to cells in \p region .
+   * Recalculates the cells referring to cells in \p region .
    * The cells are recalculated sorted by the reference depth in ascending order.
    *
    * \see recalc()

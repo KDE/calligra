@@ -532,7 +532,7 @@ public:
     Cell& operator=( const Cell& other );
 
     /**
-     * Tests wether this cell's location is less than the \p other 's.
+     * Tests whether this cell's location is less than the \p other 's.
      * (QMap support)
      * \note Does not compare the cell attributes/data.
      */

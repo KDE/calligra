@@ -152,7 +152,7 @@ public:
   const QPoint& marker() const;
 
   /**
-   * Checks wether the region consists only of one point
+   * Checks whether the region consists only of one point
    */
   bool isSingular() const;
 
@@ -233,7 +233,7 @@ public:
 
 
   /**
-   * Sets, wether multiple occurrences of elements are allowed.
+   * Sets whether multiple occurrences of elements are allowed.
    */
   void setMultipleOccurences(bool state);
 

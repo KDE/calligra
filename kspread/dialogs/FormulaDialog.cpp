@@ -617,7 +617,7 @@ void FormulaDialog::slotDoubleClicked( QModelIndex item )
     m_focus = 0;
     int old_length = result->text().length();
 
-    // Dont change order of these function calls due to a bug in Qt 2.2
+    // Do not change order of these function calls due to a bug in Qt 2.2
     m_browser->setText( m_desc->toQML() );
     m_tabwidget->setTabEnabled( m_tabwidget->indexOf(m_input), true );
     m_tabwidget->setCurrentIndex( 1 );

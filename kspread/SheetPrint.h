@@ -408,7 +408,7 @@ public:
     double zoom() const;
 
     /**
-     * Checks wether the page has content to print
+     * Checks whether the page has content to print
     */
     bool pageNeedsPrinting( QRect& page_range );
 
@@ -500,12 +500,12 @@ private:
      */
     KoPageFormat::Format m_paperFormat;
     /**
-     * The paper width in millimeters. Dont change this value, it is calculated by
+     * The paper width in millimeters. Do not change this value, it is calculated by
      * @ref #calcPaperSize from the value @ref #m_paperFormat.
      */
     float m_paperWidth;
     /**
-     * The paper height in millimeters. Dont change this value, it is calculated by
+     * The paper height in millimeters. Do not change this value, it is calculated by
      * @ref #calcPaperSize from the value @ref #m_paperFormat.
      */
     float m_paperHeight;
@@ -608,11 +608,11 @@ private:
     bool m_bPrintCommentIndicator;
 
     /**
-     * Width of repeated columns in points, stored for perfomance reasons
+     * Width of repeated columns in points, stored for performance reasons
      */
     double m_dPrintRepeatColumnsWidth;
     /**
-     * Height of repeated rows in points, stored for perfomance reasons
+     * Height of repeated rows in points, stored for performance reasons
      */
     double m_dPrintRepeatRowsHeight;
 

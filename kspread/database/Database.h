@@ -90,7 +90,7 @@ public:
     bool containsHeader() const;
 
     /**
-     * Sets wether the range contains a header column/row
+     * Sets whether the range contains a header column/row
      */
     void setContainsHeader( bool enable );
 
@@ -100,7 +100,7 @@ public:
     bool displayFilterButtons() const;
 
     /**
-     * Sets wether filter buttons should be displayed.
+     * Sets whether filter buttons should be displayed.
      */
     void setDisplayFilterButtons( bool enable );
 

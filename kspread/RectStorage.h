@@ -499,7 +499,7 @@ void RectStorage<T>::garbageCollection()
     int zIndex = pairs.constBegin().key();
     DataPair pair = pairs[zIndex];
 
-    // check wether the default style is placed first
+    // check whether the default style is placed first
     if (zIndex == currentZIndex &&
         currentPair.second == T() &&
         pair.second == T() &&

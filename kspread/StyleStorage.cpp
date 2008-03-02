@@ -508,7 +508,7 @@ void StyleStorage::garbageCollection()
     const int currentZIndex = d->possibleGarbage.constBegin().key();
     const QPair<QRectF, SharedSubStyle> currentPair = d->possibleGarbage.take(currentZIndex);
 
-    // check wether the named style still exists
+    // check whether the named style still exists
     if ( currentPair.second->type() == Style::NamedStyleKey &&
          !styleManager()->style( static_cast<const NamedStyle*>(currentPair.second.data())->name ) )
     {
@@ -528,7 +528,7 @@ void StyleStorage::garbageCollection()
     int zIndex = pairs.constBegin().key();
     SharedSubStylePair pair = pairs[zIndex];
 
-    // check wether the default style is placed first
+    // check whether the default style is placed first
     if ( zIndex == currentZIndex &&
          currentPair.second->type() == Style::DefaultStyleKey &&
          pair.second->type() == Style::DefaultStyleKey &&
@@ -543,7 +543,7 @@ void StyleStorage::garbageCollection()
     }
 
     // special handling for indentation:
-    // check wether the default indentation is placed first
+    // check whether the default indentation is placed first
     if ( zIndex == currentZIndex &&
          currentPair.second->type() == Style::Indentation &&
          static_cast<const SubStyleOne<Style::Indentation, int>*>(currentPair.second.data())->value1 == 0 &&
@@ -558,7 +558,7 @@ void StyleStorage::garbageCollection()
     }
 
     // special handling for precision:
-    // check wether the storage default precision is placed first
+    // check whether the storage default precision is placed first
     if ( zIndex == currentZIndex &&
          currentPair.second->type() == Style::Precision &&
          static_cast<const SubStyleOne<Style::Precision, int>*>(currentPair.second.data())->value1 == 0 &&
