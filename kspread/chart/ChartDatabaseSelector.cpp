@@ -73,6 +73,8 @@ void ChartDatabaseSelector::save()
         return;
     Binding binding(region);
     d->shape->setModel(binding.model());
+    d->shape->setFirstRowIsLabel( d->widget.m_firstRowAsLabel->isChecked() );
+    d->shape->setFirstColumnIsLabel( d->widget.m_firstColumnAsLabel->isChecked() );
     region.firstSheet()->cellStorage()->setBinding(region, binding);
 }
 

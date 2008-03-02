@@ -183,12 +183,15 @@ ChartShape::ChartShape()
     
     d->title = new TextLabel( this );
     d->title->setType( TitleLabelType );
+    d->title->setText( i18n( "Title" ) );
     
     d->subTitle = new TextLabel( this );
     d->subTitle->setType( SubTitleLabelType );
+    d->subTitle->setText( i18n( "Subtitle" ) );
     
     d->footer = new TextLabel( this );
     d->footer->setType( FooterLabelType );
+    d->footer->setText( i18n( "Footer" ) );
     
     d->floor = new Surface( d->plotArea );
     d->wall = new Surface( d->plotArea );
@@ -296,6 +299,16 @@ ChartSubtype ChartShape::chartSubType() const
 bool ChartShape::isThreeD() const
 {
     return d->plotArea->isThreeD();
+}
+
+void ChartShape::setFirstRowIsLabel( bool isLabel )
+{
+    d->model->setFirstRowIsLabel( isLabel );
+}
+
+void ChartShape::setFirstColumnIsLabel( bool isLabel )
+{
+    d->model->setFirstColumnIsLabel( isLabel );
 }
 
 void ChartShape::setChartType( ChartType type )

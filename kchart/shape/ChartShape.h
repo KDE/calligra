@@ -104,6 +104,9 @@ public:
     ChartSubtype chartSubType() const;
     bool isThreeD() const;
     
+    void setFirstRowIsLabel( bool isLabel );
+    void setFirstColumnIsLabel( bool isLabel );
+    
     void setChartType( ChartType type );
     void setChartSubType( ChartSubtype subType );
     void setThreeD( bool threeD );
