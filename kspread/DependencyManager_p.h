@@ -18,6 +18,9 @@
    Boston, MA 02110-1301, USA.
 */
 
+#ifndef KSPREAD_DEPENDENCY_MANAGER_P
+#define KSPREAD_DEPENDENCY_MANAGER_P
+
 // Local
 #include "DependencyManager.h"
 
@@ -144,3 +147,5 @@ public:
 };
 
 } // namespace KSpread
+
+#endif // KSPREAD_DEPENDENCY_MANAGER_P
