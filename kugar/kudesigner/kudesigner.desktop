@@ -3,7 +3,7 @@
 Type=Application
 Exec=kudesigner %u
 Icon=kudesigner
-DocPath=kugar/index.html
+X-DocPath=kugar/index.html
 Terminal=false
 Name=Kugar Designer
 Name[af]=Kugar Ontwerper

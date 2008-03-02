@@ -27,6 +27,6 @@ Type=Application
 Icon=kspread
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.spreadsheet
 X-DBUS-StartupType=multi
-DocPath=kspread/index.html
+X-DocPath=kspread/index.html
 X-KDE-StartupNotify=true
 Categories=Qt;KDE;Office;

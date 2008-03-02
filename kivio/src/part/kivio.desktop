@@ -54,6 +54,6 @@ MimeType=application/vnd.oasis.opendocument.graphics;application/x-kivio;
 Type=Application
 Icon=kivio
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.graphics
-DocPath=kivio/index.html
+X-DocPath=kivio/index.html
 X-DBUS-StartupType=Multi
 Categories=Qt;KDE;Office;

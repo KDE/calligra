@@ -3,5 +3,5 @@ Type=Application
 Name=KOffice
 Name[x-test]=xxKOfficexx
 NoDisplay=true
-DocPath=koffice/index.html
+X-DocPath=koffice/index.html
 Categories=Qt;KDE;Office;
