@@ -89,6 +89,12 @@ QVariant KDChartModel::headerData( int section,
     if ( orientation == Qt::Vertical )
         return QVariant();
     
+    if ( section >= columnCount() )
+    {
+        qDebug() << "Warning: Requesting header data from KDChartModel for non-existant data set!";
+        return QVariant();
+    }
+    
     int dataSetNumber = section / d->dataDimensions;
     DataSet *dataSet = d->dataSets[ dataSetNumber ];
     
