@@ -131,7 +131,7 @@ void KDChartModel::addDataSet( DataSet *dataSet )
     if ( d->dataSets.contains( dataSet ) )
         return;
     
-    int columnToBeInserted = rowCount();
+    int columnToBeInserted = columnCount();
     beginInsertColumns( QModelIndex(), columnToBeInserted, columnToBeInserted + d->dataDimensions - 1 );
     d->dataSets.append( dataSet );
     endInsertColumns();
