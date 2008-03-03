@@ -21,6 +21,8 @@
 #ifndef KPLATO_VIEW
 #define KPLATO_VIEW
 
+#include "kplato_export.h"
+
 #include <KoView.h>
 #include <KoQueryTrader.h>
 
@@ -75,7 +77,7 @@ class ViewAdaptor;
 
 
 //-------------
-class View : public KoView
+class KPLATO_EXPORT View : public KoView
 {
     Q_OBJECT
 

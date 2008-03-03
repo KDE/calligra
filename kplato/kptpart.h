@@ -23,6 +23,8 @@
 #ifndef KPLATO_PART_H
 #define KPLATO_PART_H
 
+#include "kplato_export.h"
+
 #include "kpttask.h"
 #include "kptconfig.h"
 #include "kptwbsdefinition.h"
@@ -42,7 +44,7 @@ class Project;
 class Context;
 class GanttView;
 
-class Part : public KoDocument
+class KPLATO_EXPORT Part : public KoDocument
 {
     Q_OBJECT
 

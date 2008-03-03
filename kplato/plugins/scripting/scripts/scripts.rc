@@ -1,0 +1,60 @@
+<KrossScripting>
+
+    <!--
+        The "import" collection provides scripts to import content into KPlato.
+        //-->
+<!--    <collection name="import" text="Import" comment="Import content">
+        <script
+               name="pyimportfile"
+               text="Text or HTML File"
+               comment="Python script to import content from a text or html file"
+               interpreter="python"
+               file="extensions/importfile.py" />
+    </collection>-->
+
+    <!--
+        The "export" collection provides scripts to export content from KPlato.
+        //-->
+<!--    <collection name="export" text="Export" comment="Export content">
+        <script
+               name="pyexportfile"
+               text="Text or HTML File"
+               comment="Python script to export content to a text or html file"
+               interpreter="python"
+               file="extensions/exportfile.py" />
+    </collection>-->
+
+    <!--
+        The "samples" collection provides misc example scripts to demonstrate
+        parts of the KPlato scripting functionality.
+        //-->
+<!--    <collection name="tools" text="Tools" comment="Miscellaneous scripts">
+       <script
+               name="pyonlinehelp"
+               text="Online Help"
+               comment="Python script that uses the KHTML Part to display the KPlato Scripting online help"
+               interpreter="python"
+               file="extensions/onlinehelp.py" />
+    </collection>-->
+
+
+    <!--
+        The "samples" collection provides misc example scripts to demonstrate
+        parts of the KPlato scripting functionality.
+        //-->
+    <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with KPlato" enabled="false">
+        <script
+            name="pysampleproject"
+            text="Print Project Name..."
+            comment="Python to print project name"
+            interpreter="python"
+            file="samples/sample_project.py" />
+<!--        <script
+            name="rbsamplecursor"
+            text="Control Cursor..."
+            comment="Ruby script that demonstrates how to control the cursor"
+            interpreter="ruby"
+            file="samples/sample_cursor.rb" />-->
+    </collection>
+
+</KrossScripting>
