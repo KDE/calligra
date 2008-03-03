@@ -22,6 +22,7 @@
 
 #include <QVBoxLayout>
 #include <QComboBox>
+#include <QDoubleSpinBox>
 #include <QLabel>
 #include <QEvent>
 #include <QPainter>
@@ -217,10 +218,26 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     connect( m_subTypeCombo, SIGNAL( activated( int ) ),
              this, SLOT( slotSubTypeChanged( int ) ) );
 
+    QGridLayout* optionLayout = new QGridLayout();
+    QLabel* durationLabel = new QLabel( i18n("Duration: "), this);
+    m_durationSpinBox = new QDoubleSpinBox( this );
+    m_durationSpinBox->setRange( 0.1, 600);
+    m_durationSpinBox->setDecimals( 1 );
+    m_durationSpinBox->setSuffix( i18n(" seconds") );
+    m_durationSpinBox->setAlignment( Qt::AlignRight );
+    m_durationSpinBox->setSingleStep( 0.1 );
+    m_durationSpinBox->setValue( 2.0 );
+    optionLayout->addWidget(durationLabel, 0, 0);
+    optionLayout->addWidget(m_durationSpinBox, 0, 1);
+
+    connect( m_durationSpinBox, SIGNAL( valueChanged( double ) ),
+             this, SLOT( slotDurationChanged( double ) ) );
+
     // setup widget layout
     QVBoxLayout* layout = new QVBoxLayout;
     layout->addWidget( m_effectCombo );
     layout->addWidget( m_subTypeCombo );
+    layout->addLayout( optionLayout);
     layout->addWidget( m_preview);
     base->setLayout( layout );
     setWidget( base );
@@ -286,6 +303,9 @@ void KPrPageEffectDocker::slotActivePageChanged()
                 break;
             }
         }
+
+        double duration = pageEffect ? static_cast<double>(pageEffect->duration())/1000 : 2.0;
+        m_durationSpinBox->setValue( duration );
 /*
     QPainter p( m_activePageBuffer );
 
@@ -309,7 +329,7 @@ void KPrPageEffectDocker::slotEffectChanged( int index )
     const KPrPageEffectFactory * factory = effectId != "" ? KPrPageEffectRegistry::instance()->value( effectId ) : 0;
     updateSubTypes( factory );
     if ( factory ) {
-        pageEffect = createPageEffect( factory, m_subTypeCombo->itemData( m_subTypeCombo->currentIndex() ).toInt());
+        pageEffect = createPageEffect( factory, m_subTypeCombo->itemData( m_subTypeCombo->currentIndex() ).toInt(), m_durationSpinBox->value());
     }
     else {
         // this is to avoid the assert that checks if the effect is different then the last one
@@ -333,16 +353,25 @@ void KPrPageEffectDocker::slotSubTypeChanged( int index )
 {
     QString effectId = m_effectCombo->itemData( m_effectCombo->currentIndex() ).toString();
     const KPrPageEffectFactory * factory = KPrPageEffectRegistry::instance()->value( effectId );
-    KPrPageEffect * pageEffect( createPageEffect( factory, m_subTypeCombo->itemData( index ).toInt() ) );
+    KPrPageEffect * pageEffect( createPageEffect( factory, m_subTypeCombo->itemData( index ).toInt(), m_durationSpinBox->value() ) );
 
     m_view->kopaCanvas()->addCommand( new KPrPageEffectSetCommand( m_view->activePage(), pageEffect ) );
 }
 
-KPrPageEffect * KPrPageEffectDocker::createPageEffect( const KPrPageEffectFactory * factory, int subType )
+void KPrPageEffectDocker::slotDurationChanged( double duration )
+{
+    QString effectId = m_effectCombo->itemData( m_effectCombo->currentIndex() ).toString();
+    const KPrPageEffectFactory * factory = KPrPageEffectRegistry::instance()->value( effectId );
+    KPrPageEffect * pageEffect( createPageEffect( factory, m_subTypeCombo->itemData( m_subTypeCombo->currentIndex() ).toInt(), duration ) );
+
+    m_view->kopaCanvas()->addCommand( new KPrPageEffectSetCommand( m_view->activePage(), pageEffect ) );
+}
+
+KPrPageEffect * KPrPageEffectDocker::createPageEffect( const KPrPageEffectFactory * factory, int subType, double duration )
 {
     Q_ASSERT( factory );
     // TODO get data from input
-    KPrPageEffectFactory::Properties properties( 5000, KPrPageEffect::SubType( subType ) );
+    KPrPageEffectFactory::Properties properties( qRound(duration*1000), KPrPageEffect::SubType( subType ) );
     return factory->createPageEffect( properties );
 }
 

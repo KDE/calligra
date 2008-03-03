@@ -25,6 +25,7 @@
 
 class QLabel;
 class QComboBox;
+class QDoubleSpinBox;
 class KPrPageEffect;
 class KPrPageEffectRunner;
 class KPrPageEffectFactory;
@@ -50,16 +51,18 @@ public slots:
 protected:
     bool eventFilter( QObject* object, QEvent* event );
     void updateSubTypes( const KPrPageEffectFactory * factory );
-    KPrPageEffect * createPageEffect( const KPrPageEffectFactory * factory, int subType );
+    KPrPageEffect * createPageEffect( const KPrPageEffectFactory * factory, int subType, double time );
 
 protected slots:
     void slotSubTypeChanged( int index );
+    void slotDurationChanged( double duration );
 
 private:
     KPrPageEffectRunner* m_runner;
     KPrView* m_view;
     QComboBox* m_effectCombo;
     QComboBox* m_subTypeCombo;
+    QDoubleSpinBox* m_durationSpinBox;
     QLabel* m_preview;
     QPixmap m_activePageBuffer;
 };
