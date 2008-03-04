@@ -35,6 +35,7 @@ public:
 	// Getter methods
 	QString title() const;
 	ChartType chartType() const;
+	ChartSubtype chartSubType() const;
 	Axis *attachedAxis() const;
 
     QString xValueCellRange() const;

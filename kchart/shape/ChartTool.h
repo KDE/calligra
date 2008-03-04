@@ -75,7 +75,8 @@ private slots:
     // Datasets
     void setDataSetChartType( DataSet *dataSet, ChartType type );
     void setDataSetChartSubType( DataSet *dataSet, ChartSubtype subType );
-    void setDatasetShowValues( int dataset, bool b );
+    void setDatasetShowValues( DataSet *dataSet, bool b );
+    void setDatasetShowLabels( DataSet *dataSet, bool b );
     void setDatasetColor( int dataset, const QColor& color );
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );

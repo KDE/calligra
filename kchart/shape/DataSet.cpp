@@ -43,6 +43,7 @@ public:
     ~Private();
     
     ChartType chartType;
+    ChartSubtype chartSubType;
     Axis *attachedAxis;
     bool showMeanValue;
     QPen meanValuePen;
@@ -68,7 +69,21 @@ public:
 DataSet::Private::Private()
 {
     chartType = LastChartType;
+    chartSubType = NoChartSubtype;
     kdDataSetNumber = 0;
+    showMeanValue = false;
+    showValues = false;
+    showLabels = false;
+    showLowerErrorIndicator = false;
+    showUpperErrorIndicator = false;
+    errorPercentage = 0.0;
+    errorMargin = 0.0;
+    lowerErrorLimit = 0.0;
+    upperErrorLimit = 0.0;
+    pen = QPen( Qt::black );
+    plotArea = 0;
+    model = 0;
+    kdDiagram = 0;
 }
 
 DataSet::Private::~Private()
@@ -95,6 +110,14 @@ ChartType DataSet::chartType() const
     // Return the global chart type of the plot area
     // if no custom type was specified for this data set
     return ( d->chartType == LastChartType ) ? d->plotArea->chartType() : d->chartType;
+}
+
+
+ChartSubtype DataSet::chartSubType() const
+{
+    // Return the global chart type of the plot area
+    // if no custom type was specified for this data set
+    return ( d->chartSubType == NoChartSubtype ) ? d->plotArea->chartSubType() : d->chartSubType;
 }
 
 Axis *DataSet::attachedAxis() const
@@ -185,7 +208,12 @@ void DataSet::setChartType( ChartType type )
 
 void DataSet::setChartSubType( ChartSubtype subType )
 {
-    // TODO (Johannes): Set the data set's chart sub type
+    Axis *axis = d->attachedAxis;
+    axis->detachDataSet( this );
+    
+    d->chartSubType = subType;
+    
+    axis->attachDataSet( this );
 }
 
 
@@ -206,11 +234,16 @@ bool DataSet::showLabels() const
 
 void DataSet::setShowValues( bool showValues )
 {
+    if ( !d->kdDiagram )
+        return;
     d->showValues = showValues;
     
     KDChart::DataValueAttributes attributes = d->kdDiagram->dataValueAttributes( d->kdDataSetNumber );
     attributes.setVisible( showValues );
     d->kdDiagram->setDataValueAttributes( d->kdDataSetNumber, attributes );
+    
+    if ( d->attachedAxis )
+        d->attachedAxis->update();
 }
 
 void DataSet::setShowLabels( bool showLabels )

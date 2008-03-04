@@ -133,6 +133,10 @@ ChartConfigWidget::Private::Private()
     lastVerticalAlignment   = 1; // Qt::AlignCenter
     fixedPosition           = KDChart::Position::East;
     lastFixedPosition       = KDChart::Position::East;
+    selectedDataset = 0;
+    shape = 0;
+    type = KChart::LastChartType;
+    subtype = KChart::NoChartSubtype;
 }
 
 ChartConfigWidget::Private::~Private()
@@ -143,9 +147,6 @@ ChartConfigWidget::Private::~Private()
 ChartConfigWidget::ChartConfigWidget()
     : d(new Private)
 {
-    d->shape = 0;
-    d->type    = KChart::LastChartType;
-    d->subtype = KChart::NoChartSubtype;
     setObjectName("Chart Type");
     d->ui.setupUi( this );
     
@@ -791,7 +792,7 @@ void ChartConfigWidget::ui_axisSelectionChanged( int index ) {
     // Check for valid index
     if ( index < 0 )
         return;
-	Q_ASSERT( d->axes.size() >= index );
+	Q_ASSERT( d->axes.size() > index );
 	
 	Axis *axis = d->axes[ index ];
 
@@ -819,12 +820,12 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
     // Check for valid index
     if ( index < 0 )
         return;
-    Q_ASSERT( d->dataSets.size() >= index );
+    Q_ASSERT( d->dataSets.size() > index );
     
     DataSet *dataSet = d->dataSets[ index ];
     //d->ui.datasetColor->setText( axis->titleText() );
     d->ui.dataSetAxes->blockSignals( true );
-    d->ui.dataSetAxes->setCurrentIndex( d->axes.indexOf( dataSet->attachedAxis() ) );
+    d->ui.dataSetAxes->setCurrentIndex( d->dataSetAxes.indexOf( dataSet->attachedAxis() ) );
     d->ui.dataSetAxes->blockSignals( false );
     d->ui.datasetShowValues->blockSignals( true );
     d->ui.datasetShowValues->setChecked( dataSet->showValues() );
@@ -832,12 +833,43 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
     d->ui.dataSetShowLabels->blockSignals( true );
     d->ui.dataSetShowLabels->setChecked( dataSet->showLabels() );
     d->ui.dataSetShowLabels->blockSignals( false );
+    
+    d->ui.dataSetChartTypeMenu->blockSignals( true );
+    switch ( dataSet->chartType() ) {
+    case BarChartType:
+        if ( dataSet->chartSubType() == NormalChartSubtype )
+            d->ui.dataSetChartTypeMenu->setText( i18n( "Normal Bar Chart" ) );
+        else if ( dataSet->chartSubType() == StackedChartSubtype )
+            d->ui.dataSetChartTypeMenu->setText( i18n( "Stacked Bar Chart" ) );
+        else if ( dataSet->chartSubType() == PercentChartSubtype )
+            d->ui.dataSetChartTypeMenu->setText( i18n( "Percent Bar Chart" ) );
+        break;
+    case LineChartType:
+        if ( dataSet->chartSubType() == NormalChartSubtype )
+            d->ui.dataSetChartTypeMenu->setText( i18n( "Normal Line Chart" ) );
+        else if ( dataSet->chartSubType() == StackedChartSubtype )
+            d->ui.dataSetChartTypeMenu->setText( i18n( "Stacked Line Chart" ) );
+        else if ( dataSet->chartSubType() == PercentChartSubtype )
+            d->ui.dataSetChartTypeMenu->setText( i18n( "Percent Line Chart" ) );
+        break;
+    case AreaChartType:
+        if ( dataSet->chartSubType() == NormalChartSubtype )
+            d->ui.dataSetChartTypeMenu->setText( i18n( "Normal Area Chart" ) );
+        else if ( dataSet->chartSubType() == StackedChartSubtype )
+            d->ui.dataSetChartTypeMenu->setText( i18n( "Stacked Area Chart" ) );
+        else if ( dataSet->chartSubType() == PercentChartSubtype )
+            d->ui.dataSetChartTypeMenu->setText( i18n( "Percent Area Chart" ) );
+        break;
+    }
+    d->ui.dataSetChartTypeMenu->blockSignals( false );
+    
+    d->selectedDataset = index;
 }
 
 void ChartConfigWidget::ui_dataSetAxisSelectionChanged( int index ) {
     if ( index < 0 )
         return;
-    Q_ASSERT( d->axes.size() >= index );
+    Q_ASSERT( d->axes.size() > index );
     
     if ( d->ui.dataSets->currentIndex() < 0 )
         return;
@@ -962,7 +994,18 @@ void ChartConfigWidget::ui_axisScalingButtonClicked()
 
 void ChartConfigWidget::ui_datasetShowValuesChanged( bool b )
 {
-    emit datasetShowValuesChanged( d->selectedDataset, b ); 
+    if ( d->selectedDataset < 0 )
+        return;
+    Q_ASSERT( d->dataSets.count() > d->selectedDataset );
+    emit datasetShowValuesChanged( d->dataSets[ d->selectedDataset ], b ); 
+}
+
+void ChartConfigWidget::ui_datasetShowLabelsChanged( bool b )
+{
+    if ( d->selectedDataset < 0 )
+        return;
+    Q_ASSERT( d->dataSets.count() > d->selectedDataset );
+    emit datasetShowValuesChanged( d->dataSets[ d->selectedDataset ], b ); 
 }
 
 #include "ChartConfigWidget.moc"

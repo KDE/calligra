@@ -53,6 +53,7 @@ public slots:
 
     void addDataSet( DataSet *dataSet );
     void removeDataSet( DataSet *dataSet );
+    QList<DataSet*> dataSets() const;
 
 private:
     class Private;

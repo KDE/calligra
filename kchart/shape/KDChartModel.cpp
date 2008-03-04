@@ -148,4 +148,9 @@ void KDChartModel::removeDataSet( DataSet *dataSet )
     endRemoveColumns();
 }
 
+QList<DataSet*> KDChartModel::dataSets() const
+{
+    return d->dataSets;
+}
+
 } // namespace KChart

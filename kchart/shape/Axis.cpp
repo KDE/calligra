@@ -199,6 +199,8 @@ bool Axis::attachDataSet( DataSet *dataSet )
             d->kdBarDiagram->addAxis( d->kdAxis );
             d->kdPlane->addDiagram( d->kdBarDiagram );
         }
+        dataSet->setKdDiagram( d->kdBarDiagram );
+        dataSet->setKdDataSetNumber( d->kdBarDiagramModel->dataSets().indexOf( dataSet ) );
     }
     break;
     case LineChartType:
@@ -215,6 +217,8 @@ bool Axis::attachDataSet( DataSet *dataSet )
             d->kdLineDiagram->addAxis( d->kdAxis );
             d->kdPlane->addDiagram( d->kdLineDiagram );
         }
+        dataSet->setKdDiagram( d->kdLineDiagram );
+        dataSet->setKdDataSetNumber( d->kdLineDiagramModel->dataSets().indexOf( dataSet ) );
     }
     break;
     }
@@ -241,6 +245,8 @@ bool Axis::detachDataSet( DataSet *dataSet )
             // datasets are displayed on it anymore
             d->kdBarDiagramModel->removeDataSet( dataSet );
         }
+        dataSet->setKdDiagram( 0 );
+        dataSet->setKdDataSetNumber( 0 );
     }
     break;
     case LineChartType:
@@ -251,6 +257,8 @@ bool Axis::detachDataSet( DataSet *dataSet )
             // datasets are displayed on it anymore
             d->kdLineDiagramModel->removeDataSet( dataSet );
         }
+        dataSet->setKdDiagram( 0 );
+        dataSet->setKdDataSetNumber( 0 );
     }
     break;
     }
