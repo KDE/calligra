@@ -22,6 +22,7 @@
 #include <QPainter>
 #include <KoShapePainter.h>
 #include <KoShapeContainer.h>
+#include <KoPAMasterPage.h>
 
 #include "KPrPage.h"
 #include "pageeffects/KPrPageEffect.h"
@@ -69,6 +70,9 @@ void KPrPreviewWidget::setPageEffect( KPrPageEffect* pageEffect, KPrPage* page )
         pageImage.fill( QColor( Qt::white ).rgb() );
 
         QList<KoShape*> shapes;
+        if(page->masterPage())
+            shapes.append(page->masterPage());
+
         shapes.append(page);
         KoShapePainter painter;
         painter.setShapes( shapes );
