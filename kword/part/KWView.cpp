@@ -838,7 +838,7 @@ void KWView::addBookmark()
     }
     delete dia;
 
-    handler->addBookmark(name, shape);
+    handler->addBookmark(name);
 }
 
 void KWView::selectBookmark()
