@@ -25,79 +25,10 @@
 
 #include <QDate>
 #include <QItemDelegate>
+#include <QMetaEnum>
 
 class QMimeData;
 class QModelIndex;
-
-#define NodeName 0
-#define NodeType 1
-#define NodeResponsible 2
-#define NodeAllocation 3
-#define NodeEstimateType 4
-#define NodeEstimate 5
-#define NodeOptimisticRatio 6
-#define NodePessimisticRatio 7
-#define NodeRisk 8
-#define NodeConstraint 9
-#define NodeConstraintStart 10
-#define NodeConstraintEnd 11
-#define NodeRunningAccount 12
-#define NodeStartupAccount 13
-#define NodeStartupCost 14
-#define NodeShutdownAccount 15
-#define NodeShutdownCost 16
-#define NodeDescription 17
-
-// Based on edited values
-#define NodeExpected 18
-#define NodeVarianceEstimate 19
-#define NodeOptimistic 20
-#define NodePessimistic 21
-
-// After scheduling
-#define NodeStartTime 22
-#define NodeEndTime 23
-#define NodeEarlyStart 24
-#define NodeEarlyFinish 25
-#define NodeLateStart 26
-#define NodeLateFinish 27
-#define NodePositiveFloat 28
-#define NodeFreeFloat 29
-#define NodeNegativeFloat 30
-#define NodeStartFloat 31
-#define NodeFinishFloat 32
-#define NodeAssigments 33
-
-// Based on scheduled values
-#define NodeDuration 34
-#define NodeVarianceDuration 35
-#define NodeOptimisticDuration 36
-#define NodePessimisticDuration 37
-
-// Completion
-#define NodeStatus 38
-#define NodeCompleted 39
-#define NodePlannedEffort 40
-#define NodeActualEffort 41
-#define NodeRemainingEffort 42
-#define NodePlannedCost 43
-#define NodeActualCost 44
-#define NodeStarted 45
-#define NodeFinished 46
-#define NodeStatusNote 47
-            
-// Scheduling errors
-#define NodeNotScheduled 48
-#define NodeAssigmentMissing 49
-#define NodeResourceOverbooked 50
-#define NodeResourceUnavailable 51
-#define NodeConstraintsError 52
-#define NodeEffortNotMet 53
-
-#define NodeWBSCode 54
-
-// Update this if you add/remove something
-#define NODE_PROPERTY_COUNT 55;
 
 namespace KPlato
 {
@@ -106,21 +37,83 @@ class Project;
 class Node;
 class Estimate;
 
-class NodeColumnMap : public ColumnMap
-{
-public:
-    NodeColumnMap();
-};
-
-
 class KPLATOMODELS_EXPORT NodeModel : public QObject
 {
     Q_OBJECT
+    Q_ENUMS( Properties )
 public:
     NodeModel();
     ~NodeModel() {}
     
-    const ColumnMap &columnNames() const { return columnMap; }
+    enum Properties {
+        NodeName = 0,
+        NodeType,
+        NodeResponsible,
+        NodeAllocation,
+        NodeEstimateType,
+        NodeEstimate,
+        NodeOptimisticRatio,
+        NodePessimisticRatio,
+        NodeRisk,
+        NodeConstraint,
+        NodeConstraintStart,
+        NodeConstraintEnd,
+        NodeRunningAccount,
+        NodeStartupAccount,
+        NodeStartupCost,
+        NodeShutdownAccount,
+        NodeShutdownCost,
+        NodeDescription,
+
+        // Based on edited values
+        NodeExpected,
+        NodeVarianceEstimate,
+        NodeOptimistic,
+        NodePessimistic,
+
+        // After scheduling
+        NodeStartTime,
+        NodeEndTime,
+        NodeEarlyStart,
+        NodeEarlyFinish,
+        NodeLateStart,
+        NodeLateFinish,
+        NodePositiveFloat,
+        NodeFreeFloat,
+        NodeNegativeFloat,
+        NodeStartFloat,
+        NodeFinishFloat,
+        NodeAssigments,
+
+        // Based on scheduled values
+        NodeDuration,
+        NodeVarianceDuration,
+        NodeOptimisticDuration,
+        NodePessimisticDuration,
+
+        // Completion
+        NodeStatus,
+        NodeCompleted,
+        NodePlannedEffort,
+        NodeActualEffort,
+        NodeRemainingEffort,
+        NodePlannedCost,
+        NodeActualCost,
+        NodeStarted,
+        NodeFinished,
+        NodeStatusNote,
+            
+        // Scheduling errors
+        NodeNotScheduled,
+        NodeAssigmentMissing,
+        NodeResourceOverbooked,
+        NodeResourceUnavailable,
+        NodeConstraintsError,
+        NodeEffortNotMet,
+
+        NodeWBSCode
+    };
+    const QMetaEnum columnMap() const;
     
     void setProject( Project *project );
     void setManager( ScheduleManager *sm );
@@ -133,7 +126,7 @@ public:
     
     static QVariant headerData( int section, int role = Qt::DisplayRole );
 
-    static int propertyCount();
+    int propertyCount() const;
     
     void setNow( const QDate &now ) { m_now = now; }
     QDate now() const { return m_now; }
@@ -211,8 +204,6 @@ private:
     ScheduleManager *m_manager;
     QDate m_now;
     int m_prec;
-    
-    static NodeColumnMap columnMap;
 };
 
 class KPLATOMODELS_EXPORT NodeItemModel : public ItemModelBase
@@ -223,7 +214,7 @@ public:
     ~NodeItemModel();
     
     /// Returns a column number/- name map for this model
-    virtual const ColumnMap &columnNames() const { return m_nodemodel.columnNames(); }
+    virtual const QMetaEnum columnMap() const { return m_nodemodel.columnMap(); }
     
     virtual void setProject( Project *project );
     void setManager( ScheduleManager *sm );

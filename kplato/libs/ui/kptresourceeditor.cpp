@@ -343,13 +343,14 @@ void ResourceEditor::slotDeleteSelection()
 
 bool ResourceEditor::loadContext( const KoXmlElement &context )
 {
-    kDebug()<<endl;
-    return m_view->loadContext( context, model()->columnNames() );
+    kDebug()<<objectName();
+    return m_view->loadContext( model()->columnMap(), context );
 }
 
 void ResourceEditor::saveContext( QDomElement &context ) const
 {
-    m_view->saveContext( context, model()->columnNames() );
+    kDebug()<<objectName();
+    m_view->saveContext( model()->columnMap(), context );
 }
 
 

@@ -49,80 +49,6 @@
 namespace KPlato
 {
 
-NodeColumnMap NodeModel::columnMap;
-
-NodeColumnMap::NodeColumnMap()
-    : ColumnMap()
-{
-    if ( columnMap.isEmpty() ) {
-        columnMap.insert( "NodeName", 0 );
-        columnMap.insert( "NodeType", 1 );
-        columnMap.insert( "NodeResponsible", 2 );
-        columnMap.insert( "NodeAllocation", 3 );
-        columnMap.insert( "NodeEstimateType", 4 );
-        columnMap.insert( "NodeEstimate", 5 );
-        columnMap.insert( "NodeOptimisticRatio", 6 );
-        columnMap.insert( "NodePessimisticRatio", 7 );
-        columnMap.insert( "NodeRisk", 8 );
-        columnMap.insert( "NodeConstraint", 9 );
-        columnMap.insert( "NodeConstraintStart", 10 );
-        columnMap.insert( "NodeConstraintEnd", 11 );
-        columnMap.insert( "NodeRunningAccount", 12 );
-        columnMap.insert( "NodeStartupAccount", 13 );
-        columnMap.insert( "NodeStartupCost", 14 );
-        columnMap.insert( "NodeShutdownAccount", 15 );
-        columnMap.insert( "NodeShutdownCost", 16 );
-        columnMap.insert( "NodeDescription", 17 );
-
-        // Based on edited values
-        columnMap.insert( "NodeExpected", 18 );
-        columnMap.insert( "NodeVarianceEstimate", 19 );
-        columnMap.insert( "NodeOptimistic", 20 );
-        columnMap.insert( "NodePessimistic", 21 );
-
-        // After scheduling
-        columnMap.insert( "NodeStartTime", 22 );
-        columnMap.insert( "NodeEndTime", 23 );
-        columnMap.insert( "NodeEarlyStart", 24 );
-        columnMap.insert( "NodeEarlyFinish", 25 );
-        columnMap.insert( "NodeLateStart", 26 );
-        columnMap.insert( "NodeLateFinish", 27 );
-        columnMap.insert( "NodePositiveFloat", 28 );
-        columnMap.insert( "NodeFreeFloat", 29 );
-        columnMap.insert( "NodeNegativeFloat", 30 );
-        columnMap.insert( "NodeStartFloat", 31 );
-        columnMap.insert( "NodeFinishFloat", 32 );
-        columnMap.insert( "NodeAssigments", 33 );
-
-        // Based on scheduled values
-        columnMap.insert( "NodeDuration", 34 );
-        columnMap.insert( "NodeVarianceDuration", 35 );
-        columnMap.insert( "NodeOptimisticDuration", 36 );
-        columnMap.insert( "NodePessimisticDuration", 37 );
-
-        // Completion
-        columnMap.insert( "NodeStatus", 38 );
-        columnMap.insert( "NodeCompleted", 39 );
-        columnMap.insert( "NodePlannedEffort", 40 );
-        columnMap.insert( "NodeActualEffort", 41 );
-        columnMap.insert( "NodeRemainingEffort", 42 );
-        columnMap.insert( "NodePlannedCost", 43 );
-        columnMap.insert( "NodeActualCost", 44 );
-        columnMap.insert( "NodeStarted", 45 );
-        columnMap.insert( "NodeFinished", 46 );
-        columnMap.insert( "NodeStatusNote", 47 );
-
-        // Scheduling errors
-        columnMap.insert( "NodeNotScheduled", 48 );
-        columnMap.insert( "NodeAssigmentMissing", 49 );
-        columnMap.insert( "NodeResourceOverbooked", 50 );
-        columnMap.insert( "NodeResourceUnavailable", 51 );
-        columnMap.insert( "NodeConstraintsError", 52 );
-        columnMap.insert( "NodeEffortNotMet", 53 );
-
-        columnMap.insert( "NodeWBSCode", 54 );
-    }
-}
 
 //--------------------------------------
 NodeModel::NodeModel()
@@ -132,6 +58,11 @@ NodeModel::NodeModel()
     m_now( QDate::currentDate() ),
     m_prec( 1 )
 {
+}
+
+const QMetaEnum NodeModel::columnMap() const
+{
+    return metaObject()->enumerator( metaObject()->indexOfEnumerator("Properties") );
 }
 
 void NodeModel::setProject( Project *project )
@@ -1306,9 +1237,9 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
     return result;
 }
 
-int NodeModel::propertyCount()
+int NodeModel::propertyCount() const
 {
-    return NODE_PROPERTY_COUNT;
+    return columnMap().keyCount();
 }
 
 bool NodeModel::setData( Node *node, int property, const QVariant & value, int role )
@@ -1570,41 +1501,41 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
     if ( m_readWrite && n != 0 ) {
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
-            case NodeName: // name
+            case NodeModel::NodeName: // name
                 flags |= Qt::ItemIsEditable;
                 break;
-            case NodeType: break; // Node type
-            case NodeResponsible: // Responsible
+            case NodeModel::NodeType: break; // Node type
+            case NodeModel::NodeResponsible: // Responsible
                 flags |= Qt::ItemIsEditable;
                 break;
-            case NodeAllocation: // allocation
+            case NodeModel::NodeAllocation: // allocation
                 if ( n->type() == Node::Type_Task ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
-            case NodeEstimateType: // estimateType
-            case NodeEstimate: // estimate
-            case NodeOptimisticRatio: // optimisticRatio
-            case NodePessimisticRatio: // pessimisticRatio
+            case NodeModel::NodeEstimateType: // estimateType
+            case NodeModel::NodeEstimate: // estimate
+            case NodeModel::NodeOptimisticRatio: // optimisticRatio
+            case NodeModel::NodePessimisticRatio: // pessimisticRatio
             {
                 if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             }
-            case NodeRisk: // risktype
+            case NodeModel::NodeRisk: // risktype
             {
                 if ( n->type() == Node::Type_Task ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             }
-            case NodeConstraint: // constraint type
+            case NodeModel::NodeConstraint: // constraint type
                 if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
-            case NodeConstraintStart: { // constraint start
+            case NodeModel::NodeConstraintStart: { // constraint start
                 if ( ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     break;
                 }
@@ -1614,7 +1545,7 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 }
                 break;
             }
-            case NodeConstraintEnd: { // constraint end
+            case NodeModel::NodeConstraintEnd: { // constraint end
                 if ( ! ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) ) {
                     break;
                 }
@@ -1624,21 +1555,21 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
                 }
                 break;
             }
-            case NodeRunningAccount: // running account
+            case NodeModel::NodeRunningAccount: // running account
                 if ( n->type() == Node::Type_Task ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
-            case NodeStartupAccount: // startup account
-            case NodeStartupCost: // startup cost
-            case NodeShutdownAccount: // shutdown account
-            case NodeShutdownCost: { // shutdown cost
+            case NodeModel::NodeStartupAccount: // startup account
+            case NodeModel::NodeStartupCost: // startup cost
+            case NodeModel::NodeShutdownAccount: // shutdown account
+            case NodeModel::NodeShutdownCost: { // shutdown cost
                 if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             }
-            case NodeDescription: // description
+            case NodeModel::NodeDescription: // description
                 break;
             default: 
                 flags &= ~Qt::ItemIsEditable;
@@ -2084,24 +2015,24 @@ bool NodeItemModel::setData( const QModelIndex &index, const QVariant &value, in
     }
     Node *n = node( index );
     switch (index.column()) {
-        case NodeName: return setName( n, value, role );
-        case NodeType: return setType( n, value, role );
-        case NodeResponsible: return setLeader( n, value, role );
-        case NodeAllocation: return setAllocation( n, value, role );
-        case NodeEstimateType: return setEstimateType( n, value, role );
-        case NodeEstimate: return setEstimate( n, value, role );
-        case NodeOptimisticRatio: return setOptimisticRatio( n, value, role );
-        case NodePessimisticRatio: return setPessimisticRatio( n, value, role );
-        case NodeRisk: return setRiskType( n, value, role );
-        case NodeConstraint: return setConstraint( n, value, role );
-        case NodeConstraintStart: return setConstraintStartTime( n, value, role );
-        case NodeConstraintEnd: return setConstraintEndTime( n, value, role );
-        case NodeRunningAccount: return setRunningAccount( n, value, role );
-        case NodeStartupAccount: return setStartupAccount( n, value, role );
-        case NodeStartupCost: return setStartupCost( n, value, role );
-        case NodeShutdownAccount: return setShutdownAccount( n, value, role );
-        case NodeShutdownCost: return setShutdownCost( n, value, role );
-        case NodeDescription: return setDescription( n, value, role );
+        case NodeModel::NodeName: return setName( n, value, role );
+        case NodeModel::NodeType: return setType( n, value, role );
+        case NodeModel::NodeResponsible: return setLeader( n, value, role );
+        case NodeModel::NodeAllocation: return setAllocation( n, value, role );
+        case NodeModel::NodeEstimateType: return setEstimateType( n, value, role );
+        case NodeModel::NodeEstimate: return setEstimate( n, value, role );
+        case NodeModel::NodeOptimisticRatio: return setOptimisticRatio( n, value, role );
+        case NodeModel::NodePessimisticRatio: return setPessimisticRatio( n, value, role );
+        case NodeModel::NodeRisk: return setRiskType( n, value, role );
+        case NodeModel::NodeConstraint: return setConstraint( n, value, role );
+        case NodeModel::NodeConstraintStart: return setConstraintStartTime( n, value, role );
+        case NodeModel::NodeConstraintEnd: return setConstraintEndTime( n, value, role );
+        case NodeModel::NodeRunningAccount: return setRunningAccount( n, value, role );
+        case NodeModel::NodeStartupAccount: return setStartupAccount( n, value, role );
+        case NodeModel::NodeStartupCost: return setStartupCost( n, value, role );
+        case NodeModel::NodeShutdownAccount: return setShutdownAccount( n, value, role );
+        case NodeModel::NodeShutdownCost: return setShutdownCost( n, value, role );
+        case NodeModel::NodeDescription: return setDescription( n, value, role );
         default:
             qWarning("data: invalid display value column %d", index.column());
             return false;
@@ -2116,7 +2047,7 @@ QVariant NodeItemModel::headerData( int section, Qt::Orientation orientation, in
             return m_nodemodel.headerData( section, role );
         } else if ( role == Qt::TextAlignmentRole ) {
             switch (section) {
-                case NodeType: return Qt::AlignCenter;
+                case NodeModel::NodeType: return Qt::AlignCenter;
                 default: return QVariant();
             }
         }
@@ -2130,18 +2061,18 @@ QVariant NodeItemModel::headerData( int section, Qt::Orientation orientation, in
 QItemDelegate *NodeItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
-        //case NodeAllocation: return new ??Delegate( parent );
-        case NodeEstimateType: return new EnumDelegate( parent );
-        case NodeEstimate: return new DurationSpinBoxDelegate( parent );
-        case NodeOptimisticRatio: return new SpinBoxDelegate( parent );
-        case NodePessimisticRatio: return new SpinBoxDelegate( parent );
-        case NodeRisk: return new EnumDelegate( parent );
-        case NodeConstraint: return new EnumDelegate( parent );
-        case NodeRunningAccount: return new EnumDelegate( parent );
-        case NodeStartupAccount: return new EnumDelegate( parent );
-        case NodeStartupCost: return new MoneyDelegate( parent );
-        case NodeShutdownAccount: return new EnumDelegate( parent );
-        case NodeShutdownCost: return new MoneyDelegate( parent );
+        //case NodeModel::NodeAllocation: return new ??Delegate( parent );
+        case NodeModel::NodeEstimateType: return new EnumDelegate( parent );
+        case NodeModel::NodeEstimate: return new DurationSpinBoxDelegate( parent );
+        case NodeModel::NodeOptimisticRatio: return new SpinBoxDelegate( parent );
+        case NodeModel::NodePessimisticRatio: return new SpinBoxDelegate( parent );
+        case NodeModel::NodeRisk: return new EnumDelegate( parent );
+        case NodeModel::NodeConstraint: return new EnumDelegate( parent );
+        case NodeModel::NodeRunningAccount: return new EnumDelegate( parent );
+        case NodeModel::NodeStartupAccount: return new EnumDelegate( parent );
+        case NodeModel::NodeStartupCost: return new MoneyDelegate( parent );
+        case NodeModel::NodeShutdownAccount: return new EnumDelegate( parent );
+        case NodeModel::NodeShutdownCost: return new MoneyDelegate( parent );
         default: return 0;
     }
     return 0;
@@ -2486,17 +2417,17 @@ Qt::ItemFlags MilestoneItemModel::flags( const QModelIndex &index ) const
     if ( m_readWrite ) {
         flags |= Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled;
         switch ( index.column() ) {
-            case NodeName: // name
+            case NodeModel::NodeName: // name
                 flags |= Qt::ItemIsEditable;
                 break;
-            case NodeType: break; // Node type
-            case NodeResponsible: // Responsible
+            case NodeModel::NodeType: break; // Node type
+            case NodeModel::NodeResponsible: // Responsible
                 flags |= Qt::ItemIsEditable;
                 break;
-            case NodeConstraint: // constraint type
+            case NodeModel::NodeConstraint: // constraint type
                 flags |= Qt::ItemIsEditable;
                 break;
-            case NodeConstraintStart: { // constraint start
+            case NodeModel::NodeConstraintStart: { // constraint start
                 Node *n = node( index );
                 if ( n == 0 )
                     break;
@@ -2506,7 +2437,7 @@ Qt::ItemFlags MilestoneItemModel::flags( const QModelIndex &index ) const
                 }
                 break;
             }
-            case NodeConstraintEnd: { // constraint end
+            case NodeModel::NodeConstraintEnd: { // constraint end
                 Node *n = node( index );
                 if ( n == 0 )
                     break;
@@ -2516,17 +2447,17 @@ Qt::ItemFlags MilestoneItemModel::flags( const QModelIndex &index ) const
                 }
                 break;
             }
-            case NodeStartupAccount: // startup account
-            case NodeStartupCost: // startup cost
-            case NodeShutdownAccount: // shutdown account
-            case NodeShutdownCost: { // shutdown cost
+            case NodeModel::NodeStartupAccount: // startup account
+            case NodeModel::NodeStartupCost: // startup cost
+            case NodeModel::NodeShutdownAccount: // shutdown account
+            case NodeModel::NodeShutdownCost: { // shutdown cost
                 Node *n = node( index );
                 if ( n && (n->type() == Node::Type_Task || n->type() == Node::Type_Milestone) ) {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
             }
-            case NodeDescription: // description
+            case NodeModel::NodeDescription: // description
                 break;
             default: 
                 flags &= ~Qt::ItemIsEditable;
@@ -2769,19 +2700,19 @@ bool MilestoneItemModel::setData( const QModelIndex &index, const QVariant &valu
     }
     Node *n = node( index );
     switch (index.column()) {
-        case NodeName: return setName( n, value, role );
-        case NodeType: return setType( n, value, role );
-        case NodeResponsible: return setLeader( n, value, role );
-        case NodeAllocation: return false;
-        case NodeConstraint: return setConstraint( n, value, role );
-        case NodeConstraintStart: return setConstraintStartTime( n, value, role );
-        case NodeConstraintEnd: return setConstraintEndTime( n, value, role );
-        case NodeRunningAccount: return setRunningAccount( n, value, role );
-        case NodeStartupAccount: return setStartupAccount( n, value, role );
-        case NodeStartupCost: return setStartupCost( n, value, role );
-        case NodeShutdownAccount: return setShutdownAccount( n, value, role );
-        case NodeShutdownCost: return setShutdownCost( n, value, role );
-        case NodeDescription: return setDescription( n, value, role );
+        case NodeModel::NodeName: return setName( n, value, role );
+        case NodeModel::NodeType: return setType( n, value, role );
+        case NodeModel::NodeResponsible: return setLeader( n, value, role );
+        case NodeModel::NodeAllocation: return false;
+        case NodeModel::NodeConstraint: return setConstraint( n, value, role );
+        case NodeModel::NodeConstraintStart: return setConstraintStartTime( n, value, role );
+        case NodeModel::NodeConstraintEnd: return setConstraintEndTime( n, value, role );
+        case NodeModel::NodeRunningAccount: return setRunningAccount( n, value, role );
+        case NodeModel::NodeStartupAccount: return setStartupAccount( n, value, role );
+        case NodeModel::NodeStartupCost: return setStartupCost( n, value, role );
+        case NodeModel::NodeShutdownAccount: return setShutdownAccount( n, value, role );
+        case NodeModel::NodeShutdownCost: return setShutdownCost( n, value, role );
+        case NodeModel::NodeDescription: return setDescription( n, value, role );
         default:
             qWarning("data: invalid display value column %d", index.column());
             return false;
@@ -2796,7 +2727,7 @@ QVariant MilestoneItemModel::headerData( int section, Qt::Orientation orientatio
             return m_nodemodel.headerData( section, role );
         } else if ( role == Qt::TextAlignmentRole ) {
             switch (section) {
-                case NodeType: return Qt::AlignCenter;
+                case NodeModel::NodeType: return Qt::AlignCenter;
                 default: return QVariant();
             }
         }
@@ -2810,12 +2741,12 @@ QVariant MilestoneItemModel::headerData( int section, Qt::Orientation orientatio
 QItemDelegate *MilestoneItemModel::createDelegate( int column, QWidget *parent ) const
 {
     switch ( column ) {
-        case NodeConstraint: return new EnumDelegate( parent );
-        case NodeRunningAccount: return new EnumDelegate( parent );
-        case NodeStartupAccount: return new EnumDelegate( parent );
-        case NodeStartupCost: return new MoneyDelegate( parent );
-        case NodeShutdownAccount: return new EnumDelegate( parent );
-        case NodeShutdownCost: return new MoneyDelegate( parent );
+        case NodeModel::NodeConstraint: return new EnumDelegate( parent );
+        case NodeModel::NodeRunningAccount: return new EnumDelegate( parent );
+        case NodeModel::NodeStartupAccount: return new EnumDelegate( parent );
+        case NodeModel::NodeStartupCost: return new MoneyDelegate( parent );
+        case NodeModel::NodeShutdownAccount: return new EnumDelegate( parent );
+        case NodeModel::NodeShutdownCost: return new MoneyDelegate( parent );
         default: return 0;
     }
     return 0;

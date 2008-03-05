@@ -294,12 +294,12 @@ void DocumentsEditor::slotDeleteSelection()
 bool DocumentsEditor::loadContext( const KoXmlElement &context )
 {
     kDebug()<<endl;
-    return m_view->loadContext( context );
+    return m_view->loadContext( m_view->model()->columnMap(), context );
 }
 
 void DocumentsEditor::saveContext( QDomElement &context ) const
 {
-    m_view->saveContext( context );
+    m_view->saveContext( m_view->model()->columnMap(), context );
 }
 
 

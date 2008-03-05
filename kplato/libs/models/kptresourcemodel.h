@@ -24,20 +24,9 @@
 
 #include <kptitemmodelbase.h>
 
+#include <QMetaEnum>
+
 class QPoint;
-
-#define ResourceName 0
-#define ResourceType 1
-#define ResourceInitials 2
-#define ResourceEmail 3
-#define ResourceCalendar 4
-#define ResourceLimit 5
-#define ResourceAvailableFrom 6
-#define ResourceAvailableUntil 7
-#define ResourceNormalRate 8 
-#define ResourceOvertimeRate 9
-
-#define RESOURCE_PROPERTY_COUNT 10;
 
 
 namespace KPlato
@@ -48,12 +37,73 @@ class Resource;
 class ResourceGroup;
 class Calendar;
 
-class ResourceColumnMap : public ColumnMap
+class KPLATOMODELS_EXPORT ResourceModel : public QObject
 {
+    Q_OBJECT
+    Q_ENUMS( Properties )
 public:
-    ResourceColumnMap();
-};
+    explicit ResourceModel( QObject *parent = 0 );
+    ~ResourceModel();
 
+    enum Properties {
+        ResourceName = 0,
+        ResourceType,
+        ResourceInitials,
+        ResourceEmail,
+        ResourceCalendar,
+        ResourceLimit,
+        ResourceAvailableFrom,
+        ResourceAvailableUntil,
+        ResourceNormalRate,
+        ResourceOvertimeRate
+    };
+    
+    const QMetaEnum columnMap() const;
+    void setProject( Project *project );
+    int propertyCount() const;
+    QVariant data( const Resource *resource, int property, int role = Qt::DisplayRole ) const;
+    static QVariant headerData( int section, int role = Qt::DisplayRole );
+
+    QVariant name( const Resource *res, int role ) const;
+    QVariant name( const ResourceGroup *res, int role ) const;
+    bool setName( Resource *res, const QVariant &value, int role );
+    bool setName( ResourceGroup *res, const QVariant &value, int role );
+    
+    QVariant type( const Resource *res, int role ) const;
+    QVariant type( const ResourceGroup *res, int role ) const;
+    bool setType( Resource *res, const QVariant &value, int role );
+    bool setType( ResourceGroup *res, const QVariant &value, int role );
+
+    QVariant initials( const Resource *res, int role ) const;
+    bool setInitials( Resource *res, const QVariant &value, int role );
+    
+    QVariant email( const Resource *res, int role ) const;
+    bool setEmail( Resource *res, const QVariant &value, int role );
+    
+    QVariant calendar( const Resource *res, int role ) const;
+    bool setCalendar( Resource *res, const QVariant &value, int role );
+
+    QVariant units( const Resource *res, int role ) const;
+    bool setUnits( Resource *res, const QVariant &value, int role );
+
+    QVariant availableFrom( const Resource *res, int role ) const;
+    bool setAvailableFrom( Resource *res, const QVariant &value, int role );
+
+    QVariant availableUntil( const Resource *res, int role ) const;
+    bool setAvailableUntil( Resource *res, const QVariant &value, int role );
+
+    QVariant normalRate( const Resource *res, int role ) const;
+    bool setNormalRate( Resource *res, const QVariant &value, int role );
+
+    QVariant overtimeRate( const Resource *res, int role ) const;
+    bool setOvertimeRate( Resource *res, const QVariant &value, int role );
+
+    QVariant fixedCost( const Resource *res, int role ) const;
+    bool setFixedCost( Resource *res, const QVariant &value, int role );
+    
+private:
+    Project *m_project;
+};
 
 class KPLATOMODELS_EXPORT ResourceItemModel : public ItemModelBase
 {
@@ -62,7 +112,7 @@ public:
     explicit ResourceItemModel( QObject *parent = 0 );
     ~ResourceItemModel();
 
-    const ColumnMap &columnNames() const { return columnMap; }
+    virtual const QMetaEnum columnMap() const { return m_model.columnMap(); }
 
     virtual void setProject( Project *project );
 
@@ -151,8 +201,7 @@ protected:
 private:
     ResourceGroup *m_group; // Used for sanity checks
     Resource *m_resource; // Used for sanity checks
-    
-    static ResourceColumnMap columnMap;
+    ResourceModel m_model;
 
 };
 

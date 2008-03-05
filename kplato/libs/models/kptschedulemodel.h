@@ -24,16 +24,6 @@
 
 #include <kptitemmodelbase.h>
 
-#define ScheduleName 0
-#define ScheduleState 1
-#define ScheduleDirection 2
-#define ScheduleOverbooking 3
-#define ScheduleDistribution 4
-#define ScheduleCalculate 5
-#define SchedulePlannedStart 6
-#define SchedulePlannedFinish 7
-
-#define SCHEDULE_PROPERTY_COUNT 8
 
 namespace KPlato
 {
@@ -44,12 +34,28 @@ class ScheduleManager;
 class MainSchedule;
 class Schedule;
 
-class ScheduleColumnMap : public ColumnMap
+class KPLATOMODELS_EXPORT ScheduleModel : public QObject
 {
-    public:
-        ScheduleColumnMap();
+    Q_OBJECT
+    Q_ENUMS( Properties )
+public:
+    explicit ScheduleModel( QObject *parent = 0 );
+    ~ScheduleModel();
+    
+    enum Properties {
+        ScheduleName = 0,
+        ScheduleState,
+        ScheduleDirection,
+        ScheduleOverbooking,
+        ScheduleDistribution,
+        ScheduleCalculate,
+        SchedulePlannedStart,
+        SchedulePlannedFinish
+    };
+    const QMetaEnum columnMap() const;
+    
+    int propertyCount() const;
 };
-
 
 class KPLATOMODELS_EXPORT ScheduleItemModel : public ItemModelBase
 {
@@ -58,7 +64,7 @@ public:
     explicit ScheduleItemModel( QObject *parent = 0 );
     ~ScheduleItemModel();
 
-    const ColumnMap &columnNames() const { return columnMap; }
+    const QMetaEnum columnMap() const { return m_model.columnMap(); }
     
     virtual void setProject( Project *project );
 
@@ -128,7 +134,7 @@ protected:
 private:
     ScheduleManager *m_manager; // for sanety check
     
-    static ScheduleColumnMap columnMap;
+    ScheduleModel m_model;
     
 };
 

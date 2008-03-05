@@ -26,6 +26,7 @@
 
 #include <QAbstractItemModel>
 #include <QItemDelegate>
+#include <QMetaEnum>
 
 #include <KoXmlReaderForward.h>
 
@@ -38,22 +39,6 @@ namespace KPlato
 {
 
 class Project;
-
-/// Base class for assigning names to columns
-class KPLATOMODELS_EXPORT ColumnMap
-{
-public:
-    ColumnMap();
-    ~ColumnMap();
-    int columnNumber( const QString &name ) const;
-    QString columnName( int column ) const;
-    void insert( const QString &name, int column );
-    bool isEmpty() const { return columnMap.isEmpty(); }
-    
-protected:
-    QMap<QString, int> columnMap;
-};
-
 
 /// Namespace for item delegate specific enums
 namespace Delegate
@@ -210,6 +195,7 @@ public:
     explicit ItemModelBase( QObject *parent = 0 );
     virtual ~ItemModelBase();
 
+    virtual const QMetaEnum columnMap() const { return QMetaEnum(); }
     Project *project() const { return m_project; }
     virtual void setProject( Project *project );
     virtual void setReadWrite( bool rw ) { m_readWrite = rw; }

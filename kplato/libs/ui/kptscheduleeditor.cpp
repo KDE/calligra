@@ -114,13 +114,13 @@ ScheduleEditor::ScheduleEditor( KoDocument *part, QWidget *parent )
     m_view->setEditTriggers( m_view->editTriggers() | QAbstractItemView::EditKeyPressed );
 
     QList<int> show;
-    show << ScheduleName
-        << ScheduleState
-        << ScheduleDirection
-        << ScheduleOverbooking
-        << ScheduleDistribution
-        << SchedulePlannedStart
-        << SchedulePlannedFinish;
+    show << ScheduleModel::ScheduleName
+        << ScheduleModel::ScheduleState
+        << ScheduleModel::ScheduleDirection
+        << ScheduleModel::ScheduleOverbooking
+        << ScheduleModel::ScheduleDistribution
+        << ScheduleModel::SchedulePlannedStart
+        << ScheduleModel::SchedulePlannedFinish;
 
     QList<int> lst;
     for ( int c = 0; c < model()->columnCount(); ++c ) {
@@ -314,12 +314,12 @@ void ScheduleEditor::slotDeleteSelection()
 bool ScheduleEditor::loadContext( const KoXmlElement &context )
 {
     kDebug()<<endl;
-    return m_view->loadContext( context );
+    return m_view->loadContext( model()->columnMap(), context );
 }
 
 void ScheduleEditor::saveContext( QDomElement &context ) const
 {
-    m_view->saveContext( context );
+    m_view->saveContext( model()->columnMap(), context );
 }
 
 

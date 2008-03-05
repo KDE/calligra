@@ -36,33 +36,6 @@
 namespace KPlato
 {
 
-ColumnMap::ColumnMap()
-{}
-
-ColumnMap::~ColumnMap()
-{}
-
-void ColumnMap::insert( const QString &name, int column )
-{
-    columnMap.insert( name, column );
-}
-
-int ColumnMap::columnNumber( const QString &name ) const
-{
-    if ( ! columnMap.contains( name ) ) {
-        return -1;
-    }
-    return columnMap[ name ];
-}
-
-QString ColumnMap::columnName( int column ) const
-{
-    if ( column < 0 || column >= columnMap.count() ) {
-        return QString();
-    }
-    return columnMap.keys().at( columnMap.values().indexOf( column ) );
-}
-
 //--------------------------------------
 bool ItemDelegate::eventFilter(QObject *object, QEvent *event)
 {

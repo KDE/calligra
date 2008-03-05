@@ -104,15 +104,15 @@ PertResult::PertResult( KoDocument *part, QWidget *parent )
         
     QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
     QList<int> show;
-    show << NodeEarlyStart
-            << NodeEarlyFinish
-            << NodeLateStart
-            << NodeLateFinish
-            << NodePositiveFloat
-            << NodeFreeFloat
-            << NodeNegativeFloat
-            << NodeStartFloat
-            << NodeFinishFloat;
+    show << NodeModel::NodeEarlyStart
+            << NodeModel::NodeEarlyFinish
+            << NodeModel::NodeLateStart
+            << NodeModel::NodeLateFinish
+            << NodeModel::NodePositiveFloat
+            << NodeModel::NodeFreeFloat
+            << NodeModel::NodeNegativeFloat
+            << NodeModel::NodeStartFloat
+            << NodeModel::NodeFinishFloat;
 
     QList<int> lst2; 
     for ( int i = 0; i < m->columnCount(); ++i ) {
@@ -401,12 +401,12 @@ void PertResult::setProject( Project *project )
 bool PertResult::loadContext( const KoXmlElement &context )
 {
     kDebug();
-    return widget.treeWidgetTaskResult->loadContext( context, model()->columnNames() );
+    return widget.treeWidgetTaskResult->loadContext( model()->columnMap(), context );
 }
 
 void PertResult::saveContext( QDomElement &context ) const
 {
-    widget.treeWidgetTaskResult->saveContext( context, model()->columnNames() );
+    widget.treeWidgetTaskResult->saveContext( model()->columnMap(), context );
 }
 
 
@@ -432,15 +432,15 @@ PertCpmView::PertCpmView( KoDocument *part, QWidget *parent )
     widget.cpmTable->masterView()->setDefaultColumns( QList<int>() << 0 );
     
     QList<int> show;
-    show << NodeDuration
-            << NodeVarianceDuration
-            << NodeOptimisticDuration
-            << NodePessimisticDuration
-            << NodeEstimate
-            << NodeExpected
-            << NodeVarianceEstimate
-            << NodeOptimistic
-            << NodePessimistic;
+    show << NodeModel::NodeDuration
+            << NodeModel::NodeVarianceDuration
+            << NodeModel::NodeOptimisticDuration
+            << NodeModel::NodePessimisticDuration
+            << NodeModel::NodeEstimate
+            << NodeModel::NodeExpected
+            << NodeModel::NodeVarianceEstimate
+            << NodeModel::NodeOptimistic
+            << NodeModel::NodePessimistic;
 
     QList<int> lst2;
     for ( int i = 0; i < m->columnCount(); ++i ) {
@@ -647,12 +647,12 @@ void PertCpmView::slotUpdate()
 bool PertCpmView::loadContext( const KoXmlElement &context )
 {
     kDebug()<<objectName();
-    return widget.cpmTable->loadContext( context, model()->columnNames() );
+    return widget.cpmTable->loadContext( model()->columnMap(), context );
 }
 
 void PertCpmView::saveContext( QDomElement &context ) const
 {
-    widget.cpmTable->saveContext( context, model()->columnNames() );
+    widget.cpmTable->saveContext( model()->columnMap(), context );
 }
 
 } // namespace KPlato

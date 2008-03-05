@@ -63,10 +63,10 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
     m->setRole( KDGantt::StartTimeRole, KDGantt::StartTimeRole ); // To provide correct format
     m->setRole( KDGantt::EndTimeRole, KDGantt::EndTimeRole ); // To provide correct format
     
-    m->setColumn( KDGantt::ItemTypeRole, NodeType );
-    m->setColumn( KDGantt::StartTimeRole, NodeStartTime );
-    m->setColumn( KDGantt::EndTimeRole, NodeEndTime );
-    m->setColumn( KDGantt::TaskCompletionRole, NodeCompleted );
+    m->setColumn( KDGantt::ItemTypeRole, NodeModel::NodeType );
+    m->setColumn( KDGantt::StartTimeRole, NodeModel::NodeStartTime );
+    m->setColumn( KDGantt::EndTimeRole, NodeModel::NodeEndTime );
+    m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
     
     m_model = new NodeItemModel( this );
     setModel( m_model );
@@ -75,7 +75,7 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
         tv->header()->setStretchLastSection( true );
         // Only show name, start- end endtime in treeview
         for ( int i = 0; i < m_model->columnCount(); ++i ) {
-            if ( i == NodeName || i == NodeStartTime || i == NodeEndTime ) {
+            if ( i == NodeModel::NodeName || i == NodeModel::NodeStartTime || i == NodeModel::NodeEndTime ) {
                 continue;
             }
             tv->hideColumn( i );
@@ -384,10 +384,10 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
     m->setRole( KDGantt::StartTimeRole, KDGantt::StartTimeRole ); // To provide correct format
     m->setRole( KDGantt::EndTimeRole, KDGantt::EndTimeRole ); // To provide correct format
     
-    m->setColumn( KDGantt::ItemTypeRole, NodeType );
-    m->setColumn( KDGantt::StartTimeRole, NodeStartTime );
-    m->setColumn( KDGantt::EndTimeRole, NodeEndTime );
-    m->setColumn( KDGantt::TaskCompletionRole, NodeCompleted );
+    m->setColumn( KDGantt::ItemTypeRole, NodeModel::NodeType );
+    m->setColumn( KDGantt::StartTimeRole, NodeModel::NodeStartTime );
+    m->setColumn( KDGantt::EndTimeRole, NodeModel::NodeEndTime );
+    m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
 
     setModel( m_model );
     QTreeView *tv = dynamic_cast<QTreeView*>( leftView() ); //FIXME ?
@@ -395,7 +395,7 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
         tv->header()->setStretchLastSection( true );
         // Only show name and start time in treeview
         for ( int i = 0; i < m_model->columnCount(); ++i ) {
-            if ( i == NodeName || i == 22 ) {
+            if ( i == NodeModel::NodeName || i == NodeModel::NodeStartTime ) {
                 continue;
             }
             tv->hideColumn( i );

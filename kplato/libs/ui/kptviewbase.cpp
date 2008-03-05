@@ -31,6 +31,7 @@
 #include <QHeaderView>
 #include <QPoint>
 #include <QScrollBar>
+#include <QMetaEnum>
 
 namespace KPlato
 {
@@ -555,24 +556,34 @@ void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
     //kDebug()<<event->isAccepted();
 }
 
-bool TreeViewBase::loadContext( const KoXmlElement &element, const ColumnMap &map )
+bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &element )
 {
     kDebug()<<objectName();
     KoXmlElement e = element.namedItem( "columns" ).toElement();
     if ( ! e.isNull() ) {
-        if ( map.isEmpty() ) {
+        if ( ! map.isValid() ) {
             // try numbers
+            kDebug()<<"invalid map";
             for ( int i = model()->columnCount() - 1; i >= 0; --i ) {
-                if ( e.attribute( QString( "column-%1" ).arg( i ), "" ) == "hidden" ) {
+                QString s = e.attribute( QString( "column-%1" ).arg( i ), "" );
+                if ( s == "hidden" ) {
                     hideColumn( i );
-                }
+                } else if ( s == "shown" ) {
+                    showColumn( i );
+                } else kDebug()<<objectName()<<"Unkown column:"<<s;
             }
         } else {
             for ( int i = model()->columnCount() - 1; i >= 0; --i ) {
-                QString n = map.columnName( i );
-                if ( ! n.isEmpty() && e.attribute( n, "" ) == "hidden" ) {
-                    hideColumn( i );
-                }
+                QString n = map.key( i );
+                kDebug()<<i<<"="<<n;
+                if ( ! n.isEmpty() ) {
+                    QString s = e.attribute( n, "" );
+                    if ( s == "hidden" ) {
+                        hideColumn( i );
+                    } else if ( s == "shown" ) {
+                        showColumn( i );
+                    } else kDebug()<<objectName()<<"Unkown column:"<<s;
+                } else kDebug()<<"Column not in enum:"<<i;
             }
         }
     }
@@ -580,7 +591,7 @@ bool TreeViewBase::loadContext( const KoXmlElement &element, const ColumnMap &ma
     if ( ! e.isNull() ) {
         QHeaderView *h = header();
         QString s( "section-%1" );
-        if ( map.isEmpty() ) {
+        if ( ! map.isValid() ) {
             // try numbers
             for ( int i = 0; i < h->count(); ++i ) {
                 if ( e.hasAttribute( s.arg( i ) ) ) {
@@ -590,9 +601,9 @@ bool TreeViewBase::loadContext( const KoXmlElement &element, const ColumnMap &ma
             }
         } else {
             for ( int i = 0; i < h->count(); ++i ) {
-                QString n = map.columnName( i );
+                QString n = map.key( i );
                 if ( ! n.isEmpty() ) {
-                    int col = map.columnNumber( e.attribute( s.arg( i ), "" ) );
+                    int col = map.keyToValue( e.attribute( s.arg( i ), "" ).toUtf8() );
                     if ( col != -1 ) {
                         header()->moveSection( h->visualIndex( col ), i );
                     }
@@ -603,19 +614,21 @@ bool TreeViewBase::loadContext( const KoXmlElement &element, const ColumnMap &ma
     return true;
 }
 
-void TreeViewBase::saveContext( QDomElement &element, const ColumnMap &map ) const
+void TreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) const
 {
+    kDebug()<<objectName();
     QDomElement e = element.ownerDocument().createElement( "columns" );
     element.appendChild( e );
     for ( int i = 0; i < model()->columnCount(); ++i ) {
-        if ( isColumnHidden( i ) ) {
-            if ( map.isEmpty() ) {
-                e.setAttribute( QString( "column-%1" ).arg( i ), "hidden" );
-            } else {
-                QString n = map.columnName( i );
-                if ( ! n.isEmpty() ) {
-                    e.setAttribute( n, "hidden" );
-                }
+        bool h = isColumnHidden( i );
+        if ( ! map.isValid() ) {
+            kDebug()<<"invalid map";
+            e.setAttribute( QString( "column-%1" ).arg( i ), h ? "hidden" : "shown" );
+        } else {
+            QString n = map.key( i );
+            kDebug()<<i<<"="<<n;
+            if ( ! n.isEmpty() ) {
+                e.setAttribute( n, h ? "hidden" : "shown" );
             }
         }
     }
@@ -624,10 +637,10 @@ void TreeViewBase::saveContext( QDomElement &element, const ColumnMap &map ) con
     QHeaderView *h = header();
     for ( int i = 0; i < h->count(); ++i ) {
         if ( ! isColumnHidden( h->logicalIndex( i ) ) ) {
-            if ( map.isEmpty() ) {
+            if ( ! map.isValid() ) {
                 e.setAttribute( QString( "section-%1" ).arg( i ), h->logicalIndex( i ) );
             } else {
-                QString n = map.columnName( h->logicalIndex( i ) );
+                QString n = map.key( h->logicalIndex( i ) );
                 if ( ! n.isEmpty() ) {
                     e.setAttribute( QString( "section-%1" ).arg( i ), n );
                 }
@@ -921,18 +934,18 @@ void DoubleTreeViewBase::slotLeftHeaderContextMenuRequested( const QPoint &pos )
     emit headerContextMenuRequested( pos );
 }
 
-bool DoubleTreeViewBase::loadContext( const KoXmlElement &element, const ColumnMap &map )
+bool DoubleTreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &element )
 {
-    //kDebug()<<endl;
+    kDebug();
     QList<int> lst1;
     QList<int> lst2;
     KoXmlElement e = element.namedItem( "master" ).toElement();
     if ( ! e.isNull() ) {
-        m_leftview->loadContext( e, map );
+        m_leftview->loadContext( map, e );
     }
     e = element.namedItem( "slave" ).toElement();
     if ( ! e.isNull() ) {
-        m_rightview->loadContext( e, map );
+        m_rightview->loadContext( map, e );
         if ( e.attribute( "hidden", "false" ) == "true" ) {
             setViewSplitMode( false );
         }
@@ -940,17 +953,18 @@ bool DoubleTreeViewBase::loadContext( const KoXmlElement &element, const ColumnM
     return true;
 }
 
-void DoubleTreeViewBase::saveContext( QDomElement &element, const ColumnMap &map ) const
+void DoubleTreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) const
 {
+    kDebug()<<objectName();
     QDomElement e = element.ownerDocument().createElement( "master" );
     element.appendChild( e );
-    m_leftview->saveContext( e, map );
+    m_leftview->saveContext( map, e );
     e = element.ownerDocument().createElement( "slave" );
     element.appendChild( e );
     if ( m_rightview->isHidden() ) {
         e.setAttribute( "hidden", "true" );
     }
-    m_rightview->saveContext( e, map );
+    m_rightview->saveContext( map, e );
 }
 
 void DoubleTreeViewBase::setViewSplitMode( bool split )

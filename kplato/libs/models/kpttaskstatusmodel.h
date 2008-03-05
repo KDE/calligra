@@ -44,7 +44,7 @@ public:
     ~TaskStatusItemModel();
     
     /// Returns a column number/- name map for this model
-    virtual const ColumnMap &columnNames() const { return m_nodemodel.columnNames(); }
+    virtual const QMetaEnum columnMap() const { return m_nodemodel.columnMap(); }
 
     virtual void setProject( Project *project );
     void setManager( ScheduleManager *sm );

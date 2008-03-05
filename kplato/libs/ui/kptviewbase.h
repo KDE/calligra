@@ -32,6 +32,7 @@
 class KAction;
 
 class QWidget;
+class QMetaEnum;
 
 class KoDocument;
 
@@ -173,9 +174,9 @@ public:
     void setColumnsHidden( const QList<int> &list );
 
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &context, const ColumnMap &map = ColumnMap() );
+    virtual bool loadContext( const QMetaEnum &map, const KoXmlElement &element );
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &context, const ColumnMap &map = ColumnMap() ) const;
+    virtual void saveContext( const QMetaEnum &map, QDomElement &context ) const;
 
     /**
       Reimplemented to fix qt bug 160083: Doesn't scroll horisontally.
@@ -302,9 +303,9 @@ public:
     TreeViewBase *slaveView() const { return m_rightview; }
 
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &context, const ColumnMap &map = ColumnMap() );
+    virtual bool loadContext( const QMetaEnum &map, const KoXmlElement &element );
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &context, const ColumnMap &map = ColumnMap() ) const;
+    virtual void saveContext( const QMetaEnum &map, QDomElement &context ) const;
     
     void setViewSplitMode( bool split );
     bool isViewSplit() const { return m_mode; }

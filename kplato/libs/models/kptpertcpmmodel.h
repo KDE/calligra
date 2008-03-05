@@ -48,7 +48,7 @@ public:
     explicit CriticalPathItemModel( QObject *parent = 0 );
     ~CriticalPathItemModel();
     
-    const ColumnMap &columnNames() const { return m_nodemodel.columnNames(); }
+    const QMetaEnum columnMap() const { return m_nodemodel.columnMap(); }
     
     virtual void setProject( Project *project );
     
@@ -103,7 +103,7 @@ public:
     explicit PertResultItemModel( QObject *parent = 0 );
     ~PertResultItemModel();
     
-    const ColumnMap &columnNames() const { return m_nodemodel.columnNames(); }
+    const QMetaEnum columnMap() const { return m_nodemodel.columnMap(); }
     
     virtual void setProject( Project *project );
     

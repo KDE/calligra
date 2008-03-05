@@ -88,23 +88,23 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
     
     QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
     QList<int> show;
-    show << NodeType
-            << NodeResponsible
-            << NodeAllocation
-            << NodeEstimateType
-            << NodeEstimate
-            << NodeOptimisticRatio
-            << NodePessimisticRatio
-            << NodeRisk
-            << NodeConstraint 
-            << NodeConstraintStart 
-            << NodeConstraintEnd 
-            << NodeRunningAccount 
-            << NodeStartupAccount 
-            << NodeStartupCost 
-            << NodeShutdownAccount 
-            << NodeShutdownCost 
-            << NodeDescription;
+    show << NodeModel::NodeType
+            << NodeModel::NodeResponsible
+            << NodeModel::NodeAllocation
+            << NodeModel::NodeEstimateType
+            << NodeModel::NodeEstimate
+            << NodeModel::NodeOptimisticRatio
+            << NodeModel::NodePessimisticRatio
+            << NodeModel::NodeRisk
+            << NodeModel::NodeConstraint 
+            << NodeModel::NodeConstraintStart 
+            << NodeModel::NodeConstraintEnd 
+            << NodeModel::NodeRunningAccount 
+            << NodeModel::NodeStartupAccount 
+            << NodeModel::NodeStartupCost 
+            << NodeModel::NodeShutdownAccount 
+            << NodeModel::NodeShutdownCost 
+            << NodeModel::NodeDescription;
 
     QList<int> lst2; 
     for ( int i = 0; i < model()->columnCount(); ++i ) {
@@ -445,12 +445,12 @@ void TaskEditor::slotMoveTaskDown()
 bool TaskEditor::loadContext( const KoXmlElement &context )
 {
     kDebug();
-    return m_view->loadContext( context, model()->columnNames() );
+    return m_view->loadContext( model()->columnMap(), context );
 }
 
 void TaskEditor::saveContext( QDomElement &context ) const
 {
-   m_view->saveContext( context, model()->columnNames() );
+    m_view->saveContext( model()->columnMap(), context );
 }
 
 //-----------------------------------
@@ -473,11 +473,11 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
 
     QList<int> lst1; lst1 << 1 << -1;
     QList<int> show; 
-    show << NodeStatus
-            << NodeCompleted
-            << NodeResponsible
-            << NodeAssigments
-            << NodeDescription;
+    show << NodeModel::NodeStatus
+            << NodeModel::NodeCompleted
+            << NodeModel::NodeResponsible
+            << NodeModel::NodeAssigments
+            << NodeModel::NodeDescription;
     
     for ( int s = 0; s < show.count(); ++s ) {
         m_view->slaveView()->mapToSection( show[s], s );
@@ -655,12 +655,12 @@ void TaskView::slotOptions()
 bool TaskView::loadContext( const KoXmlElement &context )
 {
     kDebug();
-    return m_view->loadContext( context, m_view->model()->columnNames() );
+    return m_view->loadContext( m_view->model()->columnMap(), context );
 }
 
 void TaskView::saveContext( QDomElement &context ) const
 {
-    m_view->saveContext( context, m_view->model()->columnNames() );
+    m_view->saveContext( m_view->model()->columnMap(), context );
 }
 
 

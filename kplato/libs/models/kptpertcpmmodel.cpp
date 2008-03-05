@@ -220,9 +220,9 @@ QVariant CriticalPathItemModel::data( const QModelIndex &index, int role ) const
     Node *n = node( index );
     if ( n == 0 ) {
         switch ( index.column() ) {
-            case NodeName: result = name( role ); break;
-            case NodeDuration: result = duration( role ); break;
-            case NodeVarianceDuration: result = variance( role ); break;
+            case NodeModel::NodeName: result = name( role ); break;
+            case NodeModel::NodeDuration: result = duration( role ); break;
+            case NodeModel::NodeVarianceDuration: result = variance( role ); break;
             default:
                 result = notUsed( role ); break;
         }
@@ -731,7 +731,7 @@ QVariant PertResultItemModel::data( const QModelIndex &index, int role ) const
     if ( n->type() == Node::Type_Project ) {
         Project *p = static_cast<Project*>( n );
         switch ( index.column() ) {
-            case NodeName: result = name( NodeName, role ); break;
+            case NodeModel::NodeName: result = name( NodeModel::NodeName, role ); break;
             default:
                 //kDebug()<<"data: invalid display value column "<<index.column();
                 return QVariant();

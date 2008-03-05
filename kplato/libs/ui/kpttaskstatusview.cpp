@@ -64,16 +64,16 @@ TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
     QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
     masterView()->setDefaultColumns( QList<int>() << 0 );
     QList<int> show;
-    show << NodeStatus
-            << NodeCompleted
-            << NodePlannedEffort
-            << NodeActualEffort
-            << NodeRemainingEffort
-            << NodePlannedCost
-            << NodeActualCost
-            << NodeStarted
-            << NodeFinished
-            << NodeStatusNote;
+    show << NodeModel::NodeStatus
+            << NodeModel::NodeCompleted
+            << NodeModel::NodePlannedEffort
+            << NodeModel::NodeActualEffort
+            << NodeModel::NodeRemainingEffort
+            << NodeModel::NodePlannedCost
+            << NodeModel::NodeActualCost
+            << NodeModel::NodeStarted
+            << NodeModel::NodeFinished
+            << NodeModel::NodeStatusNote;
 
     slaveView()->setDefaultColumns( show );
     QList<int> lst2; 
@@ -276,12 +276,12 @@ void TaskStatusView::slotOptions()
 bool TaskStatusView::loadContext( const KoXmlElement &context )
 {
     kDebug();
-    return m_view->loadContext( context, model()->columnNames() );
+    return m_view->loadContext( model()->columnMap(), context );
 }
 
 void TaskStatusView::saveContext( QDomElement &context ) const
 {
-    m_view->saveContext( context, model()->columnNames() );
+    m_view->saveContext( model()->columnMap(), context );
 }
 
 
