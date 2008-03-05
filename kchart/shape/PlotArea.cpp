@@ -80,6 +80,8 @@ public:
     // The list of axes
     QList<Axis*> axes;
     
+    QList<KDChart::AbstractDiagram*> kdDiagrams;
+    
     KDChart::Chart *kdChart;
     KDChart::AbstractCoordinatePlane *kdPlane;
     
@@ -541,6 +543,20 @@ KDChart::AbstractCoordinatePlane *PlotArea::kdPlane() const
 KDChart::Chart *PlotArea::kdChart() const
 {
     return d->kdChart;
+}
+
+bool PlotArea::registerKdDiagram( KDChart::AbstractDiagram *diagram )
+{
+    if ( d->kdDiagrams.contains( diagram ) )
+        return false;
+    d->kdDiagrams.append( diagram );
+}
+
+bool PlotArea::deregisterKdDiagram( KDChart::AbstractDiagram *diagram )
+{
+    if ( !d->kdDiagrams.contains( diagram ) )
+        return false;
+    d->kdDiagrams.removeAll( diagram );
 }
 
 void PlotArea::update() const

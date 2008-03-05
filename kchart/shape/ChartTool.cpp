@@ -212,8 +212,8 @@ QWidget *ChartTool::createOptionWidget()
              this,   SLOT( setDataSetChartType( DataSet*, ChartType ) ) );
     connect( widget, SIGNAL( dataSetChartSubTypeChanged( DataSet*, ChartSubtype ) ),
              this,   SLOT( setDataSetChartSubType( DataSet*, ChartSubtype ) ) );
-    connect( widget, SIGNAL( datasetColorChanged( int, const QColor& ) ),
-             this, SLOT( setDatasetColor( int, const QColor& ) ) );
+    connect( widget, SIGNAL( datasetColorChanged( DataSet*, const QColor& ) ),
+             this, SLOT( setDatasetColor( DataSet*, const QColor& ) ) );
     connect( widget, SIGNAL( datasetShowValuesChanged( DataSet*, bool ) ),
              this, SLOT( setDatasetShowValues( DataSet*, bool ) ) );
     connect( widget, SIGNAL( datasetShowLabelsChanged( DataSet*, bool ) ),
@@ -427,35 +427,25 @@ void ChartTool::setLegendShowFrame( bool show )
 }
 
 
-void ChartTool::setDatasetColor( int dataset, const QColor& color )
+void ChartTool::setDatasetColor( DataSet *dataSet, const QColor& color )
 {
-    Q_ASSERT( d->shape );
-    
-    /*
-    DataSet *set = d->shape->model()->dataSet( dataset );
-    if ( !set )
+    if ( !dataSet )
         return;
-    set->setColor( color );
-    d->shape->update();
-    */
+    dataSet->setColor( color );
 }
 
 void ChartTool::setDatasetShowValues( DataSet *dataSet, bool b )
 {
-    Q_ASSERT( d->shape );
     if ( !dataSet )
         return;
     dataSet->setShowValues( b );
-    d->shape->update();
 }
 
 void ChartTool::setDatasetShowLabels( DataSet *dataSet, bool b )
 {
-    Q_ASSERT( d->shape );
     if ( !dataSet )
         return;
     dataSet->setShowLabels( b );
-    d->shape->update();
 }
 
 void ChartTool::addAxis( AxisPosition position, const QString& title ) {

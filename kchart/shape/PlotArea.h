@@ -85,6 +85,9 @@ public:
     KDChart::AbstractCoordinatePlane *kdPlane() const;
     KDChart::Chart *kdChart() const;
     
+    bool registerKdDiagram( KDChart::AbstractDiagram *diagram );
+    bool deregisterKdDiagram( KDChart::AbstractDiagram *diagram );
+    
     void update() const;
 
 private:

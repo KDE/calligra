@@ -58,6 +58,7 @@ public:
     double lowerErrorLimit;
     double upperErrorLimit;
     QPen pen;
+    QBrush brush;
     
     PlotArea *plotArea;
     
@@ -256,21 +257,37 @@ QPen DataSet::pen() const
     return d->pen;
 }
 
+QBrush DataSet::brush() const
+{
+    return d->brush;
+}
+
 void DataSet::setPen( const QPen &pen )
 {
+    d->pen = pen;
     d->kdDiagram->setPen( d->kdDataSetNumber, pen );
+    if ( d->attachedAxis )
+        d->attachedAxis->update();
+}
+
+void DataSet::setBrush( const QBrush &brush )
+{
+    d->brush = brush;
+    d->kdDiagram->setBrush( d->kdDataSetNumber, brush );
+    if ( d->attachedAxis )
+        d->attachedAxis->update();
 }
 
 QColor DataSet::color() const
 {
-    return d->pen.color();
+    return d->brush.color();
 }
 
 void DataSet::setColor( const QColor &color )
 {
-    QPen pen = d->kdDiagram->pen( d->kdDataSetNumber );
-    pen.setColor( color );
-    d->kdDiagram->setPen( pen );
+    QBrush brush = d->brush;
+    brush.setColor( color );
+    setBrush( brush );
 }
 
 void DataSet::setShowMeanValue( bool show )
@@ -362,4 +379,9 @@ void DataSet::setKdDiagram( KDChart::AbstractDiagram *diagram )
 void DataSet::setKdDataSetNumber( int number )
 {
     d->kdDataSetNumber = number;
+    if ( d->kdDiagram )
+    {
+        d->brush = d->kdDiagram->brush( number );
+        d->pen = d->kdDiagram->pen( number );
+    }
 }

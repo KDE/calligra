@@ -90,7 +90,7 @@ signals:
     void showVerticalLinesChanged( bool b );
     void showHorizontalLinesChanged( bool b );
     
-    void datasetColorChanged( int, const QColor& color );
+    void datasetColorChanged( DataSet *dataSet, const QColor& color );
     void datasetShowValuesChanged( DataSet *dataSet, bool b );
     void datasetShowLabelsChanged( DataSet *dataSet, bool b );
     void gapBetweenBarsChanged( int percent );

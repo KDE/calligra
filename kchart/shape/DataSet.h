@@ -48,6 +48,7 @@ public:
     bool showLabels() const;
     
     QPen pen() const;
+    QBrush brush() const;
     QColor color() const;
     
 	bool showMeanValue() const;
@@ -71,6 +72,7 @@ public:
 	void setShowLabels( bool showLabels );
 	
 	void setPen( const QPen &pen );
+	void setBrush( const QBrush &brush );
 	void setColor( const QColor &color );
 	
 	void setShowMeanValue( bool b );

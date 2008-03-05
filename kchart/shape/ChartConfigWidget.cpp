@@ -343,7 +343,7 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
 
 void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
 {
-    if ( d->ui.dataSets->currentIndex() < 0 )
+    if ( d->selectedDataset < 0 )
         return;
     
     ChartType     type;
@@ -387,8 +387,8 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
         d->ui.dataSetChartTypeMenu->setText( i18n( "Percent Area Chart" ) );
     }
     
-    emit dataSetChartTypeChanged( d->dataSets[ d->ui.dataSets->currentIndex() ], type );
-    emit dataSetChartSubTypeChanged( d->dataSets[ d->ui.dataSets->currentIndex() ], subtype );
+    emit dataSetChartTypeChanged( d->dataSets[ d->selectedDataset ], type );
+    emit dataSetChartSubTypeChanged( d->dataSets[ d->selectedDataset ], subtype );
     
     update();
 }
@@ -401,7 +401,10 @@ void ChartConfigWidget::chartSubTypeSelected( int type )
 
 void ChartConfigWidget::datasetColorSelected( const QColor& color )
 {
-    emit datasetColorChanged( d->selectedDataset, color );
+    if ( d->selectedDataset < 0 )
+        return;
+
+    emit datasetColorChanged( d->dataSets[ d->selectedDataset ], color );
 }
 
 void ChartConfigWidget::setThreeDMode( bool threeD )
@@ -571,11 +574,11 @@ void ChartConfigWidget::update()
     if ( d->shape->plotArea()->dataSets() != d->dataSets ) {
         d->dataSets = d->shape->plotArea()->dataSets();
         d->ui.dataSets->clear();
-        d->ui.dataSets->blockSignals( true );
         foreach ( DataSet *dataSet, d->dataSets ) {
             d->ui.dataSets->addItem( dataSet->labelData().toString() );
         }
-        d->ui.dataSets->blockSignals( false );
+        // Select the first data set
+        ui_dataSetSelectionChanged( 0 );
     }
     
     d->ui.threeDLook->setChecked( d->shape->isThreeD() );
@@ -827,9 +830,15 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
     d->ui.dataSetAxes->blockSignals( true );
     d->ui.dataSetAxes->setCurrentIndex( d->dataSetAxes.indexOf( dataSet->attachedAxis() ) );
     d->ui.dataSetAxes->blockSignals( false );
+    
+    d->ui.datasetColor->blockSignals( true );
+    d->ui.datasetColor->setColor( dataSet->color() );
+    d->ui.datasetColor->blockSignals( false );
+    
     d->ui.datasetShowValues->blockSignals( true );
     d->ui.datasetShowValues->setChecked( dataSet->showValues() );
     d->ui.datasetShowValues->blockSignals( false );
+    
     d->ui.dataSetShowLabels->blockSignals( true );
     d->ui.dataSetShowLabels->setChecked( dataSet->showLabels() );
     d->ui.dataSetShowLabels->blockSignals( false );

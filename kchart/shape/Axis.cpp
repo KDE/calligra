@@ -441,9 +441,15 @@ void Axis::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
 void Axis::update() const
 {
     if ( d->kdBarDiagram )
+    {
         d->kdBarDiagram->doItemsLayout();
+        d->kdBarDiagram->update();
+    }
     if ( d->kdLineDiagram )
+    {
         d->kdLineDiagram->doItemsLayout();
+        d->kdLineDiagram->update();
+    }
     d->plotArea->parent()->relayout();
 }
 
