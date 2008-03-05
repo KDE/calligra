@@ -29,9 +29,11 @@
 #include <klocale.h>
 
 #include <KoPACanvas.h>
+#include <KoShapeManager.h>
 #include "KPrView.h"
 #include "KPrPage.h"
 #include "KPrPageApplicationData.h"
+#include "KPrPreviewWidget.h"
 #include "pageeffects/KPrPageEffectRegistry.h"
 #include "pageeffects/KPrPageEffectFactory.h"
 #include "commands/KPrPageEffectSetCommand.h"
@@ -196,9 +198,9 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     QWidget* base = new QWidget( this );
 
     // setup the effect preview
-    m_preview = new QLabel( base );
-    m_preview->installEventFilter( this );
-    m_preview->setFrameShape( QFrame::Box );
+    m_preview = new KPrPreviewWidget( base );
+   // m_preview->installEventFilter( this );
+   // m_preview->setFrameShape( QFrame::Box );
 
     m_effectCombo = new QComboBox( base );
     m_effectCombo->addItem( i18n( "No Effect" ), QString( "" ) );
@@ -306,6 +308,8 @@ void KPrPageEffectDocker::slotActivePageChanged()
 
         double duration = pageEffect ? static_cast<double>(pageEffect->duration())/1000 : 2.0;
         m_durationSpinBox->setValue( duration );
+
+        setEffectPreview();
 /*
     QPainter p( m_activePageBuffer );
 
@@ -313,6 +317,7 @@ void KPrPageEffectDocker::slotActivePageChanged()
     m_view->kopaCanvas()->masterShapeManager()->paint( p, converter, false );
     m_view->kopaCanvas()->shapeManager()->paint( p, converter, false );
 */
+
     }
     else {
         // disable the page effect docker as effects are only there on a normal page
@@ -344,9 +349,8 @@ void KPrPageEffectDocker::slotEffectChanged( int index )
 
     m_view->kopaCanvas()->addCommand( new KPrPageEffectSetCommand( m_view->activePage(), pageEffect ) );
 
-    // start hard coded
-//    KPrSlideWipeEffect effect;
-//    effect->setup( m_preview );
+    setEffectPreview();
+    m_preview->runPreview();
 }
 
 void KPrPageEffectDocker::slotSubTypeChanged( int index )
@@ -356,6 +360,9 @@ void KPrPageEffectDocker::slotSubTypeChanged( int index )
     KPrPageEffect * pageEffect( createPageEffect( factory, m_subTypeCombo->itemData( index ).toInt(), m_durationSpinBox->value() ) );
 
     m_view->kopaCanvas()->addCommand( new KPrPageEffectSetCommand( m_view->activePage(), pageEffect ) );
+
+    setEffectPreview();
+    m_preview->runPreview();
 }
 
 void KPrPageEffectDocker::slotDurationChanged( double duration )
@@ -381,6 +388,20 @@ void KPrPageEffectDocker::setView( KPrView* view )
     m_view = view;
     connect( view, SIGNAL( activePageChanged() ),
              this, SLOT( slotActivePageChanged() ) );
+}
+
+void KPrPageEffectDocker::setEffectPreview()
+{
+    QString effectId = m_effectCombo->itemData( m_effectCombo->currentIndex() ).toString();
+    const KPrPageEffectFactory * factory = KPrPageEffectRegistry::instance()->value( effectId );
+
+    if(factory){
+        KPrPageEffect * pageEffect( createPageEffect( factory, m_subTypeCombo->itemData( m_subTypeCombo->currentIndex() ).toInt(), m_durationSpinBox->value() ) );
+
+        m_preview->setPageEffect(pageEffect,  static_cast<KPrPage*>(m_view->activePage()));
+    }
+    else
+        m_preview->setPageEffect(0,  static_cast<KPrPage*>(m_view->activePage()));
 }
 
 #include "KPrPageEffectDocker.moc"

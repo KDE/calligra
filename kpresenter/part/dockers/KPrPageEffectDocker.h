@@ -30,6 +30,7 @@ class KPrPageEffect;
 class KPrPageEffectRunner;
 class KPrPageEffectFactory;
 class KPrView;
+class KPrPreviewWidget;
 
 /**
  * This is the page effect docker widget that let's you choose a page animation.
@@ -53,6 +54,8 @@ protected:
     void updateSubTypes( const KPrPageEffectFactory * factory );
     KPrPageEffect * createPageEffect( const KPrPageEffectFactory * factory, int subType, double time );
 
+    void setEffectPreview();
+
 protected slots:
     void slotSubTypeChanged( int index );
     void slotDurationChanged( double duration );
@@ -63,7 +66,7 @@ private:
     QComboBox* m_effectCombo;
     QComboBox* m_subTypeCombo;
     QDoubleSpinBox* m_durationSpinBox;
-    QLabel* m_preview;
+    KPrPreviewWidget* m_preview;
     QPixmap m_activePageBuffer;
 };
 

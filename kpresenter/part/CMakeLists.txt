@@ -32,6 +32,7 @@ set( kpresenterprivate_LIB_SRCS
 
      dockers/KPrPageEffectDockerFactory.cpp
      dockers/KPrPageEffectDocker.cpp
+     dockers/KPrPreviewWidget.cpp
 
      pageeffects/KPrPageEffectRunner.cpp
      pageeffects/KPrPageEffect.cpp
