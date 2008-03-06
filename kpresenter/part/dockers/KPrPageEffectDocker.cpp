@@ -369,9 +369,12 @@ void KPrPageEffectDocker::slotDurationChanged( double duration )
 {
     QString effectId = m_effectCombo->itemData( m_effectCombo->currentIndex() ).toString();
     const KPrPageEffectFactory * factory = KPrPageEffectRegistry::instance()->value( effectId );
-    KPrPageEffect * pageEffect( createPageEffect( factory, m_subTypeCombo->itemData( m_subTypeCombo->currentIndex() ).toInt(), duration ) );
 
-    m_view->kopaCanvas()->addCommand( new KPrPageEffectSetCommand( m_view->activePage(), pageEffect ) );
+    if(factory) {
+        KPrPageEffect * pageEffect( createPageEffect( factory, m_subTypeCombo->itemData( m_subTypeCombo->currentIndex() ).toInt(), duration ) );
+
+        m_view->kopaCanvas()->addCommand( new KPrPageEffectSetCommand( m_view->activePage(), pageEffect ) );
+    }
 }
 
 KPrPageEffect * KPrPageEffectDocker::createPageEffect( const KPrPageEffectFactory * factory, int subType, double duration )
