@@ -53,15 +53,22 @@ public:
 
 protected:
     void paintEvent( QPaintEvent* event );
+    void resizeEvent( QResizeEvent* event );
 
 protected slots:
     void animate();
 
 private:
+    void updatePixmaps();
+
     QTimeLine m_timeLine;
 
     KPrPageEffect* m_pageEffect;
     KPrPageEffectRunner* m_pageEffectRunner;
+    KPrPage* m_page;
+
+    QPixmap m_oldPage;
+    QPixmap m_newPage;
 };
 
 #endif /* KPRPREVIEWWIDGET_H */

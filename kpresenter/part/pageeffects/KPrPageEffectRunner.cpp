@@ -54,3 +54,25 @@ bool KPrPageEffectRunner::isFinished()
 {
     return m_data.m_finished;
 }
+
+const QPixmap & KPrPageEffectRunner::oldPage() const
+{
+    return m_data.m_oldPage;
+}
+
+const QPixmap & KPrPageEffectRunner::newPage() const
+{
+    return m_data.m_newPage;
+}
+
+void KPrPageEffectRunner::setOldPage( const QPixmap & oldPage)
+{
+    m_data.m_oldPage = oldPage;
+}
+
+void KPrPageEffectRunner::setNewPage( const QPixmap & newPage)
+{
+    m_data.m_newPage = newPage;
+}
+
+

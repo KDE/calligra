@@ -31,7 +31,7 @@
 #include <kdebug.h>
 
 KPrPreviewWidget::KPrPreviewWidget( QWidget* parent )
-: QWidget( parent ), m_pageEffect(0), m_pageEffectRunner(0)
+: QWidget( parent ), m_pageEffect(0), m_pageEffectRunner(0), m_page(0)
 {
     connect( &m_timeLine, SIGNAL( valueChanged( qreal ) ), this, SLOT( animate() ) );
 }
@@ -52,6 +52,15 @@ void KPrPreviewWidget::paintEvent( QPaintEvent *event )
     }
 }
 
+void  KPrPreviewWidget::resizeEvent( QResizeEvent* event )
+{
+    if(m_pageEffectRunner) {
+        updatePixmaps();
+        m_pageEffectRunner->setOldPage( m_oldPage );
+        m_pageEffectRunner->setNewPage( m_newPage );
+    }
+}
+
 void KPrPreviewWidget::setPageEffect( KPrPageEffect* pageEffect, KPrPage* page )
 {
     if(m_pageEffect)
@@ -60,33 +69,16 @@ void KPrPreviewWidget::setPageEffect( KPrPageEffect* pageEffect, KPrPage* page )
         delete m_pageEffectRunner;
 
     m_pageEffect = pageEffect;
+    m_page = page;
 
-    if(m_pageEffect && page) {
-        QPixmap oldPage( size() );
-        QPainter p(&oldPage);
-        p.fillRect( rect(), QBrush(Qt::black) );
-
-        QImage pageImage( size(), QImage::Format_RGB32 );
-        pageImage.fill( QColor( Qt::white ).rgb() );
-
-        QList<KoShape*> shapes;
-        if(page->masterPage())
-            shapes.append(page->masterPage());
-
-        shapes.append(page);
-        KoShapePainter painter;
-        painter.setShapes( shapes );
-        painter.paintShapes( pageImage );
-
-        QPixmap newPage( size() );
-        QPainter p2(&newPage);
-        p2.drawImage(rect(), pageImage);
-
-        m_pageEffectRunner = new KPrPageEffectRunner( oldPage, newPage, this, m_pageEffect );
+    if(m_pageEffect && m_page) {
+        updatePixmaps();
+        m_pageEffectRunner = new KPrPageEffectRunner( m_oldPage, m_newPage, this, m_pageEffect );
     }
     else {
         m_pageEffect = 0;
         m_pageEffectRunner = 0;
+        m_page = 0;
     }
     update();
 }
@@ -105,6 +97,31 @@ void KPrPreviewWidget::runPreview()
         m_timeLine.setCurrentTime( 0 );
         m_timeLine.start();
     }
+}
+
+void KPrPreviewWidget::updatePixmaps()
+{
+    QPixmap oldPage( size() );
+    QPainter p(&oldPage);
+    p.fillRect( rect(), QBrush(Qt::black) );
+    m_oldPage = oldPage;
+
+    QImage pageImage( size(), QImage::Format_RGB32 );
+    pageImage.fill( QColor( Qt::white ).rgb() );
+
+    QList<KoShape*> shapes;
+    if(m_page->masterPage())
+        shapes.append(m_page->masterPage());
+
+    shapes.append(m_page);
+    KoShapePainter painter;
+    painter.setShapes( shapes );
+    painter.paintShapes( pageImage );
+
+    QPixmap newPage( size() );
+    QPainter p2(&newPage);
+    p2.drawImage(rect(), pageImage);
+    m_newPage = newPage;
 }
 
 #include "KPrPreviewWidget.moc"

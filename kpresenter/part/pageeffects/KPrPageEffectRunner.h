@@ -85,6 +85,16 @@ public:
     const QPixmap & newPage() const;
 
     /**
+     * Set the pixmap of the old page
+     */
+    void setOldPage( const QPixmap & oldPage);
+
+    /**
+     * Set the pixmap of the new page
+     */
+    void setNewPage(const QPixmap & newPage);
+
+    /**
      * Get the wiget where the animation is shown
      */
     QWidget * widget() const;
