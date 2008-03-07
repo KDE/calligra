@@ -130,11 +130,20 @@ void KDChartModel::addDataSet( DataSet *dataSet )
 {
     if ( d->dataSets.contains( dataSet ) )
         return;
-    
-    int columnToBeInserted = columnCount();
-    beginInsertColumns( QModelIndex(), columnToBeInserted, columnToBeInserted + d->dataDimensions - 1 );
-    d->dataSets.append( dataSet );
-    endInsertColumns();
+    if ( !d->dataSets.isEmpty() )
+    {
+        int columnToBeInserted = columnCount();
+        beginInsertColumns( QModelIndex(), columnToBeInserted, columnToBeInserted + d->dataDimensions - 1 );
+        d->dataSets.append( dataSet );
+        endInsertColumns();
+    }
+    else
+    {
+        // If we had no datasets before, we haven't had a valid structure yet
+        // Thus, emit the modelReset() signal
+        d->dataSets.append( dataSet );
+        reset();
+    }
 }
 
 void KDChartModel::removeDataSet( DataSet *dataSet )
