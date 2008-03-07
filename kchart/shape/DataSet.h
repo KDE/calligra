@@ -97,6 +97,8 @@ public:
 	void setKdDiagram( KDChart::AbstractDiagram *diagram );
 	void setKdDataSetNumber( int number );
 	
+	KDChart::AbstractDiagram *kdDiagram() const;
+	
 private:
     class Private;
     Private *const d;

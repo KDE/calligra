@@ -70,6 +70,9 @@ public:
     KDChart::CartesianAxis *kdAxis() const;
     KDChart::AbstractCoordinatePlane *kdPlane() const;
     
+    void plotAreaChartTypeChanged( ChartType chartType );
+    void plotAreaChartSubTypeChanged( ChartSubtype chartSubType );
+    
     void update() const;
     
 private:

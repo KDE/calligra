@@ -57,6 +57,9 @@ public:
     Private();
     ~Private();
     
+    void createBarDiagram();
+    void createLineDiagram();
+    
     PlotArea *plotArea;
     
     AxisPosition position;
@@ -80,6 +83,9 @@ public:
 
     KDChartModel *kdBarDiagramModel;
     KDChartModel *kdLineDiagramModel;
+    
+    ChartType plotAreaChartType;
+    ChartSubtype plotAreaChartSubType;
 };
 
 Axis::Private::Private()
@@ -92,6 +98,37 @@ Axis::Private::Private()
 
 Axis::Private::~Private()
 {
+}
+
+void Axis::Private::createBarDiagram()
+{
+    if ( kdBarDiagramModel == 0 )
+        kdBarDiagramModel = new KDChartModel;
+    if ( kdBarDiagram == 0 )
+    {
+        kdBarDiagram = new KDChart::BarDiagram( plotArea->kdChart(), kdPlane );
+        kdBarDiagram->setModel( kdBarDiagramModel );
+        kdBarDiagram->setPen( QPen( Qt::black, 0.0 ) );
+        
+        //plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
+        kdBarDiagram->addAxis( kdAxis );
+        kdPlane->addDiagram( kdBarDiagram );
+    }
+}
+
+void Axis::Private::createLineDiagram()
+{
+    if ( kdLineDiagramModel == 0 )
+        kdLineDiagramModel = new KDChartModel;
+    if ( kdLineDiagram == 0 )
+    {
+        kdLineDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
+        kdLineDiagram->setModel( kdLineDiagramModel );
+        
+        //plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
+        kdLineDiagram->addAxis( kdAxis );
+        kdPlane->addDiagram( kdLineDiagram );
+    }
 }
 
 Axis::Axis( PlotArea *parent )
@@ -122,6 +159,9 @@ Axis::Axis( PlotArea *parent )
     setShowGrid( false );
     
     d->title = new TextLabel( d->plotArea->parent() );
+    
+    d->plotAreaChartType = d->plotArea->chartType();
+    d->plotAreaChartSubType = d->plotArea->chartSubType();
 }
 
 Axis::~Axis()
@@ -182,41 +222,26 @@ bool Axis::attachDataSet( DataSet *dataSet )
     d->dataSets.append( dataSet );
     dataSet->setAttachedAxis( this );
     
-    switch ( dataSet->chartType() )
+    ChartType chartType = dataSet->chartType();
+    if ( chartType == LastChartType )
+        chartType = d->plotArea->chartType();
+    
+    switch ( chartType )
     {
     case BarChartType:
     {
-        if ( d->kdBarDiagramModel == 0 )
-            d->kdBarDiagramModel = new KDChartModel;
+        if ( !d->kdBarDiagram )
+            d->createBarDiagram();
         d->kdBarDiagramModel->addDataSet( dataSet );
-        if ( d->kdBarDiagram == 0 )
-        {
-            d->kdBarDiagram = new KDChart::BarDiagram( d->plotArea->kdChart(), d->kdPlane );
-            d->kdBarDiagram->setModel( d->kdBarDiagramModel );
-            d->kdBarDiagram->setPen( QPen( Qt::black, 0.0 ) );
-            
-            //d->plotArea->parent()->legend()->kdLegend()->addDiagram( d->kdBarDiagram );
-            d->kdBarDiagram->addAxis( d->kdAxis );
-            d->kdPlane->addDiagram( d->kdBarDiagram );
-        }
         dataSet->setKdDiagram( d->kdBarDiagram );
         dataSet->setKdDataSetNumber( d->kdBarDiagramModel->dataSets().indexOf( dataSet ) );
     }
     break;
     case LineChartType:
     {
-        if ( d->kdLineDiagramModel == 0 )
-            d->kdLineDiagramModel = new KDChartModel;
+        if ( !d->kdLineDiagram )
+            d->createLineDiagram();
         d->kdLineDiagramModel->addDataSet( dataSet );
-        if ( d->kdLineDiagram == 0 )
-        {
-            d->kdLineDiagram = new KDChart::LineDiagram( d->plotArea->kdChart(), d->kdPlane );
-            d->kdLineDiagram->setModel( d->kdLineDiagramModel );
-            
-            //d->plotArea->parent()->legend()->kdLegend()->addDiagram( d->kdLineDiagram );
-            d->kdLineDiagram->addAxis( d->kdAxis );
-            d->kdPlane->addDiagram( d->kdLineDiagram );
-        }
         dataSet->setKdDiagram( d->kdLineDiagram );
         dataSet->setKdDataSetNumber( d->kdLineDiagramModel->dataSets().indexOf( dataSet ) );
     }
@@ -235,7 +260,11 @@ bool Axis::detachDataSet( DataSet *dataSet )
     d->dataSets.removeAll( dataSet );
     dataSet->setAttachedAxis( 0 );
     
-    switch ( dataSet->chartType() )
+    ChartType chartType = dataSet->chartType();
+    if ( chartType == LastChartType )
+        chartType = d->plotArea->chartType();
+    
+    switch ( chartType )
     {
     case BarChartType:
     {
@@ -461,6 +490,63 @@ KDChart::CartesianAxis *Axis::kdAxis() const
 KDChart::AbstractCoordinatePlane *Axis::kdPlane() const
 {
     return d->kdPlane;
+}
+
+void Axis::plotAreaChartTypeChanged( ChartType chartType )
+{
+    if ( d->dataSets.isEmpty() || chartType == d->plotAreaChartType )
+        return; // Return if there's nothing to do
+    
+    KDChartModel *oldModel = 0;
+    KDChartModel *newModel = 0;
+    KDChart::AbstractDiagram *newDiagram = 0;
+    
+    switch ( d->plotAreaChartType )
+    {
+    case BarChartType:
+        oldModel = d->kdBarDiagramModel;
+        break;
+    case LineChartType:
+        oldModel = d->kdLineDiagramModel;
+        break;
+    }
+    
+    switch ( chartType )
+    {
+    case BarChartType:
+        if ( !d->kdBarDiagram )
+           d->createBarDiagram();
+        newModel = d->kdBarDiagramModel;
+        newDiagram = d->kdBarDiagram;
+        break;
+    case LineChartType:
+        if ( !d->kdLineDiagram )
+           d->createLineDiagram();
+        newModel = d->kdLineDiagramModel;
+        newDiagram = d->kdLineDiagram;
+        break;
+    }
+    
+    Q_ASSERT( newModel );
+    
+    foreach( DataSet *dataSet, d->dataSets )
+    {
+        if ( dataSet->chartType() != LastChartType )
+            continue;
+        if ( oldModel )
+            oldModel->removeDataSet( dataSet );
+        newModel->addDataSet( dataSet );
+        dataSet->setKdDiagram( newDiagram );
+        dataSet->setKdDataSetNumber( newModel->dataSets().indexOf( dataSet ) );
+    }
+    
+    d->plotAreaChartType = chartType;
+    
+    d->kdPlane->layoutPlanes();
+}
+
+void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
+{
 }
 
 void Axis::setThreeD( bool threeD )

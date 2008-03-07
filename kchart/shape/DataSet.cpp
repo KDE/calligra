@@ -108,17 +108,13 @@ DataSet::~DataSet()
 
 ChartType DataSet::chartType() const
 {
-    // Return the global chart type of the plot area
-    // if no custom type was specified for this data set
-    return ( d->chartType == LastChartType ) ? d->plotArea->chartType() : d->chartType;
+    return d->chartType;
 }
 
 
 ChartSubtype DataSet::chartSubType() const
 {
-    // Return the global chart type of the plot area
-    // if no custom type was specified for this data set
-    return ( d->chartSubType == NoChartSubtype ) ? d->plotArea->chartSubType() : d->chartSubType;
+    return d->chartSubType;
 }
 
 Axis *DataSet::attachedAxis() const
@@ -374,6 +370,11 @@ int DataSet::size() const
 void DataSet::setKdDiagram( KDChart::AbstractDiagram *diagram )
 {
     d->kdDiagram = diagram;
+}
+
+KDChart::AbstractDiagram *DataSet::kdDiagram() const
+{
+    return d->kdDiagram;
 }
 
 void DataSet::setKdDataSetNumber( int number )

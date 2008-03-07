@@ -297,8 +297,9 @@ void PlotArea::setChartType( ChartType type )
 {
     d->chartType = type;
     
-    foreach( DataSet *dataSet, proxyModel()->dataSets() ) {
-        dataSet->setChartType( type );
+    foreach ( Axis *axis, d->axes )
+    {
+        axis->plotAreaChartTypeChanged( type );
     }
 
     update();
@@ -308,8 +309,10 @@ void PlotArea::setChartSubType( ChartSubtype subType )
 {
     d->chartSubtype = subType;
     
-    foreach( DataSet *dataSet, proxyModel()->dataSets() )
-        dataSet->setChartSubType( subType );
+    foreach ( Axis *axis, d->axes )
+    {
+        axis->plotAreaChartSubTypeChanged( subType );
+    }
 
     update();
 }
