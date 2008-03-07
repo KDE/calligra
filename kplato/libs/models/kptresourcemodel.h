@@ -65,41 +65,15 @@ public:
     static QVariant headerData( int section, int role = Qt::DisplayRole );
 
     QVariant name( const Resource *res, int role ) const;
-    QVariant name( const ResourceGroup *res, int role ) const;
-    bool setName( Resource *res, const QVariant &value, int role );
-    bool setName( ResourceGroup *res, const QVariant &value, int role );
-    
     QVariant type( const Resource *res, int role ) const;
-    QVariant type( const ResourceGroup *res, int role ) const;
-    bool setType( Resource *res, const QVariant &value, int role );
-    bool setType( ResourceGroup *res, const QVariant &value, int role );
-
     QVariant initials( const Resource *res, int role ) const;
-    bool setInitials( Resource *res, const QVariant &value, int role );
-    
     QVariant email( const Resource *res, int role ) const;
-    bool setEmail( Resource *res, const QVariant &value, int role );
-    
     QVariant calendar( const Resource *res, int role ) const;
-    bool setCalendar( Resource *res, const QVariant &value, int role );
-
     QVariant units( const Resource *res, int role ) const;
-    bool setUnits( Resource *res, const QVariant &value, int role );
-
     QVariant availableFrom( const Resource *res, int role ) const;
-    bool setAvailableFrom( Resource *res, const QVariant &value, int role );
-
     QVariant availableUntil( const Resource *res, int role ) const;
-    bool setAvailableUntil( Resource *res, const QVariant &value, int role );
-
     QVariant normalRate( const Resource *res, int role ) const;
-    bool setNormalRate( Resource *res, const QVariant &value, int role );
-
     QVariant overtimeRate( const Resource *res, int role ) const;
-    bool setOvertimeRate( Resource *res, const QVariant &value, int role );
-
-    QVariant fixedCost( const Resource *res, int role ) const;
-    bool setFixedCost( Resource *res, const QVariant &value, int role );
     
 private:
     Project *m_project;
@@ -159,42 +133,22 @@ protected slots:
 protected:
     QVariant notUsed( const ResourceGroup *res, int role ) const;
     
-    QVariant name( const Resource *res, int role ) const;
     QVariant name( const ResourceGroup *res, int role ) const;
     bool setName( Resource *res, const QVariant &value, int role );
     bool setName( ResourceGroup *res, const QVariant &value, int role );
     
-    QVariant type( const Resource *res, int role ) const;
     QVariant type( const ResourceGroup *res, int role ) const;
     bool setType( Resource *res, const QVariant &value, int role );
     bool setType( ResourceGroup *res, const QVariant &value, int role );
 
-    QVariant initials( const Resource *res, int role ) const;
     bool setInitials( Resource *res, const QVariant &value, int role );
-    
-    QVariant email( const Resource *res, int role ) const;
     bool setEmail( Resource *res, const QVariant &value, int role );
-    
-    QVariant calendar( const Resource *res, int role ) const;
     bool setCalendar( Resource *res, const QVariant &value, int role );
-
-    QVariant units( const Resource *res, int role ) const;
     bool setUnits( Resource *res, const QVariant &value, int role );
-
-    QVariant availableFrom( const Resource *res, int role ) const;
     bool setAvailableFrom( Resource *res, const QVariant &value, int role );
-
-    QVariant availableUntil( const Resource *res, int role ) const;
     bool setAvailableUntil( Resource *res, const QVariant &value, int role );
-
-    QVariant normalRate( const Resource *res, int role ) const;
     bool setNormalRate( Resource *res, const QVariant &value, int role );
-
-    QVariant overtimeRate( const Resource *res, int role ) const;
     bool setOvertimeRate( Resource *res, const QVariant &value, int role );
-
-    QVariant fixedCost( const Resource *res, int role ) const;
-    bool setFixedCost( Resource *res, const QVariant &value, int role );
 
     QList<Resource*> resourceList( QDataStream &stream );
     

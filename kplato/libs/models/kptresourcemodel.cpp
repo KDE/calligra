@@ -82,7 +82,6 @@ QVariant ResourceModel::name( const Resource *res, int role ) const
         case Qt::EditRole:
         case Qt::ToolTipRole:
             return res->name();
-            break;
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -202,13 +201,13 @@ QVariant ResourceModel::availableFrom( const Resource *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KGlobal::locale()->formatDateTime( res->availableFrom().dateTime() );
+            return KGlobal::locale()->formatDateTime( res->availableFrom() );
         case Qt::EditRole:
             return res->availableFrom().dateTime();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole:
-            return KGlobal::locale()->formatDateTime( res->availableFrom().dateTime() );
+            return i18n( "Available from: %1", KGlobal::locale()->formatDateTime( res->availableFrom(), KLocale::LongDate, KLocale::TimeZone ) );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -220,13 +219,13 @@ QVariant ResourceModel::availableUntil( const Resource *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KGlobal::locale()->formatDateTime( res->availableUntil().dateTime() );
+            return KGlobal::locale()->formatDateTime( res->availableUntil() );
         case Qt::EditRole:
             return res->availableUntil().dateTime();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole:
-            return KGlobal::locale()->formatDateTime( res->availableUntil().dateTime() );
+            return i18n( "Available until: %1", KGlobal::locale()->formatDateTime( res->availableUntil(), KLocale::LongDate, KLocale::TimeZone ) );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -244,6 +243,7 @@ QVariant ResourceModel::normalRate( const Resource *res, int role ) const
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole:
+            return i18n( "Cost per hour, normal time: %1", KGlobal::locale()->formatMoney( res->normalRate() ) );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -261,6 +261,7 @@ QVariant ResourceModel::overtimeRate( const Resource *res, int role ) const
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::ToolTipRole:
+            return i18n( "Cost per hour, overtime: %1", KGlobal::locale()->formatMoney( res->overtimeRate() ) );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -287,16 +288,9 @@ QVariant ResourceModel::data( const Resource *resource, int property, int role )
         case ResourceOvertimeRate: result = overtimeRate( resource, role ); break;
         default:
             kDebug()<<"data: invalid display value: property="<<property;
-            return QVariant();
+            break;
     }
-    if ( result.isValid() ) {
-        if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
-            // HACK to show focus in empty cells
-            result = " ";
-        }
-        return result;
-    }
-    return QVariant();
+    return result;
 }
 
 QVariant ResourceModel::headerData( int section, int role )
@@ -585,22 +579,6 @@ int ResourceItemModel::rowCount( const QModelIndex &parent ) const
     return 0;
 }
 
-QVariant ResourceItemModel::name( const Resource *res, int role ) const
-{
-    //kDebug()<<res->name()<<","<<role;
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return res->name();
-            break;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
 QVariant ResourceItemModel::name( const  ResourceGroup *res, int role ) const
 {
     //kDebug()<<res->name()<<","<<role;
@@ -641,26 +619,6 @@ bool ResourceItemModel::setName( ResourceGroup *res, const QVariant &value, int 
             return true;
     }
     return false;
-}
-
-QVariant ResourceItemModel::type( const Resource *res, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return res->typeToString( true );
-        case Role::EnumList: 
-            return res->typeToStringList( true );
-        case Role::EnumListValue: 
-            return (int)res->type();
-        case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
 }
 
 QVariant ResourceItemModel::type( const ResourceGroup *res, int role ) const
@@ -711,22 +669,6 @@ bool ResourceItemModel::setType( ResourceGroup *res, const QVariant &value, int 
     return false;
 }
 
-QVariant ResourceItemModel::initials( const Resource *res, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return res->initials();
-        case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
 bool ResourceItemModel::setInitials( Resource *res, const QVariant &value, int role )
 {
     switch ( role ) {
@@ -738,22 +680,6 @@ bool ResourceItemModel::setInitials( Resource *res, const QVariant &value, int r
             return true;
     }
     return false;
-}
-
-QVariant ResourceItemModel::email( const Resource *res, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole:
-            return res->email();
-        case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
 }
 
 bool ResourceItemModel::setEmail( Resource *res, const QVariant &value, int role )
@@ -769,46 +695,6 @@ bool ResourceItemModel::setEmail( Resource *res, const QVariant &value, int role
     return false;
 }
 
-QVariant ResourceItemModel::calendar( const Resource *res, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-        case Qt::ToolTipRole: {
-            QString s = i18n( "None" );
-            Calendar *cal = res->calendar( true ); // don't check for default calendar
-            if ( cal == 0 ) {
-                // Do we get a default calendar
-                cal = res->calendar();
-                if ( cal ) {
-                    s = i18nc( "Default (calendar name)", "Default (%1)", cal->name() );
-                }
-            } else {
-                s = cal->name();
-            }
-            return s;
-        }
-        case Role::EnumList: {
-            Calendar *cal = m_project->defaultCalendar();
-            QString s = i18n( "None" );
-            if ( cal ) {
-                s = i18nc( "Default (calendar name)", "Default (%1)", cal->name() );
-            }
-            return QStringList() << s << m_project->calendarNames();
-        }
-        case Role::EnumListValue: {
-            Calendar *cal = res->calendar( true ); // don't check for default calendar
-            return cal == 0 ? 0 : m_project->calendarNames().indexOf( cal->name() ) + 1;
-        }
-        case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
 bool ResourceItemModel::setCalendar( Resource *res, const QVariant &value, int role )
 {
     switch ( role ) {
@@ -816,7 +702,7 @@ bool ResourceItemModel::setCalendar( Resource *res, const QVariant &value, int r
         {
             Calendar *c = 0;
             if ( value.toInt() > 0 ) {
-                QStringList lst = calendar( res, Role::EnumList ).toStringList();
+                QStringList lst = m_model.calendar( res, Role::EnumList ).toStringList();
                 if ( value.toInt() < lst.count() ) {
                     c = m_project->calendarByName( lst.at( value.toInt() ) );
                 }
@@ -832,22 +718,6 @@ bool ResourceItemModel::setCalendar( Resource *res, const QVariant &value, int r
 }
 
 
-QVariant ResourceItemModel::units( const Resource *res, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::EditRole:
-            return res->units();
-        case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
-        case Qt::ToolTipRole:
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
 bool ResourceItemModel::setUnits( Resource *res, const QVariant &value, int role )
 {
     switch ( role ) {
@@ -859,24 +729,6 @@ bool ResourceItemModel::setUnits( Resource *res, const QVariant &value, int role
             return true;
     }
     return false;
-}
-
-QVariant ResourceItemModel::availableFrom( const Resource *res, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-            return KGlobal::locale()->formatDateTime( res->availableFrom().dateTime() );
-        case Qt::EditRole:
-            return res->availableFrom().dateTime();
-        case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
-        case Qt::ToolTipRole:
-            return KGlobal::locale()->formatDateTime( res->availableFrom().dateTime() );
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
 }
 
 bool ResourceItemModel::setAvailableFrom( Resource *res, const QVariant &value, int role )
@@ -892,24 +744,6 @@ bool ResourceItemModel::setAvailableFrom( Resource *res, const QVariant &value, 
     return false;
 }
     
-QVariant ResourceItemModel::availableUntil( const Resource *res, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-            return KGlobal::locale()->formatDateTime( res->availableUntil().dateTime() );
-        case Qt::EditRole:
-            return res->availableUntil().dateTime();
-        case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
-        case Qt::ToolTipRole:
-            return KGlobal::locale()->formatDateTime( res->availableUntil().dateTime() );
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
 bool ResourceItemModel::setAvailableUntil( Resource *res, const QVariant &value, int role )
 {
     switch ( role ) {
@@ -923,23 +757,6 @@ bool ResourceItemModel::setAvailableUntil( Resource *res, const QVariant &value,
     return false;
 }
 
-QVariant ResourceItemModel::normalRate( const Resource *res, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-            return KGlobal::locale()->formatMoney( res->normalRate() );
-        case Qt::EditRole:
-            return res->normalRate();
-        case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
-        case Qt::ToolTipRole:
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
-}
-
 bool ResourceItemModel::setNormalRate( Resource *res, const QVariant &value, int role )
 {
     switch ( role ) {
@@ -951,24 +768,6 @@ bool ResourceItemModel::setNormalRate( Resource *res, const QVariant &value, int
             return true;
     }
     return false;
-}
-
-
-QVariant ResourceItemModel::overtimeRate( const Resource *res, int role ) const
-{
-    switch ( role ) {
-        case Qt::DisplayRole:
-            return KGlobal::locale()->formatMoney( res->overtimeRate() );
-        case Qt::EditRole:
-            return res->overtimeRate();
-        case Qt::TextAlignmentRole:
-            return Qt::AlignCenter;
-        case Qt::ToolTipRole:
-        case Qt::StatusTipRole:
-        case Qt::WhatsThisRole:
-            return QVariant();
-    }
-    return QVariant();
 }
 
 bool ResourceItemModel::setOvertimeRate( Resource *res, const QVariant &value, int role )
@@ -1008,27 +807,14 @@ QVariant ResourceItemModel::data( const QModelIndex &index, int role ) const
     if ( obj == 0 ) {
         return QVariant();
     }
+    if ( role == Qt::TextAlignmentRole ) {
+        // use same alignment as in header (headers always horizontal)
+        return headerData( index.column(), Qt::Horizontal, role );
+    }
     Resource *r = qobject_cast<Resource*>( obj );
     if ( r ) {
-        switch ( index.column() ) {
-            case ResourceModel::ResourceType: result = type( r, role ); break;
-            case ResourceModel::ResourceCalendar: result = calendar( r, role ); break;
-            case ResourceModel::ResourceLimit: result = units( r, role ); break;
-            case ResourceModel::ResourceAvailableFrom: result = availableFrom( r, role ); break;
-            case ResourceModel::ResourceAvailableUntil: result = availableUntil( r, role ); break;
-            case ResourceModel::ResourceNormalRate: result = normalRate( r, role ); break;
-            case ResourceModel::ResourceOvertimeRate: result = overtimeRate( r, role ); break;
-            default:
-                return m_model.data( r, index.column(), role );
-        }
-        if ( result.isValid() ) {
-            if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
-                // HACK to show focus in empty cells
-                result = " ";
-            }
-            return result;
-        }
-    } else { 
+        result = m_model.data( r, index.column(), role );
+    } else {
         ResourceGroup *g = qobject_cast<ResourceGroup*>( obj );
         if ( g ) {
             switch ( index.column() ) {
@@ -1042,18 +828,12 @@ QVariant ResourceItemModel::data( const QModelIndex &index, int role ) const
                         return QVariant();
                     }
             }
-            if ( result.isValid() ) {
-                if ( role == Qt::DisplayRole && result.type() == QVariant::String && result.toString().isEmpty()) {
-                // HACK to show focus in empty cells
-                    result = " ";
-                }
-                return result;
-            }
         }
     }
-    // define default action
-
-    return QVariant();
+    if ( role == Qt::DisplayRole && ! result.isValid() ) {
+        result = " "; // HACK to show focus in empty cells
+    }
+    return result;
 }
 
 bool ResourceItemModel::setData( const QModelIndex &index, const QVariant &value, int role )

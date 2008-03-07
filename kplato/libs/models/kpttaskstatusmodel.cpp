@@ -450,7 +450,7 @@ Node *TaskStatusItemModel::node( const QModelIndex &index ) const
 
 void TaskStatusItemModel::slotNodeChanged( Node *)
 {
-    kDebug();
+    //kDebug();
     refresh();
 /*    if ( node == 0 || node->type() == Node::Type_Project ) {
         return;
