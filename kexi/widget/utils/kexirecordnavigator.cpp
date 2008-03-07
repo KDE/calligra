@@ -361,6 +361,28 @@ void KexiRecordNavigator::setLabelText(const QString& text)
 	d->textLabel->setText(text.isEmpty() ? QString() : (QString::fromLatin1(" ")+text+" "));
 }
 
+void KexiRecordNavigator::setButtonToolTipText(KexiRecordNavigator::Button btn, const QString& txt)
+{
+	switch (btn)
+	{
+		case KexiRecordNavigator::ButtonFirst:
+			d->navBtnFirst->setToolTip(txt);
+			break;
+		case KexiRecordNavigator::ButtonPrevious:
+			d->navBtnPrev->setToolTip(txt);
+			break;
+		case KexiRecordNavigator::ButtonNext:
+			d->navBtnNext->setToolTip(txt);
+			break;
+		case KexiRecordNavigator::ButtonLast:
+			d->navBtnLast->setToolTip(txt);
+			break;
+		case KexiRecordNavigator::ButtonNew:
+			d->navBtnNew->setToolTip(txt);
+			break;
+	}
+}
+
 void KexiRecordNavigator::setInsertingButtonVisible(bool set)
 {
 	d->navBtnNew->setVisible(set);

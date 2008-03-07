@@ -70,6 +70,15 @@ class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QWidget
 	Q_OBJECT
 
 	public:
+		enum Button
+		{
+		  ButtonFirst,
+		  ButtonPrevious,
+		  ButtonNext,
+		  ButtonLast,
+		  ButtonNew
+		};
+		
 		KexiRecordNavigator(QWidget *parent, Q3ScrollView* parentView, int leftMargin = 0);
 		virtual ~KexiRecordNavigator();
 
@@ -154,6 +163,7 @@ class KEXIGUIUTILS_EXPORT KexiRecordNavigator : public QWidget
 		 By default this label contains translated "Row:" text. */
 		void setLabelText(const QString& text);
 
+		void setButtonToolTipText(KexiRecordNavigator::Button, const QString& );
 	signals:
 		void prevButtonClicked();
 		void nextButtonClicked();
