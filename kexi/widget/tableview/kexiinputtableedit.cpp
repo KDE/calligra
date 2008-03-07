@@ -37,6 +37,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 #include <kglobalsettings.h>
+#include <kcolorscheme.h>
 #include <kcompletionbox.h>
 #include <knumvalidator.h>
 #include <kexiutils/longlongvalidator.h>
@@ -105,6 +106,13 @@ void KexiInputTableEdit::init()
 	//create internal editor
 	m_lineedit = new MyLineEdit(this);
 	m_lineedit->setObjectName("KexiInputTableEdit-MyLineEdit");
+	KColorScheme cs(QPalette::Active);
+	QColor focus = cs.decoration(KColorScheme::FocusColor).color();
+	m_lineedit->setStyleSheet(QString("QLineEdit { \
+			border: 1px solid %1; \
+			border-radius: 0px; \
+			padding: 0 0px; }").arg(focus.name()));
+	
 	setViewWidget(m_lineedit);
 	if (align_right)
 		m_lineedit->setAlignment(Qt::AlignRight);
