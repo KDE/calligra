@@ -4,6 +4,7 @@ add_subdirectory( forms )
 add_subdirectory( migration )
 add_subdirectory( importexport )
 add_subdirectory( relations )
+add_subdirectory( reportspgz )
 
 #if(DEFINED DKEXI_SCRIPTS_SUPPORT)
     add_subdirectory(scripting)

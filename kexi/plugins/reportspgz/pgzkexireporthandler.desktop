@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+ServiceTypes=Kexi/Handler
+GenericName=Reports
+Name=ReportsPgz
+X-KDE-Library=pgzkexireportpart2
+X-KDE-ParentApp=kexi
+X-Kexi-PartVersion=2
+X-Kexi-TypeName=report
+X-Kexi-TypeMime=kexi/reportpgz
+X-Kexi-ItemIcon=report
+X-Kexi-SupportsDataExport=false
+X-Kexi-SupportsPrinting=true
