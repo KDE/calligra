@@ -236,18 +236,6 @@ p, li { white-space: pre-wrap; }
         </widget>
        </item>
       </layout>
-      <zorder>pushButton_4</zorder>
-      <zorder>line_2</zorder>
-      <zorder>label_2</zorder>
-      <zorder>axes</zorder>
-      <zorder>axisScalingButton</zorder>
-      <zorder>addAxis</zorder>
-      <zorder>removeAxis</zorder>
-      <zorder>line_3</zorder>
-      <zorder>label_4</zorder>
-      <zorder>axisTitle</zorder>
-      <zorder>axisShowTitle</zorder>
-      <zorder>axisShowGridLines</zorder>
      </widget>
      <widget class="QWidget" name="tab_2" >
       <property name="geometry" >
@@ -384,7 +372,7 @@ p, li { white-space: pre-wrap; }
           <string notr="true" >text-align:left;</string>
          </property>
          <property name="text" >
-          <string>dfg</string>
+          <string/>
          </property>
         </widget>
        </item>

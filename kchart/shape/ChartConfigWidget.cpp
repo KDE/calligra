@@ -181,12 +181,12 @@ ChartConfigWidget::ChartConfigWidget()
     QMenu *dataSetBarChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_bar" ), "Bar Chart" );
     d->dataSetNormalBarChartAction  = dataSetBarChartMenu->addAction( KIcon( "chart_bar_beside" ), i18n("Normal") );
     d->dataSetStackedBarChartAction = dataSetBarChartMenu->addAction( KIcon( "chart_bar_layer" ), i18n("Stacked") );
-    d->percentBarChartAction = dataSetBarChartMenu->addAction( KIcon( "chart_bar_percent" ), i18n("Percent") );
+    d->dataSetPercentBarChartAction = dataSetBarChartMenu->addAction( KIcon( "chart_bar_percent" ), i18n("Percent") );
     
     QMenu *dataSetLineChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_line" ), "Line Chart" );
     d->dataSetNormalLineChartAction  = dataSetLineChartMenu->addAction( KIcon( "chart_line_normal" ), i18n("Normal") );
     d->dataSetStackedLineChartAction = dataSetLineChartMenu->addAction( KIcon( "chart_line_stacked" ), i18n("Stacked") );
-    d->percentLineChartAction = dataSetLineChartMenu->addAction( KIcon( "chart_line_percent" ), i18n("Percent") );
+    d->dataSetPercentLineChartAction = dataSetLineChartMenu->addAction( KIcon( "chart_line_percent" ), i18n("Percent") );
     
     QMenu *dataSetAreaChartMenu = dataSetChartTypeMenu->addMenu( KIcon( "chart_area" ), "Area Chart" );
     d->dataSetNormalAreaChartAction  = dataSetAreaChartMenu->addAction( KIcon( "chart_area_normal" ), i18n("Normal") );
@@ -361,7 +361,9 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
         type    = BarChartType;
         subtype = PercentChartSubtype;
         d->ui.dataSetChartTypeMenu->setText( i18n( "Percent Bar Chart" ) );
-    } else if ( action == d->dataSetNormalLineChartAction ) {
+    }
+    
+    else if ( action == d->dataSetNormalLineChartAction ) {
         type    = LineChartType;
         subtype = NormalChartSubtype;
         d->ui.dataSetChartTypeMenu->setText( i18n( "Normal Line Chart" ) );
@@ -373,7 +375,9 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
         type    = LineChartType;
         subtype = PercentChartSubtype;
         d->ui.dataSetChartTypeMenu->setText( i18n( "Percent Line Chart" ) );
-    } else if ( action == d->dataSetNormalAreaChartAction ) {
+    }
+    
+    else if ( action == d->dataSetNormalAreaChartAction ) {
         type    = AreaChartType;
         subtype = NormalChartSubtype;
         d->ui.dataSetChartTypeMenu->setText( i18n( "Normal Area Chart" ) );
@@ -432,6 +436,7 @@ void ChartConfigWidget::update()
         if ( !d->axes.isEmpty()	) {
             d->ui.axes->clear();
             d->ui.dataSetAxes->clear();
+            d->dataSetAxes.clear();
             foreach ( Axis *axis, d->axes ) {
     			d->ui.axes->addItem( axis->titleText() );
                 if ( axis->dimension() == YAxisDimension ) {
@@ -798,8 +803,6 @@ void ChartConfigWidget::ui_axisSelectionChanged( int index ) {
 	Q_ASSERT( d->axes.size() > index );
 	
 	Axis *axis = d->axes[ index ];
-
-    qDebug() << axis;
     
 	d->ui.axisTitle->blockSignals( true );
 	d->ui.axisTitle->setText( axis->titleText() );
@@ -878,13 +881,13 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
 void ChartConfigWidget::ui_dataSetAxisSelectionChanged( int index ) {
     if ( index < 0 )
         return;
-    Q_ASSERT( d->axes.size() > index );
+    Q_ASSERT( d->dataSetAxes.size() > index );
     
     if ( d->ui.dataSets->currentIndex() < 0 )
         return;
     DataSet *dataSet = d->dataSets[ d->ui.dataSets->currentIndex() ];
     
-    Axis *axis = d->axes[ index ];
+    Axis *axis = d->dataSetAxes[ index ];
     dataSet->attachedAxis()->detachDataSet( dataSet );
     axis->attachDataSet( dataSet );
 }
