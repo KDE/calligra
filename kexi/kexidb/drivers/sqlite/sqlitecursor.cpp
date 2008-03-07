@@ -337,6 +337,8 @@ void SQLiteCursor::drv_getNextRecord()
 void SQLiteCursor::drv_appendCurrentRecordToBuffer()
 {
 //	KexiDBDrvDbg << "SQLiteCursor::drv_appendCurrentRecordToBuffer():" <<endl;
+	if (!d->curr_coldata)
+            return;
 	if (!d->cols_pointers_mem_size)
 		d->cols_pointers_mem_size = m_fieldCount * sizeof(char*);
 	const char **record = (const char**)malloc(d->cols_pointers_mem_size);
