@@ -80,7 +80,9 @@ public:
      * Insert an element at the current cursor position
      * @param element The element to be inserted
      */
-    void insert( BasicElement* element );
+//    void insert( BasicElement* element );
+
+    void insert( const QString& data );
 
     /**
      * Remove an element from the formula

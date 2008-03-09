@@ -78,9 +78,10 @@ public:
 
     /**
      * Remove a child element
+     * @param cursor The cursor holding the position where to remove
      * @param element The BasicElement to remove
      */
-    void removeChild( BasicElement* element );
+    void removeChild( FormulaCursor* cursor, BasicElement* element );
 
     /**
      * Implement the cursor behaviour for the element

@@ -144,7 +144,7 @@ void FractionElement::insertChild( FormulaCursor* cursor, BasicElement* child )
     delete tmp;       // finally delete the old BasicElement
 }
    
-void FractionElement::removeChild( BasicElement* element )
+void FractionElement::removeChild( FormulaCursor* cursor, BasicElement* element )
 {
     if( element == m_numerator )         
     {

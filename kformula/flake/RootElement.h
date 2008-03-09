@@ -50,13 +50,14 @@ public:
      * @param cursor The cursor holding the position where to inser
      * @param child A BasicElement to insert
      */
-//    void insertChild( FormulaCursor* cursor, BasicElement* child );
+    void insertChild( FormulaCursor* cursor, BasicElement* child );
    
     /**
      * Remove a child element
+     * @param cursor The cursor holding the position where to remove
      * @param element The BasicElement to remove
      */ 
-//    void removeChild( BasicElement* element );
+    void removeChild( FormulaCursor* cursor, BasicElement* element );
 
     /**
      * Render the element to the given QPainter

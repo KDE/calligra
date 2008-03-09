@@ -74,8 +74,9 @@ void RowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
     m_childElements.insert( cursor->position(), child );
 }
 
-void RowElement::removeChild( BasicElement* child )
+void RowElement::removeChild( FormulaCursor* cursor, BasicElement* child )
 {
+    Q_UNUSED( cursor )
     m_childElements.remove( child );
 }
 

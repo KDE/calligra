@@ -67,7 +67,7 @@ void BasicElement::insertChild( FormulaCursor* cursor, BasicElement* element )
     m_parentElement->insertChild( cursor, element );
 }
 
-void BasicElement::removeChild( BasicElement* )
+void BasicElement::removeChild( FormulaCursor*, BasicElement* )
 { /* do nothing a BasicElement has no children */ }
 
 const QList<BasicElement*> BasicElement::childElements()

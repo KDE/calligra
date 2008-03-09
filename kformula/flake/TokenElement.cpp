@@ -71,8 +71,11 @@ void TokenElement::layout( const AttributeManager* am )
             renderToPath( chunk, m_contentPath );
             m_glyphs[ counter ]->renderToPath( QString(), m_contentPath );
             counter++;
+            chunk.clear();
         }
     }
+    if( !chunk.isEmpty() )
+        renderToPath( chunk, m_contentPath );
 
     // As the text is added to ( 0 / 0 ) the baseline equals the top edge of the
     // elements bounding rect, while translating it down the text's baseline moves too
@@ -89,6 +92,11 @@ void TokenElement::insertChild( FormulaCursor* cursor, BasicElement* child )
     }
     else*/ if( !child )
         m_rawString.insert( cursor->position(), cursor->inputBuffer() );
+}
+
+void TokenElement::removeChild( FormulaCursor* cursor, BasicElement* child )
+{
+    m_rawString.remove( cursor->position(), 1 );
 }
 
 BasicElement* TokenElement::acceptCursor( const FormulaCursor* cursor )

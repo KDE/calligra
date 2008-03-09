@@ -35,19 +35,48 @@
 #include <KFileDialog>
 #include <KMessageBox>
 #include <QFile>
+#include <QMenu>
 
-FormulaToolWidget::FormulaToolWidget( QWidget* parent )
+FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
                   : QTabWidget( parent )
 {
+    m_tool = tool;
     setupUi( this );
 
+    // setup the element insert menus
+    m_fractionMenu.addAction( m_tool->action( "insert_fraction" ) );
+    m_fenceMenu.addAction( m_tool->action( "insert_fence" ) );
+    m_tableMenu.addAction( m_tool->action( "insert_table" ) );
+    m_tableMenu.addAction( m_tool->action( "insert_tablerow" ) );
+    m_tableMenu.addAction( m_tool->action( "insert_tablecol" ) );
+    m_rootMenu.addAction( m_tool->action( "insert_root" ) );
+    m_rootMenu.addAction( m_tool->action( "insert_sqrt" ) );
+    m_scriptsMenu.addAction( m_tool->action( "insert_subscript" ) );
+    m_scriptsMenu.addAction( m_tool->action( "insert_supscript" ) );
+    m_scriptsMenu.addAction( m_tool->action( "insert_subsupscript" ) );
+
+    // assign menus to toolbuttons
+    buttonFence->setMenu( &m_fenceMenu );
+    buttonRoot->setMenu( &m_rootMenu );
+    buttonFraction->setMenu( &m_fractionMenu );
+    buttonTable->setMenu( &m_tableMenu );
+    buttonScript->setMenu( &m_scriptsMenu );
+
+    // connect signals to the slots
+    connect( buttonFraction, SIGNAL( triggered( QAction* ) ),
+             m_tool, SLOT( insert( QAction* ) ) );
+    connect( buttonFence, SIGNAL( triggered( QAction* ) ),
+             m_tool, SLOT( insert( QAction* ) ) );
+    connect( buttonTable, SIGNAL( triggered( QAction* ) ),
+             m_tool, SLOT( insert( QAction* ) ) );
+    connect( buttonRoot, SIGNAL( triggered( QAction* ) ),
+             m_tool, SLOT( insert( QAction* ) ) );
     connect( buttonLoad, SIGNAL( clicked() ), this, SLOT( slotLoadFormula() ) );
     connect( buttonSave, SIGNAL( clicked() ), this, SLOT( slotSaveFormula() ) );
 }
 
 FormulaToolWidget::~FormulaToolWidget()
-{
-}
+{}
 
 void FormulaToolWidget::slotLoadFormula()
 {

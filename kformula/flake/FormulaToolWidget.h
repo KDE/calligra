@@ -21,6 +21,7 @@
 #define FORMULATOOLWIDGET_H
 
 #include <QTabWidget>
+#include <QMenu>
 #include "ui_FormulaToolWidget.h"
 
 class KoFormulaTool;
@@ -37,7 +38,7 @@ class FormulaToolWidget : public QTabWidget, Ui::mainTabWidget {
 Q_OBJECT
 public:
     /// Standart constructor
-    explicit FormulaToolWidget( QWidget* parent = 0 );
+    explicit FormulaToolWidget( KoFormulaTool* tool, QWidget* parent = 0 );
 
     /// Standart destructor
     ~FormulaToolWidget();
@@ -55,6 +56,12 @@ private slots:
 private:
     /// The KoFormulaTool this options widget belongs to
     KoFormulaTool* m_tool;
+
+    QMenu m_scriptsMenu;
+    QMenu m_fractionMenu;
+    QMenu m_tableMenu;
+    QMenu m_fenceMenu;
+    QMenu m_rootMenu;
 };
 
 #endif // FORMULATOOLWIDGET_H

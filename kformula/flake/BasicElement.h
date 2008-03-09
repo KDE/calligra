@@ -87,16 +87,17 @@ public:
 
     /**
      * Insert a new child at the cursor position
-     * @param cursor The cursor holding the position where to inser
+     * @param cursor The cursor holding the position where to insert
      * @param child A BasicElement to insert
      */
     virtual void insertChild( FormulaCursor* cursor, BasicElement* child );
    
     /**
      * Remove a child element
+     * @param cursor The cursor holding the position where to remove
      * @param element The BasicElement to remove
      */ 
-    virtual void removeChild( BasicElement* element );
+    virtual void removeChild( FormulaCursor* cursor, BasicElement* element );
 
     /**
      * Render the element to the given QPainter

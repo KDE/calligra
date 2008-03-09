@@ -115,9 +115,24 @@ void FormulaCursor::insertText( const QString& text )
     }*/
 }
 
-void FormulaCursor::insert( BasicElement* element )
+void FormulaCursor::insert( const QString& data )
 {
+    BasicElement* elementToInsert;
 
+    // MathML data to load
+    if( data.startsWith( '<' ) ) {
+        // TODO
+    }
+    // special behaviour for table columns
+    else if( data == "mtd" ) {
+        // TODO
+    }
+    else
+        elementToInsert = ElementFactory::createElement( data, m_currentElement );
+
+    if( !insideToken() )
+        m_currentElement->insertChild( this, elementToInsert );
+    m_positionInElement++;
 }
 
 void FormulaCursor::remove( bool elementBeforePosition )
@@ -149,6 +164,8 @@ void FormulaCursor::move( CursorDirection direction )
             ( isEnd() && m_direction == MoveRight ) ||
             m_direction == MoveUp || m_direction == MoveDown )
             return;
+        else
+            ( m_direction == MoveLeft ) ? m_positionInElement-- : m_positionInElement++;
     }
     else {
         m_currentElement = tmp;           // asign the new element to the cursor

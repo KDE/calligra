@@ -58,14 +58,6 @@ public:
     
     void keyReleaseEvent( QKeyEvent *event );
 
-    /// Insert a new element at the current cursor position with type ElementType
-    void insertAtCursor( BasicElement* element );
-
-    void insertAtCursor( QList<BasicElement*> elements );
-
-    // perhaps later for copy&paste:
-    // insertAtCursor( QDomElement element );
-
     void remove( bool backSpace );
 
     /// @return The currently manipulated KoFormulaShape
@@ -78,11 +70,17 @@ public slots:
     /// Called when this tool instance is deactivated
     void deactivate();
 
+    /// Insert the element tied to the given @p action
+    void insert( QAction* action );
+
 protected:
     /// Create default option widget
     QWidget* createOptionWidget();
 	
 private:
+    /// Creates all the actions provided by the tool
+    void setupActions();
+
     /// The FormulaShape the tool is manipulating
     KoFormulaShape* m_formulaShape;
 

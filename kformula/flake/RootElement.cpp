@@ -88,9 +88,9 @@ const QList<BasicElement*> RootElement::childElements()
     return tmp;
 }
 
-/*
+
 void RootElement::insertChild( FormulaCursor* cursor, BasicElement* child )
-{
+{/*
     BasicElement* tmp = cursor->currentElement();
     if( tmp == m_radicand && m_radicand->elementType == Basic )
     {
@@ -110,9 +110,12 @@ void RootElement::insertChild( FormulaCursor* cursor, BasicElement* child )
         m_exponent = child;
         cursor->moveCursorTo( m_exponent, 1 );
         delete tmp;
-    }
+    }*/
 }
-*/
+
+void RootElement::removeChild( FormulaCursor* cursor, BasicElement* child )
+{
+}
 
 BasicElement* RootElement::acceptCursor( const FormulaCursor* cursor )
 {

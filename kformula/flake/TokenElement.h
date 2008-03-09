@@ -74,6 +74,13 @@ public:
     void insertChild( FormulaCursor* cursor, BasicElement* child );
 
     /**
+     * Remove a child element
+     * @param cursor The cursor holding the position where to remove
+     * @param element The BasicElement to remove
+     */ 
+    void removeChild( FormulaCursor* cursor, BasicElement* element );
+
+    /**
      * Implement the cursor behaviour for the element
      * @param direction Indicates whether the cursor moves up, down, right or left
      * @return A this pointer if the element accepts if not the element to asked instead
