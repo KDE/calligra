@@ -58,11 +58,8 @@ orQuery::orQuery ( const QString &qstrPName, const QString &qstrSQL,
 
 orQuery::~orQuery()
 {
-	if ( qryQuery != 0 )
-	{
-		delete qryQuery;
-		qryQuery = 0;
-	}
+	delete qryQuery;
+	qryQuery = 0;
 }
 
 bool orQuery::execute()
@@ -101,14 +98,16 @@ bool orQuery::execute()
 
 uint orQuery::fieldNumber ( const QString &fld )
 {
-	Q_ASSERT(qryQuery->query());
-	KexiDB::QueryColumnInfo::Vector flds = qryQuery->query()->fieldsExpanded();
 	uint x = -1;
-	for ( int i = 0; i < flds.size() ; ++i )
+	if ( qryQuery->query() )
 	{
-		if ( fld.toLower() == flds[i]->aliasOrName() )
+		KexiDB::QueryColumnInfo::Vector flds = qryQuery->query()->fieldsExpanded();
+		for ( int i = 0; i < flds.size() ; ++i )
 		{
-			x = i;
+			if ( fld.toLower() == flds[i]->aliasOrName() )
+			{
+				x = i;
+			}
 		}
 	}
 	return x;
@@ -137,24 +136,19 @@ orData::orData()
 void orData::setQuery ( orQuery *qryPassed )
 {
 	qryThis = qryPassed;
-
-	if ( qstrField.length() )
-		_valid = true;
+	_valid = ( qryThis != 0 && qstrField.length() )
 }
 
 void orData::setField ( const QString &qstrPPassed )
 {
 	qstrField = qstrPPassed;
-
-	if ( qryThis != 0 )
-		_valid = true;
+	_valid = ( qryThis != 0 );
 }
 
 const QString &orData::getValue()
 {
-	if ( _valid )
+	if ( _valid && qryThis->getQuery() )
 	{
-		Q_ASSERT(qryThis->getQuery());
 		qstrValue = qryThis->getQuery()->value ( qryThis->fieldNumber ( qstrField ) ).toString();
 	}
 	else
@@ -166,9 +160,8 @@ const QString &orData::getValue()
 
 const QByteArray &orData::getRawValue()
 {
-	if ( _valid )
+	if ( _valid && qryThis->getQuery() )
 	{
-		Q_ASSERT(qryThis->getQuery());
 		rawValue = qryThis->getQuery()->value ( qryThis->fieldNumber ( qstrField ) ).toByteArray();
 	}
 
