@@ -143,7 +143,7 @@ void orData::setQuery ( orQuery *qryPassed )
 void orData::setField ( const QString &qstrPPassed )
 {
 	qstrField = qstrPPassed;
-	_valid = ( qryThis != 0 );
+	_valid = ( qryThis != 0 && qstrField.length() );
 }
 
 const QString &orData::getValue()
