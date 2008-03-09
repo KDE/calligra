@@ -18,12 +18,13 @@
 */
 
 #include "KPrSlideWipeToBottomStrategy.h"
+#include "KPrSlideWipeEffectFactory.h"
 
 #include <QWidget>
 #include <QPainter>
 
 KPrSlideWipeToBottomStrategy::KPrSlideWipeToBottomStrategy()
-: KPrPageEffectStrategy( KPrPageEffect::ToBottom, "slideWipe", "fromTop", true )
+: KPrPageEffectStrategy( KPrSlideWipeEffectFactory::ToBottom, "slideWipe", "fromTop", true )
 {
 }
 

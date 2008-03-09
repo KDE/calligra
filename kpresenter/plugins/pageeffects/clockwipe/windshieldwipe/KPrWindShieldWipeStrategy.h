@@ -26,7 +26,7 @@
 class KPrWindShieldWipeStrategy : public KPrSweepWipeStrategy
 {
 public:
-    KPrWindShieldWipeStrategy( KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse );
+    KPrWindShieldWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse );
     virtual ~KPrWindShieldWipeStrategy();
 
     virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );

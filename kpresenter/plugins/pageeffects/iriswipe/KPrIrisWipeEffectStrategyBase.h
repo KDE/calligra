@@ -29,7 +29,7 @@
 class KPrIrisWipeEffectStrategyBase : public KPrPageEffectStrategy
 {
 public:
-    KPrIrisWipeEffectStrategyBase(QPainterPath shape, KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse);
+    KPrIrisWipeEffectStrategyBase(QPainterPath shape, int subType, const char * smilType, const char *smilSubType, bool reverse);
     virtual ~KPrIrisWipeEffectStrategyBase();
 
     virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );

@@ -39,7 +39,7 @@ class KPrPageEffect
 public:
     /**
      * Sub type of the effect
-     */
+     *//*
     enum SubType {
         FromLeft,       // the new page is coming from the left
         FromRight,      // the new page is coming from the right
@@ -189,7 +189,7 @@ public:
         Up,
         RightReverse,
         UpReverse,
-    };
+    };*/
 
     /**
      * Data used by the effect
@@ -284,7 +284,7 @@ public:
      *
      * @return The sub type of the page effect.
      */
-    SubType subType() const;
+    int subType() const;
 
     /**
      * Save the smil attributes of the effect

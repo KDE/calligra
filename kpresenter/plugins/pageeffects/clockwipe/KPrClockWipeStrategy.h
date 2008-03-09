@@ -25,7 +25,7 @@
 class KPrClockWipeStrategy : public KPrPageEffectStrategy
 {
 public:
-    KPrClockWipeStrategy(int startAngle, int bladeCount, KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse );
+    KPrClockWipeStrategy(int startAngle, int bladeCount, int subType, const char * smilType, const char *smilSubType, bool reverse );
     virtual ~KPrClockWipeStrategy();
 
     virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );

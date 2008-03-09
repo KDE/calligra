@@ -24,7 +24,7 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyle.h>
 
-KPrPageEffectStrategy::KPrPageEffectStrategy( KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse )
+KPrPageEffectStrategy::KPrPageEffectStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse )
 : m_subType( subType )
 , m_smilData( smilType, smilSubType, reverse )
 {
@@ -34,7 +34,7 @@ KPrPageEffectStrategy::~KPrPageEffectStrategy()
 {
 }
 
-KPrPageEffect::SubType KPrPageEffectStrategy::subType() const
+int KPrPageEffectStrategy::subType() const
 {
     return m_subType;
 }

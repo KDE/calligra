@@ -18,13 +18,14 @@
  */
 
 #include "DoubleDiamondWipeStrategy.h"
+#include "MiscDiagonalWipeEffectFactory.h"
 #include <QtGui/QWidget>
 #include <QtGui/QPainter>
 
 const int StepCount = 250;
 
 DoubleDiamondWipeStrategy::DoubleDiamondWipeStrategy()
-    : KPrPageEffectStrategy( KPrPageEffect::DoubleDiamond, "miscDiagonalWipe", "doubleDiamond", false )
+    : KPrPageEffectStrategy( MiscDiagonalWipeEffectFactory::DoubleDiamond, "miscDiagonalWipe", "doubleDiamond", false )
 {
 }
 

@@ -28,7 +28,7 @@
 
 #include <kdebug.h>
 
-KPrSweepWipeStrategy::KPrSweepWipeStrategy(KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse )
+KPrSweepWipeStrategy::KPrSweepWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse )
     : KPrPageEffectStrategy( subType, smilType, smilSubType, reverse )
 {
 }

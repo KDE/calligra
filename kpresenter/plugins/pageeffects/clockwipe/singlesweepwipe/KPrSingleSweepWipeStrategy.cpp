@@ -28,7 +28,7 @@
 
 #include <kdebug.h>
 
-KPrSingleSweepWipeStrategy::KPrSingleSweepWipeStrategy( double rotationX, double rotationY, int startAngle, int rotationAngle, KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse )
+KPrSingleSweepWipeStrategy::KPrSingleSweepWipeStrategy( double rotationX, double rotationY, int startAngle, int rotationAngle, int subType, const char * smilType, const char *smilSubType, bool reverse )
     : KPrPageEffectStrategy( subType, smilType, smilSubType, reverse )
     , m_rotationX(rotationX)
     , m_rotationY(rotationY)

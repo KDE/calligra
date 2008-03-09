@@ -28,7 +28,7 @@
 
 #include "KPrClockWipeSubpathHelper.h"
 
-KPrClockWipeStrategy::KPrClockWipeStrategy(int startAngle, int bladeCount, KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse )
+KPrClockWipeStrategy::KPrClockWipeStrategy(int startAngle, int bladeCount, int subType, const char * smilType, const char *smilSubType, bool reverse )
     : KPrPageEffectStrategy( subType, smilType, smilSubType, reverse ), m_bladeCount(bladeCount)
 {
     m_startAngle = static_cast<double>(startAngle)/180 * M_PI;

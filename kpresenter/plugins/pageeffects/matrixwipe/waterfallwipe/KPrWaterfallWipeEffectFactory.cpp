@@ -45,3 +45,23 @@ KPrWaterfallWipeEffectFactory::~KPrWaterfallWipeEffectFactory()
 {
 }
 
+static const char* s_subTypes[] = {
+    I18N_NOOP( "Top Left Vertical" ),
+    I18N_NOOP( "Top Left Horizontal" ),
+    I18N_NOOP( "Top Right Vertical" ),
+    I18N_NOOP( "Top Right Horizontal" ),
+    I18N_NOOP( "Bottom Left Vertical" ),
+    I18N_NOOP( "Bottom Left Horizontal" ),
+    I18N_NOOP( "Bottom Right Vertical" ),
+    I18N_NOOP( "Bottom Right Horizontal" )
+};
+
+QString KPrWaterfallWipeEffectFactory::subTypeName(int subType) const
+{
+    if (subType >= 0 && subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
+        return i18n( s_subTypes[subType] );
+    } else {
+        return i18n( "Unknown subtype" );
+    }
+}
+

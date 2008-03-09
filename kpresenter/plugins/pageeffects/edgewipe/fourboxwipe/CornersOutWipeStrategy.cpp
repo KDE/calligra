@@ -18,13 +18,14 @@
  */
 
 #include "CornersOutWipeStrategy.h"
+#include "FourBoxWipeEffectFactory.h"
 #include <QtGui/QWidget>
 #include <QtGui/QPainter>
 
 const int StepCount = 250;
 
 CornersOutWipeStrategy::CornersOutWipeStrategy( bool reverse )
-    : KPrPageEffectStrategy( reverse ? KPrPageEffect::CornersOutReverse : KPrPageEffect::CornersOut, "fourBoxWipe", "cornersOut", reverse )
+    : KPrPageEffectStrategy( reverse ? FourBoxWipeEffectFactory::CornersOutReverse : FourBoxWipeEffectFactory::CornersOut, "fourBoxWipe", "cornersOut", reverse )
 {
 }
 

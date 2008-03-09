@@ -36,3 +36,16 @@ MiscDiagonalWipeEffectFactory::~MiscDiagonalWipeEffectFactory()
 {
 }
 
+static const char* s_subTypes[] = {
+    I18N_NOOP( "Double Barn Door" ),
+    I18N_NOOP( "Double Diamond" ),
+};
+
+QString MiscDiagonalWipeEffectFactory::subTypeName(int subType) const
+{
+    if (subType >= 0 && subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
+        return i18n( s_subTypes[subType] );
+    } else {
+        return i18n( "Unknown subtype" );
+    }
+}

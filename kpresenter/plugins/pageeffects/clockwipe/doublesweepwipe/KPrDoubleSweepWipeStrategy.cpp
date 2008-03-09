@@ -18,6 +18,7 @@
 */
 
 #include "KPrDoubleSweepWipeStrategy.h"
+#include "KPrDoubleSweepWipeEffectFactory.h"
 
 #include <math.h>
 #include <QWidget>
@@ -28,7 +29,7 @@
 
 #include <kdebug.h>
 
-KPrDoubleSweepWipeStrategy::KPrDoubleSweepWipeStrategy(KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse )
+KPrDoubleSweepWipeStrategy::KPrDoubleSweepWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse )
     : KPrSweepWipeStrategy( subType, smilType, smilSubType, reverse )
 {
 }
@@ -60,8 +61,8 @@ void KPrDoubleSweepWipeStrategy::paintStep( QPainter &p, int currPos, const KPrP
 
     switch( subType() )
     {
-        case KPrPageEffect::ParallelVertical:
-        case KPrPageEffect::ParallelVerticalReverse:
+        case KPrDoubleSweepWipeEffectFactory::ParallelVertical:
+        case KPrDoubleSweepWipeEffectFactory::ParallelVerticalReverse:
             startAngle1 = M_PI;
             boundingRect1 = QRect( 0, 0, width, 2*height);
 
@@ -71,8 +72,8 @@ void KPrDoubleSweepWipeStrategy::paintStep( QPainter &p, int currPos, const KPrP
             rotationRange1 = -0.5*M_PI;
             rotationRange2 = rotationRange1;
             break;
-        case KPrPageEffect::ParallelDiagonal:
-        case KPrPageEffect::ParallelDiagonalReverse:
+        case KPrDoubleSweepWipeEffectFactory::ParallelDiagonal:
+        case KPrDoubleSweepWipeEffectFactory::ParallelDiagonalReverse:
             startAngle1 = 0.5*M_PI;
             boundingRect1 = QRect( -width, 0, 2*width, height);
 
@@ -82,8 +83,8 @@ void KPrDoubleSweepWipeStrategy::paintStep( QPainter &p, int currPos, const KPrP
             rotationRange1 = -0.5*M_PI;
             rotationRange2 = rotationRange1;
             break;
-        case KPrPageEffect::OppositeVertical:
-        case KPrPageEffect::OppositeVerticalReverse:
+        case KPrDoubleSweepWipeEffectFactory::OppositeVertical:
+        case KPrDoubleSweepWipeEffectFactory::OppositeVerticalReverse:
             startAngle1 = 0;
             boundingRect1 = QRect( 0, -height/2, width, height);
 
@@ -93,8 +94,8 @@ void KPrDoubleSweepWipeStrategy::paintStep( QPainter &p, int currPos, const KPrP
             rotationRange1 = -M_PI;
             rotationRange2 = M_PI;
             break;
-        case KPrPageEffect::OppositeHorizontal:
-        case KPrPageEffect::OppositeHorizontalReverse:
+        case KPrDoubleSweepWipeEffectFactory::OppositeHorizontal:
+        case KPrDoubleSweepWipeEffectFactory::OppositeHorizontalReverse:
             startAngle1 = 0.5*M_PI;
             boundingRect1 = QRect( -width/2, 0, width, height);
 
@@ -104,8 +105,8 @@ void KPrDoubleSweepWipeStrategy::paintStep( QPainter &p, int currPos, const KPrP
             rotationRange1 = -M_PI;
             rotationRange2 = M_PI;
             break;
-        case KPrPageEffect::ParallelDiagonalTopLeft:
-        case KPrPageEffect::ParallelDiagonalTopLeftReverse:
+        case KPrDoubleSweepWipeEffectFactory::ParallelDiagonalTopLeft:
+        case KPrDoubleSweepWipeEffectFactory::ParallelDiagonalTopLeftReverse:
             startAngle1 = 0;
             boundingRect1 = QRect( -width, -height, 2*width, 2*height);
 
@@ -115,8 +116,8 @@ void KPrDoubleSweepWipeStrategy::paintStep( QPainter &p, int currPos, const KPrP
             rotationRange1 = -atan(static_cast<double>(height)/width);
             rotationRange2 = rotationRange1;
             break;
-        case KPrPageEffect::ParallelDiagonalBottomLeft:
-        case KPrPageEffect::ParallelDiagonalBottomLeftReverse:
+        case KPrDoubleSweepWipeEffectFactory::ParallelDiagonalBottomLeft:
+        case KPrDoubleSweepWipeEffectFactory::ParallelDiagonalBottomLeftReverse:
             startAngle1 = 0.5*M_PI;
             boundingRect1 = QRect( -width, 0, 2*width, 2*height);
 

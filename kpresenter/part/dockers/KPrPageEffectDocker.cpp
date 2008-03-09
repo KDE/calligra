@@ -262,8 +262,8 @@ void KPrPageEffectDocker::updateSubTypes( const KPrPageEffectFactory * factory )
     m_subTypeCombo->clear();
     if ( factory ) {
         m_subTypeCombo->setEnabled( true );
-        foreach( KPrPageEffect::SubType subType, factory->subTypes() ) {
-            QString subTypeString = i18n( s_subTypes[subType] );
+        foreach( int subType, factory->subTypes() ) {
+            QString subTypeString = factory->subTypeName( subType );
             m_subTypeCombo->addItem( subTypeString, subType );
         }
     }
@@ -381,7 +381,7 @@ KPrPageEffect * KPrPageEffectDocker::createPageEffect( const KPrPageEffectFactor
 {
     Q_ASSERT( factory );
     // TODO get data from input
-    KPrPageEffectFactory::Properties properties( qRound(duration*1000), KPrPageEffect::SubType( subType ) );
+    KPrPageEffectFactory::Properties properties( qRound(duration*1000), subType );
     return factory->createPageEffect( properties );
 }
 

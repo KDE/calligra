@@ -27,6 +27,18 @@ class KPrWindShieldWipeEffectFactory : public KPrPageEffectFactory
 public:
     KPrWindShieldWipeEffectFactory();
     virtual ~KPrWindShieldWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        Right,
+        Up,
+        Vertical,
+        Horizontal,
+        RightReverse,
+        UpReverse,
+        VerticalReverse,
+        HorizontalReverse
+    };
 };
 
 #endif /* KPRWINDSHIELDWIPEEFFECTFACTORY_H */

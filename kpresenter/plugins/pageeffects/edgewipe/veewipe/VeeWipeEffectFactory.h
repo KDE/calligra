@@ -27,6 +27,14 @@ class VeeWipeEffectFactory : public KPrPageEffectFactory
 public:
     VeeWipeEffectFactory();
     virtual ~VeeWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        FromTop,
+        FromRight,
+        FromBottom,
+        FromLeft
+    };
 };
 
 #endif // VEEWIPEEFFECTFACTORY_H

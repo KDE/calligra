@@ -18,12 +18,13 @@
  */
 
 #include "DiagonalWipeStrategy.h"
+#include "DiagonalWipeEffectFactory.h"
 #include <QtGui/QWidget>
 #include <QtGui/QPainter>
 
 const int StepCount = 250;
 
-DiagonalWipeStrategy::DiagonalWipeStrategy( KPrPageEffect::SubType subtype, const char *smilSubType, bool reverse )
+DiagonalWipeStrategy::DiagonalWipeStrategy( int subtype, const char *smilSubType, bool reverse )
     : KPrPageEffectStrategy( subtype, "diagonalWipe", smilSubType, reverse )
 {
 }
@@ -61,22 +62,22 @@ QPainterPath DiagonalWipeStrategy::clipPath( int step, const QRect &area )
 
     switch( subType() )
     {
-        case KPrPageEffect::FromTopLeft:
+        case DiagonalWipeEffectFactory::FromTopLeft:
             path.moveTo( area.topLeft() );
             path.lineTo( area.topLeft() + vecx );
             path.lineTo( area.topLeft() + vecy );
             break;
-        case KPrPageEffect::FromTopRight:
+        case DiagonalWipeEffectFactory::FromTopRight:
             path.moveTo( area.topRight() );
             path.lineTo( area.topRight() - vecx );
             path.lineTo( area.topRight() + vecy );
             break;
-        case KPrPageEffect::FromBottomLeft:
+        case DiagonalWipeEffectFactory::FromBottomLeft:
             path.moveTo( area.bottomLeft() );
             path.lineTo( area.bottomLeft() + vecx );
             path.lineTo( area.bottomLeft() - vecy );
             break;
-        case KPrPageEffect::FromBottomRight:
+        case DiagonalWipeEffectFactory::FromBottomRight:
             path.moveTo( area.bottomRight() );
             path.lineTo( area.bottomRight() - vecx );
             path.lineTo( area.bottomRight() - vecy );

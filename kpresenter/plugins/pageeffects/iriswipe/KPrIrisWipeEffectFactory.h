@@ -27,6 +27,12 @@ class KPrIrisWipeEffectFactory : public KPrPageEffectFactory
 public:
     KPrIrisWipeEffectFactory();
     virtual ~KPrIrisWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        Rectangle,
+        Diamond
+    };
 };
 
 #endif /* KPRCLOCKWIPEEFFECTFACTORY_H */

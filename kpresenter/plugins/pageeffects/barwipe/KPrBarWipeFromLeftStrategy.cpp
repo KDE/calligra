@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2008 Timothée Lacroix <dakeyras.khan@gmail.com>
+   Copyright (C) 2008 Timothe Lacroix <dakeyras.khan@gmail.com>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,12 +18,13 @@
 */
 
 #include "KPrBarWipeFromLeftStrategy.h"
+#include "KPrBarWipeEffectFactory.h"
 
 #include <QWidget>
 #include <QPainter>
 
 KPrBarWipeFromLeftStrategy::KPrBarWipeFromLeftStrategy()
-: KPrPageEffectStrategy( KPrPageEffect::FromLeft, "barWipe", "leftToRight", false )
+: KPrPageEffectStrategy( KPrBarWipeEffectFactory::FromLeft, "barWipe", "leftToRight", false )
 {
 }
 

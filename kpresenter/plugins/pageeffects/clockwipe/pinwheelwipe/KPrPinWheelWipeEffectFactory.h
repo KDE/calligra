@@ -27,6 +27,16 @@ class KPrPinWheelWipeEffectFactory : public KPrPageEffectFactory
 public:
     KPrPinWheelWipeEffectFactory();
     virtual ~KPrPinWheelWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        TwoBladeVerticalClockwise,
+        TwoBladeHorizontalClockwise,
+        FourBladeClockwise,
+        TwoBladeVerticalCounterClockwise,
+        TwoBladeHorizontalCounterClockwise,
+        FourBladeCounterClockwise
+    };
 };
 
 #endif /* KPRPINWHEELWIPEEFFECTFACTORY_H */

@@ -18,12 +18,13 @@
 */
 
 #include "KPrSlideWipeFromLeftStrategy.h"
+#include "KPrSlideWipeEffectFactory.h"
 
 #include <QWidget>
 #include <QPainter>
 
 KPrSlideWipeFromLeftStrategy::KPrSlideWipeFromLeftStrategy()
-: KPrPageEffectStrategy( KPrPageEffect::FromLeft, "slideWipe", "fromLeft", false )
+: KPrPageEffectStrategy( KPrSlideWipeEffectFactory::FromLeft, "slideWipe", "fromLeft", false )
 {
 }
 

@@ -20,7 +20,7 @@
 #ifndef KPRPAGEEFFECTSTRATEGY_H
 #define KPRPAGEEFFECTSTRATEGY_H
 
-#include "KPrPageEffect.h"
+#include "KPrPageEffectFactory.h"
 
 #include "kpresenter_export.h"
 
@@ -35,7 +35,7 @@ public:
      * @param smilSubType The smil:subType used for loading/saving
      * @param revers The flag for the smil:direction used for loading/saving true means reverse false means forward
      */
-    KPrPageEffectStrategy( KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse );
+    KPrPageEffectStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse );
     virtual ~KPrPageEffectStrategy();
 
     /**
@@ -43,7 +43,7 @@ public:
      *
      * This is not the smil:subType but the sub type that is used for displaying a common UI string for the effect.
      */
-    KPrPageEffect::SubType subType() const;
+    int subType() const;
 
     /**
      * Setup the timeline used by this strategy
@@ -67,7 +67,7 @@ public:
     /**
      * Trigger the next paint paint event.
      *
-     * Trigger a repaint of the part of the widget that changed since 
+     * Trigger a repaint of the part of the widget that changed since
      * the last time to this call.
      *
      * @param data The data used for the effect.
@@ -75,7 +75,7 @@ public:
     virtual void next( const KPrPageEffect::Data &data ) = 0;
 
     /**
-     * The default implementation triggers an update of the whole widget. If you only need to 
+     * The default implementation triggers an update of the whole widget. If you only need to
      * update a smaller part of the widget reimplement this function.
      */
     virtual void finish( const KPrPageEffect::Data &data );
@@ -107,7 +107,7 @@ public:
     /**
      * Get the smil:direction
      *
-     * @return true if smil:direction is reverse, false otherwise 
+     * @return true if smil:direction is reverse, false otherwise
      */
     bool reverse() const;
 
@@ -125,7 +125,7 @@ private:
         bool reverse;
     };
 
-    KPrPageEffect::SubType m_subType;
+    int m_subType;
     SmilData m_smilData;
 };
 

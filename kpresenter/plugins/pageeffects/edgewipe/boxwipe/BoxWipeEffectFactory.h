@@ -27,6 +27,18 @@ class BoxWipeEffectFactory : public KPrPageEffectFactory
 public:
     BoxWipeEffectFactory();
     virtual ~BoxWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        FromTopLeft,
+        FromTopRight,
+        FromBottomRight,
+        FromBottomLeft,
+        CenterTop,
+        CenterRight,
+        CenterBottom,
+        CenterLeft
+    };
 };
 
 #endif // BOXWIPEEFFECTFACTORY_H

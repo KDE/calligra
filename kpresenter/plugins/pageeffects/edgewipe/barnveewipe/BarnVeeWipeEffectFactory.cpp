@@ -27,13 +27,28 @@
 BarnVeeWipeEffectFactory::BarnVeeWipeEffectFactory()
 : KPrPageEffectFactory( BarnVeeWipeEffectId, i18n( "Barn Vee Wipe Effect" ) )
 {
-    addStrategy( new BarnVeeWipeStrategy( KPrPageEffect::FromTop, "down", false ) );
-    addStrategy( new BarnVeeWipeStrategy( KPrPageEffect::FromRight, "left", false ) );
-    addStrategy( new BarnVeeWipeStrategy( KPrPageEffect::FromBottom, "top", false ) );
-    addStrategy( new BarnVeeWipeStrategy( KPrPageEffect::FromLeft, "right", false ) );
+    addStrategy( new BarnVeeWipeStrategy( FromTop, "down", false ) );
+    addStrategy( new BarnVeeWipeStrategy( FromRight, "left", false ) );
+    addStrategy( new BarnVeeWipeStrategy( FromBottom, "top", false ) );
+    addStrategy( new BarnVeeWipeStrategy( FromLeft, "right", false ) );
 }
 
 BarnVeeWipeEffectFactory::~BarnVeeWipeEffectFactory()
 {
 }
 
+static const char* s_subTypes[] = {
+    I18N_NOOP( "From Top" ),
+    I18N_NOOP( "From Right" ),
+    I18N_NOOP( "From Bottom" ),
+    I18N_NOOP( "From Left" )
+};
+
+QString BarnVeeWipeEffectFactory::subTypeName(int subType) const
+{
+    if (subType >= 0 && subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
+        return i18n( s_subTypes[subType] );
+    } else {
+        return i18n( "Unknown subtype" );
+    }
+}

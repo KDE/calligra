@@ -27,7 +27,7 @@ static const int squaresPerRow = 15;
 static const int squaresPerCol = 11;
 static const int framesPerSquare = 16;
 
-KPrMatrixWipeStrategy::KPrMatrixWipeStrategy(KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse, bool smooth)
+KPrMatrixWipeStrategy::KPrMatrixWipeStrategy(int subType, const char * smilType, const char *smilSubType, bool reverse, bool smooth)
     : KPrPageEffectStrategy( subType, smilType, smilSubType, reverse ), m_smooth(smooth),
     m_squaresPerRow(squaresPerRow), m_squaresPerCol(squaresPerCol)
 {

@@ -27,6 +27,18 @@ class KPrSaloonDoorWipeEffectFactory : public KPrPageEffectFactory
 public:
     KPrSaloonDoorWipeEffectFactory();
     virtual ~KPrSaloonDoorWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        FromTop,
+        FromLeft,
+        FromBottom,
+        FromRight,
+        ToTop,
+        ToLeft,
+        ToBottom,
+        ToRight
+    };
 };
 
 #endif /* KPRSALOONDOORWIPEEFFECTFACTORY_H */

@@ -27,6 +27,18 @@ class BarnDoorWipeEffectFactory : public KPrPageEffectFactory
 public:
     BarnDoorWipeEffectFactory();
     virtual ~BarnDoorWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        Vertical,
+        VerticalReverse,
+        Horizontal,
+        HorizontalReverse,
+        DiagonalBottomLeft,
+        DiagonalBottomLeftReverse,
+        DiagonalTopLeft,
+        DiagonalTopLeftReverse
+    };
 };
 
 #endif // BARNDOORWIPEEFFECTFACTORY_H

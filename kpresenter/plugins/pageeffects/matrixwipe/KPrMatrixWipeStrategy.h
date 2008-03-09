@@ -25,7 +25,7 @@
 class KPrMatrixWipeStrategy : public KPrPageEffectStrategy
 {
 public:
-    KPrMatrixWipeStrategy(KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse, bool smooth = false);
+    KPrMatrixWipeStrategy(int subType, const char * smilType, const char *smilSubType, bool reverse, bool smooth = false);
     virtual ~KPrMatrixWipeStrategy();
 
     virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );

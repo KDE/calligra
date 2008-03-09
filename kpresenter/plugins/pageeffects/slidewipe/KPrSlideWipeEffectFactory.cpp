@@ -48,3 +48,23 @@ KPrSlideWipeEffectFactory::KPrSlideWipeEffectFactory()
 KPrSlideWipeEffectFactory::~KPrSlideWipeEffectFactory()
 {
 }
+
+static const char* s_subTypes[] = {
+    I18N_NOOP( "From Left" ),
+    I18N_NOOP( "From Right" ),
+    I18N_NOOP( "From Top" ),
+    I18N_NOOP( "From Bottom" ),
+    I18N_NOOP( "To Left" ),
+    I18N_NOOP( "To Right" ),
+    I18N_NOOP( "To Top" ),
+    I18N_NOOP( "To Bottom" )
+};
+
+QString KPrSlideWipeEffectFactory::subTypeName(int subType) const
+{
+    if (subType >= 0 && subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
+        return i18n( s_subTypes[subType] );
+    } else {
+        return i18n( "Unknown subtype" );
+    }
+}

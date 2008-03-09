@@ -27,13 +27,28 @@
 DiagonalWipeEffectFactory::DiagonalWipeEffectFactory()
 : KPrPageEffectFactory( DiagonalWipeEffectId, i18n( "Diagonal Wipe Effect" ) )
 {
-    addStrategy( new DiagonalWipeStrategy( KPrPageEffect::FromTopLeft, "topLeft", false ) );
-    addStrategy( new DiagonalWipeStrategy( KPrPageEffect::FromBottomRight, "topLeft", true ) );
-    addStrategy( new DiagonalWipeStrategy( KPrPageEffect::FromTopRight, "topRight", false ) );
-    addStrategy( new DiagonalWipeStrategy( KPrPageEffect::FromBottomLeft, "topRight", true ) );
+    addStrategy( new DiagonalWipeStrategy( FromTopLeft, "topLeft", false ) );
+    addStrategy( new DiagonalWipeStrategy( FromBottomRight, "topLeft", true ) );
+    addStrategy( new DiagonalWipeStrategy( FromTopRight, "topRight", false ) );
+    addStrategy( new DiagonalWipeStrategy( FromBottomLeft, "topRight", true ) );
 }
 
 DiagonalWipeEffectFactory::~DiagonalWipeEffectFactory()
 {
 }
 
+static const char* s_subTypes[] = {
+    I18N_NOOP( "From Top Left" ),
+    I18N_NOOP( "From Bottom Right" ),
+    I18N_NOOP( "From Top Right" ),
+    I18N_NOOP( "From Bottom Left" )
+};
+
+QString DiagonalWipeEffectFactory::subTypeName(int subType) const
+{
+    if (subType >= 0 && subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
+        return i18n( s_subTypes[subType] );
+    } else {
+        return i18n( "Unknown subtype" );
+    }
+}

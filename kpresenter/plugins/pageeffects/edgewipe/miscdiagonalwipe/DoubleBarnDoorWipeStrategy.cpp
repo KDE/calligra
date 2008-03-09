@@ -18,13 +18,14 @@
  */
 
 #include "DoubleBarnDoorWipeStrategy.h"
+#include "MiscDiagonalWipeEffectFactory.h"
 #include <QtGui/QWidget>
 #include <QtGui/QPainter>
 
 const int StepCount = 250;
 
 DoubleBarnDoorWipeStrategy::DoubleBarnDoorWipeStrategy()
-    : KPrPageEffectStrategy( KPrPageEffect::DoubleBarnDoor, "miscDiagonalWipe", "doubleBarnDoor", false )
+    : KPrPageEffectStrategy( MiscDiagonalWipeEffectFactory::DoubleBarnDoor, "miscDiagonalWipe", "doubleBarnDoor", false )
 {
 }
 

@@ -27,6 +27,30 @@ class KPrParallelSnakesWipeEffectFactory : public KPrPageEffectFactory
 public:
     KPrParallelSnakesWipeEffectFactory();
     virtual ~KPrParallelSnakesWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        VerticalTopSameIn,
+        VerticalTopSameOut,
+        VerticalBottomSameIn,
+        VerticalBottomSameOut,
+        VerticalTopLeftOppositeIn,
+        VerticalTopLeftOppositeOut,
+        VerticalBottomLeftOppositeIn,
+        VerticalBottomLeftOppositeOut,
+        HorizontalLeftSameIn,
+        HorizontalLeftSameOut,
+        HorizontalRightSameIn,
+        HorizontalRightSameOut,
+        HorizontalTopLeftOppositeIn,
+        HorizontalTopLeftOppositeOut,
+        HorizontalTopRightOppositeIn,
+        HorizontalTopRightOppositeOut,
+        DiagonalBottomLeftOppositeIn,
+        DiagonalBottomLeftOppositeOut,
+        DiagonalTopLeftOppositeIn,
+        DiagonalTopLeftOppositeOut
+    };
 };
 
 #endif /* KPRPARALLELSNAKESWIPEEFFECTFACTORY_H */

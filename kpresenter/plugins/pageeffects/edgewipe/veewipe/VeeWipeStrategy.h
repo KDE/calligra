@@ -26,7 +26,7 @@
 class VeeWipeStrategy : public KPrPageEffectStrategy
 {
 public:
-    VeeWipeStrategy( KPrPageEffect::SubType subtype, const char *smilSubType, bool reverse );
+    VeeWipeStrategy( int subtype, const char *smilSubType, bool reverse );
     virtual ~VeeWipeStrategy();
 
     /// reimplemented from KPrPageEffectStrategy

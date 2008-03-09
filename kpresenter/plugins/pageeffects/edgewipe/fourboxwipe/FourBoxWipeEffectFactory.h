@@ -27,6 +27,14 @@ class FourBoxWipeEffectFactory : public KPrPageEffectFactory
 public:
     FourBoxWipeEffectFactory();
     virtual ~FourBoxWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        CornersIn,
+        CornersInReverse,
+        CornersOut,
+        CornersOutReverse
+    };
 };
 
 #endif // FOURBOXWIPEEFFECTFACTORY_H

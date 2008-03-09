@@ -28,6 +28,12 @@ class KPrBarWipeEffectFactory : public KPrPageEffectFactory
 public:
     KPrBarWipeEffectFactory();
     virtual ~KPrBarWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        FromLeft,
+        FromTop
+    };
 };
 
 #endif /* KPRBARWIPEEFFECTFACTORY_H */

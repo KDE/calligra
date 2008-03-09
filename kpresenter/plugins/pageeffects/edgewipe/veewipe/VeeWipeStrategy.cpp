@@ -18,12 +18,13 @@
  */
 
 #include "VeeWipeStrategy.h"
+#include "VeeWipeEffectFactory.h"
 #include <QtGui/QWidget>
 #include <QtGui/QPainter>
 
 const int StepCount = 250;
 
-VeeWipeStrategy::VeeWipeStrategy( KPrPageEffect::SubType subtype, const char *smilSubType, bool reverse )
+VeeWipeStrategy::VeeWipeStrategy( int subtype, const char *smilSubType, bool reverse )
     : KPrPageEffectStrategy( subtype, "veeWipe", smilSubType, reverse )
 {
 }
@@ -65,7 +66,7 @@ QPainterPath VeeWipeStrategy::clipPath( int step, const QRect &area )
     QPainterPath path;
     switch( subType() )
     {
-        case KPrPageEffect::FromTop:
+        case VeeWipeEffectFactory::FromTop:
         {
             QPoint move( 0, stepy - 2 * area.height() );
             path.moveTo( move + area.topLeft() );
@@ -75,7 +76,7 @@ QPainterPath VeeWipeStrategy::clipPath( int step, const QRect &area )
             path.lineTo( move + area.topRight() );
             break;
         }
-        case KPrPageEffect::FromRight:
+        case VeeWipeEffectFactory::FromRight:
         {
             QPoint move( 2 * area.width()-stepx, 0 );
             path.moveTo( move + area.topRight() );
@@ -85,7 +86,7 @@ QPainterPath VeeWipeStrategy::clipPath( int step, const QRect &area )
             path.lineTo( move + area.bottomRight() );
             break;
         }
-        case KPrPageEffect::FromBottom:
+        case VeeWipeEffectFactory::FromBottom:
         {
             QPoint move( 0, 2 * area.height() - stepy );
             path.moveTo( move + area.bottomLeft() );
@@ -95,7 +96,7 @@ QPainterPath VeeWipeStrategy::clipPath( int step, const QRect &area )
             path.lineTo( move + area.bottomRight() );
             break;
         }
-        case KPrPageEffect::FromLeft:
+        case VeeWipeEffectFactory::FromLeft:
         {
             QPoint move( stepx - 2 * area.width(), 0 );
             path.moveTo( move + area.topLeft() );

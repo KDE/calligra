@@ -27,6 +27,16 @@ class KPrDoubleFanWipeEffectFactory : public KPrPageEffectFactory
 public:
     KPrDoubleFanWipeEffectFactory();
     virtual ~KPrDoubleFanWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        FanOutVertical,
+        FanOutHorizontal,
+        FanInVertical,
+        FanInHorizontal,
+        FanInVerticalReverse,
+        FanInHorizontalReverse
+    };
 };
 
 #endif /* KPRDOUBLEFANWIPEEFFECTFACTORY_H */

@@ -25,7 +25,7 @@
 class KPrSaloonDoorWipeStrategy : public KPrSweepWipeStrategy
 {
 public:
-    KPrSaloonDoorWipeStrategy( KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse );
+    KPrSaloonDoorWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse );
     virtual ~KPrSaloonDoorWipeStrategy();
 
     virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );

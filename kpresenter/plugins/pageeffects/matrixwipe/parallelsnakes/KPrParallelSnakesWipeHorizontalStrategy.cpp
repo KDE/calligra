@@ -18,14 +18,15 @@
 */
 
 #include "KPrParallelSnakesWipeHorizontalStrategy.h"
+#include "KPrParallelSnakesWipeEffectFactory.h"
 
-static KPrPageEffect::SubType getSubType(bool reverseTop, bool reverseBottom, bool reverse) {
+static int getSubType(bool reverseTop, bool reverseBottom, bool reverse) {
     if (reverseTop) {
-        if (reverseBottom) return reverse ? KPrPageEffect::HorizontalRightSameOut : KPrPageEffect::HorizontalRightSameIn;
-        else return reverse ? KPrPageEffect::HorizontalTopRightOppositeOut : KPrPageEffect::HorizontalTopRightOppositeIn;
+        if (reverseBottom) return reverse ? KPrParallelSnakesWipeEffectFactory::HorizontalRightSameOut : KPrParallelSnakesWipeEffectFactory::HorizontalRightSameIn;
+        else return reverse ? KPrParallelSnakesWipeEffectFactory::HorizontalTopRightOppositeOut : KPrParallelSnakesWipeEffectFactory::HorizontalTopRightOppositeIn;
     } else {
-        if (reverseBottom) return reverse ? KPrPageEffect::HorizontalTopLeftOppositeOut : KPrPageEffect::HorizontalTopLeftOppositeIn;
-        else return reverse ? KPrPageEffect::HorizontalLeftSameOut : KPrPageEffect::HorizontalLeftSameIn;
+        if (reverseBottom) return reverse ? KPrParallelSnakesWipeEffectFactory::HorizontalTopLeftOppositeOut : KPrParallelSnakesWipeEffectFactory::HorizontalTopLeftOppositeIn;
+        else return reverse ? KPrParallelSnakesWipeEffectFactory::HorizontalLeftSameOut : KPrParallelSnakesWipeEffectFactory::HorizontalLeftSameIn;
     }
 }
 

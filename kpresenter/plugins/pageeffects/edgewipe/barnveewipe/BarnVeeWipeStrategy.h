@@ -26,7 +26,7 @@
 class BarnVeeWipeStrategy : public KPrPageEffectStrategy
 {
 public:
-    BarnVeeWipeStrategy( KPrPageEffect::SubType subtype, const char *smilSubType, bool reverse );
+    BarnVeeWipeStrategy( int subtype, const char *smilSubType, bool reverse );
     virtual ~BarnVeeWipeStrategy();
 
     /// reimplemented from KPrPageEffectStrategy

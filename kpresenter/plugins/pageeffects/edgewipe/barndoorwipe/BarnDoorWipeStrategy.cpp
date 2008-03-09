@@ -18,12 +18,13 @@
  */
 
 #include "BarnDoorWipeStrategy.h"
+#include "BarnDoorWipeEffectFactory.h"
 #include <QtGui/QWidget>
 #include <QtGui/QPainter>
 
 const int StepCount = 250;
 
-BarnDoorWipeStrategy::BarnDoorWipeStrategy( KPrPageEffect::SubType subtype, const char *smilSubType, bool reverse )
+BarnDoorWipeStrategy::BarnDoorWipeStrategy( int subtype, const char *smilSubType, bool reverse )
     : KPrPageEffectStrategy( subtype, "barnDoorWipe", smilSubType, reverse )
 {
 }
@@ -66,19 +67,19 @@ QPainterPath BarnDoorWipeStrategy::clipPath( int step, const QRect &area )
 
     switch( subType() )
     {
-        case KPrPageEffect::Vertical:
-        case KPrPageEffect::VerticalReverse:
+        case BarnDoorWipeEffectFactory::Vertical:
+        case BarnDoorWipeEffectFactory::VerticalReverse:
         {
             QPoint top( width_2, 0 );
-            QPoint bottom( width_2, area.height() ); 
+            QPoint bottom( width_2, area.height() );
             path.moveTo( top - QPoint( stepx, 0 ) );
             path.lineTo( top + QPoint( stepx, 0 ) );
             path.lineTo( bottom + QPoint( stepx, 0 ) );
             path.lineTo( bottom - QPoint( stepx, 0 ) );
             break;
         }
-        case KPrPageEffect::Horizontal:
-        case KPrPageEffect::HorizontalReverse:
+        case BarnDoorWipeEffectFactory::Horizontal:
+        case BarnDoorWipeEffectFactory::HorizontalReverse:
         {
             QPoint left( 0, height_2 );
             QPoint right( area.width(), height_2 );
@@ -88,8 +89,8 @@ QPainterPath BarnDoorWipeStrategy::clipPath( int step, const QRect &area )
             path.lineTo( right + QPoint( 0, stepy ) );
             break;
         }
-        case KPrPageEffect::DiagonalBottomLeft:
-        case KPrPageEffect::DiagonalBottomLeftReverse:
+        case BarnDoorWipeEffectFactory::DiagonalBottomLeft:
+        case BarnDoorWipeEffectFactory::DiagonalBottomLeftReverse:
         {
             path.moveTo( area.bottomLeft() + QPoint( stepx, 0 ) );
             path.lineTo( area.bottomLeft() );
@@ -99,8 +100,8 @@ QPainterPath BarnDoorWipeStrategy::clipPath( int step, const QRect &area )
             path.lineTo( area.topRight() + QPoint( 0, stepy ) );
             break;
         }
-        case KPrPageEffect::DiagonalTopLeft:
-        case KPrPageEffect::DiagonalTopLeftReverse:
+        case BarnDoorWipeEffectFactory::DiagonalTopLeft:
+        case BarnDoorWipeEffectFactory::DiagonalTopLeftReverse:
         {
             path.moveTo( area.topLeft() + QPoint( 0, stepy ) );
             path.lineTo( area.topLeft() );

@@ -56,3 +56,34 @@ KPrParallelSnakesWipeEffectFactory::~KPrParallelSnakesWipeEffectFactory()
 {
 }
 
+static const char* s_subTypes[] = {
+    I18N_NOOP( "Vertical Top Same In" ),
+    I18N_NOOP( "Vertical Top Same Out" ),
+    I18N_NOOP( "Vertical Bottom Same In" ),
+    I18N_NOOP( "Vertical Bottom Same Out" ),
+    I18N_NOOP( "Vertical Top Left Opposite In" ),
+    I18N_NOOP( "Vertical Top Left Opposite Out" ),
+    I18N_NOOP( "Vertical Bottom Left Opposite In" ),
+    I18N_NOOP( "Vertical Bottom Left Opposite Out" ),
+    I18N_NOOP( "Horizontal Left Same In" ),
+    I18N_NOOP( "Horizontal Left Same Out" ),
+    I18N_NOOP( "Horizontal Right Same In" ),
+    I18N_NOOP( "Horizontal Right Same Out" ),
+    I18N_NOOP( "Horizontal Top Left Opposite In" ),
+    I18N_NOOP( "Horizontal Top Left Opposite Out" ),
+    I18N_NOOP( "Horizontal Top Right Opposite In" ),
+    I18N_NOOP( "Horizontal Top Right Opposite Out" ),
+    I18N_NOOP( "Diagonal Bottom Left Opposite In" ),
+    I18N_NOOP( "Diagonal Bottom Left Opposite Out" ),
+    I18N_NOOP( "Diagonal Top Left Opposite In" ),
+    I18N_NOOP( "Diagonal Top Left Opposite Out" )
+};
+
+QString KPrParallelSnakesWipeEffectFactory::subTypeName(int subType) const
+{
+    if (subType >= 0 && subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
+        return i18n( s_subTypes[subType] );
+    } else {
+        return i18n( "Unknown subtype" );
+    }
+}

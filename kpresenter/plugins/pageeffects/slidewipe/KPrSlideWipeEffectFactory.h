@@ -27,6 +27,18 @@ class KPrSlideWipeEffectFactory : public KPrPageEffectFactory
 public:
     KPrSlideWipeEffectFactory();
     virtual ~KPrSlideWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        FromLeft,       // the new page is coming from the left
+        FromRight,      // the new page is coming from the right
+        FromTop,        // the new page is coming from the top
+        FromBottom,     // the new page is coming from the bottom
+        ToLeft,         // the old page is leaving from the left
+        ToRight,        // the old page is leaving from the right
+        ToTop,          // the old page is leaving from the top
+        ToBottom        // the old page is leaving from the bottom
+    };
 };
 
 #endif /* KPRSLIDEWIPEEFFECTFACTORY_H */

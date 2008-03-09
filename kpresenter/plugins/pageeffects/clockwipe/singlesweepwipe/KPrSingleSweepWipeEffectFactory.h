@@ -27,6 +27,26 @@ class KPrSingleSweepWipeEffectFactory : public KPrPageEffectFactory
 public:
     KPrSingleSweepWipeEffectFactory();
     virtual ~KPrSingleSweepWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        ClockwiseTop,
+        ClockwiseRight,
+        ClockwiseBottom,
+        ClockwiseLeft,
+        ClockwiseTopLeft,
+        CounterClockwiseBottomLeft,
+        ClockwiseBottomRight,
+        CounterClockwiseTopRight,
+        CounterClockwiseTop,
+        CounterClockwiseRight,
+        CounterClockwiseBottom,
+        CounterClockwiseLeft,
+        CounterClockwiseTopLeft,
+        ClockwiseBottomLeft,
+        CounterClockwiseBottomRight,
+        ClockwiseTopRight
+    };
 };
 
 #endif /* KPRSINGLESWEEPWIPEEFFECTFACTORY_H */

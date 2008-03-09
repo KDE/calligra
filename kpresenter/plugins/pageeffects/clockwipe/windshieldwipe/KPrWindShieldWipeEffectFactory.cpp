@@ -27,18 +27,37 @@
 KPrWindShieldWipeEffectFactory::KPrWindShieldWipeEffectFactory()
 : KPrPageEffectFactory( WindShieldWipeEffectId, i18n( "Windshield Wipe Effect" ) )
 {
-    addStrategy( new KPrWindShieldWipeStrategy( KPrPageEffect::Right, "windshieldWipe", "right", false ) );
-    addStrategy( new KPrWindShieldWipeStrategy( KPrPageEffect::Up, "windshieldWipe", "up", false ) );
-    addStrategy( new KPrWindShieldWipeStrategy( KPrPageEffect::Vertical, "windshieldWipe", "vertical", false ) );
-    addStrategy( new KPrWindShieldWipeStrategy( KPrPageEffect::Horizontal, "windshieldWipe", "horizontal", false ) );
+    addStrategy( new KPrWindShieldWipeStrategy( Right, "windshieldWipe", "right", false ) );
+    addStrategy( new KPrWindShieldWipeStrategy( Up, "windshieldWipe", "up", false ) );
+    addStrategy( new KPrWindShieldWipeStrategy( Vertical, "windshieldWipe", "vertical", false ) );
+    addStrategy( new KPrWindShieldWipeStrategy( Horizontal, "windshieldWipe", "horizontal", false ) );
 
-    addStrategy( new KPrWindShieldWipeStrategy( KPrPageEffect::RightReverse, "windshieldWipe", "right", true ) );
-    addStrategy( new KPrWindShieldWipeStrategy( KPrPageEffect::UpReverse, "windshieldWipe", "up", true ) );
-    addStrategy( new KPrWindShieldWipeStrategy( KPrPageEffect::VerticalReverse, "windshieldWipe", "vertical", true ) );
-    addStrategy( new KPrWindShieldWipeStrategy( KPrPageEffect::HorizontalReverse, "windshieldWipe", "horizontal", true ) );
+    addStrategy( new KPrWindShieldWipeStrategy( RightReverse, "windshieldWipe", "right", true ) );
+    addStrategy( new KPrWindShieldWipeStrategy( UpReverse, "windshieldWipe", "up", true ) );
+    addStrategy( new KPrWindShieldWipeStrategy( VerticalReverse, "windshieldWipe", "vertical", true ) );
+    addStrategy( new KPrWindShieldWipeStrategy( HorizontalReverse, "windshieldWipe", "horizontal", true ) );
 }
 
 KPrWindShieldWipeEffectFactory::~KPrWindShieldWipeEffectFactory()
 {
 }
 
+static const char* s_subTypes[] = {
+    I18N_NOOP( "Right" ),
+    I18N_NOOP( "Up" ),
+    I18N_NOOP( "Vertical" ),
+    I18N_NOOP( "Horizontal" ),
+    I18N_NOOP( "Right Reverse" ),
+    I18N_NOOP( "Up Reverse" ),
+    I18N_NOOP( "Vertical Reverse" ),
+    I18N_NOOP( "Horizontal Reverse" )
+};
+
+QString KPrWindShieldWipeEffectFactory::subTypeName(int subType) const
+{
+    if (subType >= 0 && subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
+        return i18n( s_subTypes[subType] );
+    } else {
+        return i18n( "Unknown subtype" );
+    }
+}

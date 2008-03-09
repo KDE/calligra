@@ -18,6 +18,7 @@
 */
 
 #include "KPrWindShieldWipeStrategy.h"
+#include "KPrWindShieldWipeEffectFactory.h"
 
 #include <math.h>
 #include <QWidget>
@@ -28,7 +29,7 @@
 
 #include <kdebug.h>
 
-KPrWindShieldWipeStrategy::KPrWindShieldWipeStrategy(KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse )
+KPrWindShieldWipeStrategy::KPrWindShieldWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse )
     : KPrSweepWipeStrategy( subType, smilType, smilSubType, reverse )
 {
 }
@@ -58,13 +59,13 @@ void KPrWindShieldWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPa
     double rotationRange1 = -0.5*M_PI;
     double rotationRange2 = -0.5*M_PI;
 
-    if(subType() == KPrPageEffect::Right || subType() == KPrPageEffect::Up ||
-       subType() == KPrPageEffect::RightReverse || subType() == KPrPageEffect::UpReverse ) {
+    if(subType() == KPrWindShieldWipeEffectFactory::Right || subType() == KPrWindShieldWipeEffectFactory::Up ||
+       subType() == KPrWindShieldWipeEffectFactory::RightReverse || subType() == KPrWindShieldWipeEffectFactory::UpReverse ) {
 
         switch( subType() )
         {
-            case KPrPageEffect::Right:
-            case KPrPageEffect::RightReverse:
+            case KPrWindShieldWipeEffectFactory::Right:
+            case KPrWindShieldWipeEffectFactory::RightReverse:
                 startAngle1 = 1.5*M_PI;
                 boundingRect1 = QRect( 0, 0, width, height/2);
 
@@ -74,8 +75,8 @@ void KPrWindShieldWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPa
                 rotationRange1 = 2*M_PI;
                 rotationRange2 = -rotationRange1;
                 break;
-            case KPrPageEffect::Up:
-            case KPrPageEffect::UpReverse:
+            case KPrWindShieldWipeEffectFactory::Up:
+            case KPrWindShieldWipeEffectFactory::UpReverse:
                 startAngle1 = 0;
                 boundingRect1 = QRect( 0, 0, width/2, height);
 
@@ -102,8 +103,8 @@ void KPrWindShieldWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPa
     else {
         switch( subType() )
         {
-            case KPrPageEffect::Vertical:
-            case KPrPageEffect::VerticalReverse:
+            case KPrWindShieldWipeEffectFactory::Vertical:
+            case KPrWindShieldWipeEffectFactory::VerticalReverse:
 
                 startAngle1 = 0.5*M_PI;
                 boundingRect1 = QRect( 0, 0, width, height/2);
@@ -114,8 +115,8 @@ void KPrWindShieldWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPa
                 rotationRange1 = 2*M_PI;
                 rotationRange2 = rotationRange1;
                 break;
-            case KPrPageEffect::Horizontal:
-            case KPrPageEffect::HorizontalReverse:
+            case KPrWindShieldWipeEffectFactory::Horizontal:
+            case KPrWindShieldWipeEffectFactory::HorizontalReverse:
 
                 startAngle1 = M_PI;
                 boundingRect1 = QRect( 0, 0, width/2, height);

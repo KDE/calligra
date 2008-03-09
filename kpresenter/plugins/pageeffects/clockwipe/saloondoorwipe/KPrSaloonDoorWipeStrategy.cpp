@@ -18,6 +18,7 @@
 */
 
 #include "KPrSaloonDoorWipeStrategy.h"
+#include "KPrSaloonDoorWipeEffectFactory.h"
 
 #include <math.h>
 #include <QWidget>
@@ -28,7 +29,7 @@
 
 #include <kdebug.h>
 
-KPrSaloonDoorWipeStrategy::KPrSaloonDoorWipeStrategy(KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse )
+KPrSaloonDoorWipeStrategy::KPrSaloonDoorWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse )
     : KPrSweepWipeStrategy( subType, smilType, smilSubType, reverse )
 {
 }
@@ -60,8 +61,8 @@ void KPrSaloonDoorWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPa
 
     switch( subType() )
     {
-        case KPrPageEffect::FromTop:
-        case KPrPageEffect::ToTop:
+        case KPrSaloonDoorWipeEffectFactory::FromTop:
+        case KPrSaloonDoorWipeEffectFactory::ToTop:
             startAngle1 = 0;
             boundingRect1 = QRect( -width/2, -height, width, 2*height);
 
@@ -71,8 +72,8 @@ void KPrSaloonDoorWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPa
             rotationRange1 = -0.5*M_PI;
             rotationRange2 = 0.5*M_PI;
             break;
-        case KPrPageEffect::FromLeft:
-        case KPrPageEffect::ToLeft:
+        case KPrSaloonDoorWipeEffectFactory::FromLeft:
+        case KPrSaloonDoorWipeEffectFactory::ToLeft:
             startAngle1 = 1.5*M_PI;
             boundingRect1 = QRect( -width, -height/2, 2*width, height);
 
@@ -82,8 +83,8 @@ void KPrSaloonDoorWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPa
             rotationRange1 = 0.5*M_PI;
             rotationRange2 = -0.5*M_PI;
             break;
-        case KPrPageEffect::FromBottom:
-        case KPrPageEffect::ToBottom:
+        case KPrSaloonDoorWipeEffectFactory::FromBottom:
+        case KPrSaloonDoorWipeEffectFactory::ToBottom:
             startAngle1 = 0;
             boundingRect1 = QRect( -width/2, 0, width, 2*height);
 
@@ -93,8 +94,8 @@ void KPrSaloonDoorWipeStrategy::paintStep( QPainter &p, int currPos, const KPrPa
             rotationRange1 = 0.5*M_PI;
             rotationRange2 = -0.5*M_PI;
             break;
-        case KPrPageEffect::FromRight:
-        case KPrPageEffect::ToRight:
+        case KPrSaloonDoorWipeEffectFactory::FromRight:
+        case KPrSaloonDoorWipeEffectFactory::ToRight:
             startAngle1 = 1.5*M_PI;
             boundingRect1 = QRect( 0, -height/2, 2*width, height);
 

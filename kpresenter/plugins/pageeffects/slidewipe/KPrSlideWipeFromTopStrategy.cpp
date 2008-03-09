@@ -18,12 +18,13 @@
 */
 
 #include "KPrSlideWipeFromTopStrategy.h"
+#include "KPrSlideWipeEffectFactory.h"
 
 #include <QWidget>
 #include <QPainter>
 
 KPrSlideWipeFromTopStrategy::KPrSlideWipeFromTopStrategy()
-: KPrPageEffectStrategy( KPrPageEffect::FromTop, "slideWipe", "fromTop", false )
+: KPrPageEffectStrategy( KPrSlideWipeEffectFactory::FromTop, "slideWipe", "fromTop", false )
 {
 }
 

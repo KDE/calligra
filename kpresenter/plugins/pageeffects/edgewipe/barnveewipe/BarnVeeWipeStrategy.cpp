@@ -18,12 +18,13 @@
  */
 
 #include "BarnVeeWipeStrategy.h"
+#include "BarnVeeWipeEffectFactory.h"
 #include <QtGui/QWidget>
 #include <QtGui/QPainter>
 
 const int StepCount = 250;
 
-BarnVeeWipeStrategy::BarnVeeWipeStrategy( KPrPageEffect::SubType subtype, const char *smilSubType, bool reverse )
+BarnVeeWipeStrategy::BarnVeeWipeStrategy( int subtype, const char *smilSubType, bool reverse )
     : KPrPageEffectStrategy( subtype, "barnVeeWipe", smilSubType, reverse )
 {
 }
@@ -68,7 +69,7 @@ QPainterPath BarnVeeWipeStrategy::clipPath( int step, const QRect &area )
     QPainterPath path;
     switch( subType() )
     {
-        case KPrPageEffect::FromTop:
+        case BarnVeeWipeEffectFactory::FromTop:
             path.moveTo( area.topLeft() );
             path.lineTo( area.topLeft() + QPoint( 0, stepy ) );
             path.lineTo( QPoint( width_2, area.height() ) - QPoint( stepx_2, 0 ) );
@@ -79,7 +80,7 @@ QPainterPath BarnVeeWipeStrategy::clipPath( int step, const QRect &area )
             path.lineTo( QPoint( width_2, area.height() ) - QPoint( 0, stepy ) );
             path.lineTo( area.topLeft() + QPoint( stepx_2, 0 ) );
             break;
-        case KPrPageEffect::FromRight:
+        case BarnVeeWipeEffectFactory::FromRight:
             path.moveTo( area.topRight() );
             path.lineTo( area.topRight() - QPoint( stepx, 0 ) );
             path.lineTo( QPoint( 0, height_2 ) - QPoint( 0, stepy_2 ) );
@@ -90,7 +91,7 @@ QPainterPath BarnVeeWipeStrategy::clipPath( int step, const QRect &area )
             path.lineTo( QPoint( 0, height_2 ) + QPoint( stepx, 0 ) );
             path.lineTo( area.topRight() + QPoint( 0, stepy_2 ) );
             break;
-        case KPrPageEffect::FromBottom:
+        case BarnVeeWipeEffectFactory::FromBottom:
             path.moveTo( area.bottomLeft() );
             path.lineTo( area.bottomLeft() - QPoint( 0, stepy ) );
             path.lineTo( QPoint( width_2, 0 ) - QPoint( stepx_2, 0 ) );
@@ -101,7 +102,7 @@ QPainterPath BarnVeeWipeStrategy::clipPath( int step, const QRect &area )
             path.lineTo( QPoint( width_2, 0 ) + QPoint( 0, stepy ) );
             path.lineTo( area.bottomLeft() + QPoint( stepx_2, 0 ) );
             break;
-        case KPrPageEffect::FromLeft:
+        case BarnVeeWipeEffectFactory::FromLeft:
             path.moveTo( area.topLeft() );
             path.lineTo( area.topLeft() + QPoint( stepx, 0 ) );
             path.lineTo( QPoint( area.width(), height_2 ) - QPoint( 0, stepy_2 ) );

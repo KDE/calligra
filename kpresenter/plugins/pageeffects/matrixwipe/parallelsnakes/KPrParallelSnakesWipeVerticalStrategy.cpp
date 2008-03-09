@@ -18,14 +18,15 @@
 */
 
 #include "KPrParallelSnakesWipeVerticalStrategy.h"
+#include "KPrParallelSnakesWipeEffectFactory.h"
 
-static KPrPageEffect::SubType getSubType(bool reverseLeft, bool reverseRight, bool reverse) {
+static int getSubType(bool reverseLeft, bool reverseRight, bool reverse) {
     if (reverseLeft) {
-        if (reverseRight) return reverse ? KPrPageEffect::VerticalBottomSameOut : KPrPageEffect::VerticalBottomSameIn;
-        else return reverse ? KPrPageEffect::VerticalBottomLeftOppositeOut : KPrPageEffect::VerticalBottomLeftOppositeIn;
+        if (reverseRight) return reverse ? KPrParallelSnakesWipeEffectFactory::VerticalBottomSameOut : KPrParallelSnakesWipeEffectFactory::VerticalBottomSameIn;
+        else return reverse ? KPrParallelSnakesWipeEffectFactory::VerticalBottomLeftOppositeOut : KPrParallelSnakesWipeEffectFactory::VerticalBottomLeftOppositeIn;
     } else {
-        if (reverseRight) return reverse ? KPrPageEffect::VerticalTopLeftOppositeOut : KPrPageEffect::VerticalTopLeftOppositeIn;
-        else return reverse ? KPrPageEffect::VerticalTopSameOut : KPrPageEffect::VerticalTopSameIn;
+        if (reverseRight) return reverse ? KPrParallelSnakesWipeEffectFactory::VerticalTopLeftOppositeOut : KPrParallelSnakesWipeEffectFactory::VerticalTopLeftOppositeIn;
+        else return reverse ? KPrParallelSnakesWipeEffectFactory::VerticalTopSameOut : KPrParallelSnakesWipeEffectFactory::VerticalTopSameIn;
     }
 }
 

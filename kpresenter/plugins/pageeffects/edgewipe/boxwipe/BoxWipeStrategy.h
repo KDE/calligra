@@ -26,7 +26,7 @@
 class BoxWipeStrategy : public KPrPageEffectStrategy
 {
 public:
-    BoxWipeStrategy( KPrPageEffect::SubType subtype, const char *smilSubType, bool reverse );
+    BoxWipeStrategy( int subtype, const char *smilSubType, bool reverse );
     virtual ~BoxWipeStrategy();
 
     /// reimplemented from KPrPageEffectStrategy

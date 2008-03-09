@@ -19,7 +19,7 @@
 
 #include "KPrSnakeWipeTopLeftDiagonalStrategy.h"
 
-KPrSnakeWipeDiagonalStrategy::KPrSnakeWipeDiagonalStrategy(KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse)
+KPrSnakeWipeDiagonalStrategy::KPrSnakeWipeDiagonalStrategy(int subType, const char * smilType, const char *smilSubType, bool reverse)
     : KPrMatrixWipeStrategy( subType, smilType, smilSubType, reverse )
 {
 }

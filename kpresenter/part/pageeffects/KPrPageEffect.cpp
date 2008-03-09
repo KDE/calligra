@@ -83,7 +83,7 @@ const QString & KPrPageEffect::id() const
     return m_id;
 }
 
-KPrPageEffect::SubType KPrPageEffect::subType() const
+int KPrPageEffect::subType() const
 {
     return m_strategy->subType();
 }

@@ -18,12 +18,13 @@
  */
 
 #include "BoxWipeStrategy.h"
+#include "BoxWipeEffectFactory.h"
 #include <QtGui/QWidget>
 #include <QtGui/QPainter>
 
 const int StepCount = 250;
 
-BoxWipeStrategy::BoxWipeStrategy( KPrPageEffect::SubType subtype, const char *smilSubType, bool reverse )
+BoxWipeStrategy::BoxWipeStrategy( int subtype, const char *smilSubType, bool reverse )
     : KPrPageEffectStrategy( subtype, "boxWipe", smilSubType, reverse )
 {
 }
@@ -62,31 +63,31 @@ QPainterPath BoxWipeStrategy::clipPath( int step, const QRect &area )
     QRect clipRect( QPoint( 0, 0 ), QSize( stepx, stepy ) );
     switch( subType() )
     {
-        case KPrPageEffect::FromTopLeft:
+        case BoxWipeEffectFactory::FromTopLeft:
             clipRect.moveTopLeft( area.topLeft() );
             break;
-        case KPrPageEffect::FromTopRight:
+        case BoxWipeEffectFactory::FromTopRight:
             clipRect.moveTopRight( area.topRight() );
             break;
-        case KPrPageEffect::FromBottomLeft:
+        case BoxWipeEffectFactory::FromBottomLeft:
             clipRect.moveBottomLeft( area.bottomLeft() );
             break;
-        case KPrPageEffect::FromBottomRight:
+        case BoxWipeEffectFactory::FromBottomRight:
             clipRect.moveBottomRight( area.bottomRight() );
             break;
-        case KPrPageEffect::CenterTop:
+        case BoxWipeEffectFactory::CenterTop:
             clipRect.moveCenter( area.center() );
             clipRect.moveTop( 0 );
             break;
-        case KPrPageEffect::CenterRight:
+        case BoxWipeEffectFactory::CenterRight:
             clipRect.moveCenter( area.center() );
             clipRect.moveRight( area.width() );
             break;
-        case KPrPageEffect::CenterBottom:
+        case BoxWipeEffectFactory::CenterBottom:
             clipRect.moveCenter( area.center() );
             clipRect.moveBottom( area.height() );
             break;
-        case KPrPageEffect::CenterLeft:
+        case BoxWipeEffectFactory::CenterLeft:
             clipRect.moveCenter( area.center() );
             clipRect.moveLeft( 0 );
             break;

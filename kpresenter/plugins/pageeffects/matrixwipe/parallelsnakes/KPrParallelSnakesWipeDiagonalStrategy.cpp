@@ -18,9 +18,10 @@
 */
 
 #include "KPrParallelSnakesWipeDiagonalStrategy.h"
+#include "KPrParallelSnakesWipeEffectFactory.h"
 
 KPrParallelSnakesWipeDiagonalStrategy::KPrParallelSnakesWipeDiagonalStrategy(bool reverseAngle, bool reverse)
-    : KPrMatrixWipeStrategy( reverse ? (reverseAngle ? KPrPageEffect::DiagonalBottomLeftOppositeIn : KPrPageEffect::DiagonalTopLeftOppositeIn) : (reverseAngle ? KPrPageEffect::DiagonalBottomLeftOppositeOut : KPrPageEffect::DiagonalTopLeftOppositeOut), "parallelSnakesWipe", reverseAngle ? "diagonalTopLeftOpposite" : "diagonalBottomLeftOpposite", reverse ),
+    : KPrMatrixWipeStrategy( reverse ? (reverseAngle ? KPrParallelSnakesWipeEffectFactory::DiagonalBottomLeftOppositeIn : KPrParallelSnakesWipeEffectFactory::DiagonalTopLeftOppositeIn) : (reverseAngle ? KPrParallelSnakesWipeEffectFactory::DiagonalBottomLeftOppositeOut : KPrParallelSnakesWipeEffectFactory::DiagonalTopLeftOppositeOut), "parallelSnakesWipe", reverseAngle ? "diagonalTopLeftOpposite" : "diagonalBottomLeftOpposite", reverse ),
     m_reverseAngle(reverseAngle)
 {
     setNeedEvenSquares(true, false);
@@ -63,7 +64,8 @@ int KPrParallelSnakesWipeDiagonalStrategy::maxIndex(int collumns, int rows)
     return collumns * rows;
 }
 
-int KPrParallelSnakesWipeDiagonalStrategy::squareIndex(int x, int y, int collumns, int rows){
+int KPrParallelSnakesWipeDiagonalStrategy::squareIndex(int x, int y, int collumns, int rows)
+{
     if (m_reverseAngle) y = rows - y - 1;
     int idx = m_indices[x * rows + y];
     if (reverse()) return idx;

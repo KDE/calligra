@@ -18,9 +18,10 @@
 */
 
 #include "KPrWaterfallWipeBottomRightStrategy.h"
+#include "KPrWaterfallWipeEffectFactory.h"
 
 KPrWaterfallWipeBottomRightStrategy::KPrWaterfallWipeBottomRightStrategy(Direction direction)
-    : KPrMatrixWipeStrategy( direction == BottomToTop ? KPrPageEffect::BottomRightVertical : KPrPageEffect::BottomRightHorizontal, "waterfallWipe", direction == BottomToTop ? "verticalLeft" : "horizontalLeft", true, true ),
+    : KPrMatrixWipeStrategy( direction == BottomToTop ? KPrWaterfallWipeEffectFactory::BottomRightVertical : KPrWaterfallWipeEffectFactory::BottomRightHorizontal, "waterfallWipe", direction == BottomToTop ? "verticalLeft" : "horizontalLeft", true, true ),
     m_direction(direction)
 {
 }

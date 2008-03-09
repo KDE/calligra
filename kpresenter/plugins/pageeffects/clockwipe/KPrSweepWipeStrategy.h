@@ -25,7 +25,7 @@
 class KPrSweepWipeStrategy : public KPrPageEffectStrategy
 {
 public:
-    KPrSweepWipeStrategy( KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse );
+    KPrSweepWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse );
     virtual ~KPrSweepWipeStrategy();
 
     virtual void next( const KPrPageEffect::Data &data );

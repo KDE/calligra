@@ -32,13 +32,13 @@ class KPRESENTER_EXPORT KPrPageEffectFactory
 {
 public:
     struct Properties {
-        Properties( int duration, KPrPageEffect::SubType subType )
+        Properties( int duration, int subType )
         : duration( duration )
         , subType( subType )
         {}
 
         int duration;
-        KPrPageEffect::SubType subType;
+        int subType;
     };
 
     /**
@@ -60,7 +60,7 @@ public:
     KPrPageEffect * createPageEffect( const Properties & properties ) const;
 
     /**
-     * Create a page effect 
+     * Create a page effect
      *
      * This is used for loading a page effect from odf
      *
@@ -81,17 +81,21 @@ public:
     /**
      * Get the sub types of the page effect
      */
-    QList<KPrPageEffect::SubType> subTypes() const;
+    QList<int> subTypes() const;
 
     /**
      * Get the tags the factory is responsible for
-     * 
-     * This defines for which smil:type and smil:direction this factory is responsible. 
-     * If the bool is false the smil:direction is forward if it is true the smil:direction 
+     *
+     * This defines for which smil:type and smil:direction this factory is responsible.
+     * If the bool is false the smil:direction is forward if it is true the smil:direction
      * is reverse.
      */
     QList<QPair<QString, bool> > tags() const;
 
+    /**
+     * Get the (i18n'ed) name of a given subtype.
+     */
+    virtual QString subTypeName(int subType) const = 0;
 protected:
     /**
      * Add a strategy to the factory

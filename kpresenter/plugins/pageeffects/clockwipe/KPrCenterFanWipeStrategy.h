@@ -25,7 +25,7 @@
 class KPrCenterFanWipeStrategy : public KPrPageEffectStrategy
 {
 public:
-    KPrCenterFanWipeStrategy(int startAngle, int fanCount, KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse );
+    KPrCenterFanWipeStrategy(int startAngle, int fanCount, int subType, const char * smilType, const char *smilSubType, bool reverse );
     virtual ~KPrCenterFanWipeStrategy();
 
     virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );

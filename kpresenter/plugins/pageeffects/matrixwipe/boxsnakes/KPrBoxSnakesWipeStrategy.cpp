@@ -18,18 +18,18 @@
 */
 
 #include "KPrBoxSnakesWipeStrategy.h"
-#include <kdebug.h>
+#include "KPrBoxSnakesWipeEffectFactory.h"
 
-static KPrPageEffect::SubType getSubType(int horRepeat, int verRepeat, bool clockwise, bool reverse)
+static int getSubType(int horRepeat, int verRepeat, bool clockwise, bool reverse)
 {
     if (!reverse) {
-        if (horRepeat == 2 && verRepeat == 1) return clockwise ? KPrPageEffect::TwoBoxBottomIn : KPrPageEffect::TwoBoxTopIn;
-        if (horRepeat == 1 && verRepeat == 2) return clockwise ? KPrPageEffect::TwoBoxLeftIn : KPrPageEffect::TwoBoxRightIn;
-        return clockwise ? KPrPageEffect::FourBoxHorizontalIn : KPrPageEffect::FourBoxVerticalIn;
+        if (horRepeat == 2 && verRepeat == 1) return clockwise ? KPrBoxSnakesWipeEffectFactory::TwoBoxBottomIn : KPrBoxSnakesWipeEffectFactory::TwoBoxTopIn;
+        if (horRepeat == 1 && verRepeat == 2) return clockwise ? KPrBoxSnakesWipeEffectFactory::TwoBoxLeftIn : KPrBoxSnakesWipeEffectFactory::TwoBoxRightIn;
+        return clockwise ? KPrBoxSnakesWipeEffectFactory::FourBoxHorizontalIn : KPrBoxSnakesWipeEffectFactory::FourBoxVerticalIn;
     } else {
-        if (horRepeat == 2 && verRepeat == 1) return clockwise ? KPrPageEffect::TwoBoxBottomOut : KPrPageEffect::TwoBoxTopOut;
-        if (horRepeat == 1 && verRepeat == 2) return clockwise ? KPrPageEffect::TwoBoxLeftOut : KPrPageEffect::TwoBoxRightOut;
-        return clockwise ? KPrPageEffect::FourBoxHorizontalOut : KPrPageEffect::FourBoxVerticalOut;
+        if (horRepeat == 2 && verRepeat == 1) return clockwise ? KPrBoxSnakesWipeEffectFactory::TwoBoxBottomOut : KPrBoxSnakesWipeEffectFactory::TwoBoxTopOut;
+        if (horRepeat == 1 && verRepeat == 2) return clockwise ? KPrBoxSnakesWipeEffectFactory::TwoBoxLeftOut : KPrBoxSnakesWipeEffectFactory::TwoBoxRightOut;
+        return clockwise ? KPrBoxSnakesWipeEffectFactory::FourBoxHorizontalOut : KPrBoxSnakesWipeEffectFactory::FourBoxVerticalOut;
     }
 }
 

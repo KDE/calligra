@@ -18,9 +18,10 @@
 */
 
 #include "KPrSnakeWipeTopLeftHorizontalStrategy.h"
+#include "KPrSnakeWipeEffectFactory.h"
 
 KPrSnakeWipeTopLeftHorizontalStrategy::KPrSnakeWipeTopLeftHorizontalStrategy()
-    : KPrMatrixWipeStrategy( KPrPageEffect::FromTop, "snakeWipe", "topLeftHorizontal", false, true )
+    : KPrMatrixWipeStrategy( KPrSnakeWipeEffectFactory::FromTop, "snakeWipe", "topLeftHorizontal", false, true )
 {
 }
 

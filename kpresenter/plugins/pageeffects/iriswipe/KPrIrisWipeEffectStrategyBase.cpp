@@ -22,7 +22,7 @@
 #include <QWidget>
 #include <QPainter>
 
-KPrIrisWipeEffectStrategyBase::KPrIrisWipeEffectStrategyBase( QPainterPath shape, KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse)
+KPrIrisWipeEffectStrategyBase::KPrIrisWipeEffectStrategyBase( QPainterPath shape, int subType, const char * smilType, const char *smilSubType, bool reverse)
 : KPrPageEffectStrategy( subType, smilType, smilSubType, reverse )
 , m_shape( shape )
 {

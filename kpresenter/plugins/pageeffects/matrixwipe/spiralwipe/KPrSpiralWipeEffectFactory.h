@@ -27,6 +27,26 @@ class KPrSpiralWipeEffectFactory : public KPrPageEffectFactory
 public:
     KPrSpiralWipeEffectFactory();
     virtual ~KPrSpiralWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        ClockwiseTopLeftIn,
+        ClockwiseTopLeftOut,
+        ClockwiseTopRightIn,
+        ClockwiseTopRightOut,
+        ClockwiseBottomLeftIn,
+        ClockwiseBottomLeftOut,
+        ClockwiseBottomRightIn,
+        ClockwiseBottomRightOut,
+        CounterClockwiseTopLeftIn,
+        CounterClockwiseTopLeftOut,
+        CounterClockwiseTopRightIn,
+        CounterClockwiseTopRightOut,
+        CounterClockwiseBottomLeftIn,
+        CounterClockwiseBottomLeftOut,
+        CounterClockwiseBottomRightIn,
+        CounterClockwiseBottomRightOut
+    };
 };
 
 #endif /* KPRSPIRALWIPEEFFECTFACTORY_H */

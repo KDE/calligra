@@ -26,7 +26,7 @@
 class KPrDoubleSweepWipeStrategy : public KPrSweepWipeStrategy
 {
 public:
-    KPrDoubleSweepWipeStrategy( KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse );
+    KPrDoubleSweepWipeStrategy( int subType, const char * smilType, const char *smilSubType, bool reverse );
     virtual ~KPrDoubleSweepWipeStrategy();
 
     virtual void setup( const KPrPageEffect::Data &data, QTimeLine &timeLine );

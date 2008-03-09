@@ -27,6 +27,22 @@ class KPrDoubleSweepWipeEffectFactory : public KPrPageEffectFactory
 public:
     KPrDoubleSweepWipeEffectFactory();
     virtual ~KPrDoubleSweepWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        ParallelVertical,
+        ParallelDiagonal,
+        OppositeVertical,
+        OppositeHorizontal,
+        ParallelDiagonalTopLeft,
+        ParallelDiagonalBottomLeft,
+        ParallelVerticalReverse,
+        ParallelDiagonalReverse,
+        OppositeVerticalReverse,
+        OppositeHorizontalReverse,
+        ParallelDiagonalTopLeftReverse,
+        ParallelDiagonalBottomLeftReverse
+    };
 };
 
 #endif /* KPRDOUBLESWEEPWIPEEFFECTFACTORY_H */

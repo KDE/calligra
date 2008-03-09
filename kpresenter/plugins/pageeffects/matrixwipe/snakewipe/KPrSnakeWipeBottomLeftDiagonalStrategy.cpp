@@ -18,9 +18,10 @@
 */
 
 #include "KPrSnakeWipeBottomLeftDiagonalStrategy.h"
+#include "KPrSnakeWipeEffectFactory.h"
 
 KPrSnakeWipeBottomLeftDiagonalStrategy::KPrSnakeWipeBottomLeftDiagonalStrategy()
-    : KPrSnakeWipeDiagonalStrategy( KPrPageEffect::FromBottomLeft, "snakeWipe", "bottomLeftDiagonal", false )
+    : KPrSnakeWipeDiagonalStrategy( KPrSnakeWipeEffectFactory::FromBottomLeft, "snakeWipe", "bottomLeftDiagonal", false )
 {
 }
 

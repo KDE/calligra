@@ -26,7 +26,7 @@
 class KPrSnakeWipeDiagonalStrategy : public KPrMatrixWipeStrategy
 {
 public:
-    KPrSnakeWipeDiagonalStrategy(KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse);
+    KPrSnakeWipeDiagonalStrategy(int subType, const char * smilType, const char *smilSubType, bool reverse);
     virtual ~KPrSnakeWipeDiagonalStrategy();
 protected:
     virtual int maxIndex(int collumns, int rows);

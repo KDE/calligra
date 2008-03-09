@@ -44,7 +44,7 @@ typedef boost::multi_index_container<
     KPrPageEffectStrategy *,
     boost::multi_index::indexed_by<
         boost::multi_index::ordered_unique<
-            boost::multi_index::const_mem_fun<KPrPageEffectStrategy, KPrPageEffect::SubType, &KPrPageEffectStrategy::subType>
+            boost::multi_index::const_mem_fun<KPrPageEffectStrategy, int, &KPrPageEffectStrategy::subType>
         >,
         boost::multi_index::ordered_unique<
             SmilData
@@ -69,10 +69,10 @@ struct KPrPageEffectFactory::Private
 
     QString id;
     QString name;
-    QList<KPrPageEffect::SubType> subTypes;
+    QList<int> subTypes;
     EffectStrategies strategies;
     // this defines for which smil:type and smil:direction this factory
-    // is responsible. If the bool is false the smil:direction is forward if 
+    // is responsible. If the bool is false the smil:direction is forward if
     // it is true the smil:direction is reverse.
     QList<QPair<QString, bool> > tags;
 };
@@ -137,7 +137,7 @@ QString KPrPageEffectFactory::name() const
     return d->name;
 }
 
-QList<KPrPageEffect::SubType> KPrPageEffectFactory::subTypes() const
+QList<int> KPrPageEffectFactory::subTypes() const
 {
     return d->subTypes;
 }

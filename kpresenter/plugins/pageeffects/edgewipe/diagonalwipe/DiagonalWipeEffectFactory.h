@@ -27,6 +27,14 @@ class DiagonalWipeEffectFactory : public KPrPageEffectFactory
 public:
     DiagonalWipeEffectFactory();
     virtual ~DiagonalWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        FromTopLeft,
+        FromBottomRight,
+        FromTopRight,
+        FromBottomLeft
+    };
 };
 
 #endif // DIAGONALWIPEEFFECTFACTORY_H

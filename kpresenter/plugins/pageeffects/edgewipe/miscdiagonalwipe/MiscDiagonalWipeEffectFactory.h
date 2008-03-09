@@ -27,6 +27,12 @@ class MiscDiagonalWipeEffectFactory : public KPrPageEffectFactory
 public:
     MiscDiagonalWipeEffectFactory();
     virtual ~MiscDiagonalWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        DoubleBarnDoor,
+        DoubleDiamond
+    };
 };
 
 #endif // MISCDIAGONALWIPEEFFECTFACTORY_H

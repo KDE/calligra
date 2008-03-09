@@ -49,3 +49,22 @@ KPrSnakeWipeEffectFactory::~KPrSnakeWipeEffectFactory()
 {
 }
 
+static const char* s_subTypes[] = {
+    I18N_NOOP( "From Left" ),
+    I18N_NOOP( "From Right" ),
+    I18N_NOOP( "From Top" ),
+    I18N_NOOP( "From Bottom" ),
+    I18N_NOOP( "From Top Left" ),
+    I18N_NOOP( "From Top Right" ),
+    I18N_NOOP( "From Bottom Left" ),
+    I18N_NOOP( "From Bottom Right" )
+};
+
+QString KPrSnakeWipeEffectFactory::subTypeName(int subType) const
+{
+    if (subType >= 0 && subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
+        return i18n( s_subTypes[subType] );
+    } else {
+        return i18n( "Unknown subtype" );
+    }
+}

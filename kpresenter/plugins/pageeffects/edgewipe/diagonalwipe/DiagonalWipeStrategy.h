@@ -26,7 +26,7 @@
 class DiagonalWipeStrategy : public KPrPageEffectStrategy
 {
 public:
-    DiagonalWipeStrategy( KPrPageEffect::SubType subtype, const char *smilSubType, bool reverse );
+    DiagonalWipeStrategy( int subtype, const char *smilSubType, bool reverse );
     virtual ~DiagonalWipeStrategy();
 
     /// reimplemented from KPrPageEffectStrategy

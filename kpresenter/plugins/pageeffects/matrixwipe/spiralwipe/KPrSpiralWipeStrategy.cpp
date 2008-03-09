@@ -18,23 +18,23 @@
 */
 
 #include "KPrSpiralWipeStrategy.h"
-#include <kdebug.h>
+#include "KPrSpiralWipeEffectFactory.h"
 
-static KPrPageEffect::SubType getSubType(int firstLeg, bool clockwise, bool reverse)
+static int getSubType(int firstLeg, bool clockwise, bool reverse)
 {
     if (!reverse) {
         switch (firstLeg) {
-            case 0: return clockwise ? KPrPageEffect::ClockwiseTopLeftIn : KPrPageEffect::CounterClockwiseTopLeftIn;
-            case 1: return clockwise ? KPrPageEffect::ClockwiseTopRightIn : KPrPageEffect::CounterClockwiseBottomLeftIn;
-            case 2: return clockwise ? KPrPageEffect::ClockwiseBottomRightIn : KPrPageEffect::CounterClockwiseBottomRightIn;
-            case 3: return clockwise ? KPrPageEffect::ClockwiseBottomLeftIn : KPrPageEffect::CounterClockwiseTopRightIn;
+            case 0: return clockwise ? KPrSpiralWipeEffectFactory::ClockwiseTopLeftIn : KPrSpiralWipeEffectFactory::CounterClockwiseTopLeftIn;
+            case 1: return clockwise ? KPrSpiralWipeEffectFactory::ClockwiseTopRightIn : KPrSpiralWipeEffectFactory::CounterClockwiseBottomLeftIn;
+            case 2: return clockwise ? KPrSpiralWipeEffectFactory::ClockwiseBottomRightIn : KPrSpiralWipeEffectFactory::CounterClockwiseBottomRightIn;
+            case 3: return clockwise ? KPrSpiralWipeEffectFactory::ClockwiseBottomLeftIn : KPrSpiralWipeEffectFactory::CounterClockwiseTopRightIn;
         }
     } else {
         switch (firstLeg) {
-            case 0: return !clockwise ? KPrPageEffect::ClockwiseTopLeftOut : KPrPageEffect::CounterClockwiseTopLeftOut;
-            case 1: return !clockwise ? KPrPageEffect::ClockwiseTopRightOut : KPrPageEffect::CounterClockwiseBottomLeftOut;
-            case 2: return !clockwise ? KPrPageEffect::ClockwiseBottomRightOut : KPrPageEffect::CounterClockwiseBottomRightOut;
-            case 3: return !clockwise ? KPrPageEffect::ClockwiseBottomLeftOut : KPrPageEffect::CounterClockwiseTopRightOut;
+            case 0: return !clockwise ? KPrSpiralWipeEffectFactory::ClockwiseTopLeftOut : KPrSpiralWipeEffectFactory::CounterClockwiseTopLeftOut;
+            case 1: return !clockwise ? KPrSpiralWipeEffectFactory::ClockwiseTopRightOut : KPrSpiralWipeEffectFactory::CounterClockwiseBottomLeftOut;
+            case 2: return !clockwise ? KPrSpiralWipeEffectFactory::ClockwiseBottomRightOut : KPrSpiralWipeEffectFactory::CounterClockwiseBottomRightOut;
+            case 3: return !clockwise ? KPrSpiralWipeEffectFactory::ClockwiseBottomLeftOut : KPrSpiralWipeEffectFactory::CounterClockwiseTopRightOut;
         }
     }
 }

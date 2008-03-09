@@ -27,6 +27,22 @@ class KPrBoxSnakesWipeEffectFactory : public KPrPageEffectFactory
 public:
     KPrBoxSnakesWipeEffectFactory();
     virtual ~KPrBoxSnakesWipeEffectFactory();
+    virtual QString subTypeName(int subType) const;
+
+    enum SubType {
+        TwoBoxTopIn,
+        TwoBoxBottomIn,
+        TwoBoxLeftIn,
+        TwoBoxRightIn,
+        FourBoxVerticalIn,
+        FourBoxHorizontalIn,
+        TwoBoxTopOut,
+        TwoBoxBottomOut,
+        TwoBoxLeftOut,
+        TwoBoxRightOut,
+        FourBoxVerticalOut,
+        FourBoxHorizontalOut
+    };
 };
 
 #endif /* KPRBOXSNAKESWIPEEFFECTFACTORY_H */

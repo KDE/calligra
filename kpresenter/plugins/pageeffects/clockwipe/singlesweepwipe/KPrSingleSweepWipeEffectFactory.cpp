@@ -28,40 +28,67 @@ KPrSingleSweepWipeEffectFactory::KPrSingleSweepWipeEffectFactory()
 : KPrPageEffectFactory( SingleSweepWipeEffectId, i18n( "Single Sweep Wipe Effect" ) )
 {
     addStrategy( new KPrSingleSweepWipeStrategy( 0.5, 0.0, 0, -180,
-                                                 KPrPageEffect::ClockwiseTop, "singleSweepWipe", "clockwiseTop", false ) );
+                                                 ClockwiseTop, "singleSweepWipe", "clockwiseTop", false ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 0.5, 270, -180,
-                                                 KPrPageEffect::ClockwiseRight, "singleSweepWipe", "clockwiseRight", false ) );
+                                                 ClockwiseRight, "singleSweepWipe", "clockwiseRight", false ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 0.5, 1.0, 180, -180,
-                                                 KPrPageEffect::ClockwiseBottom, "singleSweepWipe", "clockwiseBottom", false ) );
+                                                 ClockwiseBottom, "singleSweepWipe", "clockwiseBottom", false ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 0.5, 90, -180,
-                                                 KPrPageEffect::ClockwiseLeft, "singleSweepWipe", "clockwiseLeft", false ) );
+                                                 ClockwiseLeft, "singleSweepWipe", "clockwiseLeft", false ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 0.0, 0, -90,
-                                                 KPrPageEffect::ClockwiseTopLeft, "singleSweepWipe", "clockwiseTopLeft", false ) );
+                                                 ClockwiseTopLeft, "singleSweepWipe", "clockwiseTopLeft", false ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 1.0, 0, 90,
-                                                 KPrPageEffect::CounterClockwiseBottomLeft, "singleSweepWipe", "counterClockwiseBottomLeft", false ) );
+                                                 CounterClockwiseBottomLeft, "singleSweepWipe", "counterClockwiseBottomLeft", false ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 1.0, 180, -90,
-                                                 KPrPageEffect::ClockwiseBottomRight, "singleSweepWipe", "clockwiseBottomRight", false ) );
+                                                 ClockwiseBottomRight, "singleSweepWipe", "clockwiseBottomRight", false ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 0.0, 180, 90,
-                                                 KPrPageEffect::CounterClockwiseTopRight, "singleSweepWipe", "counterClockwiseTopRight", false ) );
+                                                 CounterClockwiseTopRight, "singleSweepWipe", "counterClockwiseTopRight", false ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 0.5, 0.0, 180, 180,
-                                                 KPrPageEffect::CounterClockwiseTop, "singleSweepWipe", "clockwiseTop", true ) );
+                                                 CounterClockwiseTop, "singleSweepWipe", "clockwiseTop", true ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 0.5, 90, 180,
-                                                 KPrPageEffect::CounterClockwiseRight, "singleSweepWipe", "clockwiseRight", true ) );
+                                                 CounterClockwiseRight, "singleSweepWipe", "clockwiseRight", true ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 0.5, 1.0, 0, 180,
-                                                 KPrPageEffect::CounterClockwiseBottom, "singleSweepWipe", "clockwiseBottom", true ) );
+                                                 CounterClockwiseBottom, "singleSweepWipe", "clockwiseBottom", true ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 0.5, 270, 180,
-                                                 KPrPageEffect::CounterClockwiseLeft, "singleSweepWipe", "clockwiseLeft", true ) );
+                                                 CounterClockwiseLeft, "singleSweepWipe", "clockwiseLeft", true ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 0.0, 270, 90,
-                                                 KPrPageEffect::CounterClockwiseTopLeft, "singleSweepWipe", "clockwiseTopLeft", true ) );
+                                                 CounterClockwiseTopLeft, "singleSweepWipe", "clockwiseTopLeft", true ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 0.0, 1.0, 90, -90,
-                                                 KPrPageEffect::ClockwiseBottomLeft, "singleSweepWipe", "counterClockwiseBottomLeft", true ) );
+                                                 ClockwiseBottomLeft, "singleSweepWipe", "counterClockwiseBottomLeft", true ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 1.0, 90, 90,
-                                                 KPrPageEffect::CounterClockwiseBottomRight, "singleSweepWipe", "clockwiseBottomRight", true ) );
+                                                 CounterClockwiseBottomRight, "singleSweepWipe", "clockwiseBottomRight", true ) );
     addStrategy( new KPrSingleSweepWipeStrategy( 1.0, 0.0, 270, -90,
-                                                 KPrPageEffect::ClockwiseTopRight, "singleSweepWipe", "counterClockwiseTopRight", true ) );
+                                                 ClockwiseTopRight, "singleSweepWipe", "counterClockwiseTopRight", true ) );
 }
 
 KPrSingleSweepWipeEffectFactory::~KPrSingleSweepWipeEffectFactory()
 {
 }
 
+static const char* s_subTypes[] = {
+    I18N_NOOP( "Clockwise Top" ),
+    I18N_NOOP( "Clockwise Right" ),
+    I18N_NOOP( "Clockwise Bottom" ),
+    I18N_NOOP( "Clockwise Left" ),
+    I18N_NOOP( "Clockwise Top Left" ),
+    I18N_NOOP( "Counterclockwise Bottom Left" ),
+    I18N_NOOP( "Clockwise Bottom Right" ),
+    I18N_NOOP( "Counterclockwise Top Right" ),
+    I18N_NOOP( "Counterclockwise Top" ),
+    I18N_NOOP( "Counterclockwise Right" ),
+    I18N_NOOP( "Counterclockwise Bottom" ),
+    I18N_NOOP( "Counterclockwise Left" ),
+    I18N_NOOP( "Counterclockwise Top Left" ),
+    I18N_NOOP( "Clockwise Bottom Left" ),
+    I18N_NOOP( "Counterclockwise Bottom Right" ),
+    I18N_NOOP( "Clockwise Top Right" )
+};
+
+QString KPrSingleSweepWipeEffectFactory::subTypeName(int subType) const
+{
+    if (subType >= 0 && subType < sizeof s_subTypes / sizeof s_subTypes[0]) {
+        return i18n( s_subTypes[subType] );
+    } else {
+        return i18n( "Unknown subtype" );
+    }
+}

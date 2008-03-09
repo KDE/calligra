@@ -26,7 +26,7 @@
 
 #include "KPrClockWipeSubpathHelper.h"
 
-KPrCenterFanWipeStrategy::KPrCenterFanWipeStrategy(int startAngle, int fanCount, KPrPageEffect::SubType subType, const char * smilType, const char *smilSubType, bool reverse )
+KPrCenterFanWipeStrategy::KPrCenterFanWipeStrategy(int startAngle, int fanCount, int subType, const char * smilType, const char *smilSubType, bool reverse )
     : KPrPageEffectStrategy( subType, smilType, smilSubType, reverse ), m_fanCount(fanCount)
 {
     m_startAngle = static_cast<double>(startAngle)/180 * M_PI;
