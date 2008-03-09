@@ -64,7 +64,7 @@ orQuery::~orQuery()
 
 bool orQuery::execute()
 {
-	if ( qryQuery == 0 )
+	if ( _database && qryQuery == 0 )
 	{
 		//NOTE we can use the variation of executeQuery to pass in paramters
 
@@ -119,6 +119,7 @@ KexiDB::TableOrQuerySchema &orQuery::schema()
 		return *_schema;
 	else
 	{
+		Q_ASSERT(_database);
 		KexiDB::TableOrQuerySchema *tq = new KexiDB::TableOrQuerySchema ( _database, "" );
 		return *tq;
 	}
@@ -136,7 +137,7 @@ orData::orData()
 void orData::setQuery ( orQuery *qryPassed )
 {
 	qryThis = qryPassed;
-	_valid = ( qryThis != 0 && qstrField.length() )
+	_valid = ( qryThis != 0 && qstrField.length() );
 }
 
 void orData::setField ( const QString &qstrPPassed )
