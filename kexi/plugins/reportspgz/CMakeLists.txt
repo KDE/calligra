@@ -1,4 +1,4 @@
-include_directories( ${CMAKE_SOURCE_DIR}/libs/main ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/backend/common ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/backend/renderer ${KDE4_INCLUDES} )
+include_directories( ${CMAKE_SOURCE_DIR}/libs/main ${KOODF_INCLUDES} ${CMAKE_SOURCE_DIR}/kexi ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/backend/common ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/backend/renderer ${KDE4_INCLUDES} )
 
 #this is just a basic CMakeLists.txt, for more information see the cmake manpage
 add_subdirectory( backend )
