@@ -15,7 +15,7 @@ set(pgzkexireportpart2_LIB_SRCS
 
 kde4_add_plugin(pgzkexireportpart2 ${pgzkexireportpart2_LIB_SRCS})
 
-target_link_libraries(pgzkexireportpart2 pgzrptcommon pgzrptrenderer pgzrptwrtembed ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} QtGui kexidb kexicore keximain koproperty koguiutils komain kexiguiutils)
+target_link_libraries(pgzkexireportpart2 pgzrptcommon pgzrptrenderer pgzrptwrtembed ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} kexidb kexicore keximain koproperty koguiutils komain kexiguiutils)
 
 install(TARGETS pgzkexireportpart2  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  pgzkexireporthandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kexi)

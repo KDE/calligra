@@ -27,7 +27,7 @@ kde4_add_ui_files(pgzrptwrtembed_LIB_SRCS detailgroupsectiondialog.ui sectionedi
 
 kde4_add_library(pgzrptwrtembed SHARED ${pgzrptwrtembed_LIB_SRCS})
 
-target_link_libraries(pgzrptwrtembed pgzrptcommon ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} QtSql QtGui Qt3Support kexidb kexicore keximain koproperty koguiutils komain)
+target_link_libraries(pgzrptwrtembed pgzrptcommon ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTSQL_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QT3SUPPORT_LIBRARY} kexidb kexicore keximain koproperty koguiutils komain)
 
 set_target_properties(pgzrptwrtembed PROPERTIES VERSION 0.0.1 SOVERSION 0 )
 

@@ -15,7 +15,7 @@ set(pgzrptrenderer_LIB_SRCS
 
 kde4_add_library(pgzrptrenderer SHARED ${pgzrptrenderer_LIB_SRCS})
 
-target_link_libraries(pgzrptrenderer pgzrptcommon kexidb ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kexiutils QtScript)
+target_link_libraries(pgzrptrenderer pgzrptcommon kexidb ${KDE4_KDECORE_LIBS} ${KDE4_KPARTS_LIBS} kexiutils ${QT_QTSCRIPT_LIBRARY})
 
 set_target_properties(pgzrptrenderer PROPERTIES VERSION 0.0.1 SOVERSION 0 )
 
