@@ -101,7 +101,7 @@ bool orQuery::execute()
 
 uint orQuery::fieldNumber ( const QString &fld )
 {
-	
+	Q_ASSERT(qryQuery->query());
 	KexiDB::QueryColumnInfo::Vector flds = qryQuery->query()->fieldsExpanded();
 	uint x = -1;
 	for ( int i = 0; i < flds.size() ; ++i )
@@ -154,6 +154,7 @@ const QString &orData::getValue()
 {
 	if ( _valid )
 	{
+		Q_ASSERT(qryThis->getQuery());
 		qstrValue = qryThis->getQuery()->value ( qryThis->fieldNumber ( qstrField ) ).toString();
 	}
 	else
@@ -167,6 +168,7 @@ const QByteArray &orData::getRawValue()
 {
 	if ( _valid )
 	{
+		Q_ASSERT(qryThis->getQuery());
 		rawValue = qryThis->getQuery()->value ( qryThis->fieldNumber ( qstrField ) ).toByteArray();
 	}
 
