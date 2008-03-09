@@ -126,7 +126,7 @@ void TableTool::importDocument()
     if (file.isEmpty())
         return;
     d->tableShape->doc()->setModified(false);
-    if ( ! d->tableShape->doc()->import(file))
+    if ( ! d->tableShape->doc()->importDocument(file))
         return;
     updateSheetsList();
     if (Sheet* sheet = d->tableShape->sheet()) {
@@ -143,7 +143,7 @@ void TableTool::exportDocument()
     QString file = KFileDialog::getSaveFileName(KUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Export");
     if (file.isEmpty())
         return;
-    d->tableShape->doc()->exp0rt(file);
+    d->tableShape->doc()->exportDocument(file);
 }
 
 void TableTool::paint( QPainter& painter, const KoViewConverter& viewConverter )

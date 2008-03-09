@@ -159,7 +159,7 @@ bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
   // The second case is a non-native file. Here we have to create a
   // filter manager, ask it to convert the file to the "closest" available
   // KOffice part and open the temporary file.
-  
+
   /*if (!KIO::NetAccess::exists(url,true,0) )
   {
     KMessageBox::error(0L, i18n("The file %1 does not exist.",url.url()) );
@@ -167,7 +167,7 @@ bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
     saveRecentFiles();
     return false;
   }*/
-  
+
   KMimeType::Ptr mimeType = KMimeType::findByUrl( url );
   m_documentEntry = KoDocumentEntry::queryByMimeType( mimeType->name().toLatin1() );
 
@@ -179,7 +179,7 @@ bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
 
     KoFilterManager *manager = new KoFilterManager( url.path() );
     QByteArray mimetype;                                               // an empty mimetype means, that the "nearest"
-    KoFilter::ConversionStatus status = manager->exp0rt( tmpFile.fileName(), mimetype ); // KOffice part will be chosen
+    KoFilter::ConversionStatus status = manager->exportDocument( tmpFile.fileName(), mimetype ); // KOffice part will be chosen
     delete manager;
 
     if ( status != KoFilter::OK || mimetype.isEmpty() ) {
@@ -207,7 +207,7 @@ bool KoShellWindow::openDocumentInternal( const KUrl &url, KoDocument* )
   connect(newdoc, SIGNAL(completed()), this, SLOT(slotKSLoadCompleted()));
   connect(newdoc, SIGNAL(canceled( const QString & )), this, SLOT(slotKSLoadCanceled( const QString & )));
   newdoc->addShell( this ); // used by openUrl
-  bool openRet = (!isImporting ()) ? newdoc->openUrl(tmpUrl) : newdoc->import(tmpUrl);
+  bool openRet = (!isImporting ()) ? newdoc->openUrl(tmpUrl) : newdoc->importDocument(tmpUrl);
   if ( !openRet )
   {
       newdoc->removeShell(this);
@@ -249,7 +249,7 @@ void KoShellWindow::slotSidebarItemClicked( Q3IconViewItem *item )
   if( item != 0 )
   {
     int index = item->index();
-  
+
     // Create new document from a KoDocumentEntry
     m_documentEntry = m_mapComponents[ index ];
     KoDocument *doc = m_documentEntry.createDoc();
@@ -273,7 +273,7 @@ void KoShellWindow::slotKSLoadCompleted()
 {
     KoDocument* newdoc = (KoDocument *)(sender());
 
-    // KoDocument::import() calls resetURL() too late...
+    // KoDocument::importDocument() calls resetURL() too late...
     // ...setRootDocument will show the URL...
     // So let's stop this from happening and the user will never know :)
     if (isImporting()) newdoc->resetURL ();
@@ -330,11 +330,11 @@ void KoShellWindow::setRootDocument( KoDocument * doc )
     Q3PtrList<KoView> views;
     views.append(v);
     setRootDocumentDirect( doc, views );
-    
+
     v->setGeometry( 0, 0, m_pFrame->width(), m_pFrame->height() );
     v->setPartManager( partManager() );
     m_pFrame->addTab( v, KIconLoader::global()->loadIcon( m_documentEntry.service()->icon(), KIconLoader::Small ), i18n("Untitled") );
-    
+
     // Create a new page for this doc
     Page page;
     page.m_pDoc = doc;
@@ -428,7 +428,7 @@ void KoShellWindow::slotSidebar_Document(int _item)
   if ( m_activePage != m_lstPages.end() &&
        (*m_activePage).m_id == _item )
     return;
-    
+
   Q3ValueList<Page>::Iterator it = m_lstPages.begin();
   while( it != m_lstPages.end() )
   {
@@ -458,7 +458,7 @@ void KoShellWindow::slotShowSidebar()
 void KoShellWindow::slotUpdatePart( QWidget* widget )
 {
   KoView* v = dynamic_cast<KoView*>(widget);
-  if ( v != 0 ) 
+  if ( v != 0 )
   {
     Q3ValueList<Page>::Iterator it = m_lstPages.begin();
     for( ; it != m_lstPages.end(); ++it )
@@ -661,13 +661,13 @@ void KoShellWindow::tab_contextMenu(QWidget * w,const QPoint &p)
   KIconLoader il;
   QAction *mnuSave = menu.addAction( il.loadIconSet( "document-save", KIconLoader::Small ), i18n("Save") );
   QAction *mnuClose = menu.addAction( il.loadIcon( "window-close", KIconLoader::Small ), i18n("Close") );
-  
+
   int tabnr = m_pFrame->indexOf( w );
   Page page = m_lstPages[tabnr];
   // disable save if there's nothing to save
   if ( !page.m_pDoc->isModified() )
     mnuSave->setEnabled( false );
-  
+
   // show menu
   QAction *choice = menu.exec(p);
 
@@ -691,7 +691,7 @@ void KoShellWindow::slotConfigureKeys()
 {
   KoView *view = rootView();
   KShortcutsDialog dlg(KShortcutsEditor::AllActions,KShortcutsEditor::LetterShortcutsAllowed, this );
-  
+
   dlg.addCollection( actionCollection() );
   if ( view )
      dlg.addCollection( view->actionCollection() );

@@ -177,12 +177,12 @@ bool ScriptingModule::saveUrl(const QString& url)
 
 bool ScriptingModule::importUrl(const QString& url)
 {
-	return kspreadDoc()->import(url);
+	return kspreadDoc()->importDocument(url);
 }
 
 bool ScriptingModule::exportUrl(const QString& url)
 {
-	return kspreadDoc()->exp0rt(url);
+	return kspreadDoc()->exportDocument(url);
 }
 
 QObject* ScriptingModule::reader()

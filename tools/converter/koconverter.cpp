@@ -44,7 +44,7 @@ bool convert( const KUrl & uIn, const QString & /*inputFormat*/, const KUrl & uO
     manager->setBatchMode( batch );
 
     QByteArray mime( outputFormat.toLatin1() );
-    KoFilter::ConversionStatus status = manager->exp0rt( uOut.path(), mime );
+    KoFilter::ConversionStatus status = manager->exportDocument( uOut.path(), mime );
     progressObj.slotProgress(-1);
 
     delete manager;
@@ -82,7 +82,7 @@ int main( int argc, char **argv )
     // Install the libkoffice* translations
     KGlobal::locale()->insertCatalog("koffice");
 
-    
+
 
     // Get the command line arguments which we have to parse
     KCmdLineArgs *args= KCmdLineArgs::parsedArgs();

@@ -170,7 +170,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
 
     m_canvasController = new KoCanvasController(this);
-    m_canvasController->setMinimumSize( QSize(viewMargin+50,viewMargin+50) ); 
+    m_canvasController->setMinimumSize( QSize(viewMargin+50,viewMargin+50) );
     m_canvasController->setCanvas(m_canvas);
     m_canvasController->setCanvasMode( KoCanvasController::Infinite );
     // always show srollbars which fixes some nasty infinite
@@ -262,7 +262,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
         KoToolDockerFactory toolDockerFactory;
         KoToolDocker * toolDocker =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
-        connect(m_canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), 
+        connect(m_canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)),
                 toolDocker, SLOT(newOptionWidget(QWidget*)));
 
         KoToolManager::instance()->requestToolActivation( m_canvasController );
@@ -385,7 +385,7 @@ KarbonView::fileImportGraphic()
     {
         KoFilterManager man( part() );
         KoFilter::ConversionStatus status;
-        QString importedFile = man.import( fname, status );
+        QString importedFile = man.importDocument( fname, status );
         part()->mergeNativeFormat( importedFile );
         if( !importedFile.isEmpty() )
             unlink( QFile::encodeName( importedFile ) );
