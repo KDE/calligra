@@ -221,37 +221,37 @@ ProxyModel *ChartShape::proxyModel() const
 TextLabel *ChartShape::title() const
 {
     return d->title;
-};
+}
 
 TextLabel *ChartShape::subTitle() const
 {
     return d->subTitle;
-};
+}
 
 TextLabel *ChartShape::footer() const
 {
     return d->footer;
-};
+}
 
 Legend *ChartShape::legend() const
 {
     return d->legend;
-};
+}
 
 PlotArea *ChartShape::plotArea() const
 {
     return d->plotArea;
-};
+}
 
 Surface *ChartShape::wall() const
 {
     return d->wall;
-};
+}
 
 Surface *ChartShape::floor() const
 {
     return d->floor;
-};
+}
 
 
 void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel )

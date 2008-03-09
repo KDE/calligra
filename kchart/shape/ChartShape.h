@@ -136,6 +136,6 @@ private:
     Private *const d;
 };
 
-}; // Namespace KChart
+} // Namespace KChart
 
 #endif

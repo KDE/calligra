@@ -128,7 +128,7 @@ PlotArea::PlotArea( ChartShape *parent )
     yAxis->setShowGrid( true );
     d->axes.append( xAxis );
     d->axes.append( yAxis );
-};
+}
 
 PlotArea::~PlotArea()
 {
@@ -201,7 +201,7 @@ Axis *PlotArea::xAxis() const
             return axis;
     }
     return 0;
-};
+}
 
 Axis *PlotArea::yAxis() const
 {
@@ -211,7 +211,7 @@ Axis *PlotArea::yAxis() const
             return axis;
     }
     return 0;
-};
+}
 
 Axis *PlotArea::secondaryXAxis() const
 {
@@ -226,7 +226,7 @@ Axis *PlotArea::secondaryXAxis() const
         }
     }
     return 0;
-};
+}
 
 Axis *PlotArea::secondaryYAxis() const
 {
@@ -241,22 +241,22 @@ Axis *PlotArea::secondaryYAxis() const
         }
     }
     return 0;
-};
+}
 
 ChartType PlotArea::chartType() const
 {
     return d->chartType;
-};
+}
 
 ChartSubtype PlotArea::chartSubType() const
 {
     return d->chartSubtype;
-};
+}
 
 bool PlotArea::isThreeD() const
 {
     return d->threeD;
-};
+}
 
 ThreeDScene *PlotArea::threeDScene() const
 {

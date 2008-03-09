@@ -442,7 +442,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
         }
     }
     return true;
-};
+}
 
 void Axis::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
 {
