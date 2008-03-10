@@ -39,7 +39,7 @@ add_subdirectory( tests )
 ########### next target ###############
 
 set(kexi_SRCS main.cpp )
-kde4_add_executable(kexi NOGUI ${kexi_SRCS})
+kde4_add_executable(kexi ${kexi_SRCS})
 target_link_libraries(kexi 
 	${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${KDE4_KFILE_LIBS} ${KDE4_KIO_LIBS} 
 	kexidb
