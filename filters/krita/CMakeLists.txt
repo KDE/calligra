@@ -53,7 +53,7 @@ if(OPENEXR_FOUND)
 endif(OPENEXR_FOUND)
 
 if(GRAPHICSMAGICK_FOUND)
-#    add_subdirectory(gmagick)
+    add_subdirectory(gmagick)
 endif(GRAPHICSMAGICK_FOUND)
 
 if(POPPLER_FOUND AND HAVE_POPPLER_0_6)
