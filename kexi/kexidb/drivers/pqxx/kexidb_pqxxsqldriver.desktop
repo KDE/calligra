@@ -7,6 +7,7 @@ Comment[ca]=Controlador de bases de dades Kexi per a accedir a servidors Postgre
 Comment[el]=Οδηγός βάσης δεδομένων του Kexi για πρόσβαση σε εξυπηρετητές PostgreSQL
 Comment[es]=Controlador de bases de datos de Kexi para acceder a servidores PostgreSQL
 Comment[et]=Kexi andmebaasidraiver PostgreSQL serverite kasutamiseks
+Comment[fi]=Kexi-tietokanta-ajuri PostgreSQL-palvelinten käyttämiseksi
 Comment[gl]=Motoro da base de datos de Kexi para o acceso a servidores PostgreSQL
 Comment[it]=Driver per banche dati Kexi per accedere ai server PostgreSQL
 Comment[ja]=PostgreSQL サーバにアクセスするための Kexi データベースドライバ
