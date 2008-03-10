@@ -9,6 +9,7 @@ include_directories(
 add_subdirectory( scripts )
 
 set(krossmodulekplato_PART_SRCS
+    Project.cpp
     Module.cpp
     ScriptingPart.cpp
 )

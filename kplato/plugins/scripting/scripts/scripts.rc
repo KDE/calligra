@@ -45,8 +45,8 @@
     <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with KPlato" enabled="false">
         <script
             name="pysampleproject"
-            text="Print Project Name..."
-            comment="Python to print project name"
+            text="Print Project Information..."
+            comment="Python script that print some project information"
             interpreter="python"
             file="samples/sample_project.py" />
 <!--        <script

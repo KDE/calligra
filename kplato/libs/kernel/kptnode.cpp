@@ -119,7 +119,7 @@ void Node::init() {
 
 QString Node::typeToString( bool trans ) const {
     switch ( type() ) {
-        case Type_Node: return trans ? i18n("Node") : "Node";
+        case Type_Node: return trans ? i18n("None") : "None";
         case Type_Project: return trans ? i18n("Project") : "Project";
         case Type_Subproject: return trans ? i18n("Sub-Project") : "Sub-Project";
         case Type_Task: return trans ? i18n("Task") : "Task";

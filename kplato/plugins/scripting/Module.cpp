@@ -20,6 +20,7 @@
  */
 
 #include "Module.h"
+#include "Project.h"
 
 // qt
 #include <QPointer>
@@ -38,8 +39,6 @@ extern "C"
     }
 }
 
-using namespace Scripting;
-
 namespace Scripting {
 
     /// \internal d-pointer class.
@@ -48,7 +47,6 @@ namespace Scripting {
         public:
             QPointer<KPlato::Part> doc;
     };
-}
 
 Module::Module(QObject* parent)
     : KoScriptingModule(parent, "KPlato")
@@ -83,5 +81,11 @@ QString Module::projectName()
     return part()->getProject().name();
 }
 
+QObject *Module::project()
+{
+    return new Project( this, &(part()->getProject()) );
+}
+
+}
 
 #include "Module.moc"

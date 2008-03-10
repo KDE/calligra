@@ -22,29 +22,63 @@
 #define SCRIPTING_PROJECT_H
 
 #include <QObject>
-#include <kptroject.h>
 
 #include "Module.h"
+
+#include "kptnode.h"
+#include <kptnodeitemmodel.h>
+
+namespace KPlato {
+    class Project;
+}
 
 namespace Scripting {
 
     /**
-    * The Project class represents a project in the document.
+    * The Project class represents a KPlato project.
     */
     class Project : public QObject
     {
             Q_OBJECT
         public:
-            Project( Module* module, KPlato::Project &project )
-                : QObject( module ), m_project( project ) {}
+            Project( Module* module, KPlato::Project *project );
             virtual ~Project() {}
 
         public Q_SLOTS:
+            /// Returns the identity of the project node
+            QString projectIdentity();
+            /// Returns the list of identities of all schedules
+            QStringList schedulesIdentityList();
+            /// Returns the data of @p property from schedule with id @p scheduleId
+            QString scheduleData( const QString &scheduleId, const QString &property );
+            /// Returns the names of all node properties
+            QStringList nodePropertyList();
+            /// Returns data for @p property of node with id @p nodeId
+            QString nodeData( const QString &nodeId, const QString &property );
+            /// Returns data for @p property of node with id @p nodeId and dataRole @p role
+            QString nodeData( const QString &nodeId, const QString &property, const QString &role );
+            /// Returns data for @p property of node with id @p nodeId and dataRole @p role, using @p schedule
+            QString nodeData( const QString &nodeId, const QString &property, const QString &role, const QString &schedule );
+            /// Returns header data for @p property
+            QString nodeHeaderData( const QString &property );
 
-            int name() const { return m_project->name(); }
-
+            /// Returns a list of identities of all nodes in the project
+            QStringList nodesIdentityList();
+            /// Returns a list of identities of all top level nodes (children of project)
+            QStringList childNodesIdentityList();
+            /// Returns a list of identities of child nodes to the node with id @p nodeId
+            QStringList childNodesIdentityList( const QString &nodeId );
+        
+        protected:
+            int columnNumber( const QString &property ) const;
+            KPlato::Node *node( const QString &id ) const;
+            
+            int stringToRole( const QString &role ) const;
+            
         private:
-            KPlato::Project &m_project;
+            KPlato::Project *m_project;
+            KPlato::NodeModel m_nodeModel;
+
     };
 
 }

@@ -152,9 +152,10 @@ QVariant NodeModel::type( const Node *node, int role ) const
     //kDebug()<<node->name()<<", "<<role;
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::EditRole:
         case Qt::ToolTipRole:
             return node->typeToString( true );
+        case Qt::EditRole:
+            return node->typeToString();
         case Qt::TextAlignmentRole:
             return Qt::AlignCenter;
         case Qt::StatusTipRole:
@@ -180,6 +181,7 @@ QVariant NodeModel::constraint( const Node *node, int role ) const
         case Role::EnumList: 
             return Node::constraintList( true );
         case Qt::EditRole: 
+            return node->constraintToString();
         case Role::EnumListValue: 
             return (int)node->constraint();
         case Qt::TextAlignmentRole:
@@ -255,6 +257,10 @@ QVariant NodeModel::estimateType( const Node *node, int role ) const
         case Role::EnumList: 
             return Estimate::typeToStringList( true );
         case Qt::EditRole:
+            if ( node->type() == Node::Type_Task ) {
+                return node->estimate()->typeToString();
+            }
+            return QString();
         case Role::EnumListValue: 
             return (int)node->estimate()->type();
         case Qt::StatusTipRole:
@@ -375,6 +381,10 @@ QVariant NodeModel::riskType( const Node *node, int role ) const
         case Role::EnumList: 
             return Estimate::risktypeToStringList( true );
         case Qt::EditRole:
+            if ( node->type() == Node::Type_Task ) {
+                return node->estimate()->risktypeToString();
+            }
+            return QString();
         case Role::EnumListValue: 
             return (int)node->estimate()->risktype();
         case Qt::StatusTipRole:

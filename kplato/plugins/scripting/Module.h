@@ -30,12 +30,14 @@
 
 #include <kptpart.h>
 
+
 namespace KPlato {
     class Part;
-    class Project;
 }
 
 namespace Scripting {
+
+    class Project;
 
     /**
     * The Module class enables access to the KPlato functionality
@@ -62,10 +64,11 @@ namespace Scripting {
 
         public Q_SLOTS:
 
-            /***** Page *****/
-
-            /** Return total number of pages the document has. */
+            /** Return project name. */
             QString projectName();
+            
+            /** Return the project. */
+            QObject *project();
 
         private:
             /// \internal d-pointer class.
