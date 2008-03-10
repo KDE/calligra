@@ -28,6 +28,7 @@
 class BasicElement;
 class QString;
 class QPainter;
+class QPointF;
 
 enum CursorDirection {
     MoveRight,
@@ -101,6 +102,9 @@ public:
 
     /// Move the cursor to the last position in the current element
     void moveEnd();
+
+    /// Set the cursor to the element at @p point
+    void setCursorTo( const QPointF& point );
 
     /// @return whether the cursor is at the first position
     bool isHome() const;

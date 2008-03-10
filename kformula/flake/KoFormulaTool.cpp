@@ -23,6 +23,7 @@
 #include "BasicElement.h"
 #include "FormulaCursor.h"
 #include <KoCanvasBase.h>
+#include <KoPointerEvent.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <kiconloader.h>
@@ -71,7 +72,7 @@ void KoFormulaTool::deactivate()
     m_formulaCursor = 0;
 }
 
-void KoFormulaTool::paint( QPainter &painter, const KoViewConverter &converter)
+void KoFormulaTool::paint( QPainter &painter, const KoViewConverter &converter )
 {
     painter.setMatrix( painter.matrix() *
                        m_formulaShape->absoluteTransformation( &converter ) );
@@ -82,31 +83,25 @@ void KoFormulaTool::paint( QPainter &painter, const KoViewConverter &converter)
     m_formulaCursor->paint( painter );
 }
 
+void KoFormulaTool::repaintCursor()
+{
+    canvas()->updateCanvas( m_formulaShape->boundingRect() );
+}
+
 void KoFormulaTool::mousePressEvent( KoPointerEvent *event )
 {
-    Q_UNUSED( event )
+    // Check if the event is valid means inside the shape
+    if( !m_formulaShape->boundingRect().contains( event->point ) )
+        return;
 
-// TODO implement the action and the elementAt method in FormulaShape
-//   m_formulaCursor->setCursorTo( m_formulaShape->elementAt( ) );
-//
-//
-//   from the old FormulaCursor implementation
-/*
-    FormulaElement* formula = getElement()->formula();
-    formula->goToPos( this, pos );
+    // transform the global coordinates into shape coordinates
+    QPointF p = m_formulaShape->absoluteTransformation(0).inverted().map( event->point );
 
-    setCursorToElement( m_container->childElementAt( pos ) );
-    if (flag & SelectMovement) {
-        setSelection(true);
-        if (getMark() == -1) {
-            setMark(getPos());
-        }
-    }
-    else {
-        setSelection(false);
-        setMark(getPos());
-    }
-*/
+    // set the cursor to element the user clicked to
+    m_formulaCursor->setCursorTo( p );
+
+    repaintCursor();
+    event->accept();
 }
 
 void KoFormulaTool::mouseDoubleClickEvent( KoPointerEvent *event )
@@ -168,12 +163,12 @@ void KoFormulaTool::keyPressEvent( QKeyEvent *event )
 	    m_formulaCursor->moveHome();
             break;
         default:
-            if( event->text().length() == 0 )
-                return;
-            m_formulaCursor->insertText( event->text() );
-            m_formulaShape->update();
+            if( event->text().length() != 0 ) {
+                m_formulaCursor->insertText( event->text() );
+                m_formulaShape->update();
+            }
     }
-    repaintDecorations();
+    repaintCursor();
     event->accept();
 }
 
@@ -232,9 +227,21 @@ void KoFormulaTool::setupActions()
     action->setData( QString( "mfrac" ) ); 
     addAction( "insert_fraction", action );
 
-    action = new QAction( i18n( "Insert table" ), this );
+    action = new QAction( i18n( "Insert 3x3 table" ), this );
     action->setData( QString( "mtable" ) ); 
-    addAction( "insert_table", action );
+    addAction( "insert_33table", action );
+
+    action = new QAction( i18n( "Insert 2x2 table" ), this );
+    action->setData( QString( "mtable" ) ); 
+    addAction( "insert_22table", action );
+
+    action = new QAction( i18n( "Insert 3 dimensional vector" ), this );
+    action->setData( QString( "mtable" ) ); 
+    addAction( "insert_31table", action );
+
+    action = new QAction( i18n( "Insert 2 dimensional vector" ), this );
+    action->setData( QString( "mtable" ) ); 
+    addAction( "insert_21table", action );
 
     action = new QAction( i18n( "Insert table row" ), this );
     action->setData( QString( "mtr" ) ); 

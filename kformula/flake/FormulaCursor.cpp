@@ -176,6 +176,31 @@ void FormulaCursor::move( CursorDirection direction )
     }
 }
 
+void FormulaCursor::setCursorTo( const QPointF& point )
+{
+    // find the formulaElement
+    BasicElement* formulaElement = m_currentElement;
+    while( formulaElement->parentElement() != 0 )
+        formulaElement = formulaElement->parentElement();
+
+    // find the element at the point
+    BasicElement* tmp = formulaElement->childElementAt( point );
+    m_currentElement = tmp;
+
+    // determine the correct position in the new element
+    if( tmp->elementType() == Basic )
+        m_positionInElement = 0;
+    else if( insideToken() ) {
+        // TODO
+    }
+    else if( tmp->parentElement()->elementType() == Row ) {
+        m_currentElement = tmp->parentElement();
+        m_positionInElement = m_currentElement->childElements().indexOf( tmp );
+    }
+    else
+        m_positionInElement = ( point.x() < tmp->boundingRect().center().x() ) ? 0 : 1;
+}
+
 void FormulaCursor::moveHome()
 {
     m_positionInElement = 0;

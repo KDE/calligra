@@ -78,6 +78,9 @@ protected:
     QWidget* createOptionWidget();
 	
 private:
+    /// Repaint the cursor and selection
+    void repaintCursor();
+
     /// Creates all the actions provided by the tool
     void setupActions();
 
