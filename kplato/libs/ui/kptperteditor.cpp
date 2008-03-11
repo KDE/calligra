@@ -39,15 +39,6 @@ PertEditor::PertEditor( KoDocument *part, QWidget *parent )
     kDebug() <<" ---------------- KPlato: Creating PertEditor ----------------";
     widget.setupUi(this);
 
-    //FIXME:
-    QTreeWidgetItem item;
-    m_enabledFont = item.font( 0 );
-    m_enabledBrush = item.foreground( 0 );
-    m_disabledFont = m_enabledFont;
-    m_disabledFont.setItalic( true );
-    m_disabledBrush = m_enabledBrush;
-    m_disabledBrush.setColor( Qt::lightGray );
-    
     m_tasktree = widget.taskList;
     m_tasktree->setSelectionMode( QAbstractItemView::SingleSelection );
     
@@ -60,8 +51,8 @@ PertEditor::PertEditor( KoDocument *part, QWidget *parent )
     connect( m_requiredList->model(), SIGNAL( executeCommand( QUndoCommand* ) ), part, SLOT( addCommand( QUndoCommand* ) ) );
     updateReadWrite( part->isReadWrite() );
     
-    widget.addBtn->setIcon( KIcon( "arrow-right-double" ) );
-    widget.removeBtn->setIcon( KIcon( "arrow-left-double" ) );
+    widget.addBtn->setIcon( KIcon( "arrow-right" ) );
+    widget.removeBtn->setIcon( KIcon( "arrow-left" ) );
     
     connect( m_tasktree, SIGNAL( currentItemChanged( QTreeWidgetItem *, QTreeWidgetItem * ) ), SLOT( slotCurrentTaskChanged( QTreeWidgetItem *, QTreeWidgetItem * ) ) );
     connect( m_availableList, SIGNAL( currentItemChanged( QTreeWidgetItem *, QTreeWidgetItem * ) ), SLOT( slotAvailableChanged( QTreeWidgetItem * ) ) );
@@ -328,16 +319,19 @@ void PertEditor::setAvailableItemEnabled( QTreeWidgetItem *item )
     //kDebug()<<item;
     Node *node = itemToNode( item );
     Q_ASSERT( node != 0 );
+    
     Node *selected = itemToNode( m_tasktree->currentItem() );
     if ( selected == 0 || ! m_project->legalToLink( node, selected ) ) {
         //kDebug()<<"Disable:"<<node->name();
-        item->setFont( 0, m_disabledFont) ;
-        item->setForeground( 0, m_disabledBrush );
+        QFont f = item->font( 0 );
+        f.setItalic( true );
+        item->setFont( 0, f );
         item->setFlags( item->flags() & ~Qt::ItemIsSelectable );
     } else {
         //kDebug()<<"Enable:"<<node->name();
-        item->setFont( 0, m_enabledFont) ;
-        item->setForeground( 0, m_enabledBrush );
+        QFont f = item->font( 0 );
+        f.setItalic( false );
+        item->setFont( 0, f );
         item->setFlags( item->flags() | Qt::ItemIsSelectable );
     }
 }

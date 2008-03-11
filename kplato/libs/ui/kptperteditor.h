@@ -119,9 +119,6 @@ private:
     RelationTreeView *m_requiredList;
     
     Ui::PertEditor widget;
-    
-    QFont m_disabledFont, m_enabledFont;
-    QBrush m_disabledBrush, m_enabledBrush;
 };
 
 }  //KPlato namespace
