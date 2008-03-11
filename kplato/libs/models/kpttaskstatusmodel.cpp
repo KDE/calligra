@@ -44,15 +44,19 @@ TaskStatusItemModel::TaskStatusItemModel( QObject *parent )
     m_nodemodel.setNow( QDate::currentDate() );
     
     m_topNames << i18n( "Not Started" );
+    m_topTips << i18n( "Tasks that should have been started" );
     m_top.append(&m_notstarted );
     
     m_topNames << i18n( "Running" );
+    m_topTips << i18n( "Tasks that are running" );
     m_top.append(&m_running );
     
     m_topNames << i18n( "Finished" );
+    m_topTips << i18n( "Tasks that have finished during this period" );
     m_top.append(&m_finished );
     
     m_topNames << i18n( "Next Period" );
+    m_topTips << i18n( "Tasks that are scheduled to start next period" );
     m_top.append(&m_upcoming );
     
 /*    connect( this, SIGNAL( modelAboutToBeReset() ), SLOT( slotAboutToBeReset() ) );
@@ -148,6 +152,7 @@ void TaskStatusItemModel::clear()
             //FIXME: gives error msg:
             // Can't select indexes from different model or with different parents
             QModelIndex i = index( l );
+            kDebug()<<i;
             beginRemoveRows( index( l ), 0, c-1 );
             l->clear();
             endRemoveRows();
@@ -195,6 +200,7 @@ void TaskStatusItemModel::refresh()
             endInsertRows();
         }
     }
+    emit layoutChanged(); //HACK to get views updated
 }
 
 Qt::ItemFlags TaskStatusItemModel::flags( const QModelIndex &index ) const
@@ -234,7 +240,7 @@ QModelIndex TaskStatusItemModel::parent( const QModelIndex &index ) const
 
 QModelIndex TaskStatusItemModel::index( int row, int column, const QModelIndex &parent ) const
 {
-    kDebug()<<row<<column<<parent;
+    //kDebug()<<row<<column<<parent;
     if ( m_project == 0 || column < 0 || column >= columnCount() || row < 0 ) {
         return QModelIndex();
     }
@@ -289,8 +295,9 @@ QVariant TaskStatusItemModel::name( int row, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::EditRole:
-        case Qt::ToolTipRole:
             return m_topNames.value( row );
+        case Qt::ToolTipRole:
+            return m_topTips.value( row );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -371,12 +378,12 @@ int TaskStatusItemModel::columnCount( const QModelIndex & ) const
 int TaskStatusItemModel::rowCount( const QModelIndex &parent ) const
 {
     if ( ! parent.isValid() ) {
-        kDebug()<<"top="<<m_top.count()<<m_top;
+        //kDebug()<<"top="<<m_top.count()<<m_top;
         return m_top.count();
     }
     NodeList *l = list( parent );
     if ( l ) {
-        kDebug()<<"list"<<parent.row()<<":"<<l->count()<<l;
+        //kDebug()<<"list"<<parent.row()<<":"<<l->count()<<l;
         return l->count();
     }
     //kDebug()<<"node"<<parent.row();
@@ -402,7 +409,7 @@ QMimeData *TaskStatusItemModel::mimeData( const QModelIndexList & indexes ) cons
     QList<int> rows;
     foreach (QModelIndex index, indexes) {
         if ( index.isValid() && !rows.contains( index.row() ) ) {
-            kDebug()<<index.row();
+            //kDebug()<<index.row();
             Node *n = node( index );
             if ( n ) {
                 rows << index.row();

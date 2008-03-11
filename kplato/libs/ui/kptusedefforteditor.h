@@ -140,6 +140,8 @@ protected:
     void addEntry( const QDate date );
     void refresh();
     
+    QList<double> scales() const;
+    
 private:
     Task *m_node;
     ScheduleManager *m_manager;

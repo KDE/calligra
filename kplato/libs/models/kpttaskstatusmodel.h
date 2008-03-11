@@ -103,6 +103,7 @@ protected:
 private:
     NodeModel m_nodemodel;
     QStringList m_topNames;
+    QStringList m_topTips;
     QList<NodeList*> m_top;
     NodeList m_notstarted;
     NodeList m_running;

@@ -446,25 +446,13 @@ QVariant CompletionEntryItemModel::remainingEffort ( int row, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-            //TODO
-            QList<double> scales;
             Duration::Unit unit = Duration::Unit_h;
-            if ( m_node && m_node->projectNode() ) {
-                Project *p = static_cast<Project*>( m_node->projectNode() );
-                unit = m_node->estimate()->unit();
-                QList<double> scales; // TODO: week
-                if ( m_node->estimate()->type() == Estimate::Type_Effort ) {
-                    scales << p->standardWorktime()->day();
-                    // rest is default
-                }
-            }
-            //double v = Estimate::scale( e->remainingEffort, unit, scales );
             double v = e->remainingEffort.toDouble( unit );
             //kDebug()<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
             return KGlobal::locale()->formatNumber( v, 1 ) +  Duration::unitToString( unit, true );
         }
         case Qt::EditRole:
-            return e->remainingEffort.milliseconds();
+            return e->remainingEffort.toDouble( Duration::Unit_h );
         case Role::DurationScales: {
             QVariantList lst; // TODO: week
             if ( m_node && m_node->projectNode() ) {
@@ -480,9 +468,6 @@ QVariant CompletionEntryItemModel::remainingEffort ( int row, int role ) const
             return lst;
         }
         case Role::DurationUnit:
-            if ( m_node ) {
-                return static_cast<int>( m_node->estimate()->unit() );
-            }
             return static_cast<int>( Duration::Unit_h );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -500,29 +485,18 @@ QVariant CompletionEntryItemModel::actualEffort ( int row, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-            //TODO
-            QList<double> scales;
             Duration::Unit unit = Duration::Unit_h;
-            if ( m_node && m_node->projectNode() ) {
-                Project *p = static_cast<Project*>( m_node->projectNode() );
-                unit = m_node->estimate()->unit();
-                QList<double> scales; // TODO: week
-                if ( m_node->estimate()->type() == Estimate::Type_Effort ) {
-                    scales << p->standardWorktime()->day();
-                    // rest is default
-                }
-            }
             double v = -1.0;
             if ( m_completion->entrymode() == Completion::EnterEffortPerResource ) {
-                v = Estimate::scale( m_completion->actualEffortTo( date( row ).toDate() ), unit, scales );
+                v = m_completion->actualEffortTo( date( row ).toDate() ).toDouble( unit );
             } else {
-                v = Estimate::scale( e->totalPerformed, unit, scales );
+                v = e->totalPerformed.toDouble( unit );
             }
             //kDebug()<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
             return KGlobal::locale()->formatNumber( v, 1 ) +  Duration::unitToString( unit, true );
         }
         case Qt::EditRole:
-            return e->totalPerformed.milliseconds();
+            return e->totalPerformed.toDouble( Duration::Unit_h );
         case Role::DurationScales: {
             QVariantList lst; // TODO: week
             if ( m_node && m_node->projectNode() ) {
@@ -538,9 +512,6 @@ QVariant CompletionEntryItemModel::actualEffort ( int row, int role ) const
             return lst;
         }
         case Role::DurationUnit:
-            if ( m_node ) {
-                return static_cast<int>( m_node->estimate()->unit() );
-            }
             return static_cast<int>( Duration::Unit_h );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -557,21 +528,9 @@ QVariant CompletionEntryItemModel::plannedEffort ( int row, int role ) const
     switch ( role ) {
         case Qt::DisplayRole:
         case Qt::ToolTipRole: {
-            //TODO
-            QList<double> scales;
             Duration::Unit unit = Duration::Unit_h;
-            if ( m_node && m_node->projectNode() ) {
-                Project *p = static_cast<Project*>( m_node->projectNode() );
-                unit = m_node->estimate()->unit();
-                QList<double> scales; // TODO: week
-                if ( m_node->estimate()->type() == Estimate::Type_Effort ) {
-                    scales << p->standardWorktime()->day();
-                    // rest is default
-                }
-            }
-            //double v = Estimate::scale( m_node->plannedEffort( m_manager->id() ), unit, scales );
             double v = m_node->plannedEffort( m_manager->id() ).toDouble( unit );
-            //kDebug()<<m_node->name()<<": "<<v<<" "<<unit<<" : "<<scales<<endl;
+            //kDebug()<<m_node->name()<<": "<<v<<" "<<unit;
             return KGlobal::locale()->formatNumber( v, 1 ) +  Duration::unitToString( unit, true );
         }
         case Qt::EditRole:
@@ -591,9 +550,6 @@ QVariant CompletionEntryItemModel::plannedEffort ( int row, int role ) const
             return lst;
         }
         case Role::DurationUnit:
-            if ( m_node ) {
-                return static_cast<int>( m_node->estimate()->unit() );
-            }
             return static_cast<int>( Duration::Unit_h );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
@@ -618,9 +574,27 @@ QVariant CompletionEntryItemModel::data ( const QModelIndex &index, int role ) c
     return QVariant();
 }
 
+QList<double> CompletionEntryItemModel::scales() const
+{
+    QList<double> lst;
+    if ( m_node && m_node->projectNode() ) {
+        Project *p = static_cast<Project*>( m_node->projectNode() );
+        if ( m_node->estimate()->type() == Estimate::Type_Effort ) {
+            lst.append( p->standardWorktime()->day() );
+        }
+    }
+    if ( lst.isEmpty() ) {
+        lst.append( 24.0 );
+    }
+    lst << 60.0 << 60.0 << 1000.0;
+    //kDebug()<<lst;
+    return lst;
+
+}
+
 bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant &value, int role )
 {
-    kDebug()<<endl;
+    //kDebug();
     switch ( role ) {
         case Qt::EditRole: {
             if ( idx.column() == 0 ) {
@@ -650,7 +624,9 @@ bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant 
                 if ( e == 0 ) {
                     return false;
                 }
-                Duration d( value.toList()[0].toLongLong() );
+                double v( value.toList()[0].toDouble() );
+                Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
+                Duration d = Estimate::scale( v, unit, scales() );
                 if ( d == e->totalPerformed ) {
                     return false;
                 }
@@ -663,7 +639,9 @@ bool CompletionEntryItemModel::setData ( const QModelIndex &idx, const QVariant 
                 if ( e == 0 ) {
                     return false;
                 }
-                Duration d( value.toList()[0].toLongLong() );
+                double v( value.toList()[0].toDouble() );
+                Duration::Unit unit = static_cast<Duration::Unit>( value.toList()[1].toInt() );
+                Duration d = Estimate::scale( v, unit, scales() );
                 if ( d == e->remainingEffort ) {
                     return false;
                 }

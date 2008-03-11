@@ -234,7 +234,7 @@ void TaskProgressPanel::slotAddResource()
 
 void TaskProgressPanel::slotEntryAdded( const QDate date )
 {
-    kDebug();
+    kDebug()<<date;
 }
 
 //-------------------------------------
@@ -269,7 +269,7 @@ TaskProgressPanelImpl::TaskProgressPanelImpl( Task &task, QWidget *parent )
     connect(resourceTable, SIGNAL(resourceAdded() ), SLOT( slotChanged() ) );
     
     connect(entryTable, SIGNAL(changed() ), SLOT( slotChanged() ) );
-    connect(entryTable, SIGNAL(entryAdded() ), SLOT( slotChanged() ) );
+    connect(entryTable, SIGNAL(rowInserted( const QDate ) ), SLOT( slotChanged() ) );
     
     connect( prevWeekBtn, SIGNAL( clicked( bool ) ), SLOT( slotPrevWeekBtnClicked() ) );
     connect( nextWeekBtn, SIGNAL( clicked( bool ) ), SLOT( slotNextWeekBtnClicked() ) );

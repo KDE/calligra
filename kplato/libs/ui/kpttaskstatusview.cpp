@@ -64,18 +64,17 @@ TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
     QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view
     masterView()->setDefaultColumns( QList<int>() << 0 );
     QList<int> show;
-    show << NodeModel::NodeStatus
-            << NodeModel::NodeCompleted
-            << NodeModel::NodePlannedEffort
+    show << NodeModel::NodeCompleted
             << NodeModel::NodeActualEffort
             << NodeModel::NodeRemainingEffort
+            << NodeModel::NodePlannedEffort
             << NodeModel::NodePlannedCost
             << NodeModel::NodeActualCost
+            << NodeModel::NodeStatus
             << NodeModel::NodeStarted
             << NodeModel::NodeFinished
             << NodeModel::NodeStatusNote;
 
-    slaveView()->setDefaultColumns( show );
     QList<int> lst2; 
     for ( int i = 0; i < m->columnCount(); ++i ) {
         if ( ! show.contains( i ) ) {
@@ -83,6 +82,7 @@ TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
         }
     }
     hideColumns( lst1, lst2 );
+    slaveView()->setDefaultColumns( show );
 }
 
 TaskStatusItemModel *TaskStatusTreeView::model() const
