@@ -76,16 +76,16 @@ ItemViewSettup::ItemViewSettup( TreeViewBase *view, bool includeColumn0, QWidget
         selector->selectedListWidget()->addItem( i );
     }
 
-    connect( stretchLastSection, SIGNAL( stateChanged ( int ) ), this, SLOT( changed() ) );
+    connect( stretchLastSection, SIGNAL( stateChanged ( int ) ), this, SLOT( slotChanged() ) );
     
-    connect( selector, SIGNAL( added (QListWidgetItem *) ), this, SLOT( changed() ) );
-    connect( selector, SIGNAL( removed (QListWidgetItem *) ), this, SLOT( changed() ) );
-    connect( selector, SIGNAL( movedUp (QListWidgetItem *) ), this, SLOT( changed() ) );
-    connect( selector, SIGNAL( movedDown (QListWidgetItem *) ), this, SLOT( changed() ) );
+    connect( selector, SIGNAL( added (QListWidgetItem *) ), this, SLOT( slotChanged() ) );
+    connect( selector, SIGNAL( removed (QListWidgetItem *) ), this, SLOT( slotChanged() ) );
+    connect( selector, SIGNAL( movedUp (QListWidgetItem *) ), this, SLOT( slotChanged() ) );
+    connect( selector, SIGNAL( movedDown (QListWidgetItem *) ), this, SLOT( slotChanged() ) );
 
 }
 
-void ItemViewSettup::changed()
+void ItemViewSettup::slotChanged()
 {
     emit enableButtonOk( true );
 }
@@ -144,7 +144,7 @@ ItemViewSettupDialog::ItemViewSettupDialog( TreeViewBase *view, bool includeColu
     m_panel = new ItemViewSettup( view, includeColumn0, this );
     setMainWidget( m_panel );
     
-    connect( m_panel, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
+    //connect( m_panel, SIGNAL( enableButtonOk( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
     
     connect( this, SIGNAL( okClicked() ), m_panel, SLOT( slotOk() ) );
     connect( this, SIGNAL( defaultClicked() ), m_panel, SLOT( setDefault() ) );
@@ -162,19 +162,40 @@ SplitItemViewSettupDialog::SplitItemViewSettupDialog( DoubleTreeViewBase *view, 
     bool nodef = view->masterView()->defaultColumns().isEmpty() || view->slaveView()->defaultColumns().isEmpty();
     button( Default )->setEnabled( ! nodef );
     
-    m_page1 = new ItemViewSettup( view->masterView(), true, this );
-    m_page2 = new ItemViewSettup( view->slaveView(), true, this );
+    m_page1 = new ItemViewSettup( view->masterView(), true );
+    KPageWidgetItem *page = new KPageWidgetItem( m_page1, i18n( "Main View" ) );
+    page->setHeader( i18n( "Main View Column Configuration" ) );
+    addPage( page );
+    m_pageList.append( page );
     
-    addPage( m_page1, i18n( "Master" ) );
-    addPage( m_page2, i18n( "Slave" ) );
+    m_page2 = new ItemViewSettup( view->slaveView(), true );
+    page = new KPageWidgetItem( m_page2, i18n( "Auxcilliary View" ) );
+    page->setHeader( i18n( "Auxcilliary View Column Configuration" ) );
+    addPage( page );
+    m_pageList.append( page );
     
-    connect( m_page1, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
-    connect( m_page2, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
+    //connect( m_page1, SIGNAL( enableButtonOk( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
+    //connect( m_page2, SIGNAL( enableButtonOk( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
     
     connect( this, SIGNAL( okClicked() ), m_page1, SLOT( slotOk() ) );
     connect( this, SIGNAL( okClicked() ), m_page2, SLOT( slotOk() ) );
     connect( this, SIGNAL( defaultClicked() ), m_page1, SLOT( setDefault() ) );
     connect( this, SIGNAL( defaultClicked() ), m_page2, SLOT( setDefault() ) );
+}
+
+KPageWidgetItem *SplitItemViewSettupDialog::insertWidget( int index, QWidget *widget, const QString &name, const QString &header )
+{
+    KPageWidgetItem *before = m_pageList.value( index );
+    KPageWidgetItem *page = new KPageWidgetItem( widget, name );
+    page->setHeader( header );
+    if ( before ) {
+        insertPage( before, page );
+        m_pageList.insert( index, page );
+    } else {
+        addPage( page );
+        m_pageList.append( page );
+    }
+    return page;
 }
 
 } //namespace KPlato

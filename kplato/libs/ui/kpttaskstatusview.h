@@ -25,6 +25,8 @@
 #include "kptitemmodelbase.h"
 
 #include "kptviewbase.h"
+#include "ui_kpttaskstatusviewsettingspanel.h"
+#include "kptitemviewsettup.h"
 
 class KoDocument;
 
@@ -48,6 +50,7 @@ class KPLATOUI_EXPORT TaskStatusTreeView : public DoubleTreeViewBase
 public:
     TaskStatusTreeView( QWidget *parent );
     
+    
     //void setSelectionModel( QItemSelectionModel *selectionModel );
 
     TaskStatusItemModel *model() const;
@@ -55,12 +58,24 @@ public:
     Project *project() const;
     void setProject( Project *project );
     
+    
+    int defaultWeekday() const { return Qt::Friday; }
+    int weekday() const;
+    void setWeekday( int day );
+    
+    int defaultPeriod() const { return 7; }
+    int period() const;
+    void setPeriod( int days );
+
+    int defaultPeriodType() const;
+    int periodType() const;
+    void setPeriodType( int type );
+
 protected slots:
     void slotActivated( const QModelIndex index );
     
 protected:
     void dragMoveEvent(QDragMoveEvent *event);
-
 };
 
 
@@ -112,6 +127,32 @@ private:
 
     // View options context menu
     KAction *actionOptions;
+};
+
+//--------------------------------------
+class TaskStatusViewSettingsPanel : public QWidget, public Ui::TaskStatusViewSettingsPanel
+{
+    Q_OBJECT
+public:
+    explicit TaskStatusViewSettingsPanel( TaskStatusTreeView *view, QWidget *parent = 0 );
+
+public slots:
+    void slotOk();
+    void setDefault();
+
+signals:
+    void changed();
+
+private:
+    TaskStatusTreeView *m_view;
+};
+
+class TaskStatusViewSettingsDialog : public SplitItemViewSettupDialog
+{
+    Q_OBJECT
+public:
+    TaskStatusViewSettingsDialog( TaskStatusTreeView *view, QWidget *parent = 0 );
+
 };
 
 

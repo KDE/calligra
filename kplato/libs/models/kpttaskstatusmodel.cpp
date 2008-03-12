@@ -39,10 +39,11 @@ namespace KPlato
 
 TaskStatusItemModel::TaskStatusItemModel( QObject *parent )
     : ItemModelBase( parent ),
-    m_period( 7 )
+    m_period( 7 ),
+    m_periodType( UseCurrentDate ),
+    m_weekday( Qt::Friday )
+
 {
-    m_nodemodel.setNow( QDate::currentDate() );
-    
     m_topNames << i18n( "Not Started" );
     m_topTips << i18n( "Tasks that should have been started" );
     m_top.append(&m_notstarted );
@@ -160,6 +161,25 @@ void TaskStatusItemModel::clear()
     }
 }
 
+void TaskStatusItemModel::setNow()
+{
+    switch ( m_periodType ) {
+        case UseWeekday: {
+            QDate date = QDate::currentDate();
+            int wd = date.dayOfWeek();
+            date = date.addDays( m_weekday - wd );
+            if ( wd < m_weekday ) {
+                date = date.addDays( -7 );
+            }
+            m_nodemodel.setNow( date );
+            break; }
+        case UseCurrentDate: m_nodemodel.setNow( QDate::currentDate() ); break;
+        default: 
+            m_nodemodel.setNow( QDate::currentDate() );
+            break;
+    }
+}
+
 void TaskStatusItemModel::refresh()
 {
     clear();
@@ -170,6 +190,7 @@ void TaskStatusItemModel::refresh()
     if ( m_id == -1 ) {
         return;
     }
+    setNow();
     QDate begin = m_nodemodel.now().addDays( -m_period );
     QDate end = m_nodemodel.now().addDays( m_period );
     

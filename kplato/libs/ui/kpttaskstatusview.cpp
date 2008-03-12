@@ -21,7 +21,6 @@
 #include "kpttaskstatusmodel.h"
 
 #include "kptglobal.h"
-#include "kptitemviewsettup.h"
 #include "kptcommand.h"
 #include "kptproject.h"
 #include "kptschedule.h"
@@ -83,6 +82,44 @@ TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
     }
     hideColumns( lst1, lst2 );
     slaveView()->setDefaultColumns( show );
+}
+
+int TaskStatusTreeView::weekday() const
+{
+    return model()->weekday();
+}
+
+void TaskStatusTreeView::setWeekday( int day )
+{
+    model()->setWeekday( day );
+    refresh();
+}
+
+int TaskStatusTreeView::defaultPeriodType() const
+{
+    return TaskStatusItemModel::UseCurrentDate;
+}
+
+int TaskStatusTreeView::periodType() const
+{
+    return model()->periodType();
+}
+
+void TaskStatusTreeView::setPeriodType( int type )
+{
+    model()->setPeriodType( type );
+    refresh();
+}
+
+int TaskStatusTreeView::period() const
+{
+    return model()->period();
+}
+
+void TaskStatusTreeView::setPeriod( int days )
+{
+    model()->setPeriod( days );
+    refresh();
 }
 
 TaskStatusItemModel *TaskStatusTreeView::model() const
@@ -269,20 +306,93 @@ void TaskStatusView::slotSplitView()
 void TaskStatusView::slotOptions()
 {
     kDebug();
-    SplitItemViewSettupDialog dlg( m_view );
+    TaskStatusViewSettingsDialog dlg( m_view );
     dlg.exec();
 }
 
 bool TaskStatusView::loadContext( const KoXmlElement &context )
 {
     kDebug();
+    m_view->setPeriod( context.attribute( "period", QString("%1").arg( m_view->defaultPeriod() ) ).toInt() );
+    
+    m_view->setPeriodType( context.attribute( "periodtype", QString("%1").arg( m_view->defaultPeriodType() ) ).toInt() );
+    
+    m_view->setWeekday( context.attribute( "weekday", QString("%1").arg( m_view->defaultWeekday() ) ).toInt() );
     return m_view->loadContext( model()->columnMap(), context );
 }
 
 void TaskStatusView::saveContext( QDomElement &context ) const
 {
+    context.setAttribute( "period", m_view->period() );
+    context.setAttribute( "periodtype", m_view->periodType() );
+    context.setAttribute( "weekday", m_view->weekday() );
     m_view->saveContext( model()->columnMap(), context );
 }
+
+//------------------------------------------------
+TaskStatusViewSettingsPanel::TaskStatusViewSettingsPanel( TaskStatusTreeView *view, QWidget *parent )
+    : QWidget( parent ),
+    m_view( view )
+{
+    setupUi( this );
+    
+    QStringList lst;
+    for ( int i = 1; i <= 7; ++i ) {
+        lst << QDate::longDayName( i );
+    }
+    weekdays->addItems( lst );
+    period->setValue( view->period() );
+    switch ( view->periodType() ) {
+        case TaskStatusItemModel::UseCurrentDate: useCurrentDate->setChecked( true ); break;
+        case TaskStatusItemModel::UseWeekday: useWeekday->setChecked( true ); break;
+        default: break;
+    }
+    weekdays->setCurrentIndex( m_view->weekday() - 1 );
+    
+    connect( period, SIGNAL( valueChanged( int ) ), SIGNAL( changed() ) );
+    connect( useWeekday, SIGNAL( toggled( bool ) ), SIGNAL( changed() ) );
+    connect( useCurrentDate, SIGNAL( toggled( bool ) ), SIGNAL( changed() ) );
+    connect( weekdays, SIGNAL( currentIndexChanged( int ) ), SIGNAL( changed() ) );
+}
+
+void TaskStatusViewSettingsPanel::slotOk()
+{
+    if ( period->value() != m_view->period() ) {
+        m_view->setPeriod( period->value() );
+    }
+    if ( weekdays->currentIndex() != m_view->weekday() - 1 ) {
+        m_view->setWeekday( weekdays->currentIndex() + 1 );
+    }
+    if ( useCurrentDate->isChecked() && m_view->periodType() != TaskStatusItemModel::UseCurrentDate ) {
+        m_view->setPeriodType( TaskStatusItemModel::UseCurrentDate );
+    } else if ( useWeekday->isChecked() && m_view->periodType() != TaskStatusItemModel::UseWeekday ) {
+        m_view->setPeriodType( TaskStatusItemModel::UseWeekday );
+    }
+}
+
+void TaskStatusViewSettingsPanel::setDefault()
+{
+    period->setValue( m_view->defaultPeriod() );
+    switch ( m_view->defaultPeriodType() ) {
+        case TaskStatusItemModel::UseCurrentDate: useCurrentDate->setChecked( true ); break;
+        case TaskStatusItemModel::UseWeekday: useWeekday->setChecked( true ); break;
+        default: break;
+    }
+    weekdays->setCurrentIndex( m_view->defaultWeekday() - 1 );
+}
+
+TaskStatusViewSettingsDialog::TaskStatusViewSettingsDialog( TaskStatusTreeView *view, QWidget *parent )
+    : SplitItemViewSettupDialog( view, parent )
+{
+    TaskStatusViewSettingsPanel *panel = new TaskStatusViewSettingsPanel( view );
+    KPageWidgetItem *page = insertWidget( 0, panel, i18n( "General" ), i18n( "General Settings" ) );
+    setCurrentPage( page );
+    //connect( panel, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
+    
+    connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
+    connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
+}
+
 
 
 

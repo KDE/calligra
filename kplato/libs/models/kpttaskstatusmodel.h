@@ -43,6 +43,10 @@ public:
     explicit TaskStatusItemModel( QObject *parent = 0 );
     ~TaskStatusItemModel();
     
+    enum PeriodType { UseCurrentDate, UseWeekday };
+    int periodType() const { return m_periodType; }
+    void setPeriodType( int type ) { m_periodType = type; }
+    
     /// Returns a column number/- name map for this model
     virtual const QMetaEnum columnMap() const { return m_nodemodel.columnMap(); }
 
@@ -82,8 +86,11 @@ public:
     void clear();
     void refresh();
     
-    void setNow( const QDate &date ) { m_nodemodel.setNow( date ); }
+    void setNow();
     void setPeriod( int days ) { m_period = days; }
+    int period() const { return m_period; }
+    void setWeekday( int day ) { m_weekday = day; }
+    int weekday() const { return m_weekday; }
     
 protected slots:
     void slotAboutToBeReset();
@@ -111,7 +118,10 @@ private:
     NodeList m_upcoming;
     
     long m_id; // schedule id
-    int m_period;
+    int m_period; // days
+    int m_periodType;
+    int m_weekday;
+
 };
 
 } //namespace KPlato

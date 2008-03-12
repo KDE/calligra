@@ -38,7 +38,7 @@ class ItemViewSettup : public QWidget, public Ui::ItemViewSettings
 {
     Q_OBJECT
 public:
-    explicit ItemViewSettup( TreeViewBase *view, bool includeColumn0, QWidget *parent );
+    explicit ItemViewSettup( TreeViewBase *view, bool includeColumn0, QWidget *parent = 0 );
     
     class Item : public QListWidgetItem
     {
@@ -54,7 +54,7 @@ signals:
     void enableButtonOk( bool );
     
 public slots:
-    void changed();
+    void slotChanged();
     void slotOk();
     void setDefault();
     
@@ -79,11 +79,13 @@ class SplitItemViewSettupDialog : public KPageDialog
 public:
     explicit SplitItemViewSettupDialog( DoubleTreeViewBase *view, QWidget *parent = 0 );
 
+    KPageWidgetItem *insertWidget( int before, QWidget *widget, const QString &name, const QString &header );
+    
 private:
+    QList<KPageWidgetItem*> m_pageList;
     ItemViewSettup *m_page1;
     ItemViewSettup *m_page2;
 };
-
 
 } //namespace KPlato
 
