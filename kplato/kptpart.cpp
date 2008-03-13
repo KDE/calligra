@@ -449,11 +449,6 @@ void Part::slotViewDestroyed()
 {
 }
 
-void Part::generateWBS()
-{
-    m_project->generateWBS( 1, m_wbsDefinition );
-}
-
 void Part::activate( QWidget *w )
 {
     if ( manager() )

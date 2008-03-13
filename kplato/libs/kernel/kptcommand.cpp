@@ -2971,5 +2971,22 @@ void DocumentModifySendAsCmd::unexecute()
     m_doc->setSendAs( m_oldvalue );
 }
 
+//----------------
+WBSDefinitionModifyCmd::WBSDefinitionModifyCmd( Project &project, const WBSDefinition value, const QString& name )
+    : NamedCommand( name ),
+    m_project( project )
+{
+    m_newvalue = value;
+    m_oldvalue = m_project.wbsDefinition();
+}
+void WBSDefinitionModifyCmd::execute()
+{
+    m_project.setWbsDefinition( m_newvalue );
+}
+void WBSDefinitionModifyCmd::unexecute()
+{
+    m_project.setWbsDefinition( m_oldvalue );
+}
+
 
 }  //KPlato namespace

@@ -60,7 +60,7 @@ void SummaryTaskGeneralPanel::setStartValues(Task &task) {
     leaderfield->setText(task.leader());
     descriptionfield->setText(task.description());
     idfield->setText(task.id());
-    wbsfield->setText(task.wbs());
+    wbsfield->setText(task.wbsCode());
     
     namefield->setFocus();
     

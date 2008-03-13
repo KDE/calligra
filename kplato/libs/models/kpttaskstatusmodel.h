@@ -84,7 +84,6 @@ public:
     bool dropAllowed( Node *on, const QMimeData *data );
     
     void clear();
-    void refresh();
     
     void setNow();
     void setPeriod( int days ) { m_period = days; }
@@ -92,6 +91,9 @@ public:
     void setWeekday( int day ) { m_weekday = day; }
     int weekday() const { return m_weekday; }
     
+public slots:
+    void refresh();
+
 protected slots:
     void slotAboutToBeReset();
     void slotReset();

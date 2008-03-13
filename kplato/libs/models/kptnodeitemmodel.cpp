@@ -1280,10 +1280,10 @@ QVariant NodeModel::wbsCode( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return node->wbs();
+            return node->wbsCode();
             break;
         case Qt::ToolTipRole:
-            return i18n( "Work breakdown structure code: %1", node->wbs() );
+            return i18n( "Work breakdown structure code: %1", node->wbsCode() );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1581,9 +1581,15 @@ void NodeItemModel::slotLayoutChanged()
     emit layoutChanged();
 }
 
+void NodeItemModel::slotProjectChanged()
+{
+    reset();
+}
+
 void NodeItemModel::setProject( Project *project )
 {
     if ( m_project ) {
+        connect( m_project, SIGNAL( changed() ), this, SLOT( slotProjectChanged() ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
@@ -1598,6 +1604,7 @@ void NodeItemModel::setProject( Project *project )
     //kDebug()<<m_project<<"->"<<project;
     m_nodemodel.setProject( project );
     if ( project ) {
+        connect( m_project, SIGNAL( changed() ), this, SLOT( slotProjectChanged() ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );

@@ -333,8 +333,6 @@ bool Task::load(KoXmlElement &element, XMLLoaderObject &status ) {
     m_startupCost = element.attribute("startup-cost", "0.0").toDouble();
     m_shutdownCost = element.attribute("shutdown-cost", "0.0").toDouble();
     
-    m_wbs = element.attribute("wbs", "");
-    
     // Load the task children
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -435,7 +433,7 @@ void Task::save(QDomElement &element)  const {
     me.setAttribute("startup-cost", m_startupCost);
     me.setAttribute("shutdown-cost", m_shutdownCost);
     
-    me.setAttribute("wbs", m_wbs);
+    me.setAttribute("wbs", wbsCode()); //NOTE: included for information
     
     m_estimate->save(me);
 
@@ -489,7 +487,7 @@ void Task::saveWorkPackageXML(QDomElement &element, long id )  const
     me.setAttribute("startup-cost", m_startupCost);
     me.setAttribute("shutdown-cost", m_shutdownCost);
     
-    me.setAttribute("wbs", m_wbs);
+    me.setAttribute("wbs", wbsCode()); // NOTE: included for information
     
     m_estimate->save(me);
 

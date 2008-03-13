@@ -19,7 +19,6 @@
 
 #include "kptwbsdefinition.h"
 
-
 #include <klocale.h>
 #include <kdebug.h>
 
@@ -45,7 +44,22 @@ WBSDefinition::WBSDefinition() {
     m_codeLists.append(qMakePair(QString("Letter, lower case"), i18n("Letter, lower case")));
 }
 
+WBSDefinition::WBSDefinition( const WBSDefinition &def ) {
+    (void)this->operator=( def );
+}
+
 WBSDefinition::~WBSDefinition() {
+}
+
+WBSDefinition &WBSDefinition::operator=( const WBSDefinition &def ) {
+    m_projectCode = def.m_projectCode;
+    m_projectSeparator = def.m_projectSeparator;
+    m_defaultDef.code = def.m_defaultDef.code;
+    m_defaultDef.separator = def.m_defaultDef.separator;
+    m_levelsEnabled = def.m_levelsEnabled;
+    m_levelsDef = def.m_levelsDef;
+    m_codeLists = def.m_codeLists;
+    return *this;
 }
 
 void WBSDefinition::clear() {
@@ -53,7 +67,7 @@ void WBSDefinition::clear() {
     m_levelsDef.clear();
 }
     
-QString WBSDefinition::wbs(uint index, int level) {
+QString WBSDefinition::wbs(uint index, int level) const {
     if (isLevelsDefEnabled()) {
         CodeDef def = levelsDef(level);
         if (!def.isEmpty()) {
@@ -64,7 +78,7 @@ QString WBSDefinition::wbs(uint index, int level) {
 }
 
 
-QString WBSDefinition::code(uint index, int level) {
+QString WBSDefinition::code(uint index, int level) const {
     if (isLevelsDefEnabled()) {
         CodeDef def = levelsDef(level);
         if (!def.isEmpty()) {
@@ -74,7 +88,7 @@ QString WBSDefinition::code(uint index, int level) {
     return code(m_defaultDef, index);
 }
 
-QString WBSDefinition::separator(int level) {
+QString WBSDefinition::separator(int level) const {
     if (isLevelsDefEnabled()) {
         CodeDef def = levelsDef(level);
         if (!def.isEmpty()) {
@@ -101,13 +115,13 @@ void WBSDefinition::setLevelsDef(int level, const QString& c, const QString& s) 
     m_levelsDef.insert(level, CodeDef(c, s));
 }
 
-bool WBSDefinition::level0Enabled() {
+bool WBSDefinition::level0Enabled() const {
     return m_levelsEnabled && !levelsDef(0).isEmpty();
 }
 
 const QChar Letters[] = { '?','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z' };
 
-QString WBSDefinition::code(CodeDef &def, uint index) {
+QString WBSDefinition::code(const CodeDef &def, uint index) const {
     if (def.code == "Number") {
         return QString("%1").arg(index);
     }
@@ -138,7 +152,7 @@ const QByteArray RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx
 const QByteArray RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
 const QByteArray RNThousands[] = {"", "m", "mm", "mmm"};
 
-QString WBSDefinition::toRoman( int n, bool upper )
+QString WBSDefinition::toRoman( int n, bool upper ) const
 {
     if ( n >= 0 ) {
         QString s = QString::fromLatin1( RNThousands[ ( n / 1000 ) ] +
@@ -153,10 +167,10 @@ QString WBSDefinition::toRoman( int n, bool upper )
     }
 }
 
-QStringList WBSDefinition::codeList() {
+QStringList WBSDefinition::codeList() const {
     QStringList cl;
-    QList<QPair<QString, QString> >::Iterator it;
-    for (it = m_codeLists.begin(); it != m_codeLists.end(); ++it) {
+    QList<QPair<QString, QString> >::ConstIterator it;
+    for (it = m_codeLists.constBegin(); it != m_codeLists.constEnd(); ++it) {
         cl.append((*it).second);
     }
     return cl;
@@ -183,6 +197,64 @@ bool WBSDefinition::setDefaultCode(uint index) {
 
 void WBSDefinition::setDefaultSeparator(const QString& s) {
     m_defaultDef.separator = s;
+}
+
+bool WBSDefinition::loadXML(KoXmlElement &element, XMLLoaderObject & ) {
+    m_projectCode = element.attribute( "project-code" );
+    m_projectSeparator = element.attribute( "project-separator" );
+    m_levelsEnabled = (bool)element.attribute( "levels-enabled", "0" ).toInt();
+    KoXmlNode n = element.firstChild();
+    for ( ; ! n.isNull(); n = n.nextSibling() ) {
+        if ( ! n.isElement() ) {
+            continue;
+        }
+        KoXmlElement e = n.toElement();
+        if (e.tagName() == "default") {
+            m_defaultDef.code = e.attribute( "code", "Number" );
+            m_defaultDef.separator = e.attribute( "separator", "." );
+        } else if (e.tagName() == "levels") {
+            KoXmlNode n = e.firstChild();
+            for ( ; ! n.isNull(); n = n.nextSibling() ) {
+                if ( ! n.isElement() ) {
+                    continue;
+                }
+                KoXmlElement el = n.toElement();
+                CodeDef d;
+                d.code = el.attribute( "code" );
+                d.separator = el.attribute( "separator" );
+                int lvl = el.attribute( "level", "-1" ).toInt();
+                if ( lvl >= 0 ) {
+                    setLevelsDef( lvl, d );
+                } else kError()<<"Invalid levels definition";
+            }
+        }
+    }
+    return true;
+}
+
+void WBSDefinition::saveXML(QDomElement &element)  const {
+    QDomElement me = element.ownerDocument().createElement("wbs-definition");
+    element.appendChild(me);
+
+    me.setAttribute( "project-code", m_projectCode );
+    me.setAttribute( "project-separator", m_projectSeparator );
+    me.setAttribute( "levels-enabled", m_levelsEnabled );
+    if ( ! m_levelsDef.isEmpty() ) {
+        QDomElement ld = element.ownerDocument().createElement("levels");
+        me.appendChild(ld);
+        QMap<int, CodeDef>::ConstIterator it;
+        for (it = m_levelsDef.constBegin(); it != m_levelsDef.constEnd(); ++it) {
+            QDomElement l = element.ownerDocument().createElement("level");
+            ld.appendChild(l);
+            l.setAttribute( "level", it.key() );
+            l.setAttribute( "code", it.value().code );
+            l.setAttribute( "separator", it.value().separator );
+        }
+    }
+    QDomElement cd = element.ownerDocument().createElement("default");
+    me.appendChild(cd);
+    cd.setAttribute("code", m_defaultDef.code);
+    cd.setAttribute("separator", m_defaultDef.separator);
 }
 
 } //namespace KPlato

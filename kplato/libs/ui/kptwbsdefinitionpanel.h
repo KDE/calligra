@@ -27,12 +27,13 @@
 #include <QItemDelegate>
 #include <QWidget>
 
+class QUndoCommand;
 
 namespace KPlato
 {
 
 class WBSDefinition;
-class MacroCommand;
+class Project;
 
 class ComboBoxDelegate : public QItemDelegate
 {
@@ -56,9 +57,9 @@ private:
 class WBSDefinitionPanel : public QWidget, public Ui_WBSDefinitionPanelBase {
     Q_OBJECT
 public:
-    explicit WBSDefinitionPanel(WBSDefinition &def, QWidget *parent=0, const char *name=0);
+    explicit WBSDefinitionPanel( Project &project, WBSDefinition &def, QWidget *parent=0, const char *name=0);
 
-    MacroCommand *buildCommand();
+    QUndoCommand *buildCommand();
 
     bool ok();
 
@@ -75,8 +76,9 @@ protected slots:
     void slotLevelChanged(int);
     void slotLevelsGroupToggled(bool on);
 private:
-    int selectedRow;
+    Project &m_project;
     WBSDefinition &m_def;
+    int selectedRow;
 };
 
 } //KPlato namespace

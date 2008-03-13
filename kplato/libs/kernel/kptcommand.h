@@ -28,6 +28,7 @@
 #include "kptnode.h"
 #include "kptduration.h"
 #include "kpttask.h"
+#include "kptwbsdefinition.h"
 
 class QString;
 /**
@@ -1527,6 +1528,17 @@ class KPLATOKERNEL_EXPORT DocumentModifySendAsCmd : public NamedCommand
         Document *m_doc;
         Document::SendAs m_value;
         Document::SendAs m_oldvalue;
+};
+
+class KPLATOKERNEL_EXPORT WBSDefinitionModifyCmd : public NamedCommand
+{
+public:
+    WBSDefinitionModifyCmd( Project &project, const WBSDefinition value, const QString& name = QString() );
+    void execute();
+    void unexecute();
+private:
+    Project &m_project;
+    WBSDefinition m_newvalue, m_oldvalue;
 };
 
 

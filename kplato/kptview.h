@@ -149,7 +149,6 @@ public slots:
     void slotAddMilestone();
     void slotProjectEdit();
     void slotDefineWBS();
-    void slotGenerateWBS();
 
     void slotCreateView();
     void slotCreateKofficeDocument( KoDocumentEntry& );
@@ -305,7 +304,6 @@ private:
 
     // ------ Tools
     KAction *actionDefineWBS;
-    KAction *actionGenerateWBS;
 
     // ------ Settings
     KAction *actionConfigure;

@@ -1005,16 +1005,19 @@ int Node::level() {
     return n ? n->level() + 1 : 0;
 }
 
-void Node::generateWBS(int count, WBSDefinition &def, const QString& wbs) {
-    m_wbs = wbs + def.code(count, level());
-    //kDebug()<<m_name<<" wbs:"<<m_wbs;
-    QString w = wbs + def.wbs(count, level());
-    QListIterator<Node*> it = m_nodes;
-    int i=0;
-    while (it.hasNext()) {
-        it.next()->generateWBS(++i, def, w);
+QString Node::generateWBSCode( QList<int> &indexes ) const {
+    //kDebug()<<m_name<<indexes;
+    if ( m_parent == 0 ) {
+        return QString();
     }
+    indexes.insert( 0, m_parent->indexOf( this ) );
+    return m_parent->generateWBSCode( indexes );
+}
 
+QString Node::wbsCode() const {
+    //kDebug()<<m_name;
+    QList<int> indexes;
+    return generateWBSCode( indexes );
 }
 
 bool Node::isScheduled( long id ) const

@@ -108,6 +108,7 @@ void TaskStatusItemModel::setProject( Project *project )
 {
     clear();
     if ( m_project ) {
+        disconnect( m_project, SIGNAL( changed() ), this, SLOT( refresh() ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node* ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
@@ -120,6 +121,7 @@ void TaskStatusItemModel::setProject( Project *project )
     m_project = project;
     m_nodemodel.setProject( project );
     if ( project ) {
+        connect( m_project, SIGNAL( changed() ), this, SLOT( refresh() ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
@@ -130,7 +132,7 @@ void TaskStatusItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( nodeMoved( Node* ) ), this, SLOT( slotLayoutChanged() ) );
         
     }
-    refresh();
+    reset();
 }
 
 void TaskStatusItemModel::setManager( ScheduleManager *sm )
@@ -141,6 +143,7 @@ void TaskStatusItemModel::setManager( ScheduleManager *sm )
     m_nodemodel.setManager( sm );
     if ( sm ) {
     }
+    reset();
     refresh();
 }
 
@@ -153,8 +156,8 @@ void TaskStatusItemModel::clear()
             //FIXME: gives error msg:
             // Can't select indexes from different model or with different parents
             QModelIndex i = index( l );
-            kDebug()<<i;
-            beginRemoveRows( index( l ), 0, c-1 );
+            kDebug()<<i<<0<<c-1;
+            beginRemoveRows( i, 0, c-1 );
             l->clear();
             endRemoveRows();
         }
@@ -182,6 +185,7 @@ void TaskStatusItemModel::setNow()
 
 void TaskStatusItemModel::refresh()
 {
+    //kDebug();
     clear();
     if ( m_project == 0 ) {
         return;
@@ -217,6 +221,7 @@ void TaskStatusItemModel::refresh()
     foreach ( NodeList *l, m_top ) {
         int c = l->count();
         if ( c > 0 ) {
+            kDebug()<<index(l)<<0<<c-1;
             beginInsertRows( index( l ), 0, c-1 );
             endInsertRows();
         }
@@ -276,7 +281,7 @@ QModelIndex TaskStatusItemModel::index( int row, int column, const QModelIndex &
         return QModelIndex();
     }
     if ( row >= rowCount( parent ) ) {
-        kWarning()<<"Row >= rowCount, Qt4.4 asks, so we need to handle it";
+        kWarning()<<"Row >= rowCount, Qt4.4 asks, so we need to handle it"<<parent<<row<<column;
         return QModelIndex();
     }
     QModelIndex i = createIndex(row, column, l->value( row ) );

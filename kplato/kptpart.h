@@ -72,8 +72,7 @@ public:
     Config &config() { return m_config; }
     Context *context() const { return m_context; }
     
-    void generateWBS();
-    WBSDefinition &wbsDefinition() { return m_wbsDefinition; }
+    WBSDefinition &wbsDefinition() { return m_project->wbsDefinition(); }
 
     const XMLLoaderObject &xmlLoader() const { return m_xmlLoader; }
     
@@ -114,8 +113,6 @@ private:
 
     Config m_config;
     Context *m_context;
-
-    WBSDefinition m_wbsDefinition;
 
     XMLLoaderObject m_xmlLoader;
 };

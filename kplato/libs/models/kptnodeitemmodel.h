@@ -252,6 +252,7 @@ public:
     virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
     
 protected slots:
+    void slotProjectChanged();
     void slotNodeChanged( Node* );
     void slotNodeToBeInserted( Node *node, int row );
     void slotNodeInserted( Node *node );

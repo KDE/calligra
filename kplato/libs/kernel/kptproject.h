@@ -32,6 +32,7 @@
 #include "kptdatetime.h"
 #include "kptduration.h"
 #include "kptresource.h"
+#include "kptwbsdefinition.h"
 
 #include <QMap>
 #include <QList>
@@ -357,8 +358,13 @@ public:
     /// returns a unique calendar id
     QString uniqueCalendarId() const;
 
-    void generateWBS( int count, WBSDefinition &def, const QString& wbs = QString() );
-
+    /// Return reference to WBS Definition
+    WBSDefinition &wbsDefinition();
+    /// Set WBS Definition to @p def
+    void setWbsDefinition( const WBSDefinition &def );
+    /// Generate WBS Code
+    virtual QString generateWBSCode( QList<int> &indexes ) const;
+    
     Accounts &accounts() { return m_accounts; }
 
     /**
@@ -564,6 +570,8 @@ private:
 
     QList<ScheduleManager*> m_managers;
     KDateTime::Spec m_spec;
+    
+    WBSDefinition m_wbsDefinition;
     
     //use in pert to store the project slack
     int m_projectSlack;

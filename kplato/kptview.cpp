@@ -226,13 +226,9 @@ View::View( Part* part, QWidget* parent )
 
 
     // ------ Tools
-    actionDefineWBS  = new KAction(KIcon( "tools_define_wbs" ), i18n("Define WBS Pattern..."), this);
-    actionCollection()->addAction("tools_generate_wbs", actionDefineWBS );
+    actionDefineWBS  = new KAction(KIcon( "configure" ), i18n("Define WBS Pattern..."), this);
+    actionCollection()->addAction("tools_define_wbs", actionDefineWBS );
     connect( actionDefineWBS, SIGNAL( triggered( bool ) ), SLOT( slotDefineWBS() ) );
-
-    actionGenerateWBS  = new KAction(KIcon( "tools_generate_wbs" ), i18n("Generate WBS Code"), this);
-    actionCollection()->addAction("tools_define_wbs", actionGenerateWBS );
-    connect( actionGenerateWBS, SIGNAL( triggered( bool ) ), SLOT( slotGenerateWBS() ) );
 
     // ------ Settings
     actionConfigure  = new KAction(KIcon( "configure" ), i18n("Configure KPlato..."), this);
@@ -1200,17 +1196,14 @@ void View::slotAddMilestone()
 void View::slotDefineWBS()
 {
     //kDebug();
-    WBSDefinitionDialog * dia = new WBSDefinitionDialog( getPart() ->wbsDefinition() );
-    dia->exec();
-
-    delete dia;
-}
-
-void View::slotGenerateWBS()
-{
-    //kDebug();
-    getPart() ->generateWBS();
-    slotUpdate();
+    Project &p = getProject();
+    WBSDefinitionDialog dia( p, p.wbsDefinition() );
+    if ( dia.exec() == QDialog::Accepted ) {
+        QUndoCommand *cmd = dia.buildCommand();
+        if ( cmd ) {
+            getPart()->addCommand( cmd );
+        }
+    }
 }
 
 void View::slotConfigure()

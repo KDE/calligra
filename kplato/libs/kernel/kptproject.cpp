@@ -681,6 +681,10 @@ bool Project::load( KoXmlElement &element, XMLLoaderObject &status )
                 }
             }
             //kDebug()<<"Node schedules<---";
+        } else if ( e.tagName() == "wbs-definition" ) {
+            m_wbsDefinition.loadXML( e, status );
+        } else {
+            kWarning()<<"Unhandled tag:"<<e.tagName();
         }
     }
     //kDebug()<<"<---";
@@ -702,6 +706,8 @@ void Project::save( QDomElement &element ) const
     me.setAttribute( "start-time", m_constraintStartTime.toString( KDateTime::ISODate ) );
     me.setAttribute( "end-time", m_constraintEndTime.toString( KDateTime::ISODate ) );
 
+    m_wbsDefinition.saveXML( me );
+    
     m_accounts.save( me );
 
     // save calendars
@@ -1681,17 +1687,34 @@ bool Project::legalChildren( const Node *par, const Node *child ) const
     return legal;
 }
 
-void Project::generateWBS( int count, WBSDefinition &def, const QString& wbs )
+WBSDefinition &Project::wbsDefinition()
 {
-    if ( type() == Type_Subproject || def.level0Enabled() ) {
-        Node::generateWBS( count, def, wbs );
-    } else {
-        QListIterator<Node*> it = m_nodes;
-        int i = 0;
-        while ( it.hasNext() ) {
-            it.next() ->generateWBS( ++i, def, m_wbs );
-        }
+    return m_wbsDefinition;
+}
+
+void Project::setWbsDefinition( const WBSDefinition &def )
+{
+    //kDebug();
+    m_wbsDefinition = def;
+    emit changed();
+}
+
+QString Project::generateWBSCode( QList<int> &indexes ) const
+{
+    QString code = m_wbsDefinition.projectCode();
+    if ( ! code.isEmpty() && ! indexes.isEmpty() ) {
+        code += m_wbsDefinition.projectSeparator();
     }
+    int level = 1;
+    foreach ( int index, indexes ) {
+        code += m_wbsDefinition.code( index + 1, level  );
+        if ( level < indexes.count() ) {
+            // not last level, add separator also
+            code += m_wbsDefinition.separator( level );
+        }
+        ++level;
+    }
+    return code;
 }
 
 void Project::setCurrentSchedule( long id )

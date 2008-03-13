@@ -400,9 +400,10 @@ public:
     
     /// Returns the level this node is in the hierarchy. Top node is level 0.
     virtual int level();
-    /// Generate WBS
-    virtual void generateWBS(int count, WBSDefinition &def, const QString& wbs=QString());
-    QString wbs() const { return m_wbs; }
+    /// Generate WBS Code
+    virtual QString generateWBSCode( QList<int> &indexes ) const;
+    /// Returns the Work Breakdown Structure Code
+    QString wbsCode() const;
     
     double startupCost() const { return m_startupCost; }
     void setStartupCost(double cost);
@@ -594,8 +595,6 @@ protected:
     QHash<long, Schedule*> m_schedules;
     Schedule *m_currentSchedule;
 
-    QString m_wbs;
-    
     double m_startupCost;
     Account *m_startupAccount;
     double m_shutdownCost;

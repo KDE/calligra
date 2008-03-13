@@ -62,7 +62,7 @@ void TaskGeneralPanel::setStartValues( Task &task ) {
     leaderfield->setText(task.leader());
     descriptionfield->setText(task.description());
     idfield->setText(task.id());
-    wbsfield->setText(task.wbs());
+    wbsfield->setText(task.wbsCode());
 
     estimate->setUnit( task.estimate()->unit() );
     setEstimateType(task.estimate()->type());

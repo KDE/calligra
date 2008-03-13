@@ -20,6 +20,7 @@
 #include "kptwbsdefinitionpanel.h"
 #include "kptwbsdefinition.h"
 #include "kptcommand.h"
+#include "kptproject.h"
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -30,6 +31,7 @@
 #include <QComboBox>
 #include <QTableWidget>
 #include <QStringList>
+#include <QUndoCommand>
 
 namespace KPlato
 {
@@ -74,24 +76,27 @@ void ComboBoxDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionV
 
 //----------------------
 
-WBSDefinitionPanel::WBSDefinitionPanel(WBSDefinition &def, QWidget *p, const char *n)
+WBSDefinitionPanel::WBSDefinitionPanel( Project &project, WBSDefinition &def, QWidget *p, const char *n)
     : QWidget(p),
-      selectedRow(-1),
-      m_def(def)
+      m_project( project ),
+      m_def(def),
+      selectedRow(-1)
 {
     setObjectName(n);
     setupUi(this);
     
-    QStringList codeList = def.codeList();
+    projectCode->setText( m_def.projectCode() );
+    projectSeparator->setText( m_def.projectSeparator() );
+    QStringList codeList = m_def.codeList();
     kDebug()<<codeList;
-    defaultSeparator->setText(def.defaultSeparator());
+    defaultSeparator->setText(m_def.defaultSeparator());
     defaultCode->addItems(codeList);
-    defaultCode->setCurrentIndex(def.defaultCodeIndex());
+    defaultCode->setCurrentIndex(m_def.defaultCodeIndex());
     defaultCode->setFocus();
     levelsTable->setItemDelegateForColumn(0, new ComboBoxDelegate(codeList, this));
-    levelsGroup->setChecked(def.isLevelsDefEnabled());
+    levelsGroup->setChecked(m_def.isLevelsDefEnabled());
     int i = 0;
-    const QMap<int, WBSDefinition::CodeDef> &lev = def.levelsDef();
+    const QMap<int, WBSDefinition::CodeDef> &lev = m_def.levelsDef();
     levelsTable->setRowCount(lev.count());
     QStringList sl;
     kDebug()<<"Map size="<<lev.count();
@@ -110,6 +115,8 @@ WBSDefinitionPanel::WBSDefinitionPanel(WBSDefinition &def, QWidget *p, const cha
     //levelsTable->setColumnStretchable(0, true);
     slotLevelChanged(level->value());
     
+    connect(projectCode, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
+    connect(projectSeparator, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
     connect(defaultCode, SIGNAL(activated(int)), SLOT(slotChanged()));
     connect(defaultSeparator, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
     connect(levelsGroup, SIGNAL(toggled(bool)), SLOT(slotLevelsGroupToggled(bool)));
@@ -125,23 +132,25 @@ WBSDefinitionPanel::WBSDefinitionPanel(WBSDefinition &def, QWidget *p, const cha
 void WBSDefinitionPanel::setStartValues() {
 }
 
-MacroCommand *WBSDefinitionPanel::buildCommand() {
-    MacroCommand *cmd = new MacroCommand(i18n("Modify WBS Definition"));
+QUndoCommand *WBSDefinitionPanel::buildCommand() {
+    WBSDefinition def = m_def;
+    def.setProjectCode( projectCode->text() );
+    def.setProjectSeparator( projectSeparator->text() );
+    def.setDefaultCode(defaultCode->currentIndex());
+    def.setDefaultSeparator(defaultSeparator->text());
+    
+    def.setLevelsDefEnabled(levelsGroup->isChecked());
 
+    def.clearLevelsDef();
+    for (int i = 0; i < levelsTable->rowCount(); ++i) {
+        def.setLevelsDef(levelsTable->verticalHeaderItem(i)->text().toInt(), levelsTable->item(i, 0)->text(), levelsTable->item(i, 1)->text());
+    }
+    WBSDefinitionModifyCmd *cmd = new WBSDefinitionModifyCmd( m_project, def, i18n("Modify WBS Code Definition"));
     return cmd;
 }
 
 bool WBSDefinitionPanel::ok() {
     kDebug();
-    m_def.setDefaultCode(defaultCode->currentIndex());
-    m_def.setDefaultSeparator(defaultSeparator->text());
-    
-    m_def.setLevelsDefEnabled(levelsGroup->isChecked());
-
-    m_def.clearLevelsDef();
-    for (int i = 0; i < levelsTable->rowCount(); ++i) {
-        m_def.setLevelsDef(levelsTable->verticalHeaderItem(i)->text().toInt(), levelsTable->item(i, 0)->text(), levelsTable->item(i, 1)->text());
-    }
     return true;
 }
 

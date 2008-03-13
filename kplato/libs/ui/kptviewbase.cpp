@@ -61,7 +61,7 @@ void ViewBase::setGuiActive( bool active ) // virtual slot
 
 ViewBase *ViewBase::hitView( const QPoint &glpos )
 {
-    kDebug()<<glpos;
+    //kDebug()<<glpos;
     return this;
 }
 
@@ -107,7 +107,7 @@ void TreeViewBase::createItemDelegates()
 
 void TreeViewBase::slotHeaderContextMenuRequested( const QPoint& pos )
 {
-    kDebug();
+    //kDebug();
     emit headerContextMenuRequested( header()->mapToGlobal( pos ) );
 }
 
@@ -473,7 +473,7 @@ QModelIndex TreeViewBase::moveCursor( const QModelIndex &index, CursorAction cur
 
 void TreeViewBase::contextMenuEvent ( QContextMenuEvent *event )
 {
-    kDebug();
+    //kDebug();
     emit contextMenuRequested( indexAt(event->pos()), event->globalPos() );
 }
 
@@ -558,7 +558,7 @@ void TreeViewBase::dragMoveEvent(QDragMoveEvent *event)
 
 bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &element )
 {
-    kDebug()<<objectName();
+    //kDebug()<<objectName();
     KoXmlElement e = element.namedItem( "columns" ).toElement();
     if ( ! e.isNull() ) {
         if ( ! map.isValid() ) {
@@ -575,7 +575,7 @@ bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &elemen
         } else {
             for ( int i = model()->columnCount() - 1; i >= 0; --i ) {
                 QString n = map.key( i );
-                kDebug()<<i<<"="<<n;
+                //kDebug()<<i<<"="<<n;
                 if ( ! n.isEmpty() ) {
                     QString s = e.attribute( n, "" );
                     if ( s == "hidden" ) {
@@ -616,7 +616,7 @@ bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &elemen
 
 void TreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) const
 {
-    kDebug()<<objectName();
+    //kDebug()<<objectName();
     QDomElement e = element.ownerDocument().createElement( "columns" );
     element.appendChild( e );
     for ( int i = 0; i < model()->columnCount(); ++i ) {
@@ -626,7 +626,7 @@ void TreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) con
             e.setAttribute( QString( "column-%1" ).arg( i ), h ? "hidden" : "shown" );
         } else {
             QString n = map.key( i );
-            kDebug()<<i<<"="<<n;
+            //kDebug()<<i<<"="<<n;
             if ( ! n.isEmpty() ) {
                 e.setAttribute( n, h ? "hidden" : "shown" );
             }
@@ -737,12 +737,12 @@ void DoubleTreeViewBase::hideColumns( const QList<int> &masterList, QList<int> s
         QList<int> lst;
         for ( int c = 0; c < model()->columnCount(); ++c ) {
             // only hide columns hidden in *both* views
-            kDebug()<<c<<(mlst.indexOf( c ))<<(slst.indexOf( c ));
+            //kDebug()<<c<<(mlst.indexOf( c ))<<(slst.indexOf( c ));
             if ( (mlst.indexOf( c ) >= 0) && (slst.indexOf( c ) >= 0) ) {
                 lst << c;
             }
         }
-        kDebug()<<lst;
+        //kDebug()<<lst;
         m_leftview->setColumnsHidden( lst );
     }
 }
@@ -936,7 +936,7 @@ void DoubleTreeViewBase::slotLeftHeaderContextMenuRequested( const QPoint &pos )
 
 bool DoubleTreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &element )
 {
-    kDebug();
+    //kDebug();
     QList<int> lst1;
     QList<int> lst2;
     KoXmlElement e = element.namedItem( "master" ).toElement();
@@ -955,7 +955,7 @@ bool DoubleTreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &
 
 void DoubleTreeViewBase::saveContext( const QMetaEnum &map, QDomElement &element ) const
 {
-    kDebug()<<objectName();
+    //kDebug()<<objectName();
     QDomElement e = element.ownerDocument().createElement( "master" );
     element.appendChild( e );
     m_leftview->saveContext( map, e );

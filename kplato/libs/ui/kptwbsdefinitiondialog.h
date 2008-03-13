@@ -24,20 +24,21 @@
 
 #include <kdialog.h>
 
+class QUndoCommand;
 
 namespace KPlato
 {
 
 class WBSDefinitionPanel;
 class WBSDefinition;
-class MacroCommand;
+class Project;
 
 class KPLATOUI_EXPORT WBSDefinitionDialog : public KDialog {
     Q_OBJECT
 public:
-    explicit WBSDefinitionDialog(WBSDefinition &def, QWidget *parent=0);
+    explicit WBSDefinitionDialog(Project &project, WBSDefinition &def, QWidget *parent=0);
 
-    MacroCommand *buildCommand();
+    QUndoCommand *buildCommand();
 
 protected slots:
     void slotOk();

@@ -47,7 +47,7 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
     idfield->setText(project.id());
     leaderfield->setText(project.leader());
     descriptionfield->setText(project.description());
-    wbs->setText(project.wbs());
+    wbs->setText(project.wbsCode());
 
     DateTime st = project.constraintStartTime();
     DateTime et = project.constraintEndTime();

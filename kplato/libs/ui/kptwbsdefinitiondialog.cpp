@@ -29,7 +29,7 @@
 namespace KPlato
 {
 
-WBSDefinitionDialog::WBSDefinitionDialog(WBSDefinition &def, QWidget *p)
+WBSDefinitionDialog::WBSDefinitionDialog(Project &project, WBSDefinition &def, QWidget *p)
     : KDialog(p)
 {
     setCaption( i18n("WBS Definition") );
@@ -37,7 +37,7 @@ WBSDefinitionDialog::WBSDefinitionDialog(WBSDefinition &def, QWidget *p)
     setDefaultButton( Ok );
     showButtonSeparator( true );
 
-    m_panel = new WBSDefinitionPanel(def, this);
+    m_panel = new WBSDefinitionPanel(project, def, this);
     setMainWidget(m_panel);
     enableButtonOk(false);
     connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonOk(bool)));
@@ -45,19 +45,8 @@ WBSDefinitionDialog::WBSDefinitionDialog(WBSDefinition &def, QWidget *p)
 }
 
 
-MacroCommand *WBSDefinitionDialog::buildCommand() {
-    MacroCommand *m = new MacroCommand(i18n("Modify WBS Definition"));
-    bool modified = false;
-    MacroCommand *cmd = m_panel->buildCommand();
-    if (cmd) {
-        m->addCommand(cmd);
-        modified = true;
-    }
-    if (!modified) {
-        delete m;
-        return 0;
-    }
-    return m;
+QUndoCommand *WBSDefinitionDialog::buildCommand() {
+    return m_panel->buildCommand();
 }
 
 void WBSDefinitionDialog::slotOk() {
