@@ -31,6 +31,7 @@ FractionElement::FractionElement( BasicElement* parent ) : BasicElement( parent 
 {
     m_numerator = new BasicElement( this );
     m_denominator = new BasicElement( this );
+    m_lineThickness = 1.0;
 }
 
 FractionElement::~FractionElement()
@@ -41,54 +42,61 @@ FractionElement::~FractionElement()
 
 void FractionElement::paint( QPainter& painter, AttributeManager* am )
 {
-    QPen pen;
-    double linethickness = am->doubleOf( "linethickness", this );
-    if( linethickness == 0 )
-	    return;  // specification says to not draw a line if thickness is 0
+    Q_UNUSED( am )
 
-    pen.setWidthF( linethickness );
-    painter.setPen( pen );                 // set the line width
-    painter.drawLine( m_fractionLine );    // draw the line
+    // return if there is nothing to paint
+    if( m_lineThickness == 0.0 )
+        return;
+
+    // paint the fraction line with the specified line width
+    QPen pen;
+    pen.setWidthF( m_lineThickness );
+    painter.setPen( pen );
+    painter.drawLine( m_fractionLine );
 }
 
 void FractionElement::layout( const AttributeManager* am )
 {
+    // decide which layout is wanted
     if( am->boolOf( "bevelled", this ) )
     {
         layoutBevelledFraction( am );
         return;
     }
 
-    QPointF numeratorOrigin;
-    QPointF denominatorOrigin;
-    double linethickness = am->doubleOf( "linethickness", this );
+    // get values of all attributes
+    m_lineThickness = am->doubleOf( "linethickness", this );
     double distY = am->layoutSpacing( this );
     Align numalign = am->alignOf( "numalign", this ); 
-    Align denomalign = am->alignOf( "denomalign", this ); 
-    denominatorOrigin.setY( m_numerator->height() + linethickness + 2*distY );
+    Align denomalign = am->alignOf( "denomalign", this );
+
+    // align the numerator and the denominator
+    QPointF numeratorOrigin;
+    QPointF denominatorOrigin( 0.0, m_numerator->height() + m_lineThickness + 2*distY );
     
-    setWidth( qMax( m_numerator->width(), m_denominator->width() ) + linethickness*2 );
-    setHeight( m_numerator->height() + m_denominator->height() +
-               linethickness + 2*distY );
-    setBaseLine( denominatorOrigin.y() );
- 
-    if( numalign == Right )  // for Left it is (0.0 /0.0)
-        numeratorOrigin.setX( width() - m_numerator->width() - linethickness);
-    else
+    if( numalign == Right )
+        numeratorOrigin.setX( width() - m_numerator->width() - m_lineThickness );
+    else if( numalign == Center )
 	numeratorOrigin.setX( ( width() - m_numerator->width() ) / 2 );
 
     if( denomalign == Right )
-        denominatorOrigin.setX( width() - m_denominator->width() - linethickness);
-    else
-	denominatorOrigin.setX( ( width() - m_denominator->width() ) / 2);
+        denominatorOrigin.setX( width() - m_denominator->width() - m_lineThickness );
+    else if( numalign == Center )
+	denominatorOrigin.setX( ( width() - m_denominator->width() ) / 2 );
 
     m_numerator->setOrigin( numeratorOrigin );
     m_denominator->setOrigin( denominatorOrigin );
-    if(linethickness == 0) 
-	    return;  //Specification says to not draw a line if thickness is 0
-    float fractionLineY =  m_numerator->height() + linethickness/2 + distY;
-    m_fractionLine = QLineF( QPointF( linethickness, fractionLineY ),
-                             QPointF( width()-linethickness, fractionLineY ) );
+
+    // construct the fraction's line    
+    double fractionLineY =  m_numerator->height() + m_lineThickness/2 + distY;
+    m_fractionLine = QLineF( QPointF( m_lineThickness, fractionLineY ),
+                             QPointF( width()-m_lineThickness, fractionLineY ) );
+
+    // set the values of this fraction's bounding rectangle
+    setWidth( qMax( m_numerator->width(), m_denominator->width() ) + m_lineThickness*2 );
+    setHeight( m_numerator->height() + m_denominator->height() +
+               m_lineThickness + 2*distY );
+    setBaseLine( denominatorOrigin.y() ); 
 }
 
 void FractionElement::layoutBevelledFraction( const AttributeManager* am )
@@ -117,20 +125,23 @@ const QList<BasicElement*> FractionElement::childElements()
 
 BasicElement* FractionElement::acceptCursor( const FormulaCursor* cursor )
 {
-/*    switch( cursor->direction() ) {
-        case MoveRight:
+    if( cursor->ascending() ) {
+        if( cursor->direction() == MoveUp && cursor->currentElement() == m_denominator )
             return m_numerator;
-        case LeftToChild:
+        else if( cursor->direction() == MoveDown &&
+                 cursor->currentElement() == m_numerator )
             return m_denominator;
-        case UpToParent:
-            if( cursor->currentElement() == m_denominator )
-                return m_numerator;
-        case DownToParent:
-            if( cursor->currentElement() == m_numerator )
-                return m_denominator;
-        default:
-            return 0;
-    }*/
+        else
+            return parentElement();
+    }
+    else {
+        if( cursor->direction() == MoveRight )
+            return m_numerator;
+        else if( cursor->direction() == MoveLeft )
+            return m_denominator;
+        else
+            return parentElement();
+    } 
 }
 
 void FractionElement::insertChild( FormulaCursor* cursor, BasicElement* child )

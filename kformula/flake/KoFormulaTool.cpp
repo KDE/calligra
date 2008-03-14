@@ -192,7 +192,7 @@ void KoFormulaTool::remove( bool backSpace )
 
 void KoFormulaTool::insert( QAction* action )
 {
-    m_formulaCursor->insert( action->data().toString() );
+    m_formulaCursor->insertData( action->data().toString() );
 }
 
 QWidget* KoFormulaTool::createOptionWidget()

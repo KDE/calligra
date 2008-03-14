@@ -105,6 +105,9 @@ private:
 
     /// The line that separates the denominator and the numerator
     QLineF m_fractionLine;
+
+    /// Hold the thickness of the fraction line
+    double m_lineThickness;
 };
 
 #endif // FRACTIONELEMENT_H

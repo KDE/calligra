@@ -115,7 +115,7 @@ void FormulaCursor::insertText( const QString& text )
     }*/
 }
 
-void FormulaCursor::insert( const QString& data )
+void FormulaCursor::insertData( const QString& data )
 {
     BasicElement* elementToInsert;
 
@@ -130,9 +130,33 @@ void FormulaCursor::insert( const QString& data )
     else
         elementToInsert = ElementFactory::createElement( data, m_currentElement );
 
-    if( !insideToken() )
-        m_currentElement->insertChild( this, elementToInsert );
-    m_positionInElement++;
+    insertElement( elementToInsert );
+}
+
+void FormulaCursor::insertElement( BasicElement* element )
+{
+    if( m_currentElement->elementType() == Basic ) {
+        m_currentElement->parentElement()->insertChild( this, element );
+        delete m_currentElement;
+        m_currentElement = element;
+        m_positionInElement = 1;
+    }
+    else if( insideInferredRow() ) {
+        m_currentElement->insertChild( this, element );
+        m_positionInElement++;
+    }
+    else if( insideToken() ) {
+        // TODO implement token splitting
+    }
+    else {
+        BasicElement* r = ElementFactory::createElement( "mrow",
+                                                    m_currentElement->parentElement() );
+        m_currentElement->parentElement()->insertChild( this, r );
+
+        r->insertChild( this, ( m_positionInElement==0 ) ? element : m_currentElement );
+        r->insertChild( this, ( m_positionInElement==0 ) ? m_currentElement : element );
+        m_currentElement = r;
+    }
 }
 
 void FormulaCursor::remove( bool elementBeforePosition )
@@ -174,6 +198,15 @@ void FormulaCursor::move( CursorDirection direction )
         else
             moveHome();
     }
+}
+
+void FormulaCursor::moveTo( BasicElement* element, int position )
+{
+    if( m_direction == NoDirection ) {
+        m_currentElement = element;
+        m_positionInElement = position;
+    }
+    m_direction = NoDirection;
 }
 
 void FormulaCursor::setCursorTo( const QPointF& point )
@@ -232,6 +265,17 @@ bool FormulaCursor::insideToken() const
     if( m_currentElement->elementType() == Number ||
         m_currentElement->elementType() == Operator ||
         m_currentElement->elementType() == Identifier )
+        return true;
+
+    return false;
+}
+
+bool FormulaCursor::insideInferredRow() const
+{
+    if( m_currentElement->elementType() == Row ||
+        m_currentElement->elementType() == SquareRoot ||
+        m_currentElement->elementType() == Formula ||
+        m_currentElement->elementType() == Fenced )
         return true;
 
     return false;

@@ -22,6 +22,8 @@
 
 #include "RootElement.h"
 #include "AttributeManager.h"
+#include "FormulaCursor.h"
+#include "RowElement.h"
 #include <KoXmlReader.h>
 #include <QPainter>
 #include <QPen>
@@ -90,27 +92,13 @@ const QList<BasicElement*> RootElement::childElements()
 
 
 void RootElement::insertChild( FormulaCursor* cursor, BasicElement* child )
-{/*
-    BasicElement* tmp = cursor->currentElement();
-    if( tmp == m_radicand && m_radicand->elementType == Basic )
-    {
-        m_radicand = child;
-        cursor->moveCursorTo( m_radicand, 1 );
-        delete tmp;
-    }
-    else if( tmp == m_radicand && m_radicant->elementType != Basic )
-        m_radicand = m_cursor->enqueueElement( child );
-    {
-        BasicElement* tmp = m_radicand;
-        m_radicand = new RowElement( this );
-        m_radicand->insertElement( tmp );
-    }
-    else if( tmp == m_exponent && m_exponent->elementType == Basic )
-    {
+{
+    if( cursor->currentElement() == m_exponent )
         m_exponent = child;
-        cursor->moveCursorTo( m_exponent, 1 );
-        delete tmp;
-    }*/
+    else if( cursor->currentElement() == m_radicand )
+        m_radicand = child;
+//    else
+        // TODO put in some error message
 }
 
 void RootElement::removeChild( FormulaCursor* cursor, BasicElement* child )

@@ -82,7 +82,7 @@ void RowElement::removeChild( FormulaCursor* cursor, BasicElement* child )
 
 BasicElement* RowElement::acceptCursor( const FormulaCursor* cursor )
 {
-    return 0;
+    return this;
 }
 
 ElementType RowElement::elementType() const

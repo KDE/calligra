@@ -81,9 +81,9 @@ public:
      * Insert an element at the current cursor position
      * @param element The element to be inserted
      */
-//    void insert( BasicElement* element );
+    void insertElement( BasicElement* element );
 
-    void insert( const QString& data );
+    void insertData( const QString& data );
 
     /**
      * Remove an element from the formula
@@ -96,6 +96,9 @@ public:
      * @param direction Indicates the direction to move to
      */
     void move( CursorDirection direction );
+
+    /// Move the cursor to @p element
+    void moveTo( BasicElement* element, int position );
 
     /// Move the cursor to the first position in the current element
     void moveHome();
@@ -139,6 +142,9 @@ public:
 private:
     /// @return true when the cursor is inside a token element
     bool insideToken() const;
+
+    /// @return true when the cursor is inside a row or inferred row
+    bool insideInferredRow() const;
 
 private:
     /// The element that is currently left to the cursor

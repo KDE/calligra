@@ -46,7 +46,8 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
     // setup the element insert menus
     m_fractionMenu.addAction( m_tool->action( "insert_fraction" ) );
     m_fenceMenu.addAction( m_tool->action( "insert_fence" ) );
-    m_tableMenu.addAction( m_tool->action( "insert_table" ) );
+    m_tableMenu.addAction( m_tool->action( "insert_33table" ) );
+    m_tableMenu.addAction( m_tool->action( "insert_22table" ) );
     m_tableMenu.addAction( m_tool->action( "insert_tablerow" ) );
     m_tableMenu.addAction( m_tool->action( "insert_tablecol" ) );
     m_rootMenu.addAction( m_tool->action( "insert_root" ) );
@@ -57,7 +58,9 @@ FormulaToolWidget::FormulaToolWidget( KoFormulaTool* tool, QWidget* parent )
 
     // assign menus to toolbuttons
     buttonFence->setMenu( &m_fenceMenu );
+    buttonFence->setDefaultAction( m_tool->action( "insert_fence" ) );
     buttonRoot->setMenu( &m_rootMenu );
+    buttonRoot->setDefaultAction( m_tool->action( "insert_root" ) );
     buttonFraction->setMenu( &m_fractionMenu );
     buttonTable->setMenu( &m_tableMenu );
     buttonScript->setMenu( &m_scriptsMenu );
