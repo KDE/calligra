@@ -14,6 +14,11 @@
             <Action name="edit_select_all"/>
             <Action name="edit_deselect_all"/>
             <Separator/>
+            <Action name="edit_find"/>
+            <Action name="edit_findnext"/>
+            <Action name="edit_findprevious"/>
+            <Action name="edit_replace"/>
+            <Separator/>
             <Action name="edit_customslideshows"/>
             <Separator/>
             <Action name="edit_createanimation"/>
