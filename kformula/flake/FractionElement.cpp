@@ -146,13 +146,12 @@ BasicElement* FractionElement::acceptCursor( const FormulaCursor* cursor )
 
 void FractionElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
-    BasicElement* tmp = cursor->currentElement();
-    if( tmp == m_numerator && m_numerator->elementType() == Basic )
+    if( cursor->currentElement() == m_numerator )
         m_numerator = child;
-    else if( tmp == m_denominator && m_denominator->elementType() == Basic )
+    else if( cursor->currentElement() == m_denominator )
         m_denominator = child;
-
-    delete tmp;       // finally delete the old BasicElement
+//    else
+        // TODO make some error
 }
    
 void FractionElement::removeChild( FormulaCursor* cursor, BasicElement* element )

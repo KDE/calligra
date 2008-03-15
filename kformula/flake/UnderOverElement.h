@@ -56,6 +56,13 @@ public:
     void layout( const AttributeManager* am );
 
     /**
+     * Insert a new child at the cursor position
+     * @param cursor The cursor holding the position where to insert
+     * @param child A BasicElement to insert
+     */
+    void insertChild( FormulaCursor* cursor, BasicElement* child );
+
+    /**
      * Implement the cursor behaviour for the element
      * @param cursor The FormulaCursor that is moved around
      * @return A this pointer if the element accepts if not the element to asked instead

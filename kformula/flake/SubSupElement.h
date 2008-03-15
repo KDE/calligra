@@ -61,6 +61,13 @@ public:
      */
     BasicElement* acceptCursor( const FormulaCursor* cursor );
 
+    /**
+     * Insert a new child at the cursor position
+     * @param cursor The cursor holding the position where to insert
+     * @param child A BasicElement to insert
+     */
+    void insertChild( FormulaCursor* cursor, BasicElement* child );
+
     /// @return The default value of the attribute for this element
     QString attributesDefaultValue( const QString& attribute ) const; 
 
@@ -75,16 +82,14 @@ protected:
     void writeMathMLContent( KoXmlWriter* writer ) const;
 
 private:
-    /// The BasicElement representing the base element 
+    /// The base element 
     BasicElement* m_baseElement;
 
-    //BasicElement* m_preSuperscript;
+    /// The subscript right to the m_baseElement
+    BasicElement* m_subScript;
 
-    /// The BasicElement representing the subscript right to the base element
-    BasicElement* m_postSubscript;
-
-    /// The BasicElement representing the superscript right to the base element
-    BasicElement* m_postSuperscript;
+    /// The superscript right to the m_baseElement
+    BasicElement* m_superScript;
 };
 
 #endif // SUBSUPELEMENT_H

@@ -18,6 +18,7 @@
 */
 
 #include "SubSupElement.h"
+#include "FormulaCursor.h"
 #include "AttributeManager.h"
 #include <KoXmlWriter.h>
 #include <KoXmlReader.h>
@@ -26,17 +27,15 @@
 SubSupElement::SubSupElement( BasicElement* parent ) : BasicElement( parent )
 {
     m_baseElement = new BasicElement( this );
-    m_postSubscript = new BasicElement( this );
-    m_postSuperscript = new BasicElement( this );
+    m_subScript = new BasicElement( this );
+    m_superScript = new BasicElement( this );
 }
 
 SubSupElement::~SubSupElement()
 {
     delete m_baseElement;
-    //delete m_preSubscript;
-    //	delete m_preSuperscript;
-    delete m_postSubscript;
-    delete m_postSuperscript;
+    delete m_subScript;
+    delete m_superScript;
 }
 
 void SubSupElement::paint( QPainter& painter, AttributeManager* am )
@@ -59,16 +58,16 @@ void SubSupElement::layout( const AttributeManager* am )
     // The yOffset is the amount the base element is moved down to make
     // room for the superscript
     double yOffset = 0;
-    if(m_postSuperscript) {
-        yOffset = m_postSuperscript->height() - m_baseElement->height()/2 + halfthinSpace;
+    if(m_superScript) {
+        yOffset = m_superScript->height() - m_baseElement->height()/2 + halfthinSpace;
         yOffset = qMax( yOffset, superscriptshift );
     }
     double largestWidth = 0;
-    if(m_postSubscript)
-        largestWidth = m_postSubscript->width();
-    if(m_postSuperscript) {
-        largestWidth = qMax( largestWidth, m_postSuperscript->width());
-        m_postSuperscript->setOrigin( QPointF( m_baseElement->width(), 0) );
+    if(m_subScript)
+        largestWidth = m_subScript->width();
+    if(m_superScript) {
+        largestWidth = qMax( largestWidth, m_superScript->width());
+        m_superScript->setOrigin( QPointF( m_baseElement->width(), 0) );
     }
 
     setWidth( m_baseElement->width() + largestWidth );
@@ -76,13 +75,13 @@ void SubSupElement::layout( const AttributeManager* am )
     m_baseElement->setOrigin( QPointF( 0, yOffset ) );
 
 
-    if(m_postSubscript) {
+    if(m_subScript) {
         double yPos = yOffset +
 	       	qMax( m_baseElement->height()/2 + halfthinSpace, 
-		      m_baseElement->height() - m_postSubscript->baseLine() 
+		      m_baseElement->height() - m_subScript->baseLine() 
 		          + subscriptshift );
-        m_postSubscript->setOrigin( QPointF( m_baseElement->width(), yPos ) );
-	setHeight( yPos + m_postSubscript->height() );
+        m_subScript->setOrigin( QPointF( m_baseElement->width(), yPos ) );
+	setHeight( yPos + m_subScript->height() );
     } else
         setHeight( yOffset + m_baseElement->height() );
 }
@@ -95,12 +94,19 @@ BasicElement* SubSupElement::acceptCursor( const FormulaCursor* cursor )
 const QList<BasicElement*> SubSupElement::childElements()
 {
     QList<BasicElement*> tmp;
-    tmp << m_baseElement;
-    if(m_postSubscript)
-	    tmp << m_postSubscript;
-    if(m_postSuperscript)
-	    tmp << m_postSuperscript;
-    return tmp;
+    return tmp << m_baseElement << m_subScript << m_superScript;
+}
+
+void SubSupElement::insertChild( FormulaCursor* cursor, BasicElement* child )
+{
+    if( cursor->currentElement() == m_baseElement )
+        m_baseElement = child;
+    else if( cursor->currentElement() == m_subScript )
+        m_subScript = child;
+    else if( cursor->currentElement() == m_superScript )
+        m_superScript = child;
+//    else
+//    TODO add some error
 }
 
 QString SubSupElement::attributesDefaultValue( const QString& attribute ) const
@@ -110,30 +116,19 @@ QString SubSupElement::attributesDefaultValue( const QString& attribute ) const
 
 ElementType SubSupElement::elementType() const
 {
-    if( m_postSubscript && m_postSuperscript )
+    if( m_subScript->elementType() != Basic &&
+        m_superScript->elementType() != Basic )
         return SubSupScript;
-    else if( m_postSubscript )
+    else if( m_subScript->elementType() != Basic )
         return SubScript;
-    else if( m_postSuperscript )
+    else if( m_superScript->elementType() != Basic )
         return SupScript;
-    else
-        return SubSupScript;
 }
 
 bool SubSupElement::readMathMLContent( const KoXmlElement& parent )
 {
-    QString name = parent.tagName().toLower();
     BasicElement* tmpElement = 0;
     KoXmlElement tmp;
-    //The possibilities are msub, msup and msubsup
-    if(!name.contains( "sub" )) {
-        delete m_postSubscript;
-	m_postSubscript = NULL;
-    }
-    if(!name.contains( "sup" )) {
-        delete m_postSuperscript;
-	m_postSuperscript = NULL;
-    }
     forEachElement( tmp, parent ) { 
         tmpElement = ElementFactory::createElement( tmp.tagName(), this );
         if( !tmpElement->readMathML( tmp ) )
@@ -143,32 +138,29 @@ bool SubSupElement::readMathMLContent( const KoXmlElement& parent )
             delete m_baseElement; 
             m_baseElement = tmpElement;
         }
-        else if( m_postSubscript && m_postSubscript->elementType() == Basic ) {
-            delete m_postSubscript;
-            m_postSubscript = tmpElement;
-	    Q_ASSERT(m_postSubscript);
+        else if( m_subScript->elementType() == Basic ) {
+            delete m_subScript;
+            m_subScript = tmpElement;
         }
-        else if( m_postSuperscript && m_postSuperscript->elementType() == Basic ) {
-            delete m_postSuperscript;
-            m_postSuperscript = tmpElement;
-	    Q_ASSERT(m_postSuperscript);
+        else if( m_superScript->elementType() == Basic ) {
+            delete m_superScript;
+            m_superScript = tmpElement;
         }
         else
             return false;
     }
-    Q_ASSERT(m_baseElement);  //We should have at least a BasicElement for the base
-    Q_ASSERT(m_postSubscript || m_postSuperscript);
     return true;
 }
 
 void SubSupElement::writeMathMLContent( KoXmlWriter* writer ) const
 {
-    m_baseElement->writeMathML( writer );        // Just save the children in
-                                                 // the right order
-    if( m_postSubscript )
-        m_postSubscript->writeMathML( writer );
+    // just save the children in the right order
+    m_baseElement->writeMathML( writer );
+
+    if( m_subScript->elementType() != Basic )
+        m_subScript->writeMathML( writer );
     
-    if( m_postSuperscript )
-        m_postSuperscript->writeMathML( writer );
+    if( m_superScript->elementType() != Basic )
+        m_superScript->writeMathML( writer );
 }
 

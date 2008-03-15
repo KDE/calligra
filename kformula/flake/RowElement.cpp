@@ -71,7 +71,10 @@ const QList<BasicElement*> RowElement::childElements()
 
 void RowElement::insertChild( FormulaCursor* cursor, BasicElement* child )
 {
-    m_childElements.insert( cursor->position(), child );
+    if( cursor->currentElement() == this )
+        m_childElements.insert( cursor->position(), child );
+    // else
+    //     TODO make some error
 }
 
 void RowElement::removeChild( FormulaCursor* cursor, BasicElement* child )

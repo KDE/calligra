@@ -19,6 +19,7 @@
 */
 
 #include "UnderOverElement.h"
+#include "FormulaCursor.h"
 #include "AttributeManager.h"
 #include <KoXmlReader.h>
 #include <kdebug.h>
@@ -80,6 +81,18 @@ void UnderOverElement::layout( const AttributeManager* am )
 BasicElement* UnderOverElement::acceptCursor( const FormulaCursor* cursor )
 {
     return 0;
+}
+
+void UnderOverElement::insertChild( FormulaCursor* cursor, BasicElement* child )
+{
+    if( cursor->currentElement() == m_baseElement )
+        m_baseElement = child;
+    else if( cursor->currentElement() == m_underElement )
+        m_underElement = child;
+    else if( cursor->currentElement() == m_overElement )
+        m_overElement = child;
+//  else
+//      TODO make some error
 }
 
 QString UnderOverElement::attributesDefaultValue( const QString& attribute ) const
