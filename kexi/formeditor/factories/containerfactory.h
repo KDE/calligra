@@ -26,6 +26,7 @@
 
 #include "widgetfactory.h"
 #include "../utils.h"
+#include <QGroupBox>
 //Added by qt3to4:
 #include <Q3Frame>
 #include <Q3ValueList>
@@ -186,7 +187,7 @@ class KFDTabWidget : public KFormDesigner::TabWidget
 };
 
 //! A group box widget
-class GroupBox : public Q3GroupBox
+class GroupBox : public QGroupBox
 {
 	Q_OBJECT
 

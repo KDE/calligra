@@ -29,12 +29,12 @@
 #include <Q3CString>
 #include <QEvent>
 #include <QKeyEvent>
-#include <Q3Frame>
+#include <QFrame>
 
 #include <kdebug.h>
 #include <klocale.h>
 //#ifdef KEXI_KTEXTEDIT
-#include <k3textedit.h>
+#include <ktextedit.h>
 //#else
 #include <klineedit.h>
 //#endif
@@ -197,33 +197,34 @@ WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
 {
 //#ifdef KEXI_KTEXTEDIT
 	if (multiLine) {
-		K3TextEdit *textedit = new K3TextEdit(text, QString(), w->parentWidget());
+		KTextEdit *textedit = new KTextEdit(w->parentWidget());
+		textedit->setText(text);
 		textedit->setTextFormat(Qt::PlainText);
 		textedit->setAlignment(alignment);
-		if (dynamic_cast<Q3TextEdit*>(w)) {
-			textedit->setWordWrap(dynamic_cast<Q3TextEdit*>(w)->wordWrap());
-			textedit->setWrapPolicy(dynamic_cast<Q3TextEdit*>(w)->wrapPolicy());
+		if (dynamic_cast<QTextEdit*>(w)) {
+			textedit->setWordWrapMode(dynamic_cast<QTextEdit*>(w)->wordWrapMode());
+			textedit->setLineWrapMode(dynamic_cast<QTextEdit*>(w)->lineWrapMode());
 		}
 		textedit->setPalette(w->palette());
 		textedit->setFont(w->font());
-		textedit->setResizePolicy(Q3ScrollView::Manual);
+		//textedit->setResizePolicy(Q3ScrollView::Manual);
 		textedit->setGeometry(geometry);
 		textedit->setBackgroundRole(w->backgroundRole());
 		QPalette pal(textedit->palette());
 		pal.setColor(w->backgroundRole(), w->palette().active().background());
 		textedit->setPalette(pal);
-		for(int i =0; i <= textedit->paragraphs(); i++)
-			textedit->setParagraphBackgroundColor(i, w->paletteBackgroundColor());
-		textedit->selectAll(true);
+		//for(int i =0; i <= textedit->paragraphs(); i++)
+		//	textedit->setParagraphBackgroundColor(i, w->paletteBackgroundColor());
+		//textedit->selectAll(true);
 		textedit->setColor(w->paletteForegroundColor());
-		textedit->selectAll(false);
-		textedit->moveCursor(Q3TextEdit::MoveEnd, false);
-		textedit->setParagraphBackgroundColor(0, w->paletteBackgroundColor());
-		textedit->setVScrollBarMode(Q3ScrollView::AlwaysOff); //ok?
-		textedit->setHScrollBarMode(Q3ScrollView::AlwaysOff); //ok?
+		//textedit->selectAll(false);
+		textedit->moveCursor(QTextEdit::MoveEnd, false);
+		//textedit->setParagraphBackgroundColor(0, w->paletteBackgroundColor());
+		textedit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+		textedit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff); //ok?
 		textedit->installEventFilter(this);
-		textedit->setFrameShape(useFrame ? QFrame::StyledPanel : Q3Frame::NoFrame);
-		textedit->setMargin(2); //to move away from resize handle
+		textedit->setFrameShape(useFrame ? QFrame::StyledPanel : QFrame::NoFrame);
+		//textedit->setMargin(2); //to move away from resize handle
 		textedit->show();
 		textedit->setFocus();
 		textedit->selectAll();
@@ -235,7 +236,8 @@ WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
 //#else
 	}
 	else {
-		KLineEdit *editor = new KLineEdit(text, w->parentWidget());
+		KLineEdit *editor = new KLineEdit(w->parentWidget());
+		editor->setText(text);
 		editor->setAlignment(alignment);
 		editor->setPalette(w->palette());
 		editor->setFont(w->font());
@@ -243,7 +245,8 @@ WidgetFactory::createEditor(const Q3CString &classname, const QString &text,
 		editor->setBackgroundRole(w->backgroundRole());
 		editor->installEventFilter(this);
 		editor->setFrame(useFrame);
-		editor->setContentsMargins(2,2,2,2); //to move away from resize handle
+
+		//editor->setContentsMargins(2,2,2,2); //to move away from resize handle
 		editor->show();
 		editor->setFocus();
 		editor->selectAll();
@@ -663,13 +666,13 @@ bool WidgetFactory::inheritsFactories()
 
 QString WidgetFactory::editorText() const {
 	QWidget *ed = editor(m_widget);
-	return dynamic_cast<K3TextEdit*>(ed) ? dynamic_cast<K3TextEdit*>(ed)->text() : dynamic_cast<KLineEdit*>(ed)->text();
+	return dynamic_cast<KTextEdit*>(ed) ? dynamic_cast<KTextEdit*>(ed)->text() : dynamic_cast<KLineEdit*>(ed)->text();
 }
 
 void WidgetFactory::setEditorText(const QString& text) {
 	QWidget *ed = editor(m_widget);
-	if (dynamic_cast<K3TextEdit*>(ed))
-		dynamic_cast<K3TextEdit*>(ed)->setText(text);
+	if (dynamic_cast<KTextEdit*>(ed))
+		dynamic_cast<KTextEdit*>(ed)->setText(text);
 	else
 		dynamic_cast<KLineEdit*>(ed)->setText(text);
 }

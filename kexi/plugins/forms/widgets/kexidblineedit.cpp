@@ -68,6 +68,7 @@ KexiDBLineEdit::KexiDBLineEdit(QWidget *parent)
 	widget->setPalette(p);
 #endif
 
+	setMinimumHeight(fontMetrics().height() +2);
 	connect(this, SIGNAL(textChanged(const QString&)), this, SLOT(slotTextChanged(const QString&)));
 }
 

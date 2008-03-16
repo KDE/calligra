@@ -90,7 +90,7 @@ void ContainerWidget::dropEvent( QDropEvent *e )
 ////////////////////////
 
 GroupBox::GroupBox(const QString & title, QWidget *parent)
- : Q3GroupBox(title, parent)
+ : QGroupBox(title, parent)
 {
 }
 
@@ -100,13 +100,13 @@ GroupBox::~GroupBox()
 
 void GroupBox::dragMoveEvent( QDragMoveEvent *e )
 {
-	Q3GroupBox::dragMoveEvent(e);
+	QGroupBox::dragMoveEvent(e);
 	emit handleDragMoveEvent(e);
 }
 
 void GroupBox::dropEvent( QDropEvent *e )
 {
-	Q3GroupBox::dropEvent(e);
+	QGroupBox::dropEvent(e);
 	emit handleDropEvent(e);
 }
 
@@ -732,7 +732,7 @@ ContainerFactory::startEditing(const Q3CString &classname, QWidget *w, KFormDesi
 	}
 	if(classname == "QGroupBox")
 	{
-		Q3GroupBox *group = static_cast<Q3GroupBox*>(w);
+		QGroupBox *group = static_cast<QGroupBox*>(w);
 		QRect r = QRect(group->x()+2, group->y()-5, group->width()-10, w->fontMetrics().height() + 10);
 		createEditor(classname, group->title(), group, container, r, Qt::AlignLeft);
 		return true;
