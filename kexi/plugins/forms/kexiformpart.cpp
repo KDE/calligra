@@ -446,14 +446,14 @@ void KexiFormPart::slotAssignAction()
 	KFormDesigner::WidgetPropertySet * propSet
 		= KFormDesigner::FormManager::self()->propertySet();
 
-	KoProperty::Property &onClickActionProp = propSet->property("onClickAction");
-	if (onClickActionProp.isNull())
-		return;
-	KoProperty::Property &onClickActionOptionProp = propSet->property("onClickActionOption");
 	KexiFormEventAction::ActionData data;
-	data.string = onClickActionProp.value().toString();
-	if (!onClickActionOptionProp.isNull())
-		data.option = onClickActionOptionProp.value().toString();
+	KoProperty::Property &onClickActionProp = propSet->property("onClickAction");
+	if (! onClickActionProp.isNull()) {
+		KoProperty::Property &onClickActionOptionProp = propSet->property("onClickActionOption");
+		data.string = onClickActionProp.value().toString();
+		if (!onClickActionOptionProp.isNull())
+			data.option = onClickActionOptionProp.value().toString();
+	}
 
 	KexiFormScrollView *scrollViewWidget
 		= dynamic_cast<KexiFormScrollView*>(dbform->dataAwareObject());
