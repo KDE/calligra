@@ -24,7 +24,7 @@
 
 #include <QtGui/QDialog>
 
-#include "ui_detailgroupsectiondialog.h"
+#include <ui_detailgroupsectiondialog.h>
 
 class DetailGroupSectionDialog : public QDialog, public Ui::DetailGroupSectionDialog
 {

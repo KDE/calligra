@@ -26,7 +26,7 @@ class ReportDesigner;
 class ReportSectionDetail;
 #include <QtGui/QDialog>
 
-#include "ui_sectioneditor.h"
+#include <ui_sectioneditor.h>
 
 class SectionEditor : public QDialog, public Ui::SectionEditor
 {
