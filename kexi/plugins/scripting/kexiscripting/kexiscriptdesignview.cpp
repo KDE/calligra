@@ -37,6 +37,7 @@
 //Added by qt3to4:
 #include <Q3HBoxLayout>
 #include <ktextbrowser.h>
+#include <kfiledialog.h>
 #include <kmenu.h>
 #include <kactionmenu.h>
 #include <kdebug.h>
@@ -109,6 +110,22 @@ KexiScriptDesignView::KexiScriptDesignView(
 
     // setup local actions
     QList<QAction*> viewActions;
+
+    KActionMenu* filemenu = new KActionMenu(KIcon("system-file-manager"), i18n("File"), this);
+    filemenu->setObjectName("script_file_menu");
+    filemenu->setToolTip(i18n("File actions"));
+    filemenu->setWhatsThis(i18n("File actions"));
+    QAction *a = new QAction(KIcon("document-new"), i18n("New"), this);
+    connect(a, SIGNAL(triggered(bool)), this, SLOT(slotFileNew()));
+    filemenu->addAction(a);
+    a = new QAction(KIcon("document-open"), i18n("Open..."), this);
+    connect(a, SIGNAL(triggered(bool)), this, SLOT(slotFileOpen()));
+    filemenu->addAction(a);
+    a = new QAction(KIcon("document-save"), i18n("Save As..."), this);
+    connect(a, SIGNAL(triggered(bool)), this, SLOT(slotFileSave()));
+    filemenu->addAction(a);
+    viewActions << filemenu;
+
     KActionMenu* menu = new KActionMenu(KIcon("document-properties"), i18n("Edit"), this);
     menu->setObjectName("script_edit_menu");
     menu->setToolTip(i18n("Edit actions"));
@@ -162,6 +179,41 @@ void KexiScriptDesignView::initialize()
     updateProperties();
     d->editor->initialize( d->scriptaction );
     connect(d->editor, SIGNAL(textChanged()), this, SLOT(setDirty()));
+}
+
+void KexiScriptDesignView::slotFileNew()
+{
+    d->editor->setText("");
+}
+
+void KexiScriptDesignView::slotFileOpen()
+{
+    QStringList filters;
+    foreach(QString interpreter, Kross::Manager::self().interpreters())
+        filters << Kross::Manager::self().interpreterInfo(interpreter)->mimeTypes();
+    const QString file = KFileDialog::getOpenFileName(KUrl("kfiledialog:///kexiscriptingdesigner"),filters.join(" "));
+    if( file.isEmpty() )
+        return;
+    QFile f(file);
+    if( ! f.open(QIODevice::ReadOnly | QIODevice::Text) )
+        return;
+    d->editor->setText(f.readAll());
+    f.close();
+}
+
+void KexiScriptDesignView::slotFileSave()
+{
+    QStringList filters;
+    foreach(QString interpreter, Kross::Manager::self().interpreters())
+        filters << Kross::Manager::self().interpreterInfo(interpreter)->mimeTypes();
+    const QString file = KFileDialog::getSaveFileName(KUrl("kfiledialog:///kexiscriptingdesigner"),filters.join(" "));
+    if( file.isEmpty() )
+        return;
+    QFile f(file);
+    if( ! f.open(QIODevice::WriteOnly | QIODevice::Text) )
+        return;
+    f.write(d->editor->text().toUtf8());
+    f.close();
 }
 
 void KexiScriptDesignView::updateProperties()

@@ -94,6 +94,10 @@ class KexiScriptDesignView : public KexiView
          */
         void initialize();
 
+        void slotFileNew();
+        void slotFileOpen();
+        void slotFileSave();
+
         /**
          * Handle changes in the property editor.
          */
