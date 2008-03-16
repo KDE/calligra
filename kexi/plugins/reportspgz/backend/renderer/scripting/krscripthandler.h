@@ -17,39 +17,36 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * Please contact info@openmfg.com with any questions on this license.
  */
-#ifndef KRSCRIPTFUNCTIONS_H
-#define KRSCRIPTFUNCTIONS_H
-#include <QScriptEngine>
+#ifndef KRSCRIPTHANDLER_H
+#define KRSCRIPTHANDLER_H
 #include <QObject>
 #include <QString>
 #include <kexidb/connection.h>
+#include <krsectiondata.h>
 
-/**
-	@author
-*/
-class KRScriptFunctions : public QObject
+class KRScriptFunctions;
+class QScriptEngine;
+
+class KRScriptHandler : public QObject
 {
 	Q_OBJECT
 	public:
-		KRScriptFunctions(KexiDB::Connection*, const QString &);
-
-		~KRScriptFunctions();
-		
-	private:
-		KexiDB::Connection *_conn;
-		QString _source;
-		QString _where;
-		qreal math(const QString &, const QString &);
+		KRScriptHandler(KexiDB::Connection*, QScriptEngine*);
+		~KRScriptHandler();
+		void setSource(const QString &s);
 		
 	public slots:
+		void slotInit();
+		void slotEnteredSection(KRSectionData*);
 		void slotEnteredGroup(const QString&, const QVariant&);
 		void slotExitedGroup(const QString&, const QVariant&);
 		
-		qreal sum(const QString &);
-		qreal avg(const QString &);
-		qreal min(const QString &);
-		qreal max(const QString &);
-		qreal count(const QString &);
+	private:
+		KRScriptFunctions *_functions;
+		KexiDB::Connection *_conn;
+		QScriptEngine *_engine;
+		QString _source;
+		QString _where;
 };
 
 #endif

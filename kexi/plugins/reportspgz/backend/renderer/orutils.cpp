@@ -58,6 +58,7 @@ orQuery::orQuery ( const QString &qstrPName, const QString &qstrSQL,
 
 orQuery::~orQuery()
 {
+	qryQuery->close();
 	delete qryQuery;
 	qryQuery = 0;
 }
@@ -67,8 +68,6 @@ bool orQuery::execute()
 	if ( _database && qryQuery == 0 )
 	{
 		//NOTE we can use the variation of executeQuery to pass in paramters
-
-		kDebug() << "Checking type of source for " << qstrQuery <<  endl;
 		if ( _database->tableSchema ( qstrQuery ) )
 		{
 			kDebug() << qstrQuery <<  " is a table.." << endl;

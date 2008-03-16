@@ -92,7 +92,7 @@ void ReportRectEntity::mousePressEvent ( QGraphicsSceneMouseEvent * event )
 {
 	//Update and show properties
 	ppos->setScenePos ( QPointF(sceneRect().x(), sceneRect().y()) );
-	_rd->changeSet ( pset );
+	//_rd->changeSet ( pset );
 
 	//Set selection
 	if ( ! ( ( event->modifiers() & Qt::ShiftModifier ) == Qt::ShiftModifier ) )

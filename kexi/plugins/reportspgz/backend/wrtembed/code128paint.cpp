@@ -174,7 +174,7 @@ static const struct code128 _128codes[] = {
 
 // STOP CHARACTER { 2 3 3 1 1 1 2 }
 
-int code128Index(QChar code, int set) {
+int code128IndexP(QChar code, int set) {
     for(int idx = 0; _128codes[idx]._null == false; idx++) {
         if(set == SETA && _128codes[idx].codea == code.toAscii()) return idx;
         if(set == SETB && _128codes[idx].codeb == code.toAscii()) return idx;
@@ -198,8 +198,8 @@ void renderCode128(const QRect & r, const QString & _str, int align, QPainter * 
         QChar c;
         for(i = 0; i < _str.length(); i++) {
             c = _str.at(i);
-            rank_a += (code128Index(c, SETA) != -1 ? 1 : 0);
-            rank_b += (code128Index(c, SETB) != -1 ? 1 : 0);
+            rank_a += (code128IndexP(c, SETA) != -1 ? 1 : 0);
+            rank_b += (code128IndexP(c, SETB) != -1 ? 1 : 0);
             rank_c += (c >= '0' && c <= '9' ? 1 : 0);
         }
         if(rank_c == _str.length() && ((rank_c % 2) == 0 || rank_c > 4)) {
@@ -209,7 +209,7 @@ void renderCode128(const QRect & r, const QString & _str, int align, QPainter * 
             if((rank_c % 2) == 1) {
                 str.push_back(104); // START B
                 c = _str.at(0);
-                str.push_back(code128Index(c, SETB));
+                str.push_back(code128IndexP(c, SETB));
                 str.push_back(99); // MODE C
                 i = 1;
             } else {
@@ -233,9 +233,9 @@ void renderCode128(const QRect & r, const QString & _str, int align, QPainter * 
             int v = -1;
             for(i = 0; i < _str.length(); i++) {
                 c = _str.at(i);
-                v = code128Index(c, set);
+                v = code128IndexP(c, set);
                 if(v == -1) {
-                    v = code128Index(c, (set == SETA ? SETB : SETA));
+                    v = code128IndexP(c, (set == SETA ? SETB : SETA));
                     if(v != -1) {
                         str.push_back(98); // SHIFT
                         str.push_back(v);

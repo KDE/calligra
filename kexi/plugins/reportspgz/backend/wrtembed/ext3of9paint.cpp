@@ -171,7 +171,7 @@ const _ext3of9map ext3of9map[] = {
     _ext3of9map( -1 , NULL )
 };
 
-QString convertTo3of9(QChar c)
+QString convertTo3of9P(QChar c)
 {
   for(int i = 0; ext3of9map[i].conversion != QString::null; i++)
     if(ext3of9map[i].code == c.toAscii())
@@ -188,7 +188,7 @@ void renderExtended3of9(const QRect & r, const QString & str, int align, QPainte
   for(int i = 0; i < str.length(); i++)
   {
     c = str.at(i);
-    new_str += convertTo3of9(c);
+    new_str += convertTo3of9P(c);
   }
 
   render3of9(r, new_str, align, pPainter);

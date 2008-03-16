@@ -30,6 +30,7 @@
 #include <QMouseEvent>
 #include <koproperty/set.h>
 #include <koproperty/property.h>
+#include <krsectiondata.h>
 
 // forward declarations
 class QLabel;
@@ -43,6 +44,7 @@ class ReportScene;
 class QVBoxLayout;
 class ReportResizeBar;
 class KoRuler;
+class ReportSectionTitle;
 
 //
 // Class ReportSection
@@ -70,9 +72,10 @@ class ReportSection : public QWidget
 		void slotSceneClicked();
 		void slotPropertyChanged ( KoProperty::Set &, KoProperty::Property & );
 		void slotSceneLostFocus();
+		void slotTitleDoubleClicked();
 		
 	protected:
-		QLabel * title;
+		ReportSectionTitle * title;
 		ReportScene * scene;
 		ReportResizeBar * rb;
 		ReportSceneView * sceneview;
@@ -80,11 +83,8 @@ class ReportSection : public QWidget
 		KoRuler* sectionRuler;
 		
 	private:
-		//Properties
-		void createProperties();
-		KoProperty::Set* _set;
-		KoProperty::Property* _height;
-		KoProperty::Property* _bgColor;
+		KRSectionData *_data;
+		
 };
 
 class ReportResizeBar : public QFrame
@@ -99,6 +99,20 @@ class ReportResizeBar : public QFrame
 		void barRelease();
 	protected:
 		void mouseMoveEvent ( QMouseEvent * e );
+};
+
+class ReportSectionTitle : public QLabel
+{
+	Q_OBJECT
+	public:
+		ReportSectionTitle ( QWidget *parent = 0);
+		~ReportSectionTitle();
+		
+	protected:
+		virtual void mouseDoubleClickEvent( QMouseEvent * event );
+
+	signals:
+		void doubleClicked();
 };
 
 #endif

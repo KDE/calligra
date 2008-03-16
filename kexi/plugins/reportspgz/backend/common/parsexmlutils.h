@@ -39,6 +39,7 @@ class KRTextData;
 class KRBarcodeData;
 class KRImageData;
 
+#include "krsectiondata.h"
 #include "reportpageoptions.h"
 			  
 #include <qstring.h>
@@ -124,24 +125,6 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ORLineStyleData
 		Qt::PenStyle style;  
 };
 
-//
-// ORSectionData is used to store the information about a specific
-// section. A section has a name and optionally extra data. `name'
-// rpthead, rptfoot, pghead, pgfoot, grphead, grpfoot or detail.
-// In the case of pghead and pgfoot extra would contain the page
-// designation (firstpage, odd, even or lastpage).
-//
-class PGZKEXIREPORTPART2_LIB_EXPORT ORSectionData
-{
-  public:
-    QString name;
-    QString extra; // extra info about the section
-    qreal height;
-    QColor bgColor;
-    
-    QList<KRObjectData*> objects;
-    QList<ORDataData> trackTotal;
-};
 
 class PGZKEXIREPORTPART2_LIB_EXPORT ORDetailGroupSectionData
 {
@@ -159,8 +142,8 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ORDetailGroupSectionData
 
     QMap<ORDataData,qreal> _subtotCheckPoints;
 
-    ORSectionData * head;
-    ORSectionData * foot;
+    KRSectionData * head;
+    KRSectionData * foot;
 };
 
 class PGZKEXIREPORTPART2_LIB_EXPORT ORDetailSectionData
@@ -176,50 +159,10 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ORDetailSectionData
     QString name;
     int pagebreak;
 
-    ORSectionData * detail;
+    KRSectionData * detail;
 
     QList<ORDetailGroupSectionData*> groupList;
     QList<ORDataData> trackTotal;
-};
-
-class PGZKEXIREPORTPART2_LIB_EXPORT ORParameter
-{
-  public:
-    ORParameter() : active(false) {};
-    ORParameter(const QString & n) : name(n), active(false) {}
-    ORParameter(const ORParameter & d)
-    {
-      name = d.name;
-      type = d.type;
-      defaultValue = d.defaultValue;
-      description = d.description;
-      listtype = d.listtype;
-      query = d.query;
-      values = d.values;
-      active = d.active;
-    }
-
-    ORParameter & operator=(const ORParameter & d)
-    {
-      name = d.name;
-      type = d.type;
-      defaultValue = d.defaultValue;
-      description = d.description;
-      listtype = d.listtype;
-      query = d.query;
-      values = d.values;
-      active = d.active;
-      return *this;
-    }
-
-    QString name;
-    QString type;
-    QString defaultValue;
-    QString description;
-    QString listtype;
-    QString query;
-    QList<QPair<QString,QString> > values;
-    bool active;
 };
 
 class PGZKEXIREPORTPART2_LIB_EXPORT ORReportData
@@ -228,27 +171,24 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ORReportData
     ORReportData();
 
     QString title;
-//    QString description;
-
-    QMap<QString,ORParameter> definedParams;
-
+    
     ReportPageOptions page;
     QString query;
 
-    ORSectionData * pghead_first;
-    ORSectionData * pghead_odd;
-    ORSectionData * pghead_even;
-    ORSectionData * pghead_last;
-    ORSectionData * pghead_any;
+    KRSectionData * pghead_first;
+    KRSectionData * pghead_odd;
+    KRSectionData * pghead_even;
+    KRSectionData * pghead_last;
+    KRSectionData * pghead_any;
 
-    ORSectionData * rpthead;
-    ORSectionData * rptfoot;
+    KRSectionData * rpthead;
+    KRSectionData * rptfoot;
 
-    ORSectionData * pgfoot_first;
-    ORSectionData * pgfoot_odd;
-    ORSectionData * pgfoot_even;
-    ORSectionData * pgfoot_last;
-    ORSectionData * pgfoot_any;
+    KRSectionData * pgfoot_first;
+    KRSectionData * pgfoot_odd;
+    KRSectionData * pgfoot_even;
+    KRSectionData * pgfoot_last;
+    KRSectionData * pgfoot_any;
 
     QList<ORDetailSectionData*> sections;
 //    QMap<QString, QColor> color_map;
@@ -264,7 +204,6 @@ bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportData(const QDomElement &, ORDataDa
 bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportTextStyleData(const QDomElement &, ORTextStyleData &);
 bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportLineStyleData(const QDomElement &, ORLineStyleData &);
 
-bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportSection(const QDomElement &, ORSectionData &);
 bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportDetailSection(const QDomElement &, ORDetailSectionData &);
 bool PGZKEXIREPORTPART2_LIB_EXPORT parseReport(const QDomElement &, ORReportData &);
 bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportParameter(const QDomElement &, ORReportData &);

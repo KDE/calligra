@@ -19,12 +19,7 @@
  */
 
 #include "parsexmlutils.h"
-#include "krlinedata.h"
-#include "krfielddata.h"
-#include "krtextdata.h"
-#include "krbarcodedata.h"
-#include "krimagedata.h"
-#include "krlabeldata.h"
+
 
 #include "reportpageoptions.h"
 
@@ -32,6 +27,7 @@
 #include <kdebug.h>
 #include <QPainter>
 #include <KoGlobal.h>
+#include <KoUnit.h>
 
 //TODO Graph
 //bool ORGraphData::isGraph() { return TRUE; }
@@ -320,129 +316,7 @@ bool parseReportData ( const QDomElement & elemSource, ORDataData & dataTarget )
 
 //TODO Graphs
 
-bool zLessThan(KRObjectData* s1, KRObjectData* s2)
-{
-	kDebug() << endl;
-	return s1->Z < s2->Z;
-}
 
-bool parseReportSection ( const QDomElement & elemSource, ORSectionData & sectionTarget )
-{
-	sectionTarget.name = elemSource.tagName();
-
-	if ( sectionTarget.name != "rpthead" && sectionTarget.name != "rptfoot" &&
-	        sectionTarget.name != "pghead" && sectionTarget.name != "pgfoot" &&
-	        sectionTarget.name != "grouphead" && sectionTarget.name != "groupfoot" &&
-	        sectionTarget.name != "head" && sectionTarget.name != "foot" &&
-	        sectionTarget.name != "detail" )
-		return false;
-
-	sectionTarget.extra = QString::null;
-	sectionTarget.height = -1;
-
-	QDomNodeList section = elemSource.childNodes();
-	for ( int nodeCounter = 0; nodeCounter < section.count(); nodeCounter++ )
-	{
-		QDomElement elemThis = section.item ( nodeCounter ).toElement();
-		if ( elemThis.tagName() == "height" )
-		{
-			bool valid;
-			qreal height = elemThis.text().toDouble ( &valid );
-			if ( valid )
-				sectionTarget.height = height;
-		}
-		else if ( elemThis.tagName() == "bgcolor" )
-		{
-			sectionTarget.bgColor = QColor(elemThis.text());
-		}
-		else if ( elemThis.tagName() == "firstpage" )
-		{
-			if ( sectionTarget.name == "pghead" || sectionTarget.name == "pgfoot" )
-				sectionTarget.extra = elemThis.tagName();
-		}
-		else if ( elemThis.tagName() == "odd" )
-		{
-			if ( sectionTarget.name == "pghead" || sectionTarget.name == "pgfoot" )
-				sectionTarget.extra = elemThis.tagName();
-		}
-		else if ( elemThis.tagName() == "even" )
-		{
-			if ( sectionTarget.name == "pghead" || sectionTarget.name == "pgfoot" )
-				sectionTarget.extra = elemThis.tagName();
-		}
-		else if ( elemThis.tagName() == "lastpage" )
-		{
-			if ( sectionTarget.name == "pghead" || sectionTarget.name == "pgfoot" )
-				sectionTarget.extra = elemThis.tagName();
-		}
-		else if ( elemThis.tagName() == "label" )
-		{
-			KRLabelData * label = new KRLabelData ( elemThis );
-			//if(parseReportLabel(elemThis, *label) == TRUE)
-			sectionTarget.objects.append ( label );
-			//else
-			//  delete label;
-		}
-		else if ( elemThis.tagName() == "field" )
-		{
-			KRFieldData * field = new KRFieldData ( elemThis );
-			//if(parseReportField(elemThis, *field) == TRUE)
-			//{
-			sectionTarget.objects.append ( field );
-			//TODO Totals
-			//  if(field->trackTotal)
-//          sectionTarget.trackTotal.append(field->data);
-			//}
-			//else
-			//  delete field;
-		}
-		else if ( elemThis.tagName() == "text" )
-		{
-			KRTextData * text = new KRTextData ( elemThis );
-			// if(parseReportText(elemThis, *text) == TRUE)
-			sectionTarget.objects.append ( text );
-			// else
-			//   delete text;
-		}
-		else if ( elemThis.tagName() == "line" )
-		{
-			KRLineData * line = new KRLineData(elemThis);
-			//if ( parseReportLine ( elemThis, *line ) == TRUE )
-				sectionTarget.objects.append ( line );
-			//else
-			//	delete line;
-		}
-		else if ( elemThis.tagName() == "barcode" )
-		{
-			KRBarcodeData * bc = new KRBarcodeData(elemThis);
-			//if ( parseReportBarcode ( elemThis, *bc ) == TRUE )
-				sectionTarget.objects.append ( bc );
-			//else
-			//	delete bc;
-		}
-		else if ( elemThis.tagName() == "image" )
-		{
-			KRImageData * img = new KRImageData(elemThis);
-			//if ( parseReportImage ( elemThis, *img ) == TRUE )
-				sectionTarget.objects.append ( img );
-			//else
-			//	delete img;
-		}
-		//TODO Graph
-		//else if(elemThis.tagName() == "graph")
-		//{
-		//  ORGraphData * graph = new ORGraphData();
-		//  if(parseReportGraphData(elemThis, *graph) == TRUE)
-		//   sectionTarget.objects.append(graph);
-		//  else
-		//    delete graph;
-		//}
-		else
-			kDebug() << "While parsing section encountered an unknown element: " << elemThis.tagName() << endl;
-	}
-	qSort(sectionTarget.objects.begin(), sectionTarget.objects.end(), zLessThan);
-	return TRUE;
-}
 
 bool parseReportDetailSection ( const QDomElement & elemSource, ORDetailSectionData & sectionTarget )
 {
@@ -451,8 +325,8 @@ bool parseReportDetailSection ( const QDomElement & elemSource, ORDetailSectionD
 
 	bool have_detail = FALSE;
 
-	ORSectionData * old_head = 0;
-	ORSectionData * old_foot = 0;
+	KRSectionData * old_head = 0;
+	KRSectionData * old_foot = 0;
 
 	QDomNodeList section = elemSource.childNodes();
 	for ( int nodeCounter = 0; nodeCounter < section.count(); nodeCounter++ )
@@ -465,22 +339,23 @@ bool parseReportDetailSection ( const QDomElement & elemSource, ORDetailSectionD
 		}
 		else if ( elemThis.tagName() == "grouphead" )
 		{
-			ORSectionData * sd = new ORSectionData();
-			if ( parseReportSection ( elemThis, *sd ) == TRUE )
+			KRSectionData * sd = new KRSectionData(elemThis);
+			if (sd->isValid())
 			{
 				old_head = sd;
-				sectionTarget.trackTotal += sd->trackTotal;
+			//TODO Track Totals?	sectionTarget.trackTotal += sd->trackTotal;
 			}
 			else
 				delete sd;
+		
 		}
 		else if ( elemThis.tagName() == "groupfoot" )
 		{
-			ORSectionData * sd = new ORSectionData();
-			if ( parseReportSection ( elemThis, *sd ) == TRUE )
+			KRSectionData * sd = new KRSectionData(elemThis);
+			if (sd->isValid())
 			{
 				old_foot = sd;
-				sectionTarget.trackTotal += sd->trackTotal;
+			//TODO Track Totals?	sectionTarget.trackTotal += sd->trackTotal;
 			}
 			else
 				delete sd;
@@ -506,26 +381,26 @@ bool parseReportDetailSection ( const QDomElement & elemSource, ORDetailSectionD
 				}
 				else if ( node.nodeName() == "head" )
 				{
-					ORSectionData * sd = new ORSectionData();
-					if ( parseReportSection ( node.toElement(), *sd ) == TRUE )
+					KRSectionData * sd = new KRSectionData(node.toElement());
+					if (sd->isValid())
 					{
 						dgsd->head = sd;
-						sectionTarget.trackTotal += sd->trackTotal;
-						for ( QList<ORDataData>::iterator it = sd->trackTotal.begin(); it != sd->trackTotal.end(); ++it )
-							dgsd->_subtotCheckPoints[*it] = 0.0;
+						//TODO Track Totals?sectionTarget.trackTotal += sd->trackTotal;
+						//for ( QList<ORDataData>::iterator it = sd->trackTotal.begin(); it != sd->trackTotal.end(); ++it )
+						//	dgsd->_subtotCheckPoints[*it] = 0.0;
 					}
 					else
 						delete sd;
 				}
 				else if ( node.nodeName() == "foot" )
 				{
-					ORSectionData * sd = new ORSectionData();
-					if ( parseReportSection ( node.toElement(), *sd ) == TRUE )
+					KRSectionData * sd = new KRSectionData(node.toElement());
+					if ( sd->isValid())
 					{
 						dgsd->foot = sd;
-						sectionTarget.trackTotal += sd->trackTotal;
-						for ( QList<ORDataData>::iterator it = sd->trackTotal.begin(); it != sd->trackTotal.end(); ++it )
-							dgsd->_subtotCheckPoints[*it] = 0.0;
+						//TODO Track Totals?sectionTarget.trackTotal += sd->trackTotal;
+						//for ( QList<ORDataData>::iterator it = sd->trackTotal.begin(); it != sd->trackTotal.end(); ++it )
+						//	dgsd->_subtotCheckPoints[*it] = 0.0;
 					}
 					else
 						delete sd;
@@ -537,12 +412,12 @@ bool parseReportDetailSection ( const QDomElement & elemSource, ORDetailSectionD
 		}
 		else if ( elemThis.tagName() == "detail" )
 		{
-			ORSectionData * sd = new ORSectionData();
-			if ( parseReportSection ( elemThis, *sd ) == TRUE )
+			KRSectionData * sd = new KRSectionData(elemThis);
+			if ( sd->isValid() )
 			{
 				sectionTarget.detail = sd;
-				sectionTarget.trackTotal += sd->trackTotal;
-				have_detail = TRUE;
+				//TODO Track Totals?sectionTarget.trackTotal += sd->trackTotal;
+				have_detail = true;
 			}
 			else
 				delete sd;
@@ -646,72 +521,72 @@ bool parseReport ( const QDomElement & elemSource, ORReportData & reportTarget )
 		}
 		else if ( elemThis.tagName() == "rpthead" )
 		{
-			ORSectionData * sd = new ORSectionData();
-			if ( parseReportSection ( elemThis, *sd ) == TRUE )
+			KRSectionData * sd = new KRSectionData(elemThis);
+			if ( sd->isValid() )
 			{
 				reportTarget.rpthead = sd;
-				reportTarget.trackTotal += sd->trackTotal;
+//TODO Track Totals?				reportTarget.trackTotal += sd->trackTotal;
 			}
 			else
 				delete sd;
 		}
 		else if ( elemThis.tagName() == "rptfoot" )
 		{
-			ORSectionData * sd = new ORSectionData();
-			if ( parseReportSection ( elemThis, *sd ) == TRUE )
+			KRSectionData * sd = new KRSectionData(elemThis);
+			if ( sd->isValid() )
 			{
 				reportTarget.rptfoot = sd;
-				reportTarget.trackTotal += sd->trackTotal;
+//TODO Track Totals?				reportTarget.trackTotal += sd->trackTotal;
 			}
 			else
 				delete sd;
 		}
 		else if ( elemThis.tagName() == "pghead" )
 		{
-			ORSectionData * sd = new ORSectionData();
-			if ( parseReportSection ( elemThis, *sd ) == TRUE )
+			KRSectionData * sd = new KRSectionData(elemThis);
+			if ( sd->isValid() )
 			{
-				if ( sd->extra == "firstpage" )
+				if ( sd->extra() == "firstpage" )
 					reportTarget.pghead_first = sd;
-				else if ( sd->extra == "odd" )
+				else if ( sd->extra() == "odd" )
 					reportTarget.pghead_odd = sd;
-				else if ( sd->extra == "even" )
+				else if ( sd->extra() == "even" )
 					reportTarget.pghead_even = sd;
-				else if ( sd->extra == "lastpage" )
+				else if ( sd->extra() == "lastpage" )
 					reportTarget.pghead_last = sd;
-				else if ( sd->extra == QString::null )
+				else if ( sd->extra() == QString::null )
 					reportTarget.pghead_any = sd;
 				else
 				{
 					//TODO qDebug("don't know which page this page header is for: %s",(const char*)sd->extra);
 					delete sd;
 				}
-				reportTarget.trackTotal += sd->trackTotal;
+//TODO Track Totals?				reportTarget.trackTotal += sd->trackTotal;
 			}
 			else
 				delete sd;
 		}
 		else if ( elemThis.tagName() == "pgfoot" )
 		{
-			ORSectionData * sd = new ORSectionData();
-			if ( parseReportSection ( elemThis, *sd ) == TRUE )
+			KRSectionData * sd = new KRSectionData(elemThis);
+			if ( sd->isValid() )
 			{
-				if ( sd->extra == "firstpage" )
+				if ( sd->extra() == "firstpage" )
 					reportTarget.pgfoot_first = sd;
-				else if ( sd->extra == "odd" )
+				else if ( sd->extra() == "odd" )
 					reportTarget.pgfoot_odd = sd;
-				else if ( sd->extra == "even" )
+				else if ( sd->extra() == "even" )
 					reportTarget.pgfoot_even = sd;
-				else if ( sd->extra == "lastpage" )
+				else if ( sd->extra() == "lastpage" )
 					reportTarget.pgfoot_last = sd;
-				else if ( sd->extra == QString::null )
+				else if ( sd->extra() == QString::null )
 					reportTarget.pgfoot_any = sd;
 				else
 				{
 					//TODO qDebug("don't know which page this page footer is for: %s",(const char*)sd->extra);
 					delete sd;
 				}
-				reportTarget.trackTotal += sd->trackTotal;
+//TODO Track Totals?				reportTarget.trackTotal += sd->trackTotal;
 			}
 			else
 				delete sd;

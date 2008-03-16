@@ -94,6 +94,7 @@ class PGZKEXIREPORTPART2_LIB_EXPORT KRFieldData : public KRObjectData
 		static int RTTI;
 		
 		friend class ORPreRenderPrivate;
+		friend class KRScriptField;
 };
 
 #endif

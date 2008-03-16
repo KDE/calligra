@@ -89,7 +89,7 @@ const struct code3of9 _3of9codes[] =
 	{ '\0', { 0, 0, 0, 0, 0, 0, 0, 0, 0 } } // null termininator of list
 };
 
-int codeIndex ( QChar code )
+int codeIndexP ( QChar code )
 {
 	// we are a case insensitive search
 	code = code.toUpper();
@@ -175,7 +175,7 @@ void render3of9 ( const QRect & r, const QString & _str, int align, QPainter * p
 	{
 		// loop through each char and render the barcode
 		QChar c = str.at ( i );
-		int idx = codeIndex ( c );
+		int idx = codeIndexP ( c );
 		if ( idx == -1 )
 		{
 			qDebug ( "Encountered a non-compliant character while rendering a 3of9 barcode -- skipping" );

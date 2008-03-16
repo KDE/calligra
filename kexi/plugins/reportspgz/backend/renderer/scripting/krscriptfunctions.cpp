@@ -21,10 +21,9 @@
 #include <kexidb/cursor.h>
 #include <kdebug.h>
 
-KRScriptFunctions::KRScriptFunctions(KexiDB::Connection *c, const QString &s)
+KRScriptFunctions::KRScriptFunctions(KexiDB::Connection *c)
 {
 	_conn = c;
-	_source = s;
 }
 
 
@@ -32,16 +31,16 @@ KRScriptFunctions::~KRScriptFunctions()
 {
 }
 
-void KRScriptFunctions::slotEnteredGroup(const QString &key, const QVariant &value)
+void KRScriptFunctions::setSource(const QString &s)
 {
-	kDebug() << key << value << endl;
-	_where = "(" + key + " = " + value.toString() + ")";
+	_source = s;	
 }
-void KRScriptFunctions::slotExitedGroup(const QString &key, const QVariant &value)
+
+void KRScriptFunctions::setWhere(const QString&w)
 {
-	kDebug() << key << value << endl;
-	_where = "(" + key + " = " + value.toString() + ")";
+	_where = w;
 }
+
 qreal KRScriptFunctions::math(const QString &function, const QString &field)
 {
 	qreal ret;

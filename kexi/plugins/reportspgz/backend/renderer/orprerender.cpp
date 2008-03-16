@@ -43,7 +43,7 @@
 #include <krlabeldata.h>
 #include <krlinedata.h>
 #include <QScriptEngine>
-#include "krscriptfunctions.h"
+#include "scripting/krscripthandler.h"
 //
 // ORPreRenderPrivate
 // This class is the private class that houses all the internal
@@ -92,21 +92,22 @@ class ORPreRenderPrivate : public QObject
 		qreal finishCurPageSize ( bool = false );
 
 		void renderDetailSection ( ORDetailSectionData & );
-		qreal renderSection ( const ORSectionData & );
-		qreal renderSectionSize ( const ORSectionData & );
+		qreal renderSection ( const KRSectionData & );
+		qreal renderSectionSize ( const KRSectionData & );
 
 		qreal getNearestSubTotalCheckPoint ( const ORDataData & );
 		
 		
 		///Scripting Stuff
 		QScriptEngine *_scriptEngine;
-		KRScriptFunctions *_functions;
-		void initEngineParameters();
+		KRScriptHandler *_handler;
+		void initEngine();
 		void populateEngineParameters();
 		
 	signals:
 		void enteredGroup(const QString&, const QVariant&);
 		void exitedGroup(const QString&, const QVariant&);
+		void renderingSection (KRSectionData*);
 };
 
 ORPreRenderPrivate::ORPreRenderPrivate()
@@ -124,7 +125,7 @@ ORPreRenderPrivate::ORPreRenderPrivate()
 	_subtotContextMap = 0;
 	_subtotContextDetail = 0;
 	_subtotContextPageFooter = false;
-	_scriptEngine = new QScriptEngine();
+	
 	
 }
 
@@ -270,8 +271,8 @@ void ORPreRenderPrivate::renderDetailSection ( ORDetailSectionData & detailData 
 		if (_query)
 		{
 			curs = _query->getQuery();
-			_functions = new KRScriptFunctions(_conn, _query->getSql());
-			initEngineParameters();
+// 			//TODO init the engine earlier
+			_handler->setSource( _query->getSql());
 		}
 		if ( curs && !curs->eof() )
 		{
@@ -462,17 +463,17 @@ void ORPreRenderPrivate::renderDetailSection ( ORDetailSectionData & detailData 
 	}
 }
 
-qreal ORPreRenderPrivate::renderSectionSize ( const ORSectionData & sectionData )
+qreal ORPreRenderPrivate::renderSectionSize ( const KRSectionData & sectionData )
 {
-	qreal intHeight = POINT_TO_INCH ( sectionData.height ) * KoGlobal::dpiY();
+	qreal intHeight = POINT_TO_INCH ( sectionData.height() ) * KoGlobal::dpiY();
 
-	if ( sectionData.objects.count() == 0 )
+	if ( sectionData.objects().count() == 0 )
 		return intHeight;
 
-	//QListIterator<KRObjectData*> it ( sectionData.objects );
 	QList<KRObjectData*>::const_iterator it;
+	QList<KRObjectData*> objects = sectionData.objects();
 	KRObjectData * elemThis;
-	for ( it = sectionData.objects.begin(); it != sectionData.objects.end(); ++it )
+	for ( it = objects.begin(); it != objects.end(); ++it )
 		//while ( ( elemThis = it.current() ) != 0 )
 	{
 		elemThis = *it;
@@ -556,28 +557,34 @@ qreal ORPreRenderPrivate::renderSectionSize ( const ORSectionData & sectionData 
 	return intHeight;
 }
 
-qreal ORPreRenderPrivate::renderSection ( const ORSectionData & sectionData )
+qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 {
-	qreal intHeight = POINT_TO_INCH ( sectionData.height ) * KoGlobal::dpiY();
-	kDebug() << "Name: " << sectionData.name << " Height: " << intHeight << "Objects: " << sectionData.objects.count() << endl;
+	qreal intHeight = POINT_TO_INCH ( sectionData.height() ) * KoGlobal::dpiY();
+	kDebug() << "Name: " << sectionData.name() << " Height: " << intHeight << "Objects: " << sectionData.objects().count() << endl;
 
 	populateEngineParameters();
+	
+	emit (renderingSection(const_cast<KRSectionData*>(&sectionData)));
+//	emit (renderingSection(&sectionData));
+	
+	_scriptEngine->evaluate(sectionData.eventOnRender());
 	
 	//Render section background
 	ORORect* bg = new ORORect();
 	bg->setPen(QPen(Qt::NoPen));
-	bg->setBrush(sectionData.bgColor);
+	bg->setBrush(sectionData.bgColor());
 	qreal w = _page->document()->pageOptions().widthPx() - _page->document()->pageOptions().getMarginRight() - _leftMargin;
 	
 	bg->setRect(QRectF(_leftMargin, _yOffset, w,intHeight));
 	_page->addPrimitive(bg, true);
 	
-	if ( sectionData.objects.count() == 0 )
+	if ( sectionData.objects().count() == 0 )
 		return 0;
 
 	QList<KRObjectData*>::const_iterator it;
+	QList<KRObjectData*> objects = sectionData.objects();
 	KRObjectData * elemThis;
-	for ( it = sectionData.objects.begin(); it != sectionData.objects.end(); ++it )
+	for ( it = objects.begin(); it != objects.end(); ++it )
 	{
 		elemThis = *it;
 		if ( elemThis->type() == KRObjectData::EntityLabel )
@@ -962,15 +969,14 @@ qreal ORPreRenderPrivate::getNearestSubTotalCheckPoint ( const ORDataData & d )
 	return 0.0;
 }
 
-void ORPreRenderPrivate::initEngineParameters()
+void ORPreRenderPrivate::initEngine()
 {
-	//QScriptValue sumFunc = _scriptEngine->newFunction(functions.sum);
-	//_scriptEngine->globalObject().setProperty("sum", sumFunc);
-	connect(this, SIGNAL(enteredGroup(const QString&, const QVariant&)), _functions, SLOT(slotEnteredGroup(const QString&, const QVariant&)));
+	_scriptEngine = new QScriptEngine();
+	_handler = new KRScriptHandler(_conn, _scriptEngine);
+	_handler->slotInit();
+	connect(this, SIGNAL(enteredGroup(const QString&, const QVariant&)), _handler, SLOT(slotEnteredGroup(const QString&, const QVariant&)));
 	
-	QScriptValue funcs = _scriptEngine->newQObject(_functions, QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
-	_scriptEngine->globalObject().setProperty("functions",funcs);
-	
+	connect(this, SIGNAL(renderingSection(KRSectionData*)), _handler, SLOT(slotEnteredSection(KRSectionData*)));
 }
 
 void ORPreRenderPrivate::populateEngineParameters()
@@ -1154,6 +1160,7 @@ ORODocument* ORPreRender::generate()
 //			xqry->trackFieldTotal ( _internal->_reportData->trackTotal[i].column );
 	}
 
+	_internal->initEngine();
 	_internal->createNewPage();
 	if ( !label.isNull() )
 	{

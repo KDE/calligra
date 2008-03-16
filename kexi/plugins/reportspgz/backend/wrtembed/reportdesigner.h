@@ -112,13 +112,13 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ReportDesigner : public QWidget
 		
 		int pageWidthPx() const;
 
-		QGraphicsScene* activeScene() {return _activeScene;}
-		void setActiveScene ( QGraphicsScene* a ) {_activeScene = a;}
+		QGraphicsScene* activeScene();
+		void setActiveScene ( QGraphicsScene* a );
 		KoProperty::Set* propertySet() {return set;}
 		
 		virtual QSize sizeHint() const;
 
-		KoZoomHandler* zoomHandler() {return zoom;}
+		KoZoomHandler* zoomHandler();
 		
 		KoUnit pageUnit() const;
 
@@ -129,6 +129,8 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ReportDesigner : public QWidget
 		KoProperty::Set* itemPropertySet() {return _itmset;}
 
 		void setModified ( bool = true );
+		
+		QString editorText(const QString&);
 	public slots:
 		
 		void slotEditDelete();
@@ -152,8 +154,6 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ReportDesigner : public QWidget
 	protected:
 		virtual void closeEvent ( QCloseEvent * e );
 
-		QVBoxLayout * vboxlayout;
-
 		ReportSection * reportHead;
 		ReportSection * pageHeadFirst;
 		ReportSection * pageHeadOdd;
@@ -170,19 +170,14 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ReportDesigner : public QWidget
 		ReportSectionDetail * detail;
 
 	private:
+		class Private;
+		Private * const d;
+		
+		void init();
 		bool _modified; // true if this document has been modified, false otherwise
 		KexiDB::Connection *conn;
-		QGridLayout *grid;
-		void init();
-
-		QGraphicsScene* _activeScene;
 		QStringList pageFormats();
 
-		QStringList _datasourceList;
-		KoRuler *hruler;
-
-		KoZoomHandler *zoom;
-		QPushButton *pageButton;
 		virtual void resizeEvent ( QResizeEvent * event );
 
 		//Properties

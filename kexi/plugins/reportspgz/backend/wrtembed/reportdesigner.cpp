@@ -56,6 +56,7 @@
 #include <qspinbox.h>
 #include <QGraphicsSceneMouseEvent>
 #include <QMenu>
+#include <QSplitter>
 
 #include <kexidb/connection.h>
 #include <kexidb/utils.h>
@@ -69,6 +70,9 @@
 #include <KoPageFormat.h>
 #include <kaction.h>
 #include <kdebug.h>
+#include <kexisectionheader.h>
+#include <kexieditor.h>
+
 //
 // define and implement the ReportWriterSectionData class
 // a simple class to hold/hide data in the ReportHandler class
@@ -131,9 +135,24 @@ class ReportWriterSectionData
 		QList<ReportEntity*> cut_list;
 };
 
+//! @internal
+class ReportDesigner::Private
+{
+	public:
+		QGridLayout *grid;
+		QSplitter *splitter;
+		QGraphicsScene *activeScene;
+		KoRuler *hruler;
+		KoZoomHandler *zoom;
+		QVBoxLayout *vboxlayout;
+		KexiSectionHeader *head;
+		QPushButton *pageButton;
+		KexiEditor *editor;
+		KDialog *editorDialog;
+};
 
-ReportDesigner::ReportDesigner ( QWidget * parent, KexiDB::Connection *cn)
-		: QWidget ( parent )
+ReportDesigner::ReportDesigner ( QWidget * parent, KexiDB::Connection *cn )
+		: QWidget ( parent ), d ( new Private() )
 {
 	conn = cn;
 	init();
@@ -142,7 +161,10 @@ void ReportDesigner::init()
 {
 	_modified = false;
 	detail = 0;
-	hruler = 0;
+	d->hruler = 0;
+	d->editorDialog = 0;
+	d->editor = 0;
+	
 	sectionData = new ReportWriterSectionData();
 	createProperties();
 
@@ -152,64 +174,67 @@ void ReportDesigner::init()
 	pageHeadFirst = pageHeadOdd = pageHeadEven = pageHeadLast = pageHeadAny = 0;
 	pageFootFirst = pageFootOdd = pageFootEven = pageFootLast = pageFootAny = 0;
 
-	grid = new QGridLayout ( this );
-	grid->setSpacing ( 0 );
-	grid->setMargin ( 0 );
-	grid->setColumnStretch ( 1,1 );
-	grid->setRowStretch ( 1,1 );
-	grid->setSizeConstraint(QLayout::SetFixedSize);
 	
-	vboxlayout = new QVBoxLayout ( );
-	vboxlayout->setSpacing ( 0 );
-	vboxlayout->setMargin ( 0 );
-	vboxlayout->setSizeConstraint(QLayout::SetFixedSize);
-	//Create nice rulers
-	zoom = new KoZoomHandler ();
-	hruler = new KoRuler ( this, Qt::Horizontal, zoom );
+	d->grid = new QGridLayout ( this );
+	d->grid->setSpacing ( 0 );
+	d->grid->setMargin ( 0 );
+	d->grid->setColumnStretch ( 1,1 );
+	d->grid->setRowStretch ( 1,1 );
+	d->grid->setSizeConstraint ( QLayout::SetFixedSize );
 
-	pageButton = new QPushButton ( this );
+	d->vboxlayout = new QVBoxLayout ( );
+	d->vboxlayout->setSpacing ( 0 );
+	d->vboxlayout->setMargin ( 0 );
+	d->vboxlayout->setSizeConstraint ( QLayout::SetFixedSize );
+
+	//Create nice rulers
+	d->zoom = new KoZoomHandler ();
+	d->hruler = new KoRuler ( this, Qt::Horizontal, d->zoom );
+
+	d->pageButton = new QPushButton ( this );
 
 	//Messy, but i cant find another way
-	delete hruler->tabChooser();
-	hruler->setUnit ( KoUnit ( KoUnit::Centimeter ) );
+	delete d->hruler->tabChooser();
+	d->hruler->setUnit ( KoUnit ( KoUnit::Centimeter ) );
 
-	grid->addWidget ( pageButton, 0, 0 );
-	grid->addWidget ( hruler, 0, 1 );
-	grid->addLayout ( vboxlayout, 1,0, 1, 2 );
+	d->grid->addWidget ( d->pageButton, 0, 0 );
+	d->grid->addWidget ( d->hruler, 0, 1 );
+	d->grid->addLayout ( d->vboxlayout, 1,0, 1, 2 );
 
-	pageButton->setMaximumSize ( QSize ( 22,22 ) );
-	pageButton->setMinimumSize ( QSize ( 22,22 ) );
+	d->pageButton->setMaximumSize ( QSize ( 22,22 ) );
+	d->pageButton->setMinimumSize ( QSize ( 22,22 ) );
 
 	detail = new ReportSectionDetail ( this );
-	vboxlayout->insertWidget ( 0,detail );
+	d->vboxlayout->insertWidget ( 0,detail );
+	
+	setLayout(d->grid);
+	
 
-	setLayout ( grid );
-
-	connect ( pageButton, SIGNAL ( pressed() ), this, SLOT ( slotPageButton_Pressed() ) );
+	connect ( d->pageButton, SIGNAL ( pressed() ), this, SLOT ( slotPageButton_Pressed() ) );
 	emit pagePropertyChanged ( *set );
 
 	connect ( set, SIGNAL ( propertyChanged ( KoProperty::Set &, KoProperty::Property & ) ), this, SLOT ( slotPropertyChanged ( KoProperty::Set &, KoProperty::Property & ) ) );
-	
+
 	changeSet ( set );
 }
 
-ReportDesigner::ReportDesigner (QWidget *parent, KexiDB::Connection *cn, const QString & d )
+ReportDesigner::ReportDesigner ( QWidget *parent, KexiDB::Connection *cn, const QString & d ) : d ( new Private() )
 {
 	kDebug() << "***********************************************************" << endl;
 	kDebug() << d << endl;
 	kDebug() << "***********************************************************" << endl;
-	
+
 	conn = cn;
 	init();
 	QDomDocument doc;
-	doc.setContent(d);
+	doc.setContent ( d );
 	QDomElement root = doc.documentElement();
 	if ( root.tagName() != "report" )
 	{
 		// arg we got an xml file but not one i know of
 		kDebug() <<"root element was not <report>" << endl;;
 	}
-	
+
 	deleteDetail();
 
 	QDomNodeList nlist = root.childNodes();
@@ -238,13 +263,13 @@ ReportDesigner::ReportDesigner (QWidget *parent, KexiDB::Connection *cn, const Q
 			{
 				setGridOptions ( it.toElement().attribute ( "visible" ).toInt() == 0?false:true, it.toElement().attribute ( "divisions" ).toInt() );
 			}
-			
+
 			//TODO Load page options
 			else if ( n == "size" )
 			{
 				if ( it.firstChild().isText() )
 				{
-					propertySet()->property("PageSize").setValue(it.firstChild().nodeValue());
+					propertySet()->property ( "PageSize" ).setValue ( it.firstChild().nodeValue() );
 				}
 				else
 				{
@@ -254,17 +279,17 @@ ReportDesigner::ReportDesigner (QWidget *parent, KexiDB::Connection *cn, const Q
 					QDomNode n2 = n1.nextSibling();
 					if ( n1.nodeName() == "width" )
 					{
-						propertySet()->property("CustomWidth").setValue(n1.firstChild().nodeValue().toDouble());
-						
-						propertySet()->property("CustomHeight").setValue(n2.firstChild().nodeValue().toDouble());
+						propertySet()->property ( "CustomWidth" ).setValue ( n1.firstChild().nodeValue().toDouble() );
+
+						propertySet()->property ( "CustomHeight" ).setValue ( n2.firstChild().nodeValue().toDouble() );
 					}
 					else
 					{
-						propertySet()->property("CustomHeight").setValue(n1.firstChild().nodeValue().toDouble());
-						
-						propertySet()->property("CustomWidth").setValue(n2.firstChild().nodeValue().toDouble());
+						propertySet()->property ( "CustomHeight" ).setValue ( n1.firstChild().nodeValue().toDouble() );
+
+						propertySet()->property ( "CustomWidth" ).setValue ( n2.firstChild().nodeValue().toDouble() );
 					}
-					propertySet()->property("PageSize").setValue("Custom");
+					propertySet()->property ( "PageSize" ).setValue ( "Custom" );
 				}
 			}
 			else if ( n == "labeltype" )
@@ -274,35 +299,35 @@ ReportDesigner::ReportDesigner (QWidget *parent, KexiDB::Connection *cn, const Q
 			}
 			else if ( n == "portrait" )
 			{
-				propertySet()->property("Orientation").setValue("Portrait");
+				propertySet()->property ( "Orientation" ).setValue ( "Portrait" );
 			}
 			else if ( n == "landscape" )
 			{
-				propertySet()->property("Orientation").setValue("Landscape");
+				propertySet()->property ( "Orientation" ).setValue ( "Landscape" );
 			}
 			else if ( n == "topmargin" )
 			{
-				
-				propertySet()->property("TopMargin").setValue(pageUnit().toUserValue(it.firstChild().nodeValue().toDouble()));
+
+				propertySet()->property ( "TopMargin" ).setValue ( pageUnit().toUserValue ( it.firstChild().nodeValue().toDouble() ) );
 			}
 			else if ( n == "bottommargin" )
 			{
-				propertySet()->property("BottomMargin").setValue(pageUnit().toUserValue(it.firstChild().nodeValue().toDouble()));
+				propertySet()->property ( "BottomMargin" ).setValue ( pageUnit().toUserValue ( it.firstChild().nodeValue().toDouble() ) );
 			}
 			else if ( n == "leftmargin" )
 			{
-				propertySet()->property("LeftMargin").setValue(pageUnit().toUserValue(it.firstChild().nodeValue().toDouble()));
+				propertySet()->property ( "LeftMargin" ).setValue ( pageUnit().toUserValue ( it.firstChild().nodeValue().toDouble() ) );
 			}
 			else if ( n == "rightmargin" )
 			{
-				propertySet()->property("RightMargin").setValue(pageUnit().toUserValue(it.firstChild().nodeValue().toDouble()));
+				propertySet()->property ( "RightMargin" ).setValue ( pageUnit().toUserValue ( it.firstChild().nodeValue().toDouble() ) );
 			}
 			else if ( n == "rpthead" )
 			{
-				if ( getSection(ReportDesigner::ReportHead) == 0 )
+				if ( getSection ( ReportDesigner::ReportHead ) == 0 )
 				{
-					insertSection(ReportDesigner::ReportHead);
-					getSection(ReportDesigner::ReportHead)->initFromXML ( it );
+					insertSection ( ReportDesigner::ReportHead );
+					getSection ( ReportDesigner::ReportHead )->initFromXML ( it );
 				}
 				else
 				{
@@ -311,10 +336,10 @@ ReportDesigner::ReportDesigner (QWidget *parent, KexiDB::Connection *cn, const Q
 			}
 			else if ( n == "rptfoot" )
 			{
-				if ( getSection(ReportDesigner::ReportFoot) == 0 )
+				if ( getSection ( ReportDesigner::ReportFoot ) == 0 )
 				{
-					insertSection(ReportDesigner::ReportFoot);
-					getSection(ReportDesigner::ReportFoot)->initFromXML ( it );
+					insertSection ( ReportDesigner::ReportFoot );
+					getSection ( ReportDesigner::ReportFoot )->initFromXML ( it );
 				}
 				else
 				{
@@ -329,10 +354,10 @@ ReportDesigner::ReportDesigner (QWidget *parent, KexiDB::Connection *cn, const Q
 				ReportSection * rs = 0;
 				if ( !it.namedItem ( "firstpage" ).isNull() )
 				{
-					if ( getSection(ReportDesigner::PageHeadFirst) == 0 )
+					if ( getSection ( ReportDesigner::PageHeadFirst ) == 0 )
 					{
-						insertSection(ReportDesigner::PageHeadFirst);
-						rs = getSection(ReportDesigner::PageHeadFirst);
+						insertSection ( ReportDesigner::PageHeadFirst );
+						rs = getSection ( ReportDesigner::PageHeadFirst );
 					}
 					else
 					{
@@ -341,10 +366,10 @@ ReportDesigner::ReportDesigner (QWidget *parent, KexiDB::Connection *cn, const Q
 				}
 				else if ( !it.namedItem ( "odd" ).isNull() )
 				{
-					if ( getSection(ReportDesigner::PageHeadOdd) == 0 )
+					if ( getSection ( ReportDesigner::PageHeadOdd ) == 0 )
 					{
-						insertSection(ReportDesigner::PageHeadOdd);
-						rs = getSection(ReportDesigner::PageHeadOdd);
+						insertSection ( ReportDesigner::PageHeadOdd );
+						rs = getSection ( ReportDesigner::PageHeadOdd );
 					}
 					else
 					{
@@ -353,10 +378,10 @@ ReportDesigner::ReportDesigner (QWidget *parent, KexiDB::Connection *cn, const Q
 				}
 				else if ( !it.namedItem ( "even" ).isNull() )
 				{
-					if ( getSection(ReportDesigner::PageHeadEven) == 0 )
+					if ( getSection ( ReportDesigner::PageHeadEven ) == 0 )
 					{
-						insertSection(ReportDesigner::PageHeadEven);
-						rs = getSection(ReportDesigner::PageHeadEven);
+						insertSection ( ReportDesigner::PageHeadEven );
+						rs = getSection ( ReportDesigner::PageHeadEven );
 					}
 					else
 					{
@@ -365,10 +390,10 @@ ReportDesigner::ReportDesigner (QWidget *parent, KexiDB::Connection *cn, const Q
 				}
 				else if ( !it.namedItem ( "lastpage" ).isNull() )
 				{
-					if ( getSection(ReportDesigner::PageHeadLast) == 0 )
+					if ( getSection ( ReportDesigner::PageHeadLast ) == 0 )
 					{
-						insertSection(ReportDesigner::PageHeadLast);
-						rs = getSection(ReportDesigner::PageHeadLast);
+						insertSection ( ReportDesigner::PageHeadLast );
+						rs = getSection ( ReportDesigner::PageHeadLast );
 					}
 					else
 					{
@@ -378,10 +403,10 @@ ReportDesigner::ReportDesigner (QWidget *parent, KexiDB::Connection *cn, const Q
 				else
 				{
 					// we have an any pghead
-					if ( getSection(ReportDesigner::PageHeadAny) == 0 )
+					if ( getSection ( ReportDesigner::PageHeadAny ) == 0 )
 					{
-						insertSection(ReportDesigner::PageHeadAny);
-						rs = getSection(ReportDesigner::PageHeadAny);
+						insertSection ( ReportDesigner::PageHeadAny );
+						rs = getSection ( ReportDesigner::PageHeadAny );
 					}
 					else
 					{
@@ -396,10 +421,10 @@ ReportDesigner::ReportDesigner (QWidget *parent, KexiDB::Connection *cn, const Q
 				ReportSection * rs = 0;
 				if ( !it.namedItem ( "firstpage" ).isNull() )
 				{
-					if ( getSection(ReportDesigner::PageFootFirst) == 0 )
+					if ( getSection ( ReportDesigner::PageFootFirst ) == 0 )
 					{
-						insertSection(ReportDesigner::PageFootFirst);
-						rs = getSection(ReportDesigner::PageFootFirst);
+						insertSection ( ReportDesigner::PageFootFirst );
+						rs = getSection ( ReportDesigner::PageFootFirst );
 					}
 					else
 					{
@@ -408,10 +433,10 @@ ReportDesigner::ReportDesigner (QWidget *parent, KexiDB::Connection *cn, const Q
 				}
 				else if ( !it.namedItem ( "odd" ).isNull() )
 				{
-					if ( getSection(ReportDesigner::PageFootOdd) == 0 )
+					if ( getSection ( ReportDesigner::PageFootOdd ) == 0 )
 					{
-						insertSection(ReportDesigner::PageFootOdd);
-						rs = getSection(ReportDesigner::PageFootOdd);
+						insertSection ( ReportDesigner::PageFootOdd );
+						rs = getSection ( ReportDesigner::PageFootOdd );
 					}
 					else
 					{
@@ -420,10 +445,10 @@ ReportDesigner::ReportDesigner (QWidget *parent, KexiDB::Connection *cn, const Q
 				}
 				else if ( !it.namedItem ( "even" ).isNull() )
 				{
-					if ( getSection(ReportDesigner::PageFootEven) == 0 )
+					if ( getSection ( ReportDesigner::PageFootEven ) == 0 )
 					{
-						insertSection(ReportDesigner::PageFootEven);
-						rs = getSection(ReportDesigner::PageFootEven);
+						insertSection ( ReportDesigner::PageFootEven );
+						rs = getSection ( ReportDesigner::PageFootEven );
 					}
 					else
 					{
@@ -432,10 +457,10 @@ ReportDesigner::ReportDesigner (QWidget *parent, KexiDB::Connection *cn, const Q
 				}
 				else if ( !it.namedItem ( "lastpage" ).isNull() )
 				{
-					if ( getSection(ReportDesigner::PageFootLast) == 0 )
+					if ( getSection ( ReportDesigner::PageFootLast ) == 0 )
 					{
-						insertSection(ReportDesigner::PageFootLast);
-						rs = getSection(ReportDesigner::PageFootLast);
+						insertSection ( ReportDesigner::PageFootLast );
+						rs = getSection ( ReportDesigner::PageFootLast );
 					}
 					else
 					{
@@ -445,10 +470,10 @@ ReportDesigner::ReportDesigner (QWidget *parent, KexiDB::Connection *cn, const Q
 				else
 				{
 					// we have the any page foot
-					if ( getSection(ReportDesigner::PageFootAny) == 0 )
+					if ( getSection ( ReportDesigner::PageFootAny ) == 0 )
 					{
-						insertSection(ReportDesigner::PageFootAny);
-						rs = getSection(ReportDesigner::PageFootAny);
+						insertSection ( ReportDesigner::PageFootAny );
+						rs = getSection ( ReportDesigner::PageFootAny );
 					}
 					else
 					{
@@ -461,7 +486,7 @@ ReportDesigner::ReportDesigner (QWidget *parent, KexiDB::Connection *cn, const Q
 			{
 				ReportSectionDetail * rsd = new ReportSectionDetail ( this );
 				rsd->initFromXML ( it );
-				setDetail(rsd);
+				setDetail ( rsd );
 			}
 			else
 			{
@@ -513,10 +538,10 @@ void ReportDesigner::slotSectionEditor()
 	delete se;
 }
 
-ReportSection * ReportDesigner::getSection(ReportDesigner::Section s) 
-{ 
+ReportSection * ReportDesigner::getSection ( ReportDesigner::Section s )
+{
 	ReportSection *sec;
-	switch (s)
+	switch ( s )
 	{
 		case ReportDesigner::PageHeadAny:
 			sec = pageHeadAny;
@@ -559,14 +584,14 @@ ReportSection * ReportDesigner::getSection(ReportDesigner::Section s)
 	}
 	return sec;
 }
-void ReportDesigner::removeSection(ReportDesigner::Section s)
+void ReportDesigner::removeSection ( ReportDesigner::Section s )
 {
-	ReportSection* sec = getSection(s);
+	ReportSection* sec = getSection ( s );
 	if ( sec != NULL )
 	{
 		delete sec;
-		
-		switch (s)
+
+		switch ( s )
 		{
 			case ReportDesigner::PageHeadAny:
 				pageHeadAny = NULL;
@@ -607,29 +632,29 @@ void ReportDesigner::removeSection(ReportDesigner::Section s)
 			default:
 				sec = NULL;
 		}
-		
+
 		setModified ( true );
 		adjustSize();
 	}
 }
-void ReportDesigner::insertSection(ReportDesigner::Section s)
+void ReportDesigner::insertSection ( ReportDesigner::Section s )
 {
-	ReportSection* sec = getSection(s);
+	ReportSection* sec = getSection ( s );
 	if ( sec == NULL )
 	{
 		int idx = 0;
-		for (int i = 1; i <= s; ++i)
+		for ( int i = 1; i <= s; ++i )
 		{
-			if (getSection((ReportDesigner::Section)(i)) != NULL)
+			if ( getSection ( ( ReportDesigner::Section ) ( i ) ) != NULL )
 				idx++;
 		}
-		if (s > ReportDesigner::ReportHead)
+		if ( s > ReportDesigner::ReportHead )
 			idx++;
 		kDebug() << idx << endl;
 		ReportSection *rs = new ReportSection ( this );
-		vboxlayout->insertWidget ( idx,rs );
-		
-		switch (s)
+		d->vboxlayout->insertWidget ( idx,rs );
+
+		switch ( s )
 		{
 			case ReportDesigner::PageHeadAny:
 				rs->setTitle ( i18n ( "Page Header (Any)" ) );
@@ -855,7 +880,7 @@ QDomDocument ReportDesigner::document()
 
 	return doc;
 }
-						      
+
 void ReportDesigner::setReportTitle ( const QString & str )
 {
 	if ( reportTitle() != str )
@@ -883,9 +908,9 @@ void ReportDesigner::setModified ( bool mod )
 	{
 		_modified = mod;
 	}
-	if (_modified )
+	if ( _modified )
 	{
-		emit(dirty());
+		emit ( dirty() );
 
 	}
 }
@@ -1008,7 +1033,7 @@ void ReportDesigner::slotPropertyChanged ( KoProperty::Set &s, KoProperty::Prope
 
 	if ( p.name() == "PageUnit" )
 	{
-		hruler->setUnit ( pageUnit() );
+		d->hruler->setUnit ( pageUnit() );
 	}
 
 }
@@ -1029,7 +1054,7 @@ QSize ReportDesigner::sizeHint() const
 {
 	int w = 0;
 	int h = 0;
-	
+
 	if ( pageFootAny )
 		h += pageFootAny->sizeHint().height();
 	if ( pageFootEven )
@@ -1055,15 +1080,15 @@ QSize ReportDesigner::sizeHint() const
 	if ( reportFoot )
 	{
 		h += reportFoot->sizeHint().height();
-	
-	}	
+
+	}
 	if ( detail )
 	{
 		h += detail->sizeHint().height();
 		w += detail->sizeHint().width();
 	}
 
-	h+=hruler->height();
+	h+=d->hruler->height();
 
 	return QSize ( w,h );
 }
@@ -1091,7 +1116,7 @@ int ReportDesigner::pageWidthPx() const
 void ReportDesigner::resizeEvent ( QResizeEvent * event )
 {
 	//hruler->setRulerLength ( vboxlayout->geometry().width() );
-	hruler->setRulerLength ( pageWidthPx() );
+	d->hruler->setRulerLength ( pageWidthPx() );
 }
 
 void ReportDesigner::setDetail ( ReportSectionDetail *rsd )
@@ -1106,7 +1131,7 @@ void ReportDesigner::setDetail ( ReportSectionDetail *rsd )
 		if ( pageHeadAny ) idx++;
 		if ( reportHead ) idx++;
 		detail = rsd;
-		vboxlayout->insertWidget ( idx,detail );
+		d->vboxlayout->insertWidget ( idx,detail );
 	}
 }
 void ReportDesigner::deleteDetail()
@@ -1286,7 +1311,7 @@ void ReportDesigner::slotItemGraph()
 void ReportDesigner::changeSet ( KoProperty::Set *s )
 {
 	_itmset = s;
-	emit(propertySetChanged());
+	emit ( propertySetChanged() );
 }
 
 
@@ -1332,7 +1357,7 @@ void ReportDesigner::slotEditCut()
 			delete sectionData->cut_list[i];
 		}
 		sectionData->cut_list.clear();
-		
+
 		QGraphicsItem * item = activeScene()->selectedItems().first();
 		if ( item )
 		{
@@ -1346,20 +1371,20 @@ void ReportDesigner::slotEditCut()
 				sectionData->copy_x_pos = ( int ) item->x();
 				sectionData->copy_y_pos = ( int ) item->y();
 			}
-			
+
 			sectionData->copy_list.clear();
-			
+
 			for ( int i = 0; i < activeScene()->selectedItems().count(); i++ )
 			{
-				QGraphicsItem *itm = activeScene()->selectedItems()[i];
-				sectionData->cut_list.append (dynamic_cast<ReportEntity*>(itm));
-				sectionData->copy_list.append(dynamic_cast<ReportEntity*>(itm));
+				QGraphicsItem *itm = activeScene()->selectedItems() [i];
+				sectionData->cut_list.append ( dynamic_cast<ReportEntity*> ( itm ) );
+				sectionData->copy_list.append ( dynamic_cast<ReportEntity*> ( itm ) );
 			}
 			int c = activeScene()->selectedItems().count();
 			for ( int i = 0; i < c; i++ )
 			{
-				QGraphicsItem *itm = activeScene()->selectedItems()[0];
-				activeScene()->removeItem(itm);
+				QGraphicsItem *itm = activeScene()->selectedItems() [0];
+				activeScene()->removeItem ( itm );
 				activeScene()->update();
 			}
 			sectionData->selected_x_offset = 10;
@@ -1372,7 +1397,7 @@ void ReportDesigner::slotEditCopy()
 {
 	if ( selectionCount() < 1 )
 		return;
-	
+
 	QGraphicsItem * item = activeScene()->selectedItems().first();
 	if ( item )
 	{
@@ -1387,10 +1412,10 @@ void ReportDesigner::slotEditCopy()
 			sectionData->copy_x_pos = ( int ) item->x();
 			sectionData->copy_y_pos = ( int ) item->y();
 		}
-		
+
 		for ( int i = 0; i < activeScene()->selectedItems().count(); i++ )
 		{
-			sectionData->copy_list.append ( dynamic_cast<ReportEntity*>(activeScene()->selectedItems() [i]) );
+			sectionData->copy_list.append ( dynamic_cast<ReportEntity*> ( activeScene()->selectedItems() [i] ) );
 		}
 		sectionData->selected_x_offset = 10;
 		sectionData->selected_y_offset = 10;
@@ -1415,47 +1440,47 @@ void ReportDesigner::slotEditPaste ( QGraphicsScene * canvas, const QPointF & po
 		QGraphicsItem * pasted_ent = 0;
 		canvas->clearSelection();
 		sectionData->mouseAction = ReportWriterSectionData::MA_None;
-		
+
 		for ( int i = 0; i < sectionData->copy_list.count(); i++ )
 		{
 			pasted_ent = 0;
 			int type = dynamic_cast<KRObjectData*> ( sectionData->copy_list[i] )->type();
 			kDebug() << type << endl;
-			QPointF o(sectionData->selected_x_offset,sectionData->selected_y_offset);
+			QPointF o ( sectionData->selected_x_offset,sectionData->selected_y_offset );
 			if ( type == KRObjectData::EntityLabel )
 			{
-				ReportEntityLabel * ent = dynamic_cast<ReportEntityLabel*>(sectionData->copy_list[i])->clone();
-				ent->setPos(ent->pos() + o);
+				ReportEntityLabel * ent = dynamic_cast<ReportEntityLabel*> ( sectionData->copy_list[i] )->clone();
+				ent->setPos ( ent->pos() + o );
 				pasted_ent = ent;
 			}
-			else if ( type == KRObjectData::EntityField  )
+			else if ( type == KRObjectData::EntityField )
 			{
-				ReportEntityField * ent = dynamic_cast<ReportEntityField*>(sectionData->copy_list[i])->clone();
-				ent->setPos(ent->pos() + o);
+				ReportEntityField * ent = dynamic_cast<ReportEntityField*> ( sectionData->copy_list[i] )->clone();
+				ent->setPos ( ent->pos() + o );
 				pasted_ent = ent;
 			}
-			else if ( type == KRObjectData::EntityText  )
+			else if ( type == KRObjectData::EntityText )
 			{
-				ReportEntityText * ent = dynamic_cast<ReportEntityText*>(sectionData->copy_list[i])->clone();
-				ent->setPos(ent->pos() + o);
+				ReportEntityText * ent = dynamic_cast<ReportEntityText*> ( sectionData->copy_list[i] )->clone();
+				ent->setPos ( ent->pos() + o );
 				pasted_ent = ent;
 			}
-			else if ( type == KRObjectData::EntityLine  )
+			else if ( type == KRObjectData::EntityLine )
 			{
-				ReportEntityLine * ent = dynamic_cast<ReportEntityLine*>(sectionData->copy_list[i])->clone();
-				
+				ReportEntityLine * ent = dynamic_cast<ReportEntityLine*> ( sectionData->copy_list[i] )->clone();
+
 				pasted_ent = ent;
 			}
-			else if ( type == KRObjectData::EntityBarcode  )
+			else if ( type == KRObjectData::EntityBarcode )
 			{
-				ReportEntityBarcode * ent = dynamic_cast<ReportEntityBarcode*>(sectionData->copy_list[i])->clone();
-				ent->setPos(ent->pos() + o);
+				ReportEntityBarcode * ent = dynamic_cast<ReportEntityBarcode*> ( sectionData->copy_list[i] )->clone();
+				ent->setPos ( ent->pos() + o );
 				pasted_ent = ent;
 			}
-			else if ( type == KRObjectData::EntityImage  )
+			else if ( type == KRObjectData::EntityImage )
 			{
-				ReportEntityImage * ent = dynamic_cast<ReportEntityImage*>(sectionData->copy_list[i])->clone();
-				ent->setPos(ent->pos() + o);
+				ReportEntityImage * ent = dynamic_cast<ReportEntityImage*> ( sectionData->copy_list[i] )->clone();
+				ent->setPos ( ent->pos() + o );
 				pasted_ent = ent;
 			}
 			//TODO add graph
@@ -1471,10 +1496,10 @@ void ReportDesigner::slotEditPaste ( QGraphicsScene * canvas, const QPointF & po
 			{
 				kDebug() << "Tried to paste an item I don't understand." << endl;
 			}
-			
+
 			if ( pasted_ent )
 			{
-				canvas->addItem(pasted_ent);
+				canvas->addItem ( pasted_ent );
 				pasted_ent->show();
 				sectionData->mouseAction = ReportWriterSectionData::MA_Grab;
 				setModified ( true );
@@ -1486,10 +1511,52 @@ void ReportDesigner::slotEditPaste ( QGraphicsScene * canvas, const QPointF & po
 }
 void ReportDesigner::slotRaiseSelected()
 {
-	dynamic_cast<ReportScene*>(activeScene())->raiseSelected();
+	dynamic_cast<ReportScene*> ( activeScene() )->raiseSelected();
 }
 
 void ReportDesigner::slotLowerSelected()
 {
-	dynamic_cast<ReportScene*>(activeScene())->lowerSelected();
+	dynamic_cast<ReportScene*> ( activeScene() )->lowerSelected();
+}
+
+QGraphicsScene* ReportDesigner::activeScene()
+{
+	return d->activeScene;
+}
+
+void ReportDesigner::setActiveScene ( QGraphicsScene* a )
+{
+	d->activeScene = a;
+}
+
+KoZoomHandler* ReportDesigner::zoomHandler()
+{
+	return d->zoom;
+}
+
+QString ReportDesigner::editorText(const QString& orig)
+{
+	QString old = orig;
+	if (!d->editorDialog)
+	{
+		d->editorDialog = new KDialog( this );
+		d->editorDialog->setCaption( i18n("Script Editor") );
+		d->editorDialog->setButtons( KDialog::Ok | KDialog::Cancel );
+
+		d->editor = new KexiEditor( d->editorDialog );
+		d->editorDialog->setMainWidget( d->editor );
+		d->editorDialog->setMinimumSize(400,300);
+		
+		d->editor->setHighlightMode("javascript");
+		//connect( dialog, SIGNAL( applyClicked() ), widget, SLOT( save() ) );
+		//connect( dialog, SIGNAL( okClicked() ), widget, SLOT( save() ) );
+		//connect( widget, SIGNAL( changed( bool ) ), dialog, SLOT( enableButtonApply( bool ) ) );
+	}
+	d->editor->setText(orig);
+	if (d->editorDialog->exec())
+	{
+		return d->editor->text();
+	}
+	
+	return old;
 }

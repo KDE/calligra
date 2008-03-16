@@ -55,7 +55,8 @@
 ReportSection::ReportSection ( ReportDesigner * rptdes, const char * name )
 		: QWidget ( rptdes )
 {
-	createProperties();
+	_data = new KRSectionData();
+	QObject::connect ( _data->properties(), SIGNAL ( propertyChanged ( KoProperty::Set &, KoProperty::Property & ) ), this, SLOT ( slotPropertyChanged ( KoProperty::Set &, KoProperty::Property & ) ) );
 	int dpiY = KoGlobal::dpiY();
 	
 	_rd = rptdes;
@@ -69,13 +70,9 @@ ReportSection::ReportSection ( ReportDesigner * rptdes, const char * name )
 	glayout->setSizeConstraint(QLayout::SetFixedSize);
 	
 	// ok create the base interface
-	title = new QLabel ( this );
-	title->setObjectName ( "Detail" );
+	title = new ReportSectionTitle ( this );
+	title->setObjectName ( "detail" );
 	title->setText ( i18n( "Detail" ) );
-	title->setFrameStyle(QFrame::Panel | QFrame::Raised);
-	title->setMaximumHeight(title->minimumSizeHint().height());
-	title->setMinimumHeight(title->minimumSizeHint().height());
-	title->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
 	
 	sectionRuler = new KoRuler ( this, Qt::Vertical, _rd->zoomHandler() );
 	scene = new ReportScene ( _rd->pageWidthPx(), dpiY, rptdes );
@@ -84,13 +81,14 @@ ReportSection::ReportSection ( ReportDesigner * rptdes, const char * name )
 	
 	rb = new ReportResizeBar ( this );
 
-	connect ( rb,SIGNAL ( barDragged ( int ) ),this,SLOT ( slotResizeBarDragged ( int ) ) );
+	QObject::connect ( rb,SIGNAL ( barDragged ( int ) ),this,SLOT ( slotResizeBarDragged ( int ) ) );
 	
-	connect ( _rd,SIGNAL ( pagePropertyChanged ( KoProperty::Set & ) ), this, SLOT ( slotPageOptionsChanged ( KoProperty::Set & ) ) );
+	QObject::connect ( _rd,SIGNAL ( pagePropertyChanged ( KoProperty::Set & ) ), this, SLOT ( slotPageOptionsChanged ( KoProperty::Set & ) ) );
 	
-	connect ( scene, SIGNAL( clicked() ), this, (SLOT(slotSceneClicked() )));
-	connect ( scene, SIGNAL( lostFocus() ), this, (SLOT(slotSceneLostFocus() )));
+	QObject::connect ( scene, SIGNAL( clicked() ), this, (SLOT(slotSceneClicked() )));
+	QObject::connect ( scene, SIGNAL( lostFocus() ), this, (SLOT(slotSceneLostFocus() )));
 	
+	QObject::connect (title, SIGNAL (doubleClicked() ), this, (SLOT(slotTitleDoubleClicked())));
 	glayout->addWidget ( title, 0, 0, 1, 2 );
 	glayout->addWidget ( sectionRuler, 1, 0 );
 	glayout->addWidget ( sceneview , 1, 1);
@@ -146,8 +144,12 @@ void ReportSection::buildXML ( QDomDocument & doc, QDomElement & section )
 	section.appendChild ( height );
 
 	QDomElement bgcolor = doc.createElement ( "bgcolor" );
-	bgcolor.appendChild ( doc.createTextNode ( _bgColor->value().value<QColor>().name() ));
+	bgcolor.appendChild ( doc.createTextNode ( _data->bgColor().name() ));
 	section.appendChild ( bgcolor );
+	
+	QDomElement event_onrender = doc.createElement ( "event_onrender" );
+	event_onrender.appendChild ( doc.createTextNode ( _data->eventOnRender() ));
+	section.appendChild ( event_onrender );
 	
 	// now get a list of all the QCanvasItems on this scene and output them.
 	QGraphicsItemList list = scene->items();
@@ -156,6 +158,8 @@ void ReportSection::buildXML ( QDomDocument & doc, QDomElement & section )
 	{
 		ReportEntity::buildXML ( ( *it ),doc,section );
 	}
+	
+	
 }
 
 void ReportSection::initFromXML ( QDomNode & section )
@@ -178,7 +182,11 @@ void ReportSection::initFromXML ( QDomNode & section )
 		}
 		else if ( n == "bgcolor" )
 		{
-			_bgColor->setValue(QColor(node.firstChild().nodeValue()));
+			_data->_bgColor->setValue(QColor(node.firstChild().nodeValue()));
+		}
+		else if ( n == "event_onrender" )
+		{
+			_data->_event_onrender = node.firstChild().nodeValue();
 		}
 		//Objects
 		else if ( n == "label" )
@@ -254,7 +262,7 @@ void ReportSection::slotPageOptionsChanged ( KoProperty::Set &set )
 void ReportSection::slotSceneClicked()
 {
 	title->setFrameStyle(QFrame::Panel | QFrame::Sunken);
-	_rd->changeSet(_set);
+	_rd->changeSet(_data->properties());
 }
 
 void ReportSection::slotSceneLostFocus()
@@ -262,17 +270,11 @@ void ReportSection::slotSceneLostFocus()
 	title->setFrameStyle(QFrame::Panel | QFrame::Raised);
 }
 
-void ReportSection::createProperties()
+void ReportSection::slotTitleDoubleClicked()
 {
-	_set = new KoProperty::Set ( 0, "Section" );
-	
-	_height = new KoProperty::Property ( "Height", 1.0, "Height", "Height");
-	_bgColor = new KoProperty::Property ( "BackgroundColor", Qt::white, "Background Color", "Background Color" );
-	
-	_set->addProperty ( _height );
-	_set->addProperty ( _bgColor );
-	
-	connect ( _set, SIGNAL ( propertyChanged ( KoProperty::Set &, KoProperty::Property & ) ), this, SLOT ( slotPropertyChanged ( KoProperty::Set &, KoProperty::Property & ) ) );
+	kDebug() << endl;
+	_data->_event_onrender = _rd->editorText(_data->_event_onrender);
+	if ( _rd ) _rd->setModified ( true );
 }
 
 void ReportSection::slotPropertyChanged ( KoProperty::Set &s, KoProperty::Property &p )
@@ -307,4 +309,22 @@ void ReportResizeBar::mouseMoveEvent ( QMouseEvent * e )
 	emit barDragged ( e->y() );
 }
 
+//=============================================================================
 
+ReportSectionTitle::ReportSectionTitle(QWidget*parent) : QLabel(parent)
+{
+	setFrameStyle(QFrame::Panel | QFrame::Raised);
+	setMaximumHeight(minimumSizeHint().height());
+	setMinimumHeight(minimumSizeHint().height());
+	setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+}
+
+ReportSectionTitle::~ReportSectionTitle()
+{
+	
+}
+
+void ReportSectionTitle::mouseDoubleClickEvent( QMouseEvent * event )
+{
+	emit(doubleClicked());
+}
