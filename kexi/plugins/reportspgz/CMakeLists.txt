@@ -69,6 +69,8 @@ set(pgzkexireportpart2_LIB_SRCS
 	backend/wrtembed/code128paint.cpp
 	)
 
+kde4_add_ui_files(pgzrptwrtembed_LIB_SRCS backend/wrtembed/detailgroupsectiondialog.ui backend/wrtembed/sectioneditor.ui )
+
 kde4_add_plugin(pgzkexireportpart2 ${pgzkexireportpart2_LIB_SRCS})
 
 target_link_libraries(pgzkexireportpart2 pgzrptcommon pgzrptrenderer pgzrptwrtembed ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} ${QT_QTSCRIPT_LIBRARY}  kexidb kexicore keximain koproperty koguiutils komain kexiguiutils)
