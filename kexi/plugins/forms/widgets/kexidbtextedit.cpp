@@ -36,7 +36,9 @@ KexiDBTextEdit::KexiDBTextEdit(QWidget *parent)
  , m_menuExtender(this, this)
  , m_slotTextChanged_enabled(true)
 {
-	setMinimumHeight(fontMetrics().height() +2);
+    QFont tmpFont;
+    tmpFont.setPointSize(KGlobalSettings::smallestReadableFont().pointSize());
+	setMinimumHeight(QFontMetrics(tmpFont).height() +6);
 	connect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
 	installEventFilter(this);
 }
