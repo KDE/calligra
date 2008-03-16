@@ -348,7 +348,7 @@ bool KexiDataAwareView::setupFindAndReplace(QStringList& columnNames, QStringLis
 
 	//update "look in" selection if there was any
 	const int currentColumnNumber = dataAwareObject()->currentColumn();
-	if (currentColumnNumber!=-1) {
+	if (currentColumnNumber >= 0 && currentColumnNumber < columns.count()) {
 		KexiTableViewColumn *col = columns.at( currentColumnNumber );
 		if (col && col->field())
 			currentColumnName = col->field()->name();
