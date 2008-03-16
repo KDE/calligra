@@ -182,11 +182,16 @@ QRect KexiDBComboBox::editorGeometry() const
 #else
 #pragma WARNING( KexiDBComboBox::editorGeometry() OK? )
 #endif
+
+#if 0 //20080316, sebsauer; crashes here with;
 	QRect r( QStyle::visualRect(
 		qApp->layoutDirection(), 
 		d->paintedCombo->geometry(),
 		style()->subControlRect(QStyle::CC_ComboBox, 0, QStyle::SC_ComboBoxEditField, d->paintedCombo) ) );
-	
+#else
+    QRect r = d->paintedCombo->geometry();
+#endif
+
 	//if ((height()-r.bottom())<6)
 	//	r.setBottom(height()-6);
 	return r;
