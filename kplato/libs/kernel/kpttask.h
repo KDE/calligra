@@ -154,6 +154,9 @@ public:
     void setStartTime( const DateTime &dt );
     DateTime finishTime() const { return m_finishTime; }
     void setFinishTime( const DateTime &dt );
+    void setPercentFinished( const QDate &date, int value );
+    void setRemainingEffort( const QDate &date, const Duration &value );
+    void setActualEffort( const QDate &date, const Duration &value );
     
     /// Return a list of the resource that has done any work on this task
     QList<const Resource*> resources() { return m_usedEffort.keys(); }
@@ -171,6 +174,8 @@ public:
     int percentFinished( const QDate &date ) const;
     /// Returns the estimated remaining effort
     Duration remainingEffort() const;
+    /// Returns the estimated remaining effort on @p date
+    Duration remainingEffort( const QDate &date ) const;
     /// Returns the total actual effort
     Duration actualEffort() const;
     /// Returns the total actual effort on @ date
@@ -427,11 +432,11 @@ public:
     virtual Duration plannedEffortTo(const QDate &date, long id = -1 ) const;
     
     /// Returns the total actual effort for this task (or subtasks) 
-    virtual Duration actualEffort( long id = -1 ) const;
+    virtual Duration actualEffort() const;
     /// Returns the total actual effort for this task (or subtasks) on date
-    virtual Duration actualEffort(const QDate &date, long id = -1 ) const;
+    virtual Duration actualEffort(const QDate &date ) const;
     /// Returns the actual effort up to and including date
-    virtual Duration actualEffortTo(const QDate &date, long id = -1 ) const;
+    virtual Duration actualEffortTo(const QDate &date ) const;
     
     /**
      * Returns the total planned cost for this task (or subtasks)
@@ -445,11 +450,11 @@ public:
     /**
      * Returns the actaually reported cost for this task (or subtasks)
      */
-    virtual double actualCost( long id = -1 ) const;
-    /// Actual cost on date
-    virtual double actualCost(const QDate &/*date*/, long id = -1 ) const;
-    /// Actual cost up to and including date
-    virtual double actualCostTo(const QDate &/*date*/, long id = -1 ) const;
+    virtual double actualCost() const;
+    /// Actual cost on @p date
+    virtual double actualCost(const QDate &date) const;
+    /// Actual cost up to and including @p date
+    virtual double actualCostTo(const QDate &date) const;
 
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id = -1 ) const;

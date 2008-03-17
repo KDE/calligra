@@ -260,7 +260,7 @@ void Chart::calculateActualCost(QVector<QPointF> & vect,QVector<QDate> weeks,Pro
     {
         for (int i = 0; i < 7; ++i ) {
             QDate date = (*it_weeks).addDays(i);
-            sum+=(float)p.actualCost((*it_weeks).addDays(i), sm.id());
+            sum+=(float)p.actualCost((*it_weeks).addDays(i));
             if ( date == weeks.last() ) {
                 break;
             }

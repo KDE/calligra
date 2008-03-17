@@ -1351,38 +1351,38 @@ Duration Project::plannedEffortTo( const QDate &date, long id ) const
 }
 
 // Returns the total actual effort for this project (or subproject)
-Duration Project::actualEffort( long id ) const
+Duration Project::actualEffort() const
 {
     //kDebug();
     Duration eff;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
-        eff += it.next() ->actualEffort(id);
+        eff += it.next() ->actualEffort();
     }
     return eff;
 }
 
 // Returns the total actual effort for this project (or subproject) on date
-Duration Project::actualEffort( const QDate &date, long id ) const
+Duration Project::actualEffort( const QDate &date ) const
 {
     //kDebug();
     Duration eff;
     QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
-        eff += it.next() ->actualEffort( date, id );
+        eff += it.next() ->actualEffort( date );
     }
     return eff;
 }
 
 // Returns the total actual effort for this project (or subproject) upto and including date
-Duration Project::actualEffortTo( const QDate &date, long id ) const
+Duration Project::actualEffortTo( const QDate &date ) const
 {
     //kDebug();
     Duration eff;
     QListIterator
     <Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
-        eff += it.next() ->actualEffortTo( date, id );
+        eff += it.next() ->actualEffortTo( date );
     }
     return eff;
 }
@@ -1425,40 +1425,40 @@ double Project::plannedCostTo( const QDate &date, long id ) const
     return c;
 }
 
-double Project::actualCost( long id ) const
+double Project::actualCost() const
 {
     //kDebug();
     double c = 0;
     QListIterator
     <Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
-        c += it.next() ->actualCost(id);
+        c += it.next() ->actualCost();
     }
     return c;
 }
 
 // Returns the total planned effort for this project (or subproject) on date
-double Project::actualCost( const QDate &date, long id ) const
+double Project::actualCost( const QDate &date ) const
 {
     //kDebug();
     double c = 0;
     QListIterator
     <Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
-        c += it.next() ->actualCost( date, id );
+        c += it.next() ->actualCost( date );
     }
     return c;
 }
 
 // Returns the total planned effort for this project (or subproject) upto and including date
-double Project::actualCostTo( const QDate &date, long id ) const
+double Project::actualCostTo( const QDate &date ) const
 {
     //kDebug();
     double c = 0;
     QListIterator
     <Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
-        c += it.next() ->actualCostTo( date, id );
+        c += it.next() ->actualCostTo( date );
     }
     return c;
 }

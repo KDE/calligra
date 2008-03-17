@@ -562,24 +562,24 @@ Duration Task::plannedEffortTo(const QDate &date, long id) const {
 }
 
 // Returns the total actual effort for this task (or subtasks) 
-Duration Task::actualEffort( long id ) const {
+Duration Task::actualEffort() const {
    //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            eff += n->actualEffort(id);
+            eff += n->actualEffort();
         }
     }
     return completion().actualEffort();
 }
 
 // Returns the total actual effort for this task (or subtasks) on date
-Duration Task::actualEffort(const QDate &date, long id) const {
+Duration Task::actualEffort( const QDate &date ) const {
    //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            eff += n->actualEffort(date, id);
+            eff += n->actualEffort( date );
         }
         return eff;
     }
@@ -587,12 +587,12 @@ Duration Task::actualEffort(const QDate &date, long id) const {
 }
 
 // Returns the total actual effort for this task (or subtasks) to date
-Duration Task::actualEffortTo(const QDate &date, long id) const {
+Duration Task::actualEffortTo( const QDate &date ) const {
    //kDebug();
     Duration eff;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            eff += n->actualEffortTo(date, id);
+            eff += n->actualEffortTo( date );
         }
         return eff;
     }
@@ -647,36 +647,36 @@ double Task::plannedCostTo(const QDate &date, long id) const {
     return c;
 }
 
-double Task::actualCost( long id ) const {
+double Task::actualCost() const {
     //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            c += n->actualCost( id );
+            c += n->actualCost();
         }
         return c;
     }
     return completion().actualCost();
 }
 
-double Task::actualCost(const QDate &date, long id) const {
+double Task::actualCost( const QDate &date ) const {
     //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            c += n->actualCost(date, id);
+            c += n->actualCost( date );
         }
         return c;
     }
     return completion().actualCost( date );
 }
 
-double Task::actualCostTo(const QDate &date, long id) const {
+double Task::actualCostTo( const QDate &date ) const {
     //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            c += n->actualCostTo(date, id);
+            c += n->actualCostTo( date );
         }
         return c;
     }
@@ -2335,7 +2335,46 @@ void Completion::setFinishTime( const DateTime &dt )
      m_finishTime = dt;
      changed();
 }
-    
+
+void Completion::setPercentFinished( const QDate &date, int value )
+{
+    Entry *e = 0;
+    if ( m_entries.contains( date ) ) {
+        e = m_entries[ date ];
+    } else {
+        e = new Entry();
+        m_entries[ date ] = e;
+    }
+    e->percentFinished = value;
+    changed();
+}
+
+void Completion::setRemainingEffort( const QDate &date, const Duration &value )
+{
+    Entry *e = 0;
+    if ( m_entries.contains( date ) ) {
+        e = m_entries[ date ];
+    } else {
+        e = new Entry();
+        m_entries[ date ] = e;
+    }
+    e->remainingEffort = value;
+    changed();
+}
+
+void Completion::setActualEffort( const QDate &date, const Duration &value )
+{
+    Entry *e = 0;
+    if ( m_entries.contains( date ) ) {
+        e = m_entries[ date ];
+    } else {
+        e = new Entry();
+        m_entries[ date ] = e;
+    }
+    e->totalPerformed = value;
+    changed();
+}
+
 void Completion::addEntry( const QDate &date, Entry *entry )
 {
      m_entries.insert( date, entry );
@@ -2371,6 +2410,21 @@ Duration Completion::remainingEffort() const
 {
     return m_entries.isEmpty() ? Duration::zeroDuration : m_entries.values().last()->remainingEffort;
 }
+
+Duration Completion::remainingEffort( const QDate &date ) const
+{
+    Duration x;
+    foreach ( QDate d, m_entries.keys() ) {
+        if ( d <= date ) {
+            x = m_entries[ d ]->remainingEffort;
+        }
+        if ( d >= date ) {
+            break;
+        }
+    }
+    return x;
+}
+
 
 Duration Completion::actualEffort() const
 {

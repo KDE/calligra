@@ -1974,14 +1974,94 @@ ModifyCompletionEntrymodeCmd::ModifyCompletionEntrymodeCmd( Completion &completi
 void ModifyCompletionEntrymodeCmd::execute()
 {
     m_completion.setEntrymode( newvalue );
-
-
 }
 void ModifyCompletionEntrymodeCmd::unexecute()
 {
     m_completion.setEntrymode( oldvalue );
+}
 
+ModifyCompletionPercentFinishedCmd::ModifyCompletionPercentFinishedCmd( Completion &completion, const QDate &date, int value, const QString& name )
+    : NamedCommand( name ),
+    m_completion( completion ),
+    m_date( date ),
+    m_newvalue( value ),
+    m_oldvalue( completion.percentFinished( date ) )
+{
+    if ( ! completion.entries().contains( date ) ) {
+        Completion::Entry *e = new Completion::Entry();
+        Completion::Entry *latest = completion.entry( completion.entryDate() );
+        if ( latest ) {
+            *e = *latest;
+        }
+        cmd.addCommand( new AddCompletionEntryCmd( completion, date, e ) );
+    }
 
+}
+void ModifyCompletionPercentFinishedCmd::execute()
+{
+    cmd.execute();
+    m_completion.setPercentFinished( m_date, m_newvalue );
+}
+void ModifyCompletionPercentFinishedCmd::unexecute()
+{
+    m_completion.setPercentFinished( m_date, m_oldvalue );
+    cmd.unexecute();
+}
+
+ModifyCompletionRemainingEffortCmd::ModifyCompletionRemainingEffortCmd( Completion &completion, const QDate &date, const Duration &value, const QString &name )
+    : NamedCommand( name ),
+    m_completion( completion ),
+    m_date( date ),
+    m_newvalue( value ),
+    m_oldvalue( completion.remainingEffort( date ) )
+{
+    if ( ! completion.entries().contains( date ) ) {
+        Completion::Entry *e = new Completion::Entry();
+        Completion::Entry *latest = completion.entry( completion.entryDate() );
+        if ( latest ) {
+            *e = *latest;
+        }
+        cmd.addCommand( new AddCompletionEntryCmd( completion, date, e ) );
+    }
+
+}
+void ModifyCompletionRemainingEffortCmd::execute()
+{
+    cmd.execute();
+    m_completion.setRemainingEffort( m_date, m_newvalue );
+}
+void ModifyCompletionRemainingEffortCmd::unexecute()
+{
+    m_completion.setRemainingEffort( m_date, m_oldvalue );
+    cmd.unexecute();
+}
+
+ModifyCompletionActualEffortCmd::ModifyCompletionActualEffortCmd( Completion &completion, const QDate &date, const Duration &value, const QString &name )
+    : NamedCommand( name ),
+    m_completion( completion ),
+    m_date( date ),
+    m_newvalue( value ),
+    m_oldvalue( completion.actualEffort( date ) )
+{
+    if ( ! completion.entries().contains( date ) ) {
+        Completion::Entry *e = new Completion::Entry();
+        Completion::Entry *latest = completion.entry( completion.entryDate() );
+        if ( latest ) {
+            *e = *latest;
+        }
+        cmd.addCommand( new AddCompletionEntryCmd( completion, date, e ) );
+    }
+
+}
+void ModifyCompletionActualEffortCmd::execute()
+{
+    cmd.execute();
+    m_completion.setActualEffort( m_date, m_newvalue );
+}
+void ModifyCompletionActualEffortCmd::unexecute()
+{
+    m_completion.setActualEffort( m_date, m_oldvalue );
+    cmd.unexecute();
 }
 
 ModifyCompletionStartedCmd::ModifyCompletionStartedCmd( Completion &completion, bool value, const QString& name )

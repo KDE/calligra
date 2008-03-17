@@ -200,11 +200,11 @@ public:
     virtual Duration plannedEffortTo( const QDate &date, long id = -1  ) const;
 
     /// Returns the actual effort
-    virtual Duration actualEffort( long id = -1 ) const;
-    /// Returns the actual effort on date
-    virtual Duration actualEffort( const QDate &date, long id = -1  ) const;
-    /// Returns the actual effort up to and including date
-    virtual Duration actualEffortTo( const QDate &date, long id = -1  ) const;
+    virtual Duration actualEffort() const;
+    /// Returns the actual effort on @p date
+    virtual Duration actualEffort( const QDate &date) const;
+    /// Returns the actual effort up to and including @p date
+    virtual Duration actualEffortTo( const QDate &date ) const;
     /**
      * Returns the total planned cost for this project
      * @param id Identity of the schedule to be used
@@ -228,19 +228,19 @@ public:
      * @param date The cost is calulated for this date (only)
      * @param id Identity of the schedule to be used
      */
-    virtual double actualCost( long id = -1 ) const;
+    virtual double actualCost() const;
     /**
-     *  Actual cost on date
+     *  Actual cost on @p date
      * @param date The cost is calulated for this date (only)
      * @param id Identity of the schedule to be used
      */
-    virtual double actualCost( const QDate &date, long id = -1  ) const;
+    virtual double actualCost( const QDate &date ) const;
     /**
-     * Actual cost up to and including date
+     * Actual cost up to and including @p date
      * @param date The cost is calculated from the start of the project upto including date.
      * @param id Identity of the schedule to be used.
      */
-    virtual double actualCostTo( const QDate &date, long id = -1  ) const;
+    virtual double actualCostTo( const QDate &date ) const;
     
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id = -1 ) const;

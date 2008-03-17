@@ -1099,12 +1099,12 @@ QVariant NodeModel::actualEffortTo( const Node *node, int role ) const
     KLocale *l = KGlobal::locale();
     switch ( role ) {
         case Qt::DisplayRole:
-            return l->formatNumber( node->actualEffortTo( m_now, id() ).toDouble( Duration::Unit_h ), 1 );
+            return l->formatNumber( node->actualEffortTo( m_now ).toDouble( Duration::Unit_h ), 1 );
         case Qt::ToolTipRole:
             //kDebug()<<m_now<<node;
-            return i18n( "Actual effort until %1: %2", l->formatDate( m_now ), l->formatNumber( node->actualEffortTo( m_now, id() ).toDouble( Duration::Unit_h ), 1 ) );
+            return i18n( "Actual effort used up to %1: %2", l->formatDate( m_now ), l->formatNumber( node->actualEffortTo( m_now ).toDouble( Duration::Unit_h ), 1 ) );
         case Qt::EditRole:
-            return node->actualEffortTo( m_now, id() ).toDouble( Duration::Unit_h );
+            return node->actualEffortTo( m_now ).toDouble( Duration::Unit_h );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();

@@ -1082,6 +1082,51 @@ private:
     MacroCommand *cmd;
 };
 
+class KPLATOKERNEL_EXPORT ModifyCompletionPercentFinishedCmd : public NamedCommand
+{
+public:
+    ModifyCompletionPercentFinishedCmd( Completion &completion, const QDate &date, int value, const QString& name = QString() );
+    
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    QDate m_date;
+    int m_newvalue, m_oldvalue;
+    MacroCommand cmd;
+};
+
+class KPLATOKERNEL_EXPORT ModifyCompletionRemainingEffortCmd : public NamedCommand
+{
+public:
+    ModifyCompletionRemainingEffortCmd( Completion &completion, const QDate &date, const Duration &value, const QString &name = QString() );
+
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    QDate m_date;
+    Duration m_newvalue, m_oldvalue;
+    MacroCommand cmd;
+};
+
+class KPLATOKERNEL_EXPORT ModifyCompletionActualEffortCmd : public NamedCommand
+{
+public:
+    ModifyCompletionActualEffortCmd( Completion &completion, const QDate &date, const Duration &value, const QString &name = QString() );
+
+    void execute();
+    void unexecute();
+
+private:
+    Completion &m_completion;
+    QDate m_date;
+    Duration m_newvalue, m_oldvalue;
+    MacroCommand cmd;
+};
+
 class KPLATOKERNEL_EXPORT AddCompletionUsedEffortCmd : public NamedCommand
 {
 public:

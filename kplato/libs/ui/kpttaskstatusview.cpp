@@ -58,6 +58,8 @@ TaskStatusTreeView::TaskStatusTreeView( QWidget *parent )
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setStretchLastSection( false );
     
+    createItemDelegates();
+    
     connect( this, SIGNAL( activated ( const QModelIndex ) ), this, SLOT( slotActivated( const QModelIndex ) ) );
 
     QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in left view

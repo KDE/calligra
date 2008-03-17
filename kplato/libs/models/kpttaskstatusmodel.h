@@ -109,6 +109,10 @@ protected:
     
     QVariant name( int row, int role ) const;
 
+    bool setCompletion( Node *node, const QVariant &value, int role );
+    bool setRemainingEffort( Node *node, const QVariant &value, int role );
+    bool setActualEffort( Node *node, const QVariant &value, int role );
+    
 private:
     NodeModel m_nodemodel;
     QStringList m_topNames;

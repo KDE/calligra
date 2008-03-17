@@ -275,11 +275,11 @@ public:
     virtual Duration plannedEffortTo(const QDate &, long id = -1 ) const { Q_UNUSED(id); return Duration::zeroDuration; }
     
     /// Returns the total actual effort for this task (or subtasks) 
-    virtual Duration actualEffort( long id = -1 ) const { Q_UNUSED(id); return Duration::zeroDuration; }
+    virtual Duration actualEffort() const { return Duration::zeroDuration; }
     /// Returns the total actual effort for this task (or subtasks) on date
-    virtual Duration actualEffort(const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return Duration::zeroDuration; }
+    virtual Duration actualEffort(const QDate &/*date*/ ) const { return Duration::zeroDuration; }
     /// Returns the total actual effort for this task (or subtasks) up to and including date
-    virtual Duration actualEffortTo(const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return Duration::zeroDuration; }
+    virtual Duration actualEffortTo(const QDate &/*date*/ ) const { return Duration::zeroDuration; }
     
     /**
      * Planned cost is the sum total of all resources and other costs
@@ -298,11 +298,11 @@ public:
      * Actual cost is the sum total of the reported costs actually used
      * for this node.
      */
-    virtual double actualCost( long id = -1 ) const { Q_UNUSED(id); return 0; }
+    virtual double actualCost() const { return 0; }
     /// Actual cost on date
-    virtual double actualCost(const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return 0; }
+    virtual double actualCost(const QDate &/*date*/) const { return 0; }
     /// Actual cost up to and including date
-    virtual double actualCostTo(const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return 0; }
+    virtual double actualCostTo(const QDate &/*date*/) const { return 0; }
     
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id ) const { Q_UNUSED(id); return 0.0; }
