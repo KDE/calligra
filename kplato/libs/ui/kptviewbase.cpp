@@ -31,6 +31,7 @@
 #include <QHeaderView>
 #include <QPoint>
 #include <QScrollBar>
+#include <QAbstractScrollArea>
 #include <QMetaEnum>
 
 namespace KPlato
@@ -215,15 +216,14 @@ void TreeViewBase::scrollTo(const QModelIndex &index, ScrollHint hint)
 
 void TreeViewBase::focusInEvent(QFocusEvent *event)
 {
-    QAbstractItemView::focusInEvent(event);
+    QAbstractScrollArea::focusInEvent(event); //NOTE: not QTreeView
     QModelIndex curr = currentIndex();
     if ( ! curr.isValid() || ! isIndexHidden( curr ) ) {
         return;
     }
     QModelIndex idx = curr;
-    for ( int c = 0; c < model()->columnCount(); ++c)
-    {
-        idx = model()->index( curr.row(), c, curr.parent() );
+    for ( int s = 0; s < header()->count(); ++s) {
+        idx = model()->index( curr.row(), header()->logicalIndex( s ), curr.parent() );
         if ( ! isIndexHidden( idx ) ) {
             selectionModel()->setCurrentIndex(idx, QItemSelectionModel::NoUpdate);
             scrollTo( idx );
