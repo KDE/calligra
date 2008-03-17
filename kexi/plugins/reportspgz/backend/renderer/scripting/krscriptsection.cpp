@@ -13,58 +13,62 @@
 #include "krscriptlabel.h"
 #include "krscriptfield.h"
 
-KRScriptSection::KRScriptSection ( KRSectionData* sec )
+namespace Scripting
 {
-	_section = sec;
-}
-
-
-KRScriptSection::~KRScriptSection()
-{
-}
-
-QColor KRScriptSection::backgroundColor()
-{
-	return _section->_bgColor->value().value<QColor>();
-}
-
-void   KRScriptSection::setBackgroundColor ( const QString& c)
-{
-	_section->_bgColor->setValue(QColor(c));
-}
-
-qreal KRScriptSection::height()
-{
-	return _section->_height->value().toDouble();
-}
-
-void KRScriptSection::setHeight ( qreal h)
-{
-	_section->_height->setValue(h);
-}
-
-QString KRScriptSection::name()
-{
-	return _section->_name;
-}
-
-QObject* KRScriptSection::object(int i)
-{
-	switch (_section->_objects[i]->type())
+	Section::Section ( KRSectionData* sec )
 	{
-		case KRObjectData::EntityLabel:
-			return new KRScriptLabel(_section->_objects[i]->toLabel());
-			break;
-		case KRObjectData::EntityField:
-			return new KRScriptField(_section->_objects[i]->toField());
-			break;
-		default:
-			return new QObject();
+		_section = sec;
 	}
-	
-}
 
-QObject* KRScriptSection::object(const QString&)
-{
+
+	Section::~Section()
+	{
+	}
+
+	QColor Section::backgroundColor()
+	{
+		return _section->_bgColor->value().value<QColor>();
+	}
+
+	void   Section::setBackgroundColor ( const QString& c)
+	{
+		_section->_bgColor->setValue(QColor(c));
+	}
+
+	qreal Section::height()
+	{
+		return _section->_height->value().toDouble();
+	}
+
+	void Section::setHeight ( qreal h)
+	{
+		_section->_height->setValue(h);
+	}
+
+	QString Section::name()
+	{
+		return _section->_name;
+	}
+
+	QObject* Section::object(int i)
+	{
+		switch (_section->_objects[i]->type())
+		{
+			case KRObjectData::EntityLabel:
+				return new Scripting::Label(_section->_objects[i]->toLabel());
+				break;
+			case KRObjectData::EntityField:
+				return new Scripting::Field(_section->_objects[i]->toField());
+				break;
+			default:
+				return new QObject();
+		}
 	
+	}
+
+	QObject* Section::object(const QString&)
+	{
+	
+	}
+
 }

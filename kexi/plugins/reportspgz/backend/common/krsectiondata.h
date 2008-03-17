@@ -40,6 +40,10 @@ class KRObjectData;
 #include <koproperty/set.h>
 #include <QColor>
 			 
+namespace Scripting
+{
+	class Section;
+}
 class PGZKEXIREPORTPART2_LIB_EXPORT KRSectionData : public QObject
 {
 	Q_OBJECT
@@ -81,7 +85,7 @@ class PGZKEXIREPORTPART2_LIB_EXPORT KRSectionData : public QObject
 		
 		bool _valid;
 		
-	friend class KRScriptSection;
+	friend class Scripting::Section;
 	friend class ReportSection;
 };
 

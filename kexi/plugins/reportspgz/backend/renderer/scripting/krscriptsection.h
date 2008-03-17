@@ -18,36 +18,38 @@
 /**
 	@author Adam Pigg <adam@piggz.co.uk>
 */
-class KRScriptSection : public QObject
+namespace Scripting
 {
+	class Section : public QObject
+	{
 		Q_OBJECT
-	public:
-		KRScriptSection ( KRSectionData* );
+		public:
+			Section ( KRSectionData* );
 
-		~KRScriptSection();
+			~Section();
 
-	public slots:
-		/**Returns the background color of the section*/
-		QColor backgroundColor();
+		public slots:
+			/**Returns the background color of the section*/
+			QColor backgroundColor();
 		/**Sets the background color of the section to the given color 
-		name, in the style #rrggbb*/
-		void   setBackgroundColor(const QString&);
+			name, in the style #rrggbb*/
+			void   setBackgroundColor(const QString&);
 		
-		/**Returns the section height as a real number, in points*/
-		qreal height();
-		/**Sets the section height to the given value in points*/
-		void setHeight(qreal);
+			/**Returns the section height as a real number, in points*/
+			qreal height();
+			/**Sets the section height to the given value in points*/
+			void setHeight(qreal);
 				
-		/**Returns the name of the section*/
-		QString name();
+			/**Returns the name of the section*/
+			QString name();
 		
-		/**Returns an object in the section, by number*/
-		QObject* object(int);
-		/**Returns an object in the section, by name*/
-		QObject* object(const QString&);
+			/**Returns an object in the section, by number*/
+			QObject* object(int);
+			/**Returns an object in the section, by name*/
+			QObject* object(const QString&);
 		
-	private:
-		KRSectionData *_section;
-};
-
+		private:
+			KRSectionData *_section;
+	};
+}
 #endif

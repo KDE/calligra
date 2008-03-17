@@ -11,27 +11,101 @@
 //
 #include "krscriptfield.h"
 
-KRScriptField::KRScriptField(KRFieldData *f)
+namespace Scripting
 {
-	_field = f;
-}
+	Field::Field(KRFieldData *f)
+	{
+		_field = f;
+	}
 
 
-KRScriptField::~KRScriptField()
-{
-}
+	Field::~Field()
+	{
+	}
 
-QString KRScriptField::source()
-{
-	return _field->column();
-}
+	QString Field::source()
+	{
+		return _field->column();
+	}
 
-void KRScriptField::setSource(const QString& s)
-{
-	_field->setColumn(s);
-}
+	void Field::setSource(const QString& s)
+	{
+		_field->setColumn(s);
+	}
+	
+	int Field::horizontalAlignment()
+	{
+	}
+	void Field::setHorizonalAlignment(int)
+	{
+	}
 		
-void KRScriptField::setBackgroundOpacity(int o)
-{
-	_field->_bgOpacity->setValue(o);
+	int Field::verticalAlignment()
+	{
+	}
+	void Field::setVerticalAlignment(int)
+	{
+	}
+		
+	QColor Field::backgroundColor()
+	{
+	}
+	void Field::setBackgroundColor(QColor)
+	{
+	}
+		
+	QColor Field::foregroundColor()
+	{
+	}
+	void Field::setForegroundColor(QColor)
+	{
+	}
+		
+	int Field::backgroundOpacity()
+	{
+		
+	}
+	void Field::setBackgroundOpacity(int o)
+	{
+		_field->_bgOpacity->setValue(o);
+	}
+		
+	QColor Field::lineColor()
+	{
+	}
+	void Field::setLineColor(QColor)
+	{
+	}
+			
+	int Field::lineWeight()
+	{
+	}
+	void Field::setLineWeight(int)
+	{
+	}
+			
+	int Field::lineStyle()
+	{
+	}
+	void Field::setLineStyle(int)
+	{
+	}
+	
+	QPointF Field::position()
+	{
+		
+	}
+	void Field::setPosition(QPointF)
+	{
+		
+	}
+			
+	QSizeF Field::size()
+	{
+		
+	}
+	void Field::setSize(QSizeF)
+	{
+		
+	}
 }

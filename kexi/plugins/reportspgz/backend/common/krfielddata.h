@@ -29,6 +29,12 @@
 /**
 	@author 
 */
+
+namespace Scripting
+{
+	class Field;
+}
+
 class PGZKEXIREPORTPART2_LIB_EXPORT KRFieldData : public KRObjectData
 {
 	public:
@@ -94,7 +100,7 @@ class PGZKEXIREPORTPART2_LIB_EXPORT KRFieldData : public KRObjectData
 		static int RTTI;
 		
 		friend class ORPreRenderPrivate;
-		friend class KRScriptField;
+		friend class Scripting::Field;
 };
 
 #endif

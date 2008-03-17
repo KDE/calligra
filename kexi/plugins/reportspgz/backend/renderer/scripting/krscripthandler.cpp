@@ -68,7 +68,7 @@ void KRScriptHandler::slotEnteredSection(KRSectionData *section)
 {
 	kDebug() << endl;
 
-	QScriptValue sec = _engine->newQObject(new KRScriptSection(section), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
+	QScriptValue sec = _engine->newQObject(new Scripting::Section(section), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
 	
 	_engine->globalObject().setProperty(section->name(),sec);
 	

@@ -11,23 +11,100 @@
 //
 #include "krscriptlabel.h"
 
-KRScriptLabel::KRScriptLabel(KRLabelData *l)
+namespace Scripting
 {
-	_label = l;
-}
+	Label::Label(KRLabelData *l)
+	{
+		_label = l;
+	}
 
 
-KRScriptLabel::~KRScriptLabel()
-{
-}
+	Label::~Label()
+	{
+	}
 
-QString KRScriptLabel::caption()
-{
-	return _label->text();
-}
+	QString Label::caption()
+	{
+		return _label->text();
+	}
 
-void KRScriptLabel::setCaption(const QString& c)
-{
-	_label->setText(c);
+	void Label::setCaption(const QString& c)
+	{
+		_label->setText(c);
+	}
+
+	int Label::horizontalAlignment()
+	{
+	}
+	void Label::setHorizonalAlignment(int)
+	{
+	}
+		
+	int Label::verticalAlignment()
+	{
+	}
+	void Label::setVerticalAlignment(int)
+	{
+	}
+		
+	QColor Label::backgroundColor()
+	{
+	}
+	void Label::setBackgroundColor(QColor)
+	{
+	}
+		
+	QColor Label::foregroundColor()
+	{
+	}
+	void Label::setForegroundColor(QColor)
+	{
+	}
+		
+	int Label::backgroundOpacity()
+	{
+	}
+	void Label::setBackgroundOpacity(int)
+	{
+	}
+		
+	QColor Label::lineColor()
+	{
+	}
+	void Label::setLineColor(QColor)
+	{
+	}
+			
+	int Label::lineWeight()
+	{
+	}
+	void Label::setLineWeight(int)
+	{
+	}
+			
+	int Label::lineStyle()
+	{
+	}
+	void Label::setLineStyle(int)
+	{
+	}
+	
+	QPointF Label::position()
+	{
+		
+	}
+	void Label::setPosition(QPointF)
+	{
+		
+	}
+			
+	QSizeF Label::size()
+	{
+		
+	}
+	void Label::setSize(QSizeF)
+	{
+		
+	}
 }
 

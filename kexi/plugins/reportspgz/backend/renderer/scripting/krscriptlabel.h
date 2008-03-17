@@ -18,20 +18,53 @@
 /**
 	@author Adam Pigg <adam@piggz.co.uk>
 */
-class KRScriptLabel : public QObject
+namespace Scripting
 {
+	class Label : public QObject
+	{
 		Q_OBJECT
-	public:
-		KRScriptLabel ( KRLabelData * );
+		public:
+			Label ( KRLabelData * );
 
-		~KRScriptLabel();
+			~Label();
 
-	public slots:
-		QString caption();
-		void setCaption(const QString&);
+		public slots:
+			QString caption();
+			void setCaption(const QString&);
 
-	private:
-		KRLabelData *_label;
-};
+			int horizontalAlignment();
+			void setHorizonalAlignment(int);
+		
+			int verticalAlignment();
+			void setVerticalAlignment(int);
+		
+			QColor backgroundColor();
+			void setBackgroundColor(QColor);
+		
+			QColor foregroundColor();
+			void setForegroundColor(QColor);
+		
+			int backgroundOpacity();
+			void setBackgroundOpacity(int);
+		
+			QColor lineColor();
+			void setLineColor(QColor);
+			
+			int lineWeight();
+			void setLineWeight(int);
+			
+			int lineStyle();
+			void setLineStyle(int);
+			
+			QPointF position();
+			void setPosition(QPointF);
+			
+			QSizeF size();
+			void setSize(QSizeF);
+					
+		private:
+			KRLabelData *_label;
+	};
+}
 
 #endif
