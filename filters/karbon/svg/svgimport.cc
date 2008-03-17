@@ -1471,6 +1471,7 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
     text->setFont( m_gc.top()->font );
     text->setBackground( m_gc.top()->fill );
     text->applyAbsoluteTransformation( m_gc.top()->matrix );
+    text->setZIndex( nextZIndex() );
 
     if( !b.attribute("id").isEmpty() )
         text->setName( b.attribute("id") );
