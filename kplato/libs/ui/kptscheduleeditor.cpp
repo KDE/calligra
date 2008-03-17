@@ -57,7 +57,7 @@ ScheduleTreeView::ScheduleTreeView( QWidget *parent )
     header()->setContextMenuPolicy( Qt::CustomContextMenu );
     setModel( new ScheduleItemModel() );
     setSelectionModel( new QItemSelectionModel( model() ) );
-    setSelectionMode( QAbstractItemView::SingleSelection );
+    setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     
     createItemDelegates();
