@@ -11,21 +11,21 @@ include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOTEXT_INCLUDES} ${K
 
 ########### next target ###############
 
-set(TestBasicLayout_test_SRCS TestBasicLayout.cpp)
-kde4_add_unit_test(TestBasicLayout TESTNAME kword-part-frame-TestBasicLayout  ${TestBasicLayout_test_SRCS})
-target_link_libraries(TestBasicLayout kwordprivate ${QT_QTTEST_LIBRARY})
+set(KWordTestBasicLayout_test_SRCS TestBasicLayout.cpp)
+kde4_add_unit_test(KWordTestBasicLayout TESTNAME kword-part-frame-TestBasicLayout  ${KWordTestBasicLayout_test_SRCS})
+target_link_libraries(KWordTestBasicLayout kwordprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestDocumentLayout_test_SRCS TestDocumentLayout.cpp)
-kde4_add_unit_test(TestDocumentLayout TESTNAME kword-part-frame-TestDocumentLayout  ${TestDocumentLayout_test_SRCS})
-target_link_libraries(TestDocumentLayout kwordprivate ${QT_QTTEST_LIBRARY})
+set(KWordTestDocumentLayout_test_SRCS TestDocumentLayout.cpp)
+kde4_add_unit_test(KWordTestDocumentLayout TESTNAME kword-part-frame-TestDocumentLayout  ${KWordTestDocumentLayout_test_SRCS})
+target_link_libraries(KWordTestDocumentLayout kwordprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestTextFrameSorting_test_SRCS TestTextFrameSorting.cpp)
-kde4_add_unit_test(TestTextFrameSorting TESTNAME kword-part-frame-TestTextFrameSorting  ${TestTextFrameSorting_test_SRCS})
-target_link_libraries(TestTextFrameSorting kwordprivate ${QT_QTTEST_LIBRARY})
+set(KWordTestTextFrameSorting_test_SRCS TestTextFrameSorting.cpp)
+kde4_add_unit_test(KWordTestTextFrameSorting TESTNAME kword-part-frame-TestTextFrameSorting  ${KWordTestTextFrameSorting_test_SRCS})
+target_link_libraries(KWordTestTextFrameSorting kwordprivate ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
