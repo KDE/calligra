@@ -68,7 +68,7 @@ namespace Scripting
 
 	QObject* Section::object(const QString&)
 	{
-	
+		return 0;
 	}
 
 }
