@@ -1,5 +1,5 @@
-include_directories( ${CMAKE_SOURCE_DIR}/libs/main 
-${CMAKE_SOURCE_DIR}/libs/guiutils 
+include_directories( ${KOMAIN_INCLUDES} 
+${KOGUIUTILS_INCLUDES} 
 ${KOODF_INCLUDES} 
 ${CMAKE_SOURCE_DIR}/kexi
 ${CMAKE_SOURCE_DIR}/kexi/core
