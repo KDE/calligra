@@ -30,7 +30,7 @@ namespace KChart {
 
 class ChartShape;
 
-class ChartProxyModel : public QAbstractProxyModel
+class CHARTSHAPELIB_EXPORT ChartProxyModel : public QAbstractProxyModel
 {
     Q_OBJECT
 

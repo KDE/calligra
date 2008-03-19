@@ -38,7 +38,7 @@ namespace KChart
 /**
  * This is the tool for the text-shape (which is a flake-based plugin).
  */
-class ChartTool : public KoTool
+class CHARTSHAPELIB_EXPORT ChartTool : public KoTool
 {
     Q_OBJECT
 public:

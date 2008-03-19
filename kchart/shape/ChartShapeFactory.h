@@ -41,7 +41,7 @@ public:
     ~ChartShapePlugin() {}
 };
 
-class ChartShapeFactory : public KoShapeFactory
+class CHARTSHAPELIB_EXPORT ChartShapeFactory : public KoShapeFactory
 {
     Q_OBJECT
 public:

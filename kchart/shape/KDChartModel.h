@@ -29,7 +29,7 @@
 
 namespace KChart {
 
-class KDChartModel : public QAbstractItemModel
+class CHARTSHAPELIB_EXPORT KDChartModel : public QAbstractItemModel
 {
     Q_OBJECT
 

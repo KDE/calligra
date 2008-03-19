@@ -76,7 +76,7 @@ extern QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QC
 
 #define ChartShapeId "ChartShape"
 
-class ChartShape : public KoShapeContainer, public KoChart::ChartInterface
+class CHARTSHAPELIB_EXPORT ChartShape : public KoShapeContainer, public KoChart::ChartInterface
 {
 public:
     ChartShape();
