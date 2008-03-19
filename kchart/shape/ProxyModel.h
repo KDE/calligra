@@ -31,7 +31,7 @@ namespace KChart {
 
 class PlotArea;
 
-class ProxyModel : public QAbstractProxyModel
+class CHARTSHAPELIB_EXPORT ProxyModel : public QAbstractProxyModel
 {
     Q_OBJECT
 

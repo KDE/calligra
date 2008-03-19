@@ -26,7 +26,7 @@
 
 namespace KChart {
 
-class Axis
+class CHARTSHAPELIB_EXPORT Axis
 {
 public:
     Axis( PlotArea *parent );

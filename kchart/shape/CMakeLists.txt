@@ -20,7 +20,6 @@ SET (chartshape_LIB_SRCS
     ThreeDTransformation.cpp
     ChartTableView.cpp
     ChartShape.cpp
-    ChartShapeFactory.cpp
     ChartTool.cpp
     ChartToolFactory.cpp
     ChartConfigWidget.cpp
@@ -43,7 +42,7 @@ set_target_properties(chartshapelib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VER
 
 install(TARGETS chartshapelib DESTINATION ${LIB_INSTALL_DIR})
 
-kde4_add_plugin(chartshape ${chartshape_LIB_SRCS} )
+kde4_add_plugin(chartshape ChartShapeFactory.cpp)
 target_link_libraries(chartshape chartshapelib kdchart kochart flake)
 install(TARGETS chartshape DESTINATION ${PLUGIN_INSTALL_DIR})
 

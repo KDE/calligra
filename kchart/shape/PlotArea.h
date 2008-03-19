@@ -30,7 +30,7 @@
 
 namespace KChart {
 
-class PlotArea : public QObject
+class CHARTSHAPELIB_EXPORT PlotArea : public QObject
 {
     Q_OBJECT
     

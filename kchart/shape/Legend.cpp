@@ -41,6 +41,7 @@
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoXmlNS.h>

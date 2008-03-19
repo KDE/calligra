@@ -154,7 +154,7 @@ public:
     Surface *floor;
 
     // We can rerender faster if we cache KDChart's output
-    QImage   pixmap;
+    QImage   image;
     QPointF  lastZoomLevel;
     QSizeF   lastSize;
     bool     pixmapRepaintRequested;
@@ -362,11 +362,11 @@ void ChartShape::paintPixmap( QPainter &painter, const KoViewConverter &converte
 {
     // Adjust the size of the painting area to the current zoom level
     const QSize paintRectSize = converter.documentToView( size() ).toSize();
-    d->pixmap = QPixmap( paintRectSize );
+    d->image = QImage( paintRectSize, QImage::Format_ARGB32 );
     const QRect paintRect = QRect( QPoint( 0, 0 ), paintRectSize );
 
     // Copy the painter's render hints, such as antialiasing
-    QPainter pixmapPainter( &d->pixmap );
+    QPainter pixmapPainter( &d->image );
     pixmapPainter.setRenderHints( painter.renderHints() );
     pixmapPainter.setRenderHint( QPainter::Antialiasing, false );
 
@@ -401,7 +401,7 @@ void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
     }
 
     // Paint the cached pixmap
-    painter.drawImage( 0, 0, d->pixmap );
+    painter.drawImage( 0, 0, d->image );
 }
 
 void ChartShape::paintComponent( QPainter &painter, const KoViewConverter &converter )
@@ -608,7 +608,6 @@ void ChartShape::saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
         break;
             case QVariant::DateTime:
 
-#define ChartShapeId "ChartShapeId"
         valType = "date";
         valStr  = ""; /* like in saveXML, but why? */
         break;
