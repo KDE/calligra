@@ -21,6 +21,7 @@
 
 #include "kexiscriptpart.h"
 #include "kexiscriptdesignview.h"
+#include "kexiscriptadaptor.h"
 
 #include <KexiView.h>
 #include <KexiWindow.h>
@@ -32,6 +33,7 @@
 #include <kross/core/actioncollection.h>
 
 #include <kgenericfactory.h>
+#include <kexipart.h>
 #include <kexipartitem.h>
 #include <kxmlguiclient.h>
 //#include <kexidialogbase.h>
@@ -47,18 +49,34 @@
 class KexiScriptPart::Private
 {
 	public:
-		Private() : actioncollection(0) {}
-		~Private() { delete actioncollection; }
+		explicit Private(KexiScriptPart* p)
+			: p(p)
+			, actioncollection(new Kross::ActionCollection("projectscripts"))
+			, adaptor(0) {}
+		~Private() { delete actioncollection; delete adaptor; }
 
+		KexiScriptPart* p;
 		Kross::ActionCollection* actioncollection;
+		KexiScriptAdaptor* adaptor;
+
+		Kross::Action* action(const QString &partname)
+		{
+			Kross::Action *action = actioncollection->action(partname);
+			if( ! action ) {
+				if( ! adaptor )
+					adaptor = new KexiScriptAdaptor();
+				action = new Kross::Action(p, partname);
+				actioncollection->addAction(action);
+				action->addObject(adaptor);
+			}
+			return action;
+		}
 };
 
 KexiScriptPart::KexiScriptPart(QObject *parent, const QStringList &l)
 	: KexiPart::Part((int)KexiPart::ScriptObjectType, parent, l)
-	, d( new Private() )
+	, d( new Private(this) )
 {
-    d->actioncollection = new Kross::ActionCollection("projectscripts");
-
 	setInternalPropertyValue("instanceName",
 		i18nc("Translate this word using only lowercase alphanumeric characters (a..z, 0..9). "
 		"Use '_' character instead of spaces. First character should be a..z character. "
@@ -68,8 +86,8 @@ KexiScriptPart::KexiScriptPart(QObject *parent, const QStringList &l)
 	setInternalPropertyValue("instanceToolTip", i18nc("tooltip", "Create new script"));
 	setInternalPropertyValue("instanceWhatsThis", i18nc("what's this", "Creates new script."));
 	setSupportedViewModes(Kexi::DesignViewMode);
-//setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);
-//setInternalPropertyValue("newObjectsAreDirty", true);
+	//setSupportedViewModes(Kexi::DataViewMode | Kexi::DesignViewMode);
+	//setInternalPropertyValue("newObjectsAreDirty", true);
 }
 
 KexiScriptPart::~KexiScriptPart()
@@ -121,12 +139,8 @@ bool KexiScriptPart::execute(KexiPart::Item* item, QObject* sender)
 
 //QWidget *mainwin = KexiMainWindowIface::global()->thisWidget();
 //KexiScriptDesignView view(mainwin, );
-    Kross::Action *action = d->actioncollection->action(item->name());
-    if( ! action ) {
-        action = new Kross::Action(this, item->name());
-        d->actioncollection->addAction(action);
-    }
-    kDebug();
+    Kross::Action *action = d->action(item->name());
+    Q_ASSERT(action);
     action->trigger();
 
 /*
@@ -229,11 +243,7 @@ KexiView* KexiScriptPart::createView(QWidget *parent,
 kDebug()<<"............. createView";
 	QString partname = item.name();
 	if( ! partname.isNull() ) {
-        Kross::Action *action = d->actioncollection->action(partname);
-        if( ! action ) {
-            action = new Kross::Action(this, partname);
-            d->actioncollection->addAction(action);
-        }
+        Kross::Action *action = d->action(partname);
 #if 0
 		KexiMainWindow *win = dialog->mainWin();
 		if(!win || !win->project() || !win->project()->dbConnection())

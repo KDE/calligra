@@ -116,12 +116,15 @@ KexiScriptDesignView::KexiScriptDesignView(
     filemenu->setToolTip(i18n("File actions"));
     filemenu->setWhatsThis(i18n("File actions"));
     QAction *a = new QAction(KIcon("document-new"), i18n("New"), this);
+    a->setShortcut(Qt::CTRL + Qt::Key_N);
     connect(a, SIGNAL(triggered(bool)), this, SLOT(slotFileNew()));
     filemenu->addAction(a);
     a = new QAction(KIcon("document-open"), i18n("Open..."), this);
+    a->setShortcut(Qt::CTRL + Qt::Key_O);
     connect(a, SIGNAL(triggered(bool)), this, SLOT(slotFileOpen()));
     filemenu->addAction(a);
     a = new QAction(KIcon("document-save"), i18n("Save As..."), this);
+    a->setShortcut(Qt::CTRL + Qt::Key_S);
     connect(a, SIGNAL(triggered(bool)), this, SLOT(slotFileSave()));
     filemenu->addAction(a);
     viewActions << filemenu;

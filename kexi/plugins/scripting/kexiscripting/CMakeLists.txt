@@ -10,6 +10,7 @@ include_directories(
 ########### next target ###############
 
 set(kexihandler_script_PART_SRCS kexiscriptpart.cpp kexiscripteditor.cpp kexiscriptdesignview.cpp )
+qt4_wrap_cpp(kexihandler_script_PART_SRCS kexiscriptadaptor.h)
 kde4_add_plugin(kexihandler_script ${kexihandler_script_PART_SRCS})
 target_link_libraries(kexihandler_script  ${KDE4_KDECORE_LIBS} kexiextendedwidgets koproperty ${KDE4_KROSSUI_LIBS} kokross)
 install(TARGETS kexihandler_script  DESTINATION ${PLUGIN_INSTALL_DIR})
