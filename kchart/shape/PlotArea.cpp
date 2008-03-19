@@ -553,6 +553,7 @@ bool PlotArea::registerKdDiagram( KDChart::AbstractDiagram *diagram )
     if ( d->kdDiagrams.contains( diagram ) )
         return false;
     d->kdDiagrams.append( diagram );
+    return true;
 }
 
 bool PlotArea::deregisterKdDiagram( KDChart::AbstractDiagram *diagram )
@@ -560,6 +561,7 @@ bool PlotArea::deregisterKdDiagram( KDChart::AbstractDiagram *diagram )
     if ( !d->kdDiagrams.contains( diagram ) )
         return false;
     d->kdDiagrams.removeAll( diagram );
+    return true;
 }
 
 void PlotArea::update() const
