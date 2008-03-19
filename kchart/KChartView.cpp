@@ -400,7 +400,9 @@ void KChartView::importData()
     ((KChartPart*)koDocument())->doSetData( data,
 					    hasRowHeaders, hasColHeaders );
 #else
-    QStandardItemModel  data();
+//js 2008-03-19
+//?? warning C4930: 'QStandardItemModel data(void)': prototyped function not called (was a variable definition intended?)
+//??    QStandardItemModel  data();
 #endif
 }
 
