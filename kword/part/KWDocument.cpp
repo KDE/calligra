@@ -75,7 +75,6 @@ KWDocument::KWDocument( QWidget *parentWidget, QObject* parent, bool singleViewM
       m_frameLayout(pageManager(), m_frameSets, &m_pageSettings)
 {
     m_frameLayout.setDocument(this);
-    m_styleManager = new KoStyleManager(this);
     m_inlineTextObjectManager = new KoInlineTextObjectManager(this);
     
     connect(documentInfo(), SIGNAL(infoUpdated(const QString &, const QString &)),
@@ -320,10 +319,8 @@ void KWDocument::addFrameSet(KWFrameSet *fs) {
     KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*>(fs);
     if(tfs) {
         tfs->setPageManager(pageManager());
-        m_styleManager->add( tfs->document() );
-        KoTextDocumentLayout *lay = dynamic_cast<KoTextDocumentLayout*> (tfs->document()->documentLayout());
-        if(lay)
-            lay->setStyleManager(m_styleManager);
+        KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( dataCenterMap()["StyleManager"] );
+        styleManager->add( tfs->document() );
         if(tfs->textFrameSetType() == KWord::MainTextFrameSet ||
                 tfs->textFrameSetType() == KWord::OtherTextFrameSet) {
             connect(tfs, SIGNAL(moreFramesNeeded(KWTextFrameSet*)),

@@ -239,35 +239,45 @@ void Module::setDefaultPageLayout(QObject* pagelayout)
 
 QObject* Module::defaultParagraphStyle()
 {
-    KoParagraphStyle* s = kwDoc()->styleManager()->defaultParagraphStyle();
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( kwDoc()->dataCenterMap()["StyleManager"] );
+    Q_ASSERT( styleManager );
+    KoParagraphStyle* s = styleManager->defaultParagraphStyle();
     return s ? new ParagraphStyle(this, s) : 0;
 }
 
 QObject* Module::paragraphStyle(const QString& name)
 {
-    KoParagraphStyle* s = kwDoc()->styleManager()->paragraphStyle(name);
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( kwDoc()->dataCenterMap()["StyleManager"] );
+    Q_ASSERT( styleManager );
+    KoParagraphStyle* s = styleManager->paragraphStyle(name);
     return s ? new ParagraphStyle(this, s) : 0;
 }
 
 QObject* Module::addParagraphStyle(const QString& name)
 {
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( kwDoc()->dataCenterMap()["StyleManager"] );
+    Q_ASSERT( styleManager );
     KoParagraphStyle* s = new KoParagraphStyle();
     s->setName(name);
-    kwDoc()->styleManager()->add(s);
+    styleManager->add(s);
     return new ParagraphStyle(this, s);
 }
 
 QObject* Module::characterStyle(const QString& name)
 {
-    KoCharacterStyle* s = kwDoc()->styleManager()->characterStyle(name);
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( kwDoc()->dataCenterMap()["StyleManager"] );
+    Q_ASSERT( styleManager );
+    KoCharacterStyle* s = styleManager->characterStyle(name);
     return s ? new CharacterStyle(this, s) : 0;
 }
 
 QObject* Module::addCharacterStyle(const QString& name)
 {
+    KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( kwDoc()->dataCenterMap()["StyleManager"] );
+    Q_ASSERT( styleManager );
     KoCharacterStyle* s = new KoCharacterStyle();
     s->setName(name);
-    kwDoc()->styleManager()->add(s);
+    styleManager->add(s);
     return new CharacterStyle(this, s);
 }
 

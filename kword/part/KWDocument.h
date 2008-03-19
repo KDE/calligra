@@ -40,7 +40,6 @@ class KWPageManager;
 class KWPage;
 class KWFrameSet;
 
-class KoStyleManager;
 class KoInlineTextObjectManager;
 
 class KLocalizedString;
@@ -172,19 +171,6 @@ public:
     /// return the main text frameset of the document
     KWTextFrameSet *mainFrameSet() const;
 
-    /**
-     * Return the style manager for this document.
-     * The text (paragraph/character) styles are managed per document and are all
-     * stored in this construct.
-     */
-    KoStyleManager *styleManager() { return m_styleManager; }
-    /**
-     * Return the style manager for this document.
-     * The text (paragraph/character) styles are managed per document and are all
-     * stored in this construct.
-     */
-    const KoStyleManager *styleManager() const { return m_styleManager; }
-
     /// return the inlineTextObjectManager for this document.
     KoInlineTextObjectManager *inlineTextObjectManager() const { return m_inlineTextObjectManager; }
 
@@ -261,7 +247,6 @@ private:
     KWFrameLayout m_frameLayout;
     KWApplicationConfig m_config;
 
-    KoStyleManager *m_styleManager;
     QMap<QString, KoDataCenter *>  m_dataCenterMap;
 
     KoInlineTextObjectManager *m_inlineTextObjectManager;

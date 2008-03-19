@@ -581,13 +581,17 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem) {
                 QTextCharFormat emptyCf;
                 cursor.insertBlock(emptyTbf, emptyCf);
             }
+
+            KoStyleManager * styleManager = dynamic_cast<KoStyleManager *>( m_document->dataCenterMap()["StyleManager"] );
+            Q_ASSERT( styleManager );
+
             firstParag = false;
             KoXmlElement layout = paragraph.namedItem("LAYOUT").toElement();
             if(!layout.isNull()) {
                 QString styleName = layout.namedItem("NAME").toElement().attribute("value");
-                KoParagraphStyle *style = m_document->styleManager()->paragraphStyle(styleName);
+                KoParagraphStyle *style = styleManager->paragraphStyle(styleName);
                 if(!style)
-                    style = m_document->styleManager()->defaultParagraphStyle();
+                    style = styleManager->defaultParagraphStyle();
                 KoParagraphStyle paragStyle(*style); // tmp style.
                 fill(&paragStyle, layout);
 
@@ -625,7 +629,7 @@ void KWDLoader::fill(KWTextFrameSet *fs, const KoXmlElement &framesetElem) {
             cursor.insertText( paragraph.namedItem("TEXT").toElement().text().replace('\n', QChar(0x2028)));
 
             // re-apply char format after we added the text
-            KoCharacterStyle *style = m_document->styleManager()->characterStyle(
+            KoCharacterStyle *style = styleManager->characterStyle(
                     cursor.blockCharFormat().intProperty(KoCharacterStyle::StyleId));
             if(style) {
                 QTextBlock block = cursor.block();
@@ -1064,18 +1068,19 @@ void KWDLoader::fill(ImageKey *key, const KoXmlElement &keyElement) {
 }
 
 void KWDLoader::loadStyleTemplates( const KoXmlElement &stylesElem ) {
-    KoStyleManager *manager = m_document->styleManager();
+    KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>( m_document->dataCenterMap()["StyleManager"] );
+    Q_ASSERT( styleManager );
 
     KoXmlElement style;
     forEachElement(style, stylesElem) {
         if (style.tagName() != "STYLE")
             continue;
         QString styleName = style.namedItem("NAME").toElement().attribute("value");
-        KoParagraphStyle *paragStyle = manager->paragraphStyle(styleName);
+        KoParagraphStyle *paragStyle = styleManager->paragraphStyle(styleName);
         if(!paragStyle) {
             paragStyle = new KoParagraphStyle();
             paragStyle->setName(styleName);
-            manager->add(paragStyle);
+            styleManager->add(paragStyle);
         }
         fill(paragStyle, style);
 #if 0
@@ -1097,10 +1102,10 @@ void KWDLoader::loadStyleTemplates( const KoXmlElement &stylesElem ) {
         if (style.tagName() != "STYLE")
             continue;
         QString styleName = style.namedItem("NAME").toElement().attribute("value");
-        KoParagraphStyle *paragStyle = manager->paragraphStyle(styleName);
+        KoParagraphStyle *paragStyle = styleManager->paragraphStyle(styleName);
         Q_ASSERT(paragStyle);
         QString following = style.namedItem("FOLLOWING").toElement().attribute("name");
-        KoParagraphStyle *next = manager->paragraphStyle(following);
+        KoParagraphStyle *next = styleManager->paragraphStyle(following);
         if(next)
             paragStyle->setNextStyle(next->styleId());
     }

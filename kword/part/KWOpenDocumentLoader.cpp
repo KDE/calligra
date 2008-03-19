@@ -47,6 +47,7 @@
 #include <KoTextFrameLoader.h>
 #include <KWPage.h>
 #include <KoProperties.h>
+#include <KoStyleManager.h>
 //#include <TextShape.h>
 
 // KDE + Qt includes
@@ -302,7 +303,9 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
 
     // Load all styles before the corresponding paragraphs try to use them!
     KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
-    sharedData->loadOdfStyles( odfContext, d->document->styleManager(), true );
+    KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>( d->document->dataCenterMap()["StyleManager"] );
+    Q_ASSERT( styleManager );
+    sharedData->loadOdfStyles( odfContext, styleManager, true );
     sc.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
 
     KoTextLoader * loader = new KoTextLoader( sc );
