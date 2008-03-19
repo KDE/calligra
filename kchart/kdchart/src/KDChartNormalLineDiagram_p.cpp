@@ -106,7 +106,7 @@ void NormalLineDiagram::paint( PaintContext* ctx )
 
     DataValueTextInfoList textInfoList;
     LineAttributesInfoList lineList;
-    LineAttributes::MissingValuesPolicy policy; // ???
+    LineAttributes::MissingValuesPolicy policy = LineAttributes::MissingValuesPolicyIgnored; // ???
 
     for( int column  = 0; column < columnCount; ++column ) {
         LineAttributes laPreviousCell;
