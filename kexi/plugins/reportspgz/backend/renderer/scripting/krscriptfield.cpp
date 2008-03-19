@@ -35,6 +35,7 @@ namespace Scripting
 	
 	int Field::horizontalAlignment()
 	{
+		return 0;
 	}
 	void Field::setHorizonalAlignment(int)
 	{
@@ -42,6 +43,7 @@ namespace Scripting
 		
 	int Field::verticalAlignment()
 	{
+		return 0;
 	}
 	void Field::setVerticalAlignment(int)
 	{
@@ -49,6 +51,7 @@ namespace Scripting
 		
 	QColor Field::backgroundColor()
 	{
+		return QColor();
 	}
 	void Field::setBackgroundColor(QColor)
 	{
@@ -56,6 +59,7 @@ namespace Scripting
 		
 	QColor Field::foregroundColor()
 	{
+		return QColor();
 	}
 	void Field::setForegroundColor(QColor)
 	{
@@ -63,7 +67,7 @@ namespace Scripting
 		
 	int Field::backgroundOpacity()
 	{
-		
+		return 0;
 	}
 	void Field::setBackgroundOpacity(int o)
 	{
@@ -72,6 +76,7 @@ namespace Scripting
 		
 	QColor Field::lineColor()
 	{
+		return QColor();
 	}
 	void Field::setLineColor(QColor)
 	{
@@ -79,6 +84,7 @@ namespace Scripting
 			
 	int Field::lineWeight()
 	{
+		return 1;
 	}
 	void Field::setLineWeight(int)
 	{
@@ -86,6 +92,7 @@ namespace Scripting
 			
 	int Field::lineStyle()
 	{
+		return 0;
 	}
 	void Field::setLineStyle(int)
 	{
@@ -93,7 +100,7 @@ namespace Scripting
 	
 	QPointF Field::position()
 	{
-		
+		return QPointF();
 	}
 	void Field::setPosition(QPointF)
 	{
@@ -102,7 +109,7 @@ namespace Scripting
 			
 	QSizeF Field::size()
 	{
-		
+		return QSizeF();
 	}
 	void Field::setSize(QSizeF)
 	{

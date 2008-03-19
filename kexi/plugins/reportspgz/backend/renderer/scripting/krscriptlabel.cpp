@@ -35,6 +35,7 @@ namespace Scripting
 
 	int Label::horizontalAlignment()
 	{
+		return 0;
 	}
 	void Label::setHorizonalAlignment(int)
 	{
@@ -42,6 +43,7 @@ namespace Scripting
 		
 	int Label::verticalAlignment()
 	{
+		return 0;
 	}
 	void Label::setVerticalAlignment(int)
 	{
@@ -49,6 +51,7 @@ namespace Scripting
 		
 	QColor Label::backgroundColor()
 	{
+		return QColor();
 	}
 	void Label::setBackgroundColor(QColor)
 	{
@@ -56,6 +59,7 @@ namespace Scripting
 		
 	QColor Label::foregroundColor()
 	{
+		return QColor();
 	}
 	void Label::setForegroundColor(QColor)
 	{
@@ -63,6 +67,7 @@ namespace Scripting
 		
 	int Label::backgroundOpacity()
 	{
+		return 0;
 	}
 	void Label::setBackgroundOpacity(int)
 	{
@@ -70,6 +75,7 @@ namespace Scripting
 		
 	QColor Label::lineColor()
 	{
+		return QColor();
 	}
 	void Label::setLineColor(QColor)
 	{
@@ -77,6 +83,7 @@ namespace Scripting
 			
 	int Label::lineWeight()
 	{
+		return 1;
 	}
 	void Label::setLineWeight(int)
 	{
@@ -84,6 +91,7 @@ namespace Scripting
 			
 	int Label::lineStyle()
 	{
+		return 0;
 	}
 	void Label::setLineStyle(int)
 	{
@@ -91,7 +99,7 @@ namespace Scripting
 	
 	QPointF Label::position()
 	{
-		
+		return QPointF();
 	}
 	void Label::setPosition(QPointF)
 	{
@@ -100,7 +108,7 @@ namespace Scripting
 			
 	QSizeF Label::size()
 	{
-		
+		return QSizeF();
 	}
 	void Label::setSize(QSizeF)
 	{
