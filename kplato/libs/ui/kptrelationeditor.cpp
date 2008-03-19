@@ -53,12 +53,20 @@ RelationTreeView::RelationTreeView( QWidget *parent )
 {
     setViewSplitMode( false );
     setModel( new RelationItemModel() );
-    setSelectionMode( QAbstractItemView::SingleSelection );
+    setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
-    
+    setArrowKeyNavigation( true );
     setRootIsDecorated ( false );
 
     createItemDelegates();
+    
+    //HACK to simulate SingleSelection *and* get indication of current item
+    connect( selectionModel(), SIGNAL( currentChanged(const QModelIndex&, const QModelIndex& ) ), SLOT( slotCurrentChanged(const QModelIndex&, const QModelIndex& ) ) );
+}
+
+void RelationTreeView::slotCurrentChanged(const QModelIndex &curr, const QModelIndex& )
+{
+    selectionModel()->select( curr, QItemSelectionModel::Rows | QItemSelectionModel::ClearAndSelect );
 }
 
 void RelationTreeView::slotActivated( const QModelIndex index )
@@ -76,7 +84,7 @@ RelationEditor::RelationEditor( KoDocument *part, QWidget *parent )
     l->setMargin( 0 );
     m_view = new RelationTreeView( this );
     l->addWidget( m_view );
-    kDebug()<<m_view->actionSplitView();
+    //kDebug()<<m_view->actionSplitView();
     setupGui();
     
     connect( m_view, SIGNAL( currentChanged( const QModelIndex &, const QModelIndex & ) ), this, SLOT ( slotCurrentChanged( const QModelIndex &, const QModelIndex & ) ) );
@@ -111,19 +119,19 @@ void RelationEditor::setGuiActive( bool activate )
 
 void RelationEditor::slotCurrentChanged(  const QModelIndex &curr, const QModelIndex & )
 {
-    kDebug()<<curr.row()<<","<<curr.column();
+    //kDebug()<<curr.row()<<","<<curr.column();
     slotEnableActions();
 }
 
 void RelationEditor::slotSelectionChanged( const QModelIndexList list)
 {
-    kDebug()<<list.count();
+    //kDebug()<<list.count();
     slotEnableActions();
 }
 
 Relation *RelationEditor::currentRelation() const
 {
-    kDebug();
+    //kDebug();
     return m_view->currentRelation();
 }
 
@@ -167,7 +175,7 @@ void RelationEditor::setupGui()
 
 void RelationEditor::slotSplitView()
 {
-    kDebug();
+    //kDebug();
     m_view->setViewSplitMode( ! m_view->isViewSplit() );
 }
 
@@ -207,7 +215,7 @@ void RelationEditor::slotDeleteRelation( Relation *r)
 
 bool RelationEditor::loadContext( const KoXmlElement &context )
 {
-    kDebug()<<endl;
+    kDebug();
     return m_view->loadContext( m_view->model()->columnMap(), context );
 }
 

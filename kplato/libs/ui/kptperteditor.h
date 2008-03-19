@@ -57,6 +57,7 @@
 class KoDocument;
 
 class QTreeWidgetItem;
+class QModelIndex;
 class QUndoCommand;
 
 namespace KPlato
@@ -71,6 +72,8 @@ class KPLATOUI_EXPORT PertEditor : public ViewBase
     Q_OBJECT
 public:
 
+    enum Roles { NodeRole = Qt::UserRole + 1, EnabledRole };
+    
     PertEditor( KoDocument *part, QWidget *parent );
     virtual void updateReadWrite( bool readwrite );
     void setProject( Project *project );
@@ -99,6 +102,8 @@ private slots:
     void slotNodeAdded( Node* );
     void slotNodeRemoved( Node* );
     void slotNodeChanged( Node* );
+    void slotRelationAdded( Relation *rel );
+    void slotRelationRemoved( Relation *rel );
     
     void dispAvailableTasks();
     void dispAvailableTasks( Node *parent, Node *selectedTask );
@@ -109,6 +114,7 @@ private slots:
 
     void slotCurrentTaskChanged( QTreeWidgetItem *curr, QTreeWidgetItem *prev );
     void slotAvailableChanged( QTreeWidgetItem *item );
+    void slotRequiredChanged( const QModelIndex &index );
     void slotAddClicked();
     void slotRemoveClicked();
 
