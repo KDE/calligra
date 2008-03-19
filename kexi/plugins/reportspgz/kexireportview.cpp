@@ -145,6 +145,7 @@ void KexiReportView::slotPrintReport()
 tristate KexiReportView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
 	kDebug() << tempData()->document << endl;
+	return true;
 }
 
 tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
