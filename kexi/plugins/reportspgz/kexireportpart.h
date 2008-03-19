@@ -35,7 +35,7 @@
  * @author Adam Pigg <adam@piggz.co.uk>
  * @version 0.1
  */
-class KEXIFORMUTILS_EXPORT KexiReportPart : public KexiPart::Part
+class KexiReportPart : public KexiPart::Part
 {
 	Q_OBJECT
 	public:
