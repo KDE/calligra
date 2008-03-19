@@ -304,8 +304,6 @@ QMenu* KexiEditor::defaultContextMenu()
     menu->addAction( d->view->action("edit_find_next") );
     menu->addAction( d->view->action("edit_find_prev") );
     menu->addAction( d->view->action("edit_replace") );
-    menu->addAction( d->view->action("edit_find_selected") );
-    menu->addAction( d->view->action("edit_find_selected_backwards") );
     menu->addAction( d->view->action("go_goto_line") );
     return menu;
 #endif
