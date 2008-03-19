@@ -121,7 +121,7 @@ KexiEditor::KexiEditor(QWidget *parent)
 #else
 #pragma WARNING( TODO	d->view->setContextMenu(pop); )
 #endif
-    //d->view->defaultContextMenu();
+    d->view->setContextMenu( d->view->defaultContextMenu() );
 
 /*	KTextEditor::PopupMenuInterface *popupInt = dynamic_cast<KTextEditor::PopupMenuInterface*>( d->view );
 	if(popupInt) {
@@ -298,7 +298,16 @@ QMenu* KexiEditor::defaultContextMenu()
 #ifdef KTEXTEDIT_BASED_SQL_EDITOR
     return d->view->createStandardContextMenu();
 #else
-    return d->view->defaultContextMenu();
+    QMenu* menu = d->view->defaultContextMenu();
+    menu->addSeparator();
+    menu->addAction( d->view->action("edit_find") );
+    menu->addAction( d->view->action("edit_find_next") );
+    menu->addAction( d->view->action("edit_find_prev") );
+    menu->addAction( d->view->action("edit_replace") );
+    menu->addAction( d->view->action("edit_find_selected") );
+    menu->addAction( d->view->action("edit_find_selected_backwards") );
+    menu->addAction( d->view->action("go_goto_line") );
+    return menu;
 #endif
 }
 
