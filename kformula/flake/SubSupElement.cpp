@@ -123,6 +123,7 @@ ElementType SubSupElement::elementType() const
         return SubScript;
     else if( m_superScript->elementType() != Basic )
         return SupScript;
+    return Unknown;
 }
 
 bool SubSupElement::readMathMLContent( const KoXmlElement& parent )

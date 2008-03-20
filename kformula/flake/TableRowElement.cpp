@@ -26,6 +26,7 @@
 #include "AttributeManager.h"
 #include <KoXmlReader.h>
 #include <QStringList>
+#include <QPainter>
 
 TableRowElement::TableRowElement( BasicElement* parent ) : BasicElement( parent )
 {}
