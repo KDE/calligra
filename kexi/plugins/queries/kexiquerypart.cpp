@@ -68,7 +68,7 @@ KexiWindowData* KexiQueryPart::createWindowData(KexiWindow* window)
 }
 
 KexiView* KexiQueryPart::createView(QWidget *parent, KexiWindow* window, KexiPart::Item &item, 
-	Kexi::ViewMode viewMode, QMap<QString,QString>*)
+	Kexi::ViewMode viewMode, QMap<QString,QVariant>*)
 {
 	Q_UNUSED( item );
 	Q_UNUSED( window );

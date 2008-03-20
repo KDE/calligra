@@ -163,12 +163,12 @@ class KEXICORE_EXPORT KexiMainWindowIface : /*public KexiMdiMainFrm,*/ public Ke
 
 		//! Opens object pointed by \a item in a view \a viewMode
 		virtual KexiWindow* openObject(KexiPart::Item *item, Kexi::ViewMode viewMode,
-			bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0,
+			bool &openingCancelled, QMap<QString,QVariant>* staticObjectArgs = 0,
 			QString* errorMessage = 0) = 0;
 
 		//! For convenience
 		virtual KexiWindow* openObject(const Q3CString& mime, const QString& name, 
-			Kexi::ViewMode viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0) = 0;
+			Kexi::ViewMode viewMode, bool &openingCancelled, QMap<QString,QVariant>* staticObjectArgs = 0) = 0;
 
 		/*! Closes the object for \a item. 
 		 \return true on success (closing can be dealyed though), false on failure and cancelled 

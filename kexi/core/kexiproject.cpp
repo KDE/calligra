@@ -730,7 +730,7 @@ KexiPart::Part *KexiProject::findPartFor(KexiPart::Item& item)
 }
 
 KexiWindow* KexiProject::openObject(QWidget* parent, KexiPart::Item& item, 
-	Kexi::ViewMode viewMode, QMap<QString,QString>* staticObjectArgs)
+	Kexi::ViewMode viewMode, QMap<QString,QVariant>* staticObjectArgs)
 {
 	clearError();
 	if (viewMode!=Kexi::DataViewMode && data()->userMode())

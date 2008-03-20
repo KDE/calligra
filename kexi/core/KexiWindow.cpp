@@ -571,7 +571,7 @@ bool KexiWindow::isDesignModePreloadedForTextModeHackUsed(Kexi::ViewMode newView
 
 tristate KexiWindow::switchToViewMode(
 	Kexi::ViewMode newViewMode, 
-	QMap<QString,QString>* staticObjectArgs,
+	QMap<QString,QVariant>* staticObjectArgs,
 	bool& proposeOpeningInTextViewModeBecauseOfProblems)
 {
 	KexiMainWindowIface::global()->acceptPropertySetEditing();

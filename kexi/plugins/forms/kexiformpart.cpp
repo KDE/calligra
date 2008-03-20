@@ -265,7 +265,7 @@ KexiFormPart::createWindowData(KexiWindow* window)
 }
 
 KexiView* KexiFormPart::createView(QWidget *parent, KexiWindow* window,
-	KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString,QString>*)
+	KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString,QVariant>*)
 {
 	Q_UNUSED( window );
 	Q_UNUSED( viewMode );
@@ -448,12 +448,12 @@ void KexiFormPart::slotAssignAction()
 
 	KexiFormEventAction::ActionData data;
 	KoProperty::Property &onClickActionProp = propSet->property("onClickAction");
-	if (! onClickActionProp.isNull()) {
-		KoProperty::Property &onClickActionOptionProp = propSet->property("onClickActionOption");
+	if (! onClickActionProp.isNull())
 		data.string = onClickActionProp.value().toString();
-		if (!onClickActionOptionProp.isNull())
-			data.option = onClickActionOptionProp.value().toString();
-	}
+
+	KoProperty::Property &onClickActionOptionProp = propSet->property("onClickActionOption");
+	if (!onClickActionOptionProp.isNull())
+		data.option = onClickActionOptionProp.value().toString();
 
 	KexiFormScrollView *scrollViewWidget
 		= dynamic_cast<KexiFormScrollView*>(dbform->dataAwareObject());

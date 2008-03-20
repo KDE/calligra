@@ -98,7 +98,7 @@ KexiWindowData* KexiTablePart::createWindowData(KexiWindow* window)
 }
 
 KexiView* KexiTablePart::createView(QWidget *parent, KexiWindow* window, 
-	KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString,QString>*)
+	KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString,QVariant>*)
 {
 	KexiMainWindowIface *win = KexiMainWindowIface::global();
 	if (!win || !win->project() || !win->project()->dbConnection())

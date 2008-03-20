@@ -303,7 +303,7 @@ void KexiSimplePrintingCommand::slotShowPageSetupRequested()
 //----------------------------------------------------------
 
 KexiSimplePrintingPageSetup::KexiSimplePrintingPageSetup( KexiMainWindow *mainWin, QWidget *parent, 
-	QMap<QString,QString>* args )
+	QMap<QString,QVariant>* args )
 	: KexiView( mainWin, parent, "KexiSimplePrintingPageSetup" )
 	, m_settings( KexiSimplePrintingSettings::load() )
 //	, m_command(0)

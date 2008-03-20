@@ -266,7 +266,7 @@ class KEXICORE_EXPORT KexiWindow
 		 like switchToViewMode( int newViewMode ), but passed \a staticObjectArgs.
 		 Only used for parts of class KexiPart::StaticPart. */
 		tristate switchToViewMode(Kexi::ViewMode newViewMode,
-			QMap<QString,QString>* staticObjectArgs,
+			QMap<QString,QVariant>* staticObjectArgs,
 			bool& proposeOpeningInTextViewModeBecauseOfProblems);
 
 		void registerWindow();

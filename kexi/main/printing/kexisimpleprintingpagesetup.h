@@ -74,7 +74,7 @@ class KexiSimplePrintingPageSetup : public KexiView
 	Q_OBJECT
 
 	public:
-		KexiSimplePrintingPageSetup( KexiMainWindow *mainWin, QWidget *parent, QMap<QString,QString>* args );
+		KexiSimplePrintingPageSetup( KexiMainWindow *mainWin, QWidget *parent, QMap<QString,QVariant>* args );
 		~KexiSimplePrintingPageSetup();
 
 	public slots:

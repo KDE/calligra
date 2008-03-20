@@ -36,7 +36,7 @@ class KexiSimplePrintingPart : public KexiPart::StaticPart
 
 	protected:
 		virtual KexiView* createView(QWidget *parent, KexiWindow* window, 
-			KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString,QString>* staticObjectArgs);
+			KexiPart::Item &item, Kexi::ViewMode viewMode, QMap<QString,QVariant>* staticObjectArgs);
 };
 
 #endif

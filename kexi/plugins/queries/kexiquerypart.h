@@ -99,7 +99,7 @@ class KexiQueryPart : public KexiPart::Part
 
 		virtual KexiView* createView(QWidget *parent, KexiWindow* window, 
 			KexiPart::Item &item, Kexi::ViewMode viewMode = Kexi::DataViewMode,
-			QMap<QString,QString>* staticObjectArgs = 0);
+			QMap<QString,QVariant>* staticObjectArgs = 0);
 
 //		virtual void initPartActions( KActionCollection *col );
 //		virtual void initInstanceActions( int mode, KActionCollection *col );

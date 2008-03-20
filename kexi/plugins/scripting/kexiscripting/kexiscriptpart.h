@@ -79,7 +79,7 @@ class KexiScriptPart : public KexiPart::Part
                                      KexiWindow *window, 
                                      KexiPart::Item &item,
                                      Kexi::ViewMode viewMode = Kexi::DataViewMode,
-                                     QMap<QString,QString>* staticObjectArgs = 0);
+                                     QMap<QString,QVariant>* staticObjectArgs = 0);
 /*
          * \param parent The parent QWidget the new view is displayed in.
          * \param dialog The \a KexiDialogBase the view is child of.
@@ -89,7 +89,7 @@ class KexiScriptPart : public KexiPart::Part
                                          KexiDialogBase* dialog,
                                          KexiPart::Item& item,
                                          Kexi::ViewMode viewMode = Kexi::DesignViewMode,
-                                         QMap<QString,QString>* staticObjectArgs = 0);
+                                         QMap<QString,QVariant>* staticObjectArgs = 0);
 */
 
         /**

@@ -228,12 +228,12 @@ class KEXIMAIN_EXPORT KexiMainWindow
 		 \a errorMessage, if not 0, points to a string that can be set to error message
 		 if one encountered. */
 		virtual KexiWindow* openObject(KexiPart::Item *item, Kexi::ViewMode viewMode, 
-			bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0,
+			bool &openingCancelled, QMap<QString,QVariant>* staticObjectArgs = 0,
 			QString* errorMessage = 0);
 
 		//! For convenience
 		virtual KexiWindow* openObject(const Q3CString& mime, const QString& name, 
-			Kexi::ViewMode viewMode, bool &openingCancelled, QMap<QString,QString>* staticObjectArgs = 0);
+			Kexi::ViewMode viewMode, bool &openingCancelled, QMap<QString,QVariant>* staticObjectArgs = 0);
 
 		/*! Closes the object for \a item. 
 		 \return true on success (closing can be dealyed though), false on failure and cancelled 
@@ -494,7 +494,7 @@ class KEXIMAIN_EXPORT KexiMainWindow
 
 		//! For convenience
 		KexiWindow* openObject(KexiPart::Item *item, Kexi::ViewMode viewMode,
-			QMap<QString,QString>* staticObjectArgs = 0)
+			QMap<QString,QVariant>* staticObjectArgs = 0)
 		{
 			bool openingCancelled;
 			return openObject(item, viewMode, openingCancelled, staticObjectArgs);

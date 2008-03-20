@@ -157,7 +157,7 @@ if( ! mainWin ) {
 //KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
     //KexiDialogBase* dialog = new KexiDialogBase(mainWin);
     //dialog->setId( item->identifier() );
-    QMap<QString,QString> staticObjectArgs;
+    QMap<QString,QVariant> staticObjectArgs;
     staticObjectArgs.insert("identifier", QString::number(item->identifier()));
     staticObjectArgs.insert("sender", sender ? sender->objectName() : "");
     KexiScriptDesignView* view = dynamic_cast<KexiScriptDesignView*>( 
@@ -237,8 +237,8 @@ KexiView* KexiScriptPart::createView(QWidget *parent,
                                      KexiWindow *window, 
                                      KexiPart::Item &item,
                                      Kexi::ViewMode viewMode,
-                                     QMap<QString,QString>* staticObjectArgs)
-//QWidget *parent, KexiDialogBase* dialog, KexiPart::Item& item, Kexi::ViewMode viewMode, QMap<QString,QString>*)
+                                     QMap<QString,QVariant>* staticObjectArgs)
+//QWidget *parent, KexiDialogBase* dialog, KexiPart::Item& item, Kexi::ViewMode viewMode, QMap<QString,QVariant>*)
 {
 kDebug()<<"............. createView";
 	QString partname = item.name();

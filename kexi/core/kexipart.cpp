@@ -250,7 +250,7 @@ void Part::setActionAvailable(const char *action_name, bool avail)
 }
 
 KexiWindow* Part::openInstance(QWidget* parent, KexiPart::Item &item, Kexi::ViewMode viewMode,
-	QMap<QString,QString>* staticObjectArgs)
+	QMap<QString,QVariant>* staticObjectArgs)
 {
 	//now it's the time for creating instance actions
 	if (!d->instanceActionsInitialized) {

@@ -104,7 +104,7 @@ KexiReportPart::createWindowData(KexiWindow* window)
 
 KexiView*
 KexiReportPart::createView(QWidget *parent, KexiWindow* window,
-	KexiPart::Item &item, Kexi::ViewMode mode, QMap<QString,QString>*)
+	KexiPart::Item &item, Kexi::ViewMode mode, QMap<QString,QVariant>*)
 {
 	kexipluginsdbg << "KexiReportPart::createView()" << endl;
 	KexiMainWindow *win = KexiMainWindowIface::global();

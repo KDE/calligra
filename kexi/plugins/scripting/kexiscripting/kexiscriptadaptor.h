@@ -21,12 +21,15 @@
 #define KEXISCRIPTADAPTOR_H
 
 #include <QObject>
+#include <QAction>
 
 #include <kexi.h>
 #include <kexipart.h>
 #include <kexiproject.h>
+//#include <kexidataawareview.h>
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>
+#include <KexiView.h>
 //#include "../kexidb/kexidbconnection.h"
 
 /**
@@ -42,18 +45,50 @@ class KexiScriptAdaptor : public QObject
     public Q_SLOTS:
 
         /**
+        * Returns the current KexiWindow widget.
+        */
+        QWidget* windowWidget() const {
+            return currentWindow();
+        }
+
+        /**
+        * Returns the current KexiView widget.
+        */
+        QWidget* viewWidget() const {
+            return currentView();
+        }
+
+        /**
         * Returns a list of all QAction instances the Kexi main
         * window provides.
+        *
+        * Python sample that prints the list of all actions the
+        * main window does provide.
+        * \code
+        * import Kexi
+        * for a in Kexi.actions():
+        *     print "name=%s text=%s" % (a.objectName,a.text)
+        * \endcode
         */
         QVariantList actions() {
-            if( m_actions.count() == 0 ) {
-                foreach(QAction* action, mainWindow()->allActions()) {
-                    QVariant v;
-                    v.setValue( (QObject*) action );
-                    m_actions << v;
-                }
+            QVariantList list;
+            foreach(QAction* action, mainWindow()->allActions()) {
+                QVariant v;
+                v.setValue( (QObject*) action );
+                list << v;
             }
-            return m_actions;
+            return list;
+        }
+
+        /**
+        * Returns the QAction instance the Kexi main window provides that
+        * has the objectName \p name or NULL if there is no such action.
+        */
+        QObject* action(const QString& name) {
+            foreach(QAction* action, mainWindow()->allActions())
+                if( action->objectName() == name )
+                    return action;
+            return 0;
         }
 
         /**
@@ -81,6 +116,12 @@ class KexiScriptAdaptor : public QObject
         /**
         * Returns a list of names of all items the mimetype provides. Possible
         * mimetypes are for example "table", "query", "form" or "script".
+        *
+        * Python sample that prints all tables within the current project.
+        * \code
+        * import Kexi
+        * print Kexi.items("table")
+        * \endcode
         */
         QStringList items(QString mimetype) {
             QStringList list;
@@ -128,18 +169,35 @@ class KexiScriptAdaptor : public QObject
 
         /**
         * Open an item. A window for the item defined with \p mimetype and \p name will
-        * be opened and we switch to it.
+        * be opened and we switch to it. The \p viewmode could be for example "data" (the
+        * default), "design" or "text".
+        *
+        * Python sample that opens the "cars" form in design view mode and sets then the
+        * dirty state to mark the formular as modified.
+        * \code
+        * import Kexi
+        * Kexi.openItem("form","cars","design")
+        * Kexi.windowWidget().setDirty(True)
+        * \endcode
         */
-        bool openItem(const QString& mimetype, const QString& name) {
+        bool openItem(const QString& mimetype, const QString& name, const QString& viewmode = QString()) {
             bool openingCancelled;
             KexiPart::Item *item = partItem(mimeType(mimetype), name);
-            KexiWindow* window = item ? mainWindow()->openObject(item, Kexi::DataViewMode, openingCancelled) : 0;
+            KexiWindow* window = item ? mainWindow()->openObject(item, stringToViewMode(viewmode), openingCancelled) : 0;
             return (window && ! openingCancelled);
         }
 
         /**
         * Close an opened item. The window for the item defined with \p mimetype and \p name
         * will be closed.
+        *
+        * Python sample that opens the "table1" table and closes the window right after
+        * being opened.
+        * \code
+        * import Kexi
+        * Kexi.openItem("table","table1")
+        * Kexi.closeItem("table","table1")
+        * \endcode
         */
         bool closeItem(const QString& mimetype, const QString& name) {
             if( KexiPart::Item *item = partItem(mimeType(mimetype), name) )
@@ -159,31 +217,86 @@ class KexiScriptAdaptor : public QObject
         /**
         * Executes custom action for the item defined with \p mimetype and \p name .
         */
-        bool executeItemAction(const QString& mimetype, const QString& name, const QString& actionName) {
+        bool executeItem(const QString& mimetype, const QString& name, const QString& actionName) {
             if( KexiPart::Item *item = partItem(mimeType(mimetype), name) )
                 return mainWindow()->executeCustomActionForObject(item, actionName) == true;
             return false;
         }
 
-    private:
-        QVariantList m_actions;
 
+        /**
+        * Returns the name of the current viewmode. This could be for example "data",
+        * "design", "text" or just an empty string if there is no view at the moment.
+        */
+        QString viewMode() const {
+            return currentView() ? viewModeToString(currentView()->viewMode()) : QString();
+        }
+
+        /**
+        * Returns a list of names of all available viewmodes the view supports.
+        */
+        QStringList viewModes() const {
+            QStringList list;
+            if( currentWindow() ) {
+                Kexi::ViewModes modes = currentWindow()->supportedViewModes();
+                if( modes & Kexi::DataViewMode )
+                    list << "data";
+                if( modes & Kexi::DesignViewMode )
+                    list << "design";
+                if( modes & Kexi::TextViewMode )
+                    list << "text";
+            }
+            return list;
+        }
+
+        /**
+        * Returns true if there is a current view and those current view is dirty aka
+        * has the dirty-flag set that indicates that something changed.
+        */
+        bool viewIsDirty() const {
+            return currentView() ? currentView()->isDirty() : false;
+        }
+
+    private:
         KexiMainWindowIface* mainWindow() const {
             return KexiMainWindowIface::global();
         }
         KexiProject* project() const {
-            Q_ASSERT(mainWindow());
             return mainWindow()->project();
         }
         KexiWindow* currentWindow() const {
-            Q_ASSERT(mainWindow());
             return mainWindow()->currentWindow();
+        }
+        KexiView* currentView() const {
+            return currentWindow() ? currentWindow()->selectedView() : 0;
         }
         KexiPart::Item* partItem(const QString& mimetype, const QString& name) const {
             return project() ? project()->itemForMimeType(mimetype, name) : 0;
         }
         QString mimeType(QString mimetype) const {
             return mimetype.startsWith("kexi/") ? mimetype : mimetype.prepend("kexi/");
+        }
+        QString viewModeToString(Kexi::ViewMode mode, const QString& defaultViewMode = QString()) const {
+            switch(mode) {
+                case Kexi::DataViewMode:
+                    return "data";
+                case Kexi::DesignViewMode:
+                    return "design";
+                case Kexi::TextViewMode:
+                    return "text";
+                default:
+                    break;
+            }
+            return defaultViewMode;
+        }
+        Kexi::ViewMode stringToViewMode(const QString& mode, Kexi::ViewMode defaultViewMode = Kexi::DataViewMode) const {
+            if( mode == "data" )
+                return Kexi::DataViewMode;
+            if( mode == "design" )
+                return Kexi::DesignViewMode;
+            if( mode == "text" )
+                return Kexi::TextViewMode;
+            return defaultViewMode;
         }
 };
 

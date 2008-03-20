@@ -66,12 +66,12 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		 Created widget will have assigned \a parent widget and \a objName name. */
 		static QWidget* createWidgetInstance(const char* partName, const char* widgetClass, 
 			KexiDB::MessageHandler *msgHdr,
-			QWidget *parent, const char *objName = 0, QMap<QString,QString>* args = 0);
+			QWidget *parent, const char *objName = 0, QMap<QString,QVariant>* args = 0);
 
 		/*! For convenience. */
 		static QWidget* createWidgetInstance(const char* partName,
 			KexiDB::MessageHandler *msgHdr, 
-			QWidget *parent, const char *objName = 0, QMap<QString,QString>* args = 0)
+			QWidget *parent, const char *objName = 0, QMap<QString,QVariant>* args = 0)
 		 { return createWidgetInstance(partName, 0, msgHdr, parent, objName, args); }
 
 		/*! Creates a new dialog instance. If such instance already exists, 
@@ -99,18 +99,18 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		 and \a objName name is set. */
 		static QDialog* createModalDialogInstance(const char* partName, 
 			const char* dialogClass, KexiDB::MessageHandler *msgHdr, 
-			const char *objName = 0, QMap<QString,QString>* args = 0);
+			const char *objName = 0, QMap<QString,QVariant>* args = 0);
 
 		/*! Adeded For convenience. */
 		static QDialog* createModalDialogInstance(const char* partName, 
 			KexiDB::MessageHandler *msgHdr, const char *objName = 0, 
-			QMap<QString,QString>* args = 0)
+			QMap<QString,QVariant>* args = 0)
 		{ return createModalDialogInstance(partName, 0, msgHdr, objName, args); }
 
 		/*! Executes a command \a commandName (usually nonvisual) using part called \a partName.
 		 The result can be put into the \a args. \return true on successful calling. */
 		static bool executeCommand(const char* partName, 
-			const char* commandName, QMap<QString,QString>* args = 0);
+			const char* commandName, QMap<QString,QVariant>* args = 0);
 
 		/*! \return internal part of a name \a partName. Shouldn't be usable. */
 		static const KexiInternalPart* part(KexiDB::MessageHandler *msgHdr, const char* partName);
@@ -130,7 +130,7 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		/*! Reimplement this if your internal part has to return widgets 
 		 or QDialog objects. */
 		virtual QWidget *createWidget(const char* widgetClass, 
-			QWidget * parent, const char * objName = 0, QMap<QString,QString>* args = 0);
+			QWidget * parent, const char * objName = 0, QMap<QString,QVariant>* args = 0);
 		
 		/*! Reimplement this if your internal part has to return a view object. */
 		virtual KexiView *createView(QWidget * parent, const char *objName = 0);
@@ -138,7 +138,7 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		/*! Reimplement this if your internal part has to execute a command \a commandName 
 		 (usually nonvisual). Arguments are put into \a args and the result can be put into the \a args.
 		 \return true on successful calling. */
-		virtual bool executeCommand(const char* commandName, QMap<QString,QString>* args = 0);
+		virtual bool executeCommand(const char* commandName, QMap<QString,QVariant>* args = 0);
 	
 		//! Unique dialog - we're using guarded ptr for the dialog so can know if it has been closed
 		QPointer<QWidget> m_uniqueWidget; 
