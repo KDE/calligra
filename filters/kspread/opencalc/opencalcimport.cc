@@ -1816,7 +1816,9 @@ QString * OpenCalcImport::loadFormat( KoXmlElement * element,
           leadingZ = d;
       }
 
+#ifdef __GNUC__
 #warning thousandsSep can not be true (CID 3200)
+#endif
       if ( thousandsSep && leadingZ <= 3 )
       {
         format->append( "#," );
