@@ -21,6 +21,11 @@
 #define MOCKANIMATION_H
 
 #include "shapeanimations/KPrShapeAnimation.h"
+#include "shapeanimations/KPrAnimationData.h"
+
+#include <KoViewConverter.h>
+
+#include <QPainter>
 
 class MockAppearAnimation : public KPrShapeAnimation
 {

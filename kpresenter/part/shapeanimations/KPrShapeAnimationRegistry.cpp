@@ -21,6 +21,7 @@
 
 #include <kglobal.h>
 #include <KoPluginLoader.h>
+#include <KoXmlReader.h>
 
 class KPrShapeAnimationRegistry::Singleton
 {
