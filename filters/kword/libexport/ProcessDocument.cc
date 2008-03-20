@@ -412,7 +412,7 @@ static void ProcessFootnoteTag (QDomNode myNode, void *tagData, KWEFKWordLeader 
     ProcessAttributes (myNode, attrProcessingList);
 
     // search for frameset in the footnoteList
-    for(unsigned i=0;i<leader->footnoteList.count();i++)
+    for(uint i=0;i<(uint)leader->footnoteList.count();i++)
     {
        if( leader->footnoteList[i].frameName == frameset )
        {

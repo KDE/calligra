@@ -33,7 +33,8 @@ QString KWEFUtil::EscapeSgmlText(const QTextCodec* codec,
     QString strReturn;
     QChar ch;
 
-    for (uint i=0; i<strIn.length(); i++)
+    uint strInLength = strIn.length();
+    for (uint i=0; i<strInLength; i++)
     {
         ch=strIn[i];
         switch (ch.unicode())

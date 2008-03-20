@@ -157,7 +157,7 @@ public:
 };
 
 
-class ParaData;
+struct ParaData;
 
 class KWORD_LIBEXPORT_EXPORT TableCell
 {
