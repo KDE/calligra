@@ -116,7 +116,8 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QByteArray& from, co
     m_progress = 0;
 
     int  rueck;
-    int  pos, ok;
+    int  pos;
+    bool ok;
     char stylename[100];
     QString           mystr, textstr;
     Q3PtrList<t_mycolor>  mcol;
@@ -156,10 +157,10 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QByteArray& from, co
               if (mystr.startsWith ("<color "))
 	      {
 		mystr.remove (0, 8);
-                pos = mystr.find ("\"");
+                pos = mystr.indexOf ("\"");
 		coltxt = mystr.left (pos);
                 mystr.remove (0,pos+1);
-                rueck = sscanf ((const char *) mystr.latin1() ,
+                rueck = sscanf ((const char *) mystr.toLatin1() ,
                                 ":%d:%d:%d:%d>",
 	                         &col->c, &col->m, &col->y, &col->k);
 		kDebug(30517)<<"  Color" <<  zaehler<<"  :"<<col->c <<"" << col->m<<""<< col->y<<""<< col->k<<""<<coltxt<<"";
@@ -225,7 +226,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QByteArray& from, co
          **********************************************************************/
         else if (mystr.startsWith ("<P "))
 	{
-	   sscanf ( (const char *) mystr.latin1(), "<P \"%99s\"", stylename);
+	   sscanf ( (const char *) mystr.toLatin1(), "<P \"%99s\"", stylename);
            mystr.remove (0, 5+strlen(stylename));
            kDebug(30517)<<" Para  Name:"<< stylename;
            kDebug(30517)<<"       Rest:"<<mystr;
@@ -248,7 +249,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QByteArray& from, co
           int y=0;
           do
 	  {
-             pos = mystr.find ("\"", y);
+             pos = mystr.indexOf ("\"", y);
 	     kDebug(30517)<<"POS:"<<pos<<" length:"<< mystr.length()<<" y:"<<y;
 
              kDebug(30517)<<"<"<<mystr<<" >";
@@ -315,7 +316,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QByteArray& from, co
             else if ((*it).startsWith ("size"))
             {
               (*it).remove (0, 5);
-	      sscanf ( (const char *) (*it).latin1(), "%d", &fontsize);
+	      sscanf ( (const char *) (*it).toLatin1(), "%d", &fontsize);
               kDebug(30517)<<"fontsize:"<< fontsize;
 	    }
             else if ((*it).startsWith ("face"))
@@ -330,7 +331,7 @@ KoFilter::ConversionStatus APPLIXWORDImport::convert( const QByteArray& from, co
               (*it).remove (0, 7);
 	      (*it).remove ((*it).length()-1, 1);
               colname = *it;
-              colpos = mcoltxt.findIndex (colname);
+              colpos = mcoltxt.indexOf (colname);
 	      kDebug(30517) <<"  Color:"<< colname<<""<< colpos <<"";
 	    }
             else
@@ -760,7 +761,7 @@ APPLIXWORDImport::readHeader (QTextStream &stream, QFile &in)
     mystr = readTagLine (stream, in);
 
     // mystr = stream.readLine ();
-    rueck = sscanf ((const char *) mystr.latin1() ,
+    rueck = sscanf ((const char *) mystr.toLatin1() ,
                     "*BEGIN WORDS VERSION=%d/%d ENCODING=%dBIT",
 	             &vers[0], &vers[1], &vers[2]);
     printf ("Versions info: %d %d %d\n", vers[0], vers[1], vers[2]);
@@ -769,12 +770,12 @@ APPLIXWORDImport::readHeader (QTextStream &stream, QFile &in)
     if (rueck <= 0)
     {
       printf ("Header not correkt - May be it is not an applixword file\n");
-      printf ("Headerline: <%s>\n", (const char *) mystr.latin1());
+      printf ("Headerline: <%s>\n", (const char *) mystr.toLatin1());
 
       QMessageBox::critical (0L, "Applixword header problem",
                                   QString ("The Applixword header is not correct. "
                                            "May be it is not an applixword file! <BR>"
-                                           "This is the header line I did read:<BR><B>%1</B>").arg(mystr.latin1()),
+                                           "This is the header line I did read:<BR><B>%1</B>").arg(mystr),
 				    "Okay");
 
       // i18n( "What is the separator used in this file ? First line is \n%1" ).arg(firstLine),
