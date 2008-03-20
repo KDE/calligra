@@ -94,7 +94,7 @@ KexiInternalPart::part(KexiDB::MessageHandler *msgHdr, const char* partName)
 //static
 QWidget* KexiInternalPart::createWidgetInstance(const char* partName, 
 	const char* widgetClass, KexiDB::MessageHandler *msgHdr, 
-	QWidget *parent, const char *objName, QMap<QString,QVariant>* args)
+	QWidget *parent, const char *objName, QMap<QString,QString>* args)
 {
 	KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
 	if (!part)
@@ -144,7 +144,7 @@ KexiWindow* KexiInternalPart::createKexiWindowInstance(
 //static
 QDialog* KexiInternalPart::createModalDialogInstance(const char* partName, 
 	const char* dialogClass, KexiDB::MessageHandler *msgHdr, 
-	const char *objName, QMap<QString,QVariant>* args)
+	const char *objName, QMap<QString,QString>* args)
 {
 	KexiInternalPart *part = internalPartManager.findPart(msgHdr, partName);
 	if (!part) {
@@ -170,7 +170,7 @@ QDialog* KexiInternalPart::createModalDialogInstance(const char* partName,
 
 //static 
 bool KexiInternalPart::executeCommand(const char* partName, 
-	const char* commandName, QMap<QString,QVariant>* args)
+	const char* commandName, QMap<QString,QString>* args)
 {
 	KexiInternalPart *part = internalPartManager.findPart(0, partName);
 	if (!part) {
@@ -181,7 +181,7 @@ bool KexiInternalPart::executeCommand(const char* partName,
 }
 
 QWidget* KexiInternalPart::createWidget(const char* widgetClass,
-	QWidget * parent, const char * objName, QMap<QString,QVariant>* args)
+	QWidget * parent, const char * objName, QMap<QString,QString>* args)
 {
 	Q_UNUSED(widgetClass);
 	Q_UNUSED(parent);
@@ -199,7 +199,7 @@ KexiView* KexiInternalPart::createView(QWidget * parent,
 }
 
 bool KexiInternalPart::executeCommand(const char* commandName, 
-	QMap<QString,QVariant>* args)
+	QMap<QString,QString>* args)
 {
 	Q_UNUSED(commandName);
 	Q_UNUSED(args);

@@ -4675,7 +4675,7 @@ tristate KexiMainWindow::showProjectMigrationWizard(
 	const QString& mimeType, const QString& databaseName, const KexiDB::ConnectionData *cdata)
 {
 	//pass arguments
-	QMap<QString,QVariant> args;
+	QMap<QString,QString> args;
 	args.insert("mimeType", mimeType);
 	args.insert("databaseName", databaseName);
 	if (cdata) { //pass ConnectionData serialized as a string...
@@ -4695,12 +4695,12 @@ tristate KexiMainWindow::showProjectMigrationWizard(
 		return cancelled;
 
 	//open imported project in a new Kexi instance
-	QString destinationDatabaseName( args["destinationDatabaseName"].toString() );
+	QString destinationDatabaseName( args["destinationDatabaseName"] );
 	QString fileName, destinationConnectionShortcut, dbName;
 	if (!destinationDatabaseName.isEmpty()) {
 		if (args.contains("destinationConnectionShortcut")) {
 			// server-based
-			destinationConnectionShortcut = args["destinationConnectionShortcut"].toString();
+			destinationConnectionShortcut = args["destinationConnectionShortcut"];
 		}
 		else {
 			// file-based
@@ -4734,7 +4734,7 @@ void KexiMainWindow::slotProjectImportDataTable()
 //! @todo allow data appending (it is not possible now)
 	if (d->userMode)
 		return;
-	QMap<QString,QVariant> args;
+	QMap<QString,QString> args;
 	args.insert("sourceType", "file");
 	QDialog *dlg = KexiInternalPart::createModalDialogInstance(
 		"csv_importexport", "KexiCSVImportDialog", this, 0, &args);
@@ -4764,7 +4764,7 @@ tristate KexiMainWindow::exportItemAsDataTable(KexiPart::Item* item)
 //! @todo: check if changes to this are saved, if not: ask for saving
 //! @todo: accept row changes...
 
-	QMap<QString,QVariant> args;
+	QMap<QString,QString> args;
 	args.insert("destinationType", "file");
 	args.insert("itemId", QString::number(item->identifier()));
 	QDialog *dlg = KexiInternalPart::createModalDialogInstance(
@@ -4973,7 +4973,7 @@ tristate KexiMainWindow::copyItemToClipboardAsDataTable(KexiPart::Item* item)
 	if (!item)
 		return false;
 
-	QMap<QString,QVariant> args;
+	QMap<QString,QString> args;
 	args.insert("destinationType", "clipboard");
 	args.insert("itemId", QString::number(item->identifier()));
 	QDialog *dlg = KexiInternalPart::createModalDialogInstance(
@@ -4990,7 +4990,7 @@ void KexiMainWindow::slotEditPasteSpecialDataTable()
 //! @todo allow data appending (it is not possible now)
 	if (d->userMode)
 		return;
-	QMap<QString,QVariant> args;
+	QMap<QString,QString> args;
 	args.insert("sourceType", "clipboard");
 	QDialog *dlg = KexiInternalPart::createModalDialogInstance(
 		"csv_importexport", "KexiCSVImportDialog", this, 0, &args);
