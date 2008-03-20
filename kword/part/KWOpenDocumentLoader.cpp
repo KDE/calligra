@@ -209,6 +209,8 @@ class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextF
                 kDebug() << "Support for '" << anchortype << "' is going to wait.";
             }
             return shape;
+#else
+            return 0;
 #endif
         }
 
@@ -227,7 +229,7 @@ class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextF
                 kDebug() << "No table shape";
                 return 0;
             }
-
+            return shape;
         }
         
 
