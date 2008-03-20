@@ -275,7 +275,7 @@ static bool charactersElementA (StackItem* stackItem, const QString & ch)
 
 static bool EndElementA (StackItem* stackItem, StackItem* stackCurrent, QDomDocument& mainDocument)
 {
-    if (!stackItem->elementType==ElementTypeAnchor)
+    if (stackItem->elementType!=ElementTypeAnchor)
     {
         kError(30506) << "Wrong element type!! Aborting! (</a> in StructureParser::endElement)" << endl;
         return false;
@@ -377,7 +377,7 @@ bool charactersElementP (StackItem* stackItem, QDomDocument& mainDocument, const
 
 bool EndElementP (StackItem* stackItem)
 {
-    if (!stackItem->elementType==ElementTypeParagraph)
+    if (stackItem->elementType!=ElementTypeParagraph)
     {
         kError(30506) << "Wrong element type!! Aborting! (in endElementP)" << endl;
         return false;
@@ -623,7 +623,7 @@ static bool CharactersElementD (StackItem* stackItem, QDomDocument& /*mainDocume
 
 bool StructureParser::EndElementD (StackItem* stackItem)
 {
-    if (!stackItem->elementType==ElementTypeRealData)
+    if (stackItem->elementType!=ElementTypeRealData)
     {
         kError(30506) << "Wrong element type!! Aborting! (in endElementD)" << endl;
         return false;
@@ -738,7 +738,7 @@ static bool CharactersElementM (StackItem* stackItem, const QString & ch)
 
 bool StructureParser::EndElementM (StackItem* stackItem)
 {
-    if (!stackItem->elementType==ElementTypeRealData)
+    if (stackItem->elementType!=ElementTypeRealData)
     {
         kError(30506) << "Wrong element type!! Aborting! (in endElementM)" << endl;
         return false;
@@ -1043,7 +1043,7 @@ bool StructureParser::StartElementSection(StackItem* stackItem, StackItem* /*sta
 static bool EndElementIW(StackItem* stackItem, StackItem* /*stackCurrent*/,
     QDomDocument& mainDocument, QDomElement& m_ignoreWordsElement)
 {
-    if (!stackItem->elementType==ElementTypeIgnoreWord)
+    if (stackItem->elementType!=ElementTypeIgnoreWord)
     {
         kError(30506) << "Wrong element type!! Aborting! (in endElementIW)" << endl;
         return false;
