@@ -1168,8 +1168,8 @@ namespace MSWrite
 	}
 
 	bool InternalGenerator::writeParaInfoEnd (const FormatParaProperty *paraProperty,
-															const OLE */*ole*/,
-															const Image */*image*/)
+															const OLE * /*ole*/,
+															const Image * /*image*/)
 	{
 	#ifdef DEBUG_INTERNALGENERATOR
 		m_device->debug ("!!!! InternalGenerator: writeParaInfoEnd\n");

@@ -401,8 +401,8 @@ class DocumentHandlerBase {
     virtual void gotTemplate (const char *) {}
     virtual void gotTitle (const char *) {}
     virtual void gotCreator (const char *) {}
-    virtual void gotPatternDefinition (const char */*name*/, const Q3ValueVector<AIElement>& /*layerData*/, double /*llx*/, double /*lly*/, double /*urx*/, double /*ury*/) {}
-    virtual void gotCreationDate (const char */*val1*/,const char */*val2*/) {}
+    virtual void gotPatternDefinition (const char * /*name*/, const Q3ValueVector<AIElement>& /*layerData*/, double /*llx*/, double /*lly*/, double /*urx*/, double /*ury*/) {}
+    virtual void gotCreationDate (const char * /*val1*/,const char * /*val2*/) {}
     virtual void gotProcessColors (int /*colors*/) {}
 };
 
@@ -420,7 +420,7 @@ class EmbeddedHandlerBase {
    	 EmbeddedHandlerBase() {}
 	  virtual ~EmbeddedHandlerBase() {}
 
-    virtual void gotGsaveIncludeDocument (const Q3ValueVector<AIElement>& /*transData*/, int /*llx*/, int /*lly*/, int /*urx*/, int /*ury*/, const char*/*fileName*/) {}
+    virtual void gotGsaveIncludeDocument (const Q3ValueVector<AIElement>& /*transData*/, int /*llx*/, int /*lly*/, int /*urx*/, int /*ury*/, const char* /*fileName*/) {}
     virtual void gotGrestore () {}
 };
 

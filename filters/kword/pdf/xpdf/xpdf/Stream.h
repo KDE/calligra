@@ -714,7 +714,7 @@ public:
   virtual void reset() {}
   virtual int getChar() { return EOF; }
   virtual int lookChar() { return EOF; }
-  virtual GString *getPSFilter(const char */*indent*/)  { return NULL; }
+  virtual GString *getPSFilter(const char * /*indent*/)  { return NULL; }
   virtual GBool isBinary(GBool /*last*/ = gTrue) { return gFalse; }
 };
 
@@ -732,7 +732,7 @@ public:
   virtual void close();
   virtual int getChar();
   virtual int lookChar();
-  virtual GString *getPSFilter(const char */*indent*/) { return NULL; }
+  virtual GString *getPSFilter(const char * /*indent*/) { return NULL; }
   virtual GBool isBinary(GBool /*last*/ = gTrue) { return gFalse; }
   virtual GBool isEncoder() { return gTrue; }
 
@@ -758,7 +758,7 @@ public:
     { return (bufPtr >= bufEnd && !fillBuf()) ? EOF : (*bufPtr++ & 0xff); }
   virtual int lookChar()
     { return (bufPtr >= bufEnd && !fillBuf()) ? EOF : (*bufPtr & 0xff); }
-  virtual GString *getPSFilter(const char */*indent*/) { return NULL; }
+  virtual GString *getPSFilter(const char * /*indent*/) { return NULL; }
   virtual GBool isBinary(GBool /*last*/ = gTrue) { return gFalse; }
   virtual GBool isEncoder() { return gTrue; }
 
@@ -789,7 +789,7 @@ public:
     { return (bufPtr >= bufEnd && !fillBuf()) ? EOF : (*bufPtr++ & 0xff); }
   virtual int lookChar()
     { return (bufPtr >= bufEnd && !fillBuf()) ? EOF : (*bufPtr & 0xff); }
-  virtual GString *getPSFilter(const char */*indent*/) { return NULL; }
+  virtual GString *getPSFilter(const char * /*indent*/) { return NULL; }
   virtual GBool isBinary(GBool /*last*/ = gTrue) { return gFalse; }
   virtual GBool isEncoder() { return gTrue; }
 
@@ -820,7 +820,7 @@ public:
     { return (bufPtr >= bufEnd && !fillBuf()) ? EOF : (*bufPtr++ & 0xff); }
   virtual int lookChar()
     { return (bufPtr >= bufEnd && !fillBuf()) ? EOF : (*bufPtr & 0xff); }
-  virtual GString *getPSFilter(const char */*indent*/) { return NULL; }
+  virtual GString *getPSFilter(const char * /*indent*/) { return NULL; }
   virtual GBool isBinary(GBool /*last*/ = gTrue) { return gFalse; }
   virtual GBool isEncoder() { return gTrue; }
 

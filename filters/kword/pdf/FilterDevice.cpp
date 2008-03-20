@@ -380,7 +380,7 @@ void Device::updateStrokeColor(GfxState *state)
     _strokeColor = toColor(rgb);
 }
 
-void Device::stroke(GfxState */*state*/)
+void Device::stroke(GfxState * /*state*/)
 {
 //    kDebug(30516) <<"stroke";
 //    DPathVector path = convertPath(state);
@@ -402,13 +402,13 @@ void Device::stroke(GfxState */*state*/)
 //    }
 }
 
-void Device::fill(GfxState */*state*/)
+void Device::fill(GfxState * /*state*/)
 {
 //    kDebug(30516) <<"fill";
 //    doFill(state);
 }
 
-void Device::eoFill(GfxState */*state*/)
+void Device::eoFill(GfxState * /*state*/)
 {
 //    kDebug(30516) <<"eoFill";
 //    convertPath(state);
