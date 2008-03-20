@@ -49,7 +49,9 @@ if(SHOULD_BUILD_KARBON)
 endif(SHOULD_BUILD_KARBON)
 
 if (SHOULD_BUILD_KRITA)
-  macro_optional_add_subdirectory(krita)
+  if(NOT MSVC) # TODO reenable
+    macro_optional_add_subdirectory(krita)
+  endif(NOT MSVC)
 endif(SHOULD_BUILD_KRITA)
 
 #macro_optional_add_subdirectory(kivio)
