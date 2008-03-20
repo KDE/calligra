@@ -31,7 +31,7 @@ class QStringList;
 class QTreeWidgetItem;
 class QTreeWidgetItem;
 
-class KPrinter;
+class QPrinter;
 
 namespace KPlato
 {
@@ -71,7 +71,7 @@ public:
     void setTotalHeader(const QString& text);
     void setDescriptionHeader(const QString& text);
     void setSlaveLabels(const QStringList &text);
-    virtual void print(KPrinter &printer);
+    virtual void print(QPrinter &printer);
 
     virtual void calculate();
     void clearLists();

@@ -28,11 +28,11 @@
 #include <QRect>
 #include <QHeaderView>
 #include <QScrollBar>
+#include <QPrinter>
+
 #include <kcalendarsystem.h>
 #include <kglobal.h>
 #include <klocale.h>
-
-
 #include <kdebug.h>
 
 namespace KPlato
@@ -407,7 +407,7 @@ void DoubleListViewBase::createSlaveItems() {
 }
 
 
-void DoubleListViewBase::print(KPrinter &printer) {
+void DoubleListViewBase::print(QPrinter &printer) {
     kDebug();
     Q_UNUSED(printer);
 }

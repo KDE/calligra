@@ -28,8 +28,7 @@
 class QPushButton;
 class QTreeWidgetItem;
 class QPushButton;
-
-class KPrinter;
+class QPrinter;
 
 namespace KPlato
 {
@@ -52,7 +51,7 @@ public:
 
     void draw();
     void draw( Task *task );
-    void print( KPrinter &printer );
+    void print( QPrinter &printer );
     void clear();
 
     //virtual bool setContext(const Context &context);

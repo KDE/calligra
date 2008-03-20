@@ -142,7 +142,7 @@ void TaskAppointmentsView::slotUpdate()
 }
 
 
-void TaskAppointmentsView::print( KPrinter & /*printer*/ )
+void TaskAppointmentsView::print( QPrinter & /*printer*/ )
 {
     kDebug() ;
 }

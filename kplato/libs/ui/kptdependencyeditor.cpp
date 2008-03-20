@@ -247,7 +247,7 @@ QPointF DependencyLinkItem::endPoint() const
     return succItem->connectorPoint( DependencyNodeItem::Start );
 }
 
-void DependencyLinkItem::hoverEnterEvent( QGraphicsSceneHoverEvent */*event*/ )
+void DependencyLinkItem::hoverEnterEvent( QGraphicsSceneHoverEvent * /*event*/ )
 {
     setZValue( zValue() + 1 );
     m_pen = pen();
@@ -256,7 +256,7 @@ void DependencyLinkItem::hoverEnterEvent( QGraphicsSceneHoverEvent */*event*/ )
     update();
 }
 
-void DependencyLinkItem::hoverLeaveEvent( QGraphicsSceneHoverEvent */*event*/ )
+void DependencyLinkItem::hoverLeaveEvent( QGraphicsSceneHoverEvent * /*event*/ )
 {
     setZValue( zValue() - 1 );
     setPen( m_pen );
@@ -385,12 +385,12 @@ QPointF DependencyConnectorItem::connectorPoint() const
     return QPointF( r.x()+r.width(), r.y() + r.height()/2 );
 }
 
-void DependencyConnectorItem::hoverEnterEvent( QGraphicsSceneHoverEvent */*event*/ )
+void DependencyConnectorItem::hoverEnterEvent( QGraphicsSceneHoverEvent * /*event*/ )
 {
     itemScene()->connectorEntered( this, true );
 }
 
-void DependencyConnectorItem::hoverLeaveEvent( QGraphicsSceneHoverEvent */*event*/ )
+void DependencyConnectorItem::hoverLeaveEvent( QGraphicsSceneHoverEvent * /*event*/ )
 {
     itemScene()->connectorEntered( this, false );
 }
