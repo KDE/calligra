@@ -188,4 +188,10 @@ QObject* KexiDBModule::querySchema()
     return new KexiDBQuerySchema(this, new ::KexiDB::QuerySchema(), true);
 }
 
+QObject* KexiDBModule::connectionWrapper(QObject* connection)
+{
+    ::KexiDB::Connection* c = dynamic_cast< ::KexiDB::Connection* >(connection);
+    return c ? new KexiDBConnection(c) : 0;
+}
+
 #include "kexidbmodule.moc"

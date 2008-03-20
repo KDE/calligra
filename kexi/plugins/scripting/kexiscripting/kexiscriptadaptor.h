@@ -21,8 +21,9 @@
 #define KEXISCRIPTADAPTOR_H
 
 #include <QObject>
+#include <QMetaObject>
 #include <QAction>
-
+#include <kross/core/manager.h>
 #include <kexi.h>
 #include <kexipart.h>
 #include <kexiproject.h>
@@ -30,7 +31,7 @@
 #include <KexiMainWindowIface.h>
 #include <KexiWindow.h>
 #include <KexiView.h>
-//#include "../kexidb/kexidbconnection.h"
+#include <kexidb/connection.h>
 
 /**
 * Adaptor class that provides Kexi specific functionality to
@@ -40,7 +41,7 @@ class KexiScriptAdaptor : public QObject
 {
         Q_OBJECT
     public:
-        explicit KexiScriptAdaptor() { setObjectName("Kexi"); }
+        explicit KexiScriptAdaptor() : m_kexidbmodule(0) { setObjectName("Kexi"); }
         virtual ~KexiScriptAdaptor() {}
     public Q_SLOTS:
 
@@ -99,19 +100,22 @@ class KexiScriptAdaptor : public QObject
             return project() ? project()->isConnected() : false;
         }
 
-#if 0
         /**
         * Returns the KexiDBConnection object that belongs to the opened
         * project or return NULL if there was no project opened (no
         * connection established).
         */
         QObject* getConnection() {
-            //TODO
-            //::KexiDB::Connection* connection = project() ? project()->dbConnection() : 0;
-            //return connection ? new Scripting::KexiDBConnection(connection) : 0;
+            if( ! m_kexidbmodule )
+                m_kexidbmodule = Kross::Manager::self().module("kexidb");
+            ::KexiDB::Connection *connection = project() ? project()->dbConnection() : 0;
+            if(m_kexidbmodule && connection) {
+                QObject* result = 0;
+                if( QMetaObject::invokeMethod(m_kexidbmodule, "connectionWrapper", Q_RETURN_ARG(QObject*,result), Q_ARG(QObject*,connection)) )
+                    return result;
+            }
             return 0;
         }
-#endif
 
         /**
         * Returns a list of names of all items the mimetype provides. Possible
@@ -259,6 +263,8 @@ class KexiScriptAdaptor : public QObject
         }
 
     private:
+        QObject* m_kexidbmodule;
+
         KexiMainWindowIface* mainWindow() const {
             return KexiMainWindowIface::global();
         }

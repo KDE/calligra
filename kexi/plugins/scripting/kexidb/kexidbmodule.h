@@ -80,6 +80,11 @@ namespace Scripting {
             /** Return a new \a KexiDBQuerySchema object. */
             QObject* querySchema();
 
+        private Q_SLOTS:
+
+            // Wraps a KexiDB::Connection into a KexiDBConnection
+            QObject* connectionWrapper(QObject* connection);
+
         private:
             ::KexiDB::DriverManager m_drivermanager;
     };
