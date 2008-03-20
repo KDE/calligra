@@ -170,7 +170,8 @@ class KexiScriptAdaptor : public QObject
         /**
         * Open an item. A window for the item defined with \p mimetype and \p name will
         * be opened and we switch to it. The \p viewmode could be for example "data" (the
-        * default), "design" or "text".
+        * default), "design" or "text" while the \args are optional arguments passed
+        * to the item.
         *
         * Python sample that opens the "cars" form in design view mode and sets then the
         * dirty state to mark the formular as modified.
@@ -180,10 +181,10 @@ class KexiScriptAdaptor : public QObject
         * Kexi.windowWidget().setDirty(True)
         * \endcode
         */
-        bool openItem(const QString& mimetype, const QString& name, const QString& viewmode = QString()) {
+        bool openItem(const QString& mimetype, const QString& name, const QString& viewmode = QString(), QVariantMap args = QVariantMap()) {
             bool openingCancelled;
             KexiPart::Item *item = partItem(mimeType(mimetype), name);
-            KexiWindow* window = item ? mainWindow()->openObject(item, stringToViewMode(viewmode), openingCancelled) : 0;
+            KexiWindow* window = item ? mainWindow()->openObject(item, stringToViewMode(viewmode), openingCancelled, args.isEmpty() ? 0 : &args) : 0;
             return (window && ! openingCancelled);
         }
 
