@@ -73,7 +73,7 @@ void TestDatabaseFunctions::initTestCase()
     // A18:A31
     storage->setValue(1, 18, Value("TestID"));
     for (int row = 19; row <= 31; ++row)
-        storage->setValue(1, row, Value(::pow(2, row - 19)));
+        storage->setValue(1, row, Value((double)::pow(2, row - 19)));
     // B18:B31
     storage->setValue(2, 18, Value("Constellation"));
     QList<QString> constellations = QList<QString>() << "Cancer" << "Canis Major" << "Canis Minor"
