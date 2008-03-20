@@ -33,7 +33,8 @@ static QString AmiProUnescape( const QString& str )
 {
   QString result;
 
-  for( unsigned i=0; i< str.length(); i++ )
+  uint strLen = str.length();
+  for( uint i=0; i<strLen; i++ )
   {
     QChar c = str[i];
     result.append( c );
@@ -172,9 +173,11 @@ bool AmiProParser::process( const QString& filename )
     {
       enter_new_section = true;
       m_currentSection = "";
-      for( unsigned i=1; i<line.length(); i++ )
+      uint lineLen = line.length();
+      for( uint i=1; i<lineLen; i++ ) {
         if( line[i] == ']' ) break;
         else m_currentSection += line[i];
+      }
     }
 
     // leave [tag]
@@ -252,7 +255,8 @@ bool AmiProParser::parseParagraph( const QStringList& lines )
 
   // join the lines, up until first char in a line is '>'
   QString partext = "";
-  for( unsigned i=0; i<lines.count(); i++ )
+  uint linesCount = lines.count();
+  for( uint i=0; i<linesCount; i++ )
     if( lines[i][0] == '>' ) break;
       else partext.append( lines[i] + '\n' );
 
@@ -269,7 +273,8 @@ bool AmiProParser::parseParagraph( const QStringList& lines )
   // apply default style first
   m_layout.applyStyle( findStyle( "Body Text" ) );
 
-  for( unsigned i=0; i<text.length(); i++ )
+  uint textLen = text.length();
+  for( uint i=0; i<textLen; i++ )
   {
     QChar ch = text[i];
 
@@ -277,8 +282,8 @@ bool AmiProParser::parseParagraph( const QStringList& lines )
     if( ch == '<' )
     {
         QString tag = "";
-        for( i++; (i < text.length()) && 
-           (text[i] != '>'); i++) tag.append( text[i] );
+        for( i++; (i < textLen) && (text[i] != '>'); i++)
+            tag.append( text[i] );
         handleTag( tag );
     }
 
@@ -288,7 +293,8 @@ bool AmiProParser::parseParagraph( const QStringList& lines )
     if( ch == '@' )
     {
         QString styleName;
-        for( i++; (i < partext.length()) && (partext[i] != '@'); i++)
+        uint paratextLen = partext.length();
+        for( i++; (i < paratextLen) && (partext[i] != '@'); i++)
           styleName += partext[i];
         m_layout.name = styleName;
         AmiProStyle style = findStyle( styleName );
@@ -303,7 +309,8 @@ bool AmiProParser::parseParagraph( const QStringList& lines )
   }
 
   // calc length of each format tag
-  for( unsigned j=0; j<m_formatList.count(); j++ )
+  uint formatListCount = m_formatList.count();
+  for( uint j=0; j<formatListCount; j++ )
   {
     int nextpos;
     AmiProFormat& format = m_formatList[j];
