@@ -4868,7 +4868,7 @@ void View::insertPicture()
 #endif // KSPREAD_KOPART_EMBEDDING
 }
 
-void View::slotUpdateChildGeometry( EmbeddedKOfficeObject */*_child*/ )
+void View::slotUpdateChildGeometry( EmbeddedKOfficeObject * /*_child*/ )
 {
     // ##############
     // TODO

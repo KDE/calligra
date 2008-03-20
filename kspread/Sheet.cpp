@@ -4588,7 +4588,7 @@ bool Sheet::saveChildren( KoStore* _store, const QString &_path )
     return true;
 }
 
-bool Sheet::saveOasisObjects( KoStore */*store*/, KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int & indexObj, int &partIndexObj )
+bool Sheet::saveOasisObjects( KoStore * /*store*/, KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int & indexObj, int &partIndexObj )
 {
 #if 0 // KSPREAD_KOPART_EMBEDDING
   //int i = 0;

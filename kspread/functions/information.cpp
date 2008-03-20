@@ -228,7 +228,7 @@ Value func_istext (valVector args, ValueCalc *, FuncExtra *)
 }
 
 // Function: ISREF
-Value func_isref (valVector, ValueCalc */*calc*/, FuncExtra *e)
+Value func_isref (valVector, ValueCalc * /*calc*/, FuncExtra *e)
 {
   // no reference ?
   if ((e == 0) || (e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1))

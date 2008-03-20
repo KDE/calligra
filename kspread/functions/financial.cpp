@@ -330,7 +330,7 @@ void awNpv (ValueCalc *c, Value &res, Value val, Value rate)
 //
 // helper: calc_fvifa
 //
-static Value calc_fvifa (ValueCalc */*calc*/, Value rate,
+static Value calc_fvifa (ValueCalc * /*calc*/, Value rate,
     Value nper)
 {
   Value res;
