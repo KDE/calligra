@@ -57,7 +57,7 @@ void CriticalPathItemModel::slotNodeToBeInserted( Node *, int )
     //kDebug()<<node->name();
 }
 
-void CriticalPathItemModel::slotNodeInserted( Node */*node*/ )
+void CriticalPathItemModel::slotNodeInserted( Node * /*node*/ )
 {
     //kDebug()<<node->getParent->name()<<"-->"<<node->name();
 }
@@ -329,19 +329,19 @@ void PertResultItemModel::slotNodeToBeInserted( Node *, int )
     clear();
 }
 
-void PertResultItemModel::slotNodeInserted( Node */*node*/ )
+void PertResultItemModel::slotNodeInserted( Node * /*node*/ )
 {
     //kDebug()<<node->getParent->name()<<"-->"<<node->name();
     refresh();
 }
 
-void PertResultItemModel::slotNodeToBeRemoved( Node */*node*/ )
+void PertResultItemModel::slotNodeToBeRemoved( Node * /*node*/ )
 {
     //kDebug()<<node->name();
     clear();
 }
 
-void PertResultItemModel::slotNodeRemoved( Node */*node*/ )
+void PertResultItemModel::slotNodeRemoved( Node * /*node*/ )
 {
     //kDebug()<<node->name();
     refresh();
@@ -776,7 +776,7 @@ QVariant PertResultItemModel::alignment( int column ) const
     return QVariant();
 }
 
-QItemDelegate *PertResultItemModel::createDelegate( int column, QWidget */*parent*/ ) const
+QItemDelegate *PertResultItemModel::createDelegate( int column, QWidget * /*parent*/ ) const
 {
     switch ( column ) {
         default: return 0;

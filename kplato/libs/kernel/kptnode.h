@@ -326,7 +326,7 @@ public:
     virtual void adjustSummarytask() = 0;
 
     /// Returns the (previously) calculated duration
-    const Duration &duration( long id = -1 ) const;
+    Duration duration( long id = -1 ) const;
     
     /**
      * The variance is calculated based on

@@ -442,7 +442,7 @@ void Resource::save(QDomElement &element) const {
     me.setAttribute("overtime-rate", KGlobal::locale()->formatMoney(cost.overtimeRate));
 }
 
-bool Resource::isAvailable(Task */*task*/) {
+bool Resource::isAvailable(Task * /*task*/) {
     bool busy = false;
 /*
     foreach (Appointment *a, m_appointments) {
@@ -462,7 +462,7 @@ QList<Appointment*> Resource::appointments( long id ) const {
     return s->appointments();
 }
 
-Appointment *Resource::findAppointment(Node */*node*/) {
+Appointment *Resource::findAppointment(Node * /*node*/) {
 /*
     foreach (Appointment *a, m_appointments) {
         if (a->node() == node)

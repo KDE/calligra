@@ -1078,7 +1078,7 @@ QModelIndex ResourceItemModel::insertGroup( ResourceGroup *g )
     return QModelIndex();
 }
 
-QModelIndex ResourceItemModel::insertResource( ResourceGroup *g, Resource *r, Resource */*after*/ )
+QModelIndex ResourceItemModel::insertResource( ResourceGroup *g, Resource *r, Resource * /*after*/ )
 {
     //kDebug();
     emit executeCommand( new AddResourceCmd( g, r, i18n( "Add resource" ) ) );

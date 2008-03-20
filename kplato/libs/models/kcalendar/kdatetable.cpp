@@ -1197,7 +1197,7 @@ QRectF KDateTableCustomDateDelegate::paint( QPainter *painter, const StyleOption
     QColor textColor = KGlobalSettings::activeTextColor();
     QBrush bg(option.palette.base());
 
-    if( option.state & QStyle::State_Active == 0 )
+    if( (option.state & QStyle::State_Active) == 0 )
     { // we are either
       // ° painting a day of the previous month or
       // ° painting a day of the following month

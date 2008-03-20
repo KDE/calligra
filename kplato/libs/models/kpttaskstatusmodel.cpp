@@ -87,19 +87,19 @@ void TaskStatusItemModel::slotNodeToBeInserted( Node *, int )
     clear();
 }
 
-void TaskStatusItemModel::slotNodeInserted( Node */*node*/ )
+void TaskStatusItemModel::slotNodeInserted( Node * /*node*/ )
 {
     //kDebug()<<node->getParent->name()<<"-->"<<node->name();
     refresh();
 }
 
-void TaskStatusItemModel::slotNodeToBeRemoved( Node */*node*/ )
+void TaskStatusItemModel::slotNodeToBeRemoved( Node * /*node*/ )
 {
     //kDebug()<<node->name();
     clear();
 }
 
-void TaskStatusItemModel::slotNodeRemoved( Node */*node*/ )
+void TaskStatusItemModel::slotNodeRemoved( Node * /*node*/ )
 {
     //kDebug()<<node->name();
     refresh();

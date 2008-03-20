@@ -432,7 +432,7 @@ void Node::calcResourceOverbooked() {
 }
 
 // Returns the (previously) calculated duration
-const Duration& Node::duration( long id ) const
+Duration Node::duration( long id ) const
 {
     Schedule *s = schedule( id );
     return s ? s->duration : Duration::zeroDuration;
