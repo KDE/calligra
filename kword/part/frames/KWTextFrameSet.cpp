@@ -26,6 +26,7 @@
 #include "KWDocument.h"
 
 #include <KoTextShapeData.h>
+#include <KoStyleManager.h>
 
 #include <klocale.h>
 #include <kdebug.h>
@@ -41,8 +42,12 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc)
     m_kwordDocument(doc)
 {
     KWTextDocumentLayout *layout = new KWTextDocumentLayout(this);
-    if(doc)
+    if ( m_kwordDocument ) {
         layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
+        KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>( m_kwordDocument->dataCenterMap()["StyleManager"] );
+        Q_ASSERT( styleManager );
+        layout->setStyleManager( styleManager );
+    }
     m_document->setDocumentLayout(layout);
     m_document->setUseDesignMetrics(true);
 }
@@ -57,8 +62,12 @@ KWTextFrameSet::KWTextFrameSet(const KWDocument *doc, KWord::TextFrameSetType ty
     m_kwordDocument(doc)
 {
     KWTextDocumentLayout *layout = new KWTextDocumentLayout(this);
-    if(doc)
+    if ( m_kwordDocument ) {
         layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
+        KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>( m_kwordDocument->dataCenterMap()["StyleManager"] );
+        Q_ASSERT( styleManager );
+        layout->setStyleManager( styleManager );
+    }
     m_document->setDocumentLayout(layout);
     m_document->setUseDesignMetrics(true);
     switch(m_textFrameSetType) {
@@ -103,8 +112,12 @@ void KWTextFrameSet::setupFrame(KWFrame *frame) {
         delete m_document;
         m_document = data->document();
         KWTextDocumentLayout *layout = new KWTextDocumentLayout(this);
-        if(m_kwordDocument)
+        if ( m_kwordDocument ) {
             layout->setInlineObjectTextManager(m_kwordDocument->inlineTextObjectManager());
+            KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>( m_kwordDocument->dataCenterMap()["StyleManager"] );
+            Q_ASSERT( styleManager );
+            layout->setStyleManager( styleManager );
+        }
         m_document->setDocumentLayout(layout);
         data->setDocument(m_document, false);
     }

@@ -97,7 +97,10 @@ public:
     void setPageSettings(const KWPageSettings &newPageSettings);
 
     /// @return the data center map for this document.
-   QMap<QString, KoDataCenter *>  dataCenterMap(  )  { return m_dataCenterMap; }
+   QMap<QString, KoDataCenter *>  dataCenterMap()  { return m_dataCenterMap; }
+
+    /// @return the data center map for this document.
+   const QMap<QString, KoDataCenter *>  dataCenterMap() const { return m_dataCenterMap; }
 
     /**
      * Insert a new page after another,
