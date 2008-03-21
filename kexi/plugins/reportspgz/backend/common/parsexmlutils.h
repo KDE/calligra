@@ -174,7 +174,9 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ORReportData
     
     ReportPageOptions page;
     QString query;
+    QString script;
 
+    
     KRSectionData * pghead_first;
     KRSectionData * pghead_odd;
     KRSectionData * pghead_even;
@@ -198,8 +200,6 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ORReportData
 
 bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportRect(const QDomElement &, QRectF &);
 bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportFont(const QDomElement &, QFont &);
-
-bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportData(const QDomElement &, ORDataData &);
 
 bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportTextStyleData(const QDomElement &, ORTextStyleData &);
 bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportLineStyleData(const QDomElement &, ORLineStyleData &);

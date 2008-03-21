@@ -286,34 +286,6 @@ bool parseReportFont ( const QDomElement & elemSource, QFont & fontTarget )
 	return FALSE;
 }
 
-bool parseReportData ( const QDomElement & elemSource, ORDataData & dataTarget )
-{
-	QDomNodeList params = elemSource.childNodes();
-	bool valid_query = FALSE;
-	bool valid_column = FALSE;
-
-	for ( int paramCounter = 0; paramCounter < params.count(); paramCounter++ )
-	{
-		QDomElement elemParam = params.item ( paramCounter ).toElement();
-		if ( elemParam.tagName() == "query" )
-		{
-			dataTarget.query = elemParam.text();
-			valid_query = TRUE;
-		}
-		else if ( elemParam.tagName() == "column" )
-		{
-			dataTarget.column = elemParam.text();
-			valid_column = TRUE;
-		}
-		else
-			kDebug() << "Tag not Parsed at <data>:" << elemParam.tagName() << endl;
-	}
-	if ( valid_query && valid_column )
-		return TRUE;
-
-	return FALSE;
-}
-
 //TODO Graphs
 
 
@@ -449,6 +421,8 @@ bool parseReport ( const QDomElement & elemSource, ORReportData & reportTarget )
 			reportTarget.title = elemThis.text();
 		else if ( elemThis.tagName() == "datasource" )
 			reportTarget.query = elemThis.text();
+		else if ( elemThis.tagName() == "script" )
+			reportTarget.script = elemThis.text();
 		else if ( elemThis.tagName() == "size" )
 		{
 			if ( elemThis.firstChild().isText() )

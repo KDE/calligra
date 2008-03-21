@@ -145,19 +145,22 @@ void KRFieldData::createProperties()
 
 	_font = new KoProperty::Property ( "Font", KGlobalSettings::generalFont(), "Font", "Field Font" );
 
+	_bgColor = new KoProperty::Property ( "BackgroundColor", Qt::white, "Background Color", "Background Color" );
+	_fgColor = new KoProperty::Property ( "ForegroundColor", Qt::black, "Foreground Color", "Foreground Color" );
+	
+	_bgOpacity = new KoProperty::Property ( "Opacity", 255, "Opacity", "Opacity" );
+	_bgOpacity->setOption("max", 255);
+	_bgOpacity->setOption("min", 0);
+	
+	_lnweight = new KoProperty::Property ( "Weight", 1, "Line Weight", "Line Weight" );
+	_lncolor = new KoProperty::Property ( "LineColor", Qt::black, "Line Color", "Line Color" );
+	_lnstyle = new KoProperty::Property ( "LineStyle", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle );
+	
+	//TODO I dont think we need these
 	_trackTotal = new KoProperty::Property ( "TrackTotal", QVariant ( false,0 ), "Track Total", "Track Total" );
 	_trackBuiltinFormat = new KoProperty::Property ( "TrackBuiltinFormat", QVariant ( false,0 ), "Track Builtin Format", "Track Builtin Format" );
 	_useSubTotal = new KoProperty::Property ( "UseSubTotal", QVariant ( false,0 ), "Use Sub Total", "Use Sub Total" );
 	_trackTotalFormat = new KoProperty::Property ( "TrackTotalFormat", QString(), "Track Total Format", "Track Total Format" );
-
-	_bgColor = new KoProperty::Property ( "BackgroundColor", Qt::white, "Background Color", "Background Color" );
-	_fgColor = new KoProperty::Property ( "ForegroundColor", Qt::black, "Foreground Color", "Foreground Color" );
-	_bgOpacity = new KoProperty::Property ( "Opacity", 255, "Opacity", "Opacity" );
-	_bgOpacity->setOption("max", 255);
-	_bgOpacity->setOption("min", 0);
-	_lnweight = new KoProperty::Property ( "Weight", 1, "Line Weight", "Line Weight" );
-	_lncolor = new KoProperty::Property ( "LineColor", Qt::black, "Line Color", "Line Color" );
-	_lnstyle = new KoProperty::Property ( "LineStyle", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle );
 	
 	_set->addProperty ( _controlSource );
 	_set->addProperty ( _hAlignment );
@@ -171,10 +174,10 @@ void KRFieldData::createProperties()
 	_set->addProperty ( _lnweight );
 	_set->addProperty ( _lncolor );
 	_set->addProperty ( _lnstyle );
-	_set->addProperty ( _trackTotal );
-	_set->addProperty ( _trackBuiltinFormat );
-	_set->addProperty ( _useSubTotal );
-	_set->addProperty ( _trackTotalFormat );
+	//_set->addProperty ( _trackTotal );
+	//_set->addProperty ( _trackBuiltinFormat );
+	//_set->addProperty ( _useSubTotal );
+	//_set->addProperty ( _trackTotalFormat );
 }
 
 Qt::Alignment KRFieldData::textFlags() const

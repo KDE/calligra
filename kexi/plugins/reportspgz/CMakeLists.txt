@@ -43,6 +43,7 @@ set(pgzkexireportpart2_LIB_SRCS
 	
 	backend/renderer/scripting/krscripthandler.cpp
 	backend/renderer/scripting/krscriptfunctions.cpp
+	backend/renderer/scripting/krscriptdebug.cpp
 	backend/renderer/scripting/krscriptsection.cpp
 	backend/renderer/scripting/krscriptlabel.cpp
 	backend/renderer/scripting/krscriptfield.cpp

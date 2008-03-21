@@ -9,4 +9,5 @@ Add 'on render' events to sections as they are rendered
 Add functions for drawing (lines, circles, rectangles etc) from script that draw in a section
 Add more math functions
 Speed up background drawing
+Labels
 

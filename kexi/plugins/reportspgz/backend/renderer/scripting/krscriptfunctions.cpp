@@ -59,7 +59,7 @@ qreal KRScriptFunctions::math(const QString &function, const QString &field)
 	{
 		ret = 0.0;
 	}
-	
+	delete curs;
 	return ret;
 }
 

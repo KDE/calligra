@@ -71,10 +71,6 @@ KRSectionData::KRSectionData ( const QDomElement & elemSource)
 		{
 			_bgColor->setValue( QColor ( elemThis.text() ) );
 		}
-		else if ( elemThis.tagName() == "event_onrender" )
-		{
-			_event_onrender = elemThis.text();
-		}
 		else if ( elemThis.tagName() == "firstpage" )
 		{
 			if ( _name == "pghead" || _name == "pgfoot" )

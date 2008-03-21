@@ -25,13 +25,15 @@
 #include <krsectiondata.h>
 
 class KRScriptFunctions;
+class KRScriptDebug;
 class QScriptEngine;
+class ORReportData;
 
 class KRScriptHandler : public QObject
 {
 	Q_OBJECT
 	public:
-		KRScriptHandler(KexiDB::Connection*, QScriptEngine*);
+		KRScriptHandler(KexiDB::Connection*, QScriptEngine*, const ORReportData*);
 		~KRScriptHandler();
 		void setSource(const QString &s);
 		
@@ -43,10 +45,13 @@ class KRScriptHandler : public QObject
 		
 	private:
 		KRScriptFunctions *_functions;
+		KRScriptDebug *_debug;
+		
 		KexiDB::Connection *_conn;
 		QScriptEngine *_engine;
 		QString _source;
 		QString _where;
+		const ORReportData  *_data;
 };
 
 #endif

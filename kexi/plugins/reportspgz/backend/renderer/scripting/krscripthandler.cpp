@@ -22,13 +22,18 @@
 #include <QScriptEngine>
 #include "krscriptfunctions.h"
 
+#include <parsexmlutils.h>
 #include <krsectiondata.h>
 #include "krscriptsection.h"
+#include "krscriptdebug.h"
 
-KRScriptHandler::KRScriptHandler(KexiDB::Connection* c, QScriptEngine *e)
+KRScriptHandler::KRScriptHandler(KexiDB::Connection* c, QScriptEngine *e, const ORReportData* d)
 {
 	_conn = c;
 	_engine = e;
+	_data = d;
+	
+	
 }
  
 KRScriptHandler::~KRScriptHandler()
@@ -46,9 +51,23 @@ void KRScriptHandler::slotInit()
 {
 	//QScriptValue sumFunc = _scriptEngine->newFunction(functions.sum);
 	//_scriptEngine->globalObject().setProperty("sum", sumFunc);
+	
+	//Add all the objects to the script
 	_functions = new KRScriptFunctions(_conn);
 	QScriptValue funcs = _engine->newQObject(_functions, QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
 	_engine->globalObject().setProperty("functions",funcs);
+	
+	//A simple debug function to allow printing from functions
+	_debug = new KRScriptDebug();
+	QScriptValue deb = _engine->newQObject(_debug, QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
+	_engine->globalObject().setProperty("debug",deb);
+	
+	QScriptValue detail = _engine->newQObject(new Scripting::Section(_data->sections[0]->detail), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
+	_engine->globalObject().setProperty("detail",detail);
+	
+	//Evaluate the script now, we'll call the functions in it later;
+	_engine->evaluate(_data->script);
+	
 }
 
  void KRScriptHandler::slotEnteredGroup(const QString &key, const QVariant &value)
@@ -67,10 +86,19 @@ void KRScriptHandler::slotExitedGroup(const QString &key, const QVariant &value)
 void KRScriptHandler::slotEnteredSection(KRSectionData *section)
 {
 	kDebug() << endl;
-
-	QScriptValue sec = _engine->newQObject(new Scripting::Section(section), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
 	
-	_engine->globalObject().setProperty(section->name(),sec);
 	
-	kDebug() << (_engine->evaluate(section->eventOnRender())).toString() << endl;
+	QScriptValue sec = _engine->globalObject().property(section->name() + "_onrender");
+	
+	if (sec.isFunction())
+	{
+		kDebug() << sec.call().toString() << endl;;
+	}
+	else
+	{
+		kDebug() << "No such function " << section->name() + "_onrender" << endl;
+	}
+	
+	//The old way
+	//kDebug() << (_engine->evaluate(section->eventOnRender())).toString() << endl;
 }

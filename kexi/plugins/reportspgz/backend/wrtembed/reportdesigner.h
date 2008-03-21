@@ -34,6 +34,8 @@
 #include <kexidb/connection.h>
 #include <koproperty/set.h>
 #include <koproperty/property.h>
+#include <kdebug.h>
+
 #include "../../pgzkexireportpart2_export.h"
 
 class ReportGridOptions;
@@ -114,7 +116,7 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ReportDesigner : public QWidget
 
 		QGraphicsScene* activeScene();
 		void setActiveScene ( QGraphicsScene* a );
-		KoProperty::Set* propertySet() {return set;}
+		KoProperty::Set* propertySet() {kDebug() << endl; return set;}
 		
 		virtual QSize sizeHint() const;
 
@@ -126,11 +128,11 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ReportDesigner : public QWidget
 		void sectionMouseReleaseEvent ( ReportSceneView *, QMouseEvent * e );
 
 		void changeSet ( KoProperty::Set * );
-		KoProperty::Set* itemPropertySet() {return _itmset;}
+		KoProperty::Set* itemPropertySet() {kDebug() << endl; return _itmset;}
 
 		void setModified ( bool = true );
 		
-		QString editorText(const QString&);
+		void showScriptEditor();
 	public slots:
 		
 		void slotEditDelete();
@@ -151,6 +153,7 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ReportDesigner : public QWidget
 
 		void slotRaiseSelected();
 		void slotLowerSelected();
+		
 	protected:
 		virtual void closeEvent ( QCloseEvent * e );
 
@@ -200,6 +203,9 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ReportDesigner : public QWidget
 		KoProperty::Property* _gridSnap;
 		KoProperty::Property* _labelType;
 
+		QString editorText(const QString&);
+		QString _script;
+		
 		ReportWriterSectionData * sectionData;
 		unsigned int selectionCount();
 

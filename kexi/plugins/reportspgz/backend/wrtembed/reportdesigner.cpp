@@ -251,13 +251,13 @@ ReportDesigner::ReportDesigner ( QWidget *parent, KexiDB::Connection *cn, const 
 			{
 				setReportTitle ( it.firstChild().nodeValue() );
 			}
-//			else if ( n == "name" )
-//			{
-//				setReportName ( it.firstChild().nodeValue() );
-//			}
 			else if ( n == "datasource" )
 			{
 				setReportDataSource ( it.firstChild().nodeValue() );
+			}
+			else if ( n == "script" )
+			{
+				_script =it.firstChild().nodeValue();
 			}
 			else if ( n == "grid" )
 			{
@@ -727,6 +727,10 @@ QDomDocument ReportDesigner::document()
 	QDomElement rds = doc.createElement ( "datasource" );
 	rds.appendChild ( doc.createTextNode ( reportDataSource() ) );
 	root.appendChild ( rds );
+	
+	QDomElement scr = doc.createElement ( "script" );
+	scr.appendChild ( doc.createTextNode ( _script ) );
+	root.appendChild ( scr );
 
 	QDomElement grd = doc.createElement ( "grid" );
 	grd.setAttribute ( "visible", _showGrid->value().toBool() );
@@ -1311,6 +1315,7 @@ void ReportDesigner::slotItemGraph()
 void ReportDesigner::changeSet ( KoProperty::Set *s )
 {
 	_itmset = s;
+	kDebug() << endl;
 	emit ( propertySetChanged() );
 }
 
@@ -1545,7 +1550,7 @@ QString ReportDesigner::editorText(const QString& orig)
 
 		d->editor = new KexiEditor( d->editorDialog );
 		d->editorDialog->setMainWidget( d->editor );
-		d->editorDialog->setMinimumSize(400,300);
+		d->editorDialog->setMinimumSize(600,500);
 		
 		d->editor->setHighlightMode("javascript");
 		//connect( dialog, SIGNAL( applyClicked() ), widget, SLOT( save() ) );
@@ -1555,8 +1560,13 @@ QString ReportDesigner::editorText(const QString& orig)
 	d->editor->setText(orig);
 	if (d->editorDialog->exec())
 	{
+		setModified(true);
 		return d->editor->text();
 	}
 	
 	return old;
+}
+void ReportDesigner::showScriptEditor()
+{
+	_script = editorText(_script);
 }

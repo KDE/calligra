@@ -147,10 +147,6 @@ void ReportSection::buildXML ( QDomDocument & doc, QDomElement & section )
 	bgcolor.appendChild ( doc.createTextNode ( _data->bgColor().name() ));
 	section.appendChild ( bgcolor );
 	
-	QDomElement event_onrender = doc.createElement ( "event_onrender" );
-	event_onrender.appendChild ( doc.createTextNode ( _data->eventOnRender() ));
-	section.appendChild ( event_onrender );
-	
 	// now get a list of all the QCanvasItems on this scene and output them.
 	QGraphicsItemList list = scene->items();
 	for ( QGraphicsItemList::iterator it = list.begin();
@@ -183,10 +179,6 @@ void ReportSection::initFromXML ( QDomNode & section )
 		else if ( n == "bgcolor" )
 		{
 			_data->_bgColor->setValue(QColor(node.firstChild().nodeValue()));
-		}
-		else if ( n == "event_onrender" )
-		{
-			_data->_event_onrender = node.firstChild().nodeValue();
 		}
 		//Objects
 		else if ( n == "label" )
@@ -272,9 +264,7 @@ void ReportSection::slotSceneLostFocus()
 
 void ReportSection::slotTitleDoubleClicked()
 {
-	kDebug() << endl;
-	_data->_event_onrender = _rd->editorText(_data->_event_onrender);
-	if ( _rd ) _rd->setModified ( true );
+	_rd->showScriptEditor();
 }
 
 void ReportSection::slotPropertyChanged ( KoProperty::Set &s, KoProperty::Property &p )

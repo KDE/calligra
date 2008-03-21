@@ -567,8 +567,6 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 	emit (renderingSection(const_cast<KRSectionData*>(&sectionData)));
 //	emit (renderingSection(&sectionData));
 	
-	_scriptEngine->evaluate(sectionData.eventOnRender());
-	
 	//Render section background
 	ORORect* bg = new ORORect();
 	bg->setPen(QPen(Qt::NoPen));
@@ -972,7 +970,7 @@ qreal ORPreRenderPrivate::getNearestSubTotalCheckPoint ( const ORDataData & d )
 void ORPreRenderPrivate::initEngine()
 {
 	_scriptEngine = new QScriptEngine();
-	_handler = new KRScriptHandler(_conn, _scriptEngine);
+	_handler = new KRScriptHandler(_conn, _scriptEngine, _reportData);
 	_handler->slotInit();
 	connect(this, SIGNAL(enteredGroup(const QString&, const QVariant&)), _handler, SLOT(slotEnteredGroup(const QString&, const QVariant&)));
 	

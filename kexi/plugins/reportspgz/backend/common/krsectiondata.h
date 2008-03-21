@@ -58,7 +58,6 @@ class PGZKEXIREPORTPART2_LIB_EXPORT KRSectionData : public QObject
 		qreal height() const {return _height->value().toDouble();}
 		QList<KRObjectData*> objects() const {return _objects;};
 		QString name() const {return _name;}
-		QString eventOnRender() const {return _event_onrender;};
 		QColor bgColor() const { return _bgColor->value().value<QColor>();}
 		
 		
@@ -66,7 +65,6 @@ class PGZKEXIREPORTPART2_LIB_EXPORT KRSectionData : public QObject
 		KoProperty::Set *_set;
 		KoProperty::Property *_height;
 		KoProperty::Property *_bgColor;
-		QString _event_onrender;
 		
 	public slots:
 		KoProperty::Set& propertySet(){return *_set;}

@@ -28,6 +28,11 @@
 #include "krpos.h"
 #include "krsize.h"
 
+
+namespace Scripting
+{
+	class Label;
+}
 /**
 	@author 
 */
@@ -68,6 +73,7 @@ class PGZKEXIREPORTPART2_LIB_EXPORT KRLabelData : public KRObjectData
 		virtual void createProperties();
 		static int RTTI;
 		
+		friend class Scripting::Label;
 		friend class ORPreRenderPrivate;
 };
 #endif

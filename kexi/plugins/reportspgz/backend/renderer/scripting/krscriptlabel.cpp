@@ -51,10 +51,11 @@ namespace Scripting
 		
 	QColor Label::backgroundColor()
 	{
-		return QColor();
+		return _label->_bgColor->value().value<QColor>();
 	}
-	void Label::setBackgroundColor(QColor)
+	void Label::setBackgroundColor(QColor c)
 	{
+		_label->_bgColor->setValue(c);
 	}
 		
 	QColor Label::foregroundColor()
