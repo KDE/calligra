@@ -26,7 +26,7 @@
 #include "kptglobal.h"
 #include "kptduration.h"
 #include "kptdatetime.h"
-
+#include "kptappointment.h"
 
 #include <qdom.h>
 #include <QHash>
@@ -258,9 +258,6 @@ public:
     /// Return the time when the resource is no longer available to this project.
     const DateTime &availableUntil() const { return m_availableUntil;}
 
-    void addWorkingHour( QTime from, QTime until );
-    QList<QTime*> workingHours() { return m_workingHours; }
-
     DateTime firstAvailableAfter( const DateTime &time, const DateTime &limit ) const;
     
     DateTime getBestAvailableTime( Duration duration );
@@ -416,6 +413,11 @@ public:
     // and reset when the resource is removed from the project
     void setProject( Project *project );
 
+    AppointmentIntervalList externalAppointments() { return m_externalAppointments; }
+    const AppointmentIntervalList &externalAppointments() const  { return m_externalAppointments; }
+    void clearExternalAppointments();
+    void addExternalAppointment( const DateTime &from, const DateTime &end, double load = 100 ) { m_externalAppointments.add( from, end, load ); }
+
 protected:
     void makeAppointment( Schedule *node, const DateTime &from, const DateTime &end );
     virtual void changed();
@@ -430,7 +432,7 @@ private:
     QString m_email;
     DateTime m_availableFrom;
     DateTime m_availableUntil;
-    QList<QTime*> m_workingHours;
+    AppointmentIntervalList m_externalAppointments;
 
     int m_units; // avalable units in percent
 

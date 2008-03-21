@@ -167,6 +167,14 @@ bool Schedule::allowOverbooking() const
     return false;
 }
 
+bool Schedule::checkExternalAppointments() const
+{
+    if ( m_parent ) {
+        return m_parent->checkExternalAppointments();
+    }
+    return false;
+}
+
 void Schedule::setScheduled( bool on )
 {
     notScheduled = !on;
@@ -805,7 +813,11 @@ Duration ResourceSchedule::effort( const DateTimeInterval &interval ) const
     if ( allowOverbooking() ) {
         return eff;
     }
-    Appointment a = appointmentIntervals( m_calculationMode );
+    Appointment a;
+    if ( checkExternalAppointments() ) {
+        a.setIntervals( m_resource->externalAppointments() );
+    }
+    a.merge( appointmentIntervals( m_calculationMode ) );
     if ( a.isEmpty() || a.startTime() >= interval.second || a.endTime() <= interval.first ) {
         return eff;
     }
@@ -830,7 +842,11 @@ DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval )
     if ( allowOverbooking() ) {
         return DateTimeInterval( interval.first, interval.second );
     }
-    Appointment a = appointmentIntervals( m_calculationMode );
+    Appointment a;
+    if ( checkExternalAppointments() ) {
+        a.setIntervals( m_resource->externalAppointments() );
+    }
+    a.merge( appointmentIntervals( m_calculationMode ) );
     if ( a.isEmpty() || a.startTime() >= interval.second || a.endTime() <= interval.first ) {
         //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" FREE";
         return DateTimeInterval( interval.first, interval.second );
@@ -891,6 +907,11 @@ bool MainSchedule::usePert() const
 bool MainSchedule::allowOverbooking() const
 {
     return m_manager == 0 ? false : m_manager->allowOverbooking();
+}
+
+bool MainSchedule::checkExternalAppointments() const
+{
+    return m_manager == 0 ? false : m_manager->checkExternalAppointments();
 }
 
 void MainSchedule::changed( Schedule *sch )
@@ -1092,6 +1113,7 @@ ScheduleManager::ScheduleManager( Project &project, const QString name )
     m_parent( 0 ),
     m_name( name ),
     m_allowOverbooking( false ),
+    m_checkExternalAppointments( true ),
     m_calculateAll( false ),
     m_usePert( false ),
     m_recalculate( false ),
@@ -1223,6 +1245,18 @@ bool ScheduleManager::allowOverbooking() const
 {
     //kDebug()<<m_name<<"="<<m_allowOverbooking;
     return m_allowOverbooking;
+}
+
+bool ScheduleManager::checkExternalAppointments() const
+{
+    //kDebug()<<m_name<<"="<<m_allowOverbooking;
+    return m_checkExternalAppointments;
+}
+
+void ScheduleManager::setCheckExternalAppointments( bool on )
+{
+    //kDebug()<<m_name<<"="<<m_checkExternalAppointments;
+    m_checkExternalAppointments = on;
 }
 
 void ScheduleManager::scheduleChanged( MainSchedule *sch )
@@ -1390,6 +1424,7 @@ bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
     m_name = element.attribute( "name" );
     m_usePert = (bool)(element.attribute( "distribution" ).toInt());
     m_allowOverbooking = (bool)(element.attribute( "overbooking" ).toInt());
+    m_checkExternalAppointments = (bool)(element.attribute( "check-external-appointments" ).toInt());
     m_schedulingDirection = (bool)(element.attribute( "scheduling-direction" ).toInt());
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
@@ -1445,6 +1480,7 @@ void ScheduleManager::saveXML( QDomElement &element ) const
     el.setAttribute( "name", m_name );
     el.setAttribute( "distribution", m_usePert );
     el.setAttribute( "overbooking", m_allowOverbooking );
+    el.setAttribute( "check-external-appointments", m_checkExternalAppointments );
     el.setAttribute( "scheduling-direction", m_schedulingDirection );
     foreach ( MainSchedule *s, schedules() ) {
         //kDebug()<<m_name<<" id="<<s->id()<<(s->isDeleted()?"  Deleted":"");
@@ -1468,6 +1504,7 @@ void ScheduleManager::saveWorkPackageXML( QDomElement &element, const Node &node
     el.setAttribute( "name", m_name );
     el.setAttribute( "distribution", m_usePert );
     el.setAttribute( "overbooking", m_allowOverbooking );
+    el.setAttribute( "check-external-appointments", m_checkExternalAppointments );
     el.setAttribute( "scheduling-direction", m_schedulingDirection );
     if ( m_expected && ! m_expected->isDeleted() ) {
         QDomElement schs = el.ownerDocument().createElement( "schedule" );

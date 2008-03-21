@@ -94,6 +94,7 @@ public:
     
     virtual bool usePert() const;
     virtual bool allowOverbooking() const;
+    virtual bool checkExternalAppointments() const;
 
     bool isCritical() const { return positiveFloat == Duration::zeroDuration; }
 
@@ -364,6 +365,7 @@ public:
     virtual bool isDeleted() const { return m_deleted; }
     
     virtual bool allowOverbooking() const;
+    virtual bool checkExternalAppointments() const;
     virtual bool usePert() const;
 
     virtual bool loadXML( const KoXmlElement &element, XMLLoaderObject &status );
@@ -493,6 +495,9 @@ public:
     void setAllowOverbooking( bool on );
     bool allowOverbooking() const;
     
+    void setCheckExternalAppointments( bool on );
+    bool checkExternalAppointments() const;
+
     void setUsePert( bool on );
     bool usePert() const { return m_usePert; }
 
@@ -522,6 +527,7 @@ protected:
     ScheduleManager *m_parent;
     QString m_name;
     bool m_allowOverbooking;
+    bool m_checkExternalAppointments;
     bool m_calculateAll;
     bool m_usePert;
     bool m_recalculate;

@@ -158,11 +158,73 @@ AppointmentInterval AppointmentInterval::firstInterval(const AppointmentInterval
     return a;
 }
 
+//-----------------------
+void AppointmentIntervalList::add( const DateTime &st, const DateTime &et, double load )
+{
+    Q_ASSERT( st < et );
+    DateTime s = st;
+    DateTime e = et;
+    if ( ! isEmpty() && et > values().first()->startTime() ) {
+        // see if we have overlapping intervals
+        foreach ( AppointmentInterval *ai, *this ) {
+            if ( s >= ai->endTime() ) {
+                continue;
+            }
+            if ( e <= ai->startTime() ) {
+                break; // in between, just add
+            }
+            if ( s < ai->startTime() ) {
+                // Add the part that's before this interval
+                inSort( new AppointmentInterval( s, ai->startTime(), load ) );
+                s = ai->startTime();
+            }
+            if ( e >= ai->endTime() ) {
+                ai->setLoad( ai->load() + load );
+                if ( e == ai->endTime() ) {
+                    return;
+                }
+                s = ai->endTime(); // check next interval
+            } else {
+                remove( ai->startTime().toString( KDateTime::ISODate ) + ai->endTime().toString( KDateTime::ISODate ) );
+                inSort( new AppointmentInterval( ai->startTime(), e, ai->load() + load ) );
+                inSort( new AppointmentInterval( e, ai->endTime(), ai->load() ) );
+                return;
+            }
+        }
+    }
+    inSort( new AppointmentInterval( s, e, load ) );
+}
+
 void AppointmentIntervalList::inSort(AppointmentInterval *a)
 {
     Q_ASSERT( a->startTime() < a->endTime() );
     insert( a->startTime().toString( KDateTime::ISODate ) + a->endTime().toString( KDateTime::ISODate ), a );
 }
+
+void AppointmentIntervalList::saveXML( QDomElement &element ) const
+{
+    foreach (AppointmentInterval *i, values() ) {
+        i->saveXML(element);
+    }
+}
+
+bool AppointmentIntervalList::loadXML( KoXmlElement &element, XMLLoaderObject &status )
+{
+    KoXmlElement e;
+    forEachElement(e, element) {
+        if (e.tagName() == "interval") {
+            AppointmentInterval *a = new AppointmentInterval();
+            if (a->loadXML(e, status)) {
+                inSort(a);
+            } else {
+                kError()<<"Could not load interval"<<endl;
+                delete a;
+            }
+        }
+    }
+    return true;
+}
+
 
 ////
 Appointment::Appointment()
@@ -310,18 +372,7 @@ bool Appointment::loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedu
         return false;
     }
     //kDebug()<<"res="<<m_resource<<" node="<<m_node;
-    KoXmlElement e;
-    forEachElement(e, element) {
-            if (e.tagName() == "interval") {
-            AppointmentInterval *a = new AppointmentInterval();
-                if (a->loadXML(e, status)) {
-                    addInterval(a);
-                } else {
-                    kError()<<"Could not load interval"<<endl;
-                    delete a;
-                }
-            }
-    }
+    m_intervals.loadXML( element, status );
     if (isEmpty()) {
         return false;
     }
@@ -346,9 +397,7 @@ void Appointment::saveXML(QDomElement &element) const {
 
     me.setAttribute("resource-id", m_resource->resource()->id());
     me.setAttribute("task-id", m_node->node()->id());
-    foreach (AppointmentInterval *i, m_intervals.values() ) {
-        i->saveXML(me);
-    }
+    m_intervals.saveXML( me );
 }
 
 // Returns the total planned effort for this appointment

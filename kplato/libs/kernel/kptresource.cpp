@@ -253,8 +253,7 @@ Resource::Resource()
     : QObject( 0 ), // atm QObject is only for casting
     m_project(0),
     m_parent( 0 ),
-    m_schedules(), 
-    m_workingHours() 
+    m_schedules()
 {
     m_type = Type_Work;
     m_units = 100; // %
@@ -311,8 +310,7 @@ void Resource::copy(Resource *resource) {
     m_email = resource->email();
     m_availableFrom = resource->availableFrom();
     m_availableUntil = resource->availableUntil();
-    m_workingHours.clear();
-    m_workingHours = resource->workingHours();
+    m_externalAppointments = resource->externalAppointments(); //TODO
 
     m_units = resource->units(); // available units in percent
 
@@ -376,12 +374,6 @@ void Resource::setEmail( const QString email )
     changed();
 }
 
-void Resource::addWorkingHour(QTime from, QTime until) {
-    //kDebug();
-    m_workingHours.append(new QTime(from));
-    m_workingHours.append(new QTime(until));
-}
-
 Calendar *Resource::calendar(bool local) const {
     if (!local && project() != 0 && m_calendar == 0 ) {
         return project()->defaultCalendar();
@@ -420,6 +412,9 @@ bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
         
     cost.normalRate = KGlobal::locale()->readMoney(element.attribute("normal-rate"));
     cost.overtimeRate = KGlobal::locale()->readMoney(element.attribute("overtime-rate"));
+    
+    KoXmlElement e = element.namedItem( "external-appointments" ).toElement();
+    m_externalAppointments.loadXML( e, status );
     return true;
 }
 
@@ -440,6 +435,12 @@ void Resource::save(QDomElement &element) const {
     me.setAttribute("available-until", m_availableUntil.toString( KDateTime::ISODate ));
     me.setAttribute("normal-rate", KGlobal::locale()->formatMoney(cost.normalRate));
     me.setAttribute("overtime-rate", KGlobal::locale()->formatMoney(cost.overtimeRate));
+    
+    if ( ! m_externalAppointments.isEmpty() ) {
+        QDomElement e = element.ownerDocument().createElement("external-appointments");
+        me.appendChild(e);
+        m_externalAppointments.saveXML( e );
+    }
 }
 
 bool Resource::isAvailable(Task * /*task*/) {
@@ -827,6 +828,14 @@ void Resource::setProject( Project *project )
         }
     }
     m_project = project;
+}
+
+void Resource::clearExternalAppointments()
+{
+    foreach ( AppointmentInterval *a, m_externalAppointments.values() ) {
+        delete a;
+    }
+    m_externalAppointments.clear();
 }
 
 /////////   Risk   /////////
