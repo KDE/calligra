@@ -698,11 +698,13 @@ QVariant NodeModel::pertExpected( const Estimate *est, int role ) const
     switch ( role ) {
         case Qt::DisplayRole: {
             Duration::Unit unit = est->unit();
-            return KGlobal::locale()->formatNumber( est->pertExpected().toDouble( unit ), m_prec ) +  Duration::unitToString( unit, true );
+            double v = Estimate::scale( est->pertExpected(), unit, est->scales() );
+            return KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true );
         }
         case Qt::ToolTipRole: {
             Duration::Unit unit = est->unit();
-            return i18n( "PERT expected estimate: %1", KGlobal::locale()->formatNumber( est->pertExpected().toDouble( unit ), m_prec ) +  Duration::unitToString( unit, true ) );
+            double v = Estimate::scale( est->pertExpected(), unit, est->scales() );
+            return i18n( "PERT expected estimate: %1", KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ) );
         }
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
