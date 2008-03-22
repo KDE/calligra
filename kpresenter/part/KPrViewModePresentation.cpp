@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -113,6 +113,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     m_savedParent = m_canvas->parentWidget();
     m_canvas->setParent( ( QWidget* )0, Qt::Window ); // set parent to 0 and
     m_canvas->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // detach widget to make
+    m_canvas->show();
     m_canvas->setFocus();                             // it shown full screen
 
     m_animationDirector = new KPrAnimationDirector( m_view, m_view->kopaDocument()->pages(), m_view->activePage() );
@@ -123,6 +124,7 @@ void KPrViewModePresentation::deactivate()
     m_canvas->setParent( m_savedParent, Qt::Widget );
     m_canvas->setFocus();
     m_canvas->setWindowState( m_canvas->windowState() & ~Qt::WindowFullScreen ); // reset
+    m_canvas->show();
     m_view->updateActivePage(m_view->activePage());
     delete m_animationDirector;
     m_animationDirector = 0;
