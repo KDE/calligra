@@ -618,6 +618,7 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 			tb->setFont ( f->font() );
 			tb->setFlags ( f->textFlags() );
 			tb->setTextStyle(f->textStyle());
+			tb->setLineStyle(f->lineStyle());
 			
 			QString str = QString::null;
 			if ( f->_trackTotal->value().toBool() )

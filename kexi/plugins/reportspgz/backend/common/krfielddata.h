@@ -55,12 +55,12 @@ class KRFieldData : public KRObjectData
 		void setUseSubTotal ( bool );
 
 		QString column() const;
-		bool trackTotal();
-		bool trackBuiltinFormat();
-		bool useSubTotal();
-		QString trackTotalFormat();
+		//bool trackTotal();
+		//bool trackBuiltinFormat();
+		//bool useSubTotal();
+		//QString trackTotalFormat();
 		
-		
+		ORLineStyleData lineStyle();
 		
 	protected:
 		
@@ -78,9 +78,9 @@ class KRFieldData : public KRObjectData
 		KoProperty::Property * _fgColor;
 		KoProperty::Property * _bgColor;
 		KoProperty::Property* _bgOpacity;
-		KoProperty::Property* _lncolor;
-		KoProperty::Property* _lnweight;
-		KoProperty::Property* _lnstyle;
+		KoProperty::Property* _lnColor;
+		KoProperty::Property* _lnWeight;
+		KoProperty::Property* _lnStyle;
 		
 		ORTextStyleData textStyle();
 		//QFont font;

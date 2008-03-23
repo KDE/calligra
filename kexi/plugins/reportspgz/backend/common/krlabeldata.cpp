@@ -96,9 +96,9 @@ KRLabelData::KRLabelData ( QDomNode & element )
 			ORLineStyleData ls;
 			if (parseReportLineStyleData( node.toElement(), ls ))
 			{
-				_lnweight->setValue(ls.weight);
-				_lncolor->setValue(ls.lnColor);
-				_lnstyle->setValue(ls.style);
+				_lnWeight->setValue(ls.weight);
+				_lnColor->setValue(ls.lnColor);
+				_lnStyle->setValue(ls.style);
 			}
 		}
 		else
@@ -148,9 +148,9 @@ void KRLabelData::createProperties()
 	_bgOpacity->setOption("max", 255);
 	_bgOpacity->setOption("min", 0);
 	
-	_lnweight = new KoProperty::Property ( "Weight", 1, "Line Weight", "Line Weight" );
-	_lncolor = new KoProperty::Property ( "LineColor", Qt::black, "Line Color", "Line Color" );
-	_lnstyle = new KoProperty::Property ( "LineStyle", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle );
+	_lnWeight = new KoProperty::Property ( "Weight", 1, "Line Weight", "Line Weight" );
+	_lnColor = new KoProperty::Property ( "LineColor", Qt::black, "Line Color", "Line Color" );
+	_lnStyle = new KoProperty::Property ( "LineStyle", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle );
 	
 	_set->addProperty ( _name );
 	_set->addProperty ( _text );
@@ -162,9 +162,9 @@ void KRLabelData::createProperties()
 	_set->addProperty ( _bgColor );
 	_set->addProperty ( _fgColor );
 	_set->addProperty ( _bgOpacity );
-	_set->addProperty ( _lnweight );
-	_set->addProperty ( _lncolor );
-	_set->addProperty ( _lnstyle );
+	_set->addProperty ( _lnWeight );
+	_set->addProperty ( _lnColor );
+	_set->addProperty ( _lnStyle );
 }
 
 QRectF KRLabelData::_rect()
@@ -210,9 +210,9 @@ ORTextStyleData KRLabelData::textStyle()
 ORLineStyleData KRLabelData::lineStyle()
 {
 	ORLineStyleData ls;
-	ls.weight = _lnweight->value().toInt();
-	ls.lnColor = _lncolor->value().value<QColor>();
-	ls.style = (Qt::PenStyle)_lnstyle->value().toInt();
+	ls.weight = _lnWeight->value().toInt();
+	ls.lnColor = _lnColor->value().value<QColor>();
+	ls.style = (Qt::PenStyle)_lnStyle->value().toInt();
 	return ls;
 }
 

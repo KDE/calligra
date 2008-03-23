@@ -35,39 +35,99 @@ namespace Scripting
 	
 	int Field::horizontalAlignment()
 	{
-		return 0;
+		QString a = _field->_hAlignment->value().toString();
+		
+		if (a.toLower() == "left")
+		{
+			return -1;
+		}
+		else if (a.toLower() == "center")
+		{
+			return 0;
+		}
+		else if (a.toLower() == "right")
+		{
+			return 1;
+		}
+		return -1;
 	}
-	void Field::setHorizonalAlignment(int)
+	void Field::setHorizonalAlignment(int a)
 	{
+		switch (a)
+		{
+			case -1:
+				_field->_hAlignment->setValue("Left");
+				break;
+			case 0:
+				_field->_hAlignment->setValue("Center");
+				break;
+			case 1:	
+				_field->_hAlignment->setValue("Right");
+				break;
+			default:
+				_field->_hAlignment->setValue("Left");
+				break;
+		}
 	}
 		
 	int Field::verticalAlignment()
 	{
-		return 0;
+		QString a = _field->_hAlignment->value().toString();
+		
+		if (a.toLower() == "top")
+		{
+			return -1;
+		}
+		else if (a.toLower() == "middle")
+		{
+			return 0;
+		}
+		else if (a.toLower() == "bottom")
+		{
+			return 1;
+		}
+		return -1;
 	}
-	void Field::setVerticalAlignment(int)
+	void Field::setVerticalAlignment(int a)
 	{
+		switch (a)
+		{
+			case -1:
+				_field->_hAlignment->setValue("Top");
+				break;
+			case 0:
+				_field->_hAlignment->setValue("Middle");
+				break;
+			case 1:	
+				_field->_hAlignment->setValue("Bottom");
+				break;
+			default:
+				_field->_hAlignment->setValue("Top");
+				break;
+		}
 	}
 		
 	QColor Field::backgroundColor()
 	{
-		return QColor();
+		return _field->_bgColor->value().value<QColor>();
 	}
-	void Field::setBackgroundColor(QColor)
+	void Field::setBackgroundColor(QString c)
 	{
+		_field->_bgColor->setValue(QColor(c));
 	}
 		
 	QColor Field::foregroundColor()
 	{
-		return QColor();
+		return _field->_fgColor->value().value<QColor>();
 	}
-	void Field::setForegroundColor(QColor)
+	void Field::setForegroundColor(QString c)
 	{
+		_field->_fgColor->setValue(QColor(c));
 	}
 		
 	int Field::backgroundOpacity()
 	{
-		return 0;
+		return _field->_bgOpacity->value().toInt();
 	}
 	void Field::setBackgroundOpacity(int o)
 	{
@@ -76,26 +136,33 @@ namespace Scripting
 		
 	QColor Field::lineColor()
 	{
-		return QColor();
+		return _field->_lnColor->value().value<QColor>();
 	}
-	void Field::setLineColor(QColor)
+	void Field::setLineColor(QString c)
 	{
+		_field->_lnColor->setValue(QColor(c));
 	}
 			
 	int Field::lineWeight()
 	{
-		return 1;
+		return _field->_lnWeight->value().toInt();
 	}
-	void Field::setLineWeight(int)
+	void Field::setLineWeight(int w)
 	{
+		_field->_lnWeight->setValue(w);
 	}
 			
 	int Field::lineStyle()
 	{
-		return 0;
+		return _field->_lnStyle->value().toInt();
 	}
-	void Field::setLineStyle(int)
+	void Field::setLineStyle(int s)
 	{
+		if (s < 0 || s > 5)
+		{
+			s = 1;
+		}
+		_field->_lnStyle->setValue(s);
 	}
 	
 	QPointF Field::position()

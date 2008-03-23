@@ -113,13 +113,24 @@ KRFieldData::KRFieldData ( QDomNode & element )
 				_font->setValue(ts.font);
 			}
 		}
+		else if (n == "linestyle")
+		{
+			ORLineStyleData ls;
+			if (parseReportLineStyleData( node.toElement(), ls ))
+			{
+				_lnWeight->setValue(ls.weight);
+				_lnColor->setValue(ls.lnColor);
+				_lnStyle->setValue(ls.style);
+			}
+		}
+		/*
 		else if ( n == "tracktotal" )
 		{
 			_trackBuiltinFormat->setValue ( node.toElement().attribute ( "builtin" ) =="true"?true:false );
 			_useSubTotal->setValue ( node.toElement().attribute ( "subtotal" ) =="true"?true:false );
 			_trackTotalFormat->setValue ( node.firstChild().nodeValue() );
 			if ( _trackTotalFormat->value().toString().length() > 0 ) _trackTotal->setValue ( true );
-		}
+		}*/
 		else
 		{
 			kDebug() << "while parsing field element encountered unknow element: " << n << endl;
@@ -156,9 +167,9 @@ void KRFieldData::createProperties()
 	_bgOpacity->setOption("max", 255);
 	_bgOpacity->setOption("min", 0);
 	
-	_lnweight = new KoProperty::Property ( "Weight", 1, "Line Weight", "Line Weight" );
-	_lncolor = new KoProperty::Property ( "LineColor", Qt::black, "Line Color", "Line Color" );
-	_lnstyle = new KoProperty::Property ( "LineStyle", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle );
+	_lnWeight = new KoProperty::Property ( "Weight", 1, "Line Weight", "Line Weight" );
+	_lnColor = new KoProperty::Property ( "LineColor", Qt::black, "Line Color", "Line Color" );
+	_lnStyle = new KoProperty::Property ( "LineStyle", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle );
 	
 	//TODO I dont think we need these
 	_trackTotal = new KoProperty::Property ( "TrackTotal", QVariant ( false,0 ), "Track Total", "Track Total" );
@@ -176,9 +187,9 @@ void KRFieldData::createProperties()
 	_set->addProperty ( _bgColor );
 	_set->addProperty ( _fgColor );
 	_set->addProperty ( _bgOpacity );
-	_set->addProperty ( _lnweight );
-	_set->addProperty ( _lncolor );
-	_set->addProperty ( _lnstyle );
+	_set->addProperty ( _lnWeight );
+	_set->addProperty ( _lnColor );
+	_set->addProperty ( _lnStyle );
 	//_set->addProperty ( _trackTotal );
 	//_set->addProperty ( _trackBuiltinFormat );
 	//_set->addProperty ( _useSubTotal );
@@ -236,10 +247,10 @@ void KRFieldData::setColumn ( const QString& t )
 	}
 }
 
-bool    KRFieldData::trackTotal()       { return _trackTotal->value().toBool(); }
-bool    KRFieldData::trackBuiltinFormat() { return _trackBuiltinFormat->value().toBool(); }
-bool    KRFieldData::useSubTotal() { return _useSubTotal->value().toBool(); }
-QString KRFieldData::trackTotalFormat() { return _trackTotalFormat->value().toString(); }
+//bool    KRFieldData::trackTotal()       { return _trackTotal->value().toBool(); }
+//bool    KRFieldData::trackBuiltinFormat() { return _trackBuiltinFormat->value().toBool(); }
+//bool    KRFieldData::useSubTotal() { return _useSubTotal->value().toBool(); }
+//QString KRFieldData::trackTotalFormat() { return _trackTotalFormat->value().toString(); }
 
 void KRFieldData::setTrackTotal ( bool yes )
 {
@@ -262,6 +273,15 @@ void KRFieldData::setUseSubTotal ( bool yes )
 	{
 		_useSubTotal->setValue ( yes );
 	}
+}
+
+ORLineStyleData KRFieldData::lineStyle()
+{
+	ORLineStyleData ls;
+	ls.weight = _lnWeight->value().toInt();
+	ls.lnColor = _lnColor->value().value<QColor>();
+	ls.style = (Qt::PenStyle)_lnStyle->value().toInt();
+	return ls;
 }
 // RTTI
 int KRFieldData::type() const { return RTTI; }

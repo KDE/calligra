@@ -107,13 +107,13 @@ void ReportEntityLabel::paint ( QPainter* painter, const QStyleOptionGraphicsIte
 	painter->fillRect ( QGraphicsRectItem::rect(), bg );
 	painter->drawText ( rect(), textFlags(), text() );
 	
-	if ((Qt::PenStyle)_lnstyle->value().toInt() == Qt::NoPen || _lnweight->value().toInt() <= 0)
+	if ((Qt::PenStyle)_lnStyle->value().toInt() == Qt::NoPen || _lnWeight->value().toInt() <= 0)
 	{
 		painter->setPen ( QPen ( QColor ( 224,224,224 )));
 	}
 	else
 	{
-		painter->setPen ( QPen ( _lncolor->value().value<QColor>(), _lnweight->value().toInt(), (Qt::PenStyle)_lnstyle->value().toInt() ) );
+		painter->setPen ( QPen ( _lnColor->value().value<QColor>(), _lnWeight->value().toInt(), (Qt::PenStyle)_lnStyle->value().toInt() ) );
 	}
 	
 	painter->drawRect ( QGraphicsRectItem::rect() );

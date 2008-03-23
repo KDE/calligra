@@ -104,7 +104,15 @@ void KRScriptHandler::slotInit()
 	
 	//Add the pgfoot_last section
 	QScriptValue pgfoot_last = _engine->newQObject(new Scripting::Section(_data->pgfoot_last), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
-	_engine->globalObject().setProperty("pagefoor_last",pgfoot_last);
+	_engine->globalObject().setProperty("pagefoot_last",pgfoot_last);
+	
+	//Engine constants for line styles, see http://doc.trolltech.com/4.3/qt.html#PenStyle-enum
+	_engine->globalObject().setProperty("QtNoPen", QScriptValue(_engine, 0));
+	_engine->globalObject().setProperty("QtSolidLine", QScriptValue(_engine, 1));
+	_engine->globalObject().setProperty("QtDashLine", QScriptValue(_engine, 2));
+	_engine->globalObject().setProperty("QtDotLine", QScriptValue(_engine, 3));
+	_engine->globalObject().setProperty("QtDashDotLine", QScriptValue(_engine, 4));
+	_engine->globalObject().setProperty("QtDashDotDotLine", QScriptValue(_engine, 5));
 	
 	//Evaluate the script now, we'll call the functions in it later;
 	_engine->evaluate(_data->script);

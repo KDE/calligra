@@ -32,27 +32,30 @@ namespace Scripting
 			QString caption();
 			void setCaption(const QString&);
 
+			/**Gets/sets the horizontal alignment, -1 Left, 0 Center, +1 Right*/
 			int horizontalAlignment();
 			void setHorizonalAlignment(int);
 		
+			/**Gets/sets the vertical alignment, -1 Top, 0 Middle, +1 Bottom*/
 			int verticalAlignment();
 			void setVerticalAlignment(int);
 		
 			QColor backgroundColor();
-			void setBackgroundColor(QColor);
+			void setBackgroundColor(QString);
 		
 			QColor foregroundColor();
-			void setForegroundColor(QColor);
+			void setForegroundColor(QString);
 		
 			int backgroundOpacity();
 			void setBackgroundOpacity(int);
 		
 			QColor lineColor();
-			void setLineColor(QColor);
+			void setLineColor(QString);
 			
 			int lineWeight();
 			void setLineWeight(int);
 			
+			/**Gets/sets the line style.  Valid values are those from Qt::PenStyle (0-5)*/
 			int lineStyle();
 			void setLineStyle(int);
 			

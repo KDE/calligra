@@ -64,9 +64,9 @@ class KRLabelData : public KRObjectData
 		KoProperty::Property* _fgColor;
 		KoProperty::Property* _bgColor;
 		KoProperty::Property* _bgOpacity;
-		KoProperty::Property* _lncolor;
-		KoProperty::Property* _lnweight;
-		KoProperty::Property* _lnstyle;
+		KoProperty::Property* _lnColor;
+		KoProperty::Property* _lnWeight;
+		KoProperty::Property* _lnStyle;
 
 	private:
 		virtual void createProperties();

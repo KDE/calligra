@@ -104,13 +104,13 @@ void ReportEntityField::paint( QPainter* painter, const QStyleOptionGraphicsItem
 	painter->drawText ( rect(), textFlags(), _controlSource->value().toString() +QObject::tr ( ":" ) +QObject::tr ( ( _trackTotal->value().toBool() ?" field total":" field" ) ) );
 
 	
-	if ((Qt::PenStyle)_lnstyle->value().toInt() == Qt::NoPen || _lnweight->value().toInt() <= 0)
+	if ((Qt::PenStyle)_lnStyle->value().toInt() == Qt::NoPen || _lnWeight->value().toInt() <= 0)
 	{
 		painter->setPen ( QPen ( QColor ( 224,224,224 )));
 	}
 	else
 	{
-		painter->setPen ( QPen ( _lncolor->value().value<QColor>(), _lnweight->value().toInt(), (Qt::PenStyle)_lnstyle->value().toInt() ) );
+		painter->setPen ( QPen ( _lnColor->value().value<QColor>(), _lnWeight->value().toInt(), (Qt::PenStyle)_lnStyle->value().toInt() ) );
 	}
 	
 	painter->drawRect ( rect() );
@@ -146,6 +146,9 @@ void ReportEntityField::buildXML ( QDomDocument & doc, QDomElement & parent )
 	//buildXMLFont ( doc,entity,font() );
 	//text style info
 	buildXMLTextStyle ( doc, entity, textStyle() );
+	
+	//Line Style
+	buildXMLLineStyle(doc, entity, lineStyle());
 	
 	// text alignment
 	int align = textFlags();

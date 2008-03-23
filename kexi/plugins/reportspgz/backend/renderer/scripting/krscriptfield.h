@@ -41,16 +41,16 @@ namespace Scripting
 			void setVerticalAlignment(int);
 		
 			QColor backgroundColor();
-			void setBackgroundColor(QColor);
+			void setBackgroundColor(QString);
 		
 			QColor foregroundColor();
-			void setForegroundColor(QColor);
+			void setForegroundColor(QString);
 		
 			int backgroundOpacity();
 			void setBackgroundOpacity(int);
 		
 			QColor lineColor();
-			void setLineColor(QColor);
+			void setLineColor(QString);
 			
 			int lineWeight();
 			void setLineWeight(int);
