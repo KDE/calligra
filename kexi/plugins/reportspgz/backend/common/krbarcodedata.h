@@ -30,7 +30,7 @@
 /**
 	@author 
 */
-class PGZKEXIREPORTPART2_LIB_EXPORT KRBarcodeData : public KRObjectData
+class KRBarcodeData : public KRObjectData
 {
 	public:
 		KRBarcodeData(){createProperties();}

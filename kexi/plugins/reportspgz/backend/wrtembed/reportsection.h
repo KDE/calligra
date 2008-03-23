@@ -31,6 +31,10 @@
 #include <koproperty/set.h>
 #include <koproperty/property.h>
 #include <krsectiondata.h>
+#include <QGraphicsScene>
+#include "reportscene.h"
+
+typedef QList<QGraphicsItem*> QGraphicsItemList;
 
 // forward declarations
 class QLabel;
@@ -40,7 +44,6 @@ class QDomElement;
 
 class ReportDesigner;
 class ReportSceneView;
-class ReportScene;
 class QVBoxLayout;
 class ReportResizeBar;
 class KoRuler;
@@ -64,6 +67,8 @@ class ReportSection : public QWidget
 		void buildXML ( QDomDocument & doc, QDomElement & section );
 		void initFromXML ( QDomNode & section );
 		virtual QSize sizeHint() const;
+		
+		const QGraphicsItemList items(){return scene->items();};
 	protected slots:
 		void slotResizeBarDragged ( int delta );
 		

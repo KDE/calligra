@@ -41,7 +41,7 @@ class KRImageData;
 
 #include "krsectiondata.h"
 #include "reportpageoptions.h"
-			  
+
 #include <qstring.h>
 #include <QRectF>
 #include <qfont.h>
@@ -51,161 +51,162 @@ class KRImageData;
 
 #include <QList>
 #include <QPair>
-#include "../../pgzkexireportpart2_export.h"
 
 //
 // Data Structures
 //
-class PGZKEXIREPORTPART2_LIB_EXPORT ORDataData
+class ORDataData
 {
-  public:
-    ORDataData()
-    {
-      query = QString::null;
-      column = QString::null;
-    }
-    ORDataData(const QString & q, const QString & c)
-    {
-      query = q;
-      column = c;
-    }
-    ORDataData(const ORDataData & d)
-    {
-      query = d.query;
-      column = d.column;
-    }
+	public:
+		ORDataData()
+		{
+			query = QString::null;
+			column = QString::null;
+		}
+		ORDataData ( const QString & q, const QString & c )
+		{
+			query = q;
+			column = c;
+		}
+		ORDataData ( const ORDataData & d )
+		{
+			query = d.query;
+			column = d.column;
+		}
 
-    ORDataData & operator=(const ORDataData & d)
-    {
-      query = d.query;
-      column = d.column;
-      return *this;
-    }
+		ORDataData & operator= ( const ORDataData & d )
+		{
+			query = d.query;
+			column = d.column;
+			return *this;
+		}
 
-    bool operator==(const ORDataData & d) const
-    {
-      return ((query == d.query) && (column == d.column));
-    }
+		bool operator== ( const ORDataData & d ) const
+		{
+			return ( ( query == d.query ) && ( column == d.column ) );
+		}
 
-    bool operator< (const ORDataData & d) const
-    {
-      if((query < d.query) || (query == d.query && column < d.column))
-        return true;
-      return false;
-    }
+		bool operator< ( const ORDataData & d ) const
+		{
+			if ( ( query < d.query ) || ( query == d.query && column < d.column ) )
+				return true;
+			return false;
+		}
 
-    QString query;
-    QString column;
+		QString query;
+		QString column;
 };
 
-class PGZKEXIREPORTPART2_LIB_EXPORT ORTitleData
+class ORTitleData
 {
-  public:
-    QString string;
-    QFont font;
-    bool font_defined;
+	public:
+		QString string;
+		QFont font;
+		bool font_defined;
 };
 
-class PGZKEXIREPORTPART2_LIB_EXPORT ORTextStyleData
+class ORTextStyleData
 {
-        public:
+	public:
 		QFont font;
 		Qt::Alignment textFlags;
-                QColor bgColor;
-                QColor fgColor;
+		QColor bgColor;
+		QColor fgColor;
 		int bgOpacity;
-                
+
 };
 
-class PGZKEXIREPORTPART2_LIB_EXPORT ORLineStyleData
+class ORLineStyleData
 {
 	public:
 		int weight;
 		QColor lnColor;
-		Qt::PenStyle style;  
+		Qt::PenStyle style;
 };
 
 
-class PGZKEXIREPORTPART2_LIB_EXPORT ORDetailGroupSectionData
+class ORDetailGroupSectionData
 {
-  public:
-    ORDetailGroupSectionData();
+	public:
+		ORDetailGroupSectionData();
 
-    enum PageBreak {
-      BreakNone = 0,
-      BreakAfterGroupFoot = 1
-    };
+		enum PageBreak
+		{
+			BreakNone = 0,
+			BreakAfterGroupFoot = 1
+		};
 
-    QString name;
-    QString column;
-    int pagebreak;
+		//QString name;
+		QString column;
+		int pagebreak;
 
-    QMap<ORDataData,qreal> _subtotCheckPoints;
+		QMap<ORDataData,qreal> _subtotCheckPoints;
 
-    KRSectionData * head;
-    KRSectionData * foot;
+		KRSectionData * head;
+		KRSectionData * foot;
 };
 
-class PGZKEXIREPORTPART2_LIB_EXPORT ORDetailSectionData
+class ORDetailSectionData
 {
-  public:
-    ORDetailSectionData();
+	public:
+		ORDetailSectionData();
 
-    enum PageBreak {
-      BreakNone = 0,
-      BreakAtEnd = 1
-    };
+		enum PageBreak
+		{
+			BreakNone = 0,
+			BreakAtEnd = 1
+		};
 
-    QString name;
-    int pagebreak;
+		QString name;
+		int pagebreak;
 
-    KRSectionData * detail;
+		KRSectionData * detail;
 
-    QList<ORDetailGroupSectionData*> groupList;
-    QList<ORDataData> trackTotal;
+		QList<ORDetailGroupSectionData*> groupList;
+		// QList<ORDataData> trackTotal;
 };
 
-class PGZKEXIREPORTPART2_LIB_EXPORT ORReportData
+class ORReportData
 {
-  public:
-    ORReportData();
+	public:
+		ORReportData();
 
-    QString title;
-    
-    ReportPageOptions page;
-    QString query;
-    QString script;
+		QString title;
 
-    
-    KRSectionData * pghead_first;
-    KRSectionData * pghead_odd;
-    KRSectionData * pghead_even;
-    KRSectionData * pghead_last;
-    KRSectionData * pghead_any;
+		ReportPageOptions page;
+		QString query;
+		QString script;
 
-    KRSectionData * rpthead;
-    KRSectionData * rptfoot;
 
-    KRSectionData * pgfoot_first;
-    KRSectionData * pgfoot_odd;
-    KRSectionData * pgfoot_even;
-    KRSectionData * pgfoot_last;
-    KRSectionData * pgfoot_any;
+		KRSectionData * pghead_first;
+		KRSectionData * pghead_odd;
+		KRSectionData * pghead_even;
+		KRSectionData * pghead_last;
+		KRSectionData * pghead_any;
 
-    QList<ORDetailSectionData*> sections;
+		KRSectionData * rpthead;
+		KRSectionData * rptfoot;
+
+		KRSectionData * pgfoot_first;
+		KRSectionData * pgfoot_odd;
+		KRSectionData * pgfoot_even;
+		KRSectionData * pgfoot_last;
+		KRSectionData * pgfoot_any;
+
+		ORDetailSectionData* detailsection;
 //    QMap<QString, QColor> color_map;
-    QList<ORDataData> trackTotal;
+//    QList<ORDataData> trackTotal;
 };
 
 
-bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportRect(const QDomElement &, QRectF &);
-bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportFont(const QDomElement &, QFont &);
+bool parseReportRect ( const QDomElement &, QRectF & );
+bool parseReportFont ( const QDomElement &, QFont & );
 
-bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportTextStyleData(const QDomElement &, ORTextStyleData &);
-bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportLineStyleData(const QDomElement &, ORLineStyleData &);
+bool parseReportTextStyleData ( const QDomElement &, ORTextStyleData & );
+bool parseReportLineStyleData ( const QDomElement &, ORLineStyleData & );
 
-bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportDetailSection(const QDomElement &, ORDetailSectionData &);
-bool PGZKEXIREPORTPART2_LIB_EXPORT parseReport(const QDomElement &, ORReportData &);
-bool PGZKEXIREPORTPART2_LIB_EXPORT parseReportParameter(const QDomElement &, ORReportData &);
+bool parseReportDetailSection ( const QDomElement &, ORDetailSectionData & );
+bool parseReport ( const QDomElement &, ORReportData & );
+bool parseReportParameter ( const QDomElement &, ORReportData & );
 
 #endif

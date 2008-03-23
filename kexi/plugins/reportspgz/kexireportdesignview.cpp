@@ -82,16 +82,23 @@ KexiDB::SchemaData* KexiReportDesignView::storeNewData(const KexiDB::SchemaData&
 	//sdata.setDescription ( _rd->reportTitle() );
 	KexiDB::Connection *conn = KexiMainWindowIface::global()->project()->dbConnection();
 	
-	bool ok = conn->storeObjectSchemaData(*rpt, true /*newObject*/ );
-	window()->setId( rpt->id() );
+	if (conn->storeObjectSchemaData(*rpt, true /*newObject*/ ))
+	{
+		window()->setId( rpt->id() );
 	
-	if ( rpt->id() > 0 && storeDataBlock ( _rd->document().toString(), "pgzreport_layout" ) )
-	{ 
-		kDebug() << "Saved OK " << rpt->id() << endl;
+		if ( rpt->id() > 0 && storeDataBlock ( _rd->document().toString(), "pgzreport_layout" ) )
+		{ 
+			kDebug() << "Saved OK " << rpt->id() << endl;
+		}
+		else
+		{
+			kDebug() << "NOT Saved OK" << endl;
+			return 0;
+		}
 	}
 	else
 	{
-		kDebug() << "NOT Saved OK" << endl;
+		kDebug() << "Unable to store schema data" << endl;
 		return 0;
 	}
 	return rpt;

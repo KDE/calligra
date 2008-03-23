@@ -64,6 +64,8 @@ ReportEntityImage::ReportEntityImage ( ReportDesigner * rw, QGraphicsScene* scen
 {
 	_size.setSceneSize(QSizeF(100,100));
 	init(scene);
+	
+	_name->setValue(_rd->suggestEntityName("Image"));
 }
 
 ReportEntityImage::ReportEntityImage ( QDomNode & element, ReportDesigner * rw, QGraphicsScene* scene ): ReportRectEntity(rw), KRImageData(element)
@@ -123,6 +125,11 @@ void ReportEntityImage::buildXML ( QDomDocument & doc, QDomElement & parent )
 
 	buildXMLRect ( doc,entity, pointRect() );
 	
+	// name
+	QDomElement n = doc.createElement ( "name" );
+	n.appendChild ( doc.createTextNode ( entityName() ) );
+	entity.appendChild ( n );
+	
 	// z
 	QDomElement z = doc.createElement ( "zvalue" );
 	z.appendChild ( doc.createTextNode ( QString::number(zValue()) ) );
@@ -162,6 +169,19 @@ void ReportEntityImage::propertyChanged ( KoProperty::Set &s, KoProperty::Proper
 		_pos.setUnitPos(p.value().value<QPointF>() );
 	}
 
+	if (p.name() == "Name")
+	{
+		//For some reason p.oldValue returns an empty string
+		if (!_rd->isEntityNameUnique(p.value().toString(), this))
+		{
+			p.setValue(_oldName);
+		}
+		else
+		{
+			_oldName =p.value().toString();	
+		}
+	}
+	
 	if ( _rd ) _rd->setModified ( true );
 	
 	if (scene()) scene()->update();

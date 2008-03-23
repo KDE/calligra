@@ -63,6 +63,10 @@ KRFieldData::KRFieldData ( QDomNode & element )
 			}
 			//txt = node.firstChild().nodeValue();
 		}
+		else if ( n == "name" )
+		{
+			_name->setValue(node.firstChild().nodeValue());
+		}
 		else if ( n == "zvalue" )
 		{
 			Z = node.firstChild().nodeValue().toDouble();
@@ -162,6 +166,7 @@ void KRFieldData::createProperties()
 	_useSubTotal = new KoProperty::Property ( "UseSubTotal", QVariant ( false,0 ), "Use Sub Total", "Use Sub Total" );
 	_trackTotalFormat = new KoProperty::Property ( "TrackTotalFormat", QString(), "Track Total Format", "Track Total Format" );
 	
+	_set->addProperty ( _name );
 	_set->addProperty ( _controlSource );
 	_set->addProperty ( _hAlignment );
 	_set->addProperty ( _vAlignment );

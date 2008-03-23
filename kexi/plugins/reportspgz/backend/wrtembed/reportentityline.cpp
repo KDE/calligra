@@ -58,6 +58,8 @@ ReportEntityLine::ReportEntityLine ( ReportDesigner * d, QGraphicsScene * scene 
 		: ReportEntity(d)
 {
 	init(scene,d);
+	
+	_name->setValue(_rd->suggestEntityName("Line"));
 }
 
 ReportEntityLine::ReportEntityLine ( QDomNode & entity, ReportDesigner * d, QGraphicsScene * scene )
@@ -130,6 +132,11 @@ void ReportEntityLine::buildXML ( QDomDocument & doc, QDomElement & parent )
 	e.appendChild ( doc.createTextNode ( QString::number ( ( int ) ey ) ) );
 	entity.appendChild ( e );
 
+	// name
+	QDomElement n = doc.createElement ( "name" );
+	n.appendChild ( doc.createTextNode ( entityName() ) );
+	entity.appendChild ( n );
+	
 	// z
 	QDomElement z = doc.createElement ( "zvalue" );
 	z.appendChild ( doc.createTextNode ( QString::number(zValue()) ) );
@@ -147,11 +154,22 @@ void ReportEntityLine::propertyChanged ( KoProperty::Set &s, KoProperty::Propert
 	{
 		//setLine ( _start.toScene().x(), _start.toScene().y(), line().p1().x(), line().p1().y() );
 	}
-	if ( p.name() == "End")
+	else if ( p.name() == "End")
 	{
 		//setLine ( line().p2().x(), line().p2().y(),_end.toScene().x(), _end.toScene().y() );
 	}
-	
+	else if (p.name() == "Name")
+	{
+		//For some reason p.oldValue returns an empty string
+		if (!_rd->isEntityNameUnique(p.value().toString(), this))
+		{
+			p.setValue(_oldName);
+		}
+		else
+		{
+			_oldName =p.value().toString();	
+		}
+	}
 	if ( _rd ) _rd->setModified ( true );
 	if (scene()) scene()->update();
 }

@@ -22,11 +22,10 @@
 #define __KRSCREENRENDER_H__
 
 #include <QPainter>
-#include "../../pgzkexireportpart2_export.h"
 
 class ORODocument;
 
-class PGZKEXIREPORTPART2_LIB_EXPORT KRScreenRender
+class KRScreenRender
 {
   public:
 	  KRScreenRender();

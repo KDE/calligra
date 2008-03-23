@@ -53,6 +53,8 @@ ReportEntityField::ReportEntityField ( ReportDesigner * rw, QGraphicsScene * sce
 {
 	init(scene);
 	setSceneRect(getTextRect());
+	
+	_name->setValue(_rd->suggestEntityName("Field"));
 }
 
 ReportEntityField::ReportEntityField ( QDomNode & element, ReportDesigner * d, QGraphicsScene * s )
@@ -130,6 +132,11 @@ void ReportEntityField::buildXML ( QDomDocument & doc, QDomElement & parent )
 	// bounding rect
 	buildXMLRect ( doc,entity, pointRect() );
 	
+	// name
+	QDomElement n = doc.createElement ( "name" );
+	n.appendChild ( doc.createTextNode ( entityName() ) );
+	entity.appendChild ( n );
+	
 	// z
 	QDomElement z = doc.createElement ( "zvalue" );
 	z.appendChild ( doc.createTextNode ( QString::number(zValue()) ) );
@@ -191,6 +198,18 @@ void ReportEntityField::propertyChanged ( KoProperty::Set &s, KoProperty::Proper
 		//TODO _pos.setUnitRect(p.value().value<QRect>() );
 	}
 
+	if (p.name() == "Name")
+	{
+		//For some reason p.oldValue returns an empty string
+		if (!_rd->isEntityNameUnique(p.value().toString(), this))
+		{
+			p.setValue(_oldName);
+		}
+		else
+		{
+			_oldName =p.value().toString();	
+		}
+	}
 	
 	if ( _rd ) _rd->setModified ( true );
 	

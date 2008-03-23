@@ -31,13 +31,14 @@
 #include "reportentityline.h"
 #include "reportentitybarcode.h"
 #include "reportentityimage.h"
+#include "reportsectiondetailgroup.h"
 
 // dialogs
 #include "sectioneditor.h"
 #include "reportsectiondetail.h"
 
 // qt
-#include <qpixmap.h>
+//#include <qpixmap.h>
 #include <qlayout.h>
 #include <qdom.h>
 #include <qtextstream.h>
@@ -164,7 +165,7 @@ void ReportDesigner::init()
 	d->hruler = 0;
 	d->editorDialog = 0;
 	d->editor = 0;
-	
+
 	sectionData = new ReportWriterSectionData();
 	createProperties();
 
@@ -174,7 +175,7 @@ void ReportDesigner::init()
 	pageHeadFirst = pageHeadOdd = pageHeadEven = pageHeadLast = pageHeadAny = 0;
 	pageFootFirst = pageFootOdd = pageFootEven = pageFootLast = pageFootAny = 0;
 
-	
+
 	d->grid = new QGridLayout ( this );
 	d->grid->setSpacing ( 0 );
 	d->grid->setMargin ( 0 );
@@ -206,9 +207,9 @@ void ReportDesigner::init()
 
 	detail = new ReportSectionDetail ( this );
 	d->vboxlayout->insertWidget ( 0,detail );
-	
-	setLayout(d->grid);
-	
+
+	setLayout ( d->grid );
+
 
 	connect ( d->pageButton, SIGNAL ( pressed() ), this, SLOT ( slotPageButton_Pressed() ) );
 	emit pagePropertyChanged ( *set );
@@ -218,7 +219,7 @@ void ReportDesigner::init()
 	changeSet ( set );
 }
 
-ReportDesigner::ReportDesigner ( QWidget *parent, KexiDB::Connection *cn, const QString & d ) : d ( new Private() )
+ReportDesigner::ReportDesigner ( QWidget *parent, KexiDB::Connection *cn, const QString & d ) : QWidget ( parent ), d ( new Private() )
 {
 	kDebug() << "***********************************************************" << endl;
 	kDebug() << d << endl;
@@ -538,7 +539,7 @@ void ReportDesigner::slotSectionEditor()
 	delete se;
 }
 
-ReportSection * ReportDesigner::getSection ( ReportDesigner::Section s )
+ReportSection * ReportDesigner::getSection ( ReportDesigner::Section s ) const
 {
 	ReportSection *sec;
 	switch ( s )
@@ -727,7 +728,7 @@ QDomDocument ReportDesigner::document()
 	QDomElement rds = doc.createElement ( "datasource" );
 	rds.appendChild ( doc.createTextNode ( reportDataSource() ) );
 	root.appendChild ( rds );
-	
+
 	QDomElement scr = doc.createElement ( "script" );
 	scr.appendChild ( doc.createTextNode ( _script ) );
 	root.appendChild ( scr );
@@ -764,7 +765,7 @@ QDomDocument ReportDesigner::document()
 	}
 	root.appendChild ( size );
 	// -- orientation
-	root.appendChild ( doc.createElement ( _orientation->value().toString().lower() ) );
+	root.appendChild ( doc.createElement ( _orientation->value().toString().toLower() ) );
 	// -- margins
 	QDomElement margin;
 	margin = doc.createElement ( "topmargin" );
@@ -1119,6 +1120,7 @@ int ReportDesigner::pageWidthPx() const
 
 void ReportDesigner::resizeEvent ( QResizeEvent * event )
 {
+	Q_UNUSED ( event );
 	//hruler->setRulerLength ( vboxlayout->geometry().width() );
 	d->hruler->setRulerLength ( pageWidthPx() );
 }
@@ -1182,7 +1184,7 @@ void ReportDesigner::sectionMousePressEvent ( ReportScene * s, QGraphicsSceneMou
 		QAction *popCut = 0;
 		QAction *popCopy = 0;
 		QAction *popPaste = 0;
-		QAction *popProperties = 0;
+
 		if ( selectionCount() > 0 )
 		{
 			popCut = pop.addAction ( i18n ( "Cut" ) );
@@ -1439,6 +1441,7 @@ void ReportDesigner::slotEditPaste()
 
 void ReportDesigner::slotEditPaste ( QGraphicsScene * canvas, const QPointF & pos )
 {
+	Q_UNUSED ( pos );
 	// paste a new item of the copy we have in the specified location
 	if ( sectionData->copy_list.count() > 0 )
 	{
@@ -1539,34 +1542,164 @@ KoZoomHandler* ReportDesigner::zoomHandler()
 	return d->zoom;
 }
 
-QString ReportDesigner::editorText(const QString& orig)
+QString ReportDesigner::editorText ( const QString& orig )
 {
 	QString old = orig;
-	if (!d->editorDialog)
+	if ( !d->editorDialog )
 	{
-		d->editorDialog = new KDialog( this );
-		d->editorDialog->setCaption( i18n("Script Editor") );
-		d->editorDialog->setButtons( KDialog::Ok | KDialog::Cancel );
+		d->editorDialog = new KDialog ( this );
+		d->editorDialog->setCaption ( i18n ( "Script Editor" ) );
+		d->editorDialog->setButtons ( KDialog::Ok | KDialog::Cancel );
 
-		d->editor = new KexiEditor( d->editorDialog );
-		d->editorDialog->setMainWidget( d->editor );
-		d->editorDialog->setMinimumSize(600,500);
-		
-		d->editor->setHighlightMode("javascript");
-		//connect( dialog, SIGNAL( applyClicked() ), widget, SLOT( save() ) );
-		//connect( dialog, SIGNAL( okClicked() ), widget, SLOT( save() ) );
-		//connect( widget, SIGNAL( changed( bool ) ), dialog, SLOT( enableButtonApply( bool ) ) );
+		d->editor = new KexiEditor ( d->editorDialog );
+		d->editorDialog->setMainWidget ( d->editor );
+		d->editorDialog->setMinimumSize ( 600,500 );
+
+		d->editor->setHighlightMode ( "javascript" );
+
 	}
-	d->editor->setText(orig);
-	if (d->editorDialog->exec())
+	d->editor->setText ( orig );
+	if ( d->editorDialog->exec() )
 	{
-		setModified(true);
+		setModified ( true );
 		return d->editor->text();
 	}
-	
+
 	return old;
 }
 void ReportDesigner::showScriptEditor()
 {
-	_script = editorText(_script);
+	_script = editorText ( _script );
+}
+
+QString ReportDesigner::suggestEntityName ( const QString &n ) const
+{
+	ReportSection *sec;
+	int itemCount = 0;
+	//Count items in the main sections
+	for ( int i = 1; i <= 12; ++i )
+	{
+		sec = getSection ( ( ReportDesigner::Section ) i );
+		if ( sec )
+		{
+			const QGraphicsItemList l = sec->items();
+			itemCount += l.count();
+		}
+	}
+
+	//Count items in the group headers/footers
+	for ( int i = 0; i < detail->groupSectionCount(); ++i )
+	{
+		sec = detail->getSection ( i )->getGroupHead();
+		if ( sec )
+		{
+			const QGraphicsItemList l = sec->items();
+			itemCount += l.count();
+		}
+		sec = detail->getSection ( i )->getGroupFoot();
+		if ( sec )
+		{
+			const QGraphicsItemList l = sec->items();
+			itemCount += l.count();
+		}
+	}
+
+	if ( detail )
+	{
+		sec = detail->getDetail();
+		if ( sec )
+		{
+			const QGraphicsItemList l = sec->items();
+			itemCount += l.count();
+		}
+	}
+	
+	while (!isEntityNameUnique(n + QString::number ( itemCount )))
+	{
+		itemCount++;
+	}
+	return n + QString::number ( itemCount );
+}
+
+bool ReportDesigner::isEntityNameUnique ( const QString &n, KRObjectData* ignore ) const
+{
+	ReportSection *sec;
+	int itemCount = 0;
+	bool unique = true;
+
+	//Check items in the main sections
+	for ( int i = 1; i <= 12; ++i )
+	{
+		sec = getSection ( ( ReportDesigner::Section ) i );
+		if ( sec )
+		{
+			const QGraphicsItemList l = sec->items();
+			for ( QGraphicsItemList::const_iterator it = l.begin(); it != l.end(); it++ )
+			{
+				KRObjectData* itm = dynamic_cast<KRObjectData*> ( *it );
+				if ( itm->entityName() == n  && itm != ignore)
+				{
+					unique = false;
+					break;
+				}
+			}
+			if ( !unique ) break;
+		}
+	}
+
+	//Count items in the group headers/footers
+	if ( unique )
+	{
+		for ( int i = 0; i < detail->groupSectionCount(); ++i )
+		{
+			sec = detail->getSection ( i )->getGroupHead();
+			if ( sec )
+			{
+				const QGraphicsItemList l = sec->items();
+				for ( QGraphicsItemList::const_iterator it = l.begin(); it != l.end(); it++ )
+				{
+					KRObjectData* itm = dynamic_cast<KRObjectData*> ( *it );
+					if ( itm->entityName() == n  && itm != ignore)
+					{
+						unique = false;
+						break;
+					}
+				}
+
+			}
+			sec = detail->getSection ( i )->getGroupFoot();
+			if ( unique && sec )
+			{
+				const QGraphicsItemList l = sec->items();
+				for ( QGraphicsItemList::const_iterator it = l.begin(); it != l.end(); it++ )
+				{
+					KRObjectData* itm = dynamic_cast<KRObjectData*> ( *it );
+					if ( itm->entityName() == n  && itm != ignore)
+					{
+						unique = false;
+						break;
+					}
+				}
+			}
+		}
+	}
+	if ( unique && detail )
+	{
+		sec = detail->getDetail();
+		if ( sec )
+		{
+			const QGraphicsItemList l = sec->items();
+			for ( QGraphicsItemList::const_iterator it = l.begin(); it != l.end(); it++ )
+			{
+				KRObjectData* itm = dynamic_cast<KRObjectData*> ( *it );
+				if ( itm->entityName() == n  && itm != ignore)
+				{
+					unique = false;
+					break;
+				}
+			}
+		}
+	}
+
+	return unique;
 }

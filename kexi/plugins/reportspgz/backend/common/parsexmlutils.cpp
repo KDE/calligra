@@ -35,7 +35,6 @@
 
 ORDetailGroupSectionData::ORDetailGroupSectionData()
 {
-	name = QString::null;
 	column = QString::null;
 	pagebreak = BreakNone;
 	_subtotCheckPoints.clear();
@@ -340,9 +339,7 @@ bool parseReportDetailSection ( const QDomElement & elemSource, ORDetailSectionD
 			for ( int i = 0; i < nl.count(); i++ )
 			{
 				node = nl.item ( i );
-				if ( node.nodeName() == "name" )
-					dgsd->name = node.firstChild().nodeValue();
-				else if ( node.nodeName() == "column" )
+				if ( node.nodeName() == "column" )
 					dgsd->column = node.firstChild().nodeValue();
 				else if ( node.nodeName() == "pagebreak" )
 				{
@@ -570,8 +567,8 @@ bool parseReport ( const QDomElement & elemSource, ORReportData & reportTarget )
 			ORDetailSectionData * dsd = new ORDetailSectionData();
 			if ( parseReportDetailSection ( elemThis, *dsd ) == TRUE )
 			{
-				reportTarget.sections.append ( dsd );
-				reportTarget.trackTotal += dsd->trackTotal;
+				reportTarget.detailsection = dsd;
+				//reportTarget.trackTotal += dsd->trackTotal;
 			}
 			else
 				delete dsd;

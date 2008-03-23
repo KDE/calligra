@@ -30,7 +30,7 @@
 /**
 	@author 
 */
-class PGZKEXIREPORTPART2_LIB_EXPORT KRLineData : public KRObjectData
+class KRLineData : public KRObjectData
 {
 	public:
 		KRLineData(){createProperties();}

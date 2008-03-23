@@ -58,6 +58,8 @@ ReportEntityLabel::ReportEntityLabel ( ReportDesigner* d, QGraphicsScene * scene
 	init(scene);
 	setSceneRect(getTextRect());
 	
+	_name->setValue(_rd->suggestEntityName("Label"));
+	
 }
 
 ReportEntityLabel::ReportEntityLabel ( QDomNode & element, ReportDesigner * d, QGraphicsScene * s )
@@ -135,6 +137,11 @@ void ReportEntityLabel::buildXML ( QDomDocument & doc, QDomElement & parent )
 	// bounding rect
 	buildXMLRect ( doc,entity, pointRect() );
 	
+	// name
+	QDomElement n = doc.createElement ( "name" );
+	n.appendChild ( doc.createTextNode ( entityName() ) );
+	entity.appendChild ( n );
+	
 	// z
 	QDomElement z = doc.createElement ( "zvalue" );
 	z.appendChild ( doc.createTextNode ( QString::number(zValue()) ) );
@@ -185,6 +192,18 @@ void ReportEntityLabel::propertyChanged ( KoProperty::Set &s, KoProperty::Proper
 	else if ( p.name() == "Size" )
 	{
 		//_size.setUnitSize(p.value().value<QSizeF>());
+	}
+	else if (p.name() == "Name")
+	{
+		//For some reason p.oldValue returns an empty string
+		if (!_rd->isEntityNameUnique(p.value().toString(), this))
+		{
+			p.setValue(_oldName);
+		}
+		else
+		{
+			_oldName =p.value().toString();	
+		}
 	}
 	
 	//setSceneRect(_pos.toScene(), _size.toScene());

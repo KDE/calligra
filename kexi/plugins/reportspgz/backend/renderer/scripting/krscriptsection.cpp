@@ -66,8 +66,15 @@ namespace Scripting
 	
 	}
 
-	QObject* Section::object(const QString&)
+	QObject* Section::object(const QString& n)
 	{
+		for (int i = 0; i < _section->objects().count(); ++i)
+		{
+			if (_section->_objects[i]->entityName() == n)
+			{
+				return object(i);
+			}
+		}
 		return 0;
 	}
 

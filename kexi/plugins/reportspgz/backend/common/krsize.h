@@ -23,12 +23,11 @@
 #include <QSizeF>
 #include <KoGlobal.h>
 #include <koproperty/property.h>
-#include "../../pgzkexireportpart2_export.h"
 
 /**
 	@author 
 */
-class PGZKEXIREPORTPART2_LIB_EXPORT KRSize
+class KRSize
 {
 	public:
 		KRSize(const KoUnit& unit = KoUnit(KoUnit::Centimeter));

@@ -21,7 +21,6 @@
 #define KRLABEL_H
 #include "krobjectdata.h"
 #include "parsexmlutils.h"
-#include "../../pgzkexireportpart2_export.h"
 #include <QRect>
 #include <QPainter>
 #include <qdom.h>
@@ -36,7 +35,7 @@ namespace Scripting
 /**
 	@author 
 */
-class PGZKEXIREPORTPART2_LIB_EXPORT KRLabelData : public KRObjectData
+class KRLabelData : public KRObjectData
 {
 	public:
 		KRLabelData(){createProperties();};

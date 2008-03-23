@@ -52,7 +52,7 @@ void KRScriptHandler::slotInit()
 	//QScriptValue sumFunc = _scriptEngine->newFunction(functions.sum);
 	//_scriptEngine->globalObject().setProperty("sum", sumFunc);
 	
-	//Add all the objects to the script
+	//Add math functions to the script
 	_functions = new KRScriptFunctions(_conn);
 	QScriptValue funcs = _engine->newQObject(_functions, QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
 	_engine->globalObject().setProperty("functions",funcs);
@@ -62,8 +62,49 @@ void KRScriptHandler::slotInit()
 	QScriptValue deb = _engine->newQObject(_debug, QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
 	_engine->globalObject().setProperty("debug",deb);
 	
-	QScriptValue detail = _engine->newQObject(new Scripting::Section(_data->sections[0]->detail), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
+	//Add the detail section
+	QScriptValue detail = _engine->newQObject(new Scripting::Section(_data->detailsection->detail), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
 	_engine->globalObject().setProperty("detail",detail);
+	
+	//Add the pghead_any section
+	QScriptValue pghead_any = _engine->newQObject(new Scripting::Section(_data->pghead_any), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
+	_engine->globalObject().setProperty("pagehead_any",pghead_any);
+	
+	//Add the pghead_even section
+	QScriptValue pghead_even = _engine->newQObject(new Scripting::Section(_data->pghead_even), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
+	_engine->globalObject().setProperty("pagehead_even",pghead_even);
+	
+	//Add the pghead_odd section
+	QScriptValue pghead_odd = _engine->newQObject(new Scripting::Section(_data->pghead_odd), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
+	_engine->globalObject().setProperty("pagehead_odd",pghead_odd);
+	
+	//Add the pghead_first section
+	QScriptValue pghead_first = _engine->newQObject(new Scripting::Section(_data->pghead_first), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
+	_engine->globalObject().setProperty("pagehead_first",pghead_first);
+	
+	//Add the pghead_last section
+	QScriptValue pghead_last = _engine->newQObject(new Scripting::Section(_data->pghead_last), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
+	_engine->globalObject().setProperty("pagehead_last",pghead_last);
+	
+	//Add the pgfoot_any section
+	QScriptValue pgfoot_any = _engine->newQObject(new Scripting::Section(_data->pgfoot_any), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
+	_engine->globalObject().setProperty("pagefoot_any",pgfoot_any);
+	
+	//Add the pgfoot_even section
+	QScriptValue pgfoot_even = _engine->newQObject(new Scripting::Section(_data->pgfoot_even), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
+	_engine->globalObject().setProperty("pagefoot_even",pgfoot_even);
+	
+	//Add the pgfoot_odd section
+	QScriptValue pgfoot_odd = _engine->newQObject(new Scripting::Section(_data->pgfoot_odd), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
+	_engine->globalObject().setProperty("pagefoot_odd",pgfoot_odd);
+	
+	//Add the pgfoot_first section
+	QScriptValue pgfoot_first = _engine->newQObject(new Scripting::Section(_data->pgfoot_first), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
+	_engine->globalObject().setProperty("pagefoot_first",pgfoot_first);
+	
+	//Add the pgfoot_last section
+	QScriptValue pgfoot_last = _engine->newQObject(new Scripting::Section(_data->pgfoot_last), QScriptEngine::QtOwnership, QScriptEngine::ExcludeChildObjects | QScriptEngine::ExcludeSuperClassMethods | QScriptEngine::ExcludeSuperClassProperties);
+	_engine->globalObject().setProperty("pagefoor_last",pgfoot_last);
 	
 	//Evaluate the script now, we'll call the functions in it later;
 	_engine->evaluate(_data->script);

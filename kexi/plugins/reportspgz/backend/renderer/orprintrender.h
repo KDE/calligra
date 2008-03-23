@@ -23,11 +23,10 @@
 
 #include <QPrinter>
 #include <QPainter>
-#include "../../pgzkexireportpart2_export.h"
 
 class ORODocument;
 
-class PGZKEXIREPORTPART2_LIB_EXPORT ORPrintRender
+class ORPrintRender
 {
   public:
     ORPrintRender();

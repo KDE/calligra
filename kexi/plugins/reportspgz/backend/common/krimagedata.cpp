@@ -57,6 +57,10 @@ KRImageData::KRImageData ( QDomNode & element )
 			}
 			_img_inline = false;
 		}
+		else if ( n == "name" )
+		{
+			_name->setValue(node.firstChild().nodeValue());
+		}
 		else if ( n == "zvalue" )
 		{
 			Z = node.firstChild().nodeValue().toDouble();
@@ -175,6 +179,7 @@ void KRImageData::createProperties()
 
 	_staticImage = new KoProperty::Property ( "StaticImage", QPixmap(), "Static Image", "Static Image" );
 
+	_set->addProperty ( _name );
 	_set->addProperty ( _controlSource );
 	_set->addProperty ( _resizeMode );
 	_set->addProperty ( _pos.property() );

@@ -25,9 +25,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 
-#include "../../pgzkexireportpart2_export.h"
-
-class PGZKEXIREPORTPART2_LIB_EXPORT LabelSizeInfo
+class LabelSizeInfo
 {
   public:
     LabelSizeInfo(const QString&, const QString&, int, int, int, int, int, int, int, int);

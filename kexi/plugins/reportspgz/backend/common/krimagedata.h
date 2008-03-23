@@ -35,7 +35,7 @@
 /**
 	@author 
 */
-class PGZKEXIREPORTPART2_LIB_EXPORT KRImageData : public KRObjectData
+class KRImageData : public KRObjectData
 {
 	public:
 		KRImageData(){createProperties();}

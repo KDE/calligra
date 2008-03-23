@@ -36,8 +36,6 @@
 #include <koproperty/property.h>
 #include <kdebug.h>
 
-#include "../../pgzkexireportpart2_export.h"
-
 class ReportGridOptions;
 class QDomDocument;
 class QGraphicsScene;
@@ -53,17 +51,16 @@ class ReportSceneView;
 class ReportWriterSectionData;
 class KexiView;
 
-namespace KoProperty
-{
-	class Editor;
-}
+//namespace KoProperty
+//{
+//	class Editor;
+//}
 
 //
-// Class ReportWindow
-//     The ReportWindow is the Window used to display a document in
-// the ReportWriterWindow MDI.
+// Class ReportDesigner
+//     The ReportDesigner is the main widget for designing a report
 //
-class PGZKEXIREPORTPART2_LIB_EXPORT ReportDesigner : public QWidget
+class ReportDesigner : public QWidget
 {
 		Q_OBJECT
 	public:
@@ -87,7 +84,7 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ReportDesigner : public QWidget
 		ReportDesigner ( QWidget *, KexiDB::Connection *, const QString& );
 		~ReportDesigner();
 
-		ReportSection* getSection ( ReportDesigner::Section );
+		ReportSection* getSection ( ReportDesigner::Section ) const;;
 		void removeSection ( ReportDesigner::Section );
 		void insertSection ( ReportDesigner::Section );
 		
@@ -109,9 +106,13 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ReportDesigner : public QWidget
 		KexiDB::Connection *theConn() {return conn;}
 		bool isConnected() {return conn &&  conn->isConnected();}
 		
+		/**Return a list of queries that the report can be based on*/
 		QStringList queryList();
+		
+		/**Return a list of fields in the selected query*/
 		QStringList fieldList();
 		
+		/**Return the page width in pixels for the current paper size*/
 		int pageWidthPx() const;
 
 		QGraphicsScene* activeScene();
@@ -133,6 +134,12 @@ class PGZKEXIREPORTPART2_LIB_EXPORT ReportDesigner : public QWidget
 		void setModified ( bool = true );
 		
 		void showScriptEditor();
+		
+		/**Return a unique name that can be used by the entity*/
+		QString suggestEntityName(const QString &) const;
+		
+		/**Checks if the supplied name is unique among all entities*/
+		bool isEntityNameUnique(const QString &, KRObjectData* = 0) const;
 	public slots:
 		
 		void slotEditDelete();

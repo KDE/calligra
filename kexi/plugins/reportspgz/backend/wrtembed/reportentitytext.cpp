@@ -57,6 +57,8 @@ ReportEntityText::ReportEntityText ( ReportDesigner * rw, QGraphicsScene * scene
 {
 	init(scene);
 	setSceneRect ( getTextRect() );
+	
+	_name->setValue(_rd->suggestEntityName("Text"));
 }
 
 ReportEntityText::ReportEntityText ( QDomNode & element, ReportDesigner * d, QGraphicsScene * s )
@@ -127,6 +129,11 @@ void ReportEntityText::buildXML ( QDomDocument & doc, QDomElement & parent )
 	// bounding rect
 	buildXMLRect ( doc,entity,pointRect() );
 	
+	// name
+	QDomElement n = doc.createElement ( "name" );
+	n.appendChild ( doc.createTextNode ( entityName() ) );
+	entity.appendChild ( n );
+	
 	// z
 	QDomElement z = doc.createElement ( "zvalue" );
 	z.appendChild ( doc.createTextNode ( QString::number(zValue()) ) );
@@ -163,9 +170,7 @@ void ReportEntityText::buildXML ( QDomDocument & doc, QDomElement & parent )
 
 	// the field data
 	QDomElement data = doc.createElement ( "data" );
-//	QDomElement dquery = doc.createElement ( "query" );
-//	dquery.appendChild ( doc.createTextNode ( query() ) );
-//	data.appendChild ( dquery );
+
 	QDomElement dcolumn = doc.createElement ( "controlsource" );
 	dcolumn.appendChild ( doc.createTextNode ( column() ) );
 	data.appendChild ( dcolumn );
@@ -178,4 +183,36 @@ void ReportEntityText::mousePressEvent ( QGraphicsSceneMouseEvent * event )
 {
 	_controlSource->setListData(_rd->fieldList(), _rd->fieldList());
 	ReportRectEntity::mousePressEvent(event);
+}
+
+
+void ReportEntityText::propertyChanged ( KoProperty::Set &s, KoProperty::Property &p )
+{
+	kDebug() << endl;
+	//TODO KoProperty needs QPointF and QSizeF and need to sync property with actual size/pos
+	if ( p.name() == "Position" )
+	{
+		//_pos.setUnitPos(p.value().value<QPointF>(), false);
+	}
+	else if ( p.name() == "Size" )
+	{
+		//_size.setUnitSize(p.value().value<QSizeF>());
+	}
+	else if (p.name() == "Name")
+	{
+		//For some reason p.oldValue returns an empty string
+		if (!_rd->isEntityNameUnique(p.value().toString(), this))
+		{
+			p.setValue(_oldName);
+		}
+		else
+		{
+			_oldName =p.value().toString();	
+		}
+	}
+	
+	//setSceneRect(_pos.toScene(), _size.toScene());
+	
+	if ( _rd ) _rd->setModified ( true );
+	if (scene()) scene()->update();
 }

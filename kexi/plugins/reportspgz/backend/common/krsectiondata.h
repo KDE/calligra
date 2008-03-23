@@ -33,7 +33,6 @@
 #include <QObject>
 #include <qdom.h>
 
-#include "../../pgzkexireportpart2_export.h"
 class KRObjectData;
 
 #include <koproperty/property.h>
@@ -44,7 +43,7 @@ namespace Scripting
 {
 	class Section;
 }
-class PGZKEXIREPORTPART2_LIB_EXPORT KRSectionData : public QObject
+class KRSectionData : public QObject
 {
 	Q_OBJECT
 	public:
@@ -57,7 +56,7 @@ class PGZKEXIREPORTPART2_LIB_EXPORT KRSectionData : public QObject
 		QString extra() const {return _extra;}
 		qreal height() const {return _height->value().toDouble();}
 		QList<KRObjectData*> objects() const {return _objects;};
-		QString name() const {return _name;}
+		QString name() const;
 		QColor bgColor() const { return _bgColor->value().value<QColor>();}
 		
 		

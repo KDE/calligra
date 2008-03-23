@@ -35,7 +35,11 @@ KRLabelData::KRLabelData ( QDomNode & element )
 	{
 		node = nl.item ( i );
 		n = node.nodeName();
-		if ( n == "string" )
+		if ( n == "name" )
+		{
+			_name->setValue(node.firstChild().nodeValue());
+		}
+		else if ( n == "string" )
 		{
 			_text->setValue ( node.firstChild().nodeValue() );
 		}
@@ -148,6 +152,7 @@ void KRLabelData::createProperties()
 	_lncolor = new KoProperty::Property ( "LineColor", Qt::black, "Line Color", "Line Color" );
 	_lnstyle = new KoProperty::Property ( "LineStyle", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle );
 	
+	_set->addProperty ( _name );
 	_set->addProperty ( _text );
 	_set->addProperty ( _hAlignment );
 	_set->addProperty ( _vAlignment );

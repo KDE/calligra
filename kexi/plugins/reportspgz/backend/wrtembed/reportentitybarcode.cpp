@@ -59,6 +59,8 @@ ReportEntityBarcode::ReportEntityBarcode ( ReportDesigner * rw, QGraphicsScene* 
 	init ( scene );
 	_size.setSceneSize(QSizeF(min_width_total*dpiX, min_height*dpiY));
 	setSceneRect(_pos.toScene(), _size.toScene());
+	
+	_name->setValue(_rd->suggestEntityName("Barcode"));
 }
 
 ReportEntityBarcode::ReportEntityBarcode ( QDomNode & element, ReportDesigner * rw, QGraphicsScene* scene ) : ReportRectEntity(rw), KRBarcodeData(element)
@@ -131,6 +133,11 @@ void ReportEntityBarcode::buildXML ( QDomDocument & doc, QDomElement & parent )
 	// bounding rect
 	buildXMLRect ( doc,entity,pointRect() );
 
+	// name
+	QDomElement n = doc.createElement ( "name" );
+	n.appendChild ( doc.createTextNode ( entityName() ) );
+	entity.appendChild ( n );
+	
 	// z
 	QDomElement z = doc.createElement ( "zvalue" );
 	z.appendChild ( doc.createTextNode ( QString::number(zValue()) ) );
@@ -168,6 +175,19 @@ void ReportEntityBarcode::propertyChanged ( KoProperty::Set &s, KoProperty::Prop
 		_pos.setUnitPos ( p.value().value<QPointF>() );
 	}
 
+	if (p.name() == "Name")
+	{
+		//For some reason p.oldValue returns an empty string
+		if (!_rd->isEntityNameUnique(p.value().toString(), this))
+		{
+			p.setValue(_oldName);
+		}
+		else
+		{
+			_oldName =p.value().toString();	
+		}
+	}
+	
 	if ( _rd ) _rd->setModified ( true );
 	
 	if (scene()) scene()->update();

@@ -25,7 +25,6 @@
 #include <QRectF>
 #include <QString>
 #include <QFont>
-#include "../../pgzkexireportpart2_export.h"
 
 class ORPreRenderPrivate;
 class ParameterList;
@@ -39,7 +38,7 @@ namespace KexiDB
 // This class takes a report definition and prerenders the result to
 // an ORODocument that can be used to pass to any number of renderers.
 //
-class PGZKEXIREPORTPART2_LIB_EXPORT ORPreRender {
+class ORPreRender {
   public:
     ORPreRender(KexiDB::Connection*c=0);
     ORPreRender(const QString &, KexiDB::Connection*c=0);

@@ -54,6 +54,10 @@ KRBarcodeData::KRBarcodeData(QDomNode & element)
 				}
 			}
 		}
+		else if ( n == "name" )
+		{
+			_name->setValue(node.firstChild().nodeValue());
+		}
 		else if ( n == "string" )
 		{
 			// ok -- this entity wasn't really part of the initial spec for work
@@ -197,6 +201,7 @@ void KRBarcodeData::createProperties()
 
 	_maxLength = new KoProperty::Property ("Max Length", 5, "Max Length", "Maximum Barode Length");
 	
+	_set->addProperty ( _name );
 	_set->addProperty ( _controlSource );
 	_set->addProperty ( _format );
 	_set->addProperty ( _hAlignment );

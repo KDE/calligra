@@ -40,8 +40,11 @@ KRLineData::KRLineData(QDomNode & element)
 		node = nl.item ( i );
 		n = node.nodeName();
 		
-		
-		if (n == "linestyle")
+		if ( n == "name" )
+		{
+			_name->setValue(node.firstChild().nodeValue());
+		}
+		else if (n == "linestyle")
 		{
 			if (!parseReportLineStyleData( node.toElement(), ls ))
 			{
@@ -98,6 +101,7 @@ void KRLineData::createProperties()
 	_start.setName("Start");
 	_end.setName("End");
 	
+	_set->addProperty ( _name );
 	_set->addProperty ( _start.property() );
 	_set->addProperty ( _end.property() );
 	_set->addProperty ( _lnweight );

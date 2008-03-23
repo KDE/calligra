@@ -20,7 +20,6 @@
 #ifndef KRFIELDDATA_H
 #define KRFIELDDATA_H
 #include "krobjectdata.h"
-#include "../../pgzkexireportpart2_export.h"
 #include <QRect>
 #include <qdom.h>
 #include "krsize.h"
@@ -35,7 +34,7 @@ namespace Scripting
 	class Field;
 }
 
-class PGZKEXIREPORTPART2_LIB_EXPORT KRFieldData : public KRObjectData
+class KRFieldData : public KRObjectData
 {
 	public:
 		KRFieldData(){createProperties();};

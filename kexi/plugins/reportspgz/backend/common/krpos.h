@@ -27,7 +27,7 @@
 /**
 	@author
 */
-class PGZKEXIREPORTPART2_LIB_EXPORT KRPos
+class KRPos
 {
 	public:
 		KRPos(const KoUnit& unit = KoUnit(KoUnit::Centimeter));

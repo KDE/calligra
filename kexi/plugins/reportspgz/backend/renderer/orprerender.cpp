@@ -1148,15 +1148,15 @@ ORODocument* ORPreRender::generate()
 
 	_internal->_query = ( new orQuery ( "Data Source", _internal->_reportData->query, true, _internal->_conn ) );
 
-	_internal->_subtotPageCheckPoints.clear();
-	for ( int i = 0; i < _internal->_reportData->trackTotal.count(); i++ )
-	{
-		_internal->_subtotPageCheckPoints.insert ( _internal->_reportData->trackTotal[i], 0 );
 //TODO field totals
+//	_internal->_subtotPageCheckPoints.clear();
+//	for ( int i = 0; i < _internal->_reportData->trackTotal.count(); i++ )
+//	{
+//		_internal->_subtotPageCheckPoints.insert ( _internal->_reportData->trackTotal[i], 0 );
 //		XSqlQuery * xqry = _internal->getQuerySource ( _internal->_reportData->trackTotal[i].query )->getQuery();
 //		if ( xqry )
 //			xqry->trackFieldTotal ( _internal->_reportData->trackTotal[i].column );
-	}
+//	}
 
 	_internal->initEngine();
 	_internal->createNewPage();
@@ -1190,46 +1190,42 @@ ORODocument* ORPreRender::generate()
 			numCols = label.rows();
 			numRows = label.columns();
 		}
-		for ( int i = 0; i < _internal->_reportData->sections.count(); i++ )
+
+		ORDetailSectionData * detailData = _internal->_reportData->detailsection;
+		if ( detailData->detail != 0 )
 		{
-			if ( _internal->_reportData->sections.at ( i ) )
+			orQuery *orqThis = _internal->_query;
+			KexiDB::Cursor *query;
+
+			if ( ( orqThis != 0 ) && ! ( ( query = orqThis->getQuery() )->eof() ) )
 			{
-				ORDetailSectionData * detailData = _internal->_reportData->sections.at ( i );
-				if ( detailData->detail != 0 )
+				query->moveFirst();
+				do
 				{
-					orQuery *orqThis = _internal->_query;
-					KexiDB::Cursor *query;
+					tmp = _internal->_yOffset; // store the value as renderSection changes it
+					_internal->renderSection ( * ( detailData->detail ) );
+					_internal->_yOffset = tmp; // restore the value that renderSection modified
 
-					if ( ( orqThis != 0 ) && ! ( ( query = orqThis->getQuery() )->eof() ) )
+					col ++;
+					_internal->_leftMargin += w + wg;
+					if ( col >= numCols )
 					{
-						query->moveFirst();
-						do
+						_internal->_leftMargin = margin; // reset back to original value
+						col = 0;
+						row ++;
+						_internal->_yOffset += h + hg;
+						if ( row >= numRows )
 						{
-							tmp = _internal->_yOffset; // store the value as renderSection changes it
-							_internal->renderSection ( * ( detailData->detail ) );
-							_internal->_yOffset = tmp; // restore the value that renderSection modified
-
-							col ++;
-							_internal->_leftMargin += w + wg;
-							if ( col >= numCols )
-							{
-								_internal->_leftMargin = margin; // reset back to original value
-								col = 0;
-								row ++;
-								_internal->_yOffset += h + hg;
-								if ( row >= numRows )
-								{
-									_internal->_yOffset = _internal->_topMargin;
-									row = 0;
-									_internal->createNewPage();
-								}
-							}
+							_internal->_yOffset = _internal->_topMargin;
+							row = 0;
+							_internal->createNewPage();
 						}
-						while ( query->moveNext() );
 					}
 				}
+				while ( query->moveNext() );
 			}
 		}
+		
 	}
 	else
 	{
@@ -1239,14 +1235,9 @@ ORODocument* ORPreRender::generate()
 			_internal->renderSection ( * ( _internal->_reportData->rpthead ) );
 		}
 		
-		kDebug() << _internal->_reportData->sections.count() << "detail sections" << endl;
-		for ( int i = 0; i < _internal->_reportData->sections.count(); i++ )
-		{
-			if ( _internal->_reportData->sections.at ( i ) != 0 )
-			{
-				_internal->renderDetailSection ( * ( _internal->_reportData->sections.at ( i ) ) );
-			}
-		}
+	
+		_internal->renderDetailSection ( * ( _internal->_reportData->detailsection ) );
+		
 		if ( _internal->_reportData->rptfoot != 0 )
 		{
 			if ( _internal->renderSectionSize ( * ( _internal->_reportData->rptfoot ) ) + _internal->finishCurPageSize ( true ) + _internal->_bottomMargin + _internal->_yOffset >= _internal->_maxHeight )

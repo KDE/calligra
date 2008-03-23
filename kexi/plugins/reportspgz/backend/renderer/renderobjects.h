@@ -31,7 +31,6 @@
 #include <QBrush>
 #include <parsexmlutils.h>
 #include <reportpageoptions.h>
-#include "../../pgzkexireportpart2_export.h"
 
 class ORODocument;
 class OROPage;
@@ -44,7 +43,7 @@ class OROImage;
 // ORODocument
 // This object is a single document containing one or more OROPage elements
 //
-class PGZKEXIREPORTPART2_LIB_EXPORT ORODocument
+class ORODocument
 {
   friend class OROPage;
 

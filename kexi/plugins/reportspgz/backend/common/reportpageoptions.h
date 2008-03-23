@@ -24,9 +24,8 @@
 
 #include <qobject.h>
 #include <qstring.h>
-#include "../../pgzkexireportpart2_export.h"
 
-class PGZKEXIREPORTPART2_LIB_EXPORT ReportPageOptions : public QObject
+class ReportPageOptions : public QObject
 {
   Q_OBJECT
   public:

@@ -34,7 +34,6 @@
 ReportRectEntity::ReportRectEntity ( ReportDesigner *r)
 		: QGraphicsRectItem(), ReportEntity(r)
 {
-	_rd = r;
 	dpiX = KoGlobal::dpiX();
 	dpiY = KoGlobal::dpiY();
 	

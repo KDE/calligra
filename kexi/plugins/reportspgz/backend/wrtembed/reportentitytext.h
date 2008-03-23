@@ -51,6 +51,9 @@ class ReportEntityText : public QObject, public KRTextData, public ReportRectEnt
 	private:
 		QRect getTextRect();
 		void init(QGraphicsScene*);
+		
+	private slots:
+		void propertyChanged ( KoProperty::Set &, KoProperty::Property & );
 };
 
 #endif

@@ -29,7 +29,7 @@
 /**
 	@author 
 */
-class PGZKEXIREPORTPART2_LIB_EXPORT KRTextData : public KRObjectData
+class KRTextData : public KRObjectData
 {
 	public:
 		KRTextData(){createProperties();};

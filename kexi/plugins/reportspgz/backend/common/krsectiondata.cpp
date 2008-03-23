@@ -168,3 +168,9 @@ void KRSectionData::createProperties()
 	_set->addProperty ( _height );
 	_set->addProperty ( _bgColor );
 }
+
+QString KRSectionData::name() const
+{
+	kDebug() <<(_extra.isEmpty() ? _name : _name + "_" + _extra) <<endl;
+	return (_extra.isEmpty() ? _name : _name + "_" + _extra);
+}
