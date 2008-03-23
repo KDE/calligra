@@ -5,7 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 ########### next target ###############
 
-set(karbon_roundcornersplugin_PART_SRCS roundcornersplugin.cc )
+set(karbon_roundcornersplugin_PART_SRCS RoundCornersPlugin.cpp RoundCornersCommand.cpp )
 
 
 kde4_add_plugin(karbon_roundcornersplugin ${karbon_roundcornersplugin_PART_SRCS})
@@ -19,7 +19,7 @@ install(TARGETS karbon_roundcornersplugin  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install( FILES  roundcornersplugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/kpartplugins)
+install( FILES  RoundCornersPlugin.rc  DESTINATION ${DATA_INSTALL_DIR}/karbon/kpartplugins)
 
 
 
