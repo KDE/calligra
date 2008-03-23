@@ -169,8 +169,8 @@ SplitItemViewSettupDialog::SplitItemViewSettupDialog( DoubleTreeViewBase *view, 
     m_pageList.append( page );
     
     m_page2 = new ItemViewSettup( view->slaveView(), true );
-    page = new KPageWidgetItem( m_page2, i18n( "Auxcilliary View" ) );
-    page->setHeader( i18n( "Auxcilliary View Column Configuration" ) );
+    page = new KPageWidgetItem( m_page2, i18n( "Auxiliary View" ) );
+    page->setHeader( i18n( "Auxiliary View Column Configuration" ) );
     addPage( page );
     m_pageList.append( page );
     

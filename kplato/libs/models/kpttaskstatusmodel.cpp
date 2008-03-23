@@ -355,6 +355,7 @@ bool TaskStatusItemModel::setCompletion( Node *node, const QVariant &value, int 
 {
     if ( role == Qt::EditRole && node->type() == Node::Type_Task ) {
         Task *t = static_cast<Task*>( node );
+        // xgettext: no-c-format
         emit executeCommand( new ModifyCompletionPercentFinishedCmd( t->completion(), QDate::currentDate(), value.toInt(), i18n( "Modify % Completed" ) ) );
         return true;
     }

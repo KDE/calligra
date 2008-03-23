@@ -225,10 +225,10 @@ void WorkPackageInfoView::draw()
     if ( id != -1 ) {
         QList<Resource*> lst = m_task->assignedResources( id );
         if ( lst.isEmpty() ) {
-            c.insertText( i18n( "Partisipants: None" ) );
+            c.insertText( i18n( "Participants: None" ) );
             c.insertText( "\n" );
         } else {
-            c.insertText( i18n( "Partisipants:" ) );
+            c.insertText( i18n( "Participants:" ) );
             bf.setIndent( 2 );
             c.insertBlock( bf );
             foreach ( Resource *r, lst ) {
