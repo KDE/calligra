@@ -71,7 +71,9 @@ done Jan Hambrecht
 "barnVeeWipe"  "down" (65) [default], "left" (66), "up" (67), "right" (68)
 done Jan Hambrecht
 "zigZagWipe"  "leftToRight" (71) [default], "topToBottom" (72)
+done Jan Hambrecht
 "barnZigZagWipe"  "vertical" (73) [default], "horizontal" (74)
+Jan Hambrecht
 
 Iris Wipes - shapes expand from the center of the media
 -------------------------------------------------------

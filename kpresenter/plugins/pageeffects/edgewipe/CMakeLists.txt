@@ -25,6 +25,9 @@ set(kpr_pageeffect_edgewipe_SRCS
 
     barnveewipe/BarnVeeWipeEffectFactory.cpp
     barnveewipe/BarnVeeWipeStrategy.cpp
+
+    zigzagwipe/ZigZagWipeEffectFactory.cpp
+    zigzagwipe/ZigZagWipeStrategy.cpp
     )
 
 kde4_add_plugin(kpr_pageeffect_edgewipe ${kpr_pageeffect_edgewipe_SRCS})
