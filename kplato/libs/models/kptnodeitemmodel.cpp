@@ -583,11 +583,11 @@ QVariant NodeModel::duration( const Node *node, int role ) const
             if ( node->type() == Node::Type_Task ) {
                 Duration::Unit unit = node->estimate()->unit();
                 double v = node->duration( id() ).toDouble( unit );
-                return i18n( "Scheduled duration: &%1", KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ) );
+                return i18n( "Scheduled duration: %1", KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ) );
             } else if ( node->type() == Node::Type_Project ) {
                 Duration::Unit unit = Duration::Unit_d;
                 double v = node->duration( id() ).toDouble( unit );
-                return i18n( "Scheduled duration: &%1", KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ) );
+                return i18n( "Scheduled duration: %1", KGlobal::locale()->formatNumber( v, m_prec ) +  Duration::unitToString( unit, true ) );
             }
             break;
         case Qt::EditRole: {
