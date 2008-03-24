@@ -30,6 +30,7 @@
 #include "veewipe/VeeWipeEffectFactory.h"
 #include "barnveewipe/BarnVeeWipeEffectFactory.h"
 #include "zigzagwipe/ZigZagWipeEffectFactory.h"
+#include "barnzigzagwipe/BarnZigZagWipeEffectFactory.h"
 
 K_EXPORT_COMPONENT_FACTORY( kpr_pageeffect_edgewipe, KGenericFactory<Plugin>( "KPrPageEffect" ) )
 
@@ -44,6 +45,7 @@ Plugin::Plugin(QObject *parent, const QStringList &)
     KPrPageEffectRegistry::instance()->add(new VeeWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new BarnVeeWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new ZigZagWipeEffectFactory());
+    KPrPageEffectRegistry::instance()->add(new BarnZigZagWipeEffectFactory());
 }
 
 #include "Plugin.moc"
