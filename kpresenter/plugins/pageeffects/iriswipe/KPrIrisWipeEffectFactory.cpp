@@ -20,7 +20,7 @@
 #include <klocale.h>
 
 #include "KPrIrisWipeEffectFactory.h"
-#include "../KPrIrisWipeEffectStrategyBase.h"
+#include "KPrIrisWipeEffectStrategyBase.h"
 
 #define IrisWipeEffectId "IrisWipeEffect"
 
