@@ -55,6 +55,7 @@ Name[it]=Rapporti (test)
 Name[pt]=Relatórios (teste)
 Name[pt_BR]=Relatórios(teste)
 Name[uk]=Звіти(тест)
+Name[x-test]=xxReports(test)xx
 Name[zh_TW]=報告（測試）
 X-KDE-Library=pgzkexireportpart2
 X-KDE-ParentApp=kexi

@@ -2,6 +2,7 @@
 Name=sybase
 Name[pt]=Sybase
 Name[sv]=Sybase
+Name[x-test]=xxsybasexx
 Name[zh_TW]=Sybase
 Comment=Sybase Migration Driver for Kexi
 Comment[el]=Οδηγός μεταφοράς Sybase του Kexi
@@ -13,6 +14,7 @@ Comment[pt_BR]=Driver de Migração Sybase do Kexi
 Comment[sv]=MySQL-övergångsdrivrutin för Kexi
 Comment[tr]=Kexi için Sybase Taşıma Sürücüsü
 Comment[uk]=Драйвер міграції Sybase для Kexi
+Comment[x-test]=xxSybase Migration Driver for Kexixx
 Comment[zh_TW]=Kexi 的 Sybase 轉移驅動程式
 X-KDE-Library=keximigrate_sybase
 X-KDE-ServiceTypes=Kexi/MigrationDriver
