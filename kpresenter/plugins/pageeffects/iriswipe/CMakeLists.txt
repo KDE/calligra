@@ -2,9 +2,13 @@ include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOGUIUTILS_INCLUDES}
 
 set(kpr_pageeffect_iriswipe_SRCS
     Plugin.cpp
-
     KPrIrisWipeEffectStrategyBase.cpp
-    KPrIrisWipeEffectFactory.cpp
+
+    irisWipe/KPrIrisWipeEffectFactory.cpp
+    triangleWipe/KPrTriangleWipeEffectFactory.cpp
+    arrowHeadWipe/KPrArrowHeadWipeEffectFactory.cpp
+    ellipseWipe/KPrEllipseWipeEffectFactory.cpp
+    roundRectWipe/KPrRoundRectWipeEffectFactory.cpp
     )
 
 kde4_add_plugin(kpr_pageeffect_iriswipe ${kpr_pageeffect_iriswipe_SRCS})

@@ -21,7 +21,10 @@
 #include <kgenericfactory.h>
 #include <KPrPageEffectRegistry.h>
 
-#include "KPrIrisWipeEffectFactory.h"
+#include "irisWipe/KPrIrisWipeEffectFactory.h"
+#include "triangleWipe/KPrTriangleWipeEffectFactory.h"
+#include "arrowHeadWipe/KPrArrowHeadWipeEffectFactory.h"
+
 
 K_EXPORT_COMPONENT_FACTORY( kpr_pageeffect_iriswipe, KGenericFactory<Plugin>( "KPrPageEffect" ) )
 
@@ -29,6 +32,8 @@ Plugin::Plugin(QObject *parent, const QStringList &)
     : QObject(parent)
 {
     KPrPageEffectRegistry::instance()->add(new KPrIrisWipeEffectFactory());
+    KPrPageEffectRegistry::instance()->add(new KPrTriangleWipeEffectFactory());
+    KPrPageEffectRegistry::instance()->add(new KPrArrowHeadWipeEffectFactory());
 }
 
 #include "Plugin.moc"
