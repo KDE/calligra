@@ -1696,6 +1696,7 @@ void Project::setWbsDefinition( const WBSDefinition &def )
 {
     //kDebug();
     m_wbsDefinition = def;
+    emit wbsDefinitionChanged();
     emit changed();
 }
 

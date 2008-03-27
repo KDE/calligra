@@ -452,6 +452,8 @@ public:
 signals:
     /// Emitted when anything in the project is changed (use with care)
     void changed();
+    /// Emitted when the WBS code definition has changed. This may change all nodes.
+    void wbsDefinitionChanged();
     /// Emitted when a schedule has been calculated
     void projectCalculated( ScheduleManager *sm );
     /// Emitted when the pointer to the current schedule has been changed

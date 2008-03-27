@@ -1000,8 +1000,8 @@ void Node::calcFreeFloat() {
     return;
 }
 
-int Node::level() {
-    Node *n = parentNode();
+int Node::level() const {
+    const Node *n = parentNode();
     return n ? n->level() + 1 : 0;
 }
 

@@ -399,7 +399,7 @@ public:
     virtual bool inCriticalPath( long id = -1 ) const;
     
     /// Returns the level this node is in the hierarchy. Top node is level 0.
-    virtual int level();
+    virtual int level() const;
     /// Generate WBS Code
     virtual QString generateWBSCode( QList<int> &indexes ) const;
     /// Returns the Work Breakdown Structure Code

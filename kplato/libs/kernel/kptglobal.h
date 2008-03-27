@@ -57,6 +57,7 @@ struct KPLATOKERNEL_EXPORT ToolTip
     static QString nodeConstraintEnd();
     static QString nodeDescription();
     static QString nodeWBS();
+    static QString nodeLevel();
     static QString nodeRisk();
     static QString nodeRunningAccount();
     static QString nodeStartupAccount();

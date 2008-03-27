@@ -35,6 +35,7 @@ namespace KPlato
     QString ToolTip::nodeConstraintEnd() { return i18n( "Constraint end time" ); }
     QString ToolTip::nodeDescription() { return i18n( "Task notes" ); }
     QString ToolTip::nodeWBS() { return i18n( "Work Breakdown Structure Code" ); }
+    QString ToolTip::nodeLevel() { return i18n( "Node level" ); }
     QString ToolTip::nodeRisk() { return i18n( "Risk controles the PERT distribution used when calculating the actual estimate for this task" ); }
     QString ToolTip::nodeRunningAccount() { return i18n( "Account for running costs" ); }
     QString ToolTip::nodeStartupAccount() { return i18n( "Account for cost incurred at startup of the task" ); }

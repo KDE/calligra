@@ -25,6 +25,7 @@
 #include "kptnode.h"
 #include "kptproject.h"
 #include "kpttask.h"
+#include "kptnodeitemmodel.h"
 
 #include <QAbstractItemModel>
 #include <QMimeData>
@@ -109,7 +110,7 @@ void TaskStatusItemModel::setProject( Project *project )
 {
     clear();
     if ( m_project ) {
-        disconnect( m_project, SIGNAL( changed() ), this, SLOT( refresh() ) );
+        disconnect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node* ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
@@ -122,7 +123,7 @@ void TaskStatusItemModel::setProject( Project *project )
     m_project = project;
     m_nodemodel.setProject( project );
     if ( project ) {
-        connect( m_project, SIGNAL( changed() ), this, SLOT( refresh() ) );
+        connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
@@ -479,7 +480,7 @@ int TaskStatusItemModel::rowCount( const QModelIndex &parent ) const
     }
     NodeList *l = list( parent );
     if ( l ) {
-        //kDebug()<<"list"<<parent.row()<<":"<<l->count()<<l;
+        //kDebug()<<"list"<<parent.row()<<":"<<l->count()<<l<<m_topNames.value( parent.row() );
         return l->count();
     }
     //kDebug()<<"node"<<parent.row();
@@ -531,7 +532,7 @@ NodeList *TaskStatusItemModel::list( const QModelIndex &index ) const
 {
     if ( index.isValid() ) {
         Q_ASSERT( index.internalPointer() );
-        if ( m_top.indexOf( static_cast<NodeList*>( index.internalPointer() ) ) != -1 ) {
+        if ( m_top.contains( static_cast<NodeList*>( index.internalPointer() ) ) ) {
             return static_cast<NodeList*>( index.internalPointer() );
         }
     }
@@ -551,15 +552,24 @@ Node *TaskStatusItemModel::node( const QModelIndex &index ) const
     return 0;
 }
 
-void TaskStatusItemModel::slotNodeChanged( Node *)
+void TaskStatusItemModel::slotNodeChanged( Node *node )
 {
-    //kDebug();
-    refresh();
-/*    if ( node == 0 || node->type() == Node::Type_Project ) {
+    kDebug();
+    if ( node == 0 || node->type() == Node::Type_Project ) {
         return;
     }
-    int row = node->getParent()->findChildNode( node );
-    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );*/
+    int row = node->parentNode()->findChildNode( node );
+    emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );
+}
+
+void TaskStatusItemModel::slotWbsDefinitionChanged()
+{
+    kDebug();
+    foreach ( NodeList *l, m_top ) {
+        for ( int row = 0; row < l->count(); ++row ) {
+            emit dataChanged( createIndex( row, NodeModel::NodeWBSCode, l->value( row ) ), createIndex( row, NodeModel::NodeWBSCode, l->value( row ) ) );
+        }
+    }
 }
 
 

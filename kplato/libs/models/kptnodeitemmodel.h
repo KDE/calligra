@@ -111,7 +111,8 @@ public:
         NodeConstraintsError,
         NodeEffortNotMet,
 
-        NodeWBSCode
+        NodeWBSCode,
+        NodeLevel
     };
     const QMetaEnum columnMap() const;
     
@@ -198,6 +199,7 @@ public:
     QVariant effortNotMet( const Node *node, int role ) const;
 
     QVariant wbsCode( const Node *node, int role ) const;
+    QVariant nodeLevel( const Node *node, int role ) const;
     
 private:
     Project *m_project;
@@ -252,7 +254,7 @@ public:
     virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
     
 protected slots:
-    void slotProjectChanged();
+    void slotWbsDefinitionChanged();
     void slotNodeChanged( Node* );
     void slotNodeToBeInserted( Node *node, int row );
     void slotNodeInserted( Node *node );
@@ -339,6 +341,7 @@ protected slots:
     void slotNodeRemoved( Node *node );
 
     void slotLayoutChanged();
+    void slotWbsDefinitionChanged();
 
 protected:
     bool setName( Node *node, const QVariant &value, int role );

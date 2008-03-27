@@ -1293,6 +1293,20 @@ QVariant NodeModel::wbsCode( const Node *node, int role ) const
     return QVariant();
 }
 
+QVariant NodeModel::nodeLevel( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return node->level();
+        case Qt::ToolTipRole:
+            return i18n( "Node level: %1", node->level() );
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 QVariant NodeModel::data( const Node *n, int property, int role ) const
 {
     QVariant result;
@@ -1364,6 +1378,7 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         case NodeEffortNotMet: result = effortNotMet( n, role ); break;
         
         case NodeWBSCode: result = wbsCode( n, role ); break;
+        case NodeLevel: result = nodeLevel( n, role ); break;
         
         default:
             //kDebug()<<"Invalid property number: "<<property;;
@@ -1453,6 +1468,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeEffortNotMet: return i18n( "Effort Not Met" );
             
             case NodeWBSCode: return i18n( "WBS Code" );
+            case NodeLevel: return i18nc( "Node level", "Level" );
             
             default: return QVariant();
         }
@@ -1525,6 +1541,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeEffortNotMet: return ToolTip::nodeEffortNotMet();
             
             case NodeWBSCode: return ToolTip::nodeWBS();
+            case NodeLevel: return ToolTip::nodeLevel();
             
             default: return QVariant();
         }
@@ -1583,15 +1600,23 @@ void NodeItemModel::slotLayoutChanged()
     emit layoutChanged();
 }
 
-void NodeItemModel::slotProjectChanged()
+void NodeItemModel::slotWbsDefinitionChanged()
 {
-    reset();
+    kDebug();
+    if ( m_project == 0 ) {
+        return;
+    }
+    foreach ( Node *n, m_project->allNodes() ) {
+        int row = n->parentNode()->indexOf( n );
+        emit dataChanged( createIndex( row, NodeModel::NodeWBSCode, n ), createIndex( row, NodeModel::NodeWBSCode, n ) );
+    }
 }
+
 
 void NodeItemModel::setProject( Project *project )
 {
     if ( m_project ) {
-        connect( m_project, SIGNAL( changed() ), this, SLOT( slotProjectChanged() ) );
+        disconnect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
@@ -1606,7 +1631,7 @@ void NodeItemModel::setProject( Project *project )
     //kDebug()<<m_project<<"->"<<project;
     m_nodemodel.setProject( project );
     if ( project ) {
-        connect( m_project, SIGNAL( changed() ), this, SLOT( slotProjectChanged() ) );
+        connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
@@ -2499,6 +2524,7 @@ void MilestoneItemModel::slotLayoutChanged()
 void MilestoneItemModel::setProject( Project *project )
 {
     if ( m_project ) {
+        disconnect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         disconnect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         disconnect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
@@ -2510,6 +2536,7 @@ void MilestoneItemModel::setProject( Project *project )
     //kDebug()<<m_project<<"->"<<project;
     m_nodemodel.setProject( project );
     if ( project ) {
+        connect( m_project, SIGNAL( wbsDefinitionChanged() ), this, SLOT( slotWbsDefinitionChanged() ) );
         connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
         connect( m_project, SIGNAL( nodeToBeAdded( Node*, int ) ), this, SLOT( slotNodeToBeInserted(  Node*, int ) ) );
         connect( m_project, SIGNAL( nodeToBeRemoved( Node* ) ), this, SLOT( slotNodeToBeRemoved( Node* ) ) );
@@ -3097,6 +3124,17 @@ void MilestoneItemModel::slotNodeChanged( Node *node )
     }
     //kDebug()<<node->name()<<": "<<row;
     emit dataChanged( createIndex( row, 0, node ), createIndex( row, columnCount(), node ) );
+}
+
+void MilestoneItemModel::slotWbsDefinitionChanged()
+{
+    kDebug();
+    if ( m_project == 0 ) {
+        return;
+    }
+    if ( ! m_mslist.isEmpty() ) {
+        emit dataChanged( createIndex( 0, NodeModel::NodeWBSCode, m_mslist.first() ), createIndex( m_mslist.count() - 1, NodeModel::NodeWBSCode, m_mslist.last() ) );
+    }
 }
 
 
