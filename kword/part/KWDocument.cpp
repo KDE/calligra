@@ -230,8 +230,10 @@ bool KWDocument::saveOdf( SavingContext &documentContext ) {
     if ( !mainStyles.saveOdfStylesDotXml( store, manifestWriter ) )
         return false;
 
+#if 0 // tz: remove until data center is used
     if (!context.saveImages(store, manifestWriter))
         return false;
+#endif
     return true;
 }
 
