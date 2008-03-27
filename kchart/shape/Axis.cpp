@@ -42,6 +42,10 @@
 #include <KDChartGridAttributes>
 #include <KDChartBarDiagram>
 #include <KDChartLineDiagram>
+#include <KDChartPieDiagram>
+#include <KDChartPlotter>
+#include <KDChartRingDiagram>
+#include <KDChartPolarDiagram>
 #include <KDChartThreeDBarAttributes>
 #include <KDChartThreeDLineAttributes>
 
@@ -59,6 +63,10 @@ public:
     
     void createBarDiagram();
     void createLineDiagram();
+    void createAreaDiagram();
+    void createCircleDiagram();
+    void createRadarDiagram();
+    void createScatterDiagram();
     
     PlotArea *plotArea;
     
@@ -77,12 +85,21 @@ public:
     
     KDChart::CartesianAxis *kdAxis;
     KDChart::CartesianCoordinatePlane *kdPlane;
+    KDChart::PolarCoordinatePlane *kdPolarPlane;
     
     KDChart::BarDiagram *kdBarDiagram;
     KDChart::LineDiagram *kdLineDiagram;
+    KDChart::LineDiagram *kdAreaDiagram;
+    KDChart::PieDiagram *kdCircleDiagram;
+    KDChart::PolarDiagram *kdRadarDiagram;
+    KDChart::Plotter *kdScatterDiagram;
 
     KDChartModel *kdBarDiagramModel;
     KDChartModel *kdLineDiagramModel;
+    KDChartModel *kdAreaDiagramModel;
+    KDChartModel *kdCircleDiagramModel;
+    KDChartModel *kdRadarDiagramModel;
+    KDChartModel *kdScatterDiagramModel;
     
     ChartType plotAreaChartType;
     ChartSubtype plotAreaChartSubType;
@@ -92,8 +109,17 @@ Axis::Private::Private()
 {
     kdBarDiagram = 0;
     kdLineDiagram = 0;
+    kdAreaDiagram = 0;
+    kdCircleDiagram = 0;
+    kdRadarDiagram = 0;
+    kdScatterDiagram = 0;
+
     kdBarDiagramModel = 0;
     kdLineDiagramModel = 0;
+    kdAreaDiagramModel = 0;
+    kdCircleDiagramModel = 0;
+    kdRadarDiagramModel = 0;
+    kdScatterDiagramModel = 0;
 }
 
 Axis::Private::~Private()
@@ -110,7 +136,6 @@ void Axis::Private::createBarDiagram()
         kdBarDiagram->setModel( kdBarDiagramModel );
         kdBarDiagram->setPen( QPen( Qt::black, 0.0 ) );
         
-        //plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
         kdBarDiagram->addAxis( kdAxis );
         kdPlane->addDiagram( kdBarDiagram );
     }
@@ -125,9 +150,74 @@ void Axis::Private::createLineDiagram()
         kdLineDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
         kdLineDiagram->setModel( kdLineDiagramModel );
         
-        //plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
         kdLineDiagram->addAxis( kdAxis );
         kdPlane->addDiagram( kdLineDiagram );
+    }
+}
+
+void Axis::Private::createAreaDiagram()
+{
+    if ( kdAreaDiagramModel == 0 )
+        kdAreaDiagramModel = new KDChartModel;
+    if ( kdAreaDiagram == 0 )
+    {
+        kdAreaDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
+        KDChart::LineAttributes attr = kdAreaDiagram->lineAttributes();
+        // Draw the area under the lines. This makes this diagram an area chart.
+        attr.setDisplayArea( true );
+        kdAreaDiagram->setLineAttributes( attr );
+        kdAreaDiagram->setModel( kdAreaDiagramModel );
+        
+        kdAreaDiagram->addAxis( kdAxis );
+        kdPlane->addDiagram( kdAreaDiagram );
+    }
+}
+
+void Axis::Private::createCircleDiagram()
+{
+    if ( kdCircleDiagramModel == 0 )
+        kdCircleDiagramModel = new KDChartModel;
+    if ( kdCircleDiagram == 0 )
+    {
+        kdCircleDiagram = new KDChart::PieDiagram( plotArea->kdChart(), kdPolarPlane );
+        kdCircleDiagram->setModel( kdCircleDiagramModel );
+        
+        //plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
+        //kdCircleDiagram->addAxis( kdAxis );
+        kdPolarPlane->addDiagram( kdCircleDiagram );
+    }
+}
+
+void Axis::Private::createRadarDiagram()
+{
+    if ( kdRadarDiagramModel == 0 )
+        kdRadarDiagramModel = new KDChartModel;
+    if ( kdRadarDiagram == 0 )
+    {
+        kdRadarDiagram = new KDChart::PolarDiagram( plotArea->kdChart(), kdPolarPlane );
+        kdRadarDiagram->setModel( kdRadarDiagramModel );
+        
+        //plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
+        //kdRadarDiagram->addAxis( kdAxis );
+        kdPolarPlane->addDiagram( kdRadarDiagram );
+    }
+}
+
+void Axis::Private::createScatterDiagram()
+{
+    if ( kdScatterDiagramModel == 0 )
+    {
+        kdScatterDiagramModel = new KDChartModel;
+        kdScatterDiagramModel->setDataDimensions( 2 );
+    }
+    if ( kdScatterDiagram == 0 )
+    {
+        kdScatterDiagram = new KDChart::Plotter( plotArea->kdChart(), kdPlane );
+        kdScatterDiagram->setModel( kdScatterDiagramModel );
+        
+        //plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
+        kdScatterDiagram->addAxis( kdAxis );
+        kdPlane->addDiagram( kdScatterDiagram );
     }
 }
 
@@ -140,12 +230,17 @@ Axis::Axis( PlotArea *parent )
     d->kdAxis = new KDChart::CartesianAxis();
     d->kdPlane = new KDChart::CartesianCoordinatePlane();
     d->kdPlane->setReferenceCoordinatePlane( d->plotArea->kdPlane() );
+    d->kdPolarPlane = new KDChart::PolarCoordinatePlane();
+    d->kdPolarPlane->setReferenceCoordinatePlane( d->plotArea->kdPlane() );
     
     KDChart::GridAttributes gridAttributes = d->kdPlane->gridAttributes( Qt::Horizontal );
     gridAttributes.setGridVisible( false );
     d->kdPlane->setGridAttributes( Qt::Horizontal, gridAttributes );
-    
     d->plotArea->kdChart()->addCoordinatePlane( d->kdPlane );
+    
+    gridAttributes = d->kdPolarPlane->gridAttributes( Qt::Horizontal );
+    gridAttributes.setGridVisible( false );
+    d->kdPolarPlane->setGridAttributes( Qt::Horizontal, gridAttributes );
     
     d->kdBarDiagram = new KDChart::BarDiagram( d->plotArea->kdChart(), d->kdPlane );
     d->kdBarDiagram->setPen( QPen( Qt::black, 0.0 ) );
@@ -509,6 +604,18 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
     case LineChartType:
         oldModel = d->kdLineDiagramModel;
         break;
+    case AreaChartType:
+        oldModel = d->kdAreaDiagramModel;
+        break;
+    case CircleChartType:
+        oldModel = d->kdCircleDiagramModel;
+        break;
+    case RadarChartType:
+        oldModel = d->kdRadarDiagramModel;
+        break;
+    case ScatterChartType:
+        oldModel = d->kdScatterDiagramModel;
+        break;
     }
     
     switch ( chartType )
@@ -525,9 +632,44 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
         newModel = d->kdLineDiagramModel;
         newDiagram = d->kdLineDiagram;
         break;
+    case AreaChartType:
+        if ( !d->kdAreaDiagram )
+           d->createAreaDiagram();
+        newModel = d->kdAreaDiagramModel;
+        newDiagram = d->kdAreaDiagram;
+        break;
+    case CircleChartType:
+        if ( !d->kdCircleDiagram )
+           d->createCircleDiagram();
+        newModel = d->kdCircleDiagramModel;
+        newDiagram = d->kdCircleDiagram;
+        break;
+    case RadarChartType:
+        if ( !d->kdRadarDiagram )
+           d->createRadarDiagram();
+        newModel = d->kdRadarDiagramModel;
+        newDiagram = d->kdRadarDiagram;
+        break;
+    case ScatterChartType:
+        if ( !d->kdScatterDiagram )
+           d->createScatterDiagram();
+        newModel = d->kdScatterDiagramModel;
+        newDiagram = d->kdScatterDiagram;
+        break;
     }
     
     Q_ASSERT( newModel );
+    
+    if ( isCartesian( d->plotAreaChartType ) && isPolar( chartType ) )
+    {
+        d->plotArea->kdChart()->takeCoordinatePlane( d->kdPlane );
+        d->plotArea->kdChart()->addCoordinatePlane( d->kdPolarPlane );
+    }
+    if ( isPolar( d->plotAreaChartType ) && isCartesian( chartType ) )
+    {
+        d->plotArea->kdChart()->takeCoordinatePlane( d->kdPolarPlane );
+        d->plotArea->kdChart()->addCoordinatePlane( d->kdPlane );
+    }
     
     foreach( DataSet *dataSet, d->dataSets )
     {
@@ -554,10 +696,10 @@ void Axis::setThreeD( bool threeD )
     // KDChart
     if ( d->kdBarDiagram )
     {
-                KDChart::ThreeDBarAttributes attributes( d->kdBarDiagram->threeDBarAttributes() );
-                attributes.setEnabled( threeD );
-                attributes.setDepth( 15.0 );
-                d->kdBarDiagram->setThreeDBarAttributes( attributes );
+        KDChart::ThreeDBarAttributes attributes( d->kdBarDiagram->threeDBarAttributes() );
+        attributes.setEnabled( threeD );
+        attributes.setDepth( 15.0 );
+        d->kdBarDiagram->setThreeDBarAttributes( attributes );
     }
     if ( d->kdLineDiagram )
     {
@@ -565,6 +707,20 @@ void Axis::setThreeD( bool threeD )
         attributes.setEnabled( threeD );
         attributes.setDepth( 15.0 );
         d->kdLineDiagram->setThreeDLineAttributes( attributes );
+    }
+    if ( d->kdAreaDiagram )
+    {
+        KDChart::ThreeDLineAttributes attributes( d->kdAreaDiagram->threeDLineAttributes() );
+        attributes.setEnabled( threeD );
+        attributes.setDepth( 15.0 );
+        d->kdAreaDiagram->setThreeDLineAttributes( attributes );
+    }
+    if ( d->kdCircleDiagram )
+    {
+        KDChart::ThreeDPieAttributes attributes( d->kdCircleDiagram->threeDPieAttributes() );
+        attributes.setEnabled( threeD );
+        attributes.setDepth( 15.0 );
+        d->kdCircleDiagram->setThreeDPieAttributes( attributes );
     }
 
     update();

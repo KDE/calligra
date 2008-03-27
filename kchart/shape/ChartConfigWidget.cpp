@@ -90,6 +90,12 @@ public:
     QAction  *normalAreaChartAction;
     QAction  *stackedAreaChartAction;
     QAction  *percentAreaChartAction;
+
+    QAction  *circleChartAction;
+    
+    QAction  *radarChartAction;
+    
+    QAction  *scatterChartAction;
     
     // chart type selection actions
     QAction  *dataSetNormalBarChartAction;
@@ -168,6 +174,10 @@ ChartConfigWidget::ChartConfigWidget()
     d->normalAreaChartAction  = areaChartMenu->addAction( KIcon( "chart_area_normal" ), i18n("Normal") );
     d->stackedAreaChartAction = areaChartMenu->addAction( KIcon( "chart_area_stacked" ), i18n("Stacked") );
     d->percentAreaChartAction = areaChartMenu->addAction( KIcon( "chart_area_percent" ), i18n("Percent") );
+    
+    d->radarChartAction = chartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
+    d->circleChartAction = chartTypeMenu->addAction( KIcon( "chart_pie_normal" ), i18n("Pie Chart") );
+    d->scatterChartAction = chartTypeMenu->addAction( KIcon( "chart_scatter_normal" ), i18n("Scatter Chart") );
     
     d->ui.chartTypeMenu->setMenu( chartTypeMenu );
     
@@ -315,7 +325,9 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
     } else if ( action == d->percentBarChartAction ) {
         type    = BarChartType;
         subtype = PercentChartSubtype;
-    } else if ( action == d->normalLineChartAction ) {
+    }
+    
+    else if ( action == d->normalLineChartAction ) {
         type    = LineChartType;
         subtype = NormalChartSubtype;
     } else if ( action == d->stackedLineChartAction ) {
@@ -324,7 +336,9 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
     } else if ( action == d->percentLineChartAction ) {
         type    = LineChartType;
         subtype = PercentChartSubtype;
-    } else if ( action == d->normalAreaChartAction ) {
+    }
+    
+    else if ( action == d->normalAreaChartAction ) {
         type    = AreaChartType;
         subtype = NormalChartSubtype;
     } else if ( action == d->stackedAreaChartAction ) {
@@ -333,6 +347,21 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
     } else if ( action == d->percentAreaChartAction ) {
         type    = AreaChartType;
         subtype = PercentChartSubtype;
+    }
+    
+    else if ( action == d->radarChartAction ) {
+        type = RadarChartType;
+        subtype = NoChartSubtype;
+    }
+    
+    else if ( action == d->circleChartAction ) {
+        type = CircleChartType;
+        subtype = NoChartSubtype;
+    }
+    
+    else if ( action == d->scatterChartAction ) {
+        type = ScatterChartType;
+        subtype = NoChartSubtype;
     }
     
     emit chartTypeChanged( type );
