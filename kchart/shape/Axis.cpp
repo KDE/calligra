@@ -47,6 +47,7 @@
 #include <KDChartRingDiagram>
 #include <KDChartPolarDiagram>
 #include <KDChartThreeDBarAttributes>
+#include <KDChartThreeDPieAttributes>
 #include <KDChartThreeDLineAttributes>
 
 // Qt
