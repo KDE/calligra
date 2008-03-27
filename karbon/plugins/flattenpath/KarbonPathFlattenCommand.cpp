@@ -65,6 +65,8 @@ struct PointData
     QPointF oldControlPoint2;
     KoPathPoint::KoPointProperties oldProperties;
     uint insertedPoints;
+    bool activeControlPoint1;
+    bool activeControlPoint2;
 };
 
 class KarbonPathFlattenCommand::Private
@@ -159,6 +161,8 @@ KarbonPathFlattenCommand::KarbonPathFlattenCommand( KoPathShape * path, double f
             pointData.oldControlPoint1 = curr->parent()->shapeToDocument( curr->controlPoint1() );
             pointData.oldControlPoint2 = curr->parent()->shapeToDocument( curr->controlPoint2() );
             pointData.oldProperties = curr->properties();
+            pointData.activeControlPoint1 = curr->activeControlPoint1();
+            pointData.activeControlPoint2 = curr->activeControlPoint2();
             subpathData.append( pointData );
         }
         d->oldPointData.append( subpathData );
@@ -230,8 +234,8 @@ void KarbonPathFlattenCommand::redo()
             for (int pointIndex = 0; pointIndex < newPointCount; ++pointIndex )
             {
                 KoPathPoint * point = d->path->pointByIndex( KoPathPointIndex( subpathIndex, pointIndex ) );
-                point->unsetProperty( KoPathPoint::HasControlPoint1 );
-                point->unsetProperty( KoPathPoint::HasControlPoint2 );
+                point->removeControlPoint1();
+                point->removeControlPoint2();
             }
         }
         d->flattened = true;
@@ -267,9 +271,9 @@ void KarbonPathFlattenCommand::undo()
                     continue;
                 // and restore original point data
                 p->setProperties( data.oldProperties );
-                if( data.oldProperties & KoPathPoint::HasControlPoint1 )
+                if( data.activeControlPoint1 )
                     p->setControlPoint1( d->path->documentToShape( data.oldControlPoint1 ) );
-                if( data.oldProperties & KoPathPoint::HasControlPoint2 )
+                if( data.activeControlPoint2 )
                     p->setControlPoint2( d->path->documentToShape( data.oldControlPoint2 ) );
             }
         }

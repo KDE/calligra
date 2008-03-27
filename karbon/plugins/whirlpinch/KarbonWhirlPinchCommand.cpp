@@ -41,9 +41,9 @@ struct PointData
     {
         KoPathShape * shape = p->parent();
         p->setPoint( shape->documentToShape( oldNode ) );
-        if( p->properties() & KoPathPoint::HasControlPoint1 )
+        if( p->activeControlPoint1() )
             p->setControlPoint1( shape->documentToShape( oldControlPoint1 ) );
-        if( p->properties() & KoPathPoint::HasControlPoint2 )
+        if( p->activeControlPoint2() )
             p->setControlPoint2( shape->documentToShape( oldControlPoint2 ) );
     }
 
@@ -139,9 +139,9 @@ void KarbonWhirlPinchCommand::redo()
         {
             KoPathPoint * p = d->pathShape->pointByIndex( KoPathPointIndex( subpathIndex, pointIndex ) );
             p->setPoint( d->whirlPinch( p->point() ) );
-            if( p->properties() & KoPathPoint::HasControlPoint1 )
+            if( p->activeControlPoint1() )
                 p->setControlPoint1( d->whirlPinch( p->controlPoint1() ) );
-            if( p->properties() & KoPathPoint::HasControlPoint2 )
+            if( p->activeControlPoint2() )
                 p->setControlPoint2( d->whirlPinch( p->controlPoint2() ) );
         }
     }

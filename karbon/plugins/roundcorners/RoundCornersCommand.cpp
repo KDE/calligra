@@ -310,18 +310,18 @@ void RoundCornersCommand::roundPath()
             switch( lastSeg.degree() )
             {
                 case 1:
-                    lastPoint->unsetProperty( KoPathPoint::HasControlPoint2 );
-                    firstPoint->unsetProperty( KoPathPoint::HasControlPoint1 );
+                    lastPoint->removeControlPoint2();
+                    firstPoint->removeControlPoint1();
                     break;
                 case 2:
                     if( lastSeg.first()->activeControlPoint2() )
                     {
                         lastPoint->setControlPoint2( lastSeg.first()->controlPoint2() );
-                        firstPoint->unsetProperty( KoPathPoint::HasControlPoint1 );
+                        firstPoint->removeControlPoint1();
                     }
                     else
                     {
-                        lastPoint->unsetProperty( KoPathPoint::HasControlPoint2 );
+                        lastPoint->removeControlPoint2();
                         firstPoint->setControlPoint1( lastSeg.second()->controlPoint1() );
                     }
                     break;
