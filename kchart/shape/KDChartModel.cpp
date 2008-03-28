@@ -61,13 +61,16 @@ QVariant KDChartModel::data( const QModelIndex &index,
     int dataSetNumber = column / d->dataDimensions;
     DataSet *dataSet = d->dataSets[ dataSetNumber ];
     
-    int dimension = column % d->dataDimensions;
-    if ( dimension == 0 )
+    if ( d->dataDimensions == 1 )
         return dataSet->yData( row );
-    else if ( dimension == 1 )
-        return dataSet->xData( row );
-    else if ( dimension == 2 )
-        return dataSet->customData( row );
+    else if ( d->dataDimensions == 2 )
+    {
+        if ( column % 2 == 0 )
+            return dataSet->xData( row );
+        else
+            return dataSet->yData( row );
+    }
+    // TODO (Johannes): Support for third data dimension
     
     // Should never happen
     return QVariant();

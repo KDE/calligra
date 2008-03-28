@@ -66,13 +66,16 @@ void ProxyModel::rebuildDataMap()
 {
     int numRows = rowCount();
     int dataSetCount = 0;
-    int rowInSourceModel = 0;
-    d->dataMap.clear();
     
     // If we have 2 dimensions or more, the x data comes from
-    // the first row by default.;
+    // the first row by default
+    int xDataRowInSourceModel = 0;
+    int yDataRowInSourceModel = 0;
+    
     if ( d->dataDimensions > 1 )
-        rowInSourceModel = 1;
+        yDataRowInSourceModel = 1;
+    
+    d->dataMap.clear();
     
     for ( int i = 0; i < numRows; i += d->dataDimensions )
     {
@@ -83,18 +86,18 @@ void ProxyModel::rebuildDataMap()
         
         if ( d->dataDimensions == 1 )
         {
-            d->dataMap.insert( i, rowInSourceModel );
+            d->dataMap.insert( i, yDataRowInSourceModel );
         }
         else if ( d->dataDimensions == 2 )
         {
-            d->dataMap.insert( i    , 0 );
-            d->dataMap.insert( i + 1, rowInSourceModel );
+            d->dataMap.insert( i    , yDataRowInSourceModel );
+            d->dataMap.insert( i + 1, xDataRowInSourceModel );
         }
         else if ( d->dataDimensions == 3 )
         {
             // TODO (Johannes): Handle third data dimension
         }
-        rowInSourceModel++;
+        yDataRowInSourceModel++;
     }
     
     // Some rows have apparently been removed from the model.
@@ -413,6 +416,12 @@ void ProxyModel::setDataDirection( Qt::Orientation orientation )
     reset();
 }
 
+void ProxyModel::setDataDimensions( int dimensions )
+{
+    d->dataDimensions = dimensions;
+    reset();
+};
+
 bool ProxyModel::firstRowIsLabel() const
 {
     return d->firstRowIsLabel;
@@ -426,19 +435,19 @@ bool ProxyModel::firstColumnIsLabel() const
 QVariant ProxyModel::xData( DataSet *dataSet, int column ) const
 {
     int dataSetNumber = d->dataSets.indexOf( dataSet );
-    return data( index( d->dataMap[dataSetNumber] + 1, column ) );
+    return data( index( dataSetNumber * d->dataDimensions + 1, column ) );
 }
 
 QVariant ProxyModel::yData( DataSet *dataSet, int column ) const
 {
     int dataSetNumber = d->dataSets.indexOf( dataSet );
-    return data( index( d->dataMap[dataSetNumber], column ) );
+    return data( index( dataSetNumber * d->dataDimensions, column ) );
 }
 
 QVariant ProxyModel::customData( DataSet *dataSet, int column ) const
 {
     int dataSetNumber = d->dataSets.indexOf( dataSet );
-    return data( index( d->dataMap[dataSetNumber] + 2, column ) );
+    return data( index( dataSetNumber * d->dataDimensions + 2, column ) );
 }
 
 QVariant ProxyModel::labelData( DataSet *dataSet ) const

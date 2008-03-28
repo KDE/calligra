@@ -295,6 +295,15 @@ bool PlotArea::removeAxis( Axis *axis )
 
 void PlotArea::setChartType( ChartType type )
 {
+    if ( d->chartType != ScatterChartType && type == ScatterChartType )
+    {
+        d->shape->proxyModel()->setDataDimensions( 2 );
+    }
+    else if ( d->chartType == ScatterChartType && type != ScatterChartType )
+    {
+        d->shape->proxyModel()->setDataDimensions( 1 );
+    }
+    
     d->chartType = type;
     
     foreach ( Axis *axis, d->axes )
