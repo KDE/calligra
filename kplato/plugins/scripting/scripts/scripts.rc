@@ -42,7 +42,7 @@
         The "samples" collection provides misc example scripts to demonstrate
         parts of the KPlato scripting functionality.
         //-->
-    <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with KPlato" enabled="false">
+    <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with KPlato" enabled="true">
         <script
             name="pysampleproject"
             text="Print Project Information..."

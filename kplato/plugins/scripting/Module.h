@@ -33,11 +33,13 @@
 
 namespace KPlato {
     class Part;
+    class Node;
 }
 
 namespace Scripting {
 
     class Project;
+    class Node;
 
     /**
     * The Module class enables access to the KPlato functionality
@@ -61,14 +63,37 @@ namespace Scripting {
 
             KPlato::Part* part();
             virtual KoDocument* doc();
-
+            
         public Q_SLOTS:
 
-            /** Return project name. */
-            QString projectName();
-            
-            /** Return the project. */
+            /// Return the project
             QObject *project();
+            /// Number of child nodes in the project
+            int nodeCount();
+            /// Return node at @p index
+            QObject *nodeAt( int index );
+            
+            /// Number of children of @p parent
+            int childCount( QObject *parent );
+            /// Return child node at @p index of @p parent
+            QObject *childAt(  QObject *parent, int index );
+            
+            /// Number of resource groups
+            int resourceGroupCount();
+            /// Return resource group at @p index
+            QObject *resourceGroupAt( int index );
+
+            /// Number of resources in @p group
+            int resourceCount( QObject *group );
+            /// Return resource at @p index in @p group
+            QObject *resourceAt( QObject *group, int index );
+
+            /// Number of schedule managers in @p group
+            int scheduleCount() const;
+            /// Return the schedule at @p index
+            QObject *scheduleAt( int index );
+            /// Return child schedule at @p index of @p parent
+            QObject *scheduleAt( QObject *parent, int index );
 
         private:
             /// \internal d-pointer class.

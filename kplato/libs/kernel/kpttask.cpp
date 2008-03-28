@@ -503,6 +503,14 @@ void Task::saveWorkPackageXML(QDomElement &element, long id )  const
 
 EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end, long id ) const {
     //kDebug()<<m_name;
+    if ( type() == Node::Type_Summarytask ) {
+        EffortCostMap ec;
+        QListIterator<Node*> it( childNodeIterator() );
+        while ( it.hasNext() ) {
+            ec += it.next() ->plannedEffortCostPrDay( start, end, id );
+        }
+        return ec;
+    }
     Schedule *s = schedule( id );
     if ( s ) {
         return s->plannedEffortCostPrDay(start, end);

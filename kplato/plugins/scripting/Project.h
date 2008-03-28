@@ -22,22 +22,34 @@
 #define SCRIPTING_PROJECT_H
 
 #include <QObject>
+#include <QMap>
+#include <QVariant>
+#include <QVariantList>
 
 #include "Module.h"
+#include "Node.h"
 
-#include "kptnode.h"
+#include "kptproject.h"
 #include <kptnodeitemmodel.h>
+#include <kptresourcemodel.h>
 
 namespace KPlato {
     class Project;
+    class Node;
+    class ResourceGroup;
+    class Resource;
+    class ScheduleManager;
 }
 
 namespace Scripting {
+    class ResourceGroup;
+    class Resource;
+    class Schedule;
 
     /**
     * The Project class represents a KPlato project.
     */
-    class Project : public QObject
+    class Project : public Node
     {
             Q_OBJECT
         public:
@@ -45,40 +57,73 @@ namespace Scripting {
             virtual ~Project() {}
 
         public Q_SLOTS:
-            /// Returns the identity of the project node
-            QString projectIdentity();
-            /// Returns the list of identities of all schedules
-            QStringList schedulesIdentityList();
+            /// Return number of schedule managers
+            int scheduleCount() const;
+            /// Return schedule manager at @p index
+            QObject *scheduleAt( int index );
+            
             /// Returns the data of @p property from schedule with id @p scheduleId
             QString scheduleData( const QString &scheduleId, const QString &property );
             /// Returns the names of all node properties
             QStringList nodePropertyList();
-            /// Returns data for @p property of node with id @p nodeId
-            QString nodeData( const QString &nodeId, const QString &property );
-            /// Returns data for @p property of node with id @p nodeId and dataRole @p role
-            QString nodeData( const QString &nodeId, const QString &property, const QString &role );
-            /// Returns data for @p property of node with id @p nodeId and dataRole @p role, using @p schedule
-            QString nodeData( const QString &nodeId, const QString &property, const QString &role, const QString &schedule );
-            /// Returns header data for @p property
-            QString nodeHeaderData( const QString &property );
-
-            /// Returns a list of identities of all nodes in the project
-            QStringList nodesIdentityList();
-            /// Returns a list of identities of all top level nodes (children of project)
-            QStringList childNodesIdentityList();
-            /// Returns a list of identities of child nodes to the node with id @p nodeId
-            QStringList childNodesIdentityList( const QString &nodeId );
-        
-        protected:
-            int columnNumber( const QString &property ) const;
-            KPlato::Node *node( const QString &id ) const;
             
+            /// Returns node header data for @p property
+            QVariant nodeHeaderData( const QString &property );
+        
+            /// Number of nodes in the project (excluding the project itself)
+            int nodeCount() const;
+            /// Return the node at @p index
+            QObject *node( int index );
+            
+            /// Returns resource header data for @p property
+            QVariant resourceHeaderData( const QString &property );
+
+        public:
+            
+            /// Return the Scripting::Node that interfaces the KPlato::Node @p node
+            QObject *node( KPlato::Node *node );
+            /// Return the data of @p node
+            QVariant nodeData( const KPlato::Node *node, const QString &property, const QString &role, const QString &schedule );
+            
+            /// Return ResourceGroup that interfaces the @p group (create if necessary)
+            QObject *resourceGroup( KPlato::ResourceGroup *group );
+            /// Number of resource groups
+            int resourceGroupCount() const;
+            /// Return the resource group at @p index
+            QObject *resourceGroupAt( int index );
+            /// Return the data of resource group @p group
+            QVariant resourceGroupData( const KPlato::ResourceGroup *group, const QString &property, const QString &role );
+            
+            /// Return Resource that interfaces the @p resource (create if necessary)
+            QObject *resource( KPlato::Resource *resource );
+            /// Return the data of @p resource
+            QVariant resourceData( const KPlato::Resource *resource, const QString &property, const QString &role, const QString &schedule );
+
+            /// Return the Scripting::Schedule that interfaces the KPlato::ScheuleManager @p sch
+            QObject *schedule( KPlato::ScheduleManager *sch );
+
+        protected:
+            inline KPlato::Project *project() { return m_nodeModel.project(); }
+            inline const KPlato::Project *project() const { return m_nodeModel.project(); }
+            
+            int nodeColumnNumber( const QString &property ) const;
+            
+            int resourceColumnNumber( const QString &property ) const;
+            
+        private:
             int stringToRole( const QString &role ) const;
             
         private:
-            KPlato::Project *m_project;
+            Module *m_module;
+            
             KPlato::NodeModel m_nodeModel;
-
+            QMap<KPlato::Node*, Node*> m_nodes;
+            
+            KPlato::ResourceModel m_resourceModel;
+            QMap<KPlato::ResourceGroup*, ResourceGroup*> m_groups;
+            QMap<KPlato::Resource*, Resource*> m_resources;
+    
+            QMap<KPlato::ScheduleManager*, Schedule*> m_schedules;
     };
 
 }

@@ -62,6 +62,7 @@ public:
     void setProject( Project *project );
     int propertyCount() const;
     QVariant data( const Resource *resource, int property, int role = Qt::DisplayRole ) const;
+    QVariant data( const ResourceGroup *group, int property, int role = Qt::DisplayRole ) const;
     static QVariant headerData( int section, int role = Qt::DisplayRole );
 
     QVariant name( const Resource *res, int role ) const;
@@ -75,6 +76,9 @@ public:
     QVariant normalRate( const Resource *res, int role ) const;
     QVariant overtimeRate( const Resource *res, int role ) const;
     
+    QVariant name( const ResourceGroup *res, int role ) const;
+    QVariant type( const ResourceGroup *res, int role ) const;
+
 private:
     Project *m_project;
 };

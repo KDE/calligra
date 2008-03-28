@@ -89,6 +89,22 @@ QVariant ResourceModel::name( const Resource *res, int role ) const
     return QVariant();
 }
 
+QVariant ResourceModel::name( const  ResourceGroup *res, int role ) const
+{
+    //kDebug()<<res->name()<<","<<role;
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return res->name();
+            break;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 QVariant ResourceModel::type( const Resource *res, int role ) const
 {
     switch ( role ) {
@@ -108,6 +124,27 @@ QVariant ResourceModel::type( const Resource *res, int role ) const
     }
     return QVariant();
 }
+
+QVariant ResourceModel::type( const ResourceGroup *res, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::EditRole:
+        case Qt::ToolTipRole:
+            return res->typeToString( true );
+        case Role::EnumList: 
+            return res->typeToStringList( true );
+        case Role::EnumListValue: 
+            return (int)res->type();
+        case Qt::TextAlignmentRole:
+            return Qt::AlignCenter;
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 
 QVariant ResourceModel::initials( const Resource *res, int role ) const
 {
@@ -145,7 +182,6 @@ QVariant ResourceModel::calendar( const Resource *res, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-        case Qt::EditRole:
         case Qt::ToolTipRole: {
             QString s = i18n( "None" );
             Calendar *cal = res->calendar( true ); // don't check for default calendar
@@ -168,6 +204,7 @@ QVariant ResourceModel::calendar( const Resource *res, int role ) const
             }
             return QStringList() << s << m_project->calendarNames();
         }
+        case Qt::EditRole:
         case Role::EnumListValue: {
             Calendar *cal = res->calendar( true ); // don't check for default calendar
             return cal == 0 ? 0 : m_project->calendarNames().indexOf( cal->name() ) + 1;
@@ -292,6 +329,28 @@ QVariant ResourceModel::data( const Resource *resource, int property, int role )
     }
     return result;
 }
+
+QVariant ResourceModel::data( const ResourceGroup *group, int property, int role ) const
+{
+    QVariant result;
+    if ( group == 0 ) {
+        return result;
+    }
+    switch ( property ) {
+        case ResourceModel::ResourceName: result = name( group, role ); break;
+        case ResourceModel::ResourceType: result = type( group, role ); break;
+        default:
+            if ( property < propertyCount() ) {
+                result = "";
+            } else {
+                kDebug()<<"data: invalid display value column"<<property;;
+                return QVariant();
+            }
+            break;
+    }
+    return result;
+}
+
 
 QVariant ResourceModel::headerData( int section, int role )
 {
@@ -817,17 +876,7 @@ QVariant ResourceItemModel::data( const QModelIndex &index, int role ) const
     } else {
         ResourceGroup *g = qobject_cast<ResourceGroup*>( obj );
         if ( g ) {
-            switch ( index.column() ) {
-                case ResourceModel::ResourceName: result = name( g, role ); break;
-                case ResourceModel::ResourceType: result = type( g, role ); break;
-                default:
-                    if ( index.column() < columnCount() ) {
-                        result = notUsed( g, role );
-                    } else {
-                        kDebug()<<"data: invalid display value column"<<index.column();;
-                        return QVariant();
-                    }
-            }
+            result = m_model.data( g, index.column(), role );
         }
     }
     if ( role == Qt::DisplayRole && ! result.isValid() ) {

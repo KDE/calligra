@@ -21,6 +21,9 @@
 
 #include "Module.h"
 #include "Project.h"
+#include "Node.h"
+#include "ResourceGroup.h"
+#include "Schedule.h"
 
 // qt
 #include <QPointer>
@@ -30,6 +33,7 @@
 #include <kptpart.h>
 #include <kptview.h>
 #include <kptproject.h>
+#include <kptnode.h>
 
 extern "C"
 {
@@ -46,6 +50,8 @@ namespace Scripting {
     {
         public:
             QPointer<KPlato::Part> doc;
+            Project *project;
+            Node *node;
     };
 
 Module::Module(QObject* parent)
@@ -53,6 +59,7 @@ Module::Module(QObject* parent)
     , d( new Private() )
 {
     d->doc = 0;
+    d->project = 0;
 }
 
 Module::~Module()
@@ -76,15 +83,74 @@ KoDocument* Module::doc()
     return part();
 }
 
-QString Module::projectName()
-{
-    return part()->getProject().name();
-}
-
 QObject *Module::project()
 {
-    return new Project( this, &(part()->getProject()) );
+    if ( d->project == 0 ) {
+        d->project = new Project( this, &(part()->getProject()) );
+    }
+    return d->project;
 }
+
+int Module::nodeCount()
+{
+    return d->project->nodeCount();
+}
+
+QObject *Module::nodeAt( int index )
+{
+    return d->project->node( index );
+}
+
+int Module::childCount( QObject *parent )
+{
+    Node *n = dynamic_cast<Node*>( parent );
+    return n ? n->childCount() : 0;
+}
+
+QObject *Module::childAt( QObject *parent, int index )
+{
+    Node *n = dynamic_cast<Node*>( parent );
+    return n ? n->childAt( index ) : 0;
+}
+
+int Module::resourceGroupCount()
+{
+    return d->project->resourceGroupCount();
+}
+
+QObject *Module::resourceGroupAt( int index )
+{
+    return d->project->resourceGroupAt( index );
+}
+
+int Module::resourceCount( QObject *parent )
+{
+    ResourceGroup *g = dynamic_cast<ResourceGroup*>( parent );
+    return g ? g->resourceCount() : 0;
+}
+
+QObject *Module::resourceAt( QObject *parent, int index )
+{
+    ResourceGroup *g = dynamic_cast<ResourceGroup*>( parent );
+    return g ? g->resourceAt( index ) : 0;
+}
+
+int Module::scheduleCount() const
+{
+    return d->project->scheduleCount();
+}
+
+QObject *Module::scheduleAt( int index )
+{
+    return d->project->scheduleAt( index );
+}
+
+QObject *Module::scheduleAt( QObject *parent, int index )
+{
+    Schedule *s = dynamic_cast<Schedule*>( parent );
+    return s ? s->childAt( index ) : 0;
+}
+
 
 }
 

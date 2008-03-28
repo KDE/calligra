@@ -1305,13 +1305,15 @@ QStringList Project::resourceNameList() const
     return lst;
 }
 
-// TODO
-EffortCostMap Project::plannedEffortCostPrDay( const QDate & /*start*/, const QDate & /*end*/, long id ) const
+EffortCostMap Project::plannedEffortCostPrDay( const QDate & start, const QDate &end, long id ) const
 {
-    //kDebug();
+    //kDebug()<<start<<end<<id;
     EffortCostMap ec;
+    QListIterator<Node*> it( childNodeIterator() );
+    while ( it.hasNext() ) {
+        ec += it.next() ->plannedEffortCostPrDay( start, end, id );
+    }
     return ec;
-
 }
 
 // Returns the total planned effort for this project (or subproject)

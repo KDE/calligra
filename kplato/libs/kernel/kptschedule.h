@@ -464,6 +464,8 @@ public:
     int removeChild( const ScheduleManager *sm );
     void insertChild( ScheduleManager *sm, int index = -1 );
     const QList<ScheduleManager*> &children() const { return m_children; }
+    int childCount() const { return m_children.count(); }
+    ScheduleManager *childAt( int index ) const { return m_children.value( index ); }
     /// Return list of all child managers (also childrens children)
     QList<ScheduleManager*> allChildren() const;
     int indexOf( const ScheduleManager* child ) const;

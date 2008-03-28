@@ -152,6 +152,7 @@ public:
      */
     Task *createTask( Task &def, Node* parent );
 
+    int resourceGroupCount() const { return m_resourceGroups.count(); }
     QList<ResourceGroup*> &resourceGroups();
     /// Adds the resource group to the project.
     virtual void addResourceGroup( ResourceGroup *resource, int index = -1 );
@@ -278,8 +279,10 @@ public:
     using Node::legalToLink;
 
     virtual const QHash<QString, Node*> &nodeDict() { return nodeIdDict; }
-    /// Return a list of all nodes in the project
+    /// Return a list of all nodes in the project (exluding myself)
     QList<Node*> allNodes();
+    /// Return the number of all nodes in the project (exluding myself)
+    int nodeCount() const { return nodeIdDict.count() - 1; }
 
     using Node::findNode;
     /// Find the node with identity id

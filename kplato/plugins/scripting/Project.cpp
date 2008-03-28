@@ -18,66 +18,49 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <Project.h>
+#include "Project.h"
+#include "Resource.h"
+#include "ResourceGroup.h"
+#include "Schedule.h"
 
-#include <kptglobal.h>
-#include <kptproject.h>
-#include <kptschedule.h>
+#include "kptglobal.h"
+#include "kptproject.h"
+#include "kptschedule.h"
+#include "kptresource.h"
 
 #include <QMetaEnum>
 
 Scripting::Project::Project( Scripting::Module* module, KPlato::Project *project )
-    : QObject( module ), m_project( project )
+    : Node( this, project, module ), m_module( module )
 {
     m_nodeModel.setProject( project );
+    m_resourceModel.setProject( project );
 }
 
-QString Scripting::Project::projectIdentity()
+int Scripting::Project::scheduleCount() const
 {
-    return m_project->id();
+    return project()->numScheduleManagers();
 }
 
-QStringList Scripting::Project::childNodesIdentityList()
+QObject *Scripting::Project::scheduleAt( int index )
 {
-    return childNodesIdentityList( projectIdentity() );
+    return schedule( project()->scheduleManagers().value( index ) );
 }
 
-QStringList Scripting::Project::childNodesIdentityList( const QString &nodeId )
+QObject *Scripting::Project::schedule( KPlato::ScheduleManager *sch )
 {
-    QStringList lst;
-    KPlato::Node *node = m_project->findNode( nodeId );
-    if ( node ) {
-        foreach ( KPlato::Node *n, node->childNodeIterator() ) {
-            lst << n->id();
-        }
+    if ( ! m_schedules.contains( sch ) ) {
+        m_schedules[ sch ] = new Schedule( this, sch, parent() );
     }
-    kDebug()<<lst;
-    return lst;
+    return m_schedules[ sch ];
 }
+
 
 QString Scripting::Project::scheduleData( const QString &id, const QString &/*property*/ )
 {
     //TODO: needs a schedule model
-    KPlato::ScheduleManager *m = m_project->scheduleManager( id.toLong() );
+    KPlato::ScheduleManager *m = project()->scheduleManager( id.toLong() );
     return m == 0 ? QString() : m->name();
-}
-
-QStringList Scripting::Project::schedulesIdentityList()
-{
-    QStringList lst;
-    foreach ( KPlato::ScheduleManager *m, m_project->allScheduleManagers() ) {
-        lst << QString("%1").arg( m->id() );
-    }
-    return lst;
-}
-
-QStringList Scripting::Project::nodesIdentityList()
-{
-    QStringList lst;
-    foreach ( KPlato::Node *n, m_project->allNodes() ) {
-        lst << n->id();
-    }
-    return lst;
 }
 
 QStringList Scripting::Project::nodePropertyList()
@@ -90,57 +73,89 @@ QStringList Scripting::Project::nodePropertyList()
     return lst;
 }
 
-QString Scripting::Project::nodeData( const QString &nodeId, const QString &property )
+QVariant Scripting::Project::nodeHeaderData( const QString &property )
 {
-    return nodeData( nodeId, property, "DisplayRole" );
+    int col = nodeColumnNumber( property );
+    return m_nodeModel.headerData( col );
 }
 
-QString Scripting::Project::nodeData( const QString &nodeId, const QString &property, const QString &role )
-{
-    return nodeData( nodeId, property, role, "-1" );
-}
-
-QString Scripting::Project::nodeData( const QString &nodeId, const QString &property, const QString &role, const QString &schedule )
-{
-    KPlato::Node *n = node( nodeId );
-    if ( n == 0 ) {
-        kDebug()<<"Can't find node with id ="<<nodeId;
-        return QString();
-    }
-    m_nodeModel.setManager( m_project->scheduleManager( schedule.toLong() ) );
-    return m_nodeModel.data( n, columnNumber( property ), stringToRole( role ) ).toString();
-}
-
-QString Scripting::Project::nodeHeaderData( const QString &property )
-{
-    return m_nodeModel.headerData( columnNumber( property ) ).toString();
-}
-
-int Scripting::Project::columnNumber( const QString &property ) const
+int Scripting::Project::nodeColumnNumber( const QString &property ) const
 {
     return m_nodeModel.columnMap().keyToValue( property.toUtf8() );
 }
 
-
-// QString Scripting::Project::resourceData( const QString &resourceId, const QString &property )
-// {
-//     return resourceData( resourceId, property, -1 );
-// }
-// 
-// QString Scripting::Project::resourceData( const QString &resourceId, const QString &property, long schedule  )
-// {
-//     KPlato::ResourceItemModel m;
-//     m.setProject( m_project );
-// //    m.setManager( m_project->scheduleManager( schedule ) );
-//     return m.data( m_project->findResource( resourceId ), m.columnNames().columnNumber( property ) ).toString();
-// }
-
-
-KPlato::Node *Scripting::Project::node( const QString &nodeId ) const
+int Scripting::Project::resourceColumnNumber( const QString &property ) const
 {
-    return m_project->findNode( nodeId );
+    return m_resourceModel.columnMap().keyToValue( property.toUtf8() );
 }
 
+QObject *Scripting::Project::node( KPlato::Node *node )
+{
+    if ( ! m_nodes.contains( node ) ) {
+        m_nodes[ node ] = new Node( this, node, parent() );
+    }
+    return m_nodes[ node ];
+}
+
+int Scripting::Project::nodeCount() const
+{
+    return project()->nodeCount();
+}
+
+QObject *Scripting::Project::node( int index )
+{
+    return node( project()->allNodes().value( index ) );
+}
+
+QVariant Scripting::Project::nodeData( const KPlato::Node *node, const QString &property, const QString &role, const QString &schedule )
+{
+    m_nodeModel.setManager( project()->scheduleManager( schedule.toLong() ) );
+    return m_nodeModel.data( node, nodeColumnNumber( property ), stringToRole( role ) ).toString();
+}
+
+int Scripting::Project::resourceGroupCount() const
+{
+    return project()->resourceGroupCount();
+}
+
+QObject *Scripting::Project::resourceGroupAt( int index )
+{
+    return resourceGroup( project()->resourceGroupAt( index ) );
+}
+
+QObject *Scripting::Project::resourceGroup( KPlato::ResourceGroup *group )
+{
+    if ( ! m_groups.contains( group ) ) {
+        m_groups[ group ] = new ResourceGroup( this, group, parent() );
+    }
+    return m_groups[ group ];
+}
+
+QVariant Scripting::Project::resourceGroupData( const KPlato::ResourceGroup *group, const QString &property, const QString &role )
+{
+//    m.setManager( project()->scheduleManager( schedule ) );
+    return m_resourceModel.data( group, resourceColumnNumber( property ), stringToRole( role ) );
+}
+
+QObject *Scripting::Project::resource( KPlato::Resource *resource )
+{
+    if ( ! m_resources.contains( resource ) ) {
+        m_resources[ resource ] = new Resource( this, resource, parent() );
+    }
+    return m_resources[ resource ];
+}
+
+QVariant Scripting::Project::resourceData( const KPlato::Resource *resource, const QString &property, const QString &role, const QString &schedule )
+{
+    //m_resourceModel.setManager( project()->scheduleManager( schedule.toLong() ) );
+    return m_resourceModel.data( resource, resourceColumnNumber( property ), stringToRole( role ) ).toString();
+}
+
+QVariant Scripting::Project::resourceHeaderData( const QString &property )
+{
+    int col = resourceColumnNumber( property );
+    return m_resourceModel.headerData( col );
+}
 
 int Scripting::Project::stringToRole( const QString &role ) const
 {
@@ -158,4 +173,3 @@ int Scripting::Project::stringToRole( const QString &role ) const
     kDebug()<<"Role is not handled:"<<role;
     return -1;
 }
-
