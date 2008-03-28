@@ -20,6 +20,7 @@
 #include <cmath>
 
 #include <klocale.h>
+#include <kdeversion.h>
 
 #include "KPrRoundRectWipeEffectFactory.h"
 #include "../KPrIrisWipeEffectStrategyBase.h"
@@ -32,12 +33,20 @@ KPrRoundRectWipeEffectFactory::KPrRoundRectWipeEffectFactory()
     QPainterPath shape;
 
     //horizontal
+#if QT_VERSION >= KDE_MAKE_VERSION( 4,4,0 )
     shape.addRoundedRect( -25, -12, 50, 24, 10, Qt::AbsoluteSize );
+#else
+    shape.addRoundRect( -25, -12, 50, 24, 10 );
+#endif
     addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Horizontal, "RoundRect", "horizontal", false) );
 
     //vertical
     shape = QPainterPath();
+#if QT_VERSION >= KDE_MAKE_VERSION( 4,4,0 )
     shape.addRoundedRect( -12, -25, 24, 50, 10, Qt::AbsoluteSize );
+#else
+    shape.addRoundRect( -12, -25, 24, 50, 10 );
+#endif
     addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Vertical, "RoundRect", "vertical", false) );
 }
 
