@@ -101,13 +101,13 @@ QObject *Module::nodeAt( int index )
     return d->project->node( index );
 }
 
-int Module::childCount( QObject *parent )
+int Module::nodeCount( QObject *parent )
 {
     Node *n = dynamic_cast<Node*>( parent );
     return n ? n->childCount() : 0;
 }
 
-QObject *Module::childAt( QObject *parent, int index )
+QObject *Module::nodeAt( QObject *parent, int index )
 {
     Node *n = dynamic_cast<Node*>( parent );
     return n ? n->childAt( index ) : 0;

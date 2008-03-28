@@ -8,7 +8,7 @@ import KPlato
 def printNodes( node, props, types = None ):
     printNode( node, props, types )
     for i in range( node.childCount() ):
-        printNodes( KPlato.childAt( node, i ), props, types )
+        printNodes( KPlato.nodeAt( node, i ), props, types )
 
 def printNode( node, props, types = None ):
     if types is None or node.type() in types:

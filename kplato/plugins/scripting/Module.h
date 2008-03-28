@@ -74,9 +74,9 @@ namespace Scripting {
             QObject *nodeAt( int index );
             
             /// Number of children of @p parent
-            int childCount( QObject *parent );
+            int nodeCount( QObject *parent );
             /// Return child node at @p index of @p parent
-            QObject *childAt(  QObject *parent, int index );
+            QObject *nodeAt(  QObject *parent, int index );
             
             /// Number of resource groups
             int resourceGroupCount();
