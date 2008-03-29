@@ -278,7 +278,7 @@ Appointment::~Appointment() {
 
 AppointmentIntervalList Appointment::intervals( const DateTime &start, const DateTime &end ) const
 {
-    kDebug()<<start<<end;
+    //kDebug()<<start<<end;
     AppointmentIntervalList lst;
     foreach ( AppointmentInterval *i, m_intervals ) {
         if ( i->startTime() >= end || i->endTime() <= start ) {
@@ -292,7 +292,7 @@ AppointmentIntervalList Appointment::intervals( const DateTime &start, const Dat
             ai->setEndTime( end );
         }
         lst.inSort( ai );
-        kDebug()<<ai->startTime().toString()<<ai->endTime().toString();
+        //kDebug()<<ai->startTime().toString()<<ai->endTime().toString();
     }
     return lst;
 }
@@ -449,10 +449,11 @@ EffortCostMap Appointment::plannedPrDay(const QDate& start, const QDate& end) co
             dt = st.date();
         }
         ndt = dt.addDays(1);
-        while (dt <= e.date()) {
+        while (dt <= e.date() && dt <= end ) {
+            //kDebug()<<start<<end<<dt;
             eff = i->effort(DateTime(dt, QTime( 0, 0, 0 ), st.timeSpec()), DateTime(ndt, QTime( 0, 0, 0 ), st.timeSpec()));
             ec.add(dt, eff, eff.toDouble(Duration::Unit_h) * rate);
-            if (dt < e.date()) {
+            if (dt < e.date() && dt < end) {
                 // loop trough the interval (it spans dates)
                 dt = ndt;
                 ndt = ndt.addDays(1);

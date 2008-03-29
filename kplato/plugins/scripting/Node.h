@@ -60,7 +60,7 @@ namespace Scripting {
             QVariant data( const QString &property );
             
             /// Return a map of palnned effort and cost pr day
-            QVariant plannedEffortCostPrDay( const QVariant &start, const QVariant &end, const QString &schedule );
+            QVariant plannedEffortCostPrDay( const QVariant &start, const QVariant &end, const QVariant &schedule );
 
         private:
             Project *m_project;

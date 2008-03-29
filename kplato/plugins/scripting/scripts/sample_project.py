@@ -8,7 +8,7 @@ import KPlato
 def printNodes( node, props, types = None ):
     printNode( node, props, types )
     for i in range( node.childCount() ):
-        printNodes( KPlato.nodeAt( node, i ), props, types )
+        printNodes( node.childAt( i ), props, types )
 
 def printNode( node, props, types = None ):
     if types is None or node.type() in types:
@@ -21,7 +21,7 @@ def printGroup( group, props ):
         print "%-25s" % ( group.data( prop ) ),
     print
     for i in range( group.resourceCount() ):
-        printResource( KPlato.resourceAt( group, i ), props )
+        printResource( group.resourceAt( i ), props )
 
 def printResource( resource, props ):
     for prop in props:
@@ -30,8 +30,8 @@ def printResource( resource, props ):
 
 def printSchedules():
     print "%-10s %-25s" % ( "Identity", "Name" )
-    for i in range( KPlato.scheduleCount() ):
-        printSchedule( KPlato.scheduleAt( i ) )
+    for i in range( proj.scheduleCount() ):
+        printSchedule( proj.scheduleAt( i ) )
         
     print
 
@@ -39,8 +39,14 @@ def printSchedules():
 def printSchedule( sch ):
     print "%-10s %-25s" % ( sch.id(), sch.name() )
     for i in range( sch.childCount() ):
-        printSchedule( KPlato.scheduleAt( sch, i ) )
+        printSchedule( sch.childAt( i ) )
 
+def printEffortCost( name, values ):
+    print "%-20s" % ( name )
+    for d, v in sorted( values.iteritems() ):
+        e = v[0]
+        c = v[1]
+        print "%-20s %-10s %-10f %-10f" % ( "", d, e, c )
 
 #------------------------
 proj = KPlato.project()
@@ -67,8 +73,8 @@ resprops = [ 'ResourceName', 'ResourceType', 'ResourceEmail', 'ResourceCalendar'
 for prop in resprops:
     print "%-25s" % (proj.resourceHeaderData( prop ) ),
 print
-for index in range( KPlato.resourceGroupCount() ):
-    g = KPlato.resourceGroupAt( index )
+for index in range( proj.resourceGroupCount() ):
+    g = proj.resourceGroupAt( index )
     printGroup( g, resprops )
 
 print
@@ -77,6 +83,23 @@ print "Print Schedules:"
 printSchedules()
 print
 
-#for i in range( KPlato.nodeCount() ):
-    #print KPlato.nodeAt( i ).plannedEffortCostPrDay( "2007-09-12", "2007-11-10", "" )
-print proj.plannedEffortCostPrDay( "2007-09-12", "2007-11-10", "" )
+
+sid = -1;
+# get a schedule id
+if proj.scheduleCount() > 0:
+    sid = proj.scheduleAt( 0 ).id()
+
+print "Print Effort/Cost for each node:"
+print "%-20s %-10s %-10s %-10s" % ( 'Name', 'Date', 'Effort', 'Cost' )
+for i in range( proj.nodeCount() ):
+    node = proj.nodeAt( i )
+    name = node.data( 'NodeName' )
+    printEffortCost( name, node.plannedEffortCostPrDay( "2007-09-12", "2007-09-18", sid ) )
+
+print "Print Effort/Cost for the project:"
+
+print "%-20s %-10s %-10s %-10s" % ( 'Name', 'Date', 'Effort', 'Cost' )
+name = proj.data( 'NodeName' )
+printEffortCost( name, proj.plannedEffortCostPrDay( "2007-09-12", "2007-09-17", sid ) )
+
+print

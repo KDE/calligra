@@ -21,6 +21,7 @@
 #define SCRIPTING_SCHEDULE_H
 
 #include <QObject>
+#include <QDate>
 #include <QVariant>
 
 

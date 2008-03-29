@@ -44,3 +44,5 @@ QVariant Scripting::Resource::data(const QString &property, const QString &role,
 {
     return m_project->resourceData( m_resource, property, role, schedule );
 }
+
+#include "Resource.moc"

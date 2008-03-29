@@ -44,13 +44,13 @@ namespace Scripting {
             /// Destructor
             virtual ~ResourceGroup() {}
         
-            QObject *resourceAt( int index ) const;
-            
         public Q_SLOTS:
             /// Return type of resource group
             QVariant type();
             /// Number of resources in this group
             int resourceCount() const;
+            /// Return resource at @index
+            QObject *resourceAt( int index ) const;
             /// Return the data
             QVariant data( const QString &property, const QString &role, const QString &schedule );
             /// Return the data

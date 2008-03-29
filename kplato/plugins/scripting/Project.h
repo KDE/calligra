@@ -62,8 +62,6 @@ namespace Scripting {
             /// Return schedule manager at @p index
             QObject *scheduleAt( int index );
             
-            /// Returns the data of @p property from schedule with id @p scheduleId
-            QString scheduleData( const QString &scheduleId, const QString &property );
             /// Returns the names of all node properties
             QStringList nodePropertyList();
             
@@ -73,24 +71,25 @@ namespace Scripting {
             /// Number of nodes in the project (excluding the project itself)
             int nodeCount() const;
             /// Return the node at @p index
-            QObject *node( int index );
+            QObject *nodeAt( int index );
             
             /// Returns resource header data for @p property
             QVariant resourceHeaderData( const QString &property );
 
+            /// Number of resource groups
+            int resourceGroupCount() const;
+            /// Return the resource group at @p index
+            QObject *resourceGroupAt( int index );
+            
         public:
             
-            /// Return the Scripting::Node that interfaces the KPlato::Node @p node
+            /// Return the Scripting::Node that interfaces the KPlato::Node @p node (create if necessary)
             QObject *node( KPlato::Node *node );
             /// Return the data of @p node
             QVariant nodeData( const KPlato::Node *node, const QString &property, const QString &role, const QString &schedule );
             
             /// Return ResourceGroup that interfaces the @p group (create if necessary)
             QObject *resourceGroup( KPlato::ResourceGroup *group );
-            /// Number of resource groups
-            int resourceGroupCount() const;
-            /// Return the resource group at @p index
-            QObject *resourceGroupAt( int index );
             /// Return the data of resource group @p group
             QVariant resourceGroupData( const KPlato::ResourceGroup *group, const QString &property, const QString &role );
             

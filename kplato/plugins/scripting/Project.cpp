@@ -56,13 +56,6 @@ QObject *Scripting::Project::schedule( KPlato::ScheduleManager *sch )
 }
 
 
-QString Scripting::Project::scheduleData( const QString &id, const QString &/*property*/ )
-{
-    //TODO: needs a schedule model
-    KPlato::ScheduleManager *m = project()->scheduleManager( id.toLong() );
-    return m == 0 ? QString() : m->name();
-}
-
 QStringList Scripting::Project::nodePropertyList()
 {
     QStringList lst;
@@ -102,7 +95,7 @@ int Scripting::Project::nodeCount() const
     return project()->nodeCount();
 }
 
-QObject *Scripting::Project::node( int index )
+QObject *Scripting::Project::nodeAt( int index )
 {
     return node( project()->allNodes().value( index ) );
 }
@@ -173,3 +166,5 @@ int Scripting::Project::stringToRole( const QString &role ) const
     kDebug()<<"Role is not handled:"<<role;
     return -1;
 }
+
+#include "Project.moc"

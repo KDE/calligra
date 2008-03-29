@@ -64,3 +64,4 @@ KPlatoScriptingPart::~KPlatoScriptingPart()
     delete d;
 }
 
+#include "ScriptingPart.moc"

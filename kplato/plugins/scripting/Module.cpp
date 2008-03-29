@@ -91,67 +91,6 @@ QObject *Module::project()
     return d->project;
 }
 
-int Module::nodeCount()
-{
-    return d->project->nodeCount();
-}
-
-QObject *Module::nodeAt( int index )
-{
-    return d->project->node( index );
-}
-
-int Module::nodeCount( QObject *parent )
-{
-    Node *n = dynamic_cast<Node*>( parent );
-    return n ? n->childCount() : 0;
-}
-
-QObject *Module::nodeAt( QObject *parent, int index )
-{
-    Node *n = dynamic_cast<Node*>( parent );
-    return n ? n->childAt( index ) : 0;
-}
-
-int Module::resourceGroupCount()
-{
-    return d->project->resourceGroupCount();
-}
-
-QObject *Module::resourceGroupAt( int index )
-{
-    return d->project->resourceGroupAt( index );
-}
-
-int Module::resourceCount( QObject *parent )
-{
-    ResourceGroup *g = dynamic_cast<ResourceGroup*>( parent );
-    return g ? g->resourceCount() : 0;
-}
-
-QObject *Module::resourceAt( QObject *parent, int index )
-{
-    ResourceGroup *g = dynamic_cast<ResourceGroup*>( parent );
-    return g ? g->resourceAt( index ) : 0;
-}
-
-int Module::scheduleCount() const
-{
-    return d->project->scheduleCount();
-}
-
-QObject *Module::scheduleAt( int index )
-{
-    return d->project->scheduleAt( index );
-}
-
-QObject *Module::scheduleAt( QObject *parent, int index )
-{
-    Schedule *s = dynamic_cast<Schedule*>( parent );
-    return s ? s->childAt( index ) : 0;
-}
-
-
 }
 
 #include "Module.moc"

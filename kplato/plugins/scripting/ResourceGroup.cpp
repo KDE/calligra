@@ -54,3 +54,5 @@ QVariant Scripting::ResourceGroup::data(const QString &property, const QString &
 {
     return m_project->resourceGroupData( m_group, property, role );
 }
+
+#include "ResourceGroup.moc"

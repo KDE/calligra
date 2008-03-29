@@ -67,21 +67,24 @@ QVariant Scripting::Node::data(const QString &property, const QString &role, con
     return m_project->nodeData( m_node, property, role, schedule );
 }
 
-QVariant Scripting::Node::plannedEffortCostPrDay( const QVariant &start, const QVariant &end, const QString &schedule )
+QVariant Scripting::Node::plannedEffortCostPrDay( const QVariant &start, const QVariant &end, const QVariant &schedule )
 {
+    //kDebug()<<start<<end<<schedule;
     QVariantMap map;
     QDate s = start.toDate();
     QDate e = end.toDate();
     if ( ! s.isValid() ) {
         s = QDate::currentDate();
     }
-    if ( e.isValid() ) {
+    if ( ! e.isValid() ) {
         e = QDate::currentDate();
     }
-    KPlato::EffortCostMap ec = m_node->plannedEffortCostPrDay( s, e, 2 );
+    KPlato::EffortCostMap ec = m_node->plannedEffortCostPrDay( s, e, schedule.toLongLong() );
     KPlato::EffortCostDayMap::ConstIterator it = ec.days().constBegin();
     for (; it != ec.days().constEnd(); ++it ) {
         map.insert( it.key().toString( Qt::ISODate ), QVariantList() << it.value().effort().toDouble( KPlato::Duration::Unit_h ) << it.value().cost() );
     }
     return map;
 }
+
+#include "Node.moc"
