@@ -25,7 +25,7 @@
 #include "ChartShape.h"
 
 // KOffice
-#include "../karbon/plugins/simpletextshape/SimpleTextShape.h"
+#include "simpletextshape/SimpleTextShape.h"
 
 namespace KChart {
 

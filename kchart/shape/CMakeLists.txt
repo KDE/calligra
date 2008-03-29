@@ -2,7 +2,8 @@ include_directories( ${CMAKE_SOURCE_DIR}/kchart
                      ${CMAKE_SOURCE_DIR}/kchart/kdchart/include
                      ${CMAKE_SOURCE_DIR}/interfaces
                      ${CMAKE_SOURCE_DIR}/kchart/shape/dialogs
-                     ${KOGUIUTILS_INCLUDES} )
+                     ${KOGUIUTILS_INCLUDES}
+                     ${CMAKE_SOURCE_DIR}/plugins/ )
 
 ########### Flake Plugin library ###############
 
@@ -26,7 +27,7 @@ SET (chartshape_LIB_SRCS
     dialogs/NewAxisDialog.cpp
     dialogs/AxisScalingDialog.cpp
     ../commands/ChartTypeCommand.cpp
-    ../../karbon/plugins/simpletextshape/SimpleTextShape.cpp
+    ../../plugins/simpletextshape/SimpleTextShape.cpp
 )
 
 kde4_add_ui_files(chartshape_LIB_SRCS
