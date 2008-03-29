@@ -70,3 +70,4 @@ QObject *Scripting::Schedule::childAt( int index )
 //     return m_project->scheduleData( m_schedule, property, role, schedule );
 // }
 
+#include "Schedule.moc"
