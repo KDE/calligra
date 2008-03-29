@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+ * Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -109,7 +109,7 @@ public:
         p1->setControlPoint2( p[0] );
         p2->setControlPoint1( q[2] );
 
-        KoPathPoint * splitPoint = new KoPathPoint( p1->parent(), p[2], KoPathPoint::CanHaveControlPoint1|KoPathPoint::CanHaveControlPoint2 );
+        KoPathPoint * splitPoint = new KoPathPoint( p1->parent(), p[2] );
         splitPoint->setControlPoint1( p[1] );
         splitPoint->setControlPoint2( q[1] );
         return splitPoint;

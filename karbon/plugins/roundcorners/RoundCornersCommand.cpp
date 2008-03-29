@@ -305,8 +305,7 @@ void RoundCornersCommand::roundPath()
         {
             // construct the closing segment
             lastPoint->setProperty( KoPathPoint::CloseSubpath );
-            lastPoint->setProperty( KoPathPoint::CanHaveControlPoint2 );
-            firstPoint->setProperty( KoPathPoint::CanHaveControlPoint1 );
+            firstPoint->setProperty( KoPathPoint::CloseSubpath );
             switch( lastSeg.degree() )
             {
                 case 1:
