@@ -18,6 +18,7 @@
 */
 
 #include "KPrShapeAnimationRegistry.h"
+#include "KPrShapeAnimationFactory.h"
 
 #include <kglobal.h>
 #include <KoPluginLoader.h>
