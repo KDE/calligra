@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=SQLite2
+Name[hi]=एसक्यूलाइट२
 Name[sv]=Sqlite 2
 Name[x-test]=xxSQLite2xx
 Comment=SQLite 2 is the old and obsolete version of Kexi embedded SQL engine
@@ -10,6 +11,7 @@ Comment[et]=SQLite 2 on Kexi põimitud SQL-mootori vana ja iganenud versioon
 Comment[fi]=SQLite on Kexin vanha ja vanhentunut, sisäänrakennettu SQL-moottori.
 Comment[ga]=Is é SQLite 2 an seanleagan den inneall leabaithe SQL le haghaidh Kexi
 Comment[gl]=SQLite é a versión vella e obsoleta do motor SQL embebido de Kexi
+Comment[hi]=एसक्यूलाइट २, केएक्जाई अंतर्निर्मित एसक्यूएल इंजिन का एक पुराना तथा कालातीत संस्करण है
 Comment[it]=SQLite2 è la versione vecchia e obsoleta del motore SQL integrato di Kexi
 Comment[ja]=SQLite2 は Kexi の古い埋め込み SQL エンジンです。
 Comment[pt]=O SQLite 2 é a versão antiga e obsoleta do motor de SQL incorporado por omissão do Kexi

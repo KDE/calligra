@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=MySQL
+Name[hi]=माइएसक्यूएल
 Name[sk]=mySQL
 Name[x-test]=xxMySQLxx
 Comment=Kexi database driver for accessing MySQL servers
@@ -9,6 +10,7 @@ Comment[es]=Controlador de bases de datos de Kexi para acceder a servidores MySQ
 Comment[et]=Kexi andmebaasidraiver MySQL serverite kasutamiseks
 Comment[fi]=Kexi-tietokanta-ajuri MySQL-palvelinten käyttämiseksi
 Comment[gl]=Motoro da base de datos de Kexi para o acceso a servidores MySQL
+Comment[hi]=माईएसक्यूएल सर्वरों पर पहुंच के लिए केएक्साई डाटाबेस ड्राइवर
 Comment[it]=Driver per banche dati Kexi per accedere ai server MySQL
 Comment[ja]=MySQL サーバにアクセスするための Kexi データベースドライバ
 Comment[pt]=Controlador de bases de dados do Kexi para aceder a servidores de MySQL

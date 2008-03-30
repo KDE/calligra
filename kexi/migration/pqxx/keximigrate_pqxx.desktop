@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=PostgreSQL
+Name[hi]=पोस्टग्रे-एसक्यूएल
 Name[ne]=पोस्टग्रे SQL
 Name[x-test]=xxPostgreSQLxx
 Comment=PostgreSQL Migration Driver for Kexi
@@ -18,6 +19,7 @@ Comment[fi]=PostgreSQL-siirtoajuri Kexille
 Comment[fr]=Pilote de migration PostgreSQL pour Kexi
 Comment[ga]=Tiománaí Ascnaimh PostgreSQL le haghaidh Kexi
 Comment[gl]=Controlador de Migración de PostgreSQL de Kexi
+Comment[hi]=केएक्जाई के लिए पोस्टग्रेएसक्यूएल माइग्रेशन ड्राइवर
 Comment[hr]=PostgreSQL upravljački program migracije podataka za Kexi
 Comment[hu]=Kexi PostgreSQL-migrálási meghajtó
 Comment[is]=PostgreSQL gagnaflutngingsrekill fyrir Kexi

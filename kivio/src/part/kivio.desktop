@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Kivio
+Name[hi]=किवियो
 Name[ne]=किभियो
 Name[x-test]=xxKivioxx
 Exec=kivio %u
@@ -21,6 +22,7 @@ GenericName[fr]=Conception de diagrammes et de tableaux
 GenericName[ga]=Eagarthóireacht Sreabhchairteacha agus Léaráidí
 GenericName[gl]=Criación e Edición de Diagramas de Fluxo
 GenericName[he]=עריכת תרשימי זרימה ודיאגרמות
+GenericName[hi]=फ्लोचार्ट व डायग्राम संपादन
 GenericName[hr]=Uređivannje dijagrama i prikaza protoka
 GenericName[hu]=Folyamatábra- és diagramkészítő
 GenericName[is]=Flæðirits og skýringamynda vinnsla

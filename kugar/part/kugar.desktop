@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Kugar
+Name[hi]=कुगर
 Name[ne]=कुगर
 Name[x-test]=xxKugarxx
 Exec=kugar %u
@@ -26,6 +27,7 @@ GenericName[fr]=Générateur de rapports
 GenericName[ga]=Gineadóir Tuairiscí
 GenericName[gl]=Xerador de informes
 GenericName[he]=יוצר דו"חות
+GenericName[hi]=रिपोर्ट जेनरेटर
 GenericName[hr]=Program za generiranje izvještaja
 GenericName[hu]=Jelentéskészítő
 GenericName[is]=Skýrsluskrifari

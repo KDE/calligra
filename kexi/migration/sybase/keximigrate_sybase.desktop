@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=sybase
+Name[hi]=साइबेस
 Name[pt]=Sybase
 Name[sv]=Sybase
 Name[x-test]=xxsybasexx
@@ -8,6 +9,7 @@ Comment=Sybase Migration Driver for Kexi
 Comment[el]=Οδηγός μεταφοράς Sybase του Kexi
 Comment[fi]=Sybase-siirtoajuri Kexille
 Comment[ga]=Tiománaí Ascnaimh Sybase le haghaidh Kexi
+Comment[hi]=केएक्जाई के लिए साइबेस माइग्रेशन ड्राइवर
 Comment[it]=Driver di migrazione Sybase per Kexi
 Comment[pt]=Controlador de Migração de Sybase do Kexi
 Comment[pt_BR]=Driver de Migração Sybase do Kexi

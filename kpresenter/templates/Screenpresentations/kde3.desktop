@@ -2,6 +2,7 @@
 Type=Link
 URL=.source/kde3.kpt
 Name=KDE 3
+Name[hi]=केडीई ३
 Name[ne]=केडीई ३
 Name[x-test]=xxKDE 3xx
 Comment=A presentation with KDE 3 theming
@@ -19,6 +20,7 @@ Comment[fr]=Une présentation avec un thème KDE 3
 Comment[ga]=Láithreoireacht le téamaí KDE 3
 Comment[gl]=Unha presentación cun estilo KDE 3
 Comment[he]=מצגת עם ערכת נושא מקורית של KDE 3
+Comment[hi]=केडीई ३ प्रसंग युक्त प्रस्तुतिकरण
 Comment[hu]=KDE 3-stílusú bemutató
 Comment[is]=Kynning með KDE 3 þema
 Comment[it]=Una presentazione con tema di KDE 3

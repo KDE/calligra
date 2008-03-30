@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Kexi
+Name[hi]=केक्साई
 Name[ne]=केक्सी
 Name[x-test]=xxKexixx
 Type=Application
@@ -26,6 +27,7 @@ GenericName[fr]=Créateur de base de données
 GenericName[ga]=Cruthaitheoir Bunachar Sonraí
 GenericName[gl]=Criación de Bases de Datos
 GenericName[he]=יוצר מסדי נתונים
+GenericName[hi]=डाटाबेस सृजक
 GenericName[hr]=Dizajner baza podataka
 GenericName[hu]=Adatbázis-kezelő
 GenericName[is]=Gagnagrunns hönnuður
@@ -68,6 +70,7 @@ Comment[fa]=توسعۀ کاربردهای دادگان رومیزی
 Comment[fi]=Kehitä tietokantasovelluksia
 Comment[ga]=Forbair feidhmchláir bhunachair sonraí don deasc
 Comment[gl]=Desenvolve aplicacións de base de dados de escritorio
+Comment[hi]=डेस्कटॉप डाटाबेस अनुप्रयोग डेवलप करें
 Comment[hu]=Adatbázist kezelő alkalmazások fejlesztése
 Comment[it]=Sviluppa applicazioni per banche dati da desktop
 Comment[ja]=デスクトップ データベース アプリケーションを開発

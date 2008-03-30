@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=KPlato
+Name[hi]=के-प्लेटो
 Name[ne]=केडीई प्लाटो
 Name[sv]=Kplato
 Name[x-test]=xxKPlatoxx
@@ -21,6 +22,7 @@ GenericName[fr]=Gestion de projets
 GenericName[ga]=Bainisteoireacht Tionscadal
 GenericName[gl]=Xestión de Proxectos
 GenericName[he]=ניהול פרוייקטים
+GenericName[hi]=परियोजना प्रबंधन
 GenericName[hr]=Upravljanje projektima
 GenericName[hu]=Projektkezelő
 GenericName[is]=Verkefnisstjórn
