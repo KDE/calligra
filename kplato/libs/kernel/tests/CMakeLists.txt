@@ -22,6 +22,15 @@ target_link_libraries(DurationTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTT
  
 ########## next target ###############
 
+set(AppointmentIntervalTester_SRCS AppointmentIntervalTester.cpp )
+ 
+
+kde4_add_unit_test(AppointmentIntervalTester TESTNAME KPlato-AppointmentIntervalTester ${AppointmentIntervalTester_SRCS})
+ 
+target_link_libraries(AppointmentIntervalTester  ${KDE4_KDECORE_LIBS} kplatokernel ${QT_QTTEST_LIBRARY})
+ 
+########## next target ###############
+
 set(EstimateTester_SRCS EstimateTester.cpp )
  
  

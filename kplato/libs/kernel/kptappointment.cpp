@@ -30,6 +30,7 @@
 #include <kdebug.h>
 
 #include <qdatetime.h>
+#include <QMutableMapIterator>
 
 namespace KPlato
 {
@@ -161,38 +162,105 @@ AppointmentInterval AppointmentInterval::firstInterval(const AppointmentInterval
 //-----------------------
 void AppointmentIntervalList::add( const DateTime &st, const DateTime &et, double load )
 {
+    //kDebug()<<st<<et<<load;
     Q_ASSERT( st < et );
     DateTime s = st;
     DateTime e = et;
-    if ( ! isEmpty() && et > values().first()->startTime() ) {
+    if ( isEmpty() || et < values().first()->startTime() || st > values().last()->endTime() ) {
+        inSort( new AppointmentInterval( s, e, load ) );
+    } else {
         // see if we have overlapping intervals
-        foreach ( AppointmentInterval *ai, *this ) {
-            if ( s >= ai->endTime() ) {
-                continue;
-            }
-            if ( e <= ai->startTime() ) {
-                break; // in between, just add
-            }
-            if ( s < ai->startTime() ) {
-                // Add the part that's before this interval
-                inSort( new AppointmentInterval( s, ai->startTime(), load ) );
-                s = ai->startTime();
-            }
-            if ( e >= ai->endTime() ) {
+        AppointmentIntervalList lst;
+        QMutableMapIterator<QString, AppointmentInterval*> it( *this );
+        while ( it.hasNext() ) {
+            AppointmentInterval *ai = it.next().value();
+            DateTime ist = ai->startTime();
+            DateTime iet = ai->endTime();
+            //kDebug()<<"Check:"<<s<<ist<<e<<iet;
+            if ( s == ist && e == iet ) {
+                //kDebug()<<"Exact match";
                 ai->setLoad( ai->load() + load );
-                if ( e == ai->endTime() ) {
-                    return;
-                }
-                s = ai->endTime(); // check next interval
-            } else {
-                remove( ai->startTime().toString( KDateTime::ISODate ) + ai->endTime().toString( KDateTime::ISODate ) );
-                inSort( new AppointmentInterval( ai->startTime(), e, ai->load() + load ) );
-                inSort( new AppointmentInterval( e, ai->endTime(), ai->load() ) );
                 return;
             }
+            if ( e <= ist ) {
+                //kDebug()<<"Before first or in between";
+                inSort( new AppointmentInterval( s, e, load ) );
+                break;
+            }
+            if ( s >= iet ) {
+                continue;
+            }
+            if ( s > ist ) {
+                //kDebug()<<"Start in the middle";
+                double l = ai->load();
+                lst.inSort( new AppointmentInterval( ist, s, l ) );
+                if ( e < iet ) {
+                    //kDebug()<<"End in the midle";
+                    lst.inSort( new AppointmentInterval( s, e, l + load ) );
+                    lst.inSort( new AppointmentInterval( e, iet, l ) );
+                    it.remove();
+                    delete ai;
+                    break;
+                }
+                if ( e == iet ) {
+                    //kDebug()<<"End at end";
+                    lst.inSort( new AppointmentInterval( s, e, l + load ) );
+                    it.remove();
+                    delete ai;
+                    break;
+                }
+                lst.inSort( new AppointmentInterval( s, iet, l + load ) );
+                if ( ! it.hasNext() ) {
+                    //kDebug()<<"e > iet -> at last interval";
+                    lst.inSort( new AppointmentInterval( iet, e, l + load ) );
+                    it.remove();
+                    delete ai;
+                    break;
+                }
+                //kDebug()<<"e > iet -> may overlap next interval";
+                s = iet;
+                it.remove();
+                delete ai;
+                continue;
+            }
+            if ( s < ist ) {
+                // Add the part that's before this interval
+                //kDebug()<<"start before";
+                lst.inSort( new AppointmentInterval( s, ist, load ) );
+                s = ist;
+            }
+            if ( s == ist ) {
+                //kDebug()<<"Start now at start";
+                double l = ai->load();
+                if ( e < iet ) {
+                    //kDebug()<<"End in the midle";
+                    lst.inSort( new AppointmentInterval( s, e, l + load ) );
+                    lst.inSort( new AppointmentInterval( e, iet, l ) );
+                    it.remove();
+                    delete ai;
+                    break;
+                }
+                if ( e == iet ) {
+                    //kDebug()<<"End at end";
+                    ai->setLoad( l + load );
+                    break;
+                }
+                ai->setLoad( l + load );
+                if ( ! it.hasNext() ) {
+                    //kDebug()<<"e > iet -> at last interval";
+                    lst.inSort( new AppointmentInterval( iet, e, l ) );
+                    break;
+                }
+                //kDebug()<<"e > iet -> may overlap next interval";
+                s = iet;
+                continue;
+            }
+        }
+        foreach ( AppointmentInterval *a, lst.values() ) {
+            //kDebug()<<"Add:"<<a;
+            inSort( a );
         }
     }
-    inSort( new AppointmentInterval( s, e, load ) );
 }
 
 void AppointmentIntervalList::inSort(AppointmentInterval *a)
