@@ -44,10 +44,13 @@ class KisTIFFWriterVisitor : public KisNodeVisitor
         virtual bool visit(KisPaintLayer *layer);
         virtual bool visit(KisGroupLayer *layer);
         virtual bool visit(KisAdjustmentLayer* ) { return true; }
+        virtual bool visit(KisGeneratorLayer* );
+        
     private:
         inline TIFF* image() { return m_image; }
         inline bool saveAlpha();
         bool copyDataToStrips( KisHLineConstIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, quint8* poses);
+        bool saveLayerProjection(KisLayer *);
     private:
         TIFF* m_image;
         KisTIFFOptions* m_options;

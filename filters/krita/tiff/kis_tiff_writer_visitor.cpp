@@ -32,7 +32,7 @@
 #include <kis_image.h>
 #include <kis_paint_layer.h>
 #include <kis_types.h>
-
+#include <generator/kis_generator_layer.h>
 #include "kis_tiff_converter.h"
 
 namespace {
@@ -134,8 +134,25 @@ bool KisTIFFWriterVisitor::copyDataToStrips( KisHLineConstIterator it, tdata_t b
 
 bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
 {
-    dbgFile <<"visiting on paint layer" << layer->name() <<"";
-    KisPaintDeviceSP pd = layer->paintDevice();
+    saveLayerProjection(layer);
+}
+
+bool KisTIFFWriterVisitor::visit(KisGroupLayer *layer)
+{
+    dbgFile <<"Visiting on grouplayer" << layer->name() <<"";
+    return visitAll( layer, true );
+}
+
+bool KisTIFFWriterVisitor::visit(KisGeneratorLayer* layer)
+{
+    // a generator layer has a nice paint device we can save.
+    saveLayerProjection(layer);
+}
+
+bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
+{
+    dbgFile <<"visiting on layer" << layer->name() <<"";
+    KisPaintDeviceSP pd = layer->projection();
     // Save depth
     int depth = 8 * pd->pixelSize() / pd->channelCount();
     TIFFSetField(image(), TIFFTAG_BITSPERSAMPLE, depth);
@@ -229,9 +246,3 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
     TIFFWriteDirectory(image());
     return true;
 }
-bool KisTIFFWriterVisitor::visit(KisGroupLayer *layer)
-{
-    dbgFile <<"Visiting on grouplayer" << layer->name() <<"";
-    return visitAll( layer, true );
-}
-
