@@ -38,7 +38,7 @@
 #include <kis_meta_data_store.h>
 #include <kis_meta_data_filter_registry_model.h>
 #include <kis_node_visitor.h>
-
+#include <generator/kis_generator_layer.h>
 #include "kis_jpeg_converter.h"
 
 
@@ -62,6 +62,11 @@ class KisExifInfoVisitor : public KisNodeVisitor
             return true;
         }
 
+        virtual bool visit(KisGeneratorLayer*)
+        {
+            return true;
+        }
+
         virtual bool visit(KisPaintLayer* layer) {
             m_countPaintLayer++;
             if (!layer->metaData()->empty())
@@ -70,12 +75,16 @@ class KisExifInfoVisitor : public KisNodeVisitor
             }
             return true;
         }
+
+        
         virtual bool visit(KisGroupLayer* layer)
         {
             dbgFile <<"Visiting on grouplayer" << layer->name() <<"";
             return visitAll( layer, true );
         }
+        
         virtual bool visit(KisAdjustmentLayer* ) {  return true; }
+        
     public:
         inline uint countPaintLayer() { return m_countPaintLayer; }
         inline KisMetaData::Store* exifInfo() {return m_exifInfo; }
