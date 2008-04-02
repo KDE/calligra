@@ -3,26 +3,38 @@
     <!--
         The "import" collection provides scripts to import content into KPlato.
         //-->
-<!--    <collection name="import" text="Import" comment="Import content">
+    <collection name="import" text="Import" comment="Import content">
         <script
-               name="pyimportfile"
-               text="Text or HTML File"
-               comment="Python script to import content from a text or html file"
+               name="pyimportbusyinfo"
+               text="KPlato Busy Information File"
+               comment="Python script to import busy information from file"
                interpreter="python"
-               file="extensions/importfile.py" />
-    </collection>-->
+               file="extensions/busyinfoimport.py" />
+    </collection>
 
     <!--
         The "export" collection provides scripts to export content from KPlato.
         //-->
-<!--    <collection name="export" text="Export" comment="Export content">
+    <collection name="export" text="Export" comment="Export busy info">
         <script
-               name="pyexportfile"
-               text="Text or HTML File"
-               comment="Python script to export content to a text or html file"
+               name="pyexportbusyinfo"
+               text="KPlato Busy Information File"
+               comment="Python script to export busy information to file"
                interpreter="python"
-               file="extensions/exportfile.py" />
-    </collection>-->
+               file="extensions/busyinfoexport.py" />
+    </collection>
+    
+    <!--
+        The "utilities" collection provides misc useful tools
+        //-->
+    <collection name="utilities" text="Utitlities" comment="Useful tools">
+        <script
+               name="pyclearbusyinfo"
+               text="Clear KPlato Busy Information"
+               comment="Python script to clear busy information"
+               interpreter="python"
+               file="extensions/busyinfoclear.py" />
+    </collection>
 
     <!--
         The "samples" collection provides misc example scripts to demonstrate
@@ -49,12 +61,12 @@
             comment="Python script that print some project information"
             interpreter="python"
             file="samples/sample_project.py" />
-<!--        <script
-            name="rbsamplecursor"
-            text="Control Cursor..."
-            comment="Ruby script that demonstrates how to control the cursor"
-            interpreter="ruby"
-            file="samples/sample_cursor.rb" />-->
+        <script
+            name="pysamplebusyinfocheck"
+            text="Print Resource busy Information..."
+            comment="Python script that print resource busy information"
+            interpreter="python"
+            file="samples/sample_busyinfocheck.py" />
     </collection>
 
 </KrossScripting>

@@ -40,6 +40,11 @@ QString Scripting::Schedule::name() const
     return m_schedule->name();
 }
 
+bool Scripting::Schedule::isScheduled() const
+{
+    return m_schedule->isScheduled();
+}
+
 QDate Scripting::Schedule::startDate()
 {
 //    return m_schedule->startTime().dateTime().date();
@@ -59,15 +64,5 @@ QObject *Scripting::Schedule::childAt( int index )
 {
     return m_project->schedule( m_schedule->childAt( index ) );
 }
-
-// QVariant Scripting::Schedule::data(const QString &property )
-// {
-//     return data( property, "DisplayRole", "-1" );
-// }
-
-// QVariant Scripting::Schedule::data(const QString &property, const QString &role )
-// {
-//     return m_project->scheduleData( m_schedule, property, role, schedule );
-// }
 
 #include "Schedule.moc"

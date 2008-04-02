@@ -310,7 +310,7 @@ void Resource::copy(Resource *resource) {
     m_email = resource->email();
     m_availableFrom = resource->availableFrom();
     m_availableUntil = resource->availableUntil();
-    m_externalAppointments = resource->externalAppointments(); //TODO
+    m_externalAppointments = resource->m_externalAppointments;
 
     m_units = resource->units(); // available units in percent
 
@@ -413,8 +413,20 @@ bool Resource::load(KoXmlElement &element, XMLLoaderObject &status) {
     cost.normalRate = KGlobal::locale()->readMoney(element.attribute("normal-rate"));
     cost.overtimeRate = KGlobal::locale()->readMoney(element.attribute("overtime-rate"));
     
-    KoXmlElement e = element.namedItem( "external-appointments" ).toElement();
-    m_externalAppointments.loadXML( e, status );
+    KoXmlElement parent = element.namedItem( "external-appointments" ).toElement();
+    KoXmlElement e;
+    forEachElement( e, parent ) {
+        if ( e.localName() == "project" ) {
+            QString id = e.attribute( "id" );
+            if ( id.isEmpty() ) {
+                continue;
+            }
+            if ( m_externalAppointments.contains( id ) ) {
+                clearExternalAppointments( id );
+            }
+            m_externalAppointments[ id ].loadXML( e, status );
+        }
+    }
     return true;
 }
 
@@ -437,9 +449,14 @@ void Resource::save(QDomElement &element) const {
     me.setAttribute("overtime-rate", KGlobal::locale()->formatMoney(cost.overtimeRate));
     
     if ( ! m_externalAppointments.isEmpty() ) {
-        QDomElement e = element.ownerDocument().createElement("external-appointments");
+        QDomElement e = me.ownerDocument().createElement("external-appointments");
         me.appendChild(e);
-        m_externalAppointments.saveXML( e );
+        foreach ( QString id, m_externalAppointments.uniqueKeys() ) {
+            QDomElement el = e.ownerDocument().createElement("project");
+            e.appendChild( el );
+            el.setAttribute( "id", id );
+            m_externalAppointments[ id ].saveXML( el );
+        }
     }
 }
 
@@ -806,6 +823,18 @@ bool Resource::isOverbooked(const KDateTime &start, const KDateTime &end) const 
     return m_currentSchedule ? m_currentSchedule->isOverbooked(start, end) : false;
 }
 
+Appointment Resource::appointmentIntervals( long id ) const {
+    Appointment a;
+    Schedule *s = findSchedule( id );
+    if ( s == 0 ) {
+        return a;
+    }
+    foreach (Appointment *app, static_cast<ResourceSchedule*>( s )->appointments()) {
+        a += *app;
+    }
+    return a;
+}
+
 Appointment Resource::appointmentIntervals() const {
     Appointment a;
     if (m_currentSchedule == 0)
@@ -830,13 +859,45 @@ void Resource::setProject( Project *project )
     m_project = project;
 }
 
+void Resource::addExternalAppointment( const QString &projectId, const DateTime &from, const DateTime &end, double load )
+{
+    //kDebug()<<projectId<<from<<end<<load;
+    m_externalAppointments[ projectId ].add( from, end, load );
+}
+
 void Resource::clearExternalAppointments()
 {
-    foreach ( AppointmentInterval *a, m_externalAppointments.values() ) {
-        delete a;
+    foreach ( QString id, m_externalAppointments.uniqueKeys() ) {
+        clearExternalAppointments( id );
     }
-    m_externalAppointments.clear();
 }
+
+void Resource::clearExternalAppointments( const QString projectId )
+{
+    while ( m_externalAppointments.contains( projectId ) ) {
+        AppointmentIntervalList lst = m_externalAppointments.take( projectId );
+        foreach ( AppointmentInterval *a, lst.values() ) {
+            delete a;
+        }
+    }
+}
+
+AppointmentIntervalList Resource::externalAppointments( const QString &projectId )
+{
+    return m_externalAppointments.value( projectId );
+}
+
+AppointmentIntervalList Resource::externalAppointments() const
+{
+    //kDebug()<<m_externalAppointments;
+    AppointmentIntervalList lst;
+    foreach ( QString id, m_externalAppointments.uniqueKeys() ) {
+        lst += m_externalAppointments[ id ];
+        kDebug()<<id<<lst;
+    }
+    return lst;
+}
+
 
 /////////   Risk   /////////
 Risk::Risk(Node *n, Resource *r, RiskType rt) {

@@ -44,10 +44,14 @@ namespace Scripting {
             /// Destructor
             virtual ~Node() {}
         
+            KPlato::Node *kplatoNode() const { return m_node; }
+            
         public Q_SLOTS:
             QDate startDate();
             QDate endDate();
             
+            /// Return the nodes id
+            QString id();
             /// Return type of node
             QVariant type();
             /// Return number of child nodes
@@ -55,14 +59,11 @@ namespace Scripting {
             /// Return the child node at @p index
             QObject *childAt( int index );
             /// Return the data
-            QVariant data( const QString &property, const QString &role, const QString &schedule );
-            /// Return the data
-            QVariant data( const QString &property );
             
-            /// Return a map of palnned effort and cost pr day
+            /// Return a map of planed effort and cost pr day
             QVariant plannedEffortCostPrDay( const QVariant &start, const QVariant &end, const QVariant &schedule );
 
-        private:
+        protected:
             Project *m_project;
             KPlato::Node *m_node;
     };

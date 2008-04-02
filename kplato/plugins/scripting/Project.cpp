@@ -100,9 +100,9 @@ QObject *Scripting::Project::nodeAt( int index )
     return node( project()->allNodes().value( index ) );
 }
 
-QVariant Scripting::Project::nodeData( const KPlato::Node *node, const QString &property, const QString &role, const QString &schedule )
+QVariant Scripting::Project::nodeData( const KPlato::Node *node, const QString &property, const QString &role, long schedule )
 {
-    m_nodeModel.setManager( project()->scheduleManager( schedule.toLong() ) );
+    m_nodeModel.setManager( project()->scheduleManager( schedule ) );
     return m_nodeModel.data( node, nodeColumnNumber( property ), stringToRole( role ) ).toString();
 }
 
@@ -124,7 +124,7 @@ QObject *Scripting::Project::resourceGroup( KPlato::ResourceGroup *group )
     return m_groups[ group ];
 }
 
-QVariant Scripting::Project::resourceGroupData( const KPlato::ResourceGroup *group, const QString &property, const QString &role )
+QVariant Scripting::Project::resourceGroupData( const KPlato::ResourceGroup *group, const QString &property, const QString &role, long schedule )
 {
 //    m.setManager( project()->scheduleManager( schedule ) );
     return m_resourceModel.data( group, resourceColumnNumber( property ), stringToRole( role ) );
@@ -138,7 +138,7 @@ QObject *Scripting::Project::resource( KPlato::Resource *resource )
     return m_resources[ resource ];
 }
 
-QVariant Scripting::Project::resourceData( const KPlato::Resource *resource, const QString &property, const QString &role, const QString &schedule )
+QVariant Scripting::Project::resourceData( const KPlato::Resource *resource, const QString &property, const QString &role, long schedule )
 {
     //m_resourceModel.setManager( project()->scheduleManager( schedule.toLong() ) );
     return m_resourceModel.data( resource, resourceColumnNumber( property ), stringToRole( role ) ).toString();
@@ -148,6 +148,26 @@ QVariant Scripting::Project::resourceHeaderData( const QString &property )
 {
     int col = resourceColumnNumber( property );
     return m_resourceModel.headerData( col );
+}
+
+QObject *Scripting::Project::findResource( const QString &id )
+{
+    KPlato::Resource *r = project()->findResource( id );
+    return resource( r );
+}
+
+void Scripting::Project::clearExternalAppointments( const QString &id )
+{
+    foreach ( KPlato::Resource *r, project()->resourceList() ) {
+        r->clearExternalAppointments( id );
+    }
+}
+
+void Scripting::Project::clearAllExternalAppointments()
+{
+    foreach ( KPlato::Resource *r, project()->resourceList() ) {
+        r->clearExternalAppointments();
+    }
 }
 
 int Scripting::Project::stringToRole( const QString &role ) const

@@ -45,14 +45,4 @@ QObject *Scripting::ResourceGroup::resourceAt( int index ) const
     return m_project->resource( m_group->resourceAt( index ) );
 }
 
-QVariant Scripting::ResourceGroup::data(const QString &property )
-{
-    return data( property, "DisplayRole", "-1" );
-}
-
-QVariant Scripting::ResourceGroup::data(const QString &property, const QString &role, const QString &schedule )
-{
-    return m_project->resourceGroupData( m_group, property, role );
-}
-
 #include "ResourceGroup.moc"

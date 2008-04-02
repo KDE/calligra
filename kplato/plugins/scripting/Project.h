@@ -56,6 +56,8 @@ namespace Scripting {
             Project( Module* module, KPlato::Project *project );
             virtual ~Project() {}
 
+            KPlato::Project *kplatoProject() const { return static_cast<KPlato::Project*>( m_node ); }
+            
         public Q_SLOTS:
             /// Return number of schedule managers
             int scheduleCount() const;
@@ -80,23 +82,29 @@ namespace Scripting {
             int resourceGroupCount() const;
             /// Return the resource group at @p index
             QObject *resourceGroupAt( int index );
-            
+            /// Find resource with @p id
+            QObject *findResource( const QString &id );
+            /// Clear all resources external appointments to project with @p id
+            void clearExternalAppointments( const QString &id );
+            /// Clear all resources external appointments to any project
+            void clearAllExternalAppointments();
+                    
         public:
             
             /// Return the Scripting::Node that interfaces the KPlato::Node @p node (create if necessary)
             QObject *node( KPlato::Node *node );
             /// Return the data of @p node
-            QVariant nodeData( const KPlato::Node *node, const QString &property, const QString &role, const QString &schedule );
+            QVariant nodeData( const KPlato::Node *node, const QString &property, const QString &role, long schedule );
             
             /// Return ResourceGroup that interfaces the @p group (create if necessary)
             QObject *resourceGroup( KPlato::ResourceGroup *group );
             /// Return the data of resource group @p group
-            QVariant resourceGroupData( const KPlato::ResourceGroup *group, const QString &property, const QString &role );
+            QVariant resourceGroupData( const KPlato::ResourceGroup *group, const QString &property, const QString &role, long schedule = -1 );
             
             /// Return Resource that interfaces the @p resource (create if necessary)
             QObject *resource( KPlato::Resource *resource );
             /// Return the data of @p resource
-            QVariant resourceData( const KPlato::Resource *resource, const QString &property, const QString &role, const QString &schedule );
+            QVariant resourceData( const KPlato::Resource *resource, const QString &property, const QString &role, long schedule );
 
             /// Return the Scripting::Schedule that interfaces the KPlato::ScheuleManager @p sch
             QObject *schedule( KPlato::ScheduleManager *sch );

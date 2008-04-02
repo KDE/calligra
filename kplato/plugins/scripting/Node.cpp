@@ -42,6 +42,11 @@ QDate Scripting::Node::endDate()
     return m_node->endTime().dateTime().date();
 }
 
+QString Scripting::Node::id()
+{
+    return m_node->id();
+}
+
 QVariant Scripting::Node::type()
 {
     return m_node->typeToString();
@@ -55,16 +60,6 @@ int Scripting::Node::childCount() const
 QObject *Scripting::Node::childAt( int index )
 {
     return m_project->node( m_node->childNode( index ) );
-}
-
-QVariant Scripting::Node::data(const QString &property )
-{
-    return data( property, "DisplayRole", "-1" );
-}
-
-QVariant Scripting::Node::data(const QString &property, const QString &role, const QString &schedule )
-{
-    return m_project->nodeData( m_node, property, role, schedule );
 }
 
 QVariant Scripting::Node::plannedEffortCostPrDay( const QVariant &start, const QVariant &end, const QVariant &schedule )

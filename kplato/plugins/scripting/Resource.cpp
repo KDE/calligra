@@ -23,7 +23,10 @@
 #include <Resource.h>
 #include <Project.h>
 
+#include <kglobal.h>
 #include <kptresource.h>
+#include <kptappointment.h>
+#include <kptdatetime.h>
 
 Scripting::Resource::Resource( Scripting::Project *project, KPlato::Resource *resource, QObject *parent )
     : QObject( parent ), m_project( project ), m_resource( resource )
@@ -35,14 +38,46 @@ QVariant Scripting::Resource::type()
     return m_resource->typeToString();
 }
 
-QVariant Scripting::Resource::data(const QString &property )
+QString Scripting::Resource::id() const
 {
-    return data( property, "DisplayRole", "-1" );
+    return m_resource->id();
 }
 
-QVariant Scripting::Resource::data(const QString &property, const QString &role, const QString &schedule )
+QVariantList Scripting::Resource::appointmentIntervals( qlonglong schedule ) const
 {
-    return m_project->resourceData( m_resource, property, role, schedule );
+    KPlato::Appointment app = m_resource->appointmentIntervals( schedule );
+    QVariantList lst;
+    foreach ( KPlato::AppointmentInterval *ai, app.intervals() ) {
+        lst << QVariant( QVariantList() << ai->startTime().toString() << ai->endTime().toString() << ai->load() );
+    }
+    return lst;
+}
+
+void Scripting::Resource::addExternalAppointment( const QVariant &id, const QVariantList &lst )
+{
+    //kDebug()<<id<<lst;
+    KPlato::DateTime st = KPlato::DateTime::fromString( lst[0].toString() );
+    KPlato::DateTime et = KPlato::DateTime::fromString( lst[1].toString() );
+    double load = lst[2].toDouble();
+    if ( ! st.isValid() || ! et.isValid() ) {
+        return;
+    }
+    m_resource->addExternalAppointment( id.toString(), st, et, load );
+}
+
+QVariantList Scripting::Resource::externalAppointments() const
+{
+    KPlato::AppointmentIntervalList ilst = m_resource->externalAppointments();
+    QVariantList lst;
+    foreach ( KPlato::AppointmentInterval *ai, ilst ) {
+        lst << QVariant( QVariantList() << ai->startTime().toString() << ai->endTime().toString() << ai->load() );
+    }
+    return lst;
+}
+
+void Scripting::Resource::clearExternalAppointments( const QString &projectId )
+{
+    m_resource->clearExternalAppointments( projectId );
 }
 
 #include "Resource.moc"

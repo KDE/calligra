@@ -48,6 +48,7 @@ namespace Scripting {
         public Q_SLOTS:
             qlonglong id() const;
             QString name() const;
+            bool isScheduled() const;
             
             QDate startDate();
             QDate endDate();
@@ -56,10 +57,6 @@ namespace Scripting {
             int childCount() const;
             /// Return the child schedule at @p index
             QObject *childAt( int index );
-            /// Return the data
-//            QVariant data( const QString &property, const QString &role );
-            /// Return the data
-//            QVariant data( const QString &property );
 
         private:
             Project *m_project;

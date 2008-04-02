@@ -29,7 +29,8 @@
 namespace KPlato
 {
 
-void AppointmentIntervalTester::add() {
+void AppointmentIntervalTester::addInterval()
+{
     AppointmentIntervalList lst;
     DateTime dt1 = DateTime( KDateTime::currentDateTime( KDateTime::LocalZone ) );
     DateTime dt2 = dt1 + Duration( 0, 1, 0 );
@@ -350,6 +351,27 @@ void AppointmentIntervalTester::add() {
     QCOMPARE( load, i.value()->load() );
 
 
+}
+
+void AppointmentIntervalTester::addAppointment()
+{
+    Appointment app1, app2;
+
+    DateTime dt1 = DateTime( KDateTime::currentDateTime( KDateTime::LocalZone ) );
+    DateTime dt2 = dt1 + Duration( 0, 1, 0 );
+    double load = 1;
+    
+    app2.addInterval( dt1, dt2, load );
+    app1 += app2;
+    QCOMPARE( dt1, app1.intervals().values().first()->startTime() );
+    QCOMPARE( dt2, app1.intervals().values().first()->endTime() );
+    QCOMPARE( load, app1.intervals().values().first()->load() );
+
+    app1 += app2;
+    kDebug()<<load<<app1.intervals().values().first()->load();
+    QCOMPARE( dt1, app1.intervals().values().first()->startTime() );
+    QCOMPARE( dt2, app1.intervals().values().first()->endTime() );
+    QCOMPARE( load*2, app1.intervals().values().first()->load() );
 }
 
 } //namespace KPlato

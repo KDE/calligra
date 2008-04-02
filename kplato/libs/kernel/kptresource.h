@@ -381,6 +381,7 @@ public:
 
     Calendar *findCalendar( const QString &id ) const;
 
+    Appointment appointmentIntervals( long id ) const;
     Appointment appointmentIntervals() const;
     Duration plannedEffort( const QDate &date ) const;
 
@@ -413,10 +414,12 @@ public:
     // and reset when the resource is removed from the project
     void setProject( Project *project );
 
-    AppointmentIntervalList externalAppointments() { return m_externalAppointments; }
-    const AppointmentIntervalList &externalAppointments() const  { return m_externalAppointments; }
+
+    void addExternalAppointment( const QString &projectId, const DateTime &from, const DateTime &end, double load = 100 );
     void clearExternalAppointments();
-    void addExternalAppointment( const DateTime &from, const DateTime &end, double load = 100 ) { m_externalAppointments.add( from, end, load ); }
+    void clearExternalAppointments( const QString projectId );
+    AppointmentIntervalList externalAppointments( const QString &projectId );
+    AppointmentIntervalList externalAppointments() const;
 
 protected:
     void makeAppointment( Schedule *node, const DateTime &from, const DateTime &end );
@@ -432,7 +435,7 @@ private:
     QString m_email;
     DateTime m_availableFrom;
     DateTime m_availableUntil;
-    AppointmentIntervalList m_externalAppointments;
+    QMap<QString, AppointmentIntervalList> m_externalAppointments;
 
     int m_units; // avalable units in percent
 

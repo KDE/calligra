@@ -44,16 +44,29 @@ namespace Scripting {
             /// Destructor
             virtual ~Resource() {}
         
+            KPlato::Resource *kplatoResource() const { return m_resource; }
+            
         public Q_SLOTS:
             /// Return type of resource
             QVariant type();
-            /// Return the data
-            QVariant data( const QString &property, const QString &role, const QString &schedule );
-            /// Return the data
-            QVariant data( const QString &property );
+            /// Return type of resource
+            QString id() const;
             
             /// Add external appointments
             void addExternalAppointment( const KPlato::Resource *resource, const QString &start, const QString &end, int load ) {}
+
+            /**
+             * Return all internal appointments the resource has
+             */
+            QVariantList appointmentIntervals( qlonglong schedule ) const;
+            /**
+             * Return all external appointments the resource has
+             */
+            QVariantList externalAppointments() const;
+            /// Add an external appointment
+            void addExternalAppointment( const QVariant &id, const QVariantList &lst );
+            /// Clear appointments for for the project with @p projectId
+            void clearExternalAppointments( const QString &projectId );
 
         private:
             Project *m_project;

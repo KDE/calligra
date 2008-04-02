@@ -873,8 +873,6 @@ DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval )
     return DateTimeInterval( interval.first, interval.second );
 }
 
-
-
 //--------------------------------------
 MainSchedule::MainSchedule()
     : NodeSchedule(),

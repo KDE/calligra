@@ -30,16 +30,15 @@
 
 #include <kptpart.h>
 
+class QWidget;
 
 namespace KPlato {
     class Part;
-    class Node;
 }
 
 namespace Scripting {
 
     class Project;
-    class Node;
 
     /**
     * The Module class enables access to the KPlato functionality
@@ -68,7 +67,14 @@ namespace Scripting {
 
             /// Return the project
             QObject *project();
-
+            /// Return a schedule list view
+            QWidget *createScheduleListView( QWidget *parent );
+            
+            /// Return data, default role and schedule
+            QVariant data( QObject *object, const QString &property ) const;
+            /// Return data
+            QVariant data( QObject *object, const QString &property, const QString &role, qlonglong scheduleId ) const;
+            
         private:
             /// \internal d-pointer class.
             class Private;

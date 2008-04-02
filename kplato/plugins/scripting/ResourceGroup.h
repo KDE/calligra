@@ -43,6 +43,8 @@ namespace Scripting {
             ResourceGroup( Project *project, KPlato::ResourceGroup *group, QObject *parent );
             /// Destructor
             virtual ~ResourceGroup() {}
+            
+            KPlato::ResourceGroup *kplatoResourceGroup() const { return m_group; }
         
         public Q_SLOTS:
             /// Return type of resource group
@@ -51,10 +53,6 @@ namespace Scripting {
             int resourceCount() const;
             /// Return resource at @index
             QObject *resourceAt( int index ) const;
-            /// Return the data
-            QVariant data( const QString &property, const QString &role, const QString &schedule );
-            /// Return the data
-            QVariant data( const QString &property );
             
         private:
             Project *m_project;

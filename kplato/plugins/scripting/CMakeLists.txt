@@ -16,6 +16,7 @@ set(krossmodulekplato_PART_SRCS
     Project.cpp
     Module.cpp
     ScriptingPart.cpp
+    ScriptingWidgets.cpp
 )
 
 qt4_wrap_cpp(krossmodulekplato_PART_SRCS

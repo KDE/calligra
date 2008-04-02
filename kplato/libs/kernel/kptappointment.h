@@ -92,6 +92,8 @@ private:
  */
 class KPLATOKERNEL_EXPORT AppointmentIntervalList : public QMap<QString, AppointmentInterval*> {
 public:
+    /// Add @p interval to the list. Handle overlapping with existsing intervals.
+    void add( const AppointmentInterval &interval );
     /// Add an interval to the list. Handle overlapping with existsing intervals.
     void add( const DateTime &st, const DateTime &et, double load );
     /// Add the interval @p a to the list. Assumes no overlap.
@@ -100,6 +102,8 @@ public:
     bool loadXML(KoXmlElement &element, XMLLoaderObject &status);
     /// Save intervals to document
     void saveXML(QDomElement &element) const;
+    
+    AppointmentIntervalList &operator+=( const AppointmentIntervalList &lst );
 };
 typedef QListIterator<AppointmentInterval*> AppointmentIntervalListIterator;
 

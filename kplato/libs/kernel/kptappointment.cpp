@@ -160,6 +160,26 @@ AppointmentInterval AppointmentInterval::firstInterval(const AppointmentInterval
 }
 
 //-----------------------
+AppointmentIntervalList &AppointmentIntervalList::operator+=( const AppointmentIntervalList &lst )
+{
+    if ( lst.isEmpty() ) {
+        return *this;
+    }
+    if ( isEmpty() ) {
+        *this = lst;
+        return *this;
+    }
+    foreach ( AppointmentInterval *ai, lst.values() ) {
+        add( *ai );
+    }
+    return *this;
+}
+
+void AppointmentIntervalList::add( const AppointmentInterval &ai )
+{
+    add( ai.startTime(), ai.endTime(), ai.load() );
+}
+
 void AppointmentIntervalList::add( const DateTime &st, const DateTime &et, double load )
 {
     //kDebug()<<st<<et<<load;
@@ -285,7 +305,7 @@ bool AppointmentIntervalList::loadXML( KoXmlElement &element, XMLLoaderObject &s
             if (a->loadXML(e, status)) {
                 inSort(a);
             } else {
-                kError()<<"Could not load interval"<<endl;
+                kError()<<"Could not load interval";
                 delete a;
             }
         }
@@ -422,20 +442,20 @@ bool Appointment::loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedu
     //kDebug()<<project.name();
     Node *node = status.project().findNode(element.attribute("task-id"));
     if (node == 0) {
-        kError()<<"The referenced task does not exists: "<<element.attribute("task-id")<<endl;
+        kError()<<"The referenced task does not exists: "<<element.attribute("task-id");
         return false;
     }
     Resource *res = status.project().resource(element.attribute("resource-id"));
     if (res == 0) {
-        kError()<<"The referenced resource does not exists: resource id="<<element.attribute("resource-id")<<endl;
+        kError()<<"The referenced resource does not exists: resource id="<<element.attribute("resource-id");
         return false;
     }
     if (!res->addAppointment(this, sch)) {
-        kError()<<"Failed to add appointment to resource: "<<res->name()<<endl;
+        kError()<<"Failed to add appointment to resource: "<<res->name();
         return false;
     }
     if (!node->addAppointment(this, sch)) {
-        kError()<<"Failed to add appointment to node: "<<node->name()<<endl;
+        kError()<<"Failed to add appointment to node: "<<node->name();
         m_resource->takeAppointment(this);
         return false;
     }
@@ -449,14 +469,14 @@ bool Appointment::loadXML(KoXmlElement &element, XMLLoaderObject &status, Schedu
 
 void Appointment::saveXML(QDomElement &element) const {
     if (isEmpty()) {
-        kError()<<"Incomplete appointment data: No intervals"<<endl;
+        kError()<<"Incomplete appointment data: No intervals";
     }
     if (m_resource == 0 || m_resource->resource() == 0) {
-        kError()<<"Incomplete appointment data: No resource"<<endl;
+        kError()<<"Incomplete appointment data: No resource";
         return;
     }
     if (m_node == 0 || m_node->node() == 0) {
-        kError()<<"Incomplete appointment data: No node"<<endl;
+        kError()<<"Incomplete appointment data: No node";
         return; // shouldn't happen
     }
     //kDebug();
@@ -565,7 +585,7 @@ bool Appointment::attach() {
         return true;
     }
     kWarning()<<"Failed: "<<(m_resource ? "" : "resource=0 ")
-                                       <<(m_node ? "" : "node=0")<<endl;
+                                       <<(m_node ? "" : "node=0");
     return false;
 }
 

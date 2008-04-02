@@ -22,11 +22,14 @@
 #include "Module.h"
 #include "Project.h"
 #include "Node.h"
+#include "Resource.h"
 #include "ResourceGroup.h"
 #include "Schedule.h"
+#include "ScriptingWidgets.h"
 
 // qt
 #include <QPointer>
+#include <QWidget>
 // kde
 #include <kdebug.h>
 // kplato
@@ -91,6 +94,37 @@ QObject *Module::project()
     return d->project;
 }
 
+QWidget *Module::createScheduleListView( QWidget *parent )
+{
+    return new ScriptingScheduleListView( this, parent );
 }
+
+QVariant Module::data( QObject *object, const QString &property ) const
+{
+    return data( object, property, "DisplayRole", -1 );
+}
+
+QVariant Module::data( QObject *object, const QString &property, const QString &role, qlonglong scheduleId ) const
+{
+    if ( object == 0 ) {
+        return QVariant();
+    }
+    Node *n = qobject_cast<Node*>( object );
+    if ( n ) {
+        return d->project->nodeData( n->kplatoNode(), property, role, scheduleId );
+    }
+    Resource *r = qobject_cast<Resource*>( object );
+    if ( r ) {
+        return d->project->resourceData( r->kplatoResource(), property, role, scheduleId );
+    }
+    ResourceGroup *g = qobject_cast<ResourceGroup*>( object );
+    if ( g ) {
+        return d->project->resourceGroupData( g->kplatoResourceGroup(), property, role );
+    }
+    // TODO Schedule (if needed)
+    return QVariant();
+}
+
+} //namespace Scripting
 
 #include "Module.moc"
