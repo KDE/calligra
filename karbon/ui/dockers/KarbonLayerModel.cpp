@@ -174,7 +174,7 @@ QVariant KarbonLayerModel::data( const QModelIndex &index, int role ) const
                 if( dynamic_cast<KoShapeLayer*>( shape ) )
                     name = i18n("Layer");
                 else if( dynamic_cast<KoShapeGroup*>( shape ) )
-                    name = i18n("Group");
+                    name = i18nc("A group of shapes", "Group");
                 else
                     name = i18n("Shape");
             }
