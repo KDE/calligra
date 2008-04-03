@@ -24,6 +24,7 @@
 #include "Schedule.h"
 
 #include "kptglobal.h"
+#include "kptcalendar.h"
 #include "kptproject.h"
 #include "kptschedule.h"
 #include "kptresource.h"
@@ -116,6 +117,37 @@ QObject *Scripting::Project::resourceGroupAt( int index )
     return resourceGroup( project()->resourceGroupAt( index ) );
 }
 
+QObject *Scripting::Project::findResourceGroup( const QString &id )
+{
+    KPlato::ResourceGroup *g = project()->findResourceGroup( id );
+    return g == 0 ? 0 : resourceGroup( g );
+}
+
+QObject *Scripting::Project::createResourceGroup( QObject *group )
+{
+    //kDebug()<<this<<group;
+    const ResourceGroup *gr = qobject_cast<ResourceGroup*>( group );
+    if ( gr == 0 ) {
+        kDebug()<<"No group specified";
+        return 0;
+    }
+    KPlato::ResourceGroup *copyfrom = gr->kplatoResourceGroup();
+    if ( copyfrom == 0 ) {
+        kDebug()<<"Nothing to copy from";
+        return 0;
+    }
+    KPlato::ResourceGroup *g = project()->findResourceGroup( copyfrom->id() );
+    if ( g ) {
+        kDebug()<<"Resource group already exists";
+        return 0; // ???
+    }
+    g = new KPlato::ResourceGroup( copyfrom );
+    project()->addResourceGroup( g );
+    QObject *ng = resourceGroup( g );
+    //kDebug()<<"New group created:"<<ng<<g;
+    return ng;
+}
+
 QObject *Scripting::Project::resourceGroup( KPlato::ResourceGroup *group )
 {
     if ( ! m_groups.contains( group ) ) {
@@ -129,6 +161,39 @@ QVariant Scripting::Project::resourceGroupData( const KPlato::ResourceGroup *gro
 //    m.setManager( project()->scheduleManager( schedule ) );
     return m_resourceModel.data( group, resourceColumnNumber( property ), stringToRole( role ) );
 }
+
+QObject *Scripting::Project::createResource( QObject *group, QObject *res )
+{
+    ResourceGroup *gr = qobject_cast<ResourceGroup*>( group );
+    if ( gr == 0 ) {
+        kDebug()<<"No group specified";
+        return 0;
+    }
+    KPlato::ResourceGroup *g = project()->findResourceGroup( gr->kplatoResourceGroup()->id() );
+    if ( g == 0 ) {
+        kDebug()<<"Could not find group";
+        return 0;
+    }
+    const Resource *rs = qobject_cast<Resource*>( res );
+    if ( rs == 0 ) {
+        kDebug()<<"No resource to copy from";
+        return 0; // or create empty?
+    }
+    KPlato::Resource *r = project()->findResource( rs->kplatoResource()->id() );
+    if ( r ) {
+        kDebug()<<"Resource already exists";
+        return 0;
+    }
+    r = new KPlato::Resource( rs->kplatoResource() );
+    KPlato::Calendar *c = rs->kplatoResource()->calendar( true );
+    if ( c ) {
+        c = project()->calendar( c->id() );
+    }
+    r->setCalendar(c );
+    project()->addResource( g, r );
+    return resource( r );
+}
+
 
 QObject *Scripting::Project::resource( KPlato::Resource *resource )
 {
@@ -153,7 +218,7 @@ QVariant Scripting::Project::resourceHeaderData( const QString &property )
 QObject *Scripting::Project::findResource( const QString &id )
 {
     KPlato::Resource *r = project()->findResource( id );
-    return resource( r );
+    return r == 0 ? 0 : resource( r );
 }
 
 void Scripting::Project::clearExternalAppointments( const QString &id )

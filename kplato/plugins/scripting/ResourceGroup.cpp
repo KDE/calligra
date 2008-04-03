@@ -30,7 +30,12 @@ Scripting::ResourceGroup::ResourceGroup( Scripting::Project *project, KPlato::Re
 {
 }
 
-QVariant Scripting::ResourceGroup::type()
+QString Scripting::ResourceGroup::id()
+{
+    return m_group->id();
+}
+
+QString Scripting::ResourceGroup::type()
 {
     return m_group->typeToString();
 }

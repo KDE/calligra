@@ -5,6 +5,14 @@
         //-->
     <collection name="import" text="Import" comment="Import content">
         <script
+               name="pyimportresources"
+               text="Import Resources from KPlato File"
+               comment="Python script to import resources from file"
+               interpreter="python"
+               file="extensions/resourcesimport.py" />
+    </collection>
+    <collection name="import" text="Import" comment="Import content">
+        <script
                name="pyimportbusyinfo"
                text="KPlato Busy Information File"
                comment="Python script to import busy information from file"

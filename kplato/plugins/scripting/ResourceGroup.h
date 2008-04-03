@@ -47,8 +47,10 @@ namespace Scripting {
             KPlato::ResourceGroup *kplatoResourceGroup() const { return m_group; }
         
         public Q_SLOTS:
+            /// Return the identity of resource group
+            QString id();
             /// Return type of resource group
-            QVariant type();
+            QString type();
             /// Number of resources in this group
             int resourceCount() const;
             /// Return resource at @index

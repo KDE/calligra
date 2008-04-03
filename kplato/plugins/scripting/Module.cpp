@@ -30,6 +30,7 @@
 // qt
 #include <QPointer>
 #include <QWidget>
+#include <QMap>
 // kde
 #include <kdebug.h>
 // kplato
@@ -55,6 +56,7 @@ namespace Scripting {
             QPointer<KPlato::Part> doc;
             Project *project;
             Node *node;
+            QMap<QString, Module*> modules;
     };
 
 Module::Module(QObject* parent)
@@ -67,6 +69,7 @@ Module::Module(QObject* parent)
 
 Module::~Module()
 {
+    qDeleteAll( d->modules.values() );
     delete d;
 }
 
@@ -85,6 +88,18 @@ KoDocument* Module::doc()
 {
     return part();
 }
+
+QObject *Module::openDocument( const QString tag, const QString &url )
+{
+    Module *m = d->modules[ tag ];
+    if ( m == 0 ) {
+        m = new Module();
+        d->modules[ tag ] = m;
+    }
+    m->part()->openUrl( url );
+    return m;
+}
+
 
 QObject *Module::project()
 {

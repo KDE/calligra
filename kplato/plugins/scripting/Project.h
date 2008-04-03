@@ -82,13 +82,21 @@ namespace Scripting {
             int resourceGroupCount() const;
             /// Return the resource group at @p index
             QObject *resourceGroupAt( int index );
-            /// Find resource with @p id
+            /// Find resource group with identity @p id
+            QObject *findResourceGroup( const QString &id );
+            /// Create a copy of resource group @p group and insert it into the project
+            QObject *createResourceGroup( QObject *group );
+
+            /// Find resource with identity @p id
             QObject *findResource( const QString &id );
             /// Clear all resources external appointments to project with @p id
             void clearExternalAppointments( const QString &id );
             /// Clear all resources external appointments to any project
             void clearAllExternalAppointments();
-                    
+            
+            /// Create a copy of @p resource and insert it into @p group
+            QObject *createResource( QObject *group, QObject *resource );
+            
         public:
             
             /// Return the Scripting::Node that interfaces the KPlato::Node @p node (create if necessary)

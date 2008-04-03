@@ -65,6 +65,9 @@ namespace Scripting {
             
         public Q_SLOTS:
 
+            /// Open another KPlato document
+            QObject *openDocument( const QString tag, const QString &url );
+            
             /// Return the project
             QObject *project();
             /// Return a schedule list view
