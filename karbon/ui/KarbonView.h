@@ -62,7 +62,6 @@ class KoRuler;
 class VDocumentTab;
 class VColorDocker;
 class VStyleDocker;
-class KarbonTransformDocker;
 class KarbonLayerDocker;
 class KarbonZoomController;
 
@@ -177,7 +176,6 @@ protected:
     void createLayersTabDock();
     void createStrokeDock();
     void createColorDock();
-    void createTransformDock();
     void createResourceDock();
 
     void addSelectionToClipboard() const;
@@ -228,7 +226,6 @@ private:
     //dockers
     VDocumentTab        *m_DocumentTab;
     VStyleDocker        *m_styleDocker;
-    KarbonTransformDocker *m_TransformDocker;
     KarbonLayerDocker        *m_layerDocker;
 
     //Status Bar

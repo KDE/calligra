@@ -52,7 +52,6 @@
 #include "vcolordocker.h"
 #include "vdocumentdocker.h"
 #include "vstyledocker.h"
-#include "KarbonTransformDocker.h"
 #include "KarbonLayerDocker.h"
 #include "KarbonStylePreviewDocker.h"
 
@@ -206,7 +205,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     m_DocumentTab = 0L;
     m_stylePreview = 0L;
     m_styleDocker = 0L;
-    m_TransformDocker = 0L;
     m_layerDocker = 0L;
 
     unsigned int max = part()->maxRecentFiles();
@@ -249,7 +247,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
         //Create Dockers
         createColorDock();
-        createTransformDock();
         //createDocumentTabDock();
         createLayersTabDock();
         //createResourceDock();
@@ -1411,15 +1408,6 @@ void KarbonView::createColorDock()
     createDockWidget(&colorFactory);
 }
 
-void KarbonView::createTransformDock()
-{
-    debugView("KarbonView::createTransformDock()");
-
-    KarbonTransformDockerFactory transformFactory;
-    m_TransformDocker = qobject_cast<KarbonTransformDocker*>(createDockWidget(&transformFactory));
-    connect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
-}
-
 void KarbonView::createResourceDock()
 {
     debugView("KarbonView::createResourceDock()");
@@ -1441,7 +1429,6 @@ void KarbonView::updateUnit( KoUnit unit )
 {
     m_horizRuler->setUnit( unit );
     m_vertRuler->setUnit( unit );
-    m_TransformDocker->setUnit( unit );
     m_canvas->resourceProvider()->setUnitChanged();
 }
 
