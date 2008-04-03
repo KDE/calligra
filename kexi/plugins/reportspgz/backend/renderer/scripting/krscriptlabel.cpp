@@ -167,20 +167,20 @@ namespace Scripting
 	
 	QPointF Label::position()
 	{
-		return QPointF();
+		return _label->_pos.toPoint();
 	}
-	void Label::setPosition(QPointF)
+	void Label::setPosition(qreal x, qreal y)
 	{
-		
+		_label->_pos.setPointPos(QPointF(x,y));
 	}
 			
 	QSizeF Label::size()
 	{
-		return QSizeF();
+		return _label->_size.toPoint();
 	}
-	void Label::setSize(QSizeF)
+	void Label::setSize(qreal w, qreal h)
 	{
-		
+		_label->_size.setPointSize(QSizeF(w,h));
 	}
 }
 

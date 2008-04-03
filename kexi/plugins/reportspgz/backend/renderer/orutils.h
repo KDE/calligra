@@ -63,8 +63,7 @@ class orQuery
 		inline KexiDB::Cursor *getQuery() { return qryQuery; }
 		inline const QString &getSql() const { return qstrQuery; }
 		inline const QString &getName() const { return qstrName; }
-
-		//DELETE QStringList     missingParamList;
+		
 		uint fieldNumber ( const QString &fld );
 		KexiDB::TableOrQuerySchema &schema();
 };

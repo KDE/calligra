@@ -23,6 +23,7 @@
 #include <QObject>
 #include <QString>
 #include <kexidb/connection.h>
+#include <kexidb/cursor.h>
 
 /**
 	@author
@@ -31,13 +32,14 @@ class KRScriptFunctions : public QObject
 {
 	Q_OBJECT
 	public:
-		KRScriptFunctions(KexiDB::Connection*);
+		KRScriptFunctions(const KexiDB::Cursor*);
 
 		~KRScriptFunctions();
 		void setWhere(const QString&);
 		void setSource(const QString&);
 	private:
 		KexiDB::Connection *_conn;
+		const KexiDB::Cursor *_curs;
 		QString _source;
 		qreal math(const QString &, const QString &);
 		
@@ -48,6 +50,7 @@ class KRScriptFunctions : public QObject
 		qreal min(const QString &);
 		qreal max(const QString &);
 		qreal count(const QString &);
+		QVariant value(const QString &);
 };
 
 #endif

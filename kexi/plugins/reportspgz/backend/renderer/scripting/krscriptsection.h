@@ -44,9 +44,9 @@ namespace Scripting
 			QString name();
 		
 			/**Returns an object in the section, by number*/
-			QObject* object(int);
+			QObject* objectByNumber(int);
 			/**Returns an object in the section, by name*/
-			QObject* object(const QString&);
+			QObject* objectByName(const QString&);
 		
 		private:
 			KRSectionData *_section;

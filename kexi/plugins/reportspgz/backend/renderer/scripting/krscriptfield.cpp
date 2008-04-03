@@ -167,19 +167,19 @@ namespace Scripting
 	
 	QPointF Field::position()
 	{
-		return QPointF();
+		return _field->_pos.toPoint();
 	}
-	void Field::setPosition(QPointF)
+	void Field::setPosition(qreal x, qreal y)
 	{
-		
+		_field->_pos.setPointPos(QPointF(x,y));
 	}
 			
 	QSizeF Field::size()
 	{
-		return QSizeF();
+		return _field->_size.toPoint();
 	}
-	void Field::setSize(QSizeF)
+	void Field::setSize(qreal w, qreal h)
 	{
-		
+		_field->_size.setPointSize(QSizeF(w,h));
 	}
 }

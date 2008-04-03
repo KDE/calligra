@@ -29,6 +29,8 @@ set(pgzkexireportpart2_LIB_SRCS
 	backend/common/krsectiondata.cpp
 	backend/common/labelsizeinfo.cpp
 	backend/common/reportpageoptions.cpp
+	backend/common/krreportdata.cpp
+	backend/common/krdetailsectiondata.cpp
 	backend/common/parsexmlutils.cpp
 	
 	backend/renderer/3of9.cpp
@@ -43,7 +45,9 @@ set(pgzkexireportpart2_LIB_SRCS
 	
 	backend/renderer/scripting/krscripthandler.cpp
 	backend/renderer/scripting/krscriptfunctions.cpp
+	backend/renderer/scripting/krscriptconstants.cpp
 	backend/renderer/scripting/krscriptdebug.cpp
+	backend/renderer/scripting/krscriptreport.cpp
 	backend/renderer/scripting/krscriptsection.cpp
 	backend/renderer/scripting/krscriptlabel.cpp
 	backend/renderer/scripting/krscriptfield.cpp
@@ -74,7 +78,7 @@ kde4_add_ui_files(pgzkexireportpart2_LIB_SRCS backend/wrtembed/detailgroupsectio
 
 kde4_add_plugin(pgzkexireportpart2 ${pgzkexireportpart2_LIB_SRCS})
 
-target_link_libraries(pgzkexireportpart2 ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} ${QT_QTSCRIPT_LIBRARY}  kexidb kexicore keximain koproperty koguiutils komain kexiguiutils)
+target_link_libraries(pgzkexireportpart2 ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} ${QT_QTSCRIPT_LIBRARY}  kexidb kexicore keximain koproperty koguiutils komain kexiguiutils krosscore)
 
 install(TARGETS pgzkexireportpart2  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  pgzkexireporthandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kexi)

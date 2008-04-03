@@ -45,7 +45,6 @@ class KRImageData;
 #include <qstring.h>
 #include <QRectF>
 #include <qfont.h>
-#include <qcolor.h>
 #include <qlist.h>
 #include <qmap.h>
 
@@ -97,14 +96,6 @@ class ORDataData
 		QString column;
 };
 
-class ORTitleData
-{
-	public:
-		QString string;
-		QFont font;
-		bool font_defined;
-};
-
 class ORTextStyleData
 {
 	public:
@@ -146,57 +137,6 @@ class ORDetailGroupSectionData
 		KRSectionData * foot;
 };
 
-class ORDetailSectionData
-{
-	public:
-		ORDetailSectionData();
-
-		enum PageBreak
-		{
-			BreakNone = 0,
-			BreakAtEnd = 1
-		};
-
-		QString name;
-		int pagebreak;
-
-		KRSectionData * detail;
-
-		QList<ORDetailGroupSectionData*> groupList;
-		// QList<ORDataData> trackTotal;
-};
-
-class ORReportData
-{
-	public:
-		ORReportData();
-
-		QString title;
-
-		ReportPageOptions page;
-		QString query;
-		QString script;
-
-
-		KRSectionData * pghead_first;
-		KRSectionData * pghead_odd;
-		KRSectionData * pghead_even;
-		KRSectionData * pghead_last;
-		KRSectionData * pghead_any;
-
-		KRSectionData * rpthead;
-		KRSectionData * rptfoot;
-
-		KRSectionData * pgfoot_first;
-		KRSectionData * pgfoot_odd;
-		KRSectionData * pgfoot_even;
-		KRSectionData * pgfoot_last;
-		KRSectionData * pgfoot_any;
-
-		ORDetailSectionData* detailsection;
-//    QMap<QString, QColor> color_map;
-//    QList<ORDataData> trackTotal;
-};
 
 
 bool parseReportRect ( const QDomElement &, QRectF & );
@@ -204,9 +144,5 @@ bool parseReportFont ( const QDomElement &, QFont & );
 
 bool parseReportTextStyleData ( const QDomElement &, ORTextStyleData & );
 bool parseReportLineStyleData ( const QDomElement &, ORLineStyleData & );
-
-bool parseReportDetailSection ( const QDomElement &, ORDetailSectionData & );
-bool parseReport ( const QDomElement &, ORReportData & );
-bool parseReportParameter ( const QDomElement &, ORReportData & );
 
 #endif

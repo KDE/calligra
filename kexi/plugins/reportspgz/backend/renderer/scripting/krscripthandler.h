@@ -23,35 +23,47 @@
 #include <QString>
 #include <kexidb/connection.h>
 #include <krsectiondata.h>
+#include <kross/core/action.h>
 
 class KRScriptFunctions;
+class KRScriptConstants;
 class KRScriptDebug;
 class QScriptEngine;
-class ORReportData;
+class KRReportData;
 
 class KRScriptHandler : public QObject
 {
 	Q_OBJECT
 	public:
-		KRScriptHandler(KexiDB::Connection*, QScriptEngine*, const ORReportData*);
+		KRScriptHandler(const KexiDB::Cursor *, KRReportData*);
 		~KRScriptHandler();
 		void setSource(const QString &s);
+		QVariant evaluate(const QString&);
+		void displayErrors();
 		
 	public slots:
 		void slotInit();
 		void slotEnteredSection(KRSectionData*);
 		void slotEnteredGroup(const QString&, const QVariant&);
 		void slotExitedGroup(const QString&, const QVariant&);
-		
+		void populateEngineParameters(KexiDB::Cursor *q);
+		void setPageNumber(int){};
+		void setPageTotal(int){};
 	private:
 		KRScriptFunctions *_functions;
+		KRScriptConstants *_constants;
 		KRScriptDebug *_debug;
 		
+		QString fieldFunctions();
+		
 		KexiDB::Connection *_conn;
-		QScriptEngine *_engine;
+		const KexiDB::Cursor *_curs;
+		
 		QString _source;
 		QString _where;
-		const ORReportData  *_data;
+		KRReportData  *_data;
+		
+		Kross::Action* _action;
 };
 
 #endif

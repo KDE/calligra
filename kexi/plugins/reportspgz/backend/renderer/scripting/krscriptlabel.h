@@ -60,10 +60,10 @@ namespace Scripting
 			void setLineStyle(int);
 			
 			QPointF position();
-			void setPosition(QPointF);
+			void setPosition(qreal, qreal);
 			
 			QSizeF size();
-			void setSize(QSizeF);
+			void setSize(qreal,qreal);
 					
 		private:
 			KRLabelData *_label;

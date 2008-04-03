@@ -73,6 +73,7 @@
 #include <kdebug.h>
 #include <kexisectionheader.h>
 #include <kexieditor.h>
+#include <kross/core/manager.h>
 
 //
 // define and implement the ReportWriterSectionData class
@@ -1014,6 +1015,9 @@ void ReportDesigner::createProperties()
 	_topMargin = new KoProperty::Property ( "TopMargin", 1.0, "Top Margin", "Top Margin" );
 	_bottomMargin = new KoProperty::Property ( "BottomMargin", 1.0, "Bottom Margin", "Bottom Margin" );
 
+	keys = Kross::Manager::self().interpreters();
+	_interpreter = new KoProperty::Property ( "Interpreter", keys, keys, keys[0], "Script Interpreter" );
+	
 	set->addProperty ( _title );
 	set->addProperty ( _dataSource );
 	set->addProperty ( _pageSize );
@@ -1026,7 +1030,8 @@ void ReportDesigner::createProperties()
 	set->addProperty ( _rightMargin );
 	set->addProperty ( _topMargin );
 	set->addProperty ( _bottomMargin );
-
+	set->addProperty ( _interpreter );
+	
 	KoProperty::Property* _customHeight;
 	KoProperty::Property* _customWidth;
 

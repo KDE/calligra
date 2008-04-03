@@ -21,9 +21,10 @@
 #include <kexidb/cursor.h>
 #include <kdebug.h>
 
-KRScriptFunctions::KRScriptFunctions(KexiDB::Connection *c)
+KRScriptFunctions::KRScriptFunctions(const KexiDB::Cursor *c)
 {
-	_conn = c;
+	_curs = c;
+	_conn = _curs->connection();;
 }
 
 
@@ -86,5 +87,83 @@ qreal KRScriptFunctions::max(const QString &field)
 qreal KRScriptFunctions::count(const QString &field)
 {
 	return math("COUNT", field);
+}
+
+QVariant KRScriptFunctions::value(const QString &field)
+{
+	QVariant val;
+	if (!_curs)
+	{
+		kDebug() << "No cursor to get value of field " << field << endl;
+		return val;
+	}
+	
+	
+	KexiDB::QueryColumnInfo::Vector flds = _curs->query()->fieldsExpanded();
+	for ( int i = 0; i < flds.size() ; ++i )
+	{
+		
+		if (flds[i]->aliasOrName().toLower() == field.toLower())
+		{
+			val = const_cast<KexiDB::Cursor*>(_curs)->value(i);
+		}
+	}
+	kDebug() << "Value of " << field <<  " is " << val << endl;
+	
+	return val;
+	
+	
+#if 0
+		QScriptValue *x;
+		switch(flds[i]->field->type())
+		{
+			case KexiDB::Field::Byte:
+				x = new QVariant(_scriptEngine, q->value(i).toInt());
+				break;
+			case KexiDB::Field::ShortInteger:
+				x = new QScriptValue(_scriptEngine, q->value(i).toInt());
+				break;
+			case KexiDB::Field::Integer:
+				x = new QScriptValue(_scriptEngine, q->value(i).toInt());
+				break;
+			case KexiDB::Field::BigInteger:
+				x = new QScriptValue(_scriptEngine, q->value(i).toInt());
+				break;
+			case KexiDB::Field::Boolean:
+				x = new QScriptValue(_scriptEngine, q->value(i).toBool());
+				break;
+			case KexiDB::Field::Date:
+				*x = _scriptEngine->newDate(q->value(i).toDateTime());
+				break;
+			case KexiDB::Field::DateTime:
+				*x = _scriptEngine->newDate(q->value(i).toDateTime());
+				break;
+			case KexiDB::Field::Time:
+				*x = _scriptEngine->newDate(q->value(i).toDateTime());
+				break;
+			case KexiDB::Field::Float:
+				x = new QScriptValue(_scriptEngine, q->value(i).toDouble());
+				break;
+			case KexiDB::Field::Double:
+				x = new QScriptValue(_scriptEngine, q->value(i).toDouble());
+				break;
+			case KexiDB::Field::Text:
+				x = new QScriptValue(_scriptEngine, q->value(i).toString());
+				break;
+			case KexiDB::Field::LongText:
+				x = new QScriptValue(_scriptEngine, q->value(i).toString());
+				break;
+			case KexiDB::Field::BLOB:
+				//x = new QScriptValue(_scriptEngine, q->value(i).toByteArray());
+				break;
+			default:
+				x = new QScriptValue(_scriptEngine, q->value(i).toString());
+				break;
+				
+		}
+		_scriptEngine->globalObject().setProperty(QString(flds[i]->aliasOrName()), *x);
+	}
+#endif
+	
 }
 

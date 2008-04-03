@@ -106,13 +106,19 @@ class ReportDesigner : public QWidget
 		KexiDB::Connection *theConn() {return conn;}
 		bool isConnected() {return conn &&  conn->isConnected();}
 		
-		/**Return a list of queries that the report can be based on*/
+		/**
+		\return a list of queries that the report can be based on
+		*/
 		QStringList queryList();
 		
-		/**Return a list of fields in the selected query*/
+		/**
+		\return a list of fields in the selected query
+		*/
 		QStringList fieldList();
 		
-		/**Return the page width in pixels for the current paper size*/
+		/**
+		\return the page width in pixels for the current paper size
+		*/
 		int pageWidthPx() const;
 
 		QGraphicsScene* activeScene();
@@ -209,6 +215,7 @@ class ReportDesigner : public QWidget
 		KoProperty::Property* _gridDivisions;
 		KoProperty::Property* _gridSnap;
 		KoProperty::Property* _labelType;
+		KoProperty::Property* _interpreter;
 
 		QString editorText(const QString&);
 		QString _script;

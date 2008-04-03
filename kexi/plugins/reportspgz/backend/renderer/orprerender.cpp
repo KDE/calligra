@@ -42,8 +42,10 @@
 #include <krimagedata.h>
 #include <krlabeldata.h>
 #include <krlinedata.h>
-#include <QScriptEngine>
 #include "scripting/krscripthandler.h"
+#include <krreportdata.h>
+#include <krdetailsectiondata.h>
+
 //
 // ORPreRenderPrivate
 // This class is the private class that houses all the internal
@@ -65,7 +67,7 @@ class ORPreRenderPrivate : public QObject
 
 		ORODocument* _document;
 		OROPage*     _page;
-		ORReportData* _reportData;
+		KRReportData* _reportData;
 
 		qreal _yOffset;      // how far down the current page are we
 		qreal _topMargin;    // value stored in the correct units
@@ -82,7 +84,7 @@ class ORPreRenderPrivate : public QObject
 
 		QMap<ORDataData,qreal> _subtotPageCheckPoints;
 		QMap<ORDataData,qreal> * _subtotContextMap;
-		ORDetailSectionData * _subtotContextDetail;
+		KRDetailSectionData * _subtotContextDetail;
 		bool _subtotContextPageFooter;
 
 		bool populateData ( const ORDataData &, orData & );
@@ -91,7 +93,7 @@ class ORPreRenderPrivate : public QObject
 		qreal finishCurPage ( bool = false );
 		qreal finishCurPageSize ( bool = false );
 
-		void renderDetailSection ( ORDetailSectionData & );
+		void renderDetailSection ( KRDetailSectionData & );
 		qreal renderSection ( const KRSectionData & );
 		qreal renderSectionSize ( const KRSectionData & );
 
@@ -99,7 +101,6 @@ class ORPreRenderPrivate : public QObject
 		
 		
 		///Scripting Stuff
-		QScriptEngine *_scriptEngine;
 		KRScriptHandler *_handler;
 		void initEngine();
 		void populateEngineParameters();
@@ -123,7 +124,7 @@ ORPreRenderPrivate::ORPreRenderPrivate()
 	_maxHeight = _maxWidth = 0.0;
 	_query = 0;
 	_subtotContextMap = 0;
-	_subtotContextDetail = 0;
+//	_subtotContextDetail = 0;
 	_subtotContextPageFooter = false;
 	
 	
@@ -173,8 +174,7 @@ void ORPreRenderPrivate::createNewPage()
 	_pageCounter++;
 
 	//Update the page count script value
-	QScriptValue x(_scriptEngine, _pageCounter);
-	_scriptEngine->globalObject().setProperty("PageNumber", x);
+	_handler->setPageNumber(_pageCounter);
 	
 	_page = new OROPage ( 0 );
 	_document->addPage ( _page );
@@ -259,7 +259,7 @@ qreal ORPreRenderPrivate::finishCurPage ( bool lastPage )
 	return retval;
 }
 
-void ORPreRenderPrivate::renderDetailSection ( ORDetailSectionData & detailData )
+void ORPreRenderPrivate::renderDetailSection ( KRDetailSectionData & detailData )
 {
 	kDebug() << endl;
 	
@@ -458,7 +458,7 @@ void ORPreRenderPrivate::renderDetailSection ( ORDetailSectionData & detailData 
 			}
 		}
 		_subtotContextDetail = 0;
-		if ( ORDetailSectionData::BreakAtEnd == detailData.pagebreak )
+		if ( KRDetailSectionData::BreakAtEnd == detailData.pagebreak )
 			createNewPage();
 	}
 }
@@ -562,7 +562,7 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 	qreal intHeight = POINT_TO_INCH ( sectionData.height() ) * KoGlobal::dpiY();
 	kDebug() << "Name: " << sectionData.name() << " Height: " << intHeight << "Objects: " << sectionData.objects().count() << endl;
 
-	populateEngineParameters();
+	_handler->populateEngineParameters(_query->getQuery());
 	
 	emit (renderingSection(const_cast<KRSectionData*>(&sectionData)));
 //	emit (renderingSection(&sectionData));
@@ -621,57 +621,31 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 			tb->setLineStyle(f->lineStyle());
 			
 			QString str = QString::null;
-			if ( f->_trackTotal->value().toBool() )
+	
+			QString cs = f->_controlSource->value().toString();
+			if (cs.left(1) == "=")
 			{
-//TODO Totals				KexiDB::Cursor * xqry = getQuerySource ( f->data().query )->getQuery();
-#if 0
-				if ( f->format.length() > 0 && xqry )
+				if (!cs.contains("PageTotal"))
 				{
-				qreal d_val = xqry->getFieldTotal ( f->data.column );
-					if ( f->sub_total )
-						d_val -= getNearestSubTotalCheckPoint ( f->data );
-					if ( !f->builtinFormat )
-						str = QString().sprintf ( f->format.toLatin1(), d_val ); //TODO check if sprintf nescessary
-					else
-					{
-						str = QString ( "SELECT %1(%2);" ).arg ( getFunctionFromTag ( f->format ) ).arg ( d_val );
-						XSqlQuery q ( str, _database );
-						if ( q.first() )
-							str = q.value ( 0 ).toString();
-						else
-							str = QString::null;
-					}
-				}
-#endif
-			}
-			else
-			{
-				QString cs = f->_controlSource->value().toString();
-				if (cs.left(1) == "=")
-				{
-					if (!cs.contains("PageTotal"))
-					{
-					//Calculate the value or print #ERROR
-					QScriptValue v = _scriptEngine->evaluate(cs.mid(1));
-					str = v.toString();
-					}
-					else
-					{
-						str = cs.mid(1);
-						_postProcText.append(tb);
-					}
+					str = _handler->evaluate(f->entityName()).toString();
 				}
 				else
 				{
-					QString qry = "Data Source";
-					QString clm = f->_controlSource->value().toString();
-					
-					populateData ( f->data(), dataThis );
-					str = dataThis.getValue();
+					str = cs.mid(1);
+					_postProcText.append(tb);
 				}
-				tb->setText ( str );
-				_page->addPrimitive ( tb );
 			}
+			else
+			{
+				QString qry = "Data Source";
+				QString clm = f->_controlSource->value().toString();
+				
+				populateData ( f->data(), dataThis );
+				str = dataThis.getValue();
+			}
+			tb->setText ( str );
+			_page->addPrimitive ( tb );
+		
 			
 		}
 		else if ( elemThis->type() == KRObjectData::EntityText )
@@ -970,73 +944,14 @@ qreal ORPreRenderPrivate::getNearestSubTotalCheckPoint ( const ORDataData & d )
 
 void ORPreRenderPrivate::initEngine()
 {
-	_scriptEngine = new QScriptEngine();
-	_handler = new KRScriptHandler(_conn, _scriptEngine, _reportData);
+	_handler = new KRScriptHandler(_query->getQuery(), _reportData);
 	_handler->slotInit();
 	connect(this, SIGNAL(enteredGroup(const QString&, const QVariant&)), _handler, SLOT(slotEnteredGroup(const QString&, const QVariant&)));
 	
 	connect(this, SIGNAL(renderingSection(KRSectionData*)), _handler, SLOT(slotEnteredSection(KRSectionData*)));
 }
 
-void ORPreRenderPrivate::populateEngineParameters()
-{
-	KexiDB::Cursor *q = _query->getQuery();
-	if (!q)
-		return;
-	
-	KexiDB::QueryColumnInfo::Vector flds = q->query()->fieldsExpanded();
-	for ( int i = 0; i < flds.size() ; ++i )
-	{
-		QScriptValue *x;
-		switch(flds[i]->field->type())
-		{
-			case KexiDB::Field::Byte:
-				x = new QScriptValue(_scriptEngine, q->value(i).toInt());
-				break;
-			case KexiDB::Field::ShortInteger:
-				x = new QScriptValue(_scriptEngine, q->value(i).toInt());
-				break;
-			case KexiDB::Field::Integer:
-				x = new QScriptValue(_scriptEngine, q->value(i).toInt());
-				break;
-			case KexiDB::Field::BigInteger:
-				x = new QScriptValue(_scriptEngine, q->value(i).toInt());
-				break;
-			case KexiDB::Field::Boolean:
-				x = new QScriptValue(_scriptEngine, q->value(i).toBool());
-				break;
-			case KexiDB::Field::Date:
-				*x = _scriptEngine->newDate(q->value(i).toDateTime());
-				break;
-			case KexiDB::Field::DateTime:
-				*x = _scriptEngine->newDate(q->value(i).toDateTime());
-				break;
-			case KexiDB::Field::Time:
-				*x = _scriptEngine->newDate(q->value(i).toDateTime());
-				break;
-			case KexiDB::Field::Float:
-				x = new QScriptValue(_scriptEngine, q->value(i).toDouble());
-				break;
-			case KexiDB::Field::Double:
-				x = new QScriptValue(_scriptEngine, q->value(i).toDouble());
-				break;
-			case KexiDB::Field::Text:
-				x = new QScriptValue(_scriptEngine, q->value(i).toString());
-				break;
-			case KexiDB::Field::LongText:
-				x = new QScriptValue(_scriptEngine, q->value(i).toString());
-				break;
-			case KexiDB::Field::BLOB:
-				//x = new QScriptValue(_scriptEngine, q->value(i).toByteArray());
-				break;
-			default:
-				x = new QScriptValue(_scriptEngine, q->value(i).toString());
-				break;
-				
-		}
-		_scriptEngine->globalObject().setProperty(QString(flds[i]->aliasOrName()), *x);
-	}
-}
+
 
 //
 // ORPreRender
@@ -1192,7 +1107,7 @@ ORODocument* ORPreRender::generate()
 			numRows = label.columns();
 		}
 
-		ORDetailSectionData * detailData = _internal->_reportData->detailsection;
+		KRDetailSectionData * detailData = _internal->_reportData->detailsection;
 		if ( detailData->detail != 0 )
 		{
 			orQuery *orqThis = _internal->_query;
@@ -1252,19 +1167,20 @@ ORODocument* ORPreRender::generate()
 
 	// _postProcText contains those text boxes that need to be updated
 	// with information that wasn't available at the time it was added to the document
-	QScriptValue x(_internal->_scriptEngine, _internal->_document->pages());
-	_internal->_scriptEngine->globalObject().setProperty("PageTotal", x);
+	_internal->_handler->setPageTotal(_internal->_document->pages());
 	
 	for ( int i = 0; i < _internal->_postProcText.size(); i++ )
 	{
 		OROTextBox * tb = _internal->_postProcText.at ( i );
 		
-		QScriptValue y(_internal->_scriptEngine, tb->page()->page() + 1);
-		_internal->_scriptEngine->globalObject().setProperty("PageNumber", y);
+		_internal->_handler->setPageNumber(tb->page()->page() + 1);
 		
-		tb->setText(_internal->_scriptEngine->evaluate(tb->text()).toString());
+		//tb->setText(_internal->_scriptEngine->evaluate(tb->text()).toString());
 	}
 
+	_internal->_handler->displayErrors();
+	
+	delete _internal->_handler;
 	delete _internal->_query;
 	_internal->_postProcText.clear();
 
@@ -1296,11 +1212,10 @@ bool ORPreRender::setDom ( const QString & docReport )
 		_internal->_valid = false;
 
 		_internal->_docReport.setContent(docReport);
-		_internal->_reportData = new ORReportData();
-		if ( parseReport ( _internal->_docReport.documentElement(),* ( _internal->_reportData ) ) )
-		{
-			_internal->_valid = true;
-		}
+		_internal->_reportData = new KRReportData(_internal->_docReport.documentElement());
+		//TODO KRReportData->isValid()
+		_internal->_valid = true;
+		
 	}
 	return isValid();
 }

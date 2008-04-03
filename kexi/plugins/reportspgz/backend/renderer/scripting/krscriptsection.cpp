@@ -50,7 +50,7 @@ namespace Scripting
 		return _section->_name;
 	}
 
-	QObject* Section::object(int i)
+	QObject* Section::objectByNumber(int i)
 	{
 		switch (_section->_objects[i]->type())
 		{
@@ -66,13 +66,13 @@ namespace Scripting
 	
 	}
 
-	QObject* Section::object(const QString& n)
+	QObject* Section::objectByName(const QString& n)
 	{
 		for (int i = 0; i < _section->objects().count(); ++i)
 		{
 			if (_section->_objects[i]->entityName() == n)
 			{
-				return object(i);
+				return objectByNumber(i);
 			}
 		}
 		return 0;
