@@ -42,7 +42,7 @@ class KARBONUI_EXPORT KarbonFactory : public KoFactory
 	Q_OBJECT
 
 public:
-	KarbonFactory( QObject* parent = 0, const char* name = 0 );
+	explicit KarbonFactory( QObject* parent = 0, const char* name = 0 );
 	~KarbonFactory();
 
 	virtual KParts::Part* createPartObject( QWidget *parentWidget = 0, QObject* parent = 0L, const char* classname = "KoDocument", const QStringList& args = QStringList() );
