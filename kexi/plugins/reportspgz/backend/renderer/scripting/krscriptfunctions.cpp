@@ -47,7 +47,12 @@ qreal KRScriptFunctions::math(const QString &function, const QString &field)
 	qreal ret;
 	QString sql;
 	
-	sql = "SELECT " + function +"(" + field + ") FROM " + _source + " WHERE(" + _where + ")";
+	sql = "SELECT " + function +"(" + field + ") FROM " + _source;
+	
+	if (!_where.isEmpty())
+	{
+		sql += " WHERE(" + _where + ")";
+	}
 	
 	kDebug() << sql << endl;
 	KexiDB::Cursor *curs= _conn->executeQuery(sql);
@@ -111,59 +116,5 @@ QVariant KRScriptFunctions::value(const QString &field)
 	kDebug() << "Value of " << field <<  " is " << val << endl;
 	
 	return val;
-	
-	
-#if 0
-		QScriptValue *x;
-		switch(flds[i]->field->type())
-		{
-			case KexiDB::Field::Byte:
-				x = new QVariant(_scriptEngine, q->value(i).toInt());
-				break;
-			case KexiDB::Field::ShortInteger:
-				x = new QScriptValue(_scriptEngine, q->value(i).toInt());
-				break;
-			case KexiDB::Field::Integer:
-				x = new QScriptValue(_scriptEngine, q->value(i).toInt());
-				break;
-			case KexiDB::Field::BigInteger:
-				x = new QScriptValue(_scriptEngine, q->value(i).toInt());
-				break;
-			case KexiDB::Field::Boolean:
-				x = new QScriptValue(_scriptEngine, q->value(i).toBool());
-				break;
-			case KexiDB::Field::Date:
-				*x = _scriptEngine->newDate(q->value(i).toDateTime());
-				break;
-			case KexiDB::Field::DateTime:
-				*x = _scriptEngine->newDate(q->value(i).toDateTime());
-				break;
-			case KexiDB::Field::Time:
-				*x = _scriptEngine->newDate(q->value(i).toDateTime());
-				break;
-			case KexiDB::Field::Float:
-				x = new QScriptValue(_scriptEngine, q->value(i).toDouble());
-				break;
-			case KexiDB::Field::Double:
-				x = new QScriptValue(_scriptEngine, q->value(i).toDouble());
-				break;
-			case KexiDB::Field::Text:
-				x = new QScriptValue(_scriptEngine, q->value(i).toString());
-				break;
-			case KexiDB::Field::LongText:
-				x = new QScriptValue(_scriptEngine, q->value(i).toString());
-				break;
-			case KexiDB::Field::BLOB:
-				//x = new QScriptValue(_scriptEngine, q->value(i).toByteArray());
-				break;
-			default:
-				x = new QScriptValue(_scriptEngine, q->value(i).toString());
-				break;
-				
-		}
-		_scriptEngine->globalObject().setProperty(QString(flds[i]->aliasOrName()), *x);
-	}
-#endif
-	
 }
 

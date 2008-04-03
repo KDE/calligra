@@ -438,6 +438,7 @@ void ORPreRenderPrivate::renderDetailSection ( KRDetailSectionData & detailData 
 						if ( renderSectionSize ( * ( grp->foot ) ) + finishCurPageSize() + _bottomMargin + _yOffset >= _maxHeight )
 							createNewPage();
 						renderSection ( * ( grp->foot ) );
+						emit(exitedGroup(keys[i], keyValues[i]));
 					}
 					_subtotContextMap = 0;
 					// reset the sub-total values for this group
@@ -565,7 +566,6 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 	_handler->populateEngineParameters(_query->getQuery());
 	
 	emit (renderingSection(const_cast<KRSectionData*>(&sectionData)));
-//	emit (renderingSection(&sectionData));
 	
 	//Render section background
 	ORORect* bg = new ORORect();
@@ -945,8 +945,10 @@ qreal ORPreRenderPrivate::getNearestSubTotalCheckPoint ( const ORDataData & d )
 void ORPreRenderPrivate::initEngine()
 {
 	_handler = new KRScriptHandler(_query->getQuery(), _reportData);
-	_handler->slotInit();
+	
 	connect(this, SIGNAL(enteredGroup(const QString&, const QVariant&)), _handler, SLOT(slotEnteredGroup(const QString&, const QVariant&)));
+	
+	connect(this, SIGNAL(exitedGroup(const QString&, const QVariant&)), _handler, SLOT(slotExitedGroup(const QString&, const QVariant&)));
 	
 	connect(this, SIGNAL(renderingSection(KRSectionData*)), _handler, SLOT(slotEnteredSection(KRSectionData*)));
 }

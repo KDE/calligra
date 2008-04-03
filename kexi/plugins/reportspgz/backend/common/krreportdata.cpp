@@ -229,28 +229,16 @@ KRReportData::~KRReportData()
 QList<KRObjectData*> KRReportData::objects()
 {
 	QList<KRObjectData*> obs;
+	KRSectionData *sec;
 	
-	if (pgfoot_any)
-		obs << pgfoot_any->objects();
-	if (pgfoot_even)
-		obs << pgfoot_even->objects();
-	if (pgfoot_first)
-		obs << pgfoot_first->objects();
-	if (pgfoot_last)
-		obs << pgfoot_last->objects();
-	if (pgfoot_odd)
-		obs << pgfoot_odd->objects();
-	
-	if (pghead_any)
-		obs << pghead_any->objects();
-	if (pghead_even)
-		obs << pghead_even->objects();
-	if (pghead_first)
-		obs << pghead_first->objects();
-	if (pghead_last)
-		obs << pghead_last->objects();
-	if (pghead_odd)
-		obs << pghead_odd->objects();
+	for (int i = 0; i <12 ; ++i)
+	{
+		sec = section((KRReportData::Section)(i+1));
+		if (sec)
+		{
+			obs << sec->objects();
+		}
+	}
 	
 	if (detailsection )
 	{
@@ -283,4 +271,51 @@ KRObjectData* KRReportData::objectByName(const QString& n)
 		}
 	}
 	return 0;
+}
+
+KRSectionData* KRReportData::section(KRReportData::Section s)
+{
+	KRSectionData *sec;
+	switch ( s )
+	{
+		case KRReportData::PageHeadAny:
+			sec = pghead_any;
+			break;
+		case KRReportData::PageHeadEven:
+			sec = pghead_even;
+			break;
+		case KRReportData::PageHeadOdd:
+			sec = pghead_odd;
+			break;
+		case KRReportData::PageHeadFirst:
+			sec = pghead_first;
+			break;
+		case KRReportData::PageHeadLast:
+			sec = pghead_last;
+			break;
+		case KRReportData::PageFootAny:
+			sec = pgfoot_any;
+			break;
+		case KRReportData::PageFootEven:
+			sec = pgfoot_even;
+			break;
+		case KRReportData::PageFootOdd:
+			sec = pgfoot_odd;
+			break;
+		case KRReportData::PageFootFirst:
+			sec = pgfoot_first;
+			break;
+		case KRReportData::PageFootLast:
+			sec = pgfoot_last;
+			break;
+		case KRReportData::ReportHead:
+			sec = rpthead;
+			break;
+		case KRReportData::ReportFoot:
+			sec = rptfoot;
+			break;
+		default:
+			sec = NULL;
+	}
+	return sec;
 }

@@ -19,7 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * Please contact info@openmfg.com with any questions on this license.
  */
- 
+
 #ifndef KRREPORTDATA_H
 #define KRREPORTDATA_H
 
@@ -46,25 +46,43 @@ class KRReportData : public QObject
 		KRReportData ( const QDomElement & elemSource );
 		KRReportData ();
 		~KRReportData();
-		
-		
+
+		enum Section
+		{
+			PageHeadFirst = 1,
+			PageHeadOdd,
+			PageHeadEven,
+			PageHeadLast,
+			PageHeadAny,
+			ReportHead,
+			ReportFoot,
+			PageFootFirst,
+			PageFootOdd,
+			PageFootEven,
+			PageFootLast,
+			PageFootAny
+		};
+
 		/**
 		\return a list of all objects in the report
 		*/
 		QList<KRObjectData*> objects();
-		
+
 		/**
 		\return a report object given its name
 		*/
-		KRObjectData* objectByName(const QString&);
+		KRObjectData* objectByName ( const QString& );
+
+		KRSectionData* section(Section);
+		//KRSectionData* section(const QString&);
 		
 	protected:
 		QString title;
 		QString query;
 		QString script;
-		
+
 		ReportPageOptions page;
-		
+
 
 
 		KRSectionData * pghead_first;
@@ -86,7 +104,7 @@ class KRReportData : public QObject
 	private:
 		bool _valid;
 		void init();
-		
+
 		friend class ORPreRenderPrivate;
 		friend class ORPreRender;
 		friend class KRScriptHandler;

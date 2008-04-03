@@ -29,8 +29,9 @@
 #include <QVBoxLayout>
 #include <QCloseEvent>
 
-#include "parsexmlutils.h"
+//#include "parsexmlutils.h"
 
+#include <krreportdata.h>
 #include <kexidb/connection.h>
 #include <koproperty/set.h>
 #include <koproperty/property.h>
@@ -51,11 +52,6 @@ class ReportSceneView;
 class ReportWriterSectionData;
 class KexiView;
 
-//namespace KoProperty
-//{
-//	class Editor;
-//}
-
 //
 // Class ReportDesigner
 //     The ReportDesigner is the main widget for designing a report
@@ -64,29 +60,15 @@ class ReportDesigner : public QWidget
 {
 		Q_OBJECT
 	public:
-		enum Section
-		{
-			PageHeadFirst = 1,
-			PageHeadOdd,
-			PageHeadEven,
-   			PageHeadLast,
-			PageHeadAny,
-   			ReportHead,
-   			ReportFoot,
-      			PageFootFirst,
-		      	PageFootOdd,
-			PageFootEven,
-			PageFootLast,
-			PageFootAny
-		};
+		
 		
 		ReportDesigner ( QWidget *, KexiDB::Connection * );
 		ReportDesigner ( QWidget *, KexiDB::Connection *, const QString& );
 		~ReportDesigner();
 
-		ReportSection* getSection ( ReportDesigner::Section ) const;;
-		void removeSection ( ReportDesigner::Section );
-		void insertSection ( ReportDesigner::Section );
+		ReportSection* getSection ( KRReportData::Section ) const;
+		void removeSection ( KRReportData::Section );
+		void insertSection ( KRReportData::Section );
 		
 		ReportSectionDetail* detailSection() {return detail;}
 		void setDetail ( ReportSectionDetail *rsd );

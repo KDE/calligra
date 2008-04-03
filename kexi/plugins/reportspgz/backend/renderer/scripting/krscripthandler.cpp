@@ -46,24 +46,11 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
 	
 	_action->setInterpreter("javascript");
 	
-}
- 
-KRScriptHandler::~KRScriptHandler()
-{
-	
-}
-
-void KRScriptHandler::setSource(const QString &s)
-{
-	_source = s;	
-}
-
-void KRScriptHandler::slotInit()
-{
 	//Add math functions to the script
 	_functions = new KRScriptFunctions(_curs);
 	_action->addObject(_functions, "math");
 	
+	//Add constants object
 	_constants = new KRScriptConstants();
 	_action->addObject(_constants, "constants");
 	
@@ -74,49 +61,62 @@ void KRScriptHandler::slotInit()
 	//Add a general report object
 	_action->addObject(new Scripting::Report(_data), "report");
 	
+
 	//Add the detail section
 	_action->addObject(new Scripting::Section(_data->detailsection->detail), "detail");
 	
+#if 0
 	//Add the pghead_any section
+	if (_data->pghead_any)
 	_action->addObject(new Scripting::Section(_data->pghead_any), "pagehead_any");
 	
 	//Add the pghead_even section
+	if (_data->pghead_any)
 	_action->addObject(new Scripting::Section(_data->pghead_even), "pagehead_even");
 	
 	//Add the pghead_odd section
+	if (_data->pghead_any)
 	_action->addObject(new Scripting::Section(_data->pghead_odd), "pagehead_odd");
 	
 	//Add the pghead_first section
+	if (_data->pghead_any)
 	_action->addObject(new Scripting::Section(_data->pghead_first), "pagehead_first");
 	
 	//Add the pghead_last section
+	if (_data->pghead_any)
 	_action->addObject(new Scripting::Section(_data->pghead_last), "pagehead_last");
 	
 	//Add the pgfoot_any section
+	if (_data->pghead_any)
 	_action->addObject(new Scripting::Section(_data->pgfoot_any), "pagefoot_any");
 	
 	//Add the pgfoot_even section
+	if (_data->pghead_any)
 	_action->addObject(new Scripting::Section(_data->pgfoot_even), "pagefoot_even");
 	
 	//Add the pgfoot_odd section
+	if (_data->pghead_any)
 	_action->addObject(new Scripting::Section(_data->pgfoot_odd), "pagefoot_odd");
 	
 	//Add the pgfoot_first section
+	if (_data->pghead_any)
 	_action->addObject(new Scripting::Section(_data->pgfoot_first), "pagefoot_first");
 	
 	//Add the pgfoot_last section
+	if (_data->pghead_any)
 	_action->addObject(new Scripting::Section(_data->pgfoot_last), "pagefoot_last");
 	
-	//Engine constants for line styles, see http://doc.trolltech.com/4.3/qt.html#PenStyle-enum
-	//_engine->globalObject().setProperty("QtNoPen", QScriptValue(_engine, 0));
-	//_engine->globalObject().setProperty("QtSolidLine", QScriptValue(_engine, 1));
-	//_engine->globalObject().setProperty("QtDashLine", QScriptValue(_engine, 2));
-	//_engine->globalObject().setProperty("QtDotLine", QScriptValue(_engine, 3));
-	//_engine->globalObject().setProperty("QtDashDotLine", QScriptValue(_engine, 4));
-	//_engine->globalObject().setProperty("QtDashDotDotLine", QScriptValue(_engine, 5));
+#endif
+	KRSectionData *sec;
 	
-	//Evaluate the script now, we'll call the functions in it later;
-	//_engine->evaluate(_data->script);
+	for (int i = 0; i <12 ; ++i)
+	{
+		sec = _data->section((KRReportData::Section)(i+1));
+		if (sec)
+		{
+			_action->addObject(new Scripting::Section(sec), sec->name());
+		}
+	}
 	
 	_action->setCode((_data->script + "\n" + fieldFunctions()).toLocal8Bit());
 	
@@ -127,18 +127,32 @@ void KRScriptHandler::slotInit()
 	kDebug() << "Function Names:" << _action->functionNames()<< endl;
 	
 }
+ 
+KRScriptHandler::~KRScriptHandler()
+{
+ delete _action;
+ delete _functions;
+ delete _constants;
+ delete _debug;
+}
 
- void KRScriptHandler::slotEnteredGroup(const QString &key, const QVariant &value)
+void KRScriptHandler::setSource(const QString &s)
+{
+	_source = s;
+	_functions->setSource(_source);
+}
+
+void KRScriptHandler::slotEnteredGroup(const QString &key, const QVariant &value)
 {
 	kDebug() << key << value << endl;
-	_where = "(" + key + " = " + value.toString() + ")";
-	_functions->setWhere(_where);
+	_groups[key] = value;
+
+	_functions->setWhere(where());
 }
 void KRScriptHandler::slotExitedGroup(const QString &key, const QVariant &value)
 {
-	kDebug() << key << value << endl;
-	_where = "(" + key + " = " + value.toString() + ")";
-	_functions->setWhere(_where);
+	_groups.remove(key);
+	_functions->setWhere(where());
 }
 
 void KRScriptHandler::slotEnteredSection(KRSectionData *section)
@@ -203,4 +217,17 @@ void KRScriptHandler::displayErrors()
 	{
 		KMessageBox::error(0, _action->errorMessage());
 	}
+}
+
+QString KRScriptHandler::where()
+{
+	QString w;
+	QMap<QString, QVariant>::const_iterator i = _groups.constBegin();
+	while (i != _groups.constEnd()) {
+		w += "(" + i.key() + " = " + i.value().toString() + ") AND ";
+		++i;
+	}
+	w = w.mid(0, w.length() - 4);
+	kDebug() << w << endl;
+	return w;
 }

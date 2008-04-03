@@ -42,7 +42,7 @@ class KRScriptHandler : public QObject
 		void displayErrors();
 		
 	public slots:
-		void slotInit();
+		
 		void slotEnteredSection(KRSectionData*);
 		void slotEnteredGroup(const QString&, const QVariant&);
 		void slotExitedGroup(const QString&, const QVariant&);
@@ -60,10 +60,12 @@ class KRScriptHandler : public QObject
 		const KexiDB::Cursor *_curs;
 		
 		QString _source;
-		QString _where;
 		KRReportData  *_data;
 		
 		Kross::Action* _action;
+		
+		QMap<QString, QVariant> _groups;
+		QString where();
 };
 
 #endif

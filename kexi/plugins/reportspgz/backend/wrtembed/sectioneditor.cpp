@@ -90,11 +90,11 @@ void SectionEditor::cbReportHeader_toggled ( bool yes )
 	{
 		if ( yes )
 		{
-			rw->insertSection(ReportDesigner::ReportHead);
+			rw->insertSection(KRReportData::ReportHead);
 		}
 		else
 		{
-			rw->removeSection(ReportDesigner::ReportHead);
+			rw->removeSection(KRReportData::ReportHead);
 		}
 	}
 
@@ -106,11 +106,11 @@ void SectionEditor::cbReportFooter_toggled ( bool yes )
 	{
 		if ( yes )
 		{
-			rw->insertSection(ReportDesigner::ReportFoot);
+			rw->insertSection(KRReportData::ReportFoot);
 		}
 		else
 		{
-			rw->removeSection(ReportDesigner::ReportFoot);
+			rw->removeSection(KRReportData::ReportFoot);
 		}
 	}
 
@@ -122,11 +122,11 @@ void SectionEditor::cbHeadFirst_toggled ( bool yes )
 	{
 		if ( yes )
 		{
-			rw->insertSection(ReportDesigner::PageHeadFirst);
+			rw->insertSection(KRReportData::PageHeadFirst);
 		}
 		else
 		{
-			rw->removeSection(ReportDesigner::PageHeadFirst);
+			rw->removeSection(KRReportData::PageHeadFirst);
 		}
 	}
 
@@ -138,11 +138,11 @@ void SectionEditor::cbHeadLast_toggled ( bool yes )
 	{
 		if ( yes )
 		{
-			rw->insertSection(ReportDesigner::PageHeadLast);
+			rw->insertSection(KRReportData::PageHeadLast);
 		}
 		else
 		{
-			rw->removeSection(ReportDesigner::PageHeadLast);
+			rw->removeSection(KRReportData::PageHeadLast);
 		}
 	}
 
@@ -154,11 +154,11 @@ void SectionEditor::cbHeadEven_toggled ( bool yes )
 	{
 		if ( yes )
 		{
-			rw->insertSection(ReportDesigner::PageHeadEven);
+			rw->insertSection(KRReportData::PageHeadEven);
 		}
 		else
 		{
-			rw->removeSection(ReportDesigner::PageHeadEven);
+			rw->removeSection(KRReportData::PageHeadEven);
 		}
 	}
 
@@ -170,11 +170,11 @@ void SectionEditor::cbHeadOdd_toggled ( bool yes )
 	{
 		if ( yes )
 		{
-			rw->insertSection(ReportDesigner::PageHeadOdd);
+			rw->insertSection(KRReportData::PageHeadOdd);
 		}
 		else
 		{
-			rw->removeSection(ReportDesigner::PageHeadOdd);
+			rw->removeSection(KRReportData::PageHeadOdd);
 		}
 	}
 
@@ -186,11 +186,11 @@ void SectionEditor::cbFootFirst_toggled ( bool yes )
 	{
 		if ( yes )
 		{
-			rw->insertSection(ReportDesigner::PageFootFirst);
+			rw->insertSection(KRReportData::PageFootFirst);
 		}
 		else
 		{
-			rw->removeSection(ReportDesigner::PageFootFirst);
+			rw->removeSection(KRReportData::PageFootFirst);
 		}
 	}
 
@@ -202,11 +202,11 @@ void SectionEditor::cbFootLast_toggled ( bool yes )
 	{
 		if ( yes )
 		{
-			rw->insertSection(ReportDesigner::PageFootLast);
+			rw->insertSection(KRReportData::PageFootLast);
 		}
 		else
 		{
-			rw->removeSection(ReportDesigner::PageFootLast);
+			rw->removeSection(KRReportData::PageFootLast);
 		}
 	}
 
@@ -218,11 +218,11 @@ void SectionEditor::cbFootEven_toggled ( bool yes )
 	{
 		if ( yes )
 		{
-			rw->insertSection(ReportDesigner::PageFootEven);
+			rw->insertSection(KRReportData::PageFootEven);
 		}
 		else
 		{
-			rw->removeSection(ReportDesigner::PageFootEven);
+			rw->removeSection(KRReportData::PageFootEven);
 		}
 	}
 
@@ -234,11 +234,11 @@ void SectionEditor::cbFootOdd_toggled ( bool yes )
 	{
 		if ( yes )
 		{
-			rw->insertSection(ReportDesigner::PageFootOdd);
+			rw->insertSection(KRReportData::PageFootOdd);
 		}
 		else
 		{
-			rw->removeSection(ReportDesigner::PageFootOdd);
+			rw->removeSection(KRReportData::PageFootOdd);
 		}
 	}
 
@@ -250,20 +250,20 @@ void SectionEditor::init ( ReportDesigner * rw )
 	this->rw = NULL;
 	// set all the properties
 
-	cbReportHeader->setChecked ( rw->getSection(ReportDesigner::ReportHead) !=NULL );
-	cbReportFooter->setChecked ( rw->getSection(ReportDesigner::ReportFoot) !=NULL );
+	cbReportHeader->setChecked ( rw->getSection(KRReportData::ReportHead) !=NULL );
+	cbReportFooter->setChecked ( rw->getSection(KRReportData::ReportFoot) !=NULL );
 
-	cbHeadFirst->setChecked ( rw->getSection(ReportDesigner::PageHeadFirst) !=NULL );
-	cbHeadOdd->setChecked ( rw->getSection(ReportDesigner::PageHeadOdd) !=NULL );
-	cbHeadEven->setChecked ( rw->getSection(ReportDesigner::PageHeadEven) !=NULL );
-	cbHeadLast->setChecked ( rw->getSection(ReportDesigner::PageHeadLast) !=NULL );
-	cbHeadAny->setChecked ( rw->getSection(ReportDesigner::PageHeadAny) !=NULL );
+	cbHeadFirst->setChecked ( rw->getSection(KRReportData::PageHeadFirst) !=NULL );
+	cbHeadOdd->setChecked ( rw->getSection(KRReportData::PageHeadOdd) !=NULL );
+	cbHeadEven->setChecked ( rw->getSection(KRReportData::PageHeadEven) !=NULL );
+	cbHeadLast->setChecked ( rw->getSection(KRReportData::PageHeadLast) !=NULL );
+	cbHeadAny->setChecked ( rw->getSection(KRReportData::PageHeadAny) !=NULL );
 
-	cbFootFirst->setChecked ( rw->getSection(ReportDesigner::PageFootFirst) !=NULL );
-	cbFootOdd->setChecked ( rw->getSection(ReportDesigner::PageFootOdd) !=NULL );
-	cbFootEven->setChecked ( rw->getSection(ReportDesigner::PageFootEven) !=NULL );
-	cbFootLast->setChecked ( rw->getSection(ReportDesigner::PageFootLast) !=NULL );
-	cbFootAny->setChecked ( rw->getSection(ReportDesigner::PageFootAny) !=NULL );
+	cbFootFirst->setChecked ( rw->getSection(KRReportData::PageFootFirst) !=NULL );
+	cbFootOdd->setChecked ( rw->getSection(KRReportData::PageFootOdd) !=NULL );
+	cbFootEven->setChecked ( rw->getSection(KRReportData::PageFootEven) !=NULL );
+	cbFootLast->setChecked ( rw->getSection(KRReportData::PageFootLast) !=NULL );
+	cbFootAny->setChecked ( rw->getSection(KRReportData::PageFootAny) !=NULL );
 
 	// now set the rw value
 	this->rw = rw;
@@ -284,11 +284,11 @@ void SectionEditor::cbHeadAny_toggled ( bool yes )
 	{
 		if ( yes )
 		{
-			rw->insertSection(ReportDesigner::PageHeadAny);
+			rw->insertSection(KRReportData::PageHeadAny);
 		}
 		else
 		{
-			rw->removeSection(ReportDesigner::PageHeadAny);
+			rw->removeSection(KRReportData::PageHeadAny);
 		}
 	}
 }
@@ -299,11 +299,11 @@ void SectionEditor::cbFootAny_toggled ( bool yes )
 	{
 		if ( yes )
 		{
-			rw->insertSection(ReportDesigner::PageFootAny);
+			rw->insertSection(KRReportData::PageFootAny);
 		}
 		else
 		{
-			rw->removeSection(ReportDesigner::PageFootAny);
+			rw->removeSection(KRReportData::PageFootAny);
 		}
 	}
 }
