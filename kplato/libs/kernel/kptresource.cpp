@@ -50,6 +50,13 @@ ResourceGroup::ResourceGroup()
     //kDebug()<<"("<<this<<")";
 }
 
+ResourceGroup::ResourceGroup( const ResourceGroup *group )
+    : QObject( 0 ) 
+{
+    m_project = 0;
+    copy( group );
+}
+
 ResourceGroup::~ResourceGroup() {
     //kDebug()<<"("<<this<<")";
     if (findId() == this) {
@@ -62,6 +69,14 @@ ResourceGroup::~ResourceGroup() {
         delete m_resources.takeFirst();
     }
     //kDebug()<<"("<<this<<")";
+}
+
+void ResourceGroup::copy( const ResourceGroup *group )
+{
+    //m_project = group->m_project; //Don't copy
+    m_id = group->m_id;
+    m_type = group->m_type;
+    m_name = group->m_name;
 }
 
 void ResourceGroup::changed() {
@@ -253,7 +268,8 @@ Resource::Resource()
     : QObject( 0 ), // atm QObject is only for casting
     m_project(0),
     m_parent( 0 ),
-    m_schedules()
+    m_schedules(),
+    m_currentSchedule( 0 )
 {
     m_type = Type_Work;
     m_units = 100; // %
@@ -272,7 +288,8 @@ Resource::Resource()
 Resource::Resource(Resource *resource)
     : QObject( 0 ), // atm QObject is only for casting
     m_project( 0 ),
-    m_parent( 0 )
+    m_parent( 0 ),
+    m_currentSchedule( 0 )
 {
     //kDebug()<<"("<<this<<") from ("<<resource<<")";
     copy(resource); 

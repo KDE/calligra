@@ -77,7 +77,9 @@ class KPLATOKERNEL_EXPORT ResourceGroup : public QObject
 {
     Q_OBJECT
 public:
+    /// Default constructor
     explicit ResourceGroup();
+    ResourceGroup( const ResourceGroup *group );
     ~ResourceGroup();
 
     enum Type { Type_Work, Type_Material };
@@ -177,6 +179,8 @@ public:
     // and reset when the resourcegroup is removed from the project
     void setProject( Project *project );
 
+    void copy( const ResourceGroup *group );
+    
 #ifndef NDEBUG
 
     void printDebug( const QString& ident );
@@ -315,7 +319,7 @@ public:
      * If local=false, check if there is a default calendar.
      */
     Calendar *calendar( bool local = false ) const;
-    Calendar *calendar( const QString& id ) const;
+    //Calendar *calendar( const QString& id ) const;
     void setCalendar( Calendar *calendar ) { m_calendar = calendar; changed(); }
 
     /// Delete all requests for me
