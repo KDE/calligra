@@ -18,7 +18,6 @@ set(karbonui_SRCS
 
     dialogs/KarbonConfigureDialog.cpp
 
-    dockers/vcolordocker.cc
     dockers/KarbonLayerDocker.cpp
     dockers/KarbonLayerModel.cpp
     dockers/KarbonLayerSortingModel.cpp

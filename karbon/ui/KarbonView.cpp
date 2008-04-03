@@ -49,9 +49,7 @@
 #include "KarbonConfigureDialog.h"
 
 // Dockers.
-#include "vcolordocker.h"
 #include "vdocumentdocker.h"
-#include "vstyledocker.h"
 #include "KarbonLayerDocker.h"
 #include "KarbonStylePreviewDocker.h"
 
@@ -204,7 +202,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
 
     m_DocumentTab = 0L;
     m_stylePreview = 0L;
-    m_styleDocker = 0L;
     m_layerDocker = 0L;
 
     unsigned int max = part()->maxRecentFiles();
@@ -246,10 +243,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
         m_canvasController->canvas()->shapeManager()->selection()->setActiveLayer( part()->document().layers().first() );
 
         //Create Dockers
-        createColorDock();
         //createDocumentTabDock();
         createLayersTabDock();
-        //createResourceDock();
 
         KoToolBoxFactory toolBoxFactory(m_canvasController, i18n( "Tools" ) );
         createDockWidget( &toolBoxFactory );
@@ -1398,25 +1393,6 @@ void KarbonView::createLayersTabDock()
     connect( this, SIGNAL( selectionChange() ), m_layerDocker, SLOT( updateView() ) );
     connect( shell()->partManager(), SIGNAL( activePartChanged( KParts::Part * )),
              m_layerDocker, SLOT( setPart( KParts::Part * ) ) );
-}
-
-void KarbonView::createColorDock()
-{
-    debugView("KarbonView::createColorDock()");
-
-    VColorDockerFactory colorFactory;
-    createDockWidget(&colorFactory);
-}
-
-void KarbonView::createResourceDock()
-{
-    debugView("KarbonView::createResourceDock()");
-
-    /*
-    m_styleDocker = new VStyleDocker( part(), this );
-    m_styleDocker->setWindowTitle(i18n("Resources"));
-    createDock(i18n("Resources"), m_styleDocker);
-    */
 }
 
 void KarbonView::updateReadWrite( bool readwrite )

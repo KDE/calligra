@@ -60,8 +60,6 @@ class KoCanvasController;
 class KoRuler;
 
 class VDocumentTab;
-class VColorDocker;
-class VStyleDocker;
 class KarbonLayerDocker;
 class KarbonZoomController;
 
@@ -176,7 +174,6 @@ protected:
     void createLayersTabDock();
     void createStrokeDock();
     void createColorDock();
-    void createResourceDock();
 
     void addSelectionToClipboard() const;
     virtual KoPrintJob * createPrintJob();
@@ -225,7 +222,6 @@ private:
 
     //dockers
     VDocumentTab        *m_DocumentTab;
-    VStyleDocker        *m_styleDocker;
     KarbonLayerDocker        *m_layerDocker;
 
     //Status Bar
