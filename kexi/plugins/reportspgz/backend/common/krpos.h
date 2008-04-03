@@ -23,7 +23,7 @@
 #include <KoUnit.h>
 #include <QPointF>
 #include <koproperty/property.h>
-#include "../../pgzkexireportpart2_export.h"
+
 /**
 	@author
 */
