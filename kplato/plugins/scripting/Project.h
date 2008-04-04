@@ -34,6 +34,7 @@
 #include <kptresourcemodel.h>
 
 namespace KPlato {
+    class Calendar;
     class Project;
     class Node;
     class ResourceGroup;
@@ -42,6 +43,7 @@ namespace KPlato {
 }
 
 namespace Scripting {
+    class Calendar;
     class ResourceGroup;
     class Resource;
     class Schedule;
@@ -89,14 +91,22 @@ namespace Scripting {
 
             /// Find resource with identity @p id
             QObject *findResource( const QString &id );
+            /// Create a copy of @p resource and add to @p group
+            QObject *createResource( QObject *group, QObject *resource );
             /// Clear all resources external appointments to project with @p id
             void clearExternalAppointments( const QString &id );
             /// Clear all resources external appointments to any project
             void clearAllExternalAppointments();
             
-            /// Create a copy of @p resource and insert it into @p group
-            QObject *createResource( QObject *group, QObject *resource );
-            
+            /// Number of calendars
+            int calendarCount() const;
+            /// Return the resource group at @p index
+            QObject *calendarAt( int index );
+            /// Find calendar with identity @p id
+            QObject *findCalendar( const QString &id );
+            /// Create a copy of @p calendar and add to @p parent
+            QObject *createCalendar( QObject *calendar, QObject *parent = 0 );
+
         public:
             
             /// Return the Scripting::Node that interfaces the KPlato::Node @p node (create if necessary)
@@ -113,6 +123,9 @@ namespace Scripting {
             QObject *resource( KPlato::Resource *resource );
             /// Return the data of @p resource
             QVariant resourceData( const KPlato::Resource *resource, const QString &property, const QString &role, long schedule );
+
+            /// Return the Scripting::Calendar that interfaces the KPlato::Calendar @p cal
+            QObject *calendar( KPlato::Calendar *cal );
 
             /// Return the Scripting::Schedule that interfaces the KPlato::ScheuleManager @p sch
             QObject *schedule( KPlato::ScheduleManager *sch );
@@ -137,7 +150,7 @@ namespace Scripting {
             KPlato::ResourceModel m_resourceModel;
             QMap<KPlato::ResourceGroup*, ResourceGroup*> m_groups;
             QMap<KPlato::Resource*, Resource*> m_resources;
-    
+            QMap<KPlato::Calendar*, Calendar*> m_calendars;
             QMap<KPlato::ScheduleManager*, Schedule*> m_schedules;
     };
 

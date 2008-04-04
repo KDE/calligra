@@ -19,6 +19,7 @@
  */
 
 #include "Project.h"
+#include "Calendar.h"
 #include "Resource.h"
 #include "ResourceGroup.h"
 #include "Schedule.h"
@@ -233,6 +234,65 @@ void Scripting::Project::clearAllExternalAppointments()
     foreach ( KPlato::Resource *r, project()->resourceList() ) {
         r->clearExternalAppointments();
     }
+}
+
+int Scripting::Project::calendarCount() const
+{
+    return project()->calendarCount();
+}
+
+QObject *Scripting::Project::calendarAt( int index )
+{
+    return calendar( project()->calendarAt( index ) );
+}
+
+QObject *Scripting::Project::findCalendar( const QString &id )
+{
+    KPlato::Calendar *c = project()->calendar( id );
+    kDebug()<<id<<c;
+    return c == 0 ? 0 : calendar( c );
+}
+
+QObject *Scripting::Project::createCalendar( QObject *calendar, QObject *parent )
+{
+    kDebug()<<this<<calendar<<parent;
+    const Calendar *cal = qobject_cast<Calendar*>( calendar );
+    if ( cal == 0 ) {
+        kDebug()<<"No calendar specified";
+        return 0;
+    }
+    const KPlato::Calendar *copyfrom = cal->kplatoCalendar();
+    if ( copyfrom == 0 ) {
+        kDebug()<<"Nothing to copy from";
+        return 0;
+    }
+    KPlato::Calendar *c = project()->calendar( copyfrom->id() );
+    if ( c ) {
+        kDebug()<<"Calendar already exists";
+        return 0; // ???
+    }
+    Calendar *par = qobject_cast<Calendar*>( parent );
+    KPlato::Calendar *p = 0;
+    if ( par ) {
+        p = project()->calendar( par->id() );
+    }
+    c = new KPlato::Calendar();
+    *c = *copyfrom;
+    c->setId( copyfrom->id() ); // NOTE: id is not copied
+    project()->addCalendar( c, p );
+    QObject *nc = this->calendar( c );
+    return nc;
+}
+
+QObject *Scripting::Project::calendar( KPlato::Calendar *calendar )
+{
+    if ( calendar == 0 ) {
+        return 0;
+    }
+    if ( ! m_calendars.contains( calendar ) ) {
+        m_calendars[ calendar ] = new Calendar( this, calendar, parent() );
+    }
+    return m_calendars[ calendar ];
 }
 
 int Scripting::Project::stringToRole( const QString &role ) const

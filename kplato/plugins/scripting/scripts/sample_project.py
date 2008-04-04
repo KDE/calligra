@@ -66,6 +66,17 @@ def printBusyinfo( res, lst ):
         print "%-20s %-30s %-30s %8s" % ( name, interval[0], interval[1], interval[2] )
         name = ""
 
+def printProjectCalendars( proj ):
+    for c in range( proj.calendarCount() ):
+        print c
+        printChildCalendars( c )
+
+def printChildCalendars( calendar ):
+    for c in range( calendar.childCount() ):
+        print c
+        printChildCalendars( c )
+
+
 #------------------------
 proj = KPlato.project()
 
@@ -122,4 +133,8 @@ printEffortCost( name, proj.plannedEffortCostPrDay( "2007-09-12", "2007-09-17", 
 
 print "Print Busy information for all resources in the project:"
 printProjectBusyinfo( proj )
+print
+
+print "Print the calendars in the project:"
+printProjectCalendars( proj )
 print

@@ -18,6 +18,8 @@ class ResourcesImporter:
         self.dialog.setButtons("Ok|Cancel")
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
+        #TODO add options page ( import Calendars? Select calendars, Select resources... )
+        
         openpage = self.dialog.addPage("Open","Import KPlato Resources","document-save")
         self.openwidget = self.forms.createFileWidget(openpage, "kfiledialog:///kplatresourcesimportopen")
         self.openwidget.setMode("Opening")
@@ -45,8 +47,10 @@ class ResourcesImporter:
             #raise "Project identity identical"
             print "Project identity identical: %s %s" % ( KPlato.data( project, 'NodeName' ), Other.data( otherproj, 'NodeName' ) )
 
-        #TODO Import calendars
-        
+        for ci in range( otherproj.calendarCount() ):
+            self.doImportCalendar( project, otherproj.calendarAt( ci ) )
+        #TODO Default calendar
+    
         for gi in range( otherproj.resourceGroupCount() ):
             othergroup = otherproj.resourceGroupAt( gi )
             gr = project.findResourceGroup( othergroup.id() )
@@ -69,5 +73,20 @@ class ResourcesImporter:
         else:
             #TODO update?
             print "Resource already exists: %s %s" % ( r.id(), KPlato.data( r, 'ResourceName' ) )
+    
+    def doImportCalendar( self, project, calendar, parent = None ):
+        cal = project.findCalendar( calendar.id() )
+        if cal is not None:
+            #TODO let user decide
+            raise "Calendar already exists: %s" % cal-id()
+        # python doesn't seem to give a 0 pointer for a None object
+        if parent is None:
+            cal = project.createCalendar( calendar )
+        else:
+            cal = project.createCalendar( calendar, parent )
+        if cal is None:
+            raise "Unable to create copy of calendar: %s" % ( calendar.id() )
+        for ci in range( calendar.childCount() ):
+            self.doImportCalendar( project, calendar.childAt( ci ), cal )
 
 ResourcesImporter( self )
