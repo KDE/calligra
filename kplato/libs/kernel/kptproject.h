@@ -262,7 +262,10 @@ public:
     Calendar *calendarByName( const QString &name ) const;
     void changed( Calendar *cal );
     QList<Calendar*> allCalendars() const;
-
+    /// Return number of calendars
+    int calendarCount() const { return m_calendars.count(); }
+    /// Return the calendar at @p index, 0 if index out of bounds
+    Calendar *calendarAt( int index ) const { return m_calendars.value( index ); }
     /**
      * Defines the length of days, weeks, months and years
      * and the standard working week.

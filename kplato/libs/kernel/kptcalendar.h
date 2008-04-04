@@ -346,7 +346,11 @@ public:
     void addCalendar( Calendar *calendar );
     void takeCalendar( Calendar *calendar );
     int indexOf( const Calendar *calendar ) const;
-
+    /// Return number of children
+    int childCount() const { return m_calendars.count(); }
+    /// Return child calendar at @p index, 0 if index out of bounds
+    Calendar *childAt( int index ) const { return m_calendars.value( index ); }
+    
     bool load( KoXmlElement &element, XMLLoaderObject &status );
     void save(QDomElement &element) const;
 
