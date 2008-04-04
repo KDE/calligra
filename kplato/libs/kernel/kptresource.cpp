@@ -304,6 +304,7 @@ Resource::~Resource() {
     foreach (long key, m_schedules.keys()) {
         delete m_schedules.take(key);
     }
+    clearExternalAppointments();
 }
 
 void Resource::removeRequests() {
@@ -327,8 +328,7 @@ void Resource::copy(Resource *resource) {
     m_email = resource->email();
     m_availableFrom = resource->availableFrom();
     m_availableUntil = resource->availableUntil();
-    m_externalAppointments = resource->m_externalAppointments;
-
+    
     m_units = resource->units(); // available units in percent
 
     m_type = resource->type();
@@ -337,6 +337,10 @@ void Resource::copy(Resource *resource) {
     cost.overtimeRate = resource->overtimeRate();
     
     m_calendar = resource->m_calendar;
+
+    // hmmmm
+    //m_externalAppointments = resource->m_externalAppointments;
+    //m_externalNames = resource->m_externalNames;
 }
 
 void Resource::changed()
@@ -876,10 +880,13 @@ void Resource::setProject( Project *project )
     m_project = project;
 }
 
-void Resource::addExternalAppointment( const QString &projectId, const DateTime &from, const DateTime &end, double load )
+void Resource::addExternalAppointment( const QString &id, const QString &name, const DateTime &from, const DateTime &end, double load )
 {
     //kDebug()<<projectId<<from<<end<<load;
-    m_externalAppointments[ projectId ].add( from, end, load );
+    m_externalAppointments[ id ].add( from, end, load );
+    if ( ! m_externalNames.contains( id ) ) {
+        m_externalNames[ id ] = name;
+    }
 }
 
 void Resource::clearExternalAppointments()
@@ -897,11 +904,12 @@ void Resource::clearExternalAppointments( const QString projectId )
             delete a;
         }
     }
+    m_externalNames.remove( projectId );
 }
 
-AppointmentIntervalList Resource::externalAppointments( const QString &projectId )
+AppointmentIntervalList Resource::externalAppointments( const QString &id )
 {
-    return m_externalAppointments.value( projectId );
+    return m_externalAppointments.value( id );
 }
 
 AppointmentIntervalList Resource::externalAppointments() const
@@ -910,7 +918,6 @@ AppointmentIntervalList Resource::externalAppointments() const
     AppointmentIntervalList lst;
     foreach ( QString id, m_externalAppointments.uniqueKeys() ) {
         lst += m_externalAppointments[ id ];
-        kDebug()<<id<<lst;
     }
     return lst;
 }

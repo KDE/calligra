@@ -42,12 +42,13 @@ class BusyinfoImporter:
             if not self.validProject( project, data ):
                 raise "Invalid project: %s, %s" % ( data[0], data[1] )
             pid = data[0]
+            pname = data[1]
             # clear existing, so we don't get double up
             project.clearExternalAppointments( pid )
             # load the intervals
             while True:
                 data = pickle.load( file )
-                self.loadAppointment( project, pid, data )
+                self.loadAppointment( project, pid, pname, data )
 
         except:
             file.close()
@@ -59,7 +60,7 @@ class BusyinfoImporter:
             return False
         return True
 
-    def loadAppointment( self, project, pid, data ):
+    def loadAppointment( self, project, pid, pname, data ):
         r = project.findResource( data[0] )
         if r is None:
             print "Resource is not used in this project: %s, %s" % ( data[0], data[1] )
@@ -67,6 +68,6 @@ class BusyinfoImporter:
         if KPlato.data( r, 'ResourceName' ) != data[1]:
             #TODO Warning ?
             print "Resources has same id but different names %s - %s" % ( KPlato.data( r, 'ResourceName' ), data[1] )
-        r.addExternalAppointment( pid, data[2:5] )
+        r.addExternalAppointment( pid, pname, data[2:5] )
 
 BusyinfoImporter( self )

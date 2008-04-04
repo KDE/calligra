@@ -64,9 +64,9 @@ namespace Scripting {
              */
             QVariantList externalAppointments() const;
             /// Add an external appointment
-            void addExternalAppointment( const QVariant &id, const QVariantList &lst );
-            /// Clear appointments for for the project with @p projectId
-            void clearExternalAppointments( const QString &projectId );
+            void addExternalAppointment( const QVariant &id, const QString &name, const QVariantList &lst );
+            /// Clear appointments with identity @p id
+            void clearExternalAppointments( const QString &id );
 
         private:
             Project *m_project;

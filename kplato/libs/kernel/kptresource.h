@@ -419,10 +419,10 @@ public:
     void setProject( Project *project );
 
 
-    void addExternalAppointment( const QString &projectId, const DateTime &from, const DateTime &end, double load = 100 );
+    void addExternalAppointment( const QString &id, const QString &name, const DateTime &from, const DateTime &end, double load = 100 );
     void clearExternalAppointments();
-    void clearExternalAppointments( const QString projectId );
-    AppointmentIntervalList externalAppointments( const QString &projectId );
+    void clearExternalAppointments( const QString id );
+    AppointmentIntervalList externalAppointments( const QString &id );
     AppointmentIntervalList externalAppointments() const;
 
 protected:
@@ -440,6 +440,7 @@ private:
     DateTime m_availableFrom;
     DateTime m_availableUntil;
     QMap<QString, AppointmentIntervalList> m_externalAppointments;
+    QMap<QString, QString> m_externalNames;
 
     int m_units; // avalable units in percent
 

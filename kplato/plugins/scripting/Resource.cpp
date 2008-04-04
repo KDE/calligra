@@ -53,16 +53,16 @@ QVariantList Scripting::Resource::appointmentIntervals( qlonglong schedule ) con
     return lst;
 }
 
-void Scripting::Resource::addExternalAppointment( const QVariant &id, const QVariantList &lst )
+void Scripting::Resource::addExternalAppointment( const QVariant &id, const QString &name, const QVariantList &lst )
 {
-    //kDebug()<<id<<lst;
+    //kDebug()<<id<<name<<lst;
     KPlato::DateTime st = KPlato::DateTime::fromString( lst[0].toString() );
     KPlato::DateTime et = KPlato::DateTime::fromString( lst[1].toString() );
     double load = lst[2].toDouble();
     if ( ! st.isValid() || ! et.isValid() ) {
         return;
     }
-    m_resource->addExternalAppointment( id.toString(), st, et, load );
+    m_resource->addExternalAppointment( id.toString(), name, st, et, load );
 }
 
 QVariantList Scripting::Resource::externalAppointments() const
@@ -75,9 +75,9 @@ QVariantList Scripting::Resource::externalAppointments() const
     return lst;
 }
 
-void Scripting::Resource::clearExternalAppointments( const QString &projectId )
+void Scripting::Resource::clearExternalAppointments( const QString &id )
 {
-    m_resource->clearExternalAppointments( projectId );
+    m_resource->clearExternalAppointments( id );
 }
 
 #include "Resource.moc"
