@@ -340,11 +340,13 @@ QVariant ResourceModel::data( const ResourceGroup *group, int property, int role
         case ResourceModel::ResourceName: result = name( group, role ); break;
         case ResourceModel::ResourceType: result = type( group, role ); break;
         default:
-            if ( property < propertyCount() ) {
-                result = "";
-            } else {
-                kDebug()<<"data: invalid display value column"<<property;;
-                return QVariant();
+            if ( role == Qt::DisplayRole ) {
+                if ( property < propertyCount() ) {
+                    result = "";
+                } else {
+                    kDebug()<<"data: invalid display value column"<<property;;
+                    return QVariant();
+                }
             }
             break;
     }
@@ -517,6 +519,7 @@ void ResourceItemModel::setProject( Project *project )
     
         connect( m_project, SIGNAL( defaultCalendarChanged( Calendar* ) ), this, SLOT( slotCalendarChanged( Calendar* ) ) );
     }
+    m_model.setProject( m_project );
 }
 
 Qt::ItemFlags ResourceItemModel::flags( const QModelIndex &index ) const
