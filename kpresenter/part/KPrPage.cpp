@@ -22,6 +22,7 @@
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
+#include <KoStyleStack.h>
 #include <KoPALoadingContext.h>
 
 #include "KPrPageApplicationData.h"
@@ -60,6 +61,18 @@ void KPrPage::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paCont
 void KPrPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext )
 {
     KoPAPage::loadOdfPageTag( element, loadingContext );
+
+    KoStyleStack& styleStack = loadingContext.odfLoadingContext().styleStack();
+
+    int pageProperties = m_pageProperties & UseMasterBackground;
+    if ( styleStack.property( KoXmlNS::presentation, "background-objects-visible" ) == "true" ) {
+        pageProperties = pageProperties | DisplayMasterBackground;
+    }
+    if ( styleStack.property( KoXmlNS::presentation, "background-visible" ) == "true" ) {
+        pageProperties = pageProperties | DisplayMasterShapes;
+    }
+    m_pageProperties = pageProperties;
+
     KPrPageApplicationData * data = dynamic_cast<KPrPageApplicationData *>( applicationData() );
     Q_ASSERT( data );
 

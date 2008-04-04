@@ -256,8 +256,9 @@ void KPrAnimationDirector::updateZoom( const QSize & size )
 
 void KPrAnimationDirector::paintStep( QPainter & painter )
 {
-    painter.drawRect( m_pageRect );
     painter.translate( m_pageRect.topLeft() );
+    m_view->activePage()->paintBackground( painter, m_zoomHandler );
+
     m_canvas->masterShapeManager()->paint( painter, m_zoomHandler, false );
     m_canvas->shapeManager()->paint( painter, m_zoomHandler, false );
 }
