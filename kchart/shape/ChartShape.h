@@ -132,6 +132,8 @@ public:
     
     KoShape *cloneShape() const;
     
+    void updateChildrenPositions();
+    
     void update() const;
     void relayout() const;
     

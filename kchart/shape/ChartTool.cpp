@@ -285,10 +285,12 @@ QWidget *ChartTool::createOptionWidget()
 void ChartTool::setChartType( ChartType type, ChartSubtype subtype )
 {
     Q_ASSERT( d->shape );
-    if ( d->shape != 0 ) {
-        d->shape->setChartType( type );
-        d->shape->setChartSubType( subtype );
-    }
+    if ( !d->shape )
+        return;
+    
+    d->shape->setChartType( type );
+    d->shape->setChartSubType( subtype );
+    
     if ( optionWidget() )
         optionWidget()->update();
 }
@@ -297,8 +299,9 @@ void ChartTool::setChartType( ChartType type, ChartSubtype subtype )
 void ChartTool::setChartSubType( ChartSubtype subtype )
 {
     Q_ASSERT( d->shape );
-    if ( d->shape != 0 )
-        d->shape->setChartSubType( subtype );
+    if ( !d->shape )
+        return;
+    d->shape->setChartSubType( subtype );
 }
 
 void ChartTool::setDataSetChartType( DataSet *dataSet, ChartType type )
@@ -318,42 +321,45 @@ void ChartTool::setDataSetChartSubType( DataSet *dataSet, ChartSubtype subType )
 void ChartTool::setThreeDMode( bool threeD )
 {
     Q_ASSERT( d->shape );
-    if ( d->shape != 0 )
-        d->shape->setThreeD( threeD );
+    if ( !d->shape )
+        return;
+    d->shape->setThreeD( threeD );
 }
 
 void ChartTool::setShowTitle( bool show )
 {
     Q_ASSERT( d->shape );
-    if ( d->shape ) {
-        d->shape->title()->setVisible( show );
-        d->shape->update();
-    }
+    if ( !d->shape )
+        return;
+    d->shape->title()->setVisible( show );
+    d->shape->update();
 }
 
 void ChartTool::setShowSubTitle( bool show )
 {
     Q_ASSERT( d->shape );
-    if ( d->shape ) {
+    if ( !d->shape )
+        return;
         d->shape->subTitle()->setVisible( show );
         d->shape->update();
-    }
 }
 
 void ChartTool::setShowFooter( bool show )
 {
     Q_ASSERT( d->shape );
-    if ( d->shape ) {
-        d->shape->footer()->setVisible( show );
-        d->shape->update();
-    }
+    if ( !d->shape )
+        return;
+    d->shape->footer()->setVisible( show );
+    d->shape->update();
 }
 
 void ChartTool::setDataDirection( Qt::Orientation direction )
 {
     Q_ASSERT( d->shape );
-    if ( d->shape != 0 )
-        d->shape->proxyModel()->setDataDirection( direction );
+    if ( !d->shape )
+        return;
+    d->shape->proxyModel()->setDataDirection( direction );
+    d->shape->update();
 }
 
 void ChartTool::setFirstRowIsLabel( bool b )
@@ -361,6 +367,7 @@ void ChartTool::setFirstRowIsLabel( bool b )
     Q_ASSERT( d->shape );
     if ( d->shape != 0 )
         d->shape->proxyModel()->setFirstRowIsLabel( b );
+    d->shape->update();
 }
 
 void ChartTool::setFirstColumnIsLabel( bool b )
@@ -368,6 +375,7 @@ void ChartTool::setFirstColumnIsLabel( bool b )
     Q_ASSERT( d->shape );
     if ( d->shape != 0 )
         d->shape->proxyModel()->setFirstColumnIsLabel( b );
+    d->shape->update();
 }
 
 
@@ -375,6 +383,7 @@ void ChartTool::setLegendTitle( const QString &title )
 {
     Q_ASSERT( d->shape );
     d->shape->legend()->setTitle( title );
+    d->shape->update();
 }
 
 void ChartTool::setLegendFont( const QFont &font )
@@ -382,23 +391,27 @@ void ChartTool::setLegendFont( const QFont &font )
     Q_ASSERT( d->shape );
     // There only is a general font, for the legend items and the legend title
     d->shape->legend()->setFont( font );
+    d->shape->update();
 }
 void ChartTool::setLegendFontSize( int size )
 {
     Q_ASSERT( d->shape );
     d->shape->legend()->setFontSize( size );
+    d->shape->update();
 }
 
 void ChartTool::setLegendOrientation( Qt::Orientation orientation )
 {
     Q_ASSERT( d->shape );
     d->shape->legend()->setExpansion( QtOrientationToLegendExpansion( orientation ) );
+    d->shape->update();
 }
 
 void ChartTool::setLegendAlignment( Qt::Alignment alignment )
 {
     Q_ASSERT( d->shape );
     d->shape->legend()->setAlignment( alignment );
+    d->shape->update();
 }
 
 void ChartTool::setLegendFixedPosition( LegendPosition position )
@@ -406,24 +419,28 @@ void ChartTool::setLegendFixedPosition( LegendPosition position )
     Q_ASSERT( d->shape );
     d->shape->legend()->setLegendPosition( position );
     ( ( ChartConfigWidget* ) optionWidget() )->updateFixedPosition( position );
+    d->shape->update();
 }
 
 void ChartTool::setLegendBackgroundColor( const QColor& color )
 {
     Q_ASSERT( d->shape );
     d->shape->legend()->setBackgroundColor( color );
+    d->shape->update();
 }
 
 void ChartTool::setLegendFrameColor( const QColor& color )
 {
     Q_ASSERT( d->shape );
     d->shape->legend()->setFrameColor( color );
+    d->shape->update();
 }
 
 void ChartTool::setLegendShowFrame( bool show )
 {
     Q_ASSERT( d->shape );
     d->shape->legend()->setShowFrame( show );
+    d->shape->update();
 }
 
 
@@ -432,6 +449,7 @@ void ChartTool::setDatasetColor( DataSet *dataSet, const QColor& color )
     if ( !dataSet )
         return;
     dataSet->setColor( color );
+    d->shape->update();
 }
 
 void ChartTool::setDatasetShowValues( DataSet *dataSet, bool b )
@@ -439,6 +457,7 @@ void ChartTool::setDatasetShowValues( DataSet *dataSet, bool b )
     if ( !dataSet )
         return;
     dataSet->setShowValues( b );
+    d->shape->update();
 }
 
 void ChartTool::setDatasetShowLabels( DataSet *dataSet, bool b )
@@ -446,6 +465,7 @@ void ChartTool::setDatasetShowLabels( DataSet *dataSet, bool b )
     if ( !dataSet )
         return;
     dataSet->setShowLabels( b );
+    d->shape->update();
 }
 
 void ChartTool::addAxis( AxisPosition position, const QString& title ) {
@@ -454,17 +474,20 @@ void ChartTool::addAxis( AxisPosition position, const QString& title ) {
     axis->setPosition( position );
     axis->setTitleText( title );
     d->shape->plotArea()->addAxis( axis );
+    d->shape->update();
 }
 
 void ChartTool::removeAxis( Axis *axis )
 {
     Q_ASSERT( d->shape );
     d->shape->plotArea()->removeAxis( axis );
+    d->shape->update();
 }
 
 void ChartTool::setAxisTitle( Axis *axis, const QString& title )
 {
 	axis->setTitleText( title );
+    d->shape->update();
 }
 
 void ChartTool::setAxisShowTitle( Axis *axis, bool show )
@@ -477,21 +500,25 @@ void ChartTool::setAxisShowTitle( Axis *axis, bool show )
 void ChartTool::setAxisShowGridLines( Axis *axis, bool b )
 {
 	axis->setShowGrid( b );
+    d->shape->update();
 }
 
 void ChartTool::setAxisUseLogarithmicScaling( Axis *axis, bool b )
 {
     axis->setScalingLogarithmic( b );
+    d->shape->update();
 }
 
 void ChartTool::setAxisStepWidth( Axis *axis, double width )
 {
     axis->setMajorInterval( width );
+    d->shape->update();
 }
 
 void ChartTool::setAxisSubStepWidth( Axis *axis, double width )
 {
     axis->setMinorInterval( width );
+    d->shape->update();
 }
 
 
@@ -499,12 +526,14 @@ void ChartTool::setGapBetweenBars( int percent )
 {
     Q_ASSERT( d->shape );
     d->shape->plotArea()->setGapBetweenBars( percent );
+    d->shape->update();
 }
 
 void ChartTool::setGapBetweenSets( int percent )
 {
     Q_ASSERT( d->shape );
     d->shape->plotArea()->setGapBetweenSets( percent );
+    d->shape->update();
 }
 
 void ChartTool::setShowLegend( bool b )

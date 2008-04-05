@@ -32,6 +32,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
+#include <interfaces/SimpleTextShapeInterface.h>
 
 // Qt
 #include <QPointF>
@@ -310,8 +311,6 @@ void PlotArea::setChartType( ChartType type )
     {
         axis->plotAreaChartTypeChanged( type );
     }
-
-    update();
 }
 
 void PlotArea::setChartSubType( ChartSubtype subType )
@@ -322,8 +321,6 @@ void PlotArea::setChartSubType( ChartSubtype subType )
     {
         axis->plotAreaChartSubTypeChanged( subType );
     }
-
-    update();
 }
 
 void PlotArea::setThreeD( bool threeD )
@@ -332,8 +329,6 @@ void PlotArea::setThreeD( bool threeD )
     
     foreach( Axis *axis, d->axes )
         axis->setThreeD( threeD );
-
-    update();
 }
 
 
@@ -526,8 +521,6 @@ void PlotArea::setGapBetweenBars( int percent )
     //KDChart::BarAttributes attributes = ((KDChart::BarDiagram*) d->kdDiagram)->barAttributes();
     //attributes.setBarGapFactor( (float)percent / 100.0 );
     //((KDChart::BarDiagram*) d->kdDiagram)->setBarAttributes( attributes );
-
-    update();
 }
 
 void PlotArea::setGapBetweenSets( int percent )
@@ -538,8 +531,6 @@ void PlotArea::setGapBetweenSets( int percent )
     //KDChart::BarAttributes attributes = ((KDChart::BarDiagram*) d->kdDiagram)->barAttributes();
     //attributes.setGroupGapFactor( (float)percent / 100.0 );
     //((KDChart::BarDiagram*) d->kdDiagram)->setBarAttributes( attributes );
-
-    update();
 }
 
 ChartShape *PlotArea::parent() const

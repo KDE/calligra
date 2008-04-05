@@ -282,8 +282,6 @@ void Axis::setPosition( AxisPosition position )
     
     // KDChart
     d->kdAxis->setPosition( AxisPositionToKDChartAxisPosition( position ) );
-    
-    update();
 }
 
 TextLabel *Axis::title() const
@@ -346,8 +344,6 @@ bool Axis::attachDataSet( DataSet *dataSet )
     break;
     }
     
-    update();
-    
     return true;
 }
 
@@ -390,8 +386,6 @@ bool Axis::detachDataSet( DataSet *dataSet )
     break;
     }
     
-    update();
-    
     return true; 
 }
 
@@ -414,8 +408,6 @@ void Axis::setMajorInterval( double interval )
     KDChart::GridAttributes attributes = plane->gridAttributes( orientation() );
     attributes.setGridStepWidth( interval );
     plane->setGridAttributes( orientation(), attributes );
-    
-    update();
 }
 
 double Axis::minorInterval() const
@@ -446,8 +438,6 @@ void Axis::setMinorIntervalDevisor( int devisor )
     KDChart::GridAttributes attributes = plane->gridAttributes( orientation() );
     attributes.setGridSubStepWidth( d->majorInterval / devisor );
     plane->setGridAttributes( orientation(), attributes );
-    
-    update();
 }
 
 bool Axis::showInnerMinorTicks() const
@@ -478,8 +468,6 @@ void Axis::setScalingLogarithmic( bool logarithmicScaling )
         return;
 
     d->kdPlane->setAxesCalcModeY( d->logarithmicScaling ? KDChart::AbstractCoordinatePlane::Logarithmic : KDChart::AbstractCoordinatePlane::Linear );
-    
-    update();
 }
 
 bool Axis::scalingIsLogarithmic() const
@@ -505,15 +493,11 @@ void Axis::setShowGrid( bool showGrid )
     KDChart::GridAttributes attributes = plane->gridAttributes( orientation() );
 	attributes.setGridVisible( d->showGrid );
 	plane->setGridAttributes( orientation(), attributes );
-	
-	update();
 }
 
 void Axis::setTitleText( const QString &text )
 {
     d->title->setText( text );
-    
-    update();
 }
 
 Qt::Orientation Axis::orientation()
@@ -725,6 +709,4 @@ void Axis::setThreeD( bool threeD )
         attributes.setDepth( 15.0 );
         d->kdCircleDiagram->setThreeDPieAttributes( attributes );
     }
-
-    update();
 }

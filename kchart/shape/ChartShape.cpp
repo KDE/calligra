@@ -315,24 +315,31 @@ void ChartShape::setPosition( const QPointF &pos )
 
 void ChartShape::setSize( const QSizeF &size )
 {
+    // Usually, this is done by signals from the QWidget that we resize.
+    // But since a KoShape is not a QWidget, we need to do this manually.
+    d->plotArea->kdChart()->resize( size.toSize() );
+    
+    KoShape::setSize( size );
+    
+    updateChildrenPositions();
+}
+
+void ChartShape::updateChildrenPositions()
+{
     foreach( Axis *axis, d->plotArea->axes() )
     {
         TextLabel *title = axis->title();
         QPointF titlePosition;
         if ( axis->position() == BottomAxisPosition )
-            titlePosition = QPointF( size.width() / 2.0 - title->size().width() / 2.0, size.height() );
+            titlePosition = QPointF( size().width() / 2.0 - title->size().width() / 2.0, size().height() );
         else if ( axis->position() == TopAxisPosition )
-            titlePosition = QPointF( size.width() / 2.0, -title->size().height() );
+            titlePosition = QPointF( size().width() / 2.0, -title->size().height() );
         else if ( axis->position() == LeftAxisPosition )
-            titlePosition = QPointF( -title->size().height(), size.height() / 2.0 );
+            titlePosition = QPointF( -title->size().height(), size().height() / 2.0 );
         else if ( axis->position() == RightAxisPosition )
-            titlePosition = QPointF( size.width(), size.height() / 2.0 );
+            titlePosition = QPointF( size().width(), size().height() / 2.0 );
         title->setPosition( titlePosition );
     }
-    // Usually, this is done by signals from the QWidget that we resize.
-    // But since a KoShape is not a QWidget, we need to do this manually.
-    d->plotArea->kdChart()->resize( size.toSize() );
-    KoShape::setSize( size );
 }
 
 QRectF ChartShape::boundingRect() const
