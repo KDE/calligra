@@ -29,6 +29,8 @@
 #include "pageeffects/KPrPageEffectRegistry.h"
 #include "pageeffects/KPrPageEffect.h"
 
+#include <kdebug.h>
+
 KPrPage::KPrPage( KoPAMasterPage * masterPage )
 : KoPAPage( masterPage )
 {
@@ -66,10 +68,10 @@ void KPrPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &l
 
     int pageProperties = m_pageProperties & UseMasterBackground;
     if ( styleStack.property( KoXmlNS::presentation, "background-objects-visible" ) == "true" ) {
-        pageProperties = pageProperties | DisplayMasterBackground;
+        pageProperties = pageProperties | DisplayMasterShapes;
     }
     if ( styleStack.property( KoXmlNS::presentation, "background-visible" ) == "true" ) {
-        pageProperties = pageProperties | DisplayMasterShapes;
+        pageProperties = pageProperties | DisplayMasterBackground;
     }
     m_pageProperties = pageProperties;
 

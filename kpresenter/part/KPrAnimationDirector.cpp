@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -259,7 +259,9 @@ void KPrAnimationDirector::paintStep( QPainter & painter )
     painter.translate( m_pageRect.topLeft() );
     m_view->activePage()->paintBackground( painter, m_zoomHandler );
 
-    m_canvas->masterShapeManager()->paint( painter, m_zoomHandler, false );
+    if ( m_view->activePage()->displayMasterShapes() ) {
+        m_canvas->masterShapeManager()->paint( painter, m_zoomHandler, false );
+    }
     m_canvas->shapeManager()->paint( painter, m_zoomHandler, false );
 }
 
