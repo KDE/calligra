@@ -59,11 +59,15 @@ namespace KDChart {
     class AbstractDiagram;
 }
 
+// Interface to SimpleTextShape plugin
+class SimpleTextShapeInterface;
+typedef SimpleTextShapeInterface TextLabel; // Use a shorter name instead
+#define SimpleTextShapeId "SimpleText"
+
 namespace KChart {
 
 class DataSet;
 class ProxyModel;
-class TextLabel;
 class Legend;
 class PlotArea;
 class Surface;
@@ -86,9 +90,9 @@ public:
     QAbstractItemModel *model() const;
     ProxyModel *proxyModel() const;
     
-    TextLabel *title() const;
-    TextLabel *subTitle() const;
-    TextLabel *footer() const;
+    SimpleTextShapeInterface *title() const;
+    SimpleTextShapeInterface *subTitle() const;
+    SimpleTextShapeInterface *footer() const;
     Legend *legend() const;
     PlotArea *plotArea() const;
     Surface *wall() const;

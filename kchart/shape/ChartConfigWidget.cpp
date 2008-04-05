@@ -15,6 +15,9 @@
 #include <KDebug>
 #include <KMessageBox>
 
+// KOffice
+#include <interfaces/SimpleTextShapeInterface.h>
+
 // KDChart
 #include <KDChartChart>
 #include <KDChartPosition>
@@ -29,7 +32,6 @@
 #include "PlotArea.h"
 #include "Legend.h"
 #include "DataSet.h"
-#include "TextLabel.h"
 #include "Axis.h"
 #include "ui_ChartTableEditor.h"
 #include "ui_ChartConfigWidget.h"

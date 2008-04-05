@@ -20,7 +20,6 @@
 
 // Local
 #include "Axis.h"
-#include "TextLabel.h"
 #include "PlotArea.h"
 #include "KDChartModel.h"
 #include "DataSet.h"
@@ -29,10 +28,12 @@
 
 // KOffice
 #include <KoShapeLoadingContext.h>
+#include <KoShapeRegistry.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
+#include <interfaces/SimpleTextShapeInterface.h>
 
 // KDChart
 #include <KDChartChart>
@@ -254,7 +255,8 @@ Axis::Axis( PlotArea *parent )
     
     setShowGrid( false );
     
-    d->title = new TextLabel( d->plotArea->parent() );
+    d->title = static_cast<TextLabel*>( KoShapeRegistry::instance()->value( SimpleTextShapeId )->createDefaultShape( 0 ) );
+    d->plotArea->parent()->addChild( d->title );
     
     d->plotAreaChartType = d->plotArea->chartType();
     d->plotAreaChartSubType = d->plotArea->chartSubType();

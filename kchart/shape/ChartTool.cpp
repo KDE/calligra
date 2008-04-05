@@ -23,7 +23,6 @@
 #include "Surface.h"
 #include "PlotArea.h"
 #include "Axis.h"
-#include "TextLabel.h"
 #include "DataSet.h"
 #include "Legend.h"
 #include "KDChartConvertions.h"
@@ -47,6 +46,7 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
+#include <interfaces/SimpleTextShapeInterface.h>
 
 // ChartShape
 #include "ChartConfigWidget.h"

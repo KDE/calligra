@@ -28,7 +28,6 @@
 #include "Legend.h"
 #include "PlotArea.h"
 #include "Surface.h"
-#include "TextLabel.h"
 #include "ProxyModel.h"
 
 // Posix
@@ -42,6 +41,9 @@
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
 #include <KoGenStyles.h>
+#include <KoShapeRegistry.h>
+#include <KoToolRegistry.h>
+#include <interfaces/SimpleTextShapeInterface.h>
 
 // KDChart
 #include <KDChartChart>
@@ -138,6 +140,33 @@ QString saveOdfFont( KoGenStyles& mainStyles,
     return mainStyles.lookup( autoStyle, "ch", KoGenStyles::ForceNumbering );
 }
 
+bool loadOdfLabel( TextLabel *label, KoXmlElement &labelElement, KoShapeLoadingContext &context )
+{
+    // TODO: Read optional attributes
+    // 1. Table range
+    // 2. Position and size
+    // 3. Style name
+    KoXmlElement  pElement = KoXml::namedItemNS( labelElement,
+                                            KoXmlNS::text, "p" );
+    
+    label->setText( pElement.text() );
+    
+    return true;
+}
+
+void saveOdfLabel( TextLabel *label, KoXmlWriter &bodyWriter, KoGenStyles &mainStyles, const QString &odfLabelType )
+{
+    bodyWriter.startElement( QString( "chart:" + odfLabelType ).toAscii() );
+    bodyWriter.addAttributePt( "svg:x", label->position().x() );
+    bodyWriter.addAttributePt( "svg:y", label->position().y() );
+    // TODO: Save TextLabel color
+    bodyWriter.addAttribute( "chart:style-name", saveOdfFont( mainStyles, label->font(), QColor() ) );
+    bodyWriter.startElement( "text:p" );
+    bodyWriter.addTextNode( label->text() );
+    bodyWriter.endElement(); // text:p
+    bodyWriter.endElement(); // chart:title/subtitle/footer
+}
+
 
 class ChartShape::Private
 {
@@ -184,18 +213,18 @@ ChartShape::ChartShape()
     d->plotArea->setChartType( BarChartType );
     d->plotArea->setChartSubType( NormalChartSubtype );
     
-    d->title = new TextLabel( this );
-    d->title->setType( TitleLabelType );
+    d->title = static_cast<TextLabel*>( KoShapeRegistry::instance()->value( SimpleTextShapeId )->createDefaultShape( 0 ) );
+    addChild( d->title );
     d->title->setText( i18n( "Title" ) );
     d->title->setVisible( false );
-    
-    d->subTitle = new TextLabel( this );
-    d->subTitle->setType( SubTitleLabelType );
+
+    d->subTitle = static_cast<TextLabel*>( KoShapeRegistry::instance()->value( SimpleTextShapeId )->createDefaultShape( 0 ) );
+    addChild( d->subTitle );
     d->subTitle->setText( i18n( "Subtitle" ) );
     d->subTitle->setVisible( false );
-    
-    d->footer = new TextLabel( this );
-    d->footer->setType( FooterLabelType );
+
+    d->footer = static_cast<TextLabel*>( KoShapeRegistry::instance()->value( SimpleTextShapeId )->createDefaultShape( 0 ) );
+    addChild( d->footer );
     d->footer->setText( i18n( "Footer" ) );
     d->footer->setVisible( false );
     
@@ -524,13 +553,13 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     }
 
     // 2. Write the title.
-    d->title->saveOdf( bodyWriter, mainStyles );
+    saveOdfLabel( d->title, bodyWriter, mainStyles, "title" );
 
     // 3. Write the subtitle.
-    d->subTitle->saveOdf( bodyWriter, mainStyles );
+    saveOdfLabel( d->subTitle, bodyWriter, mainStyles, "subtitle" );
 
     // 4. Write the footer.
-    d->footer->saveOdf( bodyWriter, mainStyles );
+    saveOdfLabel( d->footer, bodyWriter, mainStyles, "footer" );
 
     // 5. Write the legend.
     d->legend->saveOdf( bodyWriter, mainStyles );

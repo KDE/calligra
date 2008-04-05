@@ -16,7 +16,6 @@ SET (chartshape_LIB_SRCS
     ProxyModel.cpp
     KDChartModel.cpp
     Surface.cpp
-    TextLabel.cpp
     ThreeDScene.cpp
     ThreeDTransformation.cpp
     ChartTableView.cpp
@@ -27,7 +26,6 @@ SET (chartshape_LIB_SRCS
     dialogs/NewAxisDialog.cpp
     dialogs/AxisScalingDialog.cpp
     ../commands/ChartTypeCommand.cpp
-    ../../plugins/simpletextshape/SimpleTextShape.cpp
 )
 
 kde4_add_ui_files(chartshape_LIB_SRCS
@@ -43,7 +41,7 @@ set_target_properties(chartshapelib PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VER
 
 install(TARGETS chartshapelib DESTINATION ${LIB_INSTALL_DIR})
 
-kde4_add_plugin(chartshape ChartShapeFactory.cpp)
+kde4_add_plugin(chartshape ChartShapeFactory.cpp )
 target_link_libraries(chartshape chartshapelib kdchart kochart flake)
 install(TARGETS chartshape DESTINATION ${PLUGIN_INSTALL_DIR})
 

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>250</width>
-    <height>422</height>
+    <width>302</width>
+    <height>434</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -87,8 +87,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>230</width>
-        <height>306</height>
+        <width>282</width>
+        <height>318</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -242,8 +242,8 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>230</width>
-        <height>306</height>
+        <width>282</width>
+        <height>318</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -368,18 +368,17 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="3" column="1" colspan="2" >
         <widget class="QPushButton" name="dataSetChartTypeMenu" >
+         <property name="enabled" >
+          <bool>false</bool>
+         </property>
          <property name="styleSheet" >
           <string notr="true" >text-align:left;</string>
          </property>
          <property name="text" >
           <string/>
          </property>
-        </widget>
-       </item>
-       <item row="3" column="0" >
-        <widget class="QLabel" name="label_5" >
-         <property name="text" >
-          <string>Chart Type</string>
+         <property name="autoRepeat" >
+          <bool>false</bool>
          </property>
         </widget>
        </item>
@@ -417,6 +416,13 @@ p, li { white-space: pre-wrap; }
          </item>
         </layout>
        </item>
+       <item row="3" column="0" >
+        <widget class="QCheckBox" name="dataSetHasChartType" >
+         <property name="text" >
+          <string>Chart Type</string>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_3" >
@@ -424,8 +430,8 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>230</width>
-        <height>306</height>
+        <width>282</width>
+        <height>318</height>
        </rect>
       </property>
       <attribute name="title" >
