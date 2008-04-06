@@ -40,7 +40,7 @@ KPrTriangleWipeEffectFactory::KPrTriangleWipeEffectFactory()
 
     //triangle right
     shape = QPainterPath();
-    shape.moveTo( 25*cos( 0 ), 25*sin( 0 ) );
+    shape.moveTo( 25*cos( 0.0 ), 25*sin( 0.0 ) );
     shape.lineTo( 25*cos( 2 * M_PI / 3), 25*sin( 2 * M_PI / 3 ) );
     shape.lineTo( 25*cos( 4 * M_PI / 3), 25*sin( 4 * M_PI / 3 ) );
     shape.closeSubpath();
@@ -56,7 +56,7 @@ KPrTriangleWipeEffectFactory::KPrTriangleWipeEffectFactory()
 
     //triangle left
     shape = QPainterPath();
-    shape.moveTo( -25*cos( 0 ), 25*sin( 0 ) );
+    shape.moveTo( -25*cos( 0.0 ), 25*sin( 0.0 ) );
     shape.lineTo( -25*cos( 2 * M_PI / 3), 25*sin( 2 * M_PI / 3 ) );
     shape.lineTo( -25*cos( 4 * M_PI / 3), 25*sin( 4 * M_PI / 3 ) );
     shape.closeSubpath();
