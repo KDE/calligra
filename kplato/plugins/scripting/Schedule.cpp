@@ -47,12 +47,12 @@ bool Scripting::Schedule::isScheduled() const
 
 QDate Scripting::Schedule::startDate()
 {
-//    return m_schedule->startTime().dateTime().date();
+    return QDate(); //m_schedule->startTime().dateTime().date();
 }
 
 QDate Scripting::Schedule::endDate()
 {
-//    return m_schedule->endTime().dateTime().date();
+    return QDate(); //m_schedule->endTime().dateTime().date();
 }
 
 int Scripting::Schedule::childCount() const
