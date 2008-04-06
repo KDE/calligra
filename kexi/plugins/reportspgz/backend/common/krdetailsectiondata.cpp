@@ -23,6 +23,7 @@
 #include "krdetailsectiondata.h"
 #include "krsectiondata.h"
 #include "parsexmlutils.h"
+#include <kdebug.h>
 
 KRDetailSectionData::KRDetailSectionData()
 {
@@ -48,35 +49,7 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
 	for ( int nodeCounter = 0; nodeCounter < section.count(); nodeCounter++ )
 	{
 		QDomElement elemThis = section.item ( nodeCounter ).toElement();
-		if ( elemThis.tagName() == "pagebreak" )
-		{
-			if ( elemThis.attribute ( "when" ) == "at end" )
-				pagebreak = BreakAtEnd;
-		}
-		else if ( elemThis.tagName() == "grouphead" )
-		{
-			KRSectionData * sd = new KRSectionData(elemThis);
-			if (sd->isValid())
-			{
-				old_head = sd;
-			//TODO Track Totals?	sectionTarget.trackTotal += sd->trackTotal;
-			}
-			else
-				delete sd;
-		
-		}
-		else if ( elemThis.tagName() == "groupfoot" )
-		{
-			KRSectionData * sd = new KRSectionData(elemThis);
-			if (sd->isValid())
-			{
-				old_foot = sd;
-			//TODO Track Totals?	sectionTarget.trackTotal += sd->trackTotal;
-			}
-			else
-				delete sd;
-		}
-		else if ( elemThis.tagName() == "group" )
+		if ( elemThis.tagName() == "group" )
 		{
 			QDomNodeList nl = elemThis.childNodes();
 			QDomNode node;
@@ -85,7 +58,17 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
 			{
 				node = nl.item ( i );
 				if ( node.nodeName() == "column" )
+				{
 					dgsd->column = node.firstChild().nodeValue();
+					if (dgsd->head)
+					{
+						dgsd->head->setExtra(dgsd->column);
+					}
+					if (dgsd->foot)
+					{
+						dgsd->foot->setExtra(dgsd->column);
+					}
+				}
 				else if ( node.nodeName() == "pagebreak" )
 				{
 					QDomElement elemThis = node.toElement();
@@ -99,6 +82,7 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
 					if (sd->isValid())
 					{
 						dgsd->head = sd;
+						dgsd->head->setExtra(dgsd->column);
 						//TODO Track Totals?sectionTarget.trackTotal += sd->trackTotal;
 						//for ( QList<ORDataData>::iterator it = sd->trackTotal.begin(); it != sd->trackTotal.end(); ++it )
 						//	dgsd->_subtotCheckPoints[*it] = 0.0;
@@ -112,6 +96,7 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
 					if ( sd->isValid())
 					{
 						dgsd->foot = sd;
+						dgsd->head->setExtra(dgsd->column);
 						//TODO Track Totals?sectionTarget.trackTotal += sd->trackTotal;
 						//for ( QList<ORDataData>::iterator it = sd->trackTotal.begin(); it != sd->trackTotal.end(); ++it )
 						//	dgsd->_subtotCheckPoints[*it] = 0.0;
@@ -136,8 +121,7 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
 			else
 				delete sd;
 		}
-		//else
-		//TODO qDebug("While parsing detail section encountered an unknown element: %s",(const char*)elemThis.tagName());
+		kDebug() << "While parsing detail section encountered an unknown element: " << elemThis.tagName() <<  endl;
 	}
 
 	_valid = true;

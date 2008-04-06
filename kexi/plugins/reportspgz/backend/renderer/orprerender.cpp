@@ -103,12 +103,11 @@ class ORPreRenderPrivate : public QObject
 		///Scripting Stuff
 		KRScriptHandler *_handler;
 		void initEngine();
-		void populateEngineParameters();
-		
+	
 	signals:
 		void enteredGroup(const QString&, const QVariant&);
 		void exitedGroup(const QString&, const QVariant&);
-		void renderingSection (KRSectionData*);
+		void renderingSection (KRSectionData*, OROPage*, QPointF);
 };
 
 ORPreRenderPrivate::ORPreRenderPrivate()
@@ -565,7 +564,7 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 
 	_handler->populateEngineParameters(_query->getQuery());
 	
-	emit (renderingSection(const_cast<KRSectionData*>(&sectionData)));
+	emit (renderingSection(const_cast<KRSectionData*>(&sectionData), _page, QPointF ( _leftMargin, _yOffset )));
 	
 	//Render section background
 	ORORect* bg = new ORORect();
@@ -950,7 +949,7 @@ void ORPreRenderPrivate::initEngine()
 	
 	connect(this, SIGNAL(exitedGroup(const QString&, const QVariant&)), _handler, SLOT(slotExitedGroup(const QString&, const QVariant&)));
 	
-	connect(this, SIGNAL(renderingSection(KRSectionData*)), _handler, SLOT(slotEnteredSection(KRSectionData*)));
+	connect(this, SIGNAL(renderingSection(KRSectionData*, OROPage*, QPointF)), _handler, SLOT(slotEnteredSection(KRSectionData*, OROPage*, QPointF)));
 }
 
 

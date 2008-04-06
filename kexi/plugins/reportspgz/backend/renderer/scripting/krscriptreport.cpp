@@ -20,6 +20,10 @@
  */
 #include "krscriptreport.h"
 #include <krreportdata.h>
+#include <krobjectdata.h>
+#include "krscriptlabel.h"
+#include "krscriptfield.h"
+#include "krscriptsection.h"
 
 namespace Scripting
 {
@@ -42,9 +46,39 @@ namespace Scripting
 		return _reportdata->query;
 	}
 
-	KRObjectData* Report::objectByName ( const QString &n )
+	QObject* Report::objectByName ( const QString &n )
 	{
-		return _reportdata->objectByName(n);
+		QList<KRObjectData *>obs = _reportdata->objects();
+		foreach (KRObjectData *o, obs)
+		{
+			if (o->entityName() == n)
+			{
+				switch (o->type())
+				{
+					case KRObjectData::EntityLabel:
+						return new Scripting::Label(o->toLabel());
+						break;
+					case KRObjectData::EntityField:
+						return new Scripting::Field(o->toField());
+						break;
+					default:
+						return new QObject();
+				}
+			}
+		}
+		return 0;
 	}
-
+	
+	QObject* Report::sectionByName ( const QString &n )
+	{
+		KRSectionData *sec = _reportdata->section(n);
+		if (sec)
+		{
+			return new Scripting::Section(sec);	
+		}
+		else
+		{
+			return new QObject();
+		}
+	}
 }

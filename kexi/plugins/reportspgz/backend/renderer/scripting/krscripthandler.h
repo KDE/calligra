@@ -30,6 +30,8 @@ class KRScriptConstants;
 class KRScriptDebug;
 class QScriptEngine;
 class KRReportData;
+class OROPage;
+class KRScriptDraw;
 
 class KRScriptHandler : public QObject
 {
@@ -43,7 +45,7 @@ class KRScriptHandler : public QObject
 		
 	public slots:
 		
-		void slotEnteredSection(KRSectionData*);
+		void slotEnteredSection(KRSectionData*, OROPage*, QPointF);
 		void slotEnteredGroup(const QString&, const QVariant&);
 		void slotExitedGroup(const QString&, const QVariant&);
 		void populateEngineParameters(KexiDB::Cursor *q);
@@ -53,6 +55,7 @@ class KRScriptHandler : public QObject
 		KRScriptFunctions *_functions;
 		KRScriptConstants *_constants;
 		KRScriptDebug *_debug;
+		KRScriptDraw *_draw;
 		
 		QString fieldFunctions();
 		

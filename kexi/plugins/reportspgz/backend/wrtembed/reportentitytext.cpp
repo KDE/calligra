@@ -101,13 +101,13 @@ void ReportEntityText::paint( QPainter* painter, const QStyleOptionGraphicsItem*
 	painter->fillRect ( rect(),  _bgColor->value().value<QColor>() );
 	painter->drawText ( rect(), textFlags(), column()+QObject::tr ( ":" ) + QObject::tr ( " textarea" ) );
 	
-	if ((Qt::PenStyle)_lnstyle->value().toInt() == Qt::NoPen || _lnweight->value().toInt() <= 0)
+	if ((Qt::PenStyle)_lnStyle->value().toInt() == Qt::NoPen || _lnWeight->value().toInt() <= 0)
 	{
 		painter->setPen ( QPen ( QColor ( 224,224,224 )));
 	}
 	else
 	{
-		painter->setPen ( QPen ( _lncolor->value().value<QColor>(), _lnweight->value().toInt(), (Qt::PenStyle)_lnstyle->value().toInt() ) );
+		painter->setPen ( QPen ( _lnColor->value().value<QColor>(), _lnWeight->value().toInt(), (Qt::PenStyle)_lnStyle->value().toInt() ) );
 	}
 	painter->drawRect ( rect() );
 	

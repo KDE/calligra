@@ -71,10 +71,22 @@ class KRReportData : public QObject
 		/**
 		\return a report object given its name
 		*/
-		KRObjectData* objectByName ( const QString& );
+		KRObjectData* object( const QString& );
 
+		/**
+		\return all the sections, including groups and detail
+		*/
+		QList<KRSectionData*> sections();
+		
+		/**
+		\return a sectiondata given a section enum
+		*/
 		KRSectionData* section(Section);
-		//KRSectionData* section(const QString&);
+		
+		/**
+		\return a sectiondata given its name
+		*/
+		KRSectionData* section(const QString&);
 		
 	protected:
 		QString title;
@@ -82,8 +94,6 @@ class KRReportData : public QObject
 		QString script;
 
 		ReportPageOptions page;
-
-
 
 		KRSectionData * pghead_first;
 		KRSectionData * pghead_odd;

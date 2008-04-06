@@ -26,6 +26,11 @@
 #include "krpos.h"
 #include "krsize.h"
 #include <parsexmlutils.h>
+namespace Scripting
+{
+	class Text;
+	
+}
 /**
 	@author 
 */
@@ -43,7 +48,6 @@ class KRTextData : public KRObjectData
 		QFont font() const {return _font->value().value<QFont>();}
 		ORDataData data() {return ORDataData("Data Source"/*_query->value().toString()*/, _controlSource->value().toString());}
 		
-		void setColumn ( const QString& );
 		void setBottomPadding ( qreal bp );
 		qreal bottomPadding() const;
 
@@ -62,9 +66,9 @@ class KRTextData : public KRObjectData
 		KoProperty::Property* _fgColor;
 		KoProperty::Property* _bgColor;
 		KoProperty::Property* _bgOpacity;
-		KoProperty::Property* _lncolor;
-		KoProperty::Property* _lnweight;
-		KoProperty::Property* _lnstyle;
+		KoProperty::Property* _lnColor;
+		KoProperty::Property* _lnWeight;
+		KoProperty::Property* _lnStyle;
 		
 		qreal bpad;
 		
@@ -73,6 +77,7 @@ class KRTextData : public KRObjectData
 		static int RTTI;
 		
 		friend class ORPreRenderPrivate;
+		friend class Scripting::Text;
 };
 
 #endif

@@ -53,6 +53,14 @@ class KRSectionData : public QObject
 		KoProperty::Set* properties(){return _set;}
 	
 		bool isValid() const {return _valid;}
+		
+		/**
+		set the 'extra' info for the section.  This is used
+		to uniquely identity the section, eg, odd/even footers,
+		or multiple group heads
+		*/
+		void setExtra(const QString &e){_extra = e;}
+		
 		QString extra() const {return _extra;}
 		qreal height() const {return _height->value().toDouble();}
 		QList<KRObjectData*> objects() const {return _objects;};

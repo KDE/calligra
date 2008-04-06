@@ -1,6 +1,5 @@
 /*
  * Kexi Report Plugin 
- * Copyright (C) 2001-2007 by OpenMFG, LLC
  * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
@@ -41,7 +40,8 @@ namespace Scripting
 		public slots:
 			QString title();
 			QString recordSource();
-			KRObjectData* objectByName(const QString &);
+			QObject* objectByName(const QString &);
+			QObject* sectionByName(const QString &);
 			
 		private:
 			KRReportData *_reportdata;

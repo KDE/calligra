@@ -305,3 +305,37 @@ void ORORect::setBrush(const QBrush & b)
   _brush = b;
 }
 
+//
+// OROEllipse
+//
+const int OROEllipse::Ellipse = 5;
+
+OROEllipse::OROEllipse()
+	: OROPrimitive(OROEllipse::Ellipse)
+{
+}
+
+OROEllipse::~OROEllipse()
+{
+}
+
+void OROEllipse::setSize(const QSizeF & s)
+{
+	_size = s;
+}
+
+void OROEllipse::setRect(const QRectF & r)
+{
+	setPosition(r.topLeft());
+	setSize(r.size());
+}
+
+void OROEllipse::setPen(const QPen & p)
+{
+	_pen = p;
+}
+
+void OROEllipse::setBrush(const QBrush & b)
+{
+	_brush = b;
+}

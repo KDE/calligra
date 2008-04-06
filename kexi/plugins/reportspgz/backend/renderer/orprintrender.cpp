@@ -192,6 +192,20 @@ bool ORPrintRender::render ( ORODocument * pDocument )
 					_painter->drawRect ( rc );
 					_painter->restore();
 				}
+				else if ( prim->type() == OROEllipse::Ellipse )
+				{
+					OROEllipse * re = ( OROEllipse* ) prim;
+
+					QPointF ps = re->position();
+					QSizeF sz = re->size();
+					QRectF rc = QRectF ( ps.x(), ps.y(), sz.width(), sz.height() );
+
+					_painter->save();
+					_painter->setPen ( re->pen() );
+					_painter->setBrush ( re->brush() );
+					_painter->drawEllipse ( rc );
+					_painter->restore();
+				}
 				else
 				{
 					qDebug ( "unrecognized primitive type" );

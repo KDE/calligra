@@ -256,5 +256,33 @@ class ORORect: public OROPrimitive
     QBrush _brush;
 };
 
+//
+// ORORect
+// This primitive defines a drawn rectangle
+//
+class OROEllipse: public OROPrimitive
+{
+	public:
+		OROEllipse();
+		virtual ~OROEllipse();
 
+		QSizeF size() const { return _size; }
+		void setSize(const QSizeF &);
+
+		QRectF rect() const { return QRectF(_position, _size); };
+		void setRect(const QRectF &);
+
+		QPen pen() const { return _pen; };
+		void setPen(const QPen &);
+
+		QBrush brush() const { return _brush; };
+		void setBrush(const QBrush &);
+
+		static const int Ellipse;
+
+	protected:
+		QSizeF _size;
+		QPen _pen;
+		QBrush _brush;
+};
 #endif // __RENDEROBJECTS_H__

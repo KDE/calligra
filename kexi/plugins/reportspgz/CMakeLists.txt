@@ -47,10 +47,12 @@ set(pgzkexireportpart2_LIB_SRCS
 	backend/renderer/scripting/krscriptfunctions.cpp
 	backend/renderer/scripting/krscriptconstants.cpp
 	backend/renderer/scripting/krscriptdebug.cpp
+	backend/renderer/scripting/krscriptdraw.cpp
 	backend/renderer/scripting/krscriptreport.cpp
 	backend/renderer/scripting/krscriptsection.cpp
 	backend/renderer/scripting/krscriptlabel.cpp
 	backend/renderer/scripting/krscriptfield.cpp
+	backend/renderer/scripting/krscripttext.cpp
 
 	backend/wrtembed/detailgroupsectiondialog.cpp
 	backend/wrtembed/reportentities.cpp

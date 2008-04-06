@@ -242,6 +242,7 @@ QList<KRObjectData*> KRReportData::objects()
 	
 	if (detailsection )
 	{
+		kDebug() << "Number of groups: " << detailsection->groupList.count() << endl;
 		foreach (ORDetailGroupSectionData* g, detailsection->groupList)
 		{
 			if (g->head)
@@ -256,10 +257,16 @@ QList<KRObjectData*> KRReportData::objects()
 		if (detailsection->detail)
 			obs << detailsection->detail->objects();
 	}
+	
+	kDebug() << "Object List:" << endl;
+	foreach (KRObjectData* o, obs)
+	{
+		kDebug() << o->entityName() << endl;
+	}
 	return obs;
 }
 
-KRObjectData* KRReportData::objectByName(const QString& n)
+KRObjectData* KRReportData::object(const QString& n)
 {
 	QList<KRObjectData*> obs = objects();
 	
@@ -268,6 +275,54 @@ KRObjectData* KRReportData::objectByName(const QString& n)
 		if (o->entityName() == n)
 		{
 			return o;
+		}
+	}
+	return 0;
+}
+
+QList<KRSectionData*> KRReportData::sections()
+{
+	QList<KRSectionData*> secs;
+	KRSectionData *sec;
+	for (int i = 0; i <12 ; ++i)
+	{
+		sec = section((KRReportData::Section)(i+1));
+		if (sec)
+		{
+			secs << sec;
+		}
+	}
+	
+	if (detailsection )
+	{
+		kDebug() << "Number of groups: " << detailsection->groupList.count() << endl;
+		foreach (ORDetailGroupSectionData* g, detailsection->groupList)
+		{
+			if (g->head)
+			{
+				secs << g->head;
+			}
+			if (g->foot)
+			{
+				secs << g->foot;	
+			}
+		}
+		if (detailsection->detail)
+			secs << detailsection->detail;
+	}
+	
+	return secs;
+}
+
+KRSectionData* KRReportData::section(const QString& sn)
+{
+	QList<KRSectionData*> secs = sections();
+	
+	foreach(KRSectionData *sec, secs)
+	{
+		if (sec->name() == sn)
+		{
+			return sec;
 		}
 	}
 	return 0;

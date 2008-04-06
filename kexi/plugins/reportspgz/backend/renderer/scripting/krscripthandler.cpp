@@ -34,6 +34,8 @@
 #include <krreportdata.h>
 #include <krdetailsectiondata.h>
 #include "krscriptreport.h"
+#include <renderobjects.h>
+#include "krscriptdraw.h"
 
 KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
 {
@@ -58,57 +60,25 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
 	_debug = new KRScriptDebug();
 	_action->addObject(_debug, "debug");
 	
+	//A simple drawing object
+	_draw = new KRScriptDraw();
+	_action->addObject(_draw, "draw");
+	
 	//Add a general report object
 	_action->addObject(new Scripting::Report(_data), "report");
 	
 
 	//Add the detail section
-	_action->addObject(new Scripting::Section(_data->detailsection->detail), "detail");
+	//_action->addObject(new Scripting::Section(_data->detailsection->detail), "detail");
+	
+	
+	QList<KRSectionData*> secs = _data->sections();
+	foreach (KRSectionData *sec, secs)
+	{
+		_action->addObject(new Scripting::Section(sec), sec->name());
+	}
 	
 #if 0
-	//Add the pghead_any section
-	if (_data->pghead_any)
-	_action->addObject(new Scripting::Section(_data->pghead_any), "pagehead_any");
-	
-	//Add the pghead_even section
-	if (_data->pghead_any)
-	_action->addObject(new Scripting::Section(_data->pghead_even), "pagehead_even");
-	
-	//Add the pghead_odd section
-	if (_data->pghead_any)
-	_action->addObject(new Scripting::Section(_data->pghead_odd), "pagehead_odd");
-	
-	//Add the pghead_first section
-	if (_data->pghead_any)
-	_action->addObject(new Scripting::Section(_data->pghead_first), "pagehead_first");
-	
-	//Add the pghead_last section
-	if (_data->pghead_any)
-	_action->addObject(new Scripting::Section(_data->pghead_last), "pagehead_last");
-	
-	//Add the pgfoot_any section
-	if (_data->pghead_any)
-	_action->addObject(new Scripting::Section(_data->pgfoot_any), "pagefoot_any");
-	
-	//Add the pgfoot_even section
-	if (_data->pghead_any)
-	_action->addObject(new Scripting::Section(_data->pgfoot_even), "pagefoot_even");
-	
-	//Add the pgfoot_odd section
-	if (_data->pghead_any)
-	_action->addObject(new Scripting::Section(_data->pgfoot_odd), "pagefoot_odd");
-	
-	//Add the pgfoot_first section
-	if (_data->pghead_any)
-	_action->addObject(new Scripting::Section(_data->pgfoot_first), "pagefoot_first");
-	
-	//Add the pgfoot_last section
-	if (_data->pghead_any)
-	_action->addObject(new Scripting::Section(_data->pgfoot_last), "pagefoot_last");
-	
-#endif
-	KRSectionData *sec;
-	
 	for (int i = 0; i <12 ; ++i)
 	{
 		sec = _data->section((KRReportData::Section)(i+1));
@@ -117,15 +87,21 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
 			_action->addObject(new Scripting::Section(sec), sec->name());
 		}
 	}
-	
+#endif
 	_action->setCode((_data->script + "\n" + fieldFunctions()).toLocal8Bit());
 	
 	kDebug() << _action->code() << endl;
 	
 	_action->trigger();
 	
-	kDebug() << "Function Names:" << _action->functionNames()<< endl;
-	
+	if (_action->hadError())
+	{
+		KMessageBox::error(0, _action->errorMessage());
+	}
+	else
+	{
+		kDebug() << "Function Names:" << _action->functionNames()<< endl;
+	}
 }
  
 KRScriptHandler::~KRScriptHandler()
@@ -155,11 +131,14 @@ void KRScriptHandler::slotExitedGroup(const QString &key, const QVariant &value)
 	_functions->setWhere(where());
 }
 
-void KRScriptHandler::slotEnteredSection(KRSectionData *section)
+void KRScriptHandler::slotEnteredSection(KRSectionData *section, OROPage* cp, QPointF off)
 {
 	kDebug() << section->name() << endl;
 	
-	if (_action->functionNames().contains(section->name() + "_onrender"))
+	_draw->setPage(cp);
+	_draw->setOffset(off);
+	
+	if (!_action->hadError() && _action->functionNames().contains(section->name() + "_onrender"))
 	{
 		QVariant result = _action->callFunction(section->name() + "_onrender");
 		displayErrors();
@@ -200,7 +179,7 @@ QVariant KRScriptHandler::evaluate(const QString &field)
 {	
 	QString func = field.toLower() + "_onrender_";
 	
-	if (_action->functionNames().contains(func))
+	if (!_action->hadError() && _action->functionNames().contains(func) )
 	{
 		kDebug() << "*** Evaluating field" << endl;
 		return _action->callFunction(func);
