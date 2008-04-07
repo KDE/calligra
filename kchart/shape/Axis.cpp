@@ -25,6 +25,7 @@
 #include "DataSet.h"
 #include "Legend.h"
 #include "KDChartConvertions.h"
+#include "TextLabelDummy.h"
 
 // KOffice
 #include <KoShapeLoadingContext.h>
@@ -33,7 +34,7 @@
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
-#include <interfaces/SimpleTextShapeInterface.h>
+#include <KoTextShapeData.h>
 
 // KDChart
 #include <KDChartChart>
@@ -54,6 +55,7 @@
 // Qt
 #include <QList>
 #include <QString>
+#include <QTextDocument>
 
 using namespace KChart;
 
@@ -73,7 +75,8 @@ public:
     PlotArea *plotArea;
     
     AxisPosition position;
-    TextLabel *title;
+    KoShape *title;
+    TextLabelData *titleData;
     QString id;
     QList<DataSet*> dataSets;
     double majorInterval;
@@ -255,7 +258,22 @@ Axis::Axis( PlotArea *parent )
     
     setShowGrid( false );
     
-    d->title = static_cast<TextLabel*>( KoShapeRegistry::instance()->value( SimpleTextShapeId )->createDefaultShape( 0 ) );
+    d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShape( 0 );
+    if ( d->title )
+    {
+        d->titleData = qobject_cast<TextLabelData*>( d->title->userData() );
+        if ( d->titleData == 0 )
+        {
+            d->titleData = new TextLabelData;
+            d->title->setUserData( d->titleData );
+        }
+    }
+    else
+    {
+        d->title = new TextLabelDummy;
+        d->titleData = new TextLabelData;
+        d->title->setUserData( d->titleData );
+    }
     d->plotArea->parent()->addChild( d->title );
     
     d->plotAreaChartType = d->plotArea->chartType();
@@ -284,14 +302,14 @@ void Axis::setPosition( AxisPosition position )
     d->kdAxis->setPosition( AxisPositionToKDChartAxisPosition( position ) );
 }
 
-TextLabel *Axis::title() const
+KoShape *Axis::title() const
 {
     return d->title;
 }
 
 QString Axis::titleText() const
 {
-    return d->title->text();
+    return d->titleData->document()->toPlainText();
 }
 
 QString Axis::id() const
@@ -497,7 +515,7 @@ void Axis::setShowGrid( bool showGrid )
 
 void Axis::setTitleText( const QString &text )
 {
-    d->title->setText( text );
+    d->titleData->document()->setPlainText( text );
 }
 
 Qt::Orientation Axis::orientation()
@@ -544,7 +562,7 @@ void Axis::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
     else if ( dimension() == YAxisDimension )
         bodyWriter.addAttribute( "chart:dimension", "y" );
 
-    bodyWriter.addAttribute( "chart:axis-name", d->title->text() );
+    bodyWriter.addAttribute( "chart:axis-name", d->titleData->document()->toPlainText() );
 
     bodyWriter.endElement(); // chart:axis
 }

@@ -60,9 +60,9 @@ namespace KDChart {
 }
 
 // Interface to SimpleTextShape plugin
-class SimpleTextShapeInterface;
-typedef SimpleTextShapeInterface TextLabel; // Use a shorter name instead
-#define SimpleTextShapeId "SimpleText"
+class KoTextShapeData;
+#define TextShapeId "TextShapeID"
+typedef KoTextShapeData TextLabelData;
 
 namespace KChart {
 
@@ -90,9 +90,12 @@ public:
     QAbstractItemModel *model() const;
     ProxyModel *proxyModel() const;
     
-    SimpleTextShapeInterface *title() const;
-    SimpleTextShapeInterface *subTitle() const;
-    SimpleTextShapeInterface *footer() const;
+    KoShape *title() const;
+    TextLabelData *titleData() const;
+    KoShape *subTitle() const;
+    TextLabelData *subTitleData() const;
+    KoShape *footer() const;
+    TextLabelData *footerData() const;
     Legend *legend() const;
     PlotArea *plotArea() const;
     Surface *wall() const;
@@ -131,6 +134,7 @@ public:
     void saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
     
     KoShape *cloneShape() const;
+    void addChild( KoShape *shape );
     
     void updateChildrenPositions();
     

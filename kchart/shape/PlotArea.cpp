@@ -32,7 +32,7 @@
 #include <KoShapeLoadingContext.h>
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
-#include <interfaces/SimpleTextShapeInterface.h>
+#include <KoTextShapeData.h>
 
 // Qt
 #include <QPointF>
@@ -114,7 +114,15 @@ PlotArea::PlotArea( ChartShape *parent )
     : d( new Private )
 {
     d->shape = parent;
-    
+}
+
+PlotArea::~PlotArea()
+{
+}
+
+
+void PlotArea::init()
+{
     d->kdChart->resize( size().toSize() );
     d->kdChart->replaceCoordinatePlane( d->kdPlane );
     KDChart::FrameAttributes attr = d->kdChart->frameAttributes();
@@ -131,22 +139,17 @@ PlotArea::PlotArea( ChartShape *parent )
     d->axes.append( yAxis );
 }
 
-PlotArea::~PlotArea()
-{
-}
-
-
-ProxyModel *PlotArea::proxyModel() const
-{
-    return d->shape->proxyModel();
-}
-
-void PlotArea::init()
+void PlotArea::modelReset()
 {
     foreach( DataSet *dataSet, proxyModel()->dataSets() )
     {
         yAxis()->attachDataSet( dataSet );
     }
+}
+
+ProxyModel *PlotArea::proxyModel() const
+{
+    return d->shape->proxyModel();
 }
 
 QPointF PlotArea::position() const

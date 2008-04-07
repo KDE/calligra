@@ -15,9 +15,6 @@
 #include <KDebug>
 #include <KMessageBox>
 
-// KOffice
-#include <interfaces/SimpleTextShapeInterface.h>
-
 // KDChart
 #include <KDChartChart>
 #include <KDChartPosition>
@@ -286,6 +283,7 @@ ChartConfigWidget::~ChartConfigWidget()
 
 void ChartConfigWidget::open( KoShape* shape )
 {
+    qDebug() << "open called";
     d->shape = dynamic_cast<ChartShape*>( shape );
     
     // Update the axis titles

@@ -33,7 +33,7 @@ public:
     ~Axis();
 	
     AxisPosition position() const;
-    TextLabel *title() const;
+    KoShape *title() const;
     QString titleText() const;
     QString id() const;
     AxisDimension dimension() const;

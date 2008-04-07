@@ -46,7 +46,7 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
-#include <interfaces/SimpleTextShapeInterface.h>
+#include <KoTextShapeData.h>
 
 // ChartShape
 #include "ChartConfigWidget.h"
@@ -473,7 +473,9 @@ void ChartTool::addAxis( AxisPosition position, const QString& title ) {
     Axis *axis = new Axis( d->shape->plotArea() );
     axis->setPosition( position );
     axis->setTitleText( title );
+    
     d->shape->plotArea()->addAxis( axis );
+    d->shape->updateChildrenPositions();
     d->shape->update();
 }
 

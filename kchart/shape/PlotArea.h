@@ -89,6 +89,9 @@ public:
     bool deregisterKdDiagram( KDChart::AbstractDiagram *diagram );
     
     void update() const;
+    
+public slots:
+    void modelReset();
 
 private:
     class Private;

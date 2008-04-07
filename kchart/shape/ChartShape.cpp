@@ -29,6 +29,8 @@
 #include "PlotArea.h"
 #include "Surface.h"
 #include "ProxyModel.h"
+#include "TextLabelDummy.h"
+#include "KoTextShapeData.h"
 
 // Posix
 #include <float.h> // For basic data types characteristics.
@@ -43,7 +45,7 @@
 #include <KoGenStyles.h>
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
-#include <interfaces/SimpleTextShapeInterface.h>
+#include <KoTextShapeData.h>
 
 // KDChart
 #include <KDChartChart>
@@ -71,10 +73,12 @@
 #include <QPainter>
 #include <QPointF>
 #include <QSizeF>
+#include <QTextDocument>
 
 // KDE
 #include <KDebug>
 #include <KApplication>
+#include <KMessageBox>
 
 namespace KChart {
 
@@ -140,8 +144,12 @@ QString saveOdfFont( KoGenStyles& mainStyles,
     return mainStyles.lookup( autoStyle, "ch", KoGenStyles::ForceNumbering );
 }
 
-bool loadOdfLabel( TextLabel *label, KoXmlElement &labelElement, KoShapeLoadingContext &context )
-{
+bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingContext &context )
+{   
+    TextLabelData *labelData = qobject_cast<TextLabelData*>( label->userData() );
+    if ( !labelData )
+        return false;
+    
     // TODO: Read optional attributes
     // 1. Table range
     // 2. Position and size
@@ -149,20 +157,24 @@ bool loadOdfLabel( TextLabel *label, KoXmlElement &labelElement, KoShapeLoadingC
     KoXmlElement  pElement = KoXml::namedItemNS( labelElement,
                                             KoXmlNS::text, "p" );
     
-    label->setText( pElement.text() );
+    labelData->document()->setPlainText( pElement.text() );
     
     return true;
 }
 
-void saveOdfLabel( TextLabel *label, KoXmlWriter &bodyWriter, KoGenStyles &mainStyles, const QString &odfLabelType )
+void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter, KoGenStyles &mainStyles, const QString &odfLabelType )
 {
+    TextLabelData *labelData = qobject_cast<TextLabelData*>( label->userData() );
+    if ( !labelData )
+        return;
+    
     bodyWriter.startElement( QString( "chart:" + odfLabelType ).toAscii() );
     bodyWriter.addAttributePt( "svg:x", label->position().x() );
     bodyWriter.addAttributePt( "svg:y", label->position().y() );
-    // TODO: Save TextLabel color
-    bodyWriter.addAttribute( "chart:style-name", saveOdfFont( mainStyles, label->font(), QColor() ) );
+    // TODO: Save text label color
+    bodyWriter.addAttribute( "chart:style-name", saveOdfFont( mainStyles, labelData->document()->defaultFont(), QColor() ) );
     bodyWriter.startElement( "text:p" );
-    bodyWriter.addTextNode( label->text() );
+    bodyWriter.addTextNode( labelData->document()->toPlainText() );
     bodyWriter.endElement(); // text:p
     bodyWriter.endElement(); // chart:title/subtitle/footer
 }
@@ -174,9 +186,9 @@ public:
     Private();
     ~Private();
     
-    TextLabel *title;
-    TextLabel *subTitle;
-    TextLabel *footer;
+    KoShape *title;
+    KoShape *subTitle;
+    KoShape *footer;
     Legend *legend;
     PlotArea *plotArea;
     Surface *wall;
@@ -204,28 +216,65 @@ ChartShape::ChartShape()
 {
     setShapeId( ChartShapeId );
     
+    // We need this as the very first step, because some methods
+    // here rely on the d->plotArea pointer
+    d->plotArea = new PlotArea( this );
+    
+    d->plotArea->init();
+    
     d->legend = new Legend( this );
     d->legend->setVisible( false );
     
-    d->plotArea = new PlotArea( this );
     d->model = new ProxyModel ( d->plotArea );
+    
+    QObject::connect( d->model, SIGNAL( modelReset() ), d->plotArea, SLOT( modelReset() ) );
     
     d->plotArea->setChartType( BarChartType );
     d->plotArea->setChartSubType( NormalChartSubtype );
     
-    d->title = static_cast<TextLabel*>( KoShapeRegistry::instance()->value( SimpleTextShapeId )->createDefaultShape( 0 ) );
+    d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShape( 0 );
+    if ( !d->title )
+    {
+        d->title = new TextLabelDummy;
+        KMessageBox::error( 0, "The plugin needed for displaying text labels in a chart is not available.", "Plugin Missing" );
+    }
+    if ( dynamic_cast<TextLabelData*>( d->title->userData() ) == 0 )
+    {
+        KMessageBox::error( 0, "The plugin needed for displaying text labels is not compatible with the current version of the chart Flake shape.", "Plugin Incompatible" );
+        TextLabelData *dataDummy = new TextLabelData;
+        d->title->setUserData( dataDummy );
+    }
+    
     addChild( d->title );
-    d->title->setText( i18n( "Title" ) );
+    titleData()->document()->setPlainText( i18n( "Title" ) );
     d->title->setVisible( false );
 
-    d->subTitle = static_cast<TextLabel*>( KoShapeRegistry::instance()->value( SimpleTextShapeId )->createDefaultShape( 0 ) );
+    d->subTitle = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShape( 0 );
+    if ( !d->subTitle )
+    {
+        d->subTitle = new TextLabelDummy;
+    }
+    if ( dynamic_cast<TextLabelData*>( d->subTitle->userData() ) == 0 )
+    {
+        TextLabelData *dataDummy = new TextLabelData;
+        d->subTitle->setUserData( dataDummy );
+    }
     addChild( d->subTitle );
-    d->subTitle->setText( i18n( "Subtitle" ) );
+    subTitleData()->document()->setPlainText( i18n( "Subtitle" ) );
     d->subTitle->setVisible( false );
 
-    d->footer = static_cast<TextLabel*>( KoShapeRegistry::instance()->value( SimpleTextShapeId )->createDefaultShape( 0 ) );
+    d->footer = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShape( 0 );
+    if ( !d->footer )
+    {
+        d->footer = new TextLabelDummy;
+    }
+    if ( dynamic_cast<TextLabelData*>( d->subTitle->userData() ) == 0 )
+    {
+        TextLabelData *dataDummy = new TextLabelData;
+        d->footer->setUserData( dataDummy );
+    }
     addChild( d->footer );
-    d->footer->setText( i18n( "Footer" ) );
+    footerData()->document()->setPlainText( i18n( "Footer" ) );
     d->footer->setVisible( false );
     
     d->floor = new Surface( d->plotArea );
@@ -249,19 +298,38 @@ ProxyModel *ChartShape::proxyModel() const
     return d->model;
 }
 
-TextLabel *ChartShape::title() const
+KoShape *ChartShape::title() const
 {
     return d->title;
 }
 
-TextLabel *ChartShape::subTitle() const
+TextLabelData *ChartShape::titleData() const
+{
+    TextLabelData *data = qobject_cast<TextLabelData*>( d->title->userData() );
+    return data;
+}
+    
+
+KoShape *ChartShape::subTitle() const
 {
     return d->subTitle;
 }
 
-TextLabel *ChartShape::footer() const
+TextLabelData *ChartShape::subTitleData() const
+{
+    TextLabelData *data = qobject_cast<TextLabelData*>( d->subTitle->userData() );
+    return data;
+}
+
+KoShape *ChartShape::footer() const
 {
     return d->footer;
+}
+
+TextLabelData *ChartShape::footerData() const
+{
+    TextLabelData *data = qobject_cast<TextLabelData*>( d->footer->userData() );
+    return data;
 }
 
 Legend *ChartShape::legend() const
@@ -289,8 +357,6 @@ void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel 
 {
     Q_ASSERT( model );
     d->model->setSourceModel( model );
-    
-    d->plotArea->init();
 }
 
 bool ChartShape::addAxis( Axis *axis )
@@ -315,6 +381,8 @@ void ChartShape::setPosition( const QPointF &pos )
 
 void ChartShape::setSize( const QSizeF &size )
 {
+    Q_ASSERT( d->plotArea );
+    
     // Usually, this is done by signals from the QWidget that we resize.
     // But since a KoShape is not a QWidget, we need to do this manually.
     d->plotArea->kdChart()->resize( size.toSize() );
@@ -326,16 +394,18 @@ void ChartShape::setSize( const QSizeF &size )
 
 void ChartShape::updateChildrenPositions()
 {
+    Q_ASSERT( d->plotArea );
+    
     foreach( Axis *axis, d->plotArea->axes() )
     {
-        TextLabel *title = axis->title();
+        KoShape *title = axis->title();
         QPointF titlePosition;
         if ( axis->position() == BottomAxisPosition )
             titlePosition = QPointF( size().width() / 2.0 - title->size().width() / 2.0, size().height() );
         else if ( axis->position() == TopAxisPosition )
             titlePosition = QPointF( size().width() / 2.0, -title->size().height() );
         else if ( axis->position() == LeftAxisPosition )
-            titlePosition = QPointF( -title->size().height(), size().height() / 2.0 );
+            titlePosition = QPointF( -title->size().width() / 2.0 - title->size().height() / 2.0, size().height() / 2.0 );
         else if ( axis->position() == RightAxisPosition )
             titlePosition = QPointF( size().width(), size().height() / 2.0 );
         title->setPosition( titlePosition );
@@ -356,16 +426,19 @@ QRectF ChartShape::boundingRect() const
 
 ChartType ChartShape::chartType() const
 {
+    Q_ASSERT( d->plotArea );
     return d->plotArea->chartType();
 }
 
 ChartSubtype ChartShape::chartSubType() const
 {
+    Q_ASSERT( d->plotArea );
     return d->plotArea->chartSubType();
 }
 
 bool ChartShape::isThreeD() const
 {
+    Q_ASSERT( d->plotArea );
     return d->plotArea->isThreeD();
 }
 
@@ -381,21 +454,28 @@ void ChartShape::setFirstColumnIsLabel( bool isLabel )
 
 void ChartShape::setChartType( ChartType type )
 {
+    Q_ASSERT( d->plotArea );
     d->plotArea->setChartType( type );
 }
 
 void ChartShape::setChartSubType( ChartSubtype subType )
 {
+    Q_ASSERT( d->plotArea );
     d->plotArea->setChartSubType( subType );
 }
 
 void ChartShape::setThreeD( bool threeD )
 {
+    Q_ASSERT( d->plotArea );
     d->plotArea->setThreeD( threeD );
 }
 
 void ChartShape::paintPixmap( QPainter &painter, const KoViewConverter &converter )
 {
+    Q_ASSERT( d->plotArea );
+    if ( !d->plotArea )
+        return;
+    
     // Adjust the size of the painting area to the current zoom level
     const QSize paintRectSize = converter.documentToView( size() ).toSize();
     d->image = QImage( paintRectSize, QImage::Format_ARGB32 );
@@ -446,6 +526,8 @@ void ChartShape::paintComponent( QPainter &painter, const KoViewConverter &conve
 
 bool ChartShape::loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContext &context )
 {
+    Q_ASSERT( d->plotArea );
+    
     if ( chartElement.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
         kDebug() << " ---------------------------------------------------------------- " ;
         kDebug() << " Chart class: " 
@@ -538,6 +620,8 @@ bool ChartShape::loadOdfData( const KoXmlElement &chartElement, KoShapeLoadingCo
 
 void ChartShape::saveOdf( KoShapeSavingContext & context ) const
 {
+    Q_ASSERT( d->plotArea );
+    
     KoXmlWriter&  bodyWriter = context.xmlWriter();
     KoGenStyles&  mainStyles( context.mainStyles() );
 
@@ -676,6 +760,11 @@ void ChartShape::saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
 KoShape *ChartShape::cloneShape() const
 {
     return 0;
+}
+
+void ChartShape::addChild( KoShape *shape )
+{
+    KoShapeContainer::addChild( shape );
 }
 
 void ChartShape::update() const
