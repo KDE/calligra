@@ -23,6 +23,7 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoStyleStack.h>
+#include <KoGenStyle.h>
 #include <KoPALoadingContext.h>
 
 #include "KPrPageApplicationData.h"
@@ -50,7 +51,10 @@ KPrPageApplicationData * KPrPage::pageData( KoPAPageBase * page )
 
 void KPrPage::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const
 {
-    KoPAPageBase::saveOdfPageStyleData( style, paContext );
+    KoPAPage::saveOdfPageStyleData( style, paContext );
+    style.addProperty( "presentation:background-visible", ( m_pageProperties & DisplayMasterBackground ) == DisplayMasterBackground );
+    style.addProperty( "presentation:background-objects-visible", ( m_pageProperties & DisplayMasterShapes ) == DisplayMasterShapes );
+
     KPrPageApplicationData * data = dynamic_cast<KPrPageApplicationData *>( applicationData() );
     Q_ASSERT( data );
     KPrPageEffect * pageEffect = data->pageEffect();
