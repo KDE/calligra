@@ -93,6 +93,7 @@ signals:
     void datasetColorChanged( DataSet *dataSet, const QColor& color );
     void datasetShowValuesChanged( DataSet *dataSet, bool b );
     void datasetShowLabelsChanged( DataSet *dataSet, bool b );
+    void dataSetAxisChanged( DataSet *dataSet, Axis *axis );
     void gapBetweenBarsChanged( int percent );
     void gapBetweenSetsChanged( int percent );
     

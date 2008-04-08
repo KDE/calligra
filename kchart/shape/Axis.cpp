@@ -300,6 +300,8 @@ void Axis::setPosition( AxisPosition position )
     
     // KDChart
     d->kdAxis->setPosition( AxisPositionToKDChartAxisPosition( position ) );
+    
+    requestRepaint();
 }
 
 KoShape *Axis::title() const
@@ -362,6 +364,9 @@ bool Axis::attachDataSet( DataSet *dataSet )
     break;
     }
     
+    layoutPlanes();
+    requestRepaint();
+    
     return true;
 }
 
@@ -404,6 +409,10 @@ bool Axis::detachDataSet( DataSet *dataSet )
     break;
     }
     
+
+    layoutPlanes();
+    requestRepaint();
+    
     return true; 
 }
 
@@ -426,6 +435,8 @@ void Axis::setMajorInterval( double interval )
     KDChart::GridAttributes attributes = plane->gridAttributes( orientation() );
     attributes.setGridStepWidth( interval );
     plane->setGridAttributes( orientation(), attributes );
+    
+    requestRepaint();
 }
 
 double Axis::minorInterval() const
@@ -456,6 +467,8 @@ void Axis::setMinorIntervalDevisor( int devisor )
     KDChart::GridAttributes attributes = plane->gridAttributes( orientation() );
     attributes.setGridSubStepWidth( d->majorInterval / devisor );
     plane->setGridAttributes( orientation(), attributes );
+    
+    requestRepaint();
 }
 
 bool Axis::showInnerMinorTicks() const
@@ -486,6 +499,8 @@ void Axis::setScalingLogarithmic( bool logarithmicScaling )
         return;
 
     d->kdPlane->setAxesCalcModeY( d->logarithmicScaling ? KDChart::AbstractCoordinatePlane::Logarithmic : KDChart::AbstractCoordinatePlane::Linear );
+    
+    requestRepaint();
 }
 
 bool Axis::scalingIsLogarithmic() const
@@ -511,6 +526,8 @@ void Axis::setShowGrid( bool showGrid )
     KDChart::GridAttributes attributes = plane->gridAttributes( orientation() );
 	attributes.setGridVisible( d->showGrid );
 	plane->setGridAttributes( orientation(), attributes );
+    
+    requestRepaint();
 }
 
 void Axis::setTitleText( const QString &text )
@@ -541,6 +558,9 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &cont
                 setPosition( LeftAxisPosition );
         }
     }
+    
+    requestRepaint();
+    
     return true;
 }
 
@@ -690,6 +710,8 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
     d->plotAreaChartType = chartType;
     
     d->kdPlane->layoutPlanes();
+    
+    requestRepaint();
 }
 
 void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
@@ -727,4 +749,19 @@ void Axis::setThreeD( bool threeD )
         attributes.setDepth( 15.0 );
         d->kdCircleDiagram->setThreeDPieAttributes( attributes );
     }
+    
+    requestRepaint();
+}
+
+void Axis::requestRepaint() const
+{
+    d->plotArea->requestRepaint();
+}
+
+void Axis::layoutPlanes()
+{
+    if ( d->kdPlane )
+        d->kdPlane->layoutPlanes();
+    if ( d->kdPolarPlane )
+        d->kdPolarPlane->layoutPlanes();
 }

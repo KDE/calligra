@@ -134,12 +134,13 @@ public:
     void saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
     
     KoShape *cloneShape() const;
-    void addChild( KoShape *shape );
     
     void updateChildrenPositions();
     
     void update() const;
     void relayout() const;
+    
+    void requestRepaint() const;
     
 private:
     void paintPixmap( QPainter &painter, const KoViewConverter &converter );

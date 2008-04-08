@@ -283,7 +283,6 @@ ChartConfigWidget::~ChartConfigWidget()
 
 void ChartConfigWidget::open( KoShape* shape )
 {
-    qDebug() << "open called";
     d->shape = dynamic_cast<ChartShape*>( shape );
     
     // Update the axis titles
@@ -381,47 +380,124 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
     if ( action == d->dataSetNormalBarChartAction ) {
         type    = BarChartType;
         subtype = NormalChartSubtype;
-        d->ui.dataSetChartTypeMenu->setText( i18n( "Normal Bar Chart" ) );
     } else if ( action == d->dataSetStackedBarChartAction ) {
         type    = BarChartType;
         subtype = StackedChartSubtype;
-        d->ui.dataSetChartTypeMenu->setText( i18n( "Stacked Bar Chart" ) );
     } else if ( action == d->dataSetPercentBarChartAction ) {
         type    = BarChartType;
         subtype = PercentChartSubtype;
-        d->ui.dataSetChartTypeMenu->setText( i18n( "Percent Bar Chart" ) );
     }
     
     else if ( action == d->dataSetNormalLineChartAction ) {
         type    = LineChartType;
         subtype = NormalChartSubtype;
-        d->ui.dataSetChartTypeMenu->setText( i18n( "Normal Line Chart" ) );
     } else if ( action == d->dataSetStackedLineChartAction ) {
         type    = LineChartType;
         subtype = StackedChartSubtype;
-        d->ui.dataSetChartTypeMenu->setText( i18n( "Stacked Line Chart" ) );
     } else if ( action == d->dataSetPercentLineChartAction ) {
         type    = LineChartType;
         subtype = PercentChartSubtype;
-        d->ui.dataSetChartTypeMenu->setText( i18n( "Percent Line Chart" ) );
     }
     
     else if ( action == d->dataSetNormalAreaChartAction ) {
         type    = AreaChartType;
         subtype = NormalChartSubtype;
-        d->ui.dataSetChartTypeMenu->setText( i18n( "Normal Area Chart" ) );
     } else if ( action == d->dataSetStackedAreaChartAction ) {
         type    = AreaChartType;
         subtype = StackedChartSubtype;
-        d->ui.dataSetChartTypeMenu->setText( i18n( "Stacked Area Chart" ) );
     } else if ( action == d->dataSetPercentAreaChartAction ) {
         type    = AreaChartType;
         subtype = PercentChartSubtype;
-        d->ui.dataSetChartTypeMenu->setText( i18n( "Percent Area Chart" ) );
     }
     
-    emit dataSetChartTypeChanged( d->dataSets[ d->selectedDataset ], type );
-    emit dataSetChartSubTypeChanged( d->dataSets[ d->selectedDataset ], subtype );
+    DataSet *dataSet = d->dataSets[ d->selectedDataset ];
+    
+    if ( !dataSet )
+        return;
+    
+    switch ( subtype ) {
+    case NormalChartSubtype:
+        switch ( type ) {
+        case BarChartType:
+            d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
+            break;
+        case LineChartType:
+            d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_line_normal" ) );
+            break;
+        case AreaChartType:
+            d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_area_normal" ) );
+            break;
+        case CircleChartType:
+        case RingChartType:
+        case RadarChartType:
+        case StockChartType:
+        case BubbleChartType:
+        case SurfaceChartType:
+        case GanttChartType:
+        case LastChartType:
+        default:
+            break;
+        }
+        break;
+    case StackedChartSubtype:
+        //d->ui.subtypeStacked->blockSignals( true );
+        //d->ui.subtypeStacked->setChecked( true );
+        //d->ui.subtypeStacked->blockSignals( false );
+        switch ( type ) {
+        case BarChartType:
+            d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_layer" ) );
+            break;
+        case LineChartType:
+            d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_line_stacked" ) );
+            break;
+        case AreaChartType:
+            d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_area_stacked" ) );
+            break;
+        case CircleChartType:
+        case RingChartType:
+        case RadarChartType:
+        case StockChartType:
+        case BubbleChartType:
+        case SurfaceChartType:
+        case GanttChartType:
+        case LastChartType:
+        default:
+            break;
+        }
+        break;
+    case PercentChartSubtype:
+        //d->ui.subtypePercent->blockSignals( true );
+        //d->ui.subtypePercent->setChecked( true );
+        //d->ui.subtypePercent->blockSignals( false );
+        switch ( type ) {
+        case BarChartType:
+            d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_percent" ) );
+            break;
+        case LineChartType:
+            d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_line_percent" ) );
+            break;
+        case AreaChartType:
+            d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_area_percent" ) );
+            break;
+        case CircleChartType:
+        case RingChartType:
+        case RadarChartType:
+        case StockChartType:
+        case BubbleChartType:
+        case SurfaceChartType:
+        case GanttChartType:
+        case LastChartType:
+        default:
+            break;
+        }
+        break;
+    case NoChartSubtype:
+    default:
+        break;
+    }
+    
+    emit dataSetChartTypeChanged( dataSet, type );
+    emit dataSetChartSubTypeChanged( dataSet, subtype );
     
     update();
 }
@@ -459,13 +535,12 @@ void ChartConfigWidget::update()
 	if ( d->axes != d->shape->plotArea()->axes() ) {
         // Remove old items from the combo box
 		d->ui.axes->clear();
+        d->ui.dataSetAxes->clear();
         // Sync the internal list
         d->axes = d->shape->plotArea()->axes();
+        d->dataSetAxes.clear();
 	
         if ( !d->axes.isEmpty()	) {
-            d->ui.axes->clear();
-            d->ui.dataSetAxes->clear();
-            d->dataSetAxes.clear();
             foreach ( Axis *axis, d->axes ) {
     			d->ui.axes->addItem( axis->titleText() );
                 if ( axis->dimension() == YAxisDimension ) {
@@ -875,35 +950,6 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
     d->ui.dataSetShowLabels->setChecked( dataSet->showLabels() );
     d->ui.dataSetShowLabels->blockSignals( false );
     
-    d->ui.dataSetChartTypeMenu->blockSignals( true );
-    switch ( dataSet->chartType() ) {
-    case BarChartType:
-        if ( dataSet->chartSubType() == NormalChartSubtype )
-            d->ui.dataSetChartTypeMenu->setText( i18n( "Normal Bar Chart" ) );
-        else if ( dataSet->chartSubType() == StackedChartSubtype )
-            d->ui.dataSetChartTypeMenu->setText( i18n( "Stacked Bar Chart" ) );
-        else if ( dataSet->chartSubType() == PercentChartSubtype )
-            d->ui.dataSetChartTypeMenu->setText( i18n( "Percent Bar Chart" ) );
-        break;
-    case LineChartType:
-        if ( dataSet->chartSubType() == NormalChartSubtype )
-            d->ui.dataSetChartTypeMenu->setText( i18n( "Normal Line Chart" ) );
-        else if ( dataSet->chartSubType() == StackedChartSubtype )
-            d->ui.dataSetChartTypeMenu->setText( i18n( "Stacked Line Chart" ) );
-        else if ( dataSet->chartSubType() == PercentChartSubtype )
-            d->ui.dataSetChartTypeMenu->setText( i18n( "Percent Line Chart" ) );
-        break;
-    case AreaChartType:
-        if ( dataSet->chartSubType() == NormalChartSubtype )
-            d->ui.dataSetChartTypeMenu->setText( i18n( "Normal Area Chart" ) );
-        else if ( dataSet->chartSubType() == StackedChartSubtype )
-            d->ui.dataSetChartTypeMenu->setText( i18n( "Stacked Area Chart" ) );
-        else if ( dataSet->chartSubType() == PercentChartSubtype )
-            d->ui.dataSetChartTypeMenu->setText( i18n( "Percent Area Chart" ) );
-        break;
-    }
-    d->ui.dataSetChartTypeMenu->blockSignals( false );
-    
     d->selectedDataset = index;
 }
 
@@ -917,8 +963,7 @@ void ChartConfigWidget::ui_dataSetAxisSelectionChanged( int index ) {
     DataSet *dataSet = d->dataSets[ d->ui.dataSets->currentIndex() ];
     
     Axis *axis = d->dataSetAxes[ index ];
-    dataSet->attachedAxis()->detachDataSet( dataSet );
-    axis->attachDataSet( dataSet );
+    emit dataSetAxisChanged( dataSet, axis );
 }
 
 void ChartConfigWidget::ui_axisTitleChanged( const QString& title ) {

@@ -165,8 +165,13 @@ void ChartTool::activate( bool )
     KoSelection *selection = m_canvas->shapeManager()->selection();
     foreach ( KoShape *shape, selection->selectedShapes() ) {
         d->shape = dynamic_cast<ChartShape*>( shape );
-        if ( d->shape )
+        if ( d->shape ) {
+            KoShapeConfigWidgetBase *widget = dynamic_cast<KoShapeConfigWidgetBase*>( optionWidget() );
+            Q_ASSERT( widget);
+            if ( widget )
+                widget->open( d->shape );
             break;
+        }
     }
     if ( !d->shape ) { // none found
         emit done();
@@ -218,6 +223,8 @@ QWidget *ChartTool::createOptionWidget()
              this, SLOT( setDatasetShowValues( DataSet*, bool ) ) );
     connect( widget, SIGNAL( datasetShowLabelsChanged( DataSet*, bool ) ),
              this, SLOT( setDatasetShowLabels( DataSet*, bool ) ) );
+    connect( widget, SIGNAL( dataSetAxisChanged( DataSet*, Axis* ) ),
+             this, SLOT( setDataSetAxis( DataSet*, Axis* ) ) );
     connect( widget, SIGNAL( gapBetweenBarsChanged( int ) ),
              this,   SLOT( setGapBetweenBars( int ) ) );
     connect( widget, SIGNAL( gapBetweenSetsChanged( int ) ),
@@ -290,6 +297,7 @@ void ChartTool::setChartType( ChartType type, ChartSubtype subtype )
     
     d->shape->setChartType( type );
     d->shape->setChartSubType( subtype );
+    d->shape->update();
     
     if ( optionWidget() )
         optionWidget()->update();
@@ -302,6 +310,7 @@ void ChartTool::setChartSubType( ChartSubtype subtype )
     if ( !d->shape )
         return;
     d->shape->setChartSubType( subtype );
+    d->shape->update();
 }
 
 void ChartTool::setDataSetChartType( DataSet *dataSet, ChartType type )
@@ -309,6 +318,7 @@ void ChartTool::setDataSetChartType( DataSet *dataSet, ChartType type )
     Q_ASSERT( dataSet );
     if ( dataSet )
         dataSet->setChartType( type );
+    d->shape->update();
 }
 
 void ChartTool::setDataSetChartSubType( DataSet *dataSet, ChartSubtype subType )
@@ -316,14 +326,17 @@ void ChartTool::setDataSetChartSubType( DataSet *dataSet, ChartSubtype subType )
     Q_ASSERT( dataSet );
     if ( dataSet )
         dataSet->setChartSubType( subType );
+    d->shape->update();
 }
 
 void ChartTool::setThreeDMode( bool threeD )
 {
+    qDebug() << "Activating three-d mode... tool: " << this;
     Q_ASSERT( d->shape );
     if ( !d->shape )
         return;
     d->shape->setThreeD( threeD );
+    d->shape->update();
 }
 
 void ChartTool::setShowTitle( bool show )
@@ -340,8 +353,8 @@ void ChartTool::setShowSubTitle( bool show )
     Q_ASSERT( d->shape );
     if ( !d->shape )
         return;
-        d->shape->subTitle()->setVisible( show );
-        d->shape->update();
+    d->shape->subTitle()->setVisible( show );
+    d->shape->update();
 }
 
 void ChartTool::setShowFooter( bool show )
@@ -449,6 +462,15 @@ void ChartTool::setDatasetColor( DataSet *dataSet, const QColor& color )
     if ( !dataSet )
         return;
     dataSet->setColor( color );
+    d->shape->update();
+}
+
+void ChartTool::setDataSetAxis( DataSet *dataSet, Axis *axis )
+{
+    if ( !dataSet || !axis )
+        return;
+    dataSet->attachedAxis()->detachDataSet( dataSet );
+    axis->attachDataSet( dataSet );
     d->shape->update();
 }
 

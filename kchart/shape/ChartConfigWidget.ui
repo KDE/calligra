@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>302</width>
-    <height>434</height>
+    <width>254</width>
+    <height>419</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -87,8 +87,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>282</width>
-        <height>318</height>
+        <width>234</width>
+        <height>303</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -242,8 +242,8 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>282</width>
-        <height>318</height>
+        <width>234</width>
+        <height>303</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -257,6 +257,22 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="statusTip" >
           <string/>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0" >
+        <widget class="QLabel" name="datasetColorLabel" >
+         <property name="enabled" >
+          <bool>true</bool>
+         </property>
+         <property name="sizePolicy" >
+          <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text" >
+          <string>Color</string>
          </property>
         </widget>
        </item>
@@ -292,6 +308,63 @@ p, li { white-space: pre-wrap; }
          </item>
         </widget>
        </item>
+       <item row="3" column="0" colspan="3" >
+        <layout class="QHBoxLayout" name="horizontalLayout_3" >
+         <item>
+          <widget class="QCheckBox" name="dataSetHasChartType" >
+           <property name="text" >
+            <string>Custom Chart Type</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="dataSetChartTypeMenu" >
+           <property name="enabled" >
+            <bool>false</bool>
+           </property>
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize" >
+            <size>
+             <width>50</width>
+             <height>16777215</height>
+            </size>
+           </property>
+           <property name="styleSheet" >
+            <string notr="true" >text-align:left;</string>
+           </property>
+           <property name="text" >
+            <string/>
+           </property>
+           <property name="autoRepeat" >
+            <bool>false</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item row="4" column="0" colspan="3" >
+        <layout class="QHBoxLayout" name="horizontalLayout_2" >
+         <item>
+          <widget class="QCheckBox" name="datasetShowValues" >
+           <property name="text" >
+            <string>Data Values</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="dataSetShowLabels" >
+           <property name="text" >
+            <string>Labels</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
        <item row="5" column="0" colspan="3" >
         <widget class="Line" name="propertiesSeparator" >
          <property name="orientation" >
@@ -320,7 +393,7 @@ p, li { white-space: pre-wrap; }
        <item row="7" column="2" >
         <widget class="QSpinBox" name="gapBetweenBars" >
          <property name="sizePolicy" >
-          <sizepolicy vsizetype="Fixed" hsizetype="Fixed" >
+          <sizepolicy vsizetype="Fixed" hsizetype="Minimum" >
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
@@ -366,63 +439,6 @@ p, li { white-space: pre-wrap; }
          </property>
         </spacer>
        </item>
-       <item row="3" column="1" colspan="2" >
-        <widget class="QPushButton" name="dataSetChartTypeMenu" >
-         <property name="enabled" >
-          <bool>false</bool>
-         </property>
-         <property name="styleSheet" >
-          <string notr="true" >text-align:left;</string>
-         </property>
-         <property name="text" >
-          <string/>
-         </property>
-         <property name="autoRepeat" >
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" >
-        <widget class="QLabel" name="datasetColorLabel" >
-         <property name="enabled" >
-          <bool>true</bool>
-         </property>
-         <property name="sizePolicy" >
-          <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text" >
-          <string>Color</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="0" colspan="3" >
-        <layout class="QHBoxLayout" name="horizontalLayout_2" >
-         <item>
-          <widget class="QCheckBox" name="datasetShowValues" >
-           <property name="text" >
-            <string>Data Values</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="dataSetShowLabels" >
-           <property name="text" >
-            <string>Labels</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="3" column="0" >
-        <widget class="QCheckBox" name="dataSetHasChartType" >
-         <property name="text" >
-          <string>Chart Type</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="tab_3" >
@@ -431,7 +447,7 @@ p, li { white-space: pre-wrap; }
         <x>0</x>
         <y>0</y>
         <width>282</width>
-        <height>318</height>
+        <height>303</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -551,5 +567,22 @@ p, li { white-space: pre-wrap; }
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>dataSetHasChartType</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>dataSetChartTypeMenu</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>60</x>
+     <y>220</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>199</x>
+     <y>220</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

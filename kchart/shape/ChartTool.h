@@ -78,6 +78,7 @@ private slots:
     void setDatasetShowValues( DataSet *dataSet, bool b );
     void setDatasetShowLabels( DataSet *dataSet, bool b );
     void setDatasetColor( DataSet *dataSet, const QColor& color );
+    void setDataSetAxis( DataSet *dataSet, Axis *axis );
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );
     

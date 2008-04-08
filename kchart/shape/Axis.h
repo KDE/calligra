@@ -74,6 +74,8 @@ public:
     void plotAreaChartSubTypeChanged( ChartSubtype chartSubType );
     
     void update() const;
+    void requestRepaint() const;
+    void layoutPlanes();
     
 private:
     

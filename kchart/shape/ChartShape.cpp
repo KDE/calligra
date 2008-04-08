@@ -198,7 +198,7 @@ public:
     QImage   image;
     QPointF  lastZoomLevel;
     QSizeF   lastSize;
-    bool     pixmapRepaintRequested;
+    mutable bool pixmapRepaintRequested;
     
     ProxyModel *model;
 };
@@ -280,7 +280,7 @@ ChartShape::ChartShape()
     d->floor = new Surface( d->plotArea );
     d->wall = new Surface( d->plotArea );
     
-    d->pixmapRepaintRequested = true;
+    requestRepaint();
 }
 
 ChartShape::~ChartShape()
@@ -357,6 +357,8 @@ void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel 
 {
     Q_ASSERT( model );
     d->model->setSourceModel( model );
+    
+    requestRepaint();
 }
 
 bool ChartShape::addAxis( Axis *axis )
@@ -418,6 +420,8 @@ QRectF ChartShape::boundingRect() const
     
     foreach( KoShape *shape, iterator() )
     {
+        if ( !shape->isVisible() )
+            continue;
         rect = rect.united( shape->boundingRect() );
     }
     
@@ -445,11 +449,15 @@ bool ChartShape::isThreeD() const
 void ChartShape::setFirstRowIsLabel( bool isLabel )
 {
     d->model->setFirstRowIsLabel( isLabel );
+    
+    requestRepaint();
 }
 
 void ChartShape::setFirstColumnIsLabel( bool isLabel )
 {
     d->model->setFirstColumnIsLabel( isLabel );
+    
+    requestRepaint();
 }
 
 void ChartShape::setChartType( ChartType type )
@@ -510,6 +518,13 @@ void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
     if (    d->pixmapRepaintRequested
          || d->lastZoomLevel != zoomLevel
          || d->lastSize      != size() ) {
+        // TODO: What if two zoom levels are constantly being requested?
+        // At the moment, this *is* the case, due to the fact
+        // that the shape is also rendered in the page overview
+        // in KPresenter
+        // Everytime the window is hidden and shown again, a repaint is
+        // requested --> laggy performance, especially when quickly
+        // switching through windows
         paintPixmap( painter, converter );
         d->pixmapRepaintRequested = false;
         d->lastZoomLevel = zoomLevel;
@@ -608,7 +623,8 @@ bool ChartShape::loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContex
     if ( !loadOdfData( dataElem, context ) )
         return false;
     }
-
+    
+    requestRepaint();
 
     return true;
 }
@@ -762,11 +778,6 @@ KoShape *ChartShape::cloneShape() const
     return 0;
 }
 
-void ChartShape::addChild( KoShape *shape )
-{
-    KoShapeContainer::addChild( shape );
-}
-
 void ChartShape::update() const
 {
     KoShape::update();
@@ -776,6 +787,11 @@ void ChartShape::relayout() const
 {
     d->pixmapRepaintRequested = true;
     KoShape::update();
+}
+
+void ChartShape::requestRepaint() const
+{
+    d->pixmapRepaintRequested = true;
 }
 
 } // Namespace KChart

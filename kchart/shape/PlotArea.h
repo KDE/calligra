@@ -90,6 +90,8 @@ public:
     
     void update() const;
     
+    void requestRepaint() const;
+    
 public slots:
     void modelReset();
 

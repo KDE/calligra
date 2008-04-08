@@ -282,6 +282,8 @@ bool PlotArea::addAxis( Axis *axis )
     if ( d->axes.contains( axis ) )
         return false;
     d->axes.append( axis );
+    
+    requestRepaint();
 
     return true;
 }
@@ -291,6 +293,8 @@ bool PlotArea::removeAxis( Axis *axis )
     if ( !d->axes.contains( axis ) )
         return false;
     d->axes.removeAll( axis );
+    
+    requestRepaint();
     
     return true;
 }
@@ -314,6 +318,8 @@ void PlotArea::setChartType( ChartType type )
     {
         axis->plotAreaChartTypeChanged( type );
     }
+    
+    requestRepaint();
 }
 
 void PlotArea::setChartSubType( ChartSubtype subType )
@@ -324,6 +330,8 @@ void PlotArea::setChartSubType( ChartSubtype subType )
     {
         axis->plotAreaChartSubTypeChanged( subType );
     }
+    
+    requestRepaint();
 }
 
 void PlotArea::setThreeD( bool threeD )
@@ -332,6 +340,8 @@ void PlotArea::setThreeD( bool threeD )
     
     foreach( Axis *axis, d->axes )
         axis->setThreeD( threeD );
+    
+    requestRepaint();
 }
 
 
@@ -379,6 +389,9 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
             addAxis( axis );
         }
     }
+    
+    requestRepaint();
+    
     return true;
 }
 
@@ -524,6 +537,8 @@ void PlotArea::setGapBetweenBars( int percent )
     //KDChart::BarAttributes attributes = ((KDChart::BarDiagram*) d->kdDiagram)->barAttributes();
     //attributes.setBarGapFactor( (float)percent / 100.0 );
     //((KDChart::BarDiagram*) d->kdDiagram)->setBarAttributes( attributes );
+    
+    requestRepaint();
 }
 
 void PlotArea::setGapBetweenSets( int percent )
@@ -534,6 +549,8 @@ void PlotArea::setGapBetweenSets( int percent )
     //KDChart::BarAttributes attributes = ((KDChart::BarDiagram*) d->kdDiagram)->barAttributes();
     //attributes.setGroupGapFactor( (float)percent / 100.0 );
     //((KDChart::BarDiagram*) d->kdDiagram)->setBarAttributes( attributes );
+    
+    requestRepaint();
 }
 
 ChartShape *PlotArea::parent() const
@@ -572,6 +589,14 @@ void PlotArea::update() const
     foreach( Axis* axis, d->axes )
         axis->update();
     d->shape->relayout();
+}
+
+void PlotArea::requestRepaint() const
+{
+    if ( !d->shape )
+        return;
+    
+    d->shape->requestRepaint();
 }
 
 void PlotArea::paint( QPainter &painter )
