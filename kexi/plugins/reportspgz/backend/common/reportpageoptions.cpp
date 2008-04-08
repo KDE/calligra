@@ -203,35 +203,38 @@ void ReportPageOptions::setLabelType(const QString & type)
 //Convenience functions that return the page width/height in pixels based on the DPI
 qreal ReportPageOptions::widthPx()
 {
+	int pageWidth;
+	
 	if (isPortrait())
 	{
-		int pageWidth = KoPageFormat::width(KoPageFormat::formatFromString(getPageSize()), KoPageFormat::Portrait);
-	
-		KoUnit pageUnit(KoUnit::Millimeter);
-		pageWidth = KoUnit::toInch(pageUnit.fromUserValue(pageWidth)) * KoGlobal::dpiX();
-		return pageWidth;
-		
+		pageWidth = KoPageFormat::width(KoPageFormat::formatFromString(getPageSize()), KoPageFormat::Portrait);
 	}
 	else
 	{
-		return heightPx();
+		pageWidth = KoPageFormat::width(KoPageFormat::formatFromString(getPageSize()), KoPageFormat::Landscape);
 	}
+	
+	KoUnit pageUnit(KoUnit::Millimeter);
+	pageWidth = KoUnit::toInch(pageUnit.fromUserValue(pageWidth)) * KoGlobal::dpiX();
+	
+	return pageWidth;
 }
 
 qreal ReportPageOptions::heightPx()
 {
+	int pageHeight;
 	
 	if (isPortrait())
 	{
-		int pageHeight = KoPageFormat::height(KoPageFormat::formatFromString(getPageSize()), KoPageFormat::Portrait);
-	
-		KoUnit pageUnit(KoUnit::Millimeter);
-		pageHeight = KoUnit::toInch(pageUnit.fromUserValue(pageHeight)) * KoGlobal::dpiY();
-		return pageHeight;
-		
+		pageHeight = KoPageFormat::height(KoPageFormat::formatFromString(getPageSize()), KoPageFormat::Portrait);		
 	}
 	else
 	{
-		return widthPx();
+		pageHeight = KoPageFormat::height(KoPageFormat::formatFromString(getPageSize()), KoPageFormat::Landscape);
 	}
+	
+	KoUnit pageUnit(KoUnit::Millimeter);
+	pageHeight = KoUnit::toInch(pageUnit.fromUserValue(pageHeight)) * KoGlobal::dpiY();
+	
+	return pageHeight;
 }

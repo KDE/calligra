@@ -582,15 +582,11 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 	bg->setRect(QRectF(_leftMargin, _yOffset, w,intHeight));
 	_page->addPrimitive(bg, true);
 	
-	if ( sectionData.objects().count() == 0 )
-		return 0;
-
-	QList<KRObjectData*>::const_iterator it;
 	QList<KRObjectData*> objects = sectionData.objects();
 	KRObjectData * elemThis;
-	for ( it = objects.begin(); it != objects.end(); ++it )
+	foreach(KRObjectData *ob, objects)
 	{
-		elemThis = *it;
+		elemThis = ob;
 		if ( elemThis->type() == KRObjectData::EntityLabel )
 		{
 			KRLabelData * l = elemThis->toLabel();
