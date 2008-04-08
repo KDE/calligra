@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="KPlato" version="10">
+<kpartgui name="KPlato" version="11">
     <MenuBar>
         <Menu name="file"><text>&amp;File</text>
             <Separator/>
@@ -58,14 +58,13 @@
             </Menu> -->
             <Separator/>
         </Menu>
-        <Menu name="project"><text>&amp;Project</text>
+<!--        <Menu name="project"><text>&amp;Project</text>
             <Action name="project_edit"/>
             <Action name="project_worktime"/>
             <Action name="project_calendar"/>
             <Action name="project_accounts"/>
             <Action name="project_resources"/>
-	   
-        </Menu>
+        </Menu>-->
         <Menu name="tools"><text>&amp;Tools</text>
             <Action name="tools_define_wbs"/>
         </Menu>
