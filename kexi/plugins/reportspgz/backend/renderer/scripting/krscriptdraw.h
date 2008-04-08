@@ -47,7 +47,7 @@ class KRScriptDraw : public QObject
 		\param lc Line Color
 		\param fc Fill Color
 		\param lw Line Width
-		\param o Opacity
+		\param o Opacity (0=transparent, 255=opaque)
 		*/
 		void rectangle(qreal, qreal, qreal, qreal, const QString&, const QString&, qreal, int);
 
@@ -60,7 +60,7 @@ class KRScriptDraw : public QObject
 		\param lc Line Color
 		\param fc Fill Color
 		\param lw Line Width
-		\param o Opacity
+		\param o Opacity (0=transparent, 255=opaque)
 		 */
 		void ellipse(qreal, qreal, qreal, qreal, const QString&, const QString&, qreal, int);
 		
@@ -73,6 +73,21 @@ class KRScriptDraw : public QObject
 		\param lc Line Color
 		*/
 		void line(qreal, qreal, qreal, qreal, const QString&);
+		
+		/**
+		Draw some text
+		\param x X Position
+		\param y Y Position
+		\param txt The text
+		\param fnt The font
+		\param pt Point size
+		\param fc Foreground color
+		\param bc Background color
+		\param lc Line color
+		\param lw Line width
+		\param o Opacity (0=transparent, 255=opaque)
+		*/
+		void text(qreal, qreal, const QString &, const QString &fnt="Helvetica", int pt= 12, const QString &fc="#000000", const QString &bc="#ffffff", const QString &lc="#ffffff", qreal lw=0, int o=0);
 	private:
 		OROPage *_curPage;
 		QPointF _curOffset;

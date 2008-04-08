@@ -282,8 +282,15 @@ void ORPreRenderPrivate::renderDetailSection ( KRDetailSectionData & detailData 
 			ORDetailGroupSectionData * grp = 0;
 
 			curs->moveFirst();
-			_recordCount = KexiDB::rowCount ( _query->schema() );
-
+			if (_query->schema().table() || _query->schema().query() )
+			{
+				_recordCount = KexiDB::rowCount ( _query->schema() );
+			}
+			else
+			{
+				_recordCount = 1;	
+			}
+			
 			kDebug() << "Record Count:" << _recordCount << endl;
 		
 			for ( i = 0; i < ( int ) detailData.groupList.count(); i++ )

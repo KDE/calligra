@@ -41,7 +41,7 @@ orQuery::orQuery ( const QString &qstrPName, const QString &qstrSQL,
 
 	qryQuery = 0;
 	_database = pDb;
-
+	_schema = 0;
 	//  Initialize some privates
 	qstrName  = qstrPName;
 	qstrQuery = qstrSQL;
@@ -68,7 +68,11 @@ bool orQuery::execute()
 	if ( _database && qryQuery == 0 )
 	{
 		//NOTE we can use the variation of executeQuery to pass in paramters
-		if ( _database->tableSchema ( qstrQuery ) )
+		if (qstrQuery.isEmpty())
+		{
+			qryQuery = _database->executeQuery("SELECT '' AS expr1 FROM kexi__db WHERE kexi__db.db_property = 'kexidb_major_ver'");
+		}
+		else if ( _database->tableSchema ( qstrQuery ) )
 		{
 			kDebug() << qstrQuery <<  " is a table.." << endl;
 			qryQuery = _database->executeQuery ( * ( _database->tableSchema ( qstrQuery ) ), 1 );

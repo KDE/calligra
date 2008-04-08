@@ -21,6 +21,8 @@
 #include <renderobjects.h>
 #include <krpos.h>
 #include <krsize.h>
+#include <QFont>
+#include <QFontMetrics>
 
 KRScriptDraw::KRScriptDraw(QObject *parent)
  : QObject(parent)
@@ -100,8 +102,53 @@ void KRScriptDraw::line(qreal x1, qreal y1, qreal x2, qreal y2, const QString& l
 		s.setPointPos(QPointF(x1, y1));
 		e.setPointPos(QPointF(x2, y2));
 		
-		ln->setStartPoint(s.toScene());
-		ln->setEndPoint(e.toScene());
+		ln->setStartPoint(s.toScene()+ _curOffset);
+		ln->setEndPoint(e.toScene()+ _curOffset);
+		
+		ORLineStyleData ls;
+		ls.lnColor = QColor(lc);
+		ls.weight = 1;
+		if (ls.weight <= 0)
+			ls.style = Qt::NoPen;
+		else
+			ls.style = Qt::SolidLine;
+		
+		ln->setLineStyle(ls);
 		_curPage->addPrimitive(ln);
+	}
+}
+
+void KRScriptDraw::text(qreal x, qreal y, const QString &txt, const QString &fnt, int pt, const QString &fc, const QString&bc, const QString &lc, qreal lw, int o)
+{
+	if (_curPage)
+	{
+		QFont f(fnt, pt);
+		QRectF r = QFontMetrics(f).boundingRect( txt );
+		
+		ORTextStyleData ts;
+		ts.font = f;
+		ts.bgColor = QColor(bc);
+		ts.fgColor = QColor(fc);
+		ts.bgOpacity = o;
+		
+		ORLineStyleData ls;
+		ls.lnColor = QColor(lc);
+		ls.weight = lw;
+		if (lw <= 0)
+			ls.style = Qt::NoPen;
+		else
+			ls.style = Qt::SolidLine;
+			
+		
+		OROTextBox *tb = new OROTextBox();
+		tb->setPosition(QPointF(x,y)+ _curOffset);
+		tb->setSize(r.size());
+		tb->setTextStyle(ts);
+		tb->setLineStyle(ls);
+		
+		tb->setText(txt);
+		
+		_curPage->addPrimitive(tb);
+		
 	}
 }

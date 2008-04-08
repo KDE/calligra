@@ -96,7 +96,7 @@ KRDetailSectionData::KRDetailSectionData(const QDomElement &elemSource)
 					if ( sd->isValid())
 					{
 						dgsd->foot = sd;
-						dgsd->head->setExtra(dgsd->column);
+						dgsd->foot->setExtra(dgsd->column);
 						//TODO Track Totals?sectionTarget.trackTotal += sd->trackTotal;
 						//for ( QList<ORDataData>::iterator it = sd->trackTotal.begin(); it != sd->trackTotal.end(); ++it )
 						//	dgsd->_subtotCheckPoints[*it] = 0.0;
