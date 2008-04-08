@@ -32,7 +32,7 @@ ChartToolFactory::ChartToolFactory( QObject *parent )
 {
     setToolTip ( i18n( "Chart Editing Tool" ) );
     setToolType ( dynamicToolType() );
-    //setIcon ("");
+    setIcon ( "kchart" );
     setPriority ( 1 );
     setActivationShapeId ( ChartShapeId );
 }
