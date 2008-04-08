@@ -1440,6 +1440,28 @@ private:
     MainSchedule *m_newpessimistic;
 };
 
+class KPLATOKERNEL_EXPORT BaselineScheduleCmd : public NamedCommand
+{
+public:
+    BaselineScheduleCmd( ScheduleManager &sm, const QString& name = 0 );
+    void execute();
+    void unexecute();
+
+private:
+    ScheduleManager &m_sm;
+};
+
+class KPLATOKERNEL_EXPORT ResetBaselineScheduleCmd : public NamedCommand
+{
+public:
+    ResetBaselineScheduleCmd( ScheduleManager &sm, const QString& name = 0 );
+    void execute();
+    void unexecute();
+
+private:
+    ScheduleManager &m_sm;
+};
+
 class KPLATOKERNEL_EXPORT ModifyScheduleManagerSchedulingDirectionCmd : public NamedCommand
 {
 public:

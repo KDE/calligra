@@ -26,6 +26,7 @@
 #include "kplatokernel_export.h"
 
 #include "kptnode.h"
+#include "kptglobal.h"
 #include "kptdatetime.h"
 #include "kptduration.h"
 #include "kptresource.h"
@@ -304,8 +305,8 @@ public:
     void setScheduleManager( ScheduleManager *sm );
     /// Return schedule manager
     ScheduleManager *scheduleManager() const { return m_manager; }
-    /// Return the schedule id, or -1 if no schedule manager is set
-    long id() const { return m_manager ? m_manager->id() : -1; }
+    /// Return the schedule id, or NOTSCHEDULED if no schedule manager is set
+    long id() const { return m_manager ? m_manager->id() : NOTSCHEDULED; }
 
     Completion &completion();
     const Completion &completion() const;
@@ -398,7 +399,7 @@ public:
     virtual ResourceRequest *resourceRequest( const QString &/*name*/ ) const;
     
     /// Return the list of resources assigned to this task
-    virtual QStringList assignedNameList( long id = -1 ) const;
+    virtual QStringList assignedNameList( long id = CURRENTSCHEDULE ) const;
 
     /**
      * Calculates if the assigned resource is overbooked 
@@ -422,14 +423,14 @@ public:
      * Returns a list of planned effort and cost for this task
      * for the interval start, end inclusive
      */
-    virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end,  long id = -1 ) const;
+    virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE ) const;
     
     /// Returns the total planned effort for this task (or subtasks) 
-    virtual Duration plannedEffort( long id = -1 ) const;
+    virtual Duration plannedEffort( long id = CURRENTSCHEDULE ) const;
     /// Returns the total planned effort for this task (or subtasks) on date
-    virtual Duration plannedEffort(const QDate &date, long id = -1 ) const;
+    virtual Duration plannedEffort(const QDate &date, long id = CURRENTSCHEDULE ) const;
     /// Returns the planned effort up to and including date
-    virtual Duration plannedEffortTo(const QDate &date, long id = -1 ) const;
+    virtual Duration plannedEffortTo(const QDate &date, long id = CURRENTSCHEDULE ) const;
     
     /// Returns the total actual effort for this task (or subtasks) 
     virtual Duration actualEffort() const;
@@ -441,11 +442,11 @@ public:
     /**
      * Returns the total planned cost for this task (or subtasks)
      */
-    virtual double plannedCost( long id = -1 ) const;
+    virtual double plannedCost( long id = CURRENTSCHEDULE ) const;
     /// Planned cost on date
-    virtual double plannedCost(const QDate &/*date*/, long id = -1 ) const;
+    virtual double plannedCost(const QDate &/*date*/, long id = CURRENTSCHEDULE ) const;
     /// Planned cost up to and including date
-    virtual double plannedCostTo(const QDate &/*date*/, long id = -1 ) const;
+    virtual double plannedCostTo(const QDate &/*date*/, long id = CURRENTSCHEDULE ) const;
     
     /**
      * Returns the actaually reported cost for this task (or subtasks)
@@ -457,9 +458,9 @@ public:
     virtual double actualCostTo(const QDate &date) const;
 
     /// Budgeted Cost of Work Performed
-    virtual double bcwp( long id = -1 ) const;
+    virtual double bcwp( long id = CURRENTSCHEDULE ) const;
     /// Budgeted Cost of Work Performed ( up to @p date )
-    virtual double bcwp( const QDate &date, long id = -1 ) const;
+    virtual double bcwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
     /// Effort based performance index
     double effortPerformanceIndex(const QDate &date, bool *error=0) const;
@@ -470,37 +471,37 @@ public:
      * Return the duration that an activity's start can be delayed 
      * without affecting the project completion date. 
      * An activity with positive float is not on the critical path.
-     * @param id Schedule identity. If id is -1, use current schedule.
+     * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
-    Duration positiveFloat( long id = -1 ) const;
+    Duration positiveFloat( long id = CURRENTSCHEDULE ) const;
     /**
      * Return the duration by which the duration of an activity or path 
      * has to be reduced in order to fullfill a timing- or dependency constraint.
-     * @param id Schedule identity. If id is -1, use current schedule.
+     * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
-    Duration negativeFloat( long id = -1 ) const;
+    Duration negativeFloat( long id = CURRENTSCHEDULE ) const;
     /**
      * Return the duration by which an activity can be delayed or extended 
      * without affecting the start of any succeeding activity.
-     * @param id Schedule identity. If id is -1, use current schedule.
+     * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
-    Duration freeFloat( long id = -1 ) const;
+    Duration freeFloat( long id = CURRENTSCHEDULE ) const;
     /**
      * Return the duration from Early Start to Late Start.
-     * @param id Schedule identity. If id is -1, use current schedule.
+     * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
-    Duration startFloat( long id = -1 ) const;
+    Duration startFloat( long id = CURRENTSCHEDULE ) const;
     /**
      * Return the duration from Early Finish to Late Finish.
-     * @param id Schedule identity. If id is -1, use current schedule.
+     * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
-    Duration finishFloat( long id = -1 ) const;
+    Duration finishFloat( long id = CURRENTSCHEDULE ) const;
     
     /**
      * A task is critical if positive float equals 0
-     * @param id Schedule identity. If id is -1, use current schedule.
+     * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
-    virtual bool isCritical( long id = -1 ) const;
+    virtual bool isCritical( long id = CURRENTSCHEDULE ) const;
     
     /**
      * Set current schedule to schedule with identity id, for me and my children.
@@ -510,9 +511,9 @@ public:
     
     /**
      * The assigned resources can not fullfill the estimated effort.
-     * @param id Schedule identity. If id is -1, use current schedule.
+     * @param id Schedule identity. If id is CURRENTSCHEDULE, use current schedule.
      */
-    virtual bool effortMetError( long id = -1 ) const;
+    virtual bool effortMetError( long id = CURRENTSCHEDULE ) const;
     
     Completion &completion() { return m_workPackage.completion(); }
     const Completion &completion() const { return m_workPackage.completion(); }
@@ -526,7 +527,7 @@ public:
      * Returns the state of the task
      * @param id The identity of the schedule used when calculating the state
      */
-    virtual uint state( long id = -1 ) const;
+    virtual uint state( long id = CURRENTSCHEDULE ) const;
 
 protected:
     /// Copy info from parent schedule

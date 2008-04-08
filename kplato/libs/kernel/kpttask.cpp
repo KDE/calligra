@@ -2778,7 +2778,7 @@ QList<Resource*> WorkPackage::fetchResources()
 {
     kDebug()<<m_task.name();
     QList<Resource*> lst;
-    if ( id() == -1 ) {
+    if ( id() == NOTSCHEDULED ) {
         kDebug()<<"No schedule";
         lst << m_task.requestedResources();
     } else {

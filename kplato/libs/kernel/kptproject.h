@@ -27,6 +27,7 @@
 
 #include "kptnode.h"
 
+#include "kptglobal.h"
 #include "kptaccount.h"
 #include "kptcalendar.h"
 #include "kptdatetime.h"
@@ -401,6 +402,8 @@ public:
     ScheduleManager *findScheduleManager( const QString &name ) const;
     /// Returns a list of all schedule managers
     QList<ScheduleManager*> allScheduleManagers() const;
+    /// Return true if schedule with identity @p id is baselined
+    bool isBaselined( long id = ANYSCHEDULED ) const;
     
     void changed( ResourceGroup *group );
     void changed( Resource *resource );
@@ -449,8 +452,8 @@ public:
     /**
      * Returns the list of critical paths for schedule @p id
      */
-    const QList< QList<Node*> > *criticalPathList( long id = -1 );
-    QList<Node*> criticalPath( long id = -1, int index = 0 );
+    const QList< QList<Node*> > *criticalPathList( long id = CURRENTSCHEDULE );
+    QList<Node*> criticalPath( long id = CURRENTSCHEDULE, int index = 0 );
 
     /// Returns a flat list af all nodes
     QList<Node*> flatNodeList( Node *parent = 0 );

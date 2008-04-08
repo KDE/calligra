@@ -2854,6 +2854,39 @@ void CalculateScheduleCmd::unexecute()
 }
 
 //------------------------
+BaselineScheduleCmd::BaselineScheduleCmd( ScheduleManager &sm, const QString& name )
+    : NamedCommand( name ),
+    m_sm( sm )
+{
+}
+
+void BaselineScheduleCmd::execute()
+{
+    m_sm.setBaselined( true );
+}
+
+void BaselineScheduleCmd::unexecute()
+{
+    m_sm.setBaselined( false );
+}
+
+ResetBaselineScheduleCmd::ResetBaselineScheduleCmd( ScheduleManager &sm, const QString& name )
+    : NamedCommand( name ),
+    m_sm( sm )
+{
+}
+
+void ResetBaselineScheduleCmd::execute()
+{
+    m_sm.setBaselined( false );
+}
+
+void ResetBaselineScheduleCmd::unexecute()
+{
+    m_sm.setBaselined( true );
+}
+
+//------------------------
 ModifyStandardWorktimeYearCmd::ModifyStandardWorktimeYearCmd( StandardWorktime *wt, double oldvalue, double newvalue, const QString& name )
         : NamedCommand( name ),
         swt( wt ),

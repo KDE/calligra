@@ -100,6 +100,7 @@ public:
 signals:
     void requestPopupMenu( const QString&, const QPoint& );
     void calculateSchedule( Project*, ScheduleManager* );
+    void baselineSchedule( Project*, ScheduleManager* );
     void addScheduleManager( Project* );
     void deleteScheduleManager( Project*, ScheduleManager* );
     void SelectionScheduleChanged();
@@ -120,9 +121,11 @@ private slots:
     
     void slotSelectionChanged( const QModelIndexList );
     void slotCurrentChanged( const QModelIndex& );
+    void updateActionsEnabled( const QModelIndex &index );
     void slotEnableActions( const ScheduleManager *sm );
 
     void slotCalculateSchedule();
+    void slotBaselineSchedule();
     void slotAddSchedule();
     void slotAddSubSchedule();
     void slotDeleteSelection();
@@ -133,6 +136,7 @@ private:
     ScheduleTreeView *m_view;
 
     KAction *actionCalculateSchedule;
+    KAction *actionBaselineSchedule;
     KAction *actionAddSchedule;
     KAction *actionAddSubSchedule;
     KAction *actionDeleteSelection;

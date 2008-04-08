@@ -22,6 +22,7 @@
 
 #include "kplatokernel_export.h"
 
+#include "kptglobal.h"
 #include "kptcalendar.h"
 #include "kpteffortcostmap.h"
 #include "kptresource.h"
@@ -87,11 +88,12 @@ public:
     virtual bool recalculate() const { return m_parent == 0 ? false : m_parent->recalculate(); }
     virtual DateTime recalculateFrom() const { return m_parent == 0 ? DateTime() : m_parent->recalculateFrom(); }
 
-    virtual long parentScheduleId() const { return m_parent == 0 ? -2 : m_parent->parentScheduleId(); }
+    virtual long parentScheduleId() const { return m_parent == 0 ? NOTSCHEDULED : m_parent->parentScheduleId(); }
 
     virtual Resource *resource() const { return 0; }
     virtual Node *node() const { return 0; }
     
+    virtual bool isBaselined() const;
     virtual bool usePert() const;
     virtual bool allowOverbooking() const;
     virtual bool checkExternalAppointments() const;
@@ -364,6 +366,7 @@ public:
     ~MainSchedule();
     virtual bool isDeleted() const { return m_deleted; }
     
+    virtual bool isBaselined() const;
     virtual bool allowOverbooking() const;
     virtual bool checkExternalAppointments() const;
     virtual bool usePert() const;
@@ -459,7 +462,7 @@ public:
     void setParentManager( ScheduleManager *sm );
     ScheduleManager *parentManager() const { return m_parent; }
     
-    long id() const { return m_expected == 0 ? -2 : m_expected->id(); }
+    long id() const { return m_expected == 0 ? NOTSCHEDULED : m_expected->id(); }
     
     int removeChild( const ScheduleManager *sm );
     void insertChild( ScheduleManager *sm, int index = -1 );
@@ -476,7 +479,7 @@ public:
     void setRecalculate( bool on ) { m_recalculate = on; }
     DateTime recalculateFrom() const { return m_recalculateFrom; }
     void setRecalculateFrom( const DateTime &dt ) { m_recalculateFrom = dt; }
-    long parentScheduleId() const { return m_parent == 0 ? -2 : m_parent->id(); }
+    long parentScheduleId() const { return m_parent == 0 ? NOTSCHEDULED : m_parent->id(); }
     void createSchedules();
     
     void setDeleted( bool on );
@@ -494,6 +497,9 @@ public:
 
     QStringList state() const;
 
+    void setBaselined( bool on );
+    bool isBaselined() const { return m_baselined; }
+    bool isChildBaselined() const;
     void setAllowOverbooking( bool on );
     bool allowOverbooking() const;
     
@@ -528,6 +534,7 @@ protected:
     Project &m_project;
     ScheduleManager *m_parent;
     QString m_name;
+    bool m_baselined;
     bool m_allowOverbooking;
     bool m_checkExternalAppointments;
     bool m_calculateAll;

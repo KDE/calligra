@@ -910,7 +910,31 @@ Schedule *Node::createSchedule(Schedule *parent) {
 
 Schedule *Node::schedule( long id ) const
 {
-    return id == -1 ? m_currentSchedule : findSchedule( id );
+    switch ( id ) {
+        case ANYSCHEDULED: {
+            foreach ( Schedule *s, m_schedules ) {
+                if ( s->isScheduled() ) {
+                    return s;
+                }
+            }
+            return 0;
+        }
+        case CURRENTSCHEDULE:
+            return m_currentSchedule;
+        case NOTSCHEDULED:
+            return 0;
+        case BASELINESCHEDULE: {
+            foreach ( Schedule *s, m_schedules ) {
+                if ( s->isBaselined() ) {
+                    return s;
+                }
+            }
+            return 0;
+        }
+        default:
+            break;
+    }
+    return findSchedule( id );
 }
 
 Schedule *Node::findSchedule( long id ) const
@@ -1022,15 +1046,7 @@ QString Node::wbsCode() const {
 
 bool Node::isScheduled( long id ) const
 {
-    if ( id == -1 ) {
-        foreach ( Schedule *s, m_schedules ) {
-            if ( s->isScheduled() ) {
-                return true;
-            }
-        }
-        return false;
-    }
-    Schedule *s = findSchedule( id );
+    Schedule *s = schedule( id );
     return s != 0 && s->isScheduled();
 }
 

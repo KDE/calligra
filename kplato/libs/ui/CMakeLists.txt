@@ -105,6 +105,8 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     kptchartpanelbase.ui
     kptresourceassignmentview.ui
     kpttaskstatusviewsettingspanel.ui
+    
+    test.ui
 )
 add_definitions(-DKDGANTT_STATICLIB)
 

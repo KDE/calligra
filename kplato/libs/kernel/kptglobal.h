@@ -28,6 +28,11 @@
 // This is used both for *.kplato and *.kplatowork files as the syntax is identical
 #define XML_FILE_SYNTAX_VERSION "0.6.2"
 
+#define CURRENTSCHEDULE     -1
+#define NOTSCHEDULED        -2
+#define BASELINESCHEDULE    -3
+#define ANYSCHEDULED        -4
+
 namespace KPlato
 {
 

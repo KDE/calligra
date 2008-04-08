@@ -158,6 +158,7 @@ void Project::calculate( ScheduleManager &sm )
     emit sigProgress( 100 );
     emit sigProgress( -1 );
     emit projectCalculated( &sm );
+    emit scheduleManagerChanged( &sm );
     emit changed();
 }
 
@@ -1851,6 +1852,20 @@ ScheduleManager *Project::createScheduleManager()
     return createScheduleManager( uniqueScheduleName() );
 }
 
+bool Project::isBaselined( long id ) const
+{
+    if ( id == ANYSCHEDULED ) {
+        foreach ( ScheduleManager *sm, allScheduleManagers() ) {
+            if ( sm->isBaselined() ) {
+                return true;
+            }
+        }
+        return false;
+    }
+    Schedule *s = schedule( id );
+    return s == 0 ? false : s->isBaselined();
+}
+
 MainSchedule *Project::createSchedule( const QString& name, Schedule::Type type )
 {
     //kDebug()<<"No of schedules:"<<m_schedules.count();
@@ -1867,7 +1882,7 @@ void Project::addMainSchedule( MainSchedule *sch )
         return;
     }
     //kDebug()<<"No of schedules:"<<m_schedules.count();
-    long i = 1;
+    long i = 1; // keep this positive (negative values are special...)
     while ( m_schedules.contains( i ) ) {
         ++i;
     }

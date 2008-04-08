@@ -151,6 +151,14 @@ QStringList Schedule::state() const
     return lst;
 }
 
+bool Schedule::isBaselined() const
+{
+    if ( m_parent ) {
+        return m_parent->isBaselined();
+    }
+    return false;
+}
+
 bool Schedule::usePert() const
 {
     if ( m_parent ) {
@@ -284,6 +292,7 @@ void Schedule::insertBackwardNode( Node *node )
 bool Schedule::attatch( Appointment *appointment )
 {
     int mode = appointment->calculationMode();
+    kDebug()<<appointment<<mode;
     if ( mode == Scheduling ) {
         if ( m_appointments.indexOf( appointment ) != -1 ) {
             kError() << "Appointment already exists" << endl;
@@ -328,7 +337,7 @@ bool Schedule::add( Appointment *appointment )
 
 void Schedule::takeAppointment( Appointment *appointment, int mode )
 {
-    //kDebug()<<"("<<this<<")"<<mode<<":"<<appointment<<","<<appointment->calculationMode();
+    kDebug()<<"("<<this<<")"<<mode<<":"<<appointment<<","<<appointment->calculationMode();
     int i = m_forward.indexOf( appointment );
     if ( i != -1 ) {
         m_forward.removeAt( i );
@@ -897,6 +906,11 @@ MainSchedule::~MainSchedule()
     //kDebug()<<"("<<this<<")";
 }
 
+bool MainSchedule::isBaselined() const
+{
+    return m_manager == 0 ? false : m_manager->isBaselined();
+}
+
 bool MainSchedule::usePert() const
 {
     return m_manager == 0 ? false : m_manager->usePert();
@@ -1110,6 +1124,7 @@ ScheduleManager::ScheduleManager( Project &project, const QString name )
     : m_project( project),
     m_parent( 0 ),
     m_name( name ),
+    m_baselined( false ),
     m_allowOverbooking( false ),
     m_checkExternalAppointments( true ),
     m_calculateAll( false ),
@@ -1229,6 +1244,24 @@ void ScheduleManager::setName( const QString& name )
         m_pessimistic->setName( name );
         m_project.changed( m_pessimistic );
     }
+    m_project.changed( this );
+}
+
+bool ScheduleManager::isChildBaselined() const
+{
+    //kDebug()<<on;
+    foreach ( ScheduleManager *sm, m_children ) {
+        if ( sm->isBaselined() || sm->isChildBaselined() ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+void ScheduleManager::setBaselined( bool on )
+{
+    //kDebug()<<on;
+    m_baselined = on;
     m_project.changed( this );
 }
 
@@ -1365,6 +1398,9 @@ void ScheduleManager::setPessimistic( MainSchedule *sch )
 QStringList ScheduleManager::state() const
 {
     QStringList lst;
+    if ( isBaselined() ) {
+        return lst << i18n( "Baselined" );
+    }
     if ( m_expected == 0 && m_optimistic == 0 && m_pessimistic == 0 ) {
         return lst << i18n( "Not scheduled" );
     }
@@ -1424,6 +1460,7 @@ bool ScheduleManager::loadXML( KoXmlElement &element, XMLLoaderObject &status )
     m_allowOverbooking = (bool)(element.attribute( "overbooking" ).toInt());
     m_checkExternalAppointments = (bool)(element.attribute( "check-external-appointments" ).toInt());
     m_schedulingDirection = (bool)(element.attribute( "scheduling-direction" ).toInt());
+    m_baselined = (bool)(element.attribute( "baselined" ).toInt());
     KoXmlNode n = element.firstChild();
     for ( ; ! n.isNull(); n = n.nextSibling() ) {
         if ( ! n.isElement() ) {
@@ -1480,6 +1517,7 @@ void ScheduleManager::saveXML( QDomElement &element ) const
     el.setAttribute( "overbooking", m_allowOverbooking );
     el.setAttribute( "check-external-appointments", m_checkExternalAppointments );
     el.setAttribute( "scheduling-direction", m_schedulingDirection );
+    el.setAttribute( "baselined", m_baselined );
     foreach ( MainSchedule *s, schedules() ) {
         //kDebug()<<m_name<<" id="<<s->id()<<(s->isDeleted()?"  Deleted":"");
         if ( !s->isDeleted() && s->isScheduled() ) {
@@ -1504,6 +1542,7 @@ void ScheduleManager::saveWorkPackageXML( QDomElement &element, const Node &node
     el.setAttribute( "overbooking", m_allowOverbooking );
     el.setAttribute( "check-external-appointments", m_checkExternalAppointments );
     el.setAttribute( "scheduling-direction", m_schedulingDirection );
+    el.setAttribute( "baselined", m_baselined );
     if ( m_expected && ! m_expected->isDeleted() ) {
         QDomElement schs = el.ownerDocument().createElement( "schedule" );
         el.appendChild( schs );

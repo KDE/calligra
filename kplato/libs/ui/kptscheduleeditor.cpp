@@ -138,6 +138,8 @@ ScheduleEditor::ScheduleEditor( KoDocument *part, QWidget *parent )
 
     connect( m_view, SIGNAL( selectionChanged( const QModelIndexList ) ), this, SLOT( slotSelectionChanged( const QModelIndexList ) ) );
     
+    connect( model(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), this, SLOT( updateActionsEnabled( const QModelIndex& ) ) );
+
     connect( m_view, SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), this, SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
     
     connect( m_view, SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
@@ -210,39 +212,59 @@ void ScheduleEditor::slotSelectionChanged( const QModelIndexList list)
     
 }
 
+void ScheduleEditor::updateActionsEnabled( const QModelIndex &index )
+{
+    kDebug()<<index;
+    slotEnableActions( m_view->currentManager() );
+}
+
 void ScheduleEditor::slotEnableActions( const ScheduleManager *sm )
 {
+    actionAddSchedule->setEnabled( isReadWrite() );
+
     bool on = isReadWrite() && sm != 0;
-    actionDeleteSelection->setEnabled( on );
-    actionCalculateSchedule->setEnabled( on );
     actionAddSubSchedule->setEnabled( on );
     
-    actionAddSchedule->setEnabled( isReadWrite() );
+    if ( on && ( sm->isBaselined() || sm->isChildBaselined() ) ) {
+        actionBaselineSchedule->setEnabled( sm->isBaselined() );
+        actionCalculateSchedule->setEnabled( false );
+        actionDeleteSelection->setEnabled( false );
+    } else {
+        actionBaselineSchedule->setEnabled( on && sm->isScheduled() && ! m_view->project()->isBaselined() );
+        actionCalculateSchedule->setEnabled( on );
+        actionDeleteSelection->setEnabled( on );
+    }
 }
 
 void ScheduleEditor::setupGui()
 {
     QString name = "scheduleeditor_edit_list";
     
-    actionCalculateSchedule  = new KAction(KIcon( "project_calculate" ), i18n("Calculate Schedule..."), this);
-    actionCollection()->addAction("calculate_schedule", actionCalculateSchedule );
-    connect( actionCalculateSchedule, SIGNAL( triggered( bool ) ), SLOT( slotCalculateSchedule() ) );
-    addAction( name, actionCalculateSchedule );
-    
-    actionAddSchedule  = new KAction(KIcon( "document-new" ), i18n("Add Schedule..."), this);
+    actionAddSchedule  = new KAction(KIcon( "document-new" ), i18n("Add Schedule"), this);
     actionCollection()->addAction("add_schedule", actionAddSchedule );
     connect( actionAddSchedule, SIGNAL( triggered( bool ) ), SLOT( slotAddSchedule() ) );
     addAction( name, actionAddSchedule );
     
-    actionAddSubSchedule  = new KAction(KIcon( "document-new" ), i18n("Add Sub-schedule..."), this);
+    actionAddSubSchedule  = new KAction(KIcon( "document-new" ), i18n("Add Sub-schedule"), this);
     actionCollection()->addAction("add_subschedule", actionAddSubSchedule );
     connect( actionAddSubSchedule, SIGNAL( triggered( bool ) ), SLOT( slotAddSubSchedule() ) );
     addAction( name, actionAddSubSchedule );
     
-    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete Selected Schedules"), this);
+    actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete Selection"), this);
     actionCollection()->addAction("schedule_delete_selection", actionDeleteSelection );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
     addAction( name, actionDeleteSelection );
+
+    actionCalculateSchedule  = new KAction(KIcon( "project_calculate" ), i18n("Calculate"), this);
+    actionCollection()->addAction("calculate_schedule", actionCalculateSchedule );
+    connect( actionCalculateSchedule, SIGNAL( triggered( bool ) ), SLOT( slotCalculateSchedule() ) );
+    addAction( name, actionCalculateSchedule );
+    
+    actionBaselineSchedule  = new KAction(KIcon( "" ), i18n("Baseline"), this);
+    actionCollection()->addAction("schedule_baseline", actionBaselineSchedule );
+    connect( actionBaselineSchedule, SIGNAL( triggered( bool ) ), SLOT( slotBaselineSchedule() ) );
+    addAction( name, actionBaselineSchedule );
+
 
     // Add the context menu actions for the view options
     actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
@@ -299,6 +321,15 @@ void ScheduleEditor::slotAddSubSchedule()
         part()->addCommand( new AddScheduleManagerCmd( sm, m, i18n( "Create sub-schedule" ) ) );
     } else {
         emit addScheduleManager( m_view->project() );
+    }
+}
+
+void ScheduleEditor::slotBaselineSchedule()
+{
+    //kDebug()<<endl;
+    ScheduleManager *sm = m_view->currentManager();
+    if ( sm ) {
+        emit baselineSchedule( m_view->project(), sm );
     }
 }
 

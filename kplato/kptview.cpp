@@ -582,6 +582,9 @@ ViewBase *View::createScheduleHandler( ViewListItem *cat, const QString tag, con
 
     connect( handler->scheduleEditor(), SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
 
+    connect( handler->scheduleEditor(), SIGNAL( baselineSchedule( Project*, ScheduleManager* ) ), SLOT( slotBaselineSchedule( Project*, ScheduleManager* ) ) );
+
+
     connect( handler, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), handler, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ) );
@@ -600,6 +603,8 @@ ScheduleEditor *View::createScheduleEditor( QWidget *parent )
 
     connect( scheduleeditor, SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
 
+    connect( scheduleeditor, SIGNAL( baselineSchedule( Project*, ScheduleManager* ) ), SLOT( slotBaselineSchedule( Project*, ScheduleManager* ) ) );
+
     scheduleeditor->updateReadWrite( m_readWrite );
     return scheduleeditor;
 }
@@ -617,9 +622,13 @@ ViewBase *View::createScheduleEditor( ViewListItem *cat, const QString tag, cons
     connect( scheduleeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
     connect( scheduleeditor, SIGNAL( addScheduleManager( Project* ) ), SLOT( slotAddScheduleManager( Project* ) ) );
+    
     connect( scheduleeditor, SIGNAL( deleteScheduleManager( Project*, ScheduleManager* ) ), SLOT( slotDeleteScheduleManager( Project*, ScheduleManager* ) ) );
 
     connect( scheduleeditor, SIGNAL( calculateSchedule( Project*, ScheduleManager* ) ), SLOT( slotCalculateSchedule( Project*, ScheduleManager* ) ) );
+    
+    connect( scheduleeditor, SIGNAL( baselineSchedule( Project*, ScheduleManager* ) ), SLOT( slotBaselineSchedule( Project*, ScheduleManager* ) ) );
+    
     scheduleeditor->updateReadWrite( m_readWrite );
     return scheduleeditor;
 }
@@ -1093,6 +1102,28 @@ void View::slotCalculateSchedule( Project *project, ScheduleManager *sm )
     statusBar()->clearMessage();
     statusBar()->showMessage( i18n( "%1: Calculating done", sm->name() ), 2000 );
     slotUpdate();
+}
+
+void View::slotBaselineSchedule( Project *project, ScheduleManager *sm )
+{
+    if ( project == 0 || sm == 0 ) {
+        return;
+    }
+    if ( ! sm->isBaselined() && project->isBaselined() ) {
+        KMessageBox::sorry( this, i18n( "Cannot baseline. The project is already baselined." ) );
+        return;
+    }
+    QUndoCommand *cmd;
+    if ( sm->isBaselined() ) {
+        int res = KMessageBox::warningContinueCancel( this, i18n( "This schedule is baselined. Do you want to remove the baseline?" ) );
+        if ( res == KMessageBox::Cancel ) {
+            return;
+        }
+        cmd = new ResetBaselineScheduleCmd( *sm, i18n( "Reset Baseline %1", sm->name() ) );
+    } else {
+        cmd = new BaselineScheduleCmd( *sm, i18n( "Baseline %1", sm->name() ) );
+    }
+    getPart() ->addCommand( cmd );
 }
 
 void View::slotAddScheduleManager( Project *project )
