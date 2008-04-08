@@ -420,7 +420,7 @@ void ProxyModel::setDataDimensions( int dimensions )
 {
     d->dataDimensions = dimensions;
     reset();
-};
+}
 
 bool ProxyModel::firstRowIsLabel() const
 {
