@@ -41,6 +41,7 @@
 #include <kdebug.h>
 #include <ksystemtimezone.h>
 #include <ktimezone.h>
+#include <krandom.h>
 
 namespace KPlato
 {
@@ -85,6 +86,30 @@ Project::~Project()
 }
 
 int Project::type() const { return Node::Type_Project; }
+
+void Project::generateUniqueIds()
+{
+    foreach ( Node *n, nodeIdDict.values() ) {
+        nodeIdDict.remove( n->id() );
+        n->setId( uniqueNodeId() );
+        nodeIdDict[ n->id() ] = n;
+    }
+    foreach ( ResourceGroup *g, resourceGroupIdDict.values() ) {
+        resourceGroupIdDict.remove( g->id() );
+        g->setId( uniqueResourceGroupId() );
+        resourceGroupIdDict[ g->id() ] = g;
+    }
+    foreach ( Resource *r, resourceIdDict.values() ) {
+        resourceIdDict.remove( r->id() );
+        r->setId( uniqueResourceId() );
+        resourceIdDict[ r->id() ] = r;
+    }
+    foreach ( Calendar *c, calendarIdDict.values() ) {
+        calendarIdDict.remove( c->id() );
+        c->setId( uniqueCalendarId() );
+        calendarIdDict[ c->id() ] = c;
+    }
+}
 
 void Project::calculate( Schedule *schedule, const DateTime &dt )
 {
@@ -1136,11 +1161,12 @@ Task *Project::createTask( Task &def, Node* parent )
 
 QString Project::uniqueNodeId( int seed )
 {
+    QString ident = KRandom::randomString( 10 );
     int i = seed;
-    while ( findNode( QString( "%1" ).arg( i ) ) ) {
-        ++i;
+    while ( findNode( ident ) ) {
+        ident = KRandom::randomString( 10 );
     }
-    return QString( "%1" ).arg( i );
+    return ident;
 }
 
 bool Project::removeId( const QString &id )
@@ -1209,14 +1235,11 @@ bool Project::setResourceGroupId( ResourceGroup *group )
 }
 
 QString Project::uniqueResourceGroupId() const {
-    QString id;
-    for (int i=0; i<32000 ; ++i) {
-        id = id.setNum(i);
-        if ( ! resourceGroupIdDict.contains( id ) ) {
-            return id;
-        }
+    QString id = KRandom::randomString( 10 );
+    while ( resourceGroupIdDict.contains( id ) ) {
+        id = KRandom::randomString( 10 );
     }
-    return QString();
+    return id;
 }
 
 ResourceGroup *Project::group( const QString& id )
@@ -1270,14 +1293,11 @@ bool Project::setResourceId( Resource *resource )
 }
 
 QString Project::uniqueResourceId() const {
-    QString id;
-    for (int i=0; i<32000 ; ++i) {
-        id = id.setNum(i);
-        if ( ! resourceIdDict.contains( id ) ) {
-            return id;
-        }
+    QString id = KRandom::randomString( 10 );
+    while ( resourceIdDict.contains( id ) ) {
+        id = KRandom::randomString( 10 );
     }
-    return QString();
+    return id;
 }
 
 Resource *Project::resource( const QString& id )
@@ -1589,14 +1609,11 @@ bool Project::setCalendarId( Calendar *calendar )
 }
 
 QString Project::uniqueCalendarId() const {
-    QString id;
-    for (int i=1; i<32000 ; ++i) {
-        id = id.setNum(i);
-        if ( ! calendarIdDict.contains( id ) ) {
-            return id;
-        }
+    QString id = KRandom::randomString( 10 );
+    while ( calendarIdDict.contains( id ) ) {
+        id = KRandom::randomString( 10 );
     }
-    return QString();
+    return id;
 }
 
 void Project::setDefaultCalendar( Calendar *cal )

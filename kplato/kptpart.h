@@ -102,6 +102,7 @@ protected:
 
 protected slots:
     void slotViewDestroyed();
+    virtual void openTemplate( const KUrl& url );
 
 private:
     void loadObjects( const KoXmlElement &element );
@@ -115,6 +116,7 @@ private:
     Context *m_context;
 
     XMLLoaderObject m_xmlLoader;
+    bool m_loadingTemplate;
 };
 
 class DocumentChild : public KoDocumentChild

@@ -57,7 +57,8 @@ namespace KPlato
 Part::Part( QWidget *parentWidget, QObject *parent, bool singleViewMode )
         : KoDocument( parentWidget, parent, singleViewMode ),
         m_project( 0 ), m_parentWidget( parentWidget ),
-        m_context( 0 ), m_xmlLoader()
+        m_context( 0 ), m_xmlLoader(),
+        m_loadingTemplate( false )
 {
     setComponentData( Factory::global() );
     setTemplateType( "kplato_template" );
@@ -493,8 +494,22 @@ bool Part::loadChildren( KoStore* store )
     return true;
 }
 
+void Part::openTemplate( const KUrl& url )
+{
+    //kDebug()<<url;
+    // HACK because we can't really reimplemt openTemplate() (private methods)
+    m_loadingTemplate = true;
+    KoDocument::openTemplate( url );
+    m_loadingTemplate = false;
+}
+
 bool Part::completeLoading( KoStore *store )
 {
+    if ( m_loadingTemplate ) {
+        // If we get here the new project is loaded and set
+        //kDebug()<<"Loading template, generate unique ids";
+        m_project->generateUniqueIds();
+    }
     if ( store == 0 ) {
         // can happen if loading a template
         kDebug()<<"No store"<<endl;

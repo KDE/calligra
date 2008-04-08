@@ -458,6 +458,8 @@ public:
     /// Returns a flat list af all nodes
     QList<Node*> flatNodeList( Node *parent = 0 );
     
+    void generateUniqueIds();
+    
 signals:
     /// Emitted when anything in the project is changed (use with care)
     void changed();
