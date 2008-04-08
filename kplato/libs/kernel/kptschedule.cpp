@@ -292,7 +292,7 @@ void Schedule::insertBackwardNode( Node *node )
 bool Schedule::attatch( Appointment *appointment )
 {
     int mode = appointment->calculationMode();
-    kDebug()<<appointment<<mode;
+    //kDebug()<<appointment<<mode;
     if ( mode == Scheduling ) {
         if ( m_appointments.indexOf( appointment ) != -1 ) {
             kError() << "Appointment already exists" << endl;
@@ -337,7 +337,7 @@ bool Schedule::add( Appointment *appointment )
 
 void Schedule::takeAppointment( Appointment *appointment, int mode )
 {
-    kDebug()<<"("<<this<<")"<<mode<<":"<<appointment<<","<<appointment->calculationMode();
+    //kDebug()<<"("<<this<<")"<<mode<<":"<<appointment<<","<<appointment->calculationMode();
     int i = m_forward.indexOf( appointment );
     if ( i != -1 ) {
         m_forward.removeAt( i );

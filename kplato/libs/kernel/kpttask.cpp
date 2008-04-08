@@ -226,7 +226,7 @@ void Task::copySchedule()
     m_currentSchedule->lateFinish = ns->lateFinish;
     m_currentSchedule->duration = ns->duration;
     // TODO: status flags, etc
-    kDebug();
+    //kDebug();
 }
 
 void Task::copyAppointments()
@@ -246,7 +246,7 @@ void Task::copyAppointments( const DateTime &start, const DateTime &end )
     }
     DateTime st = start.isValid() ? start : ns->startTime;
     DateTime et = end.isValid() ? end : ns->endTime;
-    kDebug()<<m_name<<st.toString()<<et.toString();
+    //kDebug()<<m_name<<st.toString()<<et.toString()<<m_currentSchedule->calculationMode();
     foreach ( Appointment *a, ns->appointments() ) {
         Resource *r = a->resource() == 0 ? 0 : a->resource()->resource();
         if ( r == 0 ) {
@@ -255,13 +255,13 @@ void Task::copyAppointments( const DateTime &start, const DateTime &end )
         }
         AppointmentIntervalList lst = a->intervals(  st, et );
         if ( lst.isEmpty() ) {
-            kDebug()<<"No intervals to copy from"<<a;
+            //kDebug()<<"No intervals to copy from"<<a;
             continue;
         }
         Appointment *curr = 0;
         foreach ( Appointment *c, m_currentSchedule->appointments() ) {
             if ( c->resource()->resource() == r ) {
-                kDebug()<<"Found current appointment to"<<a->resource()->resource()->name();
+                //kDebug()<<"Found current appointment to"<<a->resource()->resource()->name()<<c;
                 curr = c;
                 break;
             }
@@ -270,7 +270,7 @@ void Task::copyAppointments( const DateTime &start, const DateTime &end )
             curr = new Appointment();
             m_currentSchedule->add( curr );
             curr->setNode( m_currentSchedule );
-            kDebug()<<"Created new appointment";
+            //kDebug()<<"Created new appointment"<<curr;
         }
         ResourceSchedule *rs = static_cast<ResourceSchedule*>( r->findSchedule( m_currentSchedule->id() ) );
         if ( rs == 0 ) {
@@ -278,19 +278,19 @@ void Task::copyAppointments( const DateTime &start, const DateTime &end )
             rs->setId( m_currentSchedule->id() );
             rs->setName( m_currentSchedule->name() );
             rs->setType( m_currentSchedule->type() );
-            kDebug()<<"Resource schedule not found, id="<<m_currentSchedule->id();
+            //kDebug()<<"Resource schedule not found, id="<<m_currentSchedule->id();
         }
+        rs->setCalculationMode( m_currentSchedule->calculationMode() );
         if ( ! rs->appointments().contains( curr ) ) {
+            //kDebug()<<"add to resource"<<rs<<curr;
             rs->add( curr );
             curr->setResource( rs );
         }
         Appointment app;
         app.setIntervals( lst );
-        foreach ( AppointmentInterval *i, curr->intervals() ) {
-            kDebug()<<i->startTime().toString()<<i->endTime().toString();
-        }
+        //foreach ( AppointmentInterval *i, curr->intervals() ) { kDebug()<<i->startTime().toString()<<i->endTime().toString(); }
         curr->merge( app );
-        kDebug()<<"Appointments added";
+        //kDebug()<<"Appointments added";
     }
     m_currentSchedule->startTime = ns->startTime;
     m_currentSchedule->earlyStart = ns->earlyStart;
