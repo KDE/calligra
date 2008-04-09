@@ -43,7 +43,7 @@ public slots:
 
     void dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
     
-    QModelIndex index( int row, int column, const QModelIndex &parent ) const;
+    QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
     QModelIndex parent( const QModelIndex &index ) const;
 
     int rowCount( const QModelIndex &parent = QModelIndex() ) const;

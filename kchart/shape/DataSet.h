@@ -99,6 +99,12 @@ public:
 	
 	KDChart::AbstractDiagram *kdDiagram() const;
 	
+	// Called by the proxy model
+	void dataChanged( int start, int end ) const;
+	
+	bool registerKdChartModel( KDChartModel *model );
+	bool deregisterKdChartModel( KDChartModel *model );
+	
 private:
     class Private;
     Private *const d;

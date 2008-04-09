@@ -23,6 +23,7 @@
 #include "ProxyModel.h"
 #include "Axis.h"
 #include "PlotArea.h"
+#include "KDChartModel.h"
 
 // Qt
 #include <QAbstractItemModel>
@@ -65,6 +66,8 @@ public:
     ProxyModel *model;
     KDChart::AbstractDiagram *kdDiagram;
     int kdDataSetNumber;
+    
+    QList<KDChartModel*> kdChartModels;
 };
 
 DataSet::Private::Private()
@@ -384,5 +387,30 @@ void DataSet::setKdDataSetNumber( int number )
     {
         d->brush = d->kdDiagram->brush( number );
         d->pen = d->kdDiagram->pen( number );
+    }
+}
+
+bool DataSet::registerKdChartModel( KDChartModel *model )
+{
+    if ( d->kdChartModels.contains( model ) )
+        return false;
+    d->kdChartModels.append( model );
+    return true;
+}
+
+bool DataSet::deregisterKdChartModel( KDChartModel *model )
+{
+    if ( !d->kdChartModels.contains( model ) )
+        return false;
+    d->kdChartModels.removeAll( model );
+    return true;
+}
+
+void DataSet::dataChanged( int start, int end ) const
+{
+    foreach( KDChartModel *model, d->kdChartModels )
+    {
+        model->dataChanged( model->index( start, d->kdDataSetNumber ),
+                            model->index( end,   d->kdDataSetNumber ) );
     }
 }

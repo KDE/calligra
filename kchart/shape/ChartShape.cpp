@@ -228,6 +228,7 @@ ChartShape::ChartShape()
     d->model = new ProxyModel ( d->plotArea );
     
     QObject::connect( d->model, SIGNAL( modelReset() ), d->plotArea, SLOT( modelReset() ) );
+    QObject::connect( d->model, SIGNAL( dataChanged() ), d->plotArea, SLOT( update() ) );
     
     d->plotArea->setChartType( BarChartType );
     d->plotArea->setChartSubType( NormalChartSubtype );

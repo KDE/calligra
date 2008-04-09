@@ -88,12 +88,11 @@ public:
     bool registerKdDiagram( KDChart::AbstractDiagram *diagram );
     bool deregisterKdDiagram( KDChart::AbstractDiagram *diagram );
     
-    void update() const;
-    
     void requestRepaint() const;
     
 public slots:
     void modelReset();
+    void update() const;
 
 private:
     class Private;

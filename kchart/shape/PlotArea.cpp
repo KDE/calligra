@@ -603,3 +603,6 @@ void PlotArea::paint( QPainter &painter )
 {
     d->kdChart->paint( &painter, QRect( QPoint( 0, 0 ), d->shape->size().toSize() ) );
 }
+
+#include "PlotArea.moc"
+

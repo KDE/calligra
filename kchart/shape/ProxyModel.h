@@ -78,6 +78,9 @@ public slots:
     QList<DataSet*> dataSets() const;
     
     void rebuildDataMap();
+    
+signals:
+    void dataChanged();
 
 private:
     class Private;

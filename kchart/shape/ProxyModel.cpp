@@ -72,8 +72,10 @@ void ProxyModel::rebuildDataMap()
     int xDataRowInSourceModel = 0;
     int yDataRowInSourceModel = 0;
     
+    // Since first row is for x values, move the first y value
+    // one row down
     if ( d->dataDimensions > 1 )
-        yDataRowInSourceModel = 1;
+        yDataRowInSourceModel++;
     
     d->dataMap.clear();
     
@@ -133,8 +135,61 @@ QVariant ProxyModel::data( const QModelIndex &index,
 
 void ProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight )
 {
-    // TODO (Johannes): Emit dataChanged() for all datasets that have references to these rows
-    emit QAbstractProxyModel::dataChanged( topLeft, bottomRight );
+    int firstRow, lastRow;
+    int firstCol, lastCol;
+    int numRows;
+    if ( d->dataDirection == Qt::Vertical )
+    {
+        numRows = rowCount();
+        firstRow = qMin( topLeft.row(), bottomRight.row() );
+        lastRow  = qMax( topLeft.row(), bottomRight.row() );
+        
+        firstCol = qMin( topLeft.column(), bottomRight.column() );
+        lastCol  = qMax( topLeft.column(), bottomRight.column() );
+        
+        if ( d->firstRowIsLabel )
+        {
+            firstRow--;
+            lastRow--;
+        }
+        if ( d->firstColumnIsLabel )
+        {
+            firstCol--;
+            lastCol--;
+        }
+    }
+    else
+    {
+        numRows = columnCount();
+        firstRow = qMin( topLeft.column(), bottomRight.column() );
+        lastRow  = qMax( topLeft.column(), bottomRight.column() );
+        
+        firstCol = qMin( topLeft.row(), bottomRight.row() );
+        lastCol  = qMax( topLeft.row(), bottomRight.row() );
+
+        if ( d->firstRowIsLabel )
+        {
+            firstCol--;
+            lastCol--;
+        }
+        if ( d->firstColumnIsLabel )
+        {
+            firstRow--;
+            lastRow--;
+        }
+    }
+    
+    for ( int i = 0; i < numRows; i++ )
+    {
+        if ( d->dataMap[ i ] >= firstRow && d->dataMap[ i ] <= lastRow )
+        {
+            int dataSet = int( i / d->dataDimensions );
+            Q_ASSERT( dataSet < d->dataSets.size() );
+            d->dataSets[ dataSet ]->dataChanged( firstCol, lastCol );
+        }
+    }
+    
+    emit dataChanged();
 }
 
 QVariant ProxyModel::headerData( int section,

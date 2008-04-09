@@ -147,6 +147,8 @@ void KDChartModel::addDataSet( DataSet *dataSet )
         d->dataSets.append( dataSet );
         reset();
     }
+    
+    dataSet->registerKdChartModel( this );
 }
 
 void KDChartModel::removeDataSet( DataSet *dataSet )
@@ -158,6 +160,8 @@ void KDChartModel::removeDataSet( DataSet *dataSet )
     beginRemoveColumns( QModelIndex(), columnAboutToBeRemoved, columnAboutToBeRemoved + d->dataDimensions - 1 );
     d->dataSets.removeAll( dataSet );
     endRemoveColumns();
+    
+    dataSet->deregisterKdChartModel( this );
 }
 
 QList<DataSet*> KDChartModel::dataSets() const
