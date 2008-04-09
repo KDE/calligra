@@ -502,7 +502,7 @@ void Task::saveWorkPackageXML(QDomElement &element, long id )  const
 }
 
 EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end, long id ) const {
-    //kDebug()<<m_name;
+    kDebug()<<m_name;
     if ( type() == Node::Type_Summarytask ) {
         EffortCostMap ec;
         QListIterator<Node*> it( childNodeIterator() );
@@ -517,6 +517,29 @@ EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end,
     }
     return EffortCostMap();
 }
+
+EffortCostMap Task::actualEffortCostPrDay(const QDate &start, const QDate &end, long id ) const {
+    //kDebug()<<m_name;
+    if ( type() == Node::Type_Summarytask ) {
+        EffortCostMap ec;
+        QListIterator<Node*> it( childNodeIterator() );
+        while ( it.hasNext() ) {
+            ec += it.next() ->actualEffortCostPrDay( start, end, id );
+        }
+        return ec;
+    }
+    switch ( completion().entrymode() ) {
+        case Completion::FollowPlan:
+            return plannedEffortCostPrDay( start, end, id );
+        case Completion::EnterCompleted:
+            //TODO
+            break;
+        default:
+            return completion().effortCostPrDay( start, end );
+    }
+    return EffortCostMap();
+}
+
 
 // Returns the total planned effort for this task (or subtasks) 
 Duration Task::plannedEffort( long id ) const {
@@ -2459,7 +2482,10 @@ Duration Completion::actualEffort( const QDate &date ) const
             }
         }
     } else {
-        //FIXME: How to know on a specific date?
+        // Hmmm: How to really knowon a specific date?
+        if ( m_entries.contains( date ) ) {
+            eff = m_entries[ date ]->totalPerformed;
+        }
     }
     return eff;
 }
@@ -2484,6 +2510,24 @@ Duration Completion::actualEffortTo( const QDate &date ) const
         }
     }
     return eff;
+}
+
+EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end ) const
+{
+    kDebug()<<start<<end;
+    EffortCostMap ec;
+    switch ( m_entrymode ) {
+        case FollowPlan:
+        case EnterCompleted:
+            break;
+        case EnterEffortPerTask: // hmmm
+        case EnterEffortPerResource: {
+            for ( QDate d = start; d <= end; d = d.addDays( 1 ) ) {
+                ec.add( d, actualEffort( d ), actualCost( d ) );
+            }
+        }
+    }
+    return ec;
 }
 
 void Completion::addUsedEffort( const Resource *resource, Completion::UsedEffort *value )

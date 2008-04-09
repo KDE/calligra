@@ -27,6 +27,7 @@
 #include <QList>
 #include <qstringlist.h>
 
+#include "kptglobal.h"
 #include "kpteffortcostmap.h"
 #include "kptnode.h"
 
@@ -187,7 +188,9 @@ public:
     Account *defaultAccount() const { return m_defaultAccount; }
     void setDefaultAccount(Account *account) { m_defaultAccount = account; }
     
-    EffortCostMap plannedCost(const Account &account, const QDate &start, const QDate &end, long id = -1);
+    EffortCostMap plannedCost(const Account &account, const QDate &start, const QDate &end, long id = BASELINESCHEDULE);
+    
+    EffortCostMap actualCost(const Account &account, const QDate &start, const QDate &end, long id = BASELINESCHEDULE);
     
     void clear() { m_accountList.clear(); m_idDict.clear(); }
     void insert(Account *account, Account *parent=0, int index = -1);

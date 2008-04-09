@@ -210,6 +210,8 @@ public:
     void setEntrymode( Entrymode mode ) { m_entrymode = mode; }
     Entrymode entrymode() const { return m_entrymode; }
     
+    EffortCostMap effortCostPrDay(const QDate &start, const QDate &end ) const;
+    
 protected:
     void copy( const Completion &copy);
     
@@ -457,6 +459,12 @@ public:
     /// Actual cost up to and including @p date
     virtual double actualCostTo(const QDate &date) const;
 
+    /**
+     * Returns a list of actual effort and cost for this task
+     * for the interval start, end inclusive
+     */
+    virtual EffortCostMap actualEffortCostPrDay(const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE ) const;
+    
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id = CURRENTSCHEDULE ) const;
     /// Budgeted Cost of Work Performed ( up to @p date )

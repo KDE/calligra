@@ -244,6 +244,8 @@ public:
      */
     virtual double actualCostTo( const QDate &date ) const;
     
+    virtual EffortCostMap actualEffortCostPrDay( const QDate &start, const QDate &end, long id = -1 ) const;
+    
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id = -1 ) const;
     /// Budgeted Cost of Work Performed ( up to @p date )

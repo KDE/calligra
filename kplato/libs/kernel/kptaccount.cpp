@@ -406,15 +406,70 @@ EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, 
     if (&account == m_defaultAccount) {
         QHash<QString, Node*> hash = m_project.nodeDict();
         foreach (Node *n, hash) {
+            if ( n->numChildren() > 0 ) {
+                continue;
+            }
             if (n->runningAccount() == 0) {
+                kDebug()<<"default, running:"<<n->name();
                 ec += n->plannedEffortCostPrDay(start, end, id);
             }
             if (n->startupAccount() == 0) {
+                kDebug()<<"default, startup:"<<n->name();
                 if (n->startTime( id ).date() >= start &&
                     n->startTime( id ).date() <= end)
                     ec.add(n->startTime( id ).date(), EffortCost(Duration::zeroDuration, n->startupCost()));
             }
             if (n->shutdownAccount() == 0) {
+                kDebug()<<"default, shutdown:"<<n->name();
+                if (n->endTime( id ).date() >= start &&
+                    n->endTime( id ).date() <= end)
+                    ec.add(n->endTime( id ).date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
+            }
+        }
+    }
+    return ec;
+}
+
+EffortCostMap Accounts::actualCost(const Account &account, const QDate &start, const QDate &end, long id) {
+    EffortCostMap ec;
+    foreach (Account::CostPlace *cp, account.costPlaces()) {
+        Node *n = cp->node();
+        if (n == 0) {
+            continue;
+        }
+        //kDebug()<<"n="<<n->name();
+        if (cp->running()) {
+            ec += n->actualEffortCostPrDay(start, end, id);
+        }
+        if (cp->startup()) {
+            if (n->startTime( id ).date() >= start &&
+                n->startTime( id ).date() <= end)
+                ec.add(n->startTime( id ).date(), EffortCost(Duration::zeroDuration, n->startupCost()));
+        }
+        if (cp->shutdown()) {
+            if (n->endTime( id ).date() >= start &&
+                n->endTime( id ).date() <= end)
+                ec.add(n->endTime( id ).date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
+        }
+    }
+    if (&account == m_defaultAccount) {
+        QHash<QString, Node*> hash = m_project.nodeDict();
+        foreach (Node *n, hash) {
+            if ( n->numChildren() > 0 ) {
+                continue;
+            }
+            if (n->runningAccount() == 0) {
+                kDebug()<<"default, running:"<<n->name();
+                ec += n->actualEffortCostPrDay(start, end, id);
+            }
+            if (n->startupAccount() == 0) {
+                kDebug()<<"default, starup:"<<n->name();
+                if (n->startTime( id ).date() >= start &&
+                    n->startTime( id ).date() <= end)
+                    ec.add(n->startTime( id ).date(), EffortCost(Duration::zeroDuration, n->startupCost()));
+            }
+            if (n->shutdownAccount() == 0) {
+                kDebug()<<"default, shutdown:"<<n->name();
                 if (n->endTime( id ).date() >= start &&
                     n->endTime( id ).date() <= end)
                     ec.add(n->endTime( id ).date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));

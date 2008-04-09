@@ -185,13 +185,13 @@ public:
     Relation *findRelation( const Node *node ) const;
 
     /// Set the scheduled start time
-    void setStartTime(DateTime startTime, long id = -1 );
+    void setStartTime(DateTime startTime, long id = CURRENTSCHEDULE );
     /// Return the scheduled start time
-    virtual DateTime startTime( long id = -1 ) const;
+    virtual DateTime startTime( long id = CURRENTSCHEDULE ) const;
     /// Set the scheduled end time
-    void setEndTime(DateTime endTime, long id = -1 );
+    void setEndTime(DateTime endTime, long id = CURRENTSCHEDULE );
     /// Return the scheduled end time
-    virtual DateTime endTime( long id = -1 ) const;
+    virtual DateTime endTime( long id = CURRENTSCHEDULE ) const;
 
     /// Return the estimate for this node
     Estimate *estimate() const { return m_estimate; }
@@ -243,7 +243,7 @@ public:
     virtual ResourceRequest *resourceRequest( const QString &/*name*/ ) const { return 0; }
     
     /// Return the list of resources assigned to this task
-    virtual QStringList assignedNameList( long /*id*/ = -1 ) const { return QStringList(); }
+    virtual QStringList assignedNameList( long /*id*/ = CURRENTSCHEDULE ) const { return QStringList(); }
     
     virtual void makeAppointments();
     /// Calculates if the assigned resource is overbooked 
@@ -251,28 +251,28 @@ public:
     virtual void calcResourceOverbooked();
 
     /// EstimateType == Estimate, but no resource is requested
-    bool resourceError( long id = -1 ) const;
+    bool resourceError( long id = CURRENTSCHEDULE ) const;
     /// The assigned resource is overbooked
-    virtual bool resourceOverbooked( long id = -1 ) const;
+    virtual bool resourceOverbooked( long id = CURRENTSCHEDULE ) const;
     /// The requested resource is not available
-    bool resourceNotAvailable( long id = -1 ) const;
+    bool resourceNotAvailable( long id = CURRENTSCHEDULE ) const;
     /// The task cannot be scheduled to fullfill all the constraints
-    virtual bool schedulingError( long id = -1 ) const;
+    virtual bool schedulingError( long id = CURRENTSCHEDULE ) const;
     /// The node has not been scheduled
-    bool notScheduled( long id = -1 ) const;
+    bool notScheduled( long id = CURRENTSCHEDULE ) const;
     /// Return a list of overbooked resources
-    virtual QStringList overbookedResources( long id = -1 ) const;
+    virtual QStringList overbookedResources( long id = CURRENTSCHEDULE ) const;
     /// The assigned resources can not fullfill the estimated effort.
-    virtual bool effortMetError( long /*id*/ = -1 ) const { return false; }
+    virtual bool effortMetError( long /*id*/ = CURRENTSCHEDULE ) const { return false; }
     
-    virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end, long id = -1 ) const=0;
+    virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end, long id = CURRENTSCHEDULE ) const=0;
         
     /// Returns the total planned effort for this task (or subtasks) 
-    virtual Duration plannedEffort( long id = -1 ) const { Q_UNUSED(id); return Duration::zeroDuration; }
+    virtual Duration plannedEffort( long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return Duration::zeroDuration; }
     /// Returns the total planned effort for this task (or subtasks) on date
-    virtual Duration plannedEffort(const QDate &, long id = -1 ) const { Q_UNUSED(id); return Duration::zeroDuration; }
+    virtual Duration plannedEffort(const QDate &, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return Duration::zeroDuration; }
     /// Returns the planned effort up to and including date
-    virtual Duration plannedEffortTo(const QDate &, long id = -1 ) const { Q_UNUSED(id); return Duration::zeroDuration; }
+    virtual Duration plannedEffortTo(const QDate &, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return Duration::zeroDuration; }
     
     /// Returns the total actual effort for this task (or subtasks) 
     virtual Duration actualEffort() const { return Duration::zeroDuration; }
@@ -280,20 +280,21 @@ public:
     virtual Duration actualEffort(const QDate &/*date*/ ) const { return Duration::zeroDuration; }
     /// Returns the total actual effort for this task (or subtasks) up to and including date
     virtual Duration actualEffortTo(const QDate &/*date*/ ) const { return Duration::zeroDuration; }
+    virtual EffortCostMap actualEffortCostPrDay(const QDate &start, const QDate &end, long id = CURRENTSCHEDULE ) const=0;
     
     /**
      * Planned cost is the sum total of all resources and other costs
      * planned for this node.
      */
-    virtual double plannedCost( long id = -1 ) const { Q_UNUSED(id); return 0; }
+    virtual double plannedCost( long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0; }
     
     /// Planned cost on date
-    virtual double plannedCost(const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return 0; }
+    virtual double plannedCost(const QDate &/*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0; }
     /**
      * Planned cost from start of activity up to and including date
      * is the sum of all resource costs and other costs planned for this node.
      */
-    virtual double plannedCostTo(const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return 0; }
+    virtual double plannedCostTo(const QDate &/*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0; }
     /**
      * Actual cost is the sum total of the reported costs actually used
      * for this node.
@@ -307,7 +308,7 @@ public:
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id ) const { Q_UNUSED(id); return 0.0; }
     /// Budgeted Cost of Work Performed ( up to @p date )
-    virtual double bcwp( const QDate &/*date*/, long id = -1 ) const { Q_UNUSED(id); return 0.0; }
+    virtual double bcwp( const QDate &/*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0.0; }
     
     /// Effort based performance index
     double effortPerformanceIndex(const QDate &/*date*/, bool * /*error=0*/) const { return 0.0; }
@@ -326,18 +327,18 @@ public:
     virtual void adjustSummarytask() = 0;
 
     /// Returns the (previously) calculated duration
-    Duration duration( long id = -1 ) const;
+    Duration duration( long id = CURRENTSCHEDULE ) const;
     
     /**
      * The variance is calculated based on
      * the optimistic/pessimistic ratio specified for the estimate.
      */
-    double variance( long id = -1, Duration::Unit unit = Duration::Unit_ms ) const;
+    double variance( long id = CURRENTSCHEDULE, Duration::Unit unit = Duration::Unit_ms ) const;
     /**
      * The standard deviation is calculated based on 
      * the optimistic/pessimistic ratio specified for the estimate.
      */
-    double deviation( long id = -1, Duration::Unit unit = Duration::Unit_ms ) const;
+    double deviation( long id = CURRENTSCHEDULE, Duration::Unit unit = Duration::Unit_ms ) const;
     
     Node *siblingBefore();
     Node *childBefore(Node *node);
@@ -354,7 +355,7 @@ public:
     /// Save appointments for schedule with id
     virtual void saveAppointments(QDomElement &element, long id) const;
     ///Return the list of appointments for schedule with id.
-    QList<Appointment*> appointments( long id = -1 );
+    QList<Appointment*> appointments( long id = CURRENTSCHEDULE );
     /// Adds appointment to this node only (not to resource)
     virtual bool addAppointment(Appointment *appointment, Schedule &main);
     
@@ -382,21 +383,21 @@ public:
      * the calendar of allocated resources. Normally this is the same
      * as @ref startTime(), but may differ if timing constraints are set.
      */
-    virtual DateTime workStartTime( long id = -1 ) const;
-    void setWorkStartTime(const DateTime &dt,  long id = -1 );
+    virtual DateTime workStartTime( long id = CURRENTSCHEDULE ) const;
+    void setWorkStartTime(const DateTime &dt,  long id = CURRENTSCHEDULE );
     
     /**
      * This is when work can finish on this node in accordance with 
      * the calendar of allocated resources. Normally this is the same
      * as @ref endTime(), but may differ if timing constraints are set.
      */
-    virtual DateTime workEndTime( long id = -1 ) const;
-    void setWorkEndTime(const DateTime &dt,  long id = -1 );
+    virtual DateTime workEndTime( long id = CURRENTSCHEDULE ) const;
+    void setWorkEndTime(const DateTime &dt,  long id = CURRENTSCHEDULE );
     
     /// Returns true if this node is critical
-    virtual bool isCritical( long id = -1 ) const { Q_UNUSED(id); return false; }
+    virtual bool isCritical( long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return false; }
     /// Returns true if this node is in a critical path
-    virtual bool inCriticalPath( long id = -1 ) const;
+    virtual bool inCriticalPath( long id = CURRENTSCHEDULE ) const;
     
     /// Returns the level this node is in the hierarchy. Top node is level 0.
     virtual int level() const;
@@ -422,16 +423,16 @@ public:
 
     /**
      * Return schedule with @id
-     * If @id == -1, return m_currentSchedule
+     * If @id == CURRENTSCHEDULE, return m_currentSchedule
      * Return 0 if schedule with @id doesn't exist.
      */
-    Schedule *schedule( long id = -1 ) const;
+    Schedule *schedule( long id = CURRENTSCHEDULE ) const;
     /// Return current schedule
     Schedule *currentSchedule() const { return m_currentSchedule; }
     /// Set current schedule to schedule with identity id, for me and my children
     virtual void setCurrentSchedule(long id);
     /// Return true if this node has a valid schedule with identity == @id
-    bool isScheduled( long id = -1 ) const;
+    bool isScheduled( long id = CURRENTSCHEDULE ) const;
     /// Return the list of schedules for this node
     QHash<long, Schedule*> &schedules() { return m_schedules; }
     /// Find schedule matching name and type. Does not return deleted schedule.
@@ -498,38 +499,38 @@ public:
      * earlyStart() returns earliest time this node can start
      * given the constraints of the network.
      */
-    DateTime earlyStart( long id = -1 ) const;
+    DateTime earlyStart( long id = CURRENTSCHEDULE ) const;
     /**
      * setEarlyStart() sets earliest time this node can start
      */
-    void setEarlyStart(const DateTime &dt, long id = -1 );
+    void setEarlyStart(const DateTime &dt, long id = CURRENTSCHEDULE );
     /**
      * lateStart() returns latest time this node can start
      * given the constraints of the network.
      */
-    DateTime lateStart( long id = -1 ) const;
+    DateTime lateStart( long id = CURRENTSCHEDULE ) const;
     /**
      * setLateStart() sets the earliest time this node can start
      */
-    void setLateStart(const DateTime &dt, long id = -1 );
+    void setLateStart(const DateTime &dt, long id = CURRENTSCHEDULE );
     /**
      * earlyFinish() returns earliest time this node can finish
      * given the constraints of the network.
      */
-    DateTime earlyFinish( long id = -1 ) const;
+    DateTime earlyFinish( long id = CURRENTSCHEDULE ) const;
     /**
      * setEarlyFinish() sets earliest time this node can finish
      */
-    void setEarlyFinish(const DateTime &dt, long id = -1 );
+    void setEarlyFinish(const DateTime &dt, long id = CURRENTSCHEDULE );
     /**
      * lateFinish() returns latest time this node can finish
      * given the constraints of the network.
      */
-    DateTime lateFinish( long id = -1 ) const;
+    DateTime lateFinish( long id = CURRENTSCHEDULE ) const;
     /**
      * setLateFinish() sets latest time this node can finish
      */
-    void setLateFinish(const DateTime &dt, long id = -1 );
+    void setLateFinish(const DateTime &dt, long id = CURRENTSCHEDULE );
     
     /// Adds appointment to both this node and resource
     virtual void addAppointment(ResourceSchedule *resource, DateTime &start, DateTime &end, double load=100);
