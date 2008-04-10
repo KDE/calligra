@@ -35,7 +35,7 @@ class KRScriptConstants : public QObject
 
 		~KRScriptConstants();
 
-		Q_ENUMS ( PenStyle );
+		Q_ENUMS ( PenStyle )
 		
 		enum PenStyle{QtNoPen = 0, QtSolidLine, QtDashLine, QtDotLine, QtDashDotLine, QtDashDotDotLine};
 };
