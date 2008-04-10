@@ -92,6 +92,8 @@ public:
     void save(QDomElement &element) const;
     
     const QList<Account*> &accountList() const { return m_accountList; }
+    int childCount() const { return m_accountList.count(); }
+    Account *childAt( int index ) const { return m_accountList.value( index ); }
     
     Account *findAccount() const { return findAccount(m_name); }
     Account *findAccount(const QString &id) const;
@@ -203,6 +205,8 @@ public:
     QStringList nameList() const;
         
     const AccountList &accountList() const { return m_accountList; }
+    int accountCount() const { return m_accountList.count(); }
+    Account *accountAt( int index ) const { return m_accountList.value( index ); }
     
     Account *findRunningAccount(const Node &node) const;
     Account *findStartupAccount(const Node &node) const;

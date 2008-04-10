@@ -30,10 +30,12 @@
 #include "Node.h"
 
 #include "kptproject.h"
-#include <kptnodeitemmodel.h>
-#include <kptresourcemodel.h>
+#include "kptnodeitemmodel.h"
+#include "kptresourcemodel.h"
+#include "kptaccountsmodel.h"
 
 namespace KPlato {
+    class Account;
     class Calendar;
     class Project;
     class Node;
@@ -43,6 +45,7 @@ namespace KPlato {
 }
 
 namespace Scripting {
+    class Account;
     class Calendar;
     class ResourceGroup;
     class Resource;
@@ -100,15 +103,21 @@ namespace Scripting {
             
             /// Number of calendars
             int calendarCount() const;
-            /// Return the resource group at @p index
+            /// Return the calendar at @p index
             QObject *calendarAt( int index );
             /// Find calendar with identity @p id
             QObject *findCalendar( const QString &id );
             /// Create a copy of @p calendar and add to @p parent
             QObject *createCalendar( QObject *calendar, QObject *parent = 0 );
 
+            /// Number of accounts
+            int accountCount() const;
+            /// Return the account at @p index
+            QObject *accountAt( int index );
+            /// Find account with identity @p id
+            QObject *findAccount( const QString &id );
+
         public:
-            
             /// Return the Scripting::Node that interfaces the KPlato::Node @p node (create if necessary)
             QObject *node( KPlato::Node *node );
             /// Return the data of @p node
@@ -130,6 +139,13 @@ namespace Scripting {
             /// Return the Scripting::Schedule that interfaces the KPlato::ScheuleManager @p sch
             QObject *schedule( KPlato::ScheduleManager *sch );
 
+            /// Return the Scripting::Account that interfaces the KPlato::Account @p acc
+            QObject *account( KPlato::Account *acc );
+            /// Return the header data of accounts
+            QVariant accountHeaderData( const QString &property );
+            /// Return the data of @p account
+            QVariant accountData( const KPlato::Account *account, const QString &property, const QString &role, long = -1 );
+
         protected:
             inline KPlato::Project *project() { return m_nodeModel.project(); }
             inline const KPlato::Project *project() const { return m_nodeModel.project(); }
@@ -140,6 +156,7 @@ namespace Scripting {
             
         private:
             int stringToRole( const QString &role ) const;
+            int accountProperty( const QString &property ) const;
             
         private:
             Module *m_module;
@@ -152,6 +169,9 @@ namespace Scripting {
             QMap<KPlato::Resource*, Resource*> m_resources;
             QMap<KPlato::Calendar*, Calendar*> m_calendars;
             QMap<KPlato::ScheduleManager*, Schedule*> m_schedules;
+            
+            KPlato::AccountItemModel m_accountModel;
+            QMap<KPlato::Account*, Account*> m_accounts;
     };
 
 }

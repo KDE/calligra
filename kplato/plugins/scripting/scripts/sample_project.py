@@ -68,13 +68,12 @@ def printBusyinfo( res, lst ):
 
 def printProjectCalendars( proj ):
     for c in range( proj.calendarCount() ):
-        print c
-        printChildCalendars( c )
+        printChildCalendars( proj.calendarAt ( c ) )
 
 def printChildCalendars( calendar ):
+    print calendar.name()
     for c in range( calendar.childCount() ):
-        print c
-        printChildCalendars( c )
+        printChildCalendars( calendar.childAt ( c ) )
 
 
 #------------------------
@@ -137,4 +136,20 @@ print
 
 print "Print the calendars in the project:"
 printProjectCalendars( proj )
+print
+
+print "Print planned Effort/Cost for each account:"
+print "%-20s %-10s %-10s %-10s" % ( 'Name', 'Date', 'Effort', 'Cost' )
+for i in range( proj.accountCount() ):
+    account = proj.accountAt( i )
+    name = KPlato.data( account, 'AccountName' )
+    printEffortCost( name, account.plannedEffortCostPrDay( "2007-09-12", "2007-09-18", sid ) )
+print
+
+print "Print actual Effort/Cost for each account:"
+print "%-20s %-10s %-10s %-10s" % ( 'Name', 'Date', 'Effort', 'Cost' )
+for i in range( proj.accountCount() ):
+    account = proj.accountAt( i )
+    name = KPlato.data( account, 'AccountName' )
+    printEffortCost( name, account.actualEffortCostPrDay( "2007-09-12", "2008-04-18", -3 ) )
 print

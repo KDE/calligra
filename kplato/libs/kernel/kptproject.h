@@ -375,6 +375,7 @@ public:
     virtual QString generateWBSCode( QList<int> &indexes ) const;
     
     Accounts &accounts() { return m_accounts; }
+    const Accounts &accounts() const { return m_accounts; }
 
     /**
      * Set current schedule to schedule with identity id, for me and my children

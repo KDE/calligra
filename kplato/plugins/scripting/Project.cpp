@@ -19,12 +19,14 @@
  */
 
 #include "Project.h"
+#include "Account.h"
 #include "Calendar.h"
 #include "Resource.h"
 #include "ResourceGroup.h"
 #include "Schedule.h"
 
 #include "kptglobal.h"
+#include "kptaccount.h"
 #include "kptcalendar.h"
 #include "kptproject.h"
 #include "kptschedule.h"
@@ -293,6 +295,63 @@ QObject *Scripting::Project::calendar( KPlato::Calendar *calendar )
         m_calendars[ calendar ] = new Calendar( this, calendar, parent() );
     }
     return m_calendars[ calendar ];
+}
+
+//-----------------------
+int Scripting::Project::accountCount() const
+{
+    return project()->accounts().accountCount();
+}
+
+QObject *Scripting::Project::accountAt( int index )
+{
+    return account( project()->accounts().accountAt( index ) );
+}
+
+QObject *Scripting::Project::findAccount( const QString &id )
+{
+    KPlato::Account *a = project()->accounts().findAccount( id );
+    kDebug()<<id<<a;
+    return a == 0 ? 0 : account( a );
+}
+
+QObject *Scripting::Project::account( KPlato::Account *account )
+{
+    if ( account == 0 ) {
+        return 0;
+    }
+    if ( ! m_accounts.contains( account ) ) {
+        m_accounts[ account ] = new Account( this, account, parent() );
+    }
+    return m_accounts[ account ];
+}
+
+int Scripting::Project::accountProperty( const QString &property ) const
+{
+    if ( property == "AccountName" ) {
+        return 0;
+    }
+    if ( property == "AccountDescription" ) {
+        return 1;
+    }
+    return -1;
+}
+
+QVariant Scripting::Project::accountHeaderData( const QString &property )
+{
+    return m_accountModel.headerData( accountProperty( property ), Qt::Horizontal );
+}
+
+QVariant Scripting::Project::accountData( const KPlato::Account *account, const QString &property, const QString &, long )
+{
+    // Fake this atm
+    switch ( accountProperty( property ) ) {
+        case 0: return account->name();
+        case 1: return account->description();
+        default:
+            break;
+    }
+    return QVariant();
 }
 
 int Scripting::Project::stringToRole( const QString &role ) const

@@ -420,7 +420,7 @@ Appointment Schedule::appointmentIntervals( int which ) const
 
 EffortCostMap Schedule::plannedEffortCostPrDay( const QDate &start, const QDate &end ) const
 {
-    kDebug()<<m_name<<m_appointments;
+    //kDebug()<<m_name<<m_appointments;
     EffortCostMap ec;
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {

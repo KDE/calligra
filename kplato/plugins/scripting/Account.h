@@ -17,47 +17,51 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef SCRIPTING_CALENDAR_H
-#define SCRIPTING_CALENDAR_H
+#ifndef SCRIPTING_ACCOUNT_H
+#define SCRIPTING_ACCOUNT_H
 
 #include <QObject>
 #include <QVariant>
 
+
 namespace KPlato {
-    class Calendar;
+    class Account;
 }
 
 namespace Scripting {
     class Project;
-    class Calendar;
+    class Account;
 
     /**
-    * The Calendar class represents a calendar in a project.
+    * The Account class represents a account manager in a project.
     */
-    class Calendar : public QObject
+    class Account : public QObject
     {
             Q_OBJECT
         public:
-            /// Create a calendar
-            Calendar( Project *project, KPlato::Calendar *calendar, QObject *parent );
+            /// Create a account
+            Account( Project *project, KPlato::Account *account, QObject *parent );
             /// Destructor
-            virtual ~Calendar() {}
+            virtual ~Account() {}
         
-            KPlato::Calendar *kplatoCalendar() const { return m_calendar; }
+            KPlato::Account *kplatoAccount() const { return static_cast<KPlato::Account*>( m_account ); }
             
         public Q_SLOTS:
-            /// Return the calendars id
-            QString id() const;
-            /// Return the calendars id
             QString name() const;
-            /// Return number of child calendars
+            
+            /// Return type of account
             int childCount() const;
-            /// Return the child calendar at @p index
+            /// Return the child account at @p index
             QObject *childAt( int index );
-        
-        protected:
+
+            /// Return a map of planned effort and cost pr day
+            QVariant plannedEffortCostPrDay( const QVariant &start, const QVariant &end, const QVariant &schedule );
+            /// Return a map of actual effort and cost pr day
+            QVariant actualEffortCostPrDay( const QVariant &start, const QVariant &end, const QVariant &schedule );
+
+        private:
             Project *m_project;
-            KPlato::Calendar *m_calendar;
+            KPlato::Account *m_account;
     };
 
 }

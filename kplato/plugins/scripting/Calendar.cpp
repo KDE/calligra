@@ -35,6 +35,11 @@ QString Scripting::Calendar::id() const
     return m_calendar->id();
 }
 
+QString Scripting::Calendar::name() const
+{
+    return m_calendar->name();
+}
+
 int Scripting::Calendar::childCount() const
 {
     return m_calendar->childCount();

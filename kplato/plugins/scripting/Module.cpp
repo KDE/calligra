@@ -21,6 +21,7 @@
 
 #include "Module.h"
 #include "Project.h"
+#include "Account.h"
 #include "Node.h"
 #include "Resource.h"
 #include "ResourceGroup.h"
@@ -135,6 +136,10 @@ QVariant Module::data( QObject *object, const QString &property, const QString &
     ResourceGroup *g = qobject_cast<ResourceGroup*>( object );
     if ( g ) {
         return d->project->resourceGroupData( g->kplatoResourceGroup(), property, role );
+    }
+    Account *a = qobject_cast<Account*>( object );
+    if ( a ) {
+        return d->project->accountData( a->kplatoAccount(), property, role );
     }
     // TODO Schedule (if needed)
     return QVariant();

@@ -527,7 +527,7 @@ EffortCostMap Appointment::plannedPrDay(const QDate& start, const QDate& end) co
     QDate dt(start);
     QDate ndt(dt.addDays(1));
     double rate = m_resource->normalRatePrHour();
-    kDebug()<<rate<<m_intervals.count();
+    //kDebug()<<rate<<m_intervals.count();
     foreach (AppointmentInterval *i, m_intervals.values() ) {
         DateTime st = i->startTime();
         DateTime e = i->endTime();

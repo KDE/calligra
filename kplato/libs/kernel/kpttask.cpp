@@ -502,7 +502,7 @@ void Task::saveWorkPackageXML(QDomElement &element, long id )  const
 }
 
 EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end, long id ) const {
-    kDebug()<<m_name;
+    //kDebug()<<m_name;
     if ( type() == Node::Type_Summarytask ) {
         EffortCostMap ec;
         QListIterator<Node*> it( childNodeIterator() );
@@ -2514,7 +2514,7 @@ Duration Completion::actualEffortTo( const QDate &date ) const
 
 EffortCostMap Completion::effortCostPrDay(const QDate &start, const QDate &end ) const
 {
-    kDebug()<<start<<end;
+    //kDebug()<<start<<end;
     EffortCostMap ec;
     switch ( m_entrymode ) {
         case FollowPlan:
