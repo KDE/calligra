@@ -73,17 +73,15 @@ class KWStatusBar::Private
             , modifiedLabel(0)
             , pageLabel(0)
             , mousePosLabel(0)
+            , statusLabel(0)
             , zoomWidget(0)
         {
         }
         ~Private() {
-            //if(modifiedLabel) statusbar->removeWidget(modifiedLabel);
             delete modifiedLabel;
-            //if(pageLabel) statusbar->removeWidget(pageLabel);
             delete pageLabel;
-            //if(mousePosLabel) statusbar->removeWidget(mousePosLabel);
             delete mousePosLabel;
-            //if(zoomWidget) statusbar->removeWidget(zoomWidget);
+            delete statusLabel;
             delete zoomWidget;
         }
 };
