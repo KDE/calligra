@@ -62,6 +62,7 @@ class KWStatusBar::Private
         QLabel* modifiedLabel;
         QLabel* pageLabel;
         QLabel* mousePosLabel;
+        KSqueezedTextLabel* statusLabel;
         QWidget* zoomWidget;
 
         Private(KStatusBar* sb, KWView* v)
@@ -142,12 +143,13 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
         d->mousePosLabel->setFrameShape(QFrame::Panel);
         d->mousePosLabel->setFrameShadow(QFrame::Sunken);
         d->mousePosLabel->setMinimumWidth( QFontMetrics(d->mousePosLabel->font()).width("9999:9999") );
+        d->mousePosLabel->setVisible(false);
         d->statusbar->addWidget(d->mousePosLabel);
 
         QAction* action = new KAction(i18n("Mouseposition: X:Y"), this);
         action->setObjectName("mousecursor_pos");
         action->setCheckable(true);
-        action->setChecked(true);
+        action->setChecked(false);
         d->statusbar->addAction(action);
         connect(action, SIGNAL(toggled(bool)), d->mousePosLabel, SLOT(setVisible(bool)));
     }
@@ -164,8 +166,9 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     }
     */
 
-    //d->statusLabel = new KSqueezedTextLabel(d->statusbar);
-    //d->statusbar->addWidget(d->statusLabel,1);
+    d->statusLabel = new KSqueezedTextLabel(d->statusbar);
+    d->statusbar->addWidget(d->statusLabel, 1);
+    connect(d->statusbar, SIGNAL(messageChanged(const QString&)), this, SLOT(setText(const QString&)));
 
     {
         KActionCollection* collection = d->view->actionCollection();
@@ -194,6 +197,11 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
 KWStatusBar::~KWStatusBar()
 {
     delete d;
+}
+
+void KWStatusBar::setText(const QString& text)
+{
+    d->statusLabel->setText(text);
 }
 
 void KWStatusBar::slotModifiedChanged(bool modified)

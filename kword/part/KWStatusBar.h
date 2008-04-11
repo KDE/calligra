@@ -49,6 +49,9 @@ public:
     */
     virtual ~KWStatusBar();
 
+public slots:
+    void setText(const QString& text);
+
 private slots:
     void slotModifiedChanged(bool modified);
     void slotPagesChanged();
