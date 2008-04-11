@@ -103,24 +103,6 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     Q_ASSERT(canvas);
 
     {
-        d->modifiedLabel = new QLabel(d->statusbar);
-        d->modifiedLabel->setFrameShape(QFrame::Panel);
-        d->modifiedLabel->setFrameShadow(QFrame::Sunken);
-        QFontMetrics fm(d->modifiedLabel->font());
-        d->modifiedLabel->setMinimumWidth( qMax(fm.width(i18nModified), fm.width(i18nSaved)) );
-        d->statusbar->addWidget(d->modifiedLabel);
-        slotModifiedChanged(kwdoc->isModified());
-        connect(kwdoc, SIGNAL(modified(bool)), this, SLOT(slotModifiedChanged(bool)));
-
-        QAction* action = new KAction(i18n("State: saved/modified"), this);
-        action->setObjectName("doc_save_state");
-        action->setCheckable(true);
-        action->setChecked(true);
-        d->statusbar->addAction(action);
-        connect(action, SIGNAL(toggled(bool)), d->modifiedLabel, SLOT(setVisible(bool)));
-    }
-
-    {
         d->pageLabel = new QLabel(d->statusbar);
         d->pageLabel->setFrameShape(QFrame::Panel);
         d->pageLabel->setFrameShadow(QFrame::Sunken);
@@ -136,6 +118,24 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
         action->setChecked(true);
         d->statusbar->addAction(action);
         connect(action, SIGNAL(toggled(bool)), d->pageLabel, SLOT(setVisible(bool)));
+    }
+
+    {
+        d->modifiedLabel = new QLabel(d->statusbar);
+        d->modifiedLabel->setFrameShape(QFrame::Panel);
+        d->modifiedLabel->setFrameShadow(QFrame::Sunken);
+        QFontMetrics fm(d->modifiedLabel->font());
+        d->modifiedLabel->setMinimumWidth( qMax(fm.width(i18nModified), fm.width(i18nSaved)) );
+        d->statusbar->addWidget(d->modifiedLabel);
+        slotModifiedChanged(kwdoc->isModified());
+        connect(kwdoc, SIGNAL(modified(bool)), this, SLOT(slotModifiedChanged(bool)));
+
+        QAction* action = new KAction(i18n("State: saved/modified"), this);
+        action->setObjectName("doc_save_state");
+        action->setCheckable(true);
+        action->setChecked(true);
+        d->statusbar->addAction(action);
+        connect(action, SIGNAL(toggled(bool)), d->modifiedLabel, SLOT(setVisible(bool)));
     }
 
     {
