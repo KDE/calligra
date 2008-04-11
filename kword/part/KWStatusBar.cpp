@@ -101,11 +101,6 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     KWCanvas* const canvas =  d->view->kwcanvas();
     Q_ASSERT(canvas);
 
-    //sebsauer, 2007-08-15, this crashes within QMainWindowLayout::animationFinished
-    //This may the same bug that let's KWord crash if "Split View" got called.
-    //FIXME check later if it's fixed.
-#if 0
-
     {
         d->modifiedLabel = new QLabel(d->statusbar);
         d->modifiedLabel->setFrameShape(QFrame::Panel);
@@ -194,7 +189,6 @@ KWStatusBar::KWStatusBar(KStatusBar* statusBar, KWView* view)
     KoCanvasResourceProvider* resourceprovider = canvas->resourceProvider();
     Q_ASSERT(resourceprovider);
     connect(resourceprovider, SIGNAL(resourceChanged(int,QVariant)), this, SLOT(slotResourceChanged(int,QVariant)));
-#endif
 }
 
 KWStatusBar::~KWStatusBar()
