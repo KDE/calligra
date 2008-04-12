@@ -201,11 +201,16 @@ KexiStartupHandler::KexiStartupHandler()
  , KexiStartupData()
  , d( new Private() )
 {
-	connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(slotAboutToAppQuit()));
+	// K_GLOBAL_STATIC is cleaned up *after* QApplication is gone
+	// but we have to cleanup before -> use qAddPostRoutine
+	qAddPostRoutine(Kexi::_startupHandler.destroy);
+
+  connect(qApp, SIGNAL(aboutToQuit()), this, SLOT(slotAboutToAppQuit()));
 }
 
 KexiStartupHandler::~KexiStartupHandler()
 {
+	qRemovePostRoutine(Kexi::_startupHandler.destroy); // post routine is installed!
 	delete d;
 }
 
