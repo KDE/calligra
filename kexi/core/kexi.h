@@ -137,7 +137,7 @@ namespace Kexi
 }//namespace Kexi
 
 //! Icon name for database servers
-#define KEXI_ICON_DATABASE_SERVER "network-local"
+#define KEXI_ICON_DATABASE_SERVER "network-server-database"
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Kexi::ViewModes)
 
