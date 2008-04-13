@@ -36,7 +36,7 @@ class CHARTSHAPELIB_EXPORT ProxyModel : public QAbstractProxyModel
     Q_OBJECT
 
 public:
-    ProxyModel( PlotArea *parent );
+    ProxyModel();
     ~ProxyModel();
 
 public slots:

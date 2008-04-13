@@ -20,13 +20,12 @@
 
 // Local
 #include "ProxyModel.h"
-#include "PlotArea.h"
 #include "DataSet.h"
 
 // KDE
 #include <KDebug>
 
-namespace KChart {
+using namespace KChart;
 
 class ProxyModel::Private {
 public:
@@ -38,7 +37,6 @@ public:
     int dataDimensions;
     QMap<int, int> dataMap;
     QList<DataSet*> dataSets;
-    PlotArea *plotArea;
 };
 
 ProxyModel::Private::Private()
@@ -50,11 +48,10 @@ ProxyModel::Private::Private()
     dataDirection = Qt::Vertical;
 }
 
-ProxyModel::ProxyModel( PlotArea *parent )
+ProxyModel::ProxyModel()
     : QAbstractProxyModel( 0 ),
       d( new Private )
 {
-    d->plotArea = parent;
     connect( this, SIGNAL( modelReset() ), this, SLOT( rebuildDataMap() ) );
 }
 
@@ -72,10 +69,12 @@ void ProxyModel::rebuildDataMap()
     int xDataRowInSourceModel = 0;
     int yDataRowInSourceModel = 0;
     
-    // Since first row is for x values, move the first y value
-    // one row down
     if ( d->dataDimensions > 1 )
+    {
+        // Since first row is for x values,
+        // move the first y value one row down
         yDataRowInSourceModel++;
+    }
     
     d->dataMap.clear();
     
@@ -84,7 +83,9 @@ void ProxyModel::rebuildDataMap()
         dataSetCount++;
         // Only insert a new data set if we don't already have it
         if ( dataSetCount > d->dataSets.count() )
-            d->dataSets.append( new DataSet( d->plotArea ) );
+        {
+            d->dataSets.append( new DataSet( this ) );
+        }
         
         if ( d->dataDimensions == 1 )
         {
@@ -125,12 +126,21 @@ void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
 }
 
 QVariant ProxyModel::data( const QModelIndex &index,
-                                int role /* = Qt::DisplayRole */ ) const
+                           int role /* = Qt::DisplayRole */ ) const
 {
     if ( sourceModel() == 0 )
         return QVariant();
-
-    return sourceModel()->data( mapToSource( index ), role );
+    
+    QModelIndex sourceIndex = mapToSource( index );
+    if ( sourceIndex == QModelIndex() )
+    {
+        qWarning() << "ProxyModel::data(): Attempting to request data for invalid source index";
+        qWarning() << "ProxyModel::data(): Mapping resulted in:";
+        qWarning() << index << "-->" << sourceIndex;
+        return QVariant();
+    }
+    QVariant value = sourceModel()->data( sourceIndex, role );
+    return value;
 }
 
 void ProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight )
@@ -225,12 +235,12 @@ QVariant ProxyModel::headerData( int section,
     
     if ( row >= sourceModel()->rowCount() )
     {
-        qDebug() << "Warning: Requesting header data for row >= rowCount";
+        qWarning() << "ProxyModel::headerData(): Attempting to request header data for row >= rowCount";
         return QVariant();
     }
     if ( column >= sourceModel()->columnCount() )
     {
-        qDebug() << "Warning: Requesting header data for column >= columnCount";
+        qWarning() << "ProxyModel::headerData(): Attempting to request header data for column >= columnCount";
         return QVariant();
     }
 
@@ -317,7 +327,7 @@ QModelIndex ProxyModel::mapToSource( const QModelIndex &proxyIndex ) const
         row++;
     if ( d->firstColumnIsLabel )
         column++;
-    
+
     return sourceModel()->index( row, column );
 }
 
@@ -391,7 +401,7 @@ int ProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() */ ) c
 
     if ( columnCount > 0 && firstColumnIsLabel )
         columnCount--;
-
+    
     return columnCount;
 }
 
@@ -411,7 +421,10 @@ void ProxyModel::setFirstRowIsLabel( bool b )
         else
             beginInsertRows( QModelIndex(), 0, 0 );
     }
+    
     d->firstRowIsLabel = b;
+    rebuildDataMap();
+    
     if ( b ) {
         if ( d->dataDirection == Qt::Horizontal )
             endRemoveColumns();
@@ -423,8 +436,6 @@ void ProxyModel::setFirstRowIsLabel( bool b )
         else
             endInsertRows();
     }
-    
-    reset();
 }
  
 void ProxyModel::setFirstColumnIsLabel( bool b )
@@ -443,7 +454,10 @@ void ProxyModel::setFirstColumnIsLabel( bool b )
         else
             beginInsertRows( QModelIndex(), 0, 0 );
     }
+    
     d->firstColumnIsLabel = b;
+    rebuildDataMap();
+    
     if ( b ) {
         if ( d->dataDirection == Qt::Vertical )
             endRemoveColumns();
@@ -455,8 +469,6 @@ void ProxyModel::setFirstColumnIsLabel( bool b )
         else
             endInsertRows();
     }
-    
-    reset();
 }
 
 Qt::Orientation ProxyModel::dataDirection()
@@ -466,7 +478,6 @@ Qt::Orientation ProxyModel::dataDirection()
 
 void ProxyModel::setDataDirection( Qt::Orientation orientation )
 {
-    
     d->dataDirection = orientation;
     reset();
 }
@@ -516,4 +527,4 @@ QList<DataSet*> ProxyModel::dataSets() const
     return d->dataSets;
 }
 
-} // namespace KChart
+#include "ProxyModel.moc"
