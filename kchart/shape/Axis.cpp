@@ -25,6 +25,7 @@
 #include "DataSet.h"
 #include "Legend.h"
 #include "KDChartConvertions.h"
+#include "ProxyModel.h"
 #include "TextLabelDummy.h"
 
 // KOffice
@@ -129,12 +130,31 @@ Axis::Private::Private()
 
 Axis::Private::~Private()
 {
+    delete kdBarDiagram;
+    delete kdLineDiagram;
+    delete kdAreaDiagram;
+    delete kdCircleDiagram;
+    delete kdRadarDiagram;
+    delete kdScatterDiagram;
+
+    delete kdBarDiagramModel;
+    delete kdLineDiagramModel;
+    delete kdAreaDiagramModel;
+    delete kdCircleDiagramModel;
+    delete kdRadarDiagramModel;
+    delete kdScatterDiagramModel;
 }
 
 void Axis::Private::createBarDiagram()
 {
     if ( kdBarDiagramModel == 0 )
+    {
         kdBarDiagramModel = new KDChartModel;
+        QObject::connect( plotArea->proxyModel(), SIGNAL( modelReset() ),
+                          kdBarDiagramModel,      SIGNAL( modelReset() ) );
+        QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
+                          kdBarDiagramModel,      SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+    }
     if ( kdBarDiagram == 0 )
     {
         kdBarDiagram = new KDChart::BarDiagram( plotArea->kdChart(), kdPlane );
@@ -149,7 +169,13 @@ void Axis::Private::createBarDiagram()
 void Axis::Private::createLineDiagram()
 {
     if ( kdLineDiagramModel == 0 )
+    {
         kdLineDiagramModel = new KDChartModel;
+        QObject::connect( plotArea->proxyModel(), SIGNAL( modelReset() ),
+                          kdLineDiagramModel,     SIGNAL( modelReset() ) );
+        QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
+                          kdLineDiagramModel,     SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+    }
     if ( kdLineDiagram == 0 )
     {
         kdLineDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
@@ -163,7 +189,13 @@ void Axis::Private::createLineDiagram()
 void Axis::Private::createAreaDiagram()
 {
     if ( kdAreaDiagramModel == 0 )
+    {
         kdAreaDiagramModel = new KDChartModel;
+        QObject::connect( plotArea->proxyModel(), SIGNAL( modelReset() ),
+                          kdAreaDiagramModel,     SIGNAL( modelReset() ) );
+        QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
+                          kdAreaDiagramModel,     SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+    }
     if ( kdAreaDiagram == 0 )
     {
         kdAreaDiagram = new KDChart::LineDiagram( plotArea->kdChart(), kdPlane );
@@ -181,7 +213,13 @@ void Axis::Private::createAreaDiagram()
 void Axis::Private::createCircleDiagram()
 {
     if ( kdCircleDiagramModel == 0 )
+    {
         kdCircleDiagramModel = new KDChartModel;
+        QObject::connect( plotArea->proxyModel(), SIGNAL( modelReset() ),
+                          kdCircleDiagramModel,   SIGNAL( modelReset() ) );
+        QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
+                          kdCircleDiagramModel,   SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+    }
     if ( kdCircleDiagram == 0 )
     {
         kdCircleDiagram = new KDChart::PieDiagram( plotArea->kdChart(), kdPolarPlane );
@@ -196,7 +234,13 @@ void Axis::Private::createCircleDiagram()
 void Axis::Private::createRadarDiagram()
 {
     if ( kdRadarDiagramModel == 0 )
+    {
         kdRadarDiagramModel = new KDChartModel;
+        QObject::connect( plotArea->proxyModel(), SIGNAL( modelReset() ),
+                          kdRadarDiagramModel,    SIGNAL( modelReset() ) );
+        QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
+                          kdRadarDiagramModel,    SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+    }
     if ( kdRadarDiagram == 0 )
     {
         kdRadarDiagram = new KDChart::PolarDiagram( plotArea->kdChart(), kdPolarPlane );
@@ -213,6 +257,10 @@ void Axis::Private::createScatterDiagram()
     if ( kdScatterDiagramModel == 0 )
     {
         kdScatterDiagramModel = new KDChartModel;
+        QObject::connect( plotArea->proxyModel(), SIGNAL( modelReset() ),
+                          kdScatterDiagramModel,  SIGNAL( modelReset() ) );
+        QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
+                          kdRadarDiagramModel,    SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
         kdScatterDiagramModel->setDataDimensions( 2 );
     }
     if ( kdScatterDiagram == 0 )
@@ -247,13 +295,7 @@ Axis::Axis( PlotArea *parent )
     gridAttributes.setGridVisible( false );
     d->kdPolarPlane->setGridAttributes( Qt::Horizontal, gridAttributes );
     
-    d->kdBarDiagram = new KDChart::BarDiagram( d->plotArea->kdChart(), d->kdPlane );
-    d->kdBarDiagram->setPen( QPen( Qt::black, 0.0 ) );
-    
-    d->kdBarDiagram->addAxis( d->kdAxis );
-    d->kdBarDiagramModel = new KDChartModel;
-    d->kdBarDiagram->setModel( d->kdBarDiagramModel );
-    d->kdPlane->addDiagram( d->kdBarDiagram );
+    d->createBarDiagram();
     //d->plotArea->parent()->legend()->kdLegend()->addDiagram( d->kdBarDiagram );
     
     setShowGrid( false );
@@ -281,7 +323,8 @@ Axis::Axis( PlotArea *parent )
 }
 
 Axis::~Axis()
-{	
+{
+    delete d;
 }
 
 AxisPosition Axis::position() const
@@ -340,7 +383,7 @@ bool Axis::attachDataSet( DataSet *dataSet )
     
     ChartType chartType = dataSet->chartType();
     if ( chartType == LastChartType )
-        chartType = d->plotArea->chartType();
+        chartType = d->plotAreaChartType;
     
     switch ( chartType )
     {
@@ -362,6 +405,15 @@ bool Axis::attachDataSet( DataSet *dataSet )
         dataSet->setKdDataSetNumber( d->kdLineDiagramModel->dataSets().indexOf( dataSet ) );
     }
     break;
+    case ScatterChartType:
+    {
+        if ( !d->kdScatterDiagram )
+            d->createScatterDiagram();
+        d->kdScatterDiagramModel->addDataSet( dataSet );
+        dataSet->setKdDiagram( d->kdScatterDiagram );
+        dataSet->setKdDataSetNumber( d->kdScatterDiagramModel->dataSets().indexOf( dataSet ) );
+    }
+    break;
     }
     
     layoutPlanes();
@@ -379,7 +431,7 @@ bool Axis::detachDataSet( DataSet *dataSet )
     
     ChartType chartType = dataSet->chartType();
     if ( chartType == LastChartType )
-        chartType = d->plotArea->chartType();
+        chartType = d->plotAreaChartType;
     
     switch ( chartType )
     {
@@ -402,6 +454,18 @@ bool Axis::detachDataSet( DataSet *dataSet )
             // TODO (Johannes): Remove diagram if no
             // datasets are displayed on it anymore
             d->kdLineDiagramModel->removeDataSet( dataSet );
+        }
+        dataSet->setKdDiagram( 0 );
+        dataSet->setKdDataSetNumber( 0 );
+    }
+    break;
+    case ScatterChartType:
+    {
+        if ( d->kdScatterDiagramModel )
+        {
+            // TODO (Johannes): Remove diagram if no
+            // datasets are displayed on it anymore
+            d->kdScatterDiagramModel->removeDataSet( dataSet );
         }
         dataSet->setKdDiagram( 0 );
         dataSet->setKdDataSetNumber( 0 );
@@ -619,27 +683,34 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
     
     KDChartModel *oldModel = 0;
     KDChartModel *newModel = 0;
+    KDChart::AbstractDiagram *oldDiagram = 0;
     KDChart::AbstractDiagram *newDiagram = 0;
     
     switch ( d->plotAreaChartType )
     {
     case BarChartType:
         oldModel = d->kdBarDiagramModel;
+        oldDiagram = d->kdBarDiagram;
         break;
     case LineChartType:
         oldModel = d->kdLineDiagramModel;
+        oldDiagram = d->kdLineDiagram;
         break;
     case AreaChartType:
         oldModel = d->kdAreaDiagramModel;
+        oldDiagram = d->kdAreaDiagram;
         break;
     case CircleChartType:
         oldModel = d->kdCircleDiagramModel;
+        oldDiagram = d->kdCircleDiagram;
         break;
     case RadarChartType:
         oldModel = d->kdRadarDiagramModel;
+        oldDiagram = d->kdRadarDiagram;
         break;
     case ScatterChartType:
         oldModel = d->kdScatterDiagramModel;
+        oldDiagram = d->kdScatterDiagram;
         break;
     }
     
@@ -705,6 +776,15 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
         newModel->addDataSet( dataSet );
         dataSet->setKdDiagram( newDiagram );
         dataSet->setKdDataSetNumber( newModel->dataSets().indexOf( dataSet ) );
+    }
+    
+    if ( oldModel && oldModel->columnCount() == 0 )
+    {
+        if (oldDiagram->coordinatePlane() )
+            oldDiagram->coordinatePlane()->takeDiagram( oldDiagram );
+        if ( oldDiagram )
+            delete oldDiagram;
+        delete oldModel;
     }
     
     d->plotAreaChartType = chartType;
