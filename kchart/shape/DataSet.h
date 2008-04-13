@@ -29,7 +29,7 @@ namespace KChart {
 class DataSet
 {
 public:
-    DataSet( PlotArea *plotArea );
+    DataSet( ProxyModel *model );
 	~DataSet();
 	
 	// Getter methods

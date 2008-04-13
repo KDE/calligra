@@ -88,6 +88,7 @@ DataSet::Private::Private()
     plotArea = 0;
     model = 0;
     kdDiagram = 0;
+    attachedAxis = 0;
 }
 
 DataSet::Private::~Private()
@@ -95,11 +96,10 @@ DataSet::Private::~Private()
 }
 
 
-DataSet::DataSet( PlotArea *plotArea )
+DataSet::DataSet( ProxyModel *proxyModel )
     : d( new Private )
 {
-    d->plotArea = plotArea;
-    d->model = d->plotArea->proxyModel();
+    d->model = proxyModel;
 }
 
 DataSet::~DataSet()
