@@ -205,6 +205,15 @@ public:
 
 ChartShape::Private::Private()
 {
+    title = 0;
+    subTitle = 0;
+    footer = 0;
+    legend = 0;
+    plotArea = 0;
+    wall = 0;
+    floor = 0;
+    model = 0;
+    pixmapRepaintRequested = true;
 }
 
 ChartShape::Private::~Private()
@@ -216,18 +225,18 @@ ChartShape::ChartShape()
 {
     setShapeId( ChartShapeId );
     
+    d->model = new ProxyModel();
+    
     // We need this as the very first step, because some methods
     // here rely on the d->plotArea pointer
     d->plotArea = new PlotArea( this );
     
-    d->plotArea->init();
-    
     d->legend = new Legend( this );
     d->legend->setVisible( false );
     
-    d->model = new ProxyModel ( d->plotArea );
-    
-    QObject::connect( d->model, SIGNAL( modelReset() ), d->plotArea, SLOT( modelReset() ) );
+    QObject::connect( d->model, SIGNAL( modelReset() ), d->plotArea, SLOT( dataSetCountChanged() ) );
+    QObject::connect( d->model, SIGNAL( rowsInserted( const QModelIndex, int, int ) ), d->plotArea, SLOT( dataSetCountChanged() ) );
+    QObject::connect( d->model, SIGNAL( rowsRemoved( const QModelIndex, int, int ) ), d->plotArea, SLOT( dataSetCountChanged() ) );
     QObject::connect( d->model, SIGNAL( dataChanged() ), d->plotArea, SLOT( update() ) );
     
     d->plotArea->setChartType( BarChartType );
