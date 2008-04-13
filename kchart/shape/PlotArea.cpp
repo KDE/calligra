@@ -101,8 +101,17 @@ public:
 
 PlotArea::Private::Private()
 {
+    shape = 0;
     kdChart = new KDChart::Chart();
     kdPlane = new KDChart::CartesianCoordinatePlane( kdChart );
+    wall = 0;
+    floor = 0;
+    chartType = BarChartType;
+    chartSubtype = NormalChartSubtype;
+    threeD = false;
+    threeDScene = 0;
+    gapBetweenBars = 0;
+    gapBetweenSets = 100;
 }
 
 PlotArea::Private::~Private()
@@ -114,15 +123,7 @@ PlotArea::PlotArea( ChartShape *parent )
     : d( new Private )
 {
     d->shape = parent;
-}
-
-PlotArea::~PlotArea()
-{
-}
-
-
-void PlotArea::init()
-{
+    
     d->kdChart->resize( size().toSize() );
     d->kdChart->replaceCoordinatePlane( d->kdPlane );
     KDChart::FrameAttributes attr = d->kdChart->frameAttributes();
@@ -139,11 +140,19 @@ void PlotArea::init()
     d->axes.append( yAxis );
 }
 
-void PlotArea::modelReset()
+PlotArea::~PlotArea()
+{
+}
+
+
+void PlotArea::dataSetCountChanged()
 {
     foreach( DataSet *dataSet, proxyModel()->dataSets() )
     {
-        yAxis()->attachDataSet( dataSet );
+        if ( !dataSet->attachedAxis() )
+        {
+            yAxis()->attachDataSet( dataSet );
+        }
     }
 }
 

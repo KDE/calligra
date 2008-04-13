@@ -39,8 +39,6 @@ public:
     ~PlotArea();
     
     ProxyModel *proxyModel() const;
-    
-    void init();
 
     QPointF position() const;
     QSizeF  size() const;
@@ -88,10 +86,9 @@ public:
     bool registerKdDiagram( KDChart::AbstractDiagram *diagram );
     bool deregisterKdDiagram( KDChart::AbstractDiagram *diagram );
     
-    void requestRepaint() const;
-    
 public slots:
-    void modelReset();
+    void requestRepaint() const;
+    void dataSetCountChanged();
     void update() const;
 
 private:
