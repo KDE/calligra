@@ -42,6 +42,7 @@ public slots:
     QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
     void dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
+    void slotColumnsInserted( const QModelIndex& parent, int start, int end );
     
     QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
     QModelIndex parent( const QModelIndex &index ) const;
