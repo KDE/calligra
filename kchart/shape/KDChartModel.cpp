@@ -25,7 +25,7 @@
 // KDE
 #include <KDebug>
 
-namespace KChart {
+using namespace KChart;
 
 class KDChartModel::Private {
 public:
@@ -82,6 +82,12 @@ void KDChartModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& b
     emit QAbstractItemModel::dataChanged( topLeft, bottomRight );
 }
 
+void KDChartModel::slotColumnsInserted( const QModelIndex& parent, int start, int end )
+{
+    beginInsertRows( parent, start, end );
+    endInsertRows();
+}
+
 QVariant KDChartModel::headerData( int section,
                                    Qt::Orientation orientation,
                                    int role /* = Qt::DisplayRole */ ) const
@@ -94,7 +100,7 @@ QVariant KDChartModel::headerData( int section,
     
     if ( section >= columnCount() )
     {
-        qDebug() << "Warning: Requesting header data from KDChartModel for non-existant data set!";
+        qWarning() << "KDChartModel::headerData(): Attempting to request header data for non-existant data set!";
         return QVariant();
     }
     
@@ -132,7 +138,10 @@ void KDChartModel::setDataDimensions( int dataDimensions )
 void KDChartModel::addDataSet( DataSet *dataSet )
 {
     if ( d->dataSets.contains( dataSet ) )
+    {
+        qWarning() << "KDChartModel::addDataSet(): Attempting to insert already-contained data set";
         return;
+    }
     if ( !d->dataSets.isEmpty() )
     {
         int columnToBeInserted = columnCount();
@@ -169,4 +178,4 @@ QList<DataSet*> KDChartModel::dataSets() const
     return d->dataSets;
 }
 
-} // namespace KChart
+#include "KDChartModel.moc"
