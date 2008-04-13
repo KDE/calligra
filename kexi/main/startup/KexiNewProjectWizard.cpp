@@ -278,7 +278,8 @@ void KexiNewProjectWizard::showPage(QWidget *page)
 			QString fn = KexiUtils::string2FileName( m_db_title->le_caption->text() );
 			if (!fn.endsWith(".kexi"))
 				fn += ".kexi";
-			m_conn_sel->fileWidget->setLocationText( fn );
+//			m_conn_sel->fileWidget->setLocationText( fn );
+			m_conn_sel->fileWidget->setSelection( fn );
 			setFinishEnabled(m_conn_sel_widget,true);
 			m_conn_sel->setFocus();
 		}

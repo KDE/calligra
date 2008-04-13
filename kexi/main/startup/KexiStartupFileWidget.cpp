@@ -323,7 +323,11 @@ bool KexiStartupFileWidget::checkSelectedFile()
 		kDebug() << baseUrl() <<endl;
 		
 		d->highlightedUrl = baseUrl();
-		d->highlightedUrl.addPath( locationEdit()->urls().first() );
+		const QString firstUrl( locationEdit()->urls().first() );
+		if (QDir::isAbsolutePath( firstUrl ))
+			d->highlightedUrl = KUrl::fromPath( firstUrl );
+		else
+			d->highlightedUrl.addPath( firstUrl );
 	}
 	
 	kDebug() << "d->highlightedUrl: " << d->highlightedUrl << endl;
