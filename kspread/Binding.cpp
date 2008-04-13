@@ -85,6 +85,7 @@ void Binding::update(const Region& region)
 {
     QRect rect;
     Region changedRegion;
+    const QPoint offset = d->model->region().firstRange().topLeft();
     const QRect range = d->model->region().firstRange();
     const Sheet* sheet = d->model->region().firstSheet();
     Region::ConstIterator end(region.constEnd());
@@ -93,13 +94,13 @@ void Binding::update(const Region& region)
         if (sheet != (*it)->sheet())
             continue;
         rect = range & (*it)->rect();
+        rect.translate( -offset.x(), -offset.y() );
         if (rect.isValid())
         {
             d->model->emitDataChanged(rect);
             changedRegion.add(rect, (*it)->sheet());
         }
     }
-    kDebug() <<"Binding:" << changedRegion <<" changed.";
     d->model->emitChanged(changedRegion);
 }
 
@@ -120,7 +121,7 @@ bool Binding::operator<(const Binding& other) const
 
 
 BindingModel::BindingModel(const Region& region)
-    : QAbstractTableModel()
+    : KoChart::ChartModel()
     , m_region(region)
 {
 }
@@ -147,6 +148,43 @@ int BindingModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
     return m_region.isEmpty() ? 0 : m_region.firstRange().width();
+}
+
+QString BindingModel::areaAt( const QModelIndex &index ) const
+{
+    if (m_region.isEmpty())
+        return QString();
+    const QPoint point = QPoint( index.column(), index.row() ) + m_region.firstRange().topLeft();
+    const Region region( point, m_region.firstSheet() );
+    
+    return region.name();
+}
+
+QString BindingModel::areaAt( const QModelIndex &first, const QModelIndex &last ) const
+{
+    if (m_region.isEmpty())
+        return QString();
+    
+    const QModelIndex lastIndex = last == QModelIndex() ? first : last;
+    
+    const QPoint offset = m_region.firstRange().topLeft();
+    
+    const QPoint firstPoint = QPoint( first.row(), first.column() ) + offset;
+    const QPoint lastPoint = QPoint( lastIndex.row(), lastIndex.column() ) + offset;
+    
+    const Region region( QRect( firstPoint, lastPoint ), m_region.firstSheet() );
+    
+    return region.name();
+}
+
+bool BindingModel::addArea( const QString &area, int section, Qt::Orientation orientation )
+{
+    return false;
+}
+
+bool BindingModel::removeArea( const QString &area, int section, Qt::Orientation orientation )
+{
+    return false;
 }
 
 QVariant BindingModel::data(const QModelIndex& index, int role) const

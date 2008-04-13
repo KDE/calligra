@@ -20,7 +20,7 @@
 #ifndef KSPREAD_BINDING
 #define KSPREAD_BINDING
 
-#include <QAbstractTableModel>
+#include <interfaces/KoChartModel.h>
 #include <QSharedDataPointer>
 #include <QVariant>
 
@@ -30,7 +30,7 @@
 namespace KSpread
 {
 
-class BindingModel : public QAbstractTableModel
+class BindingModel : public KoChart::ChartModel
 {
     Q_OBJECT
 
@@ -47,6 +47,13 @@ public:
 
     void emitDataChanged(const QRect& range);
     void emitChanged(const Region& region);
+    
+    // Reimplemented methods from KoChartModel
+    QString areaAt( const QModelIndex &index ) const;
+    QString areaAt( const QModelIndex &first, const QModelIndex &last = QModelIndex() ) const;
+    
+    bool addArea( const QString &area, int section, Qt::Orientation orientation );
+    bool removeArea( const QString &area, int section, Qt::Orientation orientation );
 
 Q_SIGNALS:
     void changed(const Region& region);
