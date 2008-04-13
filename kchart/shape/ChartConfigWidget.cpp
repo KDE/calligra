@@ -546,7 +546,10 @@ void ChartConfigWidget::update()
                 if ( axis->dimension() == YAxisDimension ) {
                     d->dataSetAxes.append( axis );
                     d->ui.dataSetAxes->blockSignals( true );
-    			    d->ui.dataSetAxes->addItem( axis->titleText() );
+                    QString title = axis->titleText();
+                    if ( title.isEmpty() )
+                        title = i18n( "Axis %1", d->ui.dataSetAxes->count() + 1 );
+    			    d->ui.dataSetAxes->addItem( title );
                     d->ui.dataSetAxes->blockSignals( false );
                 }
     		}
@@ -684,7 +687,10 @@ void ChartConfigWidget::update()
         d->dataSets = d->shape->plotArea()->dataSets();
         d->ui.dataSets->clear();
         foreach ( DataSet *dataSet, d->dataSets ) {
-            d->ui.dataSets->addItem( dataSet->labelData().toString() );
+            QString title = dataSet->labelData().toString();
+            if ( title.isEmpty() )
+                title = i18n( "Data Set %1", d->ui.dataSets->count() + 1 );
+            d->ui.dataSets->addItem( title );
         }
         // Select the first data set
         ui_dataSetSelectionChanged( 0 );
