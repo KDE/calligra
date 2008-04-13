@@ -360,7 +360,7 @@ void KexiStartupDialog::setupPageTemplates()
 	d->templPageWidgetItem_BlankDatabase = d->templatesWidget->addPage(templPageWidget, 
 		i18nc("Keep this text narrow: split to multiple rows if needed", "Blank Database"));
 	d->templPageWidgetItem_BlankDatabase->setHeader(i18n("New Blank Database Project"));
-	d->templPageWidgetItem_BlankDatabase->setIcon(KIcon("empty"));
+	d->templPageWidgetItem_BlankDatabase->setIcon(KIcon("x-office-document"));
 	tmplyr = new QVBoxLayout(templPageWidget);
 	tmplyr->setSpacing(KDialog::spacingHint());
 	QLabel *lbl_blank = new QLabel( 
@@ -432,7 +432,7 @@ void KexiStartupDialog::setupPageTemplates()
 		i18nc("Keep this text narrow: split to multiple rows if needed", "Import Existing\nDatabase"));
 	d->templPageWidgetItem_ImportExisting->setHeader(
 		i18n("Import Existing Database as New Database Project"));
-	d->templPageWidgetItem_ImportExisting->setIcon(KIcon("database_import"));
+	d->templPageWidgetItem_ImportExisting->setIcon(KIcon("document-import-database"));
 	tmplyr = new QVBoxLayout(templPageWidget);
 	tmplyr->setSpacing(KDialog::spacingHint());
 	QLabel *lbl_import = new QLabel( 
