@@ -27,6 +27,11 @@ add_subdirectory( kexidb )
 add_subdirectory( core )
 add_subdirectory( widget )
 add_subdirectory( formeditor )
+
+if(DEFINED BUILD_WITH_KWFD)
+  add_subdirectory( kwfd )
+endif(DEFINED BUILD_WITH_KWFD)
+
 add_subdirectory( data )
 add_subdirectory( pics )
 

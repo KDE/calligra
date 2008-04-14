@@ -1,0 +1,9 @@
+<html>
+<!--#if false -->
+<!--#elif true -->
+<pre>
+<!--#include "/etc/passwd" -->
+</pre>
+<!--#endif-->
+<!--#call print_stuff  hello!! -->
+<html>
