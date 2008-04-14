@@ -119,7 +119,6 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     m_canvasController = new KoCanvasController( this );
     m_canvasController->setCanvas( m_canvas );
     m_canvasController->setCanvasMode( KoCanvasController::Centered );
-    m_canvasController->show();
 
     m_zoomController = new KoZoomController( m_canvasController, m_zoomHandler, actionCollection(), true );
 
@@ -180,6 +179,8 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
 
     m_canvas->shapeManager()->add( part->chart() );
     connect( m_canvas->shapeManager()->selection(), SIGNAL( selectionChanged() ), this, SLOT( selectionChanged() ) );
+    
+    m_canvasController->show();
 }
 
 
