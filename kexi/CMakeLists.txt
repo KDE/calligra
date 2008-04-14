@@ -29,7 +29,7 @@ add_subdirectory( widget )
 add_subdirectory( formeditor )
 
 if(DEFINED BUILD_WITH_KWFD)
-  add_subdirectory( kwfd )
+  add_subdirectory( webforms )
 endif(DEFINED BUILD_WITH_KWFD)
 
 add_subdirectory( data )
