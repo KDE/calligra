@@ -28,9 +28,9 @@ add_subdirectory( core )
 add_subdirectory( widget )
 add_subdirectory( formeditor )
 
-if(DEFINED BUILD_WITH_KWFD)
+if(DEFINED WITH_WEBFORMS)
   add_subdirectory( webforms )
-endif(DEFINED BUILD_WITH_KWFD)
+endif(DEFINED WITH_WEBFORMS)
 
 add_subdirectory( data )
 add_subdirectory( pics )

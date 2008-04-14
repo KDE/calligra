@@ -1,9 +1,9 @@
 
 add_subdirectory( kexisql3 )
 
-if(DEFINED BUILD_WITH_KWFD)
+if(DEFINED WITH_WEBFORMS)
   add_subdirectory(shttpd)
-endif(DEFINED BUILD_WITH_KWFD)
+endif(DEFINED WITH_WEBFORMS)
 
 #ancient add_subdirectory( kexisql )
 
