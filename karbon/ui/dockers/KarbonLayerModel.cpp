@@ -273,7 +273,7 @@ KoDocumentSectionModel::PropertyList KarbonLayerModel::properties( KoShape* shap
 {
     PropertyList l;
     l << Property(i18nc("Visibility state of the shape","Visible"), SmallIcon("14_layer_visible"), SmallIcon("14_layer_novisible"), shape->isVisible());
-    l << Property(i18nc("Lock state of the shape","Locked"), SmallIcon("document-encrypt"), SmallIcon("document-decrypt"), shape->isLocked());
+    l << Property(i18nc("Lock state of the shape","Locked"), SmallIcon("object-locked"), SmallIcon("object-unlocked"), shape->isLocked());
     l << Property( i18nc("The z-index of the shape", "zIndex"), QString("%1").arg( shape->zIndex() ) );
     return l;
 }
