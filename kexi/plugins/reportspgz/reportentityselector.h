@@ -43,7 +43,7 @@ public:
     KPushButton *itemLine;
     KPushButton *itemBarcode;
     KPushButton *itemImage;
-    KPushButton *itemGraph;
+    KPushButton *itemChart;
     
 };
 

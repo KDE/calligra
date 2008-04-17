@@ -32,7 +32,7 @@ ReportEntitySelector::ReportEntitySelector(QWidget *parent)
 	itemLine = new KPushButton ( KIcon ( "draw-freehand" ),i18n ( "Line" ), this );
 	itemBarcode = new KPushButton ( KIcon ( "insert-barcode" ),i18n ( "Barcode" ), this );
 	itemImage = new KPushButton ( KIcon ( "insert-image" ),i18n ( "Image" ), this );
-	itemGraph = new KPushButton ( KIcon ( "view-statistics" ),i18n ( "Chart" ), this );
+	itemChart = new KPushButton ( KIcon ( "view-statistics" ),i18n ( "Chart" ), this );
 	
 	itemLabel->setFlat(true);
 	layout->addWidget(itemLabel);
@@ -41,7 +41,8 @@ ReportEntitySelector::ReportEntitySelector(QWidget *parent)
 	layout->addWidget(itemLine);
 	layout->addWidget(itemBarcode);
 	layout->addWidget(itemImage);
-	layout->addWidget(itemGraph);
+	layout->addWidget(itemChart);
+	layout->addStretch();
 	setLayout(layout);
 }
 
