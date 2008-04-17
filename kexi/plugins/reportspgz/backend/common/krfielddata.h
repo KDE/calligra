@@ -93,6 +93,7 @@ class KRFieldData : public KRObjectData
 		//bool builtinFormat;
 		//QString format;
 		
+		QStringList fieldNames(const QString &);
 		
 	private:
 		virtual void createProperties();

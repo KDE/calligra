@@ -26,7 +26,7 @@ class KRFieldData;
 class KRTextData;
 class KRBarcodeData;
 class KRImageData;
-class KRGraphData;
+class KRChartData;
 
 namespace KoProperty
 {
@@ -47,7 +47,7 @@ class KRObjectData
 			EntityText  = 65552,
 			EntityBarcode = 65553,
 			EntityImage = 65554,
-			EntityGraph = 65555
+			EntityChart = 65555
 		};
 		
 		KRObjectData();
@@ -60,7 +60,7 @@ class KRObjectData
 		virtual KRTextData * toText();
 		virtual KRBarcodeData * toBarcode();
 		virtual KRImageData * toImage();
-		//virtual ORGraphData * toGraph();
+		virtual KRChartData * toChart();
 		
 		KoProperty::Set* properties(){return _set;}
 		virtual void createProperties() =0;

@@ -5,7 +5,8 @@ ${CMAKE_SOURCE_DIR}/kexi
 ${CMAKE_SOURCE_DIR}/kexi/core
 ${CMAKE_SOURCE_DIR}/kexi/widget
 ${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/backend/common 
-${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/backend/renderer 
+${CMAKE_SOURCE_DIR}/kexi/plugins/reportspgz/backend/renderer
+${CMAKE_SOURCE_DIR}/kchart/kdchart/include
 ${KDE4_INCLUDES} )
 
 #build a shared library
@@ -20,6 +21,7 @@ set(pgzkexireportpart2_LIB_SRCS
 	backend/common/krpos.cpp
 	backend/common/krsize.cpp
 	backend/common/krobjectdata.cpp
+	backend/common/krchartdata.cpp
 	backend/common/krlabeldata.cpp
 	backend/common/krfielddata.cpp
 	backend/common/krtextdata.cpp
@@ -42,6 +44,7 @@ set(pgzkexireportpart2_LIB_SRCS
 	backend/renderer/orprintrender.cpp
 	backend/renderer/orprerender.cpp
 	backend/renderer/krscreenrender.cpp
+	backend/renderer/krkspreadrender.cpp
 	
 	backend/renderer/scripting/krscripthandler.cpp
 	backend/renderer/scripting/krscriptfunctions.cpp
@@ -63,6 +66,7 @@ set(pgzkexireportpart2_LIB_SRCS
 	backend/wrtembed/reportentityline.cpp
 	backend/wrtembed/reportentitybarcode.cpp
 	backend/wrtembed/reportentityimage.cpp
+	backend/wrtembed/reportentitychart.cpp
 	backend/wrtembed/reportsection.cpp
 	backend/wrtembed/reportsectiondetailgroup.cpp
 	backend/wrtembed/reportsectiondetail.cpp
@@ -80,7 +84,8 @@ kde4_add_ui_files(pgzkexireportpart2_LIB_SRCS backend/wrtembed/detailgroupsectio
 
 kde4_add_plugin(pgzkexireportpart2 ${pgzkexireportpart2_LIB_SRCS})
 
-target_link_libraries(pgzkexireportpart2 ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} ${QT_QTSCRIPT_LIBRARY}  kexidb kexicore keximain koproperty koguiutils komain kexiguiutils ${KDE4_KROSSCORE_LIBS})
+target_link_libraries(pgzkexireportpart2 ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} ${QT_QTSCRIPT_LIBRARY}  kexidb kexicore keximain koproperty koguiutils komain kexiguiutils 
+kspreadcommon kdchart ${KDE4_KROSSCORE_LIBS})
 
 install(TARGETS pgzkexireportpart2  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  pgzkexireporthandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kexi)

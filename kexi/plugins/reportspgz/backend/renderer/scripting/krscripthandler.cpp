@@ -78,16 +78,6 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
 		_action->addObject(new Scripting::Section(sec), sec->name());
 	}
 	
-#if 0
-	for (int i = 0; i <12 ; ++i)
-	{
-		sec = _data->section((KRReportData::Section)(i+1));
-		if (sec)
-		{
-			_action->addObject(new Scripting::Section(sec), sec->name());
-		}
-	}
-#endif
 	_action->setCode((_data->script + "\n" + fieldFunctions()).toLocal8Bit());
 	
 	kDebug() << _action->code() << endl;

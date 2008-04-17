@@ -31,6 +31,8 @@
 #include "reportentityline.h"
 #include "reportentitybarcode.h"
 #include "reportentityimage.h"
+#include "reportentitychart.h"
+
 #include "reportsectiondetailgroup.h"
 
 // dialogs
@@ -102,7 +104,7 @@ class ReportWriterSectionData
 			LineItem,
 			BarcodeItem,
 			ImageItem,
-			GraphItem
+			ChartItem
 		};
 
 		enum MouseAction
@@ -1240,10 +1242,9 @@ void ReportDesigner::sectionMouseReleaseEvent ( ReportSceneView * v, QMouseEvent
 						//dynamic_cast<QGraphicsLineItem*>(item)->setLine ( e->x()-10, e->y(), e->x()+10, e->y() );
 						dynamic_cast<QGraphicsLineItem*> ( item )->setLine ( e->x(), e->y(), e->x() +20, e->y() );
 						break;
-						//TODO add graph
-						//case ReportWriterSectionData::GraphItem :
-						//  item = new ReportEntityGraph(v->document(), v->canvas());
-						//  break;
+					case ReportWriterSectionData::ChartItem :
+						  item = new ReportEntityChart(v->document(), v->scene());
+						  break;
 					default:
 						kDebug() << "attempted to insert an unknown item" << endl;;
 				}
@@ -1313,10 +1314,10 @@ void ReportDesigner::slotItemImage()
 	sectionData->insertItem = ReportWriterSectionData::ImageItem;
 }
 
-void ReportDesigner::slotItemGraph()
+void ReportDesigner::slotItemChart()
 {
 	sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
-	sectionData->insertItem = ReportWriterSectionData::GraphItem;
+	sectionData->insertItem = ReportWriterSectionData::ChartItem;
 }
 
 void ReportDesigner::changeSet ( KoProperty::Set *s )

@@ -99,7 +99,6 @@ class ORPreRenderPrivate : public QObject
 
 		qreal getNearestSubTotalCheckPoint ( const ORDataData & );
 		
-		
 		///Scripting Stuff
 		KRScriptHandler *_handler;
 		void initEngine();
@@ -270,7 +269,7 @@ void ORPreRenderPrivate::renderDetailSection ( KRDetailSectionData & detailData 
 		if (_query)
 		{
 			curs = _query->getQuery();
-// 			//TODO init the engine earlier
+// 			//TODO init the engine earlier?
 			_handler->setSource( _query->getSql());
 		}
 		if ( curs && !curs->eof() )
@@ -477,13 +476,11 @@ qreal ORPreRenderPrivate::renderSectionSize ( const KRSectionData & sectionData 
 	if ( sectionData.objects().count() == 0 )
 		return intHeight;
 
-	QList<KRObjectData*>::const_iterator it;
 	QList<KRObjectData*> objects = sectionData.objects();
 	KRObjectData * elemThis;
-	for ( it = objects.begin(); it != objects.end(); ++it )
-		//while ( ( elemThis = it.current() ) != 0 )
+	foreach(KRObjectData *ob, objects)
 	{
-		elemThis = *it;
+		elemThis = ob;
 		//++it;
 		// TODO: See if this can be simplified anymore than it already is.
 		//       All we need to know is how much strech we are going to get.

@@ -35,7 +35,7 @@ KRFieldData * KRObjectData::toField() { return 0; }
 KRTextData * KRObjectData::toText() { return 0; }
 KRBarcodeData * KRObjectData::toBarcode() { return 0; }
 KRImageData * KRObjectData::toImage() { return 0; }
-//ORGraphData * KRObject::toGraph() { return 0; }
+KRChartData * KRObjectData::toChart() { return 0; }
 
 
 

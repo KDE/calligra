@@ -31,16 +31,12 @@
 #include <QPainter>
 #include <krscreenrender.h>
 
-//#include "backend/common/pagesizeinfo.h"
-
 KexiReportPage::KexiReportPage(QWidget *parent, const char *name, ORODocument *r)
 	: QWidget(parent, name, Qt::WNoAutoErase)
 {
 	kDebug() << "CREATED PAGE" << endl;
 	rpt = r;
 	page = 1;
-	
-	//setBackgroundMode(Qt::NoBackground);
 	
 	QString pageSize = r->pageOptions().getPageSize();
 	int pageWidth = 0;
@@ -56,22 +52,11 @@ KexiReportPage::KexiReportPage(QWidget *parent, const char *name, ORODocument *r
 		// lookup the correct size information for the specified size paper
 		pageWidth = r->pageOptions().widthPx();
 		pageHeight = r->pageOptions().heightPx();
-		/*
-		KoUnit pageUnit(KoUnit::Millimeter);
-		pageWidth = KoUnit::toInch(pageUnit.fromUserValue(pageWidth)) * KoGlobal::dpiX();
-		pageHeight = KoUnit::toInch(pageUnit.fromUserValue(pageHeight)) * KoGlobal::dpiY();
-		
-		if ( !r->pageOptions().isPortrait() )
-		{
-			int tmp = pageWidth;
-			pageWidth = pageHeight;
-			pageHeight = tmp;
-		}*/
 	}
 	
 
 	setFixedSize(pageWidth,pageHeight);
-	//setPaletteBackgroundColor(QColor(255,255,255));
+	
 	kDebug() << "PAGE IS " << pageWidth << "x" << pageHeight << endl;
 	_repaint = true;
 	_pm = new QPixmap(pageWidth, pageHeight);
@@ -80,7 +65,6 @@ KexiReportPage::KexiReportPage(QWidget *parent, const char *name, ORODocument *r
 
 void KexiReportPage::paintEvent(QPaintEvent*)
 {
-	//bitBlt (this, 0, 0, _pm);
 	QPainter painter(this);
 	painter.drawPixmap(QPoint(0, 0), *_pm);
 }

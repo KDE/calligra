@@ -33,6 +33,7 @@
 #include <QPrintDialog>
 #include <widget/utils/kexirecordnavigator.h>
 #include <core/KexiWindow.h>
+#include <krkspreadrender.h>
 
 KexiReportView::KexiReportView(QWidget *parent)
  : KexiView(parent)
@@ -70,7 +71,7 @@ KexiReportView::KexiReportView(QWidget *parent)
 	a->setObjectName("pgzkexirpt_open_kspread");
 	a->setToolTip(i18n("Open the report in KSpread"));
 	a->setWhatsThis(i18n("Opens the current report in KSpread."));
-	a->setEnabled(false);
+	a->setEnabled(true);
 	connect(a, SIGNAL(triggered()), this, SLOT(slotRenderKSpread()));
 	
 	setViewActions(viewActions);
@@ -142,6 +143,14 @@ void KexiReportView::slotPrintReport()
 
 	pr.render(doc);
 }
+
+void KexiReportView::slotRenderKSpread()
+{
+	KRKSpreadRender ks;
+
+	ks.render(doc);
+}
+
 tristate KexiReportView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
 {
 	//kDebug() << tempData()->document << endl;

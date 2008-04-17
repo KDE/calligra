@@ -179,7 +179,7 @@ tristate KexiReportDesignView::afterSwitchFrom(Kexi::ViewMode mode)
 	connect ( res->itemText, SIGNAL( clicked() ), _rd, SLOT( slotItemText() ));
 	connect ( res->itemLine, SIGNAL( clicked() ), _rd, SLOT( slotItemLine() ));
 	connect ( res->itemBarcode, SIGNAL( clicked() ), _rd, SLOT( slotItemBarcode() ));
-	connect ( res->itemGraph, SIGNAL( clicked() ), _rd, SLOT( slotItemGraph() ));
+	connect ( res->itemChart, SIGNAL( clicked() ), _rd, SLOT( slotItemChart() ));
 	connect ( res->itemImage, SIGNAL( clicked() ), _rd, SLOT( slotItemImage() ));
 	
 	//Raise/Lower

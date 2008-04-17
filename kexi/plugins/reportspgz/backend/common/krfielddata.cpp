@@ -18,8 +18,6 @@
  * Please contact info@openmfg.com with any questions on this license.
  */
 #include "krfielddata.h"
-#include <koproperty/property.h>
-#include <koproperty/set.h>
 #include <KoGlobal.h>
 #include <kdebug.h>
 #include <klocalizedstring.h>

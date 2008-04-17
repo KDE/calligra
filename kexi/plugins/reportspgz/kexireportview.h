@@ -61,7 +61,8 @@ public:
 		void prevPage();
 		void firstPage();
 		void lastPage();
-		void slotPrintReport();		
+		void slotPrintReport();
+		void slotRenderKSpread();	
 };
 
 #endif

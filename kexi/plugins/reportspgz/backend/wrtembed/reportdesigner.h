@@ -142,7 +142,7 @@ class ReportDesigner : public QWidget
 		void slotItemLine();
 		void slotItemBarcode();
 		void slotItemImage();
-		void slotItemGraph();
+		void slotItemChart();
 		
 		void slotSectionEditor();
 
