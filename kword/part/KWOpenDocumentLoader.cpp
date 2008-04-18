@@ -183,7 +183,7 @@ class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextF
             KoProperties props;
             KoShape *shape = factory->createShape(&props);
             if (!shape) {
-                kDebug() << "No text shape";
+                kDebug(32001) << "No text shape";
                 return 0;
             }
             KWTextFrameSet* fs = new KWTextFrameSet(m_loader->document());
@@ -206,7 +206,7 @@ class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextF
                 Q_ASSERT(layout && layout->inlineObjectTextManager());
                 layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
             } else {
-                kDebug() << "Support for '" << anchortype << "' is going to wait.";
+                kDebug(32001) << "Support for '" << anchortype << "' is going to wait.";
             }
             return shape;
 #else
@@ -217,7 +217,7 @@ class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextF
         virtual KoShape * loadTableShape(KoTextLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& textElem, QTextCursor& cursor) {
             KoShapeFactory * factory = KoShapeRegistry::instance()->value(TableShape_SHAPEID);
             if (!factory) {
-                kDebug() << "No table shape";
+                kDebug(32001) << "No table shape";
                 return 0;
             }
             
@@ -226,7 +226,7 @@ class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextF
             KoShape *shape = factory->createShape( &props, 0 );
             
             if (!shape) {
-                kDebug() << "No table shape";
+                kDebug(32001) << "No table shape";
                 return 0;
             }
             return shape;
@@ -411,7 +411,7 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
                 int pages=1;
                 KoXmlElement page;
                 forEachElement( page, tag ) ++pages;
-                kDebug() <<"DTP mode: found" << pages <<"pages";
+                kDebug(32001) <<"DTP mode: found" << pages <<"pages";
                 //setPageCount ( pages );
             }
             else if ( localName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
@@ -623,7 +623,7 @@ void KWOpenDocumentLoader::loadHeaderFooter(KoTextLoadingContext& context, const
         return; // no header/footer
 
     const QString localName = elem.localName();
-    kDebug()<<"KWOpenDocumentLoader::loadHeaderFooter localName="<<localName<<" isHeader="<<isHeader<<" hasFirst="<<hasFirst;
+    kDebug(32001)<<"KWOpenDocumentLoader::loadHeaderFooter localName="<<localName<<" isHeader="<<isHeader<<" hasFirst="<<hasFirst;
 
     // Formatting properties for headers and footers on a page.
     KoXmlElement styleElem = KoXml::namedItemNS( masterPageStyle, KoXmlNS::style, isHeader ? "header-style" : "footer-style" );

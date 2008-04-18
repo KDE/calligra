@@ -222,7 +222,7 @@ void KWStatusBar::slotResourceChanged(int key, const QVariant& value)
             slotPagesChanged();
         } break;
         default: {
-            kDebug()<<"KWStatusBar::slotResourceChanged Unhandled key="<<key<<" value="<<value<<endl;
+            kDebug(32003)<<"KWStatusBar::slotResourceChanged Unhandled key="<<key<<" value="<<value<<endl;
         } break;
     }
 }
@@ -230,7 +230,7 @@ void KWStatusBar::slotResourceChanged(int key, const QVariant& value)
 /*
 void KWStatusBar::slotSelectionChanged(bool hasSelection)
 {
-    kDebug()<<"===> KWStatusBar::slotSelectionChanged"<<endl;
+    kDebug(32003)<<"===> KWStatusBar::slotSelectionChanged"<<endl;
     QString pos = "0";
     if( hasSelection ) {
         KoToolSelection* selection = d->toolproxy->selection();
@@ -246,7 +246,7 @@ void KWStatusBar::slotSelectionChanged(bool hasSelection)
 
 void KWStatusBar::slotChangedTool()
 {
-    kDebug()<<"KWStatusBar::slotChangedTool"<<endl;
+    kDebug(32003)<<"KWStatusBar::slotChangedTool"<<endl;
     if(d->controller) {
         disconnect(d->controller, SIGNAL(canvasMousePositionChanged(const QPoint&)), this, SLOT(slotMousePositionChanged(const QPoint&)));
     }
@@ -261,7 +261,7 @@ void KWStatusBar::slotChangedTool()
 
 void KWStatusBar::slotMousePositionChanged(const QPoint& pos)
 {
-    //kDebug()<<"KWStatusBar::slotMousePositionChanged"<<endl;
+    //kDebug(32003)<<"KWStatusBar::slotMousePositionChanged"<<endl;
     d->mousePosLabel->setText( QString("%1:%2").arg(pos.x()).arg(pos.y()) );
 }
 
