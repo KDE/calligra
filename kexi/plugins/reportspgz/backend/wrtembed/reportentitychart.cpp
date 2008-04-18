@@ -148,17 +148,17 @@ void ReportEntityChart::buildXML ( QDomDocument & doc, QDomElement & parent )
 	
 	//type
 	QDomElement type = doc.createElement ( "type" );
-	type.appendChild ( doc.createTextNode ( _chartType->value().toString() );
+	type.appendChild ( doc.createTextNode ( _chartType->value().toString() ) );
 	entity.appendChild ( type );
 	
 	//sub type
 	QDomElement subtype = doc.createElement ( "subtype" );
-	subtype.appendChild ( doc.createTextNode ( _chartSubType->value().toString() );
+	subtype.appendChild ( doc.createTextNode ( _chartSubType->value().toString() ));
 	entity.appendChild ( subtype );
 	
 	//3d
 	QDomElement d3 = doc.createElement ( "3d" );
-	d3.appendChild ( doc.createTextNode ( _chartSubType->value().toBool() );
+	d3.appendChild ( doc.createTextNode ( _chartSubType->value().toBool() ? "true" : "false" ));
 	entity.appendChild ( d3 );
 	
 	//color scheme
