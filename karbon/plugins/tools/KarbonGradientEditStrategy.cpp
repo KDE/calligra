@@ -39,9 +39,10 @@ const double stopDistance = 15.0;
 
 
 GradientStrategy::GradientStrategy( KoShape *shape, const QGradient * gradient, Target target )
-    : m_shape( shape ), m_editing( false ), m_stopsVisible(false)
+    : m_shape( shape ), m_editing( false )
     , m_target( target ), m_gradientLine( 0, 1 )
     , m_selection( None ), m_selectionIndex(0)
+    , m_type( gradient->type() )
 {
     if( m_target == Fill )
     {
@@ -169,7 +170,7 @@ void GradientStrategy::paintStops( QPainter &painter, const KoViewConverter &con
     painter.restore();
 }
 
-void GradientStrategy::paint( QPainter &painter, const KoViewConverter &converter )
+void GradientStrategy::paint( QPainter &painter, const KoViewConverter &converter, bool selected )
 {
     m_shape->applyConversion( painter, converter );
 
@@ -180,7 +181,7 @@ void GradientStrategy::paint( QPainter &painter, const KoViewConverter &converte
     painter.drawLine( startPoint, stopPoint );
 
     // draw the gradient stops
-    if( m_stopsVisible )
+    if( selected )
         paintStops( painter, converter );
 
     // draw the gradient handles
@@ -194,7 +195,9 @@ double GradientStrategy::projectToGradientLine( const QPointF &point )
     QPointF stopPoint = m_matrix.map( m_handles[m_gradientLine.second] );
     QPointF diff = stopPoint - startPoint;
     double diffLength = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
-        // project mouse position relative to stop position on gradient line
+    if( diffLength == 0.0f )
+        return 0.0f;
+    // project mouse position relative to stop position on gradient line
     double scalar = KarbonGlobal::scalarProduct( point-startPoint, diff / diffLength );
     return scalar /= diffLength;
 }
@@ -420,9 +423,38 @@ void GradientStrategy::startDrawing( const QPointF &mousePos )
     setEditing( true );
 }
 
-void GradientStrategy::showStops( bool show )
+bool GradientStrategy::hasSelection() const
 {
-    m_stopsVisible = show;
+    return m_selection != None;
+}
+
+KoShape * GradientStrategy::shape()
+{
+    return m_shape;
+}
+
+QGradient::Type GradientStrategy::type() const
+{
+    return m_type;
+}
+
+void GradientStrategy::updateStops()
+{
+    QBrush brush;
+    if( m_target == Fill )
+    {
+        brush = m_shape->background();
+    }
+    else
+    {
+        KoLineBorder * stroke = dynamic_cast<KoLineBorder*>( m_shape->border() );
+        if( stroke )
+        {
+            brush = stroke->lineBrush();
+        }
+    }
+    if( brush.gradient() )
+        m_stops = brush.gradient()->stops();
 }
 
 void GradientStrategy::setGradientLine( int start, int stop )
@@ -457,7 +489,10 @@ QList<GradientStrategy::StopHandle> GradientStrategy::stopHandles( const KoViewC
     QPointF diff = stop-start;
     QPointF ortho( -diff.y(), diff.x() );
     double orthoLength = sqrt( ortho.x()*ortho.x() + ortho.y()*ortho.y() );
-    ortho *= stopDistance / orthoLength;
+    if( orthoLength == 0.0 )
+        ortho = QPointF( stopDistance, 0.0f );
+    else
+        ortho *= stopDistance / orthoLength;
 
     // make handles have always the same distance to the gradient line
     // independent of acual zooming

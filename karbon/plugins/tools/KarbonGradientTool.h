@@ -21,11 +21,13 @@
 #define _KARBONGRADIENTTOOL_H_
 
 #include <KoTool.h>
-#include <QGradient>
+#include <QtGui/QGradient>
+#include <QtCore/QMultiMap>
 
 class GradientStrategy;
 class VGradientTabWidget;
 class QUndoCommand;
+class KoShape;
 
 /**
  * A tool for editing gradient backgrounds of shapes.
@@ -60,8 +62,9 @@ private Q_SLOTS:
     void gradientChanged();
 private:
     QGradient * m_gradient;
-    QList<GradientStrategy*> m_gradients; ///< the list of editing strategies, one for each shape
-    GradientStrategy* m_currentStrategy;  ///< the current editing strategy
+    QMultiMap<KoShape*,GradientStrategy*> m_gradients; ///< the list of gradient strategies
+    GradientStrategy * m_currentStrategy;  ///< the current editing strategy
+    GradientStrategy * m_hoverStrategy; ///< the strategy the mouse hovers over
     VGradientTabWidget * m_gradientWidget;
     QUndoCommand * m_currentCmd;
 };

@@ -45,7 +45,7 @@ public:
     virtual ~GradientStrategy() {}
 
     /// painting of the gradient editing handles
-    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paint( QPainter &painter, const KoViewConverter &converter, bool selected );
 
     /// selects handle at the given position
     bool selectHandle( const QPointF &mousePos, const KoViewConverter &converter );
@@ -92,9 +92,17 @@ public:
     /// Starts drawing the gradient at the given mouse position
     void startDrawing( const QPointF &mousePos );
 
-    /// Shows/hides stops of the gradient strategy
-    void showStops( bool show );
+    /// Returns if strategy has a selection
+    bool hasSelection() const;
 
+    /// Returns the shape associated with the gradient
+    KoShape * shape();
+
+    /// Returns the type of this gradient strategy
+    QGradient::Type type() const;
+
+    /// Triggers updating the gradient stops from the shape
+    void updateStops();
 protected:
     enum SelectionType { None, Handle, Line, Stop };
 
@@ -138,12 +146,12 @@ private:
 
     static int m_handleRadius; ///< the handle radius for all gradient strategies
     bool m_editing; /// the edit mode flag
-    bool m_stopsVisible;       ///< indicates if gradient stops are visible
     Target m_target; ///< the gradient target
     QPair<int,int> m_gradientLine; ///< the handle indices defining the gradient line
     QPointF m_lastMousePos;    ///< last mouse position
     SelectionType m_selection; ///< the actual selection type
     int m_selectionIndex;      ///< the actual selection index
+    QGradient::Type m_type;    ///< the gradient strategy type
 };
 
 /// Strategy for editing a linear gradient

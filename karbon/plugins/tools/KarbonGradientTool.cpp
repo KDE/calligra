@@ -58,6 +58,7 @@ KarbonGradientTool::KarbonGradientTool(KoCanvasBase *canvas)
 : KoTool( canvas )
 , m_gradient( 0 )
 , m_currentStrategy( 0 )
+, m_hoverStrategy( 0 )
 , m_gradientWidget( 0 )
 , m_currentCmd( 0 )
 {
@@ -77,8 +78,10 @@ void KarbonGradientTool::paint( QPainter &painter, const KoViewConverter &conver
     // paint all the strategies
     foreach( GradientStrategy *strategy, m_gradients )
     {
+        if( strategy == m_currentStrategy )
+            continue;
         painter.save();
-        strategy->paint( painter, converter );
+        strategy->paint( painter, converter, false );
         painter.restore();
     }
 
@@ -86,7 +89,7 @@ void KarbonGradientTool::paint( QPainter &painter, const KoViewConverter &conver
     if( m_currentStrategy )
     {
         painter.setBrush( Qt::red ); //TODO make configurable
-        m_currentStrategy->paint( painter, converter );
+        m_currentStrategy->paint( painter, converter, true );
     }
 }
 
@@ -96,13 +99,19 @@ void KarbonGradientTool::repaintDecorations()
         m_canvas->updateCanvas( strategy->boundingRect( *m_canvas->viewConverter() ) );
 }
 
-
 void KarbonGradientTool::mousePressEvent( KoPointerEvent *event )
 {
     Q_UNUSED( event )
-    if( m_currentStrategy )
+    if( m_currentStrategy && m_currentStrategy->hasSelection() )
     {
         m_currentStrategy->setEditing( true );
+    }
+    else if( m_hoverStrategy && m_hoverStrategy->hasSelection() )
+    {
+        m_currentStrategy = m_hoverStrategy;
+        m_hoverStrategy = 0;
+        m_currentStrategy->setEditing( true );
+        m_currentStrategy->repaint();
     }
     else
     {
@@ -159,7 +168,7 @@ void KarbonGradientTool::mousePressEvent( KoPointerEvent *event )
         if( newStrategy )
         {
             m_currentStrategy = newStrategy;
-            m_gradients.append( m_currentStrategy );
+            m_gradients.insert( m_currentStrategy->shape(), m_currentStrategy );
             m_currentStrategy->startDrawing( event->point );
         }
     }
@@ -167,27 +176,33 @@ void KarbonGradientTool::mousePressEvent( KoPointerEvent *event )
 
 void KarbonGradientTool::mouseMoveEvent( KoPointerEvent *event )
 {
-    // enable all gradient stops of gradients the mouse is over
-    foreach( GradientStrategy *strategy, m_gradients )
-    {
-        // always show stops for current strategy
-        if( strategy == m_currentStrategy )
-            continue;
-        strategy->repaint();
-        // only show stops if mouse is inside strategy bbox and if there
-        // is no current active strategy
-        bool mouseOnStrategy = strategy->boundingRect( *m_canvas->viewConverter() ).contains( event->point );
-        strategy->showStops( ! m_currentStrategy && mouseOnStrategy );
-        strategy->repaint();
-    }
+    m_hoverStrategy = 0;
 
     if( m_currentStrategy )
     {
-        m_currentStrategy->repaint();
         if( m_currentStrategy->isEditing() )
         {
+            m_currentStrategy->repaint();
             m_currentStrategy->handleMouseMove( event->point, event->modifiers() );
             m_currentStrategy->repaint();
+            return;
+        }
+        else if( m_currentStrategy->selectHandle( event->point, *m_canvas->viewConverter() ) )
+        {
+            m_currentStrategy->repaint();
+            useCursor( KarbonCursor::needleMoveArrow() );
+            return;
+        }
+        else if( m_currentStrategy->selectStop( event->point, *m_canvas->viewConverter() ) )
+        {
+            m_currentStrategy->repaint();
+            useCursor( KarbonCursor::needleMoveArrow() );
+            return;
+        }
+        else if( m_currentStrategy->selectLine( event->point, *m_canvas->viewConverter() ) )
+        {
+            m_currentStrategy->repaint();
+            useCursor( Qt::SizeAllCursor );
             return;
         }
     }
@@ -197,19 +212,7 @@ void KarbonGradientTool::mouseMoveEvent( KoPointerEvent *event )
     {
         if( strategy->selectHandle( event->point, *m_canvas->viewConverter() ) )
         {
-            m_currentStrategy = strategy;
-            m_currentStrategy->repaint();
-            useCursor( KarbonCursor::needleMoveArrow() );
-            return;
-        }
-    }
-    // now check if we hit any gradient stops
-    foreach( GradientStrategy *strategy, m_gradients )
-    {
-        if( strategy->selectStop( event->point, *m_canvas->viewConverter() ) )
-        {
-            m_currentStrategy = strategy;
-            m_currentStrategy->repaint();
+            m_hoverStrategy = strategy;
             useCursor( KarbonCursor::needleMoveArrow() );
             return;
         }
@@ -219,14 +222,12 @@ void KarbonGradientTool::mouseMoveEvent( KoPointerEvent *event )
     {
         if( strategy->selectLine( event->point, *m_canvas->viewConverter() ) )
         {
-            m_currentStrategy = strategy;
-            m_currentStrategy->repaint();
+            m_hoverStrategy = strategy;
             useCursor( Qt::SizeAllCursor );
             return;
         }
     }
 
-    m_currentStrategy = 0;
     useCursor( KarbonCursor::needleArrow() );
 }
 
@@ -236,7 +237,6 @@ void KarbonGradientTool::mouseReleaseEvent( KoPointerEvent *event )
     // if we are editing, get out of edit mode and add a command to the stack
     if( m_currentStrategy )
     {
-        m_currentStrategy->setEditing( false );
         QUndoCommand * cmd = m_currentStrategy->createCommand( m_currentCmd );
         m_canvas->addCommand( m_currentCmd ? m_currentCmd : cmd );
         m_currentCmd = 0;
@@ -248,6 +248,7 @@ void KarbonGradientTool::mouseReleaseEvent( KoPointerEvent *event )
             else
                 m_gradientWidget->setTarget( VGradientTabWidget::StrokeGradient );
         }
+        m_currentStrategy->setEditing( false );
     }
 }
 
@@ -316,27 +317,94 @@ void KarbonGradientTool::initialize()
     if( m_currentStrategy && m_currentStrategy->isEditing() )
         return;
 
-    m_gradients.clear();
-    m_currentStrategy = 0;
+    m_hoverStrategy = 0;
 
-    foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
+    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
+    QList<GradientStrategy*> strategies = m_gradients.values();
+    // remove all gradient strategies no longer applicable
+    foreach( GradientStrategy * strategy, strategies )
     {
-        GradientStrategy * fillStrategy = createStrategy( shape, shape->background().gradient(), GradientStrategy::Fill );
-        if( fillStrategy )
+        // is this gradient shape still selected ?
+        if( ! selectedShapes.contains( strategy->shape() ) )
         {
-            m_gradients.append( fillStrategy );
-            fillStrategy->repaint();
+            m_gradients.remove( strategy->shape(), strategy );
+            delete strategy;
+            if( m_currentStrategy == strategy )
+                m_currentStrategy = 0;
+            continue;
+        }
+        // is the gradient a fill gradient but shape has no fill gradient anymore ?
+        if( strategy->target() == GradientStrategy::Fill )
+        {
+            const QGradient * gradient = strategy->shape()->background().gradient();
+            if( ! gradient || gradient->type() != strategy->type() )
+            {
+                // delete the gradient
+                m_gradients.remove( strategy->shape(), strategy );
+                delete strategy;
+                if( m_currentStrategy == strategy )
+                    m_currentStrategy = 0;
+                continue;
+            }
+        }
+        // is the gradient a stroke gradient but shape has no stroke gradient anymore ?
+        if( strategy->target() == GradientStrategy::Stroke )
+        {
+            KoLineBorder * stroke = dynamic_cast<KoLineBorder*>( strategy->shape()->border() );
+            if( ! stroke  || ! stroke->lineBrush().gradient() || stroke->lineBrush().gradient()->type() != strategy->type() )
+            {
+                // delete the gradient
+                m_gradients.remove( strategy->shape(), strategy );
+                delete strategy;
+                if( m_currentStrategy == strategy )
+                    m_currentStrategy = 0;
+                continue;
+            }
+        }
+    }
+
+    // now create new strategies if needed
+    foreach( KoShape * shape, selectedShapes )
+    {
+        bool strokeExists = false;
+        bool fillExists = false;
+        // check which gradient strategies exist for this shape
+        foreach( GradientStrategy * strategy, m_gradients.values( shape ) )
+        {
+            if( strategy->target() == GradientStrategy::Fill )
+            {
+                fillExists = true;
+                strategy->updateStops();
+            }
+            if( strategy->target() == GradientStrategy::Stroke )
+            {
+                strokeExists = true;
+                strategy->updateStops();
+            }
         }
 
-        KoLineBorder * stroke = dynamic_cast<KoLineBorder*>( shape->border() );
-        if( ! stroke )
-            continue;
-
-        GradientStrategy * strokeStrategy = createStrategy( shape, stroke->lineBrush().gradient(), GradientStrategy::Stroke );
-        if( strokeStrategy )
+        if( ! fillExists )
         {
-            m_gradients.append( strokeStrategy );
-            strokeStrategy->repaint();
+            GradientStrategy * fillStrategy = createStrategy( shape, shape->background().gradient(), GradientStrategy::Fill );
+            if( fillStrategy )
+            {
+                m_gradients.insert( shape, fillStrategy );
+                fillStrategy->repaint();
+            }
+        }
+
+        if( ! strokeExists )
+        {
+            KoLineBorder * stroke = dynamic_cast<KoLineBorder*>( shape->border() );
+            if( ! stroke )
+                continue;
+
+            GradientStrategy * strokeStrategy = createStrategy( shape, stroke->lineBrush().gradient(), GradientStrategy::Stroke );
+            if( strokeStrategy )
+            {
+                m_gradients.insert( shape, strokeStrategy );
+                strokeStrategy->repaint();
+            }
         }
     }
 
@@ -349,9 +417,9 @@ void KarbonGradientTool::initialize()
         return;
     }
 
-    m_gradients.first()->setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
     delete m_gradient;
-    GradientStrategy * strategy = m_gradients.first();
+    GradientStrategy * strategy = m_currentStrategy ? m_currentStrategy : m_gradients.values().first();
+    strategy->setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
     m_gradient = KarbonGradientHelper::cloneGradient( strategy->gradient() );
     if( m_gradientWidget )
     {
@@ -369,6 +437,7 @@ void KarbonGradientTool::deactivate()
     m_gradient = 0;
 
     m_currentStrategy = 0;
+    m_hoverStrategy = 0;
     qDeleteAll( m_gradients );
     m_gradients.clear();
 }
