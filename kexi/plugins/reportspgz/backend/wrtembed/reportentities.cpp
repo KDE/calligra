@@ -49,6 +49,7 @@
 #include "reportentityline.h"
 #include "reportentitybarcode.h"
 #include "reportentityimage.h"
+#include "reportentitychart.h"
 
 //
 // ReportEntity
@@ -81,9 +82,9 @@ void ReportEntity::buildXML ( QGraphicsItem * item, QDomDocument & doc, QDomElem
 		case KRObjectData::EntityImage:
 			re = ( ReportEntityImage* ) item;
 			break;
-			//case EntityGraph:
-			//    re = (ReportEntityGraph*)item;
-			//    break;
+		case KRObjectData::EntityChart:
+			re = (ReportEntityChart*)item;
+			break;
 		default:
 			kDebug() << "ReportEntity::buildXML(): unrecognized rtti type" << item->type() << endl;
 	};

@@ -25,7 +25,7 @@
 
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
-#include <kexidb/parser.h>
+#include <kexidb/parser/parser.h>
 #include <koproperty/property.h>
 
 #include <kdebug.h>
@@ -328,6 +328,15 @@ void KRChartData::setAxis()
 		xAxis->setTitleText ( _xTitle->value().toString() );
 		yAxis->setTitleText ( _yTitle->value().toString() );
 	}
+}
+
+ORLineStyleData KRChartData::lineStyle()
+{
+	ORLineStyleData ls;
+	ls.weight = _lnWeight->value().toInt();
+	ls.lnColor = _lnColor->value().value<QColor>();
+	ls.style = (Qt::PenStyle)_lnStyle->value().toInt();
+	return ls;
 }
 
 // RTTI

@@ -42,9 +42,9 @@ class KRChartData : public KRObjectData
 		~KRChartData();
 		virtual KRChartData * toChart();
 		virtual int type() const;
+	
 	protected:
 		
-		QRect _rect;
 		KRPos _pos;
 		KRSize _size;	
 		KoProperty::Property * _dataSource;
@@ -57,6 +57,7 @@ class KRChartData : public KRObjectData
 		KoProperty::Property * _xTitle;
 		KoProperty::Property * _yTitle;
 		
+		KoProperty::Property *_bgColor;
 		KoProperty::Property* _lnColor;
 		KoProperty::Property* _lnWeight;
 		KoProperty::Property* _lnStyle;

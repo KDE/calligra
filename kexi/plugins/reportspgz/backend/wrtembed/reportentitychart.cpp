@@ -162,9 +162,17 @@ void ReportEntityChart::buildXML ( QDomDocument & doc, QDomElement & parent )
 	entity.appendChild ( d3 );
 	
 	//color scheme
+	QDomElement cs = doc.createElement ( "colorscheme" );
+	cs.appendChild ( doc.createTextNode ( _colorScheme->value().toString() ));
+	entity.appendChild ( cs );
 	
 	//aa
+	QDomElement aa = doc.createElement ( "antialiased" );
+	aa.appendChild ( doc.createTextNode ( _aa->value().toBool() ? "true" : "false" ));
+	entity.appendChild ( aa );
 	
+	//Line Style
+	buildXMLLineStyle(doc, entity, lineStyle());
 	
 	parent.appendChild ( entity );
 }
