@@ -416,6 +416,11 @@ void KarbonGradientTool::initialize()
         m_gradient->setColorAt( 1.0, Qt::green );
         return;
     }
+    // automatically select strategy when editing single shape
+    if( selectedShapes.count() == 1 && m_gradients.count() )
+    {
+        m_currentStrategy = m_gradients.values().first();
+    }
 
     delete m_gradient;
     GradientStrategy * strategy = m_currentStrategy ? m_currentStrategy : m_gradients.values().first();
