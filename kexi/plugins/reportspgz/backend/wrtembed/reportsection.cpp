@@ -29,6 +29,7 @@
 #include "reportentityline.h"
 #include "reportentitybarcode.h"
 #include "reportentityimage.h"
+#include "reportentitychart.h"
 
 #include "reportscene.h"
 #include "reportsceneview.h"
@@ -204,10 +205,10 @@ void ReportSection::initFromXML ( QDomNode & section )
 		else if ( n == "image" )
 		{
 			( new ReportEntityImage ( node, sceneview->document(), scene ) )->setVisible ( true );
-		} //TODO add graph
-		//else if(n == "graph") {
-		//  (new ReportEntityGraph(node, sceneview->document(), scene))->setVisible(true);
-		//}
+		}
+		else if(n == "chart") {
+		  (new ReportEntityChart(node, sceneview->document(), scene))->setVisible(true);
+		}
 		else if ( n == "key" || n == "firstpage" || n == "lastpage"
 		          || n == "odd" || n == "even" )
 		{

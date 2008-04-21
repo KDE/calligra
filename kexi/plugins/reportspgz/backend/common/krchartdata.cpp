@@ -34,6 +34,96 @@ typedef QVector<qreal> datalist;
 KRChartData::KRChartData ( QDomNode & element )
 {
 	_conn = 0;
+	createProperties();
+	
+	QDomNodeList nl = element.childNodes();
+
+	QString n;
+	QDomNode node;
+
+	for ( int i = 0; i < nl.count(); i++ )
+	{
+		node = nl.item ( i );
+		n = node.nodeName();
+		
+		kDebug() << node.nodeName() << node.firstChild().nodeValue();
+		if ( n == "data" )
+		{
+			QDomNodeList dnl = node.childNodes();
+			for ( int di = 0; di < dnl.count(); di++ )
+			{
+				//TODO link child, master
+				node = dnl.item ( di );
+				n = node.nodeName();
+				if ( n == "datasource" )
+				{
+					_dataSource->setValue ( node.firstChild().nodeValue() );
+				}
+				else
+				{
+					kDebug() << "while parsing field data encountered and unknown element: " << n << endl;
+				}
+			}
+		}
+		else if ( n == "name" )
+		{
+			_name->setValue(node.firstChild().nodeValue());
+		}
+		else if ( n == "zvalue" )
+		{
+			Z = node.firstChild().nodeValue().toDouble();
+		}
+		else if ( n == "type" )
+		{
+			_chartType->setValue(node.firstChild().nodeValue().toInt());
+		}
+		else if ( n == "subtype" )
+		{
+			_chartSubType->setValue(node.firstChild().nodeValue().toInt());
+		}
+		else if ( n == "threed" )
+		{
+			_threeD->setValue(node.firstChild().nodeValue() == "true" ? true : false);
+		}
+		else if ( n == "colorscheme" )
+		{
+			_colorScheme->setValue(node.firstChild().nodeValue());
+		}
+		else if ( n == "antialiased" )
+		{
+			_aa->setValue(node.firstChild().nodeValue() == "true" ? true : false);
+		}
+		else if ( n == "xtitle" )
+		{
+			_xTitle->setValue(node.firstChild().nodeValue());
+		}
+		else if ( n == "ytitle" )
+		{
+			_yTitle->setValue(node.firstChild().nodeValue());
+		}
+		else if ( n == "rect" )
+		{
+			QRectF r;
+			parseReportRect(node.toElement(), r);
+			_pos.setPointPos(r.topLeft());
+			_size.setPointSize(r.size());
+		}
+		
+		else if (n == "linestyle")
+		{
+			ORLineStyleData ls;
+			if (parseReportLineStyleData( node.toElement(), ls ))
+			{
+				_lnWeight->setValue(ls.weight);
+				_lnColor->setValue(ls.lnColor);
+				_lnStyle->setValue(ls.style);
+			}
+		}
+		else
+		{
+			kDebug() << "while parsing field element encountered unknow element: " << n << endl;
+		}
+	}
 
 }
 

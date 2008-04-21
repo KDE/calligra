@@ -60,7 +60,9 @@ ReportEntityChart::ReportEntityChart ( ReportDesigner * rd, QGraphicsScene* scen
 ReportEntityChart::ReportEntityChart ( QDomNode & element, ReportDesigner * rd, QGraphicsScene* scene ) : ReportRectEntity ( rd ), KRChartData ( element )
 {
 	init ( scene, rd );
+	populateData();
 	setSceneRect ( _pos.toScene(), _size.toScene() );
+	
 }
 
 ReportEntityChart::~ReportEntityChart()
@@ -123,6 +125,7 @@ void ReportEntityChart::buildXML ( QDomDocument & doc, QDomElement & parent )
 {
 	QDomElement entity = doc.createElement ( "chart" );
 
+	//Size, position
 	buildXMLRect ( doc,entity, pointRect() );
 
 	// name
@@ -135,9 +138,6 @@ void ReportEntityChart::buildXML ( QDomDocument & doc, QDomElement & parent )
 	z.appendChild ( doc.createTextNode ( QString::number ( zValue() ) ) );
 	entity.appendChild ( z );
 
-	// bounding rect
-	buildXMLRect ( doc,entity,pointRect() );
-	
 	//Data source
 	QDomElement data = doc.createElement ( "data" );
 	QDomElement dcolumn = doc.createElement ( "datasource" );
@@ -157,8 +157,8 @@ void ReportEntityChart::buildXML ( QDomDocument & doc, QDomElement & parent )
 	entity.appendChild ( subtype );
 	
 	//3d
-	QDomElement d3 = doc.createElement ( "3d" );
-	d3.appendChild ( doc.createTextNode ( _chartSubType->value().toBool() ? "true" : "false" ));
+	QDomElement d3 = doc.createElement ( "threed" );
+	d3.appendChild ( doc.createTextNode ( _threeD->value().toBool() ? "true" : "false" ));
 	entity.appendChild ( d3 );
 	
 	//color scheme
@@ -170,6 +170,16 @@ void ReportEntityChart::buildXML ( QDomDocument & doc, QDomElement & parent )
 	QDomElement aa = doc.createElement ( "antialiased" );
 	aa.appendChild ( doc.createTextNode ( _aa->value().toBool() ? "true" : "false" ));
 	entity.appendChild ( aa );
+	
+	//x-title
+	QDomElement xt = doc.createElement ( "xtitle" );
+	xt.appendChild ( doc.createTextNode ( _xTitle->value().toString() ));
+	entity.appendChild ( xt );
+	
+	//y-title
+	QDomElement yt = doc.createElement ( "ytitle" );
+	yt.appendChild ( doc.createTextNode ( _yTitle->value().toString() ));
+	entity.appendChild ( yt );
 	
 	//Line Style
 	buildXMLLineStyle(doc, entity, lineStyle());
