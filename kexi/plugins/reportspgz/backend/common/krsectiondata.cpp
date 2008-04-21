@@ -33,28 +33,29 @@
 #include "krbarcodedata.h"
 #include "krimagedata.h"
 #include "krlabeldata.h"
+#include "krchartdata.h"
 
 KRSectionData::KRSectionData()
 {
 	createProperties();
 }
 
-KRSectionData::KRSectionData ( const QDomElement & elemSource)
+KRSectionData::KRSectionData ( const QDomElement & elemSource )
 {
 	createProperties();
 	_name = elemSource.tagName();
 	setObjectName ( _name );
-	
+
 	if ( _name != "rpthead" && _name != "rptfoot" &&
-		    _name != "pghead" && _name != "pgfoot" &&
-		    _name != "grouphead" && _name != "groupfoot" &&
-		    _name != "head" && _name != "foot" &&
-		    _name != "detail" )
+	        _name != "pghead" && _name != "pgfoot" &&
+	        _name != "grouphead" && _name != "groupfoot" &&
+	        _name != "head" && _name != "foot" &&
+	        _name != "detail" )
 	{
 		_valid = false;
 		return;
 	}
-	_height->setValue(1);
+	_height->setValue ( 1 );
 
 	QDomNodeList section = elemSource.childNodes();
 	for ( int nodeCounter = 0; nodeCounter < section.count(); nodeCounter++ )
@@ -65,11 +66,11 @@ KRSectionData::KRSectionData ( const QDomElement & elemSource)
 			bool valid;
 			qreal height = elemThis.text().toDouble ( &valid );
 			if ( valid )
-				_height->setValue( height );
+				_height->setValue ( height );
 		}
 		else if ( elemThis.tagName() == "bgcolor" )
 		{
-			_bgColor->setValue( QColor ( elemThis.text() ) );
+			_bgColor->setValue ( QColor ( elemThis.text() ) );
 		}
 		else if ( elemThis.tagName() == "firstpage" )
 		{
@@ -125,26 +126,23 @@ KRSectionData::KRSectionData ( const QDomElement & elemSource)
 		{
 			KRBarcodeData * bc = new KRBarcodeData ( elemThis );
 			_objects.append ( bc );
-			
+
 		}
 		else if ( elemThis.tagName() == "image" )
 		{
 			KRImageData * img = new KRImageData ( elemThis );
 			_objects.append ( img );
 		}
-		//TODO Graph
-		//else if(elemThis.tagName() == "graph")
-		//{
-		//  ORGraphData * graph = new ORGraphData();
-		//  if(parseReportGraphData(elemThis, *graph) == TRUE)
-		//   sectionTarget.objects.append(graph);
-		//  else
-		//    delete graph;
-		//}
+		else if ( elemThis.tagName() == "chart" )
+		{
+			KRChartData * chart = new KRChartData ( elemThis );
+			_objects.append ( chart );
+
+		}
 		else
 			kDebug() << "While parsing section encountered an unknown element: " << elemThis.tagName() << endl;
 	}
-	qSort (_objects.begin(),_objects.end(), zLessThan );
+	qSort ( _objects.begin(),_objects.end(), zLessThan );
 	_valid = true;
 }
 
@@ -153,7 +151,7 @@ KRSectionData::~KRSectionData()
 
 }
 
-bool KRSectionData::zLessThan(KRObjectData* s1, KRObjectData* s2)
+bool KRSectionData::zLessThan ( KRObjectData* s1, KRObjectData* s2 )
 {
 	return s1->Z < s2->Z;
 }
@@ -161,15 +159,15 @@ bool KRSectionData::zLessThan(KRObjectData* s1, KRObjectData* s2)
 void KRSectionData::createProperties()
 {
 	_set = new KoProperty::Set ( 0, "Section" );
-	
-	_height = new KoProperty::Property ( "Height", 1.0, "Height", "Height");
+
+	_height = new KoProperty::Property ( "Height", 1.0, "Height", "Height" );
 	_bgColor = new KoProperty::Property ( "BackgroundColor", Qt::white, "Background Color", "Background Color" );
-	
+
 	_set->addProperty ( _height );
 	_set->addProperty ( _bgColor );
 }
 
 QString KRSectionData::name() const
 {
-	return (_extra.isEmpty() ? _name : _name + "_" + _extra);
+	return ( _extra.isEmpty() ? _name : _name + "_" + _extra );
 }

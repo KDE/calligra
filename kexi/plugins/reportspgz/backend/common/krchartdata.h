@@ -42,7 +42,9 @@ class KRChartData : public KRObjectData
 		~KRChartData();
 		virtual KRChartData * toChart();
 		virtual int type() const;
-	
+		KDChart::Widget *widget(){return _chartWidget;}
+		void populateData();
+		void setConnection(KexiDB::Connection*);
 	protected:
 		
 		KRPos _pos;
@@ -71,9 +73,6 @@ class KRChartData : public KRObjectData
 		void setColorScheme ( const QString & );
 		void setAxis();
 		
-		
-		void populateData();
-		void setConnection(KexiDB::Connection*);
 		QStringList fieldNames(const QString &);
 		QStringList fieldNamesHackUntilImprovedParser(const QString &);
 		

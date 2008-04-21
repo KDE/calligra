@@ -42,6 +42,8 @@
 #include <krimagedata.h>
 #include <krlabeldata.h>
 #include <krlinedata.h>
+#include <krchartdata.h>
+
 #include "scripting/krscripthandler.h"
 #include <krreportdata.h>
 #include <krdetailsectiondata.h>
@@ -836,47 +838,22 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 			id->setSize ( size );
 			_page->addPrimitive ( id );
 		}
-//TODO Graphs
-#if 0
-		else if ( elemThis->isGraph() )
+		else if ( elemThis->type() == KRObjectData::EntityChart )
 		{
-			ORGraphData * gData = elemThis->toGraph();
-
-			QPointF pos = gData->rect.topLeft();
-			QSizeF size = gData->rect.size();
-			pos /= 100.0;
+			KRChartData * ch = elemThis->toChart();
+			ch->setConnection(_conn);
+			ch->populateData();
+			OROImage * id = new OROImage();
+			id->setImage ( QPixmap::grabWidget ( ch->widget() ).toImage() );
+			QPointF pos = ch->_pos.toScene();
+			QSizeF size = ch->_size.toScene();
+			
 			pos += QPointF ( _leftMargin, _yOffset );
-			size /= 100.0;
-
-			QRect rect = QRect ( QPoint ( 0, 0 ), gData->rect.size() );
-
-// What we are doing here is we are creating an image assuming the original
-// 100dpi to render the graph to. All the original code is usable this way
-// as we just need to setup a painter for the image and pass that along to
-// the graph drawing code.
-			QImage gImage ( rect.size(), QImage::Format_RGB32 );
-			gImage.setDotsPerMeterX ( 3937 ); // should be 100dpi
-			gImage.setDotsPerMeterY ( 3937 ); // should be 100dpi
-			QPainter gPainter;
-			if ( gPainter.begin ( &gImage ) )
-			{
-				gPainter.fillRect ( rect, QColor ( Qt::white ) );
-				gPainter.setPen ( Qt::black );
-				//renderGraph(gPainter, rect, *gData, getQuerySource(gData->data.query)->getQuery(), _colorMap);
-				gPainter.end();
-
-				OROImage * id = new OROImage();
-				id->setImage ( gImage );
-				id->setPosition ( pos );
-				id->setSize ( size );
-				id->setScaled ( true );
-				id->setAspectRatioMode ( Qt::KeepAspectRatio );
-				id->setTransformationMode ( Qt::SmoothTransformation );
-				_page->addPrimitive ( id );
-
-			}
+			
+			id->setPosition ( pos );
+			id->setSize ( size );
+			_page->addPrimitive ( id );
 		}
-#endif
 		else
 		{
 			//logMessage("Encountered and unknown element while rendering a section.");
