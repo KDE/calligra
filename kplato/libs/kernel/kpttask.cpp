@@ -727,6 +727,22 @@ double Task::bcwp( long id ) const
     return plannedCost( id ) * (double)completion().percentFinished() / 100.0;
 }
 
+Duration Task::budgetedWorkPerformed( const QDate &date, long id ) const
+{
+    //kDebug();
+    Duration e;
+    if (type() == Node::Type_Summarytask) {
+        foreach (Node *n, childNodeIterator()) {
+            e += n->budgetedWorkPerformed( date, id );
+        }
+        return e;
+    }
+    
+    e = plannedEffort( id ) * (double)completion().percentFinished( date ) / 100.0;
+    //kDebug()<<m_name<<"("<<id<<")"<<date<<"="<<e.toString();
+    return e;
+}
+
 double Task::bcwp( const QDate &date, long id ) const
 {
     //kDebug();
@@ -742,21 +758,19 @@ double Task::bcwp( const QDate &date, long id ) const
     return c;
 }
 
-
-//FIXME Handle summarytasks
-double Task::effortPerformanceIndex(const QDate &date, bool *error) const {
-    double res = 0.0;
-    Duration ae = actualEffortTo(date);
-    
-    bool e = (ae == Duration::zeroDuration || completion().percentFinished() == 0);
-    if (error) {
-        *error = e;
+double Task::effortPerformanceIndex( const QDate &date, long id ) const {
+    kDebug();
+    Duration b = budgetedWorkPerformed( date, id );
+    if ( b == Duration::zeroDuration ) {
+        return 1.0;
     }
-    if (!e) {
-        res = (plannedEffortTo(date).toDouble() * ((double)completion().percentFinished()/100.0) / ae.toDouble());
+    Duration a = actualEffortTo( date );
+    if ( b == Duration::zeroDuration ) {
+        return 1.0;
     }
-    return res;
+    return b.toDouble() / a.toDouble();
 }
+
 
 //FIXME Handle summarytasks
 double Task::costPerformanceIndex(const QDate &date, bool *error) const {

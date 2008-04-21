@@ -1497,26 +1497,67 @@ double Project::actualCostTo( const QDate &date ) const
     return c;
 }
 
-double Project::bcwp( long id ) const
+Duration Project::budgetedWorkPerformed( const QDate &date, long id ) const
 {
     //kDebug();
-    double c = 0;
+    Duration e;
     foreach (Node *n, childNodeIterator()) {
-        c += n->bcwp(id);
+        e += n->budgetedWorkPerformed( date, id );
     }
-    return c;
+    return e;
+}
+
+double Project::effortPerformanceIndex( const QDate &date, long id ) const
+{
+    //kDebug();
+    kDebug()<<date<<id;
+    Duration b = budgetedWorkPerformed( date, id );
+    if ( b == Duration::zeroDuration ) {
+        return 1.0;
+    }
+    Duration a = actualEffortTo( date );
+    if ( b == Duration::zeroDuration ) {
+        return 1.0;
+    }
+    return b.toDouble() / a.toDouble();
+}
+
+double Project::bcwp( long id ) const
+{
+    QDate date = QDate::currentDate();
+    return bcwp( date, id );
 }
 
 double Project::bcwp( const QDate &date, long id ) const
 {
-    //kDebug();
-    double c = 0;
-    foreach (Node *n, childNodeIterator()) {
-        c += n->bcwp( date, id );
+    kDebug()<<date<<id;
+    QDate start = startTime( id ).date();
+    QDate end = endTime( id ).date();
+    EffortCostMap plan = plannedEffortCostPrDay( start, end, id );
+    EffortCostMap actual = actualEffortCostPrDay( start, (end > date ? end : date), id );
+
+    double budgetAtCompletion;
+    double plannedCompleted;
+    double actualCompleted;
+    double budgetedCompleted;
+    bool useEffort = true; //FIXME
+    if ( useEffort ) {
+        budgetAtCompletion = plan.totalEffort().toDouble( Duration::Unit_h );
+        plannedCompleted = plan.effortTo( date ).toDouble( Duration::Unit_h );
+        //actualCompleted = actual.effortTo( date ).toDouble( Duration::Unit_h );
+        actualCompleted = actualEffortTo( date ).toDouble( Duration::Unit_h );
+        budgetedCompleted = budgetedWorkPerformed( date, id ).toDouble( Duration::Unit_h );
+    } else {
+        budgetAtCompletion = plan.totalCost();
+        plannedCompleted = plan.costTo( date );
+        actualCompleted = actual.costTo( date );
     }
+    double percentageCompletion = budgetedCompleted / budgetAtCompletion;
+    
+    double c = budgetAtCompletion * percentageCompletion; //??
+    kDebug()<<percentageCompletion<<budgetAtCompletion<<budgetedCompleted<<plannedCompleted;
     return c;
 }
-
 
 void Project::addCalendar( Calendar *calendar, Calendar *parent )
 {

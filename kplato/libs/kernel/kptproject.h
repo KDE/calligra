@@ -246,10 +246,15 @@ public:
     
     virtual EffortCostMap actualEffortCostPrDay( const QDate &start, const QDate &end, long id = -1 ) const;
     
+    double effortPerformanceIndex( const QDate &date, long id ) const;
+    
+    /// Returns the effort planned to be used to reach the actual percent finished
+    virtual Duration budgetedWorkPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;
+
     /// Budgeted Cost of Work Performed
-    virtual double bcwp( long id = -1 ) const;
+    virtual double bcwp( long id = BASELINESCHEDULE ) const;
     /// Budgeted Cost of Work Performed ( up to @p date )
-    virtual double bcwp( const QDate &date, long id = -1 ) const;
+    virtual double bcwp( const QDate &date, long id = BASELINESCHEDULE ) const;
 
     Calendar *defaultCalendar() const { return m_defaultCalendar; }
     void setDefaultCalendar( Calendar *cal );

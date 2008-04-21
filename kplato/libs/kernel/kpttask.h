@@ -465,13 +465,17 @@ public:
      */
     virtual EffortCostMap actualEffortCostPrDay(const QDate &start, const QDate &end,  long id = CURRENTSCHEDULE ) const;
     
+    /// Returns the effort planned to be used to reach the actual percent finished
+    virtual Duration budgetedWorkPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;
+
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id = CURRENTSCHEDULE ) const;
     /// Budgeted Cost of Work Performed ( up to @p date )
     virtual double bcwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
     /// Effort based performance index
-    double effortPerformanceIndex(const QDate &date, bool *error=0) const;
+    double effortPerformanceIndex( const QDate &date, long id = CURRENTSCHEDULE ) const;
+
     /// Cost performance index
     double costPerformanceIndex(const QDate &date, bool *error=0) const;
     

@@ -182,6 +182,29 @@ public:
         return eff;
     }
     
+    double costTo( const QDate &date ) const {
+        double cost = 0.0;
+        EffortCostDayMap::const_iterator it;
+        for(it = m_days.constBegin(); it != m_days.constEnd(); ++it) {
+            if ( it.key() > date ) {
+                break;
+            }
+            cost += it.value().cost();
+        }
+        return cost;
+    }
+    Duration effortTo( const QDate &date ) const {
+        Duration eff;
+        EffortCostDayMap::const_iterator it;
+        for(it = m_days.constBegin(); it != m_days.constEnd(); ++it) {
+            if ( it.key() > date ) {
+                break;
+            }
+            eff += it.value().effort();
+        }
+        return eff;
+    }
+
 private:
     EffortCost &zero() { return m_zero; }
     

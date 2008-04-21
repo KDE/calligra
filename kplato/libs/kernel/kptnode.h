@@ -305,6 +305,11 @@ public:
     /// Actual cost up to and including date
     virtual double actualCostTo(const QDate &/*date*/) const { return 0; }
     
+    virtual double effortPerformanceIndex( const QDate &, long ) const = 0;
+    
+    /// Returns the effort planned to be used to reach the actual percent finished
+    virtual Duration budgetedWorkPerformed( const QDate &, long = CURRENTSCHEDULE ) const = 0;
+    
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id ) const { Q_UNUSED(id); return 0.0; }
     /// Budgeted Cost of Work Performed ( up to @p date )
