@@ -4,7 +4,6 @@ add_definitions(-DNO_CGI -DNO_SSI)
 remove_definitions(-DQT_NO_STL)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../3rdparty/shttpd/src)
-link_directories(${CMAKE_CURRENT_BINARY_DIR}/../../lib)
 
 set(webforms_SRCS
   main.cpp
