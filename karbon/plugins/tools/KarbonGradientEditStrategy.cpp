@@ -81,7 +81,7 @@ void GradientStrategy::setEditing( bool on )
     }
 }
 
-bool GradientStrategy::selectHandle( const QPointF &mousePos, const KoViewConverter &converter )
+bool GradientStrategy::hitHandle( const QPointF &mousePos, const KoViewConverter &converter, bool select )
 {
     QRectF hr = handleRect( converter );
 
@@ -91,33 +91,37 @@ bool GradientStrategy::selectHandle( const QPointF &mousePos, const KoViewConver
         hr.moveCenter( m_matrix.map( handle ) );
         if( hr.contains( mousePos ) )
         {
-            setSelection( Handle, handleIndex );
+            if( select )
+                setSelection( Handle, handleIndex );
             return true;
         }
         handleIndex++;
     }
 
-    setSelection( None );
+    if( select )
+        setSelection( None );
 
     return false;
 }
 
-bool GradientStrategy::selectLine( const QPointF &mousePos, const KoViewConverter &converter )
+bool GradientStrategy::hitLine( const QPointF &mousePos, const KoViewConverter &converter, bool select )
 {
     double maxDistance = handleRect( converter ).size().width();
     if( mouseAtLineSegment( mousePos, maxDistance ) )
     {
         m_lastMousePos = mousePos;
-        setSelection( Line );
+        if( select )
+            setSelection( Line );
         return true;
     }
 
-    setSelection( None );
+    if( select )
+        setSelection( None );
 
     return false;
 }
 
-bool GradientStrategy::selectStop( const QPointF &mousePos, const KoViewConverter &converter )
+bool GradientStrategy::hitStop( const QPointF &mousePos, const KoViewConverter &converter, bool select )
 {
     QRectF hr = handleRect( converter );
 
@@ -129,13 +133,15 @@ bool GradientStrategy::selectStop( const QPointF &mousePos, const KoViewConverte
         hr.moveCenter( handles[i].second );
         if( hr.contains( mousePos ) )
         {
-            setSelection( Stop, i );
+            if( select )
+                setSelection( Stop, i );
             m_lastMousePos = mousePos;
             return true;
         }
     }
 
-    setSelection( None );
+    if( select )
+        setSelection( None );
 
     return false;
 }
@@ -164,7 +170,19 @@ void GradientStrategy::paintStops( QPainter &painter, const KoViewConverter &con
         painter.drawLine( handles[i].first, handles[i].second );
         painter.setBrush( m_stops[i].second );
         painter.setPen( invertedColor( m_stops[i].second ) );
-        painter.drawEllipse( hr );
+        if( m_selection == Stop && m_selectionIndex == i )
+        {
+            QMatrix m;
+            m.translate( hr.center().x(), hr.center().y() );
+            m.rotate( 45.0 );
+            m.translate( -hr.center().x(), -hr.center().y() );
+            painter.save();
+            painter.setWorldMatrix( m, true );
+            painter.drawRect( hr );
+            painter.restore();
+        }
+        else
+            painter.drawEllipse( hr );
     }
 
     painter.restore();

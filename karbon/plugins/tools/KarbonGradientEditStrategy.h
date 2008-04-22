@@ -48,13 +48,13 @@ public:
     void paint( QPainter &painter, const KoViewConverter &converter, bool selected );
 
     /// selects handle at the given position
-    bool selectHandle( const QPointF &mousePos, const KoViewConverter &converter );
+    bool hitHandle( const QPointF &mousePos, const KoViewConverter &converter, bool select );
 
     /// selects the the gradient line at the given position
-    bool selectLine( const QPointF &mousePos, const KoViewConverter &converter );
+    bool hitLine( const QPointF &mousePos, const KoViewConverter &converter, bool select );
 
     /// selects the gradient stop at the given position
-    bool selectStop( const QPointF &mousePos, const KoViewConverter &converter );
+    bool hitStop( const QPointF &mousePos, const KoViewConverter &converter, bool select );
 
     /// mouse position handling for moving handles
     void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
