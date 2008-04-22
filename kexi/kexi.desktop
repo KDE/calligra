@@ -2,6 +2,7 @@
 Name=Kexi
 Name[hi]=केक्साई
 Name[ne]=केक्सी
+Name[ta]=கெக்ஸி
 Name[x-test]=xxKexixx
 Type=Application
 Exec=kexi
@@ -91,6 +92,7 @@ Comment[sl]=Razvijte namizne programe za delo z zbirkami podatkov
 Comment[sr]=Развијање примена база података за радну површину
 Comment[sr@latin]=Razvijanje primena baza podataka za radnu površinu
 Comment[sv]=Utveckla databasprogram för skrivbordet
+Comment[ta]=முகப்பு தரவுத்தள நிரல்களை உருவாக்கு
 Comment[uk]=Розробка програм для баз даних
 Comment[uz]=Маълумот базаси асосида дастурларни тузиш
 Comment[x-test]=xxDevelop desktop database applicationsxx

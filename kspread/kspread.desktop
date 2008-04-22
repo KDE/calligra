@@ -4,6 +4,7 @@ Name[af]=Kspread
 Name[hi]=के-स्प्रेड
 Name[ne]=केडीई स्प्रेड
 Name[sv]=Kspread
+Name[ta]=கேஸ்பிரெட்
 Name[x-test]=xxKSpreadxx
 Exec=kspread %u
 GenericName=Spreadsheet

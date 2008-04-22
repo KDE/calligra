@@ -2,6 +2,7 @@
 Name=PostgreSQL
 Name[hi]=पोस्टग्रे-एसक्यूएल
 Name[ne]=पोस्टग्रे SQL
+Name[ta]=போஸ்ட்கிரெஸ்கியூஎல்
 Name[x-test]=xxPostgreSQLxx
 Comment=Kexi database driver for accessing PostgreSQL servers
 Comment[ca]=Controlador de bases de dades Kexi per a accedir a servidors PostgresSQL
@@ -16,6 +17,7 @@ Comment[ja]=PostgreSQL サーバにアクセスするための Kexi データベ
 Comment[pt]=Controlador de bases de dados do Kexi para aceder a servidores de PostgreSQL
 Comment[pt_BR]=Controlador de bancos de dados do Kexi para acesso a servidores de PostgreSQL
 Comment[sv]=Databasdrivrutin i Kexi för att komma åt PostgreSQL-servrar
+Comment[ta]=போஸ்ட்கிரெஸ்கியூஎல் செவகன்களை அணுகுவதற்கான கெக்ஸி தரவுத்தள இயக்கி
 Comment[uk]=Драйвер бази даних Kexi для доступу до серверів PostgreSQL
 Comment[x-test]=xxKexi database driver for accessing PostgreSQL serversxx
 Comment[zh_TW]=存取 PostgreSQL 伺服器的 Kexi 資料庫驅動程式

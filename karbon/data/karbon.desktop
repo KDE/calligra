@@ -2,6 +2,7 @@
 Name=Karbon14
 Name[hi]=कारबन14
 Name[ne]=कार्बन१४
+Name[ta]=கார்பன்14
 Name[x-test]=xxKarbon14xx
 Exec=karbon %u
 GenericName=Scalable Graphics
@@ -46,6 +47,7 @@ GenericName[sl]=Raztegljiva grafika
 GenericName[sr]=Скалабилна графика
 GenericName[sr@latin]=Skalabilna grafika
 GenericName[sv]=Skalbar grafik
+GenericName[ta]=அளக்கக்கூடிய வண்ணங்கள்
 GenericName[tg]=Сиёҳқаламии Пулакчадор
 GenericName[tr]=Oranlanabilir Grafikler
 GenericName[uk]=Масштабовна графіка

@@ -2,6 +2,7 @@
 Name=SQLite3
 Name[hi]=एसक्यूलाइट३
 Name[sv]=Sqlite 3
+Name[ta]=எஸ்கியூலைட்3
 Name[x-test]=xxSQLite3xx
 Comment=SQLite is default Kexi embedded SQL engine
 Comment[bg]=SQLite е СУБД по подразбиране в Kexi , с вградено SQL ядро
@@ -42,6 +43,7 @@ Comment[sl]=SQLite je privzet vključen pogon SQL za Kexi
 Comment[sr]=SQLite је подразумевани Kexi-јев уграђен SQL мотор
 Comment[sr@latin]=SQLite je podrazumevani Kexi-jev ugrađen SQL motor
 Comment[sv]=Sqlite är inbyggd SQL-standarddatabas i Kexi
+Comment[ta]=எஸ்கியூலைட் என்பது இருப்பில் உள்ள கெக்ஸி பொருந்திய எஸ்கியூஎல்
 Comment[tg]=SQLite -- движоки SQL, ки дар дар дохили Kexi бо пешфарз сохта шудааст
 Comment[tr]=SQlite Kexi'ye gömülü varsayılan  SQL motorudur
 Comment[uk]=SQLite - це типовий рушій SQL вбудований в Kexi

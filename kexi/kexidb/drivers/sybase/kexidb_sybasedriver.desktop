@@ -1,6 +1,7 @@
 [Desktop Entry]
 Name=Sybase
 Name[hi]=साइबेस
+Name[ta]=சைபேஸ்
 Name[x-test]=xxSybasexx
 Comment=Kexi database driver for accessing Sybase servers
 Comment[ca]=Controlador de bases de dades Kexi per a accedir a servidors Sybase
@@ -16,6 +17,7 @@ Comment[ja]=Sybase サーバにアクセスするための Kexi データベー�
 Comment[pt]=Controlador de bases de dados do Kexi para aceder a servidores Sybase
 Comment[pt_BR]=Controlador de bancos de dados do Kexi para acesso a servidores Sybase
 Comment[sv]=Databasdrivrutin i Kexi för att komma åt Sybase-servrar
+Comment[ta]=சைபேஸ் செவகன்களை அனுகுவதற்கான கெக்ஸி தரவுத்தள இயக்கி
 Comment[uk]=Драйвер бази даних Kexi для доступу до серверів Sybase
 Comment[x-test]=xxKexi database driver for accessing Sybase serversxx
 Comment[zh_TW]=存取 Sybase 伺服器的 Kexi 資料庫驅動程式

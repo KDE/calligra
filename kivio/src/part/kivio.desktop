@@ -2,6 +2,7 @@
 Name=Kivio
 Name[hi]=किवियो
 Name[ne]=किभियो
+Name[ta]=கேவியோ
 Name[x-test]=xxKivioxx
 Exec=kivio %u
 GenericName=Flowchart & Diagram Editing
@@ -44,7 +45,7 @@ GenericName[sl]=Urejanje grafov in diagramov poteka
 GenericName[sr]=Уређивање графикона токова и дијаграма
 GenericName[sr@latin]=Uređivanje grafikona tokova i dijagrama
 GenericName[sv]=Flödesscheman och diagramredigering
-GenericName[ta]=  பாய்வு நிரல்படம் & வரிப்படம் தொகுப்பு 
+GenericName[ta]=பாய்வு நிரல்பட மற்றும் வரிபட தொகுப்பு
 GenericName[tg]=Муҳаррири Ҷадвали ҳозира ва Диаграмма
 GenericName[tr]=Diyagram Düzenleyici
 GenericName[uk]=Редагування діаграм та блок-схем

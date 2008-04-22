@@ -5,6 +5,7 @@ Name[af]=Kword
 Name[hi]=के-वर्ड
 Name[ne]=केडीई वर्ड
 Name[sv]=Kword
+Name[ta]=கேவோர்டு
 Name[x-test]=xxKWordxx
 Exec=kword %u
 GenericName=Word Processing

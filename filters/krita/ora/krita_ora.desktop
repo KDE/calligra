@@ -7,6 +7,7 @@ MimeType=image/openraster-archiving;
 Name=Krita
 Name[hi]=केरिता
 Name[ne]=क्रिता
+Name[ta]=கிரிட்டா
 Name[x-test]=xxKritaxx
 Path=
 StartupNotify=true

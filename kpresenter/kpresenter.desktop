@@ -7,6 +7,7 @@ Name[mk]=K-презентација
 Name[ne]=केडीई प्रस्तुतकर्ता
 Name[nl]=Kpresenter
 Name[sv]=Kpresenter
+Name[ta]=கேபிரஸன்டர்
 Name[tr]=Kpresenter
 Name[x-test]=xxKPresenterxx
 Exec=kpresenter %u

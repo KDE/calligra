@@ -2,6 +2,7 @@
 Name=Kugar
 Name[hi]=कुगर
 Name[ne]=कुगर
+Name[ta]=குகார்
 Name[x-test]=xxKugarxx
 Exec=kugar %u
 Icon=kugar
@@ -52,6 +53,7 @@ GenericName[sl]=Ustvarjanje poročil
 GenericName[sr]=Програм за прављење извештаја
 GenericName[sr@latin]=Program za pravljenje izveštaja
 GenericName[sv]=Rapportgenerator
+GenericName[ta]=அறிக்கை உருவாக்கி
 GenericName[tg]=Ҳисоби Тавлидкунанда
 GenericName[tr]=Rapor Oluşturma Programı
 GenericName[uk]=Генератор звітів

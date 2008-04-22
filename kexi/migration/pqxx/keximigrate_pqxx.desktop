@@ -2,6 +2,7 @@
 Name=PostgreSQL
 Name[hi]=पोस्टग्रे-एसक्यूएल
 Name[ne]=पोस्टग्रे SQL
+Name[ta]=போஸ்ட்கிரெஸ்கியூஎல்
 Name[x-test]=xxPostgreSQLxx
 Comment=PostgreSQL Migration Driver for Kexi
 Comment[bg]=Драйвер за мигриране от PostgreSQL към Kexi
