@@ -13,13 +13,11 @@ set(shttpd_SRCS string.c
 
 if(WIN32)
   list(APPEND shttpd_SRCS compat_win32.c)
-else(WIN32)
-  if (UNIX)
-    list(APPEND shttpd_SRCS compat_unix.c)
-  endif(UNIX)
 endif(WIN32)
 
-# Disable unneeded features
-add_definitions(-DNDEBUG -DNO_CGI -DNO_SSI)
+if (UNIX)
+  list(APPEND shttpd_SRCS compat_unix.c)
+endif(UNIX)
 
-add_library(shttpd ${shttpd_SRCS})
+add_library(shttpd STATIC ${shttpd_SRCS})
+target_link_libraries(shttpd ${CMAKE_DL_LIBS})

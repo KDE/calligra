@@ -1205,7 +1205,7 @@ shttpd_fini(struct shttpd_ctx *ctx)
 	free_list(&ctx->registered_uris, registered_uri_destructor);
 	free_list(&ctx->acl, acl_destructor);
 	free_list(&ctx->listeners, listener_destructor);
-	free_list(&ctx->ssi_funcs, ssi_func_destructor);
+	/* free_list(&ctx->ssi_funcs, ssi_func_destructor); */
 
 	for (i = 0; i < NELEMS(ctx->options); i++)
 		if (ctx->options[i] != NULL)
