@@ -46,6 +46,9 @@
         <Menu name="insert"><text>&amp;Insert</text>
             <Action name="insert_variable"/> <!-- menu -->
         </Menu>
+        <Menu name="format"><text>F&amp;ormat</text>
+            <Action name="format_masterpage"/> 
+        </Menu>
         <Menu name="page">
             <Text>&amp;Page</Text>
             <Action name="page_insertpage"/>
