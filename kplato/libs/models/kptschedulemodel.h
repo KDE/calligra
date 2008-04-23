@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2007 Dag Andersen <kplato@kde.org>
+  Copyright (C) 2007, 2008 Dag Andersen <kplato@kde.org>
 
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 
 #include <kptitemmodelbase.h>
 
+#include <QStandardItemModel>
 
 namespace KPlato
 {
@@ -136,6 +137,55 @@ private:
     
     ScheduleModel m_model;
     
+};
+
+//----------------------------------------
+class KPLATOMODELS_EXPORT ScheduleLogItemModel : public ItemModelBase
+{
+    Q_OBJECT
+public:
+    explicit ScheduleLogItemModel( QObject *parent = 0 );
+    ~ScheduleLogItemModel();
+
+    virtual void setProject( Project *project );
+    void setManager( ScheduleManager *manager );
+    ScheduleManager *manager() const { return m_manager; }
+
+    virtual Qt::ItemFlags flags( const QModelIndex & index ) const;
+
+    virtual QModelIndex parent( const QModelIndex & index ) const;
+    virtual QModelIndex index( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
+
+    virtual int columnCount( const QModelIndex & parent = QModelIndex() ) const; 
+    virtual int rowCount( const QModelIndex & parent = QModelIndex() ) const; 
+
+    virtual QVariant data( const QModelIndex & index, int role = Qt::DisplayRole ) const; 
+
+    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
+
+    QItemDelegate *createDelegate( int column, QWidget *parent ) const;
+
+    void refresh();
+    
+    QStandardItemModel *standardModel() { return &m_standard; }
+    
+protected slots:
+    void slotManagerChanged( ScheduleManager *sch );
+    void slotScheduleChanged( MainSchedule *sch );
+
+    void slotScheduleManagerToBeRemoved( const ScheduleManager *manager );
+    void slotScheduleManagerRemoved( const ScheduleManager *manager );
+    void slotScheduleToBeInserted( const ScheduleManager *manager, int row );
+    void slotScheduleInserted( const MainSchedule *schedule );
+    void slotScheduleToBeRemoved( const MainSchedule *schedule );
+    void slotScheduleRemoved( const MainSchedule *schedule );
+
+private:
+    ScheduleManager *m_manager;
+    MainSchedule *m_schedule;
+    QStandardItemModel m_standard;
+    ScheduleModel m_model;
+
 };
 
 

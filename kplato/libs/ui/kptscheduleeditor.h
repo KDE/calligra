@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-  Copyright (C) 2006-2007 Dag Andersen <kplato@kde.org>
+  Copyright (C) 2006-2008 Dag Andersen <kplato@kde.org>
   Copyright (C) 2006-2007 Menard Alexis <kplato@kde.org>
   This library is free software; you can redistribute it and/or
   modify it under the terms of the GNU Library General Public
@@ -140,6 +140,84 @@ private:
     KAction *actionAddSchedule;
     KAction *actionAddSubSchedule;
     KAction *actionDeleteSelection;
+    
+    KAction *actionOptions;
+};
+
+
+//-----------------------------
+class KPLATOUI_EXPORT ScheduleLogTreeView : public QTreeView
+{
+    Q_OBJECT
+public:
+    ScheduleLogTreeView( QWidget *parent );
+
+    Project *project() const { return logModel()->project(); }
+    void setProject( Project *project ) { logModel()->setProject( project ); }
+
+    ScheduleLogItemModel *logModel() const { return m_model; }
+    
+    ScheduleManager *scheduleManager() const { return logModel()->manager(); }
+    void setScheduleManager( ScheduleManager *manager ) { logModel()->setManager( manager ); }
+
+signals:
+    void currentChanged( const QModelIndex& );
+    void currentColumnChanged( QModelIndex, QModelIndex );
+    void selectionChanged( const QModelIndexList );
+
+    void contextMenuRequested( QModelIndex, const QPoint& );
+
+protected slots:
+    void headerContextMenuRequested( const QPoint &pos );
+    void slotActivated( const QModelIndex index );
+    virtual void selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    virtual void currentChanged ( const QModelIndex & current, const QModelIndex & previous );
+
+private:
+    ScheduleLogItemModel *m_model;
+};
+
+//----------------------------------------------
+class KPLATOUI_EXPORT ScheduleLogView : public ViewBase
+{
+    Q_OBJECT
+public:
+    ScheduleLogView( KoDocument *part, QWidget *parent );
+
+    void setupGui();
+    virtual void setProject( Project *project );
+    virtual void draw( Project &project );
+
+    ScheduleLogItemModel *model() const { return m_view->logModel(); }
+
+    virtual void updateReadWrite( bool readwrite );
+
+    /// Loads context info into this view.
+    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    /// Save context info from this view.
+    virtual void saveContext( QDomElement &/*context*/ ) const;
+    
+signals:
+    void requestPopupMenu( const QString&, const QPoint& );
+
+public slots:
+    /// Activate/deactivate the gui
+    virtual void setGuiActive( bool activate );
+
+private slots:
+    void slotContextMenuRequested( QModelIndex index, const QPoint& pos );
+    void slotHeaderContextMenuRequested( const QPoint &pos );
+    void slotScheduleSelectionChanged( ScheduleManager *sm );
+
+    void slotSelectionChanged( const QModelIndexList );
+    void slotCurrentChanged( const QModelIndex& );
+    void updateActionsEnabled( const QModelIndex &index );
+    void slotEnableActions( const ScheduleManager *sm );
+
+    void slotOptions();
+
+private:
+    ScheduleLogTreeView *m_view;
     
     KAction *actionOptions;
 };

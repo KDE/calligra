@@ -131,17 +131,33 @@ void Project::calculate( const DateTime &dt )
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
     Estimate::Use estType = ( Estimate::Use ) cs->type();
     if ( type() == Type_Project ) {
+        cs->setPhaseName( 0, "Init" );
+        cs->logInfo( "Schedule project from: " + dt.toString(), 0 );
         initiateCalculation( *cs );
         initiateCalculationLists( *cs ); // must be after initiateCalculation() !!
         kDebug()<<"Node="<<m_name<<" Start="<<time.toString();
         propagateEarliestStart( time );
         // Calculate lateFinish from time. If a task has started, remaingEffort is used.
+        cs->setPhaseName( 1, "Forward" );
+        cs->logInfo( "Calculate finish", 1 );
         cs->lateFinish = calculateForward( estType );
         propagateLatestFinish( cs->lateFinish );
         // Calculate earlyFinish. If a task has started, remaingEffort is used.
+        cs->setPhaseName( 2, "Backward" );
+        cs->logInfo( "Calculate start", 2 );
         cs->calculateBackward( estType );
         // Schedule. If a task has started, remaingEffort is used and appointments are copied from parent
+        cs->setPhaseName( 3, "Schedule" );
+        cs->logInfo( "Schedule tasks forward", 3 );
         cs->endTime = scheduleForward( cs->startTime, estType );
+        cs->logInfo( i18n( "Scheduled finish: %1", cs->endTime.toString() ), 3 );
+        if ( cs->endTime > m_constraintEndTime ) {
+            cs->logError( i18n( "Could not finish project in time: %1", m_constraintEndTime.toString() ), 3 );
+        } else if ( cs->endTime == m_constraintEndTime ) {
+            cs->logWarning( i18n( "Finished project exactly on time: %1", m_constraintEndTime.toString() ), 3 );
+        } else {
+            cs->logInfo( i18n( "Finished project before time: %1", m_constraintEndTime.toString() ), 3 );
+        }
         calcCriticalPath( false );
         calcResourceOverbooked();
         cs->notScheduled = false;
@@ -200,7 +216,7 @@ void Project::calculate( Schedule *schedule )
 void Project::calculate()
 {
     if ( m_currentSchedule == 0 ) {
-        kError() << "No current schedule to calculate" << endl;
+        kError() << "No current schedule to calculate";
         return ;
     }
     MainSchedule *cs = static_cast<MainSchedule*>( m_currentSchedule );
@@ -213,28 +229,58 @@ void Project::calculate()
         initiateCalculation( *cs );
         initiateCalculationLists( *cs ); // must be after initiateCalculation() !!
         if ( ! backwards ) {
-            kDebug()<<"Node="<<m_name<<" Start="<<m_constraintStartTime.toString();
+            cs->setPhaseName( 0, "Init" );
+            cs->logInfo( i18n( "Schedule project forward from: %1", m_constraintStartTime.toString() ), 0 );
             cs->startTime = m_constraintStartTime;
             cs->earlyStart = m_constraintStartTime;
             // Calculate from start time
             propagateEarliestStart( cs->earlyStart );
+            cs->setPhaseName( 1, "Forward" );
+            cs->logInfo( "Calculate late finish", 1 );
             cs->lateFinish = calculateForward( estType );
             propagateLatestFinish( cs->lateFinish );
+            cs->setPhaseName( 2, "Backward" );
+            cs->logInfo( "Calculate early start", 2 );
             cs->calculateBackward( estType );
+            cs->setPhaseName( 3, "Schedule" );
+            cs->logInfo( "Schedule tasks forward", 3 );
             cs->endTime = scheduleForward( cs->startTime, estType );
             cs->duration = cs->endTime - cs->startTime;
+            cs->logInfo( i18n( "Scheduled finish: %1", cs->endTime.toString() ), 3 );
+            if ( cs->endTime > m_constraintEndTime ) {
+                cs->logError( i18n( "Could not finish project in time: %1", m_constraintEndTime.toString() ), 3 );
+            } else if ( cs->endTime == m_constraintEndTime ) {
+                cs->logWarning( i18n( "Finished project exactly on time: %1", m_constraintEndTime.toString() ), 3 );
+            } else {
+                cs->logInfo( i18n( "Finished project before time: %1", m_constraintEndTime.toString() ), 3 );
+            }
             calcCriticalPath( false );
         } else {
-            //kDebug()<<"Node="<<m_name<<" End="<<m_constraintEndTime.toString();
+            cs->setPhaseName( 0, "Init" );
+            cs->logInfo( i18n( "Schedule project backward from: %1", m_constraintEndTime.toString(), 0 ) );
             cs->endTime = m_constraintEndTime;
             cs->lateFinish = m_constraintEndTime;
             // Calculate from end time
             propagateLatestFinish( cs->lateFinish );
+            cs->setPhaseName( 1, "Backward" );
+            cs->logInfo( "Calculate early start", 1 );
             cs->earlyStart = calculateBackward( estType );
             propagateEarliestStart( cs->earlyStart );
+            cs->setPhaseName( 2, "Forward" );
+            cs->logInfo( "Calculate late finish", 2 );
             cs->calculateForward( estType );
+            cs->setPhaseName( 3, "Schedule" );
+            cs->logInfo( "Schedule tasks backward", 3 );
             cs->startTime = scheduleBackward( cs->endTime, estType );
             cs->duration = cs->endTime - cs->startTime;
+            cs->logInfo( i18n( "Scheduled start: %1 (%2)", cs->startTime.toString(), m_constraintStartTime.toString() ), 3 );
+            if ( cs->startTime < m_constraintStartTime ) {
+                cs->logWarning( i18n( "Must start project early in order to finish in time: %1", m_constraintStartTime.toString() ), 3 );
+            } else if ( cs->startTime == m_constraintStartTime ) {
+                cs->logWarning( i18n( "Start project exactly on time: %1", m_constraintStartTime.toString() ), 3 );
+            } else {
+                cs->logInfo( i18n( "Can start project later than time: %1", m_constraintStartTime.toString() ), 3 );
+            }
             calcCriticalPath( true );
         }
         //makeAppointments();
@@ -2016,6 +2062,7 @@ void Project::sendScheduleAdded( const MainSchedule *sch )
 
 void Project::sendScheduleToBeRemoved( const MainSchedule *sch )
 {
+    //kDebug()<<sch->id();
     emit scheduleToBeRemoved( sch );
 }
 

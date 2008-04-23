@@ -28,6 +28,7 @@
 #include "kptresource.h"
 
 #include <QList>
+#include <QMap>
 #include <QString>
 
 //class KoXmlElement;
@@ -189,6 +190,29 @@ public:
     
     virtual ScheduleManager *manager() const { return 0; }
     
+    class Log {
+        public:
+            Log() 
+                : node( 0 ), resource( 0 ), severity( 0 ), phase( -1 )
+            {}
+            Log( const Node *n, int sev, const QString &msg, int ph = -1 )
+                : node( n ), resource( 0 ), message( msg ), severity( sev ), phase( ph )
+            {}
+            Log( const Node *n, const Resource *r, int sev, const QString &msg, int ph = -1 )
+                : node( n ), resource( r ), message( msg ), severity( sev ), phase( ph )
+            {}
+            const Node *node;
+            const Resource *resource;
+            QString message;
+            int severity;
+            int phase;
+    };
+    virtual void addLog( Log &log );
+    virtual void clearLogs() {};
+    virtual void logError( const QString &, int = -1 ) {}
+    virtual void logWarning( const QString &, int = -1 ) {}
+    virtual void logInfo( const QString &, int = -1 ) {}
+    
 protected:
     virtual void changed( Schedule * /*sch*/ ) {}
     
@@ -305,6 +329,10 @@ public:
     /// Return the resource names that has appointments to this schedule
     virtual QStringList resourceNameList() const;
 
+    virtual void logError( const QString &msg, int phase = -1 );
+    virtual void logWarning( const QString &msg, int phase = -1 );
+    virtual void logInfo( const QString &msg, int phase = -1 );
+
 protected:
     void init();
 
@@ -344,10 +372,17 @@ public:
     virtual Duration effort( const DateTimeInterval &interval ) const;
     virtual DateTimeInterval available( const DateTimeInterval &interval ) const;
     
+    virtual void logError( const QString &msg, int phase = -1 );
+    virtual void logWarning( const QString &msg, int phase = -1 );
+    virtual void logInfo( const QString &msg, int phase = -1 );
+    
+    void setNodeSchedule( const Schedule *sch ) { m_nodeSchedule = sch; }
+    
 private:
     Resource *m_resource;
     Schedule *m_parent;
-
+    const Schedule *m_nodeSchedule; // used during scheduling
+    
 #ifndef NDEBUG
 public:
     virtual void printDebug( const QString& ident );
@@ -417,6 +452,15 @@ public:
     }
     void addCriticalPathNode( Node *node );
     
+    QList<Schedule::Log> logs();
+    const QList<Schedule::Log> &logs() const;
+    virtual void addLog( Schedule::Log &log );
+    virtual void clearLogs() { m_log.clear(); m_logPhase.clear(); }
+    
+    void setPhaseName( int phase, const QString &name ) { m_logPhase[ phase ] = name; }
+    QString logPhase( int phase ) const { return m_logPhase.value( phase ); }
+    static QString logSeverity( int severity );
+    
 protected:
     virtual void changed( Schedule *sch );
 
@@ -435,6 +479,10 @@ private:
     QList< QList<Node*> > m_pathlists;
     QList<Node*> *m_currentCriticalPath;
     bool criticalPathListCached;
+    
+    
+    QList<Schedule::Log> m_log;
+    QMap<int, QString> m_logPhase;
     
 #ifndef NDEBUG
 public:

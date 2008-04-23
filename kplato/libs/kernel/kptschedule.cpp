@@ -496,6 +496,13 @@ double Schedule::plannedCostTo( const QDate &date ) const
     return c;
 }
 
+void Schedule::addLog( Schedule::Log &log )
+{
+    if ( m_parent ) {
+        m_parent->addLog( log );
+    }
+}
+
 //-------------------------------------------------
 NodeSchedule::NodeSchedule()
         : Schedule(),
@@ -711,6 +718,35 @@ QStringList NodeSchedule::resourceNameList() const
     return rl;
 }
 
+void NodeSchedule::logError( const QString &msg, int phase )
+{
+    Schedule::Log log( m_node, 2, msg, phase );
+    if ( m_parent ) {
+        m_parent->addLog( log );
+    } else {
+        addLog( log );
+    }
+}
+
+void NodeSchedule::logWarning( const QString &msg, int phase )
+{
+    Schedule::Log log( m_node, 1, msg, phase );
+    if ( m_parent ) {
+        m_parent->addLog( log );
+    } else {
+        addLog( log );
+    }
+}
+
+void NodeSchedule::logInfo( const QString &msg, int phase )
+{
+    Schedule::Log log( m_node, 0, msg, phase );
+    if ( m_parent ) {
+        m_parent->addLog( log );
+    } else {
+        addLog( log );
+    }
+}
 
 //-----------------------------------------------
 ResourceSchedule::ResourceSchedule()
@@ -723,7 +759,8 @@ ResourceSchedule::ResourceSchedule()
 ResourceSchedule::ResourceSchedule( Resource *resource, const QString& name, Schedule::Type type, long id )
         : Schedule( name, type, id ),
         m_resource( resource ),
-        m_parent( 0 )
+        m_parent( 0 ),
+        m_nodeSchedule( 0 )
 {
     //kDebug()<<"resource:"<<resource->name();
 }
@@ -731,7 +768,8 @@ ResourceSchedule::ResourceSchedule( Resource *resource, const QString& name, Sch
 ResourceSchedule::ResourceSchedule( Schedule *parent, Resource *resource )
         : Schedule( parent ),
         m_resource( resource ),
-        m_parent( parent )
+        m_parent( parent ),
+        m_nodeSchedule( 0 )
 {
     //kDebug()<<"resource:"<<resource->name();
 }
@@ -880,6 +918,30 @@ DateTimeInterval ResourceSchedule::available( const DateTimeInterval &interval )
     }
     //kDebug()<<this<<"id="<<m_id<<"Mode="<<m_calculationMode<<""<<interval.first<<","<<interval.second<<" FREE";
     return DateTimeInterval( interval.first, interval.second );
+}
+
+void ResourceSchedule::logError( const QString &msg, int phase )
+{
+    if ( m_parent ) {
+        Schedule::Log log( m_nodeSchedule->node(), m_resource, 2, msg, phase );
+        m_parent->addLog( log );
+    }
+}
+
+void ResourceSchedule::logWarning( const QString &msg, int phase )
+{
+    if ( m_parent ) {
+        Schedule::Log log( m_nodeSchedule->node(), m_resource, 1, msg, phase );
+        m_parent->addLog( log );
+    }
+}
+
+void ResourceSchedule::logInfo( const QString &msg, int phase )
+{
+    if ( m_parent ) {
+        Schedule::Log log( m_nodeSchedule->node(), m_resource, 0, msg, phase );
+        m_parent->addLog( log );
+    }
 }
 
 //--------------------------------------
@@ -1117,6 +1179,36 @@ void MainSchedule::addCriticalPathNode( Node *node )
         return;
     }
     m_currentCriticalPath->append( node );
+}
+
+QList<Schedule::Log> MainSchedule::logs()
+{
+    return m_log;
+}
+
+const QList<Schedule::Log> &MainSchedule::logs() const
+{
+    return m_log;
+}
+
+void MainSchedule::addLog( Schedule::Log &log )
+{
+    if ( log.phase == -1 && ! m_log.isEmpty() ) {
+        log.phase = m_log.last().phase;
+    }
+    m_log.append( log );
+}
+
+//static
+QString MainSchedule::logSeverity( int severity )
+{
+    switch ( severity ) {
+        case 0: return i18n( "Info" );
+        case 1: return i18n( "Warning" );
+        case 2: return i18n( "Error" );
+        default: break;
+    }
+    return QString( "Severity %1" ).arg( severity );
 }
 
 //-----------------------------------------
@@ -1666,6 +1758,14 @@ void MainSchedule::printDebug( const QString& _indent )
     QListIterator<Appointment*> it = m_appointments;
     while ( it.hasNext() ) {
         it.next() ->printDebug( indent + "  " );
+    }
+    kDebug()<< indent << "Scheduling log:"<<m_log.count();
+    if ( ! m_log.isEmpty() ) {
+        indent += "!-- ";
+        QList<Schedule::Log>::ConstIterator it;
+        for (it = m_log.constBegin(); it != m_log.constEnd(); ++it) {
+            kDebug()<< indent << logPhase( (*it).phase ) << (*it).node->name() << ((*it).resource? (*it).resource->name():"") << (*it).message;
+        }
     }
 }
 #endif

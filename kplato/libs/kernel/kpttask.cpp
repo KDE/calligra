@@ -899,6 +899,7 @@ DateTime Task::calculateEarlyFinish(int use) {
         //kDebug()<<earliestStart.toString()<<" +"<<m_durationBackward.toString()<<""<<m_name<<" calculateForward() (visited)";
         return cs->earlyFinish;
     }
+    cs->logInfo( "Calculate early finish" );
     //kDebug()<<"------>"<<m_name<<""<<cs->earlyStart;
     if (type() == Node::Type_Task) {
         m_durationForward = m_estimate->value(use, pert);
@@ -1111,6 +1112,7 @@ DateTime Task::calculateLateStart(int use) {
         //kDebug()<<latestFinish.toString()<<" -"<<m_durationBackward.toString()<<""<<m_name<<" calculateBackward() (visited)";
         return cs->lateStart;
     }
+    cs->logInfo( "Calculate late start" );
     //kDebug()<<m_name<<" id="<<cs->id()<<" mode="<<cs->calculationMode()<<": latestFinish="<<cs->lateFinish;
     if (type() == Node::Type_Task) {
         m_durationBackward = m_estimate->value(use, pert);
@@ -1315,6 +1317,7 @@ DateTime Task::scheduleFromStartTime(int use) {
     if ( !cs->startTime.isValid() ) {
         cs->startTime = cs->earlyStart;
     }
+    cs->logInfo( "Schedule from start " + cs->startTime.toString() );
     //kDebug()<<m_name<<" startTime="<<cs->startTime;
     if(type() == Node::Type_Task) {
         if ( cs->recalculate() && completion().isFinished() ) {

@@ -274,7 +274,7 @@ Resource::Resource()
     m_type = Type_Work;
     m_units = 100; // %
 
-    m_availableFrom = DateTime(KDateTime::currentLocalDateTime());
+    m_availableFrom = DateTime( QDate::currentDate(), QTime( 0, 0, 0 ) );
     m_availableUntil = m_availableFrom.addYears(2);
 
     cost.normalRate = 100;
@@ -611,7 +611,7 @@ KDateTime::Spec Resource::timeSpec() const
 void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateTime &end) {
     //kDebug()<<"node id="<<node->id()<<" mode="<<node->calculationMode()<<""<<from<<" -"<<end;
     if (!from.isValid() || !end.isValid()) {
-        kWarning()<<"Invalid time"<<endl;
+        m_currentSchedule->logWarning( "Invalid times" );
         return;
     }
     Calendar *cal = calendar();
@@ -622,18 +622,18 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
     while (time < end) {
         //kDebug()<<time<<" to"<<end;
         if (!time.isValid() || !end.isValid()) {
-            kWarning()<<"Invalid time"<<endl;
+            m_currentSchedule->logWarning( "Invalid time" );
             return;
         }
         if (!cal->hasInterval(time, end, m_currentSchedule)) {
             //kDebug()<<time<<" to"<<end<<": No (more) interval(s)";
-            kWarning()<<m_name<<": Resource only partially available"<<endl;
+            m_currentSchedule->logWarning( "Resource only partially available" );
             //node->resourceNotAvailable = true;
             return; // nothing more to do
         }
         DateTimeInterval i = cal->firstInterval(time, end, m_currentSchedule);
         if (!i.second.isValid()) {
-            kWarning()<<"Invalid interval: "<<time.toString()<<", "<<end.toString()<<endl;
+            m_currentSchedule->logWarning( "Invalid interval: " + time.toString() + ", " + end.toString() );
             return;
         }
         if (time == i.second)
@@ -651,11 +651,11 @@ void Resource::makeAppointment(Schedule *node, const DateTime &from, const DateT
 void Resource::makeAppointment(Schedule *node) {
     //kDebug()<<m_name<<": id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<node->node()->name()<<": id="<<node->id()<<" mode="<<node->calculationMode()<<""<<node->startTime;
     if (!node->startTime.isValid()) {
-        kWarning()<<m_name<<": startTime invalid"<<endl;
+        m_currentSchedule->logWarning( "Node startTime invalid" );
         return;
     }
     if (!node->endTime.isValid()) {
-        kWarning()<<m_name<<": endTime invalid"<<endl;
+        m_currentSchedule->logWarning( "Node endTime invalid" );
         return;
     }
     node->resourceNotAvailable = false;
@@ -676,7 +676,7 @@ void Resource::makeAppointment(Schedule *node) {
         makeAppointment(node, from, end);
     }
     if (!cal) {
-        kWarning()<<m_name<<": No calendar defined"<<endl;
+        m_currentSchedule->logWarning( "No calendar defined" );
         return; 
     }
     //TODO: units and standard non-working days
@@ -684,13 +684,13 @@ void Resource::makeAppointment(Schedule *node) {
     DateTime end = node->endTime;
     time = availableAfter(time, end);
     if (!time.isValid()) {
-        kWarning()<<m_name<<": Resource not available (after="<<node->startTime.toString()<<", "<<end.toString()<<")"<<endl;
+        m_currentSchedule->logWarning( "Resource not available after=" + node->startTime.toString() + ", " + end.toString() );
         node->resourceNotAvailable = true;
         return;
     }
     end = availableBefore(end, time);
     if (!end.isValid()) {
-        kWarning()<<m_name<<": Resource not available (before="<<node->endTime.toString()<<", "<<time.toString()<<")"<<endl;
+        m_currentSchedule->logWarning( "Resource not available  before=" + node->endTime.toString() + ", " + time.toString() + ")" );
         node->resourceNotAvailable = true;
         return;
     }
@@ -719,21 +719,29 @@ Duration Resource::effort(Schedule *sch, const DateTime &start, const Duration &
     }
     if (backward) {
         DateTime limit = start - duration;
+        if ( limit < m_availableFrom ) {
+            limit = m_availableFrom;
+        }
         DateTime t = availableBefore(start, limit);
         if (t.isValid()) {
             sts = true;
-            if ( t < limit ) kError()<<m_name<<"backward, t < limit: t="<<t<<" limit="<<limit;
+            if ( t < limit ) sch->logError( " t < limit: t=" + t.toString() + " limit=" + limit.toString() );
             e = (cal->effort(limit, t, sch) * m_units)/100;
         } else {
-            //kDebug()<<m_name<<": Not available (start="<<start<<","<<limit<<")";
+            //sch->logInfo( "Not available (start=" + start.toString() + "," + limit.toString() + ")" );
         }
     } else {
         DateTime limit = start + duration;
+        if ( limit > m_availableUntil ) {
+            limit = m_availableUntil;
+        }
         DateTime t = availableAfter(start, limit);
         if (t.isValid()) {
             sts = true;
-            if ( t > limit ) kError()<<m_name<<"forward, t > limit: t="<<t<<" limit="<<limit;
+            if ( t > limit ) sch->logError( "t > limit: t=" + t.toString() + " limit=" + limit.toString() );
             e = (cal->effort(t, limit, sch) * m_units)/100;
+        } else {
+            //sch->logInfo( "Not available (start=" + start.toString() + "," + limit.toString() + ")" );
         }
     }
     //kDebug()<<start<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")";
@@ -802,14 +810,14 @@ DateTime Resource::availableBefore(const DateTime &time, const DateTime limit, S
         return t;
     }
     if (!m_availableUntil.isValid()) {
-        kWarning()<<m_name<<": availabelUntil is invalid"<<endl;
+        sch->logWarning( "availabelUntil is invalid" );
         t = time;
     } else {
         t = m_availableUntil < time ? m_availableUntil : time;
     }
-    if ( t < lmt ) kError()<<" t < lmt"<<t<<"<"<<lmt;
+    if ( t < lmt ) sch->logError( "t < lmt: " + t.toString() + " < " + lmt.toString() );
     t = cal->firstAvailableBefore(t, lmt, sch );
-    if ( t.isValid() && t < lmt ) kError()<<m_name<<" id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<" t < lmt:"<<"t="<<t<<" lmt="<<lmt;
+    if ( t.isValid() && t < lmt ) sch->logError( " t < lmt: t=" + t.toString() + " lmt=" + lmt.toString() );
     return t;
 }
 
@@ -990,6 +998,7 @@ Schedule *ResourceRequest::resourceSchedule( Schedule *ns )
         s = r->createSchedule(ns->parent());
     }
     s->setCalculationMode( ns->calculationMode() );
+    static_cast<ResourceSchedule*>( s )->setNodeSchedule( ns );
     //kDebug()<<s->name()<<": id="<<s->id()<<" mode="<<s->calculationMode();
     return s;
 }
@@ -1195,6 +1204,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     if (_effort == Duration::zeroDuration) {
         return e;
     }
+    DateTime logtime = time;
     bool sts=true;
     bool match = false;
     DateTime start = time;
@@ -1219,78 +1229,101 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
             break;
         }
     }
-    //kDebug()<<"duration"<<(backward?"backward":"forward:")<<start.toString()<<" -"<<end.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts;
-    d = Duration(0, 1, 0); // 1 hour
-    for (int i=0; !match && i < 24; ++i) {
-        // hours
-        end = end.addSecs(inc*60*60);
-        e1 = effort(start, d, ns, backward, &sts);
-        if (e + e1 < _effort) {
-            e += e1;
-            start = end;
-        } else if (e + e1 == _effort) {
-            e += e1;
-            match = true;
-        } else {
-            end = start;
-            break;
+    if ( ! match ) {
+        ns->logInfo( "Days: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + QString("%1").arg(e.milliseconds()) + ")" );
+        
+        logtime = start;
+        d = Duration(0, 1, 0); // 1 hour
+        for (int i=0; !match && i < 24; ++i) {
+            // hours
+            end = end.addSecs(inc*60*60);
+            e1 = effort(start, d, ns, backward, &sts);
+            if (e + e1 < _effort) {
+                e += e1;
+                start = end;
+            } else if (e + e1 == _effort) {
+                e += e1;
+                match = true;
+            } else {
+                end = start;
+                break;
+            }
+            //kDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
         }
-        //kDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
+        //kDebug()<<"duration"<<(backward?"backward":"forward:")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts;
     }
-    //kDebug()<<"duration"<<(backward?"backward":"forward:")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts;
-    d = Duration(0, 0, 1); // 1 minute
-    for (int i=0; !match && i < 60; ++i) {
-        //minutes
-        end = end.addSecs(inc*60);
-        e1 = effort(start, d, ns, backward, &sts);
-        if (e + e1 < _effort) {
-            e += e1;
-            start = end;
-        } else if (e + e1 == _effort) {
-            e += e1;
-            match = true;
-        } else if (e + e1 > _effort) {
-            end = start;
-            break;
+    if ( ! match ) {
+        ns->logInfo( "Hours: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + QString("%1").arg(e.milliseconds()) + ")" );
+        
+        logtime = start;
+        d = Duration(0, 0, 1); // 1 minute
+        for (int i=0; !match && i < 60; ++i) {
+            //minutes
+            end = end.addSecs(inc*60);
+            e1 = effort(start, d, ns, backward, &sts);
+            if (e + e1 < _effort) {
+                e += e1;
+                start = end;
+            } else if (e + e1 == _effort) {
+                e += e1;
+                match = true;
+            } else if (e + e1 > _effort) {
+                end = start;
+                break;
+            }
+            //kDebug()<<"duration(m)"<<(backward?"backward":"forward:")<<"  time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
         }
-        //kDebug()<<"duration(m)"<<(backward?"backward":"forward:")<<"  time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
+        //kDebug()<<"duration"<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" e="<<e.toString()<<" match="<<match<<" sts="<<sts;
     }
-    //kDebug()<<"duration"<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" e="<<e.toString()<<" match="<<match<<" sts="<<sts;
-    d = Duration(0, 0, 0, 1); // 1 second
-    for (int i=0; !match && i < 60 && sts; ++i) {
-        //seconds
-        end = end.addSecs(inc);
-        e1 = effort(start, d, ns, backward, &sts);
-        if (e + e1 < _effort) {
-            e += e1;
-            start = end;
-        } else if (e + e1 == _effort) {
-            e += e1;
-            match = true;
-        } else if (e + e1 > _effort) {
-            end = start;
-            break;
+    if ( ! match ) {
+        ns->logInfo( "Minutes: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + QString("%1").arg(e.milliseconds()) + ")" );
+        
+        logtime = start;
+        d = Duration(0, 0, 0, 1); // 1 second
+        for (int i=0; !match && i < 60 && sts; ++i) {
+            //seconds
+            end = end.addSecs(inc);
+            e1 = effort(start, d, ns, backward, &sts);
+            if (e + e1 < _effort) {
+                e += e1;
+                start = end;
+            } else if (e + e1 == _effort) {
+                e += e1;
+                match = true;
+            } else if (e + e1 > _effort) {
+                end = start;
+                break;
+            }
+            //kDebug()<<"duration(s)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
         }
-        //kDebug()<<"duration(s)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
     }
-    d = Duration(0, 0, 0, 0, 1); // 1 millisecond
-    for (int i=0; !match && i < 1000; ++i) {
-        //milliseconds
-        end.setTime(end.time().addMSecs(inc));
-        e1 = effort(start, d, ns, backward, &sts);
-        if (e + e1 < _effort) {
-            e += e1;
-            start = end;
-        } else if (e + e1 == _effort) {
-            e += e1;
-            match = true;
-        } else if (e + e1 > _effort) {
-            break;
+    if ( ! match ) {
+        ns->logInfo( "Seconds: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " e=" + e.toString() + " (" + QString("%1").arg(e.milliseconds()) + ")" );
+        
+        d = Duration(0, 0, 0, 0, 1); // 1 millisecond
+        for (int i=0; !match && i < 1000; ++i) {
+            //milliseconds
+            end.setTime(end.time().addMSecs(inc));
+            e1 = effort(start, d, ns, backward, &sts);
+            if (e + e1 < _effort) {
+                e += e1;
+                start = end;
+            } else if (e + e1 == _effort) {
+                e += e1;
+                match = true;
+            } else if (e + e1 > _effort) {
+                break;
+            }
+            //kDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
         }
-        //kDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")";
     }
     if (!match) {
-        kError()<<(task()?task()->name():"No task")<<" "<<time.toString()<<": Could not match effort."<<" Want: "<<_effort.toString(Duration::Format_Day)<<" got: "<<e.toString(Duration::Format_Day)<<" sts="<<sts<<endl;
+        ns->logError( "Could not match effort. Want: " + _effort.toString(Duration::Format_Hour) + " got: " + e.toString(Duration::Format_Hour) );
+        foreach (ResourceRequest *r, m_resourceRequests) {
+            Resource *res = r->resource();
+            ns->logInfo( res->name() + ": available " + res->availableFrom().toString() + " to " + res->availableUntil().toString() );
+        }
+
     }
     DateTime t;
     if (e != Duration::zeroDuration) {
