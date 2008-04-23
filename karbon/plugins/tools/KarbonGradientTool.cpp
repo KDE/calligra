@@ -271,6 +271,7 @@ void KarbonGradientTool::mouseReleaseEvent( KoPointerEvent *event )
                 m_gradientWidget->setTarget( VGradientTabWidget::FillGradient );
             else
                 m_gradientWidget->setTarget( VGradientTabWidget::StrokeGradient );
+            m_gradientWidget->setStopIndex( m_currentStrategy->selectedColorStop() );
         }
         m_currentStrategy->setEditing( false );
     }

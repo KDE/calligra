@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001-2002 Beno�t Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2002-2003 Rob Buis <buis@kde.org>
-   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,6 +36,7 @@
 #include <kiconloader.h>
 #include <kfiledialog.h>
 #include <kurl.h>
+#include <kcolorbutton.h>
 
 #include <QtGui/QLabel>
 #include <QtGui/QPainter>
@@ -246,7 +247,7 @@ void VGradientPreview::paintEvent( QPaintEvent* )
 
 VGradientTabWidget::VGradientTabWidget( QWidget* parent )
     : QTabWidget( parent ), m_gradient( 0 )
-    , m_gradOpacity( 1.0 ), m_checkerPainter( 4 )
+    , m_gradOpacity( 1.0 ), m_stopIndex(-1), m_checkerPainter( 4 )
 {
     // create a default gradient
     m_gradient = new QLinearGradient( QPointF(0,0), QPointF(100,100) );
@@ -255,6 +256,7 @@ VGradientTabWidget::VGradientTabWidget( QWidget* parent )
 
     setupUI();
     setupConnections();
+    updateUI();
 }
 
 VGradientTabWidget::~VGradientTabWidget()
@@ -267,45 +269,53 @@ void VGradientTabWidget::setupUI()
     m_editTab = new QWidget();
     QGridLayout* editLayout = new QGridLayout( m_editTab );
 
-    editLayout->addWidget( new QLabel( i18n( "Type:" ), m_editTab ), 0, 0 );
-    editLayout->addWidget( new QLabel( i18n( "Repeat:" ), m_editTab ), 1, 0 );
-    editLayout->addWidget( new QLabel( i18n( "Target:" ), m_editTab ), 2, 0 );
-
+    int row = 0;
+    editLayout->addWidget( new QLabel( i18n( "Type:" ), m_editTab ), row, 0 );
     m_gradientType = new KComboBox( false, m_editTab );
     m_gradientType->insertItem( 0, i18nc( "Linear gradient type", "Linear" ) );
     m_gradientType->insertItem( 1, i18nc( "Radial gradient type", "Radial" ) );
     m_gradientType->insertItem( 2, i18nc( "Conical gradient type", "Conical" ) );
-    editLayout->addWidget( m_gradientType, 0, 1 );
+    editLayout->addWidget( m_gradientType, row, 1 );
 
+    editLayout->addWidget( new QLabel( i18n( "Repeat:" ), m_editTab ), ++row, 0 );
     m_gradientRepeat = new KComboBox( false, m_editTab );
     m_gradientRepeat->insertItem( 0, i18nc( "No gradient spread", "None" ) );
     m_gradientRepeat->insertItem( 1, i18n( "Reflect" ) );
     m_gradientRepeat->insertItem( 2, i18n( "Repeat" ) );
-    editLayout->addWidget( m_gradientRepeat, 1, 1 );
+    editLayout->addWidget( m_gradientRepeat, row, 1 );
 
+    editLayout->addWidget( new QLabel( i18n( "Target:" ), m_editTab ), ++row, 0 );
     m_gradientTarget = new KComboBox( false, m_editTab );
     m_gradientTarget->insertItem( 0, i18n( "Stroke" ) );
     m_gradientTarget->insertItem( 1, i18n( "Fill" ) );
     m_gradientTarget->setCurrentIndex( FillGradient );
-    editLayout->addWidget( m_gradientTarget, 2, 1 );
+    editLayout->addWidget( m_gradientTarget, row, 1 );
 
     m_gradientWidget = new VGradientWidget( m_editTab );
     m_gradientWidget->setStops( m_gradient->stops() );
-    editLayout->addWidget( m_gradientWidget, 4, 0, 1, 2 );
+    editLayout->addWidget( m_gradientWidget, ++row, 0, 1, 2 );
 
-    editLayout->addWidget( new QLabel( i18n( "Overall opacity:" ), m_editTab ), 5, 0 );
-
+    editLayout->addWidget( new QLabel( i18n( "Overall opacity:" ), m_editTab ), ++row, 0 );
     m_opacity = new KoSliderCombo( m_editTab );
     m_opacity->setDecimals(0);
-    editLayout->addWidget( m_opacity, 5, 1 );
+    editLayout->addWidget( m_opacity, row, 1 );
+
+    editLayout->addWidget( new QLabel( i18n( "Stop color:" ), m_editTab ), ++row, 0 );
+    m_stopColor = new KColorButton( m_editTab );
+    editLayout->addWidget( m_stopColor, row, 1 );
+
+    editLayout->addWidget( new QLabel( i18n( "Stop opacity:" ), m_editTab ), ++row, 0 );
+    m_stopOpacity = new KoSliderCombo( m_editTab );
+    m_stopOpacity->setDecimals(0);
+    editLayout->addWidget( m_stopOpacity, row, 1 );
 
     m_addToPredefs = new QPushButton( i18n( "&Add to Predefined Gradients" ), m_editTab );
-    editLayout->addWidget( m_addToPredefs, 6, 0, 1, 2 );
+    editLayout->addWidget( m_addToPredefs, ++row, 0, 1, 2 );
 
     editLayout->setSpacing( 3 );
     editLayout->setMargin( 6 );
     editLayout->setRowMinimumHeight( 0, 12 );
-    editLayout->setRowStretch( 7, 1 );
+    editLayout->setRowStretch( ++row, 1 );
 
     QWidget* predefTab  = new QWidget();
     QGridLayout* predefLayout = new QGridLayout( predefTab );
@@ -328,6 +338,8 @@ void VGradientTabWidget::setupConnections()
     connect( m_addToPredefs, SIGNAL( clicked() ), this, SLOT( addGradientToPredefs() ) );
     connect( m_predefGradientsView, SIGNAL( itemDoubleClicked( QTableWidgetItem * ) ), this, SLOT( changeToPredef( QTableWidgetItem* ) ) );
     connect( m_opacity, SIGNAL( valueChanged( double, bool ) ), this, SLOT( opacityChanged( double, bool ) ) );
+    connect( m_stopOpacity, SIGNAL(valueChanged(double, bool)), this, SLOT( stopChanged() ) );
+    connect( m_stopColor, SIGNAL(changed(const QColor&)), this, SLOT(stopChanged()) );
 }
 
 void VGradientTabWidget::blockChildSignals( bool block )
@@ -338,6 +350,8 @@ void VGradientTabWidget::blockChildSignals( bool block )
     m_addToPredefs->blockSignals( block );
     m_predefGradientsView->blockSignals( block );
     m_opacity->blockSignals( block );
+    m_stopColor->blockSignals( block );
+    m_stopOpacity->blockSignals( block );
 }
 
 void VGradientTabWidget::updateUI()
@@ -365,6 +379,16 @@ void VGradientTabWidget::updateUI()
         m_opacity->setValue( 100 );
     m_gradientWidget->setStops( m_gradient->stops() );
 
+    // now update the stop color and opacity
+    if( m_stopIndex >= 0 && m_stopIndex < m_gradient->stops().count() )
+    {
+        QColor c = m_gradient->stops()[m_stopIndex].second;
+        m_stopColor->setColor( c );
+        m_stopColor->setEnabled( true );
+        m_stopOpacity->setValue( c.alphaF() * 100 );
+        m_stopOpacity->setEnabled( true );
+    }
+
     blockChildSignals( false );
 }
 
@@ -380,6 +404,19 @@ void VGradientTabWidget::setOpacity( double opacity )
 
     m_gradOpacity = opacity;
     m_opacity->setValue( int(opacity*100.0) );
+}
+
+void VGradientTabWidget::setStopIndex( int index )
+{
+    if( ! m_gradient || index < 0 || index >= m_gradient->stops().count() )
+    {
+        m_stopColor->setEnabled( false );
+        m_stopOpacity->setEnabled( false );
+        return;
+    }
+
+    m_stopIndex = index;
+    updateUI();
 }
 
 const QGradient * VGradientTabWidget::gradient()
@@ -472,11 +509,10 @@ void VGradientTabWidget::combosChange( int )
     emit changed();
 }
 
-//void VGradientTabWidget::opacityChanged( int value )
 void VGradientTabWidget::opacityChanged( double value, bool final )
 {
     Q_UNUSED(final);
-    
+
     m_gradOpacity = value / 100.0;
 
     QGradientStops stops = m_gradient->stops();
@@ -547,6 +583,19 @@ void VGradientTabWidget::stopsChanged()
 {
     m_gradient->setStops( m_gradientWidget->stops() );
     emit changed();
+}
+
+void VGradientTabWidget::stopChanged()
+{
+    QColor c = m_stopColor->color();
+    c.setAlphaF( m_stopOpacity->value() / 100.0 );
+    QGradientStops stops = m_gradient->stops();
+    if( m_stopIndex >= 0 && m_stopIndex < stops.count() )
+    {
+        stops[m_stopIndex].second = c;
+        m_gradient->setStops( stops );
+        emit changed();
+    }
 }
 
 #include "vgradienttabwidget.moc"

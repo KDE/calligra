@@ -103,6 +103,10 @@ public:
 
     /// Triggers updating the gradient stops from the shape
     void updateStops();
+
+    /// Returns the currently selected color stop index
+    int selectedColorStop() const;
+
 protected:
     enum SelectionType { None, Handle, Line, Stop };
 

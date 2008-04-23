@@ -475,6 +475,14 @@ void GradientStrategy::updateStops()
         m_stops = brush.gradient()->stops();
 }
 
+int GradientStrategy::selectedColorStop() const
+{
+    if( m_selection == Stop )
+        return m_selectionIndex;
+    else
+        return -1;
+}
+
 void GradientStrategy::setGradientLine( int start, int stop )
 {
     m_gradientLine = QPair<int,int>( start, stop );

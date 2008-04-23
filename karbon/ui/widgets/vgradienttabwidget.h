@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2001-2002 Beno�t Vautrin <benoit.vautrin@free.fr>
    Copyright (C) 2002 Rob Buis <buis@kde.org>
-   Copyright (C) 2006-2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2006-2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -38,6 +38,7 @@ class QPushButton;
 class KarbonGradientChooser;
 class KoSliderCombo;
 class KoResourceItem;
+class KColorButton;
 
 /// A widget to preview a gradient
 class KARBONUI_EXPORT VGradientPreview : public QWidget
@@ -115,6 +116,9 @@ public:
     /// Sets the gradients opacity to @p opacity
     void setOpacity( double opacity );
 
+    /// Sets the index of the stop to edit
+    void setStopIndex( int index );
+
 Q_SIGNALS:
     /// Is emmited a soon as the gradient changes
     void changed();
@@ -125,7 +129,7 @@ protected Q_SLOTS:
     void changeToPredef( QTableWidgetItem* );
     void opacityChanged( double value, bool final );
     void stopsChanged();
-
+    void stopChanged();
 protected:
     void setupUI();
     void updateUI();
@@ -142,9 +146,11 @@ private:
     KarbonGradientChooser *m_predefGradientsView;
     QPushButton      *m_addToPredefs;
     KoSliderCombo * m_opacity;
-
+    KColorButton * m_stopColor;
+    KoSliderCombo * m_stopOpacity;
     QGradient * m_gradient; /// the actual edited gradient
     double m_gradOpacity;    ///< the gradient opacity
+    int m_stopIndex; ///< the index of the selected gradient stop
     KoCheckerBoardPainter m_checkerPainter;
 };
 
