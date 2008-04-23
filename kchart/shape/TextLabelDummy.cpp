@@ -26,6 +26,7 @@ void TextLabelDummy::paint( QPainter&, const KoViewConverter& )
 
 bool TextLabelDummy::loadOdf( const KoXmlElement&, KoShapeLoadingContext& )
 {
+    return false;
 }
 
 void TextLabelDummy::saveOdf( KoShapeSavingContext& ) const
