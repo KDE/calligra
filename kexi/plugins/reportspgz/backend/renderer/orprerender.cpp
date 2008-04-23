@@ -844,6 +844,7 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 			ch->setConnection(_conn);
 			ch->populateData();
 			OROImage * id = new OROImage();
+			ch->widget()->setFixedSize(ch->_size.toScene().toSize());
 			id->setImage ( QPixmap::grabWidget ( ch->widget() ).toImage() );
 			QPointF pos = ch->_pos.toScene();
 			QSizeF size = ch->_size.toScene();
@@ -856,7 +857,7 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 		}
 		else
 		{
-			//logMessage("Encountered and unknown element while rendering a section.");
+			kDebug() << "Encountered an unknown element while rendering a section.";
 		}
 	}
 
