@@ -177,7 +177,7 @@
 %token INDICATOR
 %token INITIALLY
 %token INNER
-%token INPUT
+%token SQL_INPUT
 %token INSENSITIVE
 %token INSERT
 %token INTEGER

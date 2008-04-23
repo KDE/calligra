@@ -192,7 +192,7 @@ bool parseData(KexiDB::Parser *p, const char *data);
      INDICATOR = 411,
      INITIALLY = 412,
      INNER = 413,
-     INPUT = 414,
+     SQL_INPUT = 414,
      INSENSITIVE = 415,
      INSERT = 416,
      INTEGER = 417,
@@ -541,7 +541,7 @@ bool parseData(KexiDB::Parser *p, const char *data);
 #define INDICATOR 411
 #define INITIALLY 412
 #define INNER 413
-#define INPUT 414
+#define SQL_INPUT 414
 #define INSENSITIVE 415
 #define INSERT 416
 #define INTEGER 417
