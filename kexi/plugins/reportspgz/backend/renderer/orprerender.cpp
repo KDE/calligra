@@ -843,17 +843,20 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 			KRChartData * ch = elemThis->toChart();
 			ch->setConnection(_conn);
 			ch->populateData();
-			OROImage * id = new OROImage();
-			ch->widget()->setFixedSize(ch->_size.toScene().toSize());
-			id->setImage ( QPixmap::grabWidget ( ch->widget() ).toImage() );
-			QPointF pos = ch->_pos.toScene();
-			QSizeF size = ch->_size.toScene();
+			if ( ch->widget() )
+			{
+				OROImage * id = new OROImage();
+				ch->widget()->setFixedSize(ch->_size.toScene().toSize());
+				id->setImage ( QPixmap::grabWidget ( ch->widget() ).toImage() );
+				QPointF pos = ch->_pos.toScene();
+				QSizeF size = ch->_size.toScene();
 			
-			pos += QPointF ( _leftMargin, _yOffset );
+				pos += QPointF ( _leftMargin, _yOffset );
 			
-			id->setPosition ( pos );
-			id->setSize ( size );
-			_page->addPrimitive ( id );
+				id->setPosition ( pos );
+				id->setSize ( size );
+				_page->addPrimitive ( id );
+			}
 		}
 		else
 		{

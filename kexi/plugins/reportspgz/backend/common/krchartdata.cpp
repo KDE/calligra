@@ -256,6 +256,9 @@ void KRChartData::populateData()
 
 	QStringList fn;
 
+	delete _chartWidget;
+	_chartWidget = 0;
+
 	if ( _conn )
 	{
 		curs = _conn->executeQuery ( _dataSource->value().toString() );
@@ -268,9 +271,6 @@ void KRChartData::populateData()
 			int cols = fn.count() -1;
 			data.resize(cols);
 			
-			
-			if ( _chartWidget )
-				delete _chartWidget;
 			_chartWidget = new KDChart::Widget();
 			_chartWidget->setType ( ( KDChart::Widget::ChartType ) _chartType->value().toInt() );
 			_chartWidget->setSubType ( ( KDChart::Widget::SubType ) _chartSubType->value().toInt() );
@@ -380,6 +380,8 @@ QStringList KRChartData::fieldNamesHackUntilImprovedParser ( const QString &stmt
 
 void KRChartData::setAxis()
 {
+	Q_ASSERT(_chartWidget);
+
 	if ( _chartWidget->barDiagram() || _chartWidget->lineDiagram() )
 	{
 		KDChart::AbstractCartesianDiagram *dia = dynamic_cast<KDChart::AbstractCartesianDiagram*> ( _chartWidget->diagram() );
