@@ -261,7 +261,7 @@ void KRChartData::populateData()
 
 	if ( _conn )
 	{
-		curs = _conn->executeQuery ( _dataSource->value().toString() );
+		curs = dataSet();
 
 		if ( curs )
 		{
@@ -290,7 +290,10 @@ void KRChartData::populateData()
 				curs->moveNext();
 			}
 			kDebug() << labels;
-
+			if (data.size() > 0)
+			{
+				kDebug() << data[0];
+			}
 			for (int i = 1; i <= cols; ++i)
 			{
 				_chartWidget->setDataset ( i - 1, data[i - 1], fn[i] );
@@ -370,10 +373,27 @@ QStringList KRChartData::fieldNames ( const QString &stmt )
 QStringList KRChartData::fieldNamesHackUntilImprovedParser ( const QString &stmt )
 {
 	QStringList fn;
-	QString s = stmt.mid ( 6, stmt.indexOf ( "from", 0, Qt::CaseInsensitive ) - 6 ).simplified();
-	kDebug() << s;
-
-	fn = s.split ( "," );
+	QString ds = _dataSource->value().toString();
+	KexiDB::Cursor *c = 0;
+	KexiDB::Field::List fl;
+	QString s;
+	
+	if ( _conn && _conn->tableSchema ( ds ) )
+	{
+		kDebug() << ds << "is a table";
+		fn = _conn->tableSchema ( ds )->names();
+	}
+	else if ( _conn && _conn->querySchema ( ds ) )
+	{
+		kDebug() << ds << "is a query";
+		fn = _conn->querySchema ( ds )->names();
+	}
+	else
+	{
+		QString s = stmt.mid ( 6, stmt.indexOf ( "from", 0, Qt::CaseInsensitive ) - 6 ).simplified();
+		kDebug() << s;
+		fn = s.split ( "," );
+	}
 	return fn;
 }
 
@@ -429,6 +449,30 @@ ORLineStyleData KRChartData::lineStyle()
 	ls.lnColor = _lnColor->value().value<QColor>();
 	ls.style = (Qt::PenStyle)_lnStyle->value().toInt();
 	return ls;
+}
+
+KexiDB::Cursor *KRChartData::dataSet()
+{
+	QString ds = _dataSource->value().toString();
+	KexiDB::Cursor *c = 0;
+	
+	if ( _conn && _conn->tableSchema ( ds ) )
+	{
+		kDebug() << ds << "is a table";
+		c = _conn->executeQuery ( * ( _conn->tableSchema ( ds ) ), 1 );
+	}
+	else if ( _conn && _conn->querySchema ( ds ) )
+	{
+		kDebug() << ds << "is a query";
+		c = _conn->executeQuery ( * ( _conn->querySchema ( ds ) ), 1 );
+	}
+	else
+	{
+		kDebug() << ds << "is a statement";
+		c = _conn->executeQuery( ds );
+	}
+	
+	return c;
 }
 
 // RTTI

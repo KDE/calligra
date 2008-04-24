@@ -23,6 +23,7 @@
 namespace KexiDB
 {
 	class Connection;
+	class Cursor;
 }
 
 /**
@@ -85,6 +86,7 @@ class KRChartData : public KRObjectData
 		friend class ORPreRenderPrivate;
 		friend class Scripting::Chart;
 		
+		KexiDB::Cursor *dataSet();
 
 };
 
