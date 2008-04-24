@@ -32,6 +32,7 @@
 #include <QKeyEvent>
 #include <QEvent>
 #include <QAction>
+#include <QLineEdit>
 
 #include <kmessagebox.h>
 #include <klocale.h>
@@ -317,13 +318,15 @@ bool KexiStartupFileWidget::checkSelectedFile()
 //	KUrl url = currentURL();
 //	QString path = url.path().trimmed();
 //	QString path = selectedFile().trimmed();
+	kDebug() << "d->highlightedUrl: " << d->highlightedUrl << endl;
 
-	if (d->highlightedUrl.isEmpty() && !locationEdit()->urls().isEmpty()) {
-		kDebug() << locationEdit()->urls() <<endl;
+	if (d->highlightedUrl.isEmpty() && !locationEdit()->lineEdit()->text().isEmpty()) {
+		kDebug() << locationEdit()->lineEdit()->text() <<endl;
+		//kDebug() << locationEdit()->urls() <<endl;
 		kDebug() << baseUrl() <<endl;
 		
 		d->highlightedUrl = baseUrl();
-		const QString firstUrl( locationEdit()->urls().first() );
+		const QString firstUrl( locationEdit()->lineEdit()->text() ); // FIXME: find first...
 		if (QDir::isAbsolutePath( firstUrl ))
 			d->highlightedUrl = KUrl::fromPath( firstUrl );
 		else
