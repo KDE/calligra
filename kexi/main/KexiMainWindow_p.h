@@ -431,7 +431,7 @@ bool KexiMainWidget::queryExit()
 void KexiMainWidget::slotCurrentTabIndexChanged(int index)
 {
 	KexiWindowContainer* cont = dynamic_cast<KexiWindowContainer*>( m_tabWidget->widget(index) );
-	if ((KexiWindow*)m_previouslyActiveWindow == cont->window)
+	if (! cont || (KexiWindow*)m_previouslyActiveWindow == cont->window)
 		return;
 	if (m_mainWindow)
 		m_mainWindow->activeWindowChanged( cont->window, (KexiWindow*)m_previouslyActiveWindow );
