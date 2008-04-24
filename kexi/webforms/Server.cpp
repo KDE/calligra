@@ -26,24 +26,40 @@
 #include <shttpd.h>
 
 namespace KexiWebForms {
+    Server::Server() {
+        ctx = NULL;
+        ctx = shttpd_init();
+    }
+
     Server::~Server() {
         if (ctx != NULL)
             shttpd_fini(ctx);
     }
 
-    void Server::run(ServerConfig& serverConfig) {
-        kDebug() << "Initializing server...";
+    bool Server::run(ServerConfig& serverConfig) {
+        if (ctx != NULL) {
 
-        ctx = shttpd_init();
-        shttpd_set_option(ctx, "ports", serverConfig.ports.toStdString().c_str());
-        shttpd_set_option(ctx, "root", serverConfig.webRoot.toStdString().c_str());
-
-        // Do not show directory listings by default
-        shttpd_set_option(ctx, "dir_list", "0");
-
-        kDebug() << "Listening...";
-        
-        for (;;)
-            shttpd_poll(ctx, 1000);
+            kDebug() << "Initializing server...";
+            
+            ctx = shttpd_init();
+            shttpd_set_option(ctx, "ports", serverConfig.ports.toStdString().c_str());
+            shttpd_set_option(ctx, "root", serverConfig.webRoot.toStdString().c_str());
+            
+            // Do not show directory listings by default
+            shttpd_set_option(ctx, "dir_list", "0");
+            
+            kDebug() << "Listening...";
+            
+            for (;;)
+                shttpd_poll(ctx, 1000);
+            
+            return true;
+        } else if (ctx == NULL) {
+            kError() << "Internal error, SHTTPD engine was not initialized correctly";
+            return false;
+        } else { 
+            kError() << "Unknown error";
+            return false;
+        }
     }
 }

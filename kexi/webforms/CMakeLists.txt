@@ -10,4 +10,4 @@ set(webforms_SRCS
   Server.cpp)
 
 add_executable(kwebforms ${webforms_SRCS})
-target_link_libraries(kwebforms shttpd ${KDE4_KDECORE_LIBS})
+target_link_libraries(kwebforms shttpd ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS})

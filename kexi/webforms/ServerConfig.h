@@ -26,6 +26,11 @@
 namespace KexiWebForms {
 
     struct ServerConfig {
+        /**
+          * A string to specify listen ports. You can use it this way:
+          * "N,N,Ns" where N are port numbers and Ns is a port on which
+          * listen for HTTPS requests
+          */
         QString ports;
         QString webRoot;
     };

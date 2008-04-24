@@ -23,15 +23,16 @@
 
 #include "ServerConfig.h"
 
-#include <stdlib.h>
 #include <shttpd.h>
+#include <stdlib.h>
 
 namespace KexiWebForms {
 
     class Server {
     public:
+        Server();
         ~Server();
-        void run(ServerConfig& serverConfig);
+        bool run(ServerConfig& serverConfig);
     private:
         shttpd_ctx* ctx;
     };

@@ -23,38 +23,43 @@
 #include <KAboutData>
 #include <KApplication>
 #include <KCmdLineArgs>
+#include <KUniqueApplication>
 
 #include "Server.h"
 #include "ServerConfig.h"
 
 using namespace KexiWebForms;
 
-int main(int argc, char **argv) 
-{
-  KAboutData aboutData("wfd", NULL, ki18n("Web Forms Daemon"),
-		       "0.1", ki18n("Exports Kexi Forms to standard HTML pages"),
-		       KAboutData::License_GPL_V2,
-		       ki18n("(C) Copyright 2008, Lorenzo Villani"));
+int main(int argc, char **argv) {
+    KAboutData aboutData("kwebforms", NULL, ki18n("Web Forms Daemon"),
+                         "0.1", ki18n("Exports Kexi Forms to standard HTML pages"),
+                         KAboutData::License_GPL_V2,
+                         ki18n("(C) Copyright 2008, Lorenzo Villani"));
+    
+    KCmdLineArgs::init(argc, argv, &aboutData);
+    
+    KCmdLineOptions options;
+    options.add("ports <ports>", ki18n("Listen port"), "8080");
+    options.add("webroot <directory>", ki18n("Web Root"), ".");
+    options.add("file", ki18n("Path to Kexi database file"));
+    
+    KCmdLineArgs::addCmdLineOptions(options);
 
-  KCmdLineArgs::init(argc, argv, &aboutData);
-  
+    KUniqueApplication::addCmdLineOptions();
+    KUniqueApplication app(false);
 
-  KCmdLineOptions options;
-  options.add("ports <ports>", ki18n("Listen port"), "8080");
-  options.add("webroot <directory>", ki18n("Web Root"), ".");
-  options.add("file", ki18n("Path to Kexi database file"));
-
-  KCmdLineArgs::addCmdLineOptions(options);
-  KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-
-  // Set-up and run server
-  ServerConfig serverConfig = {
-      args->getOption("ports"),
-      args->getOption("webroot"),
-  };
-  Server server;
-  server.run(serverConfig);
-  
-  return 0;
+    KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+    
+    // Set-up and run server
+    ServerConfig serverConfig = {
+        args->getOption("ports"),
+        args->getOption("webroot"),
+    };
+    Server server;
+    
+    if (server.run(serverConfig))
+        return 0;
+    else
+        return 1;
 }
 
