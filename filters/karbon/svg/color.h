@@ -1,306 +1,152 @@
+/*
+define QHash<QByteArray, QColor> m_rgbcolors from svgImport class
+*/
 
-#define TORGB( red, green, blue ) \
-{ \
-	r = red; \
-	b = blue; \
-	g = green; \
-}
-
-void keywordToRGB( QString rgbColor, int &r, int &g, int &b )
-{
-	if( rgbColor == "aliceblue" )
-		TORGB( 240, 248, 255)
-	else if( rgbColor == "antiquewhite" )
-		TORGB( 250, 235, 215)
-	else if( rgbColor == "aqua" )
-		TORGB( 0, 255, 255)
-	else if( rgbColor == "aquamarine" )
-		TORGB( 127, 255, 212 )
-	else if( rgbColor == "azure" )
-		TORGB( 240, 255, 255 )
-	else if( rgbColor == "beige" )
-		TORGB( 245, 245, 220 )
-	else if( rgbColor == "bisque" )
-		TORGB( 255, 228, 196 )
-	else if( rgbColor == "black" )
-		TORGB( 0, 0, 0 )
-	else if( rgbColor == "blanchedalmond" )
-		TORGB( 255, 235, 205 )
-	else if( rgbColor == "blue" )
-		TORGB( 0, 0, 255 )
-	else if( rgbColor == "blueviolet" )
-		TORGB( 138, 43, 226 )
-	else if( rgbColor == "brown" )
-		TORGB( 165, 42, 42 )
-	else if( rgbColor == "burlywood" )
-		TORGB( 222, 184, 135 )
-	else if( rgbColor == "cadetblue" )
-		TORGB( 95, 158, 160 )
-	else if( rgbColor == "chartreuse" )
-		TORGB( 127, 255, 0 )
-	else if( rgbColor == "chocolate" )
-		TORGB( 210, 105, 30 )
-	else if( rgbColor == "coral" )
-		TORGB( 255, 127, 80 )
-	else if( rgbColor == "cornflowerblue" )
-		TORGB( 100, 149, 237 )
-	else if( rgbColor == "cornsilk" )
-		TORGB( 255, 248, 220 )
-	else if( rgbColor == "crimson" )
-		TORGB( 220, 20, 60 )
-	else if( rgbColor == "cyan" )
-		TORGB( 0, 255, 255 )
-	else if( rgbColor == "darkblue" )
-		TORGB( 0, 0, 139 )
-	else if( rgbColor == "darkcyan" )
-		TORGB( 0, 139, 139 )
-	else if( rgbColor == "darkgoldenrod" )
-		TORGB( 184, 134, 11 )
-	else if( rgbColor == "darkgray" )
-		TORGB( 169, 169, 169 )
-	else if( rgbColor == "darkgrey" )
-		TORGB( 169, 169, 169 )
-	else if( rgbColor == "darkgreen" )
-		TORGB( 0, 100, 0 )
-	else if( rgbColor == "darkkhaki" )
-		TORGB( 189, 183, 107 )
-	else if( rgbColor == "darkmagenta" )
-		TORGB( 139, 0, 139 )
-	else if( rgbColor == "darkolivegreen" )
-		TORGB( 85, 107, 47 )
-	else if( rgbColor == "darkorange" )
-		TORGB( 255, 140, 0 )
-	else if( rgbColor == "darkorchid" )
-		TORGB( 153, 50, 204 )
-	else if( rgbColor == "darkred" )
-		TORGB( 139, 0, 0 )
-	else if( rgbColor == "darksalmon" )
-		TORGB( 233, 150, 122 )
-	else if( rgbColor == "darkseagreen" )
-		TORGB( 143, 188, 143 )
-	else if( rgbColor == "darkslateblue" )
-		TORGB( 72, 61, 139 )
-	else if( rgbColor == "darkslategray" )
-		TORGB( 47, 79, 79 )
-	else if( rgbColor == "darkslategrey" )
-		TORGB( 47, 79, 79 )
-	else if( rgbColor == "darkturquoise" )
-		TORGB( 0, 206, 209 )
-	else if( rgbColor == "darkviolet" )
-		TORGB( 148, 0, 211 )
-	else if( rgbColor == "deeppink" )
-		TORGB( 255, 20, 147 )
-	else if( rgbColor == "deepskyblue" )
-		TORGB( 0, 191, 255 )
-	else if( rgbColor == "dimgray" )
-		TORGB( 105, 105, 105 )
-	else if( rgbColor == "dimgrey" )
-		TORGB( 105, 105, 105 )
-	else if( rgbColor == "dodgerblue" )
-		TORGB( 30, 144, 255 )
-	else if( rgbColor == "firebrick" )
-		TORGB( 178, 34, 34 )
-	else if( rgbColor == "floralwhite" )
-		TORGB( 255, 250, 240 )
-	else if( rgbColor == "forestgreen" )
-		TORGB( 34, 139, 34 )
-	else if( rgbColor == "fuchsia" )
-		TORGB( 255, 0, 255 )
-	else if( rgbColor == "gainsboro" )
-		TORGB( 220, 220, 220 )
-	else if( rgbColor == "ghostwhite" )
-		TORGB( 248, 248, 255 )
-	else if( rgbColor == "gold" )
-		TORGB( 255, 215, 0 )
-	else if( rgbColor == "goldenrod" )
-		TORGB( 218, 165, 32 )
-	else if( rgbColor == "gray" )
-		TORGB( 128, 128, 128 )
-	else if( rgbColor == "grey" )
-		TORGB( 128, 128, 128 )
-	else if( rgbColor == "green" )
-		TORGB( 0, 128, 0 )
-	else if( rgbColor == "greenyellow" )
-		TORGB( 173, 255, 47 )
-	else if( rgbColor == "honeydew" )
-		TORGB( 240, 255, 240 )
-	else if( rgbColor == "hotpink" )
-		TORGB( 255, 105, 180 )
-	else if( rgbColor == "indianred" )
-		TORGB( 205, 92, 92 )
-	else if( rgbColor == "indigo" )
-		TORGB( 75, 0, 130 )
-	else if( rgbColor == "ivory" )
-		TORGB( 255, 255, 240 )
-	else if( rgbColor == "khaki" )
-		TORGB( 240, 230, 140 )
-	else if( rgbColor == "lavender" )
-		TORGB( 230, 230, 250 )
-	else if( rgbColor == "lavenderblush" )
-		TORGB( 255, 240, 245 )
-	else if( rgbColor == "lawngreen" )
-		TORGB( 124, 252, 0 )
-	else if( rgbColor == "lemonchiffon" )
-		TORGB( 255, 250, 205 )
-	else if( rgbColor == "lightblue" )
-		TORGB( 173, 216, 230 )
-	else if( rgbColor == "lightcoral" )
-		TORGB( 240, 128, 128 )
-	else if( rgbColor == "lightcyan" )
-		TORGB( 224, 255, 255 )
-	else if( rgbColor == "lightgoldenrodyellow" )
-		TORGB( 250, 250, 210 )
-	else if( rgbColor == "lightgray" )
-		TORGB( 211, 211, 211 )
-	else if( rgbColor == "lightgrey" )
-		TORGB( 211, 211, 211 )
-	else if( rgbColor == "lightgreen" )
-		TORGB( 144, 238, 144 )
-	else if( rgbColor == "lightpink" )
-		TORGB( 255, 182, 193 )
-	else if( rgbColor == "lightsalmon" )
-		TORGB( 255, 160, 122 )
-	else if( rgbColor == "lightseagreen" )
-		TORGB( 32, 178, 170 )
-	else if( rgbColor == "lightskyblue" )
-		TORGB( 135, 206, 250 )
-	else if( rgbColor == "lightslategray" )
-		TORGB( 119, 136, 153 )
-	else if( rgbColor == "lightslategrey" )
-		TORGB( 119, 136, 153 )
-	else if( rgbColor == "lightsteelblue" )
-		TORGB( 176, 196, 222 )
-	else if( rgbColor == "lightyellow" )
-		TORGB( 255, 255, 224 )
-	else if( rgbColor == "lime" )
-		TORGB( 0, 255, 0 )
-	else if( rgbColor == "limegreen" )
-		TORGB( 50, 205, 50 )
-	else if( rgbColor == "linen" )
-		TORGB( 250, 240, 230 )
-	else if( rgbColor == "magenta" )
-		TORGB( 255, 0, 255 )
-	else if( rgbColor == "maroon" )
-		TORGB( 128, 0, 0 )
-	else if( rgbColor == "mediumaquamarine" )
-		TORGB( 102, 205, 170 )
-	else if( rgbColor == "mediumblue" )
-		TORGB( 0, 0, 205 )
-	else if( rgbColor == "mediumorchid" )
-		TORGB( 186, 85, 211 )
-	else if( rgbColor == "mediumpurple" )
-		TORGB( 147, 112, 219 )
-	else if( rgbColor == "mediumseagreen" )
-		TORGB( 60, 179, 113 )
-	else if( rgbColor == "mediumslateblue" )
-		TORGB( 123, 104, 238 )
-	else if( rgbColor == "mediumspringgreen" )
-		TORGB( 0, 250, 154 )
-	else if( rgbColor == "mediumturquoise" )
-		TORGB( 72, 209, 204 )
-	else if( rgbColor == "mediumvioletred" )
-		TORGB( 199, 21, 133 )
-	else if( rgbColor == "midnightblue" )
-		TORGB( 25, 25, 112 )
-	else if( rgbColor == "mintcream" )
-		TORGB( 245, 255, 250 )
-	else if( rgbColor == "mistyrose" )
-		TORGB( 255, 228, 225 )
-	else if( rgbColor == "moccasin" )
-		TORGB( 255, 228, 181 )
-	else if( rgbColor == "navajowhite" )
-		TORGB( 255, 222, 173 )
-	else if( rgbColor == "navy" )
-		TORGB( 0, 0, 128 )
-	else if( rgbColor == "oldlace" )
-		TORGB( 253, 245, 230 )
-	else if( rgbColor == "olive" )
-		TORGB( 128, 128, 0 )
-	else if( rgbColor == "olivedrab" )
-		TORGB( 107, 142, 35 )
-	else if( rgbColor == "orange" )
-		TORGB( 255, 165, 0 )
-	else if( rgbColor == "orangered" )
-		TORGB( 255, 69, 0 )
-	else if( rgbColor == "orchid" )
-		TORGB( 218, 112, 214 )
-	else if( rgbColor == "palegoldenrod" )
-		TORGB( 238, 232, 170 )
-	else if( rgbColor == "palegreen" )
-		TORGB( 152, 251, 152 )
-	else if( rgbColor == "paleturquoise" )
-		TORGB( 175, 238, 238 )
-	else if( rgbColor == "palevioletred" )
-		TORGB( 219, 112, 147 )
-	else if( rgbColor == "papayawhip" )
-		TORGB( 255, 239, 213 )
-	else if( rgbColor == "peachpuff" )
-		TORGB( 255, 218, 185 )
-	else if( rgbColor == "peru" )
-		TORGB( 205, 133, 63 )
-	else if( rgbColor == "pink" )
-		TORGB( 255, 192, 203 )
-	else if( rgbColor == "plum" )
-		TORGB( 221, 160, 221 )
-	else if( rgbColor == "powderblue" )
-		TORGB( 176, 224, 230 )
-	else if( rgbColor == "purple" )
-		TORGB( 128, 0, 128 )
-	else if( rgbColor == "red" )
-		TORGB( 255, 0, 0 )
-	else if( rgbColor == "rosybrown" )
-		TORGB( 188, 143, 143 )
-	else if( rgbColor == "royalblue" )
-		TORGB( 65, 105, 225 )
-	else if( rgbColor == "saddlebrown" )
-		TORGB( 139, 69, 19 )
-	else if( rgbColor == "salmon" )
-		TORGB( 250, 128, 114 )
-	else if( rgbColor == "sandybrown" )
-		TORGB( 244, 164, 96 )
-	else if( rgbColor == "seagreen" )
-		TORGB( 46, 139, 87 )
-	else if( rgbColor == "seashell" )
-		TORGB( 255, 245, 238 )
-	else if( rgbColor == "sienna" )
-		TORGB( 160, 82, 45 )
-	else if( rgbColor == "silver" )
-		TORGB( 192, 192, 192 )
-	else if( rgbColor == "skyblue" )
-		TORGB( 135, 206, 235 )
-	else if( rgbColor == "slateblue" )
-		TORGB( 106, 90, 205 )
-	else if( rgbColor == "slategray" )
-		TORGB( 112, 128, 144 )
-	else if( rgbColor == "slategrey" )
-		TORGB( 112, 128, 144 )
-	else if( rgbColor == "snow" )
-		TORGB( 255, 250, 250 )
-	else if( rgbColor == "springgreen" )
-		TORGB( 0, 255, 127 )
-	else if( rgbColor == "steelblue" )
-		TORGB( 70, 130, 180 )
-	else if( rgbColor == "tan" )
-		TORGB( 210, 180, 140 )
-	else if( rgbColor == "teal" )
-		TORGB( 0, 128, 128 )
-	else if( rgbColor == "thistle" )
-		TORGB( 216, 191, 216 )
-	else if( rgbColor == "tomato" )
-		TORGB( 255, 99, 71 )
-	else if( rgbColor == "turquoise" )
-		TORGB( 64, 224, 208 )
-	else if( rgbColor == "violet" )
-		TORGB( 238, 130, 238 )
-	else if( rgbColor == "wheat" )
-		TORGB( 245, 222, 179 )
-	else if( rgbColor == "white" )
-		TORGB( 255, 255, 255 )
-	else if( rgbColor == "whitesmoke" )
-		TORGB( 245, 245, 245 )
-	else if( rgbColor == "yellow" )
-		TORGB( 255, 255, 0 )
-	else if( rgbColor == "yellowgreen" )
-		TORGB( 154, 205, 50 )
-}
-
+#define SETRGBCOLORS() \
+	m_rgbcolors["aliceblue"] = QColor ( 240, 248, 255 ); \
+	m_rgbcolors[ "antiquewhite" ] = QColor ( 250, 235, 215); \
+	m_rgbcolors[ "aqua" ] = QColor ( 0, 255, 255); \
+	m_rgbcolors[ "aquamarine" ] = QColor ( 127, 255, 212 ); \
+	m_rgbcolors[ "azure" ] = QColor ( 240, 255, 255 ); \
+	m_rgbcolors[ "beige" ] = QColor ( 245, 245, 220 ); \
+	m_rgbcolors[ "bisque" ] = QColor ( 255, 228, 196 ); \
+	m_rgbcolors[ "black" ] = QColor ( 0, 0, 0 ); \
+	m_rgbcolors[ "blanchedalmond" ] = QColor ( 255, 235, 205 ); \
+	m_rgbcolors[ "blue" ] = QColor ( 0, 0, 255 ); \
+	m_rgbcolors[ "blueviolet" ] = QColor ( 138, 43, 226 ); \
+	m_rgbcolors[ "brown" ] = QColor ( 165, 42, 42 ); \
+	m_rgbcolors[ "burlywood" ] = QColor ( 222, 184, 135 ); \
+	m_rgbcolors[ "cadetblue" ] = QColor ( 95, 158, 160 ); \
+	m_rgbcolors[ "chartreuse" ] = QColor ( 127, 255, 0 ); \
+	m_rgbcolors[ "chocolate" ] = QColor ( 210, 105, 30 ); \
+	m_rgbcolors[ "coral" ] = QColor ( 255, 127, 80 ); \
+	m_rgbcolors[ "cornflowerblue" ] = QColor ( 100, 149, 237 ); \
+	m_rgbcolors[ "cornsilk" ] = QColor ( 255, 248, 220 ); \
+	m_rgbcolors[ "crimson" ] = QColor ( 220, 20, 60 ); \
+	m_rgbcolors[ "cyan" ] = QColor ( 0, 255, 255 ); \
+	m_rgbcolors[ "darkblue" ] = QColor ( 0, 0, 139 ); \
+	m_rgbcolors[ "darkcyan" ] = QColor ( 0, 139, 139 ); \
+	m_rgbcolors[ "darkgoldenrod" ] = QColor ( 184, 134, 11 ); \
+	m_rgbcolors[ "darkgray" ] = QColor ( 169, 169, 169 ); \
+	m_rgbcolors[ "darkgrey" ] = QColor ( 169, 169, 169 ); \
+	m_rgbcolors[ "darkgreen" ] = QColor ( 0, 100, 0 ); \
+	m_rgbcolors[ "darkkhaki" ] = QColor ( 189, 183, 107 ); \
+	m_rgbcolors[ "darkmagenta" ] = QColor ( 139, 0, 139 ); \
+	m_rgbcolors[ "darkolivegreen" ] = QColor ( 85, 107, 47 ); \
+	m_rgbcolors[ "darkorange" ] = QColor ( 255, 140, 0 ); \
+	m_rgbcolors[ "darkorchid" ] = QColor ( 153, 50, 204 ); \
+	m_rgbcolors[ "darkred" ] = QColor ( 139, 0, 0 ); \
+	m_rgbcolors[ "darksalmon" ] = QColor ( 233, 150, 122 ); \
+	m_rgbcolors[ "darkseagreen" ] = QColor ( 143, 188, 143 ); \
+	m_rgbcolors[ "darkslateblue" ] = QColor ( 72, 61, 139 ); \
+	m_rgbcolors[ "darkslategray" ] = QColor ( 47, 79, 79 ); \
+	m_rgbcolors[ "darkslategrey" ] = QColor ( 47, 79, 79 ); \
+	m_rgbcolors[ "darkturquoise" ] = QColor ( 0, 206, 209 ); \
+	m_rgbcolors[ "darkviolet" ] = QColor ( 148, 0, 211 ); \
+	m_rgbcolors[ "deeppink" ] = QColor ( 255, 20, 147 ); \
+	m_rgbcolors[ "deepskyblue" ] = QColor ( 0, 191, 255 ); \
+	m_rgbcolors[ "dimgray" ] = QColor ( 105, 105, 105 ); \
+	m_rgbcolors[ "dimgrey" ] = QColor ( 105, 105, 105 ); \
+	m_rgbcolors[ "dodgerblue" ] = QColor ( 30, 144, 255 ); \
+	m_rgbcolors[ "firebrick" ] = QColor ( 178, 34, 34 ); \
+	m_rgbcolors[ "floralwhite" ] = QColor ( 255, 250, 240 ); \
+	m_rgbcolors[ "forestgreen" ] = QColor ( 34, 139, 34 ); \
+	m_rgbcolors[ "fuchsia" ] = QColor ( 255, 0, 255 ); \
+	m_rgbcolors[ "gainsboro" ] = QColor ( 220, 220, 220 ); \
+	m_rgbcolors[ "ghostwhite" ] = QColor ( 248, 248, 255 ); \
+	m_rgbcolors[ "gold" ] = QColor ( 255, 215, 0 ); \
+	m_rgbcolors[ "goldenrod" ] = QColor ( 218, 165, 32 ); \
+	m_rgbcolors[ "gray" ] = QColor ( 128, 128, 128 ); \
+	m_rgbcolors[ "grey" ] = QColor ( 128, 128, 128 ); \
+	m_rgbcolors[ "green" ] = QColor ( 0, 128, 0 ); \
+	m_rgbcolors[ "greenyellow" ] = QColor ( 173, 255, 47 ); \
+	m_rgbcolors[ "honeydew" ] = QColor ( 240, 255, 240 ); \
+	m_rgbcolors[ "hotpink" ] = QColor ( 255, 105, 180 ); \
+	m_rgbcolors[ "indianred" ] = QColor ( 205, 92, 92 ); \
+	m_rgbcolors[ "indigo" ] = QColor ( 75, 0, 130 ); \
+	m_rgbcolors[ "ivory" ] = QColor ( 255, 255, 240 ); \
+	m_rgbcolors[ "khaki" ] = QColor ( 240, 230, 140 ); \
+	m_rgbcolors[ "lavender" ] = QColor ( 230, 230, 250 ); \
+	m_rgbcolors[ "lavenderblush" ] = QColor ( 255, 240, 245 ); \
+	m_rgbcolors[ "lawngreen" ] = QColor ( 124, 252, 0 ); \
+	m_rgbcolors[ "lemonchiffon" ] = QColor ( 255, 250, 205 ); \
+	m_rgbcolors[ "lightblue" ] = QColor ( 173, 216, 230 ); \
+	m_rgbcolors[ "lightcoral" ] = QColor ( 240, 128, 128 ); \
+	m_rgbcolors[ "lightcyan" ] = QColor ( 224, 255, 255 ); \
+	m_rgbcolors[ "lightgoldenrodyellow" ] = QColor ( 250, 250, 210 ); \
+	m_rgbcolors[ "lightgray" ] = QColor ( 211, 211, 211 ); \
+	m_rgbcolors[ "lightgrey" ] = QColor ( 211, 211, 211 ); \
+	m_rgbcolors[ "lightgreen" ] = QColor ( 144, 238, 144 ); \
+	m_rgbcolors[ "lightpink" ] = QColor ( 255, 182, 193 ); \
+	m_rgbcolors[ "lightsalmon" ] = QColor ( 255, 160, 122 ); \
+	m_rgbcolors[ "lightseagreen" ] = QColor ( 32, 178, 170 ); \
+	m_rgbcolors[ "lightskyblue" ] = QColor ( 135, 206, 250 ); \
+	m_rgbcolors[ "lightslategray" ] = QColor ( 119, 136, 153 ); \
+	m_rgbcolors[ "lightslategrey" ] = QColor ( 119, 136, 153 ); \
+	m_rgbcolors[ "lightsteelblue" ] = QColor ( 176, 196, 222 ); \
+	m_rgbcolors[ "lightyellow" ] = QColor ( 255, 255, 224 ); \
+	m_rgbcolors[ "lime" ] = QColor ( 0, 255, 0 ); \
+	m_rgbcolors[ "limegreen" ] = QColor ( 50, 205, 50 ); \
+	m_rgbcolors[ "linen" ] = QColor ( 250, 240, 230 ); \
+	m_rgbcolors[ "magenta" ] = QColor ( 255, 0, 255 ); \
+	m_rgbcolors[ "maroon" ] = QColor ( 128, 0, 0 ); \
+	m_rgbcolors[ "mediumaquamarine" ] = QColor ( 102, 205, 170 ); \
+	m_rgbcolors[ "mediumblue" ] = QColor ( 0, 0, 205 ); \
+	m_rgbcolors[ "mediumorchid" ] = QColor ( 186, 85, 211 ); \
+	m_rgbcolors[ "mediumpurple" ] = QColor ( 147, 112, 219 ); \
+	m_rgbcolors[ "mediumseagreen" ] = QColor ( 60, 179, 113 ); \
+	m_rgbcolors[ "mediumslateblue" ] = QColor ( 123, 104, 238 ); \
+	m_rgbcolors[ "mediumspringgreen" ] = QColor ( 0, 250, 154 ); \
+	m_rgbcolors[ "mediumturquoise" ] = QColor ( 72, 209, 204 ); \
+	m_rgbcolors[ "mediumvioletred" ] = QColor ( 199, 21, 133 ); \
+	m_rgbcolors[ "midnightblue" ] = QColor ( 25, 25, 112 ); \
+	m_rgbcolors[ "mintcream" ] = QColor ( 245, 255, 250 ); \
+	m_rgbcolors[ "mistyrose" ] = QColor ( 255, 228, 225 ); \
+	m_rgbcolors[ "moccasin" ] = QColor ( 255, 228, 181 ); \
+	m_rgbcolors[ "navajowhite" ] = QColor ( 255, 222, 173 ); \
+	m_rgbcolors[ "navy" ] = QColor ( 0, 0, 128 ); \
+	m_rgbcolors[ "oldlace" ] = QColor ( 253, 245, 230 ); \
+	m_rgbcolors[ "olive" ] = QColor ( 128, 128, 0 ); \
+	m_rgbcolors[ "olivedrab" ] = QColor ( 107, 142, 35 ); \
+	m_rgbcolors[ "orange" ] = QColor ( 255, 165, 0 ); \
+	m_rgbcolors[ "orangered" ] = QColor ( 255, 69, 0 ); \
+	m_rgbcolors[ "orchid" ] = QColor ( 218, 112, 214 ); \
+	m_rgbcolors[ "palegoldenrod" ] = QColor ( 238, 232, 170 ); \
+	m_rgbcolors[ "palegreen" ] = QColor ( 152, 251, 152 ); \
+	m_rgbcolors[ "paleturquoise" ] = QColor ( 175, 238, 238 ); \
+	m_rgbcolors[ "palevioletred" ] = QColor ( 219, 112, 147 ); \
+	m_rgbcolors[ "papayawhip" ] = QColor ( 255, 239, 213 ); \
+	m_rgbcolors[ "peachpuff" ] = QColor ( 255, 218, 185 ); \
+	m_rgbcolors[ "peru" ] = QColor ( 205, 133, 63 ); \
+	m_rgbcolors[ "pink" ] = QColor ( 255, 192, 203 ); \
+	m_rgbcolors[ "plum" ] = QColor ( 221, 160, 221 ); \
+	m_rgbcolors[ "powderblue" ] = QColor ( 176, 224, 230 ); \
+	m_rgbcolors[ "purple" ] = QColor ( 128, 0, 128 ); \
+	m_rgbcolors[ "red" ] = QColor ( 255, 0, 0 ); \
+	m_rgbcolors[ "rosybrown" ] = QColor ( 188, 143, 143 ); \
+	m_rgbcolors[ "royalblue" ] = QColor ( 65, 105, 225 ); \
+	m_rgbcolors[ "saddlebrown" ] = QColor ( 139, 69, 19 ); \
+	m_rgbcolors[ "salmon" ] = QColor ( 250, 128, 114 ); \
+	m_rgbcolors[ "sandybrown" ] = QColor ( 244, 164, 96 ); \
+	m_rgbcolors[ "seagreen" ] = QColor ( 46, 139, 87 ); \
+	m_rgbcolors[ "seashell" ] = QColor ( 255, 245, 238 ); \
+	m_rgbcolors[ "sienna" ] = QColor ( 160, 82, 45 ); \
+	m_rgbcolors[ "silver" ] = QColor ( 192, 192, 192 ); \
+	m_rgbcolors[ "skyblue" ] = QColor ( 135, 206, 235 ); \
+	m_rgbcolors[ "slateblue" ] = QColor ( 106, 90, 205 ); \
+	m_rgbcolors[ "slategray" ] = QColor ( 112, 128, 144 ); \
+	m_rgbcolors[ "slategrey" ] = QColor ( 112, 128, 144 ); \
+	m_rgbcolors[ "snow" ] = QColor ( 255, 250, 250 ); \
+	m_rgbcolors[ "springgreen" ] = QColor ( 0, 255, 127 ); \
+	m_rgbcolors[ "steelblue" ] = QColor ( 70, 130, 180 ); \
+	m_rgbcolors[ "tan" ] = QColor ( 210, 180, 140 ); \
+	m_rgbcolors[ "teal" ] = QColor ( 0, 128, 128 ); \
+	m_rgbcolors[ "thistle" ] = QColor ( 216, 191, 216 ); \
+	m_rgbcolors[ "tomato" ] = QColor ( 255, 99, 71 ); \
+	m_rgbcolors[ "turquoise" ] = QColor ( 64, 224, 208 ); \
+	m_rgbcolors[ "violet" ] = QColor ( 238, 130, 238 ); \
+	m_rgbcolors[ "wheat" ] = QColor ( 245, 222, 179 ); \
+	m_rgbcolors[ "white" ] = QColor ( 255, 255, 255 ); \
+	m_rgbcolors[ "whitesmoke" ] = QColor ( 245, 245, 245 ); \
+	m_rgbcolors[ "yellow" ] = QColor ( 255, 255, 0 ); \
+	m_rgbcolors[ "yellowgreen" ] = QColor ( 154, 205, 50 );

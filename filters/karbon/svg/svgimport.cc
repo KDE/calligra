@@ -65,6 +65,7 @@ K_EXPORT_PLUGIN( SvgImportFactory( "kofficefilters" ) )
 SvgImport::SvgImport(QObject*parent, const QVariantList&)
     : KoFilter(parent), m_document(0)
 {
+    SETRGBCOLORS();
 }
 
 SvgImport::~SvgImport()
@@ -587,9 +588,7 @@ double SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, QRectF 
 
 QColor SvgImport::stringToColor( const QString &rgbColor )
 {
-    int r, g, b;
-    keywordToRGB( rgbColor, r, g, b );
-    return QColor( r, g, b );
+    return m_rgbcolors[ rgbColor.toLatin1() ];
 }
 
 void SvgImport::parseColor( QColor &color, const QString &s )

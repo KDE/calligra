@@ -121,6 +121,7 @@ private:
     QStack<SvgGraphicsContext*>    m_gc;
     QMap<QString, SvgGradientHelper>  m_gradients;
     QMap<QString, QDomElement>     m_defs;
+    QHash<QByteArray, QColor>      m_rgbcolors;
     QRectF                         m_outerRect;
     QDomDocument                   m_inpdoc;
 };
