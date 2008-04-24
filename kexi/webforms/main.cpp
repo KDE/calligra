@@ -18,10 +18,16 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <cstdlib>
+
 #include <KAboutData>
 #include <KApplication>
 #include <KCmdLineArgs>
 
+#include "Server.h"
+#include "ServerConfig.h"
+
+using namespace KexiWebForms;
 
 int main(int argc, char **argv) 
 {
@@ -34,12 +40,20 @@ int main(int argc, char **argv)
   
 
   KCmdLineOptions options;
-  options.add("port", ki18n("Listen port"));
-  options.add("address", ki18n("Listen address"));
+  options.add("ports <ports>", ki18n("Listen port"), "8080");
+  options.add("webroot <directory>", ki18n("Web Root"), ".");
   options.add("file", ki18n("Path to Kexi database file"));
 
   KCmdLineArgs::addCmdLineOptions(options);
   KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
+
+  // Set-up and run server
+  ServerConfig serverConfig = {
+      args->getOption("ports"),
+      args->getOption("webroot"),
+  };
+  Server server;
+  server.run(serverConfig);
   
   return 0;
 }

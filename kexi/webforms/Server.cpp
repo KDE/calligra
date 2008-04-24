@@ -18,20 +18,32 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_WEBFORMS_HTTPSERVER_H
-#define KEXI_WEBFORMS_HTTPSERVER_H
+#include "Server.h"
+#include "ServerConfig.h"
 
-#include <stdlib.h>
+#include <KDebug>
+
 #include <shttpd.h>
 
-typedef struct shttpd_ctx Ctx;
+namespace KexiWebForms {
+    Server::~Server() {
+        if (ctx != NULL)
+            shttpd_fini(ctx);
+    }
 
+    void Server::run(ServerConfig& serverConfig) {
+        kDebug() << "Initializing server...";
 
-class HttpServer 
-{
-  public:
-    Ctx* init();
-    void poll(Ctx*, int);
-};
+        ctx = shttpd_init();
+        shttpd_set_option(ctx, "ports", serverConfig.ports.toStdString().c_str());
+        shttpd_set_option(ctx, "root", serverConfig.webRoot.toStdString().c_str());
 
-#endif
+        // Do not show directory listings by default
+        shttpd_set_option(ctx, "dir_list", "0");
+
+        kDebug() << "Listening...";
+        
+        for (;;)
+            shttpd_poll(ctx, 1000);
+    }
+}

@@ -18,18 +18,18 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "HttpServer.h"
+#ifndef KEXI_WEBFORMS_SERVERCONFIG_H
+#define KEXI_WEBFORMS_SERVERCONFIG_H
 
-#include <shttpd.h>
+#include <QString>
 
-Ctx* HttpServer::init() 
-{
-  return shttpd_init();
+namespace KexiWebForms {
+
+    struct ServerConfig {
+        QString ports;
+        QString webRoot;
+    };
+
 }
 
-
-void HttpServer::poll(Ctx* ctx, int interval) 
-{
-  
-}
-
+#endif
