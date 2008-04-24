@@ -37,6 +37,8 @@
 #include <KoShapeManager.h>
 #include <KoToolProxy.h>
 #include <KoShapeManagerPaintingStrategy.h>
+#include <KoCanvasController.h>
+#include <KoSelection.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -79,7 +81,7 @@ public:
     bool showMargins;      ///< should page margins be shown
     QPoint documentOffset; ///< the offset of the virtual canvas from the viewport
     int viewMargin;        ///< the view margin around the document in pixels
-    QRectF contentRect;    ///< the last calculated content rect
+    QRectF documentViewRect; ///< the last calculated document view rect
 };
 
 KarbonCanvas::KarbonCanvas( KarbonPart *p )
@@ -89,13 +91,13 @@ KarbonCanvas::KarbonCanvas( KarbonPart *p )
     d->document = &p->document();
     d->toolProxy = new KoToolProxy(this);
     d->shapeManager = new KoShapeManager(this, d->document->shapes() );
-    connect( d->shapeManager, SIGNAL(selectionChanged()), this, SLOT(adjustOrigin()) );
+    connect( d->shapeManager, SIGNAL(selectionChanged()), this, SLOT(updateSizeAndOffset()) );
 
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
     setMouseTracking(true);
     setFocusPolicy(Qt::ClickFocus); // allow to receive keyboard input
-    adjustOrigin();
+    updateSizeAndOffset();
     setAttribute(Qt::WA_InputMethodEnabled, true);
 }
 
@@ -217,7 +219,7 @@ void KarbonCanvas::inputMethodEvent(QInputMethodEvent *event)
 
 void KarbonCanvas::resizeEvent( QResizeEvent * )
 {
-    adjustOrigin();
+    updateSizeAndOffset();
 }
 
 void KarbonCanvas::gridSize(double *horizontal, double *vertical) const {
@@ -234,7 +236,7 @@ bool KarbonCanvas::snapToGrid() const {
 void KarbonCanvas::addCommand(QUndoCommand *command) {
 
     d->part->addCommand(command);
-    adjustOrigin();
+    updateSizeAndOffset();
 }
 
 void KarbonCanvas::updateCanvas(const QRectF& rc) {
@@ -244,10 +246,32 @@ void KarbonCanvas::updateCanvas(const QRectF& rc) {
     update(clipRect);
 }
 
+void KarbonCanvas::updateSizeAndOffset()
+{
+    // save the old view rect for comparing
+    QRectF oldDocumentViewRect = d->documentViewRect;
+    d->documentViewRect = documentViewRect();
+    // check if the view rect has changed and emit signal if it has
+    if( oldDocumentViewRect != d->documentViewRect )
+    {
+        QRectF viewRect = d->zoomHandler.documentToView( d->documentViewRect );
+        KoCanvasController * controller = canvasController();
+        if( controller )
+        {
+            // tell canvas controller the new document size in pixel
+            controller->setDocumentSize( viewRect.size().toSize() );
+            // make sure the actual selection is visible
+            KoSelection * selection = d->shapeManager->selection();
+            if( selection->count() )
+                controller->ensureVisible( selection->boundingRect() );
+        }
+    }
+    adjustOrigin();
+    update();
+}
+
 void KarbonCanvas::adjustOrigin()
 {
-    //kDebug(38000) <<"KarbonCanvas::adjustOrigin";
-
     // calculate the zoomed document bounding rect
     QRect documentRect = d->zoomHandler.documentToView( documentViewRect() ).toRect();
 
@@ -328,20 +352,9 @@ int KarbonCanvas::documentViewMargin() const
 
 QRectF KarbonCanvas::documentViewRect()
 {
-    //kDebug(38000) <<"KarbonCanvas::documentViewRect";
-
-    // save the old content rect for comparing
-    QRectF oldContentRect = d->contentRect;
-    // calculate the actual content rect
-    d->contentRect = d->document->boundingRect();
-
-    QRectF viewRect = d->contentRect.adjusted( -d->viewMargin, -d->viewMargin, d->viewMargin, d->viewMargin );
-
-    // check if the content rect has changed and emit signal if it has
-    if( oldContentRect != d->contentRect )
-        emit documentViewRectChanged( viewRect );
-
-    return viewRect;
+    QRectF bbox = d->document->boundingRect();
+    d->documentViewRect = bbox.adjusted( -d->viewMargin, -d->viewMargin, d->viewMargin, d->viewMargin );
+    return d->documentViewRect;
 }
 
 void KarbonCanvas::updateInputMethodInfo() {

@@ -124,14 +124,6 @@ signals:
      */
     void documentOriginChanged( const QPoint &origin );
 
-    /**
-     * This signal is emitted when the document view rect has changed.
-     * The document view rect is the union of the document page rect,
-     * the bounding rects of the all document objects and with the
-     * viewing margin applied.
-     */
-    void documentViewRectChanged( const QRectF &viewRect );
-
 protected:
     void paintEvent(QPaintEvent * ev);
     void mouseEvent(QMouseEvent *e);
@@ -153,6 +145,9 @@ protected:
     QRect widgetToView( const QRect& r ) const;
     QPoint viewToWidget( const QPoint& p ) const;
     QRect viewToWidget( const QRect& r ) const;
+
+private slots:
+    void updateSizeAndOffset();
 
 private:
     /// paint page margins

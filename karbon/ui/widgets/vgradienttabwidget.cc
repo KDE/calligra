@@ -388,6 +388,11 @@ void VGradientTabWidget::updateUI()
         m_stopOpacity->setValue( c.alphaF() * 100 );
         m_stopOpacity->setEnabled( true );
     }
+    else
+    {
+        m_stopColor->setEnabled( false );
+        m_stopOpacity->setEnabled( false );
+    }
 
     blockChildSignals( false );
 }
@@ -408,13 +413,6 @@ void VGradientTabWidget::setOpacity( double opacity )
 
 void VGradientTabWidget::setStopIndex( int index )
 {
-    if( ! m_gradient || index < 0 || index >= m_gradient->stops().count() )
-    {
-        m_stopColor->setEnabled( false );
-        m_stopOpacity->setEnabled( false );
-        return;
-    }
-
     m_stopIndex = index;
     updateUI();
 }
