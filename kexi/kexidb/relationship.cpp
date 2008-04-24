@@ -58,7 +58,6 @@ Relationship::Relationship( QuerySchema *query, Field *field1, Field *field2 )
 
 Relationship::~Relationship()
 {
-	qDeleteAll(m_pairs);
 	if (m_masterIndexOwned)
 		delete m_masterIndex;
 	if (m_detailsIndexOwned)
@@ -156,7 +155,6 @@ void Relationship::setIndices(IndexSchema* masterIndex, IndexSchema* detailsInde
 {
 	m_masterIndex = 0;
 	m_detailsIndex = 0;
-	qDeleteAll(m_pairs);
 	m_pairs.clear();
 	if (!masterIndex || !detailsIndex || !masterIndex->table() || !detailsIndex->table() 
 	|| masterIndex->table()==detailsIndex->table() || masterIndex->fieldCount()!=detailsIndex->fieldCount())
@@ -179,7 +177,6 @@ void Relationship::setIndices(IndexSchema* masterIndex, IndexSchema* detailsInde
 			<<"',INDEX on "<<detailsIndex->table()->name()<<"): !equal field types: "
 			<<Driver::defaultSQLTypeName(masterField->type())<<" "<<masterField->name()<<", "
 			<<Driver::defaultSQLTypeName(detailsField->type())<<" "<<detailsField->name() <<endl;
-			qDeleteAll(m_pairs);
 			m_pairs.clear();
 			return;
 		}
@@ -191,12 +188,11 @@ void Relationship::setIndices(IndexSchema* masterIndex, IndexSchema* detailsInde
 			<<"',INDEX on "<<detailsIndex->table()->name()<<"): !equal signedness of field types: "
 			<<Driver::defaultSQLTypeName(masterField->type())<<" "<<masterField->name()<<", "
 			<<Driver::defaultSQLTypeName(detailsField->type())<<" "<<detailsField->name() <<endl;
-			qDeleteAll(m_pairs);
 			m_pairs.clear();
 			return;
 		}
 #endif
-		m_pairs.append( new Field::Pair(masterField, detailsField) );
+		m_pairs.append( Field::Pair(masterField, detailsField) );
 	}
 	//ok: update information
 	if (m_masterIndex) {//detach yourself

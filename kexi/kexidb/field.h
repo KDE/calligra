@@ -80,7 +80,7 @@ class KEXI_DB_EXPORT Field
 		typedef QVector<Field*> Vector; //!< vector of fields 
 		typedef QList<Field*>::ConstIterator ListIterator; //!< iterator for list of fields 
 		typedef QPair<Field*,Field*> Pair; //!< fields pair
-		typedef QList<Pair*> PairList; //!< list of fields pair
+		typedef QList<Pair> PairList; //!< list of fields pair
 
 		/*! Unified (most common used) types of fields. */
 		enum Type

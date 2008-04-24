@@ -1453,17 +1453,17 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 		else
 			s_where += QString::fromLatin1(" AND ");
 		QString s_where_sub;
-		foreach (Field::Pair *pair, *rel->fieldPairs()) {
+		foreach (Field::Pair pair, *rel->fieldPairs()) {
 			if (!s_where_sub.isEmpty())
 				s_where_sub += QString::fromLatin1(" AND ");
 			s_where_sub += (
-				escapeIdentifier(pair->first->table()->name(), options.identifierEscaping) +
+				escapeIdentifier(pair.first->table()->name(), options.identifierEscaping) +
 				QString::fromLatin1(".") +
-				escapeIdentifier(pair->first->name(), options.identifierEscaping) +
+				escapeIdentifier(pair.first->name(), options.identifierEscaping) +
 				QString::fromLatin1(" = ")  +
-				escapeIdentifier(pair->second->table()->name(), options.identifierEscaping) +
+				escapeIdentifier(pair.second->table()->name(), options.identifierEscaping) +
 				QString::fromLatin1(".") +
-				escapeIdentifier(pair->second->name(), options.identifierEscaping));
+				escapeIdentifier(pair.second->name(), options.identifierEscaping));
 		}
 		if (rel->fieldPairs()->count()>1) {
 			s_where_sub.prepend("(");
