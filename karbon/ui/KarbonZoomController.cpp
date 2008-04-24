@@ -67,6 +67,8 @@ KarbonZoomController::KarbonZoomController( KoCanvasController *controller, KAct
 
     connect(d->canvasController, SIGNAL( sizeChanged(const QSize & ) ), this, SLOT( setAvailableSize() ) );
     connect(d->canvasController, SIGNAL( zoomBy(const double ) ), this, SLOT( requestZoomBy( const double ) ) );
+    connect(d->canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
+            d->canvas, SLOT(setDocumentOffset(const QPoint&)));
 }
 
 KarbonZoomController::~KarbonZoomController()

@@ -159,8 +159,6 @@ protected slots:
     void mousePositionChanged( const QPoint &position );
     void pageOffsetChanged();
 
-    void documentViewRectChanged( const QRectF &viewRect );
-
     void updateUnit( KoUnit unit );
 signals:
     void selectionChange();

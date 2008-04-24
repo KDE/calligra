@@ -222,16 +222,11 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     m_vertRuler->setUnit(p->unit());
     layout->addWidget( m_vertRuler, 1, 0 );
 
-    connect(m_canvas, SIGNAL(documentOriginChanged( const QPoint &)), this, SLOT(pageOffsetChanged()));
-    connect(m_canvas, SIGNAL(documentViewRectChanged(const QRectF &)),
-            this, SLOT(documentViewRectChanged(const QRectF &)));
+    connect( m_canvas, SIGNAL(documentOriginChanged( const QPoint &)), this, SLOT(pageOffsetChanged()));
     connect( m_canvasController, SIGNAL(canvasOffsetXChanged(int)), this, SLOT(pageOffsetChanged()));
     connect( m_canvasController, SIGNAL(canvasOffsetYChanged(int)), this, SLOT(pageOffsetChanged()));
     connect( m_canvasController, SIGNAL(canvasMousePositionChanged(const QPoint &)),
             this, SLOT(mousePositionChanged(const QPoint&)));
-
-    connect(m_canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
-            m_canvas, SLOT(setDocumentOffset(const QPoint&)));
 
     updateRuler();
 
@@ -935,18 +930,7 @@ void KarbonView::zoomDrawing()
     m_canvasController->setPreferredCenter( newCenter.toPoint() );
 }
 
-void KarbonView::documentViewRectChanged( const QRectF &viewRect )
-{
-    debugView("KarbonView::documentViewRectChanged()");
-    m_canvasController->setDocumentSize( viewRect.size().toSize() );
-    m_canvas->update();
-    KoSelection * selection = m_canvas->shapeManager()->selection();
-    if( selection->count() )
-        m_canvasController->ensureVisible( selection->boundingRect() );
-}
-
-void
-KarbonView::initActions()
+void KarbonView::initActions()
 {
     debugView("KarbonView::initActions()");
 
