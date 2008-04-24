@@ -480,8 +480,7 @@ void KarbonPart::addShape( KoShape* shape )
     setModified( true );
 }
 
-void
-KarbonPart::removeShape( KoShape* shape )
+void KarbonPart::removeShape( KoShape* shape )
 {
     KoShapeLayer *layer = dynamic_cast<KoShapeLayer*>( shape );
     if( layer )
