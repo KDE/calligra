@@ -39,8 +39,12 @@ int main(int argc, char **argv) {
     KCmdLineArgs::init(argc, argv, &aboutData);
     
     KCmdLineOptions options;
-    options.add("ports <ports>", ki18n("Listen port"), "8080");
+    // FIXME: Change this to uint
+    options.add("port <port>", ki18n("Listen port"), "8080");
     options.add("webroot <directory>", ki18n("Web Root"), ".");
+    // TODO: Implement handlers for this stuff
+    // FIXME: Change this to uint
+    options.add("https <port>", ki18n("HTTPS listen port"), "8085");
     options.add("file", ki18n("Path to Kexi database file"));
     
     KCmdLineArgs::addCmdLineOptions(options);
