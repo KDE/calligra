@@ -136,12 +136,17 @@ void KarbonGradientTool::mousePressEvent( KoPointerEvent *event )
     roi.moveCenter( event->point );
     // check if we on a shape without a gradient yet
     QList<KoShape*> shapes = m_canvas->shapeManager()->shapesAt( roi );
+    KoSelection * selection = m_canvas->shapeManager()->selection();
+
     VGradientTabWidget::VGradientTarget target = m_gradientWidget->target();
 
     GradientStrategy * newStrategy = 0;
 
     foreach( KoShape * shape, shapes )
     {
+        if( ! selection->isSelected( shape ) )
+            continue;
+
         if( target == VGradientTabWidget::FillGradient )
         {
             // target is fill so check the background style
