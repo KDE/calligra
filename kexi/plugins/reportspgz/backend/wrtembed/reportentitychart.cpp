@@ -91,14 +91,14 @@ void ReportEntityChart::paint ( QPainter* painter, const QStyleOptionGraphicsIte
 	painter->drawText ( rect(), 0, _dataSource->value().toString() +QObject::tr ( ":" ) +QObject::tr ( "chart" ) );
 
 
-	if ( ( Qt::PenStyle ) _lnStyle->value().toInt() == Qt::NoPen || _lnWeight->value().toInt() <= 0 )
-	{
+//	if ( ( Qt::PenStyle ) _lnStyle->value().toInt() == Qt::NoPen || _lnWeight->value().toInt() <= 0 )
+//	{
 		painter->setPen ( QPen ( QColor ( 224,224,224 ) ) );
-	}
-	else
-	{
-		painter->setPen ( QPen ( _lnColor->value().value<QColor>(), _lnWeight->value().toInt(), ( Qt::PenStyle ) _lnStyle->value().toInt() ) );
-	}
+//	}
+//	else
+//	{
+//		painter->setPen ( QPen ( _lnColor->value().value<QColor>(), _lnWeight->value().toInt(), ( Qt::PenStyle ) _lnStyle->value().toInt() ) );
+//	}
 
 	painter->drawRect ( rect() );
 
@@ -181,8 +181,13 @@ void ReportEntityChart::buildXML ( QDomDocument & doc, QDomElement & parent )
 	yt.appendChild ( doc.createTextNode ( _yTitle->value().toString() ));
 	entity.appendChild ( yt );
 	
+	//background color
+	QDomElement bc = doc.createElement ( "backgroundcolor" );
+	bc.appendChild ( doc.createTextNode ( _bgColor->value().value<QColor>().name() ));
+	entity.appendChild ( bc );
+	
 	//Line Style
-	buildXMLLineStyle(doc, entity, lineStyle());
+//	buildXMLLineStyle(doc, entity, lineStyle());
 	
 	parent.appendChild ( entity );
 }
@@ -228,7 +233,11 @@ void ReportEntityChart::propertyChanged ( KoProperty::Set &s, KoProperty::Proper
 	{
 		setAxis();
 	}
-
+	else if ( p.name() == "BackgroundColor")
+	{
+		_chartWidget->setStyleSheet("background-color: " + _bgColor->value().value<QColor>().name());
+	}
+	
 	if ( _chartWidget )
 	{
 		_chartWidget->setType ( ( KDChart::Widget::ChartType ) _chartType->value().toInt() );

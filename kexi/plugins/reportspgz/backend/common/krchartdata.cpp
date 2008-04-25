@@ -27,7 +27,7 @@
 #include <kexidb/cursor.h>
 #include <kexidb/parser/parser.h>
 #include <koproperty/property.h>
-
+#include <QMotifStyle>
 #include <kdebug.h>
 typedef QVector<qreal> datalist;
 
@@ -108,16 +108,19 @@ KRChartData::KRChartData ( QDomNode & element )
 			_pos.setPointPos(r.topLeft());
 			_size.setPointSize(r.size());
 		}
-		
+		else if (n == "backgroundcolor")
+		{
+			_bgColor->setValue(QColor(node.firstChild().nodeValue()));	
+		}
 		else if (n == "linestyle")
 		{
 			ORLineStyleData ls;
-			if (parseReportLineStyleData( node.toElement(), ls ))
-			{
-				_lnWeight->setValue(ls.weight);
-				_lnColor->setValue(ls.lnColor);
-				_lnStyle->setValue(ls.style);
-			}
+//			if (parseReportLineStyleData( node.toElement(), ls ))
+//			{
+//				_lnWeight->setValue(ls.weight);
+//				_lnColor->setValue(ls.lnColor);
+//				_lnStyle->setValue(ls.style);
+//			}
 		}
 		else
 		{
@@ -173,10 +176,10 @@ void KRChartData::createProperties()
 	_xTitle = new KoProperty::Property ( "XTitle", "", "X Axis Title", "X Axis Title" );
 	_yTitle = new KoProperty::Property ( "YTitle", "", "Y Axis Title", "Y Axis Title" );
 
-	_lnWeight = new KoProperty::Property ( "Weight", 1, "Line Weight", "Line Weight" );
-	_lnColor = new KoProperty::Property ( "LineColor", Qt::black, "Line Color", "Line Color" );
-	_lnStyle = new KoProperty::Property ( "LineStyle", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle );
-
+	//_lnWeight = new KoProperty::Property ( "Weight", 1, "Line Weight", "Line Weight" );
+	//_lnColor = new KoProperty::Property ( "LineColor", Qt::black, "Line Color", "Line Color" );
+	//_lnStyle = new KoProperty::Property ( "LineStyle", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle );
+	_bgColor = new KoProperty::Property ( "BackgroundColor", Qt::white, "Background Color", "Background Color" );
 	_set->addProperty ( _name );
 	_set->addProperty ( _dataSource );
 
@@ -190,10 +193,11 @@ void KRChartData::createProperties()
 	_set->addProperty ( _aa );
 	_set->addProperty ( _xTitle );
 	_set->addProperty ( _yTitle );
-
-	_set->addProperty ( _lnWeight );
-	_set->addProperty ( _lnColor );
-	_set->addProperty ( _lnStyle );
+	_set->addProperty ( _bgColor );
+	
+	//_set->addProperty ( _lnWeight );
+	//_set->addProperty ( _lnColor );
+	//_set->addProperty ( _lnStyle );
 
 	set3D ( false );
 	setAA ( false );
@@ -272,6 +276,8 @@ void KRChartData::populateData()
 			data.resize(cols);
 			
 			_chartWidget = new KDChart::Widget();
+			_chartWidget->setStyle(new QMotifStyle());
+			
 			_chartWidget->setType ( ( KDChart::Widget::ChartType ) _chartType->value().toInt() );
 			_chartWidget->setSubType ( ( KDChart::Widget::SubType ) _chartSubType->value().toInt() );
 			set3D ( _threeD->value().toBool() );
@@ -327,6 +333,9 @@ void KRChartData::populateData()
 					}
 				}
 			}
+			
+			//Set the background color
+			_chartWidget->setStyleSheet("background-color: " + _bgColor->value().value<QColor>().name());
 		}
 		else
 		{
@@ -442,14 +451,14 @@ void KRChartData::setAxis()
 	}
 }
 
-ORLineStyleData KRChartData::lineStyle()
-{
-	ORLineStyleData ls;
-	ls.weight = _lnWeight->value().toInt();
-	ls.lnColor = _lnColor->value().value<QColor>();
-	ls.style = (Qt::PenStyle)_lnStyle->value().toInt();
-	return ls;
-}
+//ORLineStyleData KRChartData::lineStyle()
+//{
+//	ORLineStyleData ls;
+//	ls.weight = _lnWeight->value().toInt();
+//	ls.lnColor = _lnColor->value().value<QColor>();
+//	ls.style = (Qt::PenStyle)_lnStyle->value().toInt();
+//	return ls;
+//}
 
 KexiDB::Cursor *KRChartData::dataSet()
 {
