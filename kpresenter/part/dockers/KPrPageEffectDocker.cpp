@@ -156,17 +156,12 @@ void KPrPageEffectDocker::slotActivePageChanged()
         }
 
         double duration = pageEffect ? static_cast<double>(pageEffect->duration())/1000 : 2.0;
+        // block the signal so we don't get a new page effect when the page is changed
+        m_durationSpinBox->blockSignals( true );
         m_durationSpinBox->setValue( duration );
+        m_durationSpinBox->blockSignals( false );
 
         setEffectPreview();
-/*
-    QPainter p( m_activePageBuffer );
-
-    KoViewConverter converter;
-    m_view->kopaCanvas()->masterShapeManager()->paint( p, converter, false );
-    m_view->kopaCanvas()->shapeManager()->paint( p, converter, false );
-*/
-
     }
     else {
         // disable the page effect docker as effects are only there on a normal page
