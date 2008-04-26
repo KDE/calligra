@@ -12,6 +12,7 @@
 #include "krscriptsection.h"
 #include "krscriptlabel.h"
 #include "krscriptfield.h"
+#include <kdebug.h>
 
 namespace Scripting
 {
@@ -30,9 +31,10 @@ namespace Scripting
 		return _section->_bgColor->value().value<QColor>();
 	}
 
-	void   Section::setBackgroundColor ( const QString& c)
+	void   Section::setBackgroundColor ( const QColor &c)
 	{
-		_section->_bgColor->setValue(QColor(c));
+		kDebug() << c.name();
+		_section->_bgColor->setValue(c);
 	}
 
 	qreal Section::height()

@@ -49,16 +49,16 @@ namespace Scripting
 			void setVerticalAlignment(int);
 		
 			QColor backgroundColor();
-			void setBackgroundColor(QString);
+			void setBackgroundColor(const QColor&);
 		
 			QColor foregroundColor();
-			void setForegroundColor(QString);
+			void setForegroundColor(const QColor&);
 		
 			int backgroundOpacity();
 			void setBackgroundOpacity(int);
 		
 			QColor lineColor();
-			void setLineColor(QString);
+			void setLineColor(const QColor&);
 			
 			int lineWeight();
 			void setLineWeight(int);
@@ -67,10 +67,10 @@ namespace Scripting
 			void setLineStyle(int);
 			
 			QPointF position();
-			void setPosition(qreal, qreal);
+			void setPosition(const QPointF&);
 			
 			QSizeF size();
-			void setSize(qreal,qreal);
+			void setSize(const QSizeF&);
 		private:
 			KRFieldData *_field;
 

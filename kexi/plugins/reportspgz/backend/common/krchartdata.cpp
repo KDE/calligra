@@ -110,7 +110,8 @@ KRChartData::KRChartData ( QDomNode & element )
 		}
 		else if (n == "backgroundcolor")
 		{
-			_bgColor->setValue(QColor(node.firstChild().nodeValue()));	
+			_bgColor->setValue(QColor(node.firstChild().nodeValue()));
+			
 		}
 		else if (n == "linestyle")
 		{

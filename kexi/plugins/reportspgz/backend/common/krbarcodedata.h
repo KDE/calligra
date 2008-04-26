@@ -27,6 +27,10 @@
 #include "krsize.h"
 #include <parsexmlutils.h>
 
+namespace Scripting
+{
+	class Barcode;
+}
 /**
 	@author 
 */
@@ -65,15 +69,12 @@ class KRBarcodeData : public KRObjectData
 		qreal min_width_total;
 		qreal min_height;
 		
-//		QString format;
-//		int maxlength;
-//		ORDataData data;
-//		int align; // 0 = left, 1 = center, 2 = right
 	private:
 		virtual void createProperties();
 		static int RTTI;
 		
 		friend class ORPreRenderPrivate;
+		friend class Scripting::Barcode;
 };
 
 #endif

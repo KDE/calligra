@@ -56,6 +56,7 @@ set(pgzkexireportpart2_LIB_SRCS
 	backend/renderer/scripting/krscriptlabel.cpp
 	backend/renderer/scripting/krscriptfield.cpp
 	backend/renderer/scripting/krscripttext.cpp
+	backend/renderer/scripting/krscriptbarcode.cpp
 
 	backend/wrtembed/detailgroupsectiondialog.cpp
 	backend/wrtembed/reportentities.cpp

@@ -111,18 +111,18 @@ namespace Scripting
 	{
 		return _field->_bgColor->value().value<QColor>();
 	}
-	void Field::setBackgroundColor(QString c)
+	void Field::setBackgroundColor(const QColor& c)
 	{
-		_field->_bgColor->setValue(QColor(c));
+		_field->_bgColor->setValue(c);
 	}
 		
 	QColor Field::foregroundColor()
 	{
 		return _field->_fgColor->value().value<QColor>();
 	}
-	void Field::setForegroundColor(QString c)
+	void Field::setForegroundColor(const QColor& c)
 	{
-		_field->_fgColor->setValue(QColor(c));
+		_field->_fgColor->setValue(c);
 	}
 		
 	int Field::backgroundOpacity()
@@ -138,9 +138,9 @@ namespace Scripting
 	{
 		return _field->_lnColor->value().value<QColor>();
 	}
-	void Field::setLineColor(QString c)
+	void Field::setLineColor(const QColor& c)
 	{
-		_field->_lnColor->setValue(QColor(c));
+		_field->_lnColor->setValue(c);
 	}
 			
 	int Field::lineWeight()
@@ -169,17 +169,17 @@ namespace Scripting
 	{
 		return _field->_pos.toPoint();
 	}
-	void Field::setPosition(qreal x, qreal y)
+	void Field::setPosition(const QPointF &p)
 	{
-		_field->_pos.setPointPos(QPointF(x,y));
+		_field->_pos.setPointPos(p);
 	}
 			
 	QSizeF Field::size()
 	{
 		return _field->_size.toPoint();
 	}
-	void Field::setSize(qreal w, qreal h)
+	void Field::setSize(const QSizeF &s)
 	{
-		_field->_size.setPointSize(QSizeF(w,h));
+		_field->_size.setPointSize(s);
 	}
 }

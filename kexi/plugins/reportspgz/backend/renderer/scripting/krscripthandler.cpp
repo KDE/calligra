@@ -67,11 +67,7 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
 	//Add a general report object
 	_action->addObject(new Scripting::Report(_data), "report");
 	
-
-	//Add the detail section
-	//_action->addObject(new Scripting::Section(_data->detailsection->detail), "detail");
-	
-	
+	//Add the sections
 	QList<KRSectionData*> secs = _data->sections();
 	foreach (KRSectionData *sec, secs)
 	{

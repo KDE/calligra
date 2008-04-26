@@ -120,7 +120,7 @@ namespace Scripting
 	{
 		return _text->_bgColor->value().value<QColor>();
 	}
-	void Text::setBackgroundColor(QString c)
+	void Text::setBackgroundColor(const QColor& c)
 	{
 		_text->_bgColor->setValue(QColor(c));
 	}
@@ -129,7 +129,7 @@ namespace Scripting
 	{
 		return _text->_fgColor->value().value<QColor>();
 	}
-	void Text::setForegroundColor(QString c)
+	void Text::setForegroundColor(const QColor& c)
 	{
 		_text->_fgColor->setValue(QColor(c));
 	}
@@ -147,7 +147,7 @@ namespace Scripting
 	{
 		return _text->_lnColor->value().value<QColor>();
 	}
-	void Text::setLineColor(QString c)
+	void Text::setLineColor(const QColor& c)
 	{
 		_text->_lnColor->setValue(QColor(c));
 	}
@@ -178,17 +178,17 @@ namespace Scripting
 	{
 		return _text->_pos.toPoint();
 	}
-	void Text::setPosition(qreal x, qreal y)
+	void Text::setPosition(const QPointF& p)
 	{
-		_text->_pos.setPointPos(QPointF(x,y));
+		_text->_pos.setPointPos(p);
 	}
 			
 	QSizeF Text::size()
 	{
 		return _text->_size.toPoint();
 	}
-	void Text::setSize(qreal w, qreal h)
+	void Text::setSize(const QSizeF& s)
 	{
-		_text->_size.setPointSize(QSizeF(w,h));
+		_text->_size.setPointSize(s);
 	}
 }

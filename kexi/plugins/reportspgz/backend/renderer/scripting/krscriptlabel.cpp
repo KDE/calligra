@@ -111,18 +111,18 @@ namespace Scripting
 	{
 		return _label->_bgColor->value().value<QColor>();
 	}
-	void Label::setBackgroundColor(QString c)
+	void Label::setBackgroundColor(const QColor& c)
 	{
-		_label->_bgColor->setValue(QColor(c));
+		_label->_bgColor->setValue(c);
 	}
 		
 	QColor Label::foregroundColor()
 	{
 		return _label->_fgColor->value().value<QColor>();
 	}
-	void Label::setForegroundColor(QString c)
+	void Label::setForegroundColor(const QColor& c)
 	{
-		_label->_fgColor->setValue(QColor(c));
+		_label->_fgColor->setValue(c);
 	}
 		
 	int Label::backgroundOpacity()
@@ -138,9 +138,9 @@ namespace Scripting
 	{
 		return _label->_lnColor->value().value<QColor>();
 	}
-	void Label::setLineColor(QString c)
+	void Label::setLineColor(const QColor& c)
 	{
-		_label->_lnColor->setValue(QColor(c));
+		_label->_lnColor->setValue(c);
 	}
 			
 	int Label::lineWeight()
@@ -169,18 +169,18 @@ namespace Scripting
 	{
 		return _label->_pos.toPoint();
 	}
-	void Label::setPosition(qreal x, qreal y)
+	void Label::setPosition(const QPointF &p)
 	{
-		_label->_pos.setPointPos(QPointF(x,y));
+		_label->_pos.setPointPos(p);
 	}
 			
 	QSizeF Label::size()
 	{
 		return _label->_size.toPoint();
 	}
-	void Label::setSize(qreal w, qreal h)
+	void Label::setSize(const QSizeF &s)
 	{
-		_label->_size.setPointSize(QSizeF(w,h));
+		_label->_size.setPointSize(s);
 	}
 }
 

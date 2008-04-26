@@ -39,9 +39,10 @@ namespace Scripting
 		public slots:
 			/**Returns the background color of the section*/
 			QColor backgroundColor();
-		/**Sets the background color of the section to the given color 
-			name, in the style #rrggbb*/
-			void   setBackgroundColor(const QString&);
+		
+			/**Sets the background color of the section to the given color 
+			*/
+			void setBackgroundColor(const QColor&);
 		
 			/**Returns the section height as a real number, in points*/
 			qreal height();
