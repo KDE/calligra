@@ -38,6 +38,8 @@ class GradientStrategy
 public:
     /// The different targets of the gradients
     enum Target { Fill, Stroke };
+    /// The selection types
+    enum SelectionType { None, Handle, Line, Stop };
 
     /// constructs new strategy on the specified shape and target
     explicit GradientStrategy( KoShape *shape, const QGradient * gradient, Target target );
@@ -107,9 +109,10 @@ public:
     /// Returns the currently selected color stop index
     int selectedColorStop() const;
 
-protected:
-    enum SelectionType { None, Handle, Line, Stop };
+    /// Returns the actual selection type
+    SelectionType selection() const;
 
+protected:
     /// Sets the actual selection
     void setSelection( SelectionType selection, int index = 0 );
 

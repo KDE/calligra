@@ -67,6 +67,7 @@ private:
     GradientStrategy * m_hoverStrategy; ///< the strategy the mouse hovers over
     VGradientTabWidget * m_gradientWidget;
     QUndoCommand * m_currentCmd;
+    int m_oldSnapStrategies; ///< the previously enables snap strategies
 };
 
 #endif // _KARBONGRADIENTTOOL_H_

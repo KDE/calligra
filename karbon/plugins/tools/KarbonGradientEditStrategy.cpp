@@ -483,6 +483,11 @@ int GradientStrategy::selectedColorStop() const
         return -1;
 }
 
+GradientStrategy::SelectionType GradientStrategy::selection() const
+{
+    return m_selection;
+}
+
 void GradientStrategy::setGradientLine( int start, int stop )
 {
     m_gradientLine = QPair<int,int>( start, stop );

@@ -34,6 +34,8 @@
 #include <KoShapeBackgroundCommand.h>
 #include <KoShapeBorderCommand.h>
 #include <KoResourceServerProvider.h>
+#include <KoSnapGuide.h>
+#include <KoSnapStrategy.h>
 
 #include <QGridLayout>
 #include <QPainter>
@@ -61,6 +63,7 @@ KarbonGradientTool::KarbonGradientTool(KoCanvasBase *canvas)
 , m_hoverStrategy( 0 )
 , m_gradientWidget( 0 )
 , m_currentCmd( 0 )
+, m_oldSnapStrategies(0)
 {
     connect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
 }
@@ -205,8 +208,13 @@ void KarbonGradientTool::mouseMoveEvent( KoPointerEvent *event )
         // are we editing the current selected gradient ?
         if( m_currentStrategy->isEditing() )
         {
+            QPointF mousePos = event->point;
+            // snap to bounding box when moving handles
+            if( m_currentStrategy->selection() == GradientStrategy::Handle )
+                mousePos = m_canvas->snapGuide()->snap( mousePos, event->modifiers() );
+
             m_currentStrategy->repaint();
-            m_currentStrategy->handleMouseMove( event->point, event->modifiers() );
+            m_currentStrategy->handleMouseMove( mousePos, event->modifiers() );
             m_currentStrategy->repaint();
             return;
         }
@@ -340,6 +348,10 @@ void KarbonGradientTool::activate( bool temporary )
     repaintDecorations();
 
     useCursor( KarbonCursor::needleArrow(), true);
+
+    // save old enabled snap strategies, set bounding box snap strategy
+    m_oldSnapStrategies = m_canvas->snapGuide()->enabledSnapStrategies();
+    m_canvas->snapGuide()->enableSnapStrategies( KoSnapStrategy::BoundingBox );
 }
 
 void KarbonGradientTool::initialize()
@@ -475,6 +487,9 @@ void KarbonGradientTool::deactivate()
     m_hoverStrategy = 0;
     qDeleteAll( m_gradients );
     m_gradients.clear();
+
+    // restore previously set snap strategies
+    m_canvas->snapGuide()->enableSnapStrategies( m_oldSnapStrategies );
 }
 
 void KarbonGradientTool::resourceChanged( int key, const QVariant & res )
