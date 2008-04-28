@@ -12,6 +12,11 @@
 #include "krscriptsection.h"
 #include "krscriptlabel.h"
 #include "krscriptfield.h"
+#include "krscripttext.h"
+#include "krscriptbarcode.h"
+#include "krscriptimage.h"
+#include "krscriptline.h"
+#include "krscriptchart.h"
 #include <kdebug.h>
 
 namespace Scripting
@@ -61,6 +66,21 @@ namespace Scripting
 				break;
 			case KRObjectData::EntityField:
 				return new Scripting::Field(_section->_objects[i]->toField());
+				break;
+			case KRObjectData::EntityText:
+				return new Scripting::Field(_section->_objects[i]->toField());
+				break;
+			case KRObjectData::EntityBarcode:
+				return new Scripting::Barcode(_section->_objects[i]->toBarcode());
+				break;
+			case KRObjectData::EntityLine:
+				return new Scripting::Line(_section->_objects[i]->toLine());
+				break;
+			case KRObjectData::EntityChart:
+				return new Scripting::Chart(_section->_objects[i]->toChart());
+				break;
+			case KRObjectData::EntityImage:
+				return new Scripting::Image(_section->_objects[i]->toImage());
 				break;
 			default:
 				return new QObject();
