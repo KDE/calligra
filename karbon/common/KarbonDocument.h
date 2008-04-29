@@ -44,6 +44,7 @@
 class KoShape;
 class KoShapeSavingContext;
 class KoShapeLayer;
+class KoImageCollection;
 class KoStore;
 
 typedef QList<KoShapeLayer*> VLayerList;
@@ -207,6 +208,8 @@ public:
     /// Sets the documents page size
     void setPageSize( QSizeF pageSize );
 
+    /// Returns the documents image collection
+    KoImageCollection * imageCollection();
 private:
 
     void saveOasisSettings( KoStore * store );

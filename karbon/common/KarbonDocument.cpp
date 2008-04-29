@@ -45,6 +45,7 @@
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeStyleWriter.h>
+#include <KoImageCollection.h>
 
 #include <ktemporaryfile.h>
 #include <kdebug.h>
@@ -75,6 +76,7 @@ public:
     VLayerList layers;         ///< The layers in this document.
 
     KoUnit unit; ///< The unit.
+    KoImageCollection imageCollection; ///< the image collection
 };
 
 KarbonDocument::KarbonDocument()
@@ -256,6 +258,8 @@ bool KarbonDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingConte
     qDeleteAll( d->objects );
     d->objects.clear();
 
+    context.setImageCollection( &d->imageCollection );
+
     KoXmlElement layerElement;
     forEachElement( layerElement, context.odfLoadingContext().stylesReader().layerSet() )
     {
@@ -345,6 +349,11 @@ void KarbonDocument::setUnit( KoUnit unit )
 const VLayerList& KarbonDocument::layers() const
 {
     return d->layers;
+}
+
+KoImageCollection * KarbonDocument::imageCollection()
+{
+    return &d->imageCollection;
 }
 
 //#############################################################################
