@@ -506,6 +506,10 @@ bool PqxxMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *des
 			{
 				vals.append( KexiDB::pgsqlByteaToByteArray((*i).c_str(), (*i).size()) );
 			}
+			else if (fieldsExpanded.at(index)->field->type()==KexiDB::Field::Boolean )
+			{
+				vals.append(QString((*i).c_str()).toLower() == "t" ? QVariant(true) : QVariant(false));
+			}
 			else
 				vals.append( KexiDB::cstringToVariant((*i).c_str(), 
 					fieldsExpanded.at(index)->field, (*i).size()) );
