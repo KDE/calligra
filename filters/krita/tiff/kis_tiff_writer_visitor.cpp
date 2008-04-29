@@ -135,6 +135,7 @@ bool KisTIFFWriterVisitor::copyDataToStrips( KisHLineConstIterator it, tdata_t b
 bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
 {
     saveLayerProjection(layer);
+    return true;
 }
 
 bool KisTIFFWriterVisitor::visit(KisGroupLayer *layer)
