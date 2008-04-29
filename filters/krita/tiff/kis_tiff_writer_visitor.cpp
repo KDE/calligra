@@ -134,8 +134,7 @@ bool KisTIFFWriterVisitor::copyDataToStrips( KisHLineConstIterator it, tdata_t b
 
 bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
 {
-    saveLayerProjection(layer);
-    return true;
+    return saveLayerProjection(layer);
 }
 
 bool KisTIFFWriterVisitor::visit(KisGroupLayer *layer)
@@ -147,7 +146,7 @@ bool KisTIFFWriterVisitor::visit(KisGroupLayer *layer)
 bool KisTIFFWriterVisitor::visit(KisGeneratorLayer* layer)
 {
     // a generator layer has a nice paint device we can save.
-    saveLayerProjection(layer);
+    return saveLayerProjection(layer);
 }
 
 bool KisTIFFWriterVisitor::saveLayerProjection(KisLayer * layer)
