@@ -1252,7 +1252,6 @@ KoShape * KarbonImport::loadImage( const KoXmlElement &element )
 
     QImage img( fname );
 
-#if 0 // TODO imageCollection is no more
     KoImageData * data = new KoImageData( m_document.imageCollection() );
     data->setImage( QImage( fname ).mirrored( false, true ) );
 
@@ -1264,8 +1263,6 @@ KoShape * KarbonImport::loadImage( const KoXmlElement &element )
     loadCommon( picture, element );
 
     return picture;
-#endif
-    return 0;
 }
 
 KoShape * KarbonImport::loadText( const KoXmlElement &element )
