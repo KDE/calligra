@@ -20,6 +20,7 @@
 
 #include <cstdlib>
 
+#include <KDebug>
 #include <KAboutData>
 #include <KApplication>
 #include <KCmdLineArgs>
@@ -39,12 +40,11 @@ int main(int argc, char **argv) {
     KCmdLineArgs::init(argc, argv, &aboutData);
     
     KCmdLineOptions options;
-    // FIXME: Change this to uint
     options.add("port <port>", ki18n("Listen port"), "8080");
     options.add("webroot <directory>", ki18n("Web Root"), ".");
-    // TODO: Implement handlers for this stuff
-    // FIXME: Change this to uint
-    options.add("https <port>", ki18n("HTTPS listen port"), "8085");
+    options.add("https <port>", ki18n("HTTPS listen port"));
+    options.add("cert <path>", ki18n("Path to SSL certificate file"));
+    options.add("key <path>", ki18n("Path to SSL key file"));
     options.add("file", ki18n("Path to Kexi database file"));
     
     KCmdLineArgs::addCmdLineOptions(options);
@@ -53,14 +53,27 @@ int main(int argc, char **argv) {
     KUniqueApplication app(false);
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
-    
-    // Set-up and run server
+
+
+    // General set up
     ServerConfig serverConfig = {
-        args->getOption("ports"),
+        args->getOption("port"),
         args->getOption("webroot"),
     };
-    Server server;
-    
+
+    // SSL
+    if (args->isSet("https")) {
+        kDebug() << "Initializing SSL...";
+        if (!args->isSet("cert")) {
+            kError() << "You must specify both certificate and key file in order to use SSL support";
+            exit(1);
+        } else {
+            serverConfig.certPath = args->getOption("cert");
+        }
+        serverConfig.https = args->getOption("https");
+    }
+
+    Server server;    
     if (server.run(serverConfig))
         return 0;
     else

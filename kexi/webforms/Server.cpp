@@ -43,7 +43,16 @@ namespace KexiWebForms {
             
             ctx = shttpd_init();
             shttpd_set_option(ctx, "ports", serverConfig.ports.toStdString().c_str());
+            // TODO: Check that webroot actually exists
             shttpd_set_option(ctx, "root", serverConfig.webRoot.toStdString().c_str());
+
+            // SSL certificate
+            if (serverConfig.https != NULL) {
+                if (serverConfig.certPath != NULL) {
+                    // FIXME: check that certificate file actually exists
+                    shttpd_set_option(ctx, "ssl_cert", serverConfig.certPath.toStdString().c_str());
+                }
+            }
             
             // Do not show directory listings by default
             shttpd_set_option(ctx, "dir_list", "0");

@@ -32,6 +32,8 @@ namespace KexiWebForms {
           * listen for HTTPS requests
           */
         QString ports;
+        QString https;
+        QString certPath;
         QString webRoot;
     };
 
