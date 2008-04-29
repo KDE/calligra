@@ -1627,6 +1627,7 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
 
         if( imageLoaded )
         {
+#if 0 // TODO imageCollection is no more
             KoImageData * data = new KoImageData( m_document->imageCollection() );
             data->setImage( img );
 
@@ -1641,6 +1642,7 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
             picture->setPosition( QPointF(x,y) );
 
             obj = picture;
+#endif
         }
     }
 

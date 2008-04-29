@@ -350,6 +350,7 @@ void WMFImportParser::drawPolyPolygon( QList<QPolygon>& listPa, bool winding ) {
 
 
 void WMFImportParser::drawImage( int x, int y, const QImage &image, int sx, int sy, int sw, int sh ) {
+#if 0 // TODO imageCollection is no more
     KoImageData * data = new KoImageData( mDoc->imageCollection() );
     data->setImage( image );
 
@@ -368,6 +369,7 @@ void WMFImportParser::drawImage( int x, int y, const QImage &image, int sx, int 
     kDebug() << "source size =" << QPointF( scaleW(sw), scaleH(sh) );
 
     mDoc->add( pic );
+#endif
 }
 
 
