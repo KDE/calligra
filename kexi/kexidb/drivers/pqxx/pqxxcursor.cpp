@@ -238,7 +238,7 @@ QVariant pqxxSqlCursor::pValue(uint pos)const
 		}
 		else if (f->type() == Field::Boolean )
 		{
-			return QString((*m_res)[at()][pos].c_str()).toLower() == "t" ? QVariant(true) : QVariant(false); 
+			return QString((*m_res)[at()][pos].c_str()).lower() == "t" ? QVariant(true, 1) : QVariant(false, 1); 
 		}
 		else if (f->typeGroup() == Field::BLOBGroup)
 		{

@@ -543,7 +543,7 @@ bool PqxxMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *des
 	     }
 	     else if (fieldsExpanded.at(index)->field->type()==KexiDB::Field::Boolean )
 	     {
-	          vals.append(QString((*i).c_str()).toLower() == "t" ? QVariant(true) : QVariant(false));
+	          vals.append(QString((*i).c_str()).lower() == "t" ? QVariant(true, 1) : QVariant(false, 1));
 	     }
 	     else
 	     {
