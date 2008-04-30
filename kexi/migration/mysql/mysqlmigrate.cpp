@@ -406,10 +406,6 @@ KexiDB::Field::Type MySQLMigrate::examineBlobField(const QString& table,
 		// Doesn't matter how big it is, it's binary
 		return KexiDB::Field::BLOB;
 	}
-/*	else if (mysqlType.contains("text", Qt::CaseInsensitive)) {
-		// All the TEXT types are too big for Kexi text.
-		return KexiDB::Field::BLOB;
-	}*/
 	else if (fld->length < 200) {
 		return KexiDB::Field::Text;
 	}
