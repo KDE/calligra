@@ -64,9 +64,9 @@ KAboutData* Kexi::createAboutData()
 	aboutData->addAuthor(
 		ki18n("Sebastian Sauer"), ki18n("Scripting module (KROSS), Python language bindings, design"), "mail@dipe.org");
 	aboutData->addAuthor(
-		ki18n("Adam Pigg"), ki18n("PostgreSQL database driver, Migration module"), "adam@piggz.fsnet.co.uk");
+		ki18n("Adam Pigg"), ki18n("PostgreSQL database driver, Migration and Reporting modules"), "adam@piggz.co.uk");
 	aboutData->addAuthor(
-		ki18n("Sharan Rao"),ki18n("Sybase/MSSQL Server driver, improvements for KexiDB"), "sharanrao@gmail.com");
+		ki18n("Sharan Rao"),ki18n("Sybase/MS SQL Server database drivers, xBase migration plugin, improvements for KexiDB"), "sharanrao@gmail.com");
 	aboutData->addAuthor(
 		ki18n("Cedric Pasteur"), ki18n("KexiPropertyEditor and FormDesigner"), "cedric.pasteur@free.fr");
 	aboutData->addAuthor(
