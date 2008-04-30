@@ -68,6 +68,7 @@ bool xBaseMigrate::drv_connect()
 
 	// set filters
 	QStringList dbfFilters;
+//! @todo use application/x-dbase mime type as soon as share mime db provides info on file extensions
 	dbfFilters<<"*.dbf"<<"*.DBF";
 
 	xBaseDirectory.setNameFilters( dbfFilters );
