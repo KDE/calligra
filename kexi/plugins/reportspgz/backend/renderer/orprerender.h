@@ -58,6 +58,7 @@ class ORPreRender {
 
   private:
     ORPreRenderPrivate* _internal;
+    
 };
 
 

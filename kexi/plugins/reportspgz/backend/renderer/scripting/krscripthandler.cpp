@@ -43,6 +43,12 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
 	_data = d;
 	_curs = cu;
 	
+	_action = 0;
+	_functions = 0;
+	_constants = 0;
+	_debug = 0;
+	_draw = 0;
+	
 	// Create the Kross::Action instance .
 	_action = new Kross::Action(this, "ReportScript");
 	
@@ -92,10 +98,11 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
  
 KRScriptHandler::~KRScriptHandler()
 {
- delete _action;
- delete _functions;
- delete _constants;
- delete _debug;
+ if (_action) delete _action;
+ if (_functions) delete _functions;
+ if (_constants) delete _constants;
+ if (_debug) delete _debug;
+ if (_draw) delete _draw;
 }
 
 void KRScriptHandler::setSource(const QString &s)

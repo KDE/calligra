@@ -47,6 +47,12 @@
 #include "scripting/krscripthandler.h"
 #include <krreportdata.h>
 #include <krdetailsectiondata.h>
+#include <QResizeEvent>
+#include <QApplication>
+
+#include <KDChartAbstractDiagram>
+#include <KDChartAbstractCoordinatePlane>
+#include <KDChartChart>
 
 //
 // ORPreRenderPrivate
@@ -104,7 +110,7 @@ class ORPreRenderPrivate : public QObject
 		///Scripting Stuff
 		KRScriptHandler *_handler;
 		void initEngine();
-	
+		static void sendResizeEvents(QWidget *target);
 	signals:
 		void enteredGroup(const QString&, const QVariant&);
 		void exitedGroup(const QString&, const QVariant&);
@@ -820,7 +826,6 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 			
 			QImage img;
 			img.loadFromData ( imgdata );
-
 			OROImage * id = new OROImage();
 			id->setImage ( img );
 			if ( im->mode().toLower() == "stretch" )
@@ -845,9 +850,17 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 			ch->populateData();
 			if ( ch->widget() )
 			{
-				OROImage * id = new OROImage();
+				OROPicture * id = new OROPicture();
 				ch->widget()->setFixedSize(ch->_size.toScene().toSize());
-				id->setImage ( QPixmap::grabWidget ( ch->widget() ).toImage() );
+				//Get the widget the correct size
+				
+				sendResizeEvents(ch->widget());
+				
+				QPainter p(id->picture());
+				
+				ch->widget()->diagram()->coordinatePlane()->parent()->paint(&p, QRect(QPoint(0,0), ch->_size.toScene().toSize()));
+				//ch->widget()->render(id->picture(), QPoint(), QRect(), QWidget::DrawWindowBackground | QWidget::DrawChildren | QWidget::IgnoreMask);
+
 				QPointF pos = ch->_pos.toScene();
 				QSizeF size = ch->_size.toScene();
 			
@@ -1162,7 +1175,7 @@ ORODocument* ORPreRender::generate()
 
 	_internal->_handler->displayErrors();
 	
-	delete _internal->_handler;
+	//delete _internal->_handler;
 	delete _internal->_query;
 	_internal->_postProcText.clear();
 
@@ -1207,6 +1220,19 @@ bool ORPreRender::isValid() const
 	if ( _internal != 0 && _internal->_valid )
 		return true;
 	return false;
+}
+
+void ORPreRenderPrivate::sendResizeEvents(QWidget *target)
+{
+	QResizeEvent e(target->size(), QSize());
+	QApplication::sendEvent(target, &e);
+
+	const QObjectList children = target->children();
+	for (int i = 0; i < children.size(); ++i) {
+		QWidget *child = static_cast<QWidget*>(children.at(i));
+		if (child->isWidgetType() && !child->isWindow() && child->testAttribute(Qt::WA_PendingResizeEvent))
+			sendResizeEvents(child);
+	}
 }
 
 #include <orprerenderprivate.moc>

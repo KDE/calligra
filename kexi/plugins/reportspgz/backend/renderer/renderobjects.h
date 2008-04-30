@@ -31,6 +31,7 @@
 #include <QBrush>
 #include <parsexmlutils.h>
 #include <reportpageoptions.h>
+#include <QPicture>
 
 class ORODocument;
 class OROPage;
@@ -226,6 +227,24 @@ class OROImage: public OROPrimitive
     int _aspectFlags;
 };
 
+class OROPicture: public OROPrimitive
+{
+	public:
+		OROPicture();
+		virtual ~OROPicture();
+
+		QPicture* picture() { return &_picture; };
+
+		QSizeF size() const { return _size; };
+		void setSize(const QSizeF &);
+
+		static const int Picture;
+
+	protected:
+		QPicture _picture;
+		QSizeF _size;
+
+};
 //
 // ORORect
 // This primitive defines a drawn rectangle

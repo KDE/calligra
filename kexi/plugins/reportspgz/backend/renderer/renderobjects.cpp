@@ -271,6 +271,27 @@ void OROImage::setAspectRatioMode(int arm)
 }
 
 //
+// OROPicture
+//
+const int OROPicture::Picture = 6;
+
+OROPicture::OROPicture()
+	: OROPrimitive(OROPicture::Picture)
+{
+	
+}
+
+OROPicture::~OROPicture()
+{
+}
+
+void OROPicture::setSize(const QSizeF & sz)
+{
+	_size = sz;
+}
+
+
+//
 // ORORect
 //
 const int ORORect::Rect = 4;
