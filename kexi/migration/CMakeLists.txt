@@ -20,6 +20,11 @@ IF(FreeTDS_FOUND)
 	add_subdirectory( sybase )
 ENDIF(FreeTDS_FOUND)
 
+INCLUDE(FindXBase)
+IF(XBase_FOUND)
+  add_subdirectory( xbase )
+ENDIF(XBase_FOUND)
+
 #todo add_subdirectory( mdb )
 
 ########### next target ###############
