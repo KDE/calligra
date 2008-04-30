@@ -98,11 +98,11 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
  
 KRScriptHandler::~KRScriptHandler()
 {
- if (_action) delete _action;
- if (_functions) delete _functions;
- if (_constants) delete _constants;
- if (_debug) delete _debug;
- if (_draw) delete _draw;
+ delete _action;
+ delete _functions;
+ delete _constants;
+ delete _debug;
+ delete _draw;
 }
 
 void KRScriptHandler::setSource(const QString &s)
