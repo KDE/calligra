@@ -62,7 +62,6 @@ class xBaseMigrate : public KexiMigrate, protected xbXBase
 	private:
 		KexiDB::Field::Type type(char xBaseColumnType);
 
-		bool processBooleanField(char boolField);
 		//! Mapping tableNames to actual absoolute file name paths
 		//  XBase only deals with absolute names ( with the .dbf extension ) which is pretty cumbersome
 		QMap<QString,QString> tableNamePathMap;
