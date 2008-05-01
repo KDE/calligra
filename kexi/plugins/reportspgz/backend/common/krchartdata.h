@@ -61,7 +61,8 @@ class KRChartData : public KRObjectData
 		KoProperty::Property * _yTitle;
 		
 		KoProperty::Property *_bgColor;
-		//KoProperty::Property* _lnColor;
+		KoProperty::Property* _displayLegend;
+		
 		//KoProperty::Property* _lnWeight;
 		//KoProperty::Property* _lnStyle;
 		

@@ -32,6 +32,12 @@
 #include <klocalizedstring.h>
 #include <kglobalsettings.h>
 #include <parsexmlutils.h>
+
+namespace Scripting
+{
+	class Image;
+}
+
 /**
 	@author 
 */
@@ -77,6 +83,7 @@ class KRImageData : public KRObjectData
 		static int RTTI;
 		virtual void createProperties();
 		friend class ORPreRenderPrivate;
+		friend class Scripting::Image;
 };
 
 #endif

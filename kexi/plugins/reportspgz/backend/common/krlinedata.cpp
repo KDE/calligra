@@ -84,9 +84,9 @@ KRLineData::KRLineData(QDomNode & element)
 	}
 	_start.setPointPos ( QPointF ( sx, sy ) );
 	_end.setPointPos ( QPointF ( ex, ey ) );
-	_lnweight->setValue(ls.weight);
-	_lncolor->setValue(ls.lnColor);
-	_lnstyle->setValue(ls.style);
+	_lnWeight->setValue(ls.weight);
+	_lnColor->setValue(ls.lnColor);
+	_lnStyle->setValue(ls.style);
 
 }
 
@@ -95,33 +95,33 @@ void KRLineData::createProperties()
 {
 	_set = new KoProperty::Set ( 0, "Line" );
 
-	_lnweight = new KoProperty::Property ( "Weight", 1, "Line Weight", "Line Weight" );
-	_lncolor = new KoProperty::Property ( "LineColor", Qt::black, "Line Color", "Line Color" );
-	_lnstyle = new KoProperty::Property ( "LineStyle", Qt::SolidLine, "Line Style", "Line Style", KoProperty::LineStyle );
+	_lnWeight = new KoProperty::Property ( "Weight", 1, "Line Weight", "Line Weight" );
+	_lnColor = new KoProperty::Property ( "LineColor", Qt::black, "Line Color", "Line Color" );
+	_lnStyle = new KoProperty::Property ( "LineStyle", Qt::SolidLine, "Line Style", "Line Style", KoProperty::LineStyle );
 	_start.setName("Start");
 	_end.setName("End");
 	
 	_set->addProperty ( _name );
 	_set->addProperty ( _start.property() );
 	_set->addProperty ( _end.property() );
-	_set->addProperty ( _lnweight );
-	_set->addProperty ( _lncolor );
-	_set->addProperty ( _lnstyle );
+	_set->addProperty ( _lnWeight );
+	_set->addProperty ( _lnColor );
+	_set->addProperty ( _lnStyle );
 }
 
 ORLineStyleData KRLineData::lineStyle()
 {
 	ORLineStyleData ls;
-	ls.weight = _lnweight->value().toInt();
-	ls.lnColor = _lncolor->value().value<QColor>();
-	ls.style = (Qt::PenStyle)_lnstyle->value().toInt();
+	ls.weight = _lnWeight->value().toInt();
+	ls.lnColor = _lnColor->value().value<QColor>();
+	ls.style = (Qt::PenStyle)_lnStyle->value().toInt();
 	return ls;
 }
 
-unsigned int KRLineData::weight() const { return _lnweight->value().toInt(); }
+unsigned int KRLineData::weight() const { return _lnWeight->value().toInt(); }
 void KRLineData::setWeight ( int w )
 {
-	_lnweight->setValue(w);
+	_lnWeight->setValue(w);
 }
 
 int KRLineData::type() const { return RTTI; }

@@ -27,6 +27,11 @@
 #include "krsize.h"
 #include "parsexmlutils.h"
 
+namespace Scripting
+{
+	class Line;
+}
+
 /**
 	@author 
 */
@@ -45,15 +50,16 @@ class KRLineData : public KRObjectData
 	protected:
 		KRPos _start;
 		KRPos _end;
-		KoProperty::Property* _lncolor;
-		KoProperty::Property* _lnweight;
-		KoProperty::Property* _lnstyle;
+		KoProperty::Property* _lnColor;
+		KoProperty::Property* _lnWeight;
+		KoProperty::Property* _lnStyle;
 		virtual void createProperties();
 	private:
 		
 		static int RTTI;
 		
 		friend class ORPreRenderPrivate;
+		friend class Scripting::Line;
 };
 
 #endif

@@ -25,5 +25,21 @@ namespace Scripting
 	{
 	}
 
+	QPointF Image::position()
+	{
+		return _image->_pos.toPoint();
+	}
+	void Image::setPosition ( const QPointF& p )
+	{
+		_image->_pos.setPointPos ( p );
+	}
 
+	QSizeF Image::size()
+	{
+		return _image->_size.toPoint();
+	}
+	void Image::setSize ( const QSizeF& s )
+	{
+		_image->_size.setPointSize ( s );
+	}
 }

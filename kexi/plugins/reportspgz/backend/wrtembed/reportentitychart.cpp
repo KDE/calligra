@@ -186,6 +186,10 @@ void ReportEntityChart::buildXML ( QDomDocument & doc, QDomElement & parent )
 	bc.appendChild ( doc.createTextNode ( _bgColor->value().value<QColor>().name() ));
 	entity.appendChild ( bc );
 	
+	//legend
+	QDomElement dl = doc.createElement ( "displaylegend" );
+	dl.appendChild ( doc.createTextNode ( _displayLegend->value().toBool() ? "true" : "false" ));
+	entity.appendChild ( dl );
 	//Line Style
 //	buildXMLLineStyle(doc, entity, lineStyle());
 	
@@ -236,6 +240,10 @@ void ReportEntityChart::propertyChanged ( KoProperty::Set &s, KoProperty::Proper
 	else if ( p.name() == "BackgroundColor")
 	{
 		_chartWidget->setStyleSheet("background-color: " + _bgColor->value().value<QColor>().name());
+	}
+	else if ( p.name() == "DisplayLegend")
+	{
+		populateData();
 	}
 	
 	if ( _chartWidget )

@@ -87,7 +87,7 @@ void ReportEntityLine::paint( QPainter* painter, const QStyleOptionGraphicsItem*
 	//Q3CanvasLine::drawShape(painter);
 	painter->setRenderHint(QPainter::Antialiasing, true);
 	QPen p = painter->pen();
-	painter->setPen ( QPen ( _lncolor->value().value<QColor>(), _lnweight->value().toInt(), (Qt::PenStyle)_lnstyle->value().toInt() ) );
+	painter->setPen ( QPen ( _lnColor->value().value<QColor>(), _lnWeight->value().toInt(), (Qt::PenStyle)_lnStyle->value().toInt() ) );
 	painter->drawLine ( line() );
 	if ( isSelected() )
 	{

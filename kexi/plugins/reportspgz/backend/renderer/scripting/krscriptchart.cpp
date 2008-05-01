@@ -26,5 +26,22 @@ namespace Scripting
 	{
 	}
 
+	QPointF Chart::position()
+	{
+		return _chart->_pos.toPoint();
+	}
+	void Chart::setPosition ( const QPointF& p )
+	{
+		_chart->_pos.setPointPos ( p );
+	}
 
+	QSizeF Chart::size()
+	{
+		return _chart->_size.toPoint();
+	}
+	void Chart::setSize ( const QSizeF& s )
+	{
+		_chart->_size.setPointSize ( s );
+	}
+	
 }

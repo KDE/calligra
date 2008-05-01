@@ -35,7 +35,7 @@ KRChartData::KRChartData ( QDomNode & element )
 {
 	_conn = 0;
 	createProperties();
-	
+
 	QDomNodeList nl = element.childNodes();
 
 	QString n;
@@ -45,7 +45,7 @@ KRChartData::KRChartData ( QDomNode & element )
 	{
 		node = nl.item ( i );
 		n = node.nodeName();
-		
+
 		kDebug() << node.nodeName() << node.firstChild().nodeValue();
 		if ( n == "data" )
 		{
@@ -67,7 +67,7 @@ KRChartData::KRChartData ( QDomNode & element )
 		}
 		else if ( n == "name" )
 		{
-			_name->setValue(node.firstChild().nodeValue());
+			_name->setValue ( node.firstChild().nodeValue() );
 		}
 		else if ( n == "zvalue" )
 		{
@@ -75,45 +75,50 @@ KRChartData::KRChartData ( QDomNode & element )
 		}
 		else if ( n == "type" )
 		{
-			_chartType->setValue(node.firstChild().nodeValue().toInt());
+			_chartType->setValue ( node.firstChild().nodeValue().toInt() );
 		}
 		else if ( n == "subtype" )
 		{
-			_chartSubType->setValue(node.firstChild().nodeValue().toInt());
+			_chartSubType->setValue ( node.firstChild().nodeValue().toInt() );
 		}
 		else if ( n == "threed" )
 		{
-			_threeD->setValue(node.firstChild().nodeValue() == "true" ? true : false);
+			_threeD->setValue ( node.firstChild().nodeValue() == "true" ? true : false );
 		}
 		else if ( n == "colorscheme" )
 		{
-			_colorScheme->setValue(node.firstChild().nodeValue());
+			_colorScheme->setValue ( node.firstChild().nodeValue() );
 		}
 		else if ( n == "antialiased" )
 		{
-			_aa->setValue(node.firstChild().nodeValue() == "true" ? true : false);
+			_aa->setValue ( node.firstChild().nodeValue() == "true" ? true : false );
 		}
 		else if ( n == "xtitle" )
 		{
-			_xTitle->setValue(node.firstChild().nodeValue());
+			_xTitle->setValue ( node.firstChild().nodeValue() );
 		}
 		else if ( n == "ytitle" )
 		{
-			_yTitle->setValue(node.firstChild().nodeValue());
+			_yTitle->setValue ( node.firstChild().nodeValue() );
 		}
 		else if ( n == "rect" )
 		{
 			QRectF r;
-			parseReportRect(node.toElement(), r);
-			_pos.setPointPos(r.topLeft());
-			_size.setPointSize(r.size());
+			parseReportRect ( node.toElement(), r );
+			_pos.setPointPos ( r.topLeft() );
+			_size.setPointSize ( r.size() );
 		}
-		else if (n == "backgroundcolor")
+		else if ( n == "backgroundcolor" )
 		{
-			_bgColor->setValue(QColor(node.firstChild().nodeValue()));
-			
+			_bgColor->setValue ( QColor ( node.firstChild().nodeValue() ) );
+
 		}
-		else if (n == "linestyle")
+		else if ( n == "displaylegend" )
+		{
+			_displayLegend->setValue ( node.firstChild().nodeValue() == "true" ? true : false );
+
+		}
+		else if ( n == "linestyle" )
 		{
 			ORLineStyleData ls;
 //			if (parseReportLineStyleData( node.toElement(), ls ))
@@ -177,10 +182,11 @@ void KRChartData::createProperties()
 	_xTitle = new KoProperty::Property ( "XTitle", "", "X Axis Title", "X Axis Title" );
 	_yTitle = new KoProperty::Property ( "YTitle", "", "Y Axis Title", "Y Axis Title" );
 
-	//_lnWeight = new KoProperty::Property ( "Weight", 1, "Line Weight", "Line Weight" );
-	//_lnColor = new KoProperty::Property ( "LineColor", Qt::black, "Line Color", "Line Color" );
-	//_lnStyle = new KoProperty::Property ( "LineStyle", Qt::NoPen, "Line Style", "Line Style", KoProperty::LineStyle );
+	_displayLegend = new KoProperty::Property ( "DisplayLegend", QVariant ( true, 0 ), "Display Legend", "Display Legend" );
+
 	_bgColor = new KoProperty::Property ( "BackgroundColor", Qt::white, "Background Color", "Background Color" );
+
+
 	_set->addProperty ( _name );
 	_set->addProperty ( _dataSource );
 
@@ -195,8 +201,8 @@ void KRChartData::createProperties()
 	_set->addProperty ( _xTitle );
 	_set->addProperty ( _yTitle );
 	_set->addProperty ( _bgColor );
-	
-	//_set->addProperty ( _lnWeight );
+	_set->addProperty ( _displayLegend );
+
 	//_set->addProperty ( _lnColor );
 	//_set->addProperty ( _lnStyle );
 
@@ -271,14 +277,14 @@ void KRChartData::populateData()
 		if ( curs )
 		{
 			fn = fieldNamesHackUntilImprovedParser ( _dataSource->value().toString() );
-			
+
 			//resize the data lists to match the number of columns
 			int cols = fn.count() -1;
-			data.resize(cols);
-			
+			data.resize ( cols );
+
 			_chartWidget = new KDChart::Widget();
-			_chartWidget->setStyle(new QMotifStyle());
-			
+			_chartWidget->setStyle ( new QMotifStyle() );
+
 			_chartWidget->setType ( ( KDChart::Widget::ChartType ) _chartType->value().toInt() );
 			_chartWidget->setSubType ( ( KDChart::Widget::SubType ) _chartSubType->value().toInt() );
 			set3D ( _threeD->value().toBool() );
@@ -289,35 +295,38 @@ void KRChartData::populateData()
 			while ( !curs->eof() )
 			{
 				labels << curs->value ( 0 ).toString();
-				
-				for (int i = 1; i <= cols; ++i)
+
+				for ( int i = 1; i <= cols; ++i )
 				{
 					data[i - 1] << curs->value ( i ).toDouble();
 				}
 				curs->moveNext();
 			}
 			kDebug() << labels;
-			if (data.size() > 0)
+			if ( data.size() > 0 )
 			{
 				kDebug() << data[0];
 			}
-			for (int i = 1; i <= cols; ++i)
+			for ( int i = 1; i <= cols; ++i )
 			{
 				_chartWidget->setDataset ( i - 1, data[i - 1], fn[i] );
 			}
-			
+
 
 			//Add the legend
-			_chartWidget->addLegend ( KDChart::Position::East );
-			_chartWidget->legend()->setOrientation ( Qt::Horizontal );
-			_chartWidget->legend()->setTitleText ( "Legend" );
-			for ( unsigned int i = 1; i < fn.count(); ++i )
+			if ( _displayLegend->value().toBool() )
 			{
-				_chartWidget->legend()->setText ( i - 1, fn[i] );
+				_chartWidget->addLegend ( KDChart::Position::East );
+				_chartWidget->legend()->setOrientation ( Qt::Horizontal );
+				_chartWidget->legend()->setTitleText ( "Legend" );
+				for ( unsigned int i = 1; i < fn.count(); ++i )
+				{
+					_chartWidget->legend()->setText ( i - 1, fn[i] );
+				}
+
+				_chartWidget->legend()->setShowLines ( true );
 			}
-
-			_chartWidget->legend()->setShowLines ( true );
-
+			
 			//Add the axis
 			setAxis();
 
@@ -334,9 +343,9 @@ void KRChartData::populateData()
 					}
 				}
 			}
-			
+
 			//Set the background color
-			_chartWidget->setStyleSheet("background-color: " + _bgColor->value().value<QColor>().name());
+			_chartWidget->setStyleSheet ( "background-color: " + _bgColor->value().value<QColor>().name() );
 		}
 		else
 		{
@@ -387,7 +396,7 @@ QStringList KRChartData::fieldNamesHackUntilImprovedParser ( const QString &stmt
 	KexiDB::Cursor *c = 0;
 	KexiDB::Field::List fl;
 	QString s;
-	
+
 	if ( _conn && _conn->tableSchema ( ds ) )
 	{
 		kDebug() << ds << "is a table";
@@ -410,7 +419,7 @@ QStringList KRChartData::fieldNamesHackUntilImprovedParser ( const QString &stmt
 
 void KRChartData::setAxis()
 {
-	Q_ASSERT(_chartWidget);
+	Q_ASSERT ( _chartWidget );
 
 	if ( _chartWidget->barDiagram() || _chartWidget->lineDiagram() )
 	{
@@ -452,20 +461,11 @@ void KRChartData::setAxis()
 	}
 }
 
-//ORLineStyleData KRChartData::lineStyle()
-//{
-//	ORLineStyleData ls;
-//	ls.weight = _lnWeight->value().toInt();
-//	ls.lnColor = _lnColor->value().value<QColor>();
-//	ls.style = (Qt::PenStyle)_lnStyle->value().toInt();
-//	return ls;
-//}
-
 KexiDB::Cursor *KRChartData::dataSet()
 {
 	QString ds = _dataSource->value().toString();
 	KexiDB::Cursor *c = 0;
-	
+
 	if ( _conn && _conn->tableSchema ( ds ) )
 	{
 		kDebug() << ds << "is a table";
@@ -479,9 +479,9 @@ KexiDB::Cursor *KRChartData::dataSet()
 	else
 	{
 		kDebug() << ds << "is a statement";
-		c = _conn->executeQuery( ds );
+		c = _conn->executeQuery ( ds );
 	}
-	
+
 	return c;
 }
 
