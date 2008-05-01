@@ -20,7 +20,7 @@
 
 #include "ChartDialog.h"
 
-#include "kchart/shape/ChartShape.h"
+#include <koChart.h>
 
 #include "ChartDatabaseSelectorFactory.h"
 

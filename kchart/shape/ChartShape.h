@@ -79,8 +79,6 @@ extern bool isPolar( ChartType type );
 extern bool isCartesian( ChartType type );
 extern QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color );
 
-#define ChartShapeId "ChartShape"
-
 class CHARTSHAPELIB_EXPORT ChartShape : public KoShapeContainer, public KoChart::ChartInterface
 {
 public:
