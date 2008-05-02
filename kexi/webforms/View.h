@@ -18,25 +18,14 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_WEBFORMS_SERVERCONFIG_H
-#define KEXI_WEBFORMS_SERVERCONFIG_H
-
-#include <QString>
+#ifndef KEXI_WEBFORMS_VIEW_H
+#define KEXI_WEBFORMS_VIEW_H
 
 namespace KexiWebForms {
 
-    struct ServerConfig {
-        /**
-          * A string to specify listen ports. You can use it this way:
-          * "N,N,Ns" where N are port numbers and Ns is a port on which
-          * listen for HTTPS requests
-          */
-        QString ports;
-        QString webRoot;
-        bool dirList;
-        QString https;
-        QString certPath;
-        QString dbPath;
+    class View {
+    protected:
+        virtual void show() = 0;
     };
 
 }

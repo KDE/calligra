@@ -29,14 +29,26 @@
 #include "Server.h"
 #include "ServerConfig.h"
 
+// FIXME: remove this
+#include <shttpd.h>
+
 using namespace KexiWebForms;
+
+// FIXME: Testing
+static void indexH(struct shttpd_arg* arg) {
+	shttpd_printf(arg, "%s", "HTTP/1.1 200 OK\r\n");
+	shttpd_printf(arg, "%s", "Content-Type: text/html\r\n\r\n");
+	shttpd_printf(arg, "%s", "<html><body>");
+	shttpd_printf(arg, "%s", "<h1>Kexi Web Forms daemon</h1></body></html>");
+	arg->flags |= SHTTPD_END_OF_OUTPUT;
+}
 
 int main(int argc, char **argv) {
     KAboutData aboutData("kwebforms", NULL, ki18n("Web Forms Daemon"),
                          "0.1", ki18n("Exports Kexi Forms to standard HTML pages"),
                          KAboutData::License_GPL_V2,
                          ki18n("(C) Copyright 2008, Lorenzo Villani"));
-    
+
     KCmdLineArgs::init(argc, argv, &aboutData);
     
     KCmdLineOptions options;
@@ -45,6 +57,7 @@ int main(int argc, char **argv) {
     options.add("https <port>", ki18n("HTTPS listen port"));
     options.add("cert <path>", ki18n("Path to SSL certificate file"));
     options.add("key <path>", ki18n("Path to SSL key file"));
+    options.add("dirlist", ki18n("Enable directory listing"));
     options.add("file", ki18n("Path to Kexi database file"));
     
     KCmdLineArgs::addCmdLineOptions(options);
@@ -59,6 +72,7 @@ int main(int argc, char **argv) {
     ServerConfig serverConfig = {
         args->getOption("port"),
         args->getOption("webroot"),
+        args->isSet("dirlist")
     };
 
     // SSL
@@ -73,8 +87,14 @@ int main(int argc, char **argv) {
         serverConfig.https = args->getOption("https");
     }
 
-    Server server;    
-    if (server.run(serverConfig))
+    Server server(&serverConfig);
+
+    // Setup server
+    // FIXME: This code is put here just for testing
+    // I need to define a better API to handle this stuff
+    server.registerHandler("/", indexH);
+
+    if (server.run())
         return 0;
     else
         return 1;

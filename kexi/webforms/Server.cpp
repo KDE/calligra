@@ -26,9 +26,21 @@
 #include <shttpd.h>
 
 namespace KexiWebForms {
-    Server::Server() {
+
+    Server::Server(ServerConfig* serverConfig) {
         ctx = NULL;
         ctx = shttpd_init();
+        if (ctx == NULL) {
+            kError() << "SHTTPD not correctly initialized, aborting";
+            exit(1);
+        }
+
+        if (config == NULL) {
+            kError() << "You can't pass NULL to Server ctor";
+            exit(1);
+        } else {
+            config = serverConfig;
+        }
     }
 
     Server::~Server() {
@@ -36,28 +48,30 @@ namespace KexiWebForms {
             shttpd_fini(ctx);
     }
 
-    bool Server::run(ServerConfig& serverConfig) {
+    bool Server::run() {
         if (ctx != NULL) {
-
             kDebug() << "Initializing server...";
-            
-            ctx = shttpd_init();
-            shttpd_set_option(ctx, "ports", serverConfig.ports.toStdString().c_str());
+            shttpd_set_option(ctx, "ports", config->ports.toStdString().c_str());
             // TODO: Check that webroot actually exists
-            shttpd_set_option(ctx, "root", serverConfig.webRoot.toStdString().c_str());
+            shttpd_set_option(ctx, "root", config->webRoot.toStdString().c_str());
 
             // SSL certificate
-            if (serverConfig.https != NULL) {
-                if (serverConfig.certPath != NULL) {
+            if (config->https != NULL) {
+                if (config->certPath != NULL) {
                     // FIXME: check that certificate file actually exists
-                    shttpd_set_option(ctx, "ssl_cert", serverConfig.certPath.toStdString().c_str());
+                    shttpd_set_option(ctx, "ssl_cert", config->certPath.toStdString().c_str());
                 }
             }
             
             // Do not show directory listings by default
-            shttpd_set_option(ctx, "dir_list", "0");
+            if (config->dirList) {
+                kDebug() << "Enabling directory listing...";
+                shttpd_set_option(ctx, "dir_list", "1");
+            } else {
+                shttpd_set_option(ctx, "dir_list", "0");
+            }
             
-            kDebug() << "Listening...";
+            kDebug() << "Listening on port " << config->ports;
             
             for (;;)
                 shttpd_poll(ctx, 1000);
@@ -69,6 +83,23 @@ namespace KexiWebForms {
         } else { 
             kError() << "Unknown error";
             return false;
+        }
+    }
+
+    void Server::registerHandler(const char* handler, void(*f)(shttpd_arg*)) {
+        if (f != NULL) {
+            kDebug() << "Registering handler for: " << handler;
+            shttpd_register_uri(ctx, handler, f, NULL);
+        }
+    }
+
+    ServerConfig* Server::getConfig() {
+        if (config != NULL)
+            return config;
+        else {
+            kError() << "Configuration data can't be loaded";
+            kError() << "Internal error, aborting";
+            exit(1);
         }
     }
 }
