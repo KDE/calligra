@@ -1,14 +1,22 @@
-//
-// C++ Implementation: krchartdata
-//
-// Description:
-//
-//
-// Author: Adam Pigg <adam@piggz.co.uk>, (C) 2008
-//
-// Copyright: See COPYING file that comes with this distribution
-//
-//
+/*
+ * Kexi Report Plugin
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Please contact info@openmfg.com with any questions on this license.
+ */
 #include "krchartdata.h"
 #include <KoGlobal.h>
 #include <kglobalsettings.h>
@@ -29,6 +37,10 @@
 #include <koproperty/property.h>
 #include <QMotifStyle>
 #include <kdebug.h>
+
+#include <KDChartChart>
+#include <KDChartBackgroundAttributes>
+
 typedef QVector<qreal> datalist;
 
 KRChartData::KRChartData ( QDomNode & element )
@@ -283,14 +295,14 @@ void KRChartData::populateData()
 			data.resize ( cols );
 
 			_chartWidget = new KDChart::Widget();
-			_chartWidget->setStyle ( new QMotifStyle() );
+			//_chartWidget->setStyle ( new QMotifStyle() );
 
 			_chartWidget->setType ( ( KDChart::Widget::ChartType ) _chartType->value().toInt() );
 			_chartWidget->setSubType ( ( KDChart::Widget::SubType ) _chartSubType->value().toInt() );
 			set3D ( _threeD->value().toBool() );
 			setAA ( _aa->value().toBool() );
 			setColorScheme ( _colorScheme->value().toString() );
-
+			setBackgroundColor ( _bgColor->value().value<QColor>() );
 			curs->moveFirst();
 			while ( !curs->eof() )
 			{
@@ -312,23 +324,12 @@ void KRChartData::populateData()
 				_chartWidget->setDataset ( i - 1, data[i - 1], fn[i] );
 			}
 
-
-			//Add the legend
-			if ( _displayLegend->value().toBool() )
-			{
-				_chartWidget->addLegend ( KDChart::Position::East );
-				_chartWidget->legend()->setOrientation ( Qt::Horizontal );
-				_chartWidget->legend()->setTitleText ( "Legend" );
-				for ( unsigned int i = 1; i < fn.count(); ++i )
-				{
-					_chartWidget->legend()->setText ( i - 1, fn[i] );
-				}
-
-				_chartWidget->legend()->setShowLines ( true );
-			}
+			setLegend( _displayLegend->value().toBool() );
+			
+			
 			
 			//Add the axis
-			setAxis();
+			setAxis( _xTitle->value().toString(), _yTitle->value().toString() );
 
 			//Add the bottom labels
 			if ( _chartWidget->barDiagram() || _chartWidget->lineDiagram() )
@@ -344,8 +345,7 @@ void KRChartData::populateData()
 				}
 			}
 
-			//Set the background color
-			_chartWidget->setStyleSheet ( "background-color: " + _bgColor->value().value<QColor>().name() );
+			
 		}
 		else
 		{
@@ -417,7 +417,7 @@ QStringList KRChartData::fieldNamesHackUntilImprovedParser ( const QString &stmt
 }
 
 
-void KRChartData::setAxis()
+void KRChartData::setAxis( const QString& xa, const QString &ya )
 {
 	Q_ASSERT ( _chartWidget );
 
@@ -456,8 +456,8 @@ void KRChartData::setAxis()
 			dia->addAxis ( yAxis );
 		}
 
-		xAxis->setTitleText ( _xTitle->value().toString() );
-		yAxis->setTitleText ( _yTitle->value().toString() );
+		xAxis->setTitleText ( xa );
+		yAxis->setTitleText ( ya );
 	}
 }
 
@@ -483,6 +483,46 @@ KexiDB::Cursor *KRChartData::dataSet()
 	}
 
 	return c;
+}
+void KRChartData::setBackgroundColor( const QColor& )
+{
+	//Set the background color
+	KDChart::Chart *cht = _chartWidget->diagram()->coordinatePlane()->parent();
+			
+	KDChart::BackgroundAttributes ba;
+			
+	ba.setVisible(true);
+	ba.setBrush(_bgColor->value().value<QColor>());
+	cht->setBackgroundAttributes(ba);
+}
+
+void KRChartData::setLegend( bool le)
+{
+	//Add the legend
+	if ( _chartWidget )
+	{
+		if ( le )
+		{
+			QStringList fn = fieldNamesHackUntilImprovedParser ( _dataSource->value().toString() );
+			
+			_chartWidget->addLegend ( KDChart::Position::East );
+			_chartWidget->legend()->setOrientation ( Qt::Horizontal );
+			_chartWidget->legend()->setTitleText ( "Legend" );
+			for ( unsigned int i = 1; i < fn.count(); ++i )
+			{
+				_chartWidget->legend()->setText ( i - 1, fn[i] );
+			}
+	
+			_chartWidget->legend()->setShowLines ( true );
+		}
+		else
+		{
+			if ( _chartWidget->legend() )
+			{
+				_chartWidget->takeLegend( _chartWidget->legend() );
+			}
+		}
+	}
 }
 
 // RTTI

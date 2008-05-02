@@ -1,14 +1,22 @@
-//
-// C++ Implementation: reportentitychart
-//
-// Description:
-//
-//
-// Author: Adam Pigg <adam@piggz.co.uk>, (C) 2008
-//
-// Copyright: See COPYING file that comes with this distribution
-//
-//
+/*
+ * Kexi Report Plugin
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ * Please contact info@openmfg.com with any questions on this license.
+ */
 #include "reportentitychart.h"
 
 #include <QGraphicsScene>
@@ -235,24 +243,31 @@ void ReportEntityChart::propertyChanged ( KoProperty::Set &s, KoProperty::Proper
 	}
 	else if ( p.name() == "XAxis" ||   p.name() == "YAxis")
 	{
-		setAxis();
+		setAxis( _xTitle->value().toString(), _yTitle->value().toString() );
 	}
 	else if ( p.name() == "BackgroundColor")
 	{
-		_chartWidget->setStyleSheet("background-color: " + _bgColor->value().value<QColor>().name());
+		setBackgroundColor ( p.value().value<QColor>() );
 	}
 	else if ( p.name() == "DisplayLegend")
 	{
-		populateData();
+		setLegend ( p.value().toBool() );
+	}
+	else if ( p.name() == "ChartType" )
+	{
+		if ( _chartWidget )
+		{
+			_chartWidget->setType ( ( KDChart::Widget::ChartType ) _chartType->value().toInt() );
+		}
+	}
+	else if ( p.name() == "ChartSubType" )
+	{
+		if ( _chartWidget )
+		{
+			_chartWidget->setSubType ( ( KDChart::Widget::SubType ) _chartSubType->value().toInt() );
+		}
 	}
 	
-	if ( _chartWidget )
-	{
-		_chartWidget->setType ( ( KDChart::Widget::ChartType ) _chartType->value().toInt() );
-		_chartWidget->setSubType ( ( KDChart::Widget::SubType ) _chartSubType->value().toInt() );
-		
-		setAxis();
-	}
 
 	if ( _rd ) _rd->setModified ( true );
 

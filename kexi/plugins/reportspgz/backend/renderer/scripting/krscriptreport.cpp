@@ -23,6 +23,11 @@
 #include <krobjectdata.h>
 #include "krscriptlabel.h"
 #include "krscriptfield.h"
+#include "krscripttext.h"
+#include "krscriptbarcode.h"
+#include "krscriptimage.h"
+#include "krscriptline.h"
+#include "krscriptchart.h"
 #include "krscriptsection.h"
 
 namespace Scripting
@@ -47,7 +52,7 @@ namespace Scripting
 	}
 
 	QObject* Report::objectByName ( const QString &n )
-	{
+	{	
 		QList<KRObjectData *>obs = _reportdata->objects();
 		foreach (KRObjectData *o, obs)
 		{
@@ -60,6 +65,21 @@ namespace Scripting
 						break;
 					case KRObjectData::EntityField:
 						return new Scripting::Field(o->toField());
+						break;
+					case KRObjectData::EntityText:
+						return new Scripting::Field(o->toField());
+						break;
+					case KRObjectData::EntityBarcode:
+						return new Scripting::Barcode(o->toBarcode());
+						break;
+					case KRObjectData::EntityLine:
+						return new Scripting::Line(o->toLine());
+						break;
+					case KRObjectData::EntityChart:
+						return new Scripting::Chart(o->toChart());
+						break;
+					case KRObjectData::EntityImage:
+						return new Scripting::Image(o->toImage());
 						break;
 					default:
 						return new QObject();
