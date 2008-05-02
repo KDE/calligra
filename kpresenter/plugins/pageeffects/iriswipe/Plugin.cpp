@@ -24,6 +24,9 @@
 #include "irisWipe/KPrIrisWipeEffectFactory.h"
 #include "triangleWipe/KPrTriangleWipeEffectFactory.h"
 #include "arrowHeadWipe/KPrArrowHeadWipeEffectFactory.h"
+#include "ellipseWipe/KPrEllipseWipeEffectFactory.h"
+#include "roundRectWipe/KPrRoundRectWipeEffectFactory.h"
+#include "pentagonWipe/KPrPentagonWipeEffectFactory.h"
 
 
 K_EXPORT_COMPONENT_FACTORY( kpr_pageeffect_iriswipe, KGenericFactory<Plugin>( "KPrPageEffect" ) )
@@ -34,6 +37,10 @@ Plugin::Plugin(QObject *parent, const QStringList &)
     KPrPageEffectRegistry::instance()->add(new KPrIrisWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new KPrTriangleWipeEffectFactory());
     KPrPageEffectRegistry::instance()->add(new KPrArrowHeadWipeEffectFactory());
+    KPrPageEffectRegistry::instance()->add(new KPrArrowHeadWipeEffectFactory());
+    KPrPageEffectRegistry::instance()->add(new KPrEllipseWipeEffectFactory());
+    KPrPageEffectRegistry::instance()->add(new KPrRoundRectWipeEffectFactory());
+    KPrPageEffectRegistry::instance()->add(new KPrPentagonWipeEffectFactory());
 }
 
 #include "Plugin.moc"

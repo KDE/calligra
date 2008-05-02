@@ -17,22 +17,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRIRISWIPEEFFECTFACTORY_H
-#define KPRIRISWIPEEFFECTFACTORY_H
+#ifndef KPRPENTAGONWIPEEFFECTFACTORY_H
+#define KPRPENTAGONWIPEEFFECTFACTORY_H
 
 #include <KPrPageEffectFactory.h>
 
-class KPrIrisWipeEffectFactory : public KPrPageEffectFactory
+class KPrPentagonWipeEffectFactory : public KPrPageEffectFactory
 {
 public:
-    KPrIrisWipeEffectFactory();
-    virtual ~KPrIrisWipeEffectFactory();
+    KPrPentagonWipeEffectFactory();
+    virtual ~KPrPentagonWipeEffectFactory();
     virtual QString subTypeName(int subType) const;
 
     enum SubType {
-        Rectangle,
-        Diamond
+        Up,
+        Down
     };
 };
 
-#endif /* KPRIRISWIPEEFFECTFACTORY_H */
+#endif /* KPRPENTAGONWIPEEFFECTFACTORY_H */s
