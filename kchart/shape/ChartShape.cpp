@@ -237,6 +237,7 @@ ChartShape::ChartShape()
     QObject::connect( d->model, SIGNAL( modelReset() ), d->plotArea, SLOT( dataSetCountChanged() ) );
     QObject::connect( d->model, SIGNAL( rowsInserted( const QModelIndex, int, int ) ), d->plotArea, SLOT( dataSetCountChanged() ) );
     QObject::connect( d->model, SIGNAL( rowsRemoved( const QModelIndex, int, int ) ), d->plotArea, SLOT( dataSetCountChanged() ) );
+    QObject::connect( d->model, SIGNAL( dataChanged() ), d->plotArea, SLOT( update() ) );
     
     d->plotArea->setChartType( BarChartType );
     d->plotArea->setChartSubType( NormalChartSubtype );
