@@ -289,7 +289,15 @@ int PlotArea::gapBetweenSets() const
 bool PlotArea::addAxis( Axis *axis )
 {
     if ( d->axes.contains( axis ) )
-        return false;
+    {
+    	qWarning() << "PlotArea::addAxis(): This axis has already been added.";
+    	return false;
+    }
+    if ( !axis )
+    {
+    	qWarning() << "PlotArea::addAxis(): Pointer to axis is NULL!";
+    	return false;
+    }
     d->axes.append( axis );
     
     requestRepaint();
@@ -300,7 +308,15 @@ bool PlotArea::addAxis( Axis *axis )
 bool PlotArea::removeAxis( Axis *axis )
 {
     if ( !d->axes.contains( axis ) )
-        return false;
+    {
+    	qWarning() << "PlotArea::removeAxis(): This axis has not been added previously.";
+    	return false;
+    }
+    if ( !axis )
+    {
+    	qWarning() << "PlotArea::removeAxis(): Pointer to axis is NULL!";
+    	return false;
+    }
     d->axes.removeAll( axis );
     
     requestRepaint();
