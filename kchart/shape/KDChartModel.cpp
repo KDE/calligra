@@ -205,7 +205,7 @@ void KDChartModel::addDataSet( DataSet *dataSet, bool silent )
     	d->dataSets.append( dataSet );
     	const int dataSetSize = dataSet->size();
         d->dataSetSizes.append( dataSetSize );
-        if ( dataSetSize > d->dataSetSizes[ d->biggestDataSetIndex ] )
+        if ( d->biggestDataSetIndex < 0 || dataSetSize > d->dataSetSizes[ d->biggestDataSetIndex ] )
         	d->biggestDataSetIndex = d->dataSets.count() - 1;
     }
     else
@@ -268,12 +268,6 @@ void KDChartModel::removeDataSet( DataSet *dataSet, bool silent )
     }
     else
     {
-    	int columnAboutToBeRemoved = d->dataSets.indexOf( dataSet ) * d->dataDimensions;
-    	beginRemoveColumns( QModelIndex(), columnAboutToBeRemoved, columnAboutToBeRemoved + d->dataDimensions - 1 );
-    	d->dataSets.removeAt( dataSetIndex );
-        d->dataSetSizes.removeAt( dataSetIndex );
-    	endRemoveColumns();
-        
     	const int dataSetSize = dataSet->size();
     	if ( dataSetIndex == d->biggestDataSetIndex )
     	{
@@ -281,6 +275,8 @@ void KDChartModel::removeDataSet( DataSet *dataSet, bool silent )
     		int biggestDataSetIndex = -1;
     		for ( int i = 0; i < d->dataSets.size(); i++ )
     		{
+    			if ( d->dataSets[i] == dataSet )
+    				continue;
     			const int size = d->dataSets[i]->size();
     			if ( size > maxSize )
     			{
@@ -296,6 +292,12 @@ void KDChartModel::removeDataSet( DataSet *dataSet, bool silent )
     			endRemoveRows();
     		}
     	}
+    	
+    	int columnAboutToBeRemoved = d->dataSets.indexOf( dataSet ) * d->dataDimensions;
+    	beginRemoveColumns( QModelIndex(), columnAboutToBeRemoved, columnAboutToBeRemoved + d->dataDimensions - 1 );
+    	d->dataSets.removeAt( dataSetIndex );
+        d->dataSetSizes.removeAt( dataSetIndex );
+    	endRemoveColumns();
     }
     
     dataSet->deregisterKdChartModel( this );
@@ -308,10 +310,17 @@ QList<DataSet*> KDChartModel::dataSets() const
 
 void KDChartModel::emitReset()
 {
+	d->biggestDataSetIndex = -1;
 	// Update data set sizes
+	int maxSize = 0;
 	for ( int i = 0; i < d->dataSets.size(); i++ )
 	{
 		d->dataSetSizes[i] = d->dataSets[i]->size();
+		if ( d->dataSetSizes[i] > maxSize )
+		{
+			maxSize = d->dataSetSizes[i];
+			d->biggestDataSetIndex = i;
+		}
 	}
 	reset();
 }
