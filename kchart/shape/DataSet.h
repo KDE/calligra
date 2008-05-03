@@ -66,6 +66,8 @@ public:
     // Setter methods
     void setChartType( ChartType type );
     void setChartSubType( ChartSubtype type );
+    void setGlobalChartType( ChartType type );
+    void setGlobalChartSubType( ChartSubtype type );
     void setAttachedAxis( Axis *axis );
 
     void setShowValues( bool showValues );
@@ -120,6 +122,7 @@ public:
     virtual void setLabelDataRegionString( const QString &region ) {};
 
     virtual int size() const;
+    virtual int dimension() const;
 
     void setKdDiagram( KDChart::AbstractDiagram *diagram );
     void setKdDataSetNumber( int number );
@@ -147,6 +150,8 @@ public:
 protected:
     ChartType m_chartType;
     ChartSubtype m_chartSubType;
+    ChartType m_globalChartType;
+    ChartSubtype m_globalChartSubType;
     Axis *m_attachedAxis;
     bool m_showMeanValue;
     QPen m_meanValuePen;

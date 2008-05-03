@@ -810,6 +810,7 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
         newModel->addDataSet( dataSet, true );
         dataSet->setKdDiagram( newDiagram );
         dataSet->setKdDataSetNumber( newModel->dataSets().indexOf( dataSet ) );
+        dataSet->setGlobalChartType( chartType );
     }
     
     if ( *oldModel )

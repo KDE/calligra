@@ -161,6 +161,16 @@ void DataSet::setChartSubType( ChartSubtype subType )
     axis->attachDataSet( this );
 }
 
+void DataSet::setGlobalChartType( ChartType type )
+{
+	m_globalChartType = type;
+}
+
+void DataSet::setGlobalChartSubType( ChartSubtype type )
+{
+	m_globalChartSubType = type;
+}
+
 
 void DataSet::setAttachedAxis( Axis *axis )
 {
@@ -318,6 +328,29 @@ QVariant DataSet::labelData() const
 int DataSet::size() const
 {
     return m_model->columnCount();
+}
+
+int DataSet::dimension() const
+{
+	// Return "1" by default
+	const ChartType chartType = m_chartType != LastChartType ? m_chartType : m_globalChartType;
+	switch ( chartType )
+	{
+	case BarChartType:
+	case AreaChartType:
+	case LineChartType:
+	case CircleChartType:
+	case RadarChartType:
+	case SurfaceChartType:
+		return 1;
+	case GanttChartType:
+	case RingChartType:
+		return 2;
+	case BubbleChartType:
+		return 3;
+	}
+	
+	return 0;
 }
 
 void DataSet::setKdDiagram( KDChart::AbstractDiagram *diagram )
