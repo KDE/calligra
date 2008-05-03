@@ -219,6 +219,14 @@ Region::~Region()
     qDeleteAll( d->cells );
 }
 
+QVector<QRect> Region::rects() const
+{
+	QVector<QRect> cellRects;
+	foreach (Element *element, d->cells)
+		cellRects.append( element->rect() );
+	return cellRects;
+}
+
 const Map* Region::map() const
 {
   Q_ASSERT(d->map);

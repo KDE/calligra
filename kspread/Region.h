@@ -117,7 +117,11 @@ public:
    */
   virtual ~Region();
 
-
+  
+  /**
+   *  @return a QRegion that unifies all contained ranges
+   */
+  QVector<QRect> rects() const;
 
   /**
    * @param originSheet The name is created relative to this sheet.
