@@ -343,6 +343,7 @@ int DataSet::dimension() const
 	case RadarChartType:
 	case SurfaceChartType:
 		return 1;
+	case ScatterChartType:
 	case GanttChartType:
 	case RingChartType:
 		return 2;
