@@ -155,7 +155,6 @@ void Axis::Private::registerKDChartModel( KDChartModel *model )
 	QObject::connect( model, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), plotArea, SLOT( update() ) );
 	QObject::connect( model, SIGNAL( columnsInserted( const QModelIndex&, int, int ) ), plotArea, SLOT( update() ) );
 	QObject::connect( model, SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ), plotArea, SLOT( update() ) );
-    QObject::connect( model, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), plotArea, SLOT( update() ) );
     
     QObject::connect( plotArea->proxyModel(), SIGNAL( modelReset() ),
     		          model,                  SLOT( emitReset() ) );
@@ -169,7 +168,6 @@ void Axis::Private::deregisterKDChartModel( KDChartModel *model )
 	QObject::disconnect( model, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), plotArea, SLOT( update() ) );
 	QObject::disconnect( model, SIGNAL( columnsInserted( const QModelIndex&, int, int ) ), plotArea, SLOT( update() ) );
 	QObject::disconnect( model, SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ), plotArea, SLOT( update() ) );
-	QObject::disconnect( model, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), plotArea, SLOT( update() ) );
     
 	QObject::disconnect( plotArea->proxyModel(), SIGNAL( modelReset() ),
     		             model,                  SLOT( emitReset() ) );
@@ -675,6 +673,7 @@ void Axis::update() const
 {
     if ( d->kdBarDiagram )
     {
+    	qDebug() << "Axis::update():" << d->kdBarDiagram;
         d->kdBarDiagram->doItemsLayout();
         d->kdBarDiagram->update();
     }
@@ -701,36 +700,36 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
     if ( d->dataSets.isEmpty() || chartType == d->plotAreaChartType )
         return; // Return if there's nothing to do
     
-    KDChartModel *oldModel = 0;
+    KDChartModel **oldModel = 0;
     KDChartModel *newModel = 0;
-    KDChart::AbstractDiagram *oldDiagram = 0;
+    KDChart::AbstractDiagram **oldDiagram = 0;
     KDChart::AbstractDiagram *newDiagram = 0;
     
     switch ( d->plotAreaChartType )
     {
     case BarChartType:
-        oldModel = d->kdBarDiagramModel;
-        oldDiagram = d->kdBarDiagram;
+        oldModel = &d->kdBarDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdBarDiagram;
         break;
     case LineChartType:
-        oldModel = d->kdLineDiagramModel;
-        oldDiagram = d->kdLineDiagram;
+        oldModel = &d->kdLineDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdLineDiagram;
         break;
     case AreaChartType:
-        oldModel = d->kdAreaDiagramModel;
-        oldDiagram = d->kdAreaDiagram;
+        oldModel = &d->kdAreaDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdAreaDiagram;
         break;
     case CircleChartType:
-        oldModel = d->kdCircleDiagramModel;
-        oldDiagram = d->kdCircleDiagram;
+        oldModel = &d->kdCircleDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdCircleDiagram;
         break;
     case RadarChartType:
-        oldModel = d->kdRadarDiagramModel;
-        oldDiagram = d->kdRadarDiagram;
+        oldModel = &d->kdRadarDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdRadarDiagram;
         break;
     case ScatterChartType:
-        oldModel = d->kdScatterDiagramModel;
-        oldDiagram = d->kdScatterDiagram;
+        oldModel = &d->kdScatterDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdScatterDiagram;
         break;
     }
     
@@ -791,21 +790,32 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
     {
         if ( dataSet->chartType() != LastChartType )
             continue;
-        if ( oldModel )
-            oldModel->removeDataSet( dataSet );
-        newModel->addDataSet( dataSet );
+        if ( oldModel && *oldModel )
+        {
+        	if ( (*oldModel)->columnCount() == 1 )
+        	{
+        		if ( (*oldDiagram)->coordinatePlane() )
+        			(*oldDiagram)->coordinatePlane()->takeDiagram( (*oldDiagram) );
+        		Q_ASSERT( oldDiagram );
+        		Q_ASSERT( *oldDiagram );
+		        if ( *oldDiagram )
+		            delete *oldDiagram;
+		        delete *oldModel;
+		        *oldModel = 0;
+		        *oldDiagram = 0;
+        	}
+        	else
+        		(*oldModel)->removeDataSet( dataSet, true );
+        }
+        newModel->addDataSet( dataSet, true );
         dataSet->setKdDiagram( newDiagram );
         dataSet->setKdDataSetNumber( newModel->dataSets().indexOf( dataSet ) );
     }
     
-    if ( oldModel && oldModel->columnCount() == 0 )
-    {
-        if (oldDiagram->coordinatePlane() )
-            oldDiagram->coordinatePlane()->takeDiagram( oldDiagram );
-        if ( oldDiagram )
-            delete oldDiagram;
-        delete oldModel;
-    }
+    if ( *oldModel )
+    	(*oldModel)->emitReset();
+    if ( newModel )
+    	newModel->emitReset();
     
     d->plotAreaChartType = chartType;
     
