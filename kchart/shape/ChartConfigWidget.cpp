@@ -37,6 +37,7 @@
 #include "CellRegionDialog.h"
 #include "ChartTableView.h"
 #include "commands/ChartTypeCommand.h"
+#include "CellRegionStringValidator.h"
 #include <interfaces/KoChartModel.h>
 
 using namespace KChart;
@@ -135,12 +136,14 @@ public:
     NewAxisDialog     newAxisDialog;
     AxisScalingDialog axisScalingDialog;
     CellRegionDialog  cellRegionDialog;
+    
+    CellRegionStringValidator *cellRegionStringValidator;
 };
 
 ChartConfigWidget::Private::Private( QWidget *parent )
-	: newAxisDialog( parent ),
-	  axisScalingDialog( parent ),
-	  cellRegionDialog( parent )
+    : newAxisDialog( parent ),
+      axisScalingDialog( parent ),
+      cellRegionDialog( parent )
 {
     lastHorizontalAlignment = 1; // Qt::AlignCenter
     lastVerticalAlignment   = 1; // Qt::AlignCenter
@@ -151,6 +154,7 @@ ChartConfigWidget::Private::Private( QWidget *parent )
     type = KChart::LastChartType;
     subtype = KChart::NoChartSubtype;
     sourceIsSpreadSheet = false;
+    cellRegionStringValidator = 0;
 }
 
 ChartConfigWidget::Private::~Private()
@@ -253,22 +257,22 @@ ChartConfigWidget::ChartConfigWidget()
     connect( d->ui.legendOrientationIsVertical, SIGNAL( toggled( bool ) ),
              this, SLOT( setLegendOrientationIsVertical( bool ) ) );
     
-	d->ui.addAxis->setIcon( KIcon( "list-add" ) );
-	d->ui.removeAxis->setIcon( KIcon( "list-remove" ) );
+    d->ui.addAxis->setIcon( KIcon( "list-add" ) );
+    d->ui.removeAxis->setIcon( KIcon( "list-remove" ) );
 
-	connect( d->ui.axisTitle, SIGNAL( textChanged( const QString& ) ),
-			 this, SLOT( ui_axisTitleChanged( const QString& ) ) );
-	connect( d->ui.axisShowTitle, SIGNAL( toggled( bool ) ),
-			 this, SLOT( ui_axisShowTitleChanged( bool ) ) );
-	connect( d->ui.axisShowGridLines, SIGNAL( toggled( bool ) ),
-			 this, SLOT( ui_axisShowGridLinesChanged( bool ) ) );
-	connect ( d->ui.axes, SIGNAL( currentIndexChanged( int ) ),
-			  this, SLOT( ui_axisSelectionChanged( int ) ) );
-	
-	connect( d->ui.dataSets, SIGNAL( currentIndexChanged( int ) ),
-	         this, SLOT( ui_dataSetSelectionChanged( int ) ) );
-	connect( d->ui.dataSetAxes, SIGNAL( currentIndexChanged( int ) ),
-	        this, SLOT( ui_dataSetAxisSelectionChanged( int ) ) );
+    connect( d->ui.axisTitle, SIGNAL( textChanged( const QString& ) ),
+             this, SLOT( ui_axisTitleChanged( const QString& ) ) );
+    connect( d->ui.axisShowTitle, SIGNAL( toggled( bool ) ),
+             this, SLOT( ui_axisShowTitleChanged( bool ) ) );
+    connect( d->ui.axisShowGridLines, SIGNAL( toggled( bool ) ),
+             this, SLOT( ui_axisShowGridLinesChanged( bool ) ) );
+    connect ( d->ui.axes, SIGNAL( currentIndexChanged( int ) ),
+              this, SLOT( ui_axisSelectionChanged( int ) ) );
+    
+    connect( d->ui.dataSets, SIGNAL( currentIndexChanged( int ) ),
+             this, SLOT( ui_dataSetSelectionChanged( int ) ) );
+    connect( d->ui.dataSetAxes, SIGNAL( currentIndexChanged( int ) ),
+            this, SLOT( ui_dataSetAxisSelectionChanged( int ) ) );
 
     setupDialogs();
     createActions();
@@ -293,7 +297,8 @@ void ChartConfigWidget::open( KoShape* shape )
     d->shape = dynamic_cast<ChartShape*>( shape );
     Q_ASSERT( d->shape );
     
-    d->sourceIsSpreadSheet = dynamic_cast<KoChart::ChartModel*>( d->shape->model() ) != 0;
+    KoChart::ChartModel *spreadSheetModel = dynamic_cast<KoChart::ChartModel*>( d->shape->model() );
+    d->sourceIsSpreadSheet = spreadSheetModel != 0;
     
     // Update the axis titles
     //d->ui.xAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[0]->titleText() );
@@ -305,18 +310,30 @@ void ChartConfigWidget::open( KoShape* shape )
     // Fill the data table
     if ( d->sourceIsSpreadSheet )
     {
-    	d->ui.editData->setText( i18n( "Data Ranges..." ) );
-    	connect( d->ui.editData, SIGNAL( clicked( bool ) ), &d->cellRegionDialog, SLOT( show() ) );
-    	connect( d->cellRegionDialog.xDataRegion, SIGNAL( textEdited( const QString&) ),
-    			 this, SLOT( ui_dataSetXDataRegionChanged( const QString& ) ) );
-    	connect( d->cellRegionDialog.yDataRegion, SIGNAL( textEdited( const QString&) ),
-    			 this, SLOT( ui_dataSetYDataRegionChanged( const QString& ) ) );
-    	connect( d->cellRegionDialog.dataSets, SIGNAL( currentIndexChanged( int ) ),
-    			 this, SLOT( ui_dataSetSelectionChanged_CellRegionDialog( int ) ) );
+    	d->cellRegionStringValidator = new CellRegionStringValidator( spreadSheetModel );
+    	d->cellRegionDialog.labelDataRegion->setValidator( d->cellRegionStringValidator );
+    	d->cellRegionDialog.xDataRegion->setValidator( d->cellRegionStringValidator );
+    	d->cellRegionDialog.yDataRegion->setValidator( d->cellRegionStringValidator );
+    	d->cellRegionDialog.categoryDataRegion->setValidator( d->cellRegionStringValidator );
+    	
+        d->ui.editData->setText( i18n( "Data Ranges..." ) );
+        connect( d->ui.editData, SIGNAL( clicked( bool ) ), &d->cellRegionDialog, SLOT( show() ) );
+        connect( d->cellRegionDialog.xDataRegion, SIGNAL( editingFinished() ),
+                 this, SLOT( ui_dataSetXDataRegionChanged() ) );
+        connect( d->cellRegionDialog.yDataRegion, SIGNAL( editingFinished() ),
+                 this, SLOT( ui_dataSetYDataRegionChanged() ) );
+        connect( d->cellRegionDialog.labelDataRegion, SIGNAL( editingFinished() ),
+                 this, SLOT( ui_dataSetLabelDataRegionChanged() ) );
+        //connect( d->cellRegionDialog.customDataRegion, SIGNAL( textEdited( const QString&) ),
+        //         this, SLOT( ui_dataSetCustomDataRegionChanged( const QString& ) ) );
+        connect( d->cellRegionDialog.categoryDataRegion, SIGNAL( editingFinished() ),
+                 this, SLOT( ui_dataSetCategoryDataRegionChanged() ) );
+        connect( d->cellRegionDialog.dataSets, SIGNAL( currentIndexChanged( int ) ),
+                 this, SLOT( ui_dataSetSelectionChanged_CellRegionDialog( int ) ) );
     }
     else
     {
-    	d->tableView->setModel( d->shape->model() );
+        d->tableView->setModel( d->shape->model() );
         connect( d->ui.editData, SIGNAL( clicked( bool ) ),
                  this, SLOT( slotShowTableEditor( bool ) ) );
     }
@@ -558,36 +575,36 @@ void ChartConfigWidget::update()
     blockSignals( true );
     
     // Update cartesian diagram-specific properties
-	if ( d->axes != d->shape->plotArea()->axes() ) {
+    if ( d->axes != d->shape->plotArea()->axes() ) {
         // Remove old items from the combo box
-		d->ui.axes->clear();
+        d->ui.axes->clear();
         d->ui.dataSetAxes->clear();
         // Sync the internal list
         d->axes = d->shape->plotArea()->axes();
         d->dataSetAxes.clear();
-	
-        if ( !d->axes.isEmpty()	) {
+    
+        if ( !d->axes.isEmpty()    ) {
             foreach ( Axis *axis, d->axes ) {
-    			d->ui.axes->addItem( axis->titleText() );
+                d->ui.axes->addItem( axis->titleText() );
                 if ( axis->dimension() == YAxisDimension ) {
                     d->dataSetAxes.append( axis );
                     d->ui.dataSetAxes->blockSignals( true );
                     QString title = axis->titleText();
                     if ( title.isEmpty() )
                         title = i18n( "Axis %1", d->ui.dataSetAxes->count() + 1 );
-    			    d->ui.dataSetAxes->addItem( title );
+                    d->ui.dataSetAxes->addItem( title );
                     d->ui.dataSetAxes->blockSignals( false );
                 }
-    		}
-    		
-    		const Axis *selectedAxis = d->shape->plotArea()->axes().first();
+            }
+            
+            const Axis *selectedAxis = d->shape->plotArea()->axes().first();
 
             d->ui.axisShowGridLines->setEnabled( true );
-    		d->ui.axisShowGridLines->setChecked( selectedAxis->showGrid() );
+            d->ui.axisShowGridLines->setChecked( selectedAxis->showGrid() );
             d->ui.axisShowTitle->setEnabled( true );
-    		d->ui.axisShowTitle->setChecked( !selectedAxis->titleText().isEmpty() );
+            d->ui.axisShowTitle->setChecked( !selectedAxis->titleText().isEmpty() );
             d->ui.axisTitle->setEnabled( true );
-    		d->ui.axisTitle->setText( selectedAxis->titleText() );
+            d->ui.axisTitle->setText( selectedAxis->titleText() );
         } else {
             d->ui.axisShowGridLines->blockSignals( true );
             d->ui.axisShowGridLines->setChecked( false );
@@ -604,7 +621,7 @@ void ChartConfigWidget::update()
             d->ui.axisTitle->setEnabled( false );
             d->ui.axisTitle->blockSignals( false );
         }
-	}
+    }
     
     if (    d->type    != d->shape->chartType()
          || d->subtype != d->shape->chartSubType() )
@@ -939,49 +956,97 @@ void ChartConfigWidget::ui_axisSelectionChanged( int index ) {
     // Check for valid index
     if ( index < 0 )
         return;
-	Q_ASSERT( d->axes.size() > index );
-	
-	Axis *axis = d->axes[ index ];
+    Q_ASSERT( d->axes.size() > index );
     
-	d->ui.axisTitle->blockSignals( true );
-	d->ui.axisTitle->setText( axis->titleText() );
-	d->ui.axisTitle->blockSignals( false );
-	d->ui.axisShowTitle->blockSignals( true );
-	d->ui.axisShowTitle->setChecked( axis->title()->isVisible() );
-	d->ui.axisShowTitle->blockSignals( false );
-	d->ui.axisShowGridLines->blockSignals( true );
-	d->ui.axisShowGridLines->setChecked( axis->showGrid() );
-	d->ui.axisShowGridLines->blockSignals( false );
-	
-	d->axisScalingDialog.logarithmicScaling->blockSignals( true );
-	if ( axis->dimension() == YAxisDimension )
+    Axis *axis = d->axes[ index ];
+    
+    d->ui.axisTitle->blockSignals( true );
+    d->ui.axisTitle->setText( axis->titleText() );
+    d->ui.axisTitle->blockSignals( false );
+    d->ui.axisShowTitle->blockSignals( true );
+    d->ui.axisShowTitle->setChecked( axis->title()->isVisible() );
+    d->ui.axisShowTitle->blockSignals( false );
+    d->ui.axisShowGridLines->blockSignals( true );
+    d->ui.axisShowGridLines->setChecked( axis->showGrid() );
+    d->ui.axisShowGridLines->blockSignals( false );
+    
+    d->axisScalingDialog.logarithmicScaling->blockSignals( true );
+    if ( axis->dimension() == YAxisDimension )
         d->axisScalingDialog.logarithmicScaling->setEnabled( true );
-	else
-	    d->axisScalingDialog.logarithmicScaling->setEnabled( false );
+    else
+        d->axisScalingDialog.logarithmicScaling->setEnabled( false );
     d->axisScalingDialog.logarithmicScaling->blockSignals( false );
 }
 
 
-void ChartConfigWidget::ui_dataSetXDataRegionChanged( const QString &region )
+void ChartConfigWidget::ui_dataSetXDataRegionChanged()
 {
     // Check for valid index
     if ( d->selectedDataSet_CellRegionDialog < 0 )
         return;
+    
+    const QString region = d->cellRegionDialog.xDataRegion->text();
     
     DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
     
     emit dataSetXDataRegionChanged( dataSet, region );
 }
 
-void ChartConfigWidget::ui_dataSetYDataRegionChanged( const QString &region )
+void ChartConfigWidget::ui_dataSetYDataRegionChanged()
 {
     // Check for valid index
     if ( d->selectedDataSet_CellRegionDialog < 0 )
         return;
     
+    const QString region = d->cellRegionDialog.yDataRegion->text();
+    
     DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
     
     emit dataSetYDataRegionChanged( dataSet, region );
+}
+
+void ChartConfigWidget::ui_dataSetCustomDataRegionChanged()
+{
+	// Only makes sense when bubble charts are implemented
+	// TODO: ui_dataSetCustomDataRegionChanged
+	return;
+	/*
+    // Check for valid index
+    if ( d->selectedDataSet_CellRegionDialog < 0 )
+        return;
+    
+    const QString region = d->cellRegionDialog.customDataRegion->text();
+    
+    DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
+    
+    emit dataSetCustomDataRegionChanged( dataSet, region );
+    */
+}
+
+void ChartConfigWidget::ui_dataSetCategoryDataRegionChanged()
+{
+    // Check for valid index
+    if ( d->selectedDataSet_CellRegionDialog < 0 )
+        return;
+    
+    const QString region = d->cellRegionDialog.categoryDataRegion->text();
+    
+    DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
+    
+    emit dataSetCategoryDataRegionChanged( dataSet, region );
+}
+
+void ChartConfigWidget::ui_dataSetLabelDataRegionChanged()
+{
+    // Check for valid index
+    if ( d->selectedDataSet_CellRegionDialog < 0 )
+        return;
+    
+    const QString region = d->cellRegionDialog.labelDataRegion->text();
+    
+    DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
+    
+    emit dataSetLabelDataRegionChanged( dataSet, region );
 }
 
 void ChartConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog( int index ) {
@@ -991,9 +1056,18 @@ void ChartConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog( int index )
     Q_ASSERT( d->dataSets.size() >= index );
     
     DataSet *dataSet = d->dataSets[ index ];
-    
-    d->cellRegionDialog.xDataRegion->setText( dataSet->xDataRegionString() );
+    const int dimensions = dataSet->dimension();
+
+    d->cellRegionDialog.labelDataRegion->setText( dataSet->labelDataRegionString() );
+    if ( dimensions > 1 )
+    {
+        d->cellRegionDialog.xDataRegion->setEnabled( true );
+        d->cellRegionDialog.xDataRegion->setText( dataSet->xDataRegionString() );
+    }
+    else
+        d->cellRegionDialog.xDataRegion->setEnabled( false );
     d->cellRegionDialog.yDataRegion->setText( dataSet->yDataRegionString() );
+    d->cellRegionDialog.categoryDataRegion->setText( dataSet->categoryDataRegionString() );
     
     d->selectedDataSet_CellRegionDialog = index;
 }
@@ -1039,22 +1113,22 @@ void ChartConfigWidget::ui_dataSetAxisSelectionChanged( int index ) {
 }
 
 void ChartConfigWidget::ui_axisTitleChanged( const QString& title ) {
-	Q_ASSERT( d->axes.size() >= d->ui.axes->currentIndex() );
-	
-	emit axisTitleChanged( d->axes[ d->ui.axes->currentIndex() ], title );
+    Q_ASSERT( d->axes.size() >= d->ui.axes->currentIndex() );
+    
+    emit axisTitleChanged( d->axes[ d->ui.axes->currentIndex() ], title );
 }
 
 void ChartConfigWidget::ui_axisShowTitleChanged( bool b ) {
-	Q_ASSERT( d->axes.size() >= d->ui.axes->currentIndex() );
-	
-	// To hide the axis title, we pass an empty string
-	emit axisShowTitleChanged( d->axes[ d->ui.axes->currentIndex() ], b );
+    Q_ASSERT( d->axes.size() >= d->ui.axes->currentIndex() );
+    
+    // To hide the axis title, we pass an empty string
+    emit axisShowTitleChanged( d->axes[ d->ui.axes->currentIndex() ], b );
 }
 
 void ChartConfigWidget::ui_axisShowGridLinesChanged( bool b ) {
-	Q_ASSERT( d->axes.size() >= d->ui.axes->currentIndex() );
-	
-	emit axisShowGridLinesChanged( d->axes[ d->ui.axes->currentIndex() ], b );
+    Q_ASSERT( d->axes.size() >= d->ui.axes->currentIndex() );
+    
+    emit axisShowGridLinesChanged( d->axes[ d->ui.axes->currentIndex() ], b );
 }
 
 void ChartConfigWidget::ui_axisAdded() {
@@ -1085,7 +1159,7 @@ void ChartConfigWidget::ui_removeAxisClicked() {
     // Check for valid index
     if ( index < 0 )
         return;
-	Q_ASSERT( d->axes.size() > index );
+    Q_ASSERT( d->axes.size() > index );
 
     if ( KMessageBox::questionYesNo( this,
                                      "Are you sure you want to remove this axis? All settings specific to this axis will be lost.",
@@ -1108,7 +1182,7 @@ void ChartConfigWidget::ui_axisUseLogarithmicScalingChanged( bool b )
     // Check for valid index
     if ( index < 0 )
         return;
-	Q_ASSERT( d->axes.size() > index );
+    Q_ASSERT( d->axes.size() > index );
 
     emit axisUseLogarithmicScalingChanged( d->axes[ index ], b );
 }
@@ -1119,7 +1193,7 @@ void ChartConfigWidget::ui_axisStepWidthChanged( double width )
     // Check for valid index
     if ( index < 0 )
         return;
-	Q_ASSERT( d->axes.size() > index );
+    Q_ASSERT( d->axes.size() > index );
 
     emit axisStepWidthChanged( d->axes[ index ], width );
 }
@@ -1130,7 +1204,7 @@ void ChartConfigWidget::ui_axisSubStepWidthChanged( double width )
     // Check for valid index
     if ( index < 0 )
         return;
-	Q_ASSERT( d->axes.size() > index );
+    Q_ASSERT( d->axes.size() > index );
 
     emit axisSubStepWidthChanged( d->axes[ index ], width );
 }

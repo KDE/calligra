@@ -217,6 +217,12 @@ QWidget *ChartTool::createOptionWidget()
     		 this,   SLOT( setDataSetXDataRegion( DataSet*, const QString& ) ) );
     connect( widget, SIGNAL( dataSetYDataRegionChanged( DataSet*, const QString& ) ),
     		 this,   SLOT( setDataSetYDataRegion( DataSet*, const QString& ) ) );
+    connect( widget, SIGNAL( dataSetCustomDataRegionChanged( DataSet*, const QString& ) ),
+    		 this,   SLOT( setDataSetCustomDataRegion( DataSet*, const QString& ) ) );
+    connect( widget, SIGNAL( dataSetLabelDataRegionChanged( DataSet*, const QString& ) ),
+    		 this,   SLOT( setDataSetLabelDataRegion( DataSet*, const QString& ) ) );
+    connect( widget, SIGNAL( dataSetCategoryDataRegionChanged( DataSet*, const QString& ) ),
+    		 this,   SLOT( setDataSetCategoryDataRegion( DataSet*, const QString& ) ) );
     connect( widget, SIGNAL( dataSetChartTypeChanged( DataSet*, ChartType ) ),
              this,   SLOT( setDataSetChartType( DataSet*, ChartType ) ) );
     connect( widget, SIGNAL( dataSetChartSubTypeChanged( DataSet*, ChartSubtype ) ),

@@ -54,8 +54,11 @@ public slots:
     void ui_datasetShowLabelsChanged( bool b );
     void ui_dataSetSelectionChanged( int index );
     void ui_dataSetAxisSelectionChanged( int index );
-    void ui_dataSetXDataRegionChanged( const QString &region );
-    void ui_dataSetYDataRegionChanged( const QString &region );
+    void ui_dataSetXDataRegionChanged();
+    void ui_dataSetYDataRegionChanged();
+    void ui_dataSetCustomDataRegionChanged();
+    void ui_dataSetLabelDataRegionChanged();
+    void ui_dataSetCategoryDataRegionChanged();
     void ui_dataSetSelectionChanged_CellRegionDialog( int index );
 
     void setLegendOrientationIsVertical( bool );
@@ -95,6 +98,9 @@ signals:
     
     void dataSetXDataRegionChanged( DataSet *dataSet, const QString &region );
     void dataSetYDataRegionChanged( DataSet *dataSet, const QString &region );
+    void dataSetCustomDataRegionChanged( DataSet *dataSet, const QString &region );
+    void dataSetCategoryDataRegionChanged( DataSet *dataSet, const QString &region );
+    void dataSetLabelDataRegionChanged( DataSet *dataSet, const QString &region );
     
     void datasetColorChanged( DataSet *dataSet, const QColor& color );
     void datasetShowValuesChanged( DataSet *dataSet, bool b );
