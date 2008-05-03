@@ -827,6 +827,60 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
 
 void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
 {
+    switch ( d->plotAreaChartType )
+    {
+    case BarChartType:
+        if ( d->kdBarDiagram )
+        {
+            KDChart::BarDiagram::BarType type;
+            switch ( subType )
+            {
+            case StackedChartSubtype:
+                type = KDChart::BarDiagram::Stacked; break;
+            case PercentChartSubtype:
+                type = KDChart::BarDiagram::Percent; break;
+            default:
+                type = KDChart::BarDiagram::Normal;
+            }
+            d->kdBarDiagram->setType( type );
+        }
+        break;
+    case LineChartType:
+        if ( d->kdLineDiagram )
+        {
+            KDChart::LineDiagram::LineType type;
+            switch ( subType )
+            {
+            case StackedChartSubtype:
+                type = KDChart::LineDiagram::Stacked; break;
+            case PercentChartSubtype:
+                type = KDChart::LineDiagram::Percent; break;
+            default:
+                type = KDChart::LineDiagram::Normal;
+            }
+            d->kdLineDiagram->setType( type );
+        }
+        break;
+    case AreaChartType:
+        if ( d->kdAreaDiagram )
+        {
+            KDChart::LineDiagram::LineType type;
+            switch ( subType )
+            {
+            case StackedChartSubtype:
+                type = KDChart::LineDiagram::Stacked; break;
+            case PercentChartSubtype:
+                type = KDChart::LineDiagram::Percent; break;
+            default:
+                type = KDChart::LineDiagram::Normal;
+            }
+            d->kdAreaDiagram->setType( type );
+        }
+        break;
+    }
+    foreach ( DataSet *dataSet, d->dataSets )
+        dataSet->setGlobalChartSubType( subType );
+        
 }
 
 void Axis::setThreeD( bool threeD )
