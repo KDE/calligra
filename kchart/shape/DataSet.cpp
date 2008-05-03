@@ -20,12 +20,10 @@
 
 // Local
 #include "DataSet.h"
-#include "CellRegion.h"
 #include "ProxyModel.h"
 #include "Axis.h"
 #include "PlotArea.h"
 #include "KDChartModel.h"
-#include <interfaces/KoChartModel.h>
 
 // Qt
 #include <QAbstractItemModel>
@@ -39,188 +37,126 @@
 
 using namespace KChart;
 
-class DataSet::Private
-{
-public:
-    Private();
-    ~Private();
-    
-    ChartType chartType;
-    ChartSubtype chartSubType;
-    Axis *attachedAxis;
-    bool showMeanValue;
-    QPen meanValuePen;
-    bool showValues;
-    bool showLabels;
-    bool showLowerErrorIndicator;
-    bool showUpperErrorIndicator;
-    QPen errorIndicatorPen;
-    ErrorCategory errorCategory;
-    double errorPercentage;
-    double errorMargin;
-    double lowerErrorLimit;
-    double upperErrorLimit;
-    QPen pen;
-    QBrush brush;
-    
-    CellRegion xDataRegion;
-    CellRegion yDataRegion;
-    CellRegion customDataRegion;
-    CellRegion labelDataRegion;
-    CellRegion categoryDataRegion;
-    
-    Qt::Orientation xDataDirection;
-    Qt::Orientation yDataDirection;
-    Qt::Orientation customDataDirection;
-    Qt::Orientation labelDataDirection;
-    Qt::Orientation categoryDataDirection;
-    
-    PlotArea *plotArea;
-    
-    ProxyModel *model;
-    KoChart::ChartModel *spreadSheetModel;
-    KDChart::AbstractDiagram *kdDiagram;
-    int kdDataSetNumber;
-    
-    bool sourceIsSpreadSheet;
-    
-    QList<KDChartModel*> kdChartModels;
-    
-    int size;
-    bool blockSignals;
-};
-
-DataSet::Private::Private()
-{
-    chartType = LastChartType;
-    chartSubType = NoChartSubtype;
-    kdDataSetNumber = 0;
-    showMeanValue = false;
-    showValues = false;
-    showLabels = false;
-    showLowerErrorIndicator = false;
-    showUpperErrorIndicator = false;
-    errorPercentage = 0.0;
-    errorMargin = 0.0;
-    lowerErrorLimit = 0.0;
-    upperErrorLimit = 0.0;
-    pen = QPen( Qt::black );
-    plotArea = 0;
-    model = 0;
-    kdDiagram = 0;
-    attachedAxis = 0;
-    sourceIsSpreadSheet = false;
-    spreadSheetModel = 0;
-    size = 0;
-    blockSignals = false;
-}
-
-DataSet::Private::~Private()
-{
-}
-
-
 DataSet::DataSet( ProxyModel *proxyModel )
-    : d( new Private )
 {
-    d->model = proxyModel;
+    m_model = proxyModel;
+    
+    m_chartType = LastChartType;
+    m_chartSubType = NoChartSubtype;
+    m_kdDataSetNumber = 0;
+    m_showMeanValue = false;
+    m_showValues = false;
+    m_showLabels = false;
+    m_showLowerErrorIndicator = false;
+    m_showUpperErrorIndicator = false;
+    m_errorPercentage = 0.0;
+    m_errorMargin = 0.0;
+    m_lowerErrorLimit = 0.0;
+    m_upperErrorLimit = 0.0;
+    m_pen = QPen( Qt::black );
+    m_kdDiagram = 0;
+    m_attachedAxis = 0;
+    m_sourceIsSpreadSheet = false;
+    m_spreadSheetModel = 0;
+    m_size = 0;
+    m_blockSignals = false;
 }
 
 DataSet::~DataSet()
 {
-    if ( d->attachedAxis )
-        d->attachedAxis->detachDataSet( this, true );
+    if ( m_attachedAxis )
+        m_attachedAxis->detachDataSet( this, true );
 }
 
 
 ChartType DataSet::chartType() const
 {
-    return d->chartType;
+    return m_chartType;
 }
 
 
 ChartSubtype DataSet::chartSubType() const
 {
-    return d->chartSubType;
+    return m_chartSubType;
 }
 
 Axis *DataSet::attachedAxis() const
 {
-    return d->attachedAxis;
+    return m_attachedAxis;
 }
 
 ProxyModel *DataSet::model() const
 {
-    return d->model;
+    return m_model;
 }
 
 bool DataSet::showMeanValue() const
 {
-    return d->showMeanValue;
+    return m_showMeanValue;
 }
 
 QPen DataSet::meanValuePen() const
 {
-    return d->meanValuePen;   
+    return m_meanValuePen;   
 }
 
 bool DataSet::showLowerErrorIndicator() const
 {
-    return d->showLowerErrorIndicator;
+    return m_showLowerErrorIndicator;
 }
 
 bool DataSet::showUpperErrorIndicator() const
 {
-    return d->showUpperErrorIndicator;
+    return m_showUpperErrorIndicator;
 }
 
 QPen DataSet::errorIndicatorPen() const
 {
-    return d->errorIndicatorPen;
+    return m_errorIndicatorPen;
 }
 
 ErrorCategory DataSet::errorCategory() const
 {
-    return d->errorCategory;
+    return m_errorCategory;
 }
 
 double DataSet::errorPercentage() const
 {
-    return d->errorPercentage;
+    return m_errorPercentage;
 }
 
 double DataSet::errorMargin() const
 {
-    return d->errorMargin;   
+    return m_errorMargin;   
 }
 
 double DataSet::lowerErrorLimit() const
 {
-    return d->lowerErrorLimit;
+    return m_lowerErrorLimit;
 }
 
 double DataSet::upperErrorLimit() const
 {
-    return d->upperErrorLimit;
+    return m_upperErrorLimit;
 }
 
 
 void DataSet::setChartType( ChartType type )
 {
-    Axis *axis = d->attachedAxis;
+    Axis *axis = m_attachedAxis;
     axis->detachDataSet( this );
     
-    d->chartType = type;
+    m_chartType = type;
     
     axis->attachDataSet( this );
 }
 
 void DataSet::setChartSubType( ChartSubtype subType )
 {
-    Axis *axis = d->attachedAxis;
+    Axis *axis = m_attachedAxis;
     axis->detachDataSet( this );
     
-    d->chartSubType = subType;
+    m_chartSubType = subType;
     
     axis->attachDataSet( this );
 }
@@ -228,94 +164,94 @@ void DataSet::setChartSubType( ChartSubtype subType )
 
 void DataSet::setAttachedAxis( Axis *axis )
 {
-    d->attachedAxis = axis;
+    m_attachedAxis = axis;
 }
 
 bool DataSet::showValues() const
 {
-    return d->showValues;
+    return m_showValues;
 }
 
 bool DataSet::showLabels() const
 {
-    return d->showLabels;
+    return m_showLabels;
 }
 
 void DataSet::setShowValues( bool showValues )
 {
-    if ( !d->kdDiagram )
+    if ( !m_kdDiagram )
         return;
-    d->showValues = showValues;
+    m_showValues = showValues;
     
-    KDChart::DataValueAttributes attributes = d->kdDiagram->dataValueAttributes( d->kdDataSetNumber );
+    KDChart::DataValueAttributes attributes = m_kdDiagram->dataValueAttributes( m_kdDataSetNumber );
     attributes.setVisible( showValues );
-    d->kdDiagram->setDataValueAttributes( d->kdDataSetNumber, attributes );
+    m_kdDiagram->setDataValueAttributes( m_kdDataSetNumber, attributes );
     
-    if ( d->attachedAxis )
-        d->attachedAxis->update();
+    if ( m_attachedAxis )
+        m_attachedAxis->update();
 }
 
 void DataSet::setShowLabels( bool showLabels )
 {
-    d->showLabels = showLabels;
+    m_showLabels = showLabels;
 }
 
 QPen DataSet::pen() const
 {
-    return d->pen;
+    return m_pen;
 }
 
 QBrush DataSet::brush() const
 {
-    return d->brush;
+    return m_brush;
 }
 
 void DataSet::setPen( const QPen &pen )
 {
-    d->pen = pen;
-    d->kdDiagram->setPen( d->kdDataSetNumber, pen );
-    if ( d->attachedAxis )
-        d->attachedAxis->update();
+    m_pen = pen;
+    m_kdDiagram->setPen( m_kdDataSetNumber, pen );
+    if ( m_attachedAxis )
+        m_attachedAxis->update();
 }
 
 void DataSet::setBrush( const QBrush &brush )
 {
-    d->brush = brush;
-    d->kdDiagram->setBrush( d->kdDataSetNumber, brush );
-    if ( d->attachedAxis )
-        d->attachedAxis->update();
+    m_brush = brush;
+    m_kdDiagram->setBrush( m_kdDataSetNumber, brush );
+    if ( m_attachedAxis )
+        m_attachedAxis->update();
 }
 
 QColor DataSet::color() const
 {
-    return d->brush.color();
+    return m_brush.color();
 }
 
 void DataSet::setColor( const QColor &color )
 {
-    QBrush brush = d->brush;
+    QBrush brush = m_brush;
     brush.setColor( color );
     setBrush( brush );
 }
 
 void DataSet::setShowMeanValue( bool show )
 {
-    d->showMeanValue = show;
+    m_showMeanValue = show;
 }
 
 void DataSet::setMeanValuePen( const QPen &pen )
 {
-    d->meanValuePen = pen;
+    m_meanValuePen = pen;
 }
 
 void DataSet::setShowLowerErrorIndicator( bool show )
 {
-    d->showLowerErrorIndicator = show;
+    m_showLowerErrorIndicator = show;
 }
 
 void DataSet::setShowUpperErrorIndicator( bool show )
 {
-    d->showUpperErrorIndicator = show;
+    m_showUpperErrorIndicator = show;
 }
 
 void DataSet::setShowErrorIndicators( bool lower, bool upper )
@@ -326,388 +262,136 @@ void DataSet::setShowErrorIndicators( bool lower, bool upper )
 
 void DataSet::setErrorIndicatorPen( const QPen &pen )
 {
-    d->errorIndicatorPen = pen;
+    m_errorIndicatorPen = pen;
 }
 
 void DataSet::setErrorCategory( ErrorCategory category )
 {
-    d->errorCategory = category;
+    m_errorCategory = category;
 }
 
 void DataSet::setErrorPercentage( double percentage )
 {
-    d->errorPercentage = percentage;
+    m_errorPercentage = percentage;
 }
 
 void DataSet::setErrorMargin( double margin )
 {
-    d->errorMargin = margin;
+    m_errorMargin = margin;
 }
 
 void DataSet::setLowerErrorLimit( double limit )
 {
-    d->lowerErrorLimit = limit;
+    m_lowerErrorLimit = limit;
 }
 
 void DataSet::setUpperErrorLimit( double limit )
 {
-    d->upperErrorLimit = limit;
+    m_upperErrorLimit = limit;
 }
 
 QVariant DataSet::xData( int index ) const
 {
-    if ( !d->xDataRegion.isValid() )
-            return QVariant();
-        
-    QPoint dataPoint = d->xDataRegion.pointAtIndex( index );
-    return d->model->data( d->model->index( dataPoint.y(), dataPoint.x() ) );
+    return m_model->xData( this, index );
 }
 
 QVariant DataSet::yData( int index ) const
 {
-    if ( !d->yDataRegion.isValid() )
-            return QVariant();
-        
-    QPoint dataPoint = d->yDataRegion.pointAtIndex( index );
-    qDebug() << dataPoint;
-    return d->model->data( d->model->index( dataPoint.y(), dataPoint.x() ) );
+    return m_model->yData( this, index );
 }
 
 QVariant DataSet::customData( int index ) const
 {
-    if ( !d->customDataRegion.isValid() )
-            return QVariant();
-        
-    QPoint dataPoint = d->customDataRegion.pointAtIndex( index );
-    return d->model->data( d->model->index( dataPoint.y(), dataPoint.x() ) );
+    return m_model->customData( this, index );
 }
 
 QVariant DataSet::categoryData( int index ) const
 {
-    if ( !d->categoryDataRegion.isValid() )
-            return QVariant();
-        
-    QPoint dataPoint = d->categoryDataRegion.pointAtIndex( index );
-    return d->model->data( d->model->index( dataPoint.y(), dataPoint.x() ) );
+    return m_model->categoryData( this, index );
 }
 
 QVariant DataSet::labelData() const
 {
-    if ( !d->labelDataRegion.isValid() )
-            return QVariant();
-    
-    QString label;
-    
-    int cellCount = d->labelDataRegion.cellCount();
-    for ( int i = 0; i < cellCount; i++ )
-    {
-        QPoint dataPoint = d->labelDataRegion.pointAtIndex( i );
-        label += d->model->data( d->model->index( dataPoint.y(), dataPoint.x() ) ).toString();
-    }
-    
-    return QVariant( label );
+    return m_model->labelData( this );
 }
-
-
-CellRegion DataSet::xDataRegion() const
-{
-    return d->xDataRegion;
-}
-
-CellRegion DataSet::yDataRegion() const
-{
-    return d->yDataRegion;
-}
-
-CellRegion DataSet::customDataRegion() const
-{
-    return d->customDataRegion;
-}
-
-CellRegion DataSet::categoryDataRegion() const
-{
-    return d->categoryDataRegion;
-}
-
-CellRegion DataSet::labelDataRegion() const
-{
-    return d->labelDataRegion;
-}
-
-QString DataSet::xDataRegionString() const
-{
-    if ( !d->model->spreadSheetModel() )
-        return QString();
-    
-    return d->model->spreadSheetModel()->regionToString( d->xDataRegion.rects() );
-}
-
-QString DataSet::yDataRegionString() const
-{
-    if ( !d->model->spreadSheetModel() )
-        return QString();
-    
-    return d->model->spreadSheetModel()->regionToString( d->yDataRegion.rects() );
-}
-
-QString DataSet::customDataRegionString() const
-{
-    if ( !d->model->spreadSheetModel() )
-        return QString();
-    
-    return d->model->spreadSheetModel()->regionToString( d->customDataRegion.rects() );
-}
-
-QString DataSet::categoryDataRegionString() const
-{
-    if ( !d->model->spreadSheetModel() )
-        return QString();
-    
-    return d->model->spreadSheetModel()->regionToString( d->categoryDataRegion.rects() );
-}
-
-QString DataSet::labelDataRegionString() const
-{
-    if ( !d->model->spreadSheetModel() )
-        return QString();
-    
-    return d->model->spreadSheetModel()->regionToString( d->labelDataRegion.rects() );
-}
-
-
-void DataSet::setXDataRegion( const CellRegion &region )
-{
-    d->xDataRegion = region;
-    int newSize = 0;
-    
-    QRect boundingRect;
-    foreach ( QRect rect, region.rects() )
-    {
-        newSize += qMax( rect.width(), rect.height() );
-        boundingRect |= rect;
-    }
-    
-    if ( boundingRect.height() > 1 )
-        d->xDataDirection = Qt::Vertical;
-    else
-        d->xDataDirection = Qt::Horizontal;
-
-    d->size = qMax( d->size, newSize );
-}
-
-void DataSet::setYDataRegion( const CellRegion &region )
-{
-    d->yDataRegion = region;
-    d->yDataDirection = region.orientation();
-    const int oldSize = d->size;
-    d->size = region.cellCount();
-    qDebug() << "cell count:" << region.cellCount();
-    
-    if ( !d->blockSignals )
-    {
-	    foreach( KDChartModel *model, d->kdChartModels )
-	    {
-	    	if ( oldSize != d->size )
-	    		model->dataSetSizeChanged( this, d->size );
-	        model->dataChanged( model->index( 0,           d->kdDataSetNumber ),
-	                            model->index( d->size - 1, d->kdDataSetNumber ) );
-	    }
-    }
-}
-
-void DataSet::setCustomDataRegion( const CellRegion &region )
-{
-    d->customDataRegion = region;
-    int newSize = 0;
-    
-    QRect boundingRect;
-    foreach ( QRect rect, region.rects() )
-    {
-        newSize += qMax( rect.width(), rect.height() );
-        boundingRect |= rect;
-    }
-    
-    if ( boundingRect.height() > 1 )
-        d->customDataDirection = Qt::Vertical;
-    else
-        d->customDataDirection = Qt::Horizontal;
-
-    d->size = qMax( d->size, newSize );
-}
-
-void DataSet::setCategoryDataRegion( const CellRegion &region )
-{
-    d->categoryDataRegion = region;
-    int newSize = 0;
-    
-    QRect boundingRect;
-    foreach ( QRect rect, region.rects() )
-    {
-        newSize += qMax( rect.width(), rect.height() );
-        boundingRect |= rect;
-    }
-    
-    if ( boundingRect.height() > 1 )
-        d->categoryDataDirection = Qt::Vertical;
-    else
-        d->categoryDataDirection = Qt::Horizontal;
-    
-    d->size = qMax( d->size, newSize );
-}
-
-void DataSet::setLabelDataRegion( const CellRegion &region )
-{
-    d->labelDataRegion = region;
-    
-    QRect boundingRect;
-    foreach ( QRect rect, region.rects() )
-        boundingRect |= rect;
-    
-    if ( boundingRect.height() > 1 )
-        d->labelDataDirection = Qt::Vertical;
-    else
-        d->labelDataDirection = Qt::Horizontal;
-}
-
-void DataSet::setXDataRegionString( const QString &string )
-{
-    if ( !d->model->spreadSheetModel() )
-        return;
-    
-    setXDataRegion( d->model->spreadSheetModel()->stringToRegion( string ) );
-}
-
-void DataSet::setYDataRegionString( const QString &string )
-{
-    if ( !d->model->spreadSheetModel() )
-        return;
-    
-    setYDataRegion( d->model->spreadSheetModel()->stringToRegion( string ) );
-}
-
-void DataSet::setCustomDataRegionString( const QString &string )
-{
-    if ( !d->model->spreadSheetModel() )
-        return;
-    
-    setCustomDataRegion( d->model->spreadSheetModel()->stringToRegion( string ) );
-}
-
-void DataSet::setCategoryDataRegionString( const QString &string )
-{
-    if ( !d->model->spreadSheetModel() )
-        return;
-    
-    setCategoryDataRegion( d->model->spreadSheetModel()->stringToRegion( string ) );
-}
-
-void DataSet::setLabelDataRegionString( const QString &string )
-{
-    if ( !d->model->spreadSheetModel() )
-        return;
-    
-    setLabelDataRegion( d->model->spreadSheetModel()->stringToRegion( string ) );
-}
-
 
 int DataSet::size() const
 {
-    qDebug() << "DataSet::size(): Returning" << d->size;
-    return d->size;
+    return m_model->columnCount();
 }
 
 void DataSet::setKdDiagram( KDChart::AbstractDiagram *diagram )
 {
-    d->kdDiagram = diagram;
+    m_kdDiagram = diagram;
 }
 
 KDChart::AbstractDiagram *DataSet::kdDiagram() const
 {
-    return d->kdDiagram;
+    return m_kdDiagram;
 }
 
 void DataSet::setKdDataSetNumber( int number )
 {
-    d->kdDataSetNumber = number;
-    if ( d->kdDiagram )
+    m_kdDataSetNumber = number;
+    if ( m_kdDiagram )
     {
-        d->brush = d->kdDiagram->brush( number );
-        d->pen = d->kdDiagram->pen( number );
+        m_brush = m_kdDiagram->brush( number );
+        m_pen = m_kdDiagram->pen( number );
     }
 }
 
 bool DataSet::registerKdChartModel( KDChartModel *model )
 {
-    if ( d->kdChartModels.contains( model ) )
+    if ( m_kdChartModels.contains( model ) )
         return false;
-    d->kdChartModels.append( model );
+    m_kdChartModels.append( model );
     return true;
 }
 
 bool DataSet::deregisterKdChartModel( KDChartModel *model )
 {
-    if ( !d->kdChartModels.contains( model ) )
+    if ( !m_kdChartModels.contains( model ) )
         return false;
-    d->kdChartModels.removeAll( model );
+    m_kdChartModels.removeAll( model );
     return true;
 }
 
 void DataSet::deregisterAllKdChartModels()
 {
-	d->kdChartModels.clear();
+	m_kdChartModels.clear();
 }
 
-void DataSet::yDataChanged( const QRect &rect ) const
-{    
-    int start, end;
-    
-    QVector<QRect> yDataRegionRects = d->yDataRegion.rects();
-    
-    if ( d->yDataDirection == Qt::Horizontal )
+void DataSet::xDataChanged( int start, int end ) const
+{
+    foreach( KDChartModel *model, m_kdChartModels )
     {
-        QPoint topLeft = rect.topLeft();
-        QPoint topRight = rect.topRight();
-        
-        int totalWidth = 0;
-        int i;
-        
-        for ( i = 0; i < yDataRegionRects.size(); i++ )
-        {
-            if ( yDataRegionRects[i].contains( topLeft ) )
-            {
-                start = totalWidth + topLeft.x() - yDataRegionRects[i].topLeft().x();
-                break;
-            }
-            totalWidth += yDataRegionRects[i].width();
-        }
-        
-        for ( i; i < yDataRegionRects.size(); i++ )
-        {
-            if ( yDataRegionRects[i].contains( topRight ) )
-            {
-                end = totalWidth + topRight.x() - yDataRegionRects[i].topLeft().x();
-                break;
-            }
-            totalWidth += yDataRegionRects[i].width();
-        }
+        model->dataChanged( model->index( start, m_kdDataSetNumber ),
+                            model->index( end,   m_kdDataSetNumber ) );
     }
-    else
+}
+
+void DataSet::yDataChanged( int start, int end ) const
+{
+    foreach( KDChartModel *model, m_kdChartModels )
     {
+        model->dataChanged( model->index( start, m_kdDataSetNumber ),
+                            model->index( end,   m_kdDataSetNumber ) );
     }
-    
-    qDebug() << "y data changed:" << start << end << "[this=" << this << "]";
-    
-    if ( !d->blockSignals )
-    {
-	    foreach( KDChartModel *model, d->kdChartModels )
-	    {
-	        model->dataChanged( model->index( start, d->kdDataSetNumber ),
-	                            model->index( end,   d->kdDataSetNumber ) );
-	    }
-    }
+}
+
+void DataSet::customDataChanged( int start, int end ) const
+{
+}
+
+void DataSet::labelDataChanged() const
+{
+}
+
+void DataSet::categoryDataChanged( int start, int end ) const
+{
 }
 
 void DataSet::blockSignals( bool block )
 {
-	d->blockSignals = block;
+	m_blockSignals = block;
 }
