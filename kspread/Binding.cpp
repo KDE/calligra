@@ -196,7 +196,7 @@ QString BindingModel::regionToString( const QVector<QRect> &region ) const
 
 QVector<QRect> BindingModel::stringToRegion( const QString &string ) const
 {
-	const Region r( string );
+	const Region r( string, m_sheet->map() );
 	return r.rects();
 }
 
@@ -204,7 +204,7 @@ QVariant BindingModel::data(const QModelIndex& index, int role) const
 {
     if ((!m_sheet && m_region.isEmpty()) || (role != Qt::EditRole && role != Qt::DisplayRole))
         return QVariant();
-    const QPoint offset = m_sheet ? QPoint(0,0) : m_region.firstRange().topLeft();
+    const QPoint offset = m_sheet ? QPoint(1,1) : m_region.firstRange().topLeft();
     const Sheet* sheet = m_sheet ? m_sheet : m_region.firstSheet();
     const Value value = sheet->cellStorage()->value(offset.x() + index.column(),
                                                      offset.y() + index.row());
