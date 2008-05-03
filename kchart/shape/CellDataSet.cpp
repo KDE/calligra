@@ -60,9 +60,9 @@ QVariant CellDataSet::xData( int index ) const
         return QVariant();
         
     QPoint dataPoint = m_xDataRegion.pointAtIndex( index );
-    if ( dataPoint.x() < 0 || dataPoint.y() < 0 )
+    if ( dataPoint.x() <= 0 || dataPoint.y() <= 0 )
         return QVariant();
-    return model->data( model->index( dataPoint.y(), dataPoint.x() ) );
+    return model->data( model->index( dataPoint.y() - 1, dataPoint.x() - 1 ) );
 }
 
 QVariant CellDataSet::yData( int index ) const
@@ -74,9 +74,9 @@ QVariant CellDataSet::yData( int index ) const
         return QVariant();
         
     QPoint dataPoint = m_yDataRegion.pointAtIndex( index );
-    if ( dataPoint.x() < 0 || dataPoint.y() < 0 )
+    if ( dataPoint.x() <= 0 || dataPoint.y() <= 0 )
         return QVariant();
-    return model->data( model->index( dataPoint.y(), dataPoint.x() ) );
+    return model->data( model->index( dataPoint.y() - 1, dataPoint.x() - 1 ) );
 }
 
 QVariant CellDataSet::customData( int index ) const
@@ -88,9 +88,9 @@ QVariant CellDataSet::customData( int index ) const
         return QVariant();
         
     QPoint dataPoint = m_customDataRegion.pointAtIndex( index );
-    if ( dataPoint.x() < 0 || dataPoint.y() < 0 )
+    if ( dataPoint.x() <= 0 || dataPoint.y() <= 0 )
         return QVariant();
-    return model->data( model->index( dataPoint.y(), dataPoint.x() ) );
+    return model->data( model->index( dataPoint.y() - 1, dataPoint.x() - 1 ) );
 }
 
 QVariant CellDataSet::categoryData( int index ) const
@@ -113,7 +113,8 @@ QVariant CellDataSet::labelData() const
     for ( int i = 0; i < cellCount; i++ )
     {
         QPoint dataPoint = m_labelDataRegion.pointAtIndex( i );
-        label += m_model->sourceModel()->data( m_model->index( dataPoint.y(), dataPoint.x() ) ).toString();
+        if ( dataPoint.x() > 0 && dataPoint.y() > 0 )
+        	label += m_model->sourceModel()->data( m_model->index( dataPoint.y() - 1, dataPoint.x() - 1 ) ).toString();
     }
     
     return QVariant( label );
@@ -319,7 +320,6 @@ void CellDataSet::setLabelDataRegionString( const QString &string )
 
 int CellDataSet::size() const
 {
-    qDebug() << "CellDataSet::size(): Returning" << m_size;
     return m_size;
 }
 
@@ -360,8 +360,6 @@ void CellDataSet::yDataChanged( const QRect &rect ) const
     else
     {
     }
-    
-    qDebug() << "y data changed:" << start << end << "[this=" << this << "]";
     
     if ( !m_blockSignals && m_kdChartModel )
     {
