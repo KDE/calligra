@@ -13,6 +13,7 @@ SET (chartshape_LIB_SRCS
     DataSet.cpp
     CellDataSet.cpp
     CellRegion.cpp
+    CellRegionStringValidator.cpp
     Legend.cpp
     TextLabelDummy.cpp
     PlotArea.cpp
