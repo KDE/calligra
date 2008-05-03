@@ -74,6 +74,7 @@ class Surface;
 class Axis;
 class ThreeDScene;
 class KDChartModel;
+class CellRegion;
 
 extern bool isPolar( ChartType type );
 extern bool isCartesian( ChartType type );
@@ -102,6 +103,7 @@ public:
     
     // Setter methods
     void setModel( QAbstractItemModel *model, bool takeOwnershipOfModel = false );
+    void setModel( KoChart::ChartModel *model, const QVector<QRect> &selection );
     bool addAxis( Axis *axis );
     bool removeAxis( Axis *axis );
     
