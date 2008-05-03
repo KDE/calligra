@@ -21,6 +21,10 @@
 // Local
 #include "ProxyModel.h"
 #include "DataSet.h"
+#include <interfaces/KoChartModel.h>
+
+// Qt
+#include <QRegion>
 
 // KDE
 #include <KDebug>
@@ -37,6 +41,9 @@ public:
     int dataDimensions;
     QMap<int, int> dataMap;
     QList<DataSet*> dataSets;
+    QList<DataSet*> removedDataSets;
+    QVector<QRect> selection;
+    KoChart::ChartModel *spreadSheetModel;
 };
 
 ProxyModel::Private::Private()
@@ -45,14 +52,14 @@ ProxyModel::Private::Private()
     firstColumnIsLabel = false;
     dataDimensions = 1;
 
-    dataDirection = Qt::Vertical;
+    dataDirection = Qt::Horizontal;
+    spreadSheetModel = 0;
 }
 
 ProxyModel::ProxyModel()
     : QAbstractProxyModel( 0 ),
       d( new Private )
 {
-    connect( this, SIGNAL( modelReset() ), this, SLOT( rebuildDataMap() ) );
 }
 
 ProxyModel::~ProxyModel()
@@ -61,56 +68,106 @@ ProxyModel::~ProxyModel()
 
 void ProxyModel::rebuildDataMap()
 {
-    int numRows = rowCount();
-    int dataSetCount = 0;
+    QMap<int, QVector<QRect> > rows;
+    QMap<int, QVector<QRect> > sortedRows;
     
-    // If we have 2 dimensions or more, the x data comes from
-    // the first row by default
-    int xDataRowInSourceModel = 0;
-    int yDataRowInSourceModel = 0;
-    
-    if ( d->dataDimensions > 1 )
+    if ( d->dataDirection == Qt::Horizontal )
     {
-        // Since first row is for x values,
-        // move the first y value one row down
-        yDataRowInSourceModel++;
-    }
-    
-    d->dataMap.clear();
-    
-    for ( int i = 0; i < numRows; i += d->dataDimensions )
-    {
-        dataSetCount++;
-        // Only insert a new data set if we don't already have it
-        if ( dataSetCount > d->dataSets.count() )
+        // Split up region in horizontal rectangles
+        // that are sorted from top to bottom
+        foreach ( QRect rect, d->selection )
         {
-            d->dataSets.append( new DataSet( this ) );
+            int x = rect.topLeft().x();
+            for ( int y = rect.topLeft().y(); y <= rect.bottomLeft().y(); y++ )
+            {
+                QRect dataRect = QRect( QPoint( x, y ), QSize( rect.width(), 1 ) );
+                if ( !rows.contains( y ) )
+                    rows.insert( y, QVector<QRect>() );
+                rows[y].append( dataRect );
+            }
         }
         
-        if ( d->dataDimensions == 1 )
+        // Sort rectangles in each row from left to right
+        QMapIterator<int, QVector<QRect> > i( rows );
+        while ( i.hasNext() )
         {
-            d->dataMap.insert( i, yDataRowInSourceModel );
+            i.next();
+            int row = i.key();
+            QVector<QRect> unsortedRects = i.value();
+            QVector<QRect> sortedRects;
+            
+            foreach ( QRect rect, unsortedRects )
+            {
+                int index;
+                
+                for ( index = 0; index < sortedRects.size(); index++ )
+                    if ( rect.topLeft().x() <= sortedRects[ index ].topLeft().x() )
+                        break;
+                
+                sortedRects.insert( index, rect );
+            }
+            
+            sortedRows.insert( row, sortedRects );
         }
-        else if ( d->dataDimensions == 2 )
-        {
-            d->dataMap.insert( i    , yDataRowInSourceModel );
-            d->dataMap.insert( i + 1, xDataRowInSourceModel );
-        }
-        else if ( d->dataDimensions == 3 )
-        {
-            // TODO (Johannes): Handle third data dimension
-        }
-        yDataRowInSourceModel++;
+    }
+    else
+    {
+        qWarning() << "ProxyModel::rebuildDataMap(): Vertical data direction not supported yet";
     }
     
-    // Some rows have apparently been removed from the model.
-    // Remove remaining data sets from the list.
-    while ( d->dataSets.count() > dataSetCount )
+    QMapIterator<int, QVector<QRect> > j( sortedRows );
+    int k = 0;
+    
+    CellRegion categoryRegion;
+    
+    if ( d->firstRowIsLabel && j.hasNext() )
     {
-        DataSet *dataSet = d->dataSets.takeLast();
-        // TODO (Johannes): Keep the data sets to re-add them later
-        // when the row count is increased again
-        delete dataSet;
+        j.next();
+        
+        categoryRegion = CellRegion( j.value() );
+        if ( d->firstColumnIsLabel )
+            categoryRegion.subtract( categoryRegion.pointAtIndex( 0 ) );
+    }
+    
+    while ( j.hasNext() )
+    {
+        j.next();
+        
+        DataSet *dataSet;
+        if ( k >= d->dataSets.size() )
+        {
+        	if ( !d->removedDataSets.isEmpty() )
+        		dataSet = d->removedDataSets.takeLast();
+        	else
+        		dataSet = new DataSet( this );
+            d->dataSets.append( dataSet );
+        }
+        else
+            dataSet = d->dataSets[k];
+        dataSet->blockSignals( true );
+        
+        CellRegion yDataRegion( j.value() );
+
+        qDebug() << "Creating data set with region " << j.value();
+        if ( d->firstColumnIsLabel )
+        {
+            QPoint labelDataPoint = yDataRegion.pointAtIndex( 0 );
+            dataSet->setLabelDataRegion( CellRegion( labelDataPoint ) );
+            dataSet->setCategoryDataRegion( categoryRegion );
+            
+            yDataRegion.subtract( labelDataPoint );
+        }
+        
+        dataSet->setYDataRegion( yDataRegion );
+        k++;
+        dataSet->blockSignals( false );
+    }
+    
+    while ( d->dataSets.size() > k + 1 )
+    {
+    	DataSet *dataSet = d->dataSets.takeLast();
+    	dataSet->deregisterAllKdChartModels();
+        d->removedDataSets.append( dataSet );
     }
 }
 
@@ -120,9 +177,38 @@ void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
              this,        SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
 
     QAbstractProxyModel::setSourceModel( sourceModel );
+    
+    rebuildDataMap();
 
     // Update the entire data set
     reset();
+}
+
+void ProxyModel::setSourceModel( KoChart::ChartModel *sourceModel, const QVector<QRect> &selection )
+{
+    connect( sourceModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
+             this,        SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
+    
+    d->selection = selection;
+
+    QAbstractProxyModel::setSourceModel( sourceModel );
+    d->spreadSheetModel = sourceModel;
+    
+    rebuildDataMap();
+
+    // Update the entire data set
+    reset();
+}
+
+KoChart::ChartModel *ProxyModel::spreadSheetModel() const
+{
+    return d->spreadSheetModel;
+}
+
+void ProxyModel::setSelection( const QVector<QRect> &selection )
+{
+    d->selection = selection;
+    //needReset();
 }
 
 QVariant ProxyModel::data( const QModelIndex &index,
@@ -131,20 +217,52 @@ QVariant ProxyModel::data( const QModelIndex &index,
     if ( sourceModel() == 0 )
         return QVariant();
     
-    QModelIndex sourceIndex = mapToSource( index );
-    if ( sourceIndex == QModelIndex() )
+    if ( !index.isValid() )
     {
         qWarning() << "ProxyModel::data(): Attempting to request data for invalid source index";
-        qWarning() << "ProxyModel::data(): Mapping resulted in:";
-        qWarning() << index << "-->" << sourceIndex;
+        qWarning() << "ProxyModel::data():" << index;
         return QVariant();
     }
-    QVariant value = sourceModel()->data( sourceIndex, role );
-    return value;
+    
+    return sourceModel()->data( index, role );
 }
 
 void ProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight )
 {
+    qDebug() << topLeft << bottomRight;
+    QPoint topLeftPoint( topLeft.column(), topLeft.row() );
+    // Excerpt from the Qt reference for QRect::bottomRight() which is used for calculating bottomRight
+    // Note that for historical reasons this function returns QPoint(left() + width() -1, top() + height() - 1).
+    QPoint bottomRightPoint( bottomRight.column() + 1, bottomRight.row() + 1 );
+    QRect dataChangedRect = QRect( topLeftPoint, QSize( bottomRightPoint.x() - topLeftPoint.x(), bottomRightPoint.y() - topLeftPoint.y() ) );
+    
+    qDebug() << "data changed: " << dataChangedRect;
+    
+    foreach ( DataSet *dataSet, d->dataSets )
+    {
+        bool intersects = false;
+        QRect changedRect;
+        qDebug() << "c:" << dataChangedRect;
+        foreach ( QRect rect, dataSet->yDataRegion().rects() )
+        {
+            qDebug() << "r:" << rect;
+            if ( rect.intersects( dataChangedRect ) )
+            {
+                changedRect |= rect.intersected( dataChangedRect );
+                intersects = true;
+                break;
+            }
+            else
+                qDebug() << "don't intersect";
+        }
+        if ( intersects )
+        {
+            qDebug() << "intersects dataset with y data region" << dataSet->yDataRegion().rects();
+            qDebug() << changedRect;
+            dataSet->yDataChanged( changedRect );
+        }
+    }
+    /*
     int firstRow, lastRow;
     int firstCol, lastCol;
     int numRows;
@@ -198,7 +316,7 @@ void ProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bot
             d->dataSets[ dataSet ]->dataChanged( firstCol, lastCol );
         }
     }
-    
+    */
     emit dataChanged();
 }
 
@@ -410,7 +528,7 @@ void ProxyModel::setFirstRowIsLabel( bool b )
     if ( b == d->firstRowIsLabel )
         return;
     
-    if ( b ) {
+    /*if ( b ) {
         if ( d->dataDirection == Qt::Horizontal )
             beginRemoveColumns( QModelIndex(), 0, 0 );
         else
@@ -420,12 +538,14 @@ void ProxyModel::setFirstRowIsLabel( bool b )
             beginInsertColumns( QModelIndex(), 0, 0 );
         else
             beginInsertRows( QModelIndex(), 0, 0 );
-    }
+    }*/
     
     d->firstRowIsLabel = b;
     rebuildDataMap();
     
-    if ( b ) {
+    reset();
+    
+    /*if ( b ) {
         if ( d->dataDirection == Qt::Horizontal )
             endRemoveColumns();
         else
@@ -435,12 +555,12 @@ void ProxyModel::setFirstRowIsLabel( bool b )
             endInsertColumns();
         else
             endInsertRows();
-    }
+    }*/
 }
  
 void ProxyModel::setFirstColumnIsLabel( bool b )
 {
-    if ( b == d->firstColumnIsLabel )
+    /*if ( b == d->firstColumnIsLabel )
         return;
     
     if ( b ) {
@@ -453,12 +573,14 @@ void ProxyModel::setFirstColumnIsLabel( bool b )
             beginInsertColumns( QModelIndex(), 0, 0 );
         else
             beginInsertRows( QModelIndex(), 0, 0 );
-    }
+    }*/
     
     d->firstColumnIsLabel = b;
     rebuildDataMap();
     
-    if ( b ) {
+    reset();
+    
+    /*if ( b ) {
         if ( d->dataDirection == Qt::Vertical )
             endRemoveColumns();
         else
@@ -468,7 +590,7 @@ void ProxyModel::setFirstColumnIsLabel( bool b )
             endInsertColumns();
         else
             endInsertRows();
-    }
+    }*/
 }
 
 Qt::Orientation ProxyModel::dataDirection()
@@ -479,7 +601,7 @@ Qt::Orientation ProxyModel::dataDirection()
 void ProxyModel::setDataDirection( Qt::Orientation orientation )
 {
     d->dataDirection = orientation;
-    reset();
+    //needReset();
 }
 
 void ProxyModel::setDataDimensions( int dimensions )
@@ -496,30 +618,6 @@ bool ProxyModel::firstRowIsLabel() const
 bool ProxyModel::firstColumnIsLabel() const
 {
     return d->firstColumnIsLabel;
-}
-
-QVariant ProxyModel::xData( DataSet *dataSet, int column ) const
-{
-    int dataSetNumber = d->dataSets.indexOf( dataSet );
-    return data( index( dataSetNumber * d->dataDimensions + 1, column ) );
-}
-
-QVariant ProxyModel::yData( DataSet *dataSet, int column ) const
-{
-    int dataSetNumber = d->dataSets.indexOf( dataSet );
-    return data( index( dataSetNumber * d->dataDimensions, column ) );
-}
-
-QVariant ProxyModel::customData( DataSet *dataSet, int column ) const
-{
-    int dataSetNumber = d->dataSets.indexOf( dataSet );
-    return data( index( dataSetNumber * d->dataDimensions + 2, column ) );
-}
-
-QVariant ProxyModel::labelData( DataSet *dataSet ) const
-{
-    int dataSetNumber = d->dataSets.indexOf( dataSet );
-    return headerData( dataSetNumber, d->dataDirection );
 }
 
 QList<DataSet*> ProxyModel::dataSets() const

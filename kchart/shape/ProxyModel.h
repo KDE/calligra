@@ -23,6 +23,12 @@
 
 // Local
 #include "ChartShape.h"
+#include "CellRegion.h"
+
+namespace KoChart
+{
+    class ChartModel;
+}
 
 // Qt
 #include <QAbstractProxyModel>
@@ -41,6 +47,10 @@ public:
 
 public slots:
     virtual void setSourceModel( QAbstractItemModel *sourceModel );
+    virtual void setSourceModel( KoChart::ChartModel *model, const QVector<QRect> &selection );
+    KoChart::ChartModel *spreadSheetModel() const;
+
+    void setSelection( const QVector<QRect> &selection );
 
     virtual QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
@@ -65,20 +75,15 @@ public slots:
     void setFirstColumnIsLabel( bool b );
     void setDataDirection( Qt::Orientation orientation );
     void setDataDimensions( int dimensions );
-    
+
     bool firstRowIsLabel() const;
     bool firstColumnIsLabel() const;
     Qt::Orientation dataDirection();
-    
-    QVariant xData( DataSet *dataSet, int column ) const;
-    QVariant yData( DataSet *dataSet, int column ) const;
-    QVariant customData( DataSet *dataSet, int column ) const;
-    QVariant labelData( DataSet *dataSet ) const;
-    
+
     QList<DataSet*> dataSets() const;
-    
+
     void rebuildDataMap();
-    
+
 signals:
     void dataChanged();
 

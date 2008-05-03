@@ -581,6 +581,7 @@ bool PlotArea::registerKdDiagram( KDChart::AbstractDiagram *diagram )
 {
     if ( d->kdDiagrams.contains( diagram ) )
         return false;
+    
     d->kdDiagrams.append( diagram );
     return true;
 }

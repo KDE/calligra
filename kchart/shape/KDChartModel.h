@@ -42,6 +42,7 @@ public slots:
     QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
 
     void dataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
+    void dataSetSizeChanged( DataSet *dataSet, int newSize );
     void slotColumnsInserted( const QModelIndex& parent, int start, int end );
     
     QModelIndex index( int row, int column, const QModelIndex &parent = QModelIndex() ) const;
@@ -52,9 +53,11 @@ public slots:
     
     void setDataDimensions( int dataDimensions );
 
-    void addDataSet( DataSet *dataSet );
-    void removeDataSet( DataSet *dataSet );
+    void addDataSet( DataSet *dataSet, bool silent = false );
+    void removeDataSet( DataSet *dataSet, bool silent = false );
     QList<DataSet*> dataSets() const;
+    
+    void emitReset();
 
 private:
     class Private;

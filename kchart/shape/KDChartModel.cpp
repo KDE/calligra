@@ -33,10 +33,13 @@ public:
 
     int dataDimensions;
     QList<DataSet*> dataSets;
+    QList<int> dataSetSizes;
+    int biggestDataSetIndex;
 };
 
 KDChartModel::Private::Private()
 {
+	biggestDataSetIndex = -1;
     dataDimensions = 1;
 }
 
@@ -82,6 +85,56 @@ void KDChartModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& b
     emit QAbstractItemModel::dataChanged( topLeft, bottomRight );
 }
 
+void KDChartModel::dataSetSizeChanged( DataSet *dataSet, int newSize )
+{
+	int dataSetIndex = d->dataSets.indexOf( dataSet );
+	
+	if ( dataSetIndex < 0 )
+	{
+		qWarning() << "KDChartModel::dataSetSizeChanged(): The data set is not assigned to this model.";
+		return;
+	}
+	
+	if ( newSize > d->dataSetSizes[ d->biggestDataSetIndex ] )
+	{
+		qDebug() << "Inserting rows:" << d->dataSetSizes[ d->biggestDataSetIndex ] << newSize - 1;
+		beginInsertRows( QModelIndex(), d->dataSetSizes[ d->biggestDataSetIndex ], newSize - 1 );
+		
+		d->dataSetSizes[ dataSetIndex ] = newSize;
+		d->biggestDataSetIndex = dataSetIndex;
+		
+		endInsertRows();
+	}
+	else if ( newSize < d->dataSetSizes[ d->biggestDataSetIndex ] && dataSetIndex == d->biggestDataSetIndex )
+	{
+		const int oldMaxSize = d->dataSetSizes[ dataSetIndex ];
+		
+		int maxSize = 0;
+		int biggestDataSetIndex = -1;
+		for ( int i = 0; i < d->dataSets.size(); i++ )
+		{
+			const int size = d->dataSets[i]->size();
+			if ( size > maxSize )
+			{
+				maxSize = size;
+				biggestDataSetIndex = i;
+			}
+		}
+		
+		if ( maxSize < oldMaxSize )
+		{
+			beginRemoveRows( QModelIndex(), maxSize, oldMaxSize - 1 );
+			d->biggestDataSetIndex = biggestDataSetIndex;
+			d->dataSetSizes[ dataSetIndex ] = newSize;
+			endRemoveRows();
+		}
+	}
+	else
+	{
+		d->dataSetSizes[ dataSetIndex ] = newSize;
+	}
+}
+
 void KDChartModel::slotColumnsInserted( const QModelIndex& parent, int start, int end )
 {
     beginInsertRows( parent, start, end );
@@ -122,7 +175,11 @@ QModelIndex KDChartModel::parent( const QModelIndex &index ) const
 
 int KDChartModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) const
 {
-    return d->dataSets.isEmpty() ? 0 : d->dataSets[0]->size();
+	if ( d->biggestDataSetIndex < 0 )
+		return 0;
+	Q_ASSERT( d->biggestDataSetIndex < d->dataSets.count() );
+	
+    return d->dataSetSizes[ d->biggestDataSetIndex ];
 }
 
 int KDChartModel::columnCount( const QModelIndex &parent /* = QModelIndex() */ ) const
@@ -135,40 +192,111 @@ void KDChartModel::setDataDimensions( int dataDimensions )
     d->dataDimensions = dataDimensions;
 }
 
-void KDChartModel::addDataSet( DataSet *dataSet )
+void KDChartModel::addDataSet( DataSet *dataSet, bool silent )
 {
     if ( d->dataSets.contains( dataSet ) )
     {
         qWarning() << "KDChartModel::addDataSet(): Attempting to insert already-contained data set";
         return;
     }
-    if ( !d->dataSets.isEmpty() )
+    
+    if ( silent )
     {
-        int columnToBeInserted = columnCount();
-        beginInsertColumns( QModelIndex(), columnToBeInserted, columnToBeInserted + d->dataDimensions - 1 );
-        d->dataSets.append( dataSet );
-        endInsertColumns();
+    	d->dataSets.append( dataSet );
+    	const int dataSetSize = dataSet->size();
+        d->dataSetSizes.append( dataSetSize );
+        if ( dataSetSize > d->dataSetSizes[ d->biggestDataSetIndex ] )
+        	d->biggestDataSetIndex = d->dataSets.count() - 1;
     }
     else
     {
-        // If we had no datasets before, we haven't had a valid structure yet
-        // Thus, emit the modelReset() signal
-        d->dataSets.append( dataSet );
-        reset();
+		if ( !d->dataSets.isEmpty() )
+		{
+		    int columnToBeInserted = columnCount();
+		    beginInsertColumns( QModelIndex(), columnToBeInserted, columnToBeInserted + d->dataDimensions - 1 );
+		    d->dataSets.append( dataSet );
+		    endInsertColumns();
+		    
+		    const int dataSetSize = dataSet->size();
+		    d->dataSetSizes.append( dataSetSize );
+		    if ( dataSetSize > d->dataSetSizes[ d->biggestDataSetIndex ] )
+		    {
+		    	beginInsertRows( QModelIndex(), d->dataSetSizes[ d->biggestDataSetIndex ], dataSetSize - 1 );
+		    	d->biggestDataSetIndex = d->dataSets.count() - 1;
+		    	endInsertRows();
+		    }
+		}
+		else
+		{
+		    // If we had no datasets before, we haven't had a valid structure yet
+		    // Thus, emit the modelReset() signal
+		    d->dataSets.append( dataSet );
+		    d->dataSetSizes.append( dataSet->size() );
+		    d->biggestDataSetIndex = 0;
+		
+		    reset();
+		}
     }
     
     dataSet->registerKdChartModel( this );
 }
 
-void KDChartModel::removeDataSet( DataSet *dataSet )
+void KDChartModel::removeDataSet( DataSet *dataSet, bool silent )
 {
-    if ( !d->dataSets.contains( dataSet ) )
-        return;
+	const int dataSetIndex = d->dataSets.indexOf( dataSet );
+	if ( dataSetIndex < 0 )
+		return;
     
-    int columnAboutToBeRemoved = d->dataSets.indexOf( dataSet ) * d->dataDimensions;
-    beginRemoveColumns( QModelIndex(), columnAboutToBeRemoved, columnAboutToBeRemoved + d->dataDimensions - 1 );
-    d->dataSets.removeAll( dataSet );
-    endRemoveColumns();
+    if ( silent )
+    {
+    	d->dataSets.removeAll( dataSet );
+    	
+    	const int dataSetSize = dataSet->size();
+    	if ( dataSetIndex == d->biggestDataSetIndex )
+    	{
+    		int maxSize = 0;
+    		for ( int i = 0; i < d->dataSets.size(); i++ )
+    		{
+    			const int size = d->dataSets[i]->size();
+    			if ( size > maxSize )
+    			{
+    				maxSize = size;
+    				d->biggestDataSetIndex = i;
+    			}
+    		}
+    	}
+    }
+    else
+    {
+    	int columnAboutToBeRemoved = d->dataSets.indexOf( dataSet ) * d->dataDimensions;
+    	beginRemoveColumns( QModelIndex(), columnAboutToBeRemoved, columnAboutToBeRemoved + d->dataDimensions - 1 );
+    	d->dataSets.removeAt( dataSetIndex );
+        d->dataSetSizes.removeAt( dataSetIndex );
+    	endRemoveColumns();
+        
+    	const int dataSetSize = dataSet->size();
+    	if ( dataSetIndex == d->biggestDataSetIndex )
+    	{
+    		int maxSize = 0;
+    		int biggestDataSetIndex = -1;
+    		for ( int i = 0; i < d->dataSets.size(); i++ )
+    		{
+    			const int size = d->dataSets[i]->size();
+    			if ( size > maxSize )
+    			{
+    				maxSize = size;
+    				biggestDataSetIndex = i;
+    			}
+    		}
+    		
+    		if ( maxSize < dataSetSize )
+    		{
+    			beginRemoveRows( QModelIndex(), maxSize, dataSetSize - 1 );
+    			d->biggestDataSetIndex = biggestDataSetIndex;
+    			endRemoveRows();
+    		}
+    	}
+    }
     
     dataSet->deregisterKdChartModel( this );
 }
@@ -176,6 +304,16 @@ void KDChartModel::removeDataSet( DataSet *dataSet )
 QList<DataSet*> KDChartModel::dataSets() const
 {
     return d->dataSets;
+}
+
+void KDChartModel::emitReset()
+{
+	// Update data set sizes
+	for ( int i = 0; i < d->dataSets.size(); i++ )
+	{
+		d->dataSetSizes[i] = d->dataSets[i]->size();
+	}
+	reset();
 }
 
 #include "KDChartModel.moc"

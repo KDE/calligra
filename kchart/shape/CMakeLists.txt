@@ -11,6 +11,7 @@ SET (chartshape_LIB_SRCS
     KDChartConvertions.cpp
     Axis.cpp
     DataSet.cpp
+    CellRegion.cpp
     Legend.cpp
     TextLabelDummy.cpp
     PlotArea.cpp
@@ -26,6 +27,7 @@ SET (chartshape_LIB_SRCS
     ChartConfigWidget.cpp
     dialogs/NewAxisDialog.cpp
     dialogs/AxisScalingDialog.cpp
+    dialogs/CellRegionDialog.cpp
     ../commands/ChartTypeCommand.cpp
 )
 
@@ -34,6 +36,7 @@ kde4_add_ui_files(chartshape_LIB_SRCS
     ChartTableEditor.ui
     dialogs/NewAxisDialog.ui
     dialogs/AxisScalingDialog.ui
+    dialogs/CellRegionDialog.ui
 )
 
 kde4_add_library(chartshapelib SHARED ${chartshape_LIB_SRCS})

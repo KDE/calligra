@@ -34,8 +34,10 @@
 #include "ui_ChartConfigWidget.h"
 #include "NewAxisDialog.h"
 #include "AxisScalingDialog.h"
+#include "CellRegionDialog.h"
 #include "ChartTableView.h"
 #include "commands/ChartTypeCommand.h"
+#include <interfaces/KoChartModel.h>
 
 using namespace KChart;
 
@@ -65,7 +67,7 @@ public:
 class ChartConfigWidget::Private
 {
 public:
-    Private();
+    Private( QWidget *parent );
     ~Private();
 
     // Basic properties of the chart.
@@ -76,6 +78,7 @@ public:
     QVBoxLayout           *leftLayout;
     QVBoxLayout           *rightLayout;
     Ui::ChartConfigWidget  ui;
+    bool sourceIsSpreadSheet;
     
     // chart type selection actions
     QAction  *normalBarChartAction;
@@ -121,7 +124,8 @@ public:
     KDChart::Position     fixedPosition;
     KDChart::Position     lastFixedPosition;
     
-    int                   selectedDataset;
+    int                   selectedDataSet;
+    int                   selectedDataSet_CellRegionDialog;
     
     QList<Axis*> dataSetAxes;
     QList<Axis*> axes;
@@ -130,18 +134,23 @@ public:
     // Dialogs
     NewAxisDialog     newAxisDialog;
     AxisScalingDialog axisScalingDialog;
+    CellRegionDialog  cellRegionDialog;
 };
 
-ChartConfigWidget::Private::Private()
+ChartConfigWidget::Private::Private( QWidget *parent )
+	: newAxisDialog( parent ),
+	  axisScalingDialog( parent ),
+	  cellRegionDialog( parent )
 {
     lastHorizontalAlignment = 1; // Qt::AlignCenter
     lastVerticalAlignment   = 1; // Qt::AlignCenter
     fixedPosition           = KDChart::Position::East;
     lastFixedPosition       = KDChart::Position::East;
-    selectedDataset = 0;
+    selectedDataSet = 0;
     shape = 0;
     type = KChart::LastChartType;
     subtype = KChart::NoChartSubtype;
+    sourceIsSpreadSheet = false;
 }
 
 ChartConfigWidget::Private::~Private()
@@ -150,7 +159,7 @@ ChartConfigWidget::Private::~Private()
 
 
 ChartConfigWidget::ChartConfigWidget()
-    : d(new Private)
+    : d( new Private( this ) )
 {
     setObjectName("Chart Type");
     d->ui.setupUi( this );
@@ -225,8 +234,6 @@ ChartConfigWidget::ChartConfigWidget()
              this, SLOT( setThreeDMode( bool ) ) );
     connect( d->ui.showLegend, SIGNAL( toggled( bool ) ),
              this, SIGNAL( showLegendChanged( bool ) ) );
-    connect( d->ui.editData, SIGNAL( clicked( bool ) ),
-             this, SLOT( slotShowTableEditor( bool ) ) );
     
     // "Datasets" Tab
     connect( d->ui.datasetColor, SIGNAL( changed( const QColor& ) ),
@@ -284,6 +291,9 @@ ChartConfigWidget::~ChartConfigWidget()
 void ChartConfigWidget::open( KoShape* shape )
 {
     d->shape = dynamic_cast<ChartShape*>( shape );
+    Q_ASSERT( d->shape );
+    
+    d->sourceIsSpreadSheet = dynamic_cast<KoChart::ChartModel*>( d->shape->model() ) != 0;
     
     // Update the axis titles
     //d->ui.xAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[0]->titleText() );
@@ -293,7 +303,23 @@ void ChartConfigWidget::open( KoShape* shape )
     //d->ui.legendTitle->setText( d->shape->legend()->title() );
     
     // Fill the data table
-    d->tableView->setModel( d->shape->model() );
+    if ( d->sourceIsSpreadSheet )
+    {
+    	d->ui.editData->setText( i18n( "Data Ranges..." ) );
+    	connect( d->ui.editData, SIGNAL( clicked( bool ) ), &d->cellRegionDialog, SLOT( show() ) );
+    	connect( d->cellRegionDialog.xDataRegion, SIGNAL( textEdited( const QString&) ),
+    			 this, SLOT( ui_dataSetXDataRegionChanged( const QString& ) ) );
+    	connect( d->cellRegionDialog.yDataRegion, SIGNAL( textEdited( const QString&) ),
+    			 this, SLOT( ui_dataSetYDataRegionChanged( const QString& ) ) );
+    	connect( d->cellRegionDialog.dataSets, SIGNAL( currentIndexChanged( int ) ),
+    			 this, SLOT( ui_dataSetSelectionChanged_CellRegionDialog( int ) ) );
+    }
+    else
+    {
+    	d->tableView->setModel( d->shape->model() );
+        connect( d->ui.editData, SIGNAL( clicked( bool ) ),
+                 this, SLOT( slotShowTableEditor( bool ) ) );
+    }
     
     update();
 }
@@ -371,7 +397,7 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
 
 void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
 {
-    if ( d->selectedDataset < 0 )
+    if ( d->selectedDataSet < 0 )
         return;
     
     ChartType     type;
@@ -410,7 +436,7 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
         subtype = PercentChartSubtype;
     }
     
-    DataSet *dataSet = d->dataSets[ d->selectedDataset ];
+    DataSet *dataSet = d->dataSets[ d->selectedDataSet ];
     
     if ( !dataSet )
         return;
@@ -510,10 +536,10 @@ void ChartConfigWidget::chartSubTypeSelected( int type )
 
 void ChartConfigWidget::datasetColorSelected( const QColor& color )
 {
-    if ( d->selectedDataset < 0 )
+    if ( d->selectedDataSet < 0 )
         return;
 
-    emit datasetColorChanged( d->dataSets[ d->selectedDataset ], color );
+    emit datasetColorChanged( d->dataSets[ d->selectedDataSet ], color );
 }
 
 void ChartConfigWidget::setThreeDMode( bool threeD )
@@ -686,14 +712,17 @@ void ChartConfigWidget::update()
     if ( d->shape->plotArea()->dataSets() != d->dataSets ) {
         d->dataSets = d->shape->plotArea()->dataSets();
         d->ui.dataSets->clear();
+        d->cellRegionDialog.dataSets->clear();
         foreach ( DataSet *dataSet, d->dataSets ) {
             QString title = dataSet->labelData().toString();
             if ( title.isEmpty() )
                 title = i18n( "Data Set %1", d->ui.dataSets->count() + 1 );
             d->ui.dataSets->addItem( title );
+            d->cellRegionDialog.dataSets->addItem( title );
         }
         // Select the first data set
         ui_dataSetSelectionChanged( 0 );
+        ui_dataSetSelectionChanged_CellRegionDialog( 0 );
     }
     
     d->ui.threeDLook->setChecked( d->shape->isThreeD() );
@@ -895,7 +924,7 @@ void ChartConfigWidget::selectDataset( int dataset )
         d->ui.datasetColorLabel->setEnabled( false );
         d->ui.datasetColor->setEnabled( false );
     }
-    d->selectedDataset = dataset;
+    d->selectedDataSet = dataset;
 }
 
 void ChartConfigWidget::setLegendOrientationIsVertical( bool b )
@@ -932,11 +961,48 @@ void ChartConfigWidget::ui_axisSelectionChanged( int index ) {
     d->axisScalingDialog.logarithmicScaling->blockSignals( false );
 }
 
+
+void ChartConfigWidget::ui_dataSetXDataRegionChanged( const QString &region )
+{
+    // Check for valid index
+    if ( d->selectedDataSet_CellRegionDialog < 0 )
+        return;
+    
+    DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
+    
+    emit dataSetXDataRegionChanged( dataSet, region );
+}
+
+void ChartConfigWidget::ui_dataSetYDataRegionChanged( const QString &region )
+{
+    // Check for valid index
+    if ( d->selectedDataSet_CellRegionDialog < 0 )
+        return;
+    
+    DataSet *dataSet = d->dataSets[ d->selectedDataSet_CellRegionDialog ];
+    
+    emit dataSetYDataRegionChanged( dataSet, region );
+}
+
+void ChartConfigWidget::ui_dataSetSelectionChanged_CellRegionDialog( int index ) {
+    // Check for valid index
+    if ( index < 0 )
+        return;
+    Q_ASSERT( d->dataSets.size() >= index );
+    
+    DataSet *dataSet = d->dataSets[ index ];
+    
+    d->cellRegionDialog.xDataRegion->setText( dataSet->xDataRegionString() );
+    d->cellRegionDialog.yDataRegion->setText( dataSet->yDataRegionString() );
+    
+    d->selectedDataSet_CellRegionDialog = index;
+}
+
 void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
     // Check for valid index
     if ( index < 0 )
         return;
-    Q_ASSERT( d->dataSets.size() > index );
+    Q_ASSERT( d->dataSets.size() >= index );
     
     DataSet *dataSet = d->dataSets[ index ];
     //d->ui.datasetColor->setText( axis->titleText() );
@@ -956,13 +1022,13 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
     d->ui.dataSetShowLabels->setChecked( dataSet->showLabels() );
     d->ui.dataSetShowLabels->blockSignals( false );
     
-    d->selectedDataset = index;
+    d->selectedDataSet = index;
 }
 
 void ChartConfigWidget::ui_dataSetAxisSelectionChanged( int index ) {
     if ( index < 0 )
         return;
-    Q_ASSERT( d->dataSetAxes.size() > index );
+    Q_ASSERT( d->dataSetAxes.size() >= index );
     
     if ( d->ui.dataSets->currentIndex() < 0 )
         return;
@@ -973,20 +1039,20 @@ void ChartConfigWidget::ui_dataSetAxisSelectionChanged( int index ) {
 }
 
 void ChartConfigWidget::ui_axisTitleChanged( const QString& title ) {
-	Q_ASSERT( d->axes.size() > d->ui.axes->currentIndex() );
+	Q_ASSERT( d->axes.size() >= d->ui.axes->currentIndex() );
 	
 	emit axisTitleChanged( d->axes[ d->ui.axes->currentIndex() ], title );
 }
 
 void ChartConfigWidget::ui_axisShowTitleChanged( bool b ) {
-	Q_ASSERT( d->axes.size() > d->ui.axes->currentIndex() );
+	Q_ASSERT( d->axes.size() >= d->ui.axes->currentIndex() );
 	
 	// To hide the axis title, we pass an empty string
 	emit axisShowTitleChanged( d->axes[ d->ui.axes->currentIndex() ], b );
 }
 
 void ChartConfigWidget::ui_axisShowGridLinesChanged( bool b ) {
-	Q_ASSERT( d->axes.size() > d->ui.axes->currentIndex() );
+	Q_ASSERT( d->axes.size() >= d->ui.axes->currentIndex() );
 	
 	emit axisShowGridLinesChanged( d->axes[ d->ui.axes->currentIndex() ], b );
 }
@@ -1086,18 +1152,18 @@ void ChartConfigWidget::ui_axisScalingButtonClicked()
 
 void ChartConfigWidget::ui_datasetShowValuesChanged( bool b )
 {
-    if ( d->selectedDataset < 0 )
+    if ( d->selectedDataSet < 0 )
         return;
-    Q_ASSERT( d->dataSets.count() > d->selectedDataset );
-    emit datasetShowValuesChanged( d->dataSets[ d->selectedDataset ], b ); 
+    Q_ASSERT( d->dataSets.count() > d->selectedDataSet );
+    emit datasetShowValuesChanged( d->dataSets[ d->selectedDataSet ], b ); 
 }
 
 void ChartConfigWidget::ui_datasetShowLabelsChanged( bool b )
 {
-    if ( d->selectedDataset < 0 )
+    if ( d->selectedDataSet < 0 )
         return;
-    Q_ASSERT( d->dataSets.count() > d->selectedDataset );
-    emit datasetShowValuesChanged( d->dataSets[ d->selectedDataset ], b ); 
+    Q_ASSERT( d->dataSets.count() > d->selectedDataSet );
+    emit datasetShowValuesChanged( d->dataSets[ d->selectedDataSet ], b ); 
 }
 
 #include "ChartConfigWidget.moc"

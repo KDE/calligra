@@ -362,7 +362,7 @@ Surface *ChartShape::floor() const
 }
 
 
-void ChartShape::setModel( QAbstractItemModel *model )
+void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel )
 {
     Q_ASSERT( model );
     d->model->setSourceModel( model );

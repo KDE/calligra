@@ -73,12 +73,20 @@ private slots:
     void setShowFooter( bool show );
 
     // Datasets
+    void setDataSetXDataRegion( DataSet *dataSet, const QString &region );
+    void setDataSetYDataRegion( DataSet *dataSet, const QString &region );
+    void setDataSetCustomDataRegion( DataSet *dataSet, const QString &region );
+    void setDataSetLabelDataRegion( DataSet *dataSet, const QString &region );
+    void setDataSetCategoryDataRegion( DataSet *dataSet, const QString &region );
+    
     void setDataSetChartType( DataSet *dataSet, ChartType type );
     void setDataSetChartSubType( DataSet *dataSet, ChartSubtype subType );
-    void setDatasetShowValues( DataSet *dataSet, bool b );
-    void setDatasetShowLabels( DataSet *dataSet, bool b );
-    void setDatasetColor( DataSet *dataSet, const QColor& color );
+    void setDataSetShowValues( DataSet *dataSet, bool b );
+    void setDataSetShowLabels( DataSet *dataSet, bool b );
+    void setDataSetColor( DataSet *dataSet, const QColor& color );
     void setDataSetAxis( DataSet *dataSet, Axis *axis );
+    
+    // Plot Area
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );
     

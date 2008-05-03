@@ -51,8 +51,8 @@ public:
 	
     void setPosition( AxisPosition position );
     void setTitleText( const QString &text );
-    bool attachDataSet( DataSet *dataSet );
-    bool detachDataSet( DataSet *dataSet );
+    bool attachDataSet( DataSet *dataSet, bool silent = false );
+    bool detachDataSet( DataSet *dataSet, bool silent = false );
     void setMajorInterval( double interval );
     void setMinorInterval( double interval );
     void setMinorIntervalDevisor( int devisor );

@@ -213,16 +213,20 @@ QWidget *ChartTool::createOptionWidget()
     connect( widget, SIGNAL( firstColumnIsLabelChanged( bool ) ),
              this,    SLOT( setFirstColumnIsLabel( bool ) ) );
     
+    connect( widget, SIGNAL( dataSetXDataRegionChanged( DataSet*, const QString& ) ),
+    		 this,   SLOT( setDataSetXDataRegion( DataSet*, const QString& ) ) );
+    connect( widget, SIGNAL( dataSetYDataRegionChanged( DataSet*, const QString& ) ),
+    		 this,   SLOT( setDataSetYDataRegion( DataSet*, const QString& ) ) );
     connect( widget, SIGNAL( dataSetChartTypeChanged( DataSet*, ChartType ) ),
              this,   SLOT( setDataSetChartType( DataSet*, ChartType ) ) );
     connect( widget, SIGNAL( dataSetChartSubTypeChanged( DataSet*, ChartSubtype ) ),
              this,   SLOT( setDataSetChartSubType( DataSet*, ChartSubtype ) ) );
     connect( widget, SIGNAL( datasetColorChanged( DataSet*, const QColor& ) ),
-             this, SLOT( setDatasetColor( DataSet*, const QColor& ) ) );
+             this, SLOT( setDataSetColor( DataSet*, const QColor& ) ) );
     connect( widget, SIGNAL( datasetShowValuesChanged( DataSet*, bool ) ),
-             this, SLOT( setDatasetShowValues( DataSet*, bool ) ) );
+             this, SLOT( setDataSetShowValues( DataSet*, bool ) ) );
     connect( widget, SIGNAL( datasetShowLabelsChanged( DataSet*, bool ) ),
-             this, SLOT( setDatasetShowLabels( DataSet*, bool ) ) );
+             this, SLOT( setDataSetShowLabels( DataSet*, bool ) ) );
     connect( widget, SIGNAL( dataSetAxisChanged( DataSet*, Axis* ) ),
              this, SLOT( setDataSetAxis( DataSet*, Axis* ) ) );
     connect( widget, SIGNAL( gapBetweenBarsChanged( int ) ),
@@ -313,6 +317,43 @@ void ChartTool::setChartSubType( ChartSubtype subtype )
     d->shape->update();
 }
 
+
+void ChartTool::setDataSetXDataRegion( DataSet *dataSet, const QString &region )
+{
+	if ( !dataSet )
+		return;
+	dataSet->setXDataRegionString( region );
+}
+
+void ChartTool::setDataSetYDataRegion( DataSet *dataSet, const QString &region )
+{
+	if ( !dataSet )
+		return;
+	dataSet->setYDataRegionString( region );
+}
+
+void ChartTool::setDataSetCustomDataRegion( DataSet *dataSet, const QString &region )
+{
+	if ( !dataSet )
+		return;
+	dataSet->setCustomDataRegionString( region );
+}
+
+void ChartTool::setDataSetLabelDataRegion( DataSet *dataSet, const QString &region )
+{
+	if ( !dataSet )
+		return;
+	dataSet->setLabelDataRegionString( region );
+}
+
+void ChartTool::setDataSetCategoryDataRegion( DataSet *dataSet, const QString &region )
+{
+	if ( !dataSet )
+		return;
+	dataSet->setCategoryDataRegionString( region );
+}
+
+
 void ChartTool::setDataSetChartType( DataSet *dataSet, ChartType type )
 {
     Q_ASSERT( dataSet );
@@ -328,6 +369,41 @@ void ChartTool::setDataSetChartSubType( DataSet *dataSet, ChartSubtype subType )
         dataSet->setChartSubType( subType );
     d->shape->update();
 }
+
+
+void ChartTool::setDataSetColor( DataSet *dataSet, const QColor& color )
+{
+    if ( !dataSet )
+        return;
+    dataSet->setColor( color );
+    d->shape->update();
+}
+
+void ChartTool::setDataSetAxis( DataSet *dataSet, Axis *axis )
+{
+    if ( !dataSet || !axis )
+        return;
+    dataSet->attachedAxis()->detachDataSet( dataSet );
+    axis->attachDataSet( dataSet );
+    d->shape->update();
+}
+
+void ChartTool::setDataSetShowValues( DataSet *dataSet, bool b )
+{
+    if ( !dataSet )
+        return;
+    dataSet->setShowValues( b );
+    d->shape->update();
+}
+
+void ChartTool::setDataSetShowLabels( DataSet *dataSet, bool b )
+{
+    if ( !dataSet )
+        return;
+    dataSet->setShowLabels( b );
+    d->shape->update();
+}
+
 
 void ChartTool::setThreeDMode( bool threeD )
 {
@@ -456,39 +532,6 @@ void ChartTool::setLegendShowFrame( bool show )
     d->shape->update();
 }
 
-
-void ChartTool::setDatasetColor( DataSet *dataSet, const QColor& color )
-{
-    if ( !dataSet )
-        return;
-    dataSet->setColor( color );
-    d->shape->update();
-}
-
-void ChartTool::setDataSetAxis( DataSet *dataSet, Axis *axis )
-{
-    if ( !dataSet || !axis )
-        return;
-    dataSet->attachedAxis()->detachDataSet( dataSet );
-    axis->attachDataSet( dataSet );
-    d->shape->update();
-}
-
-void ChartTool::setDatasetShowValues( DataSet *dataSet, bool b )
-{
-    if ( !dataSet )
-        return;
-    dataSet->setShowValues( b );
-    d->shape->update();
-}
-
-void ChartTool::setDatasetShowLabels( DataSet *dataSet, bool b )
-{
-    if ( !dataSet )
-        return;
-    dataSet->setShowLabels( b );
-    d->shape->update();
-}
 
 void ChartTool::addAxis( AxisPosition position, const QString& title ) {
     Q_ASSERT( d->shape );

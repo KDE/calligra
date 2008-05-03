@@ -66,6 +66,9 @@ public:
     Private();
     ~Private();
     
+    void registerKDChartModel( KDChartModel *model );
+    void deregisterKDChartModel( KDChartModel *model );
+    
     void createBarDiagram();
     void createLineDiagram();
     void createAreaDiagram();
@@ -145,15 +148,41 @@ Axis::Private::~Private()
     delete kdScatterDiagramModel;
 }
 
+void Axis::Private::registerKDChartModel( KDChartModel *model )
+{
+	QObject::connect( model, SIGNAL( modelReset() ), plotArea, SLOT( update() ) );
+	QObject::connect( model, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ), plotArea, SLOT( update() ) );
+	QObject::connect( model, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), plotArea, SLOT( update() ) );
+	QObject::connect( model, SIGNAL( columnsInserted( const QModelIndex&, int, int ) ), plotArea, SLOT( update() ) );
+	QObject::connect( model, SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ), plotArea, SLOT( update() ) );
+    QObject::connect( model, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), plotArea, SLOT( update() ) );
+    
+    QObject::connect( plotArea->proxyModel(), SIGNAL( modelReset() ),
+    		          model,                  SLOT( emitReset() ) );
+    QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
+                      model,                  SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+}
+void Axis::Private::deregisterKDChartModel( KDChartModel *model )
+{
+	QObject::disconnect( model, SIGNAL( modelReset() ), plotArea, SLOT( update() ) );
+	QObject::disconnect( model, SIGNAL( rowsInserted( const QModelIndex&, int, int ) ), plotArea, SLOT( update() ) );
+	QObject::disconnect( model, SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ), plotArea, SLOT( update() ) );
+	QObject::disconnect( model, SIGNAL( columnsInserted( const QModelIndex&, int, int ) ), plotArea, SLOT( update() ) );
+	QObject::disconnect( model, SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ), plotArea, SLOT( update() ) );
+	QObject::disconnect( model, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ), plotArea, SLOT( update() ) );
+    
+	QObject::disconnect( plotArea->proxyModel(), SIGNAL( modelReset() ),
+    		             model,                  SLOT( emitReset() ) );
+    QObject::disconnect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
+                         model,                  SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+}
+
 void Axis::Private::createBarDiagram()
 {
     if ( kdBarDiagramModel == 0 )
     {
         kdBarDiagramModel = new KDChartModel;
-        QObject::connect( plotArea->proxyModel(), SIGNAL( modelReset() ),
-                          kdBarDiagramModel,      SIGNAL( modelReset() ) );
-        QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
-                          kdBarDiagramModel,      SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+        registerKDChartModel( kdBarDiagramModel );
     }
     if ( kdBarDiagram == 0 )
     {
@@ -171,10 +200,7 @@ void Axis::Private::createLineDiagram()
     if ( kdLineDiagramModel == 0 )
     {
         kdLineDiagramModel = new KDChartModel;
-        QObject::connect( plotArea->proxyModel(), SIGNAL( modelReset() ),
-                          kdLineDiagramModel,     SIGNAL( modelReset() ) );
-        QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
-                          kdLineDiagramModel,     SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+        registerKDChartModel( kdLineDiagramModel );
     }
     if ( kdLineDiagram == 0 )
     {
@@ -191,10 +217,7 @@ void Axis::Private::createAreaDiagram()
     if ( kdAreaDiagramModel == 0 )
     {
         kdAreaDiagramModel = new KDChartModel;
-        QObject::connect( plotArea->proxyModel(), SIGNAL( modelReset() ),
-                          kdAreaDiagramModel,     SIGNAL( modelReset() ) );
-        QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
-                          kdAreaDiagramModel,     SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+        registerKDChartModel( kdAreaDiagramModel );
     }
     if ( kdAreaDiagram == 0 )
     {
@@ -215,10 +238,7 @@ void Axis::Private::createCircleDiagram()
     if ( kdCircleDiagramModel == 0 )
     {
         kdCircleDiagramModel = new KDChartModel;
-        QObject::connect( plotArea->proxyModel(), SIGNAL( modelReset() ),
-                          kdCircleDiagramModel,   SIGNAL( modelReset() ) );
-        QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
-                          kdCircleDiagramModel,   SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+        registerKDChartModel( kdCircleDiagramModel );
     }
     if ( kdCircleDiagram == 0 )
     {
@@ -236,10 +256,7 @@ void Axis::Private::createRadarDiagram()
     if ( kdRadarDiagramModel == 0 )
     {
         kdRadarDiagramModel = new KDChartModel;
-        QObject::connect( plotArea->proxyModel(), SIGNAL( modelReset() ),
-                          kdRadarDiagramModel,    SIGNAL( modelReset() ) );
-        QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
-                          kdRadarDiagramModel,    SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+        registerKDChartModel( kdRadarDiagramModel );
     }
     if ( kdRadarDiagram == 0 )
     {
@@ -257,10 +274,7 @@ void Axis::Private::createScatterDiagram()
     if ( kdScatterDiagramModel == 0 )
     {
         kdScatterDiagramModel = new KDChartModel;
-        QObject::connect( plotArea->proxyModel(), SIGNAL( modelReset() ),
-                          kdScatterDiagramModel,  SIGNAL( modelReset() ) );
-        QObject::connect( plotArea->proxyModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
-                          kdRadarDiagramModel,    SLOT( slotColumnsInserted( const QModelIndex&, int, int ) ) );
+        registerKDChartModel( kdScatterDiagramModel );
         kdScatterDiagramModel->setDataDimensions( 2 );
     }
     if ( kdScatterDiagram == 0 )
@@ -295,7 +309,7 @@ Axis::Axis( PlotArea *parent )
     gridAttributes.setGridVisible( false );
     d->kdPolarPlane->setGridAttributes( Qt::Horizontal, gridAttributes );
     
-    d->createBarDiagram();
+    //d->createBarDiagram();
     //d->plotArea->parent()->legend()->kdLegend()->addDiagram( d->kdBarDiagram );
     
     setShowGrid( false );
@@ -374,7 +388,7 @@ QList<DataSet*> Axis::dataSets() const
     return d->dataSets;
 }
 
-bool Axis::attachDataSet( DataSet *dataSet )
+bool Axis::attachDataSet( DataSet *dataSet, bool silent )
 {
     if ( d->dataSets.contains( dataSet ) )
         return false;
@@ -391,7 +405,7 @@ bool Axis::attachDataSet( DataSet *dataSet )
     {
         if ( !d->kdBarDiagram )
             d->createBarDiagram();
-        d->kdBarDiagramModel->addDataSet( dataSet );
+        d->kdBarDiagramModel->addDataSet( dataSet, silent );
         dataSet->setKdDiagram( d->kdBarDiagram );
         dataSet->setKdDataSetNumber( d->kdBarDiagramModel->dataSets().indexOf( dataSet ) );
     }
@@ -400,7 +414,7 @@ bool Axis::attachDataSet( DataSet *dataSet )
     {
         if ( !d->kdLineDiagram )
             d->createLineDiagram();
-        d->kdLineDiagramModel->addDataSet( dataSet );
+        d->kdLineDiagramModel->addDataSet( dataSet, silent );
         dataSet->setKdDiagram( d->kdLineDiagram );
         dataSet->setKdDataSetNumber( d->kdLineDiagramModel->dataSets().indexOf( dataSet ) );
     }
@@ -409,20 +423,23 @@ bool Axis::attachDataSet( DataSet *dataSet )
     {
         if ( !d->kdScatterDiagram )
             d->createScatterDiagram();
-        d->kdScatterDiagramModel->addDataSet( dataSet );
+        d->kdScatterDiagramModel->addDataSet( dataSet, silent );
         dataSet->setKdDiagram( d->kdScatterDiagram );
         dataSet->setKdDataSetNumber( d->kdScatterDiagramModel->dataSets().indexOf( dataSet ) );
     }
     break;
     }
     
-    layoutPlanes();
-    requestRepaint();
+    if ( !silent )
+    {
+        layoutPlanes();
+        requestRepaint();
+    }
     
     return true;
 }
 
-bool Axis::detachDataSet( DataSet *dataSet )
+bool Axis::detachDataSet( DataSet *dataSet, bool silent )
 {
     if ( !d->dataSets.contains( dataSet ) )
         return false;
@@ -441,7 +458,7 @@ bool Axis::detachDataSet( DataSet *dataSet )
         {
             // TODO (Johannes): Remove diagram if no
             // datasets are displayed on it anymore
-            d->kdBarDiagramModel->removeDataSet( dataSet );
+            d->kdBarDiagramModel->removeDataSet( dataSet, silent );
         }
         dataSet->setKdDiagram( 0 );
         dataSet->setKdDataSetNumber( 0 );
@@ -453,7 +470,7 @@ bool Axis::detachDataSet( DataSet *dataSet )
         {
             // TODO (Johannes): Remove diagram if no
             // datasets are displayed on it anymore
-            d->kdLineDiagramModel->removeDataSet( dataSet );
+            d->kdLineDiagramModel->removeDataSet( dataSet, silent );
         }
         dataSet->setKdDiagram( 0 );
         dataSet->setKdDataSetNumber( 0 );
@@ -465,7 +482,7 @@ bool Axis::detachDataSet( DataSet *dataSet )
         {
             // TODO (Johannes): Remove diagram if no
             // datasets are displayed on it anymore
-            d->kdScatterDiagramModel->removeDataSet( dataSet );
+            d->kdScatterDiagramModel->removeDataSet( dataSet, silent );
         }
         dataSet->setKdDiagram( 0 );
         dataSet->setKdDataSetNumber( 0 );
@@ -474,8 +491,11 @@ bool Axis::detachDataSet( DataSet *dataSet )
     }
     
 
-    layoutPlanes();
-    requestRepaint();
+    if ( !silent )
+    {
+        layoutPlanes();
+        requestRepaint();
+    }
     
     return true; 
 }
@@ -845,3 +865,5 @@ void Axis::layoutPlanes()
     if ( d->kdPolarPlane )
         d->kdPolarPlane->layoutPlanes();
 }
+
+

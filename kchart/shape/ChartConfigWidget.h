@@ -54,6 +54,9 @@ public slots:
     void ui_datasetShowLabelsChanged( bool b );
     void ui_dataSetSelectionChanged( int index );
     void ui_dataSetAxisSelectionChanged( int index );
+    void ui_dataSetXDataRegionChanged( const QString &region );
+    void ui_dataSetYDataRegionChanged( const QString &region );
+    void ui_dataSetSelectionChanged_CellRegionDialog( int index );
 
     void setLegendOrientationIsVertical( bool );
     void setLegendOrientation( int boxEntryIndex );
@@ -89,6 +92,9 @@ signals:
     
     void showVerticalLinesChanged( bool b );
     void showHorizontalLinesChanged( bool b );
+    
+    void dataSetXDataRegionChanged( DataSet *dataSet, const QString &region );
+    void dataSetYDataRegionChanged( DataSet *dataSet, const QString &region );
     
     void datasetColorChanged( DataSet *dataSet, const QColor& color );
     void datasetShowValuesChanged( DataSet *dataSet, bool b );

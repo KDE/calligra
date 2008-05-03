@@ -30,82 +30,114 @@ class DataSet
 {
 public:
     DataSet( ProxyModel *model );
-	~DataSet();
-	
-	// Getter methods
-	QString title() const;
-	ChartType chartType() const;
-	ChartSubtype chartSubType() const;
-	Axis *attachedAxis() const;
+    ~DataSet();
 
-    QString xValueCellRange() const;
-    QString yValueCellRange() const;
-    QString widthCellRange() const;
-    
+    // Getter methods
+    QString title() const;
+    ChartType chartType() const;
+    ChartSubtype chartSubType() const;
+    Axis *attachedAxis() const;
+
     ProxyModel *model() const;
-	
+
     bool showValues() const;
     bool showLabels() const;
-    
+
     QPen pen() const;
     QBrush brush() const;
     QColor color() const;
-    
-	bool showMeanValue() const;
-	QPen meanValuePen() const;
-	
-	bool showLowerErrorIndicator() const;
-	bool showUpperErrorIndicator() const;
-	QPen errorIndicatorPen() const;
-	ErrorCategory errorCategory() const;
-	double errorPercentage() const;
-	double errorMargin() const;
-	double lowerErrorLimit() const;
-	double upperErrorLimit() const;
-	
-	// Setter methods
-	void setChartType( ChartType type );
-    void setChartSubType( ChartSubtype type );
-	void setAttachedAxis( Axis *axis );
-	
-	void setShowValues( bool showValues );
-	void setShowLabels( bool showLabels );
-	
-	void setPen( const QPen &pen );
-	void setBrush( const QBrush &brush );
-	void setColor( const QColor &color );
-	
-	void setShowMeanValue( bool b );
-	void setMeanValuePen( const QPen &pen );
 
-	void setShowLowerErrorIndicator( bool b );
-	void setShowUpperErrorIndicator( bool b );
-	void setShowErrorIndicators( bool lower, bool upper );
-	void setErrorIndicatorPen( const QPen &pen );
-	void setErrorCategory( ErrorCategory category );
-	void setErrorPercentage( double percentage );
-	void setErrorMargin( double margin );
-	void setLowerErrorLimit( double limit );
-	void setUpperErrorLimit( double limit );
-	
-	QVariant xData( int index );
-	QVariant yData( int index );
-	QVariant customData( int index );
-    QVariant labelData();
-	int size() const;
-	
-	void setKdDiagram( KDChart::AbstractDiagram *diagram );
-	void setKdDataSetNumber( int number );
-	
-	KDChart::AbstractDiagram *kdDiagram() const;
-	
-	// Called by the proxy model
-	void dataChanged( int start, int end ) const;
-	
-	bool registerKdChartModel( KDChartModel *model );
-	bool deregisterKdChartModel( KDChartModel *model );
-	
+    bool showMeanValue() const;
+    QPen meanValuePen() const;
+
+    bool showLowerErrorIndicator() const;
+    bool showUpperErrorIndicator() const;
+    QPen errorIndicatorPen() const;
+    ErrorCategory errorCategory() const;
+    double errorPercentage() const;
+    double errorMargin() const;
+    double lowerErrorLimit() const;
+    double upperErrorLimit() const;
+
+    // Setter methods
+    void setChartType( ChartType type );
+    void setChartSubType( ChartSubtype type );
+    void setAttachedAxis( Axis *axis );
+
+    void setShowValues( bool showValues );
+    void setShowLabels( bool showLabels );
+
+    void setPen( const QPen &pen );
+    void setBrush( const QBrush &brush );
+    void setColor( const QColor &color );
+
+    void setShowMeanValue( bool b );
+    void setMeanValuePen( const QPen &pen );
+
+    void setShowLowerErrorIndicator( bool b );
+    void setShowUpperErrorIndicator( bool b );
+    void setShowErrorIndicators( bool lower, bool upper );
+    void setErrorIndicatorPen( const QPen &pen );
+    void setErrorCategory( ErrorCategory category );
+    void setErrorPercentage( double percentage );
+    void setErrorMargin( double margin );
+    void setLowerErrorLimit( double limit );
+    void setUpperErrorLimit( double limit );
+
+    QVariant xData( int index ) const;
+    QVariant yData( int index ) const;
+    QVariant customData( int index ) const;
+    QVariant categoryData( int index ) const;
+    QVariant labelData() const;
+
+    CellRegion xDataRegion() const;
+    CellRegion yDataRegion() const;
+    CellRegion customDataRegion() const;
+    CellRegion categoryDataRegion() const;
+    CellRegion labelDataRegion() const;
+    // TODO: Region for custom colors
+
+    QString xDataRegionString() const;
+    QString yDataRegionString() const;
+    QString customDataRegionString() const;
+    QString categoryDataRegionString() const;
+    QString labelDataRegionString() const;
+
+    void setXDataRegion( const CellRegion &region );
+    void setYDataRegion( const CellRegion &region );
+    void setCustomDataRegion( const CellRegion &region );
+    void setCategoryDataRegion( const CellRegion &region );
+    void setLabelDataRegion( const CellRegion &region );
+
+    void setXDataRegionString( const QString &region );
+    void setYDataRegionString( const QString &region );
+    void setCustomDataRegionString( const QString &region );
+    void setCategoryDataRegionString( const QString &region );
+    void setLabelDataRegionString( const QString &region );
+
+    int size() const;
+
+    void setKdDiagram( KDChart::AbstractDiagram *diagram );
+    void setKdDataSetNumber( int number );
+
+    KDChart::AbstractDiagram *kdDiagram() const;
+
+    // Called by the proxy model
+    void yDataChanged( const QRect &region ) const;
+    void xDataChanged( const QRect &region ) const;
+    void customDataChanged( const QRect &region ) const;
+    void labelDataChanged( const QRect &region ) const;
+    void categoryDataChanged( const QRect &region ) const;
+
+    bool registerKdChartModel( KDChartModel *model );
+    bool deregisterKdChartModel( KDChartModel *model );
+    void deregisterAllKdChartModels();
+    
+    void blockSignals( bool block );
+
 private:
+    QVariant data( const Region region, int index, Qt::Orientation orientation ) const;
+
     class Private;
     Private *const d;
 };
@@ -113,3 +145,4 @@ private:
 } // Namespace KChart
 
 #endif // KCHART_DATASET_H
+
