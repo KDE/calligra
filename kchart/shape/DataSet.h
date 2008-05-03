@@ -130,17 +130,17 @@ public:
     KDChart::AbstractDiagram *kdDiagram() const;
 
     // Called by the proxy model
-    void yDataChanged( int start, int end ) const;
-    void xDataChanged( int start, int end ) const;
-    void customDataChanged( int start, int end ) const;
-    void labelDataChanged() const;
-    void categoryDataChanged( int start, int end ) const;
+    virtual void yDataChanged( int start, int end ) const;
+    virtual void xDataChanged( int start, int end ) const;
+    virtual void customDataChanged( int start, int end ) const;
+    virtual void labelDataChanged() const;
+    virtual void categoryDataChanged( int start, int end ) const;
 
-    void yDataChanged( const QRect &region ) const {};
-    void xDataChanged( const QRect &region ) const {};
-    void customDataChanged( const QRect &region ) const {};
-    void labelDataChanged( const QRect &region ) const {};
-    void categoryDataChanged( const QRect &region ) const {};
+    virtual void yDataChanged( const QRect &region ) const {};
+    virtual void xDataChanged( const QRect &region ) const {};
+    virtual void customDataChanged( const QRect &region ) const {};
+    virtual void labelDataChanged( const QRect &region ) const {};
+    virtual void categoryDataChanged( const QRect &region ) const {};
 
     void setKdChartModel( KDChartModel *model );
     KDChartModel *kdChartModel() const;
