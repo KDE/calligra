@@ -329,9 +329,6 @@
        <property name="text" >
         <string>&amp;Close</string>
        </property>
-       <property name="shortcut" >
-        <string>Alt+C</string>
-       </property>
        <property name="autoDefault" >
         <bool>true</bool>
        </property>
