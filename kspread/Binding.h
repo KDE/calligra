@@ -35,7 +35,8 @@ class BindingModel : public KoChart::ChartModel
     Q_OBJECT
 
 public:
-    BindingModel(const Region& region);
+	BindingModel(const Region& region);
+    BindingModel(Sheet *sheet);
 
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
@@ -44,22 +45,23 @@ public:
 
     const Region& region() const;
     void setRegion(const Region& region);
+    
+    Sheet *sheet() const;
+    void setSheet(Sheet *sheet);
 
     void emitDataChanged(const QRect& range);
     void emitChanged(const Region& region);
     
     // Reimplemented methods from KoChartModel
-    QString areaAt( const QModelIndex &index ) const;
-    QString areaAt( const QModelIndex &first, const QModelIndex &last = QModelIndex() ) const;
-    
-    bool addArea( const QString &area, int section, Qt::Orientation orientation );
-    bool removeArea( const QString &area, int section, Qt::Orientation orientation );
+    QString regionToString( const QVector<QRect> &region ) const;
+    QVector<QRect> stringToRegion( const QString &string ) const;
 
 Q_SIGNALS:
     void changed(const Region& region);
 
 private:
-    Region m_region;
+	Region m_region;
+    Sheet *m_sheet;
 };
 
 /**
@@ -70,13 +72,14 @@ class KSPREAD_EXPORT Binding
 {
 public:
     Binding();
+    explicit Binding(Sheet *sheet);
     explicit Binding(const Region& region);
     Binding( const Binding& other );
     ~Binding();
 
     bool isEmpty() const;
 
-    QAbstractItemModel* model() const;
+    KoChart::ChartModel* model() const;
 
     const Region& region() const;
     void setRegion(const Region& region);
