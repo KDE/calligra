@@ -340,42 +340,31 @@ void DataSet::setKdDataSetNumber( int number )
     }
 }
 
-bool DataSet::registerKdChartModel( KDChartModel *model )
+void DataSet::setKdChartModel( KDChartModel *model )
 {
-    if ( m_kdChartModels.contains( model ) )
-        return false;
-    m_kdChartModels.append( model );
-    return true;
+    m_kdChartModel = model;
 }
 
-bool DataSet::deregisterKdChartModel( KDChartModel *model )
+KDChartModel *DataSet::kdChartModel() const
 {
-    if ( !m_kdChartModels.contains( model ) )
-        return false;
-    m_kdChartModels.removeAll( model );
-    return true;
-}
-
-void DataSet::deregisterAllKdChartModels()
-{
-	m_kdChartModels.clear();
+	return m_kdChartModel;
 }
 
 void DataSet::xDataChanged( int start, int end ) const
 {
-    foreach( KDChartModel *model, m_kdChartModels )
+    if ( m_kdChartModel )
     {
-        model->dataChanged( model->index( start, m_kdDataSetNumber ),
-                            model->index( end,   m_kdDataSetNumber ) );
+    	m_kdChartModel->dataChanged( m_kdChartModel->index( start, m_kdDataSetNumber ),
+    		                         m_kdChartModel->index( end,   m_kdDataSetNumber ) );
     }
 }
 
 void DataSet::yDataChanged( int start, int end ) const
 {
-    foreach( KDChartModel *model, m_kdChartModels )
+    if ( m_kdChartModel )
     {
-        model->dataChanged( model->index( start, m_kdDataSetNumber ),
-                            model->index( end,   m_kdDataSetNumber ) );
+    	m_kdChartModel->dataChanged( m_kdChartModel->index( start, m_kdDataSetNumber ),
+    			                     m_kdChartModel->index( end,   m_kdDataSetNumber ) );
     }
 }
 

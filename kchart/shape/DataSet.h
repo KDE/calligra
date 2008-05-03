@@ -139,9 +139,8 @@ public:
     void labelDataChanged( const QRect &region ) const {};
     void categoryDataChanged( const QRect &region ) const {};
 
-    bool registerKdChartModel( KDChartModel *model );
-    bool deregisterKdChartModel( KDChartModel *model );
-    void deregisterAllKdChartModels();
+    void setKdChartModel( KDChartModel *model );
+    KDChartModel *kdChartModel() const;
     
     void blockSignals( bool block );
 
@@ -183,7 +182,7 @@ protected:
     
     bool m_sourceIsSpreadSheet;
     
-    QList<KDChartModel*> m_kdChartModels;
+    KDChartModel *m_kdChartModel;
     
     int m_size;
     bool m_blockSignals;

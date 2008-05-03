@@ -57,11 +57,11 @@ QVariant CellDataSet::xData( int index ) const
             return QVariant();
     QAbstractItemModel *model = m_model->sourceModel();
     if ( !model )
-    	return QVariant();
+        return QVariant();
         
     QPoint dataPoint = m_xDataRegion.pointAtIndex( index );
     if ( dataPoint.x() < 0 || dataPoint.y() < 0 )
-    	return QVariant();
+        return QVariant();
     return model->data( model->index( dataPoint.y(), dataPoint.x() ) );
 }
 
@@ -71,11 +71,11 @@ QVariant CellDataSet::yData( int index ) const
             return QVariant();
     QAbstractItemModel *model = m_model->sourceModel();
     if ( !model )
-    	return QVariant();
+        return QVariant();
         
     QPoint dataPoint = m_yDataRegion.pointAtIndex( index );
     if ( dataPoint.x() < 0 || dataPoint.y() < 0 )
-    	return QVariant();
+        return QVariant();
     return model->data( model->index( dataPoint.y(), dataPoint.x() ) );
 }
 
@@ -85,11 +85,11 @@ QVariant CellDataSet::customData( int index ) const
             return QVariant();
     QAbstractItemModel *model = m_model->sourceModel();
     if ( !model )
-    	return QVariant();
+        return QVariant();
         
     QPoint dataPoint = m_customDataRegion.pointAtIndex( index );
     if ( dataPoint.x() < 0 || dataPoint.y() < 0 )
-    	return QVariant();
+        return QVariant();
     return model->data( model->index( dataPoint.y(), dataPoint.x() ) );
 }
 
@@ -213,15 +213,12 @@ void CellDataSet::setYDataRegion( const CellRegion &region )
     const int oldSize = m_size;
     m_size = region.cellCount();
     
-    if ( !m_blockSignals )
+    if ( !m_blockSignals && m_kdChartModel )
     {
-	    foreach( KDChartModel *model, m_kdChartModels )
-	    {
-	    	if ( oldSize != m_size )
-	    		model->dataSetSizeChanged( this, m_size );
-	        model->dataChanged( model->index( 0,           m_kdDataSetNumber ),
-	                            model->index( m_size - 1, m_kdDataSetNumber ) );
-	    }
+        if ( oldSize != m_size )
+            m_kdChartModel->dataSetSizeChanged( this, m_size );
+        m_kdChartModel->dataChanged( m_kdChartModel->index( 0,          m_kdDataSetNumber ),
+                                     m_kdChartModel->index( m_size - 1, m_kdDataSetNumber ) );
     }
 }
 
@@ -366,13 +363,10 @@ void CellDataSet::yDataChanged( const QRect &rect ) const
     
     qDebug() << "y data changed:" << start << end << "[this=" << this << "]";
     
-    if ( !m_blockSignals )
+    if ( !m_blockSignals && m_kdChartModel )
     {
-	    foreach( KDChartModel *model, m_kdChartModels )
-	    {
-	        model->dataChanged( model->index( start, m_kdDataSetNumber ),
-	                            model->index( end,   m_kdDataSetNumber ) );
-	    }
+        m_kdChartModel->dataChanged( m_kdChartModel->index( start, m_kdDataSetNumber ),
+                                     m_kdChartModel->index( end,   m_kdDataSetNumber ) );
     }
 }
 

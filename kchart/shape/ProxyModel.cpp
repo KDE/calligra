@@ -173,7 +173,7 @@ void ProxyModel::rebuildDataMap()
 	    while ( d->dataSets.size() > k + 1 )
 	    {
 	    	DataSet *dataSet = d->dataSets.takeLast();
-	    	dataSet->deregisterAllKdChartModels();
+	    	dataSet->setKdChartModel( 0 );
 	        d->removedDataSets.append( dataSet );
 	    }
 	}
