@@ -110,9 +110,9 @@ KoShape* ChartShapeFactory::createDefaultShape() const
     }
 
     // We want the chart shape to take over and handle this model itself
-    shape->setModel( m_chartData  );
-    shape->proxyModel()->setFirstRowIsLabel( true );
-    shape->proxyModel()->setFirstColumnIsLabel( true );
+    shape->setModel( m_chartData, true );
+    shape->setFirstRowIsLabel( true );
+    shape->setFirstColumnIsLabel( true );
     shape->setSize( QSizeF( CM_TO_POINT( 12 ), CM_TO_POINT( 8 ) ) );
     
     if ( shape->plotArea()->xAxis() )
