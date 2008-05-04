@@ -397,35 +397,57 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
     if ( chartType == LastChartType )
         chartType = d->plotAreaChartType;
     
+    KDChart::AbstractDiagram *diagram = 0;
+    KDChartModel *model = 0;
+    
     switch ( chartType )
     {
     case BarChartType:
-    {
         if ( !d->kdBarDiagram )
             d->createBarDiagram();
-        d->kdBarDiagramModel->addDataSet( dataSet, silent );
-        dataSet->setKdDiagram( d->kdBarDiagram );
-        dataSet->setKdDataSetNumber( d->kdBarDiagramModel->dataSets().indexOf( dataSet ) );
-    }
-    break;
+        model = d->kdBarDiagramModel;
+        diagram = d->kdBarDiagram;
+        break;
     case LineChartType:
-    {
         if ( !d->kdLineDiagram )
             d->createLineDiagram();
-        d->kdLineDiagramModel->addDataSet( dataSet, silent );
-        dataSet->setKdDiagram( d->kdLineDiagram );
-        dataSet->setKdDataSetNumber( d->kdLineDiagramModel->dataSets().indexOf( dataSet ) );
-    }
-    break;
+        model = d->kdLineDiagramModel;
+        diagram = d->kdLineDiagram;
+        break;
+    case AreaChartType:
+        if ( !d->kdAreaDiagram )
+            d->createAreaDiagram();
+        model = d->kdAreaDiagramModel;
+        diagram = d->kdAreaDiagram;
+        break;
+    case CircleChartType:
+        if ( !d->kdCircleDiagram )
+            d->createCircleDiagram();
+        model = d->kdCircleDiagramModel;
+        diagram = d->kdCircleDiagram;
+        break;
+    case RadarChartType:
+        if ( !d->kdRadarDiagram )
+            d->createRadarDiagram();
+        model = d->kdRadarDiagramModel;
+        diagram = d->kdRadarDiagram;
+        break;
     case ScatterChartType:
-    {
         if ( !d->kdScatterDiagram )
             d->createScatterDiagram();
-        d->kdScatterDiagramModel->addDataSet( dataSet, silent );
-        dataSet->setKdDiagram( d->kdScatterDiagram );
-        dataSet->setKdDataSetNumber( d->kdScatterDiagramModel->dataSets().indexOf( dataSet ) );
+        model = d->kdScatterDiagramModel;
+        diagram = d->kdScatterDiagram;
+        break;
     }
-    break;
+    
+    Q_ASSERT( model );
+    Q_ASSERT( diagram );
+
+    dataSet->setKdDiagram( diagram );
+    if ( model )
+    {
+        model->addDataSet( dataSet, silent );
+        dataSet->setKdDataSetNumber( model->dataSets().indexOf( dataSet ) );
     }
     
     if ( !silent )
@@ -448,45 +470,57 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
     if ( chartType == LastChartType )
         chartType = d->plotAreaChartType;
     
+    KDChart::AbstractDiagram **oldDiagram = 0;
+    KDChartModel **oldModel = 0;
+    
     switch ( chartType )
     {
     case BarChartType:
-    {
-        if ( d->kdBarDiagramModel )
-        {
-            // TODO (Johannes): Remove diagram if no
-            // datasets are displayed on it anymore
-            d->kdBarDiagramModel->removeDataSet( dataSet, silent );
-        }
-        dataSet->setKdDiagram( 0 );
-        dataSet->setKdDataSetNumber( 0 );
-    }
-    break;
+        oldModel = &d->kdBarDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdBarDiagram;
+        break;
     case LineChartType:
-    {
-        if ( d->kdLineDiagramModel )
-        {
-            // TODO (Johannes): Remove diagram if no
-            // datasets are displayed on it anymore
-            d->kdLineDiagramModel->removeDataSet( dataSet, silent );
-        }
-        dataSet->setKdDiagram( 0 );
-        dataSet->setKdDataSetNumber( 0 );
-    }
-    break;
+        oldModel = &d->kdLineDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdLineDiagram;
+        break;
+    case AreaChartType:
+        oldModel = &d->kdAreaDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdAreaDiagram;
+        break;
+    case CircleChartType:
+        oldModel = &d->kdCircleDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdCircleDiagram;
+        break;
+    case RadarChartType:
+        oldModel = &d->kdRadarDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdRadarDiagram;
+        break;
     case ScatterChartType:
+        oldModel = &d->kdScatterDiagramModel;
+        oldDiagram = (KDChart::AbstractDiagram**)&d->kdScatterDiagram;
+        break;
+    }
+    
+    if ( oldModel && *oldModel )
     {
-        if ( d->kdScatterDiagramModel )
+        if ( (*oldModel)->columnCount() == 1 )
         {
-            // TODO (Johannes): Remove diagram if no
-            // datasets are displayed on it anymore
-            d->kdScatterDiagramModel->removeDataSet( dataSet, silent );
+            if ( (*oldDiagram)->coordinatePlane() )
+                (*oldDiagram)->coordinatePlane()->takeDiagram( (*oldDiagram) );
+            Q_ASSERT( oldDiagram );
+            Q_ASSERT( *oldDiagram );
+            if ( *oldDiagram )
+                delete *oldDiagram;
+            delete *oldModel;
+            *oldModel = 0;
+            *oldDiagram = 0;
         }
-        dataSet->setKdDiagram( 0 );
-        dataSet->setKdDataSetNumber( 0 );
+        else
+            (*oldModel)->removeDataSet( dataSet, silent );
     }
-    break;
-    }
+    
+    dataSet->setKdDiagram( 0 );
+    dataSet->setKdDataSetNumber( 0 );
     
 
     if ( !silent )
