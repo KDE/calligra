@@ -112,7 +112,7 @@ void KPrViewModeNotes::keyPressEvent(QKeyEvent *event)
                 break;
             default:
                 event->ignore();
-                break;
+                return;
         }
 
         KoPAPageBase *activePage = m_view->activePage();
@@ -175,7 +175,7 @@ void KPrViewModeNotes::updateActiveNotes(KPrPage *page)
     m_canvas->masterShapeManager()->setShapes(QList<KoShape*>());
 
     KoSelection *selection = m_canvas->shapeManager()->selection();
-    selection->select(page->pageNotes()->textShape());
+    selection->select(notes->textShape());
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
 }
