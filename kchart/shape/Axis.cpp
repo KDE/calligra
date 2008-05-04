@@ -731,8 +731,14 @@ KDChart::AbstractCoordinatePlane *Axis::kdPlane() const
 
 void Axis::plotAreaChartTypeChanged( ChartType chartType )
 {
-    if ( d->dataSets.isEmpty() || chartType == d->plotAreaChartType )
-        return; // Return if there's nothing to do
+    // Return if there's nothing to do
+    if ( chartType == d->plotAreaChartType )
+        return;
+    if ( d->dataSets.isEmpty() )
+    {
+        d->plotAreaChartType = chartType;
+        return;
+    }
     
     KDChartModel **oldModel = 0;
     KDChartModel *newModel = 0;
