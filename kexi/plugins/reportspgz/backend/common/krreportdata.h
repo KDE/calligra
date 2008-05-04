@@ -88,11 +88,13 @@ class KRReportData : public QObject
 		*/
 		KRSectionData* section(const QString&);
 		
+		QString interpreter(){return _interpreter;}
 	protected:
 		QString title;
 		QString query;
 		QString script;
-
+		QString _interpreter;
+		
 		ReportPageOptions page;
 
 		KRSectionData * pghead_first;

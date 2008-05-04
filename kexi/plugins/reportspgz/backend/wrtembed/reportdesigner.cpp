@@ -734,6 +734,7 @@ QDomDocument ReportDesigner::document()
 
 	QDomElement scr = doc.createElement ( "script" );
 	scr.appendChild ( doc.createTextNode ( _script ) );
+	scr.setAttribute("interpreter", _interpreter->value().toString());
 	root.appendChild ( scr );
 
 	QDomElement grd = doc.createElement ( "grid" );
@@ -1561,9 +1562,8 @@ QString ReportDesigner::editorText ( const QString& orig )
 		d->editorDialog->setMainWidget ( d->editor );
 		d->editorDialog->setMinimumSize ( 600,500 );
 
-		d->editor->setHighlightMode ( "javascript" );
-
 	}
+	d->editor->setHighlightMode ( _interpreter->value().toString() );
 	d->editor->setText ( orig );
 	if ( d->editorDialog->exec() )
 	{

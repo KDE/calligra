@@ -1,6 +1,6 @@
 /*
  * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,6 +19,9 @@
  */
 #include "krscriptimage.h"
 #include <krimagedata.h>
+#include <QBuffer>
+#include <kcodecs.h>
+#include <kdebug.h>
 
 namespace Scripting
 {
@@ -49,5 +52,35 @@ namespace Scripting
 	void Image::setSize ( const QSizeF& s )
 	{
 		_image->_size.setPointSize ( s );
+	}
+
+	QString Image::resizeMode()
+	{
+		return _image->_resizeMode->value().toString();
+	}
+
+	void Image::setResizeMode ( const QString &rm )
+	{
+		if ( rm == "Stretch" )
+		{
+			_image->_resizeMode->setValue ( "Stretch" );
+		}
+		else
+		{
+			_image->_resizeMode->setValue ( "Clip" );
+		}
+	}
+
+	void Image::setInlineImage( const QByteArray &ba )
+	{
+		_image->setInlineImageData(ba);
+	}
+	
+	void Image::loadFromFile( const QVariant &pth )
+	{
+		QPixmap img;
+
+		QString str = pth.toString();
+		_image->setInlineImageData(QByteArray(), str);
 	}
 }

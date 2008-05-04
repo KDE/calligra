@@ -52,7 +52,7 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
 	// Create the Kross::Action instance .
 	_action = new Kross::Action(this, "ReportScript");
 	
-	_action->setInterpreter("javascript");
+	_action->setInterpreter(d->interpreter());
 	
 	//Add math functions to the script
 	_functions = new KRScriptFunctions(_curs);

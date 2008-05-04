@@ -64,7 +64,10 @@ KRReportData::KRReportData(const QDomElement & elemSource)
 		else if ( elemThis.tagName() == "datasource" )
 			query = elemThis.text();
 		else if ( elemThis.tagName() == "script" )
+		{
 			script = elemThis.text();
+			_interpreter = elemThis.attribute("interpreter");
+		}
 		else if ( elemThis.tagName() == "size" )
 		{
 			if ( elemThis.firstChild().isText() )

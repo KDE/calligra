@@ -51,8 +51,8 @@ class KRImageData : public KRObjectData
 		virtual int type() const;
 		
 		void setMode ( QString );
-		void setInline ( bool );
-		void setInlineImageData ( QByteArray );
+
+		void setInlineImageData ( QByteArray, const QString& = QString());
 		void setColumn( QString );
 		QString mode();
 		bool isInline();
@@ -64,20 +64,11 @@ class KRImageData : public KRObjectData
 		QRect _rect();
 		KRPos _pos;
 		KRSize _size;
-		//QString mode;
-		//QString format;      // } 
-		//QString inline_data; // } INLINE
-                         	     //     OR
-		//ORDataData data;     // } FROM DB
-		
 		KoProperty::Property * _controlSource;
 		KoProperty::Property* _resizeMode;
 		KoProperty::Property* _staticImage;
 		
-		
-		
 		QString _format;
-		bool _img_inline;
 
 	private:
 		static int RTTI;

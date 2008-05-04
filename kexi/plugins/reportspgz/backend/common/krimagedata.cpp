@@ -33,7 +33,7 @@ KRImageData::KRImageData ( QDomNode & element )
 	QDomNodeList nl = element.childNodes();
 	QString n;
 	QDomNode node;
-	_img_inline = false;
+
 	for ( int i = 0; i < nl.count(); i++ )
 	{
 		node = nl.item ( i );
@@ -55,7 +55,6 @@ KRImageData::KRImageData ( QDomNode & element )
 					kDebug() << "while parsing field data, encountered unknown element: " << n << endl;
 				}
 			}
-			_img_inline = false;
 		}
 		else if ( n == "name" )
 		{
@@ -75,7 +74,6 @@ KRImageData::KRImageData ( QDomNode & element )
 			// method
 			kDebug() << "Loading Image Data" << endl;
 			setInlineImageData ( node.firstChild().nodeValue().toLatin1() );
-			_img_inline = true;
 		}
 		else if ( n == "rect" )
 		{
@@ -122,14 +120,7 @@ KRImageData::KRImageData ( QDomNode & element )
 
 bool KRImageData::isInline()
 {
-	return !(inlineImageData() == "");
-}
-void KRImageData::setInline ( bool yes )
-{
-	if ( _img_inline != yes )
-	{
-		_img_inline = yes;
-	}
+	return !(inlineImageData().isEmpty());
 }
 
 QString KRImageData::inlineImageData()
@@ -145,16 +136,29 @@ QString KRImageData::inlineImageData()
 	return imageEncoded;
 }
 
-void KRImageData::setInlineImageData ( QByteArray dat )
+void KRImageData::setInlineImageData ( QByteArray dat, const QString &fn )
 {
-	QByteArray binaryStream;
-
-	binaryStream = KCodecs::base64Decode(dat);
-	QImage img (binaryStream);
-	QPixmap pix;
-	pix.convertFromImage(img, QPixmap::Color);
-
-	_staticImage->setValue(pix);
+	
+	
+	if (!fn.isEmpty())
+	{
+		QPixmap pix(fn);
+		_staticImage->setValue(pix);
+	}
+	else
+	{
+		
+		QByteArray binaryStream;
+	
+		binaryStream = KCodecs::base64Decode(dat);
+		QImage img(binaryStream);
+		QPixmap pix;
+		pix.convertFromImage(img, QPixmap::Color);
+	
+		_staticImage->setValue(pix);
+		
+	}
+	
 }
 
 QString KRImageData::mode() { return _resizeMode->value().toString(); }
