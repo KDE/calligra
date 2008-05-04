@@ -26,6 +26,7 @@
 #include "KPrShapeAnimations.h"
 
 class KPrPageApplicationData;
+class KPrNotes;
 
 class KPrPage : public KoPAPage , public KPrAnimationController
 {
@@ -42,10 +43,18 @@ public:
      */
     static KPrPageApplicationData * pageData( KoPAPageBase * page );
 
+    KPrNotes *pageNotes();
+
 protected:
     virtual void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const;
 
     virtual void loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &loadingContext );
+
+    /// reimplemented
+    virtual bool saveOdfPresentationNotes(KoPASavingContext &paContext) const;
+
+private:
+    KPrNotes *m_pageNotes;
 };
 
 #endif /* KPRPAGE_H */

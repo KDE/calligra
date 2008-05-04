@@ -27,12 +27,14 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 #include <KoPACanvas.h>
+#include <KoPADocumentStructureDocker.h>
 
 #include "KPrDocument.h"
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
 #include "KPrPageApplicationData.h"
 #include "KPrViewModePresentation.h"
+#include "KPrViewModeNotes.h"
 #include "commands/KPrAnimationCreateCommand.h"
 #include "dockers/KPrPageEffectDocker.h"
 #include "dockers/KPrPageEffectDockerFactory.h"
@@ -45,7 +47,8 @@
 KPrView::KPrView( KPrDocument *document, QWidget *parent )
 : KoPAView( document, parent )
 , m_presentationMode( new KPrViewModePresentation( this, m_canvas ))
-, m_normalMode( 0 )
+, m_normalMode( m_viewMode )
+, m_notesMode( new KPrViewModeNotes(this, m_canvas))
 {
     initGUI();
     initActions();
@@ -61,6 +64,18 @@ KoViewConverter * KPrView::viewConverter()
     KPrViewModePresentation * mode = dynamic_cast<KPrViewModePresentation *>( viewMode() );
 
     return mode ? mode->viewConverter() : KoPAView::viewConverter();
+}
+
+void KPrView::updateActivePage(KoPAPageBase *page)
+{
+    KPrViewModeNotes *notesMode = dynamic_cast<KPrViewModeNotes *>(viewMode());
+    if (notesMode) {
+        KPrPage *prPage = dynamic_cast<KPrPage *>(page);
+        if (page)
+            notesMode->updateActiveNotes(prPage);
+    }
+    else
+        KoPAView::updateActivePage(page);
 }
 
 void KPrView::initGUI()
@@ -90,6 +105,21 @@ void KPrView::initActions()
     m_actionStartPresentation->addAction( action );
     connect( action, SIGNAL( activated() ), this, SLOT( startPresentationFromBeginning() ) );
 
+    m_actionViewModeNormal = new KAction(i18n("Normal"), this);
+    m_actionViewModeNormal->setCheckable(true);
+    m_actionViewModeNormal->setChecked(true);
+    actionCollection()->addAction("view_normal", m_actionViewModeNormal);
+    connect(m_actionViewModeNormal, SIGNAL(triggered()), this, SLOT(showNormal()));
+
+    m_actionViewModeNotes = new KAction(i18n("Notes"), this);
+    m_actionViewModeNotes->setCheckable(true);
+    actionCollection()->addAction("view_notes", m_actionViewModeNotes);
+    connect(m_actionViewModeNotes, SIGNAL(triggered()), this, SLOT(showNotes()));
+
+    QActionGroup *viewModesGroup = new QActionGroup(this);
+    viewModesGroup->addAction(m_actionViewModeNormal);
+    viewModesGroup->addAction(m_actionViewModeNotes);
+
     m_actionCreateAnimation = new KAction( i18n( "Create Appear Animation" ), this );
     actionCollection()->addAction( "edit_createanimation", m_actionCreateAnimation );
     connect( m_actionCreateAnimation, SIGNAL( activated() ), this, SLOT( createAnimation() ) );
@@ -97,6 +127,9 @@ void KPrView::initActions()
     m_actionCreateCustomSlideShowsDialog = new KAction( i18n( "Edit Custom Slide Shows..." ), this );
     actionCollection()->addAction( "edit_customslideshows", m_actionCreateCustomSlideShowsDialog );
     connect( m_actionCreateCustomSlideShowsDialog, SIGNAL( activated() ), this, SLOT( dialogCustomSlideShows() ) );
+
+    KoPADocumentStructureDocker *docStructureDocker = documentStructureDocker();
+    connect(docStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
 }
 
 void KPrView::startPresentation()
@@ -124,6 +157,16 @@ void KPrView::createAnimation()
         m_canvas->addCommand( command );
     }
     animationcount = ( animationcount + 1 ) % 3;
+}
+
+void KPrView::showNormal()
+{
+    setViewMode(m_normalMode);
+}
+
+void KPrView::showNotes()
+{
+    setViewMode(m_notesMode);
 }
 
 void KPrView::dialogCustomSlideShows()

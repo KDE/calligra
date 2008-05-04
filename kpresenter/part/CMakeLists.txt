@@ -16,6 +16,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrDocument.cpp
      KPrView.cpp
      KPrViewModePresentation.cpp
+     KPrViewModeNotes.cpp
      KPrPresentationTool.cpp
      KPrAnimationDirector.cpp
      KPrShapeAnimations.cpp
@@ -23,6 +24,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrAnimationController.cpp
      KPrPage.cpp
      KPrMasterPage.cpp
+     KPrNotes.cpp
      KPrPageApplicationData.cpp
      KPrShapeApplicationData.cpp
      KPrCustomSlideShows.cpp

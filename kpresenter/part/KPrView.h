@@ -25,8 +25,10 @@
 #include <KoPAView.h>
 
 class KPrDocument;
+class KPrViewModeNotes;
 class KPrViewModePresentation;
 class KActionMenu;
+class KoPAPageBase;
 
 class KPrView : public KoPAView
 {
@@ -37,6 +39,9 @@ public:
 
     virtual KoViewConverter * viewConverter();
 
+public slots:
+    void updateActivePage(KoPAPageBase *page);
+
 protected:
     void initGUI();
     void initActions();
@@ -45,14 +50,20 @@ protected slots:
     void startPresentation();
     void startPresentationFromBeginning();
     void createAnimation();
+    void showNormal();
+    void showNotes();
     void dialogCustomSlideShows();
 
 private:
     KActionMenu *m_actionStartPresentation;
     KAction *m_actionCreateAnimation;
+    KAction *m_actionViewModeNormal;
+    KAction *m_actionViewModeNotes;
     KAction *m_actionCreateCustomSlideShowsDialog;
+
     KPrViewModePresentation *m_presentationMode;
     KoPAViewMode *m_normalMode;
+    KPrViewModeNotes *m_notesMode;
 };
 
 #endif /* KPRVIEW_H */

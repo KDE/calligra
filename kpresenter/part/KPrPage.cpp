@@ -27,6 +27,7 @@
 #include <KoPALoadingContext.h>
 
 #include "KPrPageApplicationData.h"
+#include "KPrNotes.h"
 #include "pageeffects/KPrPageEffectRegistry.h"
 #include "pageeffects/KPrPageEffect.h"
 
@@ -36,10 +37,12 @@ KPrPage::KPrPage( KoPAMasterPage * masterPage )
 : KoPAPage( masterPage )
 {
     setApplicationData( new KPrPageApplicationData() );
+    m_pageNotes = new KPrNotes(this);
 }
 
 KPrPage::~KPrPage()
 {
+    delete m_pageNotes;
 }
 
 KPrPageApplicationData * KPrPage::pageData( KoPAPageBase * page )
@@ -47,6 +50,11 @@ KPrPageApplicationData * KPrPage::pageData( KoPAPageBase * page )
     KPrPageApplicationData * data = dynamic_cast<KPrPageApplicationData *>( page->applicationData() );
     Q_ASSERT( data );
     return data;
+}
+
+KPrNotes *KPrPage::pageNotes()
+{
+    return m_pageNotes;
 }
 
 void KPrPage::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const
@@ -88,4 +96,15 @@ void KPrPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &l
     if ( node.isElement() ) {
         data->setPageEffect( KPrPageEffectRegistry::instance()->createPageEffect( node.toElement() ) );
     }
+
+    node = element.namedItemNS(KoXmlNS::presentation, "notes");
+    if (node.isElement())
+        m_pageNotes->loadOdf(node.toElement(), loadingContext);
 }
+
+bool KPrPage::saveOdfPresentationNotes(KoPASavingContext &paContext) const
+{
+    m_pageNotes->saveOdf(paContext);
+    return true;
+}
+

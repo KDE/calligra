@@ -29,6 +29,9 @@
             <Separator/>
             <ActionList name="view_split"/>
             <Separator/>
+            <Action name="view_normal"/>
+            <Action name="view_notes"/>
+            <Separator/>
             <Action name="view_masterpages"/>
             <Separator/>
             <Action name="view_mode"/>
