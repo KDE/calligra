@@ -239,6 +239,8 @@ QWidget *ChartTool::createOptionWidget()
              this,   SLOT( setGapBetweenBars( int ) ) );
     connect( widget, SIGNAL( gapBetweenSetsChanged( int ) ),
              this,   SLOT( setGapBetweenSets( int ) ) );
+    connect( widget, SIGNAL( pieExplodeFactorChanged( int ) ),
+             this,   SLOT( setPieExplodeFactor( int ) ) );
     
     connect( widget, SIGNAL( showLegendChanged( bool ) ),
              this,   SLOT( setShowLegend( bool ) ));
@@ -606,6 +608,13 @@ void ChartTool::setGapBetweenSets( int percent )
 {
     Q_ASSERT( d->shape );
     d->shape->plotArea()->setGapBetweenSets( percent );
+    d->shape->update();
+}
+
+void ChartTool::setPieExplodeFactor( int percent )
+{
+    Q_ASSERT( d->shape );
+    d->shape->plotArea()->setPieExplodeFactor( percent );
     d->shape->update();
 }
 

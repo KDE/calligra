@@ -556,26 +556,17 @@ void PlotArea::saveOdfSubType( KoXmlWriter& xmlWriter, KoGenStyle& plotAreaStyle
 
 void PlotArea::setGapBetweenBars( int percent )
 {
-    if ( d->chartType != BarChartType )
-        return;
-    
-    //KDChart::BarAttributes attributes = ((KDChart::BarDiagram*) d->kdDiagram)->barAttributes();
-    //attributes.setBarGapFactor( (float)percent / 100.0 );
-    //((KDChart::BarDiagram*) d->kdDiagram)->setBarAttributes( attributes );
-    
-    requestRepaint();
+    emit gapBetweenBarsChanged( percent );
 }
 
 void PlotArea::setGapBetweenSets( int percent )
 {
-    if ( d->chartType != BarChartType )
-        return;
-    
-    //KDChart::BarAttributes attributes = ((KDChart::BarDiagram*) d->kdDiagram)->barAttributes();
-    //attributes.setGroupGapFactor( (float)percent / 100.0 );
-    //((KDChart::BarDiagram*) d->kdDiagram)->setBarAttributes( attributes );
-    
-    requestRepaint();
+    emit gapBetweenSetsChanged( percent );
+}
+
+void PlotArea::setPieExplodeFactor( int percent )
+{
+    emit pieExplodeFactorChanged( percent );
 }
 
 ChartShape *PlotArea::parent() const

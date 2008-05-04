@@ -248,6 +248,8 @@ ChartConfigWidget::ChartConfigWidget()
              this, SIGNAL( gapBetweenBarsChanged( int ) ) );
     connect( d->ui.gapBetweenSets, SIGNAL( valueChanged( int ) ),
              this, SIGNAL( gapBetweenSetsChanged( int ) ) );
+    connect( d->ui.pieExplodeFactor, SIGNAL( valueChanged( int ) ),
+             this, SIGNAL( pieExplodeFactorChanged( int ) ) );
     
     // "Legend" Tab
     connect( d->ui.legendTitle, SIGNAL( textChanged( const QString& ) ),
@@ -276,6 +278,11 @@ ChartConfigWidget::ChartConfigWidget()
 
     setupDialogs();
     createActions();
+    
+    // Activate spin box "acceleration"
+    d->ui.gapBetweenBars->setAccelerated( true );
+    d->ui.gapBetweenSets->setAccelerated( true );
+    d->ui.pieExplodeFactor->setAccelerated( true );
 
     // We need only connect one of the data direction buttons, since
     // they are mutually exclusive.
@@ -628,18 +635,16 @@ void ChartConfigWidget::update()
     {
         bool needSeparator = false;
         if ( d->shape->chartType() == BarChartType ) {
-            d->ui.barPropertiesLabel->show();
-            d->ui.gapBetweenBarsLabel->show();
-            d->ui.gapBetweenSetsLabel->show();
-            d->ui.gapBetweenBars->show();
-            d->ui.gapBetweenSets->show();
+            d->ui.barProperties->show();
+            d->ui.pieProperties->hide();
+            needSeparator = true;
+        } else if ( d->shape->chartType() == CircleChartType ) {
+            d->ui.barProperties->hide();
+            d->ui.pieProperties->show();
             needSeparator = true;
         } else {
-            d->ui.barPropertiesLabel->hide();
-            d->ui.gapBetweenBarsLabel->hide();
-            d->ui.gapBetweenSetsLabel->hide();
-            d->ui.gapBetweenBars->hide();
-            d->ui.gapBetweenSets->hide();
+            d->ui.barProperties->hide();
+            d->ui.pieProperties->hide();
         }
         d->ui.propertiesSeparator->setVisible( needSeparator );
         switch ( d->shape->chartSubType() ) {

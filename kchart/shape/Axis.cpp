@@ -49,6 +49,8 @@
 #include <KDChartPlotter>
 #include <KDChartRingDiagram>
 #include <KDChartPolarDiagram>
+#include <KDChartBarAttributes>
+#include <KDChartPieAttributes>
 #include <KDChartThreeDBarAttributes>
 #include <KDChartThreeDPieAttributes>
 #include <KDChartThreeDLineAttributes>
@@ -332,6 +334,13 @@ Axis::Axis( PlotArea *parent )
     
     d->plotAreaChartType = d->plotArea->chartType();
     d->plotAreaChartSubType = d->plotArea->chartSubType();
+    
+    connect( d->plotArea, SIGNAL( gapBetweenBarsChanged( int ) ),
+             this,        SLOT( setGapBetweenBars( int ) ) );
+    connect( d->plotArea, SIGNAL( gapBetweenSetsChanged( int ) ),
+             this,        SLOT( setGapBetweenSets( int ) ) );
+    connect( d->plotArea, SIGNAL( pieExplodeFactorChanged( int ) ),
+             this,        SLOT( setPieExplodeFactor( int ) ) );
 }
 
 Axis::~Axis()
@@ -971,4 +980,40 @@ void Axis::layoutPlanes()
         d->kdPolarPlane->layoutPlanes();
 }
 
+void Axis::setGapBetweenBars( int percent )
+{
+    if ( d->kdBarDiagram )
+    {
+        KDChart::BarAttributes attributes = d->kdBarDiagram->barAttributes();
+        attributes.setBarGapFactor( (float)percent / 100.0 );
+        d->kdBarDiagram->setBarAttributes( attributes );
+    }
+    
+    requestRepaint();
+}
 
+void Axis::setGapBetweenSets( int percent )
+{
+    if ( d->kdBarDiagram )
+    {
+        KDChart::BarAttributes attributes = d->kdBarDiagram->barAttributes();
+        attributes.setGroupGapFactor( (float)percent / 100.0 );
+        d->kdBarDiagram->setBarAttributes( attributes );
+    }
+    
+    requestRepaint();
+}
+
+void Axis::setPieExplodeFactor( int percent )
+{
+    if ( d->kdCircleDiagram )
+    {
+        KDChart::PieAttributes attributes = d->kdCircleDiagram->pieAttributes();
+        attributes.setExplodeFactor( (float)percent / 100.0 );
+        d->kdCircleDiagram->setPieAttributes( attributes );
+    }
+    
+    requestRepaint();
+}
+
+#include "Axis.moc"

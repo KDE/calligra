@@ -21,13 +21,18 @@
 #ifndef KCHART_AXIS_H
 #define KCHART_AXIS_H
 
+// Qt
+#include <QObject>
+
 // Local
 #include "ChartShape.h"
 
 namespace KChart {
 
-class CHARTSHAPELIB_EXPORT Axis
+class CHARTSHAPELIB_EXPORT Axis : public QObject
 {
+    Q_OBJECT
+    
 public:
     Axis( PlotArea *parent );
     ~Axis();
@@ -76,6 +81,11 @@ public:
     void update() const;
     void requestRepaint() const;
     void layoutPlanes();
+    
+public slots:
+    void setGapBetweenBars( int percent );
+    void setGapBetweenSets( int percent );
+    void setPieExplodeFactor( int percent );
     
 private:
     

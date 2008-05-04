@@ -66,6 +66,7 @@ public:
     
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );
+    void setPieExplodeFactor( int percent );
     
     bool loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingContext &context );
     void saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
@@ -90,6 +91,11 @@ public slots:
     void requestRepaint() const;
     void dataSetCountChanged();
     void update() const;
+    
+signals:
+    void gapBetweenBarsChanged( int );
+    void gapBetweenSetsChanged( int );
+    void pieExplodeFactorChanged( int );
 
 private:
     class Private;

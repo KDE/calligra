@@ -108,6 +108,7 @@ signals:
     void dataSetAxisChanged( DataSet *dataSet, Axis *axis );
     void gapBetweenBarsChanged( int percent );
     void gapBetweenSetsChanged( int percent );
+    void pieExplodeFactorChanged( int percent );
     
     void showLegendChanged( bool b );
 
