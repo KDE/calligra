@@ -74,10 +74,19 @@ ChartType DataSet::chartType() const
     return m_chartType;
 }
 
-
 ChartSubtype DataSet::chartSubType() const
 {
     return m_chartSubType;
+}
+
+ChartType DataSet::globalChartType() const
+{
+    return m_globalChartType;
+}
+
+ChartSubtype DataSet::globalChartSubType() const
+{
+    return m_globalChartSubType;
 }
 
 Axis *DataSet::attachedAxis() const

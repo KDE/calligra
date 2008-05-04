@@ -40,6 +40,8 @@ public:
     QString title() const;
     ChartType chartType() const;
     ChartSubtype chartSubType() const;
+    ChartType globalChartType() const;
+    ChartSubtype globalChartSubType() const;
     Axis *attachedAxis() const;
 
     ProxyModel *model() const;
