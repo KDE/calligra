@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>250</width>
-    <height>429</height>
+    <width>271</width>
+    <height>454</height>
    </rect>
   </property>
   <layout class="QGridLayout" >
@@ -39,8 +39,7 @@
      </property>
      <property name="icon" >
       <iconset>
-       <normaloff/>
-      </iconset>
+       <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
      </property>
      <property name="iconSize" >
       <size>
@@ -87,8 +86,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>230</width>
-        <height>313</height>
+        <width>251</width>
+        <height>338</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -242,8 +241,8 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>291</width>
-        <height>403</height>
+        <width>251</width>
+        <height>338</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -325,7 +324,7 @@ p, li { white-space: pre-wrap; }
          <item>
           <widget class="QCheckBox" name="dataSetHasChartType" >
            <property name="text" >
-            <string>Custom Chart Type</string>
+            <string>Custom Type</string>
            </property>
           </widget>
          </item>
@@ -359,25 +358,7 @@ p, li { white-space: pre-wrap; }
          </item>
         </layout>
        </item>
-       <item row="4" column="0" colspan="3" >
-        <layout class="QHBoxLayout" name="horizontalLayout_2" >
-         <item>
-          <widget class="QCheckBox" name="datasetShowValues" >
-           <property name="text" >
-            <string>Data Values</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QCheckBox" name="dataSetShowLabels" >
-           <property name="text" >
-            <string>Labels</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item row="6" column="0" colspan="3" >
+       <item row="7" column="0" colspan="3" >
         <widget class="QWidget" native="1" name="barProperties" >
          <layout class="QGridLayout" name="gridLayout" >
           <property name="margin" >
@@ -459,11 +440,9 @@ p, li { white-space: pre-wrap; }
            </widget>
           </item>
          </layout>
-         <zorder>gridLayoutWidget</zorder>
-         <zorder>barPropertiesLabel</zorder>
         </widget>
        </item>
-       <item row="7" column="0" colspan="3" >
+       <item row="8" column="0" colspan="3" >
         <widget class="QWidget" native="1" name="pieProperties" >
          <layout class="QGridLayout" name="gridLayout_4" >
           <property name="leftMargin" >
@@ -512,7 +491,7 @@ p, li { white-space: pre-wrap; }
          </layout>
         </widget>
        </item>
-       <item row="8" column="0" colspan="3" >
+       <item row="9" column="0" colspan="3" >
         <spacer>
          <property name="orientation" >
           <enum>Qt::Vertical</enum>
@@ -525,12 +504,30 @@ p, li { white-space: pre-wrap; }
          </property>
         </spacer>
        </item>
-       <item row="5" column="0" colspan="3" >
+       <item row="6" column="0" colspan="3" >
         <widget class="Line" name="propertiesSeparator" >
          <property name="orientation" >
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
+       </item>
+       <item row="4" column="0" colspan="3" >
+        <layout class="QHBoxLayout" name="horizontalLayout_2" >
+         <item>
+          <widget class="QCheckBox" name="datasetShowValues" >
+           <property name="text" >
+            <string>Data Values</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="dataSetShowLabels" >
+           <property name="text" >
+            <string>Labels</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </widget>
@@ -539,8 +536,8 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>291</width>
-        <height>403</height>
+        <width>251</width>
+        <height>338</height>
        </rect>
       </property>
       <attribute name="title" >
@@ -621,8 +618,7 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="icon" >
           <iconset>
-           <normaloff/>
-          </iconset>
+           <normaloff>../../../../../.designer/backup</normaloff>../../../../../.designer/backup</iconset>
          </property>
         </widget>
        </item>
@@ -651,11 +647,6 @@ p, li { white-space: pre-wrap; }
     </widget>
    </item>
   </layout>
-  <zorder>chartTypeMenu</zorder>
-  <zorder>threeDLook</zorder>
-  <zorder>editData</zorder>
-  <zorder>pushButton_5</zorder>
-  <zorder>tabWidget</zorder>
  </widget>
  <customwidgets>
   <customwidget>

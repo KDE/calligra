@@ -60,6 +60,7 @@ public slots:
     void ui_dataSetLabelDataRegionChanged();
     void ui_dataSetCategoryDataRegionChanged();
     void ui_dataSetSelectionChanged_CellRegionDialog( int index );
+    void ui_dataSetHasChartTypeChanged( bool b );
 
     void setLegendOrientationIsVertical( bool );
     void setLegendOrientation( int boxEntryIndex );

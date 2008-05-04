@@ -112,6 +112,10 @@ public:
     QAction  *dataSetNormalAreaChartAction;
     QAction  *dataSetStackedAreaChartAction;
     QAction  *dataSetPercentAreaChartAction;
+    
+    QAction *dataSetCircleChartAction;
+    QAction *dataSetScatterChartAction;
+    QAction *dataSetRadarChartAction;
 
     // Table Editor
     Ui::ChartTableEditor  tableEditor;
@@ -155,6 +159,19 @@ ChartConfigWidget::Private::Private( QWidget *parent )
     subtype = KChart::NoChartSubtype;
     sourceIsSpreadSheet = false;
     cellRegionStringValidator = 0;
+    
+    dataSetNormalBarChartAction = 0;
+    dataSetStackedBarChartAction = 0;
+    dataSetPercentBarChartAction = 0;
+    dataSetNormalLineChartAction = 0;
+    dataSetStackedLineChartAction = 0;
+    dataSetPercentLineChartAction = 0;
+    dataSetNormalAreaChartAction = 0;
+    dataSetStackedAreaChartAction = 0;
+    dataSetPercentAreaChartAction = 0;
+    dataSetCircleChartAction = 0;
+    dataSetScatterChartAction = 0;
+    dataSetRadarChartAction = 0;
 }
 
 ChartConfigWidget::Private::~Private()
@@ -215,10 +232,17 @@ ChartConfigWidget::ChartConfigWidget()
     d->dataSetStackedAreaChartAction = dataSetAreaChartMenu->addAction( KIcon( "chart_area_stacked" ), i18n("Stacked") );
     d->dataSetPercentAreaChartAction = dataSetAreaChartMenu->addAction( KIcon( "chart_area_percent" ), i18n("Percent") );
     
+    d->dataSetRadarChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_polar_normal" ), i18n("Polar Chart") );
+    d->dataSetCircleChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_pie_normal" ), i18n("Pie Chart") );
+    d->dataSetScatterChartAction = dataSetChartTypeMenu->addAction( KIcon( "chart_scatter_normal" ), i18n("Scatter Chart") );
+    
     d->ui.dataSetChartTypeMenu->setMenu( dataSetChartTypeMenu );
     
     connect( dataSetChartTypeMenu, SIGNAL( triggered( QAction* ) ), 
-             this,          SLOT( dataSetChartTypeSelected( QAction* ) ) );
+             this,                 SLOT( dataSetChartTypeSelected( QAction* ) ) );
+    
+    connect( d->ui.dataSetHasChartType, SIGNAL( toggled( bool ) ),
+             this,                      SLOT( ui_dataSetHasChartTypeChanged( bool ) ) );
     
     // Quick-access settings
     d->tableEditorDialog = new QDialog( this );
@@ -419,13 +443,31 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
     update();
 }
 
+void ChartConfigWidget::ui_dataSetHasChartTypeChanged( bool b )
+{
+    if ( d->selectedDataSet < 0 )
+        return;
+    
+    if ( !b )
+    {
+        DataSet *dataSet = d->dataSets[ d->selectedDataSet ];
+        Q_ASSERT( dataSet );
+        if ( !dataSet )
+            return;
+        
+        emit dataSetChartTypeChanged( dataSet, LastChartType );
+        emit dataSetChartSubTypeChanged( dataSet, NoChartSubtype );
+        d->ui.dataSetChartTypeMenu->setIcon( QIcon() );
+    }
+}
+
 void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
 {
     if ( d->selectedDataSet < 0 )
         return;
     
-    ChartType     type;
-    ChartSubtype  subtype;
+    ChartType     type = LastChartType;
+    ChartSubtype  subtype = NoChartSubtype;
     
     if ( action == d->dataSetNormalBarChartAction ) {
         type    = BarChartType;
@@ -460,8 +502,15 @@ void ChartConfigWidget::dataSetChartTypeSelected( QAction *action )
         subtype = PercentChartSubtype;
     }
     
-    DataSet *dataSet = d->dataSets[ d->selectedDataSet ];
+    else if ( action == d->dataSetRadarChartAction )
+        type = RadarChartType;
+    else if ( action == d->dataSetCircleChartAction )
+        type = CircleChartType;
+    else if ( action == d->dataSetScatterChartAction )
+        type = ScatterChartType;
     
+    DataSet *dataSet = d->dataSets[ d->selectedDataSet ];
+    Q_ASSERT( dataSet );
     if ( !dataSet )
         return;
     
@@ -1100,6 +1149,82 @@ void ChartConfigWidget::ui_dataSetSelectionChanged( int index ) {
     d->ui.dataSetShowLabels->blockSignals( true );
     d->ui.dataSetShowLabels->setChecked( dataSet->showLabels() );
     d->ui.dataSetShowLabels->blockSignals( false );
+    
+    if ( dataSet->chartType() != LastChartType )
+    {
+        d->ui.dataSetHasChartType->blockSignals( true );
+        d->ui.dataSetHasChartType->setChecked( true );
+        d->ui.dataSetHasChartType->blockSignals( false );
+        d->ui.dataSetChartTypeMenu->setEnabled( true );
+    }
+    else
+    {
+        d->ui.dataSetHasChartType->blockSignals( true );
+        d->ui.dataSetHasChartType->setChecked( false );
+        d->ui.dataSetHasChartType->blockSignals( false );
+        d->ui.dataSetChartTypeMenu->setEnabled( false );
+    }
+
+    Q_ASSERT( d->ui.dataSetChartTypeMenu->menu() );
+
+    if ( dataSet->chartType() != LastChartType )
+    {
+        switch ( dataSet->chartType() )
+        {
+        case BarChartType:
+            switch ( dataSet->chartSubType() )
+            {
+            case StackedChartSubtype:
+                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_stacked" ) );
+                break;
+            case PercentChartSubtype:
+                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_layer" ) );
+                break;
+            default:
+                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_bar_beside" ) );
+            }
+            break;
+        case LineChartType:
+            switch ( dataSet->chartSubType() )
+            {
+            case StackedChartSubtype:
+                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_line_stacked" ) );
+                break;
+            case PercentChartSubtype:
+                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_line_percent" ) );
+                break;
+            default:
+                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_line_normal" ) );
+            }
+            break;
+        case AreaChartType:
+            switch ( dataSet->chartSubType() )
+            {
+            case StackedChartSubtype:
+                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_area_stacked" ) );
+                break;
+            case PercentChartSubtype:
+                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_area_percent" ) );
+                break;
+            default:
+                d->ui.dataSetChartTypeMenu->setIcon( KIcon( "chart_area_normal" ) );
+            }
+            break;
+        case CircleChartType:
+            d->ui.dataSetChartTypeMenu->menu()->setIcon( KIcon( "chart_circle_normal" ) );
+            break;
+        case RadarChartType:
+            d->ui.dataSetChartTypeMenu->menu()->setIcon( KIcon( "chart_radar_normal" ) );
+            break;
+        case ScatterChartType:
+            d->ui.dataSetChartTypeMenu->menu()->setIcon( KIcon( "chart_scatter_normal" ) );
+            break;
+        }
+    }
+    else
+    {
+        d->ui.dataSetChartTypeMenu->setIcon( QIcon() );
+    }
     
     d->selectedDataSet = index;
 }
