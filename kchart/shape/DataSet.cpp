@@ -152,6 +152,9 @@ double DataSet::upperErrorLimit() const
 
 void DataSet::setChartType( ChartType type )
 {
+    if ( type == m_chartType )
+        return;
+    
     Axis *axis = m_attachedAxis;
     axis->detachDataSet( this );
     
@@ -162,6 +165,9 @@ void DataSet::setChartType( ChartType type )
 
 void DataSet::setChartSubType( ChartSubtype subType )
 {
+    if ( subType == m_chartSubType )
+        return;
+    
     Axis *axis = m_attachedAxis;
     axis->detachDataSet( this );
     
