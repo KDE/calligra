@@ -1,11 +1,8 @@
 [Desktop Entry]
 Name=Sybase
 Name[hi]=साइबेस
-Name[pt]=Sybase
-Name[sv]=Sybase
 Name[ta]=சைபேஸ்
-Name[x-test]=xxsybasexx
-Name[zh_TW]=Sybase
+Name[x-test]=xxSybasexx
 Comment=Sybase Migration Driver for Kexi
 Comment[el]=Οδηγός μεταφοράς Sybase του Kexi
 Comment[fi]=Sybase-siirtoajuri Kexille
