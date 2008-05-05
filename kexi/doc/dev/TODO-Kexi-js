@@ -113,6 +113,7 @@ TODO: add support for PRAGMA page_size on new db creation,
 			and e.g. propose default values for win32
 			http://www.sqlite.org/cvstrac/wiki?p=PerformanceTuningWindows
 			(see also other optimization mentioned here)
+TODO: consider using legacy_file_format (http://sqlite.org/pragma.html#pragma_legacy_file_format)
 
 TODO: In Memory database/tables: how to load an sqlite file to be entirely fit in the memory?
    clever solution: "You could set the cache size as big as your database file (via pragma). 

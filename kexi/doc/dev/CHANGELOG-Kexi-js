@@ -17,6 +17,33 @@ Legend:
 
 ===================== Kexi 2.0 Alpha =====================
 
+2008-05-05
+Main Window
+- execute 'copy to clipboard' instead of 'copy to file' in 'edit->copy special' menu
+1.x: merged
+
+2008-01-17
+Table View
+- A fix for data editing bug #155899. 
+  When a default value is specified for an field with 'required' flag,
+  it was not only applied when a new row is created,
+  but also when an existing row is edited,
+  thus overwriting the existing value.
+
+2008-01-10
+KexiDB
+- Fix the bug #146818: handling expressions containing
+ binary operators like *, /, -, + where both arguments are of
+ floating-point type (with single or double precision).
+ Previously the result was marked as boolean, now it is
+ floating-point.
+
+2007-12-09
+KexiDB
+- make optimization with LIMIT driver-dependent
+
+~~~~~~~~~~~~~~~~ 2.0 alpha 6 ~~~~~~~~~~~~~~~~
+
 2007-11-19
 Startup
 - minor GUI fixes (description box)
