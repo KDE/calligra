@@ -16,14 +16,14 @@ IF (POSTGRESQL_FOUND AND PQXX_FOUND)
 ENDIF (POSTGRESQL_FOUND AND PQXX_FOUND)
 
 INCLUDE(FindFreeTDS)
-IF(FreeTDS_FOUND)
+IF(FREETDS_FOUND)
 	add_subdirectory( sybase )
-ENDIF(FreeTDS_FOUND)
+ENDIF(FREETDS_FOUND)
 
 INCLUDE(FindXBase)
-IF(XBase_FOUND)
+IF(XBASE_FOUND)
   add_subdirectory( xbase )
-ENDIF(XBase_FOUND)
+ENDIF(XBASE_FOUND)
 
 #todo add_subdirectory( mdb )
 
