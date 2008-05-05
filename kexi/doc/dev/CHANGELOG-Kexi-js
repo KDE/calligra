@@ -18,10 +18,14 @@ Legend:
 TODO: fix displaying default values in comboboxes (form and tableview)
 TODO: use KCompletionBox in (editable/noneditable) comboboxes
 
+
+2008-05-05
+Kexi 1.x: execute 'copy to clipboard' instead of 'copy to file' in 'edit->copy special' menu
+
 ===================== Kexi 2.0 Alpha =====================
 2007-10-15
 KexiDB
-- fix for possible compiler problem (see http://bugs.kde.org/show_bug.cgi?id=150388)
+- a fix for possible compiler problem (see http://bugs.kde.org/show_bug.cgi?id=150388)
 
 2007-10-01
 Kexi 1.x:
