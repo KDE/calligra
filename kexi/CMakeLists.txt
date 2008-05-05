@@ -29,6 +29,7 @@ add_subdirectory( widget )
 add_subdirectory( formeditor )
 
 if(DEFINED WITH_WEBFORMS)
+  find_package(GoogleCtemplate REQUIRED)
   add_subdirectory( webforms )
 endif(DEFINED WITH_WEBFORMS)
 
