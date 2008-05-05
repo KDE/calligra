@@ -4489,7 +4489,7 @@ void KexiMainWindowImpl::slotEditCopySpecialDataTable()
 {
 	KexiPart::Item* item = d->nav->selectedPartItem();
 	if (item)
-		exportItemAsDataTable(item);
+		copyItemToClipboardAsDataTable(item);
 }
 
 tristate KexiMainWindowImpl::copyItemToClipboardAsDataTable(KexiPart::Item* item)
