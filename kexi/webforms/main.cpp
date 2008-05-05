@@ -32,6 +32,9 @@
 // FIXME: remove this
 #include <shttpd.h>
 
+
+#include "DBModel.h"
+
 using namespace KexiWebForms;
 
 // FIXME: Testing
@@ -44,12 +47,11 @@ static void indexH(struct shttpd_arg* arg) {
 }
 
 int main(int argc, char **argv) {
-    KAboutData aboutData("kwebforms", NULL, ki18n("Web Forms Daemon"),
-                         "0.1", ki18n("Exports Kexi Forms to standard HTML pages"),
-                         KAboutData::License_GPL_V2,
-                         ki18n("(C) Copyright 2008, Lorenzo Villani"));
-
-    KCmdLineArgs::init(argc, argv, &aboutData);
+    KCmdLineArgs::init(argc, argv,
+                       new KAboutData ("kwebforms", NULL, ki18n("Web Forms Daemon"),
+                                       "0.1", ki18n("Exports Kexi Forms to standard HTML pages"),
+                                       KAboutData::License_GPL_V2,
+                                       ki18n("(C) Copyright 2008, Lorenzo Villani")));
     
     KCmdLineOptions options;
     options.add("port <port>", ki18n("Listen port"), "8080");
@@ -58,7 +60,7 @@ int main(int argc, char **argv) {
     options.add("cert <path>", ki18n("Path to SSL certificate file"));
     options.add("key <path>", ki18n("Path to SSL key file"));
     options.add("dirlist", ki18n("Enable directory listing"));
-    options.add("file", ki18n("Path to Kexi database file"));
+    options.add("file <file>", ki18n("Path to Kexi database file"));
     
     KCmdLineArgs::addCmdLineOptions(options);
 
@@ -87,12 +89,24 @@ int main(int argc, char **argv) {
         serverConfig.https = args->getOption("https");
     }
 
+    if (args->isSet("file")) {
+        serverConfig.dbPath = args->getOption("file");
+    } else {
+        kError() << "You must specifiy a Kexi file path";
+        exit(1);
+    }
+
     Server server(&serverConfig);
 
     // Setup server
     // FIXME: This code is put here just for testing
     // I need to define a better API to handle this stuff
     server.registerHandler("/", indexH);
+
+    // Test model
+    // FIXME: This code is here just for testing
+    DBModel model(serverConfig.dbPath);
+    kDebug() << "Databases: " << model.getDatabases();
 
     if (server.run())
         return 0;

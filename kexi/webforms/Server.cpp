@@ -21,7 +21,10 @@
 #include "Server.h"
 #include "ServerConfig.h"
 
+#include <QDir>
+
 #include <KDebug>
+#include <KUniqueApplication>
 
 #include <shttpd.h>
 
@@ -29,14 +32,15 @@ namespace KexiWebForms {
 
     Server::Server(ServerConfig* serverConfig) {
         ctx = NULL;
+        kDebug() << "Initializing HTTP server...";
         ctx = shttpd_init();
         if (ctx == NULL) {
-            kError() << "SHTTPD not correctly initialized, aborting";
+            kError() << "HTTP Server not correctly initialized, aborting";
             exit(1);
         }
 
         if (config == NULL) {
-            kError() << "You can't pass NULL to Server ctor";
+            kError() << "Internal error, can't retrieve configuration data!";
             exit(1);
         } else {
             config = serverConfig;
@@ -50,16 +54,26 @@ namespace KexiWebForms {
 
     bool Server::run() {
         if (ctx != NULL) {
-            kDebug() << "Initializing server...";
+            kDebug() << "Setting to listen on port " << config->ports;
             shttpd_set_option(ctx, "ports", config->ports.toStdString().c_str());
-            // TODO: Check that webroot actually exists
-            shttpd_set_option(ctx, "root", config->webRoot.toStdString().c_str());
+
+            if (QDir(config->webRoot).exists()) {
+                kDebug() << "Webroot is " << config->webRoot;
+                shttpd_set_option(ctx, "root", config->webRoot.toStdString().c_str());
+            } else {
+                kError() << "Webroot does not exist! Aborting";
+                exit(1);
+            }
 
             // SSL certificate
             if (config->https != NULL) {
                 if (config->certPath != NULL) {
-                    // FIXME: check that certificate file actually exists
-                    shttpd_set_option(ctx, "ssl_cert", config->certPath.toStdString().c_str());
+                    if (QFile(config->certPath).exists()) {
+                        shttpd_set_option(ctx, "ssl_cert", config->certPath.toStdString().c_str());
+                    } else {
+                        kError() << "Certificate file does not exist! Aborting";
+                        exit(1);
+                    }
                 }
             }
             
@@ -71,10 +85,10 @@ namespace KexiWebForms {
                 shttpd_set_option(ctx, "dir_list", "0");
             }
             
-            kDebug() << "Listening on port " << config->ports;
-            
-            for (;;)
+            for (;;) {
                 shttpd_poll(ctx, 1000);
+                KUniqueApplication::processEvents();
+            }
             
             return true;
         } else if (ctx == NULL) {
