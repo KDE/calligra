@@ -98,8 +98,9 @@ void KPrPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &l
     }
 
     node = element.namedItemNS(KoXmlNS::presentation, "notes");
-    if (node.isElement())
+    if ( node.isElement() ) {
         m_pageNotes->loadOdf(node.toElement(), loadingContext);
+    }
 }
 
 bool KPrPage::saveOdfPresentationNotes(KoPASavingContext &paContext) const

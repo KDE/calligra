@@ -37,8 +37,8 @@
 #include "KPrPage.h"
 
 KPrNotes::KPrNotes(KPrPage *page)
-    : KoShapeContainer(),
-    m_page(page)
+    : KoShapeContainer()
+    , m_page( page )
 {
     // All sizes and positions are hardcoded for now
     KoShapeFactory *factory = KoShapeRegistry::instance()->value("TextShapeID");

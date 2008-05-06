@@ -120,8 +120,9 @@ void KPrViewModeNotes::keyPressEvent(QKeyEvent *event)
 
         if (newPage != activePage) {
             KPrPage *page = dynamic_cast<KPrPage *>(newPage);
-            if (page)
+            if ( page ) {
                 updateActiveNotes(page);
+            }
         }
     }
 }
@@ -140,7 +141,7 @@ void KPrViewModeNotes::activate(KoPAViewMode *previousViewMode)
 {
     KPrPage *page = dynamic_cast<KPrPage *>(m_view->activePage());
 
-    if (page) {
+    if ( page ) {
         m_canvas->resourceProvider()->setResource(KoText::ShowTextFrames, true);
         updateActiveNotes(page);
     }
