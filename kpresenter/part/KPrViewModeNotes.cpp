@@ -35,7 +35,7 @@
 
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
-#include <KoPAPage.h>
+#include <KoPAPageBase.h>
 #include <KoPAMasterPage.h>
 #include <KoPAView.h>
 
@@ -119,10 +119,7 @@ void KPrViewModeNotes::keyPressEvent(QKeyEvent *event)
         KoPAPageBase *newPage = m_view->kopaDocument()->pageByNavigation(activePage, pageNavigation);
 
         if (newPage != activePage) {
-            KPrPage *page = dynamic_cast<KPrPage *>(newPage);
-            if ( page ) {
-                updateActiveNotes(page);
-            }
+            updateActivePage( newPage );
         }
     }
 }
@@ -139,12 +136,8 @@ void KPrViewModeNotes::wheelEvent(QWheelEvent *event, const QPointF &point)
 
 void KPrViewModeNotes::activate(KoPAViewMode *previousViewMode)
 {
-    KPrPage *page = dynamic_cast<KPrPage *>(m_view->activePage());
-
-    if ( page ) {
-        m_canvas->resourceProvider()->setResource(KoText::ShowTextFrames, true);
-        updateActiveNotes(page);
-    }
+    m_canvas->resourceProvider()->setResource(KoText::ShowTextFrames, true);
+    updateActivePage( m_view->activePage() );
 }
 
 void KPrViewModeNotes::deactivate()
@@ -153,9 +146,12 @@ void KPrViewModeNotes::deactivate()
     m_view->updateActivePage(m_view->activePage());
 }
 
-void KPrViewModeNotes::updateActiveNotes(KPrPage *page)
+void KPrViewModeNotes::updateActivePage( KoPAPageBase *page )
 {
-    KPrNotes *notes = page->pageNotes();
+    KPrPage *prPage = dynamic_cast<KPrPage *>( page );
+    if ( !prPage ) return;
+
+    KPrNotes *notes = prPage->pageNotes();
     QList<KoShape *> shapes;
     shapes << notes->textShape();
     shapes << notes->thumbnailShape();

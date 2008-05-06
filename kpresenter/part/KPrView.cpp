@@ -61,22 +61,12 @@ KPrView::~KPrView()
 
 KoViewConverter * KPrView::viewConverter()
 {
-    KPrViewModePresentation * mode = dynamic_cast<KPrViewModePresentation *>( viewMode() );
-
-    return mode ? mode->viewConverter() : KoPAView::viewConverter();
+    return viewMode()->viewConverter();
 }
 
 void KPrView::updateActivePage(KoPAPageBase *page)
 {
-    KPrViewModeNotes *notesMode = dynamic_cast<KPrViewModeNotes *>(viewMode());
-    if (notesMode) {
-        KPrPage *prPage = dynamic_cast<KPrPage *>(page);
-        if ( page ) {
-            notesMode->updateActiveNotes(prPage);
-        }
-    }
-    else
-        KoPAView::updateActivePage(page);
+    viewMode()->updateActivePage( page );
 }
 
 void KPrView::initGUI()

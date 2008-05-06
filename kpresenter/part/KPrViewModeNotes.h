@@ -25,7 +25,7 @@
 
 class KoPAView;
 class KoPACanvas;
-class KPrPage;
+class KoPAPageBase;
 
 class KPrViewModeNotes : public KoPAViewMode
 {
@@ -46,7 +46,7 @@ public:
     void activate(KoPAViewMode *previousViewMode);
     void deactivate();
 
-    void updateActiveNotes(KPrPage *page);
+    void updateActivePage( KoPAPageBase *page );
 };
 
 #endif // KPRVIEWMODENOTES_H
