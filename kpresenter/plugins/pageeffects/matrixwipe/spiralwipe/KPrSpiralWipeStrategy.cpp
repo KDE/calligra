@@ -34,10 +34,11 @@ static int getSubType(int firstLeg, bool clockwise, bool reverse)
             case 0: return !clockwise ? KPrSpiralWipeEffectFactory::ClockwiseTopLeftOut : KPrSpiralWipeEffectFactory::CounterClockwiseTopLeftOut;
             case 1: return !clockwise ? KPrSpiralWipeEffectFactory::ClockwiseTopRightOut : KPrSpiralWipeEffectFactory::CounterClockwiseBottomLeftOut;
             case 2: return !clockwise ? KPrSpiralWipeEffectFactory::ClockwiseBottomRightOut : KPrSpiralWipeEffectFactory::CounterClockwiseBottomRightOut;
-            default:
             case 3: return !clockwise ? KPrSpiralWipeEffectFactory::ClockwiseBottomLeftOut : KPrSpiralWipeEffectFactory::CounterClockwiseTopRightOut;
         }
     }
+    // not reached
+    return KPrSpiralWipeEffectFactory::ClockwiseTopLeftIn;
 }
 
 static const char * getSmilSubType(int firstLeg, bool clockwise)
