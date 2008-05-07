@@ -1,6 +1,12 @@
 [Desktop Entry]
 Name=xBase
+Name[x-test]=xxxBasexx
 Comment=xBase Migration Driver for Kexi
+Comment[ga]=Tiománaí Ascnaimh xBase le haghaidh Kexi
+Comment[pt]=Controlador de Migração de xBase do Kexi
+Comment[pt_BR]=Controlador de Migração de xBase do Kexi
+Comment[sv]=xBase-övergångsdrivrutin för Kexi
+Comment[x-test]=xxxBase Migration Driver for Kexixx
 
 X-KDE-Library=keximigrate_xbase
 X-KDE-ServiceTypes=Kexi/MigrationDriver

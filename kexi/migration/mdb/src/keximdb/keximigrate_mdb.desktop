@@ -1,6 +1,12 @@
 [Desktop Entry]
 Name=MS Access
+Name[x-test]=xxMS Accessxx
 Comment=MS Access (MDB) Migration Driver for Kexi
+Comment[ga]=Tiománaí Ascnaimh MS Access (MDB) le haghaidh Kexi
+Comment[pt]=Controlador de Migração do MS Access (MDB) para o Kexi
+Comment[pt_BR]=Controlador de Migração do MS Access (MDB) para o Kexi
+Comment[sv]=MS Access (MDB)-övergångsdrivrutin för Kexi
+Comment[x-test]=xxMS Access (MDB) Migration Driver for Kexixx
 X-KDE-Library=keximigrate_mdb
 X-KDE-ServiceTypes=Kexi/MigrationDriver
 Type=Service
