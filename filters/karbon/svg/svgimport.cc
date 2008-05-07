@@ -1462,15 +1462,15 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
     parseStyle( text, b );
     parseFont( b );
 
-    if( anchor == "middle" )
-        text->setTextAnchor( SimpleTextShape::AnchorMiddle );
-    else if( anchor == "end" )
-        text->setTextAnchor( SimpleTextShape::AnchorEnd );
-
     text->setFont( m_gc.top()->font );
     text->setBackground( m_gc.top()->fill );
     text->applyAbsoluteTransformation( m_gc.top()->matrix );
     text->setZIndex( nextZIndex() );
+
+    if( anchor == "middle" )
+        text->setTextAnchor( SimpleTextShape::AnchorMiddle );
+    else if( anchor == "end" )
+        text->setTextAnchor( SimpleTextShape::AnchorEnd );
 
     if( !b.attribute("id").isEmpty() )
         text->setName( b.attribute("id") );
@@ -1553,6 +1553,7 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
             path->clear();
             path->moveTo( QPointF( x1, y1 ) );
             path->lineTo( QPointF( x2, y2 ) );
+            path->normalize();
             obj = path;
         }
     }
