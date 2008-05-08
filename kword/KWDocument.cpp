@@ -2844,9 +2844,13 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
         QBuffer buffer( headerFooterContent );
         buffer.open( IO_WriteOnly );
         KoXmlWriter headerFooterTmpWriter( &buffer );  // TODO pass indentation level
-        QPtrListIterator<KWFrameSet> fit = framesetsIterator();
+
+        // The order we write out header, header-left, etc. is important. So, we go here
+        // the dirty way to collect them first and then flush them ordered out.
+        QMap<KWFrameSet::Info,const KWFrameSet*> tempmap;
+
         // ## This loop is duplicated in saveOasisDocumentStyles
-        for ( ; fit.current() ; ++fit ) {
+        for (QPtrListIterator<KWFrameSet> fit = framesetsIterator(); fit.current() ; ++fit ) {
             const KWFrameSet* fs = fit.current();
             if ( fs->isVisible() && // HACK to avoid saving [hidden] headers/footers framesets for now
                  !fs->isFloating() &&
@@ -2854,12 +2858,25 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
                  fs->type() == FT_TEXT &&
                  fs->isHeaderOrFooter() )
             {
+                tempmap.insert(fs->frameSetInfo(), fs);
+            }
+        }
+
+        QValueList<KWFrameSet::Info> order;
+        order << KWFrameSet::FI_FIRST_HEADER << KWFrameSet::FI_ODD_HEADER << KWFrameSet::FI_EVEN_HEADER
+              << KWFrameSet::FI_FIRST_FOOTER << KWFrameSet::FI_ODD_FOOTER << KWFrameSet::FI_EVEN_FOOTER;
+        for (uint i=0; i<order.count(); ++i) {
+            KWFrameSet::Info info = order[i];
+            if (tempmap.contains(info)) {
+                const KWFrameSet* fs = tempmap[info];
+
                 // Save content
                 headerFooterTmpWriter.startElement( fs->headerFooterTag() ); // e.g. style:header
                 static_cast<const KWTextFrameSet *>(fs)->saveOasisContent( headerFooterTmpWriter, savingContext );
                 headerFooterTmpWriter.endElement();
             }
         }
+
         // Add trailing '0'  (Qt4: remove)
         headerFooterContent.resize( headerFooterContent.size() + 1 );
         headerFooterContent[headerFooterContent.size()-1] = '\0';
