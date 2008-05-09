@@ -24,7 +24,6 @@ set(karbonui_SRCS
     dockers/KarbonStylePreviewDocker.cpp
 
     widgets/KarbonCanvas.cpp
-    widgets/vcolorslider.cc
     widgets/vgradientwidget.cc
     widgets/KarbonGradientChooser.cpp
     widgets/KarbonGradientItem.cpp
