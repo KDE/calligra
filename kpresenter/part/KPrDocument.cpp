@@ -25,13 +25,19 @@
 #include "KPrMasterPage.h"
 #include "KPrShapeApplicationData.h"
 #include "KPrFactory.h"
+#include <KoXmlNS.h>
+#include <KoShapeLoadingContext.h>
 
 KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoPADocument( parentWidget, parent, singleViewMode )
-  , m_customSlideShows(new KPrCustomSlideShows())
+, m_customSlideShows(new KPrCustomSlideShows())
 {
     setComponentData(KPrFactory::componentData(), false);
     setTemplateType( "kpresenter_template" );
+
+    KoShapeLoadingContext::addAdditionalAttributeData( KoShapeLoadingContext::AdditionalAttributeData(
+                                                       KoXmlNS::presentation, "placeholder",
+                                                       "presentation:placeholder" ) );
 }
 
 KPrDocument::~KPrDocument()
