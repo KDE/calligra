@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2008 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,7 @@
 #include <qcheckbox.h>
 
 class KexiCharacterEncodingComboBox;
+class QComboBox;
 
 //! @short CSV Options
 class KexiCSVImportOptions
@@ -32,12 +33,21 @@ class KexiCSVImportOptions
 		KexiCSVImportOptions();
 		~KexiCSVImportOptions();
 
+		//! Date format values
+		enum DateFormat {
+			AutoDateFormat = 0, //!< auto
+			DMY = 1, //!< day-month-year
+			YMD = 2, //!< year-month-day
+			MDY = 3  //!< month-day-year
+		};
+
 		bool operator== ( const KexiCSVImportOptions & opt ) const;
 		bool operator!= ( const KexiCSVImportOptions & opt ) const;
 
 		QString encoding;
-		bool defaultEncodingExplicitySet;
-		bool stripWhiteSpaceInTextValuesChecked;
+		DateFormat dateFormat;
+		bool defaultEncodingExplicitySet : 1;
+		bool stripWhiteSpaceInTextValuesChecked : 1;
 };
 
 //! @short CSV Options dialog
@@ -57,6 +67,7 @@ class KexiCSVImportOptionsDialog : public KDialogBase
 		KexiCharacterEncodingComboBox *m_encodingComboBox;
 		QCheckBox *m_chkAlwaysUseThisEncoding;
 		QCheckBox *m_chkStripWhiteSpaceInTextValues;
+		QComboBox *m_comboDateFormat;
 };
 
 #endif
