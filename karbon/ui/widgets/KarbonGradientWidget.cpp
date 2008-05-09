@@ -26,7 +26,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "vgradientwidget.h"
+#include "KarbonGradientWidget.h"
 #include "KarbonCursor.h"
 
 #include <KoUniColorDialog.h>
@@ -64,7 +64,7 @@ static unsigned char colorStop_bits[] = {
    0x7c, 0x00, 0xfe, 0x00, 0xfe, 0x00, 0xff, 0x01
 };
 
-VGradientWidget::VGradientWidget( QWidget* parent )
+KarbonGradientWidget::KarbonGradientWidget( QWidget* parent )
 : QWidget( parent ), m_currentStop( -1 ), m_checkerPainter( 4 )
 {
     // initialize the gradient with some sane values
@@ -79,22 +79,22 @@ VGradientWidget::VGradientWidget( QWidget* parent )
     setMinimumSize( 105, 35 );
 }
 
-VGradientWidget::~VGradientWidget()
+KarbonGradientWidget::~KarbonGradientWidget()
 {
 }
 
-void VGradientWidget::setStops( const QGradientStops & stops )
+void KarbonGradientWidget::setStops( const QGradientStops & stops )
 {
     m_gradient.setStops( stops );
     update();
 }
 
-QGradientStops VGradientWidget::stops() const
+QGradientStops KarbonGradientWidget::stops() const
 {
     return m_gradient.stops();
 }
 
-void VGradientWidget::paintColorStop( QPainter& p, int x, const QColor& color )
+void KarbonGradientWidget::paintColorStop( QPainter& p, int x, const QColor& color )
 {
     QBitmap bitmap = QBitmap::fromData( QSize(colorStop_width, colorStop_height), colorStop_bits );
     bitmap.setMask( bitmap );
@@ -107,7 +107,7 @@ void VGradientWidget::paintColorStop( QPainter& p, int x, const QColor& color )
     p.drawPixmap( x - 5, 1, bitmap );
 }
 
-void VGradientWidget::paintMidPoint( QPainter& p, int x )
+void KarbonGradientWidget::paintMidPoint( QPainter& p, int x )
 {
     QBitmap bitmap = QBitmap::fromData( QSize(midPoint_width, midPoint_height), midPoint_bits );
     bitmap.setMask( bitmap );
@@ -115,7 +115,7 @@ void VGradientWidget::paintMidPoint( QPainter& p, int x )
     p.drawPixmap( x - 3, 1, bitmap );
 }
 
-void VGradientWidget::paintEvent( QPaintEvent* )
+void KarbonGradientWidget::paintEvent( QPaintEvent* )
 {
     int w = width() - 4;  // available width for gradient and points
     int h = height() - 7; // available height for gradient and points
@@ -172,7 +172,7 @@ void VGradientWidget::paintEvent( QPaintEvent* )
     }
 }
 
-void VGradientWidget::mousePressEvent( QMouseEvent* e )
+void KarbonGradientWidget::mousePressEvent( QMouseEvent* e )
 {
     if( ! m_pntArea.contains( e->x(), e->y() ) )
         return;
@@ -197,7 +197,7 @@ void VGradientWidget::mousePressEvent( QMouseEvent* e )
     }
 }
 
-void VGradientWidget::mouseReleaseEvent( QMouseEvent* e )
+void KarbonGradientWidget::mouseReleaseEvent( QMouseEvent* e )
 {
     if( e->button() == Qt::RightButton && m_currentStop >= 0 )
     {
@@ -219,7 +219,7 @@ void VGradientWidget::mouseReleaseEvent( QMouseEvent* e )
     setCursor( QCursor( Qt::ArrowCursor ) );
 }
 
-void VGradientWidget::mouseDoubleClickEvent( QMouseEvent* e )
+void KarbonGradientWidget::mouseDoubleClickEvent( QMouseEvent* e )
 {
     if( ! m_pntArea.contains( e->x(), e->y() ) )
         return;
@@ -262,7 +262,7 @@ void VGradientWidget::mouseDoubleClickEvent( QMouseEvent* e )
     }
 }
 
-void VGradientWidget::mouseMoveEvent( QMouseEvent* e )
+void KarbonGradientWidget::mouseMoveEvent( QMouseEvent* e )
 {
     if( e->buttons() & Qt::RightButton )
         return;
@@ -287,4 +287,4 @@ void VGradientWidget::mouseMoveEvent( QMouseEvent* e )
     emit changed();
 }
 
-#include "vgradientwidget.moc"
+#include "KarbonGradientWidget.moc"

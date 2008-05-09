@@ -23,8 +23,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _VGRADIENTWIDGET_H_
-#define _VGRADIENTWIDGET_H_
+#ifndef KARBONGRADIENTWIDGET_H
+#define KARBONGRADIENTWIDGET_H
 
 #include <karbonui_export.h>
 #include <KoCheckerBoardPainter.h>
@@ -39,7 +39,7 @@ class QColor;
 /**
  * A widget for editing a gradients color stops.
  */
-class KARBONUI_EXPORT VGradientWidget : public QWidget
+class KARBONUI_EXPORT KarbonGradientWidget : public QWidget
 {
     Q_OBJECT
 
@@ -48,10 +48,10 @@ public:
      * Constructs a new gradient widget with the given parent
      * @param parent the gradient widgets parent
      */
-    explicit VGradientWidget( QWidget* parent = 0L );
+    explicit KarbonGradientWidget( QWidget* parent = 0L );
 
     /// Destroys the gradient widget
-    ~VGradientWidget();
+    ~KarbonGradientWidget();
 
     /**
      * Sets the gradient color stops to be edited.
@@ -92,4 +92,4 @@ private:
     KoCheckerBoardPainter m_checkerPainter;
 };
 
-#endif /* _VGRADIENTWIDGET_H_ */
+#endif // KARBONGRADIENTWIDGET_H

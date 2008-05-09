@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _VGRADIENTTABWIDGET_H_
-#define _VGRADIENTTABWIDGET_H_
+#ifndef KARBONGRADIENTTABWIDGET_H
+#define KARBONGRADIENTTABWIDGET_H
 
 #include <karbonui_export.h>
 
@@ -32,7 +32,7 @@
 #include <KoCheckerBoardPainter.h>
 
 class KComboBox;
-class VGradientWidget;
+class KarbonGradientWidget;
 class KListWidget;
 class QPushButton;
 class KarbonGradientChooser;
@@ -40,40 +40,18 @@ class KoSliderCombo;
 class KoResourceItem;
 class KColorButton;
 
-/// A widget to preview a gradient
-class KARBONUI_EXPORT VGradientPreview : public QWidget
-{
-public:
-    /// Constructs a gradient preview with the givne parent
-    explicit VGradientPreview( QWidget* parent = 0L );
-
-    /// Destroys the gradient preview
-    ~VGradientPreview();
-
-    /**
-     * Sets the gradient to preview.
-     * @param gradient the gradient to preview
-     */
-    void setGradient( const QGradient * gradient );
-
-protected:
-    virtual void paintEvent( QPaintEvent* );
-private:
-    QGradient * m_gradient; ///< the gradient to preview
-};
-
 /**
  * A tab widget for managing gradients.
  *
  * It has one tab to edit a selected gradients type, spread method and color stops.
  * Another tab contains a list with predefined gradients to choose from.
  */
-class KARBONUI_EXPORT VGradientTabWidget : public QTabWidget
+class KARBONUI_EXPORT KarbonGradientTabWidget : public QTabWidget
 {
 Q_OBJECT
 
 public:
-    enum VGradientTarget {
+    enum GradientTarget {
         StrokeGradient,
         FillGradient
     };
@@ -87,10 +65,10 @@ public:
      * @param parent the widgets parent
      * @param name the widgets name
      */
-    explicit VGradientTabWidget( QWidget* parent = 0L );
+    explicit KarbonGradientTabWidget( QWidget* parent = 0L );
 
     /// Destroys the widget
-    ~VGradientTabWidget();
+    ~KarbonGradientTabWidget();
 
     /**
      * Returns the actual selected gradient.
@@ -105,10 +83,10 @@ public:
     void setGradient( const QGradient* gradient );
 
     /// Returns the gradient target (fill/stroke)
-    VGradientTarget target();
+    GradientTarget target();
 
     /// Sets a new gradient target
-    void setTarget( VGradientTarget target );
+    void setTarget( GradientTarget target );
 
     /// Returns the gradient opacity
     double opacity() const;
@@ -139,7 +117,7 @@ protected:
 
 private:
     QWidget          *m_editTab;
-    VGradientWidget  *m_gradientWidget;
+    KarbonGradientWidget * m_gradientWidget;
     KComboBox        *m_gradientTarget;
     KComboBox        *m_gradientRepeat;
     KComboBox        *m_gradientType;
@@ -154,4 +132,4 @@ private:
     KoCheckerBoardPainter m_checkerPainter;
 };
 
-#endif /* _VGRADIENTTABWIDGET_H_ */
+#endif // KARBONGRADIENTTABWIDGET_H

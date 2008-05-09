@@ -17,15 +17,15 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KARBONGRADIENTTOOL_H_
-#define _KARBONGRADIENTTOOL_H_
+#ifndef KARBONGRADIENTTOOL_H
+#define KARBONGRADIENTTOOL_H
 
 #include <KoTool.h>
 #include <QtGui/QGradient>
 #include <QtCore/QMultiMap>
 
 class GradientStrategy;
-class VGradientTabWidget;
+class KarbonGradientTabWidget;
 class QUndoCommand;
 class KoShape;
 
@@ -65,9 +65,9 @@ private:
     QMultiMap<KoShape*,GradientStrategy*> m_gradients; ///< the list of gradient strategies
     GradientStrategy * m_currentStrategy;  ///< the current editing strategy
     GradientStrategy * m_hoverStrategy; ///< the strategy the mouse hovers over
-    VGradientTabWidget * m_gradientWidget;
+    KarbonGradientTabWidget * m_gradientWidget;
     QUndoCommand * m_currentCmd;
     int m_oldSnapStrategies; ///< the previously enables snap strategies
 };
 
-#endif // _KARBONGRADIENTTOOL_H_
+#endif // KARBONGRADIENTTOOL_H

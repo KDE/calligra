@@ -24,10 +24,10 @@ set(karbonui_SRCS
     dockers/KarbonStylePreviewDocker.cpp
 
     widgets/KarbonCanvas.cpp
-    widgets/vgradientwidget.cc
+    widgets/KarbonGradientWidget.cpp
     widgets/KarbonGradientChooser.cpp
     widgets/KarbonGradientItem.cpp
-    widgets/vgradienttabwidget.cc
+    widgets/KarbonGradientTabWidget.cpp
     widgets/KarbonStylePreview.cpp
     widgets/KarbonStyleButtonBox.cpp
     widgets/KarbonPatternChooser.cpp

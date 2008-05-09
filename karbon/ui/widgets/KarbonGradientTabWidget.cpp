@@ -19,8 +19,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "vgradienttabwidget.h"
-#include "vgradientwidget.h"
+#include "KarbonGradientTabWidget.h"
+#include "KarbonGradientWidget.h"
 #include "KarbonGradientItem.h"
 #include "KarbonGradientChooser.h"
 #include "KarbonGradientHelper.h"
@@ -156,96 +156,7 @@ void transferGradientPosition( const QGradient * srcGradient, QGradient * dstGra
     }
 }
 
-VGradientPreview::VGradientPreview( QWidget* parent )
-    : QWidget( parent ), m_gradient( 0 )
-{
-
-    QPalette p = palette();
-    p.setBrush(QPalette::Window, QBrush(Qt::NoBrush));
-    // TODO: check if this is equivalent with the line below
-    // setBackgroundMode( Qt::NoBackground );
-    setMinimumSize( 70, 70 );
-}
-
-VGradientPreview::~VGradientPreview()
-{
-    delete m_gradient;
-}
-
-void VGradientPreview::setGradient( const QGradient *gradient )
-{
-    delete m_gradient;
-    m_gradient = KarbonGradientHelper::cloneGradient( gradient );
-
-    switch( m_gradient->type() )
-    {
-        case QGradient::LinearGradient:
-        {
-            QLinearGradient * g = static_cast<QLinearGradient*>( m_gradient );
-            g->setStart( QPointF( 0.0, 0.0 ) );
-            g->setFinalStop( QPointF( width(), 0.0 ) );
-            break;
-        }
-        case QGradient::RadialGradient:
-        {
-            QRadialGradient * g = static_cast<QRadialGradient*>( m_gradient );
-            g->setCenter( QPointF( 0.5 * width(), 0.5 * height() ) );
-            g->setFocalPoint( QPointF( 0.5 * width(), 0.5 * height() ) );
-            g->setRadius( 0.3 * width() );
-            break;
-        }
-        case QGradient::ConicalGradient:
-        {
-            QConicalGradient * g = static_cast<QConicalGradient*>( m_gradient );
-            g->setCenter( QPointF( 0.5 * width(), 0.5 * height() ) );
-            g->setAngle( 0.0 );
-            break;
-        }
-        default:
-            delete m_gradient;
-            m_gradient = 0;
-    }
-
-    update();
-}
-
-void VGradientPreview::paintEvent( QPaintEvent* )
-{
-    QPainter painter( this );
-
-    QPixmap checker(8, 8);
-    QPainter p(&checker);
-    p.fillRect(0, 0, 4, 4, Qt::lightGray);
-    p.fillRect(4, 0, 4, 4, Qt::darkGray);
-    p.fillRect(0, 4, 4, 4, Qt::darkGray);
-    p.fillRect(4, 4, 4, 4, Qt::lightGray);
-    p.end();
-
-    QRect rect = QRect( 0, 0, width(), height() );
-
-    // draw checker board
-    painter.fillRect( rect, QBrush(checker));
-
-    if( ! m_gradient )
-        return;
-
-    painter.setBrush( QBrush( *m_gradient ) );
-    painter.drawRect( rect );
-
-    painter.setPen( palette().light().color() );
-    // light frame around widget
-    QRect frame( 1, 1, width()-2, height()-2 );
-    painter.drawRect( frame );
-
-    painter.setPen( palette().dark().color() );
-    painter.drawLine( QPointF( 0, height() - 1 ), QPointF( 0, 0 ) );
-    painter.drawLine( QPointF( 0, 0 ), QPointF( width() - 1, 0 ) );
-    painter.drawLine( QPointF( width() - 2, 2 ), QPointF( width() - 2, height() - 2 ) );
-    painter.drawLine( QPointF( width() - 2, height() - 2 ), QPointF( 2, height() - 2 ) );
-
-}
-
-VGradientTabWidget::VGradientTabWidget( QWidget* parent )
+KarbonGradientTabWidget::KarbonGradientTabWidget( QWidget* parent )
     : QTabWidget( parent ), m_gradient( 0 )
     , m_gradOpacity( 1.0 ), m_stopIndex(-1), m_checkerPainter( 4 )
 {
@@ -259,12 +170,12 @@ VGradientTabWidget::VGradientTabWidget( QWidget* parent )
     updateUI();
 }
 
-VGradientTabWidget::~VGradientTabWidget()
+KarbonGradientTabWidget::~KarbonGradientTabWidget()
 {
     delete m_gradient;
 }
 
-void VGradientTabWidget::setupUI()
+void KarbonGradientTabWidget::setupUI()
 {
     m_editTab = new QWidget();
     QGridLayout* editLayout = new QGridLayout( m_editTab );
@@ -291,7 +202,7 @@ void VGradientTabWidget::setupUI()
     m_gradientTarget->setCurrentIndex( FillGradient );
     editLayout->addWidget( m_gradientTarget, row, 1 );
 
-    m_gradientWidget = new VGradientWidget( m_editTab );
+    m_gradientWidget = new KarbonGradientWidget( m_editTab );
     m_gradientWidget->setStops( m_gradient->stops() );
     editLayout->addWidget( m_gradientWidget, ++row, 0, 1, 2 );
 
@@ -330,7 +241,7 @@ void VGradientTabWidget::setupUI()
     addTab( predefTab, i18n( "Predefined Gradients" ) );
 }
 
-void VGradientTabWidget::setupConnections()
+void KarbonGradientTabWidget::setupConnections()
 {
     connect( m_gradientType, SIGNAL( activated( int ) ), this, SLOT( combosChange( int ) ) );
     connect( m_gradientRepeat, SIGNAL( activated( int ) ), this, SLOT( combosChange( int ) ) );
@@ -342,7 +253,7 @@ void VGradientTabWidget::setupConnections()
     connect( m_stopColor, SIGNAL(changed(const QColor&)), this, SLOT(stopChanged()) );
 }
 
-void VGradientTabWidget::blockChildSignals( bool block )
+void KarbonGradientTabWidget::blockChildSignals( bool block )
 {
     m_gradientType->blockSignals( block );
     m_gradientRepeat->blockSignals( block );
@@ -354,7 +265,7 @@ void VGradientTabWidget::blockChildSignals( bool block )
     m_stopOpacity->blockSignals( block );
 }
 
-void VGradientTabWidget::updateUI()
+void KarbonGradientTabWidget::updateUI()
 {
     blockChildSignals( true );
 
@@ -397,12 +308,12 @@ void VGradientTabWidget::updateUI()
     blockChildSignals( false );
 }
 
-double VGradientTabWidget::opacity() const
+double KarbonGradientTabWidget::opacity() const
 {
     return m_opacity->value() / 100.0;
 }
 
-void VGradientTabWidget::setOpacity( double opacity )
+void KarbonGradientTabWidget::setOpacity( double opacity )
 {
     if( opacity < 0.0 || opacity > 1.0 )
         return;
@@ -411,18 +322,18 @@ void VGradientTabWidget::setOpacity( double opacity )
     m_opacity->setValue( int(opacity*100.0) );
 }
 
-void VGradientTabWidget::setStopIndex( int index )
+void KarbonGradientTabWidget::setStopIndex( int index )
 {
     m_stopIndex = index;
     updateUI();
 }
 
-const QGradient * VGradientTabWidget::gradient()
+const QGradient * KarbonGradientTabWidget::gradient()
 {
     return m_gradient;
 }
 
-void VGradientTabWidget::setGradient( const QGradient* gradient )
+void KarbonGradientTabWidget::setGradient( const QGradient* gradient )
 {
     delete m_gradient;
     m_gradient = KarbonGradientHelper::cloneGradient( gradient );
@@ -430,17 +341,17 @@ void VGradientTabWidget::setGradient( const QGradient* gradient )
     updateUI();
 }
 
-VGradientTabWidget::VGradientTarget VGradientTabWidget::target()
+KarbonGradientTabWidget::GradientTarget KarbonGradientTabWidget::target()
 {
-    return (VGradientTarget)m_gradientTarget->currentIndex();
+    return (GradientTarget)m_gradientTarget->currentIndex();
 }
 
-void VGradientTabWidget::setTarget( VGradientTarget target )
+void KarbonGradientTabWidget::setTarget( GradientTarget target )
 {
     m_gradientTarget->setCurrentIndex( target );
 }
 
-void VGradientTabWidget::combosChange( int )
+void KarbonGradientTabWidget::combosChange( int )
 {
     QGradient * newGradient = 0;
 
@@ -507,7 +418,7 @@ void VGradientTabWidget::combosChange( int )
     emit changed();
 }
 
-void VGradientTabWidget::opacityChanged( double value, bool final )
+void KarbonGradientTabWidget::opacityChanged( double value, bool final )
 {
     Q_UNUSED(final);
 
@@ -524,7 +435,7 @@ void VGradientTabWidget::opacityChanged( double value, bool final )
     emit changed();
 }
 
-void VGradientTabWidget::addGradientToPredefs()
+void KarbonGradientTabWidget::addGradientToPredefs()
 {
     KoResourceServer<KoAbstractGradient>* server = KoResourceServerProvider::instance()->gradientServer();
 
@@ -548,7 +459,7 @@ void VGradientTabWidget::addGradientToPredefs()
         delete g;
 }
 
-void VGradientTabWidget::changeToPredef( QTableWidgetItem * item )
+void KarbonGradientTabWidget::changeToPredef( QTableWidgetItem * item )
 {
     if( ! item )
         return;
@@ -577,13 +488,13 @@ void VGradientTabWidget::changeToPredef( QTableWidgetItem * item )
     emit changed();
 }
 
-void VGradientTabWidget::stopsChanged()
+void KarbonGradientTabWidget::stopsChanged()
 {
     m_gradient->setStops( m_gradientWidget->stops() );
     emit changed();
 }
 
-void VGradientTabWidget::stopChanged()
+void KarbonGradientTabWidget::stopChanged()
 {
     QColor c = m_stopColor->color();
     c.setAlphaF( m_stopOpacity->value() / 100.0 );
@@ -596,5 +507,5 @@ void VGradientTabWidget::stopChanged()
     }
 }
 
-#include "vgradienttabwidget.moc"
+#include "KarbonGradientTabWidget.moc"
 
