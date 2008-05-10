@@ -18,6 +18,17 @@ Legend:
 TODO: fix displaying default values in comboboxes (form and tableview)
 TODO: use KCompletionBox in (editable/noneditable) comboboxes
 
+2008-05-09
+CSV Import Dialog
+(Kexi 1.x)
+- fix setting data types for columns, previously text type was used instead
+- fix autodetecting and importing of floating-point values in "E scientific notation"
+- output null values to fields if value coversion failed (e.g. text-to-date); 
+  without this subsequent values are written into the wrong columns
+- added "Date format" import option with possible values: auto, DMY, YMD, MDY
+BUG: 147809
+BUG: 151478
+2.0: merged
 
 2008-05-05
 Kexi 1.x: execute 'copy to clipboard' instead of 'copy to file' in 'edit->copy special' menu
