@@ -73,7 +73,7 @@ KoShape *KPrNotes::textShape()
 
 KoShape *KPrNotes::thumbnailShape()
 {
-    KoImageData *imageData = new KoImageData(new KoImageCollection());
+    KoImageData *imageData = new KoImageData(new KoImageCollection(),"");
     imageData->setImage(createPageThumbnail());
     m_thumbnailShape->setUserData(imageData);
     return m_thumbnailShape;
