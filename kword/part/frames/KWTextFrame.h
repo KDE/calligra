@@ -41,7 +41,7 @@ public:
      */
     KWTextFrame(KoShape *shape, KWTextFrameSet *parent);
     ~KWTextFrame();
-
+    
     /**
      * Set the sorting Id that influences the sorting order of the text frames.
      * Text frames have an order in which they are used to flow the text in,

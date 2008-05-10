@@ -21,34 +21,13 @@
 
 #include "KWFrame.h"
 
-#include <KoImageData.h>
-
 /**
  * This frame type will hold images.
- * A unique feature of this image frame is that you can set a rendering-quality for the image
- * that will allow high-speed rendering without loss of quality for actual processing like
- * printing.
  */
 class KWORD_EXPORT KWImageFrame : public KWFrame {
 public:
-     /// the rendering-quality of the image
-    enum ImageQuality {
-        /* Remember to keep the ordering of this enum the same as the ordering in the KoImageData class! */
-        LowQuality,     ///< see KoImageData::LowQuality
-        MediumQuality,  ///< see KoImageData::MediumQuality
-        HighQuality,    ///< see KoImageData::HighQuality
-        EditableQuality 
-    };
-
     KWImageFrame(KWFrameSet *parent, KoShape *imageshape = 0);
     ~KWImageFrame();
-
-    void setImageQuality(ImageQuality quality);
-    ImageQuality imageQuality() const;
-
-private:
-    bool m_fullKritaShape;
-    KWImageFrame::ImageQuality  m_quality;
 };
 
 #endif

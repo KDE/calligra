@@ -64,4 +64,3 @@ void KWTextFrame::autoShrink(double requestedHeight) {
     shape()->setSize(QSizeF(size.width(), qMax(requestedHeight, m_minimumFrameHeight)));
     m_lastHeight = size.height();
 }
-

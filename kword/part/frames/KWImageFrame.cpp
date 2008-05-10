@@ -43,45 +43,9 @@ static KoShape *createShape() {
 }
 
 KWImageFrame::KWImageFrame(KWFrameSet *parent, KoShape *imageshape)
-    : KWFrame(imageshape ? imageshape : createShape(), parent),
-    m_fullKritaShape(false)
+    : KWFrame(imageshape ? imageshape : createShape(), parent)
 {
-    //m_quality = static_cast<KWImageFrame::ImageQuality> (m_imageData.imageQuality());
 }
 
 KWImageFrame::~KWImageFrame() {
 }
-
-void KWImageFrame::setImageQuality(KWImageFrame::ImageQuality quality) {
-/*    if(m_quality == quality)
-        return;
-    if(quality == EditableQuality) {
-        // create and initialize a krita shape.
-        KoShapeFactory *factory = KoShapeRegistry::instance()->value("KritaShape");
-        if(factory) {
-            KoShape *shape = factory->createDefaultShape( 0 );
-            shape->setUserData(new KoImageData(m_imageData));
-            setShape(shape);
-            m_imageData.setImageQuality(KoImageData::NoPreviewImage); // flush pixmap from imageData object.
-        }
-        else {
-            kWarning() << "Krita not installed; keeping preview resolution\n";
-            return;
-        }
-    }
-    else {
-        if(m_quality == EditableQuality)
-            setShape(createShape(m_imageData));
-        m_imageData.setImageQuality( static_cast<KoImageData::ImageQuality>(quality));
-    }
-    m_quality = quality;
-*/
-}
-
-KWImageFrame::ImageQuality KWImageFrame::imageQuality() const {
-    if(m_quality == EditableQuality)
-        return EditableQuality;
-return m_quality;
-//    return static_cast<KWImageFrame::ImageQuality> (m_imageData.imageQuality());
-}
-
