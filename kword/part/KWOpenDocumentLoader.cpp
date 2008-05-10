@@ -73,7 +73,7 @@ class KWSharedLoadingData : public KoTextSharedLoadingData
                   each time and assume that we only need to append content anyway?
             */
 
-            
+            /*TEMP HACK
             if(dynamic_cast<KoImageData*>(shape->userData())) {
                 QString anchortype = shape->additionalAttribute("anchor-type");
                 KWFrameSet* fs = new KWFrameSet();
@@ -91,7 +91,7 @@ class KWSharedLoadingData : public KoTextSharedLoadingData
                 Q_ASSERT(layout->inlineObjectTextManager());
                 layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
             }
-            
+            */
         }
     private:
         KWOpenDocumentLoader* m_loader;
