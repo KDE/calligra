@@ -42,8 +42,8 @@ static KoShape *createShape() {
     return new DummyShape();
 }
 
-KWImageFrame::KWImageFrame(KWFrameSet *parent)
-    : KWFrame(createShape(), parent),
+KWImageFrame::KWImageFrame(KWFrameSet *parent, KoShape *imageshape)
+    : KWFrame(imageshape ? imageshape : createShape(), parent),
     m_fullKritaShape(false)
 {
     //m_quality = static_cast<KWImageFrame::ImageQuality> (m_imageData.imageQuality());

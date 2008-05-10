@@ -40,7 +40,7 @@ public:
         EditableQuality 
     };
 
-    KWImageFrame(KWFrameSet *parent);
+    KWImageFrame(KWFrameSet *parent, KoShape *imageshape = 0);
     ~KWImageFrame();
 
     void setImageQuality(ImageQuality quality);

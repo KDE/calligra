@@ -44,7 +44,7 @@
 #include <KoTextDocumentLayout.h>
 #include <KoShapeLoadingContext.h>
 #include <KoInlineTextObjectManager.h>
-#include <KoTextFrameLoader.h>
+//#include <KoTextFrameLoader.h>
 #include <KWPage.h>
 #include <KoProperties.h>
 #include <KoStyleManager.h>
@@ -56,6 +56,48 @@
 #include <kdebug.h>
 #include <QTextBlock>
 
+class KWSharedLoadingData : public KoTextSharedLoadingData
+{
+    public:
+        KWSharedLoadingData(KWOpenDocumentLoader* loader) : KoTextSharedLoadingData(), m_loader(loader) {}
+    protected:
+        virtual void shapeInserted(KoShape* shape) {
+            kDebug()<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+
+            /*TODO
+                - shape can be anything, not only an image-shape but with the current KWFrame-design
+                  we need to special case them, or? well, probably it would be wise to refactor
+                  the KWFrame+KWFrameSet logic here...
+                - we also need to pass the used QTextCursor around or even better the frameset itself
+                  to know in what KWFrameSet we are atm. Should we use the DataCenter for it or
+                  how are such things done within flake?
+            */
+
+            /*
+            if(dynamic_cast<KoImageData*>(shape->userData())) {
+                QString anchortype = shape->additionalAttribute("anchor-type");
+                KWFrameSet* fs = new KWFrameSet();
+                fs->setName("My FrameSet");
+
+                KWImageFrame *imageFrame = new KWImageFrame(fs, shape);
+                m_loader->document()->addFrameSet(fs);
+
+                KoTextAnchor *anchor = new KoTextAnchor(shape);
+                KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
+                Q_ASSERT(textShapeData);
+                QTextCursor cursor( textShapeData->document() );
+                KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> ( cursor.block().document()->documentLayout() );
+                Q_ASSERT(layout);
+                Q_ASSERT(layout->inlineObjectTextManager());
+                layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
+            }
+            */
+        }
+    private:
+        KWOpenDocumentLoader* m_loader;
+};
+
+#if 0
 /**
 * The KWOpenDocumentFrameLoader class implements a KoTextFrameLoader to
 * handle loading of frames (e.g. images) within KWord.
@@ -236,6 +278,7 @@ class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextF
     private:
         KWOpenDocumentLoader* m_loader;
 };
+#endif
 
 /// \internal d-pointer class.
 class KWOpenDocumentLoader::Private
@@ -247,8 +290,6 @@ class KWOpenDocumentLoader::Private
         QString currentMasterPage;
         /// Current KWFrameSet name.
         QString currentFramesetName;
-        /// The KWOpenDocumentFrameLoader class handles loading of frames/images.
-        KWOpenDocumentFrameLoader* frameLoader;
 };
 
 KWOpenDocumentLoader::KWOpenDocumentLoader(KWDocument *document)
@@ -256,12 +297,10 @@ KWOpenDocumentLoader::KWOpenDocumentLoader(KWDocument *document)
 , d(new Private())
 {
     d->document = document;
-    d->frameLoader = 0;
     connect(this, SIGNAL(sigProgress(int)), d->document, SIGNAL(sigProgress(int)));
 }
 
 KWOpenDocumentLoader::~KWOpenDocumentLoader() {
-    delete d->frameLoader; d->frameLoader = 0;
     delete d;
 }
 
@@ -304,14 +343,8 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
     KoShapeLoadingContext sc( odfContext, d->document );
 
     // Load all styles before the corresponding paragraphs try to use them!
-    class KWSharedLoadingData : public KoTextSharedLoadingData {
-        protected:
-            virtual void shapeInserted(KoShape* shape) {
-                kDebug()<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
-            }
-    };
     //KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
-    KWSharedLoadingData * sharedData = new KWSharedLoadingData();
+    KWSharedLoadingData * sharedData = new KWSharedLoadingData(this);
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>( d->document->dataCenterMap()["StyleManager"] );
     Q_ASSERT( styleManager );
     sharedData->loadOdfStyles( odfContext, styleManager, true );
@@ -451,8 +484,8 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
 
     // Set the KWOpenDocumentFrameLoader which implements the KoTextFrameLoader to
     // handle loading of frames (e.g. images) within KWord.
-    Q_ASSERT(! d->frameLoader);
-    d->frameLoader = new KWOpenDocumentFrameLoader(this);
+    //Q_ASSERT(! d->frameLoader);
+    //d->frameLoader = new KWOpenDocumentFrameLoader(this);
 
     // The KoTextShapeData does contain the data for our TextShape
     KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
@@ -486,8 +519,8 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
     //d->document->setDefaultPageLayout( KoPageLayout::standardLayout() );
 #endif
 
-    delete d->frameLoader;
-    d->frameLoader = 0;
+    //delete d->frameLoader;
+    //d->frameLoader = 0;
 
     kDebug(32001) <<"========================> KWOpenDocumentLoader::load END";
     emit sigProgress(100);
