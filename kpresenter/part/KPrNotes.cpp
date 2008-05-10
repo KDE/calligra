@@ -45,6 +45,7 @@ KPrNotes::KPrNotes(KPrPage *page)
     Q_ASSERT(factory);
     m_textShape = factory->createDefaultShape(0);
     m_textShape->setLocked(true);
+    m_textShape->setAddtionalAttribute( "presentation:class", "notes" );
     m_pageLayout = KoPageLayout::standardLayout();
     m_textShape->setPosition(QPointF(62.22, 374.46));
     m_textShape->setSize(QSizeF(489.57, 356.37));
@@ -53,6 +54,7 @@ KPrNotes::KPrNotes(KPrPage *page)
     Q_ASSERT(factory);
     m_thumbnailShape = factory->createDefaultShape(0);
     m_thumbnailShape->setLocked(true);
+    m_thumbnailShape->setAddtionalAttribute( "presentation:class", "page" );
     m_thumbnailShape->setPosition(QPointF(108.00, 60.18));
     m_thumbnailShape->setSize(QSizeF(396.28, 296.96));
 
@@ -82,7 +84,9 @@ void KPrNotes::saveOdf(KoShapeSavingContext &context) const
     KoXmlWriter *writer = &context.xmlWriter();
     writer->startElement("presentation:notes");
 
+    context.addOption( KoShapeSavingContext::PresentationShape );
     m_textShape->saveOdf(context);
+    context.removeOption( KoShapeSavingContext::PresentationShape );
     writer->startElement("draw:page-thumbnail");
     m_thumbnailShape->saveOdfFrameAttributes(context);
     writer->addAttribute("draw:page-number", static_cast<KoPASavingContext &>(context).page());
