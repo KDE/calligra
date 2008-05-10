@@ -23,7 +23,6 @@
 
 #include "frames/KWImageFrame.h"
 
-#include <QMap>
 #include <QRectF>
 
 class KWView;
@@ -48,7 +47,6 @@ protected:
 private:
     KWDocument *m_document;
     bool m_clipToPage;
-    QMap<KWImageFrame*, KWImageFrame::ImageQuality> m_originalImages;
     QRectF m_currentPage;
 };
 
