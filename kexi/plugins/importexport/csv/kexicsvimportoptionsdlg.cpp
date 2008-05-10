@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2008 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,8 +24,8 @@
 #include <qlayout.h>
 #include <qtextcodec.h>
 #include <qcheckbox.h>
-//Added by qt3to4:
-#include <Q3GridLayout>
+#include <qgroupbox.h>
+#include <qgridlayout.h>
 
 #include <kapplication.h>
 #include <kconfig.h>
@@ -33,6 +33,29 @@
 #include <klocale.h>
 #include <kglobal.h>
 #include <kcharsets.h>
+
+KexiCSVImportOptions::DateFormat dateFormatFromString( const QString& s )
+{
+	QString str( s.toLower().trimmed() );
+	if (str == "dmy")
+		return KexiCSVImportOptions::DMY;
+	if (str == "ymd")
+		return KexiCSVImportOptions::YMD;
+	if (str == "mdy")
+		return KexiCSVImportOptions::MDY;
+	return KexiCSVImportOptions::AutoDateFormat;
+}
+
+QString dateFormatToString( KexiCSVImportOptions::DateFormat format )
+{
+	switch (format) {
+	case KexiCSVImportOptions::DMY: return "DMY";
+	case KexiCSVImportOptions::YMD: return "YMD";
+	case KexiCSVImportOptions::MDY: return "MDY";
+	default: break;
+	}
+	return QString::null;
+}
 
 KexiCSVImportOptions::KexiCSVImportOptions()
 {
@@ -44,6 +67,8 @@ KexiCSVImportOptions::KexiCSVImportOptions()
 	}
 	else
 		defaultEncodingExplicitySet = true;
+
+	dateFormat = dateFormatFromString( importExportGroup.readEntry("DateFormatWhenImportingCSVFiles") );
 
 	trimmedInTextValuesChecked 
 		= importExportGroup.readEntry("StripBlanksOffOfTextValuesWhenImportingCSVFiles", true);
@@ -57,7 +82,8 @@ bool KexiCSVImportOptions::operator== ( const KexiCSVImportOptions & opt ) const
 {
 	return defaultEncodingExplicitySet==opt.defaultEncodingExplicitySet
 		&& trimmedInTextValuesChecked==opt.trimmedInTextValuesChecked
-		&& encoding==opt.encoding;
+		&& encoding==opt.encoding
+		&& dateFormat==opt.dateFormat;
 }
 
 bool KexiCSVImportOptions::operator!= ( const KexiCSVImportOptions & opt ) const
@@ -79,35 +105,47 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
 	QWidget *plainPage = new QWidget(this);
 	setMainWidget(plainPage);
 	
-	Q3GridLayout *lyr = new Q3GridLayout( plainPage, 5, 3, 
-		KDialog::marginHint(), KDialog::spacingHint());
+	QGridLayout *lyr = new QGridLayout( plainPage, 4, 3, 
+		0, KDialog::spacingHint());
 
-	m_encodingComboBox = new KexiCharacterEncodingComboBox(plainPage, options.encoding);
-	lyr->addWidget( m_encodingComboBox, 0, 1 );
+	QGroupBox* textEncodingGroupBox = new QGroupBox( i18n("Text encoding"), plainPage );
+	lyr->addMultiCellWidget( textEncodingGroupBox, 0, 0, 0, 1 );
+	QVBoxLayout* textEncodingGroupBoxLyr = new QVBoxLayout( textEncodingGroupBox, KDialog::spacingHint(), KDialog::spacingHint() );
+	textEncodingGroupBoxLyr->addItem( new QSpacerItem( 20, 15, QSizePolicy::Fixed, QSizePolicy::Fixed ) );
 
-	QLabel* lbl = new QLabel( m_encodingComboBox, i18n("Text encoding:"), plainPage);
-	lyr->addWidget( lbl, 0, 0 );
+	m_encodingComboBox = new KexiCharacterEncodingComboBox(textEncodingGroupBox, options.encoding);
+	textEncodingGroupBoxLyr->addWidget( m_encodingComboBox );
 
-	lyr->addItem( new QSpacerItem( 
-		20, KDialog::spacingHint(), QSizePolicy::Fixed, QSizePolicy::Fixed ), 2, 1 );
-	lyr->addItem( new QSpacerItem(
-		121, KDialog::spacingHint(), QSizePolicy::Expanding, QSizePolicy::Minimum ), 0, 2 );
+	lyr->addItem( new QSpacerItem( 20, KDialog::spacingHint(), QSizePolicy::Expanding, QSizePolicy::Minimum ), 0, 2 );
 
 	m_chkAlwaysUseThisEncoding = new QCheckBox(
-		i18n("Always use this encoding when importing CSV data files"), plainPage);
-	lyr->addWidget( m_chkAlwaysUseThisEncoding, 1, 1 );
+		i18n("Always use this encoding when importing CSV data files"), textEncodingGroupBox);
+	textEncodingGroupBoxLyr->addWidget( m_chkAlwaysUseThisEncoding );
+
+	m_comboDateFormat = new QComboBox( plainPage );
+	m_comboDateFormat->setName( "m_comboDateFormat" );
+	m_comboDateFormat->insertItem( i18n("Date format: Auto", "Auto") );
+	QString year( i18n("year") ), month( i18n("month") ), day( i18n("day") );
+	QString mask( i18n("\"month, year, day\" mask", "%1, %2, %3 (e.g. %4-%5-%6)") );
+	m_comboDateFormat->insertItem( mask.arg(day).arg(month).arg(year).arg(30).arg(12).arg(2008) );
+	m_comboDateFormat->insertItem( mask.arg(year).arg(month).arg(day).arg(2008).arg(12).arg(30) );
+	m_comboDateFormat->insertItem( mask.arg(month).arg(day).arg(year).arg(12).arg(30).arg(2008) );
+	lyr->addWidget( m_comboDateFormat, 1, 1 );
+
+	QLabel* lblDateFormat = new QLabel( m_comboDateFormat, i18n("Date format:"), plainPage);
+	lyr->addWidget( lblDateFormat, 1, 0 );
 
 	m_chkStripWhiteSpaceInTextValues = new QCheckBox(
 		i18n("Strip leading and trailing blanks off of text values"), plainPage);
-	lyr->addWidget( m_chkStripWhiteSpaceInTextValues, 3, 1 );
-	lyr->addItem( new QSpacerItem(
-		20, KDialog::spacingHint(), QSizePolicy::Minimum, QSizePolicy::Expanding ), 4, 1 );
+	lyr->addMultiCellWidget( m_chkStripWhiteSpaceInTextValues, 2, 2, 0, 1 );
+	lyr->addItem( new QSpacerItem( 30, KDialog::spacingHint(), QSizePolicy::Minimum, QSizePolicy::Expanding ), 3, 0 );
 
 	//update widgets
 	if (options.defaultEncodingExplicitySet) {
 		m_encodingComboBox->setSelectedEncoding(options.encoding);
 		m_chkAlwaysUseThisEncoding->setChecked(true);
 	}
+	m_comboDateFormat->setCurrentItem( (int)options.dateFormat );
 	m_chkStripWhiteSpaceInTextValues->setChecked(options.trimmedInTextValuesChecked);
 
 	adjustSize();
@@ -134,6 +172,13 @@ void KexiCSVImportOptionsDialog::accept()
 			m_encodingComboBox->selectedEncoding());
 	else
 		importExportGroup.deleteEntry("DefaultEncodingForImportingCSVFiles");
+
+	const KexiCSVImportOptions::DateFormat dateFormat 
+		= (KexiCSVImportOptions::DateFormat)m_comboDateFormat->currentItem();
+	if (dateFormat == KexiCSVImportOptions::AutoDateFormat)
+		importExportGroup.deleteEntry("DateFormatWhenImportingCSVFiles");
+	else
+		importExportGroup.writeEntry("DateFormatWhenImportingCSVFiles", dateFormatToString( dateFormat ));
 
 	importExportGroup.writeEntry("StripBlanksOffOfTextValuesWhenImportingCSVFiles", 
 		m_chkStripWhiteSpaceInTextValues->isChecked());

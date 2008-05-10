@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2008 Jaroslaw Staniek <js@iidea.pl>
 
    This work is based on kspread/dialogs/kspread_dlg_csv.cc
    and will be merged back with KOffice libraries.
@@ -185,7 +185,7 @@ class KexiCSVImportDialog : public KDialog
 		//! (only for numeric type)
 		QVector< QList<int>* > m_uniquenessTest;
 
-		QRegExp m_dateRegExp, m_timeRegExp1, m_timeRegExp2, m_fpNumberRegExp;
+		QRegExp m_dateRegExp, m_timeRegExp1, m_timeRegExp2, m_fpNumberRegExp1, m_fpNumberRegExp2;
 		Q3ValueVector<QString> m_typeNames, m_columnNames;
 		QBitArray m_changedColumnNames;
 		bool m_columnsAdjusted : 1; //!< to call adjustColumn() only once

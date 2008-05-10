@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2008 Jaroslaw Staniek <js@iidea.pl>
 
    This work is based on kspread/dialogs/kspread_dlg_csv.cc
    and will be merged back with KOffice libraries.
@@ -317,7 +317,9 @@ if ( m_mode == Clipboard )
 	m_dateRegExp = QRegExp("(\\d{1,4})([/\\-\\.])(\\d{1,2})([/\\-\\.])(\\d{1,4})");
 	m_timeRegExp1 = QRegExp("(\\d{1,2}):(\\d{1,2}):(\\d{1,2})");
 	m_timeRegExp2 = QRegExp("(\\d{1,2}):(\\d{1,2})");
-	m_fpNumberRegExp = QRegExp("[\\-]{0,1}\\d*[,\\.]\\d+");
+	m_fpNumberRegExp1 = QRegExp("[\\-]{0,1}\\d*[,\\.]\\d+");
+	// E notation, e.g. 0.1e2, 0.1e+2, 0.1e-2, 0.1E2, 0.1E+2, 0.1E-2
+	m_fpNumberRegExp2 = QRegExp("[\\-]{0,1}\\d*[,\\.]\\d+[Ee][+-]{0,1}\\d+");
 	QString caption( i18n("Open CSV Data File") );
 
 	if (m_mode == File) {
@@ -1006,9 +1008,7 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
 		//detect type because it's 1st row or all prev. rows were not text
 		//-FP number? (trying before "number" type is a must)
 		if (!found && (row==1 || type==_NUMBER_TYPE || type==_FP_NUMBER_TYPE || type==_NO_TYPE_YET)) {
-			bool ok = text.isEmpty() || m_fpNumberRegExp.exactMatch(text);
-			//if (!ok)
-			//	text.toDouble(&ok);
+			bool ok = text.isEmpty() || m_fpNumberRegExp1.exactMatch(text) || m_fpNumberRegExp2.exactMatch(text);
 			if (ok && (row==1 || type==_NUMBER_TYPE || type==_FP_NUMBER_TYPE || type==_NO_TYPE_YET)) {
 				m_detectedTypes[col]=_FP_NUMBER_TYPE;
 				found = true; //yes
@@ -1096,13 +1096,22 @@ bool KexiCSVImportDialog::parseDate(const QString& text, QDate& date)
 	//dddd - dd - dddd
 	//1    2 3  4 5    <- pos
 	const int d1 = m_dateRegExp.cap(1).toInt(), d3 = m_dateRegExp.cap(3).toInt(), d5 = m_dateRegExp.cap(5).toInt();
-	if (m_dateRegExp.cap(2)=="/") //probably separator for american format mm/dd/yyyy
-		date = QDate(d5, d1, d3);
-	else {
-		if (d5 > 31) //d5 == year
-			date = QDate(d5, d3, d1);
-		else //d1 == year
-			date = QDate(d1, d3, d5);
+	switch (m_options.dateFormat) {
+	case KexiCSVImportOptions::DMY: date = QDate(d5, d3, d1); break;
+	case KexiCSVImportOptions::YMD: date = QDate(d1, d3, d5); break;
+	case KexiCSVImportOptions::MDY: date = QDate(d5, d1, d3); break;
+	case KexiCSVImportOptions::AutoDateFormat:
+		if (m_dateRegExp.cap(2) == "/") { //probably separator for american format mm/dd/yyyy
+			date = QDate(d5, d1, d3);
+		}
+		else {
+			if (d5 > 31) //d5 == year
+				date = QDate(d5, d3, d1);
+			else //d1 == year
+				date = QDate(d1, d3, d5);
+		}
+		break;
+	default:;
 	}
 	return date.isValid();
 }
@@ -1123,6 +1132,9 @@ bool KexiCSVImportDialog::parseTime(const QString& text, QTime& time)
 void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool inGUI)
 {
 	if (!inGUI) {
+		if (row==1 && m_1stRowForFieldNames->isChecked())
+			return; // do not care about this value if it contains column names (these were already used)
+
 		//save text directly to database buffer
 		if (col==1) { //1st col
 			m_importingStatement->clearArguments();
@@ -1150,11 +1162,15 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
 			QDate date;
 			if (parseDate(text, date))
 				*m_importingStatement << date;
+			else
+				*m_importingStatement << QVariant();
 		}
 		else if (detectedType==_TIME_TYPE) {
 			QTime time;
 			if (parseTime(text, time))
 				*m_importingStatement << time;
+			else
+				*m_importingStatement << QVariant();
 		}
 		else if (detectedType==_DATETIME_TYPE) {
 			QStringList dateTimeList( text.split(" ") );
@@ -1170,8 +1186,14 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text, bool in
 					QTime time;
 					if (parseTime(timePart, time))
 						*m_importingStatement << QDateTime(date, time);
+					else
+						*m_importingStatement << QVariant();
 				}
+				else
+					*m_importingStatement << QVariant();
 			}
+			else
+				*m_importingStatement << QVariant();
 		}
 		else //_TEXT_TYPE and the rest
 			*m_importingStatement << (m_options.trimmedInTextValuesChecked ? text.trimmed() : text);
@@ -1490,9 +1512,9 @@ void KexiCSVImportDialog::accept()
 		KexiDB::Field::Type fieldType;
 		if (detectedType==_DATE_TYPE)
 			fieldType = KexiDB::Field::Date;
-		if (detectedType==_TIME_TYPE)
+		else if (detectedType==_TIME_TYPE)
 			fieldType = KexiDB::Field::Time;
-		if (detectedType==_DATETIME_TYPE)
+		else if (detectedType==_DATETIME_TYPE)
 			fieldType = KexiDB::Field::DateTime;
 		else if (detectedType==_NUMBER_TYPE)
 			fieldType = KexiDB::Field::Integer;
