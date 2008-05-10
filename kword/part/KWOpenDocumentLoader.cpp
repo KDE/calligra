@@ -69,11 +69,11 @@ class KWSharedLoadingData : public KoTextSharedLoadingData
                   we need to special case them, or? well, probably it would be wise to refactor
                   the KWFrame+KWFrameSet logic here...
                 - we also need to pass the used QTextCursor around to know in what KWFrameSet we are
-                  atm and where to write to. Should we use the DataCenter for it or how are such things
-                  done within flake?
+                  atm and where to write to. Or should we just use QTextCursor(m_loader->currentFrameset->document())
+                  each time and assume that we only need to append content anyway?
             */
 
-            /*TESTCASE;
+            
             if(dynamic_cast<KoImageData*>(shape->userData())) {
                 QString anchortype = shape->additionalAttribute("anchor-type");
                 KWFrameSet* fs = new KWFrameSet();
@@ -91,7 +91,7 @@ class KWSharedLoadingData : public KoTextSharedLoadingData
                 Q_ASSERT(layout->inlineObjectTextManager());
                 layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
             }
-            */
+            
         }
     private:
         KWOpenDocumentLoader* m_loader;
@@ -289,7 +289,7 @@ class KWOpenDocumentLoader::Private
         /// Current master-page name (OASIS loading)
         QString currentMasterPage;
         /// Current KWFrameSet name.
-        QString currentFramesetName;
+        KWTextFrame *currentFrame;
 };
 
 KWOpenDocumentLoader::KWOpenDocumentLoader(KWDocument *document)
@@ -297,6 +297,7 @@ KWOpenDocumentLoader::KWOpenDocumentLoader(KWDocument *document)
 , d(new Private())
 {
     d->document = document;
+    d->currentFrame = 0;
     connect(this, SIGNAL(sigProgress(int)), d->document, SIGNAL(sigProgress(int)));
 }
 
@@ -307,7 +308,7 @@ KWOpenDocumentLoader::~KWOpenDocumentLoader() {
 KWDocument* KWOpenDocumentLoader::document() const { return d->document; }
 KWPageManager* KWOpenDocumentLoader::pageManager() { return & d->document->m_pageManager; }
 QString KWOpenDocumentLoader::currentMasterPage() const { return d->currentMasterPage; }
-QString KWOpenDocumentLoader::currentFramesetName() const { return d->currentFramesetName; }
+QString KWOpenDocumentLoader::currentFramesetName() const { return d->currentFrame ? d->currentFrame->frameSet()->name() : QString(); }
 
 //1.6: KWDocument::loadOasis
 bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
@@ -476,7 +477,7 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
     // The TextShape will be displayed within a KWTextFrame
     KWTextFrame *frame = new KWTextFrame(shape, fs);
     Q_UNUSED(frame);
-    d->currentFramesetName = fs->name();
+    d->currentFrame = frame;
     d->document->addFrameSet(fs);
 
 
@@ -739,7 +740,7 @@ void KWOpenDocumentLoader::loadHeaderFooter(KoTextLoadingContext& context, const
     Q_ASSERT(factory);
     KoShape *shape = factory->createDefaultShape( d->document );
     KWTextFrame *frame = new KWTextFrame(shape, fs);
-    d->currentFramesetName = fs->name();
+    d->currentFrame = frame;
     d->document->addFrameSet(fs);
 
     QTextCursor cursor( fs->document() );
