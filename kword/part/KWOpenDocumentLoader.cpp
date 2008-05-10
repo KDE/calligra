@@ -68,24 +68,24 @@ class KWSharedLoadingData : public KoTextSharedLoadingData
                 - shape can be anything, not only an image-shape but with the current KWFrame-design
                   we need to special case them, or? well, probably it would be wise to refactor
                   the KWFrame+KWFrameSet logic here...
-                - we also need to pass the used QTextCursor around or even better the frameset itself
-                  to know in what KWFrameSet we are atm. Should we use the DataCenter for it or
-                  how are such things done within flake?
+                - we also need to pass the used QTextCursor around to know in what KWFrameSet we are
+                  atm and where to write to. Should we use the DataCenter for it or how are such things
+                  done within flake?
             */
 
-            /*
+            /*TESTCASE;
             if(dynamic_cast<KoImageData*>(shape->userData())) {
                 QString anchortype = shape->additionalAttribute("anchor-type");
                 KWFrameSet* fs = new KWFrameSet();
                 fs->setName("My FrameSet");
-
                 KWImageFrame *imageFrame = new KWImageFrame(fs, shape);
                 m_loader->document()->addFrameSet(fs);
-
                 KoTextAnchor *anchor = new KoTextAnchor(shape);
-                KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
-                Q_ASSERT(textShapeData);
-                QTextCursor cursor( textShapeData->document() );
+                //KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
+                //Q_ASSERT(textShapeData); //this asserts cause shapes don't inheritate there userdata
+                QTextDocument* doc = m_loader->document()->mainFrameSet()->document();
+                Q_ASSERT(doc);
+                QTextCursor cursor(doc);
                 KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> ( cursor.block().document()->documentLayout() );
                 Q_ASSERT(layout);
                 Q_ASSERT(layout->inlineObjectTextManager());
