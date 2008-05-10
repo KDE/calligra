@@ -304,7 +304,14 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
     KoShapeLoadingContext sc( odfContext, d->document );
 
     // Load all styles before the corresponding paragraphs try to use them!
-    KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
+    class KWSharedLoadingData : public KoTextSharedLoadingData {
+        protected:
+            virtual void shapeInserted(KoShape* shape) {
+                kDebug()<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+            }
+    };
+    //KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
+    KWSharedLoadingData * sharedData = new KWSharedLoadingData();
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>( d->document->dataCenterMap()["StyleManager"] );
     Q_ASSERT( styleManager );
     sharedData->loadOdfStyles( odfContext, styleManager, true );
