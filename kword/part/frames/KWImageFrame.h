@@ -20,7 +20,7 @@
 #define KWIMAGEFRAME_H
 
 #include "KWFrame.h"
-
+#if 0
 /**
  * This frame type will hold images.
  */
@@ -29,6 +29,6 @@ public:
     KWImageFrame(KWFrameSet *parent, KoShape *imageshape = 0);
     ~KWImageFrame();
 };
-
+#endif
 #endif
 

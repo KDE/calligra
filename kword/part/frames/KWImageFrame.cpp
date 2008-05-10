@@ -19,6 +19,7 @@
 
 #include "KWImageFrame.h"
 
+#if 0
 #include <KoShapeRegistry.h>
 #include <KoShapeFactory.h>
 
@@ -49,3 +50,4 @@ KWImageFrame::KWImageFrame(KWFrameSet *parent, KoShape *imageshape)
 
 KWImageFrame::~KWImageFrame() {
 }
+#endif

@@ -61,15 +61,16 @@ void KWPrintingDialog::preparePage(int pageNumber) {
 #endif
     const double offsetInDocument = page->offsetInDocument();
     // find images
-    foreach(KWFrameSet *fs, m_document->frameSets()) {
+/*    foreach(KWFrameSet *fs, m_document->frameSets()) {
         if(fs->frameCount() == 0) continue;
-        KWImageFrame *image = dynamic_cast<KWImageFrame*> (fs->frames().at(0));
-        if(image == 0) continue;
-        QRectF bound = image->shape()->boundingRect();
+        KWFrame *frame = fs->frames().at(0);
+        if(frame == 0) continue;
+        QRectF bound = frame->shape()->boundingRect();
         if(offsetInDocument > bound.bottom() || offsetInDocument + page->height() < bound.top())
             continue;
-        shapeManager()->add(image->shape()); // just in case the image change internally create a new shape
-    }
+        if (dynamic_cast<PictureShape*> (frame->shape()))
+            shapeManager()->add(frame->shape()); // just in case the image change internally create a new shape
+    }*/
 
     const int pageOffset = qRound(POINT_TO_INCH( resolution * offsetInDocument));
 

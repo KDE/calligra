@@ -25,7 +25,7 @@
 #include "KWDocument.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWTextFrame.h"
-#include "frames/KWImageFrame.h"
+#include "frames/KWFrame.h"
 
 // koffice
 #include <KoTextLoadingContext.h>
@@ -73,12 +73,11 @@ class KWSharedLoadingData : public KoTextSharedLoadingData
                   each time and assume that we only need to append content anyway?
             */
 
-            /*TEMP HACK
             if(dynamic_cast<KoImageData*>(shape->userData())) {
                 QString anchortype = shape->additionalAttribute("anchor-type");
                 KWFrameSet* fs = new KWFrameSet();
                 fs->setName("My FrameSet");
-                KWImageFrame *imageFrame = new KWImageFrame(fs, shape);
+                KWFrame *imageFrame = new KWFrame(shape, fs);
                 m_loader->document()->addFrameSet(fs);
                 KoTextAnchor *anchor = new KoTextAnchor(shape);
                 //KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
@@ -91,7 +90,6 @@ class KWSharedLoadingData : public KoTextSharedLoadingData
                 Q_ASSERT(layout->inlineObjectTextManager());
                 layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
             }
-            */
         }
     private:
         KWOpenDocumentLoader* m_loader;
@@ -271,6 +269,7 @@ class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextF
                 kDebug(32001) << "No table shape";
                 return 0;
             }
+kDebug(32001) << "HOOOO Look at me, I've got a table shape !!! Incredible." << shape;
             return shape;
         }
         
