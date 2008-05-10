@@ -2,7 +2,7 @@
  Kexi Development CHANGELOG Document
  From jstaniek's Point of View
  
- Copyright (C) 2003-2007 Jaroslaw Staniek js at iidea.pl / OpenOffice Polska
+ Copyright (C) 2003-2008 Jaroslaw Staniek js at iidea.pl / OpenOffice Polska
  Kexi home page: http://www.kexi-project.org/
 -----------------------------------------------------------------------------
 
@@ -16,6 +16,21 @@ Legend:
    mentioning in the public changelog
 
 ===================== Kexi 2.0 Alpha =====================
+
+~~~~~~~~~~~~~~~~ 2.0 alpha 6 ~~~~~~~~~~~~~~~~
+
+2008-05-09
+CSV Import Dialog
+- fix setting data types for columns, previously text type was used instead
+- fix autodetecting and importing of floating-point values in "E scientific notation"
+- output null values to fields if value coversion failed (e.g. text-to-date);
+  without this subsequent values are written into the wrong columns
+- added "Date format" import option with possible values: auto, DMY, YMD, MDY
+Ported from 1.0: r805884
+BUG:147809
+BUG:151478
+
+~~~~~~~~~~~~~~~~ 2.0 alpha 7 ~~~~~~~~~~~~~~~~
 
 2008-05-05
 Main Window
