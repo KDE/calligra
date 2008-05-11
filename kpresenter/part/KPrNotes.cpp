@@ -45,7 +45,7 @@ KPrNotes::KPrNotes(KPrPage *page)
     Q_ASSERT(factory);
     m_textShape = factory->createDefaultShape(0);
     m_textShape->setLocked(true);
-    m_textShape->setAddtionalAttribute( "presentation:class", "notes" );
+    m_textShape->setAdditionalAttribute( "presentation:class", "notes" );
     m_pageLayout = KoPageLayout::standardLayout();
     m_textShape->setPosition(QPointF(62.22, 374.46));
     m_textShape->setSize(QSizeF(489.57, 356.37));
@@ -54,7 +54,7 @@ KPrNotes::KPrNotes(KPrPage *page)
     Q_ASSERT(factory);
     m_thumbnailShape = factory->createDefaultShape(0);
     m_thumbnailShape->setLocked(true);
-    m_thumbnailShape->setAddtionalAttribute( "presentation:class", "page" );
+    m_thumbnailShape->setAdditionalAttribute( "presentation:class", "page" );
     m_thumbnailShape->setPosition(QPointF(108.00, 60.18));
     m_thumbnailShape->setSize(QSizeF(396.28, 296.96));
 
