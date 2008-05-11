@@ -105,9 +105,13 @@ void KarbonPencilTool::mouseReleaseEvent( KoPointerEvent *event )
 {
     addPoint( event->point );
     finish( event->modifiers() & Qt::ShiftModifier );
+
+    QRectF originalBoundingRect = m_shape->boundingRect();
     delete m_shape;
     m_shape = 0;
     m_points.clear();
+    // the original path may be different from the one added
+    m_canvas->updateCanvas( originalBoundingRect );
 }
 
 void KarbonPencilTool::keyPressEvent(QKeyEvent *event)
