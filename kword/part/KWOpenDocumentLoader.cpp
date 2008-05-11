@@ -69,9 +69,19 @@ class KWSharedLoadingData : public KoTextSharedLoadingData
                   we need to special case them, or? well, probably it would be wise to refactor
                   the KWFrame+KWFrameSet logic here...
                             ==> DONE ? Now, we just use a KWFrame + KWFrameSet, no need for KWImageFrame for instance.
+                                ==> imho the best way to go in the long run.
                 - we also need to pass the used QTextCursor around to know in what KWFrameSet we are
                   atm and where to write to. Or should we just use QTextCursor(m_loader->currentFrameset->document())
                   each time and assume that we only need to append content anyway?
+                - KoTextAnchor should be created+managed by the KoTextLoader but we need access to
+                  it here to be able to use KWPageManager if "anchor-type"=="page". Maybe we are
+                  able to utilize KoShapeApplicationData as container for such kind of objects?
+                - bring back header+footers :)
+                - What about parent-styles aka style-inheritance? Does this REALLY work already?
+                - table-shape vs. QTextTable vs. the layout-hacks within the textshape is still a huge
+                  issue of it's own. http://lists.kde.org/?l=koffice-devel&m=120574617208477&w=2 and
+                  http://lists.kde.org/?l=koffice-devel&m=120582471310900&w=2
+                - unittests :)
             */
 
             //TEMP HACK
@@ -81,9 +91,12 @@ class KWSharedLoadingData : public KoTextSharedLoadingData
             KWFrame *frame = new KWFrame(shape, fs);
             m_loader->document()->addFrameSet(fs);
             KoTextAnchor *anchor = new KoTextAnchor(shape);
-            //KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
-            //Q_ASSERT(textShapeData); //this asserts cause shapes don't inheritate there userdata
-            QTextDocument* doc = m_loader->document()->mainFrameSet()->document();
+            //Q_ASSERT(dynamic_cast<KoTextShapeData*>(shape->userData())); //this asserts cause shapes don't inheritate/share there userdata
+            Q_ASSERT(m_loader->currentFrame());
+            KWTextFrameSet* docfs = dynamic_cast<KWTextFrameSet*>(m_loader->currentFrame()->frameSet());
+            Q_ASSERT(docfs);
+            QTextDocument* doc = docfs->document(); //m_loader->document()->mainFrameSet()->document();
+
             Q_ASSERT(doc);
             QTextCursor cursor(doc);
             KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> ( cursor.block().document()->documentLayout() );
@@ -308,6 +321,7 @@ KWDocument* KWOpenDocumentLoader::document() const { return d->document; }
 KWPageManager* KWOpenDocumentLoader::pageManager() { return & d->document->m_pageManager; }
 QString KWOpenDocumentLoader::currentMasterPage() const { return d->currentMasterPage; }
 QString KWOpenDocumentLoader::currentFramesetName() const { return d->currentFrame ? d->currentFrame->frameSet()->name() : QString(); }
+KWTextFrame* KWOpenDocumentLoader::currentFrame() const { return d->currentFrame; }
 
 //1.6: KWDocument::loadOasis
 bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )

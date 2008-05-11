@@ -29,6 +29,7 @@
 class KWDocument;
 class KWPageManager;
 class KWTextFrameSet;
+class KWTextFrame;
 class KoOdfReadStore;
 class KoOdfLoadingContext;
 class KoTextLoadingContext;
@@ -56,6 +57,7 @@ public:
     KWPageManager* pageManager();
     QString currentMasterPage() const;
     QString currentFramesetName() const;
+    KWTextFrame* currentFrame() const;
 
     /**
      *  @brief Loads an OASIS OpenDocument from a store.
