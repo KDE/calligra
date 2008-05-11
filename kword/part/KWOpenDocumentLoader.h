@@ -32,7 +32,7 @@ class KWTextFrameSet;
 class KWTextFrame;
 class KoOdfReadStore;
 class KoOdfLoadingContext;
-class KoTextLoadingContext;
+class KWLoadingContext;
 class KoTextAnchor;
 class KoXmlDocument;
 class KoXmlElement;
@@ -76,13 +76,13 @@ signals:
 protected:
     virtual void loadSettings( const KoXmlDocument& settings );
     virtual bool loadPageLayout( KoOdfLoadingContext& context, const QString& masterPageName );
-    virtual bool loadMasterPageStyle(KoTextLoadingContext& context, const QString& masterPageName);
+    virtual bool loadMasterPageStyle(KWLoadingContext& context, const QString& masterPageName);
 
-    virtual void loadFrame(KoTextLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
+    virtual void loadFrame(KWLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
 
 private:
-    void loadHeaderFooter(KoTextLoadingContext& context, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader);
-    void loadFinished(KoTextLoadingContext& context, QTextCursor& cursor);
+    void loadHeaderFooter(KWLoadingContext& context, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader);
+    void loadFinished(KWLoadingContext& context, QTextCursor& cursor);
 
 private:
     /// \internal d-pointer class.
