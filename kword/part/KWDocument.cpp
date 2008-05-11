@@ -230,6 +230,14 @@ bool KWDocument::saveOdf( SavingContext &documentContext ) {
     if ( !mainStyles.saveOdfStylesDotXml( store, manifestWriter ) )
         return false;
 
+    bool ok=true;
+    foreach(KoDataCenter *dataCenter, m_dataCenterMap)
+    {
+        ok = ok && dataCenter->completeSaving(store, manifestWriter);
+    }
+    if(!ok)
+        return false;
+
 #if 0 // tz: remove until data center is used
     if (!context.saveImages(store, manifestWriter))
         return false;
