@@ -76,13 +76,13 @@ signals:
 protected:
     virtual void loadSettings( const KoXmlDocument& settings );
     virtual bool loadPageLayout( KoOdfLoadingContext& context, const QString& masterPageName );
-    virtual bool loadMasterPageStyle(KWLoadingContext& context, const QString& masterPageName);
+    virtual bool loadMasterPageStyle(KoOdfLoadingContext& context, const QString& masterPageName);
 
-    virtual void loadFrame(KWLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
+    virtual void loadFrame(KoOdfLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor);
 
 private:
-    void loadHeaderFooter(KWLoadingContext& context, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader);
-    void loadFinished(KWLoadingContext& context, QTextCursor& cursor);
+    void loadHeaderFooter(KoOdfLoadingContext& context, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader);
+    void loadFinished(KoOdfLoadingContext& context, QTextCursor& cursor);
 
 private:
     /// \internal d-pointer class.

@@ -108,17 +108,6 @@ class KWSharedLoadingData : public KoTextSharedLoadingData
         KWOpenDocumentLoader* m_loader;
 };
 
-//TODO get right of thet class. We don't need it anyway or?
-class KOTEXT_EXPORT KWLoadingContext : public KoOdfLoadingContext
-{
-public:
-    explicit KWLoadingContext(KoTextLoader* loader, KoOdfStylesReader& stylesReader, KoStore* store) : KoOdfLoadingContext( stylesReader, store ), m_loader(loader) {}
-    virtual ~KWLoadingContext() {}
-    KoTextLoader* loader() const { return m_loader; }
-private:
-    KoTextLoader* m_loader;
-};
-
 #if 0
 /**
 * The KWOpenDocumentFrameLoader class implements a KoTextFrameLoader to
@@ -376,7 +365,7 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
     sc.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
 
     KoTextLoader * loader = new KoTextLoader( sc );
-    KWLoadingContext context( loader, odfStore.styles(), odfStore.store() );
+    KoOdfLoadingContext context( odfStore.styles(), odfStore.store() );
 
 
     KoColumns columns;
@@ -644,7 +633,7 @@ bool KWOpenDocumentLoader::loadPageLayout(KoOdfLoadingContext& context, const QS
     return true;
 }
 
-bool KWOpenDocumentLoader::loadMasterPageStyle(KWLoadingContext& context, const QString& masterPageName)
+bool KWOpenDocumentLoader::loadMasterPageStyle(KoOdfLoadingContext& context, const QString& masterPageName)
 {
     kDebug(32001)<<"KWOpenDocumentLoader::loadMasterPageStyle masterPageName="<<masterPageName;
     const KoOdfStylesReader& styles = context.stylesReader();
@@ -676,7 +665,7 @@ bool KWOpenDocumentLoader::loadMasterPageStyle(KWLoadingContext& context, const 
 }
 
 //1.6: KWOasisLoader::loadOasisHeaderFooter
-void KWOpenDocumentLoader::loadHeaderFooter(KWLoadingContext& context, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader)
+void KWOpenDocumentLoader::loadHeaderFooter(KoOdfLoadingContext& context, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader)
 {
     // Not OpenDocument compliant element to define the first header/footer.
     KoXmlElement firstElem = KoXml::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-first" : "footer-first" );
@@ -784,7 +773,7 @@ void KWOpenDocumentLoader::loadHeaderFooter(KWLoadingContext& context, const KoX
     //TODO handle style, seems to be similar to what is done at KoPageLayout::loadOasis
 }
 
-void KWOpenDocumentLoader::loadFrame(KWLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor)
+void KWOpenDocumentLoader::loadFrame(KoOdfLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor)
 {
 #if 0 // TODO differently
     Q_ASSERT(d->frameLoader);
