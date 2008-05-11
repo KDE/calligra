@@ -32,7 +32,6 @@ class KWTextFrameSet;
 class KWTextFrame;
 class KoOdfReadStore;
 class KoOdfLoadingContext;
-class KWLoadingContext;
 class KoTextAnchor;
 class KoXmlDocument;
 class KoXmlElement;
