@@ -71,12 +71,10 @@ void KWPrintingDialog::preparePage(int pageNumber) {
             continue;
         KoImageData *imageData = dynamic_cast<KoImageData*>(frame->shape()->userData());
         if (imageData) {
-            // We are creating a high resolution copy of the shape.
             if (imageData->imageQuality() != KoImageData::HighQuality) {
                 m_originalImages.insert(imageData, imageData->imageQuality());
                 imageData->setImageQuality(KoImageData::HighQuality);
             }
-            shapeManager()->add(frame->shape()); // just in case the image change internally create a new shape
         }
     }
 
