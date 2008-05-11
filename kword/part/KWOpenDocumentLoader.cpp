@@ -68,29 +68,28 @@ class KWSharedLoadingData : public KoTextSharedLoadingData
                 - shape can be anything, not only an image-shape but with the current KWFrame-design
                   we need to special case them, or? well, probably it would be wise to refactor
                   the KWFrame+KWFrameSet logic here...
+                            ==> DONE ? Now, we just use a KWFrame + KWFrameSet, no need for KWImageFrame for instance.
                 - we also need to pass the used QTextCursor around to know in what KWFrameSet we are
                   atm and where to write to. Or should we just use QTextCursor(m_loader->currentFrameset->document())
                   each time and assume that we only need to append content anyway?
             */
 
             //TEMP HACK
-            if(dynamic_cast<KoImageData*>(shape->userData())) {
-                QString anchortype = shape->additionalAttribute("anchor-type");
-                KWFrameSet* fs = new KWFrameSet();
-                fs->setName("My FrameSet");
-                KWFrame *imageFrame = new KWFrame(shape, fs);
-                m_loader->document()->addFrameSet(fs);
-                KoTextAnchor *anchor = new KoTextAnchor(shape);
-                //KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
-                //Q_ASSERT(textShapeData); //this asserts cause shapes don't inheritate there userdata
-                QTextDocument* doc = m_loader->document()->mainFrameSet()->document();
-                Q_ASSERT(doc);
-                QTextCursor cursor(doc);
-                KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> ( cursor.block().document()->documentLayout() );
-                Q_ASSERT(layout);
-                Q_ASSERT(layout->inlineObjectTextManager());
-                layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
-            }
+            QString anchortype = shape->additionalAttribute("anchor-type");
+            KWFrameSet* fs = new KWFrameSet();
+            fs->setName("My FrameSet");
+            KWFrame *frame = new KWFrame(shape, fs);
+            m_loader->document()->addFrameSet(fs);
+            KoTextAnchor *anchor = new KoTextAnchor(shape);
+            //KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
+            //Q_ASSERT(textShapeData); //this asserts cause shapes don't inheritate there userdata
+            QTextDocument* doc = m_loader->document()->mainFrameSet()->document();
+            Q_ASSERT(doc);
+            QTextCursor cursor(doc);
+            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> ( cursor.block().document()->documentLayout() );
+            Q_ASSERT(layout);
+            Q_ASSERT(layout->inlineObjectTextManager());
+            layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
         }
     private:
         KWOpenDocumentLoader* m_loader;
