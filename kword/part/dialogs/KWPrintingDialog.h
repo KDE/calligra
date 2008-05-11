@@ -21,8 +21,6 @@
 
 #include <KoPrintingDialog.h>
 
-#include "frames/KWImageFrame.h"
-
 #include <QRectF>
 
 class KWView;

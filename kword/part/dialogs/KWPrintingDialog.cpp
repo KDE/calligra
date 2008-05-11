@@ -25,7 +25,9 @@
 #include "KWView.h"
 #include "KWCanvas.h"
 #include "frames/KWFrameSet.h"
+#include "frames/KWFrame.h"
 
+#include <KoImageData.h>
 #include <KoInsets.h>
 #include <KoShapeManager.h>
 #include <kdeversion.h>
@@ -61,16 +63,16 @@ void KWPrintingDialog::preparePage(int pageNumber) {
 #endif
     const double offsetInDocument = page->offsetInDocument();
     // find images
-/*    foreach(KWFrameSet *fs, m_document->frameSets()) {
+    foreach(KWFrameSet *fs, m_document->frameSets()) {
         if(fs->frameCount() == 0) continue;
         KWFrame *frame = fs->frames().at(0);
         if(frame == 0) continue;
         QRectF bound = frame->shape()->boundingRect();
         if(offsetInDocument > bound.bottom() || offsetInDocument + page->height() < bound.top())
             continue;
-        if (dynamic_cast<PictureShape*> (frame->shape()))
+        if(dynamic_cast<KoImageData*>(frame->shape()->userData()))
             shapeManager()->add(frame->shape()); // just in case the image change internally create a new shape
-    }*/
+    }
 
     const int pageOffset = qRound(POINT_TO_INCH( resolution * offsetInDocument));
 
