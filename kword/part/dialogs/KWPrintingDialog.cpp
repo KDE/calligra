@@ -27,7 +27,6 @@
 #include "frames/KWFrameSet.h"
 #include "frames/KWFrame.h"
 
-#include <KoImageData.h>
 #include <KoInsets.h>
 #include <KoShapeManager.h>
 #include <kdeversion.h>
@@ -70,8 +69,15 @@ void KWPrintingDialog::preparePage(int pageNumber) {
         QRectF bound = frame->shape()->boundingRect();
         if(offsetInDocument > bound.bottom() || offsetInDocument + page->height() < bound.top())
             continue;
-        if(dynamic_cast<KoImageData*>(frame->shape()->userData()))
+        KoImageData *imageData = dynamic_cast<KoImageData*>(frame->shape()->userData());
+        if (imageData) {
+            // We are creating a high resolution copy of the shape.
+            if (imageData->imageQuality() != KoImageData::HighQuality) {
+                m_originalImages.insert(imageData, imageData->imageQuality());
+                imageData->setImageQuality(KoImageData::HighQuality);
+            }
             shapeManager()->add(frame->shape()); // just in case the image change internally create a new shape
+        }
     }
 
     const int pageOffset = qRound(POINT_TO_INCH( resolution * offsetInDocument));
@@ -101,7 +107,8 @@ QList<KoShape*> KWPrintingDialog::shapesOnPage(int pageNumber) {
 }
 
 void KWPrintingDialog::printingDone() {
-    
+    foreach(KoImageData *image, m_originalImages.keys())
+        image->setImageQuality(m_originalImages[image]);
 }
 
 QList<QWidget*> KWPrintingDialog::createOptionWidgets() const {

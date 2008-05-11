@@ -20,7 +20,9 @@
 #define KWPRINTINGDIALOG_H
 
 #include <KoPrintingDialog.h>
+#include <KoImageData.h>
 
+#include <QMap>
 #include <QRectF>
 
 class KWView;
@@ -43,6 +45,7 @@ protected:
     virtual int documentLastPage() const;
 
 private:
+    QMap <KoImageData*, KoImageData::ImageQuality> m_originalImages;
     KWDocument *m_document;
     bool m_clipToPage;
     QRectF m_currentPage;
