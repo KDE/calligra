@@ -201,6 +201,8 @@ public:
     mutable bool pixmapRepaintRequested;
     
     ProxyModel *model;
+    
+    QList<KoShape*> hiddenChildren;
 };
 
 ChartShape::Private::Private()
@@ -438,8 +440,12 @@ QRectF ChartShape::boundingRect() const
     
     foreach( KoShape *shape, iterator() )
     {
-        if ( !shape->isVisible() )
+        // Before we can hide the child, we need to do a repaint
+        // with the old bounding rect, to avoid shapes not being
+        // painted over (i.e. hidden) because of the changed geometry
+        if ( !shape->isVisible() && d->hiddenChildren.contains( shape ) )
             continue;
+
         rect = rect.united( shape->boundingRect() );
     }
     
@@ -547,6 +553,14 @@ void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
         d->pixmapRepaintRequested = false;
         d->lastZoomLevel = zoomLevel;
         d->lastSize      = size();
+    }
+    
+    foreach( KoShape *shape, iterator() )
+    {
+        if ( !shape->isVisible() && !d->hiddenChildren.contains( shape ) )
+            d->hiddenChildren.append( shape );
+        else if ( d->hiddenChildren.contains( shape ) )
+            d->hiddenChildren.removeAll( shape );
     }
 
     // Paint the cached pixmap
