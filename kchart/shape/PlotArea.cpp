@@ -62,6 +62,22 @@
 
 using namespace KChart;
 
+bool isPolar( ChartType type )
+{
+    switch ( type )
+    {
+    case CircleChartType:
+    case RingChartType:
+    case RadarChartType:
+    case BubbleChartType:
+    case SurfaceChartType:
+        return true;
+    default:
+        return false;
+    }
+    return false;
+}
+
 class PlotArea::Private
 {
 public:
@@ -97,6 +113,8 @@ public:
     
     int gapBetweenBars;
     int gapBetweenSets;
+    
+    QList<KoShape*> automaticallyHiddenAxisTitles;
 };
 
 PlotArea::Private::Private()
@@ -328,6 +346,25 @@ bool PlotArea::removeAxis( Axis *axis )
 
 void PlotArea::setChartType( ChartType type )
 {
+    if ( !isPolar( d->chartType ) && isPolar( type ) )
+    {
+        foreach ( Axis *axis, d->axes )
+        {
+            if ( !axis->title()->isVisible() )
+                continue;
+            axis->title()->setVisible( false );
+            d->automaticallyHiddenAxisTitles.append( axis->title() );
+        }
+    }
+    else if ( isPolar( d->chartType ) && !isPolar( type ) )
+    {
+        foreach ( KoShape *title, d->automaticallyHiddenAxisTitles )
+        {
+            title->setVisible( true );
+        }
+        d->automaticallyHiddenAxisTitles.clear();
+    }
+    
     if ( d->chartType != ScatterChartType && type == ScatterChartType )
     {
         d->shape->proxyModel()->setDataDimensions( 2 );
