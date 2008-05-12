@@ -94,7 +94,7 @@ public:
     // implemented from KoShapeController
     virtual void addShape( KoShape* shape );
     virtual void removeShape( KoShape* shape );
-    virtual QMap<QString, KoDataCenter*> dataCenterMap( ) {return m_dataCenterMap;}
+    virtual QMap<QString, KoDataCenter*> dataCenterMap();
 
 public slots:
     /// repaint all views attached to this koDocument
@@ -110,7 +110,6 @@ protected:
     void setPageSize( const QSizeF &pageSize );
 private:
     KarbonDocument m_doc;                    /// store non-visual doc info
-    QMap<QString, KoDataCenter*> m_dataCenterMap;
     bool m_bShowStatusBar;                /// enable/disable status bar in attached view(s)
     bool m_merge;
     unsigned int m_maxRecentFiles;                /// max. number of files shown in open recent menu item

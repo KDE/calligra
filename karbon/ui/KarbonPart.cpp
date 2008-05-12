@@ -95,13 +95,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
 
     m_maxRecentFiles = 10;
 
-    // Ask every shapefactory to populate the dataCenterMap
-    foreach(QString id, KoShapeRegistry::instance()->keys())
-    {
-	KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
-        shapeFactory->populateDataCenterMap(m_dataCenterMap);
-    }
-
     // set as default paper
     m_pageLayout.format = KoPageFormat::defaultFormat();
     m_pageLayout.orientation = KoPageFormat::Portrait;
@@ -112,7 +105,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName, QObject* 
 
 KarbonPart::~KarbonPart()
 {
-    qDeleteAll( m_dataCenterMap );
 }
 
 void
@@ -309,9 +301,9 @@ bool KarbonPart::loadOdf( KoOdfReadStore & odfStore )
 bool KarbonPart::completeLoading( KoStore* store )
 {
     bool ok=true;
-    foreach(KoDataCenter *dataCenter, m_dataCenterMap)
+    foreach(KoDataCenter *dataCenter, dataCenterMap() )
     {
-	ok = ok && dataCenter->completeLoading(store);
+        ok = ok && dataCenter->completeLoading(store);
     }
     return ok;
 
@@ -496,6 +488,11 @@ void KarbonPart::removeShape( KoShape* shape )
         }
     }
     setModified( true );
+}
+
+QMap<QString, KoDataCenter*> KarbonPart::dataCenterMap()
+{
+    return m_doc.dataCenterMap();
 }
 
 void KarbonPart::updateDocumentSize()

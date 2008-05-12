@@ -46,6 +46,7 @@ class KoShapeSavingContext;
 class KoShapeLayer;
 class KoImageCollection;
 class KoStore;
+class KoDataCenter;
 
 typedef QList<KoShapeLayer*> VLayerList;
 
@@ -210,6 +211,10 @@ public:
 
     /// Returns the documents image collection
     KoImageCollection * imageCollection();
+
+    /// Returns the documents data centers
+    QMap<QString, KoDataCenter*> dataCenterMap();
+
 private:
 
     void saveOasisSettings( KoStore * store );

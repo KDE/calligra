@@ -46,6 +46,7 @@
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeStyleWriter.h>
 #include <KoImageCollection.h>
+#include <KoDataCenter.h>
 
 #include <ktemporaryfile.h>
 #include <kdebug.h>
@@ -60,7 +61,14 @@ public:
     Private()
     : pageSize(0.0, 0.0)
     , unit( KoUnit::Millimeter )
-    {}
+    {
+        // Ask every shapefactory to populate the dataCenterMap
+        foreach(QString id, KoShapeRegistry::instance()->keys())
+        {
+            KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
+            shapeFactory->populateDataCenterMap( dataCenterMap );
+        }
+    }
 
     ~Private()
     {
@@ -68,6 +76,7 @@ public:
         layers.clear();
         qDeleteAll( objects );
         objects.clear();
+        qDeleteAll( dataCenterMap );
     }
 
     QSizeF pageSize; ///< the documents page size
@@ -76,7 +85,7 @@ public:
     VLayerList layers;         ///< The layers in this document.
 
     KoUnit unit; ///< The unit.
-    KoImageCollection imageCollection; ///< the image collection
+    QMap<QString, KoDataCenter*> dataCenterMap;
 };
 
 KarbonDocument::KarbonDocument()
@@ -258,8 +267,6 @@ bool KarbonDocument::loadOasis( const KoXmlElement &element, KoShapeLoadingConte
     qDeleteAll( d->objects );
     d->objects.clear();
 
-    context.setImageCollection( &d->imageCollection );
-
     KoXmlElement layerElement;
     forEachElement( layerElement, context.odfLoadingContext().stylesReader().layerSet() )
     {
@@ -353,7 +360,12 @@ const VLayerList& KarbonDocument::layers() const
 
 KoImageCollection * KarbonDocument::imageCollection()
 {
-    return &d->imageCollection;
+    return (KoImageCollection *)d->dataCenterMap["ImageCollection"];
+}
+
+QMap<QString, KoDataCenter*> KarbonDocument::dataCenterMap()
+{
+    return d->dataCenterMap;
 }
 
 //#############################################################################
@@ -431,7 +443,12 @@ bool KarbonDocument::saveOdf( KoDocument::SavingContext &documentContext )
 
     manifestWriter->addManifestEntry("settings.xml", "text/xml");
 
-    if( ! shapeContext.saveImages( store, manifestWriter ) )
+    bool ok = true;
+    foreach( KoDataCenter *dataCenter, d->dataCenterMap )
+    {
+        ok = ok && dataCenter->completeSaving( store, manifestWriter );
+    }
+    if(!ok)
         return false;
 
     return true;
