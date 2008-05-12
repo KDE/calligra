@@ -592,6 +592,8 @@ void PlotArea::setPieExplodeFactor( int percent )
 
 ChartShape *PlotArea::parent() const
 {
+    // There has to be a valid parent
+    Q_ASSERT( d->shape );
     return d->shape;
 }
 

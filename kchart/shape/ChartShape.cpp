@@ -243,7 +243,7 @@ ChartShape::ChartShape()
     d->plotArea = new PlotArea( this );
     
     d->legend = new Legend( this );
-    d->legend->setVisible( false );
+    d->legend->setVisible( true );
     
     QObject::connect( d->model, SIGNAL( modelReset() ), d->plotArea, SLOT( dataSetCountChanged() ) );
     QObject::connect( d->model, SIGNAL( rowsInserted( const QModelIndex, int, int ) ), d->plotArea, SLOT( dataSetCountChanged() ) );
@@ -355,6 +355,9 @@ TextLabelData *ChartShape::footerData() const
 
 Legend *ChartShape::legend() const
 {
+    // There has to be a valid legend
+    // even, if it's hidden
+    Q_ASSERT( d->legend );
     return d->legend;
 }
 
@@ -441,6 +444,9 @@ void ChartShape::updateChildrenPositions()
             titlePosition = QPointF( size().width(), size().height() / 2.0 );
         title->setPosition( titlePosition );
     }
+    
+    const double legendXOffset = 10.0;
+    d->legend->setPosition( QPointF( size().width() + legendXOffset, size().height() / 2.0 - d->legend->size().height() / 2.0 ) );
 }
 
 QRectF ChartShape::boundingRect() const
@@ -528,7 +534,7 @@ void ChartShape::paintPixmap( QPainter &painter, const KoViewConverter &converte
     pixmapPainter.setRenderHint( QPainter::Antialiasing, false );
 
     // Paint the background
-    pixmapPainter.fillRect( paintRect, KApplication::palette().base() );
+    pixmapPainter.fillRect( paintRect, Qt::white );
 
     // scale the painter's coordinate system to fit the current zoom level
     applyConversion( pixmapPainter, converter );

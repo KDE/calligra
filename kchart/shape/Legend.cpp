@@ -25,13 +25,16 @@
 
 // Qt
 #include <QString>
+#include <QSizeF>
 #include <QPen>
 #include <QColor>
 #include <QBrush>
 #include <QFont>
+#include <QImage>
 
 // KDChart
 #include <KDChartChart>
+#include <KDChartBarDiagram>
 #include <KDChartAbstractDiagram>
 #include <KDChartFrameAttributes>
 #include <KDChartBackgroundAttributes>
@@ -62,10 +65,17 @@ public:
     LegendExpansion expansion;
     LegendPosition position;
     QFont font;
+    QFont titleFont;
     QColor fontColor;
     Qt::Alignment alignment;
     
     KDChart::Legend *kdLegend;
+    
+    QImage image;
+    
+    bool pixmapRepaintRequested;
+    QSizeF lastSize;
+    QPointF lastZoomLevel;
 };
 
 Legend::Private::Private()
@@ -75,7 +85,7 @@ Legend::Private::Private()
     backgroundBrush = QBrush();
     expansion = HighLegendExpansion;
     alignment = Qt::AlignRight;
-    kdLegend = new KDChart::Legend();
+    pixmapRepaintRequested = true;
 }
 
 Legend::Private::~Private()
@@ -89,6 +99,17 @@ Legend::Legend( ChartShape *parent )
     Q_ASSERT( parent );
     
     d->shape = parent;
+    
+    d->kdLegend = new KDChart::Legend();
+    KDChart::FrameAttributes attributes = d->kdLegend->frameAttributes();
+    attributes.setVisible( false );
+    d->kdLegend->setFrameAttributes( attributes );
+    
+    setTitleFontSize( 10 );
+    setTitle( QString() );
+    setFontSize( 8 );
+    
+    setSize( QSizeF( CM_TO_POINT( 4 ), CM_TO_POINT( 2 ) ) );
     
     parent->addChild( this );
 }
@@ -106,6 +127,8 @@ QString Legend::title() const
 void Legend::setTitle( const QString &title )
 {
     d->title = title;
+    d->kdLegend->setTitleText( title );
+    d->pixmapRepaintRequested = true;
 }
 
 bool Legend::showFrame() const
@@ -121,6 +144,7 @@ void Legend::setShowFrame( bool show )
     KDChart::FrameAttributes attributes = d->kdLegend->frameAttributes();
     attributes.setVisible( show );
     d->kdLegend->setFrameAttributes( attributes );
+    d->pixmapRepaintRequested = true;
 }
 
 QPen Legend::framePen() const
@@ -136,6 +160,7 @@ void Legend::setFramePen( const QPen &pen )
     KDChart::FrameAttributes attributes = d->kdLegend->frameAttributes();
     attributes.setPen( pen  );
     d->kdLegend->setFrameAttributes( attributes );
+    d->pixmapRepaintRequested = true;
 }
 
 QColor Legend::frameColor() const
@@ -154,6 +179,7 @@ void Legend::setFrameColor( const QColor &color )
     pen.setColor( color );
     attributes.setPen( pen );
     d->kdLegend->setFrameAttributes( attributes );
+    d->pixmapRepaintRequested = true;
 }
 
 QBrush Legend::backgroundBrush() const
@@ -170,6 +196,7 @@ void Legend::setBackgroundBrush( const QBrush &brush )
     attributes.setVisible( true );
     attributes.setBrush( brush );
     d->kdLegend->setBackgroundAttributes( attributes );
+    d->pixmapRepaintRequested = true;
 }
 
 QColor Legend::backgroundColor() const
@@ -188,6 +215,7 @@ void Legend::setBackgroundColor( const QColor &color )
     brush.setColor( color );
     attributes.setBrush( brush );
     d->kdLegend->setBackgroundAttributes( attributes );
+    d->pixmapRepaintRequested = true;
 }
 
 QFont Legend::font() const
@@ -203,6 +231,7 @@ void Legend::setFont( const QFont &font )
     KDChart::TextAttributes attributes = d->kdLegend->textAttributes();
     attributes.setFont( font );
     d->kdLegend->setTextAttributes( attributes );
+    d->pixmapRepaintRequested = true;
 }
 
 double Legend::fontSize() const
@@ -216,8 +245,41 @@ void Legend::setFontSize( double size )
 
     // KDChart
     KDChart::TextAttributes attributes = d->kdLegend->textAttributes();
-    attributes.setFontSize( size );
+    attributes.setFontSize( KDChart::Measure( size, KDChartEnums::MeasureCalculationModeAbsolute ) );
     d->kdLegend->setTextAttributes( attributes );
+    d->pixmapRepaintRequested = true;
+}
+
+QFont Legend::titleFont() const
+{
+    return d->titleFont;
+}
+
+void Legend::setTitleFont( const QFont &font )
+{
+    d->titleFont = font;
+
+    // KDChart
+    KDChart::TextAttributes attributes = d->kdLegend->titleTextAttributes();
+    attributes.setFont( font );
+    d->kdLegend->setTitleTextAttributes( attributes );
+    d->pixmapRepaintRequested = true;
+}
+
+double Legend::titleFontSize() const
+{
+    return d->titleFont.pointSizeF();
+}
+
+void Legend::setTitleFontSize( double size )
+{
+    d->titleFont.setPointSizeF( size );
+
+    // KDChart
+    KDChart::TextAttributes attributes = d->kdLegend->titleTextAttributes();
+    attributes.setFontSize( KDChart::Measure( size, KDChartEnums::MeasureCalculationModeAbsolute ) );
+    d->kdLegend->setTitleTextAttributes( attributes );
+    d->pixmapRepaintRequested = true;
 }
 
 LegendExpansion Legend::expansion() const
@@ -228,6 +290,7 @@ LegendExpansion Legend::expansion() const
 void Legend::setExpansion( LegendExpansion expansion )
 {
     d->expansion = expansion;
+    d->pixmapRepaintRequested = true;
 }
 
 Qt::Alignment Legend::alignment() const
@@ -248,30 +311,68 @@ LegendPosition Legend::legendPosition() const
 void Legend::setLegendPosition( LegendPosition position )
 {
     d->position = position;
+    d->pixmapRepaintRequested = true;
 }
 
 void Legend::setSize( const QSizeF &size )
 {
-    d->kdLegend->resizeLayout( size.toSize() );
+    //d->kdLegend->forceRebuild();
     KoShape::setSize( size );
 }
 
 
-void Legend::paint( QPainter &painter, const KoViewConverter &converter )
+void Legend::paintPixmap( QPainter &painter, const KoViewConverter &converter )
 {
     // Adjust the size of the painting area to the current zoom level
-    const QSize paintRectSize = converter.documentToView( size() ).toSize();
+    const QSize paintRectSize = converter.documentToView( d->lastSize ).toSize();
     const QRect paintRect = QRect( QPoint( 0, 0 ), paintRectSize );
+    d->image = QImage( paintRectSize, QImage::Format_ARGB32 );
     
-    painter.setClipRect( paintRect );
+    QPainter pixmapPainter( &d->image );
+    pixmapPainter.setRenderHints( painter.renderHints() );
+    pixmapPainter.setRenderHint( QPainter::Antialiasing, false );
 
     // Paint the background
-    painter.fillRect( paintRect, Qt::white );
+    pixmapPainter.fillRect( paintRect, Qt::white );
 
     // scale the painter's coordinate system to fit the current zoom level
-    applyConversion( painter, converter );
+    applyConversion( pixmapPainter, converter );
+    d->kdLegend->forceRebuild();
+    d->kdLegend->resizeLayout( d->lastSize.toSize() );
+    d->kdLegend->paintIntoRect( pixmapPainter, paintRect );
+}
 
-    d->kdLegend->paint( &painter );
+void Legend::paint( QPainter &painter, const KoViewConverter &converter )
+{
+    // Calculate the clipping rect
+    QRectF paintRect = QRectF( QPointF( 0, 0 ), size() );
+    //clipRect.intersect( paintRect );
+    painter.setClipRect( converter.documentToView( paintRect ) );
+
+    // Get the current zoom level
+    QPointF zoomLevel;
+    converter.zoom( &zoomLevel.rx(), &zoomLevel.ry() );
+
+    // Only repaint the pixmap if it is scheduled, the zoom level changed or the shape was resized
+    if (    d->pixmapRepaintRequested
+         || d->lastZoomLevel != zoomLevel
+         || d->lastSize      != size() ) {
+        // TODO: What if two zoom levels are constantly being requested?
+        // At the moment, this *is* the case, due to the fact
+        // that the shape is also rendered in the page overview
+        // in KPresenter
+        // Everytime the window is hidden and shown again, a repaint is
+        // requested --> laggy performance, especially when quickly
+        // switching through windows
+        d->pixmapRepaintRequested = false;
+        d->lastZoomLevel = zoomLevel;
+        d->lastSize      = size();
+        
+        paintPixmap( painter, converter );
+    }
+
+    // Paint the cached pixmap
+    painter.drawImage( 0, 0, d->image );
 }
 
 
@@ -377,6 +478,8 @@ bool Legend::loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &
     }
     
     //d->chart->replaceLegend( d->legend, oldLegend );
+    
+    d->pixmapRepaintRequested = true;
 
     return true;
 }
@@ -435,6 +538,8 @@ void Legend::saveOdf( KoShapeSavingContext &context ) const
 
 KDChart::Legend *Legend::kdLegend() const
 {
+    // There has to be a valid KDChart instance of this legend
+    Q_ASSERT( d->kdLegend );
     return d->kdLegend;
 }
 

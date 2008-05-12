@@ -192,6 +192,9 @@ void Axis::Private::createBarDiagram()
         
         kdBarDiagram->addAxis( kdAxis );
         kdPlane->addDiagram( kdBarDiagram );
+        
+        Q_ASSERT( plotArea );
+        plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
     }
 }
 
@@ -209,6 +212,9 @@ void Axis::Private::createLineDiagram()
         
         kdLineDiagram->addAxis( kdAxis );
         kdPlane->addDiagram( kdLineDiagram );
+        
+        Q_ASSERT( plotArea );
+        plotArea->parent()->legend()->kdLegend()->addDiagram( kdLineDiagram );
     }
 }
 
@@ -330,6 +336,8 @@ Axis::Axis( PlotArea *parent )
         d->titleData = new TextLabelData;
         d->title->setUserData( d->titleData );
     }
+    d->title->setSize( QSizeF( CM_TO_POINT( 5 ), CM_TO_POINT( 0.75 ) ) );
+    
     d->plotArea->parent()->addChild( d->title );
     
     d->plotAreaChartType = d->plotArea->chartType();
@@ -657,7 +665,7 @@ void Axis::setShowGrid( bool showGrid )
 
 void Axis::setTitleText( const QString &text )
 {
-    d->titleData->document()->setPlainText( text );
+    d->titleData->document()->setHtml( "<div align=center>" + text + "</div>" );
 }
 
 Qt::Orientation Axis::orientation()
@@ -833,6 +841,19 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
     {
         d->plotArea->kdChart()->takeCoordinatePlane( d->kdPolarPlane );
         d->plotArea->kdChart()->addCoordinatePlane( d->kdPlane );
+    }
+    
+    if (    isPolar( chartType ) && !isPolar( d->plotAreaChartType )
+         || !isPolar( chartType ) && isPolar( d->plotAreaChartType ) )
+    {
+        foreach( DataSet *dataSet, d->dataSets )
+        {
+            if ( dataSet->chartType() != LastChartType )
+            {
+                dataSet->setChartType( LastChartType );
+                dataSet->setChartSubType( NoChartSubtype );
+            }
+        }
     }
     
     foreach( DataSet *dataSet, d->dataSets )

@@ -43,6 +43,8 @@ public:
     QColor backgroundColor() const;
     QFont font() const;
     double fontSize() const;
+    QFont titleFont() const;
+    double titleFontSize() const;
     LegendExpansion expansion() const;
     Qt::Alignment alignment() const;
     LegendPosition legendPosition() const;
@@ -55,12 +57,15 @@ public:
     void setBackgroundColor( const QColor &color );
     void setFont( const QFont &font );
     void setFontSize( double size );
+    void setTitleFont( const QFont &font );
+    void setTitleFontSize( double size );
     void setExpansion( LegendExpansion expansion );
     void setAlignment( Qt::Alignment alignment );
     void setLegendPosition( LegendPosition position );
     void setSize( const QSizeF &size );
     
-    void paint( QPainter &painter, const KoViewConverter &converter );   
+    void paint( QPainter &painter, const KoViewConverter &converter );
+    void paintPixmap( QPainter &painter, const KoViewConverter &converter );
     
     bool loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &context );
     void saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
