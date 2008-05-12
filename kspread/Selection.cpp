@@ -84,7 +84,6 @@ public:
 /***************************************************************************
   class Selection
 ****************************************************************************/
-namespace KSpread {
 
 Selection::Selection( QObject* parent )
     : QObject( parent )
@@ -766,7 +765,7 @@ void Selection::setActiveElement(int pos)
   d->activeElement = pos;
 }
 
-Region::Element* Selection::activeElement() const
+KSpread::Region::Element* Selection::activeElement() const
 {
   return (d->activeElement == cells().count()) ? 0 : cells()[d->activeElement];
 }
@@ -899,32 +898,32 @@ QRect Selection::extendToMergedAreas(const QRect& _area) const
   return area;
 }
 
-Selection::Region::Point* Selection::createPoint(const QPoint& point) const
+KSpread::Region::Point* Selection::createPoint(const QPoint& point) const
 {
   return new Point(point);
 }
 
-Selection::Region::Point* Selection::createPoint(const QString& string) const
+KSpread::Region::Point* Selection::createPoint(const QString& string) const
 {
   return new Point(string);
 }
 
-Selection::Region::Point* Selection::createPoint(const Point& point) const
+KSpread::Region::Point* Selection::createPoint(const Region::Point& point) const
 {
   return new Point(point);
 }
 
-Selection::Region::Range* Selection::createRange(const QRect& rect) const
+KSpread::Region::Range* Selection::createRange(const QRect& rect) const
 {
   return new Range(rect);
 }
 
-Selection::Region::Range* Selection::createRange(const QString& string) const
+KSpread::Region::Range* Selection::createRange(const QString& string) const
 {
   return new Range(string);
 }
 
-Selection::Region::Range* Selection::createRange(const Range& range) const
+KSpread::Region::Range* Selection::createRange(const Region::Range& range) const
 {
   return new Range(range);
 }
@@ -1035,6 +1034,12 @@ Selection::Point::Point(const QString& string)
 {
 }
 
+Selection::Point::Point(const Region::Point& point)
+  : Region::Point(point),
+    m_color(Qt::black)
+{
+}
+
 /***************************************************************************
   class Range
 ****************************************************************************/
@@ -1051,6 +1056,10 @@ Selection::Range::Range(const QString& string)
 {
 }
 
-} // namespace KSpread
+Selection::Range::Range(const Region::Range& range)
+  : Region::Range(range),
+    m_color(Qt::black)
+{
+}
 
 #include "Selection.moc"

@@ -275,7 +275,7 @@ protected:
   /**
    * @internal used to create derived Points
    */
-  virtual Region::Point* createPoint(const Point&) const;
+  virtual Region::Point* createPoint(const Region::Point&) const;
 
   /**
    * @internal used to create derived Ranges
@@ -290,7 +290,7 @@ protected:
   /**
    * @internal used to create derived Ranges
    */
-  virtual Region::Range* createRange(const Range&) const;
+  virtual Region::Range* createRange(const Region::Range&) const;
 
   /**
    * Dilates the region and emits the changed() signal.
@@ -323,6 +323,7 @@ class Selection::Point : public Region::Point
 public:
   Point(const QPoint& point);
   Point(const QString& string);
+  Point(const Region::Point& point);
 
   void setColor(const QColor& color) { m_color = color; }
   virtual const QColor& color() const { return m_color; }
@@ -343,6 +344,7 @@ class Selection::Range : public Region::Range
 public:
   Range(const QRect& rect);
   Range(const QString& string);
+  Range(const Region::Range& range);
 
   void setColor(const QColor& color) { m_color = color; }
   const QColor& color() const { return m_color; }
