@@ -44,7 +44,7 @@ KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader* loader)
 {
     KoShapeLoadingContext::addAdditionalAttributeData(
         KoShapeLoadingContext::AdditionalAttributeData(
-            KoXmlNS::draw, "anchor-type", "draw:anchor-type" ) );
+            KoXmlNS::draw, "anchor-type", "text:anchor-type" ) );
 }
 
 void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
@@ -76,7 +76,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
     */
 
     //TODO adopt the anchor-logic below + move as much of the loading-logic to KoTextAnchor itself (see also KoTextShapeContainerModel)
-    QString anchortype = shape->additionalAttribute("draw:anchor-type");
+    QString anchortype = shape->additionalAttribute("text:anchor-type");
     kDebug()<<"anchortype="<<anchortype;
 
     KWFrameSet* fs = new KWFrameSet();
