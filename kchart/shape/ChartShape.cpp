@@ -118,9 +118,18 @@ static const unsigned int  numChartTypes = ( sizeof odfChartTypes
 
 bool isPolar( ChartType type )
 {
-    return ( type == CircleChartType
-         || type == RingChartType
-         || type == RadarChartType );
+    switch ( type )
+    {
+    case CircleChartType:
+    case RingChartType:
+    case RadarChartType:
+    case BubbleChartType:
+    case SurfaceChartType:
+        return true;
+    default:
+        return false;
+    }
+    return false;
 }
 
 bool isCartesian( ChartType type )

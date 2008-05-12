@@ -62,22 +62,6 @@
 
 using namespace KChart;
 
-bool isPolar( ChartType type )
-{
-    switch ( type )
-    {
-    case CircleChartType:
-    case RingChartType:
-    case RadarChartType:
-    case BubbleChartType:
-    case SurfaceChartType:
-        return true;
-    default:
-        return false;
-    }
-    return false;
-}
-
 class PlotArea::Private
 {
 public:
