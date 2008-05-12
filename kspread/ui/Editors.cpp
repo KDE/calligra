@@ -114,7 +114,7 @@ const Tokens& FormulaEditorHighlighter::formulaTokens() const
 void FormulaEditorHighlighter::highlightBlock( const QString& text )
 {
   // reset syntax highlighting
-  setFormat(0, text.length(), Qt::black);
+  setFormat(0, text.length(), QApplication::palette().text().color());
 
   // save the old ones to identify range changes
   Tokens oldTokens = d->tokens;

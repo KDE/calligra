@@ -1873,7 +1873,7 @@ uint Style::topPenValue() const
 QColor Style::fontColor() const
 {
     if ( !d->subStyles.contains( FontColor ) )
-        return Qt::black;//SubStyleOne<FontColor, QColor>().value1;
+        return SubStyleOne<FontColor, QColor>().value1;
     return static_cast<const SubStyleOne<FontColor, QColor>*>( d->subStyles[FontColor].data() )->value1;
 }
 

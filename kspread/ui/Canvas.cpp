@@ -2894,7 +2894,7 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
     painter.setClipRegion( painter.clipRegion().boundingRect().adjusted(-1,-1,1,1) );
 
     QLineF line;
-    QPen pen( Qt::black, d->view->zoomHandler()->unzoomItX( 2 ) );
+    QPen pen( QApplication::palette().text().color(), d->view->zoomHandler()->unzoomItX( 2 ) );
     painter.setPen( pen );
 
     const KSpread::Selection* selection = this->selection();
