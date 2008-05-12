@@ -75,7 +75,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
         - unittests :)
     */
 
-    //TODO use KoTextShapeContainerModel
+    //TODO adopt the anchor-logic below + move as much of the loading-logic to KoTextAnchor itself (see also KoTextShapeContainerModel)
     QString anchortype = shape->additionalAttribute("draw:anchor-type");
     kDebug()<<"anchortype="<<anchortype;
 
