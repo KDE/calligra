@@ -1575,6 +1575,8 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
                 QPointF point;
                 point.setX( fromUserSpace( (*it).toDouble() ) );
                 ++it;
+                if( it == pointList.end() )
+                    break;
                 point.setY( fromUserSpace( (*it).toDouble() ) );
                 if( bFirst )
                 {
