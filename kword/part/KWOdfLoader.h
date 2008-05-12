@@ -20,8 +20,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KWOPENDOCUMENTLOADER_H
-#define KWOPENDOCUMENTLOADER_H
+#ifndef KWODFLOADER_H
+#define KWODFLOADER_H
 
 #include <KoStore.h>
 #include <KoTextLoader.h>
@@ -41,7 +41,7 @@ class QTextCursor;
 /**
  * Class that has a lot of the OpenDocument (ODF) loading code for KWord.
  */
-class KWOpenDocumentLoader : public QObject
+class KWOdfLoader : public QObject
 {
     Q_OBJECT
 public:
@@ -49,8 +49,8 @@ public:
      * Constructor
      * @param document the document this loader will work for.
      */
-    explicit KWOpenDocumentLoader(KWDocument *document);
-    virtual ~KWOpenDocumentLoader();
+    explicit KWOdfLoader(KWDocument *document);
+    virtual ~KWOdfLoader();
 
     KWDocument* document() const;
     KWPageManager* pageManager();

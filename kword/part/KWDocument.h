@@ -217,7 +217,7 @@ protected:
 private:
     friend class PageProcessingQueue;
     friend class KWDLoader;
-    friend class KWOpenDocumentLoader;
+    friend class KWOdfLoader;
     friend class KWStartupWidget;
     friend class KWPagePropertiesCommand;
     friend class KWPageInsertCommand;

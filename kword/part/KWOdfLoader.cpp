@@ -21,14 +21,14 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KWOpenDocumentLoader.h"
+#include "KWOdfLoader.h"
+#include "KWOdfSharedLoadingData.h"
 #include "KWDocument.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWTextFrame.h"
 #include "frames/KWFrame.h"
 
 // koffice
-#include <KoTextSharedLoadingData.h>
 #include <KoOdfStylesReader.h>
 #include <KoOasisSettings.h>
 #include <KoOdfReadStore.h>
@@ -56,58 +56,6 @@
 #include <kdebug.h>
 #include <QTextBlock>
 
-class KWSharedLoadingData : public KoTextSharedLoadingData
-{
-    public:
-        KWSharedLoadingData(KWOpenDocumentLoader* loader) : KoTextSharedLoadingData(), m_loader(loader) {}
-    protected:
-        virtual void shapeInserted(KoShape* shape) {
-            kDebug()<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
-
-            /*TODO
-                - shape can be anything, not only an image-shape but with the current KWFrame-design
-                  we need to special case them, or? well, probably it would be wise to refactor
-                  the KWFrame+KWFrameSet logic here...
-                            ==> DONE ? Now, we just use a KWFrame + KWFrameSet, no need for KWImageFrame for instance.
-                                ==> imho the best way to go in the long run.
-                - we also need to pass the used QTextCursor around to know in what KWFrameSet we are
-                  atm and where to write to. Or should we just use QTextCursor(m_loader->currentFrameset->document())
-                  each time and assume that we only need to append content anyway?
-                - KoTextAnchor should be created+managed by the KoTextLoader but we need access to
-                  it here to be able to use KWPageManager if "anchor-type"=="page". Maybe we are
-                  able to utilize KoShapeApplicationData as container for such kind of objects?
-                - bring back header+footers :)
-                - What about parent-styles aka style-inheritance? Does this REALLY work already?
-                - table-shape vs. QTextTable vs. the layout-hacks within the textshape is still a huge
-                  issue of it's own. http://lists.kde.org/?l=koffice-devel&m=120574617208477&w=2 and
-                  http://lists.kde.org/?l=koffice-devel&m=120582471310900&w=2
-                - unittests :)
-            */
-
-            //TEMP HACK
-            QString anchortype = shape->additionalAttribute("anchor-type");
-            KWFrameSet* fs = new KWFrameSet();
-            fs->setName("My FrameSet");
-            KWFrame *frame = new KWFrame(shape, fs);
-            m_loader->document()->addFrameSet(fs);
-            KoTextAnchor *anchor = new KoTextAnchor(shape);
-            //Q_ASSERT(dynamic_cast<KoTextShapeData*>(shape->userData())); //this asserts cause shapes don't inheritate/share there userdata
-            Q_ASSERT(m_loader->currentFrame());
-            KWTextFrameSet* docfs = dynamic_cast<KWTextFrameSet*>(m_loader->currentFrame()->frameSet());
-            Q_ASSERT(docfs);
-            QTextDocument* doc = docfs->document(); //m_loader->document()->mainFrameSet()->document();
-
-            Q_ASSERT(doc);
-            QTextCursor cursor(doc);
-            KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> ( cursor.block().document()->documentLayout() );
-            Q_ASSERT(layout);
-            Q_ASSERT(layout->inlineObjectTextManager());
-            layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
-        }
-    private:
-        KWOpenDocumentLoader* m_loader;
-};
-
 #if 0
 /**
 * The KWOpenDocumentFrameLoader class implements a KoTextFrameLoader to
@@ -116,7 +64,7 @@ class KWSharedLoadingData : public KoTextSharedLoadingData
 class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextFrameLoader
 {
     public:
-        explicit KWOpenDocumentFrameLoader(KWOpenDocumentLoader* loader) /*: KoTextFrameLoader(loader), m_loader(loader)*/ {}
+        explicit KWOpenDocumentFrameLoader(KWOdfLoader* loader) /*: KoTextFrameLoader(loader), m_loader(loader)*/ {}
         virtual ~KWOpenDocumentFrameLoader() {}
 
         virtual KoShape* loadImageShape(KWLoadingContext& context, const KoXmlElement& frameElem, const KoXmlElement& imageElem, QTextCursor& cursor)
@@ -132,7 +80,7 @@ class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextF
             m_loader->document()->addFrameSet(fs);
             KoShape* shape = imageFrame->shape();
             if( ! shape ) {
-                kWarning(32001)<<"KWOpenDocumentLoader::loadImage No image shape"<<endl;
+                kWarning(32001)<<"KWOdfLoader::loadImage No image shape"<<endl;
                 return 0;
             }
 
@@ -221,7 +169,7 @@ class KWOpenDocumentFrameLoader //TODO no frame loading for now : public KoTextF
                 layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
             }
             else
-                kWarning(32001)<<"KWOpenDocumentLoader::loadImage Unknown anchor-type: "<<anchortype<<endl;
+                kWarning(32001)<<"KWOdfLoader::loadImage Unknown anchor-type: "<<anchortype<<endl;
             if (anchor)
                 imageFrame->attachAnchor(anchor);
 
@@ -288,12 +236,12 @@ kDebug(32001) << "HOOOO Look at me, I've got a table shape !!! Incredible." << s
         
 
     private:
-        KWOpenDocumentLoader* m_loader;
+        KWOdfLoader* m_loader;
 };
 #endif
 
 /// \internal d-pointer class.
-class KWOpenDocumentLoader::Private
+class KWOdfLoader::Private
 {
     public:
         /// The KWord document.
@@ -304,7 +252,7 @@ class KWOpenDocumentLoader::Private
         KWTextFrame *currentFrame;
 };
 
-KWOpenDocumentLoader::KWOpenDocumentLoader(KWDocument *document)
+KWOdfLoader::KWOdfLoader(KWDocument *document)
 : QObject()
 , d(new Private())
 {
@@ -313,21 +261,21 @@ KWOpenDocumentLoader::KWOpenDocumentLoader(KWDocument *document)
     connect(this, SIGNAL(sigProgress(int)), d->document, SIGNAL(sigProgress(int)));
 }
 
-KWOpenDocumentLoader::~KWOpenDocumentLoader() {
+KWOdfLoader::~KWOdfLoader() {
     delete d;
 }
 
-KWDocument* KWOpenDocumentLoader::document() const { return d->document; }
-KWPageManager* KWOpenDocumentLoader::pageManager() { return & d->document->m_pageManager; }
-QString KWOpenDocumentLoader::currentMasterPage() const { return d->currentMasterPage; }
-QString KWOpenDocumentLoader::currentFramesetName() const { return d->currentFrame ? d->currentFrame->frameSet()->name() : QString(); }
-KWTextFrame* KWOpenDocumentLoader::currentFrame() const { return d->currentFrame; }
+KWDocument* KWOdfLoader::document() const { return d->document; }
+KWPageManager* KWOdfLoader::pageManager() { return & d->document->m_pageManager; }
+QString KWOdfLoader::currentMasterPage() const { return d->currentMasterPage; }
+QString KWOdfLoader::currentFramesetName() const { return d->currentFrame ? d->currentFrame->frameSet()->name() : QString(); }
+KWTextFrame* KWOdfLoader::currentFrame() const { return d->currentFrame; }
 
 //1.6: KWDocument::loadOasis
-bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
+bool KWOdfLoader::load( KoOdfReadStore & odfStore )
 {
     emit sigProgress( 0 );
-    kDebug(32001) <<"========================> KWOpenDocumentLoader::load START";
+    kDebug(32001) <<"========================> KWOdfLoader::load START";
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
     KoXmlElement realBody ( KoXml::namedItemNS( content, KoXmlNS::office, "body" ) );
@@ -358,7 +306,7 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
 
     // Load all styles before the corresponding paragraphs try to use them!
     //KoTextSharedLoadingData * sharedData = new KoTextSharedLoadingData();
-    KWSharedLoadingData * sharedData = new KWSharedLoadingData(this);
+    KWOdfSharedLoadingData * sharedData = new KWOdfSharedLoadingData(this);
     KoStyleManager *styleManager = dynamic_cast<KoStyleManager *>( d->document->dataCenterMap()["StyleManager"] );
     Q_ASSERT( styleManager );
     sharedData->loadOdfStyles( odfContext, styleManager, true );
@@ -536,17 +484,17 @@ bool KWOpenDocumentLoader::load( KoOdfReadStore & odfStore )
     //delete d->frameLoader;
     //d->frameLoader = 0;
 
-    kDebug(32001) <<"========================> KWOpenDocumentLoader::load END";
+    kDebug(32001) <<"========================> KWOdfLoader::load END";
     emit sigProgress(100);
     return true;
 }
 
-void KWOpenDocumentLoader::loadSettings( const KoXmlDocument& settingsDoc )
+void KWOdfLoader::loadSettings( const KoXmlDocument& settingsDoc )
 {
     if ( settingsDoc.isNull() )
         return;
 
-    kDebug(32001)<<"KWOpenDocumentLoader::loadSettings";
+    kDebug(32001)<<"KWOdfLoader::loadSettings";
     KoOasisSettings settings( settingsDoc );
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
     if ( !viewSettings.isNull() )
@@ -562,9 +510,9 @@ void KWOpenDocumentLoader::loadSettings( const KoXmlDocument& settingsDoc )
     //1.6: d->document->variableCollection()->variableSetting()->loadOasis( settings );
 }
 
-bool KWOpenDocumentLoader::loadPageLayout(KoOdfLoadingContext& context, const QString& masterPageName)
+bool KWOdfLoader::loadPageLayout(KoOdfLoadingContext& context, const QString& masterPageName)
 {
-    kDebug(32001)<<"KWOpenDocumentLoader::loadPageLayout masterPageName="<<masterPageName;
+    kDebug(32001)<<"KWOdfLoader::loadPageLayout masterPageName="<<masterPageName;
     const KoOdfStylesReader& styles = context.stylesReader();
     const KoXmlElement* masterPage = styles.masterPages()[ masterPageName ];
     const KoXmlElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
@@ -633,9 +581,9 @@ bool KWOpenDocumentLoader::loadPageLayout(KoOdfLoadingContext& context, const QS
     return true;
 }
 
-bool KWOpenDocumentLoader::loadMasterPageStyle(KoOdfLoadingContext& context, const QString& masterPageName)
+bool KWOdfLoader::loadMasterPageStyle(KoOdfLoadingContext& context, const QString& masterPageName)
 {
-    kDebug(32001)<<"KWOpenDocumentLoader::loadMasterPageStyle masterPageName="<<masterPageName;
+    kDebug(32001)<<"KWOdfLoader::loadMasterPageStyle masterPageName="<<masterPageName;
     const KoOdfStylesReader& styles = context.stylesReader();
     const KoXmlElement *masterPage = styles.masterPages()[ masterPageName ];
     const KoXmlElement *masterPageStyle = masterPage ? styles.findStyle( masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString() ) ) : 0;
@@ -665,7 +613,7 @@ bool KWOpenDocumentLoader::loadMasterPageStyle(KoOdfLoadingContext& context, con
 }
 
 //1.6: KWOasisLoader::loadOasisHeaderFooter
-void KWOpenDocumentLoader::loadHeaderFooter(KoOdfLoadingContext& context, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader)
+void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext& context, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader)
 {
     // Not OpenDocument compliant element to define the first header/footer.
     KoXmlElement firstElem = KoXml::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-first" : "footer-first" );
@@ -677,7 +625,7 @@ void KWOpenDocumentLoader::loadHeaderFooter(KoOdfLoadingContext& context, const 
         return; // no header/footer
 
     const QString localName = elem.localName();
-    kDebug(32001)<<"KWOpenDocumentLoader::loadHeaderFooter localName="<<localName<<" isHeader="<<isHeader<<" hasFirst="<<hasFirst;
+    kDebug(32001)<<"KWOdfLoader::loadHeaderFooter localName="<<localName<<" isHeader="<<isHeader<<" hasFirst="<<hasFirst;
 
     // Formatting properties for headers and footers on a page.
     KoXmlElement styleElem = KoXml::namedItemNS( masterPageStyle, KoXmlNS::style, isHeader ? "header-style" : "footer-style" );
@@ -714,7 +662,7 @@ void KWOpenDocumentLoader::loadHeaderFooter(KoOdfLoadingContext& context, const 
         fsTypeName = i18n("First Page Footer");
     }
     else {
-        kWarning(32001) << "Unknown tag in KWOpenDocumentLoader::loadHeaderFooter: " << localName << endl;
+        kWarning(32001) << "Unknown tag in KWOdfLoader::loadHeaderFooter: " << localName << endl;
         return;
     }
 
@@ -773,7 +721,7 @@ void KWOpenDocumentLoader::loadHeaderFooter(KoOdfLoadingContext& context, const 
     //TODO handle style, seems to be similar to what is done at KoPageLayout::loadOasis
 }
 
-void KWOpenDocumentLoader::loadFrame(KoOdfLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor)
+void KWOdfLoader::loadFrame(KoOdfLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor)
 {
 #if 0 // TODO differently
     Q_ASSERT(d->frameLoader);

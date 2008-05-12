@@ -26,7 +26,7 @@
 #include "KWCanvas.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
-#include "KWOpenDocumentLoader.h"
+#include "KWOdfLoader.h"
 #include "KWDLoader.h"
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
@@ -509,8 +509,7 @@ bool KWDocument::loadOdf( KoOdfReadStore & odfStore )
         KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
         canvas->resourceProvider()->setResource(KoCanvasResource::DocumentIsLoading, true);
     }
-
-    KWOpenDocumentLoader loader(this);
+    KWOdfLoader loader(this);
     bool rc = loader.load(odfStore);
     if (rc)
         endOfLoading();

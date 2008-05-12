@@ -21,7 +21,8 @@ set(kwordprivate_LIB_SRCS
     KWViewModeNormal.cpp
     KWViewModePreview.cpp
     KWStatusBar.cpp
-    KWOpenDocumentLoader.cpp
+    KWOdfLoader.cpp
+    KWOdfSharedLoadingData.cpp
     KWDLoader.cpp
 
     frames/KWTextDocumentLayout.cpp
