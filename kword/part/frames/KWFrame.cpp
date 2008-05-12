@@ -82,25 +82,10 @@ void KWFrame::copySettings(const KWFrame *frame) {
 void KWFrame::saveOdf(KoShapeSavingContext & context) {
     if (m_anchor)
         return;
-    KoXmlWriter &writer = context.xmlWriter();
-    const bool mainTextFrame = context.isSet(KoShapeSavingContext::MainTextFrame);
-    if (!mainTextFrame) {
-        writer.startElement("draw:frame");
-        /*
-        ODF: 9.3 Frames
-        The attributes that may be associated with the <draw:frame> element are:
-        Position, Size (relative sizes, see below), Style, Layer, Z-Index, ID, Caption ID and
-        Transformation – see section 9.2.15.
-        Text anchor, table background, draw end position – see section 9.2.16
-        Presentation class – see section 9.6.1
-        Copy frames
-        */
-    
-        shape()->saveOdfFrameAttributes(context);
-    }
+
+    // TODO I think a anchor-type needs to be added to the shape
+    // but I'm not sure how kword does handle that stuff.
     shape()->saveOdf(context);
-    if (!mainTextFrame)
-        writer.endElement();
 }
 
 void KWFrame::setShape(KoShape *shape) {
