@@ -126,7 +126,7 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
 	m_comboDateFormat->setName( "m_comboDateFormat" );
 	m_comboDateFormat->insertItem( i18nc("Date format: Auto", "Auto") );
 	QString year( i18n("year") ), month( i18n("month") ), day( i18n("day") );
-	QString mask= ki18nc("\"month, year, day\" mask", "%1, %2, %3 (e.g. %4-%5-%6)").toString();
+	QString mask= ki18nc("do not reorder placeholders, just translate e.g. and - to the separator used by dates in your language", "%1, %2, %3 (e.g. %4-%5-%6)").toString();
 	m_comboDateFormat->insertItem( mask.arg(day).arg(month).arg(year).arg(30).arg(12).arg(2008) );
 	m_comboDateFormat->insertItem( mask.arg(year).arg(month).arg(day).arg(2008).arg(12).arg(30) );
 	m_comboDateFormat->insertItem( mask.arg(month).arg(day).arg(year).arg(12).arg(30).arg(2008) );
