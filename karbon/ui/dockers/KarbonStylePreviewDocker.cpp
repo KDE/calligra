@@ -378,7 +378,7 @@ QString KarbonStylePreviewDockerFactory::id() const
 
 KoDockFactory::DockPosition KarbonStylePreviewDockerFactory::defaultDockPosition() const
 {
-    return DockLeft;
+    return DockRight;
 }
 
 QDockWidget* KarbonStylePreviewDockerFactory::createDockWidget()
