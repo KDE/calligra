@@ -1422,8 +1422,6 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
         }
 
         text->setText( content.simplified() );
-        textPosition -= QPointF( 0, text->baselineOffset() );
-        kDebug(30514) << "with childs -> baseline offset =" << text->baselineOffset();
         text->setPosition( textPosition );
 
         if( path )
@@ -1448,8 +1446,6 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
             return 0;
 
         text->setText( b.text().simplified() );
-        kDebug(30514) << "baseline offset =" << text->baselineOffset();
-        textPosition -= QPointF( 0, text->baselineOffset() );
         text->setPosition( textPosition );
     }
 
@@ -1464,8 +1460,10 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
 
     text->setFont( m_gc.top()->font );
     text->setBackground( m_gc.top()->fill );
-    text->applyAbsoluteTransformation( m_gc.top()->matrix );
     text->setZIndex( nextZIndex() );
+
+    // adjust position by baseline offset
+    text->setPosition( text->position() - QPointF( 0, text->baselineOffset() ) );
 
     if( anchor == "middle" )
         text->setTextAnchor( SimpleTextShape::AnchorMiddle );
@@ -1474,6 +1472,8 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
 
     if( !b.attribute("id").isEmpty() )
         text->setName( b.attribute("id") );
+
+    text->applyAbsoluteTransformation( m_gc.top()->matrix );
 
     removeGraphicContext();
 
@@ -1518,27 +1518,27 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
     }
     else if( b.tagName() == "ellipse" )
     {
-        double rx   = parseUnit( b.attribute( "rx" ) );
-        double ry   = parseUnit( b.attribute( "ry" ) );
-        double left = parseUnit( b.attribute( "cx" ) ) - rx;
-        double top  = parseUnit( b.attribute( "cy" ) ) - ry;
         obj = createShape( KoEllipseShapeId );
         if( obj )
         {
+            double rx   = parseUnit( b.attribute( "rx" ) );
+            double ry   = parseUnit( b.attribute( "ry" ) );
+            double cx = b.attribute( "cx" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "cx" ) );
+            double cy = b.attribute( "cy" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "cy" ) );
             obj->setSize( QSizeF(2*rx, 2*ry) );
-            obj->setPosition( QPointF(left,top) );
+            obj->setPosition( QPointF(cx-rx,cy-ry) );
         }
     }
     else if( b.tagName() == "circle" )
     {
-        double r    = parseUnit( b.attribute( "r" ) );
-        double left = parseUnit( b.attribute( "cx" ) ) - r;
-        double top  = parseUnit( b.attribute( "cy" ) ) - r;
         obj = createShape( KoEllipseShapeId );
         if( obj )
         {
+            double r    = parseUnit( b.attribute( "r" ) );
+            double cx = b.attribute( "cx" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "cx" ) );
+            double cy = b.attribute( "cy" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "cy" ) );
             obj->setSize( QSizeF(2*r, 2*r) );
-            obj->setPosition( QPointF(left,top) );
+            obj->setPosition( QPointF(cx-r,cy-r) );
         }
     }
     else if( b.tagName() == "line" )
@@ -1714,6 +1714,9 @@ KoShape * SvgImport::createShape( const QString &shapeID )
     KoShape * shape = factory->createDefaultShape( 0 );
     if( shape && shape->shapeId().isEmpty() )
         shape->setShapeId( factory->id() );
+
+    // reset tranformation that might come from the default shape
+    shape->setTransformation( QMatrix() );
 
     return shape;
 }
