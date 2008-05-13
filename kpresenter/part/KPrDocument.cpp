@@ -25,8 +25,12 @@
 #include "KPrMasterPage.h"
 #include "KPrShapeApplicationData.h"
 #include "KPrFactory.h"
-#include <KoXmlNS.h>
+#include "KPrViewModeNotes.h"
+#include <KoPACanvas.h>
+#include <KoPAViewModeNormal.h>
+#include <KoShapeManager.h>
 #include <KoShapeLoadingContext.h>
+#include <KoXmlNS.h>
 
 KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoPADocument( parentWidget, parent, singleViewMode )
@@ -55,6 +59,40 @@ bool KPrDocument::loadXML( QIODevice *, const KoXmlDocument & doc )
     //Perhaps not necessary if we use filter import/export for old file format
     //will be removed
     return true;
+}
+
+void KPrDocument::addShape( KoShape *shape )
+{
+    foreach( KoView *view, views() )
+    {
+        KoPAView *kopaView = static_cast<KPrView *>( view );
+        KoPAViewModeNormal *normalMode = dynamic_cast<KoPAViewModeNormal *>( kopaView->viewMode() );
+        KPrViewModeNotes *notesMode = dynamic_cast<KPrViewModeNotes *>( kopaView->viewMode() );
+
+        if ( normalMode ) {
+            KoPADocument::addShape( shape );
+        }
+        else if ( notesMode ) {
+            kopaView->kopaCanvas()->shapeManager()->add( shape );
+        }
+    }
+}
+
+void KPrDocument::removeShape( KoShape *shape )
+{
+    foreach( KoView *view, views() )
+    {
+        KoPAView *kopaView = static_cast<KPrView *>( view );
+        KoPAViewModeNormal *normalMode = dynamic_cast<KoPAViewModeNormal *>( kopaView->viewMode() );
+        KPrViewModeNotes *notesMode = dynamic_cast<KPrViewModeNotes *>( kopaView->viewMode() );
+
+        if ( normalMode ) {
+            KoPADocument::removeShape( shape );
+        }
+        else if ( notesMode ) {
+            kopaView->kopaCanvas()->shapeManager()->remove( shape );
+        }
+    }
 }
 
 KoView * KPrDocument::createViewInstance( QWidget *parent )

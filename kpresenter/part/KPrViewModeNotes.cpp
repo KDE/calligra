@@ -27,6 +27,7 @@
 #include <KoCanvasResourceProvider.h>
 #include <KoRuler.h>
 #include <KoSelection.h>
+#include <KoShapeLayer.h>
 #include <KoShapeManager.h>
 #include <KoText.h>
 #include <KoToolManager.h>
@@ -152,9 +153,8 @@ void KPrViewModeNotes::updateActivePage( KoPAPageBase *page )
     if ( !prPage ) return;
 
     KPrNotes *notes = prPage->pageNotes();
-    QList<KoShape *> shapes;
-    shapes << notes->textShape();
-    shapes << notes->thumbnailShape();
+    notes->updatePageThumbnail();
+    KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( notes->iterator().last() );
 
     KoPageLayout &layout = notes->pageLayout();
     QSize size(layout.width, layout.height);
@@ -168,11 +168,12 @@ void KPrViewModeNotes::updateActivePage( KoPAPageBase *page )
     m_view->zoomController()->setDocumentSize(size);
     m_canvas->update();
 
-    m_canvas->shapeManager()->setShapes(shapes);
+    m_canvas->shapeManager()->setShapes( layer->iterator() );
     m_canvas->masterShapeManager()->setShapes(QList<KoShape*>());
 
     KoSelection *selection = m_canvas->shapeManager()->selection();
     selection->select(notes->textShape());
+    selection->setActiveLayer( layer );
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
 }

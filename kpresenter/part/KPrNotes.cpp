@@ -28,18 +28,46 @@
 #include <KoPAMasterPage.h>
 #include <KoShape.h>
 #include <KoShapeFactory.h>
+#include <KoShapeLayer.h>
 #include <KoShapePainter.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
+#include <KoUnit.h>
+#include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
 
 #include "KPrPage.h"
 
+// a helper class to load attributes of the thumbnail shape
+class ShapeLoaderHelper : public KoShape
+{
+public:
+    ShapeLoaderHelper() { }
+
+    virtual void paint( QPainter &, const KoViewConverter & ) { }
+
+    virtual void paintDecorations( QPainter &, const KoViewConverter &, const KoCanvasBase * ) { }
+
+    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
+    {
+        return loadOdfAttributes( element, context, OdfAllAttributes );
+    }
+
+    virtual void saveOdf( KoShapeSavingContext & ) const { }
+
+private:
+    virtual KoShape *cloneShape() const { return 0; }
+};
+
 KPrNotes::KPrNotes(KPrPage *page)
     : KoShapeContainer()
     , m_page( page )
 {
+    // add default layer
+    KoShapeLayer* layer = new KoShapeLayer;
+    addChild( layer );
+
     // All sizes and positions are hardcoded for now
     KoShapeFactory *factory = KoShapeRegistry::instance()->value("TextShapeID");
     Q_ASSERT(factory);
@@ -58,8 +86,8 @@ KPrNotes::KPrNotes(KPrPage *page)
     m_thumbnailShape->setPosition(QPointF(108.00, 60.18));
     m_thumbnailShape->setSize(QSizeF(396.28, 296.96));
 
-    addChild(m_textShape);
-    addChild(m_thumbnailShape);
+    layer->addChild( m_textShape );
+    layer->addChild( m_thumbnailShape );
 }
 
 KPrNotes::~KPrNotes()
@@ -92,12 +120,52 @@ void KPrNotes::saveOdf(KoShapeSavingContext &context) const
     writer->addAttribute("draw:page-number", static_cast<KoPASavingContext &>(context).page());
     writer->endElement();
 
+    /* foreach ( KoShape *shape, iterator() ) {
+        if ( shape != m_textShape && shape != m_thumbnailShape ) {
+            kDebug() << "Iterator: " << shape;
+            shape->saveOdf( context );
+        }
+    } */
+
     writer->endElement();
 }
 
 bool KPrNotes::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
 {
-    // TODO
+    KoXmlElement child;
+    KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( iterator().last() );
+
+    forEachElement( child, element ) {
+        if ( child.namespaceURI() != KoXmlNS::draw )
+            continue;
+
+        if ( child.tagName() == "page-thumbnail") {
+            ShapeLoaderHelper *helper = new ShapeLoaderHelper();
+            helper->loadOdf( child, context );
+            m_thumbnailShape->setSize( helper->size() );
+            m_thumbnailShape->setTransformation( helper->transformation() );
+            m_thumbnailShape->setPosition( helper->position() );
+            m_thumbnailShape->setShapeId( helper->shapeId() );
+            delete helper;
+        }
+        else /* if ( child.tagName() == "frame") */ {
+            KoShape *shape = KoShapeRegistry::instance()->createShapeFromOdf( child, context );
+            if ( shape ) {
+                if ( shape->shapeId() == "TextShapeID" &&
+                        child.hasAttributeNS( KoXmlNS::presentation, "class" ) ) {
+                    layer->removeChild( m_textShape );
+                    delete m_textShape;
+                    m_textShape = shape;
+                    m_textShape->setAdditionalAttribute( "presentation:class", "notes" );
+                    layer->addChild( m_textShape );
+                }
+                else {
+                    layer->addChild( shape );
+                }
+            }
+        }
+    }
+
     return true;
 }
 
@@ -105,6 +173,13 @@ void KPrNotes::paintComponent(QPainter& painter, const KoViewConverter& converte
 {
     Q_UNUSED(painter);
     Q_UNUSED(converter);
+}
+
+void KPrNotes::updatePageThumbnail()
+{
+    KoImageData *imageData = new KoImageData( new KoImageCollection() );
+    imageData->setImage( createPageThumbnail() );
+    m_thumbnailShape->setUserData( imageData );
 }
 
 KoShape *KPrNotes::cloneShape() const

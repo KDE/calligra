@@ -46,6 +46,8 @@ public:
 
     KoPageLayout &pageLayout() { return m_pageLayout; }
 
+    void updatePageThumbnail();
+
 protected:
     /// reimplemented from KoShape
     virtual KoShape *cloneShape() const;
