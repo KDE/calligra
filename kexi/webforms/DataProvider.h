@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_WEBFORMS_DBMODEL_H
-#define KEXI_WEBFORMS_DBMODEL_H
+#ifndef KEXI_WEBFORMS_DATAPROVIDER_H
+#define KEXI_WEBFORMS_DATAPROVIDER_H
 
 #include <QString>
 #include <QStringList>
@@ -36,12 +36,11 @@
 
 namespace KexiWebForms {
 
-    class DBModel {
+    class DataProvider {
     public:
-        DBModel(QString);
-        virtual ~DBModel() {};
-        QStringList getDatabases();
-        QStringList getTables(const QString&);
+        DataProvider(QString);
+        virtual ~DataProvider() {};
+        QStringList getTables();
     private:
         KexiDB::ConnectionData m_connData;
         KexiDB::Connection* m_connection;

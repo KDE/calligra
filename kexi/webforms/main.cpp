@@ -33,7 +33,7 @@
 #include <shttpd.h>
 
 
-#include "DBModel.h"
+#include "DataProvider.h"
 
 using namespace KexiWebForms;
 
@@ -105,8 +105,8 @@ int main(int argc, char **argv) {
 
     // Test model
     // FIXME: This code is here just for testing
-    DBModel model(serverConfig.dbPath);
-    kDebug() << "Databases: " << model.getDatabases();
+    DataProvider provider(serverConfig.dbPath);
+    kDebug() << "Databases: " << provider.getTables();
 
     if (server.run())
         return 0;

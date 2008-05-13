@@ -18,7 +18,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "DBModel.h"
+#include "DataProvider.h"
 
 #include <KDebug>
 
@@ -26,7 +26,7 @@
 
 namespace KexiWebForms {
 
-    DBModel::DBModel(QString kexiFile) {
+    DataProvider::DataProvider(QString kexiFile) {
         m_driverManager = new KexiDB::DriverManager();
 
         kDebug() << "Loading default driver...";
@@ -47,11 +47,8 @@ namespace KexiWebForms {
         }
     }
 
-    QStringList DBModel::getDatabases() {
+    QStringList DataProvider::getTables() {
         return m_connection->databaseNames(true);
-    }
-
-    QStringList DBModel::getTables(const QString& dbName) {
     }
 
 }
