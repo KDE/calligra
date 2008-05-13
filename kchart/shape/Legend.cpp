@@ -339,7 +339,7 @@ void Legend::paintPixmap( QPainter &painter, const KoViewConverter &converter )
     applyConversion( pixmapPainter, converter );
     d->kdLegend->forceRebuild();
     d->kdLegend->resizeLayout( d->lastSize.toSize() );
-    d->kdLegend->paintIntoRect( pixmapPainter, paintRect );
+    d->kdLegend->paintIntoRect( pixmapPainter, QRect( QPoint( 0, 0 ), d->lastSize.toSize() ) );
 }
 
 void Legend::paint( QPainter &painter, const KoViewConverter &converter )
