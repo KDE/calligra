@@ -109,16 +109,16 @@ KoShape *KPrNotes::thumbnailShape()
 
 void KPrNotes::saveOdf(KoShapeSavingContext &context) const
 {
-    KoXmlWriter *writer = &context.xmlWriter();
-    writer->startElement("presentation:notes");
+    KoXmlWriter & writer = context.xmlWriter();
+    writer.startElement("presentation:notes");
 
     context.addOption( KoShapeSavingContext::PresentationShape );
     m_textShape->saveOdf(context);
     context.removeOption( KoShapeSavingContext::PresentationShape );
-    writer->startElement("draw:page-thumbnail");
-    m_thumbnailShape->saveOdfFrameAttributes(context);
-    writer->addAttribute("draw:page-number", static_cast<KoPASavingContext &>(context).page());
-    writer->endElement();
+    writer.startElement("draw:page-thumbnail");
+    //m_thumbnailShape->saveOdfAttributes(context, OdfAllAttributes);
+    writer.addAttribute("draw:page-number", static_cast<KoPASavingContext &>(context).page());
+    writer.endElement(); // draw:page-thumbnail
 
     /* foreach ( KoShape *shape, iterator() ) {
         if ( shape != m_textShape && shape != m_thumbnailShape ) {
@@ -127,7 +127,7 @@ void KPrNotes::saveOdf(KoShapeSavingContext &context) const
         }
     } */
 
-    writer->endElement();
+    writer.endElement(); // presentation:notes
 }
 
 bool KPrNotes::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)

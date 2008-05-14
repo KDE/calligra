@@ -56,6 +56,7 @@
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
 #include <KoDataCenter.h>
+#include <KoTextShapeData.h>
 
 // KDE + Qt includes
 #include <klocale.h>
@@ -188,10 +189,13 @@ bool KWDocument::saveOdf( SavingContext &documentContext ) {
     }
 
     if (mainTextFrame) {
-        context.addOption(KoShapeSavingContext::MainTextFrame);
-        if (mainTextFrame->frames().first())
-            mainTextFrame->frames().first()->saveOdf(context);
-        context.removeOption(KoShapeSavingContext::MainTextFrame);
+        if (! mainTextFrame->frames().isEmpty() && mainTextFrame->frames().first() ) {
+            KoTextShapeData * shapeData = dynamic_cast<KoTextShapeData *>( mainTextFrame->frames().first()->shape()->userData() );
+
+            if ( shapeData ) {
+                shapeData->saveOdf(context);
+            }
+        }
     }
 
 /*
