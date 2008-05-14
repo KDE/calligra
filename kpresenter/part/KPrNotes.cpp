@@ -116,16 +116,16 @@ void KPrNotes::saveOdf(KoShapeSavingContext &context) const
     m_textShape->saveOdf(context);
     context.removeOption( KoShapeSavingContext::PresentationShape );
     writer.startElement("draw:page-thumbnail");
-    //m_thumbnailShape->saveOdfAttributes(context, OdfAllAttributes);
+    m_thumbnailShape->saveOdfAttributes( context, OdfAllAttributes );
     writer.addAttribute("draw:page-number", static_cast<KoPASavingContext &>(context).page());
     writer.endElement(); // draw:page-thumbnail
 
-    /* foreach ( KoShape *shape, iterator() ) {
+    KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( iterator().last() );
+    foreach ( KoShape *shape, layer->iterator() ) {
         if ( shape != m_textShape && shape != m_thumbnailShape ) {
-            kDebug() << "Iterator: " << shape;
             shape->saveOdf( context );
         }
-    } */
+    }
 
     writer.endElement(); // presentation:notes
 }
