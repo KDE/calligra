@@ -188,6 +188,7 @@ void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter, KoGenStyles &mainSty
     bodyWriter.endElement(); // chart:title/subtitle/footer
 }
 
+const int MAX_PIXMAP_SIZE = 1000;
 
 class ChartShape::Private
 {
@@ -205,6 +206,7 @@ public:
 
     // We can rerender faster if we cache KDChart's output
     QImage   image;
+    bool     paintPixmap;
     QPointF  lastZoomLevel;
     QSizeF   lastSize;
     mutable bool pixmapRepaintRequested;
@@ -225,6 +227,7 @@ ChartShape::Private::Private()
     floor = 0;
     model = 0;
     pixmapRepaintRequested = true;
+    paintPixmap = true;
 }
 
 ChartShape::Private::~Private()
@@ -531,21 +534,35 @@ void ChartShape::paintPixmap( QPainter &painter, const KoViewConverter &converte
     
     // Adjust the size of the painting area to the current zoom level
     const QSize paintRectSize = converter.documentToView( size() ).toSize();
-    d->image = QImage( paintRectSize, QImage::Format_ARGB32 );
     const QRect paintRect = QRect( QPoint( 0, 0 ), paintRectSize );
 
-    // Copy the painter's render hints, such as antialiasing
-    QPainter pixmapPainter( &d->image );
-    pixmapPainter.setRenderHints( painter.renderHints() );
-    pixmapPainter.setRenderHint( QPainter::Antialiasing, false );
-
-    // Paint the background
-    pixmapPainter.fillRect( paintRect, Qt::white );
-
-    // scale the painter's coordinate system to fit the current zoom level
-    applyConversion( pixmapPainter, converter );
-
-    d->plotArea->paint( pixmapPainter );
+    // Only use a pixmap with sane sizes
+    d->paintPixmap = paintRectSize.width() < MAX_PIXMAP_SIZE || paintRectSize.height() < MAX_PIXMAP_SIZE;
+    
+    if ( d->paintPixmap ) {
+        d->image = QImage( paintRectSize, QImage::Format_ARGB32 );
+    
+        // Copy the painter's render hints, such as antialiasing
+        QPainter pixmapPainter( &d->image );
+        pixmapPainter.setRenderHints( painter.renderHints() );
+        pixmapPainter.setRenderHint( QPainter::Antialiasing, false );
+    
+        // Paint the background
+        pixmapPainter.fillRect( paintRect, Qt::white );
+    
+        // scale the painter's coordinate system to fit the current zoom level
+        applyConversion( pixmapPainter, converter );
+    
+        d->plotArea->paint( pixmapPainter );
+    } else {
+        // Paint the background
+        painter.fillRect( paintRect, Qt::white );
+    
+        // scale the painter's coordinate system to fit the current zoom level
+        applyConversion( painter, converter );
+    
+        d->plotArea->paint( painter );
+    }
 }
 
 void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
@@ -562,7 +579,8 @@ void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
     // Only repaint the pixmap if it is scheduled, the zoom level changed or the shape was resized
     if (    d->pixmapRepaintRequested
          || d->lastZoomLevel != zoomLevel
-         || d->lastSize      != size() ) {
+         || d->lastSize      != size()
+         || !d->paintPixmap ) {
         // TODO: What if two zoom levels are constantly being requested?
         // At the moment, this *is* the case, due to the fact
         // that the shape is also rendered in the page overview
@@ -584,8 +602,9 @@ void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
             d->hiddenChildren.removeAll( shape );
     }
 
-    // Paint the cached pixmap
-    painter.drawImage( 0, 0, d->image );
+    // Paint the cached pixmap if we got a GO from paintPixmap()
+    if ( d->paintPixmap )
+        painter.drawImage( 0, 0, d->image );
 }
 
 void ChartShape::paintComponent( QPainter &painter, const KoViewConverter &converter )
