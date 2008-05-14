@@ -499,6 +499,12 @@ void ChartShape::setFirstColumnIsLabel( bool isLabel )
     requestRepaint();
 }
 
+void ChartShape::setDataDirection( Qt::Orientation orientation )
+{
+    Q_ASSERT( d->model );
+    d->model->setDataDirection( orientation );
+}
+
 void ChartShape::setChartType( ChartType type )
 {
     Q_ASSERT( d->plotArea );

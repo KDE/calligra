@@ -75,6 +75,7 @@ void ChartDatabaseSelector::save()
     d->shape->setModel(binding.model(), region.rects());
     d->shape->setFirstRowIsLabel( d->widget.m_firstRowAsLabel->isChecked() );
     d->shape->setFirstColumnIsLabel( d->widget.m_firstColumnAsLabel->isChecked() );
+    d->shape->setDataDirection( d->widget.m_dataInRows->isChecked() ? Qt::Horizontal : Qt::Vertical );
     region.firstSheet()->cellStorage()->setBinding(region, binding);
 }
 

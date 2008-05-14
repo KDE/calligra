@@ -698,12 +698,14 @@ Qt::Orientation ProxyModel::dataDirection()
 void ProxyModel::setDataDirection( Qt::Orientation orientation )
 {
     d->dataDirection = orientation;
-    //needReset();
+    rebuildDataMap();
+    reset();
 }
 
 void ProxyModel::setDataDimensions( int dimensions )
 {
     d->dataDimensions = dimensions;
+    rebuildDataMap();
     reset();
 }
 

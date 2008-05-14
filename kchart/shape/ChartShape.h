@@ -115,8 +115,10 @@ public:
     ChartSubtype chartSubType() const;
     bool isThreeD() const;
     
+    // Inherited from chart interface
     void setFirstRowIsLabel( bool isLabel );
     void setFirstColumnIsLabel( bool isLabel );
+    void setDataDirection( Qt::Orientation orientation );
     
     void setChartType( ChartType type );
     void setChartSubType( ChartSubtype subType );

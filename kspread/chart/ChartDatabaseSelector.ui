@@ -5,24 +5,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>173</width>
-    <height>208</height>
+    <width>198</width>
+    <height>233</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>Database Selector</string>
   </property>
   <layout class="QVBoxLayout" >
-   <property name="leftMargin" >
-    <number>0</number>
-   </property>
-   <property name="topMargin" >
-    <number>0</number>
-   </property>
-   <property name="rightMargin" >
-    <number>0</number>
-   </property>
-   <property name="bottomMargin" >
+   <property name="margin" >
     <number>0</number>
    </property>
    <item>
@@ -70,14 +61,14 @@
       <item>
        <widget class="QRadioButton" name="m_dataInRows" >
         <property name="text" >
-         <string>Data in rows</string>
+         <string>Data sets in rows</string>
         </property>
        </widget>
       </item>
       <item>
        <widget class="QRadioButton" name="m_dataInColumns" >
         <property name="text" >
-         <string>Data in columns</string>
+         <string>Data sets in columns</string>
         </property>
         <property name="checked" >
          <bool>true</bool>
@@ -89,6 +80,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>klineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
