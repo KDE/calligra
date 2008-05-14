@@ -106,7 +106,7 @@ int main(int argc, char **argv) {
     // Test model
     // FIXME: This code is here just for testing
     DataProvider provider(serverConfig.dbPath);
-    kDebug() << "Databases: " << provider.getTables();
+    kDebug() << "Tables: " << provider.getTables().size();
 
     if (server.run())
         return 0;

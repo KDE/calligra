@@ -23,6 +23,7 @@
 #include <KDebug>
 
 #include <kexidb/drivermanager.h>
+#include <kexidb/cursor.h>
 
 namespace KexiWebForms {
 
@@ -32,6 +33,7 @@ namespace KexiWebForms {
         kDebug() << "Loading default driver...";
         m_driver = m_driverManager->driver("SQLite3");
         if (!m_driver || m_driverManager->error()) {
+            kError() << "ERROR while trying to load database driver!" << endl;
             m_driverManager->debugError();
             exit(1);
         }
@@ -42,13 +44,18 @@ namespace KexiWebForms {
         kDebug() << "Opening connection with database...";
         m_connection = m_driver->createConnection(m_connData);
         if (!m_connection || m_driver->error()) {
+            kError() << "ERROR while trying to initialize connection with database!" << endl;
             m_driver->debugError();
             exit(1);
+        }
+
+        if (!m_connection->useDatabase(m_connection->data()->fileName())) {
+            kError() << "ERROR: " << m_connection->errorMsg() << endl;
         }
     }
 
     QStringList DataProvider::getTables() {
-        return m_connection->databaseNames(true);
+        return m_connection->tableNames();
     }
 
 }
