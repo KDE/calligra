@@ -2,10 +2,12 @@
 Name=xBase
 Name[x-test]=xxxBasexx
 Comment=xBase Migration Driver for Kexi
+Comment[el]=Οδηγός μεταφοράς xBase του Kexi
 Comment[ga]=Tiománaí Ascnaimh xBase le haghaidh Kexi
 Comment[pt]=Controlador de Migração de xBase do Kexi
 Comment[pt_BR]=Driver de Migração do xBase para o Kexi
 Comment[sv]=xBase-övergångsdrivrutin för Kexi
+Comment[uk]=Драйвер міграції xBase для Kexi
 Comment[x-test]=xxxBase Migration Driver for Kexixx
 Comment[zh_TW]=Kexi 的 xBase 轉移驅動程式
 
