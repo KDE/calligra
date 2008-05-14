@@ -79,17 +79,17 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
     */
 
     //TODO adopt the anchor-logic below + move as much of the loading-logic to KoTextAnchor itself (see also KoTextShapeContainerModel)
-    QString anchortype = shape->additionalAttribute("text:anchor-type");
-    kDebug()<<"anchortype="<<anchortype;
+    //QString anchortype = shape->additionalAttribute("text:anchor-type");
+    //kDebug()<<"anchortype="<<anchortype;
 
     KWFrameSet* fs = new KWFrameSet();
     fs->setName("My FrameSet");
     KWFrame *frame = new KWFrame(shape, fs);
     m_loader->document()->addFrameSet(fs);
 
-    KoTextAnchor *anchor = new KoTextAnchor(shape);
+    //KoTextAnchor *anchor = new KoTextAnchor(shape);
     //Q_ASSERT(dynamic_cast<KoTextShapeData*>(shape->userData())); //this asserts cause shapes don't inheritate/share there userdata
-    Q_ASSERT(m_loader->currentFrame());
+    /*Q_ASSERT(m_loader->currentFrame());
     KWTextFrameSet* docfs = dynamic_cast<KWTextFrameSet*>(m_loader->currentFrame()->frameSet());
     Q_ASSERT(docfs);
     QTextDocument* doc = docfs->document(); //m_loader->document()->mainFrameSet()->document();
@@ -99,7 +99,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> ( cursor.block().document()->documentLayout() );
     Q_ASSERT(layout);
     Q_ASSERT(layout->inlineObjectTextManager());
-    layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);
+    layout->inlineObjectTextManager()->insertInlineObject(cursor, anchor);*/
 }
 
 #if 0
