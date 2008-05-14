@@ -73,6 +73,9 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
             issue of it's own. http://lists.kde.org/?l=koffice-devel&m=120574617208477&w=2 and
             http://lists.kde.org/?l=koffice-devel&m=120582471310900&w=2
         - unittests :)
+            ==> see libs/kotext/opendocument/tests
+        - probably related to the crash with the OpenDoc1.1-specs;
+            http://lists.kde.org/?l=koffice-devel&m=121068865723376&w=2
     */
 
     //TODO adopt the anchor-logic below + move as much of the loading-logic to KoTextAnchor itself (see also KoTextShapeContainerModel)
