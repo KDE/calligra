@@ -120,6 +120,8 @@ Item                                                                   Status
 * KDChart
   + Lying bars                                                          DONE
   + Ring chart                                                          JOSI
+  + Bubble charts                                                       ----
+  + Stock charts                                                        ----
 
 
 Before release of KOffice 2.0.1
