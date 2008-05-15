@@ -101,9 +101,6 @@ Legend::Legend( ChartShape *parent )
     d->shape = parent;
     
     d->kdLegend = new KDChart::Legend();
-    KDChart::FrameAttributes attributes = d->kdLegend->frameAttributes();
-    attributes.setVisible( false );
-    d->kdLegend->setFrameAttributes( attributes );
     
     setTitleFontSize( 10 );
     setTitle( QString() );
@@ -316,7 +313,7 @@ void Legend::setLegendPosition( LegendPosition position )
 
 void Legend::setSize( const QSizeF &size )
 {
-    //d->kdLegend->forceRebuild();
+    d->kdLegend->resize( size.toSize() );
     KoShape::setSize( size );
 }
 
@@ -337,9 +334,8 @@ void Legend::paintPixmap( QPainter &painter, const KoViewConverter &converter )
 
     // scale the painter's coordinate system to fit the current zoom level
     applyConversion( pixmapPainter, converter );
-    d->kdLegend->forceRebuild();
-    d->kdLegend->resizeLayout( d->lastSize.toSize() );
-    d->kdLegend->paintIntoRect( pixmapPainter, QRect( QPoint( 0, 0 ), d->lastSize.toSize() ) );
+    d->kdLegend->needSizeHint();
+    d->kdLegend->paint( &pixmapPainter );
 }
 
 void Legend::paint( QPainter &painter, const KoViewConverter &converter )
