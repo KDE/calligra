@@ -51,7 +51,7 @@ namespace KPlato
 NodeTreeView::NodeTreeView( QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
-    NodeItemModel *m = new NodeItemModel();
+    NodeItemModel *m = new NodeItemModel( this );
     setModel( m );
     //setSelectionBehavior( QAbstractItemView::SelectItems );
     setSelectionMode( QAbstractItemView::ExtendedSelection );

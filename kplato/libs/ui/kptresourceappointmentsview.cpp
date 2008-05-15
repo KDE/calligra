@@ -62,7 +62,7 @@ ResourceAppointmentsTreeView::ResourceAppointmentsTreeView( QWidget *parent )
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
     setStretchLastSection( false );
     
-    ResourceAppointmentsItemModel *m = new ResourceAppointmentsItemModel();
+    ResourceAppointmentsItemModel *m = new ResourceAppointmentsItemModel( this );
     setModel( m );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     QList<int> lst1; lst1 << 2 << -1;

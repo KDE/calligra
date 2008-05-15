@@ -52,7 +52,7 @@ RelationTreeView::RelationTreeView( QWidget *parent )
     : DoubleTreeViewBase( parent )
 {
     setViewSplitMode( false );
-    setModel( new RelationItemModel() );
+    setModel( new RelationItemModel( this ) );
     setSelectionMode( QAbstractItemView::ExtendedSelection );
     setSelectionBehavior( QAbstractItemView::SelectRows );
     setArrowKeyNavigation( true );
