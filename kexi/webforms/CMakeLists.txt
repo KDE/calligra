@@ -14,3 +14,4 @@ add_executable(kwebforms ${webforms_SRCS})
 target_link_libraries(kwebforms shttpd ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS}
   kexidb
 )
+install(TARGETS kwebforms DESTINATION ${BIN_INSTALL_DIR})
