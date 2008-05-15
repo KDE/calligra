@@ -55,11 +55,11 @@ namespace KexiWebForms {
     bool Server::run() {
         if (ctx != NULL) {
             kDebug() << "Setting to listen on port " << config->ports;
-            shttpd_set_option(ctx, "ports", config->ports.toStdString().c_str());
+            shttpd_set_option(ctx, "ports", config->ports.toLatin1().constData());
 
             if (QDir(config->webRoot).exists()) {
                 kDebug() << "Webroot is " << config->webRoot;
-                shttpd_set_option(ctx, "root", config->webRoot.toStdString().c_str());
+                shttpd_set_option(ctx, "root", QFile::encodeName(config->webRoot).constData());
             } else {
                 kError() << "Webroot does not exist! Aborting";
                 exit(1);
@@ -69,7 +69,7 @@ namespace KexiWebForms {
             if (config->https != NULL) {
                 if (config->certPath != NULL) {
                     if (QFile(config->certPath).exists()) {
-                        shttpd_set_option(ctx, "ssl_cert", config->certPath.toStdString().c_str());
+                        shttpd_set_option(ctx, "ssl_cert", QFile::encodeName(config->certPath).constData());
                     } else {
                         kError() << "Certificate file does not exist! Aborting";
                         exit(1);
