@@ -81,7 +81,7 @@ bool xBaseMigrate::drv_connect()
 		// to the dbfList of xbXBase class ( if there is no error )
 		QString absoluteFileName = xBaseDirectory.filePath( fileName );
 		fileName.chop( 4 ); // remove the letters .dbf
-		tableNamePathMap[fileName] = absoluteFileName;
+		tableNamePathMap[fileName.toLower()] = absoluteFileName;
 
 		if (  ( returnCode = table->OpenDatabase( absoluteFileName.toUtf8().constData() ) ) != XB_NO_ERROR ) {
 			switch( returnCode ) {
@@ -102,8 +102,6 @@ bool xBaseMigrate::drv_connect()
 	}
 
 	kDebug()<<"Successfully processed all the dbf files in the directory";
-	//! TODO Open .NDX,.NTX, .DBT files too
-
 	return true;
 }
 
@@ -155,13 +153,12 @@ bool xBaseMigrate::drv_readTableSchema(
 
 	for( xbShort i = 0; i < numFlds; i = i + 1 ) {
 		QString fldName = QString::fromLatin1( tableDbf->GetFieldName( i ) );
-		QString fldID( KexiUtils::string2Identifier( fldName ) );
+		QString fldID( KexiUtils::string2Identifier( fldName.toLower() ) );
 
 		KexiDB::Field *fld =
 		    new KexiDB::Field( fldID, type( tableDbf->GetFieldType( i ) ) );
 
-		//! TODO Open Index files and fill in these constraints
-		// getConstraints()
+		getConstraints(originalName, fld);
 
 		tableSchema.addField(fld);
 	}
@@ -210,7 +207,14 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 		// fields are indexed from 0
 		for( xbShort j = 0; j < numFlds; j = j + 1 ) {
 			const char* data = tableDbf->GetField(j);
-                        QVariant val;
+			QVariant val;
+
+			#ifdef XB_MEMO_FIELDS
+				int blobFieldLength;
+				char* memoBuffer = 0;
+				int rc;
+			#endif
+	
 			switch ( type( tableDbf->GetFieldType( j ) ) ) {
 				case KexiDB::Field::Date:
 					val = QDate::fromString( data, "yyyyMMdd" );
@@ -228,13 +232,36 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 							break;
 					}
 					break;
+				case KexiDB::Field::BLOB:
+				#ifdef XB_MEMO_FIELDS
+					blobFieldLength = tableDbf->GetMemoFieldLen(j);
+					memoBuffer = new char[blobFieldLength];
+
+					#ifdef XB_LOCKING_ON
+						tableDbf->LockMemoFile( F_SETLK, F_RDLCK );
+					#endif
+
+					if ( ( rc = tableDbf->GetMemoField( j , blobFieldLength, memoBuffer, F_SETLKW ) ) != XB_NO_ERROR ) {
+						kDebug()<<"Error reading blob field. Error code: "<<rc; // make error message more verbose
+					} else {
+						val = KexiDB::cstringToVariant( memoBuffer, fieldsExpanded.at(j)->field, blobFieldLength );
+					}
+					#ifdef XB_LOCKING_ON
+						tableDbf->LockMemoFile( F_SETLK, F_UNLCK );
+					#endif
+
+					delete[] memoBuffer;
+					break;
+				#else
+					kDebug()<<"XB_MEMO_FIELDS support disabled during compilation of XBase libraries";
+				#endif
+
 				default:
 					val = KexiDB::cstringToVariant(data, fieldsExpanded.at(j)->field, strlen( data ) ) ;
 					break;
 			}
 			vals.append( val );
 		}
-		kDebug()<<vals;
 		if (!destConn->insertRecord(*dstTable, vals)) {
 			return false;
 		}
@@ -272,6 +299,108 @@ KexiDB::Field::Type KexiMigration::xBaseMigrate::type(char xBaseColumnType)
 	}
 
 	return kexiType;
+}
+
+void KexiMigration::xBaseMigrate::getConstraints(const QString& tableName, KexiDB::Field* fld)
+{
+	// 1. Get the names of the index files
+	// 2. Create appropriate xbIndex type object ( xbNdx or xbNtx ) depending on extension
+	// 3. Open the index file
+	// 4. Check the expression of the index to crosscheck whether this is indeed the index file on the required field.
+	// 5. Determine the index type ( unique or not )
+	// 6. Set appropriate properties to the field
+	
+	// Create a base class pointer to an xbIndex
+	xbIndex* index = 0;
+	
+	QStringList indexFileNames = getIndexFileNames(tableName, fld->name());
+	
+	if ( indexFileNames.isEmpty() ) {
+		// no index files exist for this field
+		return;
+	}
+	
+	foreach( QString indexFileName, indexFileNames ) {
+	
+		// get dbf pointer for table
+		QString tablePath = tableNamePathMap[tableName];
+		xbDbf* tableDbf = GetDbfPtr( tablePath.toLatin1().constData() );
+
+		// determine type of indexFile
+		// currently done by checking extension.
+		//! @TODO Check mimetype instead
+		QString fileExtension = indexFileName.right( 3 );
+	
+		if ( fileExtension.toLower() == "ndx" ) {
+			index = new xbNdx( tableDbf );
+		} else if ( fileExtension.toLower() == "ntx" ) {
+			index = new xbNtx( tableDbf );
+		} else {
+			// couldn't recognize extension
+			kDebug()<<"Couldn't recognize extension";
+			return;
+		}
+	
+		if ( index->OpenIndex( indexFileName.toLatin1().constData() ) != XB_NO_ERROR ) {
+			kDebug()<<"Couldn't open index file"<<indexFileName;
+			return;
+		}
+	
+		// verfiy if this index is on the required field
+		char buf[256];
+		index->GetExpression( buf, 256 );
+		QString expressionName = QString::fromLatin1( buf );
+	
+		if ( expressionName.toLower() != fld->name() ) {
+			kDebug()<<"Expression mismatch in "<<indexFileName;
+			continue;
+		}
+	
+		// all is well, set the index
+		if ( index->UniqueIndex() == XB_UNIQUE ) {
+			fld->setUniqueKey( true );
+			kDebug()<<"Unique Index on "<<fld->name();
+		} else {  // index->UniqueIndex() == XB_NOT_UNIQUE
+			fld->setIndexed( true );
+			kDebug()<<"Normal Index on "<<fld->name();
+		}
+		
+		delete xbIndex;
+		xbIndex = 0;
+		// ok, moving through the loop is fairly useless as we can only set a single index on a field anyway
+		// does any one use multiple indexes on the same field ?
+		// well anyway, when Kexi supports it, we'll use IndexSchemas till then ...
+	}
+}
+
+QStringList KexiMigration::xBaseMigrate::getIndexFileNames(const QString& tableName, const QString& fieldName)
+{
+	// this function needs to return a lits of index files corresponding to the given tablename and field.
+	// The current policy uses the xbsql ( http://www.quaking.demon.co.uk/xbsql/ ) semantics for determining
+	// the filenames of the index files
+	// index files are assumed to be of the type <tablename>_<fieldname>.ndx or .ntx
+	
+	// Though the current semantics allows only one index on a field ( actually two, considering we can
+	// have both .ndx and .ntx index, there can be multiple indices, hence a list of filenames is returned
+	// (Note: Kexi fields support only a single index. But we have a separate IndexSchema class ...)
+	
+	QString dbPath = data()->source->dbPath();
+	QDir xBaseDirectory( dbPath );
+	
+	QString fileName = tableName + '_' + fieldName;
+	
+	QStringList indexFilters;
+	indexFilters<<fileName+'*'; // filter all files of the form <tableName>_<fieldName>
+	
+	xBaseDirectory.setNameFilters( indexFilters );
+	QStringList fileNameList = xBaseDirectory.entryList();
+	
+	QStringList absolutePathNames;
+	foreach( QString fileName, fileNameList ) {
+		absolutePathNames<<xBaseDirectory.filePath( fileName );
+	}
+	
+	return absolutePathNames;
 }
 
 #include "xbasemigrate.moc"

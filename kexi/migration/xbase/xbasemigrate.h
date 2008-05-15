@@ -62,6 +62,12 @@ class xBaseMigrate : public KexiMigrate, protected xbXBase
 	private:
 		KexiDB::Field::Type type(char xBaseColumnType);
 
+		//! Sets and existing constraints on the field
+		void getConstraints(const QString& tableName, KexiDB::Field* fld);
+
+		//! Returns a list of index files corresponding to the specific fieldName
+		QStringList getIndexFileNames(const QString& tableName, const QString& fieldName);
+
 		//! Mapping tableNames to actual absoolute file name paths
 		//  XBase only deals with absolute names ( with the .dbf extension ) which is pretty cumbersome
 		QMap<QString,QString> tableNamePathMap;
