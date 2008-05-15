@@ -61,12 +61,6 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
             atm and where to write to. Or should we just use
             QTextCursor(m_loader->currentFrameset->document())
             each time and assume that we only need to append content anyway?
-        - KoTextAnchor should be created+managed by the KoTextLoader but we need access to
-            it here to be able to use KWPageManager if "anchor-type"=="page". Maybe we are
-            able to utilize KoShapeApplicationData as container for such kind of objects?
-                ==> Anchors are actually stored in flake ;)
-                    KoTextAnchor adds itself using the KoTextShapeContainerModel::addAnchor() 
-                    method. See KoTextAnchor.cpp:70
         - bring back header+footers :)
         - What about parent-styles aka style-inheritance? Does this REALLY work already?
         - table-shape vs. QTextTable vs. the layout-hacks within the textshape is still a huge
@@ -74,18 +68,17 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
             http://lists.kde.org/?l=koffice-devel&m=120582471310900&w=2
         - unittests :)
             ==> see libs/kotext/opendocument/tests
+            * anchors
         - probably related to the crash with the OpenDoc1.1-specs;
             http://lists.kde.org/?l=koffice-devel&m=121068865723376&w=2
     */
-
-    //TODO adopt the anchor-logic below + move as much of the loading-logic to KoTextAnchor itself (see also KoTextShapeContainerModel)
-    //QString anchortype = shape->additionalAttribute("text:anchor-type");
-    //kDebug()<<"anchortype="<<anchortype;
 
     KWFrameSet* fs = new KWFrameSet();
     fs->setName("My FrameSet");
     KWFrame *frame = new KWFrame(shape, fs);
     m_loader->document()->addFrameSet(fs);
+
+//TODO anchor->updatePosition()
 
     //KoTextAnchor *anchor = new KoTextAnchor(shape);
     //Q_ASSERT(dynamic_cast<KoTextShapeData*>(shape->userData())); //this asserts cause shapes don't inheritate/share there userdata
