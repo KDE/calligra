@@ -24,7 +24,6 @@
 #include "ServerConfig.h"
 
 #include <shttpd.h>
-#include <stdlib.h>
 
 namespace KexiWebForms {
 
