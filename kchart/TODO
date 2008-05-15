@@ -80,24 +80,25 @@ Item                                                                   Status
      - Barchart                                                         done
      - Line chart                                                       done
      - Area chart                                                       done
-     - Scatter chart                                                    --
-     - Pie chart (Circle)                                               --
-     - Ring chart                                                       --
-     - Radar chart                                                      --
-  + General                                                             ----
-     - Title                                                            --
-     - Subtitle                                                         --
-     - Footer                                                           --
-  + Plot area                                                           ----
-     - Axis                                                             --
-     - Grid                                                             --
-  + Datasets                                                            ----
+     - Scatter chart                                                    done
+     - Pie chart (Circle)                                               done
+     - Ring chart                                                       ----
+     - Radar chart                                                      done
+  + General                                                             DONE
+     - Title                                                            done
+     - Subtitle                                                         done
+     - Footer                                                           done
+  + Plot area                                                           DONE
+     - Axis                                                             done
+     - Grid                                                             done
+  + Datasets                                                            DONE
      - Color                                                            done
   + Legend                                                              JOSI
-     - Title                                                            --
-     - Frame                                                            --
-     - Orientation                                                      --
-     - Position                                                         --
+     - Title                                                            done
+     - Frame                                                            josi
+     - Orientation                                                      josi
+     - Position                                                         done
+     - "Bind to chart" Option                                           ----
   + Data Editor                                                         INGE
      - Insert/delete row/column                                         --
      - Close button                                                     --
@@ -117,7 +118,7 @@ Item                                                                   Status
      - Save as embedded document                                        --
 
 * KDChart
-  + Lying bars                                                          JOSI
+  + Lying bars                                                          DONE
   + Ring chart                                                          JOSI
 
 
