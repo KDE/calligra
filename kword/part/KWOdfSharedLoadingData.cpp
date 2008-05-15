@@ -42,9 +42,9 @@ KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader* loader)
     : KoTextSharedLoadingData()
     , m_loader(loader)
 {
-    /*KoShapeLoadingContext::addAdditionalAttributeData(
+    KoShapeLoadingContext::addAdditionalAttributeData(
         KoShapeLoadingContext::AdditionalAttributeData(
-            KoXmlNS::text, "anchor-type", "text:anchor-type" ) );*/
+            KoXmlNS::text, "anchor-type", "text:anchor-type" ) );
 }
 
 void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
