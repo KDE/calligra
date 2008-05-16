@@ -75,11 +75,11 @@ void ProxyModel::rebuildDataMap()
 {
 	if ( d->spreadSheetModel )
 	{
-	    QMap<int, QVector<QRect> > rows;
-	    QMap<int, QVector<QRect> > sortedRows;
-	    
+        int k = 0;
 	    if ( d->dataDirection == Qt::Horizontal )
 	    {
+	        QMap<int, QVector<QRect> > rows;
+	        QMap<int, QVector<QRect> > sortedRows;
 	        // Split up region in horizontal rectangles
 	        // that are sorted from top to bottom
 	        foreach ( QRect rect, d->selection )
@@ -116,58 +116,142 @@ void ProxyModel::rebuildDataMap()
 	            
 	            sortedRows.insert( row, sortedRects );
 	        }
+	        
+	        QMapIterator<int, QVector<QRect> > j( sortedRows );
+	        
+	        CellRegion categoryRegion;
+	        
+	        if ( d->firstRowIsLabel && j.hasNext() )
+	        {
+	            j.next();
+	            
+	            categoryRegion = CellRegion( j.value() );
+	            if ( d->firstColumnIsLabel )
+	                categoryRegion.subtract( categoryRegion.pointAtIndex( 0 ) );
+	        }
+	        
+	        while ( j.hasNext() )
+	        {
+	            j.next();
+	            
+	            DataSet *dataSet;
+	            if ( k >= d->dataSets.size() )
+	            {
+	                if ( !d->removedDataSets.isEmpty() )
+	                    dataSet = d->removedDataSets.takeLast();
+	                else
+	                    dataSet = new CellDataSet( this );
+	                d->dataSets.append( dataSet );
+	            }
+	            else
+	                dataSet = d->dataSets[k];
+	            dataSet->blockSignals( true );
+	            
+	            CellRegion yDataRegion( j.value() );
+	    
+	            qDebug() << "Creating data set with region " << j.value();
+	            if ( d->firstColumnIsLabel )
+	            {
+	                QPoint labelDataPoint = yDataRegion.pointAtIndex( 0 );
+	                dataSet->setLabelDataRegion( CellRegion( labelDataPoint ) );
+	                dataSet->setCategoryDataRegion( categoryRegion );
+	                
+	                yDataRegion.subtract( labelDataPoint );
+	            }
+	            
+	            dataSet->setYDataRegion( yDataRegion );
+	            k++;
+	            dataSet->blockSignals( false );
+	        }
 	    }
 	    else
 	    {
-	        qWarning() << "ProxyModel::rebuildDataMap(): Vertical data direction not supported yet";
-	    }
-	    
-	    QMapIterator<int, QVector<QRect> > j( sortedRows );
-	    int k = 0;
-	    
-	    CellRegion categoryRegion;
-	    
-	    if ( d->firstRowIsLabel && j.hasNext() )
-	    {
-	        j.next();
-	        
-	        categoryRegion = CellRegion( j.value() );
-	        if ( d->firstColumnIsLabel )
-	            categoryRegion.subtract( categoryRegion.pointAtIndex( 0 ) );
-	    }
-	    
-	    while ( j.hasNext() )
-	    {
-	        j.next();
-	        
-	        DataSet *dataSet;
-	        if ( k >= d->dataSets.size() )
-	        {
-	        	if ( !d->removedDataSets.isEmpty() )
-	        		dataSet = d->removedDataSets.takeLast();
-	        	else
-	        		dataSet = new CellDataSet( this );
-	            d->dataSets.append( dataSet );
-	        }
-	        else
-	            dataSet = d->dataSets[k];
-	        dataSet->blockSignals( true );
-	        
-	        CellRegion yDataRegion( j.value() );
-	
-	        qDebug() << "Creating data set with region " << j.value();
-	        if ( d->firstColumnIsLabel )
-	        {
-	            QPoint labelDataPoint = yDataRegion.pointAtIndex( 0 );
-	            dataSet->setLabelDataRegion( CellRegion( labelDataPoint ) );
-	            dataSet->setCategoryDataRegion( categoryRegion );
-	            
-	            yDataRegion.subtract( labelDataPoint );
-	        }
-	        
-	        dataSet->setYDataRegion( yDataRegion );
-	        k++;
-	        dataSet->blockSignals( false );
+            QMap<int, QVector<QRect> > columns;
+            QMap<int, QVector<QRect> > sortedColumns;
+            // Split up region in horizontal rectangles
+            // that are sorted from top to bottom
+            foreach ( QRect rect, d->selection )
+            {
+                int y = rect.topLeft().y();
+                for ( int x = rect.topLeft().x(); x <= rect.topRight().x(); x++ )
+                {
+                    QRect dataRect = QRect( QPoint( x, y ), QSize( 1, rect.height() ) );
+                    if ( !columns.contains( x ) )
+                        columns.insert( x, QVector<QRect>() );
+                    columns[x].append( dataRect );
+                }
+            }
+            
+            // Sort rectangles in each column from top to bottom
+            QMapIterator<int, QVector<QRect> > i( columns );
+            while ( i.hasNext() )
+            {
+                i.next();
+                int row = i.key();
+                QVector<QRect> unsortedRects = i.value();
+                QVector<QRect> sortedRects;
+                
+                foreach ( QRect rect, unsortedRects )
+                {
+                    int index;
+                    
+                    for ( index = 0; index < sortedRects.size(); index++ )
+                        if ( rect.topLeft().y() <= sortedRects[ index ].topLeft().y() )
+                            break;
+                    
+                    sortedRects.insert( index, rect );
+                }
+                
+                sortedColumns.insert( row, sortedRects );
+            }
+            
+            QMapIterator<int, QVector<QRect> > j( sortedColumns );
+            
+            CellRegion categoryRegion;
+            
+            if ( d->firstColumnIsLabel && j.hasNext() )
+            {
+                j.next();
+                
+                categoryRegion = CellRegion( j.value() );
+                if ( d->firstRowIsLabel )
+                    categoryRegion.subtract( categoryRegion.pointAtIndex( 0 ) );
+            }
+            
+            while ( j.hasNext() )
+            {
+                j.next();
+                qDebug() << j.value();
+                
+                DataSet *dataSet;
+                if ( k >= d->dataSets.size() )
+                {
+                    if ( !d->removedDataSets.isEmpty() )
+                        dataSet = d->removedDataSets.takeLast();
+                    else
+                        dataSet = new CellDataSet( this );
+                    d->dataSets.append( dataSet );
+                }
+                else
+                    dataSet = d->dataSets[k];
+                dataSet->blockSignals( true );
+                
+                CellRegion yDataRegion( j.value() );
+        
+                qDebug() << "Creating data set with region " << j.value();
+                if ( d->firstRowIsLabel )
+                {
+                    QPoint labelDataPoint = yDataRegion.pointAtIndex( 0 );
+                    dataSet->setLabelDataRegion( CellRegion( labelDataPoint ) );
+                    dataSet->setCategoryDataRegion( categoryRegion );
+                    
+                    yDataRegion.subtract( labelDataPoint );
+                }
+                
+                dataSet->setYDataRegion( yDataRegion );
+                k++;
+                dataSet->blockSignals( false );
+            }
 	    }
 	    
 	    while ( d->dataSets.size() > k + 1 )
