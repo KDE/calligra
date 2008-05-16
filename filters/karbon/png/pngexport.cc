@@ -28,6 +28,7 @@
 */
 
 #include "pngexport.h"
+#include "PngExportOptionsWidget.h"
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
@@ -35,9 +36,10 @@
 
 #include <KoFilter.h>
 #include <KoFilterChain.h>
+#include <KoFilterManager.h>
 
 #include <kgenericfactory.h>
-
+#include <KDialog>
 #include <QImage>
 
 typedef KGenericFactory<PngExport> PngExportFactory;
@@ -69,7 +71,23 @@ PngExport::convert( const QByteArray& from, const QByteArray& to )
     painter.setShapes( karbonPart->document().shapes() );
 
     QRectF shapesRect = painter.contentRect();
-    QImage image( shapesRect.size().toSize(), QImage::Format_RGB32 );
+    QSize size = shapesRect.size().toSize();
+
+    if( ! m_chain->manager()->getBatchMode() )
+    {
+        PngExportOptionsWidget * widget = new PngExportOptionsWidget( shapesRect.size() );
+        widget->setUnit( karbonPart->unit() );
+
+        KDialog dlg;
+        dlg.setCaption( i18n("PNG Export Options") );
+        dlg.setButtons( KDialog::Ok | KDialog::Cancel );
+        dlg.setMainWidget( widget );
+        if( dlg.exec() == QDialog::Accepted )
+            size = widget->exportSize();
+        else
+            return KoFilter::UserCancelled;
+    }
+    QImage image( size, QImage::Format_RGB32 );
 
     // draw the background of the thumbnail
     image.fill( QColor( Qt::white).rgb() );
