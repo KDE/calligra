@@ -20,7 +20,7 @@
 #ifndef XBASEMIGRATE_H
 #define XBASEMIGRATE_H
 
-#include <QMap>
+#include <QHash>
 
 #include "migration/keximigrate.h"
 #include "xbase.h"
@@ -70,7 +70,7 @@ class xBaseMigrate : public KexiMigrate, protected xbXBase
 
 		//! Mapping tableNames to actual absoolute file name paths
 		//  XBase only deals with absolute names ( with the .dbf extension ) which is pretty cumbersome
-		QMap<QString,QString> tableNamePathMap;
+		QHash<QString,QString> m_tableNamePathMap;
 		
 };
 }

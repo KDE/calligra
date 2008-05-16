@@ -74,15 +74,15 @@ bool xBaseMigrate::drv_connect()
 	xBaseDirectory.setNameFilters( dbfFilters );
 	QStringList dbfFiles = xBaseDirectory.entryList(); // set a readable files filter here ?
 
-	foreach( QString fileName, dbfFiles ) {
+	foreach( const QString& fileName, dbfFiles ) {
 		xbDbf* table = new xbDbf( this );
-		int returnCode;
 		// Calling OpenDatabase, will automatically add the pointer `table`
 		// to the dbfList of xbXBase class ( if there is no error )
 		QString absoluteFileName = xBaseDirectory.filePath( fileName );
 		fileName.chop( 4 ); // remove the letters .dbf
-		tableNamePathMap[fileName.toLower()] = absoluteFileName;
+		m_tableNamePathMap[fileName.toLower()] = absoluteFileName;
 
+		int returnCode;
 		if (  ( returnCode = table->OpenDatabase( absoluteFileName.toUtf8().constData() ) ) != XB_NO_ERROR ) {
 			switch( returnCode ) {
 				case XB_OPEN_ERROR:
@@ -145,7 +145,7 @@ bool xBaseMigrate::drv_readTableSchema(
 	// 10. end for
 
 	// Get table path
-	QString tablePath = tableNamePathMap[originalName];
+	QString tablePath = m_tableNamePathMap.value( originalName );
 	// get dbf pointer for table
 	xbDbf* tableDbf = GetDbfPtr( tablePath.toLatin1().constData() );
 
@@ -170,7 +170,7 @@ bool xBaseMigrate::drv_readTableSchema(
 bool xBaseMigrate::drv_tableNames(QStringList& tableNames)
 {
 	// Get the names from the map directly
-	tableNames<<tableNamePathMap.keys();
+	tableNames<<m_tableNamePathMap.keys();
 
 	kDebug()<<"Tables "<<tableNames;
 
@@ -192,7 +192,7 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 	// 8. end for
 
 	// get dbf pointer for table
-	QString tablePath = tableNamePathMap[srcTable];
+	QString tablePath = m_tableNamePathMap.value( srcTable );
 	xbDbf* tableDbf = GetDbfPtr( tablePath.toLatin1().constData() );
 
 	xbLong numRecords = tableDbf->NoOfRecords();
@@ -212,7 +212,7 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 			#ifdef XB_MEMO_FIELDS
 				int blobFieldLength;
 				char* memoBuffer = 0;
-				int rc;
+				int returnCode;
 			#endif
 	
 			switch ( type( tableDbf->GetFieldType( j ) ) ) {
@@ -241,7 +241,7 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 						tableDbf->LockMemoFile( F_SETLK, F_RDLCK );
 					#endif
 
-					if ( ( rc = tableDbf->GetMemoField( j , blobFieldLength, memoBuffer, F_SETLKW ) ) != XB_NO_ERROR ) {
+					if ( ( returnCode = tableDbf->GetMemoField( j , blobFieldLength, memoBuffer, F_SETLKW ) ) != XB_NO_ERROR ) {
 						kDebug()<<"Error reading blob field. Error code: "<<rc; // make error message more verbose
 					} else {
 						val = KexiDB::cstringToVariant( memoBuffer, fieldsExpanded.at(j)->field, blobFieldLength );
@@ -320,10 +320,10 @@ void KexiMigration::xBaseMigrate::getConstraints(const QString& tableName, KexiD
 		return;
 	}
 	
-	foreach( QString indexFileName, indexFileNames ) {
+	foreach( const QString& indexFileName, indexFileNames ) {
 	
 		// get dbf pointer for table
-		QString tablePath = tableNamePathMap[tableName];
+		QString tablePath = m_tableNamePathMap.value( tableName );
 		xbDbf* tableDbf = GetDbfPtr( tablePath.toLatin1().constData() );
 
 		// determine type of indexFile
@@ -396,7 +396,7 @@ QStringList KexiMigration::xBaseMigrate::getIndexFileNames(const QString& tableN
 	QStringList fileNameList = xBaseDirectory.entryList();
 	
 	QStringList absolutePathNames;
-	foreach( QString fileName, fileNameList ) {
+	foreach( const QString& fileName, fileNameList ) {
 		absolutePathNames<<xBaseDirectory.filePath( fileName );
 	}
 	
