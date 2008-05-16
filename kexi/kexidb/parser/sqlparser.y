@@ -1201,7 +1201,7 @@ IDENTIFIER
 			Field *f = item->table()->field(item->name());
 			if(!f)
 			{
-				ParserError err(i18n("Field List Error"), i18n("Unknown column '%1' in table '%2'").arg(item->name()).arg(schema->name()), ctoken, current);
+				ParserError err(i18n("Field List Error"), i18n("Unknown column '%1' in table '%2'",item->name(),schema->name()), ctoken, current);
 				parser->setError(err);
 				yyerror("fieldlisterror");
 			}	
@@ -1360,7 +1360,7 @@ ColWildCard:
 {
 	$$ = new VariableExpr($1);
 	KexiDBDbg << "  Invalid identifier! " << $1 << endl;
-	setError(i18n("Invalid identifier \"%1\"").arg($1));
+	setError(i18n("Invalid identifier \"%1\"",$1));
 }*/
 ;
 

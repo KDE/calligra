@@ -205,7 +205,7 @@ bool parseData(Parser *p, const char *data)
 			{
 				if(tableList.findRef(item->table()) == -1)
 				{
-					ParserError err(i18n("Field List Error"), i18n("Unknown table '%1' in field list").arg(item->table()->name()), ctoken, current);
+					ParserError err(i18n("Field List Error"), i18n("Unknown table '%1' in field list",item->table()->name()), ctoken, current);
 					parser->setError(err);
 
 					yyerror("fieldlisterror");
@@ -288,16 +288,16 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 						//ambiguous field name
 						setError(i18n("Ambiguous field name"),
 							i18n("Both table \"%1\" and \"%2\" have defined \"%3\" field. "
-								"Use \"<tableName>.%4\" notation to specify table name.")
-								.arg(firstField->table()->name()).arg(f->table()->name())
-								.arg(fieldName).arg(fieldName));
+								"Use \"<tableName>.%4\" notation to specify table name."
+								,firstField->table()->name(),f->table()->name()
+								,fieldName,fieldName));
 						return false;
 					}
 				}
 			}
 			if (!firstField) {
 					setError(i18n("Field not found"),
-						i18n("Table containing \"%1\" field not found").arg(fieldName));
+						i18n("Table containing \"%1\" field not found",fieldName));
 					return false;
 			}
 			//ok
@@ -324,10 +324,10 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 			if (covered) {
 				setError(i18n("Could not access the table directly using its name"),
 					i18n("Table \"%1\" is covered by aliases. Instead of \"%2\", "
-					"you can write \"%3\"")
-					.arg( tableName )
-					.arg( tableName + "." + fieldName)
-					.arg( tableAlias + "." + fieldName.toLatin1() ));
+					"you can write \"%3\""
+					,tableName
+					,(tableName + "." + fieldName)
+					, tableAlias + "." + fieldName.toLatin1() ));
 				return false;
 			}
 		}
@@ -353,8 +353,8 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 
 			if (fieldName=="*") {
 				if (positionsList.count()>1) {
-					setError(i18n("Ambiguous \"%1.*\" expression").arg(tableName),
-						i18n("More than one \"%1\" table or alias defined").arg(tableName));
+					setError(i18n("Ambiguous \"%1.*\" expression",tableName),
+						i18n("More than one \"%1\" table or alias defined",tableName));
 					return false;
 				}
 				parseInfo.querySchema->addAsterisk( new QueryAsterisk(parseInfo.querySchema, ts) );
@@ -371,9 +371,9 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 						if (otherTS->field(fieldName))
 							numberOfTheSameFields++;
 						if (numberOfTheSameFields>1) {
-							setError(i18n("Ambiguous \"%1.%2\" expression").arg(tableName).arg(fieldName),
-								i18n("More than one \"%1\" table or alias defined containing \"%2\" field")
-								.arg(tableName).arg(fieldName));
+							setError(i18n("Ambiguous \"%1.%2\" expression",tableName,fieldName),
+								i18n("More than one \"%1\" table or alias defined containing \"%2\" field"
+								,tableName,fieldName));
 							return false;
 						}
 					}
@@ -381,8 +381,8 @@ bool addColumn( ParseInfo& parseInfo, BaseExpr* columnExpr )
 					parseInfo.querySchema->addField(realField, tablePosition);
 				}
 				else {
-					setError(i18n("Field not found"), i18n("Table \"%1\" has no \"%2\" field")
-						.arg(tableName).arg(fieldName));
+					setError(i18n("Field not found"), i18n("Table \"%1\" has no \"%2\" field"
+						,tableName,fieldName));
 					return false;
 				}
 			}
