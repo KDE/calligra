@@ -9,7 +9,7 @@
    Copyright (C) 2006 Inge Wallin <inge@lysator.liu.se>
    Copyright (C) 2006 Laurent Montel <montel@kde.org>
    Copyright (C) 2006 Christian Mueller <cmueller@gmx.de>
-   Copyright (C) 2007 Jan Hambrecht <jaham@gmx.net>
+   Copyright (C) 2007-2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,7 +27,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "pngexport.h"
+#include "PngExport.h"
 #include "PngExportOptionsWidget.h"
 
 #include <KarbonDocument.h>
@@ -100,5 +100,5 @@ PngExport::convert( const QByteArray& from, const QByteArray& to )
     return KoFilter::OK;
 }
 
-#include "pngexport.moc"
+#include "PngExport.moc"
 

@@ -5,7 +5,7 @@ include_directories( ${CMAKE_SOURCE_DIR}/karbon ${CMAKE_SOURCE_DIR}/karbon/core 
 
 ########### next target ###############
 
-set(karbonpngexport_PART_SRCS pngexport.cc PngExportOptionsWidget.cpp )
+set(karbonpngexport_PART_SRCS PngExport.cpp PngExportOptionsWidget.cpp )
 
 kde4_add_ui_files( karbonpngexport_PART_SRCS PngExportOptionsWidget.ui )
 
