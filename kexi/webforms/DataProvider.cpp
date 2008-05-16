@@ -41,16 +41,18 @@
 #include <kexidb/queryschema.h>
 #include <kexidb/indexschema.h>
 
-using namespace KexiDB;
-
 namespace KexiWebForms {
     QPointer<KexiDB::Connection> gConnection = NULL;
 
+    QPointer<KexiDB::Connection*> connection() {
+    }
+
+    // FIXME: Move creation of ConnectionData outside this function
     bool initDatabase(const QString& fileName) {
         bool m_status = false;
-        QPointer<Driver> driver = NULL;
-        DriverManager* manager = new DriverManager();
-        ConnectionData* connData = new ConnectionData();
+        KexiDB::Driver* driver;
+        KexiDB::DriverManager manager;
+        KexiDB::ConnectionData* connData = new KexiDB::ConnectionData();
 
         QString driverName;
         QString suggestedDriverName;
@@ -67,9 +69,9 @@ namespace KexiWebForms {
             } else {
                 kDebug() << "File name should be a file-based database... loading it" << endl;
 
-                driver = manager->driver(driverName);
-                if (!driver || manager->error()) {
-                    manager->debugError();
+                driver = manager.driver(driverName);
+                if (!driver || manager.error()) {
+                    manager.debugError();
                     m_status = false;
                 } else m_status = true;
 

@@ -76,7 +76,8 @@ int main(int argc, char **argv) {
         kDebug() << "Initializing SSL...";
         if (!args->isSet("cert")) {
             kError() << "You must specify both certificate and key file in order to use SSL support";
-            exit(1);
+            delete serverConfig;
+            return 1;
         } else {
             serverConfig->certPath = args->getOption("cert");
         }
@@ -87,7 +88,8 @@ int main(int argc, char **argv) {
         serverConfig->dbPath = args->getOption("file");
     } else {
         kError() << "You must specifiy a Kexi file path";
-        exit(1);
+        delete serverConfig;
+        return 1;
     }
 
     Server server(serverConfig);
@@ -95,7 +97,11 @@ int main(int argc, char **argv) {
         server.registerHandler("/", indexH);
 
     // Initialize database connection
-    initDatabase(serverConfig->dbPath);
+    if (!initDatabase(serverConfig->dbPath)) {
+        kError() << "Something went wrong while initializing database..." << endl;
+        delete serverConfig;
+        return 1;
+    }
 
     return server.run();
 }

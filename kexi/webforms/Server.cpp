@@ -38,7 +38,12 @@ namespace KexiWebForms {
 
     bool Server::init() {
         kDebug() << "Initializing HTTP server...";
-        m_ctx = shttpd_init();
+        
+        if (!m_ctx)
+            m_ctx = shttpd_init();
+        else
+            return true;
+
         if (!m_ctx) {
             kError() << "HTTP Server not correctly initialized, aborting";
             m_initialized = false;
@@ -115,10 +120,12 @@ namespace KexiWebForms {
         }
     }
 
-    ServerConfig* Server::getConfig() {
+    ServerConfig* Server::config() const {
         if (m_config)
             return m_config;
-        else
+        else {
             kError() << "Configuration data can't be loaded" << endl;
+            return 0;
+        }
     }
 }

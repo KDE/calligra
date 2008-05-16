@@ -35,7 +35,7 @@ namespace KexiWebForms {
         bool run();
         // FIXME: Do not expose shttpd data structures
         void registerHandler(const char*, void(*f)(shttpd_arg*));
-        ServerConfig* getConfig();
+        ServerConfig* config() const;
     private:
         bool m_initialized;
         ServerConfig* m_config;

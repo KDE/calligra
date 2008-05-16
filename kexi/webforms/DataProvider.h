@@ -28,6 +28,7 @@
 namespace KexiWebForms {
     extern QPointer<KexiDB::Connection> gConnection;
 
+    static QPointer<KexiDB::Connection*> connection();
     bool initDatabase(const QString& fileName);
 }
 
