@@ -44,8 +44,9 @@
 namespace KexiWebForms {
     QPointer<KexiDB::Connection> gConnection = NULL;
 
-    QPointer<KexiDB::Connection*> connection() {
-    }
+    /*QPointer<KexiDB::Connection*> connection() const {
+        //        return gConnection;
+        }*/
 
     // FIXME: Move creation of ConnectionData outside this function
     bool initDatabase(const QString& fileName) {

@@ -21,6 +21,7 @@
 #ifndef KEXI_WEBFORMS_SERVER_H
 #define KEXI_WEBFORMS_SERVER_H
 
+#include <QPointer>
 #include "ServerConfig.h"
 
 #include <shttpd.h>
@@ -29,14 +30,19 @@ namespace KexiWebForms {
 
     class Server {
     public:
-        Server(ServerConfig*);
         ~Server();
-        bool init();
+        static Server* instance();
+
+        bool init(ServerConfig*);
         bool run();
+
         // FIXME: Do not expose shttpd data structures
         void registerHandler(const char*, void(*f)(shttpd_arg*));
         ServerConfig* config() const;
+    protected:
+        Server();
     private:
+        static Server* m_instance;
         bool m_initialized;
         ServerConfig* m_config;
         shttpd_ctx* m_ctx;

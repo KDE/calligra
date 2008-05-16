@@ -29,11 +29,12 @@
 #include "Server.h"
 #include "ServerConfig.h"
 #include "DataProvider.h"
+#include "IndexView.h"
 
 using namespace KexiWebForms;
 
 // FIXME: Testing
-static void indexH(struct shttpd_arg* arg) {
+void indexH(struct shttpd_arg* arg) {
 	shttpd_printf(arg, "%s", "HTTP/1.1 200 OK\r\n");
 	shttpd_printf(arg, "%s", "Content-Type: text/html\r\n\r\n");
 	shttpd_printf(arg, "%s", "<html><body>");
@@ -92,9 +93,11 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    Server server(serverConfig);
-    if (server.init())
-        server.registerHandler("/", indexH);
+    Server* server = Server::instance();
+
+    if (server->init(serverConfig)) {
+        server->registerHandler("/", IndexView::show);
+    }
 
     // Initialize database connection
     if (!initDatabase(serverConfig->dbPath)) {
@@ -103,6 +106,6 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    return server.run();
+    return server->run();
 }
 

@@ -28,15 +28,26 @@
 #include <shttpd.h>
 
 namespace KexiWebForms {
+    Server* Server::m_instance = 0;
 
-    Server::Server(ServerConfig* serverConfig) : m_config(serverConfig) {}
+    Server* Server::instance() {
+        if (m_instance == 0) {
+            m_instance = new Server();
+        } else {
+            return m_instance;
+        }
+    }
+
+    Server::Server() : m_ctx(NULL) {}
 
     Server::~Server() {
         if (m_ctx)
             shttpd_fini(m_ctx);
     }
 
-    bool Server::init() {
+    bool Server::init(ServerConfig* config) {
+        m_config = config;
+
         kDebug() << "Initializing HTTP server...";
         
         if (!m_ctx)
@@ -115,8 +126,8 @@ namespace KexiWebForms {
 
     void Server::registerHandler(const char* handler, void(*f)(shttpd_arg*)) {
         if (f) {
-            kDebug() << "Registering handler for: " << handler << endl;
-            shttpd_register_uri(m_ctx, handler, f, NULL);
+          kDebug() << "Registering handler for: " << handler << endl;
+          shttpd_register_uri(m_ctx, handler, f, NULL);
         }
     }
 

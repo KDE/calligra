@@ -9,10 +9,11 @@ set(webforms_SRCS
   Server.cpp
   ServerConfig.cpp
   DataProvider.cpp
+  IndexView.cpp
 )
 
 kde4_add_executable(kwebforms ${webforms_SRCS})
 target_link_libraries(kwebforms shttpd ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS}
-  kexidb kexicore keximain
+  kexidb kexicore keximain ctemplate
 )
 install(TARGETS kwebforms DESTINATION ${BIN_INSTALL_DIR})

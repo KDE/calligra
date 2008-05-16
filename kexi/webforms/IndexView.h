@@ -21,14 +21,13 @@
 #ifndef KEXI_WEBFORMS_INDEXVIEW_H
 #define KEXI_WEBFORMS_INDEXVIEW_H
 
-#include "View.h"
+#include <shttpd.h>
 
 namespace KexiWebForms {
 
-    class IndexView : public View {
-    public:
-        void show();
-    };
+    namespace IndexView {
+        void show(struct shttpd_arg*);
+    }
 
 }
 
