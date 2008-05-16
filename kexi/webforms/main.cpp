@@ -28,11 +28,6 @@
 
 #include "Server.h"
 #include "ServerConfig.h"
-
-// FIXME: remove this
-#include <shttpd.h>
-
-
 #include "DataProvider.h"
 
 using namespace KexiWebForms;
@@ -71,11 +66,10 @@ int main(int argc, char **argv) {
 
 
     // General set up
-    ServerConfig serverConfig = {
-        args->getOption("port"),
-        args->getOption("webroot"),
-        args->isSet("dirlist")
-    };
+    ServerConfig* serverConfig = new ServerConfig();
+    serverConfig->ports = args->getOption("port");
+    serverConfig->webRoot = args->getOption("webroot");
+    serverConfig->dirList = args->isSet("dirlist");
 
     // SSL
     if (args->isSet("https")) {
@@ -84,33 +78,25 @@ int main(int argc, char **argv) {
             kError() << "You must specify both certificate and key file in order to use SSL support";
             exit(1);
         } else {
-            serverConfig.certPath = args->getOption("cert");
+            serverConfig->certPath = args->getOption("cert");
         }
-        serverConfig.https = args->getOption("https");
+        serverConfig->https = args->getOption("https");
     }
 
     if (args->isSet("file")) {
-        serverConfig.dbPath = args->getOption("file");
+        serverConfig->dbPath = args->getOption("file");
     } else {
         kError() << "You must specifiy a Kexi file path";
         exit(1);
     }
 
-    Server server(&serverConfig);
+    Server server(serverConfig);
+    if (server.init())
+        server.registerHandler("/", indexH);
 
-    // Setup server
-    // FIXME: This code is put here just for testing
-    // I need to define a better API to handle this stuff
-    server.registerHandler("/", indexH);
+    // Initialize database connection
+    initDatabase(serverConfig->dbPath);
 
-    // Test model
-    // FIXME: This code is here just for testing
-    DataProvider provider(serverConfig.dbPath);
-    kDebug() << "Tables: " << provider.getTables().size();
-
-    if (server.run())
-        return 0;
-    else
-        return 1;
+    return server.run();
 }
 

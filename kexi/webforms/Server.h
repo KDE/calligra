@@ -31,13 +31,15 @@ namespace KexiWebForms {
     public:
         Server(ServerConfig*);
         ~Server();
+        bool init();
         bool run();
         // FIXME: Do not expose shttpd data structures
         void registerHandler(const char*, void(*f)(shttpd_arg*));
         ServerConfig* getConfig();
     private:
-        ServerConfig* config;
-        shttpd_ctx* ctx;
+        bool m_initialized;
+        ServerConfig* m_config;
+        shttpd_ctx* m_ctx;
     };
 
 }

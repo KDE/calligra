@@ -22,7 +22,6 @@
 #include "ServerConfig.h"
 
 #include <QDir>
-
 #include <KDebug>
 #include <KUniqueApplication>
 
@@ -30,90 +29,96 @@
 
 namespace KexiWebForms {
 
-    Server::Server(ServerConfig* serverConfig) {
-        ctx = NULL;
-        kDebug() << "Initializing HTTP server...";
-        ctx = shttpd_init();
-        if (ctx == NULL) {
-            kError() << "HTTP Server not correctly initialized, aborting";
-            exit(1);
-        }
-
-        if (config == NULL) {
-            kError() << "Internal error, can't retrieve configuration data!";
-            exit(1);
-        } else {
-            config = serverConfig;
-        }
-    }
+    Server::Server(ServerConfig* serverConfig) : m_config(serverConfig) {}
 
     Server::~Server() {
-        if (ctx != NULL)
-            shttpd_fini(ctx);
+        if (m_ctx)
+            shttpd_fini(m_ctx);
+    }
+
+    bool Server::init() {
+        kDebug() << "Initializing HTTP server...";
+        m_ctx = shttpd_init();
+        if (!m_ctx) {
+            kError() << "HTTP Server not correctly initialized, aborting";
+            m_initialized = false;
+            return false;
+        }
+
+        if (!m_config) {
+            kError() << "Internal error, can't retrieve configuration data!";
+            m_initialized = false;
+            return false;
+        }
+
+        m_initialized = true;
+        return true;
     }
 
     bool Server::run() {
-        if (ctx != NULL) {
-            kDebug() << "Setting to listen on port " << config->ports;
-            shttpd_set_option(ctx, "ports", config->ports.toLatin1().constData());
-
-            if (QDir(config->webRoot).exists()) {
-                kDebug() << "Webroot is " << config->webRoot;
-                shttpd_set_option(ctx, "root", QFile::encodeName(config->webRoot).constData());
-            } else {
-                kError() << "Webroot does not exist! Aborting";
-                exit(1);
-            }
-
-            // SSL certificate
-            if (config->https != NULL) {
-                if (config->certPath != NULL) {
-                    if (QFile(config->certPath).exists()) {
-                        shttpd_set_option(ctx, "ssl_cert", QFile::encodeName(config->certPath).constData());
-                    } else {
-                        kError() << "Certificate file does not exist! Aborting";
-                        exit(1);
+        if (m_initialized) {
+            if (m_ctx) {
+                kDebug() << "Setting to listen on port " << m_config->ports << endl;
+                shttpd_set_option(m_ctx, "ports", m_config->ports.toLatin1().constData());
+                
+                if (QDir(m_config->webRoot).exists()) {
+                    kDebug() << "Webroot is " << m_config->webRoot << endl;
+                    shttpd_set_option(m_ctx, "root", QFile::encodeName(m_config->webRoot).constData());
+                } else {
+                    kError() << "Webroot does not exist! Aborting" << endl;
+                    exit(1);
+                }
+                
+                // SSL certificate
+                if (m_config->https != NULL) {
+                    if (m_config->certPath != NULL) {
+                        if (QFile(m_config->certPath).exists()) {
+                            shttpd_set_option(m_ctx, "ssl_cert", QFile::encodeName(m_config->certPath).constData());
+                        } else {
+                            kError() << "Certificate file does not exist! Aborting" << endl;
+                            exit(1);
+                        }
                     }
                 }
+                
+                // Do not show directory listings by default
+                if (m_config->dirList) {
+                    kDebug() << "Enabling directory listing..." << endl;
+                    shttpd_set_option(m_ctx, "dir_list", "1");
+                } else {
+                    shttpd_set_option(m_ctx, "dir_list", "0");
+                }
+                
+                for (;;) {
+                    shttpd_poll(m_ctx, 1000);
+                    KUniqueApplication::processEvents();
+                }
+                
+                return true;
+            } else if (m_ctx == NULL) {
+                kError() << "Internal error, SHTTPD engine was not initialized correctly" << endl;
+                return false;
+            } else { 
+                kError() << "Unknown error" << endl;
+                return false;
             }
-            
-            // Do not show directory listings by default
-            if (config->dirList) {
-                kDebug() << "Enabling directory listing...";
-                shttpd_set_option(ctx, "dir_list", "1");
-            } else {
-                shttpd_set_option(ctx, "dir_list", "0");
-            }
-            
-            for (;;) {
-                shttpd_poll(ctx, 1000);
-                KUniqueApplication::processEvents();
-            }
-            
-            return true;
-        } else if (ctx == NULL) {
-            kError() << "Internal error, SHTTPD engine was not initialized correctly";
-            return false;
-        } else { 
-            kError() << "Unknown error";
+        } else {
+            kError() << "Server was not initiliazed" << endl;
             return false;
         }
     }
 
     void Server::registerHandler(const char* handler, void(*f)(shttpd_arg*)) {
-        if (f != NULL) {
-            kDebug() << "Registering handler for: " << handler;
-            shttpd_register_uri(ctx, handler, f, NULL);
+        if (f) {
+            kDebug() << "Registering handler for: " << handler << endl;
+            shttpd_register_uri(m_ctx, handler, f, NULL);
         }
     }
 
     ServerConfig* Server::getConfig() {
-        if (config != NULL)
-            return config;
-        else {
-            kError() << "Configuration data can't be loaded";
-            kError() << "Internal error, aborting";
-            exit(1);
-        }
+        if (m_config)
+            return m_config;
+        else
+            kError() << "Configuration data can't be loaded" << endl;
     }
 }

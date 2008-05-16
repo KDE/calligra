@@ -22,32 +22,13 @@
 #define KEXI_WEBFORMS_DATAPROVIDER_H
 
 #include <QString>
-#include <QStringList>
-#include <QPointer>
-
-#include <kexidb/drivermanager.h>
-#include <kexidb/driver.h>
+#include <core/kexiproject.h>
 #include <kexidb/connection.h>
-#include <kexidb/cursor.h>
-#include <kexidb/field.h>
-#include <kexidb/tableschema.h>
-#include <kexidb/queryschema.h>
-#include <kexidb/indexschema.h>
 
 namespace KexiWebForms {
+    extern KexiDB::Connection* gConnection;
 
-    class DataProvider {
-    public:
-        DataProvider(QString);
-        virtual ~DataProvider() {};
-        QStringList getTables();
-    private:
-        KexiDB::ConnectionData m_connData;
-        KexiDB::Connection* m_connection;
-        KexiDB::Driver* m_driver;
-        KexiDB::DriverManager* m_driverManager;
-    };
-
+    bool initDatabase(const QString& fileName);
 }
 
 #endif

@@ -21,41 +21,77 @@
 #include "DataProvider.h"
 
 #include <KDebug>
+#include <QString>
+#include <QStringList>
+#include <QPointer>
+
+#include <main/startup/KexiStartup.h>
+
+#include <core/kexidbshortcutfile.h>
+#include <core/kexiproject.h>
+#include <core/kexiprojectdata.h>
+#include <core/kexistartupdata.h>
 
 #include <kexidb/drivermanager.h>
+#include <kexidb/driver.h>
+#include <kexidb/connection.h>
 #include <kexidb/cursor.h>
+#include <kexidb/field.h>
+#include <kexidb/tableschema.h>
+#include <kexidb/queryschema.h>
+#include <kexidb/indexschema.h>
+
+using namespace KexiDB;
 
 namespace KexiWebForms {
+    KexiDB::Connection* gConnection = NULL;
 
-    DataProvider::DataProvider(QString kexiFile) {
-        m_driverManager = new KexiDB::DriverManager();
+    bool initDatabase(const QString& fileName) {
+        bool m_status = false;
+        Driver* driver = NULL;
+        DriverManager* manager = new DriverManager();
+        ConnectionData* connData = new ConnectionData();
 
-        kDebug() << "Loading default driver...";
-        m_driver = m_driverManager->driver("SQLite3");
-        if (!m_driver || m_driverManager->error()) {
-            kError() << "ERROR while trying to load database driver!" << endl;
-            m_driverManager->debugError();
-            exit(1);
+        QString driverName;
+        QString suggestedDriverName;
+        KexiStartupData::Import data;
+
+        tristate res = KexiStartupHandler::detectActionForFile(data, driverName, "", fileName);
+        kDebug() << "Database file name: " << fileName << " driver name: " << driverName << endl;
+
+        if (true == res) {
+            if (driverName == "shortcut") {
+                // TODO: implement this stub
+            } else if (driverName == "connection") {
+                // TODO: implement this stub
+            } else {
+                kDebug() << "File name should be a file-based database... loading it" << endl;
+
+                driver = manager->driver(driverName);
+                if (!driver || manager->error()) {
+                    manager->debugError();
+                    m_status = false;
+                } else m_status = true;
+
+                connData->setFileName(fileName);
+
+                gConnection = driver->createConnection(*connData);
+                if (!gConnection || driver->error()) {
+                    driver->debugError();
+                    m_status = false;
+                } else m_status = true;
+
+                if (!gConnection->connect()){
+                    gConnection->debugError();
+                    m_status = false;
+                } else m_status = true;
+
+                if (!gConnection->useDatabase(fileName)) {
+                    kError() << gConnection->errorMsg() << endl;
+                }
+            }
         }
-
-        kDebug() << "Opening database file " << kexiFile;
-        m_connData.setFileName(kexiFile);
-
-        kDebug() << "Opening connection with database...";
-        m_connection = m_driver->createConnection(m_connData);
-        if (!m_connection || m_driver->error()) {
-            kError() << "ERROR while trying to initialize connection with database!" << endl;
-            m_driver->debugError();
-            exit(1);
-        }
-
-        if (!m_connection->useDatabase(m_connection->data()->fileName())) {
-            kError() << "ERROR: " << m_connection->errorMsg() << endl;
-        }
-    }
-
-    QStringList DataProvider::getTables() {
-        return m_connection->tableNames();
+        return m_status;
     }
 
 }
