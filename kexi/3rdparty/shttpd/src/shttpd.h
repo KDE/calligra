@@ -25,6 +25,8 @@
 #ifndef SHTTPD_HEADER_INCLUDED
 #define	SHTTPD_HEADER_INCLUDED
 
+#include <stdlib.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
