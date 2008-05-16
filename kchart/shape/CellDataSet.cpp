@@ -359,6 +359,30 @@ void CellDataSet::yDataChanged( const QRect &rect ) const
     }
     else
     {
+        QPoint topLeft = rect.topLeft();
+        QPoint bottomLeft = rect.bottomLeft();
+        
+        int totalHeight = 0;
+        int i;
+        for ( i = 0; i < yDataRegionRects.size(); i++ )
+        {
+            if ( yDataRegionRects[i].contains( topLeft ) )
+            {
+                start = totalHeight + topLeft.y() - yDataRegionRects[i].topLeft().y();
+                break;
+            }
+            totalHeight += yDataRegionRects[i].height();
+        }
+        
+        for ( i; i < yDataRegionRects.size(); i++ )
+        {
+            if ( yDataRegionRects[i].contains( bottomLeft ) )
+            {
+                end = totalHeight + bottomLeft.y() - yDataRegionRects[i].topLeft().y();
+                break;
+            }
+            totalHeight += yDataRegionRects[i].height();
+        }
     }
     
     if ( !m_blockSignals && m_kdChartModel )
