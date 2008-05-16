@@ -44,11 +44,11 @@
 using namespace KexiDB;
 
 namespace KexiWebForms {
-    KexiDB::Connection* gConnection = NULL;
+    QPointer<KexiDB::Connection> gConnection = NULL;
 
     bool initDatabase(const QString& fileName) {
         bool m_status = false;
-        Driver* driver = NULL;
+        QPointer<Driver> driver = NULL;
         DriverManager* manager = new DriverManager();
         ConnectionData* connData = new ConnectionData();
 

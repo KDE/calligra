@@ -18,17 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_WEBFORMS_DATAPROVIDER_H
-#define KEXI_WEBFORMS_DATAPROVIDER_H
+#include "ServerConfig.h"
 
-#include <QString>
-#include <QPointer>
-#include <kexidb/connection.h>
-
-namespace KexiWebForms {
-    extern QPointer<KexiDB::Connection> gConnection;
-
-    bool initDatabase(const QString& fileName);
-}
-
-#endif
+// ServerConfig::dirList = false;
