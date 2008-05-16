@@ -121,27 +121,27 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
 /*
     KUrl u;
     u.setPath( QDir::rootPath() );
-    QString text = i18n("Root Directory: %1").arg( u.path() );
+    QString text = i18n("Root Directory: %1", u.path() );
     d->pathCombo->addDefaultURL( u,
                                  KMimeType::pixmapForURL( u, 0, KIconLoader::Small ),
                                  text );
 
     u.setPath( QDir::homePath() );
-    text = i18n("Home Directory: %1").arg( u.path( +1 ) );
+    text = i18n("Home Directory: %1", u.path( +1 ) );
     d->pathCombo->addDefaultURL( u, KMimeType::pixmapForURL( u, 0, KIconLoader::Small ),
                                  text );
 
     KUrl docPath;
     docPath.setPath( KGlobalSettings::documentPath() );
     if ( u.path(+1) != docPath.path(+1) ) {
-        text = i18n("Documents: %1").arg( docPath.path( +1 ) );
+        text = i18n("Documents: %1", docPath.path( +1 ) );
         d->pathCombo->addDefaultURL( u,
                                      KMimeType::pixmapForURL( u, 0, KIconLoader::Small ),
                                      text );
     }
 
     u.setPath( KGlobalSettings::desktopPath() );
-    text = i18n("Desktop: %1").arg( u.path( +1 ) );
+    text = i18n("Desktop: %1", u.path( +1 ) );
     d->pathCombo->addDefaultURL( u,
                                  KMimeType::pixmapForURL( u, 0, KIconLoader::Small ),
                                  text );
@@ -186,7 +186,7 @@ void KexiStartupFileDialogBase::init(const QString& startDir, const QString& fil
     coll->action( "up" )->plug( toolbar );
     coll->action( "up" )->setWhatsThis(i18n("<qt>Click this button to enter the parent directory.<p>"
                                             "For instance, if the current location is file:/home/%1 clicking this "
-                                            "button will take you to file:/home.</qt>").arg(getlogin()));
+                                            "button will take you to file:/home.</qt>",getlogin()));
     coll->action( "back" )->plug( toolbar );
     coll->action( "back" )->setWhatsThis(i18n("Click this button to move backwards one step in the browsing history."));
     coll->action( "forward" )->plug( toolbar );
