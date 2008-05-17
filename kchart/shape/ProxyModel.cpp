@@ -82,7 +82,7 @@ void ProxyModel::rebuildDataMap()
 	        QMap<int, QVector<QRect> > sortedRows;
 	        // Split up region in horizontal rectangles
 	        // that are sorted from top to bottom
-	        foreach ( QRect rect, d->selection )
+	        foreach ( const QRect &rect, d->selection )
 	        {
 	            int x = rect.topLeft().x();
 	            for ( int y = rect.topLeft().y(); y <= rect.bottomLeft().y(); y++ )
@@ -103,7 +103,7 @@ void ProxyModel::rebuildDataMap()
 	            QVector<QRect> unsortedRects = i.value();
 	            QVector<QRect> sortedRects;
 	            
-	            foreach ( QRect rect, unsortedRects )
+	            foreach ( const QRect &rect, unsortedRects )
 	            {
 	                int index;
 	                
@@ -170,7 +170,7 @@ void ProxyModel::rebuildDataMap()
             QMap<int, QVector<QRect> > sortedColumns;
             // Split up region in horizontal rectangles
             // that are sorted from top to bottom
-            foreach ( QRect rect, d->selection )
+            foreach ( const QRect &rect, d->selection )
             {
                 int y = rect.topLeft().y();
                 for ( int x = rect.topLeft().x(); x <= rect.topRight().x(); x++ )
@@ -191,7 +191,7 @@ void ProxyModel::rebuildDataMap()
                 QVector<QRect> unsortedRects = i.value();
                 QVector<QRect> sortedRects;
                 
-                foreach ( QRect rect, unsortedRects )
+                foreach ( const QRect &rect, unsortedRects )
                 {
                     int index;
                     
@@ -426,7 +426,7 @@ void ProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bot
 	    {
 	        bool intersects = false;
 	        QRect changedRect;
-	        foreach ( QRect rect, dataSet->yDataRegion().rects() )
+	        foreach ( const QRect &rect, dataSet->yDataRegion().rects() )
 	        {
 	            if ( rect.intersects( dataChangedRect ) )
 	            {

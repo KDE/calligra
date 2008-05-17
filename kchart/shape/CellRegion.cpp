@@ -69,7 +69,7 @@ bool CellRegion::isValid() const
 
 bool CellRegion::contains( const QPoint &point, bool proper ) const
 {
-    foreach ( QRect rect, m_rects )
+    foreach ( const QRect &rect, m_rects )
     {
         if ( rect.contains( point, proper ) )
             return true;
@@ -80,7 +80,7 @@ bool CellRegion::contains( const QPoint &point, bool proper ) const
 
 bool CellRegion::contains( const QRect &rect, bool proper ) const
 {
-    foreach ( QRect r, m_rects )
+    foreach ( const QRect &r, m_rects )
     {
         if ( r.contains( rect, proper ) )
             return true;
@@ -91,7 +91,7 @@ bool CellRegion::contains( const QRect &rect, bool proper ) const
 
 Qt::Orientation CellRegion::orientation() const
 {
-    foreach ( QRect rect, m_rects )
+    foreach ( const QRect &rect, m_rects )
     {
     	if ( rect.width() > 1 )
     		return Qt::Horizontal;
@@ -108,12 +108,12 @@ int CellRegion::cellCount() const
     int count = 0;
     if ( orientation() == Qt::Horizontal )
     {
-        foreach ( QRect rect, m_rects )
+        foreach ( const QRect &rect, m_rects )
             count += rect.width();
     }
     else
     {
-        foreach( QRect rect, m_rects )
+        foreach( const QRect &rect, m_rects )
             count += rect.height();
     }
     
@@ -147,7 +147,7 @@ void CellRegion::add( const QRect &rect )
 
 void CellRegion::add( const QVector<QRect> &rects )
 {
-    foreach ( QRect rect, rects )
+    foreach ( const QRect &rect, rects )
         add( rect );
 }
 
@@ -194,7 +194,7 @@ void CellRegion::subtract( const QPoint &point )
 
     // Recalculate bounding rectangle
     m_boundingRect = QRect();
-    foreach ( QRect rect, m_rects )
+    foreach ( const QRect &rect, m_rects )
         m_boundingRect |= rect;
 }
 
@@ -208,7 +208,7 @@ QPoint CellRegion::pointAtIndex( int index ) const
     // sum of all previous rectangle indices
     int i = 0;
     
-    foreach ( QRect rect, m_rects )
+    foreach ( const QRect &rect, m_rects )
     {
         // Rectangle is horizontal
         if ( rect.width() > 1 )

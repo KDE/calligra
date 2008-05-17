@@ -193,7 +193,7 @@ void CellDataSet::setXDataRegion( const CellRegion &region )
     int newSize = 0;
     
     QRect boundingRect;
-    foreach ( QRect rect, region.rects() )
+    foreach ( const QRect &rect, region.rects() )
     {
         newSize += qMax( rect.width(), rect.height() );
         boundingRect |= rect;
@@ -229,7 +229,7 @@ void CellDataSet::setCustomDataRegion( const CellRegion &region )
     int newSize = 0;
     
     QRect boundingRect;
-    foreach ( QRect rect, region.rects() )
+    foreach ( const QRect &rect, region.rects() )
     {
         newSize += qMax( rect.width(), rect.height() );
         boundingRect |= rect;
@@ -249,7 +249,7 @@ void CellDataSet::setCategoryDataRegion( const CellRegion &region )
     int newSize = 0;
     
     QRect boundingRect;
-    foreach ( QRect rect, region.rects() )
+    foreach ( const QRect &rect, region.rects() )
     {
         newSize += qMax( rect.width(), rect.height() );
         boundingRect |= rect;
@@ -268,7 +268,7 @@ void CellDataSet::setLabelDataRegion( const CellRegion &region )
     m_labelDataRegion = region;
     
     QRect boundingRect;
-    foreach ( QRect rect, region.rects() )
+    foreach ( const QRect &rect, region.rects() )
         boundingRect |= rect;
     
     if ( boundingRect.height() > 1 )
