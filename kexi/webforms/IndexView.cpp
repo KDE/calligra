@@ -32,6 +32,7 @@ namespace KexiWebForms {
     namespace IndexView {
 
         void show(struct shttpd_arg* arg) {
+            // TODO: We shouldn't see any shttpd specific call here...
             shttpd_printf(arg, "%s", "HTTP/1.1 200 OK\r\n");
             shttpd_printf(arg, "%s", "Content-Type: text/html\r\n\r\n");
 
@@ -39,7 +40,7 @@ namespace KexiWebForms {
             dict.SetValue("TITLE", gConnection->data()->fileName().toLatin1().constData());
 
             std::ostringstream tables;
-            // FIXME: Ugly usage of temporary objects
+            // FIXME: Beware of temporary objects!
             for (int i = 0; i < gConnection->tableNames().size(); ++i)
                 tables << "<li>" << gConnection->tableNames().at(i).toLatin1().constData() << "</li>";
             dict.SetValue("TABLES", tables.str());
