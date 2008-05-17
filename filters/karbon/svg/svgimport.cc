@@ -59,8 +59,6 @@
 #include <QtCore/QFile>
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
-#include <QtGui/QTextCursor>
-#include <QtGui/QTextCharFormat>
 
 #define DPI 72.0
 
