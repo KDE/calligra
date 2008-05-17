@@ -2,15 +2,15 @@
 
 ########### next target ###############
 
-set(karbonepsexport_PART_SRCS epsexport.cc epsexportdlg.cc )
+#set(karbonepsexport_PART_SRCS epsexport.cc epsexportdlg.cc )
 
-kde4_add_plugin(karbonepsexport WITH_PREFIX ${karbonepsexport_PART_SRCS})
+#kde4_add_plugin(karbonepsexport WITH_PREFIX ${karbonepsexport_PART_SRCS})
 
 
 
-target_link_libraries(karbonepsexport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon )
+#target_link_libraries(karbonepsexport  ${KDE4_KDECORE_LIBS} koguiutils karboncommon )
 
-install(TARGETS karbonepsexport  DESTINATION ${PLUGIN_INSTALL_DIR})
+#install(TARGETS karbonepsexport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 
 ########### next target ###############
@@ -28,9 +28,12 @@ install(TARGETS karbonepsimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############
 
-install(FILES  karbon_eps_export.desktop  
+install(
+FILES  
+#karbon_eps_export.desktop  
 	karbon_eps_import.desktop
-  	karbon_ps_import.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+#  	karbon_ps_import.desktop
+DESTINATION ${SERVICES_INSTALL_DIR})
 
 
 

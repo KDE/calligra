@@ -26,45 +26,36 @@
 #include <KoFilterChain.h>
 #include <krun.h>
 #include <kprocess.h>
+#include <kshell.h>
 
 #include <kdebug.h>
 
 #include "epsimport.h"
 #include "pscommentlexer.h"
 
-class EpsImportFactory : KGenericFactory<EpsImport>
-{
-public:
-	EpsImportFactory( void )
-		: KGenericFactory<EpsImport>( "karbonepsimport" )
-	{}
-
-protected:
-	virtual void setupTranslations( void )
-	{
-		KGlobal::locale()->insertCatalog( "kofficefilters" );
-	}
-};
-
-K_EXPORT_COMPONENT_FACTORY( libkarbonepsimport, EpsImportFactory() )
+typedef KGenericFactory<EpsImport> EpsImportFactory;
+K_EXPORT_COMPONENT_FACTORY( libkarbonepsimport, EpsImportFactory( "kofficefilters" ) )
 
 EpsImport::EpsImport( QObject*parent, const QStringList& )
 	: KoFilter(parent)
 {
+    kDebug() << "###   ###   EPS Import Filter" << endl;
 }
 
 EpsImport::~EpsImport()
 {
 }
 
-KoFilter::ConversionStatus
-EpsImport::convert( const QByteArray& from, const QByteArray& to )
+KoFilter::ConversionStatus EpsImport::convert( const QByteArray& from, const QByteArray& to )
 {
 	if(
 		to != "application/illustrator" ||
 		(
 			from != "image/x-eps" &&
-			from != "application/postscript" ) )
+			from != "image/eps" &&
+			from != "application/eps" &&
+			from != "application/x-eps" &&
+			from != "application/postscript" ) ) 
 	{
 		return KoFilter::NotImplemented;
 	}
@@ -98,11 +89,11 @@ EpsImport::convert( const QByteArray& from, const QByteArray& to )
 	// Build ghostscript call to convert ps/eps -> ai:
 	QString command(
 		"gs -q -P- -dBATCH -dNOPAUSE -dSAFER -dPARANOIDSAFER -dNODISPLAY ps2ai.ps ");
-	command += KProcess::quote(input);
+	command += KShell::quoteArg(input);
 	command += " | ";
 	command += sedFilter;
 	command += " > ";
-	command += KProcess::quote(m_chain->outputFile());
+	command += KShell::quoteArg(m_chain->outputFile());
 
 	qDebug ("command to execute is (%s)", QFile::encodeName(command).data());
 

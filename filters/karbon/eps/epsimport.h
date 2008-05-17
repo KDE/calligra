@@ -21,14 +21,8 @@
 #define __EPSIMPORT_H__
 
 #include <QObject>
-//Added by qt3to4:
-#include <QTextStream>
-#include <Q3CString>
 
 #include <KoFilter.h>
-
-class QDomElement;
-class QTextStream;
 
 class EpsImport : public KoFilter
 {

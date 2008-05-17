@@ -29,10 +29,10 @@ if (LIBWPD AND LIBWPG_FOUND)
 endif (LIBWPD AND LIBWPG_FOUND)
 add_subdirectory( wmf )
 add_subdirectory( karbon1.x )
+add_subdirectory( eps )
 
 # enable again when these filters are ported
 if(FALSE)
-add_subdirectory( eps )
 add_subdirectory( ai )
 add_subdirectory( kontour )
 add_subdirectory( xcf )
