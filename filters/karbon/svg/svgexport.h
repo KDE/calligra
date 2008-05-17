@@ -79,6 +79,9 @@ private:
 
     double toUserSpace( double value );
 
+    /// Checks if the matrix only has translation set
+    bool isTranslation( const QMatrix & );
+
     QTextStream* m_stream;
     QTextStream* m_defs;
     QTextStream* m_body;

@@ -214,7 +214,7 @@ void SvgExport::savePath( KoPathShape * path )
     getFill( path, m_body );
     getStroke( path, m_body );
 
-    *m_body << " d=\"" << path->toString( path->absoluteTransformation(0) * m_userSpaceMatrix ) << "\" ";
+    *m_body << " d=\"" << path->toString( path->transformation() * m_userSpaceMatrix ) << "\" ";
 
     if( path->fillRule() == Qt::OddEvenFill )
         *m_body << " fill-rule=\"evenodd\"";
@@ -259,6 +259,11 @@ QString SvgExport::getTransform( const QMatrix &matrix )
             .arg( toUserSpace(matrix.dx()) ) .arg( toUserSpace(matrix.dy()) );
 
     return transform;
+}
+
+bool SvgExport::isTranslation( const QMatrix &m )
+{
+    return ( m.m11() == 1.0 && m.m12() == 0.0 && m.m21() == 0.0 && m.m22() == 1.0 );
 }
 
 void SvgExport::getColorStops( const QGradientStops & colorStops )
@@ -487,17 +492,37 @@ void SvgExport::saveText( SimpleTextShape * text )
         *m_body << " font-weight=\"bold\"";
     if( font.italic() )
         *m_body << " font-style=\"italic\"";
+
+    qreal anchorOffset = 0.0;
     if( text->textAnchor() == SimpleTextShape::AnchorMiddle )
+    {
+        anchorOffset += 0.5 * text->size().width();
         *m_body << " text-anchor=\"middle\"";
+    }
     else if( text->textAnchor() == SimpleTextShape::AnchorEnd )
+    {
+        anchorOffset += text->size().width();
         *m_body << " text-anchor=\"end\"";
+    }
 
     printIndentation( m_body, m_indent );
 
     // check if we are set on a path
     if( text->layout() == SimpleTextShape::Straight )
     {
-        *m_body << " transform=\"" << getTransform( text->transformation() ) << "\" ";
+        QMatrix m = text->transformation();
+        if( isTranslation( m ) )
+        {
+            QPointF position = text->position();
+            *m_body << " x=\"" << position.x() + anchorOffset << "pt\"";
+            *m_body << " y=\"" << position.y() + text->baselineOffset() << "pt\"";
+        }
+        else
+        {
+            *m_body << " x=\"" << anchorOffset << "pt\"";
+            *m_body << " y=\"" << text->baselineOffset() << "pt\"";
+            *m_body << " transform=\"" << getTransform( text->transformation() ) << "\"";
+        }
         *m_body << ">" << endl;
         *m_body << text->text();
     }
@@ -544,7 +569,7 @@ void SvgExport::saveImage( PictureShape * picture )
 
     *m_body << "<image" << getID( picture );
     QMatrix m = picture->transformation();
-    if( m.m11() == 1.0 && m.m12() == 0.0 && m.m21() == 0.0 && m.m22() == 1.0 )
+    if( isTranslation( m ) )
     {
         QPointF position = picture->position();
         *m_body << " x=\"" << position.x() << "pt\"";
