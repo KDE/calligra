@@ -39,6 +39,7 @@ class KoShape;
 class KoPathShape;
 class KoShapeBorderModel;
 class SimpleTextShape;
+class PictureShape;
 class QTextStream;
 class QPixmap;
 class QImage;
@@ -62,7 +63,7 @@ private:
     void saveShape( KoShape * shape );
     void savePath( KoPathShape * path );
 
-    void saveImage( QImage& image );
+    void saveImage( PictureShape * picture );
     void saveText( SimpleTextShape * text );
 
     void getFill( KoShape * shape, QTextStream *stream );
@@ -74,6 +75,7 @@ private:
     QString getTransform( const QMatrix &matrix );
 
     QString getID( const KoShape *obj );
+    QString createID( const KoShape * obj );
 
     double toUserSpace( double value );
 

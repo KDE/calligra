@@ -43,6 +43,8 @@
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
 #include <plugins/simpletextshape/SimpleTextShape.h>
+#include <plugins/pictureshape/PictureShape.h>
+#include <KoImageData.h>
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -50,6 +52,7 @@
 #include <QtCore/QFile>
 #include <QtCore/QString>
 #include <QtCore/QTextStream>
+#include <QtCore/QBuffer>
 #include <QtGui/QLinearGradient>
 #include <QtGui/QRadialGradient>
 
@@ -164,7 +167,9 @@ void SvgExport::saveLayer( KoShapeLayer * layer )
 void SvgExport::saveGroup( KoShapeContainer * group )
 {
     printIndentation( m_body, m_indent++ );
-    *m_body << "<g" << getID( group ) << ">" << endl;
+    *m_body << "<g" << getID( group ) << " ";
+    *m_body << " transform=\"" << getTransform( group->transformation() ) << "\" ";
+    *m_body << ">" << endl;
 
     foreach( KoShape * shape, group->iterator() )
     {
@@ -192,6 +197,10 @@ void SvgExport::saveShape( KoShape * shape )
         if( shape->shapeId() == SimpleTextShapeID )
         {
             saveText( static_cast<SimpleTextShape*>( shape ) );
+        }
+        else if( shape->shapeId() == PICTURESHAPEID )
+        {
+            saveImage( static_cast<PictureShape*>( shape ) );
         }
         // TODO export text and images
     }
@@ -222,7 +231,7 @@ static QString createUID()
     return "defitem" + QString().setNum( nr++ );
 }
 
-QString SvgExport::getID( const KoShape *obj )
+QString SvgExport::createID( const KoShape * obj )
 {
     QString id;
     if( ! m_shapeIds.contains( obj ) )
@@ -234,8 +243,12 @@ QString SvgExport::getID( const KoShape *obj )
     {
         id = m_shapeIds[obj];
     }
+    return id;
+}
 
-    return QString( " id=\"%1\"" ).arg( id );
+QString SvgExport::getID( const KoShape *obj )
+{
+    return QString( " id=\"%1\"" ).arg( createID( obj ) );
 }
 
 QString SvgExport::getTransform( const QMatrix &matrix )
@@ -518,16 +531,60 @@ void SvgExport::saveText( SimpleTextShape * text )
 
 // horrible but at least something gets exported now
 // will need this for patterns
-void SvgExport::saveImage( QImage& )
+void SvgExport::saveImage( PictureShape * picture )
 {
-    printIndentation( m_body, m_indent );
-    *m_body << "<image ";
+    KoImageData * imageData = dynamic_cast<KoImageData*>( picture->userData() );
+    if( ! imageData )
+    {
+        qWarning() << "Picture has no image data. Omitting.";
+        return;
+    }
 
-    *m_body << "x=\"" << "\" ";
-    *m_body << "y=\"" << "\" ";
-    *m_body << "width=\"" << "\" ";
-    *m_body << "height=\"" << "\" ";
-    *m_body << "xlink:href=\"" << "\"";
+    printIndentation( m_body, m_indent );
+
+    *m_body << "<image" << getID( picture );
+    QMatrix m = picture->transformation();
+    if( m.m11() == 1.0 && m.m12() == 0.0 && m.m21() == 0.0 && m.m22() == 1.0 )
+    {
+        QPointF position = picture->position();
+        *m_body << " x=\"" << position.x() << "pt\"";
+        *m_body << " y=\"" << position.y() << "pt\"";
+    }
+    else
+    {
+        *m_body << " transform=\"" << getTransform( picture->transformation() ) << "\"";
+    }
+
+    *m_body << " width=\"" << picture->size().width() << "pt\"";
+    *m_body << " height=\"" << picture->size().height() <<"pt\"";
+
+    const bool saveInline = true;
+
+    if( saveInline )
+    {
+        QByteArray ba;
+        QBuffer buffer(&ba);
+        buffer.open(QIODevice::WriteOnly);
+        if( imageData->saveToFile( &buffer ) )
+        {
+            // TODO get file format written
+            *m_body << " xlink:href=\"data:image/png;base64," << ba.toBase64() <<  "\"";
+        }
+    }
+    else
+    {
+        // TODO handle remote files too
+        KUrl url( m_chain->outputFile() );
+        url.setDirectory( url.directory() );
+        // TODO get file format written
+        QString fname = createID( picture ) + ".png";
+        url.setFileName( fname );
+        QFile dstFile ( url.path() );
+        if( imageData->saveToFile( &dstFile ) )
+        {
+            *m_body << " xlink:href=\"" << fname << "\"";
+        }
+    }
     *m_body << " />" << endl;
 }
 
