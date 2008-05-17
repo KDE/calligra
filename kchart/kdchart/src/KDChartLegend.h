@@ -276,6 +276,10 @@ m_legend->setFloatingPosition( relativePosition );
     void setOrientation( Qt::Orientation orientation );
     Qt::Orientation orientation() const;
 
+
+    void setSortOrder( Qt::SortOrder order );
+    Qt::SortOrder sortOrder() const;
+
     void setShowLines( bool legendShowLines );
     bool showLines() const;
 

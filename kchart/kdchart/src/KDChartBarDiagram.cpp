@@ -39,11 +39,15 @@
 #include "KDChartNormalBarDiagram_p.h"
 #include "KDChartStackedBarDiagram_p.h"
 #include "KDChartPercentBarDiagram_p.h"
+#include "KDChartNormalLyingBarDiagram_p.h"
+#include "KDChartStackedLyingBarDiagram_p.h"
+#include "KDChartPercentLyingBarDiagram_p.h"
 
 
 using namespace KDChart;
 
 BarDiagram::Private::Private()
+    : orientation( Qt::Vertical )
 {
 }
 
@@ -64,6 +68,9 @@ void BarDiagram::init()
     d->normalDiagram = new NormalBarDiagram( this );
     d->stackedDiagram = new StackedBarDiagram( this );
     d->percentDiagram = new PercentBarDiagram( this );
+    d->normalLyingDiagram = new NormalLyingBarDiagram( this );
+    d->stackedLyingDiagram = new StackedLyingBarDiagram( this );
+    d->percentLyingDiagram = new PercentLyingBarDiagram( this );
     d->implementor = d->normalDiagram;
     d->compressor.setModel( attributesModel() );
 }
@@ -105,19 +112,35 @@ void BarDiagram::setType( const BarType type )
     //if ( type == d->barType ) return;
      if ( d->implementor->type() == type ) return;
 
-     switch( type ) {
-     case Normal:
-         d->implementor = d->normalDiagram;
-         break;
-     case Stacked:
-         d->implementor = d->stackedDiagram;
-         break;
-     case Percent:
-         d->implementor = d->percentDiagram;
-         break;
-     default:
-         Q_ASSERT_X( false, "BarDiagram::setType", "unknown diagram subtype" );
-     };
+     if ( d->orientation == Qt::Vertical ) {
+         switch( type ) {
+         case Normal:
+             d->implementor = d->normalDiagram;
+             break;
+         case Stacked:
+             d->implementor = d->stackedDiagram;
+             break;
+         case Percent:
+             d->implementor = d->percentDiagram;
+             break;
+         default:
+             Q_ASSERT_X( false, "BarDiagram::setType", "unknown diagram subtype" );
+         }
+     } else {
+         switch( type ) {
+         case Normal:
+             d->implementor = d->normalLyingDiagram;
+             break;
+         case Stacked:
+             d->implementor = d->stackedLyingDiagram;
+             break;
+         case Percent:
+             d->implementor = d->percentLyingDiagram;
+             break;
+         default:
+             Q_ASSERT_X( false, "BarDiagram::setType", "unknown diagram subtype" );
+         }
+     }
 
    Q_ASSERT( d->implementor->type() == type );
 
@@ -130,11 +153,65 @@ void BarDiagram::setType( const BarType type )
 }
 
 /**
-  * @return the type of the line diagram
+  * @return the type of the bar diagram
   */
 BarDiagram::BarType BarDiagram::type() const
 {
     return d->implementor->type();
+}
+
+/**
+  * Sets the orientation of the bar diagram
+  */
+void BarDiagram::setOrientation( Qt::Orientation orientation )
+{
+    if ( d->orientation == orientation )
+        return;
+    d->orientation = orientation;
+
+     if ( d->orientation == Qt::Vertical ) {
+         switch( type() ) {
+         case Normal:
+             d->implementor = d->normalDiagram;
+             break;
+         case Stacked:
+             d->implementor = d->stackedDiagram;
+             break;
+         case Percent:
+             d->implementor = d->percentDiagram;
+             break;
+         default:
+             Q_ASSERT_X( false, "BarDiagram::setType", "unknown diagram subtype" );
+         }
+     } else {
+         switch( type() ) {
+         case Normal:
+             d->implementor = d->normalLyingDiagram;
+             break;
+         case Stacked:
+             d->implementor = d->stackedLyingDiagram;
+             break;
+         case Percent:
+             d->implementor = d->percentLyingDiagram;
+             break;
+         default:
+             Q_ASSERT_X( false, "BarDiagram::setType", "unknown diagram subtype" );
+         }
+     }
+    
+    // AbstractAxis settings - see AbstractDiagram and CartesianAxis
+    setPercentMode( type() == BarDiagram::Percent );
+    setDataBoundariesDirty();
+    emit layoutChanged( this );
+    emit propertiesChanged();
+}
+
+/**
+  * @return the orientation of the bar diagram
+  */
+Qt::Orientation BarDiagram::orientation() const
+{
+    return d->orientation;
 }
 
 /**
@@ -184,10 +261,12 @@ BarAttributes BarDiagram::barAttributes() const
   */
 BarAttributes BarDiagram::barAttributes( int column ) const
 {
-    return qVariantValue<BarAttributes>(
-        d->attributesModel->data(
-            d->attributesModel->mapFromSource( columnToIndex( column ) ),
-            KDChart::BarAttributesRole ) );
+    const QVariant attrs(
+            d->attributesModel->headerData( column, Qt::Vertical,
+                    KDChart::BarAttributesRole ) );
+    if( attrs.isValid() )
+        return qVariantValue< BarAttributes >( attrs );
+    return barAttributes();
 }
 
 /**
@@ -255,10 +334,12 @@ ThreeDBarAttributes BarDiagram::threeDBarAttributes() const
   */
 ThreeDBarAttributes BarDiagram::threeDBarAttributes( int column ) const
 {
-    return qVariantValue<ThreeDBarAttributes>(
-        d->attributesModel->data(
-            d->attributesModel->mapFromSource( columnToIndex( column ) ),
-            KDChart::ThreeDBarAttributesRole ) );
+    const QVariant attrs(
+            d->attributesModel->headerData( column, Qt::Vertical,
+                                            KDChart::ThreeDBarAttributesRole ) );
+    if( attrs.isValid() )
+        return qVariantValue< ThreeDBarAttributes >( attrs );
+    return threeDBarAttributes();
 }
 
 /**
@@ -316,7 +397,7 @@ void BarDiagram::paint( PaintContext* ctx )
     if ( !checkInvariants( true ) ) return;
     if ( !AbstractGrid::isBoundariesValid(dataBoundaries()) ) return;
     const PainterSaver p( ctx->painter() );
-    if( model()->rowCount() == 0 || model()->columnCount() == 0 )
+    if( model()->rowCount( rootIndex() ) == 0 || model()->columnCount( rootIndex() ) == 0 )
         return; // nothing to paint for us
 
     AbstractCoordinatePlane* const plane = ctx->coordinatePlane();

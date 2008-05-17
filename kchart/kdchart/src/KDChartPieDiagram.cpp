@@ -160,6 +160,7 @@ void PieDiagram::paint( PaintContext* ctx )
         startAngle += spanAngle;
         startAngleValueSpace += nextValue;
     }
+    d->clearListOfAlreadyDrawnDataValueTexts();
     DataValueTextInfoListIterator it( list );
     while ( it.hasNext() ) {
         const DataValueTextInfo& info = it.next();
@@ -288,6 +289,7 @@ void PieDiagram::paint( PaintContext* ctx )
     int currentLeftPie = backmostpie;
     int currentRightPie = backmostpie;
 
+    d->clearListOfAlreadyDrawnDataValueTexts();
     drawOnePie( ctx->painter(), 0, backmostpie, granularity(), sizeFor3DEffect );
 
     if( backmostpie == frontmostpie )

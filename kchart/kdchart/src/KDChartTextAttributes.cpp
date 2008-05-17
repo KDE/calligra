@@ -129,6 +129,7 @@ void TextAttributes::setFont( const QFont& font )
 {
     d->font       = font;
     d->cachedFont = font; // note: we do not set the font's size here, but in calculatedFont()
+    //qDebug() << "resetting cached font size";
     d->cachedFontSize = -1.0;
 }
 
@@ -180,8 +181,9 @@ const QFont TextAttributes::calculatedFont(
         KDChartEnums::MeasureOrientation autoReferenceOrientation ) const
 {
     const qreal size = calculatedFontSize( autoReferenceArea, autoReferenceOrientation );
-    //qDebug() << "TextAttributes::calculatedFont() has   d->cachedFontSize" << d->cachedFontSize << "  calculatedFontSize" << calculatedFontSize;
+    //qDebug() << "TextAttributes::calculatedFont() has   d->cachedFontSize" << d->cachedFontSize << "  calculatedFontSize" << size;
     if( size > 0.0 && d->cachedFontSize != size ){
+        //qDebug() << "new into the cache:" << size;
         d->cachedFontSize = size;
         d->cachedFont.setPointSizeF( d->cachedFontSize );
     }

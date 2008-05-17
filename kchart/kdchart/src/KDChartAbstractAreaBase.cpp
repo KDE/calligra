@@ -29,6 +29,7 @@
 #include <KDChartFrameAttributes.h>
 #include <KDChartTextAttributes.h>
 #include "KDChartPainterSaver_p.h"
+#include "KDChartPrintingParameters.h"
 #include <QPainter>
 
 #include <KDABLibFakes>
@@ -186,11 +187,11 @@ void AbstractAreaBase::paintFrameAttributes( QPainter& painter, const QRect& rec
 
     const QPen   oldPen(   painter.pen() );
     const QBrush oldBrush( painter.brush() );
-    painter.setPen(   attributes.pen() );
+    painter.setPen(  PrintingParameters::scalePen( attributes.pen() ) );
     painter.setBrush( Qt::NoBrush );
     painter.drawRect( rect.adjusted( 0, 0, -1, -1 ) );
     painter.setBrush( oldBrush );
-    painter.setPen(   oldPen );
+    painter.setPen( oldPen );
 }
 
 void AbstractAreaBase::paintBackground( QPainter& painter, const QRect& rect )

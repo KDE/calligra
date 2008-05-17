@@ -27,6 +27,8 @@
  **
  **********************************************************************/
 
+#include <limits>
+
 #include <QAbstractItemModel>
 
 #include "KDChartBarDiagram.h"
@@ -52,32 +54,33 @@ const QPair< QPointF, QPointF > NormalLineDiagram::calculateDataBoundaries() con
 {
     const int rowCount = compressor().modelDataRows();
     const int colCount = compressor().modelDataColumns();
-    double xMin = 0;
+    double xMin = 0.0;
     double xMax = diagram()->model() ? diagram()->model()->rowCount( diagram()->rootIndex() ) - 1 : 0;
-    double yMin = 0;
-    double yMax = 0;
+    double yMin = std::numeric_limits< double >::quiet_NaN();
+    double yMax = std::numeric_limits< double >::quiet_NaN();
 
-    bool first = true;
     for( int column = 0; column < colCount; ++column )
     {
         for ( int row = 0; row < rowCount; ++row )
         {
             const CartesianDiagramDataCompressor::CachePosition position( row, column );
             const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
-
-            if ( first ) {
-                    yMin = point.value;
-                    yMax = point.value;
+            const double value = ISNAN( point.value ) ? 0.0 : point.value;
+            
+            if ( ISNAN( yMin ) ) {
+                    yMin = value;
+                    yMax = value;
             } else {
-                yMin = qMin( yMin, point.value );
-                yMax = qMax( yMax, point.value );
+                yMin = qMin( yMin, value );
+                yMax = qMax( yMax, value );
             }
-
-            first = false;
         }
     }
 
-    const QPointF bottomLeft( QPointF( xMin, qMin( 0.0, yMin ) ) );
+    // NOTE: calculateDataBoundaries must return the *real* data boundaries!
+    //       i.e. we may NOT fake yMin to be qMin( 0.0, yMin )
+    //       (khz, 2008-01-24)
+    const QPointF bottomLeft( QPointF( xMin, yMin ) );
     const QPointF topRight( QPointF( xMax, yMax ) );
     return QPair< QPointF, QPointF >( bottomLeft, topRight );
 }
@@ -106,48 +109,73 @@ void NormalLineDiagram::paint( PaintContext* ctx )
 
     DataValueTextInfoList textInfoList;
     LineAttributesInfoList lineList;
-    LineAttributes::MissingValuesPolicy policy = LineAttributes::MissingValuesPolicyIgnored; // ???
+
+    LineAttributes::MissingValuesPolicy policy;
 
     for( int column  = 0; column < columnCount; ++column ) {
         LineAttributes laPreviousCell;
-        CartesianDiagramDataCompressor::CachePosition previousCellPosition;
+        CartesianDiagramDataCompressor::DataPoint lastPoint;
 
+        CartesianDiagramDataCompressor::CachePosition previousCellPosition;
         for ( int row = 0; row < rowCount; ++row ) {
             const CartesianDiagramDataCompressor::CachePosition position( row, column );
             // get where to draw the line from:
-            const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
-            LineAttributes laCell;
-            if ( row > 0 ) { // position 0 is not really painted, since it takes two points to make a line :-)
-                const QModelIndex sourceIndex = attributesModel()->mapToSource( point.index );
-                const CartesianDiagramDataCompressor::DataPoint lastPoint = compressor().data( previousCellPosition );
-                // area corners, a + b are the line ends:
-                const QPointF a( plane->translate( QPointF( lastPoint.key, lastPoint.value ) ) );
-                const QPointF b( plane->translate( QPointF( point.key, point.value ) ) );
-                const QPointF c( plane->translate( QPointF( lastPoint.key, 0.0 ) ) );
-                const QPointF d( plane->translate( QPointF( point.key, 0.0 ) ) );
-                // add the line to the list:
-                laCell = diagram()->lineAttributes( sourceIndex );
-                // add data point labels:
-                const PositionPoints pts = PositionPoints( b, a, d, c );
-                // if necessary, add the area to the area list:
-                QList<QPolygonF> areas;
-                if ( laCell.displayArea() ) {
-                    QPolygonF polygon;
-                    polygon << a << b << d << c;
-                    areas << polygon;
-                }
-                // add the pieces to painting if this is not hidden:
-                if ( ! point.hidden ) {
-                    appendDataValueTextInfoToList( diagram(), textInfoList, sourceIndex, pts,
-                                                   Position::NorthWest, Position::SouthWest,
-                                                   point.value );
-                    paintAreas( ctx, attributesModel()->mapToSource( lastPoint.index ), areas, laCell.transparency() );
-                    lineList.append( LineAttributesInfo( sourceIndex, a, b ) );
+            CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
+            
+            const QModelIndex sourceIndex = attributesModel()->mapToSource( point.index );
+
+            const LineAttributes laCell = diagram()->lineAttributes( sourceIndex );
+            const LineAttributes::MissingValuesPolicy policy = laCell.missingValuesPolicy();
+            
+            if( ISNAN( point.value ) )
+            {
+                switch( policy )
+                {
+                case LineAttributes::MissingValuesAreBridged:
+                    // we just bridge both values
+                    continue;
+                case LineAttributes::MissingValuesShownAsZero:
+                    // set it to zero
+                    point.value = 0.0;
+                    break;
+                case LineAttributes::MissingValuesHideSegments:
+                    // they're just hidden
+                    break;
+                default:
+                    break;
+                    // hm....
                 }
             }
+            
+            // area corners, a + b are the line ends:
+            const QPointF a( plane->translate( QPointF( lastPoint.key, lastPoint.value ) ) );
+            const QPointF b( plane->translate( QPointF( point.key, point.value ) ) );
+            const QPointF c( plane->translate( QPointF( lastPoint.key, 0.0 ) ) );
+            const QPointF d( plane->translate( QPointF( point.key, 0.0 ) ) );
+            // add the line to the list:
+           // add data point labels:
+            const PositionPoints pts = PositionPoints( b, a, d, c );
+            // if necessary, add the area to the area list:
+            QList<QPolygonF> areas;
+            if ( !ISNAN( point.value ) && !ISNAN( lastPoint.value ) && laCell.displayArea() ) {
+                areas << ( QPolygonF() << a << b << d << c );//polygon;
+            }
+            // add the pieces to painting if this is not hidden:
+            if ( ! point.hidden && !ISNAN( point.value ) )
+            {
+                appendDataValueTextInfoToList( diagram(), textInfoList, sourceIndex, pts,
+                                               Position::NorthWest, Position::SouthWest,
+                                               point.value );
+                paintAreas( ctx, attributesModel()->mapToSource( lastPoint.index ), areas, laCell.transparency() );
+                // position 0 is not really painted, since it takes two points to make a line :-)
+                if( row > 0 && !ISNAN( lastPoint.value ) )
+                    lineList.append( LineAttributesInfo( sourceIndex, a, b ) );
+            }
+            
             // wrap it up:
             previousCellPosition = position;
             laPreviousCell = laCell;
+            lastPoint = point;
         }
     }
 

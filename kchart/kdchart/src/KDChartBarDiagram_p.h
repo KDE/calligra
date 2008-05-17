@@ -77,12 +77,16 @@ public:
                                      double& spaceBetweenGroups );
 */
 
+    Qt::Orientation orientation;
 
     BarDiagram* diagram;
     BarDiagramType* implementor; // the current type
     BarDiagramType* normalDiagram;
     BarDiagramType* stackedDiagram;
     BarDiagramType* percentDiagram;
+    BarDiagramType* normalLyingDiagram;
+    BarDiagramType* stackedLyingDiagram;
+    BarDiagramType* percentLyingDiagram;
 
 /* refactoring */
 /*

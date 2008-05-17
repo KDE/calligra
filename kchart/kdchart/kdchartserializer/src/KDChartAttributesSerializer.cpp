@@ -460,6 +460,12 @@ bool AttributesSerializer::parseDataValueAttributes(
                     a.setShowRepetitiveDataLabels( b );
                 else
                     qDebug() << "Error parsing DataValueAttributes tag: " << tagName;
+            } else if( tagName == "ShowOverlappingDataLabels" ) {
+                bool b;
+                if( KDXML::readBoolNode( element, b ) )
+                    a.setShowOverlappingDataLabels( b );
+                else
+                    qDebug() << "Error parsing DataValueAttributes tag: " << tagName;
             } else if( tagName == "PowerOfTenDivisor" ) {
                 int i;
                 if( KDXML::readIntNode( element, i ) )
@@ -534,6 +540,8 @@ void AttributesSerializer::saveDataValueAttributes(
     KDXML::createStringNodeIfContent( doc, element, "DataLabel", a.dataLabel() );
     // save the showRepetitiveDataLabels flag
     KDXML::createBoolNode( doc, element, "ShowRepetitiveDataLabels", a.showRepetitiveDataLabels() );
+    // save the showOverlappingDataLabels flag
+    KDXML::createBoolNode( doc, element, "ShowOverlappingDataLabels", a.showOverlappingDataLabels() );
     // save the power-of-ten divisor
     KDXML::createIntNode( doc, element, "PowerOfTenDivisor", a.powerOfTenDivisor() );
     // save the showInfinite flag

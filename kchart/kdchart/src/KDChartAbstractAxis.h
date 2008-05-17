@@ -38,6 +38,7 @@
 #include "KDChartGlobal.h"
 #include "KDChartAbstractArea.h"
 #include "KDChartTextAttributes.h"
+#include "KDChartRulerAttributes.h"
 
 
 class QPainter;
@@ -110,6 +111,9 @@ namespace KDChart {
 
         void setTextAttributes( const TextAttributes &a );
         TextAttributes textAttributes() const;
+        
+        void setRulerAttributes( const RulerAttributes &a );
+        RulerAttributes rulerAttributes() const;
 
         void setLabels( const QStringList& list );
         QStringList labels() const;

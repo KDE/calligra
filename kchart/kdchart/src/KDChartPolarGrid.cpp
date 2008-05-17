@@ -27,6 +27,7 @@
 #include "KDChartPaintContext.h"
 #include "KDChartPolarDiagram.h"
 #include "KDChartPieDiagram.h"
+#include "KDChartPrintingParameters.h"
 
 #include <QPainter>
 
@@ -73,23 +74,27 @@ void PolarGrid::drawGrid( PaintContext* context )
     if( dynamic_cast<PieDiagram*> (plane->diagrams().first() ) ) return;
 
 
-    context->painter()->setPen ( QColor ( Qt::lightGray ) );
-    QPointF origin = plane->translate( QPointF( 0,0 ) ) + context->rectangle().topLeft();
+    context->painter()->setPen ( PrintingParameters::scalePen( QColor ( Qt::lightGray ) ) );
+    const double min = dgr->dataBoundaries().first.y();
+    QPointF origin = plane->translate( QPointF( min, 0 ) ) + context->rectangle().topLeft();
     //qDebug() << "origin" << origin;
 
-    const double r = dgr->dataBoundaries().second.y(); // use the full extents
+    const double r = qAbs( min ) + dgr->dataBoundaries().second.y(); // use the full extents
 
     if ( gridAttrsSagittal.isGridVisible() ){
         const int numberOfSpokes = ( int ) ( 360 / plane->angleUnit() );
         for ( int i = 0; i < numberOfSpokes ; ++i ) {
-            context->painter()->drawLine( origin, plane->translate( QPointF( r, i ) ) + context->rectangle().topLeft() );
+            context->painter()->drawLine( origin, plane->translate( QPointF( r - qAbs( min ), i ) ) + context->rectangle().topLeft() );
         }
     }
 
-    if ( gridAttrsCircular.isGridVisible() ){
-        const int numberOfGridRings = ( int ) dgr->numberOfGridRings();
+    if ( gridAttrsCircular.isGridVisible() )
+    {
+        const qreal startPos = plane->startPosition();
+        plane->setStartPosition( 0.0 );
+        const int numberOfGridRings = ( int )dgr->numberOfGridRings();
         for ( int j = 0; j < numberOfGridRings; ++j ) {
-            const double rad = ( ( j + 1) * r / numberOfGridRings );
+            const double rad = min - ( ( j + 1) * r / numberOfGridRings );
     
             if ( rad == 0 )
                 continue;
@@ -103,10 +108,11 @@ void PolarGrid::drawGrid( PaintContext* context )
             bottomRightPoint = plane->translate( QPointF( rad, 180 / plane->angleUnit() ) );
             bottomRightPoint.setX( plane->translate( QPointF( rad, 270 / plane->angleUnit() ) ).x() );
 
-            rect.setTopLeft( topLeftPoint );
-            rect.setBottomRight( bottomRightPoint );
-            
+            rect.setTopLeft( topLeftPoint + context->rectangle().topLeft() );
+            rect.setBottomRight( bottomRightPoint + context->rectangle().topLeft() );
+
             context->painter()->drawEllipse( rect );
         }
+        plane->setStartPosition( startPos );
     }
 }

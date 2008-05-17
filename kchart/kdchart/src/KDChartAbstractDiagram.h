@@ -584,12 +584,17 @@ namespace KDChart {
         int datasetDimension() const;
 
         /**
-         * Sets the dataset dimension of the diagram.
-         * @see datasetDimension.
-         * @param dimension
+         * \obsolete
+         *
+         * Sets the dataset dimension of the diagram. Using this method
+         * is obsolete. Use the specific diagram types instead.
          */
         void setDatasetDimension( int dimension );
 
+    protected:
+        void setDatasetDimensionInternal( int dimension );
+
+    public:
         void update() const;
 
         void paintMarker( QPainter* painter, const QModelIndex& index,
@@ -606,12 +611,30 @@ namespace KDChart {
     protected:
         virtual bool checkInvariants( bool justReturnTheStatus=false ) const;
         virtual const QPair<QPointF, QPointF> calculateDataBoundaries() const = 0;
+
+    protected Q_SLOTS:
         void setDataBoundariesDirty() const;
+
+    protected:
+        /**
+         * \obsolete
+         * This method is obsolete and provided for backward-compatibility only.
+         * Your own diagram classes should call
+         * d->paintDataValueTextsAndMarkers() instead
+         * which also is taking care for showing your cell-specific comments, if any,
+         */
         virtual void paintDataValueTexts( QPainter* painter );
+        /**
+         * \obsolete
+         * This method is obsolete and provided for backward-compatibility only.
+         * Your own diagram classes should call
+         * d->paintDataValueTextsAndMarkers() instead
+         * which also is taking care for showing your cell-specific comments, if any,
+         */
         virtual void paintMarkers( QPainter* painter );
         void setAttributesModelRootIndex( const QModelIndex& );
         QModelIndex attributesModelRootIndex() const;
-        QModelIndex columnToIndex( int column ) const;
+
         /**
          * Helper method, retrieving the data value (DisplayRole) for a given row and column
          * @param row The row to query.

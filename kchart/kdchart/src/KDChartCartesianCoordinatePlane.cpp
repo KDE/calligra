@@ -37,6 +37,7 @@
 #include "KDChartGridAttributes.h"
 #include "KDChartPaintContext.h"
 #include "KDChartPainterSaver_p.h"
+#include "KDChartBarDiagram.h"
 
 #include <KDABLibFakes>
 
@@ -176,7 +177,7 @@ QRectF CartesianCoordinatePlane::adjustedToMaxEmptyInnerPercentage(
         const QRectF& r, unsigned int percentX, unsigned int percentY ) const
 {
     QRectF erg( r );
-    if( percentX < 100 || percentX == 1000 ) {
+    if( (percentX > 0) && (percentX != 100) ) {
         const bool isPositive = (r.left() >= 0);
         if( (r.right() >= 0) == isPositive ){
             const qreal innerBound =
@@ -192,13 +193,15 @@ QRectF CartesianCoordinatePlane::adjustedToMaxEmptyInnerPercentage(
             }
         }
     }
-    if( percentY < 100 || percentY == 1000 ) {
+    if( (percentY > 0) && (percentY != 100) ) {
+        //qDebug() << erg.bottom() << erg.top();
         const bool isPositive = (r.bottom() >= 0);
         if( (r.top() >= 0) == isPositive ){
             const qreal innerBound =
                     isPositive ? qMin(r.top(), r.bottom()) : qMax(r.top(), r.bottom());
             const qreal outerBound =
                     isPositive ? qMax(r.top(), r.bottom()) : qMin(r.top(), r.bottom());
+            //qDebug() << innerBound << outerBound;
             if( innerBound / outerBound * 100 <= percentY )
             {
                 if( isPositive )
@@ -207,6 +210,7 @@ QRectF CartesianCoordinatePlane::adjustedToMaxEmptyInnerPercentage(
                     erg.setTop( 0.0 );
             }
         }
+        //qDebug() << erg.bottom() << erg.top() << "!!";
     }
     return erg;
 }
@@ -263,6 +267,18 @@ DataDimensionsList CartesianCoordinatePlane::getDataDimensionsList() const
     DataDimensionsList l;
     const AbstractCartesianDiagram* dgr
         = diagrams().isEmpty() ? 0 : dynamic_cast<const AbstractCartesianDiagram*> (diagrams().first() );
+    if( dgr && dgr->referenceDiagram() )
+    	dgr = dgr->referenceDiagram();
+	const BarDiagram *barDiagram = qobject_cast< const BarDiagram* >( dgr );
+	
+	// note:
+	// It does make sense to retrieve the orientation from the first diagram. This is because
+	// a coordinate plane can either be for horizontal *or* for vertical diagrams. Both at the
+	// same time won't work, and thus the orientation for all diagrams is the same as for the first one.
+	const Qt::Orientation diagramOrientation = barDiagram != 0 ? barDiagram->orientation() : Qt::Vertical;
+	
+    const bool diagramIsVertical = diagramOrientation == Qt::Vertical;
+        
 
     if( dgr ){
         const QRectF r( calculateRawDataBoundingRect() );
@@ -276,30 +292,20 @@ DataDimensionsList CartesianCoordinatePlane::getDataDimensionsList() const
         l.append(
             DataDimension(
                 r.left(), r.right(),
-                dgr->datasetDimension() > 1,
+                diagramIsVertical ? ( dgr->datasetDimension() > 1 ) : true,
                 axesCalcModeX(),
                 gaH.gridGranularitySequence(),
                 gaH.gridStepWidth(),
                 gaH.gridSubStepWidth() ) );
         // append the second dimension: for Ordinate axes
-        if( dgr->percentMode() )
-            l.append(
-                DataDimension(
-                    // always return 0-100 when in percentMode
-                    0.0, 100.0,
-                    true,
-                    axesCalcModeY(),
-                    KDChartEnums::GranularitySequence_10_20,
-                    10.0 ) );
-        else
-            l.append(
-                DataDimension(
-                    r.bottom(), r.top(),
-                    true,
-                    axesCalcModeY(),
-                    gaV.gridGranularitySequence(),
-                    gaV.gridStepWidth(),
-                    gaV.gridSubStepWidth() ) );
+        l.append(
+            DataDimension(
+                r.bottom(), r.top(),
+                diagramIsVertical ? true : ( dgr->datasetDimension() > 1 ),
+                axesCalcModeY(),
+                gaV.gridGranularitySequence(),
+                gaV.gridStepWidth(),
+                gaV.gridSubStepWidth() ) );
     }else{
         l.append( DataDimension() ); // This gets us the default 1..0 / 1..0 grid
         l.append( DataDimension() ); // shown, if there is no diagram on this plane.
@@ -427,6 +433,21 @@ void CartesianCoordinatePlane::setFixedDataCoordinateSpaceRelation( bool fixed )
 {
     d->fixedDataCoordinateSpaceRelation = fixed;
     d->fixedDataCoordinateSpaceRelationOldSize = QRectF();
+    /*
+    //TODO(khz): We need to discuss if we want to do this:
+    if( ! fixed ){
+        bool bChanged = false;
+        if( doneSetZoomFactorY( 1.0 ) )
+            bChanged = true;
+        if( doneSetZoomFactorX( 1.0 ) )
+            bChanged = true;
+        if( doneSetZoomCenter( QPointF(0.5, 0.5) ) )
+            bChanged = true;
+        if( bChanged ){
+            emit propertiesChanged();
+        }
+    }
+    */
 }
 
 bool CartesianCoordinatePlane::hasFixedDataCoordinateSpaceRelation() const
@@ -454,9 +475,18 @@ void CartesianCoordinatePlane::handleFixedDataCoordinateSpaceRelation( const QRe
         const QPointF newCenter = QPointF( oldCenter.x() * geometry.width() / d->fixedDataCoordinateSpaceRelationOldSize.width(),
                                            oldCenter.y() * geometry.height() / d->fixedDataCoordinateSpaceRelationOldSize.height() );
 
-        setZoomCenter( newCenter );
-        setZoomFactorX( newZoomX );
-        setZoomFactorY( newZoomY );
+        // Use these internal methods to avoid sending
+        // the propertiesChanged signal three times:
+        bool bChanged = false;
+        if( doneSetZoomFactorY( newZoomY ) )
+            bChanged = true;
+        if( doneSetZoomFactorX( newZoomX ) )
+            bChanged = true;
+        if( doneSetZoomCenter( newCenter ) )
+            bChanged = true;
+        if( bChanged ){
+            emit propertiesChanged();
+        }
     }
 
     d->fixedDataCoordinateSpaceRelationOldSize = geometry;

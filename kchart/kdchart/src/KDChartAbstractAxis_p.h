@@ -43,6 +43,7 @@
 #include "KDChartAbstractArea_p.h"
 #include "KDChartAbstractDiagram.h"
 #include <KDChartTextAttributes.h>
+#include <KDChartRulerAttributes.h>
 #include <KDChartAbstractDiagram.h>
 #include <KDChartDiagramObserver.h>
 
@@ -73,6 +74,7 @@ public:
     DiagramObserver* observer;
 
     TextAttributes textAttributes;
+    RulerAttributes rulerAttributes;
     QStringList hardLabels;
     QStringList hardShortLabels;
     QQueue<AbstractDiagram*> secondaryDiagrams;

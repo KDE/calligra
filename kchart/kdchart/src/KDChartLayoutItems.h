@@ -39,6 +39,9 @@
 class QPainter;
 class KDTextDocument;
 
+QPointF rotatedPoint( const QPointF& pt, qreal rotation, const QPointF& center = QPointF() );
+QRectF rotatedRect( const QRectF& pt, qreal rotation, const QPointF& center = QPointF() );
+
 namespace KDChart {
     class AbstractDiagram;
     class PaintContext;
@@ -143,6 +146,8 @@ namespace KDChart {
         QSize unrotatedSizeHint( QFont fnt = QFont() ) const;
         QSize calcSizeHint( QFont fnt ) const;
 
+        qreal fitFontSizeToGeometry() const;
+
         QRect mRect;
         QString mText;
         TextAttributes mAttributes;
@@ -151,6 +156,51 @@ namespace KDChart {
         mutable QSize cachedSizeHint;
         mutable qreal cachedFontSize;
         mutable QFont cachedFont;
+    };
+
+    class KDCHART_EXPORT TextBubbleLayoutItem : public AbstractLayoutItem
+    {
+    public:
+        TextBubbleLayoutItem();
+        TextBubbleLayoutItem( const QString& text,
+                              const TextAttributes& attributes,
+                              const QObject* autoReferenceArea,
+                              KDChartEnums::MeasureOrientation autoReferenceOrientation,
+                              Qt::Alignment alignment = 0 );
+
+        ~TextBubbleLayoutItem();
+
+        void setAutoReferenceArea( const QObject* area );
+        const QObject* autoReferenceArea() const;
+
+        void setText(const QString & text);
+        QString text() const;
+
+        void setTextAttributes( const TextAttributes& a );
+        TextAttributes textAttributes() const;
+
+        /** pure virtual in QLayoutItem */
+        virtual bool isEmpty() const;
+        /** pure virtual in QLayoutItem */
+        virtual Qt::Orientations expandingDirections() const;
+        /** pure virtual in QLayoutItem */
+        virtual QSize maximumSize() const;
+        /** pure virtual in QLayoutItem */
+        virtual QSize minimumSize() const;
+        /** pure virtual in QLayoutItem */
+        virtual QSize sizeHint() const;
+        /** pure virtual in QLayoutItem */
+        virtual void setGeometry( const QRect& r );
+        /** pure virtual in QLayoutItem */
+        virtual QRect geometry() const;
+
+        virtual void paint( QPainter* painter );
+
+    protected:
+        int borderWidth() const;
+
+    private:
+        TextLayoutItem* const m_text;
     };
 
     /**

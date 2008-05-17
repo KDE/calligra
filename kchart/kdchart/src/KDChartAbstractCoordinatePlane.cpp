@@ -67,6 +67,9 @@ AbstractCoordinatePlane::~AbstractCoordinatePlane()
 void AbstractCoordinatePlane::init()
 {
     d->initialize();  // virtual method to init the correct grid: cartesian, polar, ...
+    connect( this, SIGNAL(internal_geometryChanged( QRect, QRect )),
+             this, SIGNAL(geometryChanged(          QRect, QRect )),
+             Qt::QueuedConnection );
 }
 
 void AbstractCoordinatePlane::addDiagram ( AbstractDiagram* diagram )
@@ -79,6 +82,7 @@ void AbstractCoordinatePlane::addDiagram ( AbstractDiagram* diagram )
     diagram->setCoordinatePlane( this );
     layoutDiagrams();
     layoutPlanes(); // there might be new axes, etc
+    connect( diagram, SIGNAL( modelsChanged() ), this, SLOT( layoutPlanes() ) );
     update();
 }
 
@@ -108,6 +112,7 @@ void AbstractCoordinatePlane::takeDiagram ( AbstractDiagram* diagram )
         d->diagrams.removeAt( idx );
         diagram->setParent( 0 );
         diagram->setCoordinatePlane( 0 );
+        disconnect( diagram, SIGNAL( modelsChanged() ), this, SLOT( layoutPlanes() ) );
         layoutDiagrams();
         update();
     }
@@ -237,9 +242,15 @@ void KDChart::AbstractCoordinatePlane::setGeometry( const QRect& r )
 {
 //    qDebug() << "KDChart::AbstractCoordinatePlane::setGeometry(" << r << ") called";
     if( d->geometry != r ){
+        //qDebug() << "entering KDChart::AbstractCoordinatePlane::setGeometry(" << r << ")";
+        // inform the outside word by Signal geometryChanged()
+        // via a queued connection to internal_geometryChanged()
+        emit internal_geometryChanged( d->geometry, r );
+
         d->geometry = r;
         // Note: We do *not* call update() here
         //       because it would invoke KDChart::update() recursively.
+        //qDebug() << "leaving  KDChart::AbstractCoordinatePlane::setGeometry(" << r << ")";
     }
 }
 /* pure virtual in QLayoutItem */
@@ -347,29 +358,31 @@ void KDChart::AbstractCoordinatePlane::mouseReleaseEvent( QMouseEvent* event )
         const double rubberWidth = static_cast< double >( d->rubberBand->width() );
         const double rubberHeight = static_cast< double >( d->rubberBand->height() );
 
-        // this is the center of the rubber band in pixel space
-        const double rubberCenterX = static_cast< double >( d->rubberBand->geometry().center().x() - geometry().x() );
-        const double rubberCenterY = static_cast< double >( d->rubberBand->geometry().center().y() - geometry().y() );
+        if( rubberWidth > 0.0 && rubberHeight > 0.0 )
+        {
+            // this is the center of the rubber band in pixel space
+            const double rubberCenterX = static_cast< double >( d->rubberBand->geometry().center().x() - geometry().x() );
+            const double rubberCenterY = static_cast< double >( d->rubberBand->geometry().center().y() - geometry().y() );
 
-        // this is the height/width of the plane in pixel space
-        const double myWidth = static_cast< double >( geometry().width() );
-        const double myHeight = static_cast< double >( geometry().height() );
+            // this is the height/width of the plane in pixel space
+            const double myWidth = static_cast< double >( geometry().width() );
+            const double myHeight = static_cast< double >( geometry().height() );
 
-        // this describes the new center of zooming, relative to the plane pixel space
-        const double newCenterX = rubberCenterX / myWidth / zoomFactorX() + zoomCenter().x() - 0.5 / zoomFactorX();
-        const double newCenterY = rubberCenterY / myHeight / zoomFactorY() + zoomCenter().y() - 0.5 / zoomFactorY();
+            // this describes the new center of zooming, relative to the plane pixel space
+            const double newCenterX = rubberCenterX / myWidth / zoomFactorX() + zoomCenter().x() - 0.5 / zoomFactorX();
+            const double newCenterY = rubberCenterY / myHeight / zoomFactorY() + zoomCenter().y() - 0.5 / zoomFactorY();
 
-        // this will be the new zoom factor
-        const double newZoomFactorX = zoomFactorX() * myWidth / rubberWidth;
-        const double newZoomFactorY = zoomFactorY() * myHeight / rubberHeight;
+            // this will be the new zoom factor
+            const double newZoomFactorX = zoomFactorX() * myWidth / rubberWidth;
+            const double newZoomFactorY = zoomFactorY() * myHeight / rubberHeight;
 
-        // and this the new center
-        const QPointF newZoomCenter( newCenterX, newCenterY );
+            // and this the new center
+            const QPointF newZoomCenter( newCenterX, newCenterY );
 
-        setZoomFactorX( newZoomFactorX );
-        setZoomFactorY( newZoomFactorY );
-        setZoomCenter( newZoomCenter );
-
+            setZoomFactorX( newZoomFactorX );
+            setZoomFactorY( newZoomFactorY );
+            setZoomCenter( newZoomCenter );
+        }
 
         d->rubberBand->parentWidget()->update();
         delete d->rubberBand;

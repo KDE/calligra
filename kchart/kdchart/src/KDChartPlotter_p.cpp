@@ -46,12 +46,12 @@ void Plotter::Private::paintPolyline(
     const QPolygonF& points ) const
 {
     ctx->painter()->setBrush( brush );
-    ctx->painter()->setPen(
+    ctx->painter()->setPen( PrintingParameters::scalePen(
         QPen( pen.color(),
               pen.width(),
               pen.style(),
               Qt::FlatCap,
-              Qt::MiterJoin ) );
+              Qt::MiterJoin ) ) );
 #if QT_VERSION > 0x040299
     ctx->painter()->drawPolyline( points );
 #else
@@ -100,7 +100,7 @@ void Plotter::PlotterType::paintThreeDLines(
         ctx->painter()->setRenderHint( QPainter::Antialiasing );
 
     ctx->painter()->setBrush( indexBrush );
-    ctx->painter()->setPen( diagram()->pen( index ) ) ;
+    ctx->painter()->setPen( PrintingParameters::scalePen( diagram()->pen( index ) )  );
 
     reverseMapper().addPolygon( index.row(), index.column(), segment );
     ctx->painter()->drawPolygon( segment );
@@ -221,7 +221,7 @@ void Plotter::PlotterType::paintAreas(
     if( diagram()->antiAliasing() )
         ctx->painter()->setRenderHint( QPainter::Antialiasing );
 
-    ctx->painter()->setPen( indexPen );
+    ctx->painter()->setPen( PrintingParameters::scalePen( indexPen ) );
     ctx->painter()->setBrush( trans );
 
     QPainterPath path;
@@ -297,7 +297,7 @@ void Plotter::PlotterType::paintValueTracker( PaintContext* ctx, const ValueTrac
     QRectF area( topLeft, size );
 
     PainterSaver painterSaver( ctx->painter() );
-    ctx->painter()->setPen( vt.pen() );
+    ctx->painter()->setPen( PrintingParameters::scalePen( vt.pen() ) );
     ctx->painter()->setBrush( QBrush() );
 
     ctx->painter()->drawLine( markerPoint, ordinatePoint );

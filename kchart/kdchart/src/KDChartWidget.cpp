@@ -36,6 +36,7 @@
 #include <KDChartChart.h>
 #include <KDChartAbstractCoordinatePlane.h>
 #include <KDChartLineDiagram.h>
+#include <KDChartPlotter.h>
 #include <KDChartPieDiagram.h>
 #include <KDChartPolarCoordinatePlane.h>
 #include <KDChartPolarDiagram.h>
@@ -135,8 +136,7 @@ void Widget::setDataset( int column, const QVector< QPair< double, double > > & 
         model.setData( index, QVariant( data[i].second ), Qt::DisplayRole );
     }
     if ( ! title.isEmpty() ){
-        model.setHeaderData( column * 2,   Qt::Horizontal, QVariant( title ) );
-        model.setHeaderData( column * 2+1, Qt::Horizontal, QVariant( title ) );
+        model.setHeaderData( column,   Qt::Horizontal, QVariant( title ) );
     }
 }
 
@@ -364,6 +364,10 @@ LineDiagram* Widget::lineDiagram()
 {
     return dynamic_cast<LineDiagram*>( diagram() );
 }
+Plotter* Widget::plotter()
+{
+    return dynamic_cast<Plotter*>( diagram() );
+}
 PieDiagram* Widget::pieDiagram()
 {
     return dynamic_cast<PieDiagram*>( diagram() );
@@ -408,8 +412,11 @@ void Widget::setType( ChartType chartType, SubType chartSubType )
               diag = new BarDiagram( &d->m_chart, cartPlane );
               break;
             case Line:
-              diag = new LineDiagram( &d->m_chart, cartPlane );
-              break;
+                diag = new LineDiagram( &d->m_chart, cartPlane );
+                break;
+            case Plot:
+                diag = new Plotter( &d->m_chart, cartPlane );
+                break;
             case Pie:
               diag = new PieDiagram( &d->m_chart, polPlane );
               break;
@@ -449,8 +456,7 @@ void Widget::setType( ChartType chartType, SubType chartSubType )
             LegendList legends = d->m_chart.legends();
             Q_FOREACH(Legend* l, legends)
                 l->setDiagram( diag );
-            if( d->usedDatasetWidth )
-                diag->setDatasetDimension( d->usedDatasetWidth );
+            //checkDatasetWidth( d->usedDatasetWidth );
         }
     }
 
@@ -461,8 +467,9 @@ void Widget::setType( ChartType chartType, SubType chartSubType )
 
 void Widget::setSubType( SubType subType )
 {
-    BarDiagram*  barDia  = qobject_cast< BarDiagram* >(   diagram() );
-    LineDiagram* lineDia = qobject_cast< LineDiagram* >(  diagram() );
+    BarDiagram*  barDia     = qobject_cast< BarDiagram* >(   diagram() );
+    LineDiagram* lineDia    = qobject_cast< LineDiagram* >(  diagram() );
+    Plotter*     plotterDia = qobject_cast< Plotter* >(      diagram() );
 
 //FIXME(khz): Add the impl for these chart types - or remove them from here:
 //    PieDiagram*   pieDia   = qobject_cast< PieDiagram* >(   diagram() );
@@ -477,16 +484,19 @@ void Widget::setSubType( SubType subType )
     switch ( subType )
     {
         case Normal:
-           SET_SUB_TYPE( barDia,  BarDiagram::Normal );
-           SET_SUB_TYPE( lineDia, LineDiagram::Normal );
+           SET_SUB_TYPE( barDia,     BarDiagram::Normal );
+           SET_SUB_TYPE( lineDia,    LineDiagram::Normal );
+           SET_SUB_TYPE( plotterDia, Plotter::Normal );
            break;
         case Stacked:
            SET_SUB_TYPE( barDia,  BarDiagram::Stacked );
            SET_SUB_TYPE( lineDia, LineDiagram::Stacked );
+           //SET_SUB_TYPE( plotterDia, Plotter::Stacked );
            break;
         case Percent:
            SET_SUB_TYPE( barDia,  BarDiagram::Percent );
            SET_SUB_TYPE( lineDia, LineDiagram::Percent );
+           SET_SUB_TYPE( plotterDia, Plotter::Percent );
            break;
         case Rows:
            SET_SUB_TYPE( barDia, BarDiagram::Rows );
@@ -510,6 +520,8 @@ Widget::ChartType Widget::type() const
         return Bar;
     else if ( qobject_cast< LineDiagram* >( dia ) )
         return Line;
+    else if ( qobject_cast< Plotter* >( dia ) )
+        return Plot;
     else if( qobject_cast< PieDiagram* >( dia ) )
         return Pie;
     else if( qobject_cast< PolarDiagram* >( dia ) )
@@ -526,8 +538,9 @@ Widget::SubType Widget::subType() const
     Widget::SubType retVal = Normal;
 
     AbstractDiagram * const dia = const_cast<Widget*>( this )->diagram();
-    BarDiagram*  barDia  = qobject_cast< BarDiagram* >(   dia );
-    LineDiagram* lineDia = qobject_cast< LineDiagram* >(  dia );
+    BarDiagram*  barDia     = qobject_cast< BarDiagram* >(   dia );
+    LineDiagram* lineDia    = qobject_cast< LineDiagram* >(  dia );
+    Plotter*     plotterDia = qobject_cast< Plotter* >(  dia );
 
 //FIXME(khz): Add the impl for these chart types - or remove them from here:
 //    PieDiagram*   pieDia   = qobject_cast< PieDiagram* >(   diagram() );
@@ -549,10 +562,13 @@ Widget::SubType Widget::subType() const
            TEST_SUB_TYPE( barDia, BarDiagram::Rows,    Rows );
            break;
         case Line:
-           TEST_SUB_TYPE( lineDia, LineDiagram::Normal,  Normal );
-           TEST_SUB_TYPE( lineDia, LineDiagram::Stacked, Stacked );
-           TEST_SUB_TYPE( lineDia, LineDiagram::Percent, Percent );
-           break;
+            TEST_SUB_TYPE( lineDia, LineDiagram::Normal,  Normal );
+            TEST_SUB_TYPE( lineDia, LineDiagram::Stacked, Stacked );
+            TEST_SUB_TYPE( lineDia, LineDiagram::Percent, Percent );
+            break;
+        case Plot:
+            TEST_SUB_TYPE( plotterDia, Plotter::Normal,  Normal );
+            break;
         case Pie:
            // no impl. yet
            break;
@@ -576,14 +592,20 @@ Widget::SubType Widget::subType() const
  */
 bool Widget::checkDatasetWidth( int width )
 {
-    if ( d->usedDatasetWidth == width || d->usedDatasetWidth == 0 ) {
+    if( width == diagram()->datasetDimension() )
+    {
+        d->usedDatasetWidth = width;
+        return true;
+    }
+    qDebug() << "The current diagram type doesn't support this data dimension.";
+    return false;
+/*    if ( d->usedDatasetWidth == width || d->usedDatasetWidth == 0 ) {
         d->usedDatasetWidth = width;
         diagram()->setDatasetDimension( width );
-        //qDebug() << "KDChart::Widget::checkDatasetWidth():  DatasetWidth is set to" << width << "now.";
         return true;
     }
     qDebug() << "It's impossible to mix up the different setDataset() methods on the same widget.";
-    return false;
+    return false;*/
 }
 
 /**

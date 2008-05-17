@@ -68,9 +68,19 @@ public:
         const AbstractCoordinatePlane * plane,
         const QPointF& point ) const
     {
+        QPointF p = point;
+        const CartesianCoordinatePlane* const ref = 
+            dynamic_cast< const CartesianCoordinatePlane* >( const_cast< AbstractCoordinatePlane* >( plane )->sharedAxisMasterPlane() );
+        const CartesianCoordinatePlane* const cartPlane = 
+            dynamic_cast< const CartesianCoordinatePlane* >( plane );
+        if( ref != 0 && ref != cartPlane )
+        {
+            const QPointF logical = ref->translateBack( point ) - cartPlane->visibleDataRange().topLeft() 
+                                                                      + ref->visibleDataRange().topLeft();
+            p = ref->translate( logical );
+        }
         const QRectF geo( plane->geometry() );
-        //qDebug() << "point:" << point << "  plane->geometry():" << geo;
-        return geo.contains( point );
+        return geo.contains( p );
     }
 
 

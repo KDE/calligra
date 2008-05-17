@@ -50,21 +50,10 @@ LineDiagram::LineType PercentLineDiagram::type() const
 
 const QPair<QPointF, QPointF> PercentLineDiagram::calculateDataBoundaries() const
 {
-    const int rowCount = compressor().modelDataRows();
-    const int colCount = compressor().modelDataColumns();
-    double xMin = 0.0;
-    double xMax = diagram()->model() ? diagram()->model()->rowCount( diagram()->rootIndex() ) - 1 : 0;
+    const double xMin = 0.0;
+    const double xMax = diagram()->model() ? diagram()->model()->rowCount( diagram()->rootIndex() ) - 1 : 0;
     const double yMin = 0.0;
-    double yMax = 0.0;
-
-    for( int col = 0; col < colCount; ++col ) {
-        for ( int row = 0; row < rowCount; ++row ) {
-            CartesianDiagramDataCompressor::CachePosition position( row, col );
-            CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
-
-            yMax = qMax( yMax, point.value );
-        }
-    }
+    const double yMax = 100.0;
 
     QPointF bottomLeft( QPointF( xMin, yMin ) );
     QPointF topRight( QPointF( xMax, yMax ) );
@@ -97,7 +86,7 @@ void PercentLineDiagram::paint(  PaintContext* ctx )
 
     DataValueTextInfoList list;
     LineAttributesInfoList lineList;
-    LineAttributes::MissingValuesPolicy policy = LineAttributes::MissingValuesPolicyIgnored;
+    LineAttributes::MissingValuesPolicy policy;
 
     //FIXME(khz): add LineAttributes::MissingValuesPolicy support for LineDiagram::Stacked and ::Percent
 
@@ -110,11 +99,15 @@ void PercentLineDiagram::paint(  PaintContext* ctx )
     {
         for( int col = 0; col < columnCount; ++col )
         {
-            CartesianDiagramDataCompressor::CachePosition position( row, col );
+            const CartesianDiagramDataCompressor::CachePosition position( row, col );
             CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
-            const double tmpValue = point.value;
-            if ( tmpValue > 0 )
-                sumValues += tmpValue;
+            const QModelIndex sourceIndex = attributesModel()->mapToSource( point.index );
+            const LineAttributes laCell = diagram()->lineAttributes( sourceIndex );
+            const LineAttributes::MissingValuesPolicy policy = laCell.missingValuesPolicy();
+            if( ISNAN( point.value ) && policy == LineAttributes::MissingValuesAreBridged )
+                point.value = interpolateMissingValue( position );
+            if ( point.value > 0 )
+                sumValues += point.value;
             if ( col == lastVisibleColumn ) 
             {
                 percentSumValues << sumValues ;
@@ -122,7 +115,7 @@ void PercentLineDiagram::paint(  PaintContext* ctx )
             }
         }
     }
-
+    
     QList<QPointF> bottomPoints;
     bool bFirstDataset = true;
 
@@ -136,7 +129,7 @@ void PercentLineDiagram::paint(  PaintContext* ctx )
 
         for( int row = 0; row < rowCount; ++row ) 
         {
-            CartesianDiagramDataCompressor::CachePosition position( row, column );
+            const CartesianDiagramDataCompressor::CachePosition position( row, column );
             CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
             const QModelIndex sourceIndex = attributesModel()->mapToSource( point.index );
             const LineAttributes laCell = diagram()->lineAttributes( sourceIndex );
@@ -147,16 +140,27 @@ void PercentLineDiagram::paint(  PaintContext* ctx )
                   column2 >= 0;//datasetDimension() - 1;
                   column2 -= 1 )//datasetDimension() )
             {
-                CartesianDiagramDataCompressor::CachePosition position( row, column2 );
+                const CartesianDiagramDataCompressor::CachePosition position( row, column2 );
                 CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
+
                 const QModelIndex sourceIndex = attributesModel()->mapToSource( point.index );
+                const LineAttributes::MissingValuesPolicy policy = laCell.missingValuesPolicy();
+                if( ISNAN( point.value ) && policy == LineAttributes::MissingValuesAreBridged )
+                    point.value = interpolateMissingValue( position );
+
                 const double val = point.value;
                 if( val > 0 )
                     stackedValues += val;
                 //qDebug() << valueForCell( iRow, iColumn2 );
                 if ( row + 1 < rowCount ){
-                    CartesianDiagramDataCompressor::CachePosition position( row + 1, column2 );
+                    const CartesianDiagramDataCompressor::CachePosition position( row + 1, column2 );
                     CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
+                
+                    const QModelIndex sourceIndex = attributesModel()->mapToSource( point.index );
+                    const LineAttributes::MissingValuesPolicy policy = laCell.missingValuesPolicy();
+                    if( ISNAN( point.value ) && policy == LineAttributes::MissingValuesAreBridged )
+                        point.value = interpolateMissingValue( position );
+
                     const double val = point.value;
                     if( val > 0 )
                         nextValues += val;
@@ -215,10 +219,13 @@ void PercentLineDiagram::paint(  PaintContext* ctx )
                 ptSouthEast = ptSouthWest;
             }
 
-            const PositionPoints pts( ptNorthWest, ptNorthEast, ptSouthEast, ptSouthWest );
-            appendDataValueTextInfoToList( diagram(), list, sourceIndex, pts,
-                                           Position::NorthWest, Position::SouthWest,
-                                           point.value );
+            if( !ISNAN( point.value ) )
+            {
+                const PositionPoints pts( ptNorthWest, ptNorthEast, ptSouthEast, ptSouthWest );
+                appendDataValueTextInfoToList( diagram(), list, sourceIndex, pts,
+                                               Position::NorthWest, Position::SouthWest,
+                                               point.value );
+            }
         }
         if( areas.count() ){
             paintAreas( ctx, indexPreviousCell, areas, laPreviousCell.transparency() );

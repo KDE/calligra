@@ -48,6 +48,7 @@ namespace KDChart {
     class TableModel;
     class BarDiagram;
     class LineDiagram;
+    class Plotter;
     class PieDiagram;
     class RingDiagram;
     class PolarDiagram;
@@ -180,10 +181,18 @@ namespace KDChart {
           */
         BarDiagram* barDiagram();
         /** If the current diagram is a LineDiagram, it is returnd; otherwise 0 is returned.
-          * This function provides type-safe casting.
-          */
+         * This function provides type-safe casting.
+         */
         LineDiagram* lineDiagram();
-        /** If the current diagram is a PieDiagram, it is returnd; otherwise 0 is returned.
+        /** If the current diagram is a LineDiagram, it is returnd; otherwise 0 is returned.
+         * This function provides type-safe casting.
+         *
+         * \note Do not use lineDiagram for multi-dimensional diagrams, but use plotter instead
+         *
+         * \sa plotter
+         */
+        Plotter* plotter();
+        /** If the current diagram is a Plotter, it is returnd; otherwise 0 is returned.
           * This function provides type-safe casting.
           */
         PieDiagram* pieDiagram();
@@ -200,7 +209,7 @@ namespace KDChart {
         AbstractCoordinatePlane* coordinatePlane();
 
 
-        enum ChartType { NoType, Bar, Line, Pie, Ring, Polar };
+        enum ChartType { NoType, Bar, Line, Plot, Pie, Ring, Polar };
 
         /** Returns the type of the chart. */
         ChartType type() const;

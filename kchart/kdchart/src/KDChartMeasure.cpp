@@ -112,7 +112,7 @@ qreal Measure::calculatedValue( const QSizeF& autoSize,
                 size = autoSize;
             else
                 size = sizeOfArea( area );
-            //qDebug() << "size" << size;
+            //qDebug() << ( area == autoArea ) << "size" << size;
             qreal referenceValue;
             switch( orientation ){
                 case KDChartEnums::MeasureOrientationAuto: // fall through intended

@@ -37,6 +37,7 @@ using namespace KDChart;
 AbstractCartesianDiagram::Private::Private()
     : referenceDiagram( 0 )
 {
+    qRegisterMetaType< QModelIndex >( "QModelIndex" );
 }
 
 AbstractCartesianDiagram::Private::~Private()
@@ -140,15 +141,15 @@ void KDChart::AbstractCartesianDiagram::setCoordinatePlane( AbstractCoordinatePl
     if ( plane ) {
         // Readjust the layout when the dataset count changes
         connect( attributesModel(), SIGNAL( rowsRemoved( const QModelIndex&, int, int ) ),
-                 plane, SLOT( relayout() ) );
+                 plane, SLOT( relayout() ), Qt::QueuedConnection );
         connect( attributesModel(), SIGNAL( rowsInserted( const QModelIndex&, int, int ) ),
-                 plane, SLOT( relayout() ) );
+                 plane, SLOT( relayout() ), Qt::QueuedConnection );
         connect( attributesModel(), SIGNAL( columnsRemoved( const QModelIndex&, int, int ) ),
-                 plane, SLOT( relayout() ) );
+                 plane, SLOT( relayout() ), Qt::QueuedConnection );
         connect( attributesModel(), SIGNAL( columnsInserted( const QModelIndex&, int, int ) ),
-                 plane, SLOT( relayout() ) );
+                 plane, SLOT( relayout() ), Qt::QueuedConnection );
     }
-    // show the axes, after all have been adjusted
+    // show the axes, after all have been layoutPlanes
     // (because they might be dependend on each other)
     /*
     if( plane )
@@ -178,8 +179,8 @@ QPointF AbstractCartesianDiagram::referenceDiagramOffset() const
 
 void AbstractCartesianDiagram::setRootIndex( const QModelIndex& index )
 {
-    d->compressor.setRootIndex( index );
     AbstractDiagram::setRootIndex( index );
+    d->compressor.setRootIndex( attributesModel()->mapFromSource( index ) );
 }
 
 void AbstractCartesianDiagram::setModel( QAbstractItemModel* model )

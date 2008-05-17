@@ -60,12 +60,19 @@ const QPair<QPointF, QPointF> StackedLineDiagram::calculateDataBoundaries() cons
     for( int row = 0; row < rowCount; ++row )
     {
         // calculate sum of values per column - Find out stacked Min/Max
-        double stackedValues = 0;
+        double stackedValues = 0.0;
+        double negativeStackedValues = 0.0;
         for( int col = datasetDimension() - 1; col < colCount; col += datasetDimension() ) {
-            CartesianDiagramDataCompressor::CachePosition position( row, col );
-            CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
+            const CartesianDiagramDataCompressor::CachePosition position( row, col );
+            const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
 
-            stackedValues += point.value;
+            if( ISNAN( point.value ) )
+                continue;
+
+            if( point.value >= 0.0 )
+                stackedValues += point.value;
+            else
+                negativeStackedValues += point.value;
         }
 
         if( bStarting ){
@@ -73,16 +80,15 @@ const QPair<QPointF, QPointF> StackedLineDiagram::calculateDataBoundaries() cons
             yMax = stackedValues;
             bStarting = false;
         }else{
-            // Pending Michel:
-            // I am taking in account all values negatives or positives
             // take in account all stacked values
-            yMin = qMin( qMin( yMin,  0.0 ), stackedValues );
-            yMax = qMax( yMax, stackedValues );
+            yMin = qMin( qMin( yMin, negativeStackedValues ), stackedValues );
+            yMax = qMax( qMax( yMax, negativeStackedValues ), stackedValues );
         }
     }
 
-    QPointF bottomLeft( QPointF( xMin, yMin ) );
-    QPointF topRight(   QPointF( xMax, yMax ) );
+    const QPointF bottomLeft( xMin, yMin );
+    const QPointF topRight( xMax, yMax );
+
     return QPair<QPointF, QPointF> ( bottomLeft, topRight );
 }
 
@@ -111,7 +117,7 @@ void StackedLineDiagram::paint(  PaintContext* ctx )
 
     DataValueTextInfoList list;
     LineAttributesInfoList lineList;
-    LineAttributes::MissingValuesPolicy policy = LineAttributes::MissingValuesPolicyIgnored;
+    LineAttributes::MissingValuesPolicy policy;
 
     //FIXME(khz): add LineAttributes::MissingValuesPolicy support for LineDiagram::Stacked and ::Percent
 
@@ -132,11 +138,16 @@ void StackedLineDiagram::paint(  PaintContext* ctx )
 
         for ( int row = 0; row < rowCount; ++row ) {
             const CartesianDiagramDataCompressor::CachePosition position( row, column );
-            const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
+            CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
             const QModelIndex sourceIndex = attributesModel()->mapToSource( point.index );
 
             const LineAttributes laCell = diagram()->lineAttributes( sourceIndex );
             const bool bDisplayCellArea = laCell.displayArea();
+    
+            const LineAttributes::MissingValuesPolicy policy = laCell.missingValuesPolicy();
+
+            if( ISNAN( point.value ) && policy == LineAttributes::MissingValuesShownAsZero )
+                point.value = 0.0;
 
             double stackedValues = 0, nextValues = 0, nextKey = 0;
             for ( int column2 = column; column2 >= 0; --column2 )
@@ -144,12 +155,31 @@ void StackedLineDiagram::paint(  PaintContext* ctx )
                 const CartesianDiagramDataCompressor::CachePosition position( row, column2 );
                 const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
                 const QModelIndex sourceIndex = attributesModel()->mapToSource( point.index );
-                stackedValues += point.value;
+                if( !ISNAN( point.value ) )
+                {
+                    stackedValues += point.value;
+                }
+                else if( policy == LineAttributes::MissingValuesAreBridged )
+                {
+                    const double interpolation = interpolateMissingValue( position );
+                    if( !ISNAN( interpolation ) )
+                        stackedValues += interpolation;
+                }
+
                 //qDebug() << valueForCell( iRow, iColumn2 );
                 if ( row + 1 < rowCount ){
-                    CartesianDiagramDataCompressor::CachePosition position( row + 1, column2 );
-                    CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
-                    nextValues += point.value;
+                    const CartesianDiagramDataCompressor::CachePosition position( row + 1, column2 );
+                    const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
+                    if( !ISNAN( point.value ) )
+                    {
+                        nextValues += point.value;
+                    }
+                    else if( policy == LineAttributes::MissingValuesAreBridged )
+                    {
+                        const double interpolation = interpolateMissingValue( position );
+                        if( !ISNAN( interpolation ) )
+                            nextValues += interpolation;
+                    }
                     nextKey = point.key;
                 }
             }
@@ -198,9 +228,10 @@ void StackedLineDiagram::paint(  PaintContext* ctx )
             }
 
             const PositionPoints pts( ptNorthWest, ptNorthEast, ptSouthEast, ptSouthWest );
-            appendDataValueTextInfoToList( diagram(), list, sourceIndex, pts,
-                                           Position::NorthWest, Position::SouthWest,
-                                           point.value );
+            if( !ISNAN( point.value ) )
+                appendDataValueTextInfoToList( diagram(), list, sourceIndex, pts,
+                                               Position::NorthWest, Position::SouthWest,
+                                               point.value );
         }
         if( areas.count() ){
             paintAreas( ctx, indexPreviousCell, areas, laPreviousCell.transparency() );

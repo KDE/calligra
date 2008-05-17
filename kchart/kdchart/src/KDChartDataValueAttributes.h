@@ -184,18 +184,28 @@ public:
   QString dataLabel() const;
 
  /**
-   * \cond PLANNED_FOR_FUTURE
-   *
    * \return Whether data values not different from their predecessors are drawn.
-   */
+  */
   bool showRepetitiveDataLabels() const;
 
  /**
    *
    * Set whether data value labels not different from their predecessors should be drawn.
    * \param showRepetitiveDataLabels Whether data value not different from their predecessors are drawn.
-   */
+  */
   void setShowRepetitiveDataLabels( bool showRepetitiveDataLabels );
+
+ /**
+   * \return Whether data value texts overlapping other data value texts of the same diagram are drawn.
+  */
+  bool showOverlappingDataLabels() const;
+
+ /**
+   *
+   * Set whether data value texts overlapping other data value texts of the same diagram should be drawn.
+   * \param showOverlappingDataLabels Whether data texts overlapping other data value texts of the same diagram are drawn.
+  */
+  void setShowOverlappingDataLabels( bool showOverlappingDataLabels );
 
   /**
     *

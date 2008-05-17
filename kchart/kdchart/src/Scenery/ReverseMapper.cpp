@@ -79,7 +79,7 @@ QModelIndexList ReverseMapper::indexesIn( const QRect& rect ) const
         Q_FOREACH( QGraphicsItem* item, items ) {
             ChartGraphicsItem* i = qgraphicsitem_cast<ChartGraphicsItem*>( item );
             if ( i ) {
-                QModelIndex index ( m_diagram->model()->index( i->row(), i->column() ) );
+                QModelIndex index ( m_diagram->model()->index( i->row(), i->column(), m_diagram->rootIndex() ) );
                 indexes << index;
             }
         }
@@ -98,7 +98,7 @@ QModelIndexList ReverseMapper::indexesAt( const QPointF& point ) const
         Q_FOREACH( QGraphicsItem* item, items ) {
             ChartGraphicsItem* i = qgraphicsitem_cast<ChartGraphicsItem*>( item );
             if ( i ) {
-                QModelIndex index ( m_diagram->model()->index( i->row(), i->column() ) );
+                QModelIndex index ( m_diagram->model()->index( i->row(), i->column(), m_diagram->rootIndex() ) );
                 indexes << index;
             }
         }

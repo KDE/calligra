@@ -143,7 +143,7 @@ visible background and no visible frame.
 These attribute sets are passed by value, they are intended to be used
 much like Qt's QPen or QBrush. For example:
 
-KDChart::TextAttributes ta;
+KDChart::TextAttributes ta( chart->legend()->textAttributes() );
 ta.setPen( Qt::red );
 ta.setFont( QFont( "Helvetica" ) );
 chart->legend()->setTextAttributes( ta );

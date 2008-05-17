@@ -323,6 +323,20 @@ namespace KDChart {
         /** Emitted upon change of a property of the Coordinate Plane or any of its components. */
         void propertiesChanged();
 
+        /** Emitted after the geometry of the Coordinate Plane has been changed.
+         *  and control has returned to the event loop.
+         *
+         * Parameters are the the old geometry, the new geometry.
+        */
+        void geometryChanged( QRect, QRect );
+
+    private:
+    Q_SIGNALS:
+        // Emitted from inside the setGeometry()
+        // This is connected via QueuedConnection to the geometryChanged() Signal
+        // that users can connect to safely then.
+        void internal_geometryChanged( QRect, QRect );
+
     protected:
         virtual DataDimensionsList getDataDimensionsList() const = 0;
 

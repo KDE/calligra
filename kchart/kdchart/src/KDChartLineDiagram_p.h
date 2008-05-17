@@ -102,6 +102,8 @@ namespace KDChart {
         ReverseMapper& reverseMapper();
         CartesianDiagramDataCompressor& compressor() const;
 
+        double interpolateMissingValue( const CartesianDiagramDataCompressor::CachePosition& pos ) const;
+
         int datasetDimension() const;
         LineAttributes::MissingValuesPolicy getCellValues(
             int row, int column,

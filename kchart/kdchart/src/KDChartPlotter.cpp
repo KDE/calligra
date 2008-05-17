@@ -31,6 +31,7 @@
 
 #include "KDChartPlotter_p.h"
 #include "KDChartNormalPlotter_p.h"
+#include "KDChartPercentPlotter_p.h"
 
 using namespace KDChart;
 
@@ -54,9 +55,10 @@ void Plotter::init()
 {
     d->diagram = this;
     d->normalPlotter = new NormalPlotter( this );
+    d->percentPlotter = new PercentPlotter( this );
     d->implementor = d->normalPlotter;
 
-    setDatasetDimension( 2 );
+    setDatasetDimensionInternal( 2 );
 }
 
 Plotter::~Plotter()
@@ -87,32 +89,34 @@ bool Plotter::compare( const Plotter* other )const
 
 /**
   * Sets the plotter's type to \a type
-  * Currently, there's no other type than PlotType::Normal, but others might be added in future.
   */
 void Plotter::setType( const PlotType type )
 {
     if( d->implementor->type() == type ) 
         return;
-    if( type != Plotter::Normal && datasetDimension() != 2 ) 
+    if( datasetDimension() != 2 ) 
     {
        Q_ASSERT_X ( false, "setType()",
                     "This line chart type can only be used with two-dimensional data." );
        return;
-   }
-   switch( type ) {
-   case Normal:
-       d->implementor = d->normalPlotter;
-       break;
-   default:
-       Q_ASSERT_X( false, "Plotter::setType", "unknown plotter subtype" );
-   };
+    }
+    switch( type ) {
+    case Normal:
+        d->implementor = d->normalPlotter;
+        break;
+    case Percent:
+        d->implementor = d->percentPlotter;
+        break;
+    default:
+        Q_ASSERT_X( false, "Plotter::setType", "unknown plotter subtype" );
+    };
 
-   // d->lineType = type;
-   Q_ASSERT( d->implementor->type() == type );
+    // d->lineType = type;
+    Q_ASSERT( d->implementor->type() == type );
 
-   setDataBoundariesDirty();
-   emit layoutChanged( this );
-   emit propertiesChanged();
+    setDataBoundariesDirty();
+    emit layoutChanged( this );
+    emit propertiesChanged();
 }
 
 /**
@@ -197,10 +201,12 @@ LineAttributes Plotter::lineAttributes() const
   */
 LineAttributes Plotter::lineAttributes( int column ) const
 {
-    return qVariantValue<LineAttributes>(
-        d->attributesModel->data(
-            d->attributesModel->mapFromSource( columnToIndex( column ) ),
-            KDChart::LineAttributesRole ) );
+    const QVariant attrs(
+            d->attributesModel->headerData( column, Qt::Vertical,
+                                            LineAttributesRole ) );
+    if( attrs.isValid() )
+        return qVariantValue< LineAttributes >( attrs );
+    return lineAttributes();
 }
 
 /**
@@ -273,10 +279,12 @@ ThreeDLineAttributes Plotter::threeDLineAttributes() const
   */
 ThreeDLineAttributes Plotter::threeDLineAttributes( int column ) const
 {
-    return qVariantValue<ThreeDLineAttributes>(
-        d->attributesModel->data(
-            d->attributesModel->mapFromSource( columnToIndex( column ) ),
-            KDChart::ThreeDLineAttributesRole ) );
+    const QVariant attrs(
+            d->attributesModel->headerData( column, Qt::Vertical,
+                                            ThreeDLineAttributesRole ) );
+    if( attrs.isValid() )
+        return qVariantValue< ThreeDLineAttributes >( attrs );
+    return threeDLineAttributes();
 }
 
 /**
@@ -362,7 +370,7 @@ void Plotter::paint( PaintContext* ctx )
     if ( !checkInvariants( true ) ) return;
     if ( !AbstractGrid::isBoundariesValid(dataBoundaries()) ) return;
     const PainterSaver p( ctx->painter() );
-    if( model()->rowCount() == 0 || model()->columnCount() == 0 )
+    if( model()->rowCount( rootIndex() ) == 0 || model()->columnCount( rootIndex() ) == 0 )
         return; // nothing to paint for us
 
     AbstractCoordinatePlane* const plane = ctx->coordinatePlane();

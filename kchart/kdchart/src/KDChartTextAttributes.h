@@ -72,7 +72,13 @@ public:
 
   /**
    * Set the font to be used for rendering the text.
+   *
+   * \note All of the font's attributes will be used - except of its size!
+   * To specify the size please use setFontSize (or setMinimalFontSize, resp.)
+   * 
    * \param font The font to use.
+   *
+   * \sa setFontSize, setMinimalFontSize
    */
   void setFont( const QFont& font );
 

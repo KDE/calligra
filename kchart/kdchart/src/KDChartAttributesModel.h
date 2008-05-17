@@ -135,6 +135,19 @@ protected:
     /** needed for serialization */
     void setModelDataMap( const QMap<int, QVariant> map );
 
+private Q_SLOTS:
+    void slotRowsAboutToBeInserted( const QModelIndex& parent, int start, int end );
+    void slotColumnsAboutToBeInserted( const QModelIndex& parent, int start, int end );
+    void slotRowsInserted( const QModelIndex& parent, int start, int end );
+    void slotColumnsInserted( const QModelIndex& parent, int start, int end );
+
+    void slotRowsAboutToBeRemoved( const QModelIndex& parent, int start, int end );
+    void slotColumnsAboutToBeRemoved( const QModelIndex& parent, int start, int end );
+    void slotRowsRemoved( const QModelIndex& parent, int start, int end );
+    void slotColumnsRemoved( const QModelIndex& parent, int start, int end );
+
+    void slotDataChanged( const QModelIndex& topLeft, const QModelIndex& bottomRight );
+
 private:
     // helper
     QVariant defaultsForRole( int role ) const;

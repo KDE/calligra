@@ -35,6 +35,9 @@ set(kdchart_LIB_SRCS
     KDChartBackgroundAttributes.cpp
     KDChartBarAttributes.cpp
     KDChartBarDiagram.cpp
+    KDChartNormalLyingBarDiagram_p.cpp
+    KDChartStackedLyingBarDiagram_p.cpp
+    KDChartPercentPlotter_p.cpp
     KDChartCartesianAxis.cpp
     KDChartDatasetProxyModel.cpp
     KDChartDatasetSelector.cpp
@@ -70,13 +73,23 @@ set(kdchart_LIB_SRCS
     KDChartNormalLineDiagram_p.cpp
     KDChartNormalPlotter_p.cpp
     KDChartPercentBarDiagram_p.cpp
+    KDChartPercentLyingBarDiagram_p.cpp
     KDChartPercentLineDiagram_p.cpp
     KDChartPlotter.cpp
     KDChartPlotter_p.cpp
     KDChartStackedBarDiagram_p.cpp
     KDChartStackedLineDiagram_p.cpp
     KDChartValueTrackerAttributes.cpp
+    KDChartRulerAttributes.cpp
+    KDChartPrintingParameters.cpp
+    KDChartModelDataCache_p.cpp
     PrerenderedElements/KDChartTextLabelCache.cpp
+    LeveyJennings/KDChartLeveyJenningsDiagram.cpp
+    LeveyJennings/KDChartLeveyJenningsDiagram_p.cpp
+    LeveyJennings/KDChartLeveyJenningsAxis.cpp
+    LeveyJennings/KDChartLeveyJenningsCoordinatePlane.cpp
+    LeveyJennings/KDChartLeveyJenningsGrid.cpp
+    LeveyJennings/KDChartLeveyJenningsGridAttributes.cpp
     Scenery/ReverseMapper.cpp
     Scenery/ChartGraphicsItem.cpp
 )
@@ -88,7 +101,7 @@ qt4_wrap_ui(kdchart_LIB_SRCS
 kde4_add_library(kdchart SHARED ${kdchart_LIB_SRCS})
 
 #target_link_libraries(kdchart ${QT_QT3SUPPORT_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY} ${ZLIB_LIBRARY} )
-target_link_libraries(kdchart  ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY} ${ZLIB_LIBRARY} )
+target_link_libraries(kdchart  ${QT_QTSVG_LIBRARY} ${QT_QTXML_LIBRARY} ${QT_QTGUI_LIBRARY} ${QT_QTCORE_LIBRARY} ${ZLIB_LIBRARY} )
 
 set_target_properties(kdchart PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kdchart  DESTINATION ${LIB_INSTALL_DIR})

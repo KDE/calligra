@@ -57,13 +57,16 @@ public:
     Private( AbstractCartesianDiagram* diagram, CartesianAxis* axis )
         : AbstractAxis::Private( diagram, axis )
         , useDefaultTextAttributes( true )
+        , cachedHeaderLabels( QStringList() )
+        , cachedLabelHeight( 0.0 )
+        , cachedFontHeight( 0 )
     {}
     ~Private() {}
 
     const CartesianAxis* axis() const { return static_cast<CartesianAxis *>( mAxis ); }
 
     void drawSubUnitRulers( QPainter*, CartesianCoordinatePlane* plane, const DataDimension& dim,
-                            const QPointF& rulerRef, const QVector<int>& drawnTicks ) const;
+                            const QPointF& rulerRef, const QVector<int>& drawnTicks, const bool diagramIsVertical ) const;
     void drawTitleText( QPainter*, CartesianCoordinatePlane* plane, const QRect& areaGeoRect ) const;
 
     const TextAttributes titleTextAttributesWithAdjustedRotation() const;
@@ -74,6 +77,12 @@ private:
     bool useDefaultTextAttributes;
     Position position;
     QRect geometry;
+    QMap< double, QString > annotations;
+    mutable QStringList cachedHeaderLabels;
+    mutable qreal cachedLabelHeight;
+    mutable qreal cachedLabelWidth;
+    mutable int cachedFontHeight;
+    mutable int cachedFontWidth;
 };
 
 inline CartesianAxis::CartesianAxis( Private * p, AbstractDiagram* diagram )

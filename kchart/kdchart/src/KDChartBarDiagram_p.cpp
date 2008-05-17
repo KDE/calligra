@@ -53,7 +53,7 @@ void BarDiagram::BarDiagramType::paintBars( PaintContext* ctx, const QModelIndex
     if ( diagram()->antiAliasing() )
         ctx->painter()->setRenderHint ( QPainter::Antialiasing );
     ctx->painter()->setBrush( indexBrush );
-    ctx->painter()->setPen( indexPen );
+    ctx->painter()->setPen( PrintingParameters::scalePen( indexPen ) );
     if ( threeDAttrs.isEnabled() ) {
         bool stackedMode = false;
         bool percentMode = false;

@@ -115,6 +115,9 @@ namespace KDChart {
          * GridAttributes::setAdjustBoundsToGrid() for either the global grid-attributes
          * or for the horizontal/vertical attrs separately.
          *
+         * \note If you use user defined vertical ranges together with logarithmic scale, only
+         * positive values are supported. If you set it to negative values, the result is undefined.
+         *
          * \param range a pair of values representing the smalles and the largest
          * horizontal value space coordinate displayed.
          *
@@ -144,6 +147,9 @@ namespace KDChart {
          * You can turn this feature off for any of the four bounds by calling
          * GridAttributes::setAdjustBoundsToGrid() for either the global grid-attributes
          * or for the horizontal/vertical attrs separately.
+         *
+         * \note If you use user defined vertical ranges together with logarithmic scale, only
+         * positive values are supported. If you set it to negative values, the result is undefined.
          *
          * \param range a pair of values representing the smalles and the largest
          * vertical value space coordinate displayed.

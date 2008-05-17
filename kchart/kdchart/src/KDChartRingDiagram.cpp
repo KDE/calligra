@@ -118,9 +118,10 @@ void RingDiagram::paint( PaintContext* ctx )
         QPen p( ctx->painter()->pen() );
         p.setColor( brush.color() );
         p.setWidth( 2 );// FIXME properties, use DatasetPenRole
-        ctx->painter()->setPen( p );
+        ctx->painter()->setPen( PrintingParameters::scalePen( p ) );
         //ctx->painter()->drawPolyline( polygon );
     }
+    d->clearListOfAlreadyDrawnDataValueTexts();
     DataValueTextInfoListIterator it( list );
     while ( it.hasNext() ) {
         const DataValueTextInfo& info = it.next();

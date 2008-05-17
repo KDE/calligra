@@ -149,7 +149,7 @@ void PolarCoordinatePlane::paint ( QPainter* painter )
         ctx.setRectangle ( geometry() /*d->contentRect*/ );
 
         // paint the coordinate system rulers:
-        d->currentTransformation = & ( d->coordinateTransformations[0] );
+        d->currentTransformation = & ( d->coordinateTransformations.first() );
         d->grid->drawGrid( &ctx );
 
         // paint the diagrams:
@@ -162,72 +162,6 @@ void PolarCoordinatePlane::paint ( QPainter* painter )
         d->currentTransformation = 0;
     } // else: diagrams have not been set up yet
 }
-
-/*
-void PolarCoordinatePlane::paintEvent ( QPaintEvent* )
-{
-    AbstractDiagramList diags = diagrams();
-    if ( d->coordinateTransformations.size() == diags.size() )
-    {
-        QPainter painter ( this );
-        PaintContext ctx;
-        ctx.setPainter ( &painter );
-        ctx.setCoordinatePlane ( this );
-        ctx.setRectangle ( d->contentRect );
-
-        // paint the coordinate system rulers:
-        d->grid->drawGrid( &ctx );
-
-        // paint the diagrams:
-        for ( int i = 0; i < diags.size(); i++ )
-        {
-            d->currentTransformation = & ( d->coordinateTransformations[i] );
-            PainterSaver painterSaver( &painter );
-            diags[i]->paint ( &ctx );
-        }
-        d->currentTransformation = 0;
-    } // else: diagrams have not been set up yet
-}
-*/
-/*
-void PolarCoordinatePlane::paintGrid( PaintContext* ctx )
-{
-    if ( d->coordinateTransformations.size () <= 0 ) return;
-
-    // FIXME: we paint the rulers to the settings of the first diagram for now:
-    AbstractPolarDiagram* dgr = dynamic_cast<AbstractPolarDiagram*> (diagrams().first() );
-    Q_ASSERT ( dgr ); // only polar diagrams are allowed here
-
-    ctx->painter()->setPen ( QColor ( Qt::lightGray ) );
-    QPointF origin = translate( QPointF( 0,0 ) );
-    const int numberOfSpokes = ( int ) ( 360 / d->currentTransformation->angleUnit );
-    const double r = dgr->dataBoundaries().second.y(); // use the full extents
-    for ( int i = 0; i < numberOfSpokes ; ++i ) {
-        ctx->painter()->drawLine( origin, d->currentTransformation->translate( QPointF( r, i ) ) );
-    }
-    const int numberOfGridRings = ( int ) dgr->numberOfGridRings();
-    for ( int i = 0; i < numberOfGridRings; ++i ) {
-        const double rad = ( ( i + 1) * r / numberOfGridRings );
-
-        if ( rad == 0 )
-            continue;
-
-        QRectF rect;
-        QPointF topLeftPoint;
-        QPointF bottomRightPoint;
-
-        topLeftPoint = d->currentTransformation->translate( QPointF( rad, 0 ) );
-        topLeftPoint.setX( d->currentTransformation->translate( QPointF( rad, 90 / d->currentTransformation->angleUnit ) ).x() );
-        bottomRightPoint = d->currentTransformation->translate( QPointF( rad, 180 / d->currentTransformation->angleUnit ) );
-        bottomRightPoint.setX( d->currentTransformation->translate( QPointF( rad, 270 / d->currentTransformation->angleUnit ) ).x() );
-
-        rect.setTopLeft( topLeftPoint );
-        rect.setBottomRight( bottomRightPoint );
-
-        ctx->painter()->drawEllipse( rect );
-    }
-}
-*/
 
 void PolarCoordinatePlane::resizeEvent ( QResizeEvent* )
 {
@@ -246,6 +180,8 @@ void PolarCoordinatePlane::layoutDiagrams()
     const QRect rect( areaGeometry() );
     d->contentRect = QRectF ( 1, 1, rect.width() - 3, rect.height() - 3 );
 
+    const ZoomParameters zoom = d->coordinateTransformations.isEmpty() ? ZoomParameters() 
+                                                                       : d->coordinateTransformations.front().zoom;
     // FIXME distribute space according to options:
     const qreal oldStartPosition = startPosition();
     d->coordinateTransformations.clear();
@@ -257,7 +193,7 @@ void PolarCoordinatePlane::layoutDiagrams()
 
             const double angleUnit = 360 / polarDiagram->valueTotals();
 //qDebug() << "--------------------------------------------------------";
-            const double radius = dataBoundariesPair.second.y();
+            const double radius = qAbs( dataBoundariesPair.first.y() ) + dataBoundariesPair.second.y();
 //qDebug() << radius <<"="<<dataBoundariesPair.second.y();
             const double diagramWidth = radius * 2; // == height
             const double planeWidth = d->contentRect.width();
@@ -272,7 +208,8 @@ void PolarCoordinatePlane::layoutDiagrams()
             diagramTransposition.radiusUnit = radiusUnit;
             diagramTransposition.angleUnit = angleUnit;
             diagramTransposition.startPosition = oldStartPosition;
-            diagramTransposition.zoom = ZoomParameters();
+            diagramTransposition.zoom = zoom;
+            diagramTransposition.minValue = dataBoundariesPair.first.y() < 0 ? dataBoundariesPair.first.y() : 0.0;
             d->coordinateTransformations.append( diagramTransposition );
         }
 }
@@ -314,45 +251,75 @@ void PolarCoordinatePlane::setStartPosition( qreal degrees )
 {
     Q_ASSERT_X ( diagram(), "PolarCoordinatePlane::setStartPosition",
                  "setStartPosition() needs a diagram to be associated to the plane." );
-    d->coordinateTransformations[0].startPosition = degrees;
+    for( CoordinateTransformationList::iterator it = d->coordinateTransformations.begin(); 
+                                                it != d->coordinateTransformations.end();
+                                                ++it )
+    {
+        CoordinateTransformation& trans = *it;
+        trans.startPosition = degrees;
+    }
 }
 
 qreal PolarCoordinatePlane::startPosition() const
 {
-    return d->coordinateTransformations.size()
-        ?  d->coordinateTransformations[0].startPosition
-        :  0.0;
+    return d->coordinateTransformations.isEmpty()
+        ? 0.0
+        :  d->coordinateTransformations.first().startPosition;
 }
 
 double PolarCoordinatePlane::zoomFactorX() const
 {
-    return d->coordinateTransformations[0].zoom.xFactor;
+    return d->coordinateTransformations.isEmpty()
+        ? 1.0
+        : d->coordinateTransformations.first().zoom.xFactor;
 }
 
 double PolarCoordinatePlane::zoomFactorY() const
 {
-    return d->coordinateTransformations[0].zoom.yFactor;
+    return d->coordinateTransformations.isEmpty()
+        ? 1.0
+        : d->coordinateTransformations.first().zoom.yFactor;
 }
 
 void PolarCoordinatePlane::setZoomFactorX( double factor )
 {
-    d->coordinateTransformations[0].zoom.xFactor = factor;
+    for( CoordinateTransformationList::iterator it = d->coordinateTransformations.begin(); 
+                                                it != d->coordinateTransformations.end();
+                                                ++it )
+    {
+        CoordinateTransformation& trans = *it;
+        trans.zoom.xFactor = factor;
+    }
 }
 
 void PolarCoordinatePlane::setZoomFactorY( double factor )
 {
-    d->coordinateTransformations[0].zoom.yFactor = factor;
+    for( CoordinateTransformationList::iterator it = d->coordinateTransformations.begin(); 
+                                                it != d->coordinateTransformations.end();
+                                                ++it )
+    {
+        CoordinateTransformation& trans = *it;
+        trans.zoom.yFactor = factor;
+    }
 }
 
 QPointF PolarCoordinatePlane::zoomCenter() const
 {
-    return QPointF( d->coordinateTransformations[0].zoom.xCenter, d->coordinateTransformations[0].zoom.yCenter );
+    return d->coordinateTransformations.isEmpty()
+        ? QPointF( 0.5, 0.5 )
+        : QPointF( d->coordinateTransformations.first().zoom.xCenter, d->coordinateTransformations.first().zoom.yCenter );
 }
 
 void PolarCoordinatePlane::setZoomCenter( const QPointF& center )
 {
-    d->coordinateTransformations[0].zoom.xCenter = center.x();
-    d->coordinateTransformations[0].zoom.yCenter = center.y();
+    for( CoordinateTransformationList::iterator it = d->coordinateTransformations.begin(); 
+                                                it != d->coordinateTransformations.end();
+                                                ++it )
+    {
+        CoordinateTransformation& trans = *it;
+        trans.zoom.xCenter = center.x();
+        trans.zoom.yCenter = center.y();
+    }
 }
 
 DataDimensionsList PolarCoordinatePlane::getDataDimensionsList() const

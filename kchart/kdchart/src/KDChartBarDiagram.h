@@ -70,10 +70,14 @@ public:
     enum BarType { Normal,
                    Stacked,
                    Percent,
-                   Rows };
+                   Rows ///< @deprecated Use BarDiagram::setOrientation() instead
+                 };
 
     void setType( const BarType type );
     BarType type() const;
+    
+    void setOrientation( Qt::Orientation orientation );
+    Qt::Orientation orientation() const;
 
     void setBarAttributes( const BarAttributes & a );
     void setBarAttributes( int column, const BarAttributes & a );

@@ -60,22 +60,28 @@ const QPair<QPointF, QPointF> StackedBarDiagram::calculateDataBoundaries() const
     for( int row = 0; row < rowCount; ++row )
     {
         // calculate sum of values per column - Find out stacked Min/Max
-        double stackedValues = 0;
+        double stackedValues = 0.0;
+        double negativeStackedValues = 0.0;
         for ( int col = 0; col < colCount ; ++col )
         {
             const CartesianDiagramDataCompressor::CachePosition position( row, col );
             const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
-            stackedValues +=  point.value;
+
+            if( point.value > 0.0 )
+                stackedValues += point.value;
+            else
+                negativeStackedValues += point.value;
+
             // this is always true yMin can be 0 in case all values
             // are the same
             // same for yMax it can be zero if all values are negative
             if( bStarting ){
-                yMin = stackedValues;
-                yMax = stackedValues;
+                yMin = negativeStackedValues < 0.0 ? negativeStackedValues : stackedValues;
+                yMax = stackedValues > 0.0 ? stackedValues : negativeStackedValues;
                 bStarting = false;
             }else{
-                yMin = qMin( yMin, stackedValues );
-                yMax = qMax( yMax, stackedValues );
+                yMin = qMin( qMin( yMin, stackedValues ), negativeStackedValues );
+                yMax = qMax( qMax( yMax, stackedValues ), negativeStackedValues );
             }
         }
     }
@@ -123,8 +129,8 @@ void StackedBarDiagram::paint(  PaintContext* ctx )
         if ( groupWidth < 0 )
             groupWidth = 0;
 
-        if ( groupWidth  * rowCount > ctx->rectangle().width() )
-            groupWidth = ctx->rectangle().width() / rowCount;
+        if ( groupWidth  * rowCount > width )
+            groupWidth = width / rowCount;
     }
 
     // maxLimit: allow the space between bars to be larger until area.width()
@@ -134,10 +140,10 @@ void StackedBarDiagram::paint(  PaintContext* ctx )
 
     //Pending Michel: FixMe
     if ( ba.useFixedDataValueGap() ) {
-        if ( ctx->rectangle().width() > maxLimit )
+        if ( width > maxLimit )
             spaceBetweenBars += ba.fixedDataValueGap();
         else
-            spaceBetweenBars = ((ctx->rectangle().width()/rowCount) - groupWidth)/(colCount-1);
+            spaceBetweenBars = ((width/rowCount) - groupWidth)/(colCount-1);
     }
 
     if ( ba.useFixedValueBlockGap() )
@@ -175,13 +181,14 @@ void StackedBarDiagram::paint(  PaintContext* ctx )
                     maxDepth = offset - (width/rowCount);
                 }
             } else
-                barWidth =  (ctx->rectangle().width() - (offset*rowCount))/ rowCount ;
+                barWidth =  (width - (offset*rowCount))/ rowCount ;
 
             for ( int k = col; k >= 0; --k )
             {
                 const CartesianDiagramDataCompressor::CachePosition position( row, k );
                 const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
-                stackedValues += point.value;
+                if( p.value >= 0.0 && point.value >= 0.0 || p.value < 0.0 && point.value < 0.0 )
+                    stackedValues += point.value;
                 key = point.key;
             }
             QPointF point = ctx->coordinatePlane()->translate( QPointF( key, stackedValues ) );

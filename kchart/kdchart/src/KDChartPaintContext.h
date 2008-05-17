@@ -40,7 +40,7 @@ namespace KDChart {
       * @brief Stores information about painting diagrams
       * \internal
       */
-    class PaintContext
+    class KDCHART_EXPORT PaintContext
     {
     public:
         PaintContext();

@@ -45,12 +45,12 @@ void LineDiagram::Private::paintPolyline(
     const QPolygonF& points ) const
 {
     ctx->painter()->setBrush( brush );
-    ctx->painter()->setPen(
+    ctx->painter()->setPen( PrintingParameters::scalePen( 
         QPen( pen.color(),
               pen.width(),
               pen.style(),
               Qt::FlatCap,
-              Qt::MiterJoin ) );
+              Qt::MiterJoin ) ) );
 #if QT_VERSION > 0x040299
     ctx->painter()->drawPolyline( points );
 #else
@@ -99,7 +99,7 @@ void LineDiagram::LineDiagramType::paintThreeDLines(
         ctx->painter()->setRenderHint( QPainter::Antialiasing );
 
     ctx->painter()->setBrush( indexBrush );
-    ctx->painter()->setPen( diagram()->pen( index ) ) ;
+    ctx->painter()->setPen( PrintingParameters::scalePen( diagram()->pen( index ) ) );
 
     reverseMapper().addPolygon( index.row(), index.column(), segment );
     ctx->painter()->drawPolygon( segment );
@@ -116,7 +116,7 @@ void LineDiagram::LineDiagramType::paintElements(
 {
     Q_UNUSED( policy );
     // paint all lines and their attributes
-    PainterSaver painterSaver( ctx->painter() );
+    const PainterSaver painterSaver( ctx->painter() );
     if ( diagram()->antiAliasing() )
         ctx->painter()->setRenderHint ( QPainter::Antialiasing );
     LineAttributesInfoListIterator itline ( lineList );
@@ -216,7 +216,7 @@ void LineDiagram::LineDiagramType::paintAreas(
     if( diagram()->antiAliasing() )
         ctx->painter()->setRenderHint( QPainter::Antialiasing );
 
-    ctx->painter()->setPen( indexPen );
+    ctx->painter()->setPen( PrintingParameters::scalePen( indexPen ) );
     ctx->painter()->setBrush( trans );
 
     QPainterPath path;
@@ -290,7 +290,7 @@ void LineDiagram::LineDiagramType::paintValueTracker( PaintContext* ctx, const V
     QRectF area( topLeft, size );
 
     PainterSaver painterSaver( ctx->painter() );
-    ctx->painter()->setPen( vt.pen() );
+    ctx->painter()->setPen( PrintingParameters::scalePen( vt.pen() ) );
     ctx->painter()->setBrush( QBrush() );
 
     ctx->painter()->drawLine( markerPoint, ordinatePoint );
@@ -308,4 +308,39 @@ void LineDiagram::LineDiagramType::paintValueTracker( PaintContext* ctx, const V
 CartesianDiagramDataCompressor& LineDiagram::LineDiagramType::compressor() const
 {
     return m_private->compressor;
+}
+
+double LineDiagram::LineDiagramType::interpolateMissingValue( const CartesianDiagramDataCompressor::CachePosition& pos ) const
+{
+    double leftValue = std::numeric_limits< double >::quiet_NaN();
+    double rightValue = std::numeric_limits< double >::quiet_NaN();
+    int missingCount = 1;
+    
+    const int column = pos.second;
+    const int row = pos.first;
+    const int rowCount = compressor().modelDataRows();
+    
+    // iterate back and forth to find valid values
+    for( int r1 = row - 1; r1 > 0; --r1 )
+    {
+        const CartesianDiagramDataCompressor::CachePosition position( r1, column );
+        const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
+        leftValue = point.value;
+        if( !ISNAN( point.value ) )
+            break;
+        ++missingCount;
+    }
+    for( int r2 = row + 1; r2 < rowCount; ++r2 )
+    {
+        const CartesianDiagramDataCompressor::CachePosition position( r2, column );
+        const CartesianDiagramDataCompressor::DataPoint point = compressor().data( position );
+        rightValue = point.value;
+        if( !ISNAN( point.value ) )
+            break;
+        ++missingCount;
+    }
+    if( !ISNAN( leftValue ) && !ISNAN( rightValue ) )
+        return leftValue + ( rightValue - leftValue ) / ( missingCount + 1 );
+    else
+        return std::numeric_limits< double >::quiet_NaN();
 }

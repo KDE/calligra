@@ -223,10 +223,12 @@ LineAttributes LineDiagram::lineAttributes() const
   */
 LineAttributes LineDiagram::lineAttributes( int column ) const
 {
-    return qVariantValue<LineAttributes>(
-        d->attributesModel->data(
-            d->attributesModel->mapFromSource( columnToIndex( column ) ),
-            KDChart::LineAttributesRole ) );
+    const QVariant attrs(
+            d->attributesModel->headerData( column, Qt::Vertical,
+                                            LineAttributesRole ) );
+    if( attrs.isValid() )
+        return qVariantValue< LineAttributes >( attrs );
+    return lineAttributes();
 }
 
 /**
@@ -299,10 +301,12 @@ ThreeDLineAttributes LineDiagram::threeDLineAttributes() const
   */
 ThreeDLineAttributes LineDiagram::threeDLineAttributes( int column ) const
 {
-    return qVariantValue<ThreeDLineAttributes>(
-        d->attributesModel->data(
-            d->attributesModel->mapFromSource( columnToIndex( column ) ),
-            KDChart::ThreeDLineAttributesRole ) );
+    const QVariant attrs(
+            d->attributesModel->headerData( column, Qt::Vertical,
+                                            ThreeDLineAttributesRole ) );
+    if( attrs.isValid() )
+        return qVariantValue< ThreeDLineAttributes >( attrs );
+    return threeDLineAttributes();
 }
 
 /**
@@ -427,7 +431,7 @@ void LineDiagram::paint( PaintContext* ctx )
     if ( !checkInvariants( true ) ) return;
     if ( !AbstractGrid::isBoundariesValid(dataBoundaries()) ) return;
     const PainterSaver p( ctx->painter() );
-    if( model()->rowCount() == 0 || model()->columnCount() == 0 )
+    if( model()->rowCount( rootIndex() ) == 0 || model()->columnCount( rootIndex() ) == 0 )
         return; // nothing to paint for us
 
     AbstractCoordinatePlane* const plane = ctx->coordinatePlane();

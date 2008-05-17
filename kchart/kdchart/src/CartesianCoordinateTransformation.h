@@ -32,7 +32,8 @@
 
 #include "KDChartZoomParameters.h"
 
-#include <math.h>
+#include <cmath>
+#include <limits>
 
 namespace KDChart {
 
@@ -59,28 +60,35 @@ namespace KDChart {
 
         ZoomParameters zoom;
 
-        inline const qreal makeLogarithmic( qreal reference, qreal value ) const
+        typedef QPair< qreal, qreal > qrealPair;
+
+        inline const qreal makeLogarithmic( qrealPair reference, qreal value ) const
         {
             qreal result = value;
-            //qDebug() << "value == " << value;
-            //qDebug() << "log10( " << reference << " ) == " << log10( reference );
 
             qreal relation;
-            if( reference == 1.0 )
+            if( reference.second == 1.0 )
                 relation = 1.0;
-            else if( reference > 0.0 )
-                relation = reference / log10( reference );
+            else if( reference.second > 0.0 )
+                relation = reference.second / log10( reference.second );
             else if( result < 0.0 )
-                relation = reference / log10( -reference );
+                relation = reference.second / log10( -reference.second );
             else
                 relation = 10.0;
 
-            if( result == 1.0 )
-                result = 1.0;
-            else if( result > 0.0 )
+            if( value == 0.0 )
+                result = 0.0;//std::numeric_limits< qreal >::quiet_NaN();
+            else if( value > 0.0 )
                 result = log10( result ) * relation;
-            else if( result < 0.0 )
+            else if( value < 0.0 )
                 result = -log10( -result ) * relation;
+
+            if( value == 0.0 )
+                return result;
+            
+            result -= log10( reference.first ) * relation;
+            result *= ( reference.second - reference.first ) / relation / (log10(reference.second)-log10(reference.first));
+            result += reference.first;
 
             return result;
         }
@@ -91,28 +99,26 @@ namespace KDChart {
             QPointF result = originTranslation;
             QPointF tempPoint = diagramPoint;
 
-            if ( axesCalcModeY == CartesianCoordinatePlane::Logarithmic ){
-                tempPoint.setY( makeLogarithmic( diagramRect.y(), tempPoint.y() ) );
-                //qDebug() << "Y: " << tempPoint.y();
-            }
-            if ( axesCalcModeX == CartesianCoordinatePlane::Logarithmic ){
-                //qDebug() << "X diagramRect.x(): " << diagramRect.x();
-                //qDebug() << "X tempPoint old: " << tempPoint;
-                tempPoint.setX( makeLogarithmic( diagramRect.width(), tempPoint.x() ) );
-                //qDebug() << "X tempPoint new: " << tempPoint;
-            }
-            //qDebug() << "CoordinateTransformation::translate() using diagramRect: "
-            //         << diagramRect.x() << diagramRect.y() << diagramRect.width() << diagramRect.height();
+            const QRectF& diagRect = diagramRect;
 
-            tempPoint.rx() += diagramRect.width() / (2.0 * zoom.xFactor);
-            tempPoint.ry() += diagramRect.height() / (2.0 * zoom.yFactor);
+            if( axesCalcModeY == CartesianCoordinatePlane::Logarithmic )
+            {
+                tempPoint.setY( makeLogarithmic( qrealPair( diagRect.bottom(), diagRect.y() ), tempPoint.y() ) );
+            }
+            if( axesCalcModeX == CartesianCoordinatePlane::Logarithmic )
+            {
+                tempPoint.setX( makeLogarithmic( qrealPair( diagRect.x(), diagRect.right() ), tempPoint.x() ) );
+            }
 
-            tempPoint.rx() -= diagramRect.width() * zoom.xCenter;
-            tempPoint.ry() -= diagramRect.height() * zoom.yCenter;
+            tempPoint.rx() += diagRect.width() / (2.0 * zoom.xFactor);
+            tempPoint.ry() += diagRect.height() / (2.0 * zoom.yFactor);
+
+            tempPoint.rx() -= diagRect.width() * zoom.xCenter;
+            tempPoint.ry() -= diagRect.height() * zoom.yCenter;
 
             // translate:      xNew = (xOld - diaX) * zoomX + diaX
-            tempPoint.setX( ( tempPoint.x() - diagramRect.x() ) * zoom.xFactor + diagramRect.x() );
-            tempPoint.setY( ( tempPoint.y() - diagramRect.y() ) * zoom.yFactor + diagramRect.y() );
+            tempPoint.setX( ( tempPoint.x() - diagRect.x() ) * zoom.xFactor + diagRect.x() );
+            tempPoint.setY( ( tempPoint.y() - diagRect.y() ) * zoom.yFactor + diagRect.y() );
 
             result.rx() += isoScaleX * unitVectorX * tempPoint.x();
             result.ry() += isoScaleY * unitVectorY * tempPoint.y();

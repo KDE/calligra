@@ -71,7 +71,6 @@ namespace KDChart {
         Plotter* diagram;
         PlotterType* implementor; // the current type
         PlotterType* normalPlotter;
-        PlotterType* stackedPlotter;
         PlotterType* percentPlotter;
     };
 

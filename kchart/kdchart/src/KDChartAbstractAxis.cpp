@@ -247,6 +247,31 @@ TextAttributes AbstractAxis::textAttributes() const
     return d->textAttributes;
 }
 
+
+/**
+  \brief Use this to specify the attributes used to paint the axis ruler
+  
+  Every axis has a default set of ruler attributes that is exactly the
+  same among them. Use this method to specify your own attributes.
+  
+  \sa rulerAttributes
+*/
+void AbstractAxis::setRulerAttributes( const RulerAttributes &a )
+{
+	d->rulerAttributes = a;
+	update();
+}
+
+/**
+  \brief Returns the attributes to be used for painting the rulers
+  
+  \sa setRulerAttributes
+*/
+RulerAttributes AbstractAxis::rulerAttributes() const
+{
+	return d->rulerAttributes;
+}
+
 /**
   \brief Use this to specify your own set of strings, to be used as axis labels.
 

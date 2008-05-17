@@ -112,7 +112,18 @@ namespace KDChart {
         virtual bool isAbscissa() const;
         virtual bool isOrdinate() const;
 
-
+        /**
+         * Sets the axis annotations to \a annotations.
+         * Annotations are a QMap of doubles and QStrings defining special
+         * markers and their position.
+         * If you use annotations, the normal ticks and values will be invisible.
+         * To unset the annotations, pass an empty QMap.
+         */
+        void setAnnotations( const QMap< double, QString >& annotations );
+        /**
+         * Returns the currently set axis annotations.
+         */
+        QMap< double, QString > annotations() const;
 
         /** pure virtual in QLayoutItem */
         virtual bool isEmpty() const;

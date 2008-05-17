@@ -132,6 +132,10 @@ public:
      * Aligning is applied, after horiz./vert. padding was retrieved to calculate the real
      * reference point, so aligning is seen as relative to that point.
      *
+     * \note When printing data value texts at a centered point you might want to call
+     * setAlignment( Qt::AlignCenter ) and also set the horizontal/vertical padding to Zero
+     * to have your texts centered more precisely.
+     * 
      * \sa setReferencePosition, setReferenceArea, setHorizontalPadding, setVerticalPadding
      */
     void setAlignment( Qt::Alignment flags );
@@ -141,9 +145,11 @@ public:
      * Specifies the horizontal width of the gap between the anchor point and the content,
      * that is to be positioned by this RelativePosition.
      *
-     * \note When printing data value texts the font height is used as reference size for both,
-     *       horizontal and vertical padding, if the respective padding's Measure is using
-     *       automatic reference area detection.
+     * \note When printing data value texts this Measure is used to find the alignment
+     * point to align the text to, then alignment() is looked at to determine the way how
+     * the text is to be aligned to that point. The font height is used as reference size
+     * for both, horizontal and vertical padding, if the respective padding's Measure is
+     * using automatic reference area detection.
      *
      * \sa setVerticalPadding, setReferencePosition, setReferenceArea
      */
@@ -154,9 +160,11 @@ public:
      * Specifies the vertical width of the gap between the anchor point and the content,
      * that is to be positioned by this RelativePosition.
      *
-     * \note When printing data value texts the font height is used as reference size for both,
-     *       horizontal and vertical padding, if the respective padding's Measure is using
-     *       automatic reference area detection.
+     * \note When printing data value texts this Measure is used to find the alignment
+     * point to align the text to, then alignment() is looked at to determine the way how
+     * the text is to be aligned to that point. The font height is used as reference size
+     * for both, horizontal and vertical padding, if the respective padding's Measure is
+     * using automatic reference area detection.
      *
      * \sa setHorizontalPadding, setReferencePosition, setReferenceArea
      */

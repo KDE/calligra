@@ -30,11 +30,15 @@
 #ifndef KDCHARTCARTESIANDIAGRAMDATACOMPRESSOR_H
 #define KDCHARTCARTESIANDIAGRAMDATACOMPRESSOR_H
 
+#include <limits>
+
 #include <QPair>
 #include <QVector>
 #include <QObject>
 #include <QPointer>
 #include <QModelIndex>
+
+#include "KDChartModelDataCache_p.h"
 
 #include "kdchart_export.h"
 
@@ -66,14 +70,36 @@ namespace KDChart {
     public:
         class DataPoint {
         public:
-            DataPoint() : key(), value(), hidden( false ) {}
+            DataPoint() 
+                : key( std::numeric_limits< double >::quiet_NaN() ), 
+                  value( std::numeric_limits< double >::quiet_NaN() ), 
+                  hidden( false ) 
+                  {}
             double key;
             double value;
             bool hidden;
             QModelIndex index;
         };
         typedef QVector<DataPoint> DataPointVector;
-        typedef QPair<int, int> CachePosition;
+        class CachePosition {
+        public:
+            CachePosition()
+                : first( -1 ),
+                  second( -1 )
+                  {}
+            CachePosition( int first, int second )
+                : first( first ),
+                  second( second )
+                  {}
+            int first;
+            int second;
+
+            bool operator==( const CachePosition& rhs ) const
+            {
+                return first == rhs.first &&
+                       second == rhs.second;
+            }
+        };
 
         enum ApproximationMode {
             // do not approximate, interpolate by averaging all
@@ -115,6 +141,7 @@ namespace KDChart {
         // FIXME resolution changes and root index changes should all
         // be catchable with this method:
         void slotDiagramLayoutChanged( AbstractDiagram* );
+
         // geometry has changed
         void rebuildCache() const;
         // reset all cached values, without changing the cache geometry
@@ -146,6 +173,7 @@ namespace KDChart {
         QPointer<QAbstractItemModel> m_model;
         unsigned int m_sampleStep;
         QModelIndex m_rootIndex;
+        ModelDataCache< double > m_modelCache;
         int m_datasetDimension;
     };
 }

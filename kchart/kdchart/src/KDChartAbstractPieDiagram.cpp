@@ -113,10 +113,12 @@ PieAttributes AbstractPieDiagram::pieAttributes() const
 //       (khz, 2006-07-28)
 PieAttributes AbstractPieDiagram::pieAttributes( int column ) const
 {
-    return qVariantValue<PieAttributes>(
-        d->attributesModel->data(
-            d->attributesModel->mapFromSource( columnToIndex( column ) ).column(),
-            PieAttributesRole ) );
+    const QVariant attrs(
+            d->attributesModel->headerData( column, Qt::Vertical,
+                                            PieAttributesRole ) );
+    if( attrs.isValid() )
+        return qVariantValue< PieAttributes >( attrs );
+    return pieAttributes();
 }
 
 PieAttributes AbstractPieDiagram::pieAttributes( const QModelIndex & index ) const
@@ -161,10 +163,12 @@ ThreeDPieAttributes AbstractPieDiagram::threeDPieAttributes() const
 //       (khz, 2006-07-28)
 ThreeDPieAttributes AbstractPieDiagram::threeDPieAttributes( int column ) const
 {
-    return qVariantValue<ThreeDPieAttributes>(
-        d->attributesModel->data(
-            d->attributesModel->mapFromSource( columnToIndex( column ) ).column(),
-            ThreeDPieAttributesRole ) );
+    const QVariant attrs(
+            d->attributesModel->headerData( column, Qt::Vertical,
+                                            ThreeDPieAttributesRole ) );
+    if( attrs.isValid() )
+        return qVariantValue< ThreeDPieAttributes >( attrs );
+    return threeDPieAttributes();
 }
 
 ThreeDPieAttributes AbstractPieDiagram::threeDPieAttributes( const QModelIndex & index ) const

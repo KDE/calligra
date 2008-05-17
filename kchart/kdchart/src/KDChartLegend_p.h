@@ -79,6 +79,7 @@ public:
         alignment( rhs.alignment ),
         relativePosition( rhs.relativePosition ),
         orientation( rhs.orientation ),
+        order( rhs.order ),
         showLines( rhs.showLines ),
         texts( rhs.texts ),
         brushes( rhs.brushes ),
@@ -111,6 +112,7 @@ private:
     Qt::Alignment alignment;
     RelativePosition relativePosition;
     Qt::Orientation orientation;
+    Qt::SortOrder order;
     bool showLines;
     QMap<uint,QString> texts;
     QMap<uint,QBrush> brushes;

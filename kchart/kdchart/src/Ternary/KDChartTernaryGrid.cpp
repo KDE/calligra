@@ -1,5 +1,3 @@
-/* -*- Mode: C++ -*-
-   KDChart - a multi-platform charting engine
    */
 
 /****************************************************************************
@@ -41,6 +39,7 @@
 #include "KDChartTernaryGrid.h"
 #include "KDChartPainterSaver_p.h"
 #include "KDChartTernaryCoordinatePlane.h"
+#include "KDChartPrintingParameters.h"
 
 using namespace KDChart;
 
@@ -123,18 +122,18 @@ void TernaryGrid::drawGrid( PaintContext* context )
     }}
 
     // now draw the lines:
-    painter.setPen( QPen( QColor( "lightgray" ), 1 ) );
+    painter.setPen( PrintingParameters::scalePen( QPen( QColor( "lightgray" ), 1 ) ) );
     painter.setBrush( QColor( "lightgray" ) );
     painter.drawLines( lines[2] );
-    painter.setPen( QPen( QColor( "gray" ), 1 ) );
+    painter.setPen( PrintingParameters::scalePen( QPen( QColor( "gray" ), 1 ) ) );
     painter.setBrush( QColor( "gray" ) );
     painter.drawLines( lines[1] );
-    painter.setPen( QPen( QColor( "darkslategray" ), 1 ) );
+    painter.setPen( PrintingParameters::scalePen( QPen( QColor( "darkslategray" ), 1 ) ) );
     painter.setBrush( QColor( "darkslategray" ) );
     painter.drawLines( lines[0] );
 
     // now draw the triangle (this could be part of the axis, in fact):
-    painter.setPen( QPen( Qt::black, 1 ) );
+    painter.setPen( PrintingParameters::scalePen( QPen( Qt::black, 1 ) ) );
     // make sure this does not fill, otherwise it wipes the contents
     // of the triangle (doh!):
     painter.setBrush( Qt::NoBrush );
@@ -145,7 +144,7 @@ void TernaryGrid::drawGrid( PaintContext* context )
     painter.drawPolygon( points );
 
     // now draw the ticks:
-    painter.setPen( Qt::black );
+    painter.setPen( PrintingParameters::scalePen( QPen( Qt::black ) ) );
     painter.setBrush( Qt::black );
 
     QVector<QLineF> ticks;

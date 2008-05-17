@@ -56,6 +56,7 @@ struct PolarCoordinatePlane::CoordinateTransformation
     QPointF originTranslation;
     double radiusUnit;
     double angleUnit;
+    double minValue;
 
     qreal startPosition;
     ZoomParameters zoom;
@@ -70,9 +71,9 @@ struct PolarCoordinatePlane::CoordinateTransformation
     {
         // ### de-inline me
         // calculate the polar coordinates
-        const double x = diagramPoint.x() * radiusUnit;
+        const double x = (diagramPoint.x() * radiusUnit) - (minValue * radiusUnit);
 //qDebug() << x << "=" << diagramPoint.x() << "*" << radiusUnit << "  startPosition: " << startPosition;
-        const double y = ( diagramPoint.y() * angleUnit) - 90.0 - startPosition;
+        const double y = ( diagramPoint.y() * -angleUnit) - 90.0 - startPosition;
         // convert to cartesian coordinates
         QPointF cartesianPoint = polarToCartesian( x, y );
         cartesianPoint.setX( cartesianPoint.x() * zoom.xFactor );
