@@ -1635,20 +1635,23 @@ KoShape * SvgImport::createObject( const QDomElement &b, const QDomElement &styl
 
         if( imageLoaded )
         {
-            KoImageData * data = new KoImageData( m_document->imageCollection() );
-            data->setImage( img );
+            KoShape * picture = createShape( PICTURESHAPEID );
+            if( picture )
+            {
+                KoImageData * data = new KoImageData( m_document->imageCollection() );
+                data->setImage( img );
 
-            double x = parseUnit( b.attribute( "x" ) );
-            double y = parseUnit( b.attribute( "y" ) );
-            double w = parseUnit( b.attribute( "width" ) );
-            double h = parseUnit( b.attribute( "height" ) );
+                double x = parseUnit( b.attribute( "x" ) );
+                double y = parseUnit( b.attribute( "y" ) );
+                double w = parseUnit( b.attribute( "width" ) );
+                double h = parseUnit( b.attribute( "height" ) );
 
-            PictureShape * picture = new PictureShape();
-            picture->setUserData( data );
-            picture->setSize( QSizeF(w,h) );
-            picture->setPosition( QPointF(x,y) );
+                picture->setUserData( data );
+                picture->setSize( QSizeF(w,h) );
+                picture->setPosition( QPointF(x,y) );
 
-            obj = picture;
+                obj = picture;
+            }
         }
     }
 
