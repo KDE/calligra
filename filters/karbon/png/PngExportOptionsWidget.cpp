@@ -41,7 +41,8 @@ PngExportOptionsWidget::PngExportOptionsWidget( QSizeF pointSize, QWidget * pare
     widget.dpi->setValue( KoGlobal::dpiX() );
     widget.dpi->setAlignment( Qt::AlignRight );
     widget.dpi->setSuffix( " DPI" );
-    widget.keepAspect->setCheckState( Qt::Checked );
+    widget.pxAspect->setKeepAspectRatio( true );
+    widget.unitAspect->setKeepAspectRatio( true );
     widget.unit->addItems( KoUnit::listOfUnitName() );
     widget.unit->setCurrentIndex( unit.indexInList() );
 
@@ -55,7 +56,8 @@ PngExportOptionsWidget::PngExportOptionsWidget( QSizeF pointSize, QWidget * pare
     connect( widget.pxHeight, SIGNAL(valueChanged(int)), this, SLOT(pxHeightChanged(int)));
     connect( widget.dpi, SIGNAL(valueChanged(int)), this, SLOT(dpiChanged(int)));
     connect( widget.unit, SIGNAL(activated(int)), this, SLOT(unitChanged(int)));
-    connect( widget.keepAspect,SIGNAL(toggled(bool)), this, SLOT(aspectChanged(bool)));
+    connect( widget.pxAspect,SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(aspectChanged(bool)));
+    connect( widget.unitAspect,SIGNAL(keepAspectRatioChanged(bool)), this, SLOT(aspectChanged(bool)));
 }
 
 void PngExportOptionsWidget::setUnit( const KoUnit &unit )
@@ -102,7 +104,7 @@ void PngExportOptionsWidget::unitWidthChanged( double newWidth )
     blockChildSignals( true );
 
     double newHeight = widget.unitHeight->value();
-    if( widget.keepAspect->checkState() == Qt::Checked )
+    if( widget.unitAspect->keepAspectRatio() )
     {
         newHeight = newWidth * m_pointSize.height() / m_pointSize.width();
         widget.unitHeight->changeValue( newHeight );
@@ -117,7 +119,7 @@ void PngExportOptionsWidget::unitHeightChanged( double newHeight )
     blockChildSignals( true );
 
     double newWidth = widget.unitWidth->value();
-    if( widget.keepAspect->checkState() == Qt::Checked )
+    if( widget.unitAspect->keepAspectRatio() )
     {
         newWidth = newHeight * m_pointSize.width() / m_pointSize.height();
         widget.unitWidth->changeValue( newWidth );
@@ -132,7 +134,7 @@ void PngExportOptionsWidget::pxWidthChanged( int newWidth )
     blockChildSignals( true );
 
     int newHeight = widget.pxHeight->value();
-    if( widget.keepAspect->checkState() == Qt::Checked )
+    if( widget.pxAspect->keepAspectRatio() )
     {
         newHeight = qRound( newWidth * m_pointSize.height() / m_pointSize.width() );
         widget.pxHeight->setValue( newHeight );
@@ -147,7 +149,7 @@ void PngExportOptionsWidget::pxHeightChanged( int newHeight )
     blockChildSignals( true );
 
     int newWidth = widget.pxWidth->value();
-    if( widget.keepAspect->checkState() == Qt::Checked )
+    if( widget.pxAspect->keepAspectRatio() )
     {
         newWidth = qRound( newHeight * m_pointSize.width() / m_pointSize.height() );
         widget.pxWidth->setValue( newWidth );
@@ -175,9 +177,16 @@ void PngExportOptionsWidget::unitChanged( int newUnit )
     blockChildSignals( false );
 }
 
-void PngExportOptionsWidget::aspectChanged( bool checked )
+void PngExportOptionsWidget::aspectChanged( bool keepAspect )
 {
-    if( checked )
+    blockChildSignals(true);
+
+    widget.pxAspect->setKeepAspectRatio( keepAspect );
+    widget.unitAspect->setKeepAspectRatio( keepAspect );
+
+    blockChildSignals(false);
+
+    if( keepAspect )
         unitWidthChanged( widget.unitWidth->value() );
 }
 #include "PngExportOptionsWidget.moc"
