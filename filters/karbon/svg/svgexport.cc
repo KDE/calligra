@@ -167,8 +167,8 @@ void SvgExport::saveLayer( KoShapeLayer * layer )
 void SvgExport::saveGroup( KoShapeContainer * group )
 {
     printIndentation( m_body, m_indent++ );
-    *m_body << "<g" << getID( group ) << " ";
-    *m_body << " transform=\"" << getTransform( group->transformation() ) << "\" ";
+    *m_body << "<g" << getID( group );
+    *m_body << getTransform( group->transformation(), " transform" );
     *m_body << ">" << endl;
 
     foreach( KoShape * shape, group->iterator() )
@@ -251,14 +251,27 @@ QString SvgExport::getID( const KoShape *obj )
     return QString( " id=\"%1\"" ).arg( createID( obj ) );
 }
 
-QString SvgExport::getTransform( const QMatrix &matrix )
+QString SvgExport::getTransform( const QMatrix &matrix, const QString &attributeName )
 {
-    QString transform = QString( "matrix(%1 %2 %3 %4 %5 %6)" )
-            .arg( matrix.m11() ).arg( matrix.m12() )
-            .arg( matrix.m21() ).arg( matrix.m22() )
-            .arg( toUserSpace(matrix.dx()) ) .arg( toUserSpace(matrix.dy()) );
+    if( matrix.isIdentity() )
+        return "";
 
-    return transform;
+    QString transform = attributeName + "=\"";
+    if( isTranslation( matrix ) )
+    {
+        transform += QString("translate(%1, %2)")
+                    .arg( toUserSpace(matrix.dx()) )
+                    .arg( toUserSpace(matrix.dy()) );
+    }
+    else
+    {
+        transform += QString( "matrix(%1 %2 %3 %4 %5 %6)" )
+                    .arg( matrix.m11() ).arg( matrix.m12() )
+                    .arg( matrix.m21() ).arg( matrix.m22() )
+                    .arg( toUserSpace(matrix.dx()) ) .arg( toUserSpace(matrix.dy()) );
+    }
+
+    return transform + "\"";
 }
 
 bool SvgExport::isTranslation( const QMatrix &m )
@@ -302,7 +315,7 @@ void SvgExport::getGradient( KoShape * shape, const QBrush &brush )
         printIndentation( m_defs, m_indent2 );
         *m_defs << "<linearGradient id=\"" << uid << "\" ";
         *m_defs << "gradientUnits=\"userSpaceOnUse\" ";
-        *m_defs << "gradientTransform=\"" << getTransform( matrix ) << "\" ";
+        *m_defs << getTransform( matrix, "gradientTransform" ) << " ";
         *m_defs << "x1=\"" << toUserSpace( g->start().x() ) << "\" ";
         *m_defs << "y1=\"" << toUserSpace( g->start().y() ) << "\" ";
         *m_defs << "x2=\"" << toUserSpace( g->finalStop().x() ) << "\" ";
@@ -324,7 +337,7 @@ void SvgExport::getGradient( KoShape * shape, const QBrush &brush )
         printIndentation( m_defs, m_indent2 );
         *m_defs << "<radialGradient id=\"" << uid << "\" ";
         *m_defs << "gradientUnits=\"userSpaceOnUse\" ";
-        *m_defs << "gradientTransform=\"" << getTransform( matrix ) << "\" ";
+        *m_defs << getTransform( matrix, "gradientTransform" ) << " ";
         *m_defs << "cx=\"" << toUserSpace( g->center().x() ) << "\" ";
         *m_defs << "cy=\"" << toUserSpace( g->center().y() ) << "\" ";
         *m_defs << "fx=\"" << toUserSpace( g->focalPoint().x() ) << "\" ";
@@ -521,7 +534,7 @@ void SvgExport::saveText( SimpleTextShape * text )
         {
             *m_body << " x=\"" << anchorOffset << "pt\"";
             *m_body << " y=\"" << text->baselineOffset() << "pt\"";
-            *m_body << " transform=\"" << getTransform( text->transformation() ) << "\"";
+            *m_body << getTransform( text->transformation(), " transform" );
         }
         *m_body << ">" << endl;
         *m_body << text->text();
@@ -577,7 +590,7 @@ void SvgExport::saveImage( PictureShape * picture )
     }
     else
     {
-        *m_body << " transform=\"" << getTransform( picture->transformation() ) << "\"";
+        *m_body << getTransform( picture->transformation(), "transform" );
     }
 
     *m_body << " width=\"" << picture->size().width() << "pt\"";
