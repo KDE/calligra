@@ -40,10 +40,6 @@ public:
 
     bool loadXML( QIODevice *, const KoXmlDocument & doc );
 
-    void addShape( KoShape *shape );
-
-    void removeShape( KoShape* shape );
-
     /// reimplemented
     virtual KoPAPage * newPage( KoPAMasterPage * masterPage = 0 );
     /// reimplemented

@@ -61,40 +61,6 @@ bool KPrDocument::loadXML( QIODevice *, const KoXmlDocument & doc )
     return true;
 }
 
-void KPrDocument::addShape( KoShape *shape )
-{
-    foreach( KoView *view, views() )
-    {
-        KoPAView *kopaView = static_cast<KPrView *>( view );
-        KoPAViewModeNormal *normalMode = dynamic_cast<KoPAViewModeNormal *>( kopaView->viewMode() );
-        KPrViewModeNotes *notesMode = dynamic_cast<KPrViewModeNotes *>( kopaView->viewMode() );
-
-        if ( normalMode ) {
-            KoPADocument::addShape( shape );
-        }
-        else if ( notesMode ) {
-            kopaView->kopaCanvas()->shapeManager()->add( shape );
-        }
-    }
-}
-
-void KPrDocument::removeShape( KoShape *shape )
-{
-    foreach( KoView *view, views() )
-    {
-        KoPAView *kopaView = static_cast<KPrView *>( view );
-        KoPAViewModeNormal *normalMode = dynamic_cast<KoPAViewModeNormal *>( kopaView->viewMode() );
-        KPrViewModeNotes *notesMode = dynamic_cast<KPrViewModeNotes *>( kopaView->viewMode() );
-
-        if ( normalMode ) {
-            KoPADocument::removeShape( shape );
-        }
-        else if ( notesMode ) {
-            kopaView->kopaCanvas()->shapeManager()->remove( shape );
-        }
-    }
-}
-
 KoView * KPrDocument::createViewInstance( QWidget *parent )
 {
     return new KPrView( this, parent );

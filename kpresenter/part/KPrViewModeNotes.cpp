@@ -137,6 +137,7 @@ void KPrViewModeNotes::wheelEvent(QWheelEvent *event, const QPointF &point)
 
 void KPrViewModeNotes::activate(KoPAViewMode *previousViewMode)
 {
+    Q_UNUSED( previousViewMode );
     m_canvas->resourceProvider()->setResource(KoText::ShowTextFrames, true);
     updateActivePage( m_view->activePage() );
 }
@@ -149,6 +150,10 @@ void KPrViewModeNotes::deactivate()
 
 void KPrViewModeNotes::updateActivePage( KoPAPageBase *page )
 {
+    if ( m_view->activePage() != page ) {
+        m_view->setActivePage( page );
+    }
+
     KPrPage *prPage = dynamic_cast<KPrPage *>( page );
     if ( !prPage ) return;
 
@@ -176,5 +181,38 @@ void KPrViewModeNotes::updateActivePage( KoPAPageBase *page )
     selection->setActiveLayer( layer );
     QString tool = KoToolManager::instance()->preferredToolForSelection(selection->selectedShapes());
     KoToolManager::instance()->switchToolRequested(tool);
+}
+
+void KPrViewModeNotes::addShape( KoShape *shape )
+{
+    KoShape *parent = shape;
+    KPrNotes *notes = 0;
+    // similar to KoPADocument::pageByShape()
+    while ( !notes && ( parent = parent->parent() ) ) {
+        notes = dynamic_cast<KPrNotes *>( parent );
+    }
+
+    if ( notes ) {
+        KPrPage *activePage = static_cast<KPrPage *>( m_view->activePage() );
+        if ( notes == activePage->pageNotes() ) {
+            m_view->kopaCanvas()->shapeManager()->add( shape );
+        }
+    }
+}
+
+void KPrViewModeNotes::removeShape( KoShape *shape )
+{
+    KoShape *parent = shape;
+    KPrNotes *notes = 0;
+    while ( !notes && ( parent = parent->parent() ) ) {
+        notes = dynamic_cast<KPrNotes *>( parent );
+    }
+
+    if ( notes ) {
+        KPrPage *activePage = static_cast<KPrPage *>( m_view->activePage() );
+        if ( notes == activePage->pageNotes() ) {
+            m_view->kopaCanvas()->shapeManager()->remove( shape );
+        }
+    }
 }
 
