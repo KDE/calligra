@@ -49,7 +49,7 @@ KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader* loader)
 
 void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
 {
-    kDebug()<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
+    kDebug()<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ext:anchor-type="<<shape->additionalAttribute("text:anchor-type");
 
     /*TODO
         - shape can be anything, not only an image-shape but with the current KWFrame-design
@@ -79,6 +79,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
     m_loader->document()->addFrameSet(fs);
 
 //TODO anchor->updatePosition()
+//shape->setSize(QSizeF(100,100));
 
     //KoTextAnchor *anchor = new KoTextAnchor(shape);
     //Q_ASSERT(dynamic_cast<KoTextShapeData*>(shape->userData())); //this asserts cause shapes don't inheritate/share there userdata
@@ -86,7 +87,6 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
     KWTextFrameSet* docfs = dynamic_cast<KWTextFrameSet*>(m_loader->currentFrame()->frameSet());
     Q_ASSERT(docfs);
     QTextDocument* doc = docfs->document(); //m_loader->document()->mainFrameSet()->document();
-
     Q_ASSERT(doc);
     QTextCursor cursor(doc);
     KoTextDocumentLayout *layout = dynamic_cast<KoTextDocumentLayout*> ( cursor.block().document()->documentLayout() );

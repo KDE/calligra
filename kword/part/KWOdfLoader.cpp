@@ -200,45 +200,6 @@ bool KWOdfLoader::load( KoOdfReadStore & odfStore )
     */
 #endif
 
-#if 0 //1.6:
-    if ( m_processingType == WP ) { // Create main frameset
-        KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Main Text Frameset" ) );
-        m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
-        fs->loadOasisContent( body, context );
-        KWFrame* frame = new KWFrame( fs, 29, 42, 566-29, 798-42 );
-        frame->setNewFrameBehavior( KWFrame::Reconnect );
-        fs->addFrame( frame );
-        // load padding, background and borders for the main frame
-        const KoXmlElement* masterPage = context.styles().masterPages()[ d->currentMasterPage ];
-        const KoXmlElement *masterPageStyle = masterPage ? context.styles().findStyle(masterPage->attributeNS( KoXmlNS::style, "page-layout-name", QString::null ) ) : 0;
-        if ( masterPageStyle ) {
-          KoStyleStack styleStack;
-          styleStack.push(  *masterPageStyle );
-          styleStack.setTypeProperties( "page-layout" );
-          frame->loadBorderProperties( styleStack );
-        }
-        fs->renumberFootNotes( false /*no repaint*/ );
-    } else { // DTP mode: the items in the body are page-sequence and then frames
-        KoXmlElement tag;
-        forEachElement( tag, body ) {
-            context.styleStack().save();
-            const QString localName = tag.localName();
-            if ( localName == "page-sequence" && tag.namespaceURI() == KoXmlNS::text ) {
-                // We don't have support for changing the page layout yet, so just take the
-                // number of pages
-                int pages=1;
-                KoXmlElement page;
-                forEachElement( page, tag ) ++pages;
-                kDebug(32001) <<"DTP mode: found" << pages <<"pages";
-                //setPageCount ( pages );
-            }
-            else if ( localName == "frame" && tag.namespaceURI() == KoXmlNS::draw )
-                oasisLoader.loadFrame( tag, context, KoPoint() );
-            else
-                kWarning(32001) << "Unsupported tag in DTP loading:" << tag.tagName() << endl;
-        }
-    }
-#else
     KWord::TextFrameSetType type = KWord::MainTextFrameSet;
     KWTextFrameSet *fs = new KWTextFrameSet( d->document, type );
     fs->setAllowLayout(false);
@@ -257,32 +218,19 @@ bool KWOdfLoader::load( KoOdfReadStore & odfStore )
     d->currentFrame = frame;
     d->document->addFrameSet(fs);
 
-
-
-
-    // Set the KWOpenDocumentFrameLoader which implements the KoTextFrameLoader to
-    // handle loading of frames (e.g. images) within KWord.
-    //Q_ASSERT(! d->frameLoader);
-    //d->frameLoader = new KWOpenDocumentFrameLoader(this);
-
     // The KoTextShapeData does contain the data for our TextShape
     KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData*>(shape->userData());
     Q_ASSERT(textShapeData);
     textShapeData->setDocument( fs->document(), false /*transferOwnership*/ );
     // Let the TextShape handle loading the body element.
     shape->loadOdf(body, sc);
-/*
-    QTextCursor cursor( fs->document() );
 
+    /*
+    QTextCursor cursor( fs->document() );
     Q_ASSERT(! d->frameLoader);
     d->frameLoader = new KWOpenDocumentFrameLoader(this);
     loadBody(context, body, cursor);
-*/
-
-
-
-
-#endif
+    */
 
     if ( !loadMasterPageStyle(context, d->currentMasterPage) )
         return false;
@@ -520,16 +468,17 @@ void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext& context, const KoXmlElem
     d->currentFrame = frame;
     d->document->addFrameSet(fs);
 
+    KoShapeLoadingContext ctxt( context, d->document );
+    KoTextLoader loader( ctxt );
     QTextCursor cursor( fs->document() );
 
-#if 0 // TODO use a KoTextLoader
+    //TODO fix logic
     if ( !leftElem.isNull() ) // if "header-left" or "footer-left" was defined, the content is within the leftElem
-        loadBody(context, leftElem, cursor);
+        loader.loadBody(leftElem, cursor);
     else if( hasFirst ) // if there was a "header-first" or "footer-first" defined, the content is within the firstElem
-        loadBody(context, firstElem, cursor);
+        loader.loadBody(firstElem, cursor);
     else // else the content is within the elem
-        loadBody(context, elem, cursor);
-#endif
+        loader.loadBody(elem, cursor);
 
     // restore use of auto-styles from content.xml, not those from styles.xml
     context.setUseStylesAutoStyles( false );
