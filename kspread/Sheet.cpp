@@ -2769,7 +2769,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
             }
 
             // don't need it anymore
-            KoXml::load(rowElement);
+            KoXml::unload(rowElement);
         }
 
         rowNode = rowNode.nextSibling();
