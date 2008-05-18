@@ -65,10 +65,12 @@
 K_PLUGIN_FACTORY( SvgImportFactory, registerPlugin<SvgImport>(); )
 K_EXPORT_PLUGIN( SvgImportFactory( "kofficefilters" ) )
 
+
 SvgImport::SvgImport(QObject*parent, const QVariantList&)
     : KoFilter(parent), m_document(0)
 {
     SETRGBCOLORS();
+    m_fontAttributes << "font-family" << "font-size" << "font-weight" << "text-decoration";
 }
 
 SvgImport::~SvgImport()
@@ -1111,7 +1113,9 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
         QStringList substyle = it->split( ':' );
         QString command = substyle[0].trimmed();
         QString params  = substyle[1].trimmed();
-        parsePA( obj, gc, command, params );
+        // do not parse font attributes here, this is done in parseFont
+        if( ! m_fontAttributes.contains( command ) )
+            parsePA( obj, gc, command, params );
     }
 
     if(!obj)
@@ -1133,14 +1137,24 @@ void SvgImport::parseFont( const QDomElement &e )
     SvgGraphicsContext * gc = m_gc.top();
     if( !gc ) return;
 
-    if( ! e.attribute( "font-family" ).isEmpty() )
-        parsePA( 0L, gc, "font-family", e.attribute( "font-family" ) );
-    if( ! e.attribute( "font-size" ).isEmpty() )
-        parsePA( 0L, gc, "font-size", e.attribute( "font-size" ) );
-    if( ! e.attribute( "font-weight" ).isEmpty() )
-        parsePA( 0L, gc, "font-weight", e.attribute( "font-weight" ) );
-    if( ! e.attribute( "text-decoration" ).isEmpty() )
-        parsePA( 0L, gc, "text-decoration", e.attribute( "text-decoration" ) );
+    foreach( const QString &attributeName, m_fontAttributes )
+    {
+        if( ! e.attribute( attributeName ).isEmpty() )
+            parsePA( 0L, gc, attributeName, e.attribute( attributeName ) );
+    }
+
+    // now parse the style attribute for font specific parameters
+    QString style = e.attribute( "style" ).simplified();
+    QStringList substyles = style.split( ';', QString::SkipEmptyParts );
+    for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
+    {
+        QStringList substyle = it->split( ':' );
+        QString command = substyle[0].trimmed();
+        QString params  = substyle[1].trimmed();
+        // only parse font related parameters here
+        if( m_fontAttributes.contains( command ) )
+            parsePA( 0L, gc, command, params );
+    }
 }
 
 QList<KoShape*> SvgImport::parseUse( const QDomElement &e )
@@ -1314,6 +1328,9 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
     if( ! b.attribute( "text-anchor" ).isEmpty() )
         anchor = b.attribute( "text-anchor" );
 
+    parseFont( b );
+    QDomElement styleElement = b;
+
     if( b.hasChildNodes() )
     {
         if( textPosition.isNull() && ! b.attribute( "x" ).isEmpty() && ! b.attribute( "y" ).isEmpty() )
@@ -1394,6 +1411,10 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
                         textPosition.setY( parseUnit( posY.first() ) );
                     }
                 }
+                styleElement = e;
+                // this overrides the font of the text element or of previous tspan elements
+                // TODO we probably have to create separate shapes per tspan element later
+                parseFont( e );
             }
             else if( e.tagName() == "tref" )
             {
@@ -1458,13 +1479,8 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
         return 0;
     }
 
-    parseStyle( text, b );
-    parseFont( b );
-
+    // first set the font for the right size and offsets
     text->setFont( m_gc.top()->font );
-    text->setBackground( m_gc.top()->fill );
-    text->setZIndex( nextZIndex() );
-
     // adjust position by baseline offset
     text->setPosition( text->position() - QPointF( 0, text->baselineOffset() ) );
 
@@ -1477,6 +1493,12 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
         text->setName( b.attribute("id") );
 
     text->applyAbsoluteTransformation( m_gc.top()->matrix );
+    text->setZIndex( nextZIndex() );
+
+    // apply the style of the text element
+    parseStyle( text, b );
+    // apply the style of the last tspan element
+    parseStyle( text, styleElement );
 
     removeGraphicContext();
 

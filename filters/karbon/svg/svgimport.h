@@ -125,6 +125,7 @@ private:
     QHash<QByteArray, QColor>      m_rgbcolors;
     QRectF                         m_outerRect;
     QDomDocument                   m_inpdoc;
+    QStringList m_fontAttributes; ///< font related attributes
 };
 
 #endif
