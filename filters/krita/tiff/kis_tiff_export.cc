@@ -37,7 +37,7 @@
 
 #include "kis_tiff_converter.h"
 #include "kis_dlg_options_tiff.h"
-#include "kis_wdg_options_tiff.h"
+#include "ui_kis_wdg_options_tiff.h"
 
 typedef KGenericFactory<KisTIFFExport> KisTIFFExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritatiffexport, KisTIFFExportFactory("kofficefilters"))

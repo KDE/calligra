@@ -28,18 +28,19 @@
 #include <kcombobox.h>
 #include <klocale.h>
 
-#include "kis_wdg_options_tiff.h"
+#include "ui_kis_wdg_options_tiff.h"
 
 KisDlgOptionsTIFF::KisDlgOptionsTIFF(QWidget *parent)
-    : KDialog(parent)
+    : KDialog(parent), wdg(new QWidget)
 {
     setWindowTitle( i18n("TIFF Export Options") );
     setButtons( KDialog::Ok | KDialog::Cancel );
-    optionswdg = new KisWdgOptionsTIFF(this);
+    optionswdg = new Ui_KisWdgOptionsTIFF();
+    optionswdg->setupUi(wdg);
     activated(0);
     connect(optionswdg->kComboBoxCompressionType, SIGNAL(activated ( int )), this, SLOT(activated ( int ) ));
     connect(optionswdg->flatten, SIGNAL(toggled(bool)), this, SLOT(flattenToggled( bool) ) );
-    setMainWidget(optionswdg);
+    setMainWidget(wdg);
     kapp->restoreOverrideCursor();
     setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum) );
 }

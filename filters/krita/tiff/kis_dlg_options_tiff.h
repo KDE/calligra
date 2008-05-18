@@ -23,7 +23,7 @@
 #include <kdialog.h>
 #include <kis_tiff_converter.h>
 
-class KisWdgOptionsTIFF;
+class Ui_KisWdgOptionsTIFF;
 /**
 	@author Cyrille Berger <cberger@cberger.net>
 */
@@ -38,7 +38,8 @@ class KisDlgOptionsTIFF : public KDialog
         void flattenToggled(bool);
         KisTIFFOptions options();
     public:
-        KisWdgOptionsTIFF* optionswdg;
+        QWidget* wdg;
+        Ui_KisWdgOptionsTIFF* optionswdg;
 };
 
 #endif
