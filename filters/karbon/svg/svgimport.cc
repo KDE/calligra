@@ -1251,6 +1251,10 @@ QList<KoShape*> SvgImport::parseGroup( const QDomElement &e )
 
             continue;
         }
+        if( b.tagName() == "switch" )
+        {
+            return parseGroup( b );
+        }
         if( b.tagName() == "defs" )
         {
             parseDefs( b );
