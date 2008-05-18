@@ -46,13 +46,18 @@
 #include <plugins/pictureshape/PictureShape.h>
 #include <KoImageData.h>
 
-#include <kdebug.h>
-#include <kgenericfactory.h>
+#include <KDebug>
+#include <KGenericFactory>
+#include <KMimeType>
+#include <KTemporaryFile>
+#include <KIO/NetAccess>
+#include <KIO/CopyJob>
 
 #include <QtCore/QFile>
 #include <QtCore/QString>
 #include <QtCore/QTextStream>
 #include <QtCore/QBuffer>
+#include <QtCore/QFileInfo>
 #include <QtGui/QLinearGradient>
 #include <QtGui/QRadialGradient>
 
@@ -590,7 +595,7 @@ void SvgExport::saveImage( PictureShape * picture )
     }
     else
     {
-        *m_body << getTransform( picture->transformation(), "transform" );
+        *m_body << getTransform( picture->transformation(), " transform" );
     }
 
     *m_body << " width=\"" << picture->size().width() << "pt\"";
@@ -605,22 +610,41 @@ void SvgExport::saveImage( PictureShape * picture )
         buffer.open(QIODevice::WriteOnly);
         if( imageData->saveToFile( &buffer ) )
         {
-            // TODO get file format written
-            *m_body << " xlink:href=\"data:image/png;base64," << ba.toBase64() <<  "\"";
+            const QString mimeType( KMimeType::findByContent( ba )->name() );
+            *m_body << " xlink:href=\"data:" << mimeType << ";base64," << ba.toBase64() <<  "\"";
         }
     }
     else
     {
-        // TODO handle remote files too
-        KUrl url( m_chain->outputFile() );
-        url.setDirectory( url.directory() );
-        // TODO get file format written
-        QString fname = createID( picture ) + ".png";
-        url.setFileName( fname );
-        QFile dstFile ( url.path() );
-        if( imageData->saveToFile( &dstFile ) )
+        // write to a temp file first
+        KTemporaryFile imgFile;
+        if( imageData->saveToFile( &imgFile ) )
         {
-            *m_body << " xlink:href=\"" << fname << "\"";
+            // get the mime type from the temp file content
+            KMimeType::Ptr mimeType = KMimeType::findByFileContent( imgFile.fileName() );
+            // get url of destination directory
+            KUrl url( m_chain->outputFile() );
+            QString dstBaseFilename = QFileInfo( url.fileName() ).baseName();
+            url.setDirectory( url.directory() );
+            // create a filename for the image file at the destination directory
+            QString fname = dstBaseFilename + "_" + createID( picture );
+            // get extension from mimetype
+            QString ext = "";
+            QStringList patterns = mimeType->patterns();
+            if( patterns.count() )
+                ext = patterns.first().mid( 1 );
+            url.setFileName( fname + ext );
+            // check if file exists already
+            int i = 0;
+            // change filename as long as the filename already exists
+            while( KIO::NetAccess::exists( url, KIO::NetAccess::DestinationSide, 0 ) )
+                url.setFileName( fname + QString( "_%1").arg( ++i ) + ext );
+            // move the temp file to the destination directory
+            KIO::Job * job = KIO::move( KUrl( imgFile.fileName() ), url );
+            if( job && KIO::NetAccess::synchronousRun( job, 0 ) )
+                *m_body << " xlink:href=\"" << url.fileName() << "\"";
+            else
+                KIO::NetAccess::removeTempFile( imgFile.fileName() );
         }
     }
     *m_body << " />" << endl;
