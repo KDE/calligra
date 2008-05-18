@@ -572,8 +572,6 @@ void SvgExport::saveText( SimpleTextShape * text )
     *m_body << "</text>" << endl;
 }
 
-// horrible but at least something gets exported now
-// will need this for patterns
 void SvgExport::saveImage( PictureShape * picture )
 {
     KoImageData * imageData = dynamic_cast<KoImageData*>( picture->userData() );
