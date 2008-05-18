@@ -66,6 +66,47 @@ class KWOdfLoader::Private
         QString currentMasterPage;
         /// Current KWFrameSet name.
         KWTextFrame *currentFrame;
+
+        /// helper function to create a KWTextFrameSet+KWTextFrame for a header/footer.
+        KWTextFrame* loadHeaderFooterFrame(KoOdfLoadingContext& context, const KoXmlElement& elem, KWord::HeaderFooterType hfType, KWord::TextFrameSetType fsType)
+        {
+            KWTextFrameSet *fs = new KWTextFrameSet(document, fsType);
+            fs->setAllowLayout(false);
+            switch (fsType) {
+                case KWord::FirstPageHeaderTextFrameSet: fs->setName(i18n("First Page Header")); break;
+                case KWord::OddPagesHeaderTextFrameSet: fs->setName(i18n("Odd Pages Header")); break;
+                case KWord::EvenPagesHeaderTextFrameSet: fs->setName(i18n("Even Pages Header")); break;
+                case KWord::FirstPageFooterTextFrameSet: fs->setName(i18n("First Page Footer")); break;
+                case KWord::OddPagesFooterTextFrameSet: fs->setName(i18n("Odd Pages Footer")); break;
+                case KWord::EvenPagesFooterTextFrameSet: fs->setName(i18n("Even Pages Footer")); break;
+                default: break;
+            }
+
+            kDebug(32001)<<"KWOdfLoader::loadTextFrameSet localName="<<elem.localName()<<" type="<<fs->name();
+
+            // Add the frameset and the shape for the header/footer to the document.
+            KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
+            Q_ASSERT(factory);
+            KoShape *shape = factory->createDefaultShape( document );
+            KWTextFrame *frame = new KWTextFrame(shape, fs);
+            document->addFrameSet(fs);
+
+            currentFrame = frame;
+
+            // use auto-styles from styles.xml, not those from content.xml
+            context.setUseStylesAutoStyles( true );
+
+            KoShapeLoadingContext ctxt( context, document );
+            KoTextLoader loader( ctxt );
+            QTextCursor cursor( fs->document() );
+            loader.loadBody(elem, cursor);
+
+            // restore use of auto-styles from content.xml, not those from styles.xml
+            context.setUseStylesAutoStyles( false );
+
+            return frame;
+        }
+
 };
 
 KWOdfLoader::KWOdfLoader(KWDocument *document)
@@ -129,6 +170,7 @@ bool KWOdfLoader::load( KoOdfReadStore & odfStore )
     sc.addSharedData( KOTEXT_SHARED_LOADING_ID, sharedData );
 
     KoTextLoader * loader = new KoTextLoader( sc );
+Q_UNUSED(loader);
     KoOdfLoadingContext context( odfStore.styles(), odfStore.store() );
 
 
@@ -383,53 +425,33 @@ void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext& context, const KoXmlElem
     KoXmlElement firstElem = KoXml::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-first" : "footer-first" );
     // The actual content of the header/footer.
     KoXmlElement elem = KoXml::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header" : "footer" );
-
-    const bool hasFirst = !firstElem.isNull();
-    if ( !hasFirst && elem.isNull() )
-        return; // no header/footer
-
-    const QString localName = elem.localName();
-    kDebug(32001)<<"KWOdfLoader::loadHeaderFooter localName="<<localName<<" isHeader="<<isHeader<<" hasFirst="<<hasFirst;
-
-    // Formatting properties for headers and footers on a page.
-    KoXmlElement styleElem = KoXml::namedItemNS( masterPageStyle, KoXmlNS::style, isHeader ? "header-style" : "footer-style" );
-
     // The two additional elements <style:header-left> and <style:footer-left> specifies if defined that even and odd pages
     // should be displayed different. If they are missing, the conent of odd and even (aka left and right) pages are the same.
     KoXmlElement leftElem = KoXml::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-left" : "footer-left" );
 
-    // Determinate the type of the frameset used for the header/footer.
-    QString fsTypeName;
-    KWord::TextFrameSetType fsType = KWord::OtherTextFrameSet;
-    if ( localName == "header" ) {
-        fsType = KWord::OddPagesHeaderTextFrameSet;
-        fsTypeName = leftElem.isNull() ? i18n( "Header" ) : i18n("Odd Pages Header");
-    }
-    else if ( localName == "header-left" ) {
-        fsType = KWord::EvenPagesHeaderTextFrameSet;
-        fsTypeName = i18n("Even Pages Header");
-    }
-    else if ( localName == "footer" ) {
-        fsType = KWord::OddPagesFooterTextFrameSet;
-        fsTypeName = leftElem.isNull() ? i18n( "Footer" ) : i18n("Odd Pages Footer");
-    }
-    else if ( localName == "footer-left" ) {
-        fsType = KWord::EvenPagesFooterTextFrameSet;
-        fsTypeName = i18n("Even Pages Footer");
-    }
-    else if ( localName == "header-first" ) { // NOT OASIS COMPLIANT
-        fsType = KWord::FirstPageHeaderTextFrameSet;
-        fsTypeName = i18n("First Page Header");
-    }
-    else if ( localName == "footer-first" ) { // NOT OASIS COMPLIANT
-        fsType = KWord::FirstPageFooterTextFrameSet;
-        fsTypeName = i18n("First Page Footer");
-    }
-    else {
-        kWarning(32001) << "Unknown tag in KWOdfLoader::loadHeaderFooter: " << localName << endl;
-        return;
+    if ( firstElem.isNull() && elem.isNull() ) {
+        return; // no header/footer
     }
 
+    KWord::HeaderFooterType hfType = leftElem.isNull() ? KWord::HFTypeUniform : KWord::HFTypeEvenOdd;
+
+    if ( ! firstElem.isNull() ) { // header-first and footer-first
+        d->loadHeaderFooterFrame(context, firstElem, hfType, isHeader ? KWord::FirstPageHeaderTextFrameSet : KWord::FirstPageFooterTextFrameSet);
+    }
+
+    if ( ! leftElem.isNull() ) { // header-left and footer-left
+        d->loadHeaderFooterFrame(context, leftElem, hfType, isHeader ? KWord::EvenPagesHeaderTextFrameSet : KWord::EvenPagesFooterTextFrameSet);
+    }
+
+    if ( ! elem.isNull() ) { // header and footer
+        d->loadHeaderFooterFrame(context, elem, hfType, isHeader ? KWord::OddPagesHeaderTextFrameSet : KWord::OddPagesFooterTextFrameSet);
+    }
+
+#if 0
+    const QString localName = elem.localName();
+    kDebug(32001)<<"KWOdfLoader::loadHeaderFooter localName="<<localName<<" isHeader="<<isHeader<<" hasFirst="<<hasFirst;
+    // Formatting properties for headers and footers on a page.
+    KoXmlElement styleElem = KoXml::namedItemNS( masterPageStyle, KoXmlNS::style, isHeader ? "header-style" : "footer-style" );
     // Set the type of the header/footer in the KWPageSettings instance of our document.
     if ( !leftElem.isNull() ) {
         //d->hf.header = hasFirst ? HF_FIRST_EO_DIFF : HF_EO_DIFF;
@@ -453,37 +475,11 @@ void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext& context, const KoXmlElem
             d->document->m_pageSettings.setFirstFooterPolicy(KWord::HFTypeEvenOdd);
         }
     }
-
     // use auto-styles from styles.xml, not those from content.xml
     context.setUseStylesAutoStyles( true );
-
-    // Add the frameset and the shape for the header/footer to the document.
-    KWTextFrameSet *fs = new KWTextFrameSet( d->document, fsType );
-    fs->setAllowLayout(false);
-    fs->setName(fsTypeName);
-    KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
-    Q_ASSERT(factory);
-    KoShape *shape = factory->createDefaultShape( d->document );
-    KWTextFrame *frame = new KWTextFrame(shape, fs);
-    d->currentFrame = frame;
-    d->document->addFrameSet(fs);
-
-    KoShapeLoadingContext ctxt( context, d->document );
-    KoTextLoader loader( ctxt );
-    QTextCursor cursor( fs->document() );
-
-    //TODO fix logic
-    if ( !leftElem.isNull() ) // if "header-left" or "footer-left" was defined, the content is within the leftElem
-        loader.loadBody(leftElem, cursor);
-    else if( hasFirst ) // if there was a "header-first" or "footer-first" defined, the content is within the firstElem
-        loader.loadBody(firstElem, cursor);
-    else // else the content is within the elem
-        loader.loadBody(elem, cursor);
-
-    // restore use of auto-styles from content.xml, not those from styles.xml
-    context.setUseStylesAutoStyles( false );
-
     //TODO handle style, seems to be similar to what is done at KoPageLayout::loadOasis
+#endif
+
 }
 
 void KWOdfLoader::loadFrame(KoOdfLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor)
