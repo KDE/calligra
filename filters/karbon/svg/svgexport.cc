@@ -310,7 +310,7 @@ void SvgExport::getGradient( KoShape * shape, const QBrush &brush )
     if( ! grad )
         return;
 
-    QMatrix matrix = brush.matrix() * shape->absoluteTransformation(0);
+    QMatrix matrix = brush.matrix() * shape->transformation();
 
     QString uid = createUID();
     if( grad->type() == QGradient::LinearGradient )
