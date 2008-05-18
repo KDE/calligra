@@ -61,6 +61,7 @@
 #include "Selection.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
+#include "SheetShapeContainer.h"
 #include "Style.h"
 #include "StyleManager.h"
 #include "Util.h"
@@ -70,6 +71,9 @@
 #include "ValueFormatter.h"
 #include "ValueParser.h"
 
+#include <KoShape.h>
+#include <KoShapeLoadingContext.h>
+#include <KoShapeRegistry.h>
 #include <KoStyleStack.h>
 #include <KoXmlNS.h>
 #include <KoXmlReader.h>
@@ -1553,9 +1557,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOdfLoadingContext& odfConte
             setComment( comment );
     }
 
-    KoXmlElement frame = KoXml::namedItemNS( element, KoXmlNS::draw, "frame" );
-    if ( !frame.isNull() )
-      loadOasisObjects( frame, odfContext );
+    loadOasisObjects(element, odfContext);
 
     return true;
 }
@@ -1616,66 +1618,79 @@ void Cell::loadOasisCellText( const KoXmlElement& parent )
 
 void Cell::loadOasisObjects( const KoXmlElement &parent, KoOdfLoadingContext& odfContext )
 {
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    for( KoXmlElement e = parent; !e.isNull(); e = e.nextSibling().toElement() )
+    // Register additional attributes, that identify shapes anchored in cells.
+    // Their dimensions need adjustment after all rows are loaded,
+    // because the position of the end cell is not always known yet.
+    KoShapeLoadingContext::addAdditionalAttributeData(KoShapeLoadingContext::AdditionalAttributeData(
+                                                      KoXmlNS::table, "end-cell-address",
+                                                      "table:end-cell-address"));
+    KoShapeLoadingContext::addAdditionalAttributeData(KoShapeLoadingContext::AdditionalAttributeData(
+                                                      KoXmlNS::table, "end-x",
+                                                      "table:end-x"));
+    KoShapeLoadingContext::addAdditionalAttributeData(KoShapeLoadingContext::AdditionalAttributeData(
+                                                      KoXmlNS::table, "end-y",
+                                                      "table:end-y"));
+
+    KoShapeLoadingContext shapeContext(odfContext, doc());
+    KoXmlElement element;
+    forEachElement(element, parent)
     {
-        if ( e.localName() == "frame" && e.namespaceURI() == KoXmlNS::draw )
+        if (element.namespaceURI() != KoXmlNS::draw)
+            continue;
+
+        KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, shapeContext);
+        if (!shape)
         {
-          EmbeddedObject *obj = 0;
-          KoXmlNode object = KoXml::namedItemNS( e, KoXmlNS::draw, "object" );
-          if ( !object.isNull() )
-          {
-            if ( !object.toElement().attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString()).isNull() )
-              obj = new EmbeddedChart( doc(), sheet() );
-            else
-              obj = new EmbeddedKOfficeObject( doc(), sheet() );
-          }
-          else
-          {
-            KoXmlNode image = KoXml::namedItemNS( e, KoXmlNS::draw, "image" );
-            if ( !image.isNull() )
-              obj = new EmbeddedPictureObject( sheet(), doc()->pictureCollection() );
-            else
-              kDebug(36003) <<"Object type wasn't loaded!";
-          }
-
-          if ( obj )
-          {
-            obj->loadOasis( e, odfContext );
-            doc()->insertObject( obj );
-
-            QString ref = e.attributeNS( KoXmlNS::table, "end-cell-address", QString() );
-            if ( ref.isNull() )
-              continue;
-
-            ref = Oasis::decodeFormula( ref );
-            Point point( ref );
-            if ( !point.isValid() )
-              continue;
-
-            QRectF geometry = obj->geometry();
-            geometry.setLeft( geometry.left() + sheet()->columnPosition( d->column ) );
-            geometry.setTop( geometry.top() + sheet()->rowPosition( d->row ) );
-
-            QString str = e.attributeNS( KoXmlNS::table, "end-x", QString() );
-            if ( !str.isNull() )
-            {
-              uint end_x = (uint) KoUnit::parseValue( str );
-              geometry.setRight( sheet()->columnPosition( point.column() ) + end_x );
-            }
-
-            str = e.attributeNS( KoXmlNS::table, "end-y", QString() );
-            if ( !str.isNull() )
-            {
-              uint end_y = (uint) KoUnit::parseValue( str );
-              geometry.setBottom( sheet()->rowPosition( point.row() ) + end_y );
-            }
-
-            obj->setGeometry( geometry );
-          }
+            kDebug(36003) << "Unable to load shape.";
+            continue;
         }
+
+        shape->setParent(d->sheet->shapeContainer());
+        doc()->addShape(shape);
+
+        // All three attributes are necessary for cell anchored shapes.
+        // Otherwise, they are anchored in the sheet.
+        if (!shape->hasAdditionalAttribute("table:end-cell-address") ||
+            !shape->hasAdditionalAttribute("table:end-x") ||
+            !shape->hasAdditionalAttribute("table:end-y"))
+        {
+            kDebug(36003) << "Not all attributes found, that are necessary for cell anchoring.";
+            continue;
+        }
+
+        Region endCell(Region::loadOdf(shape->additionalAttribute("table:end-cell-address")),
+                       d->sheet->map(), d->sheet);
+        if (!endCell.isValid() || !endCell.isSingular())
+            continue;
+
+        QString string = shape->additionalAttribute("table:end-x");
+        if (string.isNull())
+            continue;
+        double endX = KoUnit::parseValue(string);
+
+        string = shape->additionalAttribute("table:end-y");
+        if (string.isNull())
+            continue;
+        double endY = KoUnit::parseValue(string);
+
+        // The position is relative to the upper left sheet corner until now. Move it.
+        QPointF position = shape->position();
+        for (int col = 1; col < column(); ++col)
+            position += QPointF(d->sheet->columnFormat(col)->width(), 0.0);
+        for (int row = 1; row < this->row(); ++row)
+            position += QPointF(0.0, d->sheet->rowFormat(row)->height());
+        shape->setPosition(position);
+
+        // The column dimensions are already the final ones, but not the row dimensions.
+        // The default height is used for the not yet loaded rows.
+        // TODO Stefan: Honor non-default row heights later!
+        QSizeF size = QSizeF(endX, endY);
+        for (int col = column(); col < endCell.firstRange().left(); ++col)
+            size += QSizeF(d->sheet->columnFormat(col)->width(), 0.0);
+        for (int row = this->row(); row < endCell.firstRange().top(); ++row)
+            size += QSizeF(0.0, d->sheet->rowFormat(row)->height());
+        shape->setSize(size);
     }
-#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 

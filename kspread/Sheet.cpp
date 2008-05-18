@@ -2760,6 +2760,9 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                 }
                 else if ( rowElement.localName() == "shapes" )
                 {
+                    // OpenDocument v1.1, 8.3.4 Shapes:
+                    // The <table:shapes> element contains all graphic shapes
+                    // with an anchor on the table this element is a child of.
                     KoShapeLoadingContext shapeLoadingContext( odfContext, doc() );
                     d->shapeContainer->loadOdf( rowElement, shapeLoadingContext );
                 }
