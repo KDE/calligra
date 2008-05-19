@@ -61,7 +61,7 @@ namespace KDChart
         }
 
         template<>
-        static double nan< double >()
+        double nan< double >()
         {
             return std::numeric_limits< double >::quiet_NaN();
         }
