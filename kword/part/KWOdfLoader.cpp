@@ -432,12 +432,8 @@ void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext& context, const KoXmlElem
     // The two additional elements <style:header-left> and <style:footer-left> specifies if defined that even and odd pages
     // should be displayed different. If they are missing, the conent of odd and even (aka left and right) pages are the same.
     KoXmlElement leftElem = KoXml::namedItemNS( masterPage, KoXmlNS::style, isHeader ? "header-left" : "footer-left" );
-
-    if ( firstElem.isNull() && elem.isNull() ) {
-        return; // no header/footer
-    }
-
-    KWord::HeaderFooterType hfType = elem.isNull() ? KWord::HFTypeSameAsFirst : leftElem.isNull() ? KWord::HFTypeUniform : KWord::HFTypeEvenOdd;
+    // Used in KWPageSettings to determine if, and what kind of header/footer to use.
+    KWord::HeaderFooterType hfType = (elem.isNull() && firstElem.isNull()) ? KWord::HFTypeNone : elem.isNull() ? KWord::HFTypeSameAsFirst : leftElem.isNull() ? KWord::HFTypeUniform : KWord::HFTypeEvenOdd;
 
     if ( ! firstElem.isNull() ) { // header-first and footer-first
         d->loadHeaderFooterFrame(context, firstElem, hfType, isHeader ? KWord::FirstPageHeaderTextFrameSet : KWord::FirstPageFooterTextFrameSet);
