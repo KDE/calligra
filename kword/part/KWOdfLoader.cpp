@@ -265,7 +265,7 @@ Q_UNUSED(loader);
     Q_ASSERT(textShapeData);
     textShapeData->setDocument( fs->document(), false /*transferOwnership*/ );
     // Let the TextShape handle loading the body element.
-    shape->loadOdf(body, sc);
+    textShapeData->loadOdf(body, sc);
 
     /*
     QTextCursor cursor( fs->document() );
