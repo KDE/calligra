@@ -437,7 +437,7 @@ void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext& context, const KoXmlElem
         return; // no header/footer
     }
 
-    KWord::HeaderFooterType hfType = leftElem.isNull() ? KWord::HFTypeSameAsFirst : KWord::HFTypeEvenOdd;
+    KWord::HeaderFooterType hfType = elem.isNull() ? KWord::HFTypeSameAsFirst : leftElem.isNull() ? KWord::HFTypeUniform : KWord::HFTypeEvenOdd;
 
     if ( ! firstElem.isNull() ) { // header-first and footer-first
         d->loadHeaderFooterFrame(context, firstElem, hfType, isHeader ? KWord::FirstPageHeaderTextFrameSet : KWord::FirstPageFooterTextFrameSet);
