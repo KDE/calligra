@@ -49,6 +49,7 @@ Comment[sr@Latn]=OASIS-ov OpenDocument tabelarni proračun
 Comment[sv]=OASIS OpenDocument kalkylark
 Comment[uk]=Електронна таблиця OASIS OpenDocument
 Comment[uz]=OASIS OpenDocument elektron jadval
+Comment[uz@cyrillic]=OASIS OpenDocument электрон жадвал
 Comment[zh_CN]=OASIS OpenDocument 工作簿
 Comment[zh_TW]=OASIS 開放文件工作表
 [Property::X-KDE-NativeExtension]

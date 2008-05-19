@@ -49,6 +49,7 @@ Name[tg]=Сарчашмаи ҷадвали KSpread
 Name[tr]=KSpread Tablo Kaynağı
 Name[uk]=Джерело таблиць KSpread
 Name[uz]=KSpread jadvali manbasi
+Name[uz@cyrillic]=KSpread жадвали манбаси
 Name[zh_CN]=KSpread 表源
 Name[zh_TW]=KSpread 表格來源
 Comment=This datasource type lets you use your entries from a kspread file.

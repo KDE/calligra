@@ -43,6 +43,7 @@ Name[sr@Latn]=Krita-in filter za uvoz iz XCF-a
 Name[sv]=Krita XCF-importfilter
 Name[uk]=Фільтр імпорту XCF для Krita
 Name[uz]=Krita XCF import filteri
+Name[uz@cyrillic]=Krita XCF импорт филтери
 Name[zh_CN]=Krita XCF 导入过滤器
 Name[zh_TW]=Krita XCF 匯入過濾程式
 X-KDE-Export=application/x-krita

@@ -43,6 +43,7 @@ Name[sr@Latn]=Krita-in filter za uvoz iz OpenEXR-a
 Name[sv]=Krita OpenEXR-importfilter
 Name[uk]=Фільтр імпорту OpenEXR для Krita
 Name[uz]=Krita OpenEXR import filteri
+Name[uz@cyrillic]=Krita OpenEXR импорт филтери
 Name[zh_CN]=Krita OpenEXR 导入过滤器
 Name[zh_TW]=Krita OpenEXR 匯入過濾程式
 X-KDE-Export=application/x-krita

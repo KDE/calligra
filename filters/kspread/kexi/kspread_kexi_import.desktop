@@ -36,6 +36,7 @@ Name[sr@Latn]=KSpread-ov filter za uvoz iz Kexi-ja
 Name[sv]=Kexi-importfilter för Kspread
 Name[uk]=Фільтр імпорту Kexi для KSpread
 Name[uz]=KSpread uchun Kexi import filteri
+Name[uz@cyrillic]=KSpread учун Kexi импорт филтери
 Name[zh_TW]=Kexi 的 KSpread 匯入過濾程式
 ServiceTypes=KOfficeFilter
 Type=Service

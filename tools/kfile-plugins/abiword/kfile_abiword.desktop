@@ -40,6 +40,7 @@ Name[sr@Latn]=Informacije Abiword-a
 Name[sv]=Abiword-information
 Name[uk]=Інформація Abiword
 Name[uz]=Abiword hujjati haqida maʼlumot
+Name[uz@cyrillic]=Abiword ҳужжати ҳақида маълумот
 Name[zh_CN]=Abiword 信息
 Name[zh_TW]=Abiword 資訊
 ServiceTypes=KFilePlugin
