@@ -247,4 +247,5 @@ QPoint CellRegion::pointAtIndex( int index ) const
 
 int CellRegion::indexAtPoint( const QPoint &point ) const
 {
+  return 0; //FIXME
 }
