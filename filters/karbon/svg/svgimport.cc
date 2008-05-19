@@ -1486,7 +1486,8 @@ KoShape * SvgImport::createText( const QDomElement &b, const QList<KoShape*> & s
     // first set the font for the right size and offsets
     text->setFont( m_gc.top()->font );
     // adjust position by baseline offset
-    text->setPosition( text->position() - QPointF( 0, text->baselineOffset() ) );
+    if( ! text->isOnPath() )
+        text->setPosition( text->position() - QPointF( 0, text->baselineOffset() ) );
 
     if( anchor == "middle" )
         text->setTextAnchor( SimpleTextShape::AnchorMiddle );
