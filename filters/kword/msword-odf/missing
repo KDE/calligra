@@ -1,0 +1,14 @@
+This file lists the major things missing in the current implementation of the
+consumer (consumer == this KWord filter, consuming the wv2 callbacks).
+
+The full documentation for the structures named below can be found at:
+http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/wvware/wv2/src/generator/generator_wword8.htm
+Always download the latest version, we try to fix bugs in the SPEC.
+(Attention: this is a big file)
+
+Missing (not in any particular order):
+- The filter should read the STTBFASSOC (a bunch of strings containing the
+  author, title, keywords,...) for documentinfo.xml
+
+If you want to help, please contact Werner Trobin <trobin@kde.org> and
+David Faure <faure@kde.org>
