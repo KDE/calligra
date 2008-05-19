@@ -62,6 +62,7 @@ void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
             QTextCursor(m_loader->currentFrameset->document())
             each time and assume that we only need to append content anyway?
         - bring back header+footers :)
+            ==> loading works, what about saving?
         - What about parent-styles aka style-inheritance? Does this REALLY work already?
         - table-shape vs. QTextTable vs. the layout-hacks within the textshape is still a huge
             issue of it's own. http://lists.kde.org/?l=koffice-devel&m=120574617208477&w=2 and
