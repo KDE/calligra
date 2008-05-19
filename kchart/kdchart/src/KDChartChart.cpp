@@ -1588,3 +1588,8 @@ bool Chart::event( QEvent* event )
         return QWidget::event( event );
     }
 }
+
+// needed for proper linkage (msvc):
+#include "KDChartChart.moc"
+#include "KDChartChart_p.moc"
+#include "KDChartEnums.moc"
