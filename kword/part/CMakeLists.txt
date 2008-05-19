@@ -22,6 +22,7 @@ set(kwordprivate_LIB_SRCS
     KWViewModePreview.cpp
     KWStatusBar.cpp
     KWOdfLoader.cpp
+    KWOdfWriter.cpp
     KWOdfSharedLoadingData.cpp
     KWDLoader.cpp
 

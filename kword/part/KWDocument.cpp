@@ -28,6 +28,7 @@
 #include "KWPage.h"
 #include "KWOdfLoader.h"
 #include "KWDLoader.h"
+#include "KWOdfWriter.h"
 #include "frames/KWFrameSet.h"
 #include "frames/KWTextFrameSet.h"
 #include "frames/KWFrame.h"
@@ -48,15 +49,12 @@
 #include <KoShapeFactory.h>
 #include <KoStyleManager.h>
 #include <KoInteractionTool.h>
-#include <KoStoreDevice.h>
-#include <KoXmlWriter.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoImageCollection.h>
 #include <KoDocumentInfo.h>
 #include <KoCharacterStyle.h>
 #include <KoParagraphStyle.h>
 #include <KoDataCenter.h>
-#include <KoTextShapeData.h>
 
 // KDE + Qt includes
 #include <klocale.h>
@@ -64,7 +62,6 @@
 #include <kmessagebox.h>
 #include <kaction.h>
 #include <kdebug.h>
-#include <KTemporaryFile>
 #include <QIODevice>
 #include <QTimer>
 #include <QThread>
@@ -144,109 +141,6 @@ void KWDocument::removeShape (KoShape *shape) {
 
 void KWDocument::paintContent(QPainter&, const QRect& rect) {
     // TODO
-}
-
-bool KWDocument::saveOdf( SavingContext &documentContext ) {
-    KoStore * store = documentContext.odfStore.store();
-    KoXmlWriter * manifestWriter = documentContext.odfStore.manifestWriter();
-    if ( !store->open( "content.xml" ) )
-        return false;
-
-    KoStoreDevice contentDev( store );
-    KoXmlWriter* contentWriter = KoOdfWriteStore::createOasisXmlWriter( &contentDev, "office:document-content" );
-
-    // for office:master-styles
-    KTemporaryFile masterStyles;
-    masterStyles.open();
-    KoXmlWriter masterStylesTmpWriter( &masterStyles, 1 );
-
-    // for office:body
-    KTemporaryFile contentTmpFile;
-    contentTmpFile.open();
-    KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
-
-    contentTmpWriter.startElement( "office:body" );
-    contentTmpWriter.startElement( "office:text" );
-
-    KoGenStyles mainStyles;
-    KoShapeSavingContext context(contentTmpWriter, mainStyles, documentContext.embeddedSaver);
-
-    KWTextFrameSet *mainTextFrame = 0;
-
-    foreach(KWFrameSet *fs, frameSets()) {
-        // TODO loop over all non-autocreated frames and save them.
-        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
-        if (tfs) {
-            if (tfs->textFrameSetType() == KWord::MainTextFrameSet) {
-                mainTextFrame = tfs;
-                continue;
-            }
-        }
-        foreach(KWFrame *frame, fs->frames()) {
-            //FIXME: Each text frame will save the entire document of the frameset.
-            frame->saveOdf(context);
-        }
-    }
-
-    if (mainTextFrame) {
-        if (! mainTextFrame->frames().isEmpty() && mainTextFrame->frames().first() ) {
-            KoTextShapeData * shapeData = dynamic_cast<KoTextShapeData *>( mainTextFrame->frames().first()->shape()->userData() );
-
-            if ( shapeData ) {
-                shapeData->saveOdf(context);
-            }
-        }
-    }
-
-/*
-    contentTmpWriter.startElement( odfTagName() );
-
-    paContext.setXmlWriter( contentTmpWriter );
-    paContext.setOptions( KoPASavingContext::DrawId );
-
-    // save pages
-    foreach ( KoPAPageBase *page, m_pages )
-    {
-        page->saveOdf( paContext );
-        paContext.incrementPage();
-    }
-*/
-    contentTmpWriter.endElement(); // office:text
-    contentTmpWriter.endElement(); // office:body
-
-    contentTmpFile.close();
-
-    mainStyles.saveOdfAutomaticStyles( contentWriter, false );
-
-    // And now we can copy over the contents from the tempfile to the real one
-    contentWriter->addCompleteElement( &contentTmpFile );
-
-    contentWriter->endElement(); // root element
-    contentWriter->endDocument();
-    delete contentWriter;
-
-    if ( !store->close() ) // done with content.xml
-        return false;
-
-    //add manifest line for content.xml
-    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
-
-    if ( !mainStyles.saveOdfStylesDotXml( store, manifestWriter ) )
-        return false;
-
-    bool ok=true;
-    foreach(KoDataCenter *dataCenter, m_dataCenterMap)
-    {
-        ok = ok && dataCenter->completeSaving(store, manifestWriter);
-    }
-    if(!ok)
-        return false;
-
-#if 0 // tz: remove until data center is used
-    if (!context.saveImages(store, manifestWriter))
-        return false;
-#endif
-    return true;
 }
 
 KoView* KWDocument::createViewInstance(QWidget* parent) {
@@ -664,6 +558,14 @@ bool KWDocument::completeLoading (KoStore *store) {
     return ok;
 }
 
+bool KWDocument::saveOdf( SavingContext &documentContext ) {
+    KWOdfWriter writer(this);
+    bool ok = writer.save(documentContext.odfStore, documentContext.embeddedSaver);
+    foreach(KoDataCenter *dataCenter, m_dataCenterMap) {
+        ok = ok && dataCenter->completeSaving(documentContext.odfStore.store(), documentContext.odfStore.manifestWriter());
+    }
+    return ok;
+}
 
 void KWDocument::requestMoreSpace(KWTextFrameSet *fs) {
 //kDebug(32002) <<"KWDocument::requestMoreSpace";
