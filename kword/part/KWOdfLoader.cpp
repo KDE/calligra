@@ -68,45 +68,7 @@ class KWOdfLoader::Private
         KWTextFrame *currentFrame;
 
         /// helper function to create a KWTextFrameSet+KWTextFrame for a header/footer.
-        KWTextFrame* loadHeaderFooterFrame(KoOdfLoadingContext& context, const KoXmlElement& elem, KWord::HeaderFooterType hfType, KWord::TextFrameSetType fsType)
-        {
-            KWTextFrameSet *fs = new KWTextFrameSet(document, fsType);
-            fs->setAllowLayout(false);
-            switch (fsType) {
-                case KWord::FirstPageHeaderTextFrameSet: fs->setName(i18n("First Page Header")); break;
-                case KWord::OddPagesHeaderTextFrameSet: fs->setName(i18n("Odd Pages Header")); break;
-                case KWord::EvenPagesHeaderTextFrameSet: fs->setName(i18n("Even Pages Header")); break;
-                case KWord::FirstPageFooterTextFrameSet: fs->setName(i18n("First Page Footer")); break;
-                case KWord::OddPagesFooterTextFrameSet: fs->setName(i18n("Odd Pages Footer")); break;
-                case KWord::EvenPagesFooterTextFrameSet: fs->setName(i18n("Even Pages Footer")); break;
-                default: break;
-            }
-
-            kDebug(32001)<<"KWOdfLoader::loadTextFrameSet localName="<<elem.localName()<<" type="<<fs->name();
-
-            // Add the frameset and the shape for the header/footer to the document.
-            KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
-            Q_ASSERT(factory);
-            KoShape *shape = factory->createDefaultShape( document );
-            KWTextFrame *frame = new KWTextFrame(shape, fs);
-            document->addFrameSet(fs);
-
-            currentFrame = frame;
-
-            // use auto-styles from styles.xml, not those from content.xml
-            context.setUseStylesAutoStyles( true );
-
-            KoShapeLoadingContext ctxt( context, document );
-            KoTextLoader loader( ctxt );
-            QTextCursor cursor( fs->document() );
-            loader.loadBody(elem, cursor);
-
-            // restore use of auto-styles from content.xml, not those from styles.xml
-            context.setUseStylesAutoStyles( false );
-
-            return frame;
-        }
-
+        void loadHeaderFooterFrame(KoOdfLoadingContext& context, const KoXmlElement& elem, KWord::HeaderFooterType hfType, KWord::TextFrameSetType fsType);
 };
 
 KWOdfLoader::KWOdfLoader(KWDocument *document)
@@ -418,6 +380,48 @@ bool KWOdfLoader::loadMasterPageStyle(KoOdfLoadingContext& context, const QStrin
     return true;
 }
 
+// helper function to create a KWTextFrameSet+KWTextFrame for a header/footer.
+void KWOdfLoader::Private::loadHeaderFooterFrame(KoOdfLoadingContext& context, const KoXmlElement& elem, KWord::HeaderFooterType hfType, KWord::TextFrameSetType fsType)
+{
+    KWTextFrameSet *fs = new KWTextFrameSet(document, fsType);
+    fs->setAllowLayout(false);
+    switch (fsType) {
+        case KWord::FirstPageHeaderTextFrameSet: fs->setName(i18n("First Page Header")); break;
+        case KWord::OddPagesHeaderTextFrameSet: fs->setName(i18n("Odd Pages Header")); break;
+        case KWord::EvenPagesHeaderTextFrameSet: fs->setName(i18n("Even Pages Header")); break;
+        case KWord::FirstPageFooterTextFrameSet: fs->setName(i18n("First Page Footer")); break;
+        case KWord::OddPagesFooterTextFrameSet: fs->setName(i18n("Odd Pages Footer")); break;
+        case KWord::EvenPagesFooterTextFrameSet: fs->setName(i18n("Even Pages Footer")); break;
+        default: break;
+    }
+
+    kDebug(32001)<<"KWOdfLoader::loadHeaderFooterFrame localName="<<elem.localName()<<" type="<<fs->name();
+
+    // Add the frameset and the shape for the header/footer to the document.
+    KoShapeFactory *sf = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
+    Q_ASSERT(sf);
+    KoShape *s = sf->createDefaultShape( document );
+    Q_ASSERT(s);
+    KWTextFrame *f = new KWTextFrame(s, fs);
+    document->addFrameSet(fs);
+
+    KWTextFrame *prevFrame = currentFrame;
+    currentFrame = f;
+
+    // use auto-styles from styles.xml, not those from content.xml
+    context.setUseStylesAutoStyles( true );
+
+    KoShapeLoadingContext ctxt( context, document );
+    KoTextLoader loader( ctxt );
+    QTextCursor cursor( fs->document() );
+    loader.loadBody(elem, cursor);
+
+    // restore use of auto-styles from content.xml, not those from styles.xml
+    context.setUseStylesAutoStyles( false );
+
+    currentFrame = prevFrame; // restore the previous current frame
+}
+
 //1.6: KWOasisLoader::loadOasisHeaderFooter
 void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext& context, const KoXmlElement& masterPage, const KoXmlElement& masterPageStyle, bool isHeader)
 {
@@ -433,7 +437,7 @@ void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext& context, const KoXmlElem
         return; // no header/footer
     }
 
-    KWord::HeaderFooterType hfType = leftElem.isNull() ? KWord::HFTypeUniform : KWord::HFTypeEvenOdd;
+    KWord::HeaderFooterType hfType = leftElem.isNull() ? KWord::HFTypeSameAsFirst : KWord::HFTypeEvenOdd;
 
     if ( ! firstElem.isNull() ) { // header-first and footer-first
         d->loadHeaderFooterFrame(context, firstElem, hfType, isHeader ? KWord::FirstPageHeaderTextFrameSet : KWord::FirstPageFooterTextFrameSet);
@@ -447,39 +451,14 @@ void KWOdfLoader::loadHeaderFooter(KoOdfLoadingContext& context, const KoXmlElem
         d->loadHeaderFooterFrame(context, elem, hfType, isHeader ? KWord::OddPagesHeaderTextFrameSet : KWord::OddPagesFooterTextFrameSet);
     }
 
-#if 0
-    const QString localName = elem.localName();
-    kDebug(32001)<<"KWOdfLoader::loadHeaderFooter localName="<<localName<<" isHeader="<<isHeader<<" hasFirst="<<hasFirst;
-    // Formatting properties for headers and footers on a page.
-    KoXmlElement styleElem = KoXml::namedItemNS( masterPageStyle, KoXmlNS::style, isHeader ? "header-style" : "footer-style" );
-    // Set the type of the header/footer in the KWPageSettings instance of our document.
-    if ( !leftElem.isNull() ) {
-        //d->hf.header = hasFirst ? HF_FIRST_EO_DIFF : HF_EO_DIFF;
-        if( isHeader ) {
-            d->document->m_pageSettings.setHeaderPolicy(KWord::HFTypeEvenOdd);
-            //d->document->m_pageSettings.setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
-        }
-        else {
-            d->document->m_pageSettings.setFooterPolicy(KWord::HFTypeEvenOdd);
-            //d->document->m_pageSettings.setFirstFooterPolicy(KWord::HFTypeEvenOdd);
-        }
+    if (isHeader) {
+        d->document->pageSettings().setFirstHeaderPolicy(hfType);
+        d->document->pageSettings().setHeaderPolicy(hfType);
     }
     else {
-        //d->hf.header = hasFirst ? HF_FIRST_DIFF : HF_SAME;
-        if( isHeader ) {
-            d->document->m_pageSettings.setHeaderPolicy(KWord::HFTypeSameAsFirst);
-            d->document->m_pageSettings.setFirstHeaderPolicy(KWord::HFTypeEvenOdd);
-        }
-        else {
-            d->document->m_pageSettings.setFooterPolicy(KWord::HFTypeSameAsFirst);
-            d->document->m_pageSettings.setFirstFooterPolicy(KWord::HFTypeEvenOdd);
-        }
+        d->document->pageSettings().setFirstFooterPolicy(hfType);
+        d->document->pageSettings().setFooterPolicy(hfType);
     }
-    // use auto-styles from styles.xml, not those from content.xml
-    context.setUseStylesAutoStyles( true );
-    //TODO handle style, seems to be similar to what is done at KoPageLayout::loadOasis
-#endif
-
 }
 
 void KWOdfLoader::loadFrame(KoOdfLoadingContext& context, const KoXmlElement& frameElem, QTextCursor& cursor)
