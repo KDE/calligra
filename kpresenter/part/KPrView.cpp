@@ -157,6 +157,12 @@ void KPrView::showNormal()
 
 void KPrView::showNotes()
 {
+    // Make sure that we are not in master mode
+    // since notes master is not supported yet
+    if ( m_viewMode->masterMode() ) {
+        actionCollection()->action( "view_masterpages" )->setChecked( false );
+        setMasterMode( false );
+    }
     setViewMode(m_notesMode);
 }
 

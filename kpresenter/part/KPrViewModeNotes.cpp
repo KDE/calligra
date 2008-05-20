@@ -139,12 +139,14 @@ void KPrViewModeNotes::activate(KoPAViewMode *previousViewMode)
 {
     Q_UNUSED( previousViewMode );
     m_canvas->resourceProvider()->setResource(KoText::ShowTextFrames, true);
+    m_view->setActionEnabled( KoPAView::AllActions, false );
     updateActivePage( m_view->activePage() );
 }
 
 void KPrViewModeNotes::deactivate()
 {
     m_canvas->resourceProvider()->setResource(KoText::ShowTextFrames, false);
+    m_view->setActionEnabled( KoPAView::AllActions, true );
     m_view->updateActivePage(m_view->activePage());
 }
 
