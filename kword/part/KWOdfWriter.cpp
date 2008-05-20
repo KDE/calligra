@@ -103,7 +103,14 @@ class KWOdfWriter::Private
                     continue;
                 style.addChildElement(QString::number(i), content);
             }
-            mainStyles.lookup(style); // appends the headerfooter-style to the main-style
+
+            //FIXME hmpf, while following would be only a dirty hack to set the name
+            //      explicit, it seems we produce invalid XML that way and KWord should
+            //      discover this rather then producing non-wellformed stuff!
+            //style.addAttribute("style:name","Standard");
+
+            if(! style.isEmpty())
+                mainStyles.lookup(style); // appends the headerfooter-style to the main-style
 
             //foreach(KoGenStyles::NamedStyle s, mainStyles.styles(KoGenStyle::StyleAuto))
             //    mainStyles.markStyleForStylesXml( s.name );
