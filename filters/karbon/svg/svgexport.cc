@@ -237,7 +237,32 @@ void SvgExport::savePath( KoPathShape * path )
 
 void SvgExport::saveEllipse( KoEllipseShape * ellipse )
 {
-    savePath( ellipse );
+    if( ellipse->type() == KoEllipseShape::Arc && ellipse->startAngle() == ellipse->endAngle() )
+    {
+        printIndentation( m_body, m_indent );
+        QSizeF size = ellipse->size();
+        if( size.width() == size.height() )
+        {
+            *m_body << "<circle" << getID( ellipse );
+            *m_body << " r=\"" << 0.5 * size.width() << "pt\"";
+        }
+        else
+        {
+            *m_body << "<ellipse" << getID( ellipse );
+            *m_body << " rx=\"" << 0.5 * size.width() << "pt\"";
+            *m_body << " ry=\"" << 0.5 * size.height() << "pt\"";
+        }
+        *m_body << " cx=\"" << 0.5 * size.width() << "pt\"";
+        *m_body << " cy=\"" << 0.5 * size.height() << "pt\"";
+        *m_body << getTransform( ellipse->transformation(), " transform" );
+        getFill( ellipse, m_body );
+        getStroke( ellipse, m_body );
+        *m_body << "/>" << endl;
+    }
+    else
+    {
+        savePath( ellipse );
+    }
 }
 
 void SvgExport::saveRectangle( KoRectangleShape * rectangle )
@@ -471,9 +496,9 @@ void SvgExport::getFill( KoShape * shape, QTextStream *stream )
     if( path )
     {
         if( path->fillRule() == Qt::OddEvenFill )
-            *m_body << " fill-rule=\"evenodd\"";
+            *stream << " fill-rule=\"evenodd\"";
         else
-            *m_body << " fill-rule=\"nonzero\"";
+            *stream << " fill-rule=\"nonzero\"";
     }
 }
 
