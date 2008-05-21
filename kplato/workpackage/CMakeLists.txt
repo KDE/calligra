@@ -47,6 +47,8 @@ kde4_add_library(kplatoworkapp  SHARED ${kplatoworkapp_LIB_SRCS})
 
 target_link_libraries(kplatoworkapp kplatoworkfactory komain)
 
+set_target_properties(kplatoworkapp PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
+
 install(TARGETS kplatoworkapp DESTINATION ${LIB_INSTALL_DIR})
 
 
