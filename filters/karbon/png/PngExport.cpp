@@ -32,11 +32,12 @@
 
 #include <KarbonDocument.h>
 #include <KarbonPart.h>
-#include <KoShapePainter.h>
 
+#include <KoShapePainter.h>
 #include <KoFilter.h>
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
+#include <KoZoomHandler.h>
 
 #include <kgenericfactory.h>
 #include <KDialog>
@@ -70,12 +71,18 @@ PngExport::convert( const QByteArray& from, const QByteArray& to )
     KoShapePainter painter;
     painter.setShapes( karbonPart->document().shapes() );
 
+    KoZoomHandler zoomHandler;
+
+    // get the bounding rect of the content
     QRectF shapesRect = painter.contentRect();
-    QSize size = shapesRect.size().toSize();
+    // get the size on point
+    QSizeF pointSize = shapesRect.size();
+    // get the size in pixel (100% zoom)
+    QSize pixelSize = zoomHandler.documentToView( pointSize ).toSize();
 
     if( ! m_chain->manager()->getBatchMode() )
     {
-        PngExportOptionsWidget * widget = new PngExportOptionsWidget( shapesRect.size() );
+        PngExportOptionsWidget * widget = new PngExportOptionsWidget( pointSize );
         widget->setUnit( karbonPart->unit() );
 
         KDialog dlg;
@@ -83,11 +90,11 @@ PngExport::convert( const QByteArray& from, const QByteArray& to )
         dlg.setButtons( KDialog::Ok | KDialog::Cancel );
         dlg.setMainWidget( widget );
         if( dlg.exec() == QDialog::Accepted )
-            size = widget->exportSize();
+            pixelSize = widget->exportSize();
         else
             return KoFilter::UserCancelled;
     }
-    QImage image( size, QImage::Format_RGB32 );
+    QImage image( pixelSize, QImage::Format_RGB32 );
 
     // draw the background of the thumbnail
     image.fill( QColor( Qt::white).rgb() );
