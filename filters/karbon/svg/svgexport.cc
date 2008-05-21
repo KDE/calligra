@@ -43,6 +43,8 @@
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
 #include <plugins/simpletextshape/SimpleTextShape.h>
+#include <pathshapes/rectangle/KoRectangleShape.h>
+#include <pathshapes/ellipse/KoEllipseShape.h>
 #include <plugins/pictureshape/PictureShape.h>
 #include <KoImageData.h>
 
@@ -194,8 +196,18 @@ void SvgExport::saveShape( KoShape * shape )
     KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
     if( path )
     {
-        // TODO differentiate between rects, circles and paths
-        savePath( path );
+        if( path->pathShapeId() == KoRectangleShapeId )
+        {
+            saveRectangle( static_cast<KoRectangleShape*>( path ) );
+        }
+        else if( path->pathShapeId() == KoEllipseShapeId )
+        {
+            saveEllipse( static_cast<KoEllipseShape*>( path ) );
+        }
+        else 
+        {
+            savePath( path );
+        }
     }
     else
     {
@@ -207,7 +219,6 @@ void SvgExport::saveShape( KoShape * shape )
         {
             saveImage( static_cast<PictureShape*>( shape ) );
         }
-        // TODO export text and images
     }
 }
 
@@ -221,12 +232,35 @@ void SvgExport::savePath( KoPathShape * path )
 
     *m_body << " d=\"" << path->toString( path->transformation() * m_userSpaceMatrix ) << "\" ";
 
-    if( path->fillRule() == Qt::OddEvenFill )
-        *m_body << " fill-rule=\"evenodd\"";
-    else
-        *m_body << " fill-rule=\"nonzero\"";
-
     *m_body << " />" << endl;
+}
+
+void SvgExport::saveEllipse( KoEllipseShape * ellipse )
+{
+    savePath( ellipse );
+}
+
+void SvgExport::saveRectangle( KoRectangleShape * rectangle )
+{
+    printIndentation( m_body, m_indent );
+    *m_body << "<rect" << getID( rectangle );
+    *m_body << getTransform( rectangle->transformation(), " transform" );
+
+    getFill( rectangle, m_body );
+    getStroke( rectangle, m_body );
+
+    QSizeF size = rectangle->size();
+    *m_body << " width=\"" << size.width() << "pt\""; 
+    *m_body << " height=\"" << size.height() << "pt\""; 
+
+    double rx = rectangle->cornerRadiusX();
+    if( rx > 0.0 )
+        *m_body << " rx=\"" << 0.01 * rx * 0.5 * size.width() << "pt\""; 
+    double ry = rectangle->cornerRadiusY();
+    if( ry > 0.0 )
+        *m_body << " ry=\"" << 0.01 * ry * 0.5 * size.height() << "pt\""; 
+
+    *m_body << "/>" << endl;
 }
 
 static QString createUID()
@@ -432,6 +466,15 @@ void SvgExport::getFill( KoShape * shape, QTextStream *stream )
     *stream << "\"";
 
     *stream << " fill-opacity=\"" << fill.color().alphaF() << "\"";
+
+    KoPathShape * path = dynamic_cast<KoPathShape*>( shape );
+    if( path )
+    {
+        if( path->fillRule() == Qt::OddEvenFill )
+            *m_body << " fill-rule=\"evenodd\"";
+        else
+            *m_body << " fill-rule=\"nonzero\"";
+    }
 }
 
 void SvgExport::getStroke( KoShape *shape, QTextStream *stream )
@@ -497,7 +540,7 @@ void SvgExport::saveText( SimpleTextShape * text )
 {
     printIndentation( m_body, m_indent++ );
     *m_body << "<text" << getID( text );
-    // *m_body << " transform=\"scale(1, -1) translate(0, -" << text.document()->height() << ")\"";
+
     getFill( text, m_body );
     getStroke( text, m_body );
 
@@ -625,7 +668,7 @@ void SvgExport::saveImage( PictureShape * picture )
             QString dstBaseFilename = QFileInfo( url.fileName() ).baseName();
             url.setDirectory( url.directory() );
             // create a filename for the image file at the destination directory
-            QString fname = dstBaseFilename + "_" + createID( picture );
+            QString fname = dstBaseFilename + '_' + createID( picture );
             // get extension from mimetype
             QString ext = "";
             QStringList patterns = mimeType->patterns();
