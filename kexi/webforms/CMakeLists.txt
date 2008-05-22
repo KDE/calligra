@@ -9,6 +9,7 @@ set(webforms_SRCS
   main.cpp
   Server.cpp
   ServerConfig.cpp
+  HTTPStream.cpp
   DataProvider.cpp
   IndexView.cpp
 )

@@ -18,19 +18,37 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_WEBFORMS_INDEXVIEW_H
-#define KEXI_WEBFORMS_INDEXVIEW_H
+#ifndef KEXI_WEBFORMS_HTTPSTREAM_H
+#define KEXI_WEBFORMS_HTTPSTREAM_H
 
 #include <shttpd.h>
 
-#include "HTTPStream.h"
+#include <string>
+
+#include <QString>
 
 namespace KexiWebForms {
 
-    namespace IndexView {
-        void show(Request* req);
-    }
+    typedef struct shttpd_arg Request;
 
+    // Create a new type
+    typedef struct {} HTTPEndOfStream;
+
+    class HTTPStream {
+    public:
+        HTTPStream(Request*);
+        HTTPStream& operator<<(const char*);
+        HTTPStream& operator<<(const std::string&);
+        HTTPStream& operator<<(const QString&);
+        // TODO: review this
+        void operator<<(HTTPEndOfStream);
+    private:
+        bool m_headerModified;
+        QString m_contentbuf;
+        Request* m_request;
+    };
+
+    extern HTTPEndOfStream webend;
 }
 
 #endif

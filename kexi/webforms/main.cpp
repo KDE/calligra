@@ -33,15 +33,6 @@
 
 using namespace KexiWebForms;
 
-// FIXME: Testing
-void indexH(struct shttpd_arg* arg) {
-	shttpd_printf(arg, "%s", "HTTP/1.1 200 OK\r\n");
-	shttpd_printf(arg, "%s", "Content-Type: text/html\r\n\r\n");
-	shttpd_printf(arg, "%s", "<html><body>");
-	shttpd_printf(arg, "%s", "<h1>Kexi Web Forms daemon</h1></body></html>");
-	arg->flags |= SHTTPD_END_OF_OUTPUT;
-}
-
 int main(int argc, char **argv) {
     KCmdLineArgs::init(argc, argv,
                        new KAboutData ("kwebforms", NULL, ki18n("Web Forms Daemon"),

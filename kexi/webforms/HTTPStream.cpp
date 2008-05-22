@@ -18,19 +18,38 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_WEBFORMS_INDEXVIEW_H
-#define KEXI_WEBFORMS_INDEXVIEW_H
-
 #include <shttpd.h>
 
 #include "HTTPStream.h"
 
 namespace KexiWebForms {
 
-    namespace IndexView {
-        void show(Request* req);
+    HTTPStream::HTTPStream(Request* req) : m_request(req) {}
+
+    HTTPStream& HTTPStream::operator<<(const char* str) {
+        m_contentbuf.append(str);
+        return *this;
     }
 
-}
+    HTTPStream& HTTPStream::operator<<(const std::string& str) {
+        m_contentbuf.append(str.c_str());
+        return *this;
+    }
 
-#endif
+    HTTPStream& HTTPStream::operator<<(const QString& str) {
+        m_contentbuf.append(str);
+        return *this;
+    }
+
+    void HTTPStream::operator<<(HTTPEndOfStream eos) {
+        if (!m_headerModified) {
+            shttpd_printf(m_request, "%s", "HTTP/1.1 200 OK\r\n");
+            shttpd_printf(m_request, "%s", "Content-Type: text/html\r\n\r\n");
+        }
+        shttpd_printf(m_request, "%s", m_contentbuf.toLatin1().constData());
+        m_request->flags |= SHTTPD_END_OF_OUTPUT;
+    }
+
+
+    HTTPEndOfStream webend;
+}
