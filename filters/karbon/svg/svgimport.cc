@@ -1142,7 +1142,10 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
         gc->stroke.setLineStyle( Qt::CustomDashLine, dashes );
         gc->stroke.setDashOffset( dashOffset / lineWidth );
     }
-    obj->setBorder( new KoLineBorder( gc->stroke ) );
+    if( gc->stroke.lineStyle() != Qt::NoPen )
+        obj->setBorder( new KoLineBorder( gc->stroke ) );
+    else
+        obj->setBorder( 0 );
 }
 
 void SvgImport::parseFont( const QDomElement &e )
