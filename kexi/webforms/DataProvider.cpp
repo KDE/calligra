@@ -44,13 +44,13 @@
 namespace KexiWebForms {
     QPointer<KexiDB::Connection> gConnection = NULL;
 
-    /*QPointer<KexiDB::Connection*> connection() const {
-        //        return gConnection;
-        }*/
+    const QPointer<KexiDB::Connection> connection() {
+        return gConnection;
+    }
 
     // FIXME: Move creation of ConnectionData outside this function
     bool initDatabase(const QString& fileName) {
-        bool m_status = false;
+        bool status = false;
         KexiDB::Driver* driver;
         KexiDB::DriverManager manager;
         KexiDB::ConnectionData* connData = new KexiDB::ConnectionData();
@@ -73,28 +73,28 @@ namespace KexiWebForms {
                 driver = manager.driver(driverName);
                 if (!driver || manager.error()) {
                     manager.debugError();
-                    m_status = false;
-                } else m_status = true;
+                    status = false;
+                } else status = true;
 
                 connData->setFileName(fileName);
 
                 gConnection = driver->createConnection(*connData);
                 if (!gConnection || driver->error()) {
                     driver->debugError();
-                    m_status = false;
-                } else m_status = true;
+                    status = false;
+                } else status = true;
 
                 if (!gConnection->connect()){
                     gConnection->debugError();
-                    m_status = false;
-                } else m_status = true;
+                    status = false;
+                } else status = true;
 
                 if (!gConnection->useDatabase(fileName)) {
                     kError() << gConnection->errorMsg() << endl;
                 }
             }
         }
-        return m_status;
+        return status;
     }
 
 }
