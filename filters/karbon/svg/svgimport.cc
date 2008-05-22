@@ -910,7 +910,9 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
         }
     }
     else if( command == "stroke-width" )
+    {
         gc->stroke.setLineWidth( parseUnit( params, true, true, m_outerRect ) );
+    }
     else if( command == "stroke-linejoin" )
     {
         if( params == "miter" )
@@ -930,22 +932,24 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
             gc->stroke.setCapStyle( Qt::SquareCap );
     }
     else if( command == "stroke-miterlimit" )
+    {
         gc->stroke.setMiterLimit( params.toFloat() );
+    }
     else if( command == "stroke-dasharray" )
     {
         QVector<qreal> array;
         if(params != "none")
         {
-            QStringList dashes = params.split( ' ' );
+            QStringList dashes = params.split( ',' );
             for( QStringList::Iterator it = dashes.begin(); it != dashes.end(); ++it )
                 array.append( (*it).toFloat() );
         }
         gc->stroke.setLineStyle( Qt::CustomDashLine, array );
     }
-    /* TODO add support for dash offset to border
     else if( command == "stroke-dashoffset" )
-        gc->stroke.dashPattern().setOffset( params.toFloat() );
-    */
+    {
+        gc->stroke.setDashOffset( params.toFloat() );
+    }
     // handle opacity
     else if( command == "stroke-opacity" )
         strokecolor.setAlphaF( fromPercentage( params ) );
@@ -1125,11 +1129,20 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
     KoPathShape * path = dynamic_cast<KoPathShape*>( obj );
     if( path )
         path->setFillRule( gc->fillRule );
-    // stroke scaling
-    double lineWidth = gc->stroke.lineWidth() * getScalingFromMatrix( gc->matrix );
-    KoLineBorder * border = new KoLineBorder( gc->stroke );
-    border->setLineWidth( lineWidth );
-    obj->setBorder( border );
+
+    double lineWidth = gc->stroke.lineWidth();
+
+    // apply line width to dashes and dash offset
+    if( gc->stroke.lineStyle() > Qt::SolidLine && lineWidth > 0.0 )
+    {
+        QVector<qreal> dashes = gc->stroke.lineDashes();
+        for( int i = 0; i < dashes.count(); ++i )
+            dashes[i] /= lineWidth;
+        double dashOffset = gc->stroke.dashOffset();
+        gc->stroke.setLineStyle( Qt::CustomDashLine, dashes );
+        gc->stroke.setDashOffset( dashOffset / lineWidth );
+    }
+    obj->setBorder( new KoLineBorder( gc->stroke ) );
 }
 
 void SvgImport::parseFont( const QDomElement &e )
