@@ -45,7 +45,10 @@ PngExportOptionsWidget::PngExportOptionsWidget( QSizeF pointSize, QWidget * pare
     widget.unitAspect->setKeepAspectRatio( true );
     widget.unit->addItems( KoUnit::listOfUnitName() );
     widget.unit->setCurrentIndex( unit.indexInList() );
-
+    widget.backColor->setColor( Qt::white );
+    widget.opacity->setMinimum( 0.0 );
+    widget.opacity->setMaximum( 100.0 );
+    widget.opacity->setValue( 100.0 );
     widget.unitWidth->changeValue( pointSize.width() );
     widget.unitHeight->changeValue( pointSize.height() );
     updateFromPointSize( pointSize );
@@ -67,9 +70,31 @@ void PngExportOptionsWidget::setUnit( const KoUnit &unit )
     widget.unit->setCurrentIndex( unit.indexInList() );
 }
 
-QSize PngExportOptionsWidget::exportSize()
+QSize PngExportOptionsWidget::pixelSize() const
 {
     return QSize( widget.pxWidth->value(), widget.pxHeight->value() );
+}
+
+QSizeF PngExportOptionsWidget::pointSize() const
+{
+    return QSizeF( widget.unitWidth->value(), widget.unitHeight->value() );
+}
+
+void PngExportOptionsWidget::setBackgroundColor( const QColor &color )
+{
+    blockChildSignals( true );
+
+    widget.backColor->setColor( color );
+    widget.opacity->setValue( color.alphaF() * 100.0 );
+
+    blockChildSignals( false );
+}
+
+QColor PngExportOptionsWidget::backgroundColor() const
+{
+    QColor color = widget.backColor->color();
+    color.setAlphaF( 0.01 * widget.opacity->value() );
+    return color;
 }
 
 void PngExportOptionsWidget::updateFromPointSize( const QSizeF &pointSize )
@@ -97,6 +122,8 @@ void PngExportOptionsWidget::blockChildSignals( bool block )
     widget.unitWidth->blockSignals( block );
     widget.unitHeight->blockSignals( block );
     widget.dpi->blockSignals( block );
+    widget.backColor->blockSignals( block );
+    widget.opacity->blockSignals( block );
 }
 
 void PngExportOptionsWidget::unitWidthChanged( double newWidth )

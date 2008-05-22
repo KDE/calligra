@@ -34,8 +34,18 @@ public:
     /// Sets the initial unit to use
     void setUnit( const KoUnit &unit );
 
-    /// Returns the choosen export size
-    QSize exportSize();
+    /// Returns the choosen export size in pixel
+    QSize pixelSize() const;
+
+    /// Returns the choosen export size in point
+    QSizeF pointSize() const;
+
+    /// Sets the background color
+    void setBackgroundColor( const QColor &color );
+
+    /// Returns the choosen background color
+    QColor backgroundColor() const;
+
 private slots:
     void unitWidthChanged( double );
     void unitHeightChanged( double );

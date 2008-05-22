@@ -71,34 +71,37 @@ PngExport::convert( const QByteArray& from, const QByteArray& to )
     KoShapePainter painter;
     painter.setShapes( karbonPart->document().shapes() );
 
-    KoZoomHandler zoomHandler;
-
     // get the bounding rect of the content
     QRectF shapesRect = painter.contentRect();
     // get the size on point
     QSizeF pointSize = shapesRect.size();
     // get the size in pixel (100% zoom)
+    KoZoomHandler zoomHandler;
     QSize pixelSize = zoomHandler.documentToView( pointSize ).toSize();
+    QColor backgroundColor( Qt::white );
 
     if( ! m_chain->manager()->getBatchMode() )
     {
         PngExportOptionsWidget * widget = new PngExportOptionsWidget( pointSize );
         widget->setUnit( karbonPart->unit() );
+        widget->setBackgroundColor( backgroundColor );
 
         KDialog dlg;
         dlg.setCaption( i18n("PNG Export Options") );
         dlg.setButtons( KDialog::Ok | KDialog::Cancel );
         dlg.setMainWidget( widget );
-        if( dlg.exec() == QDialog::Accepted )
-            pixelSize = widget->exportSize();
-        else
+        if( dlg.exec() != QDialog::Accepted )
             return KoFilter::UserCancelled;
+
+        pixelSize = widget->pixelSize();
+        backgroundColor = widget->backgroundColor();
     }
-    QImage image( pixelSize, QImage::Format_RGB32 );
+    QImage image( pixelSize, QImage::Format_ARGB32 );
 
-    // draw the background of the thumbnail
-    image.fill( QColor( Qt::white).rgb() );
+    // draw the background of the image
+    image.fill( backgroundColor.rgba() );
 
+    // paint the shapes
     if( ! painter.paintShapes( image ) )
         return KoFilter::CreationError;
 
