@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    (C) Copyright 2008 by Lorenzo Villani <lvillani@binaryhelix.net>
+   Time-stamp: <2008-05-23 19:22:55 lorenzo>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,7 +30,9 @@
 #include "Server.h"
 #include "ServerConfig.h"
 #include "DataProvider.h"
+
 #include "IndexView.h"
+#include "TableView.h"
 
 using namespace KexiWebForms;
 
@@ -88,6 +91,7 @@ int main(int argc, char **argv) {
 
     if (server->init(serverConfig)) {
         server->registerHandler("/", IndexView::show);
+        server->registerHandler("/table/*", TableView::show);
     }
 
     // Initialize database connection

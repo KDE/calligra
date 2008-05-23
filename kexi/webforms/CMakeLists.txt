@@ -12,6 +12,7 @@ set(webforms_SRCS
   HTTPStream.cpp
   DataProvider.cpp
   IndexView.cpp
+  TableView.cpp
 )
 
 kde4_add_executable(kwebforms ${webforms_SRCS})

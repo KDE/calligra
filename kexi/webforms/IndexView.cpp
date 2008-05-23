@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    (C) Copyright 2008 by Lorenzo Villani <lvillani@binaryhelix.net>
+   Time-stamp: <2008-05-23 19:14:12 lorenzo>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,7 +22,6 @@
 #include <string>
 #include <sstream>
 #include <google/template.h>
-#include <shttpd.h>
 
 #include "Server.h"
 #include "IndexView.h"
@@ -53,7 +53,7 @@ namespace KexiWebForms {
             std::string output;
             tpl->Expand(&output, &dict);
 
-            stream << output.c_str() << webend;
+            stream << output << webend;
         }
 
     }

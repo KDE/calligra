@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
 
    (C) Copyright 2008 by Lorenzo Villani <lvillani@binaryhelix.net>
+   Time-stamp: <2008-05-23 19:06:53 lorenzo>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,16 +19,14 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_WEBFORMS_INDEXVIEW_H
-#define KEXI_WEBFORMS_INDEXVIEW_H
-
-#include <shttpd.h>
+#ifndef KEXI_WEBFORMS_TABLEVIEW_H
+#define KEXI_WEBFORMS_TABLEVIEW_H
 
 #include "HTTPStream.h"
 
 namespace KexiWebForms {
-    namespace IndexView {
-        void show(Request* req);
+    namespace TableView {
+        void show(Request*);
     }
 }
 
