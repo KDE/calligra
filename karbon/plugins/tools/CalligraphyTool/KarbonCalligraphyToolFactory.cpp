@@ -17,27 +17,31 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KarbonToolsPlugin.h"
-#include "KarbonPencilToolFactory.h"
-#include "CalligraphyTool/KarbonCalligraphyToolFactory.h"
-#include "KarbonGradientToolFactory.h"
-#include "KarbonPatternToolFactory.h"
+#include "KarbonCalligraphyToolFactory.h"
+#include "KarbonCalligraphyTool.h"
 
 #include <KoToolRegistry.h>
 
-#include <KPluginFactory>
-#include <KPluginLoader>
+#include <klocale.h>
+#include <kdebug.h>
 
-K_PLUGIN_FACTORY( KarbonToolsPluginFactory, registerPlugin<KarbonToolsPlugin>(); )
-K_EXPORT_PLUGIN( KarbonToolsPluginFactory("KarbonTools") )
-
-KarbonToolsPlugin::KarbonToolsPlugin( QObject *parent, const QVariantList& )
-    : QObject(parent)
+KarbonCalligraphyToolFactory::KarbonCalligraphyToolFactory(QObject *parent)
+: KoToolFactory(parent, "KarbonCalligraphyTool", i18n("Calligraphy tool") )
 {
-    KoToolRegistry::instance()->add( new KarbonPencilToolFactory( parent ) );
-    KoToolRegistry::instance()->add( new KarbonCalligraphyToolFactory( parent ) );
-    KoToolRegistry::instance()->add( new KarbonGradientToolFactory( parent ) );
-    KoToolRegistry::instance()->add( new KarbonPatternToolFactory( parent ) );
+    setToolTip( i18n("Calligraphy Tool") );
+    setToolType( mainToolType() );
+    setIcon( "draw-calligraphy" );
+    setPriority( 3 );
+    setActivationShapeId("flake/always");
 }
 
-#include "KarbonToolsPlugin.moc"
+KarbonCalligraphyToolFactory::~KarbonCalligraphyToolFactory() 
+{
+}
+
+KoTool * KarbonCalligraphyToolFactory::createTool(KoCanvasBase *canvas) 
+{
+    return new KarbonCalligraphyTool(canvas);
+}
+
+//#include "KarbonCalligraphyToolFactory.moc"

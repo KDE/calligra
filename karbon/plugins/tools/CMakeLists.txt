@@ -14,6 +14,8 @@ set(karbon_tools_PART_SRCS
    KarbonCurveFit.cpp
    KarbonPencilTool.cpp
    KarbonPencilToolFactory.cpp
+   CalligraphyTool/KarbonCalligraphyTool.cpp
+   CalligraphyTool/KarbonCalligraphyToolFactory.cpp
    KarbonGradientTool.cpp
    KarbonGradientToolFactory.cpp
    KarbonGradientEditStrategy.cpp
