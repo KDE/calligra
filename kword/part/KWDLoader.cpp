@@ -1118,8 +1118,8 @@ void KWDLoader::insertAnchors() {
             kWarning() << "Anchored frameset not found: '" << anchor.frameSetName << endl;
             continue;
         }
+        if(fs->frames().count() == 0)  continue;
         KWFrame *frame = fs->frames().first();
-        if(frame == 0)  continue;
         frame->shape()->setPosition(QPointF(0,0));
         KoShapeContainer* container = dynamic_cast<KoShapeContainer*> (anchor.textShape);
         Q_ASSERT(container);
