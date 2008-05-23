@@ -53,7 +53,7 @@ class Document : public QObject, public wvWare::SubDocumentHandler
 {
     Q_OBJECT
 public:
-    Document( const std::string& fileName, /*QDomDocument& mainDocument, QDomDocument &documentInfo, QDomElement& framesetsElement,*/ KoFilterChain* chain, KoXmlWriter* bodyWriter );
+    Document( const std::string& fileName, /*QDomDocument& mainDocument, QDomDocument &documentInfo, QDomElement& framesetsElement,*/ KoFilterChain* chain, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter );
     virtual ~Document();
 
     bool hasParser() const { return m_parser != 0L; }
@@ -112,7 +112,7 @@ private:
     void processStyles();
     void processAssociatedStrings();
     enum NewFrameBehavior { Reconnect=0, NoFollowup=1, Copy=2 };
-    QDomElement createInitialFrame( QDomElement& parentFramesetElem, double left, double right, double top, double bottom, bool autoExtend, NewFrameBehavior nfb );
+    //QDomElement createInitialFrame( QDomElement& parentFramesetElem, double left, double right, double top, double bottom, bool autoExtend, NewFrameBehavior nfb );
     void generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd );
 
     //QDomDocument& m_mainDocument;

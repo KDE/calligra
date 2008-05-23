@@ -48,8 +48,8 @@ namespace Conversion
     // Prepare text for inclusion in XML
     void encodeText(QString &text);
 
-    // Convert color code (ico) to QColor
-    QColor color(int number, int defaultcolor, bool defaultWhite = false);
+    // Convert color code (ico) to QString with hex code
+    QString color(int number, int defaultcolor, bool defaultWhite = false);
 
     // Convert pattern style (ipat) to QBrush::BrushStyle
     int fillPatternStyle( int ipat );

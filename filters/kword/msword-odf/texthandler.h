@@ -54,7 +54,7 @@ class KWordTextHandler : public QObject, public wvWare::TextHandler
 {
     Q_OBJECT
 public:
-    KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter );
+    KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter );
 
     void setFrameSetElement( const QDomElement& frameset );
 
@@ -62,7 +62,7 @@ public:
 
     virtual void sectionStart( wvWare::SharedPtr<const wvWare::Word97::SEP> sep );
     virtual void sectionEnd();
-    virtual void pageBreak();
+    //virtual void pageBreak();
     virtual void headersFound( const wvWare::HeaderFunctor& parseHeaders );
     virtual void footnoteFound( wvWare::FootnoteData::Type type, wvWare::UChar character,
                                 wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const wvWare::FootnoteFunctor& parseFootnote );
@@ -87,10 +87,10 @@ public:
 
     // Write a <FORMAT> tag from the given CHP
     // Returns that element into pChildElement if set (in that case even an empty FORMAT can be appended)
-    void writeFormat( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, int pos, int len, int formatId, QDomElement* pChildElement );
+    void writeFormattedText( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, int pos, int len, int formatId, QDomElement* pChildElement );
 
     // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given parag props
-    void writeLayout( QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties, const wvWare::Style* style );
+    void writeLayout( /*QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties,*/ const wvWare::Style* style );
 
     // Communication with Document, without having to know about Document
 signals:
@@ -101,12 +101,13 @@ signals:
 
 protected:
     void writeOutParagraph( const QString& styleName, const QString& text );
-    void writeCounter( QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties, const wvWare::Style* style );
+    void writeCounter( /*QDomElement& parentElement,*/ const wvWare::ParagraphProperties& paragraphProperties, const wvWare::Style* style );
     QDomElement insertVariable( int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format );
     QDomElement insertAnchor( const QString& fsname );
     QString getFont(unsigned fc) const;
     //instead of this, have a pointer to contentWriter? or bodyWriter or both?
     //QDomDocument mainDocument() const;
+    KoXmlWriter* m_contentWriter;
     KoXmlWriter* m_bodyWriter;
 
 private:
@@ -118,9 +119,12 @@ private:
     int m_endNoteNumber; // number of endnote _vars_ written out
     int m_previousOutlineLSID; // The list id of the previous outline-list item
     int m_previousEnumLSID; // The list id of the previous enum-list item
+    int m_textStyleNumber; //number of styles created for text family
+    int m_paragraphStyleNumber; //number of styles created for paragraph family
 
     // Current paragraph
     QString m_paragraph;
+    QString m_runOfText;
     const wvWare::Style* m_currentStyle;
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
     enum { NoShadow, Shadow, Imprint } m_shadowTextFound;
@@ -130,6 +134,8 @@ private:
 
     KWord::Table* m_currentTable;
     bool m_bInParagraph;
+    //flag that tells us to start a new page
+    bool m_bStartNewPage;
 
     QString m_fieldValue;
     bool m_insideField;

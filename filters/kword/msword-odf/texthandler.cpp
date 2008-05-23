@@ -51,19 +51,24 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 }
 
 
-KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter )
+KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter )
     : m_parser( parser ), m_sectionNumber( 0 ), m_footNoteNumber( 0 ), m_endNoteNumber( 0 ),
+      m_textStyleNumber( 1 ), m_paragraphStyleNumber( 1 ),
       m_previousOutlineLSID( 0 ), m_previousEnumLSID( 0 ),
       m_currentStyle( 0L ), m_index( 0 ),
       m_currentTable( 0L ),
-      m_bInParagraph( false ),
+      m_bInParagraph( false ), m_bStartNewPage( false ),
       m_insideField( false ), m_fieldAfterSeparator( false ), m_fieldType( 0 )
 {
+    m_contentWriter = contentWriter; //set the pointer to contentWriter for add styles
     m_bodyWriter = bodyWriter; //set the pointer to bodyWriter for writing text
 }
 
+//increment m_sectionNumber
+//emit firstSectionFound or check for pagebreak
 void KWordTextHandler::sectionStart( wvWare::SharedPtr<const wvWare::Word97::SEP> sep )
 {
+    kDebug(30513);
     m_sectionNumber++;
 
     if ( m_sectionNumber == 1 )
@@ -78,30 +83,35 @@ void KWordTextHandler::sectionStart( wvWare::SharedPtr<const wvWare::Word97::SEP
         // Not the first section. Check for a page break
         if ( sep->bkc >= 1 ) // 1=new column, 2=new page, 3=even page, 4=odd page
         {
-            pageBreak();
+            //pageBreak();
+	    m_bStartNewPage = true; //tell us to start new page on next element we write
+	    kDebug(30513) << "b_StartNewPage = true";
         }
     }
 }
 
 void KWordTextHandler::sectionEnd()
 {
-
+    kDebug(30513) ;
 }
 
-void KWordTextHandler::pageBreak()
-{
+//void KWordTextHandler::pageBreak()
+//{
     // Check if PAGEBREAKING already exists (e.g. due to linesTogether)
-    QDomElement pageBreak = m_oldLayout.namedItem( "PAGEBREAKING" ).toElement();
-    if ( pageBreak.isNull() )
-    {
+    //QDomElement pageBreak = m_oldLayout.namedItem( "PAGEBREAKING" ).toElement();
+    //if ( pageBreak.isNull() )
+    //{
         //pageBreak = mainDocument().createElement( "PAGEBREAKING" );
-        m_oldLayout.appendChild( pageBreak );
-    }
-    pageBreak.setAttribute( "hardFrameBreakAfter", "true" );
-}
+    //    m_oldLayout.appendChild( pageBreak );
+    //}
+    //pageBreak.setAttribute( "hardFrameBreakAfter", "true" );
 
+//}
+
+//signal that there's another subDoc to parse
 void KWordTextHandler::headersFound( const wvWare::HeaderFunctor& parseHeaders )
 {
+    kDebug(30513) ;
     // Currently we only care about headers in the first section
     if ( m_sectionNumber == 1 )
     {
@@ -109,10 +119,12 @@ void KWordTextHandler::headersFound( const wvWare::HeaderFunctor& parseHeaders )
     }
 }
 
+//handles in text part of the footnote, but then parses text of it later?
 void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
                                       wvWare::UChar character, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                       const wvWare::FootnoteFunctor& parseFootnote )
 {
+    kDebug(30513) ;
     bool autoNumbered = (character.unicode() == 2);
     QDomElement varElem = insertVariable( 11 /*KWord code for footnotes*/, chp, "STRI" );
     QDomElement footnoteElem = varElem.ownerDocument().createElement( "FOOTNOTE" );
@@ -134,12 +146,14 @@ void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
     emit subDocFound( new wvWare::FootnoteFunctor( parseFootnote ), type );
 }
 
+//create an element for the variable
 QDomElement KWordTextHandler::insertVariable( int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format )
 {
+    kDebug(30513) ;
     m_paragraph += '#';
 
     QDomElement formatElem;
-    writeFormat( m_formats, chp, m_currentStyle ? &m_currentStyle->chp() : 0, m_index, 1, 4 /*id*/, &formatElem );
+    writeFormattedText( m_formats, chp, m_currentStyle ? &m_currentStyle->chp() : 0, m_index, 1, 4 /*id*/, &formatElem );
 
     m_index += 1;
 
@@ -154,6 +168,7 @@ QDomElement KWordTextHandler::insertVariable( int type, wvWare::SharedPtr<const 
 
 void KWordTextHandler::tableRowFound( const wvWare::TableRowFunctor& functor, wvWare::SharedPtr<const wvWare::Word97::TAP> tap )
 {
+    kDebug(30513) ;
     if ( !m_currentTable )
     {
         // We need to put the table in a paragraph. For wv2 tables are between paragraphs.
@@ -178,6 +193,7 @@ void KWordTextHandler::pictureFound( const wvWare::PictureFunctor& pictureFuncto
                                      wvWare::SharedPtr<const wvWare::Word97::PICF> picf,
                                      wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )
 {
+    kDebug(30513) ;
     static unsigned int s_pictureNumber = 0;
     QString pictureName = "pictures/picture";
     pictureName += QString::number( s_pictureNumber ); // filenames start at 0
@@ -203,6 +219,7 @@ void KWordTextHandler::pictureFound( const wvWare::PictureFunctor& pictureFuncto
 
 QDomElement KWordTextHandler::insertAnchor( const QString& fsname )
 {
+    kDebug(30513) ;
     m_paragraph += '#';
 
     // Can't call writeFormat, we have no chp.
@@ -224,10 +241,14 @@ QDomElement KWordTextHandler::insertAnchor( const QString& fsname )
 
 void KWordTextHandler::paragLayoutBegin()
 {
+    kDebug(30513) ;
 }
 
+//sets m_paragraphProperties to the passed-in paragraphProperties
+//sets m_currentStyle with PAP->istd (index to STSH structure)
 void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties )
 {
+    kDebug(30513) ;
     if ( m_bInParagraph )
         paragraphEnd();
     m_bInParagraph = true;
@@ -240,12 +261,17 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
     {
         m_currentStyle = styles.styleByIndex( paragraphProperties->pap().istd );
         Q_ASSERT( m_currentStyle );
+	QConstString styleName = Conversion::string( m_currentStyle->name() );
+        writeOutParagraph( styleName.string(), m_paragraph );
     }
+    else
+	writeOutParagraph( "Standard", m_paragraph );
     paragLayoutBegin();
 }
 
 void KWordTextHandler::paragraphEnd()
 {
+    kDebug(30513) ;
     Q_ASSERT( m_bInParagraph );
     if ( m_currentTable )
     {
@@ -253,16 +279,19 @@ void KWordTextHandler::paragraphEnd()
         delete m_currentTable;
         m_currentTable = 0L;
     }
-    if ( m_currentStyle ) {
-        QConstString styleName = Conversion::string( m_currentStyle->name() );
-        writeOutParagraph( styleName.string(), m_paragraph );
-    } else
-        writeOutParagraph( "Standard", m_paragraph );
+    //we're writing the paragraph style at the beginning of the paragraph now! (see paragraphStart())
+    //if ( m_currentStyle ) {
+        //QConstString styleName = Conversion::string( m_currentStyle->name() );
+        //writeOutParagraph( styleName.string(), m_paragraph );
+    //} else
+        //writeOutParagraph( "Standard", m_paragraph );
+    m_bodyWriter->endElement(); //close the <text:p> tag we opened in writeLayout()
     m_bInParagraph = false;
 }
 
 void KWordTextHandler::fieldStart( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )
 {
+    kDebug(30513) ;
     m_fieldType = Conversion::fldToFieldType( fld );
     m_insideField = true;
     m_fieldAfterSeparator = false;
@@ -271,11 +300,13 @@ void KWordTextHandler::fieldStart( const wvWare::FLD* fld, wvWare::SharedPtr<con
 
 void KWordTextHandler::fieldSeparator( const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )
 {
+    kDebug(30513) ;
     m_fieldAfterSeparator = true;
 }
 
 void KWordTextHandler::fieldEnd( const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
 {
+    kDebug(30513) ;
     // only for handled field type
     if( m_fieldType >= 0 )
     {
@@ -297,7 +328,7 @@ void KWordTextHandler::fieldEnd( const wvWare::FLD* /*fld*/, wvWare::SharedPtr<c
 void KWordTextHandler::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
 {
     QConstString newText( Conversion::string( text ) );
-    kDebug(30513) <<"runOfText:" << newText.string();
+    kDebug(30513) << newText.string();
 
     // text after fieldStart and before fieldSeparator is useless
     if( m_insideField && !m_fieldAfterSeparator ) return;
@@ -309,27 +340,77 @@ void KWordTextHandler::runOfText( const wvWare::UString& text, wvWare::SharedPtr
         return;
     }
 
-    //m_paragraph += newText.string();
+    m_runOfText += newText.string();
 
-    //writeFormat( m_formats, chp, m_currentStyle ? &m_currentStyle->chp() : 0, m_index, text.length(), 1, 0L );
-    m_bodyWriter->startElement("text:p");
-    m_bodyWriter->addTextNode( newText.string() );
-    m_bodyWriter->endElement(); //text:p
+    //write the text with its formatting inside a <text:span> tag
+    writeFormattedText( m_formats, chp, m_currentStyle ? &m_currentStyle->chp() : 0, m_index, text.length(), 1, 0L );
 
+    //reset m_runOfText since we've already written it out
+    m_runOfText = "";
+    
     //m_index += text.length();
-
+    
+    //m_bodyWriter->startElement("text:p");
+    //we may need to start new page with this text
+    //if( m_bStartNewPage )
+    //{
+	//write style
+	//m_contentWriter->startElement( "style:style" );
+	//m_contentWriter->addAttribute( "style:name", "P1" );//TODO make this a dynamic name!
+	//m_contentWriter->addAttribute( "style:family", "paragraph" );
+	//m_contentWriter->startElement( "style:paragraph-properties" );
+	//m_contentWriter->addAttribute( "fo:break-before", "page" );
+	//m_contentWriter->endElement(); //style:paragraph-properties
+	//m_contentWriter->endElement(); //style:style
+	//add attribute to <text:p>
+	//m_bodyWriter->addAttribute( "text:style-name", "P1" );
+	//now set flag to false since we've started the new page
+	//m_bStartNewPage = false;
+	//kDebug(30513) << "b_StartNewPage = false";
+    //}
+    //m_bodyWriter->addTextNode( newText.string() );
+    //m_bodyWriter->endElement(); //text:p
 }
 
-void KWordTextHandler::writeFormat( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, int pos, int len, int formatId, QDomElement* pChildElement )
+//called by runOfText to write the formatting information for that text?
+//called by insertVariable() as well
+//this function writes the formatting for a runOfText
+//I'm going to make this actually write the text, too, inside a <text:span> tag (style:family=text)
+void KWordTextHandler::writeFormattedText( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, int pos, int len, int formatId, QDomElement* pChildElement )
 {
+    //chp is the actual style for this run of text
+    //refChp comes from m_currentStyle (0 if nothing there)
+    //if statement logic: I guess the assumption is that m_currentStyle (refChp) has already
+    // been applied, so only use chp if refChp doesn't exist or it's different
+
+    kDebug(30513) ;
+
+    //set up styleName
+    QString styleName( "T" );
+    styleName.append( QString::number( m_textStyleNumber ) );
+    m_textStyleNumber++; //increment for the next style we need to write
+    //start style tag for this run of text (closed at the end of the function)
+    m_contentWriter->startElement( "style:style" );
+    m_contentWriter->addAttribute( "style:name", styleName.toUtf8() );
+    m_contentWriter->addAttribute( "style:family", "text" );
+    m_contentWriter->startElement( "style:text-properties" );
+
+    //write the text
+    m_bodyWriter->startElement( "text:span" );
+    m_bodyWriter->addAttribute( "text:style-name", styleName.toUtf8() );
+    m_bodyWriter->addTextNode( m_runOfText.toUtf8() );
+    m_bodyWriter->endElement(); //text:span
+
     //QDomElement format( mainDocument().createElement( "FORMAT" ) );
     //format.setAttribute( "id", formatId );
     //format.setAttribute( "pos", pos );
     //format.setAttribute( "len", len );
 
+    //ico = color of text
     if ( !refChp || refChp->ico != chp->ico )
     {
-        QColor color = Conversion::color( chp->ico, -1 );
+        QString color = Conversion::color( chp->ico, -1 );
+	m_contentWriter->addAttribute( "fo:color", color.toUtf8() );
         //QDomElement colorElem( mainDocument().createElement( "COLOR" ) );
         //colorElem.setAttribute( "red", color.red() );
         //colorElem.setAttribute( "blue", color.blue() );
@@ -339,76 +420,115 @@ void KWordTextHandler::writeFormat( QDomElement& parentElement, const wvWare::Wo
 
     // Font name
     // TBD: We only use the Ascii font code. We should work out how/when to use the FE and Other font codes.
+    // ftcAscii = (rgftc[0]) font for ASCII text
     if ( !refChp || refChp->ftcAscii != chp->ftcAscii )
     {
         QString fontName = getFont( chp->ftcAscii );
 
         if ( !fontName.isEmpty() )
         {
+	    //TODO need to have a style:font-face-decl tag with the name of fontName!
+	    m_contentWriter->addAttribute( "style:font-name", fontName.toUtf8() );
             //QDomElement fontElem( mainDocument().createElement( "FONT" ) );
             //fontElem.setAttribute( "name", fontName );
             //format.appendChild( fontElem );
         }
     }
-
+    //hps = font size in half points
     if ( !refChp || refChp->hps != chp->hps )
     {
+	QString size = QString::number( (int)(chp->hps/2) );
+	m_contentWriter->addAttribute( "fo:font-size", size.append( "pt" ).toUtf8() );
+
         //kDebug(30513) <<"        font size:" << chp->hps/2;
         //QDomElement fontSize( mainDocument().createElement( "SIZE" ) );
         //fontSize.setAttribute( "value", (int)(chp->hps / 2) ); // hps is in half points
         //format.appendChild( fontSize );
     }
-
+    //fBold = bold text if 1
     if ( !refChp || refChp->fBold != chp->fBold ) {
+	m_contentWriter->addAttribute( "fo:font-weight", chp->fBold ? "bold" : "normal" );
         //QDomElement weight( mainDocument().createElement( "WEIGHT" ) );
         //weight.setAttribute( "value", chp->fBold ? 75 : 50 );
         //format.appendChild( weight );
     }
+    //fItalic = italic text if 1
     if ( !refChp || refChp->fItalic != chp->fItalic ) {
+	m_contentWriter->addAttribute( "fo:font-style", chp->fItalic ? "italic" : "normal" );
         //QDomElement italic( mainDocument().createElement( "ITALIC" ) );
         //italic.setAttribute( "value", chp->fItalic ? 1 : 0 );
         //format.appendChild( italic );
     }
+    //kul: underline code
     if ( !refChp || refChp->kul != chp->kul ) {
         //QDomElement underline( mainDocument().createElement( "UNDERLINE" ) );
-        QString val = (chp->kul == 0) ? "0" : "1";
-        /*switch ( chp->kul ) {
-        case 3: // double
+        //QString val = (chp->kul == 0) ? "0" : "1";
+        switch ( chp->kul ) {
+	case 0: //none
+	    m_contentWriter->addAttribute( "style:text-underline-style", "none" );
+	    break;
+        case 1: // single
+	    m_contentWriter->addAttribute( "style:text-underline-style", "solid" );
+	    break;
+        case 2: // by word
+	    m_contentWriter->addAttribute( "style:text-underline-style", "solid" );
+	    m_contentWriter->addAttribute( "style:text-underline-mode", "skip-white-space" );
+	    break;
+	case 3: // double
             //underline.setAttribute( "styleline", "solid" );
-            val = "double";
+            //val = "double";
+	    m_contentWriter->addAttribute( "style:text-underline-style", "solid" );
+	    m_contentWriter->addAttribute( "style:text-underline-type", "double" );
+            break;
+        case 4: // dotted
+	    m_contentWriter->addAttribute( "style:text-underline-style", "dotted" );
+	    break;
+        case 5: // hidden - This makes no sense as an underline property!
+            //val = "0";
+	    //I guess we could change this to have an underline the same color
+	    //as the background?
+	    m_contentWriter->addAttribute( "style:text-underline-type", "none" );
             break;
         case 6: // thick
             //underline.setAttribute( "styleline", "solid" );
-            val = "single-bold";
+            //val = "single-bold";
+	    m_contentWriter->addAttribute( "style:text-underline-style", "solid" );
+	    m_contentWriter->addAttribute( "style:text-underline-weight", "thick" );
             break;
-        case 7:
+        case 7: //dash
             //underline.setAttribute( "styleline", "dash" );
+	    m_contentWriter->addAttribute( "style:text-underline-style", "dash" );
             break;
-        case 4: // dotted
-        case 8: // dot (not used, says the docu)
+        case 8: //dot (not used, says the docu)
             //underline.setAttribute( "styleline", "dot" );
             break;
-        case 9:
+        case 9: //dot dash
             //underline.setAttribute( "styleline", "dashdot" );
+	    m_contentWriter->addAttribute( "style:text-underline-style", "dot-dash" );
             break;
-        case 10:
+        case 10: //dot dot dash
             //underline.setAttribute( "styleline", "dashdotdot" );
+	    m_contentWriter->addAttribute( "style:text-underline-style", "dot-dot-dash" );
             break;
-        case 11: // wave
+        case 11: //wave
             //underline.setAttribute( "styleline", "wave" );
+	    m_contentWriter->addAttribute( "style:text-underline-style", "wave" );
             break;
-        case 5: // hidden - This makes no sense as an underline property!
-            val = "0";
-            break;
-        case 1: // single
-        case 2: // by word - TODO
         default:
-            underline.setAttribute( "styleline", "solid" );
-        };*/
+	    m_contentWriter->addAttribute( "style:text-underline-style", "none" );
+        };
         //underline.setAttribute( "value", val );
         //format.appendChild( underline );
     }
-    //if ( !refChp || refChp->fStrike != chp->fStrike || refChp->fDStrike != chp->fDStrike ) {
+    //fstrike = use strikethrough if 1
+    //fDStrike = use double strikethrough if 1
+    if ( !refChp || refChp->fStrike != chp->fStrike || refChp->fDStrike != chp->fDStrike ) {
+	if ( chp->fStrike )
+	    m_contentWriter->addAttribute( "style:text-line-through-type", "single" );
+	else if ( chp->fDStrike )
+	    m_contentWriter->addAttribute( "style:text-line-through-type", "double" );
+	else
+	    m_contentWriter->addAttribute( "style:text-line-through-type", "none" );
         /*QDomElement strikeout( mainDocument().createElement( "STRIKEOUT" ) );
         if ( chp->fDStrike ) // double strikethrough
         {
@@ -422,64 +542,77 @@ void KWordTextHandler::writeFormat( QDomElement& parentElement, const wvWare::Wo
         }
         else
             strikeout.setAttribute( "value", "0" );
-        format.appendChild( strikeout );
+        format.appendChild( strikeout );*/
     }
 
     // font attribute (uppercase, lowercase (not in MSWord), small caps)
+    //fCaps = displayed with caps when 1, no caps when 0
+    //fSmallCaps = displayed with small caps when 1, no small caps when 0
     if ( !refChp || refChp->fCaps != chp->fCaps || refChp->fSmallCaps != chp->fSmallCaps )
     {
-        QDomElement fontAttrib( mainDocument().createElement( "FONTATTRIBUTE" ) );
-        fontAttrib.setAttribute( "value", chp->fSmallCaps ? "smallcaps" : chp->fCaps ? "uppercase" : "none" );
-        format.appendChild( fontAttrib );
+        //QDomElement fontAttrib( mainDocument().createElement( "FONTATTRIBUTE" ) );
+        //fontAttrib.setAttribute( "value", chp->fSmallCaps ? "smallcaps" : chp->fCaps ? "uppercase" : "none" );
+        //format.appendChild( fontAttrib );
     }
+    //iss = superscript/subscript indices
     if ( !refChp || refChp->iss != chp->iss ) { // superscript/subscript
-        QDomElement vertAlign( mainDocument().createElement( "VERTALIGN" ) );
+	if ( chp->iss == 1 ) //superscript
+	    m_contentWriter->addAttribute( "style:text-position", "super" );
+	else if ( chp->iss == 2 ) //subscript
+	    m_contentWriter->addAttribute( "style:text-position", "sub" );
+        //QDomElement vertAlign( mainDocument().createElement( "VERTALIGN" ) );
         // Obviously the values are reversed between the two file formats :)
-        int kwordVAlign = (chp->iss==1 ? 2 : chp->iss==2 ? 1 : 0);
-        vertAlign.setAttribute( "value", kwordVAlign );
-        format.appendChild( vertAlign );
+        //int kwordVAlign = (chp->iss==1 ? 2 : chp->iss==2 ? 1 : 0);
+        //vertAlign.setAttribute( "value", kwordVAlign );
+        //format.appendChild( vertAlign );
     }
 
-    // background color is known as "highlight" in msword
+    //fHighlight = when 1, characters are highlighted with color specified by chp.icoHighlight
+    //icoHighlight = highlight color (see chp.ico)
     if ( !refChp || refChp->fHighlight != chp->fHighlight || refChp->icoHighlight != chp->icoHighlight ) {
-        QDomElement bgcolElem( mainDocument().createElement( "TEXTBACKGROUNDCOLOR" ) );
+        //QDomElement bgcolElem( mainDocument().createElement( "TEXTBACKGROUNDCOLOR" ) );
         if ( chp->fHighlight )
         {
-            QColor color = Conversion::color( chp->icoHighlight, -1 );
-            bgcolElem.setAttribute( "red", color.red() );
-            bgcolElem.setAttribute( "blue", color.blue() );
-            bgcolElem.setAttribute( "green", color.green() );
+	    QString color = Conversion::color( chp->icoHighlight, -1 );
+
+            //bgcolElem.setAttribute( "red", color.red() );
+            //bgcolElem.setAttribute( "blue", color.blue() );
+            //bgcolElem.setAttribute( "green", color.green() );
         } else {
-            bgcolElem.setAttribute( "red", -1 );
-            bgcolElem.setAttribute( "blue", -1 );
-            bgcolElem.setAttribute( "green", -1 );
+            //bgcolElem.setAttribute( "red", -1 );
+            //bgcolElem.setAttribute( "blue", -1 );
+            //bgcolElem.setAttribute( "green", -1 );
         }
-        format.appendChild( bgcolElem );
+        //format.appendChild( bgcolElem );
     }
 
     // Shadow text. Only on/off. The properties are defined at the paragraph level (in KWord).
     if ( !refChp || refChp->fShadow != chp->fShadow || refChp->fImprint != chp->fImprint ) {
-        QDomElement shadowElem( mainDocument().createElement( "SHADOW" ) );
-        QString css = "none";
+        //QDomElement shadowElem( mainDocument().createElement( "SHADOW" ) );
+        //QString css = "none";
         // Generate a shadow with hardcoded values that make it look like in MSWord.
         // We need to make the distance depend on the font size though, to look good
         if (chp->fShadow || chp->fImprint)
         {
-            int fontSize = (int)(chp->hps / 2);
-            int dist = fontSize > 20 ? 2 : 1;
-            if (chp->fImprint) // ## no real support for imprint, we use a topleft shadow
-                dist = -dist;
-            css = QString::fromLatin1("#bebebe %1pt %1pt").arg(dist).arg(dist);
+            //int fontSize = (int)(chp->hps / 2);
+            //int dist = fontSize > 20 ? 2 : 1;
+            //if (chp->fImprint) // ## no real support for imprint, we use a topleft shadow
+            //    dist = -dist;
+            //css = QString::fromLatin1("#bebebe %1pt %1pt").arg(dist).arg(dist);
         }
-        shadowElem.setAttribute( "text-shadow", css );
-        format.appendChild( shadowElem );
+        //shadowElem.setAttribute( "text-shadow", css );
+        //format.appendChild( shadowElem );
     }
 
-    if ( pChildElement || !format.firstChild().isNull() ) // Don't save an empty format tag, unless the caller asked for it
-        parentElement.appendChild( format );
-    if ( pChildElement )
-        *pChildElement = format;
-	*/
+    //if ( pChildElement || !format.firstChild().isNull() ) // Don't save an empty format tag, unless the caller asked for it
+        //parentElement.appendChild( format );
+    //if ( pChildElement )
+        //*pChildElement = format;
+	
+
+    //now close style tag for this run of text
+    m_contentWriter->endElement(); //style:text-properties
+    m_contentWriter->endElement(); //style:style
 }
 
 //#define FONT_DEBUG
@@ -488,6 +621,7 @@ void KWordTextHandler::writeFormat( QDomElement& parentElement, const wvWare::Wo
 // something that might just be present under X11.
 QString KWordTextHandler::getFont(unsigned fc) const
 {
+    kDebug(30513) ;
     Q_ASSERT( m_parser );
     if ( !m_parser )
         return QString();
@@ -543,14 +677,16 @@ QString KWordTextHandler::getFont(unsigned fc) const
     return info.family();
 }
 
+//called by paragraphEnd()
 void KWordTextHandler::writeOutParagraph( const QString& styleName, const QString& text )
 {
-    if ( m_framesetElement.isNull() )
-    {
-        if ( !text.isEmpty() ) // vertically merged table cells are ignored, and have empty text -> no warning on those
-            kWarning(30513) << "KWordTextHandler: no frameset element to write to! text=" << text;
-        return;
-    }
+    kDebug(30513) ;
+    //if ( m_framesetElement.isNull() )
+    //{
+    //    if ( !text.isEmpty() ) // vertically merged table cells are ignored, and have empty text -> no warning on those
+    //        kWarning(30513) << "KWordTextHandler: no frameset element to write to! text=" << text;
+    //    return;
+    //}
     /*QDomElement paragraphElementOut=mainDocument().createElement("PARAGRAPH");
     m_framesetElement.appendChild(paragraphElementOut);
     QDomElement textElement=mainDocument().createElement("TEXT");
@@ -564,22 +700,52 @@ void KWordTextHandler::writeOutParagraph( const QString& styleName, const QStrin
     nameElement.setAttribute("value", styleName);
     layoutElement.appendChild(nameElement);*/
 
-    if ( m_paragraphProperties )
-    {
-        // Write out the properties of the paragraph
-        //writeLayout( layoutElement, *m_paragraphProperties, m_currentStyle );
-    }
+    //if ( m_paragraphProperties )
+    //{
+        // Write out the properties of the paragraph - all the time now!
+    writeLayout( /**m_paragraphProperties,*/ m_currentStyle );
+    //}
 
-    //textElement.appendChild(mainDocument().createTextNode(text));
+    //textElement.appendChild(mainDocument().createTextNode(text)); - here's where we actually write the text
 
     m_paragraph = QString( "" );
     m_index = 0;
     //m_oldLayout = layoutElement; // Keep a reference to the old layout for some hacks
 }
 
-void KWordTextHandler::writeLayout( QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties, const wvWare::Style* style )
+//only called by writeOutParagraph
+//looks like this is where we actually write the formatting for the paragraph
+void KWordTextHandler::writeLayout( /*QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties,*/ const wvWare::Style* style )
 {
-    const wvWare::Word97::PAP& pap = paragraphProperties.pap();
+    kDebug(30513);
+
+    //startthe <text:p> tag - it's closed in paragraphEnd()
+    m_bodyWriter->startElement( "text:p" );
+
+    //if we don't actually have paragraph properties, just return
+    if ( !m_paragraphProperties )
+    {
+	kDebug(30513) << " we don't have any paragraph properties.";
+	return;
+    }
+
+    //we do have properties, so setup the style tag
+    //set up styleName
+    QString styleName( "P" );
+    styleName.append( QString::number( m_paragraphStyleNumber ) );
+    m_paragraphStyleNumber++; //increment for the next style we need to write
+    //start style tag for this run of text (closed at the end of the function)
+    m_contentWriter->startElement( "style:style" );
+    m_contentWriter->addAttribute( "style:name", styleName.toUtf8() );
+    m_contentWriter->addAttribute( "style:family", "paragraph" );
+    //does all the styling go in this tag? may need to collect the options & write both tags at the end
+    m_contentWriter->startElement( "style:paragraph-properties" );
+
+    //add the attribute for our style in <text:p>
+    m_bodyWriter->addAttribute( "text:style-name", styleName.toUtf8() );
+    
+
+    const wvWare::Word97::PAP& pap = (*m_paragraphProperties).pap();
     // Always write out the alignment, it's required
     //QDomElement flowElement = mainDocument().createElement("FLOW");
     QString alignment = Conversion::alignment( pap.jc );
@@ -588,6 +754,9 @@ void KWordTextHandler::writeLayout( QDomElement& parentElement, const wvWare::Pa
 
     //kDebug(30513) <<" dxaLeft1=" << pap.dxaLeft1 <<" dxaLeft=" << pap.dxaLeft <<" dxaRight=" << pap.dxaRight <<" dyaBefore=" << pap.dyaBefore <<" dyaAfter=" << pap.dyaAfter <<" lspd=" << pap.lspd.dyaLine <<"/" << pap.lspd.fMultLinespace;
 
+    //dxaLeft1 = first-line indent from left margin (signed, relative to dxaLeft)
+    //dxaLeft = indent from left margin (signed)
+    //dxaRight = index from right margin
     if ( pap.dxaLeft1 || pap.dxaLeft || pap.dxaRight )
     {
         //QDomElement indentsElement = mainDocument().createElement("INDENTS");
@@ -597,6 +766,8 @@ void KWordTextHandler::writeLayout( QDomElement& parentElement, const wvWare::Pa
         //indentsElement.setAttribute( "right", (double)pap.dxaRight / 20.0 );
         //parentElement.appendChild( indentsElement );
     }
+    //dyaBefore = vertical spacing before paragraph (unsigned)
+    //dyaAfter = vertical spacing after paragraph (unsigned)
     if ( pap.dyaBefore || pap.dyaAfter )
     {
         //QDomElement offsetsElement = mainDocument().createElement("OFFSETS");
@@ -606,6 +777,8 @@ void KWordTextHandler::writeLayout( QDomElement& parentElement, const wvWare::Pa
     }
 
     // Linespacing
+    //lspd = line spacing descriptor
+    //Conversion::lineSpacing() returns "0" (default), "oneandhalf," or "double" 
     QString lineSpacing = Conversion::lineSpacing( pap.lspd );
     if ( lineSpacing != "0" )
     {
@@ -613,10 +786,14 @@ void KWordTextHandler::writeLayout( QDomElement& parentElement, const wvWare::Pa
         //lineSpacingElem.setAttribute("value", lineSpacing );
         //parentElement.appendChild( lineSpacingElem );
     }
-
+    //fKeep = keep entire paragraph on one page if possible
+    //fKeepFollow = keep paragraph on same page with next paragraph if possible
+    //fPageBreakBefore = start this paragraph on new page
     if ( pap.fKeep || pap.fKeepFollow || pap.fPageBreakBefore )
     {
-/*      QDomElement pageBreak = mainDocument().createElement( "PAGEBREAKING" );
+	if ( pap.fPageBreakBefore )
+	    m_contentWriter->addAttribute( "fo:break-before", "page" );
+	/*QDomElement pageBreak = mainDocument().createElement( "PAGEBREAKING" );
         if ( pap.fKeep )
             pageBreak.setAttribute("linesTogether", "true");
         if ( pap.fPageBreakBefore )
@@ -627,6 +804,12 @@ void KWordTextHandler::writeLayout( QDomElement& parentElement, const wvWare::Pa
     }
 
     // Borders
+    //brcTop = specification for border above paragraph
+    //brcBottom = specification for border below paragraph
+    //brcLeft = specification for border to the left of paragraph
+    //brcRight = specification for border to the right of paragraph
+    //brcType: 0=none, 1=single, 2=thick, 3=double, 5=hairline, 6=dot, 7=dash large gap,
+    //	8=dot dash, 9=dot dot dash, 10=triple, 11=thin-thick small gap, ...
     if ( pap.brcTop.brcType )
     {
         //QDomElement borderElement = mainDocument().createElement( "TOPBORDER" );
@@ -653,10 +836,12 @@ void KWordTextHandler::writeLayout( QDomElement& parentElement, const wvWare::Pa
     }
 
     // Tabulators
+    //itbdMac = number of tabs stops defined for paragraph. Must be >= 0 and <= 64.
     if ( pap.itbdMac )
     {
         for ( int i = 0 ; i < pap.itbdMac ; ++i )
         {
+	    //rgdxaTab = array of { positions of itbdMac tab stops ; itbdMac tab descriptors } itbdMax == 64. The SPEC doesn't have such a structure, obviously. This is a wv2 change. (This data is never in the file as is, it comes from the SPRMs).
             const wvWare::Word97::TabDescriptor &td = pap.rgdxaTab[i];
             //QDomElement tabElement = mainDocument().createElement( "TABULATOR" );
             //tabElement.setAttribute( "ptpos", (double)td.dxaTab / 20.0 );
@@ -683,15 +868,21 @@ void KWordTextHandler::writeLayout( QDomElement& parentElement, const wvWare::Pa
             //parentElement.appendChild( tabElement );
         }
     }
-
+    //ilfo = when non-zero, (1-based) index into the pllfo identifying the list to which the paragraph belongs
     if ( pap.ilfo > 0 )
     {
-        writeCounter( parentElement, paragraphProperties, style );
+        writeCounter( /*parentElement,*/ *m_paragraphProperties, style );
     }
+    //now close style:style tag for this paragraph
+    m_contentWriter->endElement(); //style:paragraph-properties
+    m_contentWriter->endElement(); //style:style
 }
 
-void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties, const wvWare::Style* style )
+//only called by writeLayout()
+//this is for lists (bullets & numbers)
+void KWordTextHandler::writeCounter( /*QDomElement& parentElement,*/ const wvWare::ParagraphProperties& paragraphProperties, const wvWare::Style* style )
 {
+    kDebug(30513) ;
     const wvWare::ListInfo* listInfo = paragraphProperties.listInfo();
     if ( !listInfo )
         return;
@@ -831,6 +1022,7 @@ void KWordTextHandler::writeCounter( QDomElement& parentElement, const wvWare::P
 
 void KWordTextHandler::setFrameSetElement( const QDomElement& frameset )
 {
+    kDebug(30513) ;
     //m_framesetElement = frameset;
     for ( uint i = 0 ; i < 9 ; ++i )
         m_listSuffixes[i].clear();

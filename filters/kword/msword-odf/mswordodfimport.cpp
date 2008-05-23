@@ -144,7 +144,7 @@ KoFilter::ConversionStatus MSWordOdfImport::convert( const QByteArray& from, con
     //QDomDocument documentInfo;
     //documentInfo.appendChild (documentInfo.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
 
-    d->document = new Document( QFile::encodeName( d->inputFile ).data(), /*mainDocument, documentInfo, framesetsElem,*/ m_chain, bodyWriter );
+    d->document = new Document( QFile::encodeName( d->inputFile ).data(), /*mainDocument, documentInfo, framesetsElem,*/ m_chain, contentWriter, bodyWriter );
     //Document document( QFile::encodeName( m_chain->inputFile() ).data(), mainDocument, documentInfo, framesetsElem, m_chain );
     
     //check that we can parse the document?
@@ -208,14 +208,16 @@ bool MSWordOdfImport::createContent( KoXmlWriter* contentWriter, KoXmlWriter* bo
     contentWriter->endElement(); // style:font-face
     contentWriter->startElement( "style:font-face" );
     contentWriter->addAttribute( "style:name", "Times New Roman" );
-    contentWriter->addAttribute( "svg:font-family", "&apos;Times New Roman&apos;" );
+    contentWriter->addAttribute( "svg:font-family", "Times New Roman" );
     contentWriter->endElement(); // style:font-face
     contentWriter->endElement(); // office:font-face-decls
+    contentWriter->startElement( "office:automatic-styles" ); //open automatic styles for writing during the parsing
 
     //just some constants for now
     bodyWriter->startElement( "office:body" );
     //text & content
     bodyWriter->startElement( "office:text" );
+    bodyWriter->addAttribute( "text:use-soft-page-breaks", "true" );
     //bodyWriter->startElement( "text:sequence-decls" );
     //bodyWriter->endElement(); //text:sequence-decls
     //bodyWriter->startElement( "text:p" );
@@ -224,13 +226,16 @@ bool MSWordOdfImport::createContent( KoXmlWriter* contentWriter, KoXmlWriter* bo
     
     //actual parsing & action
     if ( !d->document->parse() ) //parse file into the queues?
-        return KoFilter::ParsingError;
+	return false;
+        //return KoFilter::ParsingError;
     d->document->processSubDocQueue(); //process the queues we've created?
     d->document->finishDocument(); //process footnotes, pictures, ...
     if ( !d->document->bodyFound() )
-        return KoFilter::WrongFormat;
+	return false;
+        //return KoFilter::WrongFormat;
     
     //close & cleanup
+    contentWriter->endElement(); //office:automatic-styles
     bodyWriter->endElement(); //office:text
     bodyWriter->endElement(); //office:body
 

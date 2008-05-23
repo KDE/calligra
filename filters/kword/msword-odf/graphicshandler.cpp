@@ -29,6 +29,7 @@ using namespace wvWare;
 
 KWordPictureHandler::KWordPictureHandler( Document* doc ) : QObject(), m_doc(doc)
 {
+    kDebug(30513) ;
 }
 
 #ifdef IMAGE_IMPORT
@@ -71,6 +72,7 @@ void KWordPictureHandler::wmfData( OLEImageReader& reader, SharedPtr<const Word9
 
 void KWordPictureHandler::tiffData( const UString& /*name*/, SharedPtr<const Word97::PICF> /*picf*/ )
 {
+    kDebug(30513) ;
 }
 
 #endif // IMAGE_IMPORT

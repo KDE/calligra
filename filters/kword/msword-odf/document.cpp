@@ -40,7 +40,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 
-Document::Document( const std::string& fileName, /*QDomDocument& mainDocument, QDomDocument& documentInfo, QDomElement& framesetsElement,*/ KoFilterChain* chain, KoXmlWriter* bodyWriter )
+Document::Document( const std::string& fileName, /*QDomDocument& mainDocument, QDomDocument& documentInfo, QDomElement& framesetsElement,*/ KoFilterChain* chain, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter )
     : /*m_mainDocument( mainDocument ), m_documentInfo ( documentInfo ),
       m_framesetsElement( framesetsElement ),*/
       m_replacementHandler( new KWordReplacementHandler ), m_tableHandler( new KWordTableHandler ),
@@ -49,9 +49,10 @@ Document::Document( const std::string& fileName, /*QDomDocument& mainDocument, Q
       m_parser( wvWare::ParserFactory::createParser( fileName ) )/*, m_headerFooters( 0 ), m_bodyFound( false ),
       m_footNoteNumber( 0 ), m_endNoteNumber( 0 )*/
 {
+    kDebug(30513) ;
     if ( m_parser ) // 0 in case of major error (e.g. unsupported format)
     {
-        m_textHandler = new KWordTextHandler( m_parser, bodyWriter );
+        m_textHandler = new KWordTextHandler( m_parser, contentWriter, bodyWriter );
         connect( m_textHandler, SIGNAL( subDocFound( const wvWare::FunctorBase*, int ) ),
                  this, SLOT( slotSubDocFound( const wvWare::FunctorBase*, int ) ) );
         connect( m_textHandler, SIGNAL( tableFound( const KWord::Table& ) ),
@@ -82,8 +83,14 @@ Document::~Document()
     delete m_replacementHandler;
 }
 
+//set whether or not document has header or footer
+//set tabstop value
+//add footnote settings & endnote settings
+//write out header & footer type
+//write out picture information
 void Document::finishDocument()
 {
+    kDebug(30513) ;
     const wvWare::Word97::DOP& dop = m_parser->dop();
 /*
     QDomElement elementDoc = m_mainDocument.documentElement();
@@ -136,7 +143,10 @@ void Document::finishDocument()
     }*/
 }
 
-void Document::processAssociatedStrings() {
+//write document info, author, fullname, title, about
+void Document::processAssociatedStrings() 
+{
+    kDebug(30513) ;
     wvWare::AssociatedStrings strings( m_parser->associatedStrings() );
 /*
     QDomElement infodoc = m_documentInfo.createElement( "document-info" );
@@ -171,14 +181,15 @@ void Document::processAssociatedStrings() {
 
 void Document::processStyles()
 {
-  /*  QDomElement stylesElem = m_mainDocument.createElement( "STYLES" );
-    m_mainDocument.documentElement().appendChild( stylesElem );
+    kDebug(30513) ;
+    //QDomElement stylesElem = m_mainDocument.createElement( "STYLES" );
+    //m_mainDocument.documentElement().appendChild( stylesElem );
 
-    m_textHandler->setFrameSetElement( stylesElem ); /// ### naming!
+    //m_textHandler->setFrameSetElement( stylesElem ); /// ### naming!
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
     unsigned int count = styles.size();
-    //kDebug(30513) <<"styles count=" << count;
-    for ( unsigned int i = 0; i < count ; ++i )
+    kDebug(30513) <<"styles count=" << count;
+    /*for ( unsigned int i = 0; i < count ; ++i )
     {
         const wvWare::Style* style = styles.styleByIndex( i );
         Q_ASSERT( style );
@@ -216,13 +227,16 @@ void Document::processStyles()
     }*/
 }
 
+//just call parsing function
 bool Document::parse()
 {
+    kDebug(30513) ;
     if ( m_parser )
         return m_parser->parse();
     return false;
 }
 
+//connects firstSectionFound signal & slot together; sets flag to true
 void Document::bodyStart()
 {
     kDebug(30513) ;
@@ -242,6 +256,7 @@ void Document::bodyStart()
     m_bodyFound = true;
 }
 
+//disconnects firstSectionFound signal & slot
 void Document::bodyEnd()
 {
     kDebug(30513) ;
@@ -249,7 +264,10 @@ void Document::bodyEnd()
              this, SLOT( slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ) );
 }
 
-
+//sets paper size
+//sets format & orientation
+//sets column information
+//sets up borders
 void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> sep )
 {
     kDebug(30513) ;
@@ -287,6 +305,7 @@ void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SE
     // TODO use sep->fEndNote to set the 'use endnotes or footnotes' flag
 }
 
+//creates a frameset element with the header info
 void Document::headerStart( wvWare::HeaderData::Type type )
 {
     kDebug(30513) <<"startHeader type=" << type <<" (" << Conversion::headerTypeToFramesetName( type ) <<")";
@@ -312,13 +331,19 @@ void Document::headerStart( wvWare::HeaderData::Type type )
         m_hasFooter = true;*/
 }
 
+//creates empty frameset element?
 void Document::headerEnd()
 {
+    kDebug(30513) ;
     //m_textHandler->setFrameSetElement( QDomElement() );
 }
 
+//get text of the footnote
+//set information about the footnote/endnote
+//increment the number of footnotes/endnotes
 void Document::footnoteStart()
 {
+    kDebug(30513) ;
     // Grab data that was stored with the functor, that triggered this parsing
     SubDocument subdoc( m_subdocQueue.front() );
     int type = subdoc.data;
@@ -340,14 +365,17 @@ void Document::footnoteStart()
     //m_textHandler->setFrameSetElement( framesetElement );
 }
 
+//add empty frameset element to end it?
 void Document::footnoteEnd()
 {
     kDebug(30513) ;
     //m_textHandler->setFrameSetElement( QDomElement() );
 }
 
+//create fram for the table cell?
 void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
 {
+    kDebug(30513) ;
     // Create footnote/endnote frameset
     //QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
     //framesetElement.setAttribute( "frameType", 1 /* text */ );
@@ -367,8 +395,10 @@ void Document::slotTableCellStart( int row, int column, int rowSpan, int columnS
     //m_textHandler->setFrameSetElement( framesetElement );
 }
 
+//add empty element to end it?
 void Document::slotTableCellEnd()
 {
+    kDebug(30513) ;
     //m_textHandler->setFrameSetElement( QDomElement() );
 }
 
@@ -387,8 +417,11 @@ void Document::slotTableCellEnd()
     return frameElementOut;
 }*/
 
+//set up frame borders (like for a table cell?)
+//set the background fill
 void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
 {
+    kDebug(30513) ;
     // Frame borders
 
     if ( brcTop.ico != 255 && brcTop.dptLineWidth != 255 ) // see tablehandler.cpp
@@ -437,26 +470,34 @@ void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::
     }
 }
 
+//create SubDocument object & add it to the queue
 void Document::slotSubDocFound( const wvWare::FunctorBase* functor, int data )
 {
+    kDebug(30513) ;
     SubDocument subdoc( functor, data, QString(), QString() );
     m_subdocQueue.push( subdoc );
 }
 
+//add KWord::Table object to the table queue
 void Document::slotTableFound( const KWord::Table& table )
 {
+    kDebug(30513) ;
     m_tableQueue.push( table );
 }
 
+//add the picture SubDocument to the queue
 void Document::slotPictureFound( const QString& frameName, const QString& pictureName,
                                  const wvWare::FunctorBase* pictureFunctor )
 {
+    kDebug(30513) ;
     SubDocument subdoc( pictureFunctor, 0, frameName, pictureName );
     m_subdocQueue.push( subdoc );
 }
 
+//process through all the subDocs and the tables
 void Document::processSubDocQueue()
 {
+    kDebug(30513) ;
     // Table cells can contain footnotes, and footnotes can contain tables [without footnotes though]
     // This is why we need to repeat until there's nothing more do to (#79024)
     while ( !m_subdocQueue.empty() || !m_tableQueue.empty() )
@@ -486,8 +527,12 @@ void Document::processSubDocQueue()
     }
 }
 
+//get the subdocument
+//create the frame for it
+//create the picture element
 KoStoreDevice* Document::createPictureFrameSet( const QSizeF& size )
 {
+    kDebug(30513) ;
     // Grab data that was stored with the functor, that triggered this parsing
     SubDocument subdoc( m_subdocQueue.front() );
 

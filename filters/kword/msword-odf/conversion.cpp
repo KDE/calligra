@@ -26,53 +26,55 @@
 #include <kdebug.h>
 #include <QRegExp>
 #include <qdom.h>
+#include <QString>
 #include <klocale.h>
 
-QColor Conversion::color(int number, int defaultcolor, bool defaultWhite)
+QString Conversion::color(int number, int defaultcolor, bool defaultWhite)
 {
     switch(number)
     {
 	case 0:
 	    if(defaultWhite)
-		return Qt::white;
-	case 1:
-	    return Qt::black;
-	case 2:
-	    return Qt::blue;
-	case 3:
-	    return Qt::cyan;
-	case 4:
-	    return Qt::green;
-	case 5:
-	    return Qt::magenta;
-	case 6:
-	    return Qt::red;
-	case 7:
-	    return Qt::yellow;
-	case 8:
-	    return Qt::white;
-	case 9:
-	    return Qt::darkBlue;
-	case 10:
-	    return Qt::darkCyan;
-	case 11:
-	    return Qt::darkGreen;
-	case 12:
-	    return Qt::darkMagenta;
-	case 13:
-	    return Qt::darkRed;
-	case 14:
-	    return Qt::darkYellow;
-	case 15:
-	    return Qt::darkGray;
-	case 16:
-	    return Qt::lightGray;
+		return QString( "#FFFFFF" );
+	case 1://black
+	    return QString( "#000000" );
+	case 2://blue
+	    return QString( "#0000FF" );
+	case 3://cyan
+	    return QString( "#00FFFF" );
+	case 4://green
+	    return QString( "#008000" );
+	case 5://magenta
+	    return QString( "#FF00FF" );
+	case 6://red
+	    return QString( "#FF0000" );
+	case 7://yellow
+	    return QString( "#FFFF00" );
+	case 8://white
+	    return QString( "#FFFFFF" );
+	case 9://dark blue
+	    return QString( "#00008B" );
+	case 10://dark cyan
+	    return QString( "#008B8B" );
+	case 11://dark green
+	    return QString( "#006400" );
+	case 12://dark magenta
+	    return QString( "#8B008B" );
+	case 13://dark red
+	    return QString( "#8B0000" );
+	case 14://dark yellow
+	    return QString( "#808000" );
+	case 15://dark gray
+	    return QString( "#A9A9A9" );
+	case 16://light gray
+	    return QString( "#D3D3D3" );
 
 	default:
-            kDebug(30513) <<"Conversion::color: unknown color:" << number;
-	    if(defaultcolor == -1)
-		return QColor("black");
-	    else
+            kDebug(30513) <<" unknown color:" << number;
+	    if(defaultcolor == -1) //return black
+		return QString( "#000000" );
+	    else //call this function again with the default color value
+		//to see if it works
 		return color(defaultcolor, -1);
     }
 }

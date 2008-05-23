@@ -35,6 +35,7 @@ KWordTableHandler::KWordTableHandler()
 // Called by Document before invoking the table-row-functors
 void KWordTableHandler::tableStart( KWord::Table* table )
 {
+    kDebug(30513) ;
     Q_ASSERT( table );
     Q_ASSERT( !table->name.isEmpty() );
     m_currentTable = table;
@@ -52,6 +53,7 @@ void KWordTableHandler::tableStart( KWord::Table* table )
 
 void KWordTableHandler::tableEnd()
 {
+    kDebug(30513) ;
     m_currentTable = 0L; // we don't own it, the table-queue does!
     m_row = -2;
     m_column = -2;
@@ -60,6 +62,7 @@ void KWordTableHandler::tableEnd()
 
 void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::TAP> tap )
 {
+    kDebug(30513) ;
     if ( m_row == -2 )
     {
         kWarning(30513) << "tableRowStart: tableStart not called previously!";
@@ -81,6 +84,7 @@ void KWordTableHandler::tableRowEnd()
 
 void KWordTableHandler::tableCellStart()
 {
+    kDebug(30513) ;
     Q_ASSERT( m_tap );
     if ( !m_tap )
         return;
@@ -195,6 +199,7 @@ void KWordTableHandler::tableCellEnd()
 // Add cell edge into the cache of cell edges for a given table.
 void KWord::Table::cacheCellEdge(int cellEdge)
 {
+    kDebug(30513) ;
     uint size = m_cellEdges.size();
     // Do we already know about this edge?
     for (unsigned int i = 0; i < size; i++)
@@ -215,6 +220,7 @@ void KWord::Table::cacheCellEdge(int cellEdge)
 // And return the column number
 int KWord::Table::columnNumber(int cellEdge) const
 {
+    kDebug(30513) ;
     for (unsigned int i = 0; i < m_cellEdges.size(); i++)
     {
         if (m_cellEdges[i] == cellEdge)
@@ -227,6 +233,7 @@ int KWord::Table::columnNumber(int cellEdge) const
 
 double KWordTableHandler::rowHeight() const
 {
+    kDebug(30513) ;
     return qMax( m_tap->dyaRowHeight / 20.0, 20.0);
 }
 
