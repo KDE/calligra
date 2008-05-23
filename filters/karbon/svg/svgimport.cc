@@ -902,11 +902,13 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
             }
             else
                 gc->stroke.setLineStyle( Qt::NoPen, QVector<qreal>() );
+            gc->hasStroke = true;
         }
         else
         {
             parseColor( strokecolor, params );
             gc->stroke.setLineStyle( Qt::SolidLine, QVector<qreal>() );
+            gc->hasStroke = true;
         }
     }
     else if( command == "stroke-width" )
@@ -1142,7 +1144,7 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
         gc->stroke.setLineStyle( Qt::CustomDashLine, dashes );
         gc->stroke.setDashOffset( dashOffset / lineWidth );
     }
-    if( gc->stroke.lineStyle() != Qt::NoPen )
+    if( gc->hasStroke )
         obj->setBorder( new KoLineBorder( gc->stroke ) );
     else
         obj->setBorder( 0 );

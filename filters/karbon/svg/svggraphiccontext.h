@@ -36,6 +36,7 @@ public:
         fill = QBrush( Qt::black ); // default is black fill as per svg spec
         fillRule = Qt::WindingFill;
         color = Qt::black;
+        hasStroke = false;
     }
     QBrush       fill;
     Qt::FillRule fillRule;
@@ -44,6 +45,7 @@ public:
     QFont        font;
     QColor       color;
     QString      xmlBaseDir;
+    bool         hasStroke;
 };
 
 #endif // SVGGRAPHICCONTEXT_H
