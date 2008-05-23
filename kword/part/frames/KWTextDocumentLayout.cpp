@@ -93,11 +93,10 @@ static QList<QPointF> intersect(const QRectF &rect, const QLineF &line) {
 class Outline {
 public:
     Outline(KWFrame *frame, const QMatrix &matrix) : m_side(None) {
+        init(matrix, frame->outlineShape() ? frame->outlineShape() : frame->shape(), frame->runAroundDistance());
         if(frame->textRunAround() == KWord::NoRunAround)
             m_side = Empty;
         else {
-            init(matrix, frame->outlineShape() ? frame->outlineShape() : frame->shape(), frame->runAroundDistance());
-
             if(frame->runAroundSide() == KWord::LeftRunAroundSide)
                 m_side = Right;
             else if(frame->runAroundSide() == KWord::RightRunAroundSide)
@@ -142,8 +141,11 @@ public:
     }
 
     QRectF limit(const QRectF &content) {
-        if(m_side == Empty)
-            return QRectF();
+        if(m_side == Empty) {
+            if (content.intersects(m_bounds))
+                return QRectF();
+            return content;
+        }
 
         if(m_side == None) { // first time for this text;
             double insetLeft = m_bounds.right() - content.left();
