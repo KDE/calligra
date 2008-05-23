@@ -43,7 +43,7 @@ public:
     // determine whether the points given are in counterclockwise order or not
     // returns +1 if they are, -1 if they are given in clockwise order
     // and 0 if they form a degenerate triangle
-    static int ccw(const QPointF &p1, const QPointF &p2, const QPointF &p2);
+    static int ccw(const QPointF &p1, const QPointF &p2, const QPointF &p3);
     
     //KoPathPoint *endPoint1();
     //KoPathPoint *endPoint2();
