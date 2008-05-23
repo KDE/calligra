@@ -1072,6 +1072,12 @@ void SvgImport::parsePA( KoShape *obj, SvgGraphicsContext *gc, const QString &co
         parseColor( color, params );
         gc->color = color;
     }
+    else if( command == "display" )
+    {
+        if( params == "none" )
+            obj->setVisible( false );
+    }
+
     if( gc->fill.style() != Qt::NoBrush )
         gc->fill.setColor( fillcolor );
     //if( gc->stroke.type() == VStroke::solid )
@@ -1110,6 +1116,8 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
         parsePA( obj, gc, "fill-opacity", e.attribute( "fill-opacity" ) );
     if( !e.attribute( "opacity" ).isEmpty() )
         parsePA( obj, gc, "opacity", e.attribute( "opacity" ) );
+    if( !e.attribute( "display" ).isEmpty() )
+        parsePA( obj, gc, "display", e.attribute( "display" ) );
 
     // try style attr
     QString style = e.attribute( "style" ).simplified();
@@ -1252,7 +1260,7 @@ QList<KoShape*> SvgImport::parseGroup( const QDomElement &e )
             KoShapeGroup * group = new KoShapeGroup();
             group->setZIndex( nextZIndex() );
 
-            parseStyle( 0, b );
+            parseStyle( group, b );
             parseFont( b );
 
             QList<KoShape*> childShapes = parseGroup( b );
