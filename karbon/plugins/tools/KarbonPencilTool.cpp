@@ -27,6 +27,8 @@
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
+#include <KoCanvasResourceProvider.h>
+#include <KoColor.h>
 
 #include <knuminput.h>
 #include <klocale.h>
@@ -88,8 +90,7 @@ void KarbonPencilTool::mousePressEvent( KoPointerEvent *event )
     {
         m_shape = new KoPathShape();
         m_shape->setShapeId( KoPathShapeId );
-        // TODO take properties from the resource provider
-        m_shape->setBorder( new KoLineBorder( 1, Qt::black ) );
+        m_shape->setBorder( new KoLineBorder( 1, m_canvas->resourceProvider()->foregroundColor().toQColor() ) );
         m_points.clear();
         addPoint( event->point );
     }
@@ -230,8 +231,7 @@ void KarbonPencilTool::finish( bool closePath )
 
     // set the proper shape id
     path->setShapeId( KoPathShapeId );
-    // TODO take properties from the resource provider
-    path->setBorder( new KoLineBorder( 1, Qt::black ) );
+    path->setBorder( new KoLineBorder( 1, m_canvas->resourceProvider()->foregroundColor().toQColor() ) );
     path->normalize();
 
     QUndoCommand * cmd = m_canvas->shapeController()->addShape( path );
