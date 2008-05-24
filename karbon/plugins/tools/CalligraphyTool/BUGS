@@ -1,13 +1,11 @@
 BUGS:
-* create path tool: same repainting problem
-* freehand drawing tool with curve: repainting problem
-* freehand drawing tool with curve: sometimes the result disappears
+* freehand drawing tool with curve: sometimes the result disappears (seems to be caused by bezierFit receiving two points in sequence that are the same)
 * when painting something at the side it becomes impossible to scroll to all areas of the screen
 * when painting while the view is zoomed in very much in, the item may get somewere outside the visible area.
-* the cpu usage remains very high even without doing anything (shape proprieties seem to be the cause)
+* ctrl+mouse weel zoom don't center correctly
+* at times the cpu usage remains very high even without doing anything (shape proprieties seem to be the cause)
 * colors used are not those of the global palette (I think)
 * KoCreatePathTool.cpp:138 do the same in the pencil tool (use the forgroundcolor instread of hardcoded black)
-* a "degenerate curve" doesn't show anything... (the same applies for points) (check how it will show in svg, and with inkscape, and using plain Qt paths)
+* a "degenerate" curve doesn't show anything... (the same applies for points) (check how it will show in svg, and with inkscape, and using plain Qt paths)
 * KoPathShape::insertPoint() should maybe set the shape of the point
 * In a path without control points sometimes at one side there is still a piece of path when there shouldn't... (maybe a Qt bug if it uses QPainterPath so paint)
-* copy and pasting a calligraphic tool don't work properly... (it's not Winding fill anymore...)
