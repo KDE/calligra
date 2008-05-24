@@ -142,17 +142,21 @@ void KarbonStylePreviewDocker::updateStyle( const KoShapeBorderModel * stroke, c
     KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
     int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
 
-    QColor qColor( Qt::black );
+    QColor qColor;
     if( activeStyle == Karbon::Foreground )
     {
         const KoLineBorder * border = dynamic_cast<const KoLineBorder*>( stroke );
         if( border )
             qColor = border->color();
+        else
+            qColor = m_canvas->resourceProvider()->foregroundColor().toQColor();
     }
     else
     {
         if( fill.style() == Qt::SolidPattern )
             qColor = fill.color();
+        else
+            qColor = m_canvas->resourceProvider()->backgroundColor().toQColor();
     }
     KoColor c( qColor, KoColorSpaceRegistry::instance()->rgb8() );
     m_colorChooser->setColor( c );
@@ -231,15 +235,20 @@ void KarbonStylePreviewDocker::updateColor( const KoColor &c )
     if( ! m_canvas )
         return;
 
-    KoSelection *selection = m_canvas->shapeManager()->selection();
-    if( ! selection || ! selection->count() )
-        return;
-
-    QColor color;
-    c.toQColor(&color);
-
     KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
     int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
+
+    KoSelection *selection = m_canvas->shapeManager()->selection();
+    if( ! selection || ! selection->count() )
+    {
+        if( activeStyle == Karbon::Foreground )
+            m_canvas->resourceProvider()->setForegroundColor( c );
+        else
+            m_canvas->resourceProvider()->setBackgroundColor( c );
+        return;
+    }
+
+    QColor color = c.toQColor();
 
     // check which color to set foreground == border, background == fill
     if( activeStyle == Karbon::Foreground )
