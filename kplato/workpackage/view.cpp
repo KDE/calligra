@@ -112,8 +112,6 @@ View::View( Part* part, QWidget* parent )
     layout->setMargin(0);
     layout->addWidget( m_tab );
 
-    connect( m_tab, SIGNAL( currentChanged( int ) ), SLOT( slotCurrentChanged( int ) ) );
-    
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     
     // Add sub views
@@ -156,6 +154,8 @@ View::View( Part* part, QWidget* parent )
 
     updateReadWrite( m_readWrite );
     //kDebug()<<" end";
+
+    connect( m_tab, SIGNAL( currentChanged( int ) ), SLOT( slotCurrentChanged( int ) ) );
 }
 
 View::~View()
@@ -271,6 +271,11 @@ KoDocument *View::hitTest( const QPoint &pos )
 void View::slotCurrentChanged( int index )
 {
     kDebug()<<"---------->";
+    if ( partManager() == 0 ) {
+        kWarning()<<"No partmanager (yet)";
+        kDebug()<<"<----------";
+        return;
+    }
     KParts::Part *ap = partManager()->activePart();
     QWidget *aw = partManager()->activeWidget();
     QWidget *cw = m_tab->currentWidget();

@@ -342,6 +342,7 @@ void KPlatoWork_MainWindow::setRootDocument( KoDocument * doc )
 
     Q_ASSERT( m_pFrame );
     v->setGeometry( 0, 0, m_pFrame->width(), m_pFrame->height() );
+    kDebug()<<"setPartManager()"<<partManager();
     v->setPartManager( partManager() );
     
     KMimeType::Ptr mimeType = KMimeType::findByUrl( doc->url() );
