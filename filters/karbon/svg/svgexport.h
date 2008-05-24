@@ -70,6 +70,7 @@ private:
     void saveImage( PictureShape * picture );
     void saveText( SimpleTextShape * text );
 
+    void getStyle( KoShape * shape, QTextStream * stream );
     void getFill( KoShape * shape, QTextStream *stream );
     void getStroke( KoShape * shape, QTextStream *stream );
     void getColorStops( const QGradientStops & colorStops );

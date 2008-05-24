@@ -176,6 +176,8 @@ void SvgExport::saveGroup( KoShapeContainer * group )
     printIndentation( m_body, m_indent++ );
     *m_body << "<g" << getID( group );
     *m_body << getTransform( group->transformation(), " transform" );
+    if( ! group->isVisible() )
+        *m_body << " display=\"none\"";
     *m_body << ">" << endl;
 
     foreach( KoShape * shape, group->iterator() )
@@ -227,8 +229,7 @@ void SvgExport::savePath( KoPathShape * path )
     printIndentation( m_body, m_indent );
     *m_body << "<path" << getID( path );
 
-    getFill( path, m_body );
-    getStroke( path, m_body );
+    getStyle( path, m_body );
 
     *m_body << " d=\"" << path->toString( path->transformation() * m_userSpaceMatrix ) << "\" ";
 
@@ -255,8 +256,7 @@ void SvgExport::saveEllipse( KoEllipseShape * ellipse )
         *m_body << " cx=\"" << 0.5 * size.width() << "pt\"";
         *m_body << " cy=\"" << 0.5 * size.height() << "pt\"";
         *m_body << getTransform( ellipse->transformation(), " transform" );
-        getFill( ellipse, m_body );
-        getStroke( ellipse, m_body );
+        getStyle( ellipse, m_body );
         *m_body << "/>" << endl;
     }
     else
@@ -271,8 +271,7 @@ void SvgExport::saveRectangle( KoRectangleShape * rectangle )
     *m_body << "<rect" << getID( rectangle );
     *m_body << getTransform( rectangle->transformation(), " transform" );
 
-    getFill( rectangle, m_body );
-    getStroke( rectangle, m_body );
+    getStyle( rectangle, m_body );
 
     QSizeF size = rectangle->size();
     *m_body << " width=\"" << size.width() << "pt\""; 
@@ -460,6 +459,14 @@ void SvgExport::getPattern( const QPixmap & )
     printIndentation( m_defs, m_indent2 );
     *m_defs << "</pattern>" << endl;
     *m_body << "url(#" << uid << ")";
+}
+
+void SvgExport::getStyle( KoShape * shape, QTextStream * stream )
+{
+    getFill( shape, stream );
+    getStroke( shape, stream );
+    if( ! shape->isVisible() )
+        *stream << " display=\"none\"";
 }
 
 void SvgExport::getFill( KoShape * shape, QTextStream *stream )
