@@ -242,7 +242,7 @@ int KSpread::days360( const QDate& _date1, const QDate& _date2, bool european )
 // }
 
 // yearFrac
-double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, const QDate& endDate, const int basis )
+double KSpread::yearFrac( const QDate& refDate, const QDate& startDate, const QDate& endDate, int basis )
 {
   QDate date1 = startDate;
   QDate date2 = endDate;
