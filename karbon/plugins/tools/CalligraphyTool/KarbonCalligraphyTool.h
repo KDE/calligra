@@ -32,6 +32,8 @@ class KarbonCalligraphicPath : public KoPathShape
 public:
     void insertPoints( const QPointF &p1, const QPointF &p2 );
 
+    KoPathShape *simplified( float error );
+    
 private:
     // function that actually insererts the points
     // without doing any additional check

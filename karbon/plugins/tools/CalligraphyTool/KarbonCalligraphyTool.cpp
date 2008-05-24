@@ -90,6 +90,28 @@ void KarbonCalligraphicPath::insertPoints( const QPointF &p1, const QPointF &p2 
     m_offset += normalize();
 }
 
+KoPathShape *KarbonCalligraphicPath::simplified( float error )
+{
+    QList<QPointF> points;
+
+    const int pc = pointCount();
+    for (int i = 0; i < pc; ++i)
+    {
+        points << pointByIndex( KoPathPointIndex(0, i) )->point();
+    }
+    
+    KoPathShape *res = bezierFit( points, error );
+
+    res->setShapeId( KoPathShapeId );
+    res->setFillRule( Qt::WindingFill );
+    res->setBackground( Qt::black );
+    res->setBorder( 0 );
+    res->setPosition( m_offset );
+
+    return res;
+}
+
+
 void KarbonCalligraphicPath::insertPointsAux( const QPointF &p1,
                                               const QPointF &p2 )
 {
@@ -237,22 +259,28 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
     addPoint( event->point );
     m_isDrawing = false;
 
-    QUndoCommand * cmd = m_canvas->shapeController()->addShape( m_path );
+    KoPathShape *finalPath = m_path->simplified( m_strokeWidth/50.0 );
+    
+    QUndoCommand * cmd = m_canvas->shapeController()->addShape( finalPath );
     if( cmd )
     {
         KoSelection *selection = m_canvas->shapeManager()->selection();
         selection->deselectAll();
-        selection->select( m_path );
+        selection->select( finalPath );
         m_canvas->addCommand( cmd );
     }
     else
     {
         // TODO: when may this happen????
-        m_canvas->updateCanvas( m_path->boundingRect() );
-        delete m_path;
+        delete finalPath;
     }
+    
+    m_canvas->updateCanvas( m_path->boundingRect() );
+    m_canvas->updateCanvas( finalPath->boundingRect() );
 
+    delete m_path;
     m_path = 0;
+
     /*while ( ! m_pieces.isEmpty() )
     {
         KoPathShape *piece =  m_pieces.takeLast();
