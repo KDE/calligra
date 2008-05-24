@@ -5,6 +5,5 @@ BUGS:
 * ctrl+mouse weel zoom don't center correctly
 * at times the cpu usage remains very high even without doing anything (shape proprieties seem to be the cause)
 * colors used are not those of the global palette (I think)
-* KoCreatePathTool.cpp:138 do the same in the pencil tool (use the forgroundcolor instread of hardcoded black)
 * a "degenerate" curve doesn't show anything... (the same applies for points) (check how it will show in svg, and with inkscape, and using plain Qt paths)
 * In a path without control points sometimes at one side there is still a piece of path when there shouldn't... (maybe a Qt bug if it uses QPainterPath so paint)
