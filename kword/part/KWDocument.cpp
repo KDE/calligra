@@ -237,7 +237,7 @@ void KWDocument::addFrameSet(KWFrameSet *fs) {
     }
 
     connect(fs, SIGNAL(frameAdded(KWFrame*)), this, SLOT(addFrame(KWFrame*)));
-    connect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrame(KWFrame*)));
+    connect(fs, SIGNAL(frameRemoved(KWFrame*)), this, SLOT(removeFrameFromViews(KWFrame*)));
     emit frameSetAdded(fs);
 }
 
@@ -601,6 +601,15 @@ void KWDocument::showErrorAndDie() {
              i18n("Can not find needed text component, KWord will quit now"),
              i18n("Installation Error"));
     QCoreApplication::exit(10);
+}
+
+void KWDocument::removeFrameFromViews(KWFrame *frame)
+{
+    Q_ASSERT(frame);
+    foreach(KoView *view, views()) {
+        KWCanvas *canvas = static_cast<KWView*>(view)->kwcanvas();
+        canvas->shapeManager()->remove(frame->shape());
+    }
 }
 
 #ifndef NDEBUG

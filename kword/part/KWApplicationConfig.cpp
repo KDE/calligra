@@ -133,4 +133,5 @@ void KWApplicationConfig::save() {
 //    interface.writeEntry( "AllowAutoFormat", m_bAllowAutoFormat );
 //    interface.writeEntry( "ShowGrid" , m_bShowGrid );
 //    interface.writeEntry( "SnapToGrid" , m_bSnapToGrid );
+    interface.sync();
 }

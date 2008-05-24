@@ -85,7 +85,7 @@ void KWFrameLayout::createNewFramesForPage(int pageNumber) {
     foreach (KWFrame *frame, framesInPage(page->rect())) {
         KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (frame->frameSet());
         if (tfs && allHFTypes.contains(tfs->textFrameSetType())) {
-            frame->frameSet()->removeFrame(frame);
+            tfs->removeFrame(frame);
             delete frame;
         }
     }

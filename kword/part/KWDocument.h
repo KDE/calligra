@@ -206,6 +206,7 @@ private slots:
     void addFrame( KWFrame *frame );
     void removeFrame( KWFrame *frame );
     void requestMoreSpace(KWTextFrameSet *fs);
+    void removeFrameFromViews(KWFrame*);
 
     /// Called after the constructor figures out there is an install problem.
     void showErrorAndDie();
