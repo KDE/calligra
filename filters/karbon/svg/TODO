@@ -1,10 +1,16 @@
 SVG export
 - patterns
 - text
+- for text on path: when on path shape 
+    -> path data into defs
+    -> path shape with use on defs path data
+    => maps back to text on path shape when importing
 
 SVG import
-- units (cm, mm)
-- trafo's
 - fix text
 - embedded svg elements
 - visibility
+- text on path shape -> see above for export
+- patterns fills
+- clipping, masking
+- filters
