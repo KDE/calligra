@@ -42,101 +42,104 @@
 #include <QtGui/QLabel>
 
 #include <cmath>
-// TODO: use a const for M_PI instead
-#include <math.h>
 
+#undef M_PI
+const double M_PI = 3.1415927;
 
 void KarbonCalligraphicPath::insertPoints( const QPointF &p1, const QPointF &p2 )
 {
     if ( pointCount() == 0 ) 
     {
-        moveTo(p1);
-        lineTo(p2);
+        moveTo( p1 );
+        lineTo( p2 );
         m_offset = normalize();
         m_flipped = false;
         return;
     }
     // pointCount > 0
-    
+
     int flip = 0;
     if ( pointCount() > 2 ) 
         flip = flipDetected( p1, p2 );
-    
+
     if ( flip )
     {
         // handle flip
         m_flipped = ! m_flipped;
-        
-        // add two additional points
-        // TODO: no copy and paste write an external function for the following
-        
+
         int index = pointCount() / 2;
-        
+
         // finde the previous two points
         QPointF last1 = pointByIndex( KoPathPointIndex(0, index-1) )->point();
         QPointF last2 = pointByIndex( KoPathPointIndex(0, index) )->point();
-         
-        KoPathPoint *pp1 = new KoPathPoint(this, last1);
-        KoPathPoint *pp2 = new KoPathPoint(this, last2);
         
-        qSwap(pp1, pp2 );
-        
-        insertPoint( pp2, KoPathPointIndex(0, index) );
-        insertPoint( pp1, KoPathPointIndex(0, index) );
+        // and add them in reverse order
+        // (they are converted to canvas coordinates)
+        insertPointsAux( last2+m_offset, last1+m_offset );
     }
-    
-    KoPathPoint *pathPoint1 = new KoPathPoint(this, p1 - m_offset);
-    KoPathPoint *pathPoint2 = new KoPathPoint(this, p2 - m_offset);
-    
+
     if ( m_flipped )
-        qSwap(pathPoint1, pathPoint2 );
-    
-    // calculate the index of the insertion position
-    int index = pointCount() / 2;
-    
-    insertPoint( pathPoint2, KoPathPointIndex(0, index) );
-    insertPoint( pathPoint1, KoPathPointIndex(0, index) );
-    
+    {
+        insertPointsAux( p2, p1 );
+    }
+    else
+    {
+        insertPointsAux( p1, p2 );
+    }
+
     m_offset += normalize();
 }
 
+void KarbonCalligraphicPath::insertPointsAux( const QPointF &p1,
+                                              const QPointF &p2 )
+{
+    KoPathPoint *pathPoint1 = new KoPathPoint(this, p1 - m_offset);
+    KoPathPoint *pathPoint2 = new KoPathPoint(this, p2 - m_offset);
 
-int KarbonCalligraphicPath::flipDetected(const QPointF &p1, const QPointF &p2)
+    // calculate the index of the insertion position
+    int index = pointCount() / 2;
+
+    insertPoint( pathPoint2, KoPathPointIndex(0, index) );
+    insertPoint( pathPoint1, KoPathPointIndex(0, index) );
+}
+
+int KarbonCalligraphicPath::flipDetected( const QPointF &p1, const QPointF &p2 )
 {
     int index = pointCount() / 2;
-    
+
     QPointF last1 = pointByIndex( KoPathPointIndex(0, index-1) )->point();
     QPointF prev1 = pointByIndex( KoPathPointIndex(0, index-2) )->point();
-    
+
     QPointF last2 = pointByIndex( KoPathPointIndex(0, index) )->point();
     QPointF prev2 = pointByIndex( KoPathPointIndex(0, index+1) )->point();
+
     last1 += m_offset;
     last2 += m_offset;
     prev1 += m_offset;
     prev2 += m_offset;
-    
+
     //                 prev2  last2           p2
     //    ...o-----o-----o-----o  <-- index   o
     //    ...                  |
     //    ...o-----o-----o-----o              o
     //                 prev1  last1           p1
-    
+
     // the path has already flipped a even number of times
     // so the indexes of where p1 and p2 will be inserted are swapped
     if ( m_flipped ) 
     {
-        qSwap(last1, last2);
-        qSwap(prev1, prev2);
+        qSwap( last1, last2 );
+        qSwap( prev1, prev2 );
     }
-    
+
     // FIXME: think about the degenerate cases (ccw() == 0)
     // detect possible flips
-    if ( ccw( prev1, last1, p1 ) == ccw(prev2, prev1, last1) &&
-         ccw( prev1, last1, p1 ) != ccw(last1, p2, last2) )
+    if ( ccw( prev1, last1, p1 ) == ccw( prev2, prev1, last1 ) &&
+         ccw( prev1, last1, p1 ) != ccw( last1, p2, last2 ) )
     {
         return +1;
     }
-    
+
     // the symmetric of the above
     if ( ccw( prev2, last2, p2 ) == ccw(prev1, prev2, last2) &&
          ccw( prev2, last2, p2 ) != ccw(last2, p1, last1) )
@@ -147,9 +150,9 @@ int KarbonCalligraphicPath::flipDetected(const QPointF &p1, const QPointF &p2)
     return 0;
 }
 
-int KarbonCalligraphicPath::ccw(const QPointF &p1,
-                                const QPointF &p2,
-                                const QPointF &p3)
+int KarbonCalligraphicPath::ccw( const QPointF &p1,
+                                 const QPointF &p2,
+                                 const QPointF &p3 )
 {
     // calculate two times the area of the triangle fomed by the points given
     double area2 = ( p2.x() - p1.x() ) * ( p3.y() - p1.y() ) -
@@ -158,7 +161,7 @@ int KarbonCalligraphicPath::ccw(const QPointF &p1,
     {
         return +1; // the points are given in counterclockwise order
     }
-    else if (area2 < 0) 
+    else if ( area2 < 0 ) 
     {
         return -1; // the points are given in clockwise order
     }
@@ -193,18 +196,18 @@ void KarbonCalligraphyTool::paint( QPainter &painter, const KoViewConverter &con
 
         painter.setMatrix( shape->absoluteTransformation( &converter ) * painter.matrix() );
         shape->paint( painter, converter );
-        
+
         painter.restore();
     }*/
-    
+
     if ( ! m_path )
         return;
-    
+
     painter.save();
 
     painter.setMatrix( m_path->absoluteTransformation( &converter ) * painter.matrix() );
     m_path->paint( painter, converter );
-        
+
     painter.restore();
 }
 
@@ -212,7 +215,7 @@ void KarbonCalligraphyTool::mousePressEvent( KoPointerEvent *event )
 {
     if ( m_isDrawing ) 
         return;
-    
+
     m_lastPoint = event->point;
     m_speed = QPointF(0, 0);
     addPoint( event->point );
@@ -222,7 +225,7 @@ void KarbonCalligraphyTool::mouseMoveEvent( KoPointerEvent *event )
 {
     if ( ! m_isDrawing )
         return;
-    
+
     addPoint( event->point );
 }
 
@@ -230,10 +233,10 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
 { 
     if ( ! m_isDrawing )
         return;
-    
+
     addPoint( event->point );
     m_isDrawing = false;
-    
+
     QUndoCommand * cmd = m_canvas->shapeController()->addShape( m_path );
     if( cmd )
     {
@@ -248,7 +251,7 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
         m_canvas->updateCanvas( m_path->boundingRect() );
         delete m_path;
     }
-    
+
     m_path = 0;
     /*while ( ! m_pieces.isEmpty() )
     {
@@ -269,18 +272,18 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
 void KarbonCalligraphyTool::addPoint(const QPointF &mousePosition)
 {
     QPointF force = mousePosition - m_lastPoint;
-    
+
     QPointF dSpeed = force/m_mass;
     m_speed = m_speed/2.0 + dSpeed;
-    
+
     m_lastPoint = m_lastPoint + m_speed;
-    
+
     double dx = std::cos( m_angle ) * m_strokeWidth;
     double dy = std::sin( m_angle ) * m_strokeWidth;
-    
+
     QPointF point2 = m_lastPoint - QPointF( dx/2, dy/2 );
     QPointF point3 = m_lastPoint + QPointF( dx/2, dy/2 );
-    
+
     if ( ! m_isDrawing ) 
     {
         m_isDrawing = true;
@@ -290,11 +293,11 @@ void KarbonCalligraphyTool::addPoint(const QPointF &mousePosition)
         m_path->setBackground( Qt::black );
         m_path->setBorder( 0 );
     }
-    
+
     m_path->insertPoints(point2, point3);
-    
+
     m_canvas->updateCanvas( m_path->boundingRect() );
-    
+
     /*if (point2 == m_point1 || point3 == m_point0) {
         kDebug() << "equal points...";
         return;
@@ -305,7 +308,7 @@ void KarbonCalligraphyTool::addPoint(const QPointF &mousePosition)
         kDebug() << "2:" << point2;
         kDebug() << "3:" << point3;
     }
-    
+
     if ( ! m_isDrawing ) 
     {
         m_isDrawing = true;
@@ -323,12 +326,12 @@ void KarbonCalligraphyTool::addPoint(const QPointF &mousePosition)
         path->lineTo( point2 );
         path->lineTo( point3 );
         path->close();
-        
+
         const KoPathPointIndex INDEX0(0, 0);
         const KoPathPointIndex INDEX1(0, 1);
         const KoPathPointIndex INDEX2(0, 2);
         const KoPathPointIndex INDEX3(0, 3);
-        
+
         if ( ! m_pieces.isEmpty() ) {
             KoPathShape *last = m_pieces.last();
             QList<QPointF> points;
@@ -344,7 +347,7 @@ void KarbonCalligraphyTool::addPoint(const QPointF &mousePosition)
             QPointF next = path->pointByIndex( INDEX2 )->point();
             kDebug() << "next:" << next;
             kDebug() << "------";
-            
+
             QPointF vector = next - prev;
             double dist = ( QLineF( prev, next ) ).length();
             // normalize the vector (make it's size 1)
@@ -360,12 +363,12 @@ void KarbonCalligraphyTool::addPoint(const QPointF &mousePosition)
             QPointF vector2 = vector * dist2;
             QPointF controlPoint1 = point - vector1 - lastTopLeft;
             QPointF controlPoint2 = point + vector2;
-            
+
             // the two points that have the position of centralPoint
             last->pointByIndex( INDEX2 )->setControlPoint1( controlPoint1 );
             path->pointByIndex( INDEX1 )->setControlPoint2( controlPoint2 );
-            
-            
+
+
             prev = last->pointByIndex( INDEX0 )->point();
             prev = prev + lastTopLeft;
             kDebug() << "prev:" << prev;
@@ -376,7 +379,7 @@ void KarbonCalligraphyTool::addPoint(const QPointF &mousePosition)
             next = path->pointByIndex( INDEX3 )->point();
             kDebug() << "next:" << next;
             kDebug() << "------";
-            
+
             vector = next - prev;
             dist = ( QLineF( prev, next ) ).length();
             // normalize the vector (make it's size 1)
@@ -392,21 +395,21 @@ void KarbonCalligraphyTool::addPoint(const QPointF &mousePosition)
             vector2 = vector * dist2;
             controlPoint1 = point - vector1 - lastTopLeft;
             controlPoint2 = point + vector2;
-            
+
             // the two points that have the position of centralPoint
             last->pointByIndex( INDEX3 )->setControlPoint2( controlPoint1  );
             path->pointByIndex( INDEX0 )->setControlPoint1( controlPoint2 );
-            
-            
+
+
             last->normalize();
             m_canvas->updateCanvas( last->boundingRect() );
         }
         path->normalize();
-        
+
         m_pieces.append(path);
         m_canvas->updateCanvas( path->boundingRect() );
     }
-    
+
     m_point0 = point3;
     m_point1 = point2;*/
 }

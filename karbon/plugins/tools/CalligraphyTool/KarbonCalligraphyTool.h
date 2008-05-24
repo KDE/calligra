@@ -30,24 +30,25 @@
 class KarbonCalligraphicPath : public KoPathShape
 {
 public:
-    void insertPoints(const QPointF &p1, const QPointF &p2);
-    
-    // TODO: should the following functions be private??
-    
+    void insertPoints( const QPointF &p1, const QPointF &p2 );
+
+private:
+    // function that actually insererts the points
+    // without doing any additional check
+    // the points should be given in canvas coordinates
+    void insertPointsAux( const QPointF &p1, const QPointF &p2 );
+   
     // function to detect a flip, given the points being inserted
     // it returns 0 if there is no flip
     // +1 if the flip is in the direction of the higher indexes
     // -1 if the flip is in the direction of the lower indexes
-    int flipDetected(const QPointF &p1, const QPointF &p2);
-    
+    int flipDetected( const QPointF &p1, const QPointF &p2 );
+
     // determine whether the points given are in counterclockwise order or not
     // returns +1 if they are, -1 if they are given in clockwise order
     // and 0 if they form a degenerate triangle
-    static int ccw(const QPointF &p1, const QPointF &p2, const QPointF &p3);
-    
-    //KoPathPoint *endPoint1();
-    //KoPathPoint *endPoint2();
-private:
+    static int ccw( const QPointF &p1, const QPointF &p2, const QPointF &p3 );
+
     // offset of the points when mapped against the canvas
     QPointF m_offset;
     // when true p1 is connected to the previous
