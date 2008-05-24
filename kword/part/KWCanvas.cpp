@@ -183,7 +183,7 @@ void KWCanvas::updateInputMethodInfo() {
 void KWCanvas::keyReleaseEvent (QKeyEvent *e) {
 #ifndef NDEBUG
     // Debug keys
-    if ( ( e->modifiers() & Qt::ControlModifier ) && ( e->modifiers() & Qt::ShiftModifier ) ) {
+    if ( (e->modifiers() & (Qt::AltModifier | Qt::ControlModifier | Qt::ShiftModifier) ) ) {
         if(e->key() == Qt::Key_F) {
             document()->printDebug();
             e->accept();
