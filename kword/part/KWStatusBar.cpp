@@ -221,9 +221,9 @@ void KWStatusBar::slotResourceChanged(int key, const QVariant& value)
             d->currentPageNumber = value.toInt();
             slotPagesChanged();
         } break;
-        default: {
-            kDebug(32003)<<"KWStatusBar::slotResourceChanged Unhandled key="<<key<<" value="<<value<<endl;
-        } break;
+        default:
+            ;//kDebug(32003)<<"KWStatusBar::slotResourceChanged Unhandled key="<<key<<" value="<<value<<endl;
+        break;
     }
 }
 
