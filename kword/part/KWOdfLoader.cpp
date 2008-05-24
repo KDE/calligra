@@ -278,6 +278,7 @@ void KWOdfLoader::loadSettings( const KoXmlDocument& settingsDoc )
     //1.6: d->document->variableCollection()->variableSetting()->loadOasis( settings );
 }
 
+//1.6: KWDocument::loadOasisPageLayout
 bool KWOdfLoader::loadPageLayout(KoOdfLoadingContext& context, const QString& masterPageName)
 {
     kDebug(32001)<<"KWOdfLoader::loadPageLayout masterPageName="<<masterPageName;
