@@ -1102,10 +1102,10 @@ void Node::changed(Node *node) {
 Estimate::Estimate( Node *parent )
     : m_parent( parent )
 {
-    setUnit( Duration::Unit_ms );
-    setExpectedEstimate( 0.0 );
-    setPessimisticEstimate( 0.0 );
-    setOptimisticEstimate( 0.0 );
+    setUnit( Duration::Unit_h );
+    setExpectedEstimate( 8.0 );
+    setPessimisticEstimate( 8.0 );
+    setOptimisticEstimate( 8.0 );
     
     m_type = Type_Effort;
     m_risktype = Risk_None;
@@ -1129,7 +1129,7 @@ void Estimate::clear()
     
     m_type = Type_Effort;
     m_risktype = Risk_None;
-    m_unit = Duration::Unit_ms;
+    m_unit = Duration::Unit_h;
     changed();
 }
 
