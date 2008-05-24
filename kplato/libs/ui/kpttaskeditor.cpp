@@ -587,6 +587,7 @@ void TaskView::slotContextMenuRequested( const QModelIndex& index, const QPoint&
                 name = "taskview_popup";
                 break;
             case Node::Type_Milestone:
+                name = "taskview_milestone_popup";
                 break;
             case Node::Type_Summarytask:
                 break;

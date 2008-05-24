@@ -1574,6 +1574,7 @@ void NodeItemModel::slotNodeInserted( Node *node )
     Q_ASSERT( node->parentNode() == m_node );
     endInsertRows();
     m_node = 0;
+    emit nodeInserted( node );
 }
 
 void NodeItemModel::slotNodeToBeRemoved( Node *node )

@@ -29,10 +29,14 @@
 #include "kpttaskappointmentsview.h"
 #include "kptrelation.h"
 #include "kptschedule.h"
+#include "kptviewbase.h"
+#include "kptitemviewsettup.h"
 
 #include <kdganttproxymodel.h>
 #include <kdganttconstraintmodel.h>
+#include <kdganttconstraint.h>
 #include <kdganttdatetimegrid.h>
+#include <kdgantttreeviewrowcontroller.h>
 
 #include <KoDocument.h>
 
@@ -42,20 +46,68 @@
 #include <QVBoxLayout>
 #include <QHeaderView>
 #include <QDateTime>
+#include <QMenu>
+#include <QModelIndex>
 
 #include <klocale.h>
 #include <kglobal.h>
 #include <kmessagebox.h>
+#include <kaction.h>
 
 namespace KPlato
 {
+
+class HeaderView : public QHeaderView
+{
+public:
+    explicit HeaderView( QWidget* parent=0 ) : QHeaderView( Qt::Horizontal, parent ) {
+    }
+
+    QSize sizeHint() const { QSize s = QHeaderView::sizeHint(); s.rheight() *= 2; return s; }
+};
+
+GanttTreeView::GanttTreeView( QWidget* parent )
+    : TreeViewBase( parent )
+{
+    disconnect( header() );
+    setHeader( new HeaderView );
+    
+    setSelectionMode( QAbstractItemView::ExtendedSelection );
+    
+    header()->setContextMenuPolicy( Qt::CustomContextMenu );
+    connect( header(), SIGNAL( customContextMenuRequested( const QPoint& ) ), this, SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+
+}
+
+
+//-------------------------------------------
 
 MyKDGanttView::MyKDGanttView( QWidget *parent )
     : KDGantt::View( parent ),
     m_project( 0 ),
     m_manager( 0 )
 {
-    kDebug()<<"------------------- create MyKDGanttView -----------------------"<<endl;
+    kDebug()<<"------------------- create MyKDGanttView -----------------------";
+    GanttTreeView *tv = new GanttTreeView( this );
+    setLeftView( tv );
+    setRowController( new KDGantt::TreeViewRowController( tv, ganttProxyModel() ) );
+    m_model = new NodeItemModel( tv );
+    setModel( m_model );
+    
+    tv->header()->setStretchLastSection( true );
+    QList<int> show;
+    show << NodeModel::NodeName
+            << NodeModel::NodeCompleted
+            << NodeModel::NodeStartTime
+            << NodeModel::NodeEndTime;
+
+    tv->setDefaultColumns( show );
+    for ( int i = 0; i < model()->columnCount(); ++i ) {
+        if ( ! show.contains( i ) ) {
+            tv->hideColumn( i );
+        }
+    }
+
     setConstraintModel( new KDGantt::ConstraintModel() );
     KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( ganttProxyModel() );
 
@@ -68,27 +120,21 @@ MyKDGanttView::MyKDGanttView( QWidget *parent )
     m->setColumn( KDGantt::EndTimeRole, NodeModel::NodeEndTime );
     m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
     
-    m_model = new NodeItemModel( this );
-    setModel( m_model );
-    QTreeView *tv = dynamic_cast<QTreeView*>( leftView() ); //FIXME ?
-    if ( tv ) {
-        tv->header()->setStretchLastSection( true );
-        // Only show name, start- end endtime in treeview
-        for ( int i = 0; i < m_model->columnCount(); ++i ) {
-            if ( i == NodeModel::NodeName || i == NodeModel::NodeStartTime || i == NodeModel::NodeEndTime ) {
-                continue;
-            }
-            tv->hideColumn( i );
-        }
-    } else kDebug()<<"No treeview !!!"<<endl;
-    
     static_cast<KDGantt::DateTimeGrid*>( grid() )->setDayWidth( 30 );
+    
+    connect( m_model, SIGNAL( nodeInserted( Node* ) ), this, SLOT( slotNodeInserted( Node* ) ) );
 }
 
 void MyKDGanttView::update()
 {
     kDebug()<<endl;
     kDebug()<<"POULOU"<<endl;
+}
+
+GanttTreeView *MyKDGanttView::treeView() const
+{
+    QAbstractItemView *v = const_cast<QAbstractItemView*>( leftView() );
+    return static_cast<GanttTreeView*>( v );
 }
 
 void MyKDGanttView::setProject( Project *project )
@@ -132,19 +178,29 @@ void MyKDGanttView::setScheduleManager( ScheduleManager *sm )
     }
 }
 
+void MyKDGanttView::slotNodeInserted( Node *node )
+{
+    foreach( Relation *r, node->dependChildNodes() ) {
+        addDependency( r );
+    }
+    foreach( Relation *r, node->dependParentNodes() ) {
+        addDependency( r );
+    }
+}
 
 void MyKDGanttView::addDependency( Relation *rel )
 {
-    // FIXME: KDGantt doesn't handle relations yet.
-/*    QModelIndex par = m_model->index( rel->parent() );
+    QModelIndex par = m_model->index( rel->parent() );
     QModelIndex ch = m_model->index( rel->child() );
-    qDebug()<<"addDependency() "<<m_model<<par.model();
+    kDebug()<<"addDependency() "<<m_model<<par.model();
     if ( par.isValid() && ch.isValid() ) {
-        KDGantt::Constraint con( par, ch );
+        KDGantt::Constraint con( par, ch, KDGantt::Constraint::TypeSoft, 
+                        static_cast<KDGantt::Constraint::RelationType>( rel->type() )/*NOTE!!*/
+                               );
         if ( ! constraintModel()->hasConstraint( con ) ) {
             constraintModel()->addConstraint( con );
         }
-    }*/
+    }
 }
 
 void MyKDGanttView::removeDependency( Relation *rel )
@@ -152,7 +208,9 @@ void MyKDGanttView::removeDependency( Relation *rel )
     QModelIndex par = m_model->index( rel->parent() );
     QModelIndex ch = m_model->index( rel->child() );
     qDebug()<<"removeDependency() "<<m_model<<par.model();
-    KDGantt::Constraint con( par, ch );
+    KDGantt::Constraint con( par, ch, KDGantt::Constraint::TypeSoft, 
+                        static_cast<KDGantt::Constraint::RelationType>( rel->type() )/*NOTE!!*/
+                           );
     constraintModel()->removeConstraint( con );
 }
 
@@ -175,7 +233,6 @@ void MyKDGanttView::createDependencies()
 }
 
 //------------------------------------------
-
 GanttView::GanttView( KoDocument *part, QWidget *parent, bool readWrite )
         : ViewBase( part, parent ),
         m_readWrite( readWrite ),
@@ -213,6 +270,10 @@ GanttView::GanttView( KoDocument *part, QWidget *parent, bool readWrite )
     updateReadWrite( readWrite );
     //connect( m_gantt->constraintModel(), SIGNAL( constraintAdded( const Constraint& )), this, SLOT( update() ) );
     kDebug() <<m_gantt->constraintModel();
+    
+    connect( m_gantt->treeView(), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+
+    connect( m_gantt->treeView(), SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
 void GanttView::setZoom( double )
@@ -224,36 +285,25 @@ void GanttView::setZoom( double )
 
 void GanttView::setupGui()
 {
-/*    actionViewGanttResources  = new KToggleAction(i18n("Resources"), this);
-    actionCollection()->addAction("view_gantt_showResources", actionViewGanttResources );
-    connect( actionViewGanttResources, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttResources() ) );
-    actionViewGanttTaskName  = new KToggleAction(i18n("Task Name"), this);
-    actionCollection()->addAction("view_gantt_showTaskName", actionViewGanttTaskName );
-    connect( actionViewGanttTaskName, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttTaskName() ) );
-    actionViewGanttTaskLinks  = new KToggleAction(i18n("Task Links"), this);
-    actionCollection()->addAction("view_gantt_showTaskLinks", actionViewGanttTaskLinks );
-    connect( actionViewGanttTaskLinks, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttTaskLinks() ) );
-    actionViewGanttProgress  = new KToggleAction(i18n("Progress"), this);
-    actionCollection()->addAction("view_gantt_showProgress", actionViewGanttProgress );
-    connect( actionViewGanttProgress, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttProgress() ) );
-    actionViewGanttFloat  = new KToggleAction(i18n("Float"), this);
-    actionCollection()->addAction("view_gantt_showFloat", actionViewGanttFloat );
-    connect( actionViewGanttFloat, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttFloat() ) );
-    actionViewGanttCriticalTasks  = new KToggleAction(i18n("Critical Tasks"), this);
-    actionCollection()->addAction("view_gantt_showCriticalTasks", actionViewGanttCriticalTasks );
-    connect( actionViewGanttCriticalTasks, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttCriticalTasks() ) );
-    actionViewGanttCriticalPath  = new KToggleAction(i18n("Critical Path"), this);
-    actionCollection()->addAction("view_gantt_showCriticalPath", actionViewGanttCriticalPath );
-    connect( actionViewGanttCriticalPath, SIGNAL( triggered( bool ) ), SLOT( slotViewGanttCriticalPath() ) );
+    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
+    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
+    addContextAction( actionOptions );
+}
 
-    actionViewGanttNotScheduled  = new KToggleAction(i18n("Not Scheduled"), this);
-    actionCollection()->addAction("view_gantt_showNotScheduled", actionViewGanttNotScheduled );
-    connect(actionViewGanttNotScheduled, SIGNAL(triggered(bool)), this, SLOT(slotViewGanttNotScheduled()));
+void GanttView::slotHeaderContextMenuRequested( const QPoint &pos )
+{
+    kDebug();
+    QList<QAction*> lst = contextActionList();
+    if ( ! lst.isEmpty() ) {
+        QMenu::exec( lst, pos,  lst.first() );
+    }
+}
 
-    actionViewTaskAppointments  = new KToggleAction(i18n("Show allocations"), this);
-    actionCollection()->addAction("view_task_appointments", actionViewTaskAppointments );
-    connect( actionViewTaskAppointments, SIGNAL( triggered( bool ) ), SLOT( slotViewTaskAppointments() ) );
-*/
+void GanttView::slotOptions()
+{
+    kDebug();
+    ItemViewSettupDialog dlg( m_gantt->treeView(), true );
+    dlg.exec();
 }
 
 void GanttView::clear()
@@ -293,13 +343,39 @@ void GanttView::drawChanges( Project &project )
 
 Node *GanttView::currentNode() const
 {
-//    return getNode( m_currentItem );
-    return 0;
+    return m_gantt->model()->node( m_gantt->treeView()->selectionModel()->currentIndex() );
+}
+
+void GanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
+{
+    kDebug();
+    QString name;
+    Node *node = m_gantt->model()->node( idx );
+    if ( node ) {
+        switch ( node->type() ) {
+            case Node::Type_Task:
+                name = "taskview_popup";
+                break;
+            case Node::Type_Milestone:
+                name = "taskview_milestone_popup";
+                break;
+            case Node::Type_Summarytask:
+                break;
+            default:
+                break;
+        }
+    } else kDebug()<<"No node: "<<index;
+    if ( name.isEmpty() ) {
+        kDebug()<<"No menu";
+        return;
+    }
+    emit requestPopupMenu( name, pos );
 }
 
 bool GanttView::loadContext( const KoXmlElement &settings )
 {
-    kDebug()<<endl;
+    kDebug();
+    return m_gantt->treeView()->loadContext( m_gantt->model()->columnMap(), settings );
 /*    QDomElement elm = context.firstChildElement( objectName() );
     if ( elm.isNull() ) {
         return false;
@@ -334,28 +410,8 @@ bool GanttView::loadContext( const KoXmlElement &settings )
 
 void GanttView::saveContext( QDomElement &settings ) const
 {
-    kDebug()<<endl;
-/*    QDomElement elm = context.firstChildElement( objectName() );
-    if ( elm.isNull() ) {
-        return;
-    }*/
-/*    Context::Ganttview &context = c.ganttview;
-
-    //kDebug();
-    context.ganttviewsize = m_splitter->sizes() [ 0 ];
-    context.taskviewsize = m_splitter->sizes() [ 1 ];
-    //kDebug()<<"sizes="<<sizes()[0]<<","<<sizes()[1];
-    if ( currentNode() ) {
-        context.currentNode = currentNode() ->id();
-    }
-    context.showResources = m_showResources;
-    context.showTaskName = m_showTaskName;*/
-    settings.setAttribute( "show-dependencies", m_showTaskLinks );
-/*    context.showProgress = m_showProgress;
-    context.showPositiveFloat = m_showPositiveFloat;
-    context.showCriticalTasks = m_showCriticalTasks;
-    context.showCriticalPath = m_showCriticalPath;
-    context.showNoInformation = m_showNoInformation;*/
+    kDebug();
+    m_gantt->treeView()->saveContext( m_gantt->model()->columnMap(), settings );
 }
 
 void GanttView::updateReadWrite( bool on )
@@ -378,6 +434,25 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
     m_model( new MilestoneItemModel( this ) )
 {
     kDebug()<<"------------------- create MilestoneKDGanttView -----------------------"<<endl;
+    GanttTreeView *tv = new GanttTreeView( this );
+    tv->setRootIsDecorated( false );
+    setLeftView( tv );
+    setRowController( new KDGantt::TreeViewRowController( tv, ganttProxyModel() ) );
+    m_model = new MilestoneItemModel( tv );
+    setModel( m_model );
+    
+    tv->header()->setStretchLastSection( true );
+    QList<int> show;
+    show << NodeModel::NodeName
+            << NodeModel::NodeStartTime;
+
+    tv->setDefaultColumns( show );
+    for ( int i = 0; i < model()->columnCount(); ++i ) {
+        if ( ! show.contains( i ) ) {
+            tv->hideColumn( i );
+        }
+    }
+
     KDGantt::ProxyModel *m = static_cast<KDGantt::ProxyModel*>( ganttProxyModel() );
     
     m->setRole( KDGantt::ItemTypeRole, KDGantt::ItemTypeRole ); // To provide correct format
@@ -388,19 +463,6 @@ MilestoneKDGanttView::MilestoneKDGanttView( QWidget *parent )
     m->setColumn( KDGantt::StartTimeRole, NodeModel::NodeStartTime );
     m->setColumn( KDGantt::EndTimeRole, NodeModel::NodeEndTime );
     m->setColumn( KDGantt::TaskCompletionRole, NodeModel::NodeCompleted );
-
-    setModel( m_model );
-    QTreeView *tv = dynamic_cast<QTreeView*>( leftView() ); //FIXME ?
-    if ( tv ) {
-        tv->header()->setStretchLastSection( true );
-        // Only show name and start time in treeview
-        for ( int i = 0; i < m_model->columnCount(); ++i ) {
-            if ( i == NodeModel::NodeName || i == NodeModel::NodeStartTime ) {
-                continue;
-            }
-            tv->hideColumn( i );
-        }
-    } else kDebug()<<"No treeview !!!"<<endl;
 
     static_cast<KDGantt::DateTimeGrid*>( grid() )->setDayWidth( 30 );
 }
@@ -451,6 +513,11 @@ void MilestoneKDGanttView::setScheduleManager( ScheduleManager *sm )
     }
 }
 
+GanttTreeView *MilestoneKDGanttView::treeView() const
+{
+    QAbstractItemView *v = const_cast<QAbstractItemView*>( leftView() );
+    return static_cast<GanttTreeView*>( v );
+}
 
 //------------------------------------------
 
@@ -467,6 +534,8 @@ MilestoneGanttView::MilestoneGanttView( KoDocument *part, QWidget *parent, bool 
     l->addWidget( m_splitter );
     m_splitter->setOrientation( Qt::Vertical );
 
+    setupGui();
+
     m_gantt = new MilestoneKDGanttView( m_splitter );
 
     m_showTaskName = false; // FIXME
@@ -476,6 +545,10 @@ MilestoneGanttView::MilestoneGanttView( KoDocument *part, QWidget *parent, bool 
     m_showNoInformation = false; //FIXME
 
     updateReadWrite( readWrite );
+
+    connect( m_gantt->treeView(), SIGNAL( contextMenuRequested( QModelIndex, const QPoint& ) ), SLOT( slotContextMenuRequested( QModelIndex, const QPoint& ) ) );
+
+    connect( m_gantt->treeView(), SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 }
 
 void MilestoneGanttView::setZoom( double )
@@ -517,19 +590,68 @@ void MilestoneGanttView::drawChanges( Project &project )
 
 Node *MilestoneGanttView::currentNode() const
 {
-//    return getNode( m_currentItem );
-    return 0;
+    return m_gantt->model()->node( m_gantt->treeView()->selectionModel()->currentIndex() );
+}
+
+void MilestoneGanttView::setupGui()
+{
+    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
+    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
+    addContextAction( actionOptions );
+}
+
+void MilestoneGanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
+{
+    kDebug();
+    QString name;
+    Node *node = m_gantt->model()->node( idx );
+    if ( node ) {
+        switch ( node->type() ) {
+            case Node::Type_Task:
+                name = "taskview_popup";
+                break;
+            case Node::Type_Milestone:
+                name = "taskview_milestone_popup";
+                break;
+            case Node::Type_Summarytask:
+                break;
+            default:
+                break;
+        }
+    } else kDebug()<<"No node: "<<index;
+    if ( name.isEmpty() ) {
+        kDebug()<<"No menu";
+        return;
+    }
+    emit requestPopupMenu( name, pos );
+}
+
+void MilestoneGanttView::slotHeaderContextMenuRequested( const QPoint &pos )
+{
+    kDebug();
+    QList<QAction*> lst = contextActionList();
+    if ( ! lst.isEmpty() ) {
+        QMenu::exec( lst, pos,  lst.first() );
+    }
+}
+
+void MilestoneGanttView::slotOptions()
+{
+    kDebug();
+    ItemViewSettupDialog dlg( m_gantt->treeView(), true );
+    dlg.exec();
 }
 
 bool MilestoneGanttView::loadContext( const KoXmlElement &settings )
 {
-    kDebug()<<endl;
-    return true;
+    kDebug();
+    return m_gantt->treeView()->loadContext( m_gantt->model()->columnMap(), settings );
 }
 
 void MilestoneGanttView::saveContext( QDomElement &settings ) const
 {
-    kDebug()<<endl;
+    kDebug();
+    return m_gantt->treeView()->saveContext( m_gantt->model()->columnMap(), settings );
 }
 
 void MilestoneGanttView::updateReadWrite( bool on )

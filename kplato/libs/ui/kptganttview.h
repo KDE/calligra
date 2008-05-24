@@ -32,6 +32,7 @@ class KoDocument;
 
 class QPoint;
 class QSplitter;
+class QModelIndex;
 
 namespace KPlato
 {
@@ -45,6 +46,14 @@ class Task;
 class Project;
 class Relation;
 class ScheduleManager;
+
+class GanttTreeView : public TreeViewBase
+{
+    Q_OBJECT
+public:
+    GanttTreeView( QWidget *parent );
+
+};
 
 class MyKDGanttView : public KDGantt::View
 {
@@ -60,10 +69,14 @@ public:
     void clearDependencies();
     void createDependencies();
 
+    GanttTreeView *treeView() const;
+    
 public slots:
     void addDependency( Relation *rel );
     void removeDependency( Relation *rel );
     void slotProjectCalculated( ScheduleManager *sm );
+    
+    void slotNodeInserted( Node *node );
     
 protected:
     NodeItemModel *m_model;
@@ -128,6 +141,11 @@ public slots:
     void setShowAppointments( bool on ) { m_showAppointments = on; }
     void update();
 
+protected slots:
+    void slotContextMenuRequested( QModelIndex, const QPoint &pos );
+    void slotHeaderContextMenuRequested( const QPoint &pos );
+    void slotOptions();
+    
 private:
     bool m_readWrite;
     int m_defaultFontSize;
@@ -147,6 +165,10 @@ private:
     bool m_showNoInformation;
     bool m_showAppointments;
     Project *m_project;
+    
+    // View options context menu
+    KAction *actionOptions;
+
 };
 
 class KPLATOUI_EXPORT MilestoneKDGanttView : public KDGantt::View
@@ -160,6 +182,8 @@ public:
     void setScheduleManager( ScheduleManager *sm );
     void update();
 
+    GanttTreeView *treeView() const;
+    
 public slots:
     void slotProjectCalculated( ScheduleManager *sm );
 
@@ -182,6 +206,8 @@ public:
     virtual void draw( Project &project );
     virtual void drawChanges( Project &project );
 
+    void setupGui();
+    
     Node *currentNode() const;
 
     void clear();
@@ -212,6 +238,11 @@ public slots:
     void setShowNoInformation( bool on ) { m_showNoInformation = on; }
     void update();
 
+protected slots:
+    void slotContextMenuRequested( QModelIndex, const QPoint &pos );
+    void slotHeaderContextMenuRequested( const QPoint &pos );
+    void slotOptions();
+
 private:
     bool m_readWrite;
     int m_defaultFontSize;
@@ -223,6 +254,9 @@ private:
     bool m_showCriticalTasks;
     bool m_showNoInformation;
     Project *m_project;
+
+    // View options context menu
+    KAction *actionOptions;
 };
 
 }  //KPlato namespace

@@ -253,6 +253,9 @@ public:
     
     virtual bool dropAllowed( const QModelIndex &index, int dropIndicatorPosition, const QMimeData *data );
     
+signals:
+    void nodeInserted( Node *node );
+    
 protected slots:
     void slotWbsDefinitionChanged();
     void slotNodeChanged( Node* );
