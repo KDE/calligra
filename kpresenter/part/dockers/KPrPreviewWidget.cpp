@@ -20,6 +20,7 @@
 #include "KPrPreviewWidget.h"
 
 #include <QPainter>
+#include <QMouseEvent>
 #include <KoShapePainter.h>
 #include <KoShapeContainer.h>
 #include <KoPAMasterPage.h>
@@ -122,6 +123,12 @@ void KPrPreviewWidget::updatePixmaps()
     QPainter p2(&newPage);
     p2.drawImage(rect(), pageImage);
     m_newPage = newPage;
+}
+
+void KPrPreviewWidget::mousePressEvent( QMouseEvent* event )
+{
+    event->accept();
+    runPreview();
 }
 
 #include "KPrPreviewWidget.moc"

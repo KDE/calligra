@@ -54,6 +54,7 @@ public:
 protected:
     void paintEvent( QPaintEvent* event );
     void resizeEvent( QResizeEvent* event );
+    void mousePressEvent( QMouseEvent* event );
 
 protected slots:
     void animate();

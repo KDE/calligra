@@ -48,6 +48,7 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
 
     // setup the effect preview
     m_preview = new KPrPreviewWidget( base );
+    m_preview->setToolTip( i18n( "Click to preview the page effect." ) );
    // m_preview->installEventFilter( this );
    // m_preview->setFrameShape( QFrame::Box );
 
@@ -235,6 +236,8 @@ void KPrPageEffectDocker::setView( KPrView* view )
     m_view = view;
     connect( view, SIGNAL( activePageChanged() ),
              this, SLOT( slotActivePageChanged() ) );
+    connect( view, SIGNAL( destroyed( QObject* ) ),
+             this, SLOT( cleanup ( QObject* ) ) );
 }
 
 void KPrPageEffectDocker::setEffectPreview()
@@ -249,6 +252,15 @@ void KPrPageEffectDocker::setEffectPreview()
     }
     else
         m_preview->setPageEffect(0,  static_cast<KPrPage*>(m_view->activePage()));
+}
+
+void KPrPageEffectDocker::cleanup( QObject* object )
+{
+    if(object != m_view)
+        return;
+
+    m_view = 0;
+    m_preview->setPageEffect( 0, 0 );
 }
 
 #include "KPrPageEffectDocker.moc"

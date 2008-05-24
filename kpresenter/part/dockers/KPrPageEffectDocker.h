@@ -60,6 +60,8 @@ protected slots:
     void slotSubTypeChanged( int index );
     void slotDurationChanged( double duration );
 
+    void cleanup( QObject* object );
+
 private:
     KPrPageEffectRunner* m_runner;
     KPrView* m_view;
