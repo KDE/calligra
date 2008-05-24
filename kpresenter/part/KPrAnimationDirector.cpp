@@ -30,6 +30,7 @@
 #include <KoPACanvas.h>
 #include <KoPAPageBase.h>
 #include <KoPAView.h>
+#include <KoPAUtil.h>
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
 #include "KPrPageApplicationData.h"
@@ -241,17 +242,9 @@ bool KPrAnimationDirector::changePage( Navigation navigation )
 void KPrAnimationDirector::updateZoom( const QSize & size )
 {
     KoPageLayout pageLayout = m_view->activePage()->pageLayout();
-    double zoom = size.width() / ( m_zoomHandler.resolutionX() * pageLayout.width );
-    zoom = qMin( zoom, size.height() / ( m_zoomHandler.resolutionY() * pageLayout.height ) );
-    m_zoomHandler.setZoom( zoom );
-
-    int width = int( 0.5 + m_zoomHandler.documentToViewX( pageLayout.width ) );
-    int height = int( 0.5 + m_zoomHandler.documentToViewY( pageLayout.height ) );
-    int x = int( ( m_canvas->width() - width ) / 2.0 );
-    int y = int( ( m_canvas->height() - height ) / 2.0 );
-    m_canvas->setDocumentOffset( -QPoint( x,y ) );
-
-    m_pageRect = QRect( x, y, width, height );
+    KoPAUtil::setZoom( pageLayout, size, m_zoomHandler );
+    m_pageRect = KoPAUtil::pageRect( pageLayout, size, m_zoomHandler );
+    m_canvas->setDocumentOffset( -m_pageRect.topLeft() );
 }
 
 void KPrAnimationDirector::paintStep( QPainter & painter )
