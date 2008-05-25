@@ -26,7 +26,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include <KoGridData.h>
 #include <KoUnitDoubleSpinBox.h>
-#include <KoImageResource.h>
+#include <KoAspectButton.h>
 
 #include <kiconloader.h>
 #include <klocale.h>
@@ -42,7 +42,6 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <QtGui/QLabel>
 #include <QtGui/QGroupBox>
 #include <QtGui/QGridLayout>
-#include <QtGui/QToolButton>
 
 #include <float.h>
 
@@ -317,13 +316,8 @@ ConfigGridPage::ConfigGridPage( KarbonView* view, char* name )
     layoutSpacingGrp->addWidget(spaceVertLbl, 1, 0);
     layoutSpacingGrp->addWidget(m_spaceVertUSpin, 1, 1);
     hboxLayout->addLayout( layoutSpacingGrp );
-    m_bnLinkSpacing = new QToolButton(spacingGrp);
-    m_bnLinkSpacing->setObjectName(QString::fromUtf8("bnLinkSpacing"));
-    m_bnLinkSpacing->setMinimumSize(QSize(16, 0));
-    m_bnLinkSpacing->setMaximumSize(QSize(16, 32767));
-    m_bnLinkSpacing->setCheckable(true);
-    bool link = gd.gridX() == gd.gridY();
-    m_bnLinkSpacing->setChecked(link);
+    m_bnLinkSpacing = new KoAspectButton(spacingGrp);
+    m_bnLinkSpacing->setKeepAspectRatio( gd.gridX() == gd.gridY() );
     hboxLayout->addWidget(m_bnLinkSpacing);
 
     QVBoxLayout *mainLayout = new QVBoxLayout( this );
@@ -339,9 +333,6 @@ ConfigGridPage::ConfigGridPage( KarbonView* view, char* name )
     mainLayout->addStretch();
 
     setValuesFromGrid( view->part()->gridData() );
-
-    linkSpacingToggled(link);
-    connect(m_bnLinkSpacing, SIGNAL(toggled(bool)), this, SLOT(linkSpacingToggled( bool )));
 
     connect(m_spaceHorizUSpin, SIGNAL(valueChangedPt(double)),this,SLOT(spinBoxHSpacingChanged(double)));
     connect(m_spaceVertUSpin, SIGNAL(valueChangedPt(double)),this,SLOT(spinBoxVSpacingChanged(double)));
@@ -391,25 +382,14 @@ void ConfigGridPage::setValuesFromGrid( const KoGridData &grid )
 
 void ConfigGridPage::spinBoxHSpacingChanged( double v )
 {
-    if ( m_linkSpacing )
+    if ( m_bnLinkSpacing->keepAspectRatio() )
         m_spaceVertUSpin->changeValue(v);
 }
 
 void ConfigGridPage::spinBoxVSpacingChanged( double v )
 {
-    if ( m_linkSpacing )
+    if ( m_bnLinkSpacing->keepAspectRatio() )
         m_spaceHorizUSpin->changeValue(v);
-}
-
-void ConfigGridPage::linkSpacingToggled(bool b)
-{
-    m_linkSpacing = b;
-
-    KoImageResource kir;
-    if ( b )
-        m_bnLinkSpacing->setIcon(QIcon(kir.chain()));
-    else
-        m_bnLinkSpacing->setIcon(QIcon(kir.chainBroken()));
 }
 
 ConfigDefaultPage::ConfigDefaultPage( KarbonView* view, char* name )
