@@ -48,10 +48,6 @@ public:
 
     void updatePageThumbnail();
 
-protected:
-    /// reimplemented from KoShape
-    virtual KoShape *cloneShape() const;
-
 private:
     QImage createPageThumbnail() const;
 

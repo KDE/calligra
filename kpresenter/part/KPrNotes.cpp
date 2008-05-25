@@ -55,9 +55,6 @@ public:
     }
 
     virtual void saveOdf( KoShapeSavingContext & ) const { }
-
-private:
-    virtual KoShape *cloneShape() const { return 0; }
 };
 
 KPrNotes::KPrNotes(KPrPage *page)
@@ -180,11 +177,6 @@ void KPrNotes::updatePageThumbnail()
     KoImageData *imageData = new KoImageData( new KoImageCollection() );
     imageData->setImage( createPageThumbnail() );
     m_thumbnailShape->setUserData( imageData );
-}
-
-KoShape *KPrNotes::cloneShape() const
-{
-    return 0;
 }
 
 QImage KPrNotes::createPageThumbnail() const
