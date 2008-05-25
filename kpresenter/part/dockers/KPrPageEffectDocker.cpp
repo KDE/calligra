@@ -30,6 +30,7 @@
 #include <klocale.h>
 
 #include <KoPACanvas.h>
+#include <KoPADocument.h>
 #include <KoShapeManager.h>
 #include "KPrView.h"
 #include "KPrPage.h"
@@ -260,10 +261,12 @@ void KPrPageEffectDocker::setEffectPreview()
     if(factory){
         KPrPageEffect * pageEffect( createPageEffect( factory, m_subTypeCombo->itemData( m_subTypeCombo->currentIndex() ).toInt(), m_durationSpinBox->value() ) );
 
-        m_preview->setPageEffect(pageEffect,  static_cast<KPrPage*>(m_view->activePage()));
+        KPrPage* page = static_cast<KPrPage*>(m_view->activePage());
+        KPrPage* oldpage = static_cast<KPrPage*>(m_view->kopaDocument()->pageByNavigation(page, KoPageApp::PagePrevious));
+        m_preview->setPageEffect(pageEffect, page, oldpage);
     }
     else
-        m_preview->setPageEffect(0,  static_cast<KPrPage*>(m_view->activePage()));
+        m_preview->setPageEffect(0,  static_cast<KPrPage*>(m_view->activePage()), 0);
 }
 
 void KPrPageEffectDocker::cleanup( QObject* object )
@@ -272,7 +275,7 @@ void KPrPageEffectDocker::cleanup( QObject* object )
         return;
 
     m_view = 0;
-    m_preview->setPageEffect( 0, 0 );
+    m_preview->setPageEffect( 0, 0, 0 );
 }
 
 #include "KPrPageEffectDocker.moc"

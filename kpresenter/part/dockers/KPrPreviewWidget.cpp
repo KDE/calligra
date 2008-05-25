@@ -64,6 +64,8 @@ void KPrPreviewWidget::paintEvent( QPaintEvent *event )
     framerect.setWidth(framerect.width() - 1);
     framerect.setHeight(framerect.height() - 1);
     p.drawRect(framerect);
+
+    QWidget::paintEvent( event );
 }
 
 void  KPrPreviewWidget::resizeEvent( QResizeEvent* event )
@@ -75,9 +77,11 @@ void  KPrPreviewWidget::resizeEvent( QResizeEvent* event )
         m_pageEffectRunner->setOldPage( m_oldPage );
         m_pageEffectRunner->setNewPage( m_newPage );
     }
+
+    QWidget::resizeEvent( event );
 }
 
-void KPrPreviewWidget::setPageEffect( KPrPageEffect* pageEffect, KPrPage* page )
+void KPrPreviewWidget::setPageEffect( KPrPageEffect* pageEffect, KPrPage* page, KPrPage* prevpage )
 {
     delete m_pageEffect;
     m_pageEffect = pageEffect;
@@ -85,6 +89,7 @@ void KPrPreviewWidget::setPageEffect( KPrPageEffect* pageEffect, KPrPage* page )
     m_pageEffectRunner = 0;
 
     m_page = page;
+    m_prevpage = prevpage;
 
     if(m_page) {
         updatePixmaps();
@@ -115,47 +120,24 @@ void KPrPreviewWidget::runPreview()
 
 void KPrPreviewWidget::updatePixmaps()
 {
-    if(!m_page || !size().isValid() || (size().width() == 0 && size().height() == 0))
+    if(!m_page || !isVisible())
         return;
 
-    KoZoomHandler zoomHandler;
-    KoPageLayout layout = m_page->pageLayout();
-    double hzoom = (double) size().height() / zoomHandler.zoomItY( layout.height );
-    double wzoom = (double) size().width() / zoomHandler.zoomItX( layout.width );
-    double zoom = qMin( hzoom, wzoom );
-    zoomHandler.setZoom( zoom );
+    m_newPage = m_page->thumbnail( size() );
 
-    QSize pagesize;
-    pagesize.setWidth( zoomHandler.zoomItX( layout.width ) );
-    pagesize.setHeight( zoomHandler.zoomItY( layout.height ) );
-
-    if(!pagesize.isValid() || (pagesize.width() == 0 && pagesize.height() == 0))
+    if(m_newPage.isNull())
         return;
 
-    QPixmap pageImage( size() );
-    pageImage.fill( QColor( Qt::white ) );
-
-    if(pageImage.isNull())
-        return;
-
-    QList<KoShape*> shapes;
-
-    if(m_page->masterPage())
-        shapes.append(m_page->masterPage());
-
-    shapes.append( m_page );
-    KoShapePainter painter;
-    painter.setShapes( shapes );
-    QPainter p2( &pageImage );
-    p2.translate( ( size().width() - pagesize.width() ) / 2, ( size().height() - pagesize.height() ) / 2 );
-    p2.setClipRect( 0, 0, pagesize.width(), pagesize.height() );
-    painter.paintShapes( p2, zoomHandler );
-
-    QPixmap oldPage( size() );
-    oldPage.fill( QColor(Qt::black) );
-    m_oldPage = oldPage;
-
-    m_newPage = pageImage;
+    if(m_prevpage && m_prevpage != m_page)
+    {
+        m_oldPage = m_prevpage->thumbnail( size() );
+    }
+    else
+    {
+        QPixmap oldPage( size() );
+        oldPage.fill( QColor(Qt::black) );
+        m_oldPage = oldPage;
+    }
 }
 
 void KPrPreviewWidget::mousePressEvent( QMouseEvent* event )
