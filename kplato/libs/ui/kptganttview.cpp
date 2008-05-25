@@ -364,7 +364,7 @@ void GanttView::slotContextMenuRequested( QModelIndex idx, const QPoint &pos )
             default:
                 break;
         }
-    } else kDebug()<<"No node: "<<index;
+    } else kDebug()<<"No node";
     if ( name.isEmpty() ) {
         kDebug()<<"No menu";
         return;
