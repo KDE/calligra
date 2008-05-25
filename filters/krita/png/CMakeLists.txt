@@ -1,4 +1,4 @@
-
+add_subdirectory(tests)
 
 set(kritapngimport_PART_SRCS
     kis_png_import.cc

@@ -48,9 +48,10 @@ if(PNG_FOUND)
     add_subdirectory(png)
 endif(PNG_FOUND)
 
-if(OPENEXR_FOUND)
+# OpenCTL is needed for having a RGB16/32f color space
+if(OPENEXR_FOUND AND OPENCTL_FOUND)
     add_subdirectory(openexr)
-endif(OPENEXR_FOUND)
+endif(OPENEXR_FOUND AND OPENCTL_FOUND)
 
 if(GRAPHICSMAGICK_FOUND)
     add_subdirectory(gmagick)

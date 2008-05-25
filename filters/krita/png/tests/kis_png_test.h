@@ -16,25 +16,16 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_files_test.h"
+#ifndef _KIS_FILES_TEST_H_
+#define _KIS_FILES_TEST_H_
 
+#include <QObject>
 
-#include <QTest>
-#include <QCoreApplication>
-
-#include <qtest_kde.h>
-
-#include "filestest.h"
-
-#ifndef FILES_DATA_DIR
-    #error "FILES_DATA_DIR not set. A directory with the data used for testing the importing of files in krita"
-#endif
-
-
-void KisFilesTest::testFiles()
+class KisPngTest : public QObject
 {
-    TestUtil::testFiles( QString(FILES_DATA_DIR) + "/sources" );
-}
-QTEST_KDEMAIN(KisFilesTest, GUI)
+    Q_OBJECT
+    private slots:
+        void testFiles();
+};
 
-#include "kis_files_test.moc"
+#endif

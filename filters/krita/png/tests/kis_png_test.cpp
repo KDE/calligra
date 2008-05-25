@@ -16,7 +16,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#include "kis_files_test.h"
+#include "kis_png_test.h"
 
 
 #include <QTest>
@@ -31,10 +31,10 @@
 #endif
 
 
-void KisFilesTest::testFiles()
+void KisPngTest::testFiles()
 {
     TestUtil::testFiles( QString(FILES_DATA_DIR) + "/sources" );
 }
-QTEST_KDEMAIN(KisFilesTest, GUI)
+QTEST_KDEMAIN(KisPngTest, GUI)
 
-#include "kis_files_test.moc"
+#include "kis_png_test.moc"
