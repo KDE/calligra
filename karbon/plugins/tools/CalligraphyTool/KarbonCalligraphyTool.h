@@ -33,6 +33,10 @@ public:
     void insertPoints( const QPointF &p1, const QPointF &p2 );
 
     KoPathShape *simplified( float error );
+
+    // returns the bounding rect of whan needs to be repainted
+    // after new points are added
+    const QRectF lastPieceBoundingRect();
     
 private:
     // function that actually insererts the points
@@ -44,6 +48,7 @@ private:
     // it returns 0 if there is no flip
     // +1 if the flip is in the direction of the higher indexes
     // -1 if the flip is in the direction of the lower indexes
+    // TODO: values not used, maybe just return a boolean
     int flipDetected( const QPointF &p1, const QPointF &p2 );
 
     // determine whether the points given are in counterclockwise order or not

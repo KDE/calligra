@@ -111,6 +111,28 @@ KoPathShape *KarbonCalligraphicPath::simplified( float error )
     return res;
 }
 
+const QRectF KarbonCalligraphicPath::lastPieceBoundingRect()
+{
+    if ( pointCount() < 4 )
+        return QRectF();
+
+    int index = pointCount() / 2;
+
+    QPointF last1 = pointByIndex( KoPathPointIndex(0, index-1) )->point();
+    QPointF prev1 = pointByIndex( KoPathPointIndex(0, index-2) )->point();
+
+    QPointF last2 = pointByIndex( KoPathPointIndex(0, index) )->point();
+    QPointF prev2 = pointByIndex( KoPathPointIndex(0, index+1) )->point();
+
+    QPainterPath p;
+    p.moveTo(prev1);
+    p.lineTo(last1);
+    p.lineTo(last2);
+    p.lineTo(prev2);
+
+    return p.boundingRect().translated(m_offset);
+}
+
 
 void KarbonCalligraphicPath::insertPointsAux( const QPointF &p1,
                                               const QPointF &p2 )
@@ -259,7 +281,7 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
     addPoint( event->point );
     m_isDrawing = false;
 
-    KoPathShape *finalPath = m_path->simplified( m_strokeWidth/50.0 );
+    KoPathShape *finalPath = m_path->simplified( m_strokeWidth/60.0 );
     
     QUndoCommand * cmd = m_canvas->shapeController()->addShape( finalPath );
     if( cmd )
@@ -324,7 +346,7 @@ void KarbonCalligraphyTool::addPoint(const QPointF &mousePosition)
 
     m_path->insertPoints(point2, point3);
 
-    m_canvas->updateCanvas( m_path->boundingRect() );
+    m_canvas->updateCanvas( m_path->lastPieceBoundingRect() );
 
     /*if (point2 == m_point1 || point3 == m_point0) {
         kDebug() << "equal points...";
