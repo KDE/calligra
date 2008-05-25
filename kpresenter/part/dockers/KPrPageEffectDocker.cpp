@@ -26,6 +26,7 @@
 #include <QLabel>
 #include <QEvent>
 #include <QPainter>
+#include <QTimer>
 #include <klocale.h>
 
 #include <KoPACanvas.h>
@@ -93,6 +94,12 @@ KPrPageEffectDocker::KPrPageEffectDocker( QWidget* parent, Qt::WindowFlags flags
     layout->addWidget( m_preview);
     base->setLayout( layout );
     setWidget( base );
+
+    m_updateTimer = new QTimer( this );
+    m_updateTimer->setInterval( 100 );
+    m_updateTimer->setSingleShot( true );
+    connect( m_updateTimer, SIGNAL( timeout() ),
+             this, SLOT( setEffectPreview() ) );
 }
 
 bool KPrPageEffectDocker::eventFilter( QObject* object, QEvent* event )
@@ -238,6 +245,11 @@ void KPrPageEffectDocker::setView( KPrView* view )
              this, SLOT( slotActivePageChanged() ) );
     connect( view, SIGNAL( destroyed( QObject* ) ),
              this, SLOT( cleanup ( QObject* ) ) );
+    connect( view->kopaCanvas(), SIGNAL( canvasUpdated() ),
+             m_updateTimer, SLOT( start() ) );
+
+    if( m_view->activePage() )
+        slotActivePageChanged();
 }
 
 void KPrPageEffectDocker::setEffectPreview()

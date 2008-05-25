@@ -24,6 +24,7 @@
 #include <KoShapePainter.h>
 #include <KoShapeContainer.h>
 #include <KoPAMasterPage.h>
+#include <KoZoomHandler.h>
 
 #include "KPrPage.h"
 #include "pageeffects/KPrPageEffect.h"
@@ -44,19 +45,33 @@ KPrPreviewWidget::~KPrPreviewWidget()
 void KPrPreviewWidget::paintEvent( QPaintEvent *event )
 {
     QPainter p(this);
-    if(m_pageEffectRunner) {
+
+    if(m_pageEffectRunner && m_timeLine.state() == QTimeLine::Running) {
         m_pageEffectRunner->paint(p);
+    }
+    else if(m_page && !m_newPage.isNull()) {
+        p.drawPixmap(rect().topLeft(), m_newPage);
     }
     else {
         p.drawLine(rect().topLeft(), rect().bottomRight());
         p.drawLine(rect().topRight(), rect().bottomLeft());
     }
+
+    QPen pen(Qt::SolidLine);
+    pen.setColor(palette().color(QPalette::Mid));
+    p.setPen(pen);
+    QRect framerect = rect();
+    framerect.setWidth(framerect.width() - 1);
+    framerect.setHeight(framerect.height() - 1);
+    p.drawRect(framerect);
 }
 
 void  KPrPreviewWidget::resizeEvent( QResizeEvent* event )
 {
-    if(m_pageEffectRunner) {
+    if(m_page)
         updatePixmaps();
+
+    if(m_pageEffectRunner) {
         m_pageEffectRunner->setOldPage( m_oldPage );
         m_pageEffectRunner->setNewPage( m_newPage );
     }
@@ -64,23 +79,21 @@ void  KPrPreviewWidget::resizeEvent( QResizeEvent* event )
 
 void KPrPreviewWidget::setPageEffect( KPrPageEffect* pageEffect, KPrPage* page )
 {
-    if(m_pageEffect)
-        delete m_pageEffect;
-    if(m_pageEffectRunner)
-        delete m_pageEffectRunner;
-
+    delete m_pageEffect;
     m_pageEffect = pageEffect;
+    delete m_pageEffectRunner;
+    m_pageEffectRunner = 0;
+
     m_page = page;
 
-    if(m_pageEffect && m_page) {
+    if(m_page) {
         updatePixmaps();
-        m_pageEffectRunner = new KPrPageEffectRunner( m_oldPage, m_newPage, this, m_pageEffect );
+
+        if(m_pageEffect) {
+            m_pageEffectRunner = new KPrPageEffectRunner( m_oldPage, m_newPage, this, m_pageEffect );
+        }
     }
-    else {
-        m_pageEffect = 0;
-        m_pageEffectRunner = 0;
-        m_page = 0;
-    }
+
     update();
 }
 
@@ -102,27 +115,47 @@ void KPrPreviewWidget::runPreview()
 
 void KPrPreviewWidget::updatePixmaps()
 {
-    QPixmap oldPage( size() );
-    QPainter p(&oldPage);
-    p.fillRect( rect(), QBrush(Qt::black) );
-    m_oldPage = oldPage;
+    if(!m_page || !size().isValid() || (size().width() == 0 && size().height() == 0))
+        return;
 
-    QImage pageImage( size(), QImage::Format_RGB32 );
-    pageImage.fill( QColor( Qt::white ).rgb() );
+    KoZoomHandler zoomHandler;
+    KoPageLayout layout = m_page->pageLayout();
+    double hzoom = (double) size().height() / zoomHandler.zoomItY( layout.height );
+    double wzoom = (double) size().width() / zoomHandler.zoomItX( layout.width );
+    double zoom = qMin( hzoom, wzoom );
+    zoomHandler.setZoom( zoom );
+
+    QSize pagesize;
+    pagesize.setWidth( zoomHandler.zoomItX( layout.width ) );
+    pagesize.setHeight( zoomHandler.zoomItY( layout.height ) );
+
+    if(!pagesize.isValid() || (pagesize.width() == 0 && pagesize.height() == 0))
+        return;
+
+    QPixmap pageImage( size() );
+    pageImage.fill( QColor( Qt::white ) );
+
+    if(pageImage.isNull())
+        return;
 
     QList<KoShape*> shapes;
+
     if(m_page->masterPage())
         shapes.append(m_page->masterPage());
 
-    shapes.append(m_page);
+    shapes.append( m_page );
     KoShapePainter painter;
     painter.setShapes( shapes );
-    painter.paintShapes( pageImage );
+    QPainter p2( &pageImage );
+    p2.translate( ( size().width() - pagesize.width() ) / 2, ( size().height() - pagesize.height() ) / 2 );
+    p2.setClipRect( 0, 0, pagesize.width(), pagesize.height() );
+    painter.paintShapes( p2, zoomHandler );
 
-    QPixmap newPage( size() );
-    QPainter p2(&newPage);
-    p2.drawImage(rect(), pageImage);
-    m_newPage = newPage;
+    QPixmap oldPage( size() );
+    oldPage.fill( QColor(Qt::black) );
+    m_oldPage = oldPage;
+
+    m_newPage = pageImage;
 }
 
 void KPrPreviewWidget::mousePressEvent( QMouseEvent* event )
