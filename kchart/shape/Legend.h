@@ -72,8 +72,6 @@ public:
     void saveOdf( KoShapeSavingContext &context ) const;
     
     KDChart::Legend *kdLegend() const;
-    
-    KoShape *cloneShape() const;
 
 private:
     class Private;

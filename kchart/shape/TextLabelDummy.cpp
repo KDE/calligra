@@ -32,8 +32,3 @@ bool TextLabelDummy::loadOdf( const KoXmlElement&, KoShapeLoadingContext& )
 void TextLabelDummy::saveOdf( KoShapeSavingContext& ) const
 {
 }
-
-KoShape* TextLabelDummy::cloneShape() const
-{
-    return 0;
-}

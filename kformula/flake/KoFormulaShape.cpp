@@ -36,12 +36,6 @@ KoFormulaShape::~KoFormulaShape()
     delete m_formulaRenderer;
 }
 
-KoShape * KoFormulaShape::cloneShape() const
-{
-    // TODO implement cloning
-    return 0;
-}
-
 void KoFormulaShape::paint( QPainter &painter, const KoViewConverter &converter )
 {
     applyConversion( painter, converter );   // apply zooming and coordinate translation

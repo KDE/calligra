@@ -137,8 +137,6 @@ public:
     void saveOdf( KoShapeSavingContext &context ) const;
     void saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
     
-    KoShape *cloneShape() const;
-    
     void updateChildrenPositions();
     
     void update() const;

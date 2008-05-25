@@ -538,8 +538,3 @@ KDChart::Legend *Legend::kdLegend() const
     Q_ASSERT( d->kdLegend );
     return d->kdLegend;
 }
-
-KoShape *Legend::cloneShape() const
-{
-    return 0;
-}

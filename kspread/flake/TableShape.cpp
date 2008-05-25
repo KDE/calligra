@@ -100,12 +100,6 @@ TableShape::~TableShape()
     delete d;
 }
 
-KoShape * TableShape::cloneShape() const
-{
-    // TODO implement cloning
-    return 0;
-}
-
 int TableShape::columns() const
 {
     return d->columns;

@@ -845,11 +845,6 @@ void ChartShape::saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles )
     bodyWriter.endElement(); // table:table
 }
 
-KoShape *ChartShape::cloneShape() const
-{
-    return 0;
-}
-
 void ChartShape::update() const
 {
     KoShape::update();

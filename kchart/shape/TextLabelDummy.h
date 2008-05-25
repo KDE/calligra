@@ -29,7 +29,6 @@ public:
     void paint( QPainter&, const KoViewConverter& );
     bool loadOdf( const KoXmlElement&, KoShapeLoadingContext& );
     void saveOdf( KoShapeSavingContext& ) const;
-    KoShape* cloneShape() const;
 };
 
 #endif

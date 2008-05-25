@@ -75,9 +75,6 @@ private Q_SLOTS:
 private:
     Q_DISABLE_COPY( TableShape )
 
-    /// reimplemented from KoShape
-    virtual KoShape * cloneShape() const;
-
     class Private;
     Private * const d;
 };
