@@ -45,11 +45,17 @@ KWOdfSharedLoadingData::KWOdfSharedLoadingData(KWOdfLoader* loader)
     KoShapeLoadingContext::addAdditionalAttributeData(
         KoShapeLoadingContext::AdditionalAttributeData(
             KoXmlNS::text, "anchor-type", "text:anchor-type" ) );
+    KoShapeLoadingContext::addAdditionalAttributeData(
+            KoShapeLoadingContext::AdditionalAttributeData(
+            KoXmlNS::svg, "x", "svg:x" ) );
+    KoShapeLoadingContext::addAdditionalAttributeData(
+            KoShapeLoadingContext::AdditionalAttributeData(
+            KoXmlNS::svg, "y", "svg:y" ) );
 }
 
 void KWOdfSharedLoadingData::shapeInserted(KoShape* shape)
 {
-    kDebug()<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! ext:anchor-type="<<shape->additionalAttribute("text:anchor-type");
+    kDebug()<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! text:anchor-type="<<shape->additionalAttribute("text:anchor-type");
 
     KWFrameSet* fs = new KWFrameSet();
     fs->setName("My FrameSet");
