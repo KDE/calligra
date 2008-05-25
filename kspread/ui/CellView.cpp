@@ -50,6 +50,7 @@
 #include <QTextLayout>
 
 // KOffice
+#include <KoGlobal.h>
 #include <KoZoomHandler.h>
 
 // KSpread
@@ -2249,38 +2250,48 @@ void CellView::drawText( QPainter& painter, const QPointF& location, const QStri
 {
     Q_UNUSED( cell )
 
-    const QFontMetricsF fontMetrics(effectiveFont(painter.device()), painter.device());
-    const double leading = fontMetrics.leading();
+    const double scaleX = POINT_TO_INCH(double(KoGlobal::dpiX()));
+    const double scaleY = POINT_TO_INCH(double(KoGlobal::dpiY()));
+
+    // Qt scales the font already with the logical resolution. Do not do it twice!
+    painter.save();
+    painter.scale(1.0 / scaleX, 1.0 / scaleY);
+
+    const QFontMetricsF fontMetrics(d->style.font());
+    const double leading = fontMetrics.leading() / scaleY;
 
     const QTextOption options = d->textOptions();
 
-    double offset = 1.0 - fontMetrics.ascent();
+    double offset = 1.0 - fontMetrics.ascent() / scaleY;
     for (int i = 0; i < textLines.count(); ++i)
     {
-        QTextLayout textLayout(textLines[i], effectiveFont(painter.device()));
+        QTextLayout textLayout(textLines[i], d->style.font());
         textLayout.setCacheEnabled(true);
         textLayout.setTextOption(options);
         textLayout.beginLayout();
         double height = 0.0;
         forever
         {
-            if (offset + height + leading + fontMetrics.height() > d->height)
+            if (offset + height + leading + fontMetrics.height() / scaleY > d->height)
                 break;
             QTextLine line = textLayout.createLine();
             if (!line.isValid())
                 break;
-            line.setLineWidth(d->width - 2 * s_borderSpace
+            line.setLineWidth(scaleX * (d->width - 2 * s_borderSpace
                               - 0.5 * d->style.leftBorderPen().width()
-                              - 0.5 * d->style.rightBorderPen().width());
+                              - 0.5 * d->style.rightBorderPen().width()));
             height += leading;
-            line.setPosition(QPoint(s_borderSpace + 0.5 * d->style.leftBorderPen().width(), qRound(height)));
+            line.setPosition(QPoint(scaleX * (s_borderSpace + 0.5 * d->style.leftBorderPen().width()),
+                                    qRound(scaleX * height)));
             height += line.height();
         }
         textLayout.endLayout();
 
-        textLayout.draw(&painter, QPointF(location.x(), location.y() + offset));
+        textLayout.draw(&painter, QPointF(scaleX * location.x(), scaleY * (location.y() + offset)));
         offset += height;
     }
+
+    painter.restore();
 }
 
 void CellView::obscure( int col, int row )

@@ -60,6 +60,7 @@
 
 // KOffice
 #include <KoCanvasController.h>
+#include <KoGlobal.h>
 #include <KoZoomHandler.h>
 
 // KSpread
@@ -522,8 +523,8 @@ void VBorder::paintEvent( QPaintEvent* event )
   painter.setRenderHint( QPainter::TextAntialiasing );
 
   // fonts
-  QFont normalFont( painter.font(), m_pCanvas );
-  QFont boldFont( normalFont, m_pCanvas );
+  QFont normalFont( painter.font() );
+  QFont boldFont( normalFont );
   boldFont.setBold( true );
 
   // background brush/color
@@ -588,7 +589,7 @@ void VBorder::paintEvent( QPaintEvent* event )
         drawText( painter,
                   normalFont,
                   QPointF( ( width - len ) / 2,
-                           yPos + ( height + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2 ),
+                           yPos + ( height + painter.fontMetrics().ascent() ) / 2 ),
                   rowText );
 
     yPos += rowFormat->height();
@@ -610,6 +611,13 @@ void VBorder::drawText( QPainter& painter, const QFont& font,
     if ( !sheet )
         return;
 
+    const double scaleX = POINT_TO_INCH(double(KoGlobal::dpiX()));
+    const double scaleY = POINT_TO_INCH(double(KoGlobal::dpiY()));
+
+    // Qt scales the font already with the logical resolution. Do not do it twice!
+    painter.save();
+    painter.scale(1.0 / scaleX, 1.0 / scaleY);
+
     QTextLayout textLayout( text, font );
     textLayout.beginLayout();
     forever
@@ -617,11 +625,13 @@ void VBorder::drawText( QPainter& painter, const QFont& font,
         QTextLine line = textLayout.createLine();
         if ( !line.isValid() )
             break;
-        line.setLineWidth( width() );
+        line.setLineWidth( width() * scaleX );
     }
     textLayout.endLayout();
-    QPointF loc( location.x(), location.y() - font.pointSizeF() );
+    QPointF loc( location.x() * scaleX, (location.y() - font.pointSizeF()) * scaleY );
     textLayout.draw( &painter, loc );
+
+    painter.restore();
 }
 
 
@@ -1220,8 +1230,8 @@ void HBorder::paintEvent( QPaintEvent* event )
   painter.setRenderHint( QPainter::TextAntialiasing );
 
   // fonts
-  QFont normalFont( painter.font(), m_pCanvas );
-  QFont boldFont( normalFont, m_pCanvas );
+  QFont normalFont( painter.font() );
+  QFont boldFont( normalFont );
   boldFont.setBold( true );
 
   // background brush/color
@@ -1385,6 +1395,13 @@ void HBorder::drawText( QPainter& painter, const QFont& font,
     if ( !sheet )
         return;
 
+    const double scaleX = POINT_TO_INCH(double(KoGlobal::dpiX()));
+    const double scaleY = POINT_TO_INCH(double(KoGlobal::dpiY()));
+
+    // Qt scales the font already with the logical resolution. Do not do it twice!
+    painter.save();
+    painter.scale(1.0 / scaleX, 1.0 / scaleY);
+
     QTextLayout textLayout( text, font );
     textLayout.beginLayout();
     forever
@@ -1392,11 +1409,13 @@ void HBorder::drawText( QPainter& painter, const QFont& font,
         QTextLine line = textLayout.createLine();
         if ( !line.isValid() )
             break;
-        line.setLineWidth( width );
+        line.setLineWidth( width * scaleX );
     }
     textLayout.endLayout();
-    QPointF loc( location.x(), location.y() - font.pointSizeF() );
+    QPointF loc( location.x() * scaleX, (location.y() - font.pointSizeF()) * scaleY );
     textLayout.draw( &painter, loc );
+
+    painter.restore();
 }
 
 
