@@ -95,21 +95,21 @@ KarbonLayerDocker::KarbonLayerDocker()
     layout->addWidget( button, 1, 0 );
 
     button = new QPushButton( mainWidget );
+    button->setIcon( SmallIcon( "list-remove" ) );
+    button->setToolTip( i18n("Delete selected objects") );
+    buttonGroup->addButton( button, Button_Delete );
+    layout->addWidget( button, 1, 1 );
+
+    button = new QPushButton( mainWidget );
     button->setIcon( SmallIcon( "go-up" ) );
     button->setToolTip( i18n("Raise selected objects") );
     buttonGroup->addButton( button, Button_Raise );
-    layout->addWidget( button, 1, 1 );
+    layout->addWidget( button, 1, 2 );
 
     button = new QPushButton( mainWidget );
     button->setIcon( SmallIcon( "go-down" ) );
     button->setToolTip( i18n("Lower selected objects") );
     buttonGroup->addButton( button, Button_Lower );
-    layout->addWidget( button, 1, 2 );
-
-    button = new QPushButton( mainWidget );
-    button->setIcon( SmallIcon( "list-remove" ) );
-    button->setToolTip( i18n("Delete selected objects") );
-    buttonGroup->addButton( button, Button_Delete );
     layout->addWidget( button, 1, 3 );
 
     layout->setSpacing( 0 );
