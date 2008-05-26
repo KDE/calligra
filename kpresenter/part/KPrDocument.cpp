@@ -26,6 +26,7 @@
 #include "KPrShapeApplicationData.h"
 #include "KPrFactory.h"
 #include "KPrViewModeNotes.h"
+#include "KPrSoundCollection.h"
 #include <KoPACanvas.h>
 #include <KoPAViewModeNormal.h>
 #include <KoShapeManager.h>
@@ -42,6 +43,9 @@ KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleVie
     KoShapeLoadingContext::addAdditionalAttributeData( KoShapeLoadingContext::AdditionalAttributeData(
                                                        KoXmlNS::presentation, "placeholder",
                                                        "presentation:placeholder" ) );
+
+    KPrSoundCollection *soundCol = new KPrSoundCollection();
+    insertIntoDataCenterMap("SoundCollection", soundCol);
 }
 
 KPrDocument::~KPrDocument()

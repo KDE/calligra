@@ -25,6 +25,8 @@ set( kpresenterprivate_LIB_SRCS
      KPrPage.cpp
      KPrMasterPage.cpp
      KPrNotes.cpp
+     KPrSoundData.cpp
+     KPrSoundCollection.cpp
      KPrPageApplicationData.cpp
      KPrShapeApplicationData.cpp
      KPrCustomSlideShows.cpp
@@ -34,6 +36,8 @@ set( kpresenterprivate_LIB_SRCS
 
      dockers/KPrPageEffectDockerFactory.cpp
      dockers/KPrPageEffectDocker.cpp
+     dockers/KPrClickActionDockerFactory.cpp
+     dockers/KPrClickActionDocker.cpp
      dockers/KPrPreviewWidget.cpp
 
      pageeffects/KPrPageEffectRunner.cpp
@@ -58,7 +62,7 @@ kde4_add_ui_files(kpresenterprivate_LIB_SRCS
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})
 
-target_link_libraries(kpresenterprivate ${KDE4_KDECORE_LIBS} koguiutils flake kotext kopageapp)
+target_link_libraries(kpresenterprivate ${KDE4_KDECORE_LIBS} ${KDE4_PHONON_LIBRARY} koguiutils flake kotext kopageapp)
 
 set_target_properties(kpresenterprivate PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )
 install(TARGETS kpresenterprivate  DESTINATION ${LIB_INSTALL_DIR})

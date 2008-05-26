@@ -21,19 +21,27 @@
 
 #include <QKeyEvent>
 
+#include <KoShape.h>
+#include <KoShapeManager.h>
 #include <KoPointerEvent.h>
 #include <KoPACanvas.h>
-
+#include <KPrShapeApplicationData.h>
+#include <KPrSoundData.h>
+#include <phonon/phononnamespace.h>
+#include<Phonon/MediaObject>
 #include "KPrViewModePresentation.h"
 
 KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
 : KoTool( viewMode.canvas() )
 , m_viewMode( viewMode )
+,m_music(0)
 {
 }
 
 KPrPresentationTool::~KPrPresentationTool()
 {
+    if(m_music)
+        m_music->stop();
 }
 
 bool KPrPresentationTool::wantsAutoScroll()
@@ -47,6 +55,30 @@ void KPrPresentationTool::paint( QPainter &painter, const KoViewConverter &conve
 void KPrPresentationTool::mousePressEvent( KoPointerEvent *event )
 {
     if ( event->button() & Qt::LeftButton ) {
+        KoShape * shapeClicked = m_canvas->shapeManager()->shapeAt( event->point );
+        if(shapeClicked) {
+            if(KPrShapeApplicationData *appData
+                                = dynamic_cast<KPrShapeApplicationData *>( shapeClicked->applicationData())) {
+                switch(appData->m_invokeResponse) {
+                    case KPrShapeApplicationData::DoNavigate:
+                        m_viewMode.navigate( KPrAnimationDirector::PreviousStep );
+                        break;
+                    case KPrShapeApplicationData::DoNone:
+                    default:
+                        break;
+                }
+
+                if(m_music)
+                    m_music->stop();
+                if(appData->m_soundData)
+                {
+                    m_music = Phonon::createPlayer(Phonon::MusicCategory,
+                                                Phonon::MediaSource(appData->m_soundData->nameOfTempFile()));
+                    connect(m_music, SIGNAL(finished()), m_music, SLOT(deleteLater()));
+                    m_music->play();
+                }
+            }
+        }
         m_viewMode.navigate( KPrAnimationDirector::NextStep );
     }
 }
@@ -114,6 +146,8 @@ void KPrPresentationTool::activate( bool temporary )
 
 void KPrPresentationTool::deactivate()
 {
+    if(m_music)
+        m_music->stop();
 }
 
 #include "KPrPresentationTool.moc"

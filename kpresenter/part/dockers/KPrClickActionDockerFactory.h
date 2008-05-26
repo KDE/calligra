@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2006 Laurent Montel <montel@kde.org>
-   Copyright (C) 2007 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2007 Martin Pfeiffer <hubipete@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,41 +14,26 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPRSHAPEAPPLICATIONDATA_H
-#define KPRSHAPEAPPLICATIONDATA_H
+#ifndef KPRCLICKACTIONDOCKERFACTORY_H
+#define KPRCLICKACTIONDOCKERFACTORY_H
 
-#include <KoShapeApplicationData.h>
+#include <KoDockFactory.h>
 
-#include <QSet>
-
-class KPrShapeAnimation;
-class KPrSoundData;
-
-class KPrShapeApplicationData : public KoShapeApplicationData
+class KPrClickActionDockerFactory : public KoDockFactory
 {
 public:
-    enum InvokeResponse
+    KPrClickActionDockerFactory();
+
+    QString id() const;
+    QDockWidget* createDockWidget();
+    DockPosition defaultDockPosition() const
     {
-        DoNone,
-        DoNavigate,
-        DoPlaySound
-    };
-
-    KPrShapeApplicationData();
-    ~KPrShapeApplicationData();
-
-    QSet<KPrShapeAnimation *> & animations();
-    InvokeResponse m_invokeResponse;
-    KPrSoundData *m_soundData;
-
-private:
-   // stores the animations of a shape
-   QSet<KPrShapeAnimation *> m_animations;
+        return DockRight;
+    }
 };
 
-
-#endif
+#endif // KPRCLICKACTIONDOCKERFACTORY_H
 

@@ -24,6 +24,7 @@
 
 KPrShapeApplicationData::KPrShapeApplicationData()
 {
+    m_invokeResponse = DoNone;
 }
 
 KPrShapeApplicationData::~KPrShapeApplicationData()

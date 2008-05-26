@@ -20,6 +20,7 @@
 #define KPRPRESENTATIONTOOL_H
 
 #include <KoTool.h>
+#include<Phonon/MediaObject>
 
 class KPrViewModePresentation;
 
@@ -48,6 +49,7 @@ public slots:
 
 private:
     KPrViewModePresentation & m_viewMode;
+    Phonon::MediaObject *m_music;
 };
 
 #endif /* KPRPRESENTATIONTOOL_H */

@@ -115,12 +115,14 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     m_canvas->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // detach widget to make
     m_canvas->show();
     m_canvas->setFocus();                             // it shown full screen
+    m_tool->activate(false);
 
     m_animationDirector = new KPrAnimationDirector( m_view, m_view->kopaDocument()->pages(), m_view->activePage() );
 }
 
 void KPrViewModePresentation::deactivate()
 {
+    m_tool->deactivate();
     m_canvas->setParent( m_savedParent, Qt::Widget );
     m_canvas->setFocus();
     m_canvas->setWindowState( m_canvas->windowState() & ~Qt::WindowFullScreen ); // reset
