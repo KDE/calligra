@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    (C) Copyright 2008 by Lorenzo Villani <lvillani@binaryhelix.net>
-   Time-stamp: <2008-05-23 19:22:55 lorenzo>
+   Time-stamp: <2008-05-26 20:04:34 lorenzo>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -87,20 +87,22 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    Server* server = Server::instance();
-
-    if (server->init(serverConfig)) {
-        server->registerHandler("/", IndexView::show);
-        server->registerHandler("/table/*", TableView::show);
-    }
-
-    // Initialize database connection
+    // Initialize database connection before server
     if (!initDatabase(serverConfig->dbPath)) {
         kError() << "Something went wrong while initializing database..." << endl;
         delete serverConfig;
         return 1;
+    } else {
+        Server* server = Server::instance();
+
+        if (server->init(serverConfig)) {
+            server->registerHandler("/", IndexView::show);
+            server->registerHandler("/table/*", TableView::show);
+        }
+        return server->run();
     }
 
-    return server->run();
+    // If we reach there, something went wrong...
+    return 1;
 }
 

@@ -54,6 +54,10 @@ namespace KexiWebForms {
         KexiDB::Driver* driver;
         KexiDB::DriverManager manager;
         KexiDB::ConnectionData* connData = new KexiDB::ConnectionData();
+        KexiProjectData* projectData;
+        KexiDBShortcutFile* shortcut;
+        KexiDBConnShortcutFile* connFile;
+        
 
         QString driverName;
         QString suggestedDriverName;
@@ -64,11 +68,34 @@ namespace KexiWebForms {
 
         if (true == res) {
             if (driverName == "shortcut") {
-                // TODO: implement this stub
+                //
+                // TODO: Finish implementing this stuff
+                //
+                kDebug() << "Loading Kexi shortcut file..." << endl;
+                shortcut = new KexiDBShortcutFile(fileName);
+                projectData = new KexiProjectData();
+                if (!shortcut->loadProjectData(*projectData)) {
+                    delete projectData; projectData = NULL;
+                    delete shortcut; shortcut = NULL;
+                    return false;
+                }
             } else if (driverName == "connection") {
-                // TODO: implement this stub
+                //
+                // FIXME: This piece of code does NOT work, ouch!
+                //
+                kDebug() << "Loading connection file..." << endl;
+                connFile = new KexiDBConnShortcutFile(fileName);
+                if (!connFile->loadConnectionData(*connData)) {
+                    kDebug() << "Failed to load connection data from .kexic file..." << endl;
+                    delete connFile; connFile = NULL;
+                    return false;
+                } else {
+                    kDebug() << "Data loaded successfully, create project object..." << endl;
+                    // FIXME: this won't work! investigate...
+                    projectData = new KexiProjectData(*connData);
+                }
             } else {
-                kDebug() << "File name should be a file-based database... loading it" << endl;
+                kDebug() << "This should be a file-based database... now loading it" << endl;
 
                 driver = manager.driver(driverName);
                 if (!driver || manager.error()) {
@@ -92,6 +119,8 @@ namespace KexiWebForms {
                 if (!gConnection->useDatabase(fileName)) {
                     kError() << gConnection->errorMsg() << endl;
                 }
+
+                projectData = new KexiProjectData(*connData);
             }
         }
         return status;
