@@ -35,6 +35,7 @@
 #include <KoZoomHandler.h>
 
 #include "kspread_export.h"
+#include "PrintSettings.h"
 
 class KoGenStyles;
 class KoZoomHandler;
@@ -64,53 +65,17 @@ public:
      */
     bool print( QPainter &painter, QPrinter *_printer );
 
+    PrintSettings* settings() const { return m_settings; }
+
     /**
      * @return the prinsheet width of the paper in millimeters.
      */
-    float prinsheetWidth() const { return m_paperWidth - m_leftBorder - m_rightBorder; }
+    double printWidth() const;
 
     /**
      * @return the prinsheet height of the paper in millimeters.
      */
-    float prinsheetHeight() const;
-
-    /**
-     * @return the height of the paper in millimeters.
-     */
-    float paperHeight()const { return m_paperHeight; }
-
-    /**
-     * @return the width of the paper in millimeters.
-     */
-    float paperWidth()const { return m_paperWidth; }
-
-    void setPaperHeight(float _val) { m_paperHeight=_val; }
-    void setPaperWidth(float _val) { m_paperWidth=_val; }
-
-    /**
-     * @return the left border in millimeters
-     */
-    float leftBorder()const { return m_leftBorder; }
-
-    /**
-     * @return the right border in millimeters
-     */
-    float rightBorder()const { return m_rightBorder; }
-
-    /**
-     * @return the top border in millimeters
-     */
-    float topBorder()const { return m_topBorder; }
-
-    /**
-     * @return the bottom border in millimeters
-     */
-    float bottomBorder()const { return m_bottomBorder; }
-
-    /**
-     * @return the orientation of the paper.
-     */
-    KoPageFormat::Orientation orientation() const { return m_orientation; }
+    double printHeight() const;
 
     /**
      * @return the ascii name of the paper orientation ( like Portrait, Landscape )
@@ -118,16 +83,9 @@ public:
     const char* orientationString() const;
 
     /**
-     * @return the paper format.
-     */
-    KoPageFormat::Format paperFormat() const { return m_paperFormat; }
-
-    /**
      * @return the ascii name of the paper format ( like A4, Letter etc. )
      */
     QString paperFormatString() const;
-
-    void setPaperFormat(KoPageFormat::Format format) { m_paperFormat = format; }
 
     void setPaperOrientation(KoPageFormat::Orientation _orient);
 
@@ -300,66 +258,6 @@ public:
                           const QString &_footl, const QString &_footm, const QString &_footr );
 
     /**
-     * Returns, if the grid shall be shown on printouts
-     */
-    bool printGrid() const { return m_bPrintGrid; }
-
-    /**
-     * Sets, if the grid shall be shown on printouts
-     */
-    void setPrintGrid( bool _printGrid );
-
-    /**
-     * Returns, if the objects shall be shown on printouts
-     */
-    bool printObjects() const { return m_bPrintObjects; }
-
-    /**
-     * Sets, if the objects shall be shown on printouts
-     */
-    void setPrintObjects( bool _printObjects );
-
-    /**
-     * Returns, if the charts shall be shown on printouts
-     */
-    bool printCharts() const { return m_bPrintCharts; }
-
-    /**
-     * Sets, if the charts shall be shown on printouts
-     */
-    void setPrintCharts( bool _printCharts );
-
-    /**
-     * Returns, if the graphics shall be shown on printouts
-     */
-    bool printGraphics() const { return m_bPrintGraphics; }
-
-    /**
-     * Sets, if the graphics shall be shown on printouts
-     */
-    void setPrintGraphics( bool _printGraphics );
-
-    /**
-     * Returns, if the comment rect shall be shown on printouts
-     */
-    bool printCommentIndicator() const { return m_bPrintCommentIndicator; }
-
-    /**
-     * Sets, if the comment rect shall be shown on printouts
-     */
-    void setPrintCommentIndicator( bool _printCommentIndicator );
-
-    /**
-     * Returns, if the formula rect shall be shown on printouts
-     */
-    bool printFormulaIndicator() const { return m_bPrintFormulaIndicator; }
-
-    /**
-     * Sets, if the formula Rect shall be shown on printouts
-     */
-    void setPrintFormulaIndicator( bool _printFormulaIndicator );
-
-    /**
      * Updates m_dPrintRepeatColumnsWidth according to the new settings
      */
     void updatePrintRepeatColumnsWidth();
@@ -491,40 +389,8 @@ private:
      */
     int pagesY( const QRect& cellsPrintRange );
 
-    /**
-     * The orientation of the paper.
-     */
-    KoPageFormat::Orientation m_orientation;
-    /**
-     * Tells about the currently seleced paper size.
-     */
-    KoPageFormat::Format m_paperFormat;
-    /**
-     * The paper width in millimeters. Do not change this value, it is calculated by
-     * @ref #calcPaperSize from the value @ref #m_paperFormat.
-     */
-    float m_paperWidth;
-    /**
-     * The paper height in millimeters. Do not change this value, it is calculated by
-     * @ref #calcPaperSize from the value @ref #m_paperFormat.
-     */
-    float m_paperHeight;
-    /**
-     * The left border in millimeters.
-     */
-    float m_leftBorder;
-    /**
-     * The right border in millimeters.
-     */
-    float m_rightBorder;
-    /**
-     * The top border in millimeters.
-     */
-    float m_topBorder;
-    /**
-     * The right border in millimeters.
-     */
-    float m_bottomBorder;
+private:
+    PrintSettings* m_settings;
 
     /**
      * Header string. The string may contains makros. That means

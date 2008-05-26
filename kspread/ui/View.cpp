@@ -6124,16 +6124,7 @@ void View::paperLayoutDlg()
   }
   SheetPrint* print = d->activeSheet->print();
 
-  KoPageLayout pl;
-  pl.format = print->paperFormat();
-  pl.orientation = print->orientation();
-
-  pl.width =  print->paperWidth();
-  pl.height = print->paperHeight();
-  pl.left =   print->leftBorder();
-  pl.right =  print->rightBorder();
-  pl.top =    print->topBorder();
-  pl.bottom = print->bottomBorder();
+  KoPageLayout pl = print->settings()->pageLayout();
 
   KoHeadFoot hf;
   hf.headLeft  = print->localizeHeadFootLine( print->headLeft()  );

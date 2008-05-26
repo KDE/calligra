@@ -39,9 +39,9 @@ PaperLayoutCommand::PaperLayoutCommand( Sheet *s )
   pl = s->print()->paperLayout();
   hf = s->print()->headFootLine();
   unit = doc->unit();
-  printGrid = s->print()->printGrid();
-  printCommentIndicator = s->print()->printCommentIndicator();
-  printFormulaIndicator = s->print()->printFormulaIndicator();
+  printGrid = s->print()->settings()->printGrid();
+  printCommentIndicator = s->print()->settings()->printCommentIndicator();
+  printFormulaIndicator = s->print()->settings()->printFormulaIndicator();
   printRange = s->print()->printRange();
   printRepeatColumns = s->print()->printRepeatColumns();
   printRepeatRows = s->print()->printRepeatRows();
@@ -66,9 +66,9 @@ void PaperLayoutCommand::redo()
 
     doc->setUnit( unitRedo );
 
-    print->setPrintGrid( printGridRedo );
-    print->setPrintCommentIndicator( printCommentIndicatorRedo );
-    print->setPrintFormulaIndicator( printFormulaIndicatorRedo );
+    print->settings()->setPrintGrid( printGridRedo );
+    print->settings()->setPrintCommentIndicator( printCommentIndicatorRedo );
+    print->settings()->setPrintFormulaIndicator( printFormulaIndicatorRedo );
 
     print->setPrintRange( printRangeRedo );
     print->setPrintRepeatColumns( printRepeatColumnsRedo );
@@ -97,14 +97,14 @@ void PaperLayoutCommand::undo()
     unitRedo = doc->unit();
     doc->setUnit( unit );
 
-    printGridRedo = print->printGrid();
-    print->setPrintGrid( printGrid );
+    printGridRedo = print->settings()->printGrid();
+    print->settings()->setPrintGrid( printGrid );
 
-    printCommentIndicatorRedo = print->printCommentIndicator();
-    print->setPrintCommentIndicator( printCommentIndicator );
+    printCommentIndicatorRedo = print->settings()->printCommentIndicator();
+    print->settings()->setPrintCommentIndicator( printCommentIndicator );
 
-    printFormulaIndicatorRedo = print->printFormulaIndicator();
-    print->setPrintFormulaIndicator( printFormulaIndicator );
+    printFormulaIndicatorRedo = print->settings()->printFormulaIndicator();
+    print->settings()->setPrintFormulaIndicator( printFormulaIndicator );
 
     printRangeRedo = print->printRange();
     print->setPrintRange( printRange );

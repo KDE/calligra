@@ -44,11 +44,11 @@ PrintJob::PrintJob(View *view)
     SheetPrint* print = m_view->activeSheet()->print();
 
     //apply page layout parameters
-    KoPageFormat::Format pageFormat = print->paperFormat();
+    KoPageFormat::Format pageFormat = print->settings()->pageLayout().format;
 
     printer().setPageSize( static_cast<QPrinter::PageSize>( KoPageFormat::printerPageSize( pageFormat ) ) );
 
-    if ( print->orientation() == KoPageFormat::Landscape || pageFormat == KoPageFormat::ScreenSize )
+    if ( print->settings()->pageLayout().orientation == KoPageFormat::Landscape || pageFormat == KoPageFormat::ScreenSize )
         printer().setOrientation( QPrinter::Landscape );
     else
         printer().setOrientation( QPrinter::Portrait );
@@ -115,16 +115,16 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
         }
 
         //store the current setting in a temporary variable
-        KoPageFormat::Orientation _orient = print->orientation();
+        KoPageFormat::Orientation _orient = print->settings()->pageLayout().orientation;
 
         //use the current orientation from print dialog
         if ( printer().orientation() == QPrinter::Landscape )
         {
-            print->setPaperOrientation( KoPageFormat::Landscape );
+            print->settings()->setPageOrientation( KoPageFormat::Landscape );
         }
         else
         {
-            print->setPaperOrientation( KoPageFormat::Portrait );
+            print->settings()->setPageOrientation( KoPageFormat::Portrait );
         }
 
         bool result = print->print( painter, &printer() );

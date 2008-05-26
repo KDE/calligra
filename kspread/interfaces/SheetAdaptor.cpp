@@ -354,42 +354,48 @@ void SheetAdaptor::setShowPageBorders( bool b )
 
 float SheetAdaptor::paperHeight()const
 {
-    return m_sheet->print()->paperHeight();
+    return m_sheet->print()->settings()->pageLayout().height;
 }
 
 void SheetAdaptor::setPrinterHeight(float height)
 {
-    m_sheet->print()->setPaperHeight(MM_TO_POINT(height));
+    KoPageLayout pageLayout = m_sheet->print()->settings()->pageLayout();
+    pageLayout.format = KoPageFormat::CustomSize;
+    pageLayout.height = MM_TO_POINT(height);
+    m_sheet->print()->settings()->setPageLayout(pageLayout);
 }
 
 float SheetAdaptor::paperWidth()const
 {
-    return m_sheet->print()->paperWidth();
+    return m_sheet->print()->settings()->pageLayout().width;
 }
 
 void SheetAdaptor::setPaperWidth(float width)
 {
-    m_sheet->print()->setPaperWidth(MM_TO_POINT(width));
+    KoPageLayout pageLayout = m_sheet->print()->settings()->pageLayout();
+    pageLayout.format = KoPageFormat::CustomSize;
+    pageLayout.width = MM_TO_POINT(width);
+    m_sheet->print()->settings()->setPageLayout(pageLayout);
 }
 
 float SheetAdaptor::paperLeftBorder()const
 {
-    return m_sheet->print()->leftBorder();
+    return m_sheet->print()->settings()->pageLayout().left;
 }
 
 float SheetAdaptor::paperRightBorder()const
 {
-    return m_sheet->print()->rightBorder();
+    return m_sheet->print()->settings()->pageLayout().right;
 }
 
 float SheetAdaptor::paperTopBorder()const
 {
-    return m_sheet->print()->topBorder();
+    return m_sheet->print()->settings()->pageLayout().top;
 }
 
 float SheetAdaptor::paperBottomBorder()const
 {
-    return m_sheet->print()->bottomBorder();
+    return m_sheet->print()->settings()->pageLayout().bottom;
 }
 
 QString SheetAdaptor::paperFormat() const

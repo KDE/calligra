@@ -109,22 +109,8 @@ SheetPrint::SheetPrint( Sheet* sheet )
     m_pSheetView = new SheetView( sheet );
     m_pDoc = m_pSheet->doc();
 
-    m_bPrintGrid = false;
-    m_bPrintCommentIndicator = false;
-    m_bPrintFormulaIndicator = false;
-    m_bPrintObjects = true;
-    m_bPrintCharts = true;
-    m_bPrintGraphics = true;
+    m_settings = new PrintSettings();
 
-    m_leftBorder   = MM_TO_POINT(20.0);
-    m_rightBorder  = MM_TO_POINT(20.0);
-    m_topBorder    = MM_TO_POINT(20.0);
-    m_bottomBorder = MM_TO_POINT(20.0);
-
-    m_paperFormat = KoPageFormat::defaultFormat();
-    m_orientation = KoPageFormat::Portrait;
-    m_paperWidth = MM_TO_POINT( KoPageFormat::width( m_paperFormat, m_orientation ) );
-    m_paperHeight = MM_TO_POINT( KoPageFormat::height( m_paperFormat, m_orientation ) );
     m_printRange = QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) );
     m_maxCheckedNewPageX = 1;
     m_maxCheckedNewPageY = 1;
@@ -135,27 +121,19 @@ SheetPrint::SheetPrint( Sheet* sheet )
     m_zoomHandler = new KoZoomHandler();
     m_iPageLimitX = 0;
     m_iPageLimitY = 0;
-
-    calcPaperSize();
 }
 
 SheetPrint::~SheetPrint()
 {
     delete m_zoomHandler;
+    delete m_settings;
     delete m_pSheetView;
 }
 
 QString SheetPrint::saveOasisSheetStyleLayout( KoGenStyles &mainStyles )
 {
-    KoGenStyle pageLayout( KoGenStyle::StylePageLayout );
+    KoGenStyle pageLayout = m_settings->pageLayout().saveOasis();
     //pageLayout.addAttribute( "style:page-usage", "all" ); FIXME
-    pageLayout.addPropertyPt( "fo:page-width", paperWidth() );
-    pageLayout.addPropertyPt( "fo:page-height", paperHeight() );
-    pageLayout.addProperty( "style:print-orientation", orientation() == KoPageFormat::Landscape ? "landscape" : "portrait" );
-    pageLayout.addPropertyPt( "fo:margin-left", leftBorder() );
-    pageLayout.addPropertyPt( "fo:margin-top", topBorder() );
-    pageLayout.addPropertyPt( "fo:margin-right", rightBorder() );
-    pageLayout.addPropertyPt( "fo:margin-bottom", bottomBorder() );
     //necessary for print setup
     m_pSheet->saveOasisPrintStyleLayout( pageLayout );
     // this is called from Sheet::saveOasisSheetStyleName for writing the SytleMaster so 
@@ -380,9 +358,9 @@ bool SheetPrint::print( QPainter &painter, QPrinter *_printer )
         QLinkedList<QRectF>::Iterator fit = page_frame_list.begin();
         QLinkedList<QPointF>::Iterator fito = page_frame_list_offset.begin();
 
-        painter.translate(leftBorder(), topBorder());
+        painter.translate(paperLayout().left, paperLayout().top);
         painter.scale( m_zoomHandler->zoomedResolutionX(), m_zoomHandler->zoomedResolutionY() );
-        painter.setClipRect(0, 0, (int)paperWidth(), (int)paperHeight());
+        painter.setClipRect(0, 0, (int)paperLayout().width, (int)paperLayout().height);
 
         for( ; it != page_list.end(); ++it, ++fit, ++fito, ++pageNo )
         {
@@ -411,9 +389,14 @@ bool SheetPrint::print( QPainter &painter, QPrinter *_printer )
     return ( page_list.count() > 0 );
 }
 
-float SheetPrint::prinsheetHeight() const
+double SheetPrint::printHeight() const
 {
-    return m_paperHeight - m_topBorder - m_bottomBorder;
+    return paperLayout().height - paperLayout().top - paperLayout().bottom;
+}
+
+double SheetPrint::printWidth() const
+{
+     return paperLayout().width - paperLayout().left - paperLayout().right;
 }
 
 void SheetPrint::printPage( QPainter &_painter, const QRect& page_range,
@@ -563,8 +546,8 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
 #endif // KSPREAD_KOPART_EMBEDDING
 
     //Don't let obscuring cells and children overpaint this area
-    clipRegion -= QRegion((int)(leftBorder() + topLeft.x()),
-                          (int)(topBorder() + topLeft.y()),
+    clipRegion -= QRegion((int)(paperLayout().left + topLeft.x()),
+                          (int)(paperLayout().top + topLeft.y()),
                           (int)xpos,
                           (int)ypos);
 //     painter.setClipRegion( clipRegion );
@@ -583,38 +566,38 @@ void SheetPrint::printHeaderFooter( QPainter &painter, int pageNo )
     // print head line left
     w = fm.width( headLeft( pageNo, m_pSheet->sheetName() ) );
     if ( w > 0 )
-        painter.drawText((int)leftBorder(), (int)headFootDistance,
+        painter.drawText((int)paperLayout().left, (int)headFootDistance,
                          headLeft(pageNo, m_pSheet->sheetName()));
     // print head line middle
     w = fm.width( headMid( pageNo, m_pSheet->sheetName() ) );
     if ( w > 0 )
-        painter.drawText((int)(leftBorder() + ( prinsheetWidth() - w ) / 2.0),
+        painter.drawText((int)(paperLayout().left + ( printWidth() - w ) / 2.0),
                          (int)headFootDistance,
                          headMid( pageNo, m_pSheet->sheetName() ) );
     // print head line right
     w = fm.width( headRight( pageNo, m_pSheet->sheetName() ) );
     if ( w > 0 )
-        painter.drawText((int)(leftBorder() + prinsheetWidth() - w),
+        painter.drawText((int)(paperLayout().left + printWidth() - w),
                          (int)headFootDistance,
                          headRight( pageNo, m_pSheet->sheetName() ) );
 
     // print foot line left
     w = fm.width( footLeft( pageNo, m_pSheet->sheetName() ) );
     if ( w > 0 )
-        painter.drawText((int)leftBorder(),
-                         (int)(paperHeight() - headFootDistance),
+        painter.drawText((int)paperLayout().left,
+                         (int)(paperLayout().height - headFootDistance),
                          footLeft( pageNo, m_pSheet->sheetName() ) );
     // print foot line middle
     w = fm.width( footMid( pageNo, m_pSheet->sheetName() ) );
     if ( w > 0 )
-        painter.drawText((int)(leftBorder() + (prinsheetWidth() - w) / 2.0),
-                         (int)(paperHeight() - headFootDistance),
+        painter.drawText((int)(paperLayout().left + (printWidth() - w) / 2.0),
+                         (int)(paperLayout().height - headFootDistance),
                          footMid( pageNo, m_pSheet->sheetName() ) );
     // print foot line right
     w = fm.width( footRight( pageNo, m_pSheet->sheetName() ) );
     if ( w > 0 )
-        painter.drawText((int)(leftBorder() + prinsheetWidth() - w),
-                         (int)(paperHeight() - headFootDistance),
+        painter.drawText((int)(paperLayout().left + printWidth() - w),
+                         (int)(paperLayout().height - headFootDistance),
                          footRight( pageNo, m_pSheet->sheetName() ) );
 }
 
@@ -693,7 +676,7 @@ void SheetPrint::updateNewPageX( int _column )
 
         while ( ( col <= _column ) && ( col < m_printRange.right() ) )
         {
-            if ( x > prinsheetWidth() ) //end of page?
+            if ( x > printWidth() ) //end of page?
             {
                 //We found a new page, so add it to the list
                 m_lnewPageListX.append( PrintNewPageEntry( col ) );
@@ -812,7 +795,7 @@ void SheetPrint::updateNewPageY( int _row )
 
         while ( ( row <= _row ) && ( row < m_printRange.bottom() ) )
         {
-            if ( y > prinsheetHeight() )
+            if ( y > printHeight() )
             {
                 //We found a new page, so add it to the list
                 m_lnewPageListY.append( PrintNewPageEntry( row ) );
@@ -1028,8 +1011,7 @@ void SheetPrint::setPaperOrientation( KoPageFormat::Orientation _orient )
     if ( m_pSheet->isProtected() )
         NO_MODIFICATION_POSSIBLE;
 
-    m_orientation = _orient;
-    calcPaperSize();
+    m_settings->setPageOrientation(_orient);
     updatePrintRepeatColumnsWidth();
     updatePrintRepeatRowsHeight();
     updateNewPageListX( m_printRange.left() ); //Reset the list
@@ -1042,16 +1024,7 @@ void SheetPrint::setPaperOrientation( KoPageFormat::Orientation _orient )
 
 KoPageLayout SheetPrint::paperLayout() const
 {
-    KoPageLayout pl;
-    pl.format = m_paperFormat;
-    pl.orientation = m_orientation;
-    pl.width  =  m_paperWidth;
-    pl.height =  m_paperHeight;
-    pl.left   =  m_leftBorder;
-    pl.right  =  m_rightBorder;
-    pl.top    =  m_topBorder;
-    pl.bottom =  m_bottomBorder;
-    return pl;
+    return m_settings->pageLayout();
 }
 
 
@@ -1063,11 +1036,11 @@ void SheetPrint::setPaperLayout( float _leftBorder, float _topBorder,
     if ( m_pSheet->isProtected() )
         NO_MODIFICATION_POSSIBLE;
 
-    m_leftBorder   = _leftBorder;
-    m_rightBorder  = _rightBorder;
-    m_topBorder    = _topBorder;
-    m_bottomBorder = _bottomBorder;
-    m_paperFormat  = _paper;
+    paperLayout().left   = _leftBorder;
+    paperLayout().right  = _rightBorder;
+    paperLayout().top    = _topBorder;
+    paperLayout().bottom = _bottomBorder;
+    paperLayout().format  = _paper;
 
     setPaperOrientation( _orientation ); //calcPaperSize() is done here already
 
@@ -1094,8 +1067,8 @@ void SheetPrint::setPaperLayout( float _leftBorder, float _topBorder,
     if ( m_pSheet->isProtected() )
         NO_MODIFICATION_POSSIBLE;
 
-    KoPageFormat::Format f = paperFormat();
-    KoPageFormat::Orientation newOrientation = orientation();
+    KoPageFormat::Format f = paperLayout().format;
+    KoPageFormat::Orientation newOrientation = paperLayout().orientation;
 
     if ( _orientation == "Portrait" )
         newOrientation = KoPageFormat::Portrait;
@@ -1115,12 +1088,12 @@ void SheetPrint::setPaperLayout( float _leftBorder, float _topBorder,
         else
         {
             f = KoPageFormat::CustomSize;
-            m_paperWidth  = paper.left(i).toFloat();
-            m_paperHeight = paper.mid(i+1).toFloat();
-            if ( m_paperWidth < 10.0 )
-                m_paperWidth = KoPageFormat::width( KoPageFormat::IsoA4Size, newOrientation );
-            if ( m_paperHeight < 10.0 )
-                m_paperHeight = KoPageFormat::height( KoPageFormat::IsoA4Size, newOrientation );
+            paperLayout().width  = paper.left(i).toFloat();
+            paperLayout().height = paper.mid(i+1).toFloat();
+            if ( paperLayout().width < 10.0 )
+                paperLayout().width = KoPageFormat::width( KoPageFormat::IsoA4Size, newOrientation );
+            if ( paperLayout().height < 10.0 )
+                paperLayout().height = KoPageFormat::height( KoPageFormat::IsoA4Size, newOrientation );
         }
     }
     else
@@ -1131,15 +1104,6 @@ void SheetPrint::setPaperLayout( float _leftBorder, float _topBorder,
             f = KoPageFormat::IsoA4Size;
     }
     setPaperLayout( _leftBorder, _topBorder, _rightBorder, _bottomBorder, f, newOrientation );
-}
-
-void SheetPrint::calcPaperSize()
-{
-    if ( m_paperFormat != KoPageFormat::CustomSize )
-    {
-        m_paperWidth = KoPageFormat::width( m_paperFormat, m_orientation );
-        m_paperHeight = KoPageFormat::height( m_paperFormat, m_orientation );
-    }
 }
 
 QList<PrintNewPageEntry>::iterator SheetPrint::findNewPageColumn( int col )
@@ -1167,21 +1131,21 @@ QList<PrintNewPageEntry>::iterator SheetPrint::findNewPageRow( int row )
 }
 
 
-QString SheetPrint::paperFormatString()const
+QString SheetPrint::paperFormatString() const
 {
-    if ( m_paperFormat == KoPageFormat::CustomSize )
+    if ( paperLayout().format == KoPageFormat::CustomSize )
     {
         QString tmp;
-        tmp.sprintf( "%fx%f", m_paperWidth, m_paperHeight );
+        tmp.sprintf( "%fx%f", paperLayout().width, paperLayout().height );
         return tmp;
     }
 
-    return KoPageFormat::formatString( m_paperFormat );
+    return KoPageFormat::formatString( paperLayout().format );
 }
 
 const char* SheetPrint::orientationString() const
 {
-    switch( m_orientation )
+    switch( paperLayout().orientation )
     {
     case QPrinter::Portrait:
         return "Portrait";
@@ -1453,59 +1417,6 @@ void SheetPrint::calculateZoomForPageLimitY()
         m_zoomHandler->setZoom( origZoom );
 }
 
-void SheetPrint::setPrintGrid( bool _printGrid )
-{
-   if ( m_bPrintGrid == _printGrid )
-        return;
-
-    m_bPrintGrid = _printGrid;
-    m_pDoc->setModified( true );
-}
-
-void SheetPrint::setPrintObjects( bool _printObjects )
-{
-  if ( m_bPrintObjects == _printObjects )
-    return;
-
-  m_bPrintObjects = _printObjects;
-  m_pDoc->setModified( true );
-}
-
-void SheetPrint::setPrintCharts( bool _printCharts )
-{
-  if ( m_bPrintCharts == _printCharts )
-    return;
-
-  m_bPrintCharts = _printCharts;
-  m_pDoc->setModified( true );
-}
-
-void SheetPrint::setPrintGraphics( bool _printGraphics )
-{
-  if ( m_bPrintGraphics == _printGraphics )
-    return;
-
-  m_bPrintGraphics = _printGraphics;
-  m_pDoc->setModified( true );
-}
-
-void SheetPrint::setPrintCommentIndicator( bool _printCommentIndicator )
-{
-    if ( m_bPrintCommentIndicator == _printCommentIndicator )
-        return;
-
-    m_bPrintCommentIndicator = _printCommentIndicator;
-    m_pDoc->setModified( true );
-}
-
-void SheetPrint::setPrintFormulaIndicator( bool _printFormulaIndicator )
-{
-    if( m_bPrintFormulaIndicator == _printFormulaIndicator )
-        return;
-
-    m_bPrintFormulaIndicator = _printFormulaIndicator;
-    m_pDoc->setModified( true );
-}
 void SheetPrint::updatePrintRepeatColumnsWidth()
 {
     m_dPrintRepeatColumnsWidth = 0.0;

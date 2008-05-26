@@ -676,9 +676,9 @@ UndoPaperLayout::UndoPaperLayout( Doc *_doc, Sheet *_sheet )
     m_pl = _sheet->print()->paperLayout();
     m_hf = _sheet->print()->headFootLine();
     m_unit = doc()->unit();
-    m_printGrid = _sheet->print()->printGrid();
-    m_printCommentIndicator = _sheet->print()->printCommentIndicator();
-    m_printFormulaIndicator = _sheet->print()->printFormulaIndicator();
+    m_printGrid = _sheet->print()->settings()->printGrid();
+    m_printCommentIndicator = _sheet->print()->settings()->printCommentIndicator();
+    m_printFormulaIndicator = _sheet->print()->settings()->printFormulaIndicator();
     m_printRange = _sheet->print()->printRange();
     m_printRepeatColumns = _sheet->print()->printRepeatColumns();
     m_printRepeatRows = _sheet->print()->printRepeatRows();
@@ -712,14 +712,14 @@ void UndoPaperLayout::undo()
     m_unitRedo = doc()->unit();
     doc()->setUnit( m_unit );
 
-    m_printGridRedo = print->printGrid();
-    print->setPrintGrid( m_printGrid );
+    m_printGridRedo = print->settings()->printGrid();
+    print->settings()->setPrintGrid( m_printGrid );
 
-    m_printCommentIndicatorRedo = print->printCommentIndicator();
-    print->setPrintCommentIndicator( m_printCommentIndicator );
+    m_printCommentIndicatorRedo = print->settings()->printCommentIndicator();
+    print->settings()->setPrintCommentIndicator( m_printCommentIndicator );
 
-    m_printFormulaIndicatorRedo = print->printFormulaIndicator();
-    print->setPrintFormulaIndicator( m_printFormulaIndicator );
+    m_printFormulaIndicatorRedo = print->settings()->printFormulaIndicator();
+    print->settings()->setPrintFormulaIndicator( m_printFormulaIndicator );
 
     m_printRangeRedo = print->printRange();
     print->setPrintRange( m_printRange );
@@ -766,9 +766,9 @@ void UndoPaperLayout::redo()
 
     doc()->setUnit( m_unitRedo );
 
-    print->setPrintGrid( m_printGridRedo );
-    print->setPrintCommentIndicator( m_printCommentIndicatorRedo );
-    print->setPrintFormulaIndicator( m_printFormulaIndicatorRedo );
+    print->settings()->setPrintGrid( m_printGridRedo );
+    print->settings()->setPrintCommentIndicator( m_printCommentIndicatorRedo );
+    print->settings()->setPrintFormulaIndicator( m_printFormulaIndicatorRedo );
 
     print->setPrintRange( m_printRangeRedo );
     print->setPrintRepeatColumns( m_printRepeatColumnsRedo );

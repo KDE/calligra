@@ -2155,9 +2155,9 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
     sheet.setAttribute( "hidezero", (int)getHideZero());
     sheet.setAttribute( "firstletterupper", (int)getFirstLetterUpper());
     sheet.setAttribute( "grid", (int)getShowGrid() );
-    sheet.setAttribute( "printGrid", (int)print()->printGrid() );
-    sheet.setAttribute( "printCommentIndicator", (int)print()->printCommentIndicator() );
-    sheet.setAttribute( "printFormulaIndicator", (int)print()->printFormulaIndicator() );
+    sheet.setAttribute( "printGrid", (int)print()->settings()->printGrid() );
+    sheet.setAttribute( "printCommentIndicator", (int)print()->settings()->printCommentIndicator() );
+    sheet.setAttribute( "printFormulaIndicator", (int)print()->settings()->printFormulaIndicator() );
     sheet.setAttribute( "showFormula", (int)getShowFormula());
     sheet.setAttribute( "showFormulaIndicator", (int)getShowFormulaIndicator());
     sheet.setAttribute( "showCommentIndicator", (int)getShowCommentIndicator());
@@ -2184,10 +2184,11 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
     sheet.appendChild( paper );
 
     QDomElement borders = dd.createElement( "borders" );
-    borders.setAttribute( "left", print()->leftBorder() );
-    borders.setAttribute( "top", print()->topBorder() );
-    borders.setAttribute( "right", print()->rightBorder() );
-    borders.setAttribute( "bottom", print()->bottomBorder() );
+    KoPageLayout pageLayout = print()->settings()->pageLayout();
+    borders.setAttribute( "left", pageLayout.left );
+    borders.setAttribute( "top", pageLayout.top );
+    borders.setAttribute( "right", pageLayout.right );
+    borders.setAttribute( "bottom", pageLayout.bottom );
     paper.appendChild( borders );
 
     QDomElement head = dd.createElement( "head" );
@@ -2937,7 +2938,7 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
         }
         if ( str.contains( "grid" ) )
         {
-          print()->setPrintGrid( true );
+          print()->settings()->setPrintGrid( true );
         }
         if ( str.contains( "annotations" ) )
         {
@@ -3652,11 +3653,11 @@ bool Sheet::saveOasis( KoShapeSavingContext &savingContext, GenValidationStyles 
 void Sheet::saveOasisPrintStyleLayout( KoGenStyle &style ) const
 {
     QString printParameter;
-    if ( print()->printGrid() )
+    if ( print()->settings()->printGrid() )
         printParameter="grid ";
-    if ( print()->printObjects() )
+    if ( print()->settings()->printObjects() )
       printParameter+="objects ";
-    if ( print()->printCharts() )
+    if ( print()->settings()->printCharts() )
       printParameter+="charts ";
     if ( getShowFormula() )
         printParameter+="formulas ";
@@ -4082,17 +4083,17 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
     }
     if( sheet.hasAttribute( "printGrid" ) )
     {
-        print()->setPrintGrid( (bool)sheet.attribute("printGrid").toInt( &ok ) );
+        print()->settings()->setPrintGrid( (bool)sheet.attribute("printGrid").toInt( &ok ) );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "printCommentIndicator" ) )
     {
-        print()->setPrintCommentIndicator( (bool)sheet.attribute("printCommentIndicator").toInt( &ok ) );
+        print()->settings()->setPrintCommentIndicator( (bool)sheet.attribute("printCommentIndicator").toInt( &ok ) );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "printFormulaIndicator" ) )
     {
-        print()->setPrintFormulaIndicator( (bool)sheet.attribute("printFormulaIndicator").toInt( &ok ) );
+        print()->settings()->setPrintFormulaIndicator( (bool)sheet.attribute("printFormulaIndicator").toInt( &ok ) );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "hide" ) )

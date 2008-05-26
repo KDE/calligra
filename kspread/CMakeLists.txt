@@ -176,6 +176,7 @@ SET (kspreadcommon_LIB_SRCS
 	NamedAreaManager.cpp
 	Number.cpp
 # 	Object.cpp
+	PrintSettings.cpp
 # 	PropertyEditor.cpp
 	RecalcManager.cpp
 	Region.cpp

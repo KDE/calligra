@@ -857,7 +857,7 @@ void configureLayoutPage::apply()
   {
      unsigned int sizePage = defaultSizePage->currentIndex();
      pageLayoutGroup.writeEntry( "Default size page", sizePage );
-     m_pView->activeSheet()->print()->setPaperFormat( (KoPageFormat::Format)sizePage );
+     m_pView->activeSheet()->print()->settings()->setPageFormat( (KoPageFormat::Format)sizePage );
   }
   if( orientation != defaultOrientationPage->currentIndex() )
   {

@@ -340,12 +340,12 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
 
     // 1. Paint possible comment indicator.
     if ( !dynamic_cast<QPrinter*>(painter.device())
-            || cell.sheet()->print()->printCommentIndicator() )
+            || cell.sheet()->print()->settings()->printCommentIndicator() )
         paintCommentIndicator( painter, coordinate, cell );
 
     // 2. Paint possible formula indicator.
     if ( !dynamic_cast<QPrinter*>(painter.device())
-            || cell.sheet()->print()->printFormulaIndicator() )
+            || cell.sheet()->print()->settings()->printFormulaIndicator() )
     {
         paintFormulaIndicator( painter, coordinate, cell );
         paintMatrixElementIndicator( painter, coordinate, cell );
@@ -904,7 +904,7 @@ void CellView::paintCommentIndicator( QPainter& painter,
     if ( ( !cell.comment().isEmpty() )
             && d->width > 10.0
             && d->height > 10.0
-            && ( cell.sheet()->print()->printCommentIndicator()
+            && ( cell.sheet()->print()->settings()->printCommentIndicator()
             || ( !dynamic_cast<QPrinter*>(painter.device()) && cell.sheet()->getShowCommentIndicator() ) ) )
     {
         QColor penColor = Qt::red;
