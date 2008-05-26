@@ -444,36 +444,6 @@ private:
     QPair<int, int> m_printRepeatRows;
 
     /**
-     * Show the grid when making printout
-     */
-    bool m_bPrintGrid;
-
-    /**
-     * Show the objects when making printout
-     */
-    bool m_bPrintObjects;
-
-    /**
-     * Show the charts when making printout
-     */
-    bool m_bPrintCharts;
-
-    /**
-     * Show the graphics when making printout
-     */
-    bool m_bPrintGraphics;
-
-    /**
-     * Show the formula rect when making printout
-     */
-    bool m_bPrintFormulaIndicator;
-
-    /**
-     * Show the comment rect when making printout
-     */
-    bool m_bPrintCommentIndicator;
-
-    /**
      * Width of repeated columns in points, stored for performance reasons
      */
     double m_dPrintRepeatColumnsWidth;

@@ -248,8 +248,8 @@ bool SheetPrint::print( QPainter &painter, QPrinter *_printer )
     // Override the current grid pen setting, when set to disable
     QPen gridPen;
     bool oldShowGrid = m_pSheet->getShowGrid();
-    m_pSheet->setShowGrid( m_bPrintGrid );
-    if ( !m_bPrintGrid )
+    m_pSheet->setShowGrid(m_settings->printGrid());
+    if (!m_settings->printGrid())
     {
         gridPen = QPen( m_pDoc->gridColor(), 1, Qt::SolidLine );
         QPen nopen;
@@ -374,7 +374,7 @@ bool SheetPrint::print( QPainter &painter, QPrinter *_printer )
         }
     }
 
-    if ( !m_bPrintGrid )
+    if (!m_settings->printGrid())
     {
         // Restore the grid pen
         m_pDoc->setGridColor( gridPen.color() );
