@@ -262,6 +262,12 @@ KisExifIO::KisExifIO() : d(new Private)
 {
 }
 
+KisExifIO::~KisExifIO()
+{
+    delete d;
+}
+
+
 bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const
 {
     ioDevice->open(QIODevice::WriteOnly);

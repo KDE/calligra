@@ -27,7 +27,7 @@ class KisIptcIO : public KisMetaData::IOBackend {
     struct Private;
     public:
         KisIptcIO();
-        virtual ~KisIptcIO() {}
+        virtual ~KisIptcIO();
         virtual QString id() const { return "iptc"; }
         virtual QString name() const { return i18n("Iptc"); }
         virtual BackendType type() const { return Binary; }

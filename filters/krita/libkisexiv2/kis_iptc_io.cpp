@@ -71,6 +71,11 @@ KisIptcIO::KisIptcIO() : d(new Private)
 {
 }
 
+KisIptcIO::~KisIptcIO()
+{
+    delete d;
+}
+
 void KisIptcIO::initMappingsTable() const
 {
     // For some reason, initializing the tables in the constructor makes the it crash

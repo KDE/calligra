@@ -26,7 +26,7 @@ class KisExifIO : public KisMetaData::IOBackend {
     struct Private;
     public:
         KisExifIO();
-        virtual ~KisExifIO() {}
+        virtual ~KisExifIO();
         virtual QString id() const { return "exif"; }
         virtual QString name() const { return i18n("Exif"); }
         virtual BackendType type() const { return Binary; }
