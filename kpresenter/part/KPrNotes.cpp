@@ -19,23 +19,18 @@
 
 #include "KPrNotes.h"
 
-#include <QtGui/QPainter>
-
 #include <KDebug>
 
 #include <KoImageCollection.h>
 #include <KoImageData.h>
-#include <KoPAMasterPage.h>
 #include <KoShape.h>
 #include <KoShapeFactory.h>
 #include <KoShapeLayer.h>
-#include <KoShapePainter.h>
 #include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoUnit.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
-#include <KoZoomHandler.h>
 
 #include "KPrPage.h"
 
@@ -99,7 +94,7 @@ KoShape *KPrNotes::textShape()
 KoShape *KPrNotes::thumbnailShape()
 {
     KoImageData *imageData = new KoImageData(new KoImageCollection(),"");
-    imageData->setImage(createPageThumbnail());
+    imageData->setImage( m_page->thumbnail( m_thumbnailShape->size().toSize() ).toImage() );
     m_thumbnailShape->setUserData(imageData);
     return m_thumbnailShape;
 }
@@ -175,32 +170,7 @@ void KPrNotes::paintComponent(QPainter& painter, const KoViewConverter& converte
 void KPrNotes::updatePageThumbnail()
 {
     KoImageData *imageData = new KoImageData( new KoImageCollection() );
-    imageData->setImage( createPageThumbnail() );
+    imageData->setImage( m_page->thumbnail( m_thumbnailShape->size().toSize() ).toImage() );
     m_thumbnailShape->setUserData( imageData );
-}
-
-QImage KPrNotes::createPageThumbnail() const
-{
-    // TODO: use createPageThumbnail from KoPageApp
-    QSize size = m_thumbnailShape->size().toSize();
-    KoShapePainter shapePainter;
-
-    QList<KoShape*> shapes;
-    double zoom = (double) size.height() / m_page->pageLayout().width;
-
-    shapes = m_page->iterator();
-    shapes += m_page->masterPage()->iterator();
-    shapePainter.setShapes(shapes);
-
-    QImage image(size, QImage::Format_RGB32);
-    image.fill(QColor(Qt::white).rgb());
-    QPainter painter(&image);
-    painter.setRenderHint(QPainter::Antialiasing);
-    painter.setClipRect(QRect(0, 0, size.width(), size.height()));
-    KoZoomHandler zoomHandler;
-    zoomHandler.setZoom(zoom);
-    shapePainter.paintShapes(painter, zoomHandler);
-
-    return image;
 }
 
