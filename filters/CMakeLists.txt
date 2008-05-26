@@ -36,7 +36,7 @@ add_subdirectory( libkowmf )
 macro_optional_add_subdirectory(kchart)
 macro_optional_add_subdirectory(kword)
 if(SHOULD_BUILD_KPRESENTER)
-#    macro_optional_add_subdirectory(kpresenter)
+    macro_optional_add_subdirectory(kpresenter)
 endif(SHOULD_BUILD_KPRESENTER)
 #macro_optional_add_subdirectory(kformula)
 
