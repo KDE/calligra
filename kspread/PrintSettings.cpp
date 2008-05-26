@@ -38,6 +38,7 @@ public:
     bool printGraphics          : 1;
     bool printCommentIndicator  : 1;
     bool printFormulaIndicator  : 1;
+    PageOrder pageOrder;
 
 public:
     void calculatePageDimensions();
@@ -62,6 +63,7 @@ PrintSettings::PrintSettings()
     d->printGraphics = true;
     d->printCommentIndicator = false;
     d->printFormulaIndicator = false;
+    d->pageOrder = LeftToRight;
 }
 
 PrintSettings::~PrintSettings()
@@ -89,6 +91,26 @@ void PrintSettings::setPageOrientation(KoPageFormat::Orientation orientation)
 {
     d->pageLayout.orientation = orientation;
     d->calculatePageDimensions();
+}
+
+double PrintSettings::printWidth() const
+{
+     return d->pageLayout.width - d->pageLayout.left - d->pageLayout.right;
+}
+
+double PrintSettings::printHeight() const
+{
+    return d->pageLayout.height - d->pageLayout.top - d->pageLayout.bottom;
+}
+
+PrintSettings::PageOrder PrintSettings::pageOrder() const
+{
+    return d->pageOrder;
+}
+
+void PrintSettings::setPageOrder(PageOrder order)
+{
+    d->pageOrder = order;
 }
 
 bool PrintSettings::printGrid() const

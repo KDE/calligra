@@ -389,16 +389,6 @@ bool SheetPrint::print( QPainter &painter, QPrinter *_printer )
     return ( page_list.count() > 0 );
 }
 
-double SheetPrint::printHeight() const
-{
-    return paperLayout().height - paperLayout().top - paperLayout().bottom;
-}
-
-double SheetPrint::printWidth() const
-{
-     return paperLayout().width - paperLayout().left - paperLayout().right;
-}
-
 void SheetPrint::printPage( QPainter &_painter, const QRect& page_range,
                                    const QRectF& view, const QPointF _childOffset )
 {
@@ -571,13 +561,13 @@ void SheetPrint::printHeaderFooter( QPainter &painter, int pageNo )
     // print head line middle
     w = fm.width( headMid( pageNo, m_pSheet->sheetName() ) );
     if ( w > 0 )
-        painter.drawText((int)(paperLayout().left + ( printWidth() - w ) / 2.0),
+        painter.drawText((int)(paperLayout().left + ( m_settings->printWidth() - w ) / 2.0),
                          (int)headFootDistance,
                          headMid( pageNo, m_pSheet->sheetName() ) );
     // print head line right
     w = fm.width( headRight( pageNo, m_pSheet->sheetName() ) );
     if ( w > 0 )
-        painter.drawText((int)(paperLayout().left + printWidth() - w),
+        painter.drawText((int)(paperLayout().left + m_settings->printWidth() - w),
                          (int)headFootDistance,
                          headRight( pageNo, m_pSheet->sheetName() ) );
 
@@ -590,13 +580,13 @@ void SheetPrint::printHeaderFooter( QPainter &painter, int pageNo )
     // print foot line middle
     w = fm.width( footMid( pageNo, m_pSheet->sheetName() ) );
     if ( w > 0 )
-        painter.drawText((int)(paperLayout().left + (printWidth() - w) / 2.0),
+        painter.drawText((int)(paperLayout().left + (m_settings->printWidth() - w) / 2.0),
                          (int)(paperLayout().height - headFootDistance),
                          footMid( pageNo, m_pSheet->sheetName() ) );
     // print foot line right
     w = fm.width( footRight( pageNo, m_pSheet->sheetName() ) );
     if ( w > 0 )
-        painter.drawText((int)(paperLayout().left + printWidth() - w),
+        painter.drawText((int)(paperLayout().left + m_settings->printWidth() - w),
                          (int)(paperLayout().height - headFootDistance),
                          footRight( pageNo, m_pSheet->sheetName() ) );
 }
@@ -676,7 +666,7 @@ void SheetPrint::updateNewPageX( int _column )
 
         while ( ( col <= _column ) && ( col < m_printRange.right() ) )
         {
-            if ( x > printWidth() ) //end of page?
+            if ( x > m_settings->printWidth() ) //end of page?
             {
                 //We found a new page, so add it to the list
                 m_lnewPageListX.append( PrintNewPageEntry( col ) );
@@ -795,7 +785,7 @@ void SheetPrint::updateNewPageY( int _row )
 
         while ( ( row <= _row ) && ( row < m_printRange.bottom() ) )
         {
-            if ( y > printHeight() )
+            if ( y > m_settings->printHeight() )
             {
                 //We found a new page, so add it to the list
                 m_lnewPageListY.append( PrintNewPageEntry( row ) );

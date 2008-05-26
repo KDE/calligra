@@ -24,12 +24,16 @@
 
 #include <KoPageLayout.h>
 
+#include "kspread_export.h"
+
 namespace KSpread
 {
 
-class PrintSettings
+class KSPREAD_EXPORT PrintSettings
 {
 public:
+    enum PageOrder { TopToBottom, LeftToRight };
+
     /**
      * Constructor.
      */
@@ -50,6 +54,26 @@ public:
 
     void setPageFormat(KoPageFormat::Format format);
     void setPageOrientation(KoPageFormat::Orientation orientation);
+
+    /**
+     * \return the print width of the paper.
+     */
+    double printWidth() const;
+
+    /**
+     * \return the print height of the paper.
+     */
+    double printHeight() const;
+
+    /**
+     * The order in which the pages should be created.
+     * Either they are created beginning at the left, continuing to the right and
+     * then the next row of pages, or they are created vertically page column-wise.
+     *
+     * \return the page order
+     */
+    PageOrder pageOrder() const;
+    void setPageOrder(PageOrder order);
 
     /**
      * Returns, if the grid shall be shown on printouts.

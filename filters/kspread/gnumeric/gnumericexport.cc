@@ -1118,11 +1118,11 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
     int indexActiveTable=0;
     foreach(Sheet* table, ksdoc->map()->sheetList())
     {
-        if ( table->print()->paperFormat()== KoPageFormat::CustomSize )
+        if ( table->print()->settings()->pageLayout().format == KoPageFormat::CustomSize )
         {
             customSize = gnumeric_doc.createElement( "gmr:Geometry" );
-            customSize.setAttribute( "Width", POINT_TO_MM ( table->print()->paperWidth() ));
-            customSize.setAttribute( "Height", POINT_TO_MM (table->print()->paperWidth() ));
+            customSize.setAttribute( "Width", POINT_TO_MM ( table->print()->settings()->pageLayout().width ));
+            customSize.setAttribute( "Height", POINT_TO_MM (table->print()->settings()->pageLayout().width ));
             sheets.appendChild(customSize);
             //<gmr:Geometry Width="768" Height="365"/>
         }
@@ -1174,22 +1174,22 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
         margins = gnumeric_doc.createElement( "gmr:Margins" );
 
         top = gnumeric_doc.createElement( "gmr:top" );
-        top.setAttribute("Points", table->print()->topBorder());
+        top.setAttribute("Points", table->print()->settings()->pageLayout().top);
         top.setAttribute("PrefUnit", "mm");
         margins.appendChild( top );
 
         bottom = gnumeric_doc.createElement( "gmr:bottom" );
-        bottom.setAttribute("Points", table->print()->bottomBorder());
+        bottom.setAttribute("Points", table->print()->settings()->pageLayout().bottom);
         bottom.setAttribute("PrefUnit", "mm");
         margins.appendChild( bottom );
 
         left = gnumeric_doc.createElement( "gmr:left" );
-        left.setAttribute("Points", table->print()->leftBorder());
+        left.setAttribute("Points", table->print()->settings()->pageLayout().left);
         left.setAttribute("PrefUnit", "mm");
         margins.appendChild( left );
 
         right = gnumeric_doc.createElement( "gmr:right" );
-        right.setAttribute("Points", table->print()->rightBorder());
+        right.setAttribute("Points", table->print()->settings()->pageLayout().right);
         right.setAttribute("PrefUnit", "mm");
         margins.appendChild( right );
 
@@ -1197,7 +1197,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
         sheet.appendChild(tmp);
 
         orientation = gnumeric_doc.createElement( "gmr:orientation" );
-        QString orientString = table->print()->orientation() == KoPageFormat::Landscape ? "landscape" : "portrait";
+        QString orientString = table->print()->settings()->pageLayout().orientation == KoPageFormat::Landscape ? "landscape" : "portrait";
         orientation.appendChild( gnumeric_doc.createTextNode(orientString) );
         tmp.appendChild( orientation );
 

@@ -827,8 +827,8 @@ void OpenCalcExport::exportPageAutoStyles( QDomDocument & doc, QDomElement & aut
 
   if ( sheet )
   {
-    width  = sheet->print()->paperWidth() / 10;
-    height = sheet->print()->paperHeight() / 10;
+    width  = sheet->print()->settings()->pageLayout().width / 10;
+    height = sheet->print()->settings()->pageLayout().height / 10;
   }
 
   QString sWidth  = QString( "%1cm" ).arg( width  );

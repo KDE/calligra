@@ -71,6 +71,7 @@ class FusionStorage;
 class GenValidationStyles;
 class LinkStorage;
 class Map;
+class PrintSettings;
 class Region;
 class RowFormat;
 class Selection;
@@ -982,6 +983,7 @@ public:
 
 
   SheetPrint * print() const;
+    PrintSettings* printSettings() const;
 
 #ifndef NDEBUG
     void printDebug();

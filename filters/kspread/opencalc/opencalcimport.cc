@@ -1331,7 +1331,7 @@ void OpenCalcImport::loadOasisMasterLayoutPage( Sheet * table,KoStyleStack &styl
         }
         if ( str.contains( "grid" ) )
         {
-            table->print()->setPrintGrid( true );
+            table->print()->settings()->setPrintGrid( true );
         }
         if ( str.contains( "annotations" ) )
         {

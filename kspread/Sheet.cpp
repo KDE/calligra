@@ -524,6 +524,11 @@ SheetPrint* Sheet::print() const
     return d->print;
 }
 
+PrintSettings* Sheet::printSettings() const
+{
+    return d->print->settings();
+}
+
 QSizeF Sheet::documentSize() const
 {
     return d->documentSize;

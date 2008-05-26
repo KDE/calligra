@@ -68,16 +68,6 @@ public:
     PrintSettings* settings() const { return m_settings; }
 
     /**
-     * @return the prinsheet width of the paper in millimeters.
-     */
-    double printWidth() const;
-
-    /**
-     * @return the prinsheet height of the paper in millimeters.
-     */
-    double printHeight() const;
-
-    /**
      * @return the ascii name of the paper orientation ( like Portrait, Landscape )
      */
     const char* orientationString() const;
@@ -350,11 +340,6 @@ private:
     void printHeaderFooter( QPainter &painter, int pageNo );
 
     /**
-     * Looks at @ref #m_paperFormat and calculates @ref #m_paperWidth and @ref #m_paperHeight.
-     */
-    void calcPaperSize();
-
-    /**
      * Returns the iterator for the column in the newPage list for columns
      */
     QList<PrintNewPageEntry>::iterator findNewPageColumn( int col );
@@ -429,7 +414,7 @@ private:
     uint m_uprintPages;
 
     /**
-     * Defined prinsheet area
+     * Defined print area
      */
     QRect m_printRange;
 
