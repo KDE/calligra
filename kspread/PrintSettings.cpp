@@ -72,7 +72,7 @@ PrintSettings::~PrintSettings()
     delete d;
 }
 
-KoPageLayout PrintSettings::pageLayout() const
+KoPageLayout &PrintSettings::pageLayout() const
 {
     return d->pageLayout;
 }

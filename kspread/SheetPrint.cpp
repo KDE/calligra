@@ -1012,7 +1012,7 @@ void SheetPrint::setPaperOrientation( KoPageFormat::Orientation _orient )
 }
 
 
-KoPageLayout SheetPrint::paperLayout() const
+KoPageLayout &SheetPrint::paperLayout() const
 {
     return m_settings->pageLayout();
 }
