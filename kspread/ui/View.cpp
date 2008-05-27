@@ -197,7 +197,6 @@
 #include "dialogs/FindDialog.h"
 
 #include "PropertyEditor.h"
-#include "dialogs/SheetSelectPage.h"
 #include "dialogs/LinkDialog.h"
 #include "dialogs/SheetPropertiesDialog.h"
 

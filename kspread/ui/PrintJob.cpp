@@ -18,20 +18,22 @@
  */
 
 #include "PrintJob.h"
-#include "View.h"
-#include "Map.h"
+
 #include "Canvas.h"
-#include "../Sheet.h"
-#include "../SheetPrint.h"
-#include "../Doc.h"
+#include "Doc.h"
+#include "Map.h"
+#include "PrintManager.h"
+#include "Sheet.h"
+#include "SheetPrint.h"
+#include "View.h"
+
 #include <dialogs/SheetSelectPage.h>
 
 #include <KoShapeManager.h>
 
 #include <QPainter>
 
-namespace KSpread
-{
+using namespace KSpread;
 
 PrintJob::PrintJob(View *view)
     : KoPrintingDialog(view),
@@ -127,7 +129,12 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
             print->settings()->setPageOrientation( KoPageFormat::Portrait );
         }
 
+#if 0
         bool result = print->print( painter, &printer() );
+#else
+        PrintManager printManager(m_view->activeSheet());
+        bool result = printManager.print(painter, &printer());
+#endif
 
         //Restore original orientation
         print->setPaperOrientation( _orient );
@@ -161,5 +168,3 @@ QList<QWidget*> PrintJob::createOptionWidgets() const
 {
     return QList<QWidget*>() << m_sheetSelectPage;
 }
-
-} // namespace KSpread
