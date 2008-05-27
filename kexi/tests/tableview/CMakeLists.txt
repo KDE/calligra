@@ -12,7 +12,7 @@ kde4_add_executable(kexitableviewtest ${kexitableviewtest_SRCS})
 
 target_link_libraries(kexitableviewtest  ${KDE4_KDECORE_LIBS} kexidb kexiextendedwidgets )
 
-install(TARGETS kexitableviewtest  DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS kexitableviewtest  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### next target ###############

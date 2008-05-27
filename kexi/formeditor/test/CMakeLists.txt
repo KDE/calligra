@@ -12,7 +12,7 @@ kde4_add_executable(kformdesigner ${kformdesigner_SRCS})
 
 target_link_libraries(kformdesigner  ${KDE4_KDECORE_LIBS} kformdesigner )
 
-install(TARGETS kformdesigner  DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS kformdesigner  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### next target ###############

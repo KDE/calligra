@@ -20,4 +20,4 @@ target_link_libraries(kwebforms shttpd ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS}
   ${GOOGLE_CTEMPLATE_THREAD_LIB}
   kexidb kexicore keximain
 )
-install(TARGETS kwebforms DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS kwebforms ${INSTALL_TARGETS_DEFAULT_ARGS})

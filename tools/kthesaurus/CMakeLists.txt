@@ -12,7 +12,7 @@ target_link_libraries(kdeinit_kthesaurus  kotext)
 install(TARGETS kdeinit_kthesaurus  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kthesaurus kdeinit_kthesaurus )
-install(TARGETS kthesaurus  DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS kthesaurus  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

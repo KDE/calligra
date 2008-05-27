@@ -6,5 +6,5 @@ kde4_add_executable(koconverter ${koconverter_SRCS})
 
 target_link_libraries(koconverter  ${KDE4_KDECORE_LIBS} komain )
 
-install(TARGETS koconverter  DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS koconverter  ${INSTALL_TARGETS_DEFAULT_ARGS})
 

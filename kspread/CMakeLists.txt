@@ -243,7 +243,7 @@ target_link_libraries(kdeinit_kspread  ${KDE4_KDECORE_LIBS} komain )
 install(TARGETS kdeinit_kspread  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kspread kdeinit_kspread )
-install(TARGETS kspread  DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS kspread  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

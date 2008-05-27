@@ -35,7 +35,7 @@ target_link_libraries(kdeinit_kivio  ${KDE4_KDECORE_LIBS} komain )
 install(TARGETS kdeinit_kivio DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries(kivio kdeinit_kivio)
-install(TARGETS kivio DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS kivio ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### desktop files ###
 install( FILES kiviopart.desktop DESTINATION ${SERVICES_INSTALL_DIR})

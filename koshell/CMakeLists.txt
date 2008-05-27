@@ -17,7 +17,7 @@ target_link_libraries(kdeinit_koshell  ${KDE4_KDECORE_LIBS} koguiutils )
 install(TARGETS kdeinit_koshell  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( koshell kdeinit_koshell )
-install(TARGETS koshell  DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS koshell  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

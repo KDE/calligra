@@ -53,4 +53,4 @@ target_link_libraries(kdeinit_karbon  ${KDE4_KDECORE_LIBS} karboncommon karbonui
 install(TARGETS kdeinit_karbon  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( karbon kdeinit_karbon )
-install(TARGETS karbon  DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS karbon  ${INSTALL_TARGETS_DEFAULT_ARGS})

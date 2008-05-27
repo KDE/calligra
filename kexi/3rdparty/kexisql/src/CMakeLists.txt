@@ -57,7 +57,7 @@ kde4_add_executable(ksqlite2 ${ksqlite2_SRCS})
 
 target_link_libraries(ksqlite2  ${KDE4_KDECORE_LIBS} kexisql2 )
 
-install(TARGETS ksqlite2  DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS ksqlite2  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 
 ########### install files ###############

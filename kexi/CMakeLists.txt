@@ -66,7 +66,7 @@ target_link_libraries(kexi
 	keximain
 	
 )
-install(TARGETS kexi DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS kexi ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 # that functionality got moved to kexi/main2/CMakeLists.txt
 #set(kexi_KDEINIT_SRCS main.cpp )
@@ -74,7 +74,7 @@ install(TARGETS kexi DESTINATION ${BIN_INSTALL_DIR})
 #target_link_libraries(kdeinit_kexi  ${KDE4_KDECORE_LIBS} kexicore keximain )
 #install(TARGETS kdeinit_kexi  DESTINATION ${LIB_INSTALL_DIR})
 #target_link_libraries( kexi kdeinit_kexi )
-#install(TARGETS kexi DESTINATION ${BIN_INSTALL_DIR})
+#install(TARGETS kexi ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

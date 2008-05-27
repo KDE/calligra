@@ -88,7 +88,7 @@ target_link_libraries(kdeinit_kpresenter  ${KDE4_KDECORE_LIBS} komain )
 install(TARGETS kdeinit_kpresenter DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries(kpresenter kdeinit_kpresenter)
-install(TARGETS kpresenter DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS kpresenter ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ### desktop files ###
 install( FILES kpresenterpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})

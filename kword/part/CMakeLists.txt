@@ -116,7 +116,7 @@ target_link_libraries(kdeinit_kword  ${KDE4_KDECORE_LIBS} komain )
 install(TARGETS kdeinit_kword  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kword kdeinit_kword )
-install(TARGETS kword  DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS kword  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

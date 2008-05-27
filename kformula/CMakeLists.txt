@@ -54,7 +54,7 @@ target_link_libraries(kdeinit_kformula  ${KDE4_KDECORE_LIBS} komain )
 install(TARGETS kdeinit_kformula  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kformula kdeinit_kformula )
-install(TARGETS kformula  DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS kformula  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

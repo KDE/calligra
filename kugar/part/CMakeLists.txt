@@ -28,7 +28,7 @@ target_link_libraries(kdeinit_kugar  ${KDE4_KDECORE_LIBS} komain )
 install(TARGETS kdeinit_kugar  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kugar kdeinit_kugar )
-install(TARGETS kugar  DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS kugar  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

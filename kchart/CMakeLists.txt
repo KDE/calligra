@@ -80,7 +80,7 @@ target_link_libraries(kdeinit_kchart  ${KDE4_KDECORE_LIBS} komain )
 install(TARGETS kdeinit_kchart  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kchart kdeinit_kchart )
-install(TARGETS kchart  DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS kchart  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

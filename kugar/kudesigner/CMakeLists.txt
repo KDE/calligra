@@ -49,7 +49,7 @@ target_link_libraries(kdeinit_kudesigner  ${KDE4_KDECORE_LIBS} komain )
 install(TARGETS kdeinit_kudesigner  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kudesigner kdeinit_kudesigner )
-install(TARGETS kudesigner  DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS kudesigner  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

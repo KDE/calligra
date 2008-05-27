@@ -63,7 +63,7 @@ target_link_libraries(kdeinit_kplatowork kplatoworkapp )
 install(TARGETS kdeinit_kplatowork  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kplatowork kdeinit_kplatowork )
-install(TARGETS kplatowork  DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS kplatowork  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 

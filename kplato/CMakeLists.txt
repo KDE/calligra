@@ -92,7 +92,7 @@ target_link_libraries(kdeinit_kplato komain )
 install(TARGETS kdeinit_kplato  DESTINATION ${LIB_INSTALL_DIR})
 
 target_link_libraries( kplato kdeinit_kplato )
-install(TARGETS kplato  DESTINATION ${BIN_INSTALL_DIR})
+install(TARGETS kplato  ${INSTALL_TARGETS_DEFAULT_ARGS})
 
 ########### install files ###############
 
