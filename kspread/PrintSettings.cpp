@@ -25,6 +25,7 @@
 
 // KOffice
 #include <KoPageLayout.h>
+#include <KoUnit.h>
 
 using namespace KSpread;
 
@@ -48,8 +49,8 @@ void PrintSettings::Private::calculatePageDimensions()
 {
     if (pageLayout.format != KoPageFormat::CustomSize)
     {
-        pageLayout.width = KoPageFormat::width(pageLayout.format, pageLayout.orientation);
-        pageLayout.height = KoPageFormat::height(pageLayout.format, pageLayout.orientation);
+        pageLayout.width =  MM_TO_POINT(KoPageFormat::width(pageLayout.format, pageLayout.orientation));
+        pageLayout.height = MM_TO_POINT(KoPageFormat::height(pageLayout.format, pageLayout.orientation));
     }
 }
 

@@ -57,9 +57,7 @@ void PaperLayoutCommand::redo()
     if( !sheet ) return;
     SheetPrint* print = sheet->print();
 
-    print->setPaperLayout( plRedo.left,  plRedo.top,
-                           plRedo.right, plRedo.bottom,
-                           plRedo.format, plRedo.orientation );
+    print->settings()->setPageLayout(plRedo);
 
     print->setHeadFootLine( hfRedo.headLeft, hfRedo.headMid, hfRedo.headRight,
                             hfRedo.footLeft, hfRedo.footMid, hfRedo.footRight );
@@ -86,9 +84,7 @@ void PaperLayoutCommand::undo()
     if( !sheet ) return;
     SheetPrint* print = sheet->print();
     plRedo = print->paperLayout();
-    print->setPaperLayout( pl.left,  pl.top,
-                           pl.right, pl.bottom,
-                           pl.format,  pl.orientation );
+    print->settings()->setPageLayout(pl);
 
     hfRedo = print->headFootLine();
     print->setHeadFootLine( hf.headLeft, hf.headMid, hf.headRight,

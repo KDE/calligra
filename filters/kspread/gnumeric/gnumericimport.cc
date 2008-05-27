@@ -968,8 +968,15 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, Sheet * table )
   if ( !size.isNull() )
     paperSize = size.text();
 
-  table->print()->setPaperLayout( fleft, ftop, fright, fbottom,
-                         paperSize, orientation );
+  KoPageLayout pageLayout = KoPageLayout::standardLayout();
+  pageLayout.format = KoPageFormat::formatFromString(paperSize);
+  pageLayout.orientation = (orientation == "Portrait")
+                         ? KoPageFormat::Portrait : KoPageFormat::Landscape;
+  pageLayout.left   = fleft;
+  pageLayout.right  = fright;
+  pageLayout.top    = ftop;
+  pageLayout.bottom = fbottom;
+  table->print()->settings()->setPageLayout(pageLayout);
 
   table->print()->setHeadFootLine( headLeft, headMiddle, headRight,
                                    footLeft, footMiddle, footRight );

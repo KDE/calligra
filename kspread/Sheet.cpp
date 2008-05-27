@@ -2864,39 +2864,31 @@ void Sheet::loadOasisObjects( const KoXmlElement &parent, KoOdfLoadingContext& o
 
 void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
 {
-    // use A4 as default page size
-    float left = 20.0;
-    float right = 20.0;
-    float top = 20.0;
-    float bottom = 20.0;
-    float width = 210.0;
-    float height = 297.0;
-    QString orientation = "Portrait";
-    QString format;
+    KoPageLayout pageLayout = KoPageLayout::standardLayout();
 
     if ( styleStack.hasProperty( KoXmlNS::fo, "page-width" ) )
     {
-        width = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "page-width" ) );
+        pageLayout.width = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "page-width"));
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "page-height" ) )
     {
-        height = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "page-height" ) );
+        pageLayout.height = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "page-height"));
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "margin-top" ) )
     {
-        top = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-top" ) );
+        pageLayout.top = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-top"));
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "margin-bottom" ) )
     {
-        bottom = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-bottom" ) );
+        pageLayout.bottom = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-bottom"));
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "margin-left" ) )
     {
-        left = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-left" ) );
+        pageLayout.left = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-left"));
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "margin-right" ) )
     {
-        right = KoUnit::parseValue( styleStack.property( KoXmlNS::fo, "margin-right" ) );
+        pageLayout.right = KoUnit::parseValue(styleStack.property(KoXmlNS::fo, "margin-right"));
     }
     if ( styleStack.hasProperty( KoXmlNS::style, "writing-mode" ) )
     {
@@ -2915,7 +2907,8 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
     }
     if ( styleStack.hasProperty( KoXmlNS::style, "print-orientation" ) )
     {
-        orientation = ( styleStack.property( KoXmlNS::style, "print-orientation" )=="landscape" ) ? "Landscape" : "Portrait" ;
+        pageLayout.orientation = (styleStack.property(KoXmlNS::style, "print-orientation") == "landscape")
+                               ? KoPageFormat::Landscape : KoPageFormat::Portrait;
     }
     if ( styleStack.hasProperty( KoXmlNS::style, "num-format" ) )
     {
@@ -2992,16 +2985,7 @@ void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
             kDebug(36003)<<" table-centering unknown :"<<str;
 #endif
     }
-    format = QString( "%1x%2" ).arg( width ).arg( height );
-    kDebug(36003)<<" format :"<<format;
-    print()->setPaperLayout( left, top, right, bottom, format, orientation );
-
-    kDebug(36003)<<" left margin :"<<left<<" right :"<<right<<" top :"<<top<<" bottom :"<<bottom;
-//<style:properties fo:page-width="21.8cm" fo:page-height="28.801cm" fo:margin-top="2cm" fo:margin-bottom="2.799cm" fo:margin-left="1.3cm" fo:margin-right="1.3cm" style:writing-mode="lr-tb"/>
-//          QString format = paper.attribute( "format" );
-//      QString orientation = paper.attribute( "orientation" );
-//        d->print->setPaperLayout( left, top, right, bottom, format, orientation );
-//      }
+    print()->settings()->setPageLayout(pageLayout);
 }
 
 
@@ -4162,19 +4146,22 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
     KoXmlElement paper = sheet.namedItem( "paper" ).toElement();
     if ( !paper.isNull() )
     {
-        QString format = paper.attribute( "format" );
-        QString orientation = paper.attribute( "orientation" );
+        KoPageLayout pageLayout = KoPageLayout::standardLayout();
+        pageLayout.format = KoPageFormat::formatFromString(paper.attribute("format"));
+        pageLayout.orientation = (paper.attribute("orientation")  == "Portrait")
+                               ? KoPageFormat::Portrait : KoPageFormat::Landscape;
 
         // <borders>
         KoXmlElement borders = paper.namedItem( "borders" ).toElement();
         if ( !borders.isNull() )
         {
-            float left = borders.attribute( "left" ).toFloat();
-            float right = borders.attribute( "right" ).toFloat();
-            float top = borders.attribute( "top" ).toFloat();
-            float bottom = borders.attribute( "bottom" ).toFloat();
-            print()->setPaperLayout( left, top, right, bottom, format, orientation );
+            pageLayout.left   = MM_TO_POINT(borders.attribute( "left" ).toFloat());
+            pageLayout.right  = MM_TO_POINT(borders.attribute( "right" ).toFloat());
+            pageLayout.top    = MM_TO_POINT(borders.attribute( "top" ).toFloat());
+            pageLayout.bottom = MM_TO_POINT(borders.attribute( "bottom" ).toFloat());
         }
+        print()->settings()->setPageLayout(pageLayout);
+
         QString hleft, hright, hcenter;
         QString fleft, fright, fcenter;
         // <head>

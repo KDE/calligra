@@ -1073,26 +1073,26 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
 
 void Doc::loadPaper( KoXmlElement const & paper )
 {
-  // <paper>
-  QString format = paper.attribute( "format" );
-  QString orientation = paper.attribute( "orientation" );
+    KoPageLayout pageLayout = KoPageLayout::standardLayout();
+    pageLayout.format = KoPageFormat::formatFromString(paper.attribute("format"));
+    pageLayout.orientation = (paper.attribute("orientation")  == "Portrait")
+                           ? KoPageFormat::Portrait : KoPageFormat::Landscape;
 
-  // <borders>
-  KoXmlElement borders = paper.namedItem( "borders" ).toElement();
-  if ( !borders.isNull() )
-  {
-    float left = borders.attribute( "left" ).toFloat();
-    float right = borders.attribute( "right" ).toFloat();
-    float top = borders.attribute( "top" ).toFloat();
-    float bottom = borders.attribute( "bottom" ).toFloat();
+    // <borders>
+    KoXmlElement borders = paper.namedItem( "borders" ).toElement();
+    if ( !borders.isNull() )
+    {
+        pageLayout.left   = MM_TO_POINT(borders.attribute( "left" ).toFloat());
+        pageLayout.right  = MM_TO_POINT(borders.attribute( "right" ).toFloat());
+        pageLayout.top    = MM_TO_POINT(borders.attribute( "top" ).toFloat());
+        pageLayout.bottom = MM_TO_POINT(borders.attribute( "bottom" ).toFloat());
+    }
 
     //apply to all sheet
     foreach ( Sheet* sheet, map()->sheetList() )
     {
-      sheet->print()->setPaperLayout( left, top, right, bottom,
-                                      format, orientation );
+        sheet->print()->settings()->setPageLayout(pageLayout);
     }
-  }
 
   QString hleft, hright, hcenter;
   QString fleft, fright, fcenter;
