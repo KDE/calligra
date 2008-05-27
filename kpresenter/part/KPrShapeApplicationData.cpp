@@ -23,6 +23,7 @@
 #include "shapeanimations/KPrShapeAnimation.h"
 
 KPrShapeApplicationData::KPrShapeApplicationData()
+: m_soundData( 0 )
 {
     m_invokeResponse = DoNone;
 }
