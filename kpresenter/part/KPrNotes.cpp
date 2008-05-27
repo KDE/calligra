@@ -34,6 +34,7 @@
 
 #include "KPrPage.h"
 
+#include <QPainter>
 // a helper class to load attributes of the thumbnail shape
 class ShapeLoaderHelper : public KoShape
 {
