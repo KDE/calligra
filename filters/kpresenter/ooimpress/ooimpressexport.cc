@@ -1051,7 +1051,7 @@ void OoImpressExport::set2DGeometry( QDomElement & source, QDomElement & target,
 	else
         {
 	    //default value take it into kppieobject
-	    //default is 90° into kpresenter
+	    //default is 90ï¿½ into kpresenter
 	    target.setAttribute( "draw:end-angle", (90+startangle) );
         }
     }
