@@ -1445,8 +1445,8 @@ Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
        }
   }
 
-  int cols_X, cols_Y; // coloumns in X and Y-Matrix 
-  int rows_X, rows_Y; // rows     in X and Y-Matrix
+  uint cols_X, cols_Y; // coloumns in X and Y-Matrix 
+  uint rows_X, rows_Y; // rows     in X and Y-Matrix
   int M, N;
 
   // stores count of elements in array
@@ -1682,7 +1682,6 @@ Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
   }
   else
   {
-     int i,j,k;
      if (nCase == 2)
      {
         kDebug()<<"column alignment";
