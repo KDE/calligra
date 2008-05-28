@@ -21,22 +21,20 @@
 #ifndef KEXI_WEBFORMS_HTTPSTREAM_H
 #define KEXI_WEBFORMS_HTTPSTREAM_H
 
-#include <shttpd.h>
-
 #include <string>
+#include "Request.h"
 
-#include <QString>
+struct RequestData;
+class QString;
 
 namespace KexiWebForms {
-
-    typedef struct shttpd_arg Request;
 
     // Create a new type
     typedef struct {} HTTPEndOfStream;
 
     class HTTPStream {
     public:
-        HTTPStream(Request*);
+        HTTPStream(RequestData*);
         HTTPStream& operator<<(const char*);
         HTTPStream& operator<<(const std::string&);
         HTTPStream& operator<<(const QString&);
@@ -45,7 +43,7 @@ namespace KexiWebForms {
     private:
         bool m_headerModified;
         QString m_contentbuf;
-        Request* m_request;
+        RequestData* m_request;
     };
 
     extern HTTPEndOfStream webend;

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    (C) Copyright 2008 by Lorenzo Villani <lvillani@binaryhelix.net>
-   Time-stamp: <2008-05-23 20:34:04 lorenzo>
+   Time-stamp: <2008-05-28 16:00:27 lorenzo>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,29 +19,33 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QString>
-#include <QPointer>
 #include <string>
 #include <sstream>
+
+#include <QString>
+#include <QPointer>
+
 #include <google/template.h>
 
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 
+#include "Request.h"
 #include "Server.h"
 #include "HTTPStream.h"
 #include "DataProvider.h"
+
 #include "TableView.h"
 
 namespace KexiWebForms {
     namespace TableView {
-        void show(Request* req) {
+        void show(RequestData* req) {
             HTTPStream stream(req);
             google::TemplateDictionary dict("table");
 
-            QString requestedPage(shttpd_get_env(req, "REQUEST_URI"));
+            QString requestedPage = Request::requestUri(req);
             // FIXME: Mhhh, nasty things can happen with that
-            requestedPage.remove(0, 7);
+            requestedPage.remove(0, 6);
             dict.SetValue("TABLENAME", requestedPage.toLatin1().constData());
 
             // rough code to access table data...
@@ -64,10 +68,11 @@ namespace KexiWebForms {
             } else {
                 dict.SetValue("TABLEDATA", "Error in " __FILE__); // mhh...
             }
-
+            
             std::ostringstream file;
             file << Server::instance()->config()->webRoot.toLatin1().constData() << "/table.tpl";
             google::Template* tpl = google::Template::GetTemplate(file.str(), google::DO_NOT_STRIP);
+            
             std::string output;
             tpl->Expand(&output, &dict);
 

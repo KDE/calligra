@@ -21,9 +21,10 @@
 #ifndef KEXI_WEBFORMS_DATAPROVIDER_H
 #define KEXI_WEBFORMS_DATAPROVIDER_H
 
-#include <QString>
 #include <QPointer>
 #include <kexidb/connection.h>
+
+class QString;
 
 namespace KexiWebForms {
     extern QPointer<KexiDB::Connection> gConnection;

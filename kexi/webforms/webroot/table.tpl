@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
 	<title>Kexi Web Forms - {{TITLE}}</title>
-	<link rel="stylesheet" type="text/css" href="style.css"/>
+	<link rel="stylesheet" type="text/css" href="/style.css"/>
     </head>
   <body>
       <div id="wrapper">

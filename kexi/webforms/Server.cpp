@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    (C) Copyright 2008 by Lorenzo Villani <lvillani@binaryhelix.net>
-   Time-stamp: <2008-05-23 19:05:25 lorenzo>
+   Time-stamp: <2008-05-28 15:37:42 lorenzo>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,14 +19,13 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "Server.h"
-#include "ServerConfig.h"
-
 #include <QDir>
 #include <KDebug>
 #include <KUniqueApplication>
-
 #include <shttpd.h>
+
+#include "Server.h"
+#include "Request.h"
 
 namespace KexiWebForms {
     Server* Server::m_instance = 0;
@@ -125,7 +124,7 @@ namespace KexiWebForms {
         }
     }
 
-    void Server::registerHandler(const char* handler, void(*f)(shttpd_arg*)) {
+    void Server::registerHandler(const char* handler, void(*f)(RequestData*)) {
         if (f) {
           kDebug() << "Registering handler for: " << handler << endl;
           shttpd_register_uri(m_ctx, handler, f, NULL);

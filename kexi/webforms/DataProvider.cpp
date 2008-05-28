@@ -20,10 +20,20 @@
 
 #include "DataProvider.h"
 
-#include <KDebug>
-#include <QString>
-#include <QStringList>
 #include <QPointer>
+
+#include <KDebug>
+
+/*class QString;
+class QStringList;
+class KexiDB::Driver;
+class KexiDB::ConnectionData;
+class KexiProjectData;
+class KexiDBShortcutFile;
+class KexiDBConnShortcutFile;*/
+/*#include <QString>
+#include <QStringList>
+#include <QPointer>*/
 
 #include <main/startup/KexiStartup.h>
 

@@ -19,12 +19,12 @@
 */
 
 #include <shttpd.h>
-
+#include "Request.h"
 #include "HTTPStream.h"
 
 namespace KexiWebForms {
 
-    HTTPStream::HTTPStream(Request* req) : m_request(req) {}
+    HTTPStream::HTTPStream(RequestData* req) : m_request(req) {}
 
     HTTPStream& HTTPStream::operator<<(const char* str) {
         m_contentbuf.append(str);

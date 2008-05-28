@@ -18,15 +18,28 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_WEBFORMS_INDEXVIEW_H
-#define KEXI_WEBFORMS_INDEXVIEW_H
+#include <QString>
 
-struct RequestData;
+#include <shttpd.h>
+
+#include "Request.h"
 
 namespace KexiWebForms {
-    namespace IndexView {
-        void show(RequestData* req);
+    namespace Request {
+        /**
+         * Create a QMap containing all GET/POST request data
+         * and make it accessible by name
+         */
+        QString request(RequestData* req, const char* name) {
+            const char* ret = shttpd_get_env(req, name);
+            if (ret)
+                return QString(ret);
+            else
+                return NULL;
+        }
+
+        QString requestUri(RequestData* req) {
+            return QString(shttpd_get_env(req, "REQUEST_URI"));
+        }
     }
 }
-
-#endif

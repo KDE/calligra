@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    (C) Copyright 2008 by Lorenzo Villani <lvillani@binaryhelix.net>
-   Time-stamp: <2008-05-23 19:06:53 lorenzo>
+   Time-stamp: <2008-05-28 15:41:45 lorenzo>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -22,11 +22,11 @@
 #ifndef KEXI_WEBFORMS_TABLEVIEW_H
 #define KEXI_WEBFORMS_TABLEVIEW_H
 
-#include "HTTPStream.h"
+struct RequestData;
 
 namespace KexiWebForms {
     namespace TableView {
-        void show(Request*);
+        void show(RequestData*);
     }
 }
 

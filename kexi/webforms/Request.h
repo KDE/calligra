@@ -18,14 +18,18 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_WEBFORMS_INDEXVIEW_H
-#define KEXI_WEBFORMS_INDEXVIEW_H
+#ifndef KEXIWEBFORMS_REQUEST_H
+#define KEXIWEBFORMS_REQUEST_H
 
-struct RequestData;
+#include <shttpd.h>
+#include <QString>
 
 namespace KexiWebForms {
-    namespace IndexView {
-        void show(RequestData* req);
+    typedef struct shttpd_arg RequestData;
+    
+    namespace Request {
+        QString request(RequestData*, const char*);
+        QString requestUri(RequestData*);
     }
 }
 

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    (C) Copyright 2008 by Lorenzo Villani <lvillani@binaryhelix.net>
-   Time-stamp: <2008-05-23 19:14:12 lorenzo>
+   Time-stamp: <2008-05-28 16:00:46 lorenzo>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,16 +23,18 @@
 #include <sstream>
 #include <google/template.h>
 
+#include "Request.h"
 #include "Server.h"
-#include "IndexView.h"
 #include "DataProvider.h"
 #include "HTTPStream.h"
+
+#include "IndexView.h"
 
 namespace KexiWebForms {
 
     namespace IndexView {
 
-        void show(Request* req) {
+        void show(RequestData* req) {
             HTTPStream stream(req);
 
             google::TemplateDictionary dict("index");
@@ -41,15 +43,15 @@ namespace KexiWebForms {
             std::ostringstream tables;
             // FIXME: Beware of temporary objects!
             for (int i = 0; i < gConnection->tableNames().size(); ++i)
-                tables << "<li><a href=\"/table/" << gConnection->tableNames().at(i).toLatin1().constData()
+                tables << "<li><a href=\"/view/" << gConnection->tableNames().at(i).toLatin1().constData()
                        << "\">" << gConnection->tableNames().at(i).toLatin1().constData() << "</a></li>";
             dict.SetValue("TABLES", tables.str());
 
             // FIXME: That's horrible
             std::ostringstream file;
             file << Server::instance()->config()->webRoot.toLatin1().constData() << "/index.tpl";
-
             google::Template* tpl = google::Template::GetTemplate(file.str(), google::DO_NOT_STRIP);
+            
             std::string output;
             tpl->Expand(&output, &dict);
 
