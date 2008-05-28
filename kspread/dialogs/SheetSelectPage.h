@@ -20,7 +20,7 @@
 #ifndef KSPREAD_SHEETSELECTPAGE
 #define KSPREAD_SHEETSELECTPAGE
 
-#include <QWidget>
+#include "ui_SheetSelectWidget.h"
 
 namespace KSpread
 {
@@ -36,7 +36,7 @@ class SheetSelectWidget;
  * to select the sheets that should be printed and in which order
  * they should be printed.
  */
-class SheetSelectPage : public QWidget
+class SheetSelectPage : public QWidget, public Ui::SheetSelectWidget
 {
   Q_OBJECT
   public:
@@ -101,14 +101,6 @@ class SheetSelectPage : public QWidget
     void moveUp();
     void moveDown();
     void moveBottom();
-
-  private:
-
-    /**
-     * The widget used, includes two lists of sheet names and
-     * buttons to move sheets between and within the lists.
-     */
-    SheetSelectWidget* gui;
 };
 
 } // namespace KSpread

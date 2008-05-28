@@ -23,8 +23,8 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>527</width>
-    <height>160</height>
+    <width>384</width>
+    <height>251</height>
    </rect>
   </property>
   <property name="sizePolicy" >
@@ -33,52 +33,36 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
-  <property name="windowTitle" >
-   <string>Sheet Selection</string>
-  </property>
-  <layout class="QGridLayout" >
-   <item row="0" column="1" >
-    <widget class="KPushButton" name="ButtonSelectAll" >
-     <property name="toolTip" >
-      <string>Select all sheets</string>
-     </property>
+  <layout class="QGridLayout" name="gridLayout" >
+   <item row="0" column="0" >
+    <widget class="QRadioButton" name="allSheetsButton" >
      <property name="text" >
-      <string/>
+      <string>All Sheets</string>
      </property>
     </widget>
    </item>
-   <item row="1" column="1" >
-    <widget class="KPushButton" name="ButtonSelect" >
-     <property name="toolTip" >
-      <string>Select sheets</string>
-     </property>
+   <item row="1" column="0" >
+    <widget class="QRadioButton" name="activeSheetButton" >
      <property name="text" >
-      <string/>
+      <string>Active Sheet</string>
+     </property>
+     <property name="checked" >
+      <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="3" column="1" >
-    <widget class="KPushButton" name="ButtonRemoveAll" >
-     <property name="toolTip" >
-      <string>Clear Selection</string>
-     </property>
+   <item row="2" column="0" >
+    <widget class="QRadioButton" name="selectedSheetsButton" >
      <property name="text" >
-      <string/>
+      <string>Selected Sheets:</string>
      </property>
     </widget>
    </item>
-   <item row="2" column="1" >
-    <widget class="KPushButton" name="ButtonRemove" >
-     <property name="toolTip" >
-      <string>Remove sheets</string>
-     </property>
-     <property name="text" >
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item rowspan="4" row="0" column="0" >
+   <item rowspan="6" row="3" column="0" >
     <widget class="K3ListView" name="ListViewAvailable" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
      <property name="toolTip" >
       <string>Available sheets</string>
      </property>
@@ -103,51 +87,33 @@ You can insert a sheet as often as you like, this way it will be printed multipl
       <property name="text" >
        <string>Available Sheets</string>
       </property>
+      <property name="clickable" >
+       <bool>true</bool>
+      </property>
+      <property name="resizable" >
+       <bool>true</bool>
+      </property>
      </column>
     </widget>
    </item>
-   <item row="0" column="3" >
-    <widget class="KPushButton" name="ButtonMoveTop" >
-     <property name="toolTip" >
-      <string>Move selected sheet to the top</string>
+   <item row="3" column="1" >
+    <spacer name="verticalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
      </property>
-     <property name="text" >
-      <string/>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>9</height>
+      </size>
      </property>
-    </widget>
+    </spacer>
    </item>
-   <item row="1" column="3" >
-    <widget class="KPushButton" name="ButtonMoveUp" >
-     <property name="toolTip" >
-      <string>Move selected sheet up</string>
-     </property>
-     <property name="text" >
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="3" >
-    <widget class="KPushButton" name="ButtonMoveDown" >
-     <property name="toolTip" >
-      <string>Move selected sheet down</string>
-     </property>
-     <property name="text" >
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="3" >
-    <widget class="KPushButton" name="ButtonMoveBottom" >
-     <property name="toolTip" >
-      <string>Move selected sheet to the bottom</string>
-     </property>
-     <property name="text" >
-      <string/>
-     </property>
-    </widget>
-   </item>
-   <item rowspan="4" row="0" column="2" >
+   <item rowspan="6" row="3" column="2" >
     <widget class="K3ListView" name="ListViewSelected" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
      <property name="acceptDrops" >
       <bool>true</bool>
      </property>
@@ -175,8 +141,157 @@ It is even possible to print a sheet more than once. Just insert the desired she
       <property name="text" >
        <string>Selected Sheets</string>
       </property>
+      <property name="clickable" >
+       <bool>true</bool>
+      </property>
+      <property name="resizable" >
+       <bool>true</bool>
+      </property>
      </column>
     </widget>
+   </item>
+   <item row="3" column="3" >
+    <spacer name="verticalSpacer_3" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>9</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="4" column="1" >
+    <widget class="KPushButton" name="ButtonSelectAll" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="toolTip" >
+      <string>Select all sheets</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="3" >
+    <widget class="KPushButton" name="ButtonMoveTop" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="toolTip" >
+      <string>Move selected sheet to the top</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1" >
+    <widget class="KPushButton" name="ButtonSelect" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="toolTip" >
+      <string>Select sheets</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="3" >
+    <widget class="KPushButton" name="ButtonMoveUp" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="toolTip" >
+      <string>Move selected sheet up</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1" >
+    <widget class="KPushButton" name="ButtonRemove" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="toolTip" >
+      <string>Remove sheets</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="3" >
+    <widget class="KPushButton" name="ButtonMoveDown" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="toolTip" >
+      <string>Move selected sheet down</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1" >
+    <widget class="KPushButton" name="ButtonRemoveAll" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="toolTip" >
+      <string>Clear Selection</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="3" >
+    <widget class="KPushButton" name="ButtonMoveBottom" >
+     <property name="enabled" >
+      <bool>false</bool>
+     </property>
+     <property name="toolTip" >
+      <string>Move selected sheet to the bottom</string>
+     </property>
+     <property name="text" >
+      <string/>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1" >
+    <spacer name="verticalSpacer_2" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>13</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="8" column="3" >
+    <spacer name="verticalSpacer_4" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>20</width>
+       <height>13</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

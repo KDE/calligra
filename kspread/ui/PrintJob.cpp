@@ -49,23 +49,33 @@ public:
 int PrintJob::Private::setupPages()
 {
     // Setup the pages.
+    // TODO Stefan: Use the current page layout.
     // TODO Stefan: Only perform layouting, if necessary, i.e. after page layout changes.
     int pageCount = 0;
-    const QStringList sheets = sheetSelectPage->selectedSheets();
-    if (sheets.isEmpty())
-        pageCount = view->activeSheet()->printManager()->setupPages();
-    else
+    QStringList sheets;
+    if (sheetSelectPage->allSheetsButton->isChecked())
     {
-        for (int i = 0; i < sheets.count(); ++i)
+        const QList<Sheet*> availableSheets = view->doc()->map()->sheetList();
+        for (int i = 0; i < availableSheets.count(); ++i)
+            sheets.append(availableSheets[i]->sheetName());
+    }
+    else if (sheetSelectPage->activeSheetButton->isChecked())
+        sheets = QStringList() << view->activeSheet()->sheetName();
+    else if (sheetSelectPage->selectedSheetsButton->isChecked())
+        sheets = sheetSelectPage->selectedSheets();
+    // Store the selected sheets.
+    // The printing is done in threads; one for each page.
+    // At that time the dialog is already deleted.
+    selectedSheets = sheets;
+    for (int i = 0; i < sheets.count(); ++i)
+    {
+        Sheet* sheet = view->doc()->map()->findSheet(sheets[i]);
+        if (sheet == 0)
         {
-            Sheet* sheet = view->doc()->map()->findSheet(sheets[i]);
-            if (sheet == 0)
-            {
-                kWarning(36005) << i18n("Sheet %1 could not be found for printing", sheets[i]);
-                continue;
-            }
-            pageCount += sheet->printManager()->setupPages();
+            kWarning(36005) << i18n("Sheet %1 could not be found for printing", sheets[i]);
+            continue;
         }
+        pageCount += sheet->printManager()->setupPages();
     }
     return pageCount;
 }
@@ -145,13 +155,7 @@ int PrintJob::documentLastPage() const
 void PrintJob::startPrinting(RemovePolicy removePolicy)
 {
     // Setup the pages.
-    // TODO Stefan: Use the current page layout.
-    const int pageCount = d->setupPages();
-    printer().setFromTo(1, pageCount);
-    // Store the selected sheets.
-    // The printing is done in threads; one for each page.
-    // At that time the dialog is already deleted.
-    d->selectedSheets = d->sheetSelectPage->selectedSheets();
+    d->setupPages();
     // Start the printing.
     KoPrintingDialog::startPrinting(removePolicy);
 }

@@ -27,48 +27,51 @@
 
 // KOffice includes
 // KSpread includes
-#include "ui_SheetSelectWidget.h"
 
-namespace KSpread
-{
-
-class SheetSelectWidget : public QWidget, public Ui::SheetSelectWidget
-{
-  public:
-    SheetSelectWidget(QWidget* parent) : QWidget(parent) { setupUi(this); }
-};
+using namespace KSpread;
 
 SheetSelectPage::SheetSelectPage( QWidget *parent )
-: QWidget(parent),
-  gui(new SheetSelectWidget(this))
+    : QWidget(parent)
 {
-  setWindowTitle(gui->windowTitle());
+  setupUi(this);
+  setWindowTitle(i18n("Sheets"));
 
   //disabling automated sorting
-  gui->ListViewAvailable->setSorting(-1);
-  gui->ListViewSelected->setSorting(-1);
+  ListViewAvailable->setSorting(-1);
+  ListViewSelected->setSorting(-1);
 
   //setup icons
-  gui->ButtonSelectAll->setIcon(KIcon("go-last"));
-  gui->ButtonSelect->setIcon(KIcon("go-next"));
-  gui->ButtonRemove->setIcon(KIcon("go-previous"));
-  gui->ButtonRemoveAll->setIcon(KIcon("go-first"));
+  ButtonSelectAll->setIcon(KIcon("go-last"));
+  ButtonSelect->setIcon(KIcon("go-next"));
+  ButtonRemove->setIcon(KIcon("go-previous"));
+  ButtonRemoveAll->setIcon(KIcon("go-first"));
 
-  gui->ButtonMoveTop->setIcon(KIcon("go-top"));
-  gui->ButtonMoveUp->setIcon(KIcon("go-up"));
-  gui->ButtonMoveDown->setIcon(KIcon("go-down"));
-  gui->ButtonMoveBottom->setIcon(KIcon("go-bottom"));
+  ButtonMoveTop->setIcon(KIcon("go-top"));
+  ButtonMoveUp->setIcon(KIcon("go-up"));
+  ButtonMoveDown->setIcon(KIcon("go-down"));
+  ButtonMoveBottom->setIcon(KIcon("go-bottom"));
 
   //connect buttons
-  connect(gui->ButtonSelectAll,SIGNAL(clicked()),this,SLOT(selectAll()));
-  connect(gui->ButtonSelect,SIGNAL(clicked()),this,SLOT(select()));
-  connect(gui->ButtonRemove,SIGNAL(clicked()),this,SLOT(remove()));
-  connect(gui->ButtonRemoveAll,SIGNAL(clicked()),this,SLOT(removeAll()));
+  connect(ButtonSelectAll,SIGNAL(clicked()),this,SLOT(selectAll()));
+  connect(ButtonSelect,SIGNAL(clicked()),this,SLOT(select()));
+  connect(ButtonRemove,SIGNAL(clicked()),this,SLOT(remove()));
+  connect(ButtonRemoveAll,SIGNAL(clicked()),this,SLOT(removeAll()));
 
-  connect(gui->ButtonMoveTop,SIGNAL(clicked()),this,SLOT(moveTop()));
-  connect(gui->ButtonMoveUp,SIGNAL(clicked()),this,SLOT(moveUp()));
-  connect(gui->ButtonMoveDown,SIGNAL(clicked()),this,SLOT(moveDown()));
-  connect(gui->ButtonMoveBottom,SIGNAL(clicked()),this,SLOT(moveBottom()));
+  connect(ButtonMoveTop,SIGNAL(clicked()),this,SLOT(moveTop()));
+  connect(ButtonMoveUp,SIGNAL(clicked()),this,SLOT(moveUp()));
+  connect(ButtonMoveDown,SIGNAL(clicked()),this,SLOT(moveDown()));
+  connect(ButtonMoveBottom,SIGNAL(clicked()),this,SLOT(moveBottom()));
+
+  connect(selectedSheetsButton, SIGNAL(toggled(bool)), ButtonSelectAll, SLOT(setEnabled(bool)));
+  connect(selectedSheetsButton, SIGNAL(toggled(bool)), ButtonSelect, SLOT(setEnabled(bool)));
+  connect(selectedSheetsButton, SIGNAL(toggled(bool)), ButtonRemove, SLOT(setEnabled(bool)));
+  connect(selectedSheetsButton, SIGNAL(toggled(bool)), ButtonRemoveAll, SLOT(setEnabled(bool)));
+  connect(selectedSheetsButton, SIGNAL(toggled(bool)), ButtonMoveTop, SLOT(setEnabled(bool)));
+  connect(selectedSheetsButton, SIGNAL(toggled(bool)), ButtonMoveUp, SLOT(setEnabled(bool)));
+  connect(selectedSheetsButton, SIGNAL(toggled(bool)), ButtonMoveDown, SLOT(setEnabled(bool)));
+  connect(selectedSheetsButton, SIGNAL(toggled(bool)), ButtonMoveBottom, SLOT(setEnabled(bool)));
+  connect(selectedSheetsButton, SIGNAL(toggled(bool)), ListViewAvailable, SLOT(setEnabled(bool)));
+  connect(selectedSheetsButton, SIGNAL(toggled(bool)), ListViewSelected, SLOT(setEnabled(bool)));
 }
 
 // SheetSelectPage::~SheetSelectPage()
@@ -120,8 +123,7 @@ bool SheetSelectPage::isValid(QString& /*msg*/)
   // we print the activeSheet() by default if no sheet is selected,
   // so we return true in any case
 
-//   Q_ASSERT(gui);
-//   if (gui->ListViewSelected->childCount() < 1)
+//   if (ListViewSelected->childCount() < 1)
 //   {
 //     msg = i18n("No sheets selected for printing!");
 //     return false;
@@ -136,21 +138,18 @@ QString SheetSelectPage::printOptionForIndex(unsigned int index)
 
 void SheetSelectPage::prependAvailableSheet(const QString& sheetname)
 {
-  Q_ASSERT(gui);
-  new Q3ListViewItem(gui->ListViewAvailable,sheetname);
+  new Q3ListViewItem(ListViewAvailable,sheetname);
 }
 
 void SheetSelectPage::prependSelectedSheet(const QString& sheetname)
 {
-  Q_ASSERT(gui);
-  new Q3ListViewItem(gui->ListViewSelected,sheetname);
+  new Q3ListViewItem(ListViewSelected,sheetname);
 }
 
 QStringList SheetSelectPage::selectedSheets()
 {
-  Q_ASSERT(gui);
   QStringList list;
-  Q3ListViewItem* item = gui->ListViewSelected->firstChild();
+  Q3ListViewItem* item = ListViewSelected->firstChild();
   while (item)
   {
     list.append(item->text(0));
@@ -175,7 +174,7 @@ QStringList SheetSelectPage::selectedSheets(QPrinter &prt)
 
 void SheetSelectPage::clearSelection()
 {
-  gui->ListViewSelected->clear();
+  ListViewSelected->clear();
 }
 
 void SheetSelectPage::selectAll()
@@ -183,7 +182,7 @@ void SheetSelectPage::selectAll()
   //we have to add all the stuff in reverse order
   // because inserted items (prependSelectedSheet) are prepended
   QStringList list;
-  Q3ListViewItem* item = gui->ListViewAvailable->firstChild();
+  Q3ListViewItem* item = ListViewAvailable->firstChild();
   while (item)
   {
     list.prepend(item->text(0));
@@ -201,7 +200,7 @@ void SheetSelectPage::select()
   //we have to add all the stuff in reverse order
   // because inserted items (prependSelectedSheet) are prepended
   QStringList list;
-  Q3ListViewItem* item = gui->ListViewAvailable->firstChild();
+  Q3ListViewItem* item = ListViewAvailable->firstChild();
   while (item)
   {
     if (item->isSelected())
@@ -217,7 +216,7 @@ void SheetSelectPage::select()
 
 void SheetSelectPage::remove()
 {
-  Q3ListViewItem* item = gui->ListViewSelected->firstChild();
+  Q3ListViewItem* item = ListViewSelected->firstChild();
   Q3ListViewItem* nextitem = 0;
   while (item)
   {
@@ -230,7 +229,7 @@ void SheetSelectPage::remove()
 
 void SheetSelectPage::removeAll()
 {
-  gui->ListViewSelected->clear();
+  ListViewSelected->clear();
 }
 
 
@@ -240,7 +239,7 @@ void SheetSelectPage::moveTop()
   // which replaces the existing one, to avoid the need of an additional sort column
 
   QList<Q3ListViewItem*> newlist;
-  Q3ListViewItem* item = gui->ListViewSelected->firstChild();
+  Q3ListViewItem* item = ListViewSelected->firstChild();
   Q3ListViewItem* nextitem = 0;
 //   kDebug() <<"Filling new list with selected items first";
   while (item)
@@ -249,12 +248,12 @@ void SheetSelectPage::moveTop()
     if (item->isSelected())
     {
       newlist.prepend(item);
-      gui->ListViewSelected->takeItem(item);
+      ListViewSelected->takeItem(item);
     }
     item = nextitem;
   }
 //   kDebug() <<"Appending the rest";
-  item = gui->ListViewSelected->firstChild();
+  item = ListViewSelected->firstChild();
   while (item)
   {
 //     kDebug() <<" processing item" << item->text(0);
@@ -262,7 +261,7 @@ void SheetSelectPage::moveTop()
     if (!item->isSelected())
     {
       newlist.prepend(item);
-      gui->ListViewSelected->takeItem(item);
+      ListViewSelected->takeItem(item);
     }
     item = nextitem;
   }
@@ -273,7 +272,7 @@ void SheetSelectPage::moveTop()
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
 //     kDebug() <<" adding" << (*it)->text(0);
-    gui->ListViewSelected->insertItem(*it);
+    ListViewSelected->insertItem(*it);
   }
 }
 
@@ -283,7 +282,7 @@ void SheetSelectPage::moveUp()
   // which replaces the existing one, to avoid the need of an additional sort column
 
   QList<Q3ListViewItem*> newlist;
-  Q3ListViewItem* item = gui->ListViewSelected->firstChild();
+  Q3ListViewItem* item = ListViewSelected->firstChild();
   Q3ListViewItem* nextitem = 0;
   while (item)
   {
@@ -294,13 +293,13 @@ void SheetSelectPage::moveUp()
       {
         Q3ListViewItem* nextnextitem = nextitem->nextSibling();
         newlist.prepend(nextitem);
-        gui->ListViewSelected->takeItem(nextitem);
+        ListViewSelected->takeItem(nextitem);
         nextitem = nextnextitem;
       }
     }
 
     newlist.prepend(item);
-    gui->ListViewSelected->takeItem(item);
+    ListViewSelected->takeItem(item);
     item = nextitem;
   }
 
@@ -310,13 +309,13 @@ void SheetSelectPage::moveUp()
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
 //     kDebug() <<" adding" << (*it)->text(0);
-    gui->ListViewSelected->insertItem(*it);
+    ListViewSelected->insertItem(*it);
   }
 }
 
 void SheetSelectPage::moveDown()
 {
-  Q3ListViewItem* item = gui->ListViewSelected->lastItem();
+  Q3ListViewItem* item = ListViewSelected->lastItem();
 //   while (item)
 //   {
 //     nextitem = item->nextSibling();
@@ -345,7 +344,7 @@ void SheetSelectPage::moveBottom()
   // which replaces the existing one, to avoid the need of an additional sort column
 
   QList<Q3ListViewItem*> newlist;
-  Q3ListViewItem* item = gui->ListViewSelected->firstChild();
+  Q3ListViewItem* item = ListViewSelected->firstChild();
   Q3ListViewItem* nextitem = 0;
 //   kDebug() <<"Filling new list with unselected items first";
   while (item)
@@ -355,19 +354,19 @@ void SheetSelectPage::moveBottom()
     if (!item->isSelected())
     {
       newlist.prepend(item);
-      gui->ListViewSelected->takeItem(item);
+      ListViewSelected->takeItem(item);
     }
     item = nextitem;
   }
 //   kDebug() <<"Appending the rest";
-  item = gui->ListViewSelected->firstChild();
+  item = ListViewSelected->firstChild();
   while (item)
   {
     nextitem = item->nextSibling();
     if (item->isSelected())
     {
       newlist.prepend(item);
-      gui->ListViewSelected->takeItem(item);
+      ListViewSelected->takeItem(item);
     }
     item = nextitem;
   }
@@ -378,10 +377,8 @@ void SheetSelectPage::moveBottom()
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
 //     kDebug() <<" adding" << (*it)->text(0);
-    gui->ListViewSelected->insertItem(*it);
+    ListViewSelected->insertItem(*it);
   }
 }
-
-} // namespace KSpread
 
 #include "SheetSelectPage.moc"
