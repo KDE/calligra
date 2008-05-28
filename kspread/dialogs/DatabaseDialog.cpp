@@ -715,11 +715,14 @@ bool DatabaseDialog::tablesDoNext()
   m_databaseStatus->setText( i18n("Retrieving meta data of tables...") );
   QStringList tables;
 
-  for (Q3ListViewItem * item = (Q3CheckListItem *) m_tableView->firstChild(); item; item = item->nextSibling())
   {
-    if (((Q3CheckListItem * ) item)->isOn())
+    Q3ListViewItem * item = (Q3CheckListItem *) m_tableView->firstChild();
+    for (; item; item = item->nextSibling())
     {
-      tables.append(((Q3CheckListItem * ) item)->text());
+      if (((Q3CheckListItem * ) item)->isOn())
+      {
+        tables.append(((Q3CheckListItem * ) item)->text());
+      }
     }
   }
 
@@ -731,20 +734,19 @@ bool DatabaseDialog::tablesDoNext()
 
   m_columnView->clear();
   QSqlRecord info;
-  Q3CheckListItem * item;
   for (int i = 0; i < (int) tables.size(); ++i)
   {
     info = m_dbConnection.record( tables[i] );
     for (int j = 0; j < (int) info.count(); ++j)
     {
       QString name = info.fieldName(j);
-      item = new Q3CheckListItem( m_columnView, name,
+      Q3CheckListItem * checkItem = new Q3CheckListItem( m_columnView, name,
                                  Q3CheckListItem::CheckBox );
-      item->setOn(false);
-      m_columnView->insertItem( item );
-      item->setText( 1, tables[i] );
+      checkItem->setOn(false);
+      m_columnView->insertItem( checkItem );
+      checkItem->setText( 1, tables[i] );
       QSqlField field = info.field(name);
-      item->setText( 2, QVariant::typeToName(field.type()) );
+      checkItem->setText( 2, QVariant::typeToName(field.type()) );
     }
   }
   m_columnView->setSorting(1, true);
