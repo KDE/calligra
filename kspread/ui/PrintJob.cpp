@@ -35,22 +35,58 @@
 
 using namespace KSpread;
 
-PrintJob::PrintJob(View *view)
-    : KoPrintingDialog(view),
-    m_view(view),
-    m_sheetSelectPage(new SheetSelectPage())
+class PrintJob::Private
 {
-    setShapeManager(static_cast<Canvas*>(m_view->canvas())->shapeManager());
-    printer().setFromTo(1, 1);
+public:
+    View* view;
+    SheetSelectPage* sheetSelectPage;
+    QStringList selectedSheets;
 
-    SheetPrint* print = m_view->activeSheet()->print();
+public:
+    int setupPages();
+};
+
+int PrintJob::Private::setupPages()
+{
+    // Setup the pages.
+    // TODO Stefan: Only perform layouting, if necessary, i.e. after page layout changes.
+    int pageCount = 0;
+    const QStringList sheets = sheetSelectPage->selectedSheets();
+    if (sheets.isEmpty())
+        pageCount = view->activeSheet()->printManager()->setupPages();
+    else
+    {
+        for (int i = 0; i < sheets.count(); ++i)
+        {
+            Sheet* sheet = view->doc()->map()->findSheet(sheets[i]);
+            if (sheet == 0)
+            {
+                kWarning(36005) << i18n("Sheet %1 could not be found for printing", sheets[i]);
+                continue;
+            }
+            pageCount += sheet->printManager()->setupPages();
+        }
+    }
+    return pageCount;
+}
+
+PrintJob::PrintJob(View *view)
+    : KoPrintingDialog(view)
+    , d(new Private)
+{
+    d->view = view;
+    d->sheetSelectPage = new SheetSelectPage();
+
+    setShapeManager(static_cast<Canvas*>(d->view->canvas())->shapeManager());
+
+    PrintSettings* settings = d->view->activeSheet()->printSettings();
 
     //apply page layout parameters
-    KoPageFormat::Format pageFormat = print->settings()->pageLayout().format;
+    KoPageFormat::Format pageFormat = settings->pageLayout().format;
 
     printer().setPageSize( static_cast<QPrinter::PageSize>( KoPageFormat::printerPageSize( pageFormat ) ) );
 
-    if ( print->settings()->pageLayout().orientation == KoPageFormat::Landscape || pageFormat == KoPageFormat::ScreenSize )
+    if (settings->pageLayout().orientation == KoPageFormat::Landscape || pageFormat == KoPageFormat::ScreenSize)
         printer().setOrientation( QPrinter::Landscape );
     else
         printer().setOrientation( QPrinter::Portrait );
@@ -61,29 +97,113 @@ PrintJob::PrintJob(View *view)
     //kDebug(36005) <<"Adding sheet selection page.";
 
     //kDebug(36005) <<"Iterating through available sheets and initializing list of available sheets.";
-    QList<Sheet*> sheetList = m_view->doc()->map()->sheetList();
+    QList<Sheet*> sheetList = d->view->doc()->map()->sheetList();
     for ( int i = sheetList.count()-1; i >= 0; --i )
     {
         Sheet* sheet = sheetList[ i ];
         //kDebug(36005) <<"Adding" << sheet->sheetName();
-        m_sheetSelectPage->prependAvailableSheet(sheet->sheetName());
+        d->sheetSelectPage->prependAvailableSheet(sheet->sheetName());
     }
+
+    const int pageCount = d->setupPages();
+    printer().setFromTo(1, pageCount);
+}
+
+PrintJob::~PrintJob()
+{
+//     delete d->sheetSelectPage; // QPrintDialog takes ownership
+    delete d;
+}
+
+int PrintJob::documentFirstPage() const
+{
+    return 1;
+}
+
+int PrintJob::documentLastPage() const
+{
+    const QStringList sheets = d->selectedSheets;
+    int pageCount = 0;
+    if (sheets.isEmpty())
+        pageCount = d->view->activeSheet()->printManager()->pageCount();
+    else
+    {
+        for (int i = 0; i < sheets.count(); ++i)
+        {
+            Sheet* sheet = d->view->doc()->map()->findSheet(sheets[i]);
+            if (sheet == 0)
+            {
+                kWarning(36005) << i18n("Sheet %1 could not be found for printing", sheets[i]);
+                continue;
+            }
+            pageCount += sheet->printManager()->pageCount();
+        }
+    }
+    return pageCount;
+}
+
+void PrintJob::startPrinting(RemovePolicy removePolicy)
+{
+    // Setup the pages.
+    // TODO Stefan: Use the current page layout.
+    const int pageCount = d->setupPages();
+    printer().setFromTo(1, pageCount);
+    // Store the selected sheets.
+    // The printing is done in threads; one for each page.
+    // At that time the dialog is already deleted.
+    d->selectedSheets = d->sheetSelectPage->selectedSheets();
+    // Start the printing.
+    KoPrintingDialog::startPrinting(removePolicy);
 }
 
 void PrintJob::printPage(int pageNumber, QPainter &painter)
 {
+    kDebug(36004) << "Printing page" << pageNumber;
+    // Find the sheet specific page number.
+    Sheet* sheet = 0;
+    int sheetPageNumber = pageNumber;
+    const QStringList sheets = d->selectedSheets;
+    if (sheets.isEmpty())
+    {
+        if (pageNumber > d->view->activeSheet()->printManager()->pageCount())
+            return;
+        // sheetPageNumber = pageNumber;
+        sheet = d->view->activeSheet();
+    }
+    else
+    {
+        for (int i = 0; i < sheets.count(); ++i)
+        {
+            sheet = d->view->doc()->map()->findSheet(sheets[i]);
+            if (sheet == 0)
+            {
+                kWarning(36005) << i18n("Sheet %1 could not be found for printing", sheets[i]);
+                continue;
+            }
+
+            if (pageNumber <= sheet->printManager()->pageCount())
+                break;
+            sheetPageNumber -= sheet->printManager()->pageCount();
+        }
+    }
+
+    // Print the page.
+    if (sheet)
+        sheet->printManager()->printPage(sheetPageNumber, painter);
+
+#if 0
     Q_UNUSED(pageNumber);
     // kDebug(36005) <<"Entering KSpread print.";
     //save the current active sheet for later, so we can restore it at the end
-    Sheet* selectedsheet = m_view->activeSheet();
+    Sheet* selectedsheet = d->view->activeSheet();
 
     //print all sheets in the order given by the print dialog (Sheet Selection)
-    QStringList sheetlist = m_sheetSelectPage->selectedSheets();
+    QStringList sheetlist = d->sheetSelectPage->selectedSheets();
 
     if (sheetlist.empty())
     {
       // kDebug(36005) <<"No sheet for printing selected, printing active sheet";
-      sheetlist.append(m_view->activeSheet()->sheetName());
+      sheetlist.append(d->view->activeSheet()->sheetName());
     }
 
     bool firstpage = true;
@@ -92,16 +212,16 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
     for (sheetlistiterator = sheetlist.begin(); sheetlistiterator != sheetlist.end(); ++sheetlistiterator)
     {
         // kDebug(36005) <<"  printing sheet" << *sheetlistiterator;
-        Sheet* sheet = m_view->doc()->map()->findSheet(*sheetlistiterator);
+        Sheet* sheet = d->view->doc()->map()->findSheet(*sheetlistiterator);
         if (sheet == 0)
         {
           kWarning(36005) << i18n("Sheet %1 could not be found for printing",*sheetlistiterator);
           continue;
         }
 
-        m_view->setActiveSheet(sheet,false);
+        d->view->setActiveSheet(sheet,false);
 
-        SheetPrint* print = m_view->activeSheet()->print();
+        PrintSettings* settings = sheet->printSettings();
 
         if (firstpage)
           firstpage=false;
@@ -111,33 +231,36 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
           printer().newPage();
         }
 
-        if ( m_view->canvasWidget()->editor() )
+        if ( d->view->canvasWidget()->editor() )
         {
-            m_view->canvasWidget()->deleteEditor( true ); // save changes
+            d->view->canvasWidget()->deleteEditor( true ); // save changes
         }
 
         //store the current setting in a temporary variable
-        KoPageFormat::Orientation _orient = print->settings()->pageLayout().orientation;
+        KoPageFormat::Orientation _orient = settings->pageLayout().orientation;
 
         //use the current orientation from print dialog
         if ( printer().orientation() == QPrinter::Landscape )
         {
-            print->settings()->setPageOrientation( KoPageFormat::Landscape );
+            settings->setPageOrientation( KoPageFormat::Landscape );
         }
         else
         {
-            print->settings()->setPageOrientation( KoPageFormat::Portrait );
+            settings->setPageOrientation( KoPageFormat::Portrait );
         }
 
+        kDebug() << "QPainter.device() =" << painter.device();
+
 #if 0
+        SheetPrint* print = sheet->print();
         bool result = print->print( painter, &printer() );
 #else
-        PrintManager printManager(m_view->activeSheet());
+        PrintManager printManager = (d->view->activeSheet());
         bool result = printManager.print(painter, &printer());
 #endif
 
         //Restore original orientation
-        print->setPaperOrientation( _orient );
+        settings->setPageOrientation( _orient );
 
         // Nothing to print
         if( !result )
@@ -147,7 +270,7 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
             //{
                 KMessageBox::information( 0,
                 i18n("Nothing to print for sheet %1.",
-                m_view->activeSheet()->sheetName()) );
+                d->view->activeSheet()->sheetName()) );
                 //@todo: make sure we really can comment this out,
                 //       what to do with partially broken printouts?
 //                 printer.abort();
@@ -155,7 +278,8 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
         }
     }
 
-    m_view->setActiveSheet(selectedsheet);
+    d->view->setActiveSheet(selectedsheet);
+#endif
 }
 
 QList<KoShape*> PrintJob::shapesOnPage(int pageNumber)
@@ -166,5 +290,5 @@ QList<KoShape*> PrintJob::shapesOnPage(int pageNumber)
 
 QList<QWidget*> PrintJob::createOptionWidgets() const
 {
-    return QList<QWidget*>() << m_sheetSelectPage;
+    return QList<QWidget*>() << d->sheetSelectPage;
 }

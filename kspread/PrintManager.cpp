@@ -43,9 +43,7 @@ public:
 
 public:
     void calculatePages();
-    void calculatePagesHorizontally();
-    void calculatePagesVertically();
-    void printPage(QPainter& painter, QPrinter* printer, int page) const;
+    void printPage(int page, QPainter&) const;
 };
 
 void PrintManager::Private::calculatePages()
@@ -173,7 +171,7 @@ void PrintManager::Private::calculatePages()
     }
 }
 
-void PrintManager::Private::printPage(QPainter& painter, QPrinter* printer, int page) const
+void PrintManager::Private::printPage(int page, QPainter& painter) const
 {
     kDebug() << "printing page" << page;
 
@@ -209,6 +207,12 @@ PrintManager::~PrintManager()
     delete d;
 }
 
+int PrintManager::setupPages()
+{
+    d->calculatePages();
+    return d->pages.count();
+}
+
 bool PrintManager::print(QPainter& painter, QPrinter* printer)
 {
     const KoPageLayout pageLayout = d->sheet->printSettings()->pageLayout();
@@ -234,10 +238,43 @@ bool PrintManager::print(QPainter& painter, QPrinter* printer)
     // print the pages
     for (int page = 1; page <= d->pages.count(); ++page)
     {
-        d->printPage(painter, printer, page);
+        d->printPage(page, painter);
         if (page != d->pages.count())
             printer->newPage();
     }
 
     return !d->pages.isEmpty();
+}
+
+void PrintManager::printPage(int page, QPainter& painter)
+{
+    const KoPageLayout pageLayout = d->sheet->printSettings()->pageLayout();
+    kDebug(36004) << "PageLayout:"
+                  << "w" << pageLayout.width
+                  << "h" << pageLayout.height
+                  << "l" << pageLayout.left
+                  << "r" << pageLayout.right
+                  << "t" << pageLayout.top
+                  << "b" << pageLayout.bottom;
+
+    // setup the QPainter
+    painter.save();
+    painter.translate(pageLayout.left, pageLayout.top);
+    painter.scale(d->zoomHandler->zoomedResolutionX(), d->zoomHandler->zoomedResolutionY());
+    painter.setClipRect(0.0, 0.0, pageLayout.width, pageLayout.height);
+
+    // setup the SheetView
+    d->sheetView->setPaintDevice(painter.device());
+    d->sheetView->setViewConverter(d->zoomHandler);
+
+    // print the page
+    d->printPage(page, painter);
+
+    painter.restore();
+}
+
+int PrintManager::pageCount() const
+{
+    d->calculatePages();
+    return d->pages.count();
 }

@@ -48,7 +48,7 @@ public:
      * \return the page layout associated with this document (margins, pageSize, etc).
      * \see KoPageLayout
      */
-    KoPageLayout &pageLayout() const;
+    const KoPageLayout& pageLayout() const;
 
     void setPageLayout(const KoPageLayout& pageLayout);
 

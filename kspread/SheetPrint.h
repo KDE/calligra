@@ -82,7 +82,7 @@ public:
     /**
      * Returns the page layout
      */
-    KoPageLayout &paperLayout() const;
+    const KoPageLayout &paperLayout() const;
 
      /**
      * Changes the paper layout and repaints the currently displayed Sheet.

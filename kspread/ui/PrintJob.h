@@ -28,6 +28,13 @@ class SheetSelectPage;
 class PrintJob : public KoPrintingDialog {
 public:
     PrintJob(View *view);
+    virtual ~PrintJob();
+
+    virtual int documentFirstPage() const;
+    virtual int documentLastPage() const;
+
+public Q_SLOTS:
+    virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 
 protected:
     virtual void printPage(int pageNumber, QPainter &painter);
@@ -35,8 +42,8 @@ protected:
     virtual QList<QWidget*> createOptionWidgets() const;
 
 private:
-    View *m_view;
-    SheetSelectPage *m_sheetSelectPage;
+    class Private;
+    Private * const d;
 };
 
 }  //KSPread namespace

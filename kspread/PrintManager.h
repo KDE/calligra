@@ -41,9 +41,22 @@ public:
     virtual ~PrintManager();
 
     /**
+     * Setups the pages using the current page layout.
+     * \return the number of pages
+     */
+    int setupPages();
+
+    /**
      * \return \c false if nothing to print.
      */
     bool print(QPainter& painter, QPrinter* printer);
+
+    void printPage(int page, QPainter& painter);
+
+    /**
+     * Number of pages.
+     */
+    int pageCount() const;
 
 private:
     class Private;

@@ -1012,88 +1012,9 @@ void SheetPrint::setPaperOrientation( KoPageFormat::Orientation _orient )
 }
 
 
-KoPageLayout &SheetPrint::paperLayout() const
+const KoPageLayout &SheetPrint::paperLayout() const
 {
     return m_settings->pageLayout();
-}
-
-
-void SheetPrint::setPaperLayout( float _leftBorder, float _topBorder,
-                                        float _rightBorder, float _bottomBorder,
-                                        KoPageFormat::Format _paper,
-                                        KoPageFormat::Orientation _orientation )
-{
-    if ( m_pSheet->isProtected() )
-        NO_MODIFICATION_POSSIBLE;
-
-    paperLayout().left   = _leftBorder;
-    paperLayout().right  = _rightBorder;
-    paperLayout().top    = _topBorder;
-    paperLayout().bottom = _bottomBorder;
-    paperLayout().format  = _paper;
-
-    setPaperOrientation( _orientation ); //calcPaperSize() is done here already
-
-//    QPtrListIterator<KoView> it( views() );
-//    for( ;it.current(); ++it )
-//    {
-//        View *v = static_cast<View *>( it.current() );
-          // We need to trigger the appropriate repaintings in the cells near the
-          // border of the page. The easiest way for this is to turn the borders
-          // off and on (or on and off if they were off).
-//        bool bBorderWasShown = v->activeSheet()->isShowPageBorders();
-//        v->activeSheet()->setShowPageBorders( !bBorderWasShown );
-//        v->activeSheet()->setShowPageBorders( bBorderWasShown );
-//    }
-
-    m_pDoc->setModified( true );
-}
-
-void SheetPrint::setPaperLayout( float _leftBorder, float _topBorder,
-                                        float _rightBorder, float _bottomBorder,
-                                        const QString& _paper,
-                                        const QString& _orientation )
-{
-    if ( m_pSheet->isProtected() )
-        NO_MODIFICATION_POSSIBLE;
-
-    KoPageFormat::Format f = paperLayout().format;
-    KoPageFormat::Orientation newOrientation = paperLayout().orientation;
-
-    if ( _orientation == "Portrait" )
-        newOrientation = KoPageFormat::Portrait;
-    else if ( _orientation == "Landscape" )
-        newOrientation = KoPageFormat::Landscape;
-
-
-    QString paper( _paper );
-    if ( paper[0].isDigit() ) // Custom format
-    {
-        const int i = paper.indexOf( 'x' );
-        if ( i < 0 )
-        {
-            // We have nothing useful, so assume ISO A4
-            f = KoPageFormat::IsoA4Size;
-        }
-        else
-        {
-            f = KoPageFormat::CustomSize;
-            paperLayout().width  = paper.left(i).toFloat();
-            paperLayout().height = paper.mid(i+1).toFloat();
-            if ( paperLayout().width < 10.0 )
-                paperLayout().width = KoPageFormat::width( KoPageFormat::IsoA4Size, newOrientation );
-            if ( paperLayout().height < 10.0 )
-                paperLayout().height = KoPageFormat::height( KoPageFormat::IsoA4Size, newOrientation );
-        }
-    }
-    else
-    {
-        f = KoPageFormat::formatFromString( paper );
-        if ( f == KoPageFormat::CustomSize )
-            // We have no idea about height or width, therefore assume ISO A4
-            f = KoPageFormat::IsoA4Size;
-    }
-    setPaperLayout( _leftBorder, _topBorder, _rightBorder, _bottomBorder, f, newOrientation );
 }
 
 QList<PrintNewPageEntry>::iterator SheetPrint::findNewPageColumn( int col )
