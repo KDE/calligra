@@ -401,21 +401,11 @@ void KWordTextHandler::writeFormattedText( QDomElement& parentElement, const wvW
     m_bodyWriter->addTextNode( m_runOfText.toUtf8() );
     m_bodyWriter->endElement(); //text:span
 
-    //QDomElement format( mainDocument().createElement( "FORMAT" ) );
-    //format.setAttribute( "id", formatId );
-    //format.setAttribute( "pos", pos );
-    //format.setAttribute( "len", len );
-
     //ico = color of text
     if ( !refChp || refChp->ico != chp->ico )
     {
         QString color = Conversion::color( chp->ico, -1 );
 	m_contentWriter->addAttribute( "fo:color", color.toUtf8() );
-        //QDomElement colorElem( mainDocument().createElement( "COLOR" ) );
-        //colorElem.setAttribute( "red", color.red() );
-        //colorElem.setAttribute( "blue", color.blue() );
-        //colorElem.setAttribute( "green", color.green() );
-        //format.appendChild( colorElem );
     }
 
     // Font name
@@ -429,40 +419,28 @@ void KWordTextHandler::writeFormattedText( QDomElement& parentElement, const wvW
         {
 	    //TODO need to have a style:font-face-decl tag with the name of fontName!
 	    m_contentWriter->addAttribute( "style:font-name", fontName.toUtf8() );
-            //QDomElement fontElem( mainDocument().createElement( "FONT" ) );
-            //fontElem.setAttribute( "name", fontName );
-            //format.appendChild( fontElem );
         }
     }
+
     //hps = font size in half points
     if ( !refChp || refChp->hps != chp->hps )
     {
 	QString size = QString::number( (int)(chp->hps/2) );
 	m_contentWriter->addAttribute( "fo:font-size", size.append( "pt" ).toUtf8() );
 
-        //kDebug(30513) <<"        font size:" << chp->hps/2;
-        //QDomElement fontSize( mainDocument().createElement( "SIZE" ) );
-        //fontSize.setAttribute( "value", (int)(chp->hps / 2) ); // hps is in half points
-        //format.appendChild( fontSize );
     }
+
     //fBold = bold text if 1
-    if ( !refChp || refChp->fBold != chp->fBold ) {
+    if ( !refChp || refChp->fBold != chp->fBold )
 	m_contentWriter->addAttribute( "fo:font-weight", chp->fBold ? "bold" : "normal" );
-        //QDomElement weight( mainDocument().createElement( "WEIGHT" ) );
-        //weight.setAttribute( "value", chp->fBold ? 75 : 50 );
-        //format.appendChild( weight );
-    }
+
     //fItalic = italic text if 1
-    if ( !refChp || refChp->fItalic != chp->fItalic ) {
+    if ( !refChp || refChp->fItalic != chp->fItalic )
 	m_contentWriter->addAttribute( "fo:font-style", chp->fItalic ? "italic" : "normal" );
-        //QDomElement italic( mainDocument().createElement( "ITALIC" ) );
-        //italic.setAttribute( "value", chp->fItalic ? 1 : 0 );
-        //format.appendChild( italic );
-    }
+
     //kul: underline code
-    if ( !refChp || refChp->kul != chp->kul ) {
-        //QDomElement underline( mainDocument().createElement( "UNDERLINE" ) );
-        //QString val = (chp->kul == 0) ? "0" : "1";
+    if ( !refChp || refChp->kul != chp->kul )
+    {
         switch ( chp->kul ) {
 	case 0: //none
 	    m_contentWriter->addAttribute( "style:text-underline-style", "none" );
@@ -517,98 +495,61 @@ void KWordTextHandler::writeFormattedText( QDomElement& parentElement, const wvW
         default:
 	    m_contentWriter->addAttribute( "style:text-underline-style", "none" );
         };
-        //underline.setAttribute( "value", val );
-        //format.appendChild( underline );
     }
     //fstrike = use strikethrough if 1
     //fDStrike = use double strikethrough if 1
-    if ( !refChp || refChp->fStrike != chp->fStrike || refChp->fDStrike != chp->fDStrike ) {
+    if ( !refChp || refChp->fStrike != chp->fStrike || refChp->fDStrike != chp->fDStrike )
+    {
 	if ( chp->fStrike )
 	    m_contentWriter->addAttribute( "style:text-line-through-type", "single" );
 	else if ( chp->fDStrike )
 	    m_contentWriter->addAttribute( "style:text-line-through-type", "double" );
 	else
 	    m_contentWriter->addAttribute( "style:text-line-through-type", "none" );
-        /*QDomElement strikeout( mainDocument().createElement( "STRIKEOUT" ) );
-        if ( chp->fDStrike ) // double strikethrough
-        {
-            strikeout.setAttribute( "value", "double" );
-            strikeout.setAttribute( "styleline", "solid" );
-        }
-        else if ( chp->fStrike )
-        {
-            strikeout.setAttribute( "value", "single" );
-            strikeout.setAttribute( "styleline", "solid" );
-        }
-        else
-            strikeout.setAttribute( "value", "0" );
-        format.appendChild( strikeout );*/
     }
 
-    // font attribute (uppercase, lowercase (not in MSWord), small caps)
-    //fCaps = displayed with caps when 1, no caps when 0
+    //font attribute (uppercase, lowercase (not in MSWord), small caps)
+    //fCaps = displayed with all caps when 1, no caps when 0
     //fSmallCaps = displayed with small caps when 1, no small caps when 0
     if ( !refChp || refChp->fCaps != chp->fCaps || refChp->fSmallCaps != chp->fSmallCaps )
     {
-        //QDomElement fontAttrib( mainDocument().createElement( "FONTATTRIBUTE" ) );
-        //fontAttrib.setAttribute( "value", chp->fSmallCaps ? "smallcaps" : chp->fCaps ? "uppercase" : "none" );
-        //format.appendChild( fontAttrib );
+	if ( chp->fCaps )
+	    m_contentWriter->addAttribute( "fo:text-transform", "uppercase" );
+	if ( chp->fSmallCaps )
+	    m_contentWriter->addAttribute( "fo:font-variant", "small-caps" );
     }
+
     //iss = superscript/subscript indices
-    if ( !refChp || refChp->iss != chp->iss ) { // superscript/subscript
+    if ( !refChp || refChp->iss != chp->iss )
+    { 
 	if ( chp->iss == 1 ) //superscript
 	    m_contentWriter->addAttribute( "style:text-position", "super" );
 	else if ( chp->iss == 2 ) //subscript
 	    m_contentWriter->addAttribute( "style:text-position", "sub" );
-        //QDomElement vertAlign( mainDocument().createElement( "VERTALIGN" ) );
-        // Obviously the values are reversed between the two file formats :)
-        //int kwordVAlign = (chp->iss==1 ? 2 : chp->iss==2 ? 1 : 0);
-        //vertAlign.setAttribute( "value", kwordVAlign );
-        //format.appendChild( vertAlign );
     }
 
     //fHighlight = when 1, characters are highlighted with color specified by chp.icoHighlight
     //icoHighlight = highlight color (see chp.ico)
     if ( !refChp || refChp->fHighlight != chp->fHighlight || refChp->icoHighlight != chp->icoHighlight ) {
-        //QDomElement bgcolElem( mainDocument().createElement( "TEXTBACKGROUNDCOLOR" ) );
         if ( chp->fHighlight )
         {
 	    QString color = Conversion::color( chp->icoHighlight, -1 );
-
-            //bgcolElem.setAttribute( "red", color.red() );
-            //bgcolElem.setAttribute( "blue", color.blue() );
-            //bgcolElem.setAttribute( "green", color.green() );
+	    m_contentWriter->addAttribute( "fo:background-color", color );
         } else {
-            //bgcolElem.setAttribute( "red", -1 );
-            //bgcolElem.setAttribute( "blue", -1 );
-            //bgcolElem.setAttribute( "green", -1 );
+	    //TODO this should really be the surrounding background color
+	    m_contentWriter->addAttribute( "fo:background-color", "#FFFFFF" );
         }
-        //format.appendChild( bgcolElem );
     }
 
-    // Shadow text. Only on/off. The properties are defined at the paragraph level (in KWord).
-    if ( !refChp || refChp->fShadow != chp->fShadow || refChp->fImprint != chp->fImprint ) {
-        //QDomElement shadowElem( mainDocument().createElement( "SHADOW" ) );
-        //QString css = "none";
-        // Generate a shadow with hardcoded values that make it look like in MSWord.
-        // We need to make the distance depend on the font size though, to look good
-        if (chp->fShadow || chp->fImprint)
-        {
-            //int fontSize = (int)(chp->hps / 2);
-            //int dist = fontSize > 20 ? 2 : 1;
-            //if (chp->fImprint) // ## no real support for imprint, we use a topleft shadow
-            //    dist = -dist;
-            //css = QString::fromLatin1("#bebebe %1pt %1pt").arg(dist).arg(dist);
-        }
-        //shadowElem.setAttribute( "text-shadow", css );
-        //format.appendChild( shadowElem );
+    //fShadow = text has shadow if 1
+    //fImprint = text engraved if 1
+    if ( !refChp || refChp->fShadow != chp->fShadow || refChp->fImprint != chp->fImprint )
+    {
+        if ( chp->fShadow )
+	    m_contentWriter->addAttribute( "fo:text-shadow", "1pt" );
+	if ( chp->fImprint )
+	    m_contentWriter->addAttribute( "style:font-relief", "engraved" );
     }
-
-    //if ( pChildElement || !format.firstChild().isNull() ) // Don't save an empty format tag, unless the caller asked for it
-        //parentElement.appendChild( format );
-    //if ( pChildElement )
-        //*pChildElement = format;
-	
 
     //now close style tag for this run of text
     m_contentWriter->endElement(); //style:text-properties
@@ -677,7 +618,7 @@ QString KWordTextHandler::getFont(unsigned fc) const
     return info.family();
 }
 
-//called by paragraphEnd()
+//called by paragraphStart()
 void KWordTextHandler::writeOutParagraph( const QString& styleName, const QString& text )
 {
     kDebug(30513) ;
@@ -715,6 +656,7 @@ void KWordTextHandler::writeOutParagraph( const QString& styleName, const QStrin
 
 //only called by writeOutParagraph
 //looks like this is where we actually write the formatting for the paragraph
+//Style* style (actually m_currentStyle) isn't used here, just passed to writeCounter 
 void KWordTextHandler::writeLayout( /*QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties,*/ const wvWare::Style* style )
 {
     kDebug(30513);
@@ -723,6 +665,7 @@ void KWordTextHandler::writeLayout( /*QDomElement& parentElement, const wvWare::
     m_bodyWriter->startElement( "text:p" );
 
     //if we don't actually have paragraph properties, just return
+    //may need to call writeCounter here...
     if ( !m_paragraphProperties )
     {
 	kDebug(30513) << " we don't have any paragraph properties.";
@@ -744,63 +687,76 @@ void KWordTextHandler::writeLayout( /*QDomElement& parentElement, const wvWare::
     //add the attribute for our style in <text:p>
     m_bodyWriter->addAttribute( "text:style-name", styleName.toUtf8() );
     
-
     const wvWare::Word97::PAP& pap = (*m_paragraphProperties).pap();
-    // Always write out the alignment, it's required
-    //QDomElement flowElement = mainDocument().createElement("FLOW");
-    QString alignment = Conversion::alignment( pap.jc );
-    //flowElement.setAttribute( "align", alignment );
-    //parentElement.appendChild( flowElement );
+    
+    //paragraph alignment
+    //jc = justification code
+    if ( pap.jc == 1 ) //1 = center justify
+	m_contentWriter->addAttribute( "fo:text-align", "center" );
+    else if (pap.jc == 2 ) //2 = right justify
+	m_contentWriter->addAttribute( "fo:text-align", "end" );
+    else if (pap.jc == 3 ) //3 = left & right justify
+	m_contentWriter->addAttribute( "fo:text-align", "justify" );
+    else //0 = left justify
+	m_contentWriter->addAttribute( "fo:text-align", "start" );
 
     //kDebug(30513) <<" dxaLeft1=" << pap.dxaLeft1 <<" dxaLeft=" << pap.dxaLeft <<" dxaRight=" << pap.dxaRight <<" dyaBefore=" << pap.dyaBefore <<" dyaAfter=" << pap.dyaAfter <<" lspd=" << pap.lspd.dyaLine <<"/" << pap.lspd.fMultLinespace;
 
     //dxaLeft1 = first-line indent from left margin (signed, relative to dxaLeft)
     //dxaLeft = indent from left margin (signed)
-    //dxaRight = index from right margin
+    //dxaRight = indent from right margin (signed)
     if ( pap.dxaLeft1 || pap.dxaLeft || pap.dxaRight )
     {
-        //QDomElement indentsElement = mainDocument().createElement("INDENTS");
-        // 'first' is relative to 'left' in both formats
-        //indentsElement.setAttribute( "first", (double)pap.dxaLeft1 / 20.0 );
-        //indentsElement.setAttribute( "left", (double)pap.dxaLeft / 20.0 );
-        //indentsElement.setAttribute( "right", (double)pap.dxaRight / 20.0 );
-        //parentElement.appendChild( indentsElement );
+	m_contentWriter->addAttribute( "fo:margin-left", pap.dxaLeft );
+	m_contentWriter->addAttribute( "fo:margin-right", pap.dxaRight );
+	m_contentWriter->addAttribute( "fo:text-indent", pap.dxaLeft1 );
     }
+
     //dyaBefore = vertical spacing before paragraph (unsigned)
     //dyaAfter = vertical spacing after paragraph (unsigned)
     if ( pap.dyaBefore || pap.dyaAfter )
     {
-        //QDomElement offsetsElement = mainDocument().createElement("OFFSETS");
-        //offsetsElement.setAttribute( "before", (double)pap.dyaBefore / 20.0 );
-        //offsetsElement.setAttribute( "after", (double)pap.dyaAfter / 20.0 );
-        //parentElement.appendChild( offsetsElement );
+	m_contentWriter->addAttribute( "fo:margin-top", pap.dyaBefore );
+	m_contentWriter->addAttribute( "fo:margin-bottom", pap.dyaAfter );
     }
 
     // Linespacing
     //lspd = line spacing descriptor
     //Conversion::lineSpacing() returns "0" (default), "oneandhalf," or "double" 
-    QString lineSpacing = Conversion::lineSpacing( pap.lspd );
-    if ( lineSpacing != "0" )
+    //QString lineSpacingAttribute = Conversion::lineSpacing( pap.lspd );
+    if ( pap.lspd.fMultLinespace == 1 ) //Word will reserve for each line the 
+				    //(maximal height of the line*lspd.dyaLine)/240
     {
-        //QDomElement lineSpacingElem = mainDocument().createElement( "LINESPACING" );
-        //lineSpacingElem.setAttribute("value", lineSpacing );
-        //parentElement.appendChild( lineSpacingElem );
+	//get the proportion & turn it into a percentage for the attribute
+	QString proportionalLineSpacing( QString::number( ((float)pap.lspd.dyaLine/240.0)*100.0 ) );
+	m_contentWriter->addAttribute( "fo:line-height", proportionalLineSpacing.append( "%" ) );
     }
+    else if ( pap.lspd.fMultLinespace == 0 )//magnitude of lspd.dyaLine specifies the amount of space 
+				    //that will be provided for lines in the paragraph in twips
+    {
+	// see sprmPDyaLine in generator_wword8.htm
+	float value = QABS((float)pap.lspd.dyaLine / 20.0); // twip -> pt
+	// lspd.dyaLine > 0 means "at least", < 0 means "exactly"
+	if ( pap.lspd.dyaLine > 0 )
+	    m_contentWriter->addAttribute( "fo:line-height-at-least", value );
+	else if (pap.lspd.dyaLine < 0 )
+	    m_contentWriter->addAttribute( "fo:line-height", value );
+    }
+    else
+	    kWarning(30513) << "Unhandled LSPD::fMultLinespace value: " << pap.lspd.fMultLinespace;
+    //end linespacing
+
     //fKeep = keep entire paragraph on one page if possible
     //fKeepFollow = keep paragraph on same page with next paragraph if possible
     //fPageBreakBefore = start this paragraph on new page
     if ( pap.fKeep || pap.fKeepFollow || pap.fPageBreakBefore )
     {
+	if ( pap.fKeep )
+	    m_contentWriter->addAttribute( "fo:keep-together", "always" );
+	if ( pap.fKeepFollow )
+	    m_contentWriter->addAttribute( "fo:keep-with-next", "always" );
 	if ( pap.fPageBreakBefore )
 	    m_contentWriter->addAttribute( "fo:break-before", "page" );
-	/*QDomElement pageBreak = mainDocument().createElement( "PAGEBREAKING" );
-        if ( pap.fKeep )
-            pageBreak.setAttribute("linesTogether", "true");
-        if ( pap.fPageBreakBefore )
-            pageBreak.setAttribute("hardFrameBreak", "true" );
-        if ( pap.fKeepFollow )
-            pageBreak.setAttribute("keepWithNext", "true" );
-        parentElement.appendChild( pageBreak );*/
     }
 
     // Borders
@@ -812,77 +768,79 @@ void KWordTextHandler::writeLayout( /*QDomElement& parentElement, const wvWare::
     //	8=dot dash, 9=dot dot dash, 10=triple, 11=thin-thick small gap, ...
     if ( pap.brcTop.brcType )
     {
-        //QDomElement borderElement = mainDocument().createElement( "TOPBORDER" );
-        //Conversion::setBorderAttributes( borderElement, pap.brcTop );
-        //parentElement.appendChild( borderElement );
+	m_contentWriter->addAttribute( "fo:border-top", Conversion::setBorderAttributes( pap.brcTop ) );
     }
     if ( pap.brcBottom.brcType )
     {
-        //QDomElement borderElement = mainDocument().createElement( "BOTTOMBORDER" );
-        //Conversion::setBorderAttributes( borderElement, pap.brcBottom );
-        //parentElement.appendChild( borderElement );
+	m_contentWriter->addAttribute( "fo:border-bottom", Conversion::setBorderAttributes( pap.brcBottom ) );
     }
     if ( pap.brcLeft.brcType )
     {
-        //QDomElement borderElement = mainDocument().createElement( "LEFTBORDER" );
-        //Conversion::setBorderAttributes( borderElement, pap.brcLeft );
-        //parentElement.appendChild( borderElement );
+	m_contentWriter->addAttribute( "fo:border-left", Conversion::setBorderAttributes( pap.brcLeft ) );
     }
     if ( pap.brcRight.brcType )
     {
-        //QDomElement borderElement = mainDocument().createElement( "RIGHTBORDER" );
-        //Conversion::setBorderAttributes( borderElement, pap.brcRight );
-        //parentElement.appendChild( borderElement );
+	m_contentWriter->addAttribute( "fo:border-right", Conversion::setBorderAttributes( pap.brcRight ) );
     }
+
+    //close style:paragraph-properties, b/c we're done with that and we need to write more tags
+    m_contentWriter->endElement(); //style:paragraph-properties
 
     // Tabulators
     //itbdMac = number of tabs stops defined for paragraph. Must be >= 0 and <= 64.
     if ( pap.itbdMac )
     {
+	m_contentWriter->startElement( "style:tab-stops" );
         for ( int i = 0 ; i < pap.itbdMac ; ++i )
         {
-	    //rgdxaTab = array of { positions of itbdMac tab stops ; itbdMac tab descriptors } itbdMax == 64. The SPEC doesn't have such a structure, obviously. This is a wv2 change. (This data is never in the file as is, it comes from the SPRMs).
+	    m_contentWriter->startElement( "style:tab-stop" );
+
+	    //rgdxaTab = array of { positions of itbdMac tab stops ; itbdMac tab descriptors } itbdMax == 64.
             const wvWare::Word97::TabDescriptor &td = pap.rgdxaTab[i];
-            //QDomElement tabElement = mainDocument().createElement( "TABULATOR" );
-            //tabElement.setAttribute( "ptpos", (double)td.dxaTab / 20.0 );
-            //kDebug(30513) <<"ptpos=" << (double)td.dxaTab / 20.0;
-            // Wow, lucky here. The type enum matches. Only, MSWord has 4=bar,
-            // which kword doesn't support. We map it to 0 with a clever '%4' :)
-            //tabElement.setAttribute( "type", td.tbd.jc % 4 );
-            int filling = 0;
-            double width = 0.5; // default kword value, see koparaglayout.cc
-            switch ( td.tbd.tlc ) {
-            case 1: // dots
-            case 2: // hyphenated
-                filling = 1; // KWord: dots
-                break;
-            case 3: // single line
-                filling = 2; // KWord: line
-                break;
-            case 4: // heavy line
-                filling = 2; // KWord: line
-                width = 2; // make it heavy. To be tested.
-            }
-            //tabElement.setAttribute( "filling", filling );
-            //tabElement.setAttribute( "width", width );
-            //parentElement.appendChild( tabElement );
+	    //td.dxaTab = position in twips
+	    QString pos( QString::number( (double)td.dxaTab / 20.0 ) );
+	    m_contentWriter->addAttribute( "style:position", pos.append( "pt" ) );
+
+	    //td.tbd.jc = justification code
+	    if ( td.tbd.jc ) //0 = left-aligned = default, so that can just be ignored
+	    {
+		if ( td.tbd.jc == 1 ) //centered
+		    m_contentWriter->addAttribute( "style:type", "center" );
+		else if ( td.tbd.jc == 2 ) //right-aligned
+		    m_contentWriter->addAttribute( "style:type", "right" );
+		else //3 = decimal tab -> align on decimal point
+		    //4 = bar -> just creates a vertical bar at that point that's always visible
+		    kWarning(30513) << "Unhandled tab justification code: " << td.tbd.jc;
+	    }
+	    //td.tbd.tlc = tab leader code
+	    if ( td.tbd.tlc )//0 = no leader, which is default & can just be ignored
+	    {
+		if ( td.tbd.tlc == 1 ) //1 dotted leader 
+		    m_contentWriter->addAttribute( "style:leader-text", "." );
+		else if (td.tbd.tlc == 2 ) //2 hyphenated leader 
+		    m_contentWriter->addAttribute( "style:leader-text", "-" );
+		//TODO 3 single line leader 
+		//TODO 4 heavy line leader
+	    }
+
+	    m_contentWriter->endElement(); //style:tab-stop
         }
+	m_contentWriter->endElement(); //style:tab-stops
     }
     //ilfo = when non-zero, (1-based) index into the pllfo identifying the list to which the paragraph belongs
     if ( pap.ilfo > 0 )
     {
-        writeCounter( /*parentElement,*/ *m_paragraphProperties, style );
+        writeCounter( *m_paragraphProperties, style );
     }
     //now close style:style tag for this paragraph
-    m_contentWriter->endElement(); //style:paragraph-properties
     m_contentWriter->endElement(); //style:style
 }
 
-//only called by writeLayout()
-//this is for lists (bullets & numbers)
-void KWordTextHandler::writeCounter( /*QDomElement& parentElement,*/ const wvWare::ParagraphProperties& paragraphProperties, const wvWare::Style* style )
+//writeCounter() writes the formatting for the paragraph as part of a list
+void KWordTextHandler::writeCounter( const wvWare::ParagraphProperties& paragraphProperties, const wvWare::Style* style )
 {
     kDebug(30513) ;
+    //wvWare::ListInfo is defined in wv2/src/lists.[h,cpp]
     const wvWare::ListInfo* listInfo = paragraphProperties.listInfo();
     if ( !listInfo )
         return;
@@ -894,13 +852,21 @@ void KWordTextHandler::writeCounter( /*QDomElement& parentElement,*/ const wvWar
     //QDomElement counterElement = mainDocument().createElement( "COUNTER" );
     // numbering type: 0==list 1==chapter. First we determine it for word6 docs.
     // But we can also activate it if the text() looks that way
+    //if isWord6() is true, then word6-compatible options become valid (otherwise they're ignored)
+    //prev() is for LVLF::fPrev, which is word6 compatible option equivalent to ANLD::fPrev
+    //ANLD::fPrev when ==1, number generated will include previous levels (used for legal numbering)
     int numberingType = listInfo->isWord6() && listInfo->prev() ? 1 : 0;
+    //text() returns a struct consisting of a UString text string (called text) and a pointer to a CHP (called chp)
     wvWare::UString text = listInfo->text().text;
+    //number format code => 0=Arabic, 1=upper case Roman, 2=lower case Roman, 3=cap letters, 4=lower letters
+    //5=1.,2.,3...; 6=One,Two,Three; 7=First,Second,Third; 22=01,02,03,...,9,10,11,...,99,100,101,...; 23=bullets
     int nfc = listInfo->numberFormat();
+    //BULLETS******************
     if ( nfc == 23 ) // bullet
     {
         if ( text.length() == 1 )
         {
+	    //with bullets, text can only be one character, which tells us what kind of bullet to use
             unsigned int code = text[0].unicode();
             if ( (code & 0xFF00) == 0xF000 ) // see wv2
                 code &= 0x00FF;
@@ -923,6 +889,7 @@ void KWordTextHandler::writeCounter( /*QDomElement& parentElement,*/ const wvWar
         } else
             kWarning(30513) << "Bullet with more than one character, not supported";
     }
+    //NUMBERED LIST********************
     else
     {
         const wvWare::Word97::PAP& pap = paragraphProperties.pap();

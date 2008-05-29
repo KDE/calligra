@@ -424,14 +424,14 @@ void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::
     kDebug(30513) ;
     // Frame borders
 
-    if ( brcTop.ico != 255 && brcTop.dptLineWidth != 255 ) // see tablehandler.cpp
+    /*if ( brcTop.ico != 255 && brcTop.dptLineWidth != 255 ) // see tablehandler.cpp
         Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );
     if ( brcBottom.ico != 255 && brcBottom.dptLineWidth != 255 ) // see tablehandler.cpp
         Conversion::setBorderAttributes( frameElementOut, brcBottom, "b" );
     if ( brcLeft.ico != 255 && brcLeft.dptLineWidth != 255 ) // could still be 255, for first column
         Conversion::setBorderAttributes( frameElementOut, brcLeft, "l" );
     if ( brcRight.ico != 255 && brcRight.dptLineWidth != 255 ) // could still be 255, for last column
-        Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );
+        Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );*/
 
     // Frame background brush (color and fill style)
     if ( shd.icoFore != 0 || shd.icoBack != 0 )
@@ -462,10 +462,10 @@ void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::
         }
         if ( !grayHack )
         {
-            Conversion::setColorAttributes( frameElementOut, bkColor, "bk", true );
+            //Conversion::setColorAttributes( frameElementOut, bkColor, "bk", true );
             // Fill style
             int brushStyle = Conversion::fillPatternStyle( shd.ipat );
-            frameElementOut.setAttribute( "bkStyle", brushStyle );
+            //frameElementOut.setAttribute( "bkStyle", brushStyle );
         }
     }
 }

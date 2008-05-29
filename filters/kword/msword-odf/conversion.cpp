@@ -248,44 +248,48 @@ int Conversion::ditheringToGray( int ipat, bool* ok )
     }
 }
 
-QString Conversion::alignment( int jc ) {
-    QString value( "left" );
-    if ( jc == 1 )
-        value = "center";
-    else if ( jc == 2 )
-        value = "right";
-    else if ( jc == 3 )
-        value = "justify";
-    return value;
-}
+//QString Conversion::alignment( int jc ) {
+//    QString value( "left" );
+//    if ( jc == 1 )
+//        value = "center";
+//    else if ( jc == 2 )
+//        value = "right";
+//    else if ( jc == 3 )
+//        value = "justify";
+//    return value;
+//}
 
-QString Conversion::lineSpacing( const wvWare::Word97::LSPD& lspd )
-{
-    QString value( "0" );
-    if ( lspd.fMultLinespace == 1 )
-    {
-        // This will be e.g. 1.5 for a 1.5 linespacing.
-        float proportionalLineSpacing = (float)lspd.dyaLine / 240.0;
-        if ( QABS(proportionalLineSpacing - 1.5) <= 0.25 ) // close to 1.5?
-            value = "oneandhalf";
-        else if ( proportionalLineSpacing > 1.75) // close to 2.0, or more?
-            value = "double";
-    }
-    else if ( lspd.fMultLinespace == 0 )
-    {
-        // see sprmPDyaLine in generator_wword8.htm
-        //float value = QABS((float)lspd.dyaLine / 20.0); // twip -> pt
-        // lspd.dyaLine > 0 means "at least", < 0 means "exactly"
-        // "at least" is now possible in kword, but here it's the size of the whole
-        // line, not the spacing between the line (!)
-        // To convert between the two, we'd need to find out the height of the
-        // highest character in the line, and substract it from the value..... Ouch.
-        // Better implement line-height-at-least like OOo has.
-    }
-    else
-        kWarning(30513) << "Unhandled LSPD::fMultLinespace value: " << lspd.fMultLinespace;
-    return value;
-}
+//QString Conversion::lineSpacing( const wvWare::Word97::LSPD& lspd )
+//{
+//    QString attribute( "" );
+//    if ( lspd.fMultLinespace == 1 ) //Word will reserve for each line the 
+//				    //(maximal height of the line*lspd.dyaLine)/240
+//    {
+//        // This will be e.g. 1.5 for a 1.5 linespacing.
+//        float proportionalLineSpacing = (float)lspd.dyaLine / 240.0;
+//        if ( QABS(proportionalLineSpacing - 1.5) <= 0.25 ) // close to 1.5?
+//            value = "oneandhalf";
+//        else if ( proportionalLineSpacing > 1.75) // close to 2.0, or more?
+//            value = "double";
+//    }
+//    else if ( lspd.fMultLinespace == 0 )//magnitude of lspd.dyaLine specifies the amount of space 
+//				    //that will be provided for lines in the paragraph in twips
+//    {
+//        // see sprmPDyaLine in generator_wword8.htm
+//        float value = QABS((float)lspd.dyaLine / 20.0); // twip -> pt
+//        // lspd.dyaLine > 0 means "at least", < 0 means "exactly"
+//	if ( lspd.dyaLine > 0 )
+//
+//        // "at least" is now possible in kword, but here it's the size of the whole
+//        // line, not the spacing between the line (!)
+//        // To convert between the two, we'd need to find out the height of the
+//        // highest character in the line, and substract it from the value..... Ouch.
+//        // Better implement line-height-at-least like OOo has.
+//    }
+//    else
+//        kWarning(30513) << "Unhandled LSPD::fMultLinespace value: " << lspd.fMultLinespace;
+//    return attribute;
+//}
 
 void Conversion::setColorAttributes( QDomElement& element, int ico, const QString& prefix, bool defaultWhite )
 {
@@ -295,42 +299,75 @@ void Conversion::setColorAttributes( QDomElement& element, int ico, const QStrin
     element.setAttribute( prefix.isNull() ? "green" : prefix+"Green", color.green() );
 }
 
-void Conversion::setBorderAttributes( QDomElement& borderElement, const wvWare::Word97::BRC& brc, const QString& prefix )
+//get a correct fo:border value "width style color"
+//width = thick, thin, or length specification
+//style = none, solid, or double
+//color = six-digit hexadecimal color value
+QString Conversion::setBorderAttributes( const wvWare::Word97::BRC& brc )
 {
-    setColorAttributes( borderElement, brc.ico, prefix, false );
+    QString width( "thin" ); //reasonable default
+    QString style( "solid" ); //reasonable default
+    QString color( "#000000" ); //reasonable default
 
-    borderElement.setAttribute( prefix.isNull() ? "width" : prefix+"Width",
-                                (double)brc.dptLineWidth / 8.0 );
+    //TODO fix this!
+    //setColorAttributes( borderElement, brc.ico, prefix, false );
 
-    QString style = "0"; // KWord: solid
+    //borderElement.setAttribute( prefix.isNull() ? "width" : prefix+"Width",
+    //                            (double)brc.dptLineWidth / 8.0 );
+
+    //QString style = "0"; // KWord: solid
     switch ( brc.brcType ) {
     case 0: // none
-        Q_ASSERT( brc.dptLineWidth == 0 ); // otherwise kword will show a border!
-        break;
-    case 7: // dash large gap
-    case 22: // dash small gap
-        style = "1"; // KWord: dashes
-        break;
-    case 6: // dot
-        style = "2";
-        break;
-    case 8: // dot dash
-        style = "3";
-        break;
-    case 9: // dot dot dash
-        style = "4";
-        break;
-    case 3: // double
-        style = "5";
+        //Q_ASSERT( brc.dptLineWidth == 0 ); // otherwise kword will show a border!
+	style = "none";
         break;
     case 1: // single
+	//defaults should be good, so do nothing
+	break;
+    case 2: //thick
+	width = "thick";
+	break;
+    case 3: // double
+        style = "double";
+        break;
+    //doesn't seem to be a 4 in the standard?
+    case 5: //"hairline"
+	width = "0.0008in"; //this is the smallest width in OOo, so why not?
+	break;
+
+    //ODF doesn't support dotted, dashed, or wavy borders???
+
+    //case 7: // dash large gap
+    //case 22: // dash small gap
+    //    style = "1"; // KWord: dashes
+    //    break;
+    //case 6: // dot
+    //    style = "2";
+    //    break;
+    //case 8: // dot dash
+    //    style = "3";
+    //    break;
+    //case 9: // dot dot dash
+    //    style = "4";
+    //    break;
     default:
-        // if a fancy unsupported border is specified -> better a normal border than none
-        // (so we keep the default value, "0", for "solid single line".
+        //if a fancy unsupported border is specified -> better a normal border than none
+	//so just leave values as defaults
         break;
     }
-    borderElement.setAttribute( prefix.isNull() ? "style" : prefix+"Style", style );
+    //borderElement.setAttribute( prefix.isNull() ? "style" : prefix+"Style", style );
     // We ignore brc.dptSpace (spacing), brc.fShadow (shadow), and brc.fFrame (?)
+    
+    //set up color
+    color = Conversion::color( brc.ico, -1 );
+
+    QString value( width );
+    value.append( " " );
+    value.append( style );
+    value.append( " " );
+    value.append( color);
+
+    return value;
 }
 
 int Conversion::numberFormatCode( int nfc )

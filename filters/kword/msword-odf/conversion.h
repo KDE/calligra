@@ -58,7 +58,7 @@ namespace Conversion
     int ditheringToGray( int ipat, bool* ok );
 
     // Convert alignment code to string
-    QString alignment( int jc );
+    //QString alignment( int jc );
 
     // Convert linespacing struct to string
     QString lineSpacing( const wvWare::Word97::LSPD& lspd );
@@ -71,10 +71,8 @@ namespace Conversion
     // if not empty, they will be xRed/xBlue/xGreen
     void setColorAttributes( QDomElement& element, int ico, const QString& prefix = QString(), bool defaultWhite = false );
 
-    // Set all border attributes in the XML element, from a BRC structure
-    // prefix: if empty, the attribute names will be red/blue/green/width/style
-    // if not empty, they will be xRed/xBlue/xGreen/xWidth/xStyle
-    void setBorderAttributes( QDomElement& borderElement, const wvWare::Word97::BRC& brc, const QString& prefix = QString() );
+    // Return an ODF attribute for border characteristics from a BRC structure
+    QString setBorderAttributes( const wvWare::Word97::BRC& brc );
 
     // Convert wv2's Header Type to a KWord frameInfo value
     int headerTypeToFrameInfo( unsigned char type );
