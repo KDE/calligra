@@ -200,7 +200,6 @@ PrintManager::PrintManager(Sheet* sheet)
     d->settings = *sheet->printSettings();
     d->printRegion = Region(1, 1, KS_colMax, KS_rowMax, sheet);
     d->zoomHandler = new KoZoomHandler();
-    d->calculatePages();
 }
 
 PrintManager::~PrintManager()
@@ -210,9 +209,9 @@ PrintManager::~PrintManager()
     delete d;
 }
 
-void PrintManager::setPrintSettings(const PrintSettings& settings)
+void PrintManager::setPrintSettings(const PrintSettings& settings, bool force)
 {
-    if (settings == d->settings)
+    if (!force && settings == d->settings)
         return;
     d->settings = settings;
     d->calculatePages();

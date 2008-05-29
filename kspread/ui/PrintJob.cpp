@@ -44,10 +44,10 @@ public:
     QList<Sheet*> selectedSheets;
 
 public:
-    int setupPages(const QPrinter& printer);
+    int setupPages(const QPrinter& printer, bool forceRecreation = false);
 };
 
-int PrintJob::Private::setupPages(const QPrinter& printer)
+int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
 {
     // Create the page layout.
     KoPageLayout pageLayout;
@@ -88,7 +88,7 @@ int PrintJob::Private::setupPages(const QPrinter& printer)
         // Use the defaults from each sheet and use the print dialog's page layout.
         PrintSettings settings = *selectedSheets[i]->printSettings();
         settings.setPageLayout(pageLayout);
-        selectedSheets[i]->printManager()->setPrintSettings(settings);
+        selectedSheets[i]->printManager()->setPrintSettings(settings, forceRecreation);
         pageCount += selectedSheets[i]->printManager()->pageCount();
     }
     return pageCount;
@@ -112,6 +112,8 @@ PrintJob::PrintJob(View *view)
         printer().setOrientation( QPrinter::Landscape );
     else
         printer().setOrientation( QPrinter::Portrait );
+    printer().setPageMargins(pageLayout.left, pageLayout.top, pageLayout.right, pageLayout.bottom,
+                             QPrinter::Point);
     printer().setFullPage( true );
 
     //kDebug(36005) <<"Iterating through available sheets and initializing list of available sheets.";
@@ -123,7 +125,9 @@ PrintJob::PrintJob(View *view)
         d->sheetSelectPage->prependAvailableSheet(sheet->sheetName());
     }
 
-    const int pageCount = d->setupPages(printer());
+    // Setup the pages.
+    // Force the creation of pages.
+    const int pageCount = d->setupPages(printer(), true);
     printer().setFromTo(1, pageCount);
 }
 
@@ -150,6 +154,7 @@ int PrintJob::documentLastPage() const
 void PrintJob::startPrinting(RemovePolicy removePolicy)
 {
     // Setup the pages.
+    // No recreation forced, because the sheet contents remained the same since the dialog was created.
     d->setupPages(printer());
     // Start the printing.
     KoPrintingDialog::startPrinting(removePolicy);

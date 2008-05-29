@@ -45,8 +45,9 @@ public:
      * Sets the print settings.
      * If the settings differ from the existing ones, the pages are recreated.
      * \param settings the print settings
+     * \param force forces a recreation of the pages, if \c true
      */
-    void setPrintSettings(const PrintSettings& settings);
+    void setPrintSettings(const PrintSettings& settings, bool force = false);
 
     /**
      * \return \c false if nothing to print.
