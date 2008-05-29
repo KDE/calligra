@@ -229,7 +229,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         nbchannels = 0;
     }
     // Get the number of extrasamples and information about them
-    uint16 *sampleinfo, extrasamplescount;
+    uint16 *sampleinfo = 0, extrasamplescount;
     if(TIFFGetField(image, TIFFTAG_EXTRASAMPLES, &extrasamplescount, &sampleinfo) == 0)
     {
         extrasamplescount = 0;
@@ -359,6 +359,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             m_img -> addAnnotation( annotation );
         }
     } else {
+        m_img->lock();
         if( m_img->width() < (qint32)width || m_img->height() < (qint32)height)
         {
             quint32 newwidth = (m_img->width() < (qint32)width) ? width : m_img->width();
