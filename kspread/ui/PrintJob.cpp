@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ * Copyright 2008 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -40,7 +41,7 @@ class PrintJob::Private
 public:
     View* view;
     SheetSelectPage* sheetSelectPage;
-    QStringList selectedSheets;
+    QList<Sheet*> selectedSheets;
 
 public:
     int setupPages();
@@ -51,32 +52,29 @@ int PrintJob::Private::setupPages()
     // Setup the pages.
     // TODO Stefan: Use the current page layout.
     // TODO Stefan: Only perform layouting, if necessary, i.e. after page layout changes.
-    int pageCount = 0;
-    QStringList sheets;
+    selectedSheets.clear();
     if (sheetSelectPage->allSheetsButton->isChecked())
-    {
-        const QList<Sheet*> availableSheets = view->doc()->map()->sheetList();
-        for (int i = 0; i < availableSheets.count(); ++i)
-            sheets.append(availableSheets[i]->sheetName());
-    }
+        selectedSheets = view->doc()->map()->sheetList();
     else if (sheetSelectPage->activeSheetButton->isChecked())
-        sheets = QStringList() << view->activeSheet()->sheetName();
+        selectedSheets.append(view->activeSheet());
     else if (sheetSelectPage->selectedSheetsButton->isChecked())
-        sheets = sheetSelectPage->selectedSheets();
-    // Store the selected sheets.
-    // The printing is done in threads; one for each page.
-    // At that time the dialog is already deleted.
-    selectedSheets = sheets;
-    for (int i = 0; i < sheets.count(); ++i)
     {
-        Sheet* sheet = view->doc()->map()->findSheet(sheets[i]);
-        if (sheet == 0)
+        const QStringList sheetNames = sheetSelectPage->selectedSheets();
+        for (int i = 0; i < sheetNames.count(); ++i)
         {
-            kWarning(36005) << i18n("Sheet %1 could not be found for printing", sheets[i]);
-            continue;
+            Sheet* sheet = view->doc()->map()->findSheet(sheetNames[i]);
+            if (sheet == 0)
+            {
+                kWarning(36005) << i18n("Sheet %1 could not be found for printing", sheetNames[i]);
+                continue;
+            }
+            selectedSheets.append(sheet);
         }
-        pageCount += sheet->printManager()->setupPages();
     }
+
+    int pageCount = 0;
+    for (int i = 0; i < selectedSheets.count(); ++i)
+        pageCount += selectedSheets[i]->printManager()->setupPages();
     return pageCount;
 }
 
@@ -89,22 +87,16 @@ PrintJob::PrintJob(View *view)
 
     setShapeManager(static_cast<Canvas*>(d->view->canvas())->shapeManager());
 
-    PrintSettings* settings = d->view->activeSheet()->printSettings();
-
     //apply page layout parameters
-    KoPageFormat::Format pageFormat = settings->pageLayout().format;
-
-    printer().setPageSize( static_cast<QPrinter::PageSize>( KoPageFormat::printerPageSize( pageFormat ) ) );
-
-    if (settings->pageLayout().orientation == KoPageFormat::Landscape || pageFormat == KoPageFormat::ScreenSize)
+    const PrintSettings* settings = d->view->activeSheet()->printSettings();
+    const KoPageLayout pageLayout = settings->pageLayout();
+    const KoPageFormat::Format pageFormat = pageLayout.format;
+    printer().setPaperSize( static_cast<QPrinter::PageSize>( KoPageFormat::printerPageSize( pageFormat ) ) );
+    if (pageLayout.orientation == KoPageFormat::Landscape || pageFormat == KoPageFormat::ScreenSize)
         printer().setOrientation( QPrinter::Landscape );
     else
         printer().setOrientation( QPrinter::Portrait );
-
     printer().setFullPage( true );
-
-    //add possibility to select the sheets to print:
-    //kDebug(36005) <<"Adding sheet selection page.";
 
     //kDebug(36005) <<"Iterating through available sheets and initializing list of available sheets.";
     QList<Sheet*> sheetList = d->view->doc()->map()->sheetList();
@@ -127,28 +119,15 @@ PrintJob::~PrintJob()
 
 int PrintJob::documentFirstPage() const
 {
-    return 1;
+    return d->selectedSheets.isEmpty() ? 0 : 1;
 }
 
 int PrintJob::documentLastPage() const
 {
-    const QStringList sheets = d->selectedSheets;
+    const QList<Sheet*> sheets = d->selectedSheets;
     int pageCount = 0;
-    if (sheets.isEmpty())
-        pageCount = d->view->activeSheet()->printManager()->pageCount();
-    else
-    {
-        for (int i = 0; i < sheets.count(); ++i)
-        {
-            Sheet* sheet = d->view->doc()->map()->findSheet(sheets[i]);
-            if (sheet == 0)
-            {
-                kWarning(36005) << i18n("Sheet %1 could not be found for printing", sheets[i]);
-                continue;
-            }
-            pageCount += sheet->printManager()->pageCount();
-        }
-    }
+    for (int i = 0; i < sheets.count(); ++i)
+        pageCount += sheets[i]->printManager()->pageCount();
     return pageCount;
 }
 
@@ -160,35 +139,24 @@ void PrintJob::startPrinting(RemovePolicy removePolicy)
     KoPrintingDialog::startPrinting(removePolicy);
 }
 
+void PrintJob::preparePage(int pageNumber)
+{
+    printer().setPaperSize(QPrinter::A4);
+}
+
 void PrintJob::printPage(int pageNumber, QPainter &painter)
 {
     kDebug(36004) << "Printing page" << pageNumber;
     // Find the sheet specific page number.
     Sheet* sheet = 0;
     int sheetPageNumber = pageNumber;
-    const QStringList sheets = d->selectedSheets;
-    if (sheets.isEmpty())
+    const QList<Sheet*> sheets = d->selectedSheets;
+    for (int i = 0; i < sheets.count(); ++i)
     {
-        if (pageNumber > d->view->activeSheet()->printManager()->pageCount())
-            return;
-        // sheetPageNumber = pageNumber;
-        sheet = d->view->activeSheet();
-    }
-    else
-    {
-        for (int i = 0; i < sheets.count(); ++i)
-        {
-            sheet = d->view->doc()->map()->findSheet(sheets[i]);
-            if (sheet == 0)
-            {
-                kWarning(36005) << i18n("Sheet %1 could not be found for printing", sheets[i]);
-                continue;
-            }
-
-            if (pageNumber <= sheet->printManager()->pageCount())
-                break;
-            sheetPageNumber -= sheet->printManager()->pageCount();
-        }
+        sheet = sheets[i];
+        if (pageNumber <= sheet->printManager()->pageCount())
+            break;
+        sheetPageNumber -= sheet->printManager()->pageCount();
     }
 
     // Print the page.

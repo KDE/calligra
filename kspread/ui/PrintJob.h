@@ -1,4 +1,5 @@
 /* This file is part of the KDE project
+ * Copyright 2008 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  * Copyright (C) 2007 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -37,6 +38,7 @@ public Q_SLOTS:
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
 
 protected:
+    virtual void preparePage(int pageNumber);
     virtual void printPage(int pageNumber, QPainter &painter);
     virtual QList<KoShape*> shapesOnPage(int pageNumber);
     virtual QList<QWidget*> createOptionWidgets() const;
