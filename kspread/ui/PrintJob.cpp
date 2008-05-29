@@ -44,14 +44,23 @@ public:
     QList<Sheet*> selectedSheets;
 
 public:
-    int setupPages();
+    int setupPages(const QPrinter& printer);
 };
 
-int PrintJob::Private::setupPages()
+int PrintJob::Private::setupPages(const QPrinter& printer)
 {
-    // Setup the pages.
-    // TODO Stefan: Use the current page layout.
-    // TODO Stefan: Only perform layouting, if necessary, i.e. after page layout changes.
+    // Create the page layout.
+    KoPageLayout pageLayout;
+    const QSizeF size = printer.paperSize(QPrinter::Point);
+    pageLayout.format = KoPageFormat::guessFormat(POINT_TO_MM(size.width()), POINT_TO_MM(size.height()));
+    pageLayout.orientation = (printer.orientation() == QPrinter::Landscape)
+                           ? KoPageFormat::Landscape : KoPageFormat::Portrait;
+    pageLayout.width = size.width();
+    pageLayout.height = size.height();
+    printer.getPageMargins(&pageLayout.left, &pageLayout.top, &pageLayout.right, &pageLayout.bottom,
+                           QPrinter::Point);
+
+    // Create the list of sheet, that should be printed.
     selectedSheets.clear();
     if (sheetSelectPage->allSheetsButton->isChecked())
         selectedSheets = view->doc()->map()->sheetList();
@@ -72,9 +81,16 @@ int PrintJob::Private::setupPages()
         }
     }
 
+    // (Re-)Create the pages of the sheets.
     int pageCount = 0;
     for (int i = 0; i < selectedSheets.count(); ++i)
-        pageCount += selectedSheets[i]->printManager()->setupPages();
+    {
+        // Use the defaults from each sheet and use the print dialog's page layout.
+        PrintSettings settings = *selectedSheets[i]->printSettings();
+        settings.setPageLayout(pageLayout);
+        selectedSheets[i]->printManager()->setPrintSettings(settings);
+        pageCount += selectedSheets[i]->printManager()->pageCount();
+    }
     return pageCount;
 }
 
@@ -107,7 +123,7 @@ PrintJob::PrintJob(View *view)
         d->sheetSelectPage->prependAvailableSheet(sheet->sheetName());
     }
 
-    const int pageCount = d->setupPages();
+    const int pageCount = d->setupPages(printer());
     printer().setFromTo(1, pageCount);
 }
 
@@ -134,14 +150,13 @@ int PrintJob::documentLastPage() const
 void PrintJob::startPrinting(RemovePolicy removePolicy)
 {
     // Setup the pages.
-    d->setupPages();
+    d->setupPages(printer());
     // Start the printing.
     KoPrintingDialog::startPrinting(removePolicy);
 }
 
 void PrintJob::preparePage(int pageNumber)
 {
-    printer().setPaperSize(QPrinter::A4);
 }
 
 void PrintJob::printPage(int pageNumber, QPainter &painter)

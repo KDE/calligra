@@ -67,6 +67,19 @@ PrintSettings::PrintSettings()
     d->pageOrder = LeftToRight;
 }
 
+PrintSettings::PrintSettings(const PrintSettings& other)
+    : d(new Private)
+{
+    d->pageLayout = other.d->pageLayout;
+    d->printGrid = other.d->printGrid;
+    d->printCharts = other.d->printCharts;
+    d->printObjects = other.d->printObjects;
+    d->printGraphics = other.d->printGraphics;
+    d->printCommentIndicator = other.d->printCommentIndicator;
+    d->printFormulaIndicator = other.d->printFormulaIndicator;
+    d->pageOrder = other.d->pageOrder;
+}
+
 PrintSettings::~PrintSettings()
 {
     delete d;
@@ -172,4 +185,37 @@ bool PrintSettings::printFormulaIndicator() const
 void PrintSettings::setPrintFormulaIndicator(bool printFormulaIndicator)
 {
     d->printFormulaIndicator = printFormulaIndicator;
+}
+
+void PrintSettings::operator=(const PrintSettings& other)
+{
+    d->pageLayout = other.d->pageLayout;
+    d->printGrid = other.d->printGrid;
+    d->printCharts = other.d->printCharts;
+    d->printObjects = other.d->printObjects;
+    d->printGraphics = other.d->printGraphics;
+    d->printCommentIndicator = other.d->printCommentIndicator;
+    d->printFormulaIndicator = other.d->printFormulaIndicator;
+    d->pageOrder = other.d->pageOrder;
+}
+
+bool PrintSettings::operator==(const PrintSettings& other) const
+{
+    if (d->pageLayout != other.d->pageLayout)
+        return false;
+    if (d->printGrid != other.d->printGrid)
+        return false;
+    if (d->printCharts != other.d->printCharts)
+        return false;
+    if (d->printObjects != other.d->printObjects)
+        return false;
+    if (d->printGraphics != other.d->printGraphics)
+        return false;
+    if (d->printCommentIndicator != other.d->printCommentIndicator)
+        return false;
+    if (d->printFormulaIndicator != other.d->printFormulaIndicator)
+        return false;
+    if (d->pageOrder != other.d->pageOrder)
+        return false;
+    return true;
 }

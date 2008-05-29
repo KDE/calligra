@@ -25,6 +25,7 @@ class QPrinter;
 
 namespace KSpread
 {
+class PrintSettings;
 class Sheet;
 
 class PrintManager
@@ -41,10 +42,11 @@ public:
     virtual ~PrintManager();
 
     /**
-     * Setups the pages using the current page layout.
-     * \return the number of pages
+     * Sets the print settings.
+     * If the settings differ from the existing ones, the pages are recreated.
+     * \param settings the print settings
      */
-    int setupPages();
+    void setPrintSettings(const PrintSettings& settings);
 
     /**
      * \return \c false if nothing to print.

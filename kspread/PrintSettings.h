@@ -40,6 +40,11 @@ public:
     PrintSettings();
 
     /**
+     * Constructor.
+     */
+    PrintSettings(const PrintSettings& other);
+
+    /**
      * Destructor.
      */
     virtual ~PrintSettings();
@@ -134,6 +139,17 @@ public:
      * Sets, if the formula Rect shall be shown on printouts.
      */
     void setPrintFormulaIndicator(bool printFormulaIndicator);
+
+    /**
+     * Assignment operator.
+     */
+    void operator=(const PrintSettings& settings);
+
+    /**
+     * Equality operator.
+     */
+    bool operator==(const PrintSettings& other) const;
+    inline bool operator!=(const PrintSettings& other) const { return !operator==(other); }
 
 private:
     class Private;

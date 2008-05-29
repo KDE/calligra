@@ -39,6 +39,7 @@ public:
     SheetView* sheetView;
     QMap<int, QRect> pages; // page number to cell range
     Region printRegion;
+    PrintSettings settings;
     KoZoomHandler* zoomHandler;
 
 public:
@@ -49,11 +50,11 @@ public:
 void PrintManager::Private::calculatePages()
 {
     int pageNumber = 1;
-    const double printWidth = sheet->printSettings()->printWidth();
-    const double printHeight = sheet->printSettings()->printHeight();
+    const double printWidth = settings.printWidth();
+    const double printHeight = settings.printHeight();
     kDebug() << "printWidth" << printWidth << "printHeight" << printHeight;
 
-    if (sheet->printSettings()->pageOrder() == PrintSettings::LeftToRight)
+    if (settings.pageOrder() == PrintSettings::LeftToRight)
     {
 //         kDebug() << "processing printRanges" << printRegion;
         // iterate over the print ranges
@@ -111,7 +112,7 @@ void PrintManager::Private::calculatePages()
             }
         }
     }
-    else // if (sheet->printSettings()->pageOrder() == PrintSettings::TopToBottom)
+    else // if (settings.pageOrder() == PrintSettings::TopToBottom)
     {
 //         kDebug() << "processing printRanges" << printRegion;
         // iterate over the print ranges
@@ -196,8 +197,10 @@ PrintManager::PrintManager(Sheet* sheet)
 {
     d->sheet = sheet;
     d->sheetView = new SheetView(sheet);
+    d->settings = *sheet->printSettings();
     d->printRegion = Region(1, 1, KS_colMax, KS_rowMax, sheet);
     d->zoomHandler = new KoZoomHandler();
+    d->calculatePages();
 }
 
 PrintManager::~PrintManager()
@@ -207,15 +210,17 @@ PrintManager::~PrintManager()
     delete d;
 }
 
-int PrintManager::setupPages()
+void PrintManager::setPrintSettings(const PrintSettings& settings)
 {
+    if (settings == d->settings)
+        return;
+    d->settings = settings;
     d->calculatePages();
-    return d->pages.count();
 }
 
 bool PrintManager::print(QPainter& painter, QPrinter* printer)
 {
-    const KoPageLayout pageLayout = d->sheet->printSettings()->pageLayout();
+    const KoPageLayout pageLayout = d->settings.pageLayout();
     kDebug(36004) << "PageLayout:"
                   << "w" << pageLayout.width
                   << "h" << pageLayout.height
@@ -248,7 +253,7 @@ bool PrintManager::print(QPainter& painter, QPrinter* printer)
 
 void PrintManager::printPage(int page, QPainter& painter)
 {
-    const KoPageLayout pageLayout = d->sheet->printSettings()->pageLayout();
+    const KoPageLayout pageLayout = d->settings.pageLayout();
     kDebug(36004) << "PageLayout:"
                   << "w" << pageLayout.width
                   << "h" << pageLayout.height
