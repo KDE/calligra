@@ -268,6 +268,7 @@ bool KarbonImport::loadXML( const KoXmlElement& doc )
         {
             kDebug() << "loading layer";
             KoShapeLayer * layer = new KoShapeLayer();
+            layer->setZIndex( nextZIndex() );
             layer->setVisible( e.attribute( "visible" ) == 0 ? false : true );
             loadGroup( layer, e );
 
@@ -324,6 +325,7 @@ void KarbonImport::loadGroup( KoShapeContainer * parent, const KoXmlElement &ele
         else if( e.tagName() == "GROUP" )
         {
             KoShapeGroup * group = new KoShapeGroup();
+            group->setZIndex( nextZIndex() );
             loadGroup( group, e );
             shape = group;
         }
@@ -367,6 +369,10 @@ void KarbonImport::loadGroup( KoShapeContainer * parent, const KoXmlElement &ele
 
 void KarbonImport::loadStyle( KoShape * shape, const KoXmlElement &element )
 {
+    // reset fill and stroke first
+    shape->setBorder( 0 );
+    shape->setBackground( Qt::NoBrush );
+
     KoXmlElement e;
     forEachElement(e, element)
     {
@@ -432,25 +438,28 @@ QColor KarbonImport::loadColor( const KoXmlElement &element )
     return color;
 }
 
-void KarbonImport::loadGradient( KoShape * shape, const KoXmlElement &element )
+QBrush KarbonImport::loadGradient( KoShape * shape, const KoXmlElement &element )
 {
     enum GradientType { linear = 0, radial = 1, conic  = 2 };
     enum GradientSpread { none = 0, reflect = 1, repeat  = 2 };
 
+
     QPointF origin;
     origin.setX( element.attribute( "originX", "0.0" ).toDouble() );
     origin.setY( element.attribute( "originY", "0.0" ).toDouble() );
-    origin = m_mirrorMatrix.map( origin ) - shape->position();
 
     QPointF focal;
     focal.setX( element.attribute( "focalX", "0.0" ).toDouble() );
     focal.setY( element.attribute( "focalY", "0.0" ).toDouble() );
-    focal = m_mirrorMatrix.map( focal ) - shape->position();
 
     QPointF vector;
     vector.setX( element.attribute( "vectorX", "0.0" ).toDouble() );
     vector.setY( element.attribute( "vectorY", "0.0" ).toDouble() );
-    vector = m_mirrorMatrix.map( vector ) - shape->position();
+
+    QMatrix shapeMatrix = m_mirrorMatrix * shape->absoluteTransformation(0).inverted();
+    origin = shapeMatrix.map( origin );
+    focal = shapeMatrix.map( focal );
+    vector = shapeMatrix.map( vector );
 
     int type = element.attribute( "type", 0 ).toInt();
     int spread = element.attribute( "repeatMethod", 0 ).toInt();
@@ -491,7 +500,7 @@ void KarbonImport::loadGradient( KoShape * shape, const KoXmlElement &element )
         }
     }
     if( ! gradient )
-        return;
+        return QBrush();
 
     QGradientStops stops;
 
@@ -521,8 +530,10 @@ void KarbonImport::loadGradient( KoShape * shape, const KoXmlElement &element )
             break;
     }
 
-    shape->setBackground( QBrush( *gradient ) );
+    QBrush gradientBrush( *gradient );
     delete gradient;
+
+    return gradientBrush;
 }
 
 void KarbonImport::loadPattern( KoShape * shape, const KoXmlElement &element )
@@ -602,24 +613,29 @@ void KarbonImport::loadStroke( KoShape * shape, const KoXmlElement &element )
     border->setLineWidth( qMax( 0.0, element.attribute( "lineWidth", "1.0" ).toDouble() ) );
     border->setMiterLimit( qMax( 0.0, element.attribute( "miterLimit", "10.0" ).toDouble() ) );
 
+    bool hasStroke = false;
+
     KoXmlElement e;
     forEachElement(e, element)
     {
         if( e.tagName() == "COLOR" )
         {
             border->setColor( loadColor( e ) );
+            hasStroke = true;
         }
         else if( e.tagName() == "DASHPATTERN" )
         {
             double dashOffset = element.attribute( "offset", "0.0" ).toDouble();
             border->setLineStyle( Qt::CustomDashLine, loadDashes( e ) );
+            border->setDashOffset( dashOffset );
+            hasStroke = true;
         }
-        /* TODO gradient and pattern on stroke not yet implemented in flake
         else if( e.tagName() == "GRADIENT" )
         {
-            m_type = grad;
-            m_gradient.load( e );
+            border->setLineBrush( loadGradient( shape, e ) );
+            hasStroke = true;
         }
+        /* TODO gradient and pattern on stroke not yet implemented in flake
         else if( e.tagName() == "PATTERN" )
         {
             m_type = patt;
@@ -628,7 +644,10 @@ void KarbonImport::loadStroke( KoShape * shape, const KoXmlElement &element )
         */
     }
 
-    shape->setBorder( border );
+    if( hasStroke )
+        shape->setBorder( border );
+    else
+        delete border;
 }
 
 void KarbonImport::loadFill( KoShape * shape, const KoXmlElement &element )
@@ -644,7 +663,7 @@ void KarbonImport::loadFill( KoShape * shape, const KoXmlElement &element )
         }
         if( e.tagName() == "GRADIENT" )
         {
-            loadGradient( shape, e );
+            shape->setBackground( loadGradient( shape, e ) );
         }
         else if( e.tagName() == "PATTERN" )
         {
@@ -721,6 +740,7 @@ KoShape * KarbonImport::loadPath( const KoXmlElement &element )
 
     loadCommon( path, element );
     loadStyle( path, element );
+    path->setZIndex( nextZIndex() );
 
     return path;
 }
@@ -748,6 +768,7 @@ KoShape * KarbonImport::loadEllipse( const KoXmlElement &element )
 
     loadCommon( ellipse, element );
     loadStyle( ellipse, element );
+    ellipse->setZIndex( nextZIndex() );
 
     return ellipse;
 }
@@ -772,6 +793,7 @@ KoShape * KarbonImport::loadRect( const KoXmlElement &element )
 
     loadCommon( rect, element );
     loadStyle( rect, element );
+    rect->setZIndex( nextZIndex() );
 
     return rect;
 }
@@ -805,6 +827,7 @@ KoShape * KarbonImport::loadPolyline( const KoXmlElement &element )
 
     loadCommon( polyline, element );
     loadStyle( polyline, element );
+    polyline->setZIndex( nextZIndex() );
 
     return polyline;
 }
@@ -843,6 +866,7 @@ KoShape * KarbonImport::loadPolygon( const KoXmlElement &element )
 
     loadCommon( polygon, element );
     loadStyle( polygon, element );
+    polygon->setZIndex( nextZIndex() );
 
     return polygon;
 }
@@ -936,6 +960,7 @@ KoShape * KarbonImport::loadSinus( const KoXmlElement &element )
 
     loadCommon( sinus, element );
     loadStyle( sinus, element );
+    sinus->setZIndex( nextZIndex() );
 
     return sinus;
 }
@@ -1019,6 +1044,7 @@ KoShape * KarbonImport::loadSpiral( const KoXmlElement &element )
 
     loadCommon( spiral, element );
     loadStyle( spiral, element );
+    spiral->setZIndex( nextZIndex() );
 
     return spiral;
 }
@@ -1236,6 +1262,7 @@ KoShape * KarbonImport::loadStar( const KoXmlElement &element )
 
     loadCommon( starShape, element );
     loadStyle( starShape, element );
+    starShape->setZIndex( nextZIndex() );
 
     return starShape;
 }
@@ -1261,6 +1288,7 @@ KoShape * KarbonImport::loadImage( const KoXmlElement &element )
     picture->setTransformation( m );
 
     loadCommon( picture, element );
+    picture->setZIndex( nextZIndex() );
 
     return picture;
 }
@@ -1325,5 +1353,16 @@ KoShape * KarbonImport::loadText( const KoXmlElement &element )
     KoZoomHandler zoomHandler;
     textShape->setSize( QSizeF( zoomHandler.viewToDocumentX( w+20 ), zoomHandler.viewToDocumentY( h+5 ) ) );
 
+    loadCommon( textShape, element );
+    loadStyle( textShape, element );
+    textShape->setZIndex( nextZIndex() );
+
     return textShape;
+}
+
+int KarbonImport::nextZIndex()
+{
+    static int zIndex = 0;
+
+    return zIndex++;
 }

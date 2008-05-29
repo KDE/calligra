@@ -54,7 +54,7 @@ protected:
     void loadFill( KoShape * shape, const KoXmlElement &element );
     QColor loadColor( const KoXmlElement &element );
     QVector<qreal> loadDashes( const KoXmlElement& element );
-    void loadGradient( KoShape * shape, const KoXmlElement &element );
+    QBrush loadGradient( KoShape * shape, const KoXmlElement &element );
     void loadPattern( KoShape * shape, const KoXmlElement &element );
 
     KoShape * loadPath( const KoXmlElement &element );
@@ -70,7 +70,7 @@ protected:
 
     double getAttribute(KoXmlElement &element, const char *attributeName, double defaultValue);
     int getAttribute(KoXmlElement &element, const char *attributeName, int defaultValue);
-
+    int nextZIndex();
 private:
     KarbonDocument m_document;
     QMatrix m_mirrorMatrix;
