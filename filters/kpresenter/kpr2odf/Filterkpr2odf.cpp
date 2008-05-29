@@ -25,11 +25,12 @@
 #include <kgenericfactory.h>
 #include <KoStore.h>
 #include <KoFilterChain.h>
+#include <kdebug.h>
 
 #include "Filterkpr2odf.h"
 
 typedef KGenericFactory<Filterkpr2odf> Filterkpr2odfFactory;
-K_EXPORT_COMPONENT_FACTORY( Filterkpr2odp, Filterkpr2odfFactory( "kofficefilters" ) )
+K_EXPORT_COMPONENT_FACTORY( libFilterkpr2odf, Filterkpr2odfFactory( "kofficefilters" ) )
 
 Filterkpr2odf::Filterkpr2odf(QObject *parent,const QStringList&)
 : KoFilter(parent)
@@ -38,6 +39,7 @@ Filterkpr2odf::Filterkpr2odf(QObject *parent,const QStringList&)
 
 KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const QByteArray& to )
 {
+    kDebug() << "Hello from Filterkpr2odf";
     //Check that the type of files are right
     if ( from != "application/x-kpresenter"
          || to != "application/vnd.oasis.opendocument.presentation" )

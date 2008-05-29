@@ -2,7 +2,8 @@
 Type=Service
 Name=Filter to expor KPR files to ODP
 
+X-KDE-Weight=1
 X-KDE-Export=application/vnd.oasis.opendocument.presentation
 X-KDE-Import=application/x-kpresenter
-X-KDE-Library=Filterkpr2odp
+X-KDE-Library=libFilterkpr2odf
 X-KDE-ServiceTypes=KOfficeFilter
