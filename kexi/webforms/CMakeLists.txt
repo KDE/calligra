@@ -13,6 +13,7 @@ set(webforms_SRCS
   DataProvider.cpp
   IndexView.cpp
   TableView.cpp
+  UpdateView.cpp
   Request.cpp
 )
 

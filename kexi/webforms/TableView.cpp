@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    (C) Copyright 2008 by Lorenzo Villani <lvillani@binaryhelix.net>
-   Time-stamp: <2008-05-28 16:00:27 lorenzo>
+   Time-stamp: <2008-05-30 13:12:39 lorenzo>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,10 +20,8 @@
 */
 
 #include <string>
-#include <sstream>
 
 #include <QString>
-#include <QPointer>
 
 #include <google/template.h>
 
@@ -53,25 +51,26 @@ namespace KexiWebForms {
             QString query("SELECT * FROM ");
             query.append(requestedPage);
 
+            // Using global connection object, mh...
             KexiDB::Cursor* cursor = gConnection->executeQuery(query);
 
             if (cursor) {
-                std::ostringstream tabledata;
+                QString tableData;
                 while (cursor->moveNext()) {
-                    tabledata << "<tr>";
+                    tableData.append("<tr>");
                     for (int i = 0; i < cursor->fieldCount(); i++) {
-                        tabledata << "<td>" << cursor->value(i).toString().toLatin1().constData() << "</td>";
+                        tableData.append("<td>");
+                        tableData.append(cursor->value(i).toString());
+                        tableData.append("</td>");
                     }
-                    tabledata << "</tr>";
+                    tableData.append("</tr>");
                 }
-                dict.SetValue("TABLEDATA", tabledata.str().c_str());
+                dict.SetValue("TABLEDATA", tableData.toLatin1().constData());
             } else {
                 dict.SetValue("TABLEDATA", "Error in " __FILE__); // mhh...
             }
-            
-            std::ostringstream file;
-            file << Server::instance()->config()->webRoot.toLatin1().constData() << "/table.tpl";
-            google::Template* tpl = google::Template::GetTemplate(file.str(), google::DO_NOT_STRIP);
+
+            google::Template* tpl = google::Template::GetTemplate("table.tpl", google::DO_NOT_STRIP);
             
             std::string output;
             tpl->Expand(&output, &dict);

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
 
    (C) Copyright 2008 by Lorenzo Villani <lvillani@binaryhelix.net>
-   Time-stamp: <2008-05-28 15:53:56 lorenzo>
+   Time-stamp: <2008-05-30 12:58:15 lorenzo>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,13 +19,13 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <cstdlib>
-
 #include <KDebug>
 #include <KAboutData>
 #include <KApplication>
 #include <KCmdLineArgs>
 #include <KUniqueApplication>
+
+#include <google/template.h>
 
 #include "Server.h"
 #include "ServerConfig.h"
@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
     
     KCmdLineOptions options;
     options.add("port <port>", ki18n("Listen port"), "8080");
-    options.add("webroot <directory>", ki18n("Web Root"), ".");
+    options.add("webroot <directory>", ki18n("Web Root (used also as template root directory)"), "./");
     options.add("https <port>", ki18n("HTTPS listen port"));
     options.add("cert <path>", ki18n("Path to SSL certificate file"));
     options.add("key <path>", ki18n("Path to SSL key file"));
@@ -86,6 +86,11 @@ int main(int argc, char **argv) {
         delete serverConfig;
         return 1;
     }
+
+    // I want to maintain the Server class as decoupled as possible from
+    // our specific implementation, set up google-ctemplate here
+    google::Template::SetTemplateRootDirectory(serverConfig->webRoot.toLatin1().constData());
+    
 
     // Initialize database connection before server
     if (!initDatabase(serverConfig->dbPath)) {
