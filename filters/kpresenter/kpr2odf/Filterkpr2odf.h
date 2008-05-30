@@ -20,27 +20,27 @@
 #ifndef FILTERKPR2ODF_H
 #define FILTERKPR2ODF_H
 
+//KOffice includes
 #include <KoDom.h>
-
 #include <KoFilter.h>
-#include <KoDom.h>
 
 class Filterkpr2odf : public KoFilter {
     Q_OBJECT
+
 public:
     Filterkpr2odf(QObject* parent, const QStringList&);
 
     virtual ~Filterkpr2odf() {}
 
-    //reimplemented de KoFilter
+    //reimplemented from KoFilter
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 
-protected:
-    QDomDocument m_mainDoc;
-    QDomDocument m_documentInfo;
-//     QDomElement m_styles;
-//     QDomDocument m_maindoc;
-//     QDomDocument m_documentinfo;
+private:
+    //helper functions
+    QByteArray createMetadata();
+
+    KoXmlDocument m_mainDoc;
+    KoXmlDocument m_documentInfo;
 };
 
 #endif //FILTERKPR2ODF_H

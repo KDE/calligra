@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-Name=Filter to expor KPR files to ODP
+Name=Filter to export KPR files to ODP
 
 X-KDE-Weight=1
 X-KDE-Export=application/vnd.oasis.opendocument.presentation
