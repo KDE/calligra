@@ -136,6 +136,7 @@
 #include "Object.h"
 #include "RecalcManager.h"
 #include "Selection.h"
+#include "ShapeApplicationData.h"
 #include "SheetPrint.h"
 #include "SheetShapeContainer.h"
 #include "SheetView.h"
@@ -503,6 +504,7 @@ public:
     QAction * customList;
     QAction * spellChecking;
     QAction * inspector;
+    KSelectAction* shapeAnchor;
 
     // settings
     KToggleAction* showStatusBar;
@@ -1253,6 +1255,15 @@ void View::Private::initActions()
   connect(actions->customList, SIGNAL(triggered(bool)),view, SLOT( sortList() ));
   actions->customList->setToolTip(i18n("Create custom lists for sorting or autofill"));
 
+    actions->shapeAnchor = new KSelectAction(i18n("Anchor"), view);
+    actions->shapeAnchor->addAction(i18n("Cell"));
+    actions->shapeAnchor->addAction(i18n("Page"));
+    actions->shapeAnchor->setEnabled(false);
+    actions->shapeAnchor->setToolTip(i18n("Switch shape anchoring"));
+    ac->addAction("shapeAnchor", actions->shapeAnchor);
+    connect(actions->shapeAnchor, SIGNAL(triggered(const QString&)),
+            view, SLOT(setShapeAnchoring(const QString&)));
+
   // -- navigation actions --
 
   actions->gotoCell = new KAction(KIcon("go-jump" ), i18n("Goto Cell..."), view);
@@ -1878,6 +1889,8 @@ void View::initView()
              d->canvasController, SLOT(setDocumentSize(const QSize&)));
     connect( d->canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
              d->canvas, SLOT(setDocumentOffset(const QPoint&)));
+    connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
+            this, SLOT(shapeSelectionChanged()));
 
     // Let the selection pointer become a canvas resource.
     QVariant variant;
@@ -2267,6 +2280,40 @@ void View::extraSpelling()
   }
 
   startKSpell();
+}
+
+void View::shapeSelectionChanged()
+{
+    const KoSelection* selection = d->canvas->shapeManager()->selection();
+    const QList<KoShape*> shapes = selection->selectedShapes(KoFlake::StrippedSelection);
+
+    if (shapes.isEmpty())
+    {
+        d->actions->shapeAnchor->setEnabled(false);
+        return;
+    }
+    d->actions->shapeAnchor->setEnabled(true);
+
+    // start with the first shape
+    const KoShape* shape = shapes[0];
+    const ShapeApplicationData* data = dynamic_cast<ShapeApplicationData*>(shape->applicationData());
+    Q_ASSERT(data);
+    bool anchoredToCell = data->isAnchoredToCell();
+    d->actions->shapeAnchor->setCurrentAction(anchoredToCell ? i18n("Cell") : i18n("Page"));
+
+    // go on with the remaining shapes
+    for (int i = 1; i < shapes.count(); ++i)
+    {
+        shape = shapes[i];
+        data = dynamic_cast<ShapeApplicationData*>(shape->applicationData());
+        Q_ASSERT(data);
+        if (anchoredToCell != data->isAnchoredToCell())
+        {
+            // If the anchoring differs between shapes, deselect the anchoring action and stop here.
+            d->actions->shapeAnchor->setCurrentAction(0);
+            break; 
+        }
+    }
 }
 
 
@@ -4346,6 +4393,19 @@ void View::sortList()
 
   ListDialog dlg( this, "List selection" );
   dlg.exec();
+}
+
+void View::setShapeAnchoring(const QString& mode)
+{
+    const KoSelection* selection = d->canvas->shapeManager()->selection();
+    const QList<KoShape*> shapes = selection->selectedShapes(KoFlake::StrippedSelection);
+    for (int i = 0; i < shapes.count(); ++i)
+    {
+        const KoShape* shape = shapes[i];
+        ShapeApplicationData* data = dynamic_cast<ShapeApplicationData*>(shape->applicationData());
+        Q_ASSERT(data);
+        data->setAnchoredToCell(mode == i18n("Cell"));
+    }
 }
 
 void View::gotoCell()

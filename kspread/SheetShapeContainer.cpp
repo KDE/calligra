@@ -26,6 +26,7 @@
 #include <KoXmlWriter.h>
 
 #include "Doc.h"
+#include "ShapeApplicationData.h"
 #include "Sheet.h"
 
 using namespace KSpread;
@@ -73,6 +74,7 @@ bool SheetShapeContainer::loadOdf( const KoXmlElement& elements, KoShapeLoadingC
             {
                 shape->setParent(this);
                 d->sheet->doc()->addShape(shape);
+                dynamic_cast<ShapeApplicationData*>(shape->applicationData())->setAnchoredToCell(false);
             }
         }
     }
@@ -86,6 +88,13 @@ void SheetShapeContainer::saveOdf( KoShapeSavingContext& context ) const
         return;
     context.xmlWriter().startElement("table:shapes");
     foreach (KoShape* shape, children)
+    {
+        // TODO Stefan: Enable after saving of cell anchored shapes got implemented.
+#if 0
+        if (dynamic_cast<ShapeApplicationData*>(shape->applicationData())->isAnchoredToCell())
+            continue;
+#endif
         shape->saveOdf(context);
+    }
     context.xmlWriter().endElement();
 }

@@ -127,6 +127,8 @@
     <Action name="definePrintRange"/>
     <Action name="resetPrintRange"/>
   </Menu>
+  <Separator/>
+  <Action name="shapeAnchor"/>
  </Menu>
  <Menu name="Data"><text>&amp;Data</text>
   <Action name="sort"/>

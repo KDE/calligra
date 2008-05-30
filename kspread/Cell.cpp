@@ -59,6 +59,7 @@
 #include "Object.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
+#include "ShapeApplicationData.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "SheetShapeContainer.h"
@@ -1690,6 +1691,8 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOdfLoadingContext& od
         for (int row = this->row(); row < endCell.firstRange().top(); ++row)
             size += QSizeF(0.0, d->sheet->rowFormat(row)->height());
         shape->setSize(size);
+
+        dynamic_cast<ShapeApplicationData*>(shape->applicationData())->setAnchoredToCell(true);
     }
 }
 

@@ -483,6 +483,13 @@ public Q_SLOTS:
 
     void sortList();
 
+    /**
+     * Switches the shape anchoring.
+     * Shapes can either be anchored to cells or to the sheet/page.
+     * \param mode string indicating cell or sheet anchoring
+     */
+    void setShapeAnchoring(const QString& mode);
+
     void statusBarClicked(const QPoint& pos);
     void menuCalc(bool);
 
@@ -586,6 +593,7 @@ public slots:
     void slotSheetRemoved( Sheet*_sheet );
     void refreshLocale();
     void extraSpelling();
+    void shapeSelectionChanged();
 
     void spellCheckerReady();
     void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int);

@@ -85,6 +85,7 @@
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
+#include "ShapeApplicationData.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "SheetShapeContainer.h"
@@ -446,6 +447,8 @@ void Doc::addShape( KoShape* shape )
 {
     if ( !shape )
         return;
+    shape->setApplicationData(new ShapeApplicationData());
+
     KoShape* parent = shape;
     SheetShapeContainer* shapeContainer = 0;
     while ( !shapeContainer && ( parent = parent->parent() ) )

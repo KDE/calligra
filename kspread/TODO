@@ -91,6 +91,16 @@ Things not in bugzilla
 * Flake integration.
   + Provide a table shape					      1 ----
   + General shape support					      1 ----
+  + Cell anchoring						      1 ----
+    - Saving								----
+      Query the shape container of the sheet before iterating over
+      the cells. Store the shapes anchored in cells in a QHash. Put
+      that into a saving context and pass it to the cell saving
+      methods. Write out the shape at the appropriate place.
+    - Interaction							----
+      Shapes anchored cells should be moved, if the cell itself
+      got moved; either by column/row/cell range insertions/deletions
+      or by column/row dimension changes.
 
 * Internals (See also DESIGN.html)
   + Painting    						      1 DONE

@@ -183,6 +183,7 @@ SET (kspreadcommon_LIB_SRCS
 	Region.cpp
 	RowColumnFormat.cpp
 	Selection.cpp
+	ShapeApplicationData.cpp
 	Sheet.cpp
 	SheetShapeContainer.cpp
 	SheetPrint.cpp

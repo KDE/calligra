@@ -72,6 +72,52 @@ public:
     // reimplemented from KoShapeLayer
     virtual void saveOdf( KoShapeSavingContext& context ) const;
 
+    /**
+     * Insert \p number columns at \p position .
+     * \return the data, that became out of range (shifted over the end)
+     */
+    void insertColumns(int position, int number);
+
+    /**
+     * Removes \p number columns at \p position .
+     * \return the removed data
+     */
+    void removeColumns(int position, int number);
+
+    /**
+     * Insert \p number rows at \p position .
+     * \return the data, that became out of range (shifted over the end)
+     */
+    void insertRows(int position, int number);
+
+    /**
+     * Removes \p number rows at \p position .
+     * \return the removed data
+     */
+    void removeRows(int position, int number);
+
+    /**
+     * Shifts the data right of \p rect to the left by the width of \p rect .
+     * The data formerly contained in \p rect becomes overridden.
+     */
+    void removeShiftLeft(const QRect& rect);
+
+    /**
+     * Shifts the data in and right of \p rect to the right by the width of \p rect .
+     */
+    void insertShiftRight(const QRect& rect);
+
+    /**
+     * Shifts the data below \p rect to the top by the height of \p rect .
+     * The data formerly contained in \p rect becomes overridden.
+     */
+    void removeShiftUp(const QRect& rect);
+
+    /**
+     * Shifts the data in and below \p rect to the bottom by the height of \p rect .
+     */
+    void insertShiftDown(const QRect& rect);
+
 private:
     class Private;
     Private * const d;
