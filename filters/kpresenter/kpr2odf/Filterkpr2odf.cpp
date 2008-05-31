@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
    Copyright (C) 2008 Carlos Licea <carlos.licea@kdemail.net>
-   code based on svgexport.cc from Inge Wallin <inge@lysator.liu.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,6 +31,7 @@
 #include <KoXmlWriter.h>
 
 #include "Filterkpr2odf.h"
+#include "manifestCreator.h"
 
 typedef KGenericFactory<Filterkpr2odf> Filterkpr2odfFactory;
 K_EXPORT_COMPONENT_FACTORY( libFilterkpr2odf, Filterkpr2odfFactory( "kofficefilters" ) )
@@ -75,8 +75,13 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
     delete input;
 
     //If we find everything let the saving begin
+    //Create the manifest creator
+    manifestCreator manifest;
+    manifest.addFile("application/vnd.oasis.opendocument.presentation", "/");
+
     //Create the output file
-    KoStore* output = KoStore::createStore( m_chain->outputFile(), KoStore::Write, "application/vnd.oasis.opendocument.presentation", KoStore::Zip );
+    KoStore* output = KoStore::createStore( m_chain->outputFile(), KoStore::Write
+                                           ,"application/vnd.oasis.opendocument.presentation", KoStore::Zip );
 
     if ( !output )
         return KoFilter::StorageCreationError;
@@ -87,24 +92,41 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
     output->write( *preview );
     output->close();
     output->leaveDirectory();
+    manifest.addFile( "Thubnails/thubnail.png" );
+    manifest.addFile( "Thubnails/" );
     delete preview;
 
     //We cannot handle the QIODevice by ourselves when it's in writing mode so we
     //workaround that issue by writing to a QByteArray in a QBuffer and then returning the array
      //Create the content.xml file
     output->open( "content.xml" );
+    manifest.addFile( "content.xml", "text/xml" );
     output->close();
 
      //Create the styles.xml file
     output->open( "styles.xml" );
+    manifest.addFile( "styles.xml", "text/xml" );
     output->close();
 
      //Create the meta.xml file
     output->open( "meta.xml" );
     output->write( createMetadata() );
+    manifest.addFile( "meta.xml", "text/xml" );
     output->close();
 
-    //Create document manifest
+     //Write the Pictures directory and its children
+    output->enterDirectory( "Pictures" );
+    //FIXME: how in earth do we get the files inside the pictures' directory in the KPR?!
+    output->leaveDirectory();
+    manifest.addFile( "Pictures/" );
+
+     //Write the document manifest
+    output->enterDirectory( "META-INF" );
+    output->open( "manifest.xml" );
+    output->write( manifest.endManifest() );
+    output->close();
+    output->leaveDirectory();
+
     delete output;
 
     return KoFilter::OK;
@@ -192,7 +214,7 @@ QByteArray Filterkpr2odf::createMetadata()
                 meta->addTextNode( node.firstChild().toText().data() );
                 meta->endElement();
             }
-        }//end aboutNode's if
+        }//end of aboutNode's if
 
         //author node
         KoXmlNode authorNode = m_documentInfo.namedItem("author");
@@ -203,9 +225,9 @@ QByteArray Filterkpr2odf::createMetadata()
                 meta->addTextNode( node.firstChild().toText().data() );
                 meta->endElement();
             }
-        }//end author's if
+        }//end of authorNode's if
         //FIXME: loads of the autor information is being lost, what should we do?
-    }
+    }//end of documentInfoNode's if
 
     meta->endElement();//end of office:meta
     meta->endElement();//end of office:document-meta

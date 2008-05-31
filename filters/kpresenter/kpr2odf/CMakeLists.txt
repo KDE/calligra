@@ -1,6 +1,6 @@
 ########### next target ###############
 
-set(Filterkpr2odf_PART_SRCS Filterkpr2odf.cpp )
+set(Filterkpr2odf_PART_SRCS Filterkpr2odf.cpp manifestCreator.cpp )
 
 kde4_add_plugin(Filterkpr2odf WITH_PREFIX ${Filterkpr2odf_PART_SRCS})
 
