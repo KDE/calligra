@@ -44,7 +44,10 @@
 #include <KoOasisSettings.h>
 #include <KoOdfStylesReader.h>
 #include <KoQueryTrader.h>
+#include <KoShape.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeManager.h>
+#include <KoShapeRegistry.h>
 #include <KoShapeSavingContext.h>
 #include <KoStyleStack.h>
 #include <KoUnit.h>
@@ -68,8 +71,8 @@
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
+#include "ShapeApplicationData.h"
 #include "SheetPrint.h"
-#include "SheetShapeContainer.h"
 #include "RectStorage.h"
 #include "Style.h"
 #include "StyleManager.h"
@@ -139,7 +142,7 @@ public:
   CellStorage* cellStorage;
   RowCluster rows;
   ColumnCluster columns;
-  SheetShapeContainer* shapeContainer;
+  QList<KoShape*> shapes;
 
   // hold the print object
   SheetPrint* print;
@@ -194,7 +197,6 @@ Sheet::Sheet(Map* map, const QString& sheetName)
   d->cellStorage = new CellStorage( this );
   d->rows.setAutoDelete( true );
   d->columns.setAutoDelete( true );
-  d->shapeContainer = new SheetShapeContainer(this);
 
   d->documentSize = QSizeF( KS_colMax * doc()->defaultColumnFormat()->width(),
                             KS_rowMax * doc()->defaultRowFormat()->height() );
@@ -261,7 +263,16 @@ Sheet::Sheet(const Sheet& other)
     d->cellStorage = new CellStorage(*other.d->cellStorage, this);
     d->rows = other.d->rows;
     d->columns = other.d->columns;
-    d->shapeContainer = new SheetShapeContainer(*other.d->shapeContainer, this);
+
+    // flake
+    KoShape* shape;
+    const QList<KoShape*> shapes = other.d->shapes;
+    for (int i = 0; i < shapes.count(); ++i)
+    {
+        shape = KoShapeRegistry::instance()->value(shapes[i]->shapeId())->createDefaultShape( 0 );
+        shape->copySettings(shapes[i]);
+        addShape(shape);
+    }
 
     d->print = new SheetPrint(this); // FIXME = new SheetPrint(*other.d->print);
     d->printManager = new PrintManager(this);
@@ -291,7 +302,7 @@ Sheet::~Sheet()
     delete d->print;
     delete d->printManager;
     delete d->cellStorage;
-    delete d->shapeContainer;
+    qDeleteAll(d->shapes);
     delete d;
 }
 
@@ -310,9 +321,45 @@ Doc* Sheet::doc() const
   return d->workbook->doc();
 }
 
-SheetShapeContainer* Sheet::shapeContainer() const
+void Sheet::addShape(KoShape* shape)
 {
-    return d->shapeContainer;
+    if (!shape)
+        return;
+    d->shapes.append(shape);
+    shape->setApplicationData(new ShapeApplicationData());
+
+    const QList<KoView*> views = doc()->views();
+    for (int i = 0; i < views.count(); ++i)
+    {
+        View* const view = static_cast<View*>(views[i]);
+        if (view->activeSheet() == this)
+            view->canvasWidget()->shapeManager()->add(shape);
+    }
+}
+
+void Sheet::removeShape(KoShape* shape)
+{
+    if (!shape)
+        return;
+    d->shapes.removeAll(shape);
+
+    const QList<KoView*> views = doc()->views();
+    for (int i = 0; i < views.count(); ++i)
+    {
+        View* const view = static_cast<View*>(views[i]);
+        if (view->activeSheet() == this)
+            view->canvasWidget()->shapeManager()->remove(shape);
+    }
+}
+
+QMap<QString, KoDataCenter*> Sheet::dataCenterMap()
+{
+    return doc()->dataCenterMap();
+}
+
+QList<KoShape*> Sheet::shapes() const
+{
+    return d->shapes;
 }
 
 Qt::LayoutDirection Sheet::layoutDirection() const
@@ -611,6 +658,17 @@ int Sheet::bottomRow( double _ypos ) const
     while (y <= _ypos && row < KS_rowMax)
         y += rowFormat(++row)->visibleHeight();
     return row;
+}
+
+QRectF Sheet::cellCoordinatesToDocument(const QRect& cellRange) const
+{
+    // TODO Stefan: Rewrite to save some iterations over the columns/rows.
+    QRectF rect;
+    rect.setLeft(columnPosition(cellRange.left()));
+    rect.setRight(columnPosition(cellRange.right()) + columnFormat(cellRange.right())->width());
+    rect.setTop(rowPosition(cellRange.top()));
+    rect.setBottom(rowPosition(cellRange.bottom()) + rowFormat(cellRange.bottom())->height());
+    return rect;
 }
 
 double Sheet::columnPosition( int _col ) const
@@ -2779,8 +2837,18 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                     // OpenDocument v1.1, 8.3.4 Shapes:
                     // The <table:shapes> element contains all graphic shapes
                     // with an anchor on the table this element is a child of.
-                    KoShapeLoadingContext shapeLoadingContext( odfContext, doc() );
-                    d->shapeContainer->loadOdf( rowElement, shapeLoadingContext );
+                    KoShapeLoadingContext shapeLoadingContext(odfContext, this);
+                    KoXmlElement element;
+                    forEachElement(element, rowElement)
+                    {
+                        if (element.namespaceURI() != KoXmlNS::draw)
+                            continue;
+                        KoShape* shape = KoShapeRegistry::instance()->createShapeFromOdf(element, shapeLoadingContext);
+                        if (!shape)
+                            continue;
+                        addShape(shape);
+                        dynamic_cast<ShapeApplicationData*>(shape->applicationData())->setAnchoredToCell(false);
+                    }
                 }
             }
 
@@ -3643,7 +3711,21 @@ bool Sheet::saveOasis( KoShapeSavingContext &savingContext, GenValidationStyles 
     const QRect usedArea = this->usedArea();
     saveOasisColRowCell( xmlWriter, mainStyles, usedArea.width(), usedArea.height(), valStyle );
 
-    d->shapeContainer->saveOdf( savingContext );
+    // flake
+    if (!d->shapes.isEmpty())
+    {
+        xmlWriter.startElement("table:shapes");
+        foreach (KoShape* shape, d->shapes)
+        {
+            // TODO Stefan: Enable after saving of cell anchored shapes got implemented.
+#if 0
+            if (dynamic_cast<ShapeApplicationData*>(shape->applicationData())->isAnchoredToCell())
+                continue;
+#endif
+            shape->saveOdf(savingContext);
+        }
+        xmlWriter.endElement();
+    }
 
     xmlWriter.endElement();
     return true;

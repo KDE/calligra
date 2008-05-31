@@ -45,6 +45,7 @@ public:
 
 public:
     int setupPages(const QPrinter& printer, bool forceRecreation = false);
+    Sheet* getSheetPageNumber(int* sheetPageNumber) const;
 };
 
 int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
@@ -93,6 +94,22 @@ int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
     }
     return pageCount;
 }
+
+Sheet* PrintJob::Private::getSheetPageNumber(int* sheetPageNumber) const
+{
+    Q_ASSERT(sheetPageNumber);
+    // Find the sheet specific page number.
+    Sheet* sheet = 0;
+    for (int i = 0; i < selectedSheets.count(); ++i)
+    {
+        sheet = selectedSheets[i];
+        if (*sheetPageNumber <= sheet->printManager()->pageCount())
+            break;
+        *sheetPageNumber -= sheet->printManager()->pageCount();
+    }
+    return sheet;
+}
+
 
 PrintJob::PrintJob(View *view)
     : KoPrintingDialog(view)
@@ -162,22 +179,18 @@ void PrintJob::startPrinting(RemovePolicy removePolicy)
 
 void PrintJob::preparePage(int pageNumber)
 {
+    Q_UNUSED(pageNumber)
+    const int resolution = printer().resolution();
+    const QRectF pageRect = printer().pageRect(QPrinter::Point);
+    painter().translate(pageRect.left() * resolution, pageRect.top() * resolution);
+    painter().setClipRect(0.0, 0.0, pageRect.width() * resolution, pageRect.height() * resolution);
 }
 
 void PrintJob::printPage(int pageNumber, QPainter &painter)
 {
     kDebug(36004) << "Printing page" << pageNumber;
-    // Find the sheet specific page number.
-    Sheet* sheet = 0;
     int sheetPageNumber = pageNumber;
-    const QList<Sheet*> sheets = d->selectedSheets;
-    for (int i = 0; i < sheets.count(); ++i)
-    {
-        sheet = sheets[i];
-        if (pageNumber <= sheet->printManager()->pageCount())
-            break;
-        sheetPageNumber -= sheet->printManager()->pageCount();
-    }
+    Sheet* sheet = d->getSheetPageNumber(&sheetPageNumber);
 
     // Print the page.
     if (sheet)
@@ -276,8 +289,18 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
 
 QList<KoShape*> PrintJob::shapesOnPage(int pageNumber)
 {
-    Q_UNUSED(pageNumber);
-    return shapeManager()->shapes();
+    kDebug() << "determining shapes on page" << pageNumber;
+    int sheetPageNumber = pageNumber;
+    Sheet* sheet = d->getSheetPageNumber(&sheetPageNumber);
+    if (!sheet)
+        return QList<KoShape*>();
+
+    const QRect cellRange = sheet->printManager()->cellRange(sheetPageNumber);
+    kDebug() << "sheetPageNumber" << sheetPageNumber;
+    kDebug() << "cellRange" << cellRange;
+    kDebug() << "pageRange" << sheet->cellCoordinatesToDocument(cellRange);
+    kDebug() << "shapeCount" << shapeManager()->shapesAt(sheet->cellCoordinatesToDocument(cellRange)).count();
+    return shapeManager()->shapesAt(sheet->cellCoordinatesToDocument(cellRange));
 }
 
 QList<QWidget*> PrintJob::createOptionWidgets() const

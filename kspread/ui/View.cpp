@@ -99,6 +99,7 @@
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
 #include <KoPartSelectAction.h>
+#include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KoColorSetAction.h>
@@ -138,7 +139,6 @@
 #include "Selection.h"
 #include "ShapeApplicationData.h"
 #include "SheetPrint.h"
-#include "SheetShapeContainer.h"
 #include "SheetView.h"
 #include "Style.h"
 #include "StyleManager.h"
@@ -3775,9 +3775,9 @@ void View::setActiveSheet( Sheet* sheet, bool updateSheet )
     }
 
     // flake
-    // Change the active shape container (layer) and use its shapes.
-    d->canvas->shapeManager()->selection()->setActiveLayer( d->activeSheet->shapeContainer() );
-    d->canvas->shapeManager()->setShapes( d->activeSheet->shapeContainer()->iterator() );
+    // Change the active shape controller and its shapes.
+    d->canvas->shapeController()->setShapeControllerBase(d->activeSheet);
+    d->canvas->shapeManager()->setShapes(d->activeSheet->shapes());
     // Tell the Canvas about the new visible sheet size.
     sheetView( d->activeSheet )->updateAccessedCellRange();
 

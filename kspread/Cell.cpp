@@ -62,7 +62,6 @@
 #include "ShapeApplicationData.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
-#include "SheetShapeContainer.h"
 #include "Style.h"
 #include "StyleManager.h"
 #include "Util.h"
@@ -1632,7 +1631,7 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOdfLoadingContext& od
                                                       KoXmlNS::table, "end-y",
                                                       "table:end-y"));
 
-    KoShapeLoadingContext shapeContext(odfContext, doc());
+    KoShapeLoadingContext shapeContext(odfContext, d->sheet);
     KoXmlElement element;
     forEachElement(element, parent)
     {
@@ -1646,8 +1645,7 @@ void Cell::loadOasisObjects( const KoXmlElement &parent, KoOdfLoadingContext& od
             continue;
         }
 
-        shape->setParent(d->sheet->shapeContainer());
-        doc()->addShape(shape);
+        d->sheet->addShape(shape);
 
         // All three attributes are necessary for cell anchored shapes.
         // Otherwise, they are anchored in the sheet.

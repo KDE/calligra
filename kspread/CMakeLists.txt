@@ -185,7 +185,6 @@ SET (kspreadcommon_LIB_SRCS
 	Selection.cpp
 	ShapeApplicationData.cpp
 	Sheet.cpp
-	SheetShapeContainer.cpp
 	SheetPrint.cpp
 	RectStorage.cpp
 	Style.cpp

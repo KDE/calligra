@@ -45,6 +45,7 @@ public:
 public:
     void calculatePages();
     void printPage(int page, QPainter&) const;
+    bool pageNeedsPrinting(const QRect& cellRange) const;
 };
 
 void PrintManager::Private::calculatePages()
@@ -98,13 +99,17 @@ void PrintManager::Private::calculatePages()
                         continue;
 
 //                     kDebug() << "col" << col << "columns" << columns << "width" << width;
-                    pages.insert(pageNumber++, QRect(col - columns + 1, row - rows + 1, columns, rows));
+                    const QRect cellRange(col - columns + 1, row - rows + 1, columns, rows);
+                    if (pageNeedsPrinting(cellRange))
+                        pages.insert(pageNumber++, cellRange);
                     columns = 0;
                     width = 0.0;
                 }
                 // Always insert a page for the last column
                 columns++;
-                pages.insert(pageNumber++, QRect(printRange.right() - columns + 1, row - rows + 1, columns, rows));
+                const QRect cellRange(printRange.right() - columns + 1, row - rows + 1, columns, rows);
+                if (pageNeedsPrinting(cellRange))
+                    pages.insert(pageNumber++, cellRange);
 
                 // 3. prepare for the next row of pages
                 rows = 0;
@@ -156,13 +161,17 @@ void PrintManager::Private::calculatePages()
                         continue;
 
 //                     kDebug() << "row" << row << "rows" << rows << "height" << height;
-                    pages.insert(pageNumber++, QRect(col - columns + 1, row - rows + 1, columns, rows));
+                    const QRect cellRange(col - columns + 1, row - rows + 1, columns, rows);
+                    if (pageNeedsPrinting(cellRange))
+                        pages.insert(pageNumber++, cellRange);
                     rows = 0;
                     height = 0.0;
                 }
                 // Always insert a page for the last row
                 rows++;
-                pages.insert(pageNumber++, QRect(col - columns + 1, printRange.bottom() - rows + 1, columns, rows));
+                const QRect cellRange(col - columns + 1, printRange.bottom() - rows + 1, columns, rows);
+                if (pageNeedsPrinting(cellRange))
+                    pages.insert(pageNumber++, cellRange);
 
                 // 3. prepare for the next column of pages
                 columns = 0;
@@ -191,6 +200,17 @@ void PrintManager::Private::printPage(int page, QPainter& painter) const
     sheetView->setPaintCellRange(cellRange);
     sheetView->paintCells(painter.device(), painter, paintRect, topLeft);
 }
+
+bool PrintManager::Private::pageNeedsPrinting(const QRect& cellRange) const
+{
+    // TODO Stefan: Is there a better, faster approach?
+    for (int row = cellRange.top(); row <= cellRange.bottom() ; ++row)
+        for (int col = cellRange.left(); col <= cellRange.right(); ++col)
+            if (Cell(sheet, col, row).needsPrinting())
+                return true;
+    return false;
+}
+
 
 PrintManager::PrintManager(Sheet* sheet)
     : d(new Private)
@@ -281,4 +301,11 @@ int PrintManager::pageCount() const
 {
     d->calculatePages();
     return d->pages.count();
+}
+
+QRect PrintManager::cellRange(int page) const
+{
+    if (page < 1 || page > d->pages.count())
+        return QRect();
+    return d->pages[page];
 }

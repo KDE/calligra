@@ -72,25 +72,7 @@ public:
     TableShape* tableShape;
 
     QComboBox* sheetComboBox;
-
-public:
-    QRectF cellCoordinatesToDocument(const QRect& cellRange) const;
 };
-
-// TODO Stefan: Copied from Canvas. Share it somewhere.
-QRectF TableTool::Private::cellCoordinatesToDocument( const QRect& cellRange ) const
-{
-    register Sheet * const sheet = tableShape->sheet();
-    if (!sheet)
-        return QRectF();
-
-    QRectF rect;
-    rect.setLeft  ( sheet->columnPosition( cellRange.left() ) );
-    rect.setRight ( sheet->columnPosition( cellRange.right() + 1 ) );
-    rect.setTop   ( sheet->rowPosition( cellRange.top() ) );
-    rect.setBottom( sheet->rowPosition( cellRange.bottom() + 1 ) );
-    return rect;
-}
 
 
 TableTool::TableTool( KoCanvasBase* canvas )
@@ -155,7 +137,7 @@ void TableTool::paint( QPainter& painter, const KoViewConverter& viewConverter )
     selectionColor.setAlpha(127);
 
     // draw the transparent selection background
-    const QRectF rect = d->cellCoordinatesToDocument(d->selection->lastRange());
+    const QRectF rect = d->tableShape->sheet()->cellCoordinatesToDocument(d->selection->lastRange());
     painter.fillRect(rect.translated(d->tableShape->position()), selectionColor);
 }
 

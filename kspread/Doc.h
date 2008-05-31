@@ -38,7 +38,6 @@
 #include <kglobalsettings.h>
 
 #include <KoDocument.h>
-#include <KoShapeControllerBase.h>
 #include <KoXmlReader.h>
 #include <KoGenStyle.h>
 
@@ -89,7 +88,7 @@ class EmbeddedObject;
 /**
  * This class holds the data that makes up a spreadsheet.
  */
-class KSPREAD_EXPORT Doc : public KoDocument, public KoShapeControllerBase
+class KSPREAD_EXPORT Doc : public KoDocument
 {
   Q_OBJECT
   Q_PROPERTY( bool dontCheckUpperWord READ dontCheckUpperWord WRITE setDontCheckUpperWord)
@@ -136,12 +135,7 @@ public:
   virtual QByteArray mimeType() const { return MIME_TYPE; }
 
     // KoShapeControllerBase interface
-    /// reimplemented method from KoShapeControllerBase
-    virtual void addShape( KoShape* shape );
-    /// reimplemented method from KoShapeControllerBase
-    virtual void removeShape(KoShape* shape);
-    /// reimplemented method from KoShapeControllerBase
-    virtual QMap<QString, KoDataCenter*> dataCenterMap ();
+    QMap<QString, KoDataCenter*> dataCenterMap();
 
   /**
    * A sheet could use a different localization as the KDE default.

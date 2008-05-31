@@ -32,6 +32,7 @@
 #include <KoDocument.h>
 #include <KoDocumentChild.h>
 #include <KoOasisSettings.h> // for KoOasisSettings::NamedMap
+#include <KoShapeControllerBase.h>
 #include <KoXmlReader.h>
 
 #include "Cell.h"
@@ -48,6 +49,7 @@ class KoGenStyles;
 class KoOdfLoadingContext;
 class KoOasisSettings;
 class KoOdfStylesReader;
+class KoShape;
 class KoShapeSavingContext;
 class KoPicture;
 class KoXmlWriter;
@@ -78,7 +80,6 @@ class RowFormat;
 class Selection;
 class Sheet;
 class SheetPrint;
-class SheetShapeContainer;
 class Style;
 class StyleStorage;
 class Validity;
@@ -91,7 +92,7 @@ class EmbeddedObject;
 /**
  * A sheet contains several cells.
  */
-class KSPREAD_EXPORT Sheet : public QObject
+class KSPREAD_EXPORT Sheet : public QObject, public KoShapeControllerBase
 {
     Q_OBJECT
     Q_PROPERTY( QString sheetName READ sheetName )
@@ -128,10 +129,17 @@ public:
      */
     Doc* doc() const;
 
+    // KoShapeControllerBase interface
+    virtual void addShape(KoShape* shape);
+    virtual void removeShape(KoShape* shape);
+    virtual QMap<QString, KoDataCenter*> dataCenterMap();
+
     /**
-     * \return the shape container of this sheet
+     * \ingroup Embedding
+     * Returns the sheet's shapes.
+     * \return the shapes this sheet contains
      */
-    SheetShapeContainer* shapeContainer() const;
+    QList<KoShape*> shapes() const;
 
     //////////////////////////////////////////////////////////////////////////
     //
@@ -614,6 +622,14 @@ public:
      * \return the column for the given position \p _xpos
      */
     int rightColumn( double _xpos ) const;
+
+    /**
+     * Calculates the region in document coordinates occupied by a range of cells on
+     * the currently active sheet.
+     *
+     * @param cellRange The range of cells on the current sheet.
+     */
+    QRectF cellCoordinatesToDocument(const QRect& cellRange) const;
 
     /**
      * @return the left corner of the column as double.

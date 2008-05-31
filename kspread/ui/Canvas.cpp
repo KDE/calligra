@@ -126,7 +126,7 @@ using namespace KSpread;
 
 Canvas::Canvas(View *view)
     : QWidget( view )
-    , KoCanvasBase( view->doc() )
+    , KoCanvasBase(0)
     , d( new Private )
 {
   setAttribute( Qt::WA_OpaquePaintEvent );
@@ -729,7 +729,7 @@ bool Canvas::highlightRangeSizeGripAt(double x, double y)
   for (Region::ConstIterator it = choice()->constBegin(); it != end; ++it)
   {
     // TODO Stefan: adapt to Selection::selectionHandleArea
-    QRectF visibleRect = cellCoordinatesToDocument( (*it)->rect() );
+    QRectF visibleRect = activeSheet()->cellCoordinatesToDocument( (*it)->rect() );
 
     QPoint bottomRight((int) visibleRect.right(), (int) visibleRect.bottom());
     QRect handle( ( (int) bottomRight.x() - 6 ),
@@ -2843,7 +2843,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const QRectF& /*viewRect*
 
     const QRect range = choice()->extendToMergedAreas( (*it)->rect() );
 
-    QRectF unzoomedRect = cellCoordinatesToDocument( range ).translated( -xOffset(), -yOffset() );
+    QRectF unzoomedRect = activeSheet()->cellCoordinatesToDocument( range ).translated( -xOffset(), -yOffset() );
 
     //Convert region from sheet coordinates to canvas coordinates for use with the painter
     //retrieveMarkerInfo(region,viewRect,positions,paintSides);
@@ -3013,27 +3013,13 @@ void Canvas::paintNormalMarker(QPainter& painter, const QRectF &viewRect)
     painter.restore();
 }
 
-QRectF Canvas::cellCoordinatesToDocument( const QRect& cellRange ) const
-{
-    register Sheet * const sheet = activeSheet();
-    if (!sheet)
-        return QRectF();
-
-    QRectF rect;
-    rect.setLeft  ( sheet->columnPosition( cellRange.left() ) );
-    rect.setRight ( sheet->columnPosition(cellRange.right()) + sheet->columnFormat(cellRange.right())->width());
-    rect.setTop   ( sheet->rowPosition( cellRange.top() ) );
-    rect.setBottom( sheet->rowPosition(cellRange.bottom()) + sheet->rowFormat(cellRange.bottom())->height());
-    return rect;
-}
-
 QRectF Canvas::cellCoordinatesToView( const QRect& cellRange ) const
 {
     register Sheet * const sheet = activeSheet();
     if (!sheet)
         return QRectF();
 
-    QRectF rect = cellCoordinatesToDocument( cellRange );
+    QRectF rect = sheet->cellCoordinatesToDocument( cellRange );
     // apply scrolling offset
     rect.translate( -xOffset(), -yOffset() );
     // convert it to view coordinates
@@ -3055,7 +3041,7 @@ void Canvas::retrieveMarkerInfo( const QRect &cellRange,
                                  bool paintSides[] )
 {
     const Sheet* sheet = activeSheet();
-    const QRectF visibleRect = cellCoordinatesToDocument( cellRange ).translated( -xOffset(), -yOffset() );
+    const QRectF visibleRect = sheet->cellCoordinatesToDocument( cellRange ).translated( -xOffset(), -yOffset() );
 
     /* these vars are used for clarity, the array for simpler function arguments  */
     double left = visibleRect.left();

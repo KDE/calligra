@@ -22,6 +22,7 @@
 
 class QPainter;
 class QPrinter;
+class QRect;
 
 namespace KSpread
 {
@@ -60,6 +61,13 @@ public:
      * Number of pages.
      */
     int pageCount() const;
+
+    /**
+     * Return the cell range of the requested page.
+     * \param page the page number
+     * \return the page's cell range
+     */
+    QRect cellRange(int page) const;
 
 private:
     class Private;

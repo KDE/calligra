@@ -85,10 +85,8 @@
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
-#include "ShapeApplicationData.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
-#include "SheetShapeContainer.h"
 #include "SheetView.h"
 #include "StyleManager.h"
 #include "Util.h"
@@ -441,48 +439,6 @@ void Doc::setDefaultColumnWidth( double width )
 void Doc::setDefaultRowHeight( double height )
 {
     d->defaultRowFormat->setHeight( height );
-}
-
-void Doc::addShape( KoShape* shape )
-{
-    if ( !shape )
-        return;
-    shape->setApplicationData(new ShapeApplicationData());
-
-    KoShape* parent = shape;
-    SheetShapeContainer* shapeContainer = 0;
-    while ( !shapeContainer && ( parent = parent->parent() ) )
-    {
-        shapeContainer = dynamic_cast<SheetShapeContainer*>( parent );
-    }
-    Q_ASSERT( shapeContainer );
-
-    foreach ( KoView* view, views() )
-    {
-        Canvas* canvas = static_cast<View*>( view )->canvasWidget();
-        if ( canvas->activeSheet()->shapeContainer() == shapeContainer )
-            canvas->shapeManager()->add( shape );
-    }
-}
-
-void Doc::removeShape( KoShape* shape )
-{
-    if ( !shape )
-        return;
-    KoShape* parent = shape;
-    SheetShapeContainer* shapeContainer = 0;
-    while ( !shapeContainer && ( parent = parent->parent() ) )
-    {
-        shapeContainer = dynamic_cast<SheetShapeContainer*>( parent );
-    }
-    Q_ASSERT( shapeContainer );
-
-    foreach ( KoView* view, views() )
-    {
-        Canvas* canvas = static_cast<View*>( view )->canvasWidget();
-        if ( canvas->activeSheet()->shapeContainer() == shapeContainer )
-            canvas->shapeManager()->remove( shape );
-    }
 }
 
 QMap<QString, KoDataCenter *> Doc::dataCenterMap()
