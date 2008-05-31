@@ -33,6 +33,7 @@
 #include <KoShapeManager.h>
 
 #include <QPainter>
+#include <QPrintPreviewDialog>
 
 using namespace KSpread;
 
@@ -172,18 +173,36 @@ void PrintJob::startPrinting(RemovePolicy removePolicy)
 {
     // Setup the pages.
     // No recreation forced, because the sheet contents remained the same since the dialog was created.
-    d->setupPages(printer());
+    const int pageCount = d->setupPages(printer());
+
+    // If there's nothing to print and this slot was not called by the print preview dialog ...
+    if (pageCount == 0 && (!sender() || !qobject_cast<QPrintPreviewDialog*>(sender())))
+    {
+        QStringList sheetNames;
+        for (int i = 0; i < d->selectedSheets.count(); ++i)
+            sheetNames.append(d->selectedSheets[i]->sheetName());
+        KMessageBox::information(d->view, i18n("Nothing to print for sheet(s) %1.", sheetNames.join(", ")));
+        return;
+    }
+
     // Start the printing.
     KoPrintingDialog::startPrinting(removePolicy);
 }
 
 void PrintJob::preparePage(int pageNumber)
 {
-    Q_UNUSED(pageNumber)
-    const int resolution = printer().resolution();
-    const QRectF pageRect = printer().pageRect(QPrinter::Point);
-    painter().translate(pageRect.left() * resolution, pageRect.top() * resolution);
-    painter().setClipRect(0.0, 0.0, pageRect.width() * resolution, pageRect.height() * resolution);
+    int sheetPageNumber = pageNumber;
+    Sheet* sheet = d->getSheetPageNumber(&sheetPageNumber);
+    if (!sheet)
+        return;
+
+    // Prepare the page for shape printing.
+    const QRectF printerPageRect = printer().pageRect(QPrinter::Point);
+    painter().translate(printerPageRect.left(), printerPageRect.top());
+    const QRect cellRange = sheet->printManager()->cellRange(sheetPageNumber);
+    const QRectF pageRect = sheet->cellCoordinatesToDocument(cellRange);
+    painter().translate(pageRect.left(), pageRect.top());
+    painter().setClipRect(0.0, 0.0, pageRect.width(), pageRect.height());
 }
 
 void PrintJob::printPage(int pageNumber, QPainter &painter)
@@ -192,114 +211,29 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
     int sheetPageNumber = pageNumber;
     Sheet* sheet = d->getSheetPageNumber(&sheetPageNumber);
 
-    // Print the page.
+    // Print the cells.
     if (sheet)
+    {
+        // Reset the offset.
+        const QRectF printerPageRect = printer().pageRect(QPrinter::Point);
+        painter.translate(-printerPageRect.left(), -printerPageRect.top());
+        const QRect cellRange = sheet->printManager()->cellRange(sheetPageNumber);
+        const QRectF pageRect = sheet->cellCoordinatesToDocument(cellRange);
+        painter.translate(-pageRect.left(), -pageRect.top());
+
         sheet->printManager()->printPage(sheetPageNumber, painter);
-
-#if 0
-    Q_UNUSED(pageNumber);
-    // kDebug(36005) <<"Entering KSpread print.";
-    //save the current active sheet for later, so we can restore it at the end
-    Sheet* selectedsheet = d->view->activeSheet();
-
-    //print all sheets in the order given by the print dialog (Sheet Selection)
-    QStringList sheetlist = d->sheetSelectPage->selectedSheets();
-
-    if (sheetlist.empty())
-    {
-      // kDebug(36005) <<"No sheet for printing selected, printing active sheet";
-      sheetlist.append(d->view->activeSheet()->sheetName());
     }
-
-    bool firstpage = true;
-
-    QStringList::iterator sheetlistiterator;
-    for (sheetlistiterator = sheetlist.begin(); sheetlistiterator != sheetlist.end(); ++sheetlistiterator)
-    {
-        // kDebug(36005) <<"  printing sheet" << *sheetlistiterator;
-        Sheet* sheet = d->view->doc()->map()->findSheet(*sheetlistiterator);
-        if (sheet == 0)
-        {
-          kWarning(36005) << i18n("Sheet %1 could not be found for printing",*sheetlistiterator);
-          continue;
-        }
-
-        d->view->setActiveSheet(sheet,false);
-
-        PrintSettings* settings = sheet->printSettings();
-
-        if (firstpage)
-          firstpage=false;
-        else
-        {
-          // kDebug(36005) <<" inserting new page";
-          printer().newPage();
-        }
-
-        if ( d->view->canvasWidget()->editor() )
-        {
-            d->view->canvasWidget()->deleteEditor( true ); // save changes
-        }
-
-        //store the current setting in a temporary variable
-        KoPageFormat::Orientation _orient = settings->pageLayout().orientation;
-
-        //use the current orientation from print dialog
-        if ( printer().orientation() == QPrinter::Landscape )
-        {
-            settings->setPageOrientation( KoPageFormat::Landscape );
-        }
-        else
-        {
-            settings->setPageOrientation( KoPageFormat::Portrait );
-        }
-
-        kDebug() << "QPainter.device() =" << painter.device();
-
-#if 0
-        SheetPrint* print = sheet->print();
-        bool result = print->print( painter, &printer() );
-#else
-        PrintManager printManager = (d->view->activeSheet());
-        bool result = printManager.print(painter, &printer());
-#endif
-
-        //Restore original orientation
-        settings->setPageOrientation( _orient );
-
-        // Nothing to print
-        if( !result )
-        {
-            // not required in Qt
-            //if( !printer.previewOnly() )
-            //{
-                KMessageBox::information( 0,
-                i18n("Nothing to print for sheet %1.",
-                d->view->activeSheet()->sheetName()) );
-                //@todo: make sure we really can comment this out,
-                //       what to do with partially broken printouts?
-//                 printer.abort();
-            //}
-        }
-    }
-
-    d->view->setActiveSheet(selectedsheet);
-#endif
 }
 
 QList<KoShape*> PrintJob::shapesOnPage(int pageNumber)
 {
-    kDebug() << "determining shapes on page" << pageNumber;
+    // This method is called only for page preparation; to determine the shapes to wait for.
     int sheetPageNumber = pageNumber;
     Sheet* sheet = d->getSheetPageNumber(&sheetPageNumber);
     if (!sheet)
         return QList<KoShape*>();
 
     const QRect cellRange = sheet->printManager()->cellRange(sheetPageNumber);
-    kDebug() << "sheetPageNumber" << sheetPageNumber;
-    kDebug() << "cellRange" << cellRange;
-    kDebug() << "pageRange" << sheet->cellCoordinatesToDocument(cellRange);
-    kDebug() << "shapeCount" << shapeManager()->shapesAt(sheet->cellCoordinatesToDocument(cellRange)).count();
     return shapeManager()->shapesAt(sheet->cellCoordinatesToDocument(cellRange));
 }
 
