@@ -233,6 +233,7 @@ void PrintManager::setPrintSettings(const PrintSettings& settings, bool force)
 {
     if (!force && settings == d->settings)
         return;
+    kDebug() << (d->pages.isEmpty() ? "Creating" : "Recreating") << "pages...";
     d->settings = settings;
     d->calculatePages();
 }
@@ -299,7 +300,6 @@ void PrintManager::printPage(int page, QPainter& painter)
 
 int PrintManager::pageCount() const
 {
-    d->calculatePages();
     return d->pages.count();
 }
 
