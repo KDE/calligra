@@ -284,7 +284,6 @@ void PrintManager::printPage(int page, QPainter& painter)
 
     // setup the QPainter
     painter.save();
-    painter.translate(pageLayout.left, pageLayout.top);
     painter.scale(d->zoomHandler->zoomedResolutionX(), d->zoomHandler->zoomedResolutionY());
     painter.setClipRect(0.0, 0.0, pageLayout.width, pageLayout.height);
 

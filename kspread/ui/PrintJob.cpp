@@ -197,12 +197,14 @@ void PrintJob::preparePage(int pageNumber)
         return;
 
     // Prepare the page for shape printing.
-    const QRectF printerPageRect = printer().pageRect(QPrinter::Point);
-    painter().translate(printerPageRect.left(), printerPageRect.top());
+    const double scale = POINT_TO_INCH(printer().resolution());
+    const KoPageLayout pageLayout = sheet->printSettings()->pageLayout();
+    painter().translate(pageLayout.left * scale, pageLayout.top * scale);
     const QRect cellRange = sheet->printManager()->cellRange(sheetPageNumber);
     const QRectF pageRect = sheet->cellCoordinatesToDocument(cellRange);
-    painter().translate(pageRect.left(), pageRect.top());
-    painter().setClipRect(0.0, 0.0, pageRect.width(), pageRect.height());
+    painter().translate(-pageRect.left() * scale, -pageRect.top() * scale);
+    painter().setClipRect(pageRect.left() * scale, pageRect.top() * scale,
+                          pageRect.width() * scale, pageRect.height() * scale);
 }
 
 void PrintJob::printPage(int pageNumber, QPainter &painter)
@@ -215,11 +217,10 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
     if (sheet)
     {
         // Reset the offset.
-        const QRectF printerPageRect = printer().pageRect(QPrinter::Point);
-        painter.translate(-printerPageRect.left(), -printerPageRect.top());
+        const double scale = POINT_TO_INCH(printer().resolution());
         const QRect cellRange = sheet->printManager()->cellRange(sheetPageNumber);
         const QRectF pageRect = sheet->cellCoordinatesToDocument(cellRange);
-        painter.translate(-pageRect.left(), -pageRect.top());
+        painter.translate(pageRect.left() * scale, pageRect.top() * scale);
 
         sheet->printManager()->printPage(sheetPageNumber, painter);
     }
