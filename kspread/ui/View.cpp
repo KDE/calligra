@@ -7220,6 +7220,9 @@ KoPrintJob * View::createPrintJob()
 {
     if (!activeSheet())
         return 0;
+    // About to print; close the editor.
+    if (canvasWidget()->editor())
+        canvasWidget()->deleteEditor(true); // save changes
     return new PrintJob(this);
 }
 
