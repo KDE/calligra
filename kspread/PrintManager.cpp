@@ -25,6 +25,7 @@
 #include "Sheet.h"
 #include "SheetView.h"
 
+#include <KoShape.h>
 #include <KoZoomHandler.h>
 
 #include <QPainter>
@@ -208,7 +209,13 @@ bool PrintManager::Private::pageNeedsPrinting(const QRect& cellRange) const
         for (int col = cellRange.left(); col <= cellRange.right(); ++col)
             if (Cell(sheet, col, row).needsPrinting())
                 return true;
-    return false;
+
+    QRectF shapesBoundingRect;
+    const QList<KoShape*> shapes = sheet->shapes();
+    for (int i = 0; i < shapes.count(); ++i)
+        shapesBoundingRect |= shapes[i]->boundingRect();
+    const QRect shapesCellRange = sheet->documentToCellCoordinates(shapesBoundingRect);
+    return !(cellRange & shapesCellRange).isEmpty();
 }
 
 

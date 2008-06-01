@@ -624,12 +624,18 @@ public:
     int rightColumn( double _xpos ) const;
 
     /**
-     * Calculates the region in document coordinates occupied by a range of cells on
-     * the currently active sheet.
-     *
-     * @param cellRange The range of cells on the current sheet.
+     * Calculates the region in document coordinates occupied by a range of cells.
+     * \param cellRange the range of cells
+     * \return the document area covered by the cells
      */
     QRectF cellCoordinatesToDocument(const QRect& cellRange) const;
+
+    /**
+     * Calculates the cell range covering a document area.
+     * \param area the document area
+     * \return the cell range covering the area
+     */
+    QRect documentToCellCoordinates(const QRectF& area) const;
 
     /**
      * @return the left corner of the column as double.

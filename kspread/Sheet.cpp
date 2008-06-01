@@ -671,6 +671,25 @@ QRectF Sheet::cellCoordinatesToDocument(const QRect& cellRange) const
     return rect;
 }
 
+QRect Sheet::documentToCellCoordinates(const QRectF& area) const
+{
+    double width = 0.0;
+    int left = 0;
+    while (width <= area.left())
+        width += columnFormat(++left)->visibleWidth();
+    int right = left;
+    while (width < area.right())
+        width += columnFormat(++right)->visibleWidth();
+    int top = 0;
+    double height = 0.0;
+    while (height <= area.top())
+        height += rowFormat(++top)->visibleHeight();
+    int bottom = top;
+    while (height < area.bottom())
+        height += rowFormat(++bottom)->visibleHeight();
+    return QRect(left, top, right - left + 1, bottom - top + 1);
+}
+
 double Sheet::columnPosition( int _col ) const
 {
     const int max = qMin(_col, KS_colMax);
@@ -3385,6 +3404,14 @@ QRect Sheet::usedArea() const
 
         col = col->next();
     }
+
+    // flake
+    QRectF shapesBoundingRect;
+    for (int i = 0; i < d->shapes.count(); ++i)
+        shapesBoundingRect |= d->shapes[i]->boundingRect();
+    const QRect shapesCellRange = documentToCellCoordinates(shapesBoundingRect);
+    maxCols = qMax(maxCols, shapesCellRange.right());
+    maxRows = qMax(maxRows, shapesCellRange.bottom());
 
     return QRect( 1, 1, maxCols, maxRows );
 }
