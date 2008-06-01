@@ -36,9 +36,6 @@ public:
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 
 private:
-    //helper functions
-    QByteArray createMetadata();
-
     KoXmlDocument m_mainDoc;
     KoXmlDocument m_documentInfo;
 };
