@@ -294,9 +294,21 @@ void PrintManager::printPage(int page, QPainter& painter)
     d->sheetView->setPaintDevice(painter.device());
     d->sheetView->setViewConverter(d->zoomHandler);
 
+    // save and set painting flags
+    const bool grid = d->sheet->getShowGrid();
+    const bool commentIndicator = d->sheet->getShowCommentIndicator();
+    const bool formulaIndicator = d->sheet->getShowFormulaIndicator();
+    d->sheet->setShowGrid(d->settings.printGrid());
+    d->sheet->setShowCommentIndicator(d->settings.printCommentIndicator());
+    d->sheet->setShowFormulaIndicator(d->settings.printFormulaIndicator());
+
     // print the page
     d->printPage(page, painter);
 
+    // restore painting flags
+    d->sheet->setShowGrid(grid);
+    d->sheet->setShowCommentIndicator(commentIndicator);
+    d->sheet->setShowFormulaIndicator(formulaIndicator);
     painter.restore();
 }
 
