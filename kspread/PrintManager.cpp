@@ -50,10 +50,11 @@ public:
 
 void PrintManager::Private::calculatePages()
 {
+    pages.clear();
     int pageNumber = 1;
     const double printWidth = settings.printWidth();
     const double printHeight = settings.printHeight();
-    kDebug() << "printWidth" << printWidth << "printHeight" << printHeight;
+//     kDebug() << "printWidth" << printWidth << "printHeight" << printHeight;
 
     if (settings.pageOrder() == PrintSettings::LeftToRight)
     {
@@ -67,7 +68,7 @@ void PrintManager::Private::calculatePages()
 
             // limit the print range to the used area
             const QRect printRange = (*it)->rect() & sheet->usedArea();
-            kDebug() << "processing printRange" << printRange;
+//             kDebug() << "processing printRange" << printRange;
 
             int rows = 0;
             double height = 0.0;
@@ -175,6 +176,7 @@ void PrintManager::Private::calculatePages()
             }
         }
     }
+    kDebug() << pages.count() << "page(s) created";
 }
 
 void PrintManager::Private::printPage(int page, QPainter& painter) const

@@ -224,6 +224,7 @@ void PrintSettings::operator=(const PrintSettings& other)
     d->printCommentIndicator = other.d->printCommentIndicator;
     d->printFormulaIndicator = other.d->printFormulaIndicator;
     d->pageOrder = other.d->pageOrder;
+    d->printRegion = other.d->printRegion;
 }
 
 bool PrintSettings::operator==(const PrintSettings& other) const
@@ -243,6 +244,8 @@ bool PrintSettings::operator==(const PrintSettings& other) const
     if (d->printFormulaIndicator != other.d->printFormulaIndicator)
         return false;
     if (d->pageOrder != other.d->pageOrder)
+        return false;
+    if (d->printRegion != other.d->printRegion)
         return false;
     return true;
 }
