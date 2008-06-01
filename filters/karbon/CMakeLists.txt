@@ -3,9 +3,6 @@ set(SHAPES_SOURCES
     ${CMAKE_SOURCE_DIR}/plugins/pathshapes/rectangle/KoRectangleShape.cpp
     ${CMAKE_SOURCE_DIR}/plugins/pathshapes/star/KoStarShape.cpp
     ${CMAKE_SOURCE_DIR}/plugins/pictureshape/PictureShape.cpp
-    ${CMAKE_SOURCE_DIR}/plugins/textshape/TextShape.cpp
-    ${CMAKE_SOURCE_DIR}/plugins/textshape/Layout.cpp
-    ${CMAKE_SOURCE_DIR}/plugins/textshape/ListItemsHelper.cpp
     ${CMAKE_SOURCE_DIR}/plugins/simpletextshape/SimpleTextShape.cpp)
 
 

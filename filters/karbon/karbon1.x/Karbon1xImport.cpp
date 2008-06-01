@@ -40,9 +40,9 @@
 #include <pathshapes/ellipse/KoEllipseShape.h>
 #include <pathshapes/rectangle/KoRectangleShape.h>
 #include <pathshapes/star/KoStarShape.h>
+#include <simpletextshape/SimpleTextShape.h>
 #include <pictureshape/PictureShape.h>
 #include <KoImageData.h>
-#include <textshape/TextShape.h>
 #include <KoPathPoint.h>
 #include <KoZoomHandler.h>
 
@@ -1303,7 +1303,6 @@ KoShape * KarbonImport::loadText( const KoXmlElement &element )
     font.setBold( element.attribute( "bold" ).toInt() == 1 );
 
     enum Position { Above, On, Under };
-    enum Alignment { Left, Center, Right };
 
     int position = element.attribute( "position", "0" ).toInt();
     int alignment = element.attribute( "alignment", "0" ).toInt();
@@ -1314,48 +1313,74 @@ KoShape * KarbonImport::loadText( const KoXmlElement &element )
     int shadowDistance = element.attribute( "shadowdist" ).toInt();
     double offset = element.attribute( "offset" ).toDouble();
     */
-
     QString text = element.attribute( "text", "" );
-    QMatrix m;
 
-	KoXmlElement e = element.firstChild().toElement();
+    SimpleTextShape * textShape = new SimpleTextShape();
+    if( ! textShape )
+        return 0;
+
+    textShape->setFont( font );
+    textShape->setText( text );
+    textShape->setTextAnchor( static_cast<SimpleTextShape::TextAnchor>( alignment ) );
+
+    KoXmlElement e = element.firstChild().toElement();
     if( e.tagName() == "PATH" )
     {
         // as long as there is no text on path support, just try to get a transformation
         // if the path is only a single line
         KoPathShape * path = dynamic_cast<KoPathShape*>( loadPath( e ) );
-        if( path && path->pointCount() )
+        if( path )
         {
-            QPointF pos;
-            if( path->pointCount() > 0 )
-                pos = path->absoluteTransformation(0).map( path->pointByIndex( KoPathPointIndex( 0, 0 ) )->point() );
-            kDebug() << "text position =" << pos;
-            m.translate( pos.x(), pos.y() );
+            QMatrix matrix = path->absoluteTransformation(0);
+            QPainterPath outline = matrix.map( path->outline() ); 
+            qreal outlineLength = outline.length();
+            qreal textLength = textShape->size().width();
+            qreal diffLength = textLength - outlineLength;
+            if( diffLength > 0.0 )
+            {
+                // elongate path so that text fits completely on it
+                int subpathCount = path->subpathCount();
+                int subpathPointCount = path->pointCountSubpath( subpathCount-1 );
+                KoPathPoint * lastPoint = path->pointByIndex( KoPathPointIndex( subpathCount-1, subpathPointCount-1 ) );
+                KoPathPoint * prevLastPoint = path->pointByIndex( KoPathPointIndex( subpathCount-1, subpathPointCount-2 ) );
+                if( lastPoint && prevLastPoint )
+                {
+                    QPointF tangent;
+                    if( lastPoint->activeControlPoint1() )
+                        tangent = matrix.map( lastPoint->point() ) - matrix.map( lastPoint->controlPoint1() );
+                    else if( prevLastPoint->activeControlPoint2() )
+                        tangent = matrix.map( lastPoint->point() ) - matrix.map( prevLastPoint->controlPoint2() );
+                    else
+                        tangent = matrix.map( lastPoint->point() ) - matrix.map( prevLastPoint->point() );
+
+                    // normalize tangent vector
+                    qreal tangentLength = sqrt( tangent.x()*tangent.x() + tangent.y()*tangent.y() );
+                    tangent /= tangentLength;
+                    path->lineTo( matrix.inverted().map( matrix.map( lastPoint->point() ) + diffLength * tangent ) );
+                    path->normalize();
+                    outline = path->absoluteTransformation(0).map( path->outline() );
+                }
+            }
+            textShape->putOnPath( outline );
+            textShape->setStartOffset( element.attribute( "offset" ).toDouble() );
+            delete path;
         }
-        delete path;
     }
-
-    TextShape * textShape = new TextShape();
-
-    QTextCharFormat format;
-    format.setFont( font );
-    format.setTextOutline( QPen( Qt::red ) );
-
-    QTextCursor cursor( textShape->textShapeData()->document() );
-    cursor.insertText( text, format );
-
-    textShape->setTransformation( m );
-
-    QFontMetrics metrics( font );
-    int w = metrics.width( text );
-    int h = metrics.height();
-
-    KoZoomHandler zoomHandler;
-    textShape->setSize( QSizeF( zoomHandler.viewToDocumentX( w+20 ), zoomHandler.viewToDocumentY( h+5 ) ) );
 
     loadCommon( textShape, element );
     loadStyle( textShape, element );
     textShape->setZIndex( nextZIndex() );
+    textShape->applyAbsoluteTransformation( m_mirrorMatrix.inverted() );
+
+    // TODO: remove the following lines when the text shape can be saved to odf
+    KoPathShape * path = KoPathShape::fromQPainterPath( textShape->outline() );
+    path->setZIndex( textShape->zIndex() );
+    path->setBorder( textShape->border() );
+    path->setBackground( textShape->background() );
+    path->setTransformation( textShape->transformation() );
+    path->setShapeId( KoPathShapeId );
+    path->setName( textShape->name() );
+    return path;
 
     return textShape;
 }
