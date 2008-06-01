@@ -228,9 +228,7 @@ int KarbonCalligraphicShape::ccw( const QPointF &p1,
 void KarbonCalligraphicShape::setSize( const QSizeF &newSize )
 {
     QSizeF oldSize = size();
-    //QMatrix matrix( newSize.width() / oldSize.width(), 0, 0, newSize.height() / oldSize.height(), 0, 0 );
-    //m_center = matrix.map( m_center );
-    //m_radii = matrix.map( m_radii );
+    // TODO: check
     KoParameterShape::setSize( newSize );
 }
 
@@ -268,26 +266,50 @@ void KarbonCalligraphicShape::updatePath( const QSizeF &size )
     foreach(KarbonCalligraphicPoint *p, m_points)
         appendPointToPath(*p);
 
-    //simplifyPath();
+    simplifyPath();
 
     for (int i = 0; i < m_points.size(); ++i)
         m_handles[i] = m_points[i]->point() - position();
 }
 
-/*void KarbonCalligraphicShape::simplifyPath()
+void KarbonCalligraphicShape::simplifyPath()
 {
-    KoPainterPath newPath = 
+    QList<QPointF> points;
 
+    for (int i = 0; i < pointCount(); ++i)
+    {
+        points << pointByIndex( KoPathPointIndex(0, i) )->point();
+        kDebug() << "<< " << points.last() << "  " << points;
+    }
+
+    // FIXME: use something better
+    double error = m_points[0]->width() / 40;
+    KoPathShape *newPath = bezierFit( points, error );
+
+    QPointF oldPosition = position();
     clear();
     setPosition(QPoint(0, 0));
 
+    // TODO: if subpath allowed the insertion also when empty
+    //       the following would work better
+    m_subpaths.append(new KoSubpath());
     for (int i = 0; i < newPath->pointCount(); ++i)
     {
         KoPathPointIndex index(0, i);
-        KoPathPoint *p = new KoPathPoint( pointByIndex(index) );
-        insertPoint( index, p );
+        kDebug() << index;
+        KoPathPoint *p = new KoPathPoint( *newPath->pointByIndex(index) );
+        p->setParent(this);
+        m_subpaths[0]->append(p);
     }
-}*/
+
+    kDebug() << "position " << newPath->position();
+    setPosition(oldPosition);
+    m_offset = normalize();
+
+    kDebug() << newPath->pointCount() << pointCount() << m_offset;
+
+    delete newPath;
+}
 
 QString KarbonCalligraphicShape::pathShapeId() const
 {

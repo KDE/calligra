@@ -95,6 +95,8 @@ public:
     void setSize( const QSizeF &newSize );
     //virtual QPointF normalize();
 
+    void simplifyPath();
+    
     // reimplemented
     virtual QString pathShapeId() const;
     

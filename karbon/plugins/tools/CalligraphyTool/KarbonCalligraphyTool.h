@@ -51,7 +51,7 @@ private:
     //QPointF m_point0;
     //QPointF m_point1;
     QPointF m_lastPoint;
-    KarbonCalligraphicShape *m_path;
+    KarbonCalligraphicShape *m_path; // TODO: rename to m_shape
     //QList<KoPathShape *> m_pieces;
     
     double m_strokeWidth;
