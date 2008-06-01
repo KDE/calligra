@@ -18,6 +18,7 @@
  */
 
 #include "KarbonCalligraphyTool.h"
+#include "KarbonCalligraphicShape.h"
 
 #include <KoPathShape.h>
 #include <KoShapeGroup.h>
@@ -45,175 +46,6 @@
 
 #undef M_PI
 const double M_PI = 3.1415927;
-
-void KarbonCalligraphicPath::insertPoints( const QPointF &p1, const QPointF &p2 )
-{
-    if ( pointCount() == 0 ) 
-    {
-        moveTo( p1 );
-        lineTo( p2 );
-        m_offset = normalize();
-        m_flipped = false;
-        return;
-    }
-    // pointCount > 0
-
-    int flip = 0;
-    if ( pointCount() > 2 ) 
-        flip = flipDetected( p1, p2 );
-
-    if ( flip )
-    {
-        // handle flip
-        m_flipped = ! m_flipped;
-
-        int index = pointCount() / 2;
-
-        // finde the previous two points
-        QPointF last1 = pointByIndex( KoPathPointIndex(0, index-1) )->point();
-        QPointF last2 = pointByIndex( KoPathPointIndex(0, index) )->point();
-        
-        // and add them in reverse order
-        // (they are converted to canvas coordinates)
-        insertPointsAux( last2+m_offset, last1+m_offset );
-    }
-
-    if ( m_flipped )
-    {
-        insertPointsAux( p2, p1 );
-    }
-    else
-    {
-        insertPointsAux( p1, p2 );
-    }
-
-    m_offset += normalize();
-}
-
-KoPathShape *KarbonCalligraphicPath::simplified( float error )
-{
-    QList<QPointF> points;
-
-    const int pc = pointCount();
-    for (int i = 0; i < pc; ++i)
-    {
-        points << pointByIndex( KoPathPointIndex(0, i) )->point();
-    }
-    
-    KoPathShape *res = bezierFit( points, error );
-
-    res->setShapeId( KoPathShapeId );
-    res->setFillRule( Qt::WindingFill );
-    res->setBackground( Qt::black );
-    res->setBorder( 0 );
-    res->setPosition( m_offset );
-
-    return res;
-}
-
-const QRectF KarbonCalligraphicPath::lastPieceBoundingRect()
-{
-    if ( pointCount() < 4 )
-        return QRectF();
-
-    int index = pointCount() / 2;
-
-    QPointF last1 = pointByIndex( KoPathPointIndex(0, index-1) )->point();
-    QPointF prev1 = pointByIndex( KoPathPointIndex(0, index-2) )->point();
-
-    QPointF last2 = pointByIndex( KoPathPointIndex(0, index) )->point();
-    QPointF prev2 = pointByIndex( KoPathPointIndex(0, index+1) )->point();
-
-    QPainterPath p;
-    p.moveTo(prev1);
-    p.lineTo(last1);
-    p.lineTo(last2);
-    p.lineTo(prev2);
-
-    return p.boundingRect().translated(m_offset);
-}
-
-
-void KarbonCalligraphicPath::insertPointsAux( const QPointF &p1,
-                                              const QPointF &p2 )
-{
-    KoPathPoint *pathPoint1 = new KoPathPoint(this, p1 - m_offset);
-    KoPathPoint *pathPoint2 = new KoPathPoint(this, p2 - m_offset);
-
-    // calculate the index of the insertion position
-    int index = pointCount() / 2;
-
-    insertPoint( pathPoint2, KoPathPointIndex(0, index) );
-    insertPoint( pathPoint1, KoPathPointIndex(0, index) );
-}
-
-int KarbonCalligraphicPath::flipDetected( const QPointF &p1, const QPointF &p2 )
-{
-    int index = pointCount() / 2;
-
-    QPointF last1 = pointByIndex( KoPathPointIndex(0, index-1) )->point();
-    QPointF prev1 = pointByIndex( KoPathPointIndex(0, index-2) )->point();
-
-    QPointF last2 = pointByIndex( KoPathPointIndex(0, index) )->point();
-    QPointF prev2 = pointByIndex( KoPathPointIndex(0, index+1) )->point();
-
-    last1 += m_offset;
-    last2 += m_offset;
-    prev1 += m_offset;
-    prev2 += m_offset;
-
-    //                 prev2  last2           p2
-    //    ...o-----o-----o-----o  <-- index   o
-    //    ...                  |
-    //    ...o-----o-----o-----o              o
-    //                 prev1  last1           p1
-
-    // the path has already flipped a even number of times
-    // so the indexes of where p1 and p2 will be inserted are swapped
-    if ( m_flipped ) 
-    {
-        qSwap( last1, last2 );
-        qSwap( prev1, prev2 );
-    }
-
-    // FIXME: think about the degenerate cases (ccw() == 0)
-    // detect possible flips
-    if ( ccw( prev1, last1, p1 ) == ccw( prev2, prev1, last1 ) &&
-         ccw( prev1, last1, p1 ) != ccw( last1, p2, last2 ) )
-    {
-        return +1;
-    }
-
-    // the symmetric of the above
-    if ( ccw( prev2, last2, p2 ) == ccw(prev1, prev2, last2) &&
-         ccw( prev2, last2, p2 ) != ccw(last2, p1, last1) )
-    {
-        return -1;
-    }
-    // no flip was detected
-    return 0;
-}
-
-int KarbonCalligraphicPath::ccw( const QPointF &p1,
-                                 const QPointF &p2,
-                                 const QPointF &p3 )
-{
-    // calculate two times the area of the triangle fomed by the points given
-    double area2 = ( p2.x() - p1.x() ) * ( p3.y() - p1.y() ) -
-                   ( p2.y() - p1.y() ) * ( p3.x() - p1.x() );
-    if ( area2 > 0 ) 
-    {
-        return +1; // the points are given in counterclockwise order
-    }
-    else if ( area2 < 0 ) 
-    {
-        return -1; // the points are given in clockwise order
-    }
-    else 
-    {
-        return 0; // the points form a degenerate triangle
-    }
-}
 
 
 
@@ -281,7 +113,7 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
     addPoint( event->point );
     m_isDrawing = false;
 
-    KoPathShape *finalPath = m_path->simplified( m_strokeWidth/60.0 );
+    KoPathShape *finalPath = m_path;//->simplified( m_strokeWidth/60.0 );
     
     QUndoCommand * cmd = m_canvas->shapeController()->addShape( finalPath );
     if( cmd )
@@ -300,7 +132,7 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
     m_canvas->updateCanvas( m_path->boundingRect() );
     m_canvas->updateCanvas( finalPath->boundingRect() );
 
-    delete m_path;
+    //delete m_path;
     m_path = 0;
 
     /*while ( ! m_pieces.isEmpty() )
@@ -328,23 +160,17 @@ void KarbonCalligraphyTool::addPoint(const QPointF &mousePosition)
 
     m_lastPoint = m_lastPoint + m_speed;
 
-    double dx = std::cos( m_angle ) * m_strokeWidth;
-    double dy = std::sin( m_angle ) * m_strokeWidth;
-
-    QPointF point2 = m_lastPoint - QPointF( dx/2, dy/2 );
-    QPointF point3 = m_lastPoint + QPointF( dx/2, dy/2 );
-
     if ( ! m_isDrawing ) 
     {
         m_isDrawing = true;
-        m_path = new KarbonCalligraphicPath;
+        m_path = new KarbonCalligraphicShape;
         m_path->setShapeId( KoPathShapeId );
         m_path->setFillRule( Qt::WindingFill );
         m_path->setBackground( Qt::black );
         m_path->setBorder( 0 );
     }
 
-    m_path->insertPoints(point2, point3);
+    m_path->appendPoint(m_lastPoint, m_angle, m_strokeWidth);
 
     m_canvas->updateCanvas( m_path->lastPieceBoundingRect() );
 
