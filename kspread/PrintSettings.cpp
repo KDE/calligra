@@ -23,6 +23,10 @@
 // Local
 #include "PrintSettings.h"
 
+// KSpread
+#include "Global.h"
+#include "Region.h"
+
 // KOffice
 #include <KoPageLayout.h>
 #include <KoUnit.h>
@@ -40,6 +44,7 @@ public:
     bool printCommentIndicator  : 1;
     bool printFormulaIndicator  : 1;
     PageOrder pageOrder;
+    Region printRegion;
 
 public:
     void calculatePageDimensions();
@@ -65,6 +70,7 @@ PrintSettings::PrintSettings()
     d->printCommentIndicator = false;
     d->printFormulaIndicator = false;
     d->pageOrder = LeftToRight;
+    d->printRegion = Region(1, 1, KS_colMax, KS_rowMax);
 }
 
 PrintSettings::PrintSettings(const PrintSettings& other)
@@ -78,6 +84,7 @@ PrintSettings::PrintSettings(const PrintSettings& other)
     d->printCommentIndicator = other.d->printCommentIndicator;
     d->printFormulaIndicator = other.d->printFormulaIndicator;
     d->pageOrder = other.d->pageOrder;
+    d->printRegion = other.d->printRegion;
 }
 
 PrintSettings::~PrintSettings()
@@ -185,6 +192,26 @@ bool PrintSettings::printFormulaIndicator() const
 void PrintSettings::setPrintFormulaIndicator(bool printFormulaIndicator)
 {
     d->printFormulaIndicator = printFormulaIndicator;
+}
+
+const KSpread::Region& PrintSettings::printRegion() const
+{
+    return d->printRegion;
+}
+
+void PrintSettings::setPrintRegion(const Region& region)
+{
+    d->printRegion = region;
+}
+
+void PrintSettings::addPrintRange(const QRect& range)
+{
+    d->printRegion.add(range);
+}
+
+void PrintSettings::removePrintRange(const QRect& range)
+{
+    d->printRegion.sub(range, 0);
 }
 
 void PrintSettings::operator=(const PrintSettings& other)

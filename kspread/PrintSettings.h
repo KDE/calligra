@@ -28,6 +28,7 @@
 
 namespace KSpread
 {
+class Region;
 
 class KSPREAD_EXPORT PrintSettings
 {
@@ -139,6 +140,11 @@ public:
      * Sets, if the formula Rect shall be shown on printouts.
      */
     void setPrintFormulaIndicator(bool printFormulaIndicator);
+
+    const Region& printRegion() const;
+    void setPrintRegion(const Region& region);
+    void addPrintRange(const QRect& range);
+    void removePrintRange(const QRect& range);
 
     /**
      * Assignment operator.

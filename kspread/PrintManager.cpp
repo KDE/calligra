@@ -39,7 +39,6 @@ public:
     Sheet* sheet;
     SheetView* sheetView;
     QMap<int, QRect> pages; // page number to cell range
-    Region printRegion;
     PrintSettings settings;
     KoZoomHandler* zoomHandler;
 
@@ -58,14 +57,12 @@ void PrintManager::Private::calculatePages()
 
     if (settings.pageOrder() == PrintSettings::LeftToRight)
     {
-//         kDebug() << "processing printRanges" << printRegion;
+//         kDebug() << "processing printRanges" << settings.printRegion();
         // iterate over the print ranges
-        Region::ConstIterator end = printRegion.constEnd();
-        for (Region::ConstIterator it = printRegion.constBegin(); it != end; ++it)
+        Region::ConstIterator end = settings.printRegion().constEnd();
+        for (Region::ConstIterator it = settings.printRegion().constBegin(); it != end; ++it)
         {
             if (!(*it)->isValid())
-                continue;
-            if ((*it)->sheet() != sheet)
                 continue;
 
             // limit the print range to the used area
@@ -120,14 +117,12 @@ void PrintManager::Private::calculatePages()
     }
     else // if (settings.pageOrder() == PrintSettings::TopToBottom)
     {
-//         kDebug() << "processing printRanges" << printRegion;
+//         kDebug() << "processing printRanges" << settings.printRegion();
         // iterate over the print ranges
-        Region::ConstIterator end = printRegion.constEnd();
-        for (Region::ConstIterator it = printRegion.constBegin(); it != end; ++it)
+        Region::ConstIterator end = settings.printRegion().constEnd();
+        for (Region::ConstIterator it = settings.printRegion().constBegin(); it != end; ++it)
         {
             if (!(*it)->isValid())
-                continue;
-            if ((*it)->sheet() != sheet)
                 continue;
 
             // limit the print range to the used area
@@ -225,7 +220,6 @@ PrintManager::PrintManager(Sheet* sheet)
     d->sheet = sheet;
     d->sheetView = new SheetView(sheet);
     d->settings = *sheet->printSettings();
-    d->printRegion = Region(1, 1, KS_colMax, KS_rowMax, sheet);
     d->zoomHandler = new KoZoomHandler();
 }
 
