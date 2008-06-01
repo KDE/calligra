@@ -146,7 +146,6 @@ public:
 
   // hold the print object
   SheetPrint* print;
-  PrintManager* printManager;
 
   // cells that need painting
   Region paintDirtyList;
@@ -214,7 +213,6 @@ Sheet::Sheet(Map* map, const QString& sheetName)
   d->firstLetterUpper=false;
   d->autoCalc=true;
   d->print = new SheetPrint( this );
-  d->printManager = new PrintManager(this);
 
     // document size changes always trigger a visible size change
     connect(this, SIGNAL(documentSizeChanged(const QSizeF&)), SIGNAL(visibleSizeChanged()));
@@ -275,7 +273,6 @@ Sheet::Sheet(const Sheet& other)
     }
 
     d->print = new SheetPrint(this); // FIXME = new SheetPrint(*other.d->print);
-    d->printManager = new PrintManager(this);
 
     d->showPageBorders = other.d->showPageBorders;
     d->documentSize = other.d->documentSize;
@@ -300,7 +297,6 @@ Sheet::~Sheet()
         s_id = 0;
 
     delete d->print;
-    delete d->printManager;
     delete d->cellStorage;
     qDeleteAll(d->shapes);
     delete d;
@@ -574,11 +570,6 @@ bool Sheet::checkPassword( QByteArray const & passwd ) const
 SheetPrint* Sheet::print() const
 {
     return d->print;
-}
-
-PrintManager* Sheet::printManager() const
-{
-    return d->printManager;
 }
 
 PrintSettings* Sheet::printSettings() const

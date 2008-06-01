@@ -1006,7 +1006,6 @@ public:
 
 
   SheetPrint * print() const;
-    PrintManager* printManager() const;
     PrintSettings* printSettings() const;
 
 #ifndef NDEBUG

@@ -32,6 +32,7 @@
 
 #include <KoShapeManager.h>
 
+#include <QHash>
 #include <QPainter>
 #include <QPrintPreviewDialog>
 
@@ -43,10 +44,12 @@ public:
     View* view;
     SheetSelectPage* sheetSelectPage;
     QList<Sheet*> selectedSheets;
+    QHash<Sheet*, PrintManager*> printManagers;
 
 public:
     int setupPages(const QPrinter& printer, bool forceRecreation = false);
-    Sheet* getSheetPageNumber(int* sheetPageNumber) const;
+    Sheet* getSheetPageNumber(int* sheetPageNumber);
+    PrintManager* printManager(Sheet* sheet);
 };
 
 int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
@@ -90,13 +93,13 @@ int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
         // Use the defaults from each sheet and use the print dialog's page layout.
         PrintSettings settings = *selectedSheets[i]->printSettings();
         settings.setPageLayout(pageLayout);
-        selectedSheets[i]->printManager()->setPrintSettings(settings, forceRecreation);
-        pageCount += selectedSheets[i]->printManager()->pageCount();
+        printManager(selectedSheets[i])->setPrintSettings(settings, forceRecreation);
+        pageCount += printManager(selectedSheets[i])->pageCount();
     }
     return pageCount;
 }
 
-Sheet* PrintJob::Private::getSheetPageNumber(int* sheetPageNumber) const
+Sheet* PrintJob::Private::getSheetPageNumber(int* sheetPageNumber)
 {
     Q_ASSERT(sheetPageNumber);
     // Find the sheet specific page number.
@@ -104,11 +107,18 @@ Sheet* PrintJob::Private::getSheetPageNumber(int* sheetPageNumber) const
     for (int i = 0; i < selectedSheets.count(); ++i)
     {
         sheet = selectedSheets[i];
-        if (*sheetPageNumber <= sheet->printManager()->pageCount())
+        if (*sheetPageNumber <= printManager(sheet)->pageCount())
             break;
-        *sheetPageNumber -= sheet->printManager()->pageCount();
+        *sheetPageNumber -= printManager(sheet)->pageCount();
     }
     return sheet;
+}
+
+PrintManager* PrintJob::Private::printManager(Sheet* sheet)
+{
+    if (!printManagers.contains(sheet))
+        printManagers.insert(sheet, new PrintManager(sheet));
+    return printManagers[sheet];
 }
 
 
@@ -151,6 +161,7 @@ PrintJob::PrintJob(View *view)
 
 PrintJob::~PrintJob()
 {
+    qDeleteAll(d->printManagers);
 //     delete d->sheetSelectPage; // QPrintDialog takes ownership
     delete d;
 }
@@ -165,7 +176,7 @@ int PrintJob::documentLastPage() const
     const QList<Sheet*> sheets = d->selectedSheets;
     int pageCount = 0;
     for (int i = 0; i < sheets.count(); ++i)
-        pageCount += sheets[i]->printManager()->pageCount();
+        pageCount += d->printManager(sheets[i])->pageCount();
     return pageCount;
 }
 
@@ -200,7 +211,7 @@ void PrintJob::preparePage(int pageNumber)
     const double scale = POINT_TO_INCH(printer().resolution());
     const KoPageLayout pageLayout = sheet->printSettings()->pageLayout();
     painter().translate(pageLayout.left * scale, pageLayout.top * scale);
-    const QRect cellRange = sheet->printManager()->cellRange(sheetPageNumber);
+    const QRect cellRange = d->printManager(sheet)->cellRange(sheetPageNumber);
     const QRectF pageRect = sheet->cellCoordinatesToDocument(cellRange);
     painter().translate(-pageRect.left() * scale, -pageRect.top() * scale);
     painter().setClipRect(pageRect.left() * scale, pageRect.top() * scale,
@@ -218,11 +229,11 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
     {
         // Reset the offset.
         const double scale = POINT_TO_INCH(printer().resolution());
-        const QRect cellRange = sheet->printManager()->cellRange(sheetPageNumber);
+        const QRect cellRange = d->printManager(sheet)->cellRange(sheetPageNumber);
         const QRectF pageRect = sheet->cellCoordinatesToDocument(cellRange);
         painter.translate(pageRect.left() * scale, pageRect.top() * scale);
 
-        sheet->printManager()->printPage(sheetPageNumber, painter);
+        d->printManager(sheet)->printPage(sheetPageNumber, painter);
     }
 }
 
@@ -234,7 +245,7 @@ QList<KoShape*> PrintJob::shapesOnPage(int pageNumber)
     if (!sheet)
         return QList<KoShape*>();
 
-    const QRect cellRange = sheet->printManager()->cellRange(sheetPageNumber);
+    const QRect cellRange = d->printManager(sheet)->cellRange(sheetPageNumber);
     return shapeManager()->shapesAt(sheet->cellCoordinatesToDocument(cellRange));
 }
 
