@@ -265,19 +265,31 @@ void KarbonCalligraphicShape::updatePath( const QSizeF &size )
     setPosition(QPoint(0, 0));
     m_offset = QPoint(0, 0);
 
+    QList<QPointF> copy = m_handles;
     foreach(KarbonCalligraphicPoint *p, m_points)
         appendPointToPath(*p);
+    m_handles = copy;
 
-    simplifyPath();
+    /*simplifyPath();
 
     for (int i = 0; i < m_points.size(); ++i)
-        m_handles[i] = m_points[i]->point() - position();
+        m_handles[i] = m_points[i]->point() - position();*/
 }
 
-void KarbonCalligraphicShape::simplifyPath()
+/*void KarbonCalligraphicShape::simplifyPath()
 {
     KoPainterPath newPath = 
-}
+
+    clear();
+    setPosition(QPoint(0, 0));
+
+    for (int i = 0; i < newPath->pointCount(); ++i)
+    {
+        KoPathPointIndex index(0, i);
+        KoPathPoint *p = new KoPathPoint( pointByIndex(index) );
+        insertPoint( index, p );
+    }
+}*/
 
 QString KarbonCalligraphicShape::pathShapeId() const
 {
