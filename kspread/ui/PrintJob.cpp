@@ -24,6 +24,7 @@
 #include "Doc.h"
 #include "Map.h"
 #include "PrintManager.h"
+#include "Selection.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "View.h"
@@ -67,7 +68,9 @@ int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
 
     // Create the list of sheet, that should be printed.
     selectedSheets.clear();
-    if (sheetSelectPage->allSheetsButton->isChecked())
+    if (printer.printRange() == QPrinter::Selection)
+        selectedSheets.append(view->activeSheet());
+    else if (sheetSelectPage->allSheetsButton->isChecked())
         selectedSheets = view->doc()->map()->sheetList();
     else if (sheetSelectPage->activeSheetButton->isChecked())
         selectedSheets.append(view->activeSheet());
@@ -93,6 +96,9 @@ int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
         // Use the defaults from each sheet and use the print dialog's page layout.
         PrintSettings settings = *selectedSheets[i]->printSettings();
         settings.setPageLayout(pageLayout);
+        // Set the print region, if the selection should be painted.
+        if (printer.printRange() == QPrinter::Selection)
+            settings.setPrintRegion(*view->selection());
         printManager(selectedSheets[i])->setPrintSettings(settings, forceRecreation);
         pageCount += printManager(selectedSheets[i])->pageCount();
     }
@@ -252,4 +258,14 @@ QList<KoShape*> PrintJob::shapesOnPage(int pageNumber)
 QList<QWidget*> PrintJob::createOptionWidgets() const
 {
     return QList<QWidget*>() << d->sheetSelectPage;
+}
+
+QAbstractPrintDialog::PrintDialogOptions PrintJob::printDialogOptions() const
+{
+    return QAbstractPrintDialog::PrintToFile |
+           QAbstractPrintDialog::PrintSelection |
+           QAbstractPrintDialog::PrintPageRange |
+           QAbstractPrintDialog::PrintCollateCopies |
+           QAbstractPrintDialog::DontUseSheet |
+           QAbstractPrintDialog::PrintShowPageSize;
 }

@@ -33,6 +33,7 @@ public:
 
     virtual int documentFirstPage() const;
     virtual int documentLastPage() const;
+    virtual QAbstractPrintDialog::PrintDialogOptions printDialogOptions() const;
 
 public Q_SLOTS:
     virtual void startPrinting(RemovePolicy removePolicy = DoNotDelete);
