@@ -1372,16 +1372,6 @@ KoShape * KarbonImport::loadText( const KoXmlElement &element )
     textShape->setZIndex( nextZIndex() );
     textShape->applyAbsoluteTransformation( m_mirrorMatrix.inverted() );
 
-    // TODO: remove the following lines when the text shape can be saved to odf
-    KoPathShape * path = KoPathShape::fromQPainterPath( textShape->outline() );
-    path->setZIndex( textShape->zIndex() );
-    path->setBorder( textShape->border() );
-    path->setBackground( textShape->background() );
-    path->setTransformation( textShape->transformation() );
-    path->setShapeId( KoPathShapeId );
-    path->setName( textShape->name() );
-    return path;
-
     return textShape;
 }
 
