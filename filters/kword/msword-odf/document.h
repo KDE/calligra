@@ -53,7 +53,7 @@ class Document : public QObject, public wvWare::SubDocumentHandler
 {
     Q_OBJECT
 public:
-    Document( const std::string& fileName, /*QDomDocument& mainDocument, QDomDocument &documentInfo, QDomElement& framesetsElement,*/ KoFilterChain* chain, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter );
+    Document( const std::string& fileName, /*QDomDocument& mainDocument, QDomDocument &documentInfo, QDomElement& framesetsElement,*/ KoFilterChain* chain, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter, KoXmlWriter* stylesWriter );
     virtual ~Document();
 
     bool hasParser() const { return m_parser != 0L; }

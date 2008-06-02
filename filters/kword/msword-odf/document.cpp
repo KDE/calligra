@@ -40,7 +40,7 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 
-Document::Document( const std::string& fileName, /*QDomDocument& mainDocument, QDomDocument& documentInfo, QDomElement& framesetsElement,*/ KoFilterChain* chain, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter )
+Document::Document( const std::string& fileName, /*QDomDocument& mainDocument, QDomDocument& documentInfo, QDomElement& framesetsElement,*/ KoFilterChain* chain, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter, KoXmlWriter* stylesWriter )
     : /*m_mainDocument( mainDocument ), m_documentInfo ( documentInfo ),
       m_framesetsElement( framesetsElement ),*/
       m_replacementHandler( new KWordReplacementHandler ), m_tableHandler( new KWordTableHandler ),
@@ -52,7 +52,7 @@ Document::Document( const std::string& fileName, /*QDomDocument& mainDocument, Q
     kDebug(30513) ;
     if ( m_parser ) // 0 in case of major error (e.g. unsupported format)
     {
-        m_textHandler = new KWordTextHandler( m_parser, contentWriter, bodyWriter );
+        m_textHandler = new KWordTextHandler( m_parser, contentWriter, bodyWriter, stylesWriter );
         connect( m_textHandler, SIGNAL( subDocFound( const wvWare::FunctorBase*, int ) ),
                  this, SLOT( slotSubDocFound( const wvWare::FunctorBase*, int ) ) );
         connect( m_textHandler, SIGNAL( tableFound( const KWord::Table& ) ),

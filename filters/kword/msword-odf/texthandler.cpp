@@ -51,17 +51,18 @@ wvWare::U8 KWordReplacementHandler::nonRequiredHyphen()
 }
 
 
-KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter )
+KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter, KoXmlWriter* stylesWriter )
     : m_parser( parser ), m_sectionNumber( 0 ), m_footNoteNumber( 0 ), m_endNoteNumber( 0 ),
-      m_textStyleNumber( 1 ), m_paragraphStyleNumber( 1 ),
-      m_previousOutlineLSID( 0 ), m_previousEnumLSID( 0 ),
+      m_textStyleNumber( 1 ), m_paragraphStyleNumber( 1 ), m_listStyleNumber( 1 ),
+      m_previousOutlineLSID( 0 ), m_previousEnumLSID( 0 ), m_openTextListItemTag( false ), m_openTextListTag( false ),
       m_currentStyle( 0L ), m_index( 0 ),
       m_currentTable( 0L ),
       m_bInParagraph( false ), m_bStartNewPage( false ),
       m_insideField( false ), m_fieldAfterSeparator( false ), m_fieldType( 0 )
 {
-    m_contentWriter = contentWriter; //set the pointer to contentWriter for add styles
-    m_bodyWriter = bodyWriter; //set the pointer to bodyWriter for writing text
+    m_contentWriter = contentWriter; //set the pointer to contentWriter for adding styles to content.xml
+    m_bodyWriter = bodyWriter; //set the pointer to bodyWriter for writing to content.xml in office:text
+    m_stylesWriter = stylesWriter; //set the pointer to stylesWriter for writing to styles.xml
 }
 
 //increment m_sectionNumber
@@ -286,6 +287,12 @@ void KWordTextHandler::paragraphEnd()
     //} else
         //writeOutParagraph( "Standard", m_paragraph );
     m_bodyWriter->endElement(); //close the <text:p> tag we opened in writeLayout()
+    //we might need to close <text:list-item> here, too
+    if ( m_openTextListItemTag )
+    {
+	m_bodyWriter->endElement();
+	m_openTextListItemTag = false;
+    }
     m_bInParagraph = false;
 }
 
@@ -296,13 +303,13 @@ void KWordTextHandler::fieldStart( const wvWare::FLD* fld, wvWare::SharedPtr<con
     m_insideField = true;
     m_fieldAfterSeparator = false;
     m_fieldValue = "";
-}
+} //end fieldStart()
 
 void KWordTextHandler::fieldSeparator( const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )
 {
     kDebug(30513) ;
     m_fieldAfterSeparator = true;
-}
+} //end fieldSeparator()
 
 void KWordTextHandler::fieldEnd( const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
 {
@@ -322,7 +329,7 @@ void KWordTextHandler::fieldEnd( const wvWare::FLD* /*fld*/, wvWare::SharedPtr<c
     m_fieldType = -1;
     m_insideField = false;
     m_fieldAfterSeparator = false;
-}
+} //end fieldEnd()
 
 //this handles a basic section of text
 void KWordTextHandler::runOfText( const wvWare::UString& text, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
@@ -348,29 +355,7 @@ void KWordTextHandler::runOfText( const wvWare::UString& text, wvWare::SharedPtr
     //reset m_runOfText since we've already written it out
     m_runOfText = "";
     
-    //m_index += text.length();
-    
-    //m_bodyWriter->startElement("text:p");
-    //we may need to start new page with this text
-    //if( m_bStartNewPage )
-    //{
-	//write style
-	//m_contentWriter->startElement( "style:style" );
-	//m_contentWriter->addAttribute( "style:name", "P1" );//TODO make this a dynamic name!
-	//m_contentWriter->addAttribute( "style:family", "paragraph" );
-	//m_contentWriter->startElement( "style:paragraph-properties" );
-	//m_contentWriter->addAttribute( "fo:break-before", "page" );
-	//m_contentWriter->endElement(); //style:paragraph-properties
-	//m_contentWriter->endElement(); //style:style
-	//add attribute to <text:p>
-	//m_bodyWriter->addAttribute( "text:style-name", "P1" );
-	//now set flag to false since we've started the new page
-	//m_bStartNewPage = false;
-	//kDebug(30513) << "b_StartNewPage = false";
-    //}
-    //m_bodyWriter->addTextNode( newText.string() );
-    //m_bodyWriter->endElement(); //text:p
-}
+} //end runOfText()
 
 //called by runOfText to write the formatting information for that text?
 //called by insertVariable() as well
@@ -554,7 +539,7 @@ void KWordTextHandler::writeFormattedText( QDomElement& parentElement, const wvW
     //now close style tag for this run of text
     m_contentWriter->endElement(); //style:text-properties
     m_contentWriter->endElement(); //style:style
-}
+} //end writeFormattedText()
 
 //#define FONT_DEBUG
 
@@ -616,7 +601,7 @@ QString KWordTextHandler::getFont(unsigned fc) const
 #endif
 
     return info.family();
-}
+}//end getFont()
 
 //called by paragraphStart()
 void KWordTextHandler::writeOutParagraph( const QString& styleName, const QString& text )
@@ -661,16 +646,51 @@ void KWordTextHandler::writeLayout( /*QDomElement& parentElement, const wvWare::
 {
     kDebug(30513);
 
-    //startthe <text:p> tag - it's closed in paragraphEnd()
-    m_bodyWriter->startElement( "text:p" );
-
     //if we don't actually have paragraph properties, just return
     //may need to call writeCounter here...
     if ( !m_paragraphProperties )
     {
+	//open text:p anyway, because we always close it in paragraphEnd()
+	m_bodyWriter->startElement( "text:p" );
 	kDebug(30513) << " we don't have any paragraph properties.";
 	return;
     }
+
+    const wvWare::Word97::PAP& pap = (*m_paragraphProperties).pap();
+
+    //this needs to be before we open text:p, b/c text:list-item surrounds text:p
+    //ilfo = when non-zero, (1-based) index into the pllfo identifying the list to which the paragraph belongs
+    if ( pap.ilfo > 0 )
+    {
+	if ( !m_openTextListTag )
+	{
+	    //we're starting a new list...
+	    m_openTextListTag = true;
+	    m_bodyWriter->startElement( "text:list" );
+	    //set up the list style name
+	    QString listStyleName( "L" );
+	    listStyleName.append( QString::number( m_listStyleNumber ) );
+	    m_listStyleNumber++;
+	    m_bodyWriter->addAttribute( "text:style-name", listStyleName ); //write it to the text:list tag
+	    //set up the text:list-style
+	    m_contentWriter->startElement( "text:list-style" );
+	    m_contentWriter->addAttribute( "style:name", listStyleName );
+	}
+	//flag so we know we opened this tag
+	m_openTextListItemTag = true;
+	m_bodyWriter->startElement( "text:list-item" );
+        writeCounter( *m_paragraphProperties, style );
+    }
+    else if ( m_openTextListTag )
+    {
+	//if pap.ilfo is 0, we should be done with the list, so close <text:list>
+	//except I'm not sure this really works, because there might be a paragraph in the middle of the list?
+	m_openTextListTag = false;
+	m_bodyWriter->endElement(); //text:list
+    }
+
+    //start the <text:p> tag - it's closed in paragraphEnd()
+    m_bodyWriter->startElement( "text:p" );
 
     //we do have properties, so setup the style tag
     //set up styleName
@@ -687,7 +707,6 @@ void KWordTextHandler::writeLayout( /*QDomElement& parentElement, const wvWare::
     //add the attribute for our style in <text:p>
     m_bodyWriter->addAttribute( "text:style-name", styleName.toUtf8() );
     
-    const wvWare::Word97::PAP& pap = (*m_paragraphProperties).pap();
     
     //paragraph alignment
     //jc = justification code
@@ -826,11 +845,6 @@ void KWordTextHandler::writeLayout( /*QDomElement& parentElement, const wvWare::
 	    m_contentWriter->endElement(); //style:tab-stop
         }
 	m_contentWriter->endElement(); //style:tab-stops
-    }
-    //ilfo = when non-zero, (1-based) index into the pllfo identifying the list to which the paragraph belongs
-    if ( pap.ilfo > 0 )
-    {
-        writeCounter( *m_paragraphProperties, style );
     }
     //now close style:style tag for this paragraph
     m_contentWriter->endElement(); //style:style

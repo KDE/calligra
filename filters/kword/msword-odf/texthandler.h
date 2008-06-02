@@ -54,7 +54,7 @@ class KWordTextHandler : public QObject, public wvWare::TextHandler
 {
     Q_OBJECT
 public:
-    KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter );
+    KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter, KoXmlWriter* stylesWriter );
 
     void setFrameSetElement( const QDomElement& frameset );
 
@@ -108,7 +108,8 @@ protected:
     //instead of this, have a pointer to contentWriter? or bodyWriter or both?
     //QDomDocument mainDocument() const;
     KoXmlWriter* m_contentWriter;
-    KoXmlWriter* m_bodyWriter;
+    KoXmlWriter* m_bodyWriter; //this writes to content.xml inside <office:body>
+    KoXmlWriter* m_stylesWriter; //this writes to styles.xml
 
 private:
     wvWare::SharedPtr<wvWare::Parser> m_parser;
@@ -119,8 +120,12 @@ private:
     int m_endNoteNumber; // number of endnote _vars_ written out
     int m_previousOutlineLSID; // The list id of the previous outline-list item
     int m_previousEnumLSID; // The list id of the previous enum-list item
+    bool m_openTextListItemTag; //flag to tell us we need to close that tag in paragraphEnd()
+				//there's probably a better way to do this...
+    bool m_openTextListTag; //flag to tell us we have an open list
     int m_textStyleNumber; //number of styles created for text family
     int m_paragraphStyleNumber; //number of styles created for paragraph family
+    int m_listStyleNumber; //number of styles created for lists
 
     // Current paragraph
     QString m_paragraph;
