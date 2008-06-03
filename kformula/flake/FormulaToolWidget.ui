@@ -160,7 +160,7 @@
       <property name="flat" >
        <bool>true</bool>
       </property>
-      <widget class="KFontComboBox" name="fontComboBox" >
+      <widget class="QFontComboBox" name="fontComboBox" >
        <property name="geometry" >
         <rect>
          <x>80</x>
