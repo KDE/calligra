@@ -33,9 +33,8 @@ namespace KexiWebForms {
     Server* Server::instance() {
         if (m_instance == 0) {
             m_instance = new Server();
-        } else {
-            return m_instance;
-        }
+		}
+        return m_instance;
     }
 
     Server::Server() : m_ctx(NULL) {}

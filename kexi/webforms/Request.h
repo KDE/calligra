@@ -22,13 +22,15 @@
 #define KEXIWEBFORMS_REQUEST_H
 
 #include <shttpd.h>
-#include <QString>
+
+class QString;
 
 namespace KexiWebForms {
     typedef struct shttpd_arg RequestData;
     
     namespace Request {
         QString request(RequestData*, const char*);
+		QString request(RequestData*, const QString&);
         QString requestUri(RequestData*);
     }
 }

@@ -33,6 +33,7 @@
 
 #include "IndexView.h"
 #include "TableView.h"
+#include "UpdateView.h"
 
 using namespace KexiWebForms;
 
@@ -103,6 +104,7 @@ int main(int argc, char **argv) {
         if (server->init(serverConfig)) {
             server->registerHandler("/", IndexView::show);
             server->registerHandler("/view/*", TableView::show);
+			server->registerHandler("/update/*", UpdateView::show);
         }
         return server->run();
     }

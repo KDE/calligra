@@ -41,19 +41,20 @@ namespace KexiWebForms {
             HTTPStream stream(req);
             google::TemplateDictionary dict("table");
 
-            QString requestedPage = Request::requestUri(req);
+            QString requestedTable = Request::requestUri(req);
             // FIXME: Mhhh, nasty things can happen with that
-            requestedPage.remove(0, 6);
-            dict.SetValue("TABLENAME", requestedPage.toLatin1().constData());
+            requestedTable.remove(0, 6);
+            dict.SetValue("TABLENAME", requestedTable.toLatin1().constData());
 
             // rough code to access table data...
             // FIXME: Change this piece of code...
             QString query("SELECT * FROM ");
-            query.append(requestedPage);
+            query.append(requestedTable);
 
             // Using global connection object, mh...
             KexiDB::Cursor* cursor = gConnection->executeQuery(query);
 
+			int row = 1;
             if (cursor) {
                 QString tableData;
                 while (cursor->moveNext()) {
@@ -63,7 +64,10 @@ namespace KexiWebForms {
                         tableData.append(cursor->value(i).toString());
                         tableData.append("</td>");
                     }
+					tableData.append("<td><a href=\"/update/").append(requestedTable);
+					tableData.append("/").append(QVariant(row).toString()).append("\">Edit</a></td>");
                     tableData.append("</tr>");
+					row++;
                 }
                 dict.SetValue("TABLEDATA", tableData.toLatin1().constData());
             } else {

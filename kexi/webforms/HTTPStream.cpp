@@ -18,7 +18,10 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <QString>
+
 #include <shttpd.h>
+
 #include "Request.h"
 #include "HTTPStream.h"
 

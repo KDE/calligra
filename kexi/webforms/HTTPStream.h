@@ -21,11 +21,12 @@
 #ifndef KEXI_WEBFORMS_HTTPSTREAM_H
 #define KEXI_WEBFORMS_HTTPSTREAM_H
 
+#include <QString>
 #include <string>
+
 #include "Request.h"
 
 struct RequestData;
-class QString;
 
 namespace KexiWebForms {
 

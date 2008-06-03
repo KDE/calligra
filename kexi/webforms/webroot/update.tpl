@@ -13,10 +13,17 @@
 	  <div id="dbname"><h2>{{TITLE}}</h2></div>
 	  <div style="clear: both;"></div>
 	  <div id="content">
-	      <h3>Viewing table {{TABLENAME}}</h3>
-	      <table border="1" width="100%">
-		  {{TABLEDATA}}
-	      </table>
+	      <h3>Updating row {{ROW}} in table {{TABLENAME}}</h3>
+		  <pre>{{DEBUG_QUERY}}</pre>
+	      <form action="/update/{{TABLENAME}}/{{ROW}}" method="POST">
+		  	<table border="0" width="100%">
+		  	{{FORMDATA}}	
+			</table>
+			<input type="hidden" name="dataSent" value="true"/>
+			<input type="hidden" name="tableFields" value="{{TABLEFIELDS}}"/>
+			<input type="submit"/>
+			<input type="reset"/>
+		  </form>
 	  </div>
       </div>
   </body>
