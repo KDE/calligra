@@ -1,6 +1,7 @@
 /* This file is part of the KOffice project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
+   Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -42,19 +43,19 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 
-Document::Document( const std::string& fileName, /*QDomDocument& mainDocument, QDomDocument& documentInfo, QDomElement& framesetsElement,*/ KoFilterChain* chain, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter, KoXmlWriter* stylesWriter )
-    : /*m_mainDocument( mainDocument ), m_documentInfo ( documentInfo ),
-      m_framesetsElement( framesetsElement ),*/
-      m_replacementHandler( new KWordReplacementHandler ), m_tableHandler( new KWordTableHandler ),
+Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter, KoXmlWriter* stylesWriter, KoXmlWriter* listStylesWriter )
+    : m_replacementHandler( new KWordReplacementHandler ), m_tableHandler( new KWordTableHandler ),
       m_pictureHandler( new KWordPictureHandler( this ) ), m_textHandler( 0 ),
-      m_chain( chain ),
+      m_chain( chain ), m_currentListDepth( -1 ),
       m_parser( wvWare::ParserFactory::createParser( fileName ) )/*, m_headerFooters( 0 ), m_bodyFound( false ),
       m_footNoteNumber( 0 ), m_endNoteNumber( 0 )*/
 {
     kDebug(30513) ;
     if ( m_parser ) // 0 in case of major error (e.g. unsupported format)
     {
-        m_textHandler = new KWordTextHandler( m_parser, contentWriter, bodyWriter, stylesWriter );
+	m_bodyWriter = bodyWriter; //pointer for writing to the body
+	m_listStylesWriter = listStylesWriter; //pointer for writing list styles
+        m_textHandler = new KWordTextHandler( m_parser, contentWriter, bodyWriter, stylesWriter, listStylesWriter );
         connect( m_textHandler, SIGNAL( subDocFound( const wvWare::FunctorBase*, int ) ),
                  this, SLOT( slotSubDocFound( const wvWare::FunctorBase*, int ) ) );
         connect( m_textHandler, SIGNAL( tableFound( const KWord::Table& ) ),
@@ -241,7 +242,6 @@ bool Document::parse()
 //connects firstSectionFound signal & slot together; sets flag to true
 void Document::bodyStart()
 {
-    kDebug(30513) ;
 
     //QDomElement mainFramesetElement = m_mainDocument.createElement("FRAMESET");
     //mainFramesetElement.setAttribute("frameType",1);
@@ -253,15 +253,31 @@ void Document::bodyStart()
     //createInitialFrame( mainFramesetElement, 29, 798, 42, 566, false, Reconnect );
 
     //m_textHandler->setFrameSetElement( mainFramesetElement );
+    kDebug(30513) << "connecting firstSectionFound signal & updateListDepth signal";
     connect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
              this, SLOT( slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ) );
+    connect( m_textHandler, SIGNAL( updateListDepth( int ) ),
+	     this, SLOT( slotUpdateListDepth( int ) ) );
     m_bodyFound = true;
 }
 
 //disconnects firstSectionFound signal & slot
 void Document::bodyEnd()
 {
-    kDebug(30513) ;
+    kDebug(30513) << "m_currentListDepth = " << m_currentListDepth;
+
+    //close a list if we need to
+    if ( m_currentListDepth >= 0 )
+    {
+	kDebug(30513) << "closing the final list in the document";
+	m_listStylesWriter->endElement(); //text:list-style
+        for (int i = 0; i <= m_currentListDepth; i++)
+        {
+	    m_bodyWriter->endElement(); //close the text:list-item
+	    m_bodyWriter->endElement(); //text:list
+	}
+    }
+
     disconnect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
              this, SLOT( slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ) );
 }
@@ -370,8 +386,14 @@ void Document::footnoteStart()
 //add empty frameset element to end it?
 void Document::footnoteEnd()
 {
-    kDebug(30513) ;
+    kDebug(30513);
     //m_textHandler->setFrameSetElement( QDomElement() );
+}
+
+void Document::slotUpdateListDepth( int depth )
+{
+    kDebug(30513) << "setting m_currentListDepth = " << depth;
+    m_currentListDepth = depth;
 }
 
 //create fram for the table cell?

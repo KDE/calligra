@@ -1,6 +1,7 @@
 /* This file is part of the KOffice project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
+   Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -55,7 +56,7 @@ class Document : public QObject, public wvWare::SubDocumentHandler
 {
     Q_OBJECT
 public:
-    Document( const std::string& fileName, /*QDomDocument& mainDocument, QDomDocument &documentInfo, QDomElement& framesetsElement,*/ KoFilterChain* chain, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter, KoXmlWriter* stylesWriter );
+    Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter, KoXmlWriter* stylesWriter, KoXmlWriter* listStylesWriter );
     virtual ~Document();
 
     bool hasParser() const { return m_parser != 0L; }
@@ -91,7 +92,7 @@ public:
     // Called by PictureHandler
     KoStoreDevice* createPictureFrameSet( const QSizeF& size );
 
-protected slots:
+public slots:
     // Connected to the KWordTextHandler only when parsing the body
     void slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> );
 
@@ -104,6 +105,10 @@ protected slots:
 
     // Write out the frameset and add the key to the PICTURES tag
     void slotPictureFound( const QString& frameName, const QString& pictureName, const wvWare::FunctorBase* );
+
+    //track the current list depth when texthandler is parsing lists,
+    //because we may need to close the list here
+    void slotUpdateListDepth( int depth );
 
     // Similar to footnoteStart/footnoteEnd but for cells.
     // This is connected to KWordTableHandler
@@ -133,6 +138,9 @@ private:
     bool m_bodyFound;
     int m_footNoteNumber; // number of footnote _framesets_ written out
     int m_endNoteNumber; // number of endnote _framesets_ written out
+    int m_currentListDepth; //track list depth in case we need to close a list here (-1 if no list)
+    KoXmlWriter* m_bodyWriter; //for writing to the body of content.xml
+    KoXmlWriter* m_listStylesWriter; //for writing list styles
 };
 
 #endif // DOCUMENT_H

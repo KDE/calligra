@@ -1,6 +1,7 @@
 /* This file is part of the KOffice project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
+   Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -56,7 +57,7 @@ class KWordTextHandler : public QObject, public wvWare::TextHandler
 {
     Q_OBJECT
 public:
-    KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter, KoXmlWriter* stylesWriter );
+    KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter, KoXmlWriter* stylesWriter, KoXmlWriter* listStylesWriter );
 
     void setFrameSetElement( const QDomElement& frameset );
 
@@ -100,18 +101,18 @@ signals:
     void subDocFound( const wvWare::FunctorBase* parsingFunctor, int data );
     void tableFound( const KWord::Table& table );
     void pictureFound( const QString& frameName, const QString& pictureName, const wvWare::FunctorBase* pictureFunctor );
+    void updateListDepth( int );
 
 protected:
     void writeOutParagraph( const QString& styleName, const QString& text );
-    void writeCounter( /*QDomElement& parentElement,*/ const wvWare::ParagraphProperties& paragraphProperties, const wvWare::Style* style );
+    void writeCounter( const wvWare::ParagraphProperties& paragraphProperties, const wvWare::Style* style );
     QDomElement insertVariable( int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format );
     QDomElement insertAnchor( const QString& fsname );
     QString getFont(unsigned fc) const;
-    //instead of this, have a pointer to contentWriter? or bodyWriter or both?
-    //QDomDocument mainDocument() const;
     KoXmlWriter* m_contentWriter;
     KoXmlWriter* m_bodyWriter; //this writes to content.xml inside <office:body>
     KoXmlWriter* m_stylesWriter; //this writes to styles.xml
+    KoXmlWriter* m_listStylesWriter; //this is for list styles
 
 private:
     wvWare::SharedPtr<wvWare::Parser> m_parser;
@@ -120,11 +121,9 @@ private:
     int m_sectionNumber;
     int m_footNoteNumber; // number of footnote _vars_ written out
     int m_endNoteNumber; // number of endnote _vars_ written out
-    int m_previousOutlineLSID; // The list id of the previous outline-list item
-    int m_previousEnumLSID; // The list id of the previous enum-list item
-    bool m_openTextListItemTag; //flag to tell us we need to close that tag in paragraphEnd()
-				//there's probably a better way to do this...
-    bool m_openTextListTag; //flag to tell us we have an open list
+    //bool m_openTextListItemTag; //flag to tell us we need to close that tag in paragraphEnd()
+    int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)
+    int m_currentListID; //tracks the id of the current list - 0 if no list
     int m_textStyleNumber; //number of styles created for text family
     int m_paragraphStyleNumber; //number of styles created for paragraph family
     int m_listStyleNumber; //number of styles created for lists
