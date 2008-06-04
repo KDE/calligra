@@ -227,23 +227,6 @@ private:
   void obscureVerticalCells( SheetView* sheetView, const Cell& cell );
 
   /**
-   * \ingroup Layout
-   * \ingroup Painting
-   * Determines the font to be used by evaluating the font settings.
-   *
-   * This depends on the following variables:
-   * \li font family
-   * \li font size
-   * \li font flags
-   * \li conditional formatting
-   *
-   * \return the effective font
-   *
-   * \internal
-   */
-  QFont effectiveFont( QPaintDevice* paintDevice ) const;
-
-  /**
    * \ingroup Painting
    * Adjust the output text, so that it only holds the part that can be
    * displayed. The altered text is only temporary stored. It is restored

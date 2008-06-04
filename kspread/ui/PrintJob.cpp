@@ -31,6 +31,7 @@
 
 #include <dialogs/SheetSelectPage.h>
 
+#include <KoGlobal.h>
 #include <KoShapeManager.h>
 
 #include <QHash>
@@ -238,6 +239,9 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
         const QRect cellRange = d->printManager(sheet)->cellRange(sheetPageNumber);
         const QRectF pageRect = sheet->cellCoordinatesToDocument(cellRange);
         painter.translate(pageRect.left() * scale, pageRect.top() * scale);
+
+        // Scale appropriately, even for resolutions other than the screen's.
+        painter.scale(scale / POINT_TO_INCH(KoGlobal::dpiX()), scale / POINT_TO_INCH(KoGlobal::dpiX()));
 
         d->printManager(sheet)->printPage(sheetPageNumber, painter);
     }

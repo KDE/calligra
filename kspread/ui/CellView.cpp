@@ -51,6 +51,7 @@
 
 // KOffice
 #include <KoGlobal.h>
+#include <KoPostscriptPaintDevice.h>
 #include <KoZoomHandler.h>
 
 // KSpread
@@ -1082,9 +1083,7 @@ void CellView::paintText( QPainter& painter,
   }
 
   QPen tmpPen( textColorPrint );
-
-    // Set the font according to the current zoom.
-    QFont font = effectiveFont( paintDevice );
+    QFont font = d->style.font();
 
     // Check for red font color for negative values.
     if ( cell.value().isNumber()
@@ -1146,7 +1145,8 @@ void CellView::paintText( QPainter& painter,
   if ( hAlign == Style::Right && !cell.isEmpty() && !d->fittingWidth )
     offsetCellTooShort = 4;
 
-  const QFontMetricsF fontMetrics( font, paintDevice );
+  KoPostscriptPaintDevice device;
+  const QFontMetricsF fontMetrics(font, &device);
   double offsetFont = 0.0;
 
   if ( style().valign() == Style::Bottom && style().underline() )
@@ -1819,22 +1819,6 @@ QString CellView::textDisplaying( const QFontMetricsF& fm, const Cell& cell )
 //                        End of Painting
 // ================================================================
 
-
-
-// Get the effective font.
-//
-// Used in makeLayout().
-//
-QFont CellView::effectiveFont( QPaintDevice* paintDevice ) const
-{
-    QFont tmpFont = paintDevice ? QFont( d->style.font(), paintDevice ) : d->style.font();
-    // Scale the font size according to the current zoom.
-//     tmpFont.setPointSizeF( tmpFont.pointSizeF() / cell.doc()->resolutionY() );
-    return tmpFont;
-}
-
-
-
 // ================================================================
 //                              Layout
 
@@ -1856,9 +1840,10 @@ void CellView::makeLayout( SheetView* sheetView, const Cell& cell )
     // painting of it.  Now it is time to see if the contents fits into
     // the cell and, if not, maybe rearrange the outtext a bit.
 
-    // First, Determine the correct font with zoom taken into account.
-    const QFont font(effectiveFont(sheetView->paintDevice()));
-    const QFontMetricsF fontMetrics(font, sheetView->paintDevice());
+    // First, create a device independent font and its metrics.
+    KoPostscriptPaintDevice device;
+    const QFont font(d->style.font(), &device);
+    const QFontMetricsF fontMetrics(font, &device);
 
     // Then calculate text dimensions, i.e. d->textWidth and d->textHeight,
     // and check whether the text fits into the cell dimension by the way.
@@ -2444,7 +2429,6 @@ void CellView::Private::truncateText(const QFont& font, const QFontMetricsF& fon
 
 void CellView::Private::truncateHorizontalText(const QFont& font, const QFontMetricsF& fontMetrics)
 {
-    Q_UNUSED(font)
     if (!style.wrapText())
     {
         const QStringList textLines = displayText.split('\n');
