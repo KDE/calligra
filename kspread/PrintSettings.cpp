@@ -77,7 +77,6 @@ PrintSettings::PrintSettings()
     d->pageOrder = LeftToRight;
     d->printRegion = Region(1, 1, KS_colMax, KS_rowMax);
     d->zoom = 1.0;
-    d->pageLimits = QSize(1, 0);
 }
 
 PrintSettings::PrintSettings(const PrintSettings& other)
