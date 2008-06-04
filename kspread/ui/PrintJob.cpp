@@ -214,10 +214,16 @@ void PrintJob::preparePage(int pageNumber)
     if (!sheet)
         return;
 
-    // Prepare the page for shape printing.
+    // Move the painter offset according to the page layout.
     const double scale = POINT_TO_INCH(printer().resolution());
     const KoPageLayout pageLayout = sheet->printSettings()->pageLayout();
     painter().translate(pageLayout.left * scale, pageLayout.top * scale);
+
+    // Apply the print zoom factor,
+    const double zoom = d->printManager(sheet)->zoom();
+    painter().scale(zoom, zoom);
+
+    // Prepare the page for shape printing.
     const QRect cellRange = d->printManager(sheet)->cellRange(sheetPageNumber);
     const QRectF pageRect = sheet->cellCoordinatesToDocument(cellRange);
     painter().translate(-pageRect.left() * scale, -pageRect.top() * scale);
@@ -234,14 +240,14 @@ void PrintJob::printPage(int pageNumber, QPainter &painter)
     // Print the cells.
     if (sheet)
     {
-        // Reset the offset.
+        // Reset the offset made for shape printing.
         const double scale = POINT_TO_INCH(printer().resolution());
         const QRect cellRange = d->printManager(sheet)->cellRange(sheetPageNumber);
         const QRectF pageRect = sheet->cellCoordinatesToDocument(cellRange);
         painter.translate(pageRect.left() * scale, pageRect.top() * scale);
 
-        // Scale appropriately, even for resolutions other than the screen's.
-        painter.scale(scale / POINT_TO_INCH(KoGlobal::dpiX()), scale / POINT_TO_INCH(KoGlobal::dpiX()));
+        // Scale according to the printer's resolution.
+        painter.scale(scale, scale);
 
         d->printManager(sheet)->printPage(sheetPageNumber, painter);
     }

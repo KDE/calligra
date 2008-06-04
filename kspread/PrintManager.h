@@ -50,11 +50,6 @@ public:
      */
     void setPrintSettings(const PrintSettings& settings, bool force = false);
 
-    /**
-     * \return \c false if nothing to print.
-     */
-    bool print(QPainter& painter, QPrinter* printer);
-
     void printPage(int page, QPainter& painter);
 
     /**
@@ -68,6 +63,8 @@ public:
      * \return the page's cell range
      */
     QRect cellRange(int page) const;
+
+    double zoom() const;
 
 private:
     class Private;

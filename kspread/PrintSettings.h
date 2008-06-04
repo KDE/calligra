@@ -26,6 +26,8 @@
 
 #include "kspread_export.h"
 
+class QSize;
+
 namespace KSpread
 {
 class Region;
@@ -145,6 +147,11 @@ public:
     void setPrintRegion(const Region& region);
     void addPrintRange(const QRect& range);
     void removePrintRange(const QRect& range);
+
+    double zoom() const;
+    void setZoom(double zoom);
+    const QSize& pageLimits() const;
+    void setPageLimits(const QSize& pageLimits);
 
     /**
      * Assignment operator.

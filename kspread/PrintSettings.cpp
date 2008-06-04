@@ -31,6 +31,9 @@
 #include <KoPageLayout.h>
 #include <KoUnit.h>
 
+// Qt
+#include <QSize>
+
 using namespace KSpread;
 
 class PrintSettings::Private
@@ -45,6 +48,8 @@ public:
     bool printFormulaIndicator  : 1;
     PageOrder pageOrder;
     Region printRegion;
+    double zoom;
+    QSize pageLimits;
 
 public:
     void calculatePageDimensions();
@@ -71,6 +76,8 @@ PrintSettings::PrintSettings()
     d->printFormulaIndicator = false;
     d->pageOrder = LeftToRight;
     d->printRegion = Region(1, 1, KS_colMax, KS_rowMax);
+    d->zoom = 1.0;
+    d->pageLimits = QSize(1, 0);
 }
 
 PrintSettings::PrintSettings(const PrintSettings& other)
@@ -85,6 +92,8 @@ PrintSettings::PrintSettings(const PrintSettings& other)
     d->printFormulaIndicator = other.d->printFormulaIndicator;
     d->pageOrder = other.d->pageOrder;
     d->printRegion = other.d->printRegion;
+    d->zoom = other.d->zoom;
+    d->pageLimits = other.d->pageLimits;
 }
 
 PrintSettings::~PrintSettings()
@@ -214,6 +223,26 @@ void PrintSettings::removePrintRange(const QRect& range)
     d->printRegion.sub(range, 0);
 }
 
+double PrintSettings::zoom() const
+{
+    return d->zoom;
+}
+
+void PrintSettings::setZoom(double zoom)
+{
+    d->zoom = zoom;
+}
+
+const QSize& PrintSettings::pageLimits() const
+{
+    return d->pageLimits;
+}
+
+void PrintSettings::setPageLimits(const QSize& pageLimits)
+{
+    d->pageLimits = pageLimits;
+}
+
 void PrintSettings::operator=(const PrintSettings& other)
 {
     d->pageLayout = other.d->pageLayout;
@@ -225,6 +254,8 @@ void PrintSettings::operator=(const PrintSettings& other)
     d->printFormulaIndicator = other.d->printFormulaIndicator;
     d->pageOrder = other.d->pageOrder;
     d->printRegion = other.d->printRegion;
+    d->zoom = other.d->zoom;
+    d->pageLimits = other.d->pageLimits;
 }
 
 bool PrintSettings::operator==(const PrintSettings& other) const
@@ -246,6 +277,10 @@ bool PrintSettings::operator==(const PrintSettings& other) const
     if (d->pageOrder != other.d->pageOrder)
         return false;
     if (d->printRegion != other.d->printRegion)
+        return false;
+    if (d->zoom != other.d->zoom)
+        return false;
+    if (d->pageLimits != other.d->pageLimits)
         return false;
     return true;
 }

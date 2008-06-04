@@ -40,20 +40,21 @@ public:
     SheetView* sheetView;
     QMap<int, QRect> pages; // page number to cell range
     PrintSettings settings;
-    KoZoomHandler* zoomHandler;
+    double zoom;
 
 public:
     void calculatePages();
     void printPage(int page, QPainter&) const;
     bool pageNeedsPrinting(const QRect& cellRange) const;
+    void setZoomFactor();
 };
 
 void PrintManager::Private::calculatePages()
 {
     pages.clear();
     int pageNumber = 1;
-    const double printWidth = settings.printWidth();
-    const double printHeight = settings.printHeight();
+    const double printWidth = qRound(settings.printWidth() / zoom + 0.5);
+    const double printHeight = qRound(settings.printHeight() / zoom + 0.5);
 //     kDebug() << "printWidth" << printWidth << "printHeight" << printHeight;
 
     if (settings.pageOrder() == PrintSettings::LeftToRight)
@@ -215,6 +216,38 @@ bool PrintManager::Private::pageNeedsPrinting(const QRect& cellRange) const
     return !(cellRange & shapesCellRange).isEmpty();
 }
 
+void PrintManager::Private::setZoomFactor()
+{
+    const QSize pageLimits = settings.pageLimits();
+
+    // if there are no page limits, take the usual zoom factor
+    if (!pageLimits.isValid())
+    {
+        zoom = settings.zoom();
+        return;
+    }
+
+    // calculate the zoom factor from the page limits
+    double zoomX = 1.0;
+    double zoomY = 1.0;
+    // iterate over the print ranges
+    Region::ConstIterator end = settings.printRegion().constEnd();
+    for (Region::ConstIterator it = settings.printRegion().constBegin(); it != end; ++it)
+    {
+        if (!(*it)->isValid())
+            continue;
+
+        // Take the document range limited to the used area.
+        const QRectF printRange = sheet->cellCoordinatesToDocument((*it)->rect() & sheet->usedArea());
+
+        if (pageLimits.width() > 0)
+            zoomX = qMin(zoomX, settings.printWidth() / printRange.width());
+        if (pageLimits.height() > 0)
+            zoomY = qMin(zoomY, settings.printHeight() / printRange.height());
+    }
+    zoom = qMin(zoomX, zoomY);
+}
+
 
 PrintManager::PrintManager(Sheet* sheet)
     : d(new Private)
@@ -222,13 +255,12 @@ PrintManager::PrintManager(Sheet* sheet)
     d->sheet = sheet;
     d->sheetView = new SheetView(sheet);
     d->settings = *sheet->printSettings();
-    d->zoomHandler = new KoZoomHandler();
+    d->setZoomFactor();
 }
 
 PrintManager::~PrintManager()
 {
     delete d->sheetView;
-    delete d->zoomHandler;
     delete d;
 }
 
@@ -241,58 +273,20 @@ void PrintManager::setPrintSettings(const PrintSettings& settings, bool force)
     d->calculatePages();
 }
 
-bool PrintManager::print(QPainter& painter, QPrinter* printer)
-{
-    const KoPageLayout pageLayout = d->settings.pageLayout();
-    kDebug(36004) << "PageLayout:"
-                  << "w" << pageLayout.width
-                  << "h" << pageLayout.height
-                  << "l" << pageLayout.left
-                  << "r" << pageLayout.right
-                  << "t" << pageLayout.top
-                  << "b" << pageLayout.bottom;
-    d->calculatePages();
-    kDebug(36004) << d->pages;
-
-    // setup the QPainter
-    painter.translate(pageLayout.left, pageLayout.top);
-    painter.scale(d->zoomHandler->zoomedResolutionX(), d->zoomHandler->zoomedResolutionY());
-    painter.setClipRect(0.0, 0.0, pageLayout.width, pageLayout.height);
-
-    // setup the SheetView
-    d->sheetView->setPaintDevice(painter.device());
-    d->sheetView->setViewConverter(d->zoomHandler);
-
-    // print the pages
-    for (int page = 1; page <= d->pages.count(); ++page)
-    {
-        d->printPage(page, painter);
-        if (page != d->pages.count())
-            printer->newPage();
-    }
-
-    return !d->pages.isEmpty();
-}
-
 void PrintManager::printPage(int page, QPainter& painter)
 {
     const KoPageLayout pageLayout = d->settings.pageLayout();
-    kDebug(36004) << "PageLayout:"
-                  << "w" << pageLayout.width
-                  << "h" << pageLayout.height
-                  << "l" << pageLayout.left
-                  << "r" << pageLayout.right
-                  << "t" << pageLayout.top
-                  << "b" << pageLayout.bottom;
+    kDebug() << "page's cell range" << d->pages[page];
 
     // setup the QPainter
     painter.save();
-    painter.scale(d->zoomHandler->zoomedResolutionX(), d->zoomHandler->zoomedResolutionY());
-    painter.setClipRect(0.0, 0.0, pageLayout.width, pageLayout.height);
+    painter.setClipRect(0.0, 0.0, pageLayout.width / d->zoom, pageLayout.height / d->zoom);
 
     // setup the SheetView
     d->sheetView->setPaintDevice(painter.device());
-    d->sheetView->setViewConverter(d->zoomHandler);
+    KoZoomHandler zoomHandler;
+    zoomHandler.setZoom(d->zoom);
+    d->sheetView->setViewConverter(&zoomHandler);
 
     // save and set painting flags
     const bool grid = d->sheet->getShowGrid();
@@ -322,4 +316,9 @@ QRect PrintManager::cellRange(int page) const
     if (page < 1 || page > d->pages.count())
         return QRect();
     return d->pages[page];
+}
+
+double PrintManager::zoom() const
+{
+    return d->zoom;
 }
