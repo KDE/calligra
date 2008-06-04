@@ -90,7 +90,7 @@ SET (dialogs_DIR_SRCS
 	dialogs/LinkDialog.cpp
 	dialogs/ListDialog.cpp
 	dialogs/NamedAreaDialog.cpp
-	#dialogs/PaperLayoutDialog.cpp
+	dialogs/PageLayoutDialog.cpp
 	dialogs/PasteInsertDialog.cpp
 	dialogs/PreferenceDialog.cpp
 	dialogs/Resize2Dialog.cpp
@@ -109,6 +109,7 @@ SET (dialogs_DIR_SRCS
 
 kde4_add_ui_files(dialogs_DIR_SRCS
 	dialogs/FontWidget.ui
+	dialogs/PageLayoutSheetPage.ui
 	dialogs/PositionWidget.ui
 	dialogs/ProtectionWidget.ui
 	dialogs/SheetPropertiesWidget.ui

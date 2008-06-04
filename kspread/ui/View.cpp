@@ -183,7 +183,7 @@
 #include "dialogs/LayoutDialog.h"
 #include "dialogs/ListDialog.h"
 #include "dialogs/NamedAreaDialog.h"
-//#include "dialogs/PaperLayoutDialog.h"
+#include "dialogs/PageLayoutDialog.h"
 #include "dialogs/PasteInsertDialog.h"
 #include "dialogs/PreferenceDialog.h"
 #include "dialogs/Resize2Dialog.h"
@@ -6194,18 +6194,10 @@ void View::paperLayoutDlg()
   hf.footMid   = print->localizeHeadFootLine( print->footMid()   );
 
   KoUnit unit = doc()->unit();
-#ifdef __GNUC__
-#warning KDE4 porting needed
-#endif
-// TODO create a nice dialog with only the properties that KSpread needs
-#if 0
-  PaperLayout * dlg
-    = new PaperLayout( this, "PageLayout", pl, hf,
-                              FORMAT_AND_BORDERS | HEADER_AND_FOOTER,
-                              unit, d->activeSheet, this );
-  dlg->show();
-  // dlg destroys itself
-#endif
+
+    PageLayoutDialog dialog(this, d->activeSheet);
+    dialog.exec();
+//     dialog.show(); // Use show() to make selecting columns/rows possible.
 }
 
 void View::definePrintRange()

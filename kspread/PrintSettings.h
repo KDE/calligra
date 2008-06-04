@@ -143,6 +143,26 @@ public:
      */
     void setPrintFormulaIndicator(bool printFormulaIndicator);
 
+    /**
+     * Returns, if the headers shall be shown on printouts.
+     */
+    bool printHeaders() const;
+
+    /**
+     * Sets, if the headers shall be shown on printouts.
+     */
+    void setPrintHeaders(bool printHeaders);
+
+    /**
+     * Returns, if the zero values shall be shown on printouts.
+     */
+    bool printZeroValues() const;
+
+    /**
+     * Sets, if the zero values shall be shown on printouts.
+     */
+    void setPrintZeroValues(bool printZeroValues);
+
     const Region& printRegion() const;
     void setPrintRegion(const Region& region);
     void addPrintRange(const QRect& range);

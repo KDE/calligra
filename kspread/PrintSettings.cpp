@@ -46,6 +46,8 @@ public:
     bool printGraphics          : 1;
     bool printCommentIndicator  : 1;
     bool printFormulaIndicator  : 1;
+    bool printHeaders           : 1;
+    bool printZeroValues        : 1;
     PageOrder pageOrder;
     Region printRegion;
     double zoom;
@@ -74,6 +76,8 @@ PrintSettings::PrintSettings()
     d->printGraphics = true;
     d->printCommentIndicator = false;
     d->printFormulaIndicator = false;
+    d->printHeaders = false;
+    d->printZeroValues = false;
     d->pageOrder = LeftToRight;
     d->printRegion = Region(1, 1, KS_colMax, KS_rowMax);
     d->zoom = 1.0;
@@ -89,6 +93,8 @@ PrintSettings::PrintSettings(const PrintSettings& other)
     d->printGraphics = other.d->printGraphics;
     d->printCommentIndicator = other.d->printCommentIndicator;
     d->printFormulaIndicator = other.d->printFormulaIndicator;
+    d->printHeaders = other.d->printHeaders;
+    d->printZeroValues = other.d->printZeroValues;
     d->pageOrder = other.d->pageOrder;
     d->printRegion = other.d->printRegion;
     d->zoom = other.d->zoom;
@@ -202,6 +208,26 @@ void PrintSettings::setPrintFormulaIndicator(bool printFormulaIndicator)
     d->printFormulaIndicator = printFormulaIndicator;
 }
 
+bool PrintSettings::printHeaders() const
+{
+    return d->printHeaders;
+}
+
+void PrintSettings::setPrintHeaders(bool printHeaders)
+{
+    d->printHeaders = printHeaders;
+}
+
+bool PrintSettings::printZeroValues() const
+{
+    return d->printZeroValues;
+}
+
+void PrintSettings::setPrintZeroValues(bool printZeroValues)
+{
+    d->printZeroValues = printZeroValues;
+}
+
 const KSpread::Region& PrintSettings::printRegion() const
 {
     return d->printRegion;
@@ -251,6 +277,8 @@ void PrintSettings::operator=(const PrintSettings& other)
     d->printGraphics = other.d->printGraphics;
     d->printCommentIndicator = other.d->printCommentIndicator;
     d->printFormulaIndicator = other.d->printFormulaIndicator;
+    d->printHeaders = other.d->printHeaders;
+    d->printZeroValues = other.d->printZeroValues;
     d->pageOrder = other.d->pageOrder;
     d->printRegion = other.d->printRegion;
     d->zoom = other.d->zoom;
@@ -272,6 +300,10 @@ bool PrintSettings::operator==(const PrintSettings& other) const
     if (d->printCommentIndicator != other.d->printCommentIndicator)
         return false;
     if (d->printFormulaIndicator != other.d->printFormulaIndicator)
+        return false;
+    if (d->printHeaders != other.d->printHeaders)
+        return false;
+    if (d->printZeroValues != other.d->printZeroValues)
         return false;
     if (d->pageOrder != other.d->pageOrder)
         return false;
