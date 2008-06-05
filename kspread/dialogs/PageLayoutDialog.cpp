@@ -123,6 +123,7 @@ PageLayoutDialog::~PageLayoutDialog()
 void PageLayoutDialog::accept()
 {
     PrintSettings settings;
+    settings.setPageLayout(pageLayout());
     settings.setPrintGrid(d->sheetPage.gridCheckBox->isChecked());
     settings.setPrintCommentIndicator(d->sheetPage.commentCheckBox->isChecked());
     settings.setPrintFormulaIndicator(d->sheetPage.formulaCheckBox->isChecked());
@@ -160,5 +161,5 @@ void PageLayoutDialog::accept()
     else
         *d->sheet->printSettings() = settings;
 
-    KPageDialog::accept();
+    KoPageLayoutDialog::accept();
 }
