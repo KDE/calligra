@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Bar Wipe
+Name[ca]=Esborrat de barra
 Name[el]=Σβήσιμο ράβδων
 Name[hi]=बार वाइप
 Name[it]=Transizione a barre
@@ -11,6 +12,7 @@ Name[uk]=Пластинчасте витирання
 Name[x-test]=xxBar Wipexx
 Name[zh_TW]=條狀掃描
 Comment=Bar Wipe Page Effect
+Comment[ca]=Efecte d'esborrat de barra de la pàgina
 Comment[el]=Εφέ σελίδας σβήσιμο ράβδων
 Comment[hi]=बार वाइप पृष्ठ प्रभाव
 Comment[it]=Effetto di transizione a barre delle pagine

@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Exploding Page
+Name[ca]=Explosió de pàgina
 Name[el]=Έκρηξη σελίδας
 Name[fi]=Räjähtävä sivu
 Name[fy]=Eksplodearjende side
@@ -13,6 +14,7 @@ Name[uk]=Вибух сторінки
 Name[x-test]=xxExploding Pagexx
 Name[zh_TW]=爆炸頁面
 Comment=Exploding Page Page Effect
+Comment[ca]=Efecte d'explosió de la pàgina
 Comment[el]=Εφέ σελίδας έκρηξη
 Comment[fi]=Räjähtävä sivu -tehoste
 Comment[fy]=Eksplodearjende side side effekt

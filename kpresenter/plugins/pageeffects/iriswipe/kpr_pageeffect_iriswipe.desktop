@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Iris Wipe
+Name[ca]=Esborrat d'iris
 Name[el]=Σβήσιμο ίριδας
 Name[it]=Transizione a iride
 Name[pt]=Varrimento em Íris
@@ -10,6 +11,7 @@ Name[uk]=Витирання веселкою
 Name[x-test]=xxIris Wipexx
 Name[zh_TW]=彩虹掃描
 Comment=Iris Wipe Page Effects
+Comment[ca]=Efectes d'esborrat d'iris de la pàgina
 Comment[el]=Εφέ σελίδας σβήσιμο ίριδας
 Comment[it]=Effetto di transizione a iride delle pagine
 Comment[pt]=Efeito de Varrimento da Página em Íris

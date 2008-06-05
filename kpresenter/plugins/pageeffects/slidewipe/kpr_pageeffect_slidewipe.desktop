@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Slide Wipe
+Name[ca]=Esborrat de diapositiva
 Name[el]=Σβήσιμο κύλιση
 Name[hi]=स्लाइड वाइप
 Name[it]=Transizione a inserimento
@@ -11,6 +12,7 @@ Name[uk]=Ковзне витирання
 Name[x-test]=xxSlide Wipexx
 Name[zh_TW]=滑動掃描
 Comment=Slide Wipe Page Effect
+Comment[ca]=Efectes d'esborrat de diapositiva de la pàgina
 Comment[el]=Εφέ σελίδας σβήσιμο κύλιση
 Comment[hi]=स्लाइड वाइप पृष्ठ प्रभाव
 Comment[it]=Effetto di transizione a inserimento delle pagine

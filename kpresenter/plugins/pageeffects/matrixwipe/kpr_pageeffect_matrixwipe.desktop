@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Matrix wipe
+Name[ca]=Esborrat de matriu
 Name[el]=Σβήσιμο πίνακα
 Name[hi]=मेट्रिक्स वाइप
 Name[it]=Transizione a matrice
@@ -11,6 +12,7 @@ Name[uk]=Матричне витирання
 Name[x-test]=xxMatrix wipexx
 Name[zh_TW]=矩陣掃描
 Comment=Matrix wipe Page Effects
+Comment[ca]=Efectes d'esborrat de matriu de la pàgina
 Comment[el]=Εφέ σελίδας σβήσιμο πίνακα
 Comment[hi]=मेट्रिक्स वाइप पृष्ठ प्रभाव
 Comment[it]=Effetti di transizione a matrice delle pagine

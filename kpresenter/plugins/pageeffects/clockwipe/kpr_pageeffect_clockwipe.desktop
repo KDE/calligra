@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Clock wipe
+Name[ca]=Esborrat de rellotge
 Name[el]=Ωρολογιακό σβήσιμο
 Name[hi]=घड़ी वाइप
 Name[it]=Transizione a orologio
@@ -11,6 +12,7 @@ Name[uk]=Витирання по колу
 Name[x-test]=xxClock wipexx
 Name[zh_TW]=時鐘掃描
 Comment=Clock wipe Page Effects
+Comment[ca]=Efectes d'esborrat de rellotge de la pàgina
 Comment[el]=Εφέ σελίδας ωρολογιακό σβήσιμο
 Comment[hi]=घड़ी वाइप पृष्ठ प्रभाव
 Comment[it]=Effetti di transizione a orologio delle pagine
