@@ -66,8 +66,8 @@ namespace Conversion
     // Convert linespacing struct to string
     QString lineSpacing( const wvWare::Word97::LSPD& lspd );
 
-    // Convert number format code to KWord's COUNTER.type code
-    int numberFormatCode( int nfc );
+    // Convert number format code to a value for the odt style:num-format attribute
+    QString numberFormatCode( int nfc );
 
     // Set the 3 color attributes in the XML element, from a color code (ico)
     // prefix: if empty, the attribute names will be red/blue/green

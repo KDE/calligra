@@ -373,27 +373,35 @@ QString Conversion::setBorderAttributes( const wvWare::Word97::BRC& brc )
     return value;
 }
 
-int Conversion::numberFormatCode( int nfc )
+QString Conversion::numberFormatCode( int nfc )
 {
+    QString value( "" );
     switch ( nfc )
     {
     case 1: // upper case roman
-        return 5;
+        value = "I";
+	break;
     case 2: // lower case roman
-        return 4;
+	value = "i";
+	break;
     case 3: // upper case letter
-        return 3;
+	value = "A";
+	break;
     case 4: // lower case letter
-        return 2;
+	value = "a";
+	break;
     case 5: // arabic with a trailing dot (added by writeCounter)
     case 6: // numbered (one, two, three) - not supported by KWord
     case 7: // ordinal (first, second, third) - not supported by KWord
     case 22: // leading zero (01-09, 10-99, 100-...) - not supported by KWord
     case 0: // arabic
-        return 1;
+	value = "1";
+	break;
+    default:
+	kWarning(30513) << "Unknown NFC: " << nfc;
+	value = "1";
     }
-    kWarning(30513) << "Unknown NFC: " << nfc;
-    return 1;
+    return value;
 }
 
 int Conversion::headerTypeToFrameInfo( unsigned char type )
