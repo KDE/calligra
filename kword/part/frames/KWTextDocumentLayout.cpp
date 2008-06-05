@@ -29,6 +29,7 @@
 #include <KoShapeContainer.h>
 #include <KoInlineTextObjectManager.h>
 #include <KoTextAnchor.h>
+#include <KDebug>
 
 #include <QList>
 #include <QPainterPath>
@@ -332,7 +333,10 @@ void KWTextDocumentLayout::layout() {
                 rect = limit(rect);
 
                 while(true) {
-                    line.setLineWidth(rect.width());
+                    if (m_state->numColumns() > 0)
+                        line.setNumColumns(m_state->numColumns());
+                    else
+                        line.setLineWidth(rect.width());
                     rect.setHeight(line.height());
                     QRectF newLine = limit(rect);
                     if(newLine.width() <= 0.)
