@@ -76,12 +76,12 @@ void PrintManager::Private::calculatePages()
             for (int row = printRange.top(); row <= printRange.bottom(); ++row)
             {
                 rows++;
-                height += sheet->rowFormat(row)->height();
+                height += sheet->rowFormat(row)->visibleHeight();
 
                 // 1. find the number of rows per page
                 if (row == printRange.bottom()) // always iterate over the last 'page row'
                     ;
-                else if (height + sheet->rowFormat(row + 1)->height() <= printHeight)
+                else if (height + sheet->rowFormat(row + 1)->visibleHeight() <= printHeight)
                     continue;
 
 //                 kDebug() << "1. done: row" << row << "rows" << rows << "height" << height;
@@ -92,10 +92,10 @@ void PrintManager::Private::calculatePages()
                 for (int col = printRange.left(); col < printRange.right(); ++col)
                 {
                     columns++;
-                    width += sheet->columnFormat(col)->width();
+                    width += sheet->columnFormat(col)->visibleWidth();
 
                     // Does the next column fit too?
-                    if (width + sheet->columnFormat(col + 1)->width() <= printWidth)
+                    if (width + sheet->columnFormat(col + 1)->visibleWidth() <= printWidth)
                         continue;
 
 //                     kDebug() << "col" << col << "columns" << columns << "width" << width;
@@ -136,12 +136,12 @@ void PrintManager::Private::calculatePages()
             for (int col = printRange.left(); col <= printRange.right(); ++col)
             {
                 columns++;
-                width += sheet->columnFormat(col)->width();
+                width += sheet->columnFormat(col)->visibleWidth();
 
                 // 1. find the number of columns per page
                 if (col == printRange.right()) // always iterate over the last 'page column'
                     ;
-                else if (width + sheet->columnFormat(col + 1)->width() <= printWidth)
+                else if (width + sheet->columnFormat(col + 1)->visibleWidth() <= printWidth)
                     continue;
 
 //                 kDebug() << "1. done: col" << col << "columns" << columns << "width" << width;
@@ -152,10 +152,10 @@ void PrintManager::Private::calculatePages()
                 for (int row = printRange.top(); row < printRange.bottom(); ++row)
                 {
                     rows++;
-                    height += sheet->rowFormat(row)->height();
+                    height += sheet->rowFormat(row)->visibleHeight();
 
                     // Does the next row fit too?
-                    if (height + sheet->rowFormat(row + 1)->height() <= printHeight)
+                    if (height + sheet->rowFormat(row + 1)->visibleHeight() <= printHeight)
                         continue;
 
 //                     kDebug() << "row" << row << "rows" << rows << "height" << height;
@@ -191,9 +191,9 @@ void PrintManager::Private::printPage(int page, QPainter& painter) const
     // Calculate the dimension of the cell range. Needed for RTL painting.
     QRectF paintRect(topLeft, topLeft);
     for (int col = cellRange.left(); col <= cellRange.right(); ++col)
-        paintRect.adjust(0.0, 0.0, sheet->columnFormat(col)->width(), 0.0);
+        paintRect.adjust(0.0, 0.0, sheet->columnFormat(col)->visibleWidth(), 0.0);
     for (int row = cellRange.top(); row <= cellRange.bottom(); ++row)
-        paintRect.adjust(0.0, 0.0, 0.0, sheet->rowFormat(row)->height());
+        paintRect.adjust(0.0, 0.0, 0.0, sheet->rowFormat(row)->visibleHeight());
 
     // Paint the cells.
     sheetView->setPaintCellRange(cellRange);
