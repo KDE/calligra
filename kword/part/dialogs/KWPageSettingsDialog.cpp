@@ -18,89 +18,42 @@
  */
 
 #include "KWPageSettingsDialog.h"
-#include "KWPageLayout.h"
-#include "KWPagePreview.h"
+
 #include "KWDocument.h"
 #include "commands/KWPagePropertiesCommand.h"
-
-#include <KoLayoutVisitor.h>
 
 #include <QTimer>
 
 //#include <KDebug>
 
 KWPageSettingsDialog::KWPageSettingsDialog(QWidget *parent, KWDocument *document, KWPage *page)
-    : KDialog(parent),
+    : KoPageLayoutDialog(parent, page->pageLayout()),
     m_document(document),
-    m_page(page),
-    m_visited (false)
+    m_page(page)
 {
     Q_ASSERT(document);
     Q_ASSERT(page);
-    m_layout = m_page->pageLayout();
-    QWidget *widget = new QWidget(this);
-    setMainWidget(widget);
-    QHBoxLayout *lay = new QHBoxLayout(widget);
-    lay->setMargin(0);
-    widget->setLayout(lay);
 
-    m_pageLayoutWidget = new KWPageLayout(widget, m_layout);
-    m_pageLayoutWidget->showUnitchooser(false);
-    m_pageLayoutWidget->forSinglePage(m_page);
-    m_pageLayoutWidget->setStartPageNumber(m_document->startPage());
-    m_pageLayoutWidget->setTextDirection(m_page->directionHint());
-    m_pageLayoutWidget->layout()->setMargin(0);
-    lay->addWidget(m_pageLayoutWidget);
-
-    KWPagePreview *prev = new KWPagePreview(widget);
-    prev->setPageLayout(m_layout);
-    lay->addWidget(prev);
-
-    connect (m_pageLayoutWidget, SIGNAL(layoutChanged(const KoPageLayout&)),
-            prev, SLOT(setPageLayout(const KoPageLayout&)));
-    connect (m_pageLayoutWidget, SIGNAL(layoutChanged(const KoPageLayout&)),
-            this, SLOT(setPageLayout(const KoPageLayout&)));
-}
-
-void KWPageSettingsDialog::setPageLayout(const KoPageLayout &layout) {
-    m_layout = layout;
+    setPageSpread(m_page->pageSide() == KWPage::PageSpread);
+    setStartPageNumber(m_document->startPage());
+    setTextDirection(m_page->directionHint());
 }
 
 void KWPageSettingsDialog::accept() {
-    if(m_pageLayoutWidget->marginsForDocument()) {
+    if(applyToDocument()) {
         // TODO
     }
     else {
-        KoText::Direction newDir = m_pageLayoutWidget->textDirection();
-        KWPagePropertiesCommand *cmd = new KWPagePropertiesCommand(m_document, m_page, m_layout, newDir);
+        KoText::Direction newDir = textDirection();
+        KWPagePropertiesCommand *cmd = new KWPagePropertiesCommand(m_document, m_page, pageLayout(), newDir);
         m_document->addCommand(cmd);
     }
 
-    m_document->setStartPage(m_pageLayoutWidget->startPageNumber());
+    m_document->setStartPage(startPageNumber());
 
-    KDialog::accept();
-    deleteLater();
+    KoPageLayoutDialog::accept();
 }
 
 void KWPageSettingsDialog::reject() {
-    KDialog::reject();
-    deleteLater();
+    KoPageLayoutDialog::reject();
 }
-
-void KWPageSettingsDialog::showEvent (QShowEvent *e) {
-    KDialog::showEvent(e);
-    if(m_visited) return;
-    m_visited = true;
-    QTimer::singleShot(0, this, SLOT(visit()));
-}
-
-void KWPageSettingsDialog::visit() {
-    KoLayoutVisitor visitor;
-    visitor.visit(m_pageLayoutWidget);
-    visitor.relayout();
-}
-
-void KWPageSettingsDialog::showTextDirection(bool on) {
-    m_pageLayoutWidget->showTextDirection(on);
-}
-

@@ -16,30 +16,49 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KWPAGESETTINGSDIALOG_H
-#define KWPAGESETTINGSDIALOG_H
 
-#include "KWPage.h"
+#ifndef KOFFICE_PAGE_LAYOUT_DIALOG
+#define KOFFICE_PAGE_LAYOUT_DIALOG
 
-#include <KoPageLayoutDialog.h>
+#include "koguiutils_export.h"
 
-#include <KDialog>
+#include <KoText.h>
 
-class KWDocument;
+#include <KPageDialog>
+
+class KoPageLayout;
 
 /// A dialog to show the settings for one page and apply them afterwards.
-class KWPageSettingsDialog : public KoPageLayoutDialog {
+class KOGUIUTILS_EXPORT KoPageLayoutDialog : public KPageDialog {
     Q_OBJECT
 public:
-    explicit KWPageSettingsDialog(QWidget *parent, KWDocument * document, KWPage *page);
+    explicit KoPageLayoutDialog(QWidget *parent, const KoPageLayout& layout);
+    ~KoPageLayoutDialog();
 
-private:
+    void showTextDirection(bool on);
+    KoText::Direction textDirection() const;
+    void setTextDirection(KoText::Direction direction);
+    void showPageSpread(bool on);
+    void setPageSpread(bool pageSpread);
+    int startPageNumber() const;
+    void setStartPageNumber(int pageNumber);
+    const KoPageLayout& pageLayout() const;
+
+private Q_SLOTS:
+    void setPageLayout(const KoPageLayout &layout);
+    void visit();
+
+protected:
+    bool applyToDocument() const;
+
+protected Q_SLOTS:
     void accept();
     void reject();
+    void showEvent(QShowEvent *e);
 
 private:
-    KWDocument *m_document;
-    KWPage *m_page;
+    class Private;
+    Private * const d;
 };
 
 #endif

@@ -17,23 +17,27 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KWPAGEPREVIEW_H
-#define KWPAGEPREVIEW_H
+
+#ifndef KOFFICE_PAGE_PREVIEW_WIDGET
+#define KOFFICE_PAGE_PREVIEW_WIDGET
+
+#include "koguiutils_export.h"
 
 #include <KoPageLayout.h>
 
 #include <QWidget>
 
 /// A widget to preview the KoPageLayout and KoColumns data structures.
-class KWPagePreview : public QWidget {
+class KOGUIUTILS_EXPORT KoPagePreviewWidget : public QWidget {
     Q_OBJECT
 public:
-    KWPagePreview(QWidget *parent = 0);
+    KoPagePreviewWidget(QWidget *parent = 0);
+    ~KoPagePreviewWidget();
 
 protected:
     void paintEvent(QPaintEvent *event);
 
-public slots:
+public Q_SLOTS:
     void setPageLayout(const KoPageLayout &layout);
     void setColumns(const KoColumns &columns);
 
@@ -41,8 +45,8 @@ private:
     void drawPage(QPainter &painter, double zoom, const QRect &dimensions, bool left);
 
 private:
-    KoPageLayout m_pageLayout;
-    KoColumns m_columns;
+    class Private;
+    Private * const d;
 };
 
 #endif

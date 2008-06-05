@@ -18,10 +18,12 @@
  */
 
 #include "KWStartupWidget.h"
-#include <KWDocument.h>
-#include "KWPageLayout.h"
+
 #include "KWDocumentColumns.h"
-#include "KWPagePreview.h"
+
+#include <KWDocument.h>
+#include <KoPageLayoutWidget.h>
+#include <KoPagePreviewWidget.h>
 
 KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColumns &columns)
     : QWidget(parent),
@@ -41,7 +43,7 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     setFocusProxy(widget.createButton);
 
     QVBoxLayout *lay = new QVBoxLayout(widget.sizeTab);
-    m_sizeWidget = new KWPageLayout(widget.sizeTab, m_layout);
+    m_sizeWidget = new KoPageLayoutWidget(widget.sizeTab, m_layout);
     m_sizeWidget->setUnit(m_unit);
     lay->addWidget(m_sizeWidget);
     lay->setMargin(0);
@@ -55,7 +57,7 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     lay = new QVBoxLayout(widget.previewPane);
     widget.previewPane->setLayout(lay);
     lay->setMargin(0);
-    KWPagePreview *prev = new KWPagePreview(widget.previewPane);
+    KoPagePreviewWidget *prev = new KoPagePreviewWidget(widget.previewPane);
     lay->addWidget(prev);
     prev->setColumns(columns);
     prev->setPageLayout(m_layout);

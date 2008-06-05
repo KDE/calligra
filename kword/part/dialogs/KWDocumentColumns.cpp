@@ -18,7 +18,6 @@
  */
 
 #include "KWDocumentColumns.h"
-#include "KWPagePreview.h"
 
 KWDocumentColumns::KWDocumentColumns(QWidget *parent, const KoColumns &columns)
     : QWidget(parent)

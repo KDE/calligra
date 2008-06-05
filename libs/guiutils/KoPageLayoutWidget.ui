@@ -1,15 +1,15 @@
 <ui version="4.0" >
- <class>KWPageLayout</class>
- <widget class="QWidget" name="KWPageLayout" >
+ <class>KoPageLayoutWidget</class>
+ <widget class="QWidget" name="KoPageLayoutWidget" >
   <property name="geometry" >
    <rect>
     <x>0</x>
     <y>0</y>
     <width>341</width>
-    <height>428</height>
+    <height>412</height>
    </rect>
   </property>
-  <layout class="QGridLayout" >
+  <layout class="QGridLayout" name="gridLayout" >
    <item row="0" column="0" >
     <widget class="QLabel" name="unitsLabel" >
      <property name="text" >
@@ -25,16 +25,7 @@
      <property name="spacing" >
       <number>6</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
      <item>
@@ -45,7 +36,7 @@
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>10</width>
          <height>0</height>
@@ -83,16 +74,7 @@
      <property name="spacing" >
       <number>6</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
      <item>
@@ -191,7 +173,7 @@
        <property name="orientation" >
         <enum>Qt::Horizontal</enum>
        </property>
-       <property name="sizeHint" >
+       <property name="sizeHint" stdset="0" >
         <size>
          <width>40</width>
          <height>0</height>
@@ -201,28 +183,42 @@
      </item>
     </layout>
    </item>
+   <item row="6" column="0" >
+    <widget class="QLabel" name="directionLabel" >
+     <property name="text" >
+      <string>Text direction:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1" colspan="2" >
+    <widget class="QComboBox" name="textDirection" >
+     <item>
+      <property name="text" >
+       <string>Automatic</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Left to right</string>
+      </property>
+     </item>
+     <item>
+      <property name="text" >
+       <string>Right to left</string>
+      </property>
+     </item>
+    </widget>
+   </item>
    <item row="7" column="0" colspan="3" >
     <widget class="QGroupBox" name="margins" >
      <property name="title" >
       <string>Margins</string>
      </property>
      <layout class="QGridLayout" >
-      <property name="leftMargin" >
+      <property name="margin" >
        <number>9</number>
       </property>
-      <property name="topMargin" >
-       <number>9</number>
-      </property>
-      <property name="rightMargin" >
-       <number>9</number>
-      </property>
-      <property name="bottomMargin" >
-       <number>9</number>
-      </property>
-      <property name="horizontalSpacing" >
-       <number>6</number>
-      </property>
-      <property name="verticalSpacing" >
+      <property name="spacing" >
        <number>6</number>
       </property>
       <item rowspan="4" row="0" column="2" >
@@ -233,7 +229,7 @@
         <property name="sizeType" >
          <enum>QSizePolicy::MinimumExpanding</enum>
         </property>
-        <property name="sizeHint" >
+        <property name="sizeHint" stdset="0" >
          <size>
           <width>10</width>
           <height>10</height>
@@ -309,51 +305,21 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1" >
-       <widget class="QCheckBox" name="wholeDocument" >
-        <property name="text" >
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0" >
-       <widget class="QLabel" name="wholeDocumentLabel" >
-        <property name="text" >
-         <string>Whole document:</string>
-        </property>
-        <property name="buddy" >
-         <cstring>wholeDocument</cstring>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
-   <item row="6" column="0" >
-    <widget class="QLabel" name="directionLabel" >
-     <property name="text" >
-      <string>Text direction:</string>
+   <item row="8" column="0" colspan="3" >
+    <spacer name="verticalSpacer" >
+     <property name="orientation" >
+      <enum>Qt::Vertical</enum>
      </property>
-    </widget>
-   </item>
-   <item row="6" column="1" colspan="2" >
-    <widget class="QComboBox" name="textDirection" >
-     <item>
-      <property name="text" >
-       <string>Automatic</string>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>Left to right</string>
-      </property>
-     </item>
-     <item>
-      <property name="text" >
-       <string>Right to left</string>
-      </property>
-     </item>
-    </widget>
+     <property name="sizeHint" stdset="0" >
+      <size>
+       <width>318</width>
+       <height>10</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -379,7 +345,6 @@
   <tabstop>bindingEdgeMargin</tabstop>
   <tabstop>pageEdgeMargin</tabstop>
   <tabstop>bottomMargin</tabstop>
-  <tabstop>wholeDocument</tabstop>
  </tabstops>
  <resources/>
  <connections/>

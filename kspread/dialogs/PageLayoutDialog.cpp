@@ -28,9 +28,6 @@
 // KDE
 #include <klocale.h>
 
-// Qt
-#include <QDialogButtonBox>
-
 using namespace KSpread;
 
 class PageLayoutDialog::Private
@@ -38,7 +35,6 @@ class PageLayoutDialog::Private
 public:
     Sheet* sheet;
     Ui::SheetPage sheetPage;
-    QCheckBox* documentCheckBox;
 
 public:
     void setup();
@@ -98,18 +94,11 @@ void PageLayoutDialog::Private::setup()
 
 
 PageLayoutDialog::PageLayoutDialog(QWidget* parent, Sheet* sheet)
-    : KPageDialog(parent)
+    : KoPageLayoutDialog(parent, sheet->printSettings()->pageLayout())
     , d(new Private)
 {
-    setWindowTitle(i18n("Page Layout"));
-
-    for (int i = 0; i < children().count(); ++i) {
-        if (QDialogButtonBox* buttonBox = qobject_cast<QDialogButtonBox*>(children()[i])) {
-            d->documentCheckBox = new QCheckBox(i18n("Apply to document"), buttonBox);
-            buttonBox->addButton(d->documentCheckBox, QDialogButtonBox::ResetRole);
-            break;
-        }
-    }
+    setFaceType(KPageDialog::Tabbed);
+    showPageSpread(false);
 
     QWidget* page = new QWidget(this);
     d->sheetPage.setupUi(page);
@@ -161,7 +150,7 @@ void PageLayoutDialog::accept()
     }
     settings.setPageLimits(pageLimits);
 
-    if (d->documentCheckBox->isChecked())
+    if (applyToDocument())
     {
         // Apply to all sheets.
         const QList<Sheet*> sheets = d->sheet->map()->sheetList();

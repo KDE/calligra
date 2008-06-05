@@ -20,13 +20,13 @@
 #ifndef KSPREAD_PAGE_LAYOUT_DIALOG
 #define KSPREAD_PAGE_LAYOUT_DIALOG
 
-#include <kpagedialog.h>
+#include <KoPageLayoutDialog.h>
 
 namespace KSpread
 {
 class Sheet;
 
-class PageLayoutDialog : public KPageDialog
+class PageLayoutDialog : public KoPageLayoutDialog
 {
     Q_OBJECT
 public:

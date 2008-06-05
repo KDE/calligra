@@ -45,8 +45,6 @@ set(kwordprivate_LIB_SRCS
     dialogs/KWFrameDialog.cpp
     dialogs/KWShapeConfigFactory.cpp
     dialogs/KWDocumentColumns.cpp
-    dialogs/KWPagePreview.cpp
-    dialogs/KWPageLayout.cpp
     dialogs/KWStartupWidget.cpp
     dialogs/KWPageSettingsDialog.cpp
     dialogs/KWStatistics.cpp
@@ -71,7 +69,6 @@ kde4_add_ui_files(kwordprivate_LIB_SRCS
     dialogs/KWFrameRunaroundProperties.ui
     dialogs/KWGeneralFrameProperties.ui
     dialogs/KWDocumentColumns.ui
-    dialogs/KWPageLayout.ui
     dialogs/KWStartupWidget.ui
     dialogs/KWStatistics.ui
     dialogs/KWCreateBookmark.ui

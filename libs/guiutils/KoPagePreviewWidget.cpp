@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KWPagePreview.h"
+#include "KoPagePreviewWidget.h"
 
 #include <KoGlobal.h>
 #include <KoUnit.h>
@@ -26,24 +26,39 @@
 #include <QPainter>
 #include <kdebug.h>
 
-KWPagePreview::KWPagePreview(QWidget *parent)
-:QWidget(parent)
+class KoPagePreviewWidget::Private
 {
-    m_columns.columns = 1;
-    m_columns.columnSpacing = 0;
-    m_pageLayout = KoPageLayout::standardLayout();
+public:
+    KoPageLayout pageLayout;
+    KoColumns columns;
+};
+
+
+KoPagePreviewWidget::KoPagePreviewWidget(QWidget *parent)
+    : QWidget(parent)
+    , d(new Private)
+{
+    d->columns.columns = 1;
+    d->columns.columnSpacing = 0;
+    d->pageLayout = KoPageLayout::standardLayout();
     setMinimumSize( 100, 100 );
 }
 
-void KWPagePreview::paintEvent(QPaintEvent *event) {
+KoPagePreviewWidget::~KoPagePreviewWidget()
+{
+    delete d;
+}
+
+void KoPagePreviewWidget::paintEvent(QPaintEvent *event) {
+    Q_UNUSED(event);
     // resolution[XY] is in pixel per pt
     double resolutionX = POINT_TO_INCH( static_cast<double>(KoGlobal::dpiX()) );
     double resolutionY = POINT_TO_INCH( static_cast<double>(KoGlobal::dpiY()) );
 
-    double pageWidth = m_pageLayout.width * resolutionX;
-    double pageHeight = m_pageLayout.height * resolutionY;
+    double pageWidth = d->pageLayout.width * resolutionX;
+    double pageHeight = d->pageLayout.height * resolutionY;
 
-    const bool pageSpread = (m_pageLayout.bindingSide >= 0 && m_pageLayout.pageEdge >= 0);
+    const bool pageSpread = (d->pageLayout.bindingSide >= 0 && d->pageLayout.pageEdge >= 0);
     double sheetWidth = pageWidth / (pageSpread?2:1);
 
     double zoomH = (height() * 90 / 100) / pageHeight;
@@ -73,30 +88,30 @@ void KWPagePreview::paintEvent(QPaintEvent *event) {
     // paint scale
 }
 
-void KWPagePreview::drawPage(QPainter &painter, double zoom, const QRect &dimensions, bool left) {
+void KoPagePreviewWidget::drawPage(QPainter &painter, double zoom, const QRect &dimensions, bool left) {
     painter.fillRect(dimensions, QBrush(palette().base()));
     painter.setPen(QPen(palette().color(QPalette::Dark)));
     painter.drawRect(dimensions);
 
     // draw text areas
     QRect textArea = dimensions;
-    if(m_pageLayout.top == 0 && m_pageLayout.bottom == 0 &&
-            ( m_pageLayout.left == 0 && m_pageLayout.right == 0) ||
-            ( m_pageLayout.pageEdge == 0 && m_pageLayout.bindingSide == 0))
+    if(d->pageLayout.top == 0 && d->pageLayout.bottom == 0 &&
+            ( d->pageLayout.left == 0 && d->pageLayout.right == 0) ||
+            ( d->pageLayout.pageEdge == 0 && d->pageLayout.bindingSide == 0))
         // no margin
         return;
     else {
-        textArea.setTop(textArea.top() + qRound(zoom * m_pageLayout.top));
-        textArea.setBottom(textArea.bottom() - qRound(zoom * m_pageLayout.bottom));
+        textArea.setTop(textArea.top() + qRound(zoom * d->pageLayout.top));
+        textArea.setBottom(textArea.bottom() - qRound(zoom * d->pageLayout.bottom));
 
         double leftMargin, rightMargin;
-        if(m_pageLayout.bindingSide < 0) { // normal margins.
-            leftMargin = m_pageLayout.left;
-            rightMargin = m_pageLayout.right;
+        if(d->pageLayout.bindingSide < 0) { // normal margins.
+            leftMargin = d->pageLayout.left;
+            rightMargin = d->pageLayout.right;
         }
         else { // margins mirrored for left/right pages
-            leftMargin = m_pageLayout.bindingSide;
-            rightMargin = m_pageLayout.pageEdge;
+            leftMargin = d->pageLayout.bindingSide;
+            rightMargin = d->pageLayout.pageEdge;
             if(left)
                 qSwap(leftMargin, rightMargin);
         }
@@ -106,20 +121,20 @@ void KWPagePreview::drawPage(QPainter &painter, double zoom, const QRect &dimens
     painter.setBrush( QBrush( palette().color(QPalette::ButtonText), Qt::HorPattern ) );
     painter.setPen( palette().color(QPalette::Dark) );
 
-    double columnWidth = (textArea.width() + (m_columns.columnSpacing * zoom)) / m_columns.columns;
-    int width = qRound(columnWidth - m_columns.columnSpacing * zoom);
-    for ( int i = 0; i < m_columns.columns; ++i )
+    double columnWidth = (textArea.width() + (d->columns.columnSpacing * zoom)) / d->columns.columns;
+    int width = qRound(columnWidth - d->columns.columnSpacing * zoom);
+    for ( int i = 0; i < d->columns.columns; ++i )
         painter.drawRect( qRound(textArea.x() + i * columnWidth), textArea.y(), width, textArea.height());
 
 }
 
-void KWPagePreview::setPageLayout(const KoPageLayout &layout) {
-    m_pageLayout = layout;
+void KoPagePreviewWidget::setPageLayout(const KoPageLayout &layout) {
+    d->pageLayout = layout;
     update();
 }
 
-void KWPagePreview::setColumns(const KoColumns &columns) {
-    m_columns = columns;
+void KoPagePreviewWidget::setColumns(const KoColumns &columns) {
+    d->columns = columns;
     update();
 }
 

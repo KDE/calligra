@@ -16,35 +16,35 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-#ifndef KWPAGELAYOUT_H
-#define KWPAGELAYOUT_H
 
-#include "ui_KWPageLayout.h"
+#ifndef KOFFICE_PAGE_LAYOUT_WIDGET
+#define KOFFICE_PAGE_LAYOUT_WIDGET
+
+#include "koguiutils_export.h"
 
 #include <KoPageLayout.h>
-#include <KoUnit.h>
 #include <KoText.h>
+#include <KoUnit.h>
 
 #include <QWidget>
 
-class KWPage;
-
 /// the widget that shows the size/margins and other page settings.
-class KWPageLayout : public QWidget {
+class KOGUIUTILS_EXPORT KoPageLayoutWidget : public QWidget {
     Q_OBJECT
 public:
-    KWPageLayout(QWidget *parent, const KoPageLayout &layout);
+    KoPageLayoutWidget(QWidget *parent, const KoPageLayout &layout);
+    ~KoPageLayoutWidget();
 
     void setUnit(const KoUnit &unit);
     void showUnitchooser(bool on);
-    void forSinglePage(KWPage *page);
+    void showPageSpread(bool on);
+    void setPageSpread(bool pageSpread);
     void setStartPageNumber(int pageNumber);
     void showTextDirection(bool on);
     void setTextDirection(KoText::Direction direction);
     KoText::Direction textDirection() const;
 
     int startPageNumber() const;
-    bool marginsForDocument() const;
 
 signals:
     void layoutChanged(const KoPageLayout &layout);
@@ -61,14 +61,11 @@ private slots:
     void optionsChanged();
     void marginsChanged();
     void orientationChanged();
+    void setApplyToDocument(bool apply);
 
 private:
-    Ui::KWPageLayout widget;
-    KoPageLayout m_pageLayout;
-    KoUnit m_unit;
-
-    QButtonGroup *m_orientationGroup;
-    bool m_marginsEnabled, m_allowSignals;
+    class Private;
+    Private * const d;
 };
 
 #endif

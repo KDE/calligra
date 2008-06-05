@@ -27,7 +27,7 @@
 #include <QWidget>
 
 class KWDocument;
-class KWPageLayout;
+class KoPageLayoutWidget;
 class KWDocumentColumns;
 
 /**
@@ -57,7 +57,7 @@ signals:
     void documentSelected();
 
 private:
-    KWPageLayout *m_sizeWidget;
+    KoPageLayoutWidget *m_sizeWidget;
     KWDocumentColumns *m_columnsWidget;
 
     KoPageLayout m_layout;
