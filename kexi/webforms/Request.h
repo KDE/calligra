@@ -30,7 +30,7 @@ namespace KexiWebForms {
     
     namespace Request {
         QString request(RequestData*, const char*);
-		QString request(RequestData*, const QString&);
+        QString request(RequestData*, const QString&);
         QString requestUri(RequestData*);
     }
 }
