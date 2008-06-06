@@ -20,6 +20,8 @@
 //Qt includes
 #include <QByteArray>
 #include <QBuffer>
+#include <QStringList>
+#include <QString>
 
 //KDE includes
 #include <kgenericfactory.h>
@@ -99,9 +101,11 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
     delete preview;
 
      //Create the content.xml file
-//     output->open( "content.xml" );
-//     manifest->addManifestEntry( "content.xml", "text/xml" );
-//     output->close();
+    KoXmlWriter *content = odfWriter.contentWriter();
+    KoXmlWriter *body = odfWriter.bodyWriter();
+    convertContent( body );
+    odfWriter.closeContentWriter();
+    manifest->addManifestEntry( "content.xml", "text/xml" );
 
      //Create the styles.xml file
 //     output->open( "styles.xml" );
@@ -109,16 +113,15 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
 //     output->close();
 
      //Create the meta.xml file
-    KoDocumentInfo* meta = new KoDocumentInfo();
-    meta->load( m_documentInfo );
-    meta->saveOasis( output );
-    delete meta;
+//     KoDocumentInfo* meta = new KoDocumentInfo();
+//     meta->load( m_documentInfo );
+//     meta->saveOasis( output );
+//     delete meta;
 
      //Write the Pictures directory and its children
-    output->enterDirectory( "Pictures" );
-    //FIXME: how in earth do we get the files inside the pictures' directory in the KPR?!
-    output->leaveDirectory();
-    manifest->addManifestEntry( "Pictures/", "" );
+//     output->enterDirectory( "Pictures" );
+//     output->leaveDirectory();
+//     manifest->addManifestEntry( "Pictures/", "" );
 
      //Write the document manifest
     odfWriter.closeManifestWriter();
@@ -126,6 +129,49 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
     delete output;
 
     return KoFilter::OK;
+}
+
+void Filterkpr2odf::convertContent( KoXmlWriter* content )
+{
+    KoXmlNode titles = m_mainDoc.namedItem("DOC").namedItem( "PAGETITLES" );
+    KoXmlNode notes = m_mainDoc.namedItem("DOC").namedItem( "PAGENOTES" );
+    KoXmlNode backgrounds = m_mainDoc.namedItem( "BACKGROUND" );
+
+    //Parse pages
+    int currentPage = 1;
+    //The pages are all stored inside PAGETITLES
+    //and all notes in PAGENOTES
+    KoXmlNode title = titles.firstChild();
+    KoXmlNode note = notes.firstChild();
+    for ( ; !title.isNull() && !note.isNull();
+          title = title.nextSibling(), note = note.nextSibling() )
+    {
+        //Every page is a draw:page
+        content->startElement( "draw:page" );
+        content->addAttribute( "draw:name", title.toElement().attribute("title") );
+        //FIXME:missing draw:style-name
+        content->addAttribute( "draw:id", currentPage );
+        //FIXME:missing draw:master-page-name
+
+        //TODO:Append objects
+
+        //Append the notes
+        content->startElement( "presentation:notes" );
+        content->startElement( "draw:text-box" );
+        QStringList noteTextList = note.toElement().attribute("note").split("\n");
+
+        foreach( QString string, noteTextList ) {
+            content->startElement( "text:p" );
+            content->addTextNode( string );
+            content->endElement();
+        }
+
+        content->endElement();//end of draw:text-box
+        content->endElement();//end of presentation:notes
+        content->endElement();//end of draw:page
+        ++currentPage;
+    }
+    content->endDocument();
 }
 
 #include "Filterkpr2odf.moc"
