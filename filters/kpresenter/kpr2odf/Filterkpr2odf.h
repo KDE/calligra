@@ -24,6 +24,8 @@
 #include <KoDom.h>
 #include <KoFilter.h>
 
+class KoXmlWriter;
+
 class Filterkpr2odf : public KoFilter {
     Q_OBJECT
 
