@@ -133,6 +133,9 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
 
 void Filterkpr2odf::convertContent( KoXmlWriter* content )
 {
+    content->startElement( "office:body" );
+    content->startElement( "office:presentation" );
+
     KoXmlNode titles = m_mainDoc.namedItem("DOC").namedItem( "PAGETITLES" );
     KoXmlNode notes = m_mainDoc.namedItem("DOC").namedItem( "PAGENOTES" );
     KoXmlNode backgrounds = m_mainDoc.namedItem( "BACKGROUND" );
@@ -157,6 +160,9 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
 
         //Append the notes
         content->startElement( "presentation:notes" );
+        content->startElement( "draw:page-thumbnail" );
+        content->endElement();//draw:page-thumbnail
+        content->startElement( "draw:frame" );
         content->startElement( "draw:text-box" );
         QStringList noteTextList = note.toElement().attribute("note").split("\n");
 
@@ -166,11 +172,15 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
             content->endElement();
         }
 
-        content->endElement();//end of draw:text-box
-        content->endElement();//end of presentation:notes
-        content->endElement();//end of draw:page
+        content->endElement();//draw:text-box
+        content->endElement();//draw:frame
+        content->endElement();//presentation:notes
+        content->endElement();//draw:page
         ++currentPage;
     }
+
+    content->endElement();//office:presentation
+    content->endElement();//office:body
     content->endDocument();
 }
 
