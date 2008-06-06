@@ -49,7 +49,6 @@ namespace KexiWebForms {
 			// Render the template
 			std::string output;	
             google::Template* tpl = google::Template::GetTemplate("index.tpl", google::DO_NOT_STRIP);
-            std::string output;
             tpl->Expand(&output, &dict);
             stream << output << webend;
         }

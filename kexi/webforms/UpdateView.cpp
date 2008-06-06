@@ -23,6 +23,7 @@
 
 #include <KDebug>
 
+#include <kexidb/roweditbuffer.h>
 #include <kexidb/connection.h>
 #include <kexidb/queryschema.h>
 #include <kexidb/cursor.h>
@@ -54,24 +55,30 @@ namespace KexiWebForms {
 			requestedId.remove(0, requestedId.lastIndexOf('/')+1);
 			dict.SetValue("ROW", requestedId.toLatin1().constData());
 
+			KexiDB::QuerySchema schema(*gConnection->tableSchema(requestedTable));
+			schema.addToWhereExpression(schema.field("id"), QVariant(requestedId));
+			KexiDB::Cursor* cursor = gConnection->executeQuery(schema);
+
 
 			// FIXME: Can this code be improved?
-			if (Request::request(req, "dataSent") == "true") {
+			if (Request::request(req, "dataSent") == "true" && cursor) {
 				kDebug() << "Updating field" << endl;
 
+				KexiDB::RowEditBuffer editBuffer(false);
+				KexiDB::RecordData recordData;
 				QStringList fieldsList = Request::request(req, "tableFields").split("|:|");
 				QStringListIterator iterator(fieldsList);
-				// TODO: I removed all the old weird code, implement new functionality
-				// using QuerySchema exclusively
+				
+				while (iterator.hasNext()) {
+					QString curField = iterator.next();
+					QVariant curValue(Request::request(req, curField));
+					editBuffer.insert(curField, curValue);
+					kDebug() << curField << "=" << curValue;
+				}
+				cursor->updateRow(recordData, editBuffer);
 			} 
 
 			kDebug() << "Showing fields" << endl;
-
-			KexiDB::QuerySchema schema(*gConnection->tableSchema(requestedTable));
-			schema.addToWhereExpression(schema.field("id"), QVariant(requestedId));
-
-			KexiDB::Cursor* cursor = gConnection->executeQuery(schema);
-
 			if (cursor) {
 				QString formData;
 				QStringList fieldsList; 
