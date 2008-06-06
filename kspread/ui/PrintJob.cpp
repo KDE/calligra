@@ -56,17 +56,6 @@ public:
 
 int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
 {
-    // Create the page layout.
-    KoPageLayout pageLayout;
-    const QSizeF size = printer.paperSize(QPrinter::Point);
-    pageLayout.format = KoPageFormat::guessFormat(POINT_TO_MM(size.width()), POINT_TO_MM(size.height()));
-    pageLayout.orientation = (printer.orientation() == QPrinter::Landscape)
-                           ? KoPageFormat::Landscape : KoPageFormat::Portrait;
-    pageLayout.width = size.width();
-    pageLayout.height = size.height();
-    printer.getPageMargins(&pageLayout.left, &pageLayout.top, &pageLayout.right, &pageLayout.bottom,
-                           QPrinter::Point);
-
     // Create the list of sheet, that should be printed.
     selectedSheets.clear();
     if (printer.printRange() == QPrinter::Selection)
@@ -94,9 +83,7 @@ int PrintJob::Private::setupPages(const QPrinter& printer, bool forceRecreation)
     int pageCount = 0;
     for (int i = 0; i < selectedSheets.count(); ++i)
     {
-        // Use the defaults from each sheet and use the print dialog's page layout.
         PrintSettings settings = *selectedSheets[i]->printSettings();
-        settings.setPageLayout(pageLayout);
         // Set the print region, if the selection should be painted.
         if (printer.printRange() == QPrinter::Selection)
             settings.setPrintRegion(*view->selection());
