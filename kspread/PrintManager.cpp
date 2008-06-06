@@ -326,7 +326,7 @@ void PrintManager::printPage(int page, QPainter& painter)
     const bool grid = d->sheet->getShowGrid();
     const bool commentIndicator = d->sheet->getShowCommentIndicator();
     const bool formulaIndicator = d->sheet->getShowFormulaIndicator();
-//     d->sheet->setShowGrid(d->settings.printGrid());
+    d->sheet->setShowGrid(d->settings.printGrid());
     d->sheet->setShowCommentIndicator(d->settings.printCommentIndicator());
     d->sheet->setShowFormulaIndicator(d->settings.printFormulaIndicator());
 
