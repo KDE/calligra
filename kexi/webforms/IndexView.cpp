@@ -34,23 +34,23 @@ namespace KexiWebForms {
 
         void show(RequestData* req) {
             HTTPStream stream(req);
-
             google::TemplateDictionary dict("index");
+
             dict.SetValue("TITLE", gConnection->data()->fileName().toLatin1().constData());
 
             QString tables;
-            // FIXME: Beware of temporary objects!
             for (int i = 0; i < gConnection->tableNames().size(); ++i) {
                 tables.append("<li><a href=\"/view/").append(gConnection->tableNames().at(i));
                 tables.append("\">").append(gConnection->tableNames().at(i)).append("</a></li>");
             }
             dict.SetValue("TABLES", tables.toLatin1().constData());
-            
+
+
+			// Render the template
+			std::string output;	
             google::Template* tpl = google::Template::GetTemplate("index.tpl", google::DO_NOT_STRIP);
-            
             std::string output;
             tpl->Expand(&output, &dict);
-
             stream << output << webend;
         }
 

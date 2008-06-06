@@ -3,16 +3,18 @@ Tasks are listed from the most important to the least important:
 
  * Add another level of indirection with Server API (the one wrapping shttpd)
    by adding the Request object (wrapping GET/POST requests)
-   * Investigate, at the moment there's a Request, but it's just a typedef to
-   shttpd internal struct shttpd_arg, since shttpd_register_uri needs function pointers
-   with shttpd_arg as argument I should find out a solution to not break things and carry
-   out data. Maybe I can just create a utility namespace with functions accepting our
-   shttpd_arg (alias Request) object. Ask jstaniek for the best solution.
+   - Investigate, at the moment there's a Request, but it's just a typedef to
+   	 shttpd internal struct shttpd_arg, since shttpd_register_uri needs function pointers
+   	 with shttpd_arg as argument I should find out a solution to not break things and carry
+     out data. Maybe I can just create a utility namespace with functions accepting our
+     shttpd_arg (alias Request) object. Ask jstaniek for the best solution.
  * Implement CRUD operations within table views
+   	- Implement 'Create'
+   	- Implement 'Read'
+   	- Implement 'Update'
+   	- Implement 'Delete'
  * Add a nifty 'Run SQL query' box
-   * Investigate the possibility to use AJAX and some sort of
-   javascript-based autocomplete facility
+   	- Investigate the possibility to use AJAX and some sort of javascript-based autocomplete facility
  * Refine code inside views
  * Implement shortcut and connection file loading
-
  * Refine the whole code

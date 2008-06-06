@@ -14,7 +14,7 @@
 	  <div style="clear: both;"></div>
 	  <div id="content">
 	      <h3>Viewing table {{TABLENAME}}</h3>
-	      <table border="1" width="100%">
+	      <table border="0" width="100%">
 		  {{TABLEDATA}}
 	      </table>
 	  </div>

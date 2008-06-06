@@ -24,17 +24,6 @@
 
 #include <KDebug>
 
-/*class QString;
-class QStringList;
-class KexiDB::Driver;
-class KexiDB::ConnectionData;
-class KexiProjectData;
-class KexiDBShortcutFile;
-class KexiDBConnShortcutFile;*/
-/*#include <QString>
-#include <QStringList>
-#include <QPointer>*/
-
 #include <main/startup/KexiStartup.h>
 
 #include <core/kexidbshortcutfile.h>
@@ -67,7 +56,7 @@ namespace KexiWebForms {
         KexiProjectData* projectData;
         KexiDBShortcutFile* shortcut;
         KexiDBConnShortcutFile* connFile;
-        
+
 
         QString driverName;
         QString suggestedDriverName;
@@ -116,6 +105,7 @@ namespace KexiWebForms {
                 connData->setFileName(fileName);
 
                 gConnection = driver->createConnection(*connData);
+
                 if (!gConnection || driver->error()) {
                     driver->debugError();
                     status = false;

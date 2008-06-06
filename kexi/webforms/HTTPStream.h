@@ -39,7 +39,6 @@ namespace KexiWebForms {
         HTTPStream& operator<<(const char*);
         HTTPStream& operator<<(const std::string&);
         HTTPStream& operator<<(const QString&);
-        // TODO: review this
         void operator<<(HTTPEndOfStream);
     private:
         bool m_headerModified;

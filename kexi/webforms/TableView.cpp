@@ -45,17 +45,22 @@ namespace KexiWebForms {
             requestedTable.remove(0, 6);
             dict.SetValue("TABLENAME", requestedTable.toLatin1().constData());
 
-            // rough code to access table data...
-            // FIXME: Change this piece of code...
-            QString query("SELECT * FROM ");
-            query.append(requestedTable);
+			QString tableData;
+			KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
+            KexiDB::Cursor* cursor = gConnection->executeQuery(*tableSchema);
 
-            // Using global connection object, mh...
-            KexiDB::Cursor* cursor = gConnection->executeQuery(query);
-
-			int row = 1;
             if (cursor) {
-                QString tableData;
+				// Create labels with field name
+				tableData.append("<tr>");
+				for (int i = 0; i < cursor->fieldCount(); i++) {
+					tableData.append("<td><strong>");
+					tableData.append(tableSchema->query()->field(i)->captionOrName());
+					tableData.append("</strong></td>");
+				}
+				tableData.append("</tr>");
+
+				// Fill the table
+				int row = 1;
                 while (cursor->moveNext()) {
                     tableData.append("<tr>");
                     for (int i = 0; i < cursor->fieldCount(); i++) {
@@ -73,11 +78,11 @@ namespace KexiWebForms {
                 dict.SetValue("TABLEDATA", "Error in " __FILE__); // mhh...
             }
 
-            google::Template* tpl = google::Template::GetTemplate("table.tpl", google::DO_NOT_STRIP);
-            
-            std::string output;
-            tpl->Expand(&output, &dict);
 
+			// Render the template
+			std::string output;
+            google::Template* tpl = google::Template::GetTemplate("table.tpl", google::DO_NOT_STRIP);
+            tpl->Expand(&output, &dict);
             stream << output << webend;
         }
     }
