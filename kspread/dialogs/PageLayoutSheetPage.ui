@@ -27,8 +27,8 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
     <height>444</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2" >
-   <item>
+  <layout class="QGridLayout" name="gridLayout_4" >
+   <item row="0" column="0" colspan="2" >
     <widget class="QGroupBox" name="groupBox" >
      <property name="title" >
       <string>Print settings</string>
@@ -117,7 +117,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="1" column="0" >
     <widget class="QGroupBox" name="groupBox_2" >
      <property name="title" >
       <string>Page order</string>
@@ -143,44 +143,126 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
      </layout>
     </widget>
    </item>
-   <item>
-    <widget class="QGroupBox" name="groupBox_3" >
+   <item row="1" column="1" >
+    <widget class="QGroupBox" name="groupBox_5" >
      <property name="title" >
-      <string>Repetitions on each page</string>
+      <string>Table alignment on page</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_2" >
-      <item row="0" column="0" >
-       <widget class="QLabel" name="label" >
+     <layout class="QVBoxLayout" name="verticalLayout_2" >
+      <item>
+       <widget class="QCheckBox" name="horizontalCheckBox" >
         <property name="text" >
-         <string>Columns</string>
+         <string>Center horizonally</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" >
-       <widget class="KLineEdit" name="columnsLineEdit" >
-        <property name="enabled" >
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" >
-       <widget class="QLabel" name="label_2" >
+      <item>
+       <widget class="QCheckBox" name="verticalCheckBox" >
         <property name="text" >
-         <string>Rows</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1" >
-       <widget class="KLineEdit" name="rowsLineEdit" >
-        <property name="enabled" >
-         <bool>false</bool>
+         <string>Center vertically</string>
         </property>
        </widget>
       </item>
      </layout>
     </widget>
    </item>
-   <item>
+   <item row="2" column="0" colspan="2" >
+    <widget class="QGroupBox" name="groupBox_3" >
+     <property name="title" >
+      <string>Repetitions on each page</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_2" >
+      <item row="0" column="0" >
+       <widget class="QCheckBox" name="columnsCheckBox" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
+        <property name="text" >
+         <string>Columns from</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0" >
+       <widget class="QCheckBox" name="rowsCheckBox" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
+        <property name="text" >
+         <string>Rows from</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="2" >
+       <widget class="QLabel" name="label_2" >
+        <property name="text" >
+         <string>to</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="2" >
+       <widget class="QLabel" name="label_1" >
+        <property name="text" >
+         <string>to</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1" >
+       <widget class="KComboBox" name="startRowComboBox" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
+        <property name="editable" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" >
+       <widget class="KComboBox" name="startColumnComboBox" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
+        <property name="editable" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3" >
+       <widget class="KComboBox" name="endRowComboBox" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
+        <property name="editable" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3" >
+       <widget class="KComboBox" name="endColumnComboBox" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
+        <property name="editable" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item rowspan="2" row="0" column="4" >
+       <spacer name="horizontalSpacer_2" >
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0" >
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="2" >
     <widget class="QGroupBox" name="groupBox_4" >
      <property name="title" >
       <string>Scaling</string>
@@ -226,7 +308,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       <item row="1" column="1" >
        <widget class="QLabel" name="label_3" >
         <property name="enabled" >
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="text" >
          <string>Horizontal</string>
@@ -246,7 +328,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
       <item row="2" column="1" >
        <widget class="QLabel" name="label_4" >
         <property name="enabled" >
-         <bool>false</bool>
+         <bool>true</bool>
         </property>
         <property name="text" >
          <string>Vertical</string>
@@ -273,11 +355,6 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
    <class>KComboBox</class>
    <extends>QComboBox</extends>
    <header>kcombobox.h</header>
-  </customwidget>
-  <customwidget>
-   <class>KLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header>klineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

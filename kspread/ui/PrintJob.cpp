@@ -229,6 +229,22 @@ void PrintJob::preparePage(int pageNumber)
     painter().translate(-pageRect.left() * scale, -pageRect.top() * scale);
     painter().setClipRect(pageRect.left() * scale, pageRect.top() * scale,
                           pageRect.width() * scale, pageRect.height() * scale);
+
+    // Center the table on the page.
+    if (sheet->printSettings()->centerHorizontally())
+    {
+        const double printWidth = sheet->printSettings()->printWidth(); // FIXME respect repeated columns
+        const double offset = 0.5 * (printWidth / zoom - pageRect.width());
+        painter().translate(offset * scale, 0.0);
+        painter().setClipRegion(painter().clipRegion().translated(offset * scale, 0.0));
+    }
+    if (sheet->printSettings()->centerVertically())
+    {
+        const double printHeight = sheet->printSettings()->printHeight(); // FIXME respect repeated rows
+        const double offset = 0.5 * (printHeight / zoom - pageRect.height());
+        painter().translate(0.0, offset * scale);
+        painter().setClipRegion(painter().clipRegion().translated(0.0, offset * scale));
+    }
 }
 
 void PrintJob::printPage(int pageNumber, QPainter &painter)
@@ -276,6 +292,5 @@ QAbstractPrintDialog::PrintDialogOptions PrintJob::printDialogOptions() const
            QAbstractPrintDialog::PrintSelection |
            QAbstractPrintDialog::PrintPageRange |
            QAbstractPrintDialog::PrintCollateCopies |
-           QAbstractPrintDialog::DontUseSheet |
-           QAbstractPrintDialog::PrintShowPageSize;
+           QAbstractPrintDialog::DontUseSheet;
 }

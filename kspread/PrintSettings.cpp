@@ -48,10 +48,14 @@ public:
     bool printFormulaIndicator  : 1;
     bool printHeaders           : 1;
     bool printZeroValues        : 1;
+    bool centerHorizontally     : 1;
+    bool centerVertically       : 1;
     PageOrder pageOrder;
     Region printRegion;
     double zoom;
     QSize pageLimits;
+    QPair<int, int> repeatedColumns;
+    QPair<int, int> repeatedRows;
 
 public:
     void calculatePageDimensions();
@@ -78,6 +82,8 @@ PrintSettings::PrintSettings()
     d->printFormulaIndicator = false;
     d->printHeaders = false;
     d->printZeroValues = false;
+    d->centerHorizontally = false;
+    d->centerVertically = false;
     d->pageOrder = LeftToRight;
     d->printRegion = Region(1, 1, KS_colMax, KS_rowMax);
     d->zoom = 1.0;
@@ -95,10 +101,14 @@ PrintSettings::PrintSettings(const PrintSettings& other)
     d->printFormulaIndicator = other.d->printFormulaIndicator;
     d->printHeaders = other.d->printHeaders;
     d->printZeroValues = other.d->printZeroValues;
+    d->centerHorizontally = other.d->centerHorizontally;
+    d->centerVertically = other.d->centerVertically;
     d->pageOrder = other.d->pageOrder;
     d->printRegion = other.d->printRegion;
     d->zoom = other.d->zoom;
     d->pageLimits = other.d->pageLimits;
+    d->repeatedColumns = other.d->repeatedColumns;
+    d->repeatedRows = other.d->repeatedRows;
 }
 
 PrintSettings::~PrintSettings()
@@ -228,6 +238,26 @@ void PrintSettings::setPrintZeroValues(bool printZeroValues)
     d->printZeroValues = printZeroValues;
 }
 
+bool PrintSettings::centerHorizontally() const
+{
+    return d->centerHorizontally;
+}
+
+void PrintSettings::setCenterHorizontally(bool center)
+{
+    d->centerHorizontally = center;
+}
+
+bool PrintSettings::centerVertically() const
+{
+    return d->centerVertically;
+}
+
+void PrintSettings::setCenterVertically(bool center)
+{
+    d->centerVertically = center;
+}
+
 const KSpread::Region& PrintSettings::printRegion() const
 {
     return d->printRegion;
@@ -268,6 +298,27 @@ void PrintSettings::setPageLimits(const QSize& pageLimits)
     d->pageLimits = pageLimits;
 }
 
+const QPair<int, int>& PrintSettings::repeatedColumns() const
+{
+    return d->repeatedColumns;
+}
+
+void PrintSettings::setRepeatedColumns(const QPair<int, int>& repeatedColumns)
+{
+    d->repeatedColumns = repeatedColumns;
+    kDebug() << repeatedColumns;
+}
+
+const QPair<int, int>& PrintSettings::repeatedRows() const
+{
+    return d->repeatedRows;
+}
+
+void PrintSettings::setRepeatedRows(const QPair<int, int>& repeatedRows)
+{
+    d->repeatedRows = repeatedRows;
+}
+
 void PrintSettings::operator=(const PrintSettings& other)
 {
     d->pageLayout = other.d->pageLayout;
@@ -279,10 +330,14 @@ void PrintSettings::operator=(const PrintSettings& other)
     d->printFormulaIndicator = other.d->printFormulaIndicator;
     d->printHeaders = other.d->printHeaders;
     d->printZeroValues = other.d->printZeroValues;
+    d->centerHorizontally = other.d->centerHorizontally;
+    d->centerVertically = other.d->centerVertically;
     d->pageOrder = other.d->pageOrder;
     d->printRegion = other.d->printRegion;
     d->zoom = other.d->zoom;
     d->pageLimits = other.d->pageLimits;
+    d->repeatedColumns = other.d->repeatedColumns;
+    d->repeatedRows = other.d->repeatedRows;
 }
 
 bool PrintSettings::operator==(const PrintSettings& other) const
@@ -305,6 +360,10 @@ bool PrintSettings::operator==(const PrintSettings& other) const
         return false;
     if (d->printZeroValues != other.d->printZeroValues)
         return false;
+    if (d->centerHorizontally != other.d->centerHorizontally)
+        return false;
+    if (d->centerVertically != other.d->centerVertically)
+        return false;
     if (d->pageOrder != other.d->pageOrder)
         return false;
     if (d->printRegion != other.d->printRegion)
@@ -312,6 +371,10 @@ bool PrintSettings::operator==(const PrintSettings& other) const
     if (d->zoom != other.d->zoom)
         return false;
     if (d->pageLimits != other.d->pageLimits)
+        return false;
+    if (d->repeatedColumns != other.d->repeatedColumns)
+        return false;
+    if (d->repeatedRows != other.d->repeatedRows)
         return false;
     return true;
 }

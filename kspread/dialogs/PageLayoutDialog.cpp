@@ -24,6 +24,7 @@
 #include "PrintSettings.h"
 #include "Sheet.h"
 #include "ui_PageLayoutSheetPage.h"
+#include "Util.h"
 
 // KDE
 #include <klocale.h>
@@ -52,7 +53,49 @@ void PageLayoutDialog::Private::setup()
     sheetPage.zeroValuesCheckBox->setChecked(settings->printZeroValues());
     sheetPage.headersCheckBox->setChecked(settings->printHeaders());
     sheetPage.ltrButton->setChecked(settings->pageOrder() == PrintSettings::LeftToRight);
+    sheetPage.horizontalCheckBox->setChecked(settings->centerHorizontally());
+    sheetPage.verticalCheckBox->setChecked(settings->centerVertically());
 
+    // Setup the repeated columns comboboxes.
+    const QRect usedArea = sheet->usedArea();
+    const QPair<int, int> repeatedColumns = settings->repeatedColumns();
+    sheetPage.columnsCheckBox->setChecked(repeatedColumns.first && repeatedColumns.second);
+    const int maxColumn = qMax(usedArea.width(), repeatedColumns.second);
+    for (int col = 1; col <= maxColumn; ++col)
+    {
+        const QString number = Cell::columnName(col);
+        sheetPage.startColumnComboBox->addItem(number);
+        sheetPage.endColumnComboBox->addItem(number, col);
+    }
+    int index = sheetPage.startColumnComboBox->findText(Cell::columnName(repeatedColumns.first));
+    if (index == -1)
+        index = 0;
+    sheetPage.startColumnComboBox->setCurrentIndex(index);
+    index = sheetPage.endColumnComboBox->findText(Cell::columnName(repeatedColumns.second));
+    if (index == -1)
+        index = 0;
+    sheetPage.endColumnComboBox->setCurrentIndex(index);
+
+    // Setup the repeated rows comboboxes.
+    const QPair<int, int> repeatedRows = settings->repeatedRows();
+    sheetPage.rowsCheckBox->setChecked(repeatedRows.first && repeatedRows.second);
+    const int maxRow = qMax(usedArea.height(), repeatedRows.second);
+    for (int row = 1; row <= maxRow; ++row)
+    {
+        const QString number = QString::number(row);
+        sheetPage.startRowComboBox->addItem(number);
+        sheetPage.endRowComboBox->addItem(number, row);
+    }
+    index = sheetPage.startRowComboBox->findText(QString::number(repeatedRows.first));
+    if (index == -1)
+        index = 0;
+    sheetPage.startRowComboBox->setCurrentIndex(index);
+    index = sheetPage.endRowComboBox->findText(QString::number(repeatedRows.second));
+    if (index == -1)
+        index = 0;
+    sheetPage.endRowComboBox->setCurrentIndex(index);
+
+    // Setup the fixed zoom comboboxes.
     QStringList zoomLevels;
     for (int zoomLevel = 25; zoomLevel <= 500; zoomLevel += 25)
     {
@@ -67,9 +110,9 @@ void PageLayoutDialog::Private::setup()
     const QString zoomLevel = i18n("%1%", qRound(settings->zoom() * 100));
     sheetPage.zoomComboBox->setCurrentIndex(sheetPage.zoomComboBox->findText(zoomLevel));
 
+    // Setup the page limits comboboxes.
     const QSize pageLimits = settings->pageLimits();
     sheetPage.pageLimitsButton->setChecked(pageLimits.isValid());
-
     QStringList limits;
     limits.append(i18n("No Limit"));
     for (int limit = 1; limit <= 20; ++limit)
@@ -104,6 +147,14 @@ PageLayoutDialog::PageLayoutDialog(QWidget* parent, Sheet* sheet)
     d->sheetPage.setupUi(page);
     addPage(page, i18n("Sheet"));
 
+    connect(d->sheetPage.columnsCheckBox, SIGNAL(toggled(bool)),
+            d->sheetPage.startColumnComboBox, SLOT(setEnabled(bool)));
+    connect(d->sheetPage.columnsCheckBox, SIGNAL(toggled(bool)),
+            d->sheetPage.endColumnComboBox, SLOT(setEnabled(bool)));
+    connect(d->sheetPage.rowsCheckBox, SIGNAL(toggled(bool)),
+            d->sheetPage.startRowComboBox, SLOT(setEnabled(bool)));
+    connect(d->sheetPage.rowsCheckBox, SIGNAL(toggled(bool)),
+            d->sheetPage.endRowComboBox, SLOT(setEnabled(bool)));
     connect(d->sheetPage.zoomButton, SIGNAL(toggled(bool)),
             d->sheetPage.zoomComboBox, SLOT(setEnabled(bool)));
     connect(d->sheetPage.pageLimitsButton, SIGNAL(toggled(bool)),
@@ -133,6 +184,30 @@ void PageLayoutDialog::accept()
     settings.setPrintZeroValues(d->sheetPage.zeroValuesCheckBox->isChecked());
     settings.setPrintHeaders(d->sheetPage.headersCheckBox->isChecked());
     settings.setPageOrder(d->sheetPage.ltrButton->isChecked() ? PrintSettings::LeftToRight : PrintSettings::TopToBottom);
+    settings.setCenterHorizontally(d->sheetPage.horizontalCheckBox->isChecked());
+    settings.setCenterVertically(d->sheetPage.verticalCheckBox->isChecked());
+
+    // Set the repeated columns.
+    if (d->sheetPage.columnsCheckBox->isChecked())
+    {
+        // TODO Stefan: Check if width of repeated columns exceeds page width.
+        const int startColumn = Util::decodeColumnLabelText(d->sheetPage.startColumnComboBox->currentText());
+        const int endColumn = Util::decodeColumnLabelText(d->sheetPage.endColumnComboBox->currentText());
+        settings.setRepeatedColumns(qMakePair(qMin(startColumn, endColumn), qMax(startColumn, endColumn)));
+    }
+    else
+        settings.setRepeatedColumns(QPair<int, int>());
+
+    // Set the repeated rows.
+    if (d->sheetPage.rowsCheckBox->isChecked())
+    {
+        // TODO Stefan: Check if height of repeated rows exceeds page height.
+        const int startRow = d->sheetPage.startRowComboBox->currentText().toInt();
+        const int endRow = d->sheetPage.endRowComboBox->currentText().toInt();
+        settings.setRepeatedRows(qMakePair(qMin(startRow, endRow), qMax(startRow, endRow)));
+    }
+    else
+        settings.setRepeatedRows(QPair<int, int>());
 
     bool isValid = false;
     settings.setZoom(0.01 * d->sheetPage.zoomComboBox->currentText().replace('%', "").toDouble(&isValid));

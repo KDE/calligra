@@ -47,14 +47,18 @@ public:
     void printPage(int page, QPainter&) const;
     bool pageNeedsPrinting(const QRect& cellRange) const;
     void setZoomFactor();
+    /// Takes the repeated columns into account.
+    double printWidth() const;
+    /// Takes the repeated rows into account.
+    double printHeight() const;
 };
 
 void PrintManager::Private::calculatePages()
 {
     pages.clear();
     int pageNumber = 1;
-    const double printWidth = qRound(settings.printWidth() / zoom + 0.5);
-    const double printHeight = qRound(settings.printHeight() / zoom + 0.5);
+    const double printWidth = qRound(this->printWidth() / zoom + 0.5);
+    const double printHeight = qRound(this->printHeight() / zoom + 0.5);
 //     kDebug() << "printWidth" << printWidth << "printHeight" << printHeight;
 
     if (settings.pageOrder() == PrintSettings::LeftToRight)
@@ -183,12 +187,13 @@ void PrintManager::Private::calculatePages()
 void PrintManager::Private::printPage(int page, QPainter& painter) const
 {
     kDebug() << "printing page" << page;
+    painter.save();
 
     const QRect cellRange = pages[page];
 
     QPointF topLeft(0.0, 0.0);
 
-    // Calculate the dimension of the cell range. Needed for RTL painting.
+    // Calculate the dimension of the cell range. Needed for RTL painting and table centering.
     QRectF paintRect(topLeft, topLeft);
     for (int col = cellRange.left(); col <= cellRange.right(); ++col)
         paintRect.adjust(0.0, 0.0, sheet->columnFormat(col)->visibleWidth(), 0.0);
@@ -198,6 +203,7 @@ void PrintManager::Private::printPage(int page, QPainter& painter) const
     // Paint the cells.
     sheetView->setPaintCellRange(cellRange);
     sheetView->paintCells(painter.device(), painter, paintRect, topLeft);
+    painter.restore();
 }
 
 bool PrintManager::Private::pageNeedsPrinting(const QRect& cellRange) const
@@ -241,11 +247,39 @@ void PrintManager::Private::setZoomFactor()
         const QRectF printRange = sheet->cellCoordinatesToDocument((*it)->rect() & sheet->usedArea());
 
         if (pageLimits.width() > 0)
-            zoomX = qMin(zoomX, settings.printWidth() / printRange.width());
+            zoomX = qMin(zoomX, printWidth() / printRange.width());
         if (pageLimits.height() > 0)
-            zoomY = qMin(zoomY, settings.printHeight() / printRange.height());
+            zoomY = qMin(zoomY, printHeight() / printRange.height());
     }
     zoom = qMin(zoomX, zoomY);
+}
+
+double PrintManager::Private::printWidth() const
+{
+    double width = settings.printWidth();
+    const QPair<int, int> repeatedColumns = settings.repeatedColumns();
+    if (repeatedColumns.first > 0)
+    {
+        const int startColumn = qMin(repeatedColumns.first, repeatedColumns.second);
+        const int endColumn = qMax(repeatedColumns.first, repeatedColumns.second);
+        for (int col = startColumn; col <= endColumn; ++col)
+            width -= sheet->columnFormat(col)->visibleWidth();
+    }
+    return width;
+}
+
+double PrintManager::Private::printHeight() const
+{
+    double height = settings.printHeight();
+    const QPair<int, int> repeatedRows = settings.repeatedRows();
+    if (repeatedRows.first > 0)
+    {
+        const int startRow = qMin(repeatedRows.first, repeatedRows.second);
+        const int endRow = qMax(repeatedRows.first, repeatedRows.second);
+        for (int row = startRow; row <= endRow; ++row)
+            height -= sheet->rowFormat(row)->visibleHeight();
+    }
+    return height;
 }
 
 
@@ -292,7 +326,7 @@ void PrintManager::printPage(int page, QPainter& painter)
     const bool grid = d->sheet->getShowGrid();
     const bool commentIndicator = d->sheet->getShowCommentIndicator();
     const bool formulaIndicator = d->sheet->getShowFormulaIndicator();
-    d->sheet->setShowGrid(d->settings.printGrid());
+//     d->sheet->setShowGrid(d->settings.printGrid());
     d->sheet->setShowCommentIndicator(d->settings.printCommentIndicator());
     d->sheet->setShowFormulaIndicator(d->settings.printFormulaIndicator());
 

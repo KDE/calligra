@@ -29,6 +29,9 @@ namespace KSpread
 class PrintSettings;
 class Sheet;
 
+/**
+ * Manages printing on the sheet level.
+ */
 class PrintManager
 {
 public:

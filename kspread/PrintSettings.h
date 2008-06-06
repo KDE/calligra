@@ -24,6 +24,8 @@
 
 #include <KoPageLayout.h>
 
+#include <QPair>
+
 #include "kspread_export.h"
 
 class QSize;
@@ -163,6 +165,11 @@ public:
      */
     void setPrintZeroValues(bool printZeroValues);
 
+    bool centerHorizontally() const;
+    void setCenterHorizontally(bool center);
+    bool centerVertically() const;
+    void setCenterVertically(bool center);
+
     const Region& printRegion() const;
     void setPrintRegion(const Region& region);
     void addPrintRange(const QRect& range);
@@ -172,6 +179,32 @@ public:
     void setZoom(double zoom);
     const QSize& pageLimits() const;
     void setPageLimits(const QSize& pageLimits);
+
+    /**
+     * Returns the columns, which are printed on each page.
+     * Returns QPair (0, 0) if nothing is defined.
+     */
+    const QPair<int, int>& repeatedColumns() const;
+
+    /**
+     * Sets the columns to be printed on each page.
+     * Only the x-values of the points are used
+     * Set it to QPair (0, 0) to undefine it
+     */
+    void setRepeatedColumns(const QPair<int, int>& repeatedColumns);
+
+    /**
+     * Returns the rows, which are printed on each page.
+     * Returns QPair (0, 0) if nothing is defined
+     */
+    const QPair<int, int>& repeatedRows() const;
+
+    /**
+     * Sets the rows to be printed on each page.
+     * Only the y-values of the points are used
+     * Set it to QPair (0, 0) to undefine it
+     */
+    void setRepeatedRows(const QPair<int, int>& repeatedRows);
 
     /**
      * Assignment operator.
