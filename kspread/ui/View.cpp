@@ -1885,12 +1885,6 @@ void View::initView()
     d->canvasController->setCanvasMode( KoCanvasController::Infinite );
     d->canvasController->setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
     d->canvasController->setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-    connect( d->canvas, SIGNAL(documentSizeChanged(const QSize&)),
-             d->canvasController, SLOT(setDocumentSize(const QSize&)));
-    connect( d->canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
-             d->canvas, SLOT(setDocumentOffset(const QPoint&)));
-    connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
-            this, SLOT(shapeSelectionChanged()));
 
     // Let the selection pointer become a canvas resource.
     QVariant variant;
