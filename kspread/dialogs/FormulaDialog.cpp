@@ -27,7 +27,6 @@
 // Local
 #include "FormulaDialog.h"
 
-#include <qtextbrowser.h>
 #include <KTabWidget>
 #include <QApplication>
 #include <QCloseEvent>
@@ -48,6 +47,7 @@
 
 #include <kcombobox.h>
 #include <kdebug.h>
+#include <ktextbrowser.h>
 
 #include <knumvalidator.h>
 #include <QEvent>
@@ -142,7 +142,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     m_tabwidget->setSizePolicy( QSizePolicy( QSizePolicy::Expanding, QSizePolicy::Expanding ) );
     grid1->addWidget( m_tabwidget, 0, 1, 4, 1 );
 
-    m_browser = new QTextBrowser( m_tabwidget );
+    m_browser = new KTextBrowser( m_tabwidget );
     m_browser->document()->setDefaultStyleSheet("h1 { font-size:x-large; } h2 { font-size:large; } h3 { font-size:medium; }");
     m_browser->setMinimumWidth( 300 );
 

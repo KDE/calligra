@@ -27,9 +27,9 @@
 #include <QPainter>
 #include <QSpinBox>
 #include <QToolBar>
-#include <QComboBox>
 #include <QPushButton>
 
+#include <kcombobox.h>
 #include <kdebug.h>
 #include <klineedit.h>
 #include <klocale.h>
@@ -71,7 +71,7 @@ public:
     Selection* selection;
     TableShape* tableShape;
 
-    QComboBox* sheetComboBox;
+    KComboBox* sheetComboBox;
 };
 
 
@@ -325,7 +325,7 @@ QWidget* TableTool::createOptionWidget()
     sheetlayout->setMargin(0);
     sheetlayout->setSpacing(3);
     layout->addLayout(sheetlayout, 0, 1);
-    d->sheetComboBox = new QComboBox(optionWidget);
+    d->sheetComboBox = new KComboBox(optionWidget);
     sheetlayout->addWidget(d->sheetComboBox, 1);
     Map *map = d->tableShape->doc()->map();
     foreach(Sheet* s, map->sheetList()) {

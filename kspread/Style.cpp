@@ -201,7 +201,7 @@ void Style::loadAttributes( const QList<SharedSubStyle>& subStyles )
 void Style::loadOasisStyle( KoOdfStylesReader& stylesReader, const KoXmlElement& element,
                             Conditions& conditions, const StyleManager* styleManager )
 {
-    // NOTE Stefan: Don't fill the style stack with the parent styles!
+    // NOTE Stefan: Do not fill the style stack with the parent styles!
     KoStyleStack styleStack;
     styleStack.push( element );
     styleStack.setTypeProperties( "table-cell" );

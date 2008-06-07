@@ -27,8 +27,8 @@
 
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QComboBox>
 
+#include <kcombobox.h>
 #include <klineedit.h>
 
 #include "Canvas.h"
@@ -60,7 +60,7 @@ GotoDialog::GotoDialog( View* parent, const char* name )
   QLabel *label = new QLabel(i18n("Enter cell:"), page);
   lay1->addWidget(label);
 
-  m_nameCell = new QComboBox( page );
+  m_nameCell = new KComboBox( page );
   m_nameCell->setEditable(true);
   lay1->addWidget(m_nameCell);
 

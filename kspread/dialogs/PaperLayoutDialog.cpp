@@ -426,7 +426,7 @@ void PaperLayout::slotOk()
         {
           kDebug() <<"New zoom is different than original:" << m_cZoom->currentText();
           QString zoomtext = m_cZoom->currentText();
-          zoomtext.replace( '%', "" );
+          zoomtext.remove('%');
           bool convertok = false;
           double zoomvalue = zoomtext.toDouble(&convertok);
           if (!convertok)

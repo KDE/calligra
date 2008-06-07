@@ -38,7 +38,7 @@
 class QLabel;
 class QPushButton;
 class KTabWidget;
-class QTextBrowser;
+class KTextBrowser;
 class QStringListModel;
 class QSortFilterProxyModel;
 class KComboBox;
@@ -131,7 +131,7 @@ private:
     View* m_pView;
 
     KTabWidget* m_tabwidget;
-    QTextBrowser* m_browser;
+    KTextBrowser* m_browser;
     QWidget* m_input;
 
     QPushButton *selectFunction;

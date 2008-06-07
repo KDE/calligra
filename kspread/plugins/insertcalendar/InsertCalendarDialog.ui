@@ -19,7 +19,7 @@
       <string/>
     </property>
     <property name="whatsThis" stdset="0" >
-      <string comment="This what's this help applies for the entire dialog." >The Insert Calendar dialog lets you set the dates of the calendar you want to insert. When you have choosen the desired dates, simply press the Insert button to insert the calendar into the spreadsheet, starting at the cell you have currently selected.</string>
+      <string comment="This what's this help applies for the entire dialog." >The Insert Calendar dialog lets you set the dates of the calendar you want to insert. When you have chosen the desired dates, simply press the Insert button to insert the calendar into the spreadsheet, starting at the cell you have currently selected.</string>
     </property>
     <layout class="QGridLayout" >
       <item rowspan="1" row="0" column="0" colspan="2" >
@@ -163,7 +163,7 @@
             <string>&amp;Cancel</string>
           </property>
           <property name="toolTip" stdset="0" >
-            <string>Don't insert a calendar</string>
+            <string>Do not insert a calendar</string>
           </property>
           <property name="whatsThis" stdset="0" >
             <string>Quits the dialog and does not insert a calendar. Use this to cancel this operation.</string>

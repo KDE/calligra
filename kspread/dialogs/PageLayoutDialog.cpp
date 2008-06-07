@@ -210,7 +210,7 @@ void PageLayoutDialog::accept()
         settings.setRepeatedRows(QPair<int, int>());
 
     bool isValid = false;
-    settings.setZoom(0.01 * d->sheetPage.zoomComboBox->currentText().replace('%', "").toDouble(&isValid));
+    settings.setZoom(0.01 * d->sheetPage.zoomComboBox->currentText().remove('%').toDouble(&isValid));
     if (!isValid)
         settings.setZoom(1.0);
 

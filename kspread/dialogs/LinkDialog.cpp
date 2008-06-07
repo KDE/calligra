@@ -32,7 +32,6 @@
 
 #include <QLabel>
 #include <QVBoxLayout>
-#include <QComboBox>
 
 #include <kcombobox.h>
 #include <kdesktopfile.h>
@@ -64,7 +63,7 @@ public:
     KUrlRequester* fileLink;
     QWidget* cellPage;
     KLineEdit* cellText;
-    QComboBox* cellLink;
+    KComboBox* cellLink;
     KPageWidgetItem* p1, *p2, *p3, *p4;
 };
 
@@ -160,7 +159,7 @@ LinkDialog::LinkDialog( View* view, const char* )
     d->cellText = new KLineEdit( d->cellPage );
     cLayout->addWidget( d->cellText );
     cLayout->addWidget( new QLabel( i18n("Cell or Named Area:" ), d->cellPage ) );
-    d->cellLink = new QComboBox( d->cellPage );
+    d->cellLink = new KComboBox( d->cellPage );
     d->cellLink->setEditable(true);
 
     const Sheet *sheet = view->activeSheet();

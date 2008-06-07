@@ -28,7 +28,7 @@ Fifth Floor, Boston, MA 02110-1301, USA.</comment>
    </rect>
   </property>
   <property name="whatsThis" >
-   <string>You can select here the font style, size and color, including some additional options like underlined or striked out text for the current cell text. The lower part of the page gives a preview of the selected text format.
+   <string>You can select here the font style, size and color, including some additional options like underlined or stroke out text for the current cell text. The lower part of the page gives a preview of the selected text format.
 The default font is set for all cells in the Format -> Style Manager menu with the currently used style.</string>
   </property>
   <layout class="QGridLayout" >
