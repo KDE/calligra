@@ -1,0 +1,8 @@
+Why there are much HTML tags in my code?
+The answer is simple: google-ctemplate.
+Google-ctemplate is not designed to have a full-featured templating language
+it only has simple constructs and therefore we must keep stuff inside our code.
+However, when I first looked for a C++ template engine I only found google-ctemplate.
+If you want to suggest a better alternative let me know:
+
+lvillani AT binaryhelix DOT net

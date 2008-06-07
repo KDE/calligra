@@ -14,6 +14,7 @@ set(webforms_SRCS
   IndexView.cpp
   TableView.cpp
   UpdateView.cpp
+  Delete.cpp
   Request.cpp
 )
 

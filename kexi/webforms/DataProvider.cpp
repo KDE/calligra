@@ -41,11 +41,7 @@
 #include <kexidb/indexschema.h>
 
 namespace KexiWebForms {
-    QPointer<KexiDB::Connection> gConnection = NULL;
-
-    const QPointer<KexiDB::Connection> connection() {
-        return gConnection;
-    }
+    KexiDB::Connection gConnection = NULL;
 
     // FIXME: Move creation of ConnectionData outside this function
     bool initDatabase(const QString& fileName) {
@@ -54,8 +50,6 @@ namespace KexiWebForms {
         KexiDB::DriverManager manager;
         KexiDB::ConnectionData* connData = new KexiDB::ConnectionData();
         KexiProjectData* projectData;
-        KexiDBShortcutFile* shortcut;
-        KexiDBConnShortcutFile* connFile;
 
 
         QString driverName;
@@ -71,7 +65,7 @@ namespace KexiWebForms {
                 // TODO: Finish implementing this stuff
                 //
                 kDebug() << "Loading Kexi shortcut file..." << endl;
-                shortcut = new KexiDBShortcutFile(fileName);
+                KexiDBShortcutFile shortcut(fileName);
                 projectData = new KexiProjectData();
                 if (!shortcut->loadProjectData(*projectData)) {
                     delete projectData; projectData = NULL;
@@ -83,14 +77,15 @@ namespace KexiWebForms {
                 // FIXME: This piece of code does NOT work, ouch!
                 //
                 kDebug() << "Loading connection file..." << endl;
-                connFile = new KexiDBConnShortcutFile(fileName);
+                KexiDBConnShortcutFile connFile(fileName);
                 if (!connFile->loadConnectionData(*connData)) {
                     kDebug() << "Failed to load connection data from .kexic file..." << endl;
                     delete connFile; connFile = NULL;
                     return false;
                 } else {
                     kDebug() << "Data loaded successfully, create project object..." << endl;
-                    // FIXME: this won't work! investigate...
+                    // FIXME: as noticed by jstaniek I should ask the user which
+                    // database has to be opened
                     projectData = new KexiProjectData(*connData);
                 }
             } else {
@@ -118,6 +113,9 @@ namespace KexiWebForms {
 
                 if (!gConnection->useDatabase(fileName)) {
                     kError() << gConnection->errorMsg() << endl;
+                    status = false;
+                } else {
+                    status = true;
                 }
 
                 projectData = new KexiProjectData(*connData);

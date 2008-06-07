@@ -30,6 +30,7 @@
 #include "ServerConfig.h"
 #include "DataProvider.h"
 
+#include "Delete.h"
 #include "IndexView.h"
 #include "TableView.h"
 #include "UpdateView.h"
@@ -103,7 +104,8 @@ int main(int argc, char **argv) {
         if (server->init(serverConfig)) {
             server->registerHandler("/", IndexView::show);
             server->registerHandler("/view/*", TableView::show);
-			server->registerHandler("/update/*", UpdateView::show);
+            server->registerHandler("/update/*", UpdateView::show);
+            server->registerHandler("/delete/*", Delete::show);
         }
         return server->run();
     }
