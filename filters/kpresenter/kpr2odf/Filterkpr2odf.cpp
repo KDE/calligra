@@ -136,9 +136,14 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
     content->startElement( "office:body" );
     content->startElement( "office:presentation" );
 
-    KoXmlNode titles = m_mainDoc.namedItem("DOC").namedItem( "PAGETITLES" );
-    KoXmlNode notes = m_mainDoc.namedItem("DOC").namedItem( "PAGENOTES" );
-    KoXmlNode backgrounds = m_mainDoc.namedItem( "BACKGROUND" );
+    //We search all this here so that we can make the search just once
+    const KoXmlNode titles = m_mainDoc.namedItem("DOC").namedItem( "PAGETITLES" );
+    const KoXmlNode notes = m_mainDoc.namedItem("DOC").namedItem( "PAGENOTES" );
+    const KoXmlNode backgrounds = m_mainDoc.namedItem( "BACKGROUND" );
+    const KoXmlNode objects = m_mainDoc.namedItem("DOC").namedItem( "OBJECTS" );
+    const KoXmlNode paper = m_mainDoc.namedItem("DOC").namedItem( "PAPER" );
+    m_pageHeight = paper.toElement().attribute("ptHeight").toFloat();
+    //TODO: save paper Styles
 
     //Parse pages
     int currentPage = 1;
@@ -156,7 +161,8 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
         content->addAttribute( "draw:id", currentPage );
         //FIXME:missing draw:master-page-name
 
-        //TODO:Append objects
+        //convert the objects (text, images, charts...) in this page
+        convertObjects( content, objects, currentPage );
 
         //Append the notes
         content->startElement( "presentation:notes" );
@@ -182,6 +188,57 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
     content->endElement();//office:presentation
     content->endElement();//office:body
     content->endDocument();
+}
+
+void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objects, const int currentPage )
+{
+    //We search through all the objects' nodes because
+    //we are not sure if they are saved in order
+    for( KoXmlNode object = objects.firstChild(); !object.isNull(); object = object.nextSibling() ) {
+        float y = object.namedItem( "ORIG" ).toElement().attribute( "y" ).toFloat();
+
+        //We check if the y is on the current page
+        if ( y < m_pageHeight * ( currentPage - 1 )
+             || y >= m_pageHeight * currentPage )
+            continue; // object not on current page
+kDebug()<<object.toElement().attribute( "type" ).toInt();
+        switch( object.toElement().attribute( "type" ).toInt() )
+        {
+        case 0: // picture
+            break;
+        case 1: // line
+            break;
+        case 2: // rectangle
+            break;
+        case 3: // ellipse
+            break;
+        case 4: // text
+            break;
+        case 5: //autoform
+            break;
+        case 6: //clipart
+            break;
+        //NOTE: 7 is undefined, never happens in a file (according to kpresenter.dtd)
+        case 8: // pie
+            break;
+        case 9: //part
+            break;
+        case 10: //group
+            break;
+        case 11: //freehand
+            break;
+        case 12: // polyline
+            break;
+        case 13: //quadratic bezier curve
+            break;
+        case 14: //cubic bezier curve
+            break;
+        case 15: //polygon
+            break;
+        case 16: //close line
+            break;
+        }
+    }
 }
 
 #include "Filterkpr2odf.moc"

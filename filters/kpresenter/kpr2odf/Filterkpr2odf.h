@@ -39,9 +39,11 @@ public:
 
 private:
     void convertContent( KoXmlWriter* content );
+    void convertObjects( KoXmlWriter* content, const KoXmlNode& objects, const int currentPage );
 
     KoXmlDocument m_mainDoc;
     KoXmlDocument m_documentInfo;
+    int m_pageHeight;//needed to find out where's every object
 };
 
 #endif //FILTERKPR2ODF_H
