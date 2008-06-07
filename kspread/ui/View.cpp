@@ -2000,6 +2000,12 @@ void View::initView()
     // signal slot
 //     connect( d->vertScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollVert(int) ) );
 //     connect( d->horzScrollBar, SIGNAL( valueChanged(int) ), d->canvas, SLOT( slotScrollHorz(int) ) );
+    connect(d->canvas, SIGNAL(documentSizeChanged(const QSize&)),
+            d->canvasController, SLOT(setDocumentSize(const QSize&)));
+    connect(d->canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
+            d->canvas, SLOT(setDocumentOffset(const QPoint&)));
+    connect(d->canvas->shapeManager(), SIGNAL(selectionChanged()),
+            this, SLOT(shapeSelectionChanged()));
 }
 
 Canvas* View::canvasWidget() const

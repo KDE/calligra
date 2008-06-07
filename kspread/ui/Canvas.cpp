@@ -562,11 +562,8 @@ void Canvas::setDocumentOffset( const QPoint& offset )
     const QPoint delta = offset - viewConverter()->documentToView( d->offset ).toPoint();
     d->offset = viewConverter()->viewToDocument( offset );
 
-    //2008-03-15 sebsauer; crashes with Qt4.4 reproducable on loading with;
-    //#5  0x00002b53a0d4e107 in QWidget::testAttribute (this=0x0, attribute=Qt::WA_UpdatesDisabled) at ../../include/QtGui/../../src/gui/kernel/qwidget.h:990
-    //#6  0x00002b53a0d83ddc in QWidget::updatesEnabled (this=0x0) at ../../include/QtGui/../../src/gui/kernel/qwidget.h:946
-    //hBorderWidget()->scroll( delta.x(), 0 );
-    //vBorderWidget()->scroll( 0, delta.y() );
+    hBorderWidget()->scroll(delta.x(), 0);
+    vBorderWidget()->scroll(0, delta.y());
 }
 
 void Canvas::setDocumentSize( const QSizeF& size )

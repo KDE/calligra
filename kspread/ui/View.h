@@ -133,6 +133,7 @@ public:
     /** \return the zoom handler */
     KoZoomHandler* zoomHandler() const;
 
+    void setZoom(double zoom) { KoView::setZoom(zoom); }
     void setZoom( int zoom, bool updateViews ); // change the zoom value
 
     void addSheet( Sheet *_t );
