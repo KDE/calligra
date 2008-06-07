@@ -18,15 +18,15 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_WEBFORMS_TABLEVIEW_H
-#define KEXI_WEBFORMS_TABLEVIEW_H
+#ifndef KEXI_WEBFORMS_INDEX_H
+#define KEXI_WEBFORMS_INDEX_H
 
 struct RequestData;
 
 namespace KexiWebForms {
-    namespace TableView {
-        void show(RequestData*);
+    namespace Index {
+        void show(RequestData* req);
     }
 }
 
-#endif
+#endif /* KEXI_WEBFORMS_INDEX_H */

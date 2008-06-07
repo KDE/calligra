@@ -35,10 +35,10 @@
 #include "HTTPStream.h"
 #include "Request.h"
 
-#include "UpdateView.h"
+#include "Update.h"
 
 namespace KexiWebForms {
-    namespace UpdateView {
+    namespace Update {
         void show(RequestData* req) {
             HTTPStream stream(req);
             google::TemplateDictionary dict("update");
@@ -112,7 +112,7 @@ namespace KexiWebForms {
                 KexiDB::QuerySchema* schema = gConnection->tableSchema(requestedTable)->query();
                 // TODO: There should be only one entry...
                 while (cursor->moveNext()) {
-                    for (int i = 0; i < cursor->fieldCount(); i++) {
+                    for (uint i = 0; i < cursor->fieldCount(); i++) {
                         formData.append("<tr>");
                         formData.append("<td>").append(schema->field(i)->captionOrName()).append("</td>");
                         formData.append("<td><input type=\"text\" name=\"");

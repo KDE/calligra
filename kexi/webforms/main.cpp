@@ -30,10 +30,8 @@
 #include "ServerConfig.h"
 #include "DataProvider.h"
 
-#include "Delete.h"
-#include "IndexView.h"
-#include "TableView.h"
-#include "UpdateView.h"
+#include "Index.h"
+#include "CRUD.h"
 
 using namespace KexiWebForms;
 
@@ -102,9 +100,9 @@ int main(int argc, char **argv) {
         Server* server = Server::instance();
 
         if (server->init(serverConfig)) {
-            server->registerHandler("/", IndexView::show);
-            server->registerHandler("/view/*", TableView::show);
-            server->registerHandler("/update/*", UpdateView::show);
+            server->registerHandler("/", Index::show);
+            server->registerHandler("/view/*", Read::show);
+            server->registerHandler("/update/*", Update::show);
             server->registerHandler("/delete/*", Delete::show);
         }
         return server->run();

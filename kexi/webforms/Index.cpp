@@ -26,11 +26,11 @@
 #include "DataProvider.h"
 #include "HTTPStream.h"
 
-#include "IndexView.h"
+#include "Index.h"
 
 namespace KexiWebForms {
 
-    namespace IndexView {
+    namespace Index {
 
         void show(RequestData* req) {
             HTTPStream stream(req);

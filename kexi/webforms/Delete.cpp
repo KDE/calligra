@@ -18,8 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "Delete.h"
-
 #include <string>
 
 #include <QString>
@@ -34,6 +32,8 @@
 #include "DataProvider.h"
 #include "HTTPStream.h"
 #include "Request.h"
+
+#include "Delete.h"
 
 namespace KexiWebForms {
     namespace Delete {

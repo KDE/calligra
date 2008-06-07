@@ -11,11 +11,13 @@ set(webforms_SRCS
   ServerConfig.cpp
   HTTPStream.cpp
   DataProvider.cpp
-  IndexView.cpp
-  TableView.cpp
-  UpdateView.cpp
-  Delete.cpp
   Request.cpp
+# Index view
+  Index.cpp
+# CRUD
+  Read.cpp
+  Update.cpp
+  Delete.cpp
 )
 
 kde4_add_executable(kwebforms ${webforms_SRCS})

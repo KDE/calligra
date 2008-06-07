@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_WEBFORMS_SERVERCONFIG_H
-#define KEXI_WEBFORMS_SERVERCONFIG_H
+#ifndef KEXIWEBFORMS_SERVERCONFIG_H
+#define KEXIWEBFORMS_SERVERCONFIG_H
 
 #include <QString>
 
@@ -41,4 +41,4 @@ namespace KexiWebForms {
 
 }
 
-#endif
+#endif /* KEXIWEBFORMS_SERVERCONFIG_H */

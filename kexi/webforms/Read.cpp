@@ -37,10 +37,10 @@
 #include "HTTPStream.h"
 #include "DataProvider.h"
 
-#include "TableView.h"
+#include "Read.h"
 
 namespace KexiWebForms {
-    namespace TableView {
+    namespace Read {
         void show(RequestData* req) {
             HTTPStream stream(req);
             google::TemplateDictionary dict("table");

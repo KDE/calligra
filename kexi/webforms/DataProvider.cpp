@@ -41,8 +41,9 @@
 #include <kexidb/indexschema.h>
 
 namespace KexiWebForms {
-    KexiDB::Connection gConnection = NULL;
 
+    KexiDB::Connection* gConnection;
+    
     // FIXME: Move creation of ConnectionData outside this function
     bool initDatabase(const QString& fileName) {
         bool status = false;
@@ -67,9 +68,8 @@ namespace KexiWebForms {
                 kDebug() << "Loading Kexi shortcut file..." << endl;
                 KexiDBShortcutFile shortcut(fileName);
                 projectData = new KexiProjectData();
-                if (!shortcut->loadProjectData(*projectData)) {
+                if (!shortcut.loadProjectData(*projectData)) {
                     delete projectData; projectData = NULL;
-                    delete shortcut; shortcut = NULL;
                     return false;
                 }
             } else if (driverName == "connection") {
@@ -78,9 +78,8 @@ namespace KexiWebForms {
                 //
                 kDebug() << "Loading connection file..." << endl;
                 KexiDBConnShortcutFile connFile(fileName);
-                if (!connFile->loadConnectionData(*connData)) {
+                if (!connFile.loadConnectionData(*connData)) {
                     kDebug() << "Failed to load connection data from .kexic file..." << endl;
-                    delete connFile; connFile = NULL;
                     return false;
                 } else {
                     kDebug() << "Data loaded successfully, create project object..." << endl;

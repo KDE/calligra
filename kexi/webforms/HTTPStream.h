@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_WEBFORMS_HTTPSTREAM_H
-#define KEXI_WEBFORMS_HTTPSTREAM_H
+#ifndef KEXIWEBFORMS_HTTPSTREAM_H
+#define KEXIWEBFORMS_HTTPSTREAM_H
 
 #include <QString>
 #include <string>
@@ -49,4 +49,4 @@ namespace KexiWebForms {
     extern HTTPEndOfStream webend;
 }
 
-#endif
+#endif /* KEXIWEBFORMS_HTTPSTREAM_H */

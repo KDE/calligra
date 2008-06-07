@@ -18,8 +18,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_WEBFORMS_SERVER_H
-#define KEXI_WEBFORMS_SERVER_H
+#ifndef KEXIWEBFORMS_SERVER_H
+#define KEXIWEBFORMS_SERVER_H
 
 #include "Request.h"
 #include "ServerConfig.h"
@@ -51,4 +51,4 @@ namespace KexiWebForms {
 
 }
 
-#endif
+#endif /* KEXIWEBFORMS_SERVER_H */
