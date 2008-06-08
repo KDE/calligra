@@ -42,6 +42,7 @@ public:
     virtual void mousePressEvent( KoPointerEvent* event ) ;
     virtual void mouseMoveEvent( KoPointerEvent* event );
     virtual void mouseReleaseEvent( KoPointerEvent* event );
+    virtual void mouseDoubleClickEvent(KoPointerEvent* event);
 
     virtual void activate( bool temporary = false );
     virtual void deactivate();

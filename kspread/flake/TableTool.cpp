@@ -73,6 +73,7 @@ public:
     TableShape* tableShape;
 
     KComboBox* sheetComboBox;
+    KLineEdit* lineEdit;
 };
 
 
@@ -223,6 +224,18 @@ void TableTool::mouseReleaseEvent(KoPointerEvent* event)
 {
     KoInteractionTool::mouseReleaseEvent(event);
 }
+
+void TableTool::mouseDoubleClickEvent(KoPointerEvent* event)
+{
+    if (m_currentStrategy)
+    {
+        m_currentStrategy->cancelInteraction();
+        delete m_currentStrategy;
+        m_currentStrategy = 0;
+    }
+    d->lineEdit->setFocus(Qt::OtherFocusReason);
+}
+
 
 void TableTool::activate( bool temporary )
 {
@@ -392,15 +405,15 @@ QWidget* TableTool::createOptionWidget()
     label->setToolTip(i18n("Selected Sheet"));
     layout->addWidget(label, 0, 0);
 
-    KLineEdit* lineEdit = new KLineEdit(optionWidget);
-    layout->addWidget(lineEdit, 1, 1);
-    connect(lineEdit, SIGNAL(editingFinished()), this, SLOT(applyUserInput()));
-    connect(lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(changeUserInput(const QString&)));
-    connect(this, SIGNAL(userInputChanged(const QString&)), lineEdit, SLOT(setText(const QString&)));
+    d->lineEdit = new KLineEdit(optionWidget);
+    layout->addWidget(d->lineEdit, 1, 1);
+    connect(d->lineEdit, SIGNAL(editingFinished()), this, SLOT(applyUserInput()));
+    connect(d->lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(changeUserInput(const QString&)));
+    connect(this, SIGNAL(userInputChanged(const QString&)), d->lineEdit, SLOT(setText(const QString&)));
     changeSelection(Region()); // initialize the lineEdit with the cell content
 
     label = new QLabel(i18n("Content:"), optionWidget);
-    label->setBuddy(lineEdit);
+    label->setBuddy(d->lineEdit);
     label->setToolTip(i18n("Cell content"));
     layout->addWidget(label, 1, 0);
 
