@@ -232,13 +232,16 @@ public:
   : KoRTree<T>::Node(capacity, level, parent) {}
   virtual ~Node() {}
 
+  virtual void remove( int index ) { KoRTree<T>::Node::remove( index ); }
   virtual void remove( const QRectF& rect, const T& data ) = 0;
+  virtual void contains( const QPointF & point, QMap<int,T> & result ) const = 0;
   virtual void contains( const QRectF& rect, QMap<int,T>& result ) const = 0;
   virtual void intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const = 0;
   virtual QMap< int, QPair<QRectF,T> > insertRows(int position, int number, InsertMode mode) = 0;
   virtual QMap< int, QPair<QRectF,T> > insertColumns(int position, int number, InsertMode mode) = 0;
   virtual QMap< int, QPair<QRectF,T> > removeRows(int position, int number) = 0;
   virtual QMap< int, QPair<QRectF,T> > removeColumns(int position, int number) = 0;
+  virtual const QRectF& childBoundingBox( int index ) const { return KoRTree<T>::Node::childBoundingBox( index ); }
   QVector<QRectF> childBoundingBox() const { return this->m_childBoundingBox; }
 private:
   // disable copy constructor
@@ -258,7 +261,10 @@ public:
   , KoRTree<T>::LeafNode(capacity, level, parent) {}
   virtual ~LeafNode() {}
 
+  virtual void remove( int index ) { KoRTree<T>::LeafNode::remove( index ); }
+  virtual void remove( const T& data ) { KoRTree<T>::LeafNode::remove( data ); }
   virtual void remove( const QRectF& rect, const T& data );
+  virtual void contains( const QPointF & point, QMap<int,T> & result ) const { KoRTree<T>::LeafNode::contains( point, result ); }
   virtual void contains( const QRectF& rect, QMap<int,T>& result ) const;
   virtual void intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const;
   virtual QMap< int, QPair<QRectF,T> > insertRows(int position, int number, InsertMode mode);
@@ -284,7 +290,9 @@ public:
   , KoRTree<T>::NoneLeafNode(capacity, level, parent) {}
   virtual ~NoneLeafNode() {}
 
+  virtual void remove( int index ) { KoRTree<T>::NoneLeafNode::remove( index ); }
   virtual void remove( const QRectF& rect, const T& data );
+  virtual void contains( const QPointF & point, QMap<int,T> & result ) const { KoRTree<T>::NoneLeafNode::contains( point, result ); }
   virtual void contains( const QRectF& rect, QMap<int,T>& result ) const;
   virtual void intersectingPairs( const QRectF& rect, QMap<int,QPair<QRectF,T> >& result ) const;
   virtual QMap< int, QPair<QRectF,T> > insertRows(int position, int number, InsertMode mode);
