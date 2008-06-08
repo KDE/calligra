@@ -22,16 +22,37 @@
 
 #include <KoEventAction.h>
 
+#include <QObject>
+
+namespace Phonon {
+    class MediaObject;
+}
+
+class KPrSoundData;
+
 #define KPrSoundEventActionId "KPrSoundEventAction"
 
-class KPrSoundEventAction : public KoEventAction
+class KPrSoundEventAction : public QObject, public KoEventAction
 {
+    Q_OBJECT
 public:
     KPrSoundEventAction();
     virtual ~KPrSoundEventAction();
 
     virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
     virtual void saveOdf( KoShapeSavingContext & context ) const;
+
+    virtual void execute( KoTool * tool );
+    virtual void finish( KoTool * tool );
+
+    void setSoundData( KPrSoundData * soundData );
+
+public slots:
+    void finished();
+
+private:
+    Phonon::MediaObject * m_media;
+    KPrSoundData *m_soundData;
 };
 
 #endif /* KPRSOUNDEVENTACTION_H */
