@@ -29,7 +29,7 @@
 
 #include "Region.h"
 
-class KoZoomHandler;
+class KoViewConverter;
 
 namespace KSpread
 {
@@ -159,7 +159,7 @@ public:
   /**
    * @return the area that the 'handle' of the selection is located in painting coordinates
    */
-  QRectF selectionHandleArea( KoZoomHandler* zoomHandler ) const;
+  QRectF selectionHandleArea(const KoViewConverter* viewConverter) const;
 
   /**
    * @return the name of the region (e.g. "A1:A2")

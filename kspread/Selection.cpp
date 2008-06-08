@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-#include <KoZoomHandler.h>
+#include <KoViewConverter.h>
 
 #include "Cell.h"
 #include "CellStorage.h"
@@ -673,7 +673,7 @@ bool Selection::isSingular() const
   return Region::isSingular();
 }
 
-QRectF Selection::selectionHandleArea( KoZoomHandler* zoomHandler ) const
+QRectF Selection::selectionHandleArea(const KoViewConverter* viewConverter) const
 {
   int column, row;
 
@@ -695,8 +695,8 @@ QRectF Selection::selectionHandleArea( KoZoomHandler* zoomHandler ) const
   double width = cell.width();
   double height = cell.height();
 
-  const double unzoomedXPixel = zoomHandler->viewToDocumentX( 1.0 );
-  const double unzoomedYPixel = zoomHandler->viewToDocumentY( 1.0 );
+  const double unzoomedXPixel = viewConverter->viewToDocumentX( 1.0 );
+  const double unzoomedYPixel = viewConverter->viewToDocumentY( 1.0 );
 
   QRectF handle( xpos + width - 2 * unzoomedXPixel,
                 ypos + height - 2 * unzoomedYPixel,

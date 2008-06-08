@@ -183,7 +183,7 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
     }
 
     // Did we click in the lower right corner of the marker/marked-area ?
-    if ( d->canvas->selection()->selectionHandleArea(d->canvas->view()->zoomHandler()).contains( QPointF( position.x(), position.y() ) ) )
+    if ( d->canvas->selection()->selectionHandleArea(d->canvas->viewConverter()).contains( QPointF( position.x(), position.y() ) ) )
     {
         d->processClickSelectionHandle( event );
         return;
@@ -479,7 +479,7 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
     }
 
     // Test whether mouse is over the Selection.handle
-    const QRectF selectionHandle = d->canvas->view()->selection()->selectionHandleArea(d->canvas->view()->zoomHandler());
+    const QRectF selectionHandle = d->canvas->view()->selection()->selectionHandleArea(d->canvas->viewConverter());
     if ( selectionHandle.contains( QPointF( position.x(), position.y() ) ) )
     {
         //If the cursor is over the handle, than it might be already on the next cell.
