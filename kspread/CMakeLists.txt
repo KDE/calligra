@@ -149,9 +149,10 @@ SET (ui_DIR_SRCS
 	ui/DefaultTool.cpp
 	ui/DefaultToolFactory.cpp
 	ui/Editors.cpp
+	ui/PrintJob.cpp
+	ui/SelectionStrategy.cpp
 	ui/SheetView.cpp
 	ui/View.cpp
-	ui/PrintJob.cpp
 	)
 
 SET (kspreadcommon_LIB_SRCS
