@@ -59,6 +59,7 @@
 #include <KoDocumentInfo.h>
 #include <KoMainWindow.h>
 #include <KoOasisSettings.h>
+#include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfWriteStore.h>
@@ -67,6 +68,7 @@
 #include <KoShapeManager.h>
 #include <KoShapeRegistry.h>
 #include <KoStoreDevice.h>
+#include <KoStyleStack.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 #include <KoZoomHandler.h>
@@ -81,7 +83,6 @@
 #include "Localization.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
-#include "Object.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
@@ -184,11 +185,6 @@ public:
   bool configLoadFromFile       : 1;
   bool captureAllArrowKeys      : 1;
   QStringList spellListIgnoreAll;
-  // list of all objects
-  QList<EmbeddedObject*> embeddedObjects;
-  KoPictureCollection m_pictureCollection;
-  Q3ValueList<KoPictureKey> usedPictures;
-  bool m_savingWholeDocument;
   SavedDocParts savedDocParts;
 
   // calculation settings
@@ -517,8 +513,6 @@ int Doc::supportedSpecialFormats() const
 
 bool Doc::completeSaving( KoStore* _store )
 {
-    d->m_pictureCollection.saveToStore( KoPictureCollection::CollectionPicture, _store, d->usedPictures );
-
     return true;
 }
 
@@ -598,12 +592,10 @@ bool Doc::saveOdf( SavingContext &documentContext )
 }
 
 bool Doc::saveOasisHelper( SavingContext & documentContext, SaveFlag saveFlag,
-                            QString* /*plainText*/, KoPicture* /*picture*/ )
+                            QString* /*plainText*/ )
 {
     KoStore * store = documentContext.odfStore.store();
     KoXmlWriter * manifestWriter = documentContext.odfStore.manifestWriter();
-    d->m_pictureCollection.assignUniqueIds();
-    d->m_savingWholeDocument = saveFlag == SaveAll ? true : false;
 
     /* don't pull focus away from the editor if this is just a background
        autosave */
@@ -679,11 +671,6 @@ bool Doc::saveOasisHelper( SavingContext & documentContext, SaveFlag saveFlag,
 
     mainStyles.saveOdfStylesDotXml( store, manifestWriter );
 
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    makeUsedPixmapList();
-    d->m_pictureCollection.saveOasisToStore( store, d->usedPictures, manifestWriter);
-#endif // KSPREAD_KOPART_EMBEDDING
-
     if(!store->open("settings.xml"))
         return false;
 
@@ -711,25 +698,6 @@ bool Doc::saveOasisHelper( SavingContext & documentContext, SaveFlag saveFlag,
         return false;
 
     manifestWriter->addManifestEntry("settings.xml", "text/xml");
-
-
-    if ( saveFlag == SaveSelected )
-    {
-#if 0 // KSPREAD_KOPART_EMBEDDING
-      foreach ( EmbeddedObject* object, d->embeddedObjects )
-      {
-        if ( object->getType() != OBJECT_CHART  && object->getType() != OBJECT_KOFFICE_PART )
-          continue;
-        KoDocumentChild *embedded = dynamic_cast<EmbeddedKOfficeObject *>(object )->embeddedObject();
-            //NOTE: If an application's .desktop file lies about opendocument support (ie. it indicates that it has
-            //a native OASIS mime type, when it doesn't, this causes a crash when trying to reload and paint
-            //the object, since it won't have an associated document.
-          if ( !embedded->saveOasis( store, manifestWriter ) )
-            continue;
-      }
-#endif // KSPREAD_KOPART_EMBEDDING
-    }
-
 
     setModified( false );
 
@@ -1483,12 +1451,6 @@ void Doc::paintUpdates()
   {
     static_cast<View *>( view )->paintUpdates();
   }
-#if 0 // KSPREAD_KOPART_EMBEDDING
-  foreach ( Sheet* sheet, map()->sheetList() )
-  {
-    sheet->clearPaintDirtyData();
-  }
-#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 void Doc::paintCellRegions( QPainter& painter, const QRect &viewRect,
@@ -1940,44 +1902,6 @@ bool Doc::captureAllArrowKeys() const
     return d->captureAllArrowKeys;
 }
 
-
-#if 0 // KSPREAD_KOPART_EMBEDDING
-void Doc::insertObject( EmbeddedObject * obj )
-{
-  switch ( obj->getType() )
-  {
-    case OBJECT_KOFFICE_PART: case OBJECT_CHART:
-    {
-      KoDocument::insertChild( dynamic_cast<EmbeddedKOfficeObject*>(obj)->embeddedObject() );
-      break;
-    }
-    default:
-      ;
-  }
-  d->embeddedObjects.append( obj );
-}
-
-QList<EmbeddedObject*>& Doc::embeddedObjects()
-{
-    return d->embeddedObjects;
-}
-
-KoPictureCollection *Doc::pictureCollection()
-{
-  return &d->m_pictureCollection;
-}
-
-void Doc::repaint( EmbeddedObject *obj )
-{
-  foreach ( KoView* view, views() )
-  {
-    Canvas* canvas = static_cast<View*>( view )->canvasWidget();
-    if ( obj->sheet() == canvas->activeSheet() )
-        canvas->repaintObject( obj );
-  }
-}
-#endif // KSPREAD_KOPART_EMBEDDING
-
 void Doc::repaint( const QRectF& rect )
 {
     QRectF r;
@@ -2039,29 +1963,6 @@ void Doc::setDefaultDecimalPrecision( int precision )
 int Doc::defaultDecimalPrecision() const
 {
     return d->precision;
-}
-
-#if 0 // KSPREAD_KOPART_EMBEDDING
-void Doc::insertPixmapKey( KoPictureKey key )
-{
-    if ( !d->usedPictures.contains( key ) )
-        d->usedPictures.append( key );
-}
-
-void Doc::makeUsedPixmapList()
-{
-    d->usedPictures.clear();
-    foreach ( EmbeddedObject* object, d->embeddedObjects )
-    {
-        if( object->getType() == OBJECT_PICTURE && ( d->m_savingWholeDocument || object->isSelected() ) )
-            insertPixmapKey( static_cast<EmbeddedPictureObject*>( object )->getKey() );
-    }
-}
-#endif // KSPREAD_KOPART_EMBEDDING
-
-bool Doc::savingWholeDocument()
-{
-    return d->m_savingWholeDocument;
 }
 
 #include "Doc.moc"

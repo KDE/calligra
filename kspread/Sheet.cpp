@@ -594,19 +594,6 @@ void Sheet::adjustDocumentHeight( double deltaHeight )
     emit documentSizeChanged( d->documentSize );
 }
 
-#if 0 // KSPREAD_KOPART_EMBEDDING
-int Sheet::numberSelectedObjects() const
-{
-    int num = 0;
-    foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
-    {
-        if( object->sheet() == this && object->isSelected() )
-            num++;
-    }
-    return num;
-}
-#endif // KSPREAD_KOPART_EMBEDDING
-
 int Sheet::leftColumn( double _xpos, double &_left ) const
 {
     _left = 0.0;
@@ -2449,136 +2436,6 @@ bool Sheet::isLoading()
     return doc()->isLoading();
 }
 
-
-#if 0 // KSPREAD_KOPART_EMBEDDING
-QList<EmbeddedObject*> Sheet::getSelectedObjects()
-{
-    QList<EmbeddedObject*> objects;
-    foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
-    {
-        if( object->isSelected()
-            && object->sheet() == this )
-        {
-            objects.append( object );
-        }
-    }
-     return objects;
-}
-
-QRectF Sheet::getRealRect( bool all )
-{
-    QRectF rect;
-    foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
-    {
-
-        if ( all || ( object->isSelected() && ! object->isProtect() ) )
-            rect |= object->geometry();
-    }
-    return rect;
-}
-
-// move object for releasemouseevent
-QUndoCommand* Sheet::moveObject(View *_view, double diffx, double diffy)
-{
-    bool createCommand=false;
-    MoveObjectByCmd *moveByCmd=0;
-    Canvas * canvas = _view->canvasWidget();
-    QList<EmbeddedObject*> _objects;
-    foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
-    {
-        if ( object->isSelected() && !object->isProtect())
-        {
-            _objects.append( object );
-            QRectF geometry = object->geometry();
-            geometry.translate( -canvas->xOffset(), -canvas->yOffset() );
-            QRectF br = doc()->documentToView( geometry/*object->geometry()*/ );
-            br.translate( doc()->zoomItX( diffx ), doc()->zoomItY( diffy ) );
-            br.translate( doc()->zoomItX( -canvas->xOffset() ), doc()->zoomItY( -canvas->yOffset() ) );
-            canvas->repaint( br.toRect() ); // Previous position
-            canvas->repaintObject( object ); // New position
-            createCommand=true;
-        }
-    }
-    if(createCommand) {
-        moveByCmd = new MoveObjectByCmd( i18n( "Move Objects" ), QPointF( diffx, diffy ),
-                                   _objects, doc(), this );
-
-//         m_doc->updateSideBarItem( this );
-    }
-    return moveByCmd;
-}
-
-QUndoCommand* Sheet::moveObject(View *_view,const QPointF &_move,bool key)
-{
-    QList<EmbeddedObject*> _objects;
-    MoveObjectByCmd *moveByCmd=0;
-    Canvas * canvas = _view->canvasWidget();
-    foreach ( EmbeddedObject* object, d->workbook->doc()->embeddedObjects() )
-    {
-        if ( object->isSelected() && !object->isProtect()) {
-
-            QRectF geometry = object->geometry();
-            geometry.translate( -canvas->xOffset(), -canvas->yOffset() );
-            QRectF oldBoundingRect = doc()->documentToView( geometry );
-
-
-            QRectF r = object->geometry();
-            r.translate( _move.x(), _move.y() );
-
-            object->setGeometry( r );
-            _objects.append( object );
-
-            canvas->repaint( oldBoundingRect.toRect() );
-            canvas->repaintObject( object );
-        }
-    }
-
-    if ( key && !_objects.isEmpty())
-        moveByCmd = new MoveObjectByCmd( i18n( "Move Objects" ),
-                                   QPointF( _move ),
-                                   _objects, doc() ,this );
-
-    return moveByCmd;
-}
-
-/*
- * Check if object name already exists.
- */
-bool Sheet::objectNameExists( EmbeddedObject *object, QList<EmbeddedObject*> &list )
-{
-    foreach ( EmbeddedObject* obj, list ) {
-        // object name can exist in current object.
-        if ( obj->getObjectName() == object->getObjectName() &&
-             obj != object ) {
-            return true;
-        }
-    }
-    return false;
-}
-
-void Sheet::unifyObjectName( EmbeddedObject *object ) {
-    if ( object->getObjectName().isEmpty() ) {
-        object->setObjectName( object->getTypeString() );
-    }
-    QString objectName( object->getObjectName() );
-
-    QList<EmbeddedObject*> list( doc()->embeddedObjects() );
-
-    int count = 1;
-
-    while ( objectNameExists( object, list ) ) {
-        count++;
-        QRegExp rx( " \\(\\d{1,3}\\)$" );
-        if ( rx.indexIn( objectName ) != -1 ) {
-            objectName.remove( rx );
-        }
-        objectName += QString(" (%1)").arg( count );
-        object->setObjectName( objectName );
-    }
-}
-#endif // KSPREAD_KOPART_EMBEDDING
-
-
 void Sheet::checkContentDirection( QString const & name )
 {
   /* set sheet's direction to RTL if sheet name is an RTL string */
@@ -2908,47 +2765,6 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     }
     return true;
 }
-
-
-void Sheet::loadOasisObjects( const KoXmlElement &parent, KoOdfLoadingContext& odfContext )
-{
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    KoXmlElement e;
-    KoXmlNode n = parent.firstChild();
-    while( !n.isNull() )
-    {
-        e = n.toElement();
-        if ( e.localName() == "frame" && e.namespaceURI() == KoXmlNS::draw )
-        {
-          EmbeddedObject *obj = 0;
-          KoXmlNode object = KoXml::namedItemNS( e, KoXmlNS::draw, "object" );
-          if ( !object.isNull() )
-          {
-            if ( !object.toElement().attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString()).isNull() )
-                obj = new EmbeddedChart( doc(), this );
-            else
-                obj = new EmbeddedKOfficeObject( doc(), this );
-          }
-          else
-          {
-            KoXmlNode image = KoXml::namedItemNS( e, KoXmlNS::draw, "image" );
-            if ( !image.isNull() )
-              obj = new EmbeddedPictureObject( this, doc()->pictureCollection() );
-            else
-              kDebug(36003) <<"Object type wasn't loaded!";
-          }
-
-          if ( obj )
-          {
-            obj->loadOasis( e, odfContext );
-            insertObject( obj );
-          }
-        }
-        n = n.nextSibling();
-    }
-#endif // KSPREAD_KOPART_EMBEDDING
-}
-
 
 void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
 {
@@ -4545,138 +4361,6 @@ void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
     emit sig_updateView( this );
 }
 
-bool Sheet::insertChart( const QRectF& rect, KoDocumentEntry& documentEntry,
-                         const QRect& dataArea, QWidget* parentWidget )
-{
-    QString errorMsg; // TODO MESSAGE
-    KoDocument* document = documentEntry.createDoc( &errorMsg, doc() );
-    if ( !document )
-    {
-        kDebug() <<"Error inserting chart!";
-        return false;
-    }
-
-    if ( !document->showEmbedInitDialog( parentWidget ) )
-        return false;
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    EmbeddedChart * ch = new EmbeddedChart( doc(), this, document, rect );
-    ch->setDataArea( dataArea );
-    ch->update();
-    ch->chart()->setCanChangeValue( false  );
-
-    KoChart::WizardExtension * wiz = ch->chart()->wizardExtension();
-
-    Range dataRange;
-    dataRange.setRange( dataArea );
-    dataRange.setSheet( this );
-
-    QString rangeString = dataRange.toString();
-
-    if ( wiz )
-        wiz->show( rangeString );
-
-    insertObject( ch );
-#endif // KSPREAD_KOPART_EMBEDDING
-    return true;
-}
-
-#if 0 // KSPREAD_KOPART_EMBEDDING
-bool Sheet::insertChild( const QRectF& rect, KoDocumentEntry& documentEntry,
-                         QWidget* parentWidget )
-{
-    QString errorMsg; // TODO MESSAGE
-    KoDocument* document = documentEntry.createDoc( &errorMsg, doc() );
-    if ( !document )
-    {
-        kDebug() <<"Error inserting child!";
-        return false;
-    }
-    if ( !document->showEmbedInitDialog( parentWidget ) )
-        return false;
-    EmbeddedKOfficeObject* ch = new EmbeddedKOfficeObject( doc(), this, document, rect );
-    insertObject( ch );
-    return true;
-}
-
-bool Sheet::insertPicture( const QPointF& point , const KUrl& url )
-{
-    KoPicture picture = doc()->pictureCollection()->downloadPicture( url , 0 );
-
-    return insertPicture(point,picture);
-}
-
-bool Sheet::insertPicture( const QPointF& point ,  KoPicture& picture )
-{
-
-    if (picture.isNull())
-      return false;
-
-    KoPictureKey key = picture.getKey();
-
-    QRectF destinationRect;
-    destinationRect.setLeft( point.x()  );
-    destinationRect.setTop( point.y()  );
-
-    //Generate correct pixel size - this is a bit tricky.
-    //This ensures that when we load the image it appears
-    //the same size on screen on a 100%-zoom KSpread spreadsheet as it would in an
-    //image viewer or another spreadsheet program such as OpenOffice.
-    //
-    //KoUnit assumes 72DPI, whereas the user's display resolution will probably be
-    //different (eg. 96*96).  So, we convert the actual size in pixels into inches
-    //using the screen display resolution and then use KoUnit to convert back into
-    //the appropriate pixel size KSpread.
-
-    QSizeF destinationSize;
-
-    double inchWidth = (double)picture.getOriginalSize().width() / KoGlobal::dpiX();
-    double inchHeight = (double)picture.getOriginalSize().height() / KoGlobal::dpiY();
-
-    destinationSize.setWidth( KoUnit::fromUserValue(inchWidth,KoUnit::Inch) );
-    destinationSize.setHeight( KoUnit::fromUserValue(inchHeight,KoUnit::Inch) );
-
-    destinationRect.setSize( destinationSize);
-    EmbeddedPictureObject* object = new EmbeddedPictureObject( this, destinationRect, doc()->pictureCollection(),key);
-   // ch->setPicture(key);
-
-    insertObject( object );
-    return true;
-}
-
-bool Sheet::insertPicture( const QPointF& point, const QPixmap& pixmap  )
-{
-  QByteArray data;
-  QBuffer buffer( &data );
-
-  buffer.open( QIODevice::ReadWrite );
-  pixmap.save( &buffer , "PNG" );
-
-  //Reset the buffer so that KoPicture reads the whole file from the beginning
-  //(at the moment the read/write position is at the end)
-  buffer.reset();
-
-  KoPicture picture;
-  picture.load( &buffer , "PNG" );
-
-  doc()->pictureCollection()->insertPicture(picture);
-
-  return insertPicture( point , picture );
-}
-
-void Sheet::insertObject( EmbeddedObject *_obj )
-{
-    doc()->insertObject( _obj );
-    emit sig_updateView( _obj );
-}
-
-void Sheet::changeChildGeometry( EmbeddedKOfficeObject *_child, const QRectF& _rect )
-{
-    _child->setGeometry( _rect );
-
-    emit sig_updateChildGeometry( _child );
-}
-#endif // KSPREAD_KOPART_EMBEDDING
-
 bool Sheet::saveChildren( KoStore* _store, const QString &_path )
 {
     int i = 0;
@@ -4692,40 +4376,6 @@ bool Sheet::saveChildren( KoStore* _store, const QString &_path )
     }
 #endif // KSPREAD_KOPART_EMBEDDING
     return true;
-}
-
-bool Sheet::saveOasisObjects( KoStore * /*store*/, KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int & indexObj, int &partIndexObj )
-{
-#if 0 // KSPREAD_KOPART_EMBEDDING
-  //int i = 0;
-  if ( doc()->embeddedObjects().isEmpty() )
-    return true;
-
-  bool objectFound = false; // object on this sheet?
-  EmbeddedObject::KSpreadOasisSaveContext sc( xmlWriter, mainStyles, indexObj, partIndexObj );
-  foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
-  {
-    if ( object->sheet() == this && ( doc()->savingWholeDocument() || object->isSelected() ) )
-    {
-      if ( !objectFound )
-      {
-        xmlWriter.startElement( "table:shapes" );
-        objectFound = true;
-      }
-      if ( !object->saveOasisObject(sc)  )
-      {
-        xmlWriter.endElement();
-        return false;
-      }
-      ++indexObj;
-    }
-  }
-  if ( objectFound )
-  {
-    xmlWriter.endElement();
-  }
-#endif // KSPREAD_KOPART_EMBEDDING
-  return true;
 }
 
 void Sheet::hideSheet(bool _hide)
@@ -4850,9 +4500,6 @@ void Sheet::setRegionPaintDirty( const Region & region )
     if (!region.isValid())
         return;
 
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    d->paintDirtyList.add(region); // still needed for embedded object repainting
-#endif // KSPREAD_KOPART_EMBEDDING
     doc()->addDamage( new CellDamage( this, region, CellDamage::Appearance ) );
 
 //     kDebug(36004) <<"setRegionPaintDirty"<< static_cast<const Region*>(&region)->name(this);
@@ -4862,18 +4509,6 @@ void Sheet::setRegionPaintDirty( const QRect& rect )
 {
   setRegionPaintDirty( Region( rect ) );
 }
-
-#if 0 // KSPREAD_KOPART_EMBEDDING
-void Sheet::clearPaintDirtyData()
-{
-  d->paintDirtyList.clear();
-}
-
-const Region& Sheet::paintDirtyData() const
-{
-  return d->paintDirtyList;
-}
-#endif // KSPREAD_KOPART_EMBEDDING
 
 #ifndef NDEBUG
 void Sheet::printDebug()

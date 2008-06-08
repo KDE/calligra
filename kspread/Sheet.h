@@ -51,7 +51,6 @@ class KoOasisSettings;
 class KoOdfStylesReader;
 class KoShape;
 class KoShapeSavingContext;
-class KoPicture;
 class KoXmlWriter;
 
 namespace KoChart
@@ -67,7 +66,6 @@ class ColumnFormat;
 class CommentStorage;
 class ConditionsStorage;
 class FormulaStorage;
-class EmbeddedChart;
 class Doc;
 class FusionStorage;
 class GenValidationStyles;
@@ -86,8 +84,6 @@ class Validity;
 class ValidityStorage;
 class ValueStorage;
 class View;
-class EmbeddedKOfficeObject;
-class EmbeddedObject;
 
 /**
  * A sheet contains several cells.
@@ -332,11 +328,6 @@ public:
     /**
      * \ingroup OpenDocument
      */
-    void loadOasisObjects( const KoXmlElement& e, KoOdfLoadingContext& odfContext );
-
-    /**
-     * \ingroup OpenDocument
-     */
     void loadOasisSettings( const KoOasisSettings::NamedMap &settings );
 
     /**
@@ -349,111 +340,8 @@ public:
      */
     void saveOasisPrintStyleLayout( KoGenStyle &style ) const;
 
-    /**
-     * \ingroup OpenDocument
-     */
-    bool saveOasisObjects( KoStore *store, KoXmlWriter &xmlWriter, KoGenStyles& mainStyles, int & indexObj, int &partIndexObj );
-
     //
     //END Methods related to the OpenDocument file format
-    //
-    //////////////////////////////////////////////////////////////////////////
-    //
-    //BEGIN Methods related to embedded objects
-    //
-
-    /**
-     * \ingroup Embedding
-     * @brief Get a list of all selected objects
-     *
-     * @return list of selected objets.
-     */
-    QList<EmbeddedObject*> getSelectedObjects();
-
-    /**
-     * \ingroup Embedding
-     * @brief get the rect for the objects
-     *
-     * @param all true if the rect for all objects should be returned
-     *        false if only the rect for selected objects sould be returned
-     *
-     * @return rect of the objects
-     */
-    QRectF getRealRect( bool all );
-
-    /**
-     * \ingroup Embedding
-     * Moves the selected object.
-     * \return command for undo
-     */
-    QUndoCommand *moveObject(View *_view, double diffx, double diffy);
-
-    /**
-     * \ingroup Embedding
-     * Moves the selected object.
-     * \return command for undo
-     */
-    QUndoCommand *moveObject(View *m_view,const QPointF &_move,bool key);
-
-    /**
-     * \ingroup Embedding
-     * @brief Create a unique name for an object.
-     *
-     * Create a unique name for the object. If no name is set for the object
-     * a name according to its type is created. If the name already exists
-     * append ' (x)'. // FIXME: not allowed by I18N
-     *
-     * @param object to work on
-     */
-    void unifyObjectName( EmbeddedObject *object );
-
-    /**
-     * \ingroup Embedding
-     */
-    bool insertChild( const QRectF& _geometry, KoDocumentEntry&, QWidget* );
-
-    /**
-     * \ingroup Embedding
-     */
-    bool insertChart( const QRectF& _geometry, KoDocumentEntry&, const QRect& _data, QWidget* );
-
-    /**
-     * \ingroup Embedding
-     * Creates a new embedded picture object and inserts it into the sheet next to the currently
-     * selected cell.
-     *
-     * TODO:  Remove this method in future and provide a better way of opening pictures and inserting
-     * them into the sheet.
-     *
-     * @param file The URL of the file to insert.
-     * @param point The the top-left point in the sheet where the picture should be inserted.
-     */
-    bool insertPicture( const QPointF& point , const KUrl& file );
-
-    /**
-     * \ingroup Embedding
-     * Creates a new embedded picture object and inserts it into the sheet at the specified position.
-     *
-     * @param point The top-left position for the new picture object in the sheet
-     * @param pixmap The source pixmap for the new picture
-     */
-    bool insertPicture( const QPointF& point, const QPixmap& pixmap );
-
-    /**
-     * \ingroup Embedding
-     */
-    void changeChildGeometry( EmbeddedKOfficeObject *_child, const QRectF& _geometry );
-
-    /**
-     * \ingroup Embedding
-     * @brief Get the amount of selected objects that belong to this sheet
-     *
-     * @return the amount of select objects in this sheet
-     */
-    int numberSelectedObjects() const;
-
-    //
-    //END Methods related to embedded objects
     //
     //////////////////////////////////////////////////////////////////////////
     //
@@ -963,18 +851,6 @@ public:
 
     /**
      * \ingroup Painting
-     * Remove all records of 'paint dirty' cells
-     */
-    void clearPaintDirtyData();
-
-    /**
-     * \ingroup Painting
-     * Test whether a cell needs repainted
-     */
-    const Region& paintDirtyData() const;
-
-    /**
-     * \ingroup Painting
      * repaints all visible cells
      */
     void updateView();
@@ -1021,10 +897,8 @@ signals:
     void sig_refreshView();
     void sig_updateView( Sheet *_sheet );
     void sig_updateView( Sheet *_sheet, const Region& );
-    void sig_updateView( EmbeddedObject *obj );
     void sig_updateHBorder( Sheet *_sheet );
     void sig_updateVBorder( Sheet *_sheet );
-    void sig_updateChildGeometry( EmbeddedKOfficeObject *_child );
     /**
      * @see setSheetName
      */
@@ -1140,11 +1014,6 @@ protected:
     //////////////////////////////////////////////////////////////////////////
     //
 
-    /**
-     * \ingroup Embedding
-     */
-    void insertObject( EmbeddedObject *_obj );
-
     // helper function for areaIsEmpty
     bool cellIsEmpty( const Cell& cell, TestType _type );
 
@@ -1157,18 +1026,6 @@ protected:
     static QHash<int,Sheet*>* s_mapSheets;
 
 private:
-    /**
-     * \ingroup Embedding
-     * Inserts a picture into the sheet and the given position.  The picture should be added to the
-     * document's picture collection before calling this method.
-     */
-    bool insertPicture( const QPointF& point, KoPicture& picture );
-
-    /**
-     * \ingroup Embedding
-     */
-    bool objectNameExists( EmbeddedObject *object, QList<EmbeddedObject*> &list );
-
     /**
      * \ingroup NativeFormat
      */

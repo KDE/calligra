@@ -44,7 +44,6 @@
 #include "Global.h"
 
 class QDomDocument;
-class QObject;
 class QPainter;
 
 class KCompletion;
@@ -52,9 +51,6 @@ class K3SpellConfig;
 
 class KoGenStyles;
 class KoOasisSettings;
-class KoPicture;
-class KoPictureCollection;
-class KoPictureKey;
 class KoStore;
 class KoXmlWriter;
 class KoDataCenter;
@@ -83,7 +79,6 @@ class RowFormat;
 class StyleManager;
 class UndoAction;
 class LoadingInfo;
-class EmbeddedObject;
 
 /**
  * This class holds the data that makes up a spreadsheet.
@@ -486,8 +481,6 @@ public:
    */
   virtual bool loadXML( QIODevice *, const KoXmlDocument& doc );
 
-  bool savingWholeDocument();
-
 
   /**
    * \ingroup OpenDocument
@@ -500,11 +493,9 @@ public:
    * @param saveFlag either the whole document, or only the selected text/objects.
    * @param plainText must be set when saveFlag==SaveSelected.
    *        It returns the plain text format of the saved data, when available.
-   * @param picture must be set when saveFlag==SaveSelected.
-   *        It returns the selected picture, when exactly one picture was selected.
    */
   bool saveOasisHelper( SavingContext &documentContext, SaveFlag saveFlag,
-                        QString* plainText = 0, KoPicture* picture = 0 );
+                        QString* plainText = 0 );
 
   /**
    * \ingroup OpenDocument
@@ -582,18 +573,6 @@ public:
   KCompletion& completion();
   void addStringCompletion(const QString & stringCompletion);
 
-  /**
-   * Inserts an object to the object list.
-   */
-  void insertObject( EmbeddedObject * obj );
-
-  /**
-   * @return the list of all embedded objects (charts, pictures and koffice
-   *         objects) Use insertObject to add an object to the list
-   */
-  QList<EmbeddedObject*>& embeddedObjects();
-  KoPictureCollection *pictureCollection();
-
   void initConfig();
   void saveConfig();
   void refreshLocale();
@@ -631,7 +610,6 @@ public:
   bool captureAllArrowKeys() const;
 
   // repaint (update) all views
-  void repaint( EmbeddedObject* );
   void repaint( const QRectF& );
 
 #if 0 // UNDOREDOLIMIT
@@ -717,9 +695,6 @@ protected Q_SLOTS:
 
 protected:
   KoView* createViewInstance( QWidget* parent );
-
-  void makeUsedPixmapList();
-  void insertPixmapKey( KoPictureKey key );
 
   /**
    * @reimp Overloaded function of KoDocument.
