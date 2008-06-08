@@ -21,6 +21,7 @@
 #define KPRSOUNDDATA_H
 
 #include <KoShapeUserData.h>
+#include "kpresenter_export.h"
 
 #include <KUrl>
 
@@ -33,7 +34,7 @@ class QIODevice;
  * The binary data for those sounds are saved in this class.
  * This class inherits from KoShapeUserData which means you can set it on any KoShape using
  */
-class KPrSoundData {
+class KPRESENTER_EXPORT KPrSoundData {
 public:
     /**
      * The storage location
