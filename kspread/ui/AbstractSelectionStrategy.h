@@ -17,29 +17,38 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_SELECTION_STRATEGY
-#define KSPREAD_SELECTION_STRATEGY
+#ifndef KSPREAD_ABSTRACT_SELECTION_STRATEGY
+#define KSPREAD_ABSTRACT_SELECTION_STRATEGY
 
-#include "AbstractSelectionStrategy.h"
-#include "kspread_export.h"
+#include <KoInteractionStrategy.h>
+
+#include <Qt>
 
 namespace KSpread
 {
 class Selection;
 
-class KSPREAD_EXPORT SelectionStrategy : public AbstractSelectionStrategy
+class AbstractSelectionStrategy : public KoInteractionStrategy
 {
 public:
     /**
      * Constructor.
      */
-    SelectionStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
+    AbstractSelectionStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
                       const QPointF position, Qt::KeyboardModifiers modifiers);
 
     /**
      * Destructor.
      */
-    virtual ~SelectionStrategy();
+    virtual ~AbstractSelectionStrategy();
+
+    virtual void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers);
+    virtual QUndoCommand* createCommand();
+    virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
+
+protected:
+    Selection* selection() const;
+    const QPointF& startPosition() const;
 
 private:
     class Private;
@@ -48,4 +57,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_SELECTION_STRATEGY
+#endif // KSPREAD_ABSTRACT_SELECTION_STRATEGY

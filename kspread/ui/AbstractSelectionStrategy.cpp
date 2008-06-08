@@ -17,7 +17,7 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "SelectionStrategy.h"
+#include "AbstractSelectionStrategy.h"
 
 #include "Selection.h"
 #include "Sheet.h"
@@ -29,37 +29,68 @@
 
 using namespace KSpread;
 
-class SelectionStrategy::Private
+class AbstractSelectionStrategy::Private
 {
 public:
+    Selection* selection;
+    QPointF start;
 };
 
-SelectionStrategy::SelectionStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
+AbstractSelectionStrategy::AbstractSelectionStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
                                      const QPointF documentPos, Qt::KeyboardModifiers modifiers)
-    : AbstractSelectionStrategy(parent, canvas, selection, documentPos, modifiers)
+    : KoInteractionStrategy(parent, canvas)
     , d(new Private)
 {
-    Q_ASSERT(canvas->shapeManager()->selection()->count() > 0);
-    KoShape* shape = canvas->shapeManager()->selection()->firstSelectedShape();
-    const QPointF position = documentPos - shape->position();
+    Q_UNUSED(modifiers)
+    d->selection = selection;
+    d->start = documentPos;
+}
 
-    // Extend selection, if control modifier is pressed.
+AbstractSelectionStrategy::~AbstractSelectionStrategy()
+{
+    delete d;
+}
+
+void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::KeyboardModifiers modifiers)
+{
+    if (!modifiers & Qt::ShiftModifier)
+        return;
+    Q_ASSERT(m_canvas->shapeManager()->selection()->count() > 0);
+    KoShape* shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    const QPointF position = documentPos - shape->position();
     // In which cell did the user click?
     double xpos;
     double ypos;
-    int col = this->selection()->activeSheet()->leftColumn(position.x(), xpos);
-    int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
+    int col = d->selection->activeSheet()->leftColumn(position.x(), xpos);
+    int row = d->selection->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.
     if (col > KS_colMax || row > KS_rowMax)
+    {
         kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
-    else if (modifiers & Qt::ControlModifier)
-        this->selection()->extend(QPoint(col, row), this->selection()->activeSheet());
-    else
-        this->selection()->initialize(QPoint(col, row), this->selection()->activeSheet());
+        return;
+    }
+    // Update the selection.
+    d->selection->update(QPoint(col, row));
     m_parent->repaintDecorations();
 }
 
-SelectionStrategy::~SelectionStrategy()
+QUndoCommand* AbstractSelectionStrategy::createCommand()
 {
-    delete d;
+    return 0;
+}
+
+void AbstractSelectionStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
+{
+    Q_UNUSED(modifiers)
+    m_parent->repaintDecorations();
+}
+
+Selection* AbstractSelectionStrategy::selection() const
+{
+    return d->selection;
+}
+
+const QPointF& AbstractSelectionStrategy::startPosition() const
+{
+    return d->start;
 }

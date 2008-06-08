@@ -43,9 +43,11 @@
 #include <KoSelection.h>
 #include <KoShapeManager.h>
 
+#include "AutoFillStrategy.h"
 #include "Cell.h"
 #include "Doc.h"
 #include "Global.h"
+#include "MergeStrategy.h"
 #include "Selection.h"
 #include "SelectionStrategy.h"
 #include "Sheet.h"
@@ -60,14 +62,6 @@ using namespace KSpread;
 class TableTool::Private
 {
 public:
-    // If the user is dragging around with the mouse then this tells us what he is doing.
-    // The user may want to mark cells or he started in the lower right corner
-    // of the marker which is something special. The values for the 2 above
-    // methods are called 'Mark' and 'Merge' or 'AutoFill' depending
-    // on the mouse button used. By default this variable holds
-    // the value 'None'.
-    enum { None, Mark, Merge, AutoFill, Resize } mouseAction : 3;
-
     QString userInput;
     Selection* selection;
     TableShape* tableShape;
@@ -275,9 +269,9 @@ KoInteractionStrategy* TableTool::createStrategy(KoPointerEvent* event)
     if (d->selection->selectionHandleArea(canvas()->viewConverter()).contains(position))
     {
         if (event->button() == Qt::LeftButton)
-            kDebug() << "autofill"; // TODO Stefan: autofill
+            return new AutoFillStrategy(this, canvas(), d->selection, event->point, event->modifiers());
         else if (event->button() == Qt::MidButton)
-            kDebug() << "merging"; // TODO Stefan: merging cells
+            return new MergeStrategy(this, canvas(), d->selection, event->point, event->modifiers());
     }
 
     // Pasting with the middle mouse button.

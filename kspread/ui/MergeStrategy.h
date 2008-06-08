@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_SELECTION_STRATEGY
-#define KSPREAD_SELECTION_STRATEGY
+#ifndef KSPREAD_MERGE_STRATEGY
+#define KSPREAD_MERGE_STRATEGY
 
 #include "AbstractSelectionStrategy.h"
 #include "kspread_export.h"
@@ -27,19 +27,21 @@ namespace KSpread
 {
 class Selection;
 
-class KSPREAD_EXPORT SelectionStrategy : public AbstractSelectionStrategy
+class KSPREAD_EXPORT MergeStrategy : public AbstractSelectionStrategy
 {
 public:
     /**
      * Constructor.
      */
-    SelectionStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
-                      const QPointF position, Qt::KeyboardModifiers modifiers);
+    MergeStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
+                  const QPointF position, Qt::KeyboardModifiers modifiers);
 
     /**
      * Destructor.
      */
-    virtual ~SelectionStrategy();
+    virtual ~MergeStrategy();
+
+    virtual QUndoCommand* createCommand();
 
 private:
     class Private;
@@ -48,4 +50,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_SELECTION_STRATEGY
+#endif // KSPREAD_MERGE_STRATEGY

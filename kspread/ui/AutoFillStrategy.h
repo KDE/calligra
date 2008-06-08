@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_SELECTION_STRATEGY
-#define KSPREAD_SELECTION_STRATEGY
+#ifndef KSPREAD_AUTOFILL_STRATEGY
+#define KSPREAD_AUTOFILL_STRATEGY
 
 #include "AbstractSelectionStrategy.h"
 #include "kspread_export.h"
@@ -27,19 +27,21 @@ namespace KSpread
 {
 class Selection;
 
-class KSPREAD_EXPORT SelectionStrategy : public AbstractSelectionStrategy
+class KSPREAD_EXPORT AutoFillStrategy : public AbstractSelectionStrategy
 {
 public:
     /**
      * Constructor.
      */
-    SelectionStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
-                      const QPointF position, Qt::KeyboardModifiers modifiers);
+    AutoFillStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
+                     const QPointF position, Qt::KeyboardModifiers modifiers);
 
     /**
      * Destructor.
      */
-    virtual ~SelectionStrategy();
+    virtual ~AutoFillStrategy();
+
+    virtual QUndoCommand* createCommand();
 
 private:
     class Private;
@@ -48,4 +50,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_SELECTION_STRATEGY
+#endif // KSPREAD_AUTOFILL_STRATEGY

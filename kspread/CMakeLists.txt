@@ -143,12 +143,15 @@ SET (interfaces_DIR_SRCS
 	)
 
 SET (ui_DIR_SRCS
+	ui/AbstractSelectionStrategy.cpp
+	ui/AutoFillStrategy.cpp
 	ui/Border.cpp
 	ui/Canvas.cpp
 	ui/CellView.cpp
 	ui/DefaultTool.cpp
 	ui/DefaultToolFactory.cpp
 	ui/Editors.cpp
+	ui/MergeStrategy.cpp
 	ui/PrintJob.cpp
 	ui/SelectionStrategy.cpp
 	ui/SheetView.cpp
