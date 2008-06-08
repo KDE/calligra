@@ -1,0 +1,8 @@
+[Desktop Entry]
+Icon=
+Name=Presentation Event Actions
+X-KDE-ServiceTypes=KOffice/PresentationEventAction
+Type=Service
+X-KDE-Library=kpresentereventactions
+X-Flake-MinVersion=0
+X-Flake-PluginVersion=1
