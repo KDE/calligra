@@ -148,28 +148,6 @@ QRect SheetPrint::cellsPrintRange()
 {
     // Find maximum right/bottom cell with content
     QRect cell_range( m_pSheet->usedArea() );
-
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    // Now look at the children
-    Q3PtrListIterator<KoDocumentChild> cit( m_pDoc->children() );
-    double dummy;
-    int i;
-    for( ; cit.current(); ++cit )
-    {
-        //QRect, because KoChild doesn't use KoRect yet
-        QRect bound = cit.current()->boundingRect();
-
-        i = m_pSheet->leftColumn( bound.right(), dummy );
-        if ( i > cell_range.right() )
-            cell_range.setRight( i );
-
-        i = m_pSheet->topRow( bound.bottom(), dummy );
-        if ( i > cell_range.bottom() )
-            cell_range.setBottom( i );
-    }
-    cell_range = cell_range.intersect( m_printRange );
-#endif // KSPREAD_KOPART_EMBEDDING
-
     return cell_range;
 }
 
@@ -214,28 +192,6 @@ bool SheetPrint::pageNeedsPrinting( QRect& page_range )
 	    	return true;
 	    }
                // filled = true;
-
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    //Page empty, but maybe children on it?
-
-        QRect intView = QRect( QPoint( m_zoomHandler->documentToViewX( m_pSheet->columnPosition( page_range.left() ) ),
-                                       m_zoomHandler->documentToViewY( m_pSheet->rowPosition( page_range.top() ) ) ),
-                               QPoint( m_zoomHandler->documentToViewX( m_pSheet->columnPosition( page_range.right() ) +
-                                                        m_pSheet->columnFormat( page_range.right() )->width() ),
-                                       m_zoomHandler->documentToViewY( m_pSheet->rowPosition( page_range.bottom() ) +
-                                                        m_pSheet->rowFormat( page_range.bottom() )->height() ) ) );
-
-        Q3PtrListIterator<KoDocumentChild> it( m_pDoc->children() );
-        for( ;it.current(); ++it )
-        {
-            QRect bound = it.current()->boundingRect();
-            if ( bound.intersects( intView ) )
-	    {
-                return true;
-	    }
-		//filled = true;
-        }
-#endif // KSPREAD_KOPART_EMBEDDING
 
     //Page has no visible content on it, so we don't need to paint it
     return false;
@@ -311,34 +267,6 @@ bool SheetPrint::print( QPainter &painter, QPrinter *_printer )
     kDebug(36001) <<"PRINTING" << page_list.count() <<" pages";
     m_uprintPages = page_list.count();
 
-
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    //Cache all object so they only need to be repainted once.
-    foreach ( EmbeddedObject* object, m_pDoc->embeddedObjects() )
-    {
-      EmbeddedObject *obj = object;
-      if ( obj->sheet() != m_pSheet ||
-           !( (( obj->getType() == OBJECT_KOFFICE_PART || obj->getType() == OBJECT_PICTURE ) && m_bPrintObjects) ||
-           ( obj->getType() == OBJECT_CHART && m_bPrintCharts ) ) )
-        continue;
-
-      QRect zoomRectOld = m_pDoc->zoomRectOld( object->geometry() );
-      QPixmap *p = new QPixmap( zoomRectOld.size() );
-      QPainter painter(p);
-      painter.fillRect( p->rect(), QColor("white") );
-      painter.translate( -zoomRectOld.x(), -zoomRectOld.y() ); //we cant to paint at (0,0)
-      bool const isSelected = object->isSelected();
-      object->setSelected( false );
-      object->draw( &painter );
-      painter.end();
-      object->setSelected( isSelected );
-
-      PrintObject *po = new PrintObject();
-      m_printObjects.append( po );
-      po->obj = object;
-      po->p = p;
-    }
-#endif // KSPREAD_KOPART_EMBEDDING
 
     if ( page_list.count() == 0 )
     {
@@ -485,55 +413,6 @@ void SheetPrint::printRect( QPainter& painter, const QPointF& topLeft,
     m_pSheetView->setViewConverter( m_zoomHandler );
     m_pSheetView->setPaintCellRange( cellRange );
     m_pSheetView->paintCells( painter.device(), painter, paintRect, topLeft );
-
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    //
-    // Draw the children
-    //
-    QRect zoomedView = m_zoomHandler->documentToView( view ).toRect();
-    //QPtrListIterator<KoDocumentChild> it( m_pDoc->children() );
-    //QPtrListIterator<EmbeddedObject> itObject( m_pDoc->embeddedObjects() );
-
-    QList<PrintObject *>::iterator itObject;
-    for ( itObject = m_printObjects.begin(); itObject != m_printObjects.end(); ++itObject ) {
-          EmbeddedObject *obj = (*itObject)->obj;
-//        QString tmp=QString("Testing child %1/%2 %3/%4 against view %5/%6 %7/%8")
-//        .arg(it.current()->contentRect().left())
-//        .arg(it.current()->contentRect().top())
-//        .arg(it.current()->contentRect().right())
-//        .arg(it.current()->contentRect().bottom())
-//        .arg(view.left()).arg(view.top()).arg(zoomedView.right()).arg(zoomedView.bottom());
-//        kDebug(36001)<<tmp<<" offset"<<_childOffset.x()<<"/"<<_childOffset.y();
-
-          QRectF const bound = obj->geometry();
-          QRect zoomedBound = m_pDoc->zoomRectOld( QRectF(bound.left(), bound.top(),
-              bound.width(),
-              bound.height() ) );
-#if 1
-//         kDebug(36001)  <<"cellRange(): Bounding rect of view:" << view
-//             << endl;
-//         kDebug(36001)  <<"cellRange(): Bounding rect of zoomed view:"
-//             << zoomedView << endl;
-//         kDebug(36001)  <<"cellRange(): Bounding rect of child:" << bound
-//             << endl;
-//         kDebug(36001)  <<"cellRange(): Bounding rect of zoomed child:"
-//             << zoomedBound << endl;
-#endif
-    if ( obj->sheet() == m_pSheet  && zoomedBound.intersects( zoomedView ) )
-    {
-            painter.save();
-
-            painter.translate( -zoomedView.left() + m_zoomHandler->documentToViewX( topLeft.x() ),
-                                -zoomedView.top() + m_zoomHandler->documentToViewY( topLeft.y() ) );
-
-            //obj->draw( &painter );
-            painter.drawPixmap( m_pDoc->zoomRectOld( obj->geometry() ).topLeft(), *(*itObject)->p ); //draw the cached object
-
-            //painter.fillRect(zoomedBound, QBrush("red")); //for debug purpose
-            painter.restore();
-        }
-    }
-#endif // KSPREAD_KOPART_EMBEDDING
 
     //Don't let obscuring cells and children overpaint this area
     clipRegion -= QRegion((int)(paperLayout().left + topLeft.x()),

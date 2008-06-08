@@ -59,6 +59,7 @@
 #include <kactioncollection.h>
 #include <kconfig.h>
 #include <kcomponentdata.h>
+#include <kdatatool.h>
 #include <kdebug.h>
 #include <kdeversion.h>
 #include <kfind.h>
@@ -80,6 +81,7 @@
 #include <kstandarddirs.h>
 #include <ktemporaryfile.h>
 #include <KToggleAction>
+#include <ktoolinvocation.h>
 #include <kparts/event.h>
 #include <k3listview.h>
 #include <kpushbutton.h>
@@ -88,21 +90,20 @@
 #include <knotifyconfigwidget.h>
 
 // KOffice includes
-#include <kdatatool.h>
 #include <KoGlobal.h>
 #include <KoCanvasController.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoCharSelectDia.h>
 #include <KoColor.h>
+#include <KoColorSetAction.h>
 #include <KoMainWindow.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfReadStore.h>
 #include <KoOdfStylesReader.h>
-#include <KoPartSelectAction.h>
 #include <KoShapeController.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoColorSetAction.h>
+#include <KoStore.h>
 #include <KoTabBar.h>
 #include <KoToolBox.h>
 #include <KoToolBoxFactory.h>
@@ -110,9 +111,8 @@
 #include <KoToolDockerFactory.h>
 #include <KoToolManager.h>
 #include <KoToolRegistry.h>
-// #include <Toolbox.h>
 #include <KoTemplateCreateDia.h>
-#include <ktoolinvocation.h>
+#include <KoXmlNS.h>
 #include <KoZoomAction.h>
 #include <KoZoomController.h>
 #include <KoZoomHandler.h>
@@ -134,10 +134,10 @@
 #include "Localization.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
-#include "Object.h"
 #include "RecalcManager.h"
 #include "Selection.h"
 #include "ShapeApplicationData.h"
+#include "Sheet.h"
 #include "SheetPrint.h"
 #include "SheetView.h"
 #include "Style.h"
@@ -155,7 +155,6 @@
 #include "commands/ConditionCommand.h"
 #include "commands/DataManipulators.h"
 #include "commands/DeleteCommand.h"
-#include "commands/EmbeddedObjectCommands.h"
 #include "commands/IndentationCommand.h"
 #include "commands/LinkCommand.h"
 #include "commands/MacroCommand.h"
@@ -282,17 +281,8 @@ public:
     QPoint findPos;
     QPoint findEnd;
 
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    InsertHandler* insertHandler;
-#endif // KSPREAD_KOPART_EMBEDDING
-
     // Insert special character dialog
     KoCharSelectDia* specialCharDlg;
-
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    // Holds a guarded pointer to the transformation toolbox.
-    QPointer<KoTransformToolBox> transformToolBox;
-#endif // KSPREAD_KOPART_EMBEDDING
 
     // the last popup menu (may be 0).
     // Since only one popup menu can be opened at once, its pointer is stored here.
@@ -302,11 +292,7 @@ public:
 
     QMenu *popupRow;
     QMenu *popupColumn;
-    QMenu* popupChild;       // for embedded children
     QMenu* popupListChoose;  // for list of choose
-
-    // the child for which the popup menu has been opened.
-    Child* popupChildObject;
 
     // spell-check context
     struct
@@ -359,7 +345,6 @@ public:
 
     // cell formatting
     QAction * cellLayout;
-    QAction *actionExtraProperties;
     QAction * defaultFormat;
     KToggleAction* bold;
     KToggleAction* italic;
@@ -498,9 +483,6 @@ public:
     QAction * textToColumns;
     QAction * multipleOperations;
     QAction * createTemplate;
-    KoPartSelectAction *insertPart;
-    KToggleAction* insertChartFrame;
-    QAction * insertPicture;
     QAction * customList;
     QAction * spellChecking;
     QAction * inspector;
@@ -537,10 +519,6 @@ void View::Private::initActions()
   actions->cellLayout->setShortcut( QKeySequence( Qt::CTRL+ Qt::ALT+ Qt::Key_F));
   connect(actions->cellLayout, SIGNAL(triggered(bool)), view, SLOT( layoutDlg() ));
   actions->cellLayout->setToolTip( i18n("Set the cell formatting") );
-
-  actions->actionExtraProperties  = new KAction(KIcon( "document-properties" ), i18n("&Properties"), view);
-  ac->addAction("extra_properties", actions->actionExtraProperties );
-  connect(actions->actionExtraProperties, SIGNAL(triggered(bool)), view, SLOT( extraProperties() ));
 
   actions->defaultFormat  = new KAction(i18n("Default"), view);
   ac->addAction("default", actions->defaultFormat );
@@ -1037,19 +1015,6 @@ void View::Private::initActions()
   actions->insertSpecialChar->setToolTip(i18n("Insert one or more symbols or letters not found on the keyboard"));
   connect(actions->insertSpecialChar, SIGNAL(triggered(bool)), view, SLOT(insertSpecialChar()));
 
-  actions->insertPart = new KoPartSelectAction( i18n("&Object"), "frame_query",      view, SLOT( insertObject() ), ac, "insertPart");
-  actions->insertPart->setToolTip(i18n("Insert an object from another program"));
-
-  actions->insertChartFrame  = new KToggleAction(KIcon( "insert_chart" ), i18n("&Chart"), view);
-  ac->addAction("insertChart", actions->insertChartFrame );
-  connect(actions->insertChartFrame, SIGNAL(triggered(bool)), view, SLOT( insertChart() ));
-  actions->insertChartFrame->setToolTip(i18n("Insert a chart"));
-
-  actions->insertPicture  = new KAction(i18n("&Picture"), view);
-  ac->addAction("insertPicture", actions->insertPicture );
-  connect(actions->insertPicture, SIGNAL(triggered(bool)),view, SLOT( insertPicture() ));
-  actions->insertPicture->setToolTip(i18n("Insert a picture"));
-
   actions->insertFromClipboard  = new KAction(KIcon("klipper"), i18n("From &Clipboard..."), view);
   actions->insertFromClipboard->setIconText(i18n("Clipboard"));
   ac->addAction("insertFromClipboard", actions->insertFromClipboard );
@@ -1069,11 +1034,6 @@ void View::Private::initActions()
   connect(actions->insertFromDatabase, SIGNAL(triggered(bool)),view, SLOT( insertFromDatabase() ));
   actions->insertFromDatabase->setToolTip(i18n("Insert data from a SQL database"));
 #endif
-
-//   actions->transform = new KAction( i18n("Transform Object..."), "rotate",
-//       0, view, SLOT( transformPart() ), ac, "transform" );
-//   actions->transform->setToolTip(i18n("Rotate the contents of the cell"));
-//   actions->transform->setEnabled( false );
 
   actions->sort  = new KAction(i18n("&Sort..."), view);
   ac->addAction("sort", actions->sort );
@@ -1498,10 +1458,8 @@ void View::Private::adjustActions( bool mode )
   actions->calcCountA->setEnabled( mode );
   actions->calcSum->setEnabled( mode );
   actions->calcNone->setEnabled( mode );
-  actions->insertPart->setEnabled( mode );
   actions->createStyle->setEnabled( mode );
   actions->selectStyle->setEnabled( mode );
-  actions->insertChartFrame->setEnabled( mode );
 
   actions->autoFormat->setEnabled( false );
   actions->sort->setEnabled( false );
@@ -1529,10 +1487,7 @@ void View::Private::adjustActions( bool mode )
   formulaButton->setEnabled( mode );
 
   if ( activeSheet )
-  {
     selection->update();
-    view->objectSelectedChanged();
-  }
 }
 
 void View::Private::adjustActions( Cell cell )
@@ -1686,9 +1641,7 @@ View::View( QWidget *_parent, Doc *_doc )
     d->popupMenu   = 0;
     d->popupColumn = 0;
     d->popupRow    = 0;
-    d->popupChild   = 0;
     d->popupListChoose = 0;
-    d->popupChildObject = 0;
 
     d->searchInSheets.currentSheet = 0;
     d->searchInSheets.firstSheet = 0;
@@ -1705,9 +1658,6 @@ View::View( QWidget *_parent, Doc *_doc )
     d->spell.spellEndCellY   = 0;
     d->spell.spellCheckSelection = false;
 
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    d->insertHandler = 0;
-#endif // KSPREAD_KOPART_EMBEDDING
     d->specialCharDlg = 0;
 
     setComponentData( Factory::global() );
@@ -1720,24 +1670,6 @@ View::View( QWidget *_parent, Doc *_doc )
     initView();
 
     d->initActions();
-
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    // Handler for moving and resizing embedded parts
-    KoContainerHandler* h = new KoContainerHandler( this, d->canvas );
-    connect( h, SIGNAL( popupMenu( KoChild*, const QPoint& ) ), this, SLOT( popupChildMenu( KoChild*, const QPoint& ) ) );
-#endif // KSPREAD_KOPART_EMBEDDING
-
-    connect( this, SIGNAL( childSelected( KoDocumentChild* ) ),
-             this, SLOT( slotChildSelected( KoDocumentChild* ) ) );
-    connect( this, SIGNAL( childUnselected( KoDocumentChild* ) ),
-             this, SLOT( slotChildUnselected( KoDocumentChild* ) ) );
-    // If a selected part becomes active this is like it is deselected
-    // just before.
-    connect( this, SIGNAL( childActivated( KoDocumentChild* ) ),
-             this, SLOT( slotChildUnselected( KoDocumentChild* ) ) );
-
-    connect( d->canvas, SIGNAL( objectSelectedChanged() ),
-             this, SLOT( objectSelectedChanged() ) );
 
     connect( doc()->map(), SIGNAL( sig_addSheet( Sheet* ) ), SLOT( slotAddSheet( Sheet* ) ) );
 
@@ -1780,10 +1712,6 @@ View::~View()
     //  ElapsedTime el( "~View" );
     if ( doc()->isReadWrite() ) // make sure we're not embedded in Konq
         deleteEditor( true );
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    if ( !d->transformToolBox.isNull() )
-        delete (&*d->transformToolBox);
-#endif // KSPREAD_KOPART_EMBEDDING
     /*if (d->calcLabel)
     {
         disconnect(d->calcLabel,SIGNAL(pressed( int )),this,SLOT(statusBarClicked(int)));
@@ -1806,15 +1734,8 @@ View::~View()
     delete d->popupColumn;
     delete d->popupRow;
     delete d->popupMenu;
-    delete d->popupChild;
     delete d->popupListChoose;
     delete d->calcLabel;
-//     delete d->dcop;
-
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    delete d->insertHandler;
-    d->insertHandler = 0;
-#endif // KSPREAD_KOPART_EMBEDDING
 
     delete d->actions;
     delete d->zoomController;
@@ -2066,21 +1987,6 @@ Selection* View::choice() const
 {
   return d->choice;
 }
-
-#if 0 // KSPREAD_KOPART_EMBEDDING
-void View::resetInsertHandle()
-{
-  d->actions->insertChartFrame->setChecked( false );
- // d->actions->insertPicture->setChecked( false );
-
-  d->insertHandler = 0;
-}
-
-bool View::isInsertingObject()
-{
-    return d->insertHandler;
-}
-#endif // KSPREAD_KOPART_EMBEDDING
 
 const Sheet* View::activeSheet() const
 {
@@ -2820,16 +2726,6 @@ void View::updateEditWidget()
 
 void View::activateFormulaEditor()
 {
-}
-
-void View::objectSelectedChanged()
-{
-#if 0 // KSPREAD_KOPART_EMBEDDING
-  if ( d->canvas->isObjectSelected() )
-    d->actions->actionExtraProperties->setEnabled( true );
-  else
-    d->actions->actionExtraProperties->setEnabled( false );
-#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 void View::updateReadWrite( bool readwrite )
@@ -3708,8 +3604,6 @@ void View::addSheet( Sheet * _t )
   connect( _t->print(), SIGNAL( sig_updateView( Sheet* ) ), SLOT( slotUpdateView( Sheet* ) ) );
   connect( _t, SIGNAL( sig_updateView( Sheet *, const Region& ) ),
                     SLOT( slotUpdateView( Sheet*, const Region& ) ) );
-  connect( _t, SIGNAL( sig_updateView( EmbeddedObject* )), SLOT( slotUpdateView( EmbeddedObject* ) ) );
-
   connect( _t, SIGNAL( sig_updateHBorder( Sheet * ) ),
                     SLOT( slotUpdateHBorder( Sheet * ) ) );
   connect( _t, SIGNAL( sig_updateVBorder( Sheet * ) ),
@@ -3722,10 +3616,6 @@ void View::addSheet( Sheet * _t )
                     this, SLOT( slotSheetShown( Sheet* ) ) );
   connect( _t, SIGNAL( sig_SheetRemoved( Sheet* ) ),
                     this, SLOT( slotSheetRemoved( Sheet* ) ) );
-  // ########### Why do these signals not send a pointer to the sheet?
-  // This will lead to bugs.
-  connect( _t, SIGNAL( sig_updateChildGeometry( EmbeddedKOfficeObject* ) ),
-                    SLOT( slotUpdateChildGeometry( EmbeddedKOfficeObject* ) ) );
 
   if ( !d->loading )
     updateBorderButton();
@@ -4028,13 +3918,6 @@ void View::copySelection()
   if ( !d->activeSheet )
     return;
 
-#if 0 // KSPREAD_KOPART_EMBEDDING
-  if ( canvasWidget()->isObjectSelected() )
-  {
-    canvasWidget()->copyOasisObjects();
-    return;
-  }
-#endif // KSPREAD_KOPART_EMBEDDING
   if ( !d->canvas->editor() )
   {
     d->activeSheet->copySelection( selection() );
@@ -4060,27 +3943,6 @@ void View::cutSelection()
     //don't used this function when we edit a cell.
     doc()->emitBeginOperation(false);
 
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    if ( canvasWidget()->isObjectSelected() )
-    {
-        canvasWidget()->copyOasisObjects();
-        doc()->emitEndOperation();
-
-        doc()->beginMacro( i18n( "Cut Objects" ) );
-        foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
-        {
-            if ( object->sheet() == canvasWidget()->activeSheet() && object->isSelected() )
-            {
-                RemoveObjectCommand *cmd = new RemoveObjectCommand( object, true );
-                doc()->addCommand( cmd );
-            }
-        }
-        canvasWidget()->setMouseSelectedObject( false );
-        doc()->endMacro();
-
-        return;
-    }
-#endif // KSPREAD_KOPART_EMBEDDING
     if ( !d->canvas->editor() )
     {
         d->activeSheet->cutSelection( selection() );
@@ -4106,9 +3968,6 @@ void View::paste()
 
   if ( mimeData->hasFormat( "application/vnd.oasis.opendocument.spreadsheet" ) )
   {
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    canvasWidget()->deselectAllObjects();
-#endif // KSPREAD_KOPART_EMBEDDING
     QByteArray returnedTypeMime = "application/vnd.oasis.opendocument.spreadsheet";
     QByteArray arr = mimeData->data( returnedTypeMime );
     if( arr.isEmpty() )
@@ -4170,17 +4029,6 @@ void View::paste()
       return;
 
     d->doc->namedAreaManager()->loadOdf(body);
-  }
-  else
-  {
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    //TODO:  What if the clipboard data is available in both pixmap and OASIS format? (ie. for embedded parts)
-    QPixmap clipboardPixmap = QApplication::clipboard()->pixmap( QClipboard::Clipboard );
-    if (!clipboardPixmap.isNull())
-    {
-        d->activeSheet->insertPicture( markerDocumentPosition()  , clipboardPixmap );
-    }
-#endif // KSPREAD_KOPART_EMBEDDING
   }
 
   doc()->emitBeginOperation( false );
@@ -4858,101 +4706,6 @@ void View::insertFromClipboard()
       dialog.exec();
 }
 
-void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
-{
-    if ( !d->activeSheet )
-      return;
-
-    // Transform the view coordinates to document coordinates
-    QRectF unzoomedRect = zoomHandler()->viewToDocument( _geometry );
-    unzoomedRect.translate( d->canvas->xOffset(), d->canvas->yOffset() );
-
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    InsertObjectCommand *cmd = 0;
-    if ( d->selection->isColumnOrRowSelected() )
-    {
-      KMessageBox::error( this, i18n("Area is too large."));
-      return;
-    }
-    else
-      cmd = new InsertObjectCommand( unzoomedRect, _e, d->selection->lastRange(), d->canvas  );
-
-    doc()->addCommand( cmd );
-#endif // KSPREAD_KOPART_EMBEDDING
-}
-
-void View::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
-{
-#if 0 // KSPREAD_KOPART_EMBEDDING
-  if ( !d->activeSheet )
-    return;
-
-  // Transform the view coordinates to document coordinates
-  QRectF unzoomedRect = zoomHandler()->viewToDocument( _geometry );
-  unzoomedRect.translate( d->canvas->xOffset(), d->canvas->yOffset() );
-
-  InsertObjectCommand *cmd = new InsertObjectCommand( unzoomedRect, _e, d->canvas );
-  doc()->addCommand( cmd );
-#endif // KSPREAD_KOPART_EMBEDDING
-}
-
-QPointF View::markerDocumentPosition()
-{
-  QPoint marker=selection()->marker();
-
-  return QPointF( d->activeSheet->columnPosition(marker.x()),
-            d->activeSheet->rowPosition(marker.y()) );
-}
-
-void View::insertPicture()
-{
-#if 0 // KSPREAD_KOPART_EMBEDDING
-  //Note:  We don't use the usual insert handler here (which allows the user to drag-select the target area
-  //for the object) because when inserting raster graphics, it is usually desireable to insert at 100% size,
-  //since the graphic won't look right if inserted with an incorrect aspect ratio or if blurred due to the
-  //scaling.  If the user wishes to change the size and/or aspect ratio, they can do that afterwards.
-  //This behaviour can be seen in other spreadsheets.
-  //-- Robert Knight 12/02/06 <robertknight@gmail.com>
-
-  KUrl file = KFileDialog::getImageOpenUrl( KUrl(), d->canvas );
-
-  if (file.isEmpty())
-  return;
-
-  if ( !d->activeSheet )
-      return;
-
-  InsertObjectCommand *cmd = new InsertObjectCommand( QRectF(markerDocumentPosition(),QSizeF(0,0)) , file, d->canvas );
-  doc()->addCommand( cmd );
-#endif // KSPREAD_KOPART_EMBEDDING
-}
-
-void View::slotUpdateChildGeometry( EmbeddedKOfficeObject * /*_child*/ )
-{
-    // ##############
-    // TODO
-    /*
-  if ( _child->sheet() != d->activeSheet )
-    return;
-
-  // Find frame for child
-  ChildFrame *f = 0;
-  QPtrListIterator<ChildFrame> it( m_lstFrames );
-  for ( ; it.current() && !f; ++it )
-    if ( it.current()->child() == _child )
-      f = it.current();
-
-  assert( f != 0 );
-
-  // Are we already up to date ?
-  if ( _child->geometry() == f->partGeometry() )
-    return;
-
-  // TODO zooming
-  f->setPartGeometry( _child->geometry() );
-    */
-}
-
 void View::toggleProtectDoc( bool mode )
 {
    if ( !doc() || !doc()->map() )
@@ -5269,56 +5022,6 @@ void View::keyPressEvent ( QKeyEvent* _ev )
     QApplication::sendEvent( d->canvas, _ev );
 }
 
-KoDocument * View::hitTest( const QPoint& /*pos*/ )
-{
-//     // Code copied from KoView::hitTest
-//     KoViewChild *viewChild;
-//
-//     QMatrix m = matrix();
-//     m.translate( d->canvas->xOffset() / zoomHandler()->zoomedResolutionX(),
-//                  d->canvas->yOffset() / zoomHandler()->zoomedResolutionY() );
-//
-//     KoDocumentChild *docChild = selectedChild();
-//     if ( docChild )
-//     {
-//         if ( ( viewChild = child( docChild->document() ) ) )
-//         {
-//             if ( viewChild->frameRegion( m ).contains( pos ) )
-//                 return 0;
-//         }
-//         else
-//             if ( docChild->frameRegion( m ).contains( pos ) )
-//                 return 0;
-//     }
-//
-//     docChild = activeChild();
-//     if ( docChild )
-//     {
-//         if ( ( viewChild = child( docChild->document() ) ) )
-//         {
-//             if ( viewChild->frameRegion( m ).contains( pos ) )
-//                 return 0;
-//         }
-//         else
-//             if ( docChild->frameRegion( m ).contains( pos ) )
-//                 return 0;
-//     }
-//
-//     QPtrListIterator<KoDocumentChild> it( doc()->children() );
-//     for (; it.current(); ++it )
-//     {
-//         // Is the child document on the visible sheet ?
-//         if ( ((EmbeddedKOfficeObject*)it.current())->sheet() == d->activeSheet )
-//         {
-//             KoDocument *doc = it.current()->hitTest( pos, m );
-//             if ( doc )
-//                 return doc;
-//         }
-//     }
-//
-  return doc();
-}
-
 int View::leftBorder() const
 {
   return d->vBorderWidget->width();
@@ -5400,43 +5103,6 @@ void View::refreshView()
 
 void View::resizeEvent( QResizeEvent * )
 {
-}
-
-void View::popupChildMenu( KoChild* child, const QPoint& /*global_pos*/ )
-{
-    if ( !child )
-  return;
-
-    delete d->popupChild;
-
-//     d->popupChildObject = static_cast<EmbeddedKOfficeObject*>(child);
-//
-//     d->popupChild = new QPopupMenu( this );
-//
-//     d->popupChild->insertItem( i18n("Delete Embedded Document"), this, SLOT( slotPopupDeleteChild() ) );
-//
-//     d->popupChild->popup( global_pos );
-
-}
-
-void View::slotPopupDeleteChild()
-{
-//     if ( !d->popupChildObject || !d->popupChildObject->sheet() )
-//   return;
-
-    //Removed popup warning dialog because
-    // a) It is annoying from a user's persepective
-    // b) The behaviour should be consistant with other KOffice apps
-
-    /*int ret = KMessageBox::warningContinueCancel(this,i18n("You are about to remove this embedded document.\nDo you want to continue?"),i18n("Delete Embedded Document"),KGuiItem(i18n("&Delete"),"edit-delete"));
-    if ( ret == KMessageBox::Continue )
-    {
-
-}*/
-//     doc()->emitBeginOperation(false);
-//     d->popupChildObject->sheet()->deleteChild( d->popupChildObject );
-//     d->popupChildObject = 0;
-//     doc()->emitEndOperation();
 }
 
 void View::popupColumnMenu( const QPoint & _point )
@@ -5726,22 +5392,6 @@ void View::openPopupMenu( const QPoint & _point )
 
     d->popupMenu = new QMenu();
 
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    EmbeddedObject *obj;
-    if ( d->canvas->isObjectSelected() && ( obj = d->canvas->getObject( d->canvas->mapFromGlobal( _point ), d->activeSheet ) ) && obj->isSelected() )
-    {
-      d->popupMenu->addAction( d->actions->clearAll );
-      d->popupMenu->addSeparator();
-      d->popupMenu->addAction( d->actions->cut );
-      d->popupMenu->addAction( d->actions->copy );
-      d->popupMenu->addAction( d->actions->paste );
-      d->popupMenu->popup( _point );
-      d->popupMenu->addSeparator();
-      d->popupMenu->addAction( d->actions->actionExtraProperties );
-      return;
-    }
-#endif // KSPREAD_KOPART_EMBEDDING
-
     Cell cell = Cell( d->activeSheet, selection()->marker().x(), selection()->marker().y() );
 
     bool isProtected = d->activeSheet->isProtected();
@@ -5859,31 +5509,6 @@ void View::clearAll()
     command->setSheet( activeSheet() );
     command->add( *selection() );
     command->execute();
-
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    if ( canvasWidget()->isObjectSelected() )
-    {
-      deleteSelectedObjects();
-      return;
-    }
-#endif
-}
-
-void View::deleteSelectedObjects()
-{
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    doc()->beginMacro( i18n( "Remove Object" ) );
-    foreach ( EmbeddedObject* object, doc()->embeddedObjects() )
-    {
-        if ( object->sheet() == canvasWidget()->activeSheet() && object->isSelected() )
-        {
-            RemoveObjectCommand *cmd = new RemoveObjectCommand( object );
-            doc()->addCommand( cmd );
-        }
-    }
-    canvasWidget()->setMouseSelectedObject( false );
-    doc()->endMacro();
-#endif // KSPREAD_KOPART_EMBEDDING
 }
 
 void View::adjust()
@@ -6139,31 +5764,6 @@ void View::layoutDlg()
     dialog.exec();
 }
 
-void View::extraProperties()
-{
-    if (!activeSheet())
-      return;
-    //d->canvas->setToolEditMode( TEM_MOUSE );
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    d->m_propertyEditor = new PropertyEditor( this, "KPrPropertyEditor", d->activeSheet, doc() );
-    d->m_propertyEditor->setWindowTitle( i18n( "Properties" ) );
-
-    connect( d->m_propertyEditor, SIGNAL( propertiesOk() ), this, SLOT( propertiesOk() ) );
-    d->m_propertyEditor->exec();
-    disconnect( d->m_propertyEditor, SIGNAL( propertiesOk() ), this, SLOT( propertiesOk() ) );
-
-    delete d->m_propertyEditor;
-    d->m_propertyEditor = 0;
-#endif // KSPREAD_KOPART_EMBEDDING
-}
-
-void View::propertiesOk()
-{
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    d->m_propertyEditor->executeCommand();
-#endif // KSPREAD_KOPART_EMBEDDING
-}
-
 void View::styleDialog()
 {
     StyleManagerDialog dialog( this, doc()->styleManager() );
@@ -6408,56 +6008,6 @@ void View::percent( bool b )
     manipulator->execute();
 }
 
-void View::insertObject()
-{
-#if 0 // KSPREAD_KOPART_EMBEDDING
-  if (!activeSheet())
-    return;
-
-  doc()->emitBeginOperation( false );
-  KoDocumentEntry e =  d->actions->insertPart->documentEntry();//KoPartSelectDia::selectPart( d->canvas );
-  if ( e.isEmpty() )
-  {
-    doc()->emitEndOperation();
-    return;
-  }
-
-  //Don't start handles more than once
-  delete d->insertHandler;
-
-  d->insertHandler = new InsertPartHandler( this, d->canvas, e );
-  doc()->emitEndOperation();
-#endif // KSPREAD_KOPART_EMBEDDING
-}
-
-void View::insertChart()
-{
-#if 0 // KSPREAD_KOPART_EMBEDDING
-  if (!activeSheet())
-    return;
-
-  if ( d->selection->isColumnOrRowSelected() )
-  {
-    KMessageBox::error( this, i18n("Area too large."));
-    return;
-  }
-  Q3ValueList<KoDocumentEntry> vec = KoDocumentEntry::query( true, "'KOfficeChart' in ServiceTypes" );
-  if ( vec.isEmpty() )
-  {
-    KMessageBox::error( this, i18n("No charting component registered.") );
-    return;
-  }
-
-  //Don't start handles more than once
-  delete d->insertHandler;
-
-  doc()->emitBeginOperation( false );
-
-  d->insertHandler = new InsertChartHandler( this, d->canvas, vec[0] );
-  doc()->emitEndOperation();
-#endif // KSPREAD_KOPART_EMBEDDING
-}
-
 
 
 /*
@@ -6634,13 +6184,6 @@ void View::slotUpdateView( Sheet * _sheet, const Region& region )
   doc()->emitEndOperation();
 }
 
-void View::slotUpdateView( EmbeddedObject *obj )
-{
-#if 0 // KSPREAD_KOPART_EMBEDDING
-  d->canvas->repaintObject( obj );
-#endif // KSPREAD_KOPART_EMBEDDING
-}
-
 void View::slotUpdateHBorder( Sheet * _sheet )
 {
   // kDebug(36001)<<"void View::slotUpdateHBorder( Sheet *_sheet )";
@@ -6724,11 +6267,6 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
 
   d->canvas->validateSelection();
 
-  //Don't scroll to the marker if there is an active embedded object, since this may cause
-  //the canvas to scroll so that the object isn't in the visible area.
-  //There is still the problem of the object no longer being visible immediately after deactivating the child
-  //as the sheet jumps back to the marker though.
-  if (!activeChild())
     d->canvas->scrollToCell(selection()->marker());
 
   // Perhaps the user is entering a value in the cell.
@@ -6877,65 +6415,6 @@ QMatrix View::matrix() const
   m.translate( - d->canvas->xOffset(), - d->canvas->yOffset() );
   return m;
 }
-
-void View::transformPart()
-{
-#if 0 // KSPREAD_KOPART_EMBEDDING
-    Q_ASSERT( selectedChild() );
-
-    if ( d->transformToolBox.isNull() )
-    {
-        d->transformToolBox = new KoTransformToolBox( selectedChild(), topLevelWidget() );
-        d->transformToolBox->show();
-
-        d->transformToolBox->setDocumentChild( selectedChild() );
-    }
-    else
-    {
-        d->transformToolBox->show();
-        d->transformToolBox->raise();
-    }
-#endif // KSPREAD_KOPART_EMBEDDING
-}
-
-void View::slotChildSelected( KoDocumentChild* /*ch*/ )
-{
-//   if ( d->activeSheet && !d->activeSheet->isProtected() )
-//   {
-//     d->actions->transform->setEnabled( true );
-//
-//     if ( !d->transformToolBox.isNull() )
-//     {
-//         d->transformToolBox->setEnabled( true );
-//         d->transformToolBox->setDocumentChild( ch );
-//     }
-//   }
-
-
-  doc()->emitBeginOperation( false );
-  d->activeSheet->setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
-  doc()->emitEndOperation();
-}
-
-void View::slotChildUnselected( KoDocumentChild* )
-{
-//   if ( d->activeSheet && !d->activeSheet->isProtected() )
-//   {
-//     d->actions->transform->setEnabled( false );
-//
-//     if ( !d->transformToolBox.isNull() )
-//     {
-//         d->transformToolBox->setEnabled( false );
-//     }
-//     deleteEditor( true );
-//   }
-
-
-  doc()->emitBeginOperation( false );
-  d->activeSheet->setRegionPaintDirty(QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax)));
-  doc()->emitEndOperation();
-}
-
 
 void View::deleteEditor( bool saveChanges )
 {

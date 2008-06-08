@@ -71,7 +71,6 @@ class View;
 class Selection;
 class CellEditor;
 class LocationEditWidget;
-class EmbeddedObject;
 
 
 /**
@@ -294,72 +293,6 @@ public:
     // but is in fact a sibling of the canvas, which needs to know about it.
     void setEditWidget( KSpread::EditWidget * ew );
 
-    virtual bool focusNextPrevChild( bool );
-
-    //TODO: These embedded-object related methods need API documentation!
-    EmbeddedObject* getObject( const QPoint &pos, Sheet *_sheet );
-    void selectAllObjects();
-    void deselectAllObjects();
-    void selectObject( EmbeddedObject* );
-    void deselectObject( EmbeddedObject* );
-    void setMouseSelectedObject(bool b);
-    bool isObjectSelected();
-
-    /**
-     * @brief Move object by mouse
-     *
-     * @param pos The position of the mouse
-     * @param keepXorYunchanged if true keep x or y position unchanged
-     */
-    void moveObjectsByMouse( QPointF &pos, bool keepXorYunchanged );
-
-    //---- stuff needed for resizing ----
-    /// resize the m_resizeObject
-    void resizeObject( ModifyType _modType, const QPointF & point, bool keepRatio );
-
-    /// create KPrResizeCmd
-    void finishResizeObject( const QString &name, bool layout = true );
-
-    /**
-     * @brief Display object above the other objects in editiong mode
-     *
-     * This is used to bring a single slected object to front, so it is easier
-     * to modify.
-     *
-     * @param object which should be displayed above the other objects
-     */
-    void raiseObject( EmbeddedObject *object );
-
-    /**
-     * @brief Don't display an object above the others
-     */
-    void lowerObject();
-
-    /**
-     * @brief Get the list of objects in the order they should be displayed.
-     *
-     * This takes into account the object set in raiseObject so that it is
-     * the last one in the list returned (the one that is displayed above all
-     * the others).
-     *
-     * @return List of objects
-     */
-    void displayObjectList( QList<EmbeddedObject*> &list );
-
-    QRectF objectRect( bool all ) const;
-
-    void repaintObject( EmbeddedObject *obj );
-
-    /**
-     * This is intended to copy the selected objects to the clipboard so that
-     * they can be pasted into other applications. However, until at least
-     * KWord, KSpread, KPresenter, KChart and KFormula have consistant
-     * support for copying and pasting of OASIS objects the selected objects
-     * will just be copied in the form of raster graphics
-     */
-    void copyOasisObjects();
-    //void insertOasisData();
-
 public Q_SLOTS:
     void setDocumentOffset( const QPoint& offset );
     void setDocumentSize( const QSizeF& size );
@@ -436,13 +369,6 @@ private:
     QRect painterWindowGeometry( const QPainter& painter ) const;
 
     /**
-     * Enables clipping and removes the areas on the canvas widget occupied by embedded objects from
-     * the clip region.  This ensures that subsequent drawing operations using the given painter
-     * don't paint over the area occupied by embedded objects
-     */
-    void clipoutChildren( QPainter& painter ) const;
-
-    /**
      * Returns the range of cells which appear in the specified area of the Canvas widget
      * For example, viewToCellCoordinates( QRect(0,0,width(),height()) ) returns a range containing all visible cells
      *
@@ -460,18 +386,11 @@ private:
     QRectF cellCoordinatesToView( const QRect& cellRange ) const;
 
     /**
-     * Paints the children
-     */
-    void paintChildren( QPainter& painter, QMatrix& matrix );
-
-    /**
      * @see #setLastEditorWithFocus
      */
     EditorType lastEditorWithFocus() const;
 
 private:
-  void moveObject( int x, int y, bool key );
-
   void startTheDrag();
 
   void paintNormalMarker(QPainter& painter, const QRectF &viewRect);

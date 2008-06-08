@@ -70,42 +70,6 @@ public:
     bool mousePressed;
     bool dragging;
 
-    bool mouseSelectedObject;
-    bool drawContour;
-    ModifyType modType;
-
-    //---- stuff needed for resizing ----
-    /// object which gets resized
-    EmbeddedObject *m_resizeObject;
-    /// ratio of the object ( width / height )
-    double m_ratio;
-    bool m_isResizing;
-    /// The last position of the mouse during moving
-    QPointF m_origMousePos;
-
-    //---- stuff needed for moving ----
-    bool m_isMoving;
-    QPointF m_moveStartPoint;
-
-    /// size of the object at when resizing is started
-    QRectF m_rectBeforeResize;
-    /// Start position for move with mouse
-    QPointF m_moveStartPosMouse;
-
-    /// object which is selected and should be shown above all the other objects
-    EmbeddedObject * m_objectDisplayAbove;
-
-   // bool mouseOverHighlightRangeSizeGrip;
-
-    // The row and column of 1) the last cell under mouse pointer, 2) the last focused cell, and
-    // the last spoken cell.
-    int prevSpokenPointerRow;
-    int prevSpokenPointerCol;
-    int prevSpokenFocusRow;
-    int prevSpokenFocusCol;
-    int prevSpokenRow;
-    int prevSpokenCol;
-
     // flake
     KoShapeManager* shapeManager;
     KoToolProxy* toolProxy;

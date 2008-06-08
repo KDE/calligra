@@ -56,7 +56,6 @@ class Cell;
 class Damage;
 class Sheet;
 class Canvas;
-class Child;
 class Doc;
 class EditWidget;
 class HBorder;
@@ -67,8 +66,6 @@ class SheetView;
 class VBorder;
 class View;
 class ComboboxLocationEditWidget;
-class EmbeddedKOfficeObject;
-class EmbeddedObject;
 
 
 /** @class View
@@ -168,25 +165,6 @@ public:
     void enableInsertRow( bool _b );
 
     /**
-     *
-     * @param _geometry is the zoomed geometry of the new child.
-     * @param _entry is the entry to insert.
-     *
-     * @todo check validity of @p _entry docs.
-     */
-    void insertChart( const QRect& _geometry, KoDocumentEntry& _entry );
-    /**
-     *
-     * @param _geometry is the geometry of the new child.
-     * @param _entry is the entry to insert.
-     *
-     * @todo check validity of @p _entry docs.
-     */
-    void insertChild( const QRect& _geometry, KoDocumentEntry& _entry );
-
-   // void insertPicture( const QRect& _geometry, KUrl& _file );
-
-    /**
      * Fills the @ref EditWidget with the current cells
      * content. This function is usually called after the
      * cursor moved.
@@ -205,12 +183,6 @@ public:
     void closeEditor();
 
     virtual QWidget *canvas() const;
-
-    /**
-     * @reimp
-     */
-    KoDocument *hitTest( const QPoint &pos );
-
 
     void initConfig();
 
@@ -241,13 +213,6 @@ public:
      */
     void paintUpdates();
 
-    /**
-     * Resets the internal handle pointer, called from InsertHandler destructor
-     */
-    void resetInsertHandle();
-
-    bool isInsertingObject();
-
     bool showSheet(const QString& sheetName);
 
     /**
@@ -265,8 +230,6 @@ public:
      * Call when we change sheet, or before save in OpenDocument format.
      */
     void saveCurrentSheetSelection();
-
-    void deleteSelectedObjects();
 
     /**
      * @return @c true if document is being loaded. It is useful to suppress scrolling
@@ -287,7 +250,6 @@ public Q_SLOTS:
      */
     void selectAll();
     void createTemplate();
-    void transformPart();
     void copySelection();
     void cutSelection();
     void clearAll();
@@ -312,7 +274,6 @@ public Q_SLOTS:
     void styleDialog();
     void definePrintRange();
     void resetPrintRange();
-    void insertObject();
     void insertFromDatabase();
     void insertFromTextfile();
     void insertFromClipboard();
@@ -342,8 +303,6 @@ public Q_SLOTS:
     void hideSheet();
     void showSheet();
     void helpUsing();
-    void insertChart();
-    void insertPicture();
     void moneyFormat(bool b);
     void alignLeft( bool b );
     void alignRight( bool b );
@@ -379,7 +338,6 @@ public Q_SLOTS:
     void sortInc();
     void sortDec();
     void layoutDlg();
-    void extraProperties();
     void borderBottom();
     void borderRight();
     void borderLeft();
@@ -539,17 +497,6 @@ protected slots:
     void slotShowRowDialog();
 
     /**
-     * Invoked if the popup menu for an embedded document should be opened.
-     */
-    void popupChildMenu( KoChild*, const QPoint& global_pos );
-
-    /**
-     * Invoked when the "Delete Embedded Document" option from an embedded document's
-     * popup menu is selected.
-     */
-    void slotPopupDeleteChild();
-
-    /**
      * list from list choose
      */
     void slotItemSelected( QAction* );
@@ -567,27 +514,17 @@ protected slots:
     void slotSpecialChar( QChar c, const QString & _font );
     void slotSpecialCharDlgClosed();
 
-    void propertiesOk();
-
-    void objectSelectedChanged();
-
-protected slots:
-    void slotChildSelected( KoDocumentChild* ch );
-    void slotChildUnselected( KoDocumentChild* );
-
 public slots:
     // Document signals
     void slotRefreshView();
     void slotUpdateView( Sheet *_sheet );
     void slotUpdateView( Sheet *_sheet, const Region& );
-    void slotUpdateView( EmbeddedObject* obj );
     void slotUpdateHBorder( Sheet *_sheet );
     void slotUpdateVBorder( Sheet *_sheet );
     void slotChangeSelection(const Region&);
     void slotChangeChoice(const Region&);
     void slotScrollChoice(const Region&);
     void slotAddSheet( Sheet *_sheet );
-    void slotUpdateChildGeometry( EmbeddedKOfficeObject *_child );
     void slotSheetRenamed( Sheet* sheet, const QString& old_name );
     void slotSheetHidden( Sheet*_sheet );
     void slotSheetShown( Sheet*_sheet );
@@ -615,14 +552,6 @@ protected:
 
     virtual void keyPressEvent ( QKeyEvent * _ev );
     virtual void resizeEvent( QResizeEvent *_ev );
-
-    /**
-     * Returns the position of the top-left point of the currently selected cell in document coordinates.
-     * This is used when inserting some types of objects or pasting images into the document (so that the newly
-     * pasted object's top-left point will be aligned with the top-left point of the currently selected cell)
-     *
-     */
-    QPointF markerDocumentPosition();
 
     /**
      * Activates the formula editor for the current cell.
