@@ -143,13 +143,37 @@ void TableTool::paint( QPainter& painter, const KoViewConverter& viewConverter )
     QColor selectionColor(QApplication::palette().highlight().color());
     selectionColor.setAlpha(127);
 
-    // draw the transparent selection background
+    // Set the pen.
+    const double unzoomedPixel = viewConverter.viewToDocumentX(1.0);
+    const QPen pen(QApplication::palette().text().color(), unzoomedPixel * 2.0);
+    painter.setPen(pen);
+
+    // Clip out the
+    painter.save();
+    const QRect markerRange = QRect(d->selection->marker(), d->selection->marker());
+    const QRectF markerRect = d->tableShape->sheet()->cellCoordinatesToDocument(markerRange);
+    painter.setClipRegion(painter.clipRegion().subtracted(markerRect.translated(d->tableShape->position()).toRect()));
+
+    const QRect lastRange = d->selection->lastRange();
     Region::ConstIterator end = d->selection->constEnd();
     for (Region::ConstIterator it = d->selection->constBegin(); it != end; ++it)
     {
         const QRectF rect = d->tableShape->sheet()->cellCoordinatesToDocument((*it)->rect());
+        // draw the transparent selection background
         painter.fillRect(rect.translated(d->tableShape->position()), selectionColor);
+        if ((*it)->rect() == lastRange)
+            painter.restore(); // no clipping for the frame
+        painter.drawRect(rect.translated(d->tableShape->position()));
     }
+
+    const QRectF rect = d->tableShape->sheet()->cellCoordinatesToDocument(d->selection->lastRange());
+    const QPointF handleOffset = QPointF(unzoomedPixel * 2.0, unzoomedPixel * 2.0);
+    if (d->tableShape->sheet()->layoutDirection() == Qt::LeftToRight)
+        painter.drawRect(QRectF(rect.bottomRight() + d->tableShape->position() - handleOffset,
+                                rect.bottomRight() + d->tableShape->position() + handleOffset));
+    else
+        painter.drawRect(QRectF(rect.bottomLeft() + d->tableShape->position() - handleOffset,
+                                rect.bottomLeft() + d->tableShape->position() + handleOffset));
 }
 
 void TableTool::mousePressEvent(KoPointerEvent* event)
