@@ -9,7 +9,7 @@ lvillani AT binaryhelix DOT net
 
 
 jstaniek (2008-06-09): 
-We're limited to C++, and there apparently are no many templates.
+We're limited to C++, and there apparently are no many templates: http://en.wikipedia.org/wiki/Template_engine_(web)
 There's http://reki.ru/products/ctpp/ but I am not sure it's worth switching.
 
 
