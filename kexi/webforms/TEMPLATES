@@ -6,3 +6,10 @@ However, when I first looked for a C++ template engine I only found google-ctemp
 If you want to suggest a better alternative let me know:
 
 lvillani AT binaryhelix DOT net
+
+
+jstaniek (2008-06-09): 
+We're limited to C++, and there apparently are no many templates.
+There's http://reki.ru/products/ctpp/ but I am not sure it's worth switching.
+
+
