@@ -44,8 +44,6 @@ KPrSoundEventAction::~KPrSoundEventAction()
 
 bool KPrSoundEventAction::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
-    // XXX: commented out because it didn't compile (boud)
-/*    
     KoXmlElement sound = KoXml::namedItemNS( element, KoXmlNS::presentation, "sound" );
 
     bool retval = false;
@@ -53,10 +51,10 @@ bool KPrSoundEventAction::loadOdf( const KoXmlElement & element, KoShapeLoadingC
     if ( ! sound.isNull() ) {
 
         KPrSharedLoadingData * sharedData = dynamic_cast<KPrSharedLoadingData *>( context.sharedData( KPRESENTER_SHARED_LOADING_ID ) );
-        if ( sharedData ) {
+        if ( sharedData && sharedData->soundCollection() ) {
             QString href = sound.attributeNS( KoXmlNS::xlink, "href" );
             if ( href.isEmpty() ) {
-                m_soundData = new KPrSoundData( sharedData, href );
+                m_soundData = new KPrSoundData( sharedData->soundCollection(), href );
                 retval = true;
             }
         }
@@ -66,8 +64,6 @@ bool KPrSoundEventAction::loadOdf( const KoXmlElement & element, KoShapeLoadingC
     }
 
     return retval;
-*/
-    return false;
 }
 
 void KPrSoundEventAction::saveOdf( KoShapeSavingContext & context ) const
