@@ -371,7 +371,7 @@ void KWordTextHandler::writeFormattedText( QDomElement& parentElement, const wvW
     if ( !refChp || refChp->ico != chp->ico )
     {
         QString color = Conversion::color( chp->ico, -1 );
-	textStyle.addProperty(QString("fo:color"), color);
+	textStyle.addProperty(QString("fo:color"), color, KoGenStyle::TextType);
 	//m_automaticStylesWriter->addAttribute( "fo:color", color.toUtf8() );
     }
 
@@ -385,7 +385,7 @@ void KWordTextHandler::writeFormattedText( QDomElement& parentElement, const wvW
         if ( !fontName.isEmpty() )
         {
 	    m_mainStyles->addFontFace( fontName );
-	    textStyle.addProperty(QString("style:font-name"), fontName);
+	    textStyle.addProperty(QString("style:font-name"), fontName, KoGenStyle::TextType);
 	    //m_automaticStylesWriter->addAttribute( "style:font-name", fontName.toUtf8() );
         }
     }
@@ -393,18 +393,18 @@ void KWordTextHandler::writeFormattedText( QDomElement& parentElement, const wvW
     //hps = font size in half points
     if ( !refChp || refChp->hps != chp->hps )
     {
-	textStyle.addPropertyPt(QString("fo:font-size"), (int)(chp->hps/2));
+	textStyle.addPropertyPt(QString("fo:font-size"), (int)(chp->hps/2), KoGenStyle::TextType);
 	//m_automaticStylesWriter->addAttribute( "fo:font-size", size.append( "pt" ).toUtf8() );
     }
 
     //fBold = bold text if 1
     if ( !refChp || refChp->fBold != chp->fBold )
-	textStyle.addProperty(QString("fo:font-weight"), chp->fBold ? QString("bold") : QString("normal"));
+	textStyle.addProperty(QString("fo:font-weight"), chp->fBold ? QString("bold") : QString("normal"), KoGenStyle::TextType);
 	//m_automaticStylesWriter->addAttribute( "fo:font-weight", chp->fBold ? "bold" : "normal" );
 
     //fItalic = italic text if 1
     if ( !refChp || refChp->fItalic != chp->fItalic )
-	textStyle.addProperty(QString("fo:style"), chp->fItalic ? QString("italic") : QString("normal") );
+	textStyle.addProperty(QString("fo:style"), chp->fItalic ? QString("italic") : QString("normal"), KoGenStyle::TextType);
 	//m_automaticStylesWriter->addAttribute( "fo:font-style", chp->fItalic ? "italic" : "normal" );
 
     //kul: underline code
@@ -412,47 +412,47 @@ void KWordTextHandler::writeFormattedText( QDomElement& parentElement, const wvW
     {
         switch ( chp->kul ) {
 	case 0: //none
-	    textStyle.addProperty(QString("style:text-underline-style"), QString("none") );
+	    textStyle.addProperty(QString("style:text-underline-style"), QString("none") , KoGenStyle::TextType);
 	    //m_automaticStylesWriter->addAttribute( "style:text-underline-style", "none" );
 	    break;
         case 1: // single
-	    textStyle.addProperty( "style:text-underline-style", "solid" );
+	    textStyle.addProperty( "style:text-underline-style", "solid" , KoGenStyle::TextType);
 	    //m_automaticStylesWriter->addAttribute( "style:text-underline-style", "solid" );
 	    break;
         case 2: // by word
-	    textStyle.addProperty( "style:text-underline-style", "solid" );
+	    textStyle.addProperty( "style:text-underline-style", "solid" , KoGenStyle::TextType);
 	    //m_automaticStylesWriter->addAttribute( "style:text-underline-style", "solid" );
-	    textStyle.addProperty( "style:text-underline-mode", "skip-white-space" );
+	    textStyle.addProperty( "style:text-underline-mode", "skip-white-space" , KoGenStyle::TextType);
 	    //m_automaticStylesWriter->addAttribute( "style:text-underline-mode", "skip-white-space" );
 	    break;
 	case 3: // double
-	    textStyle.addProperty( "style:text-underline-style", "solid" );
+	    textStyle.addProperty( "style:text-underline-style", "solid" , KoGenStyle::TextType);
 	    //m_automaticStylesWriter->addAttribute( "style:text-underline-style", "solid" );
-	    textStyle.addProperty( "style:text-underline-type", "double" );
+	    textStyle.addProperty( "style:text-underline-type", "double", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "style:text-underline-type", "double" );
             break;
         case 4: // dotted
-	    textStyle.addProperty( "style:text-underline-style", "dotted" );
+	    textStyle.addProperty( "style:text-underline-style", "dotted", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "style:text-underline-style", "dotted" );
 	    break;
         case 5: // hidden - This makes no sense as an underline property!
             //val = "0";
 	    //I guess we could change this to have an underline the same color
 	    //as the background?
-	    textStyle.addProperty( "style:text-underline-type", "none" );
+	    textStyle.addProperty( "style:text-underline-type", "none", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "style:text-underline-type", "none" );
             break;
         case 6: // thick
             //underline.setAttribute( "styleline", "solid" );
             //val = "single-bold";
-	    textStyle.addProperty( "style:text-underline-style", "solid" );
+	    textStyle.addProperty( "style:text-underline-style", "solid", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "style:text-underline-style", "solid" );
-	    textStyle.addProperty( "style:text-underline-weight", "thick" );
+	    textStyle.addProperty( "style:text-underline-weight", "thick", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "style:text-underline-weight", "thick" );
             break;
         case 7: //dash
             //underline.setAttribute( "styleline", "dash" );
-	    textStyle.addProperty( "style:text-underline-style", "dash" );
+	    textStyle.addProperty( "style:text-underline-style", "dash", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "style:text-underline-style", "dash" );
             break;
         case 8: //dot (not used, says the docu)
@@ -460,21 +460,21 @@ void KWordTextHandler::writeFormattedText( QDomElement& parentElement, const wvW
             break;
         case 9: //dot dash
             //underline.setAttribute( "styleline", "dashdot" );
-	    textStyle.addProperty( "style:text-underline-style", "dot-dash" );
+	    textStyle.addProperty( "style:text-underline-style", "dot-dash", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "style:text-underline-style", "dot-dash" );
             break;
         case 10: //dot dot dash
             //underline.setAttribute( "styleline", "dashdotdot" );
-	    textStyle.addProperty( "style:text-underline-style", "dot-dot-dash" );
+	    textStyle.addProperty( "style:text-underline-style", "dot-dot-dash", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "style:text-underline-style", "dot-dot-dash" );
             break;
         case 11: //wave
             //underline.setAttribute( "styleline", "wave" );
-	    textStyle.addProperty( "style:text-underline-style", "wave" );
+	    textStyle.addProperty( "style:text-underline-style", "wave", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "style:text-underline-style", "wave" );
             break;
         default:
-	    textStyle.addProperty( "style:text-underline-style", "none" );
+	    textStyle.addProperty( "style:text-underline-style", "none", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "style:text-underline-style", "none" );
         };
     }
@@ -483,13 +483,13 @@ void KWordTextHandler::writeFormattedText( QDomElement& parentElement, const wvW
     if ( !refChp || refChp->fStrike != chp->fStrike || refChp->fDStrike != chp->fDStrike )
     {
 	if ( chp->fStrike )
-	    textStyle.addProperty( "style:text-line-through-type", "single" );
+	    textStyle.addProperty( "style:text-line-through-type", "single", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "style:text-line-through-type", "single" );
 	else if ( chp->fDStrike )
-	    textStyle.addProperty( "style:text-line-through-type", "double" );
+	    textStyle.addProperty( "style:text-line-through-type", "double", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "style:text-line-through-type", "double" );
 	else
-	    textStyle.addProperty( "style:text-line-through-type", "none" );
+	    textStyle.addProperty( "style:text-line-through-type", "none", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "style:text-line-through-type", "none" );
     }
 
@@ -499,10 +499,10 @@ void KWordTextHandler::writeFormattedText( QDomElement& parentElement, const wvW
     if ( !refChp || refChp->fCaps != chp->fCaps || refChp->fSmallCaps != chp->fSmallCaps )
     {
 	if ( chp->fCaps )
-	    textStyle.addProperty( "fo:text-transform", "uppercase" );
+	    textStyle.addProperty( "fo:text-transform", "uppercase", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "fo:text-transform", "uppercase" );
 	if ( chp->fSmallCaps )
-	    textStyle.addProperty( "fo:font-variant", "small-caps" );
+	    textStyle.addProperty( "fo:font-variant", "small-caps", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "fo:font-variant", "small-caps" );
     }
 
@@ -510,10 +510,10 @@ void KWordTextHandler::writeFormattedText( QDomElement& parentElement, const wvW
     if ( !refChp || refChp->iss != chp->iss )
     { 
 	if ( chp->iss == 1 ) //superscript
-	    textStyle.addProperty( "style:text-position", "super" );
+	    textStyle.addProperty( "style:text-position", "super", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "style:text-position", "super" );
 	else if ( chp->iss == 2 ) //subscript
-	    textStyle.addProperty( "style:text-position", "sub" );
+	    textStyle.addProperty( "style:text-position", "sub", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "style:text-position", "sub" );
     }
 
@@ -523,11 +523,11 @@ void KWordTextHandler::writeFormattedText( QDomElement& parentElement, const wvW
         if ( chp->fHighlight )
         {
 	    QString color = Conversion::color( chp->icoHighlight, -1 );
-	    textStyle.addProperty( "fo:background-color", color );
+	    textStyle.addProperty( "fo:background-color", color, KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "fo:background-color", color );
         } else {
 	    //TODO this should really be the surrounding background color
-	    textStyle.addProperty( "fo:background-color", QString("#FFFFFF"));
+	    textStyle.addProperty( "fo:background-color", QString("#FFFFFF"), KoGenStyle::TextType);
 	    //m_automaticStylesWriter->addAttribute( "fo:background-color", "#FFFFFF" );
         }
     }
@@ -537,10 +537,10 @@ void KWordTextHandler::writeFormattedText( QDomElement& parentElement, const wvW
     if ( !refChp || refChp->fShadow != chp->fShadow || refChp->fImprint != chp->fImprint )
     {
         if ( chp->fShadow )
-	    textStyle.addProperty( "style:text-shadow", "1pt" );
+	    textStyle.addProperty( "style:text-shadow", "1pt", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "fo:text-shadow", "1pt" );
 	if ( chp->fImprint )
-	    textStyle.addProperty( "style:font-relief", "engraved" );
+	    textStyle.addProperty( "style:font-relief", "engraved", KoGenStyle::TextType );
 	    //m_automaticStylesWriter->addAttribute( "style:font-relief", "engraved" );
     }
 
@@ -1039,8 +1039,8 @@ void KWordTextHandler::writeLayout( const wvWare::Style* style )
 	    m_automaticStylesWriter->endElement(); //style:tab-stop
         }
 	m_automaticStylesWriter->endElement(); //style:tab-stops
-    }
-    */
+    }*/
+    
     //add style to m_mainStyles & get style name
     QString styleName = "";
     if(!paragraphStyle.isEmpty()) {
