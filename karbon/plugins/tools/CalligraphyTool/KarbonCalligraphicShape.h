@@ -23,16 +23,6 @@
 #include <KoParameterShape.h>
 
 #define KarbonCalligraphicShapeId "KarbonCalligraphicShape"
-/*
-when I recreate the path, in practice I need to do the same as when I created it in the first place,
-so how do I avoid code duplication?
-can I call again appendPoint(), no that also appends the handlers, but the rest of appendPoint() isn't duplicated, so I think I should split the function:
-    (1) appendPoint(..) (the current func)
-    (2) appendPointToPath(KarbonCalligraphicPoint)
-
-at this point I can think about for example smoothing taking care of flips (inside appendPointToPath)
-and 
-*/
 
 class KarbonCalligraphicPoint
 {
@@ -47,7 +37,7 @@ public:
     void setPoint(const QPointF &point) {m_point = point;}
 
 private:
-    QPointF m_point;
+    QPointF m_point; // in shape coordinates
     double m_angle;
     double m_width;
 };
@@ -95,6 +85,8 @@ public:
     void setSize( const QSizeF &newSize );
     //virtual QPointF normalize();
 
+    QPointF normalize();
+
     void simplifyPath();
     
     // reimplemented
@@ -127,13 +119,9 @@ private:
     // and 0 if they form a degenerate triangle
     static int ccw( const QPointF &p1, const QPointF &p2, const QPointF &p3 );
 
-    // offset of the points when mapped against the canvas
-    QPointF m_offset; // TODO: use position instead
     // when true p1 is connected to the previous
     bool m_flipped;
 
-    // TODO: don't use: destroys encapsulation
-    KoSubpath m_path; // alias to KoPathShape *m_subpaths[0]
     // the actual data then determines it's shape
     QList<KarbonCalligraphicPoint *> m_points;
 };

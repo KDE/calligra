@@ -34,24 +34,27 @@ KarbonCalligraphicShape::~KarbonCalligraphicShape()
 {
 }
 
-void KarbonCalligraphicShape::appendPoint( const QPointF &p,
+void KarbonCalligraphicShape::appendPoint( const QPointF &point,
                                            double angle,
                                            double width )
 {
-    m_handles.append( p - m_offset);
-    KarbonCalligraphicPoint *point = new KarbonCalligraphicPoint(p, angle, width);
-    m_points.append(point);
+    // convert the point from canvas to shape coordinates
+    QPointF p = point - position();
+    KarbonCalligraphicPoint *calligraphicPoint =
+            new KarbonCalligraphicPoint( p, angle, width );
 
-    appendPointToPath(*point);
+    m_handles.append( p );
+    m_points.append(calligraphicPoint);
+    appendPointToPath(*calligraphicPoint);
 }
 
-void KarbonCalligraphicShape::appendPointToPath(const KarbonCalligraphicPoint &p)
+void KarbonCalligraphicShape::
+        appendPointToPath( const KarbonCalligraphicPoint &p )
 {
     double dx = std::cos( p.angle() ) * p.width();
     double dy = std::sin( p.angle() ) * p.width();
 
-    // TODO: maybe remove the offset at this point so from here on
-    //       all coordinates are local
+    // find the outline points
     QPointF p1 = p.point() - QPointF( dx/2, dy/2 );
     QPointF p2 = p.point() + QPointF( dx/2, dy/2 );
 
@@ -59,9 +62,8 @@ void KarbonCalligraphicShape::appendPointToPath(const KarbonCalligraphicPoint &p
     {
         moveTo( p1 );
         lineTo( p2 );
-        m_offset = normalize();
+        normalize();
         m_flipped = false;
-        m_path = *m_subpaths[0];
         return;
     }
     // pointCount > 0
@@ -77,13 +79,12 @@ void KarbonCalligraphicShape::appendPointToPath(const KarbonCalligraphicPoint &p
 
         int index = pointCount() / 2;
 
-        // finde the previous two points
+        // find the previous two points
         QPointF last1 = pointByIndex( KoPathPointIndex(0, index-1) )->point();
         QPointF last2 = pointByIndex( KoPathPointIndex(0, index) )->point();
 
         // and add them in reverse order
-        // (they are converted to canvas coordinates)
-        appendPointsToPathAux( last2+m_offset, last1+m_offset );
+        appendPointsToPathAux( last2, last1 );
     }
 
     if ( m_flipped )
@@ -95,7 +96,20 @@ void KarbonCalligraphicShape::appendPointToPath(const KarbonCalligraphicPoint &p
         appendPointsToPathAux( p1, p2 );
     }
 
-    m_offset += normalize();
+    normalize();
+}
+
+void KarbonCalligraphicShape::appendPointsToPathAux( const QPointF &p1,
+                                                     const QPointF &p2 )
+{
+    KoPathPoint *pathPoint1 = new KoPathPoint(this, p1);
+    KoPathPoint *pathPoint2 = new KoPathPoint(this, p2);
+
+    // calculate the index of the insertion position
+    int index = pointCount() / 2;
+
+    insertPoint( pathPoint2, KoPathPointIndex(0, index) );
+    insertPoint( pathPoint1, KoPathPointIndex(0, index) );
 }
 
 KoPathShape *KarbonCalligraphicShape::simplified( float error )
@@ -114,7 +128,7 @@ KoPathShape *KarbonCalligraphicShape::simplified( float error )
     res->setFillRule( Qt::WindingFill );
     res->setBackground( Qt::black );
     res->setBorder( 0 );
-    res->setPosition( m_offset );
+    res->setPosition( position() );
 
     return res;
 }
@@ -133,27 +147,14 @@ const QRectF KarbonCalligraphicShape::lastPieceBoundingRect()
     QPointF prev2 = pointByIndex( KoPathPointIndex(0, index+1) )->point();
 
     QPainterPath p;
-    p.moveTo(prev1);
-    p.lineTo(last1);
-    p.lineTo(last2);
-    p.lineTo(prev2);
+    p.moveTo( prev1 );
+    p.lineTo( last1 );
+    p.lineTo( last2 );
+    p.lineTo( prev2 );
 
-    return p.boundingRect().translated(m_offset);
+    return p.boundingRect().translated( position() );
 }
 
-
-void KarbonCalligraphicShape::appendPointsToPathAux( const QPointF &p1,
-                                               const QPointF &p2 )
-{
-    KoPathPoint *pathPoint1 = new KoPathPoint(this, p1 - m_offset);
-    KoPathPoint *pathPoint2 = new KoPathPoint(this, p2 - m_offset);
-
-    // calculate the index of the insertion position
-    int index = pointCount() / 2;
-
-    insertPoint( pathPoint2, KoPathPointIndex(0, index) );
-    insertPoint( pathPoint1, KoPathPointIndex(0, index) );
-}
 
 int KarbonCalligraphicShape::flipDetected( const QPointF &p1, const QPointF &p2 )
 {
@@ -164,11 +165,6 @@ int KarbonCalligraphicShape::flipDetected( const QPointF &p1, const QPointF &p2 
 
     QPointF last2 = pointByIndex( KoPathPointIndex(0, index) )->point();
     QPointF prev2 = pointByIndex( KoPathPointIndex(0, index+1) )->point();
-
-    last1 += m_offset;
-    last2 += m_offset;
-    prev1 += m_offset;
-    prev2 += m_offset;
 
     //                 prev2  last2           p2
     //    ...o-----o-----o-----o  <-- index   o
@@ -184,8 +180,8 @@ int KarbonCalligraphicShape::flipDetected( const QPointF &p1, const QPointF &p2 
         qSwap( prev1, prev2 );
     }
 
-    // FIXME: think about the degenerate cases (ccw() == 0)
     // detect possible flips
+    // FIXME: think about the degenerate cases (ccw() == 0)
     if ( ccw( prev1, last1, p1 ) == ccw( prev2, prev1, last1 ) &&
          ccw( prev1, last1, p1 ) != ccw( last1, p2, last2 ) )
     {
@@ -232,36 +228,37 @@ void KarbonCalligraphicShape::setSize( const QSizeF &newSize )
     KoParameterShape::setSize( newSize );
 }
 
-/*QPointF KarbonCalligraphicShape::normalize()
+QPointF KarbonCalligraphicShape::normalize()
 {
     QPointF offset( KoParameterShape::normalize() );
     QMatrix matrix;
     matrix.translate( -offset.x(), -offset.y() );
-    // FIXME: implement
-    kError() << "FIXME";
-    //m_center = matrix.map( m_center );
+
+    for( int i = 0; i < m_handles.size(); ++i )
+    {
+        m_points[i]->setPoint( matrix.map( m_points[i]->point() ) );
+    }
+
     return offset;
-}*/
+}
 
 void KarbonCalligraphicShape::moveHandleAction( int handleId,
                                                 const QPointF & point,
                                                Qt::KeyboardModifiers modifiers )
 {
-    kDebug() << "position: " << position() << "  | m_offset: " << m_offset;
-    kDebug() << point + position();
     Q_UNUSED(modifiers);
-    m_points[handleId]->setPoint( point + position() );
+    m_points[handleId]->setPoint( point );
 }
 
 void KarbonCalligraphicShape::updatePath( const QSizeF &size )
 {
     Q_UNUSED(size);
+
+    QPointF pos = position();
     
-    kDebug() << "Update Path called";
     // remove all points
     clear();
-    setPosition(QPoint(0, 0));
-    m_offset = QPoint(0, 0);
+    setPosition( QPoint(0, 0) );
 
     foreach(KarbonCalligraphicPoint *p, m_points)
         appendPointToPath(*p);
@@ -269,7 +266,9 @@ void KarbonCalligraphicShape::updatePath( const QSizeF &size )
     simplifyPath();
 
     for (int i = 0; i < m_points.size(); ++i)
-        m_handles[i] = m_points[i]->point() - position();
+        m_handles[i] = m_points[i]->point();
+
+    setPosition( pos );
 }
 
 void KarbonCalligraphicShape::simplifyPath()
@@ -279,10 +278,9 @@ void KarbonCalligraphicShape::simplifyPath()
     for (int i = 0; i < pointCount(); ++i)
     {
         points << pointByIndex( KoPathPointIndex(0, i) )->point();
-        kDebug() << "<< " << points.last() << "  " << points;
     }
 
-    // FIXME: use something better
+    // TODO: no magic numbers
     double error = m_points[0]->width() / 40;
     KoPathShape *newPath = bezierFit( points, error );
 
@@ -296,17 +294,13 @@ void KarbonCalligraphicShape::simplifyPath()
     for (int i = 0; i < newPath->pointCount(); ++i)
     {
         KoPathPointIndex index(0, i);
-        kDebug() << index;
         KoPathPoint *p = new KoPathPoint( *newPath->pointByIndex(index) );
         p->setParent(this);
         m_subpaths[0]->append(p);
     }
 
-    kDebug() << "position " << newPath->position();
     setPosition(oldPosition);
-    m_offset = normalize();
-
-    kDebug() << newPath->pointCount() << pointCount() << m_offset;
+    normalize();
 
     delete newPath;
 }
