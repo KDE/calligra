@@ -20,10 +20,8 @@
 #ifndef KPRSOUNDDATA_H
 #define KPRSOUNDDATA_H
 
-#include <KoShapeUserData.h>
-#include "kpresenter_export.h"
-
 #include <KUrl>
+#include "kpresenter_export.h"
 
 class KPrSoundCollection;
 class QIODevice;
@@ -32,7 +30,6 @@ class QIODevice;
  * Class meant to hold sound data so it can be shared between shapes.
  * In KPresenter shapes can have click actions attached to them. One such action is playing sound.
  * The binary data for those sounds are saved in this class.
- * This class inherits from KoShapeUserData which means you can set it on any KoShape using
  */
 class KPRESENTER_EXPORT KPrSoundData {
 public:
