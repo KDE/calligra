@@ -25,6 +25,8 @@
 #include <KoXmlWriter.h>
 #include <KoShapeSavingContext.h>
 #include <KPrSoundData.h>
+#include <KPrSoundCollection.h>
+#include <KPrSharedLoadingData.h>
 
 KPrSoundEventAction::KPrSoundEventAction()
 : QObject()
@@ -41,6 +43,25 @@ KPrSoundEventAction::~KPrSoundEventAction()
 
 bool KPrSoundEventAction::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
+    KoXmlElement sound = KoXml::namedItemNS( element, KoXmlNS::presentation, "sound" );
+
+    bool retval = false;
+
+    if ( ! sound.isNull() ) {
+        KPrSharedLoadingData * sharedData = dynamic_cast<KPrSharedLoadingData *>( context.sharedData( KPRESENTER_SHARED_LOADING_ID ) );
+        if ( sharedData ) {
+            QString href = sound.attributeNS( KoXmlNS::xlink, "href" );
+            if ( href.isEmpty() ) {
+                m_soundData = new KPrSoundData( sharedData, href );
+                retval = true;
+            }
+        }
+        else {
+            // TODO warning
+        }
+    }
+
+    return retval;
 }
 
 void KPrSoundEventAction::saveOdf( KoShapeSavingContext & context ) const
@@ -48,7 +69,14 @@ void KPrSoundEventAction::saveOdf( KoShapeSavingContext & context ) const
     context.xmlWriter().startElement( "presentation:event-listener" );
     context.xmlWriter().addAttribute( "script:event-name", "dom:click" );
     context.xmlWriter().addAttribute( "presentation:action", "sound" );
-    // TODO save sound
+
+    //<presentation:sound xlink:href="/opt/kde4t/share/sounds/KDE-Im-Contact-In.ogg" xlink:type="simple" xlink:show="new" xlink:actuate="onRequest"/>
+    context.xmlWriter().startElement( "presentation:sound" );
+    context.xmlWriter().addAttribute( "xlink:href", m_soundData->tagForSaving() );
+    context.xmlWriter().addAttribute( "xlink:type", "new" );
+    context.xmlWriter().addAttribute( "xlink:actuate", "onRequest" );
+    context.xmlWriter().endElement();
+
     context.xmlWriter().endElement();
 }
 
