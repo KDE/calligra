@@ -114,6 +114,9 @@ private:
     // TODO: values not used, maybe just return a boolean
     int flipDetected( const QPointF &p1, const QPointF &p2 );
 
+    void smoothLastPoints();
+    void smoothPoint( const int index );
+
     // determine whether the points given are in counterclockwise order or not
     // returns +1 if they are, -1 if they are given in clockwise order
     // and 0 if they form a degenerate triangle

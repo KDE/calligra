@@ -79,12 +79,17 @@ void KarbonCalligraphicShape::
 
         int index = pointCount() / 2;
 
-        // find the previous two points
-        QPointF last1 = pointByIndex( KoPathPointIndex(0, index-1) )->point();
-        QPointF last2 = pointByIndex( KoPathPointIndex(0, index) )->point();
+        // find the last two points
+        KoPathPoint *last1 = pointByIndex( KoPathPointIndex(0, index-1) );
+        KoPathPoint *last2 = pointByIndex( KoPathPointIndex(0, index) );
 
-        // and add them in reverse order
-        appendPointsToPathAux( last2, last1 );
+        // and re-add them in reverse order
+        appendPointsToPathAux( last2->point(), last1->point() );
+
+        // partially smooth
+        smoothLastPoints();
+        last1->removeControlPoint2();
+        last2->removeControlPoint1();
     }
 
     if ( m_flipped )
@@ -96,6 +101,23 @@ void KarbonCalligraphicShape::
         appendPointsToPathAux( p1, p2 );
     }
 
+    if ( pointCount() > 4 )
+    {
+        smoothLastPoints();
+        
+        // if there was a flip part of the smoothing was already done
+        // so undoing part of the above call
+        if ( flip )
+        {
+            int index = pointCount() / 2;
+            // find the previous two points
+            KoPathPoint *prev1 = pointByIndex( KoPathPointIndex(0, index-2) );
+            KoPathPoint *prev2 = pointByIndex( KoPathPointIndex(0, index+1) );
+
+            prev1->removeControlPoint1();
+            prev2->removeControlPoint2();
+        }
+    }
     normalize();
 }
 
@@ -110,6 +132,51 @@ void KarbonCalligraphicShape::appendPointsToPathAux( const QPointF &p1,
 
     insertPoint( pathPoint2, KoPathPointIndex(0, index) );
     insertPoint( pathPoint1, KoPathPointIndex(0, index) );
+}
+
+void KarbonCalligraphicShape::smoothLastPoints()
+{
+    int index = pointCount() / 2;
+    smoothPoint( index - 2 );
+    smoothPoint( index + 1 );
+}
+
+void KarbonCalligraphicShape::smoothPoint( const int index )
+{
+    if ( pointCount() < index + 2 )
+    {
+        kDebug() << "index to high";
+        return;
+    }
+    else if ( index < 1 )
+    {
+        kDebug() << "index to low";
+        return;
+    }
+
+    const KoPathPointIndex PREV( 0, index-1 );
+    const KoPathPointIndex INDEX( 0, index );
+    const KoPathPointIndex NEXT( 0, index+1 );
+
+    QPointF prev = pointByIndex( PREV )->point();
+    QPointF point = pointByIndex( INDEX )->point();
+    QPointF next = pointByIndex( NEXT )->point();
+
+    QPointF vector = next - prev;
+    double dist = ( QLineF( prev, next ) ).length();
+    // normalize the vector (make it's size equal to 1)
+    vector /= dist;
+    double mult = 0.35; // found by trial and error, might not be perfect...
+    // distance of the control points from the point
+    double dist1 = ( QLineF( point, prev ) ).length() * mult;
+    double dist2 = ( QLineF( point, next ) ).length() * mult;
+    QPointF vector1 = vector * dist1;
+    QPointF vector2 = vector * dist2;
+    QPointF controlPoint1 = point - vector1;
+    QPointF controlPoint2 = point + vector2;
+
+    pointByIndex( INDEX )->setControlPoint1( controlPoint1 );
+    pointByIndex( INDEX )->setControlPoint2( controlPoint2 );
 }
 
 KoPathShape *KarbonCalligraphicShape::simplified( float error )
@@ -135,22 +202,26 @@ KoPathShape *KarbonCalligraphicShape::simplified( float error )
 
 const QRectF KarbonCalligraphicShape::lastPieceBoundingRect()
 {
-    if ( pointCount() < 4 )
+    if ( pointCount() < 6 )
         return QRectF();
 
     int index = pointCount() / 2;
 
-    QPointF last1 = pointByIndex( KoPathPointIndex(0, index-1) )->point();
-    QPointF prev1 = pointByIndex( KoPathPointIndex(0, index-2) )->point();
+    QPointF p1 = pointByIndex( KoPathPointIndex(0, index-3) )->point();
+    QPointF p2 = pointByIndex( KoPathPointIndex(0, index-2) )->point();
+    QPointF p3 = pointByIndex( KoPathPointIndex(0, index-1) )->point();
+    QPointF p4 = pointByIndex( KoPathPointIndex(0, index  ) )->point();
+    QPointF p5 = pointByIndex( KoPathPointIndex(0, index+1) )->point();
+    QPointF p6 = pointByIndex( KoPathPointIndex(0, index+2) )->point();
 
-    QPointF last2 = pointByIndex( KoPathPointIndex(0, index) )->point();
-    QPointF prev2 = pointByIndex( KoPathPointIndex(0, index+1) )->point();
-
+    // TODO: also take the control points into account
     QPainterPath p;
-    p.moveTo( prev1 );
-    p.lineTo( last1 );
-    p.lineTo( last2 );
-    p.lineTo( prev2 );
+    p.moveTo( p1 );
+    p.lineTo( p2 );
+    p.lineTo( p3 );
+    p.lineTo( p4 );
+    p.lineTo( p5 );
+    p.lineTo( p6 );
 
     return p.boundingRect().translated( position() );
 }

@@ -113,8 +113,8 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
     addPoint( event->point );
     m_isDrawing = false;
 
-    m_path->simplifyPath();
-    KoPathShape *finalPath = m_path;//->simplified( m_strokeWidth/60.0 );
+    //m_path->simplifyPath();
+    KoPathShape *finalPath = m_path;
 
     QUndoCommand * cmd = m_canvas->shapeController()->addShape( finalPath );
     if( cmd )
@@ -161,6 +161,7 @@ void KarbonCalligraphyTool::addPoint(const QPointF &mousePosition)
 
     m_lastPoint = m_lastPoint + m_speed;
 
+    // TODO: put in KarbonCalligraphicShape (?)
     if ( ! m_isDrawing ) 
     {
         m_isDrawing = true;
