@@ -2,6 +2,7 @@
 Type=Service
 Name=Filter to export KPR files to ODP
 Name[ca]=Filtre per exportar fitxers KPR a ODP
+Name[el]=Φίλτρο εξαγωγής αρχείων KPR σε ODP
 Name[it]=Filtro per esportare i file KPR a ODP
 Name[pt]=Filtro para exportar os ficheiros KPR para ODP
 Name[pt_BR]=Filtro para exportar arquivos KPR para ODP

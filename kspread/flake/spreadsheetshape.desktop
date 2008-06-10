@@ -1,27 +1,5 @@
 [Desktop Entry]
 Name=Spreadsheet Shape
-Name[bg]=Форма на таблица
-Name[ca]=Forma de taula
-Name[de]=Tabellen-Objekt
-Name[el]=Σχήμα πίνακα
-Name[es]=Forma de tabla
-Name[et]=Tabelikujund
-Name[fi]=Tauluhahmo
-Name[fy]=Tabel figuer
-Name[ga]=Giuirléid Tábla
-Name[gl]=Moldura de táboa
-Name[hi]=तालिका आकार
-Name[it]=Forma di tabella
-Name[ja]=テーブルシェイプ
-Name[ne]=तालिका आकार
-Name[pt]=Forma de Tabela
-Name[pt_BR]=Forma de Tabela
-Name[sv]=Tabellform
-Name[ta]=அட்டவணை வடிவம்
-Name[tr]=Tablo Şekli
-Name[uk]=Форма таблиці
-Name[x-test]=xxTable Shapexx
-Name[zh_TW]=表格元件
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=spreadsheetshape
