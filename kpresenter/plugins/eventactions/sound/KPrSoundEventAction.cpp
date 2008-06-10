@@ -20,10 +20,11 @@
 #include "KPrSoundEventAction.h"
 
 #include <Phonon/MediaObject>
-
+#include <KoXmlNS.h>
 #include <KoXmlReader.h>
 #include <KoXmlWriter.h>
 #include <KoShapeSavingContext.h>
+#include <KoShapeLoadingContext.h>
 #include <KPrSoundData.h>
 #include <KPrSoundCollection.h>
 #include <KPrSharedLoadingData.h>
@@ -43,11 +44,14 @@ KPrSoundEventAction::~KPrSoundEventAction()
 
 bool KPrSoundEventAction::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context )
 {
+    // XXX: commented out because it didn't compile (boud)
+/*    
     KoXmlElement sound = KoXml::namedItemNS( element, KoXmlNS::presentation, "sound" );
 
     bool retval = false;
 
     if ( ! sound.isNull() ) {
+
         KPrSharedLoadingData * sharedData = dynamic_cast<KPrSharedLoadingData *>( context.sharedData( KPRESENTER_SHARED_LOADING_ID ) );
         if ( sharedData ) {
             QString href = sound.attributeNS( KoXmlNS::xlink, "href" );
@@ -62,6 +66,8 @@ bool KPrSoundEventAction::loadOdf( const KoXmlElement & element, KoShapeLoadingC
     }
 
     return retval;
+*/
+    return false;
 }
 
 void KPrSoundEventAction::saveOdf( KoShapeSavingContext & context ) const
