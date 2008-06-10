@@ -46,21 +46,19 @@ namespace KexiWebForms {
             /*
              * Retrieve requested table and pkey
              */
-            kDebug() << "Retrieving request URI" << endl;
             QStringList queryString = Request::requestUri(req).split("/");
-            kDebug() << queryString << endl;
             QString requestedTable = queryString.at(2);
             QString pkeyName = queryString.at(3);
             QString pkeyValue = queryString.at(4);
-            kDebug() << "reqTable=" << requestedTable << " pkey=" << pkeyName
-                     << "pkeyValue=" << pkeyValue << endl;
 
             kDebug() << "Trying to delete row..." << endl;
             if (KexiDB::deleteRow(*gConnection, gConnection->tableSchema(requestedTable),
                                   pkeyName, pkeyValue)) {
-                dict.SetValue("ERROR", "Row deleted successfully");
+                dict.ShowSection("SUCCESS");
+                dict.SetValue("MESSAGE", "Row deleted successfully");
             } else {
-                dict.SetValue("ERROR", "Error while trying to delete row!");
+                dict.ShowSection("ERROR");
+                dict.SetValue("MESSAGE", "Error while trying to delete row!");
             }
 
             // Render template
