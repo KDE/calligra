@@ -42,11 +42,12 @@
 #include <KoFilterChain.h>
 //Added by qt3to4:
 #include <Q3ValueList>
+#include <QBuffer>
 
-Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter, KoXmlWriter* stylesWriter, KoXmlWriter* listStylesWriter )
+Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles )
     : m_replacementHandler( new KWordReplacementHandler ), m_tableHandler( new KWordTableHandler ),
       m_pictureHandler( new KWordPictureHandler( this ) ), m_textHandler( 0 ),
-      m_chain( chain ), m_currentListDepth( -1 ),
+      m_chain( chain ), m_currentListDepth( -1 ), m_openHeader( false ), m_openFooter( false ),
       m_parser( wvWare::ParserFactory::createParser( fileName ) )/*, m_headerFooters( 0 ), m_bodyFound( false ),
       m_footNoteNumber( 0 ), m_endNoteNumber( 0 )*/
 {
@@ -54,8 +55,9 @@ Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWrit
     if ( m_parser ) // 0 in case of major error (e.g. unsupported format)
     {
 	m_bodyWriter = bodyWriter; //pointer for writing to the body
-	m_listStylesWriter = listStylesWriter; //pointer for writing list styles
-        m_textHandler = new KWordTextHandler( m_parser, contentWriter, bodyWriter, stylesWriter, listStylesWriter );
+	m_mainStyles = mainStyles; //KoGenStyles object for collecting styles
+	m_masterStyle = new KoGenStyle( KoGenStyle::StyleMaster ); //for header/footer stuff
+        m_textHandler = new KWordTextHandler( m_parser, bodyWriter, mainStyles );
         connect( m_textHandler, SIGNAL( subDocFound( const wvWare::FunctorBase*, int ) ),
                  this, SLOT( slotSubDocFound( const wvWare::FunctorBase*, int ) ) );
         connect( m_textHandler, SIGNAL( tableFound( const KWord::Table& ) ),
@@ -81,6 +83,7 @@ Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWrit
 Document::~Document()
 {
     delete m_textHandler;
+    delete m_masterStyle;
     delete m_pictureHandler;
     delete m_tableHandler;
     delete m_replacementHandler;
@@ -270,12 +273,12 @@ void Document::bodyEnd()
     if ( m_currentListDepth >= 0 )
     {
 	kDebug(30513) << "closing the final list in the document";
-	m_listStylesWriter->endElement(); //text:list-style
+	/*m_listStylesWriter->endElement(); //text:list-style
         for (int i = 0; i <= m_currentListDepth; i++)
         {
 	    m_bodyWriter->endElement(); //close the text:list-item
 	    m_bodyWriter->endElement(); //text:list
-	}
+	}*/
     }
 
     disconnect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
@@ -335,13 +338,35 @@ void Document::headerStart( wvWare::HeaderData::Type type )
     //framesetElement.setAttribute( "name", Conversion::headerTypeToFramesetName( type ) );
     //m_framesetsElement.appendChild(framesetElement);
 
-    bool isHeader = Conversion::isHeader( type );
+    m_openHeader = Conversion::isHeader( type );
+    m_openFooter = !m_openHeader; //if we don't have a header, it must be a footer
+
+    //we need to open an xmlwriter so we can create the whole element
+    m_buffer = new QBuffer();
+    m_buffer->open( QIODevice::WriteOnly );
+    m_writer = new KoXmlWriter( m_buffer );
+
+    if ( m_openHeader )
+    {
+	//TODO need to check which type of header this is
+	m_writer->startElement( "style:header" );
+    }
+    else
+    {
+	//TODO need to check which type of footer this is
+	m_writer->startElement( "style:footer" );
+    }
+
+    //tell texthandler to write to styles.xml instead of content.xml
+    m_textHandler->m_writeTextToStylesDotXml = true;
+    //and set up the tmp writer
+    m_textHandler->m_tmpWriter = m_writer;
 
     //createInitialFrame( framesetElement, 29, 798, isHeader?0:567, isHeader?41:567+41, true, Copy );
 
     //m_textHandler->setFrameSetElement( framesetElement );
 
-    m_headerFooters |= type;
+    //m_headerFooters |= type;
 
     /*if ( Conversion::isHeader( type ) )
         m_hasHeader = true;
@@ -354,6 +379,15 @@ void Document::headerEnd()
 {
     kDebug(30513) ;
     //m_textHandler->setFrameSetElement( QDomElement() );
+    //close writer & add to m_masterStyle
+    m_writer->endElement(); //style:header/footer
+    QString contents = QString::fromUtf8( m_buffer->buffer(), m_buffer->buffer().size() );
+    m_masterStyle->addChildElement( QString::number( m_headerCount ), contents );
+    m_textHandler->m_tmpWriter = 0;
+    delete m_writer;
+    delete m_buffer;
+    //we're done with this header, so reset to false
+    m_textHandler->m_writeTextToStylesDotXml = false;
 }
 
 //get text of the footnote
@@ -396,7 +430,7 @@ void Document::slotUpdateListDepth( int depth )
     m_currentListDepth = depth;
 }
 
-//create fram for the table cell?
+//create frame for the table cell?
 void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
 {
     kDebug(30513) ;

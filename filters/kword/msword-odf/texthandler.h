@@ -32,6 +32,7 @@
 #include <qdom.h>
 
 #include <KoXmlWriter.h>
+#include <KoGenStyles.h>
 
 #include <string>
 
@@ -57,15 +58,12 @@ class KWordTextHandler : public QObject, public wvWare::TextHandler
 {
     Q_OBJECT
 public:
-    KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter, KoXmlWriter* stylesWriter, KoXmlWriter* listStylesWriter );
-
-    void setFrameSetElement( const QDomElement& frameset );
+    KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles );
 
     //////// TextHandler interface
 
     virtual void sectionStart( wvWare::SharedPtr<const wvWare::Word97::SEP> sep );
     virtual void sectionEnd();
-    //virtual void pageBreak();
     virtual void headersFound( const wvWare::HeaderFunctor& parseHeaders );
     virtual void footnoteFound( wvWare::FootnoteData::Type type, wvWare::UChar character,
                                 wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const wvWare::FootnoteFunctor& parseFootnote );
@@ -85,15 +83,15 @@ public:
 #endif // IMAGE_IMPORT
     ///////// Our own interface, also used by processStyles
 
-    // Called at the beginning of a parag/style
-    void paragLayoutBegin();
-
     // Write a <FORMAT> tag from the given CHP
     // Returns that element into pChildElement if set (in that case even an empty FORMAT can be appended)
-    void writeFormattedText( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, int pos, int len, int formatId, QDomElement* pChildElement );
+    void writeFormattedText( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp,/* int pos,*/ int len, int formatId, QDomElement* pChildElement );
 
     // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given parag props
-    void writeLayout( /*QDomElement& parentElement, const wvWare::ParagraphProperties& paragraphProperties,*/ const wvWare::Style* style );
+    void writeLayout( const wvWare::Style* style );
+
+    bool m_writeTextToStylesDotXml; //flag for headers & footers, where we write the actual text to styles.xml
+    KoXmlWriter* m_tmpWriter; //for header/footer writing
 
     // Communication with Document, without having to know about Document
 signals:
@@ -104,15 +102,11 @@ signals:
     void updateListDepth( int );
 
 protected:
-    void writeOutParagraph( const QString& styleName, const QString& text );
-    void writeCounter( const wvWare::ParagraphProperties& paragraphProperties, const wvWare::Style* style );
     QDomElement insertVariable( int type, wvWare::SharedPtr<const wvWare::Word97::CHP> chp, const QString& format );
     QDomElement insertAnchor( const QString& fsname );
     QString getFont(unsigned fc) const;
-    KoXmlWriter* m_contentWriter;
     KoXmlWriter* m_bodyWriter; //this writes to content.xml inside <office:body>
-    KoXmlWriter* m_stylesWriter; //this writes to styles.xml
-    KoXmlWriter* m_listStylesWriter; //this is for list styles
+    KoGenStyles* m_mainStyles; //this is for collecting most of the styles
 
 private:
     wvWare::SharedPtr<wvWare::Parser> m_parser;
@@ -121,15 +115,13 @@ private:
     int m_sectionNumber;
     int m_footNoteNumber; // number of footnote _vars_ written out
     int m_endNoteNumber; // number of endnote _vars_ written out
-    //bool m_openTextListItemTag; //flag to tell us we need to close that tag in paragraphEnd()
     int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)
     int m_currentListID; //tracks the id of the current list - 0 if no list
-    int m_textStyleNumber; //number of styles created for text family
-    int m_paragraphStyleNumber; //number of styles created for paragraph family
-    int m_listStyleNumber; //number of styles created for lists
+    //int m_textStyleNumber; //number of styles created for text family
+    //int m_paragraphStyleNumber; //number of styles created for paragraph family
+    //int m_listStyleNumber; //number of styles created for lists
 
     // Current paragraph
-    QString m_paragraph;
     QString m_runOfText;
     const wvWare::Style* m_currentStyle;
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;

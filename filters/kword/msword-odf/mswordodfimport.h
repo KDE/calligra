@@ -40,8 +40,6 @@ public:
 private:
     class Private;
     Private* d;
-
-    bool createContent( KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter );
 };
 
 #endif // MSWORDODFIMPORT_H

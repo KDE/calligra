@@ -35,8 +35,10 @@
 #include <QRectF>
 #include <queue>
 #include <string>
+#include <QBuffer>
 
 #include <KoXmlWriter.h>
+#include <KoGenStyles.h>
 
 class KoStoreDevice;
 
@@ -56,7 +58,7 @@ class Document : public QObject, public wvWare::SubDocumentHandler
 {
     Q_OBJECT
 public:
-    Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* contentWriter, KoXmlWriter* bodyWriter, KoXmlWriter* stylesWriter, KoXmlWriter* listStylesWriter );
+    Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles );
     virtual ~Document();
 
     bool hasParser() const { return m_parser != 0L; }
@@ -119,12 +121,8 @@ private:
     void processStyles();
     void processAssociatedStrings();
     enum NewFrameBehavior { Reconnect=0, NoFollowup=1, Copy=2 };
-    //QDomElement createInitialFrame( QDomElement& parentFramesetElem, double left, double right, double top, double bottom, bool autoExtend, NewFrameBehavior nfb );
     void generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd );
 
-    //QDomDocument& m_mainDocument;
-    //QDomDocument& m_documentInfo;
-    //QDomElement& m_framesetsElement;
     KWordReplacementHandler* m_replacementHandler;
     KWordTableHandler* m_tableHandler;
     KWordPictureHandler* m_pictureHandler;
@@ -136,11 +134,17 @@ private:
     QStringList m_pictureList; // for <PICTURES>
     unsigned char m_headerFooters; // a mask of HeaderData::Type bits
     bool m_bodyFound;
+    bool m_openHeader; //we're processing a header
+    bool m_openFooter; //we're processing a footer
     int m_footNoteNumber; // number of footnote _framesets_ written out
     int m_endNoteNumber; // number of endnote _framesets_ written out
     int m_currentListDepth; //track list depth in case we need to close a list here (-1 if no list)
     KoXmlWriter* m_bodyWriter; //for writing to the body of content.xml
-    KoXmlWriter* m_listStylesWriter; //for writing list styles
+    KoGenStyles* m_mainStyles; //for collecting styles
+    KoGenStyle* m_masterStyle; //for header/footer stuff, at least
+    KoXmlWriter* m_writer; //for header/footer tags
+    QBuffer* m_buffer; //for header/footer tags
+    int m_headerCount; //just so we have a unique name for the element we're putting in m_masterStyle
 };
 
 #endif // DOCUMENT_H
