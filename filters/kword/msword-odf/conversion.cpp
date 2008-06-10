@@ -251,49 +251,6 @@ int Conversion::ditheringToGray( int ipat, bool* ok )
     }
 }
 
-//QString Conversion::alignment( int jc ) {
-//    QString value( "left" );
-//    if ( jc == 1 )
-//        value = "center";
-//    else if ( jc == 2 )
-//        value = "right";
-//    else if ( jc == 3 )
-//        value = "justify";
-//    return value;
-//}
-
-//QString Conversion::lineSpacing( const wvWare::Word97::LSPD& lspd )
-//{
-//    QString attribute( "" );
-//    if ( lspd.fMultLinespace == 1 ) //Word will reserve for each line the 
-//				    //(maximal height of the line*lspd.dyaLine)/240
-//    {
-//        // This will be e.g. 1.5 for a 1.5 linespacing.
-//        float proportionalLineSpacing = (float)lspd.dyaLine / 240.0;
-//        if ( QABS(proportionalLineSpacing - 1.5) <= 0.25 ) // close to 1.5?
-//            value = "oneandhalf";
-//        else if ( proportionalLineSpacing > 1.75) // close to 2.0, or more?
-//            value = "double";
-//    }
-//    else if ( lspd.fMultLinespace == 0 )//magnitude of lspd.dyaLine specifies the amount of space 
-//				    //that will be provided for lines in the paragraph in twips
-//    {
-//        // see sprmPDyaLine in generator_wword8.htm
-//        float value = QABS((float)lspd.dyaLine / 20.0); // twip -> pt
-//        // lspd.dyaLine > 0 means "at least", < 0 means "exactly"
-//	if ( lspd.dyaLine > 0 )
-//
-//        // "at least" is now possible in kword, but here it's the size of the whole
-//        // line, not the spacing between the line (!)
-//        // To convert between the two, we'd need to find out the height of the
-//        // highest character in the line, and substract it from the value..... Ouch.
-//        // Better implement line-height-at-least like OOo has.
-//    }
-//    else
-//        kWarning(30513) << "Unhandled LSPD::fMultLinespace value: " << lspd.fMultLinespace;
-//    return attribute;
-//}
-
 void Conversion::setColorAttributes( QDomElement& element, int ico, const QString& prefix, bool defaultWhite )
 {
     QColor color = Conversion::color( ico, -1, defaultWhite );
