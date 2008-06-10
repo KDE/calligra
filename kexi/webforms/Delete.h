@@ -24,7 +24,25 @@
 struct RequestData;
 
 namespace KexiWebForms {
+
+    /*! @short Callback function for Delete handler */
     namespace Delete {
+        /*!
+         * This namespace contains a callback function bound to '/delete/*' request URI
+         *
+         * This function expects a uri with the following format:
+         * '/delete/\<table name\>/\<pkey name\>/\<pkey value\>'
+         *
+         * For example: /delete/books/id/1
+         * In a browser address edit field: http://localhost:8080/delete/books/id/1
+         *
+         * This "Query String" will be parsed by this method and used to
+         * build a QuerySchema object with a 'WHERE' clause (required) and passed
+         * to deleteRow to perform row deletion
+         *
+         * @param RequestData: a pointer to a RequestData structure @see RequestData
+         * @see KexiWebForms::RequestData
+         */
         void show(RequestData*);
     }
 }

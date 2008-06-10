@@ -26,9 +26,21 @@
 class QString;
 
 namespace KexiWebForms {
+    /*!
+     * Global connection object
+     *
+     * @fixme That's a bit awful, isn't it?
+     */
     extern KexiDB::Connection* gConnection;
 
-    //static const QPointer<KexiDB::Connection> connection();
+    /*!
+     * Essentially, initialize the KexiDB::Connection object
+     *
+     * @param const QString& Path to a KexiDB file, connection file
+     * shortcut file
+     *
+     * @return boolean false when error occurs, true if everything went well
+     */
     bool initDatabase(const QString& fileName);
 }
 

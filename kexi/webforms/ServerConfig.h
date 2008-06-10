@@ -25,17 +25,35 @@
 
 namespace KexiWebForms {
 
+    /*!
+     * A structure representing HTTP server configuration
+     */
     struct ServerConfig {
-        /**
-          * A string to specify listen ports. You can use it this way:
-          * "N,N,Ns" where N are port numbers and Ns is a port on which
-          * listen for HTTPS requests
-          */
+
+        /*! A string to specify listen ports */
         QString ports;
+
+        /*!
+         * A string specifying the webroot, it must contain at least
+         * the required template files
+         */
         QString webRoot;
+
+        /*! Wether or not enable directory listing */
         bool dirList;
+
+        /*! Wether or not enable SSL support */
         QString https;
+
+        /*!
+         * If SSL support is enabled, this string should point to a valid
+         * certificate file
+         */
         QString certPath;
+
+        /*!
+         * Path to the Kexi database file, Kexi shortcut file or Kexi connection file
+         */
         QString dbPath;
     };
 

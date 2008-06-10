@@ -24,7 +24,16 @@
 struct RequestData;
 
 namespace KexiWebForms {
+
+    /* @short Callback functions for index page */
     namespace Index {
+        /*!
+         * This namespace contains a function bound with the 'root' URI ('/')
+         * It simply shows a list of tables contained in the database
+         *
+         * @param RequestData a pointer to a RequestData structure
+         * @see KexiWebForms::RequestData
+         */
         void show(RequestData* req);
     }
 }

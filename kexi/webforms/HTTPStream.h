@@ -30,15 +30,58 @@ struct RequestData;
 
 namespace KexiWebForms {
 
-    // Create a new type
+    /*!
+     * This empty structure is used to mark the end of an HTTP Stream
+     */
     typedef struct {} HTTPEndOfStream;
 
+    /*!
+     * HTTPStream exposes shttpd_printf functions as a
+     * C++ stream
+     *
+     * @todo implement operators to allow modifications
+     * of HTTP headers to be sent back the client
+     */
     class HTTPStream {
     public:
+        /*!
+         * The constructor
+         * @param RequestData a pointer to a RequestData structure
+         * @see KexiWebForms::RequestData
+         */
         HTTPStream(RequestData*);
+
+        /*!
+         * Writes const* char on the stream
+         * @param const char* the string to be written
+         * @return an HTTPStream reference
+         */
         HTTPStream& operator<<(const char*);
+
+        /*!
+         * Writes a C++ std::string on the stream
+         * @param const std::string& the string to be written
+         * @return an HTTPStream reference
+         */
         HTTPStream& operator<<(const std::string&);
+
+        /*!
+         * Writes const* char on the stream
+         * @param const char* the string to be written
+         * @return an HTTPStream reference
+         */
         HTTPStream& operator<<(const QString&);
+
+        /*!
+         * Stop buffering data and send it to the client
+         *
+         * @param HTTPEndOfStream an HTTPEndOfStream object
+         * @see KexiWebForms::HTTPEndOfStream
+         *
+         * @todo we return void to this function just to ensure that
+         * we can't append more data, it's not correct and probably not
+         * portable, investigate
+         */
         void operator<<(HTTPEndOfStream);
     private:
         bool m_headerModified;
@@ -46,6 +89,10 @@ namespace KexiWebForms {
         RequestData* m_request;
     };
 
+    
+    /*!
+     * Defines a globally usable HTTPEndOfStream object
+     */ 
     extern HTTPEndOfStream webend;
 }
 

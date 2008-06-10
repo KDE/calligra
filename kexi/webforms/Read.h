@@ -24,7 +24,18 @@
 struct RequestData;
 
 namespace KexiWebForms {
+    /*! @short Callback function for Read handler */
     namespace Read {
+        /*!
+         * Simply show an HTML page containing a table displaying
+         * data in a given database table.
+         * This function uses the request URI to determine which
+         * table to read: ie /view/books will show contents of the table
+         * named 'books'
+         *
+         * @param RequestData a pointer to a RequestData structure
+         * @see KexiWebForms::RequestData
+         */
         void show(RequestData*);
     }
 }

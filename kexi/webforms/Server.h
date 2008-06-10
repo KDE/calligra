@@ -28,17 +28,50 @@ struct shttpd_ctx;
 
 namespace KexiWebForms {
 
+    /*!
+     * @short Wrapper for shttpd
+     * This class is basically a C++ wrapper around shttpd
+     * shttpd has a pure C api, having it wrapped in C++ layer seemed
+     * convenient, the only drawback is that we still need to use
+     * function pointers for certain tasks
+     *
+     * This class is a Singleton
+     */
     class Server {
     public:
         ~Server();
-        
+
+        /*!
+         * Return the unique instance of Server
+         * @return Pointer to Server object
+         */
         static Server* instance();
 
+        /*!
+         * Initialize the server
+         * @param ServerConfig*: a pointer to the ServerConfig structure
+         * @return a boolean indicating if initialization has succeeded
+         */
         bool init(ServerConfig*);
+
+        /*!
+         * Run the server main loop, this is a blocking function
+         * @return boolean true if something went well, false on errors
+         */
         bool run();
 
         // FIXME: Do not expose shttpd data structures
+        /*!
+         * Register a new URI handler with a given URI pattern and
+         * callback function
+         * @param const char*: the URI pattern
+         * @param void(*f)(RequestData*): the callback function
+         */
         void registerHandler(const char*, void(*f)(RequestData*));
+
+        /*!
+         * @return a pointer to the currently used ServerConfig structure
+         */
         ServerConfig* config() const;
     protected:
         Server();

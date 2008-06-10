@@ -41,7 +41,7 @@ int main(int argc, char **argv) {
                                        "0.1", ki18n("Exports Kexi Forms to standard HTML pages"),
                                        KAboutData::License_GPL_V2,
                                        ki18n("(C) Copyright 2008, Lorenzo Villani")));
-    
+     
     KCmdLineOptions options;
     options.add("port <port>", ki18n("Listen port"), "8080");
     options.add("webroot <directory>", ki18n("Web Root (used also as template root directory)"), "./");

@@ -26,11 +26,41 @@
 class QString;
 
 namespace KexiWebForms {
+    /*! Just another name for the shttpd_arg structure */
     typedef struct shttpd_arg RequestData;
-    
+
+    /*!
+     * @short Utilities functions
+     *
+     * This namespace contains some utilities functions to get
+     * actual Request URI and to retrieve variables passed with
+     * GET or POST requests
+     */
     namespace Request {
+        /*!
+         * Retrieve the value of a POST or GET parameter
+         *
+         * @param RequestData a pointer to a RequestData structure
+         *
+         * @return The value of the chosen parameter, an empty string
+         * if it can't be found
+         */
         QString request(RequestData*, const char*);
+
+        /*!
+         * Same as above, but accepting a const QString& instead of const char*
+         */
         QString request(RequestData*, const QString&);
+
+        /*!
+         * Retrieve the request URI, for example if in the browser you write
+         * http://localhost:8080/delete/books/id/1
+         * the request URI would be '/delete/books/id/1'
+         *
+         * @param RequestData pointer to a RequestData structure
+         *
+         * @return a QString containing the request URI
+         */
         QString requestUri(RequestData*);
     }
 }
