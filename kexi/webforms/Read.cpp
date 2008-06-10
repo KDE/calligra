@@ -108,9 +108,11 @@ namespace KexiWebForms {
                         QString pkeyVal(cursor->value(tableSchema->indexOf(primaryKey)).toString());
                         // Edit
                         tableData.append("<td><a href=\"/update/").append(requestedTable).append("/");
+                        tableData.append(primaryKey->name()).append("/");
                         tableData.append(pkeyVal).append("\">Edit</a></td>");
                         // Delete
                         tableData.append("<td><a href=\"/delete/").append(requestedTable).append("/");
+                        tableData.append(primaryKey->name()).append("/");
                         tableData.append(pkeyVal).append("\">Delete</a></td>");
                         // End row
                         tableData.append("</tr>");

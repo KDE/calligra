@@ -24,6 +24,7 @@
 
 #include <KDebug>
 
+#include <kexidb/utils.h>
 #include <kexidb/queryschema.h>
 #include <kexidb/cursor.h>
 
@@ -45,26 +46,22 @@ namespace KexiWebForms {
             /*
              * Retrieve requested table and pkey
              */
+            kDebug() << "Retrieving request URI" << endl;
             QStringList queryString = Request::requestUri(req).split("/");
+            kDebug() << queryString << endl;
             QString requestedTable = queryString.at(2);
             QString pkeyName = queryString.at(3);
             QString pkeyValue = queryString.at(4);
+            kDebug() << "reqTable=" << requestedTable << " pkey=" << pkeyName
+                     << "pkeyValue=" << pkeyValue << endl;
 
-            /// @fixme: It seems to crash when table doesn't exist
-            KexiDB::QuerySchema schema(*gConnection->tableSchema(requestedTable));
-            schema.addToWhereExpression(schema.field(pkeyName), QVariant(pkeyValue));
-            
-            KexiDB::Cursor* cursor = gConnection->executeQuery(schema);
-            cursor->moveNext();
-            KexiDB::RecordData data(cursor->fieldCount());
-            if (cursor->deleteRow(data)) {
-                dict.SetValue("ERROR", "row deleted");
+            kDebug() << "Trying to delete row..." << endl;
+            if (KexiDB::deleteRow(*gConnection, gConnection->tableSchema(requestedTable),
+                                  pkeyName, pkeyValue)) {
+                dict.SetValue("ERROR", "Row deleted successfully");
             } else {
-                kError() << " ========== ERROR ============" << endl;
-                gConnection->debugError();
-                dict.SetValue("ERROR", cursor->serverErrorMsg().toLatin1().constData());
+                dict.SetValue("ERROR", "Error while trying to delete row!");
             }
-            //dict.SetValue("DEBUG_QUERY", gConnection->debugString().toLatin1().constData());
 
             // Render template
             std::string output;
