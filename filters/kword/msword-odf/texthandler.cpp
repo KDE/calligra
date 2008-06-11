@@ -279,7 +279,7 @@ void KWordTextHandler::paragraphEnd()
     if ( !m_writeTextToStylesDotXml )
         m_bodyWriter->endElement();
     else
-	m_tmpWriter->endElement();
+	m_headerWriter->endElement();
     //clear our paragraph flag
     m_bInParagraph = false;
 }//end paragraphEnd()
@@ -554,10 +554,10 @@ void KWordTextHandler::writeFormattedText( QDomElement& parentElement, const wvW
 	QString styleName = m_mainStyles->lookup( textStyle );
 	//now I just need to write the text:span to the header tag
 	//that'll probably just be to the temporary writer, but I should construct that elsewhere
-	m_tmpWriter->startElement( "text:span" );
-	m_tmpWriter->addAttribute( "text:style-name", styleName.toUtf8() );
-	m_tmpWriter->addTextNode( m_runOfText.toUtf8() );
-	m_tmpWriter->endElement();
+	m_headerWriter->startElement( "text:span" );
+	m_headerWriter->addAttribute( "text:style-name", styleName.toUtf8() );
+	m_headerWriter->addTextSpan(m_runOfText);
+	m_headerWriter->endElement(); //text:span
     }
     else
     {
@@ -644,7 +644,7 @@ void KWordTextHandler::writeLayout( const wvWare::Style* style )
     if ( !m_writeTextToStylesDotXml )
 	writer = m_bodyWriter;
     else
-	writer = m_tmpWriter;
+	writer = m_headerWriter;
 
     //if we don't actually have paragraph properties, just return
     if ( !m_paragraphProperties )
@@ -663,10 +663,10 @@ void KWordTextHandler::writeLayout( const wvWare::Style* style )
     //ilfo = when non-zero, (1-based) index into the pllfo identifying the list to which the paragraph belongs
     if ( pap.ilfo > 0 )
     {
-	/*//we're in a list in the word document
+	//we're in a list in the word document
 	//listInfo is our list properties object
 	const wvWare::ListInfo* listInfo = (*m_paragraphProperties).listInfo();
-	bool writeListLevelStyle = false; //little flag to tell us whether or not to write that tag
+	bool newListLevelStyle = false; //little flag to tell us whether or not to write that tag
         if ( !listInfo )
 	{
 	    kWarning() << "pap.ilfo is non-zero but there's no listInfo!";
@@ -680,82 +680,81 @@ void KWordTextHandler::writeLayout( const wvWare::Style* style )
 	    kDebug(30513) << "opening list " << m_currentListID;
 	    //open <text:list> in the body
 	    writer->startElement( "text:list" );
-	    //set up the list style name
-	    QString listStyleName( "L" );
-	    listStyleName.append( QString::number( m_listStyleNumber ) );
-	    m_listStyleNumber++;
+	    //we create a style & add it to m_mainStyles, then get a pointer to it
+	    KoGenStyle listStyle(KoGenStyle::StyleAutoList);
+	    m_listStyleName = m_mainStyles->lookup(listStyle);
 	    //write styleName to the text:list tag
-	    writer->addAttribute( "text:style-name", listStyleName ); 
-	    //set up the text:list-style to be put in styles.xml
-	    m_listStylesWriter->startElement( "text:list-style" );
-	    m_listStylesWriter->addAttribute( "style:name", listStyleName );
+	    writer->addAttribute( "text:style-name", m_listStyleName ); 
 	    //set flag to true because it's a new list, so we need to write that tag
-	    writeListLevelStyle = true;
+	    newListLevelStyle = true;
 	}
 	else if ( pap.ilvl > m_currentListDepth )
 	{
 	    //we're going to a new level in the list
 	    kDebug(30513) << "going to a new level in list" << m_currentListID;
 	    //open a new <text:list>
-	    m_bodyWriter->startElement( "text:list" );
+	    writer->startElement( "text:list" );
 	    //it's a new level, so we need to configure this level
-	    writeListLevelStyle = true;
+	    newListLevelStyle = true;
 	}
 	else if ( pap.ilvl < m_currentListDepth )
 	{
 	    //we're backing out a level in the list
 	    kDebug(30513) << "backing out a level in list" << m_currentListID;
 	    //close the last <text:list-item of the level
-	    m_bodyWriter->endElement();
+	    writer->endElement();
 	    //close <text:list> for the level
-	    m_bodyWriter->endElement();
+	    writer->endElement();
 	    //close the <text:list-item> from the surrounding level
-	    m_bodyWriter->endElement();
+	    writer->endElement();
 	}
 	else
 	{
 	    kDebug(30513) << "just another item on the same level in the list";
 	    //close <text:list-item> from the previous item
-	    m_bodyWriter->endElement();
+	    writer->endElement();
 	}
 
 	//write the style configuration tag if needed
-	if ( writeListLevelStyle )
+	if (newListLevelStyle)
 	{
 	    kDebug(30513) << "writing the list level style";
-	    //create this list style
-	    KoGenStyle* listStyle( KoGenStyle::StyleAutoList );
+	    //create writer for this list
+	    QBuffer buf;
+	    buf.open(QIODevice::WriteOnly);
+	    KoXmlWriter listStyleWriter(&buf);
+	    KoGenStyle* listStyle = 0;
 	    int nfc = listInfo->numberFormat();
 	    //text() returns a struct consisting of a UString text string (called text) & a pointer to a CHP (called chp)
 	    wvWare::UString text = listInfo->text().text;
 	    if ( nfc == 23 ) //bullets
 	    {
 		kDebug(30513) << "bullets...";
-	        m_listStylesWriter->startElement( "text:list-level-style-bullet" );
-		m_listStylesWriter->addAttribute( "text:level", pap.ilvl+1 );
+	        listStyleWriter.startElement( "text:list-level-style-bullet" );
+		listStyleWriter.addAttribute( "text:level", pap.ilvl+1 );
 		if ( text.length() == 1 )
 		{
 		    //with bullets, text can only be one character, which tells us what kind of bullet to use
 		    unsigned int code = text[0].unicode();
 		    if ( (code & 0xFF00) == 0xF000 ) // see wv2
 			code &= 0x00FF;
-		    m_listStylesWriter->addAttribute( "text:bullet-char", QString::QString( code ).toUtf8() );
+		    listStyleWriter.addAttribute( "text:bullet-char", QString::QString( code ).toUtf8() );
 		}
 		else
 		    kWarning(30513) << "Bullet with more than one character, not supported";
 
-		m_listStylesWriter->startElement( "style:list-level-properties" );
+		listStyleWriter.startElement( "style:list-level-properties" );
 		//TODO this is just hardcoded for now
-		m_listStylesWriter->addAttribute( "text:min-label-width", "0.25in" );
-		m_listStylesWriter->endElement(); //style:list-level-properties
+		listStyleWriter.addAttribute( "text:min-label-width", "0.25in" );
+		listStyleWriter.endElement(); //style:list-level-properties
 		//close element
-		m_listStylesWriter->endElement(); //text:list-level-style-bullet
+		listStyleWriter.endElement(); //text:list-level-style-bullet
 	    }
 	    else //numbered/outline list
 	    {
 		kDebug(30513) << "numbered/outline... nfc = " << nfc;
-		m_listStylesWriter->startElement( "text:list-level-style-number" );
-		m_listStylesWriter->addAttribute( "text:level", pap.ilvl+1 );
+		listStyleWriter.startElement( "text:list-level-style-number" );
+		listStyleWriter.addAttribute( "text:level", pap.ilvl+1 );
 		//*************************************
 		int depth = pap.ilvl; //both are 0 based
 		int numberingType = listInfo->isWord6() && listInfo->prev() ? 1 : 0;
@@ -831,11 +830,11 @@ void KWordTextHandler::writeLayout( const wvWare::Style* style )
 		        suffix = ".";
 		    kDebug(30513) <<" prefix=" << prefix <<" suffix=" << suffix;
 		    //counterElement.setAttribute( "type", Conversion::numberFormatCode( nfc ) );
-		    m_listStylesWriter->addAttribute( "style:num-format", Conversion::numberFormatCode( nfc ) );
+		    listStyleWriter.addAttribute( "style:num-format", Conversion::numberFormatCode( nfc ) );
 		    //counterElement.setAttribute( "lefttext", prefix );
-		    m_listStylesWriter->addAttribute( "style:num-prefix", prefix );
+		    listStyleWriter.addAttribute( "style:num-prefix", prefix );
 		    //counterElement.setAttribute( "righttext", suffix );
-		    m_listStylesWriter->addAttribute( "style:num-suffix", suffix );
+		    listStyleWriter.addAttribute( "style:num-suffix", suffix );
 		    //counterElement.setAttribute( "display-levels", displayLevels );
 		    kDebug(30513) <<"storing suffix" << suffix <<" for depth" << depth;
 		    m_listSuffixes[ depth ] = suffix;
@@ -857,13 +856,19 @@ void KWordTextHandler::writeLayout( const wvWare::Style* style )
 		//listInfo->notRestarted() [by higher level of lists] not supported
 		//listInfo->followingchar() ignored, it's always a space in KWord currently
 	    //*************************************
-		m_listStylesWriter->startElement( "style:list-level-properties" );
+		listStyleWriter.startElement( "style:list-level-properties" );
 		//TODO this is just hardcoded for now
-		m_listStylesWriter->addAttribute( "text:min-label-width", "0.25in" );
-		m_listStylesWriter->endElement(); //style:list-level-properties
+		listStyleWriter.addAttribute( "text:min-label-width", "0.25in" );
+		listStyleWriter.endElement(); //style:list-level-properties
 		//close element
-		m_listStylesWriter->endElement(); //text:list-level-style-number
+		listStyleWriter.endElement(); //text:list-level-style-number
 	    } //end numbered list stuff
+	    //now add this info to our list style
+	    QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+	    listStyle = m_mainStyles->styleForModification(m_listStyleName);
+	    //we'll add each one with a unique name
+	    QString name("listlevels");
+	    listStyle->addChildElement(name.append(QString::number(pap.ilvl)), contents);
 	}//end write list level stuff
 	//now update m_currentListDepth
 	m_currentListDepth = pap.ilvl;
@@ -871,12 +876,9 @@ void KWordTextHandler::writeLayout( const wvWare::Style* style )
 	kDebug(30513) << "emiting updateListDepth signal with depth " << m_currentListDepth;
 	emit updateListDepth( m_currentListDepth );
 	//we always want to open this tag
-	m_bodyWriter->startElement( "text:list-item" );
-	*/
+	writer->startElement( "text:list-item" );
     } //end pap.ilfo > 0 (ie. we're in a list)
     else
-    {}
-	/*
 	//not in a list at all in the word document, so check if we need to close one in the odt
 	if ( m_currentListID != 0 )
 	{
@@ -888,16 +890,16 @@ void KWordTextHandler::writeLayout( const wvWare::Style* style )
 	    //for level 2, we need to close the last item and the list, and the last item adn the list, and again
 	    for (int i = 0; i <= m_currentListDepth; i++)
 	    {
-		m_bodyWriter->endElement(); //close the last text:list-item
-		m_bodyWriter->endElement(); //text:list
+		writer->endElement(); //close the last text:list-item
+		writer->endElement(); //text:list
 	    }
-	    m_listStylesWriter->endElement(); //text:list-style
 	    m_currentListID = 0;
 	    m_currentListDepth = -1;
+	    m_listStyleName = "";
 	    kDebug(30513) << "emiting updateListDepth signal with depth " << m_currentListDepth;
 	    emit updateListDepth( m_currentListDepth );
 	}
-	*/
+
     //start the <text:p> tag - it's closed in paragraphEnd()
     writer->startElement( "text:p" );
 
@@ -997,9 +999,6 @@ void KWordTextHandler::writeLayout( const wvWare::Style* style )
 	paragraphStyle.addProperty( "fo:border-right", Conversion::setBorderAttributes( pap.brcRight ) );
     }
 
-    //close style:paragraph-properties, b/c we're done with that and we need to write more tags
-    //m_automaticStylesWriter->endElement(); //style:paragraph-properties
-
     // Tabulators
     //itbdMac = number of tabs stops defined for paragraph. Must be >= 0 and <= 64.
     if ( pap.itbdMac )
@@ -1061,7 +1060,7 @@ void KWordTextHandler::writeLayout( const wvWare::Style* style )
 	styleName = m_mainStyles->lookup(paragraphStyle);
     }
     else {
-	kWarning() << "paragraphStyle is empty!";
+	kWarning() << "paragraphStyle is empty when it shouldn't be!";
     }
     //add the attribute for our style in <text:p>
     writer->addAttribute( "text:style-name", styleName.toUtf8() );

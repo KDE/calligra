@@ -273,12 +273,15 @@ void Document::bodyEnd()
     if ( m_currentListDepth >= 0 )
     {
 	kDebug(30513) << "closing the final list in the document";
-	/*m_listStylesWriter->endElement(); //text:list-style
+	//m_listStylesWriter->endElement(); //text:list-style
+	//reset listStyleName
+	m_textHandler->m_listStyleName = "";
+	//close any open list tags in the body writer
         for (int i = 0; i <= m_currentListDepth; i++)
         {
 	    m_bodyWriter->endElement(); //close the text:list-item
 	    m_bodyWriter->endElement(); //text:list
-	}*/
+	}
     }
 
     disconnect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
@@ -359,8 +362,8 @@ void Document::headerStart( wvWare::HeaderData::Type type )
 
     //tell texthandler to write to styles.xml instead of content.xml
     m_textHandler->m_writeTextToStylesDotXml = true;
-    //and set up the tmp writer
-    m_textHandler->m_tmpWriter = m_writer;
+    //and set up the tmp writer so writeFormattedText() writes to styles.xml
+    m_textHandler->m_headerWriter = m_writer;
 
     //createInitialFrame( framesetElement, 29, 798, isHeader?0:567, isHeader?41:567+41, true, Copy );
 
@@ -383,7 +386,7 @@ void Document::headerEnd()
     m_writer->endElement(); //style:header/footer
     QString contents = QString::fromUtf8( m_buffer->buffer(), m_buffer->buffer().size() );
     m_masterStyle->addChildElement( QString::number( m_headerCount ), contents );
-    m_textHandler->m_tmpWriter = 0;
+    m_textHandler->m_headerWriter = 0;
     delete m_writer;
     delete m_buffer;
     //we're done with this header, so reset to false

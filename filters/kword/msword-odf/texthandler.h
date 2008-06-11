@@ -30,6 +30,7 @@
 #include <QString>
 #include <QObject>
 #include <qdom.h>
+#include <QBuffer>
 
 #include <KoXmlWriter.h>
 #include <KoGenStyles.h>
@@ -91,7 +92,9 @@ public:
     void writeLayout( const wvWare::Style* style );
 
     bool m_writeTextToStylesDotXml; //flag for headers & footers, where we write the actual text to styles.xml
-    KoXmlWriter* m_tmpWriter; //for header/footer writing
+    KoXmlWriter* m_headerWriter; //for header/footer writing in styles.xml
+    QString m_listStyleName; //track the name of the list style
+    KoGenStyles* m_mainStyles; //this is for collecting most of the styles
 
     // Communication with Document, without having to know about Document
 signals:
@@ -106,7 +109,6 @@ protected:
     QDomElement insertAnchor( const QString& fsname );
     QString getFont(unsigned fc) const;
     KoXmlWriter* m_bodyWriter; //this writes to content.xml inside <office:body>
-    KoGenStyles* m_mainStyles; //this is for collecting most of the styles
 
 private:
     wvWare::SharedPtr<wvWare::Parser> m_parser;
