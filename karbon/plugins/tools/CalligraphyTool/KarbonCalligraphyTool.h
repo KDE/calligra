@@ -46,13 +46,11 @@ public:
     void deactivate();
 
 private:
-    void addPoint( const QPointF &point );
+    void addPoint( KoPointerEvent *event );
 
-    //QPointF m_point0;
-    //QPointF m_point1;
+    
     QPointF m_lastPoint;
-    KarbonCalligraphicShape *m_path; // TODO: rename to m_shape
-    //QList<KoPathShape *> m_pieces;
+    KarbonCalligraphicShape *m_shape;
     
     double m_strokeWidth;
     double m_angle;
