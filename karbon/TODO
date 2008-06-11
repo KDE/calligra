@@ -22,10 +22,7 @@ KoPathShape:
 TextShape:
 ----------
 
-- make it a parameter shape and a handle for the position on path
 - saving and loading to/from odf
-- add cursor?
-- add selection?
 
 Layers:
 -------
@@ -40,8 +37,12 @@ Shapes/Tools:
 - implement a Inkscape like calligraphy tool (http://www.inkscape.org/doc/calligraphy/tutorial-calligraphy.htm)
 - find a way to save/load the roundness of the star shape (e.g. flower)
 - implement pattern resizing
+- saving/loading of simple text for wmf, ...
+- make the simple text tool emit done after hitting <enter>
+- an object snap tool:
+    - define a snap point a the selected object(s) which can snap to features of the selection
+    - move the selection which then snaps the defined snap point to other objects
 
-- saving/loading of simple text for odf, svg, wmf, ...
 
 ODF support:
 ------------
@@ -51,23 +52,17 @@ ODF support:
 Dockers:
 --------
 - implement reordering of shapes and layers in the layer docker (d'n'd)
-- double click on style preview buttons should bring up color chooser/gradient widget etc
 
 Plugins:
 --------
-- port the old plugins to work with flake shapes
-- port the round corners plugin
-- port the zoom tool plugin ??? there is an koffice wide zoom tool underway
-- gradient tool:
-    - implement a way to remove the gradient fill (and/or set a solid fill)
 - implement a tracing plugin for tracing images (potrace...)
+- time scale plugin (http://vimeo.com/1015679)
 
 Filters:
 --------
 - port the filters to create a document with flake shapes
 - fix the eps and ps filters (maybe using ps2pdf and then use a pdf import filter)
-- text support for wmf import filter
-- allow png export to set DPI option
+- text support for wmf and karbon1.x import filter
 
 Cleanup:
 --------
@@ -77,12 +72,29 @@ Cleanup:
 General:
 --------
 - consider the old todos and wishes when implementing/porting the above parts
-- replace VColor with KoColor
 
+- implement function to resize page to current drawing
 - check if we still need the KarbonDocument::shapes() method or the complete list of shapes
-- fix the zooming focus (i.e. the centered point)
 
-- move KorulerController from KoText to guiutils so we can remove the KOTEXT_INCLUDES from the CMakeLists.txt
+- finally implement the close path command
+
+- for big drawings it might be cool to have the outline mode with the option
+  of fully rendering only the current selection
+
+- guide lines snapping strategy
+
+- move cut, paste, copy, deleteSelection into KoToolSelection -> patch to Zagge
+- fix z-index handling when loading (and close bug 130147 after that)
+- move cut,paste, deleteSelection into KoToolSelection -> discuss with Zagge first
+
+- add crop marks generation/placement 
+    - http://www.thevisualsense.com/bleedcropmarks.html
+    - http://desktoppub.about.com/library/glossary/blg_crop.htm
+    - generate crop marks from selection/shapes
+    - optionally link crops marks to the selection/shape (to move when the objects move)
+    - page crops marks always keep their position
+
+- implement a KoShapeBackground so we can have the odf fill image rendering style (15.14.9)
 
 All time favourites :)
 -----------------------
@@ -93,7 +105,6 @@ BIG TOPICS:
 GUI:
 -	other koffice apps have widgts that may of interest to us, for instance in kpresenter. We should
 	try to reuse them.
--	make a UI for the node manipulation tool.
 -	rework the stroke/fill docker with preview on the document and apply button.
 -	Find a better way to select a color than the color manager. Maybe a popup ?
 
