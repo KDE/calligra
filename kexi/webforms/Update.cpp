@@ -43,87 +43,74 @@ namespace KexiWebForms {
             HTTPStream stream(req);
             google::TemplateDictionary dict("update");
 
-            // FIXME: Two copies of the same string? Hm...
-            QString requestedTable = Request::requestUri(req);
-            QString requestedId = Request::requestUri(req);
 
-            // FIXME: Strange things can happen here
-            requestedTable.remove(0, 8);
-            requestedTable.remove(requestedTable.indexOf('/'), requestedTable.size());
+            QStringList queryString = Request::requestUri(req).split("/");
+            QString requestedTable = queryString.at(2);
+            QString pkeyName = queryString.at(3);
+            QString pkeyValue = queryString.at(4);
+
+
             dict.SetValue("TABLENAME", requestedTable.toLatin1().constData());
-
-            // FIXME: And here too
-            requestedId.remove(0, requestedId.lastIndexOf('/')+1);
-            dict.SetValue("ROW", requestedId.toLatin1().constData());
-
-            KexiDB::QuerySchema schema(*gConnection->tableSchema(requestedTable));
-            schema.addToWhereExpression(schema.field("id"), QVariant(requestedId));
+            dict.SetValue("PKEY_NAME", pkeyName.toLatin1().constData());
+            dict.SetValue("PKEY_VALUE", pkeyValue.toLatin1().constData());
+            
+            KexiDB::TableSchema tableSchema(*gConnection->tableSchema(requestedTable));
+            KexiDB::QuerySchema schema(tableSchema);
+            schema.addToWhereExpression(schema.field(pkeyName), QVariant(pkeyValue));
             KexiDB::Cursor* cursor = gConnection->executeQuery(schema);
 
 
             /// @fixme: Can this code be improved?
             if (Request::request(req, "dataSent") == "true" && cursor) {
-                kDebug() << "Updating field" << endl;
-
                 QStringList fieldsList = Request::request(req, "tableFields").split("|:|");
+                kDebug() << "Fields: " << fieldsList;
+
                 QStringListIterator iterator(fieldsList);
+
+                KexiDB::RecordData recordData(tableSchema.fieldCount());
+                KexiDB::RowEditBuffer editBuffer(true);
                 
-                kDebug() << "Creating new schema object" << endl;
-                KexiDB::QuerySchema mySchema(*gConnection->tableSchema(requestedTable));
-                KexiDB::RowEditBuffer myRecordEdit(false);
-                KexiDB::RecordData myData;
-                kDebug() << "Adding fields to QuerySchema" << endl;
                 while (iterator.hasNext()) {
                     QString currentFieldName(iterator.next());
-                    kDebug() << "Adding field " << currentFieldName << " to schema" << endl;
-                    mySchema.addField(mySchema.findTableField(currentFieldName));
-                    kDebug() << "Inserting field " << currentFieldName << endl;
-                    QVariant* myV = new QVariant(currentFieldName);
-                    myRecordEdit.insert(currentFieldName, *myV);
-                }
-                mySchema.addToWhereExpression(schema.field("id"), QVariant(requestedId));
-                kDebug() << "Executing query..." << endl;
-                KexiDB::Cursor* myCursor = gConnection->executeQuery(mySchema);
-                myCursor->updateRow(myData, myRecordEdit);
-                
+                    QVariant* currentValue = new QVariant(Request::request(req, currentFieldName));
 
-                /*KexiDB::RowEditBuffer editBuffer(false);
-                KexiDB::RecordData recordData(cursor->fieldCount());
-                QStringList fieldsList = Request::request(req, "tableFields").split("|:|");
-                QStringListIterator iterator(fieldsList);
-				
-                while (iterator.hasNext()) {
-                    QString curField(iterator.next());
-                    QVariant curValue(Request::request(req, curField));
-                    editBuffer.insert(curField, curValue);
-                    kDebug() << curField << "=" << curValue;
+                    kDebug() << "Inserting " << currentFieldName << "=" << currentValue->toString() << endl;
+                    editBuffer.insert(*schema.columnInfo(currentFieldName), *currentValue);
                 }
-                if (!editBuffer.isEmpty()) {
-                    
-                } else {
-                    kDebug() << "Buffer is still empty!" << endl;
-                    }*/
-            } 
 
-            kDebug() << "Showing fields" << endl;
-            if (cursor) {
-                QString formData;
-                QStringList fieldsList; 
-                KexiDB::QuerySchema* schema = gConnection->tableSchema(requestedTable)->query();
-                // TODO: There should be only one entry...
-                while (cursor->moveNext()) {
-                    for (uint i = 0; i < cursor->fieldCount(); i++) {
-                        formData.append("<tr>");
-                        formData.append("<td>").append(schema->field(i)->captionOrName()).append("</td>");
-                        formData.append("<td><input type=\"text\" name=\"");
-                        formData.append(schema->field(i)->name()).append("\" value=\"");
-                        formData.append(cursor->value(i).toString()).append("\"/></td>");
-                        formData.append("</tr>");
-                        fieldsList << schema->field(i)->name();
+                if (cursor) {
+                    if (cursor->updateRow(recordData, editBuffer)) {
+                        dict.ShowSection("SUCCESS");
+                        dict.SetValue("MESSAGE", "Row updated successfully");
+                    } else {
+                        dict.ShowSection("ERROR");
+                        dict.SetValue("MESSAGE", "Failed to update row");
                     }
                 }
-                dict.SetValue("TABLEFIELDS", fieldsList.join("|:|").toLatin1().constData());
-                dict.SetValue("FORMDATA", formData.toLatin1().constData());
+            } else {
+                kDebug() << "Showing fields" << endl;
+
+                dict.ShowSection("FORM");
+
+                QString formData;
+                QStringList fieldsList;
+                if (cursor) {
+                    while (cursor->moveNext()) {
+                        for (uint i = 0; i < cursor->fieldCount(); i++) {
+                            QString fieldName(schema.field(i)->name());
+                            
+                            formData.append("<tr>");
+                            formData.append("<td>").append(schema.field(i)->captionOrName()).append("</td>");
+                            formData.append("<td><input type=\"text\" name=\"");
+                            formData.append(fieldName).append("\" value=\"");
+                            formData.append(cursor->value(i).toString()).append("\"/></td>");
+                            formData.append("</tr>");
+                            fieldsList << fieldName;
+                        }
+                    }
+                    dict.SetValue("TABLEFIELDS", fieldsList.join("|:|").toLatin1().constData());
+                    dict.SetValue("FORMDATA", formData.toLatin1().constData());
+                }
             }
 			
 			
