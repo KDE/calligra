@@ -46,7 +46,7 @@ private:
 
      //Styles functions
     const QString createPageStyle( const KoXmlElement& page );
-    const QString createGradientStyle( const KoXmlElement& page )
+    const QString createGradientStyle( const KoXmlElement& page );
 
 
     KoXmlDocument m_mainDoc;//from KPR
