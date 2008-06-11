@@ -182,7 +182,7 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
         content->startElement( "presentation:notes" );
         content->startElement( "draw:page-thumbnail" );
         content->endElement();//draw:page-thumbnail
-        content->startElement( "draw:frame" );
+        content->startElement( "draw:frame" );//FIXME: add drawing attributes
         content->startElement( "draw:text-box" );
         QStringList noteTextList = note.toElement().attribute("note").split("\n");
 

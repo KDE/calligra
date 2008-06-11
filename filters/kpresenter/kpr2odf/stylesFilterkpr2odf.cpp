@@ -28,7 +28,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         style.addProperty( "presentation:background-visible", backMaster.attribute( "presentation:displayBackground", "1" ) == "1" );
         style.addProperty( "presentation:background-objects-visible", backMaster.attribute( "displayMasterPageObject", "1" ) == "1" );
     }
-    else { //if BACKMASTER is not found we assume is true
+    else { //if BACKMASTER is not found we assume it's true
         style.addProperty( "presentation:background-visible", true );
         style.addProperty( "presentation:background-objects-visible", true );
     }
@@ -51,7 +51,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         else
         {
             //TODO: background is a gradient
-//             style.addAttribute( "draw:fill-gradient-name",  );
+            style.addAttribute( "draw:fill-gradient-name", createGradientStyle( page ) );
         }
     }
     else
