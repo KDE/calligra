@@ -269,6 +269,6 @@ void Filterkpr2odf::appendPicture( KoXmlWriter* content, KoXmlElement objectElem
     content->endElement();//draw:image
 }
 
-#include "stylesFilterkpr2odf.cpp"
+#include "StylesFilterkpr2odf.cpp"
 
 #include "Filterkpr2odf.moc"
