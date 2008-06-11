@@ -29,6 +29,9 @@
 #include <KoLineBorder.h>
 #include <KoShape.h>
 #include <KoShapeContainer.h>
+#include <KoColorBackground.h>
+#include <KoGradientBackground.h>
+#include <KoPatternBackground.h>
 
 /*
 TODO: bs.wmf stroke in red with MSword and in brown with Kword ??
@@ -124,11 +127,27 @@ void WmfExport::paintShape( KoShape * shape )
     }
     mWmf->setPen( getPen( shape->border() ) );
 
-    if( polygons.count() == 1 && shape->background().style() == Qt::NoBrush )
+    if( polygons.count() == 1 && ! shape->background() )
         mWmf->drawPolyline( polygons.first() );
     else
     {
-        mWmf->setBrush( shape->background() );
+        QBrush fill( Qt::NoBrush );
+        KoColorBackground * cbg = dynamic_cast<KoColorBackground*>( shape->background() );
+        if( cbg )
+            fill = QBrush( cbg->color(), cbg->style() );
+        KoGradientBackground * gbg = dynamic_cast<KoGradientBackground*>( shape->background() );
+        if( gbg )
+        {
+            fill = QBrush( *gbg->gradient() );
+            fill.setMatrix( gbg->matrix() );
+        }
+        KoPatternBackground * pbg = dynamic_cast<KoPatternBackground*>( shape->background() );
+        if( pbg )
+        {
+            fill.setTextureImage( pbg->pattern() );
+            fill.setMatrix( pbg->matrix() );
+        }
+        mWmf->setBrush( fill );
         if( polygons.count() == 1 )
             mWmf->drawPolygon( polygons.first() );
         else

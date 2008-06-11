@@ -21,6 +21,7 @@
 
 #include <KoShape.h>
 #include <KoLineBorder.h>
+#include <KoGradientBackground.h>
 
 #include <QtGui/QGradient>
 
@@ -61,22 +62,43 @@ QGradient * KarbonGradientHelper::cloneGradient( const QGradient * gradient )
     return clone;
 }
 
-QBrush KarbonGradientHelper::applyGradientStops( KoShape * shape, const QGradientStops &stops, bool fillGradient )
+KoShapeBackground * KarbonGradientHelper::applyFillGradientStops( KoShape * shape, const QGradientStops &stops )
+{
+    if( ! shape || ! stops.count() )
+        return 0;
+
+    KoGradientBackground * newGradient = 0;
+    KoGradientBackground * oldGradient = dynamic_cast<KoGradientBackground*>( shape->background() );
+    if( oldGradient )
+    {
+        // just copy the gradient and set the new stops
+        QGradient * g = cloneGradient( oldGradient->gradient() );
+        g->setStops( stops );
+        newGradient = new KoGradientBackground( g );
+        newGradient->setMatrix( oldGradient->matrix() );
+    }
+    else
+    {
+        // no gradient yet, so create a new one
+        QSizeF size = shape->size();
+        QLinearGradient * g = new QLinearGradient();
+        g->setStart( QPointF( 0, 0 ) );
+        g->setFinalStop( QPointF( size.width(), size.height() ) );
+        g->setStops( stops );
+        newGradient = new KoGradientBackground( g );
+    }
+    return newGradient;
+}
+
+QBrush KarbonGradientHelper::applyStrokeGradientStops( KoShape * shape, const QGradientStops &stops )
 {
     if( ! shape || ! stops.count() )
         return QBrush();
 
     QBrush gradientBrush;
-    if( fillGradient )
-    {
-        gradientBrush = shape->background();
-    }
-    else
-    {
-        KoLineBorder * border = dynamic_cast<KoLineBorder*>( shape->border() );
-        if( border )
-            gradientBrush = border->lineBrush();
-    }
+    KoLineBorder * border = dynamic_cast<KoLineBorder*>( shape->border() );
+    if( border )
+        gradientBrush = border->lineBrush();
 
     QGradient * newGradient = 0;
     const QGradient * oldGradient = gradientBrush.gradient();
@@ -88,7 +110,7 @@ QBrush KarbonGradientHelper::applyGradientStops( KoShape * shape, const QGradien
     }
     else
     {
-        // now gradient yet, so create a new one
+        // no gradient yet, so create a new one
         QSizeF size = shape->size();
         QLinearGradient * g = new QLinearGradient();
         g->setStart( QPointF( 0, 0 ) );

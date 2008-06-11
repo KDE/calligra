@@ -19,6 +19,7 @@
 
 #include "KWFrameSet.h"
 #include "KWFrame.h"
+#include <KoColorBackground.h>
 
 #include <kdebug.h>
 
@@ -71,10 +72,13 @@ void KWFrameSet::printDebug(KWFrame *frame) {
     kDebug(32001) <<"     RunAround:"<< runaround[ frame->textRunAround() ] <<" side:" << runaroundSide[ frame->runAroundSide() ];
     kDebug(32001) <<"     FrameBehavior:"<< frameBh[ frame->frameBehavior() ];
     kDebug(32001) <<"     NewFrameBehavior:"<< newFrameBh[ frame->newFrameBehavior() ];
-    if(frame->shape()->background().style() == Qt::NoBrush)
+    if(!frame->shape()->background() )
         kDebug(32001) <<"     BackgroundColor: Transparent";
     else {
-        QColor col = frame->shape()->background().color();
+        KoColorBackground * fill = dynamic_cast<KoColorBackground*>( frame->shape()->background() );
+        QColor col;
+        if( fill )
+            col = fill->color();
         kDebug(32001) <<"     BackgroundColor:"<< ( col.isValid() ? col.name() : QString("(default)") );
     }
     kDebug(32001) <<"     frameOnBothSheets:"<< frame->frameOnBothSheets();

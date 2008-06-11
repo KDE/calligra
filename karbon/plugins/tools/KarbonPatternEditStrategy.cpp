@@ -39,7 +39,10 @@ KarbonPatternEditStrategy::KarbonPatternEditStrategy( KoShape * shape )
     // the fixed length of half the average shape dimension
     m_normalizedLength = 0.25 * ( size.width() + size.height() );
     // get the brush tranformation matrix
-    QMatrix brushMatrix = m_shape->background().matrix();
+    QMatrix brushMatrix;
+    KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( m_shape->background() );
+    if( fill )
+        brushMatrix = fill->matrix();
 
     // the center handle at the center point of the shape
     //m_origin = QPointF( 0.5 * size.width(), 0.5 * size.height() );
@@ -120,8 +123,12 @@ void KarbonPatternEditStrategy::handleMouseMove(const QPointF &mouseLocation, Qt
         m_handles[direction] += diffPos;
     }
 
-    m_newBackground = background();
-    m_shape->setBackground( m_newBackground );
+    KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( m_shape->background() );
+    if( fill )
+    {
+        m_newFill = updatedBackground();
+        *fill = m_newFill;
+    }
 }
 
 void KarbonPatternEditStrategy::setEditing( bool on )
@@ -130,14 +137,24 @@ void KarbonPatternEditStrategy::setEditing( bool on )
     // if we are going into editing mode, save the old background
     // for use inside the command emitted when finished
     if( on )
-        m_oldBackground = m_shape->background();
+    {
+        KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( m_shape->background() );
+        if( fill )
+            m_oldFill = *fill;
+    }
 }
 
 QUndoCommand * KarbonPatternEditStrategy::createCommand()
 {
-    m_shape->setBackground( m_oldBackground );
-    QList<KoShape*> shapes;
-    return new KoShapeBackgroundCommand( shapes << m_shape, m_newBackground, 0 );
+    KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( m_shape->background() );
+    if( fill )
+    {
+        *fill = m_oldFill;
+        KoPatternBackground * newFill = new KoPatternBackground();
+        *newFill = m_newFill;
+        return new KoShapeBackgroundCommand( m_shape, newFill, 0 );
+    }
+    return 0;
 }
 
 void KarbonPatternEditStrategy::repaint() const
@@ -173,4 +190,19 @@ QBrush KarbonPatternEditStrategy::background() const
     QBrush newBrush( m_oldBackground );
     newBrush.setMatrix( matrix );
     return newBrush;
+}
+
+KoPatternBackground KarbonPatternEditStrategy::updatedBackground()
+{
+    // the direction vector controls the rotation of the pattern
+    QPointF dirVec = m_handles[direction]-m_handles[center];
+    double angle = atan2( dirVec.y(), dirVec.x() ) * 180.0 / M_PI;
+    QMatrix matrix;
+    // the center handle controls the translation
+    matrix.translate( m_handles[center].x(), m_handles[center].y() );
+    matrix.rotate( angle );
+
+    KoPatternBackground newFill = m_oldFill;
+    newFill.setMatrix( matrix );
+    return newFill;
 }

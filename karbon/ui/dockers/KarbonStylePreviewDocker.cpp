@@ -41,6 +41,8 @@
 #include <KoPathFillRuleCommand.h>
 #include <KoPathShape.h>
 #include <KoColorSpaceRegistry.h>
+#include <KoColorBackground.h>
+#include <KoPatternBackground.h>
 
 #include <klocale.h>
 
@@ -103,7 +105,7 @@ void KarbonStylePreviewDocker::setCanvas( KoCanvasBase * canvas )
     m_canvas = canvas;
     if( ! m_canvas )
     {
-        updateStyle( 0, QBrush( Qt::NoBrush ) );
+        updateStyle( 0, 0 );
         return;
     }
 
@@ -117,7 +119,7 @@ void KarbonStylePreviewDocker::setCanvas( KoCanvasBase * canvas )
     if( shape )
         updateStyle( shape->border(), shape->background() );
     else
-        updateStyle( 0, QBrush( Qt::NoBrush ) );
+        updateStyle( 0, 0 );
 }
 
 void KarbonStylePreviewDocker::selectionChanged()
@@ -129,7 +131,7 @@ void KarbonStylePreviewDocker::selectionChanged()
     if( shape )
         updateStyle( shape->border(), shape->background() );
     else
-        updateStyle( 0, QBrush( Qt::NoBrush ) );
+        updateStyle( 0, 0 );
 }
 
 bool KarbonStylePreviewDocker::strokeIsSelected() const
@@ -137,7 +139,7 @@ bool KarbonStylePreviewDocker::strokeIsSelected() const
     return m_preview->strokeIsSelected();
 }
 
-void KarbonStylePreviewDocker::updateStyle( const KoShapeBorderModel * stroke, const QBrush & fill )
+void KarbonStylePreviewDocker::updateStyle( const KoShapeBorderModel * stroke, const KoShapeBackground * fill )
 {
     KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
     int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
@@ -153,8 +155,9 @@ void KarbonStylePreviewDocker::updateStyle( const KoShapeBorderModel * stroke, c
     }
     else
     {
-        if( fill.style() == Qt::SolidPattern )
-            qColor = fill.color();
+        const KoColorBackground * background = dynamic_cast<const KoColorBackground*>( fill );
+        if( background )
+            qColor = background->color();
         else
             qColor = m_canvas->resourceProvider()->backgroundColor().toQColor();
     }
@@ -205,7 +208,7 @@ void KarbonStylePreviewDocker::styleButtonPressed( int buttonId )
                 break;
 
             if( provider->resource( Karbon::ActiveStyle ).toInt() == Karbon::Background )
-                m_canvas->addCommand( new KoShapeBackgroundCommand( selection->selectedShapes(), QBrush() ) );
+                m_canvas->addCommand( new KoShapeBackgroundCommand( selection->selectedShapes(), 0 ) );
             else
                 m_canvas->addCommand( new KoShapeBorderCommand( selection->selectedShapes(), 0 ) );
             m_stack->setCurrentIndex( 0 );
@@ -271,7 +274,8 @@ void KarbonStylePreviewDocker::updateColor( const KoColor &c )
     }
     else
     {
-        KoShapeBackgroundCommand *cmd = new KoShapeBackgroundCommand( selection->selectedShapes(), QBrush( color ) );
+        KoShapeBackground * fill = new KoColorBackground( color );
+        KoShapeBackgroundCommand *cmd = new KoShapeBackgroundCommand( selection->selectedShapes(), fill );
         m_canvas->addCommand( cmd );
         m_canvas->resourceProvider()->setBackgroundColor( c );
     }
@@ -307,13 +311,13 @@ void KarbonStylePreviewDocker::updateGradient( QTableWidgetItem * item )
         QUndoCommand * firstCommand = 0;
         foreach( KoShape * shape, selectedShapes )
         {
-            QBrush brush = KarbonGradientHelper::applyGradientStops( shape, newStops, true );
-            if( brush.style() == Qt::NoBrush )
+            KoShapeBackground * fill = KarbonGradientHelper::applyFillGradientStops( shape, newStops );
+            if( ! fill )
                 continue;
             if( ! firstCommand )
-                firstCommand = new KoShapeBackgroundCommand( shape, brush );
+                firstCommand = new KoShapeBackgroundCommand( shape, fill );
             else
-                new KoShapeBackgroundCommand( shape, brush, firstCommand );
+                new KoShapeBackgroundCommand( shape, fill, firstCommand );
         }
         m_canvas->addCommand( firstCommand );
     }
@@ -322,7 +326,7 @@ void KarbonStylePreviewDocker::updateGradient( QTableWidgetItem * item )
         QList<KoShapeBorderModel*> newBorders;
         foreach( KoShape * shape, selectedShapes )
         {
-            QBrush brush = KarbonGradientHelper::applyGradientStops( shape, newStops, false );
+            QBrush brush = KarbonGradientHelper::applyStrokeGradientStops( shape, newStops );
             if( brush.style() == Qt::NoBrush )
                 continue;
 
@@ -350,8 +354,8 @@ void KarbonStylePreviewDocker::updatePattern( QTableWidgetItem * item )
     if( ! selectedShapes.count() )
         return;
 
-    QBrush newBrush( currentPattern->pattern()->img() );
-    m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newBrush ) );
+    KoShapeBackground * fill = new KoPatternBackground( currentPattern->pattern()->img() );
+    m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, fill  ) );
     selectionChanged();
 }
 

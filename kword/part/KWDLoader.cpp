@@ -37,6 +37,7 @@
 #include <KoTextAnchor.h>
 #include <KoTextDocumentLayout.h>
 #include <KoInlineTextObjectManager.h>
+#include <KoColorBackground.h>
 
 // KDE + Qt includes
 #include <QTextBlock>
@@ -1000,7 +1001,8 @@ void KWDLoader::fill(KWFrame *frame, const KoXmlElement &frameElem) {
                   frameElem.attribute("bkGreen", "255").toInt(),
                   frameElem.attribute("bkBlue", "255").toInt());
     Qt::BrushStyle bs = static_cast<Qt::BrushStyle> ( frameElem.attribute("bkStyle", "1").toInt());
-    frame->shape()->setBackground(QBrush(background, bs));
+
+    frame->shape()->setBackground( new KoColorBackground(background, bs));
 
     switch(frameElem.attribute("runaround", "0").toInt()) {
         case 0:

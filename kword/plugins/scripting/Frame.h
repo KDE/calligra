@@ -28,6 +28,7 @@
 #include <KoShape.h>
 #include <KoTextShapeData.h>
 #include "TextCursor.h"
+#include <KoColorBackground.h>
 
 namespace Scripting {
 
@@ -203,7 +204,13 @@ namespace Scripting {
             void setZIndex(int zIndex) { m_frame->shape()->setZIndex(zIndex); }
 
             /** Return the background color of the shape. */
-            QColor backgroundColor() const { return m_frame->shape()->background().color(); }
+            QColor backgroundColor() const { 
+                KoColorBackground * fill = dynamic_cast<KoColorBackground*>( m_frame->shape()->background() );
+                if( fill )
+                    return fill->color();
+                else
+                    return QColor();
+            }
             /**
             * Set the background color of the shape.
             *
@@ -214,9 +221,8 @@ namespace Scripting {
             * \endcode
             */
             void setBackgroundColor(const QColor& color) {
-                QBrush brush = m_frame->shape()->background();
-                brush.setColor(color);
-                m_frame->shape()->setBackground(brush);
+                KoColorBackground * newFill = new KoColorBackground( color );
+                m_frame->shape()->setBackground( newFill );
             }
 
         private:

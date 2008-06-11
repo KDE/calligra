@@ -29,6 +29,7 @@ class KarbonStyleButtonBox;
 class KarbonPatternChooser;
 class KarbonGradientChooser;
 class KoShapeBorderModel;
+class KoShapeBackground;
 class KoCanvasBase;
 class KoUniColorChooser;
 class KoColor;
@@ -47,7 +48,7 @@ public:
     virtual void setCanvas(KoCanvasBase *canvas);
 
     bool strokeIsSelected() const;
-    void updateStyle( const KoShapeBorderModel * stroke, const QBrush & fill );
+    void updateStyle( const KoShapeBorderModel * stroke, const KoShapeBackground * fill );
 
 private slots:
     void fillSelected();

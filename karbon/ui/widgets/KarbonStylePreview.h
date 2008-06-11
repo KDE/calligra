@@ -30,6 +30,7 @@ class QEvent;
 class QPaintEvent;
 class QBrush;
 class KoShapeBorderModel;
+class KoShapeBackground;
 
 /// A widget to preview stroke and fill of a shape
 class KarbonStylePreview : public QFrame
@@ -52,7 +53,7 @@ public:
      * @param stroke the stroke to preview
      * @param fill the fill to preview
      */
-    void update( const KoShapeBorderModel * stroke, const QBrush & fill );
+    void update( const KoShapeBorderModel * stroke, const KoShapeBackground * fill );
 
     virtual bool eventFilter( QObject* object, QEvent* event );
 
@@ -75,11 +76,11 @@ protected:
     virtual void paintEvent( QPaintEvent* event );
 
 private:
-    void drawFill( QPainter & painter, const QBrush& );
+    void drawFill( QPainter & painter, const KoShapeBackground * fill );
     void drawStroke( QPainter & painter, const KoShapeBorderModel* );
 
     bool m_strokeWidget; ///< shows if stroke or fill is selected
-    QBrush m_fill; ///< the fill to preview
+    const KoShapeBackground * m_background; ///< the fill to preview
     const KoShapeBorderModel * m_stroke; ///< the stroke to preview
     QRectF m_strokeRect;
     QRectF m_fillRect;

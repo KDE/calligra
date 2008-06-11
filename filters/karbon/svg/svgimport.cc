@@ -28,6 +28,7 @@
 
 #include <KarbonGlobal.h>
 #include <KarbonPart.h>
+#include <KarbonGradientHelper.h>
 
 #include <KoShape.h>
 #include <KoShapeRegistry.h>
@@ -50,6 +51,9 @@
 #include <pathshapes/rectangle/KoRectangleShape.h>
 #include <pathshapes/ellipse/KoEllipseShape.h>
 #include <plugins/simpletextshape/SimpleTextShape.h>
+#include <KoColorBackground.h>
+#include <KoGradientBackground.h>
+#include <KoPatternBackground.h>
 
 #include <kgenericfactory.h>
 #include <kdebug.h>
@@ -1137,7 +1141,32 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
     if(!obj)
         return;
 
-    obj->setBackground( gc->fill );
+    switch( gc->fill.style() )
+    {
+        case Qt::NoBrush:
+            obj->setBackground( 0 );
+            break;
+        case Qt::TexturePattern:
+        {
+            KoPatternBackground * bg = new KoPatternBackground();
+            bg->setPattern( gc->fill.textureImage() );
+            bg->setMatrix( gc->fill.matrix() );
+            obj->setBackground( bg );
+            break;
+        }
+        case Qt::LinearGradientPattern:
+        case Qt::RadialGradientPattern:
+        case Qt::ConicalGradientPattern:
+        {
+            KoGradientBackground * bg = new KoGradientBackground( *gc->fill.gradient() );
+            bg->setMatrix( gc->fill.matrix() );
+            obj->setBackground( bg );
+            break;
+        }
+        default:
+            obj->setBackground( new KoColorBackground( gc->fill.color(), gc->fill.style() ) );
+    }
+
     KoPathShape * path = dynamic_cast<KoPathShape*>( obj );
     if( path )
         path->setFillRule( gc->fillRule );

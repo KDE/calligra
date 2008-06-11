@@ -17,27 +17,41 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KARBONGRADIENTHELPER_H
-#define KARBONGRADIENTHELPER_H
+#include "KoShapeBackground.h"
 
-#include <karboncommon_export.h>
-#include <QtGui/QBrush>
-
-class KoShape;
-class QGradient;
-class KoShapeBackground;
-
-class KARBONCOMMON_EXPORT KarbonGradientHelper
+class KoShapeBackground::Private
 {
 public:
-
-    /// clones the given gradient
-    static QGradient * cloneGradient( const QGradient * gradient );
-
-    /// applies given gradient stops to given shape returning the new gradient wrapped in a brush
-    static KoShapeBackground * applyFillGradientStops( KoShape * shape, const QGradientStops &stops );
-    static QBrush applyStrokeGradientStops( KoShape * shape, const QGradientStops &stops );
-    static QBrush applyGradientStops( KoShape * shape, const QGradientStops &stops, bool fillGradient );
+    Private() : refCount(0) { }
+    int refCount;
 };
 
-#endif // KARBONGRADIENTHELPER_H
+KoShapeBackground::KoShapeBackground()
+    : d( new Private() )
+{
+}
+
+KoShapeBackground::~KoShapeBackground()
+{
+    delete d;
+}
+
+bool KoShapeBackground::hasTransparency()
+{
+    return false;
+}
+
+void KoShapeBackground::addUser()
+{
+    d->refCount++;
+}
+
+int KoShapeBackground::removeUser()
+{
+    return --d->refCount;
+}
+
+int KoShapeBackground::useCount() const
+{
+    return d->refCount;
+}

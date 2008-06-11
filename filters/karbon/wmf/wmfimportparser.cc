@@ -25,6 +25,9 @@
 #include <KoLineBorder.h>
 #include <KoShapeLayer.h>
 #include <KoImageData.h>
+#include <KoColorBackground.h>
+#include <KoGradientBackground.h>
+#include <KoPatternBackground.h>
 
 #include <pathshapes/rectangle/KoRectangleShape.h>
 #include <pathshapes/ellipse/KoEllipseShape.h>
@@ -394,7 +397,31 @@ void WMFImportParser::appendPen( KoShape& obj )
 
 void WMFImportParser::appendBrush( KoShape& obj )
 {
-    obj.setBackground( mBrush );
+    switch( mBrush.style() )
+    {
+        case Qt::NoBrush:
+            obj.setBackground( 0 );
+            break;
+        case Qt::TexturePattern:
+        {
+            KoPatternBackground * bg = new KoPatternBackground();
+            bg->setPattern( mBrush.textureImage() );
+            bg->setMatrix( mBrush.matrix() );
+            obj.setBackground( bg );
+            break;
+        }
+        case Qt::LinearGradientPattern:
+        case Qt::RadialGradientPattern:
+        case Qt::ConicalGradientPattern:
+        {
+            KoGradientBackground * bg = new KoGradientBackground( *mBrush.gradient() );
+            bg->setMatrix( mBrush.matrix() );
+            obj.setBackground( bg );
+            break;
+        }
+        default:
+            obj.setBackground( new KoColorBackground( mBrush.color(), mBrush.style() ) );
+    }
 }
 
 void  WMFImportParser::setCompositionMode( QPainter::CompositionMode )

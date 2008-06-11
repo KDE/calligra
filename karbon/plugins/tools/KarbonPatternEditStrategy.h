@@ -20,6 +20,7 @@
 #ifndef _KARBONPATTERNEDITSTRATEGY_H_
 #define _KARBONPATTERNEDITSTRATEGY_H_
 
+#include <KoPatternBackground.h>
 #include <QBrush>
 
 class KoShape;
@@ -64,6 +65,7 @@ public:
 
     /// returns the actual background brush
     QBrush background() const;
+    KoPatternBackground updatedBackground();
 
     /// sets the handle radius used for painting the handles
     static void setHandleRadius( int radius ) { m_handleRadius = radius; }
@@ -91,6 +93,8 @@ private:
     bool m_editing;            ///< the edit mode flag
     double m_normalizedLength; ///< the normalized direction vector length
     QPointF m_origin;          ///< the pattern handle origin
+    KoPatternBackground m_oldFill;
+    KoPatternBackground m_newFill;
 };
 
 #endif // _KARBONPATTERNEDITSTRATEGY_H_

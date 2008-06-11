@@ -45,6 +45,10 @@
 #include <KoImageData.h>
 #include <KoPathPoint.h>
 #include <KoZoomHandler.h>
+#include <KoPatternBackground.h>
+#include <KoColorBackground.h>
+#include <KoGradientBackground.h>
+#include <KarbonGradientHelper.h>
 
 #include <kgenericfactory.h>
 
@@ -371,7 +375,7 @@ void KarbonImport::loadStyle( KoShape * shape, const KoXmlElement &element )
 {
     // reset fill and stroke first
     shape->setBorder( 0 );
-    shape->setBackground( Qt::NoBrush );
+    shape->setBackground( 0 );
 
     KoXmlElement e;
     forEachElement(e, element)
@@ -563,11 +567,10 @@ void KarbonImport::loadPattern( KoShape * shape, const KoXmlElement &element )
         kWarning() << "Failed to load pattern image" << fname;
         return;
     }
-    QBrush brush;
-    brush.setTextureImage( img.mirrored( false, true ) );
-    brush.setMatrix( m );
-
-    shape->setBackground( brush );
+    KoPatternBackground * newFill = new KoPatternBackground();
+    newFill->setPattern( img.mirrored( false, true ) );
+    newFill->setMatrix( m );
+    shape->setBackground( newFill );
 }
 
 QVector<qreal> KarbonImport::loadDashes( const KoXmlElement& element )
@@ -659,11 +662,15 @@ void KarbonImport::loadFill( KoShape * shape, const KoXmlElement &element )
     {
         if( e.tagName() == "COLOR" )
         {
-            shape->setBackground( QBrush( loadColor( e ) ) );
+            KoColorBackground * newFill = new KoColorBackground( loadColor( e ) );
+            shape->setBackground( newFill );
         }
         if( e.tagName() == "GRADIENT" )
         {
-            shape->setBackground( loadGradient( shape, e ) );
+            QBrush brush = loadGradient( shape, e );
+            KoGradientBackground * newFill = new KoGradientBackground( *brush.gradient() );
+            newFill->setMatrix( brush.matrix() );
+            shape->setBackground( newFill );
         }
         else if( e.tagName() == "PATTERN" )
         {

@@ -97,6 +97,7 @@
 #include <KoRulerController.h>
 #include <KoDockRegistry.h>
 #include <KoShapeLayer.h>
+#include <KoColorBackground.h>
 
 // kde header
 #include <kaction.h>
@@ -328,7 +329,10 @@ void KarbonView::dropEvent( QDropEvent *e )
             m_canvas->addCommand( new KoShapeBorderCommand( selectedShapes, borders, 0 ) );
         }
         else
-            m_canvas->addCommand( new KoShapeBackgroundCommand( selection->selectedShapes(), QBrush( color ), 0 ) );
+        {
+            KoColorBackground * fill = new KoColorBackground( color );
+            m_canvas->addCommand( new KoShapeBackgroundCommand( selection->selectedShapes(), fill, 0 ) );
+        }
     }
 /* TODO port to flake
     else if( KarbonDrag::decode( e->mimeData(), selection, m_part->document() ) )

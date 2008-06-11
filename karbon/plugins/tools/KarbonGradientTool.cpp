@@ -36,6 +36,7 @@
 #include <KoResourceServerProvider.h>
 #include <KoSnapGuide.h>
 #include <KoSnapStrategy.h>
+#include <KoGradientBackground.h>
 
 #include <QGridLayout>
 #include <QPainter>
@@ -47,7 +48,7 @@ GradientStrategy * createStrategy( KoShape * shape, const QGradient * gradient, 
         return 0;
 
     if( gradient->type() == QGradient::LinearGradient )
-        return new LinearGradientStrategy( shape, static_cast<const QLinearGradient*>( gradient), target );
+        return new LinearGradientStrategy( shape, static_cast<const QLinearGradient*>( gradient ), target );
     else if( gradient->type() == QGradient::RadialGradient )
         return new RadialGradientStrategy( shape, static_cast<const QRadialGradient*>( gradient ), target );
     else if( gradient->type() == QGradient::ConicalGradient )
@@ -65,7 +66,6 @@ KarbonGradientTool::KarbonGradientTool(KoCanvasBase *canvas)
 , m_currentCmd( 0 )
 , m_oldSnapStrategies(0)
 {
-    connect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
 }
 
 KarbonGradientTool::~KarbonGradientTool()
@@ -153,11 +153,11 @@ void KarbonGradientTool::mousePressEvent( KoPointerEvent *event )
         if( target == KarbonGradientTabWidget::FillGradient )
         {
             // target is fill so check the background style
-            Qt::BrushStyle style = shape->background().style();
-            if( style < Qt::LinearGradientPattern || style > Qt::RadialGradientPattern )
+            if( ! dynamic_cast<KoGradientBackground*>( shape->background() ) )
             {
-                m_currentCmd = new KoShapeBackgroundCommand( shape, QBrush( *m_gradient ) );
-                shape->setBackground( QBrush( *m_gradient ) );
+                KoGradientBackground * fill = new KoGradientBackground( *m_gradient );
+                m_currentCmd = new KoShapeBackgroundCommand( shape, fill );
+                shape->setBackground( fill );
                 newStrategy = createStrategy( shape, m_gradient, GradientStrategy::Fill );
             }
         }
@@ -352,6 +352,8 @@ void KarbonGradientTool::activate( bool temporary )
     // save old enabled snap strategies, set bounding box snap strategy
     m_oldSnapStrategies = m_canvas->snapGuide()->enabledSnapStrategies();
     m_canvas->snapGuide()->enableSnapStrategies( KoSnapStrategy::BoundingBox );
+
+    connect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
 }
 
 void KarbonGradientTool::initialize()
@@ -378,8 +380,8 @@ void KarbonGradientTool::initialize()
         // is the gradient a fill gradient but shape has no fill gradient anymore ?
         if( strategy->target() == GradientStrategy::Fill )
         {
-            const QGradient * gradient = strategy->shape()->background().gradient();
-            if( ! gradient || gradient->type() != strategy->type() )
+            KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>( strategy->shape()->background() );
+            if( ! fill || ! fill->gradient()->type() != strategy->type() )
             {
                 // delete the gradient
                 m_gradients.remove( strategy->shape(), strategy );
@@ -427,7 +429,10 @@ void KarbonGradientTool::initialize()
 
         if( ! fillExists )
         {
-            GradientStrategy * fillStrategy = createStrategy( shape, shape->background().gradient(), GradientStrategy::Fill );
+            KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>( shape->background() );
+            if( ! fill )
+                continue;
+            GradientStrategy * fillStrategy = createStrategy( shape, fill->gradient(), GradientStrategy::Fill );
             if( fillStrategy )
             {
                 m_gradients.insert( shape, fillStrategy );
@@ -480,6 +485,9 @@ void KarbonGradientTool::initialize()
 
 void KarbonGradientTool::deactivate()
 {
+    // we are not interested in selection content changes when not active
+    disconnect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
+
     delete m_gradient;
     m_gradient = 0;
 
@@ -529,7 +537,8 @@ void KarbonGradientTool::gradientChanged()
     QBrush newBrush( *m_gradientWidget->gradient() );
     if( m_gradientWidget->target() == KarbonGradientTabWidget::FillGradient )
     {
-        m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newBrush ) );
+        KoGradientBackground * newFill = new KoGradientBackground( *m_gradientWidget->gradient() );
+        m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newFill ) );
     }
     else
     {

@@ -21,6 +21,7 @@
 
 #include <KoPathPoint.h>
 #include <KarbonCurveFit.h>
+#include <KoColorBackground.h>
 
 #include <KDebug>
 
@@ -194,7 +195,7 @@ KoPathShape *KarbonCalligraphicShape::simplified( float error )
 
     res->setShapeId( KoPathShapeId );
     res->setFillRule( Qt::WindingFill );
-    res->setBackground( Qt::black );
+    res->setBackground( new KoColorBackground( Qt::black ) );
     res->setBorder( 0 );
     res->setPosition( position() );
 

@@ -42,6 +42,9 @@
 #include <KoShapeLayer.h>
 #include <KoPathShape.h>
 #include <KoLineBorder.h>
+#include <KoColorBackground.h>
+#include <KoGradientBackground.h>
+#include <KoPatternBackground.h>
 #include <plugins/simpletextshape/SimpleTextShape.h>
 #include <pathshapes/rectangle/KoRectangleShape.h>
 #include <pathshapes/ellipse/KoEllipseShape.h>
@@ -471,7 +474,22 @@ void SvgExport::getStyle( KoShape * shape, QTextStream * stream )
 
 void SvgExport::getFill( KoShape * shape, QTextStream *stream )
 {
-    QBrush fill = shape->background();
+    QBrush fill( Qt::NoBrush );
+    KoColorBackground * cbg = dynamic_cast<KoColorBackground*>( shape->background() );
+    if( cbg )
+        fill = QBrush( cbg->color(), cbg->style() );
+    KoGradientBackground * gbg = dynamic_cast<KoGradientBackground*>( shape->background() );
+    if( gbg )
+    {
+        fill = QBrush( *gbg->gradient() );
+        fill.setMatrix( gbg->matrix() );
+    }
+    KoPatternBackground * pbg = dynamic_cast<KoPatternBackground*>( shape->background() );
+    if( pbg )
+    {
+        fill.setTextureImage( pbg->pattern() );
+        fill.setMatrix( pbg->matrix() );
+    }
 
     *stream << " fill=\"";
 

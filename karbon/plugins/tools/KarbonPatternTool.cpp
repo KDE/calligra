@@ -30,6 +30,7 @@
 #include <KoShapeBackgroundCommand.h>
 #include <KoPointerEvent.h>
 #include <KoPattern.h>
+#include <KoPatternBackground.h>
 
 #include <QtGui/QPainter>
 #include <QtGui/QWidget>
@@ -153,8 +154,7 @@ void KarbonPatternTool::initialize()
 
     foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
     {
-        const QBrush &background = shape->background();
-        if( background.style() == Qt::TexturePattern )
+        if( dynamic_cast<KoPatternBackground*>( shape->background() ) )
         {
             m_patterns.append( new KarbonPatternEditStrategy( shape ) );
             m_patterns.last()->repaint();
@@ -223,8 +223,8 @@ void KarbonPatternTool::patternSelected( QTableWidgetItem * item )
         return;
 
     QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
-    QBrush newBrush( currentPattern->pattern()->img() );
-    m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newBrush ) );
+    KoPatternBackground * newFill = new KoPatternBackground( currentPattern->pattern()->img() );
+    m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newFill ) );
     initialize();
 }
 

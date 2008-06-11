@@ -19,11 +19,13 @@
 
 #include "KarbonGradientEditStrategy.h"
 #include <KarbonGlobal.h>
+#include <KarbonGradientHelper.h>
 
 #include <KoShape.h>
 #include <KoViewConverter.h>
 #include <KoShapeBackgroundCommand.h>
 #include <KoShapeBorderCommand.h>
+#include <KoGradientBackground.h>
 
 #include <QBrush>
 #include <QGradient>
@@ -42,11 +44,13 @@ GradientStrategy::GradientStrategy( KoShape *shape, const QGradient * gradient, 
     : m_shape( shape ), m_editing( false )
     , m_target( target ), m_gradientLine( 0, 1 )
     , m_selection( None ), m_selectionIndex(0)
-    , m_type( gradient->type() )
+    , m_type( gradient->type() ), m_oldFill( new QLinearGradient() )
 {
     if( m_target == Fill )
     {
-        m_matrix = m_shape->background().matrix() * m_shape->absoluteTransformation( 0 );
+        KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>( m_shape->background() );
+        if( fill )
+            m_matrix = fill->matrix() * m_shape->absoluteTransformation( 0 );
     }
     else
     {
@@ -66,7 +70,13 @@ void GradientStrategy::setEditing( bool on )
     {
         if( m_target == Fill )
         {
-            m_oldBrush = m_shape->background();
+            KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>( m_shape->background() );
+            if( fill )
+            {
+                m_oldFill = *fill;
+                m_oldBrush = QBrush( *fill->gradient() );
+                m_oldBrush.setMatrix( fill->matrix() );
+            }
         }
         else
         {
@@ -343,7 +353,12 @@ void GradientStrategy::applyChanges()
     m_newBrush = brush();
     if( m_target == Fill )
     {
-        m_shape->setBackground( m_newBrush );
+        KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>( m_shape->background() );
+        if( fill )
+        {
+            fill->setGradient( *m_newBrush.gradient() );
+            fill->setMatrix( m_newBrush.matrix() );
+        }
     }
     else
     {
@@ -360,8 +375,14 @@ QUndoCommand * GradientStrategy::createCommand( QUndoCommand * parent )
 
     if( m_target == Fill )
     {
-        m_shape->setBackground( m_oldBrush );
-        return new KoShapeBackgroundCommand( m_shape, m_newBrush, parent );
+        KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>( m_shape->background() );
+        if( fill )
+        {
+            *fill = m_oldFill;
+            KoGradientBackground * newFill = new KoGradientBackground( *m_newBrush.gradient() );
+            newFill->setMatrix( m_newBrush.matrix() );
+            return new KoShapeBackgroundCommand( m_shape, newFill, parent );
+        }
     }
     else
     {
@@ -413,7 +434,10 @@ const QGradient * GradientStrategy::gradient()
 {
     if( m_target == Fill )
     {
-        return m_shape->background().gradient();
+        KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>( m_shape->background() );
+        if( ! fill )
+            return 0;
+        return fill->gradient();
     }
     else
     {
@@ -461,7 +485,9 @@ void GradientStrategy::updateStops()
     QBrush brush;
     if( m_target == Fill )
     {
-        brush = m_shape->background();
+        KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>( m_shape->background() );
+        if( fill )
+            m_stops = fill->gradient()->stops();
     }
     else
     {
@@ -469,10 +495,10 @@ void GradientStrategy::updateStops()
         if( stroke )
         {
             brush = stroke->lineBrush();
+            if( brush.gradient() )
+                m_stops = brush.gradient()->stops();
         }
     }
-    if( brush.gradient() )
-        m_stops = brush.gradient()->stops();
 }
 
 int GradientStrategy::selectedColorStop() const

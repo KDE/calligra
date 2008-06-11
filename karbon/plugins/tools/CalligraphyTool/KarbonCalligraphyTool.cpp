@@ -30,6 +30,7 @@
 #include <KoShapeManager.h>
 #include <KoSelection.h>
 #include <KarbonCurveFit.h>
+#include <KoColorBackground.h>
 
 #include <knuminput.h>
 #include <klocale.h>
@@ -85,7 +86,7 @@ void KarbonCalligraphyTool::mousePressEvent( KoPointerEvent *event )
     m_shape = new KarbonCalligraphicShape;
     m_shape->setShapeId( KoPathShapeId );
     m_shape->setFillRule( Qt::WindingFill );
-    m_shape->setBackground( Qt::black );
+    m_shape->setBackground( new KoColorBackground( Qt::black ) );
     m_shape->setBorder( 0 );
     kDebug() << "=========";
     //addPoint( event );

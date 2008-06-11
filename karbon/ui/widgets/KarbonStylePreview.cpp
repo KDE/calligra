@@ -25,6 +25,7 @@
 #include <KoPathShape.h>
 #include <KoShapeBorderModel.h>
 #include <KoZoomHandler.h>
+#include <KoGradientBackground.h>
 
 #include <QtCore/QEvent>
 #include <QtCore/QPoint>
@@ -40,7 +41,7 @@
 #define PANEL_SIZEY 50.0
 
 KarbonStylePreview::KarbonStylePreview( QWidget * parent )
-    : QFrame( parent ), m_strokeWidget( false ), m_fill( Qt::NoBrush ), m_stroke( 0 )
+    : QFrame( parent ), m_strokeWidget( false ), m_background(0), m_stroke( 0 )
     , m_strokeRect( 5.0, 5.0, 30.0, 30.0 ), m_fillRect(15.0, 15.0, 30.0, 30.0 )
     , m_checkerPainter( 10 )
 {
@@ -51,7 +52,7 @@ KarbonStylePreview::KarbonStylePreview( QWidget * parent )
 
     installEventFilter( this );
 
-    update( m_stroke, m_fill );
+    update( m_stroke, m_background );
 }
 
 KarbonStylePreview::~KarbonStylePreview()
@@ -69,13 +70,13 @@ void KarbonStylePreview::paintEvent( QPaintEvent* event )
 
     if ( m_strokeWidget )
     {
-        drawFill( painter, m_fill );
+        drawFill( painter, m_background );
         drawStroke( painter, m_stroke );
     }
     else
     {
         drawStroke( painter, m_stroke );
-        drawFill( painter, m_fill );
+        drawFill( painter, m_background );
     }
     painter.end();
 
@@ -132,66 +133,82 @@ bool KarbonStylePreview::eventFilter( QObject *, QEvent *event )
                 emit strokeSelected();
             }
         }
-        update( m_stroke, m_fill );
+        update( m_stroke, m_background );
     }
 
     return false;
 }
 
-void KarbonStylePreview::update( const KoShapeBorderModel * stroke, const QBrush & fill )
+void KarbonStylePreview::update( const KoShapeBorderModel * stroke, const KoShapeBackground * fill )
 {
-    m_fill = fill;
+    m_background = fill;
     m_stroke = stroke;
     QFrame::update();
 }
 
-void KarbonStylePreview::drawFill( QPainter & painter, const QBrush & fill )
+void KarbonStylePreview::drawFill( QPainter & painter, const KoShapeBackground * fill )
 {
     painter.save();
 
-    QBrush brush( Qt::white );
-
-    if( fill.style() != Qt::NoBrush )
+    if( fill )
     {
-        switch( fill.style() )
+        const KoGradientBackground * gradientFill = dynamic_cast<const KoGradientBackground*>( fill );
+        if( gradientFill )
         {
-            case Qt::LinearGradientPattern:
+            const QGradient * gradient = gradientFill->gradient();
+            QBrush brush( Qt::white );
+            switch( gradient->type() )
             {
-                QLinearGradient g;
-                g.setStart( QPointF( 30, 20 ) );
-                g.setFinalStop( QPointF( 30, 50 ) );
-                g.setStops( fill.gradient()->stops() );
-                brush = QBrush( g );
-                break;
+                case QGradient::LinearGradient:
+                {
+                    QLinearGradient g;
+                    g.setStart( QPointF( 30, 20 ) );
+                    g.setFinalStop( QPointF( 30, 50 ) );
+                    g.setStops( gradient->stops() );
+                    brush = QBrush( g );
+                    break;
+                }
+                case QGradient::RadialGradient:
+                {
+                    QRadialGradient g;
+                    g.setCenter( m_fillRect.center() );
+                    g.setFocalPoint( m_fillRect.center() );
+                    g.setRadius( 15.0 );
+                    g.setStops( gradient->stops() );
+                    brush = QBrush( g );
+                    break;
+                }
+                case QGradient::ConicalGradient:
+                {
+                    QConicalGradient g;
+                    g.setCenter( m_fillRect.center() );
+                    g.setAngle( 0.0 );
+                    g.setStops( gradient->stops() );
+                    brush = QBrush( g );
+                    break;
+                }
+                default:
+                    break;
             }
-            case Qt::RadialGradientPattern:
-            {
-                QRadialGradient g;
-                g.setCenter( m_fillRect.center() );
-                g.setFocalPoint( m_fillRect.center() );
-                g.setRadius( 15.0 );
-                g.setStops( fill.gradient()->stops() );
-                brush = QBrush( g );
-                break;
-            }
-            case Qt::ConicalGradientPattern:
-            {
-                QConicalGradient g;
-                g.setCenter( m_fillRect.center() );
-                g.setAngle( 0.0 );
-                g.setStops( fill.gradient()->stops() );
-                brush = QBrush( g );
-                break;
-            }
-            default:
-                brush = fill;
-                break;
+            painter.setBrush( brush );
+            painter.setPen( Qt::NoPen );
+            painter.drawRect( m_fillRect );
+        }
+        else
+        {
+            // use the background to draw
+            QPainterPath p;
+            p.addRect( m_fillRect );
+            fill->paint( painter, p );
         }
     }
-
-    painter.setBrush( brush );
-    painter.setPen( Qt::NoPen );
-    painter.drawRect( m_fillRect );
+    else
+    {
+        QBrush brush( Qt::white );
+        painter.setBrush( brush );
+        painter.setPen( Qt::NoPen );
+        painter.drawRect( m_fillRect );
+    }
 
     // show 3D outline of fill part
     painter.setBrush( Qt::NoBrush );
@@ -204,7 +221,7 @@ void KarbonStylePreview::drawFill( QPainter & painter, const QBrush & fill )
     painter.drawLine( m_fillRect.topRight(), m_fillRect.bottomRight() );
     painter.drawLine( m_fillRect.bottomRight(), m_fillRect.bottomLeft() );
 
-    if( fill.style() == Qt::NoBrush )
+    if( ! fill )
     {
         QPen pen( Qt::red );
         pen.setWidth( 2 );
@@ -214,6 +231,7 @@ void KarbonStylePreview::drawFill( QPainter & painter, const QBrush & fill )
     }
     painter.restore();
 }
+
 
 void KarbonStylePreview::drawStroke( QPainter & painter, const KoShapeBorderModel * stroke )
 {
