@@ -165,7 +165,8 @@ void KarbonCalligraphicShape::smoothPoint( const int index )
     QPointF vector = next - prev;
     double dist = ( QLineF( prev, next ) ).length();
     // normalize the vector (make it's size equal to 1)
-    vector /= dist;
+    if ( ! qFuzzyCompare(dist + 1, 1) )
+        vector /= dist;
     double mult = 0.35; // found by trial and error, might not be perfect...
     // distance of the control points from the point
     double dist1 = ( QLineF( point, prev ) ).length() * mult;
