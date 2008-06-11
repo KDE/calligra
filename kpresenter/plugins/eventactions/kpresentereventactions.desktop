@@ -1,6 +1,7 @@
 [Desktop Entry]
 Icon=
 Name=Presentation Event Actions
+Name[zh_TW]=展示事件動作...
 X-KDE-ServiceTypes=KOffice/PresentationEventAction
 Type=Service
 X-KDE-Library=kpresentereventactions

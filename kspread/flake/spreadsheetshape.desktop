@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Spreadsheet Shape
+Name[zh_TW]=資料表元件
 X-KDE-ServiceTypes=KOffice/Shape
 Type=Service
 X-KDE-Library=spreadsheetshape
