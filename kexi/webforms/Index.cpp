@@ -28,6 +28,13 @@
 
 #include "Index.h"
 
+
+/*! @short Kexi Web Forms namespace
+ * This namespace contains code related to Kexi Web Forms daemon
+ *
+ * Kexi Web Forms daemon allows users to modify a Kexi database
+ * even if they don't have Kexi Installed
+ */
 namespace KexiWebForms {
 
     namespace Index {
