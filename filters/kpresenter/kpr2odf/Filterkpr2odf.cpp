@@ -34,6 +34,9 @@
 #include <KoFilterChain.h>
 #include <KoXmlWriter.h>
 #include <KoXmlNS.h>
+#include <KoOdf.h>
+#include <KoGenStyle.h>
+#include <KoGenStyles.h>
 
 #include "Filterkpr2odf.h"
 
@@ -42,7 +45,13 @@ K_EXPORT_COMPONENT_FACTORY( libFilterkpr2odf, Filterkpr2odfFactory( "kofficefilt
 
 Filterkpr2odf::Filterkpr2odf(QObject *parent,const QStringList&)
 : KoFilter(parent)
+, m_styles( new KoGenStyles() )
 {
+}
+
+Filterkpr2odf::~Filterkpr2odf()
+{
+    delete m_styles;
 }
 
 KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const QByteArray& to )
@@ -82,7 +91,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
 
     //Create the output file
     KoStore* output = KoStore::createStore( m_chain->outputFile(), KoStore::Write
-                                           ,KoXmlNS::presentation, KoStore::Zip );
+                                           ,KoOdf::mimeType( KoOdf::Presentation ), KoStore::Zip );
 
     if ( !output )
         return KoFilter::StorageCreationError;
@@ -104,19 +113,21 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
     KoXmlWriter *content = odfWriter.contentWriter();
     KoXmlWriter *body = odfWriter.bodyWriter();
     convertContent( body );
+    m_styles->saveOdfAutomaticStyles( content, false );
     odfWriter.closeContentWriter();
     manifest->addManifestEntry( "content.xml", "text/xml" );
 
      //Create the styles.xml file
-//     output->open( "styles.xml" );
-//     manifest->addManifestEntry( "styles.xml", "text/xml" );
-//     output->close();
+    m_styles->saveOdfStylesDotXml( output, manifest );
 
      //Create the meta.xml file
-//     KoDocumentInfo* meta = new KoDocumentInfo();
-//     meta->load( m_documentInfo );
-//     meta->saveOasis( output );
-//     delete meta;
+    output->open( "meta.xml" );
+    KoDocumentInfo* meta = new KoDocumentInfo();
+    meta->load( m_documentInfo );
+    meta->saveOasis( output );
+    delete meta;
+    output->close();
+    manifest->addManifestEntry( "meta.xml", "text/xml" );
 
      //Write the Pictures directory and its children
 //     output->enterDirectory( "Pictures" );
@@ -134,17 +145,19 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
 void Filterkpr2odf::convertContent( KoXmlWriter* content )
 {
     content->startElement( "office:body" );
-    content->startElement( "office:presentation" );
+    content->startElement( KoOdf::bodyContentElement( KoOdf::Presentation, true ) );
 
     //We search all this here so that we can make the search just once
     const KoXmlNode titles = m_mainDoc.namedItem("DOC").namedItem( "PAGETITLES" );
     const KoXmlNode notes = m_mainDoc.namedItem("DOC").namedItem( "PAGENOTES" );
-    const KoXmlNode backgrounds = m_mainDoc.namedItem( "BACKGROUND" );
+    const KoXmlNode backgrounds = m_mainDoc.namedItem("DOC").namedItem( "BACKGROUND" );
     const KoXmlNode objects = m_mainDoc.namedItem("DOC").namedItem( "OBJECTS" );
     const KoXmlNode paper = m_mainDoc.namedItem("DOC").namedItem( "PAPER" );
     m_pageHeight = paper.toElement().attribute("ptHeight").toFloat();
     //TODO: save paper Styles
 
+    //Go to the first background, there might be missing backgrounds
+    KoXmlElement pageBackground = backgrounds.firstChild().toElement();
     //Parse pages
     int currentPage = 1;
     //The pages are all stored inside PAGETITLES
@@ -157,7 +170,8 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
         //Every page is a draw:page
         content->startElement( "draw:page" );
         content->addAttribute( "draw:name", title.toElement().attribute("title") );
-        //FIXME:missing draw:style-name
+        content->addAttribute( "draw:style-name", createPageStyle( pageBackground ) );
+        pageBackground = pageBackground.nextSibling().toElement();//next background
         content->addAttribute( "draw:id", currentPage );
         //FIXME:missing draw:master-page-name
 
@@ -183,7 +197,7 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
         content->endElement();//presentation:notes
         content->endElement();//draw:page
         ++currentPage;
-    }
+    }//for
 
     content->endElement();//office:presentation
     content->endElement();//office:body
@@ -194,17 +208,20 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
 {
     //We search through all the objects' nodes because
     //we are not sure if they are saved in order
-    for( KoXmlNode object = objects.firstChild(); !object.isNull(); object = object.nextSibling() ) {
+    for( KoXmlNode object( objects.firstChild() ); !object.isNull(); object = object.nextSibling() ) {
         float y = object.namedItem( "ORIG" ).toElement().attribute( "y" ).toFloat();
 
         //We check if the y is on the current page
         if ( y < m_pageHeight * ( currentPage - 1 )
              || y >= m_pageHeight * currentPage )
             continue; // object not on current page
-kDebug()<<object.toElement().attribute( "type" ).toInt();
-        switch( object.toElement().attribute( "type" ).toInt() )
+
+        //Now define what kind of object is
+        KoXmlElement objectElement = object.toElement();
+        switch( objectElement.attribute( "type" ).toInt() )
         {
         case 0: // picture
+//             appendPicture( content, objectElement );
             break;
         case 1: // line
             break;
@@ -237,8 +254,21 @@ kDebug()<<object.toElement().attribute( "type" ).toInt();
             break;
         case 16: //close line
             break;
-        }
-    }
+        default:
+            kWarning()<<"Unexpected object found in page "<<currentPage;
+            break;
+        }//switch objectElement
+    }//for
 }
+
+void Filterkpr2odf::appendPicture( KoXmlWriter* content, KoXmlElement objectElement ) {
+    content->startElement( "draw:image" );
+    content->addAttribute( "xlink:type", "simple" );
+    content->addAttribute( "xlink:show", "embed" );
+    content->addAttribute( "xlink:actuate", "onLoad" );
+    content->endElement();//draw:image
+}
+
+#include "stylesFilterkpr2odf.cpp"
 
 #include "Filterkpr2odf.moc"

@@ -25,6 +25,7 @@
 #include <KoFilter.h>
 
 class KoXmlWriter;
+class KoGenStyles;
 
 class Filterkpr2odf : public KoFilter {
     Q_OBJECT
@@ -32,18 +33,27 @@ class Filterkpr2odf : public KoFilter {
 public:
     Filterkpr2odf(QObject* parent, const QStringList&);
 
-    virtual ~Filterkpr2odf() {}
+    virtual ~Filterkpr2odf();
 
     //reimplemented from KoFilter
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 
 private:
+    //Helper functions
     void convertContent( KoXmlWriter* content );
     void convertObjects( KoXmlWriter* content, const KoXmlNode& objects, const int currentPage );
+    void appendPicture( KoXmlWriter* content, KoXmlElement objectElement );
 
-    KoXmlDocument m_mainDoc;
-    KoXmlDocument m_documentInfo;
+     //Styles functions
+    const QString createPageStyle( const KoXmlElement& page );
+    const QString createGradientStyle( const KoXmlElement& page )
+
+
+    KoXmlDocument m_mainDoc;//from KPR
+    KoXmlDocument m_documentInfo;//from KPR
+
     int m_pageHeight;//needed to find out where's every object
+    KoGenStyles *m_styles;//style collector
 };
 
 #endif //FILTERKPR2ODF_H
