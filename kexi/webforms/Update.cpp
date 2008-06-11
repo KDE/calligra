@@ -70,7 +70,7 @@ namespace KexiWebForms {
                 
                 kDebug() << "Creating new schema object" << endl;
                 KexiDB::QuerySchema mySchema(*gConnection->tableSchema(requestedTable));
-                KexiDB::RowEditBuffer myRecordEdit(true);
+                KexiDB::RowEditBuffer myRecordEdit(false);
                 KexiDB::RecordData myData;
                 kDebug() << "Adding fields to QuerySchema" << endl;
                 while (iterator.hasNext()) {
