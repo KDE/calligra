@@ -36,7 +36,6 @@
 #include <KoXmlNS.h>
 #include <KoOdf.h>
 #include <KoGenStyle.h>
-#include <KoGenStyles.h>
 
 #include "Filterkpr2odf.h"
 
@@ -45,13 +44,7 @@ K_EXPORT_COMPONENT_FACTORY( libFilterkpr2odf, Filterkpr2odfFactory( "kofficefilt
 
 Filterkpr2odf::Filterkpr2odf(QObject *parent,const QStringList&)
 : KoFilter(parent)
-, m_styles( new KoGenStyles() )
 {
-}
-
-Filterkpr2odf::~Filterkpr2odf()
-{
-    delete m_styles;
 }
 
 KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const QByteArray& to )
@@ -85,8 +78,6 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
      if( !input->extractFile("preview.png", *preview) )
          return KoFilter::WrongFormat;
 
-    delete input;
-
     //If we find everything let the saving begin
 
     //Create the output file
@@ -109,18 +100,22 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
     manifest->addManifestEntry( "Thubnails/thubnail.png", "" );
     delete preview;
 
-     //Create the content.xml file
+    //Write the Pictures directory and its children, also fill the m_pictures hash
+    createImageList( output, input, manifest );
+    delete input;
+
+    //Create the content.xml file
     KoXmlWriter *content = odfWriter.contentWriter();
     KoXmlWriter *body = odfWriter.bodyWriter();
     convertContent( body );
-    m_styles->saveOdfAutomaticStyles( content, false );
+    m_styles.saveOdfAutomaticStyles( content, false );
     odfWriter.closeContentWriter();
     manifest->addManifestEntry( "content.xml", "text/xml" );
 
-     //Create the styles.xml file
-    m_styles->saveOdfStylesDotXml( output, manifest );
+    //Create the styles.xml file
+    m_styles.saveOdfStylesDotXml( output, manifest );
 
-     //Create the meta.xml file
+    //Create the meta.xml file
     output->open( "meta.xml" );
     KoDocumentInfo* meta = new KoDocumentInfo();
     meta->load( m_documentInfo );
@@ -129,17 +124,53 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
     output->close();
     manifest->addManifestEntry( "meta.xml", "text/xml" );
 
-     //Write the Pictures directory and its children
-//     output->enterDirectory( "Pictures" );
-//     output->leaveDirectory();
-//     manifest->addManifestEntry( "Pictures/", "" );
-
-     //Write the document manifest
+    //Write the document manifest
     odfWriter.closeManifestWriter();
 
     delete output;
 
     return KoFilter::OK;
+}
+
+void Filterkpr2odf::createImageList( KoStore* output, KoStore* input, KoXmlWriter* manifest )
+{
+    output->enterDirectory( "Pictures" );
+    manifest->addManifestEntry( "Pictures/", "" );
+    KoXmlElement key = m_mainDoc.namedItem("DOC").namedItem("PICTURES").firstChild().toElement();
+
+    //Iterate over all the keys to copy the image, get the file name and
+    //its "representation" inside the KPR file
+    for( ; !key.isNull(); key = key.nextSibling().toElement() )
+    {
+        QString name( key.attribute( "name" ) );
+        QString fullFilename( getPictureNameFromKey( key ) );
+        QStringList filenameComponents( name.split( "/" ) );
+        QString odfName( filenameComponents.at( filenameComponents.size()-1 ) );
+
+        m_pictures[ fullFilename ] = odfName;
+
+        //Copy the picture
+        QByteArray* image = new QByteArray();
+        input->extractFile( name, *image );
+        output->open( odfName );
+        output->write( *image );
+        output->close();
+        delete image;
+
+        //generate manifest entry
+        QString mediaType;
+        if( odfName.contains( "png" ) ) {
+            mediaType = "image/png";
+        }
+        else if( odfName.contains( "jpg" ) ) {
+            mediaType = "image/jpg";
+        }
+        else if( odfName.contains( "jpeg" ) ){
+            mediaType = "image/jpeg";
+        }
+        manifest->addManifestEntry( odfName, mediaType );
+    }
+    output->leaveDirectory();
 }
 
 void Filterkpr2odf::convertContent( KoXmlWriter* content )
@@ -267,6 +298,13 @@ void Filterkpr2odf::appendPicture( KoXmlWriter* content, KoXmlElement objectElem
     content->addAttribute( "xlink:show", "embed" );
     content->addAttribute( "xlink:actuate", "onLoad" );
     content->endElement();//draw:image
+}
+
+const QString Filterkpr2odf::getPictureNameFromKey( const KoXmlElement& key )
+{
+    return key.attribute( "msec" ) + key.attribute( "second" ) + key.attribute( "minute" )
+           + key.attribute( "hour" ) + key.attribute( "day" ) + key.attribute( "month")
+           + key.attribute( "year" ) + key.attribute( "filename" );
 }
 
 #include "StylesFilterkpr2odf.cpp"

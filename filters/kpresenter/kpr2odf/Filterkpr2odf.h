@@ -23,6 +23,7 @@
 //KOffice includes
 #include <KoDom.h>
 #include <KoFilter.h>
+#include <KoGenStyles.h>
 
 class KoXmlWriter;
 class KoGenStyles;
@@ -33,16 +34,18 @@ class Filterkpr2odf : public KoFilter {
 public:
     Filterkpr2odf(QObject* parent, const QStringList&);
 
-    virtual ~Filterkpr2odf();
+    virtual ~Filterkpr2odf() {}
 
     //reimplemented from KoFilter
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
 
 private:
     //Helper functions
+    void createImageList( KoStore* output, KoStore* input, KoXmlWriter* manifest );
     void convertContent( KoXmlWriter* content );
     void convertObjects( KoXmlWriter* content, const KoXmlNode& objects, const int currentPage );
     void appendPicture( KoXmlWriter* content, KoXmlElement objectElement );
+    const QString getPictureNameFromKey( const KoXmlElement& key );
 
      //Styles functions
     const QString createPageStyle( const KoXmlElement& page );
@@ -53,7 +56,9 @@ private:
     KoXmlDocument m_documentInfo;//from KPR
 
     int m_pageHeight;//needed to find out where's every object
-    KoGenStyles *m_styles;//style collector
+    QHash<QString,QString> m_pictures;//store the <filename, name> pair of the keys
+
+    KoGenStyles m_styles;//style collector
 };
 
 #endif //FILTERKPR2ODF_H
