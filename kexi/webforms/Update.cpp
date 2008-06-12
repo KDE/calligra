@@ -85,6 +85,7 @@ namespace KexiWebForms {
                     } else {
                         dict.ShowSection("ERROR");
                         dict.SetValue("MESSAGE", "Failed to update row");
+                        kDebug() << "Connection ERROR: " << gConnection->errorMsg() << endl;
                     }
                 }
             } else {
