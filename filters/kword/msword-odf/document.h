@@ -102,6 +102,8 @@ public slots:
     // Note that a header functor will parse ALL the header/footers (of the section)
     void slotSubDocFound( const wvWare::FunctorBase* functor, int data );
 
+    void slotFootnoteFound( const wvWare::FunctorBase* functor, int data );
+
     // Add to our parsing queue, for tables
     void slotTableFound( const KWord::Table& table );
 

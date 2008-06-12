@@ -92,6 +92,8 @@ public:
     void writeLayout( const wvWare::Style* style );
 
     bool m_writeTextToStylesDotXml; //flag for headers & footers, where we write the actual text to styles.xml
+    int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)
+    int m_currentListID; //tracks the id of the current list - 0 if no list
     KoXmlWriter* m_headerWriter; //for header/footer writing in styles.xml
     QString m_listStyleName; //track the name of the list style
     KoGenStyles* m_mainStyles; //this is for collecting most of the styles
@@ -100,6 +102,7 @@ public:
 signals:
     void firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> );
     void subDocFound( const wvWare::FunctorBase* parsingFunctor, int data );
+    void footnoteFound( const wvWare::FunctorBase* parsingFunctor, int data );
     void tableFound( const KWord::Table& table );
     void pictureFound( const QString& frameName, const QString& pictureName, const wvWare::FunctorBase* pictureFunctor );
     void updateListDepth( int );
@@ -117,8 +120,6 @@ private:
     int m_sectionNumber;
     int m_footNoteNumber; // number of footnote _vars_ written out
     int m_endNoteNumber; // number of endnote _vars_ written out
-    int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)
-    int m_currentListID; //tracks the id of the current list - 0 if no list
     //int m_textStyleNumber; //number of styles created for text family
     //int m_paragraphStyleNumber; //number of styles created for paragraph family
     //int m_listStyleNumber; //number of styles created for lists
@@ -133,7 +134,7 @@ private:
     QDomElement m_oldLayout;
 
     KWord::Table* m_currentTable;
-    bool m_bInParagraph;
+    //bool m_bInParagraph;
     //flag that tells us to start a new page
     bool m_bStartNewPage;
 

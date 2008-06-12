@@ -61,7 +61,7 @@ KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, Ko
       //m_textStyleNumber( 1 ), m_paragraphStyleNumber( 1 ), m_listStyleNumber( 1 ),
       m_currentListDepth( -1 ), m_currentListID( 0 ), m_currentStyle( 0L ),/* m_index( 0 ),*/
       m_currentTable( 0L ), m_writeTextToStylesDotXml( false ),
-      m_bInParagraph( false ), m_bStartNewPage( false ),
+      /*m_bInParagraph( false ),*/ m_bStartNewPage( false ),
       m_insideField( false ), m_fieldAfterSeparator( false ), m_fieldType( 0 )
 {
     if(bodyWriter) {
@@ -121,31 +121,52 @@ void KWordTextHandler::headersFound( const wvWare::HeaderFunctor& parseHeaders )
     }
 }
 
-//handles in text part of the footnote, but then parses text of it later?
+//this part puts the marker in the text, and signals for the rest to be parsed later
 void KWordTextHandler::footnoteFound( wvWare::FootnoteData::Type type,
                                       wvWare::UChar character, wvWare::SharedPtr<const wvWare::Word97::CHP> chp,
                                       const wvWare::FootnoteFunctor& parseFootnote )
 {
     kDebug(30513) ;
-    bool autoNumbered = (character.unicode() == 2);
-    QDomElement varElem = insertVariable( 11 /*KWord code for footnotes*/, chp, "STRI" );
-    QDomElement footnoteElem = varElem.ownerDocument().createElement( "FOOTNOTE" );
-    if ( autoNumbered )
-        footnoteElem.setAttribute( "value", 1 ); // KWord will renumber anyway
-    else
-        footnoteElem.setAttribute( "value", QString(QChar(character.unicode())) );
-    footnoteElem.setAttribute( "notetype", type == wvWare::FootnoteData::Endnote ? "endnote" : "footnote" );
-    footnoteElem.setAttribute( "numberingtype", autoNumbered ? "auto" : "manual" );
-    if ( type == wvWare::FootnoteData::Endnote )
-        // Keep name in sync with Document::startFootnote
-        footnoteElem.setAttribute( "frameset", i18n("Endnote %1", ++m_endNoteNumber ) );
-    else
-        // Keep name in sync with Document::startFootnote
-        footnoteElem.setAttribute( "frameset", i18n("Footnote %1", ++m_footNoteNumber ) );
-    varElem.appendChild( footnoteElem );
 
-    // Remember to parse the footnote text later
-    emit subDocFound( new wvWare::FootnoteFunctor( parseFootnote ), type );
+    m_bodyWriter->startElement("text:note");
+    //set footnote or endnote
+    m_bodyWriter->addAttribute("text:note-class", type==wvWare::FootnoteData::Endnote ? "endnote" : "footnote");
+    //autonumber or character
+    m_bodyWriter->startElement("text:note-citation");
+    if(character.unicode() == 2) {//autonumbering: 1,2,3,... for footnote; i,ii,iii,... for endnote
+	//TODO convert m_endNoteNumber to roman numeral, b/c that's the default in MS Word
+	m_bodyWriter->addTextNode(QString::number(type==wvWare::FootnoteData::Endnote ? ++m_endNoteNumber : ++m_footNoteNumber));
+    }
+    else {
+	m_bodyWriter->addTextNode(QString(QChar(character.unicode())));
+    }
+    m_bodyWriter->endElement();//text:note-citation
+    //start the body of the footnote
+    m_bodyWriter->startElement("text:note-body");
+
+    //signal Document to parse the footnote
+    emit footnoteFound( new wvWare::FootnoteFunctor( parseFootnote ), type );
+
+    //end the elements
+    m_bodyWriter->endElement();//text:note-body
+    m_bodyWriter->endElement();//text:note
+
+    //bool autoNumbered = (character.unicode() == 2);
+    //QDomElement varElem = insertVariable( 11 /*KWord code for footnotes*/, chp, "STRI" );
+    //QDomElement footnoteElem = varElem.ownerDocument().createElement( "FOOTNOTE" );
+    //if ( autoNumbered )
+    //    footnoteElem.setAttribute( "value", 1 ); // KWord will renumber anyway
+    //else
+    //    footnoteElem.setAttribute( "value", QString(QChar(character.unicode())) );
+    //footnoteElem.setAttribute( "notetype", type == wvWare::FootnoteData::Endnote ? "endnote" : "footnote" );
+    //footnoteElem.setAttribute( "numberingtype", autoNumbered ? "auto" : "manual" );
+    //if ( type == wvWare::FootnoteData::Endnote )
+        // Keep name in sync with Document::startFootnote
+    //    footnoteElem.setAttribute( "frameset", i18n("Endnote %1", ++m_endNoteNumber ) );
+    //else
+        // Keep name in sync with Document::startFootnote
+    //    footnoteElem.setAttribute( "frameset", i18n("Footnote %1", ++m_footNoteNumber ) );
+    //varElem.appendChild( footnoteElem );
 }
 
 //create an element for the variable
@@ -174,7 +195,7 @@ void KWordTextHandler::tableRowFound( const wvWare::TableRowFunctor& functor, wv
     if ( !m_currentTable )
     {
         // We need to put the table in a paragraph. For wv2 tables are between paragraphs.
-        Q_ASSERT( !m_bInParagraph );
+        //Q_ASSERT( !m_bInParagraph );
         paragraphStart( 0L );
         static int s_tableNumber = 0;
         m_currentTable = new KWord::Table();
@@ -246,9 +267,9 @@ QDomElement KWordTextHandler::insertAnchor( const QString& fsname )
 void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties )
 {
     kDebug(30513) << "**********************************************";
-    if ( m_bInParagraph )
-        paragraphEnd();
-    m_bInParagraph = true;
+    //if ( m_bInParagraph )
+    //    paragraphEnd();
+    //m_bInParagraph = true;
     //kDebug(30513) <<"paragraphStart. style index:" << paragraphProperties->pap().istd;
     //m_formats = mainDocument().createElement( "FORMATS" );
     m_paragraphProperties = paragraphProperties;
@@ -268,7 +289,7 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
 void KWordTextHandler::paragraphEnd()
 {
     kDebug(30513) ;
-    Q_ASSERT( m_bInParagraph );
+    //Q_ASSERT( m_bInParagraph );
     if ( m_currentTable )
     {
         emit tableFound( *m_currentTable );
@@ -281,7 +302,7 @@ void KWordTextHandler::paragraphEnd()
     else
 	m_headerWriter->endElement();
     //clear our paragraph flag
-    m_bInParagraph = false;
+    //m_bInParagraph = false;
 }//end paragraphEnd()
 
 void KWordTextHandler::fieldStart( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )
@@ -641,10 +662,14 @@ void KWordTextHandler::writeLayout( const wvWare::Style* style )
     //we could be writing to the body as normal, or
     //we may need to write this to styles.xml
     KoXmlWriter* writer;
-    if ( !m_writeTextToStylesDotXml )
+    if ( !m_writeTextToStylesDotXml ) {
+	kDebug(30513) << "writing to body";
 	writer = m_bodyWriter;
-    else
+    }
+    else {
+	kDebug(30513) << "writing a header";
 	writer = m_headerWriter;
+    }
 
     //if we don't actually have paragraph properties, just return
     if ( !m_paragraphProperties )
@@ -664,6 +689,7 @@ void KWordTextHandler::writeLayout( const wvWare::Style* style )
     if ( pap.ilfo > 0 )
     {
 	//we're in a list in the word document
+	kDebug(30513) << "we're in a list";
 	//listInfo is our list properties object
 	const wvWare::ListInfo* listInfo = (*m_paragraphProperties).listInfo();
 	bool newListLevelStyle = false; //little flag to tell us whether or not to write that tag

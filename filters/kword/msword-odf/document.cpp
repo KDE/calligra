@@ -60,6 +60,8 @@ Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWrit
         m_textHandler = new KWordTextHandler( m_parser, bodyWriter, mainStyles );
         connect( m_textHandler, SIGNAL( subDocFound( const wvWare::FunctorBase*, int ) ),
                  this, SLOT( slotSubDocFound( const wvWare::FunctorBase*, int ) ) );
+        connect( m_textHandler, SIGNAL( footnoteFound( const wvWare::FunctorBase*, int ) ),
+                 this, SLOT( slotFootnoteFound( const wvWare::FunctorBase*, int ) ) );
         connect( m_textHandler, SIGNAL( tableFound( const KWord::Table& ) ),
                  this, SLOT( slotTableFound( const KWord::Table& ) ) );
         connect( m_textHandler, SIGNAL( pictureFound( const QString&, const QString&, const wvWare::FunctorBase* ) ),
@@ -97,6 +99,7 @@ Document::~Document()
 void Document::finishDocument()
 {
     kDebug(30513) ;
+
     const wvWare::Word97::DOP& dop = m_parser->dop();
 /*
     QDomElement elementDoc = m_mainDocument.documentElement();
@@ -272,16 +275,19 @@ void Document::bodyEnd()
     //close a list if we need to
     if ( m_currentListDepth >= 0 )
     {
-	kDebug(30513) << "closing the final list in the document";
+	kDebug(30513) << "closing the final list in the document body";
 	//m_listStylesWriter->endElement(); //text:list-style
 	//reset listStyleName
 	m_textHandler->m_listStyleName = "";
+	m_textHandler->m_currentListDepth = -1;
+	m_textHandler->m_currentListID = 0;
 	//close any open list tags in the body writer
         for (int i = 0; i <= m_currentListDepth; i++)
         {
 	    m_bodyWriter->endElement(); //close the text:list-item
 	    m_bodyWriter->endElement(); //text:list
 	}
+	m_currentListDepth = -1;
     }
 
     disconnect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
@@ -341,23 +347,37 @@ void Document::headerStart( wvWare::HeaderData::Type type )
     //framesetElement.setAttribute( "name", Conversion::headerTypeToFramesetName( type ) );
     //m_framesetsElement.appendChild(framesetElement);
 
-    m_openHeader = Conversion::isHeader( type );
-    m_openFooter = !m_openHeader; //if we don't have a header, it must be a footer
+    //m_openHeader = Conversion::isHeader( type );
+    //m_openFooter = !m_openHeader; //if we don't have a header, it must be a footer
 
     //we need to open an xmlwriter so we can create the whole element
     m_buffer = new QBuffer();
     m_buffer->open( QIODevice::WriteOnly );
     m_writer = new KoXmlWriter( m_buffer );
 
-    if ( m_openHeader )
-    {
-	//TODO need to check which type of header this is
-	m_writer->startElement( "style:header" );
-    }
-    else
-    {
-	//TODO need to check which type of footer this is
-	m_writer->startElement( "style:footer" );
+    switch(type) {
+    //TODO fix first header
+    case wvWare::HeaderData::HeaderFirst:
+	break;
+    case wvWare::HeaderData::HeaderOdd:
+	m_openHeader = true;
+	m_writer->startElement("style:header");
+	break;
+    case wvWare::HeaderData::HeaderEven:
+	m_openHeader = true;
+	m_writer->startElement("style:header-left");
+	break;
+    //TODO fix first footer
+    case wvWare::HeaderData::FooterFirst:
+	break;
+    case wvWare::HeaderData::FooterOdd:
+	m_openFooter = true;
+	m_writer->startElement("style:footer");
+	break;
+    case wvWare::HeaderData::FooterEven:
+	m_openFooter = true;
+	m_writer->startElement("style:footer-left");
+	break;
     }
 
     //tell texthandler to write to styles.xml instead of content.xml
@@ -382,15 +402,41 @@ void Document::headerEnd()
 {
     kDebug(30513) ;
     //m_textHandler->setFrameSetElement( QDomElement() );
+    //close a list if we need to (you can have a list inside a header)
+    if ( m_currentListDepth >= 0 )
+    {
+	kDebug(30513) << "closing a list in a header/footer";
+	//m_listStylesWriter->endElement(); //text:list-style
+	//reset listStyleName
+	m_textHandler->m_currentListDepth = -1;
+	m_textHandler->m_listStyleName = "";
+	m_textHandler->m_currentListID = 0;
+	//close any open list tags in the body writer
+        for (int i = 0; i <= m_currentListDepth; i++)
+        {
+	    m_writer->endElement(); //close the text:list-item
+	    m_writer->endElement(); //text:list
+	}
+	m_currentListDepth = -1;
+    }
+
     //close writer & add to m_masterStyle
-    m_writer->endElement(); //style:header/footer
-    QString contents = QString::fromUtf8( m_buffer->buffer(), m_buffer->buffer().size() );
-    m_masterStyle->addChildElement( QString::number( m_headerCount ), contents );
+    //if it was a first header/footer, we wrote to this writer, but we won't do anything with it
+    if(m_openHeader||m_openFooter) {
+	m_writer->endElement(); //style:header/footer
+        QString contents = QString::fromUtf8( m_buffer->buffer(), m_buffer->buffer().size() );
+	m_masterStyle->addChildElement( QString::number( m_headerCount ), contents );
+    }
     m_textHandler->m_headerWriter = 0;
     delete m_writer;
+    m_writer = 0;
     delete m_buffer;
+    m_buffer = 0;
     //we're done with this header, so reset to false
     m_textHandler->m_writeTextToStylesDotXml = false;
+    //and reset variables
+    m_openHeader = false;
+    m_openFooter = false;
 }
 
 //get text of the footnote
@@ -400,8 +446,8 @@ void Document::footnoteStart()
 {
     kDebug(30513) ;
     // Grab data that was stored with the functor, that triggered this parsing
-    SubDocument subdoc( m_subdocQueue.front() );
-    int type = subdoc.data;
+    //SubDocument subdoc( m_subdocQueue.front() );
+    //int type = subdoc.data;
 
     // Create footnote/endnote frameset
     //QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
@@ -537,6 +583,14 @@ void Document::slotSubDocFound( const wvWare::FunctorBase* functor, int data )
     kDebug(30513) ;
     SubDocument subdoc( functor, data, QString(), QString() );
     m_subdocQueue.push( subdoc );
+}
+
+void Document::slotFootnoteFound(const wvWare::FunctorBase* functor, int data)
+{
+    kDebug(30513) ;
+    SubDocument subdoc( functor, data, QString(), QString() );
+    (*subdoc.functorPtr)();
+    delete subdoc.functorPtr;
 }
 
 //add KWord::Table object to the table queue
