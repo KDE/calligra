@@ -49,12 +49,15 @@ public:
     IntervalEditImpl(QWidget *parent);
     
     QList<TimeInterval*> intervals() const;
-    void setIntervals(const QList<TimeInterval*> &intervals) const;
+    void setIntervals(const QList<TimeInterval*> &intervals);
     
 private slots:
     void slotClearClicked();
     void slotAddIntervalClicked();
+    void slotRemoveIntervalClicked();
     void slotIntervalSelectionChanged();
+    void enableButtons();
+    
 signals:
     void changed();
 };

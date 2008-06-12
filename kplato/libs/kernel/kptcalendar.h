@@ -93,6 +93,22 @@ public:
         second = ti.second;
         return *this;
     }
+    /// Returns true if the intervals overlap in any way
+    bool intersects( const TimeInterval &ti ) const {
+        if ( ! isValid() || ! ti.isValid() ) {
+            return false;
+        }
+        if ( endsMidnight() && ti.endsMidnight() ) {
+            return true;
+        }
+        if ( endsMidnight() ) {
+            return first < ti.endTime();
+        }
+        if ( ti.endsMidnight() ) {
+            return ti.first < endTime();
+        }
+        return ( first < ti.endTime() && endTime() > ti.first ) || ( ti.first < endTime() && ti.endTime() > first );
+    }
 protected:
     void init()
     {

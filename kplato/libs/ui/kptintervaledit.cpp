@@ -53,23 +53,46 @@ IntervalEditImpl::IntervalEditImpl(QWidget *parent)
     intervalList->setSortingEnabled( true );
     intervalList->sortByColumn( 0, Qt::Ascending );
     
+    bAddInterval->setIcon( KIcon( "list-add" ) );
+    bRemoveInterval->setIcon( KIcon( "list-remove" ) );
+    bClear->setIcon( KIcon( "edit-clear-list" ) );
+    
     connect(bClear, SIGNAL(clicked()), SLOT(slotClearClicked()));
     connect(bAddInterval, SIGNAL(clicked()), SLOT(slotAddIntervalClicked()));
+    connect(bRemoveInterval, SIGNAL(clicked()), SLOT(slotRemoveIntervalClicked()));
     connect(intervalList, SIGNAL(itemSelectionChanged()), SLOT(slotIntervalSelectionChanged()));
-
+    
+    connect( startTime, SIGNAL( timeChanged( const QTime& ) ), SLOT( enableButtons() ) );
+    connect( length, SIGNAL( valueChanged( double ) ), SLOT( enableButtons() ) );
+    
+    enableButtons();
 }
 
 void IntervalEditImpl::slotClearClicked() {
     bool c = intervalList->topLevelItemCount() > 0;
     intervalList->clear();
+    enableButtons();
     if (c)
         emit changed();
 }
 
 void IntervalEditImpl::slotAddIntervalClicked() {
-    new IntervalItem(intervalList, startTime->time(), (int)length->value() * 1000 * 60 *60 );
+    new IntervalItem(intervalList, startTime->time(), (int)(length->value() * 1000. * 60. *60.) );
+    enableButtons();
     emit changed();
 }
+
+void IntervalEditImpl::slotRemoveIntervalClicked() {
+    IntervalItem *item = static_cast<IntervalItem*>( intervalList->currentItem() );
+    if ( item == 0) {
+        return;
+    }
+    intervalList->takeTopLevelItem( intervalList->indexOfTopLevelItem( item ) );
+    delete item;
+    enableButtons();
+    emit changed();
+}
+
 
 void IntervalEditImpl::slotIntervalSelectionChanged() {
     QList<QTreeWidgetItem*> lst = intervalList->selectedItems();
@@ -79,6 +102,8 @@ void IntervalEditImpl::slotIntervalSelectionChanged() {
     IntervalItem *ii = static_cast<IntervalItem *>(lst[0]);
     startTime->setTime(ii->interval().first);
     length->setValue((double)ii->interval().second / (1000*60*60));
+    
+    enableButtons();
 }
 
 QList<TimeInterval*> IntervalEditImpl::intervals() const {
@@ -91,12 +116,38 @@ QList<TimeInterval*> IntervalEditImpl::intervals() const {
     return l;
 }
 
-void IntervalEditImpl::setIntervals(const QList<TimeInterval*> &intervals) const {
+void IntervalEditImpl::setIntervals(const QList<TimeInterval*> &intervals) {
     intervalList->clear();
     foreach (TimeInterval *i, intervals) {
         kDebug()<<i->first<<i->second;
         new IntervalItem(intervalList, i->first, i->second);
     }
+    enableButtons();
+}
+
+void IntervalEditImpl::enableButtons() {
+    bClear->setEnabled( ! intervals().isEmpty() );
+    
+    bRemoveInterval->setEnabled( intervalList->currentItem() );
+    
+    if ( length->value() == 0.0 ) {
+        bAddInterval->setEnabled( false );
+        return;
+    }
+    if ( QTime( 0, 0, 0 ).secsTo( startTime->time() ) + (int)(length->value() * 60. * 60.) > 24 * 60 * 60 ) {
+        bAddInterval->setEnabled( false );
+        return;
+    }
+    TimeInterval ti( startTime->time(),  (int)(length->value() * 1000. * 60. *60.) );
+    kDebug()<<ti.first<<ti.second;
+    foreach (TimeInterval *i, intervals()) {
+        kDebug()<<i->startTime()<<i->endTime()<<ti.startTime()<<ti.endTime();
+        if ( i->intersects( ti ) ) {
+            bAddInterval->setEnabled( false );
+            return;
+        }
+    }
+    bAddInterval->setEnabled( true );
 }
 
 //-------------------------------------------------------------

@@ -22,6 +22,9 @@
 
 #include <QTreeWidgetItem>
 
+#include <klocale.h>
+#include <kglobal.h>
+
 namespace KPlato
 {
 
@@ -29,23 +32,25 @@ class IntervalItem : public QTreeWidgetItem
 {
 public:
     explicit IntervalItem(QTreeWidget * parent, QTime start, int length)
-    : QTreeWidgetItem(parent),
-      m_start(start)
+    : QTreeWidgetItem(parent)
     {
-        m_length = (double)(length) / (1000 * 60 * 60 ); // ms -> hours
-        setText( 0, start.toString() );
-        setText( 1, QString("%1" ).arg( m_length ) );
+        setInterval( start, (double)(length) / (1000 * 60 * 60 ) ); // ms -> hours
     }
     explicit IntervalItem(QTreeWidget * parent, QTime start, double length)
-    : QTreeWidgetItem(parent),
-      m_start(start),
-      m_length(length)
+    : QTreeWidgetItem(parent)
     {
-        setText( 0, start.toString() );
-        setText( 1, QString("%1" ).arg( length ) );
+        setInterval( start, length );
     }
       
     TimeInterval interval() { return TimeInterval(m_start, ( (int)(m_length) * 1000 * 60 * 60 ) ); }
+
+    void setInterval( const QTime &time, double length )
+    {
+        m_start = time;
+        m_length = length;
+        setText( 0, KGlobal::locale()->formatTime( time ) );
+        setText( 1, KGlobal::locale()->formatNumber( length ) );
+    }
 
 private:
     QTime m_start;
