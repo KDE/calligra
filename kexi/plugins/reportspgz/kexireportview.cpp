@@ -33,14 +33,23 @@
 #include <QPrintDialog>
 #include <widget/utils/kexirecordnavigator.h>
 #include <core/KexiWindow.h>
-#include <krkspreadrender.h>
+
+#ifdef HAVE_KSPREAD
+  #include <krkspreadrender.h>
+#endif 
+
+
+#include <krhtmlrender.h>
+#include <kfiledialog.h>
 
 KexiReportView::KexiReportView(QWidget *parent)
  : KexiView(parent)
 {	
+	rpt = 0;
 	setObjectName("KexiReportDesigner_DataView");
 	scr = new QScrollArea(this);
 	scr->setBackgroundRole(QPalette::Dark);
+	scr->viewport()->setAutoFillBackground(true);	
 
 	pageSelector = new KexiRecordNavigator(this, 0);
 	layout()->addWidget(scr);
@@ -67,12 +76,21 @@ KexiReportView::KexiReportView(QWidget *parent)
 	a->setEnabled(false);
 	connect(a, SIGNAL(triggered()), this, SLOT(slotRenderKWord()));
 	
+	#ifdef HAVE_KSPREAD
 	viewActions << (a = new KAction(KIcon("kspread"), i18n("Open in KSpread"), this ));
 	a->setObjectName("pgzkexirpt_open_kspread");
 	a->setToolTip(i18n("Open the report in KSpread"));
 	a->setWhatsThis(i18n("Opens the current report in KSpread."));
 	a->setEnabled(true);
 	connect(a, SIGNAL(triggered()), this, SLOT(slotRenderKSpread()));
+	#endif
+
+	viewActions << (a = new KAction(KIcon("text-html"), i18n("Export to HTML"), this ));
+	a->setObjectName("pgzkexirpt_export_html");
+	a->setToolTip(i18n("Export the report to HTML"));
+	a->setWhatsThis(i18n("Exports the report to a HTML file."));
+	a->setEnabled(true);
+	connect(a, SIGNAL(triggered()), this, SLOT(slotExportHTML()));
 	
 	setViewActions(viewActions);
 	
@@ -146,9 +164,29 @@ void KexiReportView::slotPrintReport()
 
 void KexiReportView::slotRenderKSpread()
 {
+#ifdef HAVE_KSPREAD
 	KRKSpreadRender ks;
 
 	ks.render(doc);
+#endif
+}
+
+void KexiReportView::slotExportHTML()
+{
+	QString saveName = KFileDialog::getSaveFileName();
+	QFile file(saveName);
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+	{
+	    KMessageBox::error(this, i18n("Report not saved "), i18n("Not Saved"));
+	    return;
+	}
+	KRHtmlRender hr(tempData()->document, KexiMainWindowIface::global()->project()->dbConnection());
+	
+	QTextStream out(&file);
+	out << hr.generate() << "\n";
+
+	file.close();
+	KMessageBox::information(this, i18n("Report saved to ") + saveName, i18n("Saved OK"));
 }
 
 tristate KexiReportView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)
@@ -164,6 +202,8 @@ tristate KexiReportView::afterSwitchFrom(Kexi::ViewMode mode)
 	kDebug() << endl;
 	if (tempData()->reportSchemaChangedInPreviousView) 
 	{
+		delete rpt;
+
 		rpt = new ORPreRender(tempData()->document, KexiMainWindowIface::global()->project()->dbConnection());
 		curPage = 1;
 		
@@ -183,4 +223,4 @@ KexiReportPart::TempData* KexiReportView::tempData() const
 {
 	return static_cast<KexiReportPart::TempData*>(window()->data());
 }
-#include "kexireportview.moc"
+

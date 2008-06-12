@@ -32,7 +32,7 @@
 #include "reportentitybarcode.h"
 #include "reportentityimage.h"
 #include "reportentitychart.h"
-
+#include "reportentityshape.h"
 #include "reportsectiondetailgroup.h"
 
 // dialogs
@@ -104,7 +104,8 @@ class ReportWriterSectionData
 			LineItem,
 			BarcodeItem,
 			ImageItem,
-			ChartItem
+			ChartItem,
+			ShapeItem
 		};
 
 		enum MouseAction
@@ -1246,6 +1247,9 @@ void ReportDesigner::sectionMouseReleaseEvent ( ReportSceneView * v, QMouseEvent
 					case ReportWriterSectionData::ChartItem :
 						  item = new ReportEntityChart(v->document(), v->scene());
 						  break;
+					case ReportWriterSectionData::ShapeItem :
+						  item = new ReportEntityShape(v->document(), v->scene());
+						  break;
 					default:
 						kDebug() << "attempted to insert an unknown item" << endl;;
 				}
@@ -1319,6 +1323,12 @@ void ReportDesigner::slotItemChart()
 {
 	sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
 	sectionData->insertItem = ReportWriterSectionData::ChartItem;
+}
+
+void ReportDesigner::slotItemShape()
+{
+	sectionData->mouseAction = ReportWriterSectionData::MA_Insert;
+	sectionData->insertItem = ReportWriterSectionData::ShapeItem;
 }
 
 void ReportDesigner::changeSet ( KoProperty::Set *s )

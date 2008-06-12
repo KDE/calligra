@@ -1053,7 +1053,7 @@ ORODocument* ORPreRender::generate()
 
 //	QuerySource * qs = 0;
 
-	_internal->_query = ( new orQuery ( "Data Source", _internal->_reportData->query, true, _internal->_conn ) );
+	_internal->_query = ( new orQuery ( "Data Source", _internal->_reportData->query(), true, _internal->_conn ) );
 
 //TODO field totals
 //	_internal->_subtotPageCheckPoints.clear();

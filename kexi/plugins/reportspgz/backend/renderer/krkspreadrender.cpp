@@ -43,7 +43,7 @@ void KRKSpreadRender::render(ORODocument *doc)
 	
 	sht->setSheetName(doc->title());
 	sht->setText(0,0,"Hello");
-	sht->setText(1,1,"Hello");
+	sht->setText(1,1,"There");
 	
 	///=============================
 	

@@ -28,6 +28,7 @@ set(pgzkexireportpart2_LIB_SRCS
 	backend/common/krbarcodedata.cpp
 	backend/common/krimagedata.cpp
 	backend/common/krlinedata.cpp
+	backend/common/krshapedata.cpp
 	backend/common/krsectiondata.cpp
 	backend/common/labelsizeinfo.cpp
 	backend/common/reportpageoptions.cpp
@@ -44,8 +45,8 @@ set(pgzkexireportpart2_LIB_SRCS
 	backend/renderer/orprintrender.cpp
 	backend/renderer/orprerender.cpp
 	backend/renderer/krscreenrender.cpp
-	backend/renderer/krkspreadrender.cpp
-	
+	backend/renderer/krhtmlrender.cpp
+
 	backend/renderer/scripting/krscripthandler.cpp
 	backend/renderer/scripting/krscriptfunctions.cpp
 	backend/renderer/scripting/krscriptconstants.cpp
@@ -71,6 +72,7 @@ set(pgzkexireportpart2_LIB_SRCS
 	backend/wrtembed/reportentitybarcode.cpp
 	backend/wrtembed/reportentityimage.cpp
 	backend/wrtembed/reportentitychart.cpp
+	backend/wrtembed/reportentityshape.cpp
 	backend/wrtembed/reportsection.cpp
 	backend/wrtembed/reportsectiondetailgroup.cpp
 	backend/wrtembed/reportsectiondetail.cpp
@@ -83,6 +85,12 @@ set(pgzkexireportpart2_LIB_SRCS
 	backend/wrtembed/codeeanpaint.cpp
 	backend/wrtembed/code128paint.cpp
 	)
+if (SHOULD_BUILD_KSPREAD)
+  add_definitions(-DHAVE_KSPREAD)
+  set(pgzkexireportpart2_LIB_SRCS
+	backend/renderer/krkspreadrender.cpp
+)
+endif (SHOULD_BUILD_KSPREAD)
 
 kde4_add_ui_files(pgzkexireportpart2_LIB_SRCS backend/wrtembed/detailgroupsectiondialog.ui backend/wrtembed/sectioneditor.ui )
 

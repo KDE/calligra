@@ -61,7 +61,7 @@ class KRFieldData : public KRObjectData
 		//QString trackTotalFormat();
 		
 		ORLineStyleData lineStyle();
-		
+		KRPos position(){return _pos;}
 	protected:
 		
 		QRect _rect;

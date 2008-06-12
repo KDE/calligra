@@ -48,7 +48,7 @@ namespace Scripting
 	}
 	QString Report::recordSource()
 	{
-		return _reportdata->query;
+		return _reportdata->query();
 	}
 
 	QObject* Report::objectByName ( const QString &n )

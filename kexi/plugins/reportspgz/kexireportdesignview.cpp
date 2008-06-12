@@ -181,7 +181,8 @@ tristate KexiReportDesignView::afterSwitchFrom(Kexi::ViewMode mode)
 	connect ( res->itemBarcode, SIGNAL( clicked() ), _rd, SLOT( slotItemBarcode() ));
 	connect ( res->itemChart, SIGNAL( clicked() ), _rd, SLOT( slotItemChart() ));
 	connect ( res->itemImage, SIGNAL( clicked() ), _rd, SLOT( slotItemImage() ));
-	
+	connect ( res->itemShape, SIGNAL( clicked() ), _rd, SLOT( slotItemShape() ));
+
 	//Raise/Lower
 	connect ( itemRaiseAction, SIGNAL( activated() ), _rd, SLOT( slotRaiseSelected() ));
 	connect ( itemLowerAction, SIGNAL( activated() ), _rd, SLOT( slotLowerSelected() ));

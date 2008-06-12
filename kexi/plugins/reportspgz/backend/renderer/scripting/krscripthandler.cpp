@@ -80,7 +80,7 @@ KRScriptHandler::KRScriptHandler(const KexiDB::Cursor* cu, KRReportData* d)
 		_action->addObject(new Scripting::Section(sec), sec->name());
 	}
 	
-	_action->setCode((_data->script + "\n" + fieldFunctions()).toLocal8Bit());
+	_action->setCode((_data->script() + "\n" + fieldFunctions()).toLocal8Bit());
 	
 	kDebug() << _action->code() << endl;
 	
@@ -113,7 +113,6 @@ void KRScriptHandler::setSource(const QString &s)
 
 void KRScriptHandler::slotEnteredGroup(const QString &key, const QVariant &value)
 {
-	kDebug() << key << value << endl;
 	_groups[key] = value;
 
 	_functions->setWhere(where());
@@ -125,9 +124,8 @@ void KRScriptHandler::slotExitedGroup(const QString &key, const QVariant &value)
 }
 
 void KRScriptHandler::slotEnteredSection(KRSectionData *section, OROPage* cp, QPointF off)
-{
-	kDebug() << section->name() << endl;
-	
+{	
+	if (cp)
 	_draw->setPage(cp);
 	_draw->setOffset(off);
 	

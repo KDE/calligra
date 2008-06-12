@@ -17,25 +17,45 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * Please contact info@openmfg.com with any questions on this license.
  */
+#ifndef KRSHAPEDATA_H
+#define KRSHAPEDATA_H
 #include "krobjectdata.h"
-#include <kdebug.h>
+#include "parsexmlutils.h"
+#include <QRect>
+#include <QPainter>
+#include <qdom.h>
+#include "krpos.h"
+#include "krsize.h"
 
-KRObjectData::KRObjectData() 
-{ 
-Z = 0;
-_name = new KoProperty::Property ( "Name", "", "Name", "Object Name");
-_name->setAutoSync(0);
+
+namespace Scripting
+{
+	class Shape;
 }
+/**
+	@author 
+*/
+class KRShapeData : public KRObjectData
+{
+	public:
+	  KRShapeData(){createProperties();};
+	  KRShapeData ( QDomNode & element );
+	  ~KRShapeData(){};
+		virtual int type() const;
+		virtual KRShapeData * toShape();
+		
+	protected:
+		QRectF _rect();
+				
+		KRPos _pos;
+		KRSize _size;
+		KoProperty::Property *_shapeType;
 
-KRObjectData::~KRObjectData() { }
-
-KRLineData * KRObjectData::toLine() { return 0; }
-KRLabelData * KRObjectData::toLabel() { return 0; }
-KRFieldData * KRObjectData::toField() { return 0; }
-KRTextData * KRObjectData::toText() { return 0; }
-KRBarcodeData * KRObjectData::toBarcode() { return 0; }
-KRImageData * KRObjectData::toImage() { return 0; }
-KRChartData * KRObjectData::toChart() { return 0; }
-KRShapeData * KRObjectData::toShape() { return 0; }
-
-
+	private:
+		virtual void createProperties();
+		static int RTTI;
+		
+		friend class Scripting::Shape;
+		friend class ORPreRenderPrivate;
+};
+#endif

@@ -60,6 +60,7 @@ KexiReportPage::KexiReportPage(QWidget *parent, const char *name, ORODocument *r
 	kDebug() << "PAGE IS " << pageWidth << "x" << pageHeight << endl;
 	_repaint = true;
 	_pm = new QPixmap(pageWidth, pageHeight);
+	setAutoFillBackground(true);
 	renderPage(1);
 }
 

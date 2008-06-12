@@ -62,7 +62,9 @@ public:
 		void firstPage();
 		void lastPage();
 		void slotPrintReport();
-		void slotRenderKSpread();	
+		void slotRenderKSpread();
+		void slotExportHTML();
+
 };
 
 #endif

@@ -1,6 +1,7 @@
 /*
- * Kexi Report Plugin
- * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)                  
+ * OpenRPT report writer and rendering engine
+ * Copyright (C) 2001-2007 by OpenMFG, LLC
+ * Copyright (C) 2007-2008 by Adam Pigg (adam@piggz.co.uk)
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -17,34 +18,46 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  * Please contact info@openmfg.com with any questions on this license.
  */
-#ifndef REPORTENTITYSELECTOR_H
-#define REPORTENTITYSELECTOR_H
+#ifndef __KRHTMLRENDER_H__
+#define __KRHTMLERENDER_H__
 
-#include <QWidget>
-class KPushButton;
-class QVBoxLayout;
+#include <QDomDocument>
+#include <QRectF>
+#include <QString>
+#include <QFont>
 
-//This is a temporary solution until something better is found
-/**
-	@author 
-*/
-class ReportEntitySelector : public QWidget
+class KRHtmlRenderPrivate;
+class ParameterList;
+class ORODocument;
+namespace KexiDB
 {
-Q_OBJECT
-public:
-    ReportEntitySelector(QWidget *parent = 0);
+	class Connection;
+}
+//
+// KRHtmlRender
+// 
+class KRHtmlRender {
+  public:
+    KRHtmlRender(KexiDB::Connection*c=0);
+    KRHtmlRender(const QString &, KexiDB::Connection*c=0);
 
-    ~ReportEntitySelector();
+    virtual ~KRHtmlRender();
 
-    QVBoxLayout *layout;
-    KPushButton *itemLabel;
-    KPushButton *itemField;
-    KPushButton *itemText;
-    KPushButton *itemLine;
-    KPushButton *itemBarcode;
-    KPushButton *itemImage;
-    KPushButton *itemChart;
-    KPushButton *itemShape;
+    QString generate();
+
+    void setDatabase(KexiDB::Connection*);
+    KexiDB::Connection* database() const;
+
+    bool setDom(const QString &);
+
+    bool isValid() const;
+
+  protected:
+
+  private:
+    KRHtmlRenderPrivate* _internal;
+    
 };
+
 
 #endif

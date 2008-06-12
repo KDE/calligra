@@ -88,11 +88,14 @@ class KRReportData : public QObject
 		*/
 		KRSectionData* section(const QString&);
 		
+		QString query(){return _query;}
+		QString script(){return _script;};
 		QString interpreter(){return _interpreter;}
+		KRDetailSectionData* detail(){return detailsection;}
 	protected:
 		QString title;
-		QString query;
-		QString script;
+		QString _query;
+		QString _script;
 		QString _interpreter;
 		
 		ReportPageOptions page;
