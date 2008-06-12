@@ -127,20 +127,25 @@ void IntervalEditDialog::slotChanged()
 
 MacroCommand *IntervalEditDialog::buildCommand( Calendar *calendar, CalendarDay *day )
 {
-    kDebug();
+    //kDebug();
     const QList<TimeInterval*> lst = m_panel->intervals();
-    const QList<TimeInterval*> org = day->workingIntervals();
-    if ( lst == org ) {
+    if ( lst == day->workingIntervals() ) {
         return 0;
     }
     MacroCommand *cmd = 0;
-    foreach ( TimeInterval *i, org ) {
-        CalendarRemoveTimeIntervalCmd *c = new CalendarRemoveTimeIntervalCmd( calendar, day, i );
+    // Set to Undefined. This will also clear any intervals
+    CalendarModifyStateCmd *c = new CalendarModifyStateCmd( calendar, day, CalendarDay::Undefined );
+    if (cmd == 0) cmd = new MacroCommand("");
+    cmd->addCommand(c);
+    kDebug()<<"Set Undefined";
+
+    foreach ( TimeInterval *i, lst ) {
+        CalendarAddTimeIntervalCmd *c = new CalendarAddTimeIntervalCmd( calendar, day, i );
         if (cmd == 0) cmd = new MacroCommand("");
         cmd->addCommand(c);
     }
-    foreach ( TimeInterval *i, lst ) {
-        CalendarAddTimeIntervalCmd *c = new CalendarAddTimeIntervalCmd( calendar, day, i );
+    if ( ! lst.isEmpty() ) {
+        CalendarModifyStateCmd *c = new CalendarModifyStateCmd( calendar, day, CalendarDay::Working );
         if (cmd == 0) cmd = new MacroCommand("");
         cmd->addCommand(c);
     }
