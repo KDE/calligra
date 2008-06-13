@@ -89,6 +89,8 @@ namespace KexiWebForms {
             while (iterator.hasNext()) {
                 QString currentFieldName(iterator.next());
                 QString currentFieldValue(QUrl::fromPercentEncoding(Request::request(req, currentFieldName).toLatin1()));
+
+                /*! @fixme This removes pluses */
                 currentFieldValue.replace("+", " ");
                 QVariant currentValue(currentFieldValue);
                     

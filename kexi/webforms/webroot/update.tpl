@@ -13,8 +13,8 @@
       <div id="dbname"><h2>{{TITLE}}</h2></div>
       <div style="clear: both;"></div>
       <div id="content">
-	<h3>Updating row {{ROW}} in table {{TABLENAME}}</h3>
-	<pre>{{DEBUG_QUERY}}</pre>
+	<h3>Editing row {{ROW}} in table {{TABLENAME}}</h3>
+	<a href="/read/{{TABLENAME}}">Table contents</a>
 
 	{{#SUCCESS}}<h4 style="color: green;">{{MESSAGE}}</h4>{{/SUCCESS}}
 	{{#ERROR}}<h4 style="color: red;">{{MESSAGE}}</h4>{{/ERROR}}
