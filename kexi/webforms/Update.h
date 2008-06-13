@@ -21,29 +21,36 @@
 #ifndef KEXIWEBFORMS_UPDATE_H
 #define KEXIWEBFORMS_UPDATE_H
 
+#include "Handler.h"
+
 struct RequestData;
 
 namespace KexiWebForms {
-    /*! @short Callback function for Update handler */
-    namespace Update {
-        /*!
-         * This function is used to update a row in a given database table
-         * This function uses the request URI to determine the table and the
-         * row to update.
-         *
-         * This function is bound to the '/update/*' request URI pattern and
-         * expects it to be in this form: /update/\<table\>/\<pkey name\>/\<pkey value\>
-         *
-         * This function expects POST parameter dataSent set to "true" to run
-         * the real update.
-         * If not given, it shows a form which allows the user to modify contents
-         * of the specified row
-         *
-         * @param RequestData: pointer to a RequestData structure
-         * @see KexiWebForms::RequestData
-         */
-        void show(RequestData*);
-    }
+
+    /*!
+     * This function is used to update a row in a given database table
+     * This function uses the request URI to determine the table and the
+     * row to update.
+     *
+     * This function is bound to the '/update/<*>' request URI pattern and
+     * expects it to be in this form: /update/\<table\>/\<pkey name\>/\<pkey value\>
+     *
+     * This function expects POST parameter dataSent set to "true" to run
+     * the real update.
+     * If not given, it shows a form which allows the user to modify contents
+     * of the specified row
+     *
+     * @param RequestData: pointer to a RequestData structure
+     * @see KexiWebForms::RequestData
+     */
+    void updateCallback(RequestData*);
+    
+    class UpdateHandler : public Handler {
+    public:
+        UpdateHandler();
+        virtual ~UpdateHandler() {}
+    };
+    
 }
 
 #endif /* KEXIWEBFORMS_UPDATE_H */

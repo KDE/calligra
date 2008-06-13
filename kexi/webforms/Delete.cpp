@@ -37,35 +37,37 @@
 #include "Delete.h"
 
 namespace KexiWebForms {
-    namespace Delete {
-        void show(RequestData* req) {
-            HTTPStream stream(req);
-            google::TemplateDictionary dict("delete");
+    void deleteCallback(RequestData* req) {
+        HTTPStream stream(req);
+        google::TemplateDictionary dict("delete");
 
 
-            /*
-             * Retrieve requested table and pkey
-             */
-            QStringList queryString = Request::requestUri(req).split("/");
-            QString requestedTable = queryString.at(2);
-            QString pkeyName = queryString.at(3);
-            QString pkeyValue = queryString.at(4);
+        /*
+         * Retrieve requested table and pkey
+         */
+        QStringList queryString = Request::requestUri(req).split("/");
+        QString requestedTable = queryString.at(2);
+        QString pkeyName = queryString.at(3);
+        QString pkeyValue = queryString.at(4);
 
-            kDebug() << "Trying to delete row..." << endl;
-            if (KexiDB::deleteRow(*gConnection, gConnection->tableSchema(requestedTable),
-                                  pkeyName, pkeyValue)) {
-                dict.ShowSection("SUCCESS");
-                dict.SetValue("MESSAGE", "Row deleted successfully");
-            } else {
-                dict.ShowSection("ERROR");
-                dict.SetValue("MESSAGE", "Error while trying to delete row!");
-            }
-
-            // Render template
-            std::string output;
-            google::Template* tpl = google::Template::GetTemplate("delete.tpl", google::DO_NOT_STRIP);
-            tpl->Expand(&output, &dict);
-            stream << output << webend;
+        kDebug() << "Trying to delete row..." << endl;
+        if (KexiDB::deleteRow(*gConnection, gConnection->tableSchema(requestedTable),
+                              pkeyName, pkeyValue)) {
+            dict.ShowSection("SUCCESS");
+            dict.SetValue("MESSAGE", "Row deleted successfully");
+        } else {
+            dict.ShowSection("ERROR");
+            dict.SetValue("MESSAGE", "Error while trying to delete row!");
         }
+
+        // Render template
+        std::string output;
+        google::Template* tpl = google::Template::GetTemplate("delete.tpl", google::DO_NOT_STRIP);
+        tpl->Expand(&output, &dict);
+        stream << output << webend;
     }
+
+
+    // Delete Handler
+    DeleteHandler::DeleteHandler() : Handler(deleteCallback) {}
 }

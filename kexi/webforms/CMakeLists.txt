@@ -14,6 +14,8 @@ set(webforms_SRCS
   Request.cpp
 # Index view
   Index.cpp
+# CRUD Architecture
+  Handler.cpp
 # CRUD
   Read.cpp
   Update.cpp

@@ -21,23 +21,28 @@
 #ifndef KEXI_WEBFORMS_READ_H
 #define KEXI_WEBFORMS_READ_H
 
+#include "Handler.h"
+
 struct RequestData;
 
 namespace KexiWebForms {
-    /*! @short Callback function for Read handler */
-    namespace Read {
-        /*!
-         * Simply show an HTML page containing a table displaying
-         * data in a given database table.
-         * This function uses the request URI to determine which
-         * table to read: ie /view/books will show contents of the table
-         * named 'books'
-         *
-         * @param RequestData a pointer to a RequestData structure
-         * @see KexiWebForms::RequestData
-         */
-        void show(RequestData*);
-    }
+    /*!
+     * Simply show an HTML page containing a table displaying
+     * data in a given database table.
+     * This function uses the request URI to determine which
+     * table to read: ie /view/books will show contents of the table
+     * named 'books'
+     *
+     * @param RequestData a pointer to a RequestData structure
+     * @see KexiWebForms::RequestData
+     */
+    void readCallback(RequestData*);
+    
+    class ReadHandler : public Handler {
+    public:
+        ReadHandler();
+        virtual ~ReadHandler() {}
+    };
 }
 
 #endif /* KEXI_WEBFORMS_READ_H */

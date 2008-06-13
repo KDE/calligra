@@ -35,6 +35,7 @@
 
 using namespace KexiWebForms;
 
+
 int main(int argc, char **argv) {
     KCmdLineArgs::init(argc, argv,
                        new KAboutData ("kwebforms", NULL, ki18n("Web Forms Daemon"),
@@ -99,11 +100,21 @@ int main(int argc, char **argv) {
     } else {
         Server* server = Server::instance();
 
+        // Index handler
+        IndexHandler indexHandler;
+
+        // CRUD Handlers
+        ReadHandler readHandler;
+        UpdateHandler updateHandler;
+        DeleteHandler deleteHandler;
+
         if (server->init(serverConfig)) {
-            server->registerHandler("/", Index::show);
-            server->registerHandler("/view/*", Read::show);
-            server->registerHandler("/update/*", Update::show);
-            server->registerHandler("/delete/*", Delete::show);
+            // Register index page handler
+            server->registerHandler("/", indexHandler.m_callback);
+            // Register CRUD handlers
+            server->registerHandler("/read/*", readHandler.m_callback);
+            server->registerHandler("/update/*", updateHandler.m_callback);
+            server->registerHandler("/delete/*", deleteHandler.m_callback);
         }
         return server->run();
     }

@@ -21,6 +21,7 @@
 #include <QString>
 #include <QStringList>
 #include <QMap>
+#include <QUrl>
 
 #include <KDebug>
 
@@ -31,6 +32,8 @@
 
 #include <google/template.h>
 
+#include "Handler.h"
+
 #include "DataProvider.h"
 #include "HTTPStream.h"
 #include "Request.h"
@@ -38,90 +41,115 @@
 #include "Update.h"
 
 namespace KexiWebForms {
-    namespace Update {
-        void show(RequestData* req) {
-            HTTPStream stream(req);
-            google::TemplateDictionary dict("update");
+
+    void updateCallback(RequestData* req) {
+        HTTPStream stream(req);
+        google::TemplateDictionary dict("update");
 
 
-            QStringList queryString = Request::requestUri(req).split("/");
-            QString requestedTable = queryString.at(2);
-            QString pkeyName = queryString.at(3);
-            QString pkeyValue = queryString.at(4);
+        QStringList queryString = Request::requestUri(req).split("/");
+        QString requestedTable = queryString.at(2);
+        QString pkeyName = queryString.at(3);
+        QString pkeyValue = queryString.at(4);
 
 
-            dict.SetValue("TABLENAME", requestedTable.toLatin1().constData());
-            dict.SetValue("PKEY_NAME", pkeyName.toLatin1().constData());
-            dict.SetValue("PKEY_VALUE", pkeyValue.toLatin1().constData());
+        dict.SetValue("TABLENAME", requestedTable.toLatin1().constData());
+        dict.SetValue("PKEY_NAME", pkeyName.toLatin1().constData());
+        dict.SetValue("PKEY_VALUE", pkeyValue.toLatin1().constData());
+
+        // Initialize our needed Objects
+        KexiDB::TableSchema tableSchema(*gConnection->tableSchema(requestedTable));
+        KexiDB::QuerySchema schema(tableSchema);
+        schema.addToWhereExpression(schema.field(pkeyName), QVariant(pkeyValue));
             
-            KexiDB::TableSchema tableSchema(*gConnection->tableSchema(requestedTable));
-            KexiDB::QuerySchema schema(tableSchema);
-            schema.addToWhereExpression(schema.field(pkeyName), QVariant(pkeyValue));
-            KexiDB::Cursor* cursor = gConnection->executeQuery(schema);
+        /*!
+         * @note We shouldn't use executeQuery otherwise the corresponding table will
+         * be locked and we won't be able to update it
+         */
+        KexiDB::Cursor* cursor = gConnection->prepareQuery(schema);
 
-
-            /// @fixme: Can this code be improved?
-            if (Request::request(req, "dataSent") == "true" && cursor) {
-                QStringList fieldsList = Request::request(req, "tableFields").split("|:|");
-                kDebug() << "Fields: " << fieldsList;
-
-                QStringListIterator iterator(fieldsList);
-
-                KexiDB::RecordData recordData(tableSchema.fieldCount());
-                KexiDB::RowEditBuffer editBuffer(true);
+            
+        if (!cursor) {
+            dict.ShowSection("ERROR");
+            dict.SetValue("MESSAGE", "No cursor object available");
+        } else if (Request::request(req, "dataSent") == "true") {
+            cursor = gConnection->prepareQuery(schema);
                 
-                while (iterator.hasNext()) {
-                    QString currentFieldName(iterator.next());
-                    QVariant* currentValue = new QVariant(Request::request(req, currentFieldName));
+            QStringList fieldsList = Request::request(req, "tableFields").split("|:|");
+            kDebug() << "Fields: " << fieldsList;
 
-                    kDebug() << "Inserting " << currentFieldName << "=" << currentValue->toString() << endl;
-                    editBuffer.insert(*schema.columnInfo(currentFieldName), *currentValue);
-                }
+            QStringListIterator iterator(fieldsList);
 
-                if (cursor) {
-                    if (cursor->updateRow(recordData, editBuffer)) {
-                        dict.ShowSection("SUCCESS");
-                        dict.SetValue("MESSAGE", "Row updated successfully");
-                    } else {
-                        dict.ShowSection("ERROR");
-                        dict.SetValue("MESSAGE", "Failed to update row");
-                        kDebug() << "Connection ERROR: " << gConnection->errorMsg() << endl;
-                    }
-                }
-            } else {
-                kDebug() << "Showing fields" << endl;
+            KexiDB::RecordData recordData(tableSchema.fieldCount());
+            KexiDB::RowEditBuffer editBuffer(true);
 
-                dict.ShowSection("FORM");
-
-                QString formData;
-                QStringList fieldsList;
-                if (cursor) {
-                    while (cursor->moveNext()) {
-                        for (uint i = 0; i < cursor->fieldCount(); i++) {
-                            QString fieldName(schema.field(i)->name());
-                            
-                            formData.append("<tr>");
-                            formData.append("<td>").append(schema.field(i)->captionOrName()).append("</td>");
-                            formData.append("<td><input type=\"text\" name=\"");
-                            formData.append(fieldName).append("\" value=\"");
-                            formData.append(cursor->value(i).toString()).append("\"/></td>");
-                            formData.append("</tr>");
-                            fieldsList << fieldName;
-                        }
-                    }
-                    dict.SetValue("TABLEFIELDS", fieldsList.join("|:|").toLatin1().constData());
-                    dict.SetValue("FORMDATA", formData.toLatin1().constData());
+            /*! @fixme Making the wrong assumption on what the pkey id is */
+            recordData.insert(0, QVariant(pkeyValue));
+                
+            while (iterator.hasNext()) {
+                QString currentFieldName(iterator.next());
+                QString currentFieldValue(QUrl::fromPercentEncoding(Request::request(req, currentFieldName).toLatin1()));
+                currentFieldValue.replace("+", " ");
+                QVariant currentValue(currentFieldValue);
+                    
+                if (currentFieldName != pkeyName) {
+                    kDebug() << "Inserting " << currentFieldName << "=" << currentValue.toString() << endl;
+                    editBuffer.insert(*schema.columnInfo(currentFieldName), currentValue);
                 }
             }
-			
-			
-            //
-            // Produce the final output	
-            //
-            std::string output;			
-            google::Template* tpl = google::Template::GetTemplate("update.tpl", google::DO_NOT_STRIP);
-            tpl->Expand(&output, &dict);
-            stream << output << webend;
+
+                
+            if (cursor->updateRow(recordData, editBuffer)) {
+                dict.ShowSection("SUCCESS");
+                dict.SetValue("MESSAGE", "Row updated successfully");
+            } else {
+                dict.ShowSection("ERROR");
+                dict.SetValue("MESSAGE", gConnection->errorMsg().toLatin1().constData());
+            }
+                
+            kDebug() << "Deleting cursor..." << endl;
+            gConnection->deleteCursor(cursor);
+        } else {
+            kDebug() << "Showing fields" << endl;
+
+            cursor = gConnection->executeQuery(schema);
+
+            dict.ShowSection("FORM");
+
+            QString formData;
+            QStringList fieldsList;
+
+            while (cursor->moveNext()) {
+                for (uint i = 0; i < cursor->fieldCount(); i++) {
+                    QString fieldName(schema.field(i)->name());
+                            
+                    formData.append("<tr>");
+                    formData.append("<td>").append(schema.field(i)->captionOrName()).append("</td>");
+                    formData.append("<td><input type=\"text\" name=\"");
+                    formData.append(fieldName).append("\" value=\"");
+                    formData.append(cursor->value(i).toString()).append("\"/></td>");
+                    formData.append("</tr>");
+                    fieldsList << fieldName;
+                }
+            }
+            dict.SetValue("TABLEFIELDS", fieldsList.join("|:|").toLatin1().constData());
+            dict.SetValue("FORMDATA", formData.toLatin1().constData());
+
+            kDebug() << "Deleting cursor..." << endl;
+            gConnection->deleteCursor(cursor);
         }
+			
+			
+        //
+        // Produce the final output	
+        //
+        std::string output;			
+        google::Template* tpl = google::Template::GetTemplate("update.tpl", google::DO_NOT_STRIP);
+        tpl->Expand(&output, &dict);
+        stream << output << webend;
     }
+    
+
+    // Update Handler
+    UpdateHandler::UpdateHandler() : Handler(updateCallback) {}
 }

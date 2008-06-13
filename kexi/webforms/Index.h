@@ -21,21 +21,25 @@
 #ifndef KEXI_WEBFORMS_INDEX_H
 #define KEXI_WEBFORMS_INDEX_H
 
+#include "Handler.h"
+
 struct RequestData;
 
 namespace KexiWebForms {
-
-    /* @short Callback functions for index page */
-    namespace Index {
-        /*!
-         * This namespace contains a function bound with the 'root' URI ('/')
-         * It simply shows a list of tables contained in the database
-         *
-         * @param RequestData a pointer to a RequestData structure
-         * @see KexiWebForms::RequestData
-         */
-        void show(RequestData* req);
-    }
+    /*!
+     * This namespace contains a function bound with the 'root' URI ('/')
+     * It simply shows a list of tables contained in the database
+     *
+     * @param RequestData a pointer to a RequestData structure
+     * @see KexiWebForms::RequestData
+     */
+    void indexCallback(RequestData*);
+    
+    class IndexHandler : public Handler {
+    public:
+        IndexHandler();
+        virtual ~IndexHandler() {}
+    };
 }
 
 #endif /* KEXI_WEBFORMS_INDEX_H */

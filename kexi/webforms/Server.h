@@ -21,6 +21,7 @@
 #ifndef KEXIWEBFORMS_SERVER_H
 #define KEXIWEBFORMS_SERVER_H
 
+#include "Handler.h"
 #include "Request.h"
 #include "ServerConfig.h"
 
