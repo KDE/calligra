@@ -36,20 +36,20 @@
 #include "Doc.h"
 #include "Selection.h"
 #include "Sheet.h"
-#include "View.h"
+
+#include "commands/CommentCommand.h"
 
 using namespace KSpread;
 
-CommentDialog::CommentDialog( View* parent, const char* name,const QPoint &_marker)
+CommentDialog::CommentDialog(QWidget* parent, Selection* selection)
   : KDialog( parent )
 {
     setCaption( i18n("Cell Comment") );
-    setObjectName( name );
     setModal( true );
     setButtons( Ok|Cancel);
 
-    m_pView = parent;
-    marker= _marker;
+    m_selection = selection;
+
     QWidget *page = new QWidget();
     setMainWidget( page );
     QVBoxLayout *lay1 = new QVBoxLayout( page );
@@ -61,7 +61,7 @@ CommentDialog::CommentDialog( View* parent, const char* name,const QPoint &_mark
 
     multiLine->setFocus();
 
-    const QString comment = Cell( m_pView->activeSheet(), marker ).comment();
+    const QString comment = Cell(m_selection->activeSheet(), m_selection->marker()).comment();
     if ( !comment.isEmpty() )
         multiLine->setText( comment );
 
@@ -80,7 +80,12 @@ void CommentDialog::slotTextChanged()
 
 void CommentDialog::slotOk()
 {
-    m_pView->setSelectionComment( multiLine->text() );
+    CommentCommand* command = new CommentCommand();
+    command->setSheet(m_selection->activeSheet());
+    command->setText(i18n("Add Comment"));
+    command->setComment(multiLine->text().trimmed());
+    command->add(*m_selection);
+    command->execute();
     accept();
 }
 

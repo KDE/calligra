@@ -209,7 +209,9 @@ configure::configure( View* _view, KVBox *box , char * /*name*/ )
   bool rowHeader=true;
   bool colHeader=true;
   bool tabbar=true;
+#if 0 // KSPREAD_DISCARD_FORMULA_BAR
   bool formulaBar=true;
+#endif
   bool statusBar=true;
   m_oldBackupFile = true;
 
@@ -229,7 +231,9 @@ configure::configure( View* _view, KVBox *box , char * /*name*/ )
     colHeader = parameterGroup.readEntry("Column Header",true);
     rowHeader = parameterGroup.readEntry("Row Header",true);
     tabbar = parameterGroup.readEntry("Tabbar",true);
+#if 0 // KSPREAD_DISCARD_FORMULA_BAR
     formulaBar = parameterGroup.readEntry("Formula bar",true);
+#endif
     statusBar = parameterGroup.readEntry("Status bar",true);
     oldRecent = parameterGroup.readEntry( "NbRecentFile" ,10);
     oldAutoSaveValue = parameterGroup.readEntry("AutoSave",KoDocument::defaultAutoSave()/60);
@@ -276,9 +280,11 @@ configure::configure( View* _view, KVBox *box , char * /*name*/ )
   showTabBar->setChecked(tabbar);
   showTabBar->setWhatsThis( i18n( "This check box controls whether the sheet tabs are shown at the bottom of the worksheet." ) );
 
+#if 0 // KSPREAD_DISCARD_FORMULA_BAR
   showFormulaBar =new QCheckBox(i18n("Sho&w formula toolbar"),tmpQGroupBox);
   showFormulaBar->setChecked(formulaBar);
   showFormulaBar->setWhatsThis( i18n( "Here is where you can choose to show or hide the Formula bar." ) );
+#endif
 
   showStatusBar =new QCheckBox(i18n("Show stat&us bar"),tmpQGroupBox);
   showStatusBar->setChecked(statusBar);
@@ -295,7 +301,9 @@ void configure::slotDefault()
   showVScrollBar->setChecked(true);
   showColHeader->setChecked(true);
   showTabBar->setChecked(true);
+#if 0 // KSPREAD_DISCARD_FORMULA_BAR
   showFormulaBar->setChecked(true);
+#endif
   showStatusBar->setChecked(true);
   nbPage->setValue(1);
   nbRecentFile->setValue(10);
@@ -365,6 +373,7 @@ void configure::apply()
         doc->setShowTabBar(active);
     }
 
+#if 0 // KSPREAD_DISCARD_FORMULA_BAR
     active=showFormulaBar->isChecked();
     if(m_pView->posWidget()->isVisible()!=active)
     {
@@ -376,6 +385,7 @@ void configure::apply()
             m_pView->posWidget()->hide();
         doc->setShowFormulaBar(active);
     }
+#endif
 
     active=showStatusBar->isChecked();
     parameterGroup.writeEntry( "Status bar",active);

@@ -32,16 +32,18 @@
 #include "Canvas.h"
 #include "Cell.h"
 #include "LayoutDialog.h"
+#include "Selection.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"
-#include "View.h"
+
+#include "commands/StyleCommand.h"
 
 using namespace KSpread;
 
-StyleManagerDialog::StyleManagerDialog(View* parent, StyleManager* manager)
+StyleManagerDialog::StyleManagerDialog(QWidget* parent, Selection* selection, StyleManager* manager)
     : KDialog(parent)
-    , m_view(parent)
+    , m_selection(selection)
     , m_styleManager(manager)
 {
     setButtons(Apply | User1 | User2 | User3 | Close);
@@ -181,9 +183,21 @@ void StyleManagerDialog::slotOk()
 
     QString name(item->text(0));
     if (name == i18n("Default"))
-        m_view->setDefaultStyle();
+    {
+        StyleCommand* command = new StyleCommand();
+        command->setSheet(m_selection->activeSheet());
+        command->setDefault();
+        command->add(*m_selection);
+        command->execute();
+    }
     else
-        m_view->setStyle(name);
+    {
+        StyleCommand* command = new StyleCommand();
+        command->setSheet(m_selection->activeSheet());
+        command->setParentName(name);
+        command->add(*m_selection);
+        command->execute();
+    }
     accept();
 }
 
@@ -213,7 +227,7 @@ void StyleManagerDialog::slotNew()
     CustomStyle* style = new CustomStyle(newName, parentStyle);
     style->setType(Style::TENTATIVE);
 
-    CellFormatDialog dlg(m_view, style, m_styleManager, m_view->doc());
+    CellFormatDialog dlg(this, m_selection, style, m_styleManager);
     dlg.exec();
 
     if (style->type() == Style::TENTATIVE)
@@ -245,11 +259,11 @@ void StyleManagerDialog::slotEdit()
     if (!style)
         return;
 
-    CellFormatDialog dialog(m_view, style, m_styleManager, m_view->doc());
+    CellFormatDialog dialog(this, m_selection, style, m_styleManager);
     dialog.exec();
 
     if (dialog.result() == Accepted)
-        m_view->refreshSheetViews();
+        m_selection->emitRefreshSheetViews();
 
     slotDisplayMode(m_displayBox->currentIndex());
 }

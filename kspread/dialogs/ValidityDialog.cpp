@@ -43,26 +43,23 @@
 #include "Localization.h"
 #include "Selection.h"
 #include "Sheet.h"
-#include "View.h"
 
 // commands
 #include "commands/ValidityCommand.h"
 
 using namespace KSpread;
 
-DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
+ValidityDialog::ValidityDialog(QWidget* parent, Selection* selection)
   :KPageDialog(parent)
 
 {
   setFaceType( Tabbed );
   setCaption( i18n("Validity") );
-  setObjectName( name );
   setModal( true );
   setButtons(Ok | Cancel | User1);
   setButtonGuiItem(User1, KGuiItem(i18n("Clear &All")));
 
-  m_pView=parent;
-  marker=_marker;
+  m_selection = selection;
 
   QFrame *page1 = new QFrame();
   addPage(page1, i18n("&Criteria"));
@@ -228,7 +225,7 @@ DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   init();
 }
 
-void DlgValidity::displayOrNotListOfValidity( bool _displayList)
+void ValidityDialog::displayOrNotListOfValidity( bool _displayList)
 {
     if ( _displayList )
     {
@@ -256,7 +253,7 @@ void DlgValidity::displayOrNotListOfValidity( bool _displayList)
     }
 }
 
-void DlgValidity::changeIndexType(int _index)
+void ValidityDialog::changeIndexType(int _index)
 {
     bool activate = ( _index!=0 );
     allowEmptyCell->setEnabled(activate);
@@ -370,7 +367,7 @@ void DlgValidity::changeIndexType(int _index)
         resize( sizeHint() );
 }
 
-void DlgValidity::changeIndexCond(int _index)
+void ValidityDialog::changeIndexCond(int _index)
 {
   switch(_index)
   {
@@ -419,9 +416,9 @@ void DlgValidity::changeIndexCond(int _index)
   }
 }
 
-void DlgValidity::init()
+void ValidityDialog::init()
 {
-  Validity validity = Cell( m_pView->activeSheet(), marker.topLeft() ).validity();
+  Validity validity = Cell(m_selection->activeSheet(), m_selection->marker() ).validity();
   if ( !validity.isEmpty() )
   {
     message->setPlainText(validity.message());
@@ -455,15 +452,15 @@ void DlgValidity::init()
       break;
      case Validity::Date:
       chooseType->setCurrentIndex(4);
-      val_min->setText(m_pView->doc()->locale()->formatDate(validity.minimumDate(),KLocale::ShortDate));
+      val_min->setText(m_selection->activeSheet()->doc()->locale()->formatDate(validity.minimumDate(),KLocale::ShortDate));
       if(validity.condition() >=5 )
-        val_max->setText(m_pView->doc()->locale()->formatDate(validity.maximumDate(),KLocale::ShortDate));
+        val_max->setText(m_selection->activeSheet()->doc()->locale()->formatDate(validity.maximumDate(),KLocale::ShortDate));
       break;
      case Validity::Time:
       chooseType->setCurrentIndex(5);
-      val_min->setText(m_pView->doc()->locale()->formatTime(validity.minimumTime(),true));
+      val_min->setText(m_selection->activeSheet()->doc()->locale()->formatTime(validity.minimumTime(),true));
       if(validity.condition() >=5 )
-        val_max->setText(m_pView->doc()->locale()->formatTime(validity.maximumTime(),true));
+        val_max->setText(m_selection->activeSheet()->doc()->locale()->formatTime(validity.maximumTime(),true));
       break;
      case Validity::List:
      {
@@ -535,7 +532,7 @@ void DlgValidity::init()
   changeIndexCond(choose->currentIndex()) ;
 }
 
-void DlgValidity::clearAllPressed()
+void ValidityDialog::clearAllPressed()
 {
   val_min->setText("");
   val_max->setText("");
@@ -554,7 +551,7 @@ void DlgValidity::clearAllPressed()
   displayHelp->setChecked( false );
 }
 
-void DlgValidity::OkPressed()
+void ValidityDialog::OkPressed()
 {
   Validity validity;
   if( chooseType->currentIndex()==1)
@@ -595,13 +592,13 @@ void DlgValidity::OkPressed()
   }
   else  if(  chooseType->currentIndex()==5)
   {
-    if(! m_pView->doc()->locale()->readTime(val_min->text()).isValid())
+    if(!m_selection->activeSheet()->doc()->locale()->readTime(val_min->text()).isValid())
     {
       KMessageBox::error( this , i18n("This is not a valid time."),i18n("Error"));
       val_min->setText("");
       return;
     }
-    if(! m_pView->doc()->locale()->readTime(val_max->text()).isValid() && choose->currentIndex()  >=5)
+    if(!m_selection->activeSheet()->doc()->locale()->readTime(val_max->text()).isValid() && choose->currentIndex()  >=5)
     {
       KMessageBox::error( this , i18n("This is not a valid time."),i18n("Error"));
       val_max->setText("");
@@ -610,13 +607,13 @@ void DlgValidity::OkPressed()
   }
   else  if(  chooseType->currentIndex()==4)
   {
-    if(! m_pView->doc()->locale()->readDate(val_min->text()).isValid())
+    if(!m_selection->activeSheet()->doc()->locale()->readDate(val_min->text()).isValid())
     {
       KMessageBox::error( this , i18n("This is not a valid date."),i18n("Error"));
       val_min->setText("");
       return;
     }
-    if(! m_pView->doc()->locale()->readDate(val_max->text()).isValid() && choose->currentIndex()  >=5 )
+    if(!m_selection->activeSheet()->doc()->locale()->readDate(val_max->text()).isValid() && choose->currentIndex()  >=5 )
     {
       KMessageBox::error( this , i18n("This is not a valid date."),i18n("Error"));
       val_max->setText("");
@@ -754,19 +751,19 @@ void DlgValidity::OkPressed()
     {
       if(choose->currentIndex()  <5)
       {
-        validity.setMinimumDate( m_pView->doc()->locale()->readDate(val_min->text()) );
+        validity.setMinimumDate(m_selection->activeSheet()->doc()->locale()->readDate(val_min->text()) );
       }
       else
       {
-        if(m_pView->doc()->locale()->readDate(val_min->text())<m_pView->doc()->locale()->readDate(val_max->text()))
+        if(m_selection->activeSheet()->doc()->locale()->readDate(val_min->text())<m_selection->activeSheet()->doc()->locale()->readDate(val_max->text()))
         {
-          validity.setMinimumDate( m_pView->doc()->locale()->readDate(val_min->text()) );
-          validity.setMaximumDate( m_pView->doc()->locale()->readDate(val_max->text()) );
+          validity.setMinimumDate(m_selection->activeSheet()->doc()->locale()->readDate(val_min->text()) );
+          validity.setMaximumDate(m_selection->activeSheet()->doc()->locale()->readDate(val_max->text()) );
         }
         else
         {
-          validity.setMinimumDate( m_pView->doc()->locale()->readDate(val_max->text()) );
-          validity.setMaximumDate( m_pView->doc()->locale()->readDate(val_min->text()) );
+          validity.setMinimumDate(m_selection->activeSheet()->doc()->locale()->readDate(val_max->text()) );
+          validity.setMaximumDate(m_selection->activeSheet()->doc()->locale()->readDate(val_min->text()) );
         }
       }
     }
@@ -774,19 +771,19 @@ void DlgValidity::OkPressed()
     {
       if(choose->currentIndex()  <5)
       {
-        validity.setMinimumTime( m_pView->doc()->locale()->readTime(val_min->text()) );
+        validity.setMinimumTime(m_selection->activeSheet()->doc()->locale()->readTime(val_min->text()) );
       }
       else
       {
-        if(m_pView->doc()->locale()->readTime(val_min->text())<m_pView->doc()->locale()->readTime(val_max->text()))
+        if(m_selection->activeSheet()->doc()->locale()->readTime(val_min->text())<m_selection->activeSheet()->doc()->locale()->readTime(val_max->text()))
         {
-          validity.setMaximumTime( m_pView->doc()->locale()->readTime(val_max->text()) );
-          validity.setMinimumTime( m_pView->doc()->locale()->readTime(val_min->text()) );
+          validity.setMaximumTime(m_selection->activeSheet()->doc()->locale()->readTime(val_max->text()) );
+          validity.setMinimumTime(m_selection->activeSheet()->doc()->locale()->readTime(val_min->text()) );
         }
         else
         {
-          validity.setMaximumTime( m_pView->doc()->locale()->readTime(val_min->text()) );
-          validity.setMinimumTime( m_pView->doc()->locale()->readTime(val_max->text()) );
+          validity.setMaximumTime(m_selection->activeSheet()->doc()->locale()->readTime(val_min->text()) );
+          validity.setMinimumTime(m_selection->activeSheet()->doc()->locale()->readTime(val_max->text()) );
         }
       }
     }
@@ -802,9 +799,9 @@ void DlgValidity::OkPressed()
   validity.setTitleInfo( titleHelp->text() );
 
   ValidityCommand* manipulator = new ValidityCommand();
-  manipulator->setSheet( m_pView->activeSheet() );
+  manipulator->setSheet( m_selection->activeSheet() );
   manipulator->setValidity( validity );
-  manipulator->add( *m_pView->selection() );
+  manipulator->add( *m_selection );
   manipulator->execute();
 
   accept();

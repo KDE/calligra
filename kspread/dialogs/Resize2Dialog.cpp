@@ -47,24 +47,21 @@
 #include "RowColumnFormat.h"
 #include "Selection.h"
 #include <Sheet.h>
-#include <View.h>
 
 // commands
 #include "commands/RowColumnManipulators.h"
 
 using namespace KSpread;
 
-ResizeRow::ResizeRow( View* parent, const char* name )
+ResizeRow::ResizeRow(QWidget* parent, Selection* selection)
   : KDialog( parent )
 {
     setCaption( i18n("Resize Row") );
-    setObjectName( name );
     setModal( true );
     setButtons( Ok|Cancel|Default );
-    m_pView = parent;
+    m_selection = selection;
 
-    QRect selection( m_pView->selection()->lastRange() );
-    const RowFormat* rl = m_pView->activeSheet()->rowFormat( selection.top() );
+    const RowFormat* rl = m_selection->activeSheet()->rowFormat(selection->lastRange().top());
     rowHeight = rl->height();
 
     QWidget *page = new QWidget();
@@ -79,7 +76,7 @@ ResizeRow::ResizeRow( View* parent, const char* name )
 
     m_pHeight = new KoUnitDoubleSpinBox( page );
     m_pHeight->setValue( rowHeight );
-    m_pHeight->setUnit( m_pView->doc()->unit() );
+    m_pHeight->setUnit( m_selection->activeSheet()->doc()->unit() );
     gridLayout->addWidget( m_pHeight, 0, 1 );
 
     m_pHeight->setFocus();
@@ -98,9 +95,9 @@ void ResizeRow::slotOk()
   if ( fabs( height - rowHeight ) > DBL_EPSILON )
   {
     ResizeRowManipulator* manipulator = new ResizeRowManipulator();
-    manipulator->setSheet(m_pView->activeSheet());
+    manipulator->setSheet(m_selection->activeSheet());
     manipulator->setSize(height);
-    manipulator->add(*m_pView->selection());
+    manipulator->add(*m_selection);
     manipulator->execute();
   }
   accept();
@@ -108,24 +105,22 @@ void ResizeRow::slotOk()
 
 void ResizeRow::slotDefault()
 {
-  Sheet* sheet = m_pView->activeSheet();
+  Sheet* sheet = m_selection->activeSheet();
   if (!sheet)
     return;
   double points = sheet->doc()->defaultRowFormat()->height();
-  m_pHeight->setValue(m_pView->doc()->unit().toUserValue(points));
+  m_pHeight->setValue(m_selection->activeSheet()->doc()->unit().toUserValue(points));
 }
 
-ResizeColumn::ResizeColumn( View* parent, const char* name )
+ResizeColumn::ResizeColumn(QWidget* parent, Selection* selection)
   : KDialog( parent )
 {
     setCaption( i18n("Resize Column") );
-    setObjectName( name );
     setModal( true );
     setButtons( Ok|Cancel|Default );
-    m_pView = parent;
+    m_selection = selection;
 
-    QRect selection( m_pView->selection()->lastRange() );
-    const ColumnFormat* cl = m_pView->activeSheet()->columnFormat( selection.left() );
+    const ColumnFormat* cl = m_selection->activeSheet()->columnFormat(selection->lastRange().left());
     columnWidth = cl->width();
 
     QWidget *page = new QWidget();
@@ -140,7 +135,7 @@ ResizeColumn::ResizeColumn( View* parent, const char* name )
 
     m_pWidth = new KoUnitDoubleSpinBox( page );
     m_pWidth->setValue( columnWidth );
-    m_pWidth->setUnit( m_pView->doc()->unit() );
+    m_pWidth->setUnit( m_selection->activeSheet()->doc()->unit() );
     gridLayout->addWidget( m_pWidth, 0, 1 );
 
     m_pWidth->setFocus();
@@ -160,9 +155,9 @@ void ResizeColumn::slotOk()
   if ( fabs( width - columnWidth ) > DBL_EPSILON )
   {
     ResizeColumnManipulator* manipulator = new ResizeColumnManipulator();
-    manipulator->setSheet(m_pView->activeSheet());
+    manipulator->setSheet(m_selection->activeSheet());
     manipulator->setSize(width);
-    manipulator->add(*m_pView->selection());
+    manipulator->add(*m_selection);
     manipulator->execute();
   }
   accept();
@@ -170,11 +165,11 @@ void ResizeColumn::slotOk()
 
 void ResizeColumn::slotDefault()
 {
-  Sheet* sheet = m_pView->activeSheet();
+  Sheet* sheet = m_selection->activeSheet();
   if (!sheet)
     return;
   double points = sheet->doc()->defaultColumnFormat()->width();
-  m_pWidth->setValue(m_pView->doc()->unit().toUserValue(points));
+  m_pWidth->setValue(m_selection->activeSheet()->doc()->unit().toUserValue(points));
 }
 
 

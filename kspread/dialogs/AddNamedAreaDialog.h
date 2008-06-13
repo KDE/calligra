@@ -30,21 +30,21 @@ class KLineEdit;
 
 namespace KSpread
 {
-class View;
+class Selection;
 
 class AddNamedAreaDialog : public KDialog
 {
     Q_OBJECT
 
 public:
-    AddNamedAreaDialog(View* parent);
+    AddNamedAreaDialog(QWidget* parent, Selection* selection);
 
 public slots:
     void slotOk();
     void slotAreaNameChanged(const QString& name);
 
 protected:
-    View*       m_pView;
+    Selection*  m_selection;
     KLineEdit*  m_areaName;
 };
 

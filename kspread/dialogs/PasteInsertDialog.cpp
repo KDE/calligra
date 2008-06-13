@@ -34,21 +34,20 @@
 
 #include "Canvas.h"
 #include "Doc.h"
-#include "Sheet.h"
-#include "View.h"
 #include "Selection.h"
+#include "Sheet.h"
 
 using namespace KSpread;
 
-PasteInsertDialog::PasteInsertDialog( View* parent, const char* name,const QRect &_rect)
+PasteInsertDialog::PasteInsertDialog(QWidget* parent, Selection* selection)
   : KDialog( parent )
 {
   setCaption( i18n("Paste Inserting Cells") );
-  setObjectName( name );
+  setObjectName("PasteInsertDialog");
   setModal( true );
   setButtons( Ok|Cancel );
-  m_pView = parent;
-  rect=_rect;
+  m_selection = selection;
+  rect = selection->lastRange();
 
   QWidget *page = new QWidget();
   setMainWidget( page );
@@ -69,17 +68,17 @@ PasteInsertDialog::PasteInsertDialog( View* parent, const char* name,const QRect
 
 void PasteInsertDialog::slotOk()
 {
-    m_pView->doc()->emitBeginOperation( false );
+    m_selection->activeSheet()->doc()->emitBeginOperation( false );
     if( rb1->isChecked() )
-      m_pView->activeSheet()->paste( m_pView->selection()->lastRange(),
+      m_selection->activeSheet()->paste( m_selection->lastRange(),
                                      true, Paste::Normal, Paste::OverWrite,
                                      true, -1 );
     else if( rb2->isChecked() )
-      m_pView->activeSheet()->paste( m_pView->selection()->lastRange(),
+      m_selection->activeSheet()->paste( m_selection->lastRange(),
                                      true, Paste::Normal, Paste::OverWrite,
                                      true, +1 );
 
-    m_pView->slotUpdateView( m_pView->activeSheet() );
+    m_selection->activeSheet()->doc()->emitEndOperation();
     accept();
 }
 

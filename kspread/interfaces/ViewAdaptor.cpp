@@ -94,6 +94,7 @@ void ViewAdaptor::show()
     m_view->show();
 }
 
+#if 0 // -> cell tool
 void ViewAdaptor::find()
 {
     m_view->find();
@@ -133,6 +134,7 @@ void ViewAdaptor::changeAngle()
 {
     m_view->changeAngle();
 }
+#endif
 
 void ViewAdaptor::preference()
 {
@@ -154,6 +156,7 @@ void ViewAdaptor::previousSheet()
     m_view->previousSheet();
 }
 
+#if 0 // -> cell tool
 void ViewAdaptor::sortList()
 {
     m_view->sortList();
@@ -288,6 +291,7 @@ void ViewAdaptor::textToColumns()
 {
     m_view->textToColumns();
 }
+#endif
 
 void ViewAdaptor::copyAsText()
 {
@@ -304,6 +308,7 @@ QRect ViewAdaptor::selection()
   return m_view->selection()->lastRange();
 }
 
+#if 0 // -> cell tool
 void ViewAdaptor::setSelectionMoneyFormat( bool b )
 {
   m_view->moneyFormat(b);
@@ -343,16 +348,19 @@ void ViewAdaptor::setSelectionVerticalText(bool enable)
 {
   m_view->verticalText(enable);
 }
+#endif
 
 void ViewAdaptor::setSelectionComment(const QString& comment)
 {
   m_view->setSelectionComment(comment);
 }
 
+#if 0 // -> cell tool
 void ViewAdaptor::setSelectionAngle(int value)
 {
   m_view->setSelectionAngle(value);
 }
+#endif
 
 void ViewAdaptor::setSelectionTextColor( const QColor& txtColor )
 {
@@ -369,6 +377,7 @@ void ViewAdaptor::setSelectionBorderColor( const QColor& bdColor )
   m_view->setSelectionBorderColor(bdColor);
 }
 
+#if 0 // -> cell tool
 void ViewAdaptor::deleteSelection()
 {
     m_view->clearAll();
@@ -383,6 +392,7 @@ void ViewAdaptor::cutSelection()
 {
   m_view->cutSelection();
 }
+#endif
 
 void ViewAdaptor::setLeftBorderColor(const QColor& color)
 {
@@ -414,6 +424,7 @@ void ViewAdaptor::setOutlineBorderColor(const QColor& color)
   m_view->setSelectionOutlineBorderColor(color);
 }
 
+#if 0 // -> cell tool
 void ViewAdaptor::removeBorder()
 {
   m_view->borderRemove();
@@ -469,5 +480,6 @@ void ViewAdaptor::decreaseFontSize()
 {
     m_view->decreaseFontSize();
 }
+#endif
 
 #include "ViewAdaptor.moc"

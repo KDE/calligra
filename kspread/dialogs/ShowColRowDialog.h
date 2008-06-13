@@ -32,21 +32,21 @@ class Q3ListBoxItem;
 
 namespace KSpread
 {
-class View;
+class Selection;
 
 class ShowColRow: public KDialog
 {
   Q_OBJECT
 public:
   enum Type { Column, Row };
-  ShowColRow( View* parent, const char* name, Type _type );
+  ShowColRow(QWidget* parent, Selection* selection, Type _type);
 
 public slots:
   void slotOk();
   void slotDoubleClicked(Q3ListBoxItem *);
 
 protected:
-  View* m_pView;
+  Selection* m_selection;
   Q3ListBox * list;
   Type typeShow;
   QList<int> listInt;

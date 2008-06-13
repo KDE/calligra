@@ -35,6 +35,7 @@
 #include <kcombobox.h>
 #include <klineedit.h>
 #include <ksharedptr.h>
+#include <KTextEdit>
 
 #include "kspread_export.h"
 
@@ -43,15 +44,17 @@ class QFont;
 class QAbstractButton;
 class QTextEdit;
 
-class KoZoomHandler;
+class KoViewConverter;
 
 namespace KSpread
 {
 class Canvas;
 class Cell;
 class CellEditor;
+class CellToolBase;
 class LocationEditWidget;
 class Region;
+class Selection;
 class TextEdit;
 class Tokens;
 class View;
@@ -68,9 +71,9 @@ public:
    * Constructs a FormulaHighlighter to color-code cell references in a QTextEdit.
    *
    * @param textEdit The QTextEdit widget which the highlighter should operate on
-   * @param canvas The Canvas object
+   * @param selection The Selection object
    */
-  FormulaEditorHighlighter(QTextEdit* textEdit, Canvas* canvas);
+  FormulaEditorHighlighter(QTextEdit* textEdit, Selection* selection);
   virtual ~FormulaEditorHighlighter();
 
 
@@ -181,20 +184,20 @@ public:
 
     /**
     * Creates a new CellEditor.
-    * @param cell The spreadsheet cell to associate the cell text editor with
-    * @param _parent The Canvas object to associate this cell text editor with
+    * @param parent The parent widget.
+    * @param selection The Selection object to associate this cell text editor with
     * @param captureAllKeyEvents Controls whether or not the text editor swallows arrow key events or sends them to the parent canvas instead.  If this is set to true, pressing the arrow keys will navigate backwards and forwards through the text in the editor.  If it is false, the key events will be sent to the parent canvas which will change the cell being edited (depending on the direction of the arrow pressed).  Generally this should be set to true if the user double clicks on the cell to edit it, and false if the user initiates editing by typing whilst the cell is selected.
     * @param _name This parameter is sent to the QObject constructor
     */
-    explicit CellEditor( const Cell& cell, Canvas* _parent = 0, bool captureAllKeyEvents = false, const char* _name = 0 );
+    explicit CellEditor(QWidget* parent, Selection* selection, bool captureAllKeyEvents = false);
     ~CellEditor();
 
     const Cell& cell() const;
-    Canvas* canvas() const;
+    Selection* selection() const;
 
     void handleKeyPressEvent( QKeyEvent* _ev );
     void handleIMEvent( QInputMethodEvent  * _ev );
-    void setEditorFont(QFont const & font, bool updateSize, KoZoomHandler* zoomHandler);
+    void setEditorFont(QFont const & font, bool updateSize, const KoViewConverter *viewConverter);
 
     int cursorPosition() const;
     void setCursorPosition(int pos);
@@ -220,6 +223,10 @@ public:
     void setUpdateChoice(bool);
 
     void setCursorToRange(uint);
+
+Q_SIGNALS:
+    void textChanged(const QString &text);
+    void modificationChanged(bool changed);
 
 private slots:
     void  slotTextChanged();
@@ -249,13 +256,14 @@ private:
 
 
 /**
- * ComboboxLocationEditWidget
+ * LocationComboBox
  */
-class ComboboxLocationEditWidget : public KComboBox
+class LocationComboBox : public KComboBox
 {
     Q_OBJECT
 public:
-    ComboboxLocationEditWidget( QWidget *_parent, View * _canvas );
+    LocationComboBox(QWidget* parent, Selection* selection);
+    void setSelection(Selection* selection);
 
 public slots:
     void slotAddAreaName( const QString & );
@@ -274,8 +282,7 @@ class LocationEditWidget : public KLineEdit
 {
     Q_OBJECT
 public:
-    LocationEditWidget( QWidget *_parent, View * _canvas );
-    View * view() const { return m_pView;}
+    LocationEditWidget(QWidget *parent, Selection* selection);
 
     void addCompletionItem( const QString &_item );
     void removeCompletionItem( const QString &_item );
@@ -286,13 +293,41 @@ private slots:
 protected:
     virtual void keyPressEvent( QKeyEvent * _ev );
 private:
-    View * m_pView;
+    Selection* m_selection;
     KCompletion completionList;
     bool activateItem();
 };
 
 
 
+class ExternalEditor : public KTextEdit
+{
+    Q_OBJECT
+public:
+    ExternalEditor(QWidget* parent = 0);
+    ~ExternalEditor();
+
+    virtual QSize sizeHint() const;
+
+    void setCellTool(CellToolBase* cellTool);
+
+public Q_SLOTS:
+    void applyChanges();
+    void discardChanges();
+    void setText(const QString &text);
+
+protected:
+    void keyPressEvent(QKeyEvent *event);
+    void focusOutEvent(QFocusEvent *event);
+
+private:
+    Q_DISABLE_COPY(ExternalEditor)
+
+    class Private;
+    Private * const d;
+};
+
+#if 0 // KSPREAD_DISCARD_FORMULA_BAR
 /**
  * The widget that appears above the sheet and allows to
  * edit the cells content.
@@ -325,6 +360,7 @@ private:
     Canvas* m_pCanvas;
     bool m_isArray;
 };
+#endif
 
 
 /**
@@ -339,11 +375,11 @@ public:
   enum SelectionMode { SingleCell = 0, MultipleCells = 1 }; // TODO Stefan: merge with Selection::Mode
   enum DisplayMode { Widget, Dialog };
 
-  RegionSelector( QWidget* parent = 0 );
+  RegionSelector(QWidget* parent = 0);
   ~RegionSelector();
 
   void setSelectionMode( SelectionMode mode );
-  void setView( View* view );
+  void setSelection(Selection* selection);
   void setDialog( QDialog* dialog );
   void setLabel( const QString& text );
 

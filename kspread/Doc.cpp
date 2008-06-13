@@ -524,7 +524,7 @@ QDomDocument Doc::saveXML()
     if (!isAutosaving())
     {
         foreach ( KoView* view, views() )
-            static_cast<View *>( view )->deleteEditor( true );
+            static_cast<View *>( view )->selection()->emitCloseEditor( true );
     }
 
     QDomDocument doc = KoDocument::createDomDocument( "kspread", "spreadsheet", CURRENT_DTD_VERSION );
@@ -602,7 +602,7 @@ bool Doc::saveOasisHelper( SavingContext & documentContext, SaveFlag saveFlag,
     if (!isAutosaving())
     {
       foreach ( KoView* view, views() )
-        static_cast<View *>( view )->deleteEditor( true );
+        static_cast<View *>( view )->selection()->emitCloseEditor( true );
     }
     if ( !store->open( "content.xml" ) )
         return false;
@@ -1360,18 +1360,6 @@ bool Doc::undoLocked() const
   return (d->undoLocked > 0);
 }
 
-void Doc::enableUndo( bool _b )
-{
-  foreach ( KoView* view, views() )
-    static_cast<View *>( view )->enableUndo( _b );
-}
-
-void Doc::enableRedo( bool _b )
-{
-  foreach ( KoView* view, views() )
-    static_cast<View *>( view )->enableRedo( _b );
-}
-
 void Doc::paintContent( QPainter& painter, const QRect& rect)
 {
 #ifdef KSPREAD_DOC_ZOOM
@@ -1751,7 +1739,7 @@ void Doc::addView( KoView *_view )
 {
   KoDocument::addView( _view );
   foreach ( KoView* view, views() )
-    static_cast<View*>( view )->closeEditor();
+    static_cast<View*>( view )->selection()->emitCloseEditor(true);
 }
 
 void Doc::addDamage( Damage* damage )

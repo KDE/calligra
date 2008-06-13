@@ -301,17 +301,6 @@ public:
   void addDamage( Damage* damage );
 
   /**
-   * \ingroup Operations
-   */
-  void enableUndo( bool _b );
-
-  /**
-   * \ingroup Operations
-   */
-  void enableRedo( bool _b );
-
-
-  /**
    * @return the name of the unit used to display margins.
    * For example, if unit() returns KoUnit::Millimeter, then
    * this functions return "mm".

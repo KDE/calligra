@@ -34,17 +34,11 @@ class KoToolProxy;
 namespace KSpread
 {
 class CellEditor;
-class ComboboxLocationEditWidget;
-class EditWidget;
 class View;
 
 class Canvas::Private
 {
 public:
-    ComboboxLocationEditWidget *posWidget;
-    KSpread::EditWidget *editWidget;
-    KSpread::CellEditor *cellEditor;
-
     View *view;
 
     // Non-visible range top-left from current screen
@@ -57,9 +51,6 @@ public:
     // Used to draw the grey grid that is usually only visible on the
     // screen, but not by printing on paper.
     QPen defaultGridPen;
-
-    // see setLastEditorWithFocus, lastEditorWithFocus
-    Canvas::EditorType focusEditorType;
 
     QLabel *validationInfo;
 

@@ -39,26 +39,25 @@
 #include "Cell.h"
 #include "CellStorage.h"
 #include "Doc.h"
+#include "Selection.h"
 #include "Sheet.h"
-#include "View.h"
 
 #include "commands/CSVDataCommand.h"
 
 using namespace KSpread;
 
-CSVDialog::CSVDialog( View * parent, QRect const & rect, Mode mode)
+CSVDialog::CSVDialog(QWidget* parent, Selection* selection, Mode mode)
   : KoCsvImportDialog( parent ),
-    m_pView( parent ),
+    m_selection(selection),
     m_canceled( false ),
-    m_targetRect( rect ),
     m_mode( mode )
 {
   // Limit the range
-  int column = m_targetRect.left();
-  Cell lastCell = m_pView->activeSheet()->cellStorage()->lastInColumn( column );
+  int column = m_selection->lastRange().left();
+  Cell lastCell = m_selection->activeSheet()->cellStorage()->lastInColumn( column );
   if ( !lastCell.isNull() )
-    if( m_targetRect.bottom() > lastCell.row() )
-      m_targetRect.setBottom( lastCell.row() );
+    if( m_selection->lastRange().bottom() > lastCell.row() )
+      m_selection->lastRange().setBottom( lastCell.row() );
 
   if ( m_mode == Clipboard )
   {
@@ -134,10 +133,10 @@ void CSVDialog::init()
   {
     setData(QByteArray());
     Cell cell;
-    Sheet * sheet = m_pView->activeSheet();
+    Sheet * sheet = m_selection->activeSheet();
     QByteArray data;
-    int col = m_targetRect.left();
-    for (int i = m_targetRect.top(); i <= m_targetRect.bottom(); ++i)
+    int col = m_selection->lastRange().left();
+    for (int i = m_selection->lastRange().top(); i <= m_selection->lastRange().bottom(); ++i)
     {
       cell = Cell( sheet, col, i );
       if ( !cell.isEmpty() )
@@ -157,7 +156,7 @@ bool CSVDialog::canceled()
 
 void CSVDialog::accept()
 {
-  Sheet * sheet  = m_pView->activeSheet();
+  Sheet * sheet  = m_selection->activeSheet();
 
   int numRows = rows();
   int numCols = cols();
@@ -165,17 +164,17 @@ void CSVDialog::accept()
   if ((numRows == 0) || (numCols == 0))
     return;  // nothing to do here
 
-  if ( (numCols > m_targetRect.width()) && (m_targetRect.width() > 1) )
+  if ( (numCols > m_selection->lastRange().width()) && (m_selection->lastRange().width() > 1) )
   {
-    numCols = m_targetRect.width();
+    numCols = m_selection->lastRange().width();
   }
   else
-    m_targetRect.setRight( m_targetRect.left() + numCols - 1 );
+    m_selection->lastRange().setRight( m_selection->lastRange().left() + numCols - 1 );
 
-  if ( (numRows > m_targetRect.height()) && (m_targetRect.height() > 1) )
-    numRows = m_targetRect.height();
+  if ( (numRows > m_selection->lastRange().height()) && (m_selection->lastRange().height() > 1) )
+    numRows = m_selection->lastRange().height();
   else
-    m_targetRect.setBottom( m_targetRect.top() + numRows - 1 );
+    m_selection->lastRange().setBottom( m_selection->lastRange().top() + numRows - 1 );
 
     QList<KoCsvImportDialog::DataType> dataTypes;
     Value value(Value::Array);
@@ -201,11 +200,11 @@ void CSVDialog::accept()
     command->setColumnDataTypes(dataTypes);
     command->setDecimalSymbol(decimalSymbol());
     command->setThousandsSeparator(thousandsSeparator());
-    command->add(m_targetRect);
+    command->add(m_selection->lastRange());
     if (!command->execute())
         delete command;
 
-  m_pView->slotUpdateView( sheet );
+  m_selection->emitModified();
   KoCsvImportDialog::accept();
 }
 

@@ -23,6 +23,8 @@
 
 #include <kdebug.h>
 
+#include <KoCanvasBase.h>
+#include <KoCanvasController.h>
 #include <KoViewConverter.h>
 
 #include "Cell.h"
@@ -31,6 +33,8 @@
 #include "Editors.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
+
+#include "commands/DataManipulators.h"
 
 using namespace KSpread;
 
@@ -64,6 +68,10 @@ public:
     activeElement = 0;
     activeSubRegionStart = 0;
     activeSubRegionLength = 1;
+
+    canvasBase = 0;
+    referenceMode = false;
+    lastEditorWithFocus = EmbeddedEditor;
   }
 
   Sheet* activeSheet;
@@ -79,23 +87,30 @@ public:
   int activeElement;
   int activeSubRegionStart;
   int activeSubRegionLength;
+
+  KoCanvasBase* canvasBase;
+  bool referenceMode : 1;
+  Region formerSelection; // for reference selection mode
+  Region oldSelection; // for select all
+  Editor lastEditorWithFocus;
 };
 
 /***************************************************************************
   class Selection
 ****************************************************************************/
 
-Selection::Selection( QObject* parent )
-    : QObject( parent )
+Selection::Selection(KoCanvasBase* canvasBase)
+    : KoToolSelection(canvasBase->canvasWidget())
     , Region(1,1)
     , d( new Private() )
 {
   d->activeSubRegionStart = 0;
   d->activeSubRegionLength = 1;
+  d->canvasBase = canvasBase;
 }
 
 Selection::Selection(const Selection& selection)
-    : QObject( selection.parent() )
+    : KoToolSelection(selection.parent())
     , Region()
     , d( new Private() )
 {
@@ -103,6 +118,7 @@ Selection::Selection(const Selection& selection)
     d->originSheet = selection.d->originSheet;
     d->activeSubRegionStart = 0;
     d->activeSubRegionLength = cells().count();
+    d->canvasBase = selection.d->canvasBase;
 }
 
 Selection::~Selection()
@@ -675,6 +691,9 @@ bool Selection::isSingular() const
 
 QRectF Selection::selectionHandleArea(const KoViewConverter* viewConverter) const
 {
+    if (d->referenceMode) {
+        return QRectF();
+    }
   int column, row;
 
   // complete rows/columns are selected, use the marker.
@@ -712,7 +731,11 @@ QString Selection::name(Sheet* sheet) const
 
 void Selection::setActiveSheet( Sheet* sheet )
 {
+    if (d->activeSheet == sheet) {
+        return;
+    }
     d->activeSheet = sheet;
+    emit activeSheetChanged(sheet);
 }
 
 Sheet* Selection::activeSheet() const
@@ -829,11 +852,6 @@ QString Selection::activeSubRegionName() const
   return names.isEmpty() ? "" : names.join(";");
 }
 
-void Selection::setMultipleOccurences(bool state)
-{
-  d->multipleOccurences = state;
-}
-
 void Selection::setSelectionMode(Mode mode)
 {
   d->selectionMode = mode;
@@ -842,6 +860,111 @@ void Selection::setSelectionMode(Mode mode)
 const QList<QColor>& Selection::colors() const
 {
   return d->colors;
+}
+
+void Selection::selectAll()
+{
+    if (!isAllSelected()) {
+        d->oldSelection = *this;
+        initialize(QRect(QPoint(KS_colMax, KS_rowMax), QPoint(1, 1)));
+    }
+    else {
+        initialize(d->oldSelection);
+        d->oldSelection.clear();
+    }
+}
+
+void Selection::setLastEditorWithFocus(Editor editor)
+{
+    d->lastEditorWithFocus = editor;
+}
+
+Selection::Editor Selection::lastEditorWithFocus() const
+{
+    return d->lastEditorWithFocus;
+}
+
+void Selection::startReferenceSelection(const Region& region)
+{
+    if (d->referenceMode) {
+        if (region.isValid()) {
+            initialize(region);
+        }
+        return;
+    }
+    d->formerSelection = *this;
+    clear();
+    setOriginSheet(activeSheet());
+    if (region.isValid()) {
+        initialize(region);
+    }
+    // It is important to enable this AFTER we set the rect!
+    d->referenceMode = true;
+    d->multipleOccurences = true;
+    // Visual cue to indicate that the user can drag-select the selection selection
+    d->canvasBase->canvasWidget()->setCursor(Qt::CrossCursor);
+}
+
+void Selection::endReferenceSelection()
+{
+    if (!d->referenceMode) {
+        return;
+    }
+    d->referenceMode = false;
+    d->multipleOccurences = false;
+    if (originSheet() != activeSheet()) {
+        emit visibleSheetRequested(originSheet());
+    }
+    // While entering a formula the choose mode is turned on and off.
+    // Clear the choice. Otherwise, cell references will stay highlighted.
+    if (!isEmpty()) {
+        emit changed(*this);
+        clear();
+    }
+    initialize(d->formerSelection);
+    d->canvasBase->canvasWidget()->setCursor(Qt::ArrowCursor);
+}
+
+void Selection::setReferenceSelectionMode(bool enable)
+{
+    d->referenceMode = enable;
+    d->multipleOccurences = enable;
+    d->canvasBase->canvasWidget()->setCursor(enable ? Qt::CrossCursor : Qt::ArrowCursor);
+}
+
+bool Selection::referenceSelectionMode() const
+{
+    return d->referenceMode;
+}
+
+void Selection::emitAboutToModify()
+{
+    emit aboutToModify(*this);
+}
+
+void Selection::emitModified()
+{
+    emit modified(*this);
+}
+
+void Selection::emitRefreshSheetViews()
+{
+    emit refreshSheetViews();
+}
+
+void Selection::emitVisibleSheetRequested(Sheet* sheet)
+{
+    emit visibleSheetRequested(sheet);
+}
+
+void Selection::emitCloseEditor(bool saveChanges, bool expandMatrix)
+{
+    emit closeEditor(saveChanges, expandMatrix);
+}
+
+void Selection::emitRequestFocusEditor()
+{
+    emit requestFocusEditor();
 }
 
 QRect Selection::extendToMergedAreas(const QRect& _area) const

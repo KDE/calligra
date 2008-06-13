@@ -22,6 +22,7 @@
 // KSpread
 #include "Canvas.h"
 #include "Cell.h"
+#include "CellToolBase.h"
 #include "Doc.h"
 #include "Formula.h"
 #include "Functions.h"
@@ -32,7 +33,8 @@
 #include "View.h"
 
 // KOffice
-#include <KoZoomHandler.h>
+#include <KoGlobal.h>
+#include <KoViewConverter.h>
 
 // KDE
 #include <kdebug.h>
@@ -80,25 +82,25 @@ class FormulaEditorHighlighter::Private
 public:
   Private()
   {
-    canvas = 0;
+    selection = 0;
     tokens = Tokens();
     rangeCount = 0;
     rangeChanged = false;
   }
 
   // source for cell reference checking
-  Canvas* canvas;
+  Selection* selection;
   Tokens tokens;
   uint rangeCount;
   bool rangeChanged;
 };
 
 
-FormulaEditorHighlighter::FormulaEditorHighlighter(QTextEdit* textEdit, Canvas* canvas)
+FormulaEditorHighlighter::FormulaEditorHighlighter(QTextEdit* textEdit, Selection* selection)
     : QSyntaxHighlighter(textEdit)
     , d( new Private )
 {
-  d->canvas = canvas;
+    d->selection = selection;
 }
 
 FormulaEditorHighlighter::~FormulaEditorHighlighter()
@@ -130,7 +132,7 @@ void FormulaEditorHighlighter::highlightBlock( const QString& text )
   uint oldRangeCount = d->rangeCount;
 
   d->rangeCount = 0;
-  QList<QColor> colors = d->canvas->choice()->colors();
+  QList<QColor> colors = d->selection->colors();
   QList<QString> alreadyFoundRanges;
 
   for (int i = 0; i < d->tokens.count(); ++i)
@@ -483,7 +485,7 @@ class CellEditor::Private
 {
 public:
   Cell                      cell;
-  Canvas*                   canvas;
+  Selection*                selection;
   KTextEdit*                textEdit;
   FormulaEditorHighlighter* highlighter;
   FunctionCompletion*       functionCompletion;
@@ -505,12 +507,12 @@ public:
 };
 
 
-CellEditor::CellEditor( const Cell& _cell, Canvas* _parent, bool captureAllKeyEvents, const char* /*_name*/ )
-    : QWidget( _parent )
+CellEditor::CellEditor(QWidget* parent, Selection* selection, bool captureAllKeyEvents)
+    : QWidget(parent)
     , d( new Private )
 {
-  d->cell = _cell;
-  d->canvas = _parent;
+  d->cell = Cell(selection->activeSheet(), selection->marker());
+  d->selection = selection;
   d->textEdit = new KTextEdit(this);
   d->globalCursorPos = QPoint();
   d->captureAllKeyEvents = captureAllKeyEvents;
@@ -524,7 +526,10 @@ CellEditor::CellEditor( const Cell& _cell, Canvas* _parent, bool captureAllKeyEv
   d->currentToken = 0;
   d->rangeCount = 0;
 
-//TODO - Get rid of QTextEdit margins, this doesn't seem easily possible in Qt 3.3, so a job for Qt 4 porting.
+  QBoxLayout* layout = new QBoxLayout(QBoxLayout::LeftToRight, this);
+  layout->setMargin(0);
+  layout->setSpacing(0);
+  layout->addWidget(d->textEdit);
 
   d->textEdit->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   d->textEdit->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -532,7 +537,7 @@ CellEditor::CellEditor( const Cell& _cell, Canvas* _parent, bool captureAllKeyEv
   d->textEdit->setLineWidth(0);
   d->textEdit->installEventFilter( this );
 
-  d->highlighter = new FormulaEditorHighlighter( d->textEdit, _parent );
+  d->highlighter = new FormulaEditorHighlighter( d->textEdit, selection );
 
   d->functionCompletion = new FunctionCompletion( this );
   d->functionCompletionTimer = new QTimer( this );
@@ -542,42 +547,32 @@ CellEditor::CellEditor( const Cell& _cell, Canvas* _parent, bool captureAllKeyEv
   connect( d->functionCompletionTimer, SIGNAL( timeout() ),
     SLOT( triggerFunctionAutoComplete() ) );
 
-  if ( !_cell.style().wrapText() )
+  if ( !d->cell.style().wrapText() )
     d->textEdit->setWordWrapMode( QTextOption::NoWrap );
   else
     d->textEdit->setWordWrapMode( QTextOption::WordWrap );
 
 #if 0 // FIXME Implement a completion aware KTextEdit.
-  d->textEdit->setCompletionMode(canvas()->view()->doc()->completionMode());
-  d->textEdit->setCompletionObject(&canvas()->view()->doc()->completion(), true);
+  d->textEdit->setCompletionMode(selection()->view()->doc()->completionMode());
+  d->textEdit->setCompletionObject(&selection()->view()->doc()->completion(), true);
 #endif
 
   setFocusProxy( d->textEdit );
 
   connect( d->textEdit, SIGNAL( cursorPositionChanged() ), this, SLOT (slotCursorPositionChanged()));
   connect( d->textEdit, SIGNAL( textChanged() ), this, SLOT( slotTextChanged() ) );
-
+    connect(d->textEdit->document(), SIGNAL(modificationChanged(bool)),
+            this, SIGNAL(modificationChanged(bool)));
 // connect( d->textEdit, SIGNAL(completionModeChanged( KGlobalSettings::Completion )),this,SLOT (slotCompletionModeChanged(KGlobalSettings::Completion)));
 
   // A choose should always start at the edited cell
-//  canvas()->setChooseMarkerRow( canvas()->selection()->marker().y() );
-//  canvas()->setChooseMarkerColumn( canvas()->selection()->marker().x() );
-
-  // set font size according to zoom factor
-  QFont font( _cell.style().font() );
-  font.setPointSizeF( 0.01 * _parent->view()->zoomHandler()->zoomInPercent() * font.pointSizeF() );
-  d->textEdit->setFont( font );
-
-  if (d->fontLength == 0)
-  {
-    QFontMetrics fm( d->textEdit->font() );
-    d->fontLength = fm.width('x');
-  }
+//  selection()->setChooseMarkerRow( selection()->d->selection->marker().y() );
+//  selection()->setChooseMarkerColumn( selection()->d->selection->marker().x() );
 }
 
 CellEditor::~CellEditor()
 {
-  canvas()->endChoose();
+  selection()->endReferenceSelection();
 
   delete d->highlighter;
   delete d->functionCompletion;
@@ -590,9 +585,9 @@ const Cell& CellEditor::cell() const
   return d->cell;
 }
 
-Canvas* CellEditor::canvas() const
+Selection* CellEditor::selection() const
 {
-  return d->canvas;
+  return d->selection;
 }
 
 QPoint CellEditor::globalCursorPosition() const
@@ -758,8 +753,8 @@ void CellEditor::slotCursorPositionChanged()
   // only change the active sub region, if we have found one.
   if (regionStart != -1)
   {
-    d->canvas->choice()->setActiveElement(currentRange);
-    d->canvas->choice()->setActiveSubRegion(regionStart, regionEnd-regionStart+1);
+    selection()->setActiveElement(currentRange);
+    selection()->setActiveSubRegion(regionStart, regionEnd-regionStart+1);
   }
 
   // triggered by keyboard action?
@@ -769,14 +764,13 @@ void CellEditor::slotCursorPositionChanged()
     {
       d->highlighter->resetRangeChanged();
 
-      disconnect( d->canvas->choice(), SIGNAL(changed(const Region&)),
-                  d->canvas->view(), SLOT(slotScrollChoice(const Region&)) );
-      d->canvas->doc()->emitBeginOperation();
+      selection()->blockSignals(true);
+      selection()->activeSheet()->doc()->emitBeginOperation();
       setUpdateChoice(false);
 
       Tokens tokens = d->highlighter->formulaTokens();
-      d->canvas->choice()->update(); // set the old one dirty
-      d->canvas->choice()->clear();
+      selection()->update(); // set the old one dirty
+      selection()->clear();
       Region tmpRegion;
       Region::ConstIterator it;
 
@@ -791,26 +785,25 @@ void CellEditor::slotCursorPositionChanged()
         Token::Type type = token.type();
         if (type == Token::Cell || type == Token::Range)
         {
-          Region region(token.text(), d->canvas->view()->doc()->map(), d->canvas->activeSheet());
+          Region region(token.text(), selection()->activeSheet()->map(), selection()->activeSheet());
           it = region.constBegin();
 
           if (!alreadyUsedRegions.contains(region))
           {
             QRect r=(*it)->rect();
 
-            if (d->canvas->choice()->isEmpty())
-                d->canvas->choice()->initialize((*it)->rect(), (*it)->sheet());
+            if (selection()->isEmpty())
+                selection()->initialize((*it)->rect(), (*it)->sheet());
             else
-                d->canvas->choice()->extend((*it)->rect(), (*it)->sheet());
+                selection()->extend((*it)->rect(), (*it)->sheet());
 
             alreadyUsedRegions.append(region);
           }
         }
       }
       setUpdateChoice(true);
-      d->canvas->doc()->emitEndOperation();
-      connect( d->canvas->choice(), SIGNAL(changed(const Region&)),
-               d->canvas->view(), SLOT(slotScrollChoice(const Region&)) );
+      selection()->activeSheet()->doc()->emitEndOperation();
+      selection()->blockSignals(false);
     }
   }
 }
@@ -830,38 +823,34 @@ void CellEditor::copy()
   d->textEdit->copy();
 }
 
-void CellEditor::setEditorFont(QFont const & font, bool updateSize, KoZoomHandler* zoomHandler)
+void CellEditor::setEditorFont(QFont const & font, bool updateSize, const KoViewConverter *viewConverter)
 {
-  QFont tmpFont( font );
-  tmpFont.setPointSizeF( 0.01 * zoomHandler->zoomInPercent() * tmpFont.pointSizeF() );
-  d->textEdit->setFont( tmpFont );
+    const double scaleY = POINT_TO_INCH(double(KoGlobal::dpiY()));
+    d->textEdit->setFont(QFont(font.family(), viewConverter->documentToViewY(font.pointSizeF()) / scaleY));
 
-  if (updateSize)
-  {
-    QFontMetrics fm( d->textEdit->font() );
-    d->fontLength = fm.width('x');
-
-    int mw = fm.width( d->textEdit->toPlainText() ) + d->fontLength;
-    // don't make it smaller: then we would have to repaint the obscured cells
-    if (mw < width())
-      mw = width();
-
-    int mh = fm.height();
-    if (mh < height())
-      mh = height();
-
-    setGeometry(x(), y(), mw, mh);
-  }
+    if (updateSize) {
+        QFontMetrics fontMetrics(d->textEdit->font());
+        d->fontLength = 0.0; // fontMetrics.width('x');
+        int width = fontMetrics.width(d->textEdit->toPlainText()) + d->fontLength;
+        // don't make it smaller: then we would have to repaint the obscured cells
+        if (width < this->width())
+            width = this->width();
+        int height = fontMetrics.height();
+        if (height < this->height())
+            height = this->height();
+        setGeometry(x(), y(), width, height);
+    }
 }
 
 void CellEditor::slotCompletionModeChanged(KGlobalSettings::Completion _completion)
 {
-  canvas()->view()->doc()->setCompletionMode( _completion );
+  selection()->activeSheet()->doc()->setCompletionMode( _completion );
 }
 
 void CellEditor::slotTextChanged()
 {
-//   kDebug() ;
+    // Fix the position.
+    d->textEdit->verticalScrollBar()->setValue(4);
 
   //FIXME - text() may return richtext?
   QString t = text();
@@ -932,8 +921,8 @@ void CellEditor::slotTextChanged()
     }
   }
 
-  canvas()->view()->editWidget()->setText( t );
-  // canvas()->view()->editWidget()->textCursor().setPosition( d->textEdit->cursorPosition() );
+    emit textChanged(d->textEdit->toPlainText());
+  // selection()->view()->editWidget()->textCursor().setPosition( d->textEdit->cursorPosition() );
 }
 
 void CellEditor::setCheckChoice(bool state)
@@ -955,7 +944,7 @@ bool CellEditor::checkChoice()
   QString text = d->textEdit->toPlainText();
   if ( text[0] != '=' )
   {
-    canvas()->setChooseMode(false);
+    selection()->setReferenceSelectionMode(false);
   }
   else
   {
@@ -966,7 +955,7 @@ bool CellEditor::checkChoice()
     // empty formula?
     if (tokens.count() < 1)
     {
-      canvas()->startChoose();
+      selection()->startReferenceSelection();
     }
     else
     {
@@ -984,16 +973,16 @@ bool CellEditor::checkChoice()
       Token::Type type = token.type();
       if (type == Token::Operator && token.asOperator() != Token::RightPar)
       {
-        canvas()->setChooseMode(true);
+        selection()->setReferenceSelectionMode(true);
       }
       else if (type == Token::Cell || type == Token::Range)
       {
         d->length_namecell = token.text().length();
-        canvas()->setChooseMode(true);
+        selection()->setReferenceSelectionMode(true);
       }
       else
       {
-        canvas()->setChooseMode(false);
+        selection()->setReferenceSelectionMode(false);
       }
     }
   }
@@ -1016,7 +1005,7 @@ void CellEditor::updateChoice()
     // prevent recursion
     d->updatingChoice = true;
 
-    Selection* choice = d->canvas->choice();
+    Selection* choice = selection();
 
     if (choice->isEmpty())
         return;
@@ -1063,7 +1052,7 @@ void CellEditor::updateChoice()
     setCheckChoice( true );
     setCursorPosition( start + d->length_namecell );
 
-    d->canvas->view()->editWidget()->setText( newText );
+    emit textChanged(d->textEdit->toPlainText());
 
     d->updatingChoice = false;
 }
@@ -1121,7 +1110,7 @@ void CellEditor::handleKeyPressEvent( QKeyEvent * _ev )
     d->textEdit->setPlainText(newString);
     setCursorPosition( cur );
 
-    _ev->accept();
+    _ev->accept(); // QKeyEvent
 
     return;
   }
@@ -1168,9 +1157,10 @@ void CellEditor::setCursorPosition( int pos )
     QTextCursor textCursor( d->textEdit->textCursor() );
     textCursor.setPosition( pos );
     d->textEdit->setTextCursor( textCursor );
+//     kDebug() << "pos" << pos << "textCursor" << d->textEdit->textCursor().position();
     // FIXME Stefan: The purpose of this connection is?
     //               Disabled to avoid cursor jumps to the end of the line on every key event.
-//     canvas()->view()->editWidget()->setCursorPosition( pos );
+//     selection()->view()->editWidget()->setCursorPosition( pos );
 }
 
 bool CellEditor::eventFilter( QObject* obj, QEvent* ev )
@@ -1181,25 +1171,19 @@ bool CellEditor::eventFilter( QObject* obj, QEvent* ev )
 
     if ( ev->type() == QEvent::FocusOut )
     {
-        canvas()->setLastEditorWithFocus( Canvas::CellEditor );
+        selection()->setLastEditorWithFocus(Selection::EmbeddedEditor);
         return false;
     }
 
     if ( ev->type() == QEvent::KeyPress || ev->type() == QEvent::KeyRelease )
     {
         QKeyEvent* ke = static_cast<QKeyEvent*>( ev );
-        if ( !( ke->modifiers() & Qt::ShiftModifier ) || canvas()->chooseMode() )
+        if ( !( ke->modifiers() & Qt::ShiftModifier ) || selection()->referenceSelectionMode() )
         {
             switch ( ke->key() )
             {
-                // If the user presses the return key to finish editing this cell,
-                // choose mode must be turned off first. Otherwise it will merely
-                // select a different cell.
                 case Qt::Key_Return:
                 case Qt::Key_Enter:
-                    kDebug() <<"CellEditor::eventFilter: quitting choose mode";
-                    canvas()->endChoose();
-                    // fall through
                 case Qt::Key_Up:
                 case Qt::Key_Down:
                 case Qt::Key_PageDown:
@@ -1215,7 +1199,7 @@ bool CellEditor::eventFilter( QObject* obj, QEvent* ev )
         // QKeyEvent::text() is empty, if a modifier was pressed/released.
         if ( ev->type() == QEvent::KeyPress && !ke->text().isEmpty() )
         {
-            canvas()->setChooseMode(false);
+            selection()->setReferenceSelectionMode(false);
         }
         // Forward left/right arrows to parent, so that pressing left/right
         // in this editor leaves editing mode, unless this editor has been set
@@ -1256,32 +1240,31 @@ void CellEditor::setCursorToRange(uint pos)
 
 /*****************************************************************************
  *
- * ComboboxLocationEditWidget
+ * LocationComboBox
  *
  ****************************************************************************/
 
-ComboboxLocationEditWidget::ComboboxLocationEditWidget( QWidget * _parent,
-                                                      View * _view )
+LocationComboBox::LocationComboBox(QWidget* _parent, Selection* selection)
     : KComboBox( _parent)
 {
-    m_locationWidget = new LocationEditWidget( _parent, _view );
+    m_locationWidget = new LocationEditWidget( _parent, selection);
     setLineEdit( m_locationWidget );
     insertItem( 0,"" );
 
-    const QList<QString> areaNames = _view->doc()->namedAreaManager()->areaNames();
+    const QList<QString> areaNames = selection->activeSheet()->doc()->namedAreaManager()->areaNames();
     for (int i = 0; i < areaNames.count(); ++i)
         slotAddAreaName(areaNames[i]);
     connect( this, SIGNAL( activated ( const QString & ) ), m_locationWidget, SLOT( slotActivateItem() ) );
 }
 
 
-void ComboboxLocationEditWidget::slotAddAreaName( const QString &_name)
+void LocationComboBox::slotAddAreaName( const QString &_name)
 {
     insertItem( count(), _name );
     m_locationWidget->addCompletionItem( _name );
 }
 
-void ComboboxLocationEditWidget::slotRemoveAreaName( const QString &_name )
+void LocationComboBox::slotRemoveAreaName( const QString &_name )
 {
     for ( int i = 0; i<count(); i++ )
     {
@@ -1302,10 +1285,9 @@ void ComboboxLocationEditWidget::slotRemoveAreaName( const QString &_name )
  *
  ****************************************************************************/
 
-LocationEditWidget::LocationEditWidget( QWidget * _parent,
-                                                      View * _view )
+LocationEditWidget::LocationEditWidget(QWidget* _parent, Selection* selection)
     : KLineEdit( _parent),
-      m_pView(_view)
+      m_selection(selection)
 {
     setCompletionObject( &completionList,true );
     setCompletionMode(KGlobalSettings::CompletionAuto  );
@@ -1333,22 +1315,22 @@ void LocationEditWidget::slotActivateItem()
 bool LocationEditWidget::activateItem()
 {
     // Set the focus back on the canvas.
-    m_pView->canvasWidget()->setFocus();
+    parentWidget()->setFocus();
 
     const QString text = this->text();
     // check whether an already existing named area was entered
-    Region region = m_pView->doc()->namedAreaManager()->namedArea(text);
+    Region region = m_selection->activeSheet()->doc()->namedAreaManager()->namedArea(text);
     if (region.isValid())
     {
-        m_pView->selection()->initialize(Region(text, m_pView->doc()->map(), m_pView->activeSheet()));
+        m_selection->initialize(Region(text, m_selection->activeSheet()->map(), m_selection->activeSheet()));
         return true;
     }
 
     // check whether a valid cell region was entered
-    region = Region(text, m_pView->doc()->map(), m_pView->activeSheet());
+    region = Region(text, m_selection->activeSheet()->map(), m_selection->activeSheet());
     if (region.isValid())
     {
-        m_pView->selection()->initialize(region);
+        m_selection->initialize(region);
         return true;
     }
 
@@ -1366,9 +1348,9 @@ bool LocationEditWidget::activateItem()
     if (validName)
     {
         NamedAreaCommand* command = new NamedAreaCommand();
-        command->setSheet(m_pView->activeSheet());
+        command->setSheet(m_selection->activeSheet());
         command->setAreaName(text);
-        command->add(Region(m_pView->selection()->lastRange(), m_pView->activeSheet()));
+        command->add(Region(m_selection->lastRange(), m_selection->activeSheet()));
         if (command->execute())
             return true;
         else
@@ -1386,7 +1368,7 @@ void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
     {
         KLineEdit::keyPressEvent( _ev );
         // Never allow that keys are passed on to the parent.
-        _ev->accept();
+        _ev->accept(); // QKeyEvent
 
         return;
     }
@@ -1399,33 +1381,157 @@ void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
     {
         if ( activateItem() )
             return;
-        _ev->accept();
+        _ev->accept(); // QKeyEvent
     }
     break;
     // Escape pressed, restore original value
     case Qt::Key_Escape:
-        if ( m_pView->selection()->isSingular() ) {
-            setText( Cell::columnName( m_pView->selection()->marker().x() )
-                     + QString::number( m_pView->selection()->marker().y() ) );
+        if ( m_selection->isSingular() ) {
+            setText( Cell::columnName( m_selection->marker().x() )
+                     + QString::number( m_selection->marker().y() ) );
         } else {
-            setText( Cell::columnName( m_pView->selection()->lastRange().left() )
-                     + QString::number( m_pView->selection()->lastRange().top() )
+            setText( Cell::columnName( m_selection->lastRange().left() )
+                     + QString::number( m_selection->lastRange().top() )
                      + ':'
-                     + Cell::columnName( m_pView->selection()->lastRange().right() )
-                     + QString::number( m_pView->selection()->lastRange().bottom() ) );
+                     + Cell::columnName( m_selection->lastRange().right() )
+                     + QString::number( m_selection->lastRange().bottom() ) );
         }
-        m_pView->canvasWidget()->setFocus();
-        _ev->accept();
+        parentWidget()->setFocus();
+        _ev->accept(); // QKeyEvent
         break;
     default:
         KLineEdit::keyPressEvent( _ev );
         // Never allow that keys are passed on to the parent.
-        _ev->accept();
+        _ev->accept(); // QKeyEvent
     }
 }
 
 
+/****************************************************************
+ *
+ * ExternalEditor
+ * The editor that appears in the tool option widget and allows
+ * to edit the cell's content.
+ *
+ ****************************************************************/
 
+class ExternalEditor::Private
+{
+public:
+    CellToolBase* cellTool;
+    FormulaEditorHighlighter* highlighter;
+    bool isArray;
+};
+
+ExternalEditor::ExternalEditor(QWidget *parent)
+    : KTextEdit(parent)
+    , d(new Private)
+{
+    d->cellTool = 0;
+    d->highlighter = 0;
+    d->isArray = false;
+    setMinimumSize(100, 30);
+}
+
+ExternalEditor::~ExternalEditor()
+{
+    delete d->highlighter;
+    delete d;
+}
+
+QSize ExternalEditor::sizeHint() const
+{
+    return document()->size().toSize();
+}
+
+void ExternalEditor::setCellTool(CellToolBase* cellTool)
+{
+    d->cellTool = cellTool;
+    d->highlighter = new FormulaEditorHighlighter(this, cellTool->selection());
+}
+
+void ExternalEditor::applyChanges()
+{
+    Q_ASSERT(d->cellTool);
+    d->cellTool->deleteEditor(true, d->isArray); // save changes
+    d->isArray = false;
+    d->cellTool->canvas()->canvasWidget()->setFocus();
+}
+
+void ExternalEditor::discardChanges()
+{
+    Q_ASSERT(d->cellTool);
+    clear();
+    d->cellTool->deleteEditor(false); // discard changes
+    d->cellTool->canvas()->canvasWidget()->setFocus();
+    d->cellTool->selection()->update();
+}
+
+void ExternalEditor::setText(const QString &text)
+{
+    Q_ASSERT(d->cellTool);
+    if (toPlainText() == text) {
+        return;
+    }
+    KTextEdit::setPlainText(text);
+    QTextCursor textCursor = this->textCursor();
+    textCursor.setPosition(d->cellTool->editor()->cursorPosition());
+    setTextCursor(textCursor);
+}
+
+void ExternalEditor::keyPressEvent(QKeyEvent *event)
+{
+    Q_ASSERT(d->cellTool);
+    if (!d->cellTool->selection()->activeSheet()->doc()->isReadWrite()) {
+        return;
+    }
+
+    // Create the embedded editor, if necessary.
+    if (!d->cellTool->editor()) {
+        d->cellTool->createEditor(false /* keep content */, false /* no focus */);
+        d->cellTool->editor()->setCursorPosition(textCursor().position());
+    }
+
+    switch (event->key())
+    {
+    case Qt::Key_Down:
+    case Qt::Key_Up:
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
+        d->cellTool->editor()->setText(toPlainText());
+        // Don't allow to start a chooser when pressing the arrow keys
+        // in this widget, since only up and down would work anyway.
+        // This is why we call slotDoneEdit now, instead of sending
+        // to the canvas.
+        //QApplication::sendEvent( m_pCanvas, _ev );
+        d->isArray = (event->modifiers() & Qt::AltModifier) && (event->modifiers() & Qt::ControlModifier);
+        applyChanges();
+        event->accept(); // QKeyEvent
+        break;
+    case Qt::Key_F2:
+        // Switch the focus back to the embedded editor.
+        d->cellTool->editor()->setFocus();
+        d->cellTool->editor()->setText(toPlainText());
+        d->cellTool->editor()->setCursorPosition(textCursor().position());
+        break;
+    default:
+        KTextEdit::keyPressEvent(event);
+        setFocus();
+        d->cellTool->editor()->setCheckChoice(false);
+        d->cellTool->editor()->setText(toPlainText());
+        d->cellTool->editor()->setCheckChoice(true);
+        d->cellTool->editor()->setCursorPosition(textCursor().position());
+    }
+}
+
+void ExternalEditor::focusOutEvent(QFocusEvent* event)
+{
+    Q_ASSERT(d->cellTool);
+    d->cellTool->selection()->setLastEditorWithFocus(Selection::ExternalEditor);
+    KTextEdit::focusOutEvent(event);
+}
+
+#if 0 // KSPREAD_DISCARD_FORMULA_BAR
 /****************************************************************
  *
  * EditWidget
@@ -1530,7 +1636,6 @@ void EditWidget::keyPressEvent ( QKeyEvent* _ev )
       m_isArray = (_ev->modifiers() & Qt::AltModifier) &&
           (_ev->modifiers() & Qt::ControlModifier);
       slotDoneEdit();
-      m_pCanvas->view()->updateEditWidget();
       _ev->accept();
       break;
     case Qt::Key_F2:
@@ -1572,6 +1677,7 @@ void EditWidget::setText( const QString& t )
 
   KLineEdit::setText( t );
 }
+#endif
 
 
 
@@ -1584,7 +1690,7 @@ void EditWidget::setText( const QString& t )
 class RegionSelector::Private
 {
   public:
-    View* view;
+    Selection* selection;
     QDialog* parentDialog;
     KDialog* dialog;
     KTextEdit* textEdit;
@@ -1597,7 +1703,7 @@ class RegionSelector::Private
 
 RegionSelector* RegionSelector::Private::s_focussedSelector = 0;
 
-RegionSelector::RegionSelector( QWidget* parent )
+RegionSelector::RegionSelector(QWidget* parent)
   : QWidget( parent ),
     d( new Private )
 {
@@ -1605,12 +1711,12 @@ RegionSelector::RegionSelector( QWidget* parent )
 
   d->displayMode = Widget;
   d->parentDialog = 0;
-  d->view = 0;
+  d->selection = 0;
   d->dialog = 0;
-  d->highlighter = 0;
   d->button = new QToolButton( this );
   d->button->setCheckable( true );
   d->button->setIcon( KIcon( "selection" ) );
+  d->highlighter = 0;
   d->textEdit = new KTextEdit( this );
   d->textEdit->setLineWrapMode( QTextEdit::NoWrap );
   d->textEdit->setWordWrapMode( QTextOption::NoWrap );
@@ -1634,7 +1740,7 @@ RegionSelector::RegionSelector( QWidget* parent )
 
 RegionSelector::~RegionSelector()
 {
-  d->view->canvasWidget()->endChoose();
+  d->selection->endReferenceSelection();
   delete d;
 }
 
@@ -1644,12 +1750,11 @@ void RegionSelector::setSelectionMode( SelectionMode mode )
   // TODO adjust selection
 }
 
-void RegionSelector::setView( View* view )
+void RegionSelector::setSelection(Selection* selection)
 {
-  d->view = view;
-  d->highlighter = new FormulaEditorHighlighter( d->textEdit, view->canvasWidget() );
-  connect( d->view->choice(), SIGNAL( changed(const Region&) ),
-           this, SLOT( choiceChanged() ) );
+    d->selection = selection;
+    d->highlighter = new FormulaEditorHighlighter(d->textEdit, d->selection);
+    connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(choiceChanged()));
 }
 
 void RegionSelector::setDialog( QDialog* dialog )
@@ -1677,14 +1782,14 @@ bool RegionSelector::eventFilter( QObject* object, QEvent* event )
   else if ( event->type() == QEvent::FocusIn )
   {
     Private::s_focussedSelector = this;
-    d->view->canvasWidget()->startChoose();
+    d->selection->startReferenceSelection();
     if (d->selectionMode == SingleCell)
     {
-      d->view->choice()->setSelectionMode( Selection::SingleCell );
+      d->selection->setSelectionMode( Selection::SingleCell );
     }
     else
     {
-      d->view->choice()->setSelectionMode( Selection::MultipleCells );
+      d->selection->setSelectionMode( Selection::MultipleCells );
     }
     // TODO Stefan: initialize choice
   }
@@ -1749,9 +1854,9 @@ void RegionSelector::choiceChanged()
   if ( Private::s_focussedSelector != this )
     return;
 
-  if ( d->view->choice()->isValid() )
+  if ( d->selection->isValid() )
   {
-    QString area = d->view->choice()->name();
+    QString area = d->selection->name();
     d->textEdit->setPlainText( area );
   }
 }

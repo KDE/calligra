@@ -46,15 +46,16 @@ class KLineEdit;
 
 namespace KSpread
 {
+class CellEditor;
 class FunctionDescription;
-class View;
+class Selection;
 
 class FormulaDialog : public KDialog
 {
     Q_OBJECT
 public:
-  FormulaDialog( View* parent, const char* name,const QString& formulaName=0);
-  ~FormulaDialog();
+    FormulaDialog(QWidget* parent, Selection* selection, CellEditor* editor, const QString& expression = 0);
+    ~FormulaDialog();
 private:
     /**
      * Turns the @p text into a parameter that koscript can understand. The type
@@ -128,7 +129,8 @@ public:
 protected:
        virtual void closeEvent ( QCloseEvent * );
 private:
-    View* m_pView;
+    Selection* m_selection;
+    CellEditor* m_editor;
 
     KTabWidget* m_tabwidget;
     KTextBrowser* m_browser;

@@ -32,7 +32,6 @@
 #include "Selection.h"
 #include "Sheet.h"
 #include "Util.h"
-#include "View.h"
 
 // commands
 #include "commands/DataManipulators.h"
@@ -56,22 +55,17 @@
 
 using namespace KSpread;
 
-GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
-                                        const char * name, bool, Qt::WFlags fl )
-  : KDialog( parent, fl ),
-    m_pView( parent ),
+GoalSeekDialog::GoalSeekDialog(QWidget* parent, Selection* selection)
+  : KDialog(parent),
+    m_selection(selection),
     m_maxIter( 1000 ),
-    m_restored( true ),
-    m_anchor( m_pView->selection()->anchor() ),
-    m_marker( m_pView->selection()->marker() ),
-    m_selection( m_pView->selection()->lastRange() )
+    m_restored( true )
 {
-  Q_UNUSED(marker)
   //setWFlags( Qt::WDestructiveClose );
   setButtons( 0 );
   setModal( false );
 
-  setObjectName( name ? name : "GoalSeekDialog" );
+  setObjectName("GoalSeekDialog");
 
   resize( 458, 153 );
   setWindowTitle( i18n( "Goal Seek" ) );
@@ -95,7 +89,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   m_startFrameLayout->addWidget( label1, 0, 0 );
 
   m_selector1 = new RegionSelector( m_startFrame );
-  m_selector1->setView( m_pView );
+  m_selector1->setSelection(selection);
   m_selector1->setDialog( this );
   m_selector1->setSelectionMode( RegionSelector::SingleCell );
   m_startFrameLayout->addWidget( m_selector1, 0, 1 );
@@ -104,7 +98,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   m_startFrameLayout->addWidget( label2, 1, 0 );
 
   m_selector2 = new RegionSelector( m_startFrame );
-  m_selector2->setView( m_pView );
+  m_selector2->setSelection(selection);
   m_selector2->setDialog( this );
   m_selector2->setSelectionMode( RegionSelector::SingleCell );
   m_startFrameLayout->addWidget( m_selector2, 1, 1 );
@@ -113,7 +107,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   m_startFrameLayout->addWidget( label3, 2, 0 );
 
   m_selector3 = new RegionSelector( m_startFrame );
-  m_selector3->setView( m_pView );
+  m_selector3->setSelection(selection);
   m_selector3->setDialog( this );
   m_selector3->setSelectionMode( RegionSelector::SingleCell );
   m_startFrameLayout->addWidget( m_selector3, 2, 1 );
@@ -177,10 +171,10 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
 
   m_resultFrame->hide();
 
-  m_sheetName = m_pView->activeSheet()->sheetName();
+  m_sheetName = m_selection->activeSheet()->sheetName();
 
   // Allow the user to select cells on the spreadsheet.
-//   m_pView->canvasWidget()->startChoose();
+//   m_selection->canvasWidget()->startChoose();
 
   qApp->installEventFilter( this );
 
@@ -189,7 +183,7 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   connect( m_buttonCancel, SIGNAL( clicked() ), this, SLOT( reject() ) );
   connect( this, SIGNAL( rejected() ), this, SLOT( buttonCancelClicked() ) );
 
-  connect( m_pView->choice(), SIGNAL(changed(const Region&)),
+  connect( m_selection, SIGNAL(changed(const Region&)),
            this, SLOT(slotSelectionChanged()));
 
   // tab order
@@ -203,14 +197,14 @@ GoalSeekDialog::~GoalSeekDialog()
 {
   kDebug() <<"~GoalSeekDialog";
 
-  if( m_pView->activeSheet() )
+  if( m_selection->activeSheet() )
   {
     chooseCleanup();
     if ( !m_restored )
     {
-      m_pView->doc()->emitBeginOperation( false );
+      m_selection->activeSheet()->doc()->emitBeginOperation( false );
       m_sourceCell.setValue(Value(m_oldSource));
-      m_pView->slotUpdateView( m_pView->activeSheet() );
+      m_selection->emitModified();
     }
   }
 }
@@ -223,11 +217,11 @@ void GoalSeekDialog::closeEvent ( QCloseEvent * e )
 
 void GoalSeekDialog::buttonOkClicked()
 {
-  Doc * pDoc = m_pView->doc();
+  Doc * pDoc = m_selection->activeSheet()->doc();
   pDoc->emitBeginOperation( false );
   if (m_maxIter > 0)
   {
-    Sheet * sheet = m_pView->activeSheet();
+    Sheet * sheet = m_selection->activeSheet();
 
     const Region source(m_selector3->textEdit()->toPlainText(), sheet->map(), sheet);
     if (!source.isValid() || !source.isSingular())
@@ -236,7 +230,7 @@ void GoalSeekDialog::buttonOkClicked()
       m_selector3->textEdit()->selectAll();
       m_selector3->textEdit()->setFocus();
 
-      m_pView->slotUpdateView( m_pView->activeSheet() );
+      m_selection->emitModified();
       return;
     }
 
@@ -247,19 +241,19 @@ void GoalSeekDialog::buttonOkClicked()
       m_selector1->textEdit()->selectAll();
       m_selector1->textEdit()->setFocus();
 
-      m_pView->slotUpdateView( m_pView->activeSheet() );
+      m_selection->emitModified();
       return;
     }
 
     bool ok = false;
-    double goal = m_pView->doc()->locale()->readNumber(m_selector2->textEdit()->toPlainText(), &ok );
+    double goal = m_selection->activeSheet()->doc()->locale()->readNumber(m_selector2->textEdit()->toPlainText(), &ok );
     if ( !ok )
     {
       KMessageBox::error( this, i18n("Target value is invalid.") );
       m_selector2->textEdit()->selectAll();
       m_selector2->textEdit()->setFocus();
 
-      m_pView->slotUpdateView( m_pView->activeSheet() );
+      m_selection->emitModified();
       return;
     }
 
@@ -272,7 +266,7 @@ void GoalSeekDialog::buttonOkClicked()
       m_selector3->textEdit()->selectAll();
       m_selector3->textEdit()->setFocus();
 
-      m_pView->slotUpdateView( m_pView->activeSheet() );
+      m_selection->emitModified();
       return;
     }
 
@@ -282,7 +276,7 @@ void GoalSeekDialog::buttonOkClicked()
       m_selector1->textEdit()->selectAll();
       m_selector1->textEdit()->setFocus();
 
-      m_pView->slotUpdateView( m_pView->activeSheet() );
+      m_selection->emitModified();
       return;
     }
 
@@ -298,7 +292,7 @@ void GoalSeekDialog::buttonOkClicked()
     m_restored = false;
 
     startCalc( numToDouble (m_sourceCell.value().asFloat()), goal );
-    m_pView->slotUpdateView( m_pView->activeSheet() );
+    m_selection->emitModified();
 
     return;
   }
@@ -307,7 +301,7 @@ void GoalSeekDialog::buttonOkClicked()
     m_restored = true;
   }
 
-  m_pView->slotUpdateView( m_pView->activeSheet() );
+  m_selection->emitModified();
   accept();
   deleteLater();
 }
@@ -316,10 +310,10 @@ void GoalSeekDialog::buttonCancelClicked()
 {
   if ( !m_restored )
   {
-    m_pView->doc()->emitBeginOperation( false );
+    m_selection->activeSheet()->doc()->emitBeginOperation( false );
     m_sourceCell.setValue(Value(m_oldSource));
     m_restored = true;
-    m_pView->slotUpdateView( m_pView->activeSheet() );
+    m_selection->emitModified();
   }
 
   deleteLater();
@@ -327,23 +321,20 @@ void GoalSeekDialog::buttonCancelClicked()
 
 void GoalSeekDialog::chooseCleanup()
 {
-//   m_pView->canvasWidget()->endChoose();
+//   m_selection->canvasWidget()->endChoose();
 
   Sheet * sheet = 0;
 
   // Switch back to the old sheet
-  Q_ASSERT( m_pView->activeSheet() );
-  if ( m_pView->activeSheet()->sheetName() !=  m_sheetName )
+  Q_ASSERT( m_selection->activeSheet() );
+  if ( m_selection->activeSheet()->sheetName() !=  m_sheetName )
   {
-    sheet = m_pView->doc()->map()->findSheet( m_sheetName );
+    sheet = m_selection->activeSheet()->doc()->map()->findSheet( m_sheetName );
     if ( sheet )
-      m_pView->setActiveSheet( sheet );
+      m_selection->setActiveSheet( sheet );
   }
   else
-    sheet = m_pView->activeSheet();
-
-  // Revert the marker to its original position
-  m_pView->selection()->initialize(QRect(m_marker, m_anchor));//, sheet );
+    sheet = m_selection->activeSheet();
 }
 
 
@@ -431,8 +422,8 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
 
     m_resultText->setText( i18n( "Goal seeking with cell %1 found a solution:",
                                  m_selector3->textEdit()->toPlainText() ) );
-    m_newValue->setText( m_pView->doc()->locale()->formatNumber( startA ) );
-    m_currentValue->setText( m_pView->doc()->locale()->formatNumber( m_oldSource ) );
+    m_newValue->setText( m_selection->activeSheet()->doc()->locale()->formatNumber( startA ) );
+    m_currentValue->setText( m_selection->activeSheet()->doc()->locale()->formatNumber( m_oldSource ) );
     m_restored = false;
   }
   else
@@ -442,7 +433,7 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
     m_resultText->setText( i18n( "Goal seeking with cell %1 has found NO solution.",
                                  m_selector3->textEdit()->toPlainText() ) );
     m_newValue->setText( "" );
-    m_currentValue->setText( m_pView->doc()->locale()->formatNumber( m_oldSource ) );
+    m_currentValue->setText( m_selection->activeSheet()->doc()->locale()->formatNumber( m_oldSource ) );
     m_restored = true;
   }
 

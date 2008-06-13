@@ -42,11 +42,10 @@
 
 using namespace KSpread;
 
-ListDialog::ListDialog( QWidget* parent, const char* name )
+ListDialog::ListDialog(QWidget* parent)
   : KDialog( parent )
 {
   setCaption( i18n("Custom Lists") );
-  setObjectName( name );
   setButtons( Ok|Cancel );
   setModal( true );
 

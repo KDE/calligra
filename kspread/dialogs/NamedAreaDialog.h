@@ -38,14 +38,14 @@ class KListWidget;
 namespace KSpread
 {
 class Region;
-class View;
+class Selection;
 
 class NamedAreaDialog : public KDialog
 {
     Q_OBJECT
 
 public:
-    NamedAreaDialog(View* parent);
+    NamedAreaDialog(QWidget* parent, Selection* selection);
 
 public Q_SLOTS:
     void slotOk();
@@ -56,7 +56,7 @@ public Q_SLOTS:
     void displayAreaValues(const QString& name);
 
 private:
-    View*           m_pView;
+    Selection*      m_selection;
     KListWidget*    m_list;
     QLabel*         m_rangeName;
 };
@@ -67,7 +67,7 @@ class EditNamedAreaDialog : public KDialog
     Q_OBJECT
 
 public:
-    EditNamedAreaDialog(View* parent);
+    EditNamedAreaDialog(QWidget* parent, Selection* selection);
     ~EditNamedAreaDialog();
 
     QString areaName() const;
@@ -79,7 +79,7 @@ public Q_SLOTS:
     void slotAreaNameModified(const QString&);
 
 private:
-    View*       m_pView;
+    Selection*  m_selection;
     KLineEdit*  m_areaNameEdit;
     KComboBox*  m_sheets;
     KLineEdit*  m_cellRange;

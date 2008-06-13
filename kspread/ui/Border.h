@@ -61,6 +61,9 @@ protected:
 
     void drawText( QPainter& painter, const QFont& font, const QPointF& location, const QString& text, double width ) const;
 
+private Q_SLOTS:
+    void toolChanged(const QString& toolId);
+
 private:
     Canvas *m_pCanvas;
     View *m_pView;
@@ -111,6 +114,7 @@ private:
     bool m_bMousePressed;
 
     QRubberBand* m_rubberband;
+    bool m_cellToolIsActive;
 };
 
 
@@ -144,6 +148,9 @@ protected:
 
     void drawText( QPainter& painter, const QFont& font, const QPointF& location, const QString& text ) const;
 
+private Q_SLOTS:
+    void toolChanged(const QString& toolId);
+
 private:
     Canvas *m_pCanvas;
     View *m_pView;
@@ -164,6 +171,7 @@ private:
     bool m_bMousePressed;
 
     QRubberBand* m_rubberband;
+    bool m_cellToolIsActive;
 };
 
 
@@ -185,9 +193,13 @@ protected:
     virtual void mouseReleaseEvent( QMouseEvent* event );
     virtual void wheelEvent( QWheelEvent* );
 
+private Q_SLOTS:
+    void toolChanged(const QString& toolId);
+
 private:
     View*  m_view;
     bool   m_mousePressed;
+    bool m_cellToolIsActive;
 };
 
 } // namespace KSpread

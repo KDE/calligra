@@ -33,15 +33,15 @@ class KDoubleNumInput;
 
 namespace KSpread
 {
+class Selection;
 class Sheet;
-class View;
 
-class SeriesDlg : public KDialog
+class SeriesDialog : public KDialog
 {
     Q_OBJECT
 public:
 
-    SeriesDlg(View* parent, const char* name,const QPoint &_marker);
+    SeriesDialog(QWidget* parent, Selection* selection);
 
     Sheet* sheet;
 
@@ -49,7 +49,7 @@ public slots:
     virtual void slotButtonClicked(int button);
 
 protected:
-    View* m_pView;
+    Selection* m_selection;
     KDoubleNumInput *start;
     KDoubleNumInput *end;
     KDoubleNumInput *step;

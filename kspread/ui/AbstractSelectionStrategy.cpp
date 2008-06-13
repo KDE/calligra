@@ -69,6 +69,15 @@ void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::
         kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
         return;
     }
+    // Test whether mouse is over the Selection.handle
+    const QRectF selectionHandle = d->selection->selectionHandleArea(m_canvas->viewConverter());
+    if (selectionHandle.contains(position))
+    {
+        // If the cursor is over the handle, than it might be already on the next cell.
+        // Recalculate the cell position!
+        col = d->selection->activeSheet()->leftColumn(position.x() - m_canvas->viewConverter()->viewToDocumentX(2.0), xpos);
+        row = d->selection->activeSheet()->topRow(position.y() - m_canvas->viewConverter()->viewToDocumentY(2.0), ypos);
+    }
     // Update the selection.
     d->selection->update(QPoint(col, row));
     m_parent->repaintDecorations();

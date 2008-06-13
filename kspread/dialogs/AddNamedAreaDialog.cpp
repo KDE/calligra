@@ -33,17 +33,16 @@
 #include "Doc.h"
 #include "Localization.h"
 #include "NamedAreaManager.h"
-#include "Sheet.h"
-#include "View.h"
 #include "Selection.h"
+#include "Sheet.h"
 
 #include "commands/NamedAreaCommand.h"
 
 using namespace KSpread;
 
-AddNamedAreaDialog::AddNamedAreaDialog(View* parent)
+AddNamedAreaDialog::AddNamedAreaDialog(QWidget* parent, Selection* selection)
     : KDialog(parent)
-    , m_pView(parent)
+    , m_selection(selection)
 {
     setButtons(Ok | Cancel);
     setCaption(i18n("Add Named Area"));
@@ -81,12 +80,12 @@ void AddNamedAreaDialog::slotOk()
         return;
 
     const QString name = m_areaName->text();
-    const Region region(m_pView->selection()->lastRange(), m_pView->selection()->lastSheet());
-    if (m_pView->doc()->namedAreaManager()->namedArea(name) == region)
+    const Region region(m_selection->lastRange(), m_selection->lastSheet());
+    if (m_selection->activeSheet()->doc()->namedAreaManager()->namedArea(name) == region)
         return; // nothing to do
 
     NamedAreaCommand* command = 0;
-    if (m_pView->doc()->namedAreaManager()->contains(name))
+    if (m_selection->activeSheet()->doc()->namedAreaManager()->contains(name))
     {
         const QString question = i18n("The named area '%1' already exists.\n"
                                       "Do you want to replace it?", name);
@@ -100,7 +99,7 @@ void AddNamedAreaDialog::slotOk()
     }
     else
         command = new NamedAreaCommand();
-    command->setSheet(m_pView->activeSheet());
+    command->setSheet(m_selection->activeSheet());
     command->setAreaName(name);
     command->add(region);
     command->execute();

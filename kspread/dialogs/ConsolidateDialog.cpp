@@ -52,9 +52,9 @@
 #include <Doc.h>
 #include <Global.h>
 #include <Localization.h>
+#include <Selection.h>
 #include <Sheet.h>
 #include <Util.h>
-#include <View.h>
 
 #include <Formula.h>
 #include <Selection.h>
@@ -63,15 +63,14 @@
 
 using namespace KSpread;
 
-ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
+ConsolidateDialog::ConsolidateDialog(QWidget* parent, Selection* selection)
   : KDialog( parent )
 {
   setCaption( i18n("Consolidate") );
-  setObjectName( name );
   setModal( false );
   setAttribute( Qt::WA_DeleteOnClose );
   setButtons( Ok|Cancel);
-  m_pView = parent;
+  m_selection = selection;
 
   QWidget *page = new QWidget();
   setMainWidget( page );
@@ -128,7 +127,7 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_pRef, SIGNAL( returnPressed() ), this, SLOT( slotReturnPressed() ) );
 
-  connect(m_pView->selection(), SIGNAL(changed(const Region&)),
+  connect(m_selection, SIGNAL(changed(const Region&)),
           this, SLOT(slotSelectionChanged()));
   connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
   connect(this,SIGNAL(cancelClicked()),this,SLOT(slotCancel()));
@@ -153,13 +152,13 @@ struct st_cell
 
 void ConsolidateDialog::slotOk()
 {
-  m_pView->doc()->emitBeginOperation( false );
+  m_selection->activeSheet()->doc()->emitBeginOperation( false );
 
-  Map *map = m_pView->doc()->map();
+  Map *map = m_selection->activeSheet()->doc()->map();
 
-  Sheet* sheet = m_pView->activeSheet();
-  int dx = m_pView->selection()->lastRange().left();
-  int dy = m_pView->selection()->lastRange().top();
+  Sheet* sheet = m_selection->activeSheet();
+  int dx = m_selection->lastRange().left();
+  int dy = m_selection->lastRange().top();
 
   QString function;
 
@@ -204,14 +203,14 @@ void ConsolidateDialog::slotOk()
   if ( w <= ( ( desc == D_BOTH || desc == D_COL ) ? 1 : 0 ) ||
        h <= ( ( desc == D_BOTH || desc == D_ROW ) ? 1 : 0 ) )
   {
-    m_pView->slotUpdateView( m_pView->activeSheet() );
+    m_selection->emitModified();
     KMessageBox::error( this, i18n( "The range\n%1\nis too small" , *( r.begin() ) ));
     return;
   }
 
   if( (*it).firstRange().bottom()==KS_rowMax || (*it).firstRange().right()== KS_colMax )
   {
-    m_pView->slotUpdateView( m_pView->activeSheet() );
+    m_selection->emitModified();
     KMessageBox::error( this, i18n( "The range\n%1\nis too large" , *( r.begin() ) ));
     return;
   }
@@ -227,7 +226,7 @@ void ConsolidateDialog::slotOk()
 
     if(currentRange.bottom()==KS_rowMax || currentRange.right()== KS_colMax)
     {
-      m_pView->slotUpdateView( m_pView->activeSheet() );
+      m_selection->emitModified();
       KMessageBox::error( this, i18n( "The range\n%1\nis too large" , r[i]));
       return;
     }
@@ -235,7 +234,7 @@ void ConsolidateDialog::slotOk()
 	 ( desc == D_ROW && h != h2 ) ||
 	 ( desc == D_COL && w != w2 ) )
     {
-      m_pView->slotUpdateView( m_pView->activeSheet() );
+      m_selection->emitModified();
       QString tmp = i18n( "The ranges\n%1\nand\n%2\nhave different size", *( r.begin() ) , r[i] );
       KMessageBox::error( this, tmp);
       return;
@@ -260,7 +259,7 @@ void ConsolidateDialog::slotOk()
       r.setCoords( currentRange.left(), currentRange.top(), currentRange.right(), currentRange.bottom() );
       if ( t == sheet && r.intersects( dest ) )
       {
-        m_pView->slotUpdateView( m_pView->activeSheet() );
+        m_selection->emitModified();
 	QString tmp( i18n("The source tables intersect with the destination table") );
 	KMessageBox::error( this, tmp);
 	return;
@@ -330,7 +329,7 @@ void ConsolidateDialog::slotOk()
       r.setCoords( currentRange.left(), currentRange.top(), currentRange.right(), currentRange.bottom() );
       if ( t == sheet && r.intersects( dest ) )
       {
-        m_pView->slotUpdateView( m_pView->activeSheet() );
+        m_selection->emitModified();
 	QString tmp( i18n("The source tables intersect with the destination table") );
 	KMessageBox::error( this, tmp);
 	return;
@@ -412,7 +411,7 @@ void ConsolidateDialog::slotOk()
       r.setCoords( currentRange.left(), currentRange.top(), currentRange.right(), currentRange.bottom() );
       if ( t == sheet && r.intersects( dest ) )
       {
-        m_pView->slotUpdateView( m_pView->activeSheet() );
+        m_selection->emitModified();
 	QString tmp( i18n("The source tables intersect with the destination table") );
 	KMessageBox::error( this, tmp);
 	return;
@@ -515,7 +514,7 @@ void ConsolidateDialog::slotOk()
       r.setCoords( currentRange.left(), currentRange.top(), currentRange.right(), currentRange.bottom() );
       if ( t == sheet && r.intersects( dest ) )
       {
-        m_pView->slotUpdateView( m_pView->activeSheet() );
+        m_selection->emitModified();
 	QString tmp( i18n("The source tables intersect with the destination table") );
 	KMessageBox::error( this, tmp);
 	return;
@@ -600,8 +599,7 @@ void ConsolidateDialog::slotOk()
       }
     }
   }
-  m_pView->updateEditWidget();
-  m_pView->slotUpdateView( m_pView->activeSheet() );
+  m_selection->emitModified();
   done( QDialog::Accepted );
 }
 
@@ -640,13 +638,13 @@ QStringList ConsolidateDialog::refs()
 
 void ConsolidateDialog::slotSelectionChanged()
 {
-  if (!m_pView->selection()->isValid())
+  if (!m_selection->isValid())
   {
     m_pRef->setText( "" );
     return;
   }
 
-  QString area = m_pView->selection()->name();
+  QString area = m_selection->name();
   m_pRef->setText( area );
   m_pRef->setSelection( 0, area.length() );
 }
@@ -655,7 +653,7 @@ void ConsolidateDialog::slotReturnPressed()
 {
   QString txt = m_pRef->text();
 
-  const Region r( txt, m_pView->doc()->map() );
+  const Region r( txt, m_selection->activeSheet()->doc()->map() );
   if ( !r.isValid() )
   {
     KMessageBox::error( this, i18n("The range\n%1\n is malformed", txt ));

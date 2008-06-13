@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="34">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="35">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -88,19 +88,19 @@
   </Menu>
  </Menu>
  <Menu name="Format"><text>F&amp;ormat</text>
-  <Action name="cellLayout"/>
-  <Action name="styles"/>
-  <Action name="stylemenu"/>
-  <Action name="createStyle"/>
+  <Action name="cellStyle"/>
+  <Action name="styleDialog"/>
+  <Action name="setStyle"/>
+  <Action name="createStyleFromCell"/>
   <Action name="conditional"/>
   <Action name="sheetFormat"/>
   <Separator/>
   <Menu name="MergeCellMenu" icon="mergecell"><text>Merge Cells</text>
-    <Action name="mergecell"/>
-    <Action name="mergecellHorizontal"/>
-    <Action name="mergecellVertical"/>
+    <Action name="mergeCells"/>
+    <Action name="mergeCellsHorizontal"/>
+    <Action name="mergeCellsVertical"/>
   </Menu>
-  <Action name="dissociatecell"/>
+  <Action name="dissociateCells"/>
   <Separator/>
   <Action name="adjust"/>
   <Menu name="Row"><text>&amp;Row</text>
@@ -159,14 +159,15 @@
   <Separator/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
-  <Action name="showFormulaBar" group="settings_show" />
   <Action name="showTabBar" group="settings_show" />
   <Action name="showStatusBar" group="settings_show" />
-  
   <Action name="configureNotifications" group="settings_configure"/>
   <Action name="preference" group="settings_configure"/>
  </Menu>
 </MenuBar>
+<Menu name="default_canvas_popup">
+    <ActionList name="toolproxy_action_list"/>
+</Menu>
 <Menu name="calc_popup">
  <Action name="menu_none"/>
  <Separator/>
@@ -192,28 +193,28 @@
  <Action name="lastSheet"/>
 </ToolBar>
 <ToolBar fullWidth="true" hidden="true" name="fontPropertyToolBar"><text>Format</text>
- <Action name="selectFont"/>
- <Action name="selectFontSize"/>
+ <Action name="font"/>
+ <Action name="fontSize"/>
  <Separator/>
  <Action name="bold"/>
  <Action name="italic"/>
  <Action name="underline"/>
  <Separator/>
- <Action name="left"/>
- <Action name="center"/>
- <Action name="right"/>
+ <Action name="alignLeft"/>
+ <Action name="alignCenter"/>
+ <Action name="alignRight"/>
  <Separator/>
- <Action name="top"/>
- <Action name="middle"/>
- <Action name="bottom"/>
- <Action name="multiRow"/>
+ <Action name="alignTop"/>
+ <Action name="alignMiddle"/>
+ <Action name="alignBottom"/>
+ <Action name="wrapText"/>
  <Separator/>
- <Action name="cellLayout"/>
+ <Action name="cellStyle"/>
  <!--
  <Action name="percent"/>
- <Action name="precplus"/>
- <Action name="precminus"/>
- <Action name="money"/>
+ <Action name="increasePrecision"/>
+ <Action name="decreasePrecision"/>
+ <Action name="currency"/>
  //-->
 </ToolBar>
 <ToolBar fullWidth="true" hidden="true" name="colorAndBorderToolBar"><text>Color/Border</text>
@@ -226,8 +227,8 @@
  <Action name="borderRemove"/>
  <Action name="borderColor"/>
  <Separator/>
- <Action name="dissociatecell"/>
- <Action name="mergecell"/>
+ <Action name="dissociateCells"/>
+ <Action name="mergeCells"/>
  <Separator/>
  <Action name="textColor"/>
  <Action name="backgroundColor"/>

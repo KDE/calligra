@@ -77,7 +77,7 @@ TableTool::TableTool( KoCanvasBase* canvas )
 {
     setObjectName("TableTool");
 
-    d->selection = new Selection(this);
+    d->selection = new Selection(m_canvas);
     connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(changeSelection(const Region&)));
     d->tableShape = 0;
 

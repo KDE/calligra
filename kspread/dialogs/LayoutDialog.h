@@ -46,7 +46,6 @@
 #include "RowColumnFormat.h"
 #include "Style.h"
 #include "Value.h"
-#include "View.h"
 
 #include "ui_FontWidget.h"
 #include "ui_PositionWidget.h"
@@ -73,6 +72,7 @@ class Sheet;
 class CustomStyle;
 class StyleManager;
 class CellFormatDialog;
+class Selection;
 class StyleCommand;
 
 enum BorderType
@@ -479,9 +479,8 @@ public:
     /**
      * Create a format dlg for the rectangular area in '_sheet'.
      */
-    CellFormatDialog( View * _view, Sheet * _sheet );
-    CellFormatDialog( View * _view, CustomStyle * _style, StyleManager * _manager,
-                   Doc * doc );
+    CellFormatDialog(QWidget* parent, Selection* selection);
+    CellFormatDialog(QWidget* parent, Selection* selection, CustomStyle* style, StyleManager* manager);
 
     ~CellFormatDialog();
 
@@ -505,7 +504,7 @@ public:
     bool isSingleCell() { return ( left == right && top == bottom ); }
     bool checkCircle( QString const & name, QString const & parent );
 
-    KLocale * locale() const { return m_pView->doc()->locale(); }
+    KLocale * locale() const { return m_doc->locale(); }
 
 
     struct CellBorderFormat
@@ -622,7 +621,7 @@ protected:
 
     Doc   * m_doc;
     Sheet * m_sheet;
-    View  * m_pView;
+    Selection  * m_selection;
     CustomStyle * m_style;
     StyleManager * m_styleManager;
 

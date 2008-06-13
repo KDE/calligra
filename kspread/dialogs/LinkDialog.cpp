@@ -24,11 +24,11 @@
 
 #include "LinkDialog.h"
 
-#include "View.h"
-#include "Doc.h"
 #include "Cell.h"
-#include "Selection.h"
+#include "Doc.h"
 #include "NamedAreaManager.h"
+#include "Selection.h"
+#include "Sheet.h"
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -67,8 +67,8 @@ public:
     KPageWidgetItem* p1, *p2, *p3, *p4;
 };
 
-LinkDialog::LinkDialog( View* view, const char* )
-    : KPageDialog()
+LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
+    : KPageDialog(parent)
     , d( new Private )
 {
     setCaption( i18n("Insert Link") );
@@ -162,14 +162,13 @@ LinkDialog::LinkDialog( View* view, const char* )
     d->cellLink = new KComboBox( d->cellPage );
     d->cellLink->setEditable(true);
 
-    const Sheet *sheet = view->activeSheet();
-    const Selection *selection = view->selection();
+    const Sheet *sheet = selection->activeSheet();
     if( sheet && selection ) {
         Cell cell(sheet, selection->cursor());
         d->cellLink->addItem( cell.fullName() );
     }
 
-    const Doc *doc = view->doc();
+    const Doc *doc = selection->activeSheet()->doc();
     const NamedAreaManager *manager = doc->namedAreaManager();
     d->cellLink->addItems( manager->areaNames() );
 

@@ -36,14 +36,14 @@ class QCheckBox;
 
 namespace KSpread
 {
-class View;
+class Selection;
 
-class DlgValidity : public KPageDialog
+class ValidityDialog : public KPageDialog
 {
     Q_OBJECT
 
 public:
-    DlgValidity(View* parent, const char* name ,const QRect &_marker );
+    ValidityDialog(QWidget* parent, Selection* selection);
     void init();
 
 public slots:
@@ -55,8 +55,8 @@ public slots:
 protected:
     void displayOrNotListOfValidity( bool _displayList);
 
-    View* m_pView;
-    QRect  marker;
+    Selection* m_selection;
+
     KLineEdit *val_max;
     KLineEdit *val_min;
     QLabel *edit1;

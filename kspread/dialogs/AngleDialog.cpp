@@ -31,23 +31,24 @@
 #include <klocale.h>
 #include <knuminput.h>
 
-#include <Cell.h>
-#include <Doc.h>
-#include <Sheet.h>
-#include <View.h>
+#include "Cell.h"
+#include "Doc.h"
+#include "Selection.h"
+#include "Sheet.h"
+
+#include "commands/StyleCommand.h"
+#include "commands/RowColumnManipulators.h"
 
 using namespace KSpread;
 
-AngleDialog::AngleDialog(View* parent, const char* name, const QPoint &_marker)
+AngleDialog::AngleDialog(QWidget* parent, Selection* selection)
   : KDialog( parent )
 {
   setCaption( i18n("Change Angle") );
-  setObjectName( name );
   setModal( true );
   setButtons( Ok|Cancel|Default );
 
-  m_pView=parent;
-  marker=_marker;
+  m_selection = selection;
 
   QWidget *page = new QWidget();
   setMainWidget( page );
@@ -69,13 +70,29 @@ AngleDialog::AngleDialog(View* parent, const char* name, const QPoint &_marker)
 
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
   connect( this, SIGNAL(defaultClicked()), this, SLOT(slotDefault()) );
-  int angle = - Cell( m_pView->activeSheet(), marker ).style().angle();
+  int angle = - Cell(m_selection->activeSheet(), m_selection->marker()).style().angle();
   m_pAngle->setValue( angle );
 }
 
 void AngleDialog::slotOk()
 {
-    m_pView->setSelectionAngle( -m_pAngle->value() );
+    m_selection->activeSheet()->doc()->beginMacro( i18n("Change Angle") );
+
+    StyleCommand* manipulator = new StyleCommand();
+    manipulator->setSheet(m_selection->activeSheet());
+    manipulator->setAngle(-m_pAngle->value());
+    manipulator->add(*m_selection);
+    m_selection->activeSheet()->doc()->addCommand(manipulator);
+
+    AdjustColumnRowManipulator* manipulator2 = new AdjustColumnRowManipulator();
+    manipulator2->setSheet(m_selection->activeSheet());
+    manipulator2->setAdjustColumn(true);
+    manipulator2->setAdjustRow(true);
+    manipulator2->add(*m_selection);
+    m_selection->activeSheet()->doc()->addCommand(manipulator2);
+
+    m_selection->activeSheet()->doc()->endMacro();
+
     accept();
 }
 

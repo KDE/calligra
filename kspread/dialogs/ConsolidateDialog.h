@@ -41,14 +41,14 @@ class Q3ListBox;
 
 namespace KSpread
 {
+class Selection;
 class Sheet;
-class View;
 
 class ConsolidateDialog : public KDialog
 {
   Q_OBJECT
 public:
-  ConsolidateDialog( View* parent, const char* name );
+  ConsolidateDialog(QWidget* parent, Selection* selection);
   virtual ~ConsolidateDialog();
   QStringList refs();
 
@@ -62,7 +62,7 @@ public slots:
   void slotReturnPressed();
 
 protected:
-  View* m_pView;
+  Selection* m_selection;
   KLineEdit* m_pRef;
   Q3ListBox* m_pRefs;
   KComboBox* m_pFunction;

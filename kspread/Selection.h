@@ -23,12 +23,14 @@
 
 #include <QColor>
 #include <QList>
-#include <QObject>
+
+#include <KoToolSelection.h>
 
 #include <kdebug.h>
 
 #include "Region.h"
 
+class KoCanvasBase;
 class KoViewConverter;
 
 namespace KSpread
@@ -43,7 +45,7 @@ class CellEditor;
  * \author Torben Weis <weis@kde.org>
  * \author Stefan Nikolaus <stefan.nikolaus@kdemail.net>
  */
-class KSPREAD_EXPORT Selection : public QObject, public Region
+class KSPREAD_EXPORT Selection : public KoToolSelection, public Region
 {
   Q_OBJECT
 
@@ -58,12 +60,21 @@ public:
     MultipleCells = 1   ///< multiple cell selection mode
   };
 
+    /**
+     * The editor type.
+     */
+    enum Editor
+    {
+        EmbeddedEditor,  ///< the embedded editor appearing in a cell
+        ExternalEditor   ///< the external editor located in the tool options
+    };
+
   /**
    * Constructor.
    * Creates a new selection with (1,1) as initial location.
-   * @param parent the parent widget
+   * @param canvasBase the canvas interface
    */
-  explicit Selection( QObject* parent );
+  explicit Selection(KoCanvasBase* canvasBase);
 
   /**
    * Copy Constructor.
@@ -233,11 +244,6 @@ public:
 
 
   /**
-   * Sets whether multiple occurrences of elements are allowed.
-   */
-  void setMultipleOccurences(bool state);
-
-  /**
    * \param mode single cell or multiple cell selection
    */
   void setSelectionMode(Mode mode);
@@ -251,12 +257,48 @@ public:
 
   const QList<QColor>& colors() const;
 
+    void selectAll();
+
+    void setLastEditorWithFocus(Editor type);
+    Editor lastEditorWithFocus() const;
+
+    void startReferenceSelection(const Region& region = Region());
+    void endReferenceSelection();
+    void setReferenceSelectionMode(bool enable);
+    bool referenceSelectionMode() const;
+
+    void emitAboutToModify();
+    void emitModified();
+    void emitRefreshSheetViews();
+    void emitVisibleSheetRequested(Sheet* sheet);
+    void emitCloseEditor(bool saveChanges, bool expandMatrix = false);
+    void emitRequestFocusEditor();
+
 signals:
   /**
    * Emitted when the Selection was changed.
    * @param region the changed part of the Selection
    */
   void changed(const Region& region);
+
+    /**
+     * An operation on the selection is about to happen.
+     */
+    void aboutToModify(const Region& region);
+
+    /**
+     * Emitted when the content was modified.
+     */
+    void modified(const Region& region);
+
+    void refreshSheetViews();
+    void visibleSheetRequested(Sheet* sheet);
+    void closeEditor(bool saveChanges, bool expandMatrix);
+    void activeSheetChanged(Sheet* sheet);
+    void requestFocusEditor();
+
+    void documentReadWriteToggled(bool readWrite);
+    void sheetProtectionToggled(bool protect);
 
 protected:
   class Point;

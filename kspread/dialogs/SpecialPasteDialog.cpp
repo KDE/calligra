@@ -29,15 +29,14 @@
 
 #include "Canvas.h"
 #include "Doc.h"
-#include "Sheet.h"
-#include "View.h"
 #include "Selection.h"
+#include "Sheet.h"
 
 using namespace KSpread;
 
-SpecialPasteDialog::SpecialPasteDialog( View* parent )
+SpecialPasteDialog::SpecialPasteDialog(QWidget* parent, Selection* selection)
   : KDialog( parent ),
-    m_pView( parent )
+    m_selection(selection)
 {
   setButtons( Ok|Cancel );
   setCaption( i18n( "Special Paste" ) );
@@ -91,9 +90,10 @@ void SpecialPasteDialog::slotOk()
     if( divisionButton->isChecked() )
       op = Paste::Div;
 
-    m_pView->doc()->emitBeginOperation( false );
-    m_pView->activeSheet()->paste( m_pView->selection()->lastRange(), true, sp, op );
-    m_pView->slotUpdateView( m_pView->activeSheet() );
+    m_selection->activeSheet()->doc()->emitBeginOperation( false );
+    m_selection->activeSheet()->paste( m_selection->lastRange(), true, sp, op );
+    m_selection->emitModified();
+    m_selection->activeSheet()->doc()->emitEndOperation( );
     accept();
 }
 

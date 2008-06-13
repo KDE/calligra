@@ -45,7 +45,7 @@ class KPushButton;
 
 namespace KSpread
 {
-class View;
+class Selection;
 
 class DatabaseDialog : public KAssistantDialog
 {
@@ -54,7 +54,7 @@ class DatabaseDialog : public KAssistantDialog
  public:
   enum PageId { eDatabase = 0, eTables = 1, eColumns = 2, eOptions = 3, eResult = 4 };
 
-  DatabaseDialog( View * parent, QRect const & rect, const char * name = 0, bool modal = false, Qt::WFlags fl = 0 );
+  DatabaseDialog(QWidget* parent, Selection* selection);
   virtual ~DatabaseDialog();
 
  private slots:
@@ -76,7 +76,7 @@ class DatabaseDialog : public KAssistantDialog
 
  private:
   int            m_currentPage;
-  View  * m_pView;
+  Selection    * m_selection;
   QRect          m_targetRect;
   QSqlDatabase   m_dbConnection;
 

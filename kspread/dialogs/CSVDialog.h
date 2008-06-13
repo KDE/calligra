@@ -28,7 +28,7 @@
 
 namespace KSpread
 {
-class View;
+class Selection;
 
 /**
  * Provides dialog for managing CSV (comma separated value) data.
@@ -47,7 +47,7 @@ class CSVDialog : public KoCsvImportDialog
 public:
   enum Mode { Clipboard, File, Column };
 
-  CSVDialog( View * parent, QRect const & rect, Mode mode);
+  CSVDialog(QWidget* parent, Selection* selection, Mode mode);
   ~CSVDialog();
 
   bool canceled();
@@ -59,7 +59,7 @@ protected:
   void accept();
 
 private:
-  View*   m_pView;
+  Selection* m_selection;
   bool    m_canceled;
   QRect   m_targetRect;
   Mode    m_mode;

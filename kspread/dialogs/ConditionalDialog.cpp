@@ -31,7 +31,6 @@
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"
-#include "View.h"
 
 // commands
 #include "commands/ConditionCommand.h"
@@ -271,18 +270,15 @@ void ConditionalWidget::slotTextChanged3( const QString & text )
  * ConditionalDialog
  * Sets conditional cell formattings.
  */
-ConditionalDialog::ConditionalDialog( View * parent, const char * name,
-                                              const QRect & marker )
+ConditionalDialog::ConditionalDialog(QWidget* parent, Selection* selection)
   : KDialog( parent ),
-    m_view( parent ),
-    m_dlg( new ConditionalWidget( this ) ),
-    m_marker( marker )
+    m_selection(selection),
+    m_dlg( new ConditionalWidget( this ) )
 {
-  Q_UNUSED(name)
   setButtons( KDialog::Ok|KDialog::Cancel );
   setCaption( i18n( "Conditional Styles") );
 
-  QStringList list( m_view->doc()->styleManager()->styleNames() );
+  QStringList list(m_selection->activeSheet()->doc()->styleManager()->styleNames());
 
   m_dlg->m_style_1->insertItems( 0, list );
   m_dlg->m_style_2->insertItems( 0, list );
@@ -306,15 +302,15 @@ void ConditionalDialog::init()
   QLinkedList<Conditional>::iterator it1;
   QLinkedList<Conditional>::iterator it2;
 
-  Sheet* sheet = m_view->activeSheet();
+  Sheet* sheet = m_selection->activeSheet();
 
-  conditionList = Cell( sheet, m_marker.topLeft() ).conditions().conditionList();
+  conditionList = Cell( sheet, m_selection->marker() ).conditions().conditionList();
   /* this is the list, but only display the conditions common to all selected
      cells*/
 
-  for ( int x = m_marker.left(); x <= m_marker.right(); x++ )
+  for ( int x = m_selection->lastRange().left(); x <= m_selection->lastRange().right(); x++ )
   {
-    for ( int y = m_marker.top(); y <= m_marker.bottom(); y++ )
+    for ( int y = m_selection->lastRange().top(); y <= m_selection->lastRange().bottom(); y++ )
     {
       otherList = Cell( sheet, x, y ).conditions().conditionList();
 
@@ -645,7 +641,7 @@ void ConditionalDialog::slotOk()
 
   kDebug() <<"Input data is valid";
 
-  StyleManager * manager = m_view->doc()->styleManager();
+  StyleManager * manager = m_selection->activeSheet()->doc()->styleManager();
 
   QLinkedList<Conditional> newList;
 
@@ -665,9 +661,9 @@ void ConditionalDialog::slotOk()
 
   kDebug() <<"Setting conditional list";
   CondtionCommand* manipulator = new CondtionCommand();
-  manipulator->setSheet( m_view->activeSheet() );
+  manipulator->setSheet( m_selection->activeSheet() );
   manipulator->setConditionList( newList );
-  manipulator->add( *m_view->selection() );
+  manipulator->add(*m_selection);
   manipulator->execute();
 
   accept();

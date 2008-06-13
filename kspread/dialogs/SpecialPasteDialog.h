@@ -32,20 +32,20 @@
 
 namespace KSpread
 {
-class View;
+class Selection;
 
 class SpecialPasteDialog : public KDialog, public Ui::SpecialPasteWidget
 {
     Q_OBJECT
 public:
-    explicit SpecialPasteDialog( View* parent );
+    explicit SpecialPasteDialog(QWidget* parent, Selection* selection);
 
 public slots:
     void slotOk();
     void slotToggled( bool );
 
 private:
-    View* m_pView;
+    Selection* m_selection;
 };
 
 } // namespace KSpread

@@ -42,7 +42,6 @@
 #include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
-#include "View.h"
 #include "Functions.h"
 
 #include <kcombobox.h>
@@ -61,35 +60,29 @@
 
 using namespace KSpread;
 
-FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& formulaName)
+FormulaDialog::FormulaDialog(QWidget* parent, Selection* selection, CellEditor* editor, const QString& formulaName)
   : KDialog( parent )
 {
     setCaption( i18n("Function") );
-    setObjectName( name );
     setModal( true );
     setButtons( Ok|Cancel );
     //setWFlags( Qt::WDestructiveClose );
 
-    m_pView = parent;
+    m_selection = selection;
+    m_editor = editor;
     m_focus = 0;
     m_desc = 0;
 
-    Cell cell( m_pView->activeSheet(), m_pView->selection()->marker() );
+    Cell cell( m_selection->activeSheet(), m_selection->marker() );
     m_oldText = cell.userInput();
     // Make sure that there is a cell editor running.
-    if ( !m_pView->canvasWidget()->editor() )
-    {
-        m_pView->canvasWidget()->createEditor();
-        if(cell.userInput().isEmpty())
-          m_pView->canvasWidget()->editor()->setText( "=" );
+    if(cell.userInput().isEmpty())
+        m_editor->setText( "=" );
+    else
+        if(cell.userInput().at(0)!='=')
+            m_editor->setText( '='+cell.userInput() );
         else
-          if(cell.userInput().at(0)!='=')
-            m_pView->canvasWidget()->editor()->setText( '='+cell.userInput() );
-          else
-            m_pView->canvasWidget()->editor()->setText( cell.userInput() );
-    }
-
-    Q_ASSERT( m_pView->canvasWidget()->editor() );
+            m_editor->setText( cell.userInput() );
 
     QWidget *page = new QWidget(this);
     setMainWidget( page );
@@ -224,19 +217,19 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     connect( fiveElement,SIGNAL(textChanged ( const QString & )),
              this,SLOT(slotChangeText(const QString &)));
 
-    connect( m_pView->choice(), SIGNAL(changed(const Region&)),
+    connect( m_selection, SIGNAL(changed(const Region&)),
              this, SLOT(slotSelectionChanged()));
 
     connect( m_browser, SIGNAL( linkClicked( const QString& ) ),
              this, SLOT( slotShowFunction( const QString& ) ) );
 
     // Save the name of the active sheet.
-    m_sheetName = m_pView->activeSheet()->sheetName();
+    m_sheetName = m_selection->activeSheet()->sheetName();
     // Save the cells current text.
-    QString tmp_oldText = m_pView->canvasWidget()->editor()->text();
+    QString tmp_oldText = m_editor->text();
     // Position of the cell.
-    m_column = m_pView->selection()->marker().x();
-    m_row = m_pView->selection()->marker().y();
+    m_column = m_selection->marker().x();
+    m_row = m_selection->marker().y();
 
     if( tmp_oldText.isEmpty() )
         result->setText("=");
@@ -249,7 +242,7 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     }
 
     // Allow the user to select cells on the spreadsheet.
-    m_pView->canvasWidget()->startChoose();
+    m_selection->startReferenceSelection();
 
     qApp->installEventFilter( this );
 
@@ -333,79 +326,62 @@ bool FormulaDialog::eventFilter( QObject* obj, QEvent* ev )
         return false;
 
     if ( m_focus )
-        m_pView->canvasWidget()->startChoose();
+        m_selection->startReferenceSelection();
 
     return false;
 }
 
 void FormulaDialog::slotOk()
 {
-    m_pView->doc()->emitBeginOperation( false );
+    m_selection->activeSheet()->doc()->emitBeginOperation( false );
 
-    m_pView->canvasWidget()->endChoose();
-    // Switch back to the old sheet
-    if( m_pView->activeSheet()->sheetName() !=  m_sheetName )
-    {
-        Sheet *sheet=m_pView->doc()->map()->findSheet(m_sheetName);
-        if( sheet)
-	    m_pView->setActiveSheet(sheet);
-    }
+    m_selection->endReferenceSelection();
 
     // Revert the marker to its original position
-    m_pView->selection()->initialize( QPoint( m_column, m_row ) );
+    m_selection->initialize( QPoint( m_column, m_row ) );
 
     // If there is still an editor then set the text.
     // Usually the editor is always in place.
-    if( m_pView->canvasWidget()->editor() != 0 )
+    if( m_editor != 0 )
     {
-        Q_ASSERT( m_pView->canvasWidget()->editor() );
+        Q_ASSERT( m_editor );
         QString tmp = result->text();
         if( tmp.at(0) != '=')
 	    tmp = '=' + tmp;
-        int pos = m_pView->canvasWidget()->editor()->cursorPosition()+ tmp.length();
-        m_pView->canvasWidget()->editor()->setText( tmp );
-        m_pView->canvasWidget()->editor()->setFocus();
-        m_pView->canvasWidget()->editor()->setCursorPosition( pos );
+        int pos = m_editor->cursorPosition()+ tmp.length();
+        m_editor->setText( tmp );
+        m_editor->setFocus();
+        m_editor->setCursorPosition( pos );
     }
 
-    m_pView->slotUpdateView( m_pView->activeSheet() );
+    m_selection->activeSheet()->doc()->emitEndOperation();
+    m_selection->emitModified();
     accept();
-    //  delete this;
+    deleteLater();
 }
 
 void FormulaDialog::slotClose()
 {
-    m_pView->doc()->emitBeginOperation( false );
+    deleteLater();
+    m_selection->activeSheet()->doc()->emitBeginOperation( false );
 
-    m_pView->canvasWidget()->endChoose();
-
-    // Switch back to the old sheet
-    if(m_pView->activeSheet()->sheetName() !=  m_sheetName )
-    {
-        Sheet *sheet=m_pView->doc()->map()->findSheet(m_sheetName);
-        if( !sheet )
-	    return;
-	m_pView->setActiveSheet(sheet);
-    }
-
+    m_selection->endReferenceSelection();
 
     // Revert the marker to its original position
-    m_pView->selection()->initialize( QPoint( m_column, m_row ) );
+    m_selection->initialize( QPoint( m_column, m_row ) );
 
     // If there is still an editor then reset the text.
     // Usually the editor is always in place.
-    if( m_pView->canvasWidget()->editor() != 0 )
+    if( m_editor != 0 )
     {
-        Q_ASSERT( m_pView->canvasWidget()->editor() );
-        m_pView->canvasWidget()->editor()->setText( m_oldText );
-        m_pView->canvasWidget()->editor()->setFocus();
+        Q_ASSERT( m_editor );
+        m_editor->setText( m_oldText );
+        m_editor->setFocus();
     }
 
-    m_pView->slotUpdateView( m_pView->activeSheet() );
+    m_selection->activeSheet()->doc()->emitEndOperation();
+    m_selection->emitModified();
     reject();
-    //laurent 2002-01-03 comment this line otherwise kspread crash
-    //but dialog box is not deleted => not good
-    //delete this;
 }
 
 void FormulaDialog::slotSelectButton()
@@ -503,7 +479,7 @@ QString FormulaDialog::createParameter( const QString& _text, int param )
     case KSpread_Any:
     {
         bool isNumber;
-        double tmp = m_pView->doc()->locale()->readNumber( _text, &isNumber );
+        double tmp = m_selection->activeSheet()->doc()->locale()->readNumber( _text, &isNumber );
         Q_UNUSED( tmp );
 
         //In case of number or boolean return _text, else return value as KSpread_String
@@ -535,7 +511,7 @@ QString FormulaDialog::createParameter( const QString& _text, int param )
         }
         else
         {
-            const Region region(_text, m_pView->doc()->map());
+            const Region region(_text, m_selection->activeSheet()->doc()->map());
             if (!region.isValid())
             {
                 text = '"';
@@ -783,9 +759,9 @@ void FormulaDialog::slotSelectionChanged()
     if ( !m_focus )
         return;
 
-    if (m_pView->choice()->isValid())
+    if (m_selection->isValid())
     {
-        QString area = m_pView->choice()->name();
+        QString area = m_selection->name();
         m_focus->setText( area );
     }
 }
@@ -814,6 +790,7 @@ void FormulaDialog::slotActivated( const QString& category )
 
 void FormulaDialog::closeEvent ( QCloseEvent * e )
 {
+    deleteLater();
     e->accept();
 }
 

@@ -29,18 +29,18 @@ class QRadioButton;
 
 namespace KSpread
 {
-class View;
+class Selection;
 
 class PasteInsertDialog : public KDialog
 {
     Q_OBJECT
 public:
-    PasteInsertDialog( View* parent, const char* name, const QRect &_rect );
+    PasteInsertDialog(QWidget* parent, Selection* selection);
 
 public slots:
     void slotOk();
 private:
-  View* m_pView;
+  Selection* m_selection;
   QRadioButton *rb1;
   QRadioButton *rb2;
   QRect  rect;

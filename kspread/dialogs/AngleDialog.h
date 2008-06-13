@@ -30,20 +30,19 @@ class KIntNumInput;
 
 namespace KSpread
 {
-class View;
+class Selection;
 
 class AngleDialog : public KDialog
 {
   Q_OBJECT
 public:
-  AngleDialog( View* parent,const char* name,const QPoint &_marker);
+  AngleDialog(QWidget* parent, Selection* selection);
 
 public slots:
   void slotOk();
   void slotDefault();
 protected:
-  View* m_pView;
-  QPoint  marker;
+  Selection* m_selection;
   KIntNumInput *m_pAngle;
 };
 

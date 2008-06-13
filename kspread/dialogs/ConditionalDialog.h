@@ -33,8 +33,8 @@ class KLineEdit;
 
 namespace KSpread
 {
+class Selection;
 class Style;
-class View;
 
 class ConditionalWidget : public QWidget
 {
@@ -70,8 +70,7 @@ class ConditionalDialog : public KDialog
 {
   Q_OBJECT
  public:
-  ConditionalDialog( View * parent, const char * name,
-                         const QRect & marker );
+  ConditionalDialog(QWidget* parent, Selection* selection);
 
   void init();
 
@@ -79,9 +78,8 @@ class ConditionalDialog : public KDialog
   void slotOk();
 
  protected:
-  View *              m_view;
+  Selection*          m_selection;
   ConditionalWidget * m_dlg;
-  QRect               m_marker;
   Conditional::Type   m_result;
 
  private:

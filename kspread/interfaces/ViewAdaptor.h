@@ -70,6 +70,7 @@ public Q_SLOTS: // METHODS
     /** Return the range of cells that is selected. */
     virtual QRect selection();
 
+#if 0 // -> cell tool
     /** Display the find dialog to find something in the document. */
     virtual void find();
     /** Display the replace dialog to replace something in the document. */
@@ -89,6 +90,7 @@ public Q_SLOTS: // METHODS
     virtual void gotoCell();
     /** Display the "Change Angle" dialog to offer to change the angle of a cell. */
     virtual void changeAngle();
+#endif
     virtual void preference();
     /** Select the next sheet as active sheet. */
     virtual void nextSheet();
@@ -96,6 +98,7 @@ public Q_SLOTS: // METHODS
     virtual void previousSheet();
     /** Select the sheet with name \p sheetName as active sheet. */
     virtual bool showSheet(const QString& sheetName);
+#if 0 // -> cell tool
     /** Display the dialog to create a custom lists for sorting or autofill. */
     virtual void sortList();
     /** Set a name for a region of the spreadsheet. */
@@ -153,9 +156,11 @@ public Q_SLOTS: // METHODS
     virtual void insertFromClipboard();
     /** Display the "Text to Columns..." dialog. */
     virtual void textToColumns();
+#endif
     /** Copy the content of the range of cells that is selected. */
     virtual void copyAsText();
 
+#if 0 // -> cell tool
     /** Set the cell formatting to look like your local currency. */
     virtual void setSelectionMoneyFormat( bool b );
     /** Set the cell formatting to look like a percentage. */
@@ -172,10 +177,13 @@ public Q_SLOTS: // METHODS
     virtual void setSelectionFirstLetterUpper();
     /** Print cell contents vertically. */
     virtual void setSelectionVerticalText(bool enable);
+#endif
     /** Set the comment of all selected cells to the defined comment string. */
     virtual void setSelectionComment(const QString& comment);
+#if 0 // -> cell tool
     /** Set the angle of all selected cells to the defined angle value. */
     virtual void setSelectionAngle(int value);
+#endif
     /** Set the text color of all selected cells to the defined color value. */
     virtual void setSelectionTextColor(const QColor& txtColor );
     /** Set the background color of all selected cells to the defined color value. */
@@ -183,12 +191,14 @@ public Q_SLOTS: // METHODS
     /** Set the border color of all selected cells to the defined color value. */
     virtual void setSelectionBorderColor(const QColor& bdColor );
 
+#if 0 // -> cell tool
     /** Delete content of the range of cells that is selected. */
     virtual void deleteSelection();
     /** Copy the content of the range of cells that is selected. */
     virtual void copySelection();
     /** Cut the content of the range of cells that is selected. */
     virtual void cutSelection();
+#endif
 
     /** Set the color of the left border. */
     virtual void setLeftBorderColor(const QColor& color);
@@ -202,6 +212,7 @@ public Q_SLOTS: // METHODS
     virtual void setAllBorderColor(const QColor& color);
     /** Set the color of the outline border. */
     virtual void setOutlineBorderColor(const QColor& color);
+#if 0 // -> cell tool
     /** Remove border. */
     virtual void removeBorder();
 
@@ -226,6 +237,7 @@ public Q_SLOTS: // METHODS
     void increaseFontSize();
     /** Decrease the size of the font. */
     void decreaseFontSize();
+#endif
 
 Q_SIGNALS:
 

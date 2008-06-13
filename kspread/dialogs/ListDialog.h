@@ -38,7 +38,7 @@ class ListDialog: public KDialog
   Q_OBJECT
 
 public:
-  ListDialog( QWidget* parent, const char* name );
+  ListDialog(QWidget* parent);
   void init();
 
 public slots:

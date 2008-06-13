@@ -34,7 +34,7 @@ class QRect;
 
 namespace KSpread
 {
-class View;
+class Selection;
 
 class InsertDialog : public KDialog
 {
@@ -42,13 +42,13 @@ class InsertDialog : public KDialog
 public:
     enum Mode { Insert, Remove };
 
-    InsertDialog( View* parent, const char* name, const QRect &_rect, Mode _mode );
+    InsertDialog(QWidget* parent, Selection* selection, Mode _mode );
 
 public slots:
     void slotOk();
 
 private:
-  View* m_pView;
+  Selection* m_selection;
 
   QRadioButton *rb1;
   QRadioButton *rb2;

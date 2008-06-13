@@ -38,8 +38,8 @@
 #include <kmessagebox.h>
 
 #include "Doc.h"
+#include "Selection.h"
 #include "Sheet.h"
-#include "View.h"
 
 // commands
 #include "commands/DataManipulators.h"
@@ -47,16 +47,14 @@
 
 using namespace KSpread;
 
-InsertDialog::InsertDialog( View* parent, const char* name,const QRect &_rect,Mode _mode)
+InsertDialog::InsertDialog(QWidget* parent, Selection* selection, Mode _mode)
   : KDialog( parent )
 {
   setCaption( "");
-  setObjectName( name );
   setButtons( Ok|Cancel );
   setModal( true );
 
-  m_pView = parent;
-  rect=_rect;
+  m_selection = selection;
   insRem=_mode;
 
   QWidget *page = new QWidget();
@@ -97,13 +95,12 @@ InsertDialog::InsertDialog( View* parent, const char* name,const QRect &_rect,Mo
 
 void InsertDialog::slotOk()
 {
-    m_pView->doc()->emitBeginOperation( false );
     if( rb1->isChecked() )
     {
         if( insRem == Insert )
         {
             ShiftManipulator* manipulator = new ShiftManipulator();
-            manipulator->setSheet( m_pView->activeSheet() );
+            manipulator->setSheet( m_selection->activeSheet() );
             manipulator->setDirection( ShiftManipulator::ShiftRight );
             manipulator->add( Region(rect) );
             manipulator->execute();
@@ -111,7 +108,7 @@ void InsertDialog::slotOk()
         else if( insRem == Remove )
         {
             ShiftManipulator* manipulator = new ShiftManipulator();
-            manipulator->setSheet( m_pView->activeSheet() );
+            manipulator->setSheet( m_selection->activeSheet() );
             manipulator->setDirection( ShiftManipulator::ShiftRight );
             manipulator->setReverse( true );
             manipulator->add( Region(rect) );
@@ -123,7 +120,7 @@ void InsertDialog::slotOk()
         if( insRem == Insert )
         {
             ShiftManipulator* manipulator = new ShiftManipulator();
-            manipulator->setSheet( m_pView->activeSheet() );
+            manipulator->setSheet( m_selection->activeSheet() );
             manipulator->setDirection( ShiftManipulator::ShiftBottom );
             manipulator->add( Region(rect) );
             manipulator->execute();
@@ -131,7 +128,7 @@ void InsertDialog::slotOk()
         else if( insRem == Remove )
         {
             ShiftManipulator* manipulator = new ShiftManipulator();
-            manipulator->setSheet( m_pView->activeSheet() );
+            manipulator->setSheet( m_selection->activeSheet() );
             manipulator->setDirection( ShiftManipulator::ShiftBottom );
             manipulator->setReverse( true );
             manipulator->add( Region(rect) );
@@ -143,14 +140,14 @@ void InsertDialog::slotOk()
         if( insRem == Insert )
         {
             InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
-            manipulator->setSheet( m_pView->activeSheet() );
+            manipulator->setSheet( m_selection->activeSheet() );
             manipulator->add( Region(rect) );
             manipulator->execute();
         }
         else if( insRem == Remove )
         {
             InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
-            manipulator->setSheet( m_pView->activeSheet() );
+            manipulator->setSheet( m_selection->activeSheet() );
             manipulator->setReverse( true );
             manipulator->add( Region(rect) );
             manipulator->execute();
@@ -161,14 +158,14 @@ void InsertDialog::slotOk()
         if( insRem == Insert )
         {
             InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
-            manipulator->setSheet( m_pView->activeSheet() );
+            manipulator->setSheet( m_selection->activeSheet() );
             manipulator->add( Region(rect) );
             manipulator->execute();
         }
         else if( insRem == Remove )
         {
             InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
-            manipulator->setSheet( m_pView->activeSheet() );
+            manipulator->setSheet( m_selection->activeSheet() );
             manipulator->setReverse( true );
             manipulator->add( Region(rect) );
             manipulator->execute();
@@ -179,9 +176,6 @@ void InsertDialog::slotOk()
         kDebug(36001) <<"Error in kspread_dlg_InsertDialog";
     }
 
-    m_pView->updateEditWidget();
-
-    m_pView->slotUpdateView( m_pView->activeSheet() );
     accept();
 }
 

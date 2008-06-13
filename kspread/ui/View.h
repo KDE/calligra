@@ -57,15 +57,12 @@ class Damage;
 class Sheet;
 class Canvas;
 class Doc;
-class EditWidget;
 class HBorder;
-class LocationEditWidget;
 class Region;
 class Selection;
 class SheetView;
 class VBorder;
 class View;
-class ComboboxLocationEditWidget;
 
 
 /** @class View
@@ -118,12 +115,6 @@ public:
     /** Returns the vertical scrollbar */
     QScrollBar* vertScrollBar() const;
 
-    /** Returns the editor widget */
-    KSpread::EditWidget* editWidget() const;
-
-    /** Returns the location widget */
-    ComboboxLocationEditWidget* posWidget() const;
-
     /** Returns the tab bar */
     KoTabBar* tabBar() const;
 
@@ -136,7 +127,6 @@ public:
     void addSheet( Sheet *_t );
     //void removesheet( Sheet *_t );
     void removeAllSheets();
-    void setActiveSheet( Sheet *_t,bool updatesheet=true );
 
     const Sheet* activeSheet() const;
     Sheet* activeSheet();
@@ -145,42 +135,6 @@ public:
      * \return the SheetView for \p sheet
      */
     SheetView* sheetView( const Sheet* sheet ) const;
-
-    void refreshSheetViews();
-
-    void openPopupMenu( const QPoint &_global );
-    void popupRowMenu(const QPoint & _point ) ;
-    void popupColumnMenu( const QPoint & _point);
-
-    // void showFormulaToolBar( bool show );
-
-    /**
-     * Used by @ref EditWidget. Sets the text of the active cell(s).
-     */
-    void setText( const QString& _text, bool array = false );
-
-    void enableUndo( bool _b );
-    void enableRedo( bool _b );
-    void enableInsertColumn( bool _b );
-    void enableInsertRow( bool _b );
-
-    /**
-     * Fills the @ref EditWidget with the current cells
-     * content. This function is usually called after the
-     * cursor moved.
-     */
-    void updateEditWidget();
-    /**
-     * Same as updateEditEidget() but no update of menus and toolbars
-     */
-    void updateEditWidgetOnPress();
-
-
-    /**
-     * Called before saving, to finish the current edition (if any)
-     */
-    void deleteEditor( bool saveChanges = true );
-    void closeEditor();
 
     virtual QWidget *canvas() const;
 
@@ -198,7 +152,6 @@ public:
     QColor borderColor() const;
 
     Selection* selection() const;
-    Selection* choice() const;
 
     void updateShowSheetMenu();
 
@@ -244,117 +197,29 @@ public Q_SLOTS:
     * refresh view when you hide/show vertical scrollbar
     */
     void refreshView();
+    void refreshSheetViews();
+    void refreshSelection(const Region& region);
+    void aboutToModify(const Region& region);
     void initialPosition();
     /**
      * Actions
      */
-    void selectAll();
     void createTemplate();
-    void copySelection();
-    void cutSelection();
-    void clearAll();
-    void clearContents();
-    void clearConditionalStyles();
-    void clearComment();
-    void clearHyperlink();
-    void clearValidity();
-    void fillRight();
-    void fillLeft();
-    void fillUp();
-    void fillDown();
     void recalcWorkBook();
     void recalcWorkSheet();
-    void paste();
-    void specialPaste();
-    void editCell();
-    void setAreaName();
-    void namedAreaDialog();
-    void adjust();
     void paperLayoutDlg();
-    void styleDialog();
-    void definePrintRange();
     void resetPrintRange();
-    void insertFromDatabase();
-    void insertFromTextfile();
-    void insertFromClipboard();
-    void insertSpecialChar();
     void togglePageBorders( bool );
     void toggleProtectSheet( bool );
     void toggleProtectDoc( bool );
     void viewZoom( KoZoomMode::Mode mode, double zoom );
-    void find();
-    void findNext();
-    void findPrevious();
-    void replace();
-    void conditional();
-    void validity();
-    void insertSeries();
-    void sort();
-    void autoFilter();
-    void insertHyperlink();
-    void goalSeek();
-    void multipleOperations();
-    void subtotals();
-    void textToColumns();
-    void consolidate();
+
     void insertSheet();
     void duplicateSheet();
     void deleteSheet();
     void hideSheet();
     void showSheet();
     void helpUsing();
-    void moneyFormat(bool b);
-    void alignLeft( bool b );
-    void alignRight( bool b );
-    void alignCenter( bool b );
-    void alignTop( bool b );
-    void alignMiddle( bool b );
-    void alignBottom( bool b );
-    void wrapText( bool b );
-    void decreasePrecision();
-    void increasePrecision();
-    void createStyleFromCell();
-    void setDefaultStyle();
-    void setStyle( const QString & );
-    void percent(bool b);
-    void fontSelected( const QString &_font );
-    void fontSizeSelected( int size );
-    void bold( bool b );
-    void italic( bool b );
-    void underline( bool b );
-    void strikeOut( bool b );
-    void deleteColumn();
-    void insertColumn();
-    void deleteRow();
-    void insertRow();
-    void hideRow();
-    void showRow();
-    void hideColumn();
-    void showColumn();
-    void insertMathExpr();
-    void formulaSelection( const QString &_math );
-    void changeTextColor();
-    void changeBackgroundColor();
-    void sortInc();
-    void sortDec();
-    void layoutDlg();
-    void borderBottom();
-    void borderRight();
-    void borderLeft();
-    void borderTop();
-    void borderOutline();
-    void borderAll();
-    void borderRemove();
-    void changeBorderColor();
-    void sheetFormat();
-    void autoSum();
-    void resizeRow();
-    void resizeColumn();
-    void adjustColumn();
-    void adjustRow();
-    void increaseFontSize();
-    void decreaseFontSize();
-    void setSelectionFontSize(int size);
 
     void setSelectionTextColor(const QColor &txtColor);
     void setSelectionBackgroundColor(const QColor &bgColor);
@@ -367,40 +232,10 @@ public Q_SLOTS:
     void setSelectionAllBorderColor(const QColor &color);
     void setSelectionOutlineBorderColor(const QColor &color);
 
-    void upper();
-    void lower();
-    void equalizeColumn();
-    void equalizeRow();
     void optionsNotifications();
     void preference();
-    void firstLetterUpper();
-    void verticalText(bool );
-    void comment();
     void setSelectionComment(const QString& comment);
-    void changeAngle();
-    void setSelectionAngle(int angle);
 
-    /**
-     * Merges selected cells into one cell. This will not work if only one
-     * cell is selected. An entire row or column can't be merged as well.
-     *
-     * \sa dissociateCell
-     */
-    void mergeCell();
-    void mergeCellHorizontal();
-    void mergeCellVertical();
-
-
-    /**
-     * Breaks merged cell. Obviously this can be done only on merged cells.
-     *
-     * \sa mergeCell
-     */
-    void dissociateCell();
-
-    void gotoCell();
-    void increaseIndent();
-    void decreaseIndent();
     void copyAsText();
 
     void moveSheet( unsigned sheet, unsigned target );
@@ -409,6 +244,8 @@ public Q_SLOTS:
      * Shows the sheet properties dialog.
      */
     void sheetProperties();
+
+    void setActiveSheet(Sheet* sheet, bool updatesheet = true);
 
     /**
      * Switch the active sheet to the name. This slot is connected to the tab bar
@@ -439,8 +276,6 @@ public Q_SLOTS:
      * if the current active sheet is already the last one.
      */
     void lastSheet();
-
-    void sortList();
 
     /**
      * Switches the shape anchoring.
@@ -474,8 +309,6 @@ public Q_SLOTS:
 
     void handleDamages( const QList<Damage*>& damages );
 
-    void runInspector();
-
     void initialiseMarkerFromSheet( Sheet *_sheet, const QPoint &point );
 
     /**
@@ -484,35 +317,7 @@ public Q_SLOTS:
     void calcStatusBarOp();
 
 protected slots:
-    /**
-     * Popup menu
-     */
-    void slotActivateTool( int _id );
-    void insertCells();
-    void slotInsertCellCopy();
-    void deleteCells();
     void slotRename();
-
-    void slotShowColumnDialog();
-    void slotShowRowDialog();
-
-    /**
-     * list from list choose
-     */
-    void slotItemSelected( QAction* );
-    void slotListChoosePopupMenu( );
-
-    /**
-     * Called by find/replace (findNext) when it found a match
-     */
-    void slotHighlight( const QString &text, int matchingIndex, int matchedLength );
-    /**
-     * Called when replacing text in a cell
-     */
-    void slotReplace( const QString &newText, int, int, int );
-
-    void slotSpecialChar( QChar c, const QString & _font );
-    void slotSpecialCharDlgClosed();
 
 public slots:
     // Document signals
@@ -522,7 +327,6 @@ public slots:
     void slotUpdateHBorder( Sheet *_sheet );
     void slotUpdateVBorder( Sheet *_sheet );
     void slotChangeSelection(const Region&);
-    void slotChangeChoice(const Region&);
     void slotScrollChoice(const Region&);
     void slotAddSheet( Sheet *_sheet );
     void slotSheetRenamed( Sheet* sheet, const QString& old_name );
@@ -530,17 +334,7 @@ public slots:
     void slotSheetShown( Sheet*_sheet );
     void slotSheetRemoved( Sheet*_sheet );
     void refreshLocale();
-    void extraSpelling();
     void shapeSelectionChanged();
-
-    void spellCheckerReady();
-    void spellCheckerMisspelling( const QString &, const QStringList &, unsigned int);
-    void spellCheckerCorrected( const QString &, const QString &, unsigned int);
-    void spellCheckerDone( const QString & );
-    void spellCheckerFinished( );
-    void spellCheckerIgnoreAll( const QString & word);
-    void spellCheckerReplaceAll( const QString &,  const QString &);
-    void startKSpell();
 
 public:
     virtual int leftBorder() const;
@@ -564,10 +358,11 @@ protected:
 
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
-    void initFindReplace();
-    Cell findNextCell();
-
     virtual KoPrintJob * createPrintJob();
+
+Q_SIGNALS:
+    void documentReadWriteToggled(bool readwrite);
+    void sheetProtectionToggled(bool protect);
 
 private:
     Q_DISABLE_COPY( View )
@@ -576,11 +371,6 @@ private:
     Private * const d;
 
     void initView();
-
-    bool spellSwitchToOtherSheet();
-    void spellCleanup();
-
-    Cell nextFindValidCell( int col, int row );
 
     friend class Private;
 };

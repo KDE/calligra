@@ -24,9 +24,9 @@
 
 #include "Cell.h"
 #include "Doc.h"
+#include "Selection.h"
 #include "Sheet.h"
 #include "Util.h"
-#include "View.h"
 
 #include "commands/Undo.h"
 
@@ -64,15 +64,13 @@ using namespace KSpread;
  *                 Database Assistant                   *
  ********************************************************/
 
-DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * name, bool modal, Qt::WFlags fl )
-  : KAssistantDialog( (QWidget *) parent, fl ),
+DatabaseDialog::DatabaseDialog(QWidget* parent, Selection* selection)
+  : KAssistantDialog(parent),
     m_currentPage( eDatabase ),
-    m_pView( parent ),
-    m_targetRect( rect )
+    m_selection(selection),
+    m_targetRect(selection->lastRange())
 {
-  setModal( modal );
-  setObjectName( name ? name : "DatabaseDialog" );
-
+  setObjectName("DatabaseDialog");
   setWindowTitle( i18n( "Insert Data From Database" ) );
 
   // database page
@@ -461,7 +459,7 @@ void DatabaseDialog::back()
 
 void DatabaseDialog::accept()
 {
-  Sheet * sheet = m_pView->activeSheet();
+  Sheet * sheet = m_selection->activeSheet();
   int top;
   int left;
   int width  = -1;
@@ -579,14 +577,14 @@ void DatabaseDialog::accept()
     }
   }
 
-  if ( !m_pView->doc()->undoLocked() )
+  if ( !m_selection->activeSheet()->doc()->undoLocked() )
   {
     QRect r(left, top, count, height);
-    UndoInsertData * undo = new UndoInsertData( m_pView->doc(), sheet, r );
-    m_pView->doc()->addCommand( undo );
+    UndoInsertData * undo = new UndoInsertData( m_selection->activeSheet()->doc(), sheet, r );
+    m_selection->activeSheet()->doc()->addCommand( undo );
   }
 
-  m_pView->doc()->emitBeginOperation();
+  m_selection->activeSheet()->doc()->emitBeginOperation();
 
   if ( query.first() )
   {
@@ -620,7 +618,8 @@ void DatabaseDialog::accept()
     }
   }
 
-  m_pView->slotUpdateView( sheet );
+  m_selection->activeSheet()->doc()->emitEndOperation();
+  m_selection->emitModified();
   KAssistantDialog::accept();
 }
 

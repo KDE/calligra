@@ -36,21 +36,20 @@
 #include "Doc.h"
 #include "Region.h"
 #include "RowColumnFormat.h"
+#include "Selection.h"
 #include "Sheet.h"
-#include "View.h"
 
 // commands
 #include "commands/RowColumnManipulators.h"
 
 using namespace KSpread;
 
-ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
+ShowColRow::ShowColRow(QWidget* parent, Selection* selection, Type _type)
   : KDialog( parent )
 {
   setModal( true );
   setButtons( Ok|Cancel );
-  setObjectName( name );
-  m_pView = parent;
+  m_selection = selection;
   typeShow=_type;
 
   QWidget *page = new QWidget();
@@ -75,10 +74,10 @@ ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
   lay1->addWidget( label );
   lay1->addWidget( list );
 
-  bool showColNumber=m_pView->activeSheet()->getShowColumnNumber();
+  bool showColNumber=m_selection->activeSheet()->getShowColumnNumber();
   if(_type==Column)
         {
-        ColumnFormat *col=m_pView->activeSheet()->firstCol();
+        ColumnFormat *col=m_selection->activeSheet()->firstCol();
 
         QString text;
         QStringList listCol;
@@ -100,7 +99,7 @@ ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
         }
   else if(_type==Row)
         {
-        RowFormat *row=m_pView->activeSheet()->firstRow();
+        RowFormat *row=m_selection->activeSheet()->firstRow();
 
         QString text;
         QStringList listRow;
@@ -152,7 +151,7 @@ void ShowColRow::slotOk()
   }
 
   HideShowManipulator* manipulator = new HideShowManipulator();
-  manipulator->setSheet( m_pView->activeSheet() );
+  manipulator->setSheet( m_selection->activeSheet() );
   if (typeShow == Column)
   {
     manipulator->setManipulateColumns(true);

@@ -56,17 +56,20 @@
 
 // KDE
 #include <klocale.h>
+#include <kmessagebox.h>
 #include <kwordwrap.h>
 
 // KOffice
 #include <KoCanvasController.h>
 #include <KoGlobal.h>
+#include <KoToolProxy.h>
 #include <KoZoomHandler.h>
 
 // KSpread
 #include "Canvas.h"
 #include "Canvas_p.h"
 #include "Cell.h"
+#include "DefaultToolFactory.h"
 #include "Doc.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
@@ -91,6 +94,7 @@ VBorder::VBorder( QWidget *_parent, Canvas *_canvas, View *_view)
   m_pCanvas = _canvas;
   m_lSize = 0;
   m_rubberband = 0;
+    m_cellToolIsActive = true;
 
   setAttribute( Qt::WA_StaticContents );
 
@@ -102,6 +106,8 @@ VBorder::VBorder( QWidget *_parent, Canvas *_canvas, View *_view)
 
   connect( m_pView, SIGNAL( autoScroll( const QPoint & )),
            this, SLOT( slotAutoScroll( const QPoint &)) );
+    connect(m_pCanvas->toolProxy(), SIGNAL(toolChanged(const QString&)),
+            this, SLOT(toolChanged(const QString&)));
 }
 
 
@@ -111,6 +117,8 @@ VBorder::~VBorder()
 
 void VBorder::mousePressEvent( QMouseEvent * _ev )
 {
+    if (!m_cellToolIsActive)
+        return;
   if ( !m_pView->koDocument()->isReadWrite() )
     return;
 
@@ -130,10 +138,7 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
   m_bSelection = false;
 
   // We were editing a cell -> save value and get out of editing mode
-  if ( m_pCanvas->editor() )
-  {
-    m_pCanvas->deleteEditor( true ); // save changes
-  }
+  m_pView->selection()->emitCloseEditor(true); // save changes
 
   // Find the first visible row and the y position of this row.
   double y;
@@ -200,18 +205,16 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
       }
     }
 
-    if ( _ev->button() == Qt::RightButton )
-    {
-      QPoint p = mapToGlobal( _ev->pos() );
-      m_pView->popupRowMenu( p );
-      m_bSelection = false;
+    if (_ev->button() == Qt::RightButton) {
+        QApplication::sendEvent(m_pCanvas, _ev);
     }
-    m_pView->updateEditWidget();
   }
 }
 
 void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
+    if (!m_cellToolIsActive)
+        return;
     m_pView->disableAutoScroll();
     if (m_lSize)
       m_lSize->hide();
@@ -301,7 +304,20 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
             }
 
             if ( hiddenRows.count() > 0 )
-              m_pView->showRow();
+            {
+                if (m_pView->selection()->isColumnSelected())
+                {
+                    KMessageBox::error(this, i18n("Area is too large."));
+                    return;
+                }
+
+                HideShowManipulator* command = new HideShowManipulator();
+                command->setSheet(sheet);
+                command->setManipulateRows(true);
+                command->setReverse(true);
+                command->add(*m_pView->selection());
+                command->execute();
+            }
         }
     }
 
@@ -333,6 +349,8 @@ void VBorder::equalizeRow( double resize )
 
 void VBorder::mouseDoubleClickEvent(QMouseEvent*)
 {
+    if (!m_cellToolIsActive)
+        return;
   register Sheet * const sheet = m_pView->activeSheet();
   if (!sheet)
     return;
@@ -340,12 +358,20 @@ void VBorder::mouseDoubleClickEvent(QMouseEvent*)
   if ( !m_pView->koDocument()->isReadWrite() || sheet->isProtected() )
     return;
 
-  m_pView->adjustRow();
+    AdjustColumnRowManipulator* command = new AdjustColumnRowManipulator();
+    command->setSheet(sheet);
+    command->setAdjustRow(true);
+    command->add(*m_pView->selection());
+    command->execute();
 }
 
 
 void VBorder::mouseMoveEvent( QMouseEvent * _ev )
 {
+    if (!m_cellToolIsActive) {
+        setCursor(Qt::ArrowCursor);
+        return;
+    }
   if ( !m_pView->koDocument()->isReadWrite() )
     return;
 
@@ -545,8 +571,12 @@ void VBorder::paintEvent( QPaintEvent* event )
   yPos = yPos - m_pCanvas->yOffset();
   double width = YBORDER_WIDTH;
 
-  const QSet<int> selectedRows = m_pView->selection()->rowsSelected();
-  const QSet<int> affectedRows = m_pView->selection()->rowsAffected();
+    QSet<int> selectedRows;
+    QSet<int> affectedRows;
+    if (!m_pView->selection()->referenceSelectionMode() && m_cellToolIsActive) {
+        selectedRows = m_pView->selection()->rowsSelected();
+        affectedRows = m_pView->selection()->rowsAffected();
+    }
   // Loop through the rows, until we are out of range
   while ( yPos <= paintRect.bottom() && y <= KS_rowMax )
   {
@@ -634,6 +664,12 @@ void VBorder::drawText( QPainter& painter, const QFont& font,
     painter.restore();
 }
 
+void VBorder::toolChanged(const QString& toolId)
+{
+    m_cellToolIsActive = (toolId == KSPREAD_DEFAULT_TOOL_ID);
+    update();
+}
+
 
 /****************************************************************
  *
@@ -648,6 +684,7 @@ HBorder::HBorder( QWidget *_parent, Canvas *_canvas,View *_view )
   m_pCanvas = _canvas;
   m_lSize = 0;
   m_rubberband = 0;
+    m_cellToolIsActive = true;
 
   setAttribute( Qt::WA_StaticContents );
 
@@ -659,6 +696,8 @@ HBorder::HBorder( QWidget *_parent, Canvas *_canvas,View *_view )
 
   connect( m_pView, SIGNAL( autoScroll( const QPoint & )),
            this, SLOT( slotAutoScroll( const QPoint &)) );
+    connect(m_pCanvas->toolProxy(), SIGNAL(toolChanged(const QString&)),
+            this, SLOT(toolChanged(const QString&)));
 }
 
 
@@ -668,6 +707,8 @@ HBorder::~HBorder()
 
 void HBorder::mousePressEvent( QMouseEvent * _ev )
 {
+    if (!m_cellToolIsActive)
+        return;
   if (!m_pView->koDocument()->isReadWrite())
     return;
 
@@ -682,10 +723,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
 	return;
 
   // We were editing a cell -> save value and get out of editing mode
-  if ( m_pCanvas->editor() )
-  {
-      m_pCanvas->deleteEditor( true ); // save changes
-  }
+  m_pView->selection()->emitCloseEditor(true); // save changes
 
   double ev_PosX;
   double dWidth = m_pView->zoomHandler()->unzoomItX( width() );
@@ -818,18 +856,16 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
       }
     }
 
-    if ( _ev->button() == Qt::RightButton )
-    {
-      QPoint p = mapToGlobal( _ev->pos() );
-      m_pView->popupColumnMenu( p );
-      m_bSelection = false;
+    if (_ev->button() == Qt::RightButton) {
+        QApplication::sendEvent(m_pCanvas, _ev);
     }
-    m_pView->updateEditWidget();
   }
 }
 
 void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
+    if (!m_cellToolIsActive)
+        return;
     m_pView->disableAutoScroll();
     if (m_lSize)
       m_lSize->hide();
@@ -928,7 +964,20 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
             }
 
             if ( hiddenCols.count() > 0 )
-              m_pView->showColumn();
+            {
+                if (m_pView->selection()->isRowSelected())
+                {
+                    KMessageBox::error(this, i18n("Area is too large."));
+                    return;
+                }
+
+                HideShowManipulator* command = new HideShowManipulator();
+                command->setSheet(sheet);
+                command->setManipulateColumns(true);
+                command->setReverse(true);
+                command->add(*m_pView->selection());
+                command->execute();
+            }
         }
     }
 
@@ -960,6 +1009,8 @@ void HBorder::equalizeColumn( double resize )
 
 void HBorder::mouseDoubleClickEvent(QMouseEvent*)
 {
+    if (!m_cellToolIsActive)
+        return;
   register Sheet * const sheet = m_pView->activeSheet();
   if (!sheet)
     return;
@@ -967,11 +1018,17 @@ void HBorder::mouseDoubleClickEvent(QMouseEvent*)
   if ( !m_pView->koDocument()->isReadWrite() || sheet->isProtected() )
     return;
 
-  m_pView->adjustColumn();
+    AdjustColumnRowManipulator* command = new AdjustColumnRowManipulator();
+    command->setSheet(sheet);
+    command->setAdjustColumn(true);
+    command->add(*m_pView->selection());
+    command->execute();
 }
 
 void HBorder::mouseMoveEvent( QMouseEvent * _ev )
 {
+    if (!m_cellToolIsActive)
+        return;
   if ( !m_pView->koDocument()->isReadWrite() )
     return;
 
@@ -1272,8 +1329,12 @@ void HBorder::paintEvent( QPaintEvent* event )
 
     xPos -= sheet->columnFormat( x )->width();
 
-    const QSet<int> selectedColumns = m_pView->selection()->columnsSelected();
-    const QSet<int> affectedColumns = m_pView->selection()->columnsAffected();
+    QSet<int> selectedColumns;
+    QSet<int> affectedColumns;
+    if (!m_pView->selection()->referenceSelectionMode() && m_cellToolIsActive) {
+        selectedColumns = m_pView->selection()->columnsSelected();
+        affectedColumns = m_pView->selection()->columnsAffected();
+    }
     //Loop through the columns, until we are out of range
     while ( xPos <= paintRect.right() && x <= KS_colMax )
     {
@@ -1325,8 +1386,12 @@ void HBorder::paintEvent( QPaintEvent* event )
   }
   else // if ( sheet->layoutDirection() == Qt::LeftToRight )
   {
-    const QSet<int> selectedColumns = m_pView->selection()->columnsSelected();
-    const QSet<int> affectedColumns = m_pView->selection()->columnsAffected();
+    QSet<int> selectedColumns;
+    QSet<int> affectedColumns;
+    if (!m_pView->selection()->referenceSelectionMode() && m_cellToolIsActive) {
+        selectedColumns = m_pView->selection()->columnsSelected();
+        affectedColumns = m_pView->selection()->columnsAffected();
+    }
     //Loop through the columns, until we are out of range
     while ( xPos <= paintRect.right() && x <= KS_colMax )
     {
@@ -1418,6 +1483,12 @@ void HBorder::drawText( QPainter& painter, const QFont& font,
     painter.restore();
 }
 
+void HBorder::toolChanged(const QString& toolId)
+{
+    m_cellToolIsActive = (toolId == KSPREAD_DEFAULT_TOOL_ID);
+    update();
+}
+
 
 /****************************************************************
  *
@@ -1430,6 +1501,9 @@ SelectAllButton::SelectAllButton( View* view  )
     , m_view( view )
     , m_mousePressed( false )
 {
+    m_cellToolIsActive = true;
+    connect(m_view->canvasWidget()->toolProxy(), SIGNAL(toolChanged(const QString&)),
+            this, SLOT(toolChanged(const QString&)));
 }
 
 SelectAllButton::~SelectAllButton()
@@ -1448,7 +1522,8 @@ void SelectAllButton::paintEvent( QPaintEvent* event )
     painter.setClipRect( paintRect );
 
     // if all cells are selected
-    if ( m_view->selection()->isAllSelected() )
+    if (m_view->selection()->isAllSelected() &&
+        !m_view->selection()->referenceSelectionMode() && m_cellToolIsActive)
     {
         // selection brush/color
         QColor selectionColor( palette().highlight().color() );
@@ -1474,22 +1549,32 @@ void SelectAllButton::paintEvent( QPaintEvent* event )
 
 void SelectAllButton::mousePressEvent( QMouseEvent* event )
 {
+    if (!m_cellToolIsActive)
+        return;
     if ( event->button() == Qt::LeftButton )
         m_mousePressed = true;
 }
 
 void SelectAllButton::mouseReleaseEvent( QMouseEvent* event )
 {
+    if (!m_cellToolIsActive)
+        return;
     Q_UNUSED(event);
     if ( !m_mousePressed )
         return;
     m_mousePressed = false;
-    m_view->selectAll();
+    m_view->selection()->selectAll();
 }
 
 void SelectAllButton::wheelEvent(QWheelEvent* event)
 {
     QApplication::sendEvent(m_view->canvasWidget(), event);
+}
+
+void SelectAllButton::toolChanged(const QString& toolId)
+{
+    m_cellToolIsActive = (toolId == KSPREAD_DEFAULT_TOOL_ID);
+    update();
 }
 
 #include "Border.moc"

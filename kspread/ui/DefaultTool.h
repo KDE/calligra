@@ -20,12 +20,12 @@
 #ifndef KSPREAD_DEFAULT_TOOL
 #define KSPREAD_DEFAULT_TOOL
 
-#include <KoTool.h>
+#include "CellToolBase.h"
 
 namespace KSpread
 {
 
-class DefaultTool : public KoTool
+class DefaultTool : public CellToolBase
 {
     Q_OBJECT
 
@@ -33,16 +33,18 @@ public:
     explicit DefaultTool( KoCanvasBase* canvas );
     ~DefaultTool();
 
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
-
     virtual void mousePressEvent( KoPointerEvent* event ) ;
     virtual void mouseReleaseEvent( KoPointerEvent* event );
     virtual void mouseMoveEvent( KoPointerEvent* event );
     virtual void mouseDoubleClickEvent( KoPointerEvent* event );
-    virtual void keyPressEvent( QKeyEvent* event );
 
-    virtual void activate( bool temporary = false );
-    virtual void deactivate();
+protected:
+    virtual KoInteractionStrategy* createStrategy(KoPointerEvent* event);
+    virtual Selection* selection();
+
+protected Q_SLOTS:
+    // -- misc actions --
+    void definePrintRange();
 
 private:
     Q_DISABLE_COPY( DefaultTool )

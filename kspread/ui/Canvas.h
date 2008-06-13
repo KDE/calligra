@@ -61,7 +61,6 @@ class QScrollBar;
 namespace KSpread
 {
 class Cell;
-class EditWidget;
 class Canvas;
 class HBorder;
 class VBorder;
@@ -70,7 +69,6 @@ class Doc;
 class View;
 class Selection;
 class CellEditor;
-class LocationEditWidget;
 
 
 /**
@@ -101,15 +99,6 @@ public:
       ResizeCell,     /**< Merging cell */
       AutoFill,       /**< Autofilling */
       ResizeSelection /**< Resizing the selection */
-    };
-
-    /**
-     * The editor type.
-     */
-    enum EditorType
-    {
-        CellEditor,  ///< the 'in-place' editor appearing in a cell
-        EditWidget   ///< the line edit located above the canvas
     };
 
     /**
@@ -148,18 +137,10 @@ public:
     /// reimplemented method from KoCanvasBase
     virtual void updateInputMethodInfo();
 
-    KSpread::EditWidget* editWidget() const;
-    KSpread::CellEditor* editor() const;
-
     /**
      * @return the usual selection of cells
      */
     KSpread::Selection* selection() const;
-
-    /**
-     * @return a selection of cells used in formulas
-     */
-    KSpread::Selection* choice() const;
 
     /**
      * @return the pen, the default grid is painted with (light gray)
@@ -213,85 +194,8 @@ public:
      */
     void scrollToCell(const QPoint& location) const;
 
-    /**
-     * Creates a 'in-place' editor over the currently selected cell.
-     * \param clear clears the current cell text
-     * \param focus gives the focus to the editor
-     */
-    bool createEditor( bool clear = true, bool focus = true );
-
-    /**
-     * Deletes the current cell editor.
-     * @see createEditor
-     * @see editor
-     * @param saveChanges if @c true , the edited text is stored in the cell.
-     *                    if @c false , the changes are discarded.
-     * @param array if @c true , array formula was entered
-     */
-    void deleteEditor(bool saveChanges, bool array = false);
-
-    /**
-     * Used in choose mode. Shows/hides the editor depending on the selected
-     * sheet. Triggers an update of the regions shown in the CellEditor.
-     * @see CellEditor::updateChoice()
-     */
-    void updateEditor();
-
-    /**
-     * Called from EditWidget and CellEditor
-     * if they loose the focus because the user started a "choose selection".
-     * This is done because the editor wants to get its focus back afterwards.
-     * But somehow Canvas must know whether the EditWidget or the CellEditor
-     * lost the focus when the user clicked on the canvas.
-     */
-    void setLastEditorWithFocus( EditorType type );
-
-    /**
-     * Switches to choose mode and sets the initial selection to the
-     * position returned by marker().
-     * Clears the choice.
-     */
-    void startChoose();
-
-    /**
-     * Switches to choose mode and sets the initial @p selection.
-     */
-    void startChoose( const QRect& selection );
-
-    /**
-     * Switches to selection mode.
-     * Clear the choice.
-     */
-    void endChoose();
-
-    /**
-     * Switches the choose mode on and off.
-     * Does not clear the choice.
-     */
-    void setChooseMode(bool state);
-
-    /**
-     * @return @c true if choose mode is enabled, @c false otherwise
-     */
-    bool chooseMode() const;
-
     void equalizeRow();
     void equalizeColumn();
-
-    /**
-     * Updates the position widget.
-     */
-    void updatePosWidget();
-
-    /**
-     * Close the cell editor and saves changes.
-     * @see deleteEditor()
-     */
-    void closeEditor();
-
-    // Created by the view since it's layout is managed there,
-    // but is in fact a sibling of the canvas, which needs to know about it.
-    void setEditWidget( KSpread::EditWidget * ew );
 
 public Q_SLOTS:
     void setDocumentOffset( const QPoint& offset );
@@ -385,69 +289,8 @@ private:
      */
     QRectF cellCoordinatesToView( const QRect& cellRange ) const;
 
-    /**
-     * @see #setLastEditorWithFocus
-     */
-    EditorType lastEditorWithFocus() const;
-
 private:
   void startTheDrag();
-
-  void paintNormalMarker(QPainter& painter, const QRectF &viewRect);
-
-  /**
-  * Paint the highlighted ranges of cells.  When the user is editing a formula in a text box, cells and ranges referenced
-  * in the formula are highlighted on the canvas.
-  * @param painter The painter on which to draw the highlighted ranges
-  * @param viewRect The area currently visible on the canvas
-  */
-  void paintHighlightedRanges(QPainter& painter, const QRectF& viewRect);
-
-  /**
-   * helper function in drawing the marker and choose marker.
-   * @param marker the rectangle that represents the marker being drawn
-   *               (cell coordinates)
-   * @param viewRect the visible area on the canvas
-   * @param positions output parameter where the viewable left, top, right, and
-   *                  bottom of the marker will be.  They are stored in the array
-   *                  in that order, and take into account cropping due to part
-   *                  of the marker being off screen.  This array should have
-   *                  at least a size of 4 pre-allocated.
-   * @param paintSides booleans indicating whether a particular side is visible.
-   *                   Again, these are in the order left, top, right, bottom.
-   *                   This should be preallocated with a size of at least 4.
-   */
-  void retrieveMarkerInfo( const QRect &marker, const QRectF &viewRect,
-                           double positions[], bool paintSides[] );
-
-
-
-
-  bool formatKeyPress( QKeyEvent * _ev );
-
-
-  /** current cursor position, be it marker or choose marker */
-  QPoint cursorPos();
-
-  /**
-   * returns the rect that needs to be redrawn
-   */
-  QRect moveDirection(KSpread::MoveTo direction, bool extendSelection);
-
-  void processEnterKey(QKeyEvent *event);
-  void processArrowKey(QKeyEvent *event);
-  void processEscapeKey(QKeyEvent *event);
-  bool processHomeKey(QKeyEvent *event);
-  bool processEndKey(QKeyEvent *event);
-  bool processPriorKey(QKeyEvent *event);
-  bool processNextKey(QKeyEvent *event);
-  void processDeleteKey(QKeyEvent *event);
-  void processF2Key(QKeyEvent *event);
-  void processF4Key(QKeyEvent *event);
-  void processOtherKey(QKeyEvent *event);
-  bool processControlArrowKey(QKeyEvent *event);
-
-  //void processIMEvent( QIMEvent * event );
 
   /**
    * Determines the cell at @p point and shows its tooltip.

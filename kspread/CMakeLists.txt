@@ -147,6 +147,8 @@ SET (ui_DIR_SRCS
 	ui/AutoFillStrategy.cpp
 	ui/Border.cpp
 	ui/Canvas.cpp
+	ui/CellToolBase.cpp
+	ui/CellToolBase_p.cpp
 	ui/CellView.cpp
 	ui/DefaultTool.cpp
 	ui/DefaultToolFactory.cpp
@@ -156,6 +158,10 @@ SET (ui_DIR_SRCS
 	ui/SelectionStrategy.cpp
 	ui/SheetView.cpp
 	ui/View.cpp
+	)
+
+kde4_add_ui_files(ui_DIR_SRCS
+	ui/CellToolOptionWidget.ui
 	)
 
 SET (kspreadcommon_LIB_SRCS

@@ -32,18 +32,18 @@
 
 namespace KSpread
 {
+class Selection;
 class Sheet;
-class View;
 
 class SubtotalDialog : public KDialog, public ::Ui::SubtotalWidget
 {
   Q_OBJECT
 
  public:
-  SubtotalDialog( View * parent, QRect const & selection );
+  SubtotalDialog(QWidget* parent, Selection* selection);
   ~SubtotalDialog();
 
-  QRect const & selection() const { return m_selection; }
+  QRect const & selection() const { return m_range; }
   Sheet * sheet() const { return m_pSheet; }
 
  private slots:
@@ -52,9 +52,9 @@ class SubtotalDialog : public KDialog, public ::Ui::SubtotalWidget
   void slotUser1();
 
  private:
-  View  *          m_pView;
+  Selection *      m_selection;
   Sheet *          m_pSheet;
-  QRect            m_selection;
+  QRect            m_range;
 
   void fillColumnBoxes();
   void fillFunctionBox();

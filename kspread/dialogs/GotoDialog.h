@@ -31,13 +31,13 @@ class KComboBox;
 
 namespace KSpread
 {
-class View;
+class Selection;
 
 class GotoDialog : public KDialog
 {
   Q_OBJECT
 public:
-  GotoDialog( View* parent, const char* name);
+  GotoDialog(QWidget* parent, Selection* selection);
 
 public slots:
   void slotOk();
@@ -45,7 +45,7 @@ public slots:
 
 
 protected:
-  View* m_pView;
+  Selection* m_selection;
   KComboBox* m_nameCell;
 };
 

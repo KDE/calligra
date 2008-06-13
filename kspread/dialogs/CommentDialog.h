@@ -19,7 +19,7 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
-*/     
+*/
 
 #ifndef KSPREAD_COMMENT_DIALOG
 #define KSPREAD_COMMENT_DIALOG
@@ -30,22 +30,21 @@ class Q3MultiLineEdit;
 
 namespace KSpread
 {
-class View;
+class Selection;
 
 class CommentDialog : public KDialog
 {
   Q_OBJECT
 public:
-  CommentDialog( View* parent, const char* name,const QPoint &_marker );
+  CommentDialog(QWidget* parent, Selection* selection);
 
 public slots:
   void slotOk();
   void slotTextChanged();
 protected:
 
-  View* m_pView;
+  Selection* m_selection;
   Q3MultiLineEdit *multiLine; 
-  QPoint  marker;
 };
 
 } // namespace KSpread

@@ -32,25 +32,25 @@
 #include <klineedit.h>
 
 #include "Canvas.h"
+#include "Cell.h"
 #include "Doc.h"
 #include "Localization.h"
-#include "Util.h"
-#include "View.h"
-#include "Cell.h"
-#include "Selection.h"
 #include "NamedAreaManager.h"
+#include "Selection.h"
+#include "Sheet.h"
+#include "Util.h"
 
 using namespace KSpread;
 
-GotoDialog::GotoDialog( View* parent, const char* name )
+GotoDialog::GotoDialog(QWidget* parent, Selection* selection)
   : KDialog( parent )
 {
   setCaption( i18n("Goto Cell") );
-  setObjectName( name );
+  setObjectName("GotoDialog");
   setModal( true );
   setButtons( Ok|Cancel );
 
-  m_pView = parent;
+  m_selection = selection;
   QWidget *page = new QWidget();
   setMainWidget( page );
   QVBoxLayout *lay1 = new QVBoxLayout( page );
@@ -64,14 +64,13 @@ GotoDialog::GotoDialog( View* parent, const char* name )
   m_nameCell->setEditable(true);
   lay1->addWidget(m_nameCell);
 
-  const Sheet* sheet = parent->activeSheet();
-  Selection* selection = parent->selection();
+  const Sheet* sheet = m_selection->activeSheet();
   if( sheet && selection ) {
     Cell cell(sheet, selection->cursor());
     m_nameCell->addItem( cell.name() );
     m_nameCell->addItem( cell.fullName() );
   }
-  Doc *doc = m_pView->doc();
+  Doc *doc = m_selection->activeSheet()->doc();
   NamedAreaManager *manager = doc->namedAreaManager();
   m_nameCell->addItems( manager->areaNames() );
   m_nameCell->setFocus();
@@ -90,22 +89,22 @@ void GotoDialog::textChanged ( const QString &_text )
 
 void GotoDialog::slotOk()
 {
-    m_pView->doc()->emitBeginOperation( false );
+    m_selection->activeSheet()->doc()->emitBeginOperation( false );
 
     QString tmp_upper = m_nameCell->currentText();
-    Region region(tmp_upper, m_pView->doc()->map(), m_pView->activeSheet());
+    Region region(tmp_upper, m_selection->activeSheet()->doc()->map(), m_selection->activeSheet());
     if ( region.isValid() )
     {
-      if ( region.firstSheet() != m_pView->activeSheet() )
-          m_pView->setActiveSheet( region.firstSheet() );
-      m_pView->selection()->initialize(region);
+      if ( region.firstSheet() != m_selection->activeSheet() )
+          m_selection->emitVisibleSheetRequested( region.firstSheet() );
+      m_selection->initialize(region);
       accept();
     }
     else
     {
       m_nameCell->setCurrentText("");
     }
-    m_pView->slotUpdateView( m_pView->activeSheet() );
+    m_selection->activeSheet()->doc()->emitEndOperation();
 }
 
 #include "GotoDialog.moc"

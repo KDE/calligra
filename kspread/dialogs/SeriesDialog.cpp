@@ -25,10 +25,11 @@
 
 
 #include "SeriesDialog.h"
+
 #include "Doc.h"
 #include "Editors.h"
+#include "Selection.h"
 #include "Sheet.h"
-#include "View.h"
 
 #include "commands/DataManipulators.h"
 
@@ -49,16 +50,15 @@
 
 using namespace KSpread;
 
-SeriesDlg::SeriesDlg( View* parent, const char* name,const QPoint &_marker)
+SeriesDialog::SeriesDialog(QWidget* parent, Selection* selection)
   : KDialog( parent )
 {
   setCaption( i18n("Series") );
   setButtons( Ok|Cancel );
   setModal( true );
-  setObjectName( name );
 
-  m_pView = parent;
-  marker=_marker;
+  m_selection = selection;
+
   QWidget *page = new QWidget();
   setMainWidget( page );
 
@@ -124,7 +124,7 @@ SeriesDlg::SeriesDlg( View* parent, const char* name,const QPoint &_marker)
   start->setFocus();
 }
 
-void SeriesDlg::slotButtonClicked(int button)
+void SeriesDialog::slotButtonClicked(int button)
 {
   if (button != KDialog::Ok) {
     KDialog::slotButtonClicked(button);
@@ -137,7 +137,7 @@ void SeriesDlg::slotButtonClicked(int button)
   QString tmp;
   double dstep, dend, dstart;
   Sheet * m_pSheet;
-  m_pSheet = m_pView->activeSheet();
+  m_pSheet = m_selection->activeSheet();
 
   dstart = start->value();
   dend= end->value();
@@ -196,8 +196,8 @@ void SeriesDlg::slotButtonClicked(int button)
   }
 
   SeriesManipulator *manipulator = new SeriesManipulator;
-  manipulator->setSheet (m_pView->activeSheet());
-  manipulator->setupSeries (marker, dstart, dend, dstep,
+  manipulator->setSheet (m_selection->activeSheet());
+  manipulator->setupSeries (m_selection->marker(), dstart, dend, dstep,
       isColumn ? SeriesManipulator::Column : SeriesManipulator::Row,
       isLinear ? SeriesManipulator::Linear : SeriesManipulator::Geometric);
   

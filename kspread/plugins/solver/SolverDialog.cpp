@@ -24,7 +24,7 @@
 
 using namespace KSpread::Plugins;
 
-SolverDialog::SolverDialog( View* view, QWidget* parent )
+SolverDialog::SolverDialog( Selection* selection, QWidget* parent )
   : KDialog( parent )
 {
   setCaption( i18n("Function Optimizer") );
@@ -35,10 +35,10 @@ SolverDialog::SolverDialog( View* view, QWidget* parent )
   Ui::Solver::setupUi( widget );
   setMainWidget( widget );
   setModal( false );
-  function->setView( view );
+  function->setSelection( selection );
   function->setDialog( this );
   function->setSelectionMode( RegionSelector::SingleCell );
-  parameters->setView( view );
+  parameters->setSelection( selection );
   parameters->setDialog( this );
   parameters->setSelectionMode( RegionSelector::MultipleCells );
 

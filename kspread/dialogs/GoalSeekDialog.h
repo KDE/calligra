@@ -49,15 +49,14 @@ class QVBoxLayout;
 namespace KSpread
 {
 class RegionSelector;
-class View;
+class Selection;
 
 class GoalSeekDialog : public KDialog
 {
   Q_OBJECT
 
  public:
-   GoalSeekDialog( View * parent, QPoint const & marker, const char * name = 0,
-                      bool modal = false, Qt::WFlags fl = 0 );
+   GoalSeekDialog(QWidget* parent, Selection* selection);
    ~GoalSeekDialog();
 
  public slots:
@@ -72,7 +71,7 @@ class GoalSeekDialog : public KDialog
   QGridLayout * m_resultFrameLayout;
 
  private:
-  View * m_pView;
+  Selection   * m_selection;
   Cell          m_sourceCell;
   Cell          m_targetCell;
   double        m_result;
@@ -96,10 +95,6 @@ class GoalSeekDialog : public KDialog
   RegionSelector* m_selector1;
   RegionSelector* m_selector2;
   RegionSelector* m_selector3;
-
-  QPoint        m_anchor;
-  QPoint        m_marker;
-  QRect         m_selection;
 
   void startCalc(double _start, double _goal);
   void chooseCleanup();

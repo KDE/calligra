@@ -315,20 +315,21 @@ bool GeneralTab::apply( CustomStyle * style )
  *
  ***************************************************************************/
 
-CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
-  : KPageDialog(_view),
-    m_doc( _sheet->doc() ),
-    m_sheet( _sheet ),
-    m_pView( _view ),
-    m_style( 0 )
+CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection)
+    : KPageDialog(parent)
+    , m_doc(selection->activeSheet()->doc())
+    , m_sheet(selection->activeSheet())
+    , m_selection(selection)
+    , m_style(0)
+    , m_styleManager(0)
 {
   initMembers();
 
   //We need both conditions quite often, so store the condition here too
-  isRowSelected    = _view->selection()->isRowSelected();
-  isColumnSelected = _view->selection()->isColumnSelected();
+  isRowSelected    = m_selection->isRowSelected();
+  isColumnSelected = m_selection->isColumnSelected();
 
-  QRect range = _view->selection()->lastRange();
+  QRect range = m_selection->lastRange();
   left = range.left();
   top = range.top();
   right = range.right();
@@ -448,24 +449,24 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   widthSize = 0.0;
   heightSize = 0.0;
 
-    Selection::ConstIterator end(m_pView->selection()->constEnd());
-    for (Selection::ConstIterator it(m_pView->selection()->constBegin()); it != end; ++it)
+    Selection::ConstIterator end(m_selection->constEnd());
+    for (Selection::ConstIterator it(m_selection->constBegin()); it != end; ++it)
     {
         QRect range = (*it)->rect();
-        Style style = m_pView->activeSheet()->cellStorage()->style( range ); // FIXME merge
+        Style style = m_sheet->cellStorage()->style( range ); // FIXME merge
         initParameters( style );
 
         // left border
         range.setWidth( 1 );
-        checkBorderLeft( m_pView->activeSheet()->cellStorage()->style( range ) );
+        checkBorderLeft( m_sheet->cellStorage()->style( range ) );
         // right border
         range = (*it)->rect();
         range.setLeft( range.right() );
-        checkBorderRight( m_pView->activeSheet()->cellStorage()->style( range ) );
+        checkBorderRight( m_sheet->cellStorage()->style( range ) );
         // inner borders
         range = (*it)->rect();
         range = range.adjusted( 1, 1, -1, -1 );
-        style = m_pView->activeSheet()->cellStorage()->style( range );
+        style = m_sheet->cellStorage()->style( range );
         checkBorderHorizontal( style );
         checkBorderVertical( style );
         // top border
@@ -475,7 +476,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
         // bottom border
         range = (*it)->rect();
         range.setBottom( range.top() );
-        checkBorderBottom( m_pView->activeSheet()->cellStorage()->style( range ) );
+        checkBorderBottom( m_sheet->cellStorage()->style( range ) );
     }
 
     // column width
@@ -483,7 +484,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
     {
         for ( int x = left; x <= right; x++ )
         {
-            cl = m_pView->activeSheet()->columnFormat( x );
+            cl = m_sheet->columnFormat( x );
             widthSize = qMax( cl->width(), widthSize );
         }
     }
@@ -493,7 +494,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
     {
         for ( int y = top; y <= bottom; y++ )
         {
-            rl = m_pView->activeSheet()->rowFormat(y);
+            rl = m_sheet->rowFormat(y);
             heightSize = qMax( rl->height(), heightSize );
         }
     }
@@ -504,14 +505,14 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
     init();
 }
 
-CellFormatDialog::CellFormatDialog( View * _view, CustomStyle * _style,
-                              StyleManager * _manager, Doc * doc )
-  : KPageDialog(_view),
-    m_doc( doc ),
-    m_sheet( 0 ),
-    m_pView( _view ),
-    m_style( _style ),
-    m_styleManager( _manager )
+CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection,
+                                   CustomStyle* style, StyleManager* manager)
+    : KPageDialog(parent)
+    , m_doc(selection->activeSheet()->doc())
+    , m_sheet(selection->activeSheet())
+    , m_selection(selection)
+    , m_style(style)
+    , m_styleManager(manager)
 {
   initMembers();
   initGUI();
@@ -636,7 +637,7 @@ void CellFormatDialog::initMembers()
 
   m_currency      = Currency(); // locale default
 
-  Sheet* sheet = m_pView->activeSheet();
+  Sheet* sheet = m_sheet;
   defaultWidthSize  = sheet ? sheet->doc()->defaultColumnFormat()->width() : 0;
   defaultHeightSize = sheet ? sheet->doc()->defaultRowFormat()->height() : 0;
 }
@@ -857,24 +858,24 @@ void CellFormatDialog::slotApply()
     if ( positionPage->getMergedCellState() )
     {
       MergeCommand* command = new MergeCommand();
-      command->setSheet(m_pView->activeSheet());
-      command->add(*m_pView->selection());
+      command->setSheet(m_sheet);
+      command->add(*m_selection);
       m_doc->addCommand( command );
     }
     else
     {
       //dissociate cells
       MergeCommand* command = new MergeCommand();
-      command->setSheet(m_pView->activeSheet());
+      command->setSheet(m_sheet);
       command->setReverse(true);
-      command->add(*m_pView->selection());
+      command->add(*m_selection);
       m_doc->addCommand( command );
     }
   }
 
   StyleCommand* command = new StyleCommand();
-  command->setSheet(m_pView->activeSheet());
-  command->add(*m_pView->selection());
+  command->setSheet(m_sheet);
+  command->add(*m_selection);
   borderPage->apply(command);
   floatPage->apply(command);
   fontPage->apply(command);
@@ -894,24 +895,21 @@ void CellFormatDialog::slotApply()
   if ( int( positionPage->getSizeHeight() ) != int( heightSize ) )
   {
     ResizeRowManipulator* command = new ResizeRowManipulator();
-    command->setSheet(m_pView->activeSheet());
+    command->setSheet(m_sheet);
     command->setSize(positionPage->getSizeHeight());
-    command->add(*m_pView->selection());
+    command->add(*m_selection);
     m_doc->addCommand( command );
   }
   if ( int( positionPage->getSizeWidth() ) != int( widthSize ) )
   {
     ResizeColumnManipulator* command = new ResizeColumnManipulator();
-    command->setSheet(m_pView->activeSheet());
+    command->setSheet(m_sheet);
     command->setSize(positionPage->getSizeWidth());
-    command->add(*m_pView->selection());
+    command->add(*m_selection);
     m_doc->addCommand( command );
   }
 
   m_doc->endMacro();
-
-  // Update the toolbar (bold/italic/font...)
-  m_pView->updateEditWidget();
 }
 
 

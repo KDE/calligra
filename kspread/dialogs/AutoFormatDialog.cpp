@@ -43,11 +43,10 @@
 #include "CellStorage.h"
 #include "Doc.h"
 #include "Localization.h"
+#include "Selection.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"
-#include "View.h"
-#include "Selection.h"
 
 #include "commands/AutoFormatCommand.h"
 
@@ -64,7 +63,7 @@ struct Entry
 class AutoFormatDialog::Private
 {
 public:
-    View* view;
+    Selection* selection;
     KComboBox* combo;
     QLabel* label;
     QList<Entry> entries;
@@ -74,8 +73,8 @@ public:
     bool parseXML(const KoXmlDocument& doc);
 };
 
-AutoFormatDialog::AutoFormatDialog(View* view)
-    : KDialog(view)
+AutoFormatDialog::AutoFormatDialog(QWidget* parent, Selection* selection)
+    : KDialog(parent)
     , d(new Private())
 {
     setCaption(i18n("Sheet Style"));
@@ -83,7 +82,7 @@ AutoFormatDialog::AutoFormatDialog(View* view)
     setModal(true);
     setButtons(Ok|Cancel);
 
-    d->view = view;
+    d->selection = selection;
     QWidget *page = mainWidget();
 
     QVBoxLayout *vbox = new QVBoxLayout(page);
@@ -177,9 +176,9 @@ void AutoFormatDialog::slotOk()
     // Set colors, borders etc.
     //
     AutoFormatCommand* command = new AutoFormatCommand();
-    command->setSheet(d->view->activeSheet());
+    command->setSheet(d->selection->activeSheet());
     command->setStyles(d->styles);
-    command->add(*d->view->selection());
+    command->add(*d->selection);
     if (!command->execute())
         delete command;
 

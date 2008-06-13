@@ -44,8 +44,8 @@ class QWidget;
 
 namespace KSpread
 {
+class Selection;
 class Sheet;
-class View;
 
 class SortDialog : public KDialog
 {
@@ -58,8 +58,7 @@ class SortDialog : public KDialog
     SortRows=1
   };
   
-  explicit SortDialog( View * parent, const char * name = 0,
-                  bool modal = false );
+  explicit SortDialog(QWidget* parent, Selection* selection);
   ~SortDialog();
  
  protected:
@@ -76,7 +75,7 @@ class SortDialog : public KDialog
  private:
   void init();
 
-  View  * m_pView;
+  Selection    * m_selection;
 
   QStringList    m_listColumn;
   QStringList    m_listRow;

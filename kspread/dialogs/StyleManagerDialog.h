@@ -31,15 +31,15 @@ class KComboBox;
 
 namespace KSpread
 {
+class Selection;
 class StyleManager;
-class View;
 
 class StyleManagerDialog : public KDialog
 {
     Q_OBJECT
 
 public:
-    StyleManagerDialog(View* parent, StyleManager* manager);
+    StyleManagerDialog(QWidget* parent, Selection* selection, StyleManager* manager);
     ~StyleManagerDialog();
 
 protected Q_SLOTS:
@@ -54,7 +54,7 @@ private:
     void fillComboBox();
 
 private:
-    View*           m_view;
+    Selection*      m_selection;
     StyleManager*   m_styleManager;
     QTreeWidget*    m_styleList;
     KComboBox*      m_displayBox;

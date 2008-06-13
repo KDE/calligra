@@ -34,20 +34,20 @@
 #include <kmessagebox.h>
 
 // KSpread
-#include "Sheet.h"
-#include "View.h"
 #include "Doc.h"
+#include "Selection.h"
+#include "Sheet.h"
 
 // commands
 #include "commands/DataManipulators.h"
 
 using namespace KSpread;
 
-SubtotalDialog::SubtotalDialog( View * parent, QRect const & selection )
+SubtotalDialog::SubtotalDialog(QWidget* parent, Selection* selection)
   : KDialog( parent ),
-    m_pView( parent ),
-    m_pSheet( m_pView->activeSheet() ),
-    m_selection( selection )
+    m_selection(selection),
+    m_pSheet( m_selection->activeSheet() ),
+    m_range( selection->lastRange() )
 {
   setCaption( i18n( "Subtotals" ) );
   setButtons( Ok|Cancel|User1 );
@@ -72,12 +72,12 @@ SubtotalDialog::~SubtotalDialog()
 
 void SubtotalDialog::slotOk()
 {
-  int numOfCols = m_selection.width();
+  int numOfCols = m_range.width();
   QVector<int> columns( numOfCols );
 
   int n = 0;
   bool empty = true;
-  int left = m_selection.left();
+  int left = m_range.left();
   for ( Q3ListViewItem * item = m_columnList->firstChild(); item; item = item->nextSibling() )
   {
     if ( ((Q3CheckListItem * ) item)->isOn() )
@@ -100,15 +100,15 @@ void SubtotalDialog::slotOk()
     removeSubtotalLines();
 
   int mainCol = left + m_columnBox->currentIndex();
-  int bottom = m_selection.bottom();
-  int top    = m_selection.top();
-  left       = m_selection.left();
+  int bottom = m_range.bottom();
+  int top    = m_range.top();
+  left       = m_range.left();
   QString oldText = Cell( m_pSheet, mainCol, top ).displayText();
   QString newText;
   QString result( ' ' + i18n("Result") );
   int lastChangedRow = top;
 
-  m_pView->doc()->emitBeginOperation( false );
+  m_selection->activeSheet()->doc()->emitBeginOperation( false );
   bool ignoreEmptyCells = m_IgnoreBox->isChecked();
   bool addRow;
   if ( !m_summaryOnly->isChecked() )
@@ -170,7 +170,7 @@ void SubtotalDialog::slotOk()
   if ( m_summaryBelow->isChecked() )
   {
     addRow = true;
-    int bottom = m_selection.bottom();
+    int bottom = m_range.bottom();
     for (int x = 0; x < numOfCols; ++x)
     {
       if (columns[x] != -1)
@@ -181,7 +181,7 @@ void SubtotalDialog::slotOk()
     }
   }
 
-  m_pView->slotUpdateView( m_pView->activeSheet() );
+  m_selection->emitModified();
   accept();
 }
 
@@ -192,9 +192,10 @@ void SubtotalDialog::slotCancel()
 
 void SubtotalDialog::slotUser1()
 {
-  m_pView->doc()->emitBeginOperation( false );
+  m_selection->activeSheet()->doc()->emitBeginOperation( false );
   removeSubtotalLines();
-  m_pView->slotUpdateView( m_pView->activeSheet() );
+  m_selection->activeSheet()->doc()->emitEndOperation();
+  m_selection->emitModified();
   accept();
 }
 
@@ -202,14 +203,14 @@ void SubtotalDialog::removeSubtotalLines()
 {
   kDebug() <<"Removing subtotal lines";
 
-  int r = m_selection.right();
-  int l = m_selection.left();
-  int t = m_selection.top();
+  int r = m_range.right();
+  int l = m_range.left();
+  int t = m_range.top();
 
   Cell cell;
   QString text;
 
-  for ( int y = m_selection.bottom(); y >= t; --y )
+  for ( int y = m_range.bottom(); y >= t; --y )
   {
     kDebug() <<"Checking row:" << y;
     bool containsSubtotal = false;
@@ -230,7 +231,7 @@ void SubtotalDialog::removeSubtotalLines()
     if ( containsSubtotal )
     {
       kDebug() <<"Line" << y <<" contains a subtotal";
-      QRect rect( l, y, m_selection.width(), 1 );
+      QRect rect( l, y, m_range.width(), 1 );
 
         ShiftManipulator* manipulator = new ShiftManipulator();
         manipulator->setSheet( m_pSheet );
@@ -238,7 +239,7 @@ void SubtotalDialog::removeSubtotalLines()
         manipulator->setReverse( true );
         manipulator->add( Region(rect) );
         manipulator->execute();
-        m_selection.setHeight( m_selection.height() - 1 );
+        m_range.setHeight( m_range.height() - 1 );
     }
   }
   kDebug() <<"Done removing subtotals";
@@ -246,8 +247,8 @@ void SubtotalDialog::removeSubtotalLines()
 
 void SubtotalDialog::fillColumnBoxes()
 {
-  int r = m_selection.right();
-  int row = m_selection.top();
+  int r = m_range.right();
+  int row = m_range.top();
 
   Cell cell;
   Q3CheckListItem * item;
@@ -255,7 +256,7 @@ void SubtotalDialog::fillColumnBoxes()
   QString text;
 
   int index = 0;
-  for ( int i = m_selection.left(); i <= r; ++i )
+  for ( int i = m_range.left(); i <= r; ++i )
   {
     cell = Cell( m_pSheet, i, row );
     text = cell.displayText();
@@ -299,14 +300,14 @@ bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
             << ": addRow: " << addRow << ", Text: " << text << endl;
     if ( addRow )
     {
-        QRect rect(m_selection.left(), row + 1, m_selection.width(), 1);
+        QRect rect(m_range.left(), row + 1, m_range.width(), 1);
         ShiftManipulator* manipulator = new ShiftManipulator();
         manipulator->setSheet( m_pSheet );
         manipulator->setDirection( ShiftManipulator::ShiftBottom );
         manipulator->add( Region(rect) );
         manipulator->execute();
 
-        m_selection.setHeight( m_selection.height() + 1 );
+        m_range.setHeight( m_range.height() + 1 );
 
         Cell cell = Cell( m_pSheet, mainCol, row + 1 );
         cell.parseUserInput( text );

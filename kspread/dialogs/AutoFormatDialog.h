@@ -31,7 +31,7 @@
 
 namespace KSpread
 {
-class View;
+class Selection;
 
 /**
  * Dialog for the "Auto-Format..." action
@@ -40,7 +40,7 @@ class AutoFormatDialog : public KDialog
 {
     Q_OBJECT
 public:
-    explicit AutoFormatDialog(View* view);
+    explicit AutoFormatDialog(QWidget* parent, Selection* selection);
     ~AutoFormatDialog();
 
 private Q_SLOTS:

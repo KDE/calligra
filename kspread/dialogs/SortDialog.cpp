@@ -55,25 +55,20 @@
 #include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
-#include "View.h"
 
 // commands
 #include "commands/SortManipulator.h"
 
 using namespace KSpread;
 
-SortDialog::SortDialog( View * parent,  const char * name,
-                                bool modal )
-  : KDialog( parent ),
-    m_pView( parent )
+SortDialog::SortDialog(QWidget* parent, Selection* selection)
+    : KDialog(parent)
+    , m_selection(selection)
 {
   setCaption( i18n("Sort") );
-  setObjectName( name );
-  setModal( modal );
   setButtons( Ok|Cancel );
   setDefaultButton (Ok);
 
-  if ( !name )
     setObjectName( "SortDialog" );
 
   resize( 528, 316 );
@@ -272,7 +267,7 @@ SortDialog::SortDialog( View * parent,  const char * name,
 
 QRect SortDialog::sourceArea()
 {
-    return m_pView->selection()->lastRange();
+    return m_selection->lastRange();
 }
 
 SortDialog::Orientation SortDialog::guessDataOrientation()
@@ -349,7 +344,7 @@ void SortDialog::init()
     int right = r.right();
     for (int i = r.left(); i <= right; ++i)
     {
-      QString guessName=m_pView->activeSheet()->guessColumnTitle(r,i);
+      QString guessName = m_selection->activeSheet()->guessColumnTitle(r,i);
       QString colName=i18n(" (Column %1)",Cell::columnName(i));
 
       if (!guessName.isEmpty())
@@ -375,7 +370,7 @@ void SortDialog::init()
     int bottom = r.bottom();
     for (int i = r.top(); i <= bottom; ++i)
     {
-      QString guessName=m_pView->activeSheet()->guessRowTitle(r,i);
+      QString guessName = m_selection->activeSheet()->guessRowTitle(r,i);
       QString rowName=i18n(" (Row %1)",i);
 
       if (!guessName.isEmpty())
@@ -417,7 +412,7 @@ void SortDialog::init()
     int bottom = r.bottom();
     for (int i = r.left(); i <= right; ++i)
     {
-      QString guessName=m_pView->activeSheet()->guessColumnTitle(r,i);
+      QString guessName = m_selection->activeSheet()->guessColumnTitle(r,i);
       QString colName=i18n(" (Column %1)",Cell::columnName(i));
 
       if (!guessName.isEmpty())
@@ -433,7 +428,7 @@ void SortDialog::init()
 
     for (int i = r.top(); i <= bottom; ++i)
     {
-      QString guessName=m_pView->activeSheet()->guessRowTitle(r,i);
+      QString guessName = m_selection->activeSheet()->guessRowTitle(r,i);
       QString rowName=i18n(" (Row %1)",i);
 
       if (!guessName.isEmpty())
@@ -519,7 +514,7 @@ void SortDialog::slotOrientationChanged(int id)
 
 void SortDialog::slotOk()
 {
-  Sheet * sheet = m_pView->activeSheet();
+  Sheet * sheet = m_selection->activeSheet();
   
   SortManipulator *sm = new SortManipulator ();
   sm->setSheet (sheet);
@@ -571,7 +566,7 @@ void SortDialog::slotOk()
   sm->add (sourceArea());
   sm->execute ();
 
-  m_pView->slotUpdateView (sheet);
+  m_selection->emitModified();
   accept();
 }
 

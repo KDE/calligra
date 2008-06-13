@@ -78,7 +78,7 @@ Solver::~Solver()
 
 void Solver::showDialog()
 {
-  d->dialog = new SolverDialog( d->view, d->view );
+  d->dialog = new SolverDialog( d->view->selection(), d->view );
   connect( d->dialog, SIGNAL( okClicked() ), this, SLOT( optimize() ) );
   d->dialog->show();
 }

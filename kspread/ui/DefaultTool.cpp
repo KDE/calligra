@@ -45,27 +45,31 @@
 
 #include <QPainter>
 
+#include <KAction>
 #include <kdebug.h>
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kmimetype.h>
 #include <krun.h>
 #include <knotification.h>
+#include <KSelectAction>
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
-#include <KoSelection.h>
-#include <KoShapeManager.h>
+#include <KoViewConverter.h>
 
 #include "Cell.h"
 #include "CellView.h"
 #include "Canvas.h"
 #include "Canvas_p.h"
 #include "Doc.h"
+#include "Editors.h"
 #include "Global.h"
+#include "PrintSettings.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "SheetView.h"
+#include "StyleManager.h"
 #include "Util.h"
 #include "View.h"
 
@@ -114,27 +118,26 @@ public:
 };
 
 DefaultTool::DefaultTool( KoCanvasBase* canvas )
-    : KoTool( canvas )
+    : CellToolBase( canvas )
     , d( new Private )
 {
     d->canvas = static_cast<Canvas*>( canvas );
     d->dragStart = QPoint( -1, -1 );
     d->mouseAction = Private::None;
+
+    QAction* action = 0;
+
+    // -- misc actions --
+
+    action = new KAction(i18n("Define Print Range"), this);
+    addAction("definePrintRange", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(definePrintRange()));
+    action->setToolTip(i18n("Define the print range in the current sheet"));
 }
 
 DefaultTool::~DefaultTool()
 {
     delete d;
-}
-
-void DefaultTool::paint( QPainter& painter, const KoViewConverter& viewConverter )
-{
-    KoShape::applyConversion( painter, viewConverter );
-    const QRectF paintRect = viewConverter.viewToDocument( d->canvas->rect() );
-
-    /* paint the selection */
-    d->canvas->paintHighlightedRanges(painter, paintRect);
-    d->canvas->paintNormalMarker(painter, paintRect);
 }
 
 void DefaultTool::mousePressEvent( KoPointerEvent* event )
@@ -169,23 +172,22 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
         return;
     }
 
-    if (d->canvas->chooseMode() && d->canvas->highlightRangeSizeGripAt(position.x(),position.y()))
+    if (selection()->referenceSelectionMode() && d->canvas->highlightRangeSizeGripAt(position.x(),position.y()))
     {
-        d->canvas->choice()->setActiveElement( QPoint( col, row ), d->canvas->editor() );
+        d->canvas->selection()->setActiveElement( QPoint( col, row ), editor() );
         d->mouseAction = Private::Resize;
+        event->accept(); // MouseButtonPress
         return;
     }
 
     // We were editing a cell -> save value and get out of editing mode
-    if ( d->canvas->editor() && !d->canvas->chooseMode() )
-    {
-        d->canvas->deleteEditor( true ); // save changes
-    }
+    d->canvas->selection()->emitCloseEditor(true); // save changes
 
     // Did we click in the lower right corner of the marker/marked-area ?
     if ( d->canvas->selection()->selectionHandleArea(d->canvas->viewConverter()).contains( QPointF( position.x(), position.y() ) ) )
     {
         d->processClickSelectionHandle( event );
+        event->accept(); // MouseButtonPress
         return;
     }
 
@@ -220,7 +222,7 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
         {
             d->dragStart.setX( (int) position.x() );
             d->dragStart.setY( (int) position.y() );
-
+            event->accept(); // MouseButtonPress
             return;
         }
     }
@@ -232,7 +234,8 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
          d->canvas->view()->koDocument()->isReadWrite() &&
          !d->canvas->selection()->isColumnOrRowSelected())
     {
-        (d->canvas->chooseMode() ? d->canvas->choice() : d->canvas->selection())->update(QPoint(col,row));
+        d->canvas->selection()->update(QPoint(col,row));
+        event->accept(); // MouseButtonPress
         return;
     }
 
@@ -249,6 +252,7 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
     switch (event->button())
     {
         case Qt::LeftButton:
+            event->accept();
             // Check, whether a filter button was hit.
             {
                 QPointF p1(xpos, ypos);
@@ -269,13 +273,13 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
             }
             else if ( event->modifiers() & Qt::ControlModifier )
             {
-                if (d->canvas->chooseMode())
+                if (selection()->referenceSelectionMode())
                 {
 #if 0 // TODO Stefan: remove for NCS of choices
                     // Start a marking action
                     d->mouseAction = Private::Mark;
                     // extend the existing selection
-                    d->canvas->choice()->extend(QPoint(col,row), sheet);
+                    d->canvas->selection()->extend(QPoint(col,row), sheet);
 #endif
                 }
                 else
@@ -286,50 +290,41 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
                     d->canvas->selection()->extend(QPoint(col,row), sheet);
                 }
                 // TODO Stefan: simplification, if NCS of choices is working
-                /*        (d->canvas->chooseMode() ? d->canvas->choice() : d->canvas->selection())->extend(QPoint(col,row), sheet);*/
+                /*        d->canvas->selection()->extend(QPoint(col,row), sheet);*/
             }
             else
             {
                 // Start a marking action
                 d->mouseAction = Private::Mark;
                 // reinitialize the selection
-                (d->canvas->chooseMode() ? d->canvas->choice() : d->canvas->selection())->initialize(QPoint(col,row), sheet);
+                d->canvas->selection()->initialize(QPoint(col,row), sheet);
             }
             break;
         case Qt::MidButton:
             // Paste operation with the middle button?
             if ( d->canvas->view()->koDocument()->isReadWrite() && !sheet->isProtected() )
             {
-                (d->canvas->chooseMode() ? d->canvas->choice() : d->canvas->selection())->initialize( QPoint( col, row ), sheet );
+                d->canvas->selection()->initialize( QPoint( col, row ), sheet );
                 sheet->paste(d->canvas->selection()->lastRange(), true, Paste::Normal,
                              Paste::OverWrite, false, 0, false, QClipboard::Selection);
                 sheet->setRegionPaintDirty(*d->canvas->selection());
+                event->accept(); // MouseButtonPress
             }
             break;
         case Qt::RightButton:
             if (!d->canvas->selection()->contains( QPoint( col, row ) ))
             {
                 // No selection or the mouse press was outside of an existing selection?
-                (d->canvas->chooseMode() ? d->canvas->choice() : d->canvas->selection())->initialize(QPoint(col,row), sheet);
+                d->canvas->selection()->initialize(QPoint(col,row), sheet);
             }
+            event->ignore(); // MouseButtonPress
             break;
         default:
             break;
     }
 
     d->canvas->scrollToCell(d->canvas->selection()->marker());
-    if ( !d->canvas->chooseMode() )
-    {
-        d->canvas->view()->updateEditWidgetOnPress();
-    }
-    d->canvas->updatePosWidget();
-
-    // Context menu?
-    if ( event->button() == Qt::RightButton )
-    {
-        QPoint p = d->canvas->mapToGlobal( event->pos() );
-        d->canvas->view()->openPopupMenu( p );
-    }
+    CellToolBase::mousePressEvent(event);
 }
 
 void DefaultTool::mouseReleaseEvent( KoPointerEvent* )
@@ -347,7 +342,7 @@ void DefaultTool::mouseReleaseEvent( KoPointerEvent* )
     if ( d->mouseAction == Private::Merge && !sheet->isProtected() )
     {
         sheet->mergeCells(Region(selection->lastRange()));
-        d->canvas->view()->updateEditWidget();
+        this->selection()->emitModified();
     }
     else if ( d->mouseAction == Private::AutoFill && !sheet->isProtected() )
     {
@@ -358,9 +353,9 @@ void DefaultTool::mouseReleaseEvent( KoPointerEvent* )
         command->execute();
     }
     // The user started the drag in the middle of a cell ?
-    else if ( d->mouseAction == Private::Mark && !d->canvas->chooseMode() )
+    else if ( d->mouseAction == Private::Mark && !d->canvas->selection()->referenceSelectionMode() )
     {
-        d->canvas->view()->updateEditWidget();
+        this->selection()->emitModified();
     }
 
     d->mouseAction = Private::None;
@@ -421,7 +416,7 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
     //*** Highlighted Range Resize Handling ***
     if (d->mouseAction == Private::Resize)
     {
-        d->canvas->choice()->update(QPoint(col,row));
+        d->canvas->selection()->update(QPoint(col,row));
         return;
     }
 
@@ -436,7 +431,7 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
         return;
     }
 
-    QRect rct( (d->canvas->chooseMode() ? d->canvas->choice() : d->canvas->selection())->lastRange() );
+    QRect rct( d->canvas->selection()->lastRange() );
 
     QRect r1;
     QRect r2;
@@ -505,9 +500,9 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
     {
         d->canvas->setCursor( Qt::PointingHandCursor );
     }
-    else if ( d->canvas->chooseMode() )
+    else if ( selection()->referenceSelectionMode() )
     {
-        //Visual cue to indicate that the user can drag-select the choice selection
+        //Visual cue to indicate that the user can drag-select the selection selection
         d->canvas->setCursor( Qt::CrossCursor );
     }
     else
@@ -521,141 +516,30 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
         return;
 
     // Set the new extent of the selection
-    (d->canvas->chooseMode() ? d->canvas->choice() : d->canvas->selection())->update(QPoint(col,row));
+    d->canvas->selection()->update(QPoint(col,row));
 }
 
 void DefaultTool::mouseDoubleClickEvent( KoPointerEvent* event )
 {
     Q_UNUSED( event );
     if ( d->canvas->view()->doc()->isReadWrite() && d->canvas->activeSheet() )
-        d->canvas->createEditor( false /* keep content */);
+        createEditor( false /* keep content */);
 }
 
-void DefaultTool::keyPressEvent( QKeyEvent* event )
+KoInteractionStrategy* DefaultTool::createStrategy(KoPointerEvent* event)
 {
-    register Sheet * const sheet = d->canvas->activeSheet();
-
-    if ( !sheet || d->canvas->formatKeyPress( event ) )
-        return;
-
-    // Don't handle the remaining special keys.
-    if ( event->modifiers() & ( Qt::AltModifier | Qt::ControlModifier ) &&
-         (event->key() != Qt::Key_Down) &&
-         (event->key() != Qt::Key_Up) &&
-         (event->key() != Qt::Key_Right) &&
-         (event->key() != Qt::Key_Left) &&
-         (event->key() != Qt::Key_Home) &&
-         (event->key() != Qt::Key_Enter) &&
-         (event->key() != Qt::Key_Return) )
-    {
-        d->canvas->QWidget::keyPressEvent( event );
-        return;
-    }
-
-    // Always accept so that events are not
-    // passed to the parent.
-    event->setAccepted(true);
-
-#if 0
-    // TODO move this to the contextMenuEvent of the view.
-    // keyPressEvent() is not called with the contextMenuKey,
-    // it's handled separately by Qt.
-    if ( event->key() == KGlobalSettings::contextMenuKey() ) {
-        int row = d->canvas->selection()->marker().y();
-        int col = d->canvas->selection()->marker().x();
-        QPointF p( sheet->columnPosition(col), sheet->rowPosition(row) );
-        d->canvas->view()->openPopupMenu( d->canvas->mapToGlobal(p.toPoint()) );
-    }
-#endif
-    switch( event->key() )
-    {
-        case Qt::Key_Return:
-        case Qt::Key_Enter:
-            d->canvas->processEnterKey( event );
-            return;
-            break;
-        case Qt::Key_Down:
-        case Qt::Key_Up:
-        case Qt::Key_Left:
-        case Qt::Key_Right:
-        case Qt::Key_Tab: /* a tab behaves just like a right/left arrow */
-        case Qt::Key_Backtab:  /* and so does Shift+Tab */
-            if (event->modifiers() & Qt::ControlModifier)
-            {
-                if ( !d->canvas->processControlArrowKey( event ) )
-                    return;
-            }
-            else
-            {
-                d->canvas->processArrowKey( event );
-                return;
-            }
-            break;
-
-        case Qt::Key_Escape:
-            d->canvas->processEscapeKey( event );
-            return;
-            break;
-
-        case Qt::Key_Home:
-            if ( !d->canvas->processHomeKey( event ) )
-                return;
-            break;
-
-        case Qt::Key_End:
-            if ( !d->canvas->processEndKey( event ) )
-                return;
-            break;
-
-        case Qt::Key_PageUp:  /* Page Up */
-            if ( !d->canvas->processPriorKey( event ) )
-                return;
-            break;
-
-        case Qt::Key_PageDown:   /* Page Down */
-            if ( !d->canvas->processNextKey( event ) )
-                return;
-            break;
-
-        case Qt::Key_Delete:
-            d->canvas->processDeleteKey( event );
-            return;
-            break;
-
-        case Qt::Key_F2:
-            d->canvas->processF2Key( event );
-            return;
-            break;
-
-        case Qt::Key_F4:
-            d->canvas->processF4Key( event );
-            return;
-            break;
-
-        default:
-            d->canvas->processOtherKey( event );
-            return;
-            break;
-    }
+    Q_UNUSED(event)
+    return 0;
 }
 
-void DefaultTool::activate( bool temporary )
+KSpread::Selection* DefaultTool::selection()
 {
-    Q_UNUSED( temporary );
-
-    m_canvas->shapeManager()->selection()->deselectAll();
-    useCursor( Qt::ArrowCursor, true );
-
-    // paint the selection rectangle
-    d->canvas->update();
+    return d->canvas->selection();
 }
 
-void DefaultTool::deactivate()
+void DefaultTool::definePrintRange()
 {
-    // close the cell editor
-    d->canvas->closeEditor();
-    // clear the selection rectangle
-    d->canvas->update();
+    selection()->activeSheet()->printSettings()->setPrintRegion(*selection());
 }
 
 void DefaultTool::Private::processClickSelectionHandle( KoPointerEvent* event )
@@ -707,8 +591,8 @@ void DefaultTool::Private::processLeftClickAnchor()
                                         "Are you sure that you want to run this program?", anchor);
                 // this will also start local programs, so adding a "don't warn again"
                 // checkbox will probably be too dangerous
-                int choice = KMessageBox::warningYesNo(canvas, question, i18n("Open Link?"));
-                if ( choice != KMessageBox::Yes )
+                int selection = KMessageBox::warningYesNo(canvas, question, i18n("Open Link?"));
+                if ( selection != KMessageBox::Yes )
                     return;
             }
             new KRun(url, canvas, 0, url.isLocalFile());

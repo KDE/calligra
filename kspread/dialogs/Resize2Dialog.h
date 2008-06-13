@@ -32,14 +32,14 @@ class KoUnitDoubleSpinBox;
 
 namespace KSpread
 {
-class View;
+class Selection;
 
 class ResizeRow: public KDialog
 {
   Q_OBJECT
 
 public:
-  explicit ResizeRow( View* parent, const char* name = 0 );
+  explicit ResizeRow(QWidget* parent, Selection* selection);
   double rowHeight;
 
 protected slots:
@@ -47,7 +47,7 @@ protected slots:
   virtual void slotDefault();
 
 protected:
-  View* m_pView;
+  Selection* m_selection;
   KoUnitDoubleSpinBox *m_pHeight;
 };
 
@@ -56,7 +56,7 @@ class ResizeColumn: public KDialog
   Q_OBJECT
 
 public:
-  explicit ResizeColumn( View* parent, const char* name = 0 );
+  explicit ResizeColumn(QWidget* parent, Selection* selection);
   double columnWidth;
 
 protected slots:
@@ -64,7 +64,7 @@ protected slots:
   virtual void slotDefault();
 
 protected:
-  View* m_pView;
+  Selection* m_selection;
   KoUnitDoubleSpinBox *m_pWidth;
 };
 
