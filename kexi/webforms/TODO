@@ -1,20 +1,37 @@
-TODO file for Kexi Web forms daemon:
-Tasks are listed from the most important to the least important:
+Hey Emacs, this is an -*- org -*- file!
 
- * Add another level of indirection with Server API (the one wrapping shttpd)
-   by adding the Request object (wrapping GET/POST requests)
-   - Investigate, at the moment there's a Request, but it's just a typedef to
-   	 shttpd internal struct shttpd_arg, since shttpd_register_uri needs function pointers
-   	 with shttpd_arg as argument I should find out a solution to not break things and carry
-     out data. Maybe I can just create a utility namespace with functions accepting our
-     shttpd_arg (alias Request) object. Ask jstaniek for the best solution.
- * Implement CRUD operations within table views
-   	- Implement 'Create'
-   	- Implement 'Read'
-   	- Implement 'Update'
-   	- Implement 'Delete'
- * Add a nifty 'Run SQL query' box
-   	- Investigate the possibility to use AJAX and some sort of javascript-based autocomplete facility
- * Refine code inside views
- * Implement shortcut and connection file loading
- * Refine the whole code
+TODO list for Kexi Web Forms:
+This file is maintained using Emacs' org-mode please do not edit it
+by hand and use org-mode instead.
+
+
+* Basic kwebforms implementation
+** Implement basic CRUD Operations [60%]
+   - [ ] Implement CREATE
+   - [X] Implement READ
+   - [X] Implement UPDATE
+   - [X] Implement DELETE
+   - [ ] Implement shortcut and connection file loading
+*** TODO Refine code
+
+
+** Add a 'RUN SQL Query' box [0%]
+   1. [ ] Discuss the security policy model with Jaroslaw
+      - In particular :: which type of queries allow/deny (we don't want to allow
+      anybody to truncate tables)
+   2. [ ] Discuss the implementation model with Jaroslaw
+      - [ ] Discuss a possible authentication system. Maybe use HTTP auth
+      - [ ] Implement the authentication system
+
+** Create a decent template [0%]
+   1. [ ] Recreate a new template from scratch, the current one is awful
+      - Take inspiration from our competitors? :-)
+
+* Post GSOC Tasks/Ideas
+** TODO New webserver backend
+   I'd like to see a new webserver backend. Using function pointers is not the
+   best way to implement handlers.
+   It should be most probably written using QtNetwork.
+   It should be designed as a library, with multithreading support, to improve
+   and encourage reuse.
+
