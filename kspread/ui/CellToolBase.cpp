@@ -941,19 +941,8 @@ void CellToolBase::activate(bool temporary)
     // Initialize cell style selection action.
     const StyleManager* styleManager = selection()->activeSheet()->doc()->styleManager();
     static_cast<KSelectAction*>(this->action("setStyle"))->setItems(styleManager->styleNames());
-}
 
-void CellToolBase::deactivate()
-{
-    // close the cell editor
-    deleteEditor(true); // save changes
-    // clear the selection rectangle
-    selection()->update();
-}
-
-void CellToolBase::init()
-{
-    // Setup connections.
+    // Establish connections.
     connect(selection(), SIGNAL(changed(const Region&)),
             this, SLOT(selectionChanged(const Region&)));
     connect(selection(), SIGNAL(closeEditor(bool, bool)),
@@ -966,6 +955,20 @@ void CellToolBase::init()
             this, SLOT(documentReadWriteToggled(bool)));
     connect(selection(), SIGNAL(sheetProtectionToggled(bool)),
             this, SLOT(sheetProtectionToggled(bool)));
+}
+
+void CellToolBase::deactivate()
+{
+    // Disconnect.
+    disconnect(selection(), 0, this, 0);
+    // close the cell editor
+    deleteEditor(true); // save changes
+    // clear the selection rectangle
+    selection()->update();
+}
+
+void CellToolBase::init()
+{
 }
 
 QWidget* CellToolBase::createOptionWidget()
