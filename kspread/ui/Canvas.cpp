@@ -579,7 +579,8 @@ void Canvas::mousePressEvent( QMouseEvent* event )
         d->view->unplugActionList("toolproxy_action_list");
         d->view->plugActionList("toolproxy_action_list", toolProxy()->popupActionList());
         QMenu* menu = dynamic_cast<QMenu*>(d->view->factory()->container("default_canvas_popup", d->view));
-        if (menu) {
+        // Only show the menu, if there are items. The plugged action list counts as one action.
+        if (menu && menu->actions().count() > 1) {
             menu->exec(event->globalPos());
         }
         event->setAccepted(true);
