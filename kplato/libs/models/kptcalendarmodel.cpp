@@ -724,6 +724,12 @@ QVariant CalendarDayItemModel::dayState( const CalendarDay *d, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
+            switch ( d->state() ) {
+                case CalendarDay::Undefined: return i18nc( "Undefined", "U" );
+                case CalendarDay::NonWorking: return i18nc( "NonWorking", "NW" );
+                case CalendarDay::Working: return i18nc( "Working", "W" );
+            }
+            break;
         case Qt::ToolTipRole:
             return CalendarDay::stateToString( d->state(), true );
         case Role::EnumList: {
@@ -760,10 +766,20 @@ QVariant CalendarDayItemModel::workDuration( const CalendarDay *day, int role ) 
 {
     //kDebug()<<day->date()<<","<<role;
     switch ( role ) {
-        case Qt::DisplayRole:
-        case Qt::ToolTipRole: {
+        case Qt::DisplayRole: {
             if ( day->state() == CalendarDay::Working ) {
                 return KGlobal::locale()->formatNumber( day->workDuration().toDouble( Duration::Unit_h ), 1 );
+            }
+            return QVariant();
+        }
+        case Qt::ToolTipRole: {
+            if ( day->state() == CalendarDay::Working ) {
+                KLocale *l = KGlobal::locale();
+                QStringList tip;
+                foreach ( TimeInterval *i, day->workingIntervals() ) {
+                    tip << l->formatTime( i->startTime() ) + ", " + i18nc( "3.5hours", "%1hours", l->formatNumber( i->hours() ) );
+                }
+                return tip.join( "\n" );
             }
             return QVariant();
         }
@@ -890,9 +906,12 @@ QVariant DateTableDataModel::data( const QDate &date, int role, int dataType ) c
         if ( day->state() == CalendarDay::NonWorking ) {
             return i18n( "Non-working" );
         }
-        double v;
-        v = day->workDuration().toDouble( Duration::Unit_h );
-        return KGlobal::locale()->formatNumber( v, 1 );
+        KLocale *l = KGlobal::locale();
+        QStringList tip;
+        foreach ( TimeInterval *i, day->workingIntervals() ) {
+            tip << l->formatTime( i->startTime() ) + ", " + i18nc( "3.5hours", "%1hours", l->formatNumber( i->hours() ) );
+        }
+        return tip.join( "\n" );
     }
 
     switch ( dataType ) {

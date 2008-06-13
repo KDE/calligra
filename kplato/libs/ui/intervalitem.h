@@ -34,7 +34,7 @@ public:
     explicit IntervalItem(QTreeWidget * parent, QTime start, int length)
     : QTreeWidgetItem(parent)
     {
-        setInterval( start, (double)(length) / (1000 * 60 * 60 ) ); // ms -> hours
+        setInterval( start, (double)(length) / (1000. * 60. * 60. ) ); // ms -> hours
     }
     explicit IntervalItem(QTreeWidget * parent, QTime start, double length)
     : QTreeWidgetItem(parent)
@@ -42,7 +42,7 @@ public:
         setInterval( start, length );
     }
       
-    TimeInterval interval() { return TimeInterval(m_start, ( (int)(m_length) * 1000 * 60 * 60 ) ); }
+    TimeInterval interval() { return TimeInterval(m_start, (int)(m_length * (1000. * 60. * 60. ) ) ); }
 
     void setInterval( const QTime &time, double length )
     {

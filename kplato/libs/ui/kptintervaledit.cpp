@@ -101,7 +101,7 @@ void IntervalEditImpl::slotIntervalSelectionChanged() {
     
     IntervalItem *ii = static_cast<IntervalItem *>(lst[0]);
     startTime->setTime(ii->interval().first);
-    length->setValue((double)ii->interval().second / (1000*60*60));
+    length->setValue((double)(ii->interval().second) / (1000.*60.*60.));
     
     enableButtons();
 }
@@ -119,7 +119,6 @@ QList<TimeInterval*> IntervalEditImpl::intervals() const {
 void IntervalEditImpl::setIntervals(const QList<TimeInterval*> &intervals) {
     intervalList->clear();
     foreach (TimeInterval *i, intervals) {
-        kDebug()<<i->first<<i->second;
         new IntervalItem(intervalList, i->first, i->second);
     }
     enableButtons();
@@ -139,9 +138,7 @@ void IntervalEditImpl::enableButtons() {
         return;
     }
     TimeInterval ti( startTime->time(),  (int)(length->value() * 1000. * 60. *60.) );
-    kDebug()<<ti.first<<ti.second;
     foreach (TimeInterval *i, intervals()) {
-        kDebug()<<i->startTime()<<i->endTime()<<ti.startTime()<<ti.endTime();
         if ( i->intersects( ti ) ) {
             bAddInterval->setEnabled( false );
             return;
@@ -188,7 +185,7 @@ MacroCommand *IntervalEditDialog::buildCommand( Calendar *calendar, CalendarDay 
     CalendarModifyStateCmd *c = new CalendarModifyStateCmd( calendar, day, CalendarDay::Undefined );
     if (cmd == 0) cmd = new MacroCommand("");
     cmd->addCommand(c);
-    kDebug()<<"Set Undefined";
+    //kDebug()<<"Set Undefined";
 
     foreach ( TimeInterval *i, lst ) {
         CalendarAddTimeIntervalCmd *c = new CalendarAddTimeIntervalCmd( calendar, day, i );

@@ -97,6 +97,8 @@ public:
     CalendarDay *selectedDay() const;
     TimeInterval *selectedInterval() const;
     
+    QSize sizeHint() const;
+    
 signals:
     void currentChanged( const QModelIndex& );
     void currentColumnChanged( QModelIndex, QModelIndex );

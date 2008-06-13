@@ -82,6 +82,7 @@ public:
     QTime startTime() const { return first; }
     /// Return the intervals calculated end time. Note: It may return QTime(0,0,0)
     QTime endTime() const { return first.addMSecs( second ); }
+    double hours() const { return (double)(second) / ( 1000. * 60. * 60. ); }
     /// Returns true if this interval ends at midnight, and thus endTime() returns QTime(0,0,0)
     bool endsMidnight() const { return endTime() == QTime( 0, 0, 0 ); }
 

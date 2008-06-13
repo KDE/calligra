@@ -192,22 +192,29 @@ void CalendarTreeView::dragMoveEvent(QDragMoveEvent *event)
     }
 }
 
-
 //--------------------
 CalendarDayView::CalendarDayView( QWidget *parent )
     : QTableView( parent )
 {
-     m_model = new CalendarDayItemModel( this );
-     setModel(m_model);
-     verticalHeader()->hide();
-     //resizeColumnsToContents();
+    setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Fixed );
+    horizontalHeader()->setResizeMode( QHeaderView::Stretch );
+    m_model = new CalendarDayItemModel( this );
+    setModel(m_model);
+    verticalHeader()->hide();
 
-     actionSetWork = new KAction( i18n( "Work..." ), this );
-     connect( actionSetWork, SIGNAL( triggered( bool ) ), SLOT( slotSetWork() ) );
-     actionSetVacation = new KAction( i18n( "Non-working" ), this );
-     connect( actionSetVacation, SIGNAL( triggered( bool ) ), SLOT( slotSetVacation() ) );
-     actionSetUndefined = new KAction( i18n( "Undefined" ), this );
-     connect( actionSetUndefined, SIGNAL( triggered( bool ) ), SLOT( slotSetUndefined() ) );
+    actionSetWork = new KAction( i18n( "Work..." ), this );
+    connect( actionSetWork, SIGNAL( triggered( bool ) ), SLOT( slotSetWork() ) );
+    actionSetVacation = new KAction( i18n( "Non-working" ), this );
+    connect( actionSetVacation, SIGNAL( triggered( bool ) ), SLOT( slotSetVacation() ) );
+    actionSetUndefined = new KAction( i18n( "Undefined" ), this );
+    connect( actionSetUndefined, SIGNAL( triggered( bool ) ), SLOT( slotSetUndefined() ) );
+}
+
+QSize CalendarDayView::sizeHint() const
+{
+    QSize s = QTableView::sizeHint();
+    s.setHeight( horizontalHeader()->height() + rowHeight( 0 ) );
+    return s;
 }
 
 void CalendarDayView::slotSetWork()
@@ -336,15 +343,17 @@ CalendarEditor::CalendarEditor( KoDocument *part, QWidget *parent )
     l->addWidget( sp );
 
     m_calendarview = new CalendarTreeView( sp );
-    sp = new QSplitter( sp );
-    sp->setOrientation( Qt::Vertical );
-    
-    sp = new QSplitter( sp );
-    sp->setOrientation( Qt::Vertical );
-    
-    m_dayview = new CalendarDayView( sp );
     
     QFrame *f = new QFrame( sp );
+    l = new QVBoxLayout( f );
+    l->setMargin( 0 );
+
+    m_dayview = new CalendarDayView( f );
+    l->addWidget( m_dayview );
+    
+    sp = new QSplitter( f );
+    l->addWidget( sp );
+    f = new QFrame( sp );
     f->setFrameStyle( QFrame::StyledPanel | QFrame::Sunken );
     l = new QVBoxLayout( f );
     l->setMargin( 0 );
