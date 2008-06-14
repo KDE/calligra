@@ -96,7 +96,7 @@ namespace Scripting {
                     kWarning(32010) << "Scripting::Module::addFrame() Invalid shapeId: " << shapeId << endl;
                     return 0;
                 }
-                KoShape *shape = factory->createDefaultShape( 0 );
+                KoShape *shape = factory->createDefaultShapeAndInit( 0 );
                 Q_ASSERT(shape);
                 shape->setZIndex( 100 + m_frameset->frameCount() );
                 KWFrame* frame = 0;

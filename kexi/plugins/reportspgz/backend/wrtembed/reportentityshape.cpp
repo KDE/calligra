@@ -88,7 +88,7 @@ void ReportEntityShape::paint ( QPainter* painter, const QStyleOptionGraphicsIte
 	QList<KoShape*> shapes;
 	painter->setRenderHint(QPainter::Antialiasing);
 
-	mShape = ( KoShape* )( KoShapeRegistry::instance()->value(_shapeType->value().toString()) )->createDefaultShape( 0 );
+	mShape = ( KoShape* )( KoShapeRegistry::instance()->value(_shapeType->value().toString()) )->createDefaultShapeAndInit( 0 );
 	mShape->setSize(_size.toScene());
 	shapes << mShape;
 	

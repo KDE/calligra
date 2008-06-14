@@ -1801,7 +1801,7 @@ KoShape * SvgImport::createShape( const QString &shapeID )
         return 0;
     }
 
-    KoShape * shape = factory->createDefaultShape( 0 );
+    KoShape * shape = factory->createDefaultShapeAndInit( 0 );
     if( shape && shape->shapeId().isEmpty() )
         shape->setShapeId( factory->id() );
 

@@ -114,4 +114,4 @@ void KPrSoundEventAction::finished()
     m_media = 0;
 }
 
-#include "KPrSoundEventAction.moc"
+#include <KPrSoundEventAction.moc>

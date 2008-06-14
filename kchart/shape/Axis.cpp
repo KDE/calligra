@@ -320,7 +320,7 @@ Axis::Axis( PlotArea *parent )
     
     setShowGrid( false );
     
-    d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShape( 0 );
+    d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( 0 );
     if ( d->title )
     {
         d->titleData = qobject_cast<TextLabelData*>( d->title->userData() );

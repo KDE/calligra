@@ -576,7 +576,7 @@ void KWFrameLayout::setup() {
 KoShape *KWFrameLayout::createTextShape(KWPage *page) {
     KoShapeFactory *factory = KoShapeRegistry::instance()->value(TextShape_SHAPEID);
     Q_ASSERT(factory);
-    KoShape *shape = factory->createDefaultShape( const_cast<KWDocument *>( m_document ) );
+    KoShape *shape = factory->createDefaultShapeAndInit( const_cast<KWDocument *>( m_document ) );
     shape->setPosition(QPointF(0, page->offsetInDocument()));
     return shape;
 }

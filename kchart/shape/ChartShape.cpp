@@ -256,7 +256,7 @@ ChartShape::ChartShape()
     d->plotArea->setChartType( BarChartType );
     d->plotArea->setChartSubType( NormalChartSubtype );
     
-    d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShape( 0 );
+    d->title = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( 0 );
     if ( !d->title )
     {
         d->title = new TextLabelDummy;
@@ -273,7 +273,7 @@ ChartShape::ChartShape()
     titleData()->document()->setPlainText( i18n( "Title" ) );
     d->title->setVisible( false );
 
-    d->subTitle = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShape( 0 );
+    d->subTitle = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( 0 );
     if ( !d->subTitle )
     {
         d->subTitle = new TextLabelDummy;
@@ -287,7 +287,7 @@ ChartShape::ChartShape()
     subTitleData()->document()->setPlainText( i18n( "Subtitle" ) );
     d->subTitle->setVisible( false );
 
-    d->footer = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShape( 0 );
+    d->footer = KoShapeRegistry::instance()->value( TextShapeId )->createDefaultShapeAndInit( 0 );
     if ( !d->footer )
     {
         d->footer = new TextLabelDummy;

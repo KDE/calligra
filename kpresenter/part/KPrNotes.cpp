@@ -64,7 +64,7 @@ KPrNotes::KPrNotes(KPrPage *page)
     // All sizes and positions are hardcoded for now
     KoShapeFactory *factory = KoShapeRegistry::instance()->value("TextShapeID");
     Q_ASSERT(factory);
-    m_textShape = factory->createDefaultShape(0);
+    m_textShape = factory->createDefaultShapeAndInit(0);
     m_textShape->setLocked(true);
     m_textShape->setAdditionalAttribute( "presentation:class", "notes" );
     m_pageLayout = KoPageLayout::standardLayout();
@@ -73,7 +73,7 @@ KPrNotes::KPrNotes(KPrPage *page)
 
     factory = KoShapeRegistry::instance()->value("PictureShape");
     Q_ASSERT(factory);
-    m_thumbnailShape = factory->createDefaultShape(0);
+    m_thumbnailShape = factory->createDefaultShapeAndInit(0);
     m_thumbnailShape->setLocked(true);
     m_thumbnailShape->setAdditionalAttribute( "presentation:class", "page" );
     m_thumbnailShape->setPosition(QPointF(108.00, 60.18));

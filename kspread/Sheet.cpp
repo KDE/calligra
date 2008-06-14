@@ -269,7 +269,7 @@ Sheet::Sheet(const Sheet& other)
     const QList<KoShape*> shapes = other.d->shapes;
     for (int i = 0; i < shapes.count(); ++i)
     {
-        shape = KoShapeRegistry::instance()->value(shapes[i]->shapeId())->createDefaultShape( 0 );
+        shape = KoShapeRegistry::instance()->value(shapes[i]->shapeId())->createDefaultShapeAndInit( 0 );
         shape->copySettings(shapes[i]);
         addShape(shape);
     }
