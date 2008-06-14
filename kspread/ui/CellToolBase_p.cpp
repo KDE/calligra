@@ -1164,7 +1164,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
                               !(cell.style().notProtected() && q->selection()->isSingular()));
     if (!isProtected) {
         actions.append(q->action("cellStyle"));
-//         actions.append(popupMenuActions["separator"]);
+        actions.append(popupMenuActions["separator1"]);
         actions.append(q->action("cut"));
     }
     actions.append(q->action("copy"));
@@ -1172,20 +1172,20 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
         actions.append(q->action("paste"));
         actions.append(q->action("specialPaste"));
         actions.append(q->action("pasteWithInsertion"));
-//         actions.append(popupMenuActions["separator"]);
+        actions.append(popupMenuActions["separator2"]);
         actions.append(q->action("clearAll"));
         actions.append(q->action("adjust"));
         actions.append(q->action("setDefaultStyle"));
         actions.append(q->action("setAreaName"));
 
         if (!q->selection()->isColumnOrRowSelected()) {
-//             actions.append(popupMenuActions["separator"]);
+            actions.append(popupMenuActions["separator3"]);
             actions.append(popupMenuActions["insertCell"]);
             actions.append(popupMenuActions["deleteCell"]);
         } else if (q->selection()->isColumnSelected() && q->selection()->isSingular()) {
             actions.append(q->action("resizeCol"));
             actions.append(popupMenuActions["adjustColumn"]);
-//             actions.append(popupMenuActions["separator"]);
+            actions.append(popupMenuActions["separator4"]);
             actions.append(popupMenuActions["insertColumn"]);
             actions.append(popupMenuActions["deleteColumn"]);
             actions.append(q->action("hideColumn"));
@@ -1222,7 +1222,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
         } else if (q->selection()->isRowSelected() && q->selection()->isSingular()) {
             actions.append(q->action("resizeRow"));
             actions.append(popupMenuActions["adjustRow"]);
-//             actions.append(popupMenuActions["separator"]);
+            actions.append(popupMenuActions["separator5"]);
             actions.append(popupMenuActions["insertRow"]);
             actions.append(popupMenuActions["deleteRow"]);
             actions.append(q->action("hideRow"));
@@ -1257,14 +1257,14 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
                 }
             }
         }
-//         actions.append(popupMenuActions["separator"]);
+        actions.append(popupMenuActions["separator6"]);
         actions.append(q->action("comment"));
         if (!cell.comment().isEmpty()) {
             actions.append(q->action("clearComment"));
         }
 
         if (q->selection()->activeSheet()->testListChoose(q->selection())) {
-//             actions.append(popupMenuActions["separator"]);
+            actions.append(popupMenuActions["separator7"]);
             actions.append(popupMenuActions["listChoose"]);
         }
     }
@@ -1275,9 +1275,11 @@ void CellToolBase::Private::createPopupMenuActions()
 {
     QAction* action = 0;
 
-//     action = new QAction(q);
-//     action->setSeparator(true);
-//     popupMenuActions.insert("separator", action);
+    for (int i = 1; i <= 7; ++i) {
+        action = new QAction(q);
+        action->setSeparator(true);
+        popupMenuActions.insert(QString("separator%1").arg(i), action);
+    }
 
     action = new KAction(KIcon("insertcell"), i18n("Insert Cells..."), q);
     connect(action, SIGNAL(triggered(bool)), q, SLOT(insertCells()));
