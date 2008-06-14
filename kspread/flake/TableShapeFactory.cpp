@@ -28,6 +28,7 @@
 #include <KoProperties.h>
 #include <KoToolRegistry.h>
 #include <KoShapeRegistry.h>
+#include <KoXmlNS.h>
 
 #include "TableShape.h"
 #include "TableToolFactory.h"
@@ -48,7 +49,7 @@ TableShapeFactory::TableShapeFactory( QObject* parent )
 {
     setToolTip( i18n( "A shape that shows a table" ) );
     setIcon( "spreadsheetshape" );
-
+    setOdfElementNames(KoXmlNS::table, QStringList() << "table");
 #if 0
     KoShapeTemplate t;
     t.name = "Simple table";
@@ -61,6 +62,23 @@ TableShapeFactory::TableShapeFactory( QObject* parent )
 
 
 #endif
+}
+
+KoShape* TableShapeFactory::createDefaultShape(KoShapeControllerBase *shapeController)
+{
+    TableShape* shape = new TableShape();
+    return shape;
+}
+
+KoShape* TableShapeFactory::createShape(const KoProperties* params, KoShapeControllerBase *shapeController)
+{
+    TableShape* shape = new TableShape();
+    return shape;
+}
+
+bool TableShapeFactory::supports(const KoXmlElement &element) const
+{
+    return (element.namespaceURI() == KoXmlNS::table && element.localName() == "table");
 }
 
 KoShape* TableShapeFactory::createDefaultShape() const

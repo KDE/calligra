@@ -45,14 +45,11 @@ public:
     void setColumns( int columns );
     void setRows( int rows );
 
-    /// reimplemented
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
-    /// reimplemented
-    virtual void setSize( const QSizeF &size );
-    /// reimplemented
-    virtual void saveOdf( KoShapeSavingContext & context ) const;
-    // reimplemented
-    virtual bool loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context );
+    // KoShape interface
+    virtual void paint(QPainter& painter, const KoViewConverter& converter);
+    virtual bool loadOdf(const KoXmlElement & element, KoShapeLoadingContext &context);
+    virtual void saveOdf(KoShapeSavingContext & context) const;
+    virtual void setSize(const QSizeF &size);
 
     /**
      * \return the document containing the data for this shape

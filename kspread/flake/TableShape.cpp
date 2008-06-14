@@ -24,6 +24,10 @@
 
 #include <kdebug.h>
 
+#include <KoOdfLoadingContext.h>
+#include <KoShapeLoadingContext.h>
+#include <KoXmlNS.h>
+
 #include <CellView.h>
 #include <Damages.h>
 #include <Doc.h>
@@ -32,6 +36,7 @@
 #include <RowColumnFormat.h>
 #include <Sheet.h>
 #include <SheetView.h>
+#include <StyleManager.h>
 
 using namespace KSpread;
 
@@ -142,6 +147,56 @@ void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
     d->sheetView->paintCells( 0 /*paintDevice*/, painter, paintRect, QPointF( 0.0, 0.0 ) );
 }
 
+bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &context)
+{
+    kDebug() << "LOADING TABLE SHAPE";
+    if (element.namespaceURI() == KoXmlNS::table && element.localName() == "table") {
+        delete d->sheetView;
+        delete d->doc;
+        d->doc = new Doc();
+
+        // pre-load auto styles
+        KoOdfLoadingContext& odfContext = context.odfLoadingContext();
+        QHash<QString, Conditions> conditionalStyles;
+        Styles autoStyles = doc()->styleManager()->loadOasisAutoStyles(odfContext.stylesReader(), conditionalStyles);
+
+        Sheet* sheet = d->doc->map()->addNewSheet();
+        d->sheetView = new SheetView(sheet);
+        if (!element.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
+            sheet->setSheetName(element.attributeNS(KoXmlNS::table, "name", QString()), true);
+        }
+        const bool result = sheet->loadOasis(element, odfContext, autoStyles, conditionalStyles);
+
+        // delete any styles which were not used
+        doc()->styleManager()->releaseUnusedAutoStyles(autoStyles);
+
+        if (!result) {
+            delete d->doc;
+            d->doc = 0;
+            d->sheetView = 0;
+            return false;
+        }
+
+        const QRect usedArea = sheet->usedArea();
+        d->columns = usedArea.width();
+        d->rows = usedArea.height();
+
+        QSizeF size(0.0, 0.0);
+        for (int col = 1; col <= d->columns; ++col) {
+            size.rwidth() += sheet->columnFormat(col)->visibleWidth();
+        }
+        for (int row = 1; row <= d->rows; ++row) {
+            size.rheight() += sheet->rowFormat(row)->visibleHeight();
+        }
+        KoShape::setSize(size);
+    }
+    return true;
+}
+
+void TableShape::saveOdf( KoShapeSavingContext & context ) const
+{
+}
+
 void TableShape::setSize( const QSizeF& newSize )
 {
     if ( size() == newSize )
@@ -175,14 +230,6 @@ void TableShape::setSheet(const QString& sheetName)
     setColumns(d->columns);
     setRows(d->rows);
     update();
-}
-
-void TableShape::saveOdf( KoShapeSavingContext & context ) const
-{
-}
-
-bool TableShape::loadOdf( const KoXmlElement & element, KoShapeLoadingContext &context ) {
-    return false; // TODO
 }
 
 void TableShape::handleDamages( const QList<Damage*>& damages )

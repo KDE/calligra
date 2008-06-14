@@ -603,7 +603,9 @@ int Map::count() const
 void Map::increaseLoadedRowsCounter(int number)
 {
     d->loadedRowsCounter += number;
-    d->doc->emitProgress(100 * d->loadedRowsCounter / d->overallRowCount);
+    if (d->overallRowCount) {
+        d->doc->emitProgress(100 * d->loadedRowsCounter / d->overallRowCount);
+    }
 }
 
 void Map::emitAddSheet(Sheet* sheet)

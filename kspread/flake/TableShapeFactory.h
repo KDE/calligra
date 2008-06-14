@@ -25,6 +25,7 @@
 #include <KoShapeFactory.h>
 
 class KoShape;
+class KoXmlElement;
 
 class TableShapePlugin : public QObject
 {
@@ -42,8 +43,14 @@ public:
     TableShapeFactory( QObject* parent );
     ~TableShapeFactory() {}
 
-    KoShape* createDefaultShape() const;
-    KoShape* createShape( const KoProperties* params ) const;
+    virtual KoShape* createDefaultShape(KoShapeControllerBase *shapeController);
+    virtual KoShape* createShape(const KoProperties* params, KoShapeControllerBase *shapeController);
+
+    virtual bool supports(const KoXmlElement &element) const;
+
+protected:
+    virtual KoShape* createDefaultShape() const;
+    virtual KoShape* createShape(const KoProperties* params) const;
 };
 
 #endif // KSPREAD_TABLE_SHAPE_FACTORY
