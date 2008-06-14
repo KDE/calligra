@@ -176,6 +176,8 @@ void FormulaEditorHighlighter::highlightBlock( const QString& text )
       case Token::Integer:     // 14, 3, 1977
       case Token::Float:       // 3.141592, 1e10, 5.9e-7
       case Token::String:      // "KOffice", "The quick brown fox..."
+      case Token::Error:
+          break;
       case Token::Operator:    // +, *, /, -
         {
             switch (token.asOperator())
