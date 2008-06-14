@@ -1224,6 +1224,10 @@ bool CellToolBase::createEditor(bool clear, bool focus)
         editorPalette.setColor(QPalette::Background, color);
         editor()->setPalette(editorPalette);
 
+        // apply (table shape) offset
+        xpos += offset().x();
+        ypos += offset().y();
+
         const QRectF rect(xpos + 0.5, ypos + 0.5, w - 0.5, h - 0.5); //needed to circumvent rounding issue with height/width
         const QRectF zoomedRect = m_canvas->viewConverter()->documentToView(rect);
         editor()->setGeometry(zoomedRect.toRect().adjusted(1, 1, -1, -1));

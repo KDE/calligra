@@ -30,7 +30,9 @@
 #define KSPREAD_CELL_TOOL_BASE
 
 #include <KoInteractionTool.h>
+
 #include "Cell.h"
+#include "kspread_export.h"
 #include "Selection.h"
 
 namespace KSpread
@@ -39,7 +41,7 @@ namespace KSpread
 /**
  * Base tool providing actions acting on cell ranges.
  */
-class CellToolBase : public KoInteractionTool
+class KSPREAD_EXPORT CellToolBase : public KoInteractionTool
 {
     Q_OBJECT
 

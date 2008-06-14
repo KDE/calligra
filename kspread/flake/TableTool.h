@@ -20,7 +20,7 @@
 #ifndef KSPREAD_TABLE_TOOL
 #define KSPREAD_TABLE_TOOL
 
-#include <KoInteractionTool.h>
+#include "CellToolBase.h"
 
 class KoInteractionStrategy;
 
@@ -28,7 +28,7 @@ namespace KSpread
 {
 class Region;
 
-class TableTool : public KoInteractionTool
+class TableTool : public CellToolBase
 {
     Q_OBJECT
 
@@ -37,13 +37,10 @@ public:
     ~TableTool();
 
     virtual void repaintDecorations();
-    virtual void paint( QPainter& painter, const KoViewConverter& converter );
 
-    virtual void mousePressEvent( KoPointerEvent* event ) ;
-    virtual void mouseMoveEvent( KoPointerEvent* event );
-    virtual void mouseReleaseEvent( KoPointerEvent* event );
-    virtual void mouseDoubleClickEvent(KoPointerEvent* event);
+    virtual Selection* selection();
 
+public Q_SLOTS:
     virtual void activate( bool temporary = false );
     virtual void deactivate();
 
@@ -51,7 +48,8 @@ Q_SIGNALS:
     void userInputChanged(const QString& content);
 
 protected:
-    virtual KoInteractionStrategy* createStrategy(KoPointerEvent* event);
+    virtual QPointF offset() const;
+    virtual QSizeF size() const;
 
 private Q_SLOTS:
     void changeColumns( int num );

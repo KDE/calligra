@@ -952,6 +952,7 @@ void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &view
     const double xOffset = q->canvas()->canvasController()->canvasOffsetX();
     const double yOffset = q->canvas()->canvasController()->canvasOffsetY();
     painter.translate(-xOffset, -yOffset); // esp. for a correct clip region
+    painter.translate(q->offset()); // for table shape
     // disable antialiasing
     painter.setRenderHint(QPainter::Antialiasing, false);
     // Extend the clip rect by one in each direction to avoid artefacts caused by rounding errors.
@@ -1073,6 +1074,7 @@ void CellToolBase::Private::paintReferenceSelection(QPainter &painter, const QRe
     const double xOffset = q->canvas()->canvasController()->canvasOffsetX();
     const double yOffset = q->canvas()->canvasController()->canvasOffsetY();
     painter.translate(-xOffset, -yOffset); // esp. for a correct clip region
+    painter.translate(q->offset()); // for table shape
 
     const QList<QColor> colors = q->selection()->colors();
     const double unzoomedPixelX = q->canvas()->viewConverter()->viewToDocumentX(1.0);

@@ -72,7 +72,7 @@ public:
 
 
 TableTool::TableTool( KoCanvasBase* canvas )
-    : KoInteractionTool( canvas )
+    : CellToolBase(canvas)
     , d( new Private )
 {
     setObjectName("TableTool");
@@ -130,106 +130,10 @@ void TableTool::repaintDecorations()
     m_canvas->updateCanvas(d->tableShape->boundingRect());
 }
 
-void TableTool::paint( QPainter& painter, const KoViewConverter& viewConverter )
+Selection* TableTool::selection()
 {
-    KoShape::applyConversion(painter, viewConverter);
-
-    // get the transparent selection color
-    QColor selectionColor(QApplication::palette().highlight().color());
-    selectionColor.setAlpha(127);
-
-    // Set the pen.
-    const double unzoomedPixel = viewConverter.viewToDocumentX(1.0);
-    const QPen pen(QApplication::palette().text().color(), unzoomedPixel * 2.0);
-    painter.setPen(pen);
-
-    // Clip out the
-    painter.save();
-    const QRect markerRange = QRect(d->selection->marker(), d->selection->marker());
-    const QRectF markerRect = d->tableShape->sheet()->cellCoordinatesToDocument(markerRange);
-    painter.setClipRegion(painter.clipRegion().subtracted(markerRect.translated(d->tableShape->position()).toRect()));
-
-    const QRect lastRange = d->selection->lastRange();
-    Region::ConstIterator end = d->selection->constEnd();
-    for (Region::ConstIterator it = d->selection->constBegin(); it != end; ++it)
-    {
-        const QRectF rect = d->tableShape->sheet()->cellCoordinatesToDocument((*it)->rect());
-        // draw the transparent selection background
-        painter.fillRect(rect.translated(d->tableShape->position()), selectionColor);
-        if ((*it)->rect() == lastRange)
-            painter.restore(); // no clipping for the frame
-        painter.drawRect(rect.translated(d->tableShape->position()));
-    }
-
-    const QRectF rect = d->tableShape->sheet()->cellCoordinatesToDocument(d->selection->lastRange());
-    const QPointF handleOffset = QPointF(unzoomedPixel * 2.0, unzoomedPixel * 2.0);
-    if (d->tableShape->sheet()->layoutDirection() == Qt::LeftToRight)
-        painter.drawRect(QRectF(rect.bottomRight() + d->tableShape->position() - handleOffset,
-                                rect.bottomRight() + d->tableShape->position() + handleOffset));
-    else
-        painter.drawRect(QRectF(rect.bottomLeft() + d->tableShape->position() - handleOffset,
-                                rect.bottomLeft() + d->tableShape->position() + handleOffset));
+    return d->selection;
 }
-
-void TableTool::mousePressEvent(KoPointerEvent* event)
-{
-    KoInteractionTool::mousePressEvent(event);
-}
-
-void TableTool::mouseMoveEvent(KoPointerEvent* event)
-{
-    // Indicators are not neccessary for protected sheets or if there's a strategy.
-    if (d->tableShape->sheet()->isProtected() || m_currentStrategy)
-        return KoInteractionTool::mouseMoveEvent(event);
-
-    // Get info about where the event occurred.
-    QPointF position = event->point - d->tableShape->position();
-    if (d->tableShape->sheet()->layoutDirection() == Qt::RightToLeft)
-        position.setX(d->tableShape->size().width() - position.x());
-
-    // Diagonal cursor, if the selection handle was hit.
-    if (d->selection->selectionHandleArea(canvas()->viewConverter()).contains(position))
-    {
-        if (d->tableShape->sheet()->layoutDirection() == Qt::RightToLeft)
-            useCursor(Qt::SizeBDiagCursor);
-        else
-            useCursor(Qt::SizeFDiagCursor);
-        return KoInteractionTool::mouseMoveEvent(event);
-    }
-
-    // Hand cursor, if the selected area was hit.
-    Region::ConstIterator end = d->selection->constEnd();
-    for (Region::ConstIterator it = d->selection->constBegin(); it != end; ++it)
-    {
-        const QRect range = (*it)->rect();
-        if (d->tableShape->sheet()->cellCoordinatesToDocument(range).contains(position))
-        {
-            useCursor(Qt::PointingHandCursor);
-            return KoInteractionTool::mouseMoveEvent(event);
-        }
-    }
-
-    // Reset to normal cursor.
-    useCursor(Qt::ArrowCursor);
-    KoInteractionTool::mouseMoveEvent(event);
-}
-
-void TableTool::mouseReleaseEvent(KoPointerEvent* event)
-{
-    KoInteractionTool::mouseReleaseEvent(event);
-}
-
-void TableTool::mouseDoubleClickEvent(KoPointerEvent* event)
-{
-    if (m_currentStrategy)
-    {
-        m_currentStrategy->cancelInteraction();
-        delete m_currentStrategy;
-        m_currentStrategy = 0;
-    }
-    d->lineEdit->setFocus(Qt::OtherFocusReason);
-}
-
 
 void TableTool::activate( bool temporary )
 {
@@ -258,41 +162,14 @@ void TableTool::deactivate()
     d->tableShape = 0;
 }
 
-KoInteractionStrategy* TableTool::createStrategy(KoPointerEvent* event)
+QPointF TableTool::offset() const
 {
-    // Get info about where the event occurred.
-    QPointF position = event->point - d->tableShape->position();
-    if (d->tableShape->sheet()->layoutDirection() == Qt::RightToLeft)
-        position.setX(d->tableShape->size().width() - position.x());
+    return d->tableShape->position();
+}
 
-    // Autofilling or merging, if the selection handle was hit.
-    if (d->selection->selectionHandleArea(canvas()->viewConverter()).contains(position))
-    {
-        if (event->button() == Qt::LeftButton)
-            return new AutoFillStrategy(this, canvas(), d->selection, event->point, event->modifiers());
-        else if (event->button() == Qt::MidButton)
-            return new MergeStrategy(this, canvas(), d->selection, event->point, event->modifiers());
-    }
-
-    // Pasting with the middle mouse button.
-    if (event->button() == Qt::MidButton)
-        kDebug() << "pasting"; // TODO Stefan: pasting
-
-    // Context menu with the right mouse button.
-    if (event->button() == Qt::RightButton)
-        kDebug() << "popup"; // TODO Stefan: popup menu
-
-    // Drag & drop, if the selected area was hit.
-    Region::ConstIterator end = d->selection->constEnd();
-    for (Region::ConstIterator it = d->selection->constBegin(); it != end; ++it)
-    {
-        const QRect range = (*it)->rect();
-        if (d->tableShape->sheet()->cellCoordinatesToDocument(range).contains(position))
-            kDebug() << "drag&drop"; // TODO Stefan: drag & drop
-    }
-
-    // TODO Stefan: reference selection
-    return new SelectionStrategy(this, canvas(), d->selection, event->point, event->modifiers());
+QSizeF TableTool::size() const
+{
+    return d->tableShape->size();
 }
 
 void TableTool::changeColumns( int num )
@@ -366,6 +243,8 @@ void TableTool::sheetsBtnClicked()
 
 QWidget* TableTool::createOptionWidget()
 {
+    return CellToolBase::createOptionWidget();
+
     QWidget* optionWidget = new QWidget();
     QVBoxLayout* l = new QVBoxLayout( optionWidget );
     l->setMargin(0);
