@@ -140,6 +140,7 @@ DefaultTool::~DefaultTool()
     delete d;
 }
 
+#if 0 // KSPREAD_MOUSE_STRATEGIES
 void DefaultTool::mousePressEvent( KoPointerEvent* event )
 {
     register Sheet * const sheet = d->canvas->activeSheet();
@@ -531,10 +532,21 @@ KoInteractionStrategy* DefaultTool::createStrategy(KoPointerEvent* event)
     Q_UNUSED(event)
     return 0;
 }
+#endif
 
 KSpread::Selection* DefaultTool::selection()
 {
     return d->canvas->selection();
+}
+
+QPointF DefaultTool::offset() const
+{
+    return QPointF(0.0, 0.0);
+}
+
+QSizeF DefaultTool::size() const
+{
+    return d->canvas->size();
 }
 
 void DefaultTool::definePrintRange()

@@ -39,9 +39,8 @@ SelectionStrategy::SelectionStrategy(KoTool* parent, KoCanvasBase* canvas, Selec
     : AbstractSelectionStrategy(parent, canvas, selection, documentPos, modifiers)
     , d(new Private)
 {
-    Q_ASSERT(canvas->shapeManager()->selection()->count() > 0);
-    KoShape* shape = canvas->shapeManager()->selection()->firstSelectedShape();
-    const QPointF position = documentPos - shape->position();
+    const KoShape* shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
 
     // Extend selection, if control modifier is pressed.
     // In which cell did the user click?
@@ -50,12 +49,20 @@ SelectionStrategy::SelectionStrategy(KoTool* parent, KoCanvasBase* canvas, Selec
     int col = this->selection()->activeSheet()->leftColumn(position.x(), xpos);
     int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
     // Check boundaries.
-    if (col > KS_colMax || row > KS_rowMax)
+    if (col > KS_colMax || row > KS_rowMax) {
         kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
-    else if (modifiers & Qt::ControlModifier)
-        this->selection()->extend(QPoint(col, row), this->selection()->activeSheet());
-    else
-        this->selection()->initialize(QPoint(col, row), this->selection()->activeSheet());
+    } else {
+        if (selection->referenceSelectionMode()) {
+            selection->emitRequestFocusEditor();
+        } else {
+            selection->emitCloseEditor(true);
+        }
+        if (modifiers & Qt::ControlModifier) {
+            this->selection()->extend(QPoint(col, row), this->selection()->activeSheet());
+        } else {
+            this->selection()->initialize(QPoint(col, row), this->selection()->activeSheet());
+        }
+    }
     m_parent->repaintDecorations();
 }
 

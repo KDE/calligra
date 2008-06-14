@@ -57,6 +57,9 @@ public:
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
     virtual void mousePressEvent(KoPointerEvent* event);
+    virtual void mouseMoveEvent(KoPointerEvent* event);
+    virtual void mouseReleaseEvent(KoPointerEvent* event);
+    virtual void mouseDoubleClickEvent(KoPointerEvent* event);
     virtual void keyPressEvent(QKeyEvent* event);
 
     virtual Selection* selection() = 0;
@@ -74,6 +77,9 @@ protected:
     void init();
     virtual QWidget* createOptionWidget();
     void applyUserInput(bool expandMatrix = false);
+    virtual KoInteractionStrategy* createStrategy(KoPointerEvent* event);
+    virtual QPointF offset() const = 0;
+    virtual QSizeF size() const = 0;
 
 protected Q_SLOTS:
     void selectionChanged(const Region&);

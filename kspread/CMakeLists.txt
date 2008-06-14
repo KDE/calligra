@@ -152,8 +152,10 @@ SET (ui_DIR_SRCS
 	ui/CellView.cpp
 	ui/DefaultTool.cpp
 	ui/DefaultToolFactory.cpp
+	ui/DragAndDropStrategy.cpp
 	ui/Editors.cpp
 	ui/MergeStrategy.cpp
+	ui/PasteStrategy.cpp
 	ui/PrintJob.cpp
 	ui/SelectionStrategy.cpp
 	ui/SheetView.cpp

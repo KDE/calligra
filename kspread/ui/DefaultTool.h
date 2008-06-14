@@ -33,14 +33,20 @@ public:
     explicit DefaultTool( KoCanvasBase* canvas );
     ~DefaultTool();
 
+#if 0 // KSPREAD_MOUSE_STRATEGIES
     virtual void mousePressEvent( KoPointerEvent* event ) ;
     virtual void mouseReleaseEvent( KoPointerEvent* event );
     virtual void mouseMoveEvent( KoPointerEvent* event );
     virtual void mouseDoubleClickEvent( KoPointerEvent* event );
+#endif
 
 protected:
+#if 0 // KSPREAD_MOUSE_STRATEGIES
     virtual KoInteractionStrategy* createStrategy(KoPointerEvent* event);
+#endif
     virtual Selection* selection();
+    virtual QPointF offset() const;
+    virtual QSizeF size() const;
 
 protected Q_SLOTS:
     // -- misc actions --

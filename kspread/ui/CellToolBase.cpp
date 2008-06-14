@@ -30,11 +30,16 @@
 #include "CellToolBase_p.h"
 
 // KSpread
+#include "AutoFillStrategy.h"
 #include "Cell.h"
 #include "Damages.h"
+#include "DragAndDropStrategy.h"
 #include "inspector.h"
 #include "Map.h"
+#include "MergeStrategy.h"
 #include "NamedAreaManager.h"
+#include "PasteStrategy.h"
+#include "SelectionStrategy.h"
 #include "Sheet.h"
 #include "StyleManager.h"
 
@@ -809,12 +814,85 @@ void CellToolBase::paint(QPainter &painter, const KoViewConverter &viewConverter
     d->paintSelection(painter, paintRect);
 }
 
+#if 0 // KSPREAD_MOUSE_STRATEGIES
 void CellToolBase::mousePressEvent(KoPointerEvent* event)
 {
     if (event->button() == Qt::RightButton) {
         // Setup the context menu.
         setPopupActionList(d->popupActionList());
     }
+}
+#endif
+
+void CellToolBase::mousePressEvent(KoPointerEvent* event)
+{
+    KoInteractionTool::mousePressEvent(event);
+}
+
+void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
+{
+    // Special handling for drag'n'drop.
+    if (dynamic_cast<DragAndDropStrategy*>(m_currentStrategy)) {
+        DragAndDropStrategy* dragAndDropStrategy = dynamic_cast<DragAndDropStrategy*>(m_currentStrategy);
+        m_currentStrategy = 0;
+        KoInteractionTool::mouseMoveEvent(event); // for last point
+        if (dragAndDropStrategy->startDrag(event->point, event->modifiers())) {
+            // drag was started
+            delete dragAndDropStrategy;
+        } else {
+            m_currentStrategy = dragAndDropStrategy;
+        }
+        return;
+    }
+    // Indicators are not neccessary for protected sheets or if there's a strategy.
+    if (selection()->activeSheet()->isProtected() || m_currentStrategy) {
+        return KoInteractionTool::mouseMoveEvent(event);
+    }
+
+    // Get info about where the event occurred.
+    QPointF position = event->point - offset();
+    if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
+        position.setX(size().width() - position.x());
+    }
+
+    // Diagonal cursor, if the selection handle was hit.
+    if (selection()->selectionHandleArea(canvas()->viewConverter()).contains(position)) {
+        if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
+            useCursor(Qt::SizeBDiagCursor);
+        } else {
+            useCursor(Qt::SizeFDiagCursor);
+        }
+        return KoInteractionTool::mouseMoveEvent(event);
+    }
+
+    // Hand cursor, if the selected area was hit.
+    Region::ConstIterator end = selection()->constEnd();
+    for (Region::ConstIterator it = selection()->constBegin(); it != end; ++it) {
+        const QRect range = (*it)->rect();
+        if (selection()->activeSheet()->cellCoordinatesToDocument(range).contains(position)) {
+            useCursor(Qt::PointingHandCursor);
+            return KoInteractionTool::mouseMoveEvent(event);
+        }
+    }
+
+    // Reset to normal cursor.
+    useCursor(Qt::ArrowCursor);
+    KoInteractionTool::mouseMoveEvent(event);
+}
+
+void CellToolBase::mouseReleaseEvent(KoPointerEvent* event)
+{
+    KoInteractionTool::mouseReleaseEvent(event);
+}
+
+void CellToolBase::mouseDoubleClickEvent(KoPointerEvent* event)
+{
+    if (m_currentStrategy) {
+        m_currentStrategy->cancelInteraction();
+        delete m_currentStrategy;
+        m_currentStrategy = 0;
+    }
+    createEditor(false /* keep content */);
 }
 
 void CellToolBase::keyPressEvent(QKeyEvent* event)
@@ -997,6 +1075,59 @@ QWidget* CellToolBase::createOptionWidget()
     return widget;
 }
 
+KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
+{
+    // Get info about where the event occurred.
+    QPointF position = event->point - offset();
+    if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft)
+        position.setX(size().width() - position.x());
+
+    // Autofilling or merging, if the selection handle was hit.
+    if (selection()->selectionHandleArea(canvas()->viewConverter()).contains(position))
+    {
+        if (event->button() == Qt::LeftButton)
+            return new AutoFillStrategy(this, canvas(), selection(), event->point, event->modifiers());
+        else if (event->button() == Qt::MidButton)
+            return new MergeStrategy(this, canvas(), selection(), event->point, event->modifiers());
+    }
+
+    // Pasting with the middle mouse button.
+    if (event->button() == Qt::MidButton) {
+        return new PasteStrategy(this, canvas(), selection(), event->point, event->modifiers());
+    }
+
+    // Context menu with the right mouse button.
+    if (event->button() == Qt::RightButton) {
+        // In which cell did the user click?
+        double xpos;
+        double ypos;
+        int col = this->selection()->activeSheet()->leftColumn(position.x(), xpos);
+        int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
+        // Check boundaries.
+        if (col > KS_colMax || row > KS_rowMax) {
+            kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
+        } else {
+            selection()->initialize(QPoint(col, row), selection()->activeSheet());
+        }
+        // Setup the context menu.
+        setPopupActionList(d->popupActionList());
+        event->ignore();
+        return 0;
+    }
+
+    // Drag & drop, if the selected area was hit.
+    Region::ConstIterator end = selection()->constEnd();
+    for (Region::ConstIterator it = selection()->constBegin(); it != end; ++it)
+    {
+        const QRect range = (*it)->rect();
+        if (selection()->activeSheet()->cellCoordinatesToDocument(range).contains(position)) {
+            return new DragAndDropStrategy(this, canvas(), selection(), event->point, event->modifiers());
+        }
+    }
+
+    return new SelectionStrategy(this, canvas(), selection(), event->point, event->modifiers());
+}
+
 void CellToolBase::selectionChanged(const Region& region)
 {
     if (!d->locationComboBox) {
@@ -1009,6 +1140,9 @@ void CellToolBase::selectionChanged(const Region& region)
     d->updateEditor(cell);
     d->updateLocationComboBox();
     d->updateActions(cell);
+    if (selection()->referenceSelectionMode() && editor()) {
+        editor()->updateChoice();
+    }
 
     if (selection()->activeSheet()->isProtected()) {
         const Style style = cell.style();

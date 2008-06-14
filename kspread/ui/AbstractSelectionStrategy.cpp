@@ -55,9 +55,8 @@ void AbstractSelectionStrategy::handleMouseMove(const QPointF& documentPos, Qt::
 {
     if (!modifiers & Qt::ShiftModifier)
         return;
-    Q_ASSERT(m_canvas->shapeManager()->selection()->count() > 0);
-    KoShape* shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
-    const QPointF position = documentPos - shape->position();
+    const KoShape* shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
+    const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
     // In which cell did the user click?
     double xpos;
     double ypos;
