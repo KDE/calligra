@@ -97,7 +97,7 @@ void CellToolBase::Private::updateLocationComboBox()
             const QRect lastRange = q->selection()->lastRange();
             address = QString::number(lastRange.bottom() - lastRange.top() + 1) + "Lx";
             if (Region::Range(lastRange).isRow())
-                address += QString::number(KS_colMax - lastRange.left() + 1) + 'C';
+                address += QString::number(q->maxCol() - lastRange.left() + 1) + 'C';
             else
                 address += QString::number(lastRange.right() - lastRange.left() + 1) + 'C';
         }
@@ -381,7 +381,7 @@ bool CellToolBase::Private::processEndKey(QKeyEvent *event)
             cell = sheet->cellStorage()->prevInRow(cell.column(), cell.row(), CellStorage::VisitContent);
         }
 
-        col = (cell.isNull()) ? KS_colMax : cell.column();
+        col = (cell.isNull()) ? q->maxCol() : cell.column();
 
         QPoint destination(col, marker.y());
         if (destination == marker)
@@ -566,19 +566,19 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
             row++;
         }
 
-        destination.setX(qBound(1, marker.x(), KS_colMax));
-        destination.setY(qBound(1, row, KS_rowMax));
+        destination.setX(qBound(1, marker.x(), q->maxCol()));
+        destination.setY(qBound(1, row, q->maxRow()));
         break;
 
         //Ctrl+Qt::Key_Down
     case Qt::Key_Down:
 
         cell = Cell(sheet, marker.x(), marker.y());
-        if ((!cell.isNull()) && (!cell.isEmpty()) && (marker.y() != KS_rowMax)) {
+        if ((!cell.isNull()) && (!cell.isEmpty()) && (marker.y() != q->maxRow())) {
             lastCell = cell;
             row = marker.y() + 1;
             cell = Cell(sheet, cell.column(), row);
-            while ((!cell.isNull()) && (row < KS_rowMax) && (!cell.isEmpty())) {
+            while ((!cell.isNull()) && (row < q->maxRow()) && (!cell.isEmpty())) {
                 if (!(sheet->rowFormat(cell.row())->isHiddenOrFiltered())) {
                     lastCell = cell;
                     searchThroughEmpty = false;
@@ -606,8 +606,8 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
             row--;
         }
 
-        destination.setX(qBound(1, marker.x(), KS_colMax));
-        destination.setY(qBound(1, row, KS_rowMax));
+        destination.setX(qBound(1, marker.x(), q->maxCol()));
+        destination.setY(qBound(1, row, q->maxRow()));
         break;
 
 //Ctrl+Qt::Key_Left
@@ -615,11 +615,11 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
 
         if (sheet->layoutDirection() == Qt::RightToLeft) {
             cell = Cell(sheet, marker.x(), marker.y());
-            if ((!cell.isNull()) && (!cell.isEmpty()) && (marker.x() != KS_colMax)) {
+            if ((!cell.isNull()) && (!cell.isEmpty()) && (marker.x() != q->maxCol())) {
                 lastCell = cell;
                 col = marker.x() + 1;
                 cell = Cell(sheet, col, cell.row());
-                while ((!cell.isNull()) && (col < KS_colMax) && (!cell.isEmpty())) {
+                while ((!cell.isNull()) && (col < q->maxCol()) && (!cell.isEmpty())) {
                     if (!(sheet->columnFormat(cell.column())->isHiddenOrFiltered())) {
                         lastCell = cell;
                         searchThroughEmpty = false;
@@ -647,8 +647,8 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 col--;
             }
 
-            destination.setX(qBound(1, col, KS_colMax));
-            destination.setY(qBound(1, marker.y(), KS_rowMax));
+            destination.setX(qBound(1, col, q->maxCol()));
+            destination.setY(qBound(1, marker.y(), q->maxRow()));
         } else {
             cell = Cell(sheet, marker.x(), marker.y());
             if ((!cell.isNull()) && (!cell.isEmpty()) && (marker.x() != 1)) {
@@ -684,8 +684,8 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 col++;
             }
 
-            destination.setX(qBound(1, col, KS_colMax));
-            destination.setY(qBound(1, marker.y(), KS_rowMax));
+            destination.setX(qBound(1, col, q->maxCol()));
+            destination.setY(qBound(1, marker.y(), q->maxRow()));
         }
         break;
 
@@ -727,15 +727,15 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 col++;
             }
 
-            destination.setX(qBound(1, col, KS_colMax));
-            destination.setY(qBound(1, marker.y(), KS_rowMax));
+            destination.setX(qBound(1, col, q->maxCol()));
+            destination.setY(qBound(1, marker.y(), q->maxRow()));
         } else {
             cell = Cell(sheet, marker.x(), marker.y());
-            if ((!cell.isNull()) && (!cell.isEmpty()) && (marker.x() != KS_colMax)) {
+            if ((!cell.isNull()) && (!cell.isEmpty()) && (marker.x() != q->maxCol())) {
                 lastCell = cell;
                 col = marker.x() + 1;
                 cell = Cell(sheet, col, cell.row());
-                while ((!cell.isNull()) && (col < KS_colMax) && (!cell.isEmpty())) {
+                while ((!cell.isNull()) && (col < q->maxCol()) && (!cell.isEmpty())) {
                     if (!(sheet->columnFormat(cell.column())->isHiddenOrFiltered())) {
                         lastCell = cell;
                         searchThroughEmpty = false;
@@ -763,8 +763,8 @@ bool CellToolBase::Private::processControlArrowKey(QKeyEvent *event)
                 col--;
             }
 
-            destination.setX(qBound(1, col, KS_colMax));
-            destination.setY(qBound(1, marker.y(), KS_rowMax));
+            destination.setX(qBound(1, col, q->maxCol()));
+            destination.setY(qBound(1, marker.y(), q->maxRow()));
         }
         break;
 
@@ -885,12 +885,12 @@ QRect CellToolBase::Private::moveDirection(KSpread::MoveTo direction, bool exten
     case Bottom:
         offset = cell.mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
         rl = sheet->rowFormat(cursor.y() + offset);
-        while (((cursor.y() + offset) <= KS_rowMax) && rl->isHiddenOrFiltered()) {
+        while (((cursor.y() + offset) <= q->maxRow()) && rl->isHiddenOrFiltered()) {
             offset++;
             rl = sheet->rowFormat(cursor.y() + offset);
         }
 
-        destination = QPoint(cursor.x(), qMin(cursor.y() + offset, KS_rowMax));
+        destination = QPoint(cursor.x(), qMin(cursor.y() + offset, q->maxRow()));
         break;
     case Top:
         offset = (cellCorner.y() - cursor.y()) - 1;
@@ -913,21 +913,21 @@ QRect CellToolBase::Private::moveDirection(KSpread::MoveTo direction, bool exten
     case Right:
         offset = cell.mergedXCells() - (cursor.x() - cellCorner.x()) + 1;
         cl = sheet->columnFormat(cursor.x() + offset);
-        while (((cursor.x() + offset) <= KS_colMax) && cl->isHiddenOrFiltered()) {
+        while (((cursor.x() + offset) <= q->maxCol()) && cl->isHiddenOrFiltered()) {
             offset++;
             cl = sheet->columnFormat(cursor.x() + offset);
         }
-        destination = QPoint(qMin(cursor.x() + offset, KS_colMax), cursor.y());
+        destination = QPoint(qMin(cursor.x() + offset, q->maxCol()), cursor.y());
         break;
     case BottomFirst:
         offset = cell.mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
         rl = sheet->rowFormat(cursor.y() + offset);
-        while (((cursor.y() + offset) <= KS_rowMax) && rl->isHiddenOrFiltered()) {
+        while (((cursor.y() + offset) <= q->maxRow()) && rl->isHiddenOrFiltered()) {
             ++offset;
             rl = sheet->rowFormat(cursor.y() + offset);
         }
 
-        destination = QPoint(1, qMin(cursor.y() + offset, KS_rowMax));
+        destination = QPoint(1, qMin(cursor.y() + offset, q->maxRow()));
         break;
     }
 

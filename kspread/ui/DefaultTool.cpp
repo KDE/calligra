@@ -549,6 +549,16 @@ QSizeF DefaultTool::size() const
     return d->canvas->size();
 }
 
+int DefaultTool::maxCol() const
+{
+    return KS_colMax;
+}
+
+int DefaultTool::maxRow() const
+{
+    return KS_rowMax;
+}
+
 void DefaultTool::definePrintRange()
 {
     selection()->activeSheet()->printSettings()->setPrintRegion(*selection());

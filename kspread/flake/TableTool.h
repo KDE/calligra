@@ -50,6 +50,8 @@ Q_SIGNALS:
 protected:
     virtual QPointF offset() const;
     virtual QSizeF size() const;
+    virtual int maxCol() const;
+    virtual int maxRow() const;
 
 private Q_SLOTS:
     void changeColumns( int num );

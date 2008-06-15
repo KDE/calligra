@@ -82,6 +82,8 @@ protected:
     virtual KoInteractionStrategy* createStrategy(KoPointerEvent* event);
     virtual QPointF offset() const = 0;
     virtual QSizeF size() const = 0;
+    virtual int maxCol() const = 0;
+    virtual int maxRow() const = 0;
 
 protected Q_SLOTS:
     void selectionChanged(const Region&);

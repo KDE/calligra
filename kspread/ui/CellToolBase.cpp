@@ -1104,7 +1104,7 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
         int col = this->selection()->activeSheet()->leftColumn(position.x(), xpos);
         int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
         // Check boundaries.
-        if (col > KS_colMax || row > KS_rowMax) {
+        if (col > maxCol() || row > maxRow()) {
             kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
         } else {
             selection()->initialize(QPoint(col, row), selection()->activeSheet());
@@ -1383,7 +1383,7 @@ void CellToolBase::styleDialog()
 
     static_cast<KSelectAction*>(action("stylemenu"))->setItems(doc->styleManager()->styleNames());
     if (selection()->activeSheet())
-        doc->addDamage(new CellDamage(selection()->activeSheet(), Region(1, 1, KS_colMax, KS_rowMax), CellDamage::Appearance));
+        doc->addDamage(new CellDamage(selection()->activeSheet(), Region(1, 1, maxCol(), maxRow()), CellDamage::Appearance));
     m_canvas->canvasWidget()->update();
 }
 

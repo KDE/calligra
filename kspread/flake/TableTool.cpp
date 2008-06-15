@@ -172,6 +172,16 @@ QSizeF TableTool::size() const
     return d->tableShape->size();
 }
 
+int TableTool::maxCol() const
+{
+    return d->tableShape->columns();
+}
+
+int TableTool::maxRow() const
+{
+    return d->tableShape->rows();
+}
+
 void TableTool::changeColumns( int num )
 {
     d->tableShape->setColumns( num );

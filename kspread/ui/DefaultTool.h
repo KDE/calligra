@@ -47,6 +47,8 @@ protected:
     virtual Selection* selection();
     virtual QPointF offset() const;
     virtual QSizeF size() const;
+    virtual int maxCol() const;
+    virtual int maxRow() const;
 
 protected Q_SLOTS:
     // -- misc actions --
