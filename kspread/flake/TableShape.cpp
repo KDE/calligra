@@ -177,8 +177,7 @@ void TableShape::saveOdf( KoShapeSavingContext & context ) const
 void TableShape::init(QMap<QString, KoDataCenter*> dataCenterMap)
 {
     Map* map = dynamic_cast<Map*>(dataCenterMap["TableMap"]);
-    map->addNewSheet();
-    d->sheet = map->sheet(0);
+    d->sheet = map->addNewSheet();
     d->sheetView = new SheetView(d->sheet);
 
     connect(map->doc(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
