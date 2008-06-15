@@ -746,7 +746,7 @@ void View::initView()
     d->vBorderWidget = new VBorder( this, d->canvas ,this );
     d->hBorderWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
     d->vBorderWidget->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
-    d->selectAllButton = new SelectAllButton( this );
+    d->selectAllButton = new SelectAllButton(d->canvas, d->selection);
     d->selectAllButton->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 
     d->canvas->setFocusPolicy( Qt::StrongFocus );

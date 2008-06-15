@@ -1496,13 +1496,14 @@ void HBorder::toolChanged(const QString& toolId)
  *
  ****************************************************************/
 
-SelectAllButton::SelectAllButton( View* view  )
-    : QWidget( view )
-    , m_view( view )
+SelectAllButton::SelectAllButton(KoCanvasBase* canvasBase, Selection* selection)
+    : QWidget(canvasBase->canvasWidget())
+    , m_canvasBase(canvasBase)
+    , m_selection(selection)
     , m_mousePressed( false )
 {
     m_cellToolIsActive = true;
-    connect(m_view->canvasWidget()->toolProxy(), SIGNAL(toolChanged(const QString&)),
+    connect(m_canvasBase->toolProxy(), SIGNAL(toolChanged(const QString&)),
             this, SLOT(toolChanged(const QString&)));
 }
 
@@ -1513,17 +1514,20 @@ SelectAllButton::~SelectAllButton()
 void SelectAllButton::paintEvent( QPaintEvent* event )
 {
     // painting rectangle
-    const QRectF paintRect = m_view->zoomHandler()->viewToDocument( event->rect() );
+    const QRectF paintRect = m_canvasBase->viewConverter()->viewToDocument(event->rect());
 
     // the painter
     QPainter painter( this );
-    painter.scale( m_view->zoomHandler()->zoomedResolutionX(), m_view->zoomHandler()->zoomedResolutionY() );
+    double zoomX;
+    double zoomY;
+    m_canvasBase->viewConverter()->zoom(&zoomX, &zoomY);
+    painter.scale(zoomX, zoomY);
 
     painter.setClipRect( paintRect );
 
     // if all cells are selected
-    if (m_view->selection()->isAllSelected() &&
-        !m_view->selection()->referenceSelectionMode() && m_cellToolIsActive)
+    if (m_selection->isAllSelected() &&
+        !m_selection->referenceSelectionMode() && m_cellToolIsActive)
     {
         // selection brush/color
         QColor selectionColor( palette().highlight().color() );
@@ -1563,12 +1567,12 @@ void SelectAllButton::mouseReleaseEvent( QMouseEvent* event )
     if ( !m_mousePressed )
         return;
     m_mousePressed = false;
-    m_view->selection()->selectAll();
+    m_selection->selectAll();
 }
 
 void SelectAllButton::wheelEvent(QWheelEvent* event)
 {
-    QApplication::sendEvent(m_view->canvasWidget(), event);
+    QApplication::sendEvent(m_canvasBase->canvasWidget(), event);
 }
 
 void SelectAllButton::toolChanged(const QString& toolId)

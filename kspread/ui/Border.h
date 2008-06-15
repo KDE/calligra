@@ -24,10 +24,12 @@
 class QLabel;
 class QRubberBand;
 
+class KoCanvasBase;
+
 namespace KSpread
 {
-
 class Canvas;
+class Selection;
 class View;
 
 /**
@@ -184,7 +186,7 @@ class SelectAllButton : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SelectAllButton( View* view );
+    explicit SelectAllButton(KoCanvasBase* canvasBase, Selection* selection);
     virtual ~SelectAllButton();
 
 protected:
@@ -197,7 +199,8 @@ private Q_SLOTS:
     void toolChanged(const QString& toolId);
 
 private:
-    View*  m_view;
+    KoCanvasBase* m_canvasBase;
+    Selection* m_selection;
     bool   m_mousePressed;
     bool m_cellToolIsActive;
 };
