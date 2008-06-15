@@ -45,7 +45,7 @@ class TableShape::Private
 public:
     int         columns;
     int         rows;
-    Doc*        doc;
+    Sheet*      sheet; // owned by "TableMap" data center
     SheetView*  sheetView;
 
 public:
@@ -55,23 +55,17 @@ public:
 
 void TableShape::Private::adjustColumnDimensions( double factor )
 {
-    doc->setDefaultColumnWidth( doc->defaultColumnFormat()->width() * factor );
-    for ( ColumnFormat* columnFormat = sheetView->sheet()->firstCol(); columnFormat; columnFormat = columnFormat->next() )
-    {
-        if ( columnFormat->column() > columns )
-            break;
-        columnFormat->setWidth( columnFormat->width() * factor );
+    for (int col = 1; col <= columns; ++col) {
+        ColumnFormat* const columnFormat = sheet->nonDefaultColumnFormat(col);
+        columnFormat->setWidth(columnFormat->width() * factor);
     }
 }
 
 void TableShape::Private::adjustRowDimensions( double factor )
 {
-    doc->setDefaultRowHeight( doc->defaultRowFormat()->height() * factor );
-    for ( RowFormat* rowFormat = sheetView->sheet()->firstRow(); rowFormat; rowFormat = rowFormat->next() )
-    {
-        if ( rowFormat->row() > rows )
-            break;
-        rowFormat->setHeight( rowFormat->height() * factor );
+    for (int row = 1; row <= rows; ++row) {
+        RowFormat* const rowFormat = sheet->nonDefaultRowFormat(row);
+        rowFormat->setHeight(rowFormat->height() * factor);
     }
 }
 
@@ -81,27 +75,18 @@ TableShape::TableShape( int columns, int rows )
     : d( new Private )
 {
     setObjectName("TableShape");
-    d->columns  = 1;
-    d->rows     = 1;
-    d->doc      = new Doc();
-    d->doc->map()->addNewSheet();
-    d->sheetView = new SheetView( d->doc->map()->sheet( 0 ) );
-
-    // initialize the default column width / row height
-    d->doc->setDefaultColumnWidth( size().width() );
-    d->doc->setDefaultRowHeight( size().height() );
-
-    setColumns( columns );
-    setRows( rows );
-
-    connect(d->doc, SIGNAL(damagesFlushed(const QList<Damage*>&)),
-            this, SLOT(handleDamages(const QList<Damage*>&)));
+    d->columns = columns;
+    d->rows = rows;
+    d->sheet = 0;
+    d->sheetView = 0;
 }
 
 TableShape::~TableShape()
 {
     delete d->sheetView;
-    delete d->doc;
+    if (d->sheet) {
+        d->sheet->map()->takeSheet(d->sheet); // declare the sheet as deleted
+    }
     delete d;
 }
 
@@ -151,50 +136,63 @@ bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
 {
     kDebug() << "LOADING TABLE SHAPE";
     if (element.namespaceURI() == KoXmlNS::table && element.localName() == "table") {
-        delete d->sheetView;
-        delete d->doc;
-        d->doc = new Doc();
-
         // pre-load auto styles
         KoOdfLoadingContext& odfContext = context.odfLoadingContext();
         QHash<QString, Conditions> conditionalStyles;
         Styles autoStyles = doc()->styleManager()->loadOasisAutoStyles(odfContext.stylesReader(), conditionalStyles);
 
-        Sheet* sheet = d->doc->map()->addNewSheet();
-        d->sheetView = new SheetView(sheet);
         if (!element.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
-            sheet->setSheetName(element.attributeNS(KoXmlNS::table, "name", QString()), true);
+            sheet()->setSheetName(element.attributeNS(KoXmlNS::table, "name", QString()), true);
         }
-        const bool result = sheet->loadOasis(element, odfContext, autoStyles, conditionalStyles);
+        const bool result = sheet()->loadOasis(element, odfContext, autoStyles, conditionalStyles);
 
         // delete any styles which were not used
         doc()->styleManager()->releaseUnusedAutoStyles(autoStyles);
 
         if (!result) {
-            delete d->doc;
-            d->doc = 0;
-            d->sheetView = 0;
             return false;
         }
 
-        const QRect usedArea = sheet->usedArea();
+        const QRect usedArea = sheet()->usedArea();
         d->columns = usedArea.width();
         d->rows = usedArea.height();
 
         QSizeF size(0.0, 0.0);
         for (int col = 1; col <= d->columns; ++col) {
-            size.rwidth() += sheet->columnFormat(col)->visibleWidth();
+            size.rwidth() += sheet()->columnFormat(col)->visibleWidth();
         }
         for (int row = 1; row <= d->rows; ++row) {
-            size.rheight() += sheet->rowFormat(row)->visibleHeight();
+            size.rheight() += sheet()->rowFormat(row)->visibleHeight();
         }
         KoShape::setSize(size);
+        return true;
     }
-    return true;
+    return false;
 }
 
 void TableShape::saveOdf( KoShapeSavingContext & context ) const
 {
+}
+
+void TableShape::init(QMap<QString, KoDataCenter*> dataCenterMap)
+{
+    Map* map = dynamic_cast<Map*>(dataCenterMap["TableMap"]);
+    map->addNewSheet();
+    d->sheet = map->sheet(0);
+    d->sheetView = new SheetView(d->sheet);
+
+    connect(map->doc(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
+            this, SLOT(handleDamages(const QList<Damage*>&)));
+
+    // Initialize the size using the default column/row dimensions.
+    QSize size;
+    for (int col = 1; col <= d->columns; ++col) {
+        size.rwidth() += sheet()->columnFormat(col)->visibleWidth();
+    }
+    for (int row = 1; row <= d->rows; ++row) {
+        size.rheight() += sheet()->rowFormat(row)->visibleHeight();
+    }
+    KoShape::setSize(size);
 }
 
 void TableShape::setSize( const QSizeF& newSize )
@@ -212,17 +210,17 @@ void TableShape::setSize( const QSizeF& newSize )
 
 Doc* TableShape::doc() const
 {
-    return d->doc;
+    return d->sheet->doc();
 }
 
 Sheet* TableShape::sheet() const
 {
-    return const_cast<Sheet*>( d->sheetView->sheet() );
+    return d->sheet;
 }
 
 void TableShape::setSheet(const QString& sheetName)
 {
-    Sheet* sheet = d->doc->map()->findSheet(sheetName);
+    Sheet* sheet = d->sheet->map()->findSheet(sheetName);
     if ( ! sheet )
         return;
     delete d->sheetView;
@@ -262,7 +260,7 @@ void TableShape::handleDamages( const QList<Damage*>& damages )
 
     update();
     // FIXME Stefan: Where's the corresponding emitBeginOperation()?
-    d->doc->emitEndOperation();
+    doc()->emitEndOperation();
 }
 
 #include "TableShape.moc"

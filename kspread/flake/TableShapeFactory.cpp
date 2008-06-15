@@ -30,6 +30,9 @@
 #include <KoShapeRegistry.h>
 #include <KoXmlNS.h>
 
+#include "Doc.h"
+#include "Map.h"
+
 #include "TableShape.h"
 #include "TableToolFactory.h"
 
@@ -44,36 +47,35 @@ TableShapePlugin::TableShapePlugin( QObject * parent,  const QStringList& )
 }
 
 
+class TableShapeFactory::Private
+{
+public:
+    // FIXME Stefan: Replace with a Map.
+    Doc* doc;
+};
+
+
 TableShapeFactory::TableShapeFactory( QObject* parent )
     : KoShapeFactory( parent, TableShapeId, i18n( "Table" ) )
+    , d(new Private)
 {
-    setToolTip( i18n( "A shape that shows a table" ) );
+    d->doc = new Doc();
+    d->doc->setAutoSave(0);
+    setToolTip(i18n("Table Shape"));
     setIcon( "spreadsheetshape" );
     setOdfElementNames(KoXmlNS::table, QStringList() << "table");
-#if 0
-    KoShapeTemplate t;
-    t.name = "Simple table";
-    t.toolTip = "Table shape containing some cells";
-    KoProperties *props = new KoProperties();
-    t.properties = props;
-    props->setProperty( "columns", 2 );
-    props->setProperty( "rows", 2 );
-    addTemplate( t );
-
-
-#endif
 }
 
-KoShape* TableShapeFactory::createDefaultShape(KoShapeControllerBase *shapeController)
+TableShapeFactory::~TableShapeFactory()
 {
-    TableShape* shape = new TableShape();
-    return shape;
+//     delete d->doc; // FIXME
+    delete d;
 }
 
-KoShape* TableShapeFactory::createShape(const KoProperties* params, KoShapeControllerBase *shapeController)
+void TableShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter*> &dataCenterMap)
 {
-    TableShape* shape = new TableShape();
-    return shape;
+    // One spreadsheet map for all inserted tables to allow referencing cells among them.
+    dataCenterMap["TableMap"] = d->doc->map();
 }
 
 bool TableShapeFactory::supports(const KoXmlElement &element) const

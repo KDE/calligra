@@ -26,6 +26,8 @@
 #include <QStringList>
 
 #include "kspread_export.h"
+
+#include <KoDataCenter.h>
 #include <KoXmlReader.h>
 
 class KoStore;
@@ -47,7 +49,7 @@ class Style;
  * A map is a simple container for all sheets. Usually a complete map
  * is saved in one file.
  */
-class KSPREAD_EXPORT Map : public QObject
+class KSPREAD_EXPORT Map : public QObject, public KoDataCenter
 {
 Q_OBJECT
 public:
@@ -65,6 +67,10 @@ public:
    * \return the document this map belongs to
    */
   Doc* doc() const;
+
+    // KoDataCenter interface
+    virtual bool completeLoading(KoStore *store);
+    virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter);
 
   /**
    * \ingroup OpenDocument

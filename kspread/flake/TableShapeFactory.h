@@ -41,16 +41,18 @@ class TableShapeFactory : public KoShapeFactory
     Q_OBJECT
 public:
     TableShapeFactory( QObject* parent );
-    ~TableShapeFactory() {}
+    ~TableShapeFactory();
 
-    virtual KoShape* createDefaultShape(KoShapeControllerBase *shapeController);
-    virtual KoShape* createShape(const KoProperties* params, KoShapeControllerBase *shapeController);
-
+    virtual void populateDataCenterMap(QMap<QString, KoDataCenter*> &dataCenterMap);
     virtual bool supports(const KoXmlElement &element) const;
 
 protected:
     virtual KoShape* createDefaultShape() const;
     virtual KoShape* createShape(const KoProperties* params) const;
+
+private:
+    class Private;
+    Private * const d;
 };
 
 #endif // KSPREAD_TABLE_SHAPE_FACTORY

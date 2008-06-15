@@ -116,6 +116,17 @@ Doc* Map::doc() const
   return d->doc;
 }
 
+bool Map::completeLoading(KoStore *store)
+{
+    Q_UNUSED(store);
+}
+
+bool Map::completeSaving(KoStore *store, KoXmlWriter *manifestWriter)
+{
+    Q_UNUSED(store);
+    Q_UNUSED(manifestWriter);
+}
+
 void Map::setProtected( QByteArray const & passwd )
 {
   d->strPassword = passwd;

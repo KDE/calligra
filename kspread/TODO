@@ -101,6 +101,8 @@ Things not in bugzilla
       Shapes anchored cells should be moved, if the cell itself
       got moved; either by column/row/cell range insertions/deletions
       or by column/row dimension changes.
+  + Move all the managers and other necessary logic from Doc to Map	----
+    in order to use Map solely as data center for embedded tables.
 
 * Internals (See also DESIGN.html)
   + Painting    						      1 DONE
