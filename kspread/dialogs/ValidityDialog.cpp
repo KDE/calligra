@@ -802,7 +802,7 @@ void ValidityDialog::OkPressed()
   manipulator->setSheet( m_selection->activeSheet() );
   manipulator->setValidity( validity );
   manipulator->add( *m_selection );
-  manipulator->execute();
+  manipulator->execute(m_selection->canvas());
 
   accept();
 }

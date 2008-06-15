@@ -25,6 +25,8 @@
 #include <klocale.h>
 #include <kpassivepopup.h>
 
+#include <KoCanvasBase.h>
+
 #include "Cell.h"
 #include "Doc.h"
 #include "Map.h"
@@ -66,7 +68,7 @@ AbstractRegionCommand::~AbstractRegionCommand()
 {
 }
 
-bool AbstractRegionCommand::execute()
+bool AbstractRegionCommand::execute(KoCanvasBase* canvas)
 {
     if ( !m_firstrun )
         return false;
@@ -74,7 +76,7 @@ bool AbstractRegionCommand::execute()
         return false;
     // registering in undo history?
     if ( m_register )
-        m_sheet->doc()->addCommand( this );
+        canvas ? canvas->addCommand(this) : m_sheet->doc()->addCommand(this);
     else
         redo();
     return m_success;

@@ -202,7 +202,7 @@ void SeriesDialog::slotButtonClicked(int button)
       isLinear ? SeriesManipulator::Linear : SeriesManipulator::Geometric);
   
   // setupSeries also called add(), so we can call execute directly
-  manipulator->execute ();
+  manipulator->execute(m_selection->canvas());
 
   accept();
 }

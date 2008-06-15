@@ -102,7 +102,7 @@ void AddNamedAreaDialog::slotOk()
     command->setSheet(m_selection->activeSheet());
     command->setAreaName(name);
     command->add(region);
-    command->execute();
+    command->execute(m_selection->canvas());
 }
 
 #include "AddNamedAreaDialog.moc"

@@ -82,14 +82,14 @@ void AngleDialog::slotOk()
     manipulator->setSheet(m_selection->activeSheet());
     manipulator->setAngle(-m_pAngle->value());
     manipulator->add(*m_selection);
-    m_selection->activeSheet()->doc()->addCommand(manipulator);
+    m_selection->canvas()->addCommand(manipulator);
 
     AdjustColumnRowManipulator* manipulator2 = new AdjustColumnRowManipulator();
     manipulator2->setSheet(m_selection->activeSheet());
     manipulator2->setAdjustColumn(true);
     manipulator2->setAdjustRow(true);
     manipulator2->add(*m_selection);
-    m_selection->activeSheet()->doc()->addCommand(manipulator2);
+    m_selection->canvas()->addCommand(manipulator2);
 
     m_selection->activeSheet()->doc()->endMacro();
 

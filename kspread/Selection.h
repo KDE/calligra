@@ -24,6 +24,7 @@
 #include <QColor>
 #include <QList>
 
+#include <KoCanvasBase.h>
 #include <KoToolSelection.h>
 
 #include <kdebug.h>
@@ -87,6 +88,11 @@ public:
    * Destructor.
    */
   virtual ~Selection();
+
+    /**
+     * \return the canvas this selection works for.
+     */
+    KoCanvasBase* canvas() const;
 
   /**
    * Sets the selection to @p point

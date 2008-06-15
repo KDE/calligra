@@ -860,7 +860,7 @@ void CellFormatDialog::slotApply()
       MergeCommand* command = new MergeCommand();
       command->setSheet(m_sheet);
       command->add(*m_selection);
-      m_doc->addCommand( command );
+      m_selection->canvas()->addCommand( command );
     }
     else
     {
@@ -869,7 +869,7 @@ void CellFormatDialog::slotApply()
       command->setSheet(m_sheet);
       command->setReverse(true);
       command->add(*m_selection);
-      m_doc->addCommand( command );
+      m_selection->canvas()->addCommand( command );
     }
   }
 
@@ -885,7 +885,7 @@ void CellFormatDialog::slotApply()
 
   if (!command->isEmpty())
   {
-    m_doc->addCommand( command );
+    m_selection->canvas()->addCommand( command );
   }
   else
   {
@@ -898,7 +898,7 @@ void CellFormatDialog::slotApply()
     command->setSheet(m_sheet);
     command->setSize(positionPage->getSizeHeight());
     command->add(*m_selection);
-    m_doc->addCommand( command );
+    m_selection->canvas()->addCommand( command );
   }
   if ( int( positionPage->getSizeWidth() ) != int( widthSize ) )
   {
@@ -906,7 +906,7 @@ void CellFormatDialog::slotApply()
     command->setSheet(m_sheet);
     command->setSize(positionPage->getSizeWidth());
     command->add(*m_selection);
-    m_doc->addCommand( command );
+    m_selection->canvas()->addCommand( command );
   }
 
   m_doc->endMacro();

@@ -126,6 +126,11 @@ Selection::~Selection()
   delete d;
 }
 
+KoCanvasBase* Selection::canvas() const
+{
+    return d->canvasBase;
+}
+
 void Selection::initialize(const QPoint& point, Sheet* sheet)
 {
   if (!isValid(point))

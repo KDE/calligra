@@ -201,7 +201,7 @@ void CSVDialog::accept()
     command->setDecimalSymbol(decimalSymbol());
     command->setThousandsSeparator(thousandsSeparator());
     command->add(m_selection->lastRange());
-    if (!command->execute())
+    if (!command->execute(m_selection->canvas()))
         delete command;
 
   m_selection->emitModified();

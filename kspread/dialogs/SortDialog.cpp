@@ -564,7 +564,7 @@ void SortDialog::slotOk()
     sm->setCustomList (clist);
   }
   sm->add (sourceArea());
-  sm->execute ();
+  sm->execute(m_selection->canvas());
 
   m_selection->emitModified();
   accept();

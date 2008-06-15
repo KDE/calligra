@@ -201,7 +201,7 @@ void NamedAreaDialog::slotRemove()
     command->setAreaName(item->text());
     command->setReverse(true);
     command->setSheet(m_selection->activeSheet());
-    if (!command->execute())
+    if (!command->execute(m_selection->canvas()))
     {
         delete command;
         return;
@@ -315,7 +315,7 @@ void EditNamedAreaDialog::slotOk()
         command->setReverse(true);
         command->setSheet(sheet);
         command->add(region);
-        command->execute();
+        command->execute(m_selection->canvas());
     }
 
     // insert the new named area
@@ -323,7 +323,7 @@ void EditNamedAreaDialog::slotOk()
     command->setAreaName(m_areaNameEdit->text());
     command->setSheet(sheet);
     command->add(region);
-    command->execute();
+    command->execute(m_selection->canvas());
 
     if (m_initialAreaName != m_areaNameEdit->text())
         m_selection->activeSheet()->doc()->endMacro();

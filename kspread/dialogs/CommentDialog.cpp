@@ -85,7 +85,7 @@ void CommentDialog::slotOk()
     command->setText(i18n("Add Comment"));
     command->setComment(multiLine->text().trimmed());
     command->add(*m_selection);
-    command->execute();
+    command->execute(m_selection->canvas());
     accept();
 }
 

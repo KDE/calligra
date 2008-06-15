@@ -57,6 +57,7 @@
 #include "commands/SortManipulator.h"
 #include "commands/StyleCommand.h"
 #include "commands/Undo.h"
+#include "commands/UndoWrapperCommand.h"
 #include "commands/ValidityCommand.h"
 
 // dialogs
@@ -1334,7 +1335,7 @@ void CellToolBase::applyUserInput(bool expandMatrix)
     command->setParsing(true);
     command->setExpandMatrix(expandMatrix);
     command->add(expandMatrix ? *selection() : Region(selection()->cursor(), selection()->activeSheet()));
-    command->execute();
+    command->execute(m_canvas);
 
     if (expandMatrix && selection()->isSingular())
         selection()->initialize(*command);
@@ -1372,7 +1373,7 @@ void CellToolBase::setDefaultStyle()
     command->setSheet(selection()->activeSheet());
     command->setDefault();
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::styleDialog()
@@ -1395,7 +1396,7 @@ void CellToolBase::setStyle(const QString& stylename)
         command->setSheet(selection()->activeSheet());
         command->setParentName(stylename);
         command->add(*selection());
-        command->execute();
+        command->execute(m_canvas);
     }
 }
 
@@ -1446,7 +1447,7 @@ void CellToolBase::bold(bool enable)
     command->setText(i18n("Change Font"));
     command->setFontBold(enable);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
     if (editor()) {
         const Cell cell = Cell(selection()->activeSheet(), selection()->marker());
         editor()->setEditorFont(cell.style().font(), true, m_canvas->viewConverter());
@@ -1460,7 +1461,7 @@ void CellToolBase::underline(bool enable)
     command->setText(i18n("Change Font"));
     command->setFontUnderline(enable);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
     if (editor()) {
         const Cell cell = Cell(selection()->activeSheet(), selection()->marker());
         editor()->setEditorFont(cell.style().font(), true, m_canvas->viewConverter());
@@ -1474,7 +1475,7 @@ void CellToolBase::strikeOut(bool enable)
     command->setText(i18n("Change Font"));
     command->setFontStrike(enable);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
     if (editor()) {
         const Cell cell = Cell(selection()->activeSheet(), selection()->marker());
         editor()->setEditorFont(cell.style().font(), true, m_canvas->viewConverter());
@@ -1489,7 +1490,7 @@ void CellToolBase::italic(bool enable)
     command->setText(i18n("Change Font"));
     command->setFontItalic(enable);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
     if (editor()) {
         const Cell cell = Cell(selection()->activeSheet(), selection()->marker());
         editor()->setEditorFont(cell.style().font(), true, m_canvas->viewConverter());
@@ -1503,7 +1504,7 @@ void CellToolBase::font(const QString& font)
     command->setText(i18n("Change Font"));
     command->setFontFamily(font.toLatin1());
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
     // Don't leave the focus in the toolbars combo box ...
     if (editor()) {
         const Style style = Cell(selection()->activeSheet(), selection()->marker()).style();
@@ -1521,7 +1522,7 @@ void CellToolBase::fontSize(int size)
     command->setText(i18n("Change Font"));
     command->setFontSize(size);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
     // Don't leave the focus in the toolbars combo box ...
     if (editor()) {
         const Cell cell(selection()->activeSheet(), selection()->marker());
@@ -1542,7 +1543,7 @@ void CellToolBase::increaseFontSize()
     command->setText(i18n("Change Font"));
     command->setFontSize(size + 1);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::decreaseFontSize()
@@ -1555,7 +1556,7 @@ void CellToolBase::decreaseFontSize()
     command->setText(i18n("Change Font"));
     command->setFontSize(size - 1);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::changeTextColor()
@@ -1565,7 +1566,7 @@ void CellToolBase::changeTextColor()
     command->setText(i18n("Change Text Color"));
     command->setFontColor(m_canvas->resourceProvider()->foregroundColor().toQColor());
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::alignLeft(bool enable)
@@ -1575,7 +1576,7 @@ void CellToolBase::alignLeft(bool enable)
     command->setText(i18n("Change Horizontal Alignment"));
     command->setHorizontalAlignment(enable ? Style::Left : Style::HAlignUndefined);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::alignRight(bool enable)
@@ -1585,7 +1586,7 @@ void CellToolBase::alignRight(bool enable)
     command->setText(i18n("Change Horizontal Alignment"));
     command->setHorizontalAlignment(enable ? Style::Right : Style::HAlignUndefined);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::alignCenter(bool enable)
@@ -1595,7 +1596,7 @@ void CellToolBase::alignCenter(bool enable)
     command->setText(i18n("Change Horizontal Alignment"));
     command->setHorizontalAlignment(enable ? Style::Center : Style::HAlignUndefined);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::alignTop(bool enable)
@@ -1605,7 +1606,7 @@ void CellToolBase::alignTop(bool enable)
     command->setText(i18n("Change Vertical Alignment"));
     command->setVerticalAlignment(enable ? Style::Top : Style::VAlignUndefined);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::alignBottom(bool enable)
@@ -1615,7 +1616,7 @@ void CellToolBase::alignBottom(bool enable)
     command->setText(i18n("Change Vertical Alignment"));
     command->setVerticalAlignment(enable ? Style::Bottom : Style::VAlignUndefined);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::alignMiddle(bool enable)
@@ -1625,7 +1626,7 @@ void CellToolBase::alignMiddle(bool enable)
     command->setText(i18n("Change Vertical Alignment"));
     command->setVerticalAlignment(enable ? Style::Middle : Style::VAlignUndefined);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::borderLeft()
@@ -1638,7 +1639,7 @@ void CellToolBase::borderLeft()
     else
         command->setLeftBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::borderRight()
@@ -1651,7 +1652,7 @@ void CellToolBase::borderRight()
     else
         command->setRightBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::borderTop()
@@ -1661,7 +1662,7 @@ void CellToolBase::borderTop()
     command->setText(i18n("Change Border"));
     command->setTopBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::borderBottom()
@@ -1671,7 +1672,7 @@ void CellToolBase::borderBottom()
     command->setText(i18n("Change Border"));
     command->setBottomBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::borderAll()
@@ -1686,7 +1687,7 @@ void CellToolBase::borderAll()
     command->setHorizontalPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->setVerticalPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::borderRemove()
@@ -1701,7 +1702,7 @@ void CellToolBase::borderRemove()
     command->setHorizontalPen(QPen(Qt::NoPen));
     command->setVerticalPen(QPen(Qt::NoPen));
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::borderOutline()
@@ -1714,7 +1715,7 @@ void CellToolBase::borderOutline()
     command->setLeftBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->setRightBorderPen(QPen(m_canvas->resourceProvider()->foregroundColor().toQColor(), 1, Qt::SolidLine));
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::borderColor()
@@ -1723,7 +1724,7 @@ void CellToolBase::borderColor()
     command->setSheet(selection()->activeSheet());
     command->setColor(m_canvas->resourceProvider()->foregroundColor().toQColor());
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::wrapText(bool enable)
@@ -1735,7 +1736,7 @@ void CellToolBase::wrapText(bool enable)
     command->setVerticalText(false);
     command->setAngle(0);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::verticalText(bool enable)
@@ -1747,7 +1748,7 @@ void CellToolBase::verticalText(bool enable)
     command->setMultiRow(false);
     command->setAngle(0);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::increaseIndentation()
@@ -1782,7 +1783,7 @@ void CellToolBase::percent(bool enable)
     command->setText(i18n("Format Percent"));
     command->setFormatType(enable ? Format::Percentage : Format::Generic);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::currency(bool enable)
@@ -1793,7 +1794,7 @@ void CellToolBase::currency(bool enable)
     command->setFormatType(enable ? Format::Money : Format::Generic);
     command->setPrecision(enable ?  selection()->activeSheet()->doc()->locale()->fracDigits() : 0);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::increasePrecision()
@@ -1822,7 +1823,7 @@ void CellToolBase::toUpperCase()
     command->setText(i18n("Switch to uppercase"));
     command->changeMode(CaseManipulator::Upper);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::toLowerCase()
@@ -1832,7 +1833,7 @@ void CellToolBase::toLowerCase()
     command->setText(i18n("Switch to lowercase"));
     command->changeMode(CaseManipulator::Lower);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::firstLetterToUpperCase()
@@ -1842,7 +1843,7 @@ void CellToolBase::firstLetterToUpperCase()
     command->setText(i18n("First letter uppercase"));
     command->changeMode(CaseManipulator::FirstUpper);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::changeBackgroundColor()
@@ -1852,7 +1853,7 @@ void CellToolBase::changeBackgroundColor()
     command->setText(i18n("Change Background Color"));
     command->setBackgroundColor(m_canvas->resourceProvider()->backgroundColor().toQColor());
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::mergeCells()
@@ -1890,7 +1891,7 @@ void CellToolBase::insertColumn()
     InsertDeleteColumnManipulator* command = new InsertDeleteColumnManipulator();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::deleteColumn()
@@ -1899,7 +1900,7 @@ void CellToolBase::deleteColumn()
     command->setSheet(selection()->activeSheet());
     command->setReverse(true);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::hideColumn()
@@ -1913,7 +1914,7 @@ void CellToolBase::hideColumn()
     command->setSheet(selection()->activeSheet());
     command->setManipulateColumns(true);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::showColumn()
@@ -1928,7 +1929,7 @@ void CellToolBase::showColumn()
     command->setManipulateColumns(true);
     command->setReverse(true);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::slotShowColumnDialog()
@@ -1974,7 +1975,7 @@ void CellToolBase::adjustColumn()
     command->setSheet(selection()->activeSheet());
     command->setAdjustColumn(true);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::resizeRow()
@@ -1992,7 +1993,7 @@ void CellToolBase::insertRow()
     InsertDeleteRowManipulator* command = new InsertDeleteRowManipulator();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::deleteRow()
@@ -2001,7 +2002,7 @@ void CellToolBase::deleteRow()
     command->setSheet(selection()->activeSheet());
     command->setReverse(true);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::hideRow()
@@ -2015,7 +2016,7 @@ void CellToolBase::hideRow()
     command->setSheet(selection()->activeSheet());
     command->setManipulateRows(true);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::showRow()
@@ -2030,7 +2031,7 @@ void CellToolBase::showRow()
     command->setManipulateRows(true);
     command->setReverse(true);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::slotShowRowDialog()
@@ -2076,7 +2077,7 @@ void CellToolBase::adjustRow()
     command->setSheet(selection()->activeSheet());
     command->setAdjustRow(true);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::adjust()
@@ -2086,7 +2087,7 @@ void CellToolBase::adjust()
     command->setAdjustColumn(true);
     command->setAdjustRow(true);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::insertCells()
@@ -2106,7 +2107,7 @@ void CellToolBase::clearAll()
     DeleteCommand* command = new DeleteCommand();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::clearContents()
@@ -2123,7 +2124,7 @@ void CellToolBase::clearContents()
     command->setParsing(true);
     command->setValue(Value(""));
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::comment()
@@ -2143,7 +2144,7 @@ void CellToolBase::clearComment()
     command->setText(i18n("Remove Comment"));
     command->setComment(QString());
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::conditional()
@@ -2162,7 +2163,7 @@ void CellToolBase::clearConditionalStyles()
     command->setSheet(selection()->activeSheet());
     command->setConditionList(QLinkedList<Conditional>());
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::insertHyperlink()
@@ -2186,7 +2187,7 @@ void CellToolBase::insertHyperlink()
         cell = Cell(selection()->activeSheet(), marker);
 
         LinkCommand* command = new LinkCommand(cell, dialog->text(), dialog->link());
-        selection()->activeSheet()->doc()->addCommand(command);
+        m_canvas->addCommand(command);
 
         //refresh editWidget
         selection()->emitModified();
@@ -2204,7 +2205,7 @@ void CellToolBase::clearHyperlink()
         return;
 
     LinkCommand* command = new LinkCommand(cell, QString(), QString());
-    selection()->activeSheet()->doc()->addCommand(command);
+    m_canvas->addCommand(command);
 
     selection()->emitModified();
 }
@@ -2225,7 +2226,7 @@ void CellToolBase::clearValidity()
     command->setSheet(selection()->activeSheet());
     command->setValidity(Validity()); // empty object removes validity
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::sort()
@@ -2256,7 +2257,7 @@ void CellToolBase::sortInc()
     command->setSortRows(!sortCols);
     command->addSortBy(0, true);  // by first one, ascending order
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 
     selection()->emitModified();
 }
@@ -2278,7 +2279,7 @@ void CellToolBase::sortDec()
     command->setSortRows(!sortCols);
     command->addSortBy(0, false);  // by first one, descending order
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 
     selection()->emitModified();
 }
@@ -2288,7 +2289,7 @@ void CellToolBase::autoFilter()
     AutoFilterCommand* command = new AutoFilterCommand();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::fillLeft()
@@ -2297,7 +2298,7 @@ void CellToolBase::fillLeft()
     command->setSheet(selection()->activeSheet());
     command->setDirection(FillManipulator::Left);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::fillRight()
@@ -2306,7 +2307,7 @@ void CellToolBase::fillRight()
     command->setSheet(selection()->activeSheet());
     command->setDirection(FillManipulator::Right);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::fillUp()
@@ -2315,7 +2316,7 @@ void CellToolBase::fillUp()
     command->setSheet(selection()->activeSheet());
     command->setDirection(FillManipulator::Up);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::fillDown()
@@ -2324,7 +2325,7 @@ void CellToolBase::fillDown()
     command->setSheet(selection()->activeSheet());
     command->setDirection(FillManipulator::Down);
     command->add(*selection());
-    command->execute();
+    command->execute(m_canvas);
 }
 
 void CellToolBase::autoSum()
@@ -2961,7 +2962,8 @@ void CellToolBase::replace()
         QRect region(d->findPos, d->findEnd);
         //TODO create undo/redo for comment
         UndoChangeAreaTextCell* undo = new UndoChangeAreaTextCell(selection()->activeSheet()->doc(), d->searchInSheets.currentSheet, Region(region));
-        selection()->activeSheet()->doc()->addCommand(undo);
+        UndoWrapperCommand* command = new UndoWrapperCommand(undo);
+        m_canvas->addCommand(command);
     }
 
     findNext();
@@ -3192,7 +3194,7 @@ void CellToolBase::spellCleanup()
     KMessageBox::information(m_canvas->canvasWidget(), i18n("Spell checking is complete."));
 
     if (d->spell.macroCmdSpellCheck)
-        selection()->activeSheet()->doc()->addCommand(d->spell.macroCmdSpellCheck);
+        m_canvas->addCommand(d->spell.macroCmdSpellCheck);
     d->spell.macroCmdSpellCheck = 0;
 }
 
@@ -3287,7 +3289,7 @@ void CellToolBase::spellCheckerCorrected(const QString & old, const QString & co
     command->setParsing(false);
     command->add(QPoint(cell.column(), cell.row()));
     command->setRegisterUndo(false);
-    command->execute();
+    command->execute(m_canvas);
 
 // the command doesn't register itself for the undo, instead, we
 // put all commands into one macro action, which will undo everything
@@ -3327,7 +3329,7 @@ void CellToolBase::spellCheckerDone(const QString &)
     d->spell.replaceAll.clear();
 
     if (d->spell.macroCmdSpellCheck) {
-        selection()->activeSheet()->doc()->addCommand(d->spell.macroCmdSpellCheck);
+        m_canvas->addCommand(d->spell.macroCmdSpellCheck);
     }
     d->spell.macroCmdSpellCheck = 0;
 }
@@ -3353,7 +3355,7 @@ void CellToolBase::spellCheckerFinished()
     }
 
     if (d->spell.macroCmdSpellCheck) {
-        selection()->activeSheet()->doc()->addCommand(d->spell.macroCmdSpellCheck);
+        m_canvas->addCommand(d->spell.macroCmdSpellCheck);
     }
     d->spell.macroCmdSpellCheck = 0;
 
@@ -3470,5 +3472,5 @@ void CellToolBase::listChooseItemSelected(QAction* action)
     command->setValue(Value(action->text()));
     command->setParsing(true);
     command->add(selection()->marker());
-    command->execute();
+    command->execute(m_canvas);
 }

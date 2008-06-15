@@ -103,7 +103,7 @@ void InsertDialog::slotOk()
             manipulator->setSheet( m_selection->activeSheet() );
             manipulator->setDirection( ShiftManipulator::ShiftRight );
             manipulator->add( Region(rect) );
-            manipulator->execute();
+            manipulator->execute(m_selection->canvas());
         }
         else if( insRem == Remove )
         {
@@ -112,7 +112,7 @@ void InsertDialog::slotOk()
             manipulator->setDirection( ShiftManipulator::ShiftRight );
             manipulator->setReverse( true );
             manipulator->add( Region(rect) );
-            manipulator->execute();
+            manipulator->execute(m_selection->canvas());
         }
     }
     else if( rb2->isChecked() )
@@ -123,7 +123,7 @@ void InsertDialog::slotOk()
             manipulator->setSheet( m_selection->activeSheet() );
             manipulator->setDirection( ShiftManipulator::ShiftBottom );
             manipulator->add( Region(rect) );
-            manipulator->execute();
+            manipulator->execute(m_selection->canvas());
         }
         else if( insRem == Remove )
         {
@@ -132,7 +132,7 @@ void InsertDialog::slotOk()
             manipulator->setDirection( ShiftManipulator::ShiftBottom );
             manipulator->setReverse( true );
             manipulator->add( Region(rect) );
-            manipulator->execute();
+            manipulator->execute(m_selection->canvas());
         }
     }
     else if( rb3->isChecked() )
@@ -142,7 +142,7 @@ void InsertDialog::slotOk()
             InsertDeleteRowManipulator* manipulator = new InsertDeleteRowManipulator();
             manipulator->setSheet( m_selection->activeSheet() );
             manipulator->add( Region(rect) );
-            manipulator->execute();
+            manipulator->execute(m_selection->canvas());
         }
         else if( insRem == Remove )
         {
@@ -150,7 +150,7 @@ void InsertDialog::slotOk()
             manipulator->setSheet( m_selection->activeSheet() );
             manipulator->setReverse( true );
             manipulator->add( Region(rect) );
-            manipulator->execute();
+            manipulator->execute(m_selection->canvas());
         }
     }
     else if( rb4->isChecked() )
@@ -160,7 +160,7 @@ void InsertDialog::slotOk()
             InsertDeleteColumnManipulator* manipulator = new InsertDeleteColumnManipulator();
             manipulator->setSheet( m_selection->activeSheet() );
             manipulator->add( Region(rect) );
-            manipulator->execute();
+            manipulator->execute(m_selection->canvas());
         }
         else if( insRem == Remove )
         {
@@ -168,7 +168,7 @@ void InsertDialog::slotOk()
             manipulator->setSheet( m_selection->activeSheet() );
             manipulator->setReverse( true );
             manipulator->add( Region(rect) );
-            manipulator->execute();
+            manipulator->execute(m_selection->canvas());
         }
     }
     else

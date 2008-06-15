@@ -238,7 +238,7 @@ void SubtotalDialog::removeSubtotalLines()
         manipulator->setDirection( ShiftManipulator::ShiftBottom );
         manipulator->setReverse( true );
         manipulator->add( Region(rect) );
-        manipulator->execute();
+        manipulator->execute(m_selection->canvas());
         m_range.setHeight( m_range.height() - 1 );
     }
   }
@@ -305,7 +305,7 @@ bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
         manipulator->setSheet( m_pSheet );
         manipulator->setDirection( ShiftManipulator::ShiftBottom );
         manipulator->add( Region(rect) );
-        manipulator->execute();
+        manipulator->execute(m_selection->canvas());
 
         m_range.setHeight( m_range.height() + 1 );
 

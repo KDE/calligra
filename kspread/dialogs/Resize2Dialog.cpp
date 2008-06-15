@@ -98,7 +98,7 @@ void ResizeRow::slotOk()
     manipulator->setSheet(m_selection->activeSheet());
     manipulator->setSize(height);
     manipulator->add(*m_selection);
-    manipulator->execute();
+    manipulator->execute(m_selection->canvas());
   }
   accept();
 }
@@ -158,7 +158,7 @@ void ResizeColumn::slotOk()
     manipulator->setSheet(m_selection->activeSheet());
     manipulator->setSize(width);
     manipulator->add(*m_selection);
-    manipulator->execute();
+    manipulator->execute(m_selection->canvas());
   }
   accept();
 }

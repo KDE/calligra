@@ -162,7 +162,7 @@ void ShowColRow::slotOk()
   }
   manipulator->setReverse(true);
   manipulator->add(region);
-  manipulator->execute();
+  manipulator->execute(m_selection->canvas());
 
   accept();
 }

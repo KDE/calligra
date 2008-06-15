@@ -664,7 +664,7 @@ void ConditionalDialog::slotOk()
   manipulator->setSheet( m_selection->activeSheet() );
   manipulator->setConditionList( newList );
   manipulator->add(*m_selection);
-  manipulator->execute();
+  manipulator->execute(m_selection->canvas());
 
   accept();
 }

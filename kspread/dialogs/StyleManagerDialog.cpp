@@ -188,7 +188,7 @@ void StyleManagerDialog::slotOk()
         command->setSheet(m_selection->activeSheet());
         command->setDefault();
         command->add(*m_selection);
-        command->execute();
+        command->execute(m_selection->canvas());
     }
     else
     {
@@ -196,7 +196,7 @@ void StyleManagerDialog::slotOk()
         command->setSheet(m_selection->activeSheet());
         command->setParentName(name);
         command->add(*m_selection);
-        command->execute();
+        command->execute(m_selection->canvas());
     }
     accept();
 }

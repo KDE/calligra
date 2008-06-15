@@ -29,6 +29,7 @@
 #include "Util.h"
 
 #include "commands/Undo.h"
+#include "commands/UndoWrapperCommand.h"
 
 #include <kcombobox.h>
 #include <kdebug.h>
@@ -581,7 +582,8 @@ void DatabaseDialog::accept()
   {
     QRect r(left, top, count, height);
     UndoInsertData * undo = new UndoInsertData( m_selection->activeSheet()->doc(), sheet, r );
-    m_selection->activeSheet()->doc()->addCommand( undo );
+    UndoWrapperCommand* command = new UndoWrapperCommand(undo);
+    m_selection->canvas()->addCommand(command);
   }
 
   m_selection->activeSheet()->doc()->emitBeginOperation();

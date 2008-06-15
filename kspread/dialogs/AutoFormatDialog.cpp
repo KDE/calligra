@@ -179,7 +179,7 @@ void AutoFormatDialog::slotOk()
     command->setSheet(d->selection->activeSheet());
     command->setStyles(d->styles);
     command->add(*d->selection);
-    if (!command->execute())
+    if (!command->execute(d->selection->canvas()))
         delete command;
 
     accept();
