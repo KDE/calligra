@@ -119,12 +119,14 @@ Doc* Map::doc() const
 bool Map::completeLoading(KoStore *store)
 {
     Q_UNUSED(store);
+    return true;
 }
 
 bool Map::completeSaving(KoStore *store, KoXmlWriter *manifestWriter)
 {
     Q_UNUSED(store);
     Q_UNUSED(manifestWriter);
+    return true;
 }
 
 void Map::setProtected( QByteArray const & passwd )
