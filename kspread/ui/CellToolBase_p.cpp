@@ -949,8 +949,8 @@ void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &view
 
     // save the painter state
     painter.save();
-    const double xOffset = q->canvas()->canvasController()->canvasOffsetX();
-    const double yOffset = q->canvas()->canvasController()->canvasOffsetY();
+    const double xOffset = q->canvas()->viewConverter()->viewToDocumentX(q->canvas()->canvasController()->canvasOffsetX());
+    const double yOffset = q->canvas()->viewConverter()->viewToDocumentY(q->canvas()->canvasController()->canvasOffsetY());
     painter.translate(-xOffset, -yOffset); // esp. for a correct clip region
     painter.translate(q->offset()); // for table shape
     // disable antialiasing
@@ -1071,8 +1071,8 @@ void CellToolBase::Private::paintReferenceSelection(QPainter &painter, const QRe
     }
     // save painter state
     painter.save();
-    const double xOffset = q->canvas()->canvasController()->canvasOffsetX();
-    const double yOffset = q->canvas()->canvasController()->canvasOffsetY();
+    const double xOffset = q->canvas()->viewConverter()->viewToDocumentX(q->canvas()->canvasController()->canvasOffsetX());
+    const double yOffset = q->canvas()->viewConverter()->viewToDocumentY(q->canvas()->canvasController()->canvasOffsetY());
     painter.translate(-xOffset, -yOffset); // esp. for a correct clip region
     painter.translate(q->offset()); // for table shape
 
@@ -1124,8 +1124,8 @@ void CellToolBase::Private::retrieveMarkerInfo(const QRect &cellRange, const QRe
         double positions[], bool paintSides[])
 {
     const Sheet* sheet = q->selection()->activeSheet();
-    const double xOffset = q->canvas()->canvasController()->canvasOffsetX();
-    const double yOffset = q->canvas()->canvasController()->canvasOffsetY();
+    const double xOffset = q->canvas()->viewConverter()->viewToDocumentX(q->canvas()->canvasController()->canvasOffsetX());
+    const double yOffset = q->canvas()->viewConverter()->viewToDocumentY(q->canvas()->canvasController()->canvasOffsetY());
     const QRectF visibleRect = sheet->cellCoordinatesToDocument(cellRange).translated(xOffset, yOffset);
 
     /* these vars are used for clarity, the array for simpler function arguments  */
