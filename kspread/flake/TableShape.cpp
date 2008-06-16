@@ -47,6 +47,7 @@ public:
     int         rows;
     Sheet*      sheet; // owned by "TableMap" data center
     SheetView*  sheetView;
+    Doc*        doc; // TODO Stefan: remove when possible
 
 public:
     void adjustColumnDimensions( double factor );
@@ -79,6 +80,7 @@ TableShape::TableShape( int columns, int rows )
     d->rows = rows;
     d->sheet = 0;
     d->sheetView = 0;
+    d->doc = new Doc(); // TODO Stefan: remove when possible
 }
 
 TableShape::~TableShape()
@@ -87,6 +89,7 @@ TableShape::~TableShape()
     if (d->sheet) {
         d->sheet->map()->takeSheet(d->sheet); // declare the sheet as deleted
     }
+    delete d->doc; // TODO Stefan: remove when possible
     delete d;
 }
 
@@ -176,7 +179,10 @@ void TableShape::saveOdf( KoShapeSavingContext & context ) const
 
 void TableShape::init(QMap<QString, KoDataCenter*> dataCenterMap)
 {
+#if 0
     Map* map = dynamic_cast<Map*>(dataCenterMap["TableMap"]);
+#endif
+    Map* map = d->doc->map(); // TODO Stefan: remove when possible
     d->sheet = map->addNewSheet();
     d->sheetView = new SheetView(d->sheet);
 

@@ -74,8 +74,10 @@ TableShapeFactory::~TableShapeFactory()
 
 void TableShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter*> &dataCenterMap)
 {
+#if 0
     // One spreadsheet map for all inserted tables to allow referencing cells among them.
     dataCenterMap["TableMap"] = d->doc->map();
+#endif
 }
 
 bool TableShapeFactory::supports(const KoXmlElement &element) const
