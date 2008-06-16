@@ -142,7 +142,7 @@ void Filterkpr2odf::createImageList( KoStore* output, KoStore* input, KoXmlWrite
 {
     output->enterDirectory( "Pictures" );
     manifest->addManifestEntry( "Pictures/", "" );
-    KoXmlElement key = m_mainDoc.namedItem("DOC").namedItem("PICTURES").firstChild().toElement();
+    KoXmlElement key( m_mainDoc.namedItem( "DOC" ).namedItem("PICTURES").firstChild().toElement() );
 
     //Iterate over all the keys to copy the image, get the file name and
     //its "representation" inside the KPR file
@@ -185,11 +185,11 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
     content->startElement( KoOdf::bodyContentElement( KoOdf::Presentation, true ) );
 
     //We search all this here so that we can make the search just once
-    const KoXmlNode titles = m_mainDoc.namedItem("DOC").namedItem( "PAGETITLES" );
-    const KoXmlNode notes = m_mainDoc.namedItem("DOC").namedItem( "PAGENOTES" );
-    const KoXmlNode backgrounds = m_mainDoc.namedItem("DOC").namedItem( "BACKGROUND" );
-    const KoXmlNode objects = m_mainDoc.namedItem("DOC").namedItem( "OBJECTS" );
-    const KoXmlNode paper = m_mainDoc.namedItem("DOC").namedItem( "PAPER" );
+    KoXmlNode titles( m_mainDoc.namedItem( "DOC" ).namedItem( "PAGETITLES" ) );
+    KoXmlNode notes( m_mainDoc.namedItem( "DOC" ).namedItem( "PAGENOTES" ) );
+    KoXmlNode backgrounds( m_mainDoc.namedItem( "DOC" ).namedItem( "BACKGROUND" ) );
+    KoXmlNode objects( m_mainDoc.namedItem( "DOC" ).namedItem( "OBJECTS" ) );
+    KoXmlNode paper( m_mainDoc.namedItem( "DOC" ).namedItem( "PAPER" ) );
     m_pageHeight = paper.toElement().attribute( "ptHeight" ).toFloat();
 
     //Go to the first background, there might be missing backgrounds

@@ -114,12 +114,14 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
     if ( !pageEffect.isNull() )
     {
         QString effectName;
-        //TODO: fill this list! damn nothing in the dtd
         int effect = pageEffect.attribute( "value", "0" ).toInt();
         switch( effect )
         {
         case -1:
             effectName = "random";
+            break;
+        case 0:
+            effectName = "none";
             break;
         case 1:
             effectName = "close-vertical";
@@ -137,22 +139,91 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
             effectName = "open-horizontal";
             break;
         case 6:
-            effectName = "fade-from-center";
+            effectName = "open";
+            break;
+        case 7:
+            effectName = "interlocking-horizontal-left";
+            break;
+        case 8:
+            effectName = "interlocking-horizontal-right";
+            break;
+        case 9:
+            effectName = "interlocking-horizontal-right";
+            break;
+        case 10:
+            effectName = "interlocking-vertical-bottom";
             break;
         case 11:
             effectName = "spiralin-left";
             break;
+        case 12:
+            effectName = "fly-away";
+            break;
+        case 13:
+            effectName = "horizontal-stripes";
+            break;
+        case 14:
+            effectName = "vertical-stripes";
+            break;
+        case 15:
+            effectName = "fade-to-center";
+            break;
+        case 16:
+            effectName = "fade-from-center";
+            break;
+        case 17:
+            effectName = "horizontal-checkerboard";
+            break;
+        case 18:
+            effectName = "vertical-checkerboard";
+            break;
         case 19:
             effectName = "fade-from-top";
+            break;
+        case 20:
+            effectName = "uncover-to-bottom";
             break;
         case 21:
             effectName = "fade-from-bottom";
             break;
         case 22:
-            effectName = "roll-from-bottom";
+            effectName = "uncover-to-top";
+            break;
+        case 23:
+            effectName = "fade-from-right";
             break;
         case 24:
-            effectName = "roll-from-right";
+            effectName = "uncover-to-left";
+            break;
+        case 25:
+            effectName = "fade-from-left";
+            break;
+        case 26:
+            effectName = "uncover-to-right";
+            break;
+        case 27:
+            effectName = "fade-from-lowerright";
+            break;
+        case 28:
+            effectName = "uncover-to-upperleft";
+            break;
+        case 29:
+            effectName = "fade-from-upperrigh";
+            break;
+        case 30:
+            effectName = "uncover-to-lowerleft";
+            break;
+        case 31:
+            effectName = "fade-from-lowerleft";
+            break;
+        case 32:
+            effectName = "uncover-to-upperright";
+            break;
+        case 33:
+            effectName = "fade-from-upperleft";
+            break;
+        case 34:
+            effectName = "fade-from-lowerleft";
             break;
         case 35:
             effectName = "dissolve";
@@ -168,6 +239,9 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
             break;
         case 39:
             effectName = "fade-from-upperleft";
+            break;
+        case 40:
+            effectName = "melt";
             break;
         }//switch efect
         style.addProperty( "presentation:transition-style", effectName );
