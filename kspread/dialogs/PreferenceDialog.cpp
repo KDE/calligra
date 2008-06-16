@@ -427,7 +427,6 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
   indentUnit = _view->doc()->unit();
     const KConfigGroup parameterGroup = config->group( "Parameters" );
     double _indent = parameterGroup.readEntry( "Indent" , indentUnit.toUserValue( 10.0 ) );
-    bool bMsgError = parameterGroup.readEntry( "Msg error" ,false );
 
     m_oldNbRedo = config->group( "Misc" ).readEntry( "UndoRedo", m_oldNbRedo );
 
@@ -492,10 +491,6 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
   valIndent->setValue ( indentUnit.toUserValue( _indent ) );
   valIndent->setWhatsThis( i18n( "Lets you define the amount of indenting used by the Increase Indent and Decrease Indent option in the Format menu." ) );
   valIndent->setLabel(i18n("&Indentation step (%1):", KoUnit::unitName(indentUnit)));
-
-  msgError= new QCheckBox(i18n("&Show error message for invalid formulae"),tmpQGroupBox);
-  msgError->setChecked( bMsgError );
-  msgError->setWhatsThis( i18n( "If this box is checked a message box will pop up when what you have entered into a cell cannot be understood by KSpread." ) );
 
   box->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
@@ -594,7 +589,6 @@ void miscParameters::slotDefault()
   valIndent->setValue( indentUnit.toUserValue( 10.0 ) );
   typeCompletion->setCurrentIndex(3);
   typeOfMove->setCurrentIndex(0);
-  msgError->setChecked(false);
   typeCalc->setCurrentIndex(0);
 }
 
@@ -708,13 +702,6 @@ void miscParameters::apply()
         m_pView->doc()->setIndentValue( val );
         m_pView->doc()->setUnit(oldUnit);
         parameterGroup.writeEntry( "Indent", indentUnit.fromUserValue( val ) );
-    }
-
-    bool active=msgError->isChecked();
-    if(active!=m_pView->doc()->showMessageError())
-    {
-        m_pView->doc()->setShowMessageError( active);
-        parameterGroup.writeEntry( "Msg error" ,(int)active);
     }
 }
 

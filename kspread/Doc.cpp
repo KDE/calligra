@@ -149,7 +149,6 @@ public:
   bool showStatusBar            : 1;
   bool showTabBar               : 1;
   bool showFormulaBar           : 1;
-  bool showError                : 1;
   KGlobalSettings::Completion completionMode;
   KSpread::MoveTo moveTo;
   MethodOfCalc calcMethod;
@@ -210,7 +209,6 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->showStatusBar = true;
   d->showFormulaBar = true;
   d->showTabBar = true;
-  d->showError = false;
   d->calcMethod = SumOfNumber;
   d->moveTo = Bottom;
   d->completionMode = KGlobalSettings::CompletionAuto;
@@ -962,16 +960,6 @@ void Doc::setShowFormulaBar(bool _formulaBar)
 bool Doc::showFormulaBar() const
 {
   return  d->showFormulaBar;
-}
-
-void Doc::setShowMessageError(bool _show)
-{
-  d->showError=_show;
-}
-
-bool Doc::showMessageError() const
-{
-  return  d->showError;
 }
 
 KSpread::MoveTo Doc::moveToValue() const

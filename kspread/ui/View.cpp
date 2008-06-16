@@ -950,8 +950,6 @@ void View::initConfig()
     if ( !configFromDoc )
         doc()->setShowTabBar(parameterGroup.readEntry("Tabbar",true));
 
-    doc()->setShowMessageError(parameterGroup.readEntry( "Msg error" ,false) );
-
     doc()->setShowFormulaBar(parameterGroup.readEntry("Formula bar",true));
     doc()->setShowStatusBar(parameterGroup.readEntry("Status bar",true));
 

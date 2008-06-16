@@ -271,16 +271,6 @@ public:
   bool showFormulaBar() const;
 
   /**
-   * If b is true, an error message will pop up whenever error occurs.
-   */
-  void setShowMessageError( bool b );
-
-  /**
-   * Returns true if error message should pop up whenever error occurs.
-   */
-  bool showMessageError() const;
-
-  /**
    * @return completion mode
    */
   KGlobalSettings::Completion completionMode() const ;

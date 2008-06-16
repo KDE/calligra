@@ -154,6 +154,11 @@ Comment[x-test]=xxA hyperlink was activatedxx
 Comment[zh_TW]=超連結已啟動
 Action=None
 
+[Event/ParsingError]
+Name=Parsing failed
+Comment=Parsing of a cell's formula failed
+Action=None
+
 [Event/ValidityError]
 Name=Validity failed
 Name[ca]=Ha fallat la validació

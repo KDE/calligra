@@ -80,9 +80,10 @@
 #include <KoOdfStylesReader.h>
 #include <KoXmlWriter.h>
 
-#include <kmessagebox.h>
-
 #include <kdebug.h>
+#include <KNotification>
+
+#include <QTimer>
 
 using namespace KSpread;
 
@@ -707,10 +708,11 @@ bool Cell::makeFormula()
     // parse the formula and check for errors
     if ( !formula().isValid() )
     {
-        if (doc()->showMessageError())
-        {
-            KMessageBox::error( 0, i18n("Error in cell %1\n\n", fullName()) );
-        }
+        KNotification *notify = new KNotification("ParsingError");
+        notify->setText(i18n("Parsing of formula in cell <i>%1</i> failed.", fullName()));
+        notify->addContext("cell", fullName());
+        notify->addContext("expression", userInput());
+        QTimer::singleShot(0, notify, SLOT(sendEvent()));
         setValue( Value::errorPARSE() );
         return false;
     }
@@ -781,10 +783,11 @@ void Cell::parseUserInput( const QString& text )
         // parse the formula and check for errors
         if ( !formula.isValid() )
         {
-            if (doc()->showMessageError())
-            {
-                KMessageBox::error( 0, i18n("Error in cell %1\n\n", fullName()) );
-            }
+            KNotification *notify = new KNotification("ParsingError");
+            notify->setText(i18n("Parsing of formula in cell <i>%1</i> failed.", fullName()));
+            notify->addContext("cell", fullName());
+            notify->addContext("expression", userInput());
+            QTimer::singleShot(0, notify, SLOT(sendEvent()));
             setValue( Value::errorPARSE() );
             return;
         }
