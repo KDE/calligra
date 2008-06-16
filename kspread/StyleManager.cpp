@@ -31,8 +31,10 @@
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
+#include "CalculationSettings.h"
 #include "Condition.h"
 #include "Doc.h"
+#include "Map.h"
 #include "Style.h"
 
 using namespace KSpread;
@@ -98,7 +100,7 @@ void StyleManager::loadOasisStyleTemplate( KoOdfStylesReader& stylesReader, Doc*
                         if ( ok && precision > -1 )
                         {
                             kDebug(36003) <<"Default decimal precision:" << precision;
-                            doc->setDefaultDecimalPrecision( precision );
+                            doc->map()->calculationSettings()->setDefaultDecimalPrecision( precision );
                         }
                     }
                 }

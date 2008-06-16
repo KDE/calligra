@@ -44,6 +44,7 @@
 
 #include <kspread/ui/AboutData.h> // for version
 #include <kspread/ui/Canvas.h>
+#include <kspread/CalculationSettings.h>
 #include <kspread/Cell.h>
 #include <kspread/Doc.h>
 #include <kspread/Map.h>
@@ -128,7 +129,7 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QByteArray & from,
     return KoFilter::NotImplemented;
   }
 
-  m_locale = static_cast<Doc*>(document)->locale();
+  m_locale = static_cast<Doc*>(document)->map()->calculationSettings()->locale();
   if ( !writeFile( ksdoc ) )
     return KoFilter::CreationError;
 
@@ -783,7 +784,7 @@ void OpenCalcExport::exportDefaultCellStyle( QDomDocument & doc, QDomElement & o
   KoDocument * document = m_chain->inputDocument();
   Doc * ksdoc    = static_cast<Doc *>(document);
 
-  const KLocale *locale = ksdoc->locale();
+  const KLocale *locale = ksdoc->map()->calculationSettings()->locale();
   QString language;
   QString country;
   QString charSet;

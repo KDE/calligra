@@ -27,6 +27,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "CalculationSettings.h"
 #include "Functions.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
@@ -166,12 +167,12 @@ Value func_info (valVector args, ValueCalc *calc, FuncExtra *)
   if (type == "recalc")
   {
     QString result;
-    if (calc->doc()) {
+//     if (calc->doc()) {
 //       if ( calc->doc()->displaySheet() && !calc->doc()->displaySheet()->isAutoCalculationEnabled() )
 //         result = i18n ("Manual");
 //       else
         result = i18n ("Automatic");
-    }
+//     }
     return Value (result);
   }
 
@@ -319,7 +320,7 @@ Value func_type (valVector args, ValueCalc *, FuncExtra *)
 
 Value func_filename (valVector, ValueCalc *calc, FuncExtra *)
 {
-  return Value (calc->doc()->url().prettyUrl());
+    return Value(calc->settings()->fileName());
 }
 
 // Function: N

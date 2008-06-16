@@ -504,7 +504,7 @@ public:
     bool isSingleCell() { return ( left == right && top == bottom ); }
     bool checkCircle( QString const & name, QString const & parent );
 
-    KLocale * locale() const { return m_doc->locale(); }
+    KLocale * locale() const;
 
 
     struct CellBorderFormat

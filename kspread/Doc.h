@@ -133,12 +133,6 @@ public:
     QMap<QString, KoDataCenter*> dataCenterMap();
 
   /**
-   * A sheet could use a different localization as the KDE default.
-   * @return the KLocale associated with this sheet
-   */
-  KLocale *locale () const;
-
-  /**
    * @return the Map that belongs to this Document
    */
   Map *map () const;
@@ -605,53 +599,6 @@ public:
   int undoRedoLimit() const;
   void setUndoRedoLimit(int _val);
 #endif
-
-    /**
-     * Sets the reference year.
-     * All two-digit-year dates are stored as numbers relative to a reference year.
-     *
-     * \param year the new reference year
-     */
-    void setReferenceYear( int year );
-
-    /**
-     * Returns the reference year all two-digit-year dates are stored relative to.
-     *
-     * \return the reference year (default: 1930)
-     */
-    int referenceYear() const;
-
-    /**
-     * Sets the reference date.
-     * All dates are stored as numbers relative to a reference date.
-     *
-     * \param date the new reference date
-     */
-    void setReferenceDate( const QDate& date );
-
-    /**
-     * Returns the reference date all date are stored relative to.
-     *
-     * \return the reference date (default: 1899-12-30)
-     */
-    QDate referenceDate() const;
-
-    /**
-     * Sets the default decimal precision.
-     * It is used to format decimal numbers, if the cell style does not define
-     * one.
-     *
-     * \param precision the default decimal precision
-     */
-    void setDefaultDecimalPrecision( int precision );
-
-    /**
-     * Returns the default decimal precision, which is used, if the cell style
-     * does not define one.
-     *
-     * \return the default decimal precision
-     */
-    int defaultDecimalPrecision() const;
 
 public Q_SLOTS:
     void refreshInterface();

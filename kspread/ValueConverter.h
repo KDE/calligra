@@ -22,11 +22,9 @@
 
 #include "Value.h"
 
-class KLocale;
-
 namespace KSpread
 {
-class Doc;
+class CalculationSettings;
 class ValueParser;
 
 /**
@@ -41,14 +39,9 @@ public:
     explicit ValueConverter( const ValueParser* parser );
 
     /**
-     * Returns the document this ValueFormatter belongs to.
+     * Returns the calculation settings this ValueFormatter uses.
      */
-    const Doc* doc() const;
-
-    /**
-     * Returns the locale this ValueFormatter uses.
-     */
-    const KLocale* locale() const;
+    const CalculationSettings* settings() const;
 
     /**
      * Converts \p value to a Value of boolean type.

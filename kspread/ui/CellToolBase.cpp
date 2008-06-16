@@ -31,6 +31,7 @@
 
 // KSpread
 #include "AutoFillStrategy.h"
+#include "CalculationSettings.h"
 #include "Cell.h"
 #include "Damages.h"
 #include "DragAndDropStrategy.h"
@@ -1792,7 +1793,7 @@ void CellToolBase::currency(bool enable)
     command->setSheet(selection()->activeSheet());
     command->setText(i18n("Format Money"));
     command->setFormatType(enable ? Format::Money : Format::Generic);
-    command->setPrecision(enable ?  selection()->activeSheet()->doc()->locale()->fracDigits() : 0);
+    command->setPrecision(enable ?  selection()->activeSheet()->map()->calculationSettings()->locale()->fracDigits() : 0);
     command->add(*selection());
     command->execute(m_canvas);
 }
@@ -2481,8 +2482,8 @@ void CellToolBase::insertFromTextfile()
     selection()->emitAboutToModify();
 
     CSVDialog dialog(m_canvas->canvasWidget(), selection(), CSVDialog::File);
-    dialog.setDecimalSymbol(selection()->activeSheet()->doc()->locale()->decimalSymbol());
-    dialog.setThousandsSeparator(selection()->activeSheet()->doc()->locale()->thousandsSeparator());
+    dialog.setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
+    dialog.setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
     if (!dialog.canceled())
         dialog.exec();
 }
@@ -2492,8 +2493,8 @@ void CellToolBase::insertFromClipboard()
     selection()->emitAboutToModify();
 
     CSVDialog dialog(m_canvas->canvasWidget(), selection(), CSVDialog::Clipboard);
-    dialog.setDecimalSymbol(selection()->activeSheet()->doc()->locale()->decimalSymbol());
-    dialog.setThousandsSeparator(selection()->activeSheet()->doc()->locale()->thousandsSeparator());
+    dialog.setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
+    dialog.setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
     if (!dialog.canceled())
         dialog.exec();
 }
@@ -2508,8 +2509,8 @@ void CellToolBase::textToColumns()
     selection()->initialize(area);
 
     CSVDialog dialog(m_canvas->canvasWidget(), selection(), CSVDialog::Column);
-    dialog.setDecimalSymbol(selection()->activeSheet()->doc()->locale()->decimalSymbol());
-    dialog.setThousandsSeparator(selection()->activeSheet()->doc()->locale()->thousandsSeparator());
+    dialog.setDecimalSymbol(selection()->activeSheet()->map()->calculationSettings()->locale()->decimalSymbol());
+    dialog.setThousandsSeparator(selection()->activeSheet()->map()->calculationSettings()->locale()->thousandsSeparator());
     if (!dialog.canceled())
         dialog.exec();
     else

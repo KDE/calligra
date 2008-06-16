@@ -41,6 +41,7 @@ class KoOasisSettings;
 
 namespace KSpread
 {
+class CalculationSettings;
 class Doc;
 class Sheet;
 class Style;
@@ -71,6 +72,11 @@ public:
     // KoDataCenter interface
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter);
+
+    /**
+     * \return the calculation settings
+     */
+    CalculationSettings* calculationSettings() const;
 
   /**
    * \ingroup OpenDocument

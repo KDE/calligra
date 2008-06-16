@@ -29,7 +29,7 @@
 
 namespace KSpread
 {
-class Doc;
+class CalculationSettings;
 class Value;
 class ValueConverter;
 
@@ -45,9 +45,9 @@ public:
     explicit ValueFormatter( const ValueConverter* converter );
 
     /**
-     * Returns the document this ValueFormatter belongs to.
+     * Returns the calculation settings this ValueFormatter uses.
      */
-    const Doc* doc() const;
+    const CalculationSettings* settings() const;
 
     /**
      * Creates a textual representation of \p value with the explicit given

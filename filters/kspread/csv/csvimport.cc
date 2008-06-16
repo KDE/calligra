@@ -34,6 +34,7 @@
 #include <KoFilterChain.h>
 #include <KoFilterManager.h>
 
+#include <kspread/CalculationSettings.h>
 #include <kspread/Cell.h>
 #include <kspread/Doc.h>
 #include <kspread/Global.h>
@@ -105,8 +106,8 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
 
     KoCsvImportDialog* dialog = new KoCsvImportDialog(0);
     dialog->setData(inputFile);
-    dialog->setDecimalSymbol(ksdoc->locale()->decimalSymbol());
-    dialog->setThousandsSeparator(ksdoc->locale()->thousandsSeparator());
+    dialog->setDecimalSymbol(ksdoc->map()->calculationSettings()->locale()->decimalSymbol());
+    dialog->setThousandsSeparator(ksdoc->map()->calculationSettings()->locale()->thousandsSeparator());
     if (!m_chain->manager()->getBatchMode() && !dialog->exec())
         return KoFilter::UserCancelled;
     inputFile.resize( 0 ); // Release memory (input file content)
@@ -122,10 +123,10 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
       ++numRows;
 
     // Initialize the decimal symbol and thousands separator to use for parsing.
-    const QString documentDecimalSymbol = ksdoc->locale()->decimalSymbol();
-    const QString documentThousandsSeparator= ksdoc->locale()->thousandsSeparator();
-    ksdoc->locale()->setDecimalSymbol(dialog->decimalSymbol());
-    ksdoc->locale()->setThousandsSeparator(dialog->thousandsSeparator());
+    const QString documentDecimalSymbol = ksdoc->map()->calculationSettings()->locale()->decimalSymbol();
+    const QString documentThousandsSeparator= ksdoc->map()->calculationSettings()->locale()->thousandsSeparator();
+    ksdoc->map()->calculationSettings()->locale()->setDecimalSymbol(dialog->decimalSymbol());
+    ksdoc->map()->calculationSettings()->locale()->setThousandsSeparator(dialog->thousandsSeparator());
 
     int step = 100 / numRows * numCols;
     int value = 0;
@@ -204,8 +205,8 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
     }
 
     // Restore the document's decimal symbol and thousands separator.
-    ksdoc->locale()->setDecimalSymbol(documentDecimalSymbol);
-    ksdoc->locale()->setThousandsSeparator(documentThousandsSeparator);
+    ksdoc->map()->calculationSettings()->locale()->setDecimalSymbol(documentDecimalSymbol);
+    ksdoc->map()->calculationSettings()->locale()->setThousandsSeparator(documentThousandsSeparator);
 
     emit sigProgress( 100 );
     QApplication::restoreOverrideCursor();

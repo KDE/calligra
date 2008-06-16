@@ -33,6 +33,7 @@
 #include <QGridLayout>
 #include <QVBoxLayout>
 
+#include "CalculationSettings.h"
 #include "Cell.h"
 #include "Canvas.h"
 #include "Util.h"
@@ -479,7 +480,7 @@ QString FormulaDialog::createParameter( const QString& _text, int param )
     case KSpread_Any:
     {
         bool isNumber;
-        double tmp = m_selection->activeSheet()->doc()->locale()->readNumber( _text, &isNumber );
+        double tmp = m_selection->activeSheet()->map()->calculationSettings()->locale()->readNumber( _text, &isNumber );
         Q_UNUSED( tmp );
 
         //In case of number or boolean return _text, else return value as KSpread_String

@@ -20,7 +20,7 @@
 
 // built-in date/time functions
 
-#include "Doc.h"
+#include "CalculationSettings.h"
 #include "Functions.h"
 #include "functions/helper.h"
 #include "ValueCalc.h"
@@ -204,15 +204,15 @@ void RegisterDateTimeFunctions()
 // Function: EDATE
 Value func_edate (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate date = calc->conv()->asDate (args[0]).asDate(calc->settings());
   int months = calc->conv()->asInteger (args[1]).asInteger();
 
-  date = calc->conv()->locale()->calendar()->addMonths (date, months);
+  date = calc->settings()->locale()->calendar()->addMonths (date, months);
 
   if (!date.isValid())
     return Value::errorVALUE();
 
-  return Value( date, calc->doc() );
+  return Value( date, calc->settings() );
 }
 
 // Function: EOMONTH
@@ -223,10 +223,10 @@ Value func_eomonth (valVector args, ValueCalc *calc, FuncExtra *)
   if (modDate.isError()) return modDate;
 
   // modDate is currently in Date format
-  QDate date = modDate.asDate( calc->doc() );
+  QDate date = modDate.asDate(calc->settings());
   date.setYMD (date.year(), date.month(), date.daysInMonth());
 
-  return Value( date, calc->doc() );
+  return Value( date, calc->settings() );
 }
 
 // internal helper function
@@ -287,8 +287,8 @@ static int func_days360_helper( const QDate& _date1, const QDate& _date2, bool e
 // algorithm adapted from gnumeric
 Value func_days360 (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date1 = calc->conv()->asDate (args[0]).asDate( calc->doc() );
-  QDate date2 = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+  QDate date1 = calc->conv()->asDate (args[0]).asDate(calc->settings());
+  QDate date2 = calc->conv()->asDate (args[1]).asDate(calc->settings());
   bool european = false;
   if (args.count() == 3)
     european = calc->conv()->asBoolean (args[2]).asBoolean();
@@ -301,7 +301,7 @@ Value func_year (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value v = calc->conv()->asDate (args[0]);
   if (v.isError()) return v;
-  QDate date = v.asDate( calc->doc() );
+  QDate date = v.asDate(calc->settings());
   return Value (date.year ());
 }
 
@@ -310,7 +310,7 @@ Value func_month (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value v = calc->conv()->asDate (args[0]);
   if (v.isError()) return v;
-  QDate date = v.asDate( calc->doc() );
+  QDate date = v.asDate(calc->settings());
   return Value (date.month ());
 }
 
@@ -319,7 +319,7 @@ Value func_day (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value v = calc->conv()->asDate (args[0]);
   if (v.isError()) return v;
-  QDate date = v.asDate( calc->doc() );
+  QDate date = v.asDate(calc->settings());
   return Value (date.day ());
 }
 
@@ -331,7 +331,7 @@ Value func_hour (valVector args, ValueCalc *calc, FuncExtra *)
   {
     Value v = calc->conv()->asTime (args[0]);
     if (v.isError()) return v;
-    time = v.asTime( calc->doc() );
+    time = v.asTime(calc->settings());
   }
   else
     time = QTime::currentTime ();
@@ -346,7 +346,7 @@ Value func_minute (valVector args, ValueCalc *calc, FuncExtra *)
   {
     Value v = calc->conv()->asTime (args[0]);
     if (v.isError()) return v;
-    time = v.asTime( calc->doc() );
+    time = v.asTime(calc->settings());
   }
   else
     time = QTime::currentTime ();
@@ -361,7 +361,7 @@ Value func_second (valVector args, ValueCalc *calc, FuncExtra *)
   {
     Value v = calc->conv()->asTime (args[0]);
     if (v.isError()) return v;
-    time = v.asTime( calc->doc() );
+    time = v.asTime(calc->settings());
   }
   else
     time = QTime::currentTime ();
@@ -373,7 +373,7 @@ Value func_weekday (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value v( calc->conv()->asDate (args[0]) );
   if (v.isError()) return v;
-  QDate date = v.asDate( calc->doc() );
+  QDate date = v.asDate(calc->settings());
   int method = 1;
   if (args.count() == 2)
     method = calc->conv()->asInteger (args[1]).asInteger();
@@ -421,8 +421,8 @@ Value func_timevalue (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: YEARS
 Value func_years (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date1 = calc->conv()->asDate (args[0]).asDate( calc->doc() );
-  QDate date2 = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+  QDate date1 = calc->conv()->asDate (args[0]).asDate(calc->settings());
+  QDate date2 = calc->conv()->asDate (args[1]).asDate(calc->settings());
   if (!date1.isValid() || !date2.isValid())
     return Value::errorVALUE();
 
@@ -455,8 +455,8 @@ Value func_years (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: MONTHS
 Value func_months (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date1 = calc->conv()->asDate (args[0]).asDate( calc->doc() );
-  QDate date2 = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+  QDate date1 = calc->conv()->asDate (args[0]).asDate(calc->settings());
+  QDate date2 = calc->conv()->asDate (args[1]).asDate(calc->settings());
   if (!date1.isValid() || !date2.isValid())
     return Value::errorVALUE();
 
@@ -490,8 +490,8 @@ Value func_months (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: WEEKS
 Value func_weeks (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date1 = calc->conv()->asDate (args[0]).asDate( calc->doc() );
-  QDate date2 = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+  QDate date1 = calc->conv()->asDate (args[0]).asDate(calc->settings());
+  QDate date2 = calc->conv()->asDate (args[1]).asDate(calc->settings());
   if (!date1.isValid() || !date2.isValid())
     return Value::errorVALUE();
 
@@ -502,7 +502,7 @@ Value func_weeks (valVector args, ValueCalc *calc, FuncExtra *)
     return Value ((int) (days / 7));
 
   // the number of full weeks between starting on mondays
-  int weekStartDay = calc->conv()->locale()->weekStartDay();
+  int weekStartDay = calc->settings()->locale()->weekStartDay();
 
   int dow1 = date1.dayOfWeek();
   int dow2 = date2.dayOfWeek();
@@ -516,8 +516,8 @@ Value func_weeks (valVector args, ValueCalc *calc, FuncExtra *)
 // Function: DAYS
 Value func_days (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date1 = calc->conv()->asDate (args[0]).asDate( calc->doc() );
-  QDate date2 = calc->conv()->asDate (args[1]).asDate( calc->doc() );
+  QDate date1 = calc->conv()->asDate (args[0]).asDate(calc->settings());
+  QDate date2 = calc->conv()->asDate (args[1]).asDate(calc->settings());
   if (!date1.isValid() || !date2.isValid())
     return Value::errorVALUE();
 
@@ -540,7 +540,7 @@ Value func_date (valVector args, ValueCalc *calc, FuncExtra *)
     tmpDate = tmpDate.addDays(d-1);
 
     //kDebug(36002) <<"func_date:: date =" << tmpDate;
-    return Value( tmpDate, calc->doc() );
+    return Value( tmpDate, calc->settings() );
   }
 }
 
@@ -549,7 +549,7 @@ Value func_dayname (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int number = calc->conv()->asInteger (args[0]).asInteger();
 
-  QString weekName = calc->conv()->locale()->calendar()->weekDayName (number);
+  QString weekName = calc->settings()->locale()->calendar()->weekDayName (number);
   if (weekName.isNull())
     return Value::errorVALUE();
   return Value (weekName);
@@ -560,7 +560,7 @@ Value func_monthname (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int number = calc->conv()->asInteger (args[0]).asInteger();
 
-  QString monthName = calc->conv()->locale()->calendar()->monthName (number,
+  QString monthName = calc->settings()->locale()->calendar()->monthName (number,
       QDate::currentDate().year());
   if (monthName.isNull())
     return Value::errorVALUE();
@@ -579,25 +579,25 @@ Value func_time (valVector args, ValueCalc *calc, FuncExtra *)
   res = res.addSecs(60*m);
   res = res.addSecs(s);
 
-  return Value( res, calc->doc() );
+  return Value( res, calc->settings() );
 }
 
 // Function: CURRENTDATE
 Value func_currentDate (valVector, ValueCalc * calc, FuncExtra *)
 {
-  return Value( QDate::currentDate(), calc->doc() );
+  return Value( QDate::currentDate(), calc->settings() );
 }
 
 // Function: CURRENTTIME
 Value func_currentTime (valVector, ValueCalc * calc, FuncExtra *)
 {
-  return Value( QTime::currentTime(), calc->doc() );
+  return Value( QTime::currentTime(), calc->settings() );
 }
 
 // Function: CURRENTDATETIME
 Value func_currentDateTime (valVector, ValueCalc * calc, FuncExtra *)
 {
-  return Value( QDateTime::currentDateTime(), calc->doc() );
+  return Value( QDateTime::currentDateTime(), calc->settings() );
 }
 
 // Function: DAYOFYEAR
@@ -605,7 +605,7 @@ Value func_dayOfYear (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value date = func_date (args, calc, 0);
   if (date.isError()) return date;
-  return Value (date.asDate( calc->doc() ).dayOfYear());
+  return Value (date.asDate(calc->settings()).dayOfYear());
 }
 
 // Function: DAYSINMONTH
@@ -663,7 +663,7 @@ Value func_easterSunday (valVector args, ValueCalc *calc, FuncExtra *)
   nDay = O % 31 + 1;
   nMonth = int(O / 31);
 
-  return Value( QDate (nYear, nMonth, nDay), calc->doc() );
+  return Value( QDate (nYear, nMonth, nDay), calc->settings() );
 }
 
 // Function: ISOWEEKNUM
@@ -674,7 +674,7 @@ Value func_easterSunday (valVector args, ValueCalc *calc, FuncExtra *)
 //
 Value func_isoWeekNum (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  QDate date = calc->conv()->asDate (args[0]).asDate( calc->doc() );
+  QDate date = calc->conv()->asDate (args[0]).asDate(calc->settings());
   if (!date.isValid())
       return Value::errorVALUE();
    
@@ -740,7 +740,7 @@ Value func_weekNum (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value v( calc->conv()->asDate (args[0]) );
   if (v.isError()) return v;
-  QDate date = v.asDate( calc->doc() );
+  QDate date = v.asDate(calc->settings());
 
   if (!date.isValid())
       return Value::errorVALUE();
@@ -784,14 +784,14 @@ Value func_dateDif (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value v1( calc->conv()->asDate (args[0]) );
   if (v1.isError()) return v1;
-  QDate date1 = v1.asDate( calc->doc() );
+  QDate date1 = v1.asDate(calc->settings());
 
   if (!date1.isValid())
       return Value::errorVALUE();
 
   Value v2( calc->conv()->asDate (args[1]) );
   if (v2.isError()) return v2;
-  QDate date2 = v2.asDate( calc->doc() );
+  QDate date2 = v2.asDate(calc->settings());
 
   if (!date2.isValid())
       return Value::errorVALUE();
@@ -809,7 +809,7 @@ Value func_dateDif (valVector args, ValueCalc *calc, FuncExtra *)
   QDate Temp1, Temp2;
 
   //QDate date0(1899,12,30); // referenceDate
-  QDate date0 = calc->doc()->referenceDate();
+  QDate date0 = calc->settings()->referenceDate();
   
   if ( date2 < date1 )
   {
@@ -900,14 +900,14 @@ Value func_yearFrac (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value v1( calc->conv()->asDate (args[0]) );
   if (v1.isError()) return v1;
-  QDate date1 = v1.asDate( calc->doc() );
+  QDate date1 = v1.asDate(calc->settings());
 
   if (!date1.isValid())
       return Value::errorVALUE();
 
   Value v2( calc->conv()->asDate (args[1]) );
   if (v2.isError()) return v2;
-  QDate date2 = v2.asDate( calc->doc() );
+  QDate date2 = v2.asDate(calc->settings());
 
   if (!date2.isValid())
       return Value::errorVALUE();
@@ -917,7 +917,7 @@ Value func_yearFrac (valVector args, ValueCalc *calc, FuncExtra *)
   if ( basis < 0 || basis > 4 )
     return Value::errorVALUE();
 
-  QDate date0 = calc->doc()->referenceDate(); // referenceDate
+  QDate date0 = calc->settings()->referenceDate(); // referenceDate
 
   return Value( yearFrac(date0, date1, date2, basis) );
 }
@@ -932,7 +932,7 @@ Value func_workday (valVector args, ValueCalc *calc, FuncExtra *e)
   Value v( calc->conv()->asDate (args[0]) );
 
   if (v.isError()) return v;
-  QDate startdate = v.asDate( calc->doc() );
+  QDate startdate = v.asDate(calc->settings());
 
   if (!startdate.isValid())
       return Value::errorVALUE();
@@ -942,7 +942,7 @@ Value func_workday (valVector args, ValueCalc *calc, FuncExtra *e)
   //
   int days = calc->conv()->asInteger (args[1]).asInteger();
 
-  QDate date0 = calc->doc()->referenceDate();   // referenceDate
+  QDate date0 = calc->settings()->referenceDate();   // referenceDate
   QDate enddate = startdate;                    // enddate
   valVector holidays;                           // stores holidays
   int sign=1;                                   // sign 1 = forward, -1 = backward
@@ -981,7 +981,7 @@ Value func_workday (valVector args, ValueCalc *calc, FuncExtra *e)
             if (v.isError())
               return Value::errorVALUE();
 
-            if (v.asDate( calc->doc() ).isValid())
+            if (v.asDate(calc->settings()).isValid())
               holidays.append( v );
           }
         } // cols
@@ -997,7 +997,7 @@ Value func_workday (valVector args, ValueCalc *calc, FuncExtra *e)
         if (v.isError())
           return Value::errorVALUE();
 
-        if (v.asDate( calc->doc() ).isValid())
+        if (v.asDate(calc->settings()).isValid())
           holidays.append( v );
       } else
       {
@@ -1025,7 +1025,7 @@ Value func_workday (valVector args, ValueCalc *calc, FuncExtra *e)
     days--;
   }
 
-  return Value( enddate, calc->doc() );
+  return Value( enddate, calc->settings() );
 }
 
 // Function: NETWORKDAY
@@ -1037,18 +1037,18 @@ Value func_networkday (valVector args, ValueCalc *calc, FuncExtra *e)
   Value v1( calc->conv()->asDate (args[0]) );
 
   if (v1.isError()) return v1;
-  QDate startdate = v1.asDate( calc->doc() );
+  QDate startdate = v1.asDate(calc->settings());
 
   Value v2( calc->conv()->asDate (args[1]) );
 
   if (v2.isError()) return v2;
-  QDate enddate = v2.asDate( calc->doc() );
+  QDate enddate = v2.asDate(calc->settings());
 
   if (!startdate.isValid() || !enddate.isValid())
       return Value::errorVALUE();
 
   int days = 0;                                 // workdays
-  QDate date0 = calc->doc()->referenceDate();   // referenceDate
+  QDate date0 = calc->settings()->referenceDate();   // referenceDate
   valVector holidays;                           // stores holidays
   int sign=1;                                   // sign 1 = forward, -1 = backward
 
@@ -1086,7 +1086,7 @@ Value func_networkday (valVector args, ValueCalc *calc, FuncExtra *e)
             if (v.isError())
               return Value::errorVALUE();
 
-            if (v.asDate( calc->doc() ).isValid())
+            if (v.asDate(calc->settings()).isValid())
               holidays.append( v );
           }
         } // cols
@@ -1100,7 +1100,7 @@ Value func_networkday (valVector args, ValueCalc *calc, FuncExtra *e)
         if (v.isError())
           return Value::errorVALUE();
 
-        if (v.asDate( calc->doc() ).isValid())
+        if (v.asDate(calc->settings()).isValid())
           holidays.append( v );
 
       } else
@@ -1148,7 +1148,7 @@ Value func_unix2date(valVector args, ValueCalc *calc, FuncExtra *)
     datetime.setTimeSpec( Qt::UTC );
     datetime.setTime_t( v.asInteger() );
 
-    return Value( datetime, calc->doc() );
+    return Value( datetime, calc->settings() );
 }
 
 // Function: UNIX2DATE
@@ -1158,7 +1158,7 @@ Value func_date2unix (valVector args, ValueCalc *calc, FuncExtra *)
     if ( v.isError() )
         return v;
 
-    const QDateTime datetime( v.asDateTime( calc->doc() ) );
+    const QDateTime datetime( v.asDateTime(calc->settings()) );
 
     return Value( static_cast<int>( datetime.toTime_t() ) );
 }

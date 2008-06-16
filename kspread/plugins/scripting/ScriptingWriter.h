@@ -203,6 +203,7 @@ class ScriptingWriter : public QObject
             if( parse )
                 v = KSpread::Value( value.toString() );
             else {
+                const KSpread::CalculationSettings* settings = m_module->kspreadDoc()->map()->calculationSettings();
                 switch( value.type() ) {
                     case QVariant::Invalid:     v = KSpread::Value(); break;
                     case QVariant::Bool:        v = KSpread::Value( value.toBool() ); break;
@@ -210,9 +211,9 @@ class ScriptingWriter : public QObject
                     case QVariant::ULongLong:   v = KSpread::Value( value.toLongLong() ); break;
                     case QVariant::Double:      v = KSpread::Value( value.toDouble() ); break;
                     case QVariant::String:      v = KSpread::Value( value.toString() ); break;
-                    case QVariant::Date:        v = KSpread::Value( value.toDate(), m_module->kspreadDoc() ); break;
-                    case QVariant::Time:        v = KSpread::Value( value.toTime(), m_module->kspreadDoc() ); break;
-                    case QVariant::DateTime:    v = KSpread::Value( value.toDateTime(), m_module->kspreadDoc() ); break;
+                    case QVariant::Date:        v = KSpread::Value( value.toDate(), settings ); break;
+                    case QVariant::Time:        v = KSpread::Value( value.toTime(), settings ); break;
+                    case QVariant::DateTime:    v = KSpread::Value( value.toDateTime(), settings ); break;
                     default: return false;
                 }
             }

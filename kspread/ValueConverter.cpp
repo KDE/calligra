@@ -20,6 +20,7 @@
 // Local
 #include "ValueConverter.h"
 
+#include "CalculationSettings.h"
 #include "Localization.h"
 #include "ValueParser.h"
 
@@ -30,14 +31,9 @@ ValueConverter::ValueConverter( const ValueParser* parser )
 {
 }
 
-const Doc* ValueConverter::doc() const
+const CalculationSettings* ValueConverter::settings() const
 {
-  return m_parser->doc();
-}
-
-const KLocale* ValueConverter::locale() const
-{
-  return m_parser->locale();
+  return m_parser->settings();
 }
 
 Value ValueConverter::asBoolean(const Value &value, bool* ok) const
@@ -282,8 +278,8 @@ Value ValueConverter::asString (const Value &value) const
       val = Value(QString());
     break;
     case Value::Boolean:
-      val = Value(value.asBoolean() ? ki18n("True").toString(m_parser->locale()) :
-        ki18n("False").toString(m_parser->locale()));
+      val = Value(value.asBoolean() ? ki18n("True").toString(m_parser->settings()->locale()) :
+        ki18n("False").toString(m_parser->settings()->locale()));
     break;
     case Value::Integer:
     {
@@ -291,11 +287,11 @@ Value ValueConverter::asString (const Value &value) const
       if (fmt == Value::fmt_Percent)
         val = Value(QString::number (value.asInteger() * 100) + " %");
       else if (fmt == Value::fmt_DateTime)
-        val = Value(m_parser->locale()->formatDateTime (value.asDateTime( doc() )));
+        val = Value(m_parser->settings()->locale()->formatDateTime (value.asDateTime( settings() )));
       else if (fmt == Value::fmt_Date)
-        val = Value(m_parser->locale()->formatDate (value.asDate( doc() )));
+        val = Value(m_parser->settings()->locale()->formatDate (value.asDate( settings() )));
       else if (fmt == Value::fmt_Time)
-        val = Value(m_parser->locale()->formatTime (value.asTime( doc() )));
+        val = Value(m_parser->settings()->locale()->formatTime (value.asTime( settings() )));
       else
         val = Value(QString::number (value.asInteger()));
     }
@@ -303,16 +299,16 @@ Value ValueConverter::asString (const Value &value) const
     case Value::Float:
       fmt = value.format();
       if (fmt == Value::fmt_DateTime)
-        val = Value(m_parser->locale()->formatDateTime (value.asDateTime( doc() )));
+        val = Value(m_parser->settings()->locale()->formatDateTime (value.asDateTime( settings() )));
       else if (fmt == Value::fmt_Date)
-        val = Value(m_parser->locale()->formatDate (value.asDate( doc() ), KLocale::ShortDate));
+        val = Value(m_parser->settings()->locale()->formatDate (value.asDate( settings() ), KLocale::ShortDate));
       else if (fmt == Value::fmt_Time)
-        val = Value(m_parser->locale()->formatTime (value.asTime( doc() )));
+        val = Value(m_parser->settings()->locale()->formatTime (value.asTime( settings() )));
       else
       {
         //convert the number, change decimal point from English to local
         s = QString::number (numToDouble (value.asFloat()), 'g', 10);
-        const QString decimalSymbol = m_parser->locale()->decimalSymbol();
+        const QString decimalSymbol = m_parser->settings()->locale()->decimalSymbol();
         if (!decimalSymbol.isNull() && ((pos = s.indexOf('.')) != -1))
           s = s.replace( pos, 1, decimalSymbol );
         if (fmt == Value::fmt_Percent)
@@ -323,15 +319,15 @@ Value ValueConverter::asString (const Value &value) const
     case Value::Complex:
       fmt = value.format();
       if (fmt == Value::fmt_DateTime)
-        val = Value(m_parser->locale()->formatDateTime (value.asDateTime( doc() )));
+        val = Value(m_parser->settings()->locale()->formatDateTime (value.asDateTime( settings() )));
       else if (fmt == Value::fmt_Date)
-        val = Value(m_parser->locale()->formatDate (value.asDate( doc() ), KLocale::ShortDate));
+        val = Value(m_parser->settings()->locale()->formatDate (value.asDate( settings() ), KLocale::ShortDate));
       else if (fmt == Value::fmt_Time)
-        val = Value(m_parser->locale()->formatTime (value.asTime( doc() )));
+        val = Value(m_parser->settings()->locale()->formatTime (value.asTime( settings() )));
       else
       {
         //convert the number, change decimal point from English to local
-        const QString decimalSymbol = m_parser->locale()->decimalSymbol();
+        const QString decimalSymbol = m_parser->settings()->locale()->decimalSymbol();
         QString real = QString::number (numToDouble (value.asComplex().real()), 'g', 10);
         if (!decimalSymbol.isNull() && ((pos = real.indexOf('.')) != -1))
             real = real.replace( pos, 1, decimalSymbol );
@@ -376,11 +372,11 @@ Value ValueConverter::asDateTime(const Value &value, bool* ok) const
 
   switch (value.type()) {
     case Value::Empty:
-      val = Value( QDateTime::currentDateTime(), doc() );
+      val = Value( QDateTime::currentDateTime(), settings() );
     break;
     case Value::Boolean:
       //ignore the bool value... any better idea? ;)
-      val = Value( QDateTime::currentDateTime(), doc() );
+      val = Value( QDateTime::currentDateTime(), settings() );
     break;
     case Value::Integer:
     case Value::Float:
@@ -420,11 +416,11 @@ Value ValueConverter::asDate(const Value &value, bool* ok) const
 
   switch (value.type()) {
     case Value::Empty:
-      val = Value( QDate::currentDate(), doc() );
+      val = Value( QDate::currentDate(), settings() );
     break;
     case Value::Boolean:
       //ignore the bool value... any better idea? ;)
-      val = Value( QDate::currentDate(), doc() );
+      val = Value( QDate::currentDate(), settings() );
     break;
     case Value::Integer:
     case Value::Float:
@@ -462,11 +458,11 @@ Value ValueConverter::asTime(const Value &value, bool* ok) const
 
   switch (value.type()) {
     case Value::Empty:
-      val = Value( QTime::currentTime(), doc() );
+      val = Value( QTime::currentTime(), settings() );
     break;
     case Value::Boolean:
       //ignore the bool value... any better idea? ;)
-      val = Value( QTime::currentTime(), doc() );
+      val = Value( QTime::currentTime(), settings() );
     break;
     case Value::Integer:
     case Value::Float:
@@ -521,15 +517,15 @@ QString ValueConverter::toString( const Value& value ) const
 
 QDateTime ValueConverter::toDateTime( const Value& value ) const
 {
-  return asDateTime (value).asDateTime (doc());
+  return asDateTime (value).asDateTime (settings());
 }
 
 QDate ValueConverter::toDate( const Value& value ) const
 {
-  return asDate (value).asDate (doc());
+  return asDate (value).asDate (settings());
 }
 
 QTime ValueConverter::toTime( const Value& value ) const
 {
-  return asTime (value).asTime (doc());
+  return asTime (value).asTime (settings());
 }

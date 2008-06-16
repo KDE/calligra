@@ -19,7 +19,7 @@
 */
 
 #include "Value.h"
-#include "Doc.h"
+#include "CalculationSettings.h"
 #include "CellStorage.h"
 
 #include <kdebug.h>
@@ -295,10 +295,10 @@ Value::Value (const char *s)
 }
 
 // create a floating-point value from date/time
-Value::Value( const QDateTime& dt, const Doc* doc )
+Value::Value(const QDateTime& dt, const CalculationSettings* settings)
     : d( Private::null() )
 {
-    const QDate refDate( doc->referenceDate() );
+    const QDate refDate(settings->referenceDate());
     const QTime refTime( 0, 0 );  // reference time is midnight
 
     d->type = Float;
@@ -308,10 +308,10 @@ Value::Value( const QDateTime& dt, const Doc* doc )
 }
 
 // create a floating-point value from time
-Value::Value( const QTime& time, const Doc* doc )
+Value::Value(const QTime& time, const CalculationSettings* settings)
     : d( Private::null() )
 {
-    Q_UNUSED( doc );
+    Q_UNUSED(settings);
     const QTime refTime( 0, 0 );  // reference time is midnight
 
     d->type = Float;
@@ -320,10 +320,10 @@ Value::Value( const QTime& time, const Doc* doc )
 }
 
 // create a floating-point value from date
-Value::Value( const QDate& date, const Doc* doc )
+Value::Value(const QDate& date, const CalculationSettings* settings)
     : d( Private::null() )
 {
-  const QDate refDate( doc->referenceDate() );
+    const QDate refDate(settings->referenceDate());
 
   d->type = Integer;
   d->i = refDate.daysTo( date );
@@ -465,9 +465,9 @@ QString Value::errorMessage() const
 }
 
 // get the value as date/time
-QDateTime Value::asDateTime( const Doc* doc ) const
+QDateTime Value::asDateTime(const CalculationSettings* settings) const
 {
-  QDateTime datetime( doc->referenceDate(), QTime(), Qt::UTC );
+    QDateTime datetime(settings->referenceDate(), QTime(), Qt::UTC);
 
   const int days = asInteger();
   const int msecs = qRound( ( numToDouble (asFloat() - days) ) * 86400000.0 ); // 24*60*60*1000
@@ -478,9 +478,9 @@ QDateTime Value::asDateTime( const Doc* doc ) const
 }
 
 // get the value as date
-QDate Value::asDate( const Doc* doc ) const
+QDate Value::asDate(const CalculationSettings* settings) const
 {
-  QDate dt( doc->referenceDate() );
+    QDate dt(settings->referenceDate());
 
   int i = asInteger();
   dt = dt.addDays( i );
@@ -489,9 +489,9 @@ QDate Value::asDate( const Doc* doc ) const
 }
 
 // get the value as time
-QTime Value::asTime( const Doc* doc ) const
+QTime Value::asTime(const CalculationSettings* settings) const
 {
-  Q_UNUSED(doc);
+    Q_UNUSED(settings);
   QTime dt;
 
   const int days = asInteger();

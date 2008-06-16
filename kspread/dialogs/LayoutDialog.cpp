@@ -59,10 +59,12 @@
 
 #include <KoUnitDoubleSpinBox.h>
 
+#include "CalculationSettings.h"
 #include "Canvas.h"
 #include "Cell.h"
 #include "CellStorage.h"
 #include "Localization.h"
+#include "Map.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"
@@ -645,6 +647,11 @@ void CellFormatDialog::initMembers()
 bool CellFormatDialog::checkCircle( QString const & name, QString const & parent )
 {
   return m_styleManager->checkCircle( name, parent );
+}
+
+KLocale* CellFormatDialog::locale() const
+{
+    return m_doc->map()->calculationSettings()->locale();
 }
 
 void CellFormatDialog::checkBorderRight(const Style& style)

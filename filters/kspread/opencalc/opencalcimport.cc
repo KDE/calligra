@@ -647,7 +647,7 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
             QDateTime dt( QDate( year, month, day ) );
             //            KSpreadValue kval( dt );
             // cell.setValue( kval );
-            cell.setValue( Value( QDate( year, month, day ), cell.sheet()->doc() ) );
+            cell.setValue( Value( QDate( year, month, day ), cell.sheet()->map()->calculationSettings() ) );
             kDebug(30518) <<"Set QDate:" << year <<" -" << month <<" -" << day;
           }
         }
@@ -691,7 +691,7 @@ bool OpenCalcImport::readCells( KoXmlElement & rowNode, Sheet  * table, int row,
           {
             // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
             // cell.setValue( kval );
-            cell.setValue( Value( QTime( hours % 24, minutes, seconds ), cell.sheet()->doc() ) );
+            cell.setValue( Value( QTime( hours % 24, minutes, seconds ), cell.sheet()->map()->calculationSettings() ) );
             style.setFormatType( Format::Custom );
           }
         }

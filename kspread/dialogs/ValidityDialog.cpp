@@ -38,9 +38,11 @@
 #include <knumvalidator.h>
 #include <ktextedit.h>
 
+#include "CalculationSettings.h"
 #include "Canvas.h"
 #include "Doc.h"
 #include "Localization.h"
+#include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
 
@@ -418,6 +420,7 @@ void ValidityDialog::changeIndexCond(int _index)
 
 void ValidityDialog::init()
 {
+    const KLocale* locale = m_selection->activeSheet()->map()->calculationSettings()->locale();
   Validity validity = Cell(m_selection->activeSheet(), m_selection->marker() ).validity();
   if ( !validity.isEmpty() )
   {
@@ -452,15 +455,15 @@ void ValidityDialog::init()
       break;
      case Validity::Date:
       chooseType->setCurrentIndex(4);
-      val_min->setText(m_selection->activeSheet()->doc()->locale()->formatDate(validity.minimumDate(),KLocale::ShortDate));
+      val_min->setText(locale->formatDate(validity.minimumDate(),KLocale::ShortDate));
       if(validity.condition() >=5 )
-        val_max->setText(m_selection->activeSheet()->doc()->locale()->formatDate(validity.maximumDate(),KLocale::ShortDate));
+        val_max->setText(locale->formatDate(validity.maximumDate(),KLocale::ShortDate));
       break;
      case Validity::Time:
       chooseType->setCurrentIndex(5);
-      val_min->setText(m_selection->activeSheet()->doc()->locale()->formatTime(validity.minimumTime(),true));
+      val_min->setText(locale->formatTime(validity.minimumTime(),true));
       if(validity.condition() >=5 )
-        val_max->setText(m_selection->activeSheet()->doc()->locale()->formatTime(validity.maximumTime(),true));
+        val_max->setText(locale->formatTime(validity.maximumTime(),true));
       break;
      case Validity::List:
      {
@@ -553,6 +556,7 @@ void ValidityDialog::clearAllPressed()
 
 void ValidityDialog::OkPressed()
 {
+    const KLocale* locale = m_selection->activeSheet()->map()->calculationSettings()->locale();
   Validity validity;
   if( chooseType->currentIndex()==1)
   {
@@ -592,13 +596,13 @@ void ValidityDialog::OkPressed()
   }
   else  if(  chooseType->currentIndex()==5)
   {
-    if(!m_selection->activeSheet()->doc()->locale()->readTime(val_min->text()).isValid())
+    if(!locale->readTime(val_min->text()).isValid())
     {
       KMessageBox::error( this , i18n("This is not a valid time."),i18n("Error"));
       val_min->setText("");
       return;
     }
-    if(!m_selection->activeSheet()->doc()->locale()->readTime(val_max->text()).isValid() && choose->currentIndex()  >=5)
+    if(!locale->readTime(val_max->text()).isValid() && choose->currentIndex()  >=5)
     {
       KMessageBox::error( this , i18n("This is not a valid time."),i18n("Error"));
       val_max->setText("");
@@ -607,13 +611,13 @@ void ValidityDialog::OkPressed()
   }
   else  if(  chooseType->currentIndex()==4)
   {
-    if(!m_selection->activeSheet()->doc()->locale()->readDate(val_min->text()).isValid())
+    if(!locale->readDate(val_min->text()).isValid())
     {
       KMessageBox::error( this , i18n("This is not a valid date."),i18n("Error"));
       val_min->setText("");
       return;
     }
-    if(!m_selection->activeSheet()->doc()->locale()->readDate(val_max->text()).isValid() && choose->currentIndex()  >=5 )
+    if(!locale->readDate(val_max->text()).isValid() && choose->currentIndex()  >=5 )
     {
       KMessageBox::error( this , i18n("This is not a valid date."),i18n("Error"));
       val_max->setText("");
@@ -751,19 +755,19 @@ void ValidityDialog::OkPressed()
     {
       if(choose->currentIndex()  <5)
       {
-        validity.setMinimumDate(m_selection->activeSheet()->doc()->locale()->readDate(val_min->text()) );
+        validity.setMinimumDate(locale->readDate(val_min->text()) );
       }
       else
       {
-        if(m_selection->activeSheet()->doc()->locale()->readDate(val_min->text())<m_selection->activeSheet()->doc()->locale()->readDate(val_max->text()))
+        if(locale->readDate(val_min->text())<locale->readDate(val_max->text()))
         {
-          validity.setMinimumDate(m_selection->activeSheet()->doc()->locale()->readDate(val_min->text()) );
-          validity.setMaximumDate(m_selection->activeSheet()->doc()->locale()->readDate(val_max->text()) );
+          validity.setMinimumDate(locale->readDate(val_min->text()) );
+          validity.setMaximumDate(locale->readDate(val_max->text()) );
         }
         else
         {
-          validity.setMinimumDate(m_selection->activeSheet()->doc()->locale()->readDate(val_max->text()) );
-          validity.setMaximumDate(m_selection->activeSheet()->doc()->locale()->readDate(val_min->text()) );
+          validity.setMinimumDate(locale->readDate(val_max->text()) );
+          validity.setMaximumDate(locale->readDate(val_min->text()) );
         }
       }
     }
@@ -771,19 +775,19 @@ void ValidityDialog::OkPressed()
     {
       if(choose->currentIndex()  <5)
       {
-        validity.setMinimumTime(m_selection->activeSheet()->doc()->locale()->readTime(val_min->text()) );
+        validity.setMinimumTime(locale->readTime(val_min->text()) );
       }
       else
       {
-        if(m_selection->activeSheet()->doc()->locale()->readTime(val_min->text())<m_selection->activeSheet()->doc()->locale()->readTime(val_max->text()))
+        if(locale->readTime(val_min->text())<locale->readTime(val_max->text()))
         {
-          validity.setMaximumTime(m_selection->activeSheet()->doc()->locale()->readTime(val_max->text()) );
-          validity.setMinimumTime(m_selection->activeSheet()->doc()->locale()->readTime(val_min->text()) );
+          validity.setMaximumTime(locale->readTime(val_max->text()) );
+          validity.setMinimumTime(locale->readTime(val_min->text()) );
         }
         else
         {
-          validity.setMaximumTime(m_selection->activeSheet()->doc()->locale()->readTime(val_min->text()) );
-          validity.setMinimumTime(m_selection->activeSheet()->doc()->locale()->readTime(val_max->text()) );
+          validity.setMaximumTime(locale->readTime(val_min->text()) );
+          validity.setMinimumTime(locale->readTime(val_max->text()) );
         }
       }
     }

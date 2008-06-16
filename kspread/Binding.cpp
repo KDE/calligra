@@ -24,6 +24,7 @@
 #include <kdebug.h>
 
 #include "CellStorage.h"
+#include "Map.h"
 #include "Sheet.h"
 #include "Value.h"
 
@@ -222,7 +223,7 @@ QVariant BindingModel::data(const QModelIndex& index, int role) const
                  value.format() == Value::fmt_Date ||
                  value.format() == Value::fmt_Time)
             {
-                variant.setValue<QDateTime>(value.asDateTime(sheet->doc()));
+                variant.setValue<QDateTime>(value.asDateTime(sheet->map()->calculationSettings()));
                 break;
             }
         case Value::Boolean:
@@ -261,7 +262,7 @@ Sheet *BindingModel::sheet() const
 
 void BindingModel::setSheet(Sheet *sheet)
 {
-	m_sheet = 0;
+	m_sheet = sheet;
 	m_region = Region();
 }
 

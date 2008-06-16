@@ -20,10 +20,12 @@
 
 #include "Formula.h"
 
+#include "CalculationSettings.h"
 #include "Cell.h"
 #include "CellStorage.h"
 #include "Sheet.h"
 #include "Doc.h"
+#include "Map.h"
 #include "NamedAreaManager.h"
 #include "Region.h"
 #include "Value.h"
@@ -497,7 +499,7 @@ bool Formula::isValid() const
   {
     KLocale* locale = !d->cell.isNull() ? d->cell.locale() : 0;
     if ((!locale) && d->sheet)
-      locale = d->sheet->doc()->locale();
+      locale = d->sheet->map()->calculationSettings()->locale();
     Tokens tokens = scan( d->expression, locale );
     if( tokens.valid() )
       compile( tokens );
@@ -527,7 +529,7 @@ Tokens Formula::tokens() const
 {
   KLocale* locale = !d->cell.isNull() ? d->cell.locale() : 0;
   if ((!locale) && d->sheet)
-    locale = d->sheet->doc()->locale();
+    locale = d->sheet->map()->calculationSettings()->locale();
   return scan( d->expression, locale );
 }
 

@@ -45,14 +45,16 @@
 
 #include <KoTabBar.h>
 
+#include "CalculationSettings.h"
+#include "Border.h"
+#include "Canvas.h"
+#include "Doc.h"
+#include "Editors.h"
+#include "Localization.h"
+#include "Map.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
-#include "Doc.h"
-#include "Canvas.h"
-#include "Border.h"
 #include "View.h"
-#include "Localization.h"
-#include "Editors.h"
 
 using namespace KSpread;
 
@@ -154,7 +156,7 @@ parameterLocale::parameterLocale( View* _view, KVBox *box , char * /*name*/ )
 //   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box );
   KVBox* tmpQGroupBox = box;
 
-  KLocale* locale=_view->doc()->locale();
+  KLocale* locale = _view->doc()->map()->calculationSettings()->locale();
 
   m_language=new QLabel( tmpQGroupBox );
   m_number=new QLabel( tmpQGroupBox );
@@ -184,8 +186,8 @@ void parameterLocale::apply()
 void parameterLocale::updateDefaultSystemConfig()
 {
     m_bUpdateLocale=true;
-    static_cast<Localization*>(m_pView->doc()->locale())->defaultSystemConfig( );
-    KLocale* locale=m_pView->doc()->locale();
+    KLocale* const locale = m_pView->doc()->map()->calculationSettings()->locale();
+    static_cast<Localization*>(locale)->defaultSystemConfig();
     updateToMatchLocale( locale );
 }
 

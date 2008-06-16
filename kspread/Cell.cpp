@@ -46,7 +46,7 @@
 #include <float.h>
 #include <math.h>
 
-
+#include "CalculationSettings.h"
 #include "CellStorage.h"
 #include "Condition.h"
 #include "Doc.h"
@@ -148,7 +148,7 @@ Doc* Cell::doc() const
 
 KLocale* Cell::locale() const
 {
-    return doc()->locale();
+    return sheet()->map()->calculationSettings()->locale();
 }
 
 // Return true if this is the default cell.
@@ -811,7 +811,7 @@ void Cell::parseUserInput( const QString& text )
         // Parsing as time acts like an autoformat: we even change the input text
         // [h]:mm:ss -> might get set by ValueParser
         if ( isTime() && ( formatType() != Format::Time7 ) )
-            setUserInput( locale()->formatTime( value().asDateTime( doc() ).time(), true ) );
+            setUserInput( locale()->formatTime( value().asDateTime( sheet()->map()->calculationSettings()).time(), true ) );
 #endif
 
         // convert first letter to uppercase ?
@@ -1017,7 +1017,7 @@ bool Cell::saveCellResult( QDomDocument& doc, QDomElement& result,
       if ( isDate() )
       {
           // serial number of date
-          QDate dd = value().asDateTime( this->doc() ).date();
+          QDate dd = value().asDateTime(sheet()->map()->calculationSettings()).date();
           dataType = "Date";
           str = "%1/%2/%3";
           str = str.arg(dd.year()).arg(dd.month()).arg(dd.day());
@@ -1026,7 +1026,7 @@ bool Cell::saveCellResult( QDomDocument& doc, QDomElement& result,
       {
           // serial number of time
           dataType = "Time";
-          str = value().asDateTime( this->doc() ).time().toString();
+          str = value().asDateTime(sheet()->map()->calculationSettings()).time().toString();
       }
       else
       {
@@ -1273,14 +1273,14 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
     {
       xmlWriter.addAttribute( "office:value-type", "date" );
       xmlWriter.addAttribute( "office:date-value",
-          value().asDate( doc() ).toString( Qt::ISODate ) );
+          value().asDate(sheet()->map()->calculationSettings()).toString( Qt::ISODate ) );
       break;
     }
     case Value::fmt_Time:
     {
       xmlWriter.addAttribute( "office:value-type", "time" );
       xmlWriter.addAttribute( "office:time-value",
-          value().asTime( doc() ).toString( "PThhHmmMssS" ) );
+          value().asTime(sheet()->map()->calculationSettings()).toString( "PThhHmmMssS" ) );
       break;
     }
     case Value::fmt_String:
@@ -1423,7 +1423,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOdfLoadingContext& odfConte
 
             if ( ok )
             {
-                setValue( Value( QDate( year, month, day ), doc() ) );
+                setValue( Value( QDate( year, month, day ), sheet()->map()->calculationSettings()) );
 // FIXME Stefan: Should be handled by Value::Format. Verify and remove!
 #if 0
                 Style style;
@@ -1471,7 +1471,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOdfLoadingContext& odfConte
             {
                 // Value kval( timeToNum( hours, minutes, seconds ) );
                 // cell.setValue( kval );
-                setValue( Value( QTime( hours % 24, minutes, seconds ), doc() ) );
+                setValue( Value( QTime( hours % 24, minutes, seconds ), sheet()->map()->calculationSettings()) );
 // FIXME Stefan: Should be handled by Value::Format. Verify and remove!
 #if 0
                 Style style;
@@ -1890,7 +1890,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
             int day   = t.right( t.length() - pos1 - 1 ).toInt();
             QDate date( year, month, day );
             if ( date.isValid() )
-              setValue( Value( date, doc() ) );
+              setValue( Value( date, sheet()->map()->calculationSettings()) );
             else
               clear = false;
           }
@@ -1918,7 +1918,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
             second  = t.right( t.length() - pos1 - 1 ).toInt();
             QTime time( hours, minutes, second );
             if ( time.isValid() )
-              setValue( Value( time, doc() ) );
+              setValue( Value( time, sheet()->map()->calculationSettings()) );
             else
               clear = false;
           }
@@ -2037,7 +2037,7 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
           kWarning(36001) << "Couldn't parse '" << t << "' as number.";
         }
         /* We will need to localize the text version of the number */
-        KLocale* locale = doc()->locale();
+        KLocale* locale = sheet()->map()->calculationSettings()->locale();
 
         /* KLocale::formatNumber requires the precision we want to return.
         */
@@ -2070,9 +2070,9 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         int pos1 = t.indexOf('/',pos+1);
         int month = t.mid(pos+1,((pos1-1)-pos)).toInt();
         int day = t.right(t.length()-pos1-1).toInt();
-        setValue( Value( QDate(year,month,day), doc() ) );
-        if ( value().asDate( doc() ).isValid() ) // Should always be the case for new docs
-          setUserInput( locale()->formatDate( value().asDate( doc() ), KLocale::ShortDate ) );
+        setValue( Value( QDate(year,month,day), sheet()->map()->calculationSettings()) );
+        if ( value().asDate(sheet()->map()->calculationSettings()).isValid() ) // Should always be the case for new docs
+          setUserInput( locale()->formatDate( value().asDate(sheet()->map()->calculationSettings()), KLocale::ShortDate ) );
         else // This happens with old docs, when format is set wrongly to date
         {
           parseUserInput( pasteOperation( t, userInput(), op ) );
@@ -2091,9 +2091,9 @@ bool Cell::loadCellData(const KoXmlElement & text, Paste::Operation op )
         pos1 = t.indexOf(':',pos+1);
         minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
         second = t.right(t.length()-pos1-1).toInt();
-        setValue( Value( QTime(hours,minutes,second), doc() ) );
-        if ( value().asTime( doc() ).isValid() ) // Should always be the case for new docs
-          setUserInput( locale()->formatTime( value().asTime( doc() ), true ) );
+        setValue( Value( QTime(hours,minutes,second), sheet()->map()->calculationSettings()) );
+        if ( value().asTime( sheet()->map()->calculationSettings()).isValid() ) // Should always be the case for new docs
+          setUserInput( locale()->formatTime( value().asTime( sheet()->map()->calculationSettings()), true ) );
         else  // This happens with old docs, when format is set wrongly to time
         {
           parseUserInput( pasteOperation( t, userInput(), op ) );
@@ -2129,8 +2129,8 @@ QTime Cell::toTime(const KoXmlElement &element)
     pos1 = t.indexOf(':',pos+1);
     minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
     second = t.right(t.length()-pos1-1).toInt();
-    setValue( Value( QTime(hours,minutes,second), doc() ) );
-    return value().asTime( doc() );
+    setValue( Value( QTime(hours,minutes,second), sheet()->map()->calculationSettings()) );
+    return value().asTime( sheet()->map()->calculationSettings());
 }
 
 QDate Cell::toDate(const KoXmlElement &element)
@@ -2146,8 +2146,8 @@ QDate Cell::toDate(const KoXmlElement &element)
     pos1 = t.indexOf('/',pos+1);
     month = t.mid(pos+1,((pos1-1)-pos)).toInt();
     day = t.right(t.length()-pos1-1).toInt();
-    setValue( Value( QDate(year,month,day), doc() ) );
-    return value().asDate( doc() );
+    setValue( Value( QDate(year,month,day), sheet()->map()->calculationSettings()) );
+    return value().asDate( sheet()->map()->calculationSettings());
 }
 
 QString Cell::pasteOperation( const QString &new_text, const QString &old_text, Paste::Operation op )

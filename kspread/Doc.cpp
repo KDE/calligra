@@ -74,6 +74,7 @@
 #include <KoZoomHandler.h>
 
 #include "BindingManager.h"
+#include "CalculationSettings.h"
 #include "Canvas.h"
 #include "Damages.h"
 #include "DependencyManager.h"
@@ -121,7 +122,6 @@ class Doc::Private
 public:
 
   Map *map;
-  KLocale *locale;
   BindingManager* bindingManager;
   DatabaseManager* databaseManager;
   DependencyManager* dependencyManager;
@@ -186,18 +186,6 @@ public:
   bool captureAllArrowKeys      : 1;
   QStringList spellListIgnoreAll;
   SavedDocParts savedDocParts;
-
-  // calculation settings
-  bool caseSensitiveComparisons : 1;
-  bool precisionAsShown         : 1;
-  bool wholeCellSearchCriteria  : 1;
-  bool automaticFindLabels      : 1;
-  bool useRegularExpressions    : 1;
-  int refYear; // the reference year two-digit years are relative to
-  QDate refDate; // the reference date all dates are relative to
-  // The precision used for decimal numbers, if the default cell style's
-  // precision is set to arbitrary.
-  int precision;
 };
 
 /*****************************************************************************
@@ -216,7 +204,6 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->loadingInfo = 0;
 
   d->map = new Map( this, "Map" );
-  d->locale = new Localization;
   d->bindingManager = new BindingManager(d->map);
   d->databaseManager = new DatabaseManager(d->map);
   d->dependencyManager = new DependencyManager( d->map );
@@ -224,10 +211,9 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->recalcManager = new RecalcManager( d->map );
   d->styleManager = new StyleManager();
 
-  d->parser = new ValueParser( this );
+  d->parser = new ValueParser(d->map->calculationSettings());
   d->converter = new ValueConverter ( d->parser );
   d->calc = new ValueCalc( d->converter );
-  d->calc->setDoc (this);
   d->formatter = new ValueFormatter( d->converter );
 
   d->defaultColumnFormat = new ColumnFormat();
@@ -276,15 +262,6 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->spellConfig = 0;
   d->dontCheckUpperWord = false;
   d->dontCheckTitleCase = false;
-  // calculation settings
-  d->caseSensitiveComparisons = true;
-  d->precisionAsShown         = false;
-  d->wholeCellSearchCriteria  = true;
-  d->automaticFindLabels      = true;
-  d->useRegularExpressions    = true;
-  d->refYear = 1930;
-  d->refDate = QDate( 1899, 12, 30 );
-  d->precision = 8;
 
     // Init chart shape factory with KSpread's specific configuration panels.
     QList<KoShapeConfigFactory*> panels = ChartDialog::panels( this );
@@ -311,7 +288,6 @@ Doc::~Doc()
   delete d->defaultColumnFormat;
   delete d->defaultRowFormat;
 
-  delete d->locale;
   delete d->map;
   delete d->bindingManager;
   delete d->databaseManager;
@@ -355,11 +331,6 @@ void Doc::initEmpty()
     styleManager()->createBuiltinStyles();
 
     KoDocument::initEmpty();
-}
-
-KLocale *Doc::locale () const
-{
-  return d->locale;
 }
 
 Map *Doc::map () const
@@ -533,7 +504,7 @@ QDomDocument Doc::saveXML()
     spread.setAttribute( "mime", "application/x-kspread" );
     spread.setAttribute( "syntaxVersion", CURRENT_SYNTAX_VERSION );
 
-    QDomElement dlocale = ((Localization *)locale())->save( doc );
+    QDomElement dlocale = static_cast<Localization*>(map()->calculationSettings()->locale())->save( doc );
     spread.appendChild( dlocale );
 
     QDomElement areaname = d->namedAreaManager->saveXML(doc);
@@ -823,7 +794,6 @@ bool Doc::loadOdf( KoOdfReadStore & odfStore )
 
     // TODO check versions and mimetypes etc.
     loadOasisCellValidation( body ); // table:content-validations
-    loadOasisCalculationSettings( body ); // table::calculation-settings
 
     // all <sheet:sheet> goes to workbook
     if ( !map()->loadOasis( body, context ) )
@@ -888,7 +858,7 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
   // <locale>
   KoXmlElement loc = spread.namedItem( "locale" ).toElement();
   if ( !loc.isNull() )
-      ((Localization *) locale())->load( loc );
+      static_cast<Localization*>(map()->calculationSettings()->locale())->load( loc );
 
   emit sigProgress( 5 );
 
@@ -1543,88 +1513,6 @@ void Doc::loadOasisCellValidation( const KoXmlElement&body )
     }
 }
 
-void Doc::loadOasisCalculationSettings( const KoXmlElement& body )
-{
-    KoXmlNode settings = KoXml::namedItemNS( body, KoXmlNS::table, "calculation-settings" );
-    kDebug() <<"Calculation settings found?"<< !settings.isNull();
-    if ( !settings.isNull() )
-    {
-        KoXmlElement element = settings.toElement();
-        if ( element.hasAttributeNS( KoXmlNS::table,  "case-sensitive" ) )
-        {
-            d->caseSensitiveComparisons = true;
-            QString value = element.attributeNS( KoXmlNS::table, "case-sensitive", "true" );
-            if ( value == "false" )
-                d->caseSensitiveComparisons = false;
-        }
-        else if ( element.hasAttributeNS( KoXmlNS::table, "precision-as-shown" ) )
-        {
-            d->precisionAsShown = false;
-            QString value = element.attributeNS( KoXmlNS::table, "precision-as-shown", "false" );
-            if ( value == "true" )
-                d->precisionAsShown = true;
-        }
-        else if ( element.hasAttributeNS( KoXmlNS::table, "search-criteria-must-apply-to-whole-cell" ) )
-        {
-            d->wholeCellSearchCriteria = true;
-            QString value = element.attributeNS( KoXmlNS::table, "search-criteria-must-apply-to-whole-cell", "true" );
-            if ( value == "false" )
-                d->wholeCellSearchCriteria = false;
-        }
-        else if ( element.hasAttributeNS( KoXmlNS::table, "automatic-find-labels" ) )
-        {
-            d->automaticFindLabels = true;
-            QString value = element.attributeNS( KoXmlNS::table, "automatic-find-labels", "true" );
-            if ( value == "false" )
-                d->automaticFindLabels = false;
-        }
-        else if ( element.hasAttributeNS( KoXmlNS::table, "use-regular-expressions" ) )
-        {
-            d->useRegularExpressions = true;
-            QString value = element.attributeNS( KoXmlNS::table, "use-regular-expressions", "true" );
-            if ( value == "false" )
-                d->useRegularExpressions = false;
-        }
-        else if ( element.hasAttributeNS( KoXmlNS::table, "null-year" ) )
-        {
-            d->refYear = 1930;
-            QString value = element.attributeNS( KoXmlNS::table, "null-year", "1930" );
-            if ( value == "false" )
-                d->refYear = false;
-        }
-
-        forEachElement( element, settings )
-        {
-            if ( element.namespaceURI() != KoXmlNS::table )
-                continue;
-            else if ( element.tagName() ==  "null-date" )
-            {
-                d->refDate = QDate( 1899, 12, 30 );
-                QString valueType = element.attributeNS( KoXmlNS::table, "value-type", "date" );
-                if( valueType == "date" )
-                {
-                    QString value = element.attributeNS( KoXmlNS::table, "date-value", "1899-12-30" );
-                    QDate date = QDate::fromString( value, Qt::ISODate );
-                    if ( date.isValid() )
-                        d->refDate = date;
-                }
-                else
-                {
-                    kDebug() <<"Doc: Error on loading null date."
-                             << "Value type """ << valueType << """ not handled"
-                             << ", falling back to default." << endl;
-                    // NOTE Stefan: I don't know why different types are possible here!
-                }
-            }
-            else if ( element.tagName() ==  "iteration" )
-            {
-                // TODO
-            }
-        }
-    }
-}
-
-
 void Doc::addStringCompletion(const QString &stringCompletion)
 {
   if ( d->listCompletion.items().contains(stringCompletion) == 0 )
@@ -1918,40 +1806,6 @@ void Doc::setUndoRedoLimit(int val)
   d->commandHistory->setRedoLimit(val);
 }
 #endif
-
-void Doc::setReferenceYear( int year )
-{
-    if ( year < 100)
-       d->refYear = 1900 + year;
-    else
-       d->refYear = year;
-}
-
-int Doc::referenceYear() const
-{
-    return d->refYear;
-}
-
-void Doc::setReferenceDate( const QDate& date )
-{
-    if ( !date.isValid() ) return;
-    d->refDate.setDate( date.year(), date.month(), date.day() );
-}
-
-QDate Doc::referenceDate() const
-{
-    return d->refDate;
-}
-
-void Doc::setDefaultDecimalPrecision( int precision )
-{
-    d->precision = ( precision < 0 ) ? 8 : precision;
-}
-
-int Doc::defaultDecimalPrecision() const
-{
-    return d->precision;
-}
 
 #include "Doc.moc"
 

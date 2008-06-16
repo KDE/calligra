@@ -211,6 +211,11 @@ ValueCalc::ValueCalc (ValueConverter* c): converter( c )
   registerAwFunc ("devsqa", awDevSqA);
 }
 
+const CalculationSettings* ValueCalc::settings() const
+{
+    return converter->settings();
+}
+
 Value ValueCalc::add (const Value &a, const Value &b)
 {
   if (a.isError()) return a;

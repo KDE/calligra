@@ -25,6 +25,7 @@
 
 #include "GoalSeekDialog.h"
 
+#include "CalculationSettings.h"
 #include "Canvas.h"
 #include "Doc.h"
 #include "Editors.h"
@@ -246,7 +247,7 @@ void GoalSeekDialog::buttonOkClicked()
     }
 
     bool ok = false;
-    double goal = m_selection->activeSheet()->doc()->locale()->readNumber(m_selector2->textEdit()->toPlainText(), &ok );
+    double goal = m_selection->activeSheet()->map()->calculationSettings()->locale()->readNumber(m_selector2->textEdit()->toPlainText(), &ok );
     if ( !ok )
     {
       KMessageBox::error( this, i18n("Target value is invalid.") );
@@ -422,8 +423,8 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
 
     m_resultText->setText( i18n( "Goal seeking with cell %1 found a solution:",
                                  m_selector3->textEdit()->toPlainText() ) );
-    m_newValue->setText( m_selection->activeSheet()->doc()->locale()->formatNumber( startA ) );
-    m_currentValue->setText( m_selection->activeSheet()->doc()->locale()->formatNumber( m_oldSource ) );
+    m_newValue->setText( m_selection->activeSheet()->map()->calculationSettings()->locale()->formatNumber( startA ) );
+    m_currentValue->setText( m_selection->activeSheet()->map()->calculationSettings()->locale()->formatNumber( m_oldSource ) );
     m_restored = false;
   }
   else
@@ -433,7 +434,7 @@ void GoalSeekDialog::startCalc(double _start, double _goal)
     m_resultText->setText( i18n( "Goal seeking with cell %1 has found NO solution.",
                                  m_selector3->textEdit()->toPlainText() ) );
     m_newValue->setText( "" );
-    m_currentValue->setText( m_selection->activeSheet()->doc()->locale()->formatNumber( m_oldSource ) );
+    m_currentValue->setText( m_selection->activeSheet()->map()->calculationSettings()->locale()->formatNumber( m_oldSource ) );
     m_restored = true;
   }
 

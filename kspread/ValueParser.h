@@ -27,11 +27,9 @@
 #include "Format.h"
 #include "Number.h"
 
-class KLocale;
-
 namespace KSpread
 {
-class Doc;
+class CalculationSettings;
 class Value;
 
 /**
@@ -44,17 +42,12 @@ public:
     /**
      * Constructor.
      */
-    explicit ValueParser( const Doc* doc );
+    explicit ValueParser(const CalculationSettings* settings);
 
     /**
-     * Returns the document this ValueFormatter belongs to.
+     * Returns the calculation settings this ValueFormatter uses.
      */
-    const Doc* doc() const;
-
-    /**
-     * Returns the locale this ValueFormatter uses.
-     */
-    const KLocale* locale() const;
+    const CalculationSettings* settings() const;
 
     /**
      * Parses the user input text \p str and tries to determine the correct
@@ -113,7 +106,7 @@ protected:
     int readInt( const QString& str, uint& pos ) const;
 
 private:
-    const Doc* m_doc;
+    const CalculationSettings* m_settings;
 };
 
 }  //namespace KSpread

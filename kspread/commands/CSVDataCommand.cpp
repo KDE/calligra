@@ -21,7 +21,9 @@
 
 #include <klocale.h>
 
+#include "CalculationSettings.h"
 #include "Doc.h"
+#include "Map.h"
 #include "Sheet.h"
 #include "Value.h"
 #include "ValueConverter.h"
@@ -96,10 +98,10 @@ bool CSVDataCommand::preProcessing()
     if (!AbstractDataManipulator::preProcessing())
         return false;
     // Initialize the decimal symbol and thousands separator to use for parsing.
-    m_documentDecimalSymbol = m_sheet->doc()->locale()->decimalSymbol();
-    m_documentThousandsSeparator = m_sheet->doc()->locale()->thousandsSeparator();
-    m_sheet->doc()->locale()->setDecimalSymbol(m_decimalSymbol);
-    m_sheet->doc()->locale()->setThousandsSeparator(m_thousandsSeparator);
+    m_documentDecimalSymbol = m_sheet->map()->calculationSettings()->locale()->decimalSymbol();
+    m_documentThousandsSeparator = m_sheet->map()->calculationSettings()->locale()->thousandsSeparator();
+    m_sheet->map()->calculationSettings()->locale()->setDecimalSymbol(m_decimalSymbol);
+    m_sheet->map()->calculationSettings()->locale()->setThousandsSeparator(m_thousandsSeparator);
     return true;
 }
 
@@ -108,8 +110,8 @@ bool CSVDataCommand::postProcessing()
     if (!AbstractDataManipulator::postProcessing())
         return false;
     // Restore the document's decimal symbol and thousands separator.
-    m_sheet->doc()->locale()->setDecimalSymbol(m_documentDecimalSymbol);
-    m_sheet->doc()->locale()->setThousandsSeparator(m_documentThousandsSeparator);
+    m_sheet->map()->calculationSettings()->locale()->setDecimalSymbol(m_documentDecimalSymbol);
+    m_sheet->map()->calculationSettings()->locale()->setThousandsSeparator(m_documentThousandsSeparator);
     m_documentDecimalSymbol.clear();
     m_documentThousandsSeparator.clear();
     return true;

@@ -32,6 +32,7 @@
 
 #include "Doc.h"
 #include "Localization.h"
+#include "Map.h"
 #include "Sheet.h"
 #include "Value.h"
 #include "ValueConverter.h"
@@ -913,7 +914,7 @@ void AutoFillCommand::fillSequence(const QList<Cell>& _srcList,
         if (cell.isTime() || cell.value().format() == Value::fmt_DateTime)
         {
             // TODO Stefan: delta depending on minimum unit of format
-            deltaSequence.append(Value(QTime(1, 0), m_sheet->doc()));
+            deltaSequence.append(Value(QTime(1, 0), m_sheet->map()->calculationSettings()));
         }
         else if (cell.isDate())
         {

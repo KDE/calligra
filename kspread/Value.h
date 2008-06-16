@@ -38,7 +38,7 @@ using namespace std;
 
 namespace KSpread
 {
-class Doc;
+class CalculationSettings;
 class ValueStorage;
 
 /**
@@ -158,19 +158,19 @@ class KSPREAD_EXPORT Value
      * Internally date/time is represented as serial-number, i.e number of
      * elapsed day since reference date. Day 61 is defined as March 1, 1900.
      */
-    Value( const QDateTime& dt, const Doc* doc );
+    Value(const QDateTime& dt, const CalculationSettings* settings);
 
     /**
      * Creates a floating-point value from time.
      * See also note above.
      */
-    Value( const QTime& time, const Doc* doc );
+    Value(const QTime& time, const CalculationSettings* settings);
 
     /**
      * Creates a floating-point value from date.
      * See also note above.
      */
-    Value( const QDate& date, const Doc* doc );
+    Value(const QDate& date, const CalculationSettings* settings);
 
     /**
      * Returns the type of the value.
@@ -281,17 +281,17 @@ class KSPREAD_EXPORT Value
     /**
      * Returns the date/time representation of this value.
      */
-    QDateTime asDateTime( const Doc* doc ) const;
+    QDateTime asDateTime(const CalculationSettings* settings) const;
 
     /**
      * Returns the date representation of this value.
      */
-    QDate asDate( const Doc* doc ) const;
+    QDate asDate(const CalculationSettings* settings) const;
 
     /**
      * Returns the time representation of this value.
      */
-    QTime asTime( const Doc* doc ) const;
+    QTime asTime(const CalculationSettings* settings) const;
 
     /**
      * Returns an element in the array value.

@@ -27,6 +27,7 @@
 #include <klocale.h>
 #include <math.h>
 
+#include "CalculationSettings.h"
 #include "Functions.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
@@ -272,7 +273,7 @@ Value func_dollar (valVector args, ValueCalc *calc, FuncExtra *)
   // do round, because formatMoney doesn't
   value = floor (value * pow (10.0, precision) + 0.5) / pow (10.0, precision);
 
-  const KLocale *locale = calc->conv()->locale();
+  const KLocale *locale = calc->settings()->locale();
   QString s = locale->formatMoney (value, locale->currencySymbol(), precision);
 
   return Value (s);
@@ -334,7 +335,7 @@ Value func_fixed (valVector args, ValueCalc *calc, FuncExtra *)
     no_commas = calc->conv()->asBoolean (args[2]).asBoolean();
 
   QString result;
-  const KLocale *locale = calc->conv()->locale();
+  const KLocale *locale = calc->settings()->locale();
 
   // unfortunately, we can't just use KLocale::formatNumber because
   // * if decimals < 0, number is rounded

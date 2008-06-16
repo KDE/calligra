@@ -70,9 +70,7 @@ class ValueCalc {
 
   ValueConverter *conv () { return converter; }
 
-  // some functions need access to the document
-  void setDoc (Doc *d) { _doc = d; }
-  Doc *doc () { return _doc; }
+    const CalculationSettings* settings() const;
 
   /** basic arithmetic operations */
   Value add (const Value &a, const Value &b);
@@ -288,8 +286,6 @@ class ValueCalc {
 
  protected:
   ValueConverter* converter;
-
-  Doc *_doc;
 
   /** registered array-walk functions */
   std::map<QString, arrayWalkFunc> awFuncs;

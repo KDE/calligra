@@ -35,6 +35,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
+#include "CalculationSettings.h"
 #include "Canvas.h"
 #include "Doc.h"
 #include "GenValidationStyle.h"
@@ -80,6 +81,8 @@ public:
   // used to determine the loading progress
   int overallRowCount;
   int loadedRowsCounter;
+
+    CalculationSettings* calculationSettings;
 };
 
 
@@ -100,12 +103,16 @@ Map::Map ( Doc* doc, const char* name)
   d->overallRowCount = 0;
   d->loadedRowsCounter = 0;
 
+    d->calculationSettings = new CalculationSettings();
+    d->calculationSettings->setFileName(d->doc->url().prettyUrl()); // for FILENAME function ;)
+
   new MapAdaptor(this);
   QDBusConnection::sessionBus().registerObject( '/'+doc->objectName() + '/' + objectName(), this);
 }
 
 Map::~Map()
 {
+    delete d->calculationSettings;
   qDeleteAll( d->lstSheets );
   qDeleteAll( d->lstDeletedSheets );
   delete d;
@@ -127,6 +134,11 @@ bool Map::completeSaving(KoStore *store, KoXmlWriter *manifestWriter)
     Q_UNUSED(store);
     Q_UNUSED(manifestWriter);
     return true;
+}
+
+CalculationSettings* Map::calculationSettings() const
+{
+    return d->calculationSettings;
 }
 
 void Map::setProtected( QByteArray const & passwd )
@@ -324,6 +336,7 @@ QDomElement Map::save( QDomDocument& doc )
 
 bool Map::loadOasis( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
 {
+    d->calculationSettings->loadOdf(body); // table::calculation-settings
     if ( body.hasAttributeNS( KoXmlNS::table, "structure-protected" ) )
     {
         QByteArray passwd( "" );

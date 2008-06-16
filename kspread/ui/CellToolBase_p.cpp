@@ -44,9 +44,11 @@
 #include "CellToolBase_p.h"
 
 // KSpread
+#include "CalculationSettings.h"
 #include "Canvas.h"
 #include "CellStorage.h"
 #include "Doc.h"
+#include "Map.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -806,7 +808,7 @@ bool CellToolBase::Private::formatKeyPress(QKeyEvent * _ev)
     case Qt::Key_Dollar:
         command->setText(i18n("Currency Format"));
         command->setFormatType(Format::Money);
-        command->setPrecision(q->selection()->activeSheet()->doc()->locale()->fracDigits());
+        command->setPrecision(q->selection()->activeSheet()->map()->calculationSettings()->locale()->fracDigits());
         break;
 
     case Qt::Key_Percent:

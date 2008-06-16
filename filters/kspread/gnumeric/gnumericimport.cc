@@ -728,7 +728,7 @@ bool GNUMERICFilter::setType( const Cell& kspread_cell,
         date.setYMD( y, m, d );
       }
       else
-        date = kspread_cell.value().asDate( kspread_cell.sheet()->doc() );
+        date = kspread_cell.value().asDate( kspread_cell.sheet()->map()->calculationSettings() );
 
       Format::Type type;
       switch( i )
@@ -768,7 +768,7 @@ bool GNUMERICFilter::setType( const Cell& kspread_cell,
       kDebug(30521) <<"i:" << i <<", Type:" << type <<", Date:" << date.toString();
 
       Cell cell( kspread_cell );
-      cell.setValue( Value( date, kspread_cell.sheet()->doc() ) );
+      cell.setValue( Value( date, kspread_cell.sheet()->map()->calculationSettings() ) );
       Style style;
       style.setFormatType( type );
       cell.setStyle(style);
@@ -797,7 +797,7 @@ bool GNUMERICFilter::setType( const Cell& kspread_cell,
         time = GnumericDate::getTime( content );
       }
       else
-        time = kspread_cell.value().asTime( kspread_cell.sheet()->doc() );
+        time = kspread_cell.value().asTime( kspread_cell.sheet()->map()->calculationSettings() );
 
       Format::Type type;
       switch( i )
@@ -814,7 +814,7 @@ bool GNUMERICFilter::setType( const Cell& kspread_cell,
 
       kDebug(30521) <<"i:" << i <<", Type:" << type;
       Cell cell( kspread_cell );
-      cell.setValue( Value( time, kspread_cell.sheet()->doc() ) );
+      cell.setValue( Value( time, kspread_cell.sheet()->map()->calculationSettings() ) );
       Style style;
       style.setFormatType( type );
       cell.setStyle( style );
