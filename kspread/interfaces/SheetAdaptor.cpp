@@ -33,7 +33,7 @@
 
 #include <kdebug.h>
 
-#include "Doc.h"
+#include "Map.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "Region.h"
@@ -87,7 +87,7 @@ int SheetAdaptor::cellColumn( const QString& cellname )
 
 QPoint SheetAdaptor::cellLocation( const QString& cellname )
 {
-    const Region region(cellname, m_sheet->doc()->map(), m_sheet);
+    const Region region(cellname, m_sheet->map(), m_sheet);
     if ( region.firstRange().isNull() )
         return QPoint();
     return region.firstRange().topLeft();
@@ -139,7 +139,7 @@ QVariant valueToVariant(const KSpread::Value& value, Sheet* sheet)
 		case KSpread::Value::Float:
 			return numToDouble (value.asFloat());
 		case KSpread::Value::Complex:
-			return sheet->doc()->converter()->asString(value).asString();
+			return sheet->map()->converter()->asString(value).asString();
 		case KSpread::Value::String:
 			return value.asString();
 		case KSpread::Value::Array: {

@@ -236,7 +236,7 @@ void areaNames( Doc * ksdoc, const QString &_name, QString _zone )
             rect.setTop( top );
             rect.setBottom( top );
         }
-        ksdoc->namedAreaManager()->insert(KSpread::Region(rect, ksdoc->map()->findSheet(tableName)), _name);
+        ksdoc->map()->namedAreaManager()->insert(KSpread::Region(rect, ksdoc->map()->findSheet(tableName)), _name);
     }
 }
 

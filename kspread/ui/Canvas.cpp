@@ -184,8 +184,8 @@ Doc* Canvas::doc() const
 
 void Canvas::gridSize( double* horizontal, double* vertical ) const
 {
-    *horizontal = doc()->defaultColumnFormat()->width();
-    *vertical = doc()->defaultRowFormat()->height();
+    *horizontal = doc()->map()->defaultColumnFormat()->width();
+    *vertical = doc()->map()->defaultRowFormat()->height();
 }
 
 bool Canvas::snapToGrid() const
@@ -435,8 +435,8 @@ void Canvas::scrollToCell(const QPoint& location) const
     const Cell cell = Cell(sheet, location).masterCell();
     const double xpos = sheet->columnPosition(cell.cellPosition().x());
     const double ypos = sheet->rowPosition(cell.cellPosition().y());
-    const double width = sheet->doc()->defaultColumnFormat()->width();
-    const double height = sheet->doc()->defaultRowFormat()->height();
+    const double width = sheet->map()->defaultColumnFormat()->width();
+    const double height = sheet->map()->defaultRowFormat()->height();
     QRectF rect(xpos, ypos, cell.width(), cell.height());
     rect.adjust(-width-2, -height-2, width+2, height+2);
     rect = rect & QRectF(QPointF(0.0, 0.0), sheet->documentSize());

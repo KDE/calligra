@@ -412,10 +412,10 @@ void exportNamedExpr( Doc* kspreadDoc, QDomDocument & doc, QDomElement & parent,
   {
     QDomElement namedRange = doc.createElement( "table:named-range" );
 
-    sheet = kspreadDoc->namedAreaManager()->sheet(namedAreas[i]);
+    sheet = kspreadDoc->map()->namedAreaManager()->sheet(namedAreas[i]);
     if (!sheet)
         continue;
-    range = kspreadDoc->namedAreaManager()->namedArea(namedAreas[i]).firstRange();
+    range = kspreadDoc->map()->namedAreaManager()->namedArea(namedAreas[i]).firstRange();
 
     namedRange.setAttribute("table:name", namedAreas[i]);
     namedRange.setAttribute("table:base-cell-address", Oasis::convertRefToBase(sheet->sheetName(), range));
@@ -500,7 +500,7 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
   KoDocument * document   = m_chain->inputDocument();
   Doc * kspreadDoc = static_cast<Doc *>( document );
 
-  AreaList namedAreas = kspreadDoc->namedAreaManager()->areaNames();
+  AreaList namedAreas = kspreadDoc->map()->namedAreaManager()->areaNames();
   if ( namedAreas.count() > 0 )
   {
     QDomElement namedExpr = doc.createElement( "table:named-expressions" );
@@ -792,7 +792,7 @@ void OpenCalcExport::exportDefaultCellStyle( QDomDocument & doc, QDomElement & o
 
   QString l( locale->language() );
   KLocale::splitLocale( l, language, country, modifier, charSet );
-  QFont font( ksdoc->styleManager()->defaultStyle()->font() );
+  QFont font( ksdoc->map()->styleManager()->defaultStyle()->font() );
   m_styles.addFont( font, true );
 
   QDomElement style = doc.createElement( "style:properties" );

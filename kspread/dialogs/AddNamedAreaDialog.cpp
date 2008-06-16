@@ -30,8 +30,8 @@
 #include <klineedit.h>
 #include <kmessagebox.h>
 
-#include "Doc.h"
 #include "Localization.h"
+#include "Map.h"
 #include "NamedAreaManager.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -81,11 +81,11 @@ void AddNamedAreaDialog::slotOk()
 
     const QString name = m_areaName->text();
     const Region region(m_selection->lastRange(), m_selection->lastSheet());
-    if (m_selection->activeSheet()->doc()->namedAreaManager()->namedArea(name) == region)
+    if (m_selection->activeSheet()->map()->namedAreaManager()->namedArea(name) == region)
         return; // nothing to do
 
     NamedAreaCommand* command = 0;
-    if (m_selection->activeSheet()->doc()->namedAreaManager()->contains(name))
+    if (m_selection->activeSheet()->map()->namedAreaManager()->contains(name))
     {
         const QString question = i18n("The named area '%1' already exists.\n"
                                       "Do you want to replace it?", name);

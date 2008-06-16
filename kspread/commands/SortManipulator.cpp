@@ -20,7 +20,7 @@
 
 #include "SortManipulator.h"
 
-#include "Doc.h"
+#include "Map.h"
 #include "Sheet.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
@@ -174,8 +174,8 @@ bool SortManipulator::shouldReorder (Element *element, int first, int second)
   // we use ValueCalc::natural* to compare
   // indexes are real indexes, we don't use the sorted array here
 
-  ValueCalc *calc = m_sheet->doc()->calc();
-  ValueConverter *conv = m_sheet->doc()->converter();
+  ValueCalc *calc = m_sheet->map()->calc();
+  ValueConverter *conv = m_sheet->map()->converter();
 
   QRect range = element->rect();
   int firstrow = range.top();

@@ -28,22 +28,36 @@
 #include <ktemporaryfile.h>
 
 #include <KoGenStyles.h>
+#include <KoGlobal.h>
 #include <KoOasisSettings.h>
 #include <KoOdfLoadingContext.h>
+#include <KoOdfStylesReader.h>
 #include <KoEmbeddedDocumentSaver.h>
 #include <KoShapeSavingContext.h>
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
+#include "BindingManager.h"
 #include "CalculationSettings.h"
 #include "Canvas.h"
+#include "DependencyManager.h"
 #include "Doc.h"
 #include "GenValidationStyle.h"
 #include "Localization.h"
+#include "NamedAreaManager.h"
+#include "RecalcManager.h"
+#include "RowColumnFormat.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "StyleManager.h"
+#include "ValueCalc.h"
+#include "ValueConverter.h"
+#include "ValueFormatter.h"
+#include "ValueParser.h"
 #include "View.h"
+
+// database
+#include "database/DatabaseManager.h"
 
 // D-Bus
 #include "interfaces/MapAdaptor.h"
@@ -82,7 +96,22 @@ public:
   int overallRowCount;
   int loadedRowsCounter;
 
+    BindingManager* bindingManager;
+    DatabaseManager* databaseManager;
+    DependencyManager* dependencyManager;
+    NamedAreaManager* namedAreaManager;
+    RecalcManager* recalcManager;
+    StyleManager* styleManager;
+
     CalculationSettings* calculationSettings;
+    ValueCalc* calc;
+    ValueConverter* converter;
+    ValueFormatter* formatter;
+    ValueParser* parser;
+
+    // default objects
+    ColumnFormat* defaultColumnFormat;
+    RowFormat* defaultRowFormat;
 };
 
 
@@ -103,16 +132,52 @@ Map::Map ( Doc* doc, const char* name)
   d->overallRowCount = 0;
   d->loadedRowsCounter = 0;
 
+    d->bindingManager = new BindingManager(this);
+    d->databaseManager = new DatabaseManager(this);
+    d->dependencyManager = new DependencyManager(this);
+    d->namedAreaManager = new NamedAreaManager(this);
+    d->recalcManager = new RecalcManager(this);
+    d->styleManager = new StyleManager();
+
     d->calculationSettings = new CalculationSettings();
     d->calculationSettings->setFileName(d->doc->url().prettyUrl()); // for FILENAME function ;)
 
+    d->parser = new ValueParser(d->calculationSettings);
+    d->converter = new ValueConverter(d->parser);
+    d->calc = new ValueCalc(d->converter);
+    d->formatter = new ValueFormatter(d->converter);
+
+    d->defaultColumnFormat = new ColumnFormat();
+    d->defaultRowFormat = new RowFormat();
+
+    QFont font(KoGlobal::defaultFont());
+    d->defaultRowFormat->setHeight(font.pointSizeF() + 3);
+    d->defaultColumnFormat->setWidth((font.pointSizeF() + 3) * 5);
+
   new MapAdaptor(this);
   QDBusConnection::sessionBus().registerObject( '/'+doc->objectName() + '/' + objectName(), this);
+
+    connect(d->namedAreaManager, SIGNAL(namedAreaModified(const QString&)),
+            d->dependencyManager, SLOT(namedAreaModified(const QString&)));
 }
 
 Map::~Map()
 {
+    delete d->bindingManager;
+    delete d->databaseManager;
+    delete d->dependencyManager;
+    delete d->namedAreaManager;
+    delete d->recalcManager;
+    delete d->styleManager;
+
+    delete d->parser;
+    delete d->formatter;
+    delete d->converter;
+    delete d->calc;
     delete d->calculationSettings;
+
+    delete d->defaultColumnFormat;
+    delete d->defaultRowFormat;
   qDeleteAll( d->lstSheets );
   qDeleteAll( d->lstDeletedSheets );
   delete d;
@@ -134,6 +199,76 @@ bool Map::completeSaving(KoStore *store, KoXmlWriter *manifestWriter)
     Q_UNUSED(store);
     Q_UNUSED(manifestWriter);
     return true;
+}
+
+BindingManager* Map::bindingManager() const
+{
+    return d->bindingManager;
+}
+
+DatabaseManager* Map::databaseManager() const
+{
+    return d->databaseManager;
+}
+
+DependencyManager* Map::dependencyManager() const
+{
+    return d->dependencyManager;
+}
+
+NamedAreaManager* Map::namedAreaManager() const
+{
+    return d->namedAreaManager;
+}
+
+RecalcManager* Map::recalcManager() const
+{
+    return d->recalcManager;
+}
+
+StyleManager* Map::styleManager() const
+{
+    return d->styleManager;
+}
+
+ValueParser* Map::parser() const
+{
+    return d->parser;
+}
+
+ValueFormatter* Map::formatter() const
+{
+    return d->formatter;
+}
+
+ValueConverter* Map::converter() const
+{
+    return d->converter;
+}
+
+ValueCalc* Map::calc() const
+{
+    return d->calc;
+}
+
+const ColumnFormat* Map::defaultColumnFormat() const
+{
+    return d->defaultColumnFormat;
+}
+
+const RowFormat* Map::defaultRowFormat() const
+{
+    return d->defaultRowFormat;
+}
+
+void Map::setDefaultColumnWidth(double width)
+{
+    d->defaultColumnFormat->setWidth(width);
+}
+
+void Map::setDefaultRowHeight(double height)
+{
+    d->defaultRowFormat->setHeight(height);
 }
 
 CalculationSettings* Map::calculationSettings() const
@@ -260,6 +395,21 @@ void Map::saveOasisSettings( KoXmlWriter &settingsWriter )
 
 bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore *store, KoXmlWriter* manifestWriter, int &_indexObj, int &_partIndexObj )
 {
+    // Saving the custom cell styles including the default cell style.
+    d->styleManager->saveOasis(mainStyles);
+
+    // Saving the default column style
+    KoGenStyle defaultColumnStyle(KoGenStyle::StyleTableColumn, "table-column");
+    defaultColumnStyle.addPropertyPt("style:column-width", d->defaultColumnFormat->width());
+    defaultColumnStyle.setDefaultStyle(true);
+    mainStyles.lookup(defaultColumnStyle, "Default", KoGenStyles::DontForceNumbering);
+
+    // Saving the default row style
+    KoGenStyle defaultRowStyle(KoGenStyle::StyleTableRow, "table-row");
+    defaultRowStyle.addPropertyPt("style:row-height", d->defaultRowFormat->height());
+    defaultRowStyle.setDefaultStyle(true);
+    mainStyles.lookup(defaultRowStyle, "Default", KoGenStyles::DontForceNumbering);
+
     if ( !d->strPassword.isEmpty() )
     {
         xmlWriter.addAttribute("table:structure-protected", "true" );
@@ -294,11 +444,29 @@ bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore 
     bodyTmpFile.close();
     xmlWriter.addCompleteElement( &bodyTmpFile );
 
+    d->namedAreaManager->saveOdf(xmlWriter);
+    d->databaseManager->saveOdf(xmlWriter);
     return true;
 }
 
 QDomElement Map::save( QDomDocument& doc )
 {
+    QDomElement spread = doc.documentElement();
+
+    QDomElement locale = static_cast<Localization*>(d->calculationSettings->locale())->save(doc);
+    spread.appendChild(locale);
+
+    QDomElement areaname = d->namedAreaManager->saveXML(doc);
+    spread.appendChild(areaname);
+
+    QDomElement defaults = doc.createElement("defaults");
+    defaults.setAttribute("row-height", d->defaultRowFormat->height());
+    defaults.setAttribute("col-width", d->defaultColumnFormat->width());
+    spread.appendChild(defaults);
+
+    QDomElement s = d->styleManager->save(doc);
+    spread.appendChild(s);
+
     QDomElement mymap = doc.createElement( "map" );
   // Save visual info for the first view, such as active sheet and active cell
   // It looks like a hack, but reopening a document creates only one view anyway (David)
@@ -336,6 +504,41 @@ QDomElement Map::save( QDomDocument& doc )
 
 bool Map::loadOasis( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
 {
+    //load in first
+    d->styleManager->loadOasisStyleTemplate(odfContext.stylesReader(), this);
+
+    // load default column style
+    const KoXmlElement* defaultColumnStyle = odfContext.stylesReader().defaultStyle("table-column");
+    if (defaultColumnStyle) {
+//       kDebug() <<"style:default-style style:family=\"table-column\"";
+        KoStyleStack styleStack;
+        styleStack.push(*defaultColumnStyle);
+        styleStack.setTypeProperties("table-column");
+        if (styleStack.hasProperty(KoXmlNS::style, "column-width")) {
+            const double width = KoUnit::parseValue(styleStack.property(KoXmlNS::style, "column-width"), -1.0);
+            if (width != -1.0) {
+//           kDebug() <<"\tstyle:column-width:" << width;
+                d->defaultColumnFormat->setWidth(width);
+            }
+        }
+    }
+
+    // load default row style
+    const KoXmlElement* defaultRowStyle = odfContext.stylesReader().defaultStyle("table-row");
+    if (defaultRowStyle) {
+//       kDebug() <<"style:default-style style:family=\"table-row\"";
+        KoStyleStack styleStack;
+        styleStack.push(*defaultRowStyle);
+        styleStack.setTypeProperties("table-row");
+        if (styleStack.hasProperty(KoXmlNS::style, "row-height")) {
+            const double height = KoUnit::parseValue(styleStack.property(KoXmlNS::style, "row-height"), -1.0);
+            if (height != -1.0) {
+//           kDebug() <<"\tstyle:row-height:" << height;
+                d->defaultRowFormat->setHeight(height);
+            }
+        }
+    }
+
     d->calculationSettings->loadOdf(body); // table::calculation-settings
     if ( body.hasAttributeNS( KoXmlNS::table, "structure-protected" ) )
     {
@@ -383,7 +586,7 @@ bool Map::loadOasis( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
 
     //pre-load auto styles
     QHash<QString, Conditions> conditionalStyles;
-    Styles autoStyles = doc()->styleManager()->loadOasisAutoStyles( odfContext.stylesReader(), conditionalStyles );
+    Styles autoStyles = d->styleManager->loadOasisAutoStyles( odfContext.stylesReader(), conditionalStyles );
 
     // load the sheet
     sheetNode = body.firstChild();
@@ -416,7 +619,11 @@ bool Map::loadOasis( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
     }
 
     //delete any styles which were not used
-    doc()->styleManager()->releaseUnusedAutoStyles( autoStyles );
+    d->styleManager->releaseUnusedAutoStyles(autoStyles);
+
+    // Load databases. This needs the sheets to be loaded.
+    d->databaseManager->loadOdf(body); // table:database-ranges
+    d->namedAreaManager->loadOdf(body); // table:named-expressions
 
     return true;
 }

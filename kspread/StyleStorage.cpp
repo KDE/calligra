@@ -26,6 +26,7 @@
 
 #include "Doc.h"
 #include "Global.h"
+#include "Map.h"
 #include "RTree.h"
 #include "Style.h"
 #include "StyleManager.h"
@@ -761,7 +762,7 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
 
 StyleManager* StyleStorage::styleManager() const
 {
-    return d->doc->styleManager();
+    return d->doc->map()->styleManager();
 }
 
 #include "StyleStorage.moc"

@@ -142,7 +142,7 @@ bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
         // pre-load auto styles
         KoOdfLoadingContext& odfContext = context.odfLoadingContext();
         QHash<QString, Conditions> conditionalStyles;
-        Styles autoStyles = doc()->styleManager()->loadOasisAutoStyles(odfContext.stylesReader(), conditionalStyles);
+        Styles autoStyles = sheet()->map()->styleManager()->loadOasisAutoStyles(odfContext.stylesReader(), conditionalStyles);
 
         if (!element.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
             sheet()->setSheetName(element.attributeNS(KoXmlNS::table, "name", QString()), true);
@@ -150,7 +150,7 @@ bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
         const bool result = sheet()->loadOasis(element, odfContext, autoStyles, conditionalStyles);
 
         // delete any styles which were not used
-        doc()->styleManager()->releaseUnusedAutoStyles(autoStyles);
+        sheet()->map()->styleManager()->releaseUnusedAutoStyles(autoStyles);
 
         if (!result) {
             return false;

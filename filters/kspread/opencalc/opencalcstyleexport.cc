@@ -23,6 +23,7 @@
 
 #include <kspread/Cell.h>
 #include <kspread/Doc.h>
+#include <kspread/Map.h>
 #include <kspread/Sheet.h>
 #include <kspread/Style.h>
 #include <kspread/StyleManager.h>
@@ -448,7 +449,7 @@ bool CellStyle::isEqual( CellStyle const * const t1, CellStyle const & t2 )
 void CellStyle::loadData( CellStyle & cs, const Cell& cell )
 {
   const KSpread::Style style = cell.style();
-  const KSpread::Style* defaultStyle = cell.sheet()->doc()->styleManager()->defaultStyle();
+  const KSpread::Style* defaultStyle = cell.sheet()->map()->styleManager()->defaultStyle();
 
   QFont font = style.font();
   if ( font != defaultStyle->font() )

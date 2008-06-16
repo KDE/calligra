@@ -496,7 +496,6 @@ public:
     void checkBorderVertical(const Style& obj);
     void checkBorderHorizontal(const Style& obj);
 
-    Doc * getDoc() const { return m_doc; }
     Sheet * getSheet() const { return m_sheet; }
     CustomStyle * getStyle() const { return m_style; }
     StyleManager * getStyleManager() const { return m_styleManager; }
@@ -619,7 +618,6 @@ protected:
     CellFormatPagePattern *patternPage;
     CellFormatPageProtection *protectPage;
 
-    Doc   * m_doc;
     Sheet * m_sheet;
     Selection  * m_selection;
     CustomStyle * m_style;

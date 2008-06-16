@@ -26,6 +26,7 @@
 #include "Doc.h"
 #include "Formula.h"
 #include "Functions.h"
+#include "Map.h"
 #include "NamedAreaManager.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -1253,7 +1254,7 @@ LocationComboBox::LocationComboBox(QWidget* _parent, Selection* selection)
     setLineEdit( m_locationWidget );
     insertItem( 0,"" );
 
-    const QList<QString> areaNames = selection->activeSheet()->doc()->namedAreaManager()->areaNames();
+    const QList<QString> areaNames = selection->activeSheet()->map()->namedAreaManager()->areaNames();
     for (int i = 0; i < areaNames.count(); ++i)
         slotAddAreaName(areaNames[i]);
     connect( this, SIGNAL( activated ( const QString & ) ), m_locationWidget, SLOT( slotActivateItem() ) );
@@ -1321,7 +1322,7 @@ bool LocationEditWidget::activateItem()
 
     const QString text = this->text();
     // check whether an already existing named area was entered
-    Region region = m_selection->activeSheet()->doc()->namedAreaManager()->namedArea(text);
+    Region region = m_selection->activeSheet()->map()->namedAreaManager()->namedArea(text);
     if (region.isValid())
     {
         m_selection->initialize(Region(text, m_selection->activeSheet()->map(), m_selection->activeSheet()));

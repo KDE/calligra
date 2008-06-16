@@ -27,6 +27,7 @@
 #include "CellStorage_p.h"
 #include "Damages.h"
 #include "Doc.h"
+#include "Map.h"
 #include "Sheet.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
@@ -78,7 +79,7 @@ bool AbstractDataManipulator::process (Element* element)
         if ( !val.isEmpty() )
         {
           cell.setValue(val);
-          cell.setUserInput(cell.doc()->converter()->asString(val).asString());
+          cell.setUserInput(m_sheet->map()->converter()->asString(val).asString());
           if ( fmtType != Format::None )
           {
             Style style;
@@ -274,7 +275,7 @@ Value SeriesManipulator::newValue (Element *element, int col, int row,
     bool *parse, Format::Type *)
 {
   *parse = false;
-  ValueCalc *calc = m_sheet->doc()->calc();
+  ValueCalc *calc = m_sheet->map()->calc();
 
   // either colidx or rowidx is always zero
   QRect range = element->rect();

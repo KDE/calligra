@@ -134,7 +134,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
     emit sigProgress(value);
     QApplication::setOverrideCursor(Qt::WaitCursor);
 
-    const double defaultWidth = ksdoc->defaultColumnFormat()->width();
+    const double defaultWidth = ksdoc->map()->defaultColumnFormat()->width();
     QVector<double> widths( numCols );
     for (int i = 0; i < numCols; ++i)
         widths[i] = defaultWidth;
@@ -169,14 +169,14 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
              {
                 Value value(text);
                 cell.setValue(value);
-                cell.setUserInput(ksdoc->converter()->asString(value).asString());
+                cell.setUserInput(ksdoc->map()->converter()->asString(value).asString());
                 break;
              }
              case KoCsvImportDialog::Date:
              {
                 Value value(text);
-                cell.setValue(ksdoc->converter()->asDate(value));
-                cell.setUserInput(ksdoc->converter()->asString(value).asString());
+                cell.setValue(ksdoc->map()->converter()->asDate(value));
+                cell.setUserInput(ksdoc->map()->converter()->asString(value).asString());
                 break;
              }
              case KoCsvImportDialog::Currency:
@@ -184,7 +184,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QByteArray& from, const QBy
                 Value value(text);
                 value.setFormat(Value::fmt_Money);
                 cell.setValue(value);
-                cell.setUserInput(ksdoc->converter()->asString(value).asString());
+                cell.setUserInput(ksdoc->map()->converter()->asString(value).asString());
                 break;
              }
              case KoCsvImportDialog::None:

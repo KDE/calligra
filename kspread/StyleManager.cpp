@@ -20,20 +20,22 @@
 // own header
 #include "StyleManager.h"
 
-#include <qdom.h>
+#include <QBrush>
+#include <QDomDocument>
+#include <QDomElement>
 #include <QPen>
 #include <QStringList>
 
 #include <kdebug.h>
 #include <klocale.h>
 
+#include <KoGenStyle.h>
 #include <KoOdfStylesReader.h>
 #include <KoXmlReader.h>
 #include <KoXmlNS.h>
 
 #include "CalculationSettings.h"
 #include "Condition.h"
-#include "Doc.h"
 #include "Map.h"
 #include "Style.h"
 
@@ -68,7 +70,7 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
     }
 }
 
-void StyleManager::loadOasisStyleTemplate( KoOdfStylesReader& stylesReader, Doc* doc )
+void StyleManager::loadOasisStyleTemplate(KoOdfStylesReader& stylesReader, Map* map)
 {
     // reset the map of OpenDocument Styles
     m_oasisStyles.clear();
@@ -81,8 +83,7 @@ void StyleManager::loadOasisStyleTemplate( KoOdfStylesReader& stylesReader, Doc*
       Conditions conditions;
       defaultStyle()->loadOasis( stylesReader, *defStyle, "Default", conditions, this );
       defaultStyle()->setType( Style::BUILTIN );
-        if ( doc )
-        {
+        if (map) {
             // Load the default precision to be used, if the (default) cell style
             // is set to arbitrary precision.
             KoXmlNode n = defStyle->firstChild();
@@ -100,7 +101,7 @@ void StyleManager::loadOasisStyleTemplate( KoOdfStylesReader& stylesReader, Doc*
                         if ( ok && precision > -1 )
                         {
                             kDebug(36003) <<"Default decimal precision:" << precision;
-                            doc->map()->calculationSettings()->setDefaultDecimalPrecision( precision );
+                            map->calculationSettings()->setDefaultDecimalPrecision( precision );
                         }
                     }
                 }

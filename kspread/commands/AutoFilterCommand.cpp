@@ -24,6 +24,7 @@
 #include "CellStorage.h"
 #include "Damages.h"
 #include "Doc.h"
+#include "Map.h"
 #include "Sheet.h"
 
 #include "database/Database.h"
@@ -43,7 +44,7 @@ AutoFilterCommand::~AutoFilterCommand()
 
 void AutoFilterCommand::redo()
 {
-    Database database(m_sheet->doc()->databaseManager()->createUniqueName());
+    Database database(m_sheet->map()->databaseManager()->createUniqueName());
     database.setDisplayFilterButtons(true);
     database.setRange(*this);
     m_sheet->cellStorage()->setDatabase(*this, database);

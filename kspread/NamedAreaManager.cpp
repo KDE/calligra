@@ -58,14 +58,14 @@ struct NamedArea
 class NamedAreaManager::Private
 {
 public:
-    const Doc* doc;
+    const Map* map;
     QHash<QString, NamedArea> namedAreas;
 };
 
-NamedAreaManager::NamedAreaManager(const Doc* doc)
+NamedAreaManager::NamedAreaManager(const Map* map)
     : d(new Private)
 {
-    d->doc = doc;
+    d->map = map;
     connect(this, SIGNAL(namedAreaAdded(const QString&)),
             this, SIGNAL(namedAreaModified(const QString&)));
     connect(this, SIGNAL(namedAreaRemoved(const QString&)),
@@ -158,7 +158,7 @@ void NamedAreaManager::updateAllNamedAreas()
 {
     QList< QPair<QRectF, QString> > namedAreas;
     const QRect rect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax));
-    const QList<Sheet*> sheets = d->doc->map()->sheetList();
+    const QList<Sheet*> sheets = d->map->sheetList();
     for (int i = 0; i < sheets.count(); ++i)
     {
         namedAreas = sheets[i]->cellStorage()->namedAreas(Region(rect, sheets[i]));
@@ -193,7 +193,7 @@ void NamedAreaManager::loadOdf(const KoXmlElement& body)
                 const QString range = element.attributeNS(KoXmlNS::table, "cell-range-address", QString());
                 kDebug(36003) <<"Named area found, name:" << name <<", area:" << range;
 
-                Region region(Region::loadOdf(range), d->doc->map());
+                Region region(Region::loadOdf(range), d->map);
                 if (!region.isValid())
                 {
                     kDebug(36003) <<"invalid area";
@@ -246,7 +246,7 @@ void NamedAreaManager::loadXML(const KoXmlElement& parent)
             int bottom = 0;
             KoXmlElement sheetName = element.namedItem("tabname").toElement();
             if (!sheetName.isNull())
-                sheet = d->doc->map()->findSheet(sheetName.text());
+                sheet = d->map->findSheet(sheetName.text());
             if (!sheet)
                 continue;
             KoXmlElement referenceName = element.namedItem("refname").toElement();

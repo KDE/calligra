@@ -48,7 +48,7 @@ void TestDependencies::testCircleRemoval()
     QApplication::processEvents(); // handle Damages
 
     QCOMPARE(m_storage->value(1, 1), Value::errorCIRCLE());
-    DependencyManager* manager = m_doc->dependencyManager();
+    DependencyManager* manager = m_doc->map()->dependencyManager();
     QVERIFY(manager->d->consumers.count() == 1);
     QVERIFY(manager->d->providers.count() == 1);
     QList<Cell> consumers = manager->d->consumers.value(m_sheet)->contains(QRect(1,1,1,1));

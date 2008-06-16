@@ -1023,7 +1023,7 @@ void View::initCalcMenu()
 
 void View::recalcWorkBook()
 {
-    doc()->recalcManager()->recalcMap();
+    doc()->map()->recalcManager()->recalcMap();
 }
 
 void View::refreshLocale()
@@ -1038,7 +1038,7 @@ void View::recalcWorkSheet()
 {
     if ( !activeSheet() )
         return;
-    doc()->recalcManager()->recalcSheet( activeSheet() );
+    doc()->map()->recalcManager()->recalcSheet( activeSheet() );
 }
 
 void View::shapeSelectionChanged()
@@ -2278,7 +2278,7 @@ void View::slotScrollChoice(const KSpread::Region& changedRegion)
 void View::calcStatusBarOp()
 {
   Sheet * sheet = activeSheet();
-  ValueCalc* calc = d->doc->calc();
+  ValueCalc* calc = doc()->map()->calc();
   Value val;
   MethodOfCalc tmpMethod = doc()->getTypeOfCalc();
   if ( tmpMethod != NoneCalc )
@@ -2311,7 +2311,7 @@ void View::calcStatusBarOp()
 
   }
 
-  QString res = d->doc->converter()->asString (val).asString ();
+  QString res = doc()->map()->converter()->asString (val).asString ();
   QString tmp;
   switch(tmpMethod )
   {

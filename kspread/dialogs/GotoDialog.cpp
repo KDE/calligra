@@ -35,6 +35,7 @@
 #include "Cell.h"
 #include "Doc.h"
 #include "Localization.h"
+#include "Map.h"
 #include "NamedAreaManager.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -70,8 +71,7 @@ GotoDialog::GotoDialog(QWidget* parent, Selection* selection)
     m_nameCell->addItem( cell.name() );
     m_nameCell->addItem( cell.fullName() );
   }
-  Doc *doc = m_selection->activeSheet()->doc();
-  NamedAreaManager *manager = doc->namedAreaManager();
+  NamedAreaManager *manager = m_selection->activeSheet()->map()->namedAreaManager();
   m_nameCell->addItems( manager->areaNames() );
   m_nameCell->setFocus();
 
@@ -92,7 +92,7 @@ void GotoDialog::slotOk()
     m_selection->activeSheet()->doc()->emitBeginOperation( false );
 
     QString tmp_upper = m_nameCell->currentText();
-    Region region(tmp_upper, m_selection->activeSheet()->doc()->map(), m_selection->activeSheet());
+    Region region(tmp_upper, m_selection->activeSheet()->map(), m_selection->activeSheet());
     if ( region.isValid() )
     {
       if ( region.firstSheet() != m_selection->activeSheet() )

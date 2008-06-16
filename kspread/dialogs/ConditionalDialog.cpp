@@ -26,7 +26,7 @@
 
 #include "Canvas.h"
 #include "Cell.h"
-#include "Doc.h"
+#include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "Style.h"
@@ -278,7 +278,7 @@ ConditionalDialog::ConditionalDialog(QWidget* parent, Selection* selection)
   setButtons( KDialog::Ok|KDialog::Cancel );
   setCaption( i18n( "Conditional Styles") );
 
-  QStringList list(m_selection->activeSheet()->doc()->styleManager()->styleNames());
+  QStringList list(m_selection->activeSheet()->map()->styleManager()->styleNames());
 
   m_dlg->m_style_1->insertItems( 0, list );
   m_dlg->m_style_2->insertItems( 0, list );
@@ -641,7 +641,7 @@ void ConditionalDialog::slotOk()
 
   kDebug() <<"Input data is valid";
 
-  StyleManager * manager = m_selection->activeSheet()->doc()->styleManager();
+  StyleManager * manager = m_selection->activeSheet()->map()->styleManager();
 
   QLinkedList<Conditional> newList;
 

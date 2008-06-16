@@ -53,7 +53,6 @@
 #include <k3sconfig.h>
 #include <ktemporaryfile.h>
 
-#include <KoGlobal.h>
 #include <KoApplication.h>
 #include <KoDataCenter.h>
 #include <KoDocumentInfo.h>
@@ -85,24 +84,16 @@
 #include "Map.h"
 #include "NamedAreaManager.h"
 #include "RecalcManager.h"
-#include "RowColumnFormat.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
 #include "SheetView.h"
 #include "StyleManager.h"
 #include "Util.h"
-#include "ValueCalc.h"
-#include "ValueConverter.h"
-#include "ValueFormatter.h"
-#include "ValueParser.h"
 #include "View.h"
 
 // commands
 #include "commands/UndoWrapperCommand.h"
-
-// database
-#include "database/DatabaseManager.h"
 
 // chart shape
 #include "kchart/shape/ChartShape.h"
@@ -122,22 +113,7 @@ class Doc::Private
 public:
 
   Map *map;
-  BindingManager* bindingManager;
-  DatabaseManager* databaseManager;
-  DependencyManager* dependencyManager;
-  NamedAreaManager* namedAreaManager;
-  RecalcManager* recalcManager;
-  StyleManager *styleManager;
-  ValueParser *parser;
-  ValueFormatter *formatter;
-  ValueConverter *converter;
-  ValueCalc *calc;
   QMap<QString, KoDataCenter *>  dataCenterMap;
-
-
-    // default objects
-    ColumnFormat* defaultColumnFormat;
-    RowFormat* defaultRowFormat;
 
   LoadingInfo *loadingInfo;
   static QList<Doc*> s_docs;
@@ -204,28 +180,10 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->loadingInfo = 0;
 
   d->map = new Map( this, "Map" );
-  d->bindingManager = new BindingManager(d->map);
-  d->databaseManager = new DatabaseManager(d->map);
-  d->dependencyManager = new DependencyManager( d->map );
-  d->namedAreaManager = new NamedAreaManager(this);
-  d->recalcManager = new RecalcManager( d->map );
-  d->styleManager = new StyleManager();
-
-  d->parser = new ValueParser(d->map->calculationSettings());
-  d->converter = new ValueConverter ( d->parser );
-  d->calc = new ValueCalc( d->converter );
-  d->formatter = new ValueFormatter( d->converter );
-
-  d->defaultColumnFormat = new ColumnFormat();
-  d->defaultRowFormat = new RowFormat();
 
   d->pageBorderColor = Qt::red;
   d->configLoadFromFile = false;
   d->captureAllArrowKeys = true;
-
-  QFont font( KoGlobal::defaultFont() );
-  d->defaultRowFormat->setHeight( font.pointSizeF() + 3 );
-  d->defaultColumnFormat->setWidth( ( font.pointSizeF() + 3 ) * 5 );
 
   // Ask every shapefactory to populate the dataCenterMap
   foreach(QString id, KoShapeRegistry::instance()->keys())
@@ -271,8 +229,6 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
             KoShapeRegistry::instance()->value(id)->setOptionPanels(panels);
     }
 
-    connect(d->namedAreaManager, SIGNAL(namedAreaModified(const QString&)),
-            d->dependencyManager, SLOT(namedAreaModified(const QString&)));
     connect(this, SIGNAL(damagesFlushed(const QList<Damage*>&)),
             this, SLOT(handleDamages(const QList<Damage*>&)));
 }
@@ -285,20 +241,7 @@ Doc::~Doc()
 
   delete d->spellConfig;
 
-  delete d->defaultColumnFormat;
-  delete d->defaultRowFormat;
-
   delete d->map;
-  delete d->bindingManager;
-  delete d->databaseManager;
-  delete d->dependencyManager;
-  delete d->namedAreaManager;
-  delete d->recalcManager;
-  delete d->styleManager;
-  delete d->parser;
-  delete d->formatter;
-  delete d->converter;
-  delete d->calc;
   qDeleteAll( d->dataCenterMap );
 
   delete d;
@@ -328,7 +271,7 @@ void Doc::initEmpty()
 
     resetURL();
     initConfig();
-    styleManager()->createBuiltinStyles();
+    map()->styleManager()->createBuiltinStyles();
 
     KoDocument::initEmpty();
 }
@@ -336,76 +279,6 @@ void Doc::initEmpty()
 Map *Doc::map () const
 {
   return d->map;
-}
-
-BindingManager* Doc::bindingManager() const
-{
-    return d->bindingManager;
-}
-
-DatabaseManager* Doc::databaseManager() const
-{
-    return d->databaseManager;
-}
-
-DependencyManager* Doc::dependencyManager() const
-{
-    return d->dependencyManager;
-}
-
-NamedAreaManager* Doc::namedAreaManager() const
-{
-    return d->namedAreaManager;
-}
-
-RecalcManager* Doc::recalcManager() const
-{
-    return d->recalcManager;
-}
-
-StyleManager *Doc::styleManager () const
-{
-  return d->styleManager;
-}
-
-ValueParser *Doc::parser () const
-{
-  return d->parser;
-}
-
-ValueFormatter *Doc::formatter () const
-{
-  return d->formatter;
-}
-
-ValueConverter *Doc::converter () const
-{
-  return d->converter;
-}
-
-ValueCalc *Doc::calc () const
-{
-  return d->calc;
-}
-
-const ColumnFormat* Doc::defaultColumnFormat() const
-{
-    return d->defaultColumnFormat;
-}
-
-const RowFormat* Doc::defaultRowFormat() const
-{
-    return d->defaultRowFormat;
-}
-
-void Doc::setDefaultColumnWidth( double width )
-{
-    d->defaultColumnFormat->setWidth( width );
-}
-
-void Doc::setDefaultRowHeight( double height )
-{
-    d->defaultRowFormat->setHeight( height );
 }
 
 QMap<QString, KoDataCenter *> Doc::dataCenterMap()
@@ -504,12 +377,6 @@ QDomDocument Doc::saveXML()
     spread.setAttribute( "mime", "application/x-kspread" );
     spread.setAttribute( "syntaxVersion", CURRENT_SYNTAX_VERSION );
 
-    QDomElement dlocale = static_cast<Localization*>(map()->calculationSettings()->locale())->save( doc );
-    spread.appendChild( dlocale );
-
-    QDomElement areaname = d->namedAreaManager->saveXML(doc);
-    spread.appendChild(areaname);
-
     if( !d->spellListIgnoreAll.isEmpty() )
     {
         QDomElement spellCheckIgnore = doc.createElement( "SPELLCHECKIGNORELIST" );
@@ -531,13 +398,6 @@ QDomDocument Doc::saveXML()
       ++iter;
     }
 
-    QDomElement defaults = doc.createElement( "defaults" );
-    defaults.setAttribute( "row-height", d->defaultRowFormat->height() );
-    defaults.setAttribute( "col-width", d->defaultColumnFormat->width() );
-    spread.appendChild( defaults );
-
-    QDomElement s = styleManager()->save( doc );
-    spread.appendChild( s );
     QDomElement e = map()->save( doc );
     spread.appendChild( e );
 
@@ -601,26 +461,9 @@ bool Doc::saveOasisHelper( SavingContext & documentContext, SaveFlag saveFlag,
     int indexObj = 1;
     int partIndexObj = 0;
 
-    // Saving the custom cell styles including the default cell style.
-    styleManager()->saveOasis( mainStyles );
-
-    // Saving the default column style
-    KoGenStyle defaultColumnStyle( KoGenStyle::StyleTableColumn, "table-column" );
-    defaultColumnStyle.addPropertyPt( "style:column-width", d->defaultColumnFormat->width() );
-    defaultColumnStyle.setDefaultStyle( true );
-    mainStyles.lookup( defaultColumnStyle, "Default", KoGenStyles::DontForceNumbering );
-
-    // Saving the default row style
-    KoGenStyle defaultRowStyle( KoGenStyle::StyleTableRow, "table-row" );
-    defaultRowStyle.addPropertyPt( "style:row-height", d->defaultRowFormat->height() );
-    defaultRowStyle.setDefaultStyle( true );
-    mainStyles.lookup( defaultRowStyle, "Default", KoGenStyles::DontForceNumbering );
-
     // Saving the map.
     map()->saveOasis( contentTmpWriter, mainStyles, store,  manifestWriter, indexObj, partIndexObj );
 
-    d->namedAreaManager->saveOdf(contentTmpWriter);
-    d->databaseManager->saveOdf(contentTmpWriter);
     contentTmpWriter.endElement(); ////office:spreadsheet
     contentTmpWriter.endElement(); ////office:body
 
@@ -751,47 +594,6 @@ bool Doc::loadOdf( KoOdfReadStore & odfStore )
 
     KoOdfLoadingContext context( odfStore.styles(), odfStore.store() );
 
-    //load in first
-    styleManager()->loadOasisStyleTemplate( odfStore.styles(), this );
-
-    // load default column style
-    const KoXmlElement* defaultColumnStyle = odfStore.styles().defaultStyle( "table-column" );
-    if ( defaultColumnStyle )
-    {
-//       kDebug() <<"style:default-style style:family=\"table-column\"";
-      KoStyleStack styleStack;
-      styleStack.push( *defaultColumnStyle );
-      styleStack.setTypeProperties( "table-column" );
-      if ( styleStack.hasProperty( KoXmlNS::style, "column-width" ) )
-      {
-        const double width = KoUnit::parseValue( styleStack.property( KoXmlNS::style, "column-width" ), -1.0 );
-        if ( width != -1.0 )
-        {
-//           kDebug() <<"\tstyle:column-width:" << width;
-          d->defaultColumnFormat->setWidth( width );
-        }
-      }
-    }
-
-    // load default row style
-    const KoXmlElement* defaultRowStyle = odfStore.styles().defaultStyle( "table-row" );
-    if ( defaultRowStyle )
-    {
-//       kDebug() <<"style:default-style style:family=\"table-row\"";
-      KoStyleStack styleStack;
-      styleStack.push( *defaultRowStyle );
-      styleStack.setTypeProperties( "table-row" );
-      if ( styleStack.hasProperty( KoXmlNS::style, "row-height" ) )
-      {
-        const double height = KoUnit::parseValue( styleStack.property( KoXmlNS::style, "row-height" ), -1.0 );
-        if ( height != -1.0 )
-        {
-//           kDebug() <<"\tstyle:row-height:" << height;
-          d->defaultRowFormat->setHeight( height );
-        }
-      }
-    }
-
     // TODO check versions and mimetypes etc.
     loadOasisCellValidation( body ); // table:content-validations
 
@@ -802,10 +604,6 @@ bool Doc::loadOdf( KoOdfReadStore & odfStore )
         deleteLoadingInfo();
         return false;
     }
-
-    // Load databases. This needs the sheets to be loaded.
-    d->databaseManager->loadOdf(body); // table:database-ranges
-    d->namedAreaManager->loadOdf(body); // table:named-expressions
 
     if ( !odfStore.settingsDoc().isNull() )
     {
@@ -868,14 +666,14 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
     double dim = defaults.attribute( "row-height" ).toDouble( &ok );
     if ( !ok )
       return false;
-    d->defaultRowFormat->setHeight( dim );
+    map()->setDefaultRowHeight(dim);
 
     dim = defaults.attribute( "col-width" ).toDouble( &ok );
 
     if ( !ok )
       return false;
 
-    d->defaultColumnFormat->setWidth( dim );
+    map()->setDefaultColumnWidth(dim);
   }
 
   KoXmlElement ignoreAll = spread.namedItem( "SPELLCHECKIGNORELIST").toElement();
@@ -902,7 +700,7 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
   KoXmlElement styles = spread.namedItem( "styles" ).toElement();
   if ( !styles.isNull() )
   {
-    if ( !styleManager()->loadXML( styles ) )
+    if ( !map()->styleManager()->loadXML( styles ) )
     {
       setErrorMessage( i18n( "Styles cannot be loaded." ) );
       d->isLoading = false;
@@ -927,7 +725,7 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
     // named areas
     const KoXmlElement areaname = spread.namedItem( "areaname" ).toElement();
     if (!areaname.isNull())
-        d->namedAreaManager->loadXML(areaname);
+        map()->namedAreaManager()->loadXML(areaname);
 
   //Backwards compatibility with older versions for paper layout
   if ( d->syntaxVersion < 1 )
@@ -1598,7 +1396,7 @@ void Doc::takeSheet( Sheet * sheet )
   foreach ( KoView* view, views() )
     static_cast<View*>( view )->removeSheet( sheet );
 
-    d->namedAreaManager->remove(sheet);
+    map()->namedAreaManager()->remove(sheet);
 }
 
 void Doc::addIgnoreWordAll( const QString & word)
@@ -1736,26 +1534,26 @@ void Doc::handleDamages( const QList<Damage*>& damages )
 
     // Update the named areas.
     if (!namedAreaChangedRegion.isEmpty())
-        namedAreaManager()->regionChanged(namedAreaChangedRegion);
+        map()->namedAreaManager()->regionChanged(namedAreaChangedRegion);
     // First, update the dependencies.
     if ( !formulaChangedRegion.isEmpty() )
-        dependencyManager()->regionChanged( formulaChangedRegion );
+        map()->dependencyManager()->regionChanged( formulaChangedRegion );
     // Tell the RecalcManager which cells have had a value change.
     if ( !valueChangedRegion.isEmpty() )
-        recalcManager()->regionChanged( valueChangedRegion );
+        map()->recalcManager()->regionChanged( valueChangedRegion );
     if ( workbookChanges.testFlag( WorkbookDamage::Formula ) )
     {
-        namedAreaManager()->updateAllNamedAreas();
-        dependencyManager()->updateAllDependencies( map() );
+        map()->namedAreaManager()->updateAllNamedAreas();
+        map()->dependencyManager()->updateAllDependencies( map() );
     }
     if ( workbookChanges.testFlag( WorkbookDamage::Value ) )
     {
-        recalcManager()->recalcMap();
-        bindingManager()->updateAllBindings();
+        map()->recalcManager()->recalcMap();
+        map()->bindingManager()->updateAllBindings();
     }
     // Update the bindings
     if (!bindingChangedRegion.isEmpty())
-        bindingManager()->regionChanged(bindingChangedRegion);
+        map()->bindingManager()->regionChanged(bindingChangedRegion);
 }
 
 void Doc::loadConfigFromFile()

@@ -85,7 +85,7 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
     m_rangeName->setText(i18n("Area: %1", QString()));
     vboxLayout->addWidget(m_rangeName);
 
-    const QList<QString> namedAreas = m_selection->activeSheet()->doc()->namedAreaManager()->areaNames();
+    const QList<QString> namedAreas = m_selection->activeSheet()->map()->namedAreaManager()->areaNames();
     for (int i = 0; i < namedAreas.count(); ++i)
         m_list->addItem(namedAreas[i]);
 
@@ -114,7 +114,7 @@ NamedAreaDialog::NamedAreaDialog(QWidget* parent, Selection* selection)
 
 void NamedAreaDialog::displayAreaValues(QString const & areaName)
 {
-    const QString regionName = m_selection->activeSheet()->doc()->namedAreaManager()->namedArea(areaName).name();
+    const QString regionName = m_selection->activeSheet()->map()->namedAreaManager()->namedArea(areaName).name();
     m_rangeName->setText(i18n("Area: %1", regionName));
 }
 
@@ -125,8 +125,8 @@ void NamedAreaDialog::slotOk()
     if (m_list->count() > 0)
     {
         QListWidgetItem* item = m_list->currentItem();
-        Region region = m_selection->activeSheet()->doc()->namedAreaManager()->namedArea(item->text());
-        Sheet* sheet = m_selection->activeSheet()->doc()->namedAreaManager()->sheet(item->text());
+        Region region = m_selection->activeSheet()->map()->namedAreaManager()->namedArea(item->text());
+        Sheet* sheet = m_selection->activeSheet()->map()->namedAreaManager()->sheet(item->text());
         if (!sheet || !region.isValid())
         {
             m_selection->activeSheet()->doc()->emitEndOperation();
@@ -258,7 +258,7 @@ EditNamedAreaDialog::EditNamedAreaDialog(QWidget* parent, Selection* selection)
     m_areaNameEdit = new KLineEdit(page);
     gridLayout->addWidget(m_areaNameEdit, 0, 1);
 
-    const QList<Sheet*> sheetList = m_selection->activeSheet()->doc()->map()->sheetList();
+    const QList<Sheet*> sheetList = m_selection->activeSheet()->map()->sheetList();
     for (int i = 0; i < sheetList.count(); ++i)
     {
         Sheet* sheet = sheetList.at(i);
@@ -285,8 +285,8 @@ void EditNamedAreaDialog::setAreaName(const QString& name)
 {
     m_initialAreaName = name;
     m_areaNameEdit->setText(name);
-    Sheet* sheet = m_selection->activeSheet()->doc()->namedAreaManager()->sheet(name);
-    const QString tmpName = m_selection->activeSheet()->doc()->namedAreaManager()->namedArea(name).name(sheet);
+    Sheet* sheet = m_selection->activeSheet()->map()->namedAreaManager()->sheet(name);
+    const QString tmpName = m_selection->activeSheet()->map()->namedAreaManager()->namedArea(name).name(sheet);
     m_cellRange->setText(tmpName);
 }
 
@@ -301,8 +301,8 @@ void EditNamedAreaDialog::slotOk()
 {
     if (m_areaNameEdit->text().isEmpty())
         return;
-    Sheet* sheet = m_selection->activeSheet()->doc()->map()->sheet(m_sheets->currentIndex());
-    Region region(m_cellRange->text(), m_selection->activeSheet()->doc()->map(), sheet);
+    Sheet* sheet = m_selection->activeSheet()->map()->sheet(m_sheets->currentIndex());
+    Region region(m_cellRange->text(), m_selection->activeSheet()->map(), sheet);
     if (!region.isValid())
         return;
 

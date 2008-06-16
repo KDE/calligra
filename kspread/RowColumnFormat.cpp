@@ -40,6 +40,7 @@
 #include "Canvas.h"
 #include "Doc.h"
 #include "Global.h"
+#include "Map.h"
 #include "Region.h"
 #include "Sheet.h"
 #include "SheetPrint.h"
@@ -149,7 +150,7 @@ QDomElement RowFormat::save(QDomDocument& doc, int yshift) const
     {
         kDebug(36003) <<"saving cell style of row" << d->row;
         QDomElement format;
-        style.saveXML(doc, format, d->sheet->doc()->styleManager());
+        style.saveXML(doc, format, d->sheet->map()->styleManager());
         row.appendChild( format );
     }
 
@@ -398,7 +399,7 @@ QDomElement ColumnFormat::save(QDomDocument& doc, int xshift) const
     {
         kDebug(36003) <<"saving cell style of column" << d->column;
         QDomElement format( doc.createElement( "format" ) );;
-        style.saveXML(doc, format, d->sheet->doc()->styleManager());
+        style.saveXML(doc, format, d->sheet->map()->styleManager());
         col.appendChild( format );
     }
 

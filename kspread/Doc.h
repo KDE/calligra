@@ -59,24 +59,12 @@ class KoDataCenter;
 
 namespace KSpread
 {
-class BindingManager;
-class ColumnFormat;
 class Damage;
-class DatabaseManager;
-class DependencyManager;
-class NamedAreaManager;
-class ValueParser;
-class ValueConverter;
-class ValueFormatter;
-class ValueCalc;
 class Sheet;
 class Doc;
 class View;
 class Map;
-class RecalcManager;
 class Region;
-class RowFormat;
-class StyleManager;
 class UndoAction;
 class LoadingInfo;
 
@@ -136,76 +124,6 @@ public:
    * @return the Map that belongs to this Document
    */
   Map *map () const;
-
-  /**
-   * \return a pointer to the binding manager
-   */
-  BindingManager* bindingManager() const;
-
-  /**
-   * \return a pointer to the database manager
-   */
-  DatabaseManager* databaseManager() const;
-
-  /**
-   * \return a pointer to the dependency manager
-   */
-  DependencyManager* dependencyManager() const;
-
-  /**
-   * \return a pointer to the named area manager
-   */
-  NamedAreaManager* namedAreaManager() const;
-
-  /**
-   * \return a pointer to the recalculation manager
-   */
-  RecalcManager* recalcManager() const;
-
-  /**
-   * @return the StyleManager of this Document
-   */
-  StyleManager *styleManager () const;
-
-  /**
-   * @return the value parser of this Document
-   */
-  ValueParser *parser () const;
-
-  /**
-   * @return the value formatter of this Document
-   */
-  ValueFormatter *formatter () const;
-
-  /**
-   * @return the value converter of this Document
-   */
-  ValueConverter *converter () const;
-
-  /**
-   * @return the value calculator of this Document
-   */
-  ValueCalc *calc () const;
-
-    /**
-     * \return the default row format
-     */
-    const ColumnFormat* defaultColumnFormat() const;
-
-    /**
-     * \return the default row format
-     */
-    const RowFormat* defaultRowFormat() const;
-
-    /**
-     * Sets the default column width to \p width.
-     */
-    void setDefaultColumnWidth( double width );
-
-    /**
-     * Sets the default row height to \p height.
-     */
-    void setDefaultRowHeight( double height );
 
   /**
    * \ingroup Operations

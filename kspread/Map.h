@@ -41,14 +41,26 @@ class KoOasisSettings;
 
 namespace KSpread
 {
+class BindingManager;
 class CalculationSettings;
+class ColumnFormat;
+class DatabaseManager;
+class DependencyManager;
 class Doc;
+class NamedAreaManager;
+class RecalcManager;
+class RowFormat;
 class Sheet;
 class Style;
+class StyleManager;
+class ValueParser;
+class ValueConverter;
+class ValueFormatter;
+class ValueCalc;
 
 /**
- * A map is a simple container for all sheets. Usually a complete map
- * is saved in one file.
+ * The "embedded document".
+ * The Map holds all the document data.
  */
 class KSPREAD_EXPORT Map : public QObject, public KoDataCenter
 {
@@ -74,9 +86,79 @@ public:
     virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter);
 
     /**
+     * \return a pointer to the binding manager
+     */
+    BindingManager* bindingManager() const;
+
+    /**
+     * \return a pointer to the database manager
+     */
+    DatabaseManager* databaseManager() const;
+
+    /**
+     * \return a pointer to the dependency manager
+     */
+    DependencyManager* dependencyManager() const;
+
+    /**
+     * \return a pointer to the named area manager
+     */
+    NamedAreaManager* namedAreaManager() const;
+
+    /**
+     * \return a pointer to the recalculation manager
+     */
+    RecalcManager* recalcManager() const;
+
+    /**
+     * @return the StyleManager of this Document
+     */
+    StyleManager* styleManager() const;
+
+    /**
+     * @return the value parser of this Document
+     */
+    ValueParser* parser() const;
+
+    /**
+     * @return the value formatter of this Document
+     */
+    ValueFormatter* formatter() const;
+
+    /**
+     * @return the value converter of this Document
+     */
+    ValueConverter* converter() const;
+
+    /**
+     * @return the value calculator of this Document
+     */
+    ValueCalc* calc() const;
+
+    /**
      * \return the calculation settings
      */
     CalculationSettings* calculationSettings() const;
+
+    /**
+     * \return the default row format
+     */
+    const ColumnFormat* defaultColumnFormat() const;
+
+    /**
+     * \return the default row format
+     */
+    const RowFormat* defaultRowFormat() const;
+
+    /**
+     * Sets the default column width to \p width.
+     */
+    void setDefaultColumnWidth( double width );
+
+    /**
+     * Sets the default row height to \p height.
+     */
+    void setDefaultRowHeight( double height );
 
   /**
    * \ingroup OpenDocument

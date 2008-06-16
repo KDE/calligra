@@ -319,7 +319,6 @@ bool GeneralTab::apply( CustomStyle * style )
 
 CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection)
     : KPageDialog(parent)
-    , m_doc(selection->activeSheet()->doc())
     , m_sheet(selection->activeSheet())
     , m_selection(selection)
     , m_style(0)
@@ -510,7 +509,6 @@ CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection)
 CellFormatDialog::CellFormatDialog(QWidget* parent, Selection* selection,
                                    CustomStyle* style, StyleManager* manager)
     : KPageDialog(parent)
-    , m_doc(selection->activeSheet()->doc())
     , m_sheet(selection->activeSheet())
     , m_selection(selection)
     , m_style(style)
@@ -640,8 +638,8 @@ void CellFormatDialog::initMembers()
   m_currency      = Currency(); // locale default
 
   Sheet* sheet = m_sheet;
-  defaultWidthSize  = sheet ? sheet->doc()->defaultColumnFormat()->width() : 0;
-  defaultHeightSize = sheet ? sheet->doc()->defaultRowFormat()->height() : 0;
+  defaultWidthSize  = sheet ? sheet->map()->defaultColumnFormat()->width() : 0;
+  defaultHeightSize = sheet ? sheet->map()->defaultRowFormat()->height() : 0;
 }
 
 bool CellFormatDialog::checkCircle( QString const & name, QString const & parent )
@@ -651,7 +649,7 @@ bool CellFormatDialog::checkCircle( QString const & name, QString const & parent
 
 KLocale* CellFormatDialog::locale() const
 {
-    return m_doc->map()->calculationSettings()->locale();
+    return m_sheet->map()->calculationSettings()->locale();
 }
 
 void CellFormatDialog::checkBorderRight(const Style& style)
@@ -858,7 +856,7 @@ void CellFormatDialog::slotApply()
   // We need to create a command that would act as macro,
   // but which would also ensure that updates are not painted until everything
   // is updated properly ...
-  m_doc->beginMacro( "Change Format" );
+  m_sheet->doc()->beginMacro( "Change Format" );
 
   if ( isMerged != positionPage->getMergedCellState() )
   {
@@ -916,7 +914,7 @@ void CellFormatDialog::slotApply()
     m_selection->canvas()->addCommand( command );
   }
 
-  m_doc->endMacro();
+  m_sheet->doc()->endMacro();
 }
 
 
@@ -1254,7 +1252,7 @@ void CellFormatPageFloat::slotChangeState()
             QDateTime tmpTime (QDate (1, 1, 1900), QTime (10, 35, 25), Qt::UTC);
 
 
-            ValueFormatter *fmt = dlg->getDoc()->formatter();
+            ValueFormatter *fmt = dlg->getSheet()->map()->formatter();
             list+= fmt->timeFormat(tmpTime, Format::Time1);
             list+= fmt->timeFormat(tmpTime, Format::Time2);
             list+= fmt->timeFormat(tmpTime, Format::Time3);
@@ -1315,7 +1313,7 @@ void CellFormatPageFloat::init()
     list+=i18n("System: ")+dlg->locale()->formatDate (QDate::currentDate(), KLocale::ShortDate);
     list+=i18n("System: ")+dlg->locale()->formatDate (QDate::currentDate(), KLocale::LongDate);
 
-    ValueFormatter *fmt = dlg->getDoc()->formatter();
+    ValueFormatter *fmt = dlg->getSheet()->map()->formatter();
 
     /*18-Feb-00*/
     list+=fmt->dateFormat( tmpDate, Format::Date1);
@@ -1554,7 +1552,7 @@ void CellFormatPageFloat::makeformat()
   {
     color = Qt::black;
   }
-  ValueFormatter *fmt = dlg->getDoc()->formatter();
+  ValueFormatter *fmt = dlg->getSheet()->map()->formatter();
   tmp = fmt->formatText(dlg->value, newFormatType, precision->value(),
                         floatFormat,
                         prefix->isEnabled() ? prefix->text() : QString(),
@@ -2090,7 +2088,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     m_indent->setMinimum(0.0);
     m_indent->setMaximum(400.0);
     m_indent->setLineStepPt(10.0);
-    m_indent->setUnit(dlg->getDoc()->unit());
+    m_indent->setUnit(dlg->getSheet()->doc()->unit());
     m_indent->changeValue(dlg->indent);
     grid2->addWidget(m_indent, 0, 0);
 
@@ -2100,15 +2098,15 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     gridWidth->setSpacing(0);
     gridWidth->addWidget(width, 0, 0);
     width->setValue ( dlg->widthSize );
-    width->setUnit( dlg->getDoc()->unit() );
+    width->setUnit( dlg->getSheet()->doc()->unit() );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
     dlg->widthSize = width->value();
 
     if ( dlg->isRowSelected )
         width->setEnabled(false);
 
-    double dw = dlg->getDoc()->unit().toUserValue(dlg->defaultWidthSize);
-    defaultWidth->setText(i18n("Default width (%1 %2)", dw, dlg->getDoc()->unitName()));
+    double dw = dlg->getSheet()->doc()->unit().toUserValue(dlg->defaultWidthSize);
+    defaultWidth->setText(i18n("Default width (%1 %2)", dw, dlg->getSheet()->doc()->unitName()));
     if ( dlg->isRowSelected )
         defaultWidth->setEnabled(false);
 
@@ -2118,15 +2116,15 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     gridHeight->setSpacing(0);
     gridHeight->addWidget(height, 0, 0);
     height->setValue( dlg->heightSize );
-    height->setUnit(  dlg->getDoc()->unit() );
+    height->setUnit(  dlg->getSheet()->doc()->unit() );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
     dlg->heightSize = height->value();
 
     if ( dlg->isColumnSelected )
         height->setEnabled(false);
 
-    double dh =  dlg->getDoc()->unit().toUserValue(dlg->defaultHeightSize);
-    defaultHeight->setText(i18n("Default height (%1 %2)", dh, dlg->getDoc()->unitName()));
+    double dh =  dlg->getSheet()->doc()->unit().toUserValue(dlg->defaultHeightSize);
+    defaultHeight->setText(i18n("Default height (%1 %2)", dh, dlg->getSheet()->doc()->unitName()));
     if ( dlg->isColumnSelected )
         defaultHeight->setEnabled(false);
 
@@ -2256,11 +2254,11 @@ void CellFormatPagePosition::apply( CustomStyle * style )
   {
     if ( (int) height->value() != (int) dlg->heightSize )
     {
-      dlg->getDoc()->setDefaultRowHeight( height->value() );
+      dlg->getSheet()->map()->setDefaultRowHeight( height->value() );
     }
     if ( (int) width->value() != (int) dlg->widthSize )
     {
-      dlg->getDoc()->setDefaultColumnWidth( width->value() );
+      dlg->getSheet()->map()->setDefaultColumnWidth( width->value() );
     }
   }
 }

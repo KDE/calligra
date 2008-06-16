@@ -529,7 +529,7 @@ void DependencyManager::Private::computeDependencies( const Cell& cell, const Fo
         if (token.type() == Token::Cell || token.type() == Token::Range)
         {
             // check for named area
-            if (sheet->doc()->namedAreaManager()->contains(token.text()))
+            if (sheet->map()->namedAreaManager()->contains(token.text()))
             {
                 // add cell as consumer of the named area
                 namedAreaConsumers[token.text()].append(cell);

@@ -30,8 +30,8 @@
 
 #include "CellStorage.h"
 #include "Database.h"
-#include "Doc.h"
 #include "Filter.h"
+#include "Map.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "ValueConverter.h"
@@ -90,7 +90,7 @@ void FilterPopup::Private::initGUI(FilterPopup* parent, const Cell& cell, const 
     {
         const Value value = isRowFilter ? sheet->cellStorage()->value(j, i)
                                         : sheet->cellStorage()->value(i, j);
-        const QString string = sheet->doc()->converter()->asString(value).asString();
+        const QString string = sheet->map()->converter()->asString(value).asString();
         if (!string.isEmpty())
             items.insert(string);
     }

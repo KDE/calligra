@@ -394,7 +394,7 @@ void CellStorage::setValue( int column, int row, const Value& value )
             CellDamage::Changes changes = CellDamage::Appearance | CellDamage::Binding;
             // Trigger a recalculation of the consuming cells, only if we are not
             // already in a recalculation process.
-            if ( !d->sheet->doc()->recalcManager()->isActive() )
+            if ( !d->sheet->map()->recalcManager()->isActive() )
                 changes |= CellDamage::Value;
             d->sheet->doc()->addDamage( new CellDamage( Cell( d->sheet, column, row ), changes ) );
         }
@@ -620,7 +620,7 @@ void CellStorage::insertColumns( int position, int number )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
-    Region providers = d->sheet->doc()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
+    Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
     d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 
@@ -678,7 +678,7 @@ void CellStorage::removeColumns( int position, int number )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
-    Region providers = d->sheet->doc()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
+    Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
     d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 
@@ -735,7 +735,7 @@ void CellStorage::insertRows( int position, int number )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
-    Region providers = d->sheet->doc()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
+    Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
     d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 
@@ -793,7 +793,7 @@ void CellStorage::removeRows( int position, int number )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
-    Region providers = d->sheet->doc()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
+    Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
     d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 
@@ -851,7 +851,7 @@ void CellStorage::removeShiftLeft( const QRect& rect )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
-    Region providers = d->sheet->doc()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
+    Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
     d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 
@@ -908,7 +908,7 @@ void CellStorage::insertShiftRight( const QRect& rect )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
-    Region providers = d->sheet->doc()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
+    Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
     d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 
@@ -966,7 +966,7 @@ void CellStorage::removeShiftUp( const QRect& rect )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
-    Region providers = d->sheet->doc()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
+    Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
     d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 
@@ -1023,7 +1023,7 @@ void CellStorage::insertShiftDown( const QRect& rect )
         d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
-    Region providers = d->sheet->doc()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
+    Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
     d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 

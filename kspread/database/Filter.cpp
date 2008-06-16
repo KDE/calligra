@@ -27,7 +27,7 @@
 
 #include "CellStorage.h"
 #include "Database.h"
-#include "Doc.h"
+#include "Map.h"
 #include "Region.h"
 #include "Sheet.h"
 #include "Value.h"
@@ -357,7 +357,7 @@ public:
         const Value value = database.orientation() == Qt::Vertical
                             ? sheet->cellStorage()->value(start + fieldNumber, index)
                             : sheet->cellStorage()->value(index, start + fieldNumber);
-        const QString testString = sheet->doc()->converter()->asString(value).asString();
+        const QString testString = sheet->map()->converter()->asString(value).asString();
         switch (operation)
         {
             case Match:

@@ -52,6 +52,7 @@
 #include <Doc.h>
 #include <Global.h>
 #include <Localization.h>
+#include <Map.h>
 #include <Selection.h>
 #include <Sheet.h>
 #include <Util.h>
@@ -679,7 +680,7 @@ QString ConsolidateDialog::evaluate( const QString& formula, Sheet* sheet )
 
   Value res = f->eval ();
   delete f;
-  result = sheet->doc()->converter()->asString (res).asString ();
+  result = sheet->map()->converter()->asString (res).asString ();
   return result;
 }
 

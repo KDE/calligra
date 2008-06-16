@@ -758,7 +758,7 @@ void OpenCalcImport::loadCondition( const Cell& cell, const KoXmlElement &proper
 void OpenCalcImport::loadOasisCondition(const Cell& cell, const KoXmlElement &property )
 {
     KoXmlElement elementItem( property );
-    StyleManager * manager = cell.sheet()->doc()->styleManager();
+    StyleManager * manager = cell.sheet()->map()->styleManager();
 
     Q3ValueList<Conditional> cond;
     while ( !elementItem.isNull() )
@@ -1446,8 +1446,8 @@ bool OpenCalcImport::parseBody( int numOfTables )
   int step = (int) ( 80 / numOfTables );
   int progress = 15;
 
-  m_doc->setDefaultColumnWidth( MM_TO_POINT( 22.7 ) );
-  m_doc->setDefaultRowHeight( MM_TO_POINT( 4.3 ) );
+  m_doc->map()->setDefaultColumnWidth( MM_TO_POINT( 22.7 ) );
+  m_doc->map()->setDefaultRowHeight( MM_TO_POINT( 4.3 ) );
   kDebug(30518) <<"Global Height:" << MM_TO_POINT( 4.3 ) <<", Global width:" << MM_TO_POINT( 22.7);
 
   while ( !sheet.isNull() )
@@ -1477,10 +1477,10 @@ bool OpenCalcImport::parseBody( int numOfTables )
     if ( defaultStyle )
     {
       kDebug(30518) <<"Copy default style to default cell";
-      table->doc()->styleManager()->defaultStyle()->merge( *defaultStyle );
+      table->map()->styleManager()->defaultStyle()->merge( *defaultStyle );
     }
-    table->doc()->setDefaultRowHeight( MM_TO_POINT( 4.3 ) );
-    table->doc()->setDefaultColumnWidth( MM_TO_POINT( 22.7 ) );
+    table->doc()->map()->setDefaultRowHeight( MM_TO_POINT( 4.3 ) );
+    table->doc()->map()->setDefaultColumnWidth( MM_TO_POINT( 22.7 ) );
 
     kDebug(30518) <<"Added table:" << t.attributeNS( ooNS::table,"name", QString() );
 
@@ -1625,7 +1625,7 @@ void OpenCalcImport::loadOasisAreaName( const KoXmlElement&body )
 
       const KSpread::Region region( point.translation );
 
-      m_doc->namedAreaManager()->insert(region, name);
+      m_doc->map()->namedAreaManager()->insert(region, name);
       kDebug(30518) <<"Area range:" << region.name();
     }
   }

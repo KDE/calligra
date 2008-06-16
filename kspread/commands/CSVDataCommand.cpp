@@ -22,7 +22,6 @@
 #include <klocale.h>
 
 #include "CalculationSettings.h"
-#include "Doc.h"
 #include "Map.h"
 #include "Sheet.h"
 #include "Value.h"
@@ -76,9 +75,9 @@ Value CSVDataCommand::newValue(Element* element, int col, int row, bool* parse, 
         value = m_value.element(colidx, rowidx);
         break;
     case KoCsvImportDialog::Date:
-        value = m_sheet->doc()->converter()->asDate(m_value.element(colidx, rowidx));
+        value = m_sheet->map()->converter()->asDate(m_value.element(colidx, rowidx));
     case KoCsvImportDialog::Currency:
-        value = m_sheet->doc()->converter()->asFloat(m_value.element(colidx, rowidx));
+        value = m_sheet->map()->converter()->asFloat(m_value.element(colidx, rowidx));
         value.setFormat(Value::fmt_Money);
         break;
     case KoCsvImportDialog::None:

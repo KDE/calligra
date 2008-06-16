@@ -59,6 +59,7 @@
 #include "CellStorage.h"
 #include "Condition.h"
 #include "Doc.h"
+#include "Map.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -145,9 +146,9 @@ public:
 
 
 CellView::CellView( SheetView* sheetView )
-    : d( new Private( sheetView->sheet()->doc()->styleManager()->defaultStyle(),
-                      sheetView->sheet()->doc()->defaultColumnFormat()->width(),
-                      sheetView->sheet()->doc()->defaultRowFormat()->height() ) )
+    : d( new Private( sheetView->sheet()->map()->styleManager()->defaultStyle(),
+                      sheetView->sheet()->map()->defaultColumnFormat()->width(),
+                      sheetView->sheet()->map()->defaultRowFormat()->height() ) )
 {
 }
 
@@ -180,9 +181,9 @@ CellView::CellView( SheetView* sheetView, int col, int row )
             d->style.merge( *style );
     }
 
-    if ( cell.width() != sheetView->sheet()->doc()->defaultColumnFormat()->width() )
+    if ( cell.width() != sheetView->sheet()->map()->defaultColumnFormat()->width() )
         d->width = cell.width();
-    if ( cell.height() != sheetView->sheet()->doc()->defaultRowFormat()->height() )
+    if ( cell.height() != sheetView->sheet()->map()->defaultRowFormat()->height() )
         d->height = cell.height();
 
     if (sheet->columnFormat(col)->isHiddenOrFiltered() ||
@@ -213,7 +214,7 @@ CellView::CellView( SheetView* sheetView, int col, int row )
     {
         // Format the value appropriately and set the display text.
         // The format of the resulting value is used below to determine the alignment.
-        value = cell.doc()->formatter()->formatText(cell.value(), d->style.formatType(),
+        value = sheet->map()->formatter()->formatText(cell.value(), d->style.formatType(),
                                                     d->style.precision(), d->style.floatFormat(),
                                                     d->style.prefix(), d->style.postfix(),
                                                     d->style.currency().symbol());

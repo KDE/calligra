@@ -1019,7 +1019,7 @@ void CellToolBase::activate(bool temporary)
     selection()->update();
 
     // Initialize cell style selection action.
-    const StyleManager* styleManager = selection()->activeSheet()->doc()->styleManager();
+    const StyleManager* styleManager = selection()->activeSheet()->map()->styleManager();
     static_cast<KSelectAction*>(this->action("setStyle"))->setItems(styleManager->styleNames());
 
     // Establish connections.
@@ -1065,9 +1065,9 @@ QWidget* CellToolBase::createOptionWidget()
     d->optionWidget.cancelButton->setIcon(KIcon("dialog-cancel"));
     d->optionWidget.applyButton->setIcon(KIcon("dialog-ok"));
 
-    connect(selection()->activeSheet()->doc()->namedAreaManager(), SIGNAL(namedAreaAdded(const QString&)),
+    connect(selection()->activeSheet()->map()->namedAreaManager(), SIGNAL(namedAreaAdded(const QString&)),
             d->locationComboBox, SLOT(slotAddAreaName(const QString&)));
-    connect(selection()->activeSheet()->doc()->namedAreaManager(), SIGNAL(namedAreaRemoved(const QString&)),
+    connect(selection()->activeSheet()->map()->namedAreaManager(), SIGNAL(namedAreaRemoved(const QString&)),
             d->locationComboBox, SLOT(slotRemoveAreaName(const QString&)));
     connect(d->optionWidget.applyButton, SIGNAL(clicked(bool)),
             d->optionWidget.userInput, SLOT(applyChanges()));
@@ -1380,10 +1380,11 @@ void CellToolBase::setDefaultStyle()
 void CellToolBase::styleDialog()
 {
     Doc* const doc = selection()->activeSheet()->doc();
-    StyleManagerDialog dialog(m_canvas->canvasWidget(), selection(), doc->styleManager());
+    StyleManager* const styleManager = selection()->activeSheet()->map()->styleManager();
+    StyleManagerDialog dialog(m_canvas->canvasWidget(), selection(), styleManager);
     dialog.exec();
 
-    static_cast<KSelectAction*>(action("stylemenu"))->setItems(doc->styleManager()->styleNames());
+    static_cast<KSelectAction*>(action("stylemenu"))->setItems(styleManager->styleNames());
     if (selection()->activeSheet())
         doc->addDamage(new CellDamage(selection()->activeSheet(), Region(1, 1, maxCol(), maxRow()), CellDamage::Appearance));
     m_canvas->canvasWidget()->update();
@@ -1392,7 +1393,7 @@ void CellToolBase::styleDialog()
 void CellToolBase::setStyle(const QString& stylename)
 {
     kDebug() << "CellToolBase::setStyle(" << stylename << ")";
-    if (selection()->activeSheet()->doc()->styleManager()->style(stylename)) {
+    if (selection()->activeSheet()->map()->styleManager()->style(stylename)) {
         StyleCommand* command = new StyleCommand();
         command->setSheet(selection()->activeSheet());
         command->setParentName(stylename);
@@ -1423,7 +1424,7 @@ void CellToolBase::createStyleFromCell()
             continue;
         }
 
-        if (selection()->activeSheet()->doc()->styleManager()->style(styleName) != 0) {
+        if (selection()->activeSheet()->map()->styleManager()->style(styleName) != 0) {
             KMessageBox::sorry(m_canvas->canvasWidget(), i18n("A style with this name already exists."));
             continue;
         }
@@ -1434,7 +1435,7 @@ void CellToolBase::createStyleFromCell()
     CustomStyle*  style = new CustomStyle(styleName);
     style->merge(cellStyle);
 
-    selection()->activeSheet()->doc()->styleManager()->insertStyle(style);
+    selection()->activeSheet()->map()->styleManager()->insertStyle(style);
     cell.setStyle(*style);
     QStringList functionList(static_cast<KSelectAction*>(action("stylemenu"))->items());
     functionList.push_back(styleName);
@@ -2663,18 +2664,18 @@ bool CellToolBase::paste()
         Q_ASSERT(!stylesReader.officeStyle().isNull());
 
         //load in first
-        selection()->activeSheet()->doc()->styleManager()->loadOasisStyleTemplate(stylesReader);
+        selection()->activeSheet()->map()->styleManager()->loadOasisStyleTemplate(stylesReader);
 
 //     // TODO check versions and mimetypes etc.
         selection()->activeSheet()->doc()->loadOasisCellValidation(body);
 
         // all <sheet:sheet> goes to workbook
-        bool result = selection()->activeSheet()->doc()->map()->loadOasis(body, context);
+        bool result = selection()->activeSheet()->map()->loadOasis(body, context);
 
         if (!result)
             return false;
 
-        selection()->activeSheet()->doc()->namedAreaManager()->loadOdf(body);
+        selection()->activeSheet()->map()->namedAreaManager()->loadOdf(body);
     }
 
     selection()->activeSheet()->doc()->emitBeginOperation(false);
@@ -3207,7 +3208,7 @@ bool CellToolBase::spellSwitchToOtherSheet()
         return false;
 
 // for optimization
-    QList<Sheet*> sheetList = selection()->activeSheet()->doc()->map()->sheetList();
+    QList<Sheet*> sheetList = selection()->activeSheet()->map()->sheetList();
 
     int curIndex = sheetList.lastIndexOf(d->spell.currentSpellSheet);
     ++curIndex;

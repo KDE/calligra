@@ -44,6 +44,7 @@
 #include <Doc.h>
 #include <Global.h>
 #include <Localization.h>
+#include "Map.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
 #include <Sheet.h>
@@ -108,7 +109,7 @@ void ResizeRow::slotDefault()
   Sheet* sheet = m_selection->activeSheet();
   if (!sheet)
     return;
-  double points = sheet->doc()->defaultRowFormat()->height();
+  double points = sheet->map()->defaultRowFormat()->height();
   m_pHeight->setValue(m_selection->activeSheet()->doc()->unit().toUserValue(points));
 }
 
@@ -168,7 +169,7 @@ void ResizeColumn::slotDefault()
   Sheet* sheet = m_selection->activeSheet();
   if (!sheet)
     return;
-  double points = sheet->doc()->defaultColumnFormat()->width();
+  double points = sheet->map()->defaultColumnFormat()->width();
   m_pWidth->setValue(m_selection->activeSheet()->doc()->unit().toUserValue(points));
 }
 

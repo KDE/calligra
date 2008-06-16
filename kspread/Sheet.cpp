@@ -198,8 +198,8 @@ Sheet::Sheet(Map* map, const QString& sheetName)
   d->rows.setAutoDelete( true );
   d->columns.setAutoDelete( true );
 
-  d->documentSize = QSizeF( KS_colMax * doc()->defaultColumnFormat()->width(),
-                            KS_rowMax * doc()->defaultRowFormat()->height() );
+  d->documentSize = QSizeF( KS_colMax * d->workbook->defaultColumnFormat()->width(),
+                            KS_rowMax * d->workbook->defaultRowFormat()->height() );
 
   d->hide = false;
   d->showGrid=true;
@@ -219,9 +219,9 @@ Sheet::Sheet(Map* map, const QString& sheetName)
     connect(this, SIGNAL(documentSizeChanged(const QSizeF&)), SIGNAL(visibleSizeChanged()));
     // CellStorage connections
     connect(d->cellStorage, SIGNAL(insertNamedArea(const Region&, const QString&)),
-            doc()->namedAreaManager(), SLOT(insert(const Region&, const QString&)));
+            d->workbook->namedAreaManager(), SLOT(insert(const Region&, const QString&)));
     connect(d->cellStorage, SIGNAL(namedAreaRemoved(const QString&)),
-            doc()->namedAreaManager(), SLOT(remove(const QString&)));
+            d->workbook->namedAreaManager(), SLOT(remove(const QString&)));
 }
 
 Sheet::Sheet(const Sheet& other)
@@ -446,8 +446,8 @@ void Sheet::setAutoCalculationEnabled(bool enable)
     if (enable == true)
     {
         const Region region(QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)), this);
-        doc()->dependencyManager()->regionChanged(region);
-        doc()->recalcManager()->recalcSheet(this);
+        map()->dependencyManager()->regionChanged(region);
+        map()->recalcManager()->recalcSheet(this);
     }
 }
 
@@ -492,7 +492,7 @@ const ColumnFormat* Sheet::columnFormat( int _column ) const
     if ( p != 0 )
         return p;
 
-    return doc()->defaultColumnFormat();
+    return map()->defaultColumnFormat();
 }
 
 const RowFormat* Sheet::rowFormat( int _row ) const
@@ -501,7 +501,7 @@ const RowFormat* Sheet::rowFormat( int _row ) const
     if ( p != 0 )
         return p;
 
-    return doc()->defaultRowFormat();
+    return map()->defaultRowFormat();
 }
 
 CellStorage* Sheet::cellStorage() const
@@ -707,7 +707,7 @@ ColumnFormat* Sheet::nonDefaultColumnFormat( int _column, bool force_creation )
     if ( p != 0 || !force_creation )
         return p;
 
-    p = new ColumnFormat( *doc()->defaultColumnFormat() );
+    p = new ColumnFormat( *map()->defaultColumnFormat() );
     p->setSheet( this );
     p->setColumn( _column );
 
@@ -723,7 +723,7 @@ RowFormat* Sheet::nonDefaultRowFormat( int _row, bool force_creation )
     if ( p != 0 || !force_creation )
         return p;
 
-    p = new RowFormat( *doc()->defaultRowFormat() );
+    p = new RowFormat( *map()->defaultRowFormat() );
     p->setSheet( this );
     p->setRow( _row );
 
@@ -1036,7 +1036,7 @@ void Sheet::changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef
                 case Token::Cell:
                 case Token::Range:
                 {
-                    if (doc()->namedAreaManager()->contains(token.text()))
+                    if (map()->namedAreaManager()->contains(token.text()))
                     {
                         newText.append(token.text()); // simply keep the area name
                         break;
@@ -1608,7 +1608,7 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
     if ( cutRegion.isValid() )
     {
       Cell destination( this, pasteArea.topLeft() );
-      this->doc()->dependencyManager()->regionMoved( cutRegion, destination );
+      map()->dependencyManager()->regionMoved( cutRegion, destination );
     }
   }
 
@@ -2379,7 +2379,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
         }
         else if ( styleIndex )
         {
-            RowFormat rowFormat(*doc()->defaultRowFormat());
+            RowFormat rowFormat(*map()->defaultRowFormat());
             rowFormat.setSheet( this );
             rowFormat.setRow( styleIndex );
             QDomElement e = rowFormat.save( dd );
@@ -2407,7 +2407,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
         }
         else if ( styleIndex )
         {
-            ColumnFormat columnFormat(*doc()->defaultColumnFormat());
+            ColumnFormat columnFormat(*map()->defaultColumnFormat());
             columnFormat.setSheet( this );
             columnFormat.setColumn( styleIndex );
             QDomElement e = columnFormat.save( dd );
@@ -3016,7 +3016,7 @@ void Sheet::loadOasisInsertStyles( const Styles& autoStyles,
     const QList<QString> styleNames = styleRegions.keys();
     for ( int i = 0; i < styleNames.count(); ++i )
     {
-        if ( !autoStyles.contains( styleNames[i] ) && !doc()->styleManager()->style( styleNames[i] ) )
+        if ( !autoStyles.contains( styleNames[i] ) && !map()->styleManager()->style( styleNames[i] ) )
         {
             kWarning(36003) << "\t" << styleNames[i] << " not used";
             continue;
@@ -3035,7 +3035,7 @@ void Sheet::loadOasisInsertStyles( const Styles& autoStyles,
             }
             else
             {
-                const CustomStyle* namedStyle = doc()->styleManager()->style( styleNames[i] );
+                const CustomStyle* namedStyle = map()->styleManager()->style( styleNames[i] );
                 kDebug(36003) <<"\tcustom:" << namedStyle->name() <<" at" << rect;
                 Style style;
                 style.setDefault(); // "overwrite" existing style
@@ -3698,7 +3698,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
           {
               KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisStyle
               const QString name = style.saveOasis(currentDefaultCellStyle, mainStyles,
-                                                                doc()->styleManager());
+                                                                map()->styleManager());
               xmlWriter.addAttribute("table:default-cell-style-name", name);
           }
 
@@ -3783,7 +3783,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             {
               KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
               const QString name = style.saveOasis(currentDefaultCellStyle, mainStyles,
-                                                   doc()->styleManager());
+                                                   map()->styleManager());
               xmlWriter.addAttribute("table:default-cell-style-name", name);
             }
             if ( row->isHidden() ) // never true for the default row
@@ -3817,7 +3817,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             {
                 KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
                 const QString name = style.saveOasis(currentDefaultCellStyle, mainStyles,
-                                                     doc()->styleManager());
+                                                     map()->styleManager());
                 xmlWriter.addAttribute("table:default-cell-style-name", name);
             }
             if ( row->isHidden() ) // never true for the default row
@@ -4537,7 +4537,7 @@ void Sheet::printDebug()
                 stream << cell.value().type();
                 cellDescr += valueType.rightJustified( 7 );
                 cellDescr += " | ";
-                cellDescr += doc()->converter()->asString( cell.value() ).asString().rightJustified( 5 );
+                cellDescr += map()->converter()->asString( cell.value() ).asString().rightJustified( 5 );
                 cellDescr += QString("  [%1]").arg( cell.userInput() );
                 kDebug(36001) << cellDescr;
             }

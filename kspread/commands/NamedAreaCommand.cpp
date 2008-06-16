@@ -21,7 +21,6 @@
 
 #include "klocale.h"
 
-#include "Doc.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
 #include "Sheet.h"
@@ -58,7 +57,7 @@ bool NamedAreaCommand::preProcessing()
     if (m_reverse)
         return true;
 
-    const Region namedArea = m_sheet->doc()->namedAreaManager()->namedArea(m_areaName);
+    const Region namedArea = m_sheet->map()->namedAreaManager()->namedArea(m_areaName);
     if (!namedArea.isEmpty())
     {
         if (namedArea == *this)
@@ -75,14 +74,14 @@ bool NamedAreaCommand::mainProcessing()
     if (!m_reverse)
     {
         if (!m_oldArea.isEmpty())
-            m_sheet->doc()->namedAreaManager()->remove(m_areaName);
-        m_sheet->doc()->namedAreaManager()->insert(*this, m_areaName);
+            m_sheet->map()->namedAreaManager()->remove(m_areaName);
+        m_sheet->map()->namedAreaManager()->insert(*this, m_areaName);
     }
     else
     {
-        m_sheet->doc()->namedAreaManager()->remove(m_areaName);
+        m_sheet->map()->namedAreaManager()->remove(m_areaName);
         if (!m_oldArea.isEmpty())
-            m_sheet->doc()->namedAreaManager()->insert(m_oldArea, m_areaName);
+            m_sheet->map()->namedAreaManager()->insert(m_oldArea, m_areaName);
     }
     return true;
 }

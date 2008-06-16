@@ -1351,7 +1351,7 @@ void Formula::compile( const Tokens& tokens ) const
 
 bool Formula::isNamedArea( const QString& expr ) const
 {
-    return d->sheet ? d->sheet->doc()->namedAreaManager()->contains(expr) : false;
+    return d->sheet ? d->sheet->map()->namedAreaManager()->contains(expr) : false;
 }
 
 
@@ -1373,8 +1373,9 @@ Value Formula::eval() const
   QVector<Value> args;
 
   const Doc *doc = d->sheet ? d->sheet->doc() : new Doc();
-  const ValueConverter* converter = doc->converter();
-  ValueCalc* calc = doc->calc();
+  const Map* map = d->sheet ? d->sheet->map() : doc->map();
+  const ValueConverter* converter = map->converter();
+  ValueCalc* calc = map->calc();
 
   Function* function;
   FuncExtra fe;

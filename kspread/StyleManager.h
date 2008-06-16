@@ -35,7 +35,7 @@ class KoOdfStylesReader;
 namespace KSpread
 {
 class Conditions;
-class Doc;
+class Map;
 class StyleDialog;
 
 /**
@@ -56,7 +56,7 @@ public:
   bool loadXML( KoXmlElement const & styles );
 
   void saveOasis( KoGenStyles &mainStyles );
-  void loadOasisStyleTemplate(  KoOdfStylesReader& stylesReader, Doc* doc = 0 );
+  void loadOasisStyleTemplate(KoOdfStylesReader& stylesReader, Map* map = 0);
 
   CustomStyle * defaultStyle() const { return m_defaultStyle; }
 

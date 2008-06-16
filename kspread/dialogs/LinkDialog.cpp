@@ -25,7 +25,7 @@
 #include "LinkDialog.h"
 
 #include "Cell.h"
-#include "Doc.h"
+#include "Map.h"
 #include "NamedAreaManager.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -168,8 +168,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
         d->cellLink->addItem( cell.fullName() );
     }
 
-    const Doc *doc = selection->activeSheet()->doc();
-    const NamedAreaManager *manager = doc->namedAreaManager();
+    const NamedAreaManager *manager = selection->activeSheet()->map()->namedAreaManager();
     d->cellLink->addItems( manager->areaNames() );
 
     d->cellLink->setCurrentText( "" );

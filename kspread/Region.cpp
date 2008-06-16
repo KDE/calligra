@@ -75,7 +75,7 @@ Region::Region(const QString& string, const Map* map, Sheet* fallbackSheet)
     QString sRegion = *it;
 
     // check for a named area first
-    const Region namedAreaRegion = map ? map->doc()->namedAreaManager()->namedArea(sRegion) : Region();
+    const Region namedAreaRegion = map ? map->namedAreaManager()->namedArea(sRegion) : Region();
     if (namedAreaRegion.isValid())
     {
         ConstIterator end(namedAreaRegion.d->cells.constEnd());

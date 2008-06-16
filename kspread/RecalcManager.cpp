@@ -88,7 +88,7 @@ void RecalcManager::Private::cellsToCalculate( const Region& region )
         return;
 
     // retrieve the cell depths
-    QHash<Cell, int> depths = map->doc()->dependencyManager()->depths();
+    QHash<Cell, int> depths = map->dependencyManager()->depths();
 
     // create the cell map ordered by depth
     QSet<Cell> cells;
@@ -104,7 +104,7 @@ void RecalcManager::Private::cellsToCalculate( const Region& region )
 void RecalcManager::Private::cellsToCalculate( Sheet* sheet )
 {
     // retrieve the cell depths
-    QHash<Cell, int> depths = map->doc()->dependencyManager()->depths();
+    QHash<Cell, int> depths = map->dependencyManager()->depths();
 
     // NOTE Stefan: It's necessary, that the cells are filled in row-wise;
     //              beginning with the top left; ending with the bottom right.
@@ -159,7 +159,7 @@ void RecalcManager::Private::cellsToCalculate( const Region& region, QSet<Cell>&
                     cells.insert( cell );
 
                 // add its consumers to the list
-                cellsToCalculate( map->doc()->dependencyManager()->consumingRegion( cell ), cells );
+                cellsToCalculate( map->dependencyManager()->consumingRegion( cell ), cells );
             }
         }
     }

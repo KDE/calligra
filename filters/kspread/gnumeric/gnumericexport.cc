@@ -1072,7 +1072,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
     </gmr:Name>
   </gmr:Names>
     */
-    const QList<QString> namedAreas = ksdoc->namedAreaManager()->areaNames();
+    const QList<QString> namedAreas = ksdoc->map()->namedAreaManager()->areaNames();
     if (namedAreas.count() > 0)
     {
         Sheet* sheet = 0;
@@ -1080,10 +1080,10 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
         QDomElement areaNames = gnumeric_doc.createElement("gmr:Names");
         for (int i = 0; i < namedAreas.count(); ++i)
         {
-            sheet = ksdoc->namedAreaManager()->sheet(namedAreas[i]);
+            sheet = ksdoc->map()->namedAreaManager()->sheet(namedAreas[i]);
             if (!sheet)
                 continue;
-            range = ksdoc->namedAreaManager()->namedArea(namedAreas[i]).firstRange();
+            range = ksdoc->map()->namedAreaManager()->namedArea(namedAreas[i]).firstRange();
             QDomElement areaName = gnumeric_doc.createElement("gmr:Name");
             QDomElement areaNameElement = gnumeric_doc.createElement("gmr:name");
             areaNameElement.appendChild(gnumeric_doc.createTextNode(namedAreas[i]));

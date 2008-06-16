@@ -103,12 +103,12 @@ AutoFillSequenceItem::AutoFillSequenceItem(const Cell& cell)
     }
     else if (cell.isDate())
     {
-        m_value = cell.doc()->converter()->asDate(cell.value());
+        m_value = cell.sheet()->map()->converter()->asDate(cell.value());
         m_type = VALUE;
     }
     else if (cell.isTime() || cell.value().format() == Value::fmt_DateTime)
     {
-        m_value = cell.doc()->converter()->asDateTime(cell.value());
+        m_value = cell.sheet()->map()->converter()->asDateTime(cell.value());
         m_type = VALUE;
     }
     else if (cell.value().isNumber())
@@ -710,15 +710,15 @@ static void fillSequence(const QList<Cell>& _srcList,
         }
         else if (value.format() == Value::fmt_Time)
         {
-            const Value timeValue = cell.doc()->converter()->asTime(value);
+            const Value timeValue = cell.sheet()->map()->converter()->asTime(value);
             cell.setValue(timeValue);
-            cell.setUserInput(cell.doc()->converter()->asString(timeValue).asString());
+            cell.setUserInput(cell.sheet()->map()->converter()->asString(timeValue).asString());
         }
         else if (value.format() == Value::fmt_Date)
         {
-            const Value dateValue = cell.doc()->converter()->asDate(value);
+            const Value dateValue = cell.sheet()->map()->converter()->asDate(value);
             cell.setValue(dateValue);
-            cell.setUserInput(cell.doc()->converter()->asString(dateValue).asString());
+            cell.setUserInput(cell.sheet()->map()->converter()->asString(dateValue).asString());
         }
         else if (value.type() == Value::Boolean ||
                  value.type() == Value::Complex ||
@@ -726,7 +726,7 @@ static void fillSequence(const QList<Cell>& _srcList,
                  value.type() == Value::Integer)
         {
             cell.setValue(value);
-            cell.setUserInput(cell.doc()->converter()->asString(value).asString());
+            cell.setUserInput(cell.sheet()->map()->converter()->asString(value).asString());
         }
         else // if (value.type() == Value::String)
         {

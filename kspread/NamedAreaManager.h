@@ -36,7 +36,7 @@ class KoXmlWriter;
 
 namespace KSpread
 {
-class Doc;
+class Map;
 class Region;
 
 class KSPREAD_EXPORT NamedAreaManager : public QObject
@@ -47,7 +47,7 @@ public:
     /**
      * Constructor.
      */
-    NamedAreaManager(const Doc* doc);
+    NamedAreaManager(const Map* map);
 
     /**
      * Destructor.

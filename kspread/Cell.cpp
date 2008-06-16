@@ -399,7 +399,7 @@ QString Cell::displayText() const
         string = userInput();
     else
     {
-        string = doc()->formatter()->formatText(value(), style.formatType(), style.precision(),
+        string = sheet()->map()->formatter()->formatText(value(), style.formatType(), style.precision(),
                                                 style.floatFormat(), style.prefix(),
                                                 style.postfix(), style.currency().symbol()).asString();
     }
@@ -528,7 +528,7 @@ QString Cell::encodeFormula(bool fixedReferences) const
             case Token::Cell:
             case Token::Range:
             {
-                if (doc()->namedAreaManager()->contains(token.text()))
+                if (sheet()->map()->namedAreaManager()->contains(token.text()))
                 {
                     result.append(token.text()); // simply keep the area name
                     break;
@@ -805,7 +805,7 @@ void Cell::parseUserInput( const QString& text )
     else
     {
         // Parses the text and return the appropriate value.
-        value = doc()->parser()->parse( text );
+        value = sheet()->map()->parser()->parse( text );
 
 #if 0
         // Parsing as time acts like an autoformat: we even change the input text
@@ -927,7 +927,7 @@ QDomElement Cell::save(QDomDocument& doc, int xOffset, int yOffset, bool era)
     // Save the formatting information
     //
     QDomElement formatElement( doc.createElement( "format" ) );
-    style().saveXML(doc, formatElement, sheet()->doc()->styleManager());
+    style().saveXML(doc, formatElement, sheet()->map()->styleManager());
     if ( formatElement.hasChildNodes() || formatElement.attributes().length() ) // don't save empty tags
         cell.appendChild( formatElement );
 
@@ -1087,7 +1087,7 @@ QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mai
         currentCellStyle = KoGenStyle( KoGenStyle::StyleAutoTableCell, "table-cell" );
         conditions.saveOasisConditions( currentCellStyle );
     }
-    return style().saveOasis( currentCellStyle, mainStyles, d->sheet->doc()->styleManager() );
+    return style().saveOasis( currentCellStyle, mainStyles, d->sheet->map()->styleManager() );
 }
 
 
@@ -1353,7 +1353,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOdfLoadingContext& odfConte
             if (ok)
                 setValue(value);
             if (!isFormula && userInput().isEmpty())
-                setUserInput(doc()->converter()->asString(value).asString());
+                setUserInput(sheet()->map()->converter()->asString(value).asString());
         }
 
         // currency value
@@ -1385,7 +1385,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOdfLoadingContext& odfConte
                 value.setFormat(Value::fmt_Percent);
                 setValue(value);
                 if (!isFormula && userInput().isEmpty())
-                    setUserInput(doc()->converter()->asString(value).asString());
+                    setUserInput(sheet()->map()->converter()->asString(value).asString());
 // FIXME Stefan: Should be handled by Value::Format. Verify and remove!
 #if 0
                 Style style;
@@ -1774,7 +1774,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
     if ( !conditionsElement.isNull())
     {
         Conditions conditions;
-        conditions.loadConditions( doc()->styleManager(), conditionsElement );
+        conditions.loadConditions(sheet()->map()->styleManager(), conditionsElement);
         if ( !conditions.isEmpty() )
             setConditions( conditions );
     }
