@@ -25,6 +25,7 @@
 #include <KoLineBorder.h>
 #include <KoShapeLayer.h>
 #include <KoImageData.h>
+#include <KoImageCollection.h>
 #include <KoColorBackground.h>
 #include <KoGradientBackground.h>
 #include <KoPatternBackground.h>
@@ -404,10 +405,15 @@ void WMFImportParser::appendBrush( KoShape& obj )
             break;
         case Qt::TexturePattern:
         {
-            KoPatternBackground * bg = new KoPatternBackground();
-            bg->setPattern( mBrush.textureImage() );
-            bg->setMatrix( mBrush.matrix() );
-            obj.setBackground( bg );
+            KoDataCenter * dataCenter = mDoc->dataCenterMap().value( "ImageCollewction", 0 );
+            KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>( dataCenter );
+            if( imageCollection )
+            {
+                KoPatternBackground * bg = new KoPatternBackground( imageCollection );
+                bg->setPattern( mBrush.textureImage() );
+                bg->setMatrix( mBrush.matrix() );
+                obj.setBackground( bg );
+            }
             break;
         }
         case Qt::LinearGradientPattern:

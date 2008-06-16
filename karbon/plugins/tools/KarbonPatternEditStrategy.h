@@ -25,6 +25,7 @@
 
 class KoShape;
 class KoViewConverter;
+class KoImageCollection;
 
 class QPainter;
 class QUndoCommand;
@@ -34,7 +35,7 @@ class KarbonPatternEditStrategy
 {
 public:
     /// constructs an edit strategy working on the given shape
-    explicit KarbonPatternEditStrategy( KoShape * shape );
+    explicit KarbonPatternEditStrategy( KoShape * shape, KoImageCollection * imageCollection );
 
     /// destroy the edit strategy
     ~KarbonPatternEditStrategy();
@@ -93,6 +94,7 @@ private:
     bool m_editing;            ///< the edit mode flag
     double m_normalizedLength; ///< the normalized direction vector length
     QPointF m_origin;          ///< the pattern handle origin
+    KoImageCollection * m_imageCollection;
     KoPatternBackground m_oldFill;
     KoPatternBackground m_newFill;
 };

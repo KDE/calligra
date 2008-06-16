@@ -31,6 +31,8 @@
 #include <KoPointerEvent.h>
 #include <KoPattern.h>
 #include <KoPatternBackground.h>
+#include <KoImageCollection.h>
+#include <KoShapeController.h>
 
 #include <QtGui/QPainter>
 #include <QtGui/QWidget>
@@ -152,11 +154,14 @@ void KarbonPatternTool::initialize()
     }
     m_patterns.clear();
 
+    KoDataCenter * dataCenter = m_canvas->shapeController()->dataCenter( "ImageCollection" );
+    KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>( dataCenter );
+
     foreach( KoShape *shape, m_canvas->shapeManager()->selection()->selectedShapes() )
     {
         if( dynamic_cast<KoPatternBackground*>( shape->background() ) )
         {
-            m_patterns.append( new KarbonPatternEditStrategy( shape ) );
+            m_patterns.append( new KarbonPatternEditStrategy( shape, imageCollection ) );
             m_patterns.last()->repaint();
         }
     }
@@ -222,10 +227,16 @@ void KarbonPatternTool::patternSelected( QTableWidgetItem * item )
     if( ! currentPattern || ! currentPattern->pattern()->valid() )
         return;
 
-    QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
-    KoPatternBackground * newFill = new KoPatternBackground( currentPattern->pattern()->img() );
-    m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newFill ) );
-    initialize();
+    KoDataCenter * dataCenter = m_canvas->shapeController()->dataCenter( "ImageCollection" );
+    KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>( dataCenter );
+    if( imageCollection )
+    {
+        QList<KoShape*> selectedShapes = m_canvas->shapeManager()->selection()->selectedShapes();
+        KoPatternBackground * newFill = new KoPatternBackground( imageCollection );
+        newFill->setPattern( currentPattern->pattern()->img() );
+        m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newFill ) );
+        initialize();
+    }
 }
 
 #include "KarbonPatternTool.moc"

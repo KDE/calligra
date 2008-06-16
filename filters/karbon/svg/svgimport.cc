@@ -46,6 +46,7 @@
 #include <KoUnit.h>
 #include <KoGlobal.h>
 #include <KoImageData.h>
+#include <KoImageCollection.h>
 #include <KoZoomHandler.h>
 #include <pictureshape/PictureShape.h>
 #include <pathshapes/rectangle/KoRectangleShape.h>
@@ -1148,10 +1149,15 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
             break;
         case Qt::TexturePattern:
         {
-            KoPatternBackground * bg = new KoPatternBackground();
-            bg->setPattern( gc->fill.textureImage() );
-            bg->setMatrix( gc->fill.matrix() );
-            obj->setBackground( bg );
+            KoDataCenter * dataCenter = m_document->dataCenterMap().value( "ImageCollewction", 0 );
+            KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>( dataCenter );
+            if( imageCollection )
+            {
+                KoPatternBackground * bg = new KoPatternBackground( imageCollection );
+                bg->setPattern( gc->fill.textureImage() );
+                bg->setMatrix( gc->fill.matrix() );
+                obj->setBackground( bg );
+            }
             break;
         }
         case Qt::LinearGradientPattern:

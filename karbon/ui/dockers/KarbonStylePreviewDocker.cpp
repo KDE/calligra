@@ -43,6 +43,8 @@
 #include <KoColorSpaceRegistry.h>
 #include <KoColorBackground.h>
 #include <KoPatternBackground.h>
+#include <KoImageCollection.h>
+#include <KoShapeController.h>
 
 #include <klocale.h>
 
@@ -354,9 +356,15 @@ void KarbonStylePreviewDocker::updatePattern( QTableWidgetItem * item )
     if( ! selectedShapes.count() )
         return;
 
-    KoShapeBackground * fill = new KoPatternBackground( currentPattern->pattern()->img() );
-    m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, fill  ) );
-    selectionChanged();
+    KoDataCenter * dataCenter = m_canvas->shapeController()->dataCenter( "ImageCollection" );
+    KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>( dataCenter );
+    if( imageCollection )
+    {
+        KoPatternBackground * fill = new KoPatternBackground( imageCollection );
+        fill->setPattern( currentPattern->pattern()->img() );
+        m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, fill  ) );
+        selectionChanged();
+    }
 }
 
 void KarbonStylePreviewDocker::updateFillRule( Qt::FillRule fillRule )

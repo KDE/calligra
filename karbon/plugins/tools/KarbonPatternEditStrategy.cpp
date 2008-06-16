@@ -30,8 +30,9 @@
 
 int KarbonPatternEditStrategy::m_handleRadius = 3;
 
-KarbonPatternEditStrategy::KarbonPatternEditStrategy( KoShape * shape )
+KarbonPatternEditStrategy::KarbonPatternEditStrategy( KoShape * shape, KoImageCollection * imageCollection )
 : m_shape( shape ),m_selectedHandle( -1 ), m_editing( false )
+, m_imageCollection( imageCollection ), m_oldFill( imageCollection ), m_newFill( imageCollection )
 {
     // cache the shapes transformation matrix
     m_matrix = m_shape->absoluteTransformation( 0 );
@@ -150,7 +151,7 @@ QUndoCommand * KarbonPatternEditStrategy::createCommand()
     if( fill )
     {
         *fill = m_oldFill;
-        KoPatternBackground * newFill = new KoPatternBackground();
+        KoPatternBackground * newFill = new KoPatternBackground( m_imageCollection );
         *newFill = m_newFill;
         return new KoShapeBackgroundCommand( m_shape, newFill, 0 );
     }
@@ -202,7 +203,9 @@ KoPatternBackground KarbonPatternEditStrategy::updatedBackground()
     matrix.translate( m_handles[center].x(), m_handles[center].y() );
     matrix.rotate( angle );
 
-    KoPatternBackground newFill = m_oldFill;
+    KoPatternBackground newFill( m_imageCollection );
+    newFill = m_oldFill;
     newFill.setMatrix( matrix );
+
     return newFill;
 }

@@ -43,6 +43,7 @@
 #include <simpletextshape/SimpleTextShape.h>
 #include <pictureshape/PictureShape.h>
 #include <KoImageData.h>
+#include <KoImageCollection.h>
 #include <KoPathPoint.h>
 #include <KoZoomHandler.h>
 #include <KoPatternBackground.h>
@@ -567,10 +568,16 @@ void KarbonImport::loadPattern( KoShape * shape, const KoXmlElement &element )
         kWarning() << "Failed to load pattern image" << fname;
         return;
     }
-    KoPatternBackground * newFill = new KoPatternBackground();
-    newFill->setPattern( img.mirrored( false, true ) );
-    newFill->setMatrix( m );
-    shape->setBackground( newFill );
+
+    KoDataCenter * dataCenter = m_document.dataCenterMap().value( "ImageCollewction", 0 );
+    KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>( dataCenter );
+    if( imageCollection )
+    {
+        KoPatternBackground * newFill = new KoPatternBackground( imageCollection );
+        newFill->setPattern( img.mirrored( false, true ) );
+        newFill->setMatrix( m );
+        shape->setBackground( newFill );
+    }
 }
 
 QVector<qreal> KarbonImport::loadDashes( const KoXmlElement& element )
