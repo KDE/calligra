@@ -20,6 +20,9 @@
 #ifndef FILTERKPR2ODF_H
 #define FILTERKPR2ODF_H
 
+//Qt's includes
+#include <QHash>
+
 //KOffice includes
 #include <KoDom.h>
 #include <KoFilter.h>
@@ -50,7 +53,8 @@ private:
      //Styles functions
     const QString createPageStyle( const KoXmlElement& page );
     const QString createGradientStyle( const KoXmlElement& page );
-
+    const QString createPageLayout();//we use more than one tag, better load them from m_mainDoc
+    const QString createMasterPageStyle();//same as above
 
     KoXmlDocument m_mainDoc;//from KPR
     KoXmlDocument m_documentInfo;//from KPR

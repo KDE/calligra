@@ -115,6 +115,12 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
     //Create the styles.xml file
     m_styles.saveOdfStylesDotXml( output, manifest );
 
+    //Create settings.xml
+//     output->open( "settings.xml" );
+//     KoStoreDevice device( output );
+//     odfWriter.createOasisXmlWriter( ,"office:document-settings" );
+//     output->close();
+
     //Create the meta.xml file
     output->open( "meta.xml" );
     KoDocumentInfo* meta = new KoDocumentInfo();
@@ -184,12 +190,13 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
     const KoXmlNode backgrounds = m_mainDoc.namedItem("DOC").namedItem( "BACKGROUND" );
     const KoXmlNode objects = m_mainDoc.namedItem("DOC").namedItem( "OBJECTS" );
     const KoXmlNode paper = m_mainDoc.namedItem("DOC").namedItem( "PAPER" );
-    m_pageHeight = paper.toElement().attribute("ptHeight").toFloat();
-    //TODO: save paper Styles
+    m_pageHeight = paper.toElement().attribute( "ptHeight" ).toFloat();
 
     //Go to the first background, there might be missing backgrounds
     KoXmlElement pageBackground = backgrounds.firstChild().toElement();
     //Parse pages
+    //create the master page style
+    const QString masterPageStyleName( createMasterPageStyle() );
     int currentPage = 1;
     //The pages are all stored inside PAGETITLES
     //and all notes in PAGENOTES
@@ -203,8 +210,8 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
         content->addAttribute( "draw:name", title.toElement().attribute("title") );
         content->addAttribute( "draw:style-name", createPageStyle( pageBackground ) );
         pageBackground = pageBackground.nextSibling().toElement();//next background
-        content->addAttribute( "draw:id", currentPage );
-        //FIXME:missing draw:master-page-name
+        content->addAttribute( "draw:id", QString( "page%1").arg( currentPage ) );
+        content->addAttribute( "draw:master-page-name", masterPageStyleName );
 
         //convert the objects (text, images, charts...) in this page
         convertObjects( content, objects, currentPage );
@@ -215,7 +222,7 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
         content->endElement();//draw:page-thumbnail
         content->startElement( "draw:frame" );//FIXME: add drawing attributes
         content->startElement( "draw:text-box" );
-        QStringList noteTextList = note.toElement().attribute("note").split("\n");
+        QStringList noteTextList = note.toElement().attribute( "note" ).split("\n");
 
         foreach( QString string, noteTextList ) {
             content->startElement( "text:p" );

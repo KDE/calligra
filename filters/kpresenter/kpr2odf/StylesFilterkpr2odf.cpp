@@ -19,7 +19,9 @@
 
 //Qt's includes
 #include <QTime>
-#include <QHash>
+
+//KOffice includes
+#include <KoUnit.h>
 
 const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
 {
@@ -35,6 +37,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         //if BACKMASTER is not found we assume it's true
         style.addProperty( "presentation:background-visible", true );
         style.addProperty( "presentation:background-objects-visible", true );
+        style.addProperty( "draw:fill", "none" );
     }
     if( !page.hasChildNodes() )
     {
@@ -56,6 +59,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         else
         {
             //background is a gradient
+            style.addAttribute( "draw:fill", "gradient" );
             style.addProperty( "draw:fill-gradient-name", createGradientStyle( page ) );
         }
     }
@@ -64,19 +68,35 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         //it's a picture instead
         QString pictureName = getPictureNameFromKey( page.namedItem( "BACKPICTUREKEY" ).toElement() );
         KoXmlElement backView = page.namedItem( "BACKVIEW" ).toElement();
-        //FIXME:how do we represent this?
+        style.addProperty( "draw:fill", "bitmap" );
+
+        //The image is specified by a draw:fill-image style in draw:fill-image-name
+        KoGenStyle drawFillImage = KoGenStyle::KoGenStyle( KoGenStyle::StyleFillImage );
+
+        //default values
+        drawFillImage.addAttribute( "xlink:href", "#Picture/" + m_pictures[ pictureName ] );
+        drawFillImage.addAttribute( "xlink:type", "simple" );
+        drawFillImage.addAttribute( "xlink:show", "embed" );
+        drawFillImage.addAttribute( "xlink:actuate", "onLoad" );
+        QString repeat;
         if( backView.isNull() )
         {
             //the picture is just centered
+            repeat = "no-repeat";
         }
         else if( backView.attribute( "value" ) == "0"  )
         {
-            //the picture is scaled
+            //the picture is stretched
+            repeat = "stretch";
         }
         else if( backView.attribute( "value" ) == "2" )
         {
             //picture is in mosaic
+            repeat = "repeat";
         }
+        style.addProperty( "style:repeat", repeat );
+
+        style.addProperty( "draw:fill-name", m_styles.lookup( drawFillImage ) );
     }
 
     //Add the duration of the page effect
@@ -158,7 +178,9 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
 
 const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientElement )
 {
-    KoGenStyle style = KoGenStyle::KoGenStyle( KoGenStyle::StyleGradient, "drawing-page" ) ;
+    KoGenStyle style = KoGenStyle::KoGenStyle( KoGenStyle::StyleGradient, "drawing-page" );
+    style.setAutoStyleInStylesDotXml( true );
+
     //KPresenter didn't allow to customize those attributes
     style.addAttribute( "draw:start-intensity", "100%" );
     style.addAttribute( "draw:end-intensity", "100%" );
@@ -233,4 +255,38 @@ const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientEl
 //         m_angle = "0";
 //         break;
 //     }//switch type
+}
+
+const QString Filterkpr2odf::createPageLayout()
+{
+    //Create the page-layout that is: paper, header and footer sizes
+    KoXmlElement paper( m_mainDoc.namedItem( "DOC" ).namedItem( "HEADER" ).toElement() );
+    KoXmlElement paperBorders( paper.namedItem( "PAPERBORDERS" ).toElement() );
+
+    //page-layout-properties
+    KoGenStyle style = KoGenStyle::KoGenStyle( KoGenStyle::StylePageLayout );
+    style.setAutoStyleInStylesDotXml( true );
+
+    style.addProperty( "fo:margin-top", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptTop" , "0" ).toFloat() ) ) );
+    style.addProperty( "fo:margin-bottom", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptBottom" , "0" ).toFloat() ) ) );
+    style.addProperty( "fo:margin-left", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptLeft" , "0" ).toFloat() ) ) );
+    style.addProperty( "fo:margin-right", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptRight" , "0" ).toFloat() ) ) );
+    style.addProperty( "fo:page-width", QString( "%1cm" ).arg( KoUnit::toCentimeter( paper.attribute( "ptWidth" , "0" ).toFloat() ) ) );
+    style.addProperty( "fo:page-height", QString( "%1cm" ).arg( KoUnit::toCentimeter( paper.attribute( "ptHeight" , "0" ).toFloat() ) ) );
+    style.addProperty( "fo:print-orientation", "landscape" );//FIXME: why?
+
+    //NOTE: header-style and footer-style are not present because in KPresenter they are treated as text boxes
+
+    return m_styles.lookup( style, "pm" );
+}
+
+const QString Filterkpr2odf::createMasterPageStyle()
+{
+    KoXmlElement header( m_mainDoc.namedItem( "DOC" ).namedItem( "HEADER" ).toElement() );
+    KoXmlElement footer( m_mainDoc.namedItem( "DOC" ).namedItem( "FOOTER" ).toElement() );
+
+    KoGenStyle style = KoGenStyle::KoGenStyle( KoGenStyle::StyleMaster, "" );
+    style.addAttribute( "style:page-layout-name", createPageLayout() );
+
+    return m_styles.lookup( style, "Default" );
 }
