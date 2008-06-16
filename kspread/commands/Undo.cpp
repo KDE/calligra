@@ -995,7 +995,6 @@ void UndoCellFormat::undo()
     return;
 
   doc()->setUndoLocked( true );
-  doc()->emitBeginOperation();
   copyFormat( m_lstRedoFormats, m_lstRedoColFormats, m_lstRedoRowFormats, sheet );
   Region::ConstIterator endOfList(m_region.constEnd());
   for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
@@ -1042,7 +1041,6 @@ void UndoCellFormat::redo()
     return;
 
   doc()->setUndoLocked( true );
-  doc()->emitBeginOperation();
 
   Region::ConstIterator endOfList(m_region.constEnd());
   for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
@@ -1273,7 +1271,6 @@ void UndoSort::undo()
     return;
 
   doc()->setUndoLocked( true );
-  doc()->emitBeginOperation();
 
   copyAll( m_lstRedoFormats, m_lstRedoColFormats,
            m_lstRedoRowFormats, sheet );
@@ -1327,7 +1324,6 @@ void UndoSort::redo()
 	return;
 
     doc()->setUndoLocked( true );
-    doc()->emitBeginOperation();
 
     if( Region::Range( m_rctRect ).isColumn() )
     {
@@ -1448,7 +1444,6 @@ void UndoDelete::undo()
     createListCell( m_dataRedo, m_lstRedoColumn, m_lstRedoRow, sheet );
 
     doc()->setUndoLocked( true );
-    doc()->emitBeginOperation();
 
     {
         QLinkedList<columnSize>::Iterator it2;
@@ -1489,7 +1484,6 @@ void UndoDelete::redo()
 	return;
 
     doc()->setUndoLocked( true );
-    doc()->emitBeginOperation();
 
     {
         QLinkedList<columnSize>::Iterator it2;
@@ -1572,7 +1566,6 @@ void UndoDragDrop::undo()
     saveCellRect( m_dataRedoTarget, sheet, m_selectionTarget );
 
     doc()->setUndoLocked( true );
-    doc()->emitBeginOperation();
 
     sheet->deleteCells( m_selectionTarget );
     sheet->paste( m_dataTarget, m_selectionTarget.boundingRect() );
@@ -1599,7 +1592,6 @@ void UndoDragDrop::redo()
 	return;
 
     doc()->setUndoLocked( true );
-    doc()->emitBeginOperation();
 
     //move next line to refreshView
     //because I must know what is the real rect
@@ -1919,7 +1911,6 @@ void UndoChangeAreaTextCell::undo()
 	return;
 
     doc()->setUndoLocked( true );
-    doc()->emitBeginOperation();
 
     kDebug() <<"creating redo list...";
     createList( m_lstRedoTextCell, sheet );
@@ -1976,7 +1967,6 @@ void UndoChangeAreaTextCell::undo()
     }
 
     //sheet->updateView();
-    doc()->emitEndOperation();
     doc()->setUndoLocked( false );
 }
 
@@ -1995,7 +1985,6 @@ void UndoChangeAreaTextCell::redo()
 	return;
 
     doc()->setUndoLocked( true );
-    doc()->emitBeginOperation();
 
     Region::ConstIterator endOfList(m_region.constEnd());
     for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
@@ -2047,7 +2036,6 @@ void UndoChangeAreaTextCell::redo()
     }
 
     //sheet->updateView();
-    doc()->emitEndOperation();
     doc()->setUndoLocked( false );
 }
 
@@ -2144,12 +2132,10 @@ void UndoAutofill::undo()
     createListCell( m_dataRedo, sheet );
 
     doc()->setUndoLocked( true );
-    doc()->emitBeginOperation();
 
     sheet->deleteCells( Region(m_selection) );
     sheet->paste( m_data, m_selection );
 
-    doc()->emitEndOperation();
     //sheet->updateView();
 
     doc()->setUndoLocked( false );
@@ -2162,8 +2148,6 @@ void UndoAutofill::redo()
     Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
-
-    doc()->emitBeginOperation();
 
     sheet->deleteCells( Region(m_selection) );
     doc()->setUndoLocked( true );
@@ -2520,7 +2504,6 @@ void UndoCellPaste::undo()
   createListCell( m_dataRedo, m_lstRedoColumn, m_lstRedoRow, sheet );
 
   doc()->setUndoLocked( true );
-  doc()->emitBeginOperation();
 
   uint numCols = 0;
   uint numRows = 0;
@@ -2646,7 +2629,6 @@ void UndoCellPaste::redo()
       return;
 
   doc()->setUndoLocked( true );
-  doc()->emitBeginOperation();
 
   uint numCols = 0;
   uint numRows = 0;
@@ -2835,7 +2817,6 @@ void UndoStyleCell::undo()
     createListCell( m_lstRedoStyleCell, sheet );
 
     doc()->setUndoLocked( true );
-    doc()->emitBeginOperation();
 
 
     QLinkedList<styleCell>::Iterator it2;
@@ -2857,7 +2838,6 @@ void UndoStyleCell::redo()
 	return;
 
     doc()->setUndoLocked( true );
-    doc()->emitBeginOperation();
 
     QLinkedList<styleCell>::Iterator it2;
     for ( it2 = m_lstRedoStyleCell.begin(); it2 != m_lstRedoStyleCell.end(); ++it2 )

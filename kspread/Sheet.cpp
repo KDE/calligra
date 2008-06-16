@@ -1527,10 +1527,8 @@ void Sheet::paste( const QRect& pasteArea, bool makeUndo,
       return;
 
     // Do the actual pasting.
-    doc()->emitBeginOperation();
     paste( b, pasteArea, makeUndo, mode, operation, insert, insertTo, pasteFC );
     emit sig_updateView( this );
-    // doc()->emitEndOperation();
 }
 
 void Sheet::pasteTextPlain(const QString& _text, const QRect& pasteArea)
@@ -4427,7 +4425,6 @@ bool Sheet::setSheetName(const QString& name, bool init)
 
 void Sheet::updateLocale()
 {
-    doc()->emitBeginOperation(true);
     setRegionPaintDirty( Region( QRect(QPoint(1,1), QPoint(KS_colMax, KS_rowMax))));
 
     for ( int c = 0; c < valueStorage()->count(); ++c )
@@ -4437,7 +4434,6 @@ void Sheet::updateLocale()
         cell.parseUserInput( text );
     }
     emit sig_updateView( this );
-    //  doc()->emitEndOperation();
 }
 
 void Sheet::convertObscuringBorders()

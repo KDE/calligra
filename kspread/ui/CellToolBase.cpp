@@ -2587,16 +2587,12 @@ void CellToolBase::edit()
 
 void CellToolBase::cut()
 {
-    //don't used this function when we edit a cell.
-    selection()->activeSheet()->doc()->emitBeginOperation(false);
-
     if (!editor()) {
         selection()->activeSheet()->cutSelection(selection());
     } else {
         editor()->cut();
     }
     selection()->emitModified();
-    selection()->activeSheet()->doc()->emitEndOperation();
 }
 
 void CellToolBase::copy() const
@@ -2678,7 +2674,6 @@ bool CellToolBase::paste()
         selection()->activeSheet()->map()->namedAreaManager()->loadOdf(body);
     }
 
-    selection()->activeSheet()->doc()->emitBeginOperation(false);
     if (!editor()) {
         //kDebug(36005) <<"Pasting. Rect=" << selection()->lastRange() <<" bytes";
         selection()->activeSheet()->paste(selection()->lastRange(), true,
@@ -2689,7 +2684,6 @@ bool CellToolBase::paste()
         editor()->paste();
     }
     selection()->emitModified();
-    selection()->activeSheet()->doc()->emitEndOperation();
     return true;
 }
 
@@ -2704,10 +2698,8 @@ void CellToolBase::specialPaste()
 void CellToolBase::pasteWithInsertion()
 {
     if (!selection()->activeSheet()->testAreaPasteInsert()) {
-        selection()->activeSheet()->doc()->emitBeginOperation(false);
         selection()->activeSheet()->paste(selection()->lastRange(), true,
                                           Paste::Normal, Paste::OverWrite, true);
-        selection()->activeSheet()->doc()->emitEndOperation();
     } else {
         PasteInsertDialog dialog(m_canvas->canvasWidget(), selection());
         dialog.exec();

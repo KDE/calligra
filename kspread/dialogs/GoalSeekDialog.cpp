@@ -203,7 +203,6 @@ GoalSeekDialog::~GoalSeekDialog()
     chooseCleanup();
     if ( !m_restored )
     {
-      m_selection->activeSheet()->doc()->emitBeginOperation( false );
       m_sourceCell.setValue(Value(m_oldSource));
       m_selection->emitModified();
     }
@@ -218,8 +217,6 @@ void GoalSeekDialog::closeEvent ( QCloseEvent * e )
 
 void GoalSeekDialog::buttonOkClicked()
 {
-  Doc * pDoc = m_selection->activeSheet()->doc();
-  pDoc->emitBeginOperation( false );
   if (m_maxIter > 0)
   {
     Sheet * sheet = m_selection->activeSheet();
@@ -311,7 +308,6 @@ void GoalSeekDialog::buttonCancelClicked()
 {
   if ( !m_restored )
   {
-    m_selection->activeSheet()->doc()->emitBeginOperation( false );
     m_sourceCell.setValue(Value(m_oldSource));
     m_restored = true;
     m_selection->emitModified();

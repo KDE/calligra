@@ -533,7 +533,7 @@ QString Cell::encodeFormula(bool fixedReferences) const
                     result.append(token.text()); // simply keep the area name
                     break;
                 }
-                const Region region(token.text(), doc()->map());
+                const Region region(token.text(), sheet()->map());
                 // Actually, a contiguous region, but the fixation is needed
                 Region::ConstIterator end = region.constEnd();
                 for (Region::ConstIterator it = region.constBegin(); it != end; ++it)

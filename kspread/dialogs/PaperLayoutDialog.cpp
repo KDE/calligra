@@ -322,7 +322,6 @@ void PaperLayout::slotOk()
     else
       sheet = m_pSheet;
 
-    m_pView->doc()->emitBeginOperation( false );
     while ( sheet )
     {
       SheetPrint *print = sheet->print();

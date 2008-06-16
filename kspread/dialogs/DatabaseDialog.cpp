@@ -586,8 +586,6 @@ void DatabaseDialog::accept()
     m_selection->canvas()->addCommand(command);
   }
 
-  m_selection->activeSheet()->doc()->emitBeginOperation();
-
   if ( query.first() )
   {
     if ( query.isValid() )
@@ -620,7 +618,6 @@ void DatabaseDialog::accept()
     }
   }
 
-  m_selection->activeSheet()->doc()->emitEndOperation();
   m_selection->emitModified();
   KAssistantDialog::accept();
 }

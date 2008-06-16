@@ -68,7 +68,6 @@ PasteInsertDialog::PasteInsertDialog(QWidget* parent, Selection* selection)
 
 void PasteInsertDialog::slotOk()
 {
-    m_selection->activeSheet()->doc()->emitBeginOperation( false );
     if( rb1->isChecked() )
       m_selection->activeSheet()->paste( m_selection->lastRange(),
                                      true, Paste::Normal, Paste::OverWrite,
@@ -78,7 +77,6 @@ void PasteInsertDialog::slotOk()
                                      true, Paste::Normal, Paste::OverWrite,
                                      true, +1 );
 
-    m_selection->activeSheet()->doc()->emitEndOperation();
     accept();
 }
 

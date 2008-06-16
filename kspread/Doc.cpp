@@ -136,8 +136,6 @@ public:
 
   KCompletion listCompletion;
 
-  int numOperations;
-
   QList<Damage*> damages;
 
   // document properties
@@ -198,7 +196,6 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   setTemplateType( "kspread_template" );
 
   d->isLoading = false;
-  d->numOperations = 1; // don't start repainting before the GUI is done...
 
   d->undoLocked = 0;
 
@@ -414,12 +411,7 @@ bool Doc::loadChildren( KoStore* _store )
 bool Doc::saveOdf( SavingContext &documentContext )
 {
     ElapsedTime et("OpenDocument Saving", ElapsedTime::PrintOnlyTime);
-
-  emitBeginOperation(true);
-    bool result=saveOasisHelper( documentContext, SaveAll );
-  emitEndOperation();
-
-  return result;
+    return saveOasisHelper(documentContext, SaveAll);
 }
 
 bool Doc::saveOasisHelper( SavingContext & documentContext, SaveFlag saveFlag,
@@ -1074,16 +1066,6 @@ QString Doc::unitName() const
   return KoUnit::unitName( unit() );
 }
 
-void Doc::increaseNumOperation()
-{
-  ++d->numOperations;
-}
-
-void Doc::decreaseNumOperation()
-{
-  --d->numOperations;
-}
-
 void Doc::addIgnoreWordAllList( const QStringList & _lst)
 {
   d->spellListIgnoreAll = _lst;
@@ -1325,58 +1307,6 @@ void Doc::refreshInterface()
 void Doc::refreshLocale()
 {
     emit sig_refreshLocale();
-}
-
-
-void Doc::emitBeginOperation(bool waitCursor)
-{
-    //If an emitBeginOperation occurs with waitCursor enabled, then the waiting cursor is set
-    //until all operations have been completed.
-    //
-    //The reason being that any operations started before the first one with waitCursor set
-    //are expected to be completed in a short time anyway.
-    QCursor* activeOverride = QApplication::overrideCursor();
-
-    if ( waitCursor &&
-         ( !activeOverride || activeOverride->shape() != QCursor(Qt::WaitCursor).shape() ) )
-    {
-        QApplication::setOverrideCursor(Qt::WaitCursor);
-    }
-
-//    /* just duplicate the current cursor on the stack, then */
-//  else if (QApplication::overrideCursor() != 0)
-//    {
-//        QApplication::setOverrideCursor(QApplication::overrideCursor()->shape());
-//    }
-
-    KoDocument::emitBeginOperation();
-    d->numOperations++;
-}
-
-void Doc::emitBeginOperation(void)
-{
-  emitBeginOperation(true);
-}
-
-void Doc::emitEndOperation()
-{
-  d->numOperations--;
-
-  if ( d->numOperations > 0 )
-  {
-    KoDocument::emitEndOperation();
-    return;
-  }
-
-  d->numOperations = 0;
-
-  KoDocument::emitEndOperation();
-
-  QApplication::restoreOverrideCursor();
-
-    // Do this after the parent class emitEndOperation,
-    // because that allows updates on the view again.
-    paintUpdates();
 }
 
 void Doc::updateBorderButton()

@@ -120,8 +120,6 @@ void NamedAreaDialog::displayAreaValues(QString const & areaName)
 
 void NamedAreaDialog::slotOk()
 {
-    m_selection->activeSheet()->doc()->emitBeginOperation(false);
-
     if (m_list->count() > 0)
     {
         QListWidgetItem* item = m_list->currentItem();
@@ -129,7 +127,6 @@ void NamedAreaDialog::slotOk()
         Sheet* sheet = m_selection->activeSheet()->map()->namedAreaManager()->sheet(item->text());
         if (!sheet || !region.isValid())
         {
-            m_selection->activeSheet()->doc()->emitEndOperation();
             return;
         }
 
@@ -138,7 +135,6 @@ void NamedAreaDialog::slotOk()
         m_selection->initialize(region);
     }
 
-    m_selection->activeSheet()->doc()->emitEndOperation();
     m_selection->emitModified();
     accept();
 }

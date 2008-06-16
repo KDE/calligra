@@ -153,9 +153,7 @@ struct st_cell
 
 void ConsolidateDialog::slotOk()
 {
-  m_selection->activeSheet()->doc()->emitBeginOperation( false );
-
-  Map *map = m_selection->activeSheet()->doc()->map();
+  Map *map = m_selection->activeSheet()->map();
 
   Sheet* sheet = m_selection->activeSheet();
   int dx = m_selection->lastRange().left();

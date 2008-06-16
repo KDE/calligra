@@ -122,7 +122,6 @@ void PreferenceDialog::openPage(int flags)
 
 void PreferenceDialog::slotApply()
 {
-  m_pView->doc()->emitBeginOperation( false );
   _configure->apply();
   _miscParameter->apply();
   _colorParameter->apply();
@@ -175,9 +174,7 @@ parameterLocale::parameterLocale( View* _view, KVBox *box , char * /*name*/ )
 
 void parameterLocale::apply()
 {
-    if (m_bUpdateLocale)
-    {
-        m_pView->doc()->emitBeginOperation( false );
+    if (m_bUpdateLocale) {
         m_pView->doc()->refreshLocale();
         m_pView->slotUpdateView( m_pView->activeSheet() );
     }
@@ -316,7 +313,6 @@ void configure::slotDefault()
 
 void configure::apply()
 {
-    m_pView->doc()->emitBeginOperation( false );
     KConfigGroup parameterGroup = config->group( "Parameters" );
     parameterGroup.writeEntry( "NbPage", nbPage->value());
     Doc *doc =m_pView->doc();
@@ -862,7 +858,6 @@ void configureLayoutPage::initCombo()
 
 void configureLayoutPage::apply()
 {
-    m_pView->doc()->emitBeginOperation( false );
     KConfigGroup pageLayoutGroup = config->group( "KSpread Page Layout" );
 
   if( paper != defaultSizePage->currentIndex() )
@@ -921,7 +916,6 @@ void configureSpellPage::apply()
 #warning TODO KDE4 port to sonnet
 #endif
 #if 0
-    m_pView->doc()->emitBeginOperation( false );
     KSpellConfig *_spellConfig = m_spellConfigWidget;
     const KConfigGroup spellGroup = config->group( "KSpell kspread" );
     spellGroup.writeEntry("KSpell_NoRootAffix",(int) _spellConfig->noRootAffix ());

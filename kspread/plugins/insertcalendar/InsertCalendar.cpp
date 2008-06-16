@@ -189,8 +189,6 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
 
   Q_ASSERT(cs);
 
-  document->emitBeginOperation();
-
   int row = selection.y();
   int col = selection.x();
   int colstart = col; //this is where we get back after each week
@@ -270,8 +268,6 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
     col+=2;
 
   }
-
-  document->emitEndOperation();
 
   kDebug() <<"inserting calendar completed";
 }

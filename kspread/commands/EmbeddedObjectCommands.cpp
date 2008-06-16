@@ -107,10 +107,8 @@ void RemoveObjectCommand::redo()
 
 //  I don't think we need this:
 //       Make sure that this child has no active embedded view -> activate ourselfs
-//       doc()->emitBeginOperation( false );
 //       partManager()->setActivePart( koDocument(), this );
 //       partManager()->setSelectedPart( 0 );
-//       doc()->emitEndOperation();
 
   doc->embeddedObjects().removeAll( obj );
   if ( obj->getType() == OBJECT_CHART ||  obj->getType()== OBJECT_KOFFICE_PART)

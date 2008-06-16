@@ -88,8 +88,6 @@ void ShowDialog::slotDoubleClicked(Q3ListBoxItem *)
 
 void ShowDialog::slotOk()
 {
-    m_pView->doc()->emitBeginOperation( false );
-
     QStringList listSheet;
 
     for (int i=0; i < list->numRows(); i++)

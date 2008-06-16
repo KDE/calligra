@@ -99,7 +99,7 @@ void AbstractRegionCommand::redo()
     }
 
     m_sheet->doc()->setUndoLocked( true );
-    m_sheet->doc()->emitBeginOperation();
+    QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     m_sheet->setRegionPaintDirty( *this );
 
     successfully = mainProcessing();
@@ -117,7 +117,7 @@ void AbstractRegionCommand::redo()
         kWarning() << "AbstractRegionCommand::redo(): postprocessing was not successful!";
     }
 
-    m_sheet->doc()->emitEndOperation();
+    QApplication::restoreOverrideCursor();
     m_sheet->doc()->setUndoLocked( false );
 
     m_firstrun = false;

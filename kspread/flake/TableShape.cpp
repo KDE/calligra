@@ -264,8 +264,6 @@ void TableShape::handleDamages( const QList<Damage*>& damages )
     }
 
     update();
-    // FIXME Stefan: Where's the corresponding emitBeginOperation()?
-    doc()->emitEndOperation();
 }
 
 #include "TableShape.moc"

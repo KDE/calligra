@@ -108,7 +108,6 @@ void SubtotalDialog::slotOk()
   QString result( ' ' + i18n("Result") );
   int lastChangedRow = top;
 
-  m_selection->activeSheet()->doc()->emitBeginOperation( false );
   bool ignoreEmptyCells = m_IgnoreBox->isChecked();
   bool addRow;
   if ( !m_summaryOnly->isChecked() )
@@ -192,9 +191,7 @@ void SubtotalDialog::slotCancel()
 
 void SubtotalDialog::slotUser1()
 {
-  m_selection->activeSheet()->doc()->emitBeginOperation( false );
   removeSubtotalLines();
-  m_selection->activeSheet()->doc()->emitEndOperation();
   m_selection->emitModified();
   accept();
 }

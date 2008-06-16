@@ -334,8 +334,6 @@ bool FormulaDialog::eventFilter( QObject* obj, QEvent* ev )
 
 void FormulaDialog::slotOk()
 {
-    m_selection->activeSheet()->doc()->emitBeginOperation( false );
-
     m_selection->endReferenceSelection();
 
     // Revert the marker to its original position
@@ -355,7 +353,6 @@ void FormulaDialog::slotOk()
         m_editor->setCursorPosition( pos );
     }
 
-    m_selection->activeSheet()->doc()->emitEndOperation();
     m_selection->emitModified();
     accept();
     deleteLater();
@@ -364,7 +361,6 @@ void FormulaDialog::slotOk()
 void FormulaDialog::slotClose()
 {
     deleteLater();
-    m_selection->activeSheet()->doc()->emitBeginOperation( false );
 
     m_selection->endReferenceSelection();
 
@@ -380,7 +376,6 @@ void FormulaDialog::slotClose()
         m_editor->setFocus();
     }
 
-    m_selection->activeSheet()->doc()->emitEndOperation();
     m_selection->emitModified();
     reject();
 }

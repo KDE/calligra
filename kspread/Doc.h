@@ -158,57 +158,6 @@ public:
 
   /**
    * \ingroup Operations
-   * Function to begin a KSpread 'operation'.
-   *
-   * Calls to emitBeginOperation and emitEndOperation should surround each
-   * logical user operation.
-   * During the operation, the following should hold true:
-   * - No painting will be done to the screen
-   * - No cell calculation will be done (maybe there are exceptions, such
-   *   as the goalseek operation needs to calculate values)
-   * During an operation, calls to Sheet::setRegionPaintDirty mark regions
-   * as needing repainted.
-   * Calls to begin/endOperation may be nested.
-   * Calcualation and painting will be delayed until the outer begin/end
-   * pair has finished.
-   *
-   * @param waitCursor specifies whether to put the hourglass up during
-   *                   the operation.
-   */
-  void emitBeginOperation(bool waitCursor);
-
-  /**
-   * \ingroup Operations
-   * Function to begin a KSpread 'operation'.
-   * Changes the cursor to an hourglass.
-   * @see emitBeginOperation(bool)
-   * @reimp default override of KoDocument version.
-   */
-  virtual void emitBeginOperation();
-
-  /**
-   * \ingroup Operations
-   * Marks the end of an operation.
-   * If cells have been marked dirty while the operation, a repainted
-   * of them is triggered.
-   * @see emitBeginOperation(bool)
-   * @see Sheet::setRegionPaintDirty
-   * @reimp
-   */
-  virtual void emitEndOperation();
-
-  /**
-   * \ingroup Operations
-   */
-  void increaseNumOperation();
-
-  /**
-   * \ingroup Operations
-   */
-  void decreaseNumOperation();
-
-  /**
-   * \ingroup Operations
    */
   void addDamage( Damage* damage );
 

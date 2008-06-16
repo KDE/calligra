@@ -90,10 +90,8 @@ void SpecialPasteDialog::slotOk()
     if( divisionButton->isChecked() )
       op = Paste::Div;
 
-    m_selection->activeSheet()->doc()->emitBeginOperation( false );
     m_selection->activeSheet()->paste( m_selection->lastRange(), true, sp, op );
     m_selection->emitModified();
-    m_selection->activeSheet()->doc()->emitEndOperation( );
     accept();
 }
 

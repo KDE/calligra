@@ -89,8 +89,6 @@ void GotoDialog::textChanged ( const QString &_text )
 
 void GotoDialog::slotOk()
 {
-    m_selection->activeSheet()->doc()->emitBeginOperation( false );
-
     QString tmp_upper = m_nameCell->currentText();
     Region region(tmp_upper, m_selection->activeSheet()->map(), m_selection->activeSheet());
     if ( region.isValid() )
@@ -104,7 +102,6 @@ void GotoDialog::slotOk()
     {
       m_nameCell->setCurrentText("");
     }
-    m_selection->activeSheet()->doc()->emitEndOperation();
 }
 
 #include "GotoDialog.moc"

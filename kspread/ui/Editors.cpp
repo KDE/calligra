@@ -768,7 +768,6 @@ void CellEditor::slotCursorPositionChanged()
       d->highlighter->resetRangeChanged();
 
       selection()->blockSignals(true);
-      selection()->activeSheet()->doc()->emitBeginOperation();
       setUpdateChoice(false);
 
       Tokens tokens = d->highlighter->formulaTokens();
@@ -805,7 +804,6 @@ void CellEditor::slotCursorPositionChanged()
         }
       }
       setUpdateChoice(true);
-      selection()->activeSheet()->doc()->emitEndOperation();
       selection()->blockSignals(false);
     }
   }

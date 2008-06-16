@@ -1131,9 +1131,6 @@ void View::initialPosition()
     updateBorderButton();
     updateShowSheetMenu();
 
-    // make paint effective:
-    doc()->decreaseNumOperation();
-
     if ( koDocument()->isReadWrite() )
         initConfig();
 
@@ -1323,8 +1320,6 @@ void View::setSelectionAllBorderColor( const QColor & color )
 
 void View::addSheet( Sheet * _t )
 {
-  doc()->emitBeginOperation( false );
-
   insertSheet( _t );
 
   // Connect some signals
@@ -1348,39 +1343,27 @@ void View::addSheet( Sheet * _t )
 
   if ( !d->loading )
     updateBorderButton();
-
-  doc()->emitEndOperation();
 }
 
 void View::slotSheetRemoved(Sheet* sheet)
 {
-    doc()->emitBeginOperation( false );
-
     d->tabBar->removeTab(sheet->sheetName());
     if (doc()->map()->findSheet(doc()->map()->visibleSheets().first()))
         setActiveSheet(doc()->map()->findSheet(doc()->map()->visibleSheets().first()));
     else
         d->activeSheet = 0;
-
-    doc()->emitEndOperation();
 }
 
 void View::removeAllSheets()
 {
-  doc()->emitBeginOperation(false);
   d->tabBar->clear();
-
   setActiveSheet( 0 );
-
-  doc()->emitEndOperation();
 }
 
 void View::setActiveSheet( Sheet* sheet, bool updateSheet )
 {
     if ( sheet == d->activeSheet )
         return;
-
-    doc()->emitBeginOperation( false );
 
     if (!d->selection->referenceSelectionMode()) {
         saveCurrentSheetSelection();
@@ -1391,7 +1374,6 @@ void View::setActiveSheet( Sheet* sheet, bool updateSheet )
 
     if ( d->activeSheet == 0 )
     {
-        doc()->emitEndOperation();
         return;
     }
 
@@ -1415,7 +1397,6 @@ void View::setActiveSheet( Sheet* sheet, bool updateSheet )
 
     if (d->selection->referenceSelectionMode()) {
         d->selection->setActiveSheet(d->activeSheet);
-        doc()->emitEndOperation();
         return;
     }
 
@@ -1449,30 +1430,22 @@ void View::setActiveSheet( Sheet* sheet, bool updateSheet )
     d->adjustWorkbookActions( !doc()->map()->isProtected() );
 
     calcStatusBarOp();
-
-    doc()->emitEndOperation();
 }
 
 void View::slotSheetRenamed( Sheet* sheet, const QString& old_name )
 {
-  doc()->emitBeginOperation( false );
   d->tabBar->renameTab( old_name, sheet->sheetName() );
-  doc()->emitEndOperation();
 }
 
 void View::slotSheetHidden( Sheet* )
 {
-  doc()->emitBeginOperation(false);
   updateShowSheetMenu();
-  doc()->emitEndOperation();
 }
 
 void View::slotSheetShown( Sheet* )
 {
-  doc()->emitBeginOperation(false);
   d->tabBar->setTabs( doc()->map()->visibleSheets() );
   updateShowSheetMenu();
-  doc()->emitEndOperation();
 }
 
 void View::changeSheet( const QString& _name )
@@ -1486,7 +1459,6 @@ void View::changeSheet( const QString& _name )
         kDebug() <<"Unknown sheet" << _name;
         return;
     }
-    doc()->emitBeginOperation(false);
     if (!selection()->referenceSelectionMode())
         selection()->emitCloseEditor(true); // save changes
     setActiveSheet( t, false /* False: Endless loop because of setActiveTab() => do the visual area update manually*/);
@@ -1498,7 +1470,6 @@ void View::changeSheet( const QString& _name )
     d->vBorderWidget->repaint();
     d->hBorderWidget->repaint();
     d->selectAllButton->repaint();
-    doc()->emitEndOperation();
 }
 
 void View::moveSheet( unsigned sheet, unsigned target )
@@ -1576,7 +1547,6 @@ void View::insertSheet()
     return;
   }
 
-  doc()->emitBeginOperation( false );
   selection()->emitCloseEditor(true); // save changes
   Sheet * t = doc()->map()->createSheet();
   QUndoCommand* command = new AddSheetCommand( t );
@@ -1588,8 +1558,6 @@ void View::insertSheet()
     d->actions->deleteSheet->setEnabled( true );
     d->actions->hideSheet->setEnabled( true );
   }
-
-  doc()->emitEndOperation();
 }
 
 void View::duplicateSheet()
@@ -1627,12 +1595,8 @@ void View::hideSheet()
   if( i < 0 ) i = 1;
   QString sn = vs[i];
 
-  doc()->emitBeginOperation(false);
-
   QUndoCommand* command = new HideSheetCommand( activeSheet() );
   doc()->addCommand( command );
-
-  doc()->emitEndOperation();
 
   d->tabBar->removeTab( d->activeSheet->sheetName() );
   d->tabBar->setActiveTab( sn );
@@ -1783,12 +1747,10 @@ void View::toggleProtectSheet( bool mode )
 
    doc()->setModified( true );
    d->adjustActions( !mode );
-   doc()->emitBeginOperation();
    // d->activeSheet->setRegionPaintDirty( QRect(QPoint( 0, 0 ), QPoint( KS_colMax, KS_rowMax ) ) );
    refreshView();
    // inform the cell tool
    emit sheetProtectionToggled(mode);
-   doc()->emitEndOperation();
 }
 
 void View::togglePageBorders( bool mode )
@@ -1796,18 +1758,14 @@ void View::togglePageBorders( bool mode )
   if ( !d->activeSheet )
     return;
 
-  doc()->emitBeginOperation( false );
   d->activeSheet->setShowPageBorders( mode );
-  doc()->emitEndOperation();
 }
 
 void View::viewZoom( KoZoomMode::Mode mode, double zoom )
 {
     Q_ASSERT( mode == KoZoomMode::ZOOM_CONSTANT );
     selection()->emitCloseEditor(true); // save changes
-    doc()->emitBeginOperation( false );
     doc()->refreshInterface();
-    doc()->emitEndOperation();
 }
 
 void View::setZoom( int zoom, bool /*updateViews*/ )
@@ -1815,13 +1773,10 @@ void View::setZoom( int zoom, bool /*updateViews*/ )
   kDebug(36005) <<"---------SetZoom:" << zoom;
 
   // Set the zoom in KoView (for embedded views)
-  doc()->emitBeginOperation( false );
-
   zoomHandler()->setZoomAndResolution( zoom, KoGlobal::dpiX(), KoGlobal::dpiY());
   //KoView::setZoom( zoomHandler()->zoomedResolutionY() /* KoView only supports one zoom */ );
 
   doc()->refreshInterface();
-  doc()->emitEndOperation();
 }
 
 void View::showStatusBar( bool b )
@@ -1855,9 +1810,7 @@ void View::preference()
   PreferenceDialog dlg( this, "Preference" );
   if ( dlg.exec() )
   {
-    doc()->emitBeginOperation( false );
     d->activeSheet->refreshPreference();
-    doc()->emitEndOperation();
   }
 }
 
@@ -2102,7 +2055,6 @@ void View::deleteSheet()
 
   if ( ret == KMessageBox::Continue )
   {
-    doc()->emitBeginOperation( false );
     selection()->emitCloseEditor(false); // discard changes
     doc()->setModified( true );
     Sheet * tbl = activeSheet();
@@ -2116,7 +2068,6 @@ void View::deleteSheet()
     tbl->doc()->map()->takeSheet( tbl );
     doc()->takeSheet( tbl );
 #endif
-    doc()->emitEndOperation();
   }
 }
 
@@ -2160,9 +2111,7 @@ void View::slotRename()
 
     //sheet->setSheetName( newName );
 
-    doc()->emitBeginOperation(false);
     doc()->setModified( true );
-    doc()->emitEndOperation();
   }
 }
 
@@ -2193,7 +2142,6 @@ void View::slotUpdateView( Sheet *_sheet )
     return;
 
   d->activeSheet->setRegionPaintDirty( d->canvas->visibleCells() );
-  doc()->emitEndOperation();
 }
 
 void View::slotUpdateView( Sheet * _sheet, const Region& region )
@@ -2204,9 +2152,7 @@ void View::slotUpdateView( Sheet * _sheet, const Region& region )
   if ( _sheet != d->activeSheet )
     return;
 
-  // doc()->emitBeginOperation( false );
   d->activeSheet->setRegionPaintDirty( region );
-  doc()->emitEndOperation();
 }
 
 void View::slotUpdateHBorder( Sheet * _sheet )
@@ -2217,9 +2163,7 @@ void View::slotUpdateHBorder( Sheet * _sheet )
   if ( _sheet != d->activeSheet )
     return;
 
-  doc()->emitBeginOperation(false);
   d->hBorderWidget->update();
-  doc()->emitEndOperation();
 }
 
 void View::slotUpdateVBorder( Sheet *_sheet )
@@ -2230,9 +2174,7 @@ void View::slotUpdateVBorder( Sheet *_sheet )
   if ( _sheet != d->activeSheet )
     return;
 
-  doc()->emitBeginOperation( false );
   d->vBorderWidget->update();
-  doc()->emitEndOperation();
 }
 
 void View::slotChangeSelection(const KSpread::Region& changedRegion)
@@ -2241,9 +2183,7 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
     return;
 
     if (d->selection->referenceSelectionMode()) {
-        doc()->emitBeginOperation( false );
         doc()->addDamage(new SelectionDamage(changedRegion));
-        doc()->emitEndOperation();
         kDebug(36002) <<"Choice:" << *selection();
         return;
     }
@@ -2352,7 +2292,6 @@ void View::statusBarClicked(const QPoint&)
 
 void View::menuCalc( bool )
 {
-  doc()->emitBeginOperation(false);
   if ( d->actions->calcMin->isChecked() )
   {
     doc()->setTypeOfCalc( Min );
@@ -2381,8 +2320,6 @@ void View::menuCalc( bool )
     doc()->setTypeOfCalc( NoneCalc );
 
   calcStatusBarOp();
-
-  doc()->emitEndOperation();
 }
 
 
@@ -2404,8 +2341,6 @@ void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
   if ( d->activeSheet )
   {
-    doc()->emitEndOperation();
-
     if ( ev->activated() )
     {
       if ( d->calcLabel )
@@ -2470,15 +2405,12 @@ void View::popupTabBarMenu( const QPoint & _point )
 
 void View::updateBorderButton()
 {
-  //  doc()->emitBeginOperation( false );
   if ( d->activeSheet )
     d->actions->showPageBorders->setChecked( d->activeSheet->isShowPageBorders() );
-  //  doc()->emitEndOperation();
 }
 
 void View::removeSheet( Sheet *_t )
 {
-  doc()->emitBeginOperation(false);
   QString m_tablName=_t->sheetName();
   d->tabBar->removeTab( m_tablName );
   setActiveSheet( doc()->map()->findSheet( doc()->map()->visibleSheets().first() ));
@@ -2486,12 +2418,10 @@ void View::removeSheet( Sheet *_t )
   bool state = doc()->map()->visibleSheets().count() > 1;
   d->actions->deleteSheet->setEnabled( state );
   d->actions->hideSheet->setEnabled( state );
-  doc()->emitEndOperation();
 }
 
 void View::insertSheet( Sheet* sheet )
 {
-  doc()->emitBeginOperation( false );
   QString tabName = sheet->sheetName();
   if ( !sheet->isHidden() )
   {
@@ -2501,7 +2431,6 @@ void View::insertSheet( Sheet* sheet )
   bool state = ( doc()->map()->visibleSheets().count() > 1 );
   d->actions->deleteSheet->setEnabled( state );
   d->actions->hideSheet->setEnabled( state );
-  doc()->emitEndOperation();
 }
 
 QColor View::borderColor() const
@@ -2511,12 +2440,10 @@ QColor View::borderColor() const
 
 void View::updateShowSheetMenu()
 {
-  doc()->emitBeginOperation( false );
   if ( d->activeSheet->isProtected() )
     d->actions->showSheet->setEnabled( false );
   else
     d->actions->showSheet->setEnabled( doc()->map()->hiddenSheets().count() > 0 );
-  doc()->emitEndOperation();
 }
 
 void View::markSelectionAsDirty()
