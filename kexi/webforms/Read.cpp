@@ -45,89 +45,79 @@ namespace KexiWebForms {
         google::TemplateDictionary dict("table");
 
             
-        QString requestedTable = Request::requestUri(req);
-        // FIXME: Mhhh, nasty things can happen with that
-        requestedTable.remove(0, 6);
-        dict.SetValue("TABLENAME", requestedTable.toLatin1().constData());
+        QString requestedTable = Request::requestUri(req).split('/').at(2);
 
         QString tableData;
         KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
+        KexiDB::QuerySchema querySchema(*tableSchema);
+        KexiDB::Cursor* cursor = gConnection->executeQuery(querySchema);
 
             
-        /*
-         * Check if requested table has primary keys
-         * If yes use it to generate query strings, using the first
-         * primary key found, if no primary key is found, print an error message
-         */
-        KexiDB::IndexSchema* indexSchema = tableSchema->primaryKey();
-        if (indexSchema->fields()->isEmpty()) {
+        if (!cursor) {
+            dict.SetValue("ERROR", "Unable to execute the query (" __FILE__ ")");
+        } else if (tableSchema->primaryKey()->fields()->isEmpty()) {
             dict.SetValue("ERROR", "This table has no primary key!");
         } else {
-            KexiDB::Field* primaryKey = indexSchema->field(0);
-            KexiDB::QuerySchema querySchema(*tableSchema);
-            KexiDB::Cursor* cursor = gConnection->executeQuery(querySchema);
+            KexiDB::Field* primaryKey = tableSchema->primaryKey()->field(0);
+            
+            // Create labels with field name
+            tableData.append("<tr>");
+            for (uint i = 0; i < cursor->fieldCount(); i++) {
+                tableData.append("\t<td><strong>");
+                tableData.append(querySchema.field(i)->captionOrName());
+                tableData.append("</strong></td>\n");
+            }
+            tableData.append("</tr>\n");
 
-            if (cursor) {
-                // Create labels with field name
+            while (cursor->moveNext()) {
                 tableData.append("<tr>");
                 for (uint i = 0; i < cursor->fieldCount(); i++) {
-                    tableData.append("\t<td><strong>");
-                    tableData.append(querySchema.field(i)->captionOrName());
-                    tableData.append("</strong></td>\n");
-                }
-                tableData.append("</tr>\n");
-
-                while (cursor->moveNext()) {
-                    tableData.append("<tr>");
-                    for (uint i = 0; i < cursor->fieldCount(); i++) {
-                        tableData.append("<td>");
-                        //
-                        // Use Kexi functions to retrieve and represent the Value
-                        //! @todo use Kexi the same functions for rendering values as Kexi table and form view
-                        //
-                        KexiDB::Field* field = querySchema.field(i);
-                        const KexiDB::Field::Type type = field->type();
-                        QString valueString;
-                        if (type == KexiDB::Field::BLOB) {
-                            //! @todo decode image and display it if possible
-                            valueString = "(Object)";
-                        }
-                        else if (field->isTextType()) {
-                            valueString = cursor->value(i).toString();
-                            //! @fixme: why I don't have Qt::escape ?
-                            //valueString = Qt::escape( cursor->value(i).toString() );
-                        }
-                        else {
-                            valueString = cursor->value(i).toString();
-                        }
-                        tableData.append(valueString);
-                        tableData.append("</td>");
+                    tableData.append("<td>");
+                    //
+                    // Use Kexi functions to retrieve and represent the Value
+                    //! @todo use Kexi the same functions for rendering values as Kexi table and form view
+                    //
+                    KexiDB::Field* field = querySchema.field(i);
+                    const KexiDB::Field::Type type = field->type();
+                    QString valueString;
+                    if (type == KexiDB::Field::BLOB) {
+                        //! @todo decode image and display it if possible
+                        valueString = "(Object)";
                     }
-                    // Toolbox
-                    QString pkeyVal(cursor->value(tableSchema->indexOf(primaryKey)).toString());
-                    // Edit
-                    tableData.append("<td><a href=\"/update/").append(requestedTable).append("/");
-                    tableData.append(primaryKey->name()).append("/");
-                    tableData.append(pkeyVal).append("\">Edit</a></td>");
-                    // Delete
-                    tableData.append("<td><a href=\"/delete/").append(requestedTable).append("/");
-                    tableData.append(primaryKey->name()).append("/");
-                    tableData.append(pkeyVal).append("\">Delete</a></td>");
-                    // End row
-                    tableData.append("</tr>");
+                    else if (field->isTextType()) {
+                        valueString = cursor->value(i).toString();
+                        //! @fixme: why I don't have Qt::escape ?
+                        //valueString = Qt::escape( cursor->value(i).toString() );
+                    }
+                    else {
+                        valueString = cursor->value(i).toString();
+                    }
+                    tableData.append(valueString);
+                    tableData.append("</td>");
                 }
+                // Toolbox
+                QString pkeyVal(cursor->value(tableSchema->indexOf(primaryKey)).toString());
+                // Edit
+                tableData.append("<td><a href=\"/update/").append(requestedTable).append("/");
+                tableData.append(primaryKey->name()).append("/");
+                tableData.append(pkeyVal).append("\">Edit</a></td>");
+                // Delete
+                tableData.append("<td><a href=\"/delete/").append(requestedTable).append("/");
+                tableData.append(primaryKey->name()).append("/");
+                tableData.append(pkeyVal).append("\">Delete</a></td>");
+                // End row
+                tableData.append("</tr>");
+                
                 dict.SetValue("TABLEDATA", tableData.toLatin1().constData());
-            } else {
-                dict.SetValue("TABLEDATA", "Error in " __FILE__); // mhh...
             }
-
+            
             kDebug() << "Deleting cursor..." << endl;
             gConnection->deleteCursor(cursor);
         }
 
         // Render the template
         std::string output;
-        google::Template* tpl = google::Template::GetTemplate("table.tpl", google::DO_NOT_STRIP);
+        google::Template* tpl = google::Template::GetTemplate("read.tpl", google::DO_NOT_STRIP);
         tpl->Expand(&output, &dict);
         stream << output << webend;
     }
