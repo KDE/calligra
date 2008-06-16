@@ -44,6 +44,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         //we check if this is an empty page
         return m_styles.lookup( style, "dp" );
     }
+
     //it is not an empty page let's keep loading
     KoXmlElement backType = page.namedItem( "BACKTYPE" ).toElement();
     if( backType.isNull() || backType.attribute( "value" ) == "0" )

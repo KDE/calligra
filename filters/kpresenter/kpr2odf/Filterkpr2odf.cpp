@@ -116,10 +116,17 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
     m_styles.saveOdfStylesDotXml( output, manifest );
 
     //Create settings.xml
-//     output->open( "settings.xml" );
-//     KoStoreDevice device( output );
-//     odfWriter.createOasisXmlWriter( ,"office:document-settings" );
-//     output->close();
+    output->open( "settings.xml" );
+    KoStoreDevice device( output );
+    KoXmlWriter *settings = KoOdfWriteStore::createOasisXmlWriter( &device, "office:document-settings" );
+//     settings->startElement( "office:settings" );
+//     settings->startElement( "config:config-item-set" );
+//     settings->endElement();//config:config-item-set
+//     settings->endElement();//office:settings
+    settings->endElement();//office:document-settings
+    settings->endDocument();
+    output->close();
+    manifest->addManifestEntry( "settings.xml", "text/xml" );
 
     //Create the meta.xml file
     output->open( "meta.xml" );
