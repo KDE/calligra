@@ -115,8 +115,6 @@ public:
 };
 
 
-bool Map::respectCase = true;
-
 Map::Map ( Doc* doc, const char* name)
   : QObject( doc ),
     d(new Private)

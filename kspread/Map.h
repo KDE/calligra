@@ -278,8 +278,6 @@ public:
 
   void increaseLoadedRowsCounter(int i = 1);
 
-  static bool respectCase;
-
   void emitAddSheet(Sheet* sheet);
 
 signals:
