@@ -38,7 +38,6 @@
 
 #include "Cell.h"
 #include "CellStorage.h"
-#include "Doc.h"
 #include "Selection.h"
 #include "Sheet.h"
 

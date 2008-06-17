@@ -31,7 +31,6 @@
  */
 namespace KSpread
 {
-class Doc;
 
 class LinkCommand : public QUndoCommand
 {
@@ -43,7 +42,6 @@ public:
 
 protected:
   Cell cell;
-  Doc* doc;
   QString oldText;
   QString oldLink;
   QString newText;

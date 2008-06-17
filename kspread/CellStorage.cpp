@@ -30,7 +30,6 @@
 // KSpread
 #include "Damages.h"
 #include "DependencyManager.h"
-#include "Doc.h"
 #include "Map.h"
 #include "RecalcManager.h"
 #include "RectStorage.h"
@@ -49,18 +48,18 @@ class CellStorage::Private
 public:
     Private( Sheet* sheet )
         : sheet( sheet )
-        , bindingStorage( new BindingStorage(sheet->doc()) )
-        , commentStorage( new CommentStorage(sheet->doc()) )
-        , conditionsStorage( new ConditionsStorage(sheet->doc()) )
-        , databaseStorage( new DatabaseStorage(sheet->doc()) )
+        , bindingStorage( new BindingStorage(sheet->map()) )
+        , commentStorage( new CommentStorage(sheet->map()) )
+        , conditionsStorage( new ConditionsStorage(sheet->map()) )
+        , databaseStorage( new DatabaseStorage(sheet->map()) )
         , formulaStorage( new FormulaStorage() )
-        , fusionStorage( new FusionStorage(sheet->doc()) )
+        , fusionStorage( new FusionStorage(sheet->map()) )
         , linkStorage( new LinkStorage() )
-        , matrixStorage( new MatrixStorage(sheet->doc()) )
-        , namedAreaStorage( new NamedAreaStorage(sheet->doc()) )
-        , styleStorage( new StyleStorage(sheet->doc()) )
+        , matrixStorage( new MatrixStorage(sheet->map()) )
+        , namedAreaStorage( new NamedAreaStorage(sheet->map()) )
+        , styleStorage( new StyleStorage(sheet->map()) )
         , userInputStorage( new UserInputStorage() )
-        , validityStorage( new ValidityStorage(sheet->doc()) )
+        , validityStorage( new ValidityStorage(sheet->map()) )
         , valueStorage( new ValueStorage() )
         , undoData( 0 ) {}
 
@@ -150,11 +149,11 @@ void CellStorage::take( int col, int row )
     oldUserInput = d->userInputStorage->take( col, row );
     oldValue = d->valueStorage->take( col, row );
 
-    if (!d->sheet->doc()->isLoading())
+    if (!d->sheet->map()->isLoading())
     {
         // Trigger a recalculation of the consuming cells.
         CellDamage::Changes changes = CellDamage:: Binding | CellDamage::Formula | CellDamage::Value;
-        d->sheet->doc()->addDamage(new CellDamage(Cell(d->sheet, col, row), changes));
+        d->sheet->map()->addDamage(new CellDamage(Cell(d->sheet, col, row), changes));
     }
 
     // recording undo?
@@ -252,10 +251,10 @@ void CellStorage::setFormula( int column, int row, const Formula& formula )
     // formula changed?
     if ( formula != old )
     {
-        if ( !d->sheet->doc()->isLoading() )
+        if ( !d->sheet->map()->isLoading() )
         {
             // trigger an update of the dependencies and a recalculation
-            d->sheet->doc()->addDamage( new CellDamage( Cell( d->sheet, column, row ), CellDamage::Formula | CellDamage::Value ) );
+            d->sheet->map()->addDamage( new CellDamage( Cell( d->sheet, column, row ), CellDamage::Formula | CellDamage::Value ) );
         }
         // recording undo?
         if ( d->undoData )
@@ -388,7 +387,7 @@ void CellStorage::setValue( int column, int row, const Value& value )
     // value changed?
     if ( value != old )
     {
-        if ( !d->sheet->doc()->isLoading() )
+        if ( !d->sheet->map()->isLoading() )
         {
             // Always trigger a repainting and a binding update.
             CellDamage::Changes changes = CellDamage::Appearance | CellDamage::Binding;
@@ -396,7 +395,7 @@ void CellStorage::setValue( int column, int row, const Value& value )
             // already in a recalculation process.
             if ( !d->sheet->map()->recalcManager()->isActive() )
                 changes |= CellDamage::Value;
-            d->sheet->doc()->addDamage( new CellDamage( Cell( d->sheet, column, row ), changes ) );
+            d->sheet->map()->addDamage( new CellDamage( Cell( d->sheet, column, row ), changes ) );
         }
         // recording undo?
         if ( d->undoData )
@@ -576,10 +575,10 @@ void CellStorage::insertColumns( int position, int number )
     for (int i = 0; i < subStorage.count(); ++i)
     {
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger an update of the bindings and the named areas.
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
+    d->sheet->map()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->insertColumns( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertColumns( position, number );
@@ -617,11 +616,11 @@ void CellStorage::insertColumns( int position, int number )
     for (int i = 0; i < subStorage.count(); ++i)
     {
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
     Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
+    d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 
 void CellStorage::removeColumns( int position, int number )
@@ -633,11 +632,11 @@ void CellStorage::removeColumns( int position, int number )
     for (int i = 0; i < subStorage.count(); ++i)
     {
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger an update of the bindings and the named areas.
     const Region region(QRect(QPoint(position - 1, 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
+    d->sheet->map()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeColumns( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeColumns( position, number );
@@ -675,11 +674,11 @@ void CellStorage::removeColumns( int position, int number )
     for (int i = 0; i < subStorage.count(); ++i)
     {
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
     Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
+    d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 
 void CellStorage::insertRows( int position, int number )
@@ -691,10 +690,10 @@ void CellStorage::insertRows( int position, int number )
     for (int i = 0; i < subStorage.count(); ++i)
     {
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger an update of the bindings and the named areas.
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
+    d->sheet->map()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->insertRows( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertRows( position, number );
@@ -732,11 +731,11 @@ void CellStorage::insertRows( int position, int number )
     for (int i = 0; i < subStorage.count(); ++i)
     {
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
     Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
+    d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 
 void CellStorage::removeRows( int position, int number )
@@ -748,11 +747,11 @@ void CellStorage::removeRows( int position, int number )
     for (int i = 0; i < subStorage.count(); ++i)
     {
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger an update of the bindings and the named areas.
     const Region region(QRect(QPoint(1, position - 1), QPoint(KS_colMax, KS_rowMax)), d->sheet);
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
+    d->sheet->map()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeRows( position, number );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeRows( position, number );
@@ -790,11 +789,11 @@ void CellStorage::removeRows( int position, int number )
     for (int i = 0; i < subStorage.count(); ++i)
     {
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
     Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
+    d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 
 void CellStorage::removeShiftLeft( const QRect& rect )
@@ -806,11 +805,11 @@ void CellStorage::removeShiftLeft( const QRect& rect )
     for (int i = 0; i < subStorage.count(); ++i)
     {
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger an update of the bindings and the named areas.
     const Region region(QRect(rect.topLeft() - QPoint(1, 0), QPoint(KS_colMax, rect.bottom())), d->sheet);
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
+    d->sheet->map()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeShiftLeft( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeShiftLeft( rect );
@@ -848,11 +847,11 @@ void CellStorage::removeShiftLeft( const QRect& rect )
     for (int i = 0; i < subStorage.count(); ++i)
     {
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
     Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
+    d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 
 void CellStorage::insertShiftRight( const QRect& rect )
@@ -864,10 +863,10 @@ void CellStorage::insertShiftRight( const QRect& rect )
     for (int i = 0; i < subStorage.count(); ++i)
     {
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger an update of the bindings and the named areas.
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
+    d->sheet->map()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->insertShiftRight( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertShiftRight( rect );
@@ -905,11 +904,11 @@ void CellStorage::insertShiftRight( const QRect& rect )
     for (int i = 0; i < subStorage.count(); ++i)
     {
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
     Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
+    d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 
 void CellStorage::removeShiftUp( const QRect& rect )
@@ -921,11 +920,11 @@ void CellStorage::removeShiftUp( const QRect& rect )
     for (int i = 0; i < subStorage.count(); ++i)
     {
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger an update of the bindings and the named areas.
     const Region region(QRect(rect.topLeft() - QPoint(0, 1), QPoint(rect.right(), KS_rowMax)), d->sheet);
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
+    d->sheet->map()->addDamage(new CellDamage(d->sheet, region, CellDamage::Binding | CellDamage::NamedArea));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->removeShiftUp( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->removeShiftUp( rect );
@@ -963,11 +962,11 @@ void CellStorage::removeShiftUp( const QRect& rect )
     for (int i = 0; i < subStorage.count(); ++i)
     {
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
     Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
+    d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 
 void CellStorage::insertShiftDown( const QRect& rect )
@@ -979,10 +978,10 @@ void CellStorage::insertShiftDown( const QRect& rect )
     for (int i = 0; i < subStorage.count(); ++i)
     {
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger an update of the bindings and the named areas.
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
+    d->sheet->map()->addDamage(new CellDamage(d->sheet, invalidRegion, CellDamage::Binding | CellDamage::NamedArea));
 
     QList< QPair<QRectF,Binding> > bindings = d->bindingStorage->insertShiftDown( rect );
     QList< QPair<QRectF,QString> > comments = d->commentStorage->insertShiftDown( rect );
@@ -1020,11 +1019,11 @@ void CellStorage::insertShiftDown( const QRect& rect )
     for (int i = 0; i < subStorage.count(); ++i)
     {
         cell = Cell(d->sheet, subStorage.col(i), subStorage.row(i));
-        d->sheet->doc()->addDamage(new CellDamage(cell, CellDamage::Formula));
+        d->sheet->map()->addDamage(new CellDamage(cell, CellDamage::Formula));
     }
     // Trigger a recalculation only for the cells, that depend on values in the changed region.
     Region providers = d->sheet->map()->dependencyManager()->reduceToProvidingRegion(invalidRegion);
-    d->sheet->doc()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
+    d->sheet->map()->addDamage(new CellDamage(d->sheet, providers, CellDamage::Value));
 }
 
 Cell CellStorage::firstInColumn(int col, Visiting visiting) const

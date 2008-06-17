@@ -261,7 +261,7 @@ QDomElement Validity::saveXML( QDomDocument& doc ) const
 
 void Validity::loadOasisValidation( Cell* const cell, const QString& validationName )
 {
-    KoXmlElement element = cell->doc()->loadingInfo()->validation( validationName);
+    KoXmlElement element = cell->sheet()->doc()->loadingInfo()->validation( validationName);
     Validity validity;
     if ( element.hasAttributeNS( KoXmlNS::table, "condition" ) )
     {

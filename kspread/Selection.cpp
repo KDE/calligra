@@ -29,7 +29,6 @@
 
 #include "Cell.h"
 #include "CellStorage.h"
-#include "Doc.h"
 #include "Editors.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"

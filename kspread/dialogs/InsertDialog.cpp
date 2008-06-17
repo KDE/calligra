@@ -37,7 +37,6 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include "Doc.h"
 #include "Selection.h"
 #include "Sheet.h"
 

@@ -186,7 +186,7 @@ void TableShape::init(QMap<QString, KoDataCenter*> dataCenterMap)
     d->sheet = map->addNewSheet();
     d->sheetView = new SheetView(d->sheet);
 
-    connect(map->doc(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
+    connect(map, SIGNAL(damagesFlushed(const QList<Damage*>&)),
             this, SLOT(handleDamages(const QList<Damage*>&)));
 
     // Initialize the size using the default column/row dimensions.

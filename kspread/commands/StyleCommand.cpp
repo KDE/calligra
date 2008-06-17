@@ -20,12 +20,13 @@
 // Local
 #include "StyleCommand.h"
 
+#include <QBrush>
+
 #include <kdebug.h>
 #include <klocale.h>
 
 #include "Cell.h"
 #include "CellStorage.h"
-#include "Doc.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleStorage.h"

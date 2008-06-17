@@ -38,7 +38,6 @@
 #include "Canvas.h"
 #include "Util.h"
 #include "Editors.h"
-#include "Doc.h"
 #include "Localization.h"
 #include "Map.h"
 #include "Selection.h"
@@ -507,7 +506,7 @@ QString FormulaDialog::createParameter( const QString& _text, int param )
         }
         else
         {
-            const Region region(_text, m_selection->activeSheet()->doc()->map());
+            const Region region(_text, m_selection->activeSheet()->map());
             if (!region.isValid())
             {
                 text = '"';

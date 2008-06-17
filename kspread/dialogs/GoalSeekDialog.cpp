@@ -27,7 +27,6 @@
 
 #include "CalculationSettings.h"
 #include "Canvas.h"
-#include "Doc.h"
 #include "Editors.h"
 #include "Map.h"
 #include "Selection.h"
@@ -326,7 +325,7 @@ void GoalSeekDialog::chooseCleanup()
   Q_ASSERT( m_selection->activeSheet() );
   if ( m_selection->activeSheet()->sheetName() !=  m_sheetName )
   {
-    sheet = m_selection->activeSheet()->doc()->map()->findSheet( m_sheetName );
+    sheet = m_selection->activeSheet()->map()->findSheet( m_sheetName );
     if ( sheet )
       m_selection->setActiveSheet( sheet );
   }

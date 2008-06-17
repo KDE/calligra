@@ -21,13 +21,14 @@
 #define KSPREAD_RECT_STORAGE
 
 #include <QCache>
+#include <QRegion>
 #include <QTimer>
 
 #include "kspread_export.h"
 
 #include "Binding.h"
 #include "Condition.h"
-#include "Doc.h"
+#include "Map.h"
 #include "Region.h"
 #include "RTree.h"
 #include "Validity.h"
@@ -56,7 +57,7 @@ template<typename T>
 class KSPREAD_EXPORT RectStorage
 {
 public:
-    explicit RectStorage(Doc* doc);
+    explicit RectStorage(Map* map);
     RectStorage(const RectStorage& other);
     virtual ~RectStorage();
 
@@ -152,7 +153,7 @@ protected:
     void invalidateCache( const QRect& rect );
 
 private:
-    Doc* m_doc;
+    Map* m_map;
     RTree<T> m_tree;
     QRegion m_usedArea;
     QMap<int, QPair<QRectF,T> > m_possibleGarbage;
@@ -162,14 +163,14 @@ private:
 };
 
 template<typename T>
-RectStorage<T>::RectStorage(Doc* doc)
-    : m_doc(doc)
+RectStorage<T>::RectStorage(Map* map)
+    : m_map(map)
 {
 }
 
 template<typename T>
 RectStorage<T>::RectStorage(const RectStorage& other)
-    : m_doc(other.m_doc)
+    : m_map(other.m_map)
     , m_usedArea(other.m_usedArea)
     , m_storedData(other.m_storedData)
 {
@@ -548,7 +549,7 @@ void RectStorage<T>::garbageCollection()
 template<typename T>
 void RectStorage<T>::regionChanged( const QRect& rect )
 {
-    if (m_doc->isLoading())
+    if (m_map->isLoading())
          return;
     // mark the possible garbage
     // NOTE Stefan: The map may contain multiple indices. The already existing possible garbage has
@@ -580,7 +581,7 @@ class BindingStorage : public QObject, public RectStorage<Binding>
 {
     Q_OBJECT
 public:
-    explicit BindingStorage(Doc* doc) : QObject(doc), RectStorage<Binding>(doc) {}
+    explicit BindingStorage(Map* map) : QObject(map), RectStorage<Binding>(map) {}
     BindingStorage(const BindingStorage& other) : QObject(other.parent()), RectStorage<Binding>(other) {}
 
 protected Q_SLOTS:
@@ -594,7 +595,7 @@ class CommentStorage : public QObject, public RectStorage<QString>
 {
     Q_OBJECT
 public:
-    explicit CommentStorage(Doc* doc) : QObject(doc), RectStorage<QString>(doc) {}
+    explicit CommentStorage(Map* map) : QObject(map), RectStorage<QString>(map) {}
     CommentStorage(const CommentStorage& other) : QObject(other.parent()), RectStorage<QString>(other) {}
 
 protected Q_SLOTS:
@@ -608,7 +609,7 @@ class ConditionsStorage : public QObject, public RectStorage<Conditions>
 {
     Q_OBJECT
 public:
-    explicit ConditionsStorage(Doc* doc) : QObject(doc), RectStorage<Conditions>(doc) {}
+    explicit ConditionsStorage(Map* map) : QObject(map), RectStorage<Conditions>(map) {}
     ConditionsStorage(const ConditionsStorage& other) : QObject(other.parent()), RectStorage<Conditions>(other) {}
 
 protected Q_SLOTS:
@@ -622,7 +623,7 @@ class DatabaseStorage : public QObject, public RectStorage<Database>
 {
     Q_OBJECT
 public:
-    explicit DatabaseStorage(Doc* doc) : QObject(doc), RectStorage<Database>(doc) {}
+    explicit DatabaseStorage(Map* map) : QObject(map), RectStorage<Database>(map) {}
     DatabaseStorage(const DatabaseStorage& other) : QObject(other.parent()), RectStorage<Database>(other) {}
 
 protected Q_SLOTS:
@@ -636,7 +637,7 @@ class FusionStorage : public QObject, public RectStorage<bool>
 {
     Q_OBJECT
 public:
-    explicit FusionStorage(Doc* doc) : QObject(doc), RectStorage<bool>(doc) {}
+    explicit FusionStorage(Map* map) : QObject(map), RectStorage<bool>(map) {}
     FusionStorage(const FusionStorage& other) : QObject(other.parent()), RectStorage<bool>(other) {}
 
 protected Q_SLOTS:
@@ -650,7 +651,7 @@ class MatrixStorage : public QObject, public RectStorage<bool>
 {
     Q_OBJECT
 public:
-    explicit MatrixStorage(Doc* doc) : QObject(doc), RectStorage<bool>(doc) {}
+    explicit MatrixStorage(Map* map) : QObject(map), RectStorage<bool>(map) {}
     MatrixStorage(const MatrixStorage& other) : QObject(other.parent()), RectStorage<bool>(other) {}
 
 protected Q_SLOTS:
@@ -664,7 +665,7 @@ class ValidityStorage : public QObject, public RectStorage<Validity>
 {
     Q_OBJECT
 public:
-    explicit ValidityStorage(Doc* doc) : QObject(doc), RectStorage<Validity>(doc) {}
+    explicit ValidityStorage(Map* map) : QObject(map), RectStorage<Validity>(map) {}
     ValidityStorage(const ValidityStorage& other) : QObject(other.parent()), RectStorage<Validity>(other) {}
 
 protected Q_SLOTS:

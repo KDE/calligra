@@ -615,7 +615,7 @@ View::View( QWidget *_parent, Doc *_doc )
 
     connect( doc(), SIGNAL( sig_refreshLocale() ), this, SLOT( refreshLocale()));
 
-    connect(doc(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
+    connect(doc()->map(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
             this, SLOT(handleDamages(const QList<Damage*>&)));
 
     if (!doc()->isReadWrite())
@@ -921,7 +921,7 @@ void View::refreshSheetViews()
 
 void View::refreshSelection(const Region& region)
 {
-    doc()->addDamage(new CellDamage(activeSheet(), region, CellDamage::Appearance));
+    doc()->map()->addDamage(new CellDamage(activeSheet(), region, CellDamage::Appearance));
 }
 
 void View::aboutToModify(const Region& region)
@@ -2181,7 +2181,7 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
     return;
 
     if (d->selection->referenceSelectionMode()) {
-        doc()->addDamage(new SelectionDamage(changedRegion));
+        doc()->map()->addDamage(new SelectionDamage(changedRegion));
         kDebug(36002) <<"Choice:" << *selection();
         return;
     }
@@ -2191,7 +2191,7 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
   d->statusBarOpTimer.start(250);
 
   if ( !d->loading )
-    doc()->addDamage( new SelectionDamage( changedRegion ) );
+    doc()->map()->addDamage( new SelectionDamage( changedRegion ) );
   d->vBorderWidget->update();
   d->hBorderWidget->update();
   d->selectAllButton->update();
@@ -2446,7 +2446,7 @@ void View::updateShowSheetMenu()
 
 void View::markSelectionAsDirty()
 {
-    doc()->addDamage(new SelectionDamage(*selection()));
+    doc()->map()->addDamage(new SelectionDamage(*selection()));
 }
 
 void View::paintUpdates()

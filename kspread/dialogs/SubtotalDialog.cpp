@@ -34,7 +34,6 @@
 #include <kmessagebox.h>
 
 // KSpread
-#include "Doc.h"
 #include "Selection.h"
 #include "Sheet.h"
 

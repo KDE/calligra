@@ -24,7 +24,6 @@
 #include <QRegion>
 #include <QTimer>
 
-#include "Doc.h"
 #include "Global.h"
 #include "Map.h"
 #include "RTree.h"
@@ -39,7 +38,7 @@ using namespace KSpread;
 class KDE_NO_EXPORT StyleStorage::Private
 {
 public:
-    Doc* doc;
+    Map* map;
     RTree<SharedSubStyle> tree;
     QMap<int, bool> usedColumns; // FIXME Stefan: Use QList and qUpperBound() for insertion.
     QMap<int, bool> usedRows;
@@ -50,19 +49,19 @@ public:
     QRegion cachedArea;
 };
 
-StyleStorage::StyleStorage(Doc* doc)
-    : QObject(doc)
+StyleStorage::StyleStorage(Map* map)
+    : QObject(map)
     , d(new Private)
 {
-    d->doc = doc;
+    d->map = map;
     d->cache.setMaxCost( g_maximumCachedStyles );
 }
 
 StyleStorage::StyleStorage(const StyleStorage& other)
-    : QObject(other.d->doc)
+    : QObject(other.d->map)
     , d(new Private)
 {
-    d->doc = other.d->doc;
+    d->map = other.d->map;
     d->tree = other.d->tree;
     d->usedColumns = other.d->usedColumns;
     d->usedRows = other.d->usedRows;
@@ -645,7 +644,7 @@ void StyleStorage::garbageCollection()
 
 void StyleStorage::regionChanged( const QRect& rect )
 {
-    if ( d->doc->isLoading() )
+    if ( d->map->isLoading() )
          return;
     // mark the possible garbage
     // NOTE Stefan: The map may contain multiple indices. The already existing possible garbage has
@@ -762,7 +761,7 @@ Style StyleStorage::composeStyle( const QList<SharedSubStyle>& subStyles ) const
 
 StyleManager* StyleStorage::styleManager() const
 {
-    return d->doc->map()->styleManager();
+    return d->map->styleManager();
 }
 
 #include "StyleStorage.moc"

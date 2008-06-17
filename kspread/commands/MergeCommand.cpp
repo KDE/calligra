@@ -25,7 +25,6 @@
 
 #include "Cell.h"
 #include "Damages.h"
-#include "Doc.h"
 #include "Map.h"
 #include "Sheet.h"
 
@@ -254,6 +253,6 @@ bool MergeCommand::postProcessing()
       }
     }
   }
-    m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
+    m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
     return true;
 }

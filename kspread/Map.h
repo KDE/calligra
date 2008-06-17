@@ -44,6 +44,7 @@ namespace KSpread
 class BindingManager;
 class CalculationSettings;
 class ColumnFormat;
+class Damage;
 class DatabaseManager;
 class DependencyManager;
 class Doc;
@@ -280,7 +281,34 @@ public:
 
   void emitAddSheet(Sheet* sheet);
 
-signals:
+    /**
+     * \ingroup OpenDocument
+     * \ingroup NativeFormat
+     * \return true if the document is currently loading.
+     */
+    bool isLoading() const;
+
+    /**
+     * \ingroup Operations
+     */
+    void addDamage(Damage* damage);
+
+public Q_SLOTS:
+    /**
+     * \ingroup Operations
+     */
+    void flushDamages();
+
+    /**
+     * \ingroup Operations
+     */
+    void handleDamages(const QList<Damage*>& damages);
+
+Q_SIGNALS:
+    /**
+     * \ingroup Operations
+     */
+    void damagesFlushed(const QList<Damage*>& damages);
 
   /**
    * Emitted if a new table is added to the document.

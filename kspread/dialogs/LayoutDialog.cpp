@@ -63,6 +63,7 @@
 #include "Canvas.h"
 #include "Cell.h"
 #include "CellStorage.h"
+#include "Doc.h"
 #include "Localization.h"
 #include "Map.h"
 #include "Sheet.h"

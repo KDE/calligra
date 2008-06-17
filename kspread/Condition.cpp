@@ -25,7 +25,6 @@
 
 #include "Cell.h"
 #include "Sheet.h"
-#include "Doc.h"
 #include "Style.h"
 #include "StyleManager.h"
 #include "Util.h"

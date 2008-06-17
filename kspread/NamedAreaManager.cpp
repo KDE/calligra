@@ -39,7 +39,6 @@
 
 // KSpread
 #include "CellStorage.h"
-#include "Doc.h"
 #include "LoadingInfo.h"
 #include "Map.h"
 #include "Region.h"

@@ -25,7 +25,6 @@
 #include <kdebug.h>
 
 #include "Cell.h"
-#include "Doc.h"
 #include "Global.h"
 #include "Map.h"
 #include "NamedAreaManager.h"

@@ -49,7 +49,6 @@
 
 //KSpread Includes
 #include <Canvas.h>
-#include <Doc.h>
 #include <Global.h>
 #include <Localization.h>
 #include <Map.h>
@@ -652,7 +651,7 @@ void ConsolidateDialog::slotReturnPressed()
 {
   QString txt = m_pRef->text();
 
-  const Region r( txt, m_selection->activeSheet()->doc()->map() );
+  const Region r( txt, m_selection->activeSheet()->map() );
   if ( !r.isValid() )
   {
     KMessageBox::error( this, i18n("The range\n%1\n is malformed", txt ));

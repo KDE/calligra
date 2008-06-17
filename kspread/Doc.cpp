@@ -75,7 +75,6 @@
 #include "BindingManager.h"
 #include "CalculationSettings.h"
 #include "Canvas.h"
-#include "Damages.h"
 #include "DependencyManager.h"
 #include "Formula.h"
 #include "Functions.h"
@@ -135,8 +134,6 @@ public:
   QColor pageBorderColor;
 
   KCompletion listCompletion;
-
-  QList<Damage*> damages;
 
   // document properties
   int syntaxVersion;
@@ -219,9 +216,6 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
             shapeFactory->setOptionPanels(panels);
         }
     }
-
-    connect(this, SIGNAL(damagesFlushed(const QList<Damage*>&)),
-            this, SLOT(handleDamages(const QList<Damage*>&)));
 }
 
 Doc::~Doc()
@@ -549,7 +543,6 @@ bool Doc::loadOdf( KoOdfReadStore & odfStore )
 
     emit sigProgress( 0 );
     d->isLoading = true;
-    connect(this, SIGNAL(completed()), this, SLOT(finishLoading()));
     d->spellListIgnoreAll.clear();
 
     KoXmlElement content = odfStore.contentDoc().documentElement();
@@ -611,7 +604,6 @@ bool Doc::loadXML( QIODevice *, const KoXmlDocument& doc )
 
   emit sigProgress( 0 );
   d->isLoading = true;
-  connect(this, SIGNAL(completed()), this, SLOT(finishLoading()));
   d->spellListIgnoreAll.clear();
   // <spreadsheet>
   KoXmlElement spread = doc.documentElement();
@@ -818,13 +810,6 @@ void Doc::loadPaper( KoXmlElement const & paper )
     sheet->print()->setHeadFootLine( hleft, hcenter, hright,
                                      fleft, fcenter, fright);
   }
-}
-
-void Doc::finishLoading()
-{
-    // update all dependencies and recalc all cells
-    addDamage(new WorkbookDamage(map(), WorkbookDamage::Formula | WorkbookDamage::Value));
-    disconnect(this, SIGNAL(completed()), this, SLOT(finishLoading()));
 }
 
 bool Doc::completeLoading( KoStore* store )
@@ -1340,134 +1325,6 @@ void Doc::addView( KoView *_view )
   KoDocument::addView( _view );
   foreach ( KoView* view, views() )
     static_cast<View*>( view )->selection()->emitCloseEditor(true);
-}
-
-void Doc::addDamage( Damage* damage )
-{
-    // Do not create a new Damage, if we are in loading process. Check for it before
-    // calling this function. This prevents unnecessary memory allocations (new).
-    Q_ASSERT( !isLoading() );
-    Q_CHECK_PTR( damage );
-
-    if ( damage->type() == Damage::Cell )
-        kDebug(36007) <<"Adding\t" << *static_cast<CellDamage*>(damage);
-    else if ( damage->type() == Damage::Sheet )
-        kDebug(36007) <<"Adding\t" << *static_cast<SheetDamage*>(damage);
-    else if ( damage->type() == Damage::Selection )
-        kDebug(36007) <<"Adding\t" << *static_cast<SelectionDamage*>(damage);
-    else
-        kDebug(36007) <<"Adding\t" << *damage;
-
-    d->damages.append( damage );
-
-    if( d->damages.count() == 1 )
-        QTimer::singleShot( 0, this, SLOT( flushDamages() ) );
-}
-
-void Doc::flushDamages()
-{
-    // Copy the damages to process. This allows new damages while processing.
-    QList<Damage*> damages = d->damages;
-    d->damages.clear();
-    emit damagesFlushed( damages );
-    qDeleteAll( damages );
-    damages.clear();
-}
-
-void Doc::handleDamages( const QList<Damage*>& damages )
-{
-    Region bindingChangedRegion;
-    Region formulaChangedRegion;
-    Region namedAreaChangedRegion;
-    Region valueChangedRegion;
-    WorkbookDamage::Changes workbookChanges = WorkbookDamage::None;
-
-    QList<Damage*>::ConstIterator end(damages.end());
-    for( QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it )
-    {
-        Damage* damage = *it;
-        if( !damage ) continue;
-
-        if( damage->type() == Damage::Cell )
-        {
-            CellDamage* cellDamage = static_cast<CellDamage*>( damage );
-            kDebug(36007) <<"Processing\t" << *cellDamage;
-            Sheet* const damagedSheet = cellDamage->sheet();
-            const Region region = cellDamage->region();
-
-            if ((cellDamage->changes() & CellDamage::Binding) &&
-                 !workbookChanges.testFlag(WorkbookDamage::Value))
-            {
-                bindingChangedRegion.add(region, damagedSheet);
-            }
-            if ( ( cellDamage->changes() & CellDamage::Formula ) &&
-                 !workbookChanges.testFlag( WorkbookDamage::Formula ) )
-            {
-                formulaChangedRegion.add( region, damagedSheet );
-            }
-            if ( ( cellDamage->changes() & CellDamage::NamedArea ) &&
-                 !workbookChanges.testFlag( WorkbookDamage::Formula ) )
-            {
-                namedAreaChangedRegion.add( region, damagedSheet );
-            }
-            if ( ( cellDamage->changes() & CellDamage::Value ) &&
-                 !workbookChanges.testFlag( WorkbookDamage::Value ) )
-            {
-                valueChangedRegion.add( region, damagedSheet );
-            }
-            continue;
-        }
-
-        if( damage->type() == Damage::Sheet )
-        {
-            SheetDamage* sheetDamage = static_cast<SheetDamage*>( damage );
-            kDebug(36007) <<"Processing\t" << *sheetDamage;
-//             Sheet* damagedSheet = sheetDamage->sheet();
-
-            if ( sheetDamage->changes() & SheetDamage::PropertiesChanged )
-            {
-            }
-            continue;
-        }
-
-        if( damage->type() == Damage::Workbook )
-        {
-            WorkbookDamage* workbookDamage = static_cast<WorkbookDamage*>( damage );
-            kDebug(36007) <<"Processing\t" << *damage;
-
-            workbookChanges |= workbookDamage->changes();
-            if ( workbookDamage->changes() & WorkbookDamage::Formula )
-                formulaChangedRegion.clear();
-            if ( workbookDamage->changes() & WorkbookDamage::Value )
-                valueChangedRegion.clear();
-            continue;
-        }
-
-        kDebug(36007) <<"Unhandled\t" << *damage;
-    }
-
-    // Update the named areas.
-    if (!namedAreaChangedRegion.isEmpty())
-        map()->namedAreaManager()->regionChanged(namedAreaChangedRegion);
-    // First, update the dependencies.
-    if ( !formulaChangedRegion.isEmpty() )
-        map()->dependencyManager()->regionChanged( formulaChangedRegion );
-    // Tell the RecalcManager which cells have had a value change.
-    if ( !valueChangedRegion.isEmpty() )
-        map()->recalcManager()->regionChanged( valueChangedRegion );
-    if ( workbookChanges.testFlag( WorkbookDamage::Formula ) )
-    {
-        map()->namedAreaManager()->updateAllNamedAreas();
-        map()->dependencyManager()->updateAllDependencies( map() );
-    }
-    if ( workbookChanges.testFlag( WorkbookDamage::Value ) )
-    {
-        map()->recalcManager()->recalcMap();
-        map()->bindingManager()->updateAllBindings();
-    }
-    // Update the bindings
-    if (!bindingChangedRegion.isEmpty())
-        map()->bindingManager()->regionChanged(bindingChangedRegion);
 }
 
 void Doc::loadConfigFromFile()

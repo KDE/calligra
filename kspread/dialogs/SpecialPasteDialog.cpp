@@ -28,7 +28,6 @@
 #include <klocale.h>
 
 #include "Canvas.h"
-#include "Doc.h"
 #include "Selection.h"
 #include "Sheet.h"
 

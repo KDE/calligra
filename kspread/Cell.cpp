@@ -49,7 +49,6 @@
 #include "CalculationSettings.h"
 #include "CellStorage.h"
 #include "Condition.h"
-#include "Doc.h"
 #include "GenValidationStyle.h"
 #include "Global.h"
 #include "Localization.h"

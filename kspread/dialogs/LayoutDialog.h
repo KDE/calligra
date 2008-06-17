@@ -42,7 +42,6 @@
 #include <knuminput.h>
 #include <kpagedialog.h>
 
-#include "Doc.h"
 #include "RowColumnFormat.h"
 #include "Style.h"
 #include "Value.h"

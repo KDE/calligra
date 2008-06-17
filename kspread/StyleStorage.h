@@ -31,8 +31,7 @@
 
 namespace KSpread
 {
-
-class Doc;
+class Map;
 class Style;
 class StyleManager;
 class SubStyle;
@@ -48,7 +47,7 @@ class KSPREAD_EXPORT StyleStorage : public QObject
     Q_OBJECT
 
 public:
-    explicit StyleStorage(Doc* doc);
+    explicit StyleStorage(Map* map);
     StyleStorage(const StyleStorage& other);
     virtual ~StyleStorage();
 

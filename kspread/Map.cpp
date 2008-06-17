@@ -40,6 +40,7 @@
 #include "BindingManager.h"
 #include "CalculationSettings.h"
 #include "Canvas.h"
+#include "Damages.h"
 #include "DependencyManager.h"
 #include "Doc.h"
 #include "GenValidationStyle.h"
@@ -112,6 +113,9 @@ public:
     // default objects
     ColumnFormat* defaultColumnFormat;
     RowFormat* defaultRowFormat;
+
+    QList<Damage*> damages;
+    bool isLoading;
 };
 
 
@@ -152,11 +156,15 @@ Map::Map ( Doc* doc, const char* name)
     d->defaultRowFormat->setHeight(font.pointSizeF() + 3);
     d->defaultColumnFormat->setWidth((font.pointSizeF() + 3) * 5);
 
+    d->isLoading = false;
+
   new MapAdaptor(this);
   QDBusConnection::sessionBus().registerObject( '/'+doc->objectName() + '/' + objectName(), this);
 
     connect(d->namedAreaManager, SIGNAL(namedAreaModified(const QString&)),
             d->dependencyManager, SLOT(namedAreaModified(const QString&)));
+    connect(this, SIGNAL(damagesFlushed(const QList<Damage*>&)),
+            this, SLOT(handleDamages(const QList<Damage*>&)));
 }
 
 Map::~Map()
@@ -189,6 +197,8 @@ Doc* Map::doc() const
 bool Map::completeLoading(KoStore *store)
 {
     Q_UNUSED(store);
+    // update all dependencies and recalc all cells
+    addDamage(new WorkbookDamage(this, WorkbookDamage::Formula | WorkbookDamage::Value));
     return true;
 }
 
@@ -502,6 +512,7 @@ QDomElement Map::save( QDomDocument& doc )
 
 bool Map::loadOasis( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
 {
+    d->isLoading = true;
     //load in first
     d->styleManager->loadOasisStyleTemplate(odfContext.stylesReader(), this);
 
@@ -623,12 +634,14 @@ bool Map::loadOasis( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
     d->databaseManager->loadOdf(body); // table:database-ranges
     d->namedAreaManager->loadOdf(body); // table:named-expressions
 
+    d->isLoading = false;
     return true;
 }
 
 
 bool Map::loadXML( const KoXmlElement& mymap )
 {
+    d->isLoading = true;
   QString activeSheet   = mymap.attribute( "activeTable" );
   d->initialMarkerColumn = mymap.attribute( "markerColumn" ).toInt();
   d->initialMarkerRow    = mymap.attribute( "markerRow" ).toInt();
@@ -640,6 +653,7 @@ bool Map::loadXML( const KoXmlElement& mymap )
   {
       // We need at least one sheet !
       doc()->setErrorMessage( i18n("This document has no sheets (tables).") );
+      d->isLoading = false;
       return false;
   }
   while( !n.isNull() )
@@ -648,8 +662,10 @@ bool Map::loadXML( const KoXmlElement& mymap )
     if ( !e.isNull() && e.tagName() == "table" )
     {
       Sheet *t = addNewSheet();
-      if ( !t->loadXML( e ) )
+      if ( !t->loadXML( e ) ) {
+        d->isLoading = false;
         return false;
+      }
     }
     n = n.nextSibling();
   }
@@ -673,6 +689,7 @@ bool Map::loadXML( const KoXmlElement& mymap )
     d->initialActiveSheet = findSheet( activeSheet );
   }
 
+    d->isLoading = false;
   return true;
 }
 
@@ -842,6 +859,136 @@ void Map::increaseLoadedRowsCounter(int number)
 void Map::emitAddSheet(Sheet* sheet)
 {
     emit sig_addSheet(sheet);
+}
+
+bool Map::isLoading() const
+{
+    return d->isLoading;
+}
+
+void Map::addDamage(Damage* damage)
+{
+    // Do not create a new Damage, if we are in loading process. Check for it before
+    // calling this function. This prevents unnecessary memory allocations (new).
+    Q_ASSERT(!isLoading());
+    Q_CHECK_PTR(damage);
+
+#ifndef NDEBUG
+    if (damage->type() == Damage::Cell) {
+        kDebug(36007) <<"Adding\t" << *static_cast<CellDamage*>(damage);
+    } else if (damage->type() == Damage::Sheet) {
+        kDebug(36007) <<"Adding\t" << *static_cast<SheetDamage*>(damage);
+    } else if (damage->type() == Damage::Selection) {
+        kDebug(36007) <<"Adding\t" << *static_cast<SelectionDamage*>(damage);
+    } else {
+        kDebug(36007) <<"Adding\t" << *damage;
+    }
+#endif
+
+    d->damages.append(damage);
+
+    if (d->damages.count() == 1) {
+        QTimer::singleShot(0, this, SLOT(flushDamages()));
+    }
+}
+
+void Map::flushDamages()
+{
+    // Copy the damages to process. This allows new damages while processing.
+    QList<Damage*> damages = d->damages;
+    d->damages.clear();
+    emit damagesFlushed(damages);
+    qDeleteAll(damages);
+}
+
+void Map::handleDamages(const QList<Damage*>& damages)
+{
+    Region bindingChangedRegion;
+    Region formulaChangedRegion;
+    Region namedAreaChangedRegion;
+    Region valueChangedRegion;
+    WorkbookDamage::Changes workbookChanges = WorkbookDamage::None;
+
+    QList<Damage*>::ConstIterator end(damages.end());
+    for(QList<Damage*>::ConstIterator it = damages.begin(); it != end; ++it) {
+        Damage* damage = *it;
+        if(!damage) continue;
+
+        if(damage->type() == Damage::Cell) {
+            CellDamage* cellDamage = static_cast<CellDamage*>(damage);
+            kDebug(36007) <<"Processing\t" << *cellDamage;
+            Sheet* const damagedSheet = cellDamage->sheet();
+            const Region region = cellDamage->region();
+
+            if ((cellDamage->changes() & CellDamage::Binding) &&
+                 !workbookChanges.testFlag(WorkbookDamage::Value)) {
+                bindingChangedRegion.add(region, damagedSheet);
+            }
+            if ((cellDamage->changes() & CellDamage::Formula) &&
+                   !workbookChanges.testFlag(WorkbookDamage::Formula)) {
+                formulaChangedRegion.add(region, damagedSheet);
+            }
+            if ((cellDamage->changes() & CellDamage::NamedArea) &&
+                   !workbookChanges.testFlag(WorkbookDamage::Formula)) {
+                namedAreaChangedRegion.add(region, damagedSheet);
+            }
+            if ((cellDamage->changes() & CellDamage::Value) &&
+                   !workbookChanges.testFlag(WorkbookDamage::Value)) {
+                valueChangedRegion.add(region, damagedSheet);
+            }
+            continue;
+        }
+
+        if(damage->type() == Damage::Sheet) {
+            SheetDamage* sheetDamage = static_cast<SheetDamage*>(damage);
+            kDebug(36007) <<"Processing\t" << *sheetDamage;
+//             Sheet* damagedSheet = sheetDamage->sheet();
+
+            if (sheetDamage->changes() & SheetDamage::PropertiesChanged) {
+            }
+            continue;
+        }
+
+        if(damage->type() == Damage::Workbook) {
+            WorkbookDamage* workbookDamage = static_cast<WorkbookDamage*>(damage);
+            kDebug(36007) <<"Processing\t" << *damage;
+
+            workbookChanges |= workbookDamage->changes();
+            if (workbookDamage->changes() & WorkbookDamage::Formula) {
+                formulaChangedRegion.clear();
+            }
+            if (workbookDamage->changes() & WorkbookDamage::Value) {
+                valueChangedRegion.clear();
+            }
+            continue;
+        }
+//         kDebug(36007) <<"Unhandled\t" << *damage;
+    }
+
+    // Update the named areas.
+    if (!namedAreaChangedRegion.isEmpty()) {
+        d->namedAreaManager->regionChanged(namedAreaChangedRegion);
+    }
+    // First, update the dependencies.
+    if (!formulaChangedRegion.isEmpty()) {
+        d->dependencyManager->regionChanged(formulaChangedRegion);
+    }
+    // Tell the RecalcManager which cells have had a value change.
+    if (!valueChangedRegion.isEmpty()) {
+        d->recalcManager->regionChanged(valueChangedRegion);
+    }
+    if (workbookChanges.testFlag(WorkbookDamage::Formula)) {
+        d->namedAreaManager->updateAllNamedAreas();
+        d->dependencyManager->updateAllDependencies(this);
+    }
+    if (workbookChanges.testFlag(WorkbookDamage::Value)) {
+        d->recalcManager->recalcMap();
+        d->bindingManager->updateAllBindings();
+    }
+    // Update the bindings
+    if (!bindingChangedRegion.isEmpty()) {
+        d->bindingManager->regionChanged(bindingChangedRegion);
+    }
 }
 
 #include "Map.moc"

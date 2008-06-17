@@ -27,7 +27,6 @@
 #include <kdebug.h>
 
 #include "Formula.h"
-#include "Doc.h"
 #include "Localization.h"
 #include "Map.h"
 #include "NamedAreaManager.h"

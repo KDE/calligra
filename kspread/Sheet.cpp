@@ -769,7 +769,7 @@ void Sheet::refreshChangeAreaName(const QString & _areaName)
             if ( cell.makeFormula() )
             {
                 // recalculate cells
-                doc()->addDamage(new CellDamage(cell, CellDamage::Appearance | CellDamage::Binding |
+                map()->addDamage(new CellDamage(cell, CellDamage::Appearance | CellDamage::Binding |
                                                       CellDamage::Value));
             }
         }
@@ -1762,7 +1762,7 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
 
 #if 0
     // recalculate cells
-    this->doc()->addDamage( new CellDamage( this, recalcRegion, CellDamage::Appearance | CellDamage::Value ) );
+    map()->addDamage( new CellDamage( this, recalcRegion, CellDamage::Appearance | CellDamage::Value ) );
 #endif
 
     this->doc()->setModified( true );
@@ -2433,7 +2433,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
 
 bool Sheet::isLoading()
 {
-    return doc()->isLoading();
+    return map()->isLoading();
 }
 
 void Sheet::checkContentDirection( QString const & name )
@@ -4305,36 +4305,41 @@ Sheet* Sheet::findSheet( const QString & _name )
 void Sheet::insertColumnFormat( ColumnFormat *l )
 {
     d->columns.insertElement( l, l->column() );
-    if (!doc()->isLoading())
-        doc()->addDamage( new SheetDamage( this, SheetDamage::ColumnsChanged ) );
+    if (!map()->isLoading()) {
+        map()->addDamage(new SheetDamage(this, SheetDamage::ColumnsChanged));
+    }
 }
 
 void Sheet::insertRowFormat( RowFormat *l )
 {
     d->rows.insertElement( l, l->row() );
-    if (!doc()->isLoading())
-        doc()->addDamage( new SheetDamage( this, SheetDamage::RowsChanged ) );
+    if (!map()->isLoading()) {
+        map()->addDamage(new SheetDamage(this, SheetDamage::RowsChanged));
+    }
 }
 
 void Sheet::deleteColumnFormat( int column )
 {
     d->columns.removeElement( column );
-    if (!doc()->isLoading())
-        doc()->addDamage( new SheetDamage( this, SheetDamage::ColumnsChanged ) );
+    if (!map()->isLoading()) {
+        map()->addDamage(new SheetDamage(this, SheetDamage::ColumnsChanged));
+    }
 }
 
 void Sheet::deleteRowFormat( int row )
 {
     d->rows.removeElement( row );
-    if (!doc()->isLoading())
-        doc()->addDamage( new SheetDamage( this, SheetDamage::RowsChanged ) );
+    if (!map()->isLoading()) {
+        map()->addDamage(new SheetDamage(this, SheetDamage::RowsChanged));
+    }
 }
 
 void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )
 {
     Q_UNUSED(_format);
-    if ( doc()->isLoading() )
+    if (map()->isLoading()) {
         return;
+    }
 
     if ( repaint )
     {
@@ -4350,8 +4355,9 @@ void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )
 void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
 {
     Q_UNUSED(_format);
-    if ( doc()->isLoading() )
+    if (map()->isLoading()) {
         return;
+    }
 
     //All the cells in this column or to the right of it will need to be repainted if the column
     //has been resized or hidden, so add that region of the sheet to the paint dirty list.
@@ -4498,7 +4504,7 @@ void Sheet::setRegionPaintDirty( const Region & region )
     if (!region.isValid())
         return;
 
-    doc()->addDamage( new CellDamage( this, region, CellDamage::Appearance ) );
+    map()->addDamage( new CellDamage( this, region, CellDamage::Appearance ) );
 
 //     kDebug(36004) <<"setRegionPaintDirty"<< static_cast<const Region*>(&region)->name(this);
 }

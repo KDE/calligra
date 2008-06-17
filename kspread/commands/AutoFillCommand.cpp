@@ -30,7 +30,6 @@
 
 #include "AutoFillCommand.h"
 
-#include "Doc.h"
 #include "Localization.h"
 #include "Map.h"
 #include "Sheet.h"

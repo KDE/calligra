@@ -40,7 +40,6 @@
 
 #include "CalculationSettings.h"
 #include "Canvas.h"
-#include "Doc.h"
 #include "Localization.h"
 #include "Map.h"
 #include "Selection.h"

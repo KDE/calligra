@@ -27,7 +27,6 @@
 #include "Cell.h"
 #include "CellStorage.h"
 #include "DependencyManager.h"
-#include "Doc.h"
 #include "Formula.h"
 #include "Map.h"
 #include "Sheet.h"

@@ -33,7 +33,6 @@
 #include <klocale.h>
 
 // KSpread
-#include "Doc.h"
 #include "Region.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"

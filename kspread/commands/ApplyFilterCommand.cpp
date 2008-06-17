@@ -23,7 +23,7 @@
 
 #include "CellStorage.h"
 #include "Damages.h"
-#include "Doc.h"
+#include "Map.h"
 #include "Sheet.h"
 #include "RowColumnFormat.h"
 
@@ -73,7 +73,7 @@ void ApplyFilterCommand::redo()
 
     m_sheet->cellStorage()->setDatabase(*this, Database());
     m_sheet->cellStorage()->setDatabase(*this, database);
-    m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
+    m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }
 
 void ApplyFilterCommand::undo()
@@ -99,7 +99,7 @@ void ApplyFilterCommand::undo()
 
     m_sheet->cellStorage()->setDatabase(*this, Database());
     m_sheet->cellStorage()->setDatabase(*this, database);
-    m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
+    m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }
 
 void ApplyFilterCommand::setDatabase(const Database& database)

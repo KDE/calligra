@@ -23,7 +23,6 @@
 
 #include "CellStorage.h"
 #include "Damages.h"
-#include "Doc.h"
 #include "Map.h"
 #include "Sheet.h"
 
@@ -48,11 +47,11 @@ void AutoFilterCommand::redo()
     database.setDisplayFilterButtons(true);
     database.setRange(*this);
     m_sheet->cellStorage()->setDatabase(*this, database);
-    m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
+    m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }
 
 void AutoFilterCommand::undo()
 {
     m_sheet->cellStorage()->setDatabase( *this, Database() );
-    m_sheet->doc()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
+    m_sheet->map()->addDamage(new CellDamage(m_sheet, *this, CellDamage::Appearance));
 }

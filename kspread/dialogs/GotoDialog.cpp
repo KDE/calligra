@@ -33,7 +33,6 @@
 
 #include "Canvas.h"
 #include "Cell.h"
-#include "Doc.h"
 #include "Localization.h"
 #include "Map.h"
 #include "NamedAreaManager.h"

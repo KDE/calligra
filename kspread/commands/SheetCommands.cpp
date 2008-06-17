@@ -288,7 +288,7 @@ void SheetPropertiesCommand::redo()
     sheet->setShowColumnNumber( newColumnAsNumber );
     sheet->setLcMode( newLcMode );
     sheet->setFirstLetterUpper( newCapitalizeFirstLetter );
-    doc->addDamage( new SheetDamage( sheet, SheetDamage::PropertiesChanged ) );
+    sheet->map()->addDamage( new SheetDamage( sheet, SheetDamage::PropertiesChanged ) );
 }
 
 void SheetPropertiesCommand::undo()
@@ -304,5 +304,5 @@ void SheetPropertiesCommand::undo()
     sheet->setShowColumnNumber( oldColumnAsNumber );
     sheet->setLcMode( oldLcMode );
     sheet->setFirstLetterUpper( oldCapitalizeFirstLetter );
-    doc->addDamage( new SheetDamage( sheet, SheetDamage::PropertiesChanged ) );
+    sheet->map()->addDamage( new SheetDamage( sheet, SheetDamage::PropertiesChanged ) );
 }

@@ -1379,14 +1379,14 @@ void CellToolBase::setDefaultStyle()
 
 void CellToolBase::styleDialog()
 {
-    Doc* const doc = selection()->activeSheet()->doc();
-    StyleManager* const styleManager = selection()->activeSheet()->map()->styleManager();
+    Map* const map = selection()->activeSheet()->map();
+    StyleManager* const styleManager = map->styleManager();
     StyleManagerDialog dialog(m_canvas->canvasWidget(), selection(), styleManager);
     dialog.exec();
 
     static_cast<KSelectAction*>(action("stylemenu"))->setItems(styleManager->styleNames());
     if (selection()->activeSheet())
-        doc->addDamage(new CellDamage(selection()->activeSheet(), Region(1, 1, maxCol(), maxRow()), CellDamage::Appearance));
+        map->addDamage(new CellDamage(selection()->activeSheet(), Region(1, 1, maxCol(), maxRow()), CellDamage::Appearance));
     m_canvas->canvasWidget()->update();
 }
 

@@ -38,7 +38,6 @@
 #include <KoXmlWriter.h>
 
 #include "Condition.h"
-#include "Doc.h"
 #include "Global.h"
 #include "StyleManager.h"
 #include "Util.h"

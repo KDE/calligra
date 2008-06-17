@@ -51,7 +51,6 @@
 #include <kmessagebox.h>
 #include <kvbox.h>
 
-#include "Doc.h"
 #include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
@@ -314,7 +313,7 @@ void SortDialog::init()
   }
   m_customList->insertItems( 0,lst);
 
-  /*QPtrList<Sheet> sheetList = m_pView->doc()->map()->sheetList();
+  /*QPtrList<Sheet> sheetList = m_pView->map()->sheetList();
   for (unsigned int c = 0; c < sheetList.count(); ++c)
   {
     Sheet * t = sheetList.at(c);

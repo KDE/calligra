@@ -20,7 +20,6 @@
 #include "BindingManager.h"
 
 #include "CellStorage.h"
-#include "Doc.h"
 #include "Map.h"
 #include "RectStorage.h"
 #include "Region.h"

@@ -59,7 +59,6 @@ class KoDataCenter;
 
 namespace KSpread
 {
-class Damage;
 class Sheet;
 class Doc;
 class View;
@@ -155,11 +154,6 @@ public:
    * Returns true if undo buffer is locked.
    */
   bool undoLocked() const;
-
-  /**
-   * \ingroup Operations
-   */
-  void addDamage( Damage* damage );
 
   /**
    * @return the name of the unit used to display margins.
@@ -459,8 +453,6 @@ public:
 
 public Q_SLOTS:
     void refreshInterface();
-    void flushDamages();
-    void handleDamages( const QList<Damage*>& damages );
 
     virtual void initEmpty();
 
@@ -480,11 +472,8 @@ Q_SIGNALS:
    */
   void sig_refreshLocale();
 
-  void damagesFlushed( const QList<Damage*>& damages );
-
 protected Q_SLOTS:
   virtual void openTemplate( const KUrl& url );
-    void finishLoading();
 
 protected:
   KoView* createViewInstance( QWidget* parent );

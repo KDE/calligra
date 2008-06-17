@@ -25,7 +25,6 @@
 
 #include "Cell.h"
 #include "CellStorage.h"
-#include "Doc.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleStorage.h"
