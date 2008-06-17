@@ -6,13 +6,14 @@ by hand and use org-mode instead.
 
 
 * Basic kwebforms implementation
-** Implement basic CRUD Operations [60%]
-   - [ ] Implement CREATE
+** Implement basic CRUD Operations [80%]
+   - [X] Implement CREATE
    - [X] Implement READ
    - [X] Implement UPDATE
    - [X] Implement DELETE
    - [ ] Implement shortcut and connection file loading
-*** TODO Refine code
+*** TODO Refine code [0%]
+   - [ ] Clean-up
 
 
 ** Add a 'RUN SQL Query' box [0%]
@@ -35,3 +36,6 @@ by hand and use org-mode instead.
    It should be designed as a library, with multithreading support, to improve
    and encourage reuse.
 
+   - Ideally this can be made using QtNetwork and QThread classes to create a
+   Pure C++ multithreaded web server. The webserver should be developed as a library
+   to improve code reuse.

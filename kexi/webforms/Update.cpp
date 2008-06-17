@@ -75,7 +75,7 @@ namespace KexiWebForms {
         } else if (Request::request(req, "dataSent") == "true") {
             cursor = gConnection->prepareQuery(schema);
                 
-            QStringList fieldsList = Request::request(req, "tableFields").split("|:|");
+            QStringList fieldsList(Request::request(req, "tableFields").split("|:|"));
             kDebug() << "Fields: " << fieldsList;
 
             QStringListIterator iterator(fieldsList);

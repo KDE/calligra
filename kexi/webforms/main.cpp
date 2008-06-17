@@ -104,6 +104,7 @@ int main(int argc, char **argv) {
         IndexHandler indexHandler;
 
         // CRUD Handlers
+        CreateHandler createHandler;
         ReadHandler readHandler;
         UpdateHandler updateHandler;
         DeleteHandler deleteHandler;
@@ -112,6 +113,7 @@ int main(int argc, char **argv) {
             // Register index page handler
             server->registerHandler("/", indexHandler.m_callback);
             // Register CRUD handlers
+            server->registerHandler("/create/*", createHandler.m_callback);
             server->registerHandler("/read/*", readHandler.m_callback);
             server->registerHandler("/update/*", updateHandler.m_callback);
             server->registerHandler("/delete/*", deleteHandler.m_callback);

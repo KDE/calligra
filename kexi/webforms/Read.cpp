@@ -46,6 +46,7 @@ namespace KexiWebForms {
 
             
         QString requestedTable = Request::requestUri(req).split('/').at(2);
+        dict.SetValue("TABLENAME", requestedTable.toLatin1().constData());
 
         QString tableData;
         KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
