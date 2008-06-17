@@ -219,12 +219,12 @@ public:
   /**
    * @return a pointer to the next sheet to @p sheet
    */
-  Sheet* nextSheet( Sheet* sheet );
+  Sheet* nextSheet( Sheet* sheet ) const;
 
   /**
    * @return a pointer to the previous sheet to @p sheet
    */
-  Sheet* previousSheet( Sheet* );
+  Sheet* previousSheet( Sheet* ) const;
 
     Sheet* initialActiveSheet()  const;
     void setInitialActiveSheet( Sheet* sheet );

@@ -703,7 +703,7 @@ Sheet* Map::findSheet( const QString & _name ) const
   return 0;
 }
 
-Sheet * Map::nextSheet( Sheet * currentSheet )
+Sheet * Map::nextSheet( Sheet * currentSheet ) const
 {
   if( currentSheet == d->lstSheets.last())
     return currentSheet;
@@ -717,7 +717,7 @@ Sheet * Map::nextSheet( Sheet * currentSheet )
   return 0;
 }
 
-Sheet * Map::previousSheet( Sheet * currentSheet )
+Sheet * Map::previousSheet( Sheet * currentSheet ) const
 {
   if( currentSheet == d->lstSheets.first())
     return currentSheet;
