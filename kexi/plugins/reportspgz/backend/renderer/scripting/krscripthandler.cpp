@@ -172,7 +172,6 @@ QVariant KRScriptHandler::evaluate(const QString &field)
 	
 	if (!_action->hadError() && _action->functionNames().contains(func) )
 	{
-		kDebug() << "*** Evaluating field" << endl;
 		return _action->callFunction(func);
 	}
 	else

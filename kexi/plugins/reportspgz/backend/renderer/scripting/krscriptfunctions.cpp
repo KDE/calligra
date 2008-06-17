@@ -113,7 +113,6 @@ QVariant KRScriptFunctions::value(const QString &field)
 			val = const_cast<KexiDB::Cursor*>(_curs)->value(i);
 		}
 	}
-	kDebug() << "Value of " << field <<  " is " << val << endl;
 	
 	return val;
 }

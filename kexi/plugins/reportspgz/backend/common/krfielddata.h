@@ -62,6 +62,7 @@ class KRFieldData : public KRObjectData
 		
 		ORLineStyleData lineStyle();
 		KRPos position(){return _pos;}
+		ORTextStyleData textStyle();
 	protected:
 		
 		QRect _rect;
@@ -82,7 +83,7 @@ class KRFieldData : public KRObjectData
 		KoProperty::Property* _lnWeight;
 		KoProperty::Property* _lnStyle;
 		
-		ORTextStyleData textStyle();
+		
 		//QFont font;
 		//int align;
 		//ORDataData data;

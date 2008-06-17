@@ -180,10 +180,12 @@ void KexiReportView::slotExportHTML()
 	    KMessageBox::error(this, i18n("Report not saved "), i18n("Not Saved"));
 	    return;
 	}
-	KRHtmlRender hr(tempData()->document, KexiMainWindowIface::global()->project()->dbConnection());
+
+	bool css = (KMessageBox::questionYesNo(this, i18n("Would you like to export using a Cascading Style Sheet which will give output closer to the original, or export using a Table which outputs a much simpler format."), i18n("Export Style"), KGuiItem("CSS"), KGuiItem("Table")) == KMessageBox::Yes);
+	KRHtmlRender hr;
 	
 	QTextStream out(&file);
-	out << hr.generate() << "\n";
+	out << hr.render(doc, css) << "\n";
 
 	file.close();
 	KMessageBox::information(this, i18n("Report saved to ") + saveName, i18n("Saved OK"));

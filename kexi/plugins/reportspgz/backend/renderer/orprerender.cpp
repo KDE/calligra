@@ -578,6 +578,12 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 	
 	emit (renderingSection(const_cast<KRSectionData*>(&sectionData), _page, QPointF ( _leftMargin, _yOffset )));
 	
+	//Create a pre-rendered section for this section and add it to the document
+	OROSection *sec = new OROSection(_document);
+	sec->setHeight( sectionData.height() );
+	sec->setBackgroundColor( sectionData.bgColor() );
+	_document->addSection( sec );
+	
 	//Render section background
 	ORORect* bg = new ORORect();
 	bg->setPen(QPen(Qt::NoPen));
@@ -609,6 +615,10 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 			tb->setTextStyle(l->textStyle());
 			tb->setLineStyle(l->lineStyle());
 			_page->addPrimitive ( tb );
+			
+			OROTextBox *tb2 = dynamic_cast<OROTextBox*>(tb->clone());
+			tb2->setPosition(l->_pos.toPoint());
+			sec->addPrimitive ( tb2 );
 		}
 		else if ( elemThis->type() == KRObjectData::EntityField )
 		{
@@ -652,6 +662,10 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 			}
 			tb->setText ( str );
 			_page->addPrimitive ( tb );
+			
+			OROTextBox *tb2 = dynamic_cast<OROTextBox*>(tb->clone());
+			tb2->setPosition(f->_pos.toPoint());
+			sec->addPrimitive ( tb2 );
 		
 			
 		}
@@ -722,7 +736,10 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 							tb->setTextStyle(t->textStyle());
 							tb->setLineStyle(t->lineStyle());
 							_page->addPrimitive ( tb );
-
+							
+							OROTextBox *tb2 = dynamic_cast<OROTextBox*>(tb->clone());
+							tb2->setPosition(t->_pos.toPoint());
+							sec->addPrimitive ( tb2 );
 
 							intStretch += intRectHeight;
 							intLineCounter++;
@@ -772,6 +789,11 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 			ln->setEndPoint ( e );
 			ln->setLineStyle ( l->lineStyle() );
 			_page->addPrimitive ( ln );
+			
+			OROLine *l2 = dynamic_cast<OROLine*>(ln->clone());
+			l2->setStartPoint(l->_start.toPoint());
+			l2->setEndPoint(l->_end.toPoint());
+			sec->addPrimitive ( l2 );
 		}
 		else if ( elemThis->type() == KRObjectData::EntityBarcode )
 		{

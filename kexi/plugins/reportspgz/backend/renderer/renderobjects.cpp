@@ -60,6 +60,22 @@ void ORODocument::addPage(OROPage* p)
   _pages.append(p);
 }
 
+OROSection* ORODocument::section(int pnum)
+{
+  return _sections.at(pnum);
+}
+
+void ORODocument::addSection(OROSection* s)
+{
+  if(s == 0)
+    return;
+  
+  // check that this page is not already in another document
+  
+  s->_document = this;
+  _sections.append(s);
+}
+
 void ORODocument::setPageOptions(const ReportPageOptions & options)
 {
   _pageOptions = options;
@@ -126,7 +142,68 @@ void OROPage::addPrimitive(OROPrimitive* p, bool atBeginning)
   }
 }
 
+//
+// OROSection
+//
+OROSection::OROSection(ORODocument * pDocument)
+: _document(pDocument)
+{
+  _height = 0;
+  _backgroundColor = Qt::white;
+}
 
+OROSection::~OROSection()
+{
+  if(_document != 0)
+  {
+    _document->_sections.removeAt(row());
+    _document = 0;
+  }
+  
+  while(!_primitives.isEmpty())
+  {
+    OROPrimitive* p = _primitives.takeFirst();
+    delete p;
+  }
+}
+
+long OROSection::row() const
+{
+  return _row;
+}
+
+OROPrimitive* OROSection::primitive(int idx)
+{
+  return _primitives.at(idx);
+}
+
+void OROSection::addPrimitive(OROPrimitive* p)
+{
+  if(p == 0)
+    return;
+
+  _primitives.append(p);
+}
+
+void OROSection::setHeight(int h)
+{
+  _height = h;
+}
+
+int OROSection::height()
+{
+   return _height;
+}
+
+void OROSection::setBackgroundColor(const QColor &c)
+{
+  _backgroundColor = c;
+}
+
+QColor OROSection::backgroundColor()
+{
+  return _backgroundColor;
+}
 //
 // OROPrimitive
 //
@@ -198,6 +275,19 @@ void OROTextBox::setFlags(int f)
   _flags = f;
 }
 
+OROPrimitive* OROTextBox::clone()
+{
+  OROTextBox *theClone = new OROTextBox();
+  theClone->setSize(_size);
+  theClone->setPosition(_position);
+  theClone->setText(_text);
+  theClone->setTextStyle(_textStyle);
+  theClone->setLineStyle(_lineStyle);
+  theClone->setFlags(_align);
+  return theClone;
+}
+
+
 //
 // OROLine
 //
@@ -226,6 +316,16 @@ void OROLine::setEndPoint(const QPointF & p)
 void OROLine::setLineStyle(const ORLineStyleData& ls)
 {
   _ls = ls;
+}
+
+
+OROPrimitive* OROLine::clone()
+{
+  OROLine *theClone = new OROLine();
+  theClone->setStartPoint(_position);
+  theClone->setEndPoint(_endPoint);
+  theClone->setLineStyle(_ls);
+  return theClone;
 }
 
 //
@@ -270,6 +370,18 @@ void OROImage::setAspectRatioMode(int arm)
   _aspectFlags = arm;
 }
 
+OROPrimitive* OROImage::clone()
+{
+  OROImage *theClone = new OROImage();
+  theClone->setSize(_size);
+  theClone->setPosition(_position);
+  theClone->setImage(_image);
+  theClone->setScaled(_scaled);
+  theClone->setTransformationMode(_transformFlags);
+  theClone->setAspectRatioMode(_aspectFlags);
+  return theClone;
+}
+
 //
 // OROPicture
 //
@@ -290,6 +402,14 @@ void OROPicture::setSize(const QSizeF & sz)
 	_size = sz;
 }
 
+OROPrimitive* OROPicture::clone()
+{
+  OROPicture *theClone = new OROPicture();
+  theClone->setSize(_size);
+  theClone->setPosition(_position);
+  theClone->setPicture(_picture);
+  return theClone;
+}
 
 //
 // ORORect
@@ -326,6 +446,15 @@ void ORORect::setBrush(const QBrush & b)
   _brush = b;
 }
 
+OROPrimitive* ORORect::clone()
+{
+  ORORect *theClone = new ORORect();
+  theClone->setSize(_size);
+  theClone->setPosition(_position);
+  theClone->setPen(_pen);
+  theClone->setBrush(_brush);
+  return theClone;
+}
 //
 // OROEllipse
 //
@@ -359,4 +488,14 @@ void OROEllipse::setPen(const QPen & p)
 void OROEllipse::setBrush(const QBrush & b)
 {
 	_brush = b;
+}
+
+OROPrimitive* OROEllipse::clone()
+{
+  OROEllipse *theClone = new OROEllipse();
+  theClone->setSize(_size);
+  theClone->setPosition(_position);
+  theClone->setPen(_pen);
+  theClone->setBrush(_brush);
+  return theClone;
 }

@@ -26,8 +26,6 @@
 #include <QString>
 #include <QFont>
 
-class KRHtmlRenderPrivate;
-class ParameterList;
 class ORODocument;
 namespace KexiDB
 {
@@ -38,24 +36,11 @@ namespace KexiDB
 // 
 class KRHtmlRender {
   public:
-    KRHtmlRender(KexiDB::Connection*c=0);
-    KRHtmlRender(const QString &, KexiDB::Connection*c=0);
+    KRHtmlRender();
 
     virtual ~KRHtmlRender();
 
-    QString generate();
-
-    void setDatabase(KexiDB::Connection*);
-    KexiDB::Connection* database() const;
-
-    bool setDom(const QString &);
-
-    bool isValid() const;
-
-  protected:
-
-  private:
-    KRHtmlRenderPrivate* _internal;
+    QString render(ORODocument *, bool=true);
     
 };
 
