@@ -41,7 +41,8 @@ using namespace KSpread;
   class ResizeColumnManipulator
 ****************************************************************************/
 
-ResizeColumnManipulator::ResizeColumnManipulator()
+ResizeColumnManipulator::ResizeColumnManipulator(QUndoCommand* parent)
+    : AbstractRegionCommand(parent)
 {
     setText(i18n("Resize Column"));
 }
@@ -69,7 +70,8 @@ bool ResizeColumnManipulator::process(Element* element)
   class ResizeRowManipulator
 ****************************************************************************/
 
-ResizeRowManipulator::ResizeRowManipulator()
+ResizeRowManipulator::ResizeRowManipulator(QUndoCommand* parent)
+    : AbstractRegionCommand(parent)
 {
     setText(i18n("Resize Row"));
 }
@@ -252,8 +254,8 @@ QString HideShowManipulator::name() const
   class AdjustColumnRowManipulator
 ****************************************************************************/
 
-AdjustColumnRowManipulator::AdjustColumnRowManipulator()
-  : AbstractRegionCommand(),
+AdjustColumnRowManipulator::AdjustColumnRowManipulator(QUndoCommand* parent)
+  : AbstractRegionCommand(parent),
     m_adjustColumn(false),
     m_adjustRow(false)
 {

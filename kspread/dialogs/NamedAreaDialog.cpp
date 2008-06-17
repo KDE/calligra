@@ -302,27 +302,25 @@ void EditNamedAreaDialog::slotOk()
     if (!region.isValid())
         return;
 
+    QUndoCommand* macroCommand = 0;
     if (!m_initialAreaName.isEmpty() && m_initialAreaName != m_areaNameEdit->text())
     {
-        m_selection->activeSheet()->doc()->beginMacro(i18n("Replace Named Area"));
+        macroCommand = new QUndoCommand(i18n("Replace Named Area"));
         // remove the old named area
-        NamedAreaCommand* command = new NamedAreaCommand();
+        NamedAreaCommand* command = new NamedAreaCommand(macroCommand);
         command->setAreaName(m_initialAreaName);
         command->setReverse(true);
         command->setSheet(sheet);
         command->add(region);
-        command->execute(m_selection->canvas());
     }
 
     // insert the new named area
-    NamedAreaCommand* command = new NamedAreaCommand();
+    NamedAreaCommand* command = new NamedAreaCommand(macroCommand);
     command->setAreaName(m_areaNameEdit->text());
     command->setSheet(sheet);
     command->add(region);
-    command->execute(m_selection->canvas());
 
-    if (m_initialAreaName != m_areaNameEdit->text())
-        m_selection->activeSheet()->doc()->endMacro();
+    m_selection->canvas()->addCommand(macroCommand ? macroCommand : command);
 
     accept();
 }

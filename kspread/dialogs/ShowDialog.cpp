@@ -104,15 +104,15 @@ void ShowDialog::slotOk()
         return;
 
     Sheet *sheet;
-    m_pView->doc()->beginMacro( i18n("Show Sheet") );
+    QUndoCommand* macroCommand = new QUndoCommand(i18n("Show Sheet"));
     for ( QStringList::Iterator it = listSheet.begin(); it != listSheet.end(); ++it )
     {
         sheet=m_pView->doc()->map()->findSheet( *it );
         if (!sheet)
             continue;
-        m_pView->doc()->addCommand( new ShowSheetCommand( sheet ) );
+        new ShowSheetCommand(sheet, macroCommand);
     }
-    m_pView->doc()->endMacro();
+    m_pView->doc()->addCommand(macroCommand);
     m_pView->slotUpdateView( m_pView->activeSheet() );
     accept();
 }

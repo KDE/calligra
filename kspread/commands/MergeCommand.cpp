@@ -30,8 +30,8 @@
 
 using namespace KSpread;
 
-MergeCommand::MergeCommand()
-  : AbstractRegionCommand(),
+MergeCommand::MergeCommand(QUndoCommand* parent)
+  : AbstractRegionCommand(parent),
     m_merge(true),
     m_mergeHorizontal(false),
     m_mergeVertical(false),

@@ -40,7 +40,7 @@ public:
     /**
      * Constructor.
      */
-    AbstractRegionCommand();
+    AbstractRegionCommand(QUndoCommand* parent = 0);
 
     /**
      * Destructor.

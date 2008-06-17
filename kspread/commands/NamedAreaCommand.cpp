@@ -27,7 +27,8 @@
 
 using namespace KSpread;
 
-NamedAreaCommand::NamedAreaCommand()
+NamedAreaCommand::NamedAreaCommand(QUndoCommand* parent)
+    : AbstractRegionCommand(parent)
 {
     setText(i18n("Add Named Area"));
 }

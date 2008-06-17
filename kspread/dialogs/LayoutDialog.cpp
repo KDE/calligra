@@ -857,29 +857,27 @@ void CellFormatDialog::slotApply()
   // We need to create a command that would act as macro,
   // but which would also ensure that updates are not painted until everything
   // is updated properly ...
-  m_sheet->doc()->beginMacro( "Change Format" );
+  QUndoCommand* macroCommand = new QUndoCommand("Change Format");
 
   if ( isMerged != positionPage->getMergedCellState() )
   {
     if ( positionPage->getMergedCellState() )
     {
-      MergeCommand* command = new MergeCommand();
+      MergeCommand* command = new MergeCommand(macroCommand);
       command->setSheet(m_sheet);
       command->add(*m_selection);
-      m_selection->canvas()->addCommand( command );
     }
     else
     {
       //dissociate cells
-      MergeCommand* command = new MergeCommand();
+      MergeCommand* command = new MergeCommand(macroCommand);
       command->setSheet(m_sheet);
       command->setReverse(true);
       command->add(*m_selection);
-      m_selection->canvas()->addCommand( command );
     }
   }
 
-  StyleCommand* command = new StyleCommand();
+  StyleCommand* command = new StyleCommand(macroCommand);
   command->setSheet(m_sheet);
   command->add(*m_selection);
   borderPage->apply(command);
@@ -889,33 +887,22 @@ void CellFormatDialog::slotApply()
   patternPage->apply(command);
   protectPage->apply(command);
 
-  if (!command->isEmpty())
-  {
-    m_selection->canvas()->addCommand( command );
-  }
-  else
-  {
-    delete command;
-  }
-
   if ( int( positionPage->getSizeHeight() ) != int( heightSize ) )
   {
-    ResizeRowManipulator* command = new ResizeRowManipulator();
+    ResizeRowManipulator* command = new ResizeRowManipulator(macroCommand);
     command->setSheet(m_sheet);
     command->setSize(positionPage->getSizeHeight());
     command->add(*m_selection);
-    m_selection->canvas()->addCommand( command );
   }
   if ( int( positionPage->getSizeWidth() ) != int( widthSize ) )
   {
-    ResizeColumnManipulator* command = new ResizeColumnManipulator();
+    ResizeColumnManipulator* command = new ResizeColumnManipulator(macroCommand);
     command->setSheet(m_sheet);
     command->setSize(positionPage->getSizeWidth());
     command->add(*m_selection);
-    m_selection->canvas()->addCommand( command );
   }
 
-  m_sheet->doc()->endMacro();
+    m_selection->canvas()->addCommand(macroCommand);
 }
 
 

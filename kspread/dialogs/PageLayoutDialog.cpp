@@ -232,13 +232,12 @@ void PageLayoutDialog::accept()
 
     if (applyToDocument()) {
         // Apply to all sheets.
-        d->sheet->doc()->beginMacro(i18n("Set Page Layout"));
+        QUndoCommand* macroCommand = new QUndoCommand(i18n("Set Page Layout"));
         const QList<Sheet*> sheets = d->sheet->map()->sheetList();
         for (int i = 0; i < sheets.count(); ++i) {
-            PageLayoutCommand* command = new PageLayoutCommand(sheets[i], settings);
-            d->sheet->doc()->addCommand(command);
+            PageLayoutCommand* command = new PageLayoutCommand(sheets[i], settings, macroCommand);
         }
-        d->sheet->doc()->endMacro();
+        d->sheet->doc()->addCommand(macroCommand);
     }
     else {
         PageLayoutCommand* command = new PageLayoutCommand(d->sheet, settings);

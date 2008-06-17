@@ -68,7 +68,7 @@ protected:
 class ShowSheetCommand : public QUndoCommand
 {
 public:
-  explicit ShowSheetCommand( Sheet* sheet );
+    explicit ShowSheetCommand(Sheet* sheet, QUndoCommand* parent = 0);
 
   virtual void redo();
   virtual void undo();

@@ -35,7 +35,7 @@ class Sheet;
 class PageLayoutCommand : public QUndoCommand
 {
 public:
-    explicit PageLayoutCommand(Sheet* sheet, const PrintSettings& settings);
+    explicit PageLayoutCommand(Sheet* sheet, const PrintSettings& settings, QUndoCommand* parent = 0);
 
     virtual void redo();
     virtual void undo();

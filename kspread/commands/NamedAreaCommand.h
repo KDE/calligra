@@ -32,7 +32,7 @@ public:
     /**
      * Constructor.
      */
-    NamedAreaCommand();
+    NamedAreaCommand(QUndoCommand* parent = 0);
 
     /**
      * Destructor.

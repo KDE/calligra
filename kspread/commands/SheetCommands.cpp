@@ -80,7 +80,8 @@ void HideSheetCommand::undo()
 
 // ----- ShowSheetCommand -----
 
-ShowSheetCommand::ShowSheetCommand( Sheet* sheet )
+ShowSheetCommand::ShowSheetCommand(Sheet* sheet, QUndoCommand* parent)
+    : QUndoCommand(parent)
 {
   doc = sheet->doc();
   sheetName = sheet->sheetName();

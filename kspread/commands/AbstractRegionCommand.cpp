@@ -52,9 +52,9 @@ using namespace KSpread;
   class AbstractRegionCommand
 ****************************************************************************/
 
-AbstractRegionCommand::AbstractRegionCommand()
+AbstractRegionCommand::AbstractRegionCommand(QUndoCommand* parent)
   : Region(),
-    QUndoCommand(),
+    QUndoCommand(parent),
     m_sheet(0),
     m_reverse(false),
     m_firstrun(true),

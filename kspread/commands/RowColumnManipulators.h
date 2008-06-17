@@ -37,7 +37,7 @@ class CellStorageUndoData;
 class ResizeColumnManipulator : public AbstractRegionCommand
 {
 public:
-    ResizeColumnManipulator();
+    ResizeColumnManipulator(QUndoCommand* parent = 0);
     ~ResizeColumnManipulator();
 
     void setSize(double size) { m_newSize = size; }
@@ -59,7 +59,7 @@ private:
 class ResizeRowManipulator : public AbstractRegionCommand
 {
   public:
-    ResizeRowManipulator();
+    ResizeRowManipulator(QUndoCommand* parent = 0);
     ~ResizeRowManipulator();
 
     void setSize(double size) { m_newSize = size; }
@@ -80,7 +80,7 @@ class ResizeRowManipulator : public AbstractRegionCommand
 class AdjustColumnRowManipulator : public AbstractRegionCommand
 {
   public:
-    AdjustColumnRowManipulator();
+    AdjustColumnRowManipulator(QUndoCommand* parent = 0);
     virtual ~AdjustColumnRowManipulator();
 
     virtual bool process(Element*);

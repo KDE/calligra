@@ -27,8 +27,9 @@ using namespace KSpread;
 
 // ----- PageLayoutCommand -----
 
-PageLayoutCommand::PageLayoutCommand(Sheet* sheet, const PrintSettings& settings)
-    : m_sheet(sheet)
+PageLayoutCommand::PageLayoutCommand(Sheet* sheet, const PrintSettings& settings, QUndoCommand* parent)
+    : QUndoCommand(parent)
+    , m_sheet(sheet)
     , m_settings(settings)
 {
     setText(i18n("Set Page Layout"));

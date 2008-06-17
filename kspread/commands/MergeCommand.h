@@ -32,7 +32,7 @@ namespace KSpread
 class MergeCommand : public AbstractRegionCommand
 {
 public:
-  MergeCommand();
+  MergeCommand(QUndoCommand* parent = 0);
   virtual ~MergeCommand();
 
   virtual bool preProcessing();
