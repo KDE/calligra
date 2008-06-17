@@ -136,8 +136,8 @@ private:
     QStringList m_pictureList; // for <PICTURES>
     unsigned char m_headerFooters; // a mask of HeaderData::Type bits
     bool m_bodyFound;
-    bool m_openHeader; //we're processing a header
-    bool m_openFooter; //we're processing a footer
+    bool m_evenOpen; //we're processing an even header or footer
+    bool m_oddOpen; //we're processing an odd header or footer
     int m_footNoteNumber; // number of footnote _framesets_ written out
     int m_endNoteNumber; // number of endnote _framesets_ written out
     int m_currentListDepth; //track list depth in case we need to close a list here (-1 if no list)
@@ -146,7 +146,9 @@ private:
     KoGenStyle* m_masterStyle; //for header/footer stuff, at least
     KoXmlWriter* m_writer; //for header/footer tags
     QBuffer* m_buffer; //for header/footer tags
+    QBuffer* m_bufferEven; //for even header/footer tags
     int m_headerCount; //just so we have a unique name for the element we're putting in m_masterStyle
+    QString m_masterStyleName; //need to know what the master style name is so we can write it
 };
 
 #endif // DOCUMENT_H

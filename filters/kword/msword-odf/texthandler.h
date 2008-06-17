@@ -27,6 +27,7 @@
 #include "versionmagic.h"
 
 #include <wv2/handlers.h>
+#include <wv2/lists.h>
 #include <QString>
 #include <QObject>
 #include <qdom.h>
@@ -92,10 +93,12 @@ public:
     void writeLayout( const wvWare::Style* style );
 
     bool m_writeTextToStylesDotXml; //flag for headers & footers, where we write the actual text to styles.xml
+    bool m_writeMasterStyleName; //whether to write the style name or not, since it only needs to be the first one
     int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)
     int m_currentListID; //tracks the id of the current list - 0 if no list
     KoXmlWriter* m_headerWriter; //for header/footer writing in styles.xml
     QString m_listStyleName; //track the name of the list style
+    QString m_masterStyleName; //need to know what the master style name is so we can write it
     KoGenStyles* m_mainStyles; //this is for collecting most of the styles
 
     // Communication with Document, without having to know about Document
@@ -142,6 +145,8 @@ private:
     bool m_insideField;
     bool m_fieldAfterSeparator;
     int m_fieldType; // 0 for no field
+    
+    bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
 };
 
 #endif // TEXTHANDLER_H
