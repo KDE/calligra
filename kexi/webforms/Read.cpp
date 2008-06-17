@@ -101,11 +101,11 @@ namespace KexiWebForms {
                 // Edit
                 tableData.append("<td><a href=\"/update/").append(requestedTable).append("/");
                 tableData.append(primaryKey->name()).append("/");
-                tableData.append(pkeyVal).append("\">Edit</a></td>");
+                tableData.append(pkeyVal).append("\"><img src=\"/draw-freehand.png\" alt=\"Edit\"/></a></td>");
                 // Delete
                 tableData.append("<td><a href=\"/delete/").append(requestedTable).append("/");
                 tableData.append(primaryKey->name()).append("/");
-                tableData.append(pkeyVal).append("\">Delete</a></td>");
+                tableData.append(pkeyVal).append("\"><img src=\"/draw-eraser.png\" alt=\"Delete\"/></a></td>");
                 // End row
                 tableData.append("</tr>");
                 

@@ -5,6 +5,8 @@ body {
     font-size: 12pt;
 }
 
+img { border: 0px; }
+
 div#wrapper {
     margin: 0px auto 0px auto;
     width: 750px;
