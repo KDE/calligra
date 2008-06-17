@@ -88,6 +88,7 @@ set(pgzkexireportpart2_LIB_SRCS
 if (SHOULD_BUILD_KSPREAD)
   add_definitions(-DHAVE_KSPREAD)
   set(pgzkexireportpart2_LIB_SRCS
+	${pgzkexireportpart2_LIB_SRCS}
 	backend/renderer/krkspreadrender.cpp
 )
 endif (SHOULD_BUILD_KSPREAD)
