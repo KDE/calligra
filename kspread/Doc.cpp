@@ -182,13 +182,6 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->configLoadFromFile = false;
   d->captureAllArrowKeys = true;
 
-  // Ask every shapefactory to populate the dataCenterMap
-  foreach(QString id, KoShapeRegistry::instance()->keys())
-  {
-    KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
-    shapeFactory->populateDataCenterMap(d->dataCenterMap);
-  }
-
   documents().append( this );
 
   setComponentData( Factory::global(), false );
@@ -216,12 +209,15 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->dontCheckUpperWord = false;
   d->dontCheckTitleCase = false;
 
+    // Ask every shapefactory to populate the dataCenterMap
     // Init chart shape factory with KSpread's specific configuration panels.
     QList<KoShapeConfigFactory*> panels = ChartDialog::panels( this );
-    foreach (QString id, KoShapeRegistry::instance()->keys())
-    {
-        if ( id == ChartShapeId )
-            KoShapeRegistry::instance()->value(id)->setOptionPanels(panels);
+    foreach (QString id, KoShapeRegistry::instance()->keys()) {
+        KoShapeFactory *shapeFactory = KoShapeRegistry::instance()->value(id);
+        shapeFactory->populateDataCenterMap(d->dataCenterMap);
+        if (id == ChartShapeId) {
+            shapeFactory->setOptionPanels(panels);
+        }
     }
 
     connect(this, SIGNAL(damagesFlushed(const QList<Damage*>&)),
