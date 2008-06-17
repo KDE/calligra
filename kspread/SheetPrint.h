@@ -66,6 +66,7 @@ public:
     bool print( QPainter &painter, QPrinter *_printer );
 
     PrintSettings* settings() const { return m_settings; }
+    void setSettings(const PrintSettings& settings) { *m_settings = settings; }
 
     /**
      * @return the ascii name of the paper orientation ( like Portrait, Landscape )

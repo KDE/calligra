@@ -20,11 +20,15 @@
 #include "PageLayoutDialog.h"
 
 // KSpread
+#include "Doc.h"
 #include "Map.h"
 #include "PrintSettings.h"
 #include "Sheet.h"
 #include "ui_PageLayoutSheetPage.h"
 #include "Util.h"
+
+// commands
+#include "commands/PageLayoutCommand.h"
 
 // KDE
 #include <klocale.h>
@@ -226,15 +230,20 @@ void PageLayoutDialog::accept()
     }
     settings.setPageLimits(pageLimits);
 
-    if (applyToDocument())
-    {
+    if (applyToDocument()) {
         // Apply to all sheets.
+        d->sheet->doc()->beginMacro(i18n("Set Page Layout"));
         const QList<Sheet*> sheets = d->sheet->map()->sheetList();
-        for (int i = 0; i < sheets.count(); ++i)
-            *sheets[i]->printSettings() = settings;
+        for (int i = 0; i < sheets.count(); ++i) {
+            PageLayoutCommand* command = new PageLayoutCommand(sheets[i], settings);
+            d->sheet->doc()->addCommand(command);
+        }
+        d->sheet->doc()->endMacro();
     }
-    else
-        *d->sheet->printSettings() = settings;
+    else {
+        PageLayoutCommand* command = new PageLayoutCommand(d->sheet, settings);
+        d->sheet->doc()->addCommand(command);
+    }
 
     KoPageLayoutDialog::accept();
 }

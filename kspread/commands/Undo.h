@@ -279,7 +279,6 @@ protected:
     int m_iNbRow;
     QLinkedList<int> listRow;
 };
-#endif
 
 class UndoPaperLayout : public UndoAction
 {
@@ -319,7 +318,6 @@ protected:
 };
 
 
-#if 0
 class UndoCellFormat : public UndoAction
 {
 public:

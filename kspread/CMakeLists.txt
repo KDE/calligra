@@ -51,7 +51,7 @@ SET (commands_DIR_SRCS
 	commands/MacroCommand.cpp
 	commands/MergeCommand.cpp
 	commands/NamedAreaCommand.cpp
-	commands/PaperLayoutCommand.cpp
+	commands/PageLayoutCommand.cpp
 	commands/PrecisionCommand.cpp
 	commands/RowColumnManipulators.cpp
 	commands/SheetCommands.cpp

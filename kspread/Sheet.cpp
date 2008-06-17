@@ -579,6 +579,11 @@ PrintSettings* Sheet::printSettings() const
     return d->print->settings();
 }
 
+void Sheet::setPrintSettings(const PrintSettings& settings)
+{
+    d->print->setSettings(settings);
+}
+
 QSizeF Sheet::documentSize() const
 {
     return d->documentSize;

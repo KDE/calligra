@@ -883,6 +883,7 @@ public:
 
   SheetPrint * print() const;
     PrintSettings* printSettings() const;
+    void setPrintSettings(const PrintSettings& settings);
 
 #ifndef NDEBUG
     void printDebug();

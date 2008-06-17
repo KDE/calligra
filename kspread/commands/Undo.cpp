@@ -658,7 +658,6 @@ void UndoShowColumn::redo()
     sheet->showColumn(0,-1,listCol);
     doc()->setUndoLocked( false );
 }
-#endif
 
 
 /****************************************************************************
@@ -778,7 +777,6 @@ void UndoPaperLayout::redo()
     doc()->setUndoLocked( false );
 }
 
-#if 0
 /****************************************************************************
  *
  * UndoCellFormat
