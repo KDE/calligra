@@ -269,21 +269,25 @@ void TaskEditor::setupGui()
 {
     QString name = "taskeditor_add_list";
     actionAddTask  = new KAction(KIcon( "add_task" ), i18n("Add Task..."), this);
+    actionAddTask->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     actionCollection()->addAction("add_task", actionAddTask );
     connect( actionAddTask, SIGNAL( triggered( bool ) ), SLOT( slotAddTask() ) );
     addAction( name, actionAddTask );
     
     actionAddSubtask  = new KAction(KIcon( "add_sub_task" ), i18n("Add Sub-Task..."), this);
+    actionAddSubtask->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     actionCollection()->addAction("add_sub_task", actionAddSubtask );
     connect( actionAddSubtask, SIGNAL( triggered( bool ) ), SLOT( slotAddSubtask() ) );
     addAction( name, actionAddSubtask );
     
     actionAddMilestone  = new KAction(KIcon( "add_milestone" ), i18n("Add Milestone..."), this);
+    actionAddMilestone->setShortcut( KShortcut( Qt::CTRL + Qt::ALT + Qt::Key_I ) );
     actionCollection()->addAction("add_milestone", actionAddMilestone );
     connect( actionAddMilestone, SIGNAL( triggered( bool ) ), SLOT( slotAddMilestone() ) );
     addAction( name, actionAddMilestone );
     
     actionDeleteTask  = new KAction(KIcon( "edit-delete" ), i18n("Delete Task"), this);
+    actionDeleteTask->setShortcut( KShortcut( Qt::Key_Delete ) );
     actionCollection()->addAction("delete_task", actionDeleteTask );
     connect( actionDeleteTask, SIGNAL( triggered( bool ) ), SLOT( slotDeleteTask() ) );
     addAction( name, actionDeleteTask );

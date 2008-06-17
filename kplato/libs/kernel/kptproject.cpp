@@ -1611,6 +1611,7 @@ void Project::addCalendar( Calendar *calendar, Calendar *parent )
     //kDebug()<<calendar->name()<<","<<(parent?parent->name():"No parent");
     int row = parent == 0 ? m_calendars.count() : parent->calendars().count();
     emit calendarToBeAdded( parent, row );
+    calendar->setProject( this );
     if ( parent == 0 ) {
         calendar->setParentCal( 0 ); // in case
         m_calendars.append( calendar );
@@ -1641,6 +1642,7 @@ void Project::takeCalendar( Calendar *calendar )
         calendar->setParentCal( 0 );
     }
     emit calendarRemoved( calendar );
+    calendar->setProject( 0 );
     emit changed();
 }
 

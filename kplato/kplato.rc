@@ -180,8 +180,13 @@
         <Action name="add_subaccount"/>
         <Action name="delete_account"/>
     </Menu>
+    <Menu name="accountseditor_edit_list">
+        <Action name="add_account"/>
+        <Action name="add_subaccount"/>
+        <Action name="delete_account"/>
+    </Menu>
     <Menu name="calendareditor_calendar_list">
-        <Action name="edit_calendar"/>
+        <Action name="add_calendar"/>
         <Action name="add_subcalendar"/>
         <Action name="delete_calendar_selection"/>
     </Menu>

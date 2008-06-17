@@ -514,23 +514,9 @@ void CalendarEditor::updateActionsEnabled(  bool on )
     QList<Calendar *> lst = m_calendarview->selectedCalendars();
     bool one = lst.count() == 1;
     bool more = lst.count() > 1;
-    bool cal = m_calendarview->hasFocus();
-    bool day = m_dayview->hasFocus();
-    actionAddCalendar ->setEnabled( on && !more && cal );
-    actionAddSubCalendar ->setEnabled( on && one && cal );
-    actionDeleteSelection->setEnabled( on && ( one || more ) && cal );
-
-    bool o = false;
-    TimeInterval *ti = 0;
-    CalendarDay *d = m_dayview->selectedDay();
-    if ( on ) {
-        o = d == 0 ? false : d->state() == CalendarDay::Working;
-    }
-    actionAddDay->setEnabled( on && day && d == 0 );
-    actionAddWorkInterval->setEnabled( on && o && day );
-    
-    bool act = on && day && d;
-    actionDeleteDaySelection->setEnabled( act );
+    actionAddCalendar ->setEnabled( on && !more );
+    actionAddSubCalendar ->setEnabled( on && one );
+    actionDeleteSelection->setEnabled( on && ( one || more ) );
 }
 
 void CalendarEditor::setupGui()
@@ -553,28 +539,9 @@ void CalendarEditor::setupGui()
     actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteCalendar() ) );
     
-    addAction( name, actionAddSubCalendar  );
     addAction( name, actionAddCalendar  );
+    addAction( name, actionAddSubCalendar  );
     addAction( name, actionDeleteSelection );
-    
-    name = "calendareditor_day_list";
-    
-    actionAddDay   = new KAction(KIcon( "document-new" ), i18n("Add Calendar Day"), this);
-    coll->addAction("add_calendarday", actionAddDay  );
-    connect( actionAddDay , SIGNAL( triggered( bool ) ), SLOT( slotAddDay() ) );
-    
-    actionAddWorkInterval   = new KAction(KIcon( "document-new" ), i18n("Add Work Interval"), this);
-    coll->addAction("add_workinterval", actionAddWorkInterval  );
-    connect( actionAddWorkInterval , SIGNAL( triggered( bool ) ), SLOT( slotAddInterval() ) );
-    
-    actionDeleteDaySelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete Selected Item"), this);
-    coll->addAction("delete_day_selection", actionDeleteDaySelection );
-    connect( actionDeleteDaySelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteDaySelection() ) );
-    
-/*    addAction( name, actionAddWorkInterval  );
-    addAction( name, actionAddDay  );
-    addAction( name, actionDeleteDaySelection );*/
-    
     
     actionSetWork = new KAction( i18n( "Work..." ), this );
     connect( actionSetWork, SIGNAL( triggered( bool ) ), SLOT( slotSetWork() ) );

@@ -241,26 +241,31 @@ void ScheduleEditor::setupGui()
     QString name = "scheduleeditor_edit_list";
     
     actionAddSchedule  = new KAction(KIcon( "document-new" ), i18n("Add Schedule"), this);
+    actionAddSchedule->setShortcut( KShortcut( Qt::CTRL + Qt::Key_I ) );
     actionCollection()->addAction("add_schedule", actionAddSchedule );
     connect( actionAddSchedule, SIGNAL( triggered( bool ) ), SLOT( slotAddSchedule() ) );
     addAction( name, actionAddSchedule );
     
     actionAddSubSchedule  = new KAction(KIcon( "document-new" ), i18n("Add Sub-schedule"), this);
+    actionAddSubSchedule->setShortcut( KShortcut( Qt::CTRL + Qt::SHIFT + Qt::Key_I ) );
     actionCollection()->addAction("add_subschedule", actionAddSubSchedule );
     connect( actionAddSubSchedule, SIGNAL( triggered( bool ) ), SLOT( slotAddSubSchedule() ) );
     addAction( name, actionAddSubSchedule );
     
     actionDeleteSelection  = new KAction(KIcon( "edit-delete" ), i18n("Delete Selection"), this);
+    actionDeleteSelection->setShortcut( KShortcut( Qt::Key_Delete ) );
     actionCollection()->addAction("schedule_delete_selection", actionDeleteSelection );
     connect( actionDeleteSelection, SIGNAL( triggered( bool ) ), SLOT( slotDeleteSelection() ) );
     addAction( name, actionDeleteSelection );
 
     actionCalculateSchedule  = new KAction(KIcon( "project_calculate" ), i18n("Calculate"), this);
+//    actionCalculateSchedule->setShortcut( KShortcut( Qt::CTRL + Qt::Key_C ) );
     actionCollection()->addAction("calculate_schedule", actionCalculateSchedule );
     connect( actionCalculateSchedule, SIGNAL( triggered( bool ) ), SLOT( slotCalculateSchedule() ) );
     addAction( name, actionCalculateSchedule );
     
     actionBaselineSchedule  = new KAction(KIcon( "" ), i18n("Baseline"), this);
+//    actionBaselineSchedule->setShortcut( KShortcut( Qt::CTRL + Qt::Key_B ) );
     actionCollection()->addAction("schedule_baseline", actionBaselineSchedule );
     connect( actionBaselineSchedule, SIGNAL( triggered( bool ) ), SLOT( slotBaselineSchedule() ) );
     addAction( name, actionBaselineSchedule );

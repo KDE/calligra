@@ -1024,7 +1024,6 @@ void DoubleTreeViewBase::setRootIsDecorated ( bool show )
     m_rightview->setRootIsDecorated( show );
 }
 
-
 } // namespace KPlato
 
 #include "kptviewbase.moc"
