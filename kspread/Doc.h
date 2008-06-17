@@ -47,7 +47,6 @@ class QDomDocument;
 class QPainter;
 
 class KCompletion;
-class K3SpellConfig;
 
 class KoGenStyles;
 class KoOasisSettings;
@@ -73,8 +72,6 @@ class LoadingInfo;
 class KSPREAD_EXPORT Doc : public KoDocument
 {
   Q_OBJECT
-  Q_PROPERTY( bool dontCheckUpperWord READ dontCheckUpperWord WRITE setDontCheckUpperWord)
-  Q_PROPERTY( bool dontCheckTitleCase READ dontCheckTitleCase WRITE setDontCheckTitleCase)
   Q_PROPERTY( int syntaxVersion READ syntaxVersion )
   Q_PROPERTY( bool showVerticalScrollBar READ showVerticalScrollBar WRITE setShowVerticalScrollBar )
   Q_PROPERTY( bool showHorizontalScrollBar READ showHorizontalScrollBar WRITE setShowHorizontalScrollBar )
@@ -283,19 +280,6 @@ public:
   */
   void setTypeOfCalc( MethodOfCalc _calc);
   MethodOfCalc getTypeOfCalc() const;
-
-
-  /**
-   * get custom kspell config
-   */
-  void setKSpellConfig(K3SpellConfig _kspell);
-  K3SpellConfig * getKSpellConfig();
-
-  bool dontCheckUpperWord() const;
-  void setDontCheckUpperWord(bool _b);
-
-  bool dontCheckTitleCase() const;
-  void setDontCheckTitleCase(bool _b);
 
   QColor pageBorderColor() const;
   void changePageBorderColor( const QColor  & _color);

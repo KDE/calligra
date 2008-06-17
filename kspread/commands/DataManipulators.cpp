@@ -36,7 +36,8 @@
 
 using namespace KSpread;
 
-AbstractDataManipulator::AbstractDataManipulator ()
+AbstractDataManipulator::AbstractDataManipulator(QUndoCommand* parent)
+    : AbstractRegionCommand(parent)
 {
     m_checkLock = true;
 }
@@ -153,8 +154,9 @@ bool AbstractDFManipulator::process (Element* element)
 }
 
 
-DataManipulator::DataManipulator()
-    : m_format( Format::None )
+DataManipulator::DataManipulator(QUndoCommand* parent)
+    : AbstractDataManipulator(parent)
+    , m_format( Format::None )
     , m_parsing( false )
     , m_expandMatrix( false )
 {

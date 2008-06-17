@@ -56,6 +56,7 @@ SET (commands_DIR_SRCS
 	commands/RowColumnManipulators.cpp
 	commands/SheetCommands.cpp
 	commands/SortManipulator.cpp
+	commands/SpellCheckCommand.cpp
 	commands/StyleCommand.cpp
 	commands/Undo.cpp
 	commands/UndoWrapperCommand.cpp

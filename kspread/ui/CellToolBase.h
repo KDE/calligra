@@ -233,16 +233,6 @@ protected Q_SLOTS:
     // -- misc actions --
     void gotoCell();
     void spellCheck();
-    void spellCheckerReady();
-    void spellCheckerMisspelling(const QString &, const QStringList &, unsigned int);
-    void spellCheckerCorrected(const QString &, const QString &, unsigned int);
-    void spellCheckerDone(const QString &);
-    void spellCheckerFinished();
-    void spellCheckerIgnoreAll(const QString & word);
-    void spellCheckerReplaceAll(const QString &,  const QString &);
-    void startKSpell();
-    bool spellSwitchToOtherSheet();
-    void spellCleanup();
     void inspector();
     void sheetFormat();
     void listChoosePopupMenu();

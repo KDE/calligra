@@ -110,19 +110,12 @@ typedef QMap<QString, QDomElement> SavedDocParts;
 class Doc::Private
 {
 public:
-
   Map *map;
   QMap<QString, KoDataCenter *>  dataCenterMap;
 
   LoadingInfo *loadingInfo;
   static QList<Doc*> s_docs;
   static int s_docId;
-
-//   DCOPObject* dcop;
-
-  // URL of the this part. This variable is only set if the load() function
-  // had been called with an URL as argument.
-  QString fileURL;
 
   // for undo/redo
   int undoLocked;
@@ -149,9 +142,6 @@ public:
   KGlobalSettings::Completion completionMode;
   KSpread::MoveTo moveTo;
   MethodOfCalc calcMethod;
-  K3SpellConfig *spellConfig;
-  bool dontCheckUpperWord       : 1;
-  bool dontCheckTitleCase       : 1;
   bool configLoadFromFile       : 1;
   bool captureAllArrowKeys      : 1;
   QStringList spellListIgnoreAll;
@@ -202,9 +192,6 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   d->calcMethod = SumOfNumber;
   d->moveTo = Bottom;
   d->completionMode = KGlobalSettings::CompletionAuto;
-  d->spellConfig = 0;
-  d->dontCheckUpperWord = false;
-  d->dontCheckTitleCase = false;
 
     // Ask every shapefactory to populate the dataCenterMap
     // Init chart shape factory with KSpread's specific configuration panels.
@@ -223,8 +210,6 @@ Doc::~Doc()
   //don't save config when kword is embedded into konqueror
   if(isReadWrite())
     saveConfig();
-
-  delete d->spellConfig;
 
   delete d->map;
   qDeleteAll( d->dataCenterMap );
@@ -961,73 +946,6 @@ void Doc::setTypeOfCalc( MethodOfCalc _calc)
 MethodOfCalc Doc::getTypeOfCalc() const
 {
   return d->calcMethod;
-}
-
-void Doc::setKSpellConfig(K3SpellConfig _kspell)
-{
-    Q_UNUSED( _kspell );
-#ifdef __GNUC__
-#warning TODO KDE4 port to sonnet
-#endif
-#if 0
-  if (d->spellConfig == 0 )
-    d->spellConfig = new K3SpellConfig();
-
-  d->spellConfig->setNoRootAffix(_kspell.noRootAffix ());
-  d->spellConfig->setRunTogether(_kspell.runTogether ());
-  d->spellConfig->setDictionary(_kspell.dictionary ());
-  d->spellConfig->setDictFromList(_kspell.dictFromList());
-  d->spellConfig->setEncoding(_kspell.encoding());
-  d->spellConfig->setClient(_kspell.client());
-#endif
-}
-
-K3SpellConfig * Doc::getKSpellConfig()
-{
-#ifdef __GNUC__
-#warning TODO KDE4 port to sonnet
-#endif
-#if 0
-    if (!d->spellConfig)
-    {
-        K3SpellConfig ksconfig;
-
-        KSharedConfigPtr config = Factory::global().config();
-        const KConfigGroup spellGroup = config->group( "KSpell kspread" );
-
-        ksconfig.setNoRootAffix(spellGroup.readEntry("KSpell_NoRootAffix", 0));
-        ksconfig.setRunTogether(spellGroup.readEntry("KSpell_RunTogether", 0));
-        ksconfig.setDictionary(spellGroup.readEntry("KSpell_Dictionary", ""));
-        ksconfig.setDictFromList(spellGroup.readEntry("KSpell_DictFromList", false));
-        ksconfig.setEncoding(spellGroup.readEntry("KSpell_Encoding", int(KS_E_ASCII)));
-        ksconfig.setClient(spellGroup.readEntry("KSpell_Client", int(KS_CLIENT_ISPELL)));
-        setKSpellConfig(ksconfig);
-
-        setDontCheckUpperWord(spellGroup.readEntry("KSpell_IgnoreUppercaseWords", false));
-        setDontCheckTitleCase(spellGroup.readEntry("KSpell_IgnoreTitleCaseWords", false));
-    }
-#endif
-  return d->spellConfig;
-}
-
-bool Doc::dontCheckUpperWord() const
-{
-  return d->dontCheckUpperWord;
-}
-
-void Doc::setDontCheckUpperWord( bool b )
-{
-  d->dontCheckUpperWord = b;
-}
-
-bool Doc::dontCheckTitleCase() const
-{
-  return  d->dontCheckTitleCase;
-}
-
-void Doc::setDontCheckTitleCase( bool b )
-{
-  d->dontCheckTitleCase = b;
 }
 
 QString Doc::unitName() const

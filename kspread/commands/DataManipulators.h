@@ -38,7 +38,7 @@ class CellStorageUndoData;
 class KSPREAD_EXPORT AbstractDataManipulator : public AbstractRegionCommand
 {
   public:
-    AbstractDataManipulator ();
+    AbstractDataManipulator(QUndoCommand* parent = 0);
     virtual ~AbstractDataManipulator ();
 
     virtual bool process (Element* element);
@@ -105,7 +105,7 @@ class AbstractDFManipulator : public AbstractDataManipulator
  */
 class KSPREAD_EXPORT DataManipulator : public AbstractDataManipulator {
   public:
-    DataManipulator ();
+    DataManipulator(QUndoCommand* parent = 0);
     virtual ~DataManipulator ();
     void setParsing (bool val) { m_parsing = val; }
     void setExpandMatrix( bool expand ) { m_expandMatrix = expand; }

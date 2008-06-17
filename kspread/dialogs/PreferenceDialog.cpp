@@ -42,6 +42,8 @@
 #include <kmessagebox.h>
 #include <kdeversion.h>
 #include <kcolorbutton.h>
+#include <ksharedconfig.h>
+#include <sonnet/configwidget.h>
 
 #include <KoTabBar.h>
 
@@ -100,8 +102,8 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
   p7 = addPage(page7,  i18n("Spelling") );
   p7->setIcon( KIcon( BarIcon("tools-check-spelling",KIconLoader::SizeMedium) ) );
   p7->setHeader( i18n("Spell Checker Behavior") );
-  _spellPage=new configureSpellPage(parent,page7);
-
+    KSharedConfig::Ptr sharedConfigPtr = Factory::global().config();
+    m_spellCheckPage = new Sonnet::ConfigWidget(sharedConfigPtr.data(), page7);
 }
 
 void PreferenceDialog::openPage(int flags)
@@ -126,7 +128,7 @@ void PreferenceDialog::slotApply()
   _miscParameter->apply();
   _colorParameter->apply();
   _layoutPage->apply();
-  _spellPage->apply();
+    m_spellCheckPage->save();
   _localePage->apply();
   m_pView->doc()->refreshInterface();
   m_pView->slotUpdateView( m_pView->activeSheet() );
@@ -143,7 +145,7 @@ void PreferenceDialog::slotDefault()
     else if ( currentPage() == p5 )
       _layoutPage->slotDefault();
     else if ( currentPage() == p6 )
-      _spellPage->slotDefault();
+        m_spellCheckPage->slotDefault();
 }
 
 
@@ -867,74 +869,5 @@ void configureLayoutPage::apply()
   }
   m_pView->slotUpdateView( m_pView->activeSheet() );
 }
-
-configureSpellPage::configureSpellPage( View* _view,KVBox *box , char * /*name*/ )
- :QObject ( box->parent() )
-{
-  m_pView = _view;
-
-  config = Factory::global().config();
-
-
-#ifdef __GNUC__
-#warning TODO KDE4 port to sonnet
-#endif
-#if 0
-  m_spellConfigWidget = new KSpellConfig( box, m_pView->doc()->getKSpellConfig()/*, false*/);
-#endif
-  dontCheckUpperWord = new QCheckBox( i18n("Skip all uppercase words"),box);
-  dontCheckUpperWord->setWhatsThis( i18n( "If checked, the words written in uppercase letters are not spell checked. This might be useful if you have a lot of acronyms such as KDE for example." ) );
-  dontCheckTitleCase = new QCheckBox( i18n("Do not check title case"),box);
-  dontCheckTitleCase->setWhatsThis( i18n( "Check this box if you want the spellchecker to ignore the title case, for example My Own Spreadsheet or My own spreadsheet. If this is unchecked, the spell checker will ask for a uppercase letter in the title nouns." ) );
-
-  QWidget* spacer = new QWidget( box );
-  spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
-
-    const KConfigGroup spellGroup = config->group( "KSpell kspread" );
-    dontCheckUpperWord->setChecked(spellGroup.readEntry("KSpell_dont_check_upper_word",false));
-    dontCheckTitleCase->setChecked(spellGroup.readEntry("KSpell_dont_check_title_case",false));
-    //m_spellConfigWidget->addIgnoreList( m_pView->doc()->spellListIgnoreAll() );
-}
-
-
-void configureSpellPage::apply()
-{
-#ifdef __GNUC__
-#warning TODO KDE4 port to sonnet
-#endif
-#if 0
-    KSpellConfig *_spellConfig = m_spellConfigWidget;
-    const KConfigGroup spellGroup = config->group( "KSpell kspread" );
-    spellGroup.writeEntry("KSpell_NoRootAffix",(int) _spellConfig->noRootAffix ());
-    spellGroup.writeEntry("KSpell_RunTogether", (int) _spellConfig->runTogether ());
-    spellGroup.writeEntry("KSpell_Dictionary", _spellConfig->dictionary ());
-    spellGroup.writeEntry("KSpell_DictFromList",(int)  _spellConfig->dictFromList());
-    spellGroup.writeEntry("KSpell_Encoding", (int)  _spellConfig->encoding());
-    spellGroup.writeEntry("KSpell_Client",  _spellConfig->client());
-    //m_spellConfigWidget->saveDictionary();
-    Doc* doc = m_pView->doc();
-    doc->setKSpellConfig(*_spellConfig);
-
-    bool state=dontCheckUpperWord->isChecked();
-    spellGroup.writeEntry("KSpell_dont_check_upper_word",(int)state);
-    doc->setDontCheckUpperWord(state);
-
-    state=dontCheckTitleCase->isChecked();
-    config->writeEntry("KSpell_dont_check_title_case",(int)state);
-    doc->setDontCheckTitleCase(state);
-
-    //m_pView->doc()->addIgnoreWordAllList( m_spellConfigWidget->ignoreList() );
-
-    m_pView->slotUpdateView( m_pView->activeSheet() );
-#endif
-}
-
-void configureSpellPage::slotDefault()
-{
-    //FIXME
-    //m_spellConfigWidget->setDefault();
-}
-
-////
 
 #include "PreferenceDialog.moc"

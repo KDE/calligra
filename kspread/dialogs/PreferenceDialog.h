@@ -46,6 +46,11 @@ class KComboBox;
 class QPushButton;
 class KColorButton;
 
+namespace Sonnet
+{
+class ConfigWidget;
+}
+
 namespace KSpread
 {
 class View;
@@ -166,44 +171,6 @@ protected:
   KSharedConfigPtr config;
 } ;
 
-class configureSpellPage : public QObject
-{
-  Q_OBJECT
-public:
-  configureSpellPage( View* _view, KVBox *box, char *name = 0 );
-  void apply();
-  void slotDefault();
-protected:
-  View * m_pView;
-  KSharedConfigPtr config;
-    KSpellConfig *m_spellConfigWidget;
-    QCheckBox *dontCheckUpperWord;
-    QCheckBox *dontCheckTitleCase;
-} ;
-
-class configureTTSPage : public QObject
-{
-  Q_OBJECT
-public:
-  configureTTSPage( View *_view, KVBox *box, char *name = 0 );
-  void slotDefault();
-  void apply();
-private slots:
-  void screenReaderOptionChanged() {}
-private:
-  KSharedConfigPtr config;
-  QCheckBox* m_cbSpeakPointerWidget;
-  QCheckBox* m_cbSpeakFocusWidget;
-  QGroupBox* m_gbScreenReaderOptions;
-  QCheckBox* m_cbSpeakTooltips;
-  QCheckBox* m_cbSpeakWhatsThis;
-  QCheckBox* m_cbSpeakDisabled;
-  QCheckBox* m_cbSpeakAccelerators;
-  QLabel* m_lblAcceleratorPrefix;
-  KLineEdit* m_leAcceleratorPrefixWord;
-  KIntNumInput* m_iniPollingInterval;
-};
-
 class PreferenceDialog : public KPageDialog
 {
   Q_OBJECT
@@ -221,7 +188,7 @@ private :
   miscParameters *_miscParameter;
   colorParameters *_colorParameter;
   configureLayoutPage *_layoutPage;
-  configureSpellPage *_spellPage;
+    Sonnet::ConfigWidget* m_spellCheckPage;
   parameterLocale *_localePage;
  KPageWidgetItem *p2, *p3, *p4, *p5, *p6, *p7;
 };
