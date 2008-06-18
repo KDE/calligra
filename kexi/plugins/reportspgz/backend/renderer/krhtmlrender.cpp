@@ -40,46 +40,75 @@ KRHtmlRender::~KRHtmlRender()
 
 QString KRHtmlRender::render(ORODocument *document, bool css)
 {
-	kDebug() << endl;
 	QString html;
-	
-	html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html>\n<head>\n";
-	html += "</head><body>";
+	QString body;
+	QString style;
+	QStringList styles;
+	int styleindex;
 				 
 	// Render Each Section
 	for (long s = 0; s < document->sections(); s++ )
 	{
+		OROSection *section = document->section(s);
+	  
+		style = "position: relative; top: 0pt; left: 0pt; background-color: " + section->backgroundColor().name() + "; height: " + QString::number(section->height()) + "pt;";
 
-	  OROSection *section = document->section(s);
-	  html += "<div style=\"position: relative; top: 0pt; left: 0pt; background-color: " + section->backgroundColor().name() + "; height: " + QString::number(section->height()) + "pt;\">\n";
-	  //Render the objects in each section
-	  for ( int i = 0; i < section->primitives(); i++ )
-	  {
-		  
-		  OROPrimitive * prim = section->primitive ( i );
-		  
-		  if ( prim->type() == OROTextBox::TextBox )
-		  {
-			  OROTextBox * tb = ( OROTextBox* ) prim;
-			  html += "<div style=\"position: absolute; ";
-			  html += "background-color: " + tb->textStyle().bgColor.name() + "; ";
-			  html += "top: " + QString::number(tb->position().y()) + "pt; ";
-			  html += "left: " + QString::number(tb->position().x()) + "pt; ";
-			  html += "font-size: " + QString::number(tb->textStyle().font.pointSize()) + "; ";
-			  html += "color: " + tb->textStyle().fgColor.name() + "; ";
-			  html += "filter:alpha(opacity=" + QString::number((tb->textStyle().bgOpacity / 255) * 100) + ");"; //ie opacity
-			  html += "opactiy: " + QString::number(tb->textStyle().bgOpacity / 255.0) + "; \">";
-			  html += tb->text();
-			  html += "</div>\n";
-		  }
-		  else
-		  {
-			  kDebug() << "unrecognized primitive type" << endl;
-		  }
-	  }
-	  html += "</div>\n";
+		if (!styles.contains(style))
+		{
+			    styles << style;
+		}
+		styleindex = styles.indexOf(style);
+
+		body += "<div class=\"style" + QString::number(styleindex) + "\">\n";
+		//Render the objects in each section
+		for ( int i = 0; i < section->primitives(); i++ )
+		{
+			OROPrimitive * prim = section->primitive ( i );
+			
+			if ( prim->type() == OROTextBox::TextBox )
+			{
+				OROTextBox * tb = ( OROTextBox* ) prim;
+				
+				style = "position: absolute; ";
+				style += "background-color: " + (tb->textStyle().bgOpacity == 0 ? "transparent" : tb->textStyle().bgColor.name()) + "; ";
+				style += "top: " + QString::number(tb->position().y()) + "pt; ";
+				style += "left: " + QString::number(tb->position().x()) + "pt; ";
+				style += "font-size: " + QString::number(tb->textStyle().font.pointSize()) + "pt; ";
+				style += "color: " + tb->textStyle().fgColor.name() + "; ";
+				//TODO opaque text + translucent background
+				//it looks a pain to implement
+				//http://developer.mozilla.org/en/docs/Useful_CSS_tips:Color_and_Background
+				//style += "filter:alpha(opacity=" + QString::number((tb->textStyle().bgOpacity / 255) * 100) + ");"; //ie opacity
+				//style += "opacity: " + QString::number(tb->textStyle().bgOpacity / 255.0) + ";";
+				
+				if (!styles.contains(style))
+				{
+				  styles << style;
+				}
+				styleindex = styles.indexOf(style);
+				
+				body += "<div class=\"style" + QString::number(styleindex) + "\">";
+				body += tb->text();
+				body += "</div>\n";
+			}
+			else
+			{
+				kDebug() << "unrecognized primitive type" << endl;
+			}
+		}
+		body += "</div>\n";
 	}
 
+	html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html>\n<head>\n";
+	html += "<style type=\"text/css\">";
+
+	for (unsigned int i = 0; i < styles.count(); ++i)
+	{
+		html += ".style" + QString::number(i) + "{" + styles[i] + "}\n";
+	}
+	
+	html += "</style></head><body>";
+	html += body;
 	html += "</body></html>";
 
 	return html;
