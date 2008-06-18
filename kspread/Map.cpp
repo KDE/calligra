@@ -37,6 +37,7 @@
 #include <KoXmlNS.h>
 #include <KoXmlWriter.h>
 
+#include "ApplicationSettings.h"
 #include "BindingManager.h"
 #include "CalculationSettings.h"
 #include "Canvas.h"
@@ -104,6 +105,7 @@ public:
     RecalcManager* recalcManager;
     StyleManager* styleManager;
 
+    ApplicationSettings* applicationSettings;
     CalculationSettings* calculationSettings;
     ValueCalc* calc;
     ValueConverter* converter;
@@ -141,6 +143,7 @@ Map::Map ( Doc* doc, const char* name)
     d->recalcManager = new RecalcManager(this);
     d->styleManager = new StyleManager();
 
+    d->applicationSettings = new ApplicationSettings();
     d->calculationSettings = new CalculationSettings();
     d->calculationSettings->setFileName(d->doc->url().prettyUrl()); // for FILENAME function ;)
 
@@ -181,6 +184,7 @@ Map::~Map()
     delete d->converter;
     delete d->calc;
     delete d->calculationSettings;
+    delete d->applicationSettings;
 
     delete d->defaultColumnFormat;
     delete d->defaultRowFormat;
@@ -277,6 +281,11 @@ void Map::setDefaultColumnWidth(double width)
 void Map::setDefaultRowHeight(double height)
 {
     d->defaultRowFormat->setHeight(height);
+}
+
+ApplicationSettings* Map::settings() const
+{
+    return d->applicationSettings;
 }
 
 CalculationSettings* Map::calculationSettings() const

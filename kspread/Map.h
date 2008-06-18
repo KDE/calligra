@@ -41,6 +41,7 @@ class KoOasisSettings;
 
 namespace KSpread
 {
+class ApplicationSettings;
 class BindingManager;
 class CalculationSettings;
 class ColumnFormat;
@@ -135,6 +136,11 @@ public:
      * @return the value calculator of this Document
      */
     ValueCalc* calc() const;
+
+    /**
+     * \return the application settings
+     */
+    ApplicationSettings* settings() const;
 
     /**
      * \return the calculation settings

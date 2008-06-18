@@ -296,11 +296,6 @@ public Q_SLOTS:
     void showTabBar( bool b );
 
     /**
-     * Shows the formula bar if b is true, otherwise the formula bar will be hidden.
-     */
-    void showFormulaBar( bool b );
-
-    /**
      * Shows context menu when tabbar is double-clicked.
      */
     void popupTabBarMenu( const QPoint& );

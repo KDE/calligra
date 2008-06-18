@@ -111,6 +111,7 @@
 #include <KoZoomHandler.h>
 
 // KSpread includes
+#include "ApplicationSettings.h"
 #include "CellStorage.h"
 #include "CellView.h"
 #include "Damages.h"
@@ -268,7 +269,6 @@ public:
     // settings
     KToggleAction* showStatusBar;
     KToggleAction* showTabBar;
-    KToggleAction* showFormulaBar;
     QAction * preference;
 
     // running calculation
@@ -427,12 +427,6 @@ void View::Private::initActions()
     connect(actions->showTabBar, SIGNAL(toggled(bool)),
             view, SLOT(showTabBar(bool)));
 
-    actions->showFormulaBar = new KToggleAction(i18n("Formula Bar"), view);
-    actions->showFormulaBar->setToolTip(i18n("Show the formula bar"));
-    ac->addAction("showFormulaBar", actions->showFormulaBar);
-    connect(actions->showFormulaBar, SIGNAL(toggled(bool)),
-            view, SLOT(showFormulaBar(bool)));
-
     actions->preference = KStandardAction::preferences(view, SLOT(preference()), view);
     actions->preference->setToolTip(i18n("Set various KSpread options"));
     ac->addAction("preference", actions->preference);
@@ -525,9 +519,8 @@ void View::Private::adjustActions( bool mode )
   else
     actions->renameSheet->setEnabled( false );
 
-  actions->showStatusBar->setChecked( view->doc()->showStatusBar() );
-  actions->showTabBar->setChecked( view->doc()->showTabBar() );
-  actions->showFormulaBar->setChecked( view->doc()->showFormulaBar() );
+  actions->showStatusBar->setChecked( view->doc()->map()->settings()->showStatusBar() );
+  actions->showTabBar->setChecked( view->doc()->map()->settings()->showTabBar() );
 
   if ( activeSheet )
     selection->update();
@@ -936,21 +929,20 @@ void View::initConfig()
     const bool configFromDoc = doc()->configLoadFromFile();
     if ( !configFromDoc )
     {
-        doc()->setShowHorizontalScrollBar(parameterGroup.readEntry("Horiz ScrollBar",true));
-        doc()->setShowVerticalScrollBar(parameterGroup.readEntry("Vert ScrollBar",true));
+        doc()->map()->settings()->setShowHorizontalScrollBar(parameterGroup.readEntry("Horiz ScrollBar",true));
+        doc()->map()->settings()->setShowVerticalScrollBar(parameterGroup.readEntry("Vert ScrollBar",true));
     }
-    doc()->setShowColumnHeader(parameterGroup.readEntry("Column Header",true));
-    doc()->setShowRowHeader(parameterGroup.readEntry("Row Header",true));
+    doc()->map()->settings()->setShowColumnHeader(parameterGroup.readEntry("Column Header",true));
+    doc()->map()->settings()->setShowRowHeader(parameterGroup.readEntry("Row Header",true));
     if ( !configFromDoc )
-        doc()->setCompletionMode((KGlobalSettings::Completion)parameterGroup.readEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
-    doc()->setMoveToValue((KSpread::MoveTo)parameterGroup.readEntry("Move",(int)(Bottom)));
-    doc()->setIndentValue( parameterGroup.readEntry( "Indent", 10.0 ) );
-    doc()->setTypeOfCalc((MethodOfCalc)parameterGroup.readEntry("Method of Calc",(int)(SumOfNumber)));
+        doc()->map()->settings()->setCompletionMode((KGlobalSettings::Completion)parameterGroup.readEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
+    doc()->map()->settings()->setMoveToValue((KSpread::MoveTo)parameterGroup.readEntry("Move",(int)(Bottom)));
+    doc()->map()->settings()->setIndentValue( parameterGroup.readEntry( "Indent", 10.0 ) );
+    doc()->map()->settings()->setTypeOfCalc((MethodOfCalc)parameterGroup.readEntry("Method of Calc",(int)(SumOfNumber)));
     if ( !configFromDoc )
-        doc()->setShowTabBar(parameterGroup.readEntry("Tabbar",true));
+        doc()->map()->settings()->setShowTabBar(parameterGroup.readEntry("Tabbar",true));
 
-    doc()->setShowFormulaBar(parameterGroup.readEntry("Formula bar",true));
-    doc()->setShowStatusBar(parameterGroup.readEntry("Status bar",true));
+    doc()->map()->settings()->setShowStatusBar(parameterGroup.readEntry("Status bar",true));
 
     changeNbOfRecentFiles(parameterGroup.readEntry("NbRecentFile",10));
     //autosave value is stored as a minute.
@@ -959,8 +951,8 @@ void View::initConfig()
     doc()->setBackupFile( parameterGroup.readEntry("BackupFile",true));
 
     const KConfigGroup colorGroup = config->group( "KSpread Color" );
-    doc()->setGridColor( colorGroup.readEntry( "GridColor", QColor(Qt::lightGray) ) );
-    doc()->changePageBorderColor( colorGroup.readEntry( "PageBorderColor", QColor(Qt::red) ) );
+    doc()->map()->settings()->setGridColor( colorGroup.readEntry( "GridColor", QColor(Qt::lightGray) ) );
+    doc()->map()->settings()->changePageBorderColor( colorGroup.readEntry( "PageBorderColor", QColor(Qt::red) ) );
 
 // Do we need a Page Layout in the congiguration file? Isn't this already in the template? Philipp
 /*
@@ -973,7 +965,7 @@ void View::initConfig()
     d->activeSheet->setPaperUnit((KoUnit)pageLayoutGroup.readEntry("Default unit page",0));
 }
 */
-    doc()->setCaptureAllArrowKeys( config->group( "Editor" ).readEntry( "CaptureAllArrowKeys", true ) );
+    doc()->map()->settings()->setCaptureAllArrowKeys( config->group( "Editor" ).readEntry( "CaptureAllArrowKeys", true ) );
 
     initCalcMenu();
     calcStatusBarOp();
@@ -987,7 +979,7 @@ void View::changeNbOfRecentFiles(int _nb)
 
 void View::initCalcMenu()
 {
-    switch( doc()->getTypeOfCalc())
+    switch( doc()->map()->settings()->getTypeOfCalc())
     {
         case  SumOfNumber:
             d->actions->calcSum->setChecked(true);
@@ -1778,19 +1770,13 @@ void View::setZoom( int zoom, bool /*updateViews*/ )
 
 void View::showStatusBar( bool b )
 {
-  doc()->setShowStatusBar( b );
+  doc()->map()->settings()->setShowStatusBar( b );
   refreshView();
 }
 
 void View::showTabBar( bool b )
 {
-  doc()->setShowTabBar( b );
-  refreshView();
-}
-
-void View::showFormulaBar( bool b )
-{
-  doc()->setShowFormulaBar( b );
+  doc()->map()->settings()->setShowTabBar( b );
   refreshView();
 }
 
@@ -1945,13 +1931,13 @@ void View::refreshView()
 
   d->tabBar->setReadOnly( !doc()->isReadWrite() || doc()->map()->isProtected() );
 
-  d->hBorderWidget->setVisible( doc()->showColumnHeader() );
-  d->vBorderWidget->setVisible( doc()->showRowHeader() );
-  d->selectAllButton->setVisible( doc()->showColumnHeader() && doc()->showRowHeader() );
-  d->vertScrollBar->setVisible( doc()->showVerticalScrollBar() );
-  d->horzScrollBar->setVisible( doc()->showHorizontalScrollBar() );
-  d->tabBar->setVisible( doc()->showTabBar() );
-  if ( statusBar() ) statusBar()->setVisible( doc()->showStatusBar() );
+  d->hBorderWidget->setVisible( doc()->map()->settings()->showColumnHeader() );
+  d->vBorderWidget->setVisible( doc()->map()->settings()->showRowHeader() );
+  d->selectAllButton->setVisible( doc()->map()->settings()->showColumnHeader() && doc()->map()->settings()->showRowHeader() );
+  d->vertScrollBar->setVisible( doc()->map()->settings()->showVerticalScrollBar() );
+  d->horzScrollBar->setVisible( doc()->map()->settings()->showHorizontalScrollBar() );
+  d->tabBar->setVisible( doc()->map()->settings()->showTabBar() );
+  if ( statusBar() ) statusBar()->setVisible( doc()->map()->settings()->showStatusBar() );
 
   QFont font( KoGlobal::defaultFont() );
   d->hBorderWidget->setMinimumHeight( qRound( zoomHandler()->zoomItY( font.pointSizeF() + 3 ) ) );
@@ -2216,7 +2202,7 @@ void View::calcStatusBarOp()
   Sheet * sheet = activeSheet();
   ValueCalc* calc = doc()->map()->calc();
   Value val;
-  MethodOfCalc tmpMethod = doc()->getTypeOfCalc();
+  MethodOfCalc tmpMethod = doc()->map()->settings()->getTypeOfCalc();
   if ( tmpMethod != NoneCalc )
   {
     Value range = sheet->cellStorage()->valueRegion( *d->selection );
@@ -2290,30 +2276,30 @@ void View::menuCalc( bool )
 {
   if ( d->actions->calcMin->isChecked() )
   {
-    doc()->setTypeOfCalc( Min );
+    doc()->map()->settings()->setTypeOfCalc( Min );
   }
   else if ( d->actions->calcMax->isChecked() )
   {
-    doc()->setTypeOfCalc( Max );
+    doc()->map()->settings()->setTypeOfCalc( Max );
   }
   else if ( d->actions->calcCount->isChecked() )
   {
-    doc()->setTypeOfCalc( Count );
+    doc()->map()->settings()->setTypeOfCalc( Count );
   }
   else if ( d->actions->calcAverage->isChecked() )
   {
-    doc()->setTypeOfCalc( Average );
+    doc()->map()->settings()->setTypeOfCalc( Average );
   }
   else if ( d->actions->calcSum->isChecked() )
   {
-    doc()->setTypeOfCalc( SumOfNumber );
+    doc()->map()->settings()->setTypeOfCalc( SumOfNumber );
   }
   else if ( d->actions->calcCountA->isChecked() )
   {
-    doc()->setTypeOfCalc( CountA );
+    doc()->map()->settings()->setTypeOfCalc( CountA );
   }
   else if ( d->actions->calcNone->isChecked() )
-    doc()->setTypeOfCalc( NoneCalc );
+    doc()->map()->settings()->setTypeOfCalc( NoneCalc );
 
   calcStatusBarOp();
 }

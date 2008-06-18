@@ -166,6 +166,7 @@ kde4_add_ui_files(ui_DIR_SRCS
 	)
 
 SET (kspreadcommon_LIB_SRCS
+	ApplicationSettings.cpp
 	Binding.cpp
 	BindingManager.cpp
 	CalculationSettings.cpp

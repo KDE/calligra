@@ -55,6 +55,7 @@
 #include <KoZoomHandler.h>
 
 // KSpread
+#include "ApplicationSettings.h"
 #include "Canvas.h"
 #include "CellStorage.h"
 #include "Condition.h"
@@ -733,7 +734,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF& paintRect,
 
     // Set the single-pixel width pen for drawing the borders with.
     // NOTE Stefan: Use a cosmetic pen (width = 0), because we want the grid always one pixel wide
-    painter.setPen( QPen( cell.doc()->gridColor(), 0, Qt::SolidLine ) );
+    painter.setPen( QPen( cell.sheet()->map()->settings()->gridColor(), 0, Qt::SolidLine ) );
 
     QLineF line;
 
@@ -833,7 +834,7 @@ void CellView::paintDefaultBorders( QPainter& painter, const QRectF& paintRect,
         }
 #endif
 
-        //painter.setPen( QPen( cell.doc()->gridColor(), 1, Qt::SolidLine ) );
+        //painter.setPen( QPen( cell.sheet()->map()->settings()->gridColor(), 1, Qt::SolidLine ) );
 
         // If we are on paper printout, we limit the length of the lines.
         // On paper, we always have full cells, on screen not.
@@ -1240,7 +1241,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
     if ( print->isColumnOnNewPage( cell.column() )
          && cell.row() <= print->printRange().bottom() )
     {
-      painter.setPen( cell.doc()->pageBorderColor() );
+      painter.setPen( cell.sheet()->map()->settings()->pageBorderColor() );
 
       if ( cell.sheet()->layoutDirection() == Qt::RightToLeft )
         line = QLineF( coordinate.x() + d->width, coordinate.y(),
@@ -1254,7 +1255,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
     if ( print->isRowOnNewPage( cell.row() ) &&
          ( cell.column() <= print->printRange().right() ) )
     {
-      painter.setPen( cell.doc()->pageBorderColor() );
+      painter.setPen( cell.sheet()->map()->settings()->pageBorderColor() );
       line = QLineF( coordinate.x(),  coordinate.y(),
                         coordinate.x() + d->width, coordinate.y() );
       painter.drawLine( line );
@@ -1263,7 +1264,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
     if ( paintBorder & RightBorder ) {
       if ( print->isColumnOnNewPage( cell.column() + 1 )
            && cell.row() <= print->printRange().bottom() ) {
-        painter.setPen( cell.doc()->pageBorderColor() );
+        painter.setPen( cell.sheet()->map()->settings()->pageBorderColor() );
 
         if ( cell.sheet()->layoutDirection() == Qt::RightToLeft )
           line = QLineF( coordinate.x(), coordinate.y(),
@@ -1278,7 +1279,7 @@ void CellView::paintPageBorders(QPainter& painter, const QPointF& coordinate,
     if ( paintBorder & BottomBorder ) {
       if ( print->isRowOnNewPage( cell.row() + 1 )
            && cell.column() <= print->printRange().right() ) {
-        painter.setPen( cell.doc()->pageBorderColor() );
+        painter.setPen( cell.sheet()->map()->settings()->pageBorderColor() );
         line = QLineF( coordinate.x(),  coordinate.y() + d->height,
                           coordinate.x() + d->width, coordinate.y() + d->height );
         painter.drawLine( line );

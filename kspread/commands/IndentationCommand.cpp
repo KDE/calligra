@@ -23,9 +23,10 @@
 #include <kdebug.h>
 #include <klocale.h>
 
+#include "ApplicationSettings.h"
 #include "Cell.h"
 #include "CellStorage.h"
-#include "Doc.h"
+#include "Map.h"
 #include "Sheet.h"
 #include "Style.h"
 
@@ -43,12 +44,12 @@ bool IndentationCommand::mainProcessing()
     if ( !m_reverse )
     {
         // increase the indentation
-        style.setIndentation( m_sheet->doc()->indentValue() );
+        style.setIndentation( m_sheet->map()->settings()->indentValue() );
     }
     else // m_reverse
     {
         // decrease the indentation
-        style.setIndentation( -m_sheet->doc()->indentValue() );
+        style.setIndentation( -m_sheet->map()->settings()->indentValue() );
     }
     m_sheet->cellStorage()->setStyle( *this, style );
     return true;

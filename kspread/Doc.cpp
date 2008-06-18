@@ -118,26 +118,11 @@ public:
   // This flag is used to avoid updates etc. during loading.
   bool isLoading;
 
-  QColor pageBorderColor;
-
   KCompletion listCompletion;
 
   // document properties
   int syntaxVersion;
-  bool verticalScrollBar        : 1;
-  bool horizontalScrollBar      : 1;
-  bool columnHeader             : 1;
-  bool rowHeader                : 1;
-  QColor gridColor;
-  double indentValue;
-  bool showStatusBar            : 1;
-  bool showTabBar               : 1;
-  bool showFormulaBar           : 1;
-  KGlobalSettings::Completion completionMode;
-  KSpread::MoveTo moveTo;
-  MethodOfCalc calcMethod;
   bool configLoadFromFile       : 1;
-  bool captureAllArrowKeys      : 1;
   QStringList spellListIgnoreAll;
   SavedDocParts savedDocParts;
 };
@@ -159,9 +144,7 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
 
   d->map = new Map( this, "Map" );
 
-  d->pageBorderColor = Qt::red;
   d->configLoadFromFile = false;
-  d->captureAllArrowKeys = true;
 
   documents().append( this );
 
@@ -172,18 +155,6 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
 
   // default document properties
   d->syntaxVersion = CURRENT_SYNTAX_VERSION;
-  d->verticalScrollBar = true;
-  d->horizontalScrollBar = true;
-  d->columnHeader = true;
-  d->rowHeader = true;
-  d->gridColor = Qt::lightGray;
-  d->indentValue = 10.0;
-  d->showStatusBar = true;
-  d->showFormulaBar = true;
-  d->showTabBar = true;
-  d->calcMethod = SumOfNumber;
-  d->moveTo = Bottom;
-  d->completionMode = KGlobalSettings::CompletionAuto;
 
     // Ask every shapefactory to populate the dataCenterMap
     // Init chart shape factory with KSpread's specific configuration panels.
@@ -285,16 +256,6 @@ bool Doc::isLoading() const
 {
     // The KoDocument state is necessary to avoid damages while importing a file (through a filter).
     return d->isLoading || KoDocument::isLoading();
-}
-
-QColor Doc::pageBorderColor() const
-{
-  return d->pageBorderColor;
-}
-
-void Doc::changePageBorderColor( const QColor  & _color)
-{
-  d->pageBorderColor = _color;
 }
 
 KCompletion& Doc::completion()
@@ -820,126 +781,6 @@ bool Doc::docData( QString const & xmlTag, QDomElement & data )
   return true;
 }
 
-void Doc::setShowVerticalScrollBar(bool _show)
-{
-  d->verticalScrollBar=_show;
-}
-
-bool Doc::showVerticalScrollBar()const
-{
-  return  d->verticalScrollBar;
-}
-
-void Doc::setShowHorizontalScrollBar(bool _show)
-{
-  d->horizontalScrollBar=_show;
-}
-
-bool Doc::showHorizontalScrollBar()const
-{
-  return  d->horizontalScrollBar;
-}
-
-KGlobalSettings::Completion Doc::completionMode( ) const
-{
-  return d->completionMode;
-}
-
-void Doc::setShowColumnHeader(bool _show)
-{
-  d->columnHeader=_show;
-}
-
-bool Doc::showColumnHeader() const
-{
-  return  d->columnHeader;
-}
-
-void Doc::setShowRowHeader(bool _show)
-{
-  d->rowHeader=_show;
-}
-
-bool Doc::showRowHeader() const
-{
-  return  d->rowHeader;
-}
-
-void Doc::setGridColor( const QColor& color )
-{
-  d->gridColor = color;
-}
-
-QColor Doc::gridColor() const
-{
-  return d->gridColor;
-}
-
-void Doc::setCompletionMode( KGlobalSettings::Completion complMode)
-{
-  d->completionMode= complMode;
-}
-
-double Doc::indentValue() const
-{
-  return d->indentValue;
-}
-
-void Doc::setIndentValue( double val )
-{
-  d->indentValue = val;
-}
-
-void Doc::setShowStatusBar(bool _statusBar)
-{
-  d->showStatusBar=_statusBar;
-}
-
-bool Doc::showStatusBar() const
-{
-  return  d->showStatusBar;
-}
-
-void Doc::setShowTabBar(bool _tabbar)
-{
-  d->showTabBar=_tabbar;
-}
-
-bool Doc::showTabBar()const
-{
-  return  d->showTabBar;
-}
-
-void Doc::setShowFormulaBar(bool _formulaBar)
-{
-  d->showFormulaBar=_formulaBar;
-}
-
-bool Doc::showFormulaBar() const
-{
-  return  d->showFormulaBar;
-}
-
-KSpread::MoveTo Doc::moveToValue() const
-{
-  return d->moveTo;
-}
-
-void Doc::setMoveToValue(KSpread::MoveTo _moveTo)
-{
-  d->moveTo = _moveTo;
-}
-
-void Doc::setTypeOfCalc( MethodOfCalc _calc)
-{
-  d->calcMethod=_calc;
-}
-
-MethodOfCalc Doc::getTypeOfCalc() const
-{
-  return d->calcMethod;
-}
-
 void Doc::addIgnoreWordAllList( const QStringList & _lst)
 {
   d->spellListIgnoreAll = _lst;
@@ -1202,16 +1043,6 @@ void Doc::loadConfigFromFile()
 bool Doc::configLoadFromFile() const
 {
     return d->configLoadFromFile;
-}
-
-void Doc::setCaptureAllArrowKeys( bool capture )
-{
-    d->captureAllArrowKeys = capture;
-}
-
-bool Doc::captureAllArrowKeys() const
-{
-    return d->captureAllArrowKeys;
 }
 
 void Doc::repaint( const QRectF& rect )

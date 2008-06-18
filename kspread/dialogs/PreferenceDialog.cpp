@@ -47,6 +47,7 @@
 
 #include <KoTabBar.h>
 
+#include "ApplicationSettings.h"
 #include "CalculationSettings.h"
 #include "Border.h"
 #include "Canvas.h"
@@ -327,7 +328,7 @@ void configure::apply()
             m_pView->horzScrollBar()->show();
         else
             m_pView->horzScrollBar()->hide();
-        doc->setShowHorizontalScrollBar(active);
+        doc->map()->settings()->setShowHorizontalScrollBar(active);
     }
     active=showVScrollBar->isChecked();
     if( m_pView->vertScrollBar()->isVisible()!=active)
@@ -337,7 +338,7 @@ void configure::apply()
             m_pView->vertScrollBar()->show();
         else
             m_pView->vertScrollBar()->hide();
-        doc->setShowVerticalScrollBar(active);
+        doc->map()->settings()->setShowVerticalScrollBar(active);
 
     }
     active=showColHeader->isChecked();
@@ -348,7 +349,7 @@ void configure::apply()
             m_pView->hBorderWidget()->show();
         else
             m_pView->hBorderWidget()->hide();
-        doc->setShowColumnHeader(active);
+        doc->map()->settings()->setShowColumnHeader(active);
     }
 
     active=showRowHeader->isChecked();
@@ -359,7 +360,7 @@ void configure::apply()
             m_pView->vBorderWidget()->show();
         else
             m_pView->vBorderWidget()->hide();
-        doc->setShowRowHeader(active);
+        doc->map()->settings()->setShowRowHeader(active);
     }
 
     active=showTabBar->isChecked();
@@ -370,7 +371,7 @@ void configure::apply()
             m_pView->tabBar()->show();
         else
             m_pView->tabBar()->hide();
-        doc->setShowTabBar(active);
+        doc->map()->settings()->setShowTabBar(active);
     }
 
 #if 0 // KSPREAD_DISCARD_FORMULA_BAR
@@ -383,7 +384,7 @@ void configure::apply()
             m_pView->posWidget()->show();
         else
             m_pView->posWidget()->hide();
-        doc->setShowFormulaBar(active);
+        doc->map()->settings()->setShowFormulaBar(active);
     }
 #endif
 
@@ -531,7 +532,7 @@ switch(tmpCompletion )
                 typeCompletion->setCurrentIndex(0);
                 break;
         }
-        switch( m_pView->doc()->moveToValue( ))
+        switch( m_pView->doc()->map()->settings()->moveToValue( ))
         {
         case  Bottom:
                 typeOfMove->setCurrentIndex(0);
@@ -553,7 +554,7 @@ switch(tmpCompletion )
                 break;
         }
 
-switch( m_pView->doc()->getTypeOfCalc())
+switch( m_pView->doc()->map()->settings()->getTypeOfCalc())
         {
         case  SumOfNumber:
                 typeCalc->setCurrentIndex(0);
@@ -604,7 +605,7 @@ void miscParameters::apply()
     if( newUndo!=m_oldNbRedo )
     {
         config->group( "Misc" ).writeEntry( "UndoRedo", newUndo );
-        m_pView->doc()->setUndoRedoLimit(newUndo);
+        m_pView->doc()->map()->settings()->setUndoRedoLimit(newUndo);
         m_oldNbRedo=newUndo;
     }
 #endif
@@ -633,7 +634,7 @@ void miscParameters::apply()
 
     if(comboChanged)
     {
-        m_pView->doc()->setCompletionMode(tmpCompletion);
+        m_pView->doc()->map()->settings()->setCompletionMode(tmpCompletion);
         parameterGroup.writeEntry( "Completion Mode", (int)tmpCompletion);
     }
 
@@ -656,9 +657,9 @@ void miscParameters::apply()
             tmpMoveTo=BottomFirst;
             break;
     }
-    if(tmpMoveTo!=m_pView->doc()->moveToValue())
+    if(tmpMoveTo!=m_pView->doc()->map()->settings()->moveToValue())
     {
-        m_pView->doc()->setMoveToValue(tmpMoveTo);
+        m_pView->doc()->map()->settings()->setMoveToValue(tmpMoveTo);
         parameterGroup.writeEntry( "Move", (int)tmpMoveTo);
     }
 
@@ -688,20 +689,20 @@ void miscParameters::apply()
             break;
 
     }
-    if(tmpMethodCalc!=m_pView->doc()->getTypeOfCalc())
+    if(tmpMethodCalc!=m_pView->doc()->map()->settings()->getTypeOfCalc())
     {
-        m_pView->doc()->setTypeOfCalc(tmpMethodCalc);
+        m_pView->doc()->map()->settings()->setTypeOfCalc(tmpMethodCalc);
         parameterGroup.writeEntry( "Method of Calc", (int)tmpMethodCalc);
         m_pView->calcStatusBarOp();
         m_pView->initCalcMenu();
     }
 
     double val = valIndent->value();
-    if( val != m_pView->doc()->indentValue() )
+    if( val != m_pView->doc()->map()->settings()->indentValue() )
     {
         KoUnit oldUnit = m_pView->doc()->unit();
         m_pView->doc()->setUnit(indentUnit);
-        m_pView->doc()->setIndentValue( val );
+        m_pView->doc()->map()->settings()->setIndentValue( val );
         m_pView->doc()->setUnit(oldUnit);
         parameterGroup.writeEntry( "Indent", indentUnit.fromUserValue( val ) );
     }
@@ -745,16 +746,16 @@ colorParameters::colorParameters( View* _view,KVBox *box , char * /*name*/ )
 void colorParameters::apply()
 {
   QColor _col = gridColor->color();
-  if ( m_pView->doc()->gridColor() != _col )
+  if ( m_pView->doc()->map()->settings()->gridColor() != _col )
   {
-    m_pView->doc()->setGridColor( _col );
+    m_pView->doc()->map()->settings()->setGridColor( _col );
     config->group( "KSpread Color" ).writeEntry( "GridColor", _col );
   }
 
   QColor _pbColor = pageBorderColor->color();
-  if ( m_pView->doc()->pageBorderColor() != _pbColor )
+  if ( m_pView->doc()->map()->settings()->pageBorderColor() != _pbColor )
   {
-    m_pView->doc()->changePageBorderColor( _pbColor );
+    m_pView->doc()->map()->settings()->changePageBorderColor( _pbColor );
     config->group( "KSpread Color" ).writeEntry( "PageBorderColor", _pbColor );
   }
 }

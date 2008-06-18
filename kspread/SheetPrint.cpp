@@ -26,8 +26,10 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
+#include "ApplicationSettings.h"
 #include "Doc.h"
 #include "Localization.h"
+#include "Map.h"
 #include "Object.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
@@ -207,10 +209,10 @@ bool SheetPrint::print( QPainter &painter, QPrinter *_printer )
     m_pSheet->setShowGrid(m_settings->printGrid());
     if (!m_settings->printGrid())
     {
-        gridPen = QPen( m_pDoc->gridColor(), 1, Qt::SolidLine );
+        gridPen = QPen( m_pSheet->map()->settings()->gridColor(), 1, Qt::SolidLine );
         QPen nopen;
         nopen.setStyle( Qt::NoPen );
-        m_pDoc->setGridColor( Qt::white );
+        m_pSheet->map()->settings()->setGridColor( Qt::white );
     }
 
     //Update m_dPrintRepeatColumnsWidth for repeated columns
@@ -305,7 +307,7 @@ bool SheetPrint::print( QPainter &painter, QPrinter *_printer )
     if (!m_settings->printGrid())
     {
         // Restore the grid pen
-        m_pDoc->setGridColor( gridPen.color() );
+        m_pSheet->map()->settings()->setGridColor( gridPen.color() );
     }
     m_pSheet->setShowGrid( oldShowGrid );
 

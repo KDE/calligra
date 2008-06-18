@@ -44,6 +44,7 @@
 #include "CellToolBase_p.h"
 
 // KSpread
+#include "ApplicationSettings.h"
 #include "CalculationSettings.h"
 #include "Canvas.h"
 #include "CellStorage.h"
@@ -219,7 +220,7 @@ void CellToolBase::Private::processEnterKey(QKeyEvent* event)
     /* use the configuration setting to see which direction we're supposed to move
         when enter is pressed.
     */
-    KSpread::MoveTo direction = q->selection()->activeSheet()->doc()->moveToValue();
+    KSpread::MoveTo direction = q->selection()->activeSheet()->map()->settings()->moveToValue();
 
 //if shift Button clicked inverse move direction
     if (event->modifiers() & Qt::ShiftModifier) {

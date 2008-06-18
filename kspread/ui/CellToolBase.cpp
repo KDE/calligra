@@ -30,6 +30,7 @@
 #include "CellToolBase_p.h"
 
 // KSpread
+#include "ApplicationSettings.h"
 #include "AutoFillStrategy.h"
 #include "CalculationSettings.h"
 #include "Cell.h"
@@ -1167,7 +1168,7 @@ bool CellToolBase::createEditor(bool clear, bool focus)
 
     if (!editor()) {
         d->cellEditor = new CellEditor(m_canvas->canvasWidget(), selection(),
-                                       selection()->activeSheet()->doc()->captureAllArrowKeys());
+                                       selection()->activeSheet()->map()->settings()->captureAllArrowKeys());
         d->cellEditor->setEditorFont(cell.style().font(), true, m_canvas->viewConverter());
         connect(d->cellEditor, SIGNAL(textChanged(const QString &)),
                 d->optionWidget.userInput, SLOT(setText(const QString &)));

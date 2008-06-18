@@ -73,13 +73,6 @@ class KSPREAD_EXPORT Doc : public KoDocument
 {
   Q_OBJECT
   Q_PROPERTY( int syntaxVersion READ syntaxVersion )
-  Q_PROPERTY( bool showVerticalScrollBar READ showVerticalScrollBar WRITE setShowVerticalScrollBar )
-  Q_PROPERTY( bool showHorizontalScrollBar READ showHorizontalScrollBar WRITE setShowHorizontalScrollBar )
-  Q_PROPERTY( bool showColumnHeader READ showColumnHeader WRITE setShowColumnHeader )
-  Q_PROPERTY( bool showRowHeader READ showRowHeader WRITE setShowRowHeader )
-  Q_PROPERTY( bool showStatusBar READ showStatusBar WRITE setShowStatusBar )
-  Q_PROPERTY( bool showFormulaBar READ showFormulaBar WRITE setShowFormulaBar )
-  Q_PROPERTY( bool showTabBar READ showTabBar WRITE setShowTabBar )
 #if 0 // UNDOREDOLIMIT
   Q_PROPERTY( int undoRedoLimit READ undoRedoLimit WRITE setUndoRedoLimit )
 #endif
@@ -125,126 +118,6 @@ public:
    * Returns the syntax version of the currently opened file
    */
   int syntaxVersion( ) const;
-
-  /**
-   * If b is true, vertical scrollbar is visible, otherwise
-   * it will be hidden.
-   */
-  void setShowVerticalScrollBar( bool b );
-
-  /**
-   * Returns true if vertical scroll bar is visible.
-   */
-  bool showVerticalScrollBar() const;
-
-  /**
-   * If b is true, horizontal scrollbar is visible, otherwise
-   * it will be hidden.
-   */
-  void setShowHorizontalScrollBar( bool b );
-
-  /**
-   * Returns true if horizontal scroll bar is visible.
-   */
-  bool showHorizontalScrollBar() const;
-
-  /**
-   * If b is true, column header is visible, otherwise
-   * it will be hidden.
-   */
-  void setShowColumnHeader( bool b );
-
-  /**
-   * Returns true if column header is visible.
-   */
-  bool showColumnHeader() const;
-
-  /**
-   * If b is true, row header is visible, otherwise
-   * it will be hidden.
-   */
-  void setShowRowHeader( bool b );
-
-  /**
-   * Returns true if row header is visible.
-   */
-  bool showRowHeader() const;
-
-  /**
-   * Sets the color of the grid.
-   */
-  void setGridColor( const QColor& color );
-
-  /**
-   * Returns the color of the grid.
-   */
-  QColor gridColor() const;
-
-  /**
-   * Sets the indentation value.
-   */
-  void setIndentValue( double val );
-
-  /**
-   * Returns the indentation value.
-   */
-  double indentValue() const;
-
-  /**
-   * If b is true, status bar is visible, otherwise
-   * it will be hidden.
-   */
-  void setShowStatusBar( bool b );
-
-  /**
-   * Returns true if status bar is visible.
-   */
-  bool showStatusBar() const;
-
-  /**
-   * If b is true, tab bar is visible, otherwise
-   * it will be hidden.
-   */
-  void setShowTabBar( bool b );
-
-  /**
-   * Returns true if tab bar is visible.
-   */
-  bool showTabBar() const;
-
-  /**
-   * If b is true, formula bar is visible, otherwise
-   * it will be hidden.
-   */
-  void setShowFormulaBar( bool b );
-
-  /**
-   * Returns true if formula bar is visible.
-   */
-  bool showFormulaBar() const;
-
-  /**
-   * @return completion mode
-   */
-  KGlobalSettings::Completion completionMode() const ;
-
-  /**
-   * Sets the completion mode.
-   * @param mode the mode to be set
-   */
-  void setCompletionMode( KGlobalSettings::Completion mode );
-
-  KSpread::MoveTo moveToValue() const;
-  void setMoveToValue(KSpread::MoveTo _moveTo);
-
-  /**
-  * Method of calc
-  */
-  void setTypeOfCalc( MethodOfCalc _calc);
-  MethodOfCalc getTypeOfCalc() const;
-
-  QColor pageBorderColor() const;
-  void changePageBorderColor( const QColor  & _color);
 
   virtual bool completeSaving( KoStore* _store );
 
@@ -381,9 +254,6 @@ public:
 /* Function specific when we load config from file */
   void loadConfigFromFile();
   bool configLoadFromFile() const;
-
-  void setCaptureAllArrowKeys( bool capture );
-  bool captureAllArrowKeys() const;
 
   // repaint (update) all views
   void repaint( const QRectF& );
