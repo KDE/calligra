@@ -40,8 +40,6 @@
 #include <KoUnitDoubleSpinBox.h>
 
 // KSpread
-#include <Canvas.h>
-#include <Doc.h>
 #include <Global.h>
 #include <Localization.h>
 #include "Map.h"
@@ -77,7 +75,7 @@ ResizeRow::ResizeRow(QWidget* parent, Selection* selection)
 
     m_pHeight = new KoUnitDoubleSpinBox( page );
     m_pHeight->setValue( rowHeight );
-    m_pHeight->setUnit( m_selection->activeSheet()->doc()->unit() );
+    m_pHeight->setUnit(m_selection->canvas()->unit());
     gridLayout->addWidget( m_pHeight, 0, 1 );
 
     m_pHeight->setFocus();
@@ -110,7 +108,7 @@ void ResizeRow::slotDefault()
   if (!sheet)
     return;
   double points = sheet->map()->defaultRowFormat()->height();
-  m_pHeight->setValue(m_selection->activeSheet()->doc()->unit().toUserValue(points));
+  m_pHeight->setValue(m_selection->canvas()->unit().toUserValue(points));
 }
 
 ResizeColumn::ResizeColumn(QWidget* parent, Selection* selection)
@@ -136,7 +134,7 @@ ResizeColumn::ResizeColumn(QWidget* parent, Selection* selection)
 
     m_pWidth = new KoUnitDoubleSpinBox( page );
     m_pWidth->setValue( columnWidth );
-    m_pWidth->setUnit( m_selection->activeSheet()->doc()->unit() );
+    m_pWidth->setUnit(m_selection->canvas()->unit());
     gridLayout->addWidget( m_pWidth, 0, 1 );
 
     m_pWidth->setFocus();
@@ -170,7 +168,7 @@ void ResizeColumn::slotDefault()
   if (!sheet)
     return;
   double points = sheet->map()->defaultColumnFormat()->width();
-  m_pWidth->setValue(m_selection->activeSheet()->doc()->unit().toUserValue(points));
+  m_pWidth->setValue(m_selection->canvas()->unit().toUserValue(points));
 }
 
 

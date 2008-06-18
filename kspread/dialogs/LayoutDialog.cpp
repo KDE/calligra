@@ -57,20 +57,19 @@
 #include <kmessagebox.h>
 #include <knumvalidator.h>
 
+#include <KoCanvasBase.h>
 #include <KoUnitDoubleSpinBox.h>
 
 #include "CalculationSettings.h"
-#include "Canvas.h"
 #include "Cell.h"
 #include "CellStorage.h"
-#include "Doc.h"
 #include "Localization.h"
 #include "Map.h"
+#include "Selection.h"
 #include "Sheet.h"
 #include "Style.h"
 #include "StyleManager.h"
 #include "StyleStorage.h"
-#include "Selection.h"
 #include "ValueFormatter.h"
 
 #include "commands/MergeCommand.h"
@@ -2076,7 +2075,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     m_indent->setMinimum(0.0);
     m_indent->setMaximum(400.0);
     m_indent->setLineStepPt(10.0);
-    m_indent->setUnit(dlg->getSheet()->doc()->unit());
+    m_indent->setUnit(dlg->selection()->canvas()->unit());
     m_indent->changeValue(dlg->indent);
     grid2->addWidget(m_indent, 0, 0);
 
@@ -2086,15 +2085,15 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     gridWidth->setSpacing(0);
     gridWidth->addWidget(width, 0, 0);
     width->setValue ( dlg->widthSize );
-    width->setUnit( dlg->getSheet()->doc()->unit() );
+    width->setUnit( dlg->selection()->canvas()->unit() );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
     dlg->widthSize = width->value();
 
     if ( dlg->isRowSelected )
         width->setEnabled(false);
 
-    double dw = dlg->getSheet()->doc()->unit().toUserValue(dlg->defaultWidthSize);
-    defaultWidth->setText(i18n("Default width (%1 %2)", dw, dlg->getSheet()->doc()->unitName()));
+    double dw = dlg->selection()->canvas()->unit().toUserValue(dlg->defaultWidthSize);
+    defaultWidth->setText(i18n("Default width (%1 %2)", dw, KoUnit::unitName(dlg->selection()->canvas()->unit())));
     if ( dlg->isRowSelected )
         defaultWidth->setEnabled(false);
 
@@ -2104,15 +2103,15 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     gridHeight->setSpacing(0);
     gridHeight->addWidget(height, 0, 0);
     height->setValue( dlg->heightSize );
-    height->setUnit(  dlg->getSheet()->doc()->unit() );
+    height->setUnit(  dlg->selection()->canvas()->unit() );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
     dlg->heightSize = height->value();
 
     if ( dlg->isColumnSelected )
         height->setEnabled(false);
 
-    double dh =  dlg->getSheet()->doc()->unit().toUserValue(dlg->defaultHeightSize);
-    defaultHeight->setText(i18n("Default height (%1 %2)", dh, dlg->getSheet()->doc()->unitName()));
+    double dh =  dlg->selection()->canvas()->unit().toUserValue(dlg->defaultHeightSize);
+    defaultHeight->setText(i18n("Default height (%1 %2)", dh, KoUnit::unitName(dlg->selection()->canvas()->unit())));
     if ( dlg->isColumnSelected )
         defaultHeight->setEnabled(false);
 

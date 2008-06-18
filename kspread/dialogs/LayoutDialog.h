@@ -496,6 +496,7 @@ public:
     void checkBorderHorizontal(const Style& obj);
 
     Sheet * getSheet() const { return m_sheet; }
+    Selection* selection() const { return m_selection; }
     CustomStyle * getStyle() const { return m_style; }
     StyleManager * getStyleManager() const { return m_styleManager; }
 
