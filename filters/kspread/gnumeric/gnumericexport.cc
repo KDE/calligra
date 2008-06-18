@@ -41,6 +41,7 @@
 #include <KoDocumentInfo.h>
 
 // KSpread
+#include <kspread/ApplicationSettings.h>
 #include <kspread/ui/Canvas.h>
 #include <kspread/CellStorage.h>
 #include <kspread/Currency.h>
@@ -1019,10 +1020,10 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
     QDomElement attributes = gnumeric_doc.createElement("gmr:Attributes");
     workbook.appendChild(attributes);
 
-    addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_horizontal_scrollbar", ksdoc->showHorizontalScrollBar());
-    addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_vertical_scrollbar", ksdoc->showVerticalScrollBar());
-    addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_notebook_tabs", ksdoc->showTabBar());
-    if (ksdoc->completionMode() == KGlobalSettings::CompletionAuto)
+    addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_horizontal_scrollbar", ksdoc->map()->settings()->showHorizontalScrollBar());
+    addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_vertical_scrollbar", ksdoc->map()->settings()->showVerticalScrollBar());
+    addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::show_notebook_tabs", ksdoc->map()->settings()->showTabBar());
+    if (ksdoc->map()->settings()->completionMode() == KGlobalSettings::CompletionAuto)
         addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::do_auto_completion", "true");
     else
         addAttributeItem(gnumeric_doc, attributes, "4", "WorkbookView::do_auto_completion", "false");
@@ -1133,8 +1134,8 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QByteArray& from, cons
         sheet.setAttribute("DisplayFormulas", table->getShowFormula() ? "true" : "false" );
         sheet.setAttribute("HideZero", table->getHideZero()? "true" : "false");
         sheet.setAttribute("HideGrid", !table->getShowGrid()? "true" : "false");
-        sheet.setAttribute("HideColHeader", ( !ksdoc->showColumnHeader() ? "true" : "false" ));
-        sheet.setAttribute("HideRowHeader", ( !ksdoc->showRowHeader()? "true" : "false" ));
+        sheet.setAttribute("HideColHeader", ( !ksdoc->map()->settings()->showColumnHeader() ? "true" : "false" ));
+        sheet.setAttribute("HideRowHeader", ( !ksdoc->map()->settings()->showRowHeader()? "true" : "false" ));
         /* Not available in KSpread ?
          * sheet.setAttribute("DisplayOutlines", "true");
          * sheet.setAttribute("OutlineSymbolsBelow", "true");

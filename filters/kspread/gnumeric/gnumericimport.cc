@@ -40,6 +40,7 @@
 #include <KoDocumentInfo.h>
 
 // KSpread
+#include <kspread/ApplicationSettings.h>
 #include <kspread/Cell.h>
 #include <kspread/Doc.h>
 #include <kspread/Map.h>
@@ -273,19 +274,19 @@ void set_document_attributes( Doc * ksdoc, QDomElement * docElem)
         QDomNode gmr_value = attributeItem.namedItem("value");
         if (gmr_name.toElement().text() == "WorkbookView::show_horizontal_scrollbar")
         {
-            ksdoc->setShowHorizontalScrollBar( gmr_value.toElement().text().toLower()=="true"? true : false );
+            ksdoc->map()->settings()->setShowHorizontalScrollBar( gmr_value.toElement().text().toLower()=="true"? true : false );
         }
         else if ( gmr_name.toElement().text() == "WorkbookView::show_vertical_scrollbar")
         {
-            ksdoc->setShowVerticalScrollBar( gmr_value.toElement().text().toLower()=="true"? true : false );
+            ksdoc->map()->settings()->setShowVerticalScrollBar( gmr_value.toElement().text().toLower()=="true"? true : false );
         }
         else if ( gmr_name.toElement().text() == "WorkbookView::show_notebook_tabs")
         {
-            ksdoc->setShowTabBar(gmr_value.toElement().text().toLower()=="true"? true : false );
+            ksdoc->map()->settings()->setShowTabBar(gmr_value.toElement().text().toLower()=="true"? true : false );
         }
         else if ( gmr_name.toElement().text() == "WorkbookView::do_auto_completion")
         {
-            ksdoc->setCompletionMode( KGlobalSettings::CompletionAuto);
+            ksdoc->map()->settings()->setCompletionMode( KGlobalSettings::CompletionAuto);
         }
         else if ( gmr_name.toElement().text() == "WorkbookView::is_protected")
         {
@@ -2026,12 +2027,12 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
         if ( sheetElement.hasAttribute( "HideColHeader" ) )
         {
             tmp = sheetElement.attribute( "HideColHeader" );
-            ksdoc->setShowColumnHeader( ( tmp=="false" )||( tmp=="0" ) );
+            ksdoc->map()->settings()->setShowColumnHeader( ( tmp=="false" )||( tmp=="0" ) );
         }
         if ( sheetElement.hasAttribute( "HideRowHeader" ) )
         {
             tmp =sheetElement.attribute( "HideRowHeader" );
-            ksdoc->setShowRowHeader( ( tmp=="false" )||( tmp=="0" ) );
+            ksdoc->map()->settings()->setShowRowHeader( ( tmp=="false" )||( tmp=="0" ) );
         }
 
 

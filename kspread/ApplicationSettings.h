@@ -26,11 +26,12 @@
 #include <QObject>
 
 #include "Global.h"
+#include "kspread_export.h"
 
 namespace KSpread
 {
 
-class ApplicationSettings : public QObject
+class KSPREAD_EXPORT ApplicationSettings : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(bool showVerticalScrollBar READ showVerticalScrollBar WRITE setShowVerticalScrollBar)
