@@ -286,6 +286,26 @@ public Q_SLOTS:
     void menuCalc(bool);
 
     /**
+     * Shows the column header, if \p enable is \c true, otherwise it will be hidden.
+     */
+    void showColumnHeader(bool enable);
+
+    /**
+     * Shows the column header, if \p enable is \c true, otherwise it will be hidden.
+     */
+    void showRowHeader(bool enable);
+
+    /**
+     * Shows the horizontal scrollbar, if \p enable is \c true, otherwise it will be hidden.
+     */
+    void showHorizontalScrollBar(bool enable);
+
+    /**
+     * Shows the vertical scrollbar, if \p enable is \c true, otherwise it will be hidden.
+     */
+    void showVerticalScrollBar(bool enable);
+
+    /**
      * Shows the status bar if b is true, otherwise the status bar will be hidden.
      */
     void showStatusBar( bool b );

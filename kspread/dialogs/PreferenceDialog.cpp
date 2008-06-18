@@ -207,6 +207,7 @@ configure::configure( View* _view, KVBox *box , char * /*name*/ )
  {
   m_pView = _view;
 
+#if 0 // KSPREAD_VIEW_SETTINGS
   bool vertical=true;
   bool horizontal=true;
   bool rowHeader=true;
@@ -216,6 +217,7 @@ configure::configure( View* _view, KVBox *box , char * /*name*/ )
   bool formulaBar=true;
 #endif
   bool statusBar=true;
+#endif
   m_oldBackupFile = true;
 
 //   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box );
@@ -229,6 +231,7 @@ configure::configure( View* _view, KVBox *box , char * /*name*/ )
 
     const KConfigGroup parameterGroup = config->group( "Parameters" );
     _page = parameterGroup.readEntry( "NbPage" ,1) ;
+#if 0 // KSPREAD_VIEW_SETTINGS
     horizontal = parameterGroup.readEntry("Horiz ScrollBar",true);
     vertical = parameterGroup.readEntry("Vert ScrollBar",true);
     colHeader = parameterGroup.readEntry("Column Header",true);
@@ -238,6 +241,7 @@ configure::configure( View* _view, KVBox *box , char * /*name*/ )
     formulaBar = parameterGroup.readEntry("Formula bar",true);
 #endif
     statusBar = parameterGroup.readEntry("Status bar",true);
+#endif
     oldRecent = parameterGroup.readEntry( "NbRecentFile" ,10);
     oldAutoSaveValue = parameterGroup.readEntry("AutoSave",KoDocument::defaultAutoSave()/60);
     m_oldBackupFile = parameterGroup.readEntry("BackupFile",m_oldBackupFile);
@@ -265,6 +269,7 @@ configure::configure( View* _view, KVBox *box , char * /*name*/ )
   m_createBackupFile->setChecked( m_oldBackupFile );
   m_createBackupFile->setWhatsThis( i18n( "Check this box if you want some backup files created. This is checked per default." ) );
 
+#if 0 // KSPREAD_VIEW_SETTINGS
   showVScrollBar=new QCheckBox(i18n("Show &vertical scrollbar"),tmpQGroupBox);
   showVScrollBar->setChecked(vertical);
   showVScrollBar->setWhatsThis( i18n( "Check or uncheck this box to show or hide the vertical scrollbar in all sheets." ) );
@@ -294,6 +299,7 @@ configure::configure( View* _view, KVBox *box , char * /*name*/ )
   showStatusBar =new QCheckBox(i18n("Show stat&us bar"),tmpQGroupBox);
   showStatusBar->setChecked(statusBar);
   showStatusBar->setWhatsThis( i18n( "Uncheck this box if you want to hide the status bar." ) );
+#endif
 
   box->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 }
@@ -301,6 +307,7 @@ configure::configure( View* _view, KVBox *box , char * /*name*/ )
 
 void configure::slotDefault()
 {
+#if 0 // KSPREAD_VIEW_SETTINGS
   showHScrollBar->setChecked(true);
   showRowHeader->setChecked(true);
   showVScrollBar->setChecked(true);
@@ -310,6 +317,7 @@ void configure::slotDefault()
   showFormulaBar->setChecked(true);
 #endif
   showStatusBar->setChecked(true);
+#endif
 #ifdef KSPREAD_NUM_SHEETS_SETTING
   nbPage->setValue(1);
 #endif
@@ -326,6 +334,7 @@ void configure::apply()
     parameterGroup.writeEntry( "NbPage", nbPage->value());
 #endif
     Doc *doc =m_pView->doc();
+#if 0 // KSPREAD_VIEW_SETTINGS
     bool active=true;
     active=showHScrollBar->isChecked();
     if( m_pView->horzScrollBar()->isVisible()!=active)
@@ -398,6 +407,7 @@ void configure::apply()
     active=showStatusBar->isChecked();
     parameterGroup.writeEntry( "Status bar",active);
     m_pView->showStatusBar( active );
+#endif
 
     int val=nbRecentFile->value();
     if( oldRecent!= val)
@@ -792,7 +802,9 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char * /*name
 
   config = Factory::global().config();
 
-  QLabel *label=new QLabel(i18n("Default page &size:"), tmpQGroupBox);
+  QLabel* label = 0;
+#ifdef KSPREAD_DEFAULT_PAGE_SETTING
+  label = new QLabel(i18n("Default page &size:"), tmpQGroupBox);
 
   grid1->addWidget(label,0,0);
 
@@ -816,6 +828,7 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char * /*name
   defaultOrientationPage->setCurrentIndex(0);
   defaultOrientationPage->setWhatsThis( i18n( "Choose the sheet orientation: portrait or lanscape.\nNote that you can overwrite the orientation for the current sheet using the Format -> Page Layout... dialog." ) );
   grid1->addWidget(defaultOrientationPage,3,0);
+#endif
 
   label=new QLabel(tmpQGroupBox);
   label->setText(i18n("Default page &unit:"));
@@ -835,8 +848,10 @@ configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char * /*name
 
 void configureLayoutPage::slotDefault()
 {
+#ifdef KSPREAD_DEFAULT_PAGE_SETTING
   defaultSizePage->setCurrentIndex(1);
   defaultOrientationPage->setCurrentIndex(0);
+#endif
   defaultUnit->setCurrentIndex(0);
 }
 
@@ -848,8 +863,10 @@ void configureLayoutPage::initCombo()
     unit = pageLayoutGroup.readEntry( "Default unit page", 0 );
 
     defaultUnit->setCurrentIndex(m_pView->doc()->unit().indexInList());
+#ifdef KSPREAD_DEFAULT_PAGE_SETTING
     defaultSizePage->setCurrentIndex(paper);
     defaultOrientationPage->setCurrentIndex(orientation);
+#endif
 }
 
 
@@ -857,6 +874,7 @@ void configureLayoutPage::apply()
 {
     KConfigGroup pageLayoutGroup = config->group( "KSpread Page Layout" );
 
+#ifdef KSPREAD_DEFAULT_PAGE_SETTING
   if( paper != defaultSizePage->currentIndex() )
   {
      unsigned int sizePage = defaultSizePage->currentIndex();
@@ -869,6 +887,7 @@ void configureLayoutPage::apply()
      pageLayoutGroup.writeEntry( "Default orientation page", orientationPage );
      m_pView->activeSheet()->print()->setPaperOrientation( (KoPageFormat::Orientation)orientationPage );
   }
+#endif
   if( unit != defaultUnit->currentIndex() )
   {
      unsigned int unitPage = defaultUnit->currentIndex();

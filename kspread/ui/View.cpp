@@ -267,6 +267,10 @@ public:
     KSelectAction* shapeAnchor;
 
     // settings
+    KToggleAction* showColumnHeader;
+    KToggleAction* showRowHeader;
+    KToggleAction* showHorizontalScrollBar;
+    KToggleAction* showVerticalScrollBar;
     KToggleAction* showStatusBar;
     KToggleAction* showTabBar;
     QAction * preference;
@@ -415,6 +419,30 @@ void View::Private::initActions()
 
   // -- settings actions --
 
+    actions->showColumnHeader = new KToggleAction(i18n("Column Header"), view);
+    actions->showColumnHeader->setToolTip(i18n("Show the column header"));
+    ac->addAction("showColumnHeader", actions->showColumnHeader);
+    connect(actions->showColumnHeader, SIGNAL(toggled(bool)),
+            view, SLOT(showColumnHeader(bool)));
+
+    actions->showRowHeader = new KToggleAction(i18n("Row Header"), view);
+    actions->showRowHeader->setToolTip(i18n("Show the row header"));
+    ac->addAction("showRowHeader", actions->showRowHeader);
+    connect(actions->showRowHeader, SIGNAL(toggled(bool)),
+            view, SLOT(showRowHeader(bool)));
+
+    actions->showHorizontalScrollBar = new KToggleAction(i18n("Horizontal Scrollbar"), view);
+    actions->showHorizontalScrollBar->setToolTip(i18n("Show the horizontal scrollbar"));
+    ac->addAction("showHorizontalScrollBar", actions->showHorizontalScrollBar);
+    connect(actions->showHorizontalScrollBar, SIGNAL(toggled(bool)),
+            view, SLOT(showHorizontalScrollBar(bool)));
+
+    actions->showVerticalScrollBar = new KToggleAction(i18n("Vertical Scrollbar"), view);
+    actions->showVerticalScrollBar->setToolTip(i18n("Show the vertical scrollbar"));
+    ac->addAction("showVerticalScrollBar", actions->showVerticalScrollBar);
+    connect(actions->showVerticalScrollBar, SIGNAL(toggled(bool)),
+            view, SLOT(showVerticalScrollBar(bool)));
+
     actions->showStatusBar = new KToggleAction(i18n("Status Bar"), view);
     actions->showStatusBar->setToolTip(i18n("Show the status bar"));
     ac->addAction("showStatusBar", actions->showStatusBar);
@@ -519,6 +547,10 @@ void View::Private::adjustActions( bool mode )
   else
     actions->renameSheet->setEnabled( false );
 
+  actions->showColumnHeader->setChecked(view->doc()->map()->settings()->showColumnHeader());
+  actions->showRowHeader->setChecked(view->doc()->map()->settings()->showRowHeader());
+  actions->showHorizontalScrollBar->setChecked(view->doc()->map()->settings()->showHorizontalScrollBar());
+  actions->showVerticalScrollBar->setChecked(view->doc()->map()->settings()->showVerticalScrollBar());
   actions->showStatusBar->setChecked( view->doc()->map()->settings()->showStatusBar() );
   actions->showTabBar->setChecked( view->doc()->map()->settings()->showTabBar() );
 
@@ -1766,6 +1798,30 @@ void View::setZoom( int zoom, bool /*updateViews*/ )
   //KoView::setZoom( zoomHandler()->zoomedResolutionY() /* KoView only supports one zoom */ );
 
   doc()->refreshInterface();
+}
+
+void View::showColumnHeader(bool enable)
+{
+    doc()->map()->settings()->setShowColumnHeader(enable);
+    refreshView();
+}
+
+void View::showRowHeader(bool enable)
+{
+    doc()->map()->settings()->setShowRowHeader(enable);
+    refreshView();
+}
+
+void View::showHorizontalScrollBar(bool enable)
+{
+    doc()->map()->settings()->setShowHorizontalScrollBar(enable);
+    refreshView();
+}
+
+void View::showVerticalScrollBar(bool enable)
+{
+    doc()->map()->settings()->setShowVerticalScrollBar(enable);
+    refreshView();
 }
 
 void View::showStatusBar( bool b )

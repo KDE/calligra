@@ -159,6 +159,10 @@
   <Separator/>
  </Menu>
  <Menu name="settings"><text>&amp;Settings</text>
+  <Action name="showColumnHeader" group="settings_show"/>
+  <Action name="showRowHeader" group="settings_show"/>
+  <Action name="showHorizontalScrollBar" group="settings_show"/>
+  <Action name="showVerticalScrollBar" group="settings_show"/>
   <Action name="showTabBar" group="settings_show" />
   <Action name="showStatusBar" group="settings_show" />
   <Action name="configureNotifications" group="settings_configure"/>
