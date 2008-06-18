@@ -1001,7 +1001,6 @@ void CellToolBase::activate(bool temporary)
         d->initialized = true;
     }
 
-    m_canvas->shapeManager()->selection()->deselectAll();
     useCursor(Qt::ArrowCursor, true);
 
     // paint the selection rectangle

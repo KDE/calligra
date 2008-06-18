@@ -40,6 +40,9 @@ public:
     virtual void mouseDoubleClickEvent( KoPointerEvent* event );
 #endif
 
+public Q_SLOTS:
+    virtual void activate(bool temporary = false);
+
 protected:
 #if 0 // KSPREAD_MOUSE_STRATEGIES
     virtual KoInteractionStrategy* createStrategy(KoPointerEvent* event);

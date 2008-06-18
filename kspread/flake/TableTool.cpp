@@ -78,7 +78,6 @@ TableTool::TableTool( KoCanvasBase* canvas )
     setObjectName("TableTool");
 
     d->selection = new Selection(m_canvas);
-    connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(changeSelection(const Region&)));
     d->tableShape = 0;
 
     KAction* importAction = new KAction(KIcon("document-import"), i18n("Import OpenDocument Spreadsheet File"), this);
@@ -137,8 +136,6 @@ Selection* TableTool::selection()
 
 void TableTool::activate( bool temporary )
 {
-    Q_UNUSED( temporary );
-
     KoSelection* selection = m_canvas->shapeManager()->selection();
     foreach ( KoShape* shape, selection->selectedShapes() )
     {
@@ -148,6 +145,7 @@ void TableTool::activate( bool temporary )
     }
     if ( !d->tableShape )
     {
+        kWarning() << "No table shape found in selection.";
         emit done();
         return;
     }
@@ -155,11 +153,17 @@ void TableTool::activate( bool temporary )
     d->selection->setOriginSheet(d->tableShape->sheet());
     useCursor( Qt::ArrowCursor, true );
     d->tableShape->update();
+
+    connect(d->selection, SIGNAL(changed(const Region&)),
+            this, SLOT(changeSelection(const Region&)));
+
+    CellToolBase::activate(temporary);
 }
 
 void TableTool::deactivate()
 {
     d->tableShape = 0;
+    CellToolBase::deactivate();
 }
 
 QPointF TableTool::offset() const

@@ -56,6 +56,8 @@
 
 #include <KoCanvasBase.h>
 #include <KoPointerEvent.h>
+#include <KoSelection.h>
+#include <KoShapeManager.h>
 #include <KoViewConverter.h>
 
 #include "Cell.h"
@@ -533,6 +535,12 @@ KoInteractionStrategy* DefaultTool::createStrategy(KoPointerEvent* event)
     return 0;
 }
 #endif
+
+void DefaultTool::activate(bool temporary)
+{
+    m_canvas->shapeManager()->selection()->deselectAll();
+    CellToolBase::activate(temporary);
+}
 
 KSpread::Selection* DefaultTool::selection()
 {
