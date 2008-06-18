@@ -271,15 +271,13 @@ public:
    */
   int count() const;
 
-  void takeSheet( Sheet * sheet );
-  void insertSheet( Sheet * sheet );
+    void removeSheet(Sheet* sheet);
+    void reviveSheet(Sheet* sheet);
 
   QStringList visibleSheets() const;
   QStringList hiddenSheets() const;
 
   void increaseLoadedRowsCounter(int i = 1);
-
-  void emitAddSheet(Sheet* sheet);
 
     /**
      * \ingroup OpenDocument
@@ -310,10 +308,20 @@ Q_SIGNALS:
      */
     void damagesFlushed(const QList<Damage*>& damages);
 
-  /**
-   * Emitted if a new table is added to the document.
-   */
-  void sig_addSheet( Sheet *_table );
+    /**
+     * Emitted, if a newly created sheet was added to the document.
+     */
+    void sheetAdded(Sheet* sheet);
+
+    /**
+     * Emitted, if a sheet was deleted from the document.
+     */
+    void sheetRemoved(Sheet* sheet);
+
+    /**
+     * Emitted, if a sheet was revived, i.e. a deleted sheet was reinserted.
+     */
+    void sheetRevived(Sheet* sheet);
 
 private:
     Q_DISABLE_COPY( Map )

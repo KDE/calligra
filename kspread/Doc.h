@@ -359,10 +359,6 @@ public:
 
   void updateBorderButton();
 
-  void insertSheet( Sheet * sheet );
-  void takeSheet( Sheet * sheet );
-
-
     void addIgnoreWordAll( const QString & word);
     void clearIgnoreWordAll( );
     void addIgnoreWordAllList( const QStringList & _lst);

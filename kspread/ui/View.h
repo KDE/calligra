@@ -147,8 +147,6 @@ public:
 
     void updateBorderButton();
 
-    void removeSheet( Sheet *_t );
-    void insertSheet( Sheet* sheet );
     QColor borderColor() const;
 
     Selection* selection() const;
@@ -363,6 +361,10 @@ protected:
 Q_SIGNALS:
     void documentReadWriteToggled(bool readwrite);
     void sheetProtectionToggled(bool protect);
+
+private Q_SLOTS:
+    void removeSheet(Sheet* sheet);
+    void reviveSheet(Sheet* sheet);
 
 private:
     Q_DISABLE_COPY( View )

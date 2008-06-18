@@ -22,7 +22,6 @@
 #include "SheetCommands.h"
 
 #include "Damages.h"
-#include "Doc.h"
 #include "Localization.h"
 #include "Map.h"
 #include "Sheet.h"
@@ -55,7 +54,7 @@ void RenameSheetCommand::undo()
 
 HideSheetCommand::HideSheetCommand( Sheet* sheet )
 {
-  doc = sheet->doc();
+  map = sheet->map();
   sheetName = sheet->sheetName();
   QString n =  i18n("Hide Sheet %1", sheetName );
   if( n.length() > 64 ) n = i18n("Hide Sheet");
@@ -64,7 +63,7 @@ HideSheetCommand::HideSheetCommand( Sheet* sheet )
 
 void HideSheetCommand::redo()
 {
-  Sheet* sheet = doc->map()->findSheet( sheetName );
+  Sheet* sheet = map->findSheet( sheetName );
   if( !sheet ) return;
 
   sheet->hideSheet( true );
@@ -72,7 +71,7 @@ void HideSheetCommand::redo()
 
 void HideSheetCommand::undo()
 {
-  Sheet* sheet = doc->map()->findSheet( sheetName );
+  Sheet* sheet = map->findSheet( sheetName );
   if( !sheet ) return;
 
   sheet->hideSheet( false );
@@ -83,7 +82,7 @@ void HideSheetCommand::undo()
 ShowSheetCommand::ShowSheetCommand(Sheet* sheet, QUndoCommand* parent)
     : QUndoCommand(parent)
 {
-  doc = sheet->doc();
+  map = sheet->map();
   sheetName = sheet->sheetName();
   QString n =  i18n("Show Sheet %1", sheetName );
   if( n.length() > 64 ) n = i18n("Show Sheet");
@@ -92,7 +91,7 @@ ShowSheetCommand::ShowSheetCommand(Sheet* sheet, QUndoCommand* parent)
 
 void ShowSheetCommand::redo()
 {
-  Sheet* sheet = doc->map()->findSheet( sheetName );
+  Sheet* sheet = map->findSheet( sheetName );
   if( !sheet ) return;
 
   sheet->hideSheet( false );
@@ -100,7 +99,7 @@ void ShowSheetCommand::redo()
 
 void ShowSheetCommand::undo()
 {
-  Sheet* sheet = doc->map()->findSheet( sheetName );
+  Sheet* sheet = map->findSheet( sheetName );
   if( !sheet ) return;
 
   sheet->hideSheet( true );
@@ -125,8 +124,7 @@ void AddSheetCommand::redo()
     }
     else
     {
-        m_sheet->map()->insertSheet(m_sheet);
-        m_sheet->doc()->insertSheet(m_sheet);
+        m_sheet->map()->reviveSheet(m_sheet);
     }
 }
 
@@ -134,8 +132,7 @@ void AddSheetCommand::undo()
 {
     // The sheet becomes a zombie, i.e. it is not deleted,
     // so that the sheet pointer used in other commands later on stays valid.
-    m_sheet->map()->takeSheet(m_sheet);
-    m_sheet->doc()->takeSheet(m_sheet);
+    m_sheet->map()->removeSheet(m_sheet);
 }
 
 
@@ -160,14 +157,12 @@ void DuplicateSheetCommand::redo()
     if (m_firstrun)
     {
         m_newSheet = new Sheet(*m_oldSheet);
-        m_newSheet->map()->insertSheet(m_newSheet);
-        m_newSheet->map()->emitAddSheet(m_newSheet);
+        m_newSheet->map()->addSheet(m_newSheet);
         m_firstrun = false;
     }
     else
     {
-        m_newSheet->map()->insertSheet(m_newSheet);
-        m_newSheet->doc()->insertSheet(m_newSheet);
+        m_newSheet->map()->reviveSheet(m_newSheet);
     }
 }
 
@@ -175,8 +170,7 @@ void DuplicateSheetCommand::undo()
 {
     // The new sheet is not deleted, but just becomes a zombie,
     // so that the sheet pointer used in commands later on stays valid.
-    m_newSheet->map()->takeSheet(m_newSheet);
-    m_newSheet->doc()->takeSheet(m_newSheet);
+    m_newSheet->map()->removeSheet(m_newSheet);
 }
 
 
@@ -185,28 +179,26 @@ void DuplicateSheetCommand::undo()
 RemoveSheetCommand::RemoveSheetCommand( Sheet* s )
 {
     sheet = s;
-    doc = sheet->doc();
+    map = sheet->map();
     setText(i18n("Remove Sheet"));
 }
 
 void RemoveSheetCommand::redo()
 {
-    sheet->map()->takeSheet( sheet );
-    doc->takeSheet( sheet );
+    sheet->map()->removeSheet( sheet );
 }
 
 void RemoveSheetCommand::undo()
 {
-    sheet->map()->insertSheet( sheet );
-    doc->insertSheet( sheet );
+    sheet->map()->reviveSheet( sheet );
 }
 
 // ----- SheetPropertiesCommand -----
 
-SheetPropertiesCommand::SheetPropertiesCommand( Doc* d, Sheet* s )
+SheetPropertiesCommand::SheetPropertiesCommand(Sheet* s)
 {
     sheet = s;
-    doc = d;
+    map = s->map();
     oldDirection = newDirection = sheet->layoutDirection();
     oldAutoCalc = newAutoCalc = sheet->isAutoCalculationEnabled();
     oldShowGrid = newShowGrid = sheet->getShowGrid();

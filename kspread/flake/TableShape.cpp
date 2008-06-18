@@ -87,7 +87,7 @@ TableShape::~TableShape()
 {
     delete d->sheetView;
     if (d->sheet) {
-        d->sheet->map()->takeSheet(d->sheet); // declare the sheet as deleted
+        d->sheet->map()->removeSheet(d->sheet); // declare the sheet as deleted
     }
     delete d->doc; // TODO Stefan: remove when possible
     delete d;

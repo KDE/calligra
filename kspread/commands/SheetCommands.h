@@ -29,7 +29,7 @@
  */
 namespace KSpread
 {
-class Doc;
+class Map;
 class Sheet;
 
 /**
@@ -61,7 +61,7 @@ public:
   virtual void undo();
 
 protected:
-  Doc* doc;
+  Map* map;
   QString sheetName;
 };
 
@@ -74,7 +74,7 @@ public:
   virtual void undo();
 
 protected:
-  Doc* doc;
+  Map* map;
   QString sheetName;
 };
 
@@ -120,7 +120,7 @@ public:
 
 protected:
     Sheet* sheet;
-    Doc* doc;
+    Map* map;
 };
 
 
@@ -131,7 +131,7 @@ protected:
 class SheetPropertiesCommand : public QUndoCommand
 {
 public:
-  SheetPropertiesCommand( Doc* doc, Sheet* sheet );
+  SheetPropertiesCommand(Sheet* sheet);
   void setLayoutDirection( Qt::LayoutDirection direction );
   void setAutoCalculationEnabled( bool b );
   void setShowGrid( bool b );
@@ -149,7 +149,7 @@ public:
 
 protected:
   Sheet* sheet;
-  Doc* doc;
+  Map* map;
   Qt::LayoutDirection oldDirection, newDirection;
   bool oldAutoCalc, newAutoCalc;
   bool oldShowGrid, newShowGrid;

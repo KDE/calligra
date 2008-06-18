@@ -604,12 +604,16 @@ View::View( QWidget *_parent, Doc *_doc )
 
     d->initActions();
 
-    connect( doc()->map(), SIGNAL( sig_addSheet( Sheet* ) ), SLOT( slotAddSheet( Sheet* ) ) );
-
     connect( doc(), SIGNAL( sig_refreshView(  ) ), this, SLOT( slotRefreshView() ) );
 
     connect( doc(), SIGNAL( sig_refreshLocale() ), this, SLOT( refreshLocale()));
 
+    connect(doc()->map(), SIGNAL(sheetAdded(Sheet*)),
+            this, SLOT(slotAddSheet(Sheet*)));
+    connect(doc()->map(), SIGNAL(sheetRemoved(Sheet*)),
+            this, SLOT(removeSheet(Sheet*)));
+    connect(doc()->map(), SIGNAL(sheetRevived(Sheet*)),
+            this, SLOT(reviveSheet(Sheet*)));
     connect(doc()->map(), SIGNAL(damagesFlushed(const QList<Damage*>&)),
             this, SLOT(handleDamages(const QList<Damage*>&)));
 
@@ -1313,7 +1317,7 @@ void View::setSelectionAllBorderColor( const QColor & color )
 
 void View::addSheet( Sheet * _t )
 {
-  insertSheet( _t );
+    reviveSheet( _t );
 
   // Connect some signals
   connect( _t, SIGNAL( sig_refreshView() ), SLOT( slotRefreshView() ) );
@@ -1502,7 +1506,7 @@ void View::sheetProperties()
 
     if( dlg->exec() )
     {
-        SheetPropertiesCommand* command = new SheetPropertiesCommand( doc(), d->activeSheet );
+        SheetPropertiesCommand* command = new SheetPropertiesCommand(d->activeSheet);
 
         if ( d->activeSheet->layoutDirection() != dlg->layoutDirection() )
             directionChanged = true;
@@ -2058,8 +2062,7 @@ void View::deleteSheet()
 #if 0
     UndoRemoveSheet * undo = new UndoRemoveSheet( doc(), tbl );
     doc()->addCommand( undo );
-    tbl->doc()->map()->takeSheet( tbl );
-    doc()->takeSheet( tbl );
+    tbl->map()->removeSheet( tbl );
 #endif
   }
 }
@@ -2413,7 +2416,7 @@ void View::removeSheet( Sheet *_t )
   d->actions->hideSheet->setEnabled( state );
 }
 
-void View::insertSheet( Sheet* sheet )
+void View::reviveSheet(Sheet* sheet)
 {
   QString tabName = sheet->sheetName();
   if ( !sheet->isHidden() )

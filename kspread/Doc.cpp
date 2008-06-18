@@ -1165,20 +1165,6 @@ void Doc::updateBorderButton()
     static_cast<View*>( view )->updateBorderButton();
 }
 
-void Doc::insertSheet( Sheet * sheet )
-{
-  foreach ( KoView* view, views() )
-    static_cast<View*>( view )->insertSheet( sheet );
-}
-
-void Doc::takeSheet( Sheet * sheet )
-{
-  foreach ( KoView* view, views() )
-    static_cast<View*>( view )->removeSheet( sheet );
-
-    map()->namedAreaManager()->remove(sheet);
-}
-
 void Doc::addIgnoreWordAll( const QString & word)
 {
     if (d->spellListIgnoreAll.indexOf(word) == -1)

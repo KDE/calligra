@@ -300,7 +300,7 @@ void Map::addSheet( Sheet *_sheet )
 {
   d->lstSheets.append( _sheet );
   d->doc->setModified( true );
-  emit sig_addSheet( _sheet );
+  emit sheetAdded(_sheet);
 }
 
 Sheet *Map::addNewSheet ()
@@ -752,16 +752,19 @@ bool Map::loadChildren( KoStore * _store )
   return true;
 }
 
-void Map::takeSheet( Sheet * sheet )
+void Map::removeSheet(Sheet* sheet)
 {
-  d->lstSheets.removeAll( sheet );
-  d->lstDeletedSheets.append( sheet );
+    d->lstSheets.removeAll(sheet);
+    d->lstDeletedSheets.append(sheet);
+    d->namedAreaManager->remove(sheet);
+    emit sheetRemoved(sheet);
 }
 
-void Map::insertSheet( Sheet * sheet )
+void Map::reviveSheet(Sheet* sheet)
 {
-    d->lstDeletedSheets.removeAll( sheet );
+    d->lstDeletedSheets.removeAll(sheet);
     d->lstSheets.append(sheet);
+    emit sheetRevived(sheet);
 }
 
 // FIXME cache this for faster operation
@@ -854,11 +857,6 @@ void Map::increaseLoadedRowsCounter(int number)
     if (d->overallRowCount) {
         d->doc->emitProgress(100 * d->loadedRowsCounter / d->overallRowCount);
     }
-}
-
-void Map::emitAddSheet(Sheet* sheet)
-{
-    emit sig_addSheet(sheet);
 }
 
 bool Map::isLoading() const

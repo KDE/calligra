@@ -61,7 +61,7 @@ SheetsEditor::SheetsEditor(TableShape* tableShape, QWidget* parent)
     Map *map = d->tableShape->doc()->map();
     foreach(Sheet* sheet, map->sheetList())
         sheetAdded(sheet);
-    connect(map, SIGNAL(sig_addSheet(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
+    connect(map, SIGNAL(sheetAdded(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
 
     QVBoxLayout* btnlayout = new QVBoxLayout(this);
     layout->addLayout(btnlayout);
@@ -148,7 +148,7 @@ void SheetsEditor::removeClicked()
     Sheet* sheet = map->findSheet( item->text() );
     if( ! sheet )
         return;
-    map->takeSheet(sheet);
+    map->removeSheet(sheet);
     delete item;
 }
 
