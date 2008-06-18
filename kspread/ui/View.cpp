@@ -199,11 +199,6 @@ public:
     // all UI actions
     ViewActions* actions;
 
-    // If updateEditWidget is called it changes some KToggleActions.
-    // That causes them to emit a signal. If this lock is true, then these
-    // signals are ignored.
-    bool toolbarLock;
-
     // if true, kspread is still loading the document
     // don't try to refresh the view
     bool loading;
@@ -595,7 +590,6 @@ View::View( QWidget *_parent, Doc *_doc )
 
     d->activeSheet = 0;
 
-    d->toolbarLock = false;
     d->loading = true;
 
     setComponentData( Factory::global() );
