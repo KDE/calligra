@@ -93,23 +93,6 @@ public:
         Sheet * firstSheet;
     } searchInSheets;
 
-    // spell-check context
-    struct {
-        K3Spell *   kspell;
-        Sheet *  firstSpellSheet;
-        Sheet *  currentSpellSheet;
-        int      currentCellIndex;
-        MacroCommand *macroCmdSpellCheck;
-        unsigned int    spellCurrCellX;
-        unsigned int    spellCurrCellY;
-        unsigned int    spellStartCellX;
-        unsigned int    spellStartCellY;
-        unsigned int    spellEndCellX;
-        unsigned int    spellEndCellY;
-        bool            spellCheckSelection;
-        QStringList replaceAll;
-    } spell;
-
 public:
     void updateEditor(const Cell& cell);
     void updateLocationComboBox();
