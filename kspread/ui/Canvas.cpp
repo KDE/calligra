@@ -883,16 +883,14 @@ void Canvas::dropEvent( QDropEvent * _ev )
   {
     if ( _ev->source() == this  )
     {
-      if ( !d->view->doc()->undoLocked() )
-      {
         UndoDragDrop * undo
-          = new UndoDragDrop(d->view->doc(), sheet, *selection(),
+          = new UndoDragDrop(sheet, *selection(),
                              Region(QRect(col, row,
                                    selection()->boundingRect().width(),
                                    selection()->boundingRect().height())));
         d->view->doc()->addCommand( undo );
         makeUndo = false;
-      }
+
       DeleteCommand* command = new DeleteCommand();
       command->setSheet( activeSheet() );
       command->add( *selection() );

@@ -1846,11 +1846,8 @@ void Sheet::loadSelectionUndo(const KoXmlDocument& d, const QRect& loadArea,
     }
   }
 
-  if (!doc()->undoLocked())
-  {
-    UndoCellPaste *undo = new UndoCellPaste( doc(), this, _xshift, _yshift, region, insert, insertTo );
+    UndoCellPaste *undo = new UndoCellPaste(this, _xshift, _yshift, region, insert, insertTo );
     doc()->addCommand( undo );
-  }
 
   if (insert)
   {

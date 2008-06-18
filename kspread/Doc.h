@@ -122,37 +122,6 @@ public:
   Map *map () const;
 
   /**
-   * \ingroup Operations
-   * Adds @p command to the command history. The command itself
-   * would not be executed.
-   * @param command the command which will be added
-   */
-  void addCommand( QUndoCommand* command );
-
-  /**
-   * \ingroup Operations
-   * Adds an undo object @p command . This is the same as addCommand, except
-   * that it accepts Undo instance. Once every undo object
-   * is converted to QUndoCommand, this function will be obsoleted.
-   * @param command the action which will be added
-   * @see addCommand(QUndoCommand*)
-   */
-  void addCommand( UndoAction* command );
-
-  /**
-   * \ingroup Operations
-   * Locks/Unlocks undo buffer.
-   * The locks are counted, so you calls of this method can be nested.
-   */
-  void setUndoLocked( bool lock );
-
-  /**
-   * \ingroup Operations
-   * Returns true if undo buffer is locked.
-   */
-  bool undoLocked() const;
-
-  /**
    * @return the name of the unit used to display margins.
    * For example, if unit() returns KoUnit::Millimeter, then
    * this functions return "mm".

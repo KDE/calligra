@@ -59,7 +59,6 @@ SET (commands_DIR_SRCS
 	commands/SpellCheckCommand.cpp
 	commands/StyleCommand.cpp
 	commands/Undo.cpp
-	commands/UndoWrapperCommand.cpp
 	commands/ValidityCommand.cpp
 	)
 

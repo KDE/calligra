@@ -1077,8 +1077,7 @@ void UndoCellFormat::redo()
   sheet->updateView( m_region );
   doc()->setUndoLocked( false );
 }
-#endif
-#if 0
+
 /****************************************************************************
  *
  * UndoChangeAngle
@@ -1519,16 +1518,16 @@ void UndoDelete::redo()
  *
  ***************************************************************************/
 
-UndoDragDrop::UndoDragDrop( Doc * _doc, Sheet * _sheet,
+UndoDragDrop::UndoDragDrop( Sheet * _sheet,
                             const Region& _source,
                             const Region& _target )
-  : UndoAction( _doc ),
+  : UndoAction(),
     m_selectionSource( _source ),
     m_selectionTarget( _target )
 {
-    name = i18n( "Drag & Drop" );
+    setText(i18n("Drag & Drop"));
 
-    m_sheetName = _sheet->sheetName();
+    m_sheet = _sheet;
 
     saveCellRect( m_dataTarget, _sheet, _target );
     saveCellRect( m_dataSource, _sheet, _source );
@@ -1556,24 +1555,18 @@ void UndoDragDrop::saveCellRect( QByteArray & cells, Sheet * sheet,
 
 void UndoDragDrop::undo()
 {
-    Sheet * sheet = doc()->map()->findSheet( m_sheetName );
-    if ( !sheet )
-	return;
+    Sheet * sheet = m_sheet;
 
     saveCellRect( m_dataRedoSource, sheet, m_selectionSource );
     saveCellRect( m_dataRedoTarget, sheet, m_selectionTarget );
 
-    doc()->setUndoLocked( true );
-
     sheet->deleteCells( m_selectionTarget );
-    sheet->paste( m_dataTarget, m_selectionTarget.boundingRect() );
+    sheet->paste( m_dataTarget, m_selectionTarget.boundingRect(), false /* no undo */ );
 
     sheet->deleteCells( m_selectionSource );
-    sheet->paste( m_dataSource, m_selectionSource.boundingRect() );
+    sheet->paste( m_dataSource, m_selectionSource.boundingRect(), false /* no undo */ );
 
     sheet->updateView();
-
-    doc()->setUndoLocked( false );
 }
 
 void UndoDragDrop::redo()
@@ -1585,24 +1578,18 @@ void UndoDragDrop::redo()
         return;
     }
 
-    Sheet * sheet = doc()->map()->findSheet( m_sheetName );
-    if ( !sheet )
-	return;
-
-    doc()->setUndoLocked( true );
+    Sheet * sheet = m_sheet;
 
     //move next line to refreshView
     //because I must know what is the real rect
     //that I must refresh, when there is cell Merged
 
     sheet->deleteCells( m_selectionTarget );
-    sheet->paste( m_dataRedoTarget, m_selectionTarget.boundingRect() );
+    sheet->paste( m_dataRedoTarget, m_selectionTarget.boundingRect(), false /* no undo */ );
     sheet->deleteCells( m_selectionSource );
-    sheet->paste( m_dataRedoSource, m_selectionSource.boundingRect() );
+    sheet->paste( m_dataRedoSource, m_selectionSource.boundingRect(), false /* no undo */ );
 
     sheet->updateView();
-
-    doc()->setUndoLocked( false );
 }
 
 #if 0
@@ -2402,17 +2389,17 @@ void UndoConditional::redo()
  *
  ***************************************************************************/
 
-UndoCellPaste::UndoCellPaste(Doc *_doc, Sheet* sheet,
+UndoCellPaste::UndoCellPaste(Sheet* sheet,
                              int _xshift, int _yshift,
                              const Region& region, bool insert, int _insertTo)
-    : UndoAction( _doc )
+    : UndoAction()
 {
     if(!insert)
-        name=i18n("Paste");
+        setText(i18n("Paste"));
     else
-        name=i18n("Paste & Insert");
+        setText(i18n("Paste & Insert"));
 
-    m_sheetName = sheet->sheetName();
+    m_sheet = sheet;
     m_region = region;
     xshift=_xshift;
     yshift=_yshift;
@@ -2493,13 +2480,9 @@ void UndoCellPaste::createListCell(QByteArray& listCell,
 
 void UndoCellPaste::undo()
 {
-  Sheet* sheet = doc()->map()->findSheet( m_sheetName );
-  if ( !sheet )
-      return;
+  Sheet* sheet = m_sheet;
 
   createListCell( m_dataRedo, m_lstRedoColumn, m_lstRedoRow, sheet );
-
-  doc()->setUndoLocked( true );
 
   uint numCols = 0;
   uint numRows = 0;
@@ -2604,11 +2587,10 @@ void UndoCellPaste::undo()
   }
   else // without insertion
   {
-    sheet->paste(m_data, m_region.boundingRect());
+    sheet->paste(m_data, m_region.boundingRect(), false /* no undo */);
   }
 
   sheet->updateView();
-  doc()->setUndoLocked( false );
 }
 
 void UndoCellPaste::redo()
@@ -2620,11 +2602,7 @@ void UndoCellPaste::redo()
         return;
     }
 
-  Sheet* sheet = doc()->map()->findSheet( m_sheetName );
-  if ( !sheet )
-      return;
-
-  doc()->setUndoLocked( true );
+  Sheet* sheet = m_sheet;
 
   uint numCols = 0;
   uint numRows = 0;
@@ -2719,10 +2697,9 @@ void UndoCellPaste::redo()
     }
   } // for (Region::...
 
-  sheet->paste( m_dataRedo, m_region.boundingRect() );
+  sheet->paste( m_dataRedo, m_region.boundingRect(), false /* no undo */ );
 
   sheet->updateView();
-  doc()->setUndoLocked( false );
 }
 
 #if 0

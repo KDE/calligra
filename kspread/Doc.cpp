@@ -91,9 +91,6 @@
 #include "Util.h"
 #include "View.h"
 
-// commands
-#include "commands/UndoWrapperCommand.h"
-
 // chart shape
 #include "kchart/shape/ChartShape.h"
 #include "chart/ChartDialog.h"
@@ -116,9 +113,6 @@ public:
   LoadingInfo *loadingInfo;
   static QList<Doc*> s_docs;
   static int s_docId;
-
-  // for undo/redo
-  int undoLocked;
 
   // true if loading is in process, otherwise false.
   // This flag is used to avoid updates etc. during loading.
@@ -175,8 +169,6 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
   setTemplateType( "kspread_template" );
 
   d->isLoading = false;
-
-  d->undoLocked = 0;
 
   // default document properties
   d->syntaxVersion = CURRENT_SYNTAX_VERSION;
@@ -971,30 +963,6 @@ void Doc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
     {
         emit sig_refreshView();
     }
-}
-
-void Doc::addCommand( QUndoCommand* command )
-{
-    if (undoLocked()) return;
-    KoDocument::addCommand( command );
-}
-
-void Doc::addCommand( UndoAction* undo )
-{
-  if (undoLocked()) return;
-  UndoWrapperCommand* command = new UndoWrapperCommand( undo );
-  addCommand( command );
-  setModified( true );
-}
-
-void Doc::setUndoLocked( bool lock )
-{
-  lock ? d->undoLocked++ : d->undoLocked--;
-}
-
-bool Doc::undoLocked() const
-{
-  return (d->undoLocked > 0);
 }
 
 void Doc::paintContent( QPainter& painter, const QRect& rect)

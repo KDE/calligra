@@ -98,7 +98,6 @@ void AbstractRegionCommand::redo()
         return;   // do nothing if pre-processing fails
     }
 
-    m_sheet->doc()->setUndoLocked( true );
     QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
     m_sheet->setRegionPaintDirty( *this );
 
@@ -118,7 +117,6 @@ void AbstractRegionCommand::redo()
     }
 
     QApplication::restoreOverrideCursor();
-    m_sheet->doc()->setUndoLocked( false );
 
     m_firstrun = false;
 }

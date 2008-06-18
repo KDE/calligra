@@ -26,11 +26,11 @@
 #include <QRect>
 #include <QStack>
 #include <QString>
+#include <QUndoCommand>
 
 #include <KoUnit.h>
 #include <KoPageLayout.h>
 
-#include "Doc.h"
 #include "Region.h"
 
 namespace KSpread
@@ -113,22 +113,16 @@ private:
  * Abstract base class. Every undo/redo action must
  * derive from this class.
  */
-class UndoAction
+class UndoAction : public QUndoCommand
 {
 public:
-    UndoAction( Doc *_doc ) : m_pDoc(_doc), m_firstRun(true) { m_pDoc->setModified(true); }
+    UndoAction() : m_firstRun(true) {}
     virtual ~UndoAction() { }
 
     virtual void undo() = 0;
     virtual void redo() = 0;
 
-    Doc* doc()const { return m_pDoc; }
-
-    QString getName()const {return name ;}
-
 protected:
-    Doc *m_pDoc;
-    QString name;
     bool m_firstRun;
 };
 
@@ -383,7 +377,7 @@ protected:
 class UndoDragDrop : public UndoAction
 {
 public:
-    UndoDragDrop( Doc * _doc, Sheet * _sheet, const Region& _source, const Region& _target );
+    UndoDragDrop(Sheet * _sheet, const Region& _source, const Region& _target );
     virtual ~UndoDragDrop();
 
     virtual void undo();
@@ -396,7 +390,7 @@ protected:
     QByteArray m_dataTarget;
     QByteArray m_dataRedoSource;
     QByteArray m_dataRedoTarget;
-    QString  m_sheetName;
+    Sheet*  m_sheet;
 
     void saveCellRect( QByteArray & cells, Sheet * sheet,
                        const Region& region );
@@ -578,7 +572,7 @@ protected:
 class UndoCellPaste : public UndoAction
 {
 public:
-    UndoCellPaste(Doc *_doc, Sheet *_sheet,
+    UndoCellPaste(Sheet *_sheet,
                   int _xshift, int _yshift,
                   const Region& _selection, bool insert, int insertTo = 0);
     virtual ~UndoCellPaste();
@@ -600,7 +594,7 @@ protected:
     int yshift;
     bool  b_insert;
     int m_iInsertTo;
-    QString m_sheetName;
+    Sheet* m_sheet;
 };
 
 #if 0

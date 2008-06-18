@@ -117,6 +117,7 @@
 #include "DefaultToolFactory.h"
 #include "DependencyManager.h"
 #include "Digest.h"
+#include "Doc.h"
 #include "inspector.h"
 #include "LoadingInfo.h"
 #include "Border.h"
