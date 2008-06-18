@@ -20,6 +20,7 @@
 #include "KPrSoundEventActionFactory.h"
 
 #include "KPrSoundEventAction.h"
+#include "KPrSoundEventActionWidget.h"
 
 KPrSoundEventActionFactory::KPrSoundEventActionFactory()
 : KoEventActionFactory( KPrSoundEventActionId, "sound" )
@@ -33,4 +34,9 @@ KPrSoundEventActionFactory::~KPrSoundEventActionFactory()
 KoEventAction * KPrSoundEventActionFactory::createEventAction()
 {
     return new KPrSoundEventAction();
+}
+
+KoEventActionWidget * KPrSoundEventActionFactory::createOptionWidget()
+{
+    return new KPrSoundEventActionWidget();
 }

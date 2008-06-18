@@ -17,19 +17,39 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRSOUNDEVENTACTIONFACTORY_H
-#define KPRSOUNDEVENTACTIONFACTORY_H
+#ifndef KPRSOUNDEVENTACTIONWIDGET_H
+#define KPRSOUNDEVENTACTIONWIDGET_H
 
-#include <KoEventActionFactory.h>
+#include <KoEventActionWidget.h>
 
-class KPrSoundEventActionFactory : public KoEventActionFactory
+class QComboBox;
+class QString;
+class KoShape;
+class KoEventAction;
+class KoEventActionData;
+class KPrEventActionData;
+class KPrSoundCollection;
+
+class KPrSoundEventActionWidget : public KoEventActionWidget
 {
+    Q_OBJECT
 public:
-    KPrSoundEventActionFactory();
-    virtual ~KPrSoundEventActionFactory();
+    explicit KPrSoundEventActionWidget( QWidget * parent = 0 );
+    virtual ~KPrSoundEventActionWidget();
 
-    virtual KoEventAction * createEventAction();
-    virtual KoEventActionWidget * createOptionWidget();
+public slots:
+    void setData( KoEventActionData *eventActionData );
+
+private slots:
+    void soundComboChanged();
+
+private:
+    void updateCombo( const QString & title );
+
+    KoShape * m_shape;
+    KoEventAction * m_eventAction;
+    KPrSoundCollection * m_soundCollection;
+    QComboBox * m_soundCombo;
 };
 
-#endif /* KPRSOUNDEVENTACTIONFACTORY_H */
+#endif /* KPRSOUNDEVENTACTIONWIDGET_H */

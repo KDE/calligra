@@ -3,6 +3,7 @@ include_directories( ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${KOGUIUTILS_INCLUDES}
 set(kpresentereventactions_PART_SRCS
     sound/KPrSoundEventAction.cpp
     sound/KPrSoundEventActionFactory.cpp
+    sound/KPrSoundEventActionWidget.cpp
     Plugin.cpp
 )
 

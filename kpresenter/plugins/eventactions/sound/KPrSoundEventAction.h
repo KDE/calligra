@@ -46,6 +46,7 @@ public:
     virtual void finish( KoTool * tool );
 
     void setSoundData( KPrSoundData * soundData );
+    KPrSoundData * soundData() const;
 
 public slots:
     void finished();

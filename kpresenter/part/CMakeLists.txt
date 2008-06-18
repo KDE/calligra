@@ -27,6 +27,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrNotes.cpp
      KPrSoundData.cpp
      KPrSoundCollection.cpp
+     KPrEventActionData.cpp
      KPrSharedLoadingData.cpp
      KPrPageApplicationData.cpp
      KPrShapeApplicationData.cpp

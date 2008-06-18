@@ -10,5 +10,5 @@ Name[zh_TW]=展示事件動作...
 X-KDE-ServiceTypes=KOffice/PresentationEventAction
 Type=Service
 X-KDE-Library=kpresentereventactions
-X-Flake-MinVersion=0
-X-Flake-PluginVersion=1
+X-PresentationEventAction-MinVersion=0
+X-PresentationEventAction-PluginVersion=1

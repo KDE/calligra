@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (  at your option ) any later version.
+ * version 2 of the License, or (at your option) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,19 +17,26 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KPRSOUNDEVENTACTIONFACTORY_H
-#define KPRSOUNDEVENTACTIONFACTORY_H
+#ifndef KPREVENTACTIONDATA_H
+#define KPREVENTACTIONDATA_H
 
-#include <KoEventActionFactory.h>
+#include <KoEventActionData.h>
 
-class KPrSoundEventActionFactory : public KoEventActionFactory
+#include "kpresenter_export.h"
+
+class KPrSoundCollection;
+
+class KPRESENTER_EXPORT KPrEventActionData : public KoEventActionData
 {
 public:
-    KPrSoundEventActionFactory();
-    virtual ~KPrSoundEventActionFactory();
+    KPrEventActionData( KoShape * shape, KoEventAction * eventAction , KPrSoundCollection * soundCollection );
+    virtual ~KPrEventActionData();
 
-    virtual KoEventAction * createEventAction();
-    virtual KoEventActionWidget * createOptionWidget();
+    KPrSoundCollection * soundCollection() const;
+
+private:
+    class Private;
+    Private * const d;
 };
 
-#endif /* KPRSOUNDEVENTACTIONFACTORY_H */
+#endif /* KPREVENTACTIONDATA_H */
