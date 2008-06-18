@@ -34,6 +34,7 @@
 #include "CalculationSettings.h"
 #include "Cell.h"
 #include "Damages.h"
+#include "Doc.h"
 #include "DragAndDropStrategy.h"
 #include "inspector.h"
 #include "Map.h"
@@ -58,8 +59,6 @@
 #include "commands/SortManipulator.h"
 #include "commands/SpellCheckCommand.h"
 #include "commands/StyleCommand.h"
-#include "commands/Undo.h"
-#include "commands/UndoWrapperCommand.h"
 #include "commands/ValidityCommand.h"
 
 // dialogs

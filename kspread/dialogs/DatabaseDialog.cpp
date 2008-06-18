@@ -28,8 +28,7 @@
 #include "Sheet.h"
 #include "Util.h"
 
-#include "commands/Undo.h"
-#include "commands/UndoWrapperCommand.h"
+#include "commands/DataManipulators.h"
 
 #include <kcombobox.h>
 #include <kdebug.h>
@@ -578,13 +577,7 @@ void DatabaseDialog::accept()
     }
   }
 
-  if ( !m_selection->activeSheet()->doc()->undoLocked() )
-  {
-    QRect r(left, top, count, height);
-    UndoInsertData * undo = new UndoInsertData( m_selection->activeSheet()->doc(), sheet, r );
-    UndoWrapperCommand* command = new UndoWrapperCommand(undo);
-    m_selection->canvas()->addCommand(command);
-  }
+    QUndoCommand* macroCommand = new QUndoCommand(i18n("Insert Data From Database"));
 
   if ( query.first() )
   {
@@ -592,8 +585,11 @@ void DatabaseDialog::accept()
     {
       for ( i = 0; i < count; ++i )
       {
-        cell = Cell( sheet, left + i, top + y );
-        cell.parseUserInput( query.value( i ).toString() );
+        DataManipulator* command = new DataManipulator(macroCommand);
+        command->setParsing(true);
+        command->setSheet(sheet);
+        command->setValue(Value(query.value( i ).toString()));
+        command->add(Region(left + i, top + y, sheet));
       }
       ++y;
     }
@@ -608,8 +604,11 @@ void DatabaseDialog::accept()
 
       for ( i = 0; i < count; ++i )
       {
-        cell = Cell( sheet, left + i, top + y );
-        cell.parseUserInput( query.value( i ).toString() );
+        DataManipulator* command = new DataManipulator(macroCommand);
+        command->setParsing(true);
+        command->setSheet(sheet);
+        command->setValue(Value(query.value( i ).toString()));
+        command->add(Region(left + i, top + y, sheet));
       }
       ++y;
 
@@ -617,6 +616,7 @@ void DatabaseDialog::accept()
         break;
     }
   }
+    m_selection->canvas()->addCommand(macroCommand);
 
   m_selection->emitModified();
   KAssistantDialog::accept();

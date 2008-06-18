@@ -422,7 +422,6 @@ protected:
     QLinkedList<rowSize> m_lstRedoRow;
     QString m_sheetName;
 };
-#endif
 
 class UndoChangeAreaTextCell : public UndoAction
 {
@@ -442,7 +441,6 @@ protected:
     QString m_sheetName;
 };
 
-#if 0
 class UndoSort : public UndoAction
 {
 public:
@@ -622,7 +620,6 @@ protected:
     QLinkedList<styleCell> m_lstRedoStyleCell;
     QString m_sheetName;
 };
-#endif
 
 class UndoInsertData : public UndoChangeAreaTextCell
 {
@@ -630,7 +627,6 @@ class UndoInsertData : public UndoChangeAreaTextCell
     UndoInsertData( Doc * _doc, Sheet * _sheet, QRect & _selection );
 };
 
-#if 0
 class Undo
 {
 public:

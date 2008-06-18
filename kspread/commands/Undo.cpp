@@ -1803,7 +1803,6 @@ void UndoResizeColRow::redo()
 
     doc()->setUndoLocked( false );
 }
-#endif
 
 /****************************************************************************
  *
@@ -2037,7 +2036,6 @@ void UndoChangeAreaTextCell::redo()
     doc()->setUndoLocked( false );
 }
 
-#if 0
 /****************************************************************************
  *
  * UndoMergedCell
@@ -2847,10 +2845,10 @@ void UndoStyleCell::redo()
 
     doc()->setUndoLocked( false );
 }
-#endif
 
 UndoInsertData::UndoInsertData( Doc * _doc, Sheet * _sheet, QRect & _selection )
     : UndoChangeAreaTextCell( _doc, _sheet, Region(_selection) )
 {
     name = i18n("Insert Data From Database");
 }
+#endif
