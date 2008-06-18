@@ -76,6 +76,7 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
   connect(this, SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
   KVBox *page2 = new KVBox();
   p2 = addPage(page2, i18n("Locale Settings"));
+  p2->setHeader(i18n("Document's Locale Settings"));
   p2->setIcon(KIcon("preferences-desktop-locale"));
  _localePage=new parameterLocale(parent,page2 );
 
@@ -169,7 +170,7 @@ parameterLocale::parameterLocale( View* _view, KVBox *box , char * /*name*/ )
 
   updateToMatchLocale(locale);
 
-  m_updateButton=new QPushButton ( i18n("&Update Locale Settings"), tmpQGroupBox);
+  m_updateButton=new QPushButton ( i18n("&Use System's Locale Settings"), tmpQGroupBox);
   connect(m_updateButton, SIGNAL(clicked()),this,SLOT(updateDefaultSystemConfig()));
 
   box->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
