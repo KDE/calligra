@@ -457,12 +457,15 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
 #endif
 
 
+    QLabel* label = 0;
+    QStringList listType;
+#if 0 // KSPREAD_COMPLETION_MODE_SETTING
   QLabel *label=new QLabel(i18n("&Completion mode:"), tmpQGroupBox);
 
   typeCompletion=new KComboBox(tmpQGroupBox);
   label->setBuddy(typeCompletion);
   typeCompletion->setWhatsThis( i18n( "Lets you choose the (auto) text completion mode from a range of options in the drop down selection box." ) );
-  QStringList listType;
+
   listType+=i18n("None");
   listType+=i18n("Manual");
   listType+=i18n("Popup");
@@ -472,6 +475,7 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
   typeCompletion->setCurrentIndex(0);
   comboChanged=false;
   connect(typeCompletion,SIGNAL(activated( const QString & )),this,SLOT(slotTextComboChanged(const QString &)));
+#endif
 
   label=new QLabel(i18n("&Pressing enter moves cell cursor:"), tmpQGroupBox);
   typeOfMove=new KComboBox( tmpQGroupBox);
@@ -524,6 +528,7 @@ void miscParameters::slotTextComboChanged(const QString &)
 
 void miscParameters::initComboBox()
 {
+#if 0 // KSPREAD_COMPLETION_MODE_SETTING
     KGlobalSettings::Completion tmpCompletion = KGlobalSettings::CompletionAuto;
     tmpCompletion = ( KGlobalSettings::Completion )config->group( "Parameters" ).readEntry( "Completion Mode" ,int(KGlobalSettings::CompletionAuto)) ;
     config->group( "Parameters" ).writeEntry( "Completion Mode", (int)tmpCompletion);
@@ -549,6 +554,7 @@ switch(tmpCompletion )
                 typeCompletion->setCurrentIndex(0);
                 break;
         }
+#endif
         switch( m_pView->doc()->map()->settings()->moveToValue( ))
         {
         case  Bottom:
@@ -607,7 +613,9 @@ void miscParameters::slotDefault()
   m_undoRedoLimit->setValue(30);
 #endif
   valIndent->setValue( indentUnit.toUserValue( 10.0 ) );
+#if 0 // KSPREAD_COMPLETION_MODE_SETTING
   typeCompletion->setCurrentIndex(3);
+#endif
   typeOfMove->setCurrentIndex(0);
   typeCalc->setCurrentIndex(0);
 }
@@ -628,6 +636,7 @@ void miscParameters::apply()
 #endif
 
     KConfigGroup parameterGroup = config->group( "Parameters" );
+#if 0 // KSPREAD_COMPLETION_MODE_SETTING
     KGlobalSettings::Completion tmpCompletion=KGlobalSettings::CompletionNone;
     switch(typeCompletion->currentIndex())
     {
@@ -654,6 +663,7 @@ void miscParameters::apply()
         m_pView->doc()->map()->settings()->setCompletionMode(tmpCompletion);
         parameterGroup.writeEntry( "Completion Mode", (int)tmpCompletion);
     }
+#endif
 
     KSpread::MoveTo tmpMoveTo=Bottom;
     switch(typeOfMove->currentIndex())
