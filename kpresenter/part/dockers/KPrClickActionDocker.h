@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2007 Martin Pfeiffer <hubipete@gmx.net>
+   Copyright (C) 2008 Casper Boemann <cbr@boemann.dk>
+   Copyright (C) 2008 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,28 +22,33 @@
 #define KPRCLICKACTIONDOCKER_H
 
 #include <QDockWidget>
+#include <QMap>
 #include <QPixmap>
 #include <KoCanvasObserver.h>
 
 class QLabel;
 class QComboBox;
 class QDoubleSpinBox;
+class QUndoCommand;
 class KPrView;
 class KoCanvasBase;
 class QCheckBox;
 class KPrSoundCollection;
+class KoEventActionWidget;
 
 /**
  * This is the page effect docker widget that let's you choose a page animation.
  */
 class KPrClickActionDocker : public QDockWidget, public KoCanvasObserver
 {
-
     Q_OBJECT
 public:
     KPrClickActionDocker( QWidget* parent = 0, Qt::WindowFlags flags = 0 );
 
     void setView( KPrView* view );
+
+public slots:
+    void addCommand( QUndoCommand * command );
 
 private slots:
     /// selection has changed
@@ -52,13 +58,14 @@ private slots:
     virtual void setCanvas( KoCanvasBase *canvas );
 
     void soundComboChanged();
-private:
 
+private:
     KPrView *m_view;
     KPrSoundCollection *m_soundCollection;
     KoCanvasBase *m_canvas;
     QCheckBox *m_cbNavigate;
     QComboBox *m_cbPlaySound;
+    QMap<QString, KoEventActionWidget *> m_eventActionWidgets;
 };
 
 #endif // KPRCLICKACTIONDOCKER_H
