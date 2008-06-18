@@ -940,11 +940,6 @@ MethodOfCalc Doc::getTypeOfCalc() const
   return d->calcMethod;
 }
 
-QString Doc::unitName() const
-{
-  return KoUnit::unitName( unit() );
-}
-
 void Doc::addIgnoreWordAllList( const QStringList & _lst)
 {
   d->spellListIgnoreAll = _lst;

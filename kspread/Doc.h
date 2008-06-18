@@ -122,13 +122,6 @@ public:
   Map *map () const;
 
   /**
-   * @return the name of the unit used to display margins.
-   * For example, if unit() returns KoUnit::Millimeter, then
-   * this functions return "mm".
-   */
-  QString unitName() const;
-
-  /**
    * Returns the syntax version of the currently opened file
    */
   int syntaxVersion( ) const;
