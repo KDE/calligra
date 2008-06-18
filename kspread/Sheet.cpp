@@ -1861,6 +1861,7 @@ void Sheet::loadSelectionUndo(const KoXmlDocument& d, const QRect& loadArea,
         rect.setWidth(rect.width());
         ShiftManipulator* manipulator = new ShiftManipulator();
         manipulator->setSheet( this );
+        manipulator->setRegisterUndo( false );
         manipulator->setDirection( ShiftManipulator::ShiftRight );
         manipulator->add( Region(rect) );
         manipulator->execute();
@@ -1872,6 +1873,7 @@ void Sheet::loadSelectionUndo(const KoXmlDocument& d, const QRect& loadArea,
         rect.setHeight(rect.height());
         ShiftManipulator* manipulator = new ShiftManipulator();
         manipulator->setSheet( this );
+        manipulator->setRegisterUndo( false );
         manipulator->setDirection( ShiftManipulator::ShiftBottom );
         manipulator->add( Region(rect) );
         manipulator->execute();
