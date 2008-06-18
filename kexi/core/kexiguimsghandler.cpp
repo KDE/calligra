@@ -158,7 +158,8 @@ void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, con
 	if (checkboxResult)
 		KMessageBox::saveDontShowAgainContinue(dontShowAgainName);
 #else
-	KMessageBox::warningContinueCancel(m_messageHandlerParentWidget, details, title, KStandardGuiItem::cont());
+	KMessageBox::warningContinueCancel(m_messageHandlerParentWidget, 
+    title + (details.isEmpty() ? QString() : (QString("\n")+details)));
 #endif
 }
 
