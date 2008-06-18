@@ -13,6 +13,7 @@ Name[x-test]=xxKPresenterxx
 Exec=kpresenter %u
 GenericName=Presentation
 GenericName[ca]=Presentació
+GenericName[de]=Präsentation
 GenericName[el]=Παρουσίαση
 GenericName[es]=Presentación
 GenericName[et]=Esitlus
