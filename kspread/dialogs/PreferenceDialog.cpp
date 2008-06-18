@@ -242,10 +242,12 @@ configure::configure( View* _view, KVBox *box , char * /*name*/ )
     oldAutoSaveValue = parameterGroup.readEntry("AutoSave",KoDocument::defaultAutoSave()/60);
     m_oldBackupFile = parameterGroup.readEntry("BackupFile",m_oldBackupFile);
 
+#ifdef KSPREAD_NUM_SHEETS_SETTING
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
   nbPage->setRange(1, 10, 1);
   nbPage->setLabel(i18n("Number of sheets open at the &beginning:"));
   nbPage->setWhatsThis( i18n( "Controls how many worksheets will be created if the option Start with an empty document is chosen when KSpread is started." ) );
+#endif
 
   nbRecentFile=new KIntNumInput(oldRecent, tmpQGroupBox , 10);
   nbRecentFile->setRange(1, 20, 1);
@@ -308,7 +310,9 @@ void configure::slotDefault()
   showFormulaBar->setChecked(true);
 #endif
   showStatusBar->setChecked(true);
+#ifdef KSPREAD_NUM_SHEETS_SETTING
   nbPage->setValue(1);
+#endif
   nbRecentFile->setValue(10);
   autoSaveDelay->setValue(KoDocument::defaultAutoSave()/60);
   m_createBackupFile->setChecked( true );
@@ -318,7 +322,9 @@ void configure::slotDefault()
 void configure::apply()
 {
     KConfigGroup parameterGroup = config->group( "Parameters" );
+#ifdef KSPREAD_NUM_SHEETS_SETTING
     parameterGroup.writeEntry( "NbPage", nbPage->value());
+#endif
     Doc *doc =m_pView->doc();
     bool active=true;
     active=showHScrollBar->isChecked();
