@@ -140,12 +140,6 @@ Sheet* Cell::sheet() const
     return d->sheet;
 }
 
-// Return the sheet that this cell belongs to.
-Doc* Cell::doc() const
-{
-    return sheet()->doc();
-}
-
 KLocale* Cell::locale() const
 {
     return sheet()->map()->calculationSettings()->locale();

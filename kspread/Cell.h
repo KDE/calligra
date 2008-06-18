@@ -109,11 +109,6 @@ public:
     Sheet* sheet() const;
 
     /**
-     * \return the document this cell belongs to
-     */
-    Doc* doc() const;
-
-    /**
      * Returns the locale setting of this cell.
      */
     KLocale* locale() const;
