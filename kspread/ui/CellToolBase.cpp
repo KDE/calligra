@@ -108,12 +108,14 @@
 
 // KDE
 #include <KAction>
+#include <KFind>
 #include <KFontAction>
 #include <KFontSizeAction>
 #include <KIcon>
 #include <KInputDialog>
 #include <KLocale>
 #include <KMessageBox>
+#include <KReplace>
 #include <KStandardAction>
 #include <KToggleAction>
 
@@ -142,6 +144,7 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     d->directionValue = FindOption::Row;
     d->find = 0;
     d->replace = 0;
+    d->replaceCommand = 0;
 
     d->searchInSheets.currentSheet = 0;
     d->searchInSheets.firstSheet = 0;
@@ -2717,6 +2720,7 @@ void CellToolBase::find()
     delete d->replace;
     d->find = new KFind(dialog.pattern(), dialog.options(), m_canvas->canvasWidget());
     d->replace = 0;
+    d->replaceCommand = 0;
 
     d->searchInSheets.currentSheet = selection()->activeSheet();
     d->searchInSheets.firstSheet = d->searchInSheets.currentSheet;
@@ -2813,8 +2817,11 @@ void CellToolBase::findNext()
         } else { // done, close the 'find next' dialog
             if (d->find)
                 d->find->closeFindNextDialog();
-            else
+            else {
+                m_canvas->addCommand(d->replaceCommand);
+                d->replaceCommand = 0;
                 d->replace->closeReplaceNextDialog();
+            }
         }
     }
 }
@@ -2938,13 +2945,7 @@ void CellToolBase::replace()
     connect(d->replace, SIGNAL(replace(const QString &, int, int, int)),
             this, SLOT(slotReplace(const QString &, int, int, int)));
 
-    if (!selection()->activeSheet()->doc()->undoLocked()) {
-        QRect region(d->findPos, d->findEnd);
-        //TODO create undo/redo for comment
-        UndoChangeAreaTextCell* undo = new UndoChangeAreaTextCell(selection()->activeSheet()->doc(), d->searchInSheets.currentSheet, Region(region));
-        UndoWrapperCommand* command = new UndoWrapperCommand(undo);
-        m_canvas->addCommand(command);
-    }
+    d->replaceCommand = new QUndoCommand(i18n("Replace"));
 
     findNext();
 
@@ -2975,14 +2976,19 @@ void CellToolBase::slotHighlight(const QString &/*text*/, int /*matchingIndex*/,
 
 void CellToolBase::slotReplace(const QString &newText, int, int, int)
 {
-    // Which cell was this again?
-    Cell cell(d->searchInSheets.currentSheet, d->findPos);
-
-    // ...now I remember, update it!
-    if (d->typeValue == FindOption::Value)
-        cell.parseUserInput(newText);
-    else if (d->typeValue == FindOption::Note)
-        cell.setComment(newText);
+    if (d->typeValue == FindOption::Value) {
+        DataManipulator* command = new DataManipulator(d->replaceCommand);
+        command->setParsing(true);
+        command->setSheet(d->searchInSheets.currentSheet);
+        command->setValue(Value(newText));
+        command->add(Region(d->findPos, d->searchInSheets.currentSheet));
+    }
+    else if (d->typeValue == FindOption::Note) {
+        CommentCommand* command = new CommentCommand(d->replaceCommand);
+        command->setComment(newText);
+        command->setSheet(d->searchInSheets.currentSheet);
+        command->add(Region(d->findPos, d->searchInSheets.currentSheet));
+    }
 }
 
 void CellToolBase::gotoCell()

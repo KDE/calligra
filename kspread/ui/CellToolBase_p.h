@@ -43,16 +43,16 @@
 #include <KoCharSelectDia.h>
 
 // KDE
-#include <KFind>
-#include <KReplace>
-#include <k3spell.h>
-#include <k3spelldlg.h>
 
 // Qt
 #include <QAction>
 #include <QHash>
 
 using namespace KSpread;
+
+class QUndoCommand;
+class KFind;
+class KReplace;
 
 class CellToolBase::Private
 {
@@ -83,6 +83,7 @@ public:
     // Current "find" operation
     KFind* find;
     KReplace* replace;
+    QUndoCommand* replaceCommand;
     int findLeftColumn;
     int findRightColumn;
     QPoint findPos;

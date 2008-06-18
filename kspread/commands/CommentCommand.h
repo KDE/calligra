@@ -32,7 +32,7 @@ namespace KSpread
 class CommentCommand : public AbstractRegionCommand
 {
 public:
-    CommentCommand();
+    CommentCommand(QUndoCommand* parent = 0);
     void setComment( const QString& comment );
 
 protected:

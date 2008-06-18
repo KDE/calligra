@@ -29,8 +29,8 @@
 
 using namespace KSpread;
 
-CommentCommand::CommentCommand()
-    : AbstractRegionCommand()
+CommentCommand::CommentCommand(QUndoCommand* parent)
+    : AbstractRegionCommand(parent)
 {
 }
 
