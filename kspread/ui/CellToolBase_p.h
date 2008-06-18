@@ -33,9 +33,6 @@
 #include "Editors.h"
 #include "ui_CellToolOptionWidget.h"
 
-// commands
-#include "commands/MacroCommand.h"
-
 // dialogs
 #include "dialogs/FindDialog.h"
 

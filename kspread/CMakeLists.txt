@@ -48,7 +48,6 @@ SET (commands_DIR_SRCS
 # 	commands/EmbeddedObjectCommands.cpp
 	commands/IndentationCommand.cpp
 	commands/LinkCommand.cpp
-	commands/MacroCommand.cpp
 	commands/MergeCommand.cpp
 	commands/NamedAreaCommand.cpp
 	commands/PageLayoutCommand.cpp
