@@ -24,24 +24,18 @@
 #include <KoShape.h>
 #include <KoShapeManager.h>
 #include <KoPointerEvent.h>
+#include <KoEventAction.h>
 #include <KoPACanvas.h>
-#include <KPrShapeApplicationData.h>
-#include <KPrSoundData.h>
-#include <phonon/phononnamespace.h>
-#include<Phonon/MediaObject>
 #include "KPrViewModePresentation.h"
 
 KPrPresentationTool::KPrPresentationTool( KPrViewModePresentation & viewMode )
 : KoTool( viewMode.canvas() )
 , m_viewMode( viewMode )
-,m_music(0)
 {
 }
 
 KPrPresentationTool::~KPrPresentationTool()
 {
-    if(m_music)
-        m_music->stop();
 }
 
 bool KPrPresentationTool::wantsAutoScroll()
@@ -55,28 +49,16 @@ void KPrPresentationTool::paint( QPainter &painter, const KoViewConverter &conve
 void KPrPresentationTool::mousePressEvent( KoPointerEvent *event )
 {
     if ( event->button() & Qt::LeftButton ) {
+        finishEventActions();
         KoShape * shapeClicked = m_canvas->shapeManager()->shapeAt( event->point );
-        if(shapeClicked) {
-            if(KPrShapeApplicationData *appData
-                                = dynamic_cast<KPrShapeApplicationData *>( shapeClicked->applicationData())) {
-                switch(appData->m_invokeResponse) {
-                    case KPrShapeApplicationData::DoNavigate:
-                        m_viewMode.navigate( KPrAnimationDirector::PreviousStep );
-                        break;
-                    case KPrShapeApplicationData::DoNone:
-                    default:
-                        break;
+        if (shapeClicked) {
+            m_eventActions = shapeClicked->eventActions();
+            if ( m_eventActions.size() ) {
+                foreach ( KoEventAction * eventAction, m_eventActions ) {
+                    eventAction->execute( this );
                 }
-
-                if(m_music)
-                    m_music->stop();
-                if(appData->m_soundData)
-                {
-                    m_music = Phonon::createPlayer(Phonon::MusicCategory,
-                                                Phonon::MediaSource(appData->m_soundData->nameOfTempFile()));
-                    connect(m_music, SIGNAL(finished()), m_music, SLOT(deleteLater()));
-                    m_music->play();
-                }
+                // don't do next step if a action was executed
+                return;
             }
         }
         m_viewMode.navigate( KPrAnimationDirector::NextStep );
@@ -97,6 +79,7 @@ void KPrPresentationTool::mouseReleaseEvent( KoPointerEvent *event )
 
 void KPrPresentationTool::keyPressEvent( QKeyEvent *event )
 {
+    finishEventActions();
     event->accept();
 
     switch ( event->key() )
@@ -146,8 +129,14 @@ void KPrPresentationTool::activate( bool temporary )
 
 void KPrPresentationTool::deactivate()
 {
-    if(m_music)
-        m_music->stop();
+    finishEventActions();
+}
+
+void KPrPresentationTool::finishEventActions()
+{
+    foreach ( KoEventAction * eventAction, m_eventActions ) {
+        eventAction->finish( this );
+    }
 }
 
 #include "KPrPresentationTool.moc"

@@ -20,8 +20,10 @@
 #define KPRPRESENTATIONTOOL_H
 
 #include <KoTool.h>
-#include<Phonon/MediaObject>
 
+#include <QList>
+
+class KoEventAction;
 class KPrViewModePresentation;
 
 /// The tool used for presentations
@@ -48,8 +50,10 @@ public slots:
     void deactivate();
 
 private:
+    void finishEventActions();
+
     KPrViewModePresentation & m_viewMode;
-    Phonon::MediaObject *m_music;
+    QList<KoEventAction *> m_eventActions;
 };
 
 #endif /* KPRPRESENTATIONTOOL_H */
