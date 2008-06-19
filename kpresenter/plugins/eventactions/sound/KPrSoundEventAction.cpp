@@ -81,12 +81,14 @@ void KPrSoundEventAction::saveOdf( KoShapeSavingContext & context ) const
     context.xmlWriter().endElement();
 
     context.xmlWriter().endElement();
+
+    context.addDataCenter( m_soundData->soundCollection() );
 }
 
 void KPrSoundEventAction::execute( KoTool * tool )
 {
-    Q_UNUSED( tool );
     if ( m_soundData ) {
+        finish( tool );
         m_media = Phonon::createPlayer( Phonon::MusicCategory,
                                         Phonon::MediaSource( m_soundData->nameOfTempFile() ) );
         connect( m_media, SIGNAL( finished() ), this, SLOT( finished() ) );

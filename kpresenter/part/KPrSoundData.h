@@ -99,6 +99,11 @@ public:
         return other.d == d;
     }
 
+    /**
+     * Get the collection used
+     */
+    KPrSoundCollection * soundCollection();
+
 private:
     class Private;
     Private * const d;

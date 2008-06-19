@@ -181,3 +181,8 @@ bool KPrSoundData::loadFromFile(QIODevice *device) {
     d->tempFile->close();
     return true;
 }
+
+KPrSoundCollection * KPrSoundData::soundCollection()
+{
+    return d->collection;
+}

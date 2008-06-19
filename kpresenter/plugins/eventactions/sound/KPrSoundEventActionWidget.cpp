@@ -44,6 +44,7 @@ KPrSoundEventActionWidget::KPrSoundEventActionWidget( QWidget * parent )
 
     connect( m_soundCombo, SIGNAL( currentIndexChanged( int ) ), this, SLOT( soundComboChanged() ) );
 
+    setEnabled( false );
     updateCombo( "" );
 }
 
@@ -70,7 +71,7 @@ void KPrSoundEventActionWidget::setData( KoEventActionData * eventActionData )
         m_eventAction = 0;
         m_soundCollection = 0;
     }
-    m_soundCombo->setEnabled( m_shape && m_soundCollection );
+    setEnabled( m_shape && m_soundCollection );
     updateCombo( title );
 }
 
