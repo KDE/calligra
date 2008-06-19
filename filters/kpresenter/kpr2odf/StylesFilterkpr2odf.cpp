@@ -25,7 +25,7 @@
 
 const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
 {
-    KoGenStyle style = KoGenStyle::KoGenStyle( KoGenStyle::StyleDrawingPage, "drawing-page" );
+    KoGenStyle style( KoGenStyle::StyleDrawingPage, "drawing-page" );
     KoXmlElement backMaster = page.namedItem( "BACKMASTER" ).toElement();
     if( !backMaster.isNull() )
     {
@@ -72,7 +72,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         style.addProperty( "draw:fill", "bitmap" );
 
         //The image is specified by a draw:fill-image style in draw:fill-image-name
-        KoGenStyle drawFillImage = KoGenStyle::KoGenStyle( KoGenStyle::StyleFillImage );
+        KoGenStyle drawFillImage( KoGenStyle::StyleFillImage );
 
         //default values
         drawFillImage.addAttribute( "xlink:href", "#Picture/" + m_pictures[ pictureName ] );
@@ -253,7 +253,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
 
 const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientElement )
 {
-    KoGenStyle style = KoGenStyle::KoGenStyle( KoGenStyle::StyleGradient, "drawing-page" );
+    KoGenStyle style( KoGenStyle::StyleGradient, "drawing-page" );
     style.setAutoStyleInStylesDotXml( true );
 
     //KPresenter didn't allow to customize those attributes
@@ -339,7 +339,7 @@ const QString Filterkpr2odf::createPageLayout()
     KoXmlElement paperBorders( paper.namedItem( "PAPERBORDERS" ).toElement() );
 
     //page-layout-properties
-    KoGenStyle style = KoGenStyle::KoGenStyle( KoGenStyle::StylePageLayout );
+    KoGenStyle style( KoGenStyle::StylePageLayout );
     style.setAutoStyleInStylesDotXml( true );
 
     style.addProperty( "fo:margin-top", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptTop" , "0" ).toFloat() ) ) );
@@ -360,8 +360,9 @@ const QString Filterkpr2odf::createMasterPageStyle()
     KoXmlElement header( m_mainDoc.namedItem( "DOC" ).namedItem( "HEADER" ).toElement() );
     KoXmlElement footer( m_mainDoc.namedItem( "DOC" ).namedItem( "FOOTER" ).toElement() );
 
-    KoGenStyle style = KoGenStyle::KoGenStyle( KoGenStyle::StyleMaster, "" );
+    KoGenStyle style( KoGenStyle::StyleMaster, "" );
     style.addAttribute( "style:page-layout-name", createPageLayout() );
 
     return m_styles.lookup( style, "Default" );
 }
+
