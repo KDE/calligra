@@ -1149,7 +1149,7 @@ void SvgImport::parseStyle( KoShape *obj, const QDomElement &e )
             break;
         case Qt::TexturePattern:
         {
-            KoDataCenter * dataCenter = m_document->dataCenterMap().value( "ImageCollewction", 0 );
+            KoDataCenter * dataCenter = m_document->dataCenterMap().value( "ImageCollection", 0 );
             KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>( dataCenter );
             if( imageCollection )
             {
