@@ -27,7 +27,8 @@
 #include <KoShapeLoadingContext.h>
 #include <KPrSoundData.h>
 #include <KPrSoundCollection.h>
-#include <KPrSharedLoadingData.h>
+
+#include <kdebug.h>
 
 KPrSoundEventAction::KPrSoundEventAction()
 : QObject()
@@ -50,17 +51,17 @@ bool KPrSoundEventAction::loadOdf( const KoXmlElement & element, KoShapeLoadingC
     bool retval = false;
 
     if ( ! sound.isNull() ) {
-
-        KPrSharedLoadingData * sharedData = dynamic_cast<KPrSharedLoadingData *>( context.sharedData( KPRESENTER_SHARED_LOADING_ID ) );
-        if ( sharedData && sharedData->soundCollection() ) {
+        KPrSoundCollection * soundCollection = dynamic_cast<KPrSoundCollection *>( context.dataCenter( "SoundCollection" ) );
+        if ( soundCollection ) {
             QString href = sound.attributeNS( KoXmlNS::xlink, "href" );
-            if ( href.isEmpty() ) {
-                m_soundData = new KPrSoundData( sharedData->soundCollection(), href );
+            if ( !href.isEmpty() ) {
+                m_soundData = new KPrSoundData( soundCollection, href );
                 retval = true;
             }
         }
         else {
-            // TODO warning
+            kWarning(33000) << "sound collection could not be found";
+            Q_ASSERT( soundCollection );
         }
     }
 
