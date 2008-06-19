@@ -468,16 +468,27 @@ public:
     /// Returns the effort planned to be used to reach the actual percent finished
     virtual Duration budgetedWorkPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
+    /// Returns the cost planned to be used to reach the actual percent finished
+    virtual double budgetedCostPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;
+
+    /// Budgeted Cost of Work Scheduled
+    virtual double bcws( const QDate &date, long id = CURRENTSCHEDULE ) const;
+
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id = CURRENTSCHEDULE ) const;
     /// Budgeted Cost of Work Performed ( up to @p date )
     virtual double bcwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
-    /// Effort based performance index
-    double effortPerformanceIndex( const QDate &date, long id = CURRENTSCHEDULE ) const;
+    /// Actual Cost of Work Performed
+    virtual double acwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
+    /// Effort based performance index
+    virtual double effortPerformanceIndex( const QDate &date, long id = CURRENTSCHEDULE ) const;
+
+    /// Schedule performance index
+    virtual double schedulePerformanceIndex( const QDate &date, long id = CURRENTSCHEDULE ) const;
     /// Cost performance index
-    double costPerformanceIndex(const QDate &date, bool *error=0) const;
+    virtual double costPerformanceIndex(const QDate &date, bool *error=0) const;
     
     /**
      * Return the duration that an activity's start can be delayed 

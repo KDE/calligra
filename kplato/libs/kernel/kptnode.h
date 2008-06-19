@@ -305,20 +305,28 @@ public:
     /// Actual cost up to and including date
     virtual double actualCostTo(const QDate &/*date*/) const { return 0; }
     
-    virtual double effortPerformanceIndex( const QDate &, long ) const = 0;
-    
     /// Returns the effort planned to be used to reach the actual percent finished
     virtual Duration budgetedWorkPerformed( const QDate &, long = CURRENTSCHEDULE ) const = 0;
-    
+    /// Returns the cost planned to be used to reach the actual percent finished
+    virtual double budgetedCostPerformed( const QDate &, long = CURRENTSCHEDULE ) const { return 0.0; };
+
+    /// Budgeted Cost of Work Scheduled
+    virtual double bcws( const QDate &/*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0.0; }
+
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id ) const { Q_UNUSED(id); return 0.0; }
     /// Budgeted Cost of Work Performed ( up to @p date )
     virtual double bcwp( const QDate &/*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0.0; }
     
+    /// Actual Cost of Work Performed
+    virtual double acwp( const QDate &/*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0.0; }
+    
     /// Effort based performance index
-    double effortPerformanceIndex(const QDate &/*date*/, bool * /*error=0*/) const { return 0.0; }
+    virtual double effortPerformanceIndex(const QDate &/*date*/, long /*id*/ = CURRENTSCHEDULE ) const { return 0.0; }
+    /// Schedule performance index
+    virtual double schedulePerformanceIndex(const QDate &/*date*/, long /*id*/ = CURRENTSCHEDULE ) const { return 0.0; }
     /// Cost performance index
-    double costPerformanceIndex(const QDate &/*date*/, bool * /*error=0*/) const { return 0.0; }
+    virtual double costPerformanceIndex(const QDate &/*date*/, bool * /*error=0*/) const { return 0.0; }
     
     virtual void initiateCalculationLists(MainSchedule &sch) = 0;
     virtual DateTime calculateForward(int /*use*/) = 0;

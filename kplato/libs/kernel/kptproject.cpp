@@ -1553,6 +1553,16 @@ Duration Project::budgetedWorkPerformed( const QDate &date, long id ) const
     return e;
 }
 
+double Project::budgetedCostPerformed( const QDate &date, long id ) const
+{
+    //kDebug();
+    double c;
+    foreach (Node *n, childNodeIterator()) {
+        c += n->budgetedCostPerformed( date, id );
+    }
+    return c;
+}
+
 double Project::effortPerformanceIndex( const QDate &date, long id ) const
 {
     //kDebug();
@@ -1566,6 +1576,27 @@ double Project::effortPerformanceIndex( const QDate &date, long id ) const
         return 1.0;
     }
     return b.toDouble() / a.toDouble();
+}
+
+double Project::schedulePerformanceIndex( const QDate &date, long id ) const
+{
+    //kDebug();
+    double r = 1.0;
+    double s = bcws( date, id );
+    double p = bcwp( date, id );
+    if ( s > 0.0 ) {
+        r = p / s;
+    }
+    kDebug()<<s<<p<<r;
+    return r;
+}
+
+double Project::bcws( const QDate &date, long id ) const
+{
+    //kDebug();
+    double c = plannedCostTo( date, id );
+    kDebug()<<c;
+    return c;
 }
 
 double Project::bcwp( long id ) const
@@ -1586,7 +1617,7 @@ double Project::bcwp( const QDate &date, long id ) const
     double plannedCompleted;
     double actualCompleted;
     double budgetedCompleted;
-    bool useEffort = true; //FIXME
+    bool useEffort = false; //FIXME
     if ( useEffort ) {
         budgetAtCompletion = plan.totalEffort().toDouble( Duration::Unit_h );
         plannedCompleted = plan.effortTo( date ).toDouble( Duration::Unit_h );
@@ -1597,11 +1628,22 @@ double Project::bcwp( const QDate &date, long id ) const
         budgetAtCompletion = plan.totalCost();
         plannedCompleted = plan.costTo( date );
         actualCompleted = actual.costTo( date );
+        budgetedCompleted = budgetedCostPerformed( date, id );
     }
     double percentageCompletion = budgetedCompleted / budgetAtCompletion;
     
     double c = budgetAtCompletion * percentageCompletion; //??
     kDebug()<<percentageCompletion<<budgetAtCompletion<<budgetedCompleted<<plannedCompleted;
+    return c;
+}
+
+double Project::acwp( const QDate &date, long id ) const
+{
+    //kDebug();
+    double c = 0;
+    foreach (Node *n, childNodeIterator()) {
+        c += n->acwp( date, id );
+    }
     return c;
 }
 

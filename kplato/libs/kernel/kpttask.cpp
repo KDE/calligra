@@ -714,17 +714,12 @@ double Task::actualCostTo( const QDate &date ) const {
     return completion().actualCostTo( date );
 }
 
-double Task::bcwp( long id ) const
+double Task::bcws( const QDate &date, long id ) const
 {
     //kDebug();
-    double c = 0;
-    if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
-            c += n->bcwp(id);
-        }
-        return c;
-    }
-    return plannedCost( id ) * (double)completion().percentFinished() / 100.0;
+    double c = plannedCostTo( date, id );
+    kDebug()<<c;
+    return c;
 }
 
 Duration Task::budgetedWorkPerformed( const QDate &date, long id ) const
@@ -743,32 +738,86 @@ Duration Task::budgetedWorkPerformed( const QDate &date, long id ) const
     return e;
 }
 
+double Task::budgetedCostPerformed( const QDate &date, long id ) const
+{
+    //kDebug();
+    double c;
+    if (type() == Node::Type_Summarytask) {
+        foreach (Node *n, childNodeIterator()) {
+            c += n->budgetedCostPerformed( date, id );
+        }
+        return c;
+    }
+    
+    c = plannedCost( id ) * (double)completion().percentFinished( date ) / 100.0;
+    //kDebug()<<m_name<<"("<<id<<")"<<date<<"="<<e.toString();
+    return c;
+}
+
+double Task::bcwp( long id ) const
+{
+    return bcwp( QDate::currentDate(), id );
+}
+
 double Task::bcwp( const QDate &date, long id ) const
 {
     //kDebug();
     double c = 0;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
-            c += n->bcwp( date, id );
+            c += n->bcwp( date, id ); //FIXME
         }
         return c;
     }
-    c = plannedCostTo( date, id ) * (double)completion().percentFinished( date ) / 100.0;
-    //kDebug()<<m_name<<"("<<id<<")"<<date<<"="<<c;
+    c = plannedCost( id ) * (double)completion().percentFinished( date ) / 100.0;
+    kDebug()<<m_name<<"("<<id<<")"<<date<<"="<<c;
     return c;
+}
+
+double Task::acwp( const QDate &date, long id ) const
+{
+    //kDebug();
+    double c = 0;
+    if (type() == Node::Type_Summarytask) {
+        foreach (Node *n, childNodeIterator()) {
+            c += n->acwp( date, id );
+        }
+        return c;
+    }
+    c = completion().actualCostTo( date );
+    kDebug()<<m_name<<"("<<id<<")"<<date<<"="<<c;
+    return c;
+}
+
+double Task::schedulePerformanceIndex( const QDate &date, long id ) const {
+    //kDebug();
+    double r = 1.0;
+    double s = bcws( date, id );
+    double p = bcwp( date, id );
+    if ( s > 0.0 ) {
+        r = p / s;
+    }
+    return r;
 }
 
 double Task::effortPerformanceIndex( const QDate &date, long id ) const {
     kDebug();
-    Duration b = budgetedWorkPerformed( date, id );
-    if ( b == Duration::zeroDuration ) {
-        return 1.0;
+    double r = 1.0;
+    Duration a, b;
+    if ( m_estimate->type() == Estimate::Type_Effort ) {
+        Duration b = budgetedWorkPerformed( date, id );
+        if ( b == Duration::zeroDuration ) {
+            return r;
+        }
+        Duration a = actualEffortTo( date );
+        if ( b == Duration::zeroDuration ) {
+            return 1.0;
+        }
+        r = b.toDouble() / a.toDouble();
+    } else if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
+        //TODO
     }
-    Duration a = actualEffortTo( date );
-    if ( b == Duration::zeroDuration ) {
-        return 1.0;
-    }
-    return b.toDouble() / a.toDouble();
+    return r;
 }
 
 

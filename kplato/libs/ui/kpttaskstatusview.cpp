@@ -32,6 +32,15 @@
 #include <QModelIndex>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QTextBrowser>
+#include <QTextCursor>
+#include <QTextTableFormat>
+#include <QTextLength>
+#include <QTextTable>
+#include <QTextFrame>
+#include <QTextFrameFormat>
+#include <QTextCharFormat>
+#include <QTextTableCell>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -163,7 +172,7 @@ void TaskStatusTreeView::dragMoveEvent(QDragMoveEvent *event)
     }
     Node *dn = model()->node( index );
     if ( dn == 0 ) {
-        kError()<<"no node to drop on!"<<endl;
+        kError()<<"no node to drop on!"
         return; // hmmm
     }
     switch ( dropIndicatorPosition() ) {
@@ -191,7 +200,7 @@ TaskStatusView::TaskStatusView( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent ),
     m_id( -1 )
 {
-    kDebug()<<"-------------------- creating TaskStatusView -------------------"<<endl;
+    kDebug()<<"-------------------- creating TaskStatusView -------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
     m_view = new TaskStatusTreeView( this );
@@ -219,9 +228,9 @@ void TaskStatusView::updateReadWrite( bool rw )
     m_view->setReadWrite( rw );
 }
 
-void TaskStatusView::slotCurrentScheduleManagerChanged( ScheduleManager *sm )
+void TaskStatusView::setScheduleManager( ScheduleManager *sm )
 {
-    //kDebug()<<endl;
+    //kDebug();
     static_cast<TaskStatusItemModel*>( m_view->model() )->setManager( sm );
 }
 
@@ -254,7 +263,7 @@ void TaskStatusView::setGuiActive( bool activate )
 
 void TaskStatusView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
 {
-    kDebug()<<index<<pos<<endl;
+    kDebug()<<index<<pos;
     if ( ! index.isValid() ) {
         return;
     }
@@ -395,6 +404,206 @@ TaskStatusViewSettingsDialog::TaskStatusViewSettingsDialog( TaskStatusTreeView *
     connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
 }
 
+//-----------------------------------
+ProjectStatusView::ProjectStatusView( KoDocument *part, QWidget *parent )
+    : ViewBase( part, parent ),
+    m_project( 0 ),
+    m_manager( 0 )
+{
+    kDebug()<<"-------------------- creating ProjectStatusView -------------------";
+    QVBoxLayout * l = new QVBoxLayout( this );
+    l->setMargin( 0 );
+    m_view = new QTextBrowser( this );
+    l->addWidget( m_view );
+    setupGui();
+
+}
+
+void ProjectStatusView::setScheduleManager( ScheduleManager *sm )
+{
+    //kDebug();
+    m_manager = sm;
+    draw();
+}
+
+void ProjectStatusView::setProject( Project *project )
+{
+    if ( m_project ) {
+        disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotUpdate( ScheduleManager* ) ) );
+        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
+    }
+    m_project = project;
+    if ( m_project ) {
+        connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotUpdate( ScheduleManager* ) ) );
+        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
+    }
+}
+
+void ProjectStatusView::slotUpdate()
+{
+    draw();
+}
+
+void ProjectStatusView::slotUpdate( ScheduleManager *sm )
+{
+    if ( sm == m_manager ) {
+        slotUpdate();
+    }
+}
+
+void ProjectStatusView::draw()
+{
+    m_view->clear();
+    if ( m_project == 0 ) {
+        return;
+    }
+    
+    QTextCursor cursor = m_view->textCursor();
+    cursor.movePosition(QTextCursor::Start);
+    QTextFrame *topFrame = cursor.currentFrame();
+    
+    QTextTableFormat tableFormat;
+    tableFormat.setAlignment(Qt::AlignHCenter);
+//    tableFormat.setBackground(QColor("#e0e0e0"));
+    tableFormat.setCellPadding(2);
+    tableFormat.setCellSpacing(4);
+    
+    QVector<QTextLength> constraints;
+    constraints << QTextLength(QTextLength::PercentageLength, 20)
+            << QTextLength(QTextLength::PercentageLength, 80);
+    tableFormat.setColumnWidthConstraints(constraints);
+    
+    QTextTable *table = cursor.insertTable(2, 2, tableFormat);
+    QTextFrame *frame = cursor.currentFrame();
+    QTextFrameFormat frameFormat = frame->frameFormat();
+    frameFormat.setBorder(1);
+    frame->setFrameFormat(frameFormat);
+    QTextCharFormat format = cursor.charFormat();
+    format.setFontPointSize(11);
+
+    QTextCharFormat boldFormat = format;
+    boldFormat.setFontWeight(QFont::Bold);
+
+    QTextCharFormat highlightedFormat = boldFormat;
+    highlightedFormat.setBackground(Qt::yellow);
+    
+    QTextTableCell cell = table->cellAt(0, 0);
+    QTextCursor cellCursor = cell.firstCursorPosition();
+    cellCursor.insertText(i18n("Project:"), format);
+    
+    cell = table->cellAt(0, 1);
+    cellCursor = cell.firstCursorPosition();
+    cellCursor.insertText(m_project->name(), boldFormat);
+
+    cell = table->cellAt(1, 0);
+    cellCursor = cell.firstCursorPosition();
+    cellCursor.insertText(i18n("Schedule:"), format);
+
+    QString s = m_manager == 0 ? i18n("None") : m_manager->name();
+    cell = table->cellAt(1, 1);
+    cellCursor = cell.firstCursorPosition();
+    cellCursor.insertText(s, boldFormat);
+    
+    if ( m_manager == 0 ) {
+        return;
+    }
+
+    NodeModel m;
+    m.setProject( m_project );
+    m.setManager( m_manager );
+    
+    cursor.setPosition(topFrame->lastPosition());
+    cursor.insertBlock();
+    cursor.insertBlock();
+    
+    constraints.clear();
+    constraints << QTextLength(QTextLength::PercentageLength, 25)
+            << QTextLength(QTextLength::PercentageLength, 25)
+            << QTextLength(QTextLength::PercentageLength, 25)
+            << QTextLength(QTextLength::PercentageLength, 25);
+    tableFormat.setColumnWidthConstraints(constraints);
+    table = cursor.insertTable(2, 4, tableFormat);
+    //frame = cursor.currentFrame();
+    //frameFormat = frame->frameFormat();
+    //frameFormat.setBorder(1);
+    //frame->setFrameFormat(frameFormat);
+    //format = cursor.charFormat();
+    //format.setFontPointSize(11);
+
+    //boldFormat = format;
+    //boldFormat.setFontWeight(QFont::Bold);
+
+    //highlightedFormat = boldFormat;
+    //highlightedFormat.setBackground(Qt::yellow);
+    
+    cell = table->cellAt(0, 0);
+    cellCursor = cell.firstCursorPosition();
+    cellCursor.insertText(i18n("BCWS"), boldFormat);
+    
+    cell = table->cellAt(1, 0);
+    cellCursor = cell.firstCursorPosition();
+    cellCursor.insertText(m.data( m_project, NodeModel::NodeBCWS ).toString(), format);
+
+    cell = table->cellAt(0, 1);
+    cellCursor = cell.firstCursorPosition();
+    cellCursor.insertText(i18n("BCWP"), boldFormat);
+
+    cell = table->cellAt(1, 1);
+    cellCursor = cell.firstCursorPosition();
+    cellCursor.insertText(m.data( m_project, NodeModel::NodeBCWP ).toString(), format);
+    
+    cell = table->cellAt(0, 2);
+    cellCursor = cell.firstCursorPosition();
+    cellCursor.insertText(i18n("ACWP"), boldFormat);
+
+    cell = table->cellAt(1, 2);
+    cellCursor = cell.firstCursorPosition();
+    cellCursor.insertText(m.data( m_project, NodeModel::NodeACWP ).toString(), format);
+
+    cell = table->cellAt(0, 3);
+    cellCursor = cell.firstCursorPosition();
+    cellCursor.insertText(i18n("SPI"), boldFormat);
+
+    cell = table->cellAt(1, 3);
+    cellCursor = cell.firstCursorPosition();
+    cellCursor.insertText(m.data( m_project, NodeModel::NodePerformanceIndex ).toString(), format);
+}
+
+void ProjectStatusView::setGuiActive( bool activate )
+{
+    kDebug()<<activate;
+//    updateActionsEnabled( true );
+    ViewBase::setGuiActive( activate );
+}
+
+void ProjectStatusView::setupGui()
+{
+    // Add the context menu actions for the view options
+/*    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
+    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
+    addContextAction( actionOptions );*/
+}
+
+void ProjectStatusView::slotSplitView()
+{
+    kDebug();
+}
+
+
+void ProjectStatusView::slotOptions()
+{
+    kDebug();
+}
+
+bool ProjectStatusView::loadContext( const KoXmlElement &context )
+{
+    kDebug();
+    return true;
+}
+
+void ProjectStatusView::saveContext( QDomElement &context ) const
+{
+}
 
 
 

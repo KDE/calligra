@@ -67,13 +67,16 @@ Duration AppointmentInterval::effort(const DateTime &start, const DateTime end) 
 }
 
 Duration AppointmentInterval::effort(const QDate &time, bool upto) const {
-    DateTime t( DateTime( QDateTime( time ), m_start.timeSpec() ) );
+    DateTime t( time, QTime(), m_start.timeSpec() );
+    //kDebug()<<time<<upto<<t<<m_start<<m_end;
     if (upto) {
         if (t <= m_start) {
             return Duration::zeroDuration;
         }
         DateTime e = (t < m_end ? t : m_end);
-        return (e - m_start) * m_load / 100;
+        Duration d = (e - m_start) * m_load / 100;
+        //kDebug()<<d.toString();
+        return d;
     }
     // from time till end
     if (t >= m_end) {
@@ -513,8 +516,9 @@ Duration Appointment::plannedEffortTo(const QDate& date) const {
     Duration d;
     QDate e(date.addDays(1));
     foreach (AppointmentInterval *i, m_intervals.values() ) {
-        d += i->effort(e, true);
+        d += i->effort(e, true); // upto e, not including
     }
+    //kDebug()<<date<<d.toString();
     return d;
 }
 

@@ -90,6 +90,11 @@ namespace KPlato
     QString ToolTip::nodeConstraintsError() { return i18n( "A timing constraint could not be met" ); }
     QString ToolTip::nodeEffortNotMet() { return i18n( "The assigned resource could not meet the estimated effort" ); }
 
+    QString ToolTip::nodeBCWS() { return i18n( "Budgeted Cost of Work Scheduled" ); }
+    QString ToolTip::nodeBCWP() { return i18n( "Budgeted Cost of Work Performed" ); }
+    QString ToolTip::nodeACWP() { return i18n( "Actual Cost of Work Performed" ); }
+    QString ToolTip::nodePerformanceIndex() { return i18n( "Schedule performance index (BCWP/BCWS)" ); }
+
     QString ToolTip::resourceName() { return i18n( "The name of the resource or resource group" ); }
     QString ToolTip::resourceType() { return i18n( "The type of the resource or resource group" ); }
     QString ToolTip::resourceInitials() { return i18n( "The initials of the resource" ); }

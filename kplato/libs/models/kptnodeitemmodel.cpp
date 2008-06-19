@@ -1307,6 +1307,62 @@ QVariant NodeModel::nodeLevel( const Node *node, int role ) const
     return QVariant();
 }
 
+QVariant NodeModel::nodeBCWS( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return KGlobal::locale()->formatMoney( node->bcws( m_now, id() ), QString(), 0 );
+        case Qt::ToolTipRole:
+            return i18n( "Budgeted Cost of Work Scheduled at %1: %2", m_now.toString(), KGlobal::locale()->formatMoney( node->bcws( m_now, id() ), QString(), 0 ) );
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant NodeModel::nodeBCWP( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return KGlobal::locale()->formatMoney( node->bcwp( id() ), QString(), 0 );
+        case Qt::ToolTipRole:
+            return i18n( "Budgeted Cost of Work Performed at %1: %2", m_now.toString(), KGlobal::locale()->formatMoney( node->bcwp( id() ), QString(), 0 ) );
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant NodeModel::nodeACWP( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return KGlobal::locale()->formatMoney( node->acwp( m_now, id() ), QString(), 0 );
+        case Qt::ToolTipRole:
+            return i18n( "Actual Cost of Work Performed at %1: %2", m_now.toString(), KGlobal::locale()->formatMoney( node->acwp( m_now, id() ) ) );
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
+QVariant NodeModel::nodePerformanceIndex( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+            return KGlobal::locale()->formatNumber( node->schedulePerformanceIndex( m_now, id() ), 2 );
+        case Qt::ToolTipRole:
+            return i18n( "Schedule Performance Index at %1: %2", m_now.toString(), KGlobal::locale()->formatNumber( node->schedulePerformanceIndex( m_now, id() ), 2 ) );
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 QVariant NodeModel::data( const Node *n, int property, int role ) const
 {
     QVariant result;
@@ -1380,6 +1436,12 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         case NodeWBSCode: result = wbsCode( n, role ); break;
         case NodeLevel: result = nodeLevel( n, role ); break;
         
+        // Performance
+        case NodeBCWS: result = nodeBCWS( n, role ); break;
+        case NodeBCWP: result = nodeBCWP( n, role ); break;
+        case NodeACWP: result = nodeACWP( n, role ); break;
+        case NodePerformanceIndex: result = nodePerformanceIndex( n, role ); break;
+
         default:
             //kDebug()<<"Invalid property number: "<<property;;
             return result;
@@ -1470,6 +1532,12 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeWBSCode: return i18n( "WBS Code" );
             case NodeLevel: return i18nc( "Node level", "Level" );
             
+            // Performance
+            case NodeBCWS: return i18nc( "Budgeted Cost of Work Scheduled", "BCWS" );
+            case NodeBCWP: return i18nc( "Budgeted Cost of Work Performed", "BCWP" );
+            case NodeACWP: return i18nc( "Actual Cost of Work Performed", "ACWP" );
+            case NodePerformanceIndex: return i18nc( "Schedule Performance Index", "SPI" );
+            
             default: return QVariant();
         }
     }
@@ -1542,6 +1610,12 @@ QVariant NodeModel::headerData( int section, int role )
             
             case NodeWBSCode: return ToolTip::nodeWBS();
             case NodeLevel: return ToolTip::nodeLevel();
+            
+            // Performance
+            case NodeBCWS: return ToolTip::nodeBCWS();
+            case NodeBCWP: return ToolTip::nodeBCWP();
+            case NodeACWP: return ToolTip::nodeACWP();
+            case NodePerformanceIndex: return ToolTip::nodePerformanceIndex();
             
             default: return QVariant();
         }

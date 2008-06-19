@@ -112,7 +112,13 @@ public:
         NodeEffortNotMet,
 
         NodeWBSCode,
-        NodeLevel
+        NodeLevel,
+        
+        // Performance
+        NodeBCWS,
+        NodeBCWP,
+        NodeACWP,
+        NodePerformanceIndex
     };
     const QMetaEnum columnMap() const;
     
@@ -201,6 +207,11 @@ public:
     QVariant wbsCode( const Node *node, int role ) const;
     QVariant nodeLevel( const Node *node, int role ) const;
     
+    QVariant nodeBCWS( const Node *node, int role ) const;
+    QVariant nodeBCWP( const Node *node, int role ) const;
+    QVariant nodeACWP( const Node *node, int role ) const;
+    QVariant nodePerformanceIndex( const Node *node, int role ) const;
+
 private:
     Project *m_project;
     ScheduleManager *m_manager;

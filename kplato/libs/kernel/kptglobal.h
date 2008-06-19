@@ -117,6 +117,11 @@ struct KPLATOKERNEL_EXPORT ToolTip
     static QString nodeConstraintsError();
     static QString nodeEffortNotMet();
 
+    static QString nodeBCWS();
+    static QString nodeBCWP();
+    static QString nodeACWP();
+    static QString nodePerformanceIndex();
+
     static QString resourceName();
     static QString resourceType();
     static QString resourceInitials();

@@ -104,7 +104,7 @@ public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
-    void slotCurrentScheduleManagerChanged( ScheduleManager *sm );
+    void setScheduleManager( ScheduleManager *sm );
     
 protected:
     void updateActionsEnabled( bool on );
@@ -179,7 +179,7 @@ public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
 
-    void slotCurrentScheduleManagerChanged( ScheduleManager *sm );
+    void setScheduleManager( ScheduleManager *sm );
 
 protected:
     void updateActionsEnabled( bool on );

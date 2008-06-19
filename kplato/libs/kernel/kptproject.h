@@ -248,13 +248,21 @@ public:
     
     double effortPerformanceIndex( const QDate &date, long id ) const;
     
+    double schedulePerformanceIndex( const QDate &date, long id ) const;
+    
     /// Returns the effort planned to be used to reach the actual percent finished
     virtual Duration budgetedWorkPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;
+    /// Returns the cost planned to be used to reach the actual percent finished
+    virtual double budgetedCostPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
+    /// Budgeted Cost of Work Scheduled ( up to @p date )
+    virtual double bcws( const QDate &date, long id = BASELINESCHEDULE ) const;
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id = BASELINESCHEDULE ) const;
     /// Budgeted Cost of Work Performed ( up to @p date )
     virtual double bcwp( const QDate &date, long id = BASELINESCHEDULE ) const;
+    /// Budgeted Cost of Work Performed ( up to @p date )
+    virtual double acwp( const QDate &date, long id = BASELINESCHEDULE ) const;
 
     Calendar *defaultCalendar() const { return m_defaultCalendar; }
     void setDefaultCalendar( Calendar *cal );

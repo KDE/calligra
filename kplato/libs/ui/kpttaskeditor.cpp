@@ -225,7 +225,7 @@ void TaskEditor::slotContextMenuRequested( const QModelIndex& index, const QPoin
     emit requestPopupMenu( name, pos );
 }
 
-void TaskEditor::slotCurrentScheduleManagerChanged( ScheduleManager *sm )
+void TaskEditor::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug()<<endl;
     static_cast<NodeItemModel*>( m_view->model() )->setManager( sm );
@@ -481,6 +481,10 @@ TaskView::TaskView( KoDocument *part, QWidget *parent )
             << NodeModel::NodeCompleted
             << NodeModel::NodeResponsible
             << NodeModel::NodeAssigments
+            << NodeModel::NodePerformanceIndex
+            << NodeModel::NodeBCWS
+            << NodeModel::NodeBCWP
+            << NodeModel::NodeACWP
             << NodeModel::NodeDescription;
     
     for ( int s = 0; s < show.count(); ++s ) {
@@ -606,7 +610,7 @@ void TaskView::slotContextMenuRequested( const QModelIndex& index, const QPoint&
     emit requestPopupMenu( name, pos );
 }
 
-void TaskView::slotCurrentScheduleManagerChanged( ScheduleManager *sm )
+void TaskView::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug()<<endl;
     static_cast<NodeItemModel*>( m_view->model() )->setManager( sm );

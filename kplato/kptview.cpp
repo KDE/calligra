@@ -396,6 +396,8 @@ void View::createViews()
                         v = createScheduleEditor( cat, tag, name, tip );
                     } else if ( type == "ScheduleHandlerView" ) {
                         v = createScheduleHandler( cat, tag, name, tip );
+                    } else if ( type == "ProjectStatusView" ) {
+                        v = createProjectStatusView( cat, tag, name, tip );
                     } else if ( type == "TaskStatusView" ) {
                         v = createTaskStatusView( cat, tag, name, tip );
                     } else if ( type == "TaskView" ) {
@@ -450,6 +452,8 @@ void View::createViews()
         createScheduleHandler( cat, "ScheduleHandler", i18n( "Schedules" ), i18n( "Calculate and analyze project schedules" ) );
     
         cat = m_viewlist->addCategory( "Views", i18n( "Views" ) );
+        createProjectStatusView( cat, "ProjectStatusView", i18n( "Project Status" ), i18n( "View project status information" ) );
+
         createTaskStatusView( cat, "TaskStatusView", i18n( "Task Status" ), i18n( "View task progress information" ) );
         
         createTaskView( cat, "TaskView", i18n( "Task Execution" ), i18n( "View task execution information" ) );
@@ -516,8 +520,9 @@ ViewBase *View::createTaskEditor( ViewListItem *cat, const QString tag, const QS
     i->setToolTip( 0, tip );
 
     taskeditor->draw( getProject() );
+    taskeditor->setScheduleManager( currentScheduleManager() );
 
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), taskeditor, SLOT( slotCurrentScheduleManagerChanged( ScheduleManager* ) ) );
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), taskeditor, SLOT( setScheduleManager( ScheduleManager* ) ) );
     
     connect( taskeditor, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
@@ -677,6 +682,25 @@ ViewBase *View::createPertEditor( ViewListItem *cat, const QString tag, const QS
     return perteditor;
 }
 
+ViewBase *View::createProjectStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+{
+    ProjectStatusView *v = new ProjectStatusView( getPart(), m_tab );
+    m_tab->addWidget( v );
+
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "status_view" );
+    i->setToolTip( 0, tip );
+
+    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    
+    v->updateReadWrite( m_readWrite );
+    v->setProject( &getProject() );
+    v->setScheduleManager( currentScheduleManager() );
+    return v;
+}
+
+
 ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
 {
     TaskStatusView *taskstatusview = new TaskStatusView( getPart(), m_tab );
@@ -687,12 +711,13 @@ ViewBase *View::createTaskStatusView( ViewListItem *cat, const QString tag, cons
 
     connect( taskstatusview, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), taskstatusview, SLOT( slotCurrentScheduleManagerChanged( ScheduleManager* ) ) );
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), taskstatusview, SLOT( setScheduleManager( ScheduleManager* ) ) );
     
     connect( taskstatusview, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
     
     taskstatusview->updateReadWrite( m_readWrite );
     taskstatusview->draw( getProject() );
+    taskstatusview->setScheduleManager( currentScheduleManager() );
     return taskstatusview;
 }
 
@@ -705,8 +730,9 @@ ViewBase *View::createTaskView( ViewListItem *cat, const QString tag, const QStr
     i->setToolTip( 0, tip );
 
     v->draw( getProject() );
-
-    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( slotCurrentScheduleManagerChanged( ScheduleManager* ) ) );
+    v->setScheduleManager( currentScheduleManager() );
+    
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
     
     connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
 
@@ -765,11 +791,12 @@ ViewBase *View::createMilestoneGanttView( ViewListItem *cat, const QString tag, 
 ViewBase *View::createAccountsView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
 {
     AccountsView *accountsview = new AccountsView( &getProject(), getPart(), m_tab );
-    m_updateAccountsview = true;
     m_tab->addWidget( accountsview );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, accountsview, getPart(), "accounts" );
     i->setToolTip( 0, tip );
+
+    accountsview->setScheduleManager( currentScheduleManager() );
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), accountsview, SLOT( setScheduleManager( ScheduleManager* ) ) );
     
