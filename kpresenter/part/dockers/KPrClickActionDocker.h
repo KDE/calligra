@@ -26,9 +26,7 @@
 #include <QPixmap>
 #include <KoCanvasObserver.h>
 
-class QLabel;
 class QComboBox;
-class QDoubleSpinBox;
 class QUndoCommand;
 class KPrView;
 class KoCanvasBase;
@@ -57,14 +55,11 @@ private slots:
     /// reimplemented
     virtual void setCanvas( KoCanvasBase *canvas );
 
-    void soundComboChanged();
-
 private:
     KPrView *m_view;
     KPrSoundCollection *m_soundCollection;
     KoCanvasBase *m_canvas;
-    QCheckBox *m_cbNavigate;
-    QComboBox *m_cbPlaySound;
+    QComboBox *m_cbPlaySound; // TODO remove when the embeded widgets are ok
     QMap<QString, KoEventActionWidget *> m_eventActionWidgets;
 };
 

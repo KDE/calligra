@@ -26,28 +26,18 @@
 #include <QSet>
 
 class KPrShapeAnimation;
-class KPrSoundData;
 
 class KPrShapeApplicationData : public KoShapeApplicationData
 {
 public:
-    enum InvokeResponse
-    {
-        DoNone,
-        DoNavigate,
-        DoPlaySound
-    };
-
     KPrShapeApplicationData();
     ~KPrShapeApplicationData();
 
     QSet<KPrShapeAnimation *> & animations();
-    InvokeResponse m_invokeResponse;
-    KPrSoundData *m_soundData;
 
 private:
-   // stores the animations of a shape
-   QSet<KPrShapeAnimation *> m_animations;
+    // stores the animations of a shape
+    QSet<KPrShapeAnimation *> m_animations;
 };
 
 
