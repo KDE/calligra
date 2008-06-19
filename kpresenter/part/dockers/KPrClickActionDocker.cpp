@@ -60,7 +60,7 @@ KPrClickActionDocker::KPrClickActionDocker( QWidget* parent, Qt::WindowFlags fla
     m_cbNavigate = new QCheckBox(i18n("Navigate to:"));
     m_cbPlaySound = new QComboBox(); //i18n("Play:")
     //layout->addWidget(m_cbNavigate);
-    layout->addWidget(m_cbPlaySound);
+    //layout->addWidget(m_cbPlaySound);
 
     QList<KoEventActionFactory *> factories = KoEventActionRegistry::instance()->presentationEventActions();
     foreach ( KoEventActionFactory * factory, factories ) {
