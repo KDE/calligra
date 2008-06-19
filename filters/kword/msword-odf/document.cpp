@@ -44,7 +44,7 @@
 #include <Q3ValueList>
 #include <QBuffer>
 
-Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles )
+Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles, KoXmlWriter* metaWriter )
     : m_replacementHandler( new KWordReplacementHandler ), m_tableHandler( new KWordTableHandler ),
       m_pictureHandler( new KWordPictureHandler( this ) ), m_textHandler( 0 ), m_headerCount(0),
       m_chain( chain ), m_currentListDepth( -1 ), m_evenOpen( false ), m_oddOpen( false ),
@@ -56,6 +56,7 @@ Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWrit
     {
 	m_bodyWriter = bodyWriter; //pointer for writing to the body
 	m_mainStyles = mainStyles; //KoGenStyles object for collecting styles
+	m_metaWriter = metaWriter; //pointer for writing to meta.xml
 	m_buffer = 0; //set pointers to 0
 	m_bufferEven = 0;
 	m_writer = 0;
@@ -117,6 +118,11 @@ void Document::finishDocument()
     }
 
     const wvWare::Word97::DOP& dop = m_parser->dop();
+    //"tabStopValue", (double)dop.dxaTab / 20.0
+    //dop.nFtn = initial footnote number for document, starts at 1
+    //Conversion::numberFormatCode(dop.nfcFtnRef2)
+    //dop.nEdn = initial endnote number for document, starts at 1
+    //Conversion::numberFormatCode(dop.nfcEdnRef2)
 /*
     QDomElement elementDoc = m_mainDocument.documentElement();
 
@@ -173,35 +179,17 @@ void Document::processAssociatedStrings()
 {
     kDebug(30513) ;
     wvWare::AssociatedStrings strings( m_parser->associatedStrings() );
-/*
-    QDomElement infodoc = m_documentInfo.createElement( "document-info" );
-    QDomElement author = m_documentInfo.createElement( "author" );
-    QDomElement fullname = m_documentInfo.createElement( "full-name" );
-    QDomElement title = m_documentInfo.createElement( "title" );
-    QDomElement about = m_documentInfo.createElement( "about" );
-
-    m_documentInfo.appendChild(infodoc);
-
-    if ( !strings.author().isNull()) {
-	fullname.appendChild(
-	    m_documentInfo.createTextNode(
-		Conversion::string (
-		    strings.author()
-		    ).string()));
-	author.appendChild(fullname);
-	infodoc.appendChild(author);
+    if(!strings.author().isNull()) {
+	m_metaWriter->startElement("meta:initial-creator");
+	m_metaWriter->addTextSpan(Conversion::string(strings.author()).string());
+	m_metaWriter->endElement();
     }
-
-    if ( !strings.title().isNull()) {
-	title.appendChild(
-	    m_documentInfo.createTextNode(
-		Conversion::string (
-		    strings.title()
-		    ).string()));
-	about.appendChild(title);
-	infodoc.appendChild(about);
+    if(!strings.title().isNull()) {
+	m_metaWriter->startElement("dc:title");
+	m_metaWriter->addTextSpan(Conversion::string(strings.title()).string());
+	m_metaWriter->endElement();
     }
-*/
+    //any other information here??
 }
 
 void Document::processStyles()
@@ -253,20 +241,23 @@ void Document::processStyles()
     //set the page-layout-name in the master style
     m_masterStyle->addAttribute("style:page-layout-name", name);
 
-    /*for ( unsigned int i = 0; i < count ; ++i )
+    //loop through each style
+    for ( unsigned int i = 0; i < count ; ++i )
     {
+	//grab style
         const wvWare::Style* style = styles.styleByIndex( i );
         Q_ASSERT( style );
         //kDebug(30513) <<"style" << i <<"" << style;
+	//only do this if style type is Style::sgcPara
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
-            QDomElement styleElem = m_mainDocument.createElement("STYLE");
-            stylesElem.appendChild( styleElem );
+            //QDomElement styleElem = m_mainDocument.createElement("STYLE");
+            //stylesElem.appendChild( styleElem );
 
             QConstString name = Conversion::string( style->name() );
-            QDomElement element = m_mainDocument.createElement("NAME");
-            element.setAttribute( "value", name.string() );
-            styleElem.appendChild( element );
+            //QDomElement element = m_mainDocument.createElement("NAME");
+            //element.setAttribute( "value", name.string() );
+            //styleElem.appendChild( element );
 
             kDebug(30513) <<"Style" << i <<":" << name.string();
 
@@ -274,21 +265,22 @@ void Document::processStyles()
             if ( followingStyle && followingStyle != style )
             {
                 QConstString followingName = Conversion::string( followingStyle->name() );
-                element = m_mainDocument.createElement("FOLLOWING");
-                element.setAttribute( "name", followingName.string() );
-                styleElem.appendChild( element );
+                //element = m_mainDocument.createElement("FOLLOWING");
+                //element.setAttribute( "name", followingName.string() );
+                //styleElem.appendChild( element );
             }
 
-            m_textHandler->paragLayoutBegin(); // new style, reset some vars
+            //m_textHandler->paragLayoutBegin(); // new style, reset some vars
 
             // It's important to do that one first, for m_shadowTextFound
-            m_textHandler->writeFormat( styleElem, &style->chp(), 0L, //all of it, no ref chp
-		    0, 0, 1, 0L );
+            //m_textHandler->writeFormat( styleElem, &style->chp(), 0L, //all of it, no ref chp
+		//    0, 0, 1, 0L );
 
-            m_textHandler->writeLayout( styleElem, style->paragraphProperties(), style );
+	    //be careful of side-effects when calling this...
+            //m_textHandler->writeLayout( /*styleElem, style->paragraphProperties(),*/ style );
         }
         // KWord doesn't support character styles yet
-    }*/
+    }
 }
 
 //just call parsing function
@@ -358,18 +350,19 @@ void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SE
     kDebug(30513) ;
     //QDomElement elementDoc = m_mainDocument.documentElement();
 
-    //QDomElement elementPaper = m_mainDocument.createElement("PAPER");
+    //set the paper size and orientation!
     bool landscape = (sep->dmOrientPage == 2);
     double width = (double)sep->xaPage / 20.0;
     double height = (double)sep->yaPage / 20.0;
-    //elementPaper.setAttribute("width", width);
-    //elementPaper.setAttribute("height", height);
 
     // guessFormat takes millimeters
     width = POINT_TO_MM( width );
     height = POINT_TO_MM( height );
     KoPageFormat::Format  paperFormat = KoPageFormat::guessFormat( landscape ? height : width, landscape ? width : height );
     //elementPaper.setAttribute("format",paperFormat);
+
+    //set up columns
+    //sep->dyaHdrTop/Bottom
 
     //elementPaper.setAttribute("orientation", landscape ? KoPageFormat::Landscape : KoPageFormat::Portrait );
     //elementPaper.setAttribute("columns", sep->ccolM1 + 1 );
@@ -378,6 +371,8 @@ void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SE
     //elementPaper.setAttribute("spFootBody", (double)sep->dyaHdrBottom / 20.0);
     // elementPaper.setAttribute("zoom",100); // not a doc property in kword
     //elementDoc.appendChild(elementPaper);
+
+    //page margins
 
     //QDomElement element = m_mainDocument.createElement("PAPERBORDERS");
     //element.setAttribute("left", (double)sep->dxaLeft / 20.0);
@@ -396,9 +391,6 @@ void Document::headerStart( wvWare::HeaderData::Type type )
     kDebug(30513) << "startHeader type=" << type << " (" << Conversion::headerTypeToFramesetName( type ) << ")";
     // Werner says the headers are always emitted in the order of the Type enum.
     //	Header Even, Header Odd, Footer Even, Footer Odd, Header First, Footer First
-
-    //m_openHeader = Conversion::isHeader( type );
-    //m_openFooter = !m_openHeader; //if we don't have a header, it must be a footer
 
     m_headerCount++;
 
@@ -463,8 +455,7 @@ void Document::headerEnd()
     if ( m_currentListDepth >= 0 )
     {
 	kDebug(30513) << "closing a list in a header/footer";
-	//m_listStylesWriter->endElement(); //text:list-style
-	//reset listStyleName
+	//reset listStyleName, m_currentListDepth, & m_currentListID in m_textHandler
 	m_textHandler->m_currentListDepth = -1;
 	m_textHandler->m_listStyleName = "";
 	m_textHandler->m_currentListID = 0;
@@ -515,6 +506,9 @@ void Document::headerEnd()
 void Document::footnoteStart()
 {
     kDebug(30513) ;
+
+    //this stuff should all be handled in texthandler.cpp, I think
+
     // Grab data that was stored with the functor, that triggered this parsing
     //SubDocument subdoc( m_subdocQueue.front() );
     //int type = subdoc.data;
@@ -600,6 +594,8 @@ void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::
 {
     kDebug(30513) ;
     // Frame borders
+
+    //figure out what this is supposed to do!
 
     /*if ( brcTop.ico != 255 && brcTop.dptLineWidth != 255 ) // see tablehandler.cpp
         Conversion::setBorderAttributes( frameElementOut, brcTop, "t" );

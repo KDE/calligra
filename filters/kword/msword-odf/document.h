@@ -58,7 +58,7 @@ class Document : public QObject, public wvWare::SubDocumentHandler
 {
     Q_OBJECT
 public:
-    Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles );
+    Document(const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles, KoXmlWriter* metaWriter);
     virtual ~Document();
 
     bool hasParser() const { return m_parser != 0L; }
@@ -143,6 +143,7 @@ private:
     int m_currentListDepth; //track list depth in case we need to close a list here (-1 if no list)
     KoXmlWriter* m_bodyWriter; //for writing to the body of content.xml
     KoGenStyles* m_mainStyles; //for collecting styles
+    KoXmlWriter* m_metaWriter; //for writing to meta.xml
     KoGenStyle* m_masterStyle; //for header/footer stuff, at least
     KoXmlWriter* m_writer; //for header/footer tags
     QBuffer* m_buffer; //for header/footer tags

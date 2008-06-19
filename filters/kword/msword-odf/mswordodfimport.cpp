@@ -119,33 +119,13 @@ KoFilter::ConversionStatus MSWordOdfImport::convert( const QByteArray& from, con
 
     kDebug(30513) <<"created oasisStore.";
 
-
-    //create temporary KoXmlWriter*'s to write to while we're parsing
-    //then we'll dump those into the real files
-    //QBuffer bodyBuffer, automaticStylesBuffer, listStylesBuffer;
-    //QBuffer stylesStylesBuffer, masterStylesBuffer;
-    //this writes to the <office:styles> section of styles.xml
-    //KoXmlWriter* stylesStylesWriter = new KoXmlWriter( &stylesStylesBuffer );
-    //stylesStylesWriter->startElement( "office:styles" );
-    //thi writes to the <office:master-styles> section of styles.xml
-    //KoXmlWriter* masterStylesWriter = new KoXmlWriter( &masterStylesBuffer );
-    //masterStylesWriter->startElement( "office:master-styles" );
-    //masterStylesWriter->startElement( "style:master-page" );
-    //masterStylesWriter->addAttribute( "style:name", "Standard" );
-    //this writes to the <office:body> section of content.xml
-    //KoXmlWriter* bodyWriter = new KoXmlWriter( &bodyBuffer );
-    //bodyWriter->startElement( "office:body" );
-    //bodyWriter->startElement( "office:text" );
-    //bodyWriter->addAttribute( "text:use-soft-page-breaks", "true" );
-    //this writes to the <office:automatic-styles> section of content.xml
-    //KoXmlWriter* automaticStylesWriter = new KoXmlWriter( &automaticStylesBuffer );
-    //automaticStylesWriter->startElement( "office:automatic-styles" );
-    //this writes <text:list-style> elements (also to office:automatic-styles) section of content.xml
-    //we need this writer in addition to the other so we can write both kinds of styles at the same time
-    //KoXmlWriter* listStylesWriter = new KoXmlWriter( &listStylesBuffer );
-
     //create KoGenStyles for writing styles while we're parsing
     KoGenStyles* mainStyles = new KoGenStyles();
+
+    //create a writer for meta.xml
+    QBuffer buf;
+    buf.open(QIODevice::WriteOnly);
+    KoXmlWriter metaWriter(&buf);
 
     //open contentWriter & bodyWriter
     KoXmlWriter* contentWriter = oasisStore.contentWriter();
@@ -164,11 +144,15 @@ KoFilter::ConversionStatus MSWordOdfImport::convert( const QByteArray& from, con
     bodyWriter->startElement("office:text");
 
     //create our document object, writing to the temporary buffers
-    d->document = new Document( QFile::encodeName( d->inputFile ).data(), m_chain, bodyWriter, mainStyles );
+    d->document = new Document(QFile::encodeName( d->inputFile ).data(), m_chain, bodyWriter, mainStyles, &metaWriter);
     
     //check that we can parse the document?
     if ( !d->document->hasParser() )
+    {
+	delete d->document;
+	delete storeout;
         return KoFilter::WrongFormat;
+    }
 
     //actual parsing & action
     if ( !d->document->parse() ) //parse file into the queues?
@@ -211,9 +195,31 @@ KoFilter::ConversionStatus MSWordOdfImport::convert( const QByteArray& from, con
     //create the styles.xml file
     mainStyles->saveOdfStylesDotXml( storeout, manifestWriter );
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
-    oasisStore.closeManifestWriter();
 
     kDebug(30513) <<"created manifest and styles.xml";
+
+    //create meta.xml
+    if(!storeout->open("meta.xml")) {
+	delete d->document;
+	delete storeout;
+	delete mainStyles;
+	return KoFilter::CreationError;
+    }
+    KoStoreDevice metaDev(storeout);
+    KoXmlWriter* meta = KoOdfWriteStore::createOasisXmlWriter(&metaDev, "office:document-meta");
+    meta->startElement("office:meta");
+    meta->addCompleteElement(&buf);
+    meta->endElement(); //office:meta
+    meta->endElement(); //office:document-meta
+    meta->endDocument();
+    if(!storeout->close()) {
+	delete d->document;
+	delete storeout;
+	delete mainStyles;
+	return KoFilter::CreationError;
+    }
+    manifestWriter->addManifestEntry("meta.xml", "text/xml");
+    oasisStore.closeManifestWriter();
 
     //done, so cleanup now
     delete d->document;
