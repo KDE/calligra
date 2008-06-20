@@ -108,7 +108,9 @@ SET (dialogs_DIR_SRCS
 
 
 kde4_add_ui_files(dialogs_DIR_SRCS
+	dialogs/FileOptionsWidget.ui
 	dialogs/FontWidget.ui
+	dialogs/InterfaceOptionsWidget.ui
 	dialogs/PageLayoutSheetPage.ui
 	dialogs/PositionWidget.ui
 	dialogs/ProtectionWidget.ui

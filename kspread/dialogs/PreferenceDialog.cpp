@@ -59,95 +59,373 @@
 #include "SheetPrint.h"
 #include "View.h"
 
+#include "ui_FileOptionsWidget.h"
+#include "ui_InterfaceOptionsWidget.h"
+
 using namespace KSpread;
 
-PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
-  : KPageDialog( )
-
+class PreferenceDialog::Private
 {
-  setFaceType( List );
-  setCaption( i18n("Configure KSpread") );
-  setButtons( Ok|Cancel|Default );
-  setDefaultButton( Ok );
+public:
+    View* view;
+    KPageWidgetItem* page1;
+    KPageWidgetItem* page2;
+    KPageWidgetItem* page3;
+    KPageWidgetItem* page4;
 
-  m_pView=parent;
+    // Locale Options
+    parameterLocale* localePage;
 
-  connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
-  connect(this, SIGNAL(defaultClicked()),this,SLOT(slotDefault()));
-  KVBox *page2 = new KVBox();
-  p2 = addPage(page2, i18n("Locale Settings"));
-  p2->setHeader(i18n("Document's Locale Settings"));
-  p2->setIcon(KIcon("preferences-desktop-locale"));
- _localePage=new parameterLocale(parent,page2 );
+    // Interface Options
+    Ui::InterfaceOptionsWidget interfaceOptions;
+    MoveTo oldCursorMovement;
+    MethodOfCalc oldFunction;
+    KoUnit oldUnit;
+    double oldIndentationStep;
+    QColor oldGridColor;
+    QColor oldPageBorderColor;
 
-  KVBox *page3 = new KVBox();
-  p3 = addPage(page3, i18n("Interface"));
-  p3->setIcon( KIcon( BarIcon("preferences-desktop-theme",KIconLoader::SizeMedium) ) );
-  _configure = new  configure(parent,page3 );
+    // Open/Save Options
+    Ui::FileOptionsWidget fileOptions;
+    int oldRecentFilesEntries;
+    int oldAutoSaveDelay;
+    bool oldCreateBackupFile;
 
-  KVBox *page4 = new KVBox();
-  p4 = addPage(page4, i18n("Misc"));
-  p4->setIcon( KIcon( BarIcon("preferences-other",KIconLoader::SizeMedium) ) );
-  _miscParameter = new  miscParameters(parent,page4 );
+    // Spellchecker Options
+    Sonnet::ConfigWidget* spellCheckPage;
 
-  KVBox *page5 = new KVBox();
-  p5 = addPage(page5, i18n("Color"));
-  p5->setIcon(KIcon("preferences-desktop-color"));
-  _colorParameter=new colorParameters(parent,page5 );
+public:
+    // Interface Options
+    void applyInterfaceOptions();
+    void defaultInterfaceOptions();
+    void resetInterfaceOptions();
 
-  KVBox *page6 = new KVBox();
-  p6 = addPage(page6, i18n("Page Layout"));
-  p6->setIcon( KIcon( BarIcon("document-properties" /*"document-page-setup" is not yet in Oxygen*/,KIconLoader::SizeMedium) ) );
-  _layoutPage=new configureLayoutPage(parent,page6 );
+    // Open/Save Options
+    void applyOpenSaveOptions();
+    void defaultOpenSaveOptions();
+    void resetOpenSaveOptions();
+};
 
-  KVBox *page7 = new KVBox();
-  p7 = addPage(page7,  i18n("Spelling") );
-  p7->setIcon( KIcon( BarIcon("tools-check-spelling",KIconLoader::SizeMedium) ) );
-  p7->setHeader( i18n("Spell Checker Behavior") );
+void PreferenceDialog::Private::applyInterfaceOptions()
+{
+    KSharedConfigPtr config = Factory::global().config();
+    KConfigGroup parameterGroup = config->group("Parameters");
+
+    oldCursorMovement = view->doc()->map()->settings()->moveToValue();
+    oldFunction = view->doc()->map()->settings()->getTypeOfCalc();
+    oldUnit = view->doc()->unit();
+
+    const int cursorMovementIndex = interfaceOptions.m_cursorMovement->currentIndex();
+    const MoveTo cursorMovement = (MoveTo)interfaceOptions.m_cursorMovement->itemData(cursorMovementIndex).toInt();
+    if (cursorMovement != view->doc()->map()->settings()->moveToValue()) {
+        view->doc()->map()->settings()->setMoveToValue(cursorMovement);
+        parameterGroup.writeEntry("Move", (int)cursorMovement);
+        oldCursorMovement = cursorMovement;
+    }
+
+    const int functionIndex = interfaceOptions.m_statusBarFunction->currentIndex();
+    const MethodOfCalc function = (MethodOfCalc)interfaceOptions.m_statusBarFunction->itemData(functionIndex).toInt();
+    if (function != view->doc()->map()->settings()->getTypeOfCalc()) {
+        view->doc()->map()->settings()->setTypeOfCalc(function);
+        parameterGroup.writeEntry("Method of Calc", (int)function);
+        view->calcStatusBarOp();
+        view->initCalcMenu();
+        oldFunction = function;
+    }
+
+    const int unitIndex = interfaceOptions.m_unit->currentIndex();
+    KoUnit unit((KoUnit::Unit)interfaceOptions.m_unit->itemData(unitIndex).toInt());
+    if (unit != view->doc()->unit()) {
+        view->doc()->setUnit(unit);
+        parameterGroup.writeEntry("Unit", unit.indexInList());
+        oldUnit = unit;
+    }
+
+    const double value = interfaceOptions.m_indentationStep->value();
+    if (value != view->doc()->map()->settings()->indentValue()) {
+        view->doc()->map()->settings()->setIndentValue(value);
+        parameterGroup.writeEntry("Indent", unit.fromUserValue(value));
+        oldIndentationStep = value;
+    }
+
+    const QColor gridColor = interfaceOptions.m_gridColor->color();
+    if (gridColor != view->doc()->map()->settings()->gridColor()) {
+        view->doc()->map()->settings()->setGridColor(gridColor);
+        config->group("KSpread Color").writeEntry("GridColor", gridColor);
+        oldGridColor = gridColor;
+    }
+
+    const QColor pageBorderColor = interfaceOptions.m_pageBorderColor->color();
+    if (pageBorderColor != view->doc()->map()->settings()->pageBorderColor()) {
+        view->doc()->map()->settings()->changePageBorderColor(pageBorderColor);
+        config->group("KSpread Color").writeEntry("PageBorderColor", pageBorderColor);
+        oldPageBorderColor = pageBorderColor;
+    }
+
+#if 0 // UNDOREDOLIMIT
+    int const newUndo=m_undoRedoLimit->value();
+    if( newUndo!=m_oldNbRedo )
+    {
+        config->group( "Misc" ).writeEntry( "UndoRedo", newUndo );
+        view->doc()->map()->settings()->setUndoRedoLimit(newUndo);
+        m_oldNbRedo=newUndo;
+    }
+#endif
+#if 0 // KSPREAD_COMPLETION_MODE_SETTING
+    KGlobalSettings::Completion tmpCompletion=KGlobalSettings::CompletionNone;
+    switch(typeCompletion->currentIndex())
+    {
+        case 0:
+            tmpCompletion=KGlobalSettings::CompletionNone;
+            break;
+        case 1:
+            tmpCompletion=KGlobalSettings::CompletionShell;
+            break;
+        case 2:
+            tmpCompletion=KGlobalSettings::CompletionPopup;
+            break;
+        case 3:
+            tmpCompletion=KGlobalSettings::CompletionAuto;
+            break;
+        case 4:
+            tmpCompletion=KGlobalSettings::CompletionMan;
+            break;
+    }
+
+
+    if(comboChanged)
+    {
+        view->doc()->map()->settings()->setCompletionMode(tmpCompletion);
+        parameterGroup.writeEntry( "Completion Mode", (int)tmpCompletion);
+    }
+#endif
+}
+
+void PreferenceDialog::Private::defaultInterfaceOptions()
+{
+    interfaceOptions.m_cursorMovement->setCurrentIndex(0);
+    interfaceOptions.m_statusBarFunction->setCurrentIndex(0);
+    interfaceOptions.m_unit->setCurrentIndex(0);
+    interfaceOptions.m_indentationStep->changeValue(10.0);
+    interfaceOptions.m_gridColor->setColor(Qt::lightGray);
+    interfaceOptions.m_pageBorderColor->setColor(Qt::red);
+#if 0 // UNDOREDOLIMIT
+    m_undoRedoLimit->setValue(30);
+#endif
+#if 0 // KSPREAD_COMPLETION_MODE_SETTING
+    typeCompletion->setCurrentIndex(3);
+#endif
+}
+
+void PreferenceDialog::Private::resetInterfaceOptions()
+{
+    KSharedConfigPtr config = Factory::global().config();
+    const KConfigGroup parameterGroup = config->group("Parameters");
+
+    oldCursorMovement = view->doc()->map()->settings()->moveToValue();
+    oldFunction = view->doc()->map()->settings()->getTypeOfCalc();
+    oldUnit = view->doc()->unit();
+    oldIndentationStep = view->doc()->map()->settings()->indentValue();
+//     m_oldNbRedo = config->group( "Misc" ).readEntry( "UndoRedo", m_oldNbRedo );
+
+    const KConfigGroup colorGroup = config->group("KSpread Color");
+    oldGridColor = colorGroup.readEntry("GridColor", QColor(Qt::lightGray));
+    oldPageBorderColor = colorGroup.readEntry("PageBorderColor", QColor(Qt::red));
+
+    const int moveToIndex = interfaceOptions.m_cursorMovement->findData(oldCursorMovement);
+    interfaceOptions.m_cursorMovement->setCurrentIndex(moveToIndex);
+    const int functionIndex = interfaceOptions.m_statusBarFunction->findData(oldFunction);
+    interfaceOptions.m_statusBarFunction->setCurrentIndex(functionIndex);
+    interfaceOptions.m_unit->setCurrentIndex(oldUnit.indexInList());
+    interfaceOptions.m_indentationStep->changeValue(oldIndentationStep);
+    interfaceOptions.m_gridColor->setColor(oldGridColor);
+    interfaceOptions.m_pageBorderColor->setColor(oldPageBorderColor);
+}
+
+void PreferenceDialog::Private::applyOpenSaveOptions()
+{
+    KSharedConfigPtr config = Factory::global().config();;
+    KConfigGroup parameterGroup = config->group("Parameters");
+    Doc* doc = view->doc();
+
+    int value = fileOptions.m_recentFilesEntries->value();
+    if (value != oldRecentFilesEntries) {
+       parameterGroup.writeEntry("NbRecentFile", value);
+       view->changeNbOfRecentFiles(value);
+       oldRecentFilesEntries = value;
+    }
+
+    value = fileOptions.m_autoSaveDelay->value();
+    if (value != oldAutoSaveDelay) {
+        parameterGroup.writeEntry("AutoSave", value);
+        doc->setAutoSave(value * 60);
+        oldAutoSaveDelay = value;
+    }
+
+    bool state = fileOptions.m_createBackupFile->isChecked();
+    if (state != oldCreateBackupFile) {
+        parameterGroup.writeEntry("BackupFile", state);
+        doc->setBackupFile(state);
+        oldCreateBackupFile = state;
+    }
+}
+
+void PreferenceDialog::Private::defaultOpenSaveOptions()
+{
+    fileOptions.m_recentFilesEntries->setValue(10);
+    fileOptions.m_autoSaveDelay->setValue(KoDocument::defaultAutoSave() / 60);
+    fileOptions.m_createBackupFile->setChecked(true);
+}
+
+void PreferenceDialog::Private::resetOpenSaveOptions()
+{
+    KSharedConfigPtr config = Factory::global().config();
+    const KConfigGroup parameterGroup = config->group("Parameters");
+
+    oldCreateBackupFile = parameterGroup.readEntry("BackupFile", true);
+    oldRecentFilesEntries = parameterGroup.readEntry("NbRecentFile", 10);
+    oldAutoSaveDelay = parameterGroup.readEntry("AutoSave", KoDocument::defaultAutoSave() / 60);
+
+    fileOptions.m_createBackupFile->setChecked(oldCreateBackupFile);
+    fileOptions.m_recentFilesEntries->setValue(oldRecentFilesEntries);
+    fileOptions.m_autoSaveDelay->setValue(oldAutoSaveDelay);
+}
+
+
+
+PreferenceDialog::PreferenceDialog(View* view)
+    : KPageDialog(view)
+    , d(new Private)
+{
+    setObjectName("PreferenceDialog");
+    setCaption(i18n("Configure KSpread"));
+    setFaceType(List);
+    setButtons(Ok | Cancel | Default | Reset);
+    setDefaultButton(Ok);
+
+    d->view = view;
+
+    connect(this, SIGNAL(okClicked()), this,SLOT(slotApply()));
+    connect(this, SIGNAL(defaultClicked()), this,SLOT(slotDefault()));
+    connect(this, SIGNAL(resetClicked()), this, SLOT(slotReset()));
+
+    KVBox *page2 = new KVBox();
+    d->page1 = addPage(page2, i18n("Locale Settings"));
+    d->page1->setHeader(i18n("Document's Locale Settings"));
+    d->page1->setIcon(KIcon("preferences-desktop-locale"));
+    d->localePage = new parameterLocale(view, page2);
+
+    QWidget* widget = 0;
+    KPageWidgetItem* page = 0;
+
+    // Interface Options Widget
+    widget = new QWidget(this);
+    d->interfaceOptions.setupUi(widget);
+    page = new KPageWidgetItem(widget, i18n("Interface"));
+    page->setIcon(KIcon("preferences-desktop-theme"));
+    addPage(page);
+    d->page2 = page;
+
+    d->interfaceOptions.m_cursorMovement->addItem(i18n("Down"), Bottom);
+    d->interfaceOptions.m_cursorMovement->addItem(i18n("Up"), Top);
+    d->interfaceOptions.m_cursorMovement->addItem(i18n("Right"), Right);
+    d->interfaceOptions.m_cursorMovement->addItem(i18n("Left"), Left);
+    d->interfaceOptions.m_cursorMovement->addItem(i18n("Down, First Column"), BottomFirst);
+
+    d->interfaceOptions.m_statusBarFunction->addItem(i18n("Sum"), SumOfNumber);
+    d->interfaceOptions.m_statusBarFunction->addItem(i18n("Min"), Min);
+    d->interfaceOptions.m_statusBarFunction->addItem(i18n("Max"), Max);
+    d->interfaceOptions.m_statusBarFunction->addItem(i18n("Average"), Average);
+    d->interfaceOptions.m_statusBarFunction->addItem(i18n("Count"), Count);
+    d->interfaceOptions.m_statusBarFunction->addItem(i18n("CountA"), CountA);
+    d->interfaceOptions.m_statusBarFunction->addItem(i18n("None"), NoneCalc);
+
+    KComboBox* unitComboBox = d->interfaceOptions.m_unit;
+    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Millimeter)), KoUnit::Millimeter);
+    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Point)), KoUnit::Point);
+    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Inch)), KoUnit::Inch);
+    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Centimeter)), KoUnit::Centimeter);
+    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Decimeter)), KoUnit::Decimeter);
+    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Pica)), KoUnit::Pica);
+    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Cicero)), KoUnit::Cicero);
+    unitComboBox->addItem(KoUnit::unitDescription(KoUnit(KoUnit::Pixel)), KoUnit::Pixel);
+    connect(unitComboBox, SIGNAL(currentIndexChanged(int)),
+            this, SLOT(unitChanged(int)));
+    unitChanged(0);
+
+    d->interfaceOptions.m_indentationStep->setMinMaxStep(0.0, 400.0, 10.0);
+
+    d->resetInterfaceOptions(); // initialize values
+
+    // Open/Save Options Widget
+    widget = new QWidget(this);
+    d->fileOptions.setupUi(widget);
+    page = new KPageWidgetItem(widget, i18n("Open/Save"));
+    page->setIcon(KIcon("document-save"));
+    addPage(page);
+    d->page3 = page;
+
+    d->resetOpenSaveOptions(); // initialize values
+
+    // Spell Checker Options
     KSharedConfig::Ptr sharedConfigPtr = Factory::global().config();
-    m_spellCheckPage = new Sonnet::ConfigWidget(sharedConfigPtr.data(), page7);
+    d->spellCheckPage = new Sonnet::ConfigWidget(sharedConfigPtr.data(), this);
+    page = new KPageWidgetItem(d->spellCheckPage, i18n("Spelling"));
+    page->setIcon(KIcon("tools-check-spelling"));
+    page->setHeader(i18n("Spell Checker Behavior"));
+    addPage(page);
+    d->page4 = page;
+}
+
+PreferenceDialog::~PreferenceDialog()
+{
+    delete d;
 }
 
 void PreferenceDialog::openPage(int flags)
 {
-    if(flags & KS_LOCALE)
-        setCurrentPage( p2 );
-    else if(flags & KS_INTERFACE)
-        setCurrentPage( p3 );
-    else if(flags & KS_MISC)
-        setCurrentPage( p4 );
-    else if(flags & KS_COLOR)
-        setCurrentPage( p5 );
-    else if(flags & KS_LAYOUT)
-        setCurrentPage( p6 );
-    else if(flags & KS_SPELLING)
-        setCurrentPage( p7 );
+    if (flags & LocalePage)
+        setCurrentPage(d->page1);
+    else if (flags & InterfacePage)
+        setCurrentPage(d->page2);
+    else if (flags & OpenSavePage)
+        setCurrentPage(d->page3);
+    else if (flags & OpenSavePage)
+        setCurrentPage(d->page4);
 }
 
 void PreferenceDialog::slotApply()
 {
-  _configure->apply();
-  _miscParameter->apply();
-  _colorParameter->apply();
-  _layoutPage->apply();
-    m_spellCheckPage->save();
-  _localePage->apply();
-  m_pView->doc()->refreshInterface();
-  m_pView->slotUpdateView( m_pView->activeSheet() );
+    d->applyInterfaceOptions();
+    d->applyOpenSaveOptions();
+
+    d->spellCheckPage->save();
+    d->localePage->apply();
+
+    d->view->doc()->refreshInterface();
+    d->view->slotUpdateView(d->view->activeSheet());
 }
 
 void PreferenceDialog::slotDefault()
 {
-    if ( currentPage() == p2 )
-      _configure->slotDefault();
-    else if ( currentPage() == p3 )
-      _miscParameter->slotDefault();
-    else if ( currentPage() == p4 )
-      _colorParameter->slotDefault();
-    else if ( currentPage() == p5 )
-      _layoutPage->slotDefault();
-    else if ( currentPage() == p6 )
-        m_spellCheckPage->slotDefault();
+    d->defaultInterfaceOptions();
+    d->defaultOpenSaveOptions();
+
+    if (currentPage() == d->page4) {
+        d->spellCheckPage->slotDefault();
+    }
+}
+
+void PreferenceDialog::slotReset()
+{
+    d->resetInterfaceOptions();
+    d->resetOpenSaveOptions();
+}
+
+void PreferenceDialog::unitChanged(int index)
+{
+    KoUnit unit((KoUnit::Unit)d->interfaceOptions.m_unit->itemData(index).toInt());
+    d->interfaceOptions.m_indentationStep->setUnit(unit);
 }
 
 
@@ -202,263 +480,14 @@ void parameterLocale::updateToMatchLocale(KLocale* locale)
   m_money->setText( i18n("Currency format: %1", locale->formatMoney(12.55) ));
 }
 
-configure::configure( View* _view, KVBox *box , char * /*name*/ )
- :QObject ( box->parent() )
- {
-  m_pView = _view;
-
-#if 0 // KSPREAD_VIEW_SETTINGS
-  bool vertical=true;
-  bool horizontal=true;
-  bool rowHeader=true;
-  bool colHeader=true;
-  bool tabbar=true;
-#if 0 // KSPREAD_DISCARD_FORMULA_BAR
-  bool formulaBar=true;
-#endif
-  bool statusBar=true;
-#endif
-  m_oldBackupFile = true;
-
-//   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box );
-  KVBox* tmpQGroupBox = box;
-
-  config = Factory::global().config();
-  int _page=1;
-
-  oldRecent=10;
-  oldAutoSaveValue=KoDocument::defaultAutoSave()/60;
-
-    const KConfigGroup parameterGroup = config->group( "Parameters" );
-    _page = parameterGroup.readEntry( "NbPage" ,1) ;
-#if 0 // KSPREAD_VIEW_SETTINGS
-    horizontal = parameterGroup.readEntry("Horiz ScrollBar",true);
-    vertical = parameterGroup.readEntry("Vert ScrollBar",true);
-    colHeader = parameterGroup.readEntry("Column Header",true);
-    rowHeader = parameterGroup.readEntry("Row Header",true);
-    tabbar = parameterGroup.readEntry("Tabbar",true);
-#if 0 // KSPREAD_DISCARD_FORMULA_BAR
-    formulaBar = parameterGroup.readEntry("Formula bar",true);
-#endif
-    statusBar = parameterGroup.readEntry("Status bar",true);
-#endif
-    oldRecent = parameterGroup.readEntry( "NbRecentFile" ,10);
-    oldAutoSaveValue = parameterGroup.readEntry("AutoSave",KoDocument::defaultAutoSave()/60);
-    m_oldBackupFile = parameterGroup.readEntry("BackupFile",m_oldBackupFile);
-
-#ifdef KSPREAD_NUM_SHEETS_SETTING
-  nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
-  nbPage->setRange(1, 10, 1);
-  nbPage->setLabel(i18n("Number of sheets open at the &beginning:"));
-  nbPage->setWhatsThis( i18n( "Controls how many worksheets will be created if the option Start with an empty document is chosen when KSpread is started." ) );
-#endif
-
-  nbRecentFile=new KIntNumInput(oldRecent, tmpQGroupBox , 10);
-  nbRecentFile->setRange(1, 20, 1);
-  nbRecentFile->setLabel(i18n("&Number of files to show in Recent Files list:"));
-  nbRecentFile->setWhatsThis( i18n( "Controls the maximum number of filenames that are shown when you select File-> Open Recent." ) );
-
-  autoSaveDelay=new KIntNumInput(oldAutoSaveValue, tmpQGroupBox , 10);
-  autoSaveDelay->setRange(0, 60, 1);
-  autoSaveDelay->setLabel(i18n("Au&tosave delay (minutes):"));
-  autoSaveDelay->setSpecialValueText(i18n("Do not save automatically"));
-  autoSaveDelay->setSuffix(i18n("min"));
-  autoSaveDelay->setWhatsThis( i18n( "Here you can select the time between autosaves, or disable this feature altogether by choosing Do not save automatically (drag the slider to the far left)." ) );
-
-  m_createBackupFile = new QCheckBox( i18n("Create backup files"), tmpQGroupBox );
-  m_createBackupFile->setChecked( m_oldBackupFile );
-  m_createBackupFile->setWhatsThis( i18n( "Check this box if you want some backup files created. This is checked per default." ) );
-
-#if 0 // KSPREAD_VIEW_SETTINGS
-  showVScrollBar=new QCheckBox(i18n("Show &vertical scrollbar"),tmpQGroupBox);
-  showVScrollBar->setChecked(vertical);
-  showVScrollBar->setWhatsThis( i18n( "Check or uncheck this box to show or hide the vertical scrollbar in all sheets." ) );
-
-  showHScrollBar=new QCheckBox(i18n("Show &horizontal scrollbar"),tmpQGroupBox);
-  showHScrollBar->setChecked(horizontal);
-  showHScrollBar->setWhatsThis( i18n( "Check or uncheck this box to show or hide the horizontal scrollbar in all sheets." ) );
-
-  showColHeader=new QCheckBox(i18n("Show c&olumn header"),tmpQGroupBox);
-  showColHeader->setChecked(colHeader);
-  showColHeader->setWhatsThis( i18n( "Check this box to show the column letters across the top of each worksheet." ) );
-
-  showRowHeader=new QCheckBox(i18n("Show &row header"),tmpQGroupBox);
-  showRowHeader->setChecked(rowHeader);
-  showRowHeader->setWhatsThis( i18n( "Check this box to show the row numbers down the left side." ) );
-
-  showTabBar =new QCheckBox(i18n("Show ta&bs"),tmpQGroupBox);
-  showTabBar->setChecked(tabbar);
-  showTabBar->setWhatsThis( i18n( "This check box controls whether the sheet tabs are shown at the bottom of the worksheet." ) );
-
-#if 0 // KSPREAD_DISCARD_FORMULA_BAR
-  showFormulaBar =new QCheckBox(i18n("Sho&w formula toolbar"),tmpQGroupBox);
-  showFormulaBar->setChecked(formulaBar);
-  showFormulaBar->setWhatsThis( i18n( "Here is where you can choose to show or hide the Formula bar." ) );
-#endif
-
-  showStatusBar =new QCheckBox(i18n("Show stat&us bar"),tmpQGroupBox);
-  showStatusBar->setChecked(statusBar);
-  showStatusBar->setWhatsThis( i18n( "Uncheck this box if you want to hide the status bar." ) );
-#endif
-
-  box->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
-}
-
-
-void configure::slotDefault()
-{
-#if 0 // KSPREAD_VIEW_SETTINGS
-  showHScrollBar->setChecked(true);
-  showRowHeader->setChecked(true);
-  showVScrollBar->setChecked(true);
-  showColHeader->setChecked(true);
-  showTabBar->setChecked(true);
-#if 0 // KSPREAD_DISCARD_FORMULA_BAR
-  showFormulaBar->setChecked(true);
-#endif
-  showStatusBar->setChecked(true);
-#endif
-#ifdef KSPREAD_NUM_SHEETS_SETTING
-  nbPage->setValue(1);
-#endif
-  nbRecentFile->setValue(10);
-  autoSaveDelay->setValue(KoDocument::defaultAutoSave()/60);
-  m_createBackupFile->setChecked( true );
-}
-
-
-void configure::apply()
-{
-    KConfigGroup parameterGroup = config->group( "Parameters" );
-#ifdef KSPREAD_NUM_SHEETS_SETTING
-    parameterGroup.writeEntry( "NbPage", nbPage->value());
-#endif
-    Doc *doc =m_pView->doc();
-#if 0 // KSPREAD_VIEW_SETTINGS
-    bool active=true;
-    active=showHScrollBar->isChecked();
-    if( m_pView->horzScrollBar()->isVisible()!=active)
-    {
-        parameterGroup.writeEntry( "Horiz ScrollBar",active);
-        if( active)
-            m_pView->horzScrollBar()->show();
-        else
-            m_pView->horzScrollBar()->hide();
-        doc->map()->settings()->setShowHorizontalScrollBar(active);
-    }
-    active=showVScrollBar->isChecked();
-    if( m_pView->vertScrollBar()->isVisible()!=active)
-    {
-        parameterGroup.writeEntry( "Vert ScrollBar", active);
-        if(active)
-            m_pView->vertScrollBar()->show();
-        else
-            m_pView->vertScrollBar()->hide();
-        doc->map()->settings()->setShowVerticalScrollBar(active);
-
-    }
-    active=showColHeader->isChecked();
-    if( m_pView->hBorderWidget()->isVisible()!=active)
-    {
-        parameterGroup.writeEntry( "Column Header", active);
-        if( active)
-            m_pView->hBorderWidget()->show();
-        else
-            m_pView->hBorderWidget()->hide();
-        doc->map()->settings()->setShowColumnHeader(active);
-    }
-
-    active=showRowHeader->isChecked();
-    if( m_pView->vBorderWidget()->isVisible()!=active)
-    {
-        parameterGroup.writeEntry( "Row Header", active);
-        if( active)
-            m_pView->vBorderWidget()->show();
-        else
-            m_pView->vBorderWidget()->hide();
-        doc->map()->settings()->setShowRowHeader(active);
-    }
-
-    active=showTabBar->isChecked();
-    if(m_pView->tabBar()->isVisible()!=active)
-    {
-        parameterGroup.writeEntry( "Tabbar", active);
-        if(active)
-            m_pView->tabBar()->show();
-        else
-            m_pView->tabBar()->hide();
-        doc->map()->settings()->setShowTabBar(active);
-    }
-
-#if 0 // KSPREAD_DISCARD_FORMULA_BAR
-    active=showFormulaBar->isChecked();
-    if(m_pView->posWidget()->isVisible()!=active)
-    {
-        parameterGroup.writeEntry( "Formula bar",active);
-        m_pView->editWidget()->showEditWidget(active);
-        if(active)
-            m_pView->posWidget()->show();
-        else
-            m_pView->posWidget()->hide();
-        doc->map()->settings()->setShowFormulaBar(active);
-    }
-#endif
-
-    active=showStatusBar->isChecked();
-    parameterGroup.writeEntry( "Status bar",active);
-    m_pView->showStatusBar( active );
-#endif
-
-    int val=nbRecentFile->value();
-    if( oldRecent!= val)
-    {
-       parameterGroup.writeEntry( "NbRecentFile",val);
-       m_pView->changeNbOfRecentFiles(val);
-    }
-    val=autoSaveDelay->value();
-    if(val!=oldAutoSaveValue)
-    {
-        parameterGroup.writeEntry( "AutoSave", val );
-        doc->setAutoSave(val*60);
-    }
-
-    bool state =m_createBackupFile->isChecked();
-    if(state!=m_oldBackupFile)
-    {
-        parameterGroup.writeEntry( "BackupFile", state );
-        doc->setBackupFile( state);
-        m_oldBackupFile=state;
-    }
-
-    m_pView->slotUpdateView( m_pView->activeSheet() );
-}
-
-
-miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
- :QObject ( box->parent() )
- {
-  m_pView = _view;
-
-
-//   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Misc"), box );
-  KVBox* tmpQGroupBox = box;
-
-  config = Factory::global().config();
-  indentUnit = _view->doc()->unit();
-    const KConfigGroup parameterGroup = config->group( "Parameters" );
-    double _indent = parameterGroup.readEntry( "Indent" , indentUnit.toUserValue( 10.0 ) );
-
-    m_oldNbRedo = config->group( "Misc" ).readEntry( "UndoRedo", m_oldNbRedo );
-
 #if 0 // UNDOREDOLIMIT
+  m_oldNbRedo = config->group( "Misc" ).readEntry( "UndoRedo", m_oldNbRedo );
+
   m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, tmpQGroupBox );
   m_undoRedoLimit->setLabel(i18n("Undo/redo limit:"));
   m_undoRedoLimit->setRange(10, 60, 1);
 #endif
 
-
-    QLabel* label = 0;
-    QStringList listType;
 #if 0 // KSPREAD_COMPLETION_MODE_SETTING
   QLabel *label=new QLabel(i18n("&Completion mode:"), tmpQGroupBox);
 
@@ -476,435 +505,5 @@ miscParameters::miscParameters( View* _view,KVBox *box, char * /*name*/ )
   comboChanged=false;
   connect(typeCompletion,SIGNAL(activated( const QString & )),this,SLOT(slotTextComboChanged(const QString &)));
 #endif
-
-  label=new QLabel(i18n("&Pressing enter moves cell cursor:"), tmpQGroupBox);
-  typeOfMove=new KComboBox( tmpQGroupBox);
-  label->setBuddy(typeOfMove);
-  listType.clear();
-  listType+=i18n("Down");
-  listType+=i18n("Up");
-  listType+=i18n("Right");
-  listType+=i18n("Left");
-  listType+=i18n("Down, First Column");
-  typeOfMove->insertItems( 0,listType);
-  typeOfMove->setCurrentIndex(0);
-  typeOfMove->setWhatsThis( i18n( "When you have selected a cell, pressing the Enter key will move the cell cursor one cell left, right, up or down, as determined by this setting." ) );
-
-  label=new QLabel(i18n("&Method of calc:"), tmpQGroupBox);
-
-  typeCalc=new KComboBox( tmpQGroupBox);
-  label->setBuddy(typeCalc);
-  QStringList listTypeCalc;
-  listTypeCalc+=i18n("Sum");
-  listTypeCalc+=i18n("Min");
-  listTypeCalc+=i18n("Max");
-  listTypeCalc+=i18n("Average");
-  listTypeCalc+=i18n("Count");
-  listTypeCalc+=i18n("CountA");
-  listTypeCalc+=i18n("None");
-  typeCalc->insertItems( 0,listTypeCalc);
-  typeCalc->setCurrentIndex(0);
-  typeCalc->setWhatsThis( i18n( "This drop down selection box can be used to choose the calculation performed by the Statusbar Summary  function." ) );
-
-//   valIndent = new KDoubleNumInput( _indent, tmpQGroupBox , 10.0 );
-  valIndent = new KDoubleNumInput( tmpQGroupBox );
-  valIndent->setRange( indentUnit.toUserValue(0.0),
-                       indentUnit.toUserValue(400.0),
-                       indentUnit.toUserValue(10.0) );
-//   valIndent->setRange( 0.0, 100.0, 10.0 );
-  valIndent->setValue ( indentUnit.toUserValue( _indent ) );
-  valIndent->setWhatsThis( i18n( "Lets you define the amount of indenting used by the Increase Indent and Decrease Indent option in the Format menu." ) );
-  valIndent->setLabel(i18n("&Indentation step (%1):", KoUnit::unitName(indentUnit)));
-
-  box->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
-
-  initComboBox();
-}
-
-void miscParameters::slotTextComboChanged(const QString &)
-{
-  comboChanged=true;
-}
-
-void miscParameters::initComboBox()
-{
-#if 0 // KSPREAD_COMPLETION_MODE_SETTING
-    KGlobalSettings::Completion tmpCompletion = KGlobalSettings::CompletionAuto;
-    tmpCompletion = ( KGlobalSettings::Completion )config->group( "Parameters" ).readEntry( "Completion Mode" ,int(KGlobalSettings::CompletionAuto)) ;
-    config->group( "Parameters" ).writeEntry( "Completion Mode", (int)tmpCompletion);
-
-switch(tmpCompletion )
-        {
-        case  KGlobalSettings::CompletionNone:
-                typeCompletion->setCurrentIndex(0);
-                break;
-        case  KGlobalSettings::CompletionAuto:
-                typeCompletion->setCurrentIndex(3);
-                break;
-        case  KGlobalSettings::CompletionMan:
-                typeCompletion->setCurrentIndex(4);
-                break;
-        case  KGlobalSettings::CompletionShell:
-                typeCompletion->setCurrentIndex(1);
-                break;
-        case  KGlobalSettings::CompletionPopup:
-                typeCompletion->setCurrentIndex(2);
-                break;
-        default :
-                typeCompletion->setCurrentIndex(0);
-                break;
-        }
-#endif
-        switch( m_pView->doc()->map()->settings()->moveToValue( ))
-        {
-        case  Bottom:
-                typeOfMove->setCurrentIndex(0);
-                break;
-        case  Left:
-                typeOfMove->setCurrentIndex(3);
-                break;
-        case  Top:
-                typeOfMove->setCurrentIndex(1);
-                break;
-        case  Right:
-                typeOfMove->setCurrentIndex(2);
-                break;
-        case  BottomFirst:
-                typeOfMove->setCurrentIndex(4);
-                break;
-        default :
-                typeOfMove->setCurrentIndex(0);
-                break;
-        }
-
-switch( m_pView->doc()->map()->settings()->getTypeOfCalc())
-        {
-        case  SumOfNumber:
-                typeCalc->setCurrentIndex(0);
-                break;
-        case  Min:
-                typeCalc->setCurrentIndex(1);
-                break;
-        case  Max:
-                typeCalc->setCurrentIndex(2);
-                break;
-        case  Average:
-                typeCalc->setCurrentIndex(3);
-                break;
-        case  Count:
-	        typeCalc->setCurrentIndex(4);
-                break;
-        case  CountA:
-	        typeCalc->setCurrentIndex(5);
-                break;
-        case  NoneCalc:
-	        typeCalc->setCurrentIndex(6);
-                break;
-        default :
-                typeCalc->setCurrentIndex(0);
-                break;
-        }
-
-}
-
-void miscParameters::slotDefault()
-{
-#if 0 // UNDOREDOLIMIT
-  m_undoRedoLimit->setValue(30);
-#endif
-  valIndent->setValue( indentUnit.toUserValue( 10.0 ) );
-#if 0 // KSPREAD_COMPLETION_MODE_SETTING
-  typeCompletion->setCurrentIndex(3);
-#endif
-  typeOfMove->setCurrentIndex(0);
-  typeCalc->setCurrentIndex(0);
-}
-
-
-void miscParameters::apply()
-{
-    kDebug() <<"Applying misc preferences";
-
-#if 0 // UNDOREDOLIMIT
-    int const newUndo=m_undoRedoLimit->value();
-    if( newUndo!=m_oldNbRedo )
-    {
-        config->group( "Misc" ).writeEntry( "UndoRedo", newUndo );
-        m_pView->doc()->map()->settings()->setUndoRedoLimit(newUndo);
-        m_oldNbRedo=newUndo;
-    }
-#endif
-
-    KConfigGroup parameterGroup = config->group( "Parameters" );
-#if 0 // KSPREAD_COMPLETION_MODE_SETTING
-    KGlobalSettings::Completion tmpCompletion=KGlobalSettings::CompletionNone;
-    switch(typeCompletion->currentIndex())
-    {
-        case 0:
-            tmpCompletion=KGlobalSettings::CompletionNone;
-            break;
-        case 1:
-            tmpCompletion=KGlobalSettings::CompletionShell;
-            break;
-        case 2:
-            tmpCompletion=KGlobalSettings::CompletionPopup;
-            break;
-        case 3:
-            tmpCompletion=KGlobalSettings::CompletionAuto;
-            break;
-        case 4:
-            tmpCompletion=KGlobalSettings::CompletionMan;
-            break;
-    }
-
-
-    if(comboChanged)
-    {
-        m_pView->doc()->map()->settings()->setCompletionMode(tmpCompletion);
-        parameterGroup.writeEntry( "Completion Mode", (int)tmpCompletion);
-    }
-#endif
-
-    KSpread::MoveTo tmpMoveTo=Bottom;
-    switch(typeOfMove->currentIndex())
-    {
-        case 0:
-            tmpMoveTo=Bottom;
-            break;
-        case 1:
-            tmpMoveTo=Top;
-            break;
-        case 2:
-            tmpMoveTo=Right;
-            break;
-        case 3:
-            tmpMoveTo=Left;
-            break;
-        case 4:
-            tmpMoveTo=BottomFirst;
-            break;
-    }
-    if(tmpMoveTo!=m_pView->doc()->map()->settings()->moveToValue())
-    {
-        m_pView->doc()->map()->settings()->setMoveToValue(tmpMoveTo);
-        parameterGroup.writeEntry( "Move", (int)tmpMoveTo);
-    }
-
-    MethodOfCalc tmpMethodCalc=SumOfNumber;
-    switch(typeCalc->currentIndex())
-    {
-        case 0:
-            tmpMethodCalc =SumOfNumber;
-            break;
-        case 1:
-            tmpMethodCalc=Min;
-            break;
-        case 2:
-            tmpMethodCalc=Max;
-            break;
-        case 3:
-            tmpMethodCalc=Average;
-            break;
-        case 4:
-            tmpMethodCalc=Count;
-            break;
-        case 5:
-            tmpMethodCalc=CountA;
-            break;
-        case 6:
-            tmpMethodCalc=NoneCalc;
-            break;
-
-    }
-    if(tmpMethodCalc!=m_pView->doc()->map()->settings()->getTypeOfCalc())
-    {
-        m_pView->doc()->map()->settings()->setTypeOfCalc(tmpMethodCalc);
-        parameterGroup.writeEntry( "Method of Calc", (int)tmpMethodCalc);
-        m_pView->calcStatusBarOp();
-        m_pView->initCalcMenu();
-    }
-
-    double val = valIndent->value();
-    if( val != m_pView->doc()->map()->settings()->indentValue() )
-    {
-        KoUnit oldUnit = m_pView->doc()->unit();
-        m_pView->doc()->setUnit(indentUnit);
-        m_pView->doc()->map()->settings()->setIndentValue( val );
-        m_pView->doc()->setUnit(oldUnit);
-        parameterGroup.writeEntry( "Indent", indentUnit.fromUserValue( val ) );
-    }
-}
-
-
-
-colorParameters::colorParameters( View* _view,KVBox *box , char * /*name*/ )
- :QObject ( box->parent() )
-{
-  m_pView = _view;
-  config = Factory::global().config();
-
-    QColor _gridColor = config->group( "KSpread Color" ).readEntry( "GridColor", QColor(Qt::lightGray) );
-
-//   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Color"), box );
-  KVBox* tmpQGroupBox = box;
-
-  QLabel *label = new QLabel(i18n("&Grid color:"), tmpQGroupBox );
-
-  gridColor = new KColorButton( _gridColor,
-                                Qt::lightGray,
-                                tmpQGroupBox );
-  gridColor->setWhatsThis( i18n( "Click here to change the grid color ie the color of the borders of each cell." ) );
-  label->setBuddy(gridColor);
-
-    QColor _pbColor = config->group( "KSpread Color" ).readEntry( "PageBorderColor", QColor(Qt::red) );
-
-  QLabel * label2 = new QLabel( i18n("&Page borders:"), tmpQGroupBox );
-
-  pageBorderColor = new KColorButton( _pbColor,
-                                Qt::red,
-                                tmpQGroupBox );
-  pageBorderColor->setWhatsThis( i18n( "When the View ->Show Page Borders menu item is checked, the page borders are displayed. Click here to choose another color for the borders than the default red." ) );
-
-  label2->setBuddy(pageBorderColor);
-
-  box->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
-}
-
-void colorParameters::apply()
-{
-  QColor _col = gridColor->color();
-  if ( m_pView->doc()->map()->settings()->gridColor() != _col )
-  {
-    m_pView->doc()->map()->settings()->setGridColor( _col );
-    config->group( "KSpread Color" ).writeEntry( "GridColor", _col );
-  }
-
-  QColor _pbColor = pageBorderColor->color();
-  if ( m_pView->doc()->map()->settings()->pageBorderColor() != _pbColor )
-  {
-    m_pView->doc()->map()->settings()->changePageBorderColor( _pbColor );
-    config->group( "KSpread Color" ).writeEntry( "PageBorderColor", _pbColor );
-  }
-}
-
-void colorParameters::slotDefault()
-{
-  gridColor->setColor( Qt::lightGray );
-  pageBorderColor->setColor( Qt::red );
-}
-
-
-
-configureLayoutPage::configureLayoutPage( View* _view,KVBox *box , char * /*name*/ )
- :QObject ( box->parent() )
-{
-  m_pView = _view;
-
-//   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Default Parameters"), box );
-//   tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
-//   tmpQGroupBox->layout()->setMargin(KDialog::marginHint());
-  QWidget* tmpQGroupBox = new QWidget( box );
-
-  QGridLayout *grid1 = new QGridLayout(tmpQGroupBox);
-  grid1->setMargin(0);
-//   grid1->addItem(new QSpacerItem( 0, KDialog::marginHint() ), 0, 0 );
-  grid1->setRowStretch( 7, 10 );
-
-  config = Factory::global().config();
-
-  QLabel* label = 0;
-#ifdef KSPREAD_DEFAULT_PAGE_SETTING
-  label = new QLabel(i18n("Default page &size:"), tmpQGroupBox);
-
-  grid1->addWidget(label,0,0);
-
-  defaultSizePage=new KComboBox( tmpQGroupBox);
-  label->setBuddy(defaultSizePage);
-  defaultSizePage->insertItems( 0, KoPageFormat::allFormats() );
-  defaultSizePage->setCurrentIndex(1);
-  defaultSizePage->setWhatsThis( i18n( "Choose the default page size for your worksheet among all the most common page sizes.\nNote that you can overwrite the page size for the current sheet using the Format -> Page Layout... dialog." ) );
-  grid1->addWidget(defaultSizePage,1,0);
-
-  label=new QLabel(i18n("Default page &orientation:"), tmpQGroupBox);
-  grid1->addWidget(label,2,0);
-
-  defaultOrientationPage=new KComboBox( tmpQGroupBox);
-  label->setBuddy(defaultOrientationPage);
-
-  QStringList listType;
-  listType+=i18n( "Portrait" );
-  listType+=i18n( "Landscape" );
-  defaultOrientationPage->insertItems( 0,listType);
-  defaultOrientationPage->setCurrentIndex(0);
-  defaultOrientationPage->setWhatsThis( i18n( "Choose the sheet orientation: portrait or lanscape.\nNote that you can overwrite the orientation for the current sheet using the Format -> Page Layout... dialog." ) );
-  grid1->addWidget(defaultOrientationPage,3,0);
-#endif
-
-  label=new QLabel(tmpQGroupBox);
-  label->setText(i18n("Default page &unit:"));
-  grid1->addWidget(label,4,0);
-  defaultUnit=new KComboBox( tmpQGroupBox);
-  label->setBuddy(defaultUnit);
-
-  defaultUnit->insertItems( 0,KoUnit::listOfUnitName());
-  defaultUnit->setCurrentIndex(0);
-  defaultUnit->setWhatsThis( i18n( "Choose the default unit that will be used in your sheet.\nNote that you can overwrite the unit for the current sheet using the Format -> Page Layout... dialog." ) );
-  grid1->addWidget(defaultUnit,5,0);
-
-  box->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
-
-  initCombo();
-}
-
-void configureLayoutPage::slotDefault()
-{
-#ifdef KSPREAD_DEFAULT_PAGE_SETTING
-  defaultSizePage->setCurrentIndex(1);
-  defaultOrientationPage->setCurrentIndex(0);
-#endif
-  defaultUnit->setCurrentIndex(0);
-}
-
-void configureLayoutPage::initCombo()
-{
-    const KConfigGroup pageLayoutGroup = config->group( "KSpread Page Layout" );
-    paper = pageLayoutGroup.readEntry( "Default size page", 1 );
-    orientation = pageLayoutGroup.readEntry( "Default orientation page", 0 );
-    unit = pageLayoutGroup.readEntry( "Default unit page", 0 );
-
-    defaultUnit->setCurrentIndex(m_pView->doc()->unit().indexInList());
-#ifdef KSPREAD_DEFAULT_PAGE_SETTING
-    defaultSizePage->setCurrentIndex(paper);
-    defaultOrientationPage->setCurrentIndex(orientation);
-#endif
-}
-
-
-void configureLayoutPage::apply()
-{
-    KConfigGroup pageLayoutGroup = config->group( "KSpread Page Layout" );
-
-#ifdef KSPREAD_DEFAULT_PAGE_SETTING
-  if( paper != defaultSizePage->currentIndex() )
-  {
-     unsigned int sizePage = defaultSizePage->currentIndex();
-     pageLayoutGroup.writeEntry( "Default size page", sizePage );
-     m_pView->activeSheet()->print()->settings()->setPageFormat( (KoPageFormat::Format)sizePage );
-  }
-  if( orientation != defaultOrientationPage->currentIndex() )
-  {
-     unsigned int orientationPage = defaultOrientationPage->currentIndex();
-     pageLayoutGroup.writeEntry( "Default orientation page", orientationPage );
-     m_pView->activeSheet()->print()->setPaperOrientation( (KoPageFormat::Orientation)orientationPage );
-  }
-#endif
-  if( unit != defaultUnit->currentIndex() )
-  {
-     unsigned int unitPage = defaultUnit->currentIndex();
-     pageLayoutGroup.writeEntry( "Default unit page", unitPage );
-     m_pView->doc()->setUnit( KoUnit((KoUnit::Unit)unitPage) );
-  }
-  m_pView->slotUpdateView( m_pView->activeSheet() );
-}
 
 #include "PreferenceDialog.moc"

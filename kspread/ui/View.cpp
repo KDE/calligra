@@ -1840,7 +1840,7 @@ void View::preference()
   if ( !d->activeSheet )
     return;
 
-  PreferenceDialog dlg( this, "Preference" );
+  PreferenceDialog dlg(this);
   if ( dlg.exec() )
   {
     d->activeSheet->refreshPreference();

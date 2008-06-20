@@ -75,122 +75,36 @@ public slots:
    bool m_bUpdateLocale;
 };
 
-class configure : public QObject
-{
-  Q_OBJECT
-public:
-  configure( View* _view,KVBox *box, char *name = 0 );
-  void apply();
-  void slotDefault();
-protected:
-  View* m_pView;
-  KIntNumInput  *nbPage;
-  KIntNumInput* nbRecentFile;
-  KIntNumInput* autoSaveDelay;
-  QCheckBox *showVScrollBar;
-  QCheckBox *showHScrollBar;
-  QCheckBox *showColHeader;
-  QCheckBox *showRowHeader;
-  QCheckBox *showTabBar;
-  QCheckBox *showFormulaBar;
-    QCheckBox *showStatusBar;
-    QCheckBox *m_createBackupFile;
-  bool m_oldBackupFile;
-
-  KSharedConfigPtr config;
-  int oldRecent;
-  int oldAutoSaveValue;
-} ;
-
-
-class miscParameters : public QObject
-{
-  Q_OBJECT
-public:
-  miscParameters( View* _view, KVBox *box, char *name = 0 );
-  void apply();
-  void slotDefault();
-
-  void initComboBox();
-
-public slots:
-  void slotTextComboChanged(const QString &);
-
-protected:
-  View* m_pView;
-  KDoubleNumInput  *valIndent;
-
-  /**
-   * Needed to ensure the same unit for loading and saving.
-   */
-  KoUnit indentUnit;
-  KSharedConfigPtr config;
-  KComboBox *typeCompletion;
-  KComboBox *typeCalc;
-  KComboBox *typeOfMove;
-  QCheckBox *msgError;
-#if 0
-  KIntNumInput* m_undoRedoLimit;
-#endif
-  bool comboChanged;
-  int m_oldNbRedo;
-} ;
-
-class colorParameters : public QObject
-{
-  Q_OBJECT
-public:
-  colorParameters( View* _view, KVBox *box, char *name = 0 );
-  void apply();
-  void slotDefault();
-protected:
-  View* m_pView;
-  KColorButton* gridColor;
-  KColorButton* pageBorderColor;
-  KSharedConfigPtr config;
-} ;
-
-class configureLayoutPage : public QObject
-{
-  Q_OBJECT
-public:
-  configureLayoutPage( View* _view,KVBox *box, char *name = 0 );
-  void apply();
-  void slotDefault();
-  void initCombo();
-protected:
-  View* m_pView;
-  KComboBox *defaultOrientationPage;
-  KComboBox *defaultSizePage;
-  KComboBox *defaultUnit;
-  //store old config
-  int paper;
-  int orientation;
-  int unit;
-
-  KSharedConfigPtr config;
-} ;
 
 class PreferenceDialog : public KPageDialog
 {
-  Q_OBJECT
+    Q_OBJECT
+
 public:
-  enum { KS_PREFERENCES = 1, KS_LOCALE = 2, KS_INTERFACE = 4,
-         KS_MISC = 8, KS_COLOR = 16, KS_LAYOUT = 32, KS_SPELLING = 64 };
-  PreferenceDialog( View* parent, const char* name);
-public slots:
-  void slotApply();
-  void slotDefault();
-  void openPage(int flags);
-private :
-  View* m_pView;
-  configure * _configure;
-  miscParameters *_miscParameter;
-  colorParameters *_colorParameter;
-  configureLayoutPage *_layoutPage;
-    Sonnet::ConfigWidget* m_spellCheckPage;
-  parameterLocale *_localePage;
- KPageWidgetItem *p2, *p3, *p4, *p5, *p6, *p7;
+    enum
+    {
+        LocalePage = 1,
+        InterfacePage = 2,
+        OpenSavePage = 4,
+        SpellCheckerPage = 8
+    };
+
+    explicit PreferenceDialog(View* view);
+    ~PreferenceDialog();
+
+    void openPage(int flags);
+
+public Q_SLOTS:
+    void slotApply();
+    void slotDefault();
+    void slotReset();
+
+private Q_SLOTS:
+    void unitChanged(int index);
+
+private:
+    class Private;
+    Private * const d;
 };
 
 } // namespace KSpread
