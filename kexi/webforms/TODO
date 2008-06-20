@@ -12,6 +12,7 @@ by hand and use org-mode instead.
    - [X] Implement UPDATE
    - [X] Implement DELETE
    - [ ] Implement shortcut and connection file loading
+*** TODO Create all the .varnames.h files automatically
 *** TODO Refine code [0%]
    - [ ] Clean-up
 

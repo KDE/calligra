@@ -89,6 +89,7 @@ int main(int argc, char **argv) {
 
     // I want to maintain the Server class as decoupled as possible from
     // our specific implementation, set up google-ctemplate here
+    // Check if all templates are found
     google::Template::SetTemplateRootDirectory(serverConfig->webRoot.toLatin1().constData());
     
 

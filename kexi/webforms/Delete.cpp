@@ -30,16 +30,17 @@
 
 #include <google/template.h>
 
-#include "DataProvider.h"
-#include "HTTPStream.h"
 #include "Request.h"
+#include "HTTPStream.h"
+#include "DataProvider.h"
+#include "TemplateProvider.h"
 
 #include "Delete.h"
 
 namespace KexiWebForms {
     void deleteCallback(RequestData* req) {
         HTTPStream stream(req);
-        google::TemplateDictionary dict("delete");
+        google::TemplateDictionary* dict = initTemplate("delete.tpl");
 
 
         /*
@@ -49,23 +50,19 @@ namespace KexiWebForms {
         QString requestedTable = queryString.at(2);
         QString pkeyName = queryString.at(3);
         QString pkeyValue = queryString.at(4);
-        dict.SetValue("TABLENAME", requestedTable.toLatin1().constData());
+        dict->SetValue("TABLENAME", requestedTable.toLatin1().constData());
 
         kDebug() << "Trying to delete row..." << endl;
         if (KexiDB::deleteRow(*gConnection, gConnection->tableSchema(requestedTable),
                               pkeyName, pkeyValue)) {
-            dict.ShowSection("SUCCESS");
-            dict.SetValue("MESSAGE", "Row deleted successfully");
+            dict->ShowSection("SUCCESS");
+            dict->SetValue("MESSAGE", "Row deleted successfully");
         } else {
-            dict.ShowSection("ERROR");
-            dict.SetValue("MESSAGE", "Error while trying to delete row!");
+            dict->ShowSection("ERROR");
+            dict->SetValue("MESSAGE", "Error while trying to delete row!");
         }
 
-        // Render template
-        std::string output;
-        google::Template* tpl = google::Template::GetTemplate("delete.tpl", google::DO_NOT_STRIP);
-        tpl->Expand(&output, &dict);
-        stream << output << webend;
+        renderTemplate(dict, stream);
     }
 
 

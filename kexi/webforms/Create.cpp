@@ -31,10 +31,10 @@
 #include <kexidb/roweditbuffer.h>
 #include <kexidb/field.h>
 
-#include "DataProvider.h"
 #include "Request.h"
 #include "HTTPStream.h"
 #include "DataProvider.h"
+#include "TemplateProvider.h"
 
 #include "Create.h"
 
@@ -42,11 +42,11 @@ namespace KexiWebForms {
 
     void createCallback(RequestData* req) {
         HTTPStream stream(req);
-        google::TemplateDictionary dict("CREATE");
+        google::TemplateDictionary* dict = initTemplate("create.tpl");
 
         /* Retrieve the requested table name */
         QString requestedTable = Request::requestUri(req).split('/').at(2);
-        dict.SetValue("TABLENAME", requestedTable.toLatin1().constData());
+        dict->SetValue("TABLENAME", requestedTable.toLatin1().constData());
 
         
         KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
@@ -79,17 +79,17 @@ namespace KexiWebForms {
 
                 
             if (cursor->insertRow(recordData, editBuffer)) {
-                dict.ShowSection("SUCCESS");
-                dict.SetValue("MESSAGE", "Row added successfully");
+                dict->ShowSection("SUCCESS");
+                dict->SetValue("MESSAGE", "Row added successfully");
             } else {
-                dict.ShowSection("ERROR");
-                dict.SetValue("MESSAGE", gConnection->errorMsg().toLatin1().constData());
+                dict->ShowSection("ERROR");
+                dict->SetValue("MESSAGE", gConnection->errorMsg().toLatin1().constData());
             }
                 
             kDebug() << "Deleting cursor..." << endl;
             gConnection->deleteCursor(cursor);
         } else {
-            dict.ShowSection("FORM");
+            dict->ShowSection("FORM");
 
             QString formData;
             QStringList fieldsList;
@@ -105,16 +105,12 @@ namespace KexiWebForms {
                 fieldsList << fieldName;
             }
                 
-            dict.SetValue("TABLEFIELDS", fieldsList.join("|:|").toLatin1().constData());
-            dict.SetValue("FORMDATA", formData.toLatin1().constData());
+            dict->SetValue("TABLEFIELDS", fieldsList.join("|:|").toLatin1().constData());
+            dict->SetValue("FORMDATA", formData.toLatin1().constData());
         }
         
         
-        // Render the template
-        std::string output;
-        google::Template* tpl = google::Template::GetTemplate("create.tpl", google::DO_NOT_STRIP);
-        tpl->Expand(&output, &dict);
-        stream << output << webend;
+        renderTemplate(dict, stream);
     }
 
     

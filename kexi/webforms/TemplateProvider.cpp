@@ -21,36 +21,27 @@
 #include <string>
 #include <google/template.h>
 
-#include "Request.h"
 #include "HTTPStream.h"
-#include "DataProvider.h"
+
 #include "TemplateProvider.h"
 
-#include "Index.h"
-
-
-/*! @short Kexi Web Forms namespace
- * This namespace contains code related to Kexi Web Forms daemon
- *
- * Kexi Web Forms daemon allows users to modify a Kexi database
- * even if they don't have Kexi Installed
- */
 namespace KexiWebForms {
-    void indexCallback(RequestData* req) {
-        HTTPStream stream(req);
-        google::TemplateDictionary* dict = initTemplate("index.tpl");
 
-        QString tables;
-        for (int i = 0; i < gConnection->tableNames().size(); ++i) {
-            tables.append("<li><a href=\"/read/").append(gConnection->tableNames().at(i));
-            tables.append("\">").append(gConnection->tableNames().at(i)).append("</a></li>");
-        }
-        dict->SetValue("TABLES", tables.toLatin1().constData());
-
-        renderTemplate(dict, stream);
+    google::TemplateDictionary* initTemplate(const char* filename) {
+        google::TemplateDictionary* dict = new google::TemplateDictionary(filename);
+        dict->SetFilename(filename);
+        // Add header template
+        dict->AddIncludeDictionary("beforecontent")->SetFilename("beforecontent.tpl");
+        // Add footer template
+        dict->AddIncludeDictionary("aftercontent")->SetFilename("aftercontent.tpl");
+        return dict;
     }
-
-    // Index Handler
-    IndexHandler::IndexHandler() : Handler(indexCallback) {}
+    
+    void renderTemplate(google::TemplateDictionary* dict, HTTPStream& stream) {
+        std::string output;
+        google::Template::GetTemplate(dict->name(), google::DO_NOT_STRIP)->Expand(&output, dict);
+        stream << output << webend;
+        delete dict;
+    }
 
 }

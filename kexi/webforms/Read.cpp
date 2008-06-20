@@ -33,34 +33,36 @@
 #include <kexidb/cursor.h>
 
 #include "Request.h"
-#include "Server.h"
 #include "HTTPStream.h"
 #include "DataProvider.h"
+#include "TemplateProvider.h"
 
 #include "Read.h"
 
 namespace KexiWebForms {
     void readCallback(RequestData* req) {
         HTTPStream stream(req);
-        google::TemplateDictionary dict("table");
+        google::TemplateDictionary* dict = initTemplate("read.tpl");
 
-            
+
         QString requestedTable = Request::requestUri(req).split('/').at(2);
-        dict.SetValue("TABLENAME", requestedTable.toLatin1().constData());
+        dict->SetValue("TABLENAME", requestedTable.toLatin1().constData());
 
         QString tableData;
         KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
         KexiDB::QuerySchema querySchema(*tableSchema);
         KexiDB::Cursor* cursor = gConnection->executeQuery(querySchema);
+        
 
-            
+
+
         if (!cursor) {
-            dict.SetValue("ERROR", "Unable to execute the query (" __FILE__ ")");
+            dict->SetValue("ERROR", "Unable to execute the query (" __FILE__ ")");
         } else if (tableSchema->primaryKey()->fields()->isEmpty()) {
-            dict.SetValue("ERROR", "This table has no primary key!");
+            dict->SetValue("ERROR", "This table has no primary key!");
         } else {
             KexiDB::Field* primaryKey = tableSchema->primaryKey()->field(0);
-            
+
             // Create labels with field name
             tableData.append("<tr>");
             for (uint i = 0; i < cursor->fieldCount(); i++) {
@@ -74,6 +76,7 @@ namespace KexiWebForms {
                 tableData.append("<tr>");
                 for (uint i = 0; i < cursor->fieldCount(); i++) {
                     tableData.append("<td>");
+
                     //
                     // Use Kexi functions to retrieve and represent the Value
                     //! @todo use Kexi the same functions for rendering values as Kexi table and form view
@@ -108,19 +111,15 @@ namespace KexiWebForms {
                 tableData.append(pkeyVal).append("\"><img src=\"/draw-eraser.png\" alt=\"Delete\"/></a></td>");
                 // End row
                 tableData.append("</tr>");
-                
-                dict.SetValue("TABLEDATA", tableData.toLatin1().constData());
+
+                dict->SetValue("TABLEDATA", tableData.toLatin1().constData());
             }
-            
+
             kDebug() << "Deleting cursor..." << endl;
             gConnection->deleteCursor(cursor);
         }
 
-        // Render the template
-        std::string output;
-        google::Template* tpl = google::Template::GetTemplate("read.tpl", google::DO_NOT_STRIP);
-        tpl->Expand(&output, &dict);
-        stream << output << webend;
+        renderTemplate(dict, stream);
     }
 
     // Read Handler

@@ -34,9 +34,10 @@
 
 #include "Handler.h"
 
-#include "DataProvider.h"
-#include "HTTPStream.h"
 #include "Request.h"
+#include "HTTPStream.h"
+#include "DataProvider.h"
+#include "TemplateProvider.h"
 
 #include "Update.h"
 
@@ -44,7 +45,7 @@ namespace KexiWebForms {
 
     void updateCallback(RequestData* req) {
         HTTPStream stream(req);
-        google::TemplateDictionary dict("update");
+        google::TemplateDictionary* dict = initTemplate("update.tpl");
 
 
         QStringList queryString = Request::requestUri(req).split("/");
@@ -53,9 +54,9 @@ namespace KexiWebForms {
         QString pkeyValue = queryString.at(4);
 
 
-        dict.SetValue("TABLENAME", requestedTable.toLatin1().constData());
-        dict.SetValue("PKEY_NAME", pkeyName.toLatin1().constData());
-        dict.SetValue("PKEY_VALUE", pkeyValue.toLatin1().constData());
+        dict->SetValue("TABLENAME", requestedTable.toLatin1().constData());
+        dict->SetValue("PKEY_NAME", pkeyName.toLatin1().constData());
+        dict->SetValue("PKEY_VALUE", pkeyValue.toLatin1().constData());
 
         // Initialize our needed Objects
         KexiDB::TableSchema tableSchema(*gConnection->tableSchema(requestedTable));
@@ -70,8 +71,8 @@ namespace KexiWebForms {
 
             
         if (!cursor) {
-            dict.ShowSection("ERROR");
-            dict.SetValue("MESSAGE", "No cursor object available");
+            dict->ShowSection("ERROR");
+            dict->SetValue("MESSAGE", "No cursor object available");
         } else if (Request::request(req, "dataSent") == "true") {
             cursor = gConnection->prepareQuery(schema);
                 
@@ -102,11 +103,11 @@ namespace KexiWebForms {
 
                 
             if (cursor->updateRow(recordData, editBuffer)) {
-                dict.ShowSection("SUCCESS");
-                dict.SetValue("MESSAGE", "Row updated successfully");
+                dict->ShowSection("SUCCESS");
+                dict->SetValue("MESSAGE", "Row updated successfully");
             } else {
-                dict.ShowSection("ERROR");
-                dict.SetValue("MESSAGE", gConnection->errorMsg().toLatin1().constData());
+                dict->ShowSection("ERROR");
+                dict->SetValue("MESSAGE", gConnection->errorMsg().toLatin1().constData());
             }
                 
             kDebug() << "Deleting cursor..." << endl;
@@ -116,7 +117,7 @@ namespace KexiWebForms {
 
             cursor = gConnection->executeQuery(schema);
 
-            dict.ShowSection("FORM");
+            dict->ShowSection("FORM");
 
             QString formData;
             QStringList fieldsList;
@@ -134,21 +135,15 @@ namespace KexiWebForms {
                     fieldsList << fieldName;
                 }
             }
-            dict.SetValue("TABLEFIELDS", fieldsList.join("|:|").toLatin1().constData());
-            dict.SetValue("FORMDATA", formData.toLatin1().constData());
+            dict->SetValue("TABLEFIELDS", fieldsList.join("|:|").toLatin1().constData());
+            dict->SetValue("FORMDATA", formData.toLatin1().constData());
 
             kDebug() << "Deleting cursor..." << endl;
             gConnection->deleteCursor(cursor);
         }
 			
 			
-        //
-        // Produce the final output	
-        //
-        std::string output;			
-        google::Template* tpl = google::Template::GetTemplate("update.tpl", google::DO_NOT_STRIP);
-        tpl->Expand(&output, &dict);
-        stream << output << webend;
+        renderTemplate(dict, stream);
     }
     
 

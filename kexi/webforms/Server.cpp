@@ -47,7 +47,7 @@ namespace KexiWebForms {
         m_config = config;
 
         kDebug() << "Initializing HTTP server...";
-        
+
         if (!m_ctx)
             m_ctx = shttpd_init();
         else
@@ -74,7 +74,7 @@ namespace KexiWebForms {
             if (m_ctx) {
                 kDebug() << "Setting to listen on port " << m_config->ports << endl;
                 shttpd_set_option(m_ctx, "ports", m_config->ports.toLatin1().constData());
-                
+
                 if (QDir(m_config->webRoot).exists()) {
                     kDebug() << "Webroot is " << m_config->webRoot << endl;
                     shttpd_set_option(m_ctx, "root", QFile::encodeName(m_config->webRoot).constData());
@@ -82,7 +82,7 @@ namespace KexiWebForms {
                     kError() << "Webroot does not exist! Aborting" << endl;
                     exit(1);
                 }
-                
+
                 // SSL certificate
                 if (m_config->https != NULL) {
                     if (m_config->certPath != NULL) {
@@ -94,7 +94,7 @@ namespace KexiWebForms {
                         }
                     }
                 }
-                
+
                 // Do not show directory listings by default
                 if (m_config->dirList) {
                     kDebug() << "Enabling directory listing..." << endl;
@@ -102,17 +102,17 @@ namespace KexiWebForms {
                 } else {
                     shttpd_set_option(m_ctx, "dir_list", "0");
                 }
-                
+
                 for (;;) {
                     shttpd_poll(m_ctx, 1000);
                     KUniqueApplication::processEvents();
                 }
-                
+
                 return true;
             } else if (m_ctx == NULL) {
                 kError() << "Internal error, SHTTPD engine was not initialized correctly" << endl;
                 return false;
-            } else { 
+            } else {
                 kError() << "Unknown error" << endl;
                 return false;
             }

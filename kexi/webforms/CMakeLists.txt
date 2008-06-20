@@ -11,6 +11,7 @@ set(webforms_SRCS
   ServerConfig.cpp
   HTTPStream.cpp
   DataProvider.cpp
+  TemplateProvider.cpp
   Request.cpp
 # Index view
   Index.cpp
