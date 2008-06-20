@@ -31,6 +31,7 @@
 #include <CellView.h>
 #include <Damages.h>
 #include <Map.h>
+#include <OdfLoadingContext.h>
 #include <Region.h>
 #include <RowColumnFormat.h>
 #include <Sheet.h>
@@ -137,13 +138,14 @@ bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
     if (element.namespaceURI() == KoXmlNS::table && element.localName() == "table") {
         // pre-load auto styles
         KoOdfLoadingContext& odfContext = context.odfLoadingContext();
+        OdfLoadingContext tableContext(odfContext);
         QHash<QString, Conditions> conditionalStyles;
         Styles autoStyles = sheet()->map()->styleManager()->loadOasisAutoStyles(odfContext.stylesReader(), conditionalStyles);
 
         if (!element.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
             sheet()->setSheetName(element.attributeNS(KoXmlNS::table, "name", QString()), true);
         }
-        const bool result = sheet()->loadOasis(element, odfContext, autoStyles, conditionalStyles);
+        const bool result = sheet()->loadOasis(element, tableContext, autoStyles, conditionalStyles);
 
         // delete any styles which were not used
         sheet()->map()->styleManager()->releaseUnusedAutoStyles(autoStyles);

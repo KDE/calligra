@@ -167,11 +167,6 @@ public:
   /**
    * \ingroup OpenDocument
    */
-  void loadOasisCellValidation( const KoXmlElement& body );
-
-  /**
-   * \ingroup OpenDocument
-   */
   void loadOasisCalculationSettings( const KoXmlElement& body );
 
 

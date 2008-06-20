@@ -36,6 +36,7 @@
 
 // Qt
 #include <QDate>
+#include <QHash>
 #include <QSharedDataPointer>
 #include <QStringList>
 #include <QTime>
@@ -50,6 +51,7 @@ class KoXmlElement;
 
 namespace KSpread
 {
+class OdfLoadingContext;
 
 /**
  * \class Validity
@@ -125,7 +127,8 @@ public:
      * \ingroup OpenDocument
      * Loads validity checks.
      */
-    void loadOasisValidation( Cell* const cell, const QString& validationName );
+    void loadOasisValidation(Cell* const cell, const QString& validationName,
+                             OdfLoadingContext& tableContext);
 
     Action action() const;
     bool allowEmptyCell() const;
@@ -168,6 +171,8 @@ public:
     void operator=( const Validity& );
     bool operator==( const Validity& other ) const;
     inline bool operator!=( const Validity& other ) const { return !operator==( other ); }
+
+    static QHash<QString, KoXmlElement> preloadValidities(const KoXmlElement& body);
 
 private:
     /**

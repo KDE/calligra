@@ -60,6 +60,7 @@ namespace KSpread
 class Doc;
 class Formula;
 class GenValidationStyles;
+class OdfLoadingContext;
 class Sheet;
 class Validity;
 class Value;
@@ -328,9 +329,9 @@ public:
      * \ingroup OpenDocument
      * Loads a cell from an OASIS XML element.
      * @param element An OASIS XML element
-     * @param odfContext The loading context assoiated with the XML element
+     * @param tableContext The loading context assoiated with the XML element
      */
-    bool loadOasis( const KoXmlElement& element, KoOdfLoadingContext& odfContext );
+    bool loadOasis(const KoXmlElement& element, OdfLoadingContext& tableContext);
 
     /**
      * \ingroup OpenDocument

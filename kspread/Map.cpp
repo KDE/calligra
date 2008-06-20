@@ -48,11 +48,13 @@
 #include "LoadingInfo.h"
 #include "Localization.h"
 #include "NamedAreaManager.h"
+#include "OdfLoadingContext.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "StyleManager.h"
+#include "Validity.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 #include "ValueFormatter.h"
@@ -531,6 +533,9 @@ bool Map::loadOasis( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
     //load in first
     d->styleManager->loadOasisStyleTemplate(odfContext.stylesReader(), this);
 
+    OdfLoadingContext tableContext(odfContext);
+    tableContext.validities = Validity::preloadValidities(body); // table:content-validations
+
     // load default column style
     const KoXmlElement* defaultColumnStyle = odfContext.stylesReader().defaultStyle("table-column");
     if (defaultColumnStyle) {
@@ -631,7 +636,7 @@ bool Map::loadOasis( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
                     Sheet* sheet = findSheet( name );
                     if( sheet )
                     {
-                        sheet->loadOasis( sheetElement, odfContext, autoStyles, conditionalStyles );
+                        sheet->loadOasis(sheetElement, tableContext, autoStyles, conditionalStyles);
                     }
                 }
             }

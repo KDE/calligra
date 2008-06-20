@@ -511,7 +511,6 @@ bool Doc::loadOdf( KoOdfReadStore & odfStore )
     KoOdfLoadingContext context( odfStore.styles(), odfStore.store() );
 
     // TODO check versions and mimetypes etc.
-    loadOasisCellValidation( body ); // table:content-validations
 
     // all <sheet:sheet> goes to workbook
     if ( !map()->loadOasis( body, context ) )
@@ -955,32 +954,6 @@ void Doc::paintRegion( QPainter &painter, const QRectF &viewRegion,
     }
     sheetView.setPaintCellRange( cellRegion );
     sheetView.paintCells( view ? view->canvasWidget() : 0, painter, viewRegionF, topLeft );
-}
-
-void Doc::loadOasisCellValidation( const KoXmlElement&body )
-{
-    KoXmlNode validation = KoXml::namedItemNS( body, KoXmlNS::table, "content-validations" );
-    kDebug()<<"void Doc::loadOasisCellValidation( const KoXmlElement&body )";
-    kDebug()<<"validation.isNull ?"<<validation.isNull();
-    if ( !validation.isNull() )
-    {
-        KoXmlNode n = validation.firstChild();
-        for( ; !n.isNull(); n = n.nextSibling() )
-        {
-            if ( n.isElement() )
-            {
-                KoXmlElement element = n.toElement();
-                //kDebug()<<" loadOasisCellValidation element.tagName() :"<<element.tagName();
-                if ( element.tagName() ==  "content-validation" && element.namespaceURI() == KoXmlNS::table ) {
-                    map()->loadingInfo()->appendValidation(element.attributeNS( KoXmlNS::table, "name", QString() ), element );
-                    kDebug()<<" validation found :"<<element.attributeNS( KoXmlNS::table,"name", QString() );
-                }
-                else {
-                    kDebug()<<" Tag not recognize :"<<element.tagName();
-                }
-            }
-        }
-    }
 }
 
 void Doc::addStringCompletion(const QString &stringCompletion)

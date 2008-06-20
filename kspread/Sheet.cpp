@@ -67,6 +67,7 @@
 #include "Map.h"
 #include "NamedAreaManager.h"
 #include "Object.h"
+#include "OdfLoadingContext.h"
 #include "PrintManager.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
@@ -2591,10 +2592,11 @@ QString Sheet::getPart( const KoXmlNode & part )
 
 
 bool Sheet::loadOasis( const KoXmlElement& sheetElement,
-                       KoOdfLoadingContext& odfContext,
+                       OdfLoadingContext& tableContext,
                        const Styles& autoStyles,
                        const QHash<QString, Conditions>& conditionalStyles )
 {
+    KoOdfLoadingContext& odfContext = tableContext.odfContext;
     setLayoutDirection( Qt::LeftToRight );
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "style-name" ) )
     {
@@ -2695,7 +2697,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                     // NOTE Handle header rows as ordinary ones
                     //      as long as they're not supported.
                     loadRowFormat( headerRowNode.toElement(), rowIndex,
-                                   odfContext, rowStyleRegions,
+                                   tableContext, rowStyleRegions,
                                    cellStyleRegions );
                     headerRowNode = headerRowNode.nextSibling();
                   }
@@ -2703,7 +2705,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                 else if( rowElement.localName() == "table-row" )
                 {
                     kDebug(36003)<<" table-row found :index row before"<<rowIndex;
-                    loadRowFormat( rowElement, rowIndex, odfContext,
+                    loadRowFormat( rowElement, rowIndex, tableContext,
                                    rowStyleRegions, cellStyleRegions );
                     kDebug(36003)<<" table-row found :index row after"<<rowIndex;
                 }
@@ -3055,12 +3057,12 @@ void Sheet::loadOasisInsertStyles( const Styles& autoStyles,
 }
 
 bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
-                           KoOdfLoadingContext& odfContext,
+                           OdfLoadingContext& tableContext,
                            QHash<QString, QRegion>& rowStyleRegions,
                            QHash<QString, QRegion>& cellStyleRegions )
 {
 //    kDebug(36003)<<"Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,const KoOdfStylesReader& stylesReader, bool isLast )***********";
-
+    KoOdfLoadingContext& odfContext = tableContext.odfContext;
     bool isNonDefaultRow = false;
 
     KoStyleStack styleStack;
@@ -3156,7 +3158,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
             continue;
 
         Cell cell(this, columnIndex, rowIndex);
-        cell.loadOasis(cellElement, odfContext);
+        cell.loadOasis(cellElement, tableContext);
 
         bool ok = false;
         const int n = cellElement.attributeNS(KoXmlNS::table, "number-columns-repeated", QString()).toInt(&ok);

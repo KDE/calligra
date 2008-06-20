@@ -20,10 +20,9 @@
 #ifndef KSPLOADINGINFO_H
 #define KSPLOADINGINFO_H
 
+#include <QMap>
 #include <QPoint>
-
 #include <QPointF>
-#include <KoXmlReader.h>
 
 namespace KSpread
 {
@@ -52,9 +51,6 @@ public:
 
     Sheet* initialActiveSheet() const { return m_initialActiveSheet; }
     void setInitialActiveSheet(Sheet* sheet) { m_initialActiveSheet = sheet; }
-
-    void appendValidation( const QString &name, const KoXmlElement &element){ m_validationList.insert( name, element);}
-    KoXmlElement validation( const QString &name) { return m_validationList[name];}
 
     /**
      * @return the cursor positions
@@ -86,7 +82,6 @@ public:
 private:
     FileFormat m_fileFormat;
     Sheet* m_initialActiveSheet;
-    QMap<QString,KoXmlElement> m_validationList;
     QMap<Sheet*, QPoint> m_cursorPositions;
     QMap<Sheet*, QPointF> m_scrollingOffsets;
     bool m_loadTemplate;

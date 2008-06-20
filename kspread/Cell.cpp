@@ -56,6 +56,7 @@
 #include "Map.h"
 #include "NamedAreaManager.h"
 #include "Object.h"
+#include "OdfLoadingContext.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
 #include "ShapeApplicationData.h"
@@ -1288,7 +1289,7 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
   };
 }
 
-bool Cell::loadOasis( const KoXmlElement& element, KoOdfLoadingContext& odfContext )
+bool Cell::loadOasis(const KoXmlElement& element, OdfLoadingContext& tableContext)
 {
     kDebug(36003) <<"*** Loading cell properties ***** at" << name();
 
@@ -1320,9 +1321,10 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOdfLoadingContext& odfConte
     //
     if ( element.hasAttributeNS( KoXmlNS::table, "validation-name" ) )
     {
-        kDebug(36003)<<" validation-name:"<<element.attributeNS( KoXmlNS::table,"validation-name", QString() );
+        const QString validationName = element.attributeNS(KoXmlNS::table,"validation-name", QString());
+        kDebug(36003) << " validation-name:" << validationName;
         Validity validity;
-        validity.loadOasisValidation( this, element.attributeNS( KoXmlNS::table, "validation-name", QString() ) );
+        validity.loadOasisValidation(this, validationName, tableContext);
         if ( !validity.isEmpty() )
             setValidity( validity );
     }
@@ -1553,7 +1555,7 @@ bool Cell::loadOasis( const KoXmlElement& element, KoOdfLoadingContext& odfConte
             setComment( comment );
     }
 
-    loadOasisObjects(element, odfContext);
+    loadOasisObjects(element, tableContext.odfContext);
 
     return true;
 }

@@ -36,9 +36,8 @@
 // KSpread
 #include "CalculationSettings.h"
 #include "Cell.h"
-#include "Doc.h"
-#include "LoadingInfo.h"
 #include "Map.h"
+#include "OdfLoadingContext.h"
 #include "Sheet.h"
 #include "Value.h"
 
@@ -259,9 +258,10 @@ QDomElement Validity::saveXML( QDomDocument& doc ) const
 }
 
 
-void Validity::loadOasisValidation( Cell* const cell, const QString& validationName )
+void Validity::loadOasisValidation(Cell* const cell, const QString& validationName,
+                                   OdfLoadingContext& tableContext)
 {
-    KoXmlElement element = cell->sheet()->map()->loadingInfo()->validation( validationName);
+    KoXmlElement element = tableContext.validities.value(validationName);
     Validity validity;
     if ( element.hasAttributeNS( KoXmlNS::table, "condition" ) )
     {
@@ -951,4 +951,25 @@ bool Validity::operator==( const Validity& other ) const
     return true;
   }
   return false;
+}
+
+// static
+QHash<QString, KoXmlElement> Validity::preloadValidities(const KoXmlElement& body)
+{
+    QHash<QString, KoXmlElement> validities;
+    KoXmlNode validation = KoXml::namedItemNS(body, KoXmlNS::table, "content-validations");
+    kDebug() << "validation.isNull?" << validation.isNull();
+    if (!validation.isNull()) {
+        KoXmlElement element;
+        forEachElement(element, validation) {
+            if (element.tagName() ==  "content-validation" && element.namespaceURI() == KoXmlNS::table) {
+                const QString name = element.attributeNS(KoXmlNS::table, "name", QString());
+                validities.insert(name, element);
+                kDebug() << " validation found:" << name;
+            } else {
+                kDebug() << " Tag not recognized:" << element.tagName();
+            }
+        }
+    }
+    return validities;
 }

@@ -2653,9 +2653,6 @@ bool CellToolBase::paste()
         //load in first
         selection()->activeSheet()->map()->styleManager()->loadOasisStyleTemplate(stylesReader);
 
-//     // TODO check versions and mimetypes etc.
-        selection()->activeSheet()->doc()->loadOasisCellValidation(body);
-
         // all <sheet:sheet> goes to workbook
         bool result = selection()->activeSheet()->map()->loadOasis(body, context);
 
