@@ -161,7 +161,7 @@ GoalSeekDialog::GoalSeekDialog(QWidget* parent, Selection* selection)
   m_resultFrameLayout->addWidget( m_currentValue, 2, 1 );
 
   m_resultText = new QLabel( m_resultFrame );
-  m_resultText->setText( "Goal seeking with cell <cell> found <a | no> solution:" );
+  m_resultText->setText( i18n("Goal seeking with cell <cell> found <a | no> solution:") );
   m_resultText->setAlignment( Qt::AlignVCenter );
   m_resultText->setWordWrap( true );
 

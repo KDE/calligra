@@ -264,7 +264,7 @@ void
 ConnectionDialog::setStatusOk(KexiDB::RecordData *record)
 {
 	m_pixmapLabel->setPixmap( DesktopIcon("dialog-ok") );
-	m_textLabel->setText("<qt><h2>The connection is OK.</h2></qt>");
+	m_textLabel->setText(i18n("<qt><h2>The connection is OK.</h2></qt>"));
 
 #ifdef __GNUC__
 #warning "Port Kexi Table View!"
@@ -288,7 +288,7 @@ void
 ConnectionDialog::setStatusError(const QString &msg, KexiDB::RecordData *record)
 {
 	m_pixmapLabel->setPixmap( DesktopIcon("dialog-cancel") );
-	m_textLabel->setText("<qt><h2>The connection is invalid.</h2></qt>" + msg);
+	m_textLabel->setText(i18n("<qt><h2>The connection is invalid.</h2></qt>") + msg);
 
 #ifdef __GNUC__
 #warning "Port Kexi Table View!"

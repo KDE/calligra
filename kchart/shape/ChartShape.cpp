@@ -260,11 +260,11 @@ ChartShape::ChartShape()
     if ( !d->title )
     {
         d->title = new TextLabelDummy;
-        KMessageBox::error( 0, "The plugin needed for displaying text labels in a chart is not available.", "Plugin Missing" );
+        KMessageBox::error( 0, i18n("The plugin needed for displaying text labels in a chart is not available."), i18n("Plugin Missing") );
     }
     if ( dynamic_cast<TextLabelData*>( d->title->userData() ) == 0 )
     {
-        KMessageBox::error( 0, "The plugin needed for displaying text labels is not compatible with the current version of the chart Flake shape.", "Plugin Incompatible" );
+        KMessageBox::error( 0, i18n("The plugin needed for displaying text labels is not compatible with the current version of the chart Flake shape."), i18n("Plugin Incompatible") );
         TextLabelData *dataDummy = new TextLabelData;
         d->title->setUserData( dataDummy );
     }

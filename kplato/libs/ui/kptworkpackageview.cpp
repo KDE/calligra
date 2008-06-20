@@ -162,7 +162,7 @@ void WorkPackageInfoView::draw()
     QTextBlockFormat bf;
     
     if ( m_project == 0 ) {
-        m_view->setText("No project available" );
+        m_view->setText(i18n("No project available") );
         return;
     }
     m_view->setText( i18n( "Project: %1", m_project->name() ) );

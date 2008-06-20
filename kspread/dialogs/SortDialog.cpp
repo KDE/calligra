@@ -219,7 +219,7 @@ SortDialog::SortDialog(QWidget* parent, Selection* selection)
   resultToBoxLayout->setAlignment( Qt::AlignTop );
 
   QLabel * destinationSheet=new QLabel(resultToBox,"destinationSheet");
-  destinationSheet->setText("Destination Sheet:");
+  destinationSheet->setText(i18n("Destination Sheet:"));
   resultToBoxLayout->addWidget(destinationSheet);
 
   m_outputSheet = new KComboBox( resultToBox );

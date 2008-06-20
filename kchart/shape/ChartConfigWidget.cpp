@@ -1292,8 +1292,8 @@ void ChartConfigWidget::ui_removeAxisClicked() {
     Q_ASSERT( d->axes.size() > index );
 
     if ( KMessageBox::questionYesNo( this,
-                                     "Are you sure you want to remove this axis? All settings specific to this axis will be lost.",
-                                     "Axis Removal Confirmation" ) != KMessageBox::Yes )
+                                     i18n("Are you sure you want to remove this axis? All settings specific to this axis will be lost."),
+                                     i18n("Axis Removal Confirmation") ) != KMessageBox::Yes )
         return;
 
     emit axisRemoved( d->axes[ index ] );
