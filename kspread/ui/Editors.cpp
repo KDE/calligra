@@ -1484,7 +1484,7 @@ void ExternalEditor::setText(const QString &text)
 void ExternalEditor::keyPressEvent(QKeyEvent *event)
 {
     Q_ASSERT(d->cellTool);
-    if (!d->cellTool->selection()->activeSheet()->doc()->isReadWrite()) {
+    if (!d->cellTool->selection()->activeSheet()->map()->isReadWrite()) {
         return;
     }
 

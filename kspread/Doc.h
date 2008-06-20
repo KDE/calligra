@@ -100,6 +100,8 @@ public:
    */
   static QList<Doc*> documents();
 
+    virtual void setReadWrite(bool readwrite = true);
+
   /**
    * @return the MIME type of KSpread document
    */

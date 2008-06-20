@@ -92,6 +92,7 @@ public:
   int loadedRowsCounter;
 
     LoadingInfo* loadingInfo;
+    bool readwrite;
 
     BindingManager* bindingManager;
     DatabaseManager* databaseManager;
@@ -126,6 +127,7 @@ Map::Map ( Doc* doc, const char* name)
   d->overallRowCount = 0;
   d->loadedRowsCounter = 0;
     d->loadingInfo = 0;
+    d->readwrite = true;
 
     d->bindingManager = new BindingManager(this);
     d->databaseManager = new DatabaseManager(this);
@@ -191,6 +193,16 @@ Map::~Map()
 Doc* Map::doc() const
 {
   return d->doc;
+}
+
+void Map::setReadWrite(bool readwrite)
+{
+    d->readwrite = readwrite;
+}
+
+bool Map::isReadWrite() const
+{
+    return d->readwrite;
 }
 
 bool Map::completeLoading(KoStore *store)

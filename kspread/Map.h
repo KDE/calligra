@@ -84,6 +84,16 @@ public:
    */
   Doc* doc() const;
 
+    /**
+     * \brief Sets whether the document can be edited or is read only.
+     */
+    void setReadWrite(bool readwrite = true);
+
+    /**
+     * \return Returns whether the document can be edited or is read only.
+     */
+    bool isReadWrite() const;
+
     // KoDataCenter interface
     virtual bool completeLoading(KoStore *store);
     virtual bool completeSaving(KoStore *store, KoXmlWriter *manifestWriter);

@@ -182,6 +182,12 @@ QList<Doc*> Doc::documents()
   return Private::s_docs;
 }
 
+void Doc::setReadWrite(bool readwrite)
+{
+    map()->setReadWrite(readwrite);
+    KoDocument::setReadWrite(readwrite);
+}
+
 void Doc::openTemplate (const KUrl& url)
 {
     map()->loadingInfo()->setLoadTemplate( true );

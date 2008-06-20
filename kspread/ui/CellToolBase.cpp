@@ -1330,8 +1330,11 @@ void CellToolBase::applyUserInput(bool expandMatrix)
         selection()->initialize(*command);
 
     Cell cell = Cell(selection()->activeSheet(), selection()->marker());
-    if (cell.value().isString() && !text.isEmpty() && !text.at(0).isDigit() && !cell.isFormula())
-        selection()->activeSheet()->doc()->addStringCompletion(text);
+    if (cell.value().isString() && !text.isEmpty() && !text.at(0).isDigit() && !cell.isFormula()) {
+        if (selection()->activeSheet()->doc()) {
+            selection()->activeSheet()->doc()->addStringCompletion(text);
+        }
+    }
 }
 
 void CellToolBase::documentReadWriteToggled(bool readWrite)
@@ -2595,7 +2598,7 @@ void CellToolBase::copy() const
 
 bool CellToolBase::paste()
 {
-    if (!selection()->activeSheet()->doc()->isReadWrite()) // don't paste into a read only document
+    if (!selection()->activeSheet()->map()->isReadWrite()) // don't paste into a read only document
         return false;
 
     const QMimeData* mimeData = QApplication::clipboard()->mimeData(QClipboard::Clipboard);
@@ -3019,7 +3022,7 @@ void CellToolBase::sheetFormat()
 
 void CellToolBase::listChoosePopupMenu()
 {
-    if (!selection()->activeSheet()->doc()->isReadWrite()) {
+    if (!selection()->activeSheet()->map()->isReadWrite()) {
         return;
     }
 

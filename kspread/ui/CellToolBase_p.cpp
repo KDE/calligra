@@ -500,7 +500,7 @@ void CellToolBase::Private::processOtherKey(QKeyEvent *event)
     register Sheet * const sheet = q->selection()->activeSheet();
 
     // No null character ...
-    if (event->text().isEmpty() || !q->selection()->activeSheet()->doc()->isReadWrite() ||
+    if (event->text().isEmpty() || !q->selection()->activeSheet()->map()->isReadWrite() ||
             !sheet || sheet->isProtected()) {
         event->accept(); // QKeyEvent
     } else {
@@ -1162,7 +1162,7 @@ QList<QAction*> CellToolBase::Private::popupActionList() const
 {
     QList<QAction*> actions;
     const Cell cell = Cell(q->selection()->activeSheet(), q->selection()->marker());
-    const bool isProtected = !q->selection()->activeSheet()->doc()->isReadWrite() ||
+    const bool isProtected = !q->selection()->activeSheet()->map()->isReadWrite() ||
                              (q->selection()->activeSheet()->isProtected() &&
                               !(cell.style().notProtected() && q->selection()->isSingular()));
     if (!isProtected) {
