@@ -64,7 +64,6 @@ class View;
 class Map;
 class Region;
 class UndoAction;
-class LoadingInfo;
 
 /**
  * This class holds the data that makes up a spreadsheet.
@@ -236,20 +235,6 @@ public:
     void clearIgnoreWordAll( );
     void addIgnoreWordAllList( const QStringList & _lst);
     QStringList spellListIgnoreAll() const ;
-
-  /**
-   * \ingroup OpenDocument
-   * \ingroup NativeFormat
-   * @return the loading info
-   */
-  LoadingInfo* loadingInfo() const;
-
-  /**
-   * \ingroup OpenDocument
-   * \ingroup NativeFormat
-   * Deletes the loading info. Called after loading is complete.
-   */
-  void deleteLoadingInfo();
 
 /* Function specific when we load config from file */
   void loadConfigFromFile();

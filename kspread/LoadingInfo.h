@@ -33,8 +33,26 @@ class Sheet;
 class LoadingInfo
 {
 public:
-    LoadingInfo() { m_loadTemplate = false;}
+    enum FileFormat
+    {
+        OpenDocument,
+        NativeFormat,
+        Gnumeric,
+        Unknown
+    };
+
+    LoadingInfo()
+        : m_fileFormat(Unknown)
+        , m_initialActiveSheet(0)
+        , m_loadTemplate(false) {}
     ~LoadingInfo() {}
+
+    FileFormat fileFormat() const { return m_fileFormat; }
+    void setFileFormat(FileFormat format) { m_fileFormat = format; }
+
+    Sheet* initialActiveSheet() const { return m_initialActiveSheet; }
+    void setInitialActiveSheet(Sheet* sheet) { m_initialActiveSheet = sheet; }
+
     void appendValidation( const QString &name, const KoXmlElement &element){ m_validationList.insert( name, element);}
     KoXmlElement validation( const QString &name) { return m_validationList[name];}
 
@@ -66,6 +84,8 @@ public:
     }
 
 private:
+    FileFormat m_fileFormat;
+    Sheet* m_initialActiveSheet;
     QMap<QString,KoXmlElement> m_validationList;
     QMap<Sheet*, QPoint> m_cursorPositions;
     QMap<Sheet*, QPointF> m_scrollingOffsets;

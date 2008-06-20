@@ -29,7 +29,7 @@
 namespace KSpread
 {
 class Damage;
-class Doc;
+class Map;
 class Sheet;
 
 class TableShape : public QObject, public KoShape
@@ -53,9 +53,9 @@ public:
     virtual void setSize(const QSizeF &size);
 
     /**
-     * \return the document containing the data for this shape
+     * \return the map containing the data for this shape
      */
-    Doc* doc() const;
+    Map* map() const;
 
     /**
      * \return the sheet containing the data for this shape

@@ -1105,14 +1105,15 @@ void View::initialPosition()
     }
 
     // Set the initial X and Y offsets for the view (OpenDocument loading)
-    if ( LoadingInfo* loadingInfo = doc()->loadingInfo() )
+    const LoadingInfo* loadingInfo = doc()->map()->loadingInfo();
+    if (loadingInfo->fileFormat() == LoadingInfo::OpenDocument)
     {
         d->savedAnchors = loadingInfo->cursorPositions();
         d->savedMarkers = loadingInfo->cursorPositions();
         d->savedOffsets = loadingInfo->scrollingOffsets();
     }
 
-    Sheet* sheet = doc()->map()->initialActiveSheet();
+    Sheet* sheet = loadingInfo->initialActiveSheet();
     if ( !sheet )
     {
         //activate first table which is not hiding
@@ -1131,22 +1132,15 @@ void View::initialPosition()
     setActiveSheet( sheet );
 
     // Set the initial X and Y offsets for the view (Native format loading)
-    if ( !doc()->loadingInfo() )
-    {
-        const int offsetX = (int)zoomHandler()->documentToViewX( doc()->map()->initialXOffset() );
-        const int offsetY = (int)zoomHandler()->documentToViewY( doc()->map()->initialYOffset() );
+    if (loadingInfo->fileFormat() == LoadingInfo::NativeFormat) {
+        const QPoint offset = zoomHandler()->documentToView(loadingInfo->scrollingOffsets()[sheet]).toPoint();
+        d->canvas->setDocumentOffset(offset);
+        d->horzScrollBar->setValue(offset.x());
+        d->vertScrollBar->setValue(offset.y());
         // Set the initial position for the marker as stored in the XML file,
         // (1,1) otherwise
-        int col = doc()->map()->initialMarkerColumn();
-        if ( col <= 0 )
-            col = 1;
-        int row = doc()->map()->initialMarkerRow();
-        if ( row <= 0 )
-            row = 1;
-        d->canvas->setDocumentOffset( QPoint( offsetX, offsetY ) );
-        d->horzScrollBar->setValue( offsetX );
-        d->vertScrollBar->setValue( offsetY );
-        d->selection->initialize( QPoint(col, row) );
+        const QPoint marker = loadingInfo->cursorPositions()[sheet];
+        d->selection->initialize((marker.x() <= 0 || marker.y() <= 0) ? QPoint(1, 1) : marker);
     }
 
     updateBorderButton();
@@ -1159,7 +1153,7 @@ void View::initialPosition()
 
     // finish the "View Loading" process
     d->loading = false;
-    doc()->deleteLoadingInfo();
+    doc()->map()->deleteLoadingInfo();
 
     refreshView();
 

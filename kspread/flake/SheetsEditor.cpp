@@ -28,7 +28,6 @@
 #include <KInputDialog>
 
 #include "TableShape.h"
-#include "Doc.h"
 #include "Sheet.h"
 #include "Map.h"
 
@@ -58,7 +57,7 @@ SheetsEditor::SheetsEditor(TableShape* tableShape, QWidget* parent)
     connect(d->list, SIGNAL(itemChanged(QListWidgetItem*)), this, SLOT(itemChanged(QListWidgetItem*)));
     layout->addWidget(d->list);
 
-    Map *map = d->tableShape->doc()->map();
+    Map *map = d->tableShape->map();
     foreach(Sheet* sheet, map->sheetList())
         sheetAdded(sheet);
     connect(map, SIGNAL(sheetAdded(Sheet*)), this, SLOT(sheetAdded(Sheet*)));
@@ -113,7 +112,7 @@ void SheetsEditor::selectionChanged()
 void SheetsEditor::itemChanged(QListWidgetItem* item)
 {
     Q_ASSERT(item);
-    Map *map = d->tableShape->doc()->map();
+    Map *map = d->tableShape->map();
     Sheet* sheet = map->findSheet( item->text() );
     if( sheet )
         sheet->setHidden( item->checkState() != Qt::Checked );
@@ -124,7 +123,7 @@ void SheetsEditor::renameClicked()
     QListWidgetItem* item = d->list->currentItem();
     if( ! item )
         return;
-    Map *map = d->tableShape->doc()->map();
+    Map *map = d->tableShape->map();
     Sheet* sheet = map->findSheet( item->text() );
     if( ! sheet )
         return;
@@ -136,7 +135,7 @@ void SheetsEditor::renameClicked()
 
 void SheetsEditor::addClicked()
 {
-    d->tableShape->doc()->map()->addNewSheet();
+    d->tableShape->map()->addNewSheet();
 }
 
 void SheetsEditor::removeClicked()
@@ -144,7 +143,7 @@ void SheetsEditor::removeClicked()
     QListWidgetItem* item = d->list->currentItem();
     if( ! item )
         return;
-    Map *map = d->tableShape->doc()->map();
+    Map *map = d->tableShape->map();
     Sheet* sheet = map->findSheet( item->text() );
     if( ! sheet )
         return;

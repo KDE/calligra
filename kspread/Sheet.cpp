@@ -190,9 +190,11 @@ Sheet::Sheet(Map* map, const QString& sheetName)
   // Set a valid object name, so that we can offer scripting.
   setObjectName(createObjectName(d->name));
   new SheetAdaptor(this);
-  QDBusConnection::sessionBus().registerObject('/' + d->workbook->doc()->objectName() +
-                                               '/' + d->workbook->objectName() +
-                                               '/' + this->objectName(), this);
+    if (d->workbook->doc()) {
+        QDBusConnection::sessionBus().registerObject('/' + d->workbook->doc()->objectName() +
+                                                     '/' + d->workbook->objectName() +
+                                                     '/' + this->objectName(), this);
+    }
 
   d->cellStorage = new CellStorage( this );
   d->rows.setAutoDelete( true );
@@ -240,9 +242,11 @@ Sheet::Sheet(const Sheet& other)
     // Set a valid object name, so that we can offer scripting.
     setObjectName(createObjectName(d->name));
     new SheetAdaptor(this);
-    QDBusConnection::sessionBus().registerObject('/' + d->workbook->doc()->objectName() +
-                                                 '/' + d->workbook->objectName() +
-                                                 '/' + this->objectName(), this);
+    if (d->workbook->doc() ) {
+        QDBusConnection::sessionBus().registerObject('/' + d->workbook->doc()->objectName() +
+                                                     '/' + d->workbook->objectName() +
+                                                     '/' + this->objectName(), this);
+    }
 
     d->id = s_id++;
     s_mapSheets->insert(d->id, this);
@@ -326,12 +330,14 @@ void Sheet::addShape(KoShape* shape)
     d->shapes.append(shape);
     shape->setApplicationData(new ShapeApplicationData());
 
-    const QList<KoView*> views = doc()->views();
-    for (int i = 0; i < views.count(); ++i)
-    {
-        View* const view = static_cast<View*>(views[i]);
-        if (view->activeSheet() == this)
-            view->canvasWidget()->shapeManager()->add(shape);
+    if (doc()) {
+        const QList<KoView*> views = doc()->views();
+        for (int i = 0; i < views.count(); ++i) {
+            View* const view = static_cast<View*>(views[i]);
+            if (view->activeSheet() == this) {
+                view->canvasWidget()->shapeManager()->add(shape);
+            }
+        }
     }
 }
 
@@ -341,18 +347,20 @@ void Sheet::removeShape(KoShape* shape)
         return;
     d->shapes.removeAll(shape);
 
-    const QList<KoView*> views = doc()->views();
-    for (int i = 0; i < views.count(); ++i)
-    {
-        View* const view = static_cast<View*>(views[i]);
-        if (view->activeSheet() == this)
-            view->canvasWidget()->shapeManager()->remove(shape);
+    if (doc()) {
+        const QList<KoView*> views = doc()->views();
+        for (int i = 0; i < views.count(); ++i) {
+            View* const view = static_cast<View*>(views[i]);
+            if (view->activeSheet() == this) {
+                view->canvasWidget()->shapeManager()->remove(shape);
+            }
+        }
     }
 }
 
 QMap<QString, KoDataCenter*> Sheet::dataCenterMap()
 {
-    return doc()->dataCenterMap();
+    return doc() ? doc()->dataCenterMap() : QMap<QString, KoDataCenter*>();
 }
 
 QList<KoShape*> Sheet::shapes() const
@@ -1770,8 +1778,6 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
     map()->addDamage( new CellDamage( this, recalcRegion, CellDamage::Appearance | CellDamage::Value ) );
 #endif
 
-    this->doc()->setModified( true );
-
     emit sig_updateView( this );
     emit sig_updateHBorder( this );
     emit sig_updateVBorder( this );
@@ -1987,8 +1993,6 @@ void Sheet::deleteCells(const Region& region)
       Cell cell = cellStack.pop();
       d->cellStorage->take( cell.column(), cell.row() );
     }
-
-    doc()->setModified( true );
 }
 
 void Sheet::updateView()
@@ -3490,11 +3494,11 @@ void Sheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings )
 
     int cursorX = items.parseConfigItemInt( "CursorPositionX" );
     int cursorY = items.parseConfigItemInt( "CursorPositionY" );
-    doc()->loadingInfo()->setCursorPosition( this, QPoint( cursorX, cursorY ) );
+    map()->loadingInfo()->setCursorPosition(this, QPoint(cursorX, cursorY));
 
     double offsetX = items.parseConfigItemDouble( "xOffset" );
     double offsetY = items.parseConfigItemDouble( "yOffset" );
-    doc()->loadingInfo()->setScrollingOffset( this, QPointF( offsetX, offsetY ) );
+    map()->loadingInfo()->setScrollingOffset(this, QPointF(offsetX, offsetY));
 
     setShowFormulaIndicator (items.parseConfigItemBool( "ShowFormulaIndicator" ));
     setShowCommentIndicator (items.parseConfigItemBool( "ShowCommentIndicator" ));
@@ -3923,8 +3927,7 @@ bool Sheet::loadXML( const KoXmlElement& sheet )
 {
     bool ok = false;
     QString sname = sheetName();
-    if ( !doc()->loadingInfo() || !doc()->loadingInfo()->loadTemplate() )
-    {
+    if (!map()->loadingInfo()->loadTemplate()) {
         sname = sheet.attribute( "name" );
         if ( sname.isEmpty() )
         {

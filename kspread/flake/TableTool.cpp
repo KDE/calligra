@@ -45,13 +45,12 @@
 
 #include "AutoFillStrategy.h"
 #include "Cell.h"
-#include "Doc.h"
 #include "Global.h"
+#include "Map.h"
 #include "MergeStrategy.h"
 #include "Selection.h"
 #include "SelectionStrategy.h"
 #include "Sheet.h"
-#include "Map.h"
 
 #include "commands/DataManipulators.h"
 
@@ -102,9 +101,11 @@ void TableTool::importDocument()
     QString file = KFileDialog::getOpenFileName(KUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Import");
     if (file.isEmpty())
         return;
+#if 0 // FIXME Stefan: Port!
     d->tableShape->doc()->setModified(false);
     if ( ! d->tableShape->doc()->importDocument(file))
         return;
+#endif
     updateSheetsList();
     if (Sheet* sheet = d->tableShape->sheet()) {
         QRect area = sheet->usedArea();
@@ -120,7 +121,9 @@ void TableTool::exportDocument()
     QString file = KFileDialog::getSaveFileName(KUrl(), "application/vnd.oasis.opendocument.spreadsheet", 0, "Export");
     if (file.isEmpty())
         return;
+#if 0 // FIXME Stefan: Port!
     d->tableShape->doc()->exportDocument(file);
+#endif
 }
 
 void TableTool::repaintDecorations()
@@ -226,7 +229,7 @@ void TableTool::updateSheetsList()
 {
 d->sheetComboBox->blockSignals(true);
     d->sheetComboBox->clear();
-    Map *map = d->tableShape->doc()->map();
+    Map *map = d->tableShape->map();
     foreach(Sheet* sheet, map->sheetList()) {
         if (sheet->isHidden())
             continue;
@@ -276,7 +279,7 @@ QWidget* TableTool::createOptionWidget()
     layout->addLayout(sheetlayout, 0, 1);
     d->sheetComboBox = new KComboBox(optionWidget);
     sheetlayout->addWidget(d->sheetComboBox, 1);
-    Map *map = d->tableShape->doc()->map();
+    Map *map = d->tableShape->map();
     foreach(Sheet* s, map->sheetList()) {
         d->sheetComboBox->addItem(s->sheetName());
         //d->sheetComboBox->setCurrentIndex( d->sheetComboBox->count()-1 );

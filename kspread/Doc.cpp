@@ -110,7 +110,6 @@ public:
   Map *map;
   QMap<QString, KoDataCenter *>  dataCenterMap;
 
-  LoadingInfo *loadingInfo;
   static QList<Doc*> s_docs;
   static int s_docId;
 
@@ -140,8 +139,6 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
     : KoDocument( parentWidget, parent, singleViewMode )
     , d( new Private )
 {
-  d->loadingInfo = 0;
-
   d->map = new Map( this, "Map" );
 
   d->configLoadFromFile = false;
@@ -187,10 +184,9 @@ QList<Doc*> Doc::documents()
 
 void Doc::openTemplate (const KUrl& url)
 {
-    d->loadingInfo = new LoadingInfo;
-    d->loadingInfo->setLoadTemplate( true );
+    map()->loadingInfo()->setLoadTemplate( true );
     KoDocument::openTemplate( url );
-    deleteLoadingInfo();
+    map()->deleteLoadingInfo();
     initConfig();
 }
 
@@ -473,9 +469,6 @@ void Doc::loadOasisIgnoreList( const KoOasisSettings& settings )
 
 bool Doc::loadOdf( KoOdfReadStore & odfStore )
 {
-    if ( !d->loadingInfo )
-        d->loadingInfo = new LoadingInfo;
-
     QTime dt;
     dt.start();
 
@@ -488,7 +481,7 @@ bool Doc::loadOdf( KoOdfReadStore & odfStore )
     if ( realBody.isNull() )
     {
         setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No office:body tag found." ));
-        deleteLoadingInfo();
+        map()->deleteLoadingInfo();
         return false;
     }
     KoXmlElement body = KoXml::namedItemNS( realBody, KoXmlNS::office, "spreadsheet" );
@@ -505,7 +498,7 @@ bool Doc::loadOdf( KoOdfReadStore & odfStore )
             setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
         else
             setErrorMessage( i18n( "This document is not a spreadsheet, but %1. Please try opening it with the appropriate application." , KoDocument::tagNameToDocumentType( localName ) ) );
-        deleteLoadingInfo();
+        map()->deleteLoadingInfo();
         return false;
     }
 
@@ -518,7 +511,7 @@ bool Doc::loadOdf( KoOdfReadStore & odfStore )
     if ( !map()->loadOasis( body, context ) )
     {
         d->isLoading = false;
-        deleteLoadingInfo();
+        map()->deleteLoadingInfo();
         return false;
     }
 
@@ -973,7 +966,7 @@ void Doc::loadOasisCellValidation( const KoXmlElement&body )
                 KoXmlElement element = n.toElement();
                 //kDebug()<<" loadOasisCellValidation element.tagName() :"<<element.tagName();
                 if ( element.tagName() ==  "content-validation" && element.namespaceURI() == KoXmlNS::table ) {
-                    d->loadingInfo->appendValidation(element.attributeNS( KoXmlNS::table, "name", QString() ), element );
+                    map()->loadingInfo()->appendValidation(element.attributeNS( KoXmlNS::table, "name", QString() ), element );
                     kDebug()<<" validation found :"<<element.attributeNS( KoXmlNS::table,"name", QString() );
                 }
                 else {
@@ -1015,17 +1008,6 @@ void Doc::addIgnoreWordAll( const QString & word)
 void Doc::clearIgnoreWordAll( )
 {
     d->spellListIgnoreAll.clear();
-}
-
-LoadingInfo * Doc::loadingInfo() const
-{
-    return d->loadingInfo;
-}
-
-void Doc::deleteLoadingInfo()
-{
-    delete d->loadingInfo;
-    d->loadingInfo = 0;
 }
 
 void Doc::addView( KoView *_view )

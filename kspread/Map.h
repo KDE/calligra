@@ -49,6 +49,7 @@ class Damage;
 class DatabaseManager;
 class DependencyManager;
 class Doc;
+class LoadingInfo;
 class NamedAreaManager;
 class RecalcManager;
 class RowFormat;
@@ -232,15 +233,6 @@ public:
    */
   Sheet* previousSheet( Sheet* ) const;
 
-    Sheet* initialActiveSheet()  const;
-    void setInitialActiveSheet( Sheet* sheet );
-
-  int    initialMarkerColumn() const;
-  int    initialMarkerRow()    const;
-  double initialXOffset()      const;
-  double initialYOffset()      const;
-
-
   /**
    * Creates a new sheet.
    * The sheet is not added to the map nor added to the GUI.
@@ -291,6 +283,21 @@ public:
      * \return true if the document is currently loading.
      */
     bool isLoading() const;
+
+    /**
+     * \ingroup OpenDocument
+     * \ingroup NativeFormat
+     * Creates the loading info, if it does not exist yet.
+     * \return the loading info
+     */
+    LoadingInfo* loadingInfo() const;
+
+    /**
+     * \ingroup OpenDocument
+     * \ingroup NativeFormat
+     * Deletes the loading info. Called after loading is complete.
+     */
+    void deleteLoadingInfo();
 
     /**
      * \ingroup Operations

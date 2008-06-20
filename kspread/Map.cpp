@@ -45,6 +45,7 @@
 #include "DependencyManager.h"
 #include "Doc.h"
 #include "GenValidationStyle.h"
+#include "LoadingInfo.h"
 #include "Localization.h"
 #include "NamedAreaManager.h"
 #include "RecalcManager.h"
@@ -82,14 +83,6 @@ public:
    * Password to protect the map from being changed.
    */
   QByteArray strPassword;
-  /**
-   * Set from the XML
-   */
-  Sheet* initialActiveSheet;
-  int    initialMarkerColumn;
-  int    initialMarkerRow;
-  double initialXOffset;
-  double initialYOffset;
 
   // used to give every Sheet a unique default name.
   int tableId;
@@ -97,6 +90,8 @@ public:
   // used to determine the loading progress
   int overallRowCount;
   int loadedRowsCounter;
+
+    LoadingInfo* loadingInfo;
 
     BindingManager* bindingManager;
     DatabaseManager* databaseManager;
@@ -127,14 +122,10 @@ Map::Map ( Doc* doc, const char* name)
 {
   setObjectName( name ); // necessary for D-Bus
   d->doc = doc;
-  d->initialActiveSheet = 0;
-  d->initialMarkerColumn = 0;
-  d->initialMarkerRow = 0;
-  d->initialXOffset = 0.0;
-  d->initialYOffset = 0.0;
   d->tableId = 1;
   d->overallRowCount = 0;
   d->loadedRowsCounter = 0;
+    d->loadingInfo = 0;
 
     d->bindingManager = new BindingManager(this);
     d->databaseManager = new DatabaseManager(this);
@@ -145,7 +136,9 @@ Map::Map ( Doc* doc, const char* name)
 
     d->applicationSettings = new ApplicationSettings();
     d->calculationSettings = new CalculationSettings();
-    d->calculationSettings->setFileName(d->doc->url().prettyUrl()); // for FILENAME function ;)
+    if (doc) {
+        d->calculationSettings->setFileName(doc->url().prettyUrl()); // for FILENAME function ;)
+    }
 
     d->parser = new ValueParser(d->calculationSettings);
     d->converter = new ValueConverter(d->parser);
@@ -162,7 +155,9 @@ Map::Map ( Doc* doc, const char* name)
     d->isLoading = false;
 
   new MapAdaptor(this);
-  QDBusConnection::sessionBus().registerObject( '/'+doc->objectName() + '/' + objectName(), this);
+    if (doc) {
+        QDBusConnection::sessionBus().registerObject( '/'+doc->objectName() + '/' + objectName(), this);
+    }
 
     connect(d->namedAreaManager, SIGNAL(namedAreaModified(const QString&)),
             d->dependencyManager, SLOT(namedAreaModified(const QString&)));
@@ -308,7 +303,6 @@ Sheet* Map::createSheet()
 void Map::addSheet( Sheet *_sheet )
 {
   d->lstSheets.append( _sheet );
-  d->doc->setModified( true );
   emit sheetAdded(_sheet);
 }
 
@@ -365,12 +359,10 @@ void Map::loadOasisSettings( KoOasisSettings &settings )
     QString activeSheet = firstView.parseConfigItemString( "ActiveTable" );
     kDebug()<<" loadOasisSettings( KoOasisSettings &settings ) activeSheet :"<<activeSheet;
 
-    if (!activeSheet.isEmpty())
-    {
+    if (!activeSheet.isEmpty()) {
         // Used by View's constructor
-        d->initialActiveSheet = findSheet( activeSheet );
+        loadingInfo()->setInitialActiveSheet(findSheet(activeSheet));
     }
-
 }
 
 void Map::saveOasisSettings( KoXmlWriter &settingsWriter )
@@ -522,6 +514,8 @@ QDomElement Map::save( QDomDocument& doc )
 bool Map::loadOasis( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
 {
     d->isLoading = true;
+    loadingInfo()->setFileFormat(LoadingInfo::OpenDocument);
+
     //load in first
     d->styleManager->loadOasisStyleTemplate(odfContext.stylesReader(), this);
 
@@ -651,11 +645,12 @@ bool Map::loadOasis( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
 bool Map::loadXML( const KoXmlElement& mymap )
 {
     d->isLoading = true;
-  QString activeSheet   = mymap.attribute( "activeTable" );
-  d->initialMarkerColumn = mymap.attribute( "markerColumn" ).toInt();
-  d->initialMarkerRow    = mymap.attribute( "markerRow" ).toInt();
-  d->initialXOffset      = mymap.attribute( "xOffset" ).toDouble();
-  d->initialYOffset      = mymap.attribute( "yOffset" ).toDouble();
+    loadingInfo()->setFileFormat(LoadingInfo::NativeFormat);
+    const QString activeSheet = mymap.attribute("activeTable");
+    const QPoint marker(mymap.attribute("markerColumn").toInt(), mymap.attribute("markerRow").toInt());
+    loadingInfo()->setCursorPosition(findSheet(activeSheet), marker);
+    const QPointF offset(mymap.attribute("xOffset").toDouble(), mymap.attribute("yOffset").toDouble());
+    loadingInfo()->setScrollingOffset(findSheet(activeSheet), offset);
 
   KoXmlNode n = mymap.firstChild();
   if ( n.isNull() )
@@ -692,11 +687,10 @@ bool Map::loadXML( const KoXmlElement& mymap )
       d->strPassword = QByteArray( "" );
   }
 
-  if (!activeSheet.isEmpty())
-  {
-    // Used by View's constructor
-    d->initialActiveSheet = findSheet( activeSheet );
-  }
+    if (!activeSheet.isEmpty()) {
+        // Used by View's constructor
+        loadingInfo()->setInitialActiveSheet(findSheet(activeSheet));
+    }
 
     d->isLoading = false;
   return true;
@@ -815,36 +809,6 @@ bool Map::checkPassword( QByteArray const & passwd ) const
   return ( passwd == d->strPassword );
 }
 
-void Map::setInitialActiveSheet( Sheet* sheet )
-{
-    d->initialActiveSheet = sheet;
-}
-
-Sheet* Map::initialActiveSheet()const
-{
-  return d->initialActiveSheet;
-}
-
-int Map::initialMarkerColumn() const
-{
-  return d->initialMarkerColumn;
-}
-
-int Map::initialMarkerRow() const
-{
-  return d->initialMarkerRow;
-}
-
-double Map::initialXOffset() const
-{
-  return d->initialXOffset;
-}
-
-double Map::initialYOffset() const
-{
-  return d->initialYOffset;
-}
-
 Sheet* Map::sheet( int index ) const
 {
   return d->lstSheets.value( index );
@@ -871,6 +835,20 @@ void Map::increaseLoadedRowsCounter(int number)
 bool Map::isLoading() const
 {
     return d->isLoading;
+}
+
+LoadingInfo* Map::loadingInfo() const
+{
+    if (!d->loadingInfo) {
+        d->loadingInfo = new LoadingInfo();
+    }
+    return d->loadingInfo;
+}
+
+void Map::deleteLoadingInfo()
+{
+    delete d->loadingInfo;
+    d->loadingInfo = 0;
 }
 
 void Map::addDamage(Damage* damage)

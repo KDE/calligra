@@ -30,7 +30,6 @@
 #include <KoShapeRegistry.h>
 #include <KoXmlNS.h>
 
-#include "Doc.h"
 #include "Map.h"
 
 #include "TableShape.h"
@@ -50,8 +49,7 @@ TableShapePlugin::TableShapePlugin( QObject * parent,  const QStringList& )
 class TableShapeFactory::Private
 {
 public:
-    // FIXME Stefan: Replace with a Map.
-    Doc* doc;
+    Map* map;
 };
 
 
@@ -59,8 +57,6 @@ TableShapeFactory::TableShapeFactory( QObject* parent )
     : KoShapeFactory( parent, TableShapeId, i18n( "Table" ) )
     , d(new Private)
 {
-    d->doc = new Doc();
-    d->doc->setAutoSave(0);
     setToolTip(i18n("Table Shape"));
     setIcon( "spreadsheetshape" );
     setOdfElementNames(KoXmlNS::table, QStringList() << "table");
@@ -68,16 +64,13 @@ TableShapeFactory::TableShapeFactory( QObject* parent )
 
 TableShapeFactory::~TableShapeFactory()
 {
-//     delete d->doc; // FIXME
     delete d;
 }
 
 void TableShapeFactory::populateDataCenterMap(QMap<QString, KoDataCenter*> &dataCenterMap)
 {
-#if 0
     // One spreadsheet map for all inserted tables to allow referencing cells among them.
-    dataCenterMap["TableMap"] = d->doc->map();
-#endif
+    dataCenterMap["TableMap"] = new Map(0, "TableMap");
 }
 
 bool TableShapeFactory::supports(const KoXmlElement &element) const
