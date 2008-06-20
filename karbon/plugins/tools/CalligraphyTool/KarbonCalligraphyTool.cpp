@@ -88,7 +88,6 @@ void KarbonCalligraphyTool::mousePressEvent( KoPointerEvent *event )
     m_shape->setFillRule( Qt::WindingFill );
     m_shape->setBackground( new KoColorBackground( Qt::black ) );
     m_shape->setBorder( 0 );
-    kDebug() << "=========";
     //addPoint( event );
 }
 
@@ -108,7 +107,7 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
     //addPoint( event );
     m_isDrawing = false;
 
-    //m_shape->simplifyPath();
+    m_shape->simplifyPath();
     KoPathShape *finalPath = m_shape;
 
     QUndoCommand * cmd = m_canvas->shapeController()->addShape( finalPath );
@@ -140,7 +139,6 @@ void KarbonCalligraphyTool::addPoint( KoPointerEvent *event )
 
     m_lastPoint = m_lastPoint + m_speed;
 
-    kDebug() << event->pressure();
     double strokeWidth = m_strokeWidth * event->pressure();
     m_shape->appendPoint( m_lastPoint, m_angle, strokeWidth );
 

@@ -76,7 +76,7 @@ public:
     void appendPoint( const QPointF &p1, double angle, double width );
     void appendPointToPath(const KarbonCalligraphicPoint &p);
 
-    KoPathShape *simplified( float error );
+    //KoPathShape *simplified( float error );
 
     // returns the bounding rect of whan needs to be repainted
     // after new points are added

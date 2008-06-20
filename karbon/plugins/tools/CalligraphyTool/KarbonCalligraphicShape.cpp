@@ -20,6 +20,8 @@
 #include "KarbonCalligraphicShape.h"
 
 #include <KoPathPoint.h>
+
+#include "KarbonSimplifyPath.h"
 #include <KarbonCurveFit.h>
 #include <KoColorBackground.h>
 
@@ -181,7 +183,7 @@ void KarbonCalligraphicShape::smoothPoint( const int index )
     pointByIndex( INDEX )->setControlPoint2( controlPoint2 );
 }
 
-KoPathShape *KarbonCalligraphicShape::simplified( float error )
+/*KoPathShape *KarbonCalligraphicShape::simplified( float error )
 {
     QList<QPointF> points;
 
@@ -200,7 +202,7 @@ KoPathShape *KarbonCalligraphicShape::simplified( float error )
     res->setPosition( position() );
 
     return res;
-}
+}*/
 
 const QRectF KarbonCalligraphicShape::lastPieceBoundingRect()
 {
@@ -325,6 +327,7 @@ void KarbonCalligraphicShape::moveHandleAction( int handleId,
 
 void KarbonCalligraphicShape::updatePath( const QSizeF &size )
 {
+    kDebug() << "updatePath";
     Q_UNUSED(size);
 
     QPointF pos = position();
@@ -346,36 +349,9 @@ void KarbonCalligraphicShape::updatePath( const QSizeF &size )
 
 void KarbonCalligraphicShape::simplifyPath()
 {
-    QList<QPointF> points;
-
-    for (int i = 0; i < pointCount(); ++i)
-    {
-        points << pointByIndex( KoPathPointIndex(0, i) )->point();
-    }
-
-    // TODO: no magic numbers
-    double error = m_points[0]->width() / 40;
-    KoPathShape *newPath = bezierFit( points, error );
-
-    QPointF oldPosition = position();
-    clear();
-    setPosition(QPoint(0, 0));
-
-    // TODO: if subpath allowed the insertion also when empty
-    //       the following would work better
-    m_subpaths.append(new KoSubpath());
-    for (int i = 0; i < newPath->pointCount(); ++i)
-    {
-        KoPathPointIndex index(0, i);
-        KoPathPoint *p = new KoPathPoint( *newPath->pointByIndex(index) );
-        p->setParent(this);
-        m_subpaths[0]->append(p);
-    }
-
-    setPosition(oldPosition);
-    normalize();
-
-    delete newPath;
+    // TODO: the error should be proportional to the width
+    //       and it shouldn't be a magic number
+    karbonSimplifyPath( this, 0.3 );
 }
 
 QString KarbonCalligraphicShape::pathShapeId() const
