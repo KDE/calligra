@@ -26,6 +26,7 @@
 
 #include <KoSelection.h>
 #include <KoShapeManager.h>
+#include <KoMainWindow.h>
 #include <KoPACanvas.h>
 #include <KoPADocumentStructureDocker.h>
 
@@ -33,6 +34,7 @@
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
 #include "KPrPageApplicationData.h"
+#include "KPrViewModePresenterView.h"
 #include "KPrViewModePresentation.h"
 #include "KPrViewModeNotes.h"
 #include "commands/KPrAnimationCreateCommand.h"
@@ -45,6 +47,7 @@
 #include "KPrCustomSlideShows.h"
 #include "ui/KPrCustomSlideShowsDialog.h"
 #include <QDebug>
+#include <QtGui/QDesktopWidget>
 
 KPrView::KPrView( KPrDocument *document, QWidget *parent )
 : KoPAView( document, parent )
@@ -54,6 +57,7 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
 {
     initGUI();
     initActions();
+    m_presenterViewMode = 0;
 }
 
 KPrView::~KPrView()
@@ -69,6 +73,7 @@ KoViewConverter * KPrView::viewConverter()
 void KPrView::updateActivePage(KoPAPageBase *page)
 {
     viewMode()->updateActivePage( page );
+
 }
 
 void KPrView::initGUI()
@@ -126,20 +131,46 @@ void KPrView::initActions()
     m_actionCreateCustomSlideShowsDialog = new KAction( i18n( "Edit Custom Slide Shows..." ), this );
     actionCollection()->addAction( "edit_customslideshows", m_actionCreateCustomSlideShowsDialog );
     connect( m_actionCreateCustomSlideShowsDialog, SIGNAL( activated() ), this, SLOT( dialogCustomSlideShows() ) );
-
+ 
     KoPADocumentStructureDocker *docStructureDocker = documentStructureDocker();
     connect(docStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
 }
 
 void KPrView::startPresentation()
 {
+#if 0
+    // TODO: check for second monitor + read from config file
+    // Create a new view
+    KoMainWindow *shell = new KoMainWindow( m_doc->componentData() );
+    shell->setRootDocument( m_doc );
+    m_doc->addShell( shell );
+    shell->show();
+
+    KPrView *view = dynamic_cast<KPrView *>( shell->rootView() );
+    Q_ASSERT( view );
+#endif
     setViewMode( m_presentationMode );
+#if 0
+    view->activatePresenterView( this );
+#endif
 }
 
 void KPrView::startPresentationFromBeginning()
 {
     setActivePage( m_doc->pageByNavigation( activePage(), KoPageApp::PageFirst ) );
-    setViewMode( m_presentationMode );
+    startPresentation();
+}
+
+void KPrView::activatePresenterView( KPrView *mainView )
+{
+    if ( !m_presenterViewMode ) {
+        KPrViewModePresentation *presentationMode = dynamic_cast<KPrViewModePresentation *>( mainView->viewMode() );
+        // To use presenter view, the main view should be in presentation mode
+        Q_ASSERT( presentationMode );
+        m_presenterViewMode = new KPrViewModePresenterView( this, m_canvas, presentationMode );
+    }
+
+    setViewMode( m_presenterViewMode );
 }
 
 void KPrView::createAnimation()

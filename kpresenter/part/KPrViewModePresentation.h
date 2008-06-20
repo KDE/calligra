@@ -25,6 +25,8 @@
 
 class QWidget;
 class KPrPresentationTool;
+class KPrPresenterViewTool;
+class KPrViewModePresenterView;
 
 class KPrViewModePresentation : public KoPAViewMode
 {
@@ -69,11 +71,18 @@ public:
      */
     void navigate( KPrAnimationDirector::Navigation navigation );
 
-private:
+    KPrPresentationTool *presentationTool();
+
+    void setPresenterViewTool( KPrPresenterViewTool *tool );
+
+protected:
     KoPAViewMode * m_savedViewMode;
     QWidget * m_savedParent;
     KPrPresentationTool * m_tool;
     KPrAnimationDirector * m_animationDirector;
+    KPrViewModePresenterView *m_presenterViewMode;
+
+    KPrPresenterViewTool * m_presenterViewTool;
 };
 
 #endif /* KPRVIEWMODEPRESENTATION_H */
