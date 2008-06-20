@@ -102,6 +102,8 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
 
     //Write the Pictures directory and its children, also fill the m_pictures hash
     createImageList( output, input, manifest );
+    //write the sounds and fill the m_sounds hash
+    createSoundList( output, input, manifest );
     delete input;
 
     //Create the content.xml file
@@ -119,10 +121,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
     output->open( "settings.xml" );
     KoStoreDevice device( output );
     KoXmlWriter *settings = KoOdfWriteStore::createOasisXmlWriter( &device, "office:document-settings" );
-//     settings->startElement( "office:settings" );
-//     settings->startElement( "config:config-item-set" );
-//     settings->endElement();//config:config-item-set
-//     settings->endElement();//office:settings
+    //TODO: check whcih settings we still use in 2.0
     settings->endElement();//office:document-settings
     settings->endDocument();
     output->close();
@@ -145,11 +144,15 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
     return KoFilter::OK;
 }
 
+//TODO: improve createImageList and createSoundList so that only save the _used_ sounds and images
 void Filterkpr2odf::createImageList( KoStore* output, KoStore* input, KoXmlWriter* manifest )
 {
+    KoXmlElement key( m_mainDoc.namedItem( "DOC" ).namedItem( "PICTURES" ).firstChild().toElement() );
+    if( key.isNull() )
+        return;
+
     output->enterDirectory( "Pictures" );
     manifest->addManifestEntry( "Pictures/", "" );
-    KoXmlElement key( m_mainDoc.namedItem( "DOC" ).namedItem("PICTURES").firstChild().toElement() );
 
     //Iterate over all the keys to copy the image, get the file name and
     //its "representation" inside the KPR file
@@ -157,6 +160,8 @@ void Filterkpr2odf::createImageList( KoStore* output, KoStore* input, KoXmlWrite
     {
         QString name( key.attribute( "name" ) );
         QString fullFilename( getPictureNameFromKey( key ) );
+
+        //Get the name how will be saved in the file
         QStringList filenameComponents( name.split( "/" ) );
         QString odfName( filenameComponents.at( filenameComponents.size()-1 ) );
 
@@ -171,17 +176,60 @@ void Filterkpr2odf::createImageList( KoStore* output, KoStore* input, KoXmlWrite
         delete image;
 
         //generate manifest entry
+        //FIXME: is there a better way to do it?
         QString mediaType;
-        if( odfName.contains( "png" ) ) {
+        if( odfName.endsWith( "png" ) ) {
             mediaType = "image/png";
         }
-        else if( odfName.contains( "jpg" ) ) {
+        else if( odfName.endsWith( "jpg" ) ) {
             mediaType = "image/jpg";
         }
-        else if( odfName.contains( "jpeg" ) ){
+        else if( odfName.endsWith( "jpeg" ) ){
             mediaType = "image/jpeg";
         }
-        manifest->addManifestEntry( odfName, mediaType );
+        manifest->addManifestEntry( name, mediaType );
+    }
+    output->leaveDirectory();
+}
+
+void Filterkpr2odf::createSoundList( KoStore* output, KoStore* input, KoXmlWriter* manifest )
+{
+    KoXmlElement file( m_mainDoc.namedItem( "DOC" ).namedItem( "SOUNDS" ).firstChild().toElement() );
+    if( file.isNull() )
+        return;
+
+    output->enterDirectory( "Sounds" );
+    manifest->addManifestEntry( "Sounds/", "" );
+
+    //Iterate over all files to copy the sound, get the file name and
+    //its "representation" inside the KPR file
+    for( ; !file.isNull(); file = file.nextSibling().toElement() )
+    {
+        QString name( file.attribute( "name" ) );
+        QString filename( file.attribute( "filename" ) );
+        QStringList filenameComponents( name.split( "/" ) );
+        QString odfName( filenameComponents.at( filenameComponents.size()-1 ) );
+
+        m_sounds[ filename ] = odfName;
+
+        //Copy the sound
+        QByteArray* sound = new QByteArray();
+        input->extractFile( name, *sound );
+        output->open( odfName );
+        output->write( *sound );
+        output->close();
+        delete sound;
+
+        //generate manifest entry
+        //FIXME: is there a better way to do it?
+        QString mediaType;
+        if( odfName.endsWith( "wav" ) ) {
+            mediaType = "audio/wav";
+        }
+        else if( odfName.endsWith( "mp3" ) ) {
+            mediaType = "audio/mp3";
+        }
+        manifest->addManifestEntry( name, mediaType );
     }
     output->leaveDirectory();
 }
@@ -244,6 +292,45 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
         ++currentPage;
     }//for
 
+    content->startElement( "presentation:settings" );
+
+    //Load wether the presentation ends or it's in an infinite loop
+    KoXmlElement infinitLoop( m_mainDoc.namedItem( "DOC" ).namedItem( "INFINITLOOP" ).toElement() );
+    if( !infinitLoop.isNull() )
+    {
+        bool value = infinitLoop.attribute( "value", "0" ) == "1";
+        content->addAttribute( "presentation:endless", ( value )? "true" : "false" );
+    }
+
+    //Specify wether the effects can be started automatically or
+    //ignore any previous order and start them manually
+    KoXmlElement manualSwitch( m_mainDoc.namedItem( "DOC" ).namedItem( "MANUALSWITCH" ).toElement() );
+    if( !manualSwitch.isNull() )
+    {
+        bool value = manualSwitch.attribute( "value", "0" ) == "1";
+        content->addAttribute( "presentation:force-manual", ( value )? "true" : "false" );
+    }
+
+    //Store the default show
+    KoXmlElement customSlideShowDefault = m_mainDoc.namedItem( "DOC" ).namedItem( "DEFAULTCUSTOMSLIDESHOWNAME" ).toElement();
+    if( !customSlideShowDefault.isNull() )
+    {
+        content->addAttribute( "presentation:show", customSlideShowDefault.attribute( "name" ) );
+    }
+
+    //Now store all the shows
+    KoXmlElement customSlideShowConfig( m_mainDoc.namedItem( "DOC" ).namedItem( "CUSTOMSLIDESHOWCONFIG" ).toElement() );
+    for ( KoXmlElement customSlideShow = customSlideShowConfig.firstChild().toElement(); !customSlideShow.isNull();
+          customSlideShow = customSlideShow.nextSibling().toElement() )
+    {
+        //FIXME: is this needed? show.tagName()=="CUSTOMSLIDESHOW" )
+        content->startElement( "presentation:show" );
+        content->addAttribute( "presentation:name", customSlideShow.attribute( "name" ) );
+        content->addAttribute( "presentation:pages", customSlideShow.attribute( "pages" ) );
+        content->endElement();//presentation:show
+    }
+
+    content->endElement();//presentation:settings
     content->endElement();//office:presentation
     content->endElement();//office:body
     content->endDocument();

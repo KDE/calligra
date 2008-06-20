@@ -45,6 +45,7 @@ public:
 private:
     //Helper functions
     void createImageList( KoStore* output, KoStore* input, KoXmlWriter* manifest );
+    void createSoundList( KoStore* output, KoStore* input, KoXmlWriter* manifest );
     void convertContent( KoXmlWriter* content );
     void convertObjects( KoXmlWriter* content, const KoXmlNode& objects, const int currentPage );
     void appendPicture( KoXmlWriter* content, KoXmlElement objectElement );
@@ -60,7 +61,9 @@ private:
     KoXmlDocument m_documentInfo;//from KPR
 
     int m_pageHeight;//needed to find out where's every object
-    QHash<QString,QString> m_pictures;//store the <filename, name> pair of the keys
+    QHash<QString,QString> m_pictures;//store the <fullFilename, name> pair of the keys
+    QHash<QString,QString> m_sounds;//store the <fullFilename, name> pair of the keys
+
 
     KoGenStyles m_styles;//style collector
 };

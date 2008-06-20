@@ -55,7 +55,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         {
             //background is a plain color
             style.addProperty( "draw:fill", "solid" );
-            style.addProperty( "draw:fill-color", page.namedItem( "BACKCOLOR1" ).toElement().attribute("color") );
+            style.addProperty( "draw:fill-color", page.namedItem( "BACKCOLOR1" ).toElement().attribute( "color" ) );
         }
         else
         {
@@ -75,7 +75,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         KoGenStyle drawFillImage( KoGenStyle::StyleFillImage );
 
         //default values
-        drawFillImage.addAttribute( "xlink:href", "#Picture/" + m_pictures[ pictureName ] );
+        drawFillImage.addAttribute( "xlink:href", "Picture/" + m_pictures[ pictureName ] );
         drawFillImage.addAttribute( "xlink:type", "simple" );
         drawFillImage.addAttribute( "xlink:show", "embed" );
         drawFillImage.addAttribute( "xlink:actuate", "onLoad" );
@@ -112,9 +112,9 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
 
     //Add the page effect
     KoXmlElement pageEffect = page.namedItem( "PGEFFECT" ).toElement();
-    if ( !pageEffect.isNull() )
+    if( !pageEffect.isNull() )
     {
-        QString effectName;
+        QString effectName( "none" );//we default to none
         int effect = pageEffect.attribute( "value", "0" ).toInt();
         switch( effect )
         {
@@ -246,8 +246,26 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
             break;
         }//switch efect
         style.addProperty( "presentation:transition-style", effectName );
-    }//if pageEfect is null
 
+        //Add the sound
+        KoXmlElement soundEffect = page.namedItem( "PGSOUNDEFFECT" ).toElement();
+        if( !soundEffect.isNull() && soundEffect.attribute( "soundEffect" ) != "0" )
+        {
+            //As this is a "complex" tag we add it "manually"
+            QBuffer buffer;
+            buffer.open( IO_WriteOnly );
+            KoXmlWriter elementWriter( &buffer );
+            elementWriter.startElement( "presentation:sound" );
+            elementWriter.addAttribute( "xlink:href", "Sounds/" + m_sounds[ soundEffect.attribute( "soundFileName" ) ] );
+            elementWriter.addAttribute( "xlink:type", "simple" );
+            elementWriter.addAttribute( "xlink:show", "new" );
+            elementWriter.addAttribute( "xlink:actuate", "onRequest");
+            elementWriter.endElement();
+
+            QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
+            style.addChildElement( "presentationSound", elementContents );
+        }
+    }//if pageEfect is null
     return m_styles.lookup( style, "dp" );
 }
 
@@ -264,72 +282,97 @@ const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientEl
     int type = 1;//we default to 1
     if( gradientElement.nodeName() == "PAGE" )
     {
-        KoXmlElement backColor1 = gradientElement.namedItem( "BACKCOLOR1" ).toElement();
-        KoXmlElement backColor2 = gradientElement.namedItem( "BACKCOLOR2" ).toElement();
-        KoXmlElement bcType = gradientElement.namedItem( "BCTYPE" ).toElement();
-        KoXmlElement bGradient = gradientElement.namedItem( "BGRADIENT" ).toElement();
-
+        KoXmlElement backColor1( gradientElement.namedItem( "BACKCOLOR1" ).toElement() );
         if( !backColor1.isNull() )
-            style.addProperty( "draw:start-color", backColor1.attribute( "color" ) );
+            style.addAttribute( "draw:start-color", backColor1.attribute( "color" ) );
+
+        KoXmlElement backColor2( gradientElement.namedItem( "BACKCOLOR2" ).toElement() );
         if( !backColor2.isNull() )
-            style.addProperty( "draw:start-color", backColor2.attribute( "color" ) );
+            style.addAttribute( "draw:end-color", backColor2.attribute( "color" ) );
+
+        KoXmlElement bcType( gradientElement.namedItem( "BCTYPE" ).toElement() );
         if( !bcType.isNull() )
             type = bcType.attribute( "value" ).toInt();
-//         if ( !bGradient.isNull() )
-//         {
-//             if ( bGradient.attribute( "unbalanced" ) == "0" )
-//             {
-//                 gradient.setAttribute( "draw:cx", m_cx );
-//                 gradient.setAttribute( "draw:cy", m_cy );
-//                 m_cx = "50%";
-//                 m_cy = "50%";
-//             }
-//             else
-//             {
-//                 int cx = bGradient.attribute( "xfactor" ).toInt();
-//                 int cy = bGradient.attribute( "yfactor" ).toInt();
-//                 m_cx = QString( "%1%" ).arg( cx / 4 + 50 );
-//                 m_cy = QString( "%1%" ).arg( cy / 4 + 50 );
-//             }
-//         }
+
+        KoXmlElement bGradient = gradientElement.namedItem( "BGRADIENT" ).toElement();
+        if( !bGradient.isNull() )
+        {
+            if ( bGradient.attribute( "unbalanced" ) == "0" )
+            {
+                style.addAttribute( "draw:cx", "50%" );
+                style.addAttribute( "draw:cy", "50%" );
+            }
+            else
+            {
+                int cx = bGradient.attribute( "xfactor" ).toInt();
+                int cy = bGradient.attribute( "yfactor" ).toInt();
+                //FIXME: find out if this is still applicable and why is the calculus like that
+                style.addAttribute( "draw:cx", QString( "%1%" ).arg( cx / 4 + 50 ) );
+                style.addAttribute( "draw:cy", QString( "%1%" ).arg( cy / 4 + 50 ) );
+            }
+        }
     }
     else
     {
-
+        style.addAttribute( "draw:start-color", gradientElement.attribute( "color1", "" ) );
+        style.addAttribute( "draw:end-color", gradientElement.attribute( "color2", "" ) );
+        type = gradientElement.attribute( "type" ).toInt();
+        if( gradientElement.hasAttribute( "unbalanced" ) )
+        {
+            if( gradientElement.attribute( "unbalanced" ) == "0" )
+            {
+                style.addAttribute( "draw:cx", "50%" );
+                style.addAttribute( "draw:cy", "50%" );
+            }
+            else
+            {
+                int cx = gradientElement.attribute( "xfactor" ).toInt();
+                int cy = gradientElement.attribute( "yfactor" ).toInt();
+                //FIXME: find out if this is still applicable and why is the calculus like that
+                style.addAttribute( "draw:cx", QString( "%1%" ).arg( cx / 4 + 50 ) );
+                style.addAttribute( "draw:cy", QString( "%1%" ).arg( cy / 4 + 50 ) );
+            }
+        }
     }
 
     //export the type of the gradient
-//     switch ( type )
-//     {
-//     case 1:
-//         m_style = "linear";
-//         m_angle = "0";
-//         break;
-//     case 2:
-//         m_style = "linear";
-//         m_angle = "900";
-//         break;
-//     case 3:
-//         m_style = "linear";
-//         m_angle = "450";
-//         break;
-//     case 4:
-//         m_style = "linear";
-//         m_angle = "135";
-//         break;
-//     case 5:
-//         m_style = "radial";
-//         m_angle = "0";
-//         break;
-//     case 6:
-//         m_style = "square";
-//         m_angle = "0";
-//         break;
-//     case 7:
-//         m_style = "axial";
-//         m_angle = "0";
-//         break;
-//     }//switch type
+    QString typeString;
+    QString angle;
+    switch ( type )
+    {
+    case 1:
+        typeString = "linear";
+        angle = "0";
+        break;
+    case 2:
+        typeString = "linear";
+        angle = "900";
+        break;
+    case 3:
+        typeString = "linear";
+        angle = "450";
+        break;
+    case 4:
+        typeString = "linear";
+        angle = "135";
+        break;
+    case 5:
+        typeString = "radial";
+        angle = "0";
+        break;
+    case 6:
+        typeString = "square";
+        angle = "0";
+        break;
+    case 7:
+        typeString = "axial";
+        angle = "0";
+        break;
+    }//switch type
+    style.addAttribute( "draw:style", typeString );
+    style.addAttribute( "draw:angle", angle );
+
+    return m_styles.lookup( style, "gr" );
 }
 
 const QString Filterkpr2odf::createPageLayout()
@@ -365,4 +408,3 @@ const QString Filterkpr2odf::createMasterPageStyle()
 
     return m_styles.lookup( style, "Default" );
 }
-
