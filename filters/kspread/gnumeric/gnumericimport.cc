@@ -43,6 +43,7 @@
 #include <kspread/ApplicationSettings.h>
 #include <kspread/Cell.h>
 #include <kspread/Doc.h>
+#include <kspread/LoadingInfo.h>
 #include <kspread/Map.h>
 #include <kspread/NamedAreaManager.h>
 #include <kspread/Region.h>
@@ -2253,8 +2254,10 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
         ++num;
       }
 
-    if ( selTable )
-      ksdoc->map()->setInitialActiveSheet( selTable );
+    if ( selTable ) {
+      ksdoc->map()->loadingInfo()->setFileFormat(LoadingInfo::Gnumeric);
+      ksdoc->map()->loadingInfo()->setInitialActiveSheet( selTable );
+    }
 
     emit sigProgress(100);
     if ( bSuccess )
