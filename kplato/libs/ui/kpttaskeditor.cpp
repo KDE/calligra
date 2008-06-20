@@ -92,6 +92,7 @@ TaskEditor::TaskEditor( KoDocument *part, QWidget *parent )
             << NodeModel::NodeResponsible
             << NodeModel::NodeAllocation
             << NodeModel::NodeEstimateType
+            << NodeModel::NodeEstimateCalendar
             << NodeModel::NodeEstimate
             << NodeModel::NodeOptimisticRatio
             << NodeModel::NodePessimisticRatio

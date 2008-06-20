@@ -37,6 +37,8 @@ class StandardWorktime;
 class DurationWidget;
 class DateTime;
 class MacroCommand;
+class Calendar;
+class Project;
         
 class TaskGeneralPanelImpl : public QWidget, public Ui_TaskGeneralPanelBase
 {
@@ -56,7 +58,8 @@ public:
     virtual QDate startDate();
     virtual QDate endDate();
     virtual int risktype() const;
-
+    virtual Calendar *calendar() const;
+    
 public slots:
     virtual void setSchedulingType( int type );
     virtual void changeLeader();
@@ -81,6 +84,7 @@ public slots:
     virtual void setStartDate( const QDate & date );
     virtual void setEndDate( const QDate & date );
     virtual void setRisktype( int r );
+    virtual void calendarChanged( int /*index*/ );
 
 signals:
     void obligatedFieldsFilled( bool );
@@ -89,6 +93,7 @@ signals:
 
 protected:
     bool useTime;
+    QList<Calendar*> m_calendars;
 };
 
 class TaskGeneralPanel : public TaskGeneralPanelImpl {
@@ -108,7 +113,7 @@ public slots:
     
 private:
     Task &m_task;
-    double m_dayLength;
+    Project &m_project;
     
     Duration m_estimate;
     Duration m_duration;

@@ -25,6 +25,7 @@
 #include "kptdurationspinbox.h"
 #include "kptcalendar.h"
 #include "kptdatetime.h"
+#include "kptproject.h"
 
 #include <kmessagebox.h>
 #include <klineedit.h>
@@ -50,7 +51,7 @@ namespace KPlato
 TaskGeneralPanel::TaskGeneralPanel(Task &task, QWidget *p, const char *n)
     : TaskGeneralPanelImpl(p, n),
       m_task(task),
-      m_dayLength(24)
+      m_project( static_cast<Project&>( *(task.projectNode()) ) )
 {
     useTime = true;
     setStartValues( task );
@@ -63,6 +64,22 @@ void TaskGeneralPanel::setStartValues( Task &task ) {
     descriptionfield->setText(task.description());
     idfield->setText(task.id());
     wbsfield->setText(task.wbsCode());
+
+    int cal = 0;
+    m_calendars.clear();
+    calendarCombo->addItem(i18n("None"));
+    m_calendars.insert(0, 0);
+    QList<Calendar*> list = m_project.calendars();
+    int i=1;
+    foreach (Calendar *c, list) {
+        calendarCombo->insertItem(i, c->name());
+        m_calendars.insert(i, c);
+        if (c == task.estimate()->calendar()) {
+            cal = i;
+        }
+        ++i;
+    }
+    calendarCombo->setCurrentIndex(cal);
 
     estimate->setUnit( task.estimate()->unit() );
     setEstimateType(task.estimate()->type());
@@ -153,6 +170,10 @@ MacroCommand *TaskGeneralPanel::buildCommand() {
         cmd->addCommand(new EstimateModifyRiskCmd(m_task, m_task.estimate()->risktype(), risktype()));
         modified = true;
     }
+    if (m_task.estimate()->calendar() != calendar()) {
+        cmd->addCommand(new ModifyEstimateCalendarCmd(m_task, m_task.estimate()->calendar(), calendar()));
+        modified = true;
+    }
     if (!modified) {
         delete cmd;
         return 0;
@@ -171,20 +192,19 @@ bool TaskGeneralPanel::ok() {
 
 void TaskGeneralPanel::estimationTypeChanged(int type) {
     if (type == 0 /*Effort*/) {
-/*        Duration d = estimationValue();
-        setEstimateScales(m_dayLength);*/
-        //setEstimate(d);
         estimate->setEnabled(true);
+        calendarCombo->setEnabled(false);
     } else {
-/*        Duration d = estimationValue();
-        setEstimateScales(24);*/
-        //setEstimate(d);
-        if (schedulingType() == 6) { /*Fixed interval*/
-            estimate->setEnabled(false);
-        } else {
-            estimate->setEnabled(true);
+        if ( type == 1 /*Duration*/ ) {
+            calendarCombo->setEnabled(false);
+            if (schedulingType() == 6) { /*Fixed interval*/
+                estimate->setEnabled(false);
+            } else {
+                estimate->setEnabled(true);
+            }
+        } else if ( type == 2 /*Length*/ ) {
+            calendarCombo->setEnabled(true);
         }
-
     }
     TaskGeneralPanelImpl::estimationTypeChanged(type);
 }
@@ -198,7 +218,6 @@ void TaskGeneralPanel::scheduleTypeChanged(int value)
 //TODO            setEstimate( DateTime( endDateTime(), KDateTime::UTC) - DateTime( startDateTime(), KDateTime::UTC ) );
         }
     } else {
-//        setEstimateScales(m_dayLength);
         estimate->setEnabled(true);
     }
     TaskGeneralPanelImpl::scheduleTypeChanged(value);
@@ -226,6 +245,8 @@ TaskGeneralPanelImpl::TaskGeneralPanelImpl(QWidget *p, const char *n)
     connect(pessimisticValue, SIGNAL(valueChanged(int)), SLOT(checkAllFieldsFilled()));
     connect(descriptionfield, SIGNAL(textChanged()), SLOT(checkAllFieldsFilled()));
     connect(risk, SIGNAL(activated(int)), SLOT(checkAllFieldsFilled()));
+    connect(calendarCombo, SIGNAL(activated(int)), SLOT(calendarChanged(int)));
+
 }
 
 void TaskGeneralPanelImpl::setSchedulingType(int type)
@@ -327,7 +348,10 @@ void TaskGeneralPanelImpl::estimationTypeChanged( int /*type*/ )
     checkAllFieldsFilled();
 }
 
-
+void TaskGeneralPanelImpl::calendarChanged( int /*index*/ )
+{
+    checkAllFieldsFilled();
+}
 
 void TaskGeneralPanelImpl::setEstimate( double duration)
 {
@@ -338,6 +362,7 @@ void TaskGeneralPanelImpl::setEstimate( double duration)
 void TaskGeneralPanelImpl::setEstimateType( int type)
 {
     estimateType->setCurrentIndex(type);
+    estimationTypeChanged( type );
 }
 
 
@@ -518,6 +543,11 @@ void TaskGeneralPanelImpl::setRisktype( int r )
 int TaskGeneralPanelImpl::risktype() const
 {
     return risk->currentIndex();
+}
+
+Calendar *TaskGeneralPanelImpl::calendar() const
+{
+    return m_calendars.value( calendarCombo->currentIndex() );
 }
 
 

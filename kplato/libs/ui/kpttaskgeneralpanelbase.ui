@@ -6,41 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>480</width>
-    <height>467</height>
+    <width>570</width>
+    <height>504</height>
    </rect>
   </property>
   <property name="windowTitle" >
    <string>TaskGeneralPanelBase</string>
   </property>
-  <layout class="QVBoxLayout" >
-   <property name="leftMargin" >
-    <number>0</number>
-   </property>
-   <property name="topMargin" >
-    <number>0</number>
-   </property>
-   <property name="rightMargin" >
-    <number>0</number>
-   </property>
-   <property name="bottomMargin" >
-    <number>0</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout" >
    <item>
     <layout class="QHBoxLayout" >
      <property name="spacing" >
       <number>6</number>
      </property>
-     <property name="leftMargin" >
-      <number>0</number>
-     </property>
-     <property name="topMargin" >
-      <number>0</number>
-     </property>
-     <property name="rightMargin" >
-      <number>0</number>
-     </property>
-     <property name="bottomMargin" >
+     <property name="margin" >
       <number>0</number>
      </property>
      <item>
@@ -48,16 +27,7 @@
        <property name="spacing" >
         <number>6</number>
        </property>
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
+       <property name="margin" >
         <number>0</number>
        </property>
        <item>
@@ -119,16 +89,7 @@ This is not limited to persons available in a resource group but can be anyone. 
        <property name="spacing" >
         <number>6</number>
        </property>
-       <property name="leftMargin" >
-        <number>0</number>
-       </property>
-       <property name="topMargin" >
-        <number>0</number>
-       </property>
-       <property name="rightMargin" >
-        <number>0</number>
-       </property>
-       <property name="bottomMargin" >
+       <property name="margin" >
         <number>0</number>
        </property>
        <item>
@@ -136,16 +97,7 @@ This is not limited to persons available in a resource group but can be anyone. 
          <property name="spacing" >
           <number>6</number>
          </property>
-         <property name="leftMargin" >
-          <number>0</number>
-         </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
+         <property name="margin" >
           <number>0</number>
          </property>
          <item>
@@ -166,7 +118,7 @@ This is not limited to persons available in a resource group but can be anyone. 
            <property name="sizeType" >
             <enum>QSizePolicy::Expanding</enum>
            </property>
-           <property name="sizeHint" >
+           <property name="sizeHint" stdset="0" >
             <size>
              <width>40</width>
              <height>20</height>
@@ -207,16 +159,7 @@ This is not limited to persons available in a resource group but can be anyone. 
          <property name="spacing" >
           <number>6</number>
          </property>
-         <property name="leftMargin" >
-          <number>0</number>
-         </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
+         <property name="margin" >
           <number>0</number>
          </property>
          <item>
@@ -270,22 +213,10 @@ The estimation can be either effort based or duration based. If it is effort bas
          <enum>QFrame::Raised</enum>
         </property>
         <layout class="QGridLayout" >
-         <property name="leftMargin" >
+         <property name="margin" >
           <number>0</number>
          </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
-          <number>0</number>
-         </property>
-         <property name="horizontalSpacing" >
-          <number>6</number>
-         </property>
-         <property name="verticalSpacing" >
+         <property name="spacing" >
           <number>6</number>
          </property>
          <item row="0" column="0" >
@@ -395,89 +326,27 @@ The estimation can be either effort based or duration based. If it is effort bas
         <property name="frameShadow" >
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QGridLayout" >
-         <property name="leftMargin" >
-          <number>0</number>
-         </property>
-         <property name="topMargin" >
-          <number>0</number>
-         </property>
-         <property name="rightMargin" >
-          <number>0</number>
-         </property>
-         <property name="bottomMargin" >
-          <number>0</number>
-         </property>
-         <property name="horizontalSpacing" >
-          <number>6</number>
-         </property>
-         <property name="verticalSpacing" >
-          <number>6</number>
-         </property>
-         <item rowspan="2" row="0" column="0" >
-          <layout class="QVBoxLayout" >
-           <property name="spacing" >
-            <number>6</number>
+        <layout class="QGridLayout" name="gridLayout" >
+         <item row="0" column="0" >
+          <widget class="QLabel" name="textLabel3_2" >
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
            </property>
-           <property name="leftMargin" >
-            <number>0</number>
+           <property name="text" >
+            <string>Estimate:</string>
            </property>
-           <property name="topMargin" >
-            <number>0</number>
+           <property name="wordWrap" >
+            <bool>false</bool>
            </property>
-           <property name="rightMargin" >
-            <number>0</number>
-           </property>
-           <property name="bottomMargin" >
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="textLabel3_2" >
-             <property name="sizePolicy" >
-              <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text" >
-              <string>Estimate:</string>
-             </property>
-             <property name="wordWrap" >
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="textLabel3_2_3" >
-             <property name="sizePolicy" >
-              <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="toolTip" >
-              <string>Risk controles the PERT distribution used when calculating the actual estimate for this task.</string>
-             </property>
-             <property name="whatsThis" >
-              <string>&lt;p>Risk controles the PERT distribution used when calculating the actual estimate for the task.
-&lt;b>None&lt;/b> means the Expected estimate is used as is.
-&lt;b>Low risk&lt;/b> means that a normal distribution is used.
-&lt;b>High risk&lt;/b> means that the estimate will be slightly pessimistic compared to Low risk.&lt;/p></string>
-             </property>
-             <property name="text" >
-              <string>Risk:</string>
-             </property>
-             <property name="wordWrap" >
-              <bool>false</bool>
-             </property>
-             <property name="buddy" >
-              <cstring>risk</cstring>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          </widget>
          </item>
          <item row="0" column="1" >
+          <widget class="DurationSpinBox" name="estimate" />
+         </item>
+         <item row="0" column="2" colspan="2" >
           <widget class="KComboBox" name="estimateType" >
            <property name="sizePolicy" >
             <sizepolicy vsizetype="Fixed" hsizetype="Preferred" >
@@ -498,6 +367,42 @@ The estimation can be either effort based or duration based. If it is effort bas
              <string>Duration</string>
             </property>
            </item>
+           <item>
+            <property name="text" >
+             <string>Length</string>
+            </property>
+           </item>
+          </widget>
+         </item>
+         <item row="0" column="4" colspan="2" >
+          <widget class="KComboBox" name="calendarCombo" />
+         </item>
+         <item row="1" column="0" >
+          <widget class="QLabel" name="textLabel3_2_3" >
+           <property name="sizePolicy" >
+            <sizepolicy vsizetype="Preferred" hsizetype="Fixed" >
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="toolTip" >
+            <string>Risk controles the PERT distribution used when calculating the actual estimate for this task.</string>
+           </property>
+           <property name="whatsThis" >
+            <string>&lt;p>Risk controles the PERT distribution used when calculating the actual estimate for the task.
+&lt;b>None&lt;/b> means the Expected estimate is used as is.
+&lt;b>Low risk&lt;/b> means that a normal distribution is used.
+&lt;b>High risk&lt;/b> means that the estimate will be slightly pessimistic compared to Low risk.&lt;/p></string>
+           </property>
+           <property name="text" >
+            <string>Risk:</string>
+           </property>
+           <property name="wordWrap" >
+            <bool>false</bool>
+           </property>
+           <property name="buddy" >
+            <cstring>risk</cstring>
+           </property>
           </widget>
          </item>
          <item row="1" column="1" >
@@ -538,78 +443,56 @@ The estimation can be either effort based or duration based. If it is effort bas
           </widget>
          </item>
          <item row="1" column="2" >
-          <layout class="QHBoxLayout" >
-           <property name="spacing" >
-            <number>6</number>
+          <widget class="QLabel" name="textLabel1_2" >
+           <property name="text" >
+            <string>Optimistic:</string>
            </property>
-           <property name="leftMargin" >
-            <number>0</number>
+           <property name="wordWrap" >
+            <bool>false</bool>
            </property>
-           <property name="topMargin" >
-            <number>0</number>
+           <property name="buddy" >
+            <cstring>optimisticValueoptimisticValue</cstring>
            </property>
-           <property name="rightMargin" >
-            <number>0</number>
-           </property>
-           <property name="bottomMargin" >
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QLabel" name="textLabel1_2" >
-             <property name="text" >
-              <string>Optimistic:</string>
-             </property>
-             <property name="wordWrap" >
-              <bool>false</bool>
-             </property>
-             <property name="buddy" >
-              <cstring>optimisticValueoptimisticValue</cstring>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSpinBox" name="optimisticValue" >
-             <property name="suffix" >
-              <string>%</string>
-             </property>
-             <property name="minimum" >
-              <number>-99</number>
-             </property>
-             <property name="maximum" >
-              <number>0</number>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="textLabel2_2" >
-             <property name="text" >
-              <string>Pessimistic:</string>
-             </property>
-             <property name="alignment" >
-              <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-             </property>
-             <property name="wordWrap" >
-              <bool>false</bool>
-             </property>
-             <property name="buddy" >
-              <cstring>pessimisticValue</cstring>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QSpinBox" name="pessimisticValue" >
-             <property name="suffix" >
-              <string>%</string>
-             </property>
-             <property name="maximum" >
-              <number>999</number>
-             </property>
-            </widget>
-           </item>
-          </layout>
+          </widget>
          </item>
-         <item row="0" column="2" >
-          <widget class="DurationSpinBox" name="estimate" />
+         <item row="1" column="3" >
+          <widget class="QSpinBox" name="optimisticValue" >
+           <property name="suffix" >
+            <string>%</string>
+           </property>
+           <property name="minimum" >
+            <number>-99</number>
+           </property>
+           <property name="maximum" >
+            <number>0</number>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="4" >
+          <widget class="QLabel" name="textLabel2_2" >
+           <property name="text" >
+            <string>Pessimistic:</string>
+           </property>
+           <property name="alignment" >
+            <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+           </property>
+           <property name="wordWrap" >
+            <bool>false</bool>
+           </property>
+           <property name="buddy" >
+            <cstring>pessimisticValue</cstring>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="5" >
+          <widget class="QSpinBox" name="pessimisticValue" >
+           <property name="suffix" >
+            <string>%</string>
+           </property>
+           <property name="maximum" >
+            <number>999</number>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
