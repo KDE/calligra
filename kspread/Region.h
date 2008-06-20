@@ -562,8 +562,7 @@ Q_DECLARE_TYPEINFO( KSpread::Region, Q_MOVABLE_TYPE );
 
 inline kdbgstream operator<<( kdbgstream str, const KSpread::Region& r )
 {
-  str << "Region = " << r.name();
-  return str;
+    return str << r.name();
 }
 
 #endif // KSPREAD_REGION

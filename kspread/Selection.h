@@ -403,19 +403,4 @@ private:
 
 } // namespace KSpread
 
-/***************************************************************************
-  kDebug support
-****************************************************************************/
-
-inline kdbgstream operator<<( kdbgstream str, const KSpread::Selection& s )
-{
-  str << "Selection = " << s.name();
-  return str;
-}
-
-inline kndbgstream operator<<( kndbgstream str, const KSpread::Selection& )
-{
-  return str;
-}
-
 #endif // KSPREAD_SELECTION
