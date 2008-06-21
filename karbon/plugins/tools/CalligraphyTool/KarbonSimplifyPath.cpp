@@ -58,6 +58,9 @@ using namespace KarbonSimplifyPath;
 
 void karbonSimplifyPath( KoPathShape *path, double error )
 {
+    if ( path->pointCount() == 0 )
+        return;
+
     QList<KoSubpath *> subpaths = split( *path );
     // TODO: step 2.
     simplifySubpaths( &subpaths, error );
@@ -151,7 +154,6 @@ void KarbonSimplifyPath::mergeSubpaths( QList<KoSubpath *> subpaths,
                                         KoPathShape *path )
 {
     path->clear();
-    // TODO: empty subpaths or empty subpaths->first()
     path->moveTo( subpaths.first()->first()->point() );
 
 
