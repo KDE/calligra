@@ -87,20 +87,19 @@ set(pgzkexireportpart2_LIB_SRCS
 	)
 if (SHOULD_BUILD_KSPREAD)
   add_definitions(-DHAVE_KSPREAD)
-  set(pgzkexireportpart2_LIB_SRCS
-	${pgzkexireportpart2_LIB_SRCS}
-	backend/renderer/krkspreadrender.cpp
-)
+  set(pgzkexireportpart2_LIB_SRCS ${pgzkexireportpart2_LIB_SRCS} backend/renderer/krkspreadrender.cpp)
 endif (SHOULD_BUILD_KSPREAD)
 
 kde4_add_ui_files(pgzkexireportpart2_LIB_SRCS backend/wrtembed/detailgroupsectiondialog.ui backend/wrtembed/sectioneditor.ui )
 
 kde4_add_plugin(pgzkexireportpart2 ${pgzkexireportpart2_LIB_SRCS})
 
-target_link_libraries(pgzkexireportpart2 ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} ${QT_QTSCRIPT_LIBRARY}  kexidb kexicore keximain koproperty koguiutils komain kexiguiutils 
-kspreadcommon kdchart ${KDE4_KROSSCORE_LIBS})
-# the above doesn't always compile, we link to kspreadcommon unconditionally while its an optional requirement...
-# any hint for a fix appreciated!
+target_link_libraries(pgzkexireportpart2 ${KDE4_KDEUI_LIBS} ${QT_QTGUI_LIBRARY} 
+  ${QT_QTSCRIPT_LIBRARY}  kexidb kexicore keximain koproperty koguiutils komain kexiguiutils 
+  kdchart ${KDE4_KROSSCORE_LIBS})
+if (SHOULD_BUILD_KSPREAD)
+  target_link_libraries(pgzkexireportpart2 kspreadcommon)
+endif (SHOULD_BUILD_KSPREAD)
 
 install(TARGETS pgzkexireportpart2  DESTINATION ${PLUGIN_INSTALL_DIR})
 install( FILES  pgzkexireporthandler.desktop  DESTINATION ${SERVICES_INSTALL_DIR}/kexi)
