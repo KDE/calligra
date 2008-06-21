@@ -959,14 +959,14 @@ void Sheet::removeRows( int row, int number )
 void Sheet::emitHideRow()
 {
     emit visibleSizeChanged();
-    emit sig_updateVBorder( this );
+    emit sig_updateRowHeader( this );
     emit sig_updateView( this );
 }
 
 void Sheet::emitHideColumn()
 {
     emit visibleSizeChanged();
-    emit sig_updateHBorder( this );
+    emit sig_updateColumnHeader( this );
     emit sig_updateView( this );
 }
 
@@ -1194,7 +1194,7 @@ void Sheet::replace( const QString &_find, const QString &_replace, long options
 
 void Sheet::refreshPreference()
 {
-  emit sig_updateHBorder( this );
+  emit sig_updateColumnHeader( this );
   emit sig_updateView( this );
 }
 
@@ -1780,8 +1780,8 @@ bool Sheet::loadSelection(const KoXmlDocument& doc, const QRect& pasteArea,
 #endif
 
     emit sig_updateView( this );
-    emit sig_updateHBorder( this );
-    emit sig_updateVBorder( this );
+    emit sig_updateColumnHeader( this );
+    emit sig_updateRowHeader( this );
 
     return true;
 }
@@ -4356,7 +4356,7 @@ void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )
         //So add that region of the sheet to the paint dirty list.
         setRegionPaintDirty( Region(QRect(QPoint(0, _row), QPoint(KS_colMax, KS_rowMax)) ) );
 
-      emit sig_updateVBorder( this );
+      emit sig_updateRowHeader( this );
       emit sig_updateView( this );
     }
 }
@@ -4372,7 +4372,7 @@ void Sheet::emit_updateColumn( ColumnFormat *_format, int _column )
     //has been resized or hidden, so add that region of the sheet to the paint dirty list.
     setRegionPaintDirty( Region( QRect(QPoint(_column, 1), QPoint(KS_colMax, KS_rowMax) ) ) );
 
-    emit sig_updateHBorder( this );
+    emit sig_updateColumnHeader( this );
     emit sig_updateView( this );
 }
 

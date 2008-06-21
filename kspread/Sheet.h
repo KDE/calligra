@@ -898,8 +898,8 @@ signals:
     void sig_refreshView();
     void sig_updateView( Sheet *_sheet );
     void sig_updateView( Sheet *_sheet, const Region& );
-    void sig_updateHBorder( Sheet *_sheet );
-    void sig_updateVBorder( Sheet *_sheet );
+    void sig_updateColumnHeader( Sheet *_sheet );
+    void sig_updateRowHeader( Sheet *_sheet );
     /**
      * @see setSheetName
      */

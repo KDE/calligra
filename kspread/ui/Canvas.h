@@ -61,14 +61,14 @@ class QScrollBar;
 namespace KSpread
 {
 class Cell;
-class Canvas;
-class HBorder;
-class VBorder;
-class Sheet;
-class Doc;
-class View;
-class Selection;
 class CellEditor;
+class Canvas;
+class ColumnHeader;
+class Doc;
+class Sheet;
+class RowHeader;
+class Selection;
+class View;
 
 
 /**
@@ -80,8 +80,8 @@ class CellEditor;
  */
 class KSPREAD_EXPORT Canvas : public QWidget, public KoCanvasBase
 {
-    friend class HBorder;
-    friend class VBorder;
+    friend class ColumnHeader;
+    friend class RowHeader;
     friend class View;
     friend class DefaultTool;
 
@@ -259,8 +259,8 @@ private slots:
 private:
     virtual bool eventFilter( QObject *o, QEvent *e );
 
-    HBorder* hBorderWidget() const;
-    VBorder* vBorderWidget() const;
+    ColumnHeader* columnHeader() const;
+    RowHeader* rowHeader() const;
     QScrollBar* horzScrollBar() const;
     QScrollBar* vertScrollBar() const;
 

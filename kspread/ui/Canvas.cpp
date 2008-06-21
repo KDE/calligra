@@ -94,12 +94,12 @@
 #include <KoZoomHandler.h>
 
 // KSpread
-#include "Border.h"
 #include "CellStorage.h"
 #include "CellView.h"
 #include "Doc.h"
 #include "Editors.h"
 #include "Global.h"
+#include "Headers.h"
 #include "Localization.h"
 #include "Map.h"
 #include "RowColumnFormat.h"
@@ -291,14 +291,14 @@ double Canvas::zoom() const
   return d->view->zoom();
 }
 
-HBorder* Canvas::hBorderWidget() const
+ColumnHeader* Canvas::columnHeader() const
 {
-  return d->view->hBorderWidget();
+  return d->view->columnHeader();
 }
 
-VBorder* Canvas::vBorderWidget() const
+RowHeader* Canvas::rowHeader() const
 {
-  return d->view->vBorderWidget();
+  return d->view->rowHeader();
 }
 
 QScrollBar* Canvas::horzScrollBar() const
@@ -449,8 +449,8 @@ void Canvas::setDocumentOffset( const QPoint& offset )
     const QPoint delta = offset - viewConverter()->documentToView( d->offset ).toPoint();
     d->offset = viewConverter()->viewToDocument( offset );
 
-    hBorderWidget()->scroll(delta.x(), 0);
-    vBorderWidget()->scroll(0, delta.y());
+    columnHeader()->scroll(delta.x(), 0);
+    rowHeader()->scroll(0, delta.y());
 }
 
 void Canvas::setDocumentSize( const QSizeF& size )
@@ -497,7 +497,7 @@ void Canvas::slotScrollHorz( int _value )
     if ( sheet->layoutDirection() == Qt::RightToLeft )
         dx = -dx;
     scroll( dx, 0 );
-    hBorderWidget()->scroll( dx, 0 );
+    columnHeader()->scroll( dx, 0 );
 }
 
 void Canvas::slotScrollVert( int _value )
@@ -521,7 +521,7 @@ void Canvas::slotScrollVert( int _value )
     // NOTE Stefan: Always scroll by whole pixels, otherwise we'll get offsets.
     int dy = qRound( viewConverter()->documentToViewY( d->yOffset - _value ) );
     scroll( 0, dy );
-    vBorderWidget()->scroll( 0, dy );
+    rowHeader()->scroll( 0, dy );
 
     // New absolute position
     // NOTE Stefan: Always store whole pixels, otherwise we'll get offsets.
@@ -916,7 +916,7 @@ void Canvas::dropEvent( QDropEvent * _ev )
 void Canvas::slotAutoScroll(const QPoint &scrollDistance)
 {
   // NOTE Stefan: This slot is triggered by the same signal as
-  //              HBorder::slotAutoScroll and VBorder::slotAutoScroll.
+  //              ColumnHeader::slotAutoScroll and RowHeader::slotAutoScroll.
   //              Therefore, nothing has to be done except the scrolling was
   //              initiated in the canvas.
   if (!d->mousePressed)
@@ -939,7 +939,7 @@ void Canvas::equalizeRow()
   {
       size = qMax( sheet->rowFormat(i)->height(), size );
   }
-  d->view->vBorderWidget()->equalizeRow(size);
+  d->view->rowHeader()->equalizeRow(size);
 }
 
 void Canvas::equalizeColumn()
@@ -958,7 +958,7 @@ void Canvas::equalizeColumn()
   {
     size = qMax( sheet->columnFormat(i)->width(), size );
   }
-  d->view->hBorderWidget()->equalizeColumn(size);
+  d->view->columnHeader()->equalizeColumn(size);
 }
 
 QRect Canvas::viewToCellCoordinates( const QRectF& viewRect ) const

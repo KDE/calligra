@@ -53,15 +53,15 @@ class KoZoomHandler;
 namespace KSpread
 {
 class Cell;
+class ColumnHeader;
 class Damage;
 class Sheet;
 class Canvas;
 class Doc;
-class HBorder;
 class Region;
 class Selection;
 class SheetView;
-class VBorder;
+class RowHeader;
 class View;
 
 
@@ -104,10 +104,10 @@ public:
     KoCanvasController* canvasController() const;
 
     /** Returns the column header */
-    HBorder* hBorderWidget() const;
+    ColumnHeader* columnHeader() const;
 
     /** Returns the row header */
-    VBorder* vBorderWidget() const;
+    RowHeader* rowHeader() const;
 
     /** Returns the horizontal scrollbar */
     QScrollBar* horzScrollBar() const;
@@ -337,8 +337,8 @@ public slots:
     void slotRefreshView();
     void slotUpdateView( Sheet *_sheet );
     void slotUpdateView( Sheet *_sheet, const Region& );
-    void slotUpdateHBorder( Sheet *_sheet );
-    void slotUpdateVBorder( Sheet *_sheet );
+    void slotUpdateColumnHeader( Sheet *_sheet );
+    void slotUpdateRowHeader( Sheet *_sheet );
     void slotChangeSelection(const Region&);
     void slotScrollChoice(const Region&);
     void slotAddSheet( Sheet *_sheet );

@@ -16,8 +16,9 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef BORDER_H
-#define BORDER_H
+
+#ifndef KSPREAD_HEADERS
+#define KSPREAD_HEADERS
 
 #include <QWidget>
 
@@ -35,12 +36,12 @@ class View;
 /**
  * The widget above the cells showing the column headers.
  */
-class HBorder : public QWidget
+class ColumnHeader : public QWidget
 {
     Q_OBJECT
 public:
-    HBorder( QWidget *_parent, Canvas *_canvas, View *_view  );
-    virtual ~HBorder();
+    ColumnHeader( QWidget *_parent, Canvas *_canvas, View *_view  );
+    virtual ~ColumnHeader();
 
     int markerColumn() const { return  m_iSelectionAnchor; }
     void equalizeColumn( double resize );
@@ -87,7 +88,7 @@ private:
 
     /**
      * Flag that indicates whether the user resizes a column
-     * The user may resize columns by dragging the mouse around in the HBorder widget.
+     * The user may resize columns by dragging the mouse around in the ColumnHeader widget.
      * If he is doing that right now, this flag is true.
      */
     bool m_bResize;
@@ -124,12 +125,12 @@ private:
 /**
  * The widget left to the cells showing the row headers.
  */
-class VBorder : public QWidget
+class RowHeader : public QWidget
 {
     Q_OBJECT
 public:
-    VBorder( QWidget *_parent, Canvas *_canvas, View *_view );
-    virtual ~VBorder();
+    RowHeader( QWidget *_parent, Canvas *_canvas, View *_view );
+    virtual ~RowHeader();
 
     int markerRow() const { return  m_iSelectionAnchor; }
     void equalizeRow( double resize );

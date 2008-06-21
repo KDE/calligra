@@ -49,7 +49,6 @@
 
 #include "ApplicationSettings.h"
 #include "CalculationSettings.h"
-#include "Border.h"
 #include "Canvas.h"
 #include "Doc.h"
 #include "Editors.h"

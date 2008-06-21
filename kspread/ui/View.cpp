@@ -121,11 +121,11 @@
 #include "Doc.h"
 #include "inspector.h"
 #include "LoadingInfo.h"
-#include "Border.h"
 #include "Canvas.h"
 #include "Editors.h"
 #include "Global.h"
 // #include "Handler.h"
+#include "Headers.h"
 #include "Localization.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
@@ -188,8 +188,8 @@ public:
     KoCanvasController* canvasController;
     KoZoomController* zoomController;
     KoZoomHandler* zoomHandler;
-    VBorder *vBorderWidget;
-    HBorder *hBorderWidget;
+    RowHeader *rowHeader;
+    ColumnHeader *columnHeader;
     SelectAllButton* selectAllButton;
     QScrollBar *horzScrollBar;
     QScrollBar *vertScrollBar;
@@ -766,10 +766,10 @@ void View::initView()
     connect( d->zoomController, SIGNAL(zoomChanged(KoZoomMode::Mode, double)),
              this, SLOT(viewZoom(KoZoomMode::Mode, double)) );
 
-    d->hBorderWidget = new HBorder( this, d->canvas,this );
-    d->vBorderWidget = new VBorder( this, d->canvas ,this );
-    d->hBorderWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
-    d->vBorderWidget->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
+    d->columnHeader = new ColumnHeader( this, d->canvas,this );
+    d->rowHeader = new RowHeader( this, d->canvas ,this );
+    d->columnHeader->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
+    d->rowHeader->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
     d->selectAllButton = new SelectAllButton(d->canvas, d->selection);
     d->selectAllButton->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Minimum );
 
@@ -819,8 +819,8 @@ void View::initView()
     d->viewLayout->setColumnStretch( 1, 10 );
     d->viewLayout->setRowStretch( 2, 10 );
     d->viewLayout->addWidget( d->selectAllButton, 1, 0 );
-    d->viewLayout->addWidget( d->hBorderWidget, 1, 1, 1, 1 );
-    d->viewLayout->addWidget( d->vBorderWidget, 2, 0 );
+    d->viewLayout->addWidget( d->columnHeader, 1, 1, 1, 1 );
+    d->viewLayout->addWidget( d->rowHeader, 2, 0 );
     d->viewLayout->addWidget( d->canvasController, 2, 1 );
     d->viewLayout->addWidget( d->vertScrollBar, 1, 2, 2, 1, Qt::AlignHCenter);
     d->viewLayout->addWidget( bottomPart, 3, 0, 1, 2 );
@@ -856,14 +856,14 @@ KoCanvasController* View::canvasController() const
     return d->canvasController;
 }
 
-HBorder* View::hBorderWidget()const
+ColumnHeader* View::columnHeader()const
 {
-    return d->hBorderWidget;
+    return d->columnHeader;
 }
 
-VBorder* View::vBorderWidget()const
+RowHeader* View::rowHeader()const
 {
-    return d->vBorderWidget;
+    return d->rowHeader;
 }
 
 QScrollBar* View::horzScrollBar()const
@@ -1343,10 +1343,10 @@ void View::addSheet( Sheet * _t )
   connect( _t->print(), SIGNAL( sig_updateView( Sheet* ) ), SLOT( slotUpdateView( Sheet* ) ) );
   connect( _t, SIGNAL( sig_updateView( Sheet *, const Region& ) ),
                     SLOT( slotUpdateView( Sheet*, const Region& ) ) );
-  connect( _t, SIGNAL( sig_updateHBorder( Sheet * ) ),
-                    SLOT( slotUpdateHBorder( Sheet * ) ) );
-  connect( _t, SIGNAL( sig_updateVBorder( Sheet * ) ),
-                    SLOT( slotUpdateVBorder( Sheet * ) ) );
+  connect( _t, SIGNAL( sig_updateColumnHeader( Sheet * ) ),
+                    SLOT( slotUpdateColumnHeader( Sheet * ) ) );
+  connect( _t, SIGNAL( sig_updateRowHeader( Sheet * ) ),
+                    SLOT( slotUpdateRowHeader( Sheet * ) ) );
   connect( _t, SIGNAL( sig_nameChanged( Sheet*, const QString& ) ),
                     this, SLOT( slotSheetRenamed( Sheet*, const QString& ) ) );
   connect( _t, SIGNAL( sig_SheetHidden( Sheet* ) ),
@@ -1405,8 +1405,8 @@ void View::setActiveSheet( Sheet* sheet, bool updateSheet )
     if ( updateSheet )
     {
         d->tabBar->setActiveTab( d->activeSheet->sheetName() );
-        d->vBorderWidget->repaint();
-        d->hBorderWidget->repaint();
+        d->rowHeader->repaint();
+        d->columnHeader->repaint();
         d->selectAllButton->repaint();
     }
 
@@ -1482,8 +1482,8 @@ void View::changeSheet( const QString& _name )
     updateBorderButton();
 
     //update visible area
-    d->vBorderWidget->repaint();
-    d->hBorderWidget->repaint();
+    d->rowHeader->repaint();
+    d->columnHeader->repaint();
     d->selectAllButton->repaint();
 }
 
@@ -1550,7 +1550,7 @@ void View::sheetProperties()
         // the scrollbar and hborder remain reversed otherwise
         d->horzScrollBar->setValue( d->horzScrollBar->maximum() -
                                             d->horzScrollBar->value() );
-        d->hBorderWidget->update();
+        d->columnHeader->update();
     }
 }
 
@@ -1940,7 +1940,7 @@ void View::keyPressEvent(QKeyEvent *event)
 
 int View::leftBorder() const
 {
-  return d->vBorderWidget->width();
+  return d->rowHeader->width();
 }
 
 int View::rightBorder() const
@@ -1950,7 +1950,7 @@ int View::rightBorder() const
 
 int View::topBorder() const
 {
-  return d->hBorderWidget->height();
+  return d->columnHeader->height();
 }
 
 int View::bottomBorder() const
@@ -1981,8 +1981,8 @@ void View::refreshView()
 
   d->tabBar->setReadOnly( !doc()->isReadWrite() || doc()->map()->isProtected() );
 
-  d->hBorderWidget->setVisible( doc()->map()->settings()->showColumnHeader() );
-  d->vBorderWidget->setVisible( doc()->map()->settings()->showRowHeader() );
+  d->columnHeader->setVisible( doc()->map()->settings()->showColumnHeader() );
+  d->rowHeader->setVisible( doc()->map()->settings()->showRowHeader() );
   d->selectAllButton->setVisible( doc()->map()->settings()->showColumnHeader() && doc()->map()->settings()->showRowHeader() );
   d->vertScrollBar->setVisible( doc()->map()->settings()->showVerticalScrollBar() );
   d->horzScrollBar->setVisible( doc()->map()->settings()->showHorizontalScrollBar() );
@@ -1990,8 +1990,8 @@ void View::refreshView()
   if ( statusBar() ) statusBar()->setVisible( doc()->map()->settings()->showStatusBar() );
 
   QFont font( KoGlobal::defaultFont() );
-  d->hBorderWidget->setMinimumHeight( qRound( zoomHandler()->zoomItY( font.pointSizeF() + 3 ) ) );
-  d->vBorderWidget->setMinimumWidth( qRound( zoomHandler()->zoomItX( YBORDER_WIDTH ) ) );
+  d->columnHeader->setMinimumHeight( qRound( zoomHandler()->zoomItY( font.pointSizeF() + 3 ) ) );
+  d->rowHeader->setMinimumWidth( qRound( zoomHandler()->zoomItX( YBORDER_WIDTH ) ) );
   d->selectAllButton->setMinimumHeight( qRound( zoomHandler()->zoomItY( font.pointSizeF() + 3 ) ) );
   d->selectAllButton->setMinimumWidth( qRound( zoomHandler()->zoomItX( YBORDER_WIDTH ) ) );
 
@@ -2056,8 +2056,8 @@ void View::zoomMinus()
     d->activeSheet->setLayoutDirtyFlag();
 
   d->canvas->repaint();
-  d->vBorderWidget->repaint();
-  d->hBorderWidget->repaint();
+  d->rowHeader->repaint();
+  d->columnHeader->repaint();
 }
 
 void View::zoomPlus()
@@ -2071,8 +2071,8 @@ void View::zoomPlus()
     d->activeSheet->setLayoutDirtyFlag();
 
   d->canvas->repaint();
-  d->vBorderWidget->repaint();
-  d->hBorderWidget->repaint();
+  d->rowHeader->repaint();
+  d->columnHeader->repaint();
 }
 */
 
@@ -2162,8 +2162,8 @@ void View::slotRefreshView()
 {
   refreshView();
   d->canvas->repaint();
-  d->vBorderWidget->repaint();
-  d->hBorderWidget->repaint();
+  d->rowHeader->repaint();
+  d->columnHeader->repaint();
   d->selectAllButton->repaint();
 }
 
@@ -2187,26 +2187,26 @@ void View::slotUpdateView( Sheet * _sheet, const Region& region )
   d->activeSheet->setRegionPaintDirty( region );
 }
 
-void View::slotUpdateHBorder( Sheet * _sheet )
+void View::slotUpdateColumnHeader( Sheet * _sheet )
 {
-  // kDebug(36001)<<"void View::slotUpdateHBorder( Sheet *_sheet )";
+  // kDebug(36001)<<"void View::slotUpdateColumnHeader( Sheet *_sheet )";
 
   // Do we display this sheet ?
   if ( _sheet != d->activeSheet )
     return;
 
-  d->hBorderWidget->update();
+  d->columnHeader->update();
 }
 
-void View::slotUpdateVBorder( Sheet *_sheet )
+void View::slotUpdateRowHeader( Sheet *_sheet )
 {
-  // kDebug("void View::slotUpdateVBorder( Sheet *_sheet )";
+  // kDebug("void View::slotUpdateRowHeader( Sheet *_sheet )";
 
   // Do we display this sheet ?
   if ( _sheet != d->activeSheet )
     return;
 
-  d->vBorderWidget->update();
+  d->rowHeader->update();
 }
 
 void View::slotChangeSelection(const KSpread::Region& changedRegion)
@@ -2226,8 +2226,8 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
 
   if ( !d->loading )
     doc()->map()->addDamage( new SelectionDamage( changedRegion ) );
-  d->vBorderWidget->update();
-  d->hBorderWidget->update();
+  d->rowHeader->update();
+  d->columnHeader->update();
   d->selectAllButton->update();
 
     if (d->selection->isColumnSelected() || d->selection->isRowSelected()) {
@@ -2566,9 +2566,9 @@ void View::handleDamages( const QList<Damage*>& damages )
                 refreshView = true;
             }
             if ( sheetDamage->changes() & SheetDamage::ColumnsChanged )
-                hBorderWidget()->update();
+                columnHeader()->update();
             if ( sheetDamage->changes() & SheetDamage::RowsChanged )
-                vBorderWidget()->update();
+                rowHeader()->update();
             continue;
         }
 

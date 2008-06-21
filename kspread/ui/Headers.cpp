@@ -41,7 +41,7 @@
 */
 
 // Local
-#include "Border.h"
+#include "Headers.h"
 
 // Qt
 #include <QApplication>
@@ -83,11 +83,11 @@ using namespace KSpread;
 
 /****************************************************************
  *
- * VBorder
+ * RowHeader
  *
  ****************************************************************/
 
-VBorder::VBorder( QWidget *_parent, Canvas *_canvas, View *_view)
+RowHeader::RowHeader( QWidget *_parent, Canvas *_canvas, View *_view)
     : QWidget( _parent )
 {
   m_pView = _view;
@@ -111,11 +111,11 @@ VBorder::VBorder( QWidget *_parent, Canvas *_canvas, View *_view)
 }
 
 
-VBorder::~VBorder()
+RowHeader::~RowHeader()
 {
 }
 
-void VBorder::mousePressEvent( QMouseEvent * _ev )
+void RowHeader::mousePressEvent( QMouseEvent * _ev )
 {
     if (!m_cellToolIsActive)
         return;
@@ -211,7 +211,7 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
   }
 }
 
-void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
+void RowHeader::mouseReleaseEvent( QMouseEvent * _ev )
 {
     if (!m_cellToolIsActive)
         return;
@@ -325,7 +325,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
     m_bResize = false;
 }
 
-void VBorder::equalizeRow( double resize )
+void RowHeader::equalizeRow( double resize )
 {
     if (resize != 0.0)
     {
@@ -347,7 +347,7 @@ void VBorder::equalizeRow( double resize )
     }
 }
 
-void VBorder::mouseDoubleClickEvent(QMouseEvent*)
+void RowHeader::mouseDoubleClickEvent(QMouseEvent*)
 {
     if (!m_cellToolIsActive)
         return;
@@ -366,7 +366,7 @@ void VBorder::mouseDoubleClickEvent(QMouseEvent*)
 }
 
 
-void VBorder::mouseMoveEvent( QMouseEvent * _ev )
+void RowHeader::mouseMoveEvent( QMouseEvent * _ev )
 {
     if (!m_cellToolIsActive) {
         setCursor(Qt::ArrowCursor);
@@ -442,10 +442,10 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
   }
 }
 
-void VBorder::slotAutoScroll(const QPoint& scrollDistance)
+void RowHeader::slotAutoScroll(const QPoint& scrollDistance)
 {
     // NOTE Stefan: This slot is triggered by the same signal as
-    //              Canvas::slotAutoScroll and HBorder::slotAutoScroll.
+    //              Canvas::slotAutoScroll and ColumnHeader::slotAutoScroll.
     //              Therefore, nothing has to be done except the scrolling was
     //              initiated in this header.
     if (!m_bMousePressed)
@@ -462,13 +462,13 @@ void VBorder::slotAutoScroll(const QPoint& scrollDistance)
     m_pCanvas->update();
 }
 
-void VBorder::wheelEvent( QWheelEvent* _ev )
+void RowHeader::wheelEvent( QWheelEvent* _ev )
 {
     QApplication::sendEvent( m_pCanvas, _ev );
 }
 
 
-void VBorder::paintSizeIndicator( int mouseY )
+void RowHeader::paintSizeIndicator( int mouseY )
 {
     register Sheet * const sheet = m_pView->activeSheet();
     if (!sheet)
@@ -518,7 +518,7 @@ void VBorder::paintSizeIndicator( int mouseY )
     m_lSize->show();
 }
 
-void VBorder::updateRows( int from, int to )
+void RowHeader::updateRows( int from, int to )
 {
     register Sheet * const sheet = m_pView->activeSheet();
     if (!sheet)
@@ -529,7 +529,7 @@ void VBorder::updateRows( int from, int to )
     update( 0, (int) y0, width(), (int) (y1-y0) );
 }
 
-void VBorder::paintEvent( QPaintEvent* event )
+void RowHeader::paintEvent( QPaintEvent* event )
 {
   register Sheet * const sheet = m_pView->activeSheet();
   if (!sheet)
@@ -628,13 +628,13 @@ void VBorder::paintEvent( QPaintEvent* event )
 }
 
 
-void VBorder::focusOutEvent( QFocusEvent* )
+void RowHeader::focusOutEvent( QFocusEvent* )
 {
     m_pView->disableAutoScroll();
     m_bMousePressed = false;
 }
 
-void VBorder::drawText( QPainter& painter, const QFont& font,
+void RowHeader::drawText( QPainter& painter, const QFont& font,
                         const QPointF& location, const QString& text ) const
 {
     register Sheet * const sheet = m_pView->activeSheet();
@@ -664,7 +664,7 @@ void VBorder::drawText( QPainter& painter, const QFont& font,
     painter.restore();
 }
 
-void VBorder::toolChanged(const QString& toolId)
+void RowHeader::toolChanged(const QString& toolId)
 {
     m_cellToolIsActive = (toolId == KSPREAD_DEFAULT_TOOL_ID);
     update();
@@ -673,11 +673,11 @@ void VBorder::toolChanged(const QString& toolId)
 
 /****************************************************************
  *
- * HBorder
+ * ColumnHeader
  *
  ****************************************************************/
 
-HBorder::HBorder( QWidget *_parent, Canvas *_canvas,View *_view )
+ColumnHeader::ColumnHeader( QWidget *_parent, Canvas *_canvas,View *_view )
     : QWidget( _parent )
 {
   m_pView = _view;
@@ -701,11 +701,11 @@ HBorder::HBorder( QWidget *_parent, Canvas *_canvas,View *_view )
 }
 
 
-HBorder::~HBorder()
+ColumnHeader::~ColumnHeader()
 {
 }
 
-void HBorder::mousePressEvent( QMouseEvent * _ev )
+void ColumnHeader::mousePressEvent( QMouseEvent * _ev )
 {
     if (!m_cellToolIsActive)
         return;
@@ -862,7 +862,7 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
   }
 }
 
-void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
+void ColumnHeader::mouseReleaseEvent( QMouseEvent * _ev )
 {
     if (!m_cellToolIsActive)
         return;
@@ -985,7 +985,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
     m_bResize = false;
 }
 
-void HBorder::equalizeColumn( double resize )
+void ColumnHeader::equalizeColumn( double resize )
 {
     if (resize != 0.0)
     {
@@ -1007,7 +1007,7 @@ void HBorder::equalizeColumn( double resize )
     }
 }
 
-void HBorder::mouseDoubleClickEvent(QMouseEvent*)
+void ColumnHeader::mouseDoubleClickEvent(QMouseEvent*)
 {
     if (!m_cellToolIsActive)
         return;
@@ -1025,7 +1025,7 @@ void HBorder::mouseDoubleClickEvent(QMouseEvent*)
     command->execute();
 }
 
-void HBorder::mouseMoveEvent( QMouseEvent * _ev )
+void ColumnHeader::mouseMoveEvent( QMouseEvent * _ev )
 {
     if (!m_cellToolIsActive)
         return;
@@ -1146,10 +1146,10 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
   }
 }
 
-void HBorder::slotAutoScroll(const QPoint& scrollDistance)
+void ColumnHeader::slotAutoScroll(const QPoint& scrollDistance)
 {
     // NOTE Stefan: This slot is triggered by the same signal as
-    //              Canvas::slotAutoScroll and VBorder::slotAutoScroll.
+    //              Canvas::slotAutoScroll and RowHeader::slotAutoScroll.
     //              Therefore, nothing has to be done except the scrolling was
     //              initiated in this header.
     if (!m_bMousePressed)
@@ -1166,12 +1166,12 @@ void HBorder::slotAutoScroll(const QPoint& scrollDistance)
     m_pCanvas->update();
 }
 
-void HBorder::wheelEvent( QWheelEvent* _ev )
+void ColumnHeader::wheelEvent( QWheelEvent* _ev )
 {
     QApplication::sendEvent( m_pCanvas, _ev );
 }
 
-void HBorder::resizeEvent( QResizeEvent* _ev )
+void ColumnHeader::resizeEvent( QResizeEvent* _ev )
 {
   register Sheet * const sheet = m_pView->activeSheet();
   if (!sheet)
@@ -1192,7 +1192,7 @@ void HBorder::resizeEvent( QResizeEvent* _ev )
   }
 }
 
-void HBorder::paintSizeIndicator( int mouseX )
+void ColumnHeader::paintSizeIndicator( int mouseX )
 {
     register Sheet * const sheet = m_pView->activeSheet();
     if (!sheet)
@@ -1256,7 +1256,7 @@ void HBorder::paintSizeIndicator( int mouseX )
     m_lSize->show();
 }
 
-void HBorder::updateColumns( int from, int to )
+void ColumnHeader::updateColumns( int from, int to )
 {
     register Sheet * const sheet = m_pView->activeSheet();
     if (!sheet)
@@ -1267,7 +1267,7 @@ void HBorder::updateColumns( int from, int to )
     update( (int) x0, 0, (int) (x1-x0), height() );
 }
 
-void HBorder::paintEvent( QPaintEvent* event )
+void ColumnHeader::paintEvent( QPaintEvent* event )
 {
   register Sheet * const sheet = m_pView->activeSheet();
   if (!sheet)
@@ -1446,13 +1446,13 @@ void HBorder::paintEvent( QPaintEvent* event )
 }
 
 
-void HBorder::focusOutEvent( QFocusEvent* )
+void ColumnHeader::focusOutEvent( QFocusEvent* )
 {
     m_pView->disableAutoScroll();
     m_bMousePressed = false;
 }
 
-void HBorder::drawText( QPainter& painter, const QFont& font,
+void ColumnHeader::drawText( QPainter& painter, const QFont& font,
                         const QPointF& location, const QString& text,
                         double width ) const
 {
@@ -1483,7 +1483,7 @@ void HBorder::drawText( QPainter& painter, const QFont& font,
     painter.restore();
 }
 
-void HBorder::toolChanged(const QString& toolId)
+void ColumnHeader::toolChanged(const QString& toolId)
 {
     m_cellToolIsActive = (toolId == KSPREAD_DEFAULT_TOOL_ID);
     update();
@@ -1581,4 +1581,4 @@ void SelectAllButton::toolChanged(const QString& toolId)
     update();
 }
 
-#include "Border.moc"
+#include "Headers.moc"
