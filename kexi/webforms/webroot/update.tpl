@@ -1,7 +1,6 @@
 {{>beforecontent}}
-    <h3>Editing row {{ROW}} in table {{TABLENAME}}</h3>
-    <a href="/read/{{TABLENAME}}">Table contents</a>
-    <br/><a href="/">Table list</a><br/>
+    <h3>Edit a row in table: {{TABLENAME}}</h3>
+    <br/>
     {{#SUCCESS}}<h4 style="color: green;">{{MESSAGE}}</h4>{{/SUCCESS}}
     {{#ERROR}}<h4 style="color: red;">{{MESSAGE}}</h4>{{/ERROR}}
     

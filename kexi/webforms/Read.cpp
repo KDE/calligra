@@ -45,16 +45,13 @@ namespace KexiWebForms {
         google::TemplateDictionary* dict = initTemplate("read.tpl");
 
 
-        QString requestedTable = Request::requestUri(req).split('/').at(2);
+        QString requestedTable(Request::requestUri(req).split('/').at(2));
         dict->SetValue("TABLENAME", requestedTable.toLatin1().constData());
 
         QString tableData;
         KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
         KexiDB::QuerySchema querySchema(*tableSchema);
         KexiDB::Cursor* cursor = gConnection->executeQuery(querySchema);
-        
-
-
 
         if (!cursor) {
             dict->SetValue("ERROR", "Unable to execute the query (" __FILE__ ")");
@@ -66,12 +63,14 @@ namespace KexiWebForms {
             // Create labels with field name
             tableData.append("<tr>");
             for (uint i = 0; i < cursor->fieldCount(); i++) {
-                tableData.append("\t<td><strong>");
+                tableData.append("\t<th scope=\"col\">");
                 tableData.append(querySchema.field(i)->captionOrName());
-                tableData.append("</strong></td>\n");
+                tableData.append("</th>\n");
             }
             tableData.append("</tr>\n");
-
+            
+            
+            // Create labels with fields data
             while (cursor->moveNext()) {
                 tableData.append("<tr>");
                 for (uint i = 0; i < cursor->fieldCount(); i++) {
@@ -104,11 +103,11 @@ namespace KexiWebForms {
                 // Edit
                 tableData.append("<td><a href=\"/update/").append(requestedTable).append("/");
                 tableData.append(primaryKey->name()).append("/");
-                tableData.append(pkeyVal).append("\"><img src=\"/draw-freehand.png\" alt=\"Edit\"/></a></td>");
+                tableData.append(pkeyVal).append("\"><img src=\"/toolbox/draw-freehand.png\" alt=\"Edit\"/></a></td>");
                 // Delete
                 tableData.append("<td><a href=\"/delete/").append(requestedTable).append("/");
                 tableData.append(primaryKey->name()).append("/");
-                tableData.append(pkeyVal).append("\"><img src=\"/draw-eraser.png\" alt=\"Delete\"/></a></td>");
+                tableData.append(pkeyVal).append("\"><img src=\"/toolbox/draw-eraser.png\" alt=\"Delete\"/></a></td>");
                 // End row
                 tableData.append("</tr>");
 

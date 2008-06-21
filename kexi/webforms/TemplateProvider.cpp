@@ -19,8 +19,10 @@
 */
 
 #include <string>
+#include <KDebug>
 #include <google/template.h>
 
+#include "DataProvider.h"
 #include "HTTPStream.h"
 
 #include "TemplateProvider.h"
@@ -31,9 +33,19 @@ namespace KexiWebForms {
         google::TemplateDictionary* dict = new google::TemplateDictionary(filename);
         dict->SetFilename(filename);
         // Add header template
-        dict->AddIncludeDictionary("beforecontent")->SetFilename("beforecontent.tpl");
-        // Add footer template
-        dict->AddIncludeDictionary("aftercontent")->SetFilename("aftercontent.tpl");
+        google::TemplateDictionary* beforeDict = dict->AddIncludeDictionary("beforecontent");
+        beforeDict->SetFilename("beforecontent.tpl");
+        
+        // Add footer template (-- note, this includes the left menu with the standard template)
+        google::TemplateDictionary* afterDict = dict->AddIncludeDictionary("aftercontent");
+        afterDict->SetFilename("aftercontent.tpl");
+        // Add tables to left menu
+        QString tables; 
+        for (int i = 0; i < gConnection->tableNames().size(); ++i) {
+            tables.append("<li><a href=\"/read/").append(gConnection->tableNames().at(i));
+            tables.append("\">").append(gConnection->tableNames().at(i)).append("</a></li>");
+        }
+        afterDict->SetValue("TABLE_LIST", tables.toLatin1().constData());
         return dict;
     }
     

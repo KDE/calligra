@@ -85,7 +85,8 @@ namespace KexiWebForms {
                     kDebug() << "Data loaded successfully, create project object..." << endl;
                     // FIXME: as noticed by jstaniek I should ask the user which
                     // database has to be opened
-                    projectData = new KexiProjectData(*connData);
+                    /* commented out until i find a better solution to display project data */
+                    //projectData = new KexiProjectData(*connData);
                 }
             } else {
                 kDebug() << "This should be a file-based database... now loading it" << endl;

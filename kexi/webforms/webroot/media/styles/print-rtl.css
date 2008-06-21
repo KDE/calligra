@@ -1,0 +1,63 @@
+/**
+ * based on code by Sebastian Faubel
+ * modified by Christoph Cullmann
+ */
+
+/* common (X)HTML formats */
+
+body {
+background-color: white;
+color: black;
+font-family: sans-serif;
+padding: 0;
+margin: 0;
+}
+
+table, td, th {
+font-family: sans-serif;
+line-height: 1em;
+padding: 0;
+margin: 0;
+text-align: left;
+}
+
+input, select, textarea {
+font-family: sans-serif;
+}
+
+optgroup {
+font-style: normal;
+}
+
+a:link {
+color: #036;
+}
+
+a:visited {
+color: #555AAA;
+}
+
+/* main color definitions */
+
+.invisible, #nav_header_logo, #nav_header_location, #nav_header_bottom, #footer, .menuheader, #leftmenu, #rightmenu, #leftmenu h2, #leftmenu ul, #search {
+display: none;
+width: 0;
+overflow: hidden;
+}
+
+#content {
+background-color: white;
+text-align: justify;
+line-height: 1.5em;
+background-color: white;
+padding-right: 2em;
+}
+
+/* static IDs, ordered top to bottom */
+
+/* div { border: 1px solid black; } */
+
+/* hidden stuff */
+.doNotDisplay {
+  display: none;
+}
