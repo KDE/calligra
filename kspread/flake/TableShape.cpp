@@ -197,15 +197,34 @@ void TableShape::init(QMap<QString, KoDataCenter*> dataCenterMap)
 
 void TableShape::setSize( const QSizeF& newSize )
 {
-    if ( size() == newSize )
+    const QSizeF oldSize = size();
+    if ( oldSize == newSize )
         return;
 
-    // adjust the column widths / row heights
-    d->adjustColumnDimensions( newSize.width() / size().width() );
-    d->adjustRowDimensions( newSize.height() / size().height() );
-    d->sheetView->invalidate();
+    QSizeF size2 = oldSize;
+    const qreal cellWidth = d->sheet->map()->defaultColumnFormat()->width();
+    const qreal cellHeight = d->sheet->map()->defaultRowFormat()->height();
 
-    KoShape::setSize( newSize );
+    // Note that the following four variables can also be negative
+    const qreal dx = newSize.width() - oldSize.width();
+    const qreal dy = newSize.height() - oldSize.height();
+    int numAddedCols = 0;
+    int numAddedRows = 0;
+
+    if( qAbs(dx) >= cellWidth ) {
+        numAddedCols = int( dx / cellWidth );
+        size2.rwidth() += cellWidth * numAddedCols;
+    }
+    if ( qAbs(dy) >= cellHeight ) {
+        numAddedRows = int( dy / cellHeight );
+        size2.rheight() += cellHeight * numAddedRows;
+    }
+    if ( qAbs(dx) >= cellWidth || qAbs(dy) >= cellHeight ) {
+        d->columns += numAddedCols;
+        d->rows += numAddedRows;
+        d->sheetView->invalidate();
+        KoShape::setSize( size2 );
+    }
 }
 
 Map* TableShape::map() const
