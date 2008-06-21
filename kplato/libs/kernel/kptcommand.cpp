@@ -1412,6 +1412,22 @@ void ModifyEstimateTypeCmd::unexecute()
 
 }
 
+ModifyEstimateCalendarCmd::ModifyEstimateCalendarCmd( Node &node, Calendar *oldvalue, Calendar *newvalue, const QString& name )
+    : NamedCommand( name ),
+        m_estimate( node.estimate() ),
+        m_oldvalue( oldvalue ),
+        m_newvalue( newvalue )
+{
+}
+void ModifyEstimateCalendarCmd::execute()
+{
+    m_estimate->setCalendar( m_newvalue );
+}
+void ModifyEstimateCalendarCmd::unexecute()
+{
+    m_estimate->setCalendar( m_oldvalue );
+}
+
 ModifyEstimateUnitCmd::ModifyEstimateUnitCmd( Node &node, Duration::Unit oldvalue, Duration::Unit newvalue, const QString& name )
         : NamedCommand( name ),
         m_estimate( node.estimate() ),

@@ -725,6 +725,20 @@ private:
 
 };
 
+class KPLATOKERNEL_EXPORT ModifyEstimateCalendarCmd : public NamedCommand
+{
+public:
+    ModifyEstimateCalendarCmd( Node &node, Calendar *oldvalue, Calendar *newvalue, const QString& name = QString() );
+    void execute();
+    void unexecute();
+
+private:
+    Estimate *m_estimate;
+    Calendar *m_oldvalue, *m_newvalue;
+
+};
+
+
 class KPLATOKERNEL_EXPORT AddResourceGroupRequestCmd : public NamedCommand
 {
 public:

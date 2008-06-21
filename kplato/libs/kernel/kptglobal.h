@@ -105,6 +105,7 @@ struct KPLATOKERNEL_EXPORT ToolTip
     static QString estimateOptimistic();
     static QString estimatePessimistic();
     static QString estimateType();
+    static QString estimateCalendar();
     static QString estimate();
     static QString optimisticRatio();
     static QString pessimisticRatio();

@@ -78,6 +78,7 @@ namespace KPlato
     QString ToolTip::estimateOptimistic() { return i18n( "Optimistic estimate" ); }
     QString ToolTip::estimatePessimistic() { return i18n( "Pessimistic estimate" ); }
     QString ToolTip::estimateType() { return i18n( "Type of estimate" ); }
+    QString ToolTip::estimateCalendar() { return i18n( "The calendar used when estimate type is Length" ); }
     QString ToolTip::estimate() { return i18n( "The most likely estimate" ); }
     QString ToolTip::optimisticRatio() { return i18n( "Optimistic estimate" ); }
     QString ToolTip::pessimisticRatio() { return i18n( "Pessimistic estimate" ); }

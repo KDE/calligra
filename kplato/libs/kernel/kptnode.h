@@ -51,6 +51,7 @@ class ResourceGroupRequest;
 class Estimate;
 class WBSDefinition;
 class EffortCostMap;
+class Calendar;
 
 /**
  * This class represents any node in the project, a node can be a project or
@@ -106,6 +107,11 @@ public:
      * Returns 0 if no project exists.
      */
     virtual Node *projectNode();
+    /**
+     * Returns a pointer to the project node (main- or sub-project)
+     * Returns 0 if no project exists.
+     */
+    virtual const Node *projectNode() const;
     
     // The load and save methods
     virtual bool load(KoXmlElement &, XMLLoaderObject &) { return true; }
@@ -653,7 +659,8 @@ public:
     /// Type defines the types of estimates
     enum Type {
         Type_Effort,        /// Changing amount of resources changes the task duration
-        Type_FixedDuration  /// Changing amount of resources will not change the tasks duration
+        Type_FixedDuration, /// Changing amount of resources will not change the tasks duration
+        Type_Length         /// Duration in work time defined by m_calendar
     };
     /// Return the node that owns this Estimate
     Node *parentNode() const { return m_parent; }
@@ -670,6 +677,11 @@ public:
     QString typeToString( bool trans=false ) const;
     /// Return a stringlist of all estimate types. Translated if @p trans = true.
     static QStringList typeToStringList( bool trans=false );
+    
+    /// Return the calendar used when Type is Length
+    Calendar *calendar() const { return m_calendar; }
+    /// Set the calendar to be used when Type is Length
+    void setCalendar( Calendar *calendar ) { m_calendar = calendar; changed(); }
     
     enum Risktype { Risk_None, Risk_Low, Risk_High };
     Risktype risktype() const { return m_risktype; }
@@ -805,6 +817,9 @@ private:
 
     Type m_type;
     Risktype m_risktype;
+    
+    /// Calendar used when Type is Type_Length
+    Calendar *m_calendar;
     
 #ifndef NDEBUG
 public:

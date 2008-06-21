@@ -159,6 +159,17 @@ Node *Node::projectNode() {
     return 0;
 }
 
+const Node *Node::projectNode() const {
+    if ((type() == Type_Project) || (type() == Type_Subproject)) {
+        return this;
+    }
+    if (m_parent)
+        return m_parent->projectNode();
+
+    kError()<<"Ooops, no parent and no project found"<<endl;
+    return 0;
+}
+
 void Node::takeChildNode( Node *node) {
     //kDebug()<<"find="<<m_nodes.indexOf(node);
     int t = type();
@@ -1108,6 +1119,7 @@ Estimate::Estimate( Node *parent )
     setOptimisticEstimate( 8.0 );
     
     m_type = Type_Effort;
+    m_calendar = 0;
     m_risktype = Risk_None;
 }
 
@@ -1128,6 +1140,7 @@ void Estimate::clear()
     setOptimisticEstimate( 0.0 );
     
     m_type = Type_Effort;
+    m_calendar = 0;
     m_risktype = Risk_None;
     m_unit = Duration::Unit_h;
     changed();
@@ -1155,6 +1168,7 @@ void Estimate::copy( const Estimate &estimate )
     m_pessimisticCached = estimate.m_pessimisticCached;
     
     m_type = estimate.m_type;
+    m_calendar = estimate.m_calendar;
     m_risktype = estimate.m_risktype;
     m_unit = estimate.m_unit;
     changed();
@@ -1232,7 +1246,7 @@ void Estimate::setUnit( Duration::Unit unit )
 }
 
 bool Estimate::load(KoXmlElement &element, XMLLoaderObject &status) {
-    setType(element.attribute("type", "WorkBased"));
+    setType(element.attribute("type"));
     setRisktype(element.attribute("risk"));
     if ( status.version() <= "0.6" ) {
         m_unit = (Duration::Unit)(element.attribute("display-unit", QString().number(Duration::Unit_h) ).toInt());
@@ -1245,6 +1259,8 @@ bool Estimate::load(KoXmlElement &element, XMLLoaderObject &status) {
         m_expectedEstimate = element.attribute("expected", "0.0").toDouble();
         m_optimisticEstimate = element.attribute("optimistic", "0.0").toDouble();
         m_pessimisticEstimate = element.attribute("pessimistic", "0.0").toDouble();
+        
+        m_calendar = status.project().findCalendar(element.attribute("calendar-id"));
     }
     return true;
 }
@@ -1256,6 +1272,9 @@ void Estimate::save(QDomElement &element) const {
     me.setAttribute("optimistic", m_optimisticEstimate);
     me.setAttribute("pessimistic", m_pessimisticEstimate);
     me.setAttribute("type", typeToString());
+    if ( m_calendar ) {
+        me.setAttribute("calendar-id", m_calendar->id() );
+    }
     me.setAttribute("risk", risktypeToString());
     me.setAttribute("unit", m_unit);
 }
@@ -1267,7 +1286,8 @@ QString Estimate::typeToString( bool trans ) const {
 QStringList Estimate::typeToStringList( bool trans ) {
     return QStringList() 
             << (trans ? i18n("Effort") : QString("Effort"))
-            << (trans ? i18n("FixedDuration") : QString("FixedDuration"));
+            << (trans ? i18n("FixedDuration") : QString("FixedDuration"))
+            << (trans ? i18n("Length") : QString("Length"));
 }
 
 void Estimate::setType(Type type)
@@ -1284,6 +1304,8 @@ void Estimate::setType(const QString& type) {
         setType(Type_Effort);
     else if (type == "FixedDuration")
         setType(Type_FixedDuration);
+    else if (type == "Length")
+        setType(Type_Length);
     else if (type == "Type_FixedDuration") // Typo, keep old xml files working
         setType(Type_FixedDuration);
     else

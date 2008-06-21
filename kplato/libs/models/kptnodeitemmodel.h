@@ -51,6 +51,7 @@ public:
         NodeResponsible,
         NodeAllocation,
         NodeEstimateType,
+        NodeEstimateCalendar,
         NodeEstimate,
         NodeOptimisticRatio,
         NodePessimisticRatio,
@@ -147,6 +148,7 @@ public:
     QVariant constraintStartTime( const Node *node, int role ) const;
     QVariant constraintEndTime( const Node *node, int role ) const;
     QVariant estimateType( const Node *node, int role ) const;
+    QVariant estimateCalendar( const Node *node, int role ) const;
     QVariant estimate( const Node *node, int role ) const;
     QVariant optimisticRatio( const Node *node, int role ) const;
     QVariant pessimisticRatio( const Node *node, int role ) const;
@@ -288,6 +290,7 @@ protected:
     bool setConstraintStartTime( Node *node, const QVariant &value, int role );
     bool setConstraintEndTime( Node *node, const QVariant &value, int role );
     bool setEstimateType( Node *node, const QVariant &value, int role );
+    bool setEstimateCalendar( Node *node, const QVariant &value, int role );
     bool setEstimate( Node *node, const QVariant &value, int role );
     bool setOptimisticRatio( Node *node, const QVariant &value, int role );
     bool setPessimisticRatio( Node *node, const QVariant &value, int role );

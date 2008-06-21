@@ -270,6 +270,54 @@ QVariant NodeModel::estimateType( const Node *node, int role ) const
     return QVariant();
 }
 
+QVariant NodeModel::estimateCalendar( const Node *node, int role ) const
+{
+    switch ( role ) {
+        case Qt::DisplayRole:
+        case Qt::ToolTipRole:
+            if ( node->type() == Node::Type_Task ) {
+                if ( node->estimate()->calendar() ) {
+                    return node->estimate()->calendar()->name();
+                }
+                return i18n( "None" );
+            }
+            return QString();
+        case Role::EnumList: 
+        {
+            QStringList lst; lst << i18n( "None" );
+            const Node *n = const_cast<Node*>( node )->projectNode();
+            if ( n ) {
+                lst += static_cast<const Project*>( n )->calendarNames();
+            }
+            return lst;
+        }
+        case Qt::EditRole:
+            if ( node->type() == Node::Type_Task ) {
+                if ( node->estimate()->calendar() == 0 ) {
+                    return i18n( "None" );
+                }
+                return node->estimate()->calendar()->name();
+            }
+            return QString();
+        case Role::EnumListValue:
+        {
+            if ( node->estimate()->calendar() == 0 ) {
+                return 0;
+            }
+            QStringList lst;
+            const Node *n = const_cast<Node*>( node )->projectNode();
+            if ( n ) {
+                lst = static_cast<const Project*>( n )->calendarNames();
+            }
+            return lst.indexOf( node->estimate()->calendar()->name() ) + 1;
+        }
+        case Qt::StatusTipRole:
+        case Qt::WhatsThisRole:
+            return QVariant();
+    }
+    return QVariant();
+}
+
 QVariant NodeModel::estimate( const Node *node, int role ) const
 {
     switch ( role ) {
@@ -1373,6 +1421,7 @@ QVariant NodeModel::data( const Node *n, int property, int role ) const
         case NodeResponsible: result = leader( n, role ); break;
         case NodeAllocation: result = allocation( n, role ); break;
         case NodeEstimateType: result = estimateType( n, role ); break;
+        case NodeEstimateCalendar: result = estimateCalendar( n, role ); break;
         case NodeEstimate: result = estimate( n, role ); break;
         case NodeOptimisticRatio: result = optimisticRatio( n, role ); break;
         case NodePessimisticRatio: result = pessimisticRatio( n, role ); break;
@@ -1468,6 +1517,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeResponsible: return i18n( "Responsible" );
             case NodeAllocation: return i18n( "Allocation" );
             case NodeEstimateType: return i18n( "Estimate Type" );
+            case NodeEstimateCalendar: return i18n( "Estimate Calendar" );
             case NodeEstimate: return i18n( "Estimate" );
             case NodeOptimisticRatio: return i18n( "Optimistic" ); // Ratio
             case NodePessimisticRatio: return i18n( "Pessimistic" ); // Ratio
@@ -1548,6 +1598,7 @@ QVariant NodeModel::headerData( int section, int role )
             case NodeResponsible: return ToolTip::nodeResponsible();
             case NodeAllocation: return ToolTip::allocation();
             case NodeEstimateType: return ToolTip::estimateType();
+            case NodeEstimateCalendar: return ToolTip::estimateCalendar();
             case NodeEstimate: return ToolTip::estimate();
             case NodeOptimisticRatio: return ToolTip::optimisticRatio();
             case NodePessimisticRatio: return ToolTip::pessimisticRatio();
@@ -1761,6 +1812,14 @@ Qt::ItemFlags NodeItemModel::flags( const QModelIndex &index ) const
             case NodeModel::NodePessimisticRatio: // pessimisticRatio
             {
                 if ( n->type() == Node::Type_Task || n->type() == Node::Type_Milestone ) {
+                    flags |= Qt::ItemIsEditable;
+                }
+                break;
+            }
+            case NodeModel::NodeEstimateCalendar: // Hmmm, check for Type_Length?
+            {
+                if ( n->type() == Node::Type_Task && n->estimate()->type() == Estimate::Type_Length )
+                {
                     flags |= Qt::ItemIsEditable;
                 }
                 break;
@@ -2070,6 +2129,27 @@ bool NodeItemModel::setEstimateType( Node *node, const QVariant &value, int role
     return false;
 }
 
+bool NodeItemModel::setEstimateCalendar( Node *node, const QVariant &value, int role )
+{
+    switch ( role ) {
+        case Qt::EditRole:
+            Calendar *c = 0;
+            if ( value.toInt() > 0 ) {
+                QStringList lst = m_nodemodel.estimateCalendar( node, Role::EnumList ).toStringList();
+                if ( value.toInt() < lst.count() ) {
+                    c = m_project->calendarByName( lst.at( value.toInt() ) );
+                }
+                Calendar *old = node->estimate()->calendar();
+                if ( c != old ) {
+                    emit executeCommand( new ModifyEstimateCalendarCmd( *node, old, c, "Modify estimate calendar" ) );
+                    return true;
+                }
+            }
+            return false;;
+    }
+    return false;
+}
+
 bool NodeItemModel::setEstimate( Node *node, const QVariant &value, int role )
 {
     switch ( role ) {
@@ -2227,12 +2307,12 @@ QVariant NodeItemModel::data( const QModelIndex &index, int role ) const
     Node *n = node( index );
     if ( n != 0 ) {
         // Special for kdgantt
-        if ( index.column() == 22 && role ==  KDGantt::StartTimeRole ) {
+        if ( index.column() == NodeModel::NodeStartTime && role ==  KDGantt::StartTimeRole ) {
             QDateTime t = n->startTime( m_nodemodel.id() ).dateTime();
             //kDebug()<<n->name()<<": "<<index.column()<<", "<<role<<t;
             return t;
         }
-        if ( index.column() == 23 && role == KDGantt::EndTimeRole ) {
+        if ( index.column() == NodeModel::NodeEndTime && role == KDGantt::EndTimeRole ) {
             QDateTime t = n->endTime( m_nodemodel.id() ).dateTime();
             //kDebug()<<n->name()<<": "<<index.column()<<", "<<role<<t;
             return t;
@@ -2258,6 +2338,7 @@ bool NodeItemModel::setData( const QModelIndex &index, const QVariant &value, in
         case NodeModel::NodeResponsible: return setLeader( n, value, role );
         case NodeModel::NodeAllocation: return setAllocation( n, value, role );
         case NodeModel::NodeEstimateType: return setEstimateType( n, value, role );
+        case NodeModel::NodeEstimateCalendar: return setEstimateCalendar( n, value, role );
         case NodeModel::NodeEstimate: return setEstimate( n, value, role );
         case NodeModel::NodeOptimisticRatio: return setOptimisticRatio( n, value, role );
         case NodeModel::NodePessimisticRatio: return setPessimisticRatio( n, value, role );
@@ -2301,6 +2382,7 @@ QItemDelegate *NodeItemModel::createDelegate( int column, QWidget *parent ) cons
     switch ( column ) {
         //case NodeModel::NodeAllocation: return new ??Delegate( parent );
         case NodeModel::NodeEstimateType: return new EnumDelegate( parent );
+        case NodeModel::NodeEstimateCalendar: return new EnumDelegate( parent );
         case NodeModel::NodeEstimate: return new DurationSpinBoxDelegate( parent );
         case NodeModel::NodeOptimisticRatio: return new SpinBoxDelegate( parent );
         case NodeModel::NodePessimisticRatio: return new SpinBoxDelegate( parent );

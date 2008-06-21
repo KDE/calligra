@@ -816,6 +816,8 @@ double Task::effortPerformanceIndex( const QDate &date, long id ) const {
         r = b.toDouble() / a.toDouble();
     } else if ( m_estimate->type() == Estimate::Type_FixedDuration ) {
         //TODO
+    } else if ( m_estimate->type() == Estimate::Type_Length ) {
+        //TODO
     }
     return r;
 }
@@ -1381,6 +1383,7 @@ DateTime Task::scheduleFromStartTime(int use) {
             //kDebug()<<m_name<<"ASAP:"<<cs->startTime<<"earliest:"<<cs->earlyStart;
             if ( m_estimate->type() != Estimate::Type_FixedDuration ) {
                 cs->startTime = workStartAfter( cs->startTime );
+                cs->logInfo( "ASAP: " + cs->startTime.toString() + " earliest: " + cs->earlyStart.toString() );
             }
             cs->duration = duration(cs->startTime, use, false);
             cs->endTime = cs->startTime + cs->duration;
@@ -1987,11 +1990,146 @@ Duration Task::calcDuration(const DateTime &time, const Duration &effort, bool b
         return dur;
     }
     if (m_estimate->type() == Estimate::Type_FixedDuration) {
-        //TODO: Different types of fixed duration
-        return dur; //
+        return dur;
+    }
+    if (m_estimate->type() == Estimate::Type_Length) {
+        return length( time, dur, backward );
     }
     kError()<<"Unsupported estimate type: "<<m_estimate->type()<<endl;
     return dur;
+}
+
+Duration Task::length(const DateTime &time, const Duration &duration, bool backward) {
+    //kDebug()<<"--->"<<(backward?"(B)":"(F)")<<m_name<<""<<time.toString()<<": duration:"<<duration.toString(Duration::Format_Day)<<" ("<<duration.milliseconds()<<")";
+    
+    Duration l;
+    Calendar *cal = m_estimate->calendar();
+    if (duration == Duration::zeroDuration || cal == 0) {
+        return l;
+    }
+    DateTime logtime = time;
+    bool sts=true;
+    bool match = false;
+    DateTime start = time;
+    int inc = backward ? -1 : 1;
+    DateTime end = start;
+    Duration l1;
+    Duration d(1, 0, 0); // 1 day
+    int nDays = backward ? projectNode()->constraintStartTime().daysTo( time ) : time.daysTo( projectNode()->constraintEndTime() );
+    for (int i=0; !match && i <= nDays; ++i) {
+        // days
+        end = end.addDays(inc);
+        l1 = backward ? cal->effort(end, start) : cal->effort(start, end);
+        //kDebug()<<"["<<i<<"of"<<nDays<<"]"<<(backward?"(B)":"(F):")<<"  start="<<start<<" l+l1="<<(l+l1).toString()<<" match"<<duration.toString();
+        if (l + l1 < duration) {
+            l += l1;
+            start = end;
+        } else if (l + l1 == duration) {
+            l += l1;
+            match = true;
+        } else {
+            end = start;
+            break;
+        }
+    }
+    if ( ! match ) {
+        m_currentSchedule->logInfo( "Days: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " l=" + l.toString() + " (" + QString("%1").arg(l.milliseconds()) + ")" );
+        
+        logtime = start;
+        for (int i=0; !match && i < 24; ++i) {
+            // hours
+            end = end.addSecs(inc*60*60);
+            l1 = backward ? cal->effort(end, start) : cal->effort(start, end);
+            if (l + l1 < duration) {
+                l += l1;
+                start = end;
+            } else if (l + l1 == duration) {
+                l += l1;
+                match = true;
+            } else {
+                end = start;
+                break;
+            }
+            //kDebug()<<"duration(h)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<")";
+        }
+        //kDebug()<<"duration"<<(backward?"backward":"forward:")<<start.toString()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<")  match="<<match<<" sts="<<sts;
+    }
+    if ( ! match ) {
+        m_currentSchedule->logInfo( "Hours: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " l=" + l.toString() + " (" + QString("%1").arg(l.milliseconds()) + ")" );
+        
+        logtime = start;
+        for (int i=0; !match && i < 60; ++i) {
+            //minutes
+            end = end.addSecs(inc*60);
+            l1 = backward ? cal->effort(end, start) : cal->effort(start, end);
+            if (l + l1 < duration) {
+                l += l1;
+                start = end;
+            } else if (l + l1 == duration) {
+                l += l1;
+                match = true;
+            } else if (l + l1 > duration) {
+                end = start;
+                break;
+            }
+            //kDebug()<<"duration(m)"<<(backward?"backward":"forward:")<<"  time="<<start.time().toString()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<")";
+        }
+        //kDebug()<<"duration"<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" l="<<l.toString()<<" match="<<match<<" sts="<<sts;
+    }
+    if ( ! match ) {
+        m_currentSchedule->logInfo( "Minutes: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " l=" + l.toString() + " (" + QString("%1").arg(l.milliseconds()) + ")" );
+        
+        logtime = start;
+        for (int i=0; !match && i < 60 && sts; ++i) {
+            //seconds
+            end = end.addSecs(inc);
+            l1 = backward ? cal->effort(end, start) : cal->effort(start, end);
+            if (l + l1 < duration) {
+                l += l1;
+                start = end;
+            } else if (l + l1 == duration) {
+                l += l1;
+                match = true;
+            } else if (l + l1 > duration) {
+                end = start;
+                break;
+            }
+            //kDebug()<<"duration(s)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<")";
+        }
+    }
+    if ( ! match ) {
+        m_currentSchedule->logInfo( "Seconds: duration " + QString("%1").arg(backward?"backward: ":"forward: ") + logtime.toString() + " - " + end.toString() + " l=" + l.toString() + " (" + QString("%1").arg(l.milliseconds()) + ")" );
+        
+        for (int i=0; !match && i < 1000; ++i) {
+            //milliseconds
+            end.setTime(end.time().addMSecs(inc));
+            l1 = backward ? cal->effort(end, start) : cal->effort(start, end);
+            if (l + l1 < duration) {
+                l += l1;
+                start = end;
+            } else if (l + l1 == duration) {
+                l += l1;
+                match = true;
+            } else if (l + l1 > duration) {
+                break;
+            }
+            //kDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" l="<<l.toString()<<" ("<<l.milliseconds()<<")";
+        }
+    }
+    if (!match) {
+        m_currentSchedule->logError( "Could not match work duration. Want: " + duration.toString(Duration::Format_Hour) + " got: " + l.toString(Duration::Format_Hour) );
+    }
+    DateTime t;
+    if (l != Duration::zeroDuration) {
+        t = backward ? cal->firstAvailableAfter(end, projectNode()->constraintEndTime()) : cal->firstAvailableBefore(end, projectNode()->constraintStartTime());
+    }
+    end = t.isValid() ? t : time;
+    //kDebug()<<"<---"<<(backward?"(B)":"(F)")<<m_name<<":"<<end.toString()<<"-"<<time.toString()<<"="<<(end - time).toString()<<" duration:"<<duration.toString(Duration::Format_Day);
+    l = end>time ? end-time : time-end;
+    if ( match ) {
+        m_currentSchedule->logInfo( "Calculated length: " + QString("%1").arg(backward?"backward: ":"forward: ") + time.toString() + " - " + duration.toString() + " = " + l.toString() );
+    }
+    return l;
 }
 
 void Task::clearProxyRelations() {
@@ -2095,7 +2233,11 @@ bool Task::isStartNode() const {
 
 DateTime Task::workTimeAfter(const DateTime &dt) const {
     DateTime t;
-    if (m_requests) {
+    if ( m_estimate->type() == Estimate::Type_Length ) {
+        if ( m_estimate->calendar() ) {
+            t = m_estimate->calendar()->firstAvailableAfter( dt, projectNode()->constraintEndTime() );
+        }
+    } else if (m_requests) {
         t = m_requests->workTimeAfter(dt);
     }
     return t.isValid() ? t : dt;
@@ -2103,14 +2245,24 @@ DateTime Task::workTimeAfter(const DateTime &dt) const {
 
 DateTime Task::workTimeBefore(const DateTime &dt) const {
     DateTime t;
-    if (m_requests) {
+    if ( m_estimate->type() == Estimate::Type_Length ) {
+        if ( m_estimate->calendar() ) {
+            t = m_estimate->calendar()->firstAvailableBefore( dt, projectNode()->constraintStartTime() );
+        }
+    } else if (m_requests) {
         t = m_requests->workTimeBefore(dt);
     }
     return t.isValid() ? t : dt;
 }
 
 DateTime Task::workStartAfter(const DateTime &dt) {
-    if (m_requests) {
+    if ( m_estimate->type() == Estimate::Type_Length ) {
+        if ( m_estimate->calendar() ) {
+            DateTime t = m_estimate->calendar()->firstAvailableAfter( dt, projectNode()->constraintEndTime() );
+            m_currentSchedule->logInfo( "workStartAfter: " + dt.toString() + " (" + projectNode()->constraintEndTime().toString() + ")  = " + t.toString() );
+            return t.isValid() ? t : dt;
+        }
+    } else if (m_requests) {
         DateTime t = m_requests->availableAfter(dt, m_currentSchedule);
         //kDebug()<<"id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<":"<<m_name<<dt<<t;
         return t.isValid() ? t : dt;
@@ -2120,7 +2272,12 @@ DateTime Task::workStartAfter(const DateTime &dt) {
 
 DateTime Task::workFinishBefore(const DateTime &dt)
 {
-    if (m_requests) {
+    if ( m_estimate->type() == Estimate::Type_Length ) {
+        if ( m_estimate->calendar() ) {
+            DateTime t = m_estimate->calendar()->firstAvailableBefore( dt, projectNode()->constraintStartTime() );
+            return t.isValid() ? t : dt;
+        }
+    } else if (m_requests) {
         DateTime t = m_requests->availableBefore(dt, m_currentSchedule);
         //kDebug()<<"id="<<m_currentSchedule->id()<<" mode="<<m_currentSchedule->calculationMode()<<":"<<m_name<<dt<<t;
         return t.isValid() ? t : dt;

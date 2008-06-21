@@ -692,6 +692,11 @@ protected:
      */
     Duration calcDuration(const DateTime &time, const Duration &effort, bool backward);
 
+    /**
+     * Return the duration calculated on bases of the estimates calendar
+     */
+    Duration length(const DateTime &time, const Duration &duration, bool backward);
+
 private:
     DateTime calculateSuccessors(const QList<Relation*> &list, int use);
     DateTime calculatePredeccessors(const QList<Relation*> &list, int use);
