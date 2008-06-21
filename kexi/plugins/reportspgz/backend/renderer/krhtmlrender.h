@@ -42,6 +42,9 @@ class KRHtmlRender {
 
     QString render(ORODocument *, bool=true);
     
+    private:
+      QString renderCSS(ORODocument*);
+      QString renderTable(ORODocument*);
 };
 
 

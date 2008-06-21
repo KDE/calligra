@@ -20,6 +20,8 @@
 #ifndef KROBJECTDATA_H
 #define KROBJECTDATA_H
 #include <koproperty/property.h>
+#include "krpos.h"
+
 class KRLineData;
 class KRLabelData;
 class KRFieldData;
@@ -69,12 +71,14 @@ class KRObjectData
 		virtual void createProperties() =0;
 		
 		qreal Z;
-		
+		KRPos position(){return _pos;}
+
 		QString entityName(){return _name->value().toString();}
 	protected:
 		KoProperty::Set *_set;
 		KoProperty::Property *_name;
-		
+		KRPos _pos;
+
 		QString _oldName;
 		
 };

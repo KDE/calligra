@@ -40,6 +40,14 @@ KRHtmlRender::~KRHtmlRender()
 
 QString KRHtmlRender::render(ORODocument *document, bool css)
 {
+  if (css)
+    return renderCSS(document);
+  else
+    return renderTable(document);
+}
+
+QString KRHtmlRender::renderCSS(ORODocument *document)
+{
 	QString html;
 	QString body;
 	QString style;
@@ -118,12 +126,77 @@ QString KRHtmlRender::render(ORODocument *document, bool css)
 	html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html>\n<head>\n";
 	html += "<style type=\"text/css\">";
 
-	for (unsigned int i = 0; i < styles.count(); ++i)
+	for (int i = 0; i < styles.count(); ++i)
 	{
 		html += ".style" + QString::number(i) + "{" + styles[i] + "}\n";
 	}
 	
-	html += "</style></head><body>";
+	html += "</style>";
+	html += "<title>" + document->title() + "</title>";
+	html += "<meta name=\"generator\" content=\"Kexi - Kickass open source data management\">";
+	html += "</head><body>";
+	html += body;
+	html += "</body></html>";
+
+	return html;
+}
+
+QString KRHtmlRender::renderTable(ORODocument *document)
+{
+	QString html;
+	QString body;
+
+	bool renderedPageHead = false;
+	bool renderedPageFoot = false;
+	// Render Each Section
+
+	body = "<table>\n";
+	for (long s = 0; s < document->sections(); s++ )
+	{
+		OROSection *section = document->section(s);
+		section->sortPrimatives(OROSection::SortX);
+
+		if (section->type() == KRSectionData::GroupHead || 
+			section->type() == KRSectionData::GroupFoot || 
+			section->type() == KRSectionData::Detail || 
+			section->type() == KRSectionData::ReportHead || 
+			section->type() == KRSectionData::ReportFoot || 
+			(section->type() == KRSectionData::PageHeadAny && !renderedPageHead) || 
+			(section->type() == KRSectionData::PageFootAny && !renderedPageFoot && s > document->sections() - 2 )) //render the page foot right at the end, it will either be the last or second last section if there is a report footer
+		{
+			if ( section->type() == KRSectionData::PageHeadAny )
+			  renderedPageHead = true;
+
+			if ( section->type() == KRSectionData::PageFootAny )
+			  renderedPageFoot = true;
+
+			body += "<tr style=\"background-color: " + section->backgroundColor().name() + "\">\n";
+			//Render the objects in each section
+			for ( int i = 0; i < section->primitives(); i++ )
+			{
+				OROPrimitive * prim = section->primitive ( i );
+				
+				if ( prim->type() == OROTextBox::TextBox )
+				{
+					OROTextBox * tb = ( OROTextBox* ) prim;
+					
+					body += "<td>";
+					body += tb->text();
+					body += "</td>\n";
+				}
+				else
+				{
+					kDebug() << "unrecognized primitive type" << endl;
+				}
+			}
+			body += "</tr>\n";
+		}
+	}
+	body += "</table>\n";
+	html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html>\n<head>\n";
+	html += "<title>" + document->title() + "</title>";
+	html += "<meta name=\"generator\" content=\"Kexi - Kickass open source data management\">";
+	html += "</head><body>";
 	html += body;
 	html += "</body></html>";
 

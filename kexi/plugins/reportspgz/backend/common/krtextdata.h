@@ -57,7 +57,7 @@ class KRTextData : public KRObjectData
 		
 	protected:
 		QRect _rect();
-		KRPos _pos;
+
 		KRSize _size;
 		KoProperty::Property * _controlSource;
 		KoProperty::Property* _hAlignment;

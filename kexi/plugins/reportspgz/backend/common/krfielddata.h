@@ -23,7 +23,6 @@
 #include <QRect>
 #include <qdom.h>
 #include "krsize.h"
-#include "krpos.h"
 #include <parsexmlutils.h>
 /**
 	@author 
@@ -61,12 +60,10 @@ class KRFieldData : public KRObjectData
 		//QString trackTotalFormat();
 		
 		ORLineStyleData lineStyle();
-		KRPos position(){return _pos;}
 		ORTextStyleData textStyle();
 	protected:
 		
 		QRect _rect;
-		KRPos _pos;
 		KRSize _size;	
 		KoProperty::Property * _controlSource;
 		KoProperty::Property * _hAlignment;

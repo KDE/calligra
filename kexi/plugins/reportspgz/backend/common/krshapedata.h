@@ -47,7 +47,6 @@ class KRShapeData : public KRObjectData
 	protected:
 		QRectF _rect();
 				
-		KRPos _pos;
 		KRSize _size;
 		KoProperty::Property *_shapeType;
 

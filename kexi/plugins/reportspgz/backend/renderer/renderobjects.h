@@ -112,6 +112,13 @@ class OROSection
   friend class OROPrimitive;
   
   public:
+    enum Sort
+    {
+      SortX = 1,
+      SortY,
+      SortZ
+    };
+    
     OROSection(ORODocument * = 0);
     virtual ~OROSection();
     
@@ -131,6 +138,7 @@ class OROSection
     OROPrimitive* primitive(int);
     void addPrimitive(OROPrimitive*);
     
+    void sortPrimatives(Sort);
   protected:
     ORODocument * _document;
     QList<OROPrimitive*> _primitives;
@@ -138,6 +146,10 @@ class OROSection
     int _height;
     KRSectionData::Section _type;
     QColor _backgroundColor;
+    
+  private:
+  
+    static bool xLessThan(OROPrimitive* s1, OROPrimitive* s2);
 };
 
 

@@ -199,6 +199,11 @@ bool KRSectionData::zLessThan ( KRObjectData* s1, KRObjectData* s2 )
 	return s1->Z < s2->Z;
 }
 
+bool KRSectionData::xLessThan ( KRObjectData* s1, KRObjectData* s2 )
+{
+  return s1->position().toPoint().x() < s2->position().toPoint().x();
+}
+
 void KRSectionData::createProperties()
 {
 	_set = new KoProperty::Set ( 0, "Section" );

@@ -55,8 +55,6 @@ class KRChartData : public KRObjectData
 		void populateData();
 		void setConnection(KexiDB::Connection*);
 	protected:
-		
-		KRPos _pos;
 		KRSize _size;	
 		KoProperty::Property * _dataSource;
 		KoProperty::Property * _font;

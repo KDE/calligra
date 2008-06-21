@@ -62,7 +62,6 @@ class KRImageData : public KRObjectData
 		ORDataData data() {return ORDataData("Data Source", _controlSource->value().toString());}
 	protected:
 		QRect _rect();
-		KRPos _pos;
 		KRSize _size;
 		KoProperty::Property * _controlSource;
 		KoProperty::Property* _resizeMode;

@@ -204,6 +204,20 @@ QColor OROSection::backgroundColor()
 {
   return _backgroundColor;
 }
+
+void OROSection::sortPrimatives(Sort s)
+{
+    if (s == SortX)
+    {
+      qSort(_primitives.begin(), _primitives.end(), xLessThan);
+    }
+}
+
+bool OROSection::xLessThan(OROPrimitive* s1, OROPrimitive* s2)
+{
+  return s1->position().x() < s2->position().x();
+}
+
 //
 // OROPrimitive
 //

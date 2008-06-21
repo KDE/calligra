@@ -87,9 +87,6 @@ bool ORPrintRender::render ( ORODocument * pDocument )
 			return false;
 	}
 
-	qreal xDpi = _printer->logicalDpiX();
-	qreal yDpi = _printer->logicalDpiY();
-
 	int fromPage = _printer->fromPage();
 	if ( fromPage > 0 )
 		fromPage -= 1;

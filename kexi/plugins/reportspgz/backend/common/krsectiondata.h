@@ -107,6 +107,7 @@ class KRSectionData : public QObject
 		Section _type;
 		
 		static bool zLessThan(KRObjectData* s1, KRObjectData* s2);
+		static bool xLessThan(KRObjectData* s1, KRObjectData* s2);
 		
 		bool _valid;
 		
