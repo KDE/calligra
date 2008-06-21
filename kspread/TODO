@@ -11,24 +11,6 @@ done    This subtask is done
 ****	This (sub)task cannot be fixed with the current technology.
         It has to wait until something in the internals is fixed.
 
-INGE	Inge is working on this task
-inge	Inge is working on this subtask
-RAPH	Raphael is working on this task
-raph	Raphael is working on this subtask
-TOMA	Tomas is working on this task (or planning to do so, at least ;))
-toma	Tomas is working on this subtask
-LAUR	Laurent is working on this task
-laur	Laurent is working on this subtask
-ARIY	Ariya is working on this task
-ariy	Ariya is working on this subtask
-JOHN	John is working on this task
-john	John is working on this subtask
-STEF	Stefan is working on this task
-stef	Stefan is working on this subtask
-
-...fill in your signatures here.
-
-
 Prio field
 
 S	Involves string changes.  Must be done before the freeze.
@@ -57,7 +39,7 @@ Regressions
 
 General bugs
 ------------
-* Autofill							      1 ----
+* Autofill							      3 ----
   Fix the 'May'-may-be-a-short-or-long-month issue.
 
 Filter bugs
@@ -119,7 +101,7 @@ Things not in bugzilla
   + Zooming							      1 DONE
     Make it view dependent and not document dependent.
 
-  + Cell Storage						      1 STEF
+  + Cell Storage						      1 ----
     - Move all cell attributes to separate storages.			done
     - Undo for LinkStorage (insert/remove columns/rows/cell ranges)	done
     - Undo for FusionStorage (insert/remove columns/rows/cell ranges)	done
@@ -151,7 +133,7 @@ Things not in bugzilla
       reuse the already stored values. This is already done in
       StyleStorage.
 
-  + Style Storage						      1 STEF
+  + Style Storage						      1 ----
     This would dramatically reduce memory consumption and allows
     styles for empty cells.
     - Merge new Style Storage into trunk				done
