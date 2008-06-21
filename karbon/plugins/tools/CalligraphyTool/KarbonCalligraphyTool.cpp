@@ -100,12 +100,21 @@ void KarbonCalligraphyTool::mouseMoveEvent( KoPointerEvent *event )
 }
 
 void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
-{ 
+{
+    Q_UNUSED( event );
+
     if ( ! m_isDrawing )
         return;
 
     //addPoint( event );
     m_isDrawing = false;
+
+    if ( m_shape->pointCount() == 0 )
+    {
+        delete m_shape;
+        m_shape = 0;
+        return;
+    }
 
     m_shape->simplifyPath();
     KoPathShape *finalPath = m_shape;
