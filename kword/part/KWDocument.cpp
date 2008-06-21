@@ -560,11 +560,7 @@ bool KWDocument::completeLoading (KoStore *store) {
 
 bool KWDocument::saveOdf( SavingContext &documentContext ) {
     KWOdfWriter writer(this);
-    bool ok = writer.save(documentContext.odfStore, documentContext.embeddedSaver);
-    foreach(KoDataCenter *dataCenter, m_dataCenterMap) {
-        ok = ok && dataCenter->completeSaving(documentContext.odfStore.store(), documentContext.odfStore.manifestWriter());
-    }
-    return ok;
+    return writer.save(documentContext.odfStore, documentContext.embeddedSaver);
 }
 
 void KWDocument::requestMoreSpace(KWTextFrameSet *fs) {

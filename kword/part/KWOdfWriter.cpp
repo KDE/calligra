@@ -133,115 +133,67 @@ bool KWOdfWriter::save(KoOdfWriteStore & odfStore, KoEmbeddedDocumentSaver & emb
     KoStore * store = odfStore.store();
     KoXmlWriter * manifestWriter = odfStore.manifestWriter();
 
+    KoXmlWriter* contentWriter = odfStore.contentWriter();
+    if (  !contentWriter )
+        return false;
+
     KoGenStyles mainStyles;
+    KoXmlWriter * bodyWriter = odfStore.bodyWriter();
 
     // Header and footers save their content into master-styles/master-page, and their
     // styles into the page-layout automatic-style.
     d->saveHeaderFooter(embeddedSaver, mainStyles);
 
-    // Content
-    {
+    KoShapeSavingContext context( *bodyWriter, mainStyles, embeddedSaver);
 
-        // add manifest line for content.xml
-        manifestWriter->addManifestEntry( "content.xml", "text/xml" );
+    bodyWriter->startElement( "office:body" );
+    bodyWriter->startElement( "office:text" );
 
-        if ( !store->open( "content.xml" ) )
-            return false;
+    KWTextFrameSet *mainTextFrame = 0;
 
-        KoStoreDevice contentDev( store );
-        KoXmlWriter* contentWriter = KoOdfWriteStore::createOasisXmlWriter( &contentDev, "office:document-content" );
-
-        // for office:master-styles
-        KTemporaryFile masterStyles;
-        masterStyles.open();
-        KoXmlWriter masterStylesTmpWriter( &masterStyles, 1 );
-
-        // for office:body
-        KTemporaryFile contentTmpFile;
-        contentTmpFile.open();
-        KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
-
-        //KoGenStyles mainStyles;
-        KoShapeSavingContext context(contentTmpWriter, mainStyles, embeddedSaver);
-        //context.setXmlWriter(contentTmpWriter);
-
-        contentTmpWriter.startElement( "office:body" );
-        contentTmpWriter.startElement( "office:text" );
-
-        KWTextFrameSet *mainTextFrame = 0;
-
-        foreach(KWFrameSet *fs, d->document->frameSets()) {
-            // TODO loop over all non-autocreated frames and save them.
-            KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
-            if (tfs) {
-                if (tfs->textFrameSetType() == KWord::MainTextFrameSet) {
-                    mainTextFrame = tfs;
-                    continue;
-                }
+    foreach(KWFrameSet *fs, d->document->frameSets()) {
+        // TODO loop over all non-autocreated frames and save them.
+        KWTextFrameSet *tfs = dynamic_cast<KWTextFrameSet*> (fs);
+        if (tfs) {
+            if (tfs->textFrameSetType() == KWord::MainTextFrameSet) {
+                mainTextFrame = tfs;
+                continue;
             }
+        }
 #if 0 //sebsauer; don't just save them but we need to handle things more explicit
-            foreach(KWFrame *frame, fs->frames()) {
-                //FIXME: Each text frame will save the entire document of the frameset.
-                frame->saveOdf(context);
-            }
+        foreach(KWFrame *frame, fs->frames()) {
+            //FIXME: Each text frame will save the entire document of the frameset.
+            frame->saveOdf(context);
+        }
 #endif
-        }
+    }
 
-        if (mainTextFrame) {
-            if (! mainTextFrame->frames().isEmpty() && mainTextFrame->frames().first() ) {
-                KoTextShapeData * shapeData = dynamic_cast<KoTextShapeData *>( mainTextFrame->frames().first()->shape()->userData() );
-                if ( shapeData ) {
-                    shapeData->saveOdf(context);
-                }
+    if (mainTextFrame) {
+        if (! mainTextFrame->frames().isEmpty() && mainTextFrame->frames().first() ) {
+            KoTextShapeData * shapeData = dynamic_cast<KoTextShapeData *>( mainTextFrame->frames().first()->shape()->userData() );
+            if ( shapeData ) {
+                shapeData->saveOdf(context);
             }
         }
-
-        /*
-        contentTmpWriter.startElement( odfTagName() );
-        paContext.setXmlWriter( contentTmpWriter );
-        paContext.setOptions( KoPASavingContext::DrawId );
-        // save pages
-        foreach ( KoPAPageBase *page, m_pages ) {
-            page->saveOdf( paContext );
-            paContext.incrementPage();
-        }
-        */
-        contentTmpWriter.endElement(); // office:text
-        contentTmpWriter.endElement(); // office:body
-
-        contentTmpFile.close();
-
-        mainStyles.saveOdfAutomaticStyles( contentWriter, false );
-
-        // And now we can copy over the contents from the tempfile to the real one
-        contentWriter->addCompleteElement( &contentTmpFile );
-
-        contentWriter->endElement(); // root element
-        contentWriter->endDocument();
-        delete contentWriter;
-
-        if ( !store->close() ) // done with content.xml
-            return false;
     }
+
+    bodyWriter->endElement(); // office:text
+    bodyWriter->endElement(); // office:body
+
+    mainStyles.saveOdfAutomaticStyles( contentWriter, false );
+
+    odfStore.closeContentWriter();
+
+    // add manifest line for content.xml
+    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
 
     // save the styles.xml
     if ( !mainStyles.saveOdfStylesDotXml( store, manifestWriter ) )
         return false;
 
-#if 0 //sebsauer: moved to KWDocument::saveOdf... probably move it back + provide access to the datacenter?!
-    bool ok=true;
-    foreach(KoDataCenter *dataCenter, m_dataCenterMap)
-    {
-        ok = ok && dataCenter->completeSaving(store, manifestWriter);
+    if ( !context.saveDataCenter( store, manifestWriter ) ) {
+        return false;
     }
-    if(!ok)
-        return false;
-#endif
-
-#if 0 // tz: remove until data center is used
-    if (!context.saveImages(store, manifestWriter))
-        return false;
-#endif
 
     return true;
 }
