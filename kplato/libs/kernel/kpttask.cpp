@@ -1336,6 +1336,9 @@ DateTime Task::scheduleForward(const DateTime &earliest, int use) {
         return DateTime();
     }
     Schedule *cs = m_currentSchedule;
+    if (m_visitedForward) {
+        return cs->endTime;
+    }
     cs->setCalculationMode( Schedule::Scheduling );
     cs->startTime = earliest > cs->earlyStart ? earliest : cs->earlyStart;
     // First, calculate all my own predecessors
@@ -1651,6 +1654,9 @@ DateTime Task::scheduleBackward(const DateTime &latest, int use) {
         return DateTime();
     }
     Schedule *cs = m_currentSchedule;
+    if (m_visitedBackward) {
+        return cs->startTime;
+    }
     cs->setCalculationMode( Schedule::Scheduling );
     cs->endTime = latest < cs->lateFinish ? latest : cs->lateFinish;
     // First, calculate all my own successors
