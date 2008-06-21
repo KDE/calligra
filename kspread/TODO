@@ -67,15 +67,16 @@ Things not in bugzilla
 ----------------------
 
 * Printing
-  + printouts with zoom other than 100% (it's a missing feature, but  2 ----
+  + printouts with zoom other than 100% (it's a missing feature, but  2 done
     the GUI is there... - page layout, options, Scale Printout )
-  + make print range work over more than 1 page			      2 ----
+  + make print range work over more than 1 page			      2 done
   + Repeated rows and columns don't work if they don't start from     2 ----
     row/column 1.   Also it is not possible to enter just one
     row/column into the dialog, it always has to be a range (2:3).
-    - Make it possible to enter just one row/column into GUI, don't   2 ----
+    - Make it possible to enter just one row/column into GUI, don't   2 done
       force a range.
   + Insert manual page break					      2 ----
+  + Print selection only					      2 done
 
 * OpenDocument file format
   - see OASIS.txt						      1 ----
@@ -89,8 +90,8 @@ Things not in bugzilla
     see section 8.5.2 in [1] and section 3.3 in [2]
 
 * Flake integration.
-  + Provide a table shape					      1 ----
-  + General shape support					      1 ----
+  + Provide a table shape					      1 done
+  + General shape support					      1 done
   + Cell anchoring						      1 ----
     - Saving								----
       Query the shape container of the sheet before iterating over
@@ -101,7 +102,7 @@ Things not in bugzilla
       Shapes anchored cells should be moved, if the cell itself
       got moved; either by column/row/cell range insertions/deletions
       or by column/row dimension changes.
-  + Move all the managers and other necessary logic from Doc to Map	----
+  + Move all the managers and other necessary logic from Doc to Map	done
     in order to use Map solely as data center for embedded tables.
 
 * Internals (See also DESIGN.html)
@@ -334,7 +335,6 @@ Things not in bugzilla
 
 
 * General features
-  + Painting: Indent and multiline doesn't work together	      2 ----
   + Split view							      1 ----
   + "Freeze/Unfreeze Panes"					      2 ----
   + Function optimizer ('Solver')				      2 ----
@@ -363,7 +363,6 @@ Not yet sorted (will be entered into categories above)
 - Printing enhancements:
   + Expand selection to page
   + Fit selection to page
-  + Print selection only
 - new dialog for conditional cell attributes
 - multiline header/footer support
 - for formulas: fit precision so the result fits in the cell or resize the cell
