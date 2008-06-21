@@ -50,7 +50,6 @@
 #include <kdebug.h>
 #include <kconfig.h>
 #include <kmessagebox.h>
-#include <k3sconfig.h>
 #include <ktemporaryfile.h>
 
 #include <KoApplication.h>

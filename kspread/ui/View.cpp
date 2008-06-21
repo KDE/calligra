@@ -750,7 +750,7 @@ void View::initView()
     KoToolRegistry::instance()->add(s_defaultToolFactory);
     KoToolManager::instance()->addController( d->canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), d->canvasController );
-    KoToolBoxFactory toolBoxFactory( d->canvasController, "KSpread" );
+    KoToolBoxFactory toolBoxFactory(d->canvasController, i18n("Tools"));
     createDockWidget( &toolBoxFactory );
 
     // Setup the tool options dock widget.
