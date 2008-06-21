@@ -244,7 +244,7 @@ QList<KRObjectData*> KRReportData::objects()
 	
 	for (int i = 0; i <12 ; ++i)
 	{
-		sec = section((KRReportData::Section)(i+1));
+		sec = section((KRSectionData::Section)(i+1));
 		if (sec)
 		{
 			obs << sec->objects();
@@ -297,7 +297,7 @@ QList<KRSectionData*> KRReportData::sections()
 	KRSectionData *sec;
 	for (int i = 0; i <12 ; ++i)
 	{
-		sec = section((KRReportData::Section)(i+1));
+		sec = section((KRSectionData::Section)(i+1));
 		if (sec)
 		{
 			secs << sec;
@@ -339,45 +339,45 @@ KRSectionData* KRReportData::section(const QString& sn)
 	return 0;
 }
 
-KRSectionData* KRReportData::section(KRReportData::Section s)
+KRSectionData* KRReportData::section(KRSectionData::Section s)
 {
 	KRSectionData *sec;
 	switch ( s )
 	{
-		case KRReportData::PageHeadAny:
+		case KRSectionData::PageHeadAny:
 			sec = pghead_any;
 			break;
-		case KRReportData::PageHeadEven:
+		case KRSectionData::PageHeadEven:
 			sec = pghead_even;
 			break;
-		case KRReportData::PageHeadOdd:
+		case KRSectionData::PageHeadOdd:
 			sec = pghead_odd;
 			break;
-		case KRReportData::PageHeadFirst:
+		case KRSectionData::PageHeadFirst:
 			sec = pghead_first;
 			break;
-		case KRReportData::PageHeadLast:
+		case KRSectionData::PageHeadLast:
 			sec = pghead_last;
 			break;
-		case KRReportData::PageFootAny:
+		case KRSectionData::PageFootAny:
 			sec = pgfoot_any;
 			break;
-		case KRReportData::PageFootEven:
+		case KRSectionData::PageFootEven:
 			sec = pgfoot_even;
 			break;
-		case KRReportData::PageFootOdd:
+		case KRSectionData::PageFootOdd:
 			sec = pgfoot_odd;
 			break;
-		case KRReportData::PageFootFirst:
+		case KRSectionData::PageFootFirst:
 			sec = pgfoot_first;
 			break;
-		case KRReportData::PageFootLast:
+		case KRSectionData::PageFootLast:
 			sec = pgfoot_last;
 			break;
-		case KRReportData::ReportHead:
+		case KRSectionData::ReportHead:
 			sec = rpthead;
 			break;
-		case KRReportData::ReportFoot:
+		case KRSectionData::ReportFoot:
 			sec = rptfoot;
 			break;
 		default:

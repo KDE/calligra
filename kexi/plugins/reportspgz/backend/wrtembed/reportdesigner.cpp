@@ -329,10 +329,10 @@ ReportDesigner::ReportDesigner ( QWidget *parent, KexiDB::Connection *cn, const 
 			}
 			else if ( n == "rpthead" )
 			{
-				if ( getSection ( KRReportData::ReportHead ) == 0 )
+				if ( getSection ( KRSectionData::ReportHead ) == 0 )
 				{
-					insertSection ( KRReportData::ReportHead );
-					getSection ( KRReportData::ReportHead )->initFromXML ( it );
+					insertSection ( KRSectionData::ReportHead );
+					getSection ( KRSectionData::ReportHead )->initFromXML ( it );
 				}
 				else
 				{
@@ -341,10 +341,10 @@ ReportDesigner::ReportDesigner ( QWidget *parent, KexiDB::Connection *cn, const 
 			}
 			else if ( n == "rptfoot" )
 			{
-				if ( getSection ( KRReportData::ReportFoot ) == 0 )
+				if ( getSection ( KRSectionData::ReportFoot ) == 0 )
 				{
-					insertSection ( KRReportData::ReportFoot );
-					getSection ( KRReportData::ReportFoot )->initFromXML ( it );
+					insertSection ( KRSectionData::ReportFoot );
+					getSection ( KRSectionData::ReportFoot )->initFromXML ( it );
 				}
 				else
 				{
@@ -359,10 +359,10 @@ ReportDesigner::ReportDesigner ( QWidget *parent, KexiDB::Connection *cn, const 
 				ReportSection * rs = 0;
 				if ( !it.namedItem ( "firstpage" ).isNull() )
 				{
-					if ( getSection ( KRReportData::PageHeadFirst ) == 0 )
+					if ( getSection ( KRSectionData::PageHeadFirst ) == 0 )
 					{
-						insertSection ( KRReportData::PageHeadFirst );
-						rs = getSection ( KRReportData::PageHeadFirst );
+						insertSection ( KRSectionData::PageHeadFirst );
+						rs = getSection ( KRSectionData::PageHeadFirst );
 					}
 					else
 					{
@@ -371,10 +371,10 @@ ReportDesigner::ReportDesigner ( QWidget *parent, KexiDB::Connection *cn, const 
 				}
 				else if ( !it.namedItem ( "odd" ).isNull() )
 				{
-					if ( getSection ( KRReportData::PageHeadOdd ) == 0 )
+					if ( getSection ( KRSectionData::PageHeadOdd ) == 0 )
 					{
-						insertSection ( KRReportData::PageHeadOdd );
-						rs = getSection ( KRReportData::PageHeadOdd );
+						insertSection ( KRSectionData::PageHeadOdd );
+						rs = getSection ( KRSectionData::PageHeadOdd );
 					}
 					else
 					{
@@ -383,10 +383,10 @@ ReportDesigner::ReportDesigner ( QWidget *parent, KexiDB::Connection *cn, const 
 				}
 				else if ( !it.namedItem ( "even" ).isNull() )
 				{
-					if ( getSection ( KRReportData::PageHeadEven ) == 0 )
+					if ( getSection ( KRSectionData::PageHeadEven ) == 0 )
 					{
-						insertSection ( KRReportData::PageHeadEven );
-						rs = getSection ( KRReportData::PageHeadEven );
+						insertSection ( KRSectionData::PageHeadEven );
+						rs = getSection ( KRSectionData::PageHeadEven );
 					}
 					else
 					{
@@ -395,10 +395,10 @@ ReportDesigner::ReportDesigner ( QWidget *parent, KexiDB::Connection *cn, const 
 				}
 				else if ( !it.namedItem ( "lastpage" ).isNull() )
 				{
-					if ( getSection ( KRReportData::PageHeadLast ) == 0 )
+					if ( getSection ( KRSectionData::PageHeadLast ) == 0 )
 					{
-						insertSection ( KRReportData::PageHeadLast );
-						rs = getSection ( KRReportData::PageHeadLast );
+						insertSection ( KRSectionData::PageHeadLast );
+						rs = getSection ( KRSectionData::PageHeadLast );
 					}
 					else
 					{
@@ -408,10 +408,10 @@ ReportDesigner::ReportDesigner ( QWidget *parent, KexiDB::Connection *cn, const 
 				else
 				{
 					// we have an any pghead
-					if ( getSection ( KRReportData::PageHeadAny ) == 0 )
+					if ( getSection ( KRSectionData::PageHeadAny ) == 0 )
 					{
-						insertSection ( KRReportData::PageHeadAny );
-						rs = getSection ( KRReportData::PageHeadAny );
+						insertSection ( KRSectionData::PageHeadAny );
+						rs = getSection ( KRSectionData::PageHeadAny );
 					}
 					else
 					{
@@ -426,10 +426,10 @@ ReportDesigner::ReportDesigner ( QWidget *parent, KexiDB::Connection *cn, const 
 				ReportSection * rs = 0;
 				if ( !it.namedItem ( "firstpage" ).isNull() )
 				{
-					if ( getSection ( KRReportData::PageFootFirst ) == 0 )
+					if ( getSection ( KRSectionData::PageFootFirst ) == 0 )
 					{
-						insertSection ( KRReportData::PageFootFirst );
-						rs = getSection ( KRReportData::PageFootFirst );
+						insertSection ( KRSectionData::PageFootFirst );
+						rs = getSection ( KRSectionData::PageFootFirst );
 					}
 					else
 					{
@@ -438,10 +438,10 @@ ReportDesigner::ReportDesigner ( QWidget *parent, KexiDB::Connection *cn, const 
 				}
 				else if ( !it.namedItem ( "odd" ).isNull() )
 				{
-					if ( getSection ( KRReportData::PageFootOdd ) == 0 )
+					if ( getSection ( KRSectionData::PageFootOdd ) == 0 )
 					{
-						insertSection ( KRReportData::PageFootOdd );
-						rs = getSection ( KRReportData::PageFootOdd );
+						insertSection ( KRSectionData::PageFootOdd );
+						rs = getSection ( KRSectionData::PageFootOdd );
 					}
 					else
 					{
@@ -450,10 +450,10 @@ ReportDesigner::ReportDesigner ( QWidget *parent, KexiDB::Connection *cn, const 
 				}
 				else if ( !it.namedItem ( "even" ).isNull() )
 				{
-					if ( getSection ( KRReportData::PageFootEven ) == 0 )
+					if ( getSection ( KRSectionData::PageFootEven ) == 0 )
 					{
-						insertSection ( KRReportData::PageFootEven );
-						rs = getSection ( KRReportData::PageFootEven );
+						insertSection ( KRSectionData::PageFootEven );
+						rs = getSection ( KRSectionData::PageFootEven );
 					}
 					else
 					{
@@ -462,10 +462,10 @@ ReportDesigner::ReportDesigner ( QWidget *parent, KexiDB::Connection *cn, const 
 				}
 				else if ( !it.namedItem ( "lastpage" ).isNull() )
 				{
-					if ( getSection ( KRReportData::PageFootLast ) == 0 )
+					if ( getSection ( KRSectionData::PageFootLast ) == 0 )
 					{
-						insertSection ( KRReportData::PageFootLast );
-						rs = getSection ( KRReportData::PageFootLast );
+						insertSection ( KRSectionData::PageFootLast );
+						rs = getSection ( KRSectionData::PageFootLast );
 					}
 					else
 					{
@@ -475,10 +475,10 @@ ReportDesigner::ReportDesigner ( QWidget *parent, KexiDB::Connection *cn, const 
 				else
 				{
 					// we have the any page foot
-					if ( getSection ( KRReportData::PageFootAny ) == 0 )
+					if ( getSection ( KRSectionData::PageFootAny ) == 0 )
 					{
-						insertSection ( KRReportData::PageFootAny );
-						rs = getSection ( KRReportData::PageFootAny );
+						insertSection ( KRSectionData::PageFootAny );
+						rs = getSection ( KRSectionData::PageFootAny );
 					}
 					else
 					{
@@ -543,45 +543,45 @@ void ReportDesigner::slotSectionEditor()
 	delete se;
 }
 
-ReportSection * ReportDesigner::getSection ( KRReportData::Section s ) const
+ReportSection * ReportDesigner::getSection ( KRSectionData::Section s ) const
 {
 	ReportSection *sec;
 	switch ( s )
 	{
-		case KRReportData::PageHeadAny:
+		case KRSectionData::PageHeadAny:
 			sec = pageHeadAny;
 			break;
-		case KRReportData::PageHeadEven:
+		case KRSectionData::PageHeadEven:
 			sec = pageHeadEven;
 			break;
-		case KRReportData::PageHeadOdd:
+		case KRSectionData::PageHeadOdd:
 			sec = pageHeadOdd;
 			break;
-		case KRReportData::PageHeadFirst:
+		case KRSectionData::PageHeadFirst:
 			sec = pageHeadFirst;
 			break;
-		case KRReportData::PageHeadLast:
+		case KRSectionData::PageHeadLast:
 			sec = pageHeadLast;
 			break;
-		case KRReportData::PageFootAny:
+		case KRSectionData::PageFootAny:
 			sec = pageFootAny;
 			break;
-		case KRReportData::PageFootEven:
+		case KRSectionData::PageFootEven:
 			sec = pageFootEven;
 			break;
-		case KRReportData::PageFootOdd:
+		case KRSectionData::PageFootOdd:
 			sec = pageFootOdd;
 			break;
-		case KRReportData::PageFootFirst:
+		case KRSectionData::PageFootFirst:
 			sec = pageFootFirst;
 			break;
-		case KRReportData::PageFootLast:
+		case KRSectionData::PageFootLast:
 			sec = pageFootLast;
 			break;
-		case KRReportData::ReportHead:
+		case KRSectionData::ReportHead:
 			sec = reportHead;
 			break;
-		case KRReportData::ReportFoot:
+		case KRSectionData::ReportFoot:
 			sec = reportFoot;
 			break;
 		default:
@@ -589,7 +589,7 @@ ReportSection * ReportDesigner::getSection ( KRReportData::Section s ) const
 	}
 	return sec;
 }
-void ReportDesigner::removeSection ( KRReportData::Section s )
+void ReportDesigner::removeSection ( KRSectionData::Section s )
 {
 	ReportSection* sec = getSection ( s );
 	if ( sec != NULL )
@@ -598,40 +598,40 @@ void ReportDesigner::removeSection ( KRReportData::Section s )
 
 		switch ( s )
 		{
-			case KRReportData::PageHeadAny:
+			case KRSectionData::PageHeadAny:
 				pageHeadAny = NULL;
 				break;
-			case KRReportData::PageHeadEven:
+			case KRSectionData::PageHeadEven:
 				sec = pageHeadEven = NULL;
 				break;
-			case KRReportData::PageHeadOdd:
+			case KRSectionData::PageHeadOdd:
 				pageHeadOdd = NULL;
 				break;
-			case KRReportData::PageHeadFirst:
+			case KRSectionData::PageHeadFirst:
 				pageHeadFirst = NULL;
 				break;
-			case KRReportData::PageHeadLast:
+			case KRSectionData::PageHeadLast:
 				pageHeadLast = NULL;
 				break;
-			case KRReportData::PageFootAny:
+			case KRSectionData::PageFootAny:
 				pageFootAny = NULL;
 				break;
-			case KRReportData::PageFootEven:
+			case KRSectionData::PageFootEven:
 				pageFootEven = NULL;
 				break;
-			case KRReportData::PageFootOdd:
+			case KRSectionData::PageFootOdd:
 				pageFootOdd = NULL;
 				break;
-			case KRReportData::PageFootFirst:
+			case KRSectionData::PageFootFirst:
 				pageFootFirst = NULL;
 				break;
-			case KRReportData::PageFootLast:
+			case KRSectionData::PageFootLast:
 				pageFootLast = NULL;
 				break;
-			case KRReportData::ReportHead:
+			case KRSectionData::ReportHead:
 				reportHead = NULL;
 				break;
-			case KRReportData::ReportFoot:
+			case KRSectionData::ReportFoot:
 				reportFoot = NULL;
 				break;
 			default:
@@ -642,7 +642,7 @@ void ReportDesigner::removeSection ( KRReportData::Section s )
 		adjustSize();
 	}
 }
-void ReportDesigner::insertSection ( KRReportData::Section s )
+void ReportDesigner::insertSection ( KRSectionData::Section s )
 {
 	ReportSection* sec = getSection ( s );
 	if ( sec == NULL )
@@ -650,10 +650,10 @@ void ReportDesigner::insertSection ( KRReportData::Section s )
 		int idx = 0;
 		for ( int i = 1; i <= s; ++i )
 		{
-			if ( getSection ( ( KRReportData::Section ) ( i ) ) != NULL )
+			if ( getSection ( ( KRSectionData::Section ) ( i ) ) != NULL )
 				idx++;
 		}
-		if ( s > KRReportData::ReportHead )
+		if ( s > KRSectionData::ReportHead )
 			idx++;
 		kDebug() << idx << endl;
 		ReportSection *rs = new ReportSection ( this );
@@ -661,51 +661,51 @@ void ReportDesigner::insertSection ( KRReportData::Section s )
 
 		switch ( s )
 		{
-			case KRReportData::PageHeadAny:
+			case KRSectionData::PageHeadAny:
 				rs->setTitle ( i18n ( "Page Header (Any)" ) );
 				pageHeadAny = rs;
 				break;
-			case KRReportData::PageHeadEven:
+			case KRSectionData::PageHeadEven:
 				rs->setTitle ( i18n ( "Page Header (Even)" ) );
 				pageHeadEven = rs;
 				break;
-			case KRReportData::PageHeadOdd:
+			case KRSectionData::PageHeadOdd:
 				rs->setTitle ( i18n ( "Page Header (Odd)" ) );
 				pageHeadOdd = rs;
 				break;
-			case KRReportData::PageHeadFirst:
+			case KRSectionData::PageHeadFirst:
 				rs->setTitle ( i18n ( "Page Header (First)" ) );
 				pageHeadFirst = rs;
 				break;
-			case KRReportData::PageHeadLast:
+			case KRSectionData::PageHeadLast:
 				rs->setTitle ( i18n ( "Page Header (Last)" ) );
 				pageHeadLast = rs;
 				break;
-			case KRReportData::PageFootAny:
+			case KRSectionData::PageFootAny:
 				rs->setTitle ( i18n ( "Page Footer (Any)" ) );
 				pageFootAny = rs;
 				break;
-			case KRReportData::PageFootEven:
+			case KRSectionData::PageFootEven:
 				rs->setTitle ( i18n ( "Page Footer (Even)" ) );
 				pageFootEven = rs;
 				break;
-			case KRReportData::PageFootOdd:
+			case KRSectionData::PageFootOdd:
 				rs->setTitle ( i18n ( "Page Footer (Odd)" ) );
 				pageFootOdd = rs;
 				break;
-			case KRReportData::PageFootFirst:
+			case KRSectionData::PageFootFirst:
 				rs->setTitle ( i18n ( "Page Footer (First)" ) );
 				pageFootFirst = rs;
 				break;
-			case KRReportData::PageFootLast:
+			case KRSectionData::PageFootLast:
 				rs->setTitle ( i18n ( "Page Footer (Last)" ) );
 				pageFootLast = rs;
 				break;
-			case KRReportData::ReportHead:
+			case KRSectionData::ReportHead:
 				rs->setTitle ( i18n ( "Report Header" ) );
 				reportHead = rs;
 				break;
-			case KRReportData::ReportFoot:
+			case KRSectionData::ReportFoot:
 				rs->setTitle ( i18n ( "Report Footer" ) );
 				reportFoot = rs;
 				break;
@@ -1595,7 +1595,7 @@ QString ReportDesigner::suggestEntityName ( const QString &n ) const
 	//Count items in the main sections
 	for ( int i = 1; i <= 12; ++i )
 	{
-		sec = getSection ( ( KRReportData::Section ) i );
+		sec = getSection ( ( KRSectionData::Section ) i );
 		if ( sec )
 		{
 			const QGraphicsItemList l = sec->items();
@@ -1646,7 +1646,7 @@ bool ReportDesigner::isEntityNameUnique ( const QString &n, KRObjectData* ignore
 	//Check items in the main sections
 	for ( int i = 1; i <= 12; ++i )
 	{
-		sec = getSection ( ( KRReportData::Section ) i );
+		sec = getSection ( ( KRSectionData::Section ) i );
 		if ( sec )
 		{
 			const QGraphicsItemList l = sec->items();

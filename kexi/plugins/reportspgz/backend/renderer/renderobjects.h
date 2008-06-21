@@ -32,6 +32,7 @@
 #include <parsexmlutils.h>
 #include <reportpageoptions.h>
 #include <QPicture>
+#include <krreportdata.h>
 
 class ORODocument;
 class OROPage;
@@ -123,6 +124,9 @@ class OROSection
     ORODocument* document() const { return _document; };
     long row() const; // returns this pages current page number
     
+    void setType(KRSectionData::Section t){_type = t;}
+    KRSectionData::Section type(){return _type;}
+    
     int primitives() const { return _primitives.count(); };
     OROPrimitive* primitive(int);
     void addPrimitive(OROPrimitive*);
@@ -132,6 +136,7 @@ class OROSection
     QList<OROPrimitive*> _primitives;
     long _row;
     int _height;
+    KRSectionData::Section _type;
     QColor _backgroundColor;
 };
 

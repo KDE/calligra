@@ -38,7 +38,7 @@ class KRObjectData;
 #include <koproperty/property.h>
 #include <koproperty/set.h>
 #include <QColor>
-			 
+
 namespace Scripting
 {
 	class Section;
@@ -47,6 +47,26 @@ class KRSectionData : public QObject
 {
 	Q_OBJECT
 	public:
+		enum Section
+		{
+		  None = 0,
+		  PageHeadFirst = 1,
+		  PageHeadOdd,
+		  PageHeadEven,
+		  PageHeadLast,
+		  PageHeadAny,
+		  ReportHead,
+		  ReportFoot,
+		  PageFootFirst,
+		  PageFootOdd,
+		  PageFootEven,
+		  PageFootLast,
+		  PageFootAny,
+		  GroupHead,
+		  GroupFoot,
+		  Detail
+		};
+	  
 		KRSectionData();
 		KRSectionData(const QDomElement &);
 		~KRSectionData();
@@ -66,7 +86,7 @@ class KRSectionData : public QObject
 		QList<KRObjectData*> objects() const {return _objects;};
 		QString name() const;
 		QColor bgColor() const { return _bgColor->value().value<QColor>();}
-		
+		Section type() const {return _type;}
 		
 	protected:
 		KoProperty::Set *_set;
@@ -84,7 +104,7 @@ class KRSectionData : public QObject
 		
 		QString _name;
 		QString _extra;
-		
+		Section _type;
 		
 		static bool zLessThan(KRObjectData* s1, KRObjectData* s2);
 		

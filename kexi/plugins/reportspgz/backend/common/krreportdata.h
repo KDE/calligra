@@ -47,22 +47,6 @@ class KRReportData : public QObject
 		KRReportData ();
 		~KRReportData();
 
-		enum Section
-		{
-			PageHeadFirst = 1,
-			PageHeadOdd,
-			PageHeadEven,
-			PageHeadLast,
-			PageHeadAny,
-			ReportHead,
-			ReportFoot,
-			PageFootFirst,
-			PageFootOdd,
-			PageFootEven,
-			PageFootLast,
-			PageFootAny
-		};
-
 		/**
 		\return a list of all objects in the report
 		*/
@@ -81,7 +65,7 @@ class KRReportData : public QObject
 		/**
 		\return a sectiondata given a section enum
 		*/
-		KRSectionData* section(Section);
+		KRSectionData* section(KRSectionData::Section);
 		
 		/**
 		\return a sectiondata given its name

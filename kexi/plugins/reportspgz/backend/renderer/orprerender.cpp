@@ -582,6 +582,7 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 	OROSection *sec = new OROSection(_document);
 	sec->setHeight( sectionData.height() );
 	sec->setBackgroundColor( sectionData.bgColor() );
+	sec->setType(sectionData.type());
 	_document->addSection( sec );
 	
 	//Render section background

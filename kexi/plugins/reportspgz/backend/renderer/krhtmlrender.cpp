@@ -45,58 +45,74 @@ QString KRHtmlRender::render(ORODocument *document, bool css)
 	QString style;
 	QStringList styles;
 	int styleindex;
-				 
+	bool renderedPageHead = false;
+	bool renderedPageFoot = false;
 	// Render Each Section
 	for (long s = 0; s < document->sections(); s++ )
 	{
 		OROSection *section = document->section(s);
 	  
-		style = "position: relative; top: 0pt; left: 0pt; background-color: " + section->backgroundColor().name() + "; height: " + QString::number(section->height()) + "pt;";
-
-		if (!styles.contains(style))
+		if (section->type() == KRSectionData::GroupHead || 
+			section->type() == KRSectionData::GroupFoot || 
+			section->type() == KRSectionData::Detail || 
+			section->type() == KRSectionData::ReportHead || 
+			section->type() == KRSectionData::ReportFoot || 
+			(section->type() == KRSectionData::PageHeadAny && !renderedPageHead) || 
+			(section->type() == KRSectionData::PageFootAny && !renderedPageFoot && s > document->sections() - 2 )) //render the page foot right at the end, it will either be the last or second last section if there is a report footer
 		{
-			    styles << style;
-		}
-		styleindex = styles.indexOf(style);
+			if ( section->type() == KRSectionData::PageHeadAny )
+			  renderedPageHead = true;
 
-		body += "<div class=\"style" + QString::number(styleindex) + "\">\n";
-		//Render the objects in each section
-		for ( int i = 0; i < section->primitives(); i++ )
-		{
-			OROPrimitive * prim = section->primitive ( i );
-			
-			if ( prim->type() == OROTextBox::TextBox )
+			if ( section->type() == KRSectionData::PageFootAny )
+			  renderedPageFoot = true;
+
+			style = "position: relative; top: 0pt; left: 0pt; background-color: " + section->backgroundColor().name() + "; height: " + QString::number(section->height()) + "pt;";
+
+			if (!styles.contains(style))
 			{
-				OROTextBox * tb = ( OROTextBox* ) prim;
+				    styles << style;
+			}
+			styleindex = styles.indexOf(style);
+
+			body += "<div class=\"style" + QString::number(styleindex) + "\">\n";
+			//Render the objects in each section
+			for ( int i = 0; i < section->primitives(); i++ )
+			{
+				OROPrimitive * prim = section->primitive ( i );
 				
-				style = "position: absolute; ";
-				style += "background-color: " + (tb->textStyle().bgOpacity == 0 ? "transparent" : tb->textStyle().bgColor.name()) + "; ";
-				style += "top: " + QString::number(tb->position().y()) + "pt; ";
-				style += "left: " + QString::number(tb->position().x()) + "pt; ";
-				style += "font-size: " + QString::number(tb->textStyle().font.pointSize()) + "pt; ";
-				style += "color: " + tb->textStyle().fgColor.name() + "; ";
-				//TODO opaque text + translucent background
-				//it looks a pain to implement
-				//http://developer.mozilla.org/en/docs/Useful_CSS_tips:Color_and_Background
-				//style += "filter:alpha(opacity=" + QString::number((tb->textStyle().bgOpacity / 255) * 100) + ");"; //ie opacity
-				//style += "opacity: " + QString::number(tb->textStyle().bgOpacity / 255.0) + ";";
-				
-				if (!styles.contains(style))
+				if ( prim->type() == OROTextBox::TextBox )
 				{
-				  styles << style;
+					OROTextBox * tb = ( OROTextBox* ) prim;
+					
+					style = "position: absolute; ";
+					style += "background-color: " + (tb->textStyle().bgOpacity == 0 ? "transparent" : tb->textStyle().bgColor.name()) + "; ";
+					style += "top: " + QString::number(tb->position().y()) + "pt; ";
+					style += "left: " + QString::number(tb->position().x()) + "pt; ";
+					style += "font-size: " + QString::number(tb->textStyle().font.pointSize()) + "pt; ";
+					style += "color: " + tb->textStyle().fgColor.name() + "; ";
+					//TODO opaque text + translucent background
+					//it looks a pain to implement
+					//http://developer.mozilla.org/en/docs/Useful_CSS_tips:Color_and_Background
+					//style += "filter:alpha(opacity=" + QString::number((tb->textStyle().bgOpacity / 255) * 100) + ");"; //ie opacity
+					//style += "opacity: " + QString::number(tb->textStyle().bgOpacity / 255.0) + ";";
+					
+					if (!styles.contains(style))
+					{
+					  styles << style;
+					}
+					styleindex = styles.indexOf(style);
+					
+					body += "<div class=\"style" + QString::number(styleindex) + "\">";
+					body += tb->text();
+					body += "</div>\n";
 				}
-				styleindex = styles.indexOf(style);
-				
-				body += "<div class=\"style" + QString::number(styleindex) + "\">";
-				body += tb->text();
-				body += "</div>\n";
+				else
+				{
+					kDebug() << "unrecognized primitive type" << endl;
+				}
 			}
-			else
-			{
-				kDebug() << "unrecognized primitive type" << endl;
-			}
+			body += "</div>\n";
 		}
-		body += "</div>\n";
 	}
 
 	html = "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html>\n<head>\n";

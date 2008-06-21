@@ -56,7 +56,30 @@ KRSectionData::KRSectionData ( const QDomElement & elemSource )
 		return;
 	}
 	_height->setValue ( 1 );
-
+	
+	_type = None;
+	
+	if (_name == "rpthead")
+	  _type = ReportHead;
+	
+	if (_name == "rptfoot")
+	  _type = ReportFoot;
+	
+	if (_name == "pghead")
+	  _type = PageHeadAny;
+	
+	if (_name == "pgfoot")
+	  _type = PageFootAny;
+	
+	if (_name == "grouphead")
+	  _type = GroupHead;
+	
+	if (_name == "groupfoot")
+	  _type = GroupFoot;
+	
+	if (_name == "detail")
+	  _type = Detail;
+	
 	QDomNodeList section = elemSource.childNodes();
 	for ( int nodeCounter = 0; nodeCounter < section.count(); nodeCounter++ )
 	{
@@ -76,21 +99,41 @@ KRSectionData::KRSectionData ( const QDomElement & elemSource )
 		{
 			if ( _name == "pghead" || _name == "pgfoot" )
 				_extra = elemThis.tagName();
+			
+			if (_name == "pghead")
+			  _type = PageHeadFirst;
+			if (_name == "pgfoot")
+			  _type = PageFootFirst;
 		}
 		else if ( elemThis.tagName() == "odd" )
 		{
 			if ( _name == "pghead" || _name == "pgfoot" )
 				_extra = elemThis.tagName();
+			
+			if (_name == "pghead")
+			  _type = PageHeadOdd;
+			if (_name == "pgfoot")
+			  _type = PageFootOdd;
 		}
 		else if ( elemThis.tagName() == "even" )
 		{
 			if ( _name == "pghead" || _name == "pgfoot" )
 				_extra = elemThis.tagName();
+			
+			if (_name == "pghead")
+			  _type = PageHeadEven;
+			if (_name == "pgfoot")
+			  _type = PageFootEven;
 		}
 		else if ( elemThis.tagName() == "lastpage" )
 		{
 			if ( _name == "pghead" || _name == "pgfoot" )
 				_extra = elemThis.tagName();
+			
+			if (_name == "pghead")
+			  _type = PageHeadLast;
+			if (_name == "pgfoot")
+			  _type = PageFootLast;
 		}
 		else if ( elemThis.tagName() == "label" )
 		{

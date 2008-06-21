@@ -66,9 +66,9 @@ class ReportDesigner : public QWidget
 		ReportDesigner ( QWidget *, KexiDB::Connection *, const QString& );
 		~ReportDesigner();
 
-		ReportSection* getSection ( KRReportData::Section ) const;
-		void removeSection ( KRReportData::Section );
-		void insertSection ( KRReportData::Section );
+		ReportSection* getSection ( KRSectionData::Section ) const;
+		void removeSection ( KRSectionData::Section );
+		void insertSection ( KRSectionData::Section );
 		
 		ReportSectionDetail* detailSection() {return detail;}
 		void setDetail ( ReportSectionDetail *rsd );
