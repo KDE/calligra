@@ -83,7 +83,21 @@ namespace KexiWebForms {
 
             KexiDB::RecordData recordData(tableSchema.fieldCount());
             KexiDB::RowEditBuffer editBuffer(true);
-
+            
+            QVector<int> pkeyFields(schema.pkeyFieldsOrder());
+            for (int i = 0; i < pkeyFields.size(); i++) {
+                int fieldId = pkeyFields.at(i);
+                if (schema.field(fieldId)->name() == pkeyName) {
+                    recordData.insert(fieldId, pkeyValue);
+                    /**
+                     * @note No need to fill other primary key values.
+                     * As reported by Jaroslaw KexiDB supports multi pkey
+                     * tables but the table designer not
+                     */
+                    break;
+                }
+            }
+            
             /*! @fixme Making the wrong assumption on what the pkey id is */
             recordData.insert(0, QVariant(pkeyValue));
                 

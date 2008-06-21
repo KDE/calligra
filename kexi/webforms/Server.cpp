@@ -21,6 +21,9 @@
 #include <QDir>
 #include <KDebug>
 #include <KUniqueApplication>
+
+#include <google/template.h>
+
 #include <shttpd.h>
 
 #include "Server.h"
@@ -106,6 +109,8 @@ namespace KexiWebForms {
                 for (;;) {
                     shttpd_poll(m_ctx, 1000);
                     KUniqueApplication::processEvents();
+                    /// @note Tricky way to clean cache on template updates...
+                    google::Template::ReloadAllIfChanged();
                 }
 
                 return true;
