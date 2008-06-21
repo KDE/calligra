@@ -375,63 +375,42 @@ QMap<QString, KoDataCenter*> KarbonDocument::dataCenterMap()
 bool KarbonDocument::saveOdf( KoDocument::SavingContext &documentContext )
 {
     KoStore * store = documentContext.odfStore.store();
-    KoXmlWriter * manifestWriter = documentContext.odfStore.manifestWriter();
-
-    if( !store->open( "content.xml" ) )
+    KoXmlWriter* contentWriter = documentContext.odfStore.contentWriter();
+    if ( !contentWriter )
         return false;
 
-    KoStoreDevice storeDev( store );
-    KoXmlWriter * docWriter = KoOdfWriteStore::createOasisXmlWriter( &storeDev, "office:document-content" );
+    KoGenStyles mainStyles;
+    KoXmlWriter * bodyWriter = documentContext.odfStore.bodyWriter();
 
-    // for office:master-styles
-    KTemporaryFile masterStyles;
-    masterStyles.open();
-    KoXmlWriter masterStylesTmpWriter( &masterStyles, 1 );
+    KoShapeSavingContext shapeContext( *bodyWriter, mainStyles, documentContext.embeddedSaver );
 
+    // save page
     KoPageLayout page;
     page.format = KoPageFormat::defaultFormat();
     page.orientation = KoPageFormat::Portrait;
     page.width = pageSize().width();
     page.height = pageSize().height();
 
-    KoGenStyles mainStyles;
     KoGenStyle pageLayout = page.saveOasis();
     QString layoutName = mainStyles.lookup( pageLayout, "PL" );
     KoGenStyle masterPage( KoGenStyle::StyleMaster );
     masterPage.addAttribute( "style:page-layout-name", layoutName );
     mainStyles.lookup( masterPage, "Default", KoGenStyles::DontForceNumbering );
 
-    KTemporaryFile contentTmpFile;
-    contentTmpFile.open();
-    KoXmlWriter contentTmpWriter( &contentTmpFile, 1 );
+    bodyWriter->startElement( "office:body" );
+    bodyWriter->startElement( "office:drawing" );
 
-    contentTmpWriter.startElement( "office:body" );
-    contentTmpWriter.startElement( "office:drawing" );
-
-    KoShapeSavingContext shapeContext( contentTmpWriter, mainStyles, documentContext.embeddedSaver );
     saveOasis( shapeContext ); // Save contents
 
-    contentTmpWriter.endElement(); // office:drawing
-    contentTmpWriter.endElement(); // office:body
+    bodyWriter->endElement(); // office:drawing
+    bodyWriter->endElement(); // office:body
 
-    mainStyles.saveOdfAutomaticStyles( docWriter, false );
+    mainStyles.saveOdfAutomaticStyles( contentWriter, false );
 
-    // And now we can copy over the contents from the tempfile to the real one
-    contentTmpFile.seek(0);
-    docWriter->addCompleteElement( &contentTmpFile );
+    documentContext.odfStore.closeContentWriter();
 
-    docWriter->endElement(); // Root element
-    docWriter->endDocument();
-    delete docWriter;
-
-    if( !store->close() )
-        return false;
-
-    manifestWriter->addManifestEntry( "content.xml", "text/xml" );
-
-    if ( ! mainStyles.saveOdfStylesDotXml( store, manifestWriter ) ) {
-        return false;
-    }
+    //add manifest line for content.xml
+    documentContext.odfStore.manifestWriter()->addManifestEntry( "content.xml", "text/xml" );
 
     if(!store->open("settings.xml"))
         return false;
@@ -441,17 +420,13 @@ bool KarbonDocument::saveOdf( KoDocument::SavingContext &documentContext )
     if(!store->close())
         return false;
 
-    manifestWriter->addManifestEntry("settings.xml", "text/xml");
+    documentContext.odfStore.manifestWriter()->addManifestEntry("settings.xml", "text/xml");
 
-    bool ok = true;
-    foreach( KoDataCenter *dataCenter, d->dataCenterMap )
-    {
-        ok = ok && dataCenter->completeSaving( store, manifestWriter );
-    }
-    if(!ok)
+    if ( !shapeContext.saveDataCenter( store, documentContext.odfStore.manifestWriter() ) ) {
         return false;
+    }
 
-    return true;
+    return mainStyles.saveOdfStylesDotXml( store, documentContext.odfStore.manifestWriter() );
 }
 
 void KarbonDocument::saveOasisSettings( KoStore * store )
