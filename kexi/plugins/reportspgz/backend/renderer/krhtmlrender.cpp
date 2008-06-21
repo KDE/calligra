@@ -145,6 +145,7 @@ QString KRHtmlRender::renderTable(ORODocument *document)
 {
 	QString html;
 	QString body;
+	QString tr;
 
 	bool renderedPageHead = false;
 	bool renderedPageFoot = false;
@@ -170,7 +171,7 @@ QString KRHtmlRender::renderTable(ORODocument *document)
 			if ( section->type() == KRSectionData::PageFootAny )
 			  renderedPageFoot = true;
 
-			body += "<tr style=\"background-color: " + section->backgroundColor().name() + "\">\n";
+			tr = "<tr style=\"background-color: " + section->backgroundColor().name() + "\">\n";
 			//Render the objects in each section
 			for ( int i = 0; i < section->primitives(); i++ )
 			{
@@ -180,16 +181,21 @@ QString KRHtmlRender::renderTable(ORODocument *document)
 				{
 					OROTextBox * tb = ( OROTextBox* ) prim;
 					
-					body += "<td>";
-					body += tb->text();
-					body += "</td>\n";
+					tr += "<td>";
+					tr += tb->text();
+					tr += "</td>\n";
 				}
 				else
 				{
 					kDebug() << "unrecognized primitive type" << endl;
 				}
 			}
-			body += "</tr>\n";
+			tr += "</tr>\n";
+
+			if (tr.contains("<td>"))
+			{
+				body += tr;
+			}
 		}
 	}
 	body += "</table>\n";
