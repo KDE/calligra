@@ -53,11 +53,6 @@ KPrDocument::~KPrDocument()
     delete m_customSlideShows;
 }
 
-void KPrDocument::paintContent( QPainter &painter, const QRect &rect, bool transparent,
-                                double zoomX, double zoomY )
-{
-}
-
 bool KPrDocument::loadXML( QIODevice *, const KoXmlDocument & doc )
 {
     //Perhaps not necessary if we use filter import/export for old file format

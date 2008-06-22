@@ -35,9 +35,6 @@ public:
     explicit KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode = false );
     ~KPrDocument();
 
-    void paintContent( QPainter &painter, const QRect &rect, bool transparent = false,
-                       double zoomX = 1.0, double zoomY = 1.0 );
-
     bool loadXML( QIODevice *, const KoXmlDocument & doc );
 
     /// reimplemented
