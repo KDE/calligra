@@ -61,7 +61,7 @@ kde4_add_ui_files(kplatoprivate_LIB_SRCS
     kptconfigtaskpanelbase.ui
 )
 
-kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS})
+kde4_add_library(kplatoprivate SHARED ${kplatoprivate_LIB_SRCS} ${libkdgantt_SRCS} )
 
 target_link_libraries(kplatoprivate kplatokernel kplatomodels kplatoui koguiutils  )
 

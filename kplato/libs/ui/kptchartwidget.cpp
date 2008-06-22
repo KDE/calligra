@@ -39,7 +39,6 @@ ChartWidget::ChartWidget(QWidget *parent, const char *name) : QWidget(parent,nam
     clear();
     
     kDebug() << "ChartWidget :: Constructor Ended"<<endl;
-
 }
 
 void ChartWidget::clear() 
@@ -50,7 +49,7 @@ void ChartWidget::clear()
     acwpPoints.clear();
 }
 
-void ChartWidget::draw( Project &p, ScheduleManager &sm ) 
+void ChartWidget::draw( Project &p, ScheduleManager &sm )
 {
     clear();
     chartEngine.calculateWeeks(weeks,p,sm);
@@ -83,6 +82,7 @@ void ChartWidget::paintEvent(QPaintEvent * ev)
    kDebug()<<size();
     //this->updateGeometry();
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 
     drawBasicChart(painter);
 

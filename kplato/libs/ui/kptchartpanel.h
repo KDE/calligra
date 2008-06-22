@@ -22,6 +22,7 @@
 
 #include "ui_kptchartpanelbase.h"
 #include "kptchartwidget.h"
+#include "kptplotwidget.h"
 #include <qevent.h>
 #include <QHash>
 
@@ -48,7 +49,8 @@ class ChartPanel : public ChartPanelBase {
     Q_OBJECT
 
 private:
-    ChartWidget * chart;
+    //ChartWidget * chart;
+    PlotWidget *   chart;
     bool is_bcwp_draw;
     bool is_bcws_draw;
     bool is_acwp_draw;

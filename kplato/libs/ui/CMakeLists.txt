@@ -75,6 +75,7 @@ set(kplatoui_LIB_SRCS
     kptchartwidget.cpp
     kptchart.cpp
     kptchartview.cpp
+    kptplotwidget.cpp
 )
 kde4_add_ui_files(kplatoui_LIB_SRCS
     kptworkpackagecontrolpanel.ui
