@@ -35,8 +35,6 @@ public:
     explicit KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode = false );
     ~KPrDocument();
 
-    bool loadXML( QIODevice *, const KoXmlDocument & doc );
-
     /// reimplemented
     virtual KoPAPage * newPage( KoPAMasterPage * masterPage = 0 );
     /// reimplemented

@@ -53,13 +53,6 @@ KPrDocument::~KPrDocument()
     delete m_customSlideShows;
 }
 
-bool KPrDocument::loadXML( QIODevice *, const KoXmlDocument & doc )
-{
-    //Perhaps not necessary if we use filter import/export for old file format
-    //will be removed
-    return true;
-}
-
 KoView * KPrDocument::createViewInstance( QWidget *parent )
 {
     return new KPrView( this, parent );
