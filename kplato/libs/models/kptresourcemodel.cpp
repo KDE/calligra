@@ -420,6 +420,7 @@ void ResourceItemModel::slotResourceInserted( const Resource *resource )
     Q_ASSERT( resource->parentGroup() == m_group );
     endInsertRows();
     m_group = 0;
+    emit layoutChanged(); //HACK to make the right view react! Bug in qt?
 }
 
 void ResourceItemModel::slotResourceToBeRemoved( const Resource *resource )
