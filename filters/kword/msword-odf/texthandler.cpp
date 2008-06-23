@@ -280,10 +280,12 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
         m_currentStyle = styles.styleByIndex( paragraphProperties->pap().istd );
         Q_ASSERT( m_currentStyle );
 	//TODO is there anything I need to actually do with styleName?
-	QConstString styleName = Conversion::string( m_currentStyle->name() );
+	QConstString namedStyleName = Conversion::string( m_currentStyle->name() );
+	namedStyleName.replace(" ", "_20_");
+	kDebug(30513) << "styleName = " << namedStyleName;
         //write the paragraph formatting
 	KoGenStyle paragraphStyle(KoGenStyle::StyleAuto, "paragraph");
-	writeLayout(*paragraphProperties, &paragraphStyle, m_currentStyle, true, QString("P"));
+	writeLayout(*paragraphProperties, &paragraphStyle, m_currentStyle, true, QString("P"), namedStyleName);
     }
 }
 
@@ -828,7 +830,7 @@ bool KWordTextHandler::writeListInfo(KoXmlWriter* writer, const wvWare::Word97::
 
 //this is where we actually write the formatting for the paragraph
 //Style* style is actually m_currentStyle 
-void KWordTextHandler::writeLayout(const wvWare::ParagraphProperties& paragraphProperties, KoGenStyle* paragraphStyle, const wvWare::Style* style, bool writeContentTags, QString styleName)
+void KWordTextHandler::writeLayout(const wvWare::ParagraphProperties& paragraphProperties, KoGenStyle* paragraphStyle, const wvWare::Style* style, bool writeContentTags, QString styleName, QString namedStyle)
 {
     kDebug(30513);
 
@@ -900,19 +902,18 @@ void KWordTextHandler::writeLayout(const wvWare::ParagraphProperties& paragraphP
 	}
     }
 
-    //KoGenStyle paragraphStyle( KoGenStyle::StyleAuto, "paragraph" );
-    if(m_writingHeader) { //if we're writing to styles.xml, the style should go there, too
+    //write the parent style name if we have it
+    if(namedStyle != "") {
+	paragraphStyle->addAttribute("style:parent-style-name", namedStyle);
+    }
+    //if we're writing to styles.xml, the style should go there, too
+    if(m_writingHeader) { 
 	paragraphStyle->setAutoStyleInStylesDotXml(true);
     }
     //check to see if we need a master page name attribute
-    if(m_writeMasterStyleName) {
+    if(m_writeMasterStyleName && writeContentTags) {
 	paragraphStyle->addAttribute("style:master-page-name", m_masterStyleName);
 	m_writeMasterStyleName = false;
-    }
-    //check for starting a new page
-    if(m_bStartNewPage) {
-	paragraphStyle->addProperty("fo:break-before", "page", KoGenStyle::ParagraphType);
-	m_bStartNewPage = false;
     }
 
     //paragraph alignment

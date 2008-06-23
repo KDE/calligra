@@ -246,7 +246,9 @@ void Document::processStyles()
 	//grab style
         const wvWare::Style* style = styles.styleByIndex( i );
         Q_ASSERT( style );
-        QConstString name = Conversion::string( style->name() );
+        QConstString displayName = Conversion::string(style->name());
+	QConstString name = Conversion::string(style->name());
+	name.replace(" ", "_20_");
         kDebug(30513) << "Style" << i << ":" << name.string();
 	kDebug(30513) << "style->type() = " << style->type();
 	kDebug(30513) << "style->sti() = " << style->sti();
@@ -276,9 +278,9 @@ void Document::processStyles()
 	    //create this style & add formatting info to it
 	    kDebug(30513) << "creating ODT style" << name.string();
 	    KoGenStyle userStyle(KoGenStyle::StyleUser, "paragraph"); 
-	    userStyle.addAttribute("style:display-name", name);
+	    userStyle.addAttribute("style:display-name", displayName);
 	    m_textHandler->writeFormattedText(&userStyle, &style->chp(), 0L, QString(""), false, QString(""));
-            m_textHandler->writeLayout(style->paragraphProperties(), &userStyle, style, false, QString(""));
+            m_textHandler->writeLayout(style->paragraphProperties(), &userStyle, style, false, QString(""), QString(""));
 	    //add style to main collection, using the name that it had in the .doc
 	    QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
 	    kDebug(30513) << "added style " << actualName << "\n";
