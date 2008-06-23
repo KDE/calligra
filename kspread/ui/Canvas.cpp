@@ -932,16 +932,6 @@ QRect Canvas::visibleCells() const
 //
 //---------------------------------------------
 
-QRect Canvas::painterWindowGeometry( const QPainter& painter ) const
-{
-  QRect zoomedWindowGeometry = painter.window();
-
-  zoomedWindowGeometry.translate( (int)( xOffset() * d->view->zoomHandler()->zoomedResolutionX() ) , (int)( yOffset() * d->view->zoomHandler()->zoomedResolutionY() ) );
-
-	return zoomedWindowGeometry;
-}
-
-
 QRectF Canvas::cellCoordinatesToView( const QRect& cellRange ) const
 {
     register Sheet * const sheet = activeSheet();

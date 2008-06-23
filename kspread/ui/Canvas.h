@@ -200,8 +200,6 @@ public Q_SLOTS:
 
 Q_SIGNALS:
     void documentSizeChanged( const QSize& );
-    void objectSelectedChanged();
-    void objectSizeChanged();
 
 protected:
     virtual void keyPressEvent ( QKeyEvent* _ev );
@@ -242,14 +240,6 @@ private:
     RowHeader* rowHeader() const;
     QScrollBar* horzScrollBar() const;
     QScrollBar* vertScrollBar() const;
-
-    /**
-     * Returns the area of the document currently visible in a painter's
-     * window, calculated by taking the painter's window() property and
-     * translating it by the current x and y offset of the Canvas (taking
-     * the zoom level into account)
-     */
-    QRect painterWindowGeometry( const QPainter& painter ) const;
 
     /**
      * Returns the range of cells which appear in the specified area of the Canvas widget
