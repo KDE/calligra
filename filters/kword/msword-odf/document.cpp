@@ -114,7 +114,7 @@ void Document::finishDocument()
 	delete m_buffer;
 	m_buffer = 0;
 	//we're done with this header, so reset to false
-	m_textHandler->m_writeTextToStylesDotXml = false;
+	m_textHandler->m_writingHeader = false;
     }
 
     const wvWare::Word97::DOP& dop = m_parser->dop();
@@ -195,8 +195,6 @@ void Document::processAssociatedStrings()
 void Document::processStyles()
 {
     kDebug(30513) ;
-    //QDomElement stylesElem = m_mainDocument.createElement( "STYLES" );
-    //m_mainDocument.documentElement().appendChild( stylesElem );
 
     //need to add master style to m_mainStyle
     kDebug(30513) << "adding master style to main styles collection";
@@ -216,6 +214,7 @@ void Document::processStyles()
     //create page layout style here
     KoGenStyle style(KoGenStyle::StylePageLayout);
 
+    //just dummy hard-coded values
     style.addProperty("fo:page-width", "8.5in");
     style.addProperty("fo:page-height", "11in");
     style.addProperty("style:footnote-max-height", "0in");
@@ -237,9 +236,9 @@ void Document::processStyles()
     style.setAutoStyleInStylesDotXml(true);
 
     //insert the style into the collection, and get the name it's assigned
-    QString name = m_mainStyles->lookup(style, QString("pm"));
+    QString pageLayoutName = m_mainStyles->lookup(style, QString("pm"));
     //set the page-layout-name in the master style
-    m_masterStyle->addAttribute("style:page-layout-name", name);
+    m_masterStyle->addAttribute("style:page-layout-name", pageLayoutName);
 
     //loop through each style
     for ( unsigned int i = 0; i < count ; ++i )
@@ -247,19 +246,23 @@ void Document::processStyles()
 	//grab style
         const wvWare::Style* style = styles.styleByIndex( i );
         Q_ASSERT( style );
-        //kDebug(30513) <<"style" << i <<"" << style;
-	//only do this if style type is Style::sgcPara
+        QConstString name = Conversion::string( style->name() );
+        kDebug(30513) << "Style" << i << ":" << name.string();
+	kDebug(30513) << "style->type() = " << style->type();
+	kDebug(30513) << "style->sti() = " << style->sti();
+
+	//construct a KoGenStyle object
+	//use chp() & paragraphProperties()
+	
+	//process paragraph styles
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
             //QDomElement styleElem = m_mainDocument.createElement("STYLE");
             //stylesElem.appendChild( styleElem );
 
-            QConstString name = Conversion::string( style->name() );
             //QDomElement element = m_mainDocument.createElement("NAME");
             //element.setAttribute( "value", name.string() );
             //styleElem.appendChild( element );
-
-            kDebug(30513) <<"Style" << i <<":" << name.string();
 
             const wvWare::Style* followingStyle = styles.styleByID( style->followingStyle() );
             if ( followingStyle && followingStyle != style )
@@ -270,16 +273,20 @@ void Document::processStyles()
                 //styleElem.appendChild( element );
             }
 
-            //m_textHandler->paragLayoutBegin(); // new style, reset some vars
-
-            // It's important to do that one first, for m_shadowTextFound
-            //m_textHandler->writeFormat( styleElem, &style->chp(), 0L, //all of it, no ref chp
-		//    0, 0, 1, 0L );
-
-	    //be careful of side-effects when calling this...
-            //m_textHandler->writeLayout( /*styleElem, style->paragraphProperties(),*/ style );
+	    //create this style & add formatting info to it
+	    kDebug(30513) << "creating ODT style" << name.string();
+	    KoGenStyle userStyle(KoGenStyle::StyleUser, "paragraph"); 
+	    userStyle.addAttribute("style:display-name", name);
+	    m_textHandler->writeFormattedText(&userStyle, &style->chp(), 0L, QString(""), false, QString(""));
+            m_textHandler->writeLayout(style->paragraphProperties(), &userStyle, style, false, QString(""));
+	    //add style to main collection, using the name that it had in the .doc
+	    QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
+	    kDebug(30513) << "added style " << actualName << "\n";
         }
-        // KWord doesn't support character styles yet
+	else if(style && style->type()==wvWare::Style::sgcChp) {
+	    // KWord doesn't support character styles yet
+
+	}
     }
 }
 
@@ -441,8 +448,8 @@ void Document::headerStart( wvWare::HeaderData::Type type )
 	break;
     }
 
-    //tell texthandler to write to styles.xml instead of content.xml
-    m_textHandler->m_writeTextToStylesDotXml = true;
+    //tell texthandler we're writing a header
+    m_textHandler->m_writingHeader = true;
     //and set up the tmp writer so writeFormattedText() writes to styles.xml
     m_textHandler->m_headerWriter = m_writer;
 }
@@ -497,7 +504,7 @@ void Document::headerEnd()
     delete m_buffer;
     m_buffer = 0;
     //we're done with this header, so reset to false
-    m_textHandler->m_writeTextToStylesDotXml = false;
+    m_textHandler->m_writingHeader = false;
 }
 
 //get text of the footnote

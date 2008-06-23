@@ -87,12 +87,12 @@ public:
 
     // Write a <FORMAT> tag from the given CHP
     // Returns that element into pChildElement if set (in that case even an empty FORMAT can be appended)
-    void writeFormattedText( QDomElement& parentElement, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp,/* int pos,*/ int len, int formatId, QDomElement* pChildElement );
+    void writeFormattedText(KoGenStyle* textStyle, const wvWare::Word97::CHP* chp, const wvWare::Word97::CHP* refChp, QString text, bool writeText, QString styleName);
 
     // Write the _contents_ (children) of a <LAYOUT> or <STYLE> tag, from the given parag props
-    void writeLayout( const wvWare::Style* style );
+    void writeLayout(const wvWare::ParagraphProperties& paragraphProperties, KoGenStyle* paragraphStyle, const wvWare::Style* style, bool writeContentTags, QString styleName);
 
-    bool m_writeTextToStylesDotXml; //flag for headers & footers, where we write the actual text to styles.xml
+    bool m_writingHeader; //flag for headers & footers, where we write the actual text to styles.xml
     bool m_writeMasterStyleName; //whether to write the style name or not, since it only needs to be the first one
     int m_currentListDepth; //tells us which list level we're on (-1 if not in a list)
     int m_currentListID; //tracks the id of the current list - 0 if no list
@@ -128,7 +128,6 @@ private:
     //int m_listStyleNumber; //number of styles created for lists
 
     // Current paragraph
-    QString m_runOfText;
     const wvWare::Style* m_currentStyle;
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
     enum { NoShadow, Shadow, Imprint } m_shadowTextFound;
