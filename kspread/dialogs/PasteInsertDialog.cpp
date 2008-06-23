@@ -32,7 +32,6 @@
 #include <QRadioButton>
 #include <QCheckBox>
 
-#include "Canvas.h"
 #include "Selection.h"
 #include "Sheet.h"
 

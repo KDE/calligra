@@ -48,7 +48,6 @@
 #include <kpushbutton.h>
 
 //KSpread Includes
-#include <Canvas.h>
 #include <Global.h>
 #include <Localization.h>
 #include <Map.h>

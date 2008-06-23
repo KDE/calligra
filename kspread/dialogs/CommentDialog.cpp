@@ -32,7 +32,6 @@
 
 //KSpread includes
 #include "Cell.h"
-#include "Canvas.h"
 #include "Selection.h"
 #include "Sheet.h"
 

@@ -24,7 +24,6 @@
 #include "ConditionalDialog.h"
 #include "Condition.h"
 
-#include "Canvas.h"
 #include "Cell.h"
 #include "Map.h"
 #include "Selection.h"

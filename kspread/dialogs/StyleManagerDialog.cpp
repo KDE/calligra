@@ -29,7 +29,6 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-#include "Canvas.h"
 #include "Cell.h"
 #include "LayoutDialog.h"
 #include "Selection.h"

@@ -31,7 +31,6 @@
 #include <kcombobox.h>
 #include <klineedit.h>
 
-#include "Canvas.h"
 #include "Cell.h"
 #include "Localization.h"
 #include "Map.h"

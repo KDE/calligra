@@ -43,7 +43,6 @@
 #include <KStandardGuiItem>
 
 // KSpread
-#include "Canvas.h"
 #include "Doc.h"
 #include "Localization.h"
 #include "Map.h"

@@ -49,7 +49,6 @@
 
 #include "ApplicationSettings.h"
 #include "CalculationSettings.h"
-#include "Canvas.h"
 #include "Doc.h"
 #include "Editors.h"
 #include "Localization.h"

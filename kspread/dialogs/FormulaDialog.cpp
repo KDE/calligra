@@ -35,7 +35,6 @@
 
 #include "CalculationSettings.h"
 #include "Cell.h"
-#include "Canvas.h"
 #include "Util.h"
 #include "Editors.h"
 #include "Localization.h"
