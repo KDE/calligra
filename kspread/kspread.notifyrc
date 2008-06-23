@@ -159,12 +159,16 @@ Action=None
 
 [Event/ParsingError]
 Name=Parsing failed
+Name[et]=Parsimine nurjus
 Name[pt]=O processamento falhou
 Name[pt_BR]=O processamento falhou
+Name[uk]=Обробка зазнала невдачі
 Name[zh_TW]=剖析失敗
 Comment=Parsing of a cell's formula failed
+Comment[et]=Lahtri valemi parsimine nurjus
 Comment[pt]=Falhou o processamento da fórmula de uma célula
 Comment[pt_BR]=O processamento da fórmula de uma célula falhou
+Comment[uk]=Обробка формули комірки завершилась невдачею
 Comment[zh_TW]=剖析儲存格中的公式失敗
 Action=None
 
