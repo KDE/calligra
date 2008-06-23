@@ -80,7 +80,7 @@ public:
     };
 
     Node(Node *parent = 0);
-    Node(Node &node, Node *parent = 0);
+    Node(const Node &node, Node *parent = 0);
 
 
     // Declare the class abstract
@@ -231,9 +231,9 @@ public:
     QString constraintToString( bool trans=false ) const;
     static QStringList constraintList( bool trans );
     
-    virtual void setConstraintStartTime(DateTime time) 
+    virtual void setConstraintStartTime(const DateTime time) 
         { m_constraintStartTime = time; changed( this ); }
-    virtual void setConstraintEndTime(DateTime time) 
+    virtual void setConstraintEndTime(const DateTime time) 
         { m_constraintEndTime = time; changed( this ); }
 
     virtual DateTime constraintStartTime() const { return m_constraintStartTime; }
@@ -646,7 +646,7 @@ public:
     /// Constructor
     explicit Estimate( Node *parent = 0 );
     /// Copy constructor.
-    Estimate (const Estimate &estimate);
+    Estimate (const Estimate &estimate, Node *parent = 0);
     /// Destructor
     ~Estimate();
 

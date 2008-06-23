@@ -838,7 +838,9 @@ NodeModifyConstraintStartTimeCmd::NodeModifyConstraintStartTimeCmd( Node &node, 
         newTime( dt ),
         oldTime( node.constraintStartTime() )
 {
-    m_spec = static_cast<Project*>( node.projectNode() )->timeSpec();
+    if ( node.projectNode() ) {
+        m_spec = static_cast<Project*>( node.projectNode() )->timeSpec();
+    }
 }
 void NodeModifyConstraintStartTimeCmd::execute()
 {
@@ -857,10 +859,9 @@ NodeModifyConstraintEndTimeCmd::NodeModifyConstraintEndTimeCmd( Node &node, cons
         newTime( dt ),
         oldTime( node.constraintEndTime() )
 {
-    m_spec = static_cast<Project*>( node.projectNode() )->timeSpec();
-/*    foreach ( Schedule * s, node.schedules() ) {
-        addSchScheduled( s );
-    }*/
+    if ( node.projectNode() ) {
+        m_spec = static_cast<Project*>( node.projectNode() )->timeSpec();
+    }
 }
 void NodeModifyConstraintEndTimeCmd::execute()
 {

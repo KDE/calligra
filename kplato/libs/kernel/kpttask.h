@@ -370,7 +370,7 @@ class KPLATOKERNEL_EXPORT Task : public Node {
     Q_OBJECT
 public:
     Task(Node *parent = 0);
-    Task(Task &task, Node *parent = 0);
+    Task(const Task &task, Node *parent = 0);
     ~Task();
 
     /// Return task type. Can be Type_Task, Type_Summarytask ot Type_Milestone.

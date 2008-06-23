@@ -23,6 +23,7 @@
 //#include "kptconfigbehaviorpanel.h"
 
 #include "kptconfig.h"
+#include "kptpart.h"
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptcalendar.h"
@@ -46,9 +47,10 @@ static inline QPixmap loadIcon( const char * name ) {
 }
 
 
-ConfigDialog::ConfigDialog(Config &config, Project &project, QWidget *parent, const char *)
+ConfigDialog::ConfigDialog(Part *part, Config &config, QWidget *parent, const char *)
     : KPageDialog(parent),
-      m_config(config)
+    m_part(*part),
+    m_config(config)
 {
     setCaption( i18n("Configure KPlato") );
     setButtons( KDialog::Ok | KDialog::Apply | KDialog::Cancel| KDialog::Default );
@@ -80,10 +82,12 @@ void ConfigDialog::slotApply() {
 /*    if (!m_behaviorPage->ok())
         return;*/
     MacroCommand *cmd = m_taskDefaultPage->buildCommand();
-    if (cmd)
+    if (cmd) {
         cmd->execute();
-
+        m_part.configChanged();
+    }
 //    m_behaviorPage->apply();
+    
 }
 
 void ConfigDialog::slotOk() {

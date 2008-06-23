@@ -45,8 +45,7 @@ namespace KPlato
 
 TaskDefaultPanel::TaskDefaultPanel(Task &task, QWidget *parent, const char *n)
     : ConfigTaskPanelImpl(parent, n),
-      m_task(task),
-      m_dayLength(24)
+      m_task(task)
 {
     setStartValues(task);
 }
@@ -96,13 +95,11 @@ MacroCommand *TaskDefaultPanel::buildCommand() {
         cmd->addCommand(new NodeModifyConstraintCmd(m_task, c));
         modified = true;
     }
-    if (startDateTime() != m_task.constraintStartTime().dateTime() &&
-        (c == Node::FixedInterval || c == Node::StartNotEarlier || c == Node::MustStartOn)) {
+    if (startDateTime() != m_task.constraintStartTime().dateTime()) {
         cmd->addCommand(new NodeModifyConstraintStartTimeCmd(m_task, startDateTime()));
         modified = true;
     }
-    if (endDateTime() != m_task.constraintEndTime().dateTime() &&
-        (c == Node::FinishNotLater || c == Node::FixedInterval || c == Node::MustFinishOn)) {
+    if (endDateTime() != m_task.constraintEndTime().dateTime()) {
         cmd->addCommand(new NodeModifyConstraintEndTimeCmd(m_task, endDateTime()));
         modified = true;
     }
@@ -122,11 +119,13 @@ MacroCommand *TaskDefaultPanel::buildCommand() {
         modified = true;
     }
     int x = optimistic();
+    kDebug()<<x<<m_task.estimate()->optimisticRatio();
     if ( x != m_task.estimate()->optimisticRatio() || expchanged || unitchanged ) {
         cmd->addCommand(new EstimateModifyOptimisticRatioCmd(m_task, m_task.estimate()->optimisticRatio(), x));
         modified = true;
     }
     x = pessimistic();
+    kDebug()<<x<<m_task.estimate()->pessimisticRatio();
     if ( x != m_task.estimate()->pessimisticRatio() || expchanged || unitchanged ) {
         cmd->addCommand(new EstimateModifyPessimisticRatioCmd(m_task, m_task.estimate()->pessimisticRatio(), x));
         modified = true;
@@ -147,10 +146,11 @@ void TaskDefaultPanel::estimationTypeChanged(int type) {
 /*        Duration d = estimationValue();
         setEstimateScales(m_dayLength);*/
         //setEstimate(d);
-    } else {
+    } else if (type == 1 /*Duration*/) {
 /*        Duration d = estimationValue();
         setEstimateScales(24);*/
         //setEstimate(d);
+    } else /* Length */ {
     }
     ConfigTaskPanelImpl::estimationTypeChanged(type);
 }

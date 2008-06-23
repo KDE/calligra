@@ -50,7 +50,8 @@ namespace KPlato
 Project::Project( Node *parent )
         : Node( parent ),
         m_accounts( *this ),
-        m_defaultCalendar( 0 )
+        m_defaultCalendar( 0 ),
+        m_taskDefaults( new Task() )
 {
     //kDebug()<<"("<<this<<")";
     m_constraint = Node::MustStartOn;
@@ -83,6 +84,8 @@ Project::~Project()
         delete m_calendars.takeFirst();
     while ( !m_managers.isEmpty() )
         delete m_managers.takeFirst();
+    
+    delete m_taskDefaults;
 }
 
 int Project::type() const { return Node::Type_Project; }
@@ -1198,7 +1201,7 @@ Task *Project::createTask( Node* parent )
     return node;
 }
 
-Task *Project::createTask( Task &def, Node* parent )
+Task *Project::createTask( const Task &def, Node* parent )
 {
     Task * node = new Task( def, parent );
     node->setId( uniqueNodeId() );
@@ -2180,6 +2183,12 @@ QList<Node*> Project::flatNodeList( Node *parent )
         }
     }
     return lst;
+}
+
+void Project::setTaskDefaults( const Task &task )
+{
+    delete m_taskDefaults;
+    m_taskDefaults = new Task( task );
 }
 
 #ifndef NDEBUG

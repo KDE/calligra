@@ -50,6 +50,7 @@ class Schedule;
 class StandardWorktime;
 class ScheduleManager;
 class XMLLoaderObject;
+class Task;
 
 /**
  * Project is the main node in a project, it contains child nodes and
@@ -151,7 +152,7 @@ public:
      * Create a copy of @p def with a unique id with its parent set to @p parent.
      * The task is not added to the parent. Do this with addSubTask().
      */
-    Task *createTask( Task &def, Node* parent );
+    Task *createTask( const Task &def, Node* parent );
 
     int resourceGroupCount() const { return m_resourceGroups.count(); }
     QList<ResourceGroup*> &resourceGroups();
@@ -476,6 +477,9 @@ public:
     
     void generateUniqueIds();
     
+    void setTaskDefaults( const Task &task );
+    const Task &taskDefaults() const { return *m_taskDefaults; }
+    
 signals:
     /// Emitted when anything in the project is changed (use with care)
     void changed();
@@ -605,6 +609,7 @@ private:
     //use in pert to store the project slack
     int m_projectSlack;
 
+    Task *m_taskDefaults;
     
 #ifndef NDEBUG
 public:

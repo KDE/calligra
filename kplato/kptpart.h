@@ -54,6 +54,8 @@ public:
           bool singleViewMode = false );
     ~Part();
 
+    void configChanged();
+    
     virtual void paintContent( QPainter& painter, const QRect& rect);
 
     void setProject( Project *project );

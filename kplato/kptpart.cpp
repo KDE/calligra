@@ -82,6 +82,11 @@ Part::~Part()
     delete m_project;
 }
 
+void Part::configChanged()
+{
+    m_project->setTaskDefaults( m_config.taskDefaults() );
+}
+
 void Part::setProject( Project *project )
 {
     if ( m_project ) {
@@ -91,6 +96,7 @@ void Part::setProject( Project *project )
     m_project = project;
     if ( m_project ) {
         connect( m_project, SIGNAL( changed() ), this, SIGNAL( changed() ) );
+        m_project->setTaskDefaults( m_config.taskDefaults() );
     }
     emit changed();
 }

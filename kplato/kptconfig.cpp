@@ -51,19 +51,20 @@ void Config::load() {
     if( config->hasGroup("Task defaults"))
     {
         //TODO: make this default stuff timezone neutral, use LocalZone for now
-        KConfigGroup grp(config, "Task defaults");
+        KConfigGroup grp = config->group( "Task defaults" );
         m_taskDefaults.setLeader(grp.readEntry("Leader"));
         m_taskDefaults.setDescription(grp.readEntry("Description"));
         m_taskDefaults.setConstraint((Node::ConstraintType)grp.readEntry("ConstraintType",0));
         
-        QDateTime dt = grp.readEntry("ConstraintStartTime",QDateTime());
+        QDateTime dt = QDateTime::fromString(grp.readEntry("ConstraintStartTime"), Qt::ISODate);
         m_taskDefaults.setConstraintStartTime( DateTime( dt, KDateTime::Spec::LocalZone() ) );
+        kDebug()<<"ConstraintStartTime"<<grp.readEntry("ConstraintStartTime")<<m_taskDefaults.constraintStartTime().toString();
         
-        dt = grp.readEntry("ConstraintEndTime",QDateTime());
+        dt = QDateTime::fromString(grp.readEntry("ConstraintEndTime"), Qt::ISODate);
         m_taskDefaults.setConstraintEndTime( DateTime( dt, KDateTime::Spec::LocalZone() ) );
         
         m_taskDefaults.estimate()->setType((Estimate::Type)grp.readEntry("EstimateType",0));
-        m_taskDefaults.estimate()->setUnit(Duration::unitFromString(grp.readEntry("Unit","")));
+        m_taskDefaults.estimate()->setUnit(Duration::unitFromString(grp.readEntry("Unit","h")));
         m_taskDefaults.estimate()->setExpectedEstimate(grp.readEntry("ExpectedEstimate",0));
         m_taskDefaults.estimate()->setPessimisticRatio(grp.readEntry("PessimisticEstimate",0));
         m_taskDefaults.estimate()->setOptimisticRatio(grp.readEntry("OptimisticEstimate",0));
@@ -80,13 +81,15 @@ void Config::save() {
     config.writeEntry("Leader", m_taskDefaults.leader());
     config.writeEntry("Description", m_taskDefaults.description());
     config.writeEntry("ConstraintType", (int)m_taskDefaults.constraint());
-    config.writeEntry("ConstraintStartTime", m_taskDefaults.constraintStartTime().dateTime());
-    config.writeEntry("ConstraintEndTime", m_taskDefaults.constraintEndTime().dateTime());
+    config.writeEntry("ConstraintStartTime", m_taskDefaults.constraintStartTime().dateTime().toString( Qt::ISODate));
+    config.writeEntry("ConstraintEndTime", m_taskDefaults.constraintEndTime().dateTime().toString( Qt::ISODate));
     config.writeEntry("EstimateType", (int)m_taskDefaults.estimate()->type());
     config.writeEntry("Unit", Duration::unitToString(m_taskDefaults.estimate()->unit()));
     config.writeEntry("ExpectedEstimate", m_taskDefaults.estimate()->expectedEstimate());
     config.writeEntry("PessimisticEstimate", m_taskDefaults.estimate()->pessimisticRatio());
     config.writeEntry("OptimisticEstimate", m_taskDefaults.estimate()->optimisticRatio());
+    
+    config.sync();
 }
 
 }  //KPlato namespace

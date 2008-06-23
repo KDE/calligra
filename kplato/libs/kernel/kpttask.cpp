@@ -60,7 +60,7 @@ Task::Task(Node *parent)
         m_leader = m_parent->leader();
 }
 
-Task::Task(Task &task, Node *parent) 
+Task::Task(const Task &task, Node *parent) 
     : Node(task, parent), 
       m_resource(),
       m_workPackage( *this )

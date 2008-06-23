@@ -48,7 +48,7 @@ Node::Node(Node *parent)
     m_id = QString(); // Not mapped
 }
 
-Node::Node(Node &node, Node *parent) 
+Node::Node(const Node &node, Node *parent) 
     : QObject( 0 ), // Don't set parent, we handle parent/child ourselves
       m_nodes(), 
       m_dependChildNodes(), 
@@ -1123,8 +1123,8 @@ Estimate::Estimate( Node *parent )
     m_risktype = Risk_None;
 }
 
-Estimate::Estimate(const Estimate &estimate)
-    : m_parent( 0 )
+Estimate::Estimate(const Estimate &estimate, Node *parent)
+    : m_parent( parent )
 {
     copy( estimate );
 }

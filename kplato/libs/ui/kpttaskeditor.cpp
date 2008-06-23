@@ -343,17 +343,20 @@ void TaskEditor::slotAddTask()
     kDebug();
     if ( selectedNodeCount() == 0 ) {
         // insert under main project
-        Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ m_view->project() );
-        edit( m_view->model()->insertSubtask( t, t->parentNode() ) );
-	kDebug()<<"test"<<t->type();
+        Task *t = m_view->project()->createTask( m_view->project()->taskDefaults(),  m_view->project() );
+        QModelIndex idx = m_view->model()->insertSubtask( t, t->parentNode() );
+        Q_ASSERT( idx.isValid() );
+        edit( idx );
         return;
     }
     Node *sib = selectedNode();
     if ( sib == 0 ) {
         return;
     }
-    Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ sib->parentNode() );
-    edit( m_view->model()->insertTask( t, sib ) );
+    Task *t = m_view->project()->createTask( m_view->project()->taskDefaults(), sib->parentNode() );
+    QModelIndex idx = m_view->model()->insertTask( t, sib );
+    Q_ASSERT( idx.isValid() );
+    edit( idx );
 }
 
 void TaskEditor::slotAddMilestone()
@@ -361,18 +364,22 @@ void TaskEditor::slotAddMilestone()
     kDebug();
     if ( selectedNodeCount() == 0 ) {
         // insert under main project
-        Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ m_view->project() );
+        Task *t = m_view->project()->createTask( m_view->project() );
         t->estimate()->clear();
-        edit( m_view->model()->insertSubtask( t, t->parentNode() ) );
+        QModelIndex idx = m_view->model()->insertSubtask( t, t->parentNode() );
+        Q_ASSERT( idx.isValid() );
+        edit( idx );
         return;
     }
     Node *sib = selectedNode(); // sibling
     if ( sib == 0 ) {
         return;
     }
-    Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ sib->parentNode() );
+    Task *t = m_view->project()->createTask( sib->parentNode() );
     t->estimate()->clear();
-    edit( m_view->model()->insertTask( t, sib ) );
+    QModelIndex idx = m_view->model()->insertTask( t, sib );
+    Q_ASSERT( idx.isValid() );
+    edit( idx );
 }
 
 void TaskEditor::slotAddSubtask()
@@ -382,8 +389,10 @@ void TaskEditor::slotAddSubtask()
     if ( parent == 0 ) {
         return;
     }
-    Task *t = m_view->project()->createTask( /*TODO part()->config().taskDefaults(),*/ parent );
-    edit( m_view->model()->insertSubtask( t, parent ) );
+    Task *t = m_view->project()->createTask( m_view->project()->taskDefaults(), parent );
+    QModelIndex idx = m_view->model()->insertSubtask( t, parent );
+    Q_ASSERT( idx.isValid() );
+    edit( idx );
 }
 
 void TaskEditor::edit( QModelIndex i )
