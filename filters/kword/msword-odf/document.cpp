@@ -189,7 +189,16 @@ void Document::processAssociatedStrings()
 	m_metaWriter->addTextSpan(Conversion::string(strings.title()).string());
 	m_metaWriter->endElement();
     }
-    //any other information here??
+    if(!strings.subject().isNull()) {
+	m_metaWriter->startElement("dc:subject");
+	m_metaWriter->addTextSpan(Conversion::string(strings.subject()).string());
+	m_metaWriter->endElement();
+    }
+    if(!strings.lastRevBy().isNull()) {
+	m_metaWriter->startElement("dc:creator");
+	m_metaWriter->addTextSpan(Conversion::string(strings.lastRevBy()).string());
+	m_metaWriter->endElement();
+    }
 }
 
 void Document::processStyles()
@@ -253,26 +262,13 @@ void Document::processStyles()
 	kDebug(30513) << "style->type() = " << style->type();
 	kDebug(30513) << "style->sti() = " << style->sti();
 
-	//construct a KoGenStyle object
-	//use chp() & paragraphProperties()
-	
 	//process paragraph styles
         if ( style && style->type() == wvWare::Style::sgcPara )
         {
-            //QDomElement styleElem = m_mainDocument.createElement("STYLE");
-            //stylesElem.appendChild( styleElem );
-
-            //QDomElement element = m_mainDocument.createElement("NAME");
-            //element.setAttribute( "value", name.string() );
-            //styleElem.appendChild( element );
-
             const wvWare::Style* followingStyle = styles.styleByID( style->followingStyle() );
             if ( followingStyle && followingStyle != style )
             {
                 QConstString followingName = Conversion::string( followingStyle->name() );
-                //element = m_mainDocument.createElement("FOLLOWING");
-                //element.setAttribute( "name", followingName.string() );
-                //styleElem.appendChild( element );
             }
 
 	    //create this style & add formatting info to it
@@ -286,8 +282,14 @@ void Document::processStyles()
 	    kDebug(30513) << "added style " << actualName << "\n";
         }
 	else if(style && style->type()==wvWare::Style::sgcChp) {
-	    // KWord doesn't support character styles yet
-
+	    //create this style & add formatting info to it
+	    kDebug(30513) << "creating ODT style" << name.string();
+	    KoGenStyle userStyle(KoGenStyle::StyleUser, "paragraph"); 
+	    userStyle.addAttribute("style:display-name", displayName);
+	    m_textHandler->writeFormattedText(&userStyle, &style->chp(), 0L, QString(""), false, QString(""));
+	    //add style to main collection, using the name that it had in the .doc
+	    QString actualName = m_mainStyles->lookup(userStyle, name, KoGenStyles::DontForceNumbering);
+	    kDebug(30513) << "added style " << actualName << "\n";
 	}
     }
 }
