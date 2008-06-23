@@ -21,11 +21,11 @@
 #ifndef KARBONSTYLEBUTTONBOX_H
 #define KARBONSTYLEBUTTONBOX_H
 
-#include <QtGui/QFrame>
+#include <QtGui/QWidget>
 
 class QButtonGroup;
 
-class KarbonStyleButtonBox : public QFrame
+class KarbonStyleButtonBox : public QWidget
 {
     Q_OBJECT
 

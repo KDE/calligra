@@ -258,10 +258,10 @@ static const char* const buttonwinding[]={
 #include <QtGui/QGridLayout>
 
 KarbonStyleButtonBox::KarbonStyleButtonBox( QWidget* parent )
-    : QFrame( parent )
+    : QWidget( parent )
 {
-    setFrameStyle( QFrame::GroupBoxPanel | QFrame::Sunken );
     setMinimumSize( 45, 70 );
+    setContentsMargins( 0, 0, 0, 0 );
 
     QGridLayout * layout = new QGridLayout( this );
     QButtonGroup * group = new QButtonGroup( this );
@@ -314,7 +314,7 @@ KarbonStyleButtonBox::KarbonStyleButtonBox( QWidget* parent )
     group->addButton( button, Winding );
     layout->addWidget( button, 2, 1 );
 
-    layout->setMargin( 1 );
+    layout->setMargin( 0 );
     layout->setSpacing( 1 );
     layout->setColumnStretch( 0, 1 );
     layout->setColumnStretch( 1, 1 );
