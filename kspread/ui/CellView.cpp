@@ -56,7 +56,6 @@
 
 // KSpread
 #include "ApplicationSettings.h"
-#include "Canvas.h"
 #include "CellStorage.h"
 #include "Condition.h"
 #include "Doc.h"

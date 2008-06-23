@@ -21,7 +21,6 @@
 
 // KSpread
 #include "ApplicationSettings.h"
-#include "Canvas.h"
 #include "Cell.h"
 #include "CellToolBase.h"
 #include "Doc.h"

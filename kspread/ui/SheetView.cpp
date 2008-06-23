@@ -25,7 +25,6 @@
 
 #include <KoViewConverter.h>
 
-#include "Canvas.h"
 #include "CellView.h"
 #include "Region.h"
 #include "RowColumnFormat.h"

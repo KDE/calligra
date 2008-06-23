@@ -37,7 +37,6 @@
 #include <KoOdfStylesReader.h>
 
 #include "CellStorage.h"
-#include "Canvas.h"
 #include "Doc.h"
 #include "Global.h"
 #include "Map.h"
