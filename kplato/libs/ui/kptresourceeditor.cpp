@@ -61,7 +61,7 @@ ResourceTreeView::ResourceTreeView( QWidget *parent )
 //    header()->setContextMenuPolicy( Qt::CustomContextMenu );
     setStretchLastSection( false );
     
-    setModel( new ResourceItemModel() );
+    setModel( new ResourceItemModel( this ) );
     
     setSelectionMode( QAbstractItemView::ExtendedSelection );
 
