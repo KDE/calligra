@@ -31,7 +31,6 @@
 
 #include "KarbonFactory.h"
 #include "KarbonPart.h"
-//#include "karbon_resourceserver.h"
 #include "KarbonAboutData.h"
 
 #include <kaboutdata.h>
@@ -46,100 +45,84 @@
 
 #include <kdebug.h>
 
-//KarbonResourceServer* KarbonFactory::s_rserver = 0;
-
 KComponentData* KarbonFactory::s_instance = 0L;
 KAboutData* KarbonFactory::s_aboutData = 0L;
 
 KarbonFactory::KarbonFactory( QObject* parent, const char* name )
-		: KoFactory( parent, name )
+    : KoFactory( parent, name )
 {
-	componentData();
+    componentData();
 
 
-	// Load plugins
-	/* TODO enable it when we are in better shape (already ported to kde4)
-	KService::List offers = KServiceTypeTrader::self() -> query(QString::fromLatin1("Karbon/CoreModule"),
+    // Load plugins
+    /* TODO enable it when we are in better shape (already ported to kde4)
+    KService::List offers = KServiceTypeTrader::self() -> query(QString::fromLatin1("Karbon/CoreModule"),
                                     QString::fromLatin1("Type == 'Service'"));
 
-	KService::List::ConstIterator iter;
+    KService::List::ConstIterator iter;
 
-	for(iter = offers.begin(); iter != offers.end(); ++iter)
-	{
-		KService::Ptr service = *iter;
-		int errCode = 0;
-		KParts::Plugin* plugin =
-		KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, QStringList(), &errCode);
-		if ( plugin )
-			kDebug() <<"found plugin" << service -> property("Name").toString() <<"";
-	}
-	*/
+    for(iter = offers.begin(); iter != offers.end(); ++iter)
+    {
+        KService::Ptr service = *iter;
+        int errCode = 0;
+        KParts::Plugin* plugin =
+        KParts::ComponentFactory::createInstanceFromService<KParts::Plugin> ( service, this, QStringList(), &errCode);
+        if ( plugin )
+            kDebug() <<"found plugin" << service -> property("Name").toString() <<"";
+    }
+    */
 }
 
 KarbonFactory::~KarbonFactory()
 {
-	delete s_instance;
-	s_instance = 0L;
-	delete s_aboutData;
-	s_aboutData = 0L;
-//	delete s_rserver;
-//	s_rserver = 0L;
+    delete s_instance;
+    s_instance = 0L;
+    delete s_aboutData;
+    s_aboutData = 0L;
 }
 
-KParts::Part*
-KarbonFactory::createPartObject( QWidget* parentWidget, QObject* parent, const char* classname, const QStringList& )
+KParts::Part* KarbonFactory::createPartObject( QWidget* parentWidget, QObject* parent, const char* classname, const QStringList& )
 {
-	// If classname is "KoDocument", our host is a koffice application
-	// otherwise, the host wants us as a simple part, so switch to readonly and
-	// single view.
-	bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
+    // If classname is "KoDocument", our host is a koffice application
+    // otherwise, the host wants us as a simple part, so switch to readonly and
+    // single view.
+    bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-	// parentWidget and widgetName are used by KoDocument for the
-	// "readonly+singleView" case.
-	KarbonPart* part =
-		new KarbonPart( parentWidget, 0, parent, 0, !bWantKoDocument );
+    // parentWidget and widgetName are used by KoDocument for the
+    // "readonly+singleView" case.
+    KarbonPart* part = new KarbonPart( parentWidget, 0, parent, 0, !bWantKoDocument );
 
-	if( !bWantKoDocument )
-		part->setReadWrite( false );
+    if( !bWantKoDocument )
+        part->setReadWrite( false );
 
-	return part;
+    return part;
 }
 
-KAboutData*
-KarbonFactory::aboutData()
+KAboutData * KarbonFactory::aboutData()
 {
-	if( !s_aboutData )
+    if( !s_aboutData )
             s_aboutData = newKarbonAboutData();
-	return s_aboutData;
+    return s_aboutData;
 }
 
 const KComponentData &KarbonFactory::componentData()
 {
-	if( !s_instance )
-	{
-		s_instance = new KComponentData( aboutData() );
-		// Add any application-specific resource directories here
+    if( !s_instance )
+    {
+        s_instance = new KComponentData( aboutData() );
+        // Add any application-specific resource directories here
 
-		s_instance->dirs()->addResourceType( "kis_brushes", "data", "krita/brushes/" );
-		s_instance->dirs()->addResourceType( "kis_pattern", "data","krita/patterns/" );
-		s_instance->dirs()->addResourceType( "karbon_gradient", "data","krita/gradients/" );
-		s_instance->dirs()->addResourceType( "karbon_clipart", "data", "karbon/cliparts/" );
-		s_instance->dirs()->addResourceType( "karbon_template", "data", "karbon/templates/" );
-		// Tell the iconloader about share/apps/koffice/icons
+        s_instance->dirs()->addResourceType( "kis_brushes", "data", "krita/brushes/" );
+        s_instance->dirs()->addResourceType( "kis_pattern", "data","krita/patterns/" );
+        s_instance->dirs()->addResourceType( "karbon_gradient", "data","krita/gradients/" );
+        s_instance->dirs()->addResourceType( "karbon_clipart", "data", "karbon/cliparts/" );
+        s_instance->dirs()->addResourceType( "karbon_template", "data", "karbon/templates/" );
+        // Tell the iconloader about share/apps/koffice/icons
         KIconLoader::global()->addAppDir("koffice");
-	}
+    }
 
-	return *s_instance;
+    return *s_instance;
 }
 
-/*
-KarbonResourceServer *KarbonFactory::rServer()
-{
-	if( !s_rserver )
-		s_rserver = new KarbonResourceServer;
-
-	return s_rserver;
-}
-*/
 #include "KarbonFactory.moc"
 

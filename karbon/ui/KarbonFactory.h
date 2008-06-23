@@ -34,28 +34,22 @@
 class KAboutData;
 class KComponentData;
 
-class KarbonResourceServer;
-
-
 class KARBONUI_EXPORT KarbonFactory : public KoFactory
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	explicit KarbonFactory( QObject* parent = 0, const char* name = 0 );
-	~KarbonFactory();
+    explicit KarbonFactory( QObject* parent = 0, const char* name = 0 );
+    ~KarbonFactory();
 
-	virtual KParts::Part* createPartObject( QWidget *parentWidget = 0, QObject* parent = 0L, const char* classname = "KoDocument", const QStringList& args = QStringList() );
+    virtual KParts::Part* createPartObject( QWidget *parentWidget = 0, QObject* parent = 0L, const char* classname = "KoDocument", const QStringList& args = QStringList() );
 
-	static const KComponentData &componentData();
-	static KAboutData* aboutData();
-
-	//static KarbonResourceServer *rServer();
+    static const KComponentData &componentData();
+    static KAboutData* aboutData();
 
 private:
-	static KComponentData* s_instance;
-	static KAboutData*	s_aboutData;
-	static KarbonResourceServer* s_rserver;
+    static KComponentData* s_instance;
+    static KAboutData* s_aboutData;
 };
 
 #endif
