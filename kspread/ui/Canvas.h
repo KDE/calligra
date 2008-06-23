@@ -142,17 +142,6 @@ public:
      */
     KSpread::Selection* selection() const;
 
-    /**
-     * @return the pen, the default grid is painted with (light gray)
-     */
-    const QPen& defaultGridPen() const;
-
-    /**
-     * convenience function
-     * @see View::zoom()
-     */
-    double zoom() const;
-
     QPointF offset() const;
 
     /**
@@ -176,13 +165,6 @@ public:
     Sheet* activeSheet() const;
 
     /**
-     * convenience function
-     * @see Map::findSheet()
-     */
-    Sheet* findSheet( const QString& _name ) const;
-
-
-    /**
      * Validates the selected cell.
      */
     void validateSelection();
@@ -193,9 +175,6 @@ public:
      * @param location the cell coordinates to scroll to
      */
     void scrollToCell(const QPoint& location) const;
-
-    void equalizeRow();
-    void equalizeColumn();
 
 public Q_SLOTS:
     void setDocumentOffset( const QPoint& offset );

@@ -48,10 +48,6 @@ public:
     // the height of the invisible rows '1' to '4'.
     QPointF offset;
 
-    // Used to draw the grey grid that is usually only visible on the
-    // screen, but not by printing on paper.
-    QPen defaultGridPen;
-
     QLabel *validationInfo;
 
     // true if the user is to choose a cell.

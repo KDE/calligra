@@ -139,11 +139,6 @@ Canvas::Canvas(View *view)
 
   QWidget::setFocusPolicy( Qt::StrongFocus );
 
-
-  d->defaultGridPen.setColor( Qt::lightGray );
-  d->defaultGridPen.setWidth( 1 );
-  d->defaultGridPen.setStyle( Qt::SolidLine );
-
   d->offset = QPointF( 0.0, 0.0 );
 
   d->view = view;
@@ -240,11 +235,6 @@ double Canvas::yOffset() const
     return d->offset.y();
 }
 
-const QPen& Canvas::defaultGridPen() const
-{
-  return d->defaultGridPen;
-}
-
 bool Canvas::eventFilter( QObject *o, QEvent *e )
 {
   /* this canvas event filter acts on events sent to the line edit as well
@@ -286,11 +276,6 @@ Selection* Canvas::selection() const
   return d->view->selection();
 }
 
-double Canvas::zoom() const
-{
-  return d->view->zoom();
-}
-
 ColumnHeader* Canvas::columnHeader() const
 {
   return d->view->columnHeader();
@@ -309,11 +294,6 @@ QScrollBar* Canvas::horzScrollBar() const
 QScrollBar* Canvas::vertScrollBar() const
 {
   return d->view->vertScrollBar();
-}
-
-Sheet* Canvas::findSheet( const QString& _name ) const
-{
-  return d->view->doc()->map()->findSheet( _name );
 }
 
 Sheet* Canvas::activeSheet() const
@@ -922,43 +902,6 @@ void Canvas::slotAutoScroll(const QPoint &scrollDistance)
   if (!d->mousePressed)
     return;
   d->view->canvasController()->scrollContentsBy(scrollDistance.x(), scrollDistance.y());
-}
-
-void Canvas::equalizeRow()
-{
-  register Sheet * const sheet = activeSheet();
-  if (!sheet)
-    return;
-
-  QRect s( selection()->lastRange() );
-  const RowFormat* rowFormat = sheet->rowFormat(s.top());
-  double size = rowFormat->height();
-  if ( s.top() == s.bottom() )
-      return;
-  for ( int i = s.top() + 1; i <= s.bottom(); i++ )
-  {
-      size = qMax( sheet->rowFormat(i)->height(), size );
-  }
-  d->view->rowHeader()->equalizeRow(size);
-}
-
-void Canvas::equalizeColumn()
-{
-  register Sheet * const sheet = activeSheet();
-  if (!sheet)
-    return;
-
-  QRect s( selection()->lastRange() );
-  const ColumnFormat* columnFormat = sheet->columnFormat(s.left());
-  double size = columnFormat->width();
-  if ( s.left() == s.right() )
-      return;
-
-  for(int i=s.left()+1;i<=s.right();i++)
-  {
-    size = qMax( sheet->columnFormat(i)->width(), size );
-  }
-  d->view->columnHeader()->equalizeColumn(size);
 }
 
 QRect Canvas::viewToCellCoordinates( const QRectF& viewRect ) const
