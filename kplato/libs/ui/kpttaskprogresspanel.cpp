@@ -26,6 +26,7 @@
 
 #include <klineedit.h>
 #include <ktextedit.h>
+#include <kdatetime.h>
 #include <kdatetimewidget.h>
 #include <knuminput.h>
 #include <klocale.h>
@@ -119,6 +120,16 @@ TaskProgressPanel::TaskProgressPanel( Task &task, ScheduleManager *sm, StandardW
     resourceTable->setCompletion( &m_completion );
     slotWeekNumberChanged( weekNumber->currentIndex() );
     //resourceTable->resizeColumnsToContents();
+
+    connect(started, SIGNAL(toggled(bool)), SLOT(slotStartedChanged(bool)));
+    connect(started, SIGNAL(toggled(bool)), SLOT(slotChanged()));
+    connect(finished, SIGNAL(toggled(bool)), SLOT(slotFinishedChanged(bool)));
+    connect(finished, SIGNAL(toggled(bool)), SLOT(slotChanged()));
+
+    connect(startTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotChanged()));
+    connect(startTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotStartTimeChanged( const QDateTime& )));
+    connect(finishTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotChanged()));
+    connect(finishTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotFinishTimeChanged( const QDateTime& )));
 }
 
 bool TaskProgressPanel::ok() {
@@ -257,14 +268,6 @@ TaskProgressPanelImpl::TaskProgressPanelImpl( Task &task, QWidget *parent )
     connect( bg, SIGNAL( buttonClicked( int ) ), SLOT( optionChanged( int ) ) );
     connect( bg, SIGNAL( buttonClicked( int ) ), SLOT( slotChanged() ) );
     
-    connect(started, SIGNAL(toggled(bool)), SLOT(slotStartedChanged(bool)));
-    connect(started, SIGNAL(toggled(bool)), SLOT(slotChanged()));
-    connect(finished, SIGNAL(toggled(bool)), SLOT(slotFinishedChanged(bool)));
-    connect(finished, SIGNAL(toggled(bool)), SLOT(slotChanged()));
-
-    connect(startTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotChanged()));
-    connect(finishTime, SIGNAL(dateTimeChanged(const QDateTime &)), SLOT(slotChanged()));
-    
     connect(resourceTable, SIGNAL(changed() ), SLOT( slotChanged() ) );
     connect(resourceTable, SIGNAL(resourceAdded() ), SLOT( slotChanged() ) );
     
@@ -312,6 +315,15 @@ void TaskProgressPanelImpl::slotFinishedChanged(bool state) {
     enableWidgets();
 }
 
+void TaskProgressPanelImpl::slotFinishTimeChanged( const QDateTime &dt )
+{
+    m_completion.setFinishTime( KDateTime( dt, KDateTime::Spec(KDateTime::LocalZone) ) );
+}
+
+void TaskProgressPanelImpl::slotStartTimeChanged( const QDateTime &dt )
+{
+    m_completion.setStartTime( KDateTime( dt, KDateTime::Spec(KDateTime::LocalZone) ) );
+}
 
 void TaskProgressPanelImpl::enableWidgets() {
     started->setEnabled(!finished->isChecked());
