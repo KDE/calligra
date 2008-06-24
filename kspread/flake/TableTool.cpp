@@ -61,12 +61,10 @@ using namespace KSpread;
 class TableTool::Private
 {
 public:
-    QString userInput;
     Selection* selection;
     TableShape* tableShape;
 
     KComboBox* sheetComboBox;
-    KLineEdit* lineEdit;
 };
 
 
@@ -157,9 +155,6 @@ void TableTool::activate( bool temporary )
     useCursor( Qt::ArrowCursor, true );
     d->tableShape->update();
 
-    connect(d->selection, SIGNAL(changed(const Region&)),
-            this, SLOT(changeSelection(const Region&)));
-
     CellToolBase::activate(temporary);
 }
 
@@ -201,30 +196,6 @@ void TableTool::changeRows( int num )
     d->tableShape->update();
 }
 
-void TableTool::changeSelection(const Region& changedRegion)
-{
-    const Cell cell(d->tableShape->sheet(), d->selection->marker());
-    emit userInputChanged(cell.userInput());
-}
-
-void TableTool::changeUserInput(const QString& content)
-{
-    d->userInput = content;
-}
-
-void TableTool::applyUserInput()
-{
-    if( ! d->tableShape )
-        return;
-    DataManipulator* manipulator = new DataManipulator();
-    manipulator->setSheet(d->tableShape->sheet());
-    manipulator->setValue(Value(d->userInput));
-    manipulator->setParsing(true);
-    manipulator->setExpandMatrix(false);
-    manipulator->add(*d->selection);
-    manipulator->execute();
-}
-
 void TableTool::updateSheetsList()
 {
 d->sheetComboBox->blockSignals(true);
@@ -260,7 +231,7 @@ void TableTool::sheetsBtnClicked()
 
 QWidget* TableTool::createOptionWidget()
 {
-    return CellToolBase::createOptionWidget();
+    QWidget* masterWidget = CellToolBase::createOptionWidget();
 
     QWidget* optionWidget = new QWidget();
     QVBoxLayout* l = new QVBoxLayout( optionWidget );
@@ -295,18 +266,6 @@ QWidget* TableTool::createOptionWidget()
     label->setToolTip(i18n("Selected Sheet"));
     layout->addWidget(label, 0, 0);
 
-    d->lineEdit = new KLineEdit(optionWidget);
-    layout->addWidget(d->lineEdit, 1, 1);
-    connect(d->lineEdit, SIGNAL(editingFinished()), this, SLOT(applyUserInput()));
-    connect(d->lineEdit, SIGNAL(textChanged(const QString&)), this, SLOT(changeUserInput(const QString&)));
-    connect(this, SIGNAL(userInputChanged(const QString&)), d->lineEdit, SLOT(setText(const QString&)));
-    changeSelection(Region()); // initialize the lineEdit with the cell content
-
-    label = new QLabel(i18n("Content:"), optionWidget);
-    label->setBuddy(d->lineEdit);
-    label->setToolTip(i18n("Cell content"));
-    layout->addWidget(label, 1, 0);
-
     spinBox = new QSpinBox( optionWidget );
     spinBox->setRange( 1, KS_colMax );
     spinBox->setValue( d->tableShape->columns() );
@@ -339,7 +298,8 @@ QWidget* TableTool::createOptionWidget()
     tb->addAction( action("import") );
     tb->addAction( action("export") );
 
-    return optionWidget;
+    static_cast<QGridLayout*>(masterWidget->layout())->addWidget(optionWidget, 3, 0, 1, 5);
+    return masterWidget;
 }
 
 #include "TableTool.moc"

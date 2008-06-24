@@ -44,9 +44,6 @@ public Q_SLOTS:
     virtual void activate( bool temporary = false );
     virtual void deactivate();
 
-Q_SIGNALS:
-    void userInputChanged(const QString& content);
-
 protected:
     virtual QPointF offset() const;
     virtual QSizeF size() const;
@@ -56,9 +53,6 @@ protected:
 private Q_SLOTS:
     void changeColumns( int num );
     void changeRows( int num );
-    void changeSelection(const Region& changedRegion);
-    void changeUserInput(const QString& content);
-    void applyUserInput();
     void sheetActivated(const QString& sheetName);
     void sheetsBtnClicked();
     void importDocument();

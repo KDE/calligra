@@ -25,6 +25,7 @@
 #include <kdebug.h>
 
 #include <KoOdfLoadingContext.h>
+#include <KoShapeContainer.h>
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
 
@@ -120,6 +121,9 @@ void TableShape::setRows( int rows )
 
 void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
 {
+    if (KoShape::parent()) {
+        kDebug() << KoShape::parent()->name() <<  KoShape::parent()->shapeId() << KoShape::parent()->boundingRect();
+    }
     const QRectF paintRect = QRectF( QPointF( 0.0, 0.0 ), size() );
 
     applyConversion( painter, converter );
