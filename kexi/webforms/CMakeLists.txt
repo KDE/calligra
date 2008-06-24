@@ -24,8 +24,6 @@ set(webforms_SRCS
   Delete.cpp
 )
 
-add_dependencies(check-syntax kwebforms/fast)
-
 kde4_add_executable(kwebforms ${webforms_SRCS})
 target_link_libraries(kwebforms shttpd ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS}
   ${GOOGLE_CTEMPLATE_THREAD_LIB}
