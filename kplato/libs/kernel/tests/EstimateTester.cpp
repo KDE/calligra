@@ -31,7 +31,7 @@ void EstimateTester::expected() {
     
     e1.setExpectedEstimate( 1.0 );
     QVERIFY( e1.expectedEstimate() == 1.0 );
-    QVERIFY( e1.expectedValue().milliseconds() == 1 );
+    QVERIFY( e1.expectedValue().milliseconds() == 1000*60*60 );
     
     e1.setUnit( Duration::Unit_ms );
     QVERIFY( e1.expectedEstimate() == 1.0 );
@@ -63,7 +63,7 @@ void EstimateTester::optimistic() {
     
     e1.setOptimisticEstimate( 1.0 );
     QVERIFY( e1.optimisticEstimate() == 1.0 );
-    QVERIFY( e1.optimisticValue().milliseconds() == 1 );
+    QVERIFY( e1.optimisticValue().milliseconds() == 1000*60*60 );
     
     e1.setUnit( Duration::Unit_ms );
     QVERIFY( e1.optimisticEstimate() == 1.0 );
@@ -95,7 +95,7 @@ void EstimateTester::pessimistic() {
     
     e1.setPessimisticEstimate( 1.0 );
     QVERIFY( e1.pessimisticEstimate() == 1.0 );
-    QVERIFY( e1.pessimisticValue().milliseconds() == 1 );
+    QVERIFY( e1.pessimisticValue().milliseconds() == 1000*60*60 );
     
     e1.setUnit( Duration::Unit_ms );
     QVERIFY( e1.pessimisticEstimate() == 1.0 );
