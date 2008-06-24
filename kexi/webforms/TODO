@@ -5,38 +5,23 @@ This file is maintained using Emacs' org-mode please do not edit it
 by hand and use org-mode instead.
 
 
-* Basic kwebforms implementation
-** Implement basic CRUD Operations [80%]
-   - [X] Implement CREATE
-   - [X] Implement READ
-   - [X] Implement UPDATE
-   - [X] Implement DELETE
-   - [ ] Implement shortcut and connection file loading
-*** TODO Create all the .varnames.h files automatically
-*** TODO Refine code [0%]
-   - [ ] Clean-up
+* Basic kwebforms implementation (mid-term tasks) [71%]
+  - Implement basic CRUD Operations [100%]
+    - [X] Implement CREATE
+    - [X] Implement READ
+    - [X] Implement UPDATE
+    - [X] Implement DELETE
+  - [X] Implement 'First' 'Previous' 'Next' 'Last' controls in Update
+  - [ ] Add support for query objects
+  - [ ] Refine code
 
 
-** Add a 'RUN SQL Query' box [0%]
-   1. [ ] Discuss the security policy model with Jaroslaw
-      - In particular :: which type of queries allow/deny (we don't want to allow
-      anybody to truncate tables)
-   2. [ ] Discuss the implementation model with Jaroslaw
-      - [ ] Discuss a possible authentication system. Maybe use HTTP auth
-      - [ ] Implement the authentication system
 
-** Create a decent template [0%]
-   1. [ ] Recreate a new template from scratch, the current one is awful
-      - Take inspiration from our competitors? :-)
+* Post mid-term (and before final) [0%]
+  - [ ] User management
 
-* Post GSOC Tasks/Ideas
-** TODO New webserver backend
-   I'd like to see a new webserver backend. Using function pointers is not the
-   best way to implement handlers.
-   It should be most probably written using QtNetwork.
-   It should be designed as a library, with multithreading support, to improve
-   and encourage reuse.
+* Medium priority task [0%]
+  - [ ] Switch to new server back-end
 
-   - Ideally this can be made using QtNetwork and QThread classes to create a
-   Pure C++ multithreaded web server. The webserver should be developed as a library
-   to improve code reuse.
+* Low priority tasks [0%]
+  - [ ] Implement shortcut and connection file loading
