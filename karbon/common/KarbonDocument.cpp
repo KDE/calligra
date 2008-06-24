@@ -44,7 +44,6 @@
 #include <KoStoreDevice.h>
 #include <KoOdfWriteStore.h>
 #include <KoEmbeddedDocumentSaver.h>
-#include <KoShapeStyleWriter.h>
 #include <KoImageCollection.h>
 #include <KoDataCenter.h>
 
