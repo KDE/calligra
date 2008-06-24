@@ -41,10 +41,10 @@ const double stopDistance = 15.0;
 
 
 GradientStrategy::GradientStrategy( KoShape *shape, const QGradient * gradient, Target target )
-    : m_shape( shape ), m_editing( false )
-    , m_target( target ), m_gradientLine( 0, 1 )
-    , m_selection( None ), m_selectionIndex(0)
-    , m_type( gradient->type() ), m_oldFill( new QLinearGradient() )
+    : m_shape( shape ), m_oldFill( new QLinearGradient() )
+    , m_editing( false ), m_target( target )
+    , m_gradientLine( 0, 1 ), m_selection( None )
+    , m_selectionIndex(0), m_type( gradient->type() )
 {
     if( m_target == Fill )
     {
