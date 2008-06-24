@@ -5,6 +5,17 @@
     {{#ERROR}}<h4 style="color: red;">{{MESSAGE}}</h4>{{/ERROR}}
     
     {{#FORM}}
+	<div style="margin-top: 20px; margin-bottom: 20px">
+	<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{FIRST}}"><img src="/toolbox/arrow-left-double.png" alt="First"/></a>&nbsp;
+	{{#SHOW_PREV}}
+		<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{PREV}}"><img src="/toolbox/arrow-left.png" alt="Previous"/></a>&nbsp;
+	{{/SHOW_PREV}}
+	{{#SHOW_NEXT}}
+		<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{NEXT}}"><img src="/toolbox/arrow-right.png" alt="Next"/></a>&nbsp;
+	{{/SHOW_NEXT}}
+	<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{LAST}}"><img src="/toolbox/arrow-right-double.png" alt="Last"/></a>&nbsp;
+	</div>
+
         <form action="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{PKEY_VALUE}}" method="POST">
         <table border="0" width="100%">
             {{FORMDATA}}	
@@ -13,6 +24,6 @@
         <input type="hidden" name="tableFields" value="{{TABLEFIELDS}}"/>
         <input type="submit"/>
         <input type="reset"/>
-        </form>
+        </form><br/>
     {{/FORM}}
 {{>aftercontent}}

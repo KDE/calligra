@@ -20,7 +20,8 @@
 
 #include <QString>
 #include <QStringList>
-#include <QMap>
+#include <QHash>
+#include <QList>
 #include <QUrl>
 
 #include <KDebug>
@@ -43,6 +44,8 @@
 
 namespace KexiWebForms {
 
+    static QHash< QString, QList<uint> > cachedPkeys;
+
     void updateCallback(RequestData* req) {
         HTTPStream stream(req);
         google::TemplateDictionary* dict = initTemplate("update.tpl");
@@ -52,6 +55,8 @@ namespace KexiWebForms {
         QString requestedTable = queryString.at(2);
         QString pkeyName = queryString.at(3);
         QString pkeyValue = queryString.at(4);
+        uint pkeyValueUInt = pkeyValue.toUInt();
+        uint current = 0;
 
 
         dict->SetValue("TABLENAME", requestedTable.toLatin1().constData());
@@ -68,8 +73,40 @@ namespace KexiWebForms {
          * be locked and we won't be able to update it
          */
         KexiDB::Cursor* cursor = gConnection->prepareQuery(schema);
+        
+        // Fill the cachedPkeys list
+        if (cachedPkeys[requestedTable].isEmpty()) {
+            kDebug() << "Cached Pkeys is empty, updating" << endl;
+            KexiDB::QuerySchema idSchema;
+            idSchema.addField(tableSchema.primaryKey()->field(0));
+            KexiDB::Cursor* idCursor = gConnection->executeQuery(idSchema);
+            while (idCursor->moveNext()) {
+                kDebug() << "Appending " << idCursor->value(0).toUInt() << " to cache" << endl;
+                cachedPkeys[requestedTable].append(idCursor->value(0).toUInt());
+            }
+            gConnection->deleteCursor(idCursor);
+        }
 
-            
+        // Retrieve current position in cache
+        for (int i = 0; i < cachedPkeys[requestedTable].size(); i++) {
+            if (cachedPkeys[requestedTable].at(i) == pkeyValueUInt)
+                current = i;
+        }
+
+        // Compute new primary key values for first, last, previous and next record
+        if (current < cachedPkeys[requestedTable].size()-1) {
+            dict->ShowSection("SHOW_NEXT");
+            dict->SetValue("NEXT", QVariant(cachedPkeys[requestedTable].at(current+1)).toString().toLatin1().constData());
+        }
+        if (current > 0) {
+            dict->ShowSection("SHOW_PREV");
+            dict->SetValue("PREV", QVariant(cachedPkeys[requestedTable].at(current-1)).toString().toLatin1().constData());
+        }
+        dict->SetValue("FIRST", QVariant(cachedPkeys[requestedTable].at(0)).toString().toLatin1().constData());
+        dict->SetValue("LAST", QVariant(cachedPkeys[requestedTable].at(cachedPkeys[requestedTable].size()-1)).toString().toLatin1().constData());
+
+
+        
         if (!cursor) {
             dict->ShowSection("ERROR");
             dict->SetValue("MESSAGE", "No cursor object available");
@@ -119,6 +156,8 @@ namespace KexiWebForms {
             if (cursor->updateRow(recordData, editBuffer)) {
                 dict->ShowSection("SUCCESS");
                 dict->SetValue("MESSAGE", "Row updated successfully");
+                // A successful update marks the cache as empty
+                cachedPkeys[requestedTable].clear();
             } else {
                 dict->ShowSection("ERROR");
                 dict->SetValue("MESSAGE", gConnection->errorMsg().toLatin1().constData());

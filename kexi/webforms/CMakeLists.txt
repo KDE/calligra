@@ -24,8 +24,6 @@ set(webforms_SRCS
   Delete.cpp
 )
 
-# This target is needed for emacs' flymake
-add_custom_target(check-syntax)
 add_dependencies(check-syntax kwebforms/fast)
 
 kde4_add_executable(kwebforms ${webforms_SRCS})
