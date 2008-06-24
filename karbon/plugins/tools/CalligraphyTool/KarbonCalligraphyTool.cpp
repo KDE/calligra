@@ -47,6 +47,8 @@
 
 #undef M_PI
 const double M_PI = 3.1415927;
+using std::pow;
+using std::sqrt;
 
 
 KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
@@ -165,4 +167,64 @@ void KarbonCalligraphyTool::deactivate()
 {
 }
 
-//#include "KarbonCalligraphyTool.moc"
+QWidget *KarbonCalligraphyTool::createOptionWidget()
+{
+    QWidget *optionWidget = new QWidget();
+    QVBoxLayout *layout = new QVBoxLayout( optionWidget );
+
+    QHBoxLayout *widthLayout = new QHBoxLayout( optionWidget );
+    QLabel *widthLabel = new QLabel( i18n( "Width" ), optionWidget );
+    QDoubleSpinBox *widthBox = new QDoubleSpinBox;
+    widthBox->setMinimum( 0.0 );
+    widthBox->setMaximum( 1000.0 );
+    widthBox->setValue( m_strokeWidth );
+    widthLayout->addWidget( widthLabel );
+    widthLayout->addWidget( widthBox );
+    layout->addLayout( widthLayout );
+
+    QHBoxLayout *angleLayout = new QHBoxLayout( optionWidget );
+    QLabel *angleLabel = new QLabel( i18n( "Angle" ), optionWidget );
+    QSpinBox *angleBox = new QSpinBox;
+    angleBox->setMinimum( 0 );
+    angleBox->setMaximum( 180 );
+    angleBox->setValue( m_angle*180/M_PI );
+    angleLayout->addWidget( angleLabel );
+    angleLayout->addWidget( angleBox );
+    layout->addLayout( angleLayout );
+
+    QHBoxLayout *massLayout = new QHBoxLayout( optionWidget );
+    QLabel *massLabel = new QLabel( i18n( "Mass" ), optionWidget );
+    QSpinBox *massBox = new QSpinBox;
+    massBox->setMinimum( 1 );
+    massBox->setMaximum( 20 );
+    massBox->setValue( qRound(sqrt(m_mass)) );
+    massLayout->addWidget( massLabel );
+    massLayout->addWidget( massBox );
+    layout->addLayout( massLayout );
+
+    connect( widthBox, SIGNAL(valueChanged(double)),
+             this, SLOT(setStrokeWidth(double)));
+
+    connect( angleBox, SIGNAL(valueChanged(int)),
+             this, SLOT(setAngle(int)));
+
+    connect( massBox, SIGNAL(valueChanged(int)),
+             this, SLOT(setMass(int)));
+
+    return optionWidget;
+}
+
+void KarbonCalligraphyTool::setStrokeWidth( double width )
+{
+    m_strokeWidth = width;
+}
+
+void KarbonCalligraphyTool::setAngle( int angle )
+{
+    m_angle = angle/180.0*M_PI;
+}
+
+void KarbonCalligraphyTool::setMass( int mass )
+{
+    m_mass = mass * mass;
+}

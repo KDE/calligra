@@ -36,29 +36,32 @@ public:
     ~KarbonCalligraphyTool();
 
     void paint( QPainter &painter, const KoViewConverter &converter );
-    
+
     void mousePressEvent( KoPointerEvent *event ) ;
     void mouseMoveEvent( KoPointerEvent *event );
     void mouseReleaseEvent( KoPointerEvent *event );
-    
-    
+
+    QWidget *createOptionWidget();
     void activate ( bool temporary=false );
     void deactivate();
+
+private slots:
+    void setStrokeWidth( double width );
+    void setAngle( int angle ); // angle in degrees
+    void setMass( int mass ); // mass in user friendly format
 
 private:
     void addPoint( KoPointerEvent *event );
 
-    
     QPointF m_lastPoint;
     KarbonCalligraphicShape *m_shape;
-    
+
     double m_strokeWidth;
-    double m_angle;
-    double m_mass;
-    
+    double m_angle; // angle in radians
+    double m_mass; // in raw format (not user friendly)
+
     bool m_isDrawing;
-    
-    
+
     // dinamic parameters
     QPointF m_speed;
 };
