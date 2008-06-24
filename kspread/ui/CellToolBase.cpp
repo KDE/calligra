@@ -1062,6 +1062,7 @@ QWidget* CellToolBase::createOptionWidget()
     connect(d->optionWidget.cancelButton, SIGNAL(clicked(bool)),
             d->optionWidget.userInput, SLOT(discardChanges()));
 
+    selection()->update(); // initialize the location combobox
     return widget;
 }
 
