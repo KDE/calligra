@@ -15,6 +15,7 @@ Comment[gl]=Motoro da base de datos de Kexi para o acceso a servidores Sybase
 Comment[hi]=साइबेस सर्वरों पर पहुँच के लिए केएक्जाई डाटाबेस ड्राइवर
 Comment[it]=Driver per banche dati Kexi per accedere ai server Sybase
 Comment[ja]=Sybase サーバにアクセスするための Kexi データベースドライバ
+Comment[nl]=Kexi databasestuurprogramma voor toegang tot Sybase-servers
 Comment[pt]=Controlador de bases de dados do Kexi para aceder a servidores Sybase
 Comment[pt_BR]=Controlador de bancos de dados do Kexi para acesso a servidores Sybase
 Comment[sv]=Databasdrivrutin i Kexi för att komma åt Sybase-servrar
