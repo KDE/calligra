@@ -23,6 +23,7 @@ SET (chartshape_LIB_SRCS
     ThreeDScene.cpp
     ThreeDTransformation.cpp
     ChartTableView.cpp
+    ChartDocument.cpp
     ChartShape.cpp
     ChartTool.cpp
     ChartToolFactory.cpp

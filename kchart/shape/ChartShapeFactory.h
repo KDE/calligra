@@ -48,6 +48,8 @@ public:
     ChartShapeFactory( QObject* parent );
     ~ChartShapeFactory() {}
 
+    bool supports( const KoXmlElement &element ) const;
+
     KoShape* createDefaultShape() const;
     KoShape* createShape( const KoProperties* params ) const;
 

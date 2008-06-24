@@ -273,7 +273,7 @@ ChartConfigWidget::ChartConfigWidget()
     connect( d->ui.gapBetweenSets, SIGNAL( valueChanged( int ) ),
              this, SIGNAL( gapBetweenSetsChanged( int ) ) );
     connect( d->ui.pieExplodeFactor, SIGNAL( valueChanged( int ) ),
-             this, SIGNAL( pieExplodeFactorChanged( int ) ) );
+             this, SLOT( ui_dataSetPieExplodeFactorChanged( int ) ) );
     
     // "Legend" Tab
     connect( d->ui.legendTitle, SIGNAL( textChanged( const QString& ) ),
@@ -441,6 +441,19 @@ void ChartConfigWidget::chartTypeSelected( QAction *action )
     emit chartSubTypeChanged( subtype );
     
     update();
+}
+
+void ChartConfigWidget::ui_dataSetPieExplodeFactorChanged( int percent )
+{
+    if ( d->selectedDataSet < 0 )
+        return;
+    
+    DataSet *dataSet = d->dataSets[ d->selectedDataSet ];
+    Q_ASSERT( dataSet );
+    if ( !dataSet )
+        return;
+    
+    emit pieExplodeFactorChanged( dataSet, percent );
 }
 
 void ChartConfigWidget::ui_dataSetHasChartTypeChanged( bool b )

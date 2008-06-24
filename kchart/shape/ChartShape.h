@@ -30,6 +30,7 @@
 
 // KOffice
 #include <KoShapeContainer.h>
+#include <KoFrameShape.h>
 
 // Qt
 #include <Qt>
@@ -49,6 +50,7 @@ class KoShapeSavingContext;
 class KoXmlElement;
 class KoXmlWriter;
 class KoGenStyles;
+class KoOdfStylesReader;
 
 namespace KDChart {
     class Chart;
@@ -81,7 +83,7 @@ extern bool isPolar( ChartType type );
 extern bool isCartesian( ChartType type );
 extern QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color );
 
-class CHARTSHAPELIB_EXPORT ChartShape : public KoShapeContainer, public KoChart::ChartInterface
+class CHARTSHAPELIB_EXPORT ChartShape : public KoFrameShape, public KoShapeContainer, public KoChart::ChartInterface
 {
 public:
     ChartShape();
@@ -132,7 +134,14 @@ public:
     
     /// reimplemented
     bool loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
-    bool loadOdfData( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
+    bool loadOdfFrame( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
+    bool loadOdfFrameElement( const KoXmlElement &chartElement, KoShapeLoadingContext &context );
+    bool loadOdfData( const KoXmlElement &chartElement, const KoOdfStylesReader &stylesReader );
+    
+    bool loadEmbeddedDocument( KoStore *store, const KoXmlElement &objectElement, const KoXmlDocument &manifestDocument );
+    
+    // FIXME: loadOdfFrame() should be called by KoLibs, not loadOdf()
+    bool loadOdfEmbedded( const KoXmlElement &chartElement, const KoOdfStylesReader &stylesReader );
     /// reimplemented
     void saveOdf( KoShapeSavingContext &context ) const;
     void saveOdfData( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;

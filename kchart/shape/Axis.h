@@ -69,7 +69,7 @@ public:
     void setShowGrid( bool showGrid );
     void setThreeD( bool threeD );
     
-    bool loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &context );
+    bool loadOdf( const KoXmlElement &axisElement, const KoOdfStylesReader &stylesReader );
     void saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles );
     
     KDChart::CartesianAxis *kdAxis() const;
@@ -85,7 +85,7 @@ public:
 public slots:
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );
-    void setPieExplodeFactor( int percent );
+    void setPieExplodeFactor( DataSet *dataSet, int percent );
     
 private:
     

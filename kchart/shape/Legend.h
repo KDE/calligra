@@ -68,6 +68,7 @@ public:
     void paintPixmap( QPainter &painter, const KoViewConverter &converter );
     
     bool loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &context );
+    bool loadOdf( const KoXmlElement &legendElement, const KoOdfStylesReader &stylesReader );
     void saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
     void saveOdf( KoShapeSavingContext &context ) const;
     

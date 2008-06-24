@@ -63,6 +63,8 @@ ChartShapePlugin::ChartShapePlugin( QObject * parent,  const QStringList& )
 ChartShapeFactory::ChartShapeFactory( QObject* parent )
     : KoShapeFactory( parent, ChartShapeId, i18n( "Chart" ) )
 {
+    qDebug() << "================================ Creating ChartShapeFactory instance";
+    setOdfElementNames( "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0", QStringList( "object" ) );
     setToolTip( i18n( "A shape that shows a chart" ) );
 
     KIconLoader::global()->addAppDir("kchart");
@@ -75,6 +77,15 @@ ChartShapeFactory::ChartShapeFactory( QObject* parent )
     setOptionPanels( panelFactories );
 }
 
+
+bool ChartShapeFactory::supports( const KoXmlElement &element ) const
+{
+    qDebug() << "===============================================";
+    qDebug() << element.namespaceURI();
+    qDebug() << element.tagName();
+    return element.namespaceURI() == "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" &&
+           element.tagName() == "object";
+}
 
 KoShape* ChartShapeFactory::createDefaultShape() const
 {

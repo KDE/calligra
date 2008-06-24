@@ -86,6 +86,7 @@ Legend::Private::Private()
     expansion = HighLegendExpansion;
     alignment = Qt::AlignRight;
     pixmapRepaintRequested = true;
+    position = EndLegendPosition;
 }
 
 Legend::Private::~Private()
@@ -372,14 +373,21 @@ void Legend::paint( QPainter &painter, const KoViewConverter &converter )
 }
 
 
+// Only reimplemneted because pure virtual in KoShape, but not needed
 bool Legend::loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &context )
 {
+    return loadOdf( legendElement, context.odfLoadingContext().stylesReader() );
+}
+
+bool Legend::loadOdf( const KoXmlElement &legendElement, const KoOdfStylesReader &stylesReader )
+{
+    qDebug() << "Loading legend..." << this;
     // TODO: Read optional attributes
     // 1. Legend expansion
     // 2. Advanced legend styling
     //KDChart::Legend  *oldKdchartLegend = d->kdchartLegend;
     //d->kdLegend = new KDChart::Legend( d->diagram, d->chart );
-    
+
     if ( !legendElement.isNull() ) {
         QString lp;
         if ( legendElement.hasAttributeNS( KoXmlNS::chart, "legend-position" ) ) {
@@ -399,7 +407,7 @@ bool Legend::loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &
             else
                 setExpansion( BalancedLegendExpansion );
         }
-        
+
         if ( lalign == "start" ) {
             setAlignment( Qt::AlignLeft );
         }
@@ -442,7 +450,7 @@ bool Legend::loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &
         
         if ( legendElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
             QString styleName = legendElement.attributeNS( KoXmlNS::chart, "style-name", QString() );
-            const KoXmlElement *styleElement = context.odfLoadingContext().stylesReader().findStyle( styleName, "chart" );
+            const KoXmlElement *styleElement = stylesReader.findStyle( styleName, "chart" );
             if ( styleElement ) {
                 KoXmlNode graphicsPropertiesNode = styleElement->namedItemNS( KoXmlNS::style, "graphic-properties" );
                 KoXmlElement graphicsPropertiesElement = *( ( KoXmlElement* )( &graphicsPropertiesNode ) );

@@ -61,6 +61,7 @@ public slots:
     void ui_dataSetCategoryDataRegionChanged();
     void ui_dataSetSelectionChanged_CellRegionDialog( int index );
     void ui_dataSetHasChartTypeChanged( bool b );
+    void ui_dataSetPieExplodeFactorChanged( int percent );
 
     void setLegendOrientationIsVertical( bool );
     void setLegendOrientation( int boxEntryIndex );
@@ -109,7 +110,7 @@ signals:
     void dataSetAxisChanged( DataSet *dataSet, Axis *axis );
     void gapBetweenBarsChanged( int percent );
     void gapBetweenSetsChanged( int percent );
-    void pieExplodeFactorChanged( int percent );
+    void pieExplodeFactorChanged( DataSet *dataSet, int percent );
     
     void showLegendChanged( bool b );
 

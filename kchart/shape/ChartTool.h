@@ -89,7 +89,7 @@ private slots:
     // Plot Area
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );
-    void setPieExplodeFactor( int percent );
+    void setPieExplodeFactor( DataSet *dataSet, int percent );
     
     // Axes
     void addAxis( AxisPosition, const QString& title = "" );

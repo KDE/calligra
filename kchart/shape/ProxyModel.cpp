@@ -494,7 +494,10 @@ void ProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bot
 	        {
 	            int dataSet = int( i / d->dataDimensions );
 	            Q_ASSERT( dataSet < d->dataSets.size() );
-	            d->dataSets[ dataSet ]->yDataChanged( firstCol, lastCol );
+	            if ( i % 2 == 0 )
+	                d->dataSets[ dataSet ]->yDataChanged( firstCol, lastCol );
+	            else
+	                d->dataSets[ dataSet ]->xDataChanged( firstCol, lastCol );
 	        }
 	    }
 	}
@@ -521,6 +524,9 @@ QVariant ProxyModel::headerData( int section,
         row = section;
         if ( d->firstRowIsLabel )
             row++;
+        // first source row is used for x values
+        if ( d->dataDimensions == 2 )
+            row++;
     }
     else {
         if( !d->firstRowIsLabel )
@@ -529,6 +535,9 @@ QVariant ProxyModel::headerData( int section,
         // Return the section-th column in the first row
         column = section;
         if ( d->firstColumnIsLabel )
+            column++;
+        // first source column is used for x values
+        if ( d->dataDimensions == 2 )
             column++;
     }
     
@@ -545,6 +554,7 @@ QVariant ProxyModel::headerData( int section,
 
     return sourceModel()->data( sourceModel()->index( row, column ), role );
 }
+
 
 QMap<int, QVariant> ProxyModel::itemData( const QModelIndex &index ) const
 {
@@ -674,6 +684,10 @@ int ProxyModel::rowCount( const QModelIndex &parent /* = QModelIndex() */ ) cons
         firstRowIsLabel = d->firstColumnIsLabel;
 
     if ( rowCount > 0 && firstRowIsLabel )
+        rowCount--;
+    
+    // One row is used for x values
+    if ( d->dataDimensions == 2 )
         rowCount--;
     
     rowCount *= d->dataDimensions;

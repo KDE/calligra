@@ -36,6 +36,7 @@
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
 #include <KoTextShapeData.h>
+#include <KoOdfStylesReader.h>
 
 // KDChart
 #include <KDChartChart>
@@ -347,8 +348,8 @@ Axis::Axis( PlotArea *parent )
              this,        SLOT( setGapBetweenBars( int ) ) );
     connect( d->plotArea, SIGNAL( gapBetweenSetsChanged( int ) ),
              this,        SLOT( setGapBetweenSets( int ) ) );
-    connect( d->plotArea, SIGNAL( pieExplodeFactorChanged( int ) ),
-             this,        SLOT( setPieExplodeFactor( int ) ) );
+    connect( d->plotArea, SIGNAL( pieExplodeFactorChanged( DataSet*, int ) ),
+             this,        SLOT( setPieExplodeFactor( DataSet*, int ) ) );
 }
 
 Axis::~Axis()
@@ -675,7 +676,7 @@ Qt::Orientation Axis::orientation()
     return Qt::Vertical;
 }
 
-bool Axis::loadOdf( const KoXmlElement &axisElement, KoShapeLoadingContext &context )
+bool Axis::loadOdf( const KoXmlElement &axisElement, const KoOdfStylesReader &stylesReader )
 {
     d->kdAxis = new KDChart::CartesianAxis();
     if ( !axisElement.isNull() ) {
@@ -724,7 +725,6 @@ void Axis::update() const
 {
     if ( d->kdBarDiagram )
     {
-    	qDebug() << "Axis::update():" << d->kdBarDiagram;
         d->kdBarDiagram->doItemsLayout();
         d->kdBarDiagram->update();
     }
@@ -1025,13 +1025,13 @@ void Axis::setGapBetweenSets( int percent )
     requestRepaint();
 }
 
-void Axis::setPieExplodeFactor( int percent )
+void Axis::setPieExplodeFactor( DataSet *dataSet, int percent )
 {
     if ( d->kdCircleDiagram )
     {
         KDChart::PieAttributes attributes = d->kdCircleDiagram->pieAttributes();
         attributes.setExplodeFactor( (float)percent / 100.0 );
-        d->kdCircleDiagram->setPieAttributes( attributes );
+        d->kdCircleDiagram->setPieAttributes( dataSet->kdDataSetNumber(), attributes );
     }
     
     requestRepaint();

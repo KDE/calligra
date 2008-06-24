@@ -31,12 +31,16 @@
 #include "ProxyModel.h"
 #include "TextLabelDummy.h"
 #include "KoTextShapeData.h"
+#include "ChartDocument.h"
 
 // Posix
 #include <float.h> // For basic data types characteristics.
 
 // KOffice
 #include <KoShapeLoadingContext.h>
+#include <KoOdfLoadingContext.h>
+#include <KoStore.h>
+#include <KoDocument.h>
 #include <KoShapeSavingContext.h>
 #include <KoViewConverter.h>
 #include <KoXmlReader.h>
@@ -46,6 +50,9 @@
 #include <KoShapeRegistry.h>
 #include <KoToolRegistry.h>
 #include <KoTextShapeData.h>
+#include <KoOdfReadStore.h>
+#include <KoQueryTrader.h>
+#include <KoOdfStylesReader.h>
 
 // KDChart
 #include <KDChartChart>
@@ -79,6 +86,14 @@
 #include <KDebug>
 #include <KApplication>
 #include <KMessageBox>
+#include <KMimeType>
+#include <KUrl>
+
+// Define the protocol used here for embedded documents' URL
+// This used to "store" but KUrl didn't like it,
+// so let's simply make it "tar" !
+#define STORE_PROTOCOL "tar"
+#define INTERNAL_PROTOCOL "intern"
 
 namespace KChart {
 
@@ -137,6 +152,12 @@ bool isCartesian( ChartType type )
     return !isPolar( type );
 }
 
+enum OdfLabelType {
+    Title,
+    SubTitle,
+    Footer
+};
+
 QString saveOdfFont( KoGenStyles& mainStyles, 
                                  const QFont& font,
                                  const QColor& color )
@@ -153,7 +174,7 @@ QString saveOdfFont( KoGenStyles& mainStyles,
     return mainStyles.lookup( autoStyle, "ch", KoGenStyles::ForceNumbering );
 }
 
-bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingContext &context )
+bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, const KoOdfStylesReader &stylesReader )
 {   
     TextLabelData *labelData = qobject_cast<TextLabelData*>( label->userData() );
     if ( !labelData )
@@ -171,13 +192,18 @@ bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, KoShapeLoadingCon
     return true;
 }
 
-void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter, KoGenStyles &mainStyles, const QString &odfLabelType )
+void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter, KoGenStyles &mainStyles, OdfLabelType odfLabelType )
 {
     TextLabelData *labelData = qobject_cast<TextLabelData*>( label->userData() );
     if ( !labelData )
         return;
     
-    bodyWriter.startElement( QString( "chart:" + odfLabelType ).toAscii() );
+    if ( odfLabelType == Footer )
+        bodyWriter.startElement( "chart:footer" );
+    else if ( odfLabelType == SubTitle )
+        bodyWriter.startElement( "chart:subtitle" );
+    else // if ( odfLabelType == Title )
+        bodyWriter.startElement( "chart:title" );
     bodyWriter.addAttributePt( "svg:x", label->position().x() );
     bodyWriter.addAttributePt( "svg:y", label->position().y() );
     // TODO: Save text label color
@@ -186,6 +212,8 @@ void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter, KoGenStyles &mainSty
     bodyWriter.addTextNode( labelData->document()->toPlainText() );
     bodyWriter.endElement(); // text:p
     bodyWriter.endElement(); // chart:title/subtitle/footer
+    
+    qDebug() << QString( "123test" );
 }
 
 const int MAX_PIXMAP_SIZE = 1000;
@@ -214,6 +242,8 @@ public:
     ProxyModel *model;
     
     QList<KoShape*> hiddenChildren;
+    
+    ChartDocument *document;
 };
 
 ChartShape::Private::Private()
@@ -228,6 +258,7 @@ ChartShape::Private::Private()
     model = 0;
     pixmapRepaintRequested = true;
     paintPixmap = true;
+    document = 0;
 }
 
 ChartShape::Private::~Private()
@@ -236,6 +267,7 @@ ChartShape::Private::~Private()
 
 ChartShape::ChartShape()
     : d ( new Private )
+    , KoFrameShape( "KoXmlNS::draw", "object" )
 {
     setShapeId( ChartShapeId );
     
@@ -244,6 +276,9 @@ ChartShape::ChartShape()
     // We need this as the very first step, because some methods
     // here rely on the d->plotArea pointer
     d->plotArea = new PlotArea( this );
+    
+    d->document = new ChartDocument( this );
+    qDebug() << QString( "123test" );
     
     d->legend = new Legend( this );
     d->legend->setVisible( true );
@@ -309,6 +344,12 @@ ChartShape::ChartShape()
 
 ChartShape::~ChartShape()
 {
+    delete d->title;
+    delete d->subTitle;
+    delete d->footer;
+    delete d->document;
+    delete d->floor;
+    delete d->wall;
 }
 
 
@@ -548,7 +589,10 @@ void ChartShape::paintPixmap( QPainter &painter, const KoViewConverter &converte
         pixmapPainter.setRenderHint( QPainter::Antialiasing, false );
     
         // Paint the background
-        pixmapPainter.fillRect( paintRect, Qt::white );
+        QBrush bgBrush( Qt::white );
+        if ( d->plotArea->chartType() == CircleChartType || d->plotArea->chartType() == RingChartType )
+            bgBrush = QBrush( QColor( 255, 255, 255, 0 ) );
+        pixmapPainter.fillRect( paintRect, bgBrush );
     
         // scale the painter's coordinate system to fit the current zoom level
         applyConversion( pixmapPainter, converter );
@@ -556,7 +600,7 @@ void ChartShape::paintPixmap( QPainter &painter, const KoViewConverter &converte
         d->plotArea->paint( pixmapPainter );
     } else {
         // Paint the background
-        painter.fillRect( paintRect, Qt::white );
+        painter.fillRect( paintRect, QColor( 255, 255, 255, 0 ) );
     
         // scale the painter's coordinate system to fit the current zoom level
         applyConversion( painter, converter );
@@ -611,28 +655,174 @@ void ChartShape::paintComponent( QPainter &painter, const KoViewConverter &conve
 {
 }
 
-bool ChartShape::loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContext &context )
+bool ChartShape::loadOdfFrame( const KoXmlElement &chartElement, KoShapeLoadingContext &context )
 {
-    Q_ASSERT( d->plotArea );
-    
-    if ( chartElement.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
-        kDebug() << " ---------------------------------------------------------------- " ;
-        kDebug() << " Chart class: " 
-                 <<  chartElement.attributeNS( KoXmlNS::chart, "class" );
+    qDebug() << "loadOdfFrame()";
+    return true;
+}
+
+bool ChartShape::loadOdfFrameElement( const KoXmlElement &chartElement, KoShapeLoadingContext &context )
+{
+    qDebug() << "loadOdfFrameElement()";
+    return true;
+}
+
+bool ChartShape::loadEmbeddedDocument( KoStore *store, const KoXmlElement &objectElement, const KoXmlDocument &manifestDocument )
+{
+    QString url = objectElement.attributeNS( KoXmlNS::xlink, "href", QString() );
+    QString m_tmpURL;
+    if ( url[0] == '#' )
+        url = url.mid( 1 );
+    if ( url.startsWith( "./" ) )
+        m_tmpURL = QString( INTERNAL_PROTOCOL ) + ":/" + url.mid( 2 );
+    else
+        m_tmpURL = url;
+    qDebug() << m_tmpURL;
+    ////////////////////////////
+    QString path = m_tmpURL;
+    if ( m_tmpURL.startsWith( INTERNAL_PROTOCOL ) ) {
+        path = store->currentDirectory();
+        if ( !path.isEmpty() )
+            path += '/';
+        QString relPath = KUrl( m_tmpURL ).path();
+        path += relPath.mid( 1 ); // remove leading '/'
+    }
+    if ( !path.endsWith( '/' ) )
+        path += '/';
+    const QString mimeType = KoOdfReadStore::mimeForPath( manifestDocument, path );
+    qDebug() <<"path for manifest file=" << path <<" mimeType=" << mimeType;
+    if ( mimeType.isEmpty() ) {
+        qDebug() << "Manifest doesn't have media-type for " << path << endl;
+        return false;
+    }
+
+    const bool oasis = mimeType.startsWith( "application/vnd.oasis.opendocument" );
+    if ( !oasis ) {
+        m_tmpURL += "/maindoc.xml";
+        kDebug(30003) <<" m_tmpURL adjusted to" << m_tmpURL;
+    }
+    ///////////////////////////
+    qDebug() <<"KoDocumentChild::loadDocumentInternal m_tmpURL=" << m_tmpURL;
+    QString errorMsg;
+    KoDocumentEntry e = KoDocumentEntry::queryByMimeType( mimeType );
+    if ( e.isEmpty() )
+    {
+        return false;
+    }
+
+    //////////////////////////////
+    bool res = true;
+    bool internalURL = false;
+    if ( m_tmpURL.startsWith( STORE_PROTOCOL ) || m_tmpURL.startsWith( INTERNAL_PROTOCOL ) || KUrl::isRelativeUrl( m_tmpURL ) )
+    {
+        if ( oasis ) {
+            store->pushDirectory();
+            Q_ASSERT( m_tmpURL.startsWith( INTERNAL_PROTOCOL ) );
+            QString relPath = KUrl( m_tmpURL ).path().mid( 1 );
+            store->enterDirectory( relPath );
+            res = d->document->loadOasisFromStore( store );
+            store->popDirectory();
+        } else {
+            if ( m_tmpURL.startsWith( INTERNAL_PROTOCOL ) )
+                m_tmpURL = KUrl( m_tmpURL ).path().mid( 1 );
+            res = d->document->loadFromStore( store, m_tmpURL );
+        }
+        internalURL = true;
+        d->document->setStoreInternal( true );
     }
     else
+    {
+        // Reference to an external document. Hmmm...
+        d->document->setStoreInternal( false );
+        KUrl url( m_tmpURL );
+        if ( !url.isLocalFile() )
+        {
+            //QApplication::restoreOverrideCursor();
+            // For security reasons we need to ask confirmation if the url is remote
+            int result = KMessageBox::warningYesNoCancel(
+                0, i18n( "This document contains an external link to a remote document\n%1", m_tmpURL),
+                i18n( "Confirmation Required" ), KGuiItem(i18n( "Download" )), KGuiItem(i18n( "Skip" ) ));
+
+            if ( result == KMessageBox::Cancel )
+            {
+                //d->m_parent->setErrorMessage("USER_CANCELED");
+                return false;
+            }
+            if ( result == KMessageBox::Yes )
+                res = d->document->openUrl( url );
+            // and if == No, res will still be false so we'll use a kounavail below
+        }
+        else
+            res = d->document->openUrl( url );
+    }
+    if ( !res )
+    {
+        QString errorMessage = d->document->errorMessage();
         return false;
+    }
+        // Still waiting...
+        //QApplication::setOverrideCursor( Qt::WaitCursor );
+
+    m_tmpURL = QString();
+
+    // see KoDocument::insertChild for an explanation what's going on
+    // now :-)
+    /*if ( parentDocument() )
+    {
+        KoDocument *parent = parentDocument();
+
+        KParts::PartManager* manager = parent->manager();
+        if ( manager && !manager->parts().isEmpty() )
+        {
+            if ( !manager->parts().contains( d->document ) &&
+                 !parent->isSingleViewMode() )
+                manager->addPart( d->document, false );
+        }
+    }*/
+
+    //QApplication::restoreOverrideCursor();
+
+    return res;
+}
+
+bool ChartShape::loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContext &context )
+{
+    // Check if we're loading an embedded document
+    if ( chartElement.tagName() != "frame" )
+        return false;
+    
+    const qreal x = KoUnit::parseValue( chartElement.attributeNS( KoXmlNS::svg, "x" ) );
+    const qreal y = KoUnit::parseValue( chartElement.attributeNS( KoXmlNS::svg, "x" ) );
+    const qreal width = KoUnit::parseValue( chartElement.attributeNS( KoXmlNS::svg, "width" ) );
+    const qreal height = KoUnit::parseValue( chartElement.attributeNS( KoXmlNS::svg, "height" ) );
+    
+    setPosition( QPointF( x, y ) );
+    setSize( QSizeF( width, height ) );
+    
+    KoXmlElement objectElement = KoXml::namedItemNS( chartElement, KoXmlNS::draw, "object" );
+    
+    return loadEmbeddedDocument( context.odfLoadingContext().store(), objectElement, context.odfLoadingContext().manifestDocument() );
+}
+
+bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, const KoOdfStylesReader &stylesReader )
+{
+    // Check if we're loading an embedded document
+    if ( !chartElement.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
+        qDebug() << "Embedded document has no chart:class element. Aborting.";
+        return false;
+    }
+
+    Q_ASSERT( d->plotArea );
 
 
     // 1. Load the chart type.
     const QString chartClass = chartElement.attributeNS( KoXmlNS::chart,
                                                          "class", QString() );
-
     // Find out what charttype the chart class corresponds to.
     bool  knownType = false;
     for ( unsigned int i = 0 ; i < numChartTypes ; ++i ) {
         if ( chartClass == odfChartTypes[i].odfName ) {
-            kDebug(35001) <<"found chart of type" << chartClass;
+            qDebug() <<"found chart of type" << chartClass;
 
             d->plotArea->setChartType( odfChartTypes[i].chartType );
             knownType = true;
@@ -652,7 +842,7 @@ bool ChartShape::loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContex
     KoXmlElement titleElem = KoXml::namedItemNS( chartElement, 
                                                  KoXmlNS::chart, "title" );
     if ( !titleElem.isNull() ) {
-        if ( !d->title->loadOdf( titleElem, context) )
+        if ( !loadOdfLabel( d->title, titleElem, stylesReader) )
             return false;
     }
 
@@ -660,7 +850,7 @@ bool ChartShape::loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContex
     KoXmlElement subTitleElem = KoXml::namedItemNS( chartElement, 
                                                     KoXmlNS::chart, "subtitle" );
     if ( !subTitleElem.isNull() ) {
-        if ( !d->subTitle->loadOdf( subTitleElem, context) )
+        if ( !loadOdfLabel( d->subTitle, subTitleElem, stylesReader) )
             return false;
     }
 
@@ -668,7 +858,7 @@ bool ChartShape::loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContex
     KoXmlElement footerElem = KoXml::namedItemNS( chartElement, 
                                                   KoXmlNS::chart, "footer" );
     if ( !footerElem.isNull() ) {
-        if ( !d->footer->loadOdf( footerElem, context) )
+        if ( !loadOdfLabel( d->footer, footerElem, stylesReader) )
             return false;
     }
 
@@ -676,7 +866,7 @@ bool ChartShape::loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContex
     KoXmlElement legendElem = KoXml::namedItemNS( chartElement, KoXmlNS::chart,
                           "legend" );
     if ( !legendElem.isNull() ) {
-    if ( !d->legend->loadOdf( legendElem, context ) )
+    if ( !d->legend->loadOdf( legendElem, stylesReader ) )
         return false;
     }
 
@@ -684,7 +874,7 @@ bool ChartShape::loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContex
     KoXmlElement  plotareaElem = KoXml::namedItemNS( chartElement,
                              KoXmlNS::chart, "plot-area" );
     if ( !plotareaElem.isNull() ) {
-    if ( !d->plotArea->loadOdf( plotareaElem, context ) )
+    if ( !d->plotArea->loadOdf( plotareaElem, stylesReader ) )
         return false;
     }
 
@@ -692,7 +882,7 @@ bool ChartShape::loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContex
     KoXmlElement  dataElem = KoXml::namedItemNS( chartElement,
                          KoXmlNS::table, "table" );
     if ( !dataElem.isNull() ) {
-    if ( !loadOdfData( dataElem, context ) )
+    if ( !loadOdfData( dataElem, stylesReader ) )
         return false;
     }
     
@@ -701,13 +891,16 @@ bool ChartShape::loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContex
     return true;
 }
 
-bool ChartShape::loadOdfData( const KoXmlElement &chartElement, KoShapeLoadingContext &context )
+bool ChartShape::loadOdfData( const KoXmlElement &chartElement, const KoOdfStylesReader &stylesReader )
 {
     return true;
 }
 
 void ChartShape::saveOdf( KoShapeSavingContext & context ) const
 {
+    // Create document
+    // Add document using KoEmbeddedDocumentSaver::embedDocument
+    // That's it =)
     Q_ASSERT( d->plotArea );
     
     KoXmlWriter&  bodyWriter = context.xmlWriter();
@@ -732,13 +925,13 @@ void ChartShape::saveOdf( KoShapeSavingContext & context ) const
     }
 
     // 2. Write the title.
-    saveOdfLabel( d->title, bodyWriter, mainStyles, "title" );
+    saveOdfLabel( d->title, bodyWriter, mainStyles, Title );
 
     // 3. Write the subtitle.
-    saveOdfLabel( d->subTitle, bodyWriter, mainStyles, "subtitle" );
+    saveOdfLabel( d->subTitle, bodyWriter, mainStyles, SubTitle );
 
     // 4. Write the footer.
-    saveOdfLabel( d->footer, bodyWriter, mainStyles, "footer" );
+    saveOdfLabel( d->footer, bodyWriter, mainStyles, Footer );
 
     // 5. Write the legend.
     d->legend->saveOdf( bodyWriter, mainStyles );

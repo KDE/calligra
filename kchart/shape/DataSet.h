@@ -130,6 +130,7 @@ public:
     void setKdDataSetNumber( int number );
 
     KDChart::AbstractDiagram *kdDiagram() const;
+    int kdDataSetNumber() const;
 
     // Called by the proxy model
     virtual void yDataChanged( int start, int end ) const;

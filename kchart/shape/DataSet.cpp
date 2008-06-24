@@ -379,6 +379,11 @@ KDChart::AbstractDiagram *DataSet::kdDiagram() const
     return m_kdDiagram;
 }
 
+int DataSet::kdDataSetNumber() const
+{
+    return m_kdDataSetNumber;
+}
+
 void DataSet::setKdDataSetNumber( int number )
 {
     m_kdDataSetNumber = number;
@@ -403,8 +408,9 @@ void DataSet::xDataChanged( int start, int end ) const
 {
     if ( m_kdChartModel )
     {
-    	m_kdChartModel->dataChanged( m_kdChartModel->index( start, m_kdDataSetNumber ),
-    		                         m_kdChartModel->index( end,   m_kdDataSetNumber ) );
+        const int column = m_kdDataSetNumber * 2;
+    	m_kdChartModel->dataChanged( m_kdChartModel->index( start, column ),
+    		                         m_kdChartModel->index( end,   column ) );
     }
 }
 
@@ -412,8 +418,9 @@ void DataSet::yDataChanged( int start, int end ) const
 {
     if ( m_kdChartModel )
     {
-    	m_kdChartModel->dataChanged( m_kdChartModel->index( start, m_kdDataSetNumber ),
-    			                     m_kdChartModel->index( end,   m_kdDataSetNumber ) );
+        const int column = dimension() == 2 ? m_kdDataSetNumber * 2 + 1 : m_kdDataSetNumber;
+    	m_kdChartModel->dataChanged( m_kdChartModel->index( start, column ),
+    			                     m_kdChartModel->index( end,   column ) );
     }
 }
 

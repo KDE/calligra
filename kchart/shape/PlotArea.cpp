@@ -33,6 +33,8 @@
 #include <KoGenStyles.h>
 #include <KoXmlNS.h>
 #include <KoTextShapeData.h>
+#include <KoOdfLoadingContext.h>
+#include <KoOdfStylesReader.h>
 
 // Qt
 #include <QPointF>
@@ -391,8 +393,9 @@ void PlotArea::setThreeD( bool threeD )
 }
 
 
-bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingContext &context )
+bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, const KoOdfStylesReader &stylesReader )
 {
+    qDebug() << "PlotArea::loadOdf()";
     KoXmlElement dataHasLabelsElem = KoXml::namedItemNS( plotAreaElement, 
                                                          KoXmlNS::chart, "data-source-has-labels" );
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart,
@@ -430,9 +433,40 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingConte
             const KoXmlElement axisElement = e;
             Axis *axis = new Axis( this );
             if ( e.localName() == "axis" && e.namespaceURI() == KoXmlNS::chart ) {
-                axis->loadOdf( axisElement, context );
+                axis->loadOdf( axisElement, stylesReader );
             }
             addAxis( axis );
+        }
+    }
+    
+    if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
+        QString styleName = plotAreaElement.attributeNS( KoXmlNS::chart, "style-name", QString() );
+        qDebug() << "plot-area style:" << styleName;
+        const KoXmlElement *styleElement = stylesReader.findStyle( styleName, "chart" );
+        qDebug() << "tjo" << styleElement;
+        if ( styleElement ) {
+            KoXmlElement chartPropertiesElement = styleElement->namedItemNS( KoXmlNS::style, "chart-properties" ).toElement();
+            if ( !chartPropertiesElement.isNull() ) {
+                qDebug() << "yep";
+                if ( chartPropertiesElement.hasAttributeNS( KoXmlNS::chart, "percentage" ) ) {
+                    QString percentage = chartPropertiesElement.attributeNS( KoXmlNS::chart, "percentage", QString() );
+                    if ( percentage == "true" )
+                    {
+                        qDebug() << "Setting chart subtype to percent";
+                        setChartSubType( PercentChartSubtype );
+                    }
+                }
+                else if ( chartPropertiesElement.hasAttributeNS( KoXmlNS::chart, "stacked" ) ) {
+                    QString stacked = chartPropertiesElement.attributeNS( KoXmlNS::chart, "stacked", QString() );
+                    if ( stacked == "true" )
+                    {
+                        qDebug() << "Setting chart subtype to stacked";
+                        setChartSubType( StackedChartSubtype );
+                    }
+                }
+            }
+            else
+                qDebug() << "no";
         }
     }
     
@@ -585,9 +619,9 @@ void PlotArea::setGapBetweenSets( int percent )
     emit gapBetweenSetsChanged( percent );
 }
 
-void PlotArea::setPieExplodeFactor( int percent )
+void PlotArea::setPieExplodeFactor( DataSet *dataSet, int percent )
 {
-    emit pieExplodeFactorChanged( percent );
+    emit pieExplodeFactorChanged( dataSet, percent );
 }
 
 ChartShape *PlotArea::parent() const
@@ -641,7 +675,10 @@ void PlotArea::requestRepaint() const
 
 void PlotArea::paint( QPainter &painter )
 {
-    d->kdChart->paint( &painter, QRect( QPoint( 0, 0 ), d->shape->size().toSize() ) );
+    const int borderX = 4;
+    const int borderY = 4;
+    const QSize size = d->shape->size().toSize();
+    d->kdChart->paint( &painter, QRect( QPoint( borderX, borderY ), QSize( size.width() - 2 * borderX, size.height() - 2 * borderY ) ) );
 }
 
 #include "PlotArea.moc"
