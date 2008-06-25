@@ -19,6 +19,11 @@ IF (FreeTDS_FOUND)
    add_subdirectory(sybase)
 ENDIF (FreeTDS_FOUND)
 
+INCLUDE(FindXBase)
+IF(XBASE_FOUND)
+   add_subdirectory(xbase)
+ENDIF(XBASE_FOUND)
+
 #message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(pgsql_dir)")
 #message(STATUS "${CMAKE_CURRENT_SOURCE_DIR}: skipped subdir $(mysql_dir)")
 
