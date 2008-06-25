@@ -22,6 +22,8 @@
 #ifndef KSPREAD_GENVALIDATIONSTYLE
 #define KSPREAD_GENVALIDATIONSTYLE
 
+#include "kspread_export.h"
+
 #include <QMap>
 #include <QString>
 
@@ -73,7 +75,7 @@ private:
     friend class GenValidationStyles;
 };
 
-class GenValidationStyles
+class KSPREAD_EXPORT GenValidationStyles
 {
 public:
     GenValidationStyles();

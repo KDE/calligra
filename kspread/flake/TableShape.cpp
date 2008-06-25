@@ -27,10 +27,12 @@
 #include <KoOdfLoadingContext.h>
 #include <KoShapeContainer.h>
 #include <KoShapeLoadingContext.h>
+#include <KoShapeSavingContext.h>
 #include <KoXmlNS.h>
 
 #include <CellView.h>
 #include <Damages.h>
+#include <GenValidationStyle.h>
 #include <Map.h>
 #include <OdfLoadingContext.h>
 #include <Region.h>
@@ -177,6 +179,25 @@ bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
 
 void TableShape::saveOdf( KoShapeSavingContext & context ) const
 {
+    const Map* map = sheet()->map();
+    // Saving the custom cell styles including the default cell style.
+    map->styleManager()->saveOasis(context.mainStyles());
+
+    // Saving the default column style
+    KoGenStyle defaultColumnStyle(KoGenStyle::StyleTableColumn, "table-column");
+    defaultColumnStyle.addPropertyPt("style:column-width", map->defaultColumnFormat()->width());
+    defaultColumnStyle.setDefaultStyle(true);
+    context.mainStyles().lookup(defaultColumnStyle, "Default", KoGenStyles::DontForceNumbering);
+
+    // Saving the default row style
+    KoGenStyle defaultRowStyle(KoGenStyle::StyleTableRow, "table-row");
+    defaultRowStyle.addPropertyPt("style:row-height", map->defaultRowFormat()->height());
+    defaultRowStyle.setDefaultStyle(true);
+    context.mainStyles().lookup(defaultRowStyle, "Default", KoGenStyles::DontForceNumbering);
+
+    GenValidationStyles valStyle;
+    sheet()->saveOasis(context, valStyle);
+    valStyle.writeStyle(context.xmlWriter());
 }
 
 void TableShape::init(QMap<QString, KoDataCenter*> dataCenterMap)
