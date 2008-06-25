@@ -20,10 +20,9 @@
 
 #ifndef _WIN32_WCE
 
-/* we use ../include/ trick to avoid including kdewin32's include/msvc/ wrapper headers */
 #include <process.h>
 #include <direct.h>
-#include <../include/io.h>
+#include <io.h>
 
 #else /* _WIN32_WCE */
 

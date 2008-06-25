@@ -26,7 +26,7 @@ fix_directory_separators(char *path)
 static int
 protect_against_code_disclosure(const char *path)
 {
-	WIN32_FIND_DATAA	data;
+	WIN32_FIND_DATA	data;
 	HANDLE		handle;
 	const char	*p;
 
@@ -41,7 +41,7 @@ protect_against_code_disclosure(const char *path)
 	 * end of file name.
 	 */
 
-	if ((handle = FindFirstFileA(path, &data)) == INVALID_HANDLE_VALUE)
+	if ((handle = FindFirstFile(path, &data)) == INVALID_HANDLE_VALUE)
 		return (FALSE);
 
 	FindClose(handle);
