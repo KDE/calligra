@@ -81,6 +81,7 @@
 #include <QPointF>
 #include <QSizeF>
 #include <QTextDocument>
+#include <QStandardItemModel>
 
 // KDE
 #include <KDebug>
@@ -867,19 +868,19 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, const KoOdfS
         return false;
     }
 
-    // 6. Load the plot area (this is where the real action is!).
-    KoXmlElement  plotareaElem = KoXml::namedItemNS( chartElement,
-                             KoXmlNS::chart, "plot-area" );
-    if ( !plotareaElem.isNull() ) {
-    if ( !d->plotArea->loadOdf( plotareaElem, stylesReader ) )
-        return false;
-    }
-
-    // 7. Load the data
+    // 6. Load the data
     KoXmlElement  dataElem = KoXml::namedItemNS( chartElement,
                          KoXmlNS::table, "table" );
     if ( !dataElem.isNull() ) {
     if ( !loadOdfData( dataElem, stylesReader ) )
+        return false;
+    }
+
+    // 7. Load the plot area (this is where the real action is!).
+    KoXmlElement  plotareaElem = KoXml::namedItemNS( chartElement,
+                             KoXmlNS::chart, "plot-area" );
+    if ( !plotareaElem.isNull() ) {
+    if ( !d->plotArea->loadOdf( plotareaElem, stylesReader ) )
         return false;
     }
     
@@ -888,8 +889,65 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, const KoOdfS
     return true;
 }
 
-bool ChartShape::loadOdfData( const KoXmlElement &chartElement, const KoOdfStylesReader &stylesReader )
+bool ChartShape::loadOdfData( const KoXmlElement &tableElement, const KoOdfStylesReader &stylesReader )
 {
+    // There is no table element to load
+    if ( tableElement.isNull() || !tableElement.isElement() )
+        return true;
+    
+    QStandardItemModel *model = new QStandardItemModel;
+    model->setRowCount( 0 );
+    model->setColumnCount( 0 );
+    
+    KoXmlElement n = tableElement.firstChild().toElement();
+    for( ; !n.isNull(); n = n.nextSibling().toElement() )
+    {
+        qDebug() << n.localName();
+        if ( n.namespaceURI() != KoXmlNS::table )
+            continue;
+        if ( n.localName() == "table-rows" )
+        {
+            int row = 0;
+            KoXmlElement _n = n.firstChild().toElement();
+            for ( ; !_n.isNull(); _n = _n.nextSibling().toElement() )
+            {
+                if ( _n.namespaceURI() != KoXmlNS::table )
+                    continue;
+                if ( _n.localName() == "table-row" )
+                {
+                    int column = 0;
+                    model->setRowCount( model->rowCount() + 1 );
+                    KoXmlElement __n = _n.firstChild().toElement();
+                    for ( ; !__n.isNull(); __n = __n.nextSibling().toElement() )
+                    {
+                        if ( __n.namespaceURI() != KoXmlNS::table )
+                            continue;
+                        if ( __n.localName() == "table-cell" )
+                        {
+                            if ( row == 0 )
+                                model->setColumnCount( model->columnCount() + 1 );
+                            const QString valueType = __n.attributeNS( KoXmlNS::office, "value-type" );
+                            const QString valueString = __n.attributeNS( KoXmlNS::office, "value" );
+                            QVariant value;
+                            if ( valueType == "float" )
+                                value = valueString.toDouble();
+                            else if ( valueType == "boolean" )
+                                value = (bool)valueString.toInt();
+                            else // if ( valueType == "string" )
+                                value = valueString;
+                            model->setData( model->index( row, column ), value );
+                            column++;
+                        }
+                    }
+                }
+                row++;
+            }
+        }
+    }
+    
+    if ( model->rowCount() > 0 && model->columnCount() > 0 )
+        setModel( model, true );
+    
     return true;
 }
 
