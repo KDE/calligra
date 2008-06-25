@@ -337,8 +337,8 @@ void SectionEditor::btnEdit_clicked()
 
 				if ( column != rsdg->column() && _rsd->findSection ( column ) != -1 )
 				{
-					QMessageBox::warning ( this, tr ( "Error Encountered" ),
-					                       tr ( "Tried to add a new Group section with a non-unique name." ) );
+					QMessageBox::warning ( this, i18n( "Error Encountered" ),
+					                       i18n( "Tried to add a new Group section with a non-unique name." ) );
 				}
 				else
 				{
@@ -380,7 +380,7 @@ void SectionEditor::btnAdd_clicked()
 		}
 		if ( _rsd->findSection ( name ) != -1 )
 		{
-			QMessageBox::warning ( this, tr ( "Error Encountered" ), tr ( "Unable to add a new group because a non-unique name could be generated." ) );
+			QMessageBox::warning ( this, i18n ( "Error Encountered" ), i18n ( "Unable to add a new group because a non-unique name could be generated." ) );
 			return;
 		}
 		ReportSectionDetailGroup * rsdg = new ReportSectionDetailGroup ( name, _rsd, _rsd );

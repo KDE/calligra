@@ -515,7 +515,7 @@ void ReportDesigner::closeEvent ( QCloseEvent * e )
 {
 	if ( _modified != false )
 	{
-		switch ( QMessageBox::information ( this,tr ( "Report Writer" ),tr ( "The document '%1' contains unsaved changes.\nDo you want to save the changes before closing?" ).arg ( windowTitle() ),tr ( "Save" ),tr ( "Discard" ),tr ( "Cancel" ), 0, 2 ) )
+		switch ( QMessageBox::information ( this,i18n ( "Report Writer" ),i18n ( "The document '%1' contains unsaved changes.\nDo you want to save the changes before closing?" , windowTitle() ),i18n( "Save" ),i18n( "Discard" ),i18n( "Cancel" ), 0, 2 ) )
 		{
 			case 0:
 				// save the doc...

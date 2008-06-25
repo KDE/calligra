@@ -74,7 +74,7 @@ void KexiNameWidget::init(
 		this, "lbl_caption" );
 	lyr->addWidget( lbl_caption, 1, 0 );
 
-	lbl_name = new QLabel( nameLabel.isEmpty() ? tr( "Name:" ) : nameLabel,
+	lbl_name = new QLabel( nameLabel.isEmpty() ? i18n( "Name:" ) : nameLabel,
 		this, "lbl_name" );
 	lyr->addWidget( lbl_name, 2, 0 );
 
