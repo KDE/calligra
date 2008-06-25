@@ -182,6 +182,7 @@ void TableShape::saveOdf( KoShapeSavingContext & context ) const
 void TableShape::init(QMap<QString, KoDataCenter*> dataCenterMap)
 {
     Map* map = dynamic_cast<Map*>(dataCenterMap["TableMap"]);
+    Q_CHECK_PTR(map);
     d->sheet = map->addNewSheet();
     d->sheetView = new SheetView(d->sheet);
 
