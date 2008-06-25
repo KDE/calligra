@@ -13,8 +13,10 @@ ADD_DEFINITIONS(
 	-DKEXI_DB_COMBOBOX_WIDGET
 	-DDB_TEMPLATES
 	-DKEXI_NO_UNFINISHED
-    -DKEXI_SCRIPTS_SUPPORT
+	-DKEXI_SCRIPTS_SUPPORT
 )
+
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44010)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-kexi.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-kexi.h )
 
@@ -33,17 +35,14 @@ if(WITH_WEBFORMS)
   macro_log_feature(GOOGLE_CTEMPLATE_FOUND "Google Ctemplate" "Kexi Web Forms require Google Ctemplate. Kexi Web Forms will not be built" "http://code.google.com/p/google-ctemplate/" FALSE "")
   if(GOOGLE_CTEMPLATE_FOUND)
     set(WITH_WEBFORMS TRUE CACHE STRING "Build with Kexi Web Forms support")
-    set(KEXIWEBFORMS_SUPPORTED TRUE)
     add_definitions(-DKEXIWEBFORMS_SUPPORTED)
     message(STATUS "Kexi Web Forms support enabled.")
     macro_optional_add_subdirectory(webforms)
   else(GOOGLE_CTEMPLATE_FOUND)
     set(WITH_WEBFORMS FALSE CACHE STRING "Build with Kexi Web Forms support")
-    set(KEXIWEBFORMS_SUPPORTED FALSE)
     message(STATUS "Kexi Web Forms support DISABLED (Google Ctemplate not found).")
   endif(GOOGLE_CTEMPLATE_FOUND)
 else(WITH_WEBFORMS)
-  set(KEXIWEBFORMS_SUPPORTED FALSE) # we haven't even tried
   set(WITH_WEBFORMS FALSE CACHE STRING "Build with Kexi Web Forms support")
 endif(WITH_WEBFORMS)
 
