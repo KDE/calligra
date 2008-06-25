@@ -72,8 +72,6 @@ KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresenterView *presen
 
     setLayout(vLayout);
 
-    connect( m_presenterView->view(), SIGNAL( activePageChanged() ), this, SLOT( updatePresenterView() ) );
-
     m_activeWidget = m_mainWidget;
     KoPAPageBase *activePage = m_presenterView->view()->activePage();
     m_activeWidget->setActivePage( activePage );
