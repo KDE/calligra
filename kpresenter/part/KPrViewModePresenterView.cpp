@@ -62,6 +62,8 @@ KPrViewModePresenterView::KPrViewModePresenterView( KoPAView *view, KoPACanvas *
 
 KPrViewModePresenterView::~KPrViewModePresenterView()
 {
+    delete m_presenterViewWidget;
+    delete m_presenterViewTool;
 }
 
 void KPrViewModePresenterView::tabletEvent(QTabletEvent *event, const QPointF &point)
@@ -141,7 +143,6 @@ void KPrViewModePresenterView::deactivate()
     m_canvas->setWindowState( m_canvas->windowState() & ~Qt::WindowFullScreen ); // reset
     m_canvas->show();
 
-    delete m_presenterViewWidget;
     KoMainWindow *shell = m_view->shell();
 
     Q_ASSERT( shell );

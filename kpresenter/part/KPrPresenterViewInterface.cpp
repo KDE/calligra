@@ -148,7 +148,7 @@ KPrPresenterViewSlidesInterface::KPrPresenterViewSlidesInterface( KoPADocument *
     QVBoxLayout *vLayout = new QVBoxLayout;
 
     QListView *listView = new QListView;
-    m_thumbnailModel = new KoPAPageThumbnailModel( m_document->pages( false ) );
+    m_thumbnailModel = new KoPAPageThumbnailModel( m_document->pages( false ), this );
     listView->setModel( m_thumbnailModel );
     listView->setDragDropMode( QListView::NoDragDrop );
     listView->setIconSize( QSize( 128, 128 ) );
