@@ -41,6 +41,8 @@ public:
     void setWidth( int );
     void setBrush( const QBrush &brush );
     void setFramePen( const QPen &pen );
+    
+    bool loadOdf( const KoXmlElement &surfaceElement, const KoOdfStylesReader &stylesReader );
 
 private:
     class Private;

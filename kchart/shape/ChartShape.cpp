@@ -212,8 +212,6 @@ void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter, KoGenStyles &mainSty
     bodyWriter.addTextNode( labelData->document()->toPlainText() );
     bodyWriter.endElement(); // text:p
     bodyWriter.endElement(); // chart:title/subtitle/footer
-    
-    qDebug() << QString( "123test" );
 }
 
 const int MAX_PIXMAP_SIZE = 1000;
@@ -278,7 +276,6 @@ ChartShape::ChartShape()
     d->plotArea = new PlotArea( this );
     
     d->document = new ChartDocument( this );
-    qDebug() << QString( "123test" );
     
     d->legend = new Legend( this );
     d->legend->setVisible( true );

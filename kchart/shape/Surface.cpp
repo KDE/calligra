@@ -26,6 +26,13 @@
 #include <QPointF>
 #include <QBrush>
 #include <QPen>
+#include <QDebug>
+
+// KOffice
+#include <KoXmlReader.h>
+#include <KoXmlWriter.h>
+#include <KoXmlNS.h>
+#include <KoOdfStylesReader.h>
 
 using namespace KChart;
 
@@ -101,4 +108,10 @@ QPen Surface::framePen() const
 void Surface::setFramePen( const QPen &pen )
 {
     d->framePen = pen;
+}
+
+bool Surface::loadOdf( const KoXmlElement &surfaceElement, const KoOdfStylesReader &stylesReader )
+{
+    qDebug() << "Surface::loadOdf()";
+    return true;
 }

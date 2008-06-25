@@ -100,6 +100,8 @@ public:
     int gapBetweenBars;
     int gapBetweenSets;
     
+    int loadedDataSets;
+    
     QList<KoShape*> automaticallyHiddenAxisTitles;
 };
 
@@ -116,6 +118,7 @@ PlotArea::Private::Private()
     threeDScene = 0;
     gapBetweenBars = 0;
     gapBetweenSets = 100;
+    loadedDataSets = 0;
 }
 
 PlotArea::Private::~Private()
@@ -395,7 +398,6 @@ void PlotArea::setThreeD( bool threeD )
 
 bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, const KoOdfStylesReader &stylesReader )
 {
-    qDebug() << "PlotArea::loadOdf()";
     KoXmlElement dataHasLabelsElem = KoXml::namedItemNS( plotAreaElement, 
                                                          KoXmlNS::chart, "data-source-has-labels" );
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart,
@@ -441,18 +443,14 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, const KoOdfStylesRe
     
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         QString styleName = plotAreaElement.attributeNS( KoXmlNS::chart, "style-name", QString() );
-        qDebug() << "plot-area style:" << styleName;
         const KoXmlElement *styleElement = stylesReader.findStyle( styleName, "chart" );
-        qDebug() << "tjo" << styleElement;
-        if ( styleElement ) {
+        if ( styleElement && !styleElement->isNull() ) {
             KoXmlElement chartPropertiesElement = styleElement->namedItemNS( KoXmlNS::style, "chart-properties" ).toElement();
             if ( !chartPropertiesElement.isNull() ) {
-                qDebug() << "yep";
                 if ( chartPropertiesElement.hasAttributeNS( KoXmlNS::chart, "percentage" ) ) {
                     QString percentage = chartPropertiesElement.attributeNS( KoXmlNS::chart, "percentage", QString() );
                     if ( percentage == "true" )
                     {
-                        qDebug() << "Setting chart subtype to percent";
                         setChartSubType( PercentChartSubtype );
                     }
                 }
@@ -460,18 +458,90 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, const KoOdfStylesRe
                     QString stacked = chartPropertiesElement.attributeNS( KoXmlNS::chart, "stacked", QString() );
                     if ( stacked == "true" )
                     {
-                        qDebug() << "Setting chart subtype to stacked";
                         setChartSubType( StackedChartSubtype );
                     }
                 }
             }
-            else
-                qDebug() << "no";
+        }
+    }
+    
+    // Load dataset properties
+    KoXmlElement n = plotAreaElement.firstChild().toElement();
+    for ( ; !n.isNull(); n = n.nextSibling().toElement() )
+    {
+        if ( n.namespaceURI() != KoXmlNS::chart )
+            continue;
+        if ( n.localName() == "series" )
+            loadOdfSeries( n, stylesReader );
+        else if ( n.localName() == "wall" )
+            d->wall->loadOdf( n, stylesReader );
+        else if ( n.localName() == "floor" )
+            d->floor->loadOdf( n, stylesReader );
+        else
+        {
+            qWarning() << "PlotArea::loadOdf(): Unknown tag name \"" << n.localName() << "\"";
         }
     }
     
     requestRepaint();
     
+    return true;
+}
+
+bool PlotArea::loadOdfSeries( const KoXmlElement &seriesElement, const KoOdfStylesReader &stylesReader )
+{
+    if ( seriesElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
+    {
+        QString styleName = seriesElement.attributeNS( KoXmlNS::chart, "style-name", QString() );
+        const KoXmlElement *styleElement = stylesReader.findStyle( styleName, "chart" );
+        if ( styleElement && !styleElement->isNull() )
+        {
+            KoXmlElement n = styleElement->firstChild().toElement();
+            for ( ; !n.isNull(); n = n.nextSibling().toElement() )
+            {
+                QList<DataSet*> dataSets = d->shape->proxyModel()->dataSets();
+                if ( d->loadedDataSets > dataSets.size() )
+                    return true;
+                
+                Q_ASSERT( dataSets[ d->loadedDataSets ] );
+                
+                if ( n.namespaceURI() != KoXmlNS::style )
+                    continue;
+                if ( n.localName() == "chart-properties" )
+                {
+                    
+                    if ( n.hasAttributeNS( KoXmlNS::chart, "pie-offset" ) )
+                    {
+                        int pieOffset = n.attributeNS( KoXmlNS::chart, "pie-offset", QString() ).toInt();
+                        
+                        setPieExplodeFactor( dataSets[ d->loadedDataSets ], pieOffset );
+                    }
+                }
+                else if ( n.localName() == "graphic-properties" )
+                {
+                    if ( n.hasAttributeNS( KoXmlNS::draw, "fill-color" ) )
+                    {
+                        QColor fillColor( n.attributeNS( KoXmlNS::draw, "fill-color", QString() ) );
+                        
+                        dataSets[ d->loadedDataSets ]->setColor( fillColor );
+                    }
+                }
+                else
+                {
+                    qWarning() << "PlotArea::loadOdfSeries(): Unknown tag name \"" << n.localName() << "\"";
+                }
+            }
+        }
+    }
+    
+    KoXmlElement n = seriesElement.firstChild().toElement();
+    for ( ; !n.isNull(); n = n.nextSibling().toElement() )
+    {
+        if ( n.namespaceURI() != KoXmlNS::chart )
+            continue;
+        // FIXME: Load data points
+    }
+    d->loadedDataSets++;
     return true;
 }
 
