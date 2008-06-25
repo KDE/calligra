@@ -22,6 +22,8 @@
 
 #include <QtGui/QKeyEvent>
 
+#include <KDebug>
+
 #include <KoPointerEvent.h>
 #include <KoPACanvas.h>
 

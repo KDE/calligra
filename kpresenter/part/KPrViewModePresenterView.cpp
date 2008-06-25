@@ -40,6 +40,7 @@
 
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
+#include <KoPAPage.h>
 #include <KoPAPageBase.h>
 #include <KoPAMasterPage.h>
 #include <KoPAView.h>
@@ -53,7 +54,7 @@ KPrViewModePresenterView::KPrViewModePresenterView( KoPAView *view, KoPACanvas *
 {
     m_savedParent = m_canvas->parentWidget();
     m_canvas->setParent( ( QWidget* )0 ); // detach it from the view
-    m_presenterViewWidget = new KPrPresenterViewWidget( m_canvas );
+    m_presenterViewWidget = new KPrPresenterViewWidget( this, m_canvas );
     m_presenterViewTool = new KPrPresenterViewTool( *this, m_presentationMode->presentationTool(), m_tool );
     m_presentationMode->setPresenterViewTool( m_presenterViewTool );
     updateActivePage( m_view->activePage() );
@@ -123,12 +124,14 @@ void KPrViewModePresenterView::activate(KoPAViewMode *previousViewMode)
 
         QRect rect = desktop.availableGeometry( newscreen );
         m_presenterViewWidget->move( rect.topLeft() );
+
+        m_presenterViewWidget->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // detach widget to make
+        m_presenterViewWidget->updateWidget( rect.size() ); 
+        m_presenterViewWidget->show();
+        m_presenterViewWidget->setFocus();    
+        m_animationDirector = new KPrAnimationDirector( m_view, m_view->kopaDocument()->pages(), m_view->activePage() );
     }
 
-    m_presenterViewWidget->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // detach widget to make
-    m_presenterViewWidget->show();
-    m_presenterViewWidget->setFocus();    
-    m_animationDirector = new KPrAnimationDirector( m_view, m_view->kopaDocument()->pages(), m_view->activePage() );
 }
 
 void KPrViewModePresenterView::deactivate()
@@ -147,5 +150,11 @@ void KPrViewModePresenterView::deactivate()
     // shell->slotCloseAllViews();
     shell->setRootDocument( 0L );
     shell->close();
+}
+
+void KPrViewModePresenterView::updateActivePage( KoPAPageBase *page )
+{
+    KPrViewModePresentation::updateActivePage( page );
+    m_presenterViewWidget->setActivePage( page );
 }
 

@@ -22,16 +22,42 @@
 
 #include <QtGui/QWidget>
 
+class QStackedLayout;
+
 class KoPACanvas;
+class KoPAPageBase;
+class KoPAPageThumbnailModel;
+
+class KPrViewModePresenterView;
+
+class KPrPresenterViewBaseInterface;
+class KPrPresenterViewInterface;
+class KPrPresenterViewSlidesInterface;
+class KPrPresenterViewToolWidget;
 
 class KPrPresenterViewWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KPrPresenterViewWidget( KoPACanvas *canvas, QWidget *parent=0 );
+    KPrPresenterViewWidget( KPrViewModePresenterView *presenterView, KoPACanvas *canvas, QWidget *parent=0 );
+    ~KPrPresenterViewWidget();
+    void setActivePage( KoPAPageBase *page );
+    void updateWidget( const QSize &widgetSize );
+
+private slots:
+    void showSlideThumbnails( bool show );
+    void requestPreviousSlide();
+    void requestNextSlide();
 
 private:
     KoPACanvas *m_canvas;
+    KPrViewModePresenterView *m_presenterView;
+
+    QStackedLayout *m_stackedLayout;
+
+    KPrPresenterViewInterface *m_mainWidget;
+    KPrPresenterViewSlidesInterface *m_slidesWidget;
+    KPrPresenterViewBaseInterface *m_activeWidget;
 };
 
 #endif

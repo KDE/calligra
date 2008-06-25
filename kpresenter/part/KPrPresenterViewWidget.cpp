@@ -20,23 +20,108 @@
 #include "KPrPresenterViewWidget.h"
 
 #include <QtGui/QBoxLayout>
-#include <QtGui/QLabel>
 #include <QtGui/QKeyEvent>
-#include <QtGui/QPainter>
+#include <QtGui/QStackedLayout>
 
 #include <KDebug>
+#include <KLocale>
+#include <KIcon>
 
+#include <KoPageLayout.h>
 #include <KoPACanvas.h>
+#include <KoPADocument.h>
+#include <KoPAPageBase.h>
+#include <KoPAPageThumbnailModel.h>
+#include <KoPAView.h>
+#include <KoPAViewMode.h>
+#include <KoShape.h>
+#include <KoTextShapeData.h>
+#include <KoZoomHandler.h>
 
-KPrPresenterViewWidget::KPrPresenterViewWidget( KoPACanvas *canvas, QWidget *parent)
+#include "KPrViewModePresenterView.h"
+#include "KPrPresenterViewInterface.h"
+
+KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresenterView *presenterView, KoPACanvas *canvas, QWidget *parent)
     : QWidget( parent )
     , m_canvas( canvas )
+    , m_presenterView( presenterView )
 {
-    // currently this widget only shows the canvas in full screen
-    // later will be turned into full presenter view widget
     QVBoxLayout *vLayout = new QVBoxLayout;
-    vLayout->addWidget( m_canvas->canvasWidget() );
+
+    vLayout->setContentsMargins( 20, 20, 20, 0 );
+
+    m_stackedLayout = new QStackedLayout;
+    m_mainWidget = new KPrPresenterViewInterface( m_canvas->document(), m_canvas );
+    m_stackedLayout->addWidget( m_mainWidget );
+
+    m_slidesWidget = new KPrPresenterViewSlidesInterface( m_canvas->document() );
+    m_stackedLayout->addWidget( m_slidesWidget );
+    
+    vLayout->addLayout( m_stackedLayout );
+
+    QHBoxLayout *hLayout = new QHBoxLayout;
+    hLayout->addStretch();
+    KPrPresenterViewToolWidget *toolWidget = new KPrPresenterViewToolWidget;
+    connect( toolWidget, SIGNAL( slideThumbnailsToggled( bool ) ), this, SLOT( showSlideThumbnails( bool ) ) );
+    connect( toolWidget, SIGNAL( previousSlideClicked() ), this, SLOT( requestPreviousSlide() ) );
+    connect( toolWidget, SIGNAL( nextSlideClicked() ), this, SLOT( requestNextSlide() ) );
+    hLayout->addWidget( toolWidget );
+    hLayout->addStretch();
+
+    vLayout->addLayout( hLayout );
+
     setLayout(vLayout);
+
+    connect( m_presenterView->view(), SIGNAL( activePageChanged() ), this, SLOT( updatePresenterView() ) );
+
+    m_activeWidget = m_mainWidget;
+    KoPAPageBase *activePage = m_presenterView->view()->activePage();
+    m_activeWidget->setActivePage( activePage );
+}
+
+KPrPresenterViewWidget::~KPrPresenterViewWidget()
+{
+}
+
+void KPrPresenterViewWidget::setActivePage( KoPAPageBase *page )
+{
+    m_activeWidget->setActivePage( page );
+}
+
+void KPrPresenterViewWidget::updateWidget( const QSize &widgetSize )
+{
+    int previewHeight = 0.5 * widgetSize.height();
+
+    KoPAPageBase *page = m_presenterView->view()->activePage();
+
+    const KoPageLayout &layout = page->pageLayout();
+    KoZoomHandler zoomHandler;
+    double ratio = ( zoomHandler.resolutionX() * layout.width ) / ( zoomHandler.resolutionY() * layout.height );
+    QSize previewSize( previewHeight * ratio, previewHeight );
+
+    m_mainWidget->setPreviewSize( previewSize );
+}
+
+void KPrPresenterViewWidget::showSlideThumbnails( bool show )
+{
+    if ( show ) {
+        m_stackedLayout->setCurrentIndex( 1 );
+        m_activeWidget = m_mainWidget;
+    }
+    else {
+        m_stackedLayout->setCurrentIndex( 0 );
+        m_activeWidget = m_slidesWidget;
+    }
+}
+
+void KPrPresenterViewWidget::requestPreviousSlide()
+{
+    m_presenterView->keyPressEvent( new QKeyEvent( QEvent::KeyPress, Qt::Key_PageUp, Qt::NoModifier ) );
+}
+
+void KPrPresenterViewWidget::requestNextSlide()
+{
+    m_presenterView->keyPressEvent( new QKeyEvent( QEvent::KeyPress, Qt::Key_PageDown, Qt::NoModifier ) );
 }
 
 #include "KPrPresenterViewWidget.moc"

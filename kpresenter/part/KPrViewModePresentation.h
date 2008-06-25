@@ -49,6 +49,9 @@ public:
     void activate( KoPAViewMode * previousViewMode );
     void deactivate();
 
+    /// reimplemented
+    virtual void updateActivePage( KoPAPageBase *page );
+
     /**
      * @brief Activate the saved view mode
      *

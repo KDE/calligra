@@ -21,6 +21,7 @@
 #define KPRVIEWMODEPRESENTERVIEW_H
 
 #include "KPrViewModePresentation.h"
+#include "KPrAnimationDirector.h"
 
 class KoPAView;
 class KoPACanvas;
@@ -30,7 +31,6 @@ class KoPAViewMode;
 class KPrPresenterViewWidget;
 class KPrPresentationCanvas;
 class KPrPresenterViewTool;
-class KPrAnimationDirector;
 
 class KPrViewModePresenterView : public KPrViewModePresentation
 {
@@ -49,6 +49,9 @@ public:
 
     void activate(KoPAViewMode *previousViewMode);
     void deactivate();
+
+    /// reimplemented
+    void updateActivePage( KoPAPageBase *page );
 
 private:
     KPrPresenterViewWidget *m_presenterViewWidget;

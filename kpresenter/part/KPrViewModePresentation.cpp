@@ -28,6 +28,7 @@
 
 #include <KoPointerEvent.h>
 #include <KoCanvasController.h>
+#include <KoPageApp.h>
 #include <KoPACanvas.h>
 #include <KoPADocument.h>
 #include <KoPAView.h>
@@ -181,6 +182,11 @@ void KPrViewModePresentation::deactivate()
         m_presenterViewTool->deactivate();
         m_presenterViewTool = 0;
     }
+}
+
+void KPrViewModePresentation::updateActivePage( KoPAPageBase *page )
+{
+    m_view->setActivePage( page );
 }
 
 void KPrViewModePresentation::activateSavedViewMode()

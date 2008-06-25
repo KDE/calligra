@@ -27,6 +27,7 @@
 #include <KoShapeManager.h>
 #include <KoShapeManagerPaintingStrategy.h>
 #include <KoViewConverter.h>
+#include <KoPAViewMode.h>
 #include <KoPACanvas.h>
 #include <KoPAPageBase.h>
 #include <KoPAView.h>
@@ -186,7 +187,7 @@ QPair<KPrShapeAnimation *, KPrAnimationData *> KPrAnimationDirector::shapeAnimat
 
 void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
 {
-    m_view->setActivePage( page );
+    m_view->viewMode()->updateActivePage( page );
     // it can be that the pages have different sizes. So we need to recalulate
     // the zoom when we change the page
     updateZoom( m_canvas->size() );
