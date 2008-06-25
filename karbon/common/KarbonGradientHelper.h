@@ -38,6 +38,10 @@ public:
     static KoShapeBackground * applyFillGradientStops( KoShape * shape, const QGradientStops &stops );
     static QBrush applyStrokeGradientStops( KoShape * shape, const QGradientStops &stops );
     static QBrush applyGradientStops( KoShape * shape, const QGradientStops &stops, bool fillGradient );
+    /// creates default gradient for given size
+    static QGradient * defaultGradient( const QSizeF &size, QGradient::Type type, QGradient::Spread spread, const QGradientStops &stops );
+    /// Converts gradient type, preserving as much data as possible
+    static QGradient * convertGradient( const QGradient * gradient, QGradient::Type newType );
 };
 
 #endif // KARBONGRADIENTHELPER_H

@@ -71,16 +71,10 @@ public:
     ~KarbonGradientTabWidget();
 
     /**
-     * Returns the actual selected gradient.
-     * @return the actual gradient
-     */
-    const QGradient* gradient();
-
-    /**
      * Sets a new gradient to edit.
      * @param gradient the gradient to edit
      */
-    void setGradient( const QGradient* gradient );
+    void setGradient( const QGradient & gradient );
 
     /// Returns the gradient target (fill/stroke)
     GradientTarget target();
@@ -96,6 +90,24 @@ public:
 
     /// Sets the index of the stop to edit
     void setStopIndex( int index );
+
+    /// Returns the gradient spread
+    QGradient::Spread spread() const;
+
+    /// Sets the gradient spread
+    void setSpread( QGradient::Spread spread );
+
+    /// Returns the gradient type
+    QGradient::Type type() const;
+
+    /// Sets the gradient type
+    void setType( QGradient::Type type );
+
+    /// Returns the gradient stops
+    QGradientStops stops() const;
+
+    /// Sets the gradient stops
+    void setStops( const QGradientStops &stops );
 
 Q_SIGNALS:
     /// Is emmited a soon as the gradient changes
@@ -126,10 +138,12 @@ private:
     KoSliderCombo * m_opacity;
     KColorButton * m_stopColor;
     KoSliderCombo * m_stopOpacity;
-    QGradient * m_gradient; /// the actual edited gradient
     double m_gradOpacity;    ///< the gradient opacity
     int m_stopIndex; ///< the index of the selected gradient stop
     KoCheckerBoardPainter m_checkerPainter;
+    QGradient::Type m_type;
+    QGradient::Spread m_spread;
+    QGradientStops m_stops;
 };
 
 #endif // KARBONGRADIENTTABWIDGET_H

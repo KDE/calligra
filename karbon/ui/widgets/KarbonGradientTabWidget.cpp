@@ -157,13 +157,13 @@ void transferGradientPosition( const QGradient * srcGradient, QGradient * dstGra
 }
 
 KarbonGradientTabWidget::KarbonGradientTabWidget( QWidget* parent )
-    : QTabWidget( parent ), m_gradient( 0 )
+    : QTabWidget( parent )
     , m_gradOpacity( 1.0 ), m_stopIndex(-1), m_checkerPainter( 4 )
+        , m_type( QGradient::LinearGradient ), m_spread( QGradient::PadSpread )
 {
     // create a default gradient
-    m_gradient = new QLinearGradient( QPointF(0,0), QPointF(100,100) );
-    m_gradient->setColorAt( 0.0, Qt::white );
-    m_gradient->setColorAt( 1.0, Qt::green );
+    m_stops.append( QGradientStop( 0.0, Qt::white ) );
+    m_stops.append( QGradientStop( 1.0, Qt::green ) );
 
     setupUI();
     setupConnections();
@@ -172,7 +172,6 @@ KarbonGradientTabWidget::KarbonGradientTabWidget( QWidget* parent )
 
 KarbonGradientTabWidget::~KarbonGradientTabWidget()
 {
-    delete m_gradient;
 }
 
 void KarbonGradientTabWidget::setupUI()
@@ -203,7 +202,7 @@ void KarbonGradientTabWidget::setupUI()
     editLayout->addWidget( m_gradientTarget, row, 1 );
 
     m_gradientWidget = new KarbonGradientWidget( m_editTab );
-    m_gradientWidget->setStops( m_gradient->stops() );
+    m_gradientWidget->setStops( m_stops );
     editLayout->addWidget( m_gradientWidget, ++row, 0, 1, 2 );
 
     editLayout->addWidget( new QLabel( i18n( "Overall opacity:" ), m_editTab ), ++row, 0 );
@@ -269,16 +268,15 @@ void KarbonGradientTabWidget::updateUI()
 {
     blockChildSignals( true );
 
-    m_gradientType->setCurrentIndex( m_gradient->type() );
-    m_gradientRepeat->setCurrentIndex( m_gradient->spread() );
+    m_gradientType->setCurrentIndex( m_type );
+    m_gradientRepeat->setCurrentIndex( m_spread );
 
-    QGradientStops stops = m_gradient->stops();
-    uint stopCount = stops.count();
-    qreal opacity = stops[0].second.alphaF();
+    uint stopCount = m_stops.count();
+    qreal opacity = m_stops[0].second.alphaF();
     bool equalOpacity = true;
     for( uint i = 1; i < stopCount; ++i )
     {
-        if( opacity != stops[i].second.alphaF() )
+        if( opacity != m_stops[i].second.alphaF() )
         {
             equalOpacity = false;
             break;
@@ -288,12 +286,12 @@ void KarbonGradientTabWidget::updateUI()
         m_opacity->setValue( opacity * 100 );
     else
         m_opacity->setValue( 100 );
-    m_gradientWidget->setStops( m_gradient->stops() );
+    m_gradientWidget->setStops( m_stops );
 
     // now update the stop color and opacity
-    if( m_stopIndex >= 0 && m_stopIndex < m_gradient->stops().count() )
+    if( m_stopIndex >= 0 && m_stopIndex < m_stops.count() )
     {
-        QColor c = m_gradient->stops()[m_stopIndex].second;
+        QColor c = m_stops[m_stopIndex].second;
         m_stopColor->setColor( c );
         m_stopColor->setEnabled( true );
         m_stopOpacity->setValue( c.alphaF() * 100 );
@@ -328,15 +326,11 @@ void KarbonGradientTabWidget::setStopIndex( int index )
     updateUI();
 }
 
-const QGradient * KarbonGradientTabWidget::gradient()
+void KarbonGradientTabWidget::setGradient( const QGradient & gradient )
 {
-    return m_gradient;
-}
-
-void KarbonGradientTabWidget::setGradient( const QGradient* gradient )
-{
-    delete m_gradient;
-    m_gradient = KarbonGradientHelper::cloneGradient( gradient );
+    m_stops = gradient.stops();
+    m_type = gradient.type();
+    m_spread = gradient.spread();
 
     updateUI();
 }
@@ -351,69 +345,43 @@ void KarbonGradientTabWidget::setTarget( GradientTarget target )
     m_gradientTarget->setCurrentIndex( target );
 }
 
+QGradient::Spread KarbonGradientTabWidget::spread() const
+{
+    return m_spread;
+}
+
+void KarbonGradientTabWidget::setSpread( QGradient::Spread spread )
+{
+    m_spread = spread;
+    updateUI();
+}
+
+QGradient::Type KarbonGradientTabWidget::type() const
+{
+    return m_type;
+}
+
+void KarbonGradientTabWidget::setType( QGradient::Type type )
+{
+    m_type = type;
+    updateUI();
+}
+
+QGradientStops KarbonGradientTabWidget::stops() const
+{
+    return m_stops;
+}
+
+void KarbonGradientTabWidget::setStops( const QGradientStops &stops )
+{
+    m_stops = stops;
+    updateUI();
+}
+
 void KarbonGradientTabWidget::combosChange( int )
 {
-    QGradient * newGradient = 0;
-
-    QPointF start, stop;
-    // try to preserve gradient positions
-    switch( m_gradient->type() )
-    {
-        case QGradient::LinearGradient:
-        {
-            QLinearGradient * g = static_cast<QLinearGradient*>( m_gradient );
-            start = g->start();
-            stop = g->finalStop();
-            break;
-        }
-        case QGradient::RadialGradient:
-        {
-            QRadialGradient * g = static_cast<QRadialGradient*>( m_gradient );
-            start = g->center();
-            stop = QPointF( g->radius(), 0.0 );
-            break;
-        }
-        case QGradient::ConicalGradient:
-        {
-            QConicalGradient * g = static_cast<QConicalGradient*>( m_gradient );
-            start = g->center();
-            double radAngle = g->angle()*M_PI/180.0;
-            stop = QPointF( 50.0 * cos( radAngle), 50.*sin( radAngle ) );
-            break;
-        }
-        default:
-            start = QPointF( 0.0, 0.0 );
-            stop = QPointF( 50.0, 50.0 );
-    }
-
-    switch( m_gradientType->currentIndex() )
-    {
-        case QGradient::LinearGradient:
-            newGradient = new QLinearGradient( start, stop );
-            break;
-        case QGradient::RadialGradient:
-        {
-            QPointF diff = stop-start;
-            double radius = sqrt( diff.x()*diff.x() + diff.y()*diff.y() );
-            newGradient = new QRadialGradient( start, radius, start );
-            break;
-        }
-        case QGradient::ConicalGradient:
-        {
-            QPointF diff = stop-start;
-            double angle = atan2( diff.y(), diff.x() );
-            if( angle < 0.0 )
-                angle += 2*M_PI;
-            newGradient = new QConicalGradient( start, angle*180/M_PI );
-            break;
-        }
-        default:
-            return;
-    }
-    newGradient->setSpread( (QGradient::Spread)m_gradientRepeat->currentIndex() );
-    newGradient->setStops( m_gradient->stops() );
-    delete m_gradient;
-    m_gradient = newGradient;
+    m_type = static_cast<QGradient::Type>( m_gradientType->currentIndex() );
+    m_spread = static_cast<QGradient::Spread>( m_gradientRepeat->currentIndex() );
 
     emit changed();
 }
@@ -424,13 +392,11 @@ void KarbonGradientTabWidget::opacityChanged( double value, bool final )
 
     m_gradOpacity = value / 100.0;
 
-    QGradientStops stops = m_gradient->stops();
-    uint stopCount = stops.count();
+    uint stopCount = m_stops.count();
     for( uint i = 0; i < stopCount; ++i )
-        stops[i].second.setAlphaF( m_gradOpacity );
-    m_gradient->setStops( stops );
+        m_stops[i].second.setAlphaF( m_gradOpacity );
 
-    m_gradientWidget->setStops( stops );
+    m_gradientWidget->setStops( m_stops );
 
     emit changed();
 }
@@ -449,7 +415,26 @@ void KarbonGradientTabWidget::addGradientToPredefs()
     }
     while( fileInfo.exists() );
 
-    KoStopGradient * g = KoStopGradient::fromQGradient( m_gradient );
+    QGradient * gradient = 0;
+    switch( m_type )
+    {
+        case QGradient::LinearGradient:
+            gradient = new QLinearGradient();
+            break;
+        case QGradient::RadialGradient:
+            gradient = new QRadialGradient();
+            break;
+        case QGradient::ConicalGradient:
+            gradient = new QConicalGradient();
+            break;
+        default:
+            // should not happen
+            return;
+    }
+    gradient->setSpread( m_spread );
+    gradient->setStops( m_stops );
+    KoStopGradient * g = KoStopGradient::fromQGradient( gradient );
+    delete gradient;
     if( ! g )
         return;
     g->setFilename( fileInfo.filePath() );
@@ -469,20 +454,19 @@ void KarbonGradientTabWidget::changeToPredef( QTableWidgetItem * item )
         return;
 
     QGradient * newGradient = gradientItem->gradient()->toQGradient();
-    if( m_gradient )
+    if( newGradient )
     {
-        m_gradient->setStops( newGradient->stops() );
+        m_type = newGradient->type();
+        m_spread = newGradient->spread();
+        m_stops = newGradient->stops();
         delete newGradient;
     }
-    else
-    {
-        m_gradient = newGradient;
-    }
+
     blockChildSignals( true );
-    m_gradientType->setCurrentIndex( m_gradient->type() );
-    m_gradientRepeat->setCurrentIndex( m_gradient->spread() );
+    m_gradientType->setCurrentIndex( m_type );
+    m_gradientRepeat->setCurrentIndex( m_spread );
     m_opacity->setValue( 100 );
-    m_gradientWidget->setStops( m_gradient->stops() );
+    m_gradientWidget->setStops( m_stops );
     blockChildSignals( false );
     setCurrentWidget( m_editTab );
     emit changed();
@@ -490,7 +474,7 @@ void KarbonGradientTabWidget::changeToPredef( QTableWidgetItem * item )
 
 void KarbonGradientTabWidget::stopsChanged()
 {
-    m_gradient->setStops( m_gradientWidget->stops() );
+    m_stops = m_gradientWidget->stops();
     emit changed();
 }
 
@@ -498,11 +482,9 @@ void KarbonGradientTabWidget::stopChanged()
 {
     QColor c = m_stopColor->color();
     c.setAlphaF( m_stopOpacity->value() / 100.0 );
-    QGradientStops stops = m_gradient->stops();
-    if( m_stopIndex >= 0 && m_stopIndex < stops.count() )
+    if( m_stopIndex >= 0 && m_stopIndex < m_stops.count() )
     {
-        stops[m_stopIndex].second = c;
-        m_gradient->setStops( stops );
+        m_stops[m_stopIndex].second = c;
         emit changed();
     }
 }

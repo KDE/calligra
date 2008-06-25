@@ -62,7 +62,7 @@ private Q_SLOTS:
     void gradientChanged();
 private:
     QGradient * m_gradient;
-    QMultiMap<KoShape*,GradientStrategy*> m_gradients; ///< the list of gradient strategies
+    QMultiMap<KoShape*,GradientStrategy*> m_strategies; ///< the list of gradient strategies
     GradientStrategy * m_currentStrategy;  ///< the current editing strategy
     GradientStrategy * m_hoverStrategy; ///< the strategy the mouse hovers over
     KarbonGradientTabWidget * m_gradientWidget;
