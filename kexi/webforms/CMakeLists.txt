@@ -24,8 +24,8 @@ set(webforms_SRCS
   Delete.cpp
 )
 
-kde4_add_executable(kwebforms ${webforms_SRCS})
-target_link_libraries(kwebforms shttpd ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS}
+kde4_add_executable(kwebforms NOGUI ${webforms_SRCS})
+target_link_libraries(kwebforms kexi_shttpd ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS}
   ${GOOGLE_CTEMPLATE_THREAD_LIB}
   kexidb kexicore keximain
 )
