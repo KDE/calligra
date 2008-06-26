@@ -60,7 +60,6 @@ KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, Ko
       //m_textStyleNumber( 1 ), m_paragraphStyleNumber( 1 ), m_listStyleNumber( 1 ),
       m_currentListDepth( -1 ), m_currentListID( 0 ), m_currentStyle( 0L ),/* m_index( 0 ),*/
       m_currentTable( 0L ), m_writingHeader(false), m_writeMasterStyleName(false),
-      m_bStartNewPage(false),
       m_insideField( false ), m_fieldAfterSeparator( false ), m_fieldType( 0 )
 {
     if(bodyWriter) {
@@ -79,44 +78,41 @@ KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, Ko
 
 //increment m_sectionNumber
 //emit firstSectionFound or check for pagebreak
-void KWordTextHandler::sectionStart( wvWare::SharedPtr<const wvWare::Word97::SEP> sep )
+void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
     kDebug(30513);
     m_sectionNumber++;
 
+    //store sep for section end
+    m_sep = sep;
+
     if ( m_sectionNumber == 1 )
     {
-        // KWord doesn't support a different paper format per section.
-        // So we use the paper format of the first section,
-        // and we apply it to the whole document.
-        emit firstSectionFound( sep );
+        emit firstSectionFound(sep);
     }
     else
     {
         // Not the first section. Check for a page break
         if ( sep->bkc >= 1 ) // 1=new column, 2=new page, 3=even page, 4=odd page
         {
-            //pageBreak();
-	    //TODO I don't know how to implement this yet
-	    m_bStartNewPage = true; //tell us to start new page on next element we write
-	    kDebug(30513) << "b_StartNewPage = true";
         }
     }
 }
 
 void KWordTextHandler::sectionEnd()
 {
-    kDebug(30513) ;
+    kDebug(30513);
+    if(m_sectionNumber == 1) {
+	emit firstSectionEnd(m_sep);
+    }
 }
 
 //signal that there's another subDoc to parse
 void KWordTextHandler::headersFound( const wvWare::HeaderFunctor& parseHeaders )
 {
     kDebug(30513) ;
-    // Currently we only care about headers in the first section
-    if ( m_sectionNumber == 1 )
-    {
-        emit subDocFound( new wvWare::HeaderFunctor( parseHeaders ), 0 );
+    if(m_sectionNumber == 1) {
+        emit headersFound( new wvWare::HeaderFunctor( parseHeaders ), 0 );
     }
 }
 
@@ -860,8 +856,13 @@ void KWordTextHandler::writeLayout(const wvWare::ParagraphProperties& paragraphP
 	if ( !listInfo )
 	{
 	    kWarning() << "pap.ilfo is non-zero but there's no listInfo!";
+	    kDebug(30513) << "found heading? style->sti() = " << style->sti();
+	    if(writeContentTags) {
+		writer->startElement("text:h"); //this element will be closed in paragraphEnd(), since no <text:p> tag is opened
+		writer->addAttribute("text:outline-level", pap.ilvl + 1);
+	    }
 	}
-	if(listInfo->lsid() == 1 && listInfo->numberFormat() == 255) { //we found a heading instead of a list
+	else if(listInfo->lsid() == 1 && listInfo->numberFormat() == 255) { //we found a heading instead of a list
 	    //TODO look at style->sti()
 	    kDebug(30513) << "found heading: style->sti() = " << style->sti();
 	    if(writeContentTags) {
@@ -911,7 +912,9 @@ void KWordTextHandler::writeLayout(const wvWare::ParagraphProperties& paragraphP
 	paragraphStyle->setAutoStyleInStylesDotXml(true);
     }
     //check to see if we need a master page name attribute
-    if(m_writeMasterStyleName && writeContentTags) {
+    //-not if we're processing a style with no text content, or if we're just
+    //writing a header
+    if(m_writeMasterStyleName && writeContentTags && !m_writingHeader) {
 	paragraphStyle->addAttribute("style:master-page-name", m_masterStyleName);
 	m_writeMasterStyleName = false;
     }

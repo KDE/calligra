@@ -47,11 +47,12 @@
 Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles, KoXmlWriter* metaWriter )
     : m_replacementHandler( new KWordReplacementHandler ), m_tableHandler( new KWordTableHandler ),
       m_pictureHandler( new KWordPictureHandler( this ) ), m_textHandler( 0 ), m_headerCount(0),
-      m_chain( chain ), m_currentListDepth( -1 ), m_evenOpen( false ), m_oddOpen( false ),
+      m_hasHeader(false), m_hasFooter(false),
+      m_chain( chain ), m_currentListDepth( -1 ), m_evenOpen( false ), m_oddOpen( false ), m_pageLayoutStyle(0),
       m_parser( wvWare::ParserFactory::createParser( fileName ) )/*, m_headerFooters( 0 ), m_bodyFound( false ),
       m_footNoteNumber( 0 ), m_endNoteNumber( 0 )*/
 {
-    kDebug(30513) ;
+    kDebug(30513);
     if ( m_parser ) // 0 in case of major error (e.g. unsupported format)
     {
 	m_bodyWriter = bodyWriter; //pointer for writing to the body
@@ -66,6 +67,8 @@ Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWrit
                  this, SLOT( slotSubDocFound( const wvWare::FunctorBase*, int ) ) );
         connect( m_textHandler, SIGNAL( footnoteFound( const wvWare::FunctorBase*, int ) ),
                  this, SLOT( slotFootnoteFound( const wvWare::FunctorBase*, int ) ) );
+        connect( m_textHandler, SIGNAL( headersFound( const wvWare::FunctorBase*, int ) ),
+                 this, SLOT( slotHeadersFound( const wvWare::FunctorBase*, int ) ) );
         connect( m_textHandler, SIGNAL( tableFound( const KWord::Table& ) ),
                  this, SLOT( slotTableFound( const KWord::Table& ) ) );
         connect( m_textHandler, SIGNAL( pictureFound( const QString&, const QString&, const wvWare::FunctorBase* ) ),
@@ -205,49 +208,9 @@ void Document::processStyles()
 {
     kDebug(30513) ;
 
-    //need to add master style to m_mainStyle
-    kDebug(30513) << "adding master style to main styles collection";
-    m_masterStyleName = m_mainStyles->lookup(*m_masterStyle, "Standard");
-    delete m_masterStyle; //delete the object since we've added it to the collection
-    //set master style name in m_textHandler because that's where we'll write it
-    m_textHandler->m_masterStyleName = m_masterStyleName;
-    //get a pointer to the object in the collection
-    m_masterStyle = m_mainStyles->styleForModification(m_masterStyleName);
-    m_textHandler->m_writeMasterStyleName = true;
-
-    //m_textHandler->setFrameSetElement( stylesElem ); /// ### naming!
     const wvWare::StyleSheet& styles = m_parser->styleSheet();
     unsigned int count = styles.size();
     kDebug(30513) <<"styles count=" << count;
-
-    //create page layout style here
-    KoGenStyle style(KoGenStyle::StylePageLayout);
-
-    //just dummy hard-coded values
-    style.addProperty("fo:page-width", "8.5in");
-    style.addProperty("fo:page-height", "11in");
-    style.addProperty("style:footnote-max-height", "0in");
-    style.addProperty("style:writing-mode", "lr-tb");
-    style.addProperty("style:print-orientation", "portrait");
-    style.addProperty("style:num-format", "1");
-    style.addProperty("fo:margin-top", "1in");
-    style.addProperty("fo:margin-bottom", "1in");
-    style.addProperty("fo:margin-left", "1in");
-    style.addProperty("fo:margin-right", "1in");
-    QString header("<style:header-style>");
-    header.append("<style:header-footer-properties fo:min-height=\"0.5in\" fo:margin-bottom=\"0.461in\" style:dynamic-spacing=\"true\" />");
-    header.append("</style:header-style>");
-    QString footer("<style:footer-style>");
-    footer.append("<style:header-footer-properties fo:min-height=\"0.5in\" fo:margin-top=\"0.461in\" style:dynamic-spacing=\"true\" />");
-    footer.append("</style:footer-style>");
-    style.addProperty("1header-style", header, KoGenStyle::StyleChildElement);
-    style.addProperty("2footer-style", footer, KoGenStyle::StyleChildElement);
-    style.setAutoStyleInStylesDotXml(true);
-
-    //insert the style into the collection, and get the name it's assigned
-    QString pageLayoutName = m_mainStyles->lookup(style, QString("pm"));
-    //set the page-layout-name in the master style
-    m_masterStyle->addAttribute("style:page-layout-name", pageLayoutName);
 
     //loop through each style
     for ( unsigned int i = 0; i < count ; ++i )
@@ -306,22 +269,13 @@ bool Document::parse()
 //connects firstSectionFound signal & slot together; sets flag to true
 void Document::bodyStart()
 {
-
-    //QDomElement mainFramesetElement = m_mainDocument.createElement("FRAMESET");
-    //mainFramesetElement.setAttribute("frameType",1);
-    //mainFramesetElement.setAttribute("frameInfo",0);
-    // TODO: "name" attribute (needs I18N)
-    //m_framesetsElement.appendChild(mainFramesetElement);
-
-    // Those values are unused. The paper margins make recalcFrames() resize this frame.
-    //createInitialFrame( mainFramesetElement, 29, 798, 42, 566, false, Reconnect );
-
-    //m_textHandler->setFrameSetElement( mainFramesetElement );
-    kDebug(30513) << "connecting firstSectionFound signal & updateListDepth signal";
-    connect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
-             this, SLOT( slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ) );
-    connect( m_textHandler, SIGNAL( updateListDepth( int ) ),
-	     this, SLOT( slotUpdateListDepth( int ) ) );
+    kDebug(30513);
+    connect( m_textHandler, SIGNAL(firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP>)),
+             this, SLOT(slotFirstSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
+    connect( m_textHandler, SIGNAL(firstSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
+             this, SLOT(slotFirstSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
+    connect( m_textHandler, SIGNAL(updateListDepth( int ) ),
+	     this, SLOT(slotUpdateListDepth( int ) ) );
     m_bodyFound = true;
 }
 
@@ -359,41 +313,87 @@ void Document::bodyEnd()
 void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> sep )
 {
     kDebug(30513) ;
-    //QDomElement elementDoc = m_mainDocument.documentElement();
+    //need to add master style to m_mainStyle
+    kDebug(30513) << "adding master style to main styles collection";
+    m_masterStyleName = m_mainStyles->lookup(*m_masterStyle, "Standard");
+    delete m_masterStyle; //delete the object since we've added it to the collection
+    //set master style name in m_textHandler because that's where we'll write it
+    m_textHandler->m_masterStyleName = m_masterStyleName;
+    //get a pointer to the object in the collection
+    m_masterStyle = m_mainStyles->styleForModification(m_masterStyleName);
+    m_textHandler->m_writeMasterStyleName = true;
 
-    //set the paper size and orientation!
-    bool landscape = (sep->dmOrientPage == 2);
+    //create page layout style here
+    m_pageLayoutStyle = new KoGenStyle(KoGenStyle::StylePageLayout);
+
+    //get width & height in points
     double width = (double)sep->xaPage / 20.0;
     double height = (double)sep->yaPage / 20.0;
+    m_pageLayoutStyle->addPropertyPt("fo:page-width", width);
+    m_pageLayoutStyle->addPropertyPt("fo:page-height", height);
+    m_pageLayoutStyle->addProperty("style:footnote-max-height", "0in");
+    m_pageLayoutStyle->addProperty("style:writing-mode", "lr-tb");
+    bool landscape = (sep->dmOrientPage == 2);
+    m_pageLayoutStyle->addProperty("style:print-orientation", landscape? "landscape" : "portrait");
+    m_pageLayoutStyle->addProperty("style:num-format", "1");
+    m_pageLayoutStyle->addPropertyPt("fo:margin-left", (double)sep->dxaLeft / 20.0);
+    m_pageLayoutStyle->addPropertyPt("fo:margin-right", (double)sep->dxaRight / 20.0);
+    QString header("<style:header-style>");
+    //set the minimum height of header/footer to the full margin minus margin above header
+    //TODO the margin between header/footer and text is just hard-coded for now
+    header.append("<style:header-footer-properties fo:margin-bottom=\"20pt\" fo:min-height=\"");
+    header.append(QString::number((sep->dyaTop - sep->dyaHdrTop)/20.0));
+    header.append("pt\"/>");
+    header.append("</style:header-style>");
+    QString footer("<style:footer-style>");
+    footer.append("<style:header-footer-properties fo:margin-top=\"20pt\" fo:min-height=\"");
+    footer.append(QString::number((sep->dyaBottom - sep->dyaHdrBottom)/20.0));
+    footer.append("pt\"/>");
+    footer.append("</style:footer-style>");
+    m_pageLayoutStyle->addProperty("1header-style", header, KoGenStyle::StyleChildElement);
+    m_pageLayoutStyle->addProperty("2footer-style", footer, KoGenStyle::StyleChildElement);
+    m_pageLayoutStyle->setAutoStyleInStylesDotXml(true);
 
-    // guessFormat takes millimeters
-    width = POINT_TO_MM( width );
-    height = POINT_TO_MM( height );
-    KoPageFormat::Format  paperFormat = KoPageFormat::guessFormat( landscape ? height : width, landscape ? width : height );
-    //elementPaper.setAttribute("format",paperFormat);
+    //dyaHdrTop = y position of top header measured from top of page (twips)
+    //dyaHdrBottom = y position of bottom header measured from top of page (twips)
+    kDebug(30513) << "dyaHdrTop = " << sep->dyaHdrTop << ", dyaHdrBottom = " << sep->dyaHdrBottom;
+    kDebug(30513) << "dyaTop = " << sep->dyaTop << ", dyaBottom = " << sep->dyaBottom;
 
-    //set up columns
-    //sep->dyaHdrTop/Bottom
-
-    //elementPaper.setAttribute("orientation", landscape ? KoPageFormat::Landscape : KoPageFormat::Portrait );
-    //elementPaper.setAttribute("columns", sep->ccolM1 + 1 );
-    //elementPaper.setAttribute("columnspacing", (double)sep->dxaColumns / 20.0);
-    //elementPaper.setAttribute("spHeadBody", (double)sep->dyaHdrTop / 20.0);
-    //elementPaper.setAttribute("spFootBody", (double)sep->dyaHdrBottom / 20.0);
-    // elementPaper.setAttribute("zoom",100); // not a doc property in kword
-    //elementDoc.appendChild(elementPaper);
-
-    //page margins
-
-    //QDomElement element = m_mainDocument.createElement("PAPERBORDERS");
-    //element.setAttribute("left", (double)sep->dxaLeft / 20.0);
-    //element.setAttribute("top",(double)sep->dyaTop / 20.0);
-    //element.setAttribute("right", (double)sep->dxaRight / 20.0);
-    //element.setAttribute("bottom", (double)sep->dyaBottom / 20.0);
-    //elementPaper.appendChild(element);
+    //ccolM1 = number of columns in section
+    //dxaColumns = distance that will be maintained between columns
 
     // TODO apply brcTop/brcLeft etc. to the main FRAME
     // TODO use sep->fEndNote to set the 'use endnotes or footnotes' flag
+}
+
+void Document::slotFirstSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
+{
+    kDebug(30513);
+    //set the margins - depends on whether a header/footer is present
+    if(m_hasHeader) {
+	kDebug(30513) << "setting margin for header...";
+	m_pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaHdrTop / 20.0);
+    }
+    else {
+	kDebug(30513) << "setting margin for no header...";
+	m_pageLayoutStyle->addPropertyPt("fo:margin-top", (double)sep->dyaTop / 20.0);
+    }
+    if(m_hasFooter) {
+	m_pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaHdrBottom / 20.0);
+    }
+    else {
+	m_pageLayoutStyle->addPropertyPt("fo:margin-bottom", (double)sep->dyaBottom / 20.0);
+    }
+    //insert the page-layout style into the collection,
+    //and get the name it's assigned
+    QString pageLayoutName = m_mainStyles->lookup(*m_pageLayoutStyle, QString("pm"));
+    //set the page-layout-name in the master style
+    m_masterStyle->addAttribute("style:page-layout-name", pageLayoutName);
+    delete m_pageLayoutStyle;
+    m_pageLayoutStyle = 0;
+    //reset variables
+    m_hasHeader = false;
+    m_hasFooter = false;
 }
 
 //creates a frameset element with the header info
@@ -419,6 +419,7 @@ void Document::headerStart( wvWare::HeaderData::Type type )
 	m_writer = new KoXmlWriter(m_buffer);
 	m_oddOpen = true;
 	m_writer->startElement("style:header");
+	m_hasHeader = true;
 	break;
     case wvWare::HeaderData::HeaderEven:
 	//write to the buffer for even headers/footers
@@ -427,6 +428,7 @@ void Document::headerStart( wvWare::HeaderData::Type type )
 	m_writer = new KoXmlWriter(m_bufferEven);
 	m_evenOpen = true;
 	m_writer->startElement("style:header-left");
+	m_hasHeader = true;
 	break;
     //TODO fix first footer
     case wvWare::HeaderData::FooterFirst:
@@ -441,6 +443,7 @@ void Document::headerStart( wvWare::HeaderData::Type type )
 	m_writer = new KoXmlWriter(m_buffer);
 	m_oddOpen = true;
 	m_writer->startElement("style:footer");
+	m_hasFooter = true;
 	break;
     case wvWare::HeaderData::FooterEven:
 	//write to the buffer for even headers/footers
@@ -449,6 +452,7 @@ void Document::headerStart( wvWare::HeaderData::Type type )
 	m_writer = new KoXmlWriter(m_bufferEven);
 	m_evenOpen = true;
 	m_writer->startElement("style:footer-left");
+	m_hasFooter = true;
 	break;
     }
 
@@ -511,41 +515,14 @@ void Document::headerEnd()
     m_textHandler->m_writingHeader = false;
 }
 
-//get text of the footnote
-//set information about the footnote/endnote
-//increment the number of footnotes/endnotes
 void Document::footnoteStart()
 {
     kDebug(30513) ;
-
-    //this stuff should all be handled in texthandler.cpp, I think
-
-    // Grab data that was stored with the functor, that triggered this parsing
-    //SubDocument subdoc( m_subdocQueue.front() );
-    //int type = subdoc.data;
-
-    // Create footnote/endnote frameset
-    //QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
-    //framesetElement.setAttribute( "frameType", 1 /* text */ );
-    //framesetElement.setAttribute( "frameInfo", 7 /* footnote/endnote */ );
-    //if ( type == wvWare::FootnoteData::Endnote )
-        // Keep name in sync with KWordTextHandler::footnoteFound
-        //framesetElement.setAttribute("name", i18n("Endnote %1", ++m_endNoteNumber ) );
-    //else
-        // Keep name in sync with KWordTextHandler::footnoteFound
-        //framesetElement.setAttribute("name", i18n("Footnote %1", ++m_footNoteNumber ) );
-    //m_framesetsElement.appendChild(framesetElement);
-
-    //createInitialFrame( framesetElement, 29, 798, 567, 567+41, true, NoFollowup );
-
-    //m_textHandler->setFrameSetElement( framesetElement );
 }
 
-//add empty frameset element to end it?
 void Document::footnoteEnd()
 {
     kDebug(30513);
-    //m_textHandler->setFrameSetElement( QDomElement() );
 }
 
 void Document::slotUpdateListDepth( int depth )
@@ -583,21 +560,6 @@ void Document::slotTableCellEnd()
     kDebug(30513) ;
     //m_textHandler->setFrameSetElement( QDomElement() );
 }
-
-/*QDomElement Document::createInitialFrame( QDomElement& parentFramesetElem, double left, double right, double top, double bottom, bool autoExtend, NewFrameBehavior nfb )
-{
-    QDomElement frameElementOut = parentFramesetElem.ownerDocument().createElement("FRAME");
-    frameElementOut.setAttribute( "left", left );
-    frameElementOut.setAttribute( "right", right );
-    frameElementOut.setAttribute( "top", top );
-    frameElementOut.setAttribute( "bottom", bottom );
-    frameElementOut.setAttribute( "runaround", 1 );
-    // AutoExtendFrame for header/footer/footnote/endnote, AutoCreateNewFrame for body text
-    frameElementOut.setAttribute( "autoCreateNewFrame", autoExtend ? 0 : 1 );
-    frameElementOut.setAttribute( "newFrameBehavior", nfb );
-    parentFramesetElem.appendChild( frameElementOut );
-    return frameElementOut;
-}*/
 
 //set up frame borders (like for a table cell?)
 //set the background fill
@@ -663,6 +625,14 @@ void Document::slotSubDocFound( const wvWare::FunctorBase* functor, int data )
 }
 
 void Document::slotFootnoteFound(const wvWare::FunctorBase* functor, int data)
+{
+    kDebug(30513) ;
+    SubDocument subdoc( functor, data, QString(), QString() );
+    (*subdoc.functorPtr)();
+    delete subdoc.functorPtr;
+}
+
+void Document::slotHeadersFound(const wvWare::FunctorBase* functor, int data)
 {
     kDebug(30513) ;
     SubDocument subdoc( functor, data, QString(), QString() );

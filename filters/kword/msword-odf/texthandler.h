@@ -103,9 +103,11 @@ public:
 
     // Communication with Document, without having to know about Document
 signals:
-    void firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> );
+    void firstSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>);
+    void firstSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>);
     void subDocFound( const wvWare::FunctorBase* parsingFunctor, int data );
     void footnoteFound( const wvWare::FunctorBase* parsingFunctor, int data );
+    void headersFound( const wvWare::FunctorBase* parsingFunctor, int data );
     void tableFound( const KWord::Table& table );
     void pictureFound( const QString& frameName, const QString& pictureName, const wvWare::FunctorBase* pictureFunctor );
     void updateListDepth( int );
@@ -130,6 +132,7 @@ private:
     // Current paragraph
     const wvWare::Style* m_currentStyle;
     wvWare::SharedPtr<const wvWare::ParagraphProperties> m_paragraphProperties;
+    wvWare::SharedPtr<const wvWare::Word97::SEP> m_sep; //store section info for section end
     enum { NoShadow, Shadow, Imprint } m_shadowTextFound;
     int m_index;
     QDomElement m_formats;
@@ -137,8 +140,6 @@ private:
 
     KWord::Table* m_currentTable;
     //bool m_bInParagraph;
-    //flag that tells us to start a new page
-    bool m_bStartNewPage;
 
     QString m_fieldValue;
     bool m_insideField;
