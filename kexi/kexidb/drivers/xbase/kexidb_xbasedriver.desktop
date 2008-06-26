@@ -2,6 +2,8 @@
 Name=xBase
 Name[x-test]=xxxBasexx
 Comment=Kexi database driver for accessing xBase database files
+Comment[it]=Driver per banche dati Kexi per accedere ai file di banche dati xBase
+Comment[uk]=Драйвер бази даних Kexi для доступу до файлів баз даних xBase
 X-KDE-Library=kexidb_xbasedriver
 X-KDE-ServiceTypes=Kexi/DBDriver
 Type=Service
