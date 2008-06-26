@@ -101,6 +101,7 @@
 #include <KoToolBox.h>
 #include <KoToolBoxFactory.h>
 #include <KoToolDocker.h>
+#include <KoDockerManager.h>
 #include <KoToolDockerFactory.h>
 #include <KoToolManager.h>
 #include <KoToolRegistry.h>
@@ -753,10 +754,10 @@ void View::initView()
     KoToolBoxFactory toolBoxFactory(d->canvasController, i18n("Tools"));
     createDockWidget( &toolBoxFactory );
 
-    // Setup the tool options dock widget.
-    KoToolDockerFactory toolDockerFactory;
-    KoToolDocker *td =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
-    connect(d->canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), td, SLOT(newOptionWidget(QWidget*)));
+    // Setup the tool options dock widget manager.
+    KoDockerManager *dockerManager = new KoDockerManager(this);
+    connect( d->canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ),
+             dockerManager, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
 
     // Setup the zoom controller.
     d->zoomHandler = new KoZoomHandler();

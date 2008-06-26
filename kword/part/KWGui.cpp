@@ -31,6 +31,7 @@
 #include <KoFlake.h>
 #include <KoSelection.h>
 #include <KoToolDocker.h>
+#include <KoDockerManager.h>
 #include <KoRuler.h>
 #include <KoToolBoxFactory.h>
 #include <KoToolDockerFactory.h>
@@ -68,9 +69,9 @@ KWGui::KWGui( const QString& viewMode, KWView *parent )
     KoToolBoxFactory toolBoxFactory(m_canvasController, "KWord");
     m_view->createDockWidget( &toolBoxFactory );
 
-    KoToolDockerFactory toolDockerFactory;
-    KoToolDocker *td =  dynamic_cast<KoToolDocker*>( m_view->createDockWidget( &toolDockerFactory ) );
-    connect(m_canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)), td, SLOT(newOptionWidget(QWidget*)));
+    KoDockerManager *dockerManager = new KoDockerManager(m_view);
+    connect(m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ),
+             dockerManager, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
 
     gridLayout->addWidget(m_horizontalRuler->tabChooser(), 0, 0);
     gridLayout->addWidget(m_horizontalRuler, 0, 1);

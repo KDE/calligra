@@ -96,6 +96,7 @@
 #include <KoParameterShape.h>
 #include <KoRulerController.h>
 #include <KoDockRegistry.h>
+#include <KoDockerManager.h>
 #include <KoShapeLayer.h>
 #include <KoColorBackground.h>
 
@@ -248,10 +249,9 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
         KarbonStylePreviewDockerFactory styleFactory;
         m_stylePreview = dynamic_cast<KarbonStylePreviewDocker*>( createDockWidget( &styleFactory ) );
 
-        KoToolDockerFactory toolDockerFactory;
-        KoToolDocker * toolDocker =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
-        connect(m_canvasController, SIGNAL(toolOptionWidgetChanged(QWidget*)),
-                toolDocker, SLOT(newOptionWidget(QWidget*)));
+        KoDockerManager *dockerManager = new KoDockerManager(this);
+        connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ),
+             dockerManager, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
 
         KoToolManager::instance()->requestToolActivation( m_canvasController );
 

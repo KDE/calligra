@@ -166,10 +166,12 @@ void ChartTool::activate( bool )
     foreach ( KoShape *shape, selection->selectedShapes() ) {
         d->shape = dynamic_cast<ChartShape*>( shape );
         if ( d->shape ) {
-            KoShapeConfigWidgetBase *widget = dynamic_cast<KoShapeConfigWidgetBase*>( optionWidget() );
-            Q_ASSERT( widget);
-            if ( widget )
-                widget->open( d->shape );
+            foreach (QWidget *w, optionWidgets().values()) {
+                KoShapeConfigWidgetBase *widget = dynamic_cast<KoShapeConfigWidgetBase*>(w);
+                Q_ASSERT(widget);
+                if (widget)
+                    widget->open(d->shape);
+            }
             break;
         }
     }
@@ -311,8 +313,8 @@ void ChartTool::setChartType( ChartType type, ChartSubtype subtype )
     d->shape->setChartSubType( subtype );
     d->shape->update();
     
-    if ( optionWidget() )
-        optionWidget()->update();
+    foreach (QWidget *w, optionWidgets().values())
+        w->update();
 }
 
 
@@ -515,7 +517,11 @@ void ChartTool::setLegendFixedPosition( LegendPosition position )
 {
     Q_ASSERT( d->shape );
     d->shape->legend()->setLegendPosition( position );
-    ( ( ChartConfigWidget* ) optionWidget() )->updateFixedPosition( position );
+
+    foreach (QWidget *w, optionWidgets().values()) {
+        ( ( ChartConfigWidget* ) w )->updateFixedPosition( position );
+    }
+
     d->shape->update();
 }
 

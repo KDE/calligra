@@ -63,6 +63,7 @@
 #include <KoViewAdaptor.h>
 #include <KoZoomAction.h>
 #include <KoZoomHandler.h>
+#include <KoDockerManager.h>
 #include <KoCanvasController.h>
 
 // KChart
@@ -162,9 +163,9 @@ KChartView::KChartView( KChartPart* part, QWidget* parent )
     KoToolManager::instance()->addController( m_canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), m_canvasController );
 
-    KoToolDockerFactory toolDockerFactory;
-    KoToolDocker *td =  dynamic_cast<KoToolDocker*>( createDockWidget( &toolDockerFactory ) );
-    connect( m_canvasController, SIGNAL( toolOptionWidgetChanged(QWidget* ) ), td, SLOT( newOptionWidget( QWidget* ) ) );
+    KoDockerManager *dockerManager = new KoDockerManager(this);
+    connect( m_canvasController, SIGNAL( toolOptionWidgetsChanged(const QMap<QString, QWidget *> &) ),
+             dockerManager, SLOT( newOptionWidgets(const  QMap<QString, QWidget *> &) ) );
 
     KoToolBoxFactory toolBoxFactory( m_canvasController, "KChart" );
     createDockWidget( &toolBoxFactory );
