@@ -18,34 +18,31 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIWEBFORMS_DATAPROVIDER_H
-#define KEXIWEBFORMS_DATAPROVIDER_H
+#ifndef KEXI_WEBFORMS_QUERY_H
+#define KEXI_WEBFORMS_QUERY_H
 
-#include <kexidb/connection.h>
-#include <core/kexiprojectdata.h>
-#include <core/kexiproject.h>
+#include "Handler.h"
 
-class QString;
+struct RequestData;
 
 namespace KexiWebForms {
     /*!
-     * Global connection object
+     * Simply show an HTML page containing a table displaying
+     * data in a given database table.
+     * This function uses the request URI to determine which
+     * table to read: ie /view/books will show contents of the table
+     * named 'books'
      *
-     * @fixme That's a bit awful, isn't it?
+     * @param RequestData a pointer to a RequestData structure
+     * @see KexiWebForms::RequestData
      */
-    extern KexiDB::Connection* gConnection;
-    extern KexiProjectData* gProjectData;
-    extern KexiProject* gProject;
-
-    /*!
-     * Essentially, initialize the KexiDB::Connection object
-     *
-     * @param const QString& Path to a KexiDB file, connection file
-     * shortcut file
-     *
-     * @return boolean false when error occurs, true if everything went well
-     */
-    bool initDatabase(const QString& fileName);
+    void queryCallback(RequestData*);
+    
+    class QueryHandler : public Handler {
+    public:
+        QueryHandler();
+        virtual ~QueryHandler() {}
+    };
 }
 
-#endif /* KEXIWEBFORMS_DATAPROVIDER_H */
+#endif /* KEXI_WEBFORMS_QUERY_H */

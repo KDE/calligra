@@ -6,13 +6,22 @@
 	      <div class="menu_box">
 		<a name="cp-menu" />
 		<div class="menutitle"><div>
-		  <h2 id="cp-menu-aboutkde">Table list</h2>
-		  <a href="#cp-skip-aboutkde" class="cp-doNotDisplay">Skip menu "Table List"</a>
+		  <h2 id="cp-menu-tables">Tables</h2>
+		  <a href="#cp-skip-tables" class="cp-doNotDisplay">Skip menu "Tables"</a>
 		</div></div>
 		<ul>
 		  {{TABLE_LIST}}
 		</ul>
-		<a name="cp-skip-aboutkde"/>
+		<a name="cp-skip-tables"/>
+
+        <div class="menutitle"><div>
+            <h2 id="cp-menu-queries">Queries</h2>
+            <a href="#cp-skip-queries" class="cp-doNotDisplay">Skip menu "Queries"</a>
+        </div></div>
+        <ul>
+            {{QUERY_LIST}}
+        </ul>
+        <a name="cp-skip-queries"/>
 
 		<!--
 		    <div class="menutitle"><div>
@@ -52,7 +61,7 @@
 	<div id="end_body"></div>
 
 	<div id="footer"><div id="footer_text">
-	  Template Maintained by Lorenzo Villani - Based upon the template created for KDE.org website<br/>	  
+	  Template Maintained by Lorenzo Villani - Based upon the template created for KDE.org website<br/>
 	  KDE<sup>&#174;</sup> and <a href="/media/images/kde_gear_black.png">the K Desktop Environment<sup>&#174;</sup> logo</a> are registered trademarks of 				<a href="http://ev.kde.org/" title="Homepage of the KDE non-profit Organization">KDE e.V.</a> |
 	  <a href="http://www.kde.org/contact/impressum.php">Legal</a>
 	</div></div>

@@ -40,7 +40,7 @@
 	<div id="header_top">
 	  <div><div>
 	      <img alt ="" src="/media/images/top-kde.jpg"/>
-	      Kexi Web Forms
+	      Kexi Web Forms: {{TITLE}}
 	</div></div></div>
 	<div id="header_bottom">
 	  <div id="location">

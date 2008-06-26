@@ -22,6 +22,8 @@ set(webforms_SRCS
   Read.cpp
   Update.cpp
   Delete.cpp
+# Other handlers
+  Query.cpp
 )
 
 kde4_add_executable(kwebforms NOGUI ${webforms_SRCS})

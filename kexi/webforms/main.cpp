@@ -31,6 +31,7 @@
 #include "DataProvider.h"
 
 #include "Index.h"
+#include "Query.h"
 #include "CRUD.h"
 
 using namespace KexiWebForms;
@@ -110,6 +111,9 @@ int main(int argc, char **argv) {
         UpdateHandler updateHandler;
         DeleteHandler deleteHandler;
 
+        // Query Handler
+        QueryHandler queryHandler;
+
         if (server->init(serverConfig)) {
             // Register index page handler
             server->registerHandler("/", indexHandler.m_callback);
@@ -118,6 +122,8 @@ int main(int argc, char **argv) {
             server->registerHandler("/read/*", readHandler.m_callback);
             server->registerHandler("/update/*", updateHandler.m_callback);
             server->registerHandler("/delete/*", deleteHandler.m_callback);
+            // Register query handler
+            server->registerHandler("/query/*", queryHandler.m_callback);
         }
         return server->run();
     }

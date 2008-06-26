@@ -19,7 +19,10 @@
 */
 
 #include <string>
+#include <QList>
 #include <KDebug>
+#include <core/kexipartinfo.h>
+#include <core/kexipartitem.h>
 #include <google/template.h>
 
 #include "DataProvider.h"
@@ -35,20 +38,31 @@ namespace KexiWebForms {
         // Add header template
         google::TemplateDictionary* beforeDict = dict->AddIncludeDictionary("beforecontent");
         beforeDict->SetFilename("beforecontent.tpl");
-        
+        beforeDict->SetValue("TITLE", gProjectData->infoString(false).toUtf8().constData());
+
         // Add footer template (-- note, this includes the left menu with the standard template)
         google::TemplateDictionary* afterDict = dict->AddIncludeDictionary("aftercontent");
         afterDict->SetFilename("aftercontent.tpl");
         // Add tables to left menu
-        QString tables; 
+        QString tables;
         for (int i = 0; i < gConnection->tableNames().size(); ++i) {
             tables.append("<li><a href=\"/read/").append(gConnection->tableNames().at(i));
             tables.append("\">").append(gConnection->tableNames().at(i)).append("</a></li>");
         }
-        afterDict->SetValue("TABLE_LIST", tables.toLatin1().constData());
+        afterDict->SetValue("TABLE_LIST", tables.toUtf8().constData());
+        
+        // Add queries to left menu
+        QList<int> queryIds(gConnection->queryIds());
+        QString queries;
+        for (int i = 0; i < queryIds.size(); ++i) {
+            queries.append("<li><a href=\"/query/").append(gConnection->querySchema(queryIds.at(i))->name());
+            queries.append("\">").append(gConnection->querySchema(queryIds.at(i))->caption()).append("</a></li>");
+        }
+        afterDict->SetValue("QUERY_LIST", queries.toUtf8().constData());
+        
         return dict;
     }
-    
+
     void renderTemplate(google::TemplateDictionary* dict, HTTPStream& stream) {
         std::string output;
         google::Template::GetTemplate(dict->name(), google::DO_NOT_STRIP)->Expand(&output, dict);

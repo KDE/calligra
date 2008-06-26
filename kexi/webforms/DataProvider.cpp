@@ -43,6 +43,8 @@
 namespace KexiWebForms {
 
     KexiDB::Connection* gConnection;
+    KexiProjectData* gProjectData;
+    KexiProject* gProject;
     
     // FIXME: Move creation of ConnectionData outside this function
     bool initDatabase(const QString& fileName) {
@@ -50,7 +52,6 @@ namespace KexiWebForms {
         KexiDB::Driver* driver;
         KexiDB::DriverManager manager;
         KexiDB::ConnectionData* connData = new KexiDB::ConnectionData();
-        KexiProjectData* projectData;
 
 
         QString driverName;
@@ -65,17 +66,18 @@ namespace KexiWebForms {
                 //
                 // TODO: Finish implementing this stuff
                 //
-                kDebug() << "Loading Kexi shortcut file..." << endl;
+                /*kDebug() << "Loading Kexi shortcut file..." << endl;
                 KexiDBShortcutFile shortcut(fileName);
-                projectData = new KexiProjectData();
+                gProjectData = new KexiProjectData();
                 if (!shortcut.loadProjectData(*projectData)) {
                     delete projectData; projectData = NULL;
                     return false;
-                }
+                    } */
             } else if (driverName == "connection") {
                 //
                 // FIXME: This piece of code does NOT work, ouch!
                 //
+                /*
                 kDebug() << "Loading connection file..." << endl;
                 KexiDBConnShortcutFile connFile(fileName);
                 if (!connFile.loadConnectionData(*connData)) {
@@ -87,7 +89,7 @@ namespace KexiWebForms {
                     // database has to be opened
                     /* commented out until i find a better solution to display project data */
                     //projectData = new KexiProjectData(*connData);
-                }
+                /*}*/
             } else {
                 kDebug() << "This should be a file-based database... now loading it" << endl;
 
@@ -118,7 +120,8 @@ namespace KexiWebForms {
                     status = true;
                 }
 
-                projectData = new KexiProjectData(*connData);
+                gProjectData = new KexiProjectData(*connData);
+                gProject = new KexiProject(gProjectData);
             }
         }
         return status;
