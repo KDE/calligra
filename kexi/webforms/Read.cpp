@@ -68,8 +68,8 @@ namespace KexiWebForms {
                 tableData.append("</th>\n");
             }
             tableData.append("</tr>\n");
-            
-            
+
+
             // Create labels with fields data
             while (cursor->moveNext()) {
                 tableData.append("<tr>");
@@ -111,7 +111,7 @@ namespace KexiWebForms {
                 // End row
                 tableData.append("</tr>");
 
-                dict->SetValue("TABLEDATA", tableData.toLatin1().constData());
+                dict->SetValue("TABLEDATA", tableData.toUtf8().constData());
             }
 
             kDebug() << "Deleting cursor..." << endl;

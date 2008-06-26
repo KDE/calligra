@@ -48,15 +48,15 @@ namespace KexiWebForms {
         QString requestedTable = Request::requestUri(req).split('/').at(2);
         dict->SetValue("TABLENAME", requestedTable.toLatin1().constData());
 
-        
+
         KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
-        
+
 
         /* Build the form */
         if (Request::request(req, "dataSent") == "true") {
             KexiDB::QuerySchema schema(*tableSchema);
             KexiDB::Cursor* cursor = gConnection->prepareQuery(schema);
-                
+
             QStringList fieldsList(Request::request(req, "tableFields").split("|:|"));
             kDebug() << "Fields: " << fieldsList;
 
@@ -64,7 +64,7 @@ namespace KexiWebForms {
 
             KexiDB::RecordData recordData(tableSchema->fieldCount());
             KexiDB::RowEditBuffer editBuffer(true);
-                
+
             while (iterator.hasNext()) {
                 QString currentFieldName(iterator.next());
                 QString currentFieldValue(QUrl::fromPercentEncoding(Request::request(req, currentFieldName).toLatin1()));
@@ -72,12 +72,12 @@ namespace KexiWebForms {
                 /*! @fixme This removes pluses */
                 currentFieldValue.replace("+", " ");
                 QVariant currentValue(currentFieldValue);
-                    
+
                 kDebug() << "Inserting " << currentFieldName << "=" << currentValue.toString() << endl;
                 editBuffer.insert(*schema.columnInfo(currentFieldName), currentValue);
             }
 
-                
+
             if (cursor->insertRow(recordData, editBuffer)) {
                 dict->ShowSection("SUCCESS");
                 dict->SetValue("MESSAGE", "Row added successfully");
@@ -85,7 +85,7 @@ namespace KexiWebForms {
                 dict->ShowSection("ERROR");
                 dict->SetValue("MESSAGE", gConnection->errorMsg().toLatin1().constData());
             }
-                
+
             kDebug() << "Deleting cursor..." << endl;
             gConnection->deleteCursor(cursor);
         } else {
@@ -93,10 +93,10 @@ namespace KexiWebForms {
 
             QString formData;
             QStringList fieldsList;
-            
+
             for (uint i = 0; i < tableSchema->fieldCount(); i++) {
                 QString fieldName(tableSchema->field(i)->name());
-                            
+
                 formData.append("<tr>");
                 formData.append("<td>").append(tableSchema->field(i)->captionOrName()).append("</td>");
                 formData.append("<td><input type=\"text\" name=\"");
@@ -104,16 +104,16 @@ namespace KexiWebForms {
                 formData.append("</tr>");
                 fieldsList << fieldName;
             }
-                
+
             dict->SetValue("TABLEFIELDS", fieldsList.join("|:|").toLatin1().constData());
-            dict->SetValue("FORMDATA", formData.toLatin1().constData());
+            dict->SetValue("FORMDATA", formData.toUtf8().constData());
         }
-        
-        
+
+
         renderTemplate(dict, stream);
     }
 
-    
+
     // Create Handler
     CreateHandler::CreateHandler() : Handler(createCallback) {}
 }

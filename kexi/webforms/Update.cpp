@@ -67,13 +67,13 @@ namespace KexiWebForms {
         KexiDB::TableSchema tableSchema(*gConnection->tableSchema(requestedTable));
         KexiDB::QuerySchema schema(tableSchema);
         schema.addToWhereExpression(schema.field(pkeyName), QVariant(pkeyValue));
-            
+
         /*!
          * @note We shouldn't use executeQuery otherwise the corresponding table will
          * be locked and we won't be able to update it
          */
         KexiDB::Cursor* cursor = gConnection->prepareQuery(schema);
-        
+
         // Fill the cachedPkeys list
         if (cachedPkeys[requestedTable].isEmpty()) {
             kDebug() << "Cached Pkeys is empty, updating" << endl;
@@ -106,13 +106,13 @@ namespace KexiWebForms {
         dict->SetValue("LAST", QVariant(cachedPkeys[requestedTable].at(cachedPkeys[requestedTable].size()-1)).toString().toLatin1().constData());
 
 
-        
+
         if (!cursor) {
             dict->ShowSection("ERROR");
             dict->SetValue("MESSAGE", "No cursor object available");
         } else if (Request::request(req, "dataSent") == "true") {
             cursor = gConnection->prepareQuery(schema);
-                
+
             QStringList fieldsList(Request::request(req, "tableFields").split("|:|"));
             kDebug() << "Fields: " << fieldsList;
 
@@ -120,7 +120,7 @@ namespace KexiWebForms {
 
             KexiDB::RecordData recordData(tableSchema.fieldCount());
             KexiDB::RowEditBuffer editBuffer(true);
-            
+
             QVector<int> pkeyFields(schema.pkeyFieldsOrder());
             for (int i = 0; i < pkeyFields.size(); i++) {
                 int fieldId = pkeyFields.at(i);
@@ -134,10 +134,10 @@ namespace KexiWebForms {
                     break;
                 }
             }
-            
+
             /*! @fixme Making the wrong assumption on what the pkey id is */
             recordData.insert(0, QVariant(pkeyValue));
-                
+
             while (iterator.hasNext()) {
                 QString currentFieldName(iterator.next());
                 QString currentFieldValue(QUrl::fromPercentEncoding(Request::request(req, currentFieldName).toLatin1()));
@@ -145,14 +145,14 @@ namespace KexiWebForms {
                 /*! @fixme This removes pluses */
                 currentFieldValue.replace("+", " ");
                 QVariant currentValue(currentFieldValue);
-                    
+
                 if (currentFieldName != pkeyName) {
                     kDebug() << "Inserting " << currentFieldName << "=" << currentValue.toString() << endl;
                     editBuffer.insert(*schema.columnInfo(currentFieldName), currentValue);
                 }
             }
 
-                
+
             if (cursor->updateRow(recordData, editBuffer)) {
                 dict->ShowSection("SUCCESS");
                 dict->SetValue("MESSAGE", "Row updated successfully");
@@ -162,7 +162,7 @@ namespace KexiWebForms {
                 dict->ShowSection("ERROR");
                 dict->SetValue("MESSAGE", gConnection->errorMsg().toLatin1().constData());
             }
-                
+
             kDebug() << "Deleting cursor..." << endl;
             gConnection->deleteCursor(cursor);
         } else {
@@ -178,7 +178,7 @@ namespace KexiWebForms {
             while (cursor->moveNext()) {
                 for (uint i = 0; i < cursor->fieldCount(); i++) {
                     QString fieldName(schema.field(i)->name());
-                            
+
                     formData.append("<tr>");
                     formData.append("<td>").append(schema.field(i)->captionOrName()).append("</td>");
                     formData.append("<td><input type=\"text\" name=\"");
@@ -189,16 +189,16 @@ namespace KexiWebForms {
                 }
             }
             dict->SetValue("TABLEFIELDS", fieldsList.join("|:|").toLatin1().constData());
-            dict->SetValue("FORMDATA", formData.toLatin1().constData());
+            dict->SetValue("FORMDATA", formData.toUtf8().constData());
 
             kDebug() << "Deleting cursor..." << endl;
             gConnection->deleteCursor(cursor);
         }
-			
-			
+
+
         renderTemplate(dict, stream);
     }
-    
+
 
     // Update Handler
     UpdateHandler::UpdateHandler() : Handler(updateCallback) {}
