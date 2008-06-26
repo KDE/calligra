@@ -595,8 +595,10 @@ bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &elemen
             // try numbers
             for ( int i = 0; i < h->count(); ++i ) {
                 if ( e.hasAttribute( s.arg( i ) ) ) {
-                    int pos = h->visualIndex( e.attribute( s.arg( i ), "-1" ).toInt() );
-                    header()->moveSection( pos, i );
+                    int index = e.attribute( s.arg( i ), "-1" ).toInt();
+                    if ( index >= 0 && index < h->count() ) {
+                        header()->moveSection( h->visualIndex( index ), i );
+                    }
                 }
             }
         } else {
@@ -604,7 +606,7 @@ bool TreeViewBase::loadContext( const QMetaEnum &map, const KoXmlElement &elemen
                 QString n = map.key( i );
                 if ( ! n.isEmpty() ) {
                     int col = map.keyToValue( e.attribute( s.arg( i ), "" ).toUtf8() );
-                    if ( col != -1 ) {
+                    if ( col >= 0 && col < h->count() ) {
                         header()->moveSection( h->visualIndex( col ), i );
                     }
                 }
