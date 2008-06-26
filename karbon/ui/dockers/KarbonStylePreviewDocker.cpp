@@ -33,7 +33,7 @@
 #include <KoCanvasResourceProvider.h>
 #include <KoShapeManager.h>
 #include <KoSelection.h>
-#include <KoUniColorChooser.h>
+#include <KoTriangleColorSelector.h>
 #include <KoCheckerBoardPainter.h>
 #include <KoLineBorder.h>
 #include <KoShapeBorderCommand.h>
@@ -45,6 +45,7 @@
 #include <KoPatternBackground.h>
 #include <KoImageCollection.h>
 #include <KoShapeController.h>
+#include <KoColorSlider.h>
 
 #include <klocale.h>
 
@@ -71,9 +72,16 @@ KarbonStylePreviewDocker::KarbonStylePreviewDocker( QWidget * parent )
     layout->setColumnStretch( 0, 1 );
     layout->setColumnStretch( 1, 3 );
 
-    m_colorChooser = new KoUniColorChooser( m_stack, true );
-    m_colorChooser->changeLayout( KoUniColorChooser::SimpleLayout );
-    m_stack->addWidget( m_colorChooser );
+    QWidget * colorWidget = new QWidget( m_stack );
+    QGridLayout * gLayout = new QGridLayout( colorWidget );
+    m_colorChooser = new KoTriangleColorSelector( colorWidget );
+    m_opacitySlider = new KoColorSlider( Qt::Vertical, colorWidget );
+    m_opacitySlider->setFixedWidth(25);
+    m_opacitySlider->setRange(0, 255);
+    m_opacitySlider->setToolTip( i18n( "Opacity" ) );
+    gLayout->addWidget( m_colorChooser, 0, 0 );
+    gLayout->addWidget( m_opacitySlider, 0, 1 );
+    m_stack->addWidget( colorWidget );
 
     m_gradientChooser = new KarbonGradientChooser( m_stack );
     m_gradientChooser->showButtons( false );
@@ -86,12 +94,13 @@ KarbonStylePreviewDocker::KarbonStylePreviewDocker( QWidget * parent )
     connect( m_preview, SIGNAL(fillSelected()), this, SLOT(fillSelected()) );
     connect( m_preview, SIGNAL(strokeSelected()), this, SLOT(strokeSelected()) );
     connect( m_buttons, SIGNAL(buttonPressed(int)), this, SLOT(styleButtonPressed(int)));
-    connect( m_colorChooser, SIGNAL( sigColorChanged( const KoColor &) ), 
-             this, SLOT( updateColor( const KoColor &) ) );
+    connect( m_colorChooser, SIGNAL( colorChanged( const QColor &) ), 
+             this, SLOT( colorChanged( const QColor &) ) );
     connect( m_gradientChooser, SIGNAL( selected( QTableWidgetItem * ) ), 
              this, SLOT( updateGradient( QTableWidgetItem* ) ) );
     connect( m_patternChooser, SIGNAL( selected( QTableWidgetItem * ) ), 
              this, SLOT( updatePattern( QTableWidgetItem* ) ) );
+    connect(m_opacitySlider, SIGNAL(valueChanged(int)), this, SLOT(opacityChanged(int)));
 
     setWidget( mainWidget );
 
@@ -163,8 +172,14 @@ void KarbonStylePreviewDocker::updateStyle( const KoShapeBorderModel * stroke, c
         else
             qColor = m_canvas->resourceProvider()->backgroundColor().toQColor();
     }
-    KoColor c( qColor, KoColorSpaceRegistry::instance()->rgb8() );
-    m_colorChooser->setColor( c );
+    m_colorChooser->setQColor( qColor );
+
+    KoColor minColor( qColor, KoColorSpaceRegistry::instance()->rgb8() );
+    KoColor maxColor( qColor, KoColorSpaceRegistry::instance()->rgb8() );
+    minColor.setOpacity( 0 );
+    maxColor.setOpacity( 255 );
+    m_opacitySlider->setColors( minColor, maxColor );
+    m_opacitySlider->setValue( qColor.alpha() );
 
     m_preview->update( stroke, fill );
 }
@@ -235,10 +250,35 @@ void KarbonStylePreviewDocker::styleButtonPressed( int buttonId )
     }
 }
 
-void KarbonStylePreviewDocker::updateColor( const KoColor &c )
+void KarbonStylePreviewDocker::opacityChanged( int opacity )
+{
+    QColor currentColor = m_colorChooser->color();
+    currentColor.setAlpha( opacity);
+    updateColor( currentColor );
+}
+
+void KarbonStylePreviewDocker::colorChanged( const QColor &c )
+{
+    QColor currentColor = c;
+    int opacity = m_opacitySlider->value();
+    currentColor.setAlpha( opacity );
+
+    KoColor minColor( c, KoColorSpaceRegistry::instance()->rgb8() );
+    minColor.setOpacity( 0 );
+    KoColor maxColor = minColor;
+    maxColor.setOpacity( 255 );
+
+    m_opacitySlider->setColors( minColor, maxColor );
+
+    updateColor( currentColor );
+}
+
+void KarbonStylePreviewDocker::updateColor( const QColor &c )
 {
     if( ! m_canvas )
         return;
+
+    KoColor kocolor( c, KoColorSpaceRegistry::instance()->rgb8() );
 
     KoCanvasResourceProvider * provider = m_canvas->resourceProvider();
     int activeStyle = provider->resource( Karbon::ActiveStyle ).toInt();
@@ -247,13 +287,11 @@ void KarbonStylePreviewDocker::updateColor( const KoColor &c )
     if( ! selection || ! selection->count() )
     {
         if( activeStyle == Karbon::Foreground )
-            m_canvas->resourceProvider()->setForegroundColor( c );
+            m_canvas->resourceProvider()->setForegroundColor( kocolor );
         else
-            m_canvas->resourceProvider()->setBackgroundColor( c );
+            m_canvas->resourceProvider()->setBackgroundColor( kocolor );
         return;
     }
-
-    QColor color = c.toQColor();
 
     // check which color to set foreground == border, background == fill
     if( activeStyle == Karbon::Foreground )
@@ -265,21 +303,21 @@ void KarbonStylePreviewDocker::updateColor( const KoColor &c )
         {
             // preserve the properties of the old border if it is a line border
             newBorder = new KoLineBorder( *oldBorder );
-            newBorder->setColor( color );
+            newBorder->setColor( c );
         }
         else
-            newBorder = new KoLineBorder( 1.0, color );
+            newBorder = new KoLineBorder( 1.0, c );
 
         KoShapeBorderCommand * cmd = new KoShapeBorderCommand( selection->selectedShapes(), newBorder );
         m_canvas->addCommand( cmd );
-        m_canvas->resourceProvider()->setForegroundColor( c );
+        m_canvas->resourceProvider()->setForegroundColor( kocolor );
     }
     else
     {
-        KoShapeBackground * fill = new KoColorBackground( color );
+        KoShapeBackground * fill = new KoColorBackground( c );
         KoShapeBackgroundCommand *cmd = new KoShapeBackgroundCommand( selection->selectedShapes(), fill );
         m_canvas->addCommand( cmd );
-        m_canvas->resourceProvider()->setBackgroundColor( c );
+        m_canvas->resourceProvider()->setBackgroundColor( kocolor );
     }
     selectionChanged();
 }

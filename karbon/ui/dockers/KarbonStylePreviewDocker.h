@@ -31,8 +31,9 @@ class KarbonGradientChooser;
 class KoShapeBorderModel;
 class KoShapeBackground;
 class KoCanvasBase;
-class KoUniColorChooser;
+class KoTriangleColorSelector;
 class KoColor;
+class KoColorSlider;
 class QBrush;
 class QStackedWidget;
 class QTableWidgetItem;
@@ -56,19 +57,21 @@ private slots:
     void selectionChanged();
     void resourceChanged( int key, const QVariant& );
     void styleButtonPressed( int buttonId );
-    void updateColor( const KoColor &c );
+    void updateColor( const QColor &c );
     void updateGradient( QTableWidgetItem * item );
     void updatePattern( QTableWidgetItem * item );
     void updateFillRule( Qt::FillRule fillRule );
-
+    void opacityChanged( int );
+    void colorChanged( const QColor &c );
 private:
     KarbonStylePreview * m_preview;
     KarbonStyleButtonBox * m_buttons;
     QStackedWidget * m_stack;
     KoCanvasBase * m_canvas;
-    KoUniColorChooser * m_colorChooser;
+    KoTriangleColorSelector * m_colorChooser;
     KarbonGradientChooser * m_gradientChooser;
     KarbonPatternChooser * m_patternChooser;
+    KoColorSlider * m_opacitySlider;
 };
 
 class KarbonStylePreviewDockerFactory : public KoDockFactory
