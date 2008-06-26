@@ -27,6 +27,7 @@ by hand and use org-mode instead.
    - [ ] Implement and test
 
 * Medium priority tasks
+** TODO Switch to new template engine
 ** Swich to new embedded HTTP server backend [0%]
    - [ ] Investigate alternatives
    - [ ] Migrate old data structure to the new backend
