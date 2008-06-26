@@ -5,23 +5,42 @@ This file is maintained using Emacs' org-mode please do not edit it
 by hand and use org-mode instead.
 
 
-* Basic kwebforms implementation (mid-term tasks) [71%]
-  - Implement basic CRUD Operations [100%]
-    - [X] Implement CREATE
-    - [X] Implement READ
-    - [X] Implement UPDATE
-    - [X] Implement DELETE
-  - [X] Implement 'First' 'Previous' 'Next' 'Last' controls in Update
-  - [ ] Add support for query objects
-  - [ ] Refine code
+* Basic kwebforms implementation (mid-term tasks)
+** CRUD Operations [100%]
+   - [X] Implement CREATE
+   - [X] Implement READ
+   - [X] Implement UPDATE
+   - [X] Implement DELETE
+** Controls [100%]
+   - [X] Implement 'First' 'Previous' 'Next' 'Last' controls in Update
+** Other tasks [0%]
+   - [ ] Add support for query objects
+   - [-] UTF-8 Support [50%]
+	 - [X] Add support to UTF-8 within main classes
+	 - [ ] Enhance UTF-8 support even further
+   - [ ] Refine code
+
+* Post mid-term (and before final)
+** User management [0%]
+   - [ ] Create a draft of the first version of the architecture
+   - [ ] Create a clear API
+   - [ ] Implement and test
+
+* Medium priority tasks
+** Swich to new embedded HTTP server backend [0%]
+   - [ ] Investigate alternatives
+   - [ ] Migrate old data structure to the new backend
+	 - If the new server backend is better and more OO than SHTTPD,
+	   remove C++ wrappers?
+** Add connectors to other server types [0%]
+   - [ ] Add a FastCGI connector
+   - [ ] Implement an apache extension module
 
 
-
-* Post mid-term (and before final) [0%]
-  - [ ] User management
-
-* Medium priority task [0%]
-  - [ ] Switch to new server back-end
-
-* Low priority tasks [0%]
-  - [ ] Implement shortcut and connection file loading
+* Low priority tasks
+** TODO: Shortcut and connection file loading
+** Parallel kwebforms and Kexi [0%]
+   - [ ] Find a way to open kwebforms in parallel with kexi, using the same
+	 database.
+	- On Windows the file is locked when used, it's not possible to barely launch
+	  the daemon in parallel with kexi. 
