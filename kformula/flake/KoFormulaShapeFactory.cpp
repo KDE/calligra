@@ -26,7 +26,7 @@ KoFormulaShapeFactory::KoFormulaShapeFactory( QObject *parent )
     : KoShapeFactory( parent, KoFormulaShapeId, i18n( "A formula shape" ) )
 {
     setToolTip( i18n( "A formula" ) );
-    setIcon( "kformula" );
+    setIcon( "x-shape-formula" );
 
 /*    KoShapeTemplate t;
     t.id = KoFormulaShapeId;
