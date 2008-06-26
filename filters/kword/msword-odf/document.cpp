@@ -219,9 +219,14 @@ void Document::processStyles()
         const wvWare::Style* style = styles.styleByIndex( i );
         Q_ASSERT( style );
         QConstString displayName = Conversion::string(style->name());
-	QConstString name = Conversion::string(style->name());
-	name.replace(" ", "_20_");
-        kDebug(30513) << "Style" << i << ":" << name.string();
+	QString name = Conversion::string(style->name());
+	//need to replace all non-alphanumeric characters with hex representation
+	for(int i = 0; i < name.size(); i++) {
+	    if(!name[i].isLetterOrNumber()) {
+		name.remove(i, 1);
+	    }
+	}
+        kDebug(30513) << "Style" << i << ":" << displayName.string();
 	kDebug(30513) << "style->type() = " << style->type();
 	kDebug(30513) << "style->sti() = " << style->sti();
 
@@ -235,7 +240,7 @@ void Document::processStyles()
             }
 
 	    //create this style & add formatting info to it
-	    kDebug(30513) << "creating ODT style" << name.string();
+	    kDebug(30513) << "creating ODT style" << name;
 	    KoGenStyle userStyle(KoGenStyle::StyleUser, "paragraph"); 
 	    userStyle.addAttribute("style:display-name", displayName);
 	    m_textHandler->writeFormattedText(&userStyle, &style->chp(), 0L, QString(""), false, QString(""));
@@ -246,7 +251,7 @@ void Document::processStyles()
         }
 	else if(style && style->type()==wvWare::Style::sgcChp) {
 	    //create this style & add formatting info to it
-	    kDebug(30513) << "creating ODT style" << name.string();
+	    kDebug(30513) << "creating ODT style" << name;
 	    KoGenStyle userStyle(KoGenStyle::StyleUser, "paragraph"); 
 	    userStyle.addAttribute("style:display-name", displayName);
 	    m_textHandler->writeFormattedText(&userStyle, &style->chp(), 0L, QString(""), false, QString(""));
