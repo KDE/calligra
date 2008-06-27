@@ -51,6 +51,7 @@ class ResourceGroupRequest;
 class Estimate;
 class WBSDefinition;
 class EffortCostMap;
+class EffortCost;
 class Calendar;
 
 /**
@@ -292,7 +293,7 @@ public:
      * Planned cost is the sum total of all resources and other costs
      * planned for this node.
      */
-    virtual double plannedCost( long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0; }
+    virtual EffortCost plannedCost( long id = CURRENTSCHEDULE ) const;
     
     /// Planned cost on date
     virtual double plannedCost(const QDate &/*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0; }
@@ -309,23 +310,29 @@ public:
     /// Actual cost on date
     virtual double actualCost(const QDate &/*date*/) const { return 0; }
     /// Actual cost up to and including date
-    virtual double actualCostTo(const QDate &/*date*/) const { return 0; }
+    virtual EffortCost actualCostTo(const QDate &/*date*/) const { return EffortCost(); }
     
     /// Returns the effort planned to be used to reach the actual percent finished
     virtual Duration budgetedWorkPerformed( const QDate &, long = CURRENTSCHEDULE ) const = 0;
     /// Returns the cost planned to be used to reach the actual percent finished
     virtual double budgetedCostPerformed( const QDate &, long = CURRENTSCHEDULE ) const { return 0.0; };
 
+    /// Return map of Budgeted Cost of Work Scheduled pr day
+    virtual EffortCostMap bcwsPrDay( long id = CURRENTSCHEDULE ) const;
     /// Budgeted Cost of Work Scheduled
     virtual double bcws( const QDate &/*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0.0; }
 
+    /// Return map of Budgeted Cost of Work Scheduled pr day (also includes bcws pr day)
+    virtual EffortCostMap bcwpPrDay( long id = CURRENTSCHEDULE ) const;
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id ) const { Q_UNUSED(id); return 0.0; }
     /// Budgeted Cost of Work Performed ( up to @p date )
     virtual double bcwp( const QDate &/*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0.0; }
     
-    /// Actual Cost of Work Performed
-    virtual double acwp( const QDate &/*date*/, long id = CURRENTSCHEDULE ) const { Q_UNUSED(id); return 0.0; }
+    /// Return a map of Actual effort and Cost of Work Performed
+    virtual EffortCostMap acwp( long id = CURRENTSCHEDULE ) const;
+    /// Return Actual effort and Cost of Work Performed upto @date
+    virtual EffortCost acwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
     
     /// Effort based performance index
     virtual double effortPerformanceIndex(const QDate &/*date*/, long /*id*/ = CURRENTSCHEDULE ) const { return 0.0; }

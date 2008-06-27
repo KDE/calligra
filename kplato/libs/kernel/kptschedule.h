@@ -141,6 +141,7 @@ public:
     /// Return the resource names that has appointments to this schedule
     virtual QStringList resourceNameList() const;
     
+    virtual EffortCostMap bcwsPrDay() const;
     virtual EffortCostMap plannedEffortCostPrDay( const QDate &start, const QDate &end ) const;
 
     /// Returns the total planned effort for this schedule
@@ -154,7 +155,7 @@ public:
      * Planned cost is the sum total of all resources and other costs
      * planned for this node.
      */
-    virtual double plannedCost() const;
+    virtual EffortCost plannedCost() const;
 
     /// Planned cost on date
     virtual double plannedCost( const QDate &date ) const;

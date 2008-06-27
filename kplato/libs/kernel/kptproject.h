@@ -212,7 +212,7 @@ public:
      * Returns the total planned cost for this project
      * @param id Identity of the schedule to be used
      */
-    virtual double plannedCost( long id = -1 ) const;
+    virtual EffortCost plannedCost( long id = CURRENTSCHEDULE ) const;
     /**
      * Planned cost on date
      * @param date The cost is calulated for this date (only)
@@ -243,7 +243,7 @@ public:
      * @param date The cost is calculated from the start of the project upto including date.
      * @param id Identity of the schedule to be used.
      */
-    virtual double actualCostTo( const QDate &date ) const;
+    virtual EffortCost actualCostTo( const QDate &date ) const;
     
     virtual EffortCostMap actualEffortCostPrDay( const QDate &start, const QDate &end, long id = -1 ) const;
     
@@ -262,8 +262,6 @@ public:
     virtual double bcwp( long id = BASELINESCHEDULE ) const;
     /// Budgeted Cost of Work Performed ( up to @p date )
     virtual double bcwp( const QDate &date, long id = BASELINESCHEDULE ) const;
-    /// Budgeted Cost of Work Performed ( up to @p date )
-    virtual double acwp( const QDate &date, long id = BASELINESCHEDULE ) const;
 
     Calendar *defaultCalendar() const { return m_defaultCalendar; }
     void setDefaultCalendar( Calendar *cal );

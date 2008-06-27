@@ -194,9 +194,14 @@ public:
     double actualCost( const QDate &date ) const;
     /// Returns the total actual cost for @p resource
     double actualCost( const Resource *resource ) const;
-    /// Returns the total actual cost upto and including @p date
-    double actualCostTo( const QDate &date ) const;
+    /// Returns the total actual effort and cost upto and including @p date
+    EffortCost actualCostTo( const QDate &date ) const;
     
+    /**
+     * Returns a map of all actual effort and cost entered
+     */
+    virtual EffortCostMap actualEffortCost() const;
+
     void addUsedEffort( const Resource *resource, UsedEffort *value = 0 );
     UsedEffort *takeUsedEffort( const Resource *r ) { return m_usedEffort.take( const_cast<Resource*>( r ) ); changed(); }
     UsedEffort *usedEffort( const Resource *r ) const { return m_usedEffort.value( const_cast<Resource*>( r ) ); }
@@ -444,7 +449,7 @@ public:
     /**
      * Returns the total planned cost for this task (or subtasks)
      */
-    virtual double plannedCost( long id = CURRENTSCHEDULE ) const;
+    virtual EffortCost plannedCost( long id = CURRENTSCHEDULE ) const;
     /// Planned cost on date
     virtual double plannedCost(const QDate &/*date*/, long id = CURRENTSCHEDULE ) const;
     /// Planned cost up to and including date
@@ -456,8 +461,8 @@ public:
     virtual double actualCost() const;
     /// Actual cost on @p date
     virtual double actualCost(const QDate &date) const;
-    /// Actual cost up to and including @p date
-    virtual double actualCostTo(const QDate &date) const;
+    /// Returns actual effort and cost up to and including @p date
+    virtual EffortCost actualCostTo(const QDate &date) const;
 
     /**
      * Returns a list of actual effort and cost for this task
@@ -471,16 +476,23 @@ public:
     /// Returns the cost planned to be used to reach the actual percent finished
     virtual double budgetedCostPerformed( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
+    /// Return map of Budgeted Cost of Work Scheduled pr day
+    virtual EffortCostMap bcwsPrDay( long id = CURRENTSCHEDULE ) const;
+    
     /// Budgeted Cost of Work Scheduled
     virtual double bcws( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
+    /// Return map of Budgeted Cost of Work Performed pr day (also includes bcwsPrDay)
+    virtual EffortCostMap bcwpPrDay( long id = CURRENTSCHEDULE ) const;
     /// Budgeted Cost of Work Performed
     virtual double bcwp( long id = CURRENTSCHEDULE ) const;
     /// Budgeted Cost of Work Performed ( up to @p date )
     virtual double bcwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
-    /// Actual Cost of Work Performed
-    virtual double acwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
+    /// Map of Actual Cost of Work Performed
+    virtual EffortCostMap acwp( long id = CURRENTSCHEDULE ) const;
+    /// Actual Cost of Work Performed up to dat
+    virtual EffortCost acwp( const QDate &date, long id = CURRENTSCHEDULE ) const;
 
     /// Effort based performance index
     virtual double effortPerformanceIndex( const QDate &date, long id = CURRENTSCHEDULE ) const;

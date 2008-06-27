@@ -1107,6 +1107,51 @@ void Node::changed(Node *node) {
         m_parent->changed(node);
 }
 
+EffortCost Node::plannedCost( long id ) const
+{
+    EffortCost ec;
+    foreach ( Node *n, m_nodes ) {
+        ec += n->plannedCost( id );
+    }
+    return ec;
+}
+
+EffortCostMap Node::bcwsPrDay( long id ) const
+{
+    EffortCostMap ec;
+    foreach ( Node *n, m_nodes ) {
+        ec += n->bcwsPrDay( id );
+    }
+    return ec;
+}
+
+EffortCostMap Node::bcwpPrDay( long id ) const
+{
+    EffortCostMap ec;
+    foreach ( Node *n, m_nodes ) {
+        ec += n->bcwpPrDay( id );
+    }
+    return ec;
+}
+
+EffortCostMap Node::acwp( long id ) const
+{
+    EffortCostMap ec;
+    foreach ( Node *n, m_nodes ) {
+        ec += n->acwp( id );
+    }
+    return ec;
+}
+
+EffortCost Node::acwp( const QDate &date, long id ) const
+{
+    EffortCost ec;
+    foreach ( Node *n, m_nodes ) {
+        ec += n->acwp( date, id );
+    }
+    return ec;
+}
+
 
 //////////////////////////   Estimate   /////////////////////////////////
 

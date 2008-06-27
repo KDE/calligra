@@ -1212,11 +1212,11 @@ QVariant NodeModel::actualCostTo( const Node *node, int role ) const
     KLocale *l = KGlobal::locale();
     switch ( role ) {
         case Qt::DisplayRole:
-            return l->formatMoney( node->actualCostTo( m_now ) );
+            return l->formatMoney( node->actualCostTo( m_now ).cost() );
         case Qt::ToolTipRole:
-            return i18n( "Actual cost until %1: %2", l->formatDate( m_now ), l->formatMoney( node->actualCostTo( m_now ) ) );
+            return i18n( "Actual cost until %1: %2", l->formatDate( m_now ), l->formatMoney( node->actualCostTo( m_now ).cost() ) );
         case Qt::EditRole:
-            return node->actualCostTo( m_now );
+            return node->actualCostTo( m_now ).cost();
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();
@@ -1387,9 +1387,9 @@ QVariant NodeModel::nodeACWP( const Node *node, int role ) const
 {
     switch ( role ) {
         case Qt::DisplayRole:
-            return KGlobal::locale()->formatMoney( node->acwp( m_now, id() ), QString(), 0 );
+            return KGlobal::locale()->formatMoney( node->acwp( m_now, id() ).cost(), QString(), 0 );
         case Qt::ToolTipRole:
-            return i18n( "Actual Cost of Work Performed at %1: %2", m_now.toString(), KGlobal::locale()->formatMoney( node->acwp( m_now, id() ) ) );
+            return i18n( "Actual Cost of Work Performed at %1: %2", m_now.toString(), KGlobal::locale()->formatMoney( node->acwp( m_now, id() ).cost() ) );
         case Qt::StatusTipRole:
         case Qt::WhatsThisRole:
             return QVariant();

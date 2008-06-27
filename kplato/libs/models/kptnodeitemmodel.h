@@ -37,6 +37,7 @@ class Project;
 class Node;
 class Estimate;
 
+
 class KPLATOMODELS_EXPORT NodeModel : public QObject
 {
     Q_OBJECT

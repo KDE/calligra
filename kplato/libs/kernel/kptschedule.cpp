@@ -418,6 +418,16 @@ Appointment Schedule::appointmentIntervals( int which ) const
 }
 
 
+EffortCostMap Schedule::bcwsPrDay() const
+{
+    //kDebug()<<m_name<<m_appointments;
+    EffortCostMap ec;
+    foreach ( Appointment *a, m_appointments ) {
+        ec += a->plannedPrDay( a->startTime().date(), a->endTime().date() );
+    }
+    return ec;
+}
+
 EffortCostMap Schedule::plannedEffortCostPrDay( const QDate &start, const QDate &end ) const
 {
     //kDebug()<<m_name<<m_appointments;
@@ -463,10 +473,10 @@ Duration Schedule::plannedEffortTo( const QDate &date ) const
     return eff;
 }
 
-double Schedule::plannedCost() const
+EffortCost Schedule::plannedCost() const
 {
     //kDebug();
-    double c = 0;
+    EffortCost c;
     QListIterator<Appointment*> it( m_appointments );
     while ( it.hasNext() ) {
         c += it.next() ->plannedCost();

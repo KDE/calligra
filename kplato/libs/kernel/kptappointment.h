@@ -44,10 +44,10 @@ class Appointment;
 class Node;
 class Resource;
 class ResourceRequest;
+class EffortCost;
 class EffortCostMap;
 class Schedule;
 class XMLLoaderObject;
-
 
 class KPLATOKERNEL_EXPORT AppointmentInterval {
 public:
@@ -191,7 +191,7 @@ public:
     Duration plannedEffortTo(const QDate &date) const;
 
      /// Calculates the total planned cost for this appointment
-    double plannedCost();
+    EffortCost plannedCost() const;
     /// Calculates the planned cost on date
     double plannedCost(const QDate &date);
     /// Calculates the planned cost upto and including date

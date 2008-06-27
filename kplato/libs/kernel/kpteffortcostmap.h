@@ -35,31 +35,48 @@ class KPLATOKERNEL_EXPORT EffortCost
 public:
     EffortCost()
         : m_effort(Duration::zeroDuration),
-          m_cost(0)
+        m_cost(0),
+        m_bcwpEffort(0.0),
+        m_bcwpCost(0.0)
     {}
     EffortCost(const Duration &effort, const double cost)
         : m_effort(effort),
-          m_cost(cost) {
+        m_cost(cost),
+        m_bcwpEffort(0.0),
+        m_bcwpCost(0.0)
+    {
         //kDebug();
     }
     ~EffortCost() {
         //kDebug();
     }
+    double hours() const { return m_effort.toDouble( Duration::Unit_h ); }
     Duration effort() const { return m_effort; }
+    void setEffort( const Duration &effort ) { m_effort = effort; }
     double cost() const { return m_cost; }
     void setCost(double cost) { m_cost = cost; }
-    void add(const Duration &effort, const double cost) {
+    void setBcwpEffort( double value ) { m_bcwpEffort = value; }
+    double bcwpEffort() const { return m_bcwpEffort; }
+    void setBcwpCost( double value ) { m_bcwpCost = value; }
+    double bcwpCost() const { return m_bcwpCost; }
+    void add(const Duration &effort, double cost, double bcwpEffort = 0.0, double bcwpCost = 0.0 ) {
         m_effort += effort;
         m_cost += cost;
+        m_bcwpEffort += bcwpEffort;
+        m_bcwpCost += bcwpCost;
     }
     EffortCost &operator+=(const EffortCost &ec) {
-        add(ec.effort(), ec.cost());
+        add(ec.m_effort, ec.m_cost, ec.m_bcwpEffort, ec.m_bcwpCost);
         return *this;
     }
+    
 private:
     Duration m_effort;
     double m_cost;
+    double m_bcwpEffort;
+    double m_bcwpCost;
 };
+
 typedef QMap<QDate, EffortCost> EffortCostDayMap;
 class EffortCostMap
 {
@@ -117,7 +134,7 @@ public:
         return m_days.isEmpty();
     }
     
-    EffortCostDayMap days() const { return m_days; }
+    const EffortCostDayMap &days() const { return m_days; }
     
     EffortCostMap &operator+=(const EffortCostMap &ec) {
         //kDebug()<<"me="<<m_days.count()<<" ec="<<ec.days().count();

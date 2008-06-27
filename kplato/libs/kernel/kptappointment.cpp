@@ -559,11 +559,13 @@ EffortCostMap Appointment::plannedPrDay(const QDate& start, const QDate& end) co
 }
 
 
-double Appointment::plannedCost() {
+EffortCost Appointment::plannedCost() const {
+    EffortCost ec;
+    ec.setEffort( plannedEffort() );
     if (m_resource && m_resource->resource()) {
-        return plannedEffort().toDouble(Duration::Unit_h) * m_resource->resource()->normalRate(); //FIXME overtime
+        ec.setCost( ec.hours() * m_resource->resource()->normalRate() ); //FIXME overtime
     }
-    return 0.0;
+    return ec;
 }
 
 //Calculates the planned cost on date

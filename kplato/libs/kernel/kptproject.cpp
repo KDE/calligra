@@ -1470,10 +1470,10 @@ Duration Project::actualEffortTo( const QDate &date ) const
     return eff;
 }
 
-double Project::plannedCost( long id ) const
+EffortCost Project::plannedCost( long id ) const
 {
     //kDebug();
-    double c = 0;
+    EffortCost c;
     QListIterator
     <Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
@@ -1534,12 +1534,11 @@ double Project::actualCost( const QDate &date ) const
 }
 
 // Returns the total planned effort for this project (or subproject) upto and including date
-double Project::actualCostTo( const QDate &date ) const
+EffortCost Project::actualCostTo( const QDate &date ) const
 {
     //kDebug();
-    double c = 0;
-    QListIterator
-    <Node*> it( childNodeIterator() );
+    EffortCost c;
+    QListIterator<Node*> it( childNodeIterator() );
     while ( it.hasNext() ) {
         c += it.next() ->actualCostTo( date );
     }
@@ -1637,16 +1636,6 @@ double Project::bcwp( const QDate &date, long id ) const
     
     double c = budgetAtCompletion * percentageCompletion; //??
     kDebug()<<percentageCompletion<<budgetAtCompletion<<budgetedCompleted<<plannedCompleted;
-    return c;
-}
-
-double Project::acwp( const QDate &date, long id ) const
-{
-    //kDebug();
-    double c = 0;
-    foreach (Node *n, childNodeIterator()) {
-        c += n->acwp( date, id );
-    }
     return c;
 }
 

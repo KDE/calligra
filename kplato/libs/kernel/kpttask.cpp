@@ -630,15 +630,12 @@ Duration Task::actualEffortTo( const QDate &date ) const {
     return completion().actualEffortTo( date );
 }
 
-double Task::plannedCost( long id ) const {
+EffortCost Task::plannedCost( long id ) const {
     //kDebug();
-    double c = 0;
     if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
-            c += n->plannedCost( id );
-        }
-        return c;
+        return Node::plannedCost( id );
     }
+    EffortCost c;
     Schedule *s = schedule( id );
     if ( s ) {
         c = s->plannedCost();
@@ -702,9 +699,9 @@ double Task::actualCost( const QDate &date ) const {
     return completion().actualCost( date );
 }
 
-double Task::actualCostTo( const QDate &date ) const {
+EffortCost Task::actualCostTo( const QDate &date ) const {
     //kDebug();
-    double c = 0;
+    EffortCost c;
     if (type() == Node::Type_Summarytask) {
         foreach (Node *n, childNodeIterator()) {
             c += n->actualCostTo( date );
@@ -718,8 +715,43 @@ double Task::bcws( const QDate &date, long id ) const
 {
     //kDebug();
     double c = plannedCostTo( date, id );
-    kDebug()<<c;
+    //kDebug()<<c;
     return c;
+}
+
+EffortCostMap Task::bcwsPrDay( long id ) const
+{
+    //kDebug();
+    if (type() == Node::Type_Summarytask) {
+        return Node::bcwsPrDay( id );
+    }
+    Schedule *s = schedule( id );
+    if ( s == 0 ) {
+        return EffortCostMap();
+    }
+    return s->bcwsPrDay();
+}
+
+EffortCostMap Task::bcwpPrDay( long id ) const
+{
+    //kDebug();
+    if (type() == Node::Type_Summarytask) {
+        return Node::bcwpPrDay( id );
+    }
+    Schedule *s = schedule( id );
+    if ( s == 0 ) {
+        return EffortCostMap();
+    }
+    EffortCostMap e = s->bcwsPrDay();
+    double totEff = e.totalEffort().toDouble( Duration::Unit_h );
+    double totCost = e.totalCost();
+    EffortCostDayMap::const_iterator it;
+    for(it = e.days().constBegin(); it != e.days().constEnd(); ++it) {
+        double p = (double)(completion().percentFinished( it.key() )) / 100.0;
+        const_cast<EffortCost&>(it.value()).setBcwpEffort( totEff  * p );
+        const_cast<EffortCost&>(it.value()).setBcwpCost( totCost  * p );
+    }
+    return e;
 }
 
 Duration Task::budgetedWorkPerformed( const QDate &date, long id ) const
@@ -749,7 +781,7 @@ double Task::budgetedCostPerformed( const QDate &date, long id ) const
         return c;
     }
     
-    c = plannedCost( id ) * (double)completion().percentFinished( date ) / 100.0;
+    c = plannedCost( id ).cost() * (double)completion().percentFinished( date ) / 100.0;
     //kDebug()<<m_name<<"("<<id<<")"<<date<<"="<<e.toString();
     return c;
 }
@@ -769,23 +801,37 @@ double Task::bcwp( const QDate &date, long id ) const
         }
         return c;
     }
-    c = plannedCost( id ) * (double)completion().percentFinished( date ) / 100.0;
-    kDebug()<<m_name<<"("<<id<<")"<<date<<"="<<c;
+    c = plannedCost( id ).cost() * (double)completion().percentFinished( date ) / 100.0;
+    //kDebug()<<m_name<<"("<<id<<")"<<date<<"="<<c;
     return c;
 }
 
-double Task::acwp( const QDate &date, long id ) const
+EffortCostMap Task::acwp( long id ) const
+{
+    if (type() == Node::Type_Summarytask) {
+        return Node::acwp( id );
+    }
+    kDebug()<<m_name<<completion().entrymode();
+    switch ( completion().entrymode() ) {
+        case Completion::FollowPlan:
+            //TODO
+            break;
+        case Completion::EnterCompleted:
+            //hmmm
+        default:
+            return completion().actualEffortCost();
+    }
+    return EffortCostMap();
+}
+
+EffortCost Task::acwp( const QDate &date, long id ) const
 {
     //kDebug();
-    double c = 0;
     if (type() == Node::Type_Summarytask) {
-        foreach (Node *n, childNodeIterator()) {
-            c += n->acwp( date, id );
-        }
-        return c;
+        return Node::acwp( date, id );
     }
+    EffortCost c;
     c = completion().actualCostTo( date );
-    kDebug()<<m_name<<"("<<id<<")"<<date<<"="<<c;
     return c;
 }
 
@@ -801,7 +847,7 @@ double Task::schedulePerformanceIndex( const QDate &date, long id ) const {
 }
 
 double Task::effortPerformanceIndex( const QDate &date, long id ) const {
-    kDebug();
+    //kDebug();
     double r = 1.0;
     Duration a, b;
     if ( m_estimate->type() == Estimate::Type_Effort ) {
@@ -826,7 +872,7 @@ double Task::effortPerformanceIndex( const QDate &date, long id ) const {
 //FIXME Handle summarytasks
 double Task::costPerformanceIndex(const QDate &date, bool *error) const {
     double res = 0.0;
-    double ac = actualCostTo(date);
+    double ac = actualCostTo(date).cost();
     
     bool e = (ac == 0.0 || completion().percentFinished() == 0);
     if (error) {
@@ -2721,7 +2767,7 @@ Duration Completion::actualEffort( const QDate &date ) const
 
 Duration Completion::actualEffortTo( const QDate &date ) const
 {
-    //kDebug()<<date<<endl;
+    //kDebug()<<date;
     Duration eff;
     if ( m_entrymode == EnterEffortPerResource ) {
         foreach( UsedEffort *ue, m_usedEffort.values() ) {
@@ -2821,24 +2867,75 @@ double Completion::actualCost( const Resource *resource ) const
     return c;
 }
 
-double Completion::actualCostTo( const QDate &date ) const
+EffortCostMap Completion::actualEffortCost() const
 {
-    //kDebug()<<date;
-    double c = 0.0;
+    //kDebug();
+    EffortCostMap map;
+    
+    QList< const QMap<QDate, UsedEffort::ActualEffort*>* > lst;
+    QList< double > rate;
+    QDate start, end;
     foreach ( const Resource *r, m_usedEffort.keys() ) {
-        double nc = r->normalRate();
-        double oc = r->overtimeRate();
-        foreach ( QDate d, m_usedEffort[ r ]->actualEffortMap().keys() ) {
-            if ( d > date ) {
-                break;
+        kDebug()<<m_node->name()<<r->name();
+        const QMap<QDate, UsedEffort::ActualEffort*> &m = usedEffort( r )->actualEffortMap();
+        if ( m.isEmpty() ) {
+            continue;
+        }
+        if ( ! start.isValid() || start > m.keys().first() ) {
+            start = m.keys().first();
+        }
+        if ( ! end.isValid() || end < m.keys().last() ) {
+            end = m.keys().last();
+        }
+        lst.append( &m );
+        rate.append( r->normalRate() );
+    }
+    kDebug()<<m_node->name()<<start<<end<<lst;
+    if ( ! lst.isEmpty() && start.isValid() && end.isValid() ) {
+        for ( QDate d = start; d <= end; d = d.addDays( 1 ) ) {
+            EffortCost c;
+            for ( int i = 0; i < lst.count(); ++i ) {
+                UsedEffort::ActualEffort *a = lst.at( i )->value( d );
+                if ( a == 0 ) {
+                    continue;
+                }
+                double nc = rate.at( i );
+                Duration eff = a->normalEffort();
+                double cost = eff.toDouble( Duration::Unit_h ) * nc;
+                c.add( eff, cost );
+                kDebug()<<d<<m_node->name()<<eff.toString()<<nc<<cost<<"->"<<c.effort().toString()<<c.cost();
             }
-            UsedEffort::ActualEffort *a = m_usedEffort[ r ]->actualEffortMap()[ d ];
-            if ( a ) {
-                c += a->normalEffort().toDouble( Duration::Unit_h ) * nc;
-                c += a->overtimeEffort().toDouble( Duration::Unit_h ) * oc;
+            if ( c.effort() != Duration::zeroDuration || c.cost() != 0.0 ) {
+                map.add( d, c );
             }
         }
     }
+    return map;
+}
+
+EffortCost Completion::actualCostTo( const QDate &date ) const
+{
+    //kDebug()<<date;
+    EffortCost c;
+    foreach ( const Resource *r, m_usedEffort.keys() ) {
+        double nc = r->normalRate();
+        //double oc = r->overtimeRate();
+        const QMap<QDate, UsedEffort::ActualEffort*> &map = usedEffort( r )->actualEffortMap();
+        QMap<QDate, UsedEffort::ActualEffort*>::const_iterator it;
+        for ( it = map.constBegin(); it != map.constEnd(); ++it ) {
+            if ( it.key() > date ) {
+                break;
+            }
+            UsedEffort::ActualEffort *a = it.value();
+            Duration eff = a->normalEffort();
+            double cost = eff.toDouble( Duration::Unit_h ) * nc;
+            c.add( Duration::zeroDuration, cost );
+            //kDebug()<<date<<r->name()<<it.key()<<c.cost();
+        }
+    }
+    Duration eff = actualEffortTo( date );
+    c.add( eff, 0.0 );
+    //kDebug()<<date<<eff.toString()<<c.effort().toString()<<c.cost();
     return c;
 }
 
