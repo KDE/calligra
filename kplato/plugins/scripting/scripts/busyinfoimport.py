@@ -18,7 +18,7 @@ class BusyinfoImporter:
         self.dialog.setButtons("Ok|Cancel")
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
-        openpage = self.dialog.addPage("Save","Export Busy Info File","document-save")
+        openpage = self.dialog.addPage("Open","Import Busy Info File","document-open")
         self.openwidget = self.forms.createFileWidget(openpage, "kfiledialog:///kplatobusyinfoimportopen")
         self.openwidget.setMode("Opening")
         self.openwidget.setFilter("*.rbi|Resource Busy Information\n*|All Files")

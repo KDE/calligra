@@ -6,8 +6,8 @@
     <collection name="import" text="Import" comment="Import content">
         <script
                name="pyimportresources"
-               text="Import Resources from KPlato File"
-               comment="Python script to import resources from file"
+               text="Resources from KPlato File"
+               comment="Python script to import resources from project file"
                interpreter="python"
                file="extensions/resourcesimport.py" />
     </collection>
@@ -62,7 +62,7 @@
         The "samples" collection provides misc example scripts to demonstrate
         parts of the KPlato scripting functionality.
         //-->
-    <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with KPlato" enabled="true">
+    <collection name="samples" text="Samples" comment="Samples to demonstrate scripting with KPlato" enabled="false">
         <script
             name="pysampleproject"
             text="Print Project Information..."

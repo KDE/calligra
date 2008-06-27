@@ -14,13 +14,13 @@ class ResourcesImporter:
         self.proj = KPlato.project()
         
         self.forms = Kross.module("forms")
-        self.dialog = self.forms.createDialog("Busy Information Import")
+        self.dialog = self.forms.createDialog("Resources Import")
         self.dialog.setButtons("Ok|Cancel")
         self.dialog.setFaceType("List") #Auto Plain List Tree Tabbed
 
         #TODO add options page ( import Calendars? Select calendars, Select resources... )
         
-        openpage = self.dialog.addPage("Open","Import KPlato Resources","document-save")
+        openpage = self.dialog.addPage("Open","KPlato Resources","document-open")
         self.openwidget = self.forms.createFileWidget(openpage, "kfiledialog:///kplatresourcesimportopen")
         self.openwidget.setMode("Opening")
         self.openwidget.setFilter("*.kplato|KPlato Project Files\n*|All Files")
