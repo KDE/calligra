@@ -753,7 +753,7 @@ const QString Filterkpr2odf::createStrokeDashStyle( int strokeStyle )
 
     return m_styles.lookup( style, name );
 }
-4352158869
+
 //TODO: yet again avoid the creation of duplicates
 const QString Filterkpr2odf::createHatchStyle( int brushStyle, QString fillColor )
 {
