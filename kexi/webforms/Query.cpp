@@ -69,10 +69,7 @@ namespace KexiWebForms {
             kDebug() << "Showing query results..." << endl;
 	    /// @fixme: Debugger says it's empty, after the first cycle it gets filled
             KexiDB::Field* primaryKey = tableSchema->primaryKey()->field(0);
-
-	    kDebug() << "PRIMARY KEY: " << primaryKey->captionOrName() << endl;
-	    kDebug() << "FIRST VALUE: " << querySchema->field(0)->captionOrName() << endl;
-	    kDebug() << "FIRST CVAL: " << cursor->value( 2 ).toString() << endl;
+            
             // Create labels with field name
 	    /// @note: when i = 2 (using my Test.kexi database) it just crashes
 	    /// com/
