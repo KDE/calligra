@@ -47,6 +47,9 @@ namespace KexiWebForms {
 
         QString queryData;
         KexiDB::QuerySchema* querySchema = gConnection->querySchema(requestedQuery);
+        if (querySchema != 0) {
+            kDebug() << "Query schema object is alive" << endl;
+        }
         KexiDB::TableSchema* tableSchema = querySchema->masterTable();
         KexiDB::Cursor* cursor = gConnection->executeQuery(*querySchema);
 
@@ -64,17 +67,23 @@ namespace KexiWebForms {
             dict->SetValue("ERROR", "This table has no primary key!");
         } else {
             kDebug() << "Showing query results..." << endl;
+	    /// @fixme: Debugger says it's empty, after the first cycle it gets filled
             KexiDB::Field* primaryKey = tableSchema->primaryKey()->field(0);
 
+	    kDebug() << "PRIMARY KEY: " << primaryKey->captionOrName() << endl;
+	    kDebug() << "FIRST VALUE: " << querySchema->field(0)->captionOrName() << endl;
+	    kDebug() << "FIRST CVAL: " << cursor->value( 2 ).toString() << endl;
             // Create labels with field name
-            queryData.append("<tr>");
+	    /// @fixme: when i = 2 (using my Test.kexi database) it just crashes
+	    /// com/
+            /*queryData.append("<tr>");
             for (uint i = 0; i < cursor->fieldCount(); i++) {
                 queryData.append("\t<th scope=\"col\">");
                 // @fixme: the following line leads to crash
                 queryData.append(querySchema->field(i)->captionOrName());
                 queryData.append("</th>\n");
             }
-            queryData.append("</tr>\n");
+            queryData.append("</tr>\n");*/
 
 
             // Create labels with fields data
@@ -87,21 +96,22 @@ namespace KexiWebForms {
                     // Use Kexi functions to retrieve and represent the Value
                     //! @todo use Kexi the same functions for rendering values as Kexi table and form view
                     //
-                    KexiDB::Field* field = querySchema->field(i);
-                    const KexiDB::Field::Type type = field->type();
+		    //! @note this will make it crash, commented out for now
+                    /*KexiDB::Field* field = querySchema->field(i);
+                    const KexiDB::Field::Type type = field->type();*/
                     QString valueString;
-                    if (type == KexiDB::Field::BLOB) {
+                    /*if (type == KexiDB::Field::BLOB) {
                         //! @todo decode image and display it if possible
                         valueString = "(Object)";
-                    }
-                    else if (field->isTextType()) {
+                    }*/
+                    /*else if (field->isTextType()) {*/
                         valueString = cursor->value(i).toString();
                         //! @fixme: why I don't have Qt::escape ?
                         //valueString = Qt::escape( cursor->value(i).toString() );
-                    }
+                    /*}
                     else {
                         valueString = cursor->value(i).toString();
-                    }
+                    }*/
                     queryData.append(valueString);
                     queryData.append("</td>");
                 }
