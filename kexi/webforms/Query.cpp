@@ -56,9 +56,9 @@ namespace KexiWebForms {
         //dict->SetValue("QUERYNAME", querySchema->caption().toUtf8().constData());
 
         /**
-         * @fixme: the code is very very similar to the one available in Read.cpp
+         * @note: the code is very very similar to the one available in Read.cpp
          * do some refactoring and avoid copy&paste programming
-         * @note: Situation should become better when I switch to the new OO server
+         * Situation should become better when I switch to the new OO server
          * backend
          */
         if (!cursor) {
@@ -74,7 +74,7 @@ namespace KexiWebForms {
 	    kDebug() << "FIRST VALUE: " << querySchema->field(0)->captionOrName() << endl;
 	    kDebug() << "FIRST CVAL: " << cursor->value( 2 ).toString() << endl;
             // Create labels with field name
-	    /// @fixme: when i = 2 (using my Test.kexi database) it just crashes
+	    /// @note: when i = 2 (using my Test.kexi database) it just crashes
 	    /// com/
             /*queryData.append("<tr>");
             for (uint i = 0; i < cursor->fieldCount(); i++) {
@@ -106,7 +106,7 @@ namespace KexiWebForms {
                     }*/
                     /*else if (field->isTextType()) {*/
                         valueString = cursor->value(i).toString();
-                        //! @fixme: why I don't have Qt::escape ?
+                        //! @note: why I don't have Qt::escape ?
                         //valueString = Qt::escape( cursor->value(i).toString() );
                     /*}
                     else {
