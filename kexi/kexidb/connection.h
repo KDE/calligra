@@ -205,7 +205,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! \return ids of all database query schemas stored in currently 
 		 used database. These ids can be later used as argument for querySchema().
-		 This is a shortcut for objectIds(TableObjectType). */
+		 This is a shortcut for objectIds(QueryObjectType). */
 		QList<int> queryIds();
 
 		/*! \return names of all schemas of object with \a objType type 
