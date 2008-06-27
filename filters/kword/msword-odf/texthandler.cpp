@@ -276,8 +276,14 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
         m_currentStyle = styles.styleByIndex( paragraphProperties->pap().istd );
         Q_ASSERT( m_currentStyle );
 	//TODO is there anything I need to actually do with styleName?
-	QConstString namedStyleName = Conversion::string( m_currentStyle->name() );
-	namedStyleName.replace(" ", "_20_");
+	QString namedStyleName = Conversion::string( m_currentStyle->name() );
+	//need to replace all non-alphanumeric characters with hex representation
+	for(int i = 0; i < namedStyleName.size(); i++) {
+	    if(!namedStyleName[i].isLetterOrNumber()) {
+		namedStyleName.remove(i, 1);
+		i--;
+	    }
+	}
 	kDebug(30513) << "styleName = " << namedStyleName;
         //write the paragraph formatting
 	KoGenStyle paragraphStyle(KoGenStyle::StyleAuto, "paragraph");

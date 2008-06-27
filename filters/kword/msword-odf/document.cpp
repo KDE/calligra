@@ -224,6 +224,7 @@ void Document::processStyles()
 	for(int i = 0; i < name.size(); i++) {
 	    if(!name[i].isLetterOrNumber()) {
 		name.remove(i, 1);
+		i--;
 	    }
 	}
         kDebug(30513) << "Style" << i << ":" << displayName.string();
