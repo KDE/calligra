@@ -1,7 +1,5 @@
 
-IF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
-	INCLUDE(${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
-ENDIF(EXISTS ${CMAKE_SOURCE_DIR}/kexi/CMakeSettings.txt)
+add_definitions(-DKDE_DEFAULT_DEBUG_AREA=44000)
 
 #add_subdirectory( parser )
 add_subdirectory( drivers )
