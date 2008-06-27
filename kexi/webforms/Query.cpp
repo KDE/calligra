@@ -21,6 +21,7 @@ Boston, MA 02110-1301, USA.
 #include <string>
 
 #include <QString>
+#include <QVector>
 
 #include <KDebug>
 
@@ -50,7 +51,7 @@ namespace KexiWebForms {
         KexiDB::TableSchema* tableSchema = querySchema->masterTable();
         KexiDB::Cursor* cursor = gConnection->executeQuery(*querySchema);
 
-        //dict->SetValue("QUERYNAME", querySchema->caption().toUtf8().constData());
+        dict->SetValue("QUERYNAME", querySchema->caption().toUtf8().constData());
 
         /**
          * @note: the code is very very similar to the one available in Read.cpp
@@ -64,26 +65,24 @@ namespace KexiWebForms {
             dict->SetValue("ERROR", "This table has no primary key!");
         } else {
             kDebug() << "Showing query results..." << endl;
-	    /// @fixme: Debugger says it's empty, after the first cycle it gets filled
             KexiDB::Field* primaryKey = tableSchema->primaryKey()->field(0);
+            KexiDB::QueryColumnInfo::Vector expandedFields = querySchema->fieldsExpanded();
+            
             
             // Create labels with field name
-	    /// @note: when i = 2 (using my Test.kexi database) it just crashes
-	    /// com/
-            /*queryData.append("<tr>");
-            for (uint i = 0; i < cursor->fieldCount(); i++) {
+            queryData.append("<tr>");
+            for (uint i = 0; i < expandedFields.size(); ++i) {
                 queryData.append("\t<th scope=\"col\">");
-                // @fixme: the following line leads to crash
-                queryData.append(querySchema->field(i)->captionOrName());
+                queryData.append(expandedFields.at(i)->field->captionOrName());
                 queryData.append("</th>\n");
             }
-            queryData.append("</tr>\n");*/
+            queryData.append("</tr>\n");
 
 
             // Create labels with fields data
             while (cursor->moveNext()) {
                 queryData.append("<tr>");
-                for (uint i = 0; i < cursor->fieldCount(); i++) {
+                for (uint i = 0; i < expandedFields.size(); ++i) {
                     queryData.append("<td>");
 
                     //
@@ -91,21 +90,19 @@ namespace KexiWebForms {
                     //! @todo use Kexi the same functions for rendering values as Kexi table and form view
                     //
 		    //! @note this will make it crash, commented out for now
-                    /*KexiDB::Field* field = querySchema->field(i);
-                    const KexiDB::Field::Type type = field->type();*/
+                    KexiDB::Field* field = expandedFields.at(i)->field;
+                    const KexiDB::Field::Type type = field->type();
                     QString valueString;
-                    /*if (type == KexiDB::Field::BLOB) {
+                    if (type == KexiDB::Field::BLOB) {
                         //! @todo decode image and display it if possible
                         valueString = "(Object)";
-                    }*/
-                    /*else if (field->isTextType()) {*/
+                    } else if (field->isTextType()) {
                         valueString = cursor->value(i).toString();
                         //! @note: why I don't have Qt::escape ?
                         //valueString = Qt::escape( cursor->value(i).toString() );
-                    /*}
-                    else {
+                    } else {
                         valueString = cursor->value(i).toString();
-                    }*/
+                    }
                     queryData.append(valueString);
                     queryData.append("</td>");
                 }
