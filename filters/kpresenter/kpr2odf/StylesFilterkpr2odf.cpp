@@ -75,7 +75,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         KoGenStyle drawFillImage( KoGenStyle::StyleFillImage );
 
         //default values
-        drawFillImage.addAttribute( "xlink:href", "Picture/" + m_pictures[ pictureName ] );
+        drawFillImage.addAttribute( "xlink:href", "Pictures/" + m_pictures[ pictureName ] );
         drawFillImage.addAttribute( "xlink:type", "simple" );
         drawFillImage.addAttribute( "xlink:show", "embed" );
         drawFillImage.addAttribute( "xlink:actuate", "onLoad" );
@@ -97,7 +97,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         }
         style.addProperty( "style:repeat", repeat );
 
-        style.addProperty( "draw:fill-name", m_styles.lookup( drawFillImage ) );
+        style.addProperty( "draw:fill-image-name", m_styles.lookup( drawFillImage, "picture" ) );
     }
 
     //Add the duration of the page effect
@@ -252,6 +252,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         if( !soundEffect.isNull() && soundEffect.attribute( "soundEffect" ) != "0" )
         {
             //As this is a "complex" tag we add it "manually"
+            //TODO: check if we can use StyleChildElement instead
             QBuffer buffer;
             buffer.open( IO_WriteOnly );
             KoXmlWriter elementWriter( &buffer );
@@ -297,7 +298,7 @@ const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientEl
         KoXmlElement bGradient = gradientElement.namedItem( "BGRADIENT" ).toElement();
         if( !bGradient.isNull() )
         {
-            if ( bGradient.attribute( "unbalanced" ) == "0" )
+            if( bGradient.attribute( "unbalanced" ) == "0" )
             {
                 style.addAttribute( "draw:cx", "50%" );
                 style.addAttribute( "draw:cy", "50%" );
@@ -338,7 +339,7 @@ const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientEl
     //export the type of the gradient
     QString typeString;
     QString angle;
-    switch ( type )
+    switch( type )
     {
     case 1:
         typeString = "linear";
@@ -378,20 +379,38 @@ const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientEl
 const QString Filterkpr2odf::createPageLayout()
 {
     //Create the page-layout that is: paper, header and footer sizes
-    KoXmlElement paper( m_mainDoc.namedItem( "DOC" ).namedItem( "HEADER" ).toElement() );
+    KoXmlElement paper( m_mainDoc.namedItem( "DOC" ).namedItem( "PAPER" ).toElement() );
     KoXmlElement paperBorders( paper.namedItem( "PAPERBORDERS" ).toElement() );
 
     //page-layout-properties
     KoGenStyle style( KoGenStyle::StylePageLayout );
     style.setAutoStyleInStylesDotXml( true );
 
-    style.addProperty( "fo:margin-top", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptTop" , "0" ).toFloat() ) ) );
-    style.addProperty( "fo:margin-bottom", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptBottom" , "0" ).toFloat() ) ) );
-    style.addProperty( "fo:margin-left", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptLeft" , "0" ).toFloat() ) ) );
-    style.addProperty( "fo:margin-right", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptRight" , "0" ).toFloat() ) ) );
-    style.addProperty( "fo:page-width", QString( "%1cm" ).arg( KoUnit::toCentimeter( paper.attribute( "ptWidth" , "0" ).toFloat() ) ) );
-    style.addProperty( "fo:page-height", QString( "%1cm" ).arg( KoUnit::toCentimeter( paper.attribute( "ptHeight" , "0" ).toFloat() ) ) );
-    style.addProperty( "fo:print-orientation", "landscape" );//FIXME: why?
+    if( paperBorders.hasAttribute( "ptTop" ) )
+    {
+        style.addProperty( "fo:margin-top", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptTop" ).toFloat() ) ) );
+    }
+    if( paperBorders.hasAttribute( "ptBottom" ) )
+    {
+        style.addProperty( "fo:margin-bottom", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptBottom" ).toFloat() ) ) );
+    }
+    if( paperBorders.hasAttribute( "ptLeft" ) )
+    {
+        style.addProperty( "fo:margin-left", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptLeft" ).toFloat() ) ) );
+    }
+    if( paperBorders.hasAttribute( "ptRight" ) )
+    {
+        style.addProperty( "fo:margin-right", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptRight" ).toFloat() ) ) );
+    }
+    if( paper.hasAttribute( "ptWidth" ) )
+    {
+        style.addProperty( "fo:page-width", QString( "%1cm" ).arg( KoUnit::toCentimeter( paper.attribute( "ptWidth" ).toFloat() ) ) );
+    }
+    if( paper.hasAttribute( "ptHeight" ) )
+    {
+        style.addProperty( "fo:page-height", QString( "%1cm" ).arg( KoUnit::toCentimeter( paper.attribute( "ptHeight" ).toFloat() ) ) );
+    }
+    style.addProperty( "fo:print-orientation", "landscape" );
 
     //NOTE: header-style and footer-style are not present because in KPresenter they are treated as text boxes
 
@@ -407,4 +426,390 @@ const QString Filterkpr2odf::createMasterPageStyle()
     style.addAttribute( "style:page-layout-name", createPageLayout() );
 
     return m_styles.lookup( style, "Default" );
+}
+//TODO: load the tags still missing
+const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
+{
+    //A graphic style is wiely used by a broad type of objects, hence can have many different properties
+    KoGenStyle style( KoGenStyle::StyleGraphicAuto );
+    KoXmlElement textObject( element.namedItem( "TEXTOBJ" ).toElement() );
+    if( !textObject.isNull() )
+    {
+        if( textObject.hasAttribute( "verticalAlign" ) )
+        {
+            QString textAligment = textObject.attribute( "verticalAlign" );
+            if( textAligment == "center" )//all the other values are valid except center that is called middle in ODF
+                textAligment = "middle";
+            style.addProperty( "draw:textarea-vertical-align", textAligment );
+        }
+        if( textObject.hasAttribute( "bleftpt" ) )
+        {
+             style.addProperty( "fo:padding-left", QString( "%1pt" ).arg( textObject.attribute( "bleftpt" ) ) );
+        }
+        if( textObject.hasAttribute( "bbottompt" ) )
+        {
+            style.addProperty( "fo:padding-bottom",QString( "%1pt" ).arg( textObject.attribute( "bbottompt" ) ) );
+        }
+        if( textObject.hasAttribute( "btoppt" ) )
+        {
+            style.addProperty( "fo:padding-top", QString( "%1pt" ).arg( textObject.attribute( "btoppt" ) ) );
+        }
+        if( textObject.hasAttribute( "brightpt" ) )
+        {
+            style.addProperty( "fo:padding-right", QString( "%1pt" ).arg( textObject.attribute( "brightpt" ) ) );
+        }
+    }
+
+    KoXmlElement pen( element.namedItem( "PEN" ).toElement() );
+    if( !pen.isNull() )
+    {
+        style.addProperty( "svg:stroke-width", QString("%1cm").arg( KoUnit::toCentimeter( pen.attribute( "width" ).toDouble() ) ) );
+        style.addProperty( "svg:stroke-color", pen.attribute( "color" ) );
+
+        QString stroke;
+        int strokeStyle = pen.attribute( "style" ).toInt();
+        if( strokeStyle == 1 )
+        {
+            stroke = "solid";
+        }
+        else if( strokeStyle >= 2 && strokeStyle <= 5 )
+        {
+            stroke = "dash";
+            style.addProperty( "draw:stroke-dash", createStrokeDashStyle( strokeStyle ) );
+        }
+        else
+        {
+            stroke = "none";
+        }
+        style.addProperty( "draw:stroke", stroke );
+    }
+
+    //We now define what's the object filled with, we "default" to a brush if both attributes are present
+    KoXmlElement brush( element.namedItem( "BRUSH" ).toElement() );
+    KoXmlElement gradient( element.namedItem( "GRADIENT" ).toElement() );
+    QString fill;
+    if( !brush.isNull() )
+    {
+        QString fillColor( brush.attribute( "color" ) );
+
+        int brushStyle = brush.attribute( "style" ).toInt();
+        if( brushStyle == 1 )
+        {
+            fill = "solid";
+            style.addProperty( "draw:fill-color", fillColor );
+        }
+        else if( brushStyle >= 9 && brushStyle <= 14 )
+        {
+            fill = "hatch";
+            style.addProperty( "draw:fill-hatch-name",  createHatchStyle( brushStyle, fillColor ) );
+        }
+        else if( brushStyle >= 2 && brushStyle <= 8 )
+        {
+            //in KPR files transparency was used in ODF opacity is used instead calculated as 100-transparency
+            int opacity;
+            if( brushStyle == 2 )
+                opacity = 6;
+            else if( brushStyle == 3 )
+                opacity = 12;
+            else if( brushStyle == 4 )
+                opacity = 37;
+            else if( brushStyle == 5 )
+                opacity = 50;
+            else if( brushStyle == 6 )
+                opacity = 63;
+            else if( brushStyle == 7 )
+                opacity = 88;
+            else if( brushStyle == 8 )
+                opacity = 94;
+            //Opacity is a gradient, in this case an uniform one
+            style.addProperty( "draw:opacity", createOpacityGradientStyle( opacity ) );
+        }
+    }
+    else if( !gradient.isNull() )
+    {
+        fill = "gradient";
+        style.addProperty( "draw:fill-gradient-name", createGradientStyle( gradient ) );
+    }
+    else
+    {
+        fill = "none";
+    }
+
+    if( !fill.isNull() ) //don't save ""
+    {
+        style.addProperty( "draw:fill", fill );
+    }
+
+    KoXmlElement lineBegin = element.namedItem( "LINEBEGIN" ).toElement();
+    if( !lineBegin.isNull() )
+    {
+        style.addProperty( "draw:marker-start-width", "0.25cm" );
+
+        int markerStyle = lineBegin.attribute( "value" ).toInt();
+        style.addProperty( "draw:marker-start", createMarkerStyle( markerStyle ) );
+    }
+
+    KoXmlElement lineEnd = element.namedItem( "LINEEND" ).toElement();
+    if( !lineEnd.isNull() )
+    {
+        style.addProperty( "draw:marker-end-width", "0.25cm" );
+
+        int markerStyle = lineEnd.attribute( "value" ).toInt();
+        style.addProperty( "draw:marker-end", createMarkerStyle( markerStyle ) );
+    }
+
+    KoXmlElement shadow = element.namedItem( "SHADOW" ).toElement();
+    if( !shadow.isNull() )
+    {
+        style.addProperty( "draw:shadow", "visible" );
+        style.addProperty( "draw:shadow-color", shadow.attribute( "color" ) );
+
+        QString shadowOffsetX;
+        QString shadowOffsetY;
+        int direction = shadow.attribute( "direction" ).toInt();
+        QString distance = QString( "%1cm" ).arg( KoUnit::toCentimeter( shadow.attribute( "distance" ).toDouble() ) );
+        switch( direction )
+        {
+        case 1: //Left Up
+            shadowOffsetX = '-' + distance;
+            shadowOffsetY = '-' + distance;
+            break;
+        case 2: //Up
+            shadowOffsetX = "0cm";
+            shadowOffsetY = '-' + distance;
+            break;
+        case 3: //Right Up
+            shadowOffsetX = distance;
+            shadowOffsetY = '-' + distance;
+            break;
+        case 4: //Right
+            shadowOffsetX = distance;
+            shadowOffsetY = "0cm";
+            break;
+        case 5: //Right Bottom
+            shadowOffsetX = distance;
+            shadowOffsetY = distance;
+            break;
+        case 6: //Bottom
+            shadowOffsetX = "0cm";
+            shadowOffsetY = distance;
+            break;
+        case 7: //Left Bottom
+            shadowOffsetX = '-' + distance;
+            shadowOffsetY = distance;
+            break;
+        case 8: //Left
+            shadowOffsetX = '-' + distance;
+            shadowOffsetY = "0cm";
+            break;
+        }
+        style.addProperty( "draw:shadow-offset-x", shadowOffsetX );
+        style.addProperty( "draw:shadow-offset-y", shadowOffsetY );
+    }
+//     if( m_name != "standard" )
+//         style.setAttribute( "style:parent-style-name", "standard" ); FIXME: what do we do?
+
+    return m_styles.lookup( style, "gr" );
+}
+
+const QString Filterkpr2odf::createOpacityGradientStyle( int opacity )
+{
+    //Opacity wasn't a gradient in KPR so we go from and to the same value
+    KoGenStyle style( KoGenStyle::StyleOpacity );
+    QString opacityString = QString("%1%").arg( opacity );
+    style.addAttribute( "draw:start", opacityString );
+    style.addAttribute( "draw:end", opacityString );
+    return m_styles.lookup( style, "op" );
+}
+
+//TODO: avoid the creation of duplicates
+const QString Filterkpr2odf::createMarkerStyle( int markerType )
+{
+    KoGenStyle style( KoGenStyle::StyleMarker );
+
+    QString name;
+    QString viewBox;
+    QString d;
+
+    switch( markerType )
+    {
+    case 0: //Normal
+        //nothing
+        break;
+    case 1:
+        name = "Arrow";
+        viewBox = "0 0 20 30";
+        d = "m10 0-10 30h20z";
+        break;
+    case 2:
+        name = "Square";
+        viewBox = "0 0 10 10";
+        d = "m0 0h10v10h-10z";
+        break;
+    case 3:
+        name = "Circle";
+        viewBox = "0 0 1131 1131";
+        d = "m462 1118-102-29-102-51-93-72-72-93-51-102-29-102-13-105 13-102 29-106 51-102 72-89 93-72 102-50 102-34 106-9 101 9 106 34 98 50 93 72 72 89 51 102 29 106 13 102-13 105-29 102-51 102-72 93-93 72-98 51-106 29-101 13z";
+        break;
+    case 4:
+        name = "Line Arrow";
+        viewBox = "0 0 1122 2243";
+        d = "m0 2108v17 17l12 42 30 34 38 21 43 4 29-8 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30 21-42v-39-12l-4 4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z";
+        break;
+    case 5:
+        name = "Dimension Lines";
+        viewBox = "0 0 836 110";
+        d = "m0 0h278 278 280v36 36 38h-278-278-280v-36-36z";
+        break;
+    case 6:
+        name = "Doble Arrow";
+        viewBox = "0 0 1131 1918";//FIXME: same as Double line arrow, not sure if it's ok, nothing in KPresenter1.6
+        d = "m737 1131h394l-564-1131-567 1131h398l-398 787h1131z";
+        break;
+    case 7:
+        name = "Double Line Arrow";
+        viewBox = "0 0 1131 1918";
+        d = "m0 11h312 312h122z";
+        break;
+    }//switch markerType
+
+    style.addAttribute( "draw:name", name );
+    style.addAttribute( "draw:viewBox", viewBox );
+    style.addAttribute( "draw:d", d );
+
+    return m_styles.lookup( style, "mks" );
+}
+
+//TODO: avoid the creation of duplicates too
+const QString Filterkpr2odf::createStrokeDashStyle( int strokeStyle )
+{
+    KoGenStyle style( KoGenStyle::StyleStrokeDash );
+
+    //"Containment" strings, filled according to the type of the strokeStyle
+    QString name;
+    QString styleString;
+    QString dots1;
+    QString dots1_length;
+    QString dots2;
+    QString dots2_length;
+    QString distance;
+
+    switch( strokeStyle )
+    {
+    case 0:
+    case 1:
+        break;
+    case 2:
+        name = "Fine Dashed";
+        styleString = "rect";
+        dots1 = "1";
+        dots1_length = "0.508cm";
+        dots2 = "1";
+        dots2_length = "0.508cm";
+        distance = "0.508cm";
+        break;
+    case 3:
+        name = "Fine Dotted";
+        styleString = "rect";
+        dots1 = "1";
+        distance = "0.257cm";
+        break;
+    case 4:
+        name = "Ultrafine 1 Dot 1 Dash";
+        styleString = "rect";
+        dots1 = "1";
+        dots1_length = "0.051cm";
+        dots2 = "1";
+        dots2_length = "0.254cm";
+        distance = "0.127cm";
+        break;
+    case 5:
+        name = "2 Dots 1 Dash";
+        styleString = "rect";
+        dots1 = "2";
+        dots2 = "1";
+        dots2_length = "0.203cm";
+        distance = "0.203cm";
+        break;
+    }
+
+    //Not all the strings are filled always so in oder to not
+    //flood the style with unneeded "", we check if it was written
+    style.addAttribute( "draw:style", styleString );
+    style.addAttribute( "draw:dots1", dots1 );
+    style.addAttribute( "draw:distance", distance );
+    if( !dots1_length.isNull() )
+    {
+        style.addAttribute( "draw:dots1-length", dots1_length );
+    }
+    if( !dots2.isNull() )
+    {
+        style.addAttribute( "draw:dots2", dots2 );
+    }
+    if( !dots2_length.isNull() )
+    {
+        style.addAttribute( "draw:dots2-length", dots2_length );
+    }
+
+    return m_styles.lookup( style, name );
+}
+4352158869
+//TODO: yet again avoid the creation of duplicates
+const QString Filterkpr2odf::createHatchStyle( int brushStyle, QString fillColor )
+{
+    KoGenStyle style( KoGenStyle::StyleHatch );
+
+    QString name;
+    QString styleString;
+    QString distance;
+    QString rotation;
+
+    //Other numbers aren't needed because those aren't a hatch style
+    switch ( brushStyle )
+    {
+    case 9:
+        name = fillColor + " 0 Degrees";
+        styleString = "single";
+        distance = "0.102cm";
+        rotation = "0";
+        break;
+    case 10:
+        name = fillColor + " 90 Degrees";
+        styleString = "single";
+        distance = "0.102cm";
+        rotation = "900";
+        break;
+    case 11:
+        name = fillColor + " Crossed 0 Degrees";
+        styleString = "double";
+        distance = "0.076cm";
+        rotation = "900";
+        break;
+    case 12:
+        name = fillColor + " 45 Degrees";
+        styleString = "single";
+        distance = "0.102cm";
+        rotation = "450";
+        break;
+    case 13:
+        name = fillColor + " -45 Degrees";
+        styleString = "single";
+        distance = "0.102cm";
+        rotation = "3150";
+        break;
+    case 14:
+        name = fillColor + " Crossed 45 Degrees";
+        styleString = "double";
+        distance = "0.076cm";
+        rotation = "450";
+        break;
+    }
+
+    style.addAttribute( "draw:name", name );
+    style.addAttribute( "draw:style", styleString );
+    style.addAttribute( "draw:color", fillColor );
+    style.addAttribute( "draw:distance", distance );
+    style.addAttribute( "draw:rotation", rotation );
+
+    return m_styles.lookup( style, name );
 }

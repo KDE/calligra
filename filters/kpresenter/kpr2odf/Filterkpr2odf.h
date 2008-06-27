@@ -54,9 +54,13 @@ private:
      //Styles functions
     const QString createPageStyle( const KoXmlElement& page );
     const QString createGradientStyle( const KoXmlElement& page );
+    const QString createGraphicStyle( const KoXmlElement& page );
     const QString createPageLayout();//we use more than one tag, better load them from m_mainDoc
     const QString createMasterPageStyle();//same as above
-
+    const QString createOpacityGradientStyle( int opacity );
+    const QString createMarkerStyle( int markerType );
+    const QString createStrokeDashStyle( int strokeStyle );
+    const QString createHatchStyle( int brushStyle, QString fillColor );
     KoXmlDocument m_mainDoc;//from KPR
     KoXmlDocument m_documentInfo;//from KPR
 

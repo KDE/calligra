@@ -50,13 +50,13 @@ Filterkpr2odf::Filterkpr2odf(QObject *parent,const QStringList&)
 KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const QByteArray& to )
 {
     //Check that the type of files are right
-    if ( from != "application/x-kpresenter"
+    if( from != "application/x-kpresenter"
          || to != "application/vnd.oasis.opendocument.presentation" )
         return KoFilter::BadMimeType;
 
     //open the input file file
     KoStore* input = KoStore::createStore( m_chain->inputFile(), KoStore::Read );
-    if ( !input )
+    if( !input )
         return KoFilter::FileNotFound;
 
     //Load the document
@@ -84,7 +84,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
     KoStore* output = KoStore::createStore( m_chain->outputFile(), KoStore::Write
                                            ,KoOdf::mimeType( KoOdf::Presentation ), KoStore::Zip );
 
-    if ( !output )
+    if( !output )
         return KoFilter::StorageCreationError;
 
     KoOdfWriteStore odfWriter( output );
@@ -152,7 +152,7 @@ void Filterkpr2odf::createImageList( KoStore* output, KoStore* input, KoXmlWrite
         return;
 
     output->enterDirectory( "Pictures" );
-    manifest->addManifestEntry( "Pictures/", "" );
+//     manifest->addManifestEntry( "Pictures/", "" );//FIXME: is this needed or not? 1.6 doesn't add an entry, ODEssentials does
 
     //Iterate over all the keys to copy the image, get the file name and
     //its "representation" inside the KPR file
@@ -257,7 +257,7 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
     //and all notes in PAGENOTES
     KoXmlNode title = titles.firstChild();
     KoXmlNode note = notes.firstChild();
-    for ( ; !title.isNull() && !note.isNull();
+    for( ; !title.isNull() && !note.isNull();
           title = title.nextSibling(), note = note.nextSibling() )
     {
         //Every page is a draw:page
@@ -320,7 +320,7 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
 
     //Now store all the shows
     KoXmlElement customSlideShowConfig( m_mainDoc.namedItem( "DOC" ).namedItem( "CUSTOMSLIDESHOWCONFIG" ).toElement() );
-    for ( KoXmlElement customSlideShow = customSlideShowConfig.firstChild().toElement(); !customSlideShow.isNull();
+    for( KoXmlElement customSlideShow = customSlideShowConfig.firstChild().toElement(); !customSlideShow.isNull();
           customSlideShow = customSlideShow.nextSibling().toElement() )
     {
         //FIXME: is this needed? show.tagName()=="CUSTOMSLIDESHOW" )
@@ -344,7 +344,7 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
         float y = object.namedItem( "ORIG" ).toElement().attribute( "y" ).toFloat();
 
         //We check if the y is on the current page
-        if ( y < m_pageHeight * ( currentPage - 1 )
+        if( y < m_pageHeight * ( currentPage - 1 )
              || y >= m_pageHeight * currentPage )
             continue; // object not on current page
 
