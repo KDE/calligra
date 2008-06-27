@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
- * Copyright ( C ) 2007 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,12 +23,11 @@
 #include <KoPAPage.h>
 
 #include "KPrAnimationController.h"
-#include "KPrShapeAnimations.h"
 
 class KPrPageApplicationData;
 class KPrNotes;
 
-class KPrPage : public KoPAPage , public KPrAnimationController
+class KPrPage : public KoPAPage, public KPrAnimationController
 {
 public:
     explicit KPrPage( KoPAMasterPage * masterPage );
@@ -45,6 +44,9 @@ public:
 
     KPrNotes *pageNotes();
 
+    void addShape( KoShape * shape );
+    void removeShape( KoShape * shape );
+
 protected:
     virtual void saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const;
 
@@ -54,7 +56,8 @@ protected:
     virtual bool saveOdfPresentationNotes(KoPASavingContext &paContext) const;
 
 private:
-    KPrNotes *m_pageNotes;
+    class Private;
+    Private * const d;
 };
 
 #endif /* KPRPAGE_H */

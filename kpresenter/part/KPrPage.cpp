@@ -19,6 +19,8 @@
 
 #include "KPrPage.h"
 
+#include <QString>
+
 #include <KoXmlNS.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
@@ -33,16 +35,31 @@
 
 #include <kdebug.h>
 
+class KPrPage::Private
+{
+public:
+    Private( KPrPage * page )
+    : pageNotes( new KPrNotes( page ) )
+    {}
+
+    ~Private()
+    {
+        delete pageNotes;
+    }
+
+    KPrNotes * pageNotes;
+};
+
 KPrPage::KPrPage( KoPAMasterPage * masterPage )
 : KoPAPage( masterPage )
+, d( new Private( this ) )
 {
     setApplicationData( new KPrPageApplicationData() );
-    m_pageNotes = new KPrNotes(this);
 }
 
 KPrPage::~KPrPage()
 {
-    delete m_pageNotes;
+    delete d;
 }
 
 KPrPageApplicationData * KPrPage::pageData( KoPAPageBase * page )
@@ -54,7 +71,19 @@ KPrPageApplicationData * KPrPage::pageData( KoPAPageBase * page )
 
 KPrNotes *KPrPage::pageNotes()
 {
-    return m_pageNotes;
+    return d->pageNotes;
+}
+
+void KPrPage::addShape( KoShape * shape )
+{
+    Q_ASSERT( shape );
+    // TODO
+}
+
+void KPrPage::removeShape( KoShape * shape )
+{
+    Q_ASSERT( shape );
+    // TODO
 }
 
 void KPrPage::saveOdfPageStyleData( KoGenStyle &style, KoPASavingContext &paContext ) const
@@ -99,13 +128,13 @@ void KPrPage::loadOdfPageTag( const KoXmlElement &element, KoPALoadingContext &l
 
     node = element.namedItemNS(KoXmlNS::presentation, "notes");
     if ( node.isElement() ) {
-        m_pageNotes->loadOdf(node.toElement(), loadingContext);
+        d->pageNotes->loadOdf(node.toElement(), loadingContext);
     }
 }
 
 bool KPrPage::saveOdfPresentationNotes(KoPASavingContext &paContext) const
 {
-    m_pageNotes->saveOdf(paContext);
+    d->pageNotes->saveOdf(paContext);
     return true;
 }
 
