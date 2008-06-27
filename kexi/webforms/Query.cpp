@@ -47,9 +47,6 @@ namespace KexiWebForms {
 
         QString queryData;
         KexiDB::QuerySchema* querySchema = gConnection->querySchema(requestedQuery);
-        if (querySchema != 0) {
-            kDebug() << "Query schema object is alive" << endl;
-        }
         KexiDB::TableSchema* tableSchema = querySchema->masterTable();
         KexiDB::Cursor* cursor = gConnection->executeQuery(*querySchema);
 
