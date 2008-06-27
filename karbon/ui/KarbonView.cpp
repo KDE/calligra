@@ -66,7 +66,6 @@
 #include <KoCanvasController.h>
 #include <KoCanvasResourceProvider.h>
 #include <KoFilterManager.h>
-#include <KoContextHelp.h>
 #include <KoUnitDoubleSpinBox.h>
 // #include <KoPageLayoutDia.h>
 #include <KoRuler.h>
@@ -115,6 +114,7 @@
 #include <kfiledialog.h>
 #include <kstandardaction.h>
 #include <kparts/partmanager.h>
+#include <KToggleAction>
 
 // qt header
 #include <QtGui/QIcon>
@@ -1148,8 +1148,6 @@ void KarbonView::initActions()
     KAction * zoomDrawing = new KAction(KIcon("zoom_drawing"), i18n("Zoom to Drawing"), this );
     actionCollection()->addAction( "view_zoom_drawing", zoomDrawing );
     connect(zoomDrawing, SIGNAL(triggered()), this, SLOT(zoomDrawing()));
-
-    m_contextHelpAction = new KoContextHelpAction( actionCollection(), this );
     // view <-----
 }
 

@@ -55,7 +55,6 @@ class KarbonPart;
 class KSelectAction;
 class KToggleAction;
 
-class KoContextHelpAction;
 class KoCanvasController;
 class KoRuler;
 
@@ -80,8 +79,6 @@ public:
     void dropEvent( QDropEvent *e );
 
     KarbonCanvas* canvasWidget() const { return m_canvas; }
-
-    KoContextHelpAction* contextHelpAction() const { return m_contextHelpAction; }
 
     void reorganizeGUI();
     void setNumberOfRecentFiles( unsigned int number );
@@ -215,7 +212,6 @@ private:
     KToggleAction        *m_showGridAction;
     KToggleAction        *m_snapGridAction;
     KToggleAction        *m_showPageMargins;
-    KoContextHelpAction    *m_contextHelpAction;
     KAction                *m_deleteSelectionAction;
 
     //dockers
