@@ -2,6 +2,7 @@
 Name=Edge wipe
 Name[ca]=Esborrat de vora
 Name[el]=Σβήσιμο άκρων
+Name[gl]=Transición brusca
 Name[hi]=किनारा वाइप
 Name[it]=Transizione a bordo
 Name[nl]=Randvegen
@@ -15,6 +16,7 @@ Name[zh_TW]=邊緣掃描
 Comment=Edge Wipe Page Effects
 Comment[ca]=Efectes d'esborrat de vora de la pàgina
 Comment[el]=Εφέ σελίδας σβήσιμο άκρων
+Comment[gl]=Efecto de Transición de Páxina Brusco
 Comment[hi]=किनारा वाइप पृष्ठ प्रभाव
 Comment[it]=Effetti di transizione a bordo delle pagine
 Comment[nl]=Randvegen pagina-effecten
