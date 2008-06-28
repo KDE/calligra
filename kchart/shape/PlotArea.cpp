@@ -21,7 +21,7 @@
 // Local
 #include "PlotArea.h"
 #include "Axis.h"
-#include "DataSet.h"
+#include "CellDataSet.h"
 #include "Surface.h"
 #include "ThreeDScene.h"
 #include "ProxyModel.h"
@@ -100,8 +100,6 @@ public:
     int gapBetweenBars;
     int gapBetweenSets;
     
-    int loadedDataSets;
-    
     QList<KoShape*> automaticallyHiddenAxisTitles;
 };
 
@@ -118,7 +116,6 @@ PlotArea::Private::Private()
     threeDScene = 0;
     gapBetweenBars = 0;
     gapBetweenSets = 100;
-    loadedDataSets = 0;
 }
 
 PlotArea::Private::~Private()
@@ -441,6 +438,24 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, const KoOdfStylesRe
         }
     }
     
+    // Load dataset properties
+    KoXmlElement n = plotAreaElement.firstChild().toElement();
+    for ( ; !n.isNull(); n = n.nextSibling().toElement() )
+    {
+        if ( n.namespaceURI() != KoXmlNS::chart )
+            continue;
+        if ( n.localName() == "series" )
+            loadOdfSeries( n, stylesReader );
+        else if ( n.localName() == "wall" )
+            d->wall->loadOdf( n, stylesReader );
+        else if ( n.localName() == "floor" )
+            d->floor->loadOdf( n, stylesReader );
+        else
+        {
+            qWarning() << "PlotArea::loadOdf(): Unknown tag name \"" << n.localName() << "\"";
+        }
+    }
+    
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) ) {
         QString styleName = plotAreaElement.attributeNS( KoXmlNS::chart, "style-name", QString() );
         const KoXmlElement *styleElement = stylesReader.findStyle( styleName, "chart" );
@@ -465,24 +480,6 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, const KoOdfStylesRe
         }
     }
     
-    // Load dataset properties
-    KoXmlElement n = plotAreaElement.firstChild().toElement();
-    for ( ; !n.isNull(); n = n.nextSibling().toElement() )
-    {
-        if ( n.namespaceURI() != KoXmlNS::chart )
-            continue;
-        if ( n.localName() == "series" )
-            loadOdfSeries( n, stylesReader );
-        else if ( n.localName() == "wall" )
-            d->wall->loadOdf( n, stylesReader );
-        else if ( n.localName() == "floor" )
-            d->floor->loadOdf( n, stylesReader );
-        else
-        {
-            qWarning() << "PlotArea::loadOdf(): Unknown tag name \"" << n.localName() << "\"";
-        }
-    }
-    
     requestRepaint();
     
     return true;
@@ -490,6 +487,21 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, const KoOdfStylesRe
 
 bool PlotArea::loadOdfSeries( const KoXmlElement &seriesElement, const KoOdfStylesReader &stylesReader )
 {
+    DataSet *dataSet = d->shape->proxyModel()->createDataSet();
+    Q_ASSERT( dataSet );
+    if ( !dataSet )
+        return true;
+
+    if ( seriesElement.hasAttributeNS( KoXmlNS::chart, "values-cell-range-address" ) )
+    {
+        const QString region = seriesElement.attributeNS( KoXmlNS::chart, "values-cell-range-address", QString() );
+        dataSet->setYDataRegionString( region );
+    }
+    if ( seriesElement.hasAttributeNS( KoXmlNS::chart, "label-cell-address" ) )
+    {
+        const QString region = seriesElement.attributeNS( KoXmlNS::chart, "label-cell-address", QString() );
+        dataSet->setLabelDataRegionString( region );
+    }
     if ( seriesElement.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
     {
         QString styleName = seriesElement.attributeNS( KoXmlNS::chart, "style-name", QString() );
@@ -499,11 +511,6 @@ bool PlotArea::loadOdfSeries( const KoXmlElement &seriesElement, const KoOdfStyl
             KoXmlElement n = styleElement->firstChild().toElement();
             for ( ; !n.isNull(); n = n.nextSibling().toElement() )
             {
-                QList<DataSet*> dataSets = d->shape->proxyModel()->dataSets();
-                if ( d->loadedDataSets > dataSets.size() )
-                    return true;
-                
-                Q_ASSERT( dataSets[ d->loadedDataSets ] );
                 
                 if ( n.namespaceURI() != KoXmlNS::style )
                     continue;
@@ -514,7 +521,7 @@ bool PlotArea::loadOdfSeries( const KoXmlElement &seriesElement, const KoOdfStyl
                     {
                         int pieOffset = n.attributeNS( KoXmlNS::chart, "pie-offset", QString() ).toInt();
                         
-                        setPieExplodeFactor( dataSets[ d->loadedDataSets ], pieOffset );
+                        setPieExplodeFactor( dataSet, pieOffset );
                     }
                 }
                 else if ( n.localName() == "graphic-properties" )
@@ -522,8 +529,14 @@ bool PlotArea::loadOdfSeries( const KoXmlElement &seriesElement, const KoOdfStyl
                     if ( n.hasAttributeNS( KoXmlNS::draw, "fill-color" ) )
                     {
                         QColor fillColor( n.attributeNS( KoXmlNS::draw, "fill-color", QString() ) );
+
+                        dataSet->setColor( fillColor );
+                    }
+                    if ( n.hasAttributeNS( KoXmlNS::svg, "stroke-color" ) )
+                    {
+                        QColor strokeColor( n.attributeNS( KoXmlNS::svg, "stroke-color", QString() ) );
                         
-                        dataSets[ d->loadedDataSets ]->setColor( fillColor );
+                        dataSet->setPen( strokeColor );
                     }
                 }
                 else
@@ -533,6 +546,7 @@ bool PlotArea::loadOdfSeries( const KoXmlElement &seriesElement, const KoOdfStyl
             }
         }
     }
+        
     
     KoXmlElement n = seriesElement.firstChild().toElement();
     for ( ; !n.isNull(); n = n.nextSibling().toElement() )
@@ -541,7 +555,7 @@ bool PlotArea::loadOdfSeries( const KoXmlElement &seriesElement, const KoOdfStyl
             continue;
         // FIXME: Load data points
     }
-    d->loadedDataSets++;
+
     return true;
 }
 

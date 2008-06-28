@@ -43,6 +43,7 @@ DataSet::DataSet( ProxyModel *proxyModel )
     
     m_chartType = LastChartType;
     m_chartSubType = NoChartSubtype;
+    m_kdChartModel = 0;
     m_kdDataSetNumber = 0;
     m_showMeanValue = false;
     m_showValues = false;
@@ -234,7 +235,8 @@ QBrush DataSet::brush() const
 void DataSet::setPen( const QPen &pen )
 {
     m_pen = pen;
-    m_kdDiagram->setPen( m_kdDataSetNumber, pen );
+    if ( m_kdDiagram )
+        m_kdDiagram->setPen( m_kdDataSetNumber, pen );
     if ( m_attachedAxis )
         m_attachedAxis->update();
 }
@@ -242,7 +244,11 @@ void DataSet::setPen( const QPen &pen )
 void DataSet::setBrush( const QBrush &brush )
 {
     m_brush = brush;
-    m_kdDiagram->setBrush( m_kdDataSetNumber, brush );
+    if ( m_kdDiagram )
+    {
+        qDebug() << "Setting brush for dataset" << m_kdDiagram->model() << m_kdDataSetNumber;
+        m_kdDiagram->setBrush( m_kdDataSetNumber, brush );
+    }
     if ( m_attachedAxis )
         m_attachedAxis->update();
 }

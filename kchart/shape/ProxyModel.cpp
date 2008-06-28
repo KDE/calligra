@@ -221,7 +221,6 @@ void ProxyModel::rebuildDataMap()
             while ( j.hasNext() )
             {
                 j.next();
-                qDebug() << j.value();
                 
                 DataSet *dataSet;
                 if ( k >= d->dataSets.size() )
@@ -352,8 +351,13 @@ void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
 
 void ProxyModel::setSourceModel( KoChart::ChartModel *sourceModel, const QVector<QRect> &selection )
 {
-    connect( sourceModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
-             this,        SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
+    QAbstractItemModel *model = dynamic_cast<QAbstractItemModel*>( sourceModel );
+    Q_ASSERT( model );
+    if ( !model )
+        return;
+    
+    connect( model, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
+             this,  SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
     
     d->selection = selection;
     
@@ -374,7 +378,8 @@ void ProxyModel::setSourceModel( KoChart::ChartModel *sourceModel, const QVector
     	}
     }
 
-    QAbstractProxyModel::setSourceModel( sourceModel );
+    QAbstractProxyModel::setSourceModel( model );
+    
     d->spreadSheetModel = sourceModel;
     
     rebuildDataMap();
@@ -392,6 +397,19 @@ void ProxyModel::setSelection( const QVector<QRect> &selection )
 {
     d->selection = selection;
     //needReset();
+}
+
+DataSet *ProxyModel::createDataSet()
+{
+    if ( !d->spreadSheetModel )
+        return 0;
+    
+    beginInsertRows( QModelIndex(), d->dataSets.size(), d->dataSets.size() );
+    DataSet *dataSet = new CellDataSet( this );
+    d->dataSets.append( dataSet );
+    endInsertRows();
+    
+    return dataSet;
 }
 
 QVariant ProxyModel::data( const QModelIndex &index,
@@ -437,7 +455,6 @@ void ProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bot
 	        }
 	        if ( intersects )
 	        {
-	            qDebug() << changedRect;
 	            dataSet->yDataChanged( changedRect );
 	        }
 	    }
@@ -699,6 +716,7 @@ int ProxyModel::columnCount( const QModelIndex &parent /* = QModelIndex() */ ) c
 {
     if ( sourceModel() == 0 )
         return 0;
+    
 
     int columnCount;
     if ( d->dataDirection == Qt::Horizontal )

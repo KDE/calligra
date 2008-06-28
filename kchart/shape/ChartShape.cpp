@@ -32,6 +32,7 @@
 #include "TextLabelDummy.h"
 #include "KoTextShapeData.h"
 #include "ChartDocument.h"
+#include "TableModel.h"
 
 // Posix
 #include <float.h> // For basic data types characteristics.
@@ -895,58 +896,10 @@ bool ChartShape::loadOdfData( const KoXmlElement &tableElement, const KoOdfStyle
     if ( tableElement.isNull() || !tableElement.isElement() )
         return true;
     
-    QStandardItemModel *model = new QStandardItemModel;
-    model->setRowCount( 0 );
-    model->setColumnCount( 0 );
+    TableModel *model = new TableModel( 0 );
+    model->loadOdf( tableElement, stylesReader );    
     
-    KoXmlElement n = tableElement.firstChild().toElement();
-    for( ; !n.isNull(); n = n.nextSibling().toElement() )
-    {
-        qDebug() << n.localName();
-        if ( n.namespaceURI() != KoXmlNS::table )
-            continue;
-        if ( n.localName() == "table-rows" )
-        {
-            int row = 0;
-            KoXmlElement _n = n.firstChild().toElement();
-            for ( ; !_n.isNull(); _n = _n.nextSibling().toElement() )
-            {
-                if ( _n.namespaceURI() != KoXmlNS::table )
-                    continue;
-                if ( _n.localName() == "table-row" )
-                {
-                    int column = 0;
-                    model->setRowCount( model->rowCount() + 1 );
-                    KoXmlElement __n = _n.firstChild().toElement();
-                    for ( ; !__n.isNull(); __n = __n.nextSibling().toElement() )
-                    {
-                        if ( __n.namespaceURI() != KoXmlNS::table )
-                            continue;
-                        if ( __n.localName() == "table-cell" )
-                        {
-                            if ( row == 0 )
-                                model->setColumnCount( model->columnCount() + 1 );
-                            const QString valueType = __n.attributeNS( KoXmlNS::office, "value-type" );
-                            const QString valueString = __n.attributeNS( KoXmlNS::office, "value" );
-                            QVariant value;
-                            if ( valueType == "float" )
-                                value = valueString.toDouble();
-                            else if ( valueType == "boolean" )
-                                value = (bool)valueString.toInt();
-                            else // if ( valueType == "string" )
-                                value = valueString;
-                            model->setData( model->index( row, column ), value );
-                            column++;
-                        }
-                    }
-                }
-                row++;
-            }
-        }
-    }
-    
-    if ( model->rowCount() > 0 && model->columnCount() > 0 )
-        setModel( model, true );
+    setModel( model, QVector<QRect>() );
     
     return true;
 }
