@@ -95,14 +95,34 @@ namespace KexiWebForms {
             QStringList fieldsList;
 
             for (uint i = 0; i < tableSchema->fieldCount(); i++) {
-                QString fieldName(tableSchema->field(i)->name());
+                KexiDB::Field* currentField = tableSchema->field(i);
+                QString fieldName(currentField->name());
+
+                formData.append("<tr>");
+                    
+                formData.append("<td>").append(currentField->captionOrName()).append("</td>");
+                formData.append("<td>").append("<input type=\"text\" name=\"");
+                formData.append(fieldName).append("\" value=\"").append(currentField->defaultValue().toString());
+                formData.append("\"/></td>");
+
+                // Field properties images
+                formData.append("<td>");
+                currentField->isAutoIncrement() ? formData.append("<img src=\"/toolbox/auto-increment.png\" alt=\"Auto increment\"/>&nbsp;") : 0;
+                currentField->isPrimaryKey() ? formData.append("<img src=\"/toolbox/primary-key.png\" alt=\"Primary Key\"/>&nbsp;") : 0;
+                currentField->isNotEmpty() ? formData.append("<img src=\"/toolbox/emblem-required.png\" alt=\"Required\"/>&nbsp;") : 0;
+                formData.append("</td>");
+                    
+                formData.append("</tr>");
+                fieldsList << fieldName;
+                
+                /*QString fieldName(tableSchema->field(i)->name());
 
                 formData.append("<tr>");
                 formData.append("<td>").append(tableSchema->field(i)->captionOrName()).append("</td>");
                 formData.append("<td><input type=\"text\" name=\"");
                 formData.append(fieldName).append("\" value=\"\"/></td>");
                 formData.append("</tr>");
-                fieldsList << fieldName;
+                fieldsList << fieldName;*/
             }
 
             dict->SetValue("TABLEFIELDS", fieldsList.join("|:|").toLatin1().constData());

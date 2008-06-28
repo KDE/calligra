@@ -6,7 +6,7 @@
     
     {{#FORM}}
         <form action="/create/{{TABLENAME}}" method="POST">
-        <table border="0" width="100%">
+        <table border="0">
             {{FORMDATA}}	
         </table>
         <input type="hidden" name="dataSent" value="true"/>

@@ -2,27 +2,44 @@
     <h3>Edit a row in table: {{TABLENAME}}</h3>
     <br/>
 
+    
+    
     <div style="margin-top: 20px; margin-bottom: 20px">
     	 {{#SUCCESS}}<h4 style="color: green;">{{MESSAGE}}</h4>{{/SUCCESS}}
     	 {{#ERROR}}<h4 style="color: red;">{{MESSAGE}}</h4>{{/ERROR}}
     </div>
     
     {{#FORM}}
-
         <form action="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{PKEY_VALUE}}" method="POST">
-        <table border="0" width="100%">
+        <table border="0">
             {{FORMDATA}}	
         </table>
 
 	<div style="margin-top: 20px; margin-bottom: 20px">
-	<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{FIRST}}"><img src="/toolbox/arrow-left-double.png" alt="First"/></a>&nbsp;
-	{{#SHOW_PREV}}
+	    {{#FIRST_ENABLED}}
+		<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{FIRST}}"><img src="/toolbox/arrow-left-double.png" alt="First"/></a>&nbsp;
+	    {{/FIRST_ENABLED}}
+	    {{#FIRST_DISABLED}}
+	        <img src="/toolbox/arrow-left-double-gray.png" alt="First"/>&nbsp;
+	    {{/FIRST_DISABLED}}
+	    {{#PREV_ENABLED}}
 		<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{PREV}}"><img src="/toolbox/arrow-left.png" alt="Previous"/></a>&nbsp;
-	{{/SHOW_PREV}}
-	{{#SHOW_NEXT}}
+	    {{/PREV_ENABLED}}
+	    {{#PREV_DISABLED}}
+		<img src="/toolbox/arrow-left-gray.png" alt="Previous"/>&nbsp;
+	    {{/PREV_DISABLED}}
+	    {{#NEXT_ENABLED}}
 		<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{NEXT}}"><img src="/toolbox/arrow-right.png" alt="Next"/></a>&nbsp;
-	{{/SHOW_NEXT}}
-	<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{LAST}}"><img src="/toolbox/arrow-right-double.png" alt="Last"/></a>&nbsp;
+	    {{/NEXT_ENABLED}}
+	    {{#NEXT_DISABLED}}
+		<img src="/toolbox/arrow-right-gray.png" alt="Next"/>&nbsp;
+	    {{/NEXT_DISABLED}}
+	    {{#LAST_ENABLED}}
+		<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{LAST}}"><img src="/toolbox/arrow-right-double.png" alt="Last"/></a>&nbsp;
+	    {{/LAST_ENABLED}}
+	    {{#LAST_DISABLED}}
+		<img src="/toolbox/arrow-right-double-gray.png" alt="Last"/>&nbsp;
+	    {{/LAST_DISABLED}}
 	</div>
 
         <input type="hidden" name="dataSent" value="true"/>

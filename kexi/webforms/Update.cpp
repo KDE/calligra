@@ -95,15 +95,33 @@ namespace KexiWebForms {
 
         // Compute new primary key values for first, last, previous and next record
         if (current < cachedPkeys[requestedTable].size()-1) {
-            dict->ShowSection("SHOW_NEXT");
+            dict->ShowSection("NEXT_ENABLED");
             dict->SetValue("NEXT", QVariant(cachedPkeys[requestedTable].at(current+1)).toString().toLatin1().constData());
+        } else {
+            dict->ShowSection("NEXT_DISABLED");
         }
+        
         if (current > 0) {
-            dict->ShowSection("SHOW_PREV");
+            dict->ShowSection("PREV_ENABLED");
             dict->SetValue("PREV", QVariant(cachedPkeys[requestedTable].at(current-1)).toString().toLatin1().constData());
+        } else {
+            dict->ShowSection("PREV_DISABLED");
         }
-        dict->SetValue("FIRST", QVariant(cachedPkeys[requestedTable].at(0)).toString().toLatin1().constData());
-        dict->SetValue("LAST", QVariant(cachedPkeys[requestedTable].at(cachedPkeys[requestedTable].size()-1)).toString().toLatin1().constData());
+
+        if (current >= cachedPkeys[requestedTable].at(0)) {
+            dict->ShowSection("FIRST_ENABLED");
+            dict->SetValue("FIRST", QVariant(cachedPkeys[requestedTable].at(0)).toString().toLatin1().constData());
+        } else {
+            dict->ShowSection("FIRST_DISABLED");
+        }
+
+        
+        if (current < cachedPkeys[requestedTable].size()-1) {
+            dict->ShowSection("LAST_ENABLED");
+            dict->SetValue("LAST", QVariant(cachedPkeys[requestedTable].at(cachedPkeys[requestedTable].size()-1)).toString().toLatin1().constData());
+        } else {
+            dict->ShowSection("LAST_DISABLED");
+        }
 
 
 
@@ -179,19 +197,23 @@ namespace KexiWebForms {
 
             while (cursor->moveNext()) {
                 for (uint i = 0; i < cursor->fieldCount(); i++) {
-                    QString fieldName(schema.field(i)->name());
+                    KexiDB::Field* currentField = schema.field(i);
+                    QString fieldName(currentField->name());
 
                     formData.append("<tr>");
+                    
                     formData.append("<td>").append(schema.field(i)->captionOrName()).append("</td>");
-                    formData.append("<td><input type=\"text\" name=\"");
+                    formData.append("<td>").append("<input type=\"text\" name=\"");
                     formData.append(fieldName).append("\" value=\"");
                     formData.append(cursor->value(i).toString()).append("\"/></td>");
-                    if (schema.field(i) == tableSchema.primaryKey()->field(0)) {
-                        formData.append("<td>Primary Key</td>");
-                    }
-                    if (schema.field(i)->isNotEmpty()) {
-                        formData.append("<td>Required</td>");
-                    }
+
+                    // Field properties images
+                    formData.append("<td>");
+                    currentField->isAutoIncrement() ? formData.append("<img src=\"/toolbox/auto-increment.png\" alt=\"Auto increment\"/>&nbsp;") : 0;
+                    currentField->isPrimaryKey() ? formData.append("<img src=\"/toolbox/primary-key.png\" alt=\"Primary Key\"/>&nbsp;") : 0;
+                    currentField->isNotEmpty() ? formData.append("<img src=\"/toolbox/emblem-required.png\" alt=\"Required\"/>&nbsp;") : 0;
+                    formData.append("</td>");
+                    
                     formData.append("</tr>");
                     formFieldsList << fieldName;
                 }
