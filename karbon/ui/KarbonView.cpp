@@ -229,6 +229,10 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     connect( m_canvasController, SIGNAL(canvasOffsetYChanged(int)), this, SLOT(pageOffsetChanged()));
     connect( m_canvasController, SIGNAL(canvasMousePositionChanged(const QPoint &)),
             this, SLOT(mousePositionChanged(const QPoint&)));
+    connect( m_vertRuler, SIGNAL(guideLineCreated(Qt::Orientation,int)), 
+             m_canvasController, SLOT( addGuideLine(Qt::Orientation,int) ) );
+    connect( m_horizRuler, SIGNAL(guideLineCreated(Qt::Orientation,int)), 
+             m_canvasController, SLOT( addGuideLine(Qt::Orientation,int) ) );
 
     updateRuler();
 

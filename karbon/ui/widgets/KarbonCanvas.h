@@ -81,6 +81,8 @@ public:
     void updateCanvas(const QRectF& rc);
     /// reimplemented from KoCanvasBase
     virtual void updateInputMethodInfo();
+    /// reimplemented from KoCanvasBase
+    virtual KoGuidesData * guidesData();
 
     /// Enables/disables showing page margins
     void setShowPageMargins( bool on );

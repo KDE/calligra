@@ -142,7 +142,9 @@ void KarbonCanvas::paintEvent(QPaintEvent * ev)
 
     paintMargins( gc, d->zoomHandler );
     gc.setRenderHint(QPainter::Antialiasing, false);
-    d->part->gridData().paintGrid( gc, d->zoomHandler, d->zoomHandler.viewToDocument( widgetToView( clipRect ) ) );
+    QRectF updateRect = d->zoomHandler.viewToDocument( widgetToView( clipRect ) );
+    d->part->gridData().paintGrid( gc, d->zoomHandler, updateRect );
+    d->part->guidesData().paintGuides( gc, d->zoomHandler, updateRect );
     gc.setRenderHint(QPainter::Antialiasing);
 
     d->shapeManager->paint( gc, d->zoomHandler, false );
@@ -359,6 +361,11 @@ QRectF KarbonCanvas::documentViewRect()
 
 void KarbonCanvas::updateInputMethodInfo() {
     updateMicroFocus();
+}
+
+KoGuidesData * KarbonCanvas::guidesData()
+{
+    return &d->part->guidesData();
 }
 
 #include "KarbonCanvas.moc"
