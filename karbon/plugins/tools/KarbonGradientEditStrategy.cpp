@@ -378,9 +378,8 @@ QUndoCommand * GradientStrategy::createCommand( QUndoCommand * parent )
         KoGradientBackground * fill = dynamic_cast<KoGradientBackground*>( m_shape->background() );
         if( fill )
         {
+            KoGradientBackground * newFill = new KoGradientBackground( *fill->gradient(), fill->matrix() );
             *fill = m_oldFill;
-            KoGradientBackground * newFill = new KoGradientBackground( *m_newBrush.gradient() );
-            newFill->setMatrix( m_newBrush.matrix() );
             return new KoShapeBackgroundCommand( m_shape, newFill, parent );
         }
     }
