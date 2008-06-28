@@ -212,8 +212,11 @@ QString KRHtmlRender::renderTable(ORODocument *document)
 
 	bool renderedPageHead = false;
 	bool renderedPageFoot = false;
+	
+	QFileInfo fi(saveDir);
+	QDir d(saveDir);
+	
 	// Render Each Section
-
 	body = "<table>\n";
 	for (long s = 0; s < document->sections(); s++ )
 	{
@@ -247,6 +250,28 @@ QString KRHtmlRender::renderTable(ORODocument *document)
 					tr += "<td>";
 					tr += tb->text();
 					tr += "</td>\n";
+				}
+				else if (prim->type() == OROImage::Image)
+				{
+					kDebug() << "Saving an image" << endl;
+					OROImage * im = ( OROImage* ) prim;
+					tr += "<td>";
+					tr += "<img src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
+					tr += "</td>\n";
+					im->image().save(saveDir + "/object" + QString::number(s) + QString::number(i) + ".png");
+				}
+				else if (prim->type() == OROPicture::Picture)
+				{
+					kDebug() << "Saving a picture" << endl;
+					OROPicture * im = ( OROPicture* ) prim;
+					
+					tr += "<td>";
+					tr += "<img src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
+					tr += "</td>\n";
+					QImage image(im->size().toSize(), QImage::Format_RGB32);
+					QPainter painter(&image);
+					im->picture()->play(&painter);
+					image.save(saveDir + "/object" + QString::number(s) + QString::number(i) + ".png");
 				}
 				else
 				{
