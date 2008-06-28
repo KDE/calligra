@@ -13,11 +13,12 @@ by hand and use org-mode instead.
    - [X] Implement DELETE
 ** Controls [100%]
    - [X] Implement 'First' 'Previous' 'Next' 'Last' controls in Update
-** Other tasks [25%]
-   - [ ] Add support for query objects
+** Other tasks [33%]
+   - [X] Add support for query objects
    - [X] Updating a row should not clear the screen
    - [X] Show "record N of Y" in table view
    - [ ] Add the same string to update view
+   - [ ] Add the same string to query view
    - [ ] Disable navigation buttons when not needed
    - [-] Show proper icons for fields [33%]
 	 - [X] Display "primary key" for primary key fields
@@ -55,3 +56,4 @@ by hand and use org-mode instead.
 	  the daemon in parallel with kexi. 
 ** Other
    - [ ] After adding a new record, bring the user to the tableview
+   - [ ] Descriptive text for field icons
