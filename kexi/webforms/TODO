@@ -13,14 +13,13 @@ by hand and use org-mode instead.
    - [X] Implement DELETE
 ** Controls [100%]
    - [X] Implement 'First' 'Previous' 'Next' 'Last' controls in Update
-** Other tasks [12%]
+** Other tasks [25%]
    - [ ] Add support for query objects
    - [X] Updating a row should not clear the screen
-   - [ ] After adding a new record, bring the user to the tableview
-   - [ ] Show "record N of Y" in table view
-	 - [ ] Add the same string to update view
+   - [X] Show "record N of Y" in table view
+   - [ ] Add the same string to update view
    - [ ] Disable navigation buttons when not needed
-   - [ ] Show proper icons for fields
+   - [ ] Show proper icons for fields [0%]
 	 - [ ] Display "primary key" for primary key fields
 	 - [ ] Display "required" for required fields
 	 - [ ] Do not show or gray out disabled fields
@@ -49,8 +48,10 @@ by hand and use org-mode instead.
 
 * Low priority tasks
 ** TODO: Shortcut and connection file loading
-** Parallel kwebforms and Kexi [0%]
+** Parallel kwebforms and Kexi
    - [ ] Find a way to open kwebforms in parallel with kexi, using the same
 	 database.
 	- On Windows the file is locked when used, it's not possible to barely launch
 	  the daemon in parallel with kexi. 
+** Other
+   - [ ] After adding a new record, bring the user to the tableview

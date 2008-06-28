@@ -53,6 +53,15 @@ namespace KexiWebForms {
         KexiDB::QuerySchema querySchema(*tableSchema);
         KexiDB::Cursor* cursor = gConnection->executeQuery(querySchema);
 
+        /* awful */
+        int recordsTotal = 0;
+        while (cursor->moveNext())
+            recordsTotal++;
+        cursor->close();
+
+        /* even more awful */
+        cursor = gConnection->executeQuery(querySchema);
+
         if (!cursor) {
             dict->SetValue("ERROR", "Unable to execute the query (" __FILE__ ")");
         } else if (tableSchema->primaryKey()->fields()->isEmpty()) {
@@ -62,6 +71,7 @@ namespace KexiWebForms {
 
             // Create labels with field name
             tableData.append("<tr>");
+            tableData.append("\t<th scope=\"col\">Record</th>\n");
             for (uint i = 0; i < cursor->fieldCount(); i++) {
                 tableData.append("\t<th scope=\"col\">");
                 tableData.append(querySchema.field(i)->captionOrName());
@@ -71,8 +81,14 @@ namespace KexiWebForms {
 
 
             // Create labels with fields data
+            int currentRecord = 0;
+            QString totalRecords(QVariant(recordsTotal).toString());
             while (cursor->moveNext()) {
+                currentRecord++;
+                
                 tableData.append("<tr>");
+                tableData.append("<td>").append(QVariant(currentRecord).toString()).append(" of ");
+                tableData.append(totalRecords).append("</td>");
                 for (uint i = 0; i < cursor->fieldCount(); i++) {
                     tableData.append("<td>");
 
