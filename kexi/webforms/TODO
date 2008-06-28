@@ -19,8 +19,8 @@ by hand and use org-mode instead.
    - [X] Show "record N of Y" in table view
    - [ ] Add the same string to update view
    - [ ] Disable navigation buttons when not needed
-   - [ ] Show proper icons for fields [0%]
-	 - [ ] Display "primary key" for primary key fields
+   - [-] Show proper icons for fields [33%]
+	 - [X] Display "primary key" for primary key fields
 	 - [ ] Display "required" for required fields
 	 - [ ] Do not show or gray out disabled fields
    - [-] UTF-8 Support [50%]
