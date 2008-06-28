@@ -94,7 +94,7 @@ namespace KexiWebForms {
         }
 
         // Compute new primary key values for first, last, previous and next record
-        if (current < cachedPkeys[requestedTable].size()-1) {
+        if (current < uint( cachedPkeys[requestedTable].size()-1 )) {
             dict->ShowSection("NEXT_ENABLED");
             dict->SetValue("NEXT", QVariant(cachedPkeys[requestedTable].at(current+1)).toString().toLatin1().constData());
         } else {
@@ -116,7 +116,7 @@ namespace KexiWebForms {
         }
 
         
-        if (current < cachedPkeys[requestedTable].size()-1) {
+        if (current < uint( cachedPkeys[requestedTable].size()-1 )) {
             dict->ShowSection("LAST_ENABLED");
             dict->SetValue("LAST", QVariant(cachedPkeys[requestedTable].at(cachedPkeys[requestedTable].size()-1)).toString().toLatin1().constData());
         } else {

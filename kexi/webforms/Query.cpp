@@ -71,7 +71,7 @@ namespace KexiWebForms {
             
             // Create labels with field name
             queryData.append("<tr>");
-            for (uint i = 0; i < expandedFields.size(); ++i) {
+            for (uint i = 0; i < uint( expandedFields.size() ); i++) {
                 queryData.append("\t<th scope=\"col\">");
                 queryData.append(expandedFields.at(i)->field->captionOrName());
                 queryData.append("</th>\n");
@@ -82,7 +82,7 @@ namespace KexiWebForms {
             // Create labels with fields data
             while (cursor->moveNext()) {
                 queryData.append("<tr>");
-                for (uint i = 0; i < expandedFields.size(); ++i) {
+                for (uint i = 0; i < uint( expandedFields.size() ); i++) {
                     queryData.append("<td>");
 
                     //
