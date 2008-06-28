@@ -186,6 +186,9 @@ namespace KexiWebForms {
                     formData.append("<td><input type=\"text\" name=\"");
                     formData.append(fieldName).append("\" value=\"");
                     formData.append(cursor->value(i).toString()).append("\"/></td>");
+                    if (schema.field(i) == tableSchema.primaryKey()->field(0)) {
+                        formData.append("<td>Primary Key</td>");
+                    }
                     formData.append("</tr>");
                     formFieldsList << fieldName;
                 }
