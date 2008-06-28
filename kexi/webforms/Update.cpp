@@ -189,6 +189,9 @@ namespace KexiWebForms {
                     if (schema.field(i) == tableSchema.primaryKey()->field(0)) {
                         formData.append("<td>Primary Key</td>");
                     }
+                    if (schema.field(i)->isNotEmpty()) {
+                        formData.append("<td>Required</td>");
+                    }
                     formData.append("</tr>");
                     formFieldsList << fieldName;
                 }
