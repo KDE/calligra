@@ -1,8 +1,11 @@
 {{>beforecontent}}
     <h3>Edit a row in table: {{TABLENAME}}</h3>
     <br/>
-    {{#SUCCESS}}<h4 style="color: green;">{{MESSAGE}}</h4>{{/SUCCESS}}
-    {{#ERROR}}<h4 style="color: red;">{{MESSAGE}}</h4>{{/ERROR}}
+
+    <div style="margin-top: 20px; margin-bottom: 20px">
+    	 {{#SUCCESS}}<h4 style="color: green;">{{MESSAGE}}</h4>{{/SUCCESS}}
+    	 {{#ERROR}}<h4 style="color: red;">{{MESSAGE}}</h4>{{/ERROR}}
+    </div>
     
     {{#FORM}}
 
