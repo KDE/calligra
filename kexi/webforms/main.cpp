@@ -24,6 +24,8 @@
 #include <KCmdLineArgs>
 #include <KUniqueApplication>
 
+#include <QFile>
+
 #include <google/template.h>
 
 #include "Server.h"
@@ -56,79 +58,74 @@ int main(int argc, char **argv) {
     KCmdLineArgs::addCmdLineOptions(options);
 
     KUniqueApplication::addCmdLineOptions();
-    KUniqueApplication app(false);
+    KUniqueApplication app(true);
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
 
     // General set up
-    ServerConfig* serverConfig = new ServerConfig();
-    serverConfig->ports = args->getOption("port");
-    serverConfig->webRoot = args->getOption("webroot");
-    serverConfig->dirList = args->isSet("dirlist");
+    ServerConfig serverConfig;
+    serverConfig.ports = args->getOption("port");
+    serverConfig.webRoot = args->getOption("webroot");
+    serverConfig.dirList = args->isSet("dirlist");
 
     // SSL
     if (args->isSet("https")) {
         kDebug() << "Initializing SSL...";
         if (!args->isSet("cert")) {
             kError() << "You must specify both certificate and key file in order to use SSL support";
-            delete serverConfig;
             return 1;
         } else {
-            serverConfig->certPath = args->getOption("cert");
+            serverConfig.certPath = args->getOption("cert");
         }
-        serverConfig->https = args->getOption("https");
+        serverConfig.https = args->getOption("https");
     }
 
     if (args->isSet("file")) {
-        serverConfig->dbPath = args->getOption("file");
+        serverConfig.dbPath = args->getOption("file");
     } else {
         kError() << "You must specifiy a Kexi file path";
-        delete serverConfig;
         return 1;
     }
 
     // I want to maintain the Server class as decoupled as possible from
     // our specific implementation, set up google-ctemplate here
     // Check if all templates are found
-    google::Template::SetTemplateRootDirectory(serverConfig->webRoot.toLatin1().constData());
-    
+    google::Template::SetTemplateRootDirectory(QFile::encodeName(serverConfig.webRoot).constData());
 
     // Initialize database connection before server
-    if (!initDatabase(serverConfig->dbPath)) {
+    if (!initDatabase(serverConfig.dbPath)) {
         kError() << "Something went wrong while initializing database..." << endl;
-        delete serverConfig;
         return 1;
-    } else {
-        Server* server = Server::instance();
-
-        // Index handler
-        IndexHandler indexHandler;
-
-        // CRUD Handlers
-        CreateHandler createHandler;
-        ReadHandler readHandler;
-        UpdateHandler updateHandler;
-        DeleteHandler deleteHandler;
-
-        // Query Handler
-        QueryHandler queryHandler;
-
-        if (server->init(serverConfig)) {
-            // Register index page handler
-            server->registerHandler("/", indexHandler.m_callback);
-            // Register CRUD handlers
-            server->registerHandler("/create/*", createHandler.m_callback);
-            server->registerHandler("/read/*", readHandler.m_callback);
-            server->registerHandler("/update/*", updateHandler.m_callback);
-            server->registerHandler("/delete/*", deleteHandler.m_callback);
-            // Register query handler
-            server->registerHandler("/query/*", queryHandler.m_callback);
-        }
-        return server->run();
     }
 
-    // If we reach there, something went wrong...
-    return 1;
+    Server* server = Server::instance();
+
+    // Index handler
+    IndexHandler indexHandler;
+
+    // CRUD Handlers
+    CreateHandler createHandler;
+    ReadHandler readHandler;
+    UpdateHandler updateHandler;
+    DeleteHandler deleteHandler;
+
+    // Query Handler
+    QueryHandler queryHandler;
+
+    if (!server->init(serverConfig))
+        return 1;
+    // Register index page handler
+    server->registerHandler("/", indexHandler.m_callback);
+    // Register CRUD handlers
+    server->registerHandler("/create/*", createHandler.m_callback);
+    server->registerHandler("/read/*", readHandler.m_callback);
+    server->registerHandler("/update/*", updateHandler.m_callback);
+    server->registerHandler("/delete/*", deleteHandler.m_callback);
+    // Register query handler
+    server->registerHandler("/query/*", queryHandler.m_callback);
+
+    bool result = server->run();
+    return result ? 0 : 1;
 }
 

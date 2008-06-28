@@ -50,10 +50,10 @@ namespace KexiWebForms {
 
         /*!
          * Initialize the server
-         * @param ServerConfig*: a pointer to the ServerConfig structure
+         * @param config: a pointer to the ServerConfig structure
          * @return a boolean indicating if initialization has succeeded
          */
-        bool init(ServerConfig*);
+        bool init(const ServerConfig& config);
 
         /*!
          * Run the server main loop, this is a blocking function
@@ -73,13 +73,12 @@ namespace KexiWebForms {
         /*!
          * @return a pointer to the currently used ServerConfig structure
          */
-        ServerConfig* config() const;
+        const ServerConfig& config() const;
     protected:
         Server();
     private:
-        static Server* m_instance;
-        bool m_initialized;
-        ServerConfig* m_config;
+        void closeCtx();
+        ServerConfig m_config;
         shttpd_ctx* m_ctx;
     };
 

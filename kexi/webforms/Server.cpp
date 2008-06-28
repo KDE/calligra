@@ -20,6 +20,8 @@
 
 #include <QDir>
 #include <KDebug>
+#include <KLocale>
+#include <KGlobal>
 #include <KUniqueApplication>
 
 #include <google/template.h>
@@ -30,100 +32,85 @@
 #include "Request.h"
 
 namespace KexiWebForms {
-    Server* Server::m_instance = 0;
+
+K_GLOBAL_STATIC( Server, s_instance )
 
     Server* Server::instance() {
-        if (m_instance == 0) {
-            m_instance = new Server();
-		}
-        return m_instance;
+        return s_instance;
     }
 
-    Server::Server() : m_ctx(NULL) {}
+    Server::Server() : m_ctx(NULL)
+    {
+    }
 
     Server::~Server() {
-        if (m_ctx)
-            shttpd_fini(m_ctx);
+        closeCtx();
     }
 
-    bool Server::init(ServerConfig* config) {
-        m_config = config;
+    void Server::closeCtx()
+    {
+        if (m_ctx)
+            shttpd_fini(m_ctx);
+        m_ctx = 0;
+    }
 
+    bool Server::init(const ServerConfig& config) {
         kDebug() << "Initializing HTTP server...";
 
-        if (!m_ctx)
-            m_ctx = shttpd_init();
-        else
-            return true;
-
+        closeCtx();
+        m_ctx = shttpd_init();
         if (!m_ctx) {
             kError() << "HTTP Server not correctly initialized, aborting";
-            m_initialized = false;
             return false;
         }
 
-        if (!m_config) {
-            kError() << "Internal error, can't retrieve configuration data!";
-            m_initialized = false;
+        kDebug() << "Setting to listen on port " << config.ports << endl;
+        shttpd_set_option(m_ctx, "ports", config.ports.toLatin1().constData());
+
+        if (QDir(config.webRoot).exists()) {
+            kDebug() << "Webroot is " << config.webRoot << endl;
+            shttpd_set_option(m_ctx, "root", QFile::encodeName(config.webRoot).constData());
+        } else {
+            kError() << i18n("Webroot %1 does not exist! Aborting", config.webRoot) << endl;
+            closeCtx();
             return false;
         }
 
-        m_initialized = true;
+        // SSL certificate
+        if (!config.https.isEmpty()) {
+            if (!config.certPath.isEmpty()) {
+                if (QFile(config.certPath).exists()) {
+                    shttpd_set_option(m_ctx, "ssl_cert", QFile::encodeName(config.certPath).constData());
+                } else {
+                    kError() << "Certificate file does not exist! Aborting" << endl;
+                    closeCtx();
+                    return false;
+                }
+            }
+        }
+
+        // Do not show directory listings by default
+        if (config.dirList) {
+            kDebug() << "Enabling directory listing..." << endl;
+            shttpd_set_option(m_ctx, "dir_list", "1");
+        } else {
+            shttpd_set_option(m_ctx, "dir_list", "0");
+        }
+
+        m_config = config;
         return true;
     }
 
     bool Server::run() {
-        if (m_initialized) {
-            if (m_ctx) {
-                kDebug() << "Setting to listen on port " << m_config->ports << endl;
-                shttpd_set_option(m_ctx, "ports", m_config->ports.toLatin1().constData());
-
-                if (QDir(m_config->webRoot).exists()) {
-                    kDebug() << "Webroot is " << m_config->webRoot << endl;
-                    shttpd_set_option(m_ctx, "root", QFile::encodeName(m_config->webRoot).constData());
-                } else {
-                    kError() << "Webroot does not exist! Aborting" << endl;
-                    exit(1);
-                }
-
-                // SSL certificate
-                if (m_config->https != NULL) {
-                    if (m_config->certPath != NULL) {
-                        if (QFile(m_config->certPath).exists()) {
-                            shttpd_set_option(m_ctx, "ssl_cert", QFile::encodeName(m_config->certPath).constData());
-                        } else {
-                            kError() << "Certificate file does not exist! Aborting" << endl;
-                            exit(1);
-                        }
-                    }
-                }
-
-                // Do not show directory listings by default
-                if (m_config->dirList) {
-                    kDebug() << "Enabling directory listing..." << endl;
-                    shttpd_set_option(m_ctx, "dir_list", "1");
-                } else {
-                    shttpd_set_option(m_ctx, "dir_list", "0");
-                }
-
-                for (;;) {
-                    shttpd_poll(m_ctx, 1000);
-                    KUniqueApplication::processEvents();
-                    /// @note Tricky way to clean cache on template updates...
-                    google::Template::ReloadAllIfChanged();
-                }
-
-                return true;
-            } else if (m_ctx == NULL) {
-                kError() << "Internal error, SHTTPD engine was not initialized correctly" << endl;
-                return false;
-            } else {
-                kError() << "Unknown error" << endl;
-                return false;
-            }
-        } else {
+        if (!m_ctx) {
             kError() << "Server was not initiliazed" << endl;
             return false;
+        }
+        for (;;) {
+            shttpd_poll(m_ctx, 1000);
+            KUniqueApplication::processEvents();
+            /// @note Tricky way to clean cache on template updates...
+            google::Template::ReloadAllIfChanged();
         }
     }
 
@@ -134,12 +121,7 @@ namespace KexiWebForms {
         }
     }
 
-    ServerConfig* Server::config() const {
-        if (m_config)
-            return m_config;
-        else {
-            kError() << "Configuration data can't be loaded" << endl;
-            return 0;
-        }
+    const ServerConfig& Server::config() const {
+        return m_config;
     }
 }
