@@ -78,9 +78,6 @@ namespace KexiWebForms {
         Server();
     private:
         void closeCtx();
-        /// @fixme Temporary fix
-        static Server* m_instance;
-        
         ServerConfig m_config;
         shttpd_ctx* m_ctx;
     };
