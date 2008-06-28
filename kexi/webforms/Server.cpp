@@ -33,7 +33,7 @@
 
 namespace KexiWebForms {
 
-    class ServerStatic : protected Server {
+    class ServerStatic : public Server {
     public:
         ServerStatic() : Server() {}
     };
