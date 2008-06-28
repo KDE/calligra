@@ -33,15 +33,20 @@
 
 namespace KexiWebForms {
 
-K_GLOBAL_STATIC( Server, s_instance )
+/* Temporary fix */
+/* This generates compiler errors */    
+/* K_GLOBAL_STATIC( Server, s_instance ) */
 
+    Server* Server::m_instance = 0;
+    
     Server* Server::instance() {
-        return s_instance;
+        //return s_instance;
+        if (!m_instance)
+            m_instance = new Server();
+        return m_instance;
     }
 
-    Server::Server() : m_ctx(NULL)
-    {
-    }
+    Server::Server() : m_ctx(NULL) {}
 
     Server::~Server() {
         closeCtx();
