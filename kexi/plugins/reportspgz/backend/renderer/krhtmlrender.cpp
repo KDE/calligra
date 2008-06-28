@@ -24,6 +24,8 @@
 #include "orutils.h"
 #include "barcodes.h"
 #include <kdebug.h>
+#include <QDir>
+#include <QPainter>
 
 //
 // KRHtmlRender
@@ -38,12 +40,26 @@ KRHtmlRender::~KRHtmlRender()
 {
 }
 
-QString KRHtmlRender::render(ORODocument *document, bool css)
+QString KRHtmlRender::render(ORODocument *document, const QString& sn, bool css)
 {
-  if (css)
-    return renderCSS(document);
+  QDir d;
+
+  saveName = sn;
+  saveDir = saveName + ".files";
+  
+  kDebug() << "3" << endl;
+  
+  if (d .exists(saveDir) || d.mkpath( saveDir ) )
+  {
+    if (css)
+      return renderCSS(document);
+    else
+      return renderTable(document);
+  }
   else
-    return renderTable(document);
+  {
+    return "";
+  }
 }
 
 QString KRHtmlRender::renderCSS(ORODocument *document)
@@ -55,6 +71,11 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
 	int styleindex;
 	bool renderedPageHead = false;
 	bool renderedPageFoot = false;
+
+	kDebug() << "4" << endl;
+
+	QFileInfo fi(saveDir);
+	QDir d(saveDir);
 	// Render Each Section
 	for (long s = 0; s < document->sections(); s++ )
 	{
@@ -87,7 +108,7 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
 			for ( int i = 0; i < section->primitives(); i++ )
 			{
 				OROPrimitive * prim = section->primitive ( i );
-				
+				kDebug() << "Got object type" << prim->type() << endl;
 				if ( prim->type() == OROTextBox::TextBox )
 				{
 					OROTextBox * tb = ( OROTextBox* ) prim;
@@ -114,9 +135,51 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
 					body += tb->text();
 					body += "</div>\n";
 				}
+				else if (prim->type() == OROImage::Image)
+				{
+					kDebug() << "Saving an image" << endl;
+					OROImage * im = ( OROImage* ) prim;
+					style = "position: absolute; ";
+					style += "top: " + QString::number(im->position().y()) + "pt; ";
+					style += "left: " + QString::number(im->position().x()) + "pt; ";
+					if (!styles.contains(style))
+					{
+					  styles << style;
+					}
+					styleindex = styles.indexOf(style);
+					
+					body += "<div class=\"style" + QString::number(styleindex) + "\">";
+					body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
+					body += "</div>\n";
+
+					
+					im->image().save(saveDir + "/object" + QString::number(s) + QString::number(i) + ".png");
+				}
+				else if (prim->type() == OROPicture::Picture)
+				{
+					kDebug() << "Saving a picture" << endl;
+					OROPicture * im = ( OROPicture* ) prim;
+					style = "position: absolute; ";
+					style += "top: " + QString::number(im->position().y()) + "pt; ";
+					style += "left: " + QString::number(im->position().x()) + "pt; ";
+					if (!styles.contains(style))
+					{
+					  styles << style;
+					}
+					styleindex = styles.indexOf(style);
+					
+					body += "<div class=\"style" + QString::number(styleindex) + "\">";
+					body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
+					body += "</div>\n";
+					
+					QImage image(im->size().toSize(), QImage::Format_RGB32);
+					QPainter painter(&image);
+					im->picture()->play(&painter);
+					image.save(saveDir + "/object" + QString::number(s) + QString::number(i) + ".png");
+				}
 				else
 				{
-					kDebug() << "unrecognized primitive type" << endl;
+					kDebug() << "unrecognized primitive type" << prim->type() << endl;
 				}
 			}
 			body += "</div>\n";
@@ -187,7 +250,7 @@ QString KRHtmlRender::renderTable(ORODocument *document)
 				}
 				else
 				{
-					kDebug() << "unrecognized primitive type" << endl;
+					kDebug() << "unhandled primitive type" << endl;
 				}
 			}
 			tr += "</tr>\n";

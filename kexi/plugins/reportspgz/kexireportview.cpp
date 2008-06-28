@@ -173,6 +173,8 @@ void KexiReportView::slotRenderKSpread()
 
 void KexiReportView::slotExportHTML()
 {
+	kDebug() << "1" << endl;
+
 	QString saveName = KFileDialog::getSaveFileName();
 	QFile file(saveName);
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
@@ -183,9 +185,9 @@ void KexiReportView::slotExportHTML()
 
 	bool css = (KMessageBox::questionYesNo(this, i18n("Would you like to export using a Cascading Style Sheet which will give output closer to the original, or export using a Table which outputs a much simpler format."), i18n("Export Style"), KGuiItem("CSS"), KGuiItem("Table")) == KMessageBox::Yes);
 	KRHtmlRender hr;
-	
+	kDebug() << "2" << endl;
 	QTextStream out(&file);
-	out << hr.render(doc, css) << "\n";
+	out << hr.render(doc, saveName, css) << "\n";
 
 	file.close();
 	KMessageBox::information(this, i18n("Report saved to ") + saveName, i18n("Saved OK"));

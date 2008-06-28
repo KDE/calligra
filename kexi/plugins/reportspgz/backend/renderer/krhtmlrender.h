@@ -40,11 +40,14 @@ class KRHtmlRender {
 
     virtual ~KRHtmlRender();
 
-    QString render(ORODocument *, bool=true);
+    QString render(ORODocument *, const QString&,  bool=true);
     
     private:
       QString renderCSS(ORODocument*);
       QString renderTable(ORODocument*);
+
+      QString saveName;
+      QString saveDir;
 };
 
 

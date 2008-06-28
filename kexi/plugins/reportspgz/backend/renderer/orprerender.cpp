@@ -865,6 +865,10 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 			id->setPosition ( pos );
 			id->setSize ( size );
 			_page->addPrimitive ( id );
+
+			OROImage *i2 = dynamic_cast<OROImage*>(id->clone());
+			i2->setPosition(im->_pos.toPoint());
+			sec->addPrimitive ( i2 );
 		}
 		else if ( elemThis->type() == KRObjectData::EntityChart )
 		{
@@ -888,6 +892,10 @@ qreal ORPreRenderPrivate::renderSection ( const KRSectionData & sectionData )
 				id->setPosition ( pos );
 				id->setSize ( size );
 				_page->addPrimitive ( id );
+
+				OROPicture *p2 = dynamic_cast<OROPicture*>(id->clone());
+				p2->setPosition(ch->_pos.toPoint());
+				sec->addPrimitive ( p2 );
 			}
 		}
 		else
