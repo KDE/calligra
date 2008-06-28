@@ -13,9 +13,9 @@ by hand and use org-mode instead.
    - [X] Implement DELETE
 ** Controls [100%]
    - [X] Implement 'First' 'Previous' 'Next' 'Last' controls in Update
-** Other tasks [0%]
+** Other tasks [12%]
    - [ ] Add support for query objects
-   - [ ] Updating a row should not clear the screen
+   - [X] Updating a row should not clear the screen
    - [ ] After adding a new record, bring the user to the tableview
    - [ ] Show "record N of Y" in table view
 	 - [ ] Add the same string to update view

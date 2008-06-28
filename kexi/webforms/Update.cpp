@@ -110,62 +110,64 @@ namespace KexiWebForms {
         if (!cursor) {
             dict->ShowSection("ERROR");
             dict->SetValue("MESSAGE", "No cursor object available");
-        } else if (Request::request(req, "dataSent") == "true") {
-            cursor = gConnection->prepareQuery(schema);
-
-            QStringList fieldsList(Request::request(req, "tableFields").split("|:|"));
-            kDebug() << "Fields: " << fieldsList;
-
-            QStringListIterator iterator(fieldsList);
-
-            KexiDB::RecordData recordData(tableSchema.fieldCount());
-            KexiDB::RowEditBuffer editBuffer(true);
-
-            QVector<int> pkeyFields(schema.pkeyFieldsOrder());
-            for (int i = 0; i < pkeyFields.size(); i++) {
-                int fieldId = pkeyFields.at(i);
-                if (schema.field(fieldId)->name() == pkeyName) {
-                    recordData.insert(fieldId, pkeyValue);
-                    /**
-                     * @note No need to fill other primary key values.
-                     * As reported by Jaroslaw KexiDB supports multi pkey
-                     * tables but the table designer not
-                     */
-                    break;
-                }
-            }
-
-            /*! @fixme Making the wrong assumption on what the pkey id is */
-            recordData.insert(0, QVariant(pkeyValue));
-
-            while (iterator.hasNext()) {
-                QString currentFieldName(iterator.next());
-                QString currentFieldValue(QUrl::fromPercentEncoding(Request::request(req, currentFieldName).toLatin1()));
-
-                /*! @fixme This removes pluses */
-                currentFieldValue.replace("+", " ");
-                QVariant currentValue(currentFieldValue);
-
-                if (currentFieldName != pkeyName) {
-                    kDebug() << "Inserting " << currentFieldName << "=" << currentValue.toString() << endl;
-                    editBuffer.insert(*schema.columnInfo(currentFieldName), currentValue);
-                }
-            }
-
-
-            if (cursor->updateRow(recordData, editBuffer)) {
-                dict->ShowSection("SUCCESS");
-                dict->SetValue("MESSAGE", "Row updated successfully");
-                // A successful update marks the cache as empty
-                cachedPkeys[requestedTable].clear();
-            } else {
-                dict->ShowSection("ERROR");
-                dict->SetValue("MESSAGE", gConnection->errorMsg().toLatin1().constData());
-            }
-
-            kDebug() << "Deleting cursor..." << endl;
-            gConnection->deleteCursor(cursor);
         } else {
+            if (Request::request(req, "dataSent") == "true") {
+                cursor = gConnection->prepareQuery(schema);
+
+                QStringList fieldsList(Request::request(req, "tableFields").split("|:|"));
+                kDebug() << "Fields: " << fieldsList;
+
+                QStringListIterator iterator(fieldsList);
+
+                KexiDB::RecordData recordData(tableSchema.fieldCount());
+                KexiDB::RowEditBuffer editBuffer(true);
+
+                QVector<int> pkeyFields(schema.pkeyFieldsOrder());
+                for (int i = 0; i < pkeyFields.size(); i++) {
+                    int fieldId = pkeyFields.at(i);
+                    if (schema.field(fieldId)->name() == pkeyName) {
+                        recordData.insert(fieldId, pkeyValue);
+                        /**
+                         * @note No need to fill other primary key values.
+                         * As reported by Jaroslaw KexiDB supports multi pkey
+                         * tables but the table designer not
+                         */
+                        break;
+                    }
+                }
+
+                /*! @fixme Making the wrong assumption on what the pkey id is */
+                recordData.insert(0, QVariant(pkeyValue));
+
+                while (iterator.hasNext()) {
+                    QString currentFieldName(iterator.next());
+                    QString currentFieldValue(QUrl::fromPercentEncoding(Request::request(req, currentFieldName).toLatin1()));
+
+                    /*! @fixme This removes pluses */
+                    currentFieldValue.replace("+", " ");
+                    QVariant currentValue(currentFieldValue);
+
+                    if (currentFieldName != pkeyName) {
+                        kDebug() << "Inserting " << currentFieldName << "=" << currentValue.toString() << endl;
+                        editBuffer.insert(*schema.columnInfo(currentFieldName), currentValue);
+                    }
+                }
+
+
+                if (cursor->updateRow(recordData, editBuffer)) {
+                    dict->ShowSection("SUCCESS");
+                    dict->SetValue("MESSAGE", "Row updated successfully");
+                    // A successful update marks the cache as empty
+                    cachedPkeys[requestedTable].clear();
+                } else {
+                    dict->ShowSection("ERROR");
+                    dict->SetValue("MESSAGE", gConnection->errorMsg().toLatin1().constData());
+                }
+
+                kDebug() << "Deleting cursor..." << endl;
+                gConnection->deleteCursor(cursor);
+            }
+
             kDebug() << "Showing fields" << endl;
 
             cursor = gConnection->executeQuery(schema);
@@ -173,7 +175,7 @@ namespace KexiWebForms {
             dict->ShowSection("FORM");
 
             QString formData;
-            QStringList fieldsList;
+            QStringList formFieldsList;
 
             while (cursor->moveNext()) {
                 for (uint i = 0; i < cursor->fieldCount(); i++) {
@@ -185,10 +187,10 @@ namespace KexiWebForms {
                     formData.append(fieldName).append("\" value=\"");
                     formData.append(cursor->value(i).toString()).append("\"/></td>");
                     formData.append("</tr>");
-                    fieldsList << fieldName;
+                    formFieldsList << fieldName;
                 }
             }
-            dict->SetValue("TABLEFIELDS", fieldsList.join("|:|").toLatin1().constData());
+            dict->SetValue("TABLEFIELDS", formFieldsList.join("|:|").toLatin1().constData());
             dict->SetValue("FORMDATA", formData.toUtf8().constData());
 
             kDebug() << "Deleting cursor..." << endl;
