@@ -15,6 +15,15 @@ by hand and use org-mode instead.
    - [X] Implement 'First' 'Previous' 'Next' 'Last' controls in Update
 ** Other tasks [0%]
    - [ ] Add support for query objects
+   - [ ] Updating a row should not clear the screen
+   - [ ] After adding a new record, bring the user to the tableview
+   - [ ] Show "record N of Y" in table view
+	 - [ ] Add the same string to update view
+   - [ ] Disable navigation buttons when not needed
+   - [ ] Show proper icons for fields
+	 - [ ] Display "primary key" for primary key fields
+	 - [ ] Display "required" for required fields
+	 - [ ] Do not show or gray out disabled fields
    - [-] UTF-8 Support [50%]
 	 - [X] Add support to UTF-8 within main classes
 	 - [ ] Enhance UTF-8 support even further
