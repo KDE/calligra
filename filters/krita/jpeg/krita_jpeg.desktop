@@ -1,6 +1,5 @@
 [Desktop Entry]
 Categories=
-Encoding=UTF-8
 Exec=krita %u
 GenericName=Application for Drawing and Handling of Images
 GenericName[bg]=Приложение за рисуване и обработка на изображения
