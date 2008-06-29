@@ -14,7 +14,7 @@ SET (chartshape_LIB_SRCS
     CellDataSet.cpp
     CellRegion.cpp
     CellRegionStringValidator.cpp
-    TableModel.cpp
+    #TableModel.cpp
     Legend.cpp
     TextLabelDummy.cpp
     PlotArea.cpp
