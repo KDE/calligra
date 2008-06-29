@@ -37,51 +37,26 @@ namespace KPlato
 class PlotWidget : public KPlotWidget {
 
 private:
-    int curve_draw;
-    bool is_bcwp_draw;
-    bool is_bcws_draw;
-    bool is_acwp_draw;
-    float maxYPercent;
-    float maxXPercent;
     
-    QVector<QPointF> bcwpPoints;
-    QVector<QPointF> bcwpPoints_display;
-
-    QVector<QPointF> bcwsPoints;
-    QVector<QPointF> bcwsPoints_display;
-
-    QVector<QPointF> acwpPoints;
-    QVector<QPointF> acwpPoints_display;
-    QVector<QDate> weeks;
+    KPlotObject *mKpoBCWP;
+    KPlotObject *mKpoBCWS;
+    KPlotObject *mKpoACWP;
+    
     Chart chartEngine;
 
 public:
-    static const int TOPMARGIN = 21;
-    static const int LEFTMARGIN = 35;
-    static const int BOTTOMMARGIN = 35;
-    static const int RIGHTMARGIN = 48;
-
-    static const int BCWP = 0;
-    static const int BCWS = 1;
-    static const int ACWP = 2;
 
     PlotWidget(QWidget *parent=0);
+    ~PlotWidget();
 
-  
-    void clear();
     void draw( Project &project, ScheduleManager &sm );
     
-    //void drawBasicChart(QPainter & painter);
-    //void paintEvent(QPaintEvent * ev);
     void drawBCWP();
     void undrawBCWP();
     void drawBCWS();
     void undrawBCWS();
     void drawACWP();
     void undrawACWP();
-    void setPointsBCPW(QVector<QPointF> );
-    void setPointsBCPS(QVector<QPointF> );
-    void setPointsACPW(QVector<QPointF> );
 };
 
 }

@@ -58,7 +58,6 @@ private:
 public:
     ChartPanel(QWidget *parent=0);
     
-    void clear();
     void draw( Project &project, ScheduleManager &sm );
 
 public slots:

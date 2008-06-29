@@ -43,7 +43,6 @@ ChartView::ChartView( KoDocument *part, QWidget *parent )
 
 void ChartView::setProject( Project *project )
 {
-    m_panel->clear();
     if ( m_project ) {
         disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
     }
@@ -59,7 +58,6 @@ void ChartView::setProject( Project *project )
 
 void ChartView::setScheduleManager( ScheduleManager *sm )
 {
-    m_panel->clear();
     m_manager = sm;
     if ( m_project && sm ) {
         m_panel->draw( *m_project, *sm );

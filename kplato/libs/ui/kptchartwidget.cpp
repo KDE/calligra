@@ -51,7 +51,7 @@ void ChartWidget::clear()
 
 void ChartWidget::draw( Project &p, ScheduleManager &sm )
 {
-    clear();
+    /*clear();
     chartEngine.calculateWeeks(weeks,p,sm);
     chartEngine.initXCurvesVectors(weeks,bcwpPoints,bcwsPoints,acwpPoints);
 
@@ -74,7 +74,7 @@ void ChartWidget::draw( Project &p, ScheduleManager &sm )
     bcwpPoints_display.clear();
     bcwsPoints_display.clear();
     acwpPoints_display.clear();
-    chartEngine.init_display(bcwpPoints_display,bcwsPoints_display,acwpPoints_display,weeks.size());
+    chartEngine.init_display(bcwpPoints_display,bcwsPoints_display,acwpPoints_display,weeks.size());*/
 }
 
 void ChartWidget::paintEvent(QPaintEvent * ev)

@@ -39,19 +39,14 @@ ChartPanel::ChartPanel(QWidget *parent) : ChartPanelBase(parent)
     connect(curve3,SIGNAL(clicked()),SLOT(slotACWP()));
     is_bcwp_draw=false;
     is_bcws_draw=true;
-    curve1->setChecked(true);
     is_acwp_draw=false;
-}
 
-void ChartPanel::clear()
-{
-    chart->clear();
+    curve1->setChecked(true);
 }
 
 void ChartPanel::draw( Project &project, ScheduleManager &sm )
 {
     chart->draw( project, sm );
-
 }
 
 void ChartPanel::slotBCWP()

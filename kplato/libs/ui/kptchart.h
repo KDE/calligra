@@ -36,30 +36,44 @@ class Chart
 {
 
 private:
-    float totalYPercent;
-    float totalCostPlanned;
-    float totalTimePlanned;
-    int totalWeek;
-public:
 
-    Chart();
+    float mTotalTime;
+    float mTotalCostPlanned;
+
     void init_display(QVector<QPointF>& , QVector<QPointF>& , QVector<QPointF>&, int);
-    void api(QVector<QPointF>& data, QVector<QPointF>& display, const QSize &size );
+    
     void reCalculateY(QVector<QPointF> &data, QVector<QPointF> &display, int height);
     void reCalculateX(QVector<QPointF> &data,QVector<QPointF> &display, int width);
-    void setMaxCost(QVector<QPointF>);
-    //void setMaxTime(QVector<QDate>);
-    float setMaxYPercent(QVector<QPointF>, QVector<QPointF>, QVector<QPointF>);
+
+    void setMaxCost(float);
+    
+    void setMaxTime();
 
     void costToPercent(QVector<QPointF>&);
     void timeToPercent(QVector<QPointF>&);
 
-    void calculatePlannedCost(QVector<QPointF> &,QVector<QDate> ,Project &,  ScheduleManager &);
-    void calculateActualCost(QVector<QPointF> &,QVector<QDate> ,Project &, ScheduleManager &);
-    void calculateBCWP(QVector<QPointF> &,QVector<QDate> ,Project &, ScheduleManager &);
+    void calculatePlannedCost(const Project &,const  ScheduleManager &);
+    void calculateActualCost(const Project &,const ScheduleManager &);
+    void calculateBCWP(const Project &,const ScheduleManager &);
 
-    void initXCurvesVectors(QVector<QDate> ,QVector<QPointF> & , QVector<QPointF> & , QVector<QPointF> & );
-    void calculateWeeks(QVector<QDate> & ,Project &, ScheduleManager & );
+    QVector<QDate> calculateWeeks(const Project &,const ScheduleManager & );
+
+public:
+
+    /*
+    *   
+    *   
+    */
+    void api(QVector<QPointF>& data, QVector<QPointF>& display, const QSize &size );
+    void calculateData(const Project & p, const ScheduleManager & sm);
+    float getMaxCost();
+    float getMaxTime();
+
+    QVector<QPointF>    mBCWPPoints;
+    QVector<QPointF>    mBCWSPoints;
+    QVector<QPointF>    mACWPPoints;
+
+    Chart();
 
 };
 
