@@ -1804,6 +1804,13 @@ bool Project::legalToLink( const Node *par, const Node *child ) const
     if ( legal )
         legal = legalParents( par, child );
 
+    if ( legal ) {
+        foreach ( Node *p, par->childNodeIterator() ) {
+            if ( ! legalToLink( p, child ) ) {
+                return false;
+            }
+        }
+    }
     return legal;
 }
 
