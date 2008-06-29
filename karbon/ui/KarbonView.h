@@ -141,6 +141,7 @@ public slots:
     void togglePageMargins(bool);
     void showRuler();
     void showGrid();
+    void showGuides();
     void snapToGrid();
 
     void showSelectionPopupMenu( const QPoint &pos );
@@ -194,9 +195,8 @@ private:
     KarbonStylePreviewDocker * m_stylePreview;
 
     // actions:
-    KAction            *m_groupObjects;
-    KAction            *m_ungroupObjects;
-
+    KAction * m_groupObjects;
+    KAction * m_ungroupObjects;
     KAction * m_closePath;
     KAction * m_combinePath;
     KAction * m_separatePath;
@@ -205,14 +205,15 @@ private:
     KAction * m_subtractPath;
     KAction * m_unitePath;
     KAction * m_excludePath;
+    KAction * m_configureAction;
+    KAction * m_deleteSelectionAction;
 
-    KToggleAction        *m_viewAction;
-    KAction                *m_configureAction;
-    KToggleAction        *m_showRulerAction;
-    KToggleAction        *m_showGridAction;
-    KToggleAction        *m_snapGridAction;
-    KToggleAction        *m_showPageMargins;
-    KAction                *m_deleteSelectionAction;
+    KToggleAction * m_viewAction;
+    KToggleAction * m_showRulerAction;
+    KToggleAction * m_showGridAction;
+    KToggleAction * m_snapGridAction;
+    KToggleAction * m_showPageMargins;
+    KToggleAction * m_showGuidesAction;
 
     //dockers
     VDocumentTab        *m_DocumentTab;

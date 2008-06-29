@@ -1066,13 +1066,19 @@ void KarbonView::initActions()
     actionCollection()->addAction("view_show_grid", m_showGridAction );
     m_showGridAction->setCheckedState(KGuiItem(i18n("Hide Grid")));
     m_showGridAction->setToolTip(i18n("Shows or hides grid"));
-    //m_showGridAction->setChecked(true);
+    m_showGridAction->setChecked( m_part->gridData().showGrid() );
     connect(m_showGridAction, SIGNAL(triggered()), this, SLOT(showGrid()));
+
+    m_showGuidesAction  = new KToggleAction(KIcon("guides"), i18n("Show Guides"), this);
+    actionCollection()->addAction("view_show_guides", m_showGuidesAction );
+    m_showGuidesAction->setCheckedState(KGuiItem(i18n("Hide Guides")));
+    m_showGuidesAction->setToolTip(i18n("Shows or hides guides"));
+    m_showGuidesAction->setChecked( m_part->guidesData().showGuideLines() );
+    connect(m_showGuidesAction, SIGNAL(triggered()), this, SLOT(showGuides()));
 
     m_snapGridAction  = new KToggleAction(i18n("Snap to Grid"), this);
     actionCollection()->addAction("view_snap_to_grid", m_snapGridAction );
     m_snapGridAction->setToolTip(i18n( "Snaps to grid"));
-    //m_snapGridAction->setChecked(true);
     connect(m_snapGridAction, SIGNAL(triggered()), this, SLOT(snapToGrid()));
 
     m_groupObjects  = new KAction(KIcon("group"), i18n("&Group Objects"), this);
@@ -1236,6 +1242,14 @@ KarbonView::showGrid()
     debugView("KarbonView::showGrid()");
 
     m_part->gridData().setShowGrid( m_showGridAction->isChecked() );
+    m_canvas->update();
+}
+
+void KarbonView::showGuides()
+{
+    debugView("KarbonView::showGuides()");
+
+    m_part->guidesData().setShowGuideLines( m_showGuidesAction->isChecked() );
     m_canvas->update();
 }
 
