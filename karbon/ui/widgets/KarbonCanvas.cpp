@@ -128,29 +128,39 @@ QWidget * KarbonCanvas::canvasWidget()
 
 void KarbonCanvas::paintEvent(QPaintEvent * ev)
 {
-    QPainter gc( this );
-    gc.translate(-d->documentOffset);
-    gc.setRenderHint(QPainter::Antialiasing);
+    QPainter painter( this );
+    painter.translate(-d->documentOffset);
+    painter.setRenderHint(QPainter::Antialiasing);
 
     QRect clipRect = ev->rect().translated(d->documentOffset);
-    gc.setClipRect( clipRect );
+    painter.setClipRect( clipRect );
 
-    gc.translate( d->origin.x(), d->origin.y() );
-    gc.setPen( Qt::black );
-    //gc.setBrush( Qt::white );
-    gc.drawRect( d->zoomHandler.documentToView( QRectF( QPointF(0.0, 0.0), d->document->pageSize() ) ) );
+    painter.translate( d->origin.x(), d->origin.y() );
+    painter.setPen( Qt::black );
 
-    paintMargins( gc, d->zoomHandler );
-    gc.setRenderHint(QPainter::Antialiasing, false);
+    // paint the page rect
+    painter.drawRect( d->zoomHandler.documentToView( QRectF( QPointF(0.0, 0.0), d->document->pageSize() ) ) );
+
+    // paint the page margins
+    paintMargins( painter, d->zoomHandler );
+
+    // get the cliprect in document coordinates
     QRectF updateRect = d->zoomHandler.viewToDocument( widgetToView( clipRect ) );
-    d->part->gridData().paintGrid( gc, d->zoomHandler, updateRect );
-    d->part->guidesData().paintGuides( gc, d->zoomHandler, updateRect );
-    gc.setRenderHint(QPainter::Antialiasing);
 
-    d->shapeManager->paint( gc, d->zoomHandler, false );
-    d->toolProxy->paint( gc, d->zoomHandler );
+    // paint the shapes
+    painter.setRenderHint(QPainter::Antialiasing);
+    d->shapeManager->paint( painter, d->zoomHandler, false );
 
-    gc.end();
+    // paint the grid and guides
+    painter.setRenderHint(QPainter::Antialiasing, false);
+    d->part->gridData().paintGrid( painter, d->zoomHandler, updateRect );
+    d->part->guidesData().paintGuides( painter, d->zoomHandler, updateRect );
+
+    // paint the tool decorations
+    painter.setRenderHint(QPainter::Antialiasing);
+    d->toolProxy->paint( painter, d->zoomHandler );
+
+    painter.end();
 }
 
 void KarbonCanvas::paintMargins( QPainter &painter, const KoViewConverter &converter )
