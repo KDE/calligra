@@ -1,0 +1,7 @@
+[koffice]
+DockerPlugins=
+DockerPluginsDisabled=kofficedockers,kofficesimpletextedit
+FlakePlugins=
+FlakePluginsDisabled=
+ShapePlugins=
+ShapePluginsDisabled=
