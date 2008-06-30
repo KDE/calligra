@@ -619,7 +619,7 @@ void RowHeader::paintEvent( QPaintEvent* event )
         drawText( painter,
                   normalFont,
                   QPointF( ( width - len ) / 2,
-                           yPos + ( height + painter.fontMetrics().ascent() ) / 2 ),
+                           yPos + ( height - painter.fontMetrics().ascent() ) / 2 ),
                   rowText );
 
     yPos += rowFormat->height();
@@ -658,7 +658,7 @@ void RowHeader::drawText( QPainter& painter, const QFont& font,
         line.setLineWidth( width() * scaleX );
     }
     textLayout.endLayout();
-    QPointF loc( location.x() * scaleX, (location.y() - font.pointSizeF()) * scaleY );
+    QPointF loc( location.x() * scaleX, location.y() * scaleY );
     textLayout.draw( &painter, loc );
 
     painter.restore();
@@ -1376,7 +1376,7 @@ void ColumnHeader::paintEvent( QPaintEvent* event )
           drawText( painter,
                     normalFont,
                     QPointF( xPos + ( width - len ) / 2,
-                             ( height + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2 ),
+                             ( height - painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2 ),
                     colText,
                     width );
 
@@ -1435,7 +1435,7 @@ void ColumnHeader::paintEvent( QPaintEvent* event )
           drawText( painter,
                     normalFont,
                     QPointF( xPos + ( width - len ) / 2,
-                             ( height + painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2 ),
+                             ( height - painter.fontMetrics().ascent() - painter.fontMetrics().descent() ) / 2 ),
                     colText,
                     width );
 
@@ -1477,7 +1477,7 @@ void ColumnHeader::drawText( QPainter& painter, const QFont& font,
         line.setLineWidth( width * scaleX );
     }
     textLayout.endLayout();
-    QPointF loc( location.x() * scaleX, (location.y() - font.pointSizeF()) * scaleY );
+    QPointF loc( location.x() * scaleX, location.y() * scaleY );
     textLayout.draw( &painter, loc );
 
     painter.restore();
