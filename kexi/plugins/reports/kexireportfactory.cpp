@@ -45,7 +45,7 @@ KexiReportFactory::KexiReportFactory(QObject *parent, const char *name, const QS
 	wView->setClassName("KexiReportForm");
 	wView->setName(i18n("Report"));
 	wView->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "report"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "report"));
 	wView->setDescription(i18n("A report"));
 	addClass(wView);
 
@@ -54,7 +54,7 @@ KexiReportFactory::KexiReportFactory(QObject *parent, const char *name, const QS
 	wLabel->setClassName("Label");
 	wLabel->setName(i18n("Label"));
 	wLabel->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "label"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "label"));
 	wLabel->setDescription(i18n("A label to display text"));
 	addClass(wLabel);
 
@@ -63,7 +63,7 @@ KexiReportFactory::KexiReportFactory(QObject *parent, const char *name, const QS
 	wPicLabel->setClassName("PicLabel");
 	wPicLabel->setName(i18n("Picture Label"));
 	wPicLabel->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "picture"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "picture"));
 	wPicLabel->setDescription(i18n("A label to display images or icons"));
 	addClass(wPicLabel);
 
@@ -72,7 +72,7 @@ KexiReportFactory::KexiReportFactory(QObject *parent, const char *name, const QS
 	wLine->setClassName("ReportLine");
 	wLine->setName(i18n("Line"));
 	wLine->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "line"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "line"));
 	wLine->setDescription(i18n("A simple line"));
 	addClass(wLine);
 
@@ -81,7 +81,7 @@ KexiReportFactory::KexiReportFactory(QObject *parent, const char *name, const QS
 	wSubReport->setClassName("KexiSubReport");
 	wSubReport->setName(i18n("Sub Report"));
 	wSubReport->setNamePrefix(
-		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "subReport"));
+		i18nc("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "subReport"));
 	wSubReport->setDescription(i18n("A report embedded in another report"));
 	addClass(wSubReport);
 }
