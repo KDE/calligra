@@ -56,19 +56,23 @@ PlotWidget::PlotWidget(QWidget * parent) : KPlotWidget(parent)
 
 PlotWidget::~PlotWidget()
 {
-    delete mKpoBCWP;
+/*    delete mKpoBCWP;
     delete mKpoBCWS;
-    delete mKpoACWP;
+    delete mKpoACWP;*/
 }
 
 void PlotWidget::draw( Project &p, ScheduleManager &sm ) 
 {
    
     // Retrieve datas
+    mKpoBCWP->clearPoints();
+    mKpoBCWS->clearPoints();
+    mKpoACWP->clearPoints();
+    
     chartEngine.calculateData(p,sm);
     
     // setting our limits for the plot
-    setLimits( 0.0, chartEngine.getMaxCost(), 0.0, chartEngine.getMaxTime() );
+    setLimits( 0.0, chartEngine.getMaxTime(), 0.0, chartEngine.getMaxCost() );
     
     for (QVector<QPointF>::iterator iterData = chartEngine.mBCWPPoints.begin() ; iterData != chartEngine.mBCWPPoints.end(); ++iterData )
         mKpoBCWP->addPoint( iterData->x(), iterData->y() );

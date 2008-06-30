@@ -19,6 +19,7 @@
 #include "kptchart.h"
 #include "kptchartpanel.h"
 #include "kptschedule.h"
+#include "kpteffortcostmap.h"
 
 #include <klocale.h>
 #include <cmath>
@@ -49,17 +50,22 @@ QVector<QDate> Chart::calculateWeeks(const Project & p,const ScheduleManager &sm
     //Schedule *s = p.findSchedule( sm.id() );
     //kDebug()<<" Schedule: " <<(s==0?"None":s->name()+QString(", %1").arg(s->type()))<<endl;
 
-    QDate myDate = p.startTime( sm.id() ).date();
-    while(myDate < p.endTime( sm.id() ).date())
+    QDate myDate = acwpPrDay.startDate();
+    if ( ! myDate.isValid() || bcwpPrDay.startDate() < myDate ) {
+        myDate = bcwpPrDay.startDate();
+    }
+    QDate endDate = acwpPrDay.endDate();
+    if ( ! endDate.isValid() || bcwpPrDay.endDate() > endDate ) {
+        endDate = bcwpPrDay.endDate();
+    }
+
+    while(myDate < endDate)
     {
         lWeeks.push_back(myDate);
         myDate=myDate.addDays(7);
     }
-    lWeeks.push_back(p.endTime( sm.id() ).date());
-    //debug
-    for ( int i = 0; i < lWeeks.count(); ++i ) {
-        kDebug()<<i<<":"<<lWeeks[i];
-    }
+    lWeeks.push_back(endDate);
+    kDebug()<<lWeeks;
     return lWeeks;
 }
 
@@ -71,16 +77,17 @@ void Chart::calculatePlannedCost( const Project & p, const ScheduleManager &sm)
     QVector<QDate>  lWeeks = calculateWeeks(p,sm);
     QVector<QDate>::iterator it_weeks = lWeeks.begin();
     float sum=0;
-    mBCWSPoints.push_back(QPointF(0,0));
+    //mBCWSPoints.push_back(QPointF(0,0));
 
     for(int i=0;i<lWeeks.size();i++)
     {
         QPointF lTemPoint;
         lTemPoint.setX(i);
 
-        for (int i = 0; i < 7; ++i ) {
-            QDate date = (*it_weeks).addDays(i);
-            sum+=(float)p.plannedCost(date, sm.id());
+        for (int j = 0; j < 7; ++j ) {
+            QDate date = (*it_weeks).addDays(j);
+            sum += bcwpPrDay.costOnDate( date );
+            kDebug()<<date<<sum;
             if ( date == lWeeks.last() ) {
                 break;
             }
@@ -94,7 +101,7 @@ void Chart::calculatePlannedCost( const Project & p, const ScheduleManager &sm)
         it_weeks++;
     }
     setMaxCost(sum);
-    //kDebug()<<"calculatePlannedCost()"<<vect;
+    kDebug()<<mBCWSPoints;
 }
 
 void Chart::calculateActualCost(const Project & p, const ScheduleManager &sm)
@@ -105,28 +112,30 @@ void Chart::calculateActualCost(const Project & p, const ScheduleManager &sm)
     QVector<QDate>  lWeeks = calculateWeeks(p,sm);
     QVector<QDate>::iterator it_weeks = lWeeks.begin();
     float sum=0;
-    mACWPPoints.push_back(QPointF(0,0));
+    //mACWPPoints.push_back(QPointF(0,0));
 
-   for(int i=0;i<lWeeks.size();i++)
+    for(int i=0;i<lWeeks.size();i++)
     {
         QPointF lTemPoint;
         lTemPoint.setX(i);
 
-        for (int i = 0; i < 7; ++i ) {
-            QDate date = (*it_weeks).addDays(i);
-            sum+=(float)p.actualCost((*it_weeks).addDays(i));
+        for (int j = 0; j < 7; ++j ) {
+            QDate date = (*it_weeks).addDays(j);
+            sum += acwpPrDay.costOnDate( date );
             if ( date == lWeeks.last() ) {
                 break;
             }
         }
         lTemPoint.setY(sum);
         /*if ( *it_weeks == weeks.last() ) {
-            break; // The last entry is the last date, not the start of a week!
-        }*/
+        break; // The last entry is the last date, not the start of a week!
+    }*/
         mACWPPoints.push_back(lTemPoint);
+
         it_weeks++;
     }
-    //kDebug()<<"calculateActualCost()"<<vect;
+    setMaxCost(sum);
+    kDebug()<<mACWPPoints;
 }
 
 void Chart::calculateBCWP(const Project & p, const ScheduleManager &sm)
@@ -138,19 +147,35 @@ void Chart::calculateBCWP(const Project & p, const ScheduleManager &sm)
     QVector<QDate>  lWeeks = calculateWeeks(p,sm);
     QVector<QDate>::iterator it_weeks = lWeeks.begin();
     float sum=0;
-    mBCWPPoints.push_back(QPointF(0,0));
+//    mBCWPPoints.push_back(QPointF(0,0));
 
     for(int i=0;i<lWeeks.size();i++)
     {
         QPointF lTemPoint;
         lTemPoint.setX(i);
 
-        sum = (float)p.bcwp((*it_weeks), sm.id()); // up to date
+        for (int j = 0; j < 7; ++j ) {
+            QDate date = (*it_weeks).addDays(j);
+            double c = bcwpPrDay.bcwpCostOnDate( date );
+            if ( c > 0.0 ) {
+                sum = c;
+            }
+            kDebug()<<date<<sum;
+            if ( date == lWeeks.last() ) {
+                break;
+            }
+        }
         lTemPoint.setY(sum);
+        kDebug()<<i<<lTemPoint;
+        /*if ( *it_weeks == weeks.last() ) {
+        break; // The last entry is the last date, not the start of a week!
+    }*/
         mBCWPPoints.push_back(lTemPoint);
+
         it_weeks++;
     }
-    kDebug()<<"calculateBCWP()";
+    setMaxCost(sum);
+    kDebug()<<mBCWPPoints;
 }
 
 float Chart::getMaxCost()
@@ -166,11 +191,25 @@ float Chart::getMaxTime()
 
 void Chart::calculateData(const Project & p, const ScheduleManager & sm)
 {
-    // calculate
+    mTotalTime = 0.0;
+    mTotalCostPlanned = 0.0;
+    kDebug()<<p.name()<<sm.id();
+    acwpPrDay = p.acwp( sm.id() );
+    bcwpPrDay = p.bcwpPrDay( sm.id() );
+
     calculateBCWP(p,sm);
     calculateActualCost(p,sm);
     calculatePlannedCost(p,sm);
 
+    if ( ! mBCWSPoints.isEmpty() ) {
+        mTotalTime = (float)mBCWSPoints.last().x();
+    }
+    if ( ! mBCWPPoints.isEmpty() ) {
+        mTotalTime = qMax( (float)mBCWPPoints.last().x(), mTotalTime );
+    }
+    if ( ! mACWPPoints.isEmpty() ) {
+        mTotalTime = qMax( (float)mACWPPoints.last().x(), mTotalTime );
+    }
     //costToPercent();
 }
 
@@ -358,7 +397,8 @@ void Chart::timeToPercent(QVector<QPointF> & vect)
 
 void Chart::setMaxCost(float pMaxCost)
 {
-    mTotalCostPlanned=pMaxCost;
+    if ( pMaxCost*1.1 > mTotalCostPlanned )
+        mTotalCostPlanned=pMaxCost*1.1; // add 10%
 }
 
 }

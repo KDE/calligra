@@ -27,10 +27,12 @@
 #include <QVector>
 #include <QDate>
 #include "kptproject.h"
+#include "kpteffortcostmap.h"
 
 namespace KPlato
 {
 class ScheduleManager;
+
 
 class Chart
 {
@@ -74,6 +76,10 @@ public:
     QVector<QPointF>    mACWPPoints;
 
     Chart();
+
+protected:
+    EffortCostMap acwpPrDay;
+    EffortCostMap bcwpPrDay; // includes both bcws and bcwp
 
 };
 
