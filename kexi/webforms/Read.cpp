@@ -106,8 +106,9 @@ namespace KexiWebForms {
                     const KexiDB::Field::Type type = field->type();
                     QString valueString;
                     if (type == KexiDB::Field::BLOB) {
-                        //! @todo decode image and display it if possible
-                        valueString = "(Object)";
+                        valueString = "<img src=\"data:image/png;base64,";
+                        valueString.append(cursor->value(i).toByteArray().toBase64());
+                        valueString.append("\" alt=\"").append(field->captionOrName()).append("\"/>\n");
                     }
                     else if (field->isTextType()) {
                         valueString = cursor->value(i).toString();
@@ -135,8 +136,10 @@ namespace KexiWebForms {
                 }
                 tableData.append("</tr>");
 
-                dict->SetValue("TABLEDATA", tableData.toUtf8().constData());
+                break;
             }
+
+            dict->SetValue("TABLEDATA", tableData.toUtf8().constData());
 
             kDebug() << "Deleting cursor..." << endl;
             gConnection->deleteCursor(cursor);

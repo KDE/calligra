@@ -198,14 +198,24 @@ namespace KexiWebForms {
             while (cursor->moveNext()) {
                 for (uint i = 0; i < cursor->fieldCount(); i++) {
                     KexiDB::Field* currentField = schema.field(i);
+                    const KexiDB::Field::Type type = currentField->type();
                     QString fieldName(currentField->name());
 
                     formData.append("<tr>");
-                    
-                    formData.append("<td>").append(schema.field(i)->captionOrName()).append("</td>");
-                    formData.append("<td>").append("<input type=\"text\" name=\"");
-                    formData.append(fieldName).append("\" value=\"");
-                    formData.append(cursor->value(i).toString()).append("\"/></td>");
+
+                    if (type == KexiDB::Field::BLOB) {
+                        formData.append("<td>").append(schema.field(i)->captionOrName()).append("</td>");
+                        formData.append("<td>");
+                        formData.append("<img src=\"data:image/png;base64,");
+                        formData.append(cursor->value(i).toByteArray().toBase64());
+                        formData.append("\" alt=\"").append(currentField->captionOrName()).append("\"/>\n");
+                        formData.append("</td>");
+                    } else {
+                        formData.append("<td>").append(schema.field(i)->captionOrName()).append("</td>");
+                        formData.append("<td>").append("<input type=\"text\" name=\"");
+                        formData.append(fieldName).append("\" value=\"");
+                        formData.append(cursor->value(i).toString()).append("\"/></td>");
+                    }
 
                     // Field properties images
                     formData.append("<td>");
