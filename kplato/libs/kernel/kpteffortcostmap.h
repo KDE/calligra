@@ -182,6 +182,16 @@ public:
         }
         return Duration::zeroDuration;
     }
+    double bcwpCostOnDate(const QDate &date) const {
+        if (!date.isValid()) {
+            kError()<<"Date not valid"<<endl;
+            return 0.0;
+        }
+        if (m_days.contains(date)) {
+            return m_days[date].bcwpCost();
+        }
+        return 0.0;
+    }
     double totalCost() const {
         double cost = 0.0;
         EffortCostDayMap::const_iterator it;
@@ -222,6 +232,9 @@ public:
         return eff;
     }
 
+    QDate startDate() const { return m_days.isEmpty() ? QDate() : m_days.keys().first(); }
+    QDate endDate() const { return m_days.isEmpty() ? QDate() : m_days.keys().last(); }
+    
 private:
     EffortCost &zero() { return m_zero; }
     
