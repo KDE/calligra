@@ -49,7 +49,7 @@ namespace KexiWebForms {
             shttpd_printf(m_request, "%s", "HTTP/1.1 200 OK\r\n");
             shttpd_printf(m_request, "%s", "Content-Type: text/html\r\n\r\n");
         }
-        shttpd_printf(m_request, "%s", m_contentbuf.toLatin1().constData());
+        shttpd_printf(m_request, "%s", m_contentbuf.toUtf8().constData());
         m_request->flags |= SHTTPD_END_OF_OUTPUT;
     }
 

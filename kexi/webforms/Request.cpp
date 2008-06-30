@@ -37,7 +37,7 @@ namespace KexiWebForms {
         }
 
         QString request(RequestData* req, const QString& name) {
-            return request(req, name.toLatin1().constData());
+            return request(req, name.toUtf8().constData());
         }
 
         QString requestUri(RequestData* req) {

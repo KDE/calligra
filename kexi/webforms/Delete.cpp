@@ -50,7 +50,7 @@ namespace KexiWebForms {
         QString requestedTable = queryString.at(2);
         QString pkeyName = queryString.at(3);
         QString pkeyValue = queryString.at(4);
-        dict->SetValue("TABLENAME", requestedTable.toLatin1().constData());
+        dict->SetValue("TABLENAME", requestedTable.toUtf8().constData());
 
         kDebug() << "Trying to delete row..." << endl;
         if (KexiDB::deleteRow(*gConnection, gConnection->tableSchema(requestedTable),

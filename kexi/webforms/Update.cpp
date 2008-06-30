@@ -59,9 +59,9 @@ namespace KexiWebForms {
         uint current = 0;
 
 
-        dict->SetValue("TABLENAME", requestedTable.toLatin1().constData());
-        dict->SetValue("PKEY_NAME", pkeyName.toLatin1().constData());
-        dict->SetValue("PKEY_VALUE", pkeyValue.toLatin1().constData());
+        dict->SetValue("TABLENAME", requestedTable.toUtf8().constData());
+        dict->SetValue("PKEY_NAME", pkeyName.toUtf8().constData());
+        dict->SetValue("PKEY_VALUE", pkeyValue.toUtf8().constData());
 
         // Initialize our needed Objects
         KexiDB::TableSchema tableSchema(*gConnection->tableSchema(requestedTable));
@@ -96,21 +96,21 @@ namespace KexiWebForms {
         // Compute new primary key values for first, last, previous and next record
         if (current < uint( cachedPkeys[requestedTable].size()-1 )) {
             dict->ShowSection("NEXT_ENABLED");
-            dict->SetValue("NEXT", QVariant(cachedPkeys[requestedTable].at(current+1)).toString().toLatin1().constData());
+            dict->SetValue("NEXT", QVariant(cachedPkeys[requestedTable].at(current+1)).toString().toUtf8().constData());
         } else {
             dict->ShowSection("NEXT_DISABLED");
         }
         
         if (current > 0) {
             dict->ShowSection("PREV_ENABLED");
-            dict->SetValue("PREV", QVariant(cachedPkeys[requestedTable].at(current-1)).toString().toLatin1().constData());
+            dict->SetValue("PREV", QVariant(cachedPkeys[requestedTable].at(current-1)).toString().toUtf8().constData());
         } else {
             dict->ShowSection("PREV_DISABLED");
         }
 
         if (current >= cachedPkeys[requestedTable].at(0)) {
             dict->ShowSection("FIRST_ENABLED");
-            dict->SetValue("FIRST", QVariant(cachedPkeys[requestedTable].at(0)).toString().toLatin1().constData());
+            dict->SetValue("FIRST", QVariant(cachedPkeys[requestedTable].at(0)).toString().toUtf8().constData());
         } else {
             dict->ShowSection("FIRST_DISABLED");
         }
@@ -118,7 +118,7 @@ namespace KexiWebForms {
         
         if (current < uint( cachedPkeys[requestedTable].size()-1 )) {
             dict->ShowSection("LAST_ENABLED");
-            dict->SetValue("LAST", QVariant(cachedPkeys[requestedTable].at(cachedPkeys[requestedTable].size()-1)).toString().toLatin1().constData());
+            dict->SetValue("LAST", QVariant(cachedPkeys[requestedTable].at(cachedPkeys[requestedTable].size()-1)).toString().toUtf8().constData());
         } else {
             dict->ShowSection("LAST_DISABLED");
         }
@@ -159,7 +159,7 @@ namespace KexiWebForms {
 
                 while (iterator.hasNext()) {
                     QString currentFieldName(iterator.next());
-                    QString currentFieldValue(QUrl::fromPercentEncoding(Request::request(req, currentFieldName).toLatin1()));
+                    QString currentFieldValue(QUrl::fromPercentEncoding(Request::request(req, currentFieldName).toUtf8()));
 
                     /*! @fixme This removes pluses */
                     currentFieldValue.replace("+", " ");
@@ -179,7 +179,7 @@ namespace KexiWebForms {
                     cachedPkeys[requestedTable].clear();
                 } else {
                     dict->ShowSection("ERROR");
-                    dict->SetValue("MESSAGE", gConnection->errorMsg().toLatin1().constData());
+                    dict->SetValue("MESSAGE", gConnection->errorMsg().toUtf8().constData());
                 }
 
                 kDebug() << "Deleting cursor..." << endl;
@@ -218,7 +218,7 @@ namespace KexiWebForms {
                     formFieldsList << fieldName;
                 }
             }
-            dict->SetValue("TABLEFIELDS", formFieldsList.join("|:|").toLatin1().constData());
+            dict->SetValue("TABLEFIELDS", formFieldsList.join("|:|").toUtf8().constData());
             dict->SetValue("FORMDATA", formData.toUtf8().constData());
 
             kDebug() << "Deleting cursor..." << endl;

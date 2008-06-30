@@ -46,7 +46,7 @@ namespace KexiWebForms {
 
         /* Retrieve the requested table name */
         QString requestedTable = Request::requestUri(req).split('/').at(2);
-        dict->SetValue("TABLENAME", requestedTable.toLatin1().constData());
+        dict->SetValue("TABLENAME", requestedTable.toUtf8().constData());
 
 
         KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
@@ -67,7 +67,7 @@ namespace KexiWebForms {
 
             while (iterator.hasNext()) {
                 QString currentFieldName(iterator.next());
-                QString currentFieldValue(QUrl::fromPercentEncoding(Request::request(req, currentFieldName).toLatin1()));
+                QString currentFieldValue(QUrl::fromPercentEncoding(Request::request(req, currentFieldName).toUtf8()));
 
                 /*! @fixme This removes pluses */
                 currentFieldValue.replace("+", " ");
@@ -83,7 +83,7 @@ namespace KexiWebForms {
                 dict->SetValue("MESSAGE", "Row added successfully");
             } else {
                 dict->ShowSection("ERROR");
-                dict->SetValue("MESSAGE", gConnection->errorMsg().toLatin1().constData());
+                dict->SetValue("MESSAGE", gConnection->errorMsg().toUtf8().constData());
             }
 
             kDebug() << "Deleting cursor..." << endl;
@@ -125,7 +125,7 @@ namespace KexiWebForms {
                 fieldsList << fieldName;*/
             }
 
-            dict->SetValue("TABLEFIELDS", fieldsList.join("|:|").toLatin1().constData());
+            dict->SetValue("TABLEFIELDS", fieldsList.join("|:|").toUtf8().constData());
             dict->SetValue("FORMDATA", formData.toUtf8().constData());
         }
 

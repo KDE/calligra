@@ -45,7 +45,7 @@ namespace KexiWebForms {
             tables.append("<li><a href=\"/read/").append(gConnection->tableNames().at(i));
             tables.append("\">").append(gConnection->tableNames().at(i)).append("</a></li>");
         }
-        dict->SetValue("TABLES", tables.toLatin1().constData());
+        dict->SetValue("TABLES", tables.toUtf8().constData());
 
         renderTemplate(dict, stream);
     }

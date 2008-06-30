@@ -54,9 +54,9 @@ namespace KexiWebForms {
         
 	bool readOnly = (querySchema.connection() && querySchema.connection()->isReadOnly());
         if (readOnly) {
-            dict->SetValue("TABLENAME", requestedTable.append(" (read only)").toLatin1().constData());
+            dict->SetValue("TABLENAME", requestedTable.append(" (read only)").toUtf8().constData());
         } else {
-            dict->SetValue("TABLENAME", requestedTable.toLatin1().constData());
+            dict->SetValue("TABLENAME", requestedTable.toUtf8().constData());
         }
 
         /* awful */

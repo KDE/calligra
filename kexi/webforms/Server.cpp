@@ -68,7 +68,7 @@ K_GLOBAL_STATIC( ServerStatic, s_instance )
         }
 
         kDebug() << "Setting to listen on port " << config.ports << endl;
-        shttpd_set_option(m_ctx, "ports", config.ports.toLatin1().constData());
+        shttpd_set_option(m_ctx, "ports", config.ports.toUtf8().constData());
 
         if (QDir(config.webRoot).exists()) {
             kDebug() << "Webroot is " << config.webRoot << endl;
