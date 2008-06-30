@@ -159,7 +159,12 @@ void KexiGUIMessageHandler::showWarningContinueMessage(const QString &title, con
 		KMessageBox::saveDontShowAgainContinue(dontShowAgainName);
 #else
 	KMessageBox::warningContinueCancel(m_messageHandlerParentWidget, 
-    title + (details.isEmpty() ? QString() : (QString("\n")+details)));
+    title + (details.isEmpty() ? QString() : (QString("\n")+details)),
+    QString(),
+    KStandardGuiItem::cont(),
+    KStandardGuiItem::cancel(),
+    dontShowAgainName,
+    KMessageBox::Notify | KMessageBox::AllowLink);
 #endif
 }
 
