@@ -61,7 +61,6 @@ class ScheduleManager;
 
 class ResourceAssignmentView;
 class TaskStatusView;
-//class ReportView;
 class Calendar;
 class Part;
 class DocumentChild;
@@ -189,8 +188,6 @@ protected slots:
     void slotProjectWorktime();
     void slotProjectAccounts();
     void slotProjectResources();
-    void slotViewReportDesign();
-    void slotViewReports();
 
     void slotOpenNode();
     void slotOpenNode( Node *node );
@@ -297,12 +294,6 @@ private:
     KAction *actionEditCalendarList;
     KAction *actionEditAccounts;
     KAction *actionEditResources;
-
-    // ------ Reports
-    KAction *actionFirstpage;
-    KAction *actionPriorpage;
-    KAction *actionNextpage;
-    KAction *actionLastpage;
 
     // ------ Tools
     KAction *actionDefineWBS;

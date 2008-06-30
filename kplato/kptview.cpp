@@ -82,7 +82,6 @@
 #include "kpttaskdialog.h"
 #include "kpttaskprogressdialog.h"
 #include "kptganttview.h"
-//#include "kptreportview.h"
 #include "kpttaskeditor.h"
 #include "kptdependencyeditor.h"
 #include "kptperteditor.h"
@@ -207,22 +206,6 @@ View::View( Part* part, QWidget* parent )
     actionEditResources  = new KAction(KIcon( "document-properties" ), i18n("Edit Resources..."), this);
     actionCollection()->addAction("project_resources", actionEditResources );
     connect( actionEditResources, SIGNAL( triggered( bool ) ), SLOT( slotProjectResources() ) );
-
-
-    /*    // ------ Reports
-    actionFirstpage = actionCollection()->addAction(KStandardAction::FirstPage, "go_firstpage", m_reportview,SLOT(slotPrevPage()));
-        connect(m_reportview, SIGNAL(setFirstPageActionEnabled(bool)), actionFirstpage, SLOT(setEnabled(bool)));
-    actionPriorpage = actionCollection()->addAction(KStandardAction::Prior, "go_prevpage", m_reportview,SLOT(slotPrevPage()));
-        connect(m_reportview, SIGNAL(setPriorPageActionEnabled(bool)), actionPriorpage, SLOT(setEnabled(bool)));
-    actionNextpage = actionCollection()->addAction(KStandardAction::Next,  "go_nextpage", m_reportview,SLOT(slotNextPage()));
-        connect(m_reportview, SIGNAL(setNextPageActionEnabled(bool)), actionNextpage, SLOT(setEnabled(bool)));
-    actionLastpage = actionCollection()->addAction(KStandardAction::LastPage,  "go_lastpage", m_reportview,SLOT(slotLastPage()));
-        connect(m_reportview, SIGNAL(setLastPageActionEnabled(bool)), actionLastpage, SLOT(setEnabled(bool)));
-        m_reportview->enableNavigationBtn();*/
-    mainWindow() ->toolBar( "report" ) ->hide();
-
-    //     new KAction(i18n("Design..."), "report_design", 0, this,
-    //         SLOT(slotReportDesign()), actionCollection(), "report_design");
 
 
     // ------ Tools
@@ -861,10 +844,6 @@ void View::print( QPrinter &printer, QPrintDialog &printDialog )
     } else if ( m_tab->currentWidget() == m_accountsview ) {
         m_accountsview->print( printer );
     }
-    // 	else if (m_tab->currentWidget() == m_reportview)
-    // 	{
-    //         m_reportview->print(printer);
-    // 	}
 }
 */
 
@@ -1170,17 +1149,6 @@ void View::slotDeleteScheduleManager( Project *project, ScheduleManager *sm )
     }
     DeleteScheduleManagerCmd *cmd =  new DeleteScheduleManagerCmd( *project, sm, i18n( "Delete Schedule %1", sm->name() ) );
     getPart() ->addCommand( cmd );
-}
-
-void View::slotViewReportDesign()
-{
-    //kDebug();
-}
-
-void View::slotViewReports()
-{
-    //kDebug();
-    //m_tab->setCurrentWidget(m_reportview);
 }
 
 void View::slotAddSubTask()
