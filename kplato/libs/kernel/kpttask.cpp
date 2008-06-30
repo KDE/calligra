@@ -2939,6 +2939,29 @@ EffortCost Completion::actualCostTo( const QDate &date ) const
     return c;
 }
 
+QStringList Completion::entrymodeList() const
+{
+    return QStringList()
+            << "FollowPlan"
+            << "EnterCompleted"
+            << "EnterEffortPerTask"
+            << "EnterEffortPerResource";
+
+}
+
+void Completion::setEntrymode( const QString &mode )
+{
+    int m = entrymodeList().indexOf( mode );
+    if ( m == -1 ) {
+        m = EnterCompleted;
+    }
+    m_entrymode = static_cast<Entrymode>( m );
+}
+QString Completion::entryModeToString() const
+{
+    return entrymodeList().value( m_entrymode );
+}
+
 bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
 {
     //kDebug();
@@ -2953,6 +2976,7 @@ bool Completion::loadXML( KoXmlElement &element, XMLLoaderObject &status )
     if (!s.isEmpty()) {
         m_finishTime = DateTime::fromString(s, status.projectSpec());
     }
+    setEntrymode( element.attribute( "entrymode" ) );
     if (status.version() < "0.6") {
         if ( m_started ) {
             Entry *entry = new Entry( element.attribute("percent-finished", "0").toInt(), Duration::fromString(element.attribute("remaining-effort")),  Duration::fromString(element.attribute("performed-effort")) );
@@ -3008,6 +3032,7 @@ void Completion::saveXML(QDomElement &element )  const
     el.setAttribute("finished", m_finished);
     el.setAttribute("startTime", m_startTime.toString( KDateTime::ISODate ));
     el.setAttribute("finishTime", m_finishTime.toString( KDateTime::ISODate ));
+    el.setAttribute("entrymode", entryModeToString());
     foreach( QDate date, m_entries.uniqueKeys() ) {
         QDomElement elm = el.ownerDocument().createElement("completion-entry");
         el.appendChild(elm);

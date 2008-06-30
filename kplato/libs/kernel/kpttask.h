@@ -214,6 +214,9 @@ public:
     enum Entrymode { FollowPlan, EnterCompleted, EnterEffortPerTask, EnterEffortPerResource };
     void setEntrymode( Entrymode mode ) { m_entrymode = mode; }
     Entrymode entrymode() const { return m_entrymode; }
+    void setEntrymode( const QString &mode );
+    QString entryModeToString() const;
+    QStringList entrymodeList() const;
     
     EffortCostMap effortCostPrDay(const QDate &start, const QDate &end ) const;
     
