@@ -178,8 +178,10 @@ void KarbonStylePreviewDocker::updateStyle( const KoShapeBorderModel * stroke, c
     KoColor maxColor( qColor, KoColorSpaceRegistry::instance()->rgb8() );
     minColor.setOpacity( 0 );
     maxColor.setOpacity( 255 );
+    m_opacitySlider->blockSignals( true );
     m_opacitySlider->setColors( minColor, maxColor );
     m_opacitySlider->setValue( qColor.alpha() );
+    m_opacitySlider->blockSignals( false );
 
     m_preview->update( stroke, fill );
 }
