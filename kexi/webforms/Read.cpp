@@ -46,12 +46,18 @@ namespace KexiWebForms {
 
 
         QString requestedTable(Request::requestUri(req).split('/').at(2));
-        dict->SetValue("TABLENAME", requestedTable.toLatin1().constData());
 
         QString tableData;
         KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
         KexiDB::QuerySchema querySchema(*tableSchema);
         KexiDB::Cursor* cursor = gConnection->executeQuery(querySchema);
+        
+	bool readOnly = (querySchema.connection() && querySchema.connection()->isReadOnly());
+        if (readOnly) {
+            dict->SetValue("TABLENAME", requestedTable.append(" (read only)").toLatin1().constData());
+        } else {
+            dict->SetValue("TABLENAME", requestedTable.toLatin1().constData());
+        }
 
         /* awful */
         int recordsTotal = 0;
@@ -116,15 +122,17 @@ namespace KexiWebForms {
                 }
                 // Toolbox
                 QString pkeyVal(cursor->value(tableSchema->indexOf(primaryKey)).toString());
-                // Edit
-                tableData.append("<td><a href=\"/update/").append(requestedTable).append("/");
-                tableData.append(primaryKey->name()).append("/");
-                tableData.append(pkeyVal).append("\"><img src=\"/toolbox/draw-freehand.png\" alt=\"Edit\"/></a></td>");
-                // Delete
-                tableData.append("<td><a href=\"/delete/").append(requestedTable).append("/");
-                tableData.append(primaryKey->name()).append("/");
-                tableData.append(pkeyVal).append("\"><img src=\"/toolbox/draw-eraser.png\" alt=\"Delete\"/></a></td>");
-                // End row
+                if (!readOnly) {
+                    // Edit
+                    tableData.append("<td><a href=\"/update/").append(requestedTable).append("/");
+                    tableData.append(primaryKey->name()).append("/");
+                    tableData.append(pkeyVal).append("\"><img src=\"/toolbox/draw-freehand.png\" alt=\"Edit\"/></a></td>");
+                    // Delete
+                    tableData.append("<td><a href=\"/delete/").append(requestedTable).append("/");
+                    tableData.append(primaryKey->name()).append("/");
+                    tableData.append(pkeyVal).append("\"><img src=\"/toolbox/draw-eraser.png\" alt=\"Delete\"/></a></td>");
+                    // End row
+                }
                 tableData.append("</tr>");
 
                 dict->SetValue("TABLEDATA", tableData.toUtf8().constData());
