@@ -911,7 +911,9 @@ void Selection::startReferenceSelection(const Region& region)
 
 void Selection::endReferenceSelection()
 {
-    if (!d->referenceMode) {
+    // The reference selection may be temporarily disabled.
+    // The stored selection reliably indicates the reference selection mode.
+    if (d->formerSelection.isEmpty()) {
         return;
     }
     d->referenceMode = false;
@@ -926,6 +928,7 @@ void Selection::endReferenceSelection()
         clear();
     }
     initialize(d->formerSelection);
+    d->formerSelection.clear();
     d->canvasBase->canvasWidget()->setCursor(Qt::ArrowCursor);
 }
 
