@@ -1,6 +1,6 @@
 #! /bin/sh
 rm -f tips.cpp
-EXCLUDE="-path ./formeditor -o -path ./doc -o -path ./plugins/importwizard -o -path ./tests -o -path ./scriptingplugins -o -path ./plugins/scripting -o -path ./3rdparty"
+EXCLUDE="-path ./formeditor -o -path ./doc -o -path ./plugins/importwizard -o -path ./tests -o -path ./scriptingplugins -o -path ./plugins/scripting -o -path ./plugins/reports -o -path ./3rdparty"
 LIST="data/*.rc `find . \( \( $EXCLUDE \) -prune -o -name \*.ui \) -type f | grep -v -e '/\.'`"
 if test -n "$LIST"; then
 	$EXTRACTRC $LIST >> rc.cpp
