@@ -48,15 +48,14 @@ class TableShape::Private
 public:
     int         columns;
     int         rows;
-    Sheet*      sheet; // owned by "TableMap" data center
     SheetView*  sheetView;
 
 public:
-    void adjustColumnDimensions( double factor );
-    void adjustRowDimensions( double factor );
+    void adjustColumnDimensions(Sheet* sheet, double factor);
+    void adjustRowDimensions(Sheet* sheet, double factor);
 };
 
-void TableShape::Private::adjustColumnDimensions( double factor )
+void TableShape::Private::adjustColumnDimensions(Sheet* sheet, double factor)
 {
     for (int col = 1; col <= columns; ++col) {
         ColumnFormat* const columnFormat = sheet->nonDefaultColumnFormat(col);
@@ -64,7 +63,7 @@ void TableShape::Private::adjustColumnDimensions( double factor )
     }
 }
 
-void TableShape::Private::adjustRowDimensions( double factor )
+void TableShape::Private::adjustRowDimensions(Sheet* sheet, double factor)
 {
     for (int row = 1; row <= rows; ++row) {
         RowFormat* const rowFormat = sheet->nonDefaultRowFormat(row);
@@ -80,15 +79,14 @@ TableShape::TableShape( int columns, int rows )
     setObjectName("TableShape");
     d->columns = columns;
     d->rows = rows;
-    d->sheet = 0;
     d->sheetView = 0;
 }
 
 TableShape::~TableShape()
 {
     delete d->sheetView;
-    if (d->sheet) {
-        d->sheet->map()->removeSheet(d->sheet); // declare the sheet as deleted
+    if (KoShape::userData()) {
+        map()->removeSheet(qobject_cast<Sheet*>(KoShape::userData())); // declare the sheet as deleted
     }
     delete d;
 }
@@ -108,7 +106,7 @@ void TableShape::setColumns( int columns )
     Q_ASSERT( columns > 0 );
     const double factor = (double) d->columns / columns;
     d->columns = columns;
-    d->adjustColumnDimensions( factor );
+    d->adjustColumnDimensions(qobject_cast<Sheet*>(KoShape::userData()), factor);
     d->sheetView->invalidate();
 }
 
@@ -117,7 +115,7 @@ void TableShape::setRows( int rows )
     Q_ASSERT( rows > 0 );
     const double factor = (double) d->rows / rows;
     d->rows = rows;
-    d->adjustRowDimensions( factor );
+    d->adjustRowDimensions(qobject_cast<Sheet*>(KoShape::userData()), factor);
     d->sheetView->invalidate();
 }
 
@@ -204,8 +202,9 @@ void TableShape::init(QMap<QString, KoDataCenter*> dataCenterMap)
 {
     Map* map = dynamic_cast<Map*>(dataCenterMap["TableMap"]);
     Q_CHECK_PTR(map);
-    d->sheet = map->addNewSheet();
-    d->sheetView = new SheetView(d->sheet);
+    Sheet* const sheet = map->addNewSheet();
+    d->sheetView = new SheetView(sheet);
+    KoShape::setUserData(sheet);
 
     connect(map, SIGNAL(damagesFlushed(const QList<Damage*>&)),
             this, SLOT(handleDamages(const QList<Damage*>&)));
@@ -213,10 +212,10 @@ void TableShape::init(QMap<QString, KoDataCenter*> dataCenterMap)
     // Initialize the size using the default column/row dimensions.
     QSize size;
     for (int col = 1; col <= d->columns; ++col) {
-        size.rwidth() += sheet()->columnFormat(col)->visibleWidth();
+        size.rwidth() += sheet->columnFormat(col)->visibleWidth();
     }
     for (int row = 1; row <= d->rows; ++row) {
-        size.rheight() += sheet()->rowFormat(row)->visibleHeight();
+        size.rheight() += sheet->rowFormat(row)->visibleHeight();
     }
     KoShape::setSize(size);
 }
@@ -228,8 +227,8 @@ void TableShape::setSize( const QSizeF& newSize )
         return;
 
     QSizeF size2 = oldSize;
-    const qreal cellWidth = d->sheet->map()->defaultColumnFormat()->width();
-    const qreal cellHeight = d->sheet->map()->defaultRowFormat()->height();
+    const qreal cellWidth = map()->defaultColumnFormat()->width();
+    const qreal cellHeight = map()->defaultRowFormat()->height();
 
     // Note that the following four variables can also be negative
     const qreal dx = newSize.width() - oldSize.width();
@@ -255,21 +254,22 @@ void TableShape::setSize( const QSizeF& newSize )
 
 Map* TableShape::map() const
 {
-    return d->sheet->map();
+    return qobject_cast<Sheet*>(KoShape::userData())->map();
 }
 
 Sheet* TableShape::sheet() const
 {
-    return d->sheet;
+    return qobject_cast<Sheet*>(KoShape::userData());
 }
 
 void TableShape::setSheet(const QString& sheetName)
 {
-    Sheet* sheet = d->sheet->map()->findSheet(sheetName);
+    Sheet* const sheet = map()->findSheet(sheetName);
     if ( ! sheet )
         return;
     delete d->sheetView;
     d->sheetView = new SheetView(sheet);
+    KoShape::setUserData(sheet);
     setColumns(d->columns);
     setRows(d->rows);
     update();

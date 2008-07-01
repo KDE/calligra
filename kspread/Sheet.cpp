@@ -172,7 +172,7 @@ Sheet* Sheet::find( int _id )
 }
 
 Sheet::Sheet(Map* map, const QString& sheetName)
-    : QObject( map )
+    : KoShapeUserData()
     , KoShapeControllerBase()
     , d( new Private )
 {
@@ -228,7 +228,7 @@ Sheet::Sheet(Map* map, const QString& sheetName)
 }
 
 Sheet::Sheet(const Sheet& other)
-    : QObject(other.d->workbook)
+    : KoShapeUserData()
     , KoShapeControllerBase()
     , d(new Private)
 {
