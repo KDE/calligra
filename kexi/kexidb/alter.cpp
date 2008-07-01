@@ -852,8 +852,8 @@ TableSchema* AlterTableHandler::execute(const QString& tableName, ExecutionArgum
 	ActionDictDict fieldActions;
 //Qt 4	fieldActions.setAutoDelete(true);
 	ActionBase* action;
-	for (ActionListIterator it(d->actions.constEnd()); it!=d->actions.constBegin(); --it) {
-		(*it)->simplifyActions( fieldActions );
+	for (int i = d->actions.count()-1; i >= 0; i--) {
+		d->actions[i]->simplifyActions( fieldActions );
 	}
 
 	if (!args.debugString)
