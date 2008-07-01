@@ -16,6 +16,7 @@ Comment[pt_BR]=Plugin de animação de formas para o KPresenter
 Comment[sv]=Insticksprogram med animeringsåtgärderför KPresenter
 Comment[uk]=Втулка анімації форм для KPresenter
 Comment[x-test]=xxShape animation plugin for KPresenterxx
+Comment[zh_CN]=KPresenter 形状动画插件
 Comment[zh_TW]=KPresenter 元件動畫外掛程式
 [PropertyDef::X-KPresenter-Version]
 Type=int

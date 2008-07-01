@@ -65,6 +65,7 @@ Name[tg]=Ҳисобот (Санҷиш)
 Name[tr]=Raporlar(deneme)
 Name[uk]=Звіти(тест)
 Name[x-test]=xxReports(test)xx
+Name[zh_CN]=报表(测试)
 Name[zh_TW]=報告（測試）
 X-KDE-Library=pgzkexireportpart2
 X-KDE-ParentApp=kexi

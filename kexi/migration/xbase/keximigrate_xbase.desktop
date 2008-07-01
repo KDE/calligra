@@ -16,6 +16,7 @@ Comment[sv]=xBase-övergångsdrivrutin för Kexi
 Comment[tr]=Kexi için xBase Taşıma Sürücüsü
 Comment[uk]=Драйвер міграції xBase для Kexi
 Comment[x-test]=xxxBase Migration Driver for Kexixx
+Comment[zh_CN]=Kexi xBase 升迁驱动
 Comment[zh_TW]=Kexi 的 xBase 轉移驅動程式
 
 X-KDE-Library=keximigrate_xbase

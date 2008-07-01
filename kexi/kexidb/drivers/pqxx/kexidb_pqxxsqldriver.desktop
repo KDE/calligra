@@ -22,6 +22,7 @@ Comment[sv]=Databasdrivrutin i Kexi för att komma åt PostgreSQL-servrar
 Comment[ta]=போஸ்ட்கிரெஸ்கியூஎல் செவகன்களை அணுகுவதற்கான கெக்ஸி தரவுத்தள இயக்கி
 Comment[uk]=Драйвер бази даних Kexi для доступу до серверів PostgreSQL
 Comment[x-test]=xxKexi database driver for accessing PostgreSQL serversxx
+Comment[zh_CN]=访问 PostgreSQL 服务器的 Kexi 数据库驱动
 Comment[zh_TW]=存取 PostgreSQL 伺服器的 Kexi 資料庫驅動程式
 X-KDE-Library=kexidb_pqxxsqldriver
 X-KDE-ServiceTypes=Kexi/DBDriver

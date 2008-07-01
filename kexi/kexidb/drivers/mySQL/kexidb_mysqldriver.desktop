@@ -22,6 +22,7 @@ Comment[sv]=Databasdrivrutin i Kexi för att komma åt MySQL-servrar
 Comment[ta]=மைஎஸ்கியூஎல் செவகன்களை அணுகுவதற்கான கெக்ஸி தரவுத்தள இயக்கி
 Comment[uk]=Драйвер бази даних Kexi для доступу до серверів MySQL
 Comment[x-test]=xxKexi database driver for accessing MySQL serversxx
+Comment[zh_CN]=访问 MySQL 服务器的 Kexi 数据库驱动
 Comment[zh_TW]=存取 MySQL 伺服器的 Kexi 資料庫驅動程式
 X-KDE-Library=kexidb_mysqldriver
 X-KDE-ServiceTypes=Kexi/DBDriver

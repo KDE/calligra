@@ -39,6 +39,7 @@ Name[uk]=Фільтр імпорту PDF для Krita
 Name[uz]=Krita uchun PDF import filteri
 Name[uz@cyrillic]=Krita учун PDF импорт филтери
 Name[x-test]=xxKrita PDF Import Filterxx
+Name[zh_CN]=Krita PDF 导出过滤器
 Name[zh_TW]=Krita PDF 匯入過濾程式
 X-KDE-ServiceTypes=KOfficeFilter
 Type=Service

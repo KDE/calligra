@@ -25,6 +25,7 @@ GenericName[sv]=Kalkylark
 GenericName[tr]=Hesap Tablosu
 GenericName[uk]=Електронні таблиці
 GenericName[x-test]=xxSpreadsheetxx
+GenericName[zh_CN]=电子表格
 GenericName[zh_TW]=資料表
 MimeType=application/vnd.oasis.opendocument.spreadsheet;application/x-kspread;application/vnd.ms-excel;text/csv;application/x-quattropro;
 Type=Application

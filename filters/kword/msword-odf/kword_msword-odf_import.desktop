@@ -16,6 +16,7 @@ Name[tg]=Филтри воридотии MS Word-ODF барои KWord
 Name[tr]=KWord için MS Word-ODF Alma Filtresi
 Name[uk]=Фільтр імпорту MS Word-ODF для KWord
 Name[x-test]=xxKWord MS Word-ODF Import Filterxx
+Name[zh_CN]=KWord MS Word-ODF 导入过滤器
 Name[zh_TW]=KWord MS Word-ODF 匯入過濾程式
 X-KDE-Export=application/vnd.oasis.opendocument.text
 X-KDE-Import=application/msword

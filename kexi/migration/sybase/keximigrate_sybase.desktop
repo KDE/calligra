@@ -21,6 +21,7 @@ Comment[sv]=MySQL-övergångsdrivrutin för Kexi
 Comment[tr]=Kexi için Sybase Taşıma Sürücüsü
 Comment[uk]=Драйвер міграції Sybase для Kexi
 Comment[x-test]=xxSybase Migration Driver for Kexixx
+Comment[zh_CN]=Kexi Sybase 升迁驱动
 Comment[zh_TW]=Kexi 的 Sybase 轉移驅動程式
 X-KDE-Library=keximigrate_sybase
 X-KDE-ServiceTypes=Kexi/MigrationDriver
