@@ -44,11 +44,11 @@
 #include "Damages.h"
 #include "DependencyManager.h"
 #include "Doc.h"
-#include "GenValidationStyle.h"
 #include "LoadingInfo.h"
 #include "Localization.h"
 #include "NamedAreaManager.h"
 #include "OdfLoadingContext.h"
+#include "OdfSavingContext.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
@@ -441,8 +441,6 @@ bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore 
         xmlWriter.addAttribute("table:protection-key", QString( str.data() ) );
     }
 
-    GenValidationStyles valStyle;
-
     KTemporaryFile bodyTmpFile;
     //Check that creation of temp file was successful
     if (!bodyTmpFile.open())
@@ -455,14 +453,14 @@ bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore 
 
     KoEmbeddedDocumentSaver embeddedSaver;
     KoShapeSavingContext savingContext( bodyTmpWriter, mainStyles, embeddedSaver );
+    OdfSavingContext tableContext(savingContext);
 
     foreach ( Sheet* sheet, d->lstSheets )
     {
-        sheet->saveOasis( savingContext, valStyle );
+        sheet->saveOasis(tableContext);
     }
 
-    valStyle.writeStyle( xmlWriter );
-
+    tableContext.valStyle.writeStyle(xmlWriter);
 
     bodyTmpFile.close();
     xmlWriter.addCompleteElement( &bodyTmpFile );

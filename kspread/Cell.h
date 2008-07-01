@@ -59,8 +59,8 @@ namespace KSpread
 {
 class Doc;
 class Formula;
-class GenValidationStyles;
 class OdfLoadingContext;
+class OdfSavingContext;
 class Sheet;
 class Validity;
 class Value;
@@ -338,7 +338,7 @@ public:
      */
     bool saveOasis( KoXmlWriter& xmlwriter, KoGenStyles& mainStyles,
                     int row, int column, int &repeated,
-                    GenValidationStyles &valStyle, const QMap<int, Style>& columnDefaultStyles,
+                   OdfSavingContext& savingContext, const QMap<int, Style>& columnDefaultStyles,
                     const QMap<int, Style>& rowDefaultStyles );
 
     /**

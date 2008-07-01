@@ -57,6 +57,7 @@
 #include "NamedAreaManager.h"
 #include "Object.h"
 #include "OdfLoadingContext.h"
+#include "OdfSavingContext.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"
 #include "ShapeApplicationData.h"
@@ -1090,9 +1091,10 @@ QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mai
 
 bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
                       int row, int column, int &repeated,
-                      GenValidationStyles &valStyle, const QMap<int, Style>& columnDefaultStyles,
+                     OdfSavingContext& tableContext, const QMap<int, Style>& columnDefaultStyles,
                       const QMap<int, Style>& rowDefaultStyles )
 {
+    // see: OpenDocument, 8.1.3 Table Cell
     if ( !isPartOfMerged() )
         xmlwriter.startElement( "table:table-cell" );
     else
@@ -1176,7 +1178,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     if ( !validity.isEmpty() )
     {
         GenValidationStyle styleVal(&validity);
-        xmlwriter.addAttribute( "table:validation-name", valStyle.lookup( styleVal ) );
+        xmlwriter.addAttribute( "table:validation-name", tableContext.valStyle.lookup( styleVal ) );
     }
     if ( isFormula() )
     {
@@ -1217,6 +1219,19 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         xmlwriter.startElement( "text:p" );
         xmlwriter.addTextNode( displayText().toUtf8() );
         xmlwriter.endElement();
+    }
+
+    // flake
+    // Save shapes that are anchored to this cell.
+    // see: OpenDocument, 2.3.1 Text Documents
+    // see: OpenDocument, 9.2 Drawing Shapes
+    if (tableContext.cellAnchoredShapes.contains(*this)) {
+        const QList<KoShape*> shapes = tableContext.cellAnchoredShapes.values(*this);
+        for (int i = 0; i < shapes.count(); ++i) {
+            shapes[i]->saveOdf(tableContext.shapeContext);
+            // FIXME Stefan: Store the additional attributes:
+            // "table:end-cell-address", "table:end-x", "table:end-y"
+        }
     }
 
     saveOasisAnnotation( xmlwriter );

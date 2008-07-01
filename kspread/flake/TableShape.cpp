@@ -35,6 +35,7 @@
 #include <GenValidationStyle.h>
 #include <Map.h>
 #include <OdfLoadingContext.h>
+#include <OdfSavingContext.h>
 #include <Region.h>
 #include <RowColumnFormat.h>
 #include <Sheet.h>
@@ -193,9 +194,9 @@ void TableShape::saveOdf( KoShapeSavingContext & context ) const
     defaultRowStyle.setDefaultStyle(true);
     context.mainStyles().lookup(defaultRowStyle, "Default", KoGenStyles::DontForceNumbering);
 
-    GenValidationStyles valStyle;
-    sheet()->saveOasis(context, valStyle);
-    valStyle.writeStyle(context.xmlWriter());
+    OdfSavingContext tableContext(context);
+    sheet()->saveOasis(tableContext);
+    tableContext.valStyle.writeStyle(context.xmlWriter());
 }
 
 void TableShape::init(QMap<QString, KoDataCenter*> dataCenterMap)

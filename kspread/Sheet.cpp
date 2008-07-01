@@ -68,6 +68,7 @@
 #include "NamedAreaManager.h"
 #include "Object.h"
 #include "OdfLoadingContext.h"
+#include "OdfSavingContext.h"
 #include "PrintManager.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
@@ -3525,10 +3526,10 @@ void Sheet::saveOasisSettings( KoXmlWriter &settingsWriter ) const
   settingsWriter.addConfigItem( "ShowColumnNumber", getShowColumnNumber() );
 }
 
-bool Sheet::saveOasis( KoShapeSavingContext &savingContext, GenValidationStyles &valStyle )
+bool Sheet::saveOasis(OdfSavingContext& tableContext)
 {
-    KoXmlWriter & xmlWriter = savingContext.xmlWriter();
-    KoGenStyles & mainStyles = savingContext.mainStyles();
+    KoXmlWriter & xmlWriter = tableContext.shapeContext.xmlWriter();
+    KoGenStyles & mainStyles = tableContext.shapeContext.mainStyles();
     xmlWriter.startElement( "table:table" );
     xmlWriter.addAttribute( "table:name", sheetName() );
     xmlWriter.addAttribute( "table:style-name", saveOasisSheetStyleName(mainStyles )  );
@@ -3552,21 +3553,31 @@ bool Sheet::saveOasis( KoShapeSavingContext &savingContext, GenValidationStyles 
         }
     }
 
+    // flake
+    // Create a dict of cell anchored shapes with the cell as key.
+    foreach (KoShape* shape, d->shapes) {
+        if (dynamic_cast<ShapeApplicationData*>(shape->applicationData())->isAnchoredToCell()) {
+            double dummy;
+            const QPointF position = shape->position();
+            const int col = leftColumn(position.x(), dummy);
+            const int row = topRow(position.y(), dummy);
+            tableContext.cellAnchoredShapes.insert(Cell(this, col, row), shape);
+        }
+    }
+
     const QRect usedArea = this->usedArea();
-    saveOasisColRowCell( xmlWriter, mainStyles, usedArea.width(), usedArea.height(), valStyle );
+    saveOasisColRowCell( xmlWriter, mainStyles, usedArea.width(), usedArea.height(), tableContext);
 
     // flake
+    // Save the remaining shapes, those that are anchored in the page.
     if (!d->shapes.isEmpty())
     {
         xmlWriter.startElement("table:shapes");
         foreach (KoShape* shape, d->shapes)
         {
-            // TODO Stefan: Enable after saving of cell anchored shapes got implemented.
-#if 0
             if (dynamic_cast<ShapeApplicationData*>(shape->applicationData())->isAnchoredToCell())
                 continue;
-#endif
-            shape->saveOdf(savingContext);
+            shape->saveOdf(tableContext.shapeContext);
         }
         xmlWriter.endElement();
     }
@@ -3615,7 +3626,7 @@ QString Sheet::saveOasisSheetStyleName( KoGenStyles &mainStyles )
 
 
 void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
-                                 int maxCols, int maxRows, GenValidationStyles &valStyle )
+                                int maxCols, int maxRows, OdfSavingContext& tableContext)
 {
     kDebug(36003) <<"Sheet::saveOasisColRowCell:" << d->name;
 
@@ -3847,7 +3858,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
               xmlWriter.addAttribute("table:number-rows-repeated", repeated);
             }
 
-            saveOasisCells(xmlWriter, mainStyles, i, maxCols, valStyle,
+            saveOasisCells(xmlWriter, mainStyles, i, maxCols, tableContext,
                            columnDefaultStyles, rowDefaultStyles);
 
             // copy the index for the next row to process
@@ -3874,7 +3885,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 }
 
 void Sheet::saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols,
-                           GenValidationStyles &valStyle, const QMap<int, Style>& columnDefaultStyles,
+                           OdfSavingContext& tableContext, const QMap<int, Style>& columnDefaultStyles,
                            const QMap<int, Style>& rowDefaultStyles)
 {
     int i = 1;
@@ -3890,7 +3901,7 @@ void Sheet::saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int 
 //                       << " i: " << i
 //                       << " column: " << cell.column() << endl;
         int repeated = 1;
-        cell.saveOasis(xmlWriter, mainStyles, row, i, repeated, valStyle,
+        cell.saveOasis(xmlWriter, mainStyles, row, i, repeated, tableContext,
                        columnDefaultStyles, rowDefaultStyles);
         i += repeated;
         // stop if we reached the end column

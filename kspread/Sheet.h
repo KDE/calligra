@@ -68,10 +68,10 @@ class ConditionsStorage;
 class FormulaStorage;
 class Doc;
 class FusionStorage;
-class GenValidationStyles;
 class LinkStorage;
 class Map;
 class OdfLoadingContext;
+class OdfSavingContext;
 class PrintManager;
 class PrintSettings;
 class Region;
@@ -318,8 +318,7 @@ public:
     /**
      * \ingroup OpenDocument
      */
-    bool saveOasis( KoShapeSavingContext &savingContext,
-                    GenValidationStyles& valStyle );
+    bool saveOasis(OdfSavingContext& tableContext);
 
     /**
      * \ingroup OpenDocument
@@ -976,13 +975,13 @@ protected:
      * \ingroup OpenDocument
      */
     void saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
-                              int maxCols, int maxRows, GenValidationStyles &valStyle );
+                              int maxCols, int maxRows, OdfSavingContext& tableContext);
 
     /**
      * \ingroup OpenDocument
      */
     void saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols,
-                        GenValidationStyles &valStyle, const QMap<int, Style>& columnDefaultStyles,
+                        OdfSavingContext& tableContext, const QMap<int, Style>& columnDefaultStyles,
                         const QMap<int, Style>& rowDefaultStyles);
 
     /**
