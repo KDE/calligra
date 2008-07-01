@@ -40,6 +40,7 @@
             <Separator/>
             <Action name="view_grid"/>
             <Action name="view_snaptogrid"/>
+            <Action name="view_show_guides"/>
             <Separator/>
             <Action name="zoom_out"/>
             <Action name="zoom_in"/>
