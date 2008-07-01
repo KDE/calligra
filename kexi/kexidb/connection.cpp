@@ -142,16 +142,17 @@ class ConnectionPrivate
 		{
 			tableSchema.setKexiDBSystem(true);
 			_kexiDBSystemTables.insert(&tableSchema);
-			tables_byname.insert(tableSchema.name(), &tableSchema);
+			tables_byname.insert(tableSchema.name().toLower(), &tableSchema);
 		}
 
-		/*! @internal Removes \a tableSchema from internal structures and
-		 destroys it. Does not make any change at the backend. */
-		inline void removeTable(TableSchema &tableSchema)
+		/*! @internal Removes table schema pointed by tableSchema.id() and tableSchema.name()
+		 from internal structures and destroys it. Does not make any change at the backend. 
+		 Note that the table schema being removed may be not the same as @a tableSchema. */
+		inline void removeTable(TableSchema& tableSchema)
 		{
 			tables_byname.remove(tableSchema.name());
-			tables.remove(tableSchema.id());
-			delete &tableSchema;
+			TableSchema *toDelete = tables.take(tableSchema.id());
+			delete toDelete;
 		}
 
 		inline void takeTable(TableSchema& tableSchema) {
