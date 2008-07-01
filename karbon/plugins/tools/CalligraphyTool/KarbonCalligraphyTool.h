@@ -47,6 +47,7 @@ public:
 
 private slots:
     void setStrokeWidth( double width );
+    void setThinning( double thinning );
     void setAngle( int angle ); // angle in degrees
     void setMass( int mass ); // mass in user friendly format
 
@@ -58,6 +59,7 @@ private:
 
     double m_strokeWidth;
     double m_angle; // angle in radians
+    double m_thinning;
     double m_mass; // in raw format (not user friendly)
 
     bool m_isDrawing;

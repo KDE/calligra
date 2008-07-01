@@ -53,7 +53,7 @@ using std::sqrt;
 
 KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
     : KoTool( canvas ), m_shape( 0 ), m_strokeWidth( 50 ), m_angle( M_PI/6.0 ),
-      m_mass( 20.0 ), m_isDrawing( false )
+      m_thinning( 0.0 ), m_mass( 20.0 ), m_isDrawing( false ), m_speed(0, 0)
 {
 }
 
@@ -146,11 +146,26 @@ void KarbonCalligraphyTool::addPoint( KoPointerEvent *event )
     QPointF force = event->point - m_lastPoint;
 
     QPointF dSpeed = force/m_mass;
-    m_speed = m_speed/2.0 + dSpeed;
+    m_speed = m_speed/3.0 + dSpeed;
 
     m_lastPoint = m_lastPoint + m_speed;
 
-    double strokeWidth = m_strokeWidth * event->pressure();
+    // calculate the modulo of the speed
+    double speed = std::sqrt( pow(m_speed.x(), 2) + pow(m_speed.y(), 2) );
+    double thinning;
+    if ( m_thinning > 0 )
+        thinning = m_thinning * (speed + 1) / 10.0;
+    else
+        thinning = m_thinning * (5 - speed) / 10.0;
+    if ( thinning > 1 )
+        thinning = 1;
+
+    double strokeWidth = m_strokeWidth * event->pressure() * (1 - thinning);
+
+    const double MINIMUM_STROKE_WIDTH = 1.0;
+    if ( strokeWidth < MINIMUM_STROKE_WIDTH )
+        strokeWidth = MINIMUM_STROKE_WIDTH;
+
     m_shape->appendPoint( m_lastPoint, m_angle, strokeWidth );
 
     m_canvas->updateCanvas( m_shape->lastPieceBoundingRect() );
@@ -175,18 +190,26 @@ QWidget *KarbonCalligraphyTool::createOptionWidget()
     QHBoxLayout *widthLayout = new QHBoxLayout( optionWidget );
     QLabel *widthLabel = new QLabel( i18n( "Width" ), optionWidget );
     QDoubleSpinBox *widthBox = new QDoubleSpinBox;
-    widthBox->setMinimum( 0.0 );
-    widthBox->setMaximum( 1000.0 );
+    widthBox->setRange( 0.0, 1000.0 );
     widthBox->setValue( m_strokeWidth );
     widthLayout->addWidget( widthLabel );
     widthLayout->addWidget( widthBox );
     layout->addLayout( widthLayout );
 
+    QHBoxLayout *thinningLayout = new QHBoxLayout( optionWidget );
+    QLabel *thinningLabel = new QLabel( i18n( "Thinning" ), optionWidget );
+    QDoubleSpinBox *thinningBox = new QDoubleSpinBox;
+    thinningBox->setRange( -1.0, 1.0 );
+    thinningBox->setSingleStep( 0.1 );
+    thinningBox->setValue( 0.0 );
+    thinningLayout->addWidget( thinningLabel );
+    thinningLayout->addWidget( thinningBox );
+    layout->addLayout( thinningLayout );
+
     QHBoxLayout *angleLayout = new QHBoxLayout( optionWidget );
     QLabel *angleLabel = new QLabel( i18n( "Angle" ), optionWidget );
     QSpinBox *angleBox = new QSpinBox;
-    angleBox->setMinimum( 0 );
-    angleBox->setMaximum( 180 );
+    angleBox->setRange( 0, 180 );
     angleBox->setValue( m_angle*180/M_PI );
     angleLayout->addWidget( angleLabel );
     angleLayout->addWidget( angleBox );
@@ -195,8 +218,7 @@ QWidget *KarbonCalligraphyTool::createOptionWidget()
     QHBoxLayout *massLayout = new QHBoxLayout( optionWidget );
     QLabel *massLabel = new QLabel( i18n( "Mass" ), optionWidget );
     QSpinBox *massBox = new QSpinBox;
-    massBox->setMinimum( 1 );
-    massBox->setMaximum( 20 );
+    massBox->setRange( 1, 20 );
     massBox->setValue( qRound(sqrt(m_mass)) );
     massLayout->addWidget( massLabel );
     massLayout->addWidget( massBox );
@@ -204,6 +226,9 @@ QWidget *KarbonCalligraphyTool::createOptionWidget()
 
     connect( widthBox, SIGNAL(valueChanged(double)),
              this, SLOT(setStrokeWidth(double)));
+
+    connect( thinningBox, SIGNAL(valueChanged(double)),
+             this, SLOT(setThinning(double)));
 
     connect( angleBox, SIGNAL(valueChanged(int)),
              this, SLOT(setAngle(int)));
@@ -217,6 +242,11 @@ QWidget *KarbonCalligraphyTool::createOptionWidget()
 void KarbonCalligraphyTool::setStrokeWidth( double width )
 {
     m_strokeWidth = width;
+}
+
+void KarbonCalligraphyTool::setThinning( double thinning )
+{
+    m_thinning = thinning/2.0;
 }
 
 void KarbonCalligraphyTool::setAngle( int angle )
