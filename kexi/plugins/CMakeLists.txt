@@ -6,7 +6,7 @@ add_subdirectory( importexport )
 add_subdirectory( relations )
 
 if(SHOULD_BUILD_KSPREAD)
-  macro_optional_add_subdirectory( reportspgz )
+#enable when kdchart is available again: macro_optional_add_subdirectory( reportspgz )
 endif(SHOULD_BUILD_KSPREAD)
 
 #if(DEFINED DKEXI_SCRIPTS_SUPPORT)
