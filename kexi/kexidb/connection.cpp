@@ -148,7 +148,7 @@ class ConnectionPrivate
 		/*! @internal Removes table schema pointed by tableSchema.id() and tableSchema.name()
 		 from internal structures and destroys it. Does not make any change at the backend. 
 		 Note that the table schema being removed may be not the same as @a tableSchema. */
-		inline void removeTable(TableSchema& tableSchema)
+		inline void removeTable(const TableSchema& tableSchema)
 		{
 			tables_byname.remove(tableSchema.name());
 			TableSchema *toDelete = tables.take(tableSchema.id());
