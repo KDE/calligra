@@ -234,7 +234,6 @@ void Axis::Private::createAreaDiagram()
         attr.setDisplayArea( true );
         kdAreaDiagram->setLineAttributes( attr );
         kdAreaDiagram->setModel( kdAreaDiagramModel );
-        kdAreaDiagram->setPen( QPen( Qt::black, 0.0 ) );
         
         kdAreaDiagram->addAxis( kdAxis );
         kdPlane->addDiagram( kdAreaDiagram );

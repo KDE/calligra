@@ -51,7 +51,6 @@ public slots:
     KoChart::ChartModel *spreadSheetModel() const;
 
     void setSelection( const QVector<QRect> &selection );
-    DataSet *createDataSet();
 
     virtual QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
