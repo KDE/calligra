@@ -540,7 +540,7 @@ void ProjectStatusView::draw()
     
     cell = table->cellAt(0, 0);
     cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText(i18n("BCWS (hours/cost)"), boldFormat);
+    cellCursor.insertText(i18nc("Budgeted Cost of Work Scheduled", "BCWS (hours/cost)"), boldFormat);
     
     cell = table->cellAt(1, 0);
     cellCursor = cell.firstCursorPosition();
@@ -548,7 +548,7 @@ void ProjectStatusView::draw()
 
     cell = table->cellAt(0, 1);
     cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText(i18n("BCWP (hours/cost)"), boldFormat);
+    cellCursor.insertText(i18nc("Budgeted Cost of Work Performed", "BCWP (hours/cost)"), boldFormat);
 
     cell = table->cellAt(1, 1);
     cellCursor = cell.firstCursorPosition();
@@ -556,7 +556,7 @@ void ProjectStatusView::draw()
     
     cell = table->cellAt(0, 2);
     cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText(i18n("ACWP (hours/cost)"), boldFormat);
+    cellCursor.insertText(i18nc("Actual Cost of Work Performed", "ACWP (hours/cost)"), boldFormat);
 
     cell = table->cellAt(1, 2);
     cellCursor = cell.firstCursorPosition();
@@ -565,7 +565,7 @@ void ProjectStatusView::draw()
     
     cell = table->cellAt(0, 3);
     cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText(i18n("SPI (hours/cost)"), boldFormat);
+    cellCursor.insertText(i18nc("Schedule Performance Index", "SPI (hours/cost)"), boldFormat);
 
     cell = table->cellAt(1, 3);
     cellCursor = cell.firstCursorPosition();
