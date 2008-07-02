@@ -44,6 +44,7 @@ class KEXI_DB_EXPORT SchemaData
 		void setName(const QString& n) { m_name=n; }
 		QString caption() const { return m_caption; }
 		void setCaption(const QString& c) { m_caption=c; }
+		QString captionOrName() const { return m_caption.isEmpty() ? m_name : m_caption; }
 		QString description() const { return m_desc; }
 		void setDescription(const QString& desc) { m_desc=desc; }
 
