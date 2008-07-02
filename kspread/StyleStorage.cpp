@@ -26,6 +26,7 @@
 
 #include "Global.h"
 #include "Map.h"
+#include "OdfSavingContext.h"
 #include "RTree.h"
 #include "Style.h"
 #include "StyleManager.h"
@@ -134,9 +135,7 @@ QRect StyleStorage::usedArea() const
     return QRect(QPoint(1, 1), d->usedArea.boundingRect().bottomRight());
 }
 
-void StyleStorage::saveOdfCreateDefaultStyles(int& maxCols, int& maxRows,
-                                              QMap<int, Style>& columnDefaultStyles,
-                                              QMap<int, Style>& rowDefaultStyles) const
+void StyleStorage::saveOdfCreateDefaultStyles(int& maxCols, int& maxRows, OdfSavingContext& tableContext) const
 {
 #if 0 // TODO
     // If we have both, column and row styles, we can take the short route.
@@ -145,12 +144,12 @@ void StyleStorage::saveOdfCreateDefaultStyles(int& maxCols, int& maxRows,
         for (int i = 0; i < d->usedColumns.count(); ++i)
         {
             const int col = d->usedColumns[i];
-            columnDefaultStyles[col].insertSubStyle(contains(QRect(col, 1, 1, KS_rowMax)));
+            tableContext.columnDefaultStyles[col].insertSubStyle(contains(QRect(col, 1, 1, KS_rowMax)));
         }
         for (int i = 0; i < d->usedColumns.count(); ++i)
         {
             const int row = d->usedRow[i];
-            rowDefaultStyles[row].insertSubStyle(contains(QRect(1, row, KS_colMax, 1)));
+            tableContext.rowDefaultStyles[row].insertSubStyle(contains(QRect(1, row, KS_colMax, 1)));
         }
         return;
     }
@@ -177,9 +176,9 @@ void StyleStorage::saveOdfCreateDefaultStyles(int& maxCols, int& maxRows,
             for (int col = rect.left(); col <= rect.right(); ++col)
             {
                 if (pairs[i].second.data()->type() == Style::DefaultStyleKey)
-                    columnDefaultStyles.remove(col);
+                    tableContext.columnDefaultStyles.remove(col);
                 else
-                    columnDefaultStyles[col].insertSubStyle(pairs[i].second);
+                    tableContext.columnDefaultStyles[col].insertSubStyle(pairs[i].second);
             }
         }
         // row default cell styles
@@ -188,9 +187,9 @@ void StyleStorage::saveOdfCreateDefaultStyles(int& maxCols, int& maxRows,
             for (int row = rect.top(); row <= rect.bottom(); ++row)
             {
                 if (pairs[i].second.data()->type() == Style::DefaultStyleKey)
-                    rowDefaultStyles.remove(row);
+                    tableContext.rowDefaultStyles.remove(row);
                 else
-                    rowDefaultStyles[row].insertSubStyle(pairs[i].second);
+                    tableContext.rowDefaultStyles[row].insertSubStyle(pairs[i].second);
             }
         }
     }

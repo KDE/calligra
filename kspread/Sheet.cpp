@@ -3632,12 +3632,10 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
     // calculate the column/row default cell styles
     int maxMaxRows = maxRows; // includes the max row a column default style occupies
-    QMap<int, Style> columnDefaultStyles;
-    QMap<int, Style> rowDefaultStyles;
     // also extends the maximum column/row to include column/row styles
-    styleStorage()->saveOdfCreateDefaultStyles(maxCols, maxMaxRows, columnDefaultStyles, rowDefaultStyles);
-    if (rowDefaultStyles.count() != 0)
-        maxRows = qMax(maxRows, (--rowDefaultStyles.constEnd()).key());
+    styleStorage()->saveOdfCreateDefaultStyles(maxCols, maxMaxRows, tableContext);
+    if (tableContext.rowDefaultStyles.count() != 0)
+        maxRows = qMax(maxRows, (--tableContext.rowDefaultStyles.constEnd()).key());
     // OpenDocument needs at least one cell per sheet.
     maxCols = qMax(1, maxCols);
     maxRows = qMax(1, maxRows);
@@ -3655,7 +3653,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 //                       << "column:" << (column ? column->column() : 0) << endl;
 
         //style default layout for column
-        const Style style = columnDefaultStyles.value(i);
+        const Style style = tableContext.columnDefaultStyles.value(i);
 
         int j = i;
         int count = 1;
@@ -3664,8 +3662,8 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         {
           const ColumnFormat* nextColumn = d->columns.next(j);
           const int nextColumnIndex = nextColumn ? nextColumn->column() : 0;
-          const QMap<int, Style>::ConstIterator nextColumnDefaultStyle = columnDefaultStyles.upperBound(j);
-          const int nextStyleColumnIndex = nextColumnDefaultStyle == columnDefaultStyles.end()
+          const QMap<int, Style>::ConstIterator nextColumnDefaultStyle = tableContext.columnDefaultStyles.upperBound(j);
+          const int nextStyleColumnIndex = nextColumnDefaultStyle == tableContext.columnDefaultStyles.end()
                                          ? 0 : nextColumnDefaultStyle.key();
           // j becomes the index of the adjacent column
           ++j;
@@ -3698,7 +3696,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
           // stop, if the next column differs from the current one
           if ((nextColumn && (*column != *nextColumn)) || (!nextColumn && !column->isDefault()))
               break;
-          if ( style != columnDefaultStyles.value( j ) )
+          if ( style != tableContext.columnDefaultStyles.value( j ) )
               break;
           ++count;
         }
@@ -3743,7 +3741,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         const RowFormat* row = rowFormat( i );
 
         // default cell style for row
-        const Style style = rowDefaultStyles.value(i);
+        const Style style = tableContext.rowDefaultStyles.value(i);
 
         xmlWriter.startElement( "table:table-row" );
 
@@ -3779,7 +3777,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
               if (row->isDefault() && style.isDefault())
               {
                 // if the next is not default, stop here
-                if (!nextRow->isDefault() || !rowDefaultStyles.value(j).isDefault())
+                if (!nextRow->isDefault() || !tableContext.rowDefaultStyles.value(j).isDefault())
                   break;
                 // otherwise, jump to the next
                 ++j;
@@ -3789,7 +3787,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
               // stop, if the next row differs from the current one
               if ((nextRow && *row != *nextRow ) || (!nextRow && !row->isDefault()))
                   break;
-              if (style != rowDefaultStyles.value(j))
+              if (style != tableContext.rowDefaultStyles.value(j))
                   break;
               // otherwise, process the next
               ++j;
@@ -3817,9 +3815,9 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             if (!style.isDefault())
                 xmlWriter.addAttribute("table:number-columns-repeated", QString::number(maxCols));
             // Fill the row with empty cells up to the last column with a default cell style.
-            else if (!columnDefaultStyles.isEmpty())
+            else if (!tableContext.columnDefaultStyles.isEmpty())
             {
-                const int col = (--columnDefaultStyles.constEnd()).key();
+                const int col = (--tableContext.columnDefaultStyles.constEnd()).key();
                 xmlWriter.addAttribute("table:number-columns-repeated", QString::number(col));
             }
             xmlWriter.endElement();
@@ -3858,8 +3856,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
               xmlWriter.addAttribute("table:number-rows-repeated", repeated);
             }
 
-            saveOasisCells(xmlWriter, mainStyles, i, maxCols, tableContext,
-                           columnDefaultStyles, rowDefaultStyles);
+            saveOasisCells(xmlWriter, mainStyles, i, maxCols, tableContext);
 
             // copy the index for the next row to process
             i = j - 1; /*it's already incremented in the for loop*/
@@ -3868,7 +3865,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     }
 
     // Fill in rows with empty cells, if there's a column default cell style.
-    if (!columnDefaultStyles.isEmpty())
+    if (!tableContext.columnDefaultStyles.isEmpty())
     {
         if (maxMaxRows > maxRows)
         {
@@ -3876,7 +3873,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             if (maxMaxRows > maxRows + 1)
                 xmlWriter.addAttribute("table:number-rows-repeated", maxMaxRows - maxRows);
             xmlWriter.startElement("table:table-cell");
-            const int col = qMin(maxCols, (--columnDefaultStyles.constEnd()).key());
+            const int col = qMin(maxCols, (--tableContext.columnDefaultStyles.constEnd()).key());
             xmlWriter.addAttribute("table:number-columns-repeated", QString::number(col));
             xmlWriter.endElement();
             xmlWriter.endElement();
@@ -3885,8 +3882,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 }
 
 void Sheet::saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols,
-                           OdfSavingContext& tableContext, const QMap<int, Style>& columnDefaultStyles,
-                           const QMap<int, Style>& rowDefaultStyles)
+                           OdfSavingContext& tableContext)
 {
     int i = 1;
     Cell cell( this, i, row );
@@ -3901,8 +3897,7 @@ void Sheet::saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int 
 //                       << " i: " << i
 //                       << " column: " << cell.column() << endl;
         int repeated = 1;
-        cell.saveOasis(xmlWriter, mainStyles, row, i, repeated, tableContext,
-                       columnDefaultStyles, rowDefaultStyles);
+        cell.saveOasis(xmlWriter, mainStyles, row, i, repeated, tableContext);
         i += repeated;
         // stop if we reached the end column
         if (i > maxCols || nextCell.isNull())
@@ -3912,7 +3907,7 @@ void Sheet::saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int 
     }
 
     // Fill the row with empty cells, if there's a row default cell style.
-    if (rowDefaultStyles.contains(row))
+    if (tableContext.rowDefaultStyles.contains(row))
     {
         if (maxCols >= i)
         {
@@ -3923,9 +3918,9 @@ void Sheet::saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int 
         }
     }
     // Fill the row with empty cells up to the last column with a default cell style.
-    else if (!columnDefaultStyles.isEmpty())
+    else if (!tableContext.columnDefaultStyles.isEmpty())
     {
-        const int col = (--columnDefaultStyles.constEnd()).key();
+        const int col = (--tableContext.columnDefaultStyles.constEnd()).key();
         if (col >= i)
         {
             xmlWriter.startElement("table:table-cell");

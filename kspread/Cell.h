@@ -338,8 +338,7 @@ public:
      */
     bool saveOasis( KoXmlWriter& xmlwriter, KoGenStyles& mainStyles,
                     int row, int column, int &repeated,
-                   OdfSavingContext& savingContext, const QMap<int, Style>& columnDefaultStyles,
-                    const QMap<int, Style>& rowDefaultStyles );
+                   OdfSavingContext& savingContext);
 
     /**
      * Copies the format from \p cell .

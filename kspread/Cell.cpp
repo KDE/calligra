@@ -390,11 +390,9 @@ QString Cell::displayText() const
     const Style style = effectiveStyle();
     // Display a formula if warranted.  If not, display the value instead;
     // this is the most common case.
-    if ( isFormula() && sheet()->getShowFormula()
-           && !( sheet()->isProtected() && style.hideFormula() ) || isEmpty() )
+    if (isFormula() && sheet()->getShowFormula() && !( sheet()->isProtected() && style.hideFormula())) {
         string = userInput();
-    else
-    {
+    } else if (!isEmpty()) {
         string = sheet()->map()->formatter()->formatText(value(), style.formatType(), style.precision(),
                                                 style.floatFormat(), style.prefix(),
                                                 style.postfix(), style.currency().symbol()).asString();
@@ -1091,8 +1089,7 @@ QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mai
 
 bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
                       int row, int column, int &repeated,
-                     OdfSavingContext& tableContext, const QMap<int, Style>& columnDefaultStyles,
-                      const QMap<int, Style>& rowDefaultStyles )
+                     OdfSavingContext& tableContext)
 {
     // see: OpenDocument, 8.1.3 Table Cell
     if ( !isPartOfMerged() )
@@ -1118,10 +1115,11 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
 
     // Either there's no column and row default and the style's not the default style,
     // or the style is different to one of them. The row default takes precedence.
-    if ((!rowDefaultStyles.contains(row) && !columnDefaultStyles.contains(column) &&
+    if ((!tableContext.rowDefaultStyles.contains(row) &&
+         !tableContext.columnDefaultStyles.contains(column) &&
          !(style().isDefault() && conditions().isEmpty())) ||
-        (rowDefaultStyles.contains(row) && rowDefaultStyles[row] != style()) ||
-        (columnDefaultStyles.contains(column) && columnDefaultStyles[column] != style()))
+        (tableContext.rowDefaultStyles.contains(row) && tableContext.rowDefaultStyles[row] != style()) ||
+        (tableContext.columnDefaultStyles.contains(column) && tableContext.columnDefaultStyles[column] != style()))
     {
         KoGenStyle currentCellStyle; // the type determined in saveOasisCellStyle
         saveOasisCellStyle( currentCellStyle, mainStyles );
@@ -1790,9 +1788,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
         conditions.loadConditions(sheet()->map()->styleManager(), conditionsElement);
         if ( !conditions.isEmpty() )
             setConditions( conditions );
-    }
-    else if (paste && (mode == Paste::Normal) || (mode == Paste::NoBorder))
-    {
+    } else if (paste && (mode == Paste::Normal || mode == Paste::NoBorder)) {
       //clear the conditional formatting
       setConditions( Conditions() );
     }
@@ -1803,9 +1799,7 @@ bool Cell::load( const KoXmlElement & cell, int _xshift, int _yshift,
         Validity validity;
         if ( validity.loadXML( this, validityElement ) )
             setValidity( validity );
-    }
-    else if (paste && (mode == Paste::Normal) || (mode == Paste::NoBorder))
-    {
+    } else if (paste && (mode == Paste::Normal || mode == Paste::NoBorder)) {
       // clear the validity
       setValidity( Validity() );
     }

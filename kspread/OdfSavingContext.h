@@ -25,6 +25,7 @@
 
 #include <KoShapeSavingContext.h>
 
+#include <QMap>
 #include <QMultiHash>
 
 class KoShape;
@@ -42,6 +43,8 @@ public:
     KoShapeSavingContext& shapeContext;
     QMultiHash<Cell, KoShape*> cellAnchoredShapes;
     GenValidationStyles valStyle;
+    QMap<int, Style> columnDefaultStyles;
+    QMap<int, Style> rowDefaultStyles;
 };
 
 } // namespace KSpread

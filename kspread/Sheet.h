@@ -981,8 +981,7 @@ protected:
      * \ingroup OpenDocument
      */
     void saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols,
-                        OdfSavingContext& tableContext, const QMap<int, Style>& columnDefaultStyles,
-                        const QMap<int, Style>& rowDefaultStyles);
+                        OdfSavingContext& tableContext);
 
     /**
      * \ingroup OpenDocument
