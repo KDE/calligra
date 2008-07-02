@@ -502,8 +502,7 @@ QuerySchema* buildSelectQuery(
 				if (!aliasVariable) {
 					setError(i18n("Invalid alias definition for column \"%1\"",
 						columnExpr->toString())); //ok?
-					CLEANUP;
-					return 0;
+					break;
 				}
 			}
 
@@ -533,13 +532,11 @@ QuerySchema* buildSelectQuery(
 			}
 			else {
 				setError(i18n("Invalid \"%1\" column definition", e->toString())); //ok?
-				CLEANUP;
-				return 0;
+				break;
 			}
 
 			if (!addColumn( parseInfo, columnExpr )) {
-				CLEANUP;
-				return 0;
+				break;
 			}
 
 			if (aliasVariable) {
@@ -565,6 +562,11 @@ QuerySchema* buildSelectQuery(
 //Qt4			if (moveNext) {
 //Qt4				colViews->list.next();
 //Qt4			}
+		} // for
+		if (!parser->error().error().isEmpty()) { // we could not return earlier (inside the loop)
+			                     // because we want run CLEANUP what could crash QMutableListIterator.
+			CLEANUP;
+			return 0;
 		}
 	}
 	//----- SELECT options
