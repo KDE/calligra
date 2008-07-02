@@ -45,7 +45,7 @@
 #include <QBuffer>
 
 Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWriter* bodyWriter, KoGenStyles* mainStyles, KoXmlWriter* metaWriter )
-    : m_replacementHandler( new KWordReplacementHandler ), m_tableHandler( new KWordTableHandler ),
+    : m_replacementHandler( new KWordReplacementHandler ),
       m_pictureHandler( new KWordPictureHandler( this ) ), m_textHandler( 0 ), m_headerCount(0),
       m_hasHeader(false), m_hasFooter(false),
       m_chain( chain ), m_currentListDepth( -1 ), m_evenOpen( false ), m_oddOpen( false ), m_pageLayoutStyle(0),
@@ -61,16 +61,16 @@ Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWrit
 	m_buffer = 0; //set pointers to 0
 	m_bufferEven = 0;
 	m_writer = 0;
-	m_masterStyle = new KoGenStyle(KoGenStyle::StyleMaster); //for header/footer stuff
-        m_textHandler = new KWordTextHandler( m_parser, bodyWriter, mainStyles );
-        connect( m_textHandler, SIGNAL( subDocFound( const wvWare::FunctorBase*, int ) ),
+        m_textHandler = new KWordTextHandler(m_parser, bodyWriter, mainStyles);
+        m_tableHandler= new KWordTableHandler(bodyWriter, mainStyles),
+	connect( m_textHandler, SIGNAL( subDocFound( const wvWare::FunctorBase*, int ) ),
                  this, SLOT( slotSubDocFound( const wvWare::FunctorBase*, int ) ) );
         connect( m_textHandler, SIGNAL( footnoteFound( const wvWare::FunctorBase*, int ) ),
                  this, SLOT( slotFootnoteFound( const wvWare::FunctorBase*, int ) ) );
         connect( m_textHandler, SIGNAL( headersFound( const wvWare::FunctorBase*, int ) ),
                  this, SLOT( slotHeadersFound( const wvWare::FunctorBase*, int ) ) );
-        connect( m_textHandler, SIGNAL( tableFound( const KWord::Table& ) ),
-                 this, SLOT( slotTableFound( const KWord::Table& ) ) );
+        connect( m_textHandler, SIGNAL( tableFound( KWord::Table* ) ),
+                 this, SLOT( slotTableFound( KWord::Table* ) ) );
         connect( m_textHandler, SIGNAL( pictureFound( const QString&, const QString&, const wvWare::FunctorBase* ) ),
                  this, SLOT( slotPictureFound( const QString&, const QString&, const wvWare::FunctorBase* ) ) );
         m_parser->setSubDocumentHandler( this );
@@ -82,10 +82,10 @@ Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWrit
         m_parser->setInlineReplacementHandler( m_replacementHandler );
         processStyles();
         processAssociatedStrings();
-        connect( m_tableHandler, SIGNAL( sigTableCellStart( int, int, int, int, const QRectF&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ),
-                 this, SLOT( slotTableCellStart( int, int, int, int, const QRectF&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ) );
-        connect( m_tableHandler, SIGNAL( sigTableCellEnd() ),
-                 this, SLOT( slotTableCellEnd() ) );
+        //connect( m_tableHandler, SIGNAL( sigTableCellStart( int, int, int, int, const QRectF&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ),
+        //         this, SLOT( slotTableCellStart( int, int, int, int, const QRectF&, const QString&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::BRC&, const wvWare::Word97::SHD& ) ) );
+        //connect( m_tableHandler, SIGNAL( sigTableCellEnd() ),
+        //         this, SLOT( slotTableCellEnd() ) );
     }
 }
 
@@ -158,7 +158,7 @@ void Document::finishDocument()
     // Done at the end: write the type of headers/footers,
     // depending on which kind of headers and footers we received.
     QDomElement paperElement = elementDoc.namedItem("PAPER").toElement();
-    Q_ASSERT ( !paperElement.isNull() ); // slotFirstSectionFound should have been called!
+    Q_ASSERT ( !paperElement.isNull() ); // slotSectionFound should have been called!
     if ( !paperElement.isNull() )
     {
         kDebug(30513) <<"m_headerFooters=" << m_headerFooters;
@@ -276,10 +276,10 @@ bool Document::parse()
 void Document::bodyStart()
 {
     kDebug(30513);
-    connect( m_textHandler, SIGNAL(firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP>)),
-             this, SLOT(slotFirstSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
-    connect( m_textHandler, SIGNAL(firstSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
-             this, SLOT(slotFirstSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
+    connect( m_textHandler, SIGNAL(sectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP>)),
+             this, SLOT(slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
+    connect( m_textHandler, SIGNAL(sectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
+             this, SLOT(slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>)));
     connect( m_textHandler, SIGNAL(updateListDepth( int ) ),
 	     this, SLOT(slotUpdateListDepth( int ) ) );
     m_bodyFound = true;
@@ -308,20 +308,23 @@ void Document::bodyEnd()
 	m_currentListDepth = -1;
     }
 
-    disconnect( m_textHandler, SIGNAL( firstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ),
-             this, SLOT( slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> ) ) );
+    disconnect(m_textHandler, SIGNAL(sectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>)),
+             this, SLOT(slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP> )));
 }
 
 //sets paper size
 //sets format & orientation
 //sets column information
 //sets up borders
-void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> sep )
+void Document::slotSectionFound( wvWare::SharedPtr<const wvWare::Word97::SEP> sep )
 {
     kDebug(30513) ;
     //need to add master style to m_mainStyle
-    kDebug(30513) << "adding master style to main styles collection";
-    m_masterStyleName = m_mainStyles->lookup(*m_masterStyle, "Standard");
+    kDebug(30513) << "creating master style for this section";
+    m_masterStyle = new KoGenStyle(KoGenStyle::StyleMaster); //for header/footer stuff
+    QString masterStyleName("section");
+    m_masterStyle->addAttribute("style:display-name", masterStyleName.append(QString::number(m_textHandler->m_sectionNumber)));
+    m_masterStyleName = m_mainStyles->lookup(*m_masterStyle, masterStyleName, KoGenStyles::DontForceNumbering);
     delete m_masterStyle; //delete the object since we've added it to the collection
     //set master style name in m_textHandler because that's where we'll write it
     m_textHandler->m_masterStyleName = m_masterStyleName;
@@ -360,19 +363,12 @@ void Document::slotFirstSectionFound( wvWare::SharedPtr<const wvWare::Word97::SE
     m_pageLayoutStyle->addProperty("2footer-style", footer, KoGenStyle::StyleChildElement);
     m_pageLayoutStyle->setAutoStyleInStylesDotXml(true);
 
-    //dyaHdrTop = y position of top header measured from top of page (twips)
-    //dyaHdrBottom = y position of bottom header measured from top of page (twips)
-    kDebug(30513) << "dyaHdrTop = " << sep->dyaHdrTop << ", dyaHdrBottom = " << sep->dyaHdrBottom;
-    kDebug(30513) << "dyaTop = " << sep->dyaTop << ", dyaBottom = " << sep->dyaBottom;
-
-    //ccolM1 = number of columns in section
-    //dxaColumns = distance that will be maintained between columns
 
     // TODO apply brcTop/brcLeft etc. to the main FRAME
     // TODO use sep->fEndNote to set the 'use endnotes or footnotes' flag
 }
 
-void Document::slotFirstSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
+void Document::slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> sep)
 {
     kDebug(30513);
     //set the margins - depends on whether a header/footer is present
@@ -400,6 +396,8 @@ void Document::slotFirstSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP> 
     //reset variables
     m_hasHeader = false;
     m_hasFooter = false;
+    //reset header data
+    m_headerCount = 0;
 }
 
 //creates a frameset element with the header info
@@ -541,7 +539,11 @@ void Document::slotUpdateListDepth( int depth )
 void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
 {
     kDebug(30513) ;
-    // Create footnote/endnote frameset
+
+    //need to set up cell style here
+    //probably don't need generateFrameBorder()
+    //<table:table-cell> tag in content.xml
+
     //QDomElement framesetElement = m_mainDocument.createElement("FRAMESET");
     //framesetElement.setAttribute( "frameType", 1 /* text */ );
     //framesetElement.setAttribute( "frameInfo", 0 /* normal text */ );
@@ -564,6 +566,8 @@ void Document::slotTableCellStart( int row, int column, int rowSpan, int columnS
 void Document::slotTableCellEnd()
 {
     kDebug(30513) ;
+    //</table:table-cell>
+
     //m_textHandler->setFrameSetElement( QDomElement() );
 }
 
@@ -647,10 +651,21 @@ void Document::slotHeadersFound(const wvWare::FunctorBase* functor, int data)
 }
 
 //add KWord::Table object to the table queue
-void Document::slotTableFound( const KWord::Table& table )
+void Document::slotTableFound(KWord::Table* table)
 {
-    kDebug(30513) ;
-    m_tableQueue.push( table );
+    kDebug(30513);
+    //need to parse this now, not leave it for later
+    m_tableHandler->tableStart(table);
+    Q3ValueList<KWord::Row> &rows = table->rows;
+    for( Q3ValueList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
+        KWord::TableRowFunctorPtr f = (*it).functorPtr;
+        Q_ASSERT( f );
+        (*f)(); // call it
+        delete f; // delete it
+    }
+    m_tableHandler->tableEnd();
+
+    //m_tableQueue.push( table );
 }
 
 //add the picture SubDocument to the queue

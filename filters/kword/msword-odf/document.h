@@ -96,9 +96,9 @@ public:
 
 public slots:
     // Connected to the KWordTextHandler only when parsing the body
-    void slotFirstSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>);
+    void slotSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>);
 
-    void slotFirstSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>);
+    void slotSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>);
 
     // Add to our parsing queue, for headers, footers, footnotes, text boxes etc.
     // Note that a header functor will parse ALL the header/footers (of the section)
@@ -108,8 +108,7 @@ public slots:
 
     void slotHeadersFound( const wvWare::FunctorBase* functor, int data );
 
-    // Add to our parsing queue, for tables
-    void slotTableFound( const KWord::Table& table );
+    void slotTableFound( KWord::Table* table );
 
     // Write out the frameset and add the key to the PICTURES tag
     void slotPictureFound( const QString& frameName, const QString& pictureName, const wvWare::FunctorBase* );

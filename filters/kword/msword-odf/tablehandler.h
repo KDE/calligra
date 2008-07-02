@@ -33,6 +33,9 @@
 #include <deque>
 #include <QRectF>
 
+#include <KoXmlWriter.h>
+#include <KoGenStyles.h>
+
 namespace wvWare {
     namespace Word97 {
         class TC;
@@ -82,7 +85,7 @@ class KWordTableHandler : public QObject, public wvWare::TableHandler
 {
     Q_OBJECT
 public:
-    KWordTableHandler();
+    KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles);
 
     //////// TableHandler interface
     virtual void tableRowStart( wvWare::SharedPtr<const wvWare::Word97::TAP> tap );
@@ -103,6 +106,8 @@ protected:
     double rowHeight() const;
 
 private:
+    KoXmlWriter* m_bodyWriter;
+    KoGenStyles* m_mainStyles;
     KWord::Table* m_currentTable;
     int m_row;
     int m_column;

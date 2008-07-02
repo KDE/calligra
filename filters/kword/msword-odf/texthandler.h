@@ -100,15 +100,16 @@ public:
     QString m_listStyleName; //track the name of the list style
     QString m_masterStyleName; //need to know what the master style name is so we can write it
     KoGenStyles* m_mainStyles; //this is for collecting most of the styles
+    int m_sectionNumber;
 
     // Communication with Document, without having to know about Document
 signals:
-    void firstSectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>);
-    void firstSectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>);
+    void sectionFound(wvWare::SharedPtr<const wvWare::Word97::SEP>);
+    void sectionEnd(wvWare::SharedPtr<const wvWare::Word97::SEP>);
     void subDocFound( const wvWare::FunctorBase* parsingFunctor, int data );
     void footnoteFound( const wvWare::FunctorBase* parsingFunctor, int data );
     void headersFound( const wvWare::FunctorBase* parsingFunctor, int data );
-    void tableFound( const KWord::Table& table );
+    void tableFound( KWord::Table* table );
     void pictureFound( const QString& frameName, const QString& pictureName, const wvWare::FunctorBase* pictureFunctor );
     void updateListDepth( int );
 
@@ -122,7 +123,6 @@ private:
     wvWare::SharedPtr<wvWare::Parser> m_parser;
     QString m_listSuffixes[9]; // The suffix for every list level seen so far
     QDomElement m_framesetElement;
-    int m_sectionNumber;
     int m_footNoteNumber; // number of footnote _vars_ written out
     int m_endNoteNumber; // number of endnote _vars_ written out
     //int m_textStyleNumber; //number of styles created for text family

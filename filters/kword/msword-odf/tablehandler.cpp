@@ -29,9 +29,13 @@
 #include <Q3ValueList>
 #include <QRectF>
 
-KWordTableHandler::KWordTableHandler()
+KWordTableHandler::KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles)
 {
-    tableEnd();
+    m_row = -2;
+    m_column = -2;
+
+    m_bodyWriter = bodyWriter; //for writing text content
+    m_mainStyles = mainStyles; //for formatting styles
 }
 
 // Called by Document before invoking the table-row-functors
@@ -51,15 +55,16 @@ void KWordTableHandler::tableStart( KWord::Table* table )
 #endif
     m_row = -1;
     m_currentY = 0;
+
+    //start the table tags in the text
+    m_bodyWriter->startElement("table:table");
 }
 
 void KWordTableHandler::tableEnd()
 {
     kDebug(30513) ;
-    m_currentTable = 0L; // we don't own it, the table-queue does!
-    m_row = -2;
-    m_column = -2;
-    // Warning: if doing more here, check that it's still ok to call this from the ctor
+    m_currentTable = 0L; // we don't own it, Document does
+    m_bodyWriter->endElement();//table:table
 }
 
 void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::TAP> tap )
@@ -80,7 +85,7 @@ void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::T
 
 void KWordTableHandler::tableRowEnd()
 {
-    kDebug(30513) <<"tableRowEnd";
+    kDebug(30513);
     m_currentY += rowHeight();
 }
 
@@ -193,7 +198,7 @@ void KWordTableHandler::tableCellStart()
 
 void KWordTableHandler::tableCellEnd()
 {
-    kDebug(30513) <<" tableCellEnd";
+    kDebug(30513);
     emit sigTableCellEnd();
 }
 

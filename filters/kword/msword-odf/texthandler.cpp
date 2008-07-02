@@ -86,33 +86,86 @@ void KWordTextHandler::sectionStart(wvWare::SharedPtr<const wvWare::Word97::SEP>
     //store sep for section end
     m_sep = sep;
 
-    if ( m_sectionNumber == 1 )
-    {
-        emit firstSectionFound(sep);
+    //sep->bkc 0=no break, 1=new column, 2=new page, 3=even page, 4=odd page
+    kDebug(30513) << "sep->bkc = " << sep->bkc;
+
+    int numColumns = sep->ccolM1 + 1;
+
+    //page layout could change
+    if(sep->bkc >= 2) {
+	emit sectionFound(sep);
     }
-    else
-    {
-        // Not the first section. Check for a page break
-        if ( sep->bkc >= 1 ) // 1=new column, 2=new page, 3=even page, 4=odd page
-        {
-        }
+    //check for a column break
+    if(sep->bkc == 1) {
+    }
+    //check for change in number of columns, too
+    //if sep->bkc isn't 0, just check to see if we have
+    // more than the usual one column
+    if(numColumns > 1 || sep->bkc == 0) {
+	QString sectionStyleName = "Sect";
+	sectionStyleName.append(QString::number(m_sectionNumber));
+	KoGenStyle sectionStyle(KoGenStyle::StyleSectionAuto, "section");
+	//parse column info
+	QBuffer buf;
+	buf.open(QIODevice::WriteOnly);
+	KoXmlWriter writer(&buf);
+	writer.startElement("style:columns");
+	//ccolM1 = number of columns in section
+	kDebug(30513) << "ccolM1 = " << sep->ccolM1;
+	writer.addAttribute("fo:column-count", numColumns);
+	//dxaColumns = distance that will be maintained between columns
+	kDebug(30513) << "dxaColumns = " << sep->dxaColumns;
+	writer.addAttributePt("fo:column-gap", sep->dxaColumns/20.0);
+	//check for vertical separator
+	if(sep->fLBetween) {
+	    writer.startElement("style:column-sep");
+	    writer.addAttribute("style:width", "0.0693in");//just a random default for now
+	    writer.endElement();//style:column-sep
+	}
+	//individual column styles
+	if(numColumns > 1) {
+	    for(int i = 0; i < numColumns; ++i) {
+		writer.startElement("style:column");
+		//this should give even columns for now
+		writer.addAttribute("style:rel-width", "1*");
+		writer.endElement();//style:column
+	    }
+	}
+	writer.endElement();//style:columns
+	QString contents = QString::fromUtf8(buf.buffer(), buf.buffer().size());
+	sectionStyle.addChildElement("style:columns", contents);
+	//add style to the collection
+	sectionStyleName = m_mainStyles->lookup(sectionStyle, sectionStyleName, 
+		KoGenStyles::DontForceNumbering);
+	//put necessary tags in the content
+	m_bodyWriter->startElement("text:section");
+	QString sectionName = "Section";
+	sectionName.append(QString::number(m_sectionNumber));
+	m_bodyWriter->addAttribute("text:name", sectionName);
+	m_bodyWriter->addAttribute("text:style-name", sectionStyleName);
     }
 }
 
 void KWordTextHandler::sectionEnd()
 {
     kDebug(30513);
-    if(m_sectionNumber == 1) {
-	emit firstSectionEnd(m_sep);
+    if(m_sep->bkc >= 2) {
+	emit sectionEnd(m_sep);
+    }
+    if(m_sep->ccolM1 > 0 || m_sep->bkc ==0) {
+	m_bodyWriter->endElement();//text:section
     }
 }
 
 //signal that there's another subDoc to parse
 void KWordTextHandler::headersFound( const wvWare::HeaderFunctor& parseHeaders )
 {
-    kDebug(30513) ;
-    if(m_sectionNumber == 1) {
-        emit headersFound( new wvWare::HeaderFunctor( parseHeaders ), 0 );
+    kDebug(30513);
+    //only parse headers if we're in a section that can have new headers
+    //ie. new sections for columns trigger this function again, but we've
+    //already parsed the headers
+    if(m_sep->bkc >= 2) {
+	emit headersFound( new wvWare::HeaderFunctor( parseHeaders ), 0 );
     }
 }
 
@@ -297,7 +350,7 @@ void KWordTextHandler::paragraphEnd()
     //Q_ASSERT( m_bInParagraph );
     if ( m_currentTable )
     {
-        emit tableFound( *m_currentTable );
+        emit tableFound( m_currentTable );
         delete m_currentTable;
         m_currentTable = 0L;
     }
@@ -534,6 +587,9 @@ void KWordTextHandler::writeFormattedText(KoGenStyle* textStyle, const wvWare::W
 	//now I just need to write the text:span to the header tag
 	writer->startElement( "text:span" );
 	writer->addAttribute( "text:style-name", styleName.toUtf8() );
+	//TODO fix this to actually insert a column break
+	//remove character I can't handle
+	text.remove(QChar(0xE));
 	writer->addTextSpan(text);
 	writer->endElement(); //text:span
     }
