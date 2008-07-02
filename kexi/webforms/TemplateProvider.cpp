@@ -19,7 +19,6 @@
 */
 
 #include <string>
-#include <QtAlgorithms>
 #include <QList>
 #include <KDebug>
 #include <core/kexipartinfo.h>
@@ -46,11 +45,9 @@ namespace KexiWebForms {
         afterDict->SetFilename("aftercontent.tpl");
         // Add tables to left menu
         QString tables;
-        QStringList tableNames(gConnection->tableNames());
-        qSort(tableNames);
-        for (int i = 0; i < tableNames.size(); ++i) {
-            tables.append("<li><a href=\"/read/").append(tableNames.at(i));
-            tables.append("\">").append(tableNames.at(i)).append("</a></li>");
+        for (int i = 0; i < gConnection->tableNames().size(); ++i) {
+            tables.append("<li><a href=\"/read/").append(gConnection->tableNames().at(i));
+            tables.append("\">").append(gConnection->tableNames().at(i)).append("</a></li>");
         }
         afterDict->SetValue("TABLE_LIST", tables.toUtf8().constData());
         
