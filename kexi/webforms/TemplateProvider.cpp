@@ -19,6 +19,7 @@
 */
 
 #include <string>
+#include <QtAlgorithms>
 #include <QList>
 #include <KDebug>
 #include <core/kexipartinfo.h>
@@ -45,18 +46,28 @@ namespace KexiWebForms {
         afterDict->SetFilename("aftercontent.tpl");
         // Add tables to left menu
         QString tables;
-        for (int i = 0; i < gConnection->tableNames().size(); ++i) {
-            tables.append("<li><a href=\"/read/").append(gConnection->tableNames().at(i));
-            tables.append("\">").append(gConnection->tableNames().at(i)).append("</a></li>");
+        QStringList tableNames(gConnection->tableNames());
+        qSort(tableNames);
+        foreach(QString t, tableNames) {
+            tables.append("<li><a href=\"/read/").append(t);
+            tables.append("\">").append(t).append("</a></li>");
         }
         afterDict->SetValue("TABLE_LIST", tables.toUtf8().constData());
         
         // Add queries to left menu
-        QList<int> queryIds(gConnection->queryIds());
+        // Step 1: Fill the queryNames stringlist
+        // Step 2: Sort it
+        // Step 3: Write the links
         QString queries;
+        QList<int> queryIds(gConnection->queryIds());
+        QMap<QString, QString> queryCaptions;
         for (int i = 0; i < queryIds.size(); ++i) {
-            queries.append("<li><a href=\"/query/").append(gConnection->querySchema(queryIds.at(i))->name());
-            queries.append("\">").append(gConnection->querySchema(queryIds.at(i))->caption()).append("</a></li>");
+            queryCaptions[gConnection->querySchema(queryIds.at(i))->caption()] =
+                gConnection->querySchema(queryIds.at(i))->name();
+        }
+        foreach (QString str, queryCaptions.keys()) {
+            queries.append("<li><a href=\"/query/").append(queryCaptions[str]);
+            queries.append("\">").append(str).append("</a></li>");
         }
         afterDict->SetValue("QUERY_LIST", queries.toUtf8().constData());
         
