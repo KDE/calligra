@@ -53,7 +53,7 @@ using std::sqrt;
 
 KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
     : KoTool( canvas ), m_shape( 0 ), m_strokeWidth( 50 ), m_angle( M_PI/6.0 ),
-      m_thinning( 0.0 ), m_mass( 17.0 ), m_drag( 1.0),
+      m_fixation( 0.0 ), m_thinning( 0.0 ), m_mass( 17.0 ), m_drag( 1.0 ),
       m_isDrawing( false ), m_speed(0, 0)
 {
 }
@@ -150,27 +150,59 @@ void KarbonCalligraphyTool::addPoint( KoPointerEvent *event )
     m_speed += dSpeed;
 
     m_lastPoint = m_lastPoint + m_speed;
-    m_speed *= (1.0 - m_drag);
 
+    double width = calculateWidth( event->pressure() );
+    m_shape->appendPoint( m_lastPoint, calculateAngle(), width );
+
+    m_canvas->updateCanvas( m_shape->lastPieceBoundingRect() );
+
+    // apply drag
+    m_speed *= (1.0 - m_drag);
+}
+
+double KarbonCalligraphyTool::calculateWidth( double pressure )
+{
     // calculate the modulo of the speed
     double speed = std::sqrt( pow(m_speed.x(), 2) + pow(m_speed.y(), 2) );
-    double thinning =  m_thinning * (speed + 1) / 10.0;
-    
+    double thinning =  m_thinning * (speed + 1) / 10.0; // can be negative
+
     if ( thinning > 1 )
         thinning = 1;
 
-    double strokeWidth = m_strokeWidth * event->pressure() * (1 - thinning);
+    double strokeWidth = m_strokeWidth * pressure * (1 - thinning);
 
     const double MINIMUM_STROKE_WIDTH = 1.0;
     if ( strokeWidth < MINIMUM_STROKE_WIDTH )
         strokeWidth = MINIMUM_STROKE_WIDTH;
 
-    m_shape->appendPoint( m_lastPoint, m_angle, strokeWidth );
-
-    m_canvas->updateCanvas( m_shape->lastPieceBoundingRect() );
+    return strokeWidth;
 }
 
 
+double KarbonCalligraphyTool::calculateAngle()
+{
+    // angle solely based on the speed
+    double speedAngle = m_angle;
+    if ( m_speed.x() != 0 ) // avoid division by zero
+    {
+        speedAngle = std::atan( m_speed.y() / m_speed.x() );
+    }
+    else if ( m_speed.y() != 0 )
+    {
+        // x == 0 && y != 0
+        speedAngle = M_PI;
+    }
+
+    double angle = speedAngle + M_PI/2;
+
+    // normalize
+    while ( angle < 0 )
+        angle += M_PI;
+    while ( angle >= M_PI )
+        angle -= M_PI;
+
+    return angle;
+}
 
 void KarbonCalligraphyTool::activate( bool )
 {
@@ -214,6 +246,16 @@ QWidget *KarbonCalligraphyTool::createOptionWidget()
     angleLayout->addWidget( angleBox );
     layout->addLayout( angleLayout );
 
+    QHBoxLayout *fixationLayout = new QHBoxLayout( optionWidget );
+    QLabel *fixationLabel = new QLabel( i18n( "Fixation" ), optionWidget );
+    QDoubleSpinBox *fixationBox = new QDoubleSpinBox;
+    fixationBox->setRange( 0.0, 1.0 );
+    fixationBox->setSingleStep( 0.1 );
+    fixationBox->setValue( m_fixation );
+    fixationLayout->addWidget( fixationLabel );
+    fixationLayout->addWidget( fixationBox );
+    layout->addLayout( fixationLayout );
+
     QHBoxLayout *massLayout = new QHBoxLayout( optionWidget );
     QLabel *massLabel = new QLabel( i18n( "Mass" ), optionWidget );
     QDoubleSpinBox *massBox = new QDoubleSpinBox;
@@ -243,6 +285,9 @@ QWidget *KarbonCalligraphyTool::createOptionWidget()
     connect( angleBox, SIGNAL(valueChanged(int)),
              this, SLOT(setAngle(int)));
 
+    connect( fixationBox, SIGNAL(valueChanged(double)),
+             this, SLOT(setFixation(double)));
+
     connect( massBox, SIGNAL(valueChanged(double)),
              this, SLOT(setMass(double)));
 
@@ -265,6 +310,11 @@ void KarbonCalligraphyTool::setThinning( double thinning )
 void KarbonCalligraphyTool::setAngle( int angle )
 {
     m_angle = angle/180.0*M_PI;
+}
+
+void KarbonCalligraphyTool::setFixation( double fixation )
+{
+    m_fixation = fixation;
 }
 
 void KarbonCalligraphyTool::setMass( double mass )

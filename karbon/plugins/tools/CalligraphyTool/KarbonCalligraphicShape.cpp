@@ -28,6 +28,7 @@
 #include <KDebug>
 
 #include <cmath>
+#include <cstdlib>
 
 KarbonCalligraphicShape::KarbonCalligraphicShape()
 {
@@ -93,6 +94,24 @@ void KarbonCalligraphicShape::
         smoothLastPoints();
         last1->removeControlPoint2();
         last2->removeControlPoint1();
+    }
+
+    // detect the flip caused by the angle changing 180 degrees
+    // thus detect the boundary crossing
+    // TODO: write more elegant code (external function?)
+    int index = pointCount() / 2;
+    QPointF last1 = pointByIndex( KoPathPointIndex(0, index-1) )->point();
+    QPointF last2 = pointByIndex( KoPathPointIndex(0, index) )->point();
+    QPointF new1 = m_flipped ? p2 : p1;
+    QPointF new2 = m_flipped ? p1 : p2;
+
+    int sum1 = std::abs( ccw(new1, new2, last1) + ccw(new1, last2, last1) );
+    int sum2 = std::abs( ccw(new2, new1, last2) + ccw(new2, last1, last2) );
+    // if there was a flip
+    if ( sum1 < 2 && sum2 < 2 )
+    {
+        kDebug() << "!!!!!!!!!! flip !!!!!!!!";
+        m_flipped = !m_flipped;
     }
 
     if ( m_flipped )

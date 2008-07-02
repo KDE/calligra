@@ -94,16 +94,13 @@ QList<KoSubpath *> KarbonSimplifyPath::split( const KoPathShape &path )
             {
                 // create a new subpath
                 subpath->append( p );
-                kDebug() << p->point();
                 subpath = new KoSubpath;
                 res.append( subpath );
             }
         }
         subpath->append( p );
-        kDebug() << p->point();
     }
 
-    kDebug() << res.size();
     return res;
 }
 
