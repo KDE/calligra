@@ -44,7 +44,7 @@
 
 namespace KexiWebForms {
 
-    static QHash< QString, QList<uint> > cachedPkeys;
+    QHash< QString, QList<uint> > cachedPkeys;
 
     void updateCallback(RequestData* req) {
         HTTPStream stream(req);
@@ -221,7 +221,7 @@ namespace KexiWebForms {
                     formData.append("<td>");
                     currentField->isAutoIncrement() ? formData.append("<img src=\"/toolbox/auto-increment.png\" alt=\"Auto increment\"/>&nbsp;") : 0;
                     currentField->isPrimaryKey() ? formData.append("<img src=\"/toolbox/primary-key.png\" alt=\"Primary Key\"/>&nbsp;") : 0;
-                    currentField->isNotEmpty() ? formData.append("<img src=\"/toolbox/emblem-required.png\" alt=\"Required\"/>&nbsp;") : 0;
+                    ( currentField->isNotEmpty() || currentField->isNotNull() ) ? formData.append("<img src=\"/toolbox/emblem-required.png\" alt=\"Required\"/>&nbsp;") : 0;
                     formData.append("</td>");
                     
                     formData.append("</tr>");

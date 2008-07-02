@@ -27,6 +27,8 @@ struct RequestData;
 
 namespace KexiWebForms {
 
+    extern QHash< QString, QList<uint> > cachedPkeys;
+    
     /*!
      * This function is used to update a row in a given database table
      * This function uses the request URI to determine the table and the

@@ -32,6 +32,7 @@
 #include <kexidb/field.h>
 
 #include "Request.h"
+#include "Update.h"
 #include "HTTPStream.h"
 #include "DataProvider.h"
 #include "TemplateProvider.h"
@@ -79,6 +80,7 @@ namespace KexiWebForms {
 
 
             if (cursor->insertRow(recordData, editBuffer)) {
+                cachedPkeys[requestedTable].clear();
                 dict->ShowSection("SUCCESS");
                 dict->SetValue("MESSAGE", "Row added successfully");
             } else {
@@ -109,7 +111,7 @@ namespace KexiWebForms {
                 formData.append("<td>");
                 currentField->isAutoIncrement() ? formData.append("<img src=\"/toolbox/auto-increment.png\" alt=\"Auto increment\"/>&nbsp;") : 0;
                 currentField->isPrimaryKey() ? formData.append("<img src=\"/toolbox/primary-key.png\" alt=\"Primary Key\"/>&nbsp;") : 0;
-                currentField->isNotEmpty() ? formData.append("<img src=\"/toolbox/emblem-required.png\" alt=\"Required\"/>&nbsp;") : 0;
+                ( currentField->isNotEmpty() || currentField->isNotNull() ) ? formData.append("<img src=\"/toolbox/emblem-required.png\" alt=\"Required\"/>&nbsp;") : 0;
                 formData.append("</td>");
                     
                 formData.append("</tr>");
