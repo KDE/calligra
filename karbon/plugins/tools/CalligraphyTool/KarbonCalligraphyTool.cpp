@@ -152,11 +152,8 @@ void KarbonCalligraphyTool::addPoint( KoPointerEvent *event )
 
     // calculate the modulo of the speed
     double speed = std::sqrt( pow(m_speed.x(), 2) + pow(m_speed.y(), 2) );
-    double thinning;
-    if ( m_thinning > 0 )
-        thinning = m_thinning * (speed + 1) / 10.0;
-    else
-        thinning = m_thinning * (5 - speed) / 10.0;
+    double thinning =  m_thinning * (speed + 1) / 10.0;
+    
     if ( thinning > 1 )
         thinning = 1;
 
