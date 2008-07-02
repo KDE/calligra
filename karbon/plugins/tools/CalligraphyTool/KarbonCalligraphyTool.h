@@ -48,8 +48,9 @@ public:
 private slots:
     void setStrokeWidth( double width );
     void setThinning( double thinning );
-    void setAngle( int angle ); // angle in degrees
-    void setMass( int mass ); // mass in user friendly format
+    void setAngle( int angle ); // set theangle in degrees
+    void setMass( double mass );   // set the mass in user friendly format
+    void setDrag( double drag );
 
 private:
     void addPoint( KoPointerEvent *event );
@@ -61,6 +62,7 @@ private:
     double m_angle; // angle in radians
     double m_thinning;
     double m_mass; // in raw format (not user friendly)
+    double m_drag; // from 0.0 to 1.0
 
     bool m_isDrawing;
 

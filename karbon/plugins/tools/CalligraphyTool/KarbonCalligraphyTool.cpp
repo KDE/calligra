@@ -53,7 +53,8 @@ using std::sqrt;
 
 KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
     : KoTool( canvas ), m_shape( 0 ), m_strokeWidth( 50 ), m_angle( M_PI/6.0 ),
-      m_thinning( 0.0 ), m_mass( 20.0 ), m_isDrawing( false ), m_speed(0, 0)
+      m_thinning( 0.0 ), m_mass( 17.0 ), m_drag( 1.0),
+      m_isDrawing( false ), m_speed(0, 0)
 {
 }
 
@@ -146,9 +147,10 @@ void KarbonCalligraphyTool::addPoint( KoPointerEvent *event )
     QPointF force = event->point - m_lastPoint;
 
     QPointF dSpeed = force/m_mass;
-    m_speed = m_speed/3.0 + dSpeed;
+    m_speed += dSpeed;
 
     m_lastPoint = m_lastPoint + m_speed;
+    m_speed *= (1.0 - m_drag);
 
     // calculate the modulo of the speed
     double speed = std::sqrt( pow(m_speed.x(), 2) + pow(m_speed.y(), 2) );
@@ -198,7 +200,7 @@ QWidget *KarbonCalligraphyTool::createOptionWidget()
     QDoubleSpinBox *thinningBox = new QDoubleSpinBox;
     thinningBox->setRange( -1.0, 1.0 );
     thinningBox->setSingleStep( 0.1 );
-    thinningBox->setValue( 0.0 );
+    thinningBox->setValue( m_thinning*2.0 );
     thinningLayout->addWidget( thinningLabel );
     thinningLayout->addWidget( thinningBox );
     layout->addLayout( thinningLayout );
@@ -214,12 +216,23 @@ QWidget *KarbonCalligraphyTool::createOptionWidget()
 
     QHBoxLayout *massLayout = new QHBoxLayout( optionWidget );
     QLabel *massLabel = new QLabel( i18n( "Mass" ), optionWidget );
-    QSpinBox *massBox = new QSpinBox;
-    massBox->setRange( 1, 20 );
-    massBox->setValue( qRound(sqrt(m_mass)) );
+    QDoubleSpinBox *massBox = new QDoubleSpinBox;
+    massBox->setRange( 0.0, 20.0 );
+    massBox->setDecimals(1);
+    massBox->setValue( sqrt(m_mass - 1) );
     massLayout->addWidget( massLabel );
     massLayout->addWidget( massBox );
     layout->addLayout( massLayout );
+
+    QHBoxLayout *dragLayout = new QHBoxLayout( optionWidget );
+    QLabel *dragLabel = new QLabel( i18n( "Drag" ), optionWidget );
+    QDoubleSpinBox *dragBox = new QDoubleSpinBox;
+    dragBox->setRange( 0.0, 1.0 );
+    dragBox->setSingleStep( 0.1 );
+    dragBox->setValue( m_drag );
+    dragLayout->addWidget( dragLabel );
+    dragLayout->addWidget( dragBox );
+    layout->addLayout( dragLayout );
 
     connect( widthBox, SIGNAL(valueChanged(double)),
              this, SLOT(setStrokeWidth(double)));
@@ -230,8 +243,11 @@ QWidget *KarbonCalligraphyTool::createOptionWidget()
     connect( angleBox, SIGNAL(valueChanged(int)),
              this, SLOT(setAngle(int)));
 
-    connect( massBox, SIGNAL(valueChanged(int)),
-             this, SLOT(setMass(int)));
+    connect( massBox, SIGNAL(valueChanged(double)),
+             this, SLOT(setMass(double)));
+
+    connect( dragBox, SIGNAL(valueChanged(double)),
+             this, SLOT(setDrag(double)));
 
     return optionWidget;
 }
@@ -251,7 +267,12 @@ void KarbonCalligraphyTool::setAngle( int angle )
     m_angle = angle/180.0*M_PI;
 }
 
-void KarbonCalligraphyTool::setMass( int mass )
+void KarbonCalligraphyTool::setMass( double mass )
 {
-    m_mass = mass * mass;
+    m_mass = mass * mass + 1;
+}
+
+void KarbonCalligraphyTool::setDrag( double drag )
+{
+    m_drag = drag;
 }
