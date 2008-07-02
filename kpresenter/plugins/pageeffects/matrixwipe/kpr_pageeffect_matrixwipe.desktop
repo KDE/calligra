@@ -2,6 +2,7 @@
 Name=Matrix wipe
 Name[ca]=Esborrat de matriu
 Name[el]=Σβήσιμο πίνακα
+Name[et]=Maatrikssiire
 Name[gl]=Transición Matricial
 Name[hi]=मेट्रिक्स वाइप
 Name[it]=Transizione a matrice
@@ -16,6 +17,7 @@ Name[zh_TW]=矩陣掃描
 Comment=Matrix wipe Page Effects
 Comment[ca]=Efectes d'esborrat de matriu de la pàgina
 Comment[el]=Εφέ σελίδας σβήσιμο πίνακα
+Comment[et]=Maatrikssiirde lehekülje efektid
 Comment[gl]=Efecto de Transición de Páxina Matricial
 Comment[hi]=मेट्रिक्स वाइप पृष्ठ प्रभाव
 Comment[it]=Effetti di transizione a matrice delle pagine
