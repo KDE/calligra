@@ -611,4 +611,14 @@ inline uint qHash( const Cell& cell )
 
 Q_DECLARE_TYPEINFO( KSpread::Cell, Q_MOVABLE_TYPE );
 
+
+/***************************************************************************
+  kDebug support
+****************************************************************************/
+
+inline kdbgstream operator<<(kdbgstream str, const KSpread::Cell& cell)
+{
+    return str << qPrintable(KSpread::Cell::columnName(cell.column()) + QString::number(cell.row()));
+}
+
 #endif  // KSPREAD_CELL
