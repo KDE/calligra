@@ -1130,8 +1130,8 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
 
     // group empty cells with the same style
     const QString comment = this->comment();
-    if ( isEmpty() && comment.isEmpty() && !isPartOfMerged() && !doesMergeCells() )
-    {
+    if (isEmpty() && comment.isEmpty() && !isPartOfMerged() && !doesMergeCells() &&
+        !tableContext.cellHasAnchoredShapes(*this)) {
       bool refCellIsDefault = isDefault();
       int j = column + 1;
       Cell nextCell = sheet()->cellStorage()->nextInRow( column, row );
@@ -1141,8 +1141,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         //   the next cell is not the adjacent one
         // or
         //   the next cell is not empty
-        if ( nextCell.column() != j || !nextCell.isEmpty() )
-        {
+        if (nextCell.column() != j || (!nextCell.isEmpty() || tableContext.cellHasAnchoredShapes(*this))) {
           if ( refCellIsDefault )
           {
             // if the origin cell was a default cell,
@@ -1156,7 +1155,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         }
 
         if ( nextCell.isPartOfMerged() || nextCell.doesMergeCells() ||
-             !nextCell.comment().isEmpty() ||
+             !nextCell.comment().isEmpty() || tableContext.cellHasAnchoredShapes(*this) ||
              !(nextCell.style() == style() && nextCell.conditions() == conditions()) )
         {
           break;
@@ -1223,8 +1222,8 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     // Save shapes that are anchored to this cell.
     // see: OpenDocument, 2.3.1 Text Documents
     // see: OpenDocument, 9.2 Drawing Shapes
-    if (tableContext.cellAnchoredShapes.contains(*this)) {
-        const QList<KoShape*> shapes = tableContext.cellAnchoredShapes.values(*this);
+    if (tableContext.cellHasAnchoredShapes(*this)) {
+        const QList<KoShape*> shapes = tableContext.cellAnchoredShapes(*this);
         for (int i = 0; i < shapes.count(); ++i) {
             shapes[i]->saveOdf(tableContext.shapeContext);
             // FIXME Stefan: Store the additional attributes:

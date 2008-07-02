@@ -3234,11 +3234,14 @@ QRect Sheet::usedArea() const
     return QRect( 1, 1, maxCols, maxRows );
 }
 
-bool Sheet::compareRows( int row1, int row2, int& maxCols ) const
+bool Sheet::compareRows(int row1, int row2, int& maxCols, OdfSavingContext& tableContext) const
 {
     if ( *rowFormat( row1 ) != *rowFormat( row2 ) )
     {
 //         kDebug(36003) <<"\t Formats of" << row1 <<" and" << row2 <<" are different";
+        return false;
+    }
+    if (tableContext.rowHasCellAnchoredShapes(this, row1) != tableContext.rowHasCellAnchoredShapes(this, row2)) {
         return false;
     }
     Cell cell1 = cellStorage()->firstInRow(row1);
@@ -3561,7 +3564,7 @@ bool Sheet::saveOasis(OdfSavingContext& tableContext)
             const QPointF position = shape->position();
             const int col = leftColumn(position.x(), dummy);
             const int row = topRow(position.y(), dummy);
-            tableContext.cellAnchoredShapes.insert(Cell(this, col, row), shape);
+            tableContext.insertCellAnchoredShape(Cell(this, col, row), shape);
         }
     }
 
@@ -3755,7 +3758,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
 
         int repeated = 1;
         // empty row?
-        if (!d->cellStorage->firstInRow(i)) // row is empty
+        if (!d->cellStorage->firstInRow(i) && !tableContext.rowHasCellAnchoredShapes(this, i)) // row is empty
         {
 //             kDebug(36003) <<"Sheet::saveOasisColRowCell: first row loop:"
 //                           << " i: " << i
@@ -3766,8 +3769,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             //   next non-empty row
             // or
             //   next row with different Format
-            while ( j <= maxRows && !d->cellStorage->firstInRow( j ) )
-            {
+            while (j <= maxRows && !d->cellStorage->firstInRow(j) && !tableContext.rowHasCellAnchoredShapes(this, j)) {
               const RowFormat* nextRow = rowFormat( j );
 //               kDebug(36003) <<"Sheet::saveOasisColRowCell: second row loop:"
 //                         << " j: " << j
@@ -3843,8 +3845,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
                 xmlWriter.addAttribute("table:visibility", "filter");
 
             int j = i + 1;
-            while ( compareRows( i, j, maxCols ) && j <= maxRows )
-            {
+            while (compareRows(i, j, maxCols, tableContext) && j <= maxRows) {
               j++;
               repeated++;
             }
@@ -3891,7 +3892,7 @@ void Sheet::saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int 
     //   the current cell is not a default one
     // or
     //   we have a further cell in this row
-    while (!cell.isDefault() || !nextCell.isNull())
+    while (!cell.isDefault() || tableContext.cellHasAnchoredShapes(cell) || !nextCell.isNull())
     {
 //         kDebug(36003) <<"Sheet::saveOasisCells:"
 //                       << " i: " << i

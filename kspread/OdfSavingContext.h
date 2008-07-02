@@ -22,6 +22,7 @@
 
 #include "Cell.h"
 #include "GenValidationStyle.h"
+#include "Sheet.h"
 
 #include <KoShapeSavingContext.h>
 
@@ -39,12 +40,47 @@ public:
     OdfSavingContext(KoShapeSavingContext& shapeContext)
         : shapeContext(shapeContext) {}
 
+    void insertCellAnchoredShape(const Cell& cell, KoShape* shape)
+    {
+        m_cellAnchoredShapes[cell.sheet()][cell.row()].insert(cell.column(), shape);
+    }
+
+    bool rowHasCellAnchoredShapes(const Sheet* sheet, int row) const
+    {
+        if (!m_cellAnchoredShapes.contains(sheet)) {
+            return false;
+        }
+        return m_cellAnchoredShapes[sheet].contains(row);
+    }
+
+    bool cellHasAnchoredShapes(const Cell& cell) const
+    {
+        if (!m_cellAnchoredShapes.contains(cell.sheet())) {
+            return false;
+        } else if (!m_cellAnchoredShapes[cell.sheet()].contains(cell.row())) {
+            return false;
+        }
+        return m_cellAnchoredShapes[cell.sheet()][cell.row()].contains(cell.column());
+    }
+
+    QList<KoShape*> cellAnchoredShapes(const Cell& cell) const
+    {
+        if (!m_cellAnchoredShapes.contains(cell.sheet())) {
+            return QList<KoShape*>();
+        } else if (!m_cellAnchoredShapes[cell.sheet()].contains(cell.row())) {
+            return QList<KoShape*>();
+        }
+        return m_cellAnchoredShapes[cell.sheet()][cell.row()].values(cell.column());
+    }
+
 public:
     KoShapeSavingContext& shapeContext;
-    QMultiHash<Cell, KoShape*> cellAnchoredShapes;
     GenValidationStyles valStyle;
     QMap<int, Style> columnDefaultStyles;
     QMap<int, Style> rowDefaultStyles;
+
+private:
+    QHash<const Sheet*, QHash<int /*row*/, QMultiHash<int /*col*/, KoShape*> > > m_cellAnchoredShapes;
 };
 
 } // namespace KSpread
