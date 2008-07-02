@@ -135,8 +135,6 @@ namespace KexiWebForms {
                     // End row
                 }
                 tableData.append("</tr>");
-
-                break;
             }
 
             dict->SetValue("TABLEDATA", tableData.toUtf8().constData());
