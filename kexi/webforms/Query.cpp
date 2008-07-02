@@ -20,6 +20,7 @@
 
 #include <string>
 
+#include <QTextDocument>
 #include <QString>
 #include <QVector>
 
@@ -126,11 +127,9 @@ namespace KexiWebForms {
                             //! @todo decode image and display it if possible
                             valueString = "(Object)";
                         } else if (field->isTextType()) {
-                            valueString = cursor->value(i).toString();
-                            //! @note: why I don't have Qt::escape ?
-                            //valueString = Qt::escape( cursor->value(i).toString() );
+                            valueString = Qt::escape( cursor->value(i).toString() );
                         } else {
-                            valueString = cursor->value(i).toString();
+                            valueString = Qt::escape( cursor->value(i).toString() );
                         }
                         queryData.append(valueString);
                         queryData.append("</td>");
@@ -150,7 +149,7 @@ namespace KexiWebForms {
                       queryData.append(pkeyVal).append("\"><img src=\"/toolbox/draw-eraser.png\" alt=\"Delete\"/></a></td>");
                     */
                     // End row
-                    queryData.append("</tr>");
+                    queryData.append("</tr>\n");
 
                     dict->SetValue("QUERYDATA", queryData.toUtf8().constData());
                 }

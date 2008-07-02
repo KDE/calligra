@@ -20,8 +20,7 @@
 
 #include <string>
 
-#include <Qt>
-#include <QtGlobal>
+#include <QTextDocument>
 #include <QString>
 
 #include <KDebug>
@@ -111,12 +110,10 @@ namespace KexiWebForms {
                         valueString.append("\" alt=\"").append(field->captionOrName()).append("\"/>\n");
                     }
                     else if (field->isTextType()) {
-                        valueString = cursor->value(i).toString();
-                        //! @fixme: why I don't have Qt::escape ?
-                        //valueString = Qt::escape( cursor->value(i).toString() );
+                        valueString = Qt::escape( cursor->value(i).toString() );
                     }
                     else {
-                        valueString = cursor->value(i).toString();
+                        valueString = Qt::escape( cursor->value(i).toString() );
                     }
                     tableData.append(valueString);
                     tableData.append("</td>");
@@ -134,7 +131,7 @@ namespace KexiWebForms {
                     tableData.append(pkeyVal).append("\"><img src=\"/toolbox/draw-eraser.png\" alt=\"Delete\"/></a></td>");
                     // End row
                 }
-                tableData.append("</tr>");
+                tableData.append("</tr>\n");
             }
 
             dict->SetValue("TABLEDATA", tableData.toUtf8().constData());

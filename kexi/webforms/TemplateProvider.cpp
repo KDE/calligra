@@ -19,9 +19,12 @@
 */
 
 #include <string>
+
 #include <QtAlgorithms>
+#include <QTextDocument>
 #include <QList>
 #include <KDebug>
+
 #include <core/kexipartinfo.h>
 #include <core/kexipartitem.h>
 #include <google/template.h>
@@ -32,6 +35,45 @@
 #include "TemplateProvider.h"
 
 namespace KexiWebForms {
+
+    static bool caseInsensitiveLessThan(const QString &s1, const QString &s2) {
+        return s1.toLower() < s2.toLower();
+    }
+
+    // Adds object list to the menu.
+    // Step 1: Fill the queryNames stringlist
+    // Step 2: Sort it
+    // Step 3: Write the links
+    static void addList(google::TemplateDictionary* dict, KexiDB::ObjectTypes objectType, 
+      const QString& objectTypeName, const char* keyName)
+    {
+        QList<int> objectIds(gConnection->objectIds( objectType ));
+        QMap<QString, QString> objectNamesForCaptions;
+        foreach (const int id, objectIds) {
+            KexiDB::SchemaData schema;
+            tristate res = gConnection->loadObjectSchemaData( id, schema );
+            if (res != true)
+                continue;
+            objectNamesForCaptions.insertMulti( 
+                schema.captionOrName(), schema.name() ); //insertMulti() because there can be many objects with the same caption
+        }
+        QStringList objectCaptionsSorted( objectNamesForCaptions.uniqueKeys() );
+        kDebug() << objectCaptionsSorted;
+        qSort(objectCaptionsSorted.begin(), objectCaptionsSorted.end(), caseInsensitiveLessThan);
+        kDebug() << objectCaptionsSorted;
+        const QString itemString( QString::fromLatin1("<li><a href=\"/") + objectTypeName + QString::fromLatin1("/%1\">%2</a></li>\n") );
+        QString result;
+        foreach (const QString& caption, objectCaptionsSorted) {
+            QStringList names( objectNamesForCaptions.values( caption ) );
+            qSort(names); // extra sort :)
+            kDebug() << names;
+            foreach (const QString& name, names) {
+                kDebug() << name << caption;
+                result.append( itemString.arg(name).arg(Qt::escape(caption)) );
+            }
+        }
+        dict->SetValue(keyName, result.toUtf8().constData());
+    }
 
     google::TemplateDictionary* initTemplate(const char* filename) {
         google::TemplateDictionary* dict = new google::TemplateDictionary(filename);
@@ -44,33 +86,10 @@ namespace KexiWebForms {
         // Add footer template (-- note, this includes the left menu with the standard template)
         google::TemplateDictionary* afterDict = dict->AddIncludeDictionary("aftercontent");
         afterDict->SetFilename("aftercontent.tpl");
-        // Add tables to left menu
-        QString tables;
-        QStringList tableNames(gConnection->tableNames());
-        qSort(tableNames);
-        foreach(QString t, tableNames) {
-            tables.append("<li><a href=\"/read/").append(t);
-            tables.append("\">").append(t).append("</a></li>");
-        }
-        afterDict->SetValue("TABLE_LIST", tables.toUtf8().constData());
-        
-        // Add queries to left menu
-        // Step 1: Fill the queryNames stringlist
-        // Step 2: Sort it
-        // Step 3: Write the links
-        QString queries;
-        QList<int> queryIds(gConnection->queryIds());
-        QMap<QString, QString> queryCaptions;
-        for (int i = 0; i < queryIds.size(); ++i) {
-            queryCaptions[gConnection->querySchema(queryIds.at(i))->caption()] =
-                gConnection->querySchema(queryIds.at(i))->name();
-        }
-        foreach (QString str, queryCaptions.keys()) {
-            queries.append("<li><a href=\"/query/").append(queryCaptions[str]);
-            queries.append("\">").append(str).append("</a></li>");
-        }
-        afterDict->SetValue("QUERY_LIST", queries.toUtf8().constData());
-        
+
+        // Add objects to the left menu
+        addList(afterDict, KexiDB::TableObjectType, "read", "TABLE_LIST");
+        addList(afterDict, KexiDB::QueryObjectType, "query", "QUERY_LIST");
         return dict;
     }
 
