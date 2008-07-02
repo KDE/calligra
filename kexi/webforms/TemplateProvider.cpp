@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
-
-   (C) Copyright 2008 by Lorenzo Villani <lvillani@binaryhelix.net>
+   Copyright (C) 2008 Lorenzo Villani <lvillani@binaryhelix.net>
+   Copyright (C) 2008 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
