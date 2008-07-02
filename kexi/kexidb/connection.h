@@ -198,18 +198,34 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		/*! \return ids of all table schema names stored in currently 
 		 used database. These ids can be later used as argument for tableSchema().
 		 This is a shortcut for objectIds(TableObjectType).
-		 If \a also_system_tables is true, 
 		 Internal KexiDB system tables (kexi__*) are not available here 
-		 because these have no identifiers assigned (more formally: id=-1). */
+		 because these have no identifiers assigned (more formally: id=-1). 
+
+		 Note: the fact that given id is on the returned list does not mean 
+		 that tableSchema( id ) returns anything. The table definition can be broken, 
+		 so you have to double check this. */
 		QList<int> tableIds();
 
 		/*! \return ids of all database query schemas stored in currently 
 		 used database. These ids can be later used as argument for querySchema().
-		 This is a shortcut for objectIds(QueryObjectType). */
+		 This is a shortcut for objectIds(QueryObjectType).
+
+		 Note: the fact that given id is on the returned list does not mean 
+		 that querySchema( id ) returns anything. The query definition can be broken, 
+		 so you have to double check this. 
+
+		 @see tableIds()
+		 */
 		QList<int> queryIds();
 
 		/*! \return names of all schemas of object with \a objType type 
-		 that are stored in currently used database. */
+		 that are stored in currently used database. 
+
+		 Note: the fact that given id is on the returned list does not mean 
+		 that the definition of the object is valid, 
+		 so you have to double check this.
+
+		 @see queryIds() */
 		QList<int> objectIds(int objType);
 
 		/*! \brief Creates new transaction handle and starts a new transaction.
@@ -1019,7 +1035,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		    Reimplement this method in your driver if there are any special processing steps to be
 		    executed after an Insert statement.
 		  \sa drv_beforeInsert()
-                */
+		*/
 		virtual bool drv_afterInsert(const QString& table, FieldList& fields){
 		    Q_UNUSED(table);
 		    Q_UNUSED(fields);
