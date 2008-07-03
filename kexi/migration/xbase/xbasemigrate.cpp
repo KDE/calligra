@@ -79,11 +79,15 @@ bool xBaseMigrate::drv_connect()
 		// Calling OpenDatabase, will automatically add the pointer `table`
 		// to the dbfList of xbXBase class ( if there is no error )
 		QString absoluteFileName = xBaseDirectory.filePath( fileName );
-		fileName.chop( 4 ); // remove the letters .dbf
-		m_tableNamePathMap[fileName.toLower()] = absoluteFileName;
+
+		// remove the letters '.dbf'. Hence the -4
+		QString choppedFileName = fileName.left( fileName.length() - 4 ).toLower();
+		m_tableNamePathMap[choppedFileName] = absoluteFileName;
+		kDebug()<<choppedFileName<<" Path:"<<absoluteFileName;
 
 		int returnCode;
-		if (  ( returnCode = table->OpenDatabase( absoluteFileName.toUtf8().constData() ) ) != XB_NO_ERROR ) {
+		QByteArray ba = absoluteFileName.toUtf8();
+		if (  ( returnCode = table->OpenDatabase( ba.constData() ) ) != XB_NO_ERROR ) {
 			switch( returnCode ) {
 				case XB_OPEN_ERROR:
 					kDebug()<<"Couldn't open "<<absoluteFileName<<".Skipping it.";
@@ -95,9 +99,9 @@ bool xBaseMigrate::drv_connect()
 					kDebug()<<absoluteFileName<<" is not a DBF file.Skipping it.";
 					break;
 				default:
-					break;
+					kDebug()<<"Error code "<<returnCode;
+					return false;
 			}
-			delete table;
 		}
 	}
 
@@ -158,6 +162,14 @@ bool xBaseMigrate::drv_readTableSchema(
 		KexiDB::Field *fld =
 		    new KexiDB::Field( fldID, type( tableDbf->GetFieldType( i ) ) );
 
+		if ( fld->type() == KexiDB::Field::Text ) {
+			fld->setLength( tableDbf->GetFieldLen(i) );
+		}
+
+		if ( fld->isFPNumericType() ) {
+			fld->setScale( tableDbf->GetFieldDecimal(i) );
+		}
+
 		getConstraints(originalName, fld);
 
 		tableSchema.addField(fld);
@@ -206,7 +218,8 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 		xbLong numFlds = tableDbf->FieldCount();
 		// fields are indexed from 0
 		for( xbShort j = 0; j < numFlds; j = j + 1 ) {
-			const char* data = tableDbf->GetField(j);
+			char data[1024];
+			tableDbf->GetField(j, data);
 			QVariant val;
 
 			#ifdef XB_MEMO_FIELDS
@@ -242,7 +255,7 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 					#endif
 
 					if ( ( returnCode = tableDbf->GetMemoField( j , blobFieldLength, memoBuffer, F_SETLKW ) ) != XB_NO_ERROR ) {
-						kDebug()<<"Error reading blob field. Error code: "<<rc; // make error message more verbose
+						kDebug()<<"Error reading blob field. Error code: "<<returnCode; // make error message more verbose
 					} else {
 						val = KexiDB::cstringToVariant( memoBuffer, fieldsExpanded.at(j)->field, blobFieldLength );
 					}
@@ -364,9 +377,7 @@ void KexiMigration::xBaseMigrate::getConstraints(const QString& tableName, KexiD
 			fld->setIndexed( true );
 			kDebug()<<"Normal Index on "<<fld->name();
 		}
-		
-		delete xbIndex;
-		xbIndex = 0;
+
 		// ok, moving through the loop is fairly useless as we can only set a single index on a field anyway
 		// does any one use multiple indexes on the same field ?
 		// well anyway, when Kexi supports it, we'll use IndexSchemas till then ...
