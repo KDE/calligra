@@ -698,9 +698,7 @@ const QString Filterkpr2odf::createStrokeDashStyle( int strokeStyle )
     case 1:
     {
         //"Empty style"
-        QString name = m_styles.lookup( style, "sds" );
-        strokeDashStyles.insert( strokeStyle, name );
-        return name;
+        return m_styles.lookup( style, "sds" );;
     }
     case 2:
         displayName = "Fine Dashed";
