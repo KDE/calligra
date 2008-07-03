@@ -98,14 +98,21 @@ namespace KexiWebForms {
 
             for (uint i = 0; i < tableSchema->fieldCount(); i++) {
                 KexiDB::Field* currentField = tableSchema->field(i);
+                const KexiDB::Field::Type type = currentField->type();
                 QString fieldName(currentField->name());
 
                 formData.append("<tr>");
                     
                 formData.append("<td>").append(currentField->captionOrName()).append("</td>");
-                formData.append("<td>").append("<input type=\"text\" name=\"");
-                formData.append(fieldName).append("\" value=\"").append(currentField->defaultValue().toString());
-                formData.append("\"/></td>");
+                /** @todo Show "upload image" if type is KexiDB::Field::BLOB */
+                if (type == KexiDB::Field::LongText) {
+                    formData.append("<td>").append("<textarea name=\"");
+                    formData.append(fieldName).append("\"></textarea></td>");
+                } else {
+                    formData.append("<td>").append("<input type=\"text\" name=\"");
+                    formData.append(fieldName).append("\" value=\"").append(currentField->defaultValue().toString());
+                    formData.append("\"/></td>");
+                }
 
                 // Field properties images
                 formData.append("<td>");

@@ -202,16 +202,19 @@ namespace KexiWebForms {
                     QString fieldName(currentField->name());
 
                     formData.append("<tr>");
-
+                    formData.append("<td>").append(schema.field(i)->captionOrName()).append("</td>");
+                    
                     if (type == KexiDB::Field::BLOB) {
-                        formData.append("<td>").append(schema.field(i)->captionOrName()).append("</td>");
                         formData.append("<td>");
                         formData.append("<img src=\"data:image/png;base64,");
                         formData.append(cursor->value(i).toByteArray().toBase64());
                         formData.append("\" alt=\"").append(currentField->captionOrName()).append("\"/>\n");
                         formData.append("</td>");
+                    } else if (type == KexiDB::Field::LongText) {
+                        formData.append("<td>").append("<textarea name=\"");
+                        formData.append(fieldName).append("\">");
+                        formData.append(cursor->value(i).toString()).append("</textarea></td>");
                     } else {
-                        formData.append("<td>").append(schema.field(i)->captionOrName()).append("</td>");
                         formData.append("<td>").append("<input type=\"text\" name=\"");
                         formData.append(fieldName).append("\" value=\"");
                         formData.append(cursor->value(i).toString()).append("\"/></td>");
