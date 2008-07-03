@@ -193,13 +193,17 @@ double KarbonCalligraphyTool::calculateAngle()
         speedAngle = M_PI;
     }
 
-    double angle = speedAngle + M_PI/2;
+    speedAngle += M_PI/2;
 
-    // normalize
-    while ( angle < 0 )
-        angle += M_PI;
-    while ( angle >= M_PI )
-        angle -= M_PI;
+    double dAngle = speedAngle - m_angle;
+
+    // normalize dAngle between -M_PI/2 and M_PI/2
+    while (dAngle > M_PI/2)
+        dAngle -= M_PI;
+    while (dAngle <= -M_PI/2)
+        dAngle += M_PI;
+    
+    double angle = m_angle + dAngle*m_fixation;
 
     return angle;
 }

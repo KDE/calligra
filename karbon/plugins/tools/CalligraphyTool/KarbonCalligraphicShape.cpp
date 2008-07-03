@@ -78,6 +78,7 @@ void KarbonCalligraphicShape::
 
     if ( flip )
     {
+        kDebug() << "!!!!!!!!!! flip 1 !!!!!!!!";
         // handle flip
         m_flipped = ! m_flipped;
 
