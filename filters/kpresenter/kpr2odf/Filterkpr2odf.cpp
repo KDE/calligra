@@ -400,12 +400,12 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
 void Filterkpr2odf::appendPicture( KoXmlWriter* content, const KoXmlElement& objectElement ) {
     content->startElement( "draw:frame" );
     set2DGeometry( objectElement, *content );
+    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
 
     content->startElement( "draw:image" );
     content->addAttribute( "xlink:type", "simple" );
     content->addAttribute( "xlink:show", "embed" );
     content->addAttribute( "xlink:actuate", "onLoad" );
-    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
     content->addAttribute( "xlink:href", "Pictures/" + m_pictures[ getPictureNameFromKey( objectElement.namedItem( "KEY" ).toElement() ) ] );
 
     content->endElement();//draw:frame
@@ -449,7 +449,7 @@ void Filterkpr2odf::set2DGeometry( const KoXmlElement& source, KoXmlWriter& targ
     float y = orig.attribute( "y" ).toFloat();
     y -= m_pageHeight * ( m_currentPage - 1 );
 
-    target.addAttribute( "draw:id", "object" + m_objectIndex );
+    target.addAttribute( "draw:id", QString( "object%1" ).arg( m_objectIndex ) );
     target.addAttribute( "svg:x", QString( "%1cm" ).arg( KoUnit::toCentimeter( orig.attribute( "x" ).toDouble() ) ) );
     target.addAttribute( "svg:y", QString( "%1cm" ).arg( KoUnit::toCentimeter( y ) ) );
     target.addAttribute( "svg:width", QString( "%1cm" ).arg( KoUnit::toCentimeter( size.attribute( "width" ).toDouble() ) ) );
