@@ -431,7 +431,7 @@ const QString Filterkpr2odf::createMasterPageStyle()
 const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
 {
     //A graphic style is wiely used by a broad type of objects, hence can have many different properties
-    KoGenStyle style( KoGenStyle::StyleGraphicAuto );
+    KoGenStyle style( KoGenStyle::StyleGraphicAuto, "graphic" );
     KoXmlElement textObject( element.namedItem( "TEXTOBJ" ).toElement() );
     if( !textObject.isNull() )
     {
@@ -622,12 +622,11 @@ const QString Filterkpr2odf::createOpacityGradientStyle( int opacity )
     return m_styles.lookup( style, "op" );
 }
 
-//TODO: avoid the creation of duplicates
 const QString Filterkpr2odf::createMarkerStyle( int markerType )
 {
     KoGenStyle style( KoGenStyle::StyleMarker );
 
-    QString name;
+    QString displayName;
     QString viewBox;
     QString d;
 
@@ -637,56 +636,55 @@ const QString Filterkpr2odf::createMarkerStyle( int markerType )
         //nothing
         break;
     case 1:
-        name = "Arrow";
+        displayName = "Arrow";
         viewBox = "0 0 20 30";
         d = "m10 0-10 30h20z";
         break;
     case 2:
-        name = "Square";
+        displayName = "Square";
         viewBox = "0 0 10 10";
         d = "m0 0h10v10h-10z";
         break;
     case 3:
-        name = "Circle";
+        displayName = "Circle";
         viewBox = "0 0 1131 1131";
         d = "m462 1118-102-29-102-51-93-72-72-93-51-102-29-102-13-105 13-102 29-106 51-102 72-89 93-72 102-50 102-34 106-9 101 9 106 34 98 50 93 72 72 89 51 102 29 106 13 102-13 105-29 102-51 102-72 93-93 72-98 51-106 29-101 13z";
         break;
     case 4:
-        name = "Line Arrow";
+        displayName = "Line Arrow";
         viewBox = "0 0 1122 2243";
         d = "m0 2108v17 17l12 42 30 34 38 21 43 4 29-8 30-21 25-26 13-34 343-1532 339 1520 13 42 29 34 39 21 42 4 42-12 34-30 21-42v-39-12l-4 4-440-1998-9-42-25-39-38-25-43-8-42 8-38 25-26 39-8 42z";
         break;
     case 5:
-        name = "Dimension Lines";
+        displayName = "Dimension Lines";
         viewBox = "0 0 836 110";
         d = "m0 0h278 278 280v36 36 38h-278-278-280v-36-36z";
         break;
     case 6:
-        name = "Doble Arrow";
+        displayName = "Doble Arrow";
         viewBox = "0 0 1131 1918";//FIXME: same as Double line arrow, not sure if it's ok, nothing in KPresenter1.6
         d = "m737 1131h394l-564-1131-567 1131h398l-398 787h1131z";
         break;
     case 7:
-        name = "Double Line Arrow";
+        displayName = "Double Line Arrow";
         viewBox = "0 0 1131 1918";
         d = "m0 11h312 312h122z";
         break;
     }//switch markerType
 
-    style.addAttribute( "draw:name", name );
+    style.addAttribute( "draw:display-name", displayName );
     style.addAttribute( "draw:viewBox", viewBox );
     style.addAttribute( "draw:d", d );
 
-    return m_styles.lookup( style, "mks" );
+    return m_styles.lookup( style, "mks" );;
 }
 
-//TODO: avoid the creation of duplicates too
 const QString Filterkpr2odf::createStrokeDashStyle( int strokeStyle )
 {
     KoGenStyle style( KoGenStyle::StyleStrokeDash );
 
     //"Containment" strings, filled according to the type of the strokeStyle
-    QString name;
+    QString displayName;
     QString styleString;
     QString dots1;
     QString dots1_length;
@@ -698,9 +696,14 @@ const QString Filterkpr2odf::createStrokeDashStyle( int strokeStyle )
     {
     case 0:
     case 1:
-        break;
+    {
+        //"Empty style"
+        QString name = m_styles.lookup( style, "sds" );
+        strokeDashStyles.insert( strokeStyle, name );
+        return name;
+    }
     case 2:
-        name = "Fine Dashed";
+        displayName = "Fine Dashed";
         styleString = "rect";
         dots1 = "1";
         dots1_length = "0.508cm";
@@ -709,13 +712,13 @@ const QString Filterkpr2odf::createStrokeDashStyle( int strokeStyle )
         distance = "0.508cm";
         break;
     case 3:
-        name = "Fine Dotted";
+        displayName = "Fine Dotted";
         styleString = "rect";
         dots1 = "1";
         distance = "0.257cm";
         break;
     case 4:
-        name = "Ultrafine 1 Dot 1 Dash";
+        displayName = "Ultrafine 1 Dot 1 Dash";
         styleString = "rect";
         dots1 = "1";
         dots1_length = "0.051cm";
@@ -724,14 +727,14 @@ const QString Filterkpr2odf::createStrokeDashStyle( int strokeStyle )
         distance = "0.127cm";
         break;
     case 5:
-        name = "2 Dots 1 Dash";
+        displayName = "2 Dots 1 Dash";
         styleString = "rect";
         dots1 = "2";
         dots2 = "1";
         dots2_length = "0.203cm";
         distance = "0.203cm";
         break;
-    }
+    }//switch strokeStyle
 
     //Not all the strings are filled always so in oder to not
     //flood the style with unneeded "", we check if it was written
@@ -751,15 +754,15 @@ const QString Filterkpr2odf::createStrokeDashStyle( int strokeStyle )
         style.addAttribute( "draw:dots2-length", dots2_length );
     }
 
-    return m_styles.lookup( style, name );
+    return m_styles.lookup( style, "sds" );
 }
 
-//TODO: yet again avoid the creation of duplicates
 const QString Filterkpr2odf::createHatchStyle( int brushStyle, QString fillColor )
 {
     KoGenStyle style( KoGenStyle::StyleHatch );
 
-    QString name;
+    //"Contaimnet" strings
+    QString displayName;
     QString styleString;
     QString distance;
     QString rotation;
@@ -768,48 +771,48 @@ const QString Filterkpr2odf::createHatchStyle( int brushStyle, QString fillColor
     switch ( brushStyle )
     {
     case 9:
-        name = fillColor + " 0 Degrees";
+        displayName = fillColor + " 0 Degrees";
         styleString = "single";
         distance = "0.102cm";
         rotation = "0";
         break;
     case 10:
-        name = fillColor + " 90 Degrees";
+        displayName = fillColor + " 90 Degrees";
         styleString = "single";
         distance = "0.102cm";
         rotation = "900";
         break;
     case 11:
-        name = fillColor + " Crossed 0 Degrees";
+        displayName = fillColor + " Crossed 0 Degrees";
         styleString = "double";
         distance = "0.076cm";
         rotation = "900";
         break;
     case 12:
-        name = fillColor + " 45 Degrees";
+        displayName = fillColor + " 45 Degrees";
         styleString = "single";
         distance = "0.102cm";
         rotation = "450";
         break;
     case 13:
-        name = fillColor + " -45 Degrees";
+        displayName = fillColor + " -45 Degrees";
         styleString = "single";
         distance = "0.102cm";
         rotation = "3150";
         break;
     case 14:
-        name = fillColor + " Crossed 45 Degrees";
+        displayName = fillColor + " Crossed 45 Degrees";
         styleString = "double";
         distance = "0.076cm";
         rotation = "450";
         break;
     }
 
-    style.addAttribute( "draw:name", name );
+    style.addAttribute( "draw:display-name", displayName );
     style.addAttribute( "draw:style", styleString );
     style.addAttribute( "draw:color", fillColor );
     style.addAttribute( "draw:distance", distance );
     style.addAttribute( "draw:rotation", rotation );
 
-    return m_styles.lookup( style, name );
+    return m_styles.lookup( style, "hs" );
 }

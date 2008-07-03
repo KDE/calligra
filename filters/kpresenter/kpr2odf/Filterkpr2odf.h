@@ -47,11 +47,13 @@ private:
     void createImageList( KoStore* output, KoStore* input, KoXmlWriter* manifest );
     void createSoundList( KoStore* output, KoStore* input, KoXmlWriter* manifest );
     void convertContent( KoXmlWriter* content );
-    void convertObjects( KoXmlWriter* content, const KoXmlNode& objects, const int currentPage );
-    void appendPicture( KoXmlWriter* content, KoXmlElement objectElement );
+    void convertObjects( KoXmlWriter* content, const KoXmlNode& objects );
+    void appendPicture( KoXmlWriter* content, const KoXmlElement& objectElement );
     const QString getPictureNameFromKey( const KoXmlElement& key );
+    void set2DGeometry( const KoXmlElement& source, KoXmlWriter& target, bool pieObject = false, bool multiPoint = false );
+    QString rotateValue( double val );
 
-     //Styles functions
+    //Styles functions
     const QString createPageStyle( const KoXmlElement& page );
     const QString createGradientStyle( const KoXmlElement& page );
     const QString createGraphicStyle( const KoXmlElement& page );
@@ -65,6 +67,8 @@ private:
     KoXmlDocument m_documentInfo;//from KPR
 
     int m_pageHeight;//needed to find out where's every object
+    int m_currentPage;
+    int m_objectIndex;//the number of the next object
     QHash<QString,QString> m_pictures;//store the <fullFilename, name> pair of the keys
     QHash<QString,QString> m_sounds;//store the <fullFilename, name> pair of the keys
 

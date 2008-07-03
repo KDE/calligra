@@ -17,6 +17,8 @@
    Boston, MA  02110-1301  USA.
 */
 
+#include <cmath>
+
 //Qt includes
 #include <QByteArray>
 #include <QBuffer>
@@ -36,6 +38,7 @@
 #include <KoXmlNS.h>
 #include <KoOdf.h>
 #include <KoGenStyle.h>
+#include <KoUnit.h>
 
 #include "Filterkpr2odf.h"
 
@@ -44,6 +47,8 @@ K_EXPORT_COMPONENT_FACTORY( libFilterkpr2odf, Filterkpr2odfFactory( "kofficefilt
 
 Filterkpr2odf::Filterkpr2odf(QObject *parent,const QStringList&)
 : KoFilter(parent)
+, m_currentPage( 1 )
+, m_objectIndex( 1 )
 {
 }
 
@@ -252,7 +257,6 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
     //Parse pages
     //create the master page style
     const QString masterPageStyleName( createMasterPageStyle() );
-    int currentPage = 1;
     //The pages are all stored inside PAGETITLES
     //and all notes in PAGENOTES
     KoXmlNode title = titles.firstChild();
@@ -262,14 +266,14 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
     {
         //Every page is a draw:page
         content->startElement( "draw:page" );
-        content->addAttribute( "draw:name", title.toElement().attribute("title") );
+        content->addAttribute( "draw:name", title.toElement().attribute( "title" ) );
         content->addAttribute( "draw:style-name", createPageStyle( pageBackground ) );
         pageBackground = pageBackground.nextSibling().toElement();//next background
-        content->addAttribute( "draw:id", QString( "page%1").arg( currentPage ) );
+        content->addAttribute( "draw:id", QString( "page%1").arg( m_currentPage ) );
         content->addAttribute( "draw:master-page-name", masterPageStyleName );
 
         //convert the objects (text, images, charts...) in this page
-        convertObjects( content, objects, currentPage );
+        convertObjects( content, objects );
 
         //Append the notes
         content->startElement( "presentation:notes" );
@@ -289,7 +293,7 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
         content->endElement();//draw:frame
         content->endElement();//presentation:notes
         content->endElement();//draw:page
-        ++currentPage;
+        ++m_currentPage;
     }//for
 
     content->startElement( "presentation:settings" );
@@ -336,7 +340,7 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
     content->endDocument();
 }
 
-void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objects, const int currentPage )
+void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objects )
 {
     //We search through all the objects' nodes because
     //we are not sure if they are saved in order
@@ -344,8 +348,8 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
         float y = object.namedItem( "ORIG" ).toElement().attribute( "y" ).toFloat();
 
         //We check if the y is on the current page
-        if( y < m_pageHeight * ( currentPage - 1 )
-             || y >= m_pageHeight * currentPage )
+        if( y < m_pageHeight * ( m_currentPage - 1 )
+             || y >= m_pageHeight * m_currentPage )
             continue; // object not on current page
 
         //Now define what kind of object is
@@ -353,7 +357,7 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
         switch( objectElement.attribute( "type" ).toInt() )
         {
         case 0: // picture
-//             appendPicture( content, objectElement );
+            appendPicture( content, objectElement );
             break;
         case 1: // line
             break;
@@ -387,18 +391,27 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
         case 16: //close line
             break;
         default:
-            kWarning()<<"Unexpected object found in page "<<currentPage;
+            kWarning()<<"Unexpected object found in page "<<m_currentPage;
             break;
         }//switch objectElement
+        ++m_objectIndex;
     }//for
 }
 
-void Filterkpr2odf::appendPicture( KoXmlWriter* content, KoXmlElement objectElement ) {
+void Filterkpr2odf::appendPicture( KoXmlWriter* content, const KoXmlElement& objectElement ) {
+    content->startElement( "draw:frame" );
+    set2DGeometry( objectElement, *content );
+
     content->startElement( "draw:image" );
     content->addAttribute( "xlink:type", "simple" );
     content->addAttribute( "xlink:show", "embed" );
     content->addAttribute( "xlink:actuate", "onLoad" );
+    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+    content->addAttribute( "xlink:href", "Pictures/" + m_pictures[ getPictureNameFromKey( objectElement.namedItem( "KEY" ).toElement() ) ] );
+
+    content->endElement();//draw:frame
     content->endElement();//draw:image
+    //TODO: port the effects
 }
 
 const QString Filterkpr2odf::getPictureNameFromKey( const KoXmlElement& key )
@@ -407,6 +420,143 @@ const QString Filterkpr2odf::getPictureNameFromKey( const KoXmlElement& key )
            + key.attribute( "hour" ) + key.attribute( "day" ) + key.attribute( "month")
            + key.attribute( "year" ) + key.attribute( "filename" );
 }
+
+void Filterkpr2odf::set2DGeometry( const KoXmlElement& source, KoXmlWriter& target, bool pieObject, bool multiPoint )
+{
+    //This function sets the needed geometry-related attributes
+    //for any object that is passed to it
+
+    KoXmlElement name = source.namedItem( "OBJECTNAME" ).toElement();
+
+    QString nameStr = name.attribute( "objectName" );
+    if( !nameStr.isEmpty() )
+    {
+        target.addAttribute( "draw:name", nameStr );
+    }
+
+    KoXmlElement angle = source.namedItem( "ANGLE" ).toElement();
+    if( !angle.isNull() )
+    {
+        QString returnAngle = rotateValue( angle.attribute( "value" ).toDouble() );
+        if( !returnAngle.isEmpty() )
+        {
+            target.addAttribute( "draw:transform", returnAngle );
+        }
+    }
+
+    KoXmlElement size = source.namedItem( "SIZE" ).toElement();
+    KoXmlElement orig = source.namedItem( "ORIG" ).toElement();
+
+    float y = orig.attribute( "y" ).toFloat();
+    y -= m_pageHeight * ( m_currentPage - 1 );
+
+    target.addAttribute( "draw:id", "object" + m_objectIndex );
+    target.addAttribute( "svg:x", QString( "%1cm" ).arg( KoUnit::toCentimeter( orig.attribute( "x" ).toDouble() ) ) );
+    target.addAttribute( "svg:y", QString( "%1cm" ).arg( KoUnit::toCentimeter( y ) ) );
+    target.addAttribute( "svg:width", QString( "%1cm" ).arg( KoUnit::toCentimeter( size.attribute( "width" ).toDouble() ) ) );
+    target.addAttribute( "svg:height", QString( "%1cm" ).arg( KoUnit::toCentimeter( size.attribute( "height" ).toDouble() ) ) );
+}
+
+QString Filterkpr2odf::rotateValue( double val )
+{
+    QString str;
+    if ( val != 0.0 )
+    {
+        double value = -1 * ( ( double )val * M_PI ) / 180.0;
+        str = QString( "rotate(%1)" ).arg( value );
+    }
+    return str;
+}
+
+//TODO: find a finction to integrate the following code, was part of set2DGeometry, but cannot longer be there as they aren't stored in the element per se
+//     //If the object is a "pie" (a circle) or a "multi-point" object
+//     //it needs some other attributes
+//     if( pieObject )
+//     {
+//         //Type of the enclosure of the circle
+//         KoXmlElement pie = source.namedItem( "PIETYPE" ).toElement();
+//         if( !pie.isNull() )
+//         {
+//             int typePie = pie.attribute( "value" ).toInt();
+//             switch( typePie )
+//             {
+//             case 0:
+//                 target.addAttribute( "draw:kind", "section" );
+//                 break;
+//             case 1:
+//                 target.addAttribute( "draw:kind", "arc" );
+//                 break;
+//             case 2:
+//                 target.addAttribute( "draw:kind", "cut" );
+//                 break;
+//             default:
+//                 kDebug(30518)<<" type unknown :"<<typePie;
+//                 break;
+//             }
+//         }
+//         else
+//         {
+//             //We didn't find the type, we set "section" by default
+//             target.addAttribute( "draw:kind", "section");
+//         }
+//
+//         KoXmlElement pieAngle = source.namedItem( "PIEANGLE" ).toElement();
+//         int startAngle = 45; //default value take it into kppieobject
+//         if( !pieAngle.isNull() )
+//         {
+//             startAngle = ( pieAngle.attribute( "value" ).toInt() ) / 16;
+//         }
+//         target.addAttribute( "draw:start-angle", startAngle );
+//
+//         KoXmlElement pieLength = source.namedItem( "PIELENGTH" ).toElement();
+//         if( !pieLength.isNull() )
+//         {
+//             int value = pieLength.attribute( "value" ).toInt();
+//             value /= 16;
+//             value += startAngle;
+//             target.addAttribute( "draw:end-angle", value );
+//         }
+//         else
+//         {
+//             //default value take it into kppieobject
+//             //default is 90 in kpresenter
+//             target.addAttribute( "draw:end-angle", ( 90 + startAngle ) );
+//         }
+//     }//if pieObject
+
+//     if( multiPoint )
+//     {
+//         KoXmlElement points = source.namedItem( "POINTS" ).toElement();
+//         if( !points.isNull() ) {
+//             KoXmlElement elemPoint = points.firstChild().toElement();
+//             QString listOfPoints;
+//             int maxX = 0;
+//             int maxY = 0;
+//             while( !elemPoint.isNull() ) {
+//                 if( elemPoint.tagName() == "Point" ) {
+//                     //FIXME: according to KPresenter1.6 the following conversion should be ok,
+//                     //ooimpressexport handles it diferently: toMillimeters( ... ) * 100, so is it coorect?
+//                     int tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
+//                     int tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
+//
+//                     //No white spaces allowed before the first element
+//                     if( !listOfPoints.isEmpty() )
+//                     {
+//                         listOfPoints += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
+//                     }
+//                     else
+//                     {
+//                         listOfPoints = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
+//                     }
+//                     maxX = qMax( maxX, tmpX );
+//                     maxY = qMax( maxY, tmpY );
+//                 }//if tagName == "Point"
+//                 elemPoint = elemPoint.nextSibling().toElement();
+//             }//while !element.isNull()
+//             target.addAttribute( "draw:points", listOfPoints );
+//             target.addAttribute( "svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
+//         }//if !points.isNull()
+//     }//if multipoint
 
 #include "StylesFilterkpr2odf.cpp"
 
