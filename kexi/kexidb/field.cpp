@@ -548,8 +548,10 @@ Field::setUniqueKey(bool u)
 {
 	if(isUniqueKey() != u) {
 		m_constraints = static_cast<Field::Constraints>(m_constraints ^ Field::Unique);
-		if (u)
+		if (u) { //also set implied constraints
 			setNotNull(true);
+			setIndexed(true);
+		}
 	}
 }
 
