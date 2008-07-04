@@ -56,7 +56,7 @@ void KWordTableHandler::tableStart( KWord::Table* table )
     m_row = -1;
     m_currentY = 0;
 
-    //start the table tags in the text
+    //start table in content
     m_bodyWriter->startElement("table:table");
 }
 
@@ -64,6 +64,7 @@ void KWordTableHandler::tableEnd()
 {
     kDebug(30513) ;
     m_currentTable = 0L; // we don't own it, Document does
+    //end table in content
     m_bodyWriter->endElement();//table:table
 }
 
@@ -75,18 +76,27 @@ void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::T
         kWarning(30513) << "tableRowStart: tableStart not called previously!";
         return;
     }
+    if(m_row == -1) {
+	m_bodyWriter->startElement("table:table-column");
+	m_bodyWriter->addAttribute("table:number-columns-repeated", tap->itcMac);
+	m_bodyWriter->endElement();
+    }
     Q_ASSERT( m_currentTable );
     Q_ASSERT( !m_currentTable->name.isEmpty() );
     m_row++;
     m_column = -1;
     m_tap = tap;
     kDebug(30513) <<"tableRowStart row=" << m_row;
+    //start table row in content
+    m_bodyWriter->startElement("table:table-row");
 }
 
 void KWordTableHandler::tableRowEnd()
 {
     kDebug(30513);
     m_currentY += rowHeight();
+    //end table row in content
+    m_bodyWriter->endElement();//table:table-row
 }
 
 void KWordTableHandler::tableCellStart()
@@ -193,13 +203,17 @@ void KWordTableHandler::tableCellStart()
         m_tap->rgtc[ m_column + 1 ].brcLeft
         : tc.brcRight;
 
-    emit sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name, brcTop, brcBottom, brcLeft, brcRight, m_tap->rgshd[ m_column ] );
+    //emit sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name, brcTop, brcBottom, brcLeft, brcRight, m_tap->rgshd[ m_column ] );
+    //start table cell in content
+    m_bodyWriter->startElement("table:table-cell");
 }
 
 void KWordTableHandler::tableCellEnd()
 {
     kDebug(30513);
-    emit sigTableCellEnd();
+    //emit sigTableCellEnd();
+    //end table cell in content
+    m_bodyWriter->endElement();//table:table-cell
 }
 
 

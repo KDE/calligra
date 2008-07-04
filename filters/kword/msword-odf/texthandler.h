@@ -109,7 +109,7 @@ signals:
     void subDocFound( const wvWare::FunctorBase* parsingFunctor, int data );
     void footnoteFound( const wvWare::FunctorBase* parsingFunctor, int data );
     void headersFound( const wvWare::FunctorBase* parsingFunctor, int data );
-    void tableFound( KWord::Table* table );
+    void tableFound(KWord::Table* table);
     void pictureFound( const QString& frameName, const QString& pictureName, const wvWare::FunctorBase* pictureFunctor );
     void updateListDepth( int );
 

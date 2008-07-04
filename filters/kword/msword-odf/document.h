@@ -108,7 +108,7 @@ public slots:
 
     void slotHeadersFound( const wvWare::FunctorBase* functor, int data );
 
-    void slotTableFound( KWord::Table* table );
+    void slotTableFound(KWord::Table* table);
 
     // Write out the frameset and add the key to the PICTURES tag
     void slotPictureFound( const QString& frameName, const QString& pictureName, const wvWare::FunctorBase* );
@@ -119,8 +119,8 @@ public slots:
 
     // Similar to footnoteStart/footnoteEnd but for cells.
     // This is connected to KWordTableHandler
-    void slotTableCellStart( int row, int column, int rowSize, int columnSize, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd );
-    void slotTableCellEnd();
+    //void slotTableCellStart( int row, int column, int rowSize, int columnSize, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd );
+    //void slotTableCellEnd();
 
 private:
     void processStyles();

@@ -244,11 +244,11 @@ void KWordTextHandler::tableRowFound( const wvWare::TableRowFunctor& functor, wv
     {
         // We need to put the table in a paragraph. For wv2 tables are between paragraphs.
         //Q_ASSERT( !m_bInParagraph );
-        paragraphStart( 0L );
+        //paragraphStart( 0L );
         static int s_tableNumber = 0;
         m_currentTable = new KWord::Table();
         m_currentTable->name = i18n("Table %1", ++s_tableNumber );
-        insertAnchor( m_currentTable->name );
+        //insertAnchor( m_currentTable->name );
     }
 
     // Add all cell edges to our array.
@@ -315,6 +315,15 @@ QDomElement KWordTextHandler::insertAnchor( const QString& fsname )
 void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::ParagraphProperties> paragraphProperties )
 {
     kDebug(30513) << "**********************************************";
+    //check for a table to parse
+    if ( m_currentTable )
+    {
+	KWord::Table* table = m_currentTable;
+	//reset m_currentTable
+        m_currentTable = 0L;
+	//must delete table in Document!
+        emit tableFound(table);
+    }
     //if ( m_bInParagraph )
     //    paragraphEnd();
     //m_bInParagraph = true;
@@ -348,12 +357,12 @@ void KWordTextHandler::paragraphEnd()
 {
     kDebug(30513) ;
     //Q_ASSERT( m_bInParagraph );
-    if ( m_currentTable )
+/*    if ( m_currentTable )
     {
         emit tableFound( m_currentTable );
         delete m_currentTable;
         m_currentTable = 0L;
-    }
+    }*/
     //close the <text:p> tag we opened in writeLayout()
     if(m_paragraphProperties)
     {
@@ -361,6 +370,8 @@ void KWordTextHandler::paragraphEnd()
 	    m_bodyWriter->endElement();
 	else
 	    m_headerWriter->endElement();
+	//reset m_paragraphProperties
+	m_paragraphProperties = 0;
     }
     //clear our paragraph flag
     //m_bInParagraph = false;

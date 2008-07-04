@@ -69,8 +69,8 @@ Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWrit
                  this, SLOT( slotFootnoteFound( const wvWare::FunctorBase*, int ) ) );
         connect( m_textHandler, SIGNAL( headersFound( const wvWare::FunctorBase*, int ) ),
                  this, SLOT( slotHeadersFound( const wvWare::FunctorBase*, int ) ) );
-        connect( m_textHandler, SIGNAL( tableFound( KWord::Table* ) ),
-                 this, SLOT( slotTableFound( KWord::Table* ) ) );
+        connect(m_textHandler, SIGNAL( tableFound(KWord::Table*)),
+                 this, SLOT( slotTableFound(KWord::Table*)));
         connect( m_textHandler, SIGNAL( pictureFound( const QString&, const QString&, const wvWare::FunctorBase* ) ),
                  this, SLOT( slotPictureFound( const QString&, const QString&, const wvWare::FunctorBase* ) ) );
         m_parser->setSubDocumentHandler( this );
@@ -535,10 +535,11 @@ void Document::slotUpdateListDepth( int depth )
     m_currentListDepth = depth;
 }
 
+//disable this for now - we should be able to do everything in TableHandler
 //create frame for the table cell?
-void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
-{
-    kDebug(30513) ;
+//void Document::slotTableCellStart( int row, int column, int rowSpan, int columnSpan, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
+//{
+    //kDebug(30513) ;
 
     //need to set up cell style here
     //probably don't need generateFrameBorder()
@@ -548,7 +549,7 @@ void Document::slotTableCellStart( int row, int column, int rowSpan, int columnS
     //framesetElement.setAttribute( "frameType", 1 /* text */ );
     //framesetElement.setAttribute( "frameInfo", 0 /* normal text */ );
     //framesetElement.setAttribute( "grpMgr", tableName );
-    QString name = i18nc("Table_Name Cell row,column", "%1 Cell %2,%3",tableName,row,column);
+    //QString name = i18nc("Table_Name Cell row,column", "%1 Cell %2,%3",tableName,row,column);
     //framesetElement.setAttribute( "name", name );
     //framesetElement.setAttribute( "row", row );
     //framesetElement.setAttribute( "col", column );
@@ -560,22 +561,22 @@ void Document::slotTableCellStart( int row, int column, int rowSpan, int columnS
     //generateFrameBorder( frameElem, brcTop, brcBottom, brcLeft, brcRight, shd );
 
     //m_textHandler->setFrameSetElement( framesetElement );
-}
+//}
 
 //add empty element to end it?
-void Document::slotTableCellEnd()
-{
-    kDebug(30513) ;
+//void Document::slotTableCellEnd()
+//{
+    //kDebug(30513) ;
     //</table:table-cell>
 
     //m_textHandler->setFrameSetElement( QDomElement() );
-}
+//}
 
 //set up frame borders (like for a table cell?)
 //set the background fill
-void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
-{
-    kDebug(30513) ;
+//void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd )
+//{
+    //kDebug(30513) ;
     // Frame borders
 
     //figure out what this is supposed to do!
@@ -590,41 +591,41 @@ void Document::generateFrameBorder( QDomElement& frameElementOut, const wvWare::
         Conversion::setBorderAttributes( frameElementOut, brcRight, "r" );*/
 
     // Frame background brush (color and fill style)
-    if ( shd.icoFore != 0 || shd.icoBack != 0 )
-    {
+    //if ( shd.icoFore != 0 || shd.icoBack != 0 )
+    //{
         // If ipat = 0 (solid fill), icoBack is the background color.
         // But otherwise, icoFore is the one we need to set as bkColor
         // (and icoBack is usually white; it's the other color of the pattern,
         // something that we can't set in Qt apparently).
-        int bkColor = shd.ipat ? shd.icoFore : shd.icoBack;
-        kDebug(30513) <<"generateFrameBorder:" <<" icoFore=" << shd.icoFore <<" icoBack=" << shd.icoBack <<" ipat=" << shd.ipat <<" -> bkColor=" << bkColor;
+        //int bkColor = shd.ipat ? shd.icoFore : shd.icoBack;
+        //kDebug(30513) <<"generateFrameBorder:" <<" icoFore=" << shd.icoFore <<" icoBack=" << shd.icoBack <<" ipat=" << shd.ipat <<" -> bkColor=" << bkColor;
 
         // Reverse-engineer MSWord's own hackery: it models various gray levels
         // using dithering. But this looks crappy with Qt. So we go back to a QColor.
-        bool grayHack = ( shd.ipat && shd.icoFore == 1 && shd.icoBack == 8 );
-        if ( grayHack )
-        {
-            bool ok;
-            int grayLevel = Conversion::ditheringToGray( shd.ipat, &ok );
-            if ( ok )
-            {
-                QColor color( 0, 0, grayLevel, QColor::Hsv );
-                QString prefix = "bk";
-                frameElementOut.setAttribute( "bkRed", color.red() );
-                frameElementOut.setAttribute( "bkBlue", color.blue() );
-                frameElementOut.setAttribute( "bkGreen", color.green() );
-            }
-            else grayHack = false;
-        }
-        if ( !grayHack )
-        {
+        //bool grayHack = ( shd.ipat && shd.icoFore == 1 && shd.icoBack == 8 );
+        //if ( grayHack )
+        //{
+            //bool ok;
+            //int grayLevel = Conversion::ditheringToGray( shd.ipat, &ok );
+            //if ( ok )
+            //{
+                //QColor color( 0, 0, grayLevel, QColor::Hsv );
+                //QString prefix = "bk";
+                //frameElementOut.setAttribute( "bkRed", color.red() );
+                //frameElementOut.setAttribute( "bkBlue", color.blue() );
+                //frameElementOut.setAttribute( "bkGreen", color.green() );
+            //}
+            //else grayHack = false;
+        //}
+        //if ( !grayHack )
+        //{
             //Conversion::setColorAttributes( frameElementOut, bkColor, "bk", true );
             // Fill style
-            int brushStyle = Conversion::fillPatternStyle( shd.ipat );
+            //int brushStyle = Conversion::fillPatternStyle( shd.ipat );
             //frameElementOut.setAttribute( "bkStyle", brushStyle );
-        }
-    }
-}
+        //}
+    //}
+//}
 
 //create SubDocument object & add it to the queue
 void Document::slotSubDocFound( const wvWare::FunctorBase* functor, int data )
@@ -654,8 +655,8 @@ void Document::slotHeadersFound(const wvWare::FunctorBase* functor, int data)
 void Document::slotTableFound(KWord::Table* table)
 {
     kDebug(30513);
-    //need to parse this now, not leave it for later
-    m_tableHandler->tableStart(table);
+
+    m_tableHandler->tableStart( table );
     Q3ValueList<KWord::Row> &rows = table->rows;
     for( Q3ValueList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
         KWord::TableRowFunctorPtr f = (*it).functorPtr;
@@ -664,6 +665,10 @@ void Document::slotTableFound(KWord::Table* table)
         delete f; // delete it
     }
     m_tableHandler->tableEnd();
+
+    //cleanup table
+    delete table;
+    table = 0;
 
     //m_tableQueue.push( table );
 }
