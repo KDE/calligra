@@ -64,6 +64,13 @@ public:
      */
     KPrCustomSlideShows* customSlideShows();
     void setCustomSlideShows( KPrCustomSlideShows* replacement );
+
+    int presentationMonitor();
+    void setPresentationMonitor( int monitor );
+
+    bool isPresenterViewEnabled();
+    void setPresenterViewEnabled( bool enabled );
+
 protected:
     /// reimplemented
     virtual KoView * createViewInstance( QWidget *parent );
@@ -75,12 +82,22 @@ protected:
     /// reimplemented
     virtual void postRemoveShape( KoPAPageBase * page, KoShape * shape );
 
+    /// load configuration specific to KPresenter
+    void loadKPrConfig();
+
+    /// save configuration specific to KPresenter
+    void saveKPrConfig();
+
     /**
      * @brief get the animations of the page
      */
     KPrShapeAnimations & animationsByPage( KoPAPageBase * page );
     
     KPrCustomSlideShows *m_customSlideShows;
+
+private:
+    int m_presentationMonitor;
+    bool m_presenterViewEnabled;
 };
 
 #endif /* KPRDOCUMENT_H */

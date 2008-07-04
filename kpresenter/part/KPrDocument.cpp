@@ -33,6 +33,9 @@
 #include <KoShapeLoadingContext.h>
 #include <KoXmlNS.h>
 
+#include <KConfig>
+#include <KConfigGroup>
+
 KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleViewMode )
 : KoPADocument( parentWidget, parent, singleViewMode )
 , m_customSlideShows(new KPrCustomSlideShows())
@@ -46,10 +49,13 @@ KPrDocument::KPrDocument( QWidget* parentWidget, QObject* parent, bool singleVie
 
     KPrSoundCollection *soundCol = new KPrSoundCollection();
     insertIntoDataCenterMap("SoundCollection", soundCol);
+
+    loadKPrConfig();
 }
 
 KPrDocument::~KPrDocument()
 {
+    saveKPrConfig();
     delete m_customSlideShows;
 }
 
@@ -137,6 +143,27 @@ void KPrDocument::postRemoveShape( KoPAPageBase * page, KoShape * shape )
     }
 }
 
+void KPrDocument::loadKPrConfig()
+{
+    KSharedConfigPtr config = componentData().config();
+
+    if ( config->hasGroup( "SlideShow" ) ) {
+        KConfigGroup configGroup = config->group( "SlideShow" );
+        m_presentationMonitor = configGroup.readEntry<int>( "PresentationMonitor", 0 );
+        m_presenterViewEnabled = configGroup.readEntry<bool>( "PresenterViewEnabled", false );
+        m_presenterViewEnabled = false;
+    }
+}
+
+void KPrDocument::saveKPrConfig()
+{
+    KSharedConfigPtr config = componentData().config();
+    KConfigGroup configGroup = config->group( "SlideShow" );
+
+    configGroup.writeEntry( "PresentationMonitor", m_presentationMonitor );
+    configGroup.writeEntry( "PresenterViewEnabled", m_presenterViewEnabled );
+}
+
 KPrShapeAnimations & KPrDocument::animationsByPage( KoPAPageBase * page )
 {
     KPrAnimationController * controller = dynamic_cast<KPrAnimationController *>( page );
@@ -155,4 +182,25 @@ void KPrDocument::setCustomSlideShows( KPrCustomSlideShows* replacement )
     m_customSlideShows = replacement;
 }
 
+int KPrDocument::presentationMonitor()
+{
+    return m_presentationMonitor;
+}
+
+void KPrDocument::setPresentationMonitor( int monitor )
+{
+    m_presentationMonitor = monitor;
+}
+
+bool KPrDocument::isPresenterViewEnabled()
+{
+    return m_presenterViewEnabled;
+}
+
+void KPrDocument::setPresenterViewEnabled( bool enabled )
+{
+    m_presenterViewEnabled = enabled;
+}
+
 #include "KPrDocument.moc"
+

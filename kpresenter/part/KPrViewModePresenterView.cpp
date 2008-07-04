@@ -45,6 +45,7 @@
 #include <KoPAMasterPage.h>
 #include <KoPAView.h>
 
+#include "KPrDocument.h"
 #include "KPrPresenterViewTool.h"
 #include "KPrPresenterViewWidget.h"
 
@@ -119,10 +120,17 @@ void KPrViewModePresenterView::activate(KoPAViewMode *previousViewMode)
     QDesktopWidget desktop;
 
     if ( desktop.numScreens() > 1 ) {
-        int newscreen = 1; // hardcoded for now
+        KPrDocument *document = static_cast<KPrDocument *>( m_canvas->document() );
+        int presentationscreen = document->presentationMonitor();
+        int newscreen = 0;
 
-        // if ( desktop.screenNumber( m_savedParent) != 0 )
-        //    newscreen = 0;
+        if ( desktop.screenNumber( m_savedParent ) != presentationscreen ) {
+            // Try to put the widget on the same screen as the current view
+            newscreen = desktop.screenNumber( m_savedParent );
+        }
+        else {
+            newscreen = desktop.numScreens() - presentationscreen - 1; // What if we have > 2 screens?
+        }
 
         QRect rect = desktop.availableGeometry( newscreen );
         m_presenterViewWidget->move( rect.topLeft() );

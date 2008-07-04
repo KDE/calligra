@@ -33,6 +33,7 @@
 #include <KoPADocument.h>
 #include <KoPAView.h>
 
+#include "KPrDocument.h"
 #include "KPrPresentationTool.h"
 #include "KPrPresenterViewTool.h"
 #include "KPrViewModePresenterView.h"
@@ -149,10 +150,8 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     QDesktopWidget desktop;
 
     if ( desktop.numScreens() > 1 ) {
-        int newscreen = 0;
-
-        /* if ( desktop.screenNumber( m_savedParent ) != 0 )
-            newscreen = 0; */
+        KPrDocument *document = static_cast<KPrDocument *>( m_canvas->document() );
+        int newscreen = document->presentationMonitor();
 
         QRect rect = desktop.availableGeometry( newscreen );
         m_canvas->move( rect.topLeft() );

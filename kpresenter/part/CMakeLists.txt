@@ -59,10 +59,12 @@ set( kpresenterprivate_LIB_SRCS
      shapeanimations/KPrShapeAnimationRegistry.cpp
 
      ui/KPrCustomSlideShowsDialog.cpp
+     ui/KPrConfigureSlideShowDialog.cpp
    )
 
 kde4_add_ui_files(kpresenterprivate_LIB_SRCS
      ui/KPrCustomSlideShowsDialog.ui
+     ui/KPrConfigureSlideShow.ui
    )
 
 kde4_add_library(kpresenterprivate SHARED ${kpresenterprivate_LIB_SRCS})

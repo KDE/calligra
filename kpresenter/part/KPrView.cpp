@@ -46,6 +46,7 @@
 
 #include "KPrCustomSlideShows.h"
 #include "ui/KPrCustomSlideShowsDialog.h"
+#include "ui/KPrConfigureSlideShowDialog.h"
 #include <QDebug>
 #include <QtGui/QDesktopWidget>
 
@@ -133,6 +134,10 @@ void KPrView::initActions()
     m_actionCreateCustomSlideShowsDialog = new KAction( i18n( "Edit Custom Slide Shows..." ), this );
     actionCollection()->addAction( "edit_customslideshows", m_actionCreateCustomSlideShowsDialog );
     connect( m_actionCreateCustomSlideShowsDialog, SIGNAL( activated() ), this, SLOT( dialogCustomSlideShows() ) );
+
+    action = new KAction( i18n( "Configure Slide Show..." ), this );
+    actionCollection()->addAction( "settings_slideshow", action );
+    connect( action, SIGNAL( activated() ), this, SLOT( configureSlideShow() ) );
  
     KoPADocumentStructureDocker *docStructureDocker = documentStructureDocker();
     connect(docStructureDocker, SIGNAL(pageChanged(KoPAPageBase*)), this, SLOT(updateActivePage(KoPAPageBase*)));
@@ -140,21 +145,25 @@ void KPrView::initActions()
 
 void KPrView::startPresentation()
 {
-#if 0
-    // TODO: check for second monitor + read from config file
-    // Create a new view
-    KoMainWindow *shell = new KoMainWindow( m_doc->componentData() );
-    shell->setRootDocument( m_doc );
-    m_doc->addShell( shell );
-    shell->show();
+    KPrDocument *doc = static_cast<KPrDocument *>( m_doc );
+    bool presenterViewEnabled = doc->isPresenterViewEnabled();
+    if ( presenterViewEnabled ) {
+        // Create a new view
+        KoMainWindow *shell = new KoMainWindow( m_doc->componentData() );
+        shell->setRootDocument( m_doc );
+        m_doc->addShell( shell );
+        shell->show();
 
-    KPrView *view = dynamic_cast<KPrView *>( shell->rootView() );
-    Q_ASSERT( view );
-#endif
-    setViewMode( m_presentationMode );
-#if 0
-    view->activatePresenterView( this );
-#endif
+        KPrView *view = dynamic_cast<KPrView *>( shell->rootView() );
+        Q_ASSERT( view );
+
+        setViewMode( m_presentationMode );
+
+        view->activatePresenterView( this );
+    }
+    else {
+        setViewMode( m_presentationMode );
+    }
 }
 
 void KPrView::startPresentationFromBeginning()
@@ -220,6 +229,18 @@ void KPrView::dialogCustomSlideShows()
     else {
         delete finalSlideShows;
     }
+}
+
+void KPrView::configureSlideShow()
+{
+    KPrDocument *doc = static_cast<KPrDocument *>( m_doc );
+    KPrConfigureSlideShowDialog *dialog = new KPrConfigureSlideShowDialog( doc, this );
+
+    if ( dialog->exec() == QDialog::Accepted ) {
+        doc->setPresentationMonitor( dialog->presentationMonitor() );
+        doc->setPresenterViewEnabled( dialog->presenterViewEnabled() );
+    }
+    delete dialog;
 }
 
 #include "KPrView.moc"

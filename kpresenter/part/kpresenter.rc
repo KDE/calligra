@@ -53,6 +53,10 @@
         <Menu name="format"><text>F&amp;ormat</text>
             <Action name="format_masterpage"/> 
         </Menu>
+        <Menu name="settings"><text>&amp;Settings</text>
+            <Action name="settings_slideshow"/>
+            <Separator/>
+        </Menu>
         <Menu name="page">
             <Text>&amp;Page</Text>
             <Action name="page_insertpage"/>
