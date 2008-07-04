@@ -101,9 +101,9 @@ bool xBaseConnection::drv_useDatabase(const QString &dbName, bool *cancelled, Me
 }
 
 bool xBaseConnection::drv_closeDatabase() {
-	if (!d->internalConn)
+	if (!d->internalConn || !d->internalConn->closeDatabase() ) {
 		return false;
-	d->internalConn->closeDatabase();
+	}
 	return true;
 }
 

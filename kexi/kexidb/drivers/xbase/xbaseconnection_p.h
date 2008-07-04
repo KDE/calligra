@@ -64,6 +64,8 @@ class xBaseConnectionInternal : public KexiDB::ConnectionInternal
 
 		QPointer<KexiDB::Driver> internalDriver;
 		QPointer<KexiDB::Connection> internalConn;
+		QString tempDatabase;
+
 		QHash<QString,QString> dbMap;
 
 		QString errmsg; //!< server-specific message of last operation

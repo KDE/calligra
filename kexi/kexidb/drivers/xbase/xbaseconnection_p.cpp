@@ -5,7 +5,7 @@
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
    version 2 of the License, or (at your option) any later version.
-  
+
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
@@ -25,7 +25,7 @@
 #include <KTemporaryFile>
 
 #include "xbaseconnection_p.h"
-
+#include "xbaseexport.h"
 
 #include <kexidb/drivermanager.h>
 #include <kexidb/utils.h>
@@ -81,15 +81,16 @@ bool xBaseConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 		kDebug()<<"Couldn't create .kexi file for exporting from xBase to .kexi";
 		return false;
 	}
-	QString kexiFileName = temporaryKexiFile.fileName();
+
+        tempDatabase = temporaryKexiFile.fileName();
 
 	KexiDB::ConnectionData* kexiConnectionData = 0;
 	kexiConnectionData = new KexiDB::ConnectionData();
 
 	// set destination file name here.
 	kexiConnectionData->driverName = KexiDB::defaultFileBasedDriverName();
-	kexiConnectionData->setFileName( kexiFileName );
-	kDebug() << "Current file name: " << kexiFileName << endl;
+	kexiConnectionData->setFileName( tempDatabase );
+	kDebug() << "Current file name: " << tempDatabase << endl;
 
 
 	QString sourceDriverName = "xbase";
@@ -103,7 +104,7 @@ bool xBaseConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 
 	KexiMigration::Data* md = new KexiMigration::Data();
 	md->keepData = true;
-	md->destination = new KexiProjectData(*kexiConnectionData, kexiFileName);
+	md->destination = new KexiProjectData(*kexiConnectionData, tempDatabase);
 
 	// Setup XBase connection data from input connection data passed
 	//! TODO Check sanity of this
@@ -135,12 +136,18 @@ bool xBaseConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 		return false;
 	}
 
+        if (!internalConn->useDatabase(tempDatabase)) {
+                internalConn->debugError();
+                storeResult();
+                return false;
+        }
+
 	// store mapping from xbase directory to .kexi file name for future use
 	// Note: When a directory is specified ( as has to be done for xBase ), fileName()
 	// will give directory name with an additional forward slash. dbPath() won't do so.
 	// Need some more maintainable solution.
 
-	dbMap[data.fileName()] = kexiFileName;
+	dbMap[data.fileName()] = tempDatabase;
 
 	return true;
 }
@@ -149,9 +156,21 @@ bool xBaseConnectionInternal::db_connect(const KexiDB::ConnectionData& data)
 */
 bool xBaseConnectionInternal::db_disconnect(const KexiDB::ConnectionData& data)
 {
-	//! TODO Export back into xBase files
-	return true;
+	//! Export back to xBase
+	xBaseExport export2xBase;
+	KexiMigration::Data* migrateData = new KexiMigration::Data();
+	migrateData->source = internalConn->data();
+	migrateData->sourceName = tempDatabase;
+	migrateData->destination = new KexiProjectData( data );
+	migrateData->keepData = true;
 
+	export2xBase.setData( migrateData );
+
+	if (!export2xBase.performExport()) {
+		return false;
+	}
+
+	return internalConn->disconnect();
 }
 
 /* ************************************************************************** */
