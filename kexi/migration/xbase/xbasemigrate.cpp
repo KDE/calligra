@@ -263,7 +263,6 @@ bool xBaseMigrate::drv_copyTable(const QString& srcTable, KexiDB::Connection *de
 						tableDbf->LockMemoFile( F_SETLK, F_UNLCK );
 					#endif
 
-					delete[] memoBuffer;
 					break;
 				#else
 					kDebug()<<"XB_MEMO_FIELDS support disabled during compilation of XBase libraries";
