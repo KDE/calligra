@@ -79,6 +79,7 @@ void KexiComboBoxDropDownButton::styleChange( QStyle & oldStyle )
 	//</hack>
 	m_drawComplexControl =
 		(style().inherits("KStyle") && qstricmp(style().name(),"qtcurve")!=0)
+//! @todo add || qstricmp(style().name(),"mandriva")!=0 ?  see http://bugs.kde.org/show_bug.cgi?id=153330
 		|| qstricmp(style().name(),"platinum")==0;
 	if (m_fixForHeight==0)
 		setFixedWidth( style().querySubControlMetrics( QStyle::CC_ComboBox, 
