@@ -215,6 +215,7 @@ double PrintManager::zoom() const
 
 QSizeF PrintManager::size(int page) const
 {
+    Q_UNUSED(page);
     const QSizeF size(d->printWidth(), d->printHeight());
     return (size / d->zoom + QSizeF(0.5, 0.5)).toSize();
 }
