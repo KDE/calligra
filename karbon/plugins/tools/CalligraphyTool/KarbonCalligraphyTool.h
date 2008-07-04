@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef _KARBONCALLIGRAPHYTOOL_H_
-#define _KARBONCALLIGRAPHYTOOL_H_
+#ifndef KARBONCALLIGRAPHYTOOL_H
+#define KARBONCALLIGRAPHYTOOL_H
 
 #include <KoTool.h>
 #include <KoPathShape.h>
@@ -75,4 +75,4 @@ private:
     QPointF m_speed; // used as a vector
 };
 
-#endif // _KARBONCALLIGRAPHYTOOL_H_
+#endif // KARBONCALLIGRAPHYTOOL_H

@@ -19,6 +19,7 @@
 
 #include "KarbonCalligraphyTool.h"
 #include "KarbonCalligraphicShape.h"
+#include "KarbonCalligraphyOptionWidget.h"
 
 #include <KoPathShape.h>
 #include <KoShapeGroup.h>
@@ -32,16 +33,7 @@
 #include <KarbonCurveFit.h>
 #include <KoColorBackground.h>
 
-#include <knuminput.h>
-#include <klocale.h>
-#include <kcombobox.h>
-
-#include <QtGui/QStackedWidget>
-#include <QtGui/QGroupBox>
-#include <QtGui/QCheckBox>
-#include <QtGui/QVBoxLayout>
 #include <QtGui/QPainter>
-#include <QtGui/QLabel>
 
 #include <cmath>
 
@@ -52,9 +44,7 @@ using std::sqrt;
 
 
 KarbonCalligraphyTool::KarbonCalligraphyTool(KoCanvasBase *canvas)
-    : KoTool( canvas ), m_shape( 0 ), m_strokeWidth( 50 ), m_angle( M_PI/6.0 ),
-      m_fixation( 0.0 ), m_thinning( 0.0 ), m_mass( 17.0 ), m_drag( 1.0 ),
-      m_isDrawing( false ), m_speed(0, 0)
+    : KoTool( canvas ), m_shape( 0 ), m_isDrawing( false ), m_speed(0, 0)
 {
 }
 
@@ -219,86 +209,29 @@ void KarbonCalligraphyTool::deactivate()
 
 QWidget *KarbonCalligraphyTool::createOptionWidget()
 {
-    QWidget *optionWidget = new QWidget();
-    QVBoxLayout *layout = new QVBoxLayout( optionWidget );
+    KarbonCalligraphyOptionWidget *widget = new KarbonCalligraphyOptionWidget;
 
-    QHBoxLayout *widthLayout = new QHBoxLayout( optionWidget );
-    QLabel *widthLabel = new QLabel( i18n( "Width" ), optionWidget );
-    QDoubleSpinBox *widthBox = new QDoubleSpinBox;
-    widthBox->setRange( 0.0, 1000.0 );
-    widthBox->setValue( m_strokeWidth );
-    widthLayout->addWidget( widthLabel );
-    widthLayout->addWidget( widthBox );
-    layout->addLayout( widthLayout );
-
-    QHBoxLayout *thinningLayout = new QHBoxLayout( optionWidget );
-    QLabel *thinningLabel = new QLabel( i18n( "Thinning" ), optionWidget );
-    QDoubleSpinBox *thinningBox = new QDoubleSpinBox;
-    thinningBox->setRange( -1.0, 1.0 );
-    thinningBox->setSingleStep( 0.1 );
-    thinningBox->setValue( m_thinning*2.0 );
-    thinningLayout->addWidget( thinningLabel );
-    thinningLayout->addWidget( thinningBox );
-    layout->addLayout( thinningLayout );
-
-    QHBoxLayout *angleLayout = new QHBoxLayout( optionWidget );
-    QLabel *angleLabel = new QLabel( i18n( "Angle" ), optionWidget );
-    QSpinBox *angleBox = new QSpinBox;
-    angleBox->setRange( 0, 180 );
-    angleBox->setValue( m_angle*180/M_PI );
-    angleLayout->addWidget( angleLabel );
-    angleLayout->addWidget( angleBox );
-    layout->addLayout( angleLayout );
-
-    QHBoxLayout *fixationLayout = new QHBoxLayout( optionWidget );
-    QLabel *fixationLabel = new QLabel( i18n( "Fixation" ), optionWidget );
-    QDoubleSpinBox *fixationBox = new QDoubleSpinBox;
-    fixationBox->setRange( 0.0, 1.0 );
-    fixationBox->setSingleStep( 0.1 );
-    fixationBox->setValue( m_fixation );
-    fixationLayout->addWidget( fixationLabel );
-    fixationLayout->addWidget( fixationBox );
-    layout->addLayout( fixationLayout );
-
-    QHBoxLayout *massLayout = new QHBoxLayout( optionWidget );
-    QLabel *massLabel = new QLabel( i18n( "Mass" ), optionWidget );
-    QDoubleSpinBox *massBox = new QDoubleSpinBox;
-    massBox->setRange( 0.0, 20.0 );
-    massBox->setDecimals(1);
-    massBox->setValue( sqrt(m_mass - 1) );
-    massLayout->addWidget( massLabel );
-    massLayout->addWidget( massBox );
-    layout->addLayout( massLayout );
-
-    QHBoxLayout *dragLayout = new QHBoxLayout( optionWidget );
-    QLabel *dragLabel = new QLabel( i18n( "Drag" ), optionWidget );
-    QDoubleSpinBox *dragBox = new QDoubleSpinBox;
-    dragBox->setRange( 0.0, 1.0 );
-    dragBox->setSingleStep( 0.1 );
-    dragBox->setValue( m_drag );
-    dragLayout->addWidget( dragLabel );
-    dragLayout->addWidget( dragBox );
-    layout->addLayout( dragLayout );
-
-    connect( widthBox, SIGNAL(valueChanged(double)),
+    connect( widget, SIGNAL(widthChanged(double)),
              this, SLOT(setStrokeWidth(double)));
 
-    connect( thinningBox, SIGNAL(valueChanged(double)),
+    connect( widget, SIGNAL(thinningChanged(double)),
              this, SLOT(setThinning(double)));
 
-    connect( angleBox, SIGNAL(valueChanged(int)),
+    connect( widget, SIGNAL(angleChanged(int)),
              this, SLOT(setAngle(int)));
 
-    connect( fixationBox, SIGNAL(valueChanged(double)),
+    connect( widget, SIGNAL(fixationChanged(double)),
              this, SLOT(setFixation(double)));
 
-    connect( massBox, SIGNAL(valueChanged(double)),
+    connect( widget, SIGNAL(massChanged(double)),
              this, SLOT(setMass(double)));
 
-    connect( dragBox, SIGNAL(valueChanged(double)),
+    connect( widget, SIGNAL(dragChanged(double)),
              this, SLOT(setDrag(double)));
 
-    return optionWidget;
+    widget->emitAll();
+
+    return widget;
 }
 
 void KarbonCalligraphyTool::setStrokeWidth( double width )

@@ -163,7 +163,7 @@ void KarbonSimplifyPath::mergeSubpaths( QList<KoSubpath *> subpaths,
         {
             KoPathPoint *point = (*subpaths[si])[pi];
             path->lineTo( point->point() );
-            
+
             // if the point isn't the last thus has control points
             if ( pi != subpaths[si]->size()-1 )
             {
