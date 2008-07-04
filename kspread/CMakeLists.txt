@@ -193,6 +193,7 @@ SET (kspreadcommon_LIB_SRCS
 	NamedAreaManager.cpp
 	Number.cpp
 # 	Object.cpp
+	PageManager.cpp
 	PrintManager.cpp
 	PrintSettings.cpp
 # 	PropertyEditor.cpp

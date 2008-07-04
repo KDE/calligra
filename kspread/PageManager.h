@@ -17,14 +17,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_PRINT_MANAGER
-#define KSPREAD_PRINT_MANAGER
+#ifndef KSPREAD_PAGE_MANAGER
+#define KSPREAD_PAGE_MANAGER
 
-#include "PageManager.h"
-
-class QPainter;
-class QPrinter;
 class QRect;
+class QSizeF;
 
 namespace KSpread
 {
@@ -34,26 +31,55 @@ class Sheet;
 /**
  * Manages printing on the sheet level.
  */
-class PrintManager : public PageManager
+class PageManager
 {
 public:
     /**
      * Constructor.
      */
-    PrintManager(Sheet* sheet);
+    PageManager(Sheet* sheet);
 
     /**
      * Destructor.
      */
-    virtual ~PrintManager();
+    virtual ~PageManager();
 
-    void printPage(int page, QPainter& painter);
+    /**
+     * Layouts the pages.
+     * Splits the used cell range, so that it fits on several pages.
+     */
+    void layoutPages();
 
-    double zoom() const;
+    /**
+     * Sets the print settings.
+     * If the settings differ from the existing ones, the pages are recreated.
+     * \param settings the print settings
+     * \param force forces a recreation of the pages, if \c true
+     */
+    void setPrintSettings(const PrintSettings& settings, bool force = false);
 
+    /**
+     * Number of pages.
+     */
+    int pageCount() const;
+
+    /**
+     * Return the cell range of the requested page.
+     * \param page the page number
+     * \return the page's cell range
+     */
+    QRect cellRange(int page) const;
+
+    /**
+     * Return the visible size, the page size decreased by the borders, of the requested page.
+     * \param page the page number
+     * \return the page's visible size
+     */
     virtual QSizeF size(int page) const;
 
 protected:
+    Sheet* sheet() const;
+    const PrintSettings& printSettings() const;
     virtual bool pageNeedsPrinting(const QRect& cellRange) const;
 
 private:
@@ -63,4 +89,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_PRINT_MANAGER
+#endif // KSPREAD_PAGE_MANAGER

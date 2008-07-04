@@ -36,14 +36,12 @@ using namespace KSpread;
 class PrintManager::Private
 {
 public:
-    Sheet* sheet;
+    Private(PrintManager* const parent) : q(parent) {}
+
     SheetView* sheetView;
-    QMap<int, QRect> pages; // page number to cell range
-    PrintSettings settings;
     double zoom;
 
 public:
-    void calculatePages();
     void printPage(int page, QPainter&) const;
     bool pageNeedsPrinting(const QRect& cellRange) const;
     void setZoomFactor();
@@ -51,145 +49,18 @@ public:
     double printWidth() const;
     /// Takes the repeated rows into account.
     double printHeight() const;
+
+private:
+    PrintManager* const q;
 };
-
-void PrintManager::Private::calculatePages()
-{
-    pages.clear();
-    int pageNumber = 1;
-    const double printWidth = qRound(this->printWidth() / zoom + 0.5);
-    const double printHeight = qRound(this->printHeight() / zoom + 0.5);
-//     kDebug() << "printWidth" << printWidth << "printHeight" << printHeight;
-
-    if (settings.pageOrder() == PrintSettings::LeftToRight)
-    {
-//         kDebug() << "processing printRanges" << settings.printRegion();
-        // iterate over the print ranges
-        Region::ConstIterator end = settings.printRegion().constEnd();
-        for (Region::ConstIterator it = settings.printRegion().constBegin(); it != end; ++it)
-        {
-            if (!(*it)->isValid())
-                continue;
-
-            // limit the print range to the used area
-            const QRect printRange = (*it)->rect() & sheet->usedArea();
-//             kDebug() << "processing printRange" << printRange;
-
-            int rows = 0;
-            double height = 0.0;
-            for (int row = printRange.top(); row <= printRange.bottom(); ++row)
-            {
-                rows++;
-                height += sheet->rowFormat(row)->visibleHeight();
-
-                // 1. find the number of rows per page
-                if (row == printRange.bottom()) // always iterate over the last 'page row'
-                    ;
-                else if (height + sheet->rowFormat(row + 1)->visibleHeight() <= printHeight)
-                    continue;
-
-//                 kDebug() << "1. done: row" << row << "rows" << rows << "height" << height;
-
-                int columns = 0;
-                double width = 0.0;
-                // 2. iterate over the columns and create the pages
-                for (int col = printRange.left(); col < printRange.right(); ++col)
-                {
-                    columns++;
-                    width += sheet->columnFormat(col)->visibleWidth();
-
-                    // Does the next column fit too?
-                    if (width + sheet->columnFormat(col + 1)->visibleWidth() <= printWidth)
-                        continue;
-
-//                     kDebug() << "col" << col << "columns" << columns << "width" << width;
-                    const QRect cellRange(col - columns + 1, row - rows + 1, columns, rows);
-                    if (pageNeedsPrinting(cellRange))
-                        pages.insert(pageNumber++, cellRange);
-                    columns = 0;
-                    width = 0.0;
-                }
-                // Always insert a page for the last column
-                columns++;
-                const QRect cellRange(printRange.right() - columns + 1, row - rows + 1, columns, rows);
-                if (pageNeedsPrinting(cellRange))
-                    pages.insert(pageNumber++, cellRange);
-
-                // 3. prepare for the next row of pages
-                rows = 0;
-                height = 0.0;
-            }
-        }
-    }
-    else // if (settings.pageOrder() == PrintSettings::TopToBottom)
-    {
-//         kDebug() << "processing printRanges" << settings.printRegion();
-        // iterate over the print ranges
-        Region::ConstIterator end = settings.printRegion().constEnd();
-        for (Region::ConstIterator it = settings.printRegion().constBegin(); it != end; ++it)
-        {
-            if (!(*it)->isValid())
-                continue;
-
-            // limit the print range to the used area
-            const QRect printRange = (*it)->rect() & sheet->usedArea();
-            kDebug() << "processing printRange" << printRange;
-
-            int columns = 0;
-            double width = 0.0;
-            for (int col = printRange.left(); col <= printRange.right(); ++col)
-            {
-                columns++;
-                width += sheet->columnFormat(col)->visibleWidth();
-
-                // 1. find the number of columns per page
-                if (col == printRange.right()) // always iterate over the last 'page column'
-                    ;
-                else if (width + sheet->columnFormat(col + 1)->visibleWidth() <= printWidth)
-                    continue;
-
-//                 kDebug() << "1. done: col" << col << "columns" << columns << "width" << width;
-
-                int rows = 0;
-                double height = 0.0;
-                // 2. iterate over the rows and create the pages
-                for (int row = printRange.top(); row < printRange.bottom(); ++row)
-                {
-                    rows++;
-                    height += sheet->rowFormat(row)->visibleHeight();
-
-                    // Does the next row fit too?
-                    if (height + sheet->rowFormat(row + 1)->visibleHeight() <= printHeight)
-                        continue;
-
-//                     kDebug() << "row" << row << "rows" << rows << "height" << height;
-                    const QRect cellRange(col - columns + 1, row - rows + 1, columns, rows);
-                    if (pageNeedsPrinting(cellRange))
-                        pages.insert(pageNumber++, cellRange);
-                    rows = 0;
-                    height = 0.0;
-                }
-                // Always insert a page for the last row
-                rows++;
-                const QRect cellRange(col - columns + 1, printRange.bottom() - rows + 1, columns, rows);
-                if (pageNeedsPrinting(cellRange))
-                    pages.insert(pageNumber++, cellRange);
-
-                // 3. prepare for the next column of pages
-                columns = 0;
-                width = 0.0;
-            }
-        }
-    }
-    kDebug() << pages.count() << "page(s) created";
-}
 
 void PrintManager::Private::printPage(int page, QPainter& painter) const
 {
+    const Sheet* sheet = q->sheet();
     kDebug() << "printing page" << page;
     painter.save();
 
-    const QRect cellRange = pages[page];
+    const QRect cellRange = q->cellRange(page);
 
     QPointF topLeft(0.0, 0.0);
 
@@ -208,6 +79,7 @@ void PrintManager::Private::printPage(int page, QPainter& painter) const
 
 bool PrintManager::Private::pageNeedsPrinting(const QRect& cellRange) const
 {
+    const Sheet* sheet = q->sheet();
     // TODO Stefan: Is there a better, faster approach?
     for (int row = cellRange.top(); row <= cellRange.bottom() ; ++row)
         for (int col = cellRange.left(); col <= cellRange.right(); ++col)
@@ -224,6 +96,8 @@ bool PrintManager::Private::pageNeedsPrinting(const QRect& cellRange) const
 
 void PrintManager::Private::setZoomFactor()
 {
+    const Sheet* sheet = q->sheet();
+    const PrintSettings settings = q->printSettings();
     const QSize pageLimits = settings.pageLimits();
 
     // if there are no page limits, take the usual zoom factor
@@ -256,6 +130,8 @@ void PrintManager::Private::setZoomFactor()
 
 double PrintManager::Private::printWidth() const
 {
+    const Sheet* sheet = q->sheet();
+    const PrintSettings settings = q->printSettings();
     double width = settings.printWidth();
     const QPair<int, int> repeatedColumns = settings.repeatedColumns();
     if (repeatedColumns.first > 0)
@@ -270,6 +146,8 @@ double PrintManager::Private::printWidth() const
 
 double PrintManager::Private::printHeight() const
 {
+    const Sheet* sheet = q->sheet();
+    const PrintSettings settings = q->printSettings();
     double height = settings.printHeight();
     const QPair<int, int> repeatedRows = settings.repeatedRows();
     if (repeatedRows.first > 0)
@@ -284,11 +162,10 @@ double PrintManager::Private::printHeight() const
 
 
 PrintManager::PrintManager(Sheet* sheet)
-    : d(new Private)
+    : PageManager(sheet)
+    , d(new Private(this))
 {
-    d->sheet = sheet;
     d->sheetView = new SheetView(sheet);
-    d->settings = *sheet->printSettings();
     d->setZoomFactor();
 }
 
@@ -298,19 +175,10 @@ PrintManager::~PrintManager()
     delete d;
 }
 
-void PrintManager::setPrintSettings(const PrintSettings& settings, bool force)
-{
-    if (!force && settings == d->settings)
-        return;
-    kDebug() << (d->pages.isEmpty() ? "Creating" : "Recreating") << "pages...";
-    d->settings = settings;
-    d->calculatePages();
-}
-
 void PrintManager::printPage(int page, QPainter& painter)
 {
-    const KoPageLayout pageLayout = d->settings.pageLayout();
-    kDebug() << "page's cell range" << d->pages[page];
+    const KoPageLayout pageLayout = printSettings().pageLayout();
+    kDebug() << "page's cell range" << cellRange(page);
 
     // setup the QPainter
     painter.save();
@@ -323,36 +191,35 @@ void PrintManager::printPage(int page, QPainter& painter)
     d->sheetView->setViewConverter(&zoomHandler);
 
     // save and set painting flags
-    const bool grid = d->sheet->getShowGrid();
-    const bool commentIndicator = d->sheet->getShowCommentIndicator();
-    const bool formulaIndicator = d->sheet->getShowFormulaIndicator();
-    d->sheet->setShowGrid(d->settings.printGrid());
-    d->sheet->setShowCommentIndicator(d->settings.printCommentIndicator());
-    d->sheet->setShowFormulaIndicator(d->settings.printFormulaIndicator());
+    const bool grid = sheet()->getShowGrid();
+    const bool commentIndicator = sheet()->getShowCommentIndicator();
+    const bool formulaIndicator = sheet()->getShowFormulaIndicator();
+    sheet()->setShowGrid(printSettings().printGrid());
+    sheet()->setShowCommentIndicator(printSettings().printCommentIndicator());
+    sheet()->setShowFormulaIndicator(printSettings().printFormulaIndicator());
 
     // print the page
     d->printPage(page, painter);
 
     // restore painting flags
-    d->sheet->setShowGrid(grid);
-    d->sheet->setShowCommentIndicator(commentIndicator);
-    d->sheet->setShowFormulaIndicator(formulaIndicator);
+    sheet()->setShowGrid(grid);
+    sheet()->setShowCommentIndicator(commentIndicator);
+    sheet()->setShowFormulaIndicator(formulaIndicator);
     painter.restore();
-}
-
-int PrintManager::pageCount() const
-{
-    return d->pages.count();
-}
-
-QRect PrintManager::cellRange(int page) const
-{
-    if (page < 1 || page > d->pages.count())
-        return QRect();
-    return d->pages[page];
 }
 
 double PrintManager::zoom() const
 {
     return d->zoom;
+}
+
+QSizeF PrintManager::size(int page) const
+{
+    const QSizeF size(d->printWidth(), d->printHeight());
+    return (size / d->zoom + QSizeF(0.5, 0.5)).toSize();
+}
+
+bool PrintManager::pageNeedsPrinting(const QRect& cellRange) const
+{
+    return d->pageNeedsPrinting(cellRange);
 }
