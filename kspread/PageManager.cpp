@@ -101,10 +101,9 @@ void PageManager::layoutPages()
                     const QRect cellRange(col - columns + 1, row - rows + 1, columns, rows);
                     if (pageNeedsPrinting(cellRange)) {
                         d->pages.append(cellRange);
-                        insertPage(pageNumber);
-                        pageNumber++;
+                        insertPage(pageNumber++);
+                        preparePage(pageNumber); // prepare the next page
                     }
-                    preparePage(pageNumber);
                     columns = 0;
                     width = 0.0;
                 }
@@ -171,10 +170,9 @@ void PageManager::layoutPages()
                     const QRect cellRange(col - columns + 1, row - rows + 1, columns, rows);
                     if (pageNeedsPrinting(cellRange)) {
                         d->pages.append(cellRange);
-                        insertPage(pageNumber);
-                        pageNumber++;
+                        insertPage(pageNumber++);
+                        preparePage(pageNumber); // prepare the next page
                     }
-                    preparePage(pageNumber);
                     rows = 0;
                     height = 0.0;
                 }
