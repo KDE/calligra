@@ -151,7 +151,6 @@ void KPrDocument::loadKPrConfig()
         KConfigGroup configGroup = config->group( "SlideShow" );
         m_presentationMonitor = configGroup.readEntry<int>( "PresentationMonitor", 0 );
         m_presenterViewEnabled = configGroup.readEntry<bool>( "PresenterViewEnabled", false );
-        m_presenterViewEnabled = false;
     }
 }
 
