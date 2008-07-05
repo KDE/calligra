@@ -15,6 +15,7 @@ set(kplatomodels_LIB_SRCS
     kcalendar/kdatepicker.cpp
     
     kptabstractchartmodel.cpp
+    kptnodechartmodel.cpp
     
     kptrelationmodel.cpp
     kptworkpackagemodel.cpp
