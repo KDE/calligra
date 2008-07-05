@@ -42,6 +42,8 @@
 #include "dockers/KPrPageEffectDockerFactory.h"
 #include "dockers/KPrClickActionDocker.h"
 #include "dockers/KPrClickActionDockerFactory.h"
+#include "dockers/KPrPageLayoutDockerFactory.h"
+#include "dockers/KPrPageLayoutDocker.h"
 #include "shapeanimations/KPrAnimationMoveAppear.h"
 
 #include "KPrCustomSlideShows.h"
@@ -80,18 +82,21 @@ void KPrView::updateActivePage(KoPAPageBase *page)
 }
 
 void KPrView::initGUI()
-{ 
+{
     // add page effect docker to the main window
     KPrPageEffectDockerFactory factory;
-    KPrPageEffectDocker* docker;
-    docker = qobject_cast<KPrPageEffectDocker*>( createDockWidget( &factory ) );
+    KPrPageEffectDocker *docker = qobject_cast<KPrPageEffectDocker*>( createDockWidget( &factory ) );
     docker->setView( this );
 
-    // add page effect docker to the main window
+    // add action event docker to the main window
     KPrClickActionDockerFactory clickActionFactory;
-    KPrClickActionDocker *clickActionDocker;
-    clickActionDocker = qobject_cast<KPrClickActionDocker*>( createDockWidget( &clickActionFactory ) );
+    KPrClickActionDocker *clickActionDocker = qobject_cast<KPrClickActionDocker*>( createDockWidget( &clickActionFactory ) );
     clickActionDocker->setView( this );
+
+    // add page effect docker to the main window
+    KPrPageLayoutDockerFactory pageLayoutFactory;
+    KPrPageLayoutDocker *pageLayoutDocker = qobject_cast<KPrPageLayoutDocker*>( createDockWidget( &pageLayoutFactory ) );
+    pageLayoutDocker->setView( this );
 }
 
 void KPrView::initActions()
