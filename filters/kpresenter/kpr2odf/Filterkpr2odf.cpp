@@ -504,6 +504,7 @@ void Filterkpr2odf::appendLine( KoXmlWriter* content, const KoXmlElement& object
     {
         content->addAttribute( "draw:name", nameString );
     }
+    content->endElement();//draw:line
 }
 
 const QString Filterkpr2odf::getPictureNameFromKey( const KoXmlElement& key )
