@@ -2,11 +2,13 @@ include_directories(
 	${CMAKE_SOURCE_DIR}/kspread
 	${CMAKE_SOURCE_DIR}/kspread/ui
 	${KOGUIUTILS_INCLUDES}
+	${KOTEXT_INCLUDES}
 	)
 
 ########### Flake Plugin library ###############
 
 SET (tableshape_LIB_SRCS
+    TablePageManager.cpp
     TableShape.cpp
     TableShapeFactory.cpp
     TableTool.cpp
@@ -16,7 +18,7 @@ SET (tableshape_LIB_SRCS
 
 kde4_add_plugin(spreadsheetshape ${tableshape_LIB_SRCS})
 
-target_link_libraries(spreadsheetshape kspreadcommon flake)
+target_link_libraries(spreadsheetshape kspreadcommon flake kotext)
 install(TARGETS spreadsheetshape DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### install files ###############

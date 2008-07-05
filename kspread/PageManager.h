@@ -20,6 +20,8 @@
 #ifndef KSPREAD_PAGE_MANAGER
 #define KSPREAD_PAGE_MANAGER
 
+#include "kspread_export.h"
+
 class QRect;
 class QSizeF;
 
@@ -31,7 +33,7 @@ class Sheet;
 /**
  * Manages printing on the sheet level.
  */
-class PageManager
+class KSPREAD_EXPORT PageManager
 {
 public:
     /**
@@ -80,7 +82,10 @@ public:
 protected:
     Sheet* sheet() const;
     const PrintSettings& printSettings() const;
+    virtual void clearPages();
     virtual bool pageNeedsPrinting(const QRect& cellRange) const;
+    virtual void insertPage(int page);
+    virtual void preparePage(int page);
 
 private:
     class Private;

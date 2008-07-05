@@ -67,6 +67,11 @@ public:
      */
     void setSheet(const QString& sheetName);
 
+    void setVisibleCellRange(const QRect& cellRange);
+
+protected:
+    virtual void shapeChanged(ChangeType type);
+
 private Q_SLOTS:
     void handleDamages( const QList<Damage*>& damages );
 

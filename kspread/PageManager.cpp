@@ -30,7 +30,7 @@ class PageManager::Private
 {
 public:
     Sheet* sheet;
-    QMap<int, QRect> pages; // page number to cell range
+    QList<QRect> pages; // page number to cell range
     PrintSettings settings;
 };
 
@@ -52,7 +52,9 @@ void PageManager::layoutPages()
     const Sheet* sheet = d->sheet;
     const PrintSettings settings = d->settings;
     d->pages.clear();
+    clearPages();
     int pageNumber = 1;
+    preparePage(pageNumber);
 
     if (settings.pageOrder() == PrintSettings::LeftToRight)
     {
@@ -97,18 +99,28 @@ void PageManager::layoutPages()
 
 //                     kDebug() << "col" << col << "columns" << columns << "width" << width;
                     const QRect cellRange(col - columns + 1, row - rows + 1, columns, rows);
-                    if (pageNeedsPrinting(cellRange))
-                        d->pages.insert(pageNumber++, cellRange);
+                    if (pageNeedsPrinting(cellRange)) {
+                        d->pages.append(cellRange);
+                        insertPage(pageNumber);
+                        pageNumber++;
+                    }
+                    preparePage(pageNumber);
                     columns = 0;
                     width = 0.0;
                 }
                 // Always insert a page for the last column
                 columns++;
                 const QRect cellRange(printRange.right() - columns + 1, row - rows + 1, columns, rows);
-                if (pageNeedsPrinting(cellRange))
-                    d->pages.insert(pageNumber++, cellRange);
+                if (pageNeedsPrinting(cellRange)) {
+                    d->pages.append(cellRange);
+                    insertPage(pageNumber);
+                    pageNumber++;
+                }
 
                 // 3. prepare for the next row of pages
+                if (row != printRange.bottom()) {
+                    preparePage(pageNumber);
+                }
                 rows = 0;
                 height = 0.0;
             }
@@ -157,18 +169,28 @@ void PageManager::layoutPages()
 
 //                     kDebug() << "row" << row << "rows" << rows << "height" << height;
                     const QRect cellRange(col - columns + 1, row - rows + 1, columns, rows);
-                    if (pageNeedsPrinting(cellRange))
-                        d->pages.insert(pageNumber++, cellRange);
+                    if (pageNeedsPrinting(cellRange)) {
+                        d->pages.append(cellRange);
+                        insertPage(pageNumber);
+                        pageNumber++;
+                    }
+                    preparePage(pageNumber);
                     rows = 0;
                     height = 0.0;
                 }
                 // Always insert a page for the last row
                 rows++;
                 const QRect cellRange(col - columns + 1, printRange.bottom() - rows + 1, columns, rows);
-                if (pageNeedsPrinting(cellRange))
-                    d->pages.insert(pageNumber++, cellRange);
+                if (pageNeedsPrinting(cellRange)) {
+                    d->pages.append(cellRange);
+                    insertPage(pageNumber);
+                    pageNumber++;
+                }
 
                 // 3. prepare for the next column of pages
+                if (col != printRange.right()) {
+                    preparePage(pageNumber);
+                }
                 columns = 0;
                 width = 0.0;
             }
@@ -195,14 +217,14 @@ QRect PageManager::cellRange(int page) const
 {
     if (page < 1 || page > d->pages.count())
         return QRect();
-    return d->pages[page];
+    return d->pages[page - 1];
 }
 
 QSizeF PageManager::size(int page) const
 {
     if (page < 1 || page > d->pages.count())
         return QSizeF();
-    return QSizeF(d->settings.printWidth(), d->settings.printHeight());
+    return QSizeF(d->settings.printWidth() + 0.5, d->settings.printHeight() + 0.5); // FIXME
 }
 
 Sheet* PageManager::sheet() const
@@ -215,8 +237,22 @@ const PrintSettings& PageManager::printSettings() const
     return d->settings;
 }
 
+void PageManager::clearPages()
+{
+}
+
 bool PageManager::pageNeedsPrinting(const QRect& cellRange) const
 {
     Q_UNUSED(cellRange);
     return true;
+}
+
+void PageManager::insertPage(int page)
+{
+    Q_UNUSED(page);
+}
+
+void PageManager::preparePage(int page)
+{
+    Q_UNUSED(page);
 }

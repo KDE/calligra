@@ -20,6 +20,8 @@
 // Local
 #include "TableShape.h"
 
+#include "TablePageManager.h"
+
 #include <QPainter>
 
 #include <kdebug.h>
@@ -36,6 +38,7 @@
 #include <Map.h>
 #include <OdfLoadingContext.h>
 #include <OdfSavingContext.h>
+#include <PrintSettings.h>
 #include <Region.h>
 #include <RowColumnFormat.h>
 #include <Sheet.h>
@@ -50,6 +53,8 @@ public:
     int         columns;
     int         rows;
     SheetView*  sheetView;
+    bool        isMaster;
+    TablePageManager* pageManager;
 
 public:
     void adjustColumnDimensions(Sheet* sheet, double factor);
@@ -81,10 +86,13 @@ TableShape::TableShape( int columns, int rows )
     d->columns = columns;
     d->rows = rows;
     d->sheetView = 0;
+    d->isMaster = false;
+    d->pageManager = 0;
 }
 
 TableShape::~TableShape()
 {
+    delete d->pageManager;
     delete d->sheetView;
     if (KoShape::userData()) {
         map()->removeSheet(qobject_cast<Sheet*>(KoShape::userData())); // declare the sheet as deleted
@@ -109,6 +117,9 @@ void TableShape::setColumns( int columns )
     d->columns = columns;
     d->adjustColumnDimensions(qobject_cast<Sheet*>(KoShape::userData()), factor);
     d->sheetView->invalidate();
+    PrintSettings settings = *sheet()->printSettings();
+    settings.setPrintRegion(Region(1, 1, d->columns, d->rows, sheet()));
+    d->pageManager->setPrintSettings(settings);
 }
 
 void TableShape::setRows( int rows )
@@ -118,6 +129,9 @@ void TableShape::setRows( int rows )
     d->rows = rows;
     d->adjustRowDimensions(qobject_cast<Sheet*>(KoShape::userData()), factor);
     d->sheetView->invalidate();
+    PrintSettings settings = *sheet()->printSettings();
+    settings.setPrintRegion(Region(1, 1, d->columns, d->rows, sheet()));
+    d->pageManager->setPrintSettings(settings);
 }
 
 void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
@@ -131,7 +145,6 @@ void TableShape::paint( QPainter& painter, const KoViewConverter& converter )
     painter.setClipRect( paintRect, Qt::IntersectClip );
 
     // painting cell contents
-    d->sheetView->setPaintCellRange( QRect( 1, 1, d->columns, d->rows ) );
     d->sheetView->setPaintDevice( painter.device() );
     d->sheetView->setViewConverter( &converter );
     d->sheetView->paintCells( 0 /*paintDevice*/, painter, paintRect, QPointF( 0.0, 0.0 ) );
@@ -206,6 +219,8 @@ void TableShape::init(QMap<QString, KoDataCenter*> dataCenterMap)
     Sheet* const sheet = map->addNewSheet();
     d->sheetView = new SheetView(sheet);
     KoShape::setUserData(sheet);
+    d->isMaster = true;
+    setVisibleCellRange(QRect(1, 1, d->columns, d->rows));
 
     connect(map, SIGNAL(damagesFlushed(const QList<Damage*>&)),
             this, SLOT(handleDamages(const QList<Damage*>&)));
@@ -273,7 +288,35 @@ void TableShape::setSheet(const QString& sheetName)
     KoShape::setUserData(sheet);
     setColumns(d->columns);
     setRows(d->rows);
+    setVisibleCellRange(QRect(1, 1, d->columns, d->rows));
     update();
+}
+
+void TableShape::setVisibleCellRange(const QRect& cellRange)
+{
+    Q_ASSERT(KoShape::userData());
+    if (!d->sheetView) {
+        d->sheetView = new SheetView(sheet());
+    }
+    d->sheetView->setPaintCellRange(cellRange & QRect(1, 1, d->columns, d->rows));
+}
+
+void TableShape::shapeChanged(ChangeType type)
+{
+    // If this is a master table shape, the parent changed and we have no parent yet...
+    if (d->isMaster && type == ParentChanged && !d->pageManager) {
+        d->pageManager = new TablePageManager(this);
+        return;
+    }
+    // Not the master table shape? Not embedded into a container?
+    if (!d->isMaster || !KoShape::parent()) {
+        return;
+    }
+    // Not the changes, we want to react on?
+    if (!(type == PositionChanged || type == SizeChanged)) {
+        return;
+    }
+    d->pageManager->layoutPages();
 }
 
 void TableShape::handleDamages( const QList<Damage*>& damages )
