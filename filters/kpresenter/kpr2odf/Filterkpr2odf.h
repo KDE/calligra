@@ -48,8 +48,13 @@ private:
     void createSoundList( KoStore* output, KoStore* input, KoXmlWriter* manifest );
     void convertContent( KoXmlWriter* content );
     void convertObjects( KoXmlWriter* content, const KoXmlNode& objects );
+
     void appendPicture( KoXmlWriter* content, const KoXmlElement& objectElement );
     void appendLine( KoXmlWriter* content, const KoXmlElement& objectElement );
+    void appendRectangle( KoXmlWriter* content, const KoXmlElement& objectElement );
+    void appendEllipse( KoXmlWriter* content, const KoXmlElement& objectElement );
+    void appendTextBox( KoXmlWriter* content, const    KoXmlElement& objectElement );
+
     const QString getPictureNameFromKey( const KoXmlElement& key );
     void set2DGeometry( const KoXmlElement& source, KoXmlWriter& target );
     QString rotateValue( double val );

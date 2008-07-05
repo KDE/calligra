@@ -363,10 +363,13 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
             appendLine( content, objectElement );
             break;
         case 2: // rectangle
+            appendRectangle( content, objectElement );
             break;
-        case 3: // ellipse
+        case 3: // ellipse or circle
+            appendEllipse( content, objectElement );
             break;
         case 4: // text
+            appendTextBox( content, objectElement );
             break;
         case 5: //autoform
             break;
@@ -447,9 +450,6 @@ void Filterkpr2odf::appendLine( KoXmlWriter* content, const KoXmlElement& object
     content->startElement( "draw:line" );
     content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
 
-    KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
-    KoXmlElement name = objectElement.namedItem( "OBJECTNAME").toElement();
-
     KoXmlElement angle = objectElement.namedItem( "ANGLE" ).toElement();
     if ( !angle.isNull() )
     {
@@ -457,6 +457,7 @@ void Filterkpr2odf::appendLine( KoXmlWriter* content, const KoXmlElement& object
     }
 
     KoXmlElement orig = objectElement.namedItem( "ORIG" ).toElement();
+    KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
     double x1 = orig.attribute( "x" ).toDouble();
     double y1 = orig.attribute( "y" ).toDouble() - m_pageHeight * ( m_currentPage - 1 );
     double x2 = size.attribute( "width" ).toDouble() + x1;
@@ -499,12 +500,55 @@ void Filterkpr2odf::appendLine( KoXmlWriter* content, const KoXmlElement& object
     content->addAttribute( "svg:x1", xpos1 );
     content->addAttribute( "svg:x2", xpos2 );
 
+    KoXmlElement name = objectElement.namedItem( "OBJECTNAME").toElement();
     QString nameString = name.attribute( "objectName" );
     if( !nameString.isNull() )
     {
         content->addAttribute( "draw:name", nameString );
     }
     content->endElement();//draw:line
+}
+
+void Filterkpr2odf::appendRectangle( KoXmlWriter* content, const KoXmlElement& objectElement )
+{
+    content->startElement( "draw:rect" );
+
+    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+    set2DGeometry( objectElement, *content );
+
+    content->endElement();//draw:rect
+}
+
+void Filterkpr2odf::appendEllipse( KoXmlWriter* content, const KoXmlElement& objectElement )
+{
+    KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
+    double width = size.attribute( "width" ).toDouble();
+    double height = size.attribute( "height" ).toDouble();
+
+    content->startElement( ( width == height ) ? "draw:circle" : "draw:ellipse" );
+    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+    set2DGeometry( objectElement, *content );
+
+    content->endElement();//draw:circle or draw:ellipse
+}
+
+void Filterkpr2odf::appendTextBox( KoXmlWriter* content, const KoXmlElement& objectElement )
+{
+    content->startElement( "draw:text-box" );
+
+    KoXmlElement textObject = objectElement.namedItem( "TEXTOBJ" ).toElement();
+
+    //export "settings"
+    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+    set2DGeometry( objectElement, *content );
+
+    //xport every paragraph
+    for( KoXmlElement paragraph = textObject.firstChild().toElement(); !paragraph.isNull(); paragraph = paragraph.nextSibling().toElement() )
+    {
+//         appendParagraph();
+    }
+
+    content->endElement();//draw:text-box
 }
 
 const QString Filterkpr2odf::getPictureNameFromKey( const KoXmlElement& key )
