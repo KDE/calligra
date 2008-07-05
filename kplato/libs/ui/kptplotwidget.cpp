@@ -20,10 +20,12 @@
 #include "kptplotwidget.h"
 #include <kplotwidget.h>
 #include <kplotobject.h>
-
+#include "kptabstractchartmodel.h"
 #include <klocale.h>
 #include <kdebug.h>
 #include <stdio.h>
+
+#include <QPointF>
 
 namespace KPlato
 {
@@ -41,15 +43,15 @@ PlotWidget::PlotWidget(QWidget * parent) : KPlotWidget(parent)
     setGridColor(Qt::black);
     setAntialiasing(false);
 
-    // creating a plot object whose points are connected by red lines 
-    mKpoBCWP = new KPlotObject( Qt::black, KPlotObject::Lines );
-    mKpoBCWS = new KPlotObject( Qt::green, KPlotObject::Lines );
-    mKpoACWP = new KPlotObject( Qt::red, KPlotObject::Lines );
-
-    // ... and adding the object to the plot widget
-    addPlotObject(mKpoBCWP);
-    addPlotObject(mKpoBCWS);
-    addPlotObject(mKpoACWP);
+//     // creating a plot object whose points are connected by red lines 
+//     mKpoBCWP = new KPlotObject( Qt::black, KPlotObject::Lines );
+//     mKpoBCWS = new KPlotObject( Qt::green, KPlotObject::Lines );
+//     mKpoACWP = new KPlotObject( Qt::red, KPlotObject::Lines );
+// 
+//     // ... and adding the object to the plot widget
+//     addPlotObject(mKpoBCWP);
+//     addPlotObject(mKpoBCWS);
+//     addPlotObject(mKpoACWP);
 
     kDebug() << "ChartWidget :: Constructor Ended"<<endl;
 }
@@ -63,6 +65,7 @@ PlotWidget::~PlotWidget()
 
 void PlotWidget::draw( Project &p, ScheduleManager &sm ) 
 {
+   return drawModel( p, sm );
    
     // Retrieve datas
     mKpoBCWP->clearPoints();
@@ -85,22 +88,114 @@ void PlotWidget::draw( Project &p, ScheduleManager &sm )
 }
 
 void PlotWidget::drawBCWP(){
-    mKpoBCWP->setShowLines(true);
+    //mKpoBCWP->setShowLines(true);
 }
 void PlotWidget::undrawBCWP(){
-    mKpoBCWP->setShowLines(false);
+    //mKpoBCWP->setShowLines(false);
 }
 void PlotWidget::drawBCWS(){
-    mKpoBCWS->setShowLines(true);
+    //mKpoBCWS->setShowLines(true);
 }
 void PlotWidget::undrawBCWS(){
-    mKpoBCWS->setShowLines(false);
+    //mKpoBCWS->setShowLines(false);
 }
 void PlotWidget::drawACWP(){
-    mKpoACWP->setShowLines(true);
+    //mKpoACWP->setShowLines(true);
 }
 void PlotWidget::undrawACWP(){
-   mKpoACWP->setShowLines(false);
+   //mKpoACWP->setShowLines(false);
+}
+
+void PlotWidget::drawModel( Project &p, ScheduleManager &sm ) 
+{
+    kDebug();
+    resetPlot();
+    model.setProject( &p );
+    model.setScheduleManager( &sm );
+    
+    int axisCount = model.axisCount();
+    for ( int i = 0; i < axisCount; ++i ) {
+        ChartAxisIndex ai = model.axisIndex( i );
+        if ( ! ai.isValid() ) {
+            continue;
+        }
+        drawAxis( ai );
+        drawData( ai );
+    }
+   
+}
+
+void PlotWidget::drawAxis( const ChartAxisIndex &idx ) 
+{
+    kDebug();
+    int axisCount = model.axisCount( idx );
+    QList<double> range;
+    for ( int i = 0; i < axisCount; ++i ) {
+        ChartAxisIndex ai = model.axisIndex( i, idx );
+        if ( ! ai.isValid() ) {
+            continue;
+        }
+        if ( model.hasAxisChildren( ai ) ) {
+            kDebug()<<"multiple axis";
+        } else {
+            range << model.axisData( ai, AbstractChartModel::AxisMinRole ).toDouble();
+            range << model.axisData( ai, AbstractChartModel::AxisMaxRole ).toDouble();
+        }
+    }
+    setLimits( range[0], range[1], range[2], range[3] );
+}
+
+void PlotWidget::drawData( const ChartAxisIndex &axisSet ) 
+{
+    kDebug();
+    int dataCount = model.dataSetCount( axisSet );
+    for ( int i = 0; i < dataCount; ++i ) {
+        kDebug()<<"create data index";
+        ChartDataIndex di = model.index( i, axisSet );
+        kDebug()<<"created data index:"<<di.number()<<di.userData;
+        if ( ! di.isValid() ) {
+            kDebug()<<"Invalid index";
+            continue;
+        }
+        if ( model.hasChildren( di ) ) {
+            kDebug()<<"sections";
+            int c = model.childCount( di );
+            for ( int ii = 0; ii < c; ++ii ) {
+                ChartDataIndex cidx = model.index( ii, di );
+                drawData( cidx, axisSet );
+            }
+        } else {
+            kDebug()<<"no sections, go direct to data";
+            drawData( di, axisSet );
+        }
+    }
+}
+
+void PlotWidget::drawData( const ChartDataIndex &index, const ChartAxisIndex &axisSet ) 
+{
+    kDebug()<<index.number()<<index.userData;
+    QVariantList data;
+    int axisCount = model.axisCount( axisSet );
+    for ( int j = 0; j < axisCount; ++j ) {
+        ChartAxisIndex axis = model.axisIndex( j, axisSet );
+        if ( model.hasAxisChildren( axis ) ) {
+            kDebug()<<"multiple axis";
+        } else {
+            data << model.data( index, axis );
+        }
+    }
+    kDebug()<<data;
+    Q_ASSERT( data.count() == 2 );
+    QVariantList x = data[0].toList();
+    QVariantList y = data[1].toList();
+    QVariant color = model.data( index, Qt::ForegroundRole );
+    KPlotObject *kpo = new KPlotObject( color.value<QColor>(), KPlotObject::Lines );
+    for (int i = 0; i < y.count(); ++i ) {
+        kDebug()<<"Add point:"<<x[i].toInt() << y[i].toDouble();
+        kpo->addPoint( x[i].toInt(), y[i].toDouble() );
+        kpo->setShowLines(true);
+    }
+    addPlotObject( kpo );
 }
 
 }

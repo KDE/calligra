@@ -29,6 +29,7 @@
 #include <QBrush>
 #include <string>
 
+#include "kptnodechartmodel.h"
 
 namespace KPlato
 {
@@ -57,6 +58,16 @@ public:
     void undrawBCWS();
     void drawACWP();
     void undrawACWP();
+    
+    void drawModel( Project &p, ScheduleManager &sm );
+    void drawAxis( const ChartAxisIndex &idx );
+    void drawData( const ChartAxisIndex &idx );
+    void drawData( const ChartDataIndex &index, const ChartAxisIndex &axisSet );
+    
+protected:
+    NodeChartModel model;
+    int m_xType;
+    int m_yType;
 };
 
 }
