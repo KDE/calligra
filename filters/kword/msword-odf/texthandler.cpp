@@ -60,7 +60,7 @@ KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, Ko
       //m_textStyleNumber( 1 ), m_paragraphStyleNumber( 1 ), m_listStyleNumber( 1 ),
       m_currentListDepth( -1 ), m_currentListID( 0 ), m_currentStyle( 0L ),/* m_index( 0 ),*/
       m_currentTable( 0L ), m_writingHeader(false), m_writeMasterStyleName(false),
-      m_insideField( false ), m_fieldAfterSeparator( false ), m_fieldType( 0 )
+      m_insideField( false ), m_fieldAfterSeparator( false ), m_fieldType( 0 ), m_maxColumns(0)
 {
     if(bodyWriter) {
         m_bodyWriter = bodyWriter; //set the pointer to bodyWriter for writing to content.xml in office:text
@@ -323,6 +323,7 @@ void KWordTextHandler::paragraphStart( wvWare::SharedPtr<const wvWare::Paragraph
         m_currentTable = 0L;
 	//must delete table in Document!
         emit tableFound(table);
+	m_maxColumns = 0;
     }
     //if ( m_bInParagraph )
     //    paragraphEnd();

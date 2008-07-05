@@ -29,7 +29,7 @@
 #include <q3valuelist.h>
 #include <QObject>
 //Added by qt3to4:
-#include <Q3MemArray>
+#include <QList>
 #include <deque>
 #include <QRectF>
 
@@ -74,7 +74,7 @@ namespace KWord
         // the original Word cells. We accumulate all the known edges for a given
         // table in an array.
         // Important: don't use unsigned int. Value can be negative (relative to margin...).
-        Q3MemArray<int> m_cellEdges;
+        QList<int> m_cellEdges;
 
         void cacheCellEdge( int cellEdge );
         int columnNumber( int cellEdge ) const;
@@ -94,13 +94,8 @@ public:
     virtual void tableCellEnd();
 
     ///////// Our own interface
-    void tableStart( KWord::Table* table );
+    void tableStart( KWord::Table* table);
     void tableEnd();
-
-signals:
-    // Tells Document to create frameset for cell
-    //void sigTableCellStart( int row, int column, int rowSpan, int columnSpan, const QRectF& cellRect, const QString& tableName, const wvWare::Word97::BRC& brcTop, const wvWare::Word97::BRC& brcBottom, const wvWare::Word97::BRC& brcLeft, const wvWare::Word97::BRC& brcRight, const wvWare::Word97::SHD& shd );
-    //void sigTableCellEnd();
 
 protected:
     double rowHeight() const;
@@ -113,6 +108,8 @@ private:
     int m_column;
     double m_currentY;
     wvWare::SharedPtr<const wvWare::Word97::TAP> m_tap;
+    bool m_cellOpen;
+    int m_colSpan;
 };
 
 #endif // TABLEHANDLER_H

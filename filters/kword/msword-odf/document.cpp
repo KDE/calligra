@@ -69,7 +69,7 @@ Document::Document( const std::string& fileName, KoFilterChain* chain, KoXmlWrit
                  this, SLOT( slotFootnoteFound( const wvWare::FunctorBase*, int ) ) );
         connect( m_textHandler, SIGNAL( headersFound( const wvWare::FunctorBase*, int ) ),
                  this, SLOT( slotHeadersFound( const wvWare::FunctorBase*, int ) ) );
-        connect(m_textHandler, SIGNAL( tableFound(KWord::Table*)),
+        connect(m_textHandler, SIGNAL(tableFound(KWord::Table*)),
                  this, SLOT( slotTableFound(KWord::Table*)));
         connect( m_textHandler, SIGNAL( pictureFound( const QString&, const QString&, const wvWare::FunctorBase* ) ),
                  this, SLOT( slotPictureFound( const QString&, const QString&, const wvWare::FunctorBase* ) ) );
@@ -656,7 +656,7 @@ void Document::slotTableFound(KWord::Table* table)
 {
     kDebug(30513);
 
-    m_tableHandler->tableStart( table );
+    m_tableHandler->tableStart(table);
     Q3ValueList<KWord::Row> &rows = table->rows;
     for( Q3ValueList<KWord::Row>::Iterator it = rows.begin(); it != rows.end(); ++it ) {
         KWord::TableRowFunctorPtr f = (*it).functorPtr;
@@ -698,7 +698,7 @@ void Document::processSubDocQueue()
             delete subdoc.functorPtr; // delete it
             m_subdocQueue.pop();
         }
-        while ( !m_tableQueue.empty() )
+        /*while ( !m_tableQueue.empty() )
         {
             KWord::Table& table = m_tableQueue.front();
             m_tableHandler->tableStart( &table );
@@ -711,7 +711,7 @@ void Document::processSubDocQueue()
             }
             m_tableHandler->tableEnd();
             m_tableQueue.pop();
-        }
+        }*/
     }
 }
 

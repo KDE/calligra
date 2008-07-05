@@ -1,6 +1,7 @@
 /* This file is part of the KOffice project
    Copyright (C) 2002 Werner Trobin <trobin@kde.org>
    Copyright (C) 2002 David Faure <faure@kde.org>
+   Copyright (C) 2008 Benjamin Cail <cricketc@gmail.com>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -39,25 +40,28 @@ KWordTableHandler::KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainS
 }
 
 // Called by Document before invoking the table-row-functors
-void KWordTableHandler::tableStart( KWord::Table* table )
+void KWordTableHandler::tableStart(KWord::Table* table)
 {
-    kDebug(30513) ;
+    kDebug(30513);
     Q_ASSERT( table );
     Q_ASSERT( !table->name.isEmpty() );
     m_currentTable = table;
-#ifdef __GNUC__
-#warning "port it: qHeapSort"
-#endif
-    //qHeapSort( table->m_cellEdges );
-#if 0
+    m_cellOpen = false;
+
+#if 1
     for (unsigned int i = 0; i < table->m_cellEdges.size(); i++)
         kDebug(30513) << table->m_cellEdges[i];
 #endif
+
     m_row = -1;
     m_currentY = 0;
 
     //start table in content
     m_bodyWriter->startElement("table:table");
+    m_bodyWriter->startElement("table:table-column");
+    kDebug(30513) << "max columns in this table: " << table->m_cellEdges.size()-1;
+    m_bodyWriter->addAttribute("table:number-columns-repeated", table->m_cellEdges.size()-1);
+    m_bodyWriter->endElement();
 }
 
 void KWordTableHandler::tableEnd()
@@ -76,17 +80,12 @@ void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::T
         kWarning(30513) << "tableRowStart: tableStart not called previously!";
         return;
     }
-    if(m_row == -1) {
-	m_bodyWriter->startElement("table:table-column");
-	m_bodyWriter->addAttribute("table:number-columns-repeated", tap->itcMac);
-	m_bodyWriter->endElement();
-    }
     Q_ASSERT( m_currentTable );
     Q_ASSERT( !m_currentTable->name.isEmpty() );
     m_row++;
     m_column = -1;
     m_tap = tap;
-    kDebug(30513) <<"tableRowStart row=" << m_row;
+    kDebug(30513) <<"tableRowStart row=" << m_row << ", number of cells: " << tap->itcMac;
     //start table row in content
     m_bodyWriter->startElement("table:table-row");
 }
@@ -105,16 +104,25 @@ void KWordTableHandler::tableCellStart()
     Q_ASSERT( m_tap );
     if ( !m_tap )
         return;
+    //increment the column number so we know where we are
     m_column++;
+    //get the number of cells in this row
     int nbCells = m_tap->itcMac;
+    //make sure we haven't gotten more columns than possible
+    //with the number of cells
     Q_ASSERT( m_column < nbCells );
+    //if our column number is greater than or equal to number
+    //of cells, just return
     if ( m_column >= nbCells )
         return;
 
     // Get table cell descriptor
+    //merging, alignment, ... information
     const wvWare::Word97::TC& tc = m_tap->rgtc[ m_column ];
 
+    //left boundary of current cell
     int left = m_tap->rgdxaCenter[ m_column ]; // in DXAs
+    //right boundary of current cell
     int right = m_tap->rgdxaCenter[ m_column+1 ]; // in DXAs
 
     // Check for merged cells
@@ -133,6 +141,7 @@ void KWordTableHandler::tableCellStart()
     }
 #endif
     int rowSpan = 1;
+    //if this is the first of some vertically merged cells...
     if ( tc.fVertRestart )
     {
         //kDebug(30513) <<"fVertRestart is set!";
@@ -156,12 +165,15 @@ void KWordTableHandler::tableCellStart()
             else
                 break;
         }
-        //kDebug(30513) <<"rowSpan=" << rowSpan;
+        kDebug(30513) <<"rowSpan=" << rowSpan;
     }
-    // Skip cells that are part of a vertically merged cell, KWord doesn't want them
+    // Put a filler in for cells that are part of a merged cell
     // The MSWord spec says they must be empty anyway (and we'll get a warning if not).
-    if ( tc.fVertMerge && !tc.fVertRestart )
+    if ( tc.fVertMerge && !tc.fVertRestart ) {
+	m_bodyWriter->startElement("table:covered-table-cell");
+	m_cellOpen = true;
         return;
+    }
 
     // Check how many cells that mean, according to our cell edge array
     int leftCellNumber = m_currentTable->columnNumber( left );
@@ -176,13 +188,18 @@ void KWordTableHandler::tableCellStart()
         right = m_currentTable->m_cellEdges[ rightCellNumber ];
     }
 
+    kDebug(30513) << "left edge = " << left << ", right edge = " << right;
+
+    kDebug(30513) << "leftCellNumber = " << leftCellNumber << ", rightCellNumber = "
+	<< rightCellNumber;
     Q_ASSERT( rightCellNumber >= leftCellNumber ); // you'd better be...
-    int colSpan = rightCellNumber - leftCellNumber; // the resulting number of merged cells
+    int colSpan = rightCellNumber - leftCellNumber; // the resulting number of merged cells horizontally
 
     QRectF cellRect( left / 20.0, // left
                      m_currentY, // top
                      ( right - left ) / 20.0, // width
                      rowHeight() ); // height
+    //I can pass these sizes to ODF now...
 
     kDebug(30513) <<" tableCellStart row=" << m_row <<" WordColumn=" << m_column <<" colSpan=" << colSpan <<" (from" << leftCellNumber <<" to" << rightCellNumber <<" for KWord) rowSpan=" << rowSpan <<" cellRect=" << cellRect;
 
@@ -203,21 +220,42 @@ void KWordTableHandler::tableCellStart()
         m_tap->rgtc[ m_column + 1 ].brcLeft
         : tc.brcRight;
 
+    //need to create the cell style here and set the style-name attribute in the content
+
     //emit sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name, brcTop, brcBottom, brcLeft, brcRight, m_tap->rgshd[ m_column ] );
     //start table cell in content
     m_bodyWriter->startElement("table:table-cell");
+    m_cellOpen = true;
+    if(rowSpan > 1) {
+	m_bodyWriter->addAttribute("table:number-rows-spanned", rowSpan);
+    }
+    if(colSpan > 1) {
+	m_bodyWriter->addAttribute("table:number-columns-spanned", colSpan);
+	m_colSpan = colSpan;
+    }
 }
 
 void KWordTableHandler::tableCellEnd()
 {
     kDebug(30513);
-    //emit sigTableCellEnd();
     //end table cell in content
-    m_bodyWriter->endElement();//table:table-cell
+    // but only if we actually opened a cell
+    if(m_cellOpen) {
+	m_bodyWriter->endElement();//table:table-cell
+	m_cellOpen = false;
+    }
+    if(m_colSpan > 1) {
+	for(int i = 1; i < m_colSpan; i++) {
+	    m_bodyWriter->startElement("table:covered-table-cell");
+	    m_bodyWriter->endElement();
+	}
+    }
+    m_colSpan = 1;
 }
 
 
 // Add cell edge into the cache of cell edges for a given table.
+// Might as well keep it sorted here
 void KWord::Table::cacheCellEdge(int cellEdge)
 {
     kDebug(30513) ;
@@ -229,11 +267,15 @@ void KWord::Table::cacheCellEdge(int cellEdge)
             kDebug(30513) << cellEdge <<" -> found";
             return;
         }
+	//insert it in the right place if necessary
+	if(m_cellEdges[i] > cellEdge) {
+	    m_cellEdges.insert(i, cellEdge);
+	    kDebug(30513) << cellEdge <<" -> added. Size=" << size+1;
+	    return;
+	}
     }
-
-    // Add the edge to the array.
-    m_cellEdges.resize(size + 1, Q3GArray::SpeedOptim);
-    m_cellEdges[size] = cellEdge;
+    //add it at the end if this edge is larger than all the rest
+    m_cellEdges.append(cellEdge);
     kDebug(30513) << cellEdge <<" -> added. Size=" << size+1;
 }
 

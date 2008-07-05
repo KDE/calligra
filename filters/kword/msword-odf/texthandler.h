@@ -145,6 +145,7 @@ private:
     bool m_insideField;
     bool m_fieldAfterSeparator;
     int m_fieldType; // 0 for no field
+    int m_maxColumns;//max number of columns in a table
     
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);
 };
