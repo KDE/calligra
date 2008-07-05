@@ -111,6 +111,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
     }
 
     //Add the page effect
+    //Enum: PageEffect
     KoXmlElement pageEffect = page.namedItem( "PGEFFECT" ).toElement();
     if( !pageEffect.isNull() )
     {
@@ -438,8 +439,11 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
         if( textObject.hasAttribute( "verticalAlign" ) )
         {
             QString textAligment = textObject.attribute( "verticalAlign" );
-            if( textAligment == "center" )//all the other values are valid except center that is called middle in ODF
+            if( textAligment == "center" )
+            {
+                //all the other values are valid except center that is called middle in ODF
                 textAligment = "middle";
+            }
             style.addProperty( "draw:textarea-vertical-align", textAligment );
         }
         if( textObject.hasAttribute( "bleftpt" ) )
@@ -568,6 +572,7 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
         QString shadowOffsetY;
         int direction = shadow.attribute( "direction" ).toInt();
         QString distance = QString( "%1cm" ).arg( KoUnit::toCentimeter( shadow.attribute( "distance" ).toDouble() ) );
+        //Enum: ShadowDirection
         switch( direction )
         {
         case 1: //Left Up
@@ -606,6 +611,32 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
         style.addProperty( "draw:shadow-offset-x", shadowOffsetX );
         style.addProperty( "draw:shadow-offset-y", shadowOffsetY );
     }
+
+    //If what we're loading is the style for an image and some form of mirror is applied to it we must load it in the GrpahicStyle
+    KoXmlElement pictureSettings = element.namedItem( "PICTURESETTINGS" ).toElement();
+    if( !pictureSettings.isNull() )
+    {
+        int mirrorType = pictureSettings.attribute( "mirrorType", "0" ).toInt();
+        QString mirror;
+        switch( mirrorType )
+        {
+        case 0: //normal
+            break;
+        case 1:
+            mirror = "horizontal";
+            break;
+        case 2:
+            mirror = "vertical";
+            break;
+        case 3:
+            mirror = "horizontal vertical";
+            break;
+        }
+        if( !mirror.isNull() )
+        {
+            style.addProperty( "style:mirror", mirror );
+        }
+    }
 //     if( m_name != "standard" )
 //         style.setAttribute( "style:parent-style-name", "standard" ); FIXME: what do we do?
 
@@ -630,6 +661,7 @@ const QString Filterkpr2odf::createMarkerStyle( int markerType )
     QString viewBox;
     QString d;
 
+    //Enum: LineEnd
     switch( markerType )
     {
     case 0: //Normal
@@ -696,10 +728,8 @@ const QString Filterkpr2odf::createStrokeDashStyle( int strokeStyle )
     {
     case 0:
     case 1:
-    {
         //"Empty style"
-        return m_styles.lookup( style, "sds" );;
-    }
+        return m_styles.lookup( style, "sds" );
     case 2:
         displayName = "Fine Dashed";
         styleString = "rect";

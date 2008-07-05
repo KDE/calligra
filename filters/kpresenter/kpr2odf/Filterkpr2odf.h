@@ -49,8 +49,9 @@ private:
     void convertContent( KoXmlWriter* content );
     void convertObjects( KoXmlWriter* content, const KoXmlNode& objects );
     void appendPicture( KoXmlWriter* content, const KoXmlElement& objectElement );
+    void appendLine( KoXmlWriter* content, const KoXmlElement& objectElement );
     const QString getPictureNameFromKey( const KoXmlElement& key );
-    void set2DGeometry( const KoXmlElement& source, KoXmlWriter& target, bool pieObject = false, bool multiPoint = false );
+    void set2DGeometry( const KoXmlElement& source, KoXmlWriter& target );
     QString rotateValue( double val );
 
     //Styles functions

@@ -353,12 +353,14 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
 
         //Now define what kind of object is
         KoXmlElement objectElement = object.toElement();
+        //Enum: ObjType
         switch( objectElement.attribute( "type" ).toInt() )
         {
         case 0: // picture
             appendPicture( content, objectElement );
             break;
         case 1: // line
+            appendLine( content, objectElement );
             break;
         case 2: // rectangle
             break;
@@ -397,10 +399,37 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
     }//for
 }
 
-void Filterkpr2odf::appendPicture( KoXmlWriter* content, const KoXmlElement& objectElement ) {
+void Filterkpr2odf::appendPicture( KoXmlWriter* content, const KoXmlElement& objectElement )
+{
     content->startElement( "draw:frame" );
-    set2DGeometry( objectElement, *content );
+    set2DGeometry( objectElement, *content );//sizes mostly
     content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+
+    //apply the simple properties  (that is the ones that don't need but one attribute)
+    KoXmlElement pictureSettings = objectElement.namedItem( "PICTURESETTINGS" ).toElement();
+    if( !pictureSettings.isNull() )
+    {
+        bool grayscal = pictureSettings.attribute( "grayscal", "0" ) == "1";
+        if( grayscal )
+        {
+            //FIXME: OO Impress doesn't load it even though if I apply a grayscale to a picture in it it is saved like this
+            content->addAttribute( "draw:color-mode", "greyscale" );
+        }
+
+        int bright = pictureSettings.attribute( "bright", "0" ).toInt();
+        if( bright != 0 )
+        {
+            content->addAttribute( "draw:luminance", QString( "%1%" ).arg( bright ) );
+        }
+
+        bool swapRGB = pictureSettings.attribute( "bright", "0" ) == "1";
+        if( swapRGB )
+        {
+            content->addAttribute( "draw:color-inversion", "true" );
+        }
+
+        //NOTE: depth is not portable
+    }
 
     content->startElement( "draw:image" );
     content->addAttribute( "xlink:type", "simple" );
@@ -408,9 +437,73 @@ void Filterkpr2odf::appendPicture( KoXmlWriter* content, const KoXmlElement& obj
     content->addAttribute( "xlink:actuate", "onLoad" );
     content->addAttribute( "xlink:href", "Pictures/" + m_pictures[ getPictureNameFromKey( objectElement.namedItem( "KEY" ).toElement() ) ] );
 
-    content->endElement();//draw:frame
     content->endElement();//draw:image
+    content->endElement();//draw:frame
     //TODO: port the effects
+}
+
+void Filterkpr2odf::appendLine( KoXmlWriter* content, const KoXmlElement& objectElement )
+{
+    content->startElement( "draw:line" );
+    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+
+    KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
+    KoXmlElement name = objectElement.namedItem( "OBJECTNAME").toElement();
+
+    KoXmlElement angle = objectElement.namedItem( "ANGLE" ).toElement();
+    if ( !angle.isNull() )
+    {
+        content->addAttribute( "draw:transform", rotateValue( angle.attribute( "value" ).toDouble() ) );
+    }
+
+    KoXmlElement orig = objectElement.namedItem( "ORIG" ).toElement();
+    double x1 = orig.attribute( "x" ).toDouble();
+    double y1 = orig.attribute( "y" ).toDouble() - m_pageHeight * ( m_currentPage - 1 );
+    double x2 = size.attribute( "width" ).toDouble() + x1;
+    double y2 = size.attribute( "height" ).toDouble() + y1;
+
+    KoXmlElement lineType = objectElement.namedItem( "LINETYPE" ).toElement();
+    int type = 0;
+    if ( !lineType.isNull() )
+    {
+        type = lineType.attribute( "value" ).toInt();
+    }
+
+    content->addAttribute( "draw:id",  QString( "object%1" ).arg( m_objectIndex ) );
+    QString xpos1 = QString( "%1cm" ).arg( KoUnit::toCentimeter( x1 ) );
+    QString xpos2 = QString( "%1cm" ).arg( KoUnit::toCentimeter( x2 ) );
+
+    //Enum: LineType
+    switch( type )
+    {
+    case 0: //Horizontal
+        content->addAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCentimeter( y2/2.0 ) ) );
+        content->addAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCentimeter( y2/2.0 ) ) );
+        break;
+    case 1: //Vertical
+        content->addAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCentimeter( y1 ) ) );
+        content->addAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCentimeter( y2 ) ) );
+        xpos1 = QString( "%1cm" ).arg( KoUnit::toCentimeter( x1/2.0 ) );
+        xpos2 = xpos1;
+        break;
+    case 2: //Left Top to Right Bottom
+        content->addAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCentimeter( y1 ) ) );
+        content->addAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCentimeter( y2 ) ) );
+        break;
+    case 3: //Left Bottom to Right Top
+        content->addAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCentimeter( y2 ) ) );
+        content->addAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCentimeter( y1 ) ) );
+        break;
+    }
+
+    content->addAttribute( "svg:x1", xpos1 );
+    content->addAttribute( "svg:x2", xpos2 );
+
+    QString nameString = name.attribute( "objectName" );
+    if( !nameString.isNull() )
+    {
+        content->addAttribute( "draw:name", nameString );
+    }
 }
 
 const QString Filterkpr2odf::getPictureNameFromKey( const KoXmlElement& key )
@@ -420,7 +513,7 @@ const QString Filterkpr2odf::getPictureNameFromKey( const KoXmlElement& key )
            + key.attribute( "year" ) + key.attribute( "filename" );
 }
 
-void Filterkpr2odf::set2DGeometry( const KoXmlElement& source, KoXmlWriter& target, bool pieObject, bool multiPoint )
+void Filterkpr2odf::set2DGeometry( const KoXmlElement& source, KoXmlWriter& target )
 {
     //This function sets the needed geometry-related attributes
     //for any object that is passed to it
