@@ -13,6 +13,8 @@ set(webforms_SRCS
   DataProvider.cpp
   TemplateProvider.cpp
   Request.cpp
+# Pattern Server
+  PatternServer.cpp
 # Index view
   Index.cpp
 # CRUD Architecture
@@ -29,6 +31,6 @@ set(webforms_SRCS
 kde4_add_executable(kwebforms NOGUI ${webforms_SRCS})
 target_link_libraries(kwebforms kexi_shttpd ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS}
   ${GOOGLE_CTEMPLATE_THREAD_LIB}
-  kexidb kexicore keximain
+  kexidb kexicore keximain pion-net
 )
 install(TARGETS kwebforms ${INSTALL_TARGETS_DEFAULT_ARGS})
