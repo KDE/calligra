@@ -1,19 +1,18 @@
-project(webforms)
+project(kwebforms)
 
-add_definitions(-DEMBEDDED) # for shttpd
-
-include_directories(${CMAKE_SOURCE_DIR}/kexi/3rdparty/shttpd/src
-  ${GOOGLE_CTEMPLATE_INCLUDE_DIR})
+include_directories(
+    ${CMAKE_SOURCE_DIR}/kexi/3rdparty/shttpd/src
+    ${GOOGLE_CTEMPLATE_INCLUDE_DIR}
+)
 
 # Workaround, exceptions are needed for pion::net
-add_definitions(-fexceptions -Wno-deprecated)
+# FIXME: This won't work for other compilers
+add_definitions(-fexceptions)
 
 set(webforms_SRCS
   main.cpp
   DataProvider.cpp
   TemplateProvider.cpp
-# Pattern Server
-  PatternServer.cpp
   WebFormsService.cpp
 # Index view
   IndexService.cpp
@@ -28,8 +27,15 @@ set(webforms_SRCS
 )
 
 kde4_add_executable(kwebforms NOGUI ${webforms_SRCS})
-target_link_libraries(kwebforms kexi_shttpd ${KDE4_KDECORE_LIBS} ${KDE4_KDEUI_LIBS}
-  ${GOOGLE_CTEMPLATE_THREAD_LIB}
-  kexidb kexicore keximain pion-net
+
+target_link_libraries(kwebforms
+    ${KDE4_KDECORE_LIBS}
+    ${KDE4_KDEUI_LIBS}
+    ${GOOGLE_CTEMPLATE_THREAD_LIB}
+    kexidb
+    kexicore
+    keximain
+    pion-net
 )
+
 install(TARGETS kwebforms ${INSTALL_TARGETS_DEFAULT_ARGS})

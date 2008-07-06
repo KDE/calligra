@@ -30,7 +30,6 @@
 #include <google/template.h>
 #include <pion/net/WebServer.hpp>
 
-#include "PatternServer.h"
 #include "ShutdownManager.hpp"
 
 #include "DataProvider.h"
