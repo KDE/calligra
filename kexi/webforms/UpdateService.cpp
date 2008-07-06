@@ -48,6 +48,8 @@ namespace KexiWebForms {
         HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
                     boost::bind(&TCPConnection::finish, tcp_conn)));
 
+        m_dict = initTemplate("update.tpl");
+
 
         QStringList queryString(QString(request->getOriginalResource().c_str()).split('/'));
         QString requestedTable = queryString.at(2);
@@ -130,7 +132,9 @@ namespace KexiWebForms {
             if (request->getQuery("dataSent") == "true") {
                 cursor = gConnection->prepareQuery(schema);
 
-                QStringList fieldsList(QString(request->getQuery("tableFields").c_str()).split("|:|"));
+                QStringList fieldsList(QUrl::fromPercentEncoding(QString(
+                        request->getQuery("tableFields").c_str()).toUtf8()
+                ).split("|:|"));
                 kDebug() << "Fields: " << fieldsList;
 
                 QStringListIterator iterator(fieldsList);
@@ -157,9 +161,10 @@ namespace KexiWebForms {
 
                 while (iterator.hasNext()) {
                     QString currentFieldName(iterator.next());
-                    QString currentFieldValue(request->getQuery(currentFieldName.toUtf8().constData()).c_str());
-                    /*QString currentFieldValue(QUrl::fromPercentEncoding(
-                        QString(request->getQuery(currentFieldName.toUtf8().constData()).c_str())));*/
+                    QString currentFieldValue(QUrl::fromPercentEncoding(QString(
+                        request->getQuery(currentFieldName.toUtf8().constData()).c_str()).toUtf8()
+                    ));
+                    // safeQString currentFieldValue(request->getQuery(currentFieldName.toUtf8().constData()).c_str());
 
                     /*! @fixme This removes pluses */
                     currentFieldValue.replace("+", " ");
@@ -222,9 +227,9 @@ namespace KexiWebForms {
 
                     // Field properties images
                     formData.append("<td>");
-                    currentField->isAutoIncrement() ? formData.append("<img src=\"/toolbox/auto-increment.png\" alt=\"Auto increment\"/>&nbsp;") : 0;
-                    currentField->isPrimaryKey() ? formData.append("<img src=\"/toolbox/primary-key.png\" alt=\"Primary Key\"/>&nbsp;") : 0;
-                    ( currentField->isNotEmpty() || currentField->isNotNull() ) ? formData.append("<img src=\"/toolbox/emblem-required.png\" alt=\"Required\"/>&nbsp;") : 0;
+                    currentField->isAutoIncrement() ? formData.append("<img src=\"/f/toolbox/auto-increment.png\" alt=\"Auto increment\"/>&nbsp;") : 0;
+                    currentField->isPrimaryKey() ? formData.append("<img src=\"/f/toolbox/primary-key.png\" alt=\"Primary Key\"/>&nbsp;") : 0;
+                    ( currentField->isNotEmpty() || currentField->isNotNull() ) ? formData.append("<img src=\"/f/toolbox/emblem-required.png\" alt=\"Required\"/>&nbsp;") : 0;
                     formData.append("</td>");
                     
                     formData.append("</tr>");
@@ -240,6 +245,7 @@ namespace KexiWebForms {
 
 
         renderTemplate(m_dict, writer);
+        delete m_dict;
     }
     
 }

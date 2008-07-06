@@ -23,6 +23,7 @@ set(webforms_SRCS
   UpdateService.cpp
   DeleteService.cpp
 # Other services
+  FileService.cpp
   QueryService.cpp
 )
 

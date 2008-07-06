@@ -188,14 +188,14 @@ table th {
     max-width: 45em;
     vertical-align: middle;
     color: #ffffff;
-    background: url(/media/images/top.jpg) repeat-x bottom;
+    background: url(/f/media/images/top.jpg) repeat-x bottom;
 background-color: #0057ae;
 }
 
 #header_top div {
     margin: 0 auto;
     padding: 0;
-    background: url(/media/images/top-left.jpg) no-repeat bottom left;
+    background: url(/f/media/images/top-left.jpg) no-repeat bottom left;
 }
 
 #header_top div div {
@@ -205,7 +205,7 @@ background-color: #0057ae;
     text-align: left;
     font-size: 1.7em;
     font-weight: bold;
-    background: url(/media/images/top-right.jpg) no-repeat bottom right;
+    background: url(/f/media/images/top-right.jpg) no-repeat bottom right;
 }
 
 #header_top div div img {
@@ -383,13 +383,13 @@ margin-left: 1em;
     margin: 0.6em 0 1.2em 0;
     padding:0;
     color: #ffffff;
-    background: url(/media/images/block_title_mid.png) repeat-y right;
+    background: url(/f/media/images/block_title_mid.png) repeat-y right;
 background-color: #0057ae;
 }
 .menutitle div {
     margin: 0;
     padding:0;
-    background: url(/media/images/block_title_top.png) no-repeat top right;
+    background: url(/f/media/images/block_title_top.png) no-repeat top right;
 }
 .menutitle div h2 {
     margin: 0;
@@ -398,7 +398,7 @@ background-color: #0057ae;
     font-size: 120%;
     font-weight: normal;
     color: #ffffff;
-    background: url(/media/images/block_title_bottom.png) no-repeat bottom right;
+    background: url(/f/media/images/block_title_bottom.png) no-repeat bottom right;
 }
 
 .clearer {
@@ -439,7 +439,7 @@ margin-right: 0.2em;
 }
 
 #footer {
-    background-image: url(/media/images/spring-footer.png);
+    background-image: url(/f/media/images/spring-footer.png);
     background-repeat: no-repeat;
     background-position: top right;
     background-color: #eeeeee;
@@ -450,14 +450,14 @@ margin-right: 0.2em;
 }
 
 #header_top div {
-    background-image: url(/media/images/spring-left.jpg);
+    background-image: url(/f/media/images/spring-left.jpg);
 }
 
 #header_top {
-    background-image: url(/media/images/spring-mid.jpg);
+    background-image: url(/f/media/images/spring-mid.jpg);
 }
 
 #header_top div div {
-    background-image: url(/media/images/spring-header.png);
+    background-image: url(/f/media/images/spring-header.png);
 }
 

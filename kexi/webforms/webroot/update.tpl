@@ -17,28 +17,28 @@
 
 	<div style="margin-top: 20px; margin-bottom: 20px">
 	    {{#FIRST_ENABLED}}
-		<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{FIRST}}"><img src="/toolbox/arrow-left-double.png" alt="First"/></a>&nbsp;
+		<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{FIRST}}"><img src="/f/toolbox/arrow-left-double.png" alt="First"/></a>&nbsp;
 	    {{/FIRST_ENABLED}}
 	    {{#FIRST_DISABLED}}
-	        <img src="/toolbox/arrow-left-double-gray.png" alt="First"/>&nbsp;
+	        <img src="/f/toolbox/arrow-left-double-gray.png" alt="First"/>&nbsp;
 	    {{/FIRST_DISABLED}}
 	    {{#PREV_ENABLED}}
-		<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{PREV}}"><img src="/toolbox/arrow-left.png" alt="Previous"/></a>&nbsp;
+		<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{PREV}}"><img src="/f/toolbox/arrow-left.png" alt="Previous"/></a>&nbsp;
 	    {{/PREV_ENABLED}}
 	    {{#PREV_DISABLED}}
-		<img src="/toolbox/arrow-left-gray.png" alt="Previous"/>&nbsp;
+		<img src="/f/toolbox/arrow-left-gray.png" alt="Previous"/>&nbsp;
 	    {{/PREV_DISABLED}}
 	    {{#NEXT_ENABLED}}
-		<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{NEXT}}"><img src="/toolbox/arrow-right.png" alt="Next"/></a>&nbsp;
+		<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{NEXT}}"><img src="/f/toolbox/arrow-right.png" alt="Next"/></a>&nbsp;
 	    {{/NEXT_ENABLED}}
 	    {{#NEXT_DISABLED}}
-		<img src="/toolbox/arrow-right-gray.png" alt="Next"/>&nbsp;
+		<img src="/f/toolbox/arrow-right-gray.png" alt="Next"/>&nbsp;
 	    {{/NEXT_DISABLED}}
 	    {{#LAST_ENABLED}}
-		<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{LAST}}"><img src="/toolbox/arrow-right-double.png" alt="Last"/></a>&nbsp;
+		<a href="/update/{{TABLENAME}}/{{PKEY_NAME}}/{{LAST}}"><img src="/f/toolbox/arrow-right-double.png" alt="Last"/></a>&nbsp;
 	    {{/LAST_ENABLED}}
 	    {{#LAST_DISABLED}}
-		<img src="/toolbox/arrow-right-double-gray.png" alt="Last"/>&nbsp;
+		<img src="/f/toolbox/arrow-right-double-gray.png" alt="Last"/>&nbsp;
 	    {{/LAST_DISABLED}}
 	</div>
 

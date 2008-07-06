@@ -18,13 +18,14 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <QFile>
+#include <QVariant>
+
 #include <KDebug>
 #include <KAboutData>
 #include <KApplication>
 #include <KCmdLineArgs>
 #include <KUniqueApplication>
-
-#include <QFile>
 
 #include <google/template.h>
 #include <pion/net/WebServer.hpp>
@@ -32,17 +33,15 @@
 #include "PatternServer.h"
 #include "ShutdownManager.hpp"
 
-//#include "Server.h"
-//#include "ServerConfig.h"
 #include "DataProvider.h"
 
+#include "FileService.hpp"
 #include "IndexService.h"
-//#include "Query.h"
+#include "QueryService.h"
 #include "CRUD.h"
 
-using namespace KexiWebForms;
 using namespace pion::net;
-
+using namespace KexiWebForms;
 
 int main(int argc, char **argv) {
     KCmdLineArgs::init(argc, argv,
@@ -80,19 +79,30 @@ int main(int argc, char **argv) {
     // Set template root directory equal to root directory
     google::Template::SetTemplateRootDirectory(QFile::encodeName(args->getOption("webroot")).constData());
 
-    pion::net::PatternServer server(8080);
+    pion::net::WebServer server(QVariant(args->getOption("port")).toUInt());
     
     IndexService indexService("index.tpl");
     CreateService createService("create.tpl");
     ReadService readService("read.tpl");
     UpdateService updateService("update.tpl");
     DeleteService deleteService("delete.tpl");
+    QueryService queryService("query.tpl");
+
+    // Plugins
+    pion::plugins::FileService fileService;
+    fileService.setOption("directory", args->getOption("webroot").toLatin1().constData());
+    fileService.setOption("file", args->getOption("webroot").append("/index.html").toLatin1().constData());
+    fileService.setOption("cache", "0");
+    fileService.setOption("scan", "0");
     
     server.addService("/", &indexService);
-    server.addService("/create/(.*)", &createService);
-    server.addService("/read/(.*)", &readService);
-    server.addService("/update/(.*)", &updateService);
-    server.addService("/delete/(.*)", &deleteService);
+    server.addService("/create", &createService);
+    server.addService("/read", &readService);
+    server.addService("/update", &updateService);
+    server.addService("/delete", &deleteService);
+    server.addService("/query", &queryService);
+    
+    server.addService("/f", &fileService);
     server.start();
     
     main_shutdown_manager.wait();

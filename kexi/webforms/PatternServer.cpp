@@ -44,7 +44,7 @@ namespace net {
                     return true;
                 } else {
                     boost::regex expression(i->first);
-                    if (boost::regex_match(resource, expression)) {
+                    if (boost::regex_match(resource, expression, boost::match_default | boost::match_partial)) {
                         request_handler = i->second;
                         return true;
                     }

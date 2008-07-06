@@ -19,12 +19,12 @@
     <meta name="MSSmartTagsPreventParsing" content="true" />
     <meta name="robots" content="all" />
     <meta name="no-email-collection" content="http://www.unspam.com/noemailcollection" />
-    <link rel="shortcut icon" href="/media/favicon.ico" />
-    <link rel="icon" href="/media/favicon.ico" />
+    <link rel="shortcut icon" href="/f/media/favicon.ico" />
+    <link rel="icon" href="/f/media/favicon.ico" />
     <link rel="alternate" type="application/rss+xml" title="Latest KDE News" href="http://www.kde.org/dotkdeorg.rdf" />
-    <link rel="stylesheet" media="screen" type="text/css" title="KDE Colors" href="/media/styles/style.css" />
-    <link rel="stylesheet" media="print, embossed" type="text/css" href="/media/styles/print.css" />
-    <link rel="alternate stylesheet" media="screen, aural, handheld, tty, braille" type="text/css" title="Flat" href="/media/styles/accessibility.css" />    
+    <link rel="stylesheet" media="screen" type="text/css" title="KDE Colors" href="/f/media/styles/style.css" />
+    <link rel="stylesheet" media="print, embossed" type="text/css" href="/f/media/styles/print.css" />
+    <link rel="alternate stylesheet" media="screen, aural, handheld, tty, braille" type="text/css" title="Flat" href="/f/media/styles/accessibility.css" />    
   </head>
   
   <body  id="cp-site-wwwkdeorg">
@@ -39,7 +39,7 @@
       <div id="header">
 	<div id="header_top">
 	  <div><div>
-	      <img alt ="" src="/media/images/top-kde.jpg"/>
+	      <img alt ="" src="/f/media/images/top-kde.jpg"/>
 	      Kexi Web Forms
 	</div></div></div>
 	<div id="header_bottom">

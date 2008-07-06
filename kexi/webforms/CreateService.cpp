@@ -45,6 +45,7 @@ namespace KexiWebForms {
     void CreateService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
         HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
                     boost::bind(&TCPConnection::finish, tcp_conn)));
+        m_dict = initTemplate("create.tpl");
 
         /* Retrieve the requested table name */
         QString requestedTable(QString(request->getOriginalResource().c_str()).split('/').at(2));
@@ -59,7 +60,9 @@ namespace KexiWebForms {
             KexiDB::QuerySchema schema(*tableSchema);
             KexiDB::Cursor* cursor = gConnection->prepareQuery(schema);
 
-            QStringList fieldsList(QString(request->getQuery("tableFields").c_str()).split("|:|"));
+            QStringList fieldsList(QUrl::fromPercentEncoding(QString(
+                        request->getQuery("tableFields").c_str()).toUtf8()
+            ).split("|:|"));
             kDebug() << "Fields: " << fieldsList;
 
             QStringListIterator iterator(fieldsList);
@@ -118,9 +121,9 @@ namespace KexiWebForms {
 
                 // Field properties images
                 formData.append("<td>");
-                currentField->isAutoIncrement() ? formData.append("<img src=\"/toolbox/auto-increment.png\" alt=\"Auto increment\"/>&nbsp;") : 0;
-                currentField->isPrimaryKey() ? formData.append("<img src=\"/toolbox/primary-key.png\" alt=\"Primary Key\"/>&nbsp;") : 0;
-                ( currentField->isNotEmpty() || currentField->isNotNull() ) ? formData.append("<img src=\"/toolbox/emblem-required.png\" alt=\"Required\"/>&nbsp;") : 0;
+                currentField->isAutoIncrement() ? formData.append("<img src=\"/f/toolbox/auto-increment.png\" alt=\"Auto increment\"/>&nbsp;") : 0;
+                currentField->isPrimaryKey() ? formData.append("<img src=\"/f/toolbox/primary-key.png\" alt=\"Primary Key\"/>&nbsp;") : 0;
+                ( currentField->isNotEmpty() || currentField->isNotNull() ) ? formData.append("<img src=\"/f/toolbox/emblem-required.png\" alt=\"Required\"/>&nbsp;") : 0;
                 formData.append("</td>");
                     
                 formData.append("</tr>");
@@ -142,6 +145,7 @@ namespace KexiWebForms {
 
 
         renderTemplate(m_dict, writer);
+        delete m_dict;
     }
 
 }

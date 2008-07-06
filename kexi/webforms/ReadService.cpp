@@ -124,11 +124,11 @@ namespace KexiWebForms {
                     // Edit
                     tableData.append("<td><a href=\"/update/").append(requestedTable).append("/");
                     tableData.append(primaryKey->name()).append("/");
-                    tableData.append(pkeyVal).append("\"><img src=\"/toolbox/draw-freehand.png\" alt=\"Edit\"/></a></td>");
+                    tableData.append(pkeyVal).append("\"><img src=\"/f/toolbox/draw-freehand.png\" alt=\"Edit\"/></a></td>");
                     // Delete
                     tableData.append("<td><a href=\"/delete/").append(requestedTable).append("/");
                     tableData.append(primaryKey->name()).append("/");
-                    tableData.append(pkeyVal).append("\"><img src=\"/toolbox/draw-eraser.png\" alt=\"Delete\"/></a></td>");
+                    tableData.append(pkeyVal).append("\"><img src=\"/f/toolbox/draw-eraser.png\" alt=\"Delete\"/></a></td>");
                     // End row
                 }
                 tableData.append("</tr>\n");
