@@ -35,7 +35,6 @@ class TestStatisticalFunctions : public QObject
 Q_OBJECT
 
 private slots:
-
     void initTestCase();
 
 //     void testARRANG(); // alias PERMUT

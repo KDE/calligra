@@ -21,6 +21,16 @@
 
 #include "TestDatetimeFunctions.h"
 
+#include "functions/DateTimeModule.h"
+#include "functions/MathModule.h"
+#include "FunctionModuleRegistry.h"
+
+void TestDatetimeFunctions::initTestCase()
+{
+    FunctionModuleRegistry::instance()->add(new DateTimeModuleFactory(this));
+    FunctionModuleRegistry::instance()->add(new MathModuleFactory(this));
+}
+
 #define CHECK_EVAL(x,y) { Value z(RoundNumber(y)); QCOMPARE(evaluate(x,z), (z)); }
 
 #define CHECK_FAIL(x,y,txt) { Value z(RoundNumber(y)); QEXPECT_FAIL("", txt, Continue); QCOMPARE(evaluate(x,z), (z));}

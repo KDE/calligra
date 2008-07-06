@@ -47,67 +47,67 @@ target_link_libraries(TestValue kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### Function tests ###############
 
-set(TestBitopsFunctions_SRCS TestBitopsFunctions.cpp)
+set(TestBitopsFunctions_SRCS TestBitopsFunctions.cpp ../functions/bitops.cpp)
 kde4_add_unit_test(TestBitopsFunctions TESTNAME kspread-BitopsFunctions  ${TestBitopsFunctions_SRCS})
 target_link_libraries(TestBitopsFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestDatabaseFunctions_SRCS TestDatabaseFunctions.cpp)
+set(TestDatabaseFunctions_SRCS TestDatabaseFunctions.cpp ../functions/database.cpp)
 kde4_add_unit_test(TestDatabaseFunctions TESTNAME kspread-DatabaseFunctions  ${TestDatabaseFunctions_SRCS})
 target_link_libraries(TestDatabaseFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### target TestDatetimeFunctions ###############
 
-set(TestDatetimeFunctions_SRCS TestDatetimeFunctions.cpp)
+set(TestDatetimeFunctions_SRCS TestDatetimeFunctions.cpp ../functions/datetime.cpp ../functions/math.cpp)
 kde4_add_unit_test(TestDatetimeFunctions TESTNAME kspread-DatetimeFunctions  ${TestDatetimeFunctions_SRCS})
 target_link_libraries(TestDatetimeFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestEngineeringFunctions_SRCS TestEngineeringFunctions.cpp)
+set(TestEngineeringFunctions_SRCS TestEngineeringFunctions.cpp ../functions/engineering.cpp ../functions/math.cpp)
 kde4_add_unit_test(TestEngineeringFunctions TESTNAME kspread-EngineeringFunctions  ${TestEngineeringFunctions_SRCS})
 target_link_libraries(TestEngineeringFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestFinancialFunctions_SRCS TestFinancialFunctions.cpp)
+set(TestFinancialFunctions_SRCS TestFinancialFunctions.cpp ../functions/financial.cpp)
 kde4_add_unit_test(TestFinancialFunctions TESTNAME kspread-FinancialFunctions  ${TestFinancialFunctions_SRCS})
 target_link_libraries(TestFinancialFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestInformationFunctions_SRCS TestInformationFunctions.cpp)
+set(TestInformationFunctions_SRCS TestInformationFunctions.cpp ../functions/information.cpp)
 kde4_add_unit_test(TestInformationFunctions TESTNAME kspread-InformationFunctions  ${TestInformationFunctions_SRCS})
 target_link_libraries(TestInformationFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestLogicFunctions_SRCS TestLogicFunctions.cpp)
+set(TestLogicFunctions_SRCS TestLogicFunctions.cpp ../functions/logic.cpp ../functions/information.cpp)
 kde4_add_unit_test(TestLogicFunctions TESTNAME kspread-LogicFunctions  ${TestLogicFunctions_SRCS})
 target_link_libraries(TestLogicFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestMathFunctions_SRCS TestMathFunctions.cpp)
+set(TestMathFunctions_SRCS TestMathFunctions.cpp ../functions/math.cpp ../functions/engineering.cpp ../functions/logic.cpp ../functions/trig.cpp)
 kde4_add_unit_test(TestMathFunctions TESTNAME kspread-MathFunctions  ${TestMathFunctions_SRCS})
 target_link_libraries(TestMathFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestStatisticalFunctions_SRCS TestStatisticalFunctions.cpp)
+set(TestStatisticalFunctions_SRCS TestStatisticalFunctions.cpp ../functions/statistical.cpp)
 kde4_add_unit_test(TestStatisticalFunctions TESTNAME kspread-StatisticalFunctions  ${TestStatisticalFunctions_SRCS})
 target_link_libraries(TestStatisticalFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestTextFunctions_SRCS TestTextFunctions.cpp)
+set(TestTextFunctions_SRCS TestTextFunctions.cpp ../functions/text.cpp ../functions/logic.cpp ../functions/information.cpp)
 kde4_add_unit_test(TestTextFunctions TESTNAME kspread-TextFunctions  ${TestTextFunctions_SRCS})
 target_link_libraries(TestTextFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestTrigFunctions_SRCS TestTrigFunctions.cpp)
+set(TestTrigFunctions_SRCS TestTrigFunctions.cpp ../functions/trig.cpp)
 kde4_add_unit_test(TestTrigFunctions TESTNAME kspread-TrigFunctions  ${TestTrigFunctions_SRCS})
 target_link_libraries(TestTrigFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 

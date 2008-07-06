@@ -33,6 +33,7 @@ class TestTrigFunctions: public QObject
     Q_OBJECT
 
 private slots:
+    void initTestCase();
   void testCOS();
   void testCOSH();
   void testPI();

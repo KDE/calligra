@@ -21,6 +21,14 @@
 
 #include "TestTrigFunctions.h"
 
+#include "functions/TrigonometryModule.h"
+#include "FunctionModuleRegistry.h"
+
+void TestTrigFunctions::initTestCase()
+{
+    FunctionModuleRegistry::instance()->add(new TrigonometryModuleFactory(this));
+}
+
 // NOTE: we do not compare the numbers _exactly_ because it is difficult
 // to get one "true correct" expected values for the functions due to:
 //  - different algorithms among spreadsheet programs

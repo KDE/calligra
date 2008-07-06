@@ -21,6 +21,14 @@
 
 #include "TestBitopsFunctions.h"
 
+#include "functions/BitOpsModule.h"
+#include "FunctionModuleRegistry.h"
+
+void TestBitopsFunctions::initTestCase()
+{
+    FunctionModuleRegistry::instance()->add(new BitOpsModuleFactory(this));
+}
+
 // because we may need to promote expected value from integer to float
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
 

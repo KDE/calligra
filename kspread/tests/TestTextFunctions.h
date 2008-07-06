@@ -33,6 +33,7 @@ class TestTextFunctions: public QObject
     Q_OBJECT
 
 private slots:
+    void initTestCase();
     void testASC();
     void testCHAR();
     void testCLEAN();

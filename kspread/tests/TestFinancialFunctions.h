@@ -34,6 +34,7 @@ class TestFinancialFunctions: public QObject
     Q_OBJECT
 
 private slots:
+    void initTestCase();
   void testACCRINT();
   void testACCRINTM();
   void testAMORDEGRC();  

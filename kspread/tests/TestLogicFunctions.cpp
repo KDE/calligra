@@ -21,6 +21,15 @@
 
 #include "TestLogicFunctions.h"
 
+#include "functions/LogicModule.h"
+#include "functions/InformationModule.h"
+#include "FunctionModuleRegistry.h"
+
+void TestLogicFunctions::initTestCase()
+{
+    FunctionModuleRegistry::instance()->add(new LogicModuleFactory(this));
+    FunctionModuleRegistry::instance()->add(new InformationModuleFactory(this));
+}
 
 // because we may need to promote expected value from integer to float
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }

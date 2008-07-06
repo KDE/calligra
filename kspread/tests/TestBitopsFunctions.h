@@ -33,6 +33,7 @@ class TestBitopsFunctions: public QObject
     Q_OBJECT
 
 private slots:
+    void initTestCase();
   void testBITAND();
   void testBITOR();
   void testBITXOR();

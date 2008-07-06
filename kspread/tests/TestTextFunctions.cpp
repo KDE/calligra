@@ -21,6 +21,18 @@
 
 #include "TestTextFunctions.h"
 
+#include "functions/InformationModule.h"
+#include "functions/LogicModule.h"
+#include "functions/TextModule.h"
+#include "FunctionModuleRegistry.h"
+
+void TestTextFunctions::initTestCase()
+{
+    FunctionModuleRegistry::instance()->add(new InformationModuleFactory(this));
+    FunctionModuleRegistry::instance()->add(new LogicModuleFactory(this));
+    FunctionModuleRegistry::instance()->add(new TextModuleFactory(this));
+}
+
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
 
 Value TestTextFunctions::evaluate(const QString& formula, Value& ex)

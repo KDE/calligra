@@ -28,6 +28,9 @@
 
 #include "TestInformationFunctions.h"
 
+#include "functions/InformationModule.h"
+#include "FunctionModuleRegistry.h"
+
 // because we may need to promote expected value from integer to float
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }
 
@@ -50,6 +53,7 @@ Value TestInformationFunctions::evaluate(const QString& formula, Value& ex)
 
 void TestInformationFunctions::initTestCase()
 {
+    FunctionModuleRegistry::instance()->add(new InformationModuleFactory(this));
     m_doc = new Doc();
     m_doc->map()->addNewSheet();
     Sheet* sheet = m_doc->map()->sheet(0);
@@ -188,10 +192,10 @@ void TestInformationFunctions::testCELL()
     // Absolute address including sheet name and IRI of location of documentare duplicated
     CHECK_EVAL( "CELL(\"ADDRESS\";'x:\\sample.ods'#Sheet3!B7)", Value( "'file:///x:/sample.ods'#$Sheet3.$B$7" ) );
 
-    // The current cell is saved in a file named ¡§sample.ods¡¨ which is located at ¡§file:///x:/¡¨
+    // The current cell is saved in a file named ï¿½ï¿½sample.odsï¿½ï¿½ which is located at ï¿½ï¿½file:///x:/ï¿½ï¿½
     CHECK_EVAL( "CELL(\"FILENAME\")",          Value( "file:///x:/sample.ods" ) );
  
-    CHECK_EVAL( "CELL(\"FORMAT\";C7)",         Value( "D4" ) ); // C7's number format is like ¡§DD-MM-YYYY HH:MM:SS¡¨
+    CHECK_EVAL( "CELL(\"FORMAT\";C7)",         Value( "D4" ) ); // C7's number format is like ï¿½ï¿½DD-MM-YYYY HH:MM:SSï¿½ï¿½
 }
 
 void TestInformationFunctions::testCOLUMN()

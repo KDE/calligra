@@ -27,6 +27,9 @@
 
 #include "TestKspreadCommon.h"
 
+#include "functions/DatabaseModule.h"
+#include "FunctionModuleRegistry.h"
+
 #define CHECK_EVAL(x,y) { Value z(RoundNumber(y)); QCOMPARE(evaluate(x,z), (z)); }
 #define ROUND(x) (roundf(1e10 * x) / 1e10)
 
@@ -63,6 +66,7 @@ Value TestDatabaseFunctions::evaluate(const QString& formula, Value& ex)
 
 void TestDatabaseFunctions::initTestCase()
 {
+    FunctionModuleRegistry::instance()->add(new DatabaseModuleFactory(this));
     m_doc = new Doc();
     m_doc->map()->addNewSheet();
     Sheet* sheet = m_doc->map()->sheet(0);
