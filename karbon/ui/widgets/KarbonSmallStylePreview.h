@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.t-com.hr)
    Copyright (C) 2005, The Karbon Developers
+   Copyright (c) 2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,46 +19,33 @@
  * Boston, MA 02110-1301, USA.
 */
 
-/* This is a small widget used on the statusbar, to display fill/stroke colors etc. */
 
-/* vsmallpreview.h */
-#ifndef VSMALLPREVIEW_H
-#define VSMALLPREVIEW_H
+#ifndef KARBONSMALLSTYLEPREVIEW_H
+#define KARBONSMALLSTYLEPREVIEW_H
 
-#include "vstroke.h"
-#include "vfill.h"
+#include <KoCheckerBoardPainter.h>
+#include <QtGui/QWidget>
 
-#include <QWidget>
-//Added by qt3to4:
-#include <QPaintEvent>
-#include <QFrame>
-#include <QLabel>
+class QPaintEvent;
+class KarbonFillStyleWidget;
+class KarbonStrokeStyleWidget;
+class KoCanvasController;
 
-class QFrame;
-class QLabel;
-
-class VSmallPreview : public QWidget
+/// This is a small widget used on the statusbar, to display fill/stroke colors etc.
+class KarbonSmallStylePreview : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 public:
-	VSmallPreview( QWidget* parent = 0L, const char* name = 0L );
-	~VSmallPreview();
+    explicit KarbonSmallStylePreview( QWidget* parent = 0L );
+    virtual ~KarbonSmallStylePreview();
 
-	void update( const VStroke &, const VFill & );
-
-protected:
-	virtual void paintEvent( QPaintEvent* event );
+private slots:
+    void selectionChanged();
+    void toolCodesSelected(const KoCanvasController *canvas, QList<QString> types);
 
 private:
-	void drawFill( const VFill & );
-	void drawStroke( const VStroke & );
-	QFrame *m_fillFrame;
-	QFrame *m_strokeFrame;
-	QLabel *m_fillLabel;
-	QLabel *m_strokeLabel;
-	VFill m_fill;
-	VStroke m_stroke;
+    KarbonFillStyleWidget * m_fillFrame;
+    KarbonStrokeStyleWidget * m_strokeFrame;
 };
 
-#endif
-
+#endif // KARBONSMALLSTYLEPREVIEW_H

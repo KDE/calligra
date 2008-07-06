@@ -59,6 +59,7 @@
 #include "KarbonCanvas.h"
 #include "KarbonPrintJob.h"
 #include "KarbonZoomController.h"
+#include "KarbonSmallStylePreview.h"
 //#include "karbon_drag.h"
 
 #include <KoMainWindow.h>
@@ -194,6 +195,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     m_zoomController->setPageSize( m_part->document().pageSize() );
     addStatusBarItem( m_zoomController->zoomAction()->createWidget( statusBar() ), 0 );
     m_zoomController->setZoomMode( KoZoomMode::ZOOM_PAGE );
+
+    addStatusBarItem( new KarbonSmallStylePreview( statusBar() ), 0 );
 
     // layout:
     QGridLayout *layout = new QGridLayout();
