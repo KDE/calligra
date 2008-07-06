@@ -27,16 +27,21 @@
 #include <QFile>
 
 #include <google/template.h>
+#include <pion/net/WebServer.hpp>
 
-#include "Server.h"
-#include "ServerConfig.h"
+#include "PatternServer.h"
+#include "ShutdownManager.hpp"
+
+//#include "Server.h"
+//#include "ServerConfig.h"
 #include "DataProvider.h"
 
 #include "Index.h"
-#include "Query.h"
-#include "CRUD.h"
+//#include "Query.h"
+//#include "CRUD.h"
 
 using namespace KexiWebForms;
+using namespace pion::net;
 
 
 int main(int argc, char **argv) {
@@ -62,15 +67,8 @@ int main(int argc, char **argv) {
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
-
-    // General set up
-    ServerConfig serverConfig;
-    serverConfig.ports = args->getOption("port");
-    serverConfig.webRoot = args->getOption("webroot");
-    serverConfig.dirList = args->isSet("dirlist");
-
     // SSL
-    if (args->isSet("https")) {
+    /*if (args->isSet("https")) {
         kDebug() << "Initializing SSL...";
         if (!args->isSet("cert")) {
             kError() << "You must specify both certificate and key file in order to use SSL support";
@@ -79,30 +77,29 @@ int main(int argc, char **argv) {
             serverConfig.certPath = args->getOption("cert");
         }
         serverConfig.https = args->getOption("https");
-    }
+    }*/
 
     if (args->isSet("file")) {
-        serverConfig.dbPath = args->getOption("file");
+        if (!initDatabase(args->getOption("file"))) {
+            kError() << "Something went wrong while initializing database..." << endl;
+            return 1;
+        }
     } else {
         kError() << "You must specifiy a Kexi file path";
         return 1;
     }
 
-    // I want to maintain the Server class as decoupled as possible from
-    // our specific implementation, set up google-ctemplate here
-    // Check if all templates are found
-    google::Template::SetTemplateRootDirectory(QFile::encodeName(serverConfig.webRoot).constData());
+    // Set template root directory equal to root directory
+    google::Template::SetTemplateRootDirectory(QFile::encodeName(args->getOption("webroot")).constData());
 
-    // Initialize database connection before server
-    if (!initDatabase(serverConfig.dbPath)) {
-        kError() << "Something went wrong while initializing database..." << endl;
-        return 1;
-    }
-
-    Server* server = Server::instance();
+    pion::net::PatternServer server(8080);
+    IndexService indexService("index.tpl");
+    server.addService("/", &indexService);
+    server.start();
+    main_shutdown_manager.wait();
 
     // Index handler
-    IndexHandler indexHandler;
+    /*IndexHandler indexHandler;
 
     // CRUD Handlers
     CreateHandler createHandler;
@@ -111,21 +108,8 @@ int main(int argc, char **argv) {
     DeleteHandler deleteHandler;
 
     // Query Handler
-    QueryHandler queryHandler;
+    QueryHandler queryHandler;*/
 
-    if (!server->init(serverConfig))
-        return 1;
-    // Register index page handler
-    server->registerHandler("/", indexHandler.m_callback);
-    // Register CRUD handlers
-    server->registerHandler("/create/*", createHandler.m_callback);
-    server->registerHandler("/read/*", readHandler.m_callback);
-    server->registerHandler("/update/*", updateHandler.m_callback);
-    server->registerHandler("/delete/*", deleteHandler.m_callback);
-    // Register query handler
-    server->registerHandler("/query/*", queryHandler.m_callback);
-
-    bool result = server->run();
-    return result ? 0 : 1;
+    return 0;
 }
 

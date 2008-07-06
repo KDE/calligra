@@ -18,7 +18,6 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <iostream>
 #include <boost/regex.hpp>
 #include "PatternServer.h"
 
@@ -33,15 +32,25 @@ namespace net {
         if (m_resources.empty())
             return false;
 
+        PION_LOG_INFO(m_logger, "Requested resource: \"" << resource << "\"");
+        
         // iterate through each resource entry that may match the resource
         ResourceMap::const_iterator i = m_resources.upper_bound(resource);
         while (i != m_resources.begin()) {
             --i;
-            // check for a match if the first part of the strings match
-            boost::regex expression(i->first);
-            if (boost::regex_match(resource, expression)) {
-                request_handler = i->second;
-                return true;
+            try {
+                if (resource == "" && ((i->first == "/") || i->first == "")) {
+                    request_handler = i->second;
+                    return true;
+                } else {
+                    boost::regex expression(i->first);
+                    if (boost::regex_match(resource, expression)) {
+                        request_handler = i->second;
+                        return true;
+                    }
+                }
+            } catch (boost::regex_error& re) {
+                // do nothing
             }
         }
 

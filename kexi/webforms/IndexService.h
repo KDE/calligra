@@ -18,6 +18,22 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "ServerConfig.h"
+#ifndef KEXIWEBFORMS_INDEXSERVICE_H
+#define KEX_WEBFORMS_INDEXSERVICE_H
 
-// ServerConfig::dirList = false;
+#include "WebFormsService.h"
+
+struct RequestData;
+
+namespace KexiWebForms {
+        
+    class IndexService : public WebFormsService {
+    public:
+        IndexService(const char* name) : WebFormsService(name) {}
+        virtual ~IndexService() {}
+        
+        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
+    };
+}
+
+#endif /* KEXI_WEBFORMS_INDEX_H */

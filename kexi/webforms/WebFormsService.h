@@ -18,45 +18,39 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIWEBFORMS_SERVERCONFIG_H
-#define KEXIWEBFORMS_SERVERCONFIG_H
+#ifndef KEXIWEBFORMS_WEBFORMSSERVICE_H
+#define KEXIWEBFORMS_WEBFORMSSERVICE_H
 
-#include <QString>
+#include <pion/net/WebService.hpp>
+
+class QString;
+class QVariant;
+namespace google {
+    class TemplateDictionary;
+}
+namespace KexiDB {
+    class Cursor;
+}
 
 namespace KexiWebForms {
 
-    /*!
-     * A structure representing HTTP server configuration
-     */
-    struct ServerConfig {
+    class WebFormsService : public pion::net::WebService {
+        public:
+            WebFormsService(const char*);
+            virtual ~WebFormsService();
 
-        /*! A string to specify listen ports */
-        QString ports;
-
-        /*!
-         * A string specifying the webroot, it must contain at least
-         * the required template files
-         */
-        QString webRoot;
-
-        /*! Wether or not enable directory listing */
-        bool dirList;
-
-        /*! Wether or not enable SSL support */
-        QString https;
-
-        /*!
-         * If SSL support is enabled, this string should point to a valid
-         * certificate file
-         */
-        QString certPath;
-
-        /*!
-         * Path to the Kexi database file, Kexi shortcut file or Kexi connection file
-         */
-        QString dbPath;
+            /**
+             * Handle request
+             */
+            virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) = 0;
+            
+            void setValue(const char*, const QVariant&);
+            void setValue(const char*, const QString&);
+        protected:
+            google::TemplateDictionary* m_dict;
+            KexiDB::Cursor* m_cursor;
     };
-
+    
 }
 
-#endif /* KEXIWEBFORMS_SERVERCONFIG_H */
+#endif

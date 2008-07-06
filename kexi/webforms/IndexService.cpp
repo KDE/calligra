@@ -19,15 +19,17 @@
 */
 
 #include <string>
+
+#include <pion/net/HTTPResponseWriter.hpp>
+
 #include <google/template.h>
 
-#include "Request.h"
-#include "HTTPStream.h"
 #include "DataProvider.h"
 #include "TemplateProvider.h"
 
-#include "Index.h"
+#include "IndexService.h"
 
+using namespace pion::net;
 
 /*! @short Kexi Web Forms namespace
  * This namespace contains code related to Kexi Web Forms daemon
@@ -36,21 +38,20 @@
  * even if they don't have Kexi Installed
  */
 namespace KexiWebForms {
-    void indexCallback(RequestData* req) {
-        HTTPStream stream(req);
-        google::TemplateDictionary* dict = initTemplate("index.tpl");
+    
+    void IndexService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
+        HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
+                    boost::bind(&TCPConnection::finish, tcp_conn)));
+                    
 
         QString tables;
         for (int i = 0; i < gConnection->tableNames().size(); ++i) {
             tables.append("<li><a href=\"/read/").append(gConnection->tableNames().at(i));
             tables.append("\">").append(gConnection->tableNames().at(i)).append("</a></li>");
         }
-        dict->SetValue("TABLES", tables.toUtf8().constData());
+        setValue("TABLES", tables);
 
-        renderTemplate(dict, stream);
+        renderTemplate(m_dict, writer);
     }
-
-    // Index Handler
-    IndexHandler::IndexHandler() : Handler(indexCallback) {}
 
 }

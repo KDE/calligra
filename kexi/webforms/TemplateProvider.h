@@ -21,13 +21,17 @@
 #ifndef KEXIWEBFORMS_TEMPLATEPROVIDER_H
 #define KEXIWEBFORMS_TEMPLATEPROVIDER_H
 
-#include <google/template.h>
+#include <pion/net/HTTPResponseWriter.hpp>
+
+namespace google {
+    class TemplateDictionary;
+}
 
 namespace KexiWebForms {
     class HTTPStream;
 
     google::TemplateDictionary* initTemplate(const char*);
-    void renderTemplate(google::TemplateDictionary*, HTTPStream&);
+    void renderTemplate(google::TemplateDictionary*, pion::net::HTTPResponseWriterPtr);
 
 }
 

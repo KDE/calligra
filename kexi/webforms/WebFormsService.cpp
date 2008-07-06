@@ -18,28 +18,36 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_WEBFORMS_INDEX_H
-#define KEXI_WEBFORMS_INDEX_H
+#include <QString>
+#include <QVariant>
 
-#include "Handler.h"
+#include <kexidb/cursor.h>
 
-struct RequestData;
+#include <google/template.h>
+
+#include "DataProvider.h"
+#include "TemplateProvider.h"
+
+#include "WebFormsService.h"
 
 namespace KexiWebForms {
-    /*!
-     * This namespace contains a function bound with the 'root' URI ('/')
-     * It simply shows a list of tables contained in the database
-     *
-     * @param RequestData a pointer to a RequestData structure
-     * @see KexiWebForms::RequestData
-     */
-    void indexCallback(RequestData*);
-    
-    class IndexHandler : public Handler {
-    public:
-        IndexHandler();
-        virtual ~IndexHandler() {}
-    };
-}
 
-#endif /* KEXI_WEBFORMS_INDEX_H */
+    WebFormsService::WebFormsService(const char* name) : pion::net::WebService() {
+        m_dict = initTemplate(name);
+    }
+
+    WebFormsService::~WebFormsService() {
+        m_cursor->close();
+        gConnection->deleteCursor(m_cursor);
+        delete m_cursor;
+        delete m_dict;
+    }
+    
+    void WebFormsService::setValue(const char* k, const QVariant& v) {
+        setValue(k, v.toString());
+    }
+    void WebFormsService::setValue(const char* k, const QString& v) {
+        m_dict->SetValue(k, v.toUtf8().constData());
+    }
+    
+}

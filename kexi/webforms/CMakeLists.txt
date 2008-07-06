@@ -5,27 +5,28 @@ add_definitions(-DEMBEDDED) # for shttpd
 include_directories(${CMAKE_SOURCE_DIR}/kexi/3rdparty/shttpd/src
   ${GOOGLE_CTEMPLATE_INCLUDE_DIR})
 
+# Workaround, exceptions are needed for pion::net
+add_definitions(-fexceptions -Wno-deprecated)
+
 set(webforms_SRCS
   main.cpp
-  Server.cpp
-  ServerConfig.cpp
-  HTTPStream.cpp
   DataProvider.cpp
   TemplateProvider.cpp
   Request.cpp
 # Pattern Server
   PatternServer.cpp
+  WebFormsService.cpp
 # Index view
   Index.cpp
 # CRUD Architecture
-  Handler.cpp
+##  Handler.cpp
 # CRUD
-  Create.cpp
-  Read.cpp
-  Update.cpp
-  Delete.cpp
+##  Create.cpp
+##  Read.cpp
+##  Update.cpp
+##  Delete.cpp
 # Other handlers
-  Query.cpp
+##  Query.cpp
 )
 
 kde4_add_executable(kwebforms NOGUI ${webforms_SRCS})
