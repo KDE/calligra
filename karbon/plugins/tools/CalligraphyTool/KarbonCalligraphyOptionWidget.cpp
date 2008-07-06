@@ -26,30 +26,6 @@ set to true
 TODO: add a reset defaults option?
 */
 
-/*class CalligraphyProfiles
-{
-    void addProfile(const QString &name);
-    void removeProfile(const QString &name);
-
-    void selectProfile(const QString &name);
-    QString selectedProfile();
-
-private:
-    loadAll();
-    saveAll();
-
-private:
-    QString m_selectedProfile;
-    QList<CalligraphyProfile> m_profiles;
-};*/
-
-KarbonCalligraphyOptionWidget::CalligraphyProfile::CalligraphyProfile(
-                const QString &name, double width, double thinning, int angle,
-                double fixation, double mass, double drag )
-    : name(name), width(width), thinning(thinning), angle(angle),
-      fixation(fixation), mass(mass), drag(drag)
-{}
-
 KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
 {
     QVBoxLayout *layout = new QVBoxLayout( this );
@@ -124,8 +100,55 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     layout->addWidget( removeButton );
     layout->addStretch( 1 );
 
-    connect ( comboBox, SIGNAL(currentIndexChanged(int)),
-              SLOT(loadProfile(int)) );
+    addDefaultProfiles(); // if they are already added does nothing
+    loadProfiles();
+    createConnections();
+}
+
+KarbonCalligraphyOptionWidget::~KarbonCalligraphyOptionWidget()
+{
+    foreach (Profile *profile, profiles)
+        delete profile;
+}
+
+/*void KarbonCalligraphyOptionWidget::customProfile()
+{
+    addProfile( createProfile(i18n("Custom")) );
+}*/
+
+void KarbonCalligraphyOptionWidget::emitAll()
+{
+    emit widthChanged( widthBox->value() );
+    emit thinningChanged( thinningBox->value() );
+    emit angleChanged( angleBox->value() );
+    emit fixationChanged( fixationBox->value() );
+    emit massChanged( massBox->value() );
+    emit dragChanged( dragBox->value() );
+}
+
+void KarbonCalligraphyOptionWidget::loadProfile( const QString &name )
+{
+    // write the new profile in the config file
+    KConfig config( KGlobal::mainComponent(), "karboncalligraphyrc" );
+    KConfigGroup generalGroup( &config, "General" );
+    generalGroup.writeEntry( "profile", name );
+    config.sync();
+
+    // and load it
+    loadCurrentProfile();
+}
+
+
+/******************************************************************************
+ ************************* Convenience Functions ******************************
+ ******************************************************************************/
+
+
+void KarbonCalligraphyOptionWidget::createConnections()
+{
+    connect ( comboBox, SIGNAL(currentIndexChanged(const QString &)),
+              SLOT(loadProfile(const QString &)) );
+
 
     connect( widthBox, SIGNAL(valueChanged(double)),
              SIGNAL(widthChanged(double)));
@@ -144,15 +167,6 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
 
     connect( dragBox, SIGNAL(valueChanged(double)),
              SIGNAL(dragChanged(double)));
-
-    addDefaultProfiles();
-    loadProfiles();
-}
-
-KarbonCalligraphyOptionWidget::~KarbonCalligraphyOptionWidget()
-{
-    while ( ! profiles.isEmpty() )
-        delete profiles.takeLast();
 }
 
 void KarbonCalligraphyOptionWidget::addDefaultProfiles()
@@ -164,7 +178,6 @@ void KarbonCalligraphyOptionWidget::addDefaultProfiles()
     if ( generalGroup.readEntry( "defaultProfilesAdded", false ) )
         return;
 
-    // if not add them
     KConfigGroup profile0( &config, "Profile0" );
     profile0.writeEntry( "name", i18n("Mouse") );
     profile0.writeEntry( "width", 30.0 );
@@ -173,7 +186,7 @@ void KarbonCalligraphyOptionWidget::addDefaultProfiles()
     profile0.writeEntry( "fixation", 0.0 );
     profile0.writeEntry( "mass", 3.0 );
     profile0.writeEntry( "drag", 0.7 );
-    
+
     KConfigGroup profile1( &config, "Profile1" );
     profile1.writeEntry( "name", i18n("Graphics Pen") );
     profile1.writeEntry( "width", 50.0 );
@@ -183,7 +196,7 @@ void KarbonCalligraphyOptionWidget::addDefaultProfiles()
     profile1.writeEntry( "mass", 1.0 );
     profile1.writeEntry( "drag", 0.9 );
 
-    generalGroup.writeEntry( "profile", 0);
+    generalGroup.writeEntry( "profile", i18n("Mouse") );
     generalGroup.writeEntry( "defaultProfilesAdded", true );
 
     config.sync();
@@ -198,24 +211,27 @@ void KarbonCalligraphyOptionWidget::loadProfiles()
     int i = 0;
     while (1) // forever
     {
-        KConfigGroup profile( &config, "Profile" + QString::number(i) );
+        KConfigGroup profileGroup( &config, "Profile" + QString::number(i) );
         // invalid profile, assume we reached the last one
-        if ( ! profile.hasKey("name") )
+        if ( ! profileGroup.hasKey("name") )
             break;
 
-        QString name =      profile.readEntry( "name", QString() );
-        double width =      profile.readEntry( "width", 30.0 );
-        double thinning =   profile.readEntry( "thinning", 0.2 );
-        int angle =         profile.readEntry( "angle", 30 );
-        double fixation =   profile.readEntry( "fixation", 0.0 );
-        double mass =       profile.readEntry( "mass", 3.0 );
-        double drag =       profile.readEntry( "drag", 0.7 );
+        Profile *profile = new Profile;
+        profile->name =     profileGroup.readEntry( "name", QString() );
+        profile->width =    profileGroup.readEntry( "width", 30.0 );
+        profile->thinning = profileGroup.readEntry( "thinning", 0.2 );
+        profile->angle =    profileGroup.readEntry( "angle", 30 );
+        profile->fixation = profileGroup.readEntry( "fixation", 0.0 );
+        profile->mass =     profileGroup.readEntry( "mass", 3.0 );
+        profile->drag =     profileGroup.readEntry( "drag", 0.7 );
 
-        profiles.append( new CalligraphyProfile( name, width, thinning,
-                                                 angle, fixation,
-                                                 mass, drag ) );
-        comboBox->addItem( name );
+        profiles.insert( profile->name, profile );
         ++i;
+    }
+
+    foreach (const QString &name, profiles.keys())
+    {
+        comboBox->addItem( name );
     }
 
     loadCurrentProfile();
@@ -225,16 +241,27 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
 {
     KConfig config( KGlobal::mainComponent(), "karboncalligraphyrc" );
     KConfigGroup generalGroup( &config, "General" );
-    int currentProfile = generalGroup.readEntry( "profile", -1 );
+    QString currentProfile = generalGroup.readEntry( "profile", QString() );
 
-    if ( currentProfile < 0 || currentProfile >= profiles.count() ) {
+    // find the index needed by the comboBox
+    int index = 0;
+    foreach (const QString &name, profiles.keys())
+    {
+        if (name == currentProfile)
+            break;
+        ++index;
+    }
+
+    if ( currentProfile == "" || index == profiles.count() )
+    {
         kError() << "invalid karboncalligraphyrc!!";
         return;
     }
 
-    comboBox->setCurrentIndex( currentProfile );
+    kDebug() << comboBox->currentIndex() << index;
+    comboBox->setCurrentIndex( index );
 
-    CalligraphyProfile *profile = profiles[currentProfile];
+    Profile *profile = profiles[currentProfile];
     widthBox->setValue( profile->width );
     thinningBox->setValue( profile->thinning );
     angleBox->setValue( profile->angle );
@@ -243,22 +270,18 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
     dragBox->setValue( profile->drag );
 }
 
-void KarbonCalligraphyOptionWidget::loadProfile( int profileIndex )
+KarbonCalligraphyOptionWidget::Profile *
+KarbonCalligraphyOptionWidget::createProfile( const QString &name )
 {
-    KConfig config( KGlobal::mainComponent(), "karboncalligraphyrc" );
-    KConfigGroup generalGroup( &config, "General" );
-    generalGroup.writeEntry( "profile", profileIndex );
-    config.sync();
 
-    loadCurrentProfile();
-}
+    Profile *profile = new Profile;
+    profile->name = name;
+    profile->width = widthBox->value();
+    profile->thinning = thinningBox->value();
+    profile->angle = angleBox->value();
+    profile->fixation = fixationBox->value();
+    profile->mass = massBox->value();
+    profile->drag = dragBox->value();
 
-void KarbonCalligraphyOptionWidget::emitAll()
-{
-    emit widthChanged( widthBox->value() );
-    emit thinningChanged( thinningBox->value() );
-    emit angleChanged( angleBox->value() );
-    emit fixationChanged( fixationBox->value() );
-    emit massChanged( massBox->value() );
-    emit dragChanged( dragBox->value() );
+    return profile;
 }

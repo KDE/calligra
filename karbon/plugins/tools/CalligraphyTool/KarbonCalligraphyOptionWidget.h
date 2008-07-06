@@ -2,6 +2,7 @@
 #define KARBONCALLIGRAPHYOPTIONWIDGET_H
 
 #include <QWidget>
+#include <QMap>
 
 class KComboBox;
 class QSpinBox;
@@ -30,14 +31,11 @@ signals:
     void dragChanged(double);
 
 private slots:
-    void loadProfile( int profileIndex );
+    void loadProfile( const QString &name );
 
 private:
-    struct CalligraphyProfile
+    struct Profile
     {
-        CalligraphyProfile( const QString &name, double width,
-                            double thinning, int angle,
-                            double fixation, double mass, double drag );
         QString name;
         double width;
         double thinning;
@@ -47,13 +45,27 @@ private:
         double drag;
     };
 
+    // convenience functions:
+
+    // connects signals and slots
+    void createConnections();
+
+    // if they aren't already added adds the default profiles
+    // called by the ctor
     void addDefaultProfiles();
+
     // laod the profiles from the configuration file
     void loadProfiles();
+
+    // loads the profile set as current profile in the configuration file
     void loadCurrentProfile();
 
-    QList<CalligraphyProfile *>profiles;
-    //int currentProfile; // index of current profile
+    // creates a profile reading the values from the input boxes
+    // ownership of the Profile * object is passed to the caller
+    Profile *createProfile( const QString &name );
+
+private:
+    QMap<QString, Profile *> profiles;
 
     KComboBox *comboBox;
     QDoubleSpinBox  *widthBox;
