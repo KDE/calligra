@@ -31,7 +31,7 @@ TODO: add a reset defaults option?
 */
 
 KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
-    : changingProfile(false)
+    : changingProfile(false), detailsShowed(true)
 {
     QVBoxLayout *layout = new QVBoxLayout( this );
 
@@ -48,9 +48,12 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     widthLayout->addWidget( widthBox );
     layout->addLayout( widthLayout );
 
-    detailsButton = new QPushButton( i18n("Hide details <<"), this );
+    detailsButton = new QPushButton( "", this );
     layout->addWidget( detailsButton );
 
+    details = new QWidget( this );
+    QVBoxLayout *detailsLayout = new QVBoxLayout( details );
+    
     QHBoxLayout *thinningLayout = new QHBoxLayout( this );
     QLabel *thinningLabel = new QLabel( i18n( "Thinning" ), this );
     thinningBox = new QDoubleSpinBox;
@@ -58,7 +61,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     thinningBox->setSingleStep( 0.1 );
     thinningLayout->addWidget( thinningLabel );
     thinningLayout->addWidget( thinningBox );
-    layout->addLayout( thinningLayout );
+    detailsLayout->addLayout( thinningLayout );
 
     QHBoxLayout *angleLayout = new QHBoxLayout( this );
     QLabel *angleLabel = new QLabel( i18n( "Angle" ), this );
@@ -66,7 +69,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     angleBox->setRange( 0, 180 );
     angleLayout->addWidget( angleLabel );
     angleLayout->addWidget( angleBox );
-    layout->addLayout( angleLayout );
+    detailsLayout->addLayout( angleLayout );
 
     QHBoxLayout *fixationLayout = new QHBoxLayout( this );
     QLabel *fixationLabel = new QLabel( i18n( "Fixation" ), this );
@@ -75,7 +78,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     fixationBox->setSingleStep( 0.1 );
     fixationLayout->addWidget( fixationLabel );
     fixationLayout->addWidget( fixationBox );
-    layout->addLayout( fixationLayout );
+    detailsLayout->addLayout( fixationLayout );
 
     QHBoxLayout *massLayout = new QHBoxLayout( this );
     QLabel *massLabel = new QLabel( i18n( "Mass" ), this );
@@ -84,7 +87,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     massBox->setDecimals( 1 );
     massLayout->addWidget( massLabel );
     massLayout->addWidget( massBox );
-    layout->addLayout( massLayout );
+    detailsLayout->addLayout( massLayout );
 
     QHBoxLayout *dragLayout = new QHBoxLayout( this );
     QLabel *dragLabel = new QLabel( i18n( "Drag" ), this );
@@ -93,14 +96,18 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     dragBox->setSingleStep( 0.1 );
     dragLayout->addWidget( dragLabel );
     dragLayout->addWidget( dragBox );
-    layout->addLayout( dragLayout );
+    detailsLayout->addLayout( dragLayout );
 
     saveButton = new QPushButton( i18n("Save profile as..."), this );
-    layout->addWidget( saveButton );
+    detailsLayout->addWidget( saveButton );
 
     removeButton = new QPushButton( i18n("Remove profile"), this );
-    layout->addWidget( removeButton );
+    detailsLayout->addWidget( removeButton );
+
+    layout->addWidget( details );
     layout->addStretch( 1 );
+
+    toggleDetails();
 
     addDefaultProfiles(); // if they are already added does nothing
     loadProfiles();
@@ -109,8 +116,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
 
 KarbonCalligraphyOptionWidget::~KarbonCalligraphyOptionWidget()
 {
-    foreach (Profile *profile, profiles)
-        delete profile;
+    qDeleteAll( profiles );
 }
 
 /*void KarbonCalligraphyOptionWidget::customProfile()
@@ -200,6 +206,22 @@ void KarbonCalligraphyOptionWidget::removeProfile()
     removeProfile( comboBox->currentText() );
 }
 
+void KarbonCalligraphyOptionWidget::toggleDetails()
+{
+    if ( detailsShowed )
+    {
+        details->hide();
+        detailsButton->setText( i18n("Show details >>") );
+    }
+    else
+    {
+        details->show();
+        detailsButton->setText( i18n("Hide details <<") );
+    }
+
+    detailsShowed = !detailsShowed;
+}
+
 
 /******************************************************************************
  ************************* Convenience Functions ******************************
@@ -251,6 +273,7 @@ void KarbonCalligraphyOptionWidget::createConnections()
 
     connect( saveButton, SIGNAL(clicked()), SLOT(saveProfileAs()) );
     connect( removeButton, SIGNAL(clicked()), SLOT(removeProfile()) );
+    connect( detailsButton, SIGNAL(clicked()), SLOT(toggleDetails()) );
 }
 
 void KarbonCalligraphyOptionWidget::addDefaultProfiles()

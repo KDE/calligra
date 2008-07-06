@@ -36,6 +36,7 @@ private slots:
     void updateCurrentProfile();
     void saveProfileAs();
     void removeProfile();
+    void toggleDetails();
 
 private:
     struct Profile
@@ -93,8 +94,12 @@ private:
     QPushButton *saveButton;
     QPushButton *removeButton;
 
+    QWidget *details;
+
     // when true updateCurrentProfile() doesn't do anything
     bool changingProfile;
+
+    bool detailsShowed;
 };
 
 #endif // KARBONCALLIGRAPHYOPTIONWIDGET_H
