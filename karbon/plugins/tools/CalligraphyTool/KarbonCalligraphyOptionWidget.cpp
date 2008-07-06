@@ -5,28 +5,33 @@
 #include <KGlobal>
 #include <KConfigGroup>
 #include <KDebug>
+#include <KMessageBox>
 
 #include <QtGui/QSpinBox>
 #include <QtGui/QDoubleSpinBox>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QLabel>
 #include <QtGui/QPushButton>
+#include <QtGui/QInputDialog>
 
 /*
 Profiles are saved in karboncalligraphyrc
 
-In the group "General", profile is the number of profile used
+In the group "General", profile is the name of profile used
 
-Every profile is described in a group, the name of which is "ProfileN",
-where N is the number of the profile.
+Every profile is described in a group, the name of which is "ProfileN"
+Starting to count from 0 onwards
+(NOTE: the index in profiles is different from the N)
 
 Default profiles are added by the function addDefaultProfiles(), once they
 have been added, the entry defaultProfilesAdded in the "General" group is
 set to true
+
 TODO: add a reset defaults option?
 */
 
 KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
+    : changingProfile(false)
 {
     QVBoxLayout *layout = new QVBoxLayout( this );
 
@@ -43,8 +48,7 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     widthLayout->addWidget( widthBox );
     layout->addLayout( widthLayout );
 
-    QPushButton *detailsButton =
-            new QPushButton( i18n("Hide details <<"), this );
+    detailsButton = new QPushButton( i18n("Hide details <<"), this );
     layout->addWidget( detailsButton );
 
     QHBoxLayout *thinningLayout = new QHBoxLayout( this );
@@ -91,12 +95,10 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     dragLayout->addWidget( dragBox );
     layout->addLayout( dragLayout );
 
-    QPushButton *saveButton =
-            new QPushButton( i18n("Save profile as..."), this );
+    saveButton = new QPushButton( i18n("Save profile as..."), this );
     layout->addWidget( saveButton );
 
-    QPushButton *removeButton =
-            new QPushButton( i18n("Remove profile"), this );
+    removeButton = new QPushButton( i18n("Remove profile"), this );
     layout->addWidget( removeButton );
     layout->addStretch( 1 );
 
@@ -136,13 +138,72 @@ void KarbonCalligraphyOptionWidget::loadProfile( const QString &name )
 
     // and load it
     loadCurrentProfile();
+
+    // don't show Current if it isn't selected
+    if (name != i18n("Current")) {
+        removeProfile( i18n("Current") );
+    }
+}
+
+void KarbonCalligraphyOptionWidget::updateCurrentProfile()
+{
+    if ( ! changingProfile )
+        saveProfile("Current");
+}
+
+void KarbonCalligraphyOptionWidget::saveProfileAs()
+{
+    QString name;
+
+    // loop until a valid name is entered or the user cancelled
+    while (1) {
+        bool ok;
+        name = QInputDialog::getText( this,
+                i18n("Profile name"),
+                i18n("Please insert the name by which "
+                "you want to save this profile:"),
+                QLineEdit::Normal, QString(), &ok );
+        if ( ! ok ) return;
+
+        if ( name.isEmpty() || name == i18n("Current") )
+        {
+            KMessageBox::sorry( this,
+                        i18n("Sorry, the name you entered is invalid!"),
+                        i18nc("invalid profile name", "Invalid name!") );
+            // try again
+            saveProfileAs();
+            continue; // ask again
+        }
+
+        if ( profiles.contains(name) )
+        {
+            int ret = KMessageBox::warningYesNo( this,
+                        i18n("A profile with that name already exists!\n"
+                                "Do you want to overwrite it?") );
+
+            if ( ret == KMessageBox::Yes )
+                break; // exit while loop (save profile)
+            // else ask again
+        }
+        else
+        {
+            // the name is valid
+            break; // exit while loop (save profile)
+        }
+    }
+
+    saveProfile(name);
+}
+
+void KarbonCalligraphyOptionWidget::removeProfile()
+{
+    removeProfile( comboBox->currentText() );
 }
 
 
 /******************************************************************************
  ************************* Convenience Functions ******************************
  ******************************************************************************/
-
 
 void KarbonCalligraphyOptionWidget::createConnections()
 {
@@ -151,22 +212,45 @@ void KarbonCalligraphyOptionWidget::createConnections()
 
 
     connect( widthBox, SIGNAL(valueChanged(double)),
-             SIGNAL(widthChanged(double)));
+             SIGNAL(widthChanged(double)) );
 
     connect( thinningBox, SIGNAL(valueChanged(double)),
-             SIGNAL(thinningChanged(double)));
+             SIGNAL(thinningChanged(double)) );
 
     connect( angleBox, SIGNAL(valueChanged(int)),
-             SIGNAL(angleChanged(int)));
+             SIGNAL(angleChanged(int)) );
 
     connect( fixationBox, SIGNAL(valueChanged(double)),
-             SIGNAL(fixationChanged(double)));
+             SIGNAL(fixationChanged(double)) );
 
     connect( massBox, SIGNAL(valueChanged(double)),
-             SIGNAL(massChanged(double)));
+             SIGNAL(massChanged(double)) );
 
     connect( dragBox, SIGNAL(valueChanged(double)),
-             SIGNAL(dragChanged(double)));
+             SIGNAL(dragChanged(double)) );
+
+
+    connect( widthBox, SIGNAL(valueChanged(double)),
+             SLOT(updateCurrentProfile()) );
+
+    connect( thinningBox, SIGNAL(valueChanged(double)),
+             SLOT(updateCurrentProfile()) );
+
+    connect( angleBox, SIGNAL(valueChanged(int)),
+             SLOT(updateCurrentProfile()) );
+
+    connect( fixationBox, SIGNAL(valueChanged(double)),
+             SLOT(updateCurrentProfile()) );
+
+    connect( massBox, SIGNAL(valueChanged(double)),
+             SLOT(updateCurrentProfile()) );
+
+    connect( dragBox, SIGNAL(valueChanged(double)),
+             SLOT(updateCurrentProfile()) );
+
+
+    connect( saveButton, SIGNAL(clicked()), SLOT(saveProfileAs()) );
+    connect( removeButton, SIGNAL(clicked()), SLOT(removeProfile()) );
 }
 
 void KarbonCalligraphyOptionWidget::addDefaultProfiles()
@@ -217,6 +301,7 @@ void KarbonCalligraphyOptionWidget::loadProfiles()
             break;
 
         Profile *profile = new Profile;
+        profile->index = 1;
         profile->name =     profileGroup.readEntry( "name", QString() );
         profile->width =    profileGroup.readEntry( "width", 30.0 );
         profile->thinning = profileGroup.readEntry( "thinning", 0.2 );
@@ -244,15 +329,9 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
     QString currentProfile = generalGroup.readEntry( "profile", QString() );
 
     // find the index needed by the comboBox
-    int index = 0;
-    foreach (const QString &name, profiles.keys())
-    {
-        if (name == currentProfile)
-            break;
-        ++index;
-    }
+    int index = profilePosition( currentProfile );
 
-    if ( currentProfile == "" || index == profiles.count() )
+    if ( currentProfile == "" || index < 0 )
     {
         kError() << "invalid karboncalligraphyrc!!";
         return;
@@ -262,16 +341,18 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
     comboBox->setCurrentIndex( index );
 
     Profile *profile = profiles[currentProfile];
+
+    changingProfile = true;
     widthBox->setValue( profile->width );
     thinningBox->setValue( profile->thinning );
     angleBox->setValue( profile->angle );
     fixationBox->setValue( profile->fixation );
     massBox->setValue( profile->mass );
     dragBox->setValue( profile->drag );
+    changingProfile = false;
 }
 
-KarbonCalligraphyOptionWidget::Profile *
-KarbonCalligraphyOptionWidget::createProfile( const QString &name )
+void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
 {
 
     Profile *profile = new Profile;
@@ -283,5 +364,99 @@ KarbonCalligraphyOptionWidget::createProfile( const QString &name )
     profile->mass = massBox->value();
     profile->drag = dragBox->value();
 
-    return profile;
+    if ( profiles.contains(name) ) {
+        // there is already a profile with the same name, overwrite
+        profile->index = profiles[name]->index;
+        profiles.insert( name, profile );
+    } else {
+        // it is a new profile
+        profile->index = profiles.count();
+        profiles.insert( name, profile );
+        // ad the profile to the combobox
+        comboBox->insertItem( profilePosition(name), name );
+    }
+
+    comboBox->setCurrentIndex( profilePosition(name) );
+
+    KConfig config( KGlobal::mainComponent(), "karboncalligraphyrc" );
+    QString str = "Profile" + QString::number( profile->index );
+    KConfigGroup profileGroup( &config, str );
+
+    profileGroup.writeEntry( "name", name );
+    profileGroup.writeEntry( "width", profile->width );
+    profileGroup.writeEntry( "thinning", profile->thinning );
+    profileGroup.writeEntry( "angle", profile->angle );
+    profileGroup.writeEntry( "fixation", profile->fixation );
+    profileGroup.writeEntry( "mass", profile->mass );
+    profileGroup.writeEntry( "drag", profile->drag );
+
+    KConfigGroup generalGroup( &config, "General" );
+    generalGroup.writeEntry( "profile", name );
+
+    config.sync();
+}
+
+void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
+{
+    int index = profilePosition(name);
+    if ( index < 0 ) return; // no such profile
+
+    // remove the file from the config file
+    KConfig config( KGlobal::mainComponent(), "karboncalligraphyrc" );
+    int deletedIndex = profiles[name]->index;
+    QString deletedGroup = "Profile" + QString::number( deletedIndex );
+    config.deleteGroup( deletedGroup );
+    config.sync();
+
+    // and from profiles
+    profiles.remove(name);
+
+    comboBox->removeItem(index);
+
+    // now in the config file there is value ProfileN missing,
+    // where N = configIndex, so put the last one there
+    if ( profiles.isEmpty() ) return;
+
+    int lastN = -1;
+    Profile *profile = 0; // profile to be moved, will be the last one
+    foreach ( Profile *p, profiles )
+    {
+        if ( p->index > lastN )
+        {
+            lastN = p->index;
+            profile = p;
+        }
+    }
+
+    Q_ASSERT(profile != 0);
+
+    // do nothing if the deleted group was the last one
+    if ( deletedIndex > lastN ) return;
+
+    QString lastGroup = "Profile" + QString::number( lastN );
+    config.deleteGroup( lastGroup );
+
+    KConfigGroup profileGroup( &config, deletedGroup );
+    profileGroup.writeEntry( "name", profile->name );
+    profileGroup.writeEntry( "width", profile->width );
+    profileGroup.writeEntry( "thinning", profile->thinning );
+    profileGroup.writeEntry( "angle", profile->angle );
+    profileGroup.writeEntry( "fixation", profile->fixation );
+    profileGroup.writeEntry( "mass", profile->mass );
+    profileGroup.writeEntry( "drag", profile->drag );
+    config.sync();
+
+    profile->index = deletedIndex;
+}
+
+int KarbonCalligraphyOptionWidget::profilePosition( const QString &profileName )
+{
+    int res = 0;
+    foreach (const QString &name, profiles.keys())
+    {
+        if (name == profileName)
+            return res;
+        ++res;
+    }
+    return -1;
 }

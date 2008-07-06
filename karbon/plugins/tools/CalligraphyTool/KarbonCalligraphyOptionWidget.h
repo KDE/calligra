@@ -7,6 +7,7 @@
 class KComboBox;
 class QSpinBox;
 class QDoubleSpinBox;
+class QPushButton;
 
 class KarbonCalligraphyOptionWidget : public QWidget
 {
@@ -32,11 +33,15 @@ signals:
 
 private slots:
     void loadProfile( const QString &name );
+    void updateCurrentProfile();
+    void saveProfileAs();
+    void removeProfile();
 
 private:
     struct Profile
     {
         QString name;
+        int index; // index in the config file
         double width;
         double thinning;
         int angle;
@@ -60,9 +65,18 @@ private:
     // loads the profile set as current profile in the configuration file
     void loadCurrentProfile();
 
-    // creates a profile reading the values from the input boxes
-    // ownership of the Profile * object is passed to the caller
-    Profile *createProfile( const QString &name );
+    // save a new profile using the values of the input boxes
+    // if a profile with the same name already exists it will be overwritten
+    void saveProfile( const QString &name );
+
+    // removes the profile from the configuration file, from profiles
+    // and from the combobox.
+    // if the profile doesn't exist the function does nothing
+    void removeProfile(const QString &name);
+
+    // returns the position inside profiles of a certain profile
+    // returns -1 if the profile is not found
+    int profilePosition( const QString &profileName );
 
 private:
     QMap<QString, Profile *> profiles;
@@ -74,6 +88,13 @@ private:
     QDoubleSpinBox  *fixationBox;
     QDoubleSpinBox  *massBox;
     QDoubleSpinBox  *dragBox;
+
+    QPushButton *detailsButton;
+    QPushButton *saveButton;
+    QPushButton *removeButton;
+
+    // when true updateCurrentProfile() doesn't do anything
+    bool changingProfile;
 };
 
 #endif // KARBONCALLIGRAPHYOPTIONWIDGET_H
