@@ -121,7 +121,6 @@ void ReportRectEntity::mouseMoveEvent ( QGraphicsSceneMouseEvent * event )
 	w = p.x() - scenePos().x();
 	h = p.y() - scenePos().y();
 	
-	//TODO All the other resize directions
 	//TODO use an enum for the directions
 
 	switch(_grabAction)
