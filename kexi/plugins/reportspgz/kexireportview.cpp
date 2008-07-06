@@ -166,26 +166,29 @@ void KexiReportView::slotRenderKSpread()
 {
 #ifdef HAVE_KSPREAD
 	KRKSpreadRender ks;
-
-	ks.render(doc);
+	QString saveName = KFileDialog::getSaveFileName();
+	QFile file(saveName);
+	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+	{
+	    KMessageBox::error(this, i18n("Report not saved, unable to open file for writing."), i18n("Not Saved"));
+	    return;
+	}
+	ks.render(doc, saveName);
 #endif
 }
 
 void KexiReportView::slotExportHTML()
 {
-	kDebug() << "1" << endl;
-
 	QString saveName = KFileDialog::getSaveFileName();
 	QFile file(saveName);
 	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
 	{
-	    KMessageBox::error(this, i18n("Report not saved "), i18n("Not Saved"));
+	    KMessageBox::error(this, i18n("Report not saved, unable to open file for writing."), i18n("Not Saved"));
 	    return;
 	}
 
 	bool css = (KMessageBox::questionYesNo(this, i18n("Would you like to export using a Cascading Style Sheet which will give output closer to the original, or export using a Table which outputs a much simpler format."), i18n("Export Style"), KGuiItem("CSS"), KGuiItem("Table")) == KMessageBox::Yes);
 	KRHtmlRender hr;
-	kDebug() << "2" << endl;
 	QTextStream out(&file);
 	out << hr.render(doc, saveName, css) << "\n";
 

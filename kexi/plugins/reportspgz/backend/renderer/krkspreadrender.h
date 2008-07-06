@@ -32,7 +32,7 @@ class KRKSpreadRender
 
 		~KRKSpreadRender();
 
-		void render (ORODocument *);
+		void render (ORODocument *, const QString&);
 		
 	private:
 		
