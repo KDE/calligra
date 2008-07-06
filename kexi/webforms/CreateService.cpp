@@ -23,6 +23,8 @@
 
 #include <KDebug>
 
+#include <pion/net/HTTPResponseWriter.hpp>
+
 #include <google/template.h>
 
 #include <kexidb/cursor.h>
@@ -31,34 +33,33 @@
 #include <kexidb/roweditbuffer.h>
 #include <kexidb/field.h>
 
-#include "Request.h"
-#include "Update.h"
-#include "HTTPStream.h"
 #include "DataProvider.h"
 #include "TemplateProvider.h"
 
-#include "Create.h"
+#include "CreateService.h"
+
+using namespace pion::net;
 
 namespace KexiWebForms {
 
-    void createCallback(RequestData* req) {
-        HTTPStream stream(req);
-        google::TemplateDictionary* dict = initTemplate("create.tpl");
+    void CreateService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
+        HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
+                    boost::bind(&TCPConnection::finish, tcp_conn)));
 
         /* Retrieve the requested table name */
-        QString requestedTable = Request::requestUri(req).split('/').at(2);
-        dict->SetValue("TABLENAME", requestedTable.toUtf8().constData());
+        QString requestedTable(QString(request->getOriginalResource().c_str()).split('/').at(2));
+        setValue("TABLENAME", requestedTable);
 
 
         KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
 
 
         /* Build the form */
-        if (Request::request(req, "dataSent") == "true") {
+        if (request->getQuery("dataSent") == "true") {
             KexiDB::QuerySchema schema(*tableSchema);
             KexiDB::Cursor* cursor = gConnection->prepareQuery(schema);
 
-            QStringList fieldsList(Request::request(req, "tableFields").split("|:|"));
+            QStringList fieldsList(QString(request->getQuery("tableFields").c_str()).split("|:|"));
             kDebug() << "Fields: " << fieldsList;
 
             QStringListIterator iterator(fieldsList);
@@ -68,9 +69,9 @@ namespace KexiWebForms {
 
             while (iterator.hasNext()) {
                 QString currentFieldName(iterator.next());
-                QString currentFieldValue(QUrl::fromPercentEncoding(Request::request(req, currentFieldName).toUtf8()));
+                QString currentFieldValue(QUrl::fromPercentEncoding(request->getQuery(currentFieldName.toUtf8().constData()).c_str()));
 
-                /*! @fixme This removes pluses */
+                /*! @note This removes pluses */
                 currentFieldValue.replace("+", " ");
                 QVariant currentValue(currentFieldValue);
 
@@ -80,18 +81,19 @@ namespace KexiWebForms {
 
 
             if (cursor->insertRow(recordData, editBuffer)) {
-                cachedPkeys[requestedTable].clear();
-                dict->ShowSection("SUCCESS");
-                dict->SetValue("MESSAGE", "Row added successfully");
+                /** @note Restore this */
+                //cachedPkeys[requestedTable].clear();
+                m_dict->ShowSection("SUCCESS");
+                setValue("MESSAGE", "Row added successfully");
             } else {
-                dict->ShowSection("ERROR");
-                dict->SetValue("MESSAGE", gConnection->errorMsg().toUtf8().constData());
+                m_dict->ShowSection("ERROR");
+                setValue("MESSAGE", gConnection->errorMsg());
             }
 
             kDebug() << "Deleting cursor..." << endl;
             gConnection->deleteCursor(cursor);
         } else {
-            dict->ShowSection("FORM");
+            m_dict->ShowSection("FORM");
 
             QString formData;
             QStringList fieldsList;
@@ -134,15 +136,12 @@ namespace KexiWebForms {
                 fieldsList << fieldName;*/
             }
 
-            dict->SetValue("TABLEFIELDS", fieldsList.join("|:|").toUtf8().constData());
-            dict->SetValue("FORMDATA", formData.toUtf8().constData());
+            setValue("TABLEFIELDS", fieldsList.join("|:|"));
+            setValue("FORMDATA", formData);
         }
 
 
-        renderTemplate(dict, stream);
+        renderTemplate(m_dict, writer);
     }
 
-
-    // Create Handler
-    CreateHandler::CreateHandler() : Handler(createCallback) {}
 }

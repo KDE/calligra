@@ -18,40 +18,20 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXIWEBFORMS_WEBFORMSSERVICE_H
-#define KEXIWEBFORMS_WEBFORMSSERVICE_H
+#ifndef KEXIWEBFORMS_QUERYSERVICE_H
+#define KEXIWEBFORMS_QUERYSERVICE_H
 
-#include <pion/net/WebService.hpp>
-
-class QString;
-class QVariant;
-namespace google {
-    class TemplateDictionary;
-}
-namespace KexiDB {
-    class Cursor;
-}
+#include "WebFormsService.h"
 
 namespace KexiWebForms {
-
-    class WebFormsService : public pion::net::WebService {
-        public:
-            WebFormsService(const char*);
-            virtual ~WebFormsService();
-
-            /**
-             * Handle request
-             */
-            virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) = 0;
-            
-            void setValue(const char*, const QVariant&);
-            void setValue(const char*, const QString&);
-            void setValue(const char*, const char*);
-        protected:
-            google::TemplateDictionary* m_dict;
-            KexiDB::Cursor* m_cursor;
-    };
     
+    class QueryService : public WebFormsService {
+    public:
+        QueryService(const char* name) : WebFormsService(name) {}
+        virtual ~QueryService() {}
+
+        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
+    };
 }
 
-#endif
+#endif /* KEXIWEBFORMS_QUERYSERVICE_H */

@@ -18,30 +18,21 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include <QString>
+#ifndef KEXIWEBFORMS_READSERVICE_H
+#define KEXIWEBFORMS_READSERVICE_H
 
-#include <shttpd.h>
-
-#include "Request.h"
+#include "WebFormsService.h"
 
 namespace KexiWebForms {
-    namespace Request {
-        /**
-         * Create a QMap containing all GET/POST request data
-         * and make it accessible by name
-         */
-        QString request(RequestData* req, const char* name) {
-            char value[4096];
-            shttpd_get_var(name, req->in.buf, req->in.len, value, sizeof(value));
-            return QString(value);
-        }
+    
+    class ReadService : public WebFormsService {
+    public:
+        ReadService(const char* name) : WebFormsService(name) {}
+        virtual ~ReadService() {}
 
-        QString request(RequestData* req, const QString& name) {
-            return request(req, name.toUtf8().constData());
-        }
-
-        QString requestUri(RequestData* req) {
-            return QString(shttpd_get_env(req, "REQUEST_URI"));
-        }
-    }
+        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
+    };
+    
 }
+
+#endif /* KEXIWEBFORMS_READSERVICE_H */

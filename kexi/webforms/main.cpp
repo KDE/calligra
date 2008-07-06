@@ -36,9 +36,9 @@
 //#include "ServerConfig.h"
 #include "DataProvider.h"
 
-#include "Index.h"
+#include "IndexService.h"
 //#include "Query.h"
-//#include "CRUD.h"
+#include "CRUD.h"
 
 using namespace KexiWebForms;
 using namespace pion::net;
@@ -67,18 +67,6 @@ int main(int argc, char **argv) {
 
     KCmdLineArgs* args = KCmdLineArgs::parsedArgs();
 
-    // SSL
-    /*if (args->isSet("https")) {
-        kDebug() << "Initializing SSL...";
-        if (!args->isSet("cert")) {
-            kError() << "You must specify both certificate and key file in order to use SSL support";
-            return 1;
-        } else {
-            serverConfig.certPath = args->getOption("cert");
-        }
-        serverConfig.https = args->getOption("https");
-    }*/
-
     if (args->isSet("file")) {
         if (!initDatabase(args->getOption("file"))) {
             kError() << "Something went wrong while initializing database..." << endl;
@@ -93,22 +81,21 @@ int main(int argc, char **argv) {
     google::Template::SetTemplateRootDirectory(QFile::encodeName(args->getOption("webroot")).constData());
 
     pion::net::PatternServer server(8080);
+    
     IndexService indexService("index.tpl");
+    CreateService createService("create.tpl");
+    ReadService readService("read.tpl");
+    UpdateService updateService("update.tpl");
+    DeleteService deleteService("delete.tpl");
+    
     server.addService("/", &indexService);
+    server.addService("/create/(.*)", &createService);
+    server.addService("/read/(.*)", &readService);
+    server.addService("/update/(.*)", &updateService);
+    server.addService("/delete/(.*)", &deleteService);
     server.start();
+    
     main_shutdown_manager.wait();
-
-    // Index handler
-    /*IndexHandler indexHandler;
-
-    // CRUD Handlers
-    CreateHandler createHandler;
-    ReadHandler readHandler;
-    UpdateHandler updateHandler;
-    DeleteHandler deleteHandler;
-
-    // Query Handler
-    QueryHandler queryHandler;*/
 
     return 0;
 }

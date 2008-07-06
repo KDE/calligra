@@ -32,7 +32,6 @@
 #include <pion/net/HTTPResponseWriter.hpp>
 
 #include "DataProvider.h"
-#include "HTTPStream.h"
 
 #include "TemplateProvider.h"
 

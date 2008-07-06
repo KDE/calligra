@@ -19,12 +19,22 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include <shttpd.h>
+#ifndef KEXIWEBFORMS_CREATESERVICE_H
+#define KEXIWEBFORMS_CREATESERVICE_H
 
-#include "Handler.h"
+#include "WebFormsService.h"
+
+struct RequestData;
 
 namespace KexiWebForms {
 
-    Handler::Handler(shttpd_callback_t callback) : m_callback(callback) {}
-    
+    class CreateService : public WebFormsService {
+    public:
+        CreateService(const char* name) : WebFormsService(name) {}
+        virtual ~CreateService() {}
+
+        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
+    };
 }
+
+#endif /* KEXIWEBFORMS_CREATESERVICE_H */

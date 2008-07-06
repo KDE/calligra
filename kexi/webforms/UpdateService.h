@@ -18,31 +18,28 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_WEBFORMS_QUERY_H
-#define KEXI_WEBFORMS_QUERY_H
+#ifndef KEXIWEBFORMS_UPDATESERVICE_H
+#define KEXIWEBFORMS_UPDATESERVICE_H
 
-#include "Handler.h"
+#include <QHash>
+#include <QString>
+#include <QList>
+
+#include "WebFormsService.h"
 
 struct RequestData;
 
 namespace KexiWebForms {
-    /*!
-     * Simply show an HTML page containing a table displaying
-     * data in a given database table.
-     * This function uses the request URI to determine which
-     * table to read: ie /view/books will show contents of the table
-     * named 'books'
-     *
-     * @param RequestData a pointer to a RequestData structure
-     * @see KexiWebForms::RequestData
-     */
-    void queryCallback(RequestData*);
     
-    class QueryHandler : public Handler {
+    class UpdateService : public WebFormsService {
     public:
-        QueryHandler();
-        virtual ~QueryHandler() {}
+        UpdateService(const char* name) : WebFormsService(name) {}
+        virtual ~UpdateService() {}
+
+        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
+        QHash< QString, QList<uint> > cachedPkeys;
     };
+    
 }
 
-#endif /* KEXI_WEBFORMS_QUERY_H */
+#endif /* KEXIWEBFORMS_UPDATESERVICE_H */

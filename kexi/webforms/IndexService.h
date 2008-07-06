@@ -19,11 +19,9 @@
 */
 
 #ifndef KEXIWEBFORMS_INDEXSERVICE_H
-#define KEX_WEBFORMS_INDEXSERVICE_H
+#define KEXIWEBFORMS_INDEXSERVICE_H
 
 #include "WebFormsService.h"
-
-struct RequestData;
 
 namespace KexiWebForms {
         
@@ -36,4 +34,4 @@ namespace KexiWebForms {
     };
 }
 
-#endif /* KEXI_WEBFORMS_INDEX_H */
+#endif /* KEXIWEBFORMS_INDEXSERVICE_H */

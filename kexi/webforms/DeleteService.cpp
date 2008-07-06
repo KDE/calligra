@@ -24,48 +24,46 @@
 
 #include <KDebug>
 
+#include <pion/net/HTTPResponseWriter.hpp>
+
 #include <kexidb/utils.h>
 #include <kexidb/queryschema.h>
 #include <kexidb/cursor.h>
 
 #include <google/template.h>
 
-#include "Request.h"
-#include "HTTPStream.h"
 #include "DataProvider.h"
 #include "TemplateProvider.h"
 
-#include "Delete.h"
+#include "DeleteService.h"
+
+using namespace pion::net;
 
 namespace KexiWebForms {
-    void deleteCallback(RequestData* req) {
-        HTTPStream stream(req);
-        google::TemplateDictionary* dict = initTemplate("delete.tpl");
+    
+    void DeleteService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
+        HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
+                    boost::bind(&TCPConnection::finish, tcp_conn)));
 
 
-        /*
-         * Retrieve requested table and pkey
-         */
-        QStringList queryString = Request::requestUri(req).split("/");
+        QStringList queryString(QString(request->getOriginalResource().c_str()).split('/'));
         QString requestedTable = queryString.at(2);
         QString pkeyName = queryString.at(3);
         QString pkeyValue = queryString.at(4);
-        dict->SetValue("TABLENAME", requestedTable.toUtf8().constData());
+        
+        setValue("TABLENAME", requestedTable);
 
         kDebug() << "Trying to delete row..." << endl;
         if (KexiDB::deleteRow(*gConnection, gConnection->tableSchema(requestedTable),
                               pkeyName, pkeyValue)) {
-            dict->ShowSection("SUCCESS");
-            dict->SetValue("MESSAGE", "Row deleted successfully");
+            m_dict->ShowSection("SUCCESS");
+            setValue("MESSAGE", "Row deleted successfully");
         } else {
-            dict->ShowSection("ERROR");
-            dict->SetValue("MESSAGE", "Error while trying to delete row!");
+            m_dict->ShowSection("ERROR");
+            setValue("MESSAGE", "Error while trying to delete row!");
         }
 
-        renderTemplate(dict, stream);
+        renderTemplate(m_dict, writer);
     }
 
-
-    // Delete Handler
-    DeleteHandler::DeleteHandler() : Handler(deleteCallback) {}
 }

@@ -23,39 +23,39 @@
 #include <QTextDocument>
 #include <QString>
 
-#include <KDebug>
+#include <pion/net/HTTPResponseWriter.hpp>
 
-#include <google/template.h>
+#include <KDebug>
 
 #include <kexidb/indexschema.h>
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 
-#include "Request.h"
-#include "HTTPStream.h"
 #include "DataProvider.h"
 #include "TemplateProvider.h"
 
-#include "Read.h"
+#include "ReadService.h"
+
+using namespace pion::net;
 
 namespace KexiWebForms {
-    void readCallback(RequestData* req) {
-        HTTPStream stream(req);
-        google::TemplateDictionary* dict = initTemplate("read.tpl");
+    
+    void ReadService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
+        HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
+                    boost::bind(&TCPConnection::finish, tcp_conn)));
 
-
-        QString requestedTable(Request::requestUri(req).split('/').at(2));
+        QString requestedTable(QString(request->getOriginalResource().c_str()).split('/').at(2));
 
         QString tableData;
         KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
         KexiDB::QuerySchema querySchema(*tableSchema);
         KexiDB::Cursor* cursor = gConnection->executeQuery(querySchema);
         
-	bool readOnly = (querySchema.connection() && querySchema.connection()->isReadOnly());
+        bool readOnly = (querySchema.connection() && querySchema.connection()->isReadOnly());
         if (readOnly) {
-            dict->SetValue("TABLENAME", requestedTable.append(" (read only)").toUtf8().constData());
+            setValue("TABLENAME", requestedTable.append(" (read only)"));
         } else {
-            dict->SetValue("TABLENAME", requestedTable.toUtf8().constData());
+            setValue("TABLENAME", requestedTable);
         }
 
         /* awful */
@@ -68,9 +68,9 @@ namespace KexiWebForms {
         cursor = gConnection->executeQuery(querySchema);
 
         if (!cursor) {
-            dict->SetValue("ERROR", "Unable to execute the query (" __FILE__ ")");
+            setValue("ERROR", "Unable to execute the query (" __FILE__ ")");
         } else if (tableSchema->primaryKey()->fields()->isEmpty()) {
-            dict->SetValue("ERROR", "This table has no primary key!");
+            setValue("ERROR", "This table has no primary key!");
         } else {
             KexiDB::Field* primaryKey = tableSchema->primaryKey()->field(0);
 
@@ -134,15 +134,13 @@ namespace KexiWebForms {
                 tableData.append("</tr>\n");
             }
 
-            dict->SetValue("TABLEDATA", tableData.toUtf8().constData());
+            setValue("TABLEDATA", tableData);
 
             kDebug() << "Deleting cursor..." << endl;
             gConnection->deleteCursor(cursor);
         }
 
-        renderTemplate(dict, stream);
+        renderTemplate(m_dict, writer);
     }
-
-    // Read Handler
-    ReadHandler::ReadHandler() : Handler(readCallback) {}
+    
 }

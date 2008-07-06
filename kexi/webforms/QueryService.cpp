@@ -26,44 +26,47 @@
 
 #include <KDebug>
 
+#include <pion/net/HTTPResponseWriter.hpp>
+
 #include <kexidb/utils.h>
 #include <kexidb/queryschema.h>
 #include <kexidb/cursor.h>
 
 #include <google/template.h>
 
-#include "Request.h"
-#include "HTTPStream.h"
 #include "DataProvider.h"
 #include "TemplateProvider.h"
 
-#include "Query.h"
+#include "QueryService.h"
+
+using namespace pion::net;
 
 namespace KexiWebForms {
-    void queryCallback(RequestData* req) {
-        HTTPStream stream(req);
-        google::TemplateDictionary* dict = initTemplate("query.tpl");
+    
+    void QueryService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
+        HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
+                    boost::bind(&TCPConnection::finish, tcp_conn)));
 
 
-        QString requestedQuery(Request::requestUri(req).split('/').at(2));
+        QString requestedQuery(QString(request->getOriginalResource().c_str()).split('/').at(2));
 
         QString queryData;
         bool ok = true;
         KexiDB::QuerySchema* querySchema = gConnection->querySchema(requestedQuery);
         if (!querySchema) {
-            dict->SetValue("ERROR", QString("Could not find query \"%1\"").arg(requestedQuery).toUtf8().constData());
+            setValue("ERROR", QString("Could not find query \"%1\"").arg(requestedQuery));
             ok = false;
         }
         KexiDB::TableSchema* tableSchema = 0;
         if (ok) {
             tableSchema = querySchema->masterTable();
             if (!tableSchema) {
-                dict->SetValue("ERROR", QString("Could not find master table for query \"%1\"").arg(requestedQuery).toUtf8().constData());
+                setValue("ERROR", QString("Could not find master table for query \"%1\"").arg(requestedQuery));
                 ok = false;
             }
         }
         if (ok) {
-//! @todo more checks
+            //! @todo more checks
             KexiDB::Cursor* cursor = gConnection->executeQuery(*querySchema);
 
             /* awful */
@@ -74,7 +77,7 @@ namespace KexiWebForms {
 
             cursor = gConnection->executeQuery(*querySchema);
 
-            dict->SetValue("QUERYNAME", querySchema->caption().toUtf8().constData());
+            setValue("QUERYNAME", querySchema->caption());
 
             /**
              * @note: the code is very very similar to the one available in Read.cpp
@@ -83,9 +86,9 @@ namespace KexiWebForms {
              * backend
              */
             if (!cursor) {
-                dict->SetValue("ERROR", "Unable to execute the query (" __FILE__ ")");
+                setValue("ERROR", "Unable to execute the query (" __FILE__ ")");
             } else if (tableSchema->primaryKey()->fields()->isEmpty()) {
-                dict->SetValue("ERROR", "This table has no primary key!");
+                setValue("ERROR", "This table has no primary key!");
             } else {
                 kDebug() << "Showing query results..." << endl;
                 KexiDB::Field* primaryKey = tableSchema->primaryKey()->field(0);
@@ -151,16 +154,14 @@ namespace KexiWebForms {
                     // End row
                     queryData.append("</tr>\n");
 
-                    dict->SetValue("QUERYDATA", queryData.toUtf8().constData());
+                    setValue("QUERYDATA", queryData);
                 }
 
                 kDebug() << "Deleting cursor..." << endl;
                 gConnection->deleteCursor(cursor);
             }
         }
-        renderTemplate(dict, stream);
+        renderTemplate(m_dict, writer);
     }
-
-    // Read Handler
-    QueryHandler::QueryHandler() : Handler(queryCallback) {}
+    
 }

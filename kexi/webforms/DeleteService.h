@@ -18,31 +18,21 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KEXI_WEBFORMS_READ_H
-#define KEXI_WEBFORMS_READ_H
+#ifndef KEXIWEBFORMS_DELETESERVICE_H
+#define KEXIWEBFORMS_DELETESERVICE_H
 
-#include "Handler.h"
-
-struct RequestData;
+#include "WebFormsService.h"
 
 namespace KexiWebForms {
-    /*!
-     * Simply show an HTML page containing a table displaying
-     * data in a given database table.
-     * This function uses the request URI to determine which
-     * table to read: ie /view/books will show contents of the table
-     * named 'books'
-     *
-     * @param RequestData a pointer to a RequestData structure
-     * @see KexiWebForms::RequestData
-     */
-    void readCallback(RequestData*);
     
-    class ReadHandler : public Handler {
+    class DeleteService : public WebFormsService {
     public:
-        ReadHandler();
-        virtual ~ReadHandler() {}
+        DeleteService(const char* name) : WebFormsService(name) {}
+        virtual ~DeleteService() {}
+
+        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
     };
+    
 }
 
-#endif /* KEXI_WEBFORMS_READ_H */
+#endif /* KEXIWEBFORMS_DELETESERVICE_H */

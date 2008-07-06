@@ -12,21 +12,18 @@ set(webforms_SRCS
   main.cpp
   DataProvider.cpp
   TemplateProvider.cpp
-  Request.cpp
 # Pattern Server
   PatternServer.cpp
   WebFormsService.cpp
 # Index view
-  Index.cpp
-# CRUD Architecture
-##  Handler.cpp
+  IndexService.cpp
 # CRUD
-##  Create.cpp
-##  Read.cpp
-##  Update.cpp
-##  Delete.cpp
-# Other handlers
-##  Query.cpp
+  CreateService.cpp
+  ReadService.cpp
+  UpdateService.cpp
+  DeleteService.cpp
+# Other services
+  QueryService.cpp
 )
 
 kde4_add_executable(kwebforms NOGUI ${webforms_SRCS})

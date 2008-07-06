@@ -26,6 +26,8 @@
 
 #include <KDebug>
 
+#include <pion/net/HTTPResponseWriter.hpp>
+
 #include <kexidb/roweditbuffer.h>
 #include <kexidb/connection.h>
 #include <kexidb/queryschema.h>
@@ -33,25 +35,21 @@
 
 #include <google/template.h>
 
-#include "Handler.h"
-
-#include "Request.h"
-#include "HTTPStream.h"
 #include "DataProvider.h"
 #include "TemplateProvider.h"
 
-#include "Update.h"
+#include "UpdateService.h"
+
+using namespace pion::net;
 
 namespace KexiWebForms {
 
-    QHash< QString, QList<uint> > cachedPkeys;
-
-    void updateCallback(RequestData* req) {
-        HTTPStream stream(req);
-        google::TemplateDictionary* dict = initTemplate("update.tpl");
+    void UpdateService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
+        HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
+                    boost::bind(&TCPConnection::finish, tcp_conn)));
 
 
-        QStringList queryString = Request::requestUri(req).split("/");
+        QStringList queryString(QString(request->getOriginalResource().c_str()).split('/'));
         QString requestedTable = queryString.at(2);
         QString pkeyName = queryString.at(3);
         QString pkeyValue = queryString.at(4);
@@ -59,9 +57,9 @@ namespace KexiWebForms {
         uint current = 0;
 
 
-        dict->SetValue("TABLENAME", requestedTable.toUtf8().constData());
-        dict->SetValue("PKEY_NAME", pkeyName.toUtf8().constData());
-        dict->SetValue("PKEY_VALUE", pkeyValue.toUtf8().constData());
+        setValue("TABLENAME", requestedTable);
+        setValue("PKEY_NAME", pkeyName);
+        setValue("PKEY_VALUE", pkeyValue);
 
         // Initialize our needed Objects
         KexiDB::TableSchema tableSchema(*gConnection->tableSchema(requestedTable));
@@ -95,44 +93,44 @@ namespace KexiWebForms {
 
         // Compute new primary key values for first, last, previous and next record
         if (current < uint( cachedPkeys[requestedTable].size()-1 )) {
-            dict->ShowSection("NEXT_ENABLED");
-            dict->SetValue("NEXT", QVariant(cachedPkeys[requestedTable].at(current+1)).toString().toUtf8().constData());
+            m_dict->ShowSection("NEXT_ENABLED");
+            m_dict->SetValue("NEXT", QVariant(cachedPkeys[requestedTable].at(current+1)).toString().toUtf8().constData());
         } else {
-            dict->ShowSection("NEXT_DISABLED");
+            m_dict->ShowSection("NEXT_DISABLED");
         }
         
         if (current > 0) {
-            dict->ShowSection("PREV_ENABLED");
-            dict->SetValue("PREV", QVariant(cachedPkeys[requestedTable].at(current-1)).toString().toUtf8().constData());
+            m_dict->ShowSection("PREV_ENABLED");
+            m_dict->SetValue("PREV", QVariant(cachedPkeys[requestedTable].at(current-1)).toString().toUtf8().constData());
         } else {
-            dict->ShowSection("PREV_DISABLED");
+            m_dict->ShowSection("PREV_DISABLED");
         }
 
         if (current >= cachedPkeys[requestedTable].at(0)) {
-            dict->ShowSection("FIRST_ENABLED");
-            dict->SetValue("FIRST", QVariant(cachedPkeys[requestedTable].at(0)).toString().toUtf8().constData());
+            m_dict->ShowSection("FIRST_ENABLED");
+            m_dict->SetValue("FIRST", QVariant(cachedPkeys[requestedTable].at(0)).toString().toUtf8().constData());
         } else {
-            dict->ShowSection("FIRST_DISABLED");
+            m_dict->ShowSection("FIRST_DISABLED");
         }
 
         
         if (current < uint( cachedPkeys[requestedTable].size()-1 )) {
-            dict->ShowSection("LAST_ENABLED");
-            dict->SetValue("LAST", QVariant(cachedPkeys[requestedTable].at(cachedPkeys[requestedTable].size()-1)).toString().toUtf8().constData());
+            m_dict->ShowSection("LAST_ENABLED");
+            m_dict->SetValue("LAST", QVariant(cachedPkeys[requestedTable].at(cachedPkeys[requestedTable].size()-1)).toString().toUtf8().constData());
         } else {
-            dict->ShowSection("LAST_DISABLED");
+            m_dict->ShowSection("LAST_DISABLED");
         }
 
 
 
         if (!cursor) {
-            dict->ShowSection("ERROR");
-            dict->SetValue("MESSAGE", "No cursor object available");
+            m_dict->ShowSection("ERROR");
+            setValue("MESSAGE", "No cursor object available");
         } else {
-            if (Request::request(req, "dataSent") == "true") {
+            if (request->getQuery("dataSent") == "true") {
                 cursor = gConnection->prepareQuery(schema);
 
-                QStringList fieldsList(Request::request(req, "tableFields").split("|:|"));
+                QStringList fieldsList(QString(request->getQuery("tableFields").c_str()).split("|:|"));
                 kDebug() << "Fields: " << fieldsList;
 
                 QStringListIterator iterator(fieldsList);
@@ -159,7 +157,9 @@ namespace KexiWebForms {
 
                 while (iterator.hasNext()) {
                     QString currentFieldName(iterator.next());
-                    QString currentFieldValue(QUrl::fromPercentEncoding(Request::request(req, currentFieldName).toUtf8()));
+                    QString currentFieldValue(request->getQuery(currentFieldName.toUtf8().constData()).c_str());
+                    /*QString currentFieldValue(QUrl::fromPercentEncoding(
+                        QString(request->getQuery(currentFieldName.toUtf8().constData()).c_str())));*/
 
                     /*! @fixme This removes pluses */
                     currentFieldValue.replace("+", " ");
@@ -173,13 +173,13 @@ namespace KexiWebForms {
 
 
                 if (cursor->updateRow(recordData, editBuffer)) {
-                    dict->ShowSection("SUCCESS");
-                    dict->SetValue("MESSAGE", "Row updated successfully");
+                    m_dict->ShowSection("SUCCESS");
+                    setValue("MESSAGE", "Row updated successfully");
                     // A successful update marks the cache as empty
                     cachedPkeys[requestedTable].clear();
                 } else {
-                    dict->ShowSection("ERROR");
-                    dict->SetValue("MESSAGE", gConnection->errorMsg().toUtf8().constData());
+                    m_dict->ShowSection("ERROR");
+                    setValue("MESSAGE", gConnection->errorMsg().toUtf8().constData());
                 }
 
                 kDebug() << "Deleting cursor..." << endl;
@@ -190,7 +190,7 @@ namespace KexiWebForms {
 
             cursor = gConnection->executeQuery(schema);
 
-            dict->ShowSection("FORM");
+            m_dict->ShowSection("FORM");
 
             QString formData;
             QStringList formFieldsList;
@@ -231,18 +231,15 @@ namespace KexiWebForms {
                     formFieldsList << fieldName;
                 }
             }
-            dict->SetValue("TABLEFIELDS", formFieldsList.join("|:|").toUtf8().constData());
-            dict->SetValue("FORMDATA", formData.toUtf8().constData());
+            setValue("TABLEFIELDS", formFieldsList.join("|:|"));
+            setValue("FORMDATA", formData);
 
             kDebug() << "Deleting cursor..." << endl;
             gConnection->deleteCursor(cursor);
         }
 
 
-        renderTemplate(dict, stream);
+        renderTemplate(m_dict, writer);
     }
-
-
-    // Update Handler
-    UpdateHandler::UpdateHandler() : Handler(updateCallback) {}
+    
 }

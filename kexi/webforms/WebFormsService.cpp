@@ -47,7 +47,10 @@ namespace KexiWebForms {
         setValue(k, v.toString());
     }
     void WebFormsService::setValue(const char* k, const QString& v) {
-        m_dict->SetValue(k, v.toUtf8().constData());
+        setValue(k, v.toUtf8().constData());
+    }
+    void WebFormsService::setValue(const char* k, const char* v) {
+        m_dict->SetValue(k, v);
     }
     
 }
