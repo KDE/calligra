@@ -23,6 +23,12 @@
 
 #include "TestFormula.h"
 
+#include "functions/LogicModule.h"
+#include "functions/MathModule.h"
+#include "functions/TrigonometryModule.h"
+#include "FunctionModuleRegistry.h"
+
+using namespace KSpread;
 
 static char encodeTokenType( const Token& token )
 {
@@ -104,6 +110,13 @@ Value TestFormula::evaluate(const QString& formula, Value& ex)
     result = Value(result.asFloat());
 
   return result;
+}
+
+void TestFormula::initTestCase()
+{
+    FunctionModuleRegistry::instance()->add(new LogicModuleFactory(this));
+    FunctionModuleRegistry::instance()->add(new MathModuleFactory(this));
+    FunctionModuleRegistry::instance()->add(new TrigonometryModuleFactory(this));
 }
 
 void TestFormula::testTokenizer()

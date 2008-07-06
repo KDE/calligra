@@ -31,6 +31,7 @@ class TestFormula: public QObject
 Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
   void testTokenizer();
   void testConstant();
   void testUnary();
