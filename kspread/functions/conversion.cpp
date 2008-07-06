@@ -20,9 +20,15 @@
 
 // built-in conversion functions
 
+#include "ConversionModule.h"
+#include "FunctionModuleRegistry.h"
 #include "Functions.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
+
+#include <KGenericFactory>
+#include <KLocale>
+
 #include <QByteArray>
 
 using namespace KSpread;
@@ -41,6 +47,22 @@ Value func_CharToAscii (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_inttobool (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_booltoint (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ToString (valVector args, ValueCalc *calc, FuncExtra *);
+
+void RegisterConversionFunctions();
+
+ConversionModulePlugin::ConversionModulePlugin(QObject* parent, const QStringList&)
+{
+    FunctionModuleRegistry::instance()->add(new ConversionModuleFactory(parent));
+}
+K_EXPORT_COMPONENT_FACTORY(kspreadconversionmodule, KGenericFactory<ConversionModulePlugin>("ConversionModule"))
+
+
+ConversionModuleFactory::ConversionModuleFactory(QObject* parent)
+    : FunctionModuleFactory(parent, "conversion", i18n("Conversion Functions"))
+{
+    RegisterConversionFunctions();
+}
+
 
 // registers all conversion functions
 void RegisterConversionFunctions()
@@ -268,3 +290,5 @@ Value func_ToString (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->conv()->asString (args[0]);
 }
+
+#include "ConversionModule.moc"

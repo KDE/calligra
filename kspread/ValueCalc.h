@@ -27,6 +27,8 @@
 #include "Number.h"
 #include "Value.h"
 
+#include "kspread_export.h"
+
 #ifdef max
 # undef max
 #endif
@@ -64,7 +66,7 @@ the Number object directly for that. This class is to be used for computations
 of more complicated and ranged functions.
 */
 
-class ValueCalc {
+class KSPREAD_EXPORT ValueCalc {
  public:
   explicit ValueCalc (ValueConverter* c);
 

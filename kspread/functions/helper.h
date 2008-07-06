@@ -20,6 +20,8 @@
 #define kspread_functions_helper_h_
 // helper functions for other functions
 
+#include "kspread_export.h"
+
 class QDate;
 
 namespace KSpread
@@ -31,7 +33,7 @@ namespace KSpread
  *	3: real days / 365
  *	4: European 30 / 360
  */
-int daysPerYear( QDate const & date, int basis );
+KSPREAD_EXPORT int daysPerYear( QDate const & date, int basis );
 
 /*	0: US 30 / 360
  *	1: real days
@@ -39,16 +41,16 @@ int daysPerYear( QDate const & date, int basis );
  *	3: real days / 365
  *	4: European 30 / 360
  */
-int daysBetweenDates( QDate const & date1, QDate const & date2, int basis );
+KSPREAD_EXPORT int daysBetweenDates( QDate const & date1, QDate const & date2, int basis );
 
 
 // ODF
-int days360( const QDate& _date1, const QDate& _date2, bool european );
-int days360( int day1, int month1, int year1, bool leapYear1, int  day2, int month2, int year2, bool usa );
-double yearFrac( const QDate& refDate, const QDate& startDate, const QDate& endDate, int basis );
-double duration( const QDate& refDate, const QDate& settlement, const QDate& maturity, const double& coup_, const double& yield_, const int& freq, const int& basis, const double& numOfCoups );
-double pow1p ( const double& x, const double& y);
-double pow1pm1 ( const double& x, const double& y);
+KSPREAD_EXPORT int days360( const QDate& _date1, const QDate& _date2, bool european );
+KSPREAD_EXPORT int days360( int day1, int month1, int year1, bool leapYear1, int  day2, int month2, int year2, bool usa );
+KSPREAD_EXPORT double yearFrac( const QDate& refDate, const QDate& startDate, const QDate& endDate, int basis );
+KSPREAD_EXPORT double duration( const QDate& refDate, const QDate& settlement, const QDate& maturity, const double& coup_, const double& yield_, const int& freq, const int& basis, const double& numOfCoups );
+KSPREAD_EXPORT double pow1p ( const double& x, const double& y);
+KSPREAD_EXPORT double pow1pm1 ( const double& x, const double& y);
 } //namespace KSpread
 
 #endif

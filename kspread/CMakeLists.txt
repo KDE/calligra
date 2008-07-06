@@ -121,20 +121,7 @@ kde4_add_ui_files(dialogs_DIR_SRCS
 	)
 
 SET (functions_DIR_SRCS
-	functions/bitops.cpp
-	functions/conversion.cpp
-	functions/database.cpp
-	functions/datetime.cpp
-	functions/engineering.cpp
-	functions/financial.cpp
 	functions/helper.cpp
-	functions/information.cpp
-	functions/logic.cpp
-	functions/math.cpp
-	functions/reference.cpp
-	functions/statistical.cpp
-	functions/text.cpp
-	functions/trig.cpp
 	)
 
 SET (interfaces_DIR_SRCS
@@ -184,6 +171,8 @@ SET (kspreadcommon_LIB_SRCS
 	Factory.cpp
 	Format.cpp
 	Formula.cpp
+	FunctionModuleFactory.cpp
+	FunctionModuleRegistry.cpp
 	Functions.cpp
 # 	GeneralProperty.cpp
 	GenValidationStyle.cpp
@@ -270,3 +259,4 @@ install( FILES  kspread.rc kspread_readonly.rc kspread.notifyrc DESTINATION ${DA
 install( FILES  kspreadpart.desktop DESTINATION ${SERVICES_INSTALL_DIR})
 install( FILES  kspread.desktop DESTINATION ${XDG_APPS_INSTALL_DIR})
 install( FILES  kspread.kcfg DESTINATION ${KCFG_INSTALL_DIR} )
+install( FILES  kspread_function.desktop DESTINATION ${SERVICETYPES_INSTALL_DIR})

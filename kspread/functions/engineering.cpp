@@ -21,9 +21,14 @@
 
 // built-in engineering functions
 
+#include "EngineeringModule.h"
+#include "FunctionModuleRegistry.h"
 #include "Functions.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
+
+#include <KGenericFactory>
+#include <KLocale>
 
 // used by the CONVERT function
 #include <QMap>
@@ -85,6 +90,22 @@ Value func_imtanh (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oct2dec (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oct2bin (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oct2hex (valVector args, ValueCalc *calc, FuncExtra *);
+
+void RegisterEngineeringFunctions();
+
+EngineeringModulePlugin::EngineeringModulePlugin(QObject* parent, const QStringList&)
+{
+    FunctionModuleRegistry::instance()->add(new EngineeringModuleFactory(parent));
+}
+K_EXPORT_COMPONENT_FACTORY(kspreadengineeringmodule, KGenericFactory<EngineeringModulePlugin>("EngineeringModule"))
+
+
+EngineeringModuleFactory::EngineeringModuleFactory(QObject* parent)
+    : FunctionModuleFactory(parent, "engineering", i18n("Engineering Functions"))
+{
+    RegisterEngineeringFunctions();
+}
+
 
 // registers all engineering functions
 void RegisterEngineeringFunctions()
@@ -1441,3 +1462,5 @@ Value func_gestep (valVector args, ValueCalc *calc, FuncExtra *)
 
   return Value (result);
 }
+
+#include "EngineeringModule.moc"

@@ -21,14 +21,16 @@
 // built-in date/time functions
 
 #include "CalculationSettings.h"
+#include "DateTimeModule.h"
+#include "FunctionModuleRegistry.h"
 #include "Functions.h"
 #include "functions/helper.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
-
 #include <kcalendarsystem.h>
-#include <klocale.h>
+#include <KGenericFactory>
+#include <KLocale>
 
 using namespace KSpread;
 
@@ -74,6 +76,22 @@ Value func_workday (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_year (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_yearFrac (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_years (valVector args, ValueCalc *calc, FuncExtra *);
+
+void RegisterDateTimeFunctions();
+
+DateTimeModulePlugin::DateTimeModulePlugin(QObject* parent, const QStringList&)
+{
+    FunctionModuleRegistry::instance()->add(new DateTimeModuleFactory(parent));
+}
+K_EXPORT_COMPONENT_FACTORY(kspreaddatetimemodule, KGenericFactory<DateTimeModulePlugin>("DateTimeModule"))
+
+
+DateTimeModuleFactory::DateTimeModuleFactory(QObject* parent)
+    : FunctionModuleFactory(parent, "datetime", i18n("DateTime Functions"))
+{
+    RegisterDateTimeFunctions();
+}
+
 
 // registers all date/time functions
 // sadly, many of these functions aren't Excel compatible
@@ -1162,3 +1180,5 @@ Value func_date2unix (valVector args, ValueCalc *calc, FuncExtra *)
 
     return Value( static_cast<int>( datetime.toTime_t() ) );
 }
+
+#include "DateTimeModule.moc"

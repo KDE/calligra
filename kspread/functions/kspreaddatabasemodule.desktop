@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Database Functions
+X-KDE-ServiceTypes=KSpread/Function
+Type=Service
+X-KDE-Library=kspreaddatabasemodule
+X-KSpread-Version=2
+X-Flake-PluginVersion=1

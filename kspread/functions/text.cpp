@@ -24,13 +24,17 @@
 
 #include <QRegExp>
 #include <kdebug.h>
-#include <klocale.h>
 #include <math.h>
 
 #include "CalculationSettings.h"
+#include "FunctionModuleRegistry.h"
 #include "Functions.h"
+#include "TextModule.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
+
+#include <KGenericFactory>
+#include <KLocale>
 
 using namespace KSpread;
 
@@ -71,6 +75,22 @@ Value func_unichar (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_unicode (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_upper (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_value (valVector args, ValueCalc *calc, FuncExtra *);
+
+void RegisterTextFunctions();
+
+TextModulePlugin::TextModulePlugin(QObject* parent, const QStringList&)
+{
+    FunctionModuleRegistry::instance()->add(new TextModuleFactory(parent));
+}
+K_EXPORT_COMPONENT_FACTORY(kspreadtextmodule, KGenericFactory<TextModulePlugin>("TextModule"))
+
+
+TextModuleFactory::TextModuleFactory(QObject* parent)
+    : FunctionModuleFactory(parent, "datetime", i18n("Text Functions"))
+{
+    RegisterTextFunctions();
+}
+
 
 // registers all text functions
 void RegisterTextFunctions()
@@ -719,3 +739,5 @@ Value func_value (valVector args, ValueCalc *calc, FuncExtra *)
   // same as the N function
   return calc->conv()->asFloat (args[0]);
 }
+
+#include "TextModule.moc"

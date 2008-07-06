@@ -32,8 +32,9 @@
 #include <k3staticdeleter.h>
 #include <kcomponentdata.h>
 
-#include "Formula.h"
 #include "Factory.h"
+#include "Formula.h"
+#include "FunctionModuleRegistry.h"
 #include "ValueCalc.h"
 
 namespace KSpread
@@ -168,22 +169,6 @@ Value Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
 }
 
 
-// these are defined in ./functions/*.cpp
-void RegisterBitopsFunctions();
-void RegisterConversionFunctions();
-void RegisterDatabaseFunctions();
-void RegisterDateTimeFunctions();
-void RegisterEngineeringFunctions();
-void RegisterFinancialFunctions();
-void RegisterInformationFunctions();
-void RegisterLogicFunctions();
-void RegisterMathFunctions();
-void RegisterReferenceFunctions();
-void RegisterStatisticalFunctions();
-void RegisterTextFunctions();
-void RegisterTrigFunctions();
-
-
 static K3StaticDeleter<FunctionRepository> fr_sd;
 FunctionRepository* FunctionRepository::s_self = 0;
 
@@ -196,19 +181,7 @@ FunctionRepository* FunctionRepository::self()
     fr_sd.setObject( s_self, new FunctionRepository() );
 
     // register all existing functions
-    RegisterBitopsFunctions();
-    RegisterConversionFunctions();
-    RegisterDatabaseFunctions();
-    RegisterDateTimeFunctions();
-    RegisterEngineeringFunctions();
-    RegisterFinancialFunctions();
-    RegisterInformationFunctions();
-    RegisterLogicFunctions();
-    RegisterMathFunctions();
-    RegisterReferenceFunctions();
-    RegisterStatisticalFunctions();
-    RegisterTextFunctions();
-    RegisterTrigFunctions();
+    FunctionModuleRegistry::instance();
 
     kDebug() << s_self->d->functions.count() <<" functions registered.";
 

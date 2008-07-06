@@ -20,9 +20,14 @@
 
 // built-in logical functions
 
+#include "FunctionModuleRegistry.h"
 #include "Functions.h"
+#include "LogicModule.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
+
+#include <KGenericFactory>
+#include <KLocale>
 
 using namespace KSpread;
 
@@ -36,6 +41,22 @@ Value func_not (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_or (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_true (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_xor (valVector args, ValueCalc *calc, FuncExtra *);
+
+void RegisterLogicFunctions();
+
+LogicModulePlugin::LogicModulePlugin(QObject* parent, const QStringList&)
+{
+    FunctionModuleRegistry::instance()->add(new LogicModuleFactory(parent));
+}
+K_EXPORT_COMPONENT_FACTORY(kspreadlogicmodule, KGenericFactory<LogicModulePlugin>("LogicModule"))
+
+
+LogicModuleFactory::LogicModuleFactory(QObject* parent)
+    : FunctionModuleFactory(parent, "logic", i18n("Logic Functions"))
+{
+    RegisterLogicFunctions();
+}
+
 
 // registers all logic functions
 void RegisterLogicFunctions()
@@ -264,3 +285,5 @@ Value func_xor (valVector args, ValueCalc *calc, FuncExtra *)
     calc->arrayWalk (args[i], count, awXor, Value(0));
   return Value (count.asInteger() == 1);
 }
+
+#include "LogicModule.moc"

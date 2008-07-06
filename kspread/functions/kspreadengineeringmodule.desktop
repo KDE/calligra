@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Engineering Functions
+X-KDE-ServiceTypes=KSpread/Function
+Type=Service
+X-KDE-Library=kspreadengineeringmodule
+X-KSpread-Version=2
+X-Flake-PluginVersion=1

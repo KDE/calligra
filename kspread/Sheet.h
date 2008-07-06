@@ -40,10 +40,13 @@
 #include "Style.h"
 #include "Global.h"
 
+#include "kspread_export.h"
+
 class QDomElement;
 class QUndoCommand;
 class QWidget;
 
+class KoDataCenter;
 class KoDocumentEntry;
 class KoStyleStack;
 class KoGenStyles;

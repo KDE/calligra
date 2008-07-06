@@ -480,7 +480,7 @@ KSPREAD_EXPORT QTextStream& operator<<( QTextStream& ts, KSpread::Value value );
   kDebug support
 ****************************************************************************/
 
-kdbgstream operator<<(kdbgstream str, const KSpread::Value& v);
+KSPREAD_EXPORT kdbgstream operator<<(kdbgstream str, const KSpread::Value& v);
 kdbgstream operator<<(kdbgstream stream, const KSpread::Value::Format& f);
 
 #endif // KSPREAD_VALUE_H

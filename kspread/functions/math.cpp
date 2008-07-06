@@ -25,15 +25,17 @@
 #include <math.h>
 
 #include <kdebug.h>
-#include <klocale.h>
+#include <KGenericFactory>
+#include <KLocale>
 
+#include "FunctionModuleRegistry.h"
 #include "Functions.h"
+#include "MathModule.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
 // these two are needed for SUBTOTAL:
 #include "Cell.h"
-#include "Sheet.h"
 
 // needed by MDETERM and MINVERSE
 #include <eigen/matrix.h>
@@ -112,6 +114,22 @@ Value func_trunc (valVector args, ValueCalc *calc, FuncExtra *);
 
 
 // Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *);
+
+void RegisterMathFunctions();
+
+MathModulePlugin::MathModulePlugin(QObject* parent, const QStringList&)
+{
+    FunctionModuleRegistry::instance()->add(new MathModuleFactory(parent));
+}
+K_EXPORT_COMPONENT_FACTORY(kspreadmathmodule, KGenericFactory<MathModulePlugin>("MathModule"))
+
+
+MathModuleFactory::MathModuleFactory(QObject* parent)
+    : FunctionModuleFactory(parent, "datetime", i18n("Math Functions"))
+{
+    RegisterMathFunctions();
+}
+
 
 // registers all math functions
 void RegisterMathFunctions()
@@ -1384,3 +1402,5 @@ Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 */
+
+#include "MathModule.moc"

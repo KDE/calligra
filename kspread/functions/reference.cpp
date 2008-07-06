@@ -26,9 +26,14 @@
 #include "Util.h"
 #include "Value.h"
 
+#include "FunctionModuleRegistry.h"
 #include "Functions.h"
+#include "ReferenceModule.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
+
+#include <KGenericFactory>
+#include <KLocale>
 
 using namespace KSpread;
 
@@ -45,6 +50,22 @@ Value func_lookup (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_row (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rows (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_vlookup (valVector args, ValueCalc *calc, FuncExtra *);
+
+void RegisterReferenceFunctions();
+
+ReferenceModulePlugin::ReferenceModulePlugin(QObject* parent, const QStringList&)
+{
+    FunctionModuleRegistry::instance()->add(new ReferenceModuleFactory(parent));
+}
+K_EXPORT_COMPONENT_FACTORY(kspreadreferencemodule, KGenericFactory<ReferenceModulePlugin>("ReferenceModule"))
+
+
+ReferenceModuleFactory::ReferenceModuleFactory(QObject* parent)
+    : FunctionModuleFactory(parent, "datetime", i18n("Reference Functions"))
+{
+    RegisterReferenceFunctions();
+}
+
 
 // registers all reference functions
 void RegisterReferenceFunctions()
@@ -421,3 +442,5 @@ Value func_vlookup (valVector args, ValueCalc *calc, FuncExtra *)
     }
     return Value::errorNA();
 }
+
+#include "ReferenceModule.moc"

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=DateTime Functions
+X-KDE-ServiceTypes=KSpread/Function
+Type=Service
+X-KDE-Library=kspreaddatetimemodule
+X-KSpread-Version=2
+X-Flake-PluginVersion=1

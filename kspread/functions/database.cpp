@@ -20,9 +20,14 @@
 
 // built-in database functions
 
+#include "DatabaseModule.h"
+#include "FunctionModuleRegistry.h"
 #include "Functions.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
+
+#include <KGenericFactory>
+#include <KLocale>
 
 using namespace KSpread;
 
@@ -40,6 +45,22 @@ Value func_dsum (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_dvar (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_dvarp (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_getpivotdata (valVector args, ValueCalc *calc, FuncExtra *);
+
+void RegisterDatabaseFunctions();
+
+DatabaseModulePlugin::DatabaseModulePlugin(QObject* parent, const QStringList&)
+{
+    FunctionModuleRegistry::instance()->add(new DatabaseModuleFactory(parent));
+}
+K_EXPORT_COMPONENT_FACTORY(kspreaddatabasemodule, KGenericFactory<DatabaseModulePlugin>("DatabaseModule"))
+
+
+DatabaseModuleFactory::DatabaseModuleFactory(QObject* parent)
+    : FunctionModuleFactory(parent, "database", i18n("Database Functions"))
+{
+    RegisterDatabaseFunctions();
+}
+
 
 // registers all database functions
 void RegisterDatabaseFunctions()
@@ -534,3 +555,5 @@ Value func_getpivotdata (valVector args, ValueCalc *calc, FuncExtra *)
 
   return database.element (fieldIndex, row);
 }
+
+#include "DatabaseModule.moc"

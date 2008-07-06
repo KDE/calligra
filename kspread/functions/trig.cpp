@@ -20,8 +20,13 @@
 
 // built-in trigonometric functions
 
+#include "FunctionModuleRegistry.h"
 #include "Functions.h"
+#include "TrigonometryModule.h"
 #include "ValueCalc.h"
+
+#include <KGenericFactory>
+#include <KLocale>
 
 using namespace KSpread;
 
@@ -46,6 +51,22 @@ Value func_sinh (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tan (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tanh (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pi (valVector args, ValueCalc *calc, FuncExtra *);
+
+void RegisterTrigFunctions();
+
+TrigonometryModulePlugin::TrigonometryModulePlugin(QObject* parent, const QStringList&)
+{
+    FunctionModuleRegistry::instance()->add(new TrigonometryModuleFactory(parent));
+}
+K_EXPORT_COMPONENT_FACTORY(kspreadtrigonometrymodule, KGenericFactory<TrigonometryModulePlugin>("TrigonometryModule"))
+
+
+TrigonometryModuleFactory::TrigonometryModuleFactory(QObject* parent)
+    : FunctionModuleFactory(parent, "datetime", i18n("Trig Functions"))
+{
+    RegisterTrigFunctions();
+}
+
 
 // registers all trigonometric functions
 void RegisterTrigFunctions()
@@ -224,3 +245,5 @@ Value func_atan2 (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->atan2 (args[1], args[0]);
 }
+
+#include "TrigonometryModule.moc"

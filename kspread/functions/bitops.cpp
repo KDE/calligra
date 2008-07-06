@@ -20,9 +20,14 @@
 
 // built-in logical functions
 
+#include "BitOpsModule.h"
+#include "FunctionModuleRegistry.h"
 #include "Functions.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
+
+#include <KGenericFactory>
+#include <KLocale>
 
 using namespace KSpread;
 
@@ -32,6 +37,22 @@ Value func_bitor (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bitxor (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bitlshift (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bitrshift (valVector args, ValueCalc *calc, FuncExtra *);
+
+void RegisterBitopsFunctions();
+
+BitOpsModulePlugin::BitOpsModulePlugin(QObject* parent, const QStringList&)
+{
+    FunctionModuleRegistry::instance()->add(new BitOpsModuleFactory(parent));
+}
+K_EXPORT_COMPONENT_FACTORY(kspreadbitopsmodule, KGenericFactory<BitOpsModulePlugin>("BitOpsModule"))
+
+
+BitOpsModuleFactory::BitOpsModuleFactory(QObject* parent)
+    : FunctionModuleFactory(parent, "bitops", i18n("Bit Operation Functions"))
+{
+    RegisterBitopsFunctions();
+}
+
 
 // registers all bitops functions
 void RegisterBitopsFunctions()
@@ -105,3 +126,5 @@ Value func_bitrshift (valVector args, ValueCalc *, FuncExtra *)
   else // negative right shift, becomes left shift
       return Value( static_cast<qint64>( x << ( -1 * numshift ) ) );
 }
+
+#include "BitOpsModule.moc"

@@ -21,13 +21,17 @@
 
 // built-in statistical functions
 
+#include "FunctionModuleRegistry.h"
 #include "Functions.h"
+#include "StatisticalModule.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
 #include <Formula.h>
 
 #include <kdebug.h>
+#include <KGenericFactory>
+#include <KLocale>
 
 // needed for MODE
 #include <QList>
@@ -116,6 +120,22 @@ Value func_weibull (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ztest (valVector args, ValueCalc *calc, FuncExtra *);
 
 typedef QList<double> List;
+
+void RegisterStatisticalFunctions();
+
+StatisticalModulePlugin::StatisticalModulePlugin(QObject* parent, const QStringList&)
+{
+    FunctionModuleRegistry::instance()->add(new StatisticalModuleFactory(parent));
+}
+K_EXPORT_COMPONENT_FACTORY(kspreadstatisticalmodule, KGenericFactory<StatisticalModulePlugin>("StatisticalModule"))
+
+
+StatisticalModuleFactory::StatisticalModuleFactory(QObject* parent)
+    : FunctionModuleFactory(parent, "datetime", i18n("Statistical Functions"))
+{
+    RegisterStatisticalFunctions();
+}
+
 
 // registers all statistical functions
 void RegisterStatisticalFunctions()
@@ -1623,7 +1643,7 @@ Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
     double valX, valY;
 
     //
-    // Gehe über Matrix Reihen/Spaltenweise
+    // Gehe ï¿½ber Matrix Reihen/Spaltenweise
     //
     for (int c=0; c<cols_Y; c++)
     {
@@ -3068,3 +3088,5 @@ Value func_ztest( valVector args, ValueCalc* calc, FuncExtra* )
     // result = 1 - ( NORMDIST(-abs(z),0,1,1) + ( 1 - NORMDIST(abs(z),0,1,1) ) )
     return calc->mul( Value(2.0), calc->gauss( calc->abs( z ) ) );
 }
+
+#include "StatisticalModule.moc"

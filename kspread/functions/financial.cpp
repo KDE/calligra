@@ -30,13 +30,16 @@
 #include <math.h>
 
 #include "CalculationSettings.h"
+#include "FinancialModule.h"
+#include "FunctionModuleRegistry.h"
 #include "Functions.h"
 #include "functions/helper.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
-#include <klocale.h>
 #include <kcalendarsystem.h>
+#include <KGenericFactory>
+#include <KLocale>
 
 using namespace KSpread;
 
@@ -104,6 +107,22 @@ Value func_xnpv (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_yielddisc (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_yieldmat (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_zero_coupon (valVector args, ValueCalc *calc, FuncExtra *);
+
+void RegisterFinancialFunctions();
+
+FinancialModulePlugin::FinancialModulePlugin(QObject* parent, const QStringList&)
+{
+    FunctionModuleRegistry::instance()->add(new FinancialModuleFactory(parent));
+}
+K_EXPORT_COMPONENT_FACTORY(kspreadfinancialmodule, KGenericFactory<FinancialModulePlugin>("FinancialModule"))
+
+
+FinancialModuleFactory::FinancialModuleFactory(QObject* parent)
+    : FunctionModuleFactory(parent, "financial", i18n("Financial Functions"))
+{
+    RegisterFinancialFunctions();
+}
+
 
 // registers all financial functions
 void RegisterFinancialFunctions()
@@ -2163,3 +2182,5 @@ Value func_zero_coupon (valVector args, ValueCalc *calc, FuncExtra *)
   // face / pow(1 + rate, years)
   return calc->div (face, calc->pow (calc->add (rate, 1), years));
 }
+
+#include "FinancialModule.moc"

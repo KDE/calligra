@@ -25,15 +25,17 @@
 
 #include <QDir>
 #include <kdebug.h>
-#include <klocale.h>
+#include <KGenericFactory>
+#include <KLocale>
 
 #include "CalculationSettings.h"
+#include "FunctionModuleRegistry.h"
 #include "Functions.h"
+#include "InformationModule.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
 #include "Doc.h"
-#include "Sheet.h"
 
 using namespace KSpread;
 
@@ -58,6 +60,22 @@ Value func_n (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_na (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_type (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_version (valVector args, ValueCalc *calc, FuncExtra *);
+
+void RegisterInformationFunctions();
+
+InformationModulePlugin::InformationModulePlugin(QObject* parent, const QStringList&)
+{
+    FunctionModuleRegistry::instance()->add(new InformationModuleFactory(parent));
+}
+K_EXPORT_COMPONENT_FACTORY(kspreadinformationmodule, KGenericFactory<InformationModulePlugin>("InformationModule"))
+
+
+InformationModuleFactory::InformationModuleFactory(QObject* parent)
+    : FunctionModuleFactory(parent, "information", i18n("Information Functions"))
+{
+    RegisterInformationFunctions();
+}
+
 
 // registers all information functions
 void RegisterInformationFunctions()
@@ -334,3 +352,5 @@ Value func_na(valVector, ValueCalc *, FuncExtra *)
 {
     return Value::errorNA();
 }
+
+#include "InformationModule.moc"

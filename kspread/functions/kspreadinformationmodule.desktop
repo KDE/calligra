@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Information Functions
+X-KDE-ServiceTypes=KSpread/Function
+Type=Service
+X-KDE-Library=kspreadinformationmodule
+X-KSpread-Version=2
+X-Flake-PluginVersion=1
