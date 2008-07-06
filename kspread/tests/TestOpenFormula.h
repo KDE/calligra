@@ -27,12 +27,14 @@
 
 namespace KSpread
 {
+class Value;
 
 class TestOpenFormula: public QObject
 {
     Q_OBJECT
 
 private Q_SLOTS:
+    void initTestCase();
   void testEvaluation();
   void testFormulaConversion();
   void testReferenceLoading();

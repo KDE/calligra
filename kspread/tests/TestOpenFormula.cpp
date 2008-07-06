@@ -19,16 +19,19 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include "TestOpenFormula.h"
+
 #include <klocale.h>
 
 #include "qtest_kde.h"
 
 #include <Formula.h>
+#include <functions/InformationModule.h>
+#include <functions/LogicModule.h>
+#include <FunctionModuleRegistry.h>
 #include <Region.h>
 #include <Util.h>
 #include <Value.h>
-
-#include "TestOpenFormula.h"
 
 using namespace KSpread;
 
@@ -88,6 +91,11 @@ QString TestOpenFormula::convertFromOpenFormula(const QString& expr)
   return formula;
 }
 
+void TestOpenFormula::initTestCase()
+{
+    FunctionModuleRegistry::instance()->add(new InformationModuleFactory(this));
+    FunctionModuleRegistry::instance()->add(new LogicModuleFactory(this));
+}
 
 void TestOpenFormula::testEvaluation()
 {

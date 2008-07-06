@@ -15,7 +15,7 @@ target_link_libraries(TestFormula kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestOpenFormula_SRCS TestOpenFormula.cpp)
+set(TestOpenFormula_SRCS TestOpenFormula.cpp ../functions/information.cpp ../functions/logic.cpp)
 kde4_add_unit_test(TestOpenFormula TESTNAME kspread-OpenFormula  ${TestOpenFormula_SRCS})
 target_link_libraries(TestOpenFormula kspreadcommon ${QT_QTTEST_LIBRARY})
 
