@@ -78,6 +78,7 @@ class Axis;
 class ThreeDScene;
 class KDChartModel;
 class CellRegion;
+class TableModel;
 
 extern bool isPolar( ChartType type );
 extern bool isCartesian( ChartType type );

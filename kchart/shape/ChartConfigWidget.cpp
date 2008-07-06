@@ -39,6 +39,7 @@
 #include "commands/ChartTypeCommand.h"
 #include "CellRegionStringValidator.h"
 #include <interfaces/KoChartModel.h>
+#include "TableModel.h"
 
 using namespace KChart;
 
@@ -329,7 +330,8 @@ void ChartConfigWidget::open( KoShape* shape )
     Q_ASSERT( d->shape );
     
     KoChart::ChartModel *spreadSheetModel = dynamic_cast<KoChart::ChartModel*>( d->shape->model() );
-    d->sourceIsSpreadSheet = spreadSheetModel != 0;
+    TableModel *tableModel = dynamic_cast<TableModel*>( d->shape->model() );
+    d->sourceIsSpreadSheet = spreadSheetModel != 0 && tableModel == 0;
     
     // Update the axis titles
     //d->ui.xAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[0]->titleText() );

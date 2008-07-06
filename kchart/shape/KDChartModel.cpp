@@ -97,7 +97,6 @@ void KDChartModel::dataSetSizeChanged( DataSet *dataSet, int newSize )
 	
 	if ( newSize > d->dataSetSizes[ d->biggestDataSetIndex ] )
 	{
-		qDebug() << "Inserting rows:" << d->dataSetSizes[ d->biggestDataSetIndex ] << newSize - 1;
 		beginInsertRows( QModelIndex(), d->dataSetSizes[ d->biggestDataSetIndex ], newSize - 1 );
 		
 		d->dataSetSizes[ dataSetIndex ] = newSize;

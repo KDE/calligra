@@ -106,7 +106,7 @@ QVariant CellDataSet::labelData() const
 {
     if ( !m_labelDataRegion.isValid() )
             return QVariant();
-    
+
     QString label;
     
     int cellCount = m_labelDataRegion.cellCount();
