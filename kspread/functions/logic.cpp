@@ -55,6 +55,11 @@ LogicModuleFactory::LogicModuleFactory(QObject* parent)
 {
 }
 
+QString LogicModuleFactory::descriptionFileName() const
+{
+    return QString("logic.xml");
+}
+
 void LogicModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();

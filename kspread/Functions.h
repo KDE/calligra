@@ -155,15 +155,17 @@ public:
   const QStringList &groups () const;
   void addGroup(const QString& groupname);
 
+    /**
+     * Loads function descriptions from an XML file.
+     */
+    void loadFunctionDescriptions(const QString& filename);
+
 private:
 
   class Private;
   Private * const d;
 
   static FunctionRepository* s_self;
-
-  /** loads function descriptions from a XML file */
-  void loadFile (const QString& filename);
 
   // no copy or assign
   FunctionRepository( const FunctionRepository& );

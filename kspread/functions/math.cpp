@@ -128,6 +128,11 @@ MathModuleFactory::MathModuleFactory(QObject* parent)
 {
 }
 
+QString MathModuleFactory::descriptionFileName() const
+{
+    return QString("math.xml");
+}
+
 void MathModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();

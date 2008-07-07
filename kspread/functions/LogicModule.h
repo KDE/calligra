@@ -39,6 +39,8 @@ class LogicModuleFactory : public FunctionModuleFactory
 public:
     LogicModuleFactory(QObject* parent);
 
+    QString descriptionFileName() const;
+
     void registerFunctions();
     void removeFunctions();
 };

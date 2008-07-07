@@ -39,6 +39,8 @@ class TrigonometryModuleFactory : public FunctionModuleFactory
 public:
     TrigonometryModuleFactory(QObject* parent);
 
+    QString descriptionFileName() const;
+
     void registerFunctions();
     void removeFunctions();
 };

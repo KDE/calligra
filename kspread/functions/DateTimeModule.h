@@ -39,6 +39,8 @@ class DateTimeModuleFactory : public FunctionModuleFactory
 public:
     DateTimeModuleFactory(QObject* parent);
 
+    QString descriptionFileName() const;
+
     void registerFunctions();
     void removeFunctions();
 };

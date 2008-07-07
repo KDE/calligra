@@ -74,6 +74,11 @@ InformationModuleFactory::InformationModuleFactory(QObject* parent)
 {
 }
 
+QString InformationModuleFactory::descriptionFileName() const
+{
+    return QString("information.xml");
+}
+
 void InformationModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();

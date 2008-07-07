@@ -37,6 +37,8 @@ public:
     QString id() const;
     QString name() const;
 
+    virtual QString descriptionFileName() const = 0;
+
     virtual void registerFunctions() = 0;
     virtual void removeFunctions() = 0;
 

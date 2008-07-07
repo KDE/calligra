@@ -39,6 +39,8 @@ class ConversionModuleFactory : public FunctionModuleFactory
 public:
     ConversionModuleFactory(QObject* parent);
 
+    QString descriptionFileName() const;
+
     void registerFunctions();
     void removeFunctions();
 };

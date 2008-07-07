@@ -90,6 +90,11 @@ DateTimeModuleFactory::DateTimeModuleFactory(QObject* parent)
 {
 }
 
+QString DateTimeModuleFactory::descriptionFileName() const
+{
+    return QString("datetime.xml");
+}
+
 void DateTimeModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();

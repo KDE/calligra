@@ -104,6 +104,11 @@ EngineeringModuleFactory::EngineeringModuleFactory(QObject* parent)
 {
 }
 
+QString EngineeringModuleFactory::descriptionFileName() const
+{
+    return QString("engineering.xml");
+}
+
 void EngineeringModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();

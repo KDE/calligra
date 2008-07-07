@@ -59,6 +59,11 @@ DatabaseModuleFactory::DatabaseModuleFactory(QObject* parent)
 {
 }
 
+QString DatabaseModuleFactory::descriptionFileName() const
+{
+    return QString("database.xml");
+}
+
 void DatabaseModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();

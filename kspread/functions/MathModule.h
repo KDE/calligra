@@ -39,6 +39,8 @@ class MathModuleFactory : public FunctionModuleFactory
 public:
     MathModuleFactory(QObject* parent);
 
+    QString descriptionFileName() const;
+
     void registerFunctions();
     void removeFunctions();
 };

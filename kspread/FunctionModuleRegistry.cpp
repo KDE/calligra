@@ -18,11 +18,15 @@
 */
 
 #include "FunctionModuleRegistry.h"
+#include "Factory.h"
 #include "FunctionModuleFactory.h"
+#include "Functions.h"
 
 #include <KoPluginLoader.h>
 
-#include "kglobal.h"
+#include <KDebug>
+#include <KGlobal>
+#include <KStandardDirs>
 
 using namespace KSpread;
 
@@ -56,6 +60,13 @@ void FunctionModuleRegistry::registerFunctions()
     const QList<FunctionModuleFactory*> factories = values();
     for (int i = 0; i < factories.count(); ++i) {
         factories[i]->registerFunctions();
+        Q_ASSERT(!factories[i]->descriptionFileName().isEmpty());
+        const KStandardDirs* dirs = Factory::global().dirs();
+        const QString fileName = dirs->findResource("functions", factories[i]->descriptionFileName());
+        if (fileName.isEmpty()) {
+            kDebug(36002) << factories[i]->descriptionFileName() << "not found.";
+        }
+        FunctionRepository::self()->loadFunctionDescriptions(fileName);
     }
 }
 

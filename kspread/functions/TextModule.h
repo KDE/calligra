@@ -39,6 +39,8 @@ class TextModuleFactory : public FunctionModuleFactory
 public:
     TextModuleFactory(QObject* parent);
 
+    QString descriptionFileName() const;
+
     void registerFunctions();
     void removeFunctions();
 };

@@ -39,6 +39,8 @@ class BitOpsModuleFactory : public FunctionModuleFactory
 public:
     BitOpsModuleFactory(QObject* parent);
 
+    QString descriptionFileName() const;
+
     void registerFunctions();
     void removeFunctions();
 };

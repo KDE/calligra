@@ -39,6 +39,8 @@ class EngineeringModuleFactory : public FunctionModuleFactory
 public:
     EngineeringModuleFactory(QObject* parent);
 
+    QString descriptionFileName() const;
+
     void registerFunctions();
     void removeFunctions();
 };

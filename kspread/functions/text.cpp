@@ -89,6 +89,11 @@ TextModuleFactory::TextModuleFactory(QObject* parent)
 {
 }
 
+QString TextModuleFactory::descriptionFileName() const
+{
+    return QString("text.xml");
+}
+
 void TextModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();

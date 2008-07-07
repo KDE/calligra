@@ -39,6 +39,8 @@ class FinancialModuleFactory : public FunctionModuleFactory
 public:
     FinancialModuleFactory(QObject* parent);
 
+    QString descriptionFileName() const;
+
     void registerFunctions();
     void removeFunctions();
 };

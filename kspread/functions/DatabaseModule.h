@@ -39,6 +39,8 @@ class DatabaseModuleFactory : public FunctionModuleFactory
 public:
     DatabaseModuleFactory(QObject* parent);
 
+    QString descriptionFileName() const;
+
     void registerFunctions();
     void removeFunctions();
 };

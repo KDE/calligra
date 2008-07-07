@@ -65,6 +65,11 @@ TrigonometryModuleFactory::TrigonometryModuleFactory(QObject* parent)
 {
 }
 
+QString TrigonometryModuleFactory::descriptionFileName() const
+{
+    return QString("trig.xml");
+}
+
 void TrigonometryModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();

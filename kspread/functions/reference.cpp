@@ -64,6 +64,11 @@ ReferenceModuleFactory::ReferenceModuleFactory(QObject* parent)
 {
 }
 
+QString ReferenceModuleFactory::descriptionFileName() const
+{
+    return QString("reference.xml");
+}
+
 void ReferenceModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();

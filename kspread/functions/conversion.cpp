@@ -61,6 +61,11 @@ ConversionModuleFactory::ConversionModuleFactory(QObject* parent)
 {
 }
 
+QString ConversionModuleFactory::descriptionFileName() const
+{
+    return QString("conversion.xml");
+}
+
 void ConversionModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();

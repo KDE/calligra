@@ -39,6 +39,8 @@ class StatisticalModuleFactory : public FunctionModuleFactory
 public:
     StatisticalModuleFactory(QObject* parent);
 
+    QString descriptionFileName() const;
+
     void registerFunctions();
     void removeFunctions();
 };

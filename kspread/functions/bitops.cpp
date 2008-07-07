@@ -51,6 +51,11 @@ BitOpsModuleFactory::BitOpsModuleFactory(QObject* parent)
 {
 }
 
+QString BitOpsModuleFactory::descriptionFileName() const
+{
+    return QString("bitops.xml");
+}
+
 void BitOpsModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();

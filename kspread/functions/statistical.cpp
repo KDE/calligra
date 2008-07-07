@@ -134,6 +134,11 @@ StatisticalModuleFactory::StatisticalModuleFactory(QObject* parent)
 {
 }
 
+QString StatisticalModuleFactory::descriptionFileName() const
+{
+    return QString("statistical.xml");
+}
+
 void StatisticalModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();

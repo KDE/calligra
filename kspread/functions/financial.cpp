@@ -121,6 +121,11 @@ FinancialModuleFactory::FinancialModuleFactory(QObject* parent)
 {
 }
 
+QString FinancialModuleFactory::descriptionFileName() const
+{
+    return QString("financial.xml");
+}
+
 void FinancialModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();

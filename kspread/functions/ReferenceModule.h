@@ -39,6 +39,8 @@ class ReferenceModuleFactory : public FunctionModuleFactory
 public:
     ReferenceModuleFactory(QObject* parent);
 
+    QString descriptionFileName() const;
+
     void registerFunctions();
     void removeFunctions();
 };

@@ -184,14 +184,14 @@ FunctionRepository* FunctionRepository::self()
     FunctionModuleRegistry::instance()->registerFunctions();
 
     kDebug() << s_self->d->functions.count() <<" functions registered.";
-
+/*
     // find all XML description files
     QStringList files = Factory::global().dirs()->findAllResources
         ("functions", "*.xml", KStandardDirs::Recursive);
 
     // load desc/help from XML file
     for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
-      s_self->loadFile (*it);
+      s_self->loadFile (*it);*/
 
 #ifndef NDEBUG
         // Verify, that every function has a description.
@@ -278,7 +278,7 @@ void FunctionRepository::addGroup(const QString& groupname)
   d->groups.sort();
 }
 
-void FunctionRepository::loadFile (const QString& filename)
+void FunctionRepository::loadFunctionDescriptions(const QString& filename)
 {
   QFile file (filename);
   if (!file.open (QIODevice::ReadOnly))
