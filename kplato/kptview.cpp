@@ -435,7 +435,7 @@ void View::createViews()
         createScheduleHandler( cat, "ScheduleHandler", i18n( "Schedules" ), i18n( "Calculate and analyze project schedules" ) );
     
         cat = m_viewlist->addCategory( "Views", i18n( "Views" ) );
-        createProjectStatusView( cat, "ProjectStatusView", i18n( "Project Status" ), i18n( "View project status information" ) );
+//         createProjectStatusView( cat, "ProjectStatusView", i18n( "Project Status" ), i18n( "View project status information" ) );
 
         createTaskStatusView( cat, "TaskStatusView", i18n( "Task Status" ), i18n( "View task progress information" ) );
         
