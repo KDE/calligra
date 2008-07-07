@@ -42,7 +42,11 @@
 #include <kmessagebox.h>
 #include <kdeversion.h>
 #include <kcolorbutton.h>
+#include <KPluginInfo>
+#include <KPluginSelector>
+#include <KServiceTypeTrader>
 #include <ksharedconfig.h>
+#include <KStandardDirs>
 #include <sonnet/configwidget.h>
 
 #include <KoTabBar.h>
@@ -70,6 +74,7 @@ public:
     KPageWidgetItem* page2;
     KPageWidgetItem* page3;
     KPageWidgetItem* page4;
+    KPageWidgetItem* pluginPage;
 
     // Locale Options
     parameterLocale* localePage;
@@ -88,6 +93,9 @@ public:
     int oldRecentFilesEntries;
     int oldAutoSaveDelay;
     bool oldCreateBackupFile;
+
+    // Plugin Options
+    KPluginSelector* pluginSelector;
 
     // Spellchecker Options
     Sonnet::ConfigWidget* spellCheckPage;
@@ -365,6 +373,20 @@ PreferenceDialog::PreferenceDialog(View* view)
 
     d->resetOpenSaveOptions(); // initialize values
 
+    // Interface Options Widget
+    d->pluginSelector = new KPluginSelector(this);
+    const QString serviceType = QString::fromLatin1("KSpread/Function");
+    const QString query = QString::fromLatin1("[X-KSpread-Version] == 2");
+    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
+    const QList<KPluginInfo> pluginInfoList = KPluginInfo::fromServices(offers);
+    d->pluginSelector->addPlugins(pluginInfoList, KPluginSelector::ReadConfigFile,
+                                  i18n("Function Modules"), "KSpread/Function");
+    d->pluginSelector->load();
+    page = new KPageWidgetItem(d->pluginSelector, i18n("Plugins"));
+    page->setIcon(KIcon("preferences-plugin"));
+    addPage(page);
+    d->pluginPage = page;
+
     // Spell Checker Options
     KSharedConfig::Ptr sharedConfigPtr = Factory::global().config();
     d->spellCheckPage = new Sonnet::ConfigWidget(sharedConfigPtr.data(), this);
@@ -388,8 +410,10 @@ void PreferenceDialog::openPage(int flags)
         setCurrentPage(d->page2);
     else if (flags & OpenSavePage)
         setCurrentPage(d->page3);
-    else if (flags & OpenSavePage)
+    else if (flags & SpellCheckerPage)
         setCurrentPage(d->page4);
+    else if (flags & PluginPage)
+        setCurrentPage(d->pluginPage);
 }
 
 void PreferenceDialog::slotApply()
@@ -397,6 +421,7 @@ void PreferenceDialog::slotApply()
     d->applyInterfaceOptions();
     d->applyOpenSaveOptions();
 
+    d->pluginSelector->save();
     d->spellCheckPage->save();
     d->localePage->apply();
 
@@ -411,6 +436,8 @@ void PreferenceDialog::slotDefault()
 
     if (currentPage() == d->page4) {
         d->spellCheckPage->slotDefault();
+    } else if (currentPage() == d->pluginPage) {
+        d->pluginSelector->load();
     }
 }
 

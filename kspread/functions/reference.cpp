@@ -52,24 +52,25 @@ Value func_rows (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_vlookup (valVector args, ValueCalc *calc, FuncExtra *);
 
 
-ReferenceModulePlugin::ReferenceModulePlugin(QObject* parent, const QStringList&)
+#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
+K_PLUGIN_FACTORY(ReferenceModulePluginFactory,
+                 registerPlugin<ReferenceModule>();
+                )
+K_EXPORT_PLUGIN(ReferenceModulePluginFactory("ReferenceModule"))
+#endif
+
+
+ReferenceModule::ReferenceModule(QObject* parent, const QVariantList&)
+    : FunctionModule(parent, "reference", i18n("Reference Functions"))
 {
-    FunctionModuleRegistry::instance()->add(new ReferenceModuleFactory(parent));
-}
-K_EXPORT_COMPONENT_FACTORY(kspreadreferencemodule, KGenericFactory<ReferenceModulePlugin>("ReferenceModule"))
-
-
-ReferenceModuleFactory::ReferenceModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "reference", i18n("Reference Functions"))
-{
 }
 
-QString ReferenceModuleFactory::descriptionFileName() const
+QString ReferenceModule::descriptionFileName() const
 {
     return QString("reference.xml");
 }
 
-void ReferenceModuleFactory::registerFunctions()
+void ReferenceModule::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -123,7 +124,7 @@ void ReferenceModuleFactory::registerFunctions()
   repo->add (f);
 }
 
-void ReferenceModuleFactory::removeFunctions()
+void ReferenceModule::removeFunctions()
 {
     // TODO
 }

@@ -17,8 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_FUNCTION_MODULE_FACTORY
-#define KSPREAD_FUNCTION_MODULE_FACTORY
+#ifndef KSPREAD_FUNCTION_MODULE
+#define KSPREAD_FUNCTION_MODULE
 
 #include <QObject>
 #include <QString>
@@ -27,12 +27,12 @@
 
 namespace KSpread
 {
-class KSPREAD_EXPORT FunctionModuleFactory : public QObject
+class KSPREAD_EXPORT FunctionModule : public QObject
 {
     Q_OBJECT
 public:
-    FunctionModuleFactory(QObject* parent, const QString &id, const QString& name);
-    virtual ~FunctionModuleFactory();
+    FunctionModule(QObject* parent, const QString &id, const QString& name);
+    virtual ~FunctionModule();
 
     QString id() const;
     QString name() const;
@@ -49,4 +49,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_FUNCTION_MODULE_FACTORY
+#endif // KSPREAD_FUNCTION_MODULE

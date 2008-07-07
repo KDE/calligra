@@ -28,8 +28,8 @@
 
 void TestEngineeringFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new EngineeringModuleFactory(this));
-    FunctionModuleRegistry::instance()->add(new MathModuleFactory(this));
+    FunctionModuleRegistry::instance()->add(new EngineeringModule(this));
+    FunctionModuleRegistry::instance()->add(new MathModule(this));
     FunctionModuleRegistry::instance()->registerFunctions();
 }
 

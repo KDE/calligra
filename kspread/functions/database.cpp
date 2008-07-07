@@ -47,24 +47,25 @@ Value func_dvarp (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_getpivotdata (valVector args, ValueCalc *calc, FuncExtra *);
 
 
-DatabaseModulePlugin::DatabaseModulePlugin(QObject* parent, const QStringList&)
+#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
+K_PLUGIN_FACTORY(DatabaseModulePluginFactory,
+                 registerPlugin<DatabaseModule>();
+                )
+K_EXPORT_PLUGIN(DatabaseModulePluginFactory("DatabaseModule"))
+#endif
+
+
+DatabaseModule::DatabaseModule(QObject* parent, const QVariantList&)
+    : FunctionModule(parent, "database", i18n("Database Functions"))
 {
-    FunctionModuleRegistry::instance()->add(new DatabaseModuleFactory(parent));
-}
-K_EXPORT_COMPONENT_FACTORY(kspreaddatabasemodule, KGenericFactory<DatabaseModulePlugin>("DatabaseModule"))
-
-
-DatabaseModuleFactory::DatabaseModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "database", i18n("Database Functions"))
-{
 }
 
-QString DatabaseModuleFactory::descriptionFileName() const
+QString DatabaseModule::descriptionFileName() const
 {
     return QString("database.xml");
 }
 
-void DatabaseModuleFactory::registerFunctions()
+void DatabaseModule::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -123,7 +124,7 @@ void DatabaseModuleFactory::registerFunctions()
   repo->add (f);
 }
 
-void DatabaseModuleFactory::removeFunctions()
+void DatabaseModule::removeFunctions()
 {
     // TODO
 }

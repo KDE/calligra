@@ -20,24 +20,18 @@
 #ifndef KSPREAD_ENGINEERING_MODULE
 #define KSPREAD_ENGINEERING_MODULE
 
-#include "FunctionModuleFactory.h"
+#include "FunctionModule.h"
+
+#include <QVariantList>
 
 namespace KSpread
 {
 
-class EngineeringModulePlugin : public QObject
+class EngineeringModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    EngineeringModulePlugin(QObject* parent, const QStringList&);
-};
-
-
-class EngineeringModuleFactory : public FunctionModuleFactory
-{
-    Q_OBJECT
-public:
-    EngineeringModuleFactory(QObject* parent);
+    EngineeringModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 

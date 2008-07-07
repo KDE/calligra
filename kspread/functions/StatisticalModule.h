@@ -20,24 +20,18 @@
 #ifndef KSPREAD_STATISTICAL_MODULE
 #define KSPREAD_STATISTICAL_MODULE
 
-#include "FunctionModuleFactory.h"
+#include "FunctionModule.h"
+
+#include <QVariantList>
 
 namespace KSpread
 {
 
-class StatisticalModulePlugin : public QObject
+class StatisticalModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    StatisticalModulePlugin(QObject* parent, const QStringList&);
-};
-
-
-class StatisticalModuleFactory : public FunctionModuleFactory
-{
-    Q_OBJECT
-public:
-    StatisticalModuleFactory(QObject* parent);
+    StatisticalModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 

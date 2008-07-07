@@ -43,24 +43,25 @@ Value func_true (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_xor (valVector args, ValueCalc *calc, FuncExtra *);
 
 
-LogicModulePlugin::LogicModulePlugin(QObject* parent, const QStringList&)
+#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
+K_PLUGIN_FACTORY(LogicModulePluginFactory,
+                 registerPlugin<LogicModule>();
+                )
+K_EXPORT_PLUGIN(LogicModulePluginFactory("LogicModule"))
+#endif
+
+
+LogicModule::LogicModule(QObject* parent, const QVariantList&)
+    : FunctionModule(parent, "logic", i18n("Logic Functions"))
 {
-    FunctionModuleRegistry::instance()->add(new LogicModuleFactory(parent));
-}
-K_EXPORT_COMPONENT_FACTORY(kspreadlogicmodule, KGenericFactory<LogicModulePlugin>("LogicModule"))
-
-
-LogicModuleFactory::LogicModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "logic", i18n("Logic Functions"))
-{
 }
 
-QString LogicModuleFactory::descriptionFileName() const
+QString LogicModule::descriptionFileName() const
 {
     return QString("logic.xml");
 }
 
-void LogicModuleFactory::registerFunctions()
+void LogicModule::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -99,7 +100,7 @@ void LogicModuleFactory::registerFunctions()
   repo->add (f);
 }
 
-void LogicModuleFactory::removeFunctions()
+void LogicModule::removeFunctions()
 {
     // TODO
 }

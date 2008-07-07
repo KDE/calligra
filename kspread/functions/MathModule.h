@@ -20,24 +20,18 @@
 #ifndef KSPREAD_MATH_MODULE
 #define KSPREAD_MATH_MODULE
 
-#include "FunctionModuleFactory.h"
+#include "FunctionModule.h"
+
+#include <QVariantList>
 
 namespace KSpread
 {
 
-class MathModulePlugin : public QObject
+class MathModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    MathModulePlugin(QObject* parent, const QStringList&);
-};
-
-
-class MathModuleFactory : public FunctionModuleFactory
-{
-    Q_OBJECT
-public:
-    MathModuleFactory(QObject* parent);
+    MathModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 

@@ -109,24 +109,25 @@ Value func_yieldmat (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_zero_coupon (valVector args, ValueCalc *calc, FuncExtra *);
 
 
-FinancialModulePlugin::FinancialModulePlugin(QObject* parent, const QStringList&)
+#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
+K_PLUGIN_FACTORY(FinancialModulePluginFactory,
+                 registerPlugin<FinancialModule>();
+                )
+K_EXPORT_PLUGIN(FinancialModulePluginFactory("FinancialModule"))
+#endif
+
+
+FinancialModule::FinancialModule(QObject* parent, const QVariantList&)
+    : FunctionModule(parent, "financial", i18n("Financial Functions"))
 {
-    FunctionModuleRegistry::instance()->add(new FinancialModuleFactory(parent));
-}
-K_EXPORT_COMPONENT_FACTORY(kspreadfinancialmodule, KGenericFactory<FinancialModulePlugin>("FinancialModule"))
-
-
-FinancialModuleFactory::FinancialModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "financial", i18n("Financial Functions"))
-{
 }
 
-QString FinancialModuleFactory::descriptionFileName() const
+QString FinancialModule::descriptionFileName() const
 {
     return QString("financial.xml");
 }
 
-void FinancialModuleFactory::registerFunctions()
+void FinancialModule::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -333,7 +334,7 @@ void FinancialModuleFactory::registerFunctions()
   repo->add (f);
 }
 
-void FinancialModuleFactory::removeFunctions()
+void FinancialModule::removeFunctions()
 {
     // TODO
 }

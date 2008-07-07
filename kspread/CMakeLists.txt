@@ -171,7 +171,7 @@ SET (kspreadcommon_LIB_SRCS
 	Factory.cpp
 	Format.cpp
 	Formula.cpp
-	FunctionModuleFactory.cpp
+	FunctionModule.cpp
 	FunctionModuleRegistry.cpp
 	Functions.cpp
 # 	GeneralProperty.cpp
@@ -221,6 +221,7 @@ target_link_libraries(kspreadcommon
 	${QT_QTSQL_LIBRARY}
 	${KDE4_KNOTIFYCONFIG_LIBS}
 	komain koguiutils kochart
+	kutils
 	${KDE4_KDE3SUPPORT_LIBS} )
 
 set_target_properties(kspreadcommon PROPERTIES VERSION ${GENERIC_KOFFICE_LIB_VERSION} SOVERSION ${GENERIC_KOFFICE_LIB_SOVERSION} )

@@ -62,24 +62,25 @@ Value func_type (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_version (valVector args, ValueCalc *calc, FuncExtra *);
 
 
-InformationModulePlugin::InformationModulePlugin(QObject* parent, const QStringList&)
+#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
+K_PLUGIN_FACTORY(InformationModulePluginFactory,
+                 registerPlugin<InformationModule>();
+                )
+K_EXPORT_PLUGIN(InformationModulePluginFactory("InformationModule"))
+#endif
+
+
+InformationModule::InformationModule(QObject* parent, const QVariantList&)
+    : FunctionModule(parent, "information", i18n("Information Functions"))
 {
-    FunctionModuleRegistry::instance()->add(new InformationModuleFactory(parent));
-}
-K_EXPORT_COMPONENT_FACTORY(kspreadinformationmodule, KGenericFactory<InformationModulePlugin>("InformationModule"))
-
-
-InformationModuleFactory::InformationModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "information", i18n("Information Functions"))
-{
 }
 
-QString InformationModuleFactory::descriptionFileName() const
+QString InformationModule::descriptionFileName() const
 {
     return QString("information.xml");
 }
 
-void InformationModuleFactory::registerFunctions()
+void InformationModule::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -132,7 +133,7 @@ void InformationModuleFactory::registerFunctions()
   repo->add (f);
 }
 
-void InformationModuleFactory::removeFunctions()
+void InformationModule::removeFunctions()
 {
     // TODO
 }

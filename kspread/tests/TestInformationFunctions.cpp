@@ -53,7 +53,7 @@ Value TestInformationFunctions::evaluate(const QString& formula, Value& ex)
 
 void TestInformationFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new InformationModuleFactory(this));
+    FunctionModuleRegistry::instance()->add(new InformationModule(this));
     FunctionModuleRegistry::instance()->registerFunctions();
     m_doc = new Doc();
     m_doc->map()->addNewSheet();

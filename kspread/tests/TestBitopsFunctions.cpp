@@ -26,7 +26,7 @@
 
 void TestBitopsFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new BitOpsModuleFactory(this));
+    FunctionModuleRegistry::instance()->add(new BitOpsModule(this));
     FunctionModuleRegistry::instance()->registerFunctions();
 }
 

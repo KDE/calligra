@@ -77,24 +77,25 @@ Value func_upper (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_value (valVector args, ValueCalc *calc, FuncExtra *);
 
 
-TextModulePlugin::TextModulePlugin(QObject* parent, const QStringList&)
+#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
+K_PLUGIN_FACTORY(TextModulePluginFactory,
+                 registerPlugin<TextModule>();
+                )
+K_EXPORT_PLUGIN(TextModulePluginFactory("TextModule"))
+#endif
+
+
+TextModule::TextModule(QObject* parent, const QVariantList&)
+    : FunctionModule(parent, "text", i18n("Text Functions"))
 {
-    FunctionModuleRegistry::instance()->add(new TextModuleFactory(parent));
-}
-K_EXPORT_COMPONENT_FACTORY(kspreadtextmodule, KGenericFactory<TextModulePlugin>("TextModule"))
-
-
-TextModuleFactory::TextModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "text", i18n("Text Functions"))
-{
 }
 
-QString TextModuleFactory::descriptionFileName() const
+QString TextModule::descriptionFileName() const
 {
     return QString("text.xml");
 }
 
-void TextModuleFactory::registerFunctions()
+void TextModule::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -187,7 +188,7 @@ void TextModuleFactory::registerFunctions()
   repo->add (f);
 }
 
-void TextModuleFactory::removeFunctions()
+void TextModule::removeFunctions()
 {
     // TODO
 }

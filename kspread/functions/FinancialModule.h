@@ -20,24 +20,18 @@
 #ifndef KSPREAD_FINANCIAL_MODULE
 #define KSPREAD_FINANCIAL_MODULE
 
-#include "FunctionModuleFactory.h"
+#include "FunctionModule.h"
+
+#include <QVariantList>
 
 namespace KSpread
 {
 
-class FinancialModulePlugin : public QObject
+class FinancialModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    FinancialModulePlugin(QObject* parent, const QStringList&);
-};
-
-
-class FinancialModuleFactory : public FunctionModuleFactory
-{
-    Q_OBJECT
-public:
-    FinancialModuleFactory(QObject* parent);
+    FinancialModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 

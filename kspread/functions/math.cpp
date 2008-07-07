@@ -116,24 +116,25 @@ Value func_trunc (valVector args, ValueCalc *calc, FuncExtra *);
 // Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *);
 
 
-MathModulePlugin::MathModulePlugin(QObject* parent, const QStringList&)
+#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
+K_PLUGIN_FACTORY(MathModulePluginFactory,
+                 registerPlugin<MathModule>();
+                )
+K_EXPORT_PLUGIN(MathModulePluginFactory("MathModule"))
+#endif
+
+
+MathModule::MathModule(QObject* parent, const QVariantList&)
+    : FunctionModule(parent, "math", i18n("Math Functions"))
 {
-    FunctionModuleRegistry::instance()->add(new MathModuleFactory(parent));
-}
-K_EXPORT_COMPONENT_FACTORY(kspreadmathmodule, KGenericFactory<MathModulePlugin>("MathModule"))
-
-
-MathModuleFactory::MathModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "math", i18n("Math Functions"))
-{
 }
 
-QString MathModuleFactory::descriptionFileName() const
+QString MathModule::descriptionFileName() const
 {
     return QString("math.xml");
 }
 
-void MathModuleFactory::registerFunctions()
+void MathModule::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -357,7 +358,7 @@ void MathModuleFactory::registerFunctions()
   repo->add (f);
 }
 
-void MathModuleFactory::removeFunctions()
+void MathModule::removeFunctions()
 {
     // TODO
 }

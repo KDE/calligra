@@ -20,24 +20,18 @@
 #ifndef KSPREAD_DATETIME_MODULE
 #define KSPREAD_DATETIME_MODULE
 
-#include "FunctionModuleFactory.h"
+#include "FunctionModule.h"
+
+#include <QVariantList>
 
 namespace KSpread
 {
 
-class DateTimeModulePlugin : public QObject
+class DateTimeModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    DateTimeModulePlugin(QObject* parent, const QStringList&);
-};
-
-
-class DateTimeModuleFactory : public FunctionModuleFactory
-{
-    Q_OBJECT
-public:
-    DateTimeModuleFactory(QObject* parent);
+    DateTimeModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 

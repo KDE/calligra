@@ -38,25 +38,24 @@ Value func_bitxor (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bitlshift (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bitrshift (valVector args, ValueCalc *calc, FuncExtra *);
 
+#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
+K_PLUGIN_FACTORY(BitOpsModulePluginFactory,
+                 registerPlugin<BitOpsModule>();
+                )
+K_EXPORT_PLUGIN(BitOpsModulePluginFactory("BitOpsModule"))
+#endif
 
-BitOpsModulePlugin::BitOpsModulePlugin(QObject* parent, const QStringList&)
+BitOpsModule::BitOpsModule(QObject* parent, const QVariantList&)
+    : FunctionModule(parent, "bitops", i18n("Bit Operation Functions"))
 {
-    FunctionModuleRegistry::instance()->add(new BitOpsModuleFactory(parent));
-}
-K_EXPORT_COMPONENT_FACTORY(kspreadbitopsmodule, KGenericFactory<BitOpsModulePlugin>("BitOpsModule"))
-
-
-BitOpsModuleFactory::BitOpsModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "bitops", i18n("Bit Operation Functions"))
-{
 }
 
-QString BitOpsModuleFactory::descriptionFileName() const
+QString BitOpsModule::descriptionFileName() const
 {
     return QString("bitops.xml");
 }
 
-void BitOpsModuleFactory::registerFunctions()
+void BitOpsModule::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -78,7 +77,7 @@ void BitOpsModuleFactory::registerFunctions()
   repo->add (f);
 }
 
-void BitOpsModuleFactory::removeFunctions()
+void BitOpsModule::removeFunctions()
 {
     // TODO
 }

@@ -20,24 +20,18 @@
 #ifndef KSPREAD_TRIGONOMETRY_MODULE
 #define KSPREAD_TRIGONOMETRY_MODULE
 
-#include "FunctionModuleFactory.h"
+#include "FunctionModule.h"
+
+#include <QVariantList>
 
 namespace KSpread
 {
 
-class TrigonometryModulePlugin : public QObject
+class TrigonometryModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    TrigonometryModulePlugin(QObject* parent, const QStringList&);
-};
-
-
-class TrigonometryModuleFactory : public FunctionModuleFactory
-{
-    Q_OBJECT
-public:
-    TrigonometryModuleFactory(QObject* parent);
+    TrigonometryModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 

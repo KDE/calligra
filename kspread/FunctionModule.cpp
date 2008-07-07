@@ -17,11 +17,11 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "FunctionModuleFactory.h"
+#include "FunctionModule.h"
 
 using namespace KSpread;
 
-class FunctionModuleFactory::Private
+class FunctionModule::Private
 {
 public:
     QString id;
@@ -29,7 +29,7 @@ public:
 };
 
 
-FunctionModuleFactory::FunctionModuleFactory(QObject* parent, const QString &id, const QString& name)
+FunctionModule::FunctionModule(QObject* parent, const QString &id, const QString& name)
     : QObject(parent)
     , d(new Private)
 {
@@ -37,19 +37,19 @@ FunctionModuleFactory::FunctionModuleFactory(QObject* parent, const QString &id,
     d->name = name;
 }
 
-FunctionModuleFactory::~FunctionModuleFactory()
+FunctionModule::~FunctionModule()
 {
     delete d;
 }
 
-QString FunctionModuleFactory::id() const
+QString FunctionModule::id() const
 {
     return d->id;
 }
 
-QString FunctionModuleFactory::name() const
+QString FunctionModule::name() const
 {
     return d->name;
 }
 
-#include "FunctionModuleFactory.moc"
+#include "FunctionModule.moc"

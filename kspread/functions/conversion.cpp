@@ -49,24 +49,25 @@ Value func_booltoint (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ToString (valVector args, ValueCalc *calc, FuncExtra *);
 
 
-ConversionModulePlugin::ConversionModulePlugin(QObject* parent, const QStringList&)
+#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
+K_PLUGIN_FACTORY(ConversionModulePluginFactory,
+                 registerPlugin<ConversionModule>();
+                )
+K_EXPORT_PLUGIN(ConversionModulePluginFactory("ConversionModule"))
+#endif
+
+
+ConversionModule::ConversionModule(QObject* parent, const QVariantList&)
+    : FunctionModule(parent, "conversion", i18n("Conversion Functions"))
 {
-    FunctionModuleRegistry::instance()->add(new ConversionModuleFactory(parent));
-}
-K_EXPORT_COMPONENT_FACTORY(kspreadconversionmodule, KGenericFactory<ConversionModulePlugin>("ConversionModule"))
-
-
-ConversionModuleFactory::ConversionModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "conversion", i18n("Conversion Functions"))
-{
 }
 
-QString ConversionModuleFactory::descriptionFileName() const
+QString ConversionModule::descriptionFileName() const
 {
     return QString("conversion.xml");
 }
 
-void ConversionModuleFactory::registerFunctions()
+void ConversionModule::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -111,7 +112,7 @@ void ConversionModuleFactory::registerFunctions()
   repo->add (f);
 }
 
-void ConversionModuleFactory::removeFunctions()
+void ConversionModule::removeFunctions()
 {
     // TODO
 }

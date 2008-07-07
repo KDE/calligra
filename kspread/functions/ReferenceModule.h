@@ -20,24 +20,18 @@
 #ifndef KSPREAD_REFERENCE_MODULE
 #define KSPREAD_REFERENCE_MODULE
 
-#include "FunctionModuleFactory.h"
+#include "FunctionModule.h"
+
+#include <QVariantList>
 
 namespace KSpread
 {
 
-class ReferenceModulePlugin : public QObject
+class ReferenceModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    ReferenceModulePlugin(QObject* parent, const QStringList&);
-};
-
-
-class ReferenceModuleFactory : public FunctionModuleFactory
-{
-    Q_OBJECT
-public:
-    ReferenceModuleFactory(QObject* parent);
+    ReferenceModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 

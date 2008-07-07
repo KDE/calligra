@@ -27,8 +27,8 @@
 
 void TestDatetimeFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new DateTimeModuleFactory(this));
-    FunctionModuleRegistry::instance()->add(new MathModuleFactory(this));
+    FunctionModuleRegistry::instance()->add(new DateTimeModule(this));
+    FunctionModuleRegistry::instance()->add(new MathModule(this));
     FunctionModuleRegistry::instance()->registerFunctions();
 }
 

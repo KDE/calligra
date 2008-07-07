@@ -28,9 +28,9 @@
 
 void TestTextFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new InformationModuleFactory(this));
-    FunctionModuleRegistry::instance()->add(new LogicModuleFactory(this));
-    FunctionModuleRegistry::instance()->add(new TextModuleFactory(this));
+    FunctionModuleRegistry::instance()->add(new InformationModule(this));
+    FunctionModuleRegistry::instance()->add(new LogicModule(this));
+    FunctionModuleRegistry::instance()->add(new TextModule(this));
     FunctionModuleRegistry::instance()->registerFunctions();
 }
 

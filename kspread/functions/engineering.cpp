@@ -92,24 +92,25 @@ Value func_oct2bin (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oct2hex (valVector args, ValueCalc *calc, FuncExtra *);
 
 
-EngineeringModulePlugin::EngineeringModulePlugin(QObject* parent, const QStringList&)
+#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
+K_PLUGIN_FACTORY(EngineeringModulePluginFactory,
+                 registerPlugin<EngineeringModule>();
+                )
+K_EXPORT_PLUGIN(EngineeringModulePluginFactory("EngineeringModule"))
+#endif
+
+
+EngineeringModule::EngineeringModule(QObject* parent, const QVariantList&)
+    : FunctionModule(parent, "engineering", i18n("Engineering Functions"))
 {
-    FunctionModuleRegistry::instance()->add(new EngineeringModuleFactory(parent));
-}
-K_EXPORT_COMPONENT_FACTORY(kspreadengineeringmodule, KGenericFactory<EngineeringModulePlugin>("EngineeringModule"))
-
-
-EngineeringModuleFactory::EngineeringModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "engineering", i18n("Engineering Functions"))
-{
 }
 
-QString EngineeringModuleFactory::descriptionFileName() const
+QString EngineeringModule::descriptionFileName() const
 {
     return QString("engineering.xml");
 }
 
-void EngineeringModuleFactory::registerFunctions()
+void EngineeringModule::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -236,7 +237,7 @@ void EngineeringModuleFactory::registerFunctions()
   repo->add (f);
 }
 
-void EngineeringModuleFactory::removeFunctions()
+void EngineeringModule::removeFunctions()
 {
     // TODO
 }

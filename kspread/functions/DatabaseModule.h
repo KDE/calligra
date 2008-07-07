@@ -20,24 +20,18 @@
 #ifndef KSPREAD_DATABASE_MODULE
 #define KSPREAD_DATABASE_MODULE
 
-#include "FunctionModuleFactory.h"
+#include "FunctionModule.h"
+
+#include <QVariantList>
 
 namespace KSpread
 {
 
-class DatabaseModulePlugin : public QObject
+class DatabaseModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    DatabaseModulePlugin(QObject* parent, const QStringList&);
-};
-
-
-class DatabaseModuleFactory : public FunctionModuleFactory
-{
-    Q_OBJECT
-public:
-    DatabaseModuleFactory(QObject* parent);
+    DatabaseModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 

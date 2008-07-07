@@ -53,24 +53,25 @@ Value func_tanh (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pi (valVector args, ValueCalc *calc, FuncExtra *);
 
 
-TrigonometryModulePlugin::TrigonometryModulePlugin(QObject* parent, const QStringList&)
+#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
+K_PLUGIN_FACTORY(TrigonometryModulePluginFactory,
+                 registerPlugin<TrigonometryModule>();
+                )
+K_EXPORT_PLUGIN(TrigonometryModulePluginFactory("TrigonometryModule"))
+#endif
+
+
+TrigonometryModule::TrigonometryModule(QObject* parent, const QVariantList&)
+    : FunctionModule(parent, "trigonometry", i18n("Trig Functions"))
 {
-    FunctionModuleRegistry::instance()->add(new TrigonometryModuleFactory(parent));
-}
-K_EXPORT_COMPONENT_FACTORY(kspreadtrigonometrymodule, KGenericFactory<TrigonometryModulePlugin>("TrigonometryModule"))
-
-
-TrigonometryModuleFactory::TrigonometryModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "trigonometry", i18n("Trig Functions"))
-{
 }
 
-QString TrigonometryModuleFactory::descriptionFileName() const
+QString TrigonometryModule::descriptionFileName() const
 {
     return QString("trig.xml");
 }
 
-void TrigonometryModuleFactory::registerFunctions()
+void TrigonometryModule::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -119,7 +120,7 @@ void TrigonometryModuleFactory::registerFunctions()
   repo->add (f);
 }
 
-void TrigonometryModuleFactory::removeFunctions()
+void TrigonometryModule::removeFunctions()
 {
     // TODO
 }

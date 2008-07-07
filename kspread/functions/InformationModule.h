@@ -20,24 +20,18 @@
 #ifndef KSPREAD_INFORMATION_MODULE
 #define KSPREAD_INFORMATION_MODULE
 
-#include "FunctionModuleFactory.h"
+#include "FunctionModule.h"
+
+#include <QVariantList>
 
 namespace KSpread
 {
 
-class InformationModulePlugin : public QObject
+class InformationModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    InformationModulePlugin(QObject* parent, const QStringList&);
-};
-
-
-class InformationModuleFactory : public FunctionModuleFactory
-{
-    Q_OBJECT
-public:
-    InformationModuleFactory(QObject* parent);
+    InformationModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 

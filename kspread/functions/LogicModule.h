@@ -20,24 +20,18 @@
 #ifndef KSPREAD_LOGIC_MODULE
 #define KSPREAD_LOGIC_MODULE
 
-#include "FunctionModuleFactory.h"
+#include "FunctionModule.h"
+
+#include <QVariantList>
 
 namespace KSpread
 {
 
-class LogicModulePlugin : public QObject
+class LogicModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    LogicModulePlugin(QObject* parent, const QStringList&);
-};
-
-
-class LogicModuleFactory : public FunctionModuleFactory
-{
-    Q_OBJECT
-public:
-    LogicModuleFactory(QObject* parent);
+    LogicModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 

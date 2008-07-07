@@ -20,24 +20,18 @@
 #ifndef KSPREAD_BITOPS_MODULE
 #define KSPREAD_BITOPS_MODULE
 
-#include "FunctionModuleFactory.h"
+#include "FunctionModule.h"
+
+#include <QVariantList>
 
 namespace KSpread
 {
 
-class BitOpsModulePlugin : public QObject
+class BitOpsModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    BitOpsModulePlugin(QObject* parent, const QStringList&);
-};
-
-
-class BitOpsModuleFactory : public FunctionModuleFactory
-{
-    Q_OBJECT
-public:
-    BitOpsModuleFactory(QObject* parent);
+    BitOpsModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 

@@ -19,13 +19,14 @@
 
 #include "FunctionModuleRegistry.h"
 #include "Factory.h"
-#include "FunctionModuleFactory.h"
+#include "FunctionModule.h"
 #include "Functions.h"
 
 #include <KoPluginLoader.h>
 
 #include <KDebug>
 #include <KGlobal>
+#include <KServiceTypeTrader>
 #include <KStandardDirs>
 
 using namespace KSpread;
@@ -41,13 +42,29 @@ K_GLOBAL_STATIC(FunctionModuleRegistrySingleton, s_singleton)
 
 FunctionModuleRegistry::FunctionModuleRegistry()
 {
-    KoPluginLoader::PluginsConfig config;
+    const QString serviceType = QString::fromLatin1("KSpread/Function");
+    const QString query = QString::fromLatin1("[X-KSpread-Version] == 2");
+    const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
+    foreach (KSharedPtr<KService> service, offers) {
+        KPluginFactory *factory = KPluginLoader(*service).factory();
+        if (!factory) {
+            kDebug() << "Unable to create plugin factory for" << service->name();
+            continue;
+        }
+        FunctionModule* module = factory->create<FunctionModule>(this);
+        if (!module) {
+            kDebug() << "Unable to create function module for" << service->name();
+            continue;
+        }
+        add(module);
+    }
+/*    KoPluginLoader::PluginsConfig config;
     config.group = "kspread";
     config.whiteList = "FunctionPlugins";
     config.blacklist = "FunctionPluginsDisabled";
     KoPluginLoader::instance()->load(QString::fromLatin1("KSpread/Function"),
                                      QString::fromLatin1("[X-KSpread-Version] == 2"),
-                                     config);
+                                     config);*/
 }
 
 FunctionModuleRegistry* FunctionModuleRegistry::instance()
@@ -57,7 +74,7 @@ FunctionModuleRegistry* FunctionModuleRegistry::instance()
 
 void FunctionModuleRegistry::registerFunctions()
 {
-    const QList<FunctionModuleFactory*> factories = values();
+    const QList<FunctionModule*> factories = values();
     for (int i = 0; i < factories.count(); ++i) {
         factories[i]->registerFunctions();
         Q_ASSERT(!factories[i]->descriptionFileName().isEmpty());
@@ -72,7 +89,7 @@ void FunctionModuleRegistry::registerFunctions()
 
 void FunctionModuleRegistry::removeFunctions()
 {
-    const QList<FunctionModuleFactory*> factories = values();
+    const QList<FunctionModule*> factories = values();
     for (int i = 0; i < factories.count(); ++i) {
         factories[i]->removeFunctions();
     }

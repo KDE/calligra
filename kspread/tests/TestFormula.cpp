@@ -114,9 +114,9 @@ Value TestFormula::evaluate(const QString& formula, Value& ex)
 
 void TestFormula::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new LogicModuleFactory(this));
-    FunctionModuleRegistry::instance()->add(new MathModuleFactory(this));
-    FunctionModuleRegistry::instance()->add(new TrigonometryModuleFactory(this));
+    FunctionModuleRegistry::instance()->add(new LogicModule(this));
+    FunctionModuleRegistry::instance()->add(new MathModule(this));
+    FunctionModuleRegistry::instance()->add(new TrigonometryModule(this));
     FunctionModuleRegistry::instance()->registerFunctions();
 }
 

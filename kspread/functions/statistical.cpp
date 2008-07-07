@@ -122,24 +122,25 @@ Value func_ztest (valVector args, ValueCalc *calc, FuncExtra *);
 typedef QList<double> List;
 
 
-StatisticalModulePlugin::StatisticalModulePlugin(QObject* parent, const QStringList&)
+#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
+K_PLUGIN_FACTORY(StatisticalModulePluginFactory,
+                 registerPlugin<StatisticalModule>();
+                )
+K_EXPORT_PLUGIN(StatisticalModulePluginFactory("StatisticalModule"))
+#endif
+
+
+StatisticalModule::StatisticalModule(QObject* parent, const QVariantList&)
+    : FunctionModule(parent, "statistical", i18n("Statistical Functions"))
 {
-    FunctionModuleRegistry::instance()->add(new StatisticalModuleFactory(parent));
-}
-K_EXPORT_COMPONENT_FACTORY(kspreadstatisticalmodule, KGenericFactory<StatisticalModulePlugin>("StatisticalModule"))
-
-
-StatisticalModuleFactory::StatisticalModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "statistical", i18n("Statistical Functions"))
-{
 }
 
-QString StatisticalModuleFactory::descriptionFileName() const
+QString StatisticalModule::descriptionFileName() const
 {
     return QString("statistical.xml");
 }
 
-void StatisticalModuleFactory::registerFunctions()
+void StatisticalModule::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -437,7 +438,7 @@ void StatisticalModuleFactory::registerFunctions()
   repo->add (f);
 }
 
-void StatisticalModuleFactory::removeFunctions()
+void StatisticalModule::removeFunctions()
 {
     // TODO
 }

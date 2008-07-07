@@ -105,10 +105,10 @@ Value TestMathFunctions::evaluate(const QString& formula)
 
 void TestMathFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new EngineeringModuleFactory(this));
-    FunctionModuleRegistry::instance()->add(new LogicModuleFactory(this));
-    FunctionModuleRegistry::instance()->add(new MathModuleFactory(this));
-    FunctionModuleRegistry::instance()->add(new TrigonometryModuleFactory(this));
+    FunctionModuleRegistry::instance()->add(new EngineeringModule(this));
+    FunctionModuleRegistry::instance()->add(new LogicModule(this));
+    FunctionModuleRegistry::instance()->add(new MathModule(this));
+    FunctionModuleRegistry::instance()->add(new TrigonometryModule(this));
     FunctionModuleRegistry::instance()->registerFunctions();
     m_doc = new Doc();
     m_doc->map()->addNewSheet();

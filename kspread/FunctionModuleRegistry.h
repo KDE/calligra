@@ -20,15 +20,17 @@
 #ifndef KSPREAD_FUNCTION_MODULE_REGISTRY
 #define KSPREAD_FUNCTION_MODULE_REGISTRY
 
+#include <QObject>
+
 #include <KoGenericRegistry.h>
 
 #include "kspread_export.h"
 
 namespace KSpread
 {
-class FunctionModuleFactory;
+class FunctionModule;
 
-class KSPREAD_EXPORT FunctionModuleRegistry : public KoGenericRegistry<FunctionModuleFactory*>
+class KSPREAD_EXPORT FunctionModuleRegistry : public QObject, public KoGenericRegistry<FunctionModule*>
 {
 public:
     FunctionModuleRegistry();

@@ -26,7 +26,7 @@
 
 void TestTrigFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new TrigonometryModuleFactory(this));
+    FunctionModuleRegistry::instance()->add(new TrigonometryModule(this));
     FunctionModuleRegistry::instance()->registerFunctions();
 }
 

@@ -78,24 +78,25 @@ Value func_yearFrac (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_years (valVector args, ValueCalc *calc, FuncExtra *);
 
 
-DateTimeModulePlugin::DateTimeModulePlugin(QObject* parent, const QStringList&)
+#ifndef KSPREAD_UNIT_TEST // Do not create/export the plugin in unit tests.
+K_PLUGIN_FACTORY(DateTimeModulePluginFactory,
+                 registerPlugin<DateTimeModule>();
+                )
+K_EXPORT_PLUGIN(DateTimeModulePluginFactory("DateTimeModule"))
+#endif
+
+
+DateTimeModule::DateTimeModule(QObject* parent, const QVariantList&)
+    : FunctionModule(parent, "datetime", i18n("DateTime Functions"))
 {
-    FunctionModuleRegistry::instance()->add(new DateTimeModuleFactory(parent));
-}
-K_EXPORT_COMPONENT_FACTORY(kspreaddatetimemodule, KGenericFactory<DateTimeModulePlugin>("DateTimeModule"))
-
-
-DateTimeModuleFactory::DateTimeModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "datetime", i18n("DateTime Functions"))
-{
 }
 
-QString DateTimeModuleFactory::descriptionFileName() const
+QString DateTimeModule::descriptionFileName() const
 {
     return QString("datetime.xml");
 }
 
-void DateTimeModuleFactory::registerFunctions()
+void DateTimeModule::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -219,7 +220,7 @@ void DateTimeModuleFactory::registerFunctions()
   repo->add (f);
 }
 
-void DateTimeModuleFactory::removeFunctions()
+void DateTimeModule::removeFunctions()
 {
     // TODO
 }

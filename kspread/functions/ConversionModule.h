@@ -20,24 +20,18 @@
 #ifndef KSPREAD_CONVERSION_MODULE
 #define KSPREAD_CONVERSION_MODULE
 
-#include "FunctionModuleFactory.h"
+#include "FunctionModule.h"
+
+#include <QVariantList>
 
 namespace KSpread
 {
 
-class ConversionModulePlugin : public QObject
+class ConversionModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    ConversionModulePlugin(QObject* parent, const QStringList&);
-};
-
-
-class ConversionModuleFactory : public FunctionModuleFactory
-{
-    Q_OBJECT
-public:
-    ConversionModuleFactory(QObject* parent);
+    ConversionModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 

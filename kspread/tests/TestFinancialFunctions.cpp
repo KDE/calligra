@@ -27,7 +27,7 @@
 
 void TestFinancialFunctions::initTestCase()
 {
-    FunctionModuleRegistry::instance()->add(new FinancialModuleFactory(this));
+    FunctionModuleRegistry::instance()->add(new FinancialModule(this));
     FunctionModuleRegistry::instance()->registerFunctions();
 }
 
