@@ -70,16 +70,19 @@ namespace KexiWebForms {
             KexiDB::RecordData recordData(tableSchema->fieldCount());
             KexiDB::RowEditBuffer editBuffer(true);
 
+            int i = 0;
             while (iterator.hasNext()) {
                 QString currentFieldName(iterator.next());
                 QString currentFieldValue(QUrl::fromPercentEncoding(request->getQuery(currentFieldName.toUtf8().constData()).c_str()));
+                if (!(tableSchema->field(i)->isAutoIncrement() && (currentFieldValue == ""))) {
+                    /*! @note This removes pluses */
+                    currentFieldValue.replace("+", " ");
+                    QVariant currentValue(currentFieldValue);
 
-                /*! @note This removes pluses */
-                currentFieldValue.replace("+", " ");
-                QVariant currentValue(currentFieldValue);
-
-                kDebug() << "Inserting " << currentFieldName << "=" << currentValue.toString() << endl;
-                editBuffer.insert(*schema.columnInfo(currentFieldName), currentValue);
+                    kDebug() << "Inserting " << currentFieldName << "=" << currentValue.toString() << endl;
+                    editBuffer.insert(*schema.columnInfo(currentFieldName), currentValue);
+                }
+                ++i;
             }
 
 
@@ -92,8 +95,7 @@ namespace KexiWebForms {
                 m_dict->ShowSection("ERROR");
                 setValue("MESSAGE", gConnection->errorMsg());
             }
-
-            kDebug() << "Deleting cursor..." << endl;
+            
             gConnection->deleteCursor(cursor);
         } else {
             m_dict->ShowSection("FORM");
@@ -142,8 +144,7 @@ namespace KexiWebForms {
             setValue("TABLEFIELDS", fieldsList.join("|:|"));
             setValue("FORMDATA", formData);
         }
-
-
+        
         renderTemplate(m_dict, writer);
         delete m_dict;
     }

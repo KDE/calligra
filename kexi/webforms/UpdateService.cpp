@@ -156,7 +156,7 @@ namespace KexiWebForms {
                     }
                 }
 
-                /*! @fixme Making the wrong assumption on what the pkey id is */
+                /*! @note Making the wrong assumption on what the pkey id is */
                 recordData.insert(0, QVariant(pkeyValue));
 
                 while (iterator.hasNext()) {
@@ -239,11 +239,9 @@ namespace KexiWebForms {
             setValue("TABLEFIELDS", formFieldsList.join("|:|"));
             setValue("FORMDATA", formData);
 
-            kDebug() << "Deleting cursor..." << endl;
             gConnection->deleteCursor(cursor);
         }
-
-
+        
         renderTemplate(m_dict, writer);
         delete m_dict;
     }

@@ -73,7 +73,7 @@ namespace KexiWebForms {
             int recordsTotal = 0;
             while (cursor->moveNext())
                 recordsTotal++;
-            cursor->close();
+            gConnection->deleteCursor(cursor);
 
             cursor = gConnection->executeQuery(*querySchema);
 
@@ -153,12 +153,11 @@ namespace KexiWebForms {
                     */
                     // End row
                     queryData.append("</tr>\n");
-
+                    
+                    gConnection->deleteCursor(cursor);
                     setValue("QUERYDATA", queryData);
                 }
-
-                kDebug() << "Deleting cursor..." << endl;
-                gConnection->deleteCursor(cursor);
+                
             }
         }
         renderTemplate(m_dict, writer);

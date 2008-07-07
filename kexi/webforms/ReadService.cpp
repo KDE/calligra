@@ -62,7 +62,7 @@ namespace KexiWebForms {
         int recordsTotal = 0;
         while (cursor->moveNext())
             recordsTotal++;
-        cursor->close();
+        gConnection->deleteCursor(cursor);
 
         /* even more awful */
         cursor = gConnection->executeQuery(querySchema);
