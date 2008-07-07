@@ -35,7 +35,7 @@ class QString;
 
 namespace KChart {
 
-class TableModel : public QStandardItemModel,  public KoChart::ChartModel
+class TableModel : public KoChart::ChartModel
 {
     Q_OBJECT
     
@@ -50,9 +50,12 @@ public:
     
     void loadOdf( const KoXmlElement &tableElement, const KoOdfStylesReader &stylesReader );
     bool saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
+    virtual int rowCount(const QModelIndex&) const;
+    virtual int columnCount(const QModelIndex&) const;
+    virtual QVariant data(const QModelIndex&, int) const;
     
 private:
-    class Private;
+    class Private; // note that you don't need a Private when the class is not exported ;)
     Private *const d;
 };
 

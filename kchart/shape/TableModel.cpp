@@ -52,8 +52,7 @@ TableModel::Private::~Private()
 }
 
 TableModel::TableModel( QObject *parent /* = 0 */)
-    : KoChart::ChartModel()
-    , QStandardItemModel( parent )
+    : KoChart::ChartModel( parent )
     , d( new Private )
 {
 }
@@ -153,8 +152,10 @@ QString TableModel::regionToString( const QVector<QRect> &region ) const
 
 void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesReader &stylesReader )
 {
+#if 0
     setRowCount( 0 );
     setColumnCount( 0 );
+#endif
     
     KoXmlElement n = tableElement.firstChild().toElement();
     for( ; !n.isNull(); n = n.nextSibling().toElement() )
@@ -174,8 +175,10 @@ void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesRea
                 if ( _n.localName() == "table-row" )
                 {
                     int column = 0;
+#if 0
                     if ( !isHeader )
                         setRowCount( rowCount() + 1 );
+#endif
                     KoXmlElement __n = _n.firstChild().toElement();
                     for ( ; !__n.isNull(); __n = __n.nextSibling().toElement() )
                     {
@@ -183,8 +186,10 @@ void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesRea
                             continue;
                         if ( __n.localName() == "table-cell" )
                         {
+#if 0
                             if ( isHeader )
                                 setColumnCount( columnCount() + 1 );
+#endif
                             const QString valueType = __n.attributeNS( KoXmlNS::office, "value-type" );
                             QString valueString;
                             const KoXmlElement valueElement = __n.namedItemNS( KoXmlNS::text, "p" ).toElement();
@@ -216,11 +221,26 @@ void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesRea
         }
     }
     
-    qDebug() << "BEFORE" << rowCount() << columnCount();
+    //qDebug() << "BEFORE" << rowCount() << columnCount();
     reset();
-    qDebug() << "AFTER" << rowCount() << columnCount();
+    //qDebug() << "AFTER" << rowCount() << columnCount();
     
-    qDebug() << "++++++++ " << rowCount() << columnCount();
+    //qDebug() << "++++++++ " << rowCount() << columnCount();
+}
+
+int TableModel::rowCount(const QModelIndex&) const
+{
+    return 0;
+}
+
+int TableModel::columnCount(const QModelIndex&) const
+{
+    return 0;
+}
+
+QVariant TableModel::data(const QModelIndex&, int) const
+{
+    return QVariant();
 }
 
 bool TableModel::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
