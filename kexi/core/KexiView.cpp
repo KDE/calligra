@@ -102,6 +102,7 @@ class KexiView::Private
 		, viewMode(Kexi::NoViewMode) //unknown!
 		, isDirty(false)
 		, slotSwitchToViewModeInternalEnabled(true)
+    , recentResultOfSwitchToViewModeInternal(true)
 		{
 		}
 
@@ -166,8 +167,12 @@ class KexiView::Private
 		QHash<QByteArray, QAction*> viewActionsHash;
 
 		bool isDirty : 1;
-		//! Used in slotSwitchToViewModeInternal()
+		//! Used in slotSwitchToViewModeInternal() to disabling it
 		bool slotSwitchToViewModeInternalEnabled : 1;
+    //! Used in slotSwitchToViewModeInternal() to disabling d->window->switchToViewModeInternal(mode) call.
+    //! Needed because there is another slotSwitchToViewModeInternal() calls if d->window->switchToViewModeInternal(mode)
+    //! did not succeed, so for the second time we block this call.
+    tristate recentResultOfSwitchToViewModeInternal;
 };
 
 //----------------------------------------------------------
@@ -639,7 +644,11 @@ void KexiView::slotSwitchToViewModeInternal(Kexi::ViewMode mode)
 {
 	if (!d->slotSwitchToViewModeInternalEnabled)
 		return;
-	d->window->switchToViewModeInternal(mode);
+	if (d->recentResultOfSwitchToViewModeInternal != true )
+		d->recentResultOfSwitchToViewModeInternal = true;
+	else
+		d->recentResultOfSwitchToViewModeInternal = d->window->switchToViewModeInternal(mode);
+
 	if (d->viewMode != mode) {
 		//switch back visually
 		KexiSmallToolButton *b = d->toggleViewModeButtons.value(mode);

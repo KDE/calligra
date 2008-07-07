@@ -3380,6 +3380,9 @@ void KexiMainWindow::slotViewPropertyEditor()
 
 tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode viewMode)
 {
+	const Kexi::ViewMode prevViewMode = currentWindow()->currentViewMode();
+	if (prevViewMode == viewMode)
+		return true;
 	if (!activateWindow(window))
 		return false;
 	if (!currentWindow()) {
@@ -3399,7 +3402,6 @@ tristate KexiMainWindow::switchToViewMode(KexiWindow& window, Kexi::ViewMode vie
 		d->toggleLastCheckedMode();*/
 		return false;
 	}
-	Kexi::ViewMode prevViewMode = currentWindow()->currentViewMode();
 	updateCustomPropertyPanelTabs(currentWindow()->part(), prevViewMode,
 		currentWindow()->part(), viewMode );
 	tristate res = currentWindow()->switchToViewMode( viewMode );
@@ -4267,8 +4269,11 @@ tristate KexiMainWindow::removeObject( KexiPart::Item *item, bool dontAsk )
 //		printedObjectID = d->pageSetupWindowItemID2dataItemID_map[ item->identifier() ];
 	KexiWindow * pageSetupWindow = d->pageSetupWindows[ item->identifier() ];
 	const bool oldInsideCloseWindow = d->insideCloseWindow;
-	d->insideCloseWindow = false;
-	 res = closeWindow(pageSetupWindow);
+	{
+		d->insideCloseWindow = false;
+		if (pageSetupWindow)
+			res = closeWindow(pageSetupWindow);
+	}
 	d->insideCloseWindow = oldInsideCloseWindow;
 	if (!res || ~res) {
 		return res;
