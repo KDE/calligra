@@ -265,6 +265,8 @@ void Conversion::setColorAttributes( QDomElement& element, int ico, const QStrin
 //color = six-digit hexadecimal color value
 QString Conversion::setBorderAttributes( const wvWare::Word97::BRC& brc )
 {
+    kDebug(30153) << "brc.brcType = " << brc.brcType;
+
     QString width( "thin" ); //reasonable default
     QString style( "solid" ); //reasonable default
     QString color( "#000000" ); //reasonable default

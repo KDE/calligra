@@ -21,6 +21,7 @@
 */
 
 #include "tablehandler.h"
+#include "conversion.h"
 
 #include <wv2/word97_generated.h>
 
@@ -29,6 +30,8 @@
 //Added by qt3to4:
 #include <Q3ValueList>
 #include <QRectF>
+
+#include <KoGenStyle.h>
 
 KWordTableHandler::KWordTableHandler(KoXmlWriter* bodyWriter, KoGenStyles* mainStyles)
 {
@@ -220,12 +223,34 @@ void KWordTableHandler::tableCellStart()
         m_tap->rgtc[ m_column + 1 ].brcLeft
         : tc.brcRight;
 
-    //need to create the cell style here and set the style-name attribute in the content
+    KoGenStyle cellStyle(KoGenStyle::StyleAutoTableCell, "table-cell");
+    cellStyle.addProperty("fo:border-top", Conversion::setBorderAttributes(brcTop));
+    cellStyle.addProperty("fo:border-bottom", Conversion::setBorderAttributes(brcBottom));
+    cellStyle.addProperty("fo:border-left", Conversion::setBorderAttributes(brcLeft));
+    cellStyle.addProperty("fo:border-right", Conversion::setBorderAttributes(brcRight));
 
+    //text direction
+    //if(tc.fVertical) {
+    //    cellStyle.addProperty("style:direction", "ttb");
+    //}
+    //vertical alignment
+    if(tc.vertAlign == 0) {
+        cellStyle.addProperty("style:vertical-align", "top");
+    }
+    else if(tc.vertAlign == 1) {
+        cellStyle.addProperty("style:vertical-align", "middle");
+    }
+    else if(tc.vertAlign == 2) {
+        cellStyle.addProperty("style:vertical-align", "bottom");
+    }
+
+    QString cellStyleName = m_mainStyles->lookup(cellStyle, QString("cell"));
+    
     //emit sigTableCellStart( m_row, leftCellNumber, rowSpan, colSpan, cellRect, m_currentTable->name, brcTop, brcBottom, brcLeft, brcRight, m_tap->rgshd[ m_column ] );
     //start table cell in content
     m_bodyWriter->startElement("table:table-cell");
     m_cellOpen = true;
+    m_bodyWriter->addAttribute("table:style-name", cellStyleName.toUtf8());
     if(rowSpan > 1) {
 	m_bodyWriter->addAttribute("table:number-rows-spanned", rowSpan);
     }
