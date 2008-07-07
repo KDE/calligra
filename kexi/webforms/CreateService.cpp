@@ -97,53 +97,53 @@ namespace KexiWebForms {
             }
             
             gConnection->deleteCursor(cursor);
-        } else {
-            m_dict->ShowSection("FORM");
+        }
+        
+        m_dict->ShowSection("FORM");
 
-            QString formData;
-            QStringList fieldsList;
+        QString formData;
+        QStringList fieldsList;
 
-            for (uint i = 0; i < tableSchema->fieldCount(); i++) {
-                KexiDB::Field* currentField = tableSchema->field(i);
-                const KexiDB::Field::Type type = currentField->type();
-                QString fieldName(currentField->name());
+        for (uint i = 0; i < tableSchema->fieldCount(); i++) {
+            KexiDB::Field* currentField = tableSchema->field(i);
+            const KexiDB::Field::Type type = currentField->type();
+            QString fieldName(currentField->name());
 
-                formData.append("<tr>");
-                    
-                formData.append("<td>").append(currentField->captionOrName()).append("</td>");
-                /** @todo Show "upload image" if type is KexiDB::Field::BLOB */
-                if (type == KexiDB::Field::LongText) {
-                    formData.append("<td>").append("<textarea name=\"");
-                    formData.append(fieldName).append("\"></textarea></td>");
-                } else {
-                    formData.append("<td>").append("<input type=\"text\" name=\"");
-                    formData.append(fieldName).append("\" value=\"").append(currentField->defaultValue().toString());
-                    formData.append("\"/></td>");
-                }
+            formData.append("<tr>");
 
-                // Field properties images
-                formData.append("<td>");
-                currentField->isAutoIncrement() ? formData.append("<img src=\"/f/toolbox/auto-increment.png\" alt=\"Auto increment\"/>&nbsp;") : 0;
-                currentField->isPrimaryKey() ? formData.append("<img src=\"/f/toolbox/primary-key.png\" alt=\"Primary Key\"/>&nbsp;") : 0;
-                ( currentField->isNotEmpty() || currentField->isNotNull() ) ? formData.append("<img src=\"/f/toolbox/emblem-required.png\" alt=\"Required\"/>&nbsp;") : 0;
-                formData.append("</td>");
-                    
-                formData.append("</tr>");
-                fieldsList << fieldName;
-                
-                /*QString fieldName(tableSchema->field(i)->name());
-
-                formData.append("<tr>");
-                formData.append("<td>").append(tableSchema->field(i)->captionOrName()).append("</td>");
-                formData.append("<td><input type=\"text\" name=\"");
-                formData.append(fieldName).append("\" value=\"\"/></td>");
-                formData.append("</tr>");
-                fieldsList << fieldName;*/
+            formData.append("<td>").append(currentField->captionOrName()).append("</td>");
+            /** @todo Show "upload image" if type is KexiDB::Field::BLOB */
+            if (type == KexiDB::Field::LongText) {
+                formData.append("<td>").append("<textarea name=\"");
+                formData.append(fieldName).append("\"></textarea></td>");
+            } else {
+                formData.append("<td>").append("<input type=\"text\" name=\"");
+                formData.append(fieldName).append("\" value=\"").append(currentField->defaultValue().toString());
+                formData.append("\"/></td>");
             }
 
-            setValue("TABLEFIELDS", fieldsList.join("|:|"));
-            setValue("FORMDATA", formData);
+            // Field properties images
+            formData.append("<td>");
+            currentField->isAutoIncrement() ? formData.append("<img src=\"/f/toolbox/auto-increment.png\" alt=\"Auto increment\"/>&nbsp;") : 0;
+            currentField->isPrimaryKey() ? formData.append("<img src=\"/f/toolbox/primary-key.png\" alt=\"Primary Key\"/>&nbsp;") : 0;
+            ( currentField->isNotEmpty() || currentField->isNotNull() ) ? formData.append("<img src=\"/f/toolbox/emblem-required.png\" alt=\"Required\"/>&nbsp;") : 0;
+            formData.append("</td>");
+
+            formData.append("</tr>");
+            fieldsList << fieldName;
+
+            /*QString fieldName(tableSchema->field(i)->name());
+
+            formData.append("<tr>");
+            formData.append("<td>").append(tableSchema->field(i)->captionOrName()).append("</td>");
+            formData.append("<td><input type=\"text\" name=\"");
+            formData.append(fieldName).append("\" value=\"\"/></td>");
+            formData.append("</tr>");
+            fieldsList << fieldName;*/
         }
+
+        setValue("TABLEFIELDS", fieldsList.join("|:|"));
+        setValue("FORMDATA", formData);
         
         renderTemplate(m_dict, writer);
         delete m_dict;
