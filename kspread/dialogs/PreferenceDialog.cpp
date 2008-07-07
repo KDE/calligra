@@ -375,12 +375,12 @@ PreferenceDialog::PreferenceDialog(View* view)
 
     // Interface Options Widget
     d->pluginSelector = new KPluginSelector(this);
-    const QString serviceType = QString::fromLatin1("KSpread/Function");
-    const QString query = QString::fromLatin1("[X-KSpread-Version] == 2");
+    const QString serviceType = QString::fromLatin1("KSpread/Plugin");
+    const QString query = QString::fromLatin1("[X-KSpread-Version] >= 2");
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
     const QList<KPluginInfo> pluginInfoList = KPluginInfo::fromServices(offers);
     d->pluginSelector->addPlugins(pluginInfoList, KPluginSelector::ReadConfigFile,
-                                  i18n("Function Modules"), "KSpread/Function");
+                                  i18n("Function Modules"), "FunctionModule");
     d->pluginSelector->load();
     page = new KPageWidgetItem(d->pluginSelector, i18n("Plugins"));
     page->setIcon(KIcon("preferences-plugin"));

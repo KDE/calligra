@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Information Functions
-X-KDE-ServiceTypes=KSpread/Function
+X-KDE-ServiceTypes=KSpread/Plugin
 Type=Service
 X-KDE-Library=kspreadinformationmodule
 X-KSpread-Version=2
@@ -9,7 +9,7 @@ X-KDE-PluginInfo-Email=koffice-devel@kde.org
 X-KDE-PluginInfo-Name=InformationModule
 X-KDE-PluginInfo-Version=1.0
 X-KDE-PluginInfo-Website=http://www.koffice.org/
-X-KDE-PluginInfo-Category=KSpread/Function
+X-KDE-PluginInfo-Category=FunctionModule
 X-KDE-PluginInfo-Depends=
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true

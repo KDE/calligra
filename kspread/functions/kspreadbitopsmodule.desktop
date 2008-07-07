@@ -1,7 +1,7 @@
 [Desktop Entry]
 Name=Bit Operation Functions
 Comment=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT
-X-KDE-ServiceTypes=KSpread/Function,KPluginInfo
+X-KDE-ServiceTypes=KSpread/Plugin,KPluginInfo
 Type=Service
 X-KDE-Library=kspreadbitopsmodule
 X-KSpread-Version=2
@@ -10,7 +10,7 @@ X-KDE-PluginInfo-Email=koffice-devel@kde.org
 X-KDE-PluginInfo-Name=BitOpsModule
 X-KDE-PluginInfo-Version=1.0
 X-KDE-PluginInfo-Website=http://www.koffice.org/
-X-KDE-PluginInfo-Category=KSpread/Function
+X-KDE-PluginInfo-Category=FunctionModule
 X-KDE-PluginInfo-Depends=
 X-KDE-PluginInfo-License=GPL
 X-KDE-PluginInfo-EnabledByDefault=true

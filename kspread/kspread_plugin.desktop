@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=ServiceType
-X-KDE-ServiceType=KSpread/Function
-Comment=Function module for KSpread
+X-KDE-ServiceType=KSpread/Plugin
+Comment=Plugin for KSpread
 [PropertyDef::X-KSpread-Version]
 Type=int

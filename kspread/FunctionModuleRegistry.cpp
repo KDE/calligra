@@ -22,10 +22,9 @@
 #include "FunctionModule.h"
 #include "Functions.h"
 
-#include <KoPluginLoader.h>
-
 #include <KDebug>
 #include <KGlobal>
+#include <KPluginInfo>
 #include <KServiceTypeTrader>
 #include <KStandardDirs>
 
@@ -42,18 +41,25 @@ K_GLOBAL_STATIC(FunctionModuleRegistrySingleton, s_singleton)
 
 FunctionModuleRegistry::FunctionModuleRegistry()
 {
-    const QString serviceType = QString::fromLatin1("KSpread/Function");
-    const QString query = QString::fromLatin1("[X-KSpread-Version] == 2");
+    const QString serviceType = QString::fromLatin1("KSpread/Plugin");
+    const QString query = QString::fromLatin1("([X-KSpread-Version] >= 2) and "
+                                              "([X-KDE-PluginInfo-Category] == 'FunctionModule')");
     const KService::List offers = KServiceTypeTrader::self()->query(serviceType, query);
-    foreach (KSharedPtr<KService> service, offers) {
-        KPluginFactory *factory = KPluginLoader(*service).factory();
+    const KConfigGroup moduleGroup = KGlobal::config()->group("Plugins");
+    const KPluginInfo::List pluginInfos = KPluginInfo::fromServices(offers, moduleGroup);
+    foreach (KPluginInfo pluginInfo, pluginInfos) {
+        pluginInfo.load();
+        if (!pluginInfo.isPluginEnabled()) {
+            continue;
+        }
+        KPluginFactory *factory = KPluginLoader(*pluginInfo.service()).factory();
         if (!factory) {
-            kDebug() << "Unable to create plugin factory for" << service->name();
+            kDebug() << "Unable to create plugin factory for" << pluginInfo.name();
             continue;
         }
         FunctionModule* module = factory->create<FunctionModule>(this);
         if (!module) {
-            kDebug() << "Unable to create function module for" << service->name();
+            kDebug() << "Unable to create function module for" << pluginInfo.name();
             continue;
         }
         add(module);
