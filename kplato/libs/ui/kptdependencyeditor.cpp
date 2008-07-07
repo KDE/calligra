@@ -366,7 +366,7 @@ DependencyConnectorItem::DependencyConnectorItem( DependencyNodeItem::ConnectorT
     setAcceptsHoverEvents( true );
     setZValue( 500.0 );
 
-//    setFlag( QGraphicsItem::ItemIsSelectable );
+    setFlag( QGraphicsItem::ItemIsFocusable );
 }
 
 DependencyScene *DependencyConnectorItem::itemScene() const
@@ -421,19 +421,39 @@ void DependencyConnectorItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void DependencyConnectorItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    //kDebug();
     if ( itemScene()->fromItem() == this ) {
         const_cast<QStyleOptionGraphicsItem*>( option )->state |= QStyle::State_Selected;
     }
-    if (option->state & QStyle::State_Selected) {
-        QPalette::ColorGroup cg = option->state & QStyle::State_Enabled
-                ? QPalette::Normal : QPalette::Disabled;
-        if (cg == QPalette::Normal && !(option->state & QStyle::State_Active))
-            cg = QPalette::Inactive;
-
-        painter->setPen( Qt::NoPen );
-        painter->setBrush( option->palette.brush(cg, QPalette::Highlight) );
+    if ( option->state & ( QStyle::State_Selected | QStyle::State_HasFocus ) ) {
+        painter->save();
+        QBrush b = brush();
+        QPen p = pen();
+        if (option->state & QStyle::State_Selected) {
+            QPalette::ColorGroup cg = option->state & QStyle::State_Enabled
+                    ? QPalette::Normal : QPalette::Disabled;
+            if (cg == QPalette::Normal && !(option->state & QStyle::State_Active))
+                cg = QPalette::Inactive;
+    
+            p.setStyle( Qt::NoPen );
+            b = option->palette.brush(cg, QPalette::Highlight);
+        }
+        if (option->state & QStyle::State_HasFocus) {
+            p.setStyle( Qt::DotLine );
+            p.setColor( Qt::white );
+        }
+        painter->setPen( p );
+        painter->setBrush( b );
         painter->drawRect( rect() );
+        painter->restore();
     }
+    QRectF r = rect();
+    if ( ctype() == DependencyNodeItem::Start ) {
+        r.setRect( r.right() - (r.width()/2.0) + 1.0, r.y() + ( r.height() * 0.33 ), r.width() / 2.0, r.height() * 0.33 );
+    } else {
+        r.setRect( r.right() - (r.width()/2.0) - 1.0, r.y() + ( r.height() * 0.33 ), r.width() / 2.0, r.height() * 0.33 );
+    }
+    painter->fillRect( r, Qt::black );
 }
 
 
@@ -455,7 +475,7 @@ DependencyNodeItem::DependencyNodeItem( Node *node, DependencyNodeItem *parent )
     m_text->setFont( f );
     m_text->setPlainText( node->name() );
     
-    setFlag( QGraphicsItem::ItemIsSelectable );
+    setFlags( QGraphicsItem::ItemIsSelectable | QGraphicsItem::ItemIsFocusable );
     
     m_symbol = new QGraphicsPathItem( this );
     m_symbol->setZValue( zValue() + 10.0 );
@@ -680,16 +700,33 @@ void DependencyNodeItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void DependencyNodeItem::paint( QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget * )
 {
-    QBrush b = brush();
-    if (option->state & QStyle::State_Selected) {
-        QPalette::ColorGroup cg = option->state & QStyle::State_Enabled
-                ? QPalette::Normal : QPalette::Disabled;
-        if (cg == QPalette::Normal && !(option->state & QStyle::State_Active))
-            cg = QPalette::Inactive;
-
-        b = option->palette.brush(cg, QPalette::Highlight);
+    QBrush b = option->palette.brush( QPalette::Mid );
+    QPen p( option->palette.color( QPalette::Midlight ) );
+    if (option->state & ( QStyle::State_Selected | QStyle::State_HasFocus ) ) {
+        if (option->state & QStyle::State_Selected) {
+            QPalette::ColorGroup cg = option->state & QStyle::State_Enabled
+                    ? QPalette::Normal : QPalette::Disabled;
+            if (cg == QPalette::Normal && !(option->state & QStyle::State_Active))
+                cg = QPalette::Inactive;
+    
+            b = option->palette.brush(cg, QPalette::Highlight);
+        }
+        if (option->state & QStyle::State_HasFocus) {
+            kDebug()<<"focus";
+            QPalette::ColorGroup cg = option->state & QStyle::State_Enabled
+                    ? QPalette::Active : QPalette::Disabled;
+            if (cg == QPalette::Active && !(option->state & QStyle::State_Active))
+                cg = QPalette::Inactive;
+            
+            p.setStyle( Qt::DotLine );
+            if ( option->state & QStyle::State_Selected ) {
+                p.setColor( option->palette.color( cg, QPalette::HighlightedText ) );
+            } else {
+                p.setColor( option->palette.color( cg, QPalette::Highlight ) );
+            }
+        }
     }
-    painter->setPen( pen() );
+    painter->setPen( p );
     painter->setBrush( b );
     painter->drawRect( rect() );
 }
@@ -987,6 +1024,183 @@ void DependencyScene::mouseMoveEvent( QGraphicsSceneMouseEvent *mouseEvent )
     QGraphicsScene::mouseMoveEvent( mouseEvent );
     //kDebug()<<mouseEvent->scenePos()<<","<<mouseEvent->isAccepted();
     
+}
+
+void DependencyScene::keyPressEvent( QKeyEvent *keyEvent )
+{
+    //kDebug()<<focusItem();
+    if ( m_visibleItems.isEmpty() ) {
+        return QGraphicsScene::keyPressEvent( keyEvent );
+    }
+    if ( focusItem() == 0 ) {
+        setFocusItem( m_visibleItems.values().first() );
+        if ( focusItem() ) {
+            update( focusItem()->boundingRect() );
+        }
+        return;
+    }
+    switch ( keyEvent->key() ) {
+        case Qt::Key_Left: {
+            QGraphicsItem *fitem = focusItem();
+            if ( fitem->type() == DependencyNodeItem::Type ) {
+                DependencyConnectorItem *item = static_cast<DependencyNodeItem*>( fitem )->startConnector();
+                if ( item ) {
+                    setFocusItem( item );
+                    update( static_cast<DependencyNodeItem*>( fitem )->rect() );
+                    update( item->rect() );
+                }
+                return;
+            }
+            if ( fitem->type() == DependencyConnectorItem::Type ) {
+                DependencyConnectorItem *citem = static_cast<DependencyConnectorItem*>( fitem );;
+                if ( citem->ctype() == DependencyNodeItem::Start ) {
+                    //Goto prev nodes finishConnector
+                    DependencyNodeItem *nitem = static_cast<DependencyNodeItem*>( citem->parentItem() );
+                    DependencyNodeItem *item = nodeItem( nitem->row() - 1 );
+                    if ( item ) {
+                        setFocusItem( item->finishConnector() );
+                        update( citem->rect() );
+                        update( item->finishConnector()->rect() );
+                    }
+                } else {
+                    // Goto node item (parent)
+                    setFocusItem( citem->parentItem() );
+                    update( citem->rect() );
+                    update( static_cast<DependencyNodeItem*>( citem->parentItem() )->rect() );
+                }
+                return;
+            }
+            return;
+        }
+        case Qt::Key_Right: {
+            QGraphicsItem *fitem = focusItem();
+            if ( fitem->type() == DependencyNodeItem::Type ) {
+                DependencyConnectorItem *item = static_cast<DependencyNodeItem*>( fitem )->finishConnector();
+                if ( item ) {
+                    setFocusItem( item );
+                    update( item->rect() );
+                    update( static_cast<DependencyNodeItem*>( item->parentItem() )->rect() );
+                }
+                return;
+            }
+            if ( fitem->type() == DependencyConnectorItem::Type ) {
+                DependencyConnectorItem *citem = static_cast<DependencyConnectorItem*>( fitem );;
+                if ( citem->ctype() == DependencyNodeItem::Finish ) {
+                    //Goto prev nodes startConnector
+                    DependencyNodeItem *nitem = static_cast<DependencyNodeItem*>( citem->parentItem() );
+                    DependencyNodeItem *item = nodeItem( nitem->row() + 1 );
+                    if ( item ) {
+                        setFocusItem( item->startConnector() );
+                        update( citem->rect() );
+                        update( item->startConnector()->rect() );
+                    }
+                } else {
+                    // Goto node item (parent)
+                    setFocusItem( citem->parentItem() );
+                    update( citem->rect() );
+                    update( static_cast<DependencyNodeItem*>( citem->parentItem() )->rect() );
+                }
+                return;
+            }
+            return;
+        }
+        case Qt::Key_Up: {
+            QGraphicsItem *fitem = focusItem();
+            if ( fitem->type() == DependencyNodeItem::Type ) {
+                DependencyNodeItem *item = nodeItem( static_cast<DependencyNodeItem*>( fitem )->row() - 1 );
+                if ( item ) {
+                    setFocusItem( item );
+                    update( static_cast<DependencyNodeItem*>( fitem )->rect() );
+                    update( item->rect() );
+                }
+                return;
+            }
+            if ( fitem->type() == DependencyConnectorItem::Type ) {
+                DependencyConnectorItem *citem = static_cast<DependencyConnectorItem*>( fitem );
+                DependencyNodeItem *nitem = static_cast<DependencyNodeItem*>( citem->parentItem() );
+                if ( citem->ctype() == DependencyNodeItem::Finish ) {
+                    DependencyNodeItem *item = nodeItem( nitem->row() - 1 );
+                    if ( item ) {
+                        setFocusItem( item->finishConnector() );
+                        update( citem->rect() );
+                        update( item->finishConnector()->rect() );
+                    }
+                } else {
+                    DependencyNodeItem *item = nodeItem( static_cast<DependencyNodeItem*>( fitem )->row() - 1 );
+                    if ( item ) {
+                        setFocusItem( item->startConnector() );
+                        update( citem->rect() );
+                        update( item->startConnector()->rect() );
+                    }
+                }
+                return;
+            }
+            return;
+        }
+        case Qt::Key_Down: {
+            QGraphicsItem *fitem = focusItem();
+            if ( fitem->type() == DependencyNodeItem::Type ) {
+                DependencyNodeItem *item = nodeItem( static_cast<DependencyNodeItem*>( fitem )->row() + 1 );
+                if ( item ) {
+                    setFocusItem( item );
+                    update( static_cast<DependencyNodeItem*>( fitem )->rect() );
+                    update( item->rect() );
+                }
+            }
+            if ( fitem->type() == DependencyConnectorItem::Type ) {
+                DependencyConnectorItem *citem = static_cast<DependencyConnectorItem*>( fitem );
+                DependencyNodeItem *nitem = static_cast<DependencyNodeItem*>( citem->parentItem() );
+                if ( citem->ctype() == DependencyNodeItem::Finish ) {
+                    DependencyNodeItem *item = nodeItem( nitem->row() + 1 );
+                    if ( item ) {
+                        setFocusItem( item->finishConnector() );
+                        update( citem->rect() );
+                        update( item->finishConnector()->rect() );
+                    }
+                } else {
+                    DependencyNodeItem *item = nodeItem( static_cast<DependencyNodeItem*>( fitem )->row() + 1 );
+                    if ( item ) {
+                        setFocusItem( item->startConnector() );
+                        update( citem->rect() );
+                        update( item->startConnector()->rect() );
+                    }
+                }
+                return;
+            }
+            return;
+        }
+        case Qt::Key_Space:
+        case Qt::Key_Select: {
+            QGraphicsItem *item = focusItem();
+            if ( item->type() == DependencyConnectorItem::Type ) {
+                singleConnectorClicked( static_cast<DependencyConnectorItem*>( item ) );
+                return;
+            }
+            if ( item->type() == DependencyNodeItem::Type ) {
+                singleConnectorClicked( 0 );
+                foreach ( QGraphicsItem *i, selectedItems() ) {
+                    i->setSelected( false );
+                }
+                item->setSelected( true );
+                return;
+            }
+            return;
+        }
+    }
+    QGraphicsScene::keyPressEvent( keyEvent );
+}
+
+DependencyNodeItem *DependencyScene::nodeItem( int row ) const
+{
+    if ( row < 0 || m_visibleItems.isEmpty() ) {
+        return 0;
+    }
+    foreach ( DependencyNodeItem *i, m_visibleItems.values() ) {
+        if ( i->row() == row ) {
+            return i;
+        }
+    }
+    return 0;
 }
 
 void DependencyScene::singleConnectorClicked( DependencyConnectorItem *item )

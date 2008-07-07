@@ -180,6 +180,9 @@ public:
     
     int nodeLevel() const { return m_node == 0 ? 0 : m_node->level() - 1; }
     
+    DependencyConnectorItem *startConnector() const { return m_start; }
+    DependencyConnectorItem *finishConnector() const { return m_finish; }
+    
 protected:
     void moveToY( qreal y );
     void moveToX( qreal x );
@@ -223,6 +226,7 @@ protected:
     void hoverLeaveEvent ( QGraphicsSceneHoverEvent *event );
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     
 private:
@@ -290,6 +294,8 @@ public:
     void moveItem( DependencyNodeItem *item, const QList<Node*> &lst );
     QList<DependencyNodeItem*> removeChildItems( DependencyNodeItem *item );
     
+    DependencyNodeItem *nodeItem( int row ) const;
+    
 signals:
     void connectorClicked( DependencyConnectorItem *item );
     void connectItems( DependencyConnectorItem *pred, DependencyConnectorItem *succ );
@@ -301,6 +307,7 @@ protected:
     virtual void mouseMoveEvent( QGraphicsSceneMouseEvent *mouseEvent );
     virtual void mousePressEvent( QGraphicsSceneMouseEvent *mouseEvent );
     virtual void mouseDoubleClickEvent ( QGraphicsSceneMouseEvent *mouseEvent );
+    virtual void keyPressEvent ( QKeyEvent *keyEvent );
     virtual void contextMenuEvent ( QGraphicsSceneContextMenuEvent *contextMenuEvent );
     
 private:
