@@ -38,6 +38,9 @@ class TextModuleFactory : public FunctionModuleFactory
     Q_OBJECT
 public:
     TextModuleFactory(QObject* parent);
+
+    void registerFunctions();
+    void removeFunctions();
 };
 
 } // namespace KSpread

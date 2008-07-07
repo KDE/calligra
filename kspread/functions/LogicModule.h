@@ -38,6 +38,9 @@ class LogicModuleFactory : public FunctionModuleFactory
     Q_OBJECT
 public:
     LogicModuleFactory(QObject* parent);
+
+    void registerFunctions();
+    void removeFunctions();
 };
 
 } // namespace KSpread

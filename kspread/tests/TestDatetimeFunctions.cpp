@@ -29,6 +29,7 @@ void TestDatetimeFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->add(new DateTimeModuleFactory(this));
     FunctionModuleRegistry::instance()->add(new MathModuleFactory(this));
+    FunctionModuleRegistry::instance()->registerFunctions();
 }
 
 #define CHECK_EVAL(x,y) { Value z(RoundNumber(y)); QCOMPARE(evaluate(x,z), (z)); }

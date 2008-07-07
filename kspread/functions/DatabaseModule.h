@@ -38,6 +38,9 @@ class DatabaseModuleFactory : public FunctionModuleFactory
     Q_OBJECT
 public:
     DatabaseModuleFactory(QObject* parent);
+
+    void registerFunctions();
+    void removeFunctions();
 };
 
 } // namespace KSpread

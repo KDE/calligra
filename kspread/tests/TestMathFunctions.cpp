@@ -109,6 +109,7 @@ void TestMathFunctions::initTestCase()
     FunctionModuleRegistry::instance()->add(new LogicModuleFactory(this));
     FunctionModuleRegistry::instance()->add(new MathModuleFactory(this));
     FunctionModuleRegistry::instance()->add(new TrigonometryModuleFactory(this));
+    FunctionModuleRegistry::instance()->registerFunctions();
     m_doc = new Doc();
     m_doc->map()->addNewSheet();
     Sheet* sheet = m_doc->map()->sheet(0);

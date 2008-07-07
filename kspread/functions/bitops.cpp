@@ -38,7 +38,6 @@ Value func_bitxor (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bitlshift (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_bitrshift (valVector args, ValueCalc *calc, FuncExtra *);
 
-void RegisterBitopsFunctions();
 
 BitOpsModulePlugin::BitOpsModulePlugin(QObject* parent, const QStringList&)
 {
@@ -50,12 +49,9 @@ K_EXPORT_COMPONENT_FACTORY(kspreadbitopsmodule, KGenericFactory<BitOpsModulePlug
 BitOpsModuleFactory::BitOpsModuleFactory(QObject* parent)
     : FunctionModuleFactory(parent, "bitops", i18n("Bit Operation Functions"))
 {
-    RegisterBitopsFunctions();
 }
 
-
-// registers all bitops functions
-void RegisterBitopsFunctions()
+void BitOpsModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -76,6 +72,12 @@ void RegisterBitopsFunctions()
   f->setParamCount (2);
   repo->add (f);
 }
+
+void BitOpsModuleFactory::removeFunctions()
+{
+    // TODO
+}
+
 
 // Function: BITAND
 Value func_bitand (valVector args, ValueCalc *, FuncExtra *)

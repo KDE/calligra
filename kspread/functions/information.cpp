@@ -61,7 +61,6 @@ Value func_na (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_type (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_version (valVector args, ValueCalc *calc, FuncExtra *);
 
-void RegisterInformationFunctions();
 
 InformationModulePlugin::InformationModulePlugin(QObject* parent, const QStringList&)
 {
@@ -73,12 +72,9 @@ K_EXPORT_COMPONENT_FACTORY(kspreadinformationmodule, KGenericFactory<Information
 InformationModuleFactory::InformationModuleFactory(QObject* parent)
     : FunctionModuleFactory(parent, "information", i18n("Information Functions"))
 {
-    RegisterInformationFunctions();
 }
 
-
-// registers all information functions
-void RegisterInformationFunctions()
+void InformationModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -130,6 +126,12 @@ void RegisterInformationFunctions()
   f->setAcceptArray ();
   repo->add (f);
 }
+
+void InformationModuleFactory::removeFunctions()
+{
+    // TODO
+}
+
 
 // Function: ERROR.TYPE
 Value func_errortype (valVector args, ValueCalc *, FuncExtra *)

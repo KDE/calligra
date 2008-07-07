@@ -67,6 +67,7 @@ Value TestDatabaseFunctions::evaluate(const QString& formula, Value& ex)
 void TestDatabaseFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->add(new DatabaseModuleFactory(this));
+    FunctionModuleRegistry::instance()->registerFunctions();
     m_doc = new Doc();
     m_doc->map()->addNewSheet();
     Sheet* sheet = m_doc->map()->sheet(0);

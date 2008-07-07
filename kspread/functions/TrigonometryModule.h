@@ -38,6 +38,9 @@ class TrigonometryModuleFactory : public FunctionModuleFactory
     Q_OBJECT
 public:
     TrigonometryModuleFactory(QObject* parent);
+
+    void registerFunctions();
+    void removeFunctions();
 };
 
 } // namespace KSpread

@@ -37,6 +37,9 @@ public:
     QString id() const;
     QString name() const;
 
+    virtual void registerFunctions() = 0;
+    virtual void removeFunctions() = 0;
+
 private:
     class Private;
     Private * const d;

@@ -31,6 +31,7 @@ void TestTextFunctions::initTestCase()
     FunctionModuleRegistry::instance()->add(new InformationModuleFactory(this));
     FunctionModuleRegistry::instance()->add(new LogicModuleFactory(this));
     FunctionModuleRegistry::instance()->add(new TextModuleFactory(this));
+    FunctionModuleRegistry::instance()->registerFunctions();
 }
 
 #define CHECK_EVAL(x,y) { Value z(y); QCOMPARE(evaluate(x,z),(z)); }

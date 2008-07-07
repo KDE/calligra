@@ -29,6 +29,7 @@ void TestLogicFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->add(new LogicModuleFactory(this));
     FunctionModuleRegistry::instance()->add(new InformationModuleFactory(this));
+    FunctionModuleRegistry::instance()->registerFunctions();
 }
 
 // because we may need to promote expected value from integer to float

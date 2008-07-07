@@ -91,7 +91,6 @@ Value func_oct2dec (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oct2bin (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_oct2hex (valVector args, ValueCalc *calc, FuncExtra *);
 
-void RegisterEngineeringFunctions();
 
 EngineeringModulePlugin::EngineeringModulePlugin(QObject* parent, const QStringList&)
 {
@@ -103,12 +102,9 @@ K_EXPORT_COMPONENT_FACTORY(kspreadengineeringmodule, KGenericFactory<Engineering
 EngineeringModuleFactory::EngineeringModuleFactory(QObject* parent)
     : FunctionModuleFactory(parent, "engineering", i18n("Engineering Functions"))
 {
-    RegisterEngineeringFunctions();
 }
 
-
-// registers all engineering functions
-void RegisterEngineeringFunctions()
+void EngineeringModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -233,6 +229,11 @@ void RegisterEngineeringFunctions()
   f = new Function ("OCT2HEX",     func_oct2hex);
   f->setParamCount (1, 2);
   repo->add (f);
+}
+
+void EngineeringModuleFactory::removeFunctions()
+{
+    // TODO
 }
 
 

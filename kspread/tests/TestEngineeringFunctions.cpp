@@ -30,6 +30,7 @@ void TestEngineeringFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->add(new EngineeringModuleFactory(this));
     FunctionModuleRegistry::instance()->add(new MathModuleFactory(this));
+    FunctionModuleRegistry::instance()->registerFunctions();
 }
 
 // NOTE: we do not compare the numbers _exactly_ because it is difficult

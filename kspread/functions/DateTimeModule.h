@@ -38,6 +38,9 @@ class DateTimeModuleFactory : public FunctionModuleFactory
     Q_OBJECT
 public:
     DateTimeModuleFactory(QObject* parent);
+
+    void registerFunctions();
+    void removeFunctions();
 };
 
 } // namespace KSpread

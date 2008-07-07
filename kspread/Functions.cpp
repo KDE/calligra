@@ -181,7 +181,7 @@ FunctionRepository* FunctionRepository::self()
     fr_sd.setObject( s_self, new FunctionRepository() );
 
     // register all existing functions
-    FunctionModuleRegistry::instance();
+    FunctionModuleRegistry::instance()->registerFunctions();
 
     kDebug() << s_self->d->functions.count() <<" functions registered.";
 

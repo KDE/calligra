@@ -77,7 +77,6 @@ Value func_year (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_yearFrac (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_years (valVector args, ValueCalc *calc, FuncExtra *);
 
-void RegisterDateTimeFunctions();
 
 DateTimeModulePlugin::DateTimeModulePlugin(QObject* parent, const QStringList&)
 {
@@ -89,13 +88,9 @@ K_EXPORT_COMPONENT_FACTORY(kspreaddatetimemodule, KGenericFactory<DateTimeModule
 DateTimeModuleFactory::DateTimeModuleFactory(QObject* parent)
     : FunctionModuleFactory(parent, "datetime", i18n("DateTime Functions"))
 {
-    RegisterDateTimeFunctions();
 }
 
-
-// registers all date/time functions
-// sadly, many of these functions aren't Excel compatible
-void RegisterDateTimeFunctions()
+void DateTimeModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -218,6 +213,12 @@ void RegisterDateTimeFunctions()
   f->setParamCount (3);
   repo->add (f);
 }
+
+void DateTimeModuleFactory::removeFunctions()
+{
+    // TODO
+}
+
 
 // Function: EDATE
 Value func_edate (valVector args, ValueCalc *calc, FuncExtra *)

@@ -108,7 +108,6 @@ Value func_yielddisc (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_yieldmat (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_zero_coupon (valVector args, ValueCalc *calc, FuncExtra *);
 
-void RegisterFinancialFunctions();
 
 FinancialModulePlugin::FinancialModulePlugin(QObject* parent, const QStringList&)
 {
@@ -120,12 +119,9 @@ K_EXPORT_COMPONENT_FACTORY(kspreadfinancialmodule, KGenericFactory<FinancialModu
 FinancialModuleFactory::FinancialModuleFactory(QObject* parent)
     : FunctionModuleFactory(parent, "financial", i18n("Financial Functions"))
 {
-    RegisterFinancialFunctions();
 }
 
-
-// registers all financial functions
-void RegisterFinancialFunctions()
+void FinancialModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -331,6 +327,12 @@ void RegisterFinancialFunctions()
   f->setParamCount (3);
   repo->add (f);
 }
+
+void FinancialModuleFactory::removeFunctions()
+{
+    // TODO
+}
+
 
 ///////////////////////////////////////////////////////////////////////////
 

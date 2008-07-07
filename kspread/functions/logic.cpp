@@ -42,7 +42,6 @@ Value func_or (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_true (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_xor (valVector args, ValueCalc *calc, FuncExtra *);
 
-void RegisterLogicFunctions();
 
 LogicModulePlugin::LogicModulePlugin(QObject* parent, const QStringList&)
 {
@@ -54,12 +53,9 @@ K_EXPORT_COMPONENT_FACTORY(kspreadlogicmodule, KGenericFactory<LogicModulePlugin
 LogicModuleFactory::LogicModuleFactory(QObject* parent)
     : FunctionModuleFactory(parent, "logic", i18n("Logic Functions"))
 {
-    RegisterLogicFunctions();
 }
 
-
-// registers all logic functions
-void RegisterLogicFunctions()
+void LogicModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -97,6 +93,12 @@ void RegisterLogicFunctions()
   f->setParamCount (2, 3);
   repo->add (f);
 }
+
+void LogicModuleFactory::removeFunctions()
+{
+    // TODO
+}
+
 
 // helper for most logical functions
 bool asBool (Value val, ValueCalc *calc)

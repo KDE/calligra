@@ -18,6 +18,7 @@
 */
 
 #include "FunctionModuleRegistry.h"
+#include "FunctionModuleFactory.h"
 
 #include <KoPluginLoader.h>
 
@@ -48,4 +49,20 @@ FunctionModuleRegistry::FunctionModuleRegistry()
 FunctionModuleRegistry* FunctionModuleRegistry::instance()
 {
     return &s_singleton->instance;
+}
+
+void FunctionModuleRegistry::registerFunctions()
+{
+    const QList<FunctionModuleFactory*> factories = values();
+    for (int i = 0; i < factories.count(); ++i) {
+        factories[i]->registerFunctions();
+    }
+}
+
+void FunctionModuleRegistry::removeFunctions()
+{
+    const QList<FunctionModuleFactory*> factories = values();
+    for (int i = 0; i < factories.count(); ++i) {
+        factories[i]->removeFunctions();
+    }
 }

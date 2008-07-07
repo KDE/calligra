@@ -76,7 +76,6 @@ Value func_unicode (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_upper (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_value (valVector args, ValueCalc *calc, FuncExtra *);
 
-void RegisterTextFunctions();
 
 TextModulePlugin::TextModulePlugin(QObject* parent, const QStringList&)
 {
@@ -86,14 +85,11 @@ K_EXPORT_COMPONENT_FACTORY(kspreadtextmodule, KGenericFactory<TextModulePlugin>(
 
 
 TextModuleFactory::TextModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "datetime", i18n("Text Functions"))
+    : FunctionModuleFactory(parent, "text", i18n("Text Functions"))
 {
-    RegisterTextFunctions();
 }
 
-
-// registers all text functions
-void RegisterTextFunctions()
+void TextModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -184,6 +180,11 @@ void RegisterTextFunctions()
   f = new Function ("TEXT", func_text);
   f->setParamCount (1, 2);
   repo->add (f);
+}
+
+void TextModuleFactory::removeFunctions()
+{
+    // TODO
 }
 
 

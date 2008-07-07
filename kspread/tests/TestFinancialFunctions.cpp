@@ -28,6 +28,7 @@
 void TestFinancialFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->add(new FinancialModuleFactory(this));
+    FunctionModuleRegistry::instance()->registerFunctions();
 }
 
 // NOTE: we do not compare the numbers _exactly_ because it is difficult

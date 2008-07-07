@@ -48,7 +48,6 @@ Value func_inttobool (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_booltoint (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_ToString (valVector args, ValueCalc *calc, FuncExtra *);
 
-void RegisterConversionFunctions();
 
 ConversionModulePlugin::ConversionModulePlugin(QObject* parent, const QStringList&)
 {
@@ -60,12 +59,9 @@ K_EXPORT_COMPONENT_FACTORY(kspreadconversionmodule, KGenericFactory<ConversionMo
 ConversionModuleFactory::ConversionModuleFactory(QObject* parent)
     : FunctionModuleFactory(parent, "conversion", i18n("Conversion Functions"))
 {
-    RegisterConversionFunctions();
 }
 
-
-// registers all conversion functions
-void RegisterConversionFunctions()
+void ConversionModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -109,6 +105,12 @@ void RegisterConversionFunctions()
   f = new Function ("STRING", func_ToString);
   repo->add (f);
 }
+
+void ConversionModuleFactory::removeFunctions()
+{
+    // TODO
+}
+
 
 // Function: POLR
 Value func_polr (valVector args, ValueCalc *calc, FuncExtra *)

@@ -27,6 +27,7 @@
 void TestTrigFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->add(new TrigonometryModuleFactory(this));
+    FunctionModuleRegistry::instance()->registerFunctions();
 }
 
 // NOTE: we do not compare the numbers _exactly_ because it is difficult

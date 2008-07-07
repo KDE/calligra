@@ -76,6 +76,7 @@
 #include "Canvas.h"
 #include "DependencyManager.h"
 #include "Formula.h"
+#include "FunctionModuleRegistry.h"
 #include "Functions.h"
 #include "LoadingInfo.h"
 #include "Localization.h"
@@ -162,6 +163,9 @@ Doc::Doc( QWidget *parentWidget, QObject* parent, bool singleViewMode )
             shapeFactory->setOptionPanels(panels);
         }
     }
+
+    // Load the function modules.
+    FunctionModuleRegistry::instance();
 }
 
 Doc::~Doc()

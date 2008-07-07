@@ -46,7 +46,6 @@ Value func_dvar (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_dvarp (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_getpivotdata (valVector args, ValueCalc *calc, FuncExtra *);
 
-void RegisterDatabaseFunctions();
 
 DatabaseModulePlugin::DatabaseModulePlugin(QObject* parent, const QStringList&)
 {
@@ -58,12 +57,9 @@ K_EXPORT_COMPONENT_FACTORY(kspreaddatabasemodule, KGenericFactory<DatabaseModule
 DatabaseModuleFactory::DatabaseModuleFactory(QObject* parent)
     : FunctionModuleFactory(parent, "database", i18n("Database Functions"))
 {
-    RegisterDatabaseFunctions();
 }
 
-
-// registers all database functions
-void RegisterDatabaseFunctions()
+void DatabaseModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -121,6 +117,12 @@ void RegisterDatabaseFunctions()
   f->setAcceptArray ();
   repo->add (f);
 }
+
+void DatabaseModuleFactory::removeFunctions()
+{
+    // TODO
+}
+
 
 int getFieldIndex (ValueCalc *calc, Value fieldName,
     Value database)

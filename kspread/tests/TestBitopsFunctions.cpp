@@ -27,6 +27,7 @@
 void TestBitopsFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->add(new BitOpsModuleFactory(this));
+    FunctionModuleRegistry::instance()->registerFunctions();
 }
 
 // because we may need to promote expected value from integer to float

@@ -38,6 +38,9 @@ class StatisticalModuleFactory : public FunctionModuleFactory
     Q_OBJECT
 public:
     StatisticalModuleFactory(QObject* parent);
+
+    void registerFunctions();
+    void removeFunctions();
 };
 
 } // namespace KSpread

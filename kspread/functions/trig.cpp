@@ -52,7 +52,6 @@ Value func_tan (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_tanh (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_pi (valVector args, ValueCalc *calc, FuncExtra *);
 
-void RegisterTrigFunctions();
 
 TrigonometryModulePlugin::TrigonometryModulePlugin(QObject* parent, const QStringList&)
 {
@@ -62,14 +61,11 @@ K_EXPORT_COMPONENT_FACTORY(kspreadtrigonometrymodule, KGenericFactory<Trigonomet
 
 
 TrigonometryModuleFactory::TrigonometryModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "datetime", i18n("Trig Functions"))
+    : FunctionModuleFactory(parent, "trigonometry", i18n("Trig Functions"))
 {
-    RegisterTrigFunctions();
 }
 
-
-// registers all trigonometric functions
-void RegisterTrigFunctions()
+void TrigonometryModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -117,6 +113,12 @@ void RegisterTrigFunctions()
   f->setParamCount (0);
   repo->add (f);
 }
+
+void TrigonometryModuleFactory::removeFunctions()
+{
+    // TODO
+}
+
 
 // Function: sin
 Value func_sin (valVector args, ValueCalc *calc, FuncExtra *)

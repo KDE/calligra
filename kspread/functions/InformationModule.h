@@ -38,6 +38,9 @@ class InformationModuleFactory : public FunctionModuleFactory
     Q_OBJECT
 public:
     InformationModuleFactory(QObject* parent);
+
+    void registerFunctions();
+    void removeFunctions();
 };
 
 } // namespace KSpread

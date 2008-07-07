@@ -115,7 +115,6 @@ Value func_trunc (valVector args, ValueCalc *calc, FuncExtra *);
 
 // Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *);
 
-void RegisterMathFunctions();
 
 MathModulePlugin::MathModulePlugin(QObject* parent, const QStringList&)
 {
@@ -125,14 +124,11 @@ K_EXPORT_COMPONENT_FACTORY(kspreadmathmodule, KGenericFactory<MathModulePlugin>(
 
 
 MathModuleFactory::MathModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "datetime", i18n("Math Functions"))
+    : FunctionModuleFactory(parent, "math", i18n("Math Functions"))
 {
-    RegisterMathFunctions();
 }
 
-
-// registers all math functions
-void RegisterMathFunctions()
+void MathModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -355,6 +351,12 @@ void RegisterMathFunctions()
   f->setAcceptArray ();
   repo->add (f);
 }
+
+void MathModuleFactory::removeFunctions()
+{
+    // TODO
+}
+
 
 // Function: SQRT
 Value func_sqrt (valVector args, ValueCalc *calc, FuncExtra *)

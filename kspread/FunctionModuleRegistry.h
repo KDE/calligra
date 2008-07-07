@@ -34,6 +34,9 @@ public:
     FunctionModuleRegistry();
 
     static FunctionModuleRegistry* instance();
+
+    void registerFunctions();
+    void removeFunctions();
 };
 
 } // namespace KSpread

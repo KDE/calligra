@@ -38,6 +38,9 @@ class FinancialModuleFactory : public FunctionModuleFactory
     Q_OBJECT
 public:
     FinancialModuleFactory(QObject* parent);
+
+    void registerFunctions();
+    void removeFunctions();
 };
 
 } // namespace KSpread

@@ -51,7 +51,6 @@ Value func_row (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_rows (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_vlookup (valVector args, ValueCalc *calc, FuncExtra *);
 
-void RegisterReferenceFunctions();
 
 ReferenceModulePlugin::ReferenceModulePlugin(QObject* parent, const QStringList&)
 {
@@ -61,14 +60,11 @@ K_EXPORT_COMPONENT_FACTORY(kspreadreferencemodule, KGenericFactory<ReferenceModu
 
 
 ReferenceModuleFactory::ReferenceModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "datetime", i18n("Reference Functions"))
+    : FunctionModuleFactory(parent, "reference", i18n("Reference Functions"))
 {
-    RegisterReferenceFunctions();
 }
 
-
-// registers all reference functions
-void RegisterReferenceFunctions()
+void ReferenceModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -120,6 +116,11 @@ void RegisterReferenceFunctions()
   f->setParamCount (3, 4);
   f->setAcceptArray ();
   repo->add (f);
+}
+
+void ReferenceModuleFactory::removeFunctions()
+{
+    // TODO
 }
 
 

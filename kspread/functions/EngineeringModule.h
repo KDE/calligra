@@ -38,6 +38,9 @@ class EngineeringModuleFactory : public FunctionModuleFactory
     Q_OBJECT
 public:
     EngineeringModuleFactory(QObject* parent);
+
+    void registerFunctions();
+    void removeFunctions();
 };
 
 } // namespace KSpread

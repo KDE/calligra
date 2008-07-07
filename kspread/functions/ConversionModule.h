@@ -38,6 +38,9 @@ class ConversionModuleFactory : public FunctionModuleFactory
     Q_OBJECT
 public:
     ConversionModuleFactory(QObject* parent);
+
+    void registerFunctions();
+    void removeFunctions();
 };
 
 } // namespace KSpread

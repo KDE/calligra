@@ -121,7 +121,6 @@ Value func_ztest (valVector args, ValueCalc *calc, FuncExtra *);
 
 typedef QList<double> List;
 
-void RegisterStatisticalFunctions();
 
 StatisticalModulePlugin::StatisticalModulePlugin(QObject* parent, const QStringList&)
 {
@@ -131,14 +130,11 @@ K_EXPORT_COMPONENT_FACTORY(kspreadstatisticalmodule, KGenericFactory<Statistical
 
 
 StatisticalModuleFactory::StatisticalModuleFactory(QObject* parent)
-    : FunctionModuleFactory(parent, "datetime", i18n("Statistical Functions"))
+    : FunctionModuleFactory(parent, "statistical", i18n("Statistical Functions"))
 {
-    RegisterStatisticalFunctions();
 }
 
-
-// registers all statistical functions
-void RegisterStatisticalFunctions()
+void StatisticalModuleFactory::registerFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -435,6 +431,12 @@ void RegisterStatisticalFunctions()
   f->setAcceptArray ();
   repo->add (f);
 }
+
+void StatisticalModuleFactory::removeFunctions()
+{
+    // TODO
+}
+
 
 ///////////////////////////////////////////////////////////
 //

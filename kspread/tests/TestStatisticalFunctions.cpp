@@ -139,6 +139,7 @@ Value TestStatisticalFunctions::evaluate(const QString& formula)
 void TestStatisticalFunctions::initTestCase()
 {
     FunctionModuleRegistry::instance()->add(new StatisticalModuleFactory(this));
+    FunctionModuleRegistry::instance()->registerFunctions();
     m_doc = new Doc();
     m_doc->map()->addNewSheet();
     Sheet* sheet = m_doc->map()->sheet(0);

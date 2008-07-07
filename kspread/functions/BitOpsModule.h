@@ -38,6 +38,9 @@ class BitOpsModuleFactory : public FunctionModuleFactory
     Q_OBJECT
 public:
     BitOpsModuleFactory(QObject* parent);
+
+    void registerFunctions();
+    void removeFunctions();
 };
 
 } // namespace KSpread

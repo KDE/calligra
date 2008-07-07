@@ -117,6 +117,7 @@ void TestFormula::initTestCase()
     FunctionModuleRegistry::instance()->add(new LogicModuleFactory(this));
     FunctionModuleRegistry::instance()->add(new MathModuleFactory(this));
     FunctionModuleRegistry::instance()->add(new TrigonometryModuleFactory(this));
+    FunctionModuleRegistry::instance()->registerFunctions();
 }
 
 void TestFormula::testTokenizer()

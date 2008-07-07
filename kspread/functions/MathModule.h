@@ -38,6 +38,9 @@ class MathModuleFactory : public FunctionModuleFactory
     Q_OBJECT
 public:
     MathModuleFactory(QObject* parent);
+
+    void registerFunctions();
+    void removeFunctions();
 };
 
 } // namespace KSpread
