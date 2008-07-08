@@ -2,6 +2,8 @@
 Name=xBase
 Name[x-test]=xxxBasexx
 Comment=Kexi database driver for accessing xBase database files
+Comment[ca]=Controlador de bases de dades Kexi per accedir a fitxers de bases de dades xBase
+Comment[el]=Οδηγός βάσης δεδομένων του Kexi για πρόσβαση σε αρχεία βάσεων xBase
 Comment[et]=Kexi andmebaasidraiver xBase andmebaasifailide kasutamiseks
 Comment[gl]=Controlador da base de datos de Kexi para o acceso a bases de batos xBase
 Comment[it]=Driver per banche dati Kexi per accedere ai file di banche dati xBase
