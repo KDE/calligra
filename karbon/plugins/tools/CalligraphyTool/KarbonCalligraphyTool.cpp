@@ -193,7 +193,7 @@ double KarbonCalligraphyTool::calculateAngle()
     while (dAngle <= -M_PI/2)
         dAngle += M_PI;
     
-    double angle = m_angle + dAngle*m_fixation;
+    double angle = m_angle + dAngle*(1.0 - m_fixation);
 
     return angle;
 }

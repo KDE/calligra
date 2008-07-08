@@ -290,7 +290,7 @@ void KarbonCalligraphyOptionWidget::addDefaultProfiles()
     profile0.writeEntry( "width", 30.0 );
     profile0.writeEntry( "thinning", 0.2 );
     profile0.writeEntry( "angle", 30 );
-    profile0.writeEntry( "fixation", 0.0 );
+    profile0.writeEntry( "fixation", 1.0 );
     profile0.writeEntry( "mass", 3.0 );
     profile0.writeEntry( "drag", 0.7 );
 
@@ -299,7 +299,7 @@ void KarbonCalligraphyOptionWidget::addDefaultProfiles()
     profile1.writeEntry( "width", 50.0 );
     profile1.writeEntry( "thinning", 0.2 );
     profile1.writeEntry( "angle", 30 );
-    profile1.writeEntry( "fixation", 0.0 );
+    profile1.writeEntry( "fixation", 1.0 );
     profile1.writeEntry( "mass", 1.0 );
     profile1.writeEntry( "drag", 0.9 );
 
