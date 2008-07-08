@@ -165,8 +165,6 @@ private:
   class Private;
   Private * const d;
 
-  static FunctionRepository* s_self;
-
   // no copy or assign
   FunctionRepository( const FunctionRepository& );
   FunctionRepository& operator=( const FunctionRepository& );

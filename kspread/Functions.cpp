@@ -26,11 +26,11 @@
 #include <QFile>
 #include <QHash>
 
+#include <KComponentData>
 #include <kdebug.h>
+#include <KGlobal>
 #include <klocale.h>
 #include <kstandarddirs.h>
-#include <k3staticdeleter.h>
-#include <kcomponentdata.h>
 
 #include "Factory.h"
 #include "Formula.h"
@@ -56,6 +56,7 @@ public:
   QHash<QString, Function*> functions;
   QHash<QString, FunctionDescription*> descriptions;
   QStringList groups;
+    bool initialized;
 };
 
 } // namespace KSpread
@@ -169,38 +170,33 @@ Value Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
 }
 
 
-static K3StaticDeleter<FunctionRepository> fr_sd;
-FunctionRepository* FunctionRepository::s_self = 0;
+class FunctionRepositorySingleton
+{
+public:
+    FunctionRepository instance;
+};
+K_GLOBAL_STATIC(FunctionRepositorySingleton, s_singleton)
+
 
 FunctionRepository* FunctionRepository::self()
 {
-  if( !s_self )
-  {
+  if (!s_singleton->instance.d->initialized) {
+      s_singleton->instance.d->initialized = true;
     kDebug() <<"Creating function repository ...";
-
-    fr_sd.setObject( s_self, new FunctionRepository() );
 
     // register all existing functions
     FunctionModuleRegistry::instance()->registerFunctions();
 
-    kDebug() << s_self->d->functions.count() <<" functions registered.";
-/*
-    // find all XML description files
-    QStringList files = Factory::global().dirs()->findAllResources
-        ("functions", "*.xml", KStandardDirs::Recursive);
-
-    // load desc/help from XML file
-    for( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
-      s_self->loadFile (*it);*/
+    kDebug() << s_singleton->instance.d->functions.count() <<" functions registered.";
 
 #ifndef NDEBUG
         // Verify, that every function has a description.
         QStringList missingDescriptions;
         typedef QHash<QString, Function*> Functions;
-        Functions::ConstIterator end = s_self->d->functions.constEnd();
-        for ( Functions::ConstIterator it = s_self->d->functions.constBegin(); it != end; ++it )
+        Functions::ConstIterator end = s_singleton->instance.d->functions.constEnd();
+        for ( Functions::ConstIterator it = s_singleton->instance.d->functions.constBegin(); it != end; ++it )
         {
-            if ( !s_self->d->descriptions.contains( it.key() ) )
+            if ( !s_singleton->instance.d->descriptions.contains( it.key() ) )
                 missingDescriptions << it.key();
         }
         if ( missingDescriptions.count() > 0 )
@@ -210,15 +206,16 @@ FunctionRepository* FunctionRepository::self()
                 kDebug() <<"\t" << missingDescription;
         }
 #endif
-        kDebug() << s_self->d->descriptions.count() <<" descriptions loaded.";
+        kDebug() << s_singleton->instance.d->descriptions.count() <<" descriptions loaded.";
         kDebug() <<"Function repository ready.";
     }
-    return s_self;
+    return &s_singleton->instance;
 }
 
 FunctionRepository::FunctionRepository()
     : d( new Private )
 {
+    d->initialized = false;
 }
 
 FunctionRepository::~FunctionRepository()
@@ -226,7 +223,6 @@ FunctionRepository::~FunctionRepository()
   qDeleteAll( d->functions );
   qDeleteAll( d->descriptions );
   delete d;
-  s_self = 0;
 }
 
 void FunctionRepository::add( Function* function )
