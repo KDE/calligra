@@ -55,6 +55,7 @@
 #include "CalculationSettings.h"
 #include "Doc.h"
 #include "Editors.h"
+#include "FunctionModuleRegistry.h"
 #include "Localization.h"
 #include "Map.h"
 #include "Sheet.h"
@@ -373,7 +374,7 @@ PreferenceDialog::PreferenceDialog(View* view)
 
     d->resetOpenSaveOptions(); // initialize values
 
-    // Interface Options Widget
+    // Plugin Options Widget
     d->pluginSelector = new KPluginSelector(this);
     const QString serviceType = QString::fromLatin1("KSpread/Plugin");
     const QString query = QString::fromLatin1("[X-KSpread-Version] >= 2");
@@ -421,7 +422,10 @@ void PreferenceDialog::slotApply()
     d->applyInterfaceOptions();
     d->applyOpenSaveOptions();
 
+    // Plugin Options
     d->pluginSelector->save();
+    FunctionModuleRegistry::instance()->loadFunctions();
+
     d->spellCheckPage->save();
     d->localePage->apply();
 
@@ -431,10 +435,11 @@ void PreferenceDialog::slotApply()
 
 void PreferenceDialog::slotDefault()
 {
-    d->defaultInterfaceOptions();
-    d->defaultOpenSaveOptions();
-
-    if (currentPage() == d->page4) {
+    if (currentPage() == d->page2) {
+        d->defaultInterfaceOptions();
+    } else if (currentPage() == d->page3) {
+        d->defaultOpenSaveOptions();
+    } else if (currentPage() == d->page4) {
         d->spellCheckPage->slotDefault();
     } else if (currentPage() == d->pluginPage) {
         d->pluginSelector->load();
@@ -443,8 +448,15 @@ void PreferenceDialog::slotDefault()
 
 void PreferenceDialog::slotReset()
 {
-    d->resetInterfaceOptions();
-    d->resetOpenSaveOptions();
+    if (currentPage() == d->page2) {
+        d->resetInterfaceOptions();
+    } else if (currentPage() == d->page3) {
+        d->resetOpenSaveOptions();
+    } else if (currentPage() == d->page4) {
+        // TODO
+    } else if (currentPage() == d->pluginPage) {
+        d->pluginSelector->load(); // FIXME
+    }
 }
 
 void PreferenceDialog::unitChanged(int index)
