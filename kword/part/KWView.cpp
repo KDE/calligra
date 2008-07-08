@@ -1149,7 +1149,7 @@ void KWView::selectionChanged()
             m_zoomController->setPageSize(m_currentPage->rect().size());
         }
         KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-        KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
+        KWTextFrameSet *fs = frame == 0 ? 0 : dynamic_cast<KWTextFrameSet*>(frame->frameSet());
         if (fs)
             m_actionAddBookmark->setEnabled(true);
         else

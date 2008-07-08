@@ -279,7 +279,7 @@ void KWStatistics::selectionChanged()
     KoShape *shape = m_selection->firstSelectedShape();
     if (!shape) return;
     KWFrame *frame = dynamic_cast<KWFrame*>(shape->applicationData());
-    Q_ASSERT(frame);
+    if (!frame) return; // you can have embedded shapes selected, in that case it surely is no text frameset.
     KWTextFrameSet *fs = dynamic_cast<KWTextFrameSet*>(frame->frameSet());
     if (fs) {
         if (m_textDocument && m_autoUpdate)
