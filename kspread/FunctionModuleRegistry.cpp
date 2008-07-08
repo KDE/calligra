@@ -41,6 +41,16 @@ K_GLOBAL_STATIC(FunctionModuleRegistrySingleton, s_singleton)
 
 FunctionModuleRegistry::FunctionModuleRegistry()
 {
+    loadFunctions();
+}
+
+FunctionModuleRegistry* FunctionModuleRegistry::instance()
+{
+    return &s_singleton->instance;
+}
+
+void FunctionModuleRegistry::loadFunctions()
+{
     const QString serviceType = QString::fromLatin1("KSpread/Plugin");
     const QString query = QString::fromLatin1("([X-KSpread-Version] >= 2) and "
                                               "([X-KDE-PluginInfo-Category] == 'FunctionModule')");
@@ -48,34 +58,25 @@ FunctionModuleRegistry::FunctionModuleRegistry()
     const KConfigGroup moduleGroup = KGlobal::config()->group("Plugins");
     const KPluginInfo::List pluginInfos = KPluginInfo::fromServices(offers, moduleGroup);
     foreach (KPluginInfo pluginInfo, pluginInfos) {
-        pluginInfo.load();
-        if (!pluginInfo.isPluginEnabled()) {
-            continue;
-        }
         KPluginFactory *factory = KPluginLoader(*pluginInfo.service()).factory();
         if (!factory) {
-            kDebug() << "Unable to create plugin factory for" << pluginInfo.name();
+            kDebug(36002) << "Unable to create plugin factory for" << pluginInfo.name();
             continue;
         }
         FunctionModule* module = factory->create<FunctionModule>(this);
         if (!module) {
-            kDebug() << "Unable to create function module for" << pluginInfo.name();
+            kDebug(36002) << "Unable to create function module for" << pluginInfo.name();
             continue;
         }
-        add(module);
+        pluginInfo.load(); // load activation state
+        if (pluginInfo.isPluginEnabled()) {
+            // just add the module; the functions are registered on demand
+            add(module);
+        } else {
+            module->removeFunctions();
+            remove(module->id());
+        }
     }
-/*    KoPluginLoader::PluginsConfig config;
-    config.group = "kspread";
-    config.whiteList = "FunctionPlugins";
-    config.blacklist = "FunctionPluginsDisabled";
-    KoPluginLoader::instance()->load(QString::fromLatin1("KSpread/Function"),
-                                     QString::fromLatin1("[X-KSpread-Version] == 2"),
-                                     config);*/
-}
-
-FunctionModuleRegistry* FunctionModuleRegistry::instance()
-{
-    return &s_singleton->instance;
 }
 
 void FunctionModuleRegistry::registerFunctions()
@@ -90,13 +91,5 @@ void FunctionModuleRegistry::registerFunctions()
             kDebug(36002) << factories[i]->descriptionFileName() << "not found.";
         }
         FunctionRepository::self()->loadFunctionDescriptions(fileName);
-    }
-}
-
-void FunctionModuleRegistry::removeFunctions()
-{
-    const QList<FunctionModule*> factories = values();
-    for (int i = 0; i < factories.count(); ++i) {
-        factories[i]->removeFunctions();
     }
 }

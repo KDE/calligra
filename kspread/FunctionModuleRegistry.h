@@ -30,15 +30,34 @@ namespace KSpread
 {
 class FunctionModule;
 
+/**
+ * Registry for function modules.
+ */
 class KSPREAD_EXPORT FunctionModuleRegistry : public QObject, public KoGenericRegistry<FunctionModule*>
 {
 public:
+    /**
+     * Creates the registry and loads the function modules.
+     */
     FunctionModuleRegistry();
 
+    /**
+     * \return the singleton instance
+     */
     static FunctionModuleRegistry* instance();
 
+    /**
+     * Loads the function modules.
+     * Depending on their activation state read from the config,
+     * the modules are added or removed from the registry.
+     */
+    void loadFunctions();
+
+    /**
+     * Registers the functions from all modules in the function repository
+     * and adds their descriptions.
+     */
     void registerFunctions();
-    void removeFunctions();
 };
 
 } // namespace KSpread
