@@ -21,9 +21,9 @@
 #define KSPREAD_BINDING
 
 #include <interfaces/KoChartModel.h>
-#include <QAbstractTableModel>
 #include <QSharedDataPointer>
 #include <QVariant>
+#include <QAbstractItemModel>
 
 #include "kspread_export.h"
 #include "Region.h"
@@ -31,38 +31,35 @@
 namespace KSpread
 {
 
-class BindingModel : public QAbstractTableModel, public KoChart::ChartModel
+class BindingModelModel;
+
+class BindingModel : public KoChart::ChartModel
 {
     Q_OBJECT
 
 public:
-	BindingModel(const Region& region);
+    BindingModel(const Region& region);
     BindingModel(Sheet *sheet);
-
-    virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
-    virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
-    virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
-    virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
 
     const Region& region() const;
     void setRegion(const Region& region);
-    
+
     Sheet *sheet() const;
     void setSheet(Sheet *sheet);
 
     void emitDataChanged(const QRect& range);
     void emitChanged(const Region& region);
-    
-    // Reimplemented methods from KoChartModel
-    QString regionToString( const QVector<QRect> &region ) const;
-    QVector<QRect> stringToRegion( const QString &string ) const;
 
-Q_SIGNALS:
+    // Reimplemented methods from KoChartModel
+    virtual QString regionToString( const QVector<QRect> &region ) const;
+    virtual QVector<QRect> stringToRegion( const QString &string ) const;
+    virtual QAbstractItemModel* model();
+
+signals:
     void changed(const Region& region);
 
 private:
-	Region m_region;
-    Sheet *m_sheet;
+    BindingModelModel *m_model;
 };
 
 /**

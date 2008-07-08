@@ -21,8 +21,8 @@
 // Local
 #include "TableModel.h"
 
-// Qt
-#include <QDebug>
+// KDE
+#include <KDebug>
 
 // KOffice
 #include <KoXmlReader.h>
@@ -36,30 +36,14 @@
 
 namespace KChart {
 
-class TableModel::Private
-{
-public:
-    Private();
-    ~Private();
-};
-
-TableModel::Private::Private()
-{
-}
-
-TableModel::Private::~Private()
-{
-}
-
 TableModel::TableModel( QObject *parent /* = 0 */)
-    : KoChart::ChartModel( parent )
-    , d( new Private )
+    : KoChart::ChartModel(parent),
+    m_model(new QStandardItemModel( this ))
 {
 }
 
 TableModel::~TableModel()
 {
-    delete d;
 }
 
 int rangeCharToInt( char c )
@@ -73,10 +57,10 @@ int rangeStringToInt( const QString &string )
     const int size = string.size();
     for ( int i = 0; i < size; i++ )
     {
-        qDebug() << "---" << rangeCharToInt( string[i].toAscii() ) * pow( 10, ( size - i - 1 ) );
+        kDebug(350001) << "---" << rangeCharToInt( string[i].toAscii() ) * pow( 10, ( size - i - 1 ) );
         result += rangeCharToInt( string[i].toAscii() ) * pow( 10, ( size - i - 1 ) );
     }
-    qDebug() << "+++++ result=" << result;
+    kDebug(350001) << "+++++ result=" << result;
     return result;
 }
 
@@ -87,7 +71,7 @@ QString rangeIntToString( int i )
     {
         tmp[j] = 'A' + tmp[j].toAscii() - '1';
     }
-    qDebug() << "tmp=" << tmp;
+    kDebug(350001) << "tmp=" << tmp;
     return tmp;
 }
 
@@ -95,7 +79,7 @@ QString rangeIntToString( int i )
 QVector<QRect> TableModel::stringToRegion( const QString &string ) const
 {
     const bool isPoint = !string.contains( ":" );
-    qDebug() << "TableModel::stringToRegion():" << string;
+    kDebug(350001) << "TableModel::stringToRegion():" << string;
     QString s = string;
     QStringList regionStrings = isPoint ? s.split( "." ) : s.remove( QChar(':') ).split( "." );
     QPoint topLeftPoint;
@@ -113,7 +97,7 @@ QVector<QRect> TableModel::stringToRegion( const QString &string ) const
     QStringList l = topLeft.split( "$" );
     if ( l.size() < 3 )
     {
-        qDebug() << topLeft;
+        kDebug(350001) << topLeft;
         qWarning() << "2) TableModel::stringToRegion(): Invalid region string \"" << string << "\"";
         return QVector<QRect>();
     }
@@ -123,7 +107,7 @@ QVector<QRect> TableModel::stringToRegion( const QString &string ) const
     
     if ( isPoint )
     {
-        qDebug() << "Returning" << QVector<QRect>( 1, QRect( topLeftPoint, QSize( 1, 1 ) ) );
+        kDebug(350001) << "Returning" << QVector<QRect>( 1, QRect( topLeftPoint, QSize( 1, 1 ) ) );
         return QVector<QRect>( 1, QRect( topLeftPoint, QSize( 1, 1 ) ) );
     }
     
@@ -138,7 +122,7 @@ QVector<QRect> TableModel::stringToRegion( const QString &string ) const
     row = l[2].toInt() - 1;
     bottomRightPoint = QPoint( column, row );
     
-    qDebug() << "///" << QRect( topLeftPoint, bottomRightPoint );
+    kDebug(350001) << "///" << QRect( topLeftPoint, bottomRightPoint );
     
     return QVector<QRect>( 1, QRect( topLeftPoint, bottomRightPoint ) );
 }
@@ -152,15 +136,13 @@ QString TableModel::regionToString( const QVector<QRect> &region ) const
 
 void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesReader &stylesReader )
 {
-#if 0
-    setRowCount( 0 );
-    setColumnCount( 0 );
-#endif
+    m_model->setRowCount( 0 );
+    m_model->setColumnCount( 0 );
     
     KoXmlElement n = tableElement.firstChild().toElement();
     for( ; !n.isNull(); n = n.nextSibling().toElement() )
     {
-        qDebug() << n.localName();
+        kDebug(350001) << n.localName();
         if ( n.namespaceURI() != KoXmlNS::table )
             continue;
         if ( n.localName() == "table-rows" || n.localName() == "table-header-rows" )
@@ -175,10 +157,8 @@ void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesRea
                 if ( _n.localName() == "table-row" )
                 {
                     int column = 0;
-#if 0
                     if ( !isHeader )
-                        setRowCount( rowCount() + 1 );
-#endif
+                        m_model->setRowCount( m_model->rowCount() + 1 );
                     KoXmlElement __n = _n.firstChild().toElement();
                     for ( ; !__n.isNull(); __n = __n.nextSibling().toElement() )
                     {
@@ -186,10 +166,8 @@ void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesRea
                             continue;
                         if ( __n.localName() == "table-cell" )
                         {
-#if 0
                             if ( isHeader )
-                                setColumnCount( columnCount() + 1 );
-#endif
+                                m_model->setColumnCount( m_model->columnCount() + 1 );
                             const QString valueType = __n.attributeNS( KoXmlNS::office, "value-type" );
                             QString valueString;
                             const KoXmlElement valueElement = __n.namedItemNS( KoXmlNS::text, "p" ).toElement();
@@ -207,11 +185,11 @@ void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesRea
                             else // if ( valueType == "string" )
                                 value = valueString;
                             if ( isHeader )
-                                setHeaderData( column, Qt::Horizontal, value );
+                                m_model->setHeaderData( column, Qt::Horizontal, value );
                             else
-                                setData( index( row, column ), value );
-                            qDebug() << isHeader;
-                            qDebug() << "Setting data in" << row << column << "to" << value;
+                                m_model->setData( m_model->index( row, column ), value );
+                            kDebug(350001) << isHeader;
+                            kDebug(350001) << "Setting data in" << row << column << "to" << value;
                             column++;
                         }
                     }
@@ -221,26 +199,11 @@ void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesRea
         }
     }
     
-    //qDebug() << "BEFORE" << rowCount() << columnCount();
-    reset();
-    //qDebug() << "AFTER" << rowCount() << columnCount();
+    kDebug(350001) << "BEFORE" << m_model->rowCount() << m_model->columnCount();
+    //reset(); // the model does that for us, doesn't it?
+    kDebug() << "AFTER" << m_model->rowCount() << m_model->columnCount();
     
-    //qDebug() << "++++++++ " << rowCount() << columnCount();
-}
-
-int TableModel::rowCount(const QModelIndex&) const
-{
-    return 0;
-}
-
-int TableModel::columnCount(const QModelIndex&) const
-{
-    return 0;
-}
-
-QVariant TableModel::data(const QModelIndex&, int) const
-{
-    return QVariant();
+    kDebug(350001) << "++++++++ " << m_model->rowCount() << m_model->columnCount();
 }
 
 bool TableModel::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
@@ -249,5 +212,3 @@ bool TableModel::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) con
 }
 
 }
-
-#include "TableModel.moc"

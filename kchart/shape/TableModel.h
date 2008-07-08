@@ -37,8 +37,6 @@ namespace KChart {
 
 class TableModel : public KoChart::ChartModel
 {
-    Q_OBJECT
-    
 public:
     TableModel( QObject *parent = 0 );
     ~TableModel();
@@ -47,16 +45,13 @@ public:
     QString regionToString( const QVector<QRect> &region ) const;
     // reimplemented
     QVector<QRect> stringToRegion( const QString &string ) const;
-    
+
     void loadOdf( const KoXmlElement &tableElement, const KoOdfStylesReader &stylesReader );
     bool saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
-    virtual int rowCount(const QModelIndex&) const;
-    virtual int columnCount(const QModelIndex&) const;
-    virtual QVariant data(const QModelIndex&, int) const;
-    
+    virtual QStandardItemModel * model() { return m_model; }
+
 private:
-    class Private; // note that you don't need a Private when the class is not exported ;)
-    Private *const d;
+    QStandardItemModel *m_model;
 };
 
 }

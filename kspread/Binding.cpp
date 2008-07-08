@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright 2007 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+    Copyright (C) 2008 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,6 +19,7 @@
 */
 
 #include "Binding.h"
+#include "Binding_p.h"
 
 #include <QRect>
 
@@ -146,64 +148,99 @@ bool Binding::operator<(const Binding& other) const
     return d < other.d;
 }
 
-
 BindingModel::BindingModel(const Region& region)
-    : QAbstractTableModel()
-    , KoChart::ChartModel()
-    , m_region(region)
+    : KoChart::ChartModel(),
+    m_model( new BindingModelModel(this) )
 {
+    m_model->setRegion(region);
+    connect (m_model, SIGNAL(changed(const Region&)), this, SIGNAL(changed(const Region&)));
 }
 
 BindingModel::BindingModel( Sheet *sheet )
-    : QAbstractTableModel()
-    , KoChart::ChartModel()
-    , m_sheet(sheet)
+    : KoChart::ChartModel(),
+    m_model( new BindingModelModel(this) )
 {
-}
-
-QVariant BindingModel::headerData(int section, Qt::Orientation orientation, int role) const
-{
-    if ( (!m_sheet && m_region.isEmpty()) || (role != Qt::EditRole && role != Qt::DisplayRole))
-        return QVariant();
-    const QPoint offset = m_sheet ? QPoint(1, 1) : m_region.firstRange().topLeft();
-    const int col = (orientation == Qt::Vertical) ? offset.x() : offset.x() + section;
-    const int row = (orientation == Qt::Vertical) ? offset.y() + section : offset.y();
-    const Sheet* sheet = m_sheet ? m_sheet : m_region.firstSheet();
-    const Value value = sheet->cellStorage()->value(col, row);
-    return value.asVariant();
-}
-
-int BindingModel::rowCount(const QModelIndex& parent) const
-{
-    Q_UNUSED(parent);
-    if (m_sheet)
-    	return m_sheet->cellStorage()->rows();
-    return m_region.isEmpty() ? 0 : m_region.firstRange().height();
-}
-
-int BindingModel::columnCount(const QModelIndex& parent) const
-{
-    Q_UNUSED(parent);
-    if (m_sheet)
-    	return m_sheet->cellStorage()->columns();
-    return m_region.isEmpty() ? 0 : m_region.firstRange().width();
+    m_model->setSheet(sheet);
+    connect (m_model, SIGNAL(changed(const Region&)), this, SIGNAL(changed(const Region&)));
 }
 
 QString BindingModel::regionToString( const QVector<QRect> &region ) const
 {
 	Region r;
 	foreach( QRect rect, region )
-	   r.add( rect, m_sheet );
+        r.add( rect, m_model->sheet() );
 	return r.name();
 }
 
 QVector<QRect> BindingModel::stringToRegion( const QString &string ) const
 {
-	const Region r( string, m_sheet->map() );
+    const Region r( string, m_model->sheet()->map() );
 	return r.rects();
 }
 
-QVariant BindingModel::data(const QModelIndex& index, int role) const
+const KSpread::Region& BindingModel::region() const
+{
+    return m_model->region();
+}
+
+void BindingModel::setRegion(const Region& region)
+{
+    m_model->setRegion(region);
+}
+
+Sheet *BindingModel::sheet() const
+{
+    return m_model->sheet();
+}
+
+void BindingModel::setSheet(Sheet *sheet)
+{
+    m_model->setSheet(sheet);
+}
+
+void BindingModel::emitDataChanged(const QRect& rect)
+{
+    m_model->emitDataChanged(rect);
+}
+
+void BindingModel::emitChanged(const Region& region)
+{
+    m_model->emitChanged(region);
+}
+
+QAbstractItemModel* BindingModel::model()
+{
+    return m_model;
+}
+
+
+/////// BindingModelModel
+
+BindingModelModel::BindingModelModel(QObject *parent)
+    : QAbstractTableModel(parent),
+    m_sheet(0)
+{
+}
+
+void BindingModelModel::emitChanged(const Region& region)
+{
+    emit changed(region);
+}
+
+void BindingModelModel::emitDataChanged(const QRect& rect)
+{
+    const QPoint tl = rect.topLeft();
+    const QPoint br = rect.bottomRight();
+    emit dataChanged(index(tl.y(), tl.x()), index(br.y(), br.x()));
+}
+
+void BindingModelModel::setSheet(Sheet *sheet)
+{
+    m_sheet = sheet;
+    m_region = Region();
+}
+
+QVariant BindingModelModel::data(const QModelIndex& index, int role) const
 {
     if ((!m_sheet && m_region.isEmpty()) || (role != Qt::EditRole && role != Qt::DisplayRole))
         return QVariant();
@@ -246,38 +283,50 @@ QVariant BindingModel::data(const QModelIndex& index, int role) const
     return variant;
 }
 
-const KSpread::Region& BindingModel::region() const
+const KSpread::Region& BindingModelModel::region() const
 {
     return m_region;
 }
 
-void BindingModel::setRegion(const Region& region)
+QVariant BindingModelModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if ( (!m_sheet && m_region.isEmpty()) || (role != Qt::EditRole && role != Qt::DisplayRole))
+        return QVariant();
+    const QPoint offset = m_sheet ? QPoint(1, 1) : m_region.firstRange().topLeft();
+    const int col = (orientation == Qt::Vertical) ? offset.x() : offset.x() + section;
+    const int row = (orientation == Qt::Vertical) ? offset.y() + section : offset.y();
+    const Sheet* sheet = m_sheet ? m_sheet : m_region.firstSheet();
+    const Value value = sheet->cellStorage()->value(col, row);
+    return value.asVariant();
+}
+
+int BindingModelModel::rowCount(const QModelIndex& parent) const
+{
+    Q_UNUSED(parent);
+    if (m_sheet)
+    	return m_sheet->cellStorage()->rows();
+    return m_region.isEmpty() ? 0 : m_region.firstRange().height();
+}
+
+int BindingModelModel::columnCount(const QModelIndex& parent) const
+{
+    Q_UNUSED(parent);
+    if (m_sheet)
+    	return m_sheet->cellStorage()->columns();
+    return m_region.isEmpty() ? 0 : m_region.firstRange().width();
+}
+
+void BindingModelModel::setRegion(const Region& region)
 {
     m_region = region;
     m_sheet = 0;
 }
 
-Sheet *BindingModel::sheet() const
+Sheet *BindingModelModel::sheet() const
 {
     return m_sheet;
 }
 
-void BindingModel::setSheet(Sheet *sheet)
-{
-	m_sheet = sheet;
-	m_region = Region();
-}
-
-void BindingModel::emitDataChanged(const QRect& rect)
-{
-    const QPoint tl = rect.topLeft();
-    const QPoint br = rect.bottomRight();
-    emit dataChanged(index(tl.y(), tl.x()), index(br.y(), br.x()));
-}
-
-void BindingModel::emitChanged(const Region& region)
-{
-    emit changed(region);
-}
 
 #include "Binding.moc"
+#include "Binding_p.moc"
