@@ -39,9 +39,38 @@ public:
 K_GLOBAL_STATIC(FunctionModuleRegistrySingleton, s_singleton)
 
 
-FunctionModuleRegistry::FunctionModuleRegistry()
+class FunctionModuleRegistry::Private
 {
+public:
+    void registerFunctionModule(FunctionModule* module);
+
+public:
+    bool repositoryInitialized;
+};
+
+void FunctionModuleRegistry::Private::registerFunctionModule(FunctionModule* module)
+{
+    module->registerFunctions();
+    Q_ASSERT(!module->descriptionFileName().isEmpty());
+    const KStandardDirs* dirs = Factory::global().dirs();
+    const QString fileName = dirs->findResource("functions", module->descriptionFileName());
+    if (fileName.isEmpty()) {
+        kDebug(36002) << module->descriptionFileName() << "not found.";
+    }
+    FunctionRepository::self()->loadFunctionDescriptions(fileName);
+}
+
+
+FunctionModuleRegistry::FunctionModuleRegistry()
+    : d(new Private)
+{
+    d->repositoryInitialized = false;
     loadFunctions();
+}
+
+FunctionModuleRegistry::~FunctionModuleRegistry()
+{
+    delete d;
 }
 
 FunctionModuleRegistry* FunctionModuleRegistry::instance()
@@ -70,9 +99,20 @@ void FunctionModuleRegistry::loadFunctions()
         }
         pluginInfo.load(); // load activation state
         if (pluginInfo.isPluginEnabled()) {
-            // just add the module; the functions are registered on demand
+            // Module already registered?
+            if (contains(module->id())) {
+                continue; 
+            }
             add(module);
+            // Is the function repository already initialized?
+            if (d->repositoryInitialized) {
+                d->registerFunctionModule(module);
+            }
         } else {
+            // Module not registered?
+            if (!contains(module->id())) {
+                continue;
+            }
             module->removeFunctions();
             remove(module->id());
         }
@@ -81,15 +121,9 @@ void FunctionModuleRegistry::loadFunctions()
 
 void FunctionModuleRegistry::registerFunctions()
 {
-    const QList<FunctionModule*> factories = values();
-    for (int i = 0; i < factories.count(); ++i) {
-        factories[i]->registerFunctions();
-        Q_ASSERT(!factories[i]->descriptionFileName().isEmpty());
-        const KStandardDirs* dirs = Factory::global().dirs();
-        const QString fileName = dirs->findResource("functions", factories[i]->descriptionFileName());
-        if (fileName.isEmpty()) {
-            kDebug(36002) << factories[i]->descriptionFileName() << "not found.";
-        }
-        FunctionRepository::self()->loadFunctionDescriptions(fileName);
+    d->repositoryInitialized = true;
+    const QList<FunctionModule*> modules = values();
+    for (int i = 0; i < modules.count(); ++i) {
+        d->registerFunctionModule(modules[i]);
     }
 }

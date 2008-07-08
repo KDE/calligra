@@ -238,6 +238,14 @@ void FunctionRepository::add( FunctionDescription *desc )
   d->descriptions.insert (desc->name(), desc);
 }
 
+void FunctionRepository::remove(const QStringList& functions)
+{
+    foreach (QString function, functions) {
+        d->functions.remove(function);
+        d->descriptions.remove(function);
+    }
+}
+
 Function *FunctionRepository::function (const QString& name)
 {
   return d->functions.value( name.toUpper() );

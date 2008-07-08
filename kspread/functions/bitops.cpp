@@ -79,7 +79,9 @@ void BitOpsModule::registerFunctions()
 
 void BitOpsModule::removeFunctions()
 {
-    // TODO
+    QStringList functions;
+    functions << "BITAND" << "BITOR" << "BITXOR" << "BITLSHIFT" << "BITRSHIFT";
+    FunctionRepository::self()->remove(functions);
 }
 
 

@@ -40,6 +40,7 @@ public:
      * Creates the registry and loads the function modules.
      */
     FunctionModuleRegistry();
+    ~FunctionModuleRegistry();
 
     /**
      * \return the singleton instance
@@ -58,6 +59,10 @@ public:
      * and adds their descriptions.
      */
     void registerFunctions();
+
+private:
+    class Private;
+    Private * const d;
 };
 
 } // namespace KSpread
