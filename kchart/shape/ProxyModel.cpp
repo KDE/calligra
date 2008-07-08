@@ -351,13 +351,8 @@ void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
 
 void ProxyModel::setSourceModel( KoChart::ChartModel *sourceModel, const QVector<QRect> &selection )
 {
-    QAbstractItemModel *model = dynamic_cast<QAbstractItemModel*>( sourceModel );
-    Q_ASSERT( model );
-    if ( !model )
-        return;
-    
-    connect( model, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
-             this,  SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
+    connect( sourceModel->model(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
+                            this,  SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
     
     d->selection = selection;
     
@@ -378,7 +373,7 @@ void ProxyModel::setSourceModel( KoChart::ChartModel *sourceModel, const QVector
     	}
     }
 
-    QAbstractProxyModel::setSourceModel( model );
+    QAbstractProxyModel::setSourceModel( sourceModel->model() );
     
     d->spreadSheetModel = sourceModel;
     
