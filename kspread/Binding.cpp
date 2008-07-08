@@ -148,13 +148,15 @@ bool Binding::operator<(const Binding& other) const
 
 
 BindingModel::BindingModel(const Region& region)
-    : KoChart::ChartModel()
+    : QAbstractTableModel()
+    , KoChart::ChartModel()
     , m_region(region)
 {
 }
 
 BindingModel::BindingModel( Sheet *sheet )
-    : KoChart::ChartModel()
+    : QAbstractTableModel()
+    , KoChart::ChartModel()
     , m_sheet(sheet)
 {
 }

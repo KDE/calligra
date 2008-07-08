@@ -21,6 +21,7 @@
 #define KSPREAD_BINDING
 
 #include <interfaces/KoChartModel.h>
+#include <QAbstractTableModel>
 #include <QSharedDataPointer>
 #include <QVariant>
 
@@ -30,7 +31,7 @@
 namespace KSpread
 {
 
-class BindingModel : public KoChart::ChartModel
+class BindingModel : public QAbstractTableModel, public KoChart::ChartModel
 {
     Q_OBJECT
 
