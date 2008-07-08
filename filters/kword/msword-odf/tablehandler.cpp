@@ -88,9 +88,23 @@ void KWordTableHandler::tableRowStart( wvWare::SharedPtr<const wvWare::Word97::T
     m_row++;
     m_column = -1;
     m_tap = tap;
-    kDebug(30513) <<"tableRowStart row=" << m_row << ", number of cells: " << tap->itcMac;
+    kDebug(30513) << "tableRowStart row=" << m_row << ", number of cells: " << tap->itcMac;
+
+    KoGenStyle rowStyle(KoGenStyle::StyleAutoTableRow, "table-row");
+    QString rowStyleName = m_mainStyles->lookup(rowStyle, QString("row"));
+
+    //TODO figure out what the six different BRC objects are for,
+    // instead of just using one of them to set the whole border
+    //for(int i = 0; i < 6; i++) {
+    //    const wvWare::Word97::BRC& brc = tap->rgbrcTable[i];
+    //    kDebug(30513) << brc.toString().c_str();
+    //}
+    const wvWare::Word97::BRC& brc = tap->rgbrcTable[0];
+    borderStyle = Conversion::setBorderAttributes(brc);
+
     //start table row in content
     m_bodyWriter->startElement("table:table-row");
+    m_bodyWriter->addAttribute("table:style-name", rowStyleName.toUtf8());
 }
 
 void KWordTableHandler::tableRowEnd()
@@ -224,11 +238,50 @@ void KWordTableHandler::tableCellStart()
         : tc.brcRight;
 
     KoGenStyle cellStyle(KoGenStyle::StyleAutoTableCell, "table-cell");
-    cellStyle.addProperty("fo:border-top", Conversion::setBorderAttributes(brcTop));
-    cellStyle.addProperty("fo:border-bottom", Conversion::setBorderAttributes(brcBottom));
-    cellStyle.addProperty("fo:border-left", Conversion::setBorderAttributes(brcLeft));
-    cellStyle.addProperty("fo:border-right", Conversion::setBorderAttributes(brcRight));
-
+    //set borders for the four edges of the cell
+    //use the row border style
+    if(brcTop.brcType == 0) {
+        cellStyle.addProperty("fo:border-top", borderStyle);
+    }
+    //no border
+    else if(brcTop.brcType == 255) {
+        cellStyle.addProperty("fo:border-top", "thin none #000000");
+    }
+    //we have a border style defined here
+    else {
+        cellStyle.addProperty("fo:border-top", Conversion::setBorderAttributes(brcTop));
+    }
+    //bottom
+    if(brcBottom.brcType == 0) {
+        cellStyle.addProperty("fo:border-bottom", borderStyle);
+    }
+    else if(brcBottom.brcType == 255) {
+        cellStyle.addProperty("fo:border-bottom", "thin none #000000");
+    }
+    else {
+        cellStyle.addProperty("fo:border-bottom", Conversion::setBorderAttributes(brcBottom));
+    }
+    //left
+    if(brcLeft.brcType == 0) {
+        cellStyle.addProperty("fo:border-left", borderStyle);
+    }
+    else if(brcLeft.brcType == 255) {
+        cellStyle.addProperty("fo:border-left", "thin none #000000");
+    }
+    else {
+        cellStyle.addProperty("fo:border-left", Conversion::setBorderAttributes(brcLeft));
+    }
+    //right
+    if(brcRight.brcType == 0) {
+        cellStyle.addProperty("fo:border-right", borderStyle);
+    }
+    else if(brcRight.brcType == 255) {
+        cellStyle.addProperty("fo:border-right", "thin none #000000");
+    }
+    else {
+        cellStyle.addProperty("fo:border-right", Conversion::setBorderAttributes(brcRight));
+    }
+    
     //text direction
     //if(tc.fVertical) {
     //    cellStyle.addProperty("style:direction", "ttb");
