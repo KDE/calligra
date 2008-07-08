@@ -34,21 +34,62 @@ namespace KexiDB {
 
 namespace KexiWebForms {
 
+    /**
+     * @brief Kexi Web Forms specific Service
+     *
+     * Services are used to handle requests on specific URIs, for example you
+     * can bind a WebService to listen for requests on '/query'. Refer to
+     * pion-network-library documentation for more details.
+     *
+     * In particular this WebService implementation is used to intialize a
+     * google::TemplateDictionary context for the specified webservice and
+     * provides binding to google::TemplateDictionary::SetValue accepting QStrings
+     * and QVariants, thus simplifying the code in resources handlers a lot.
+     */
     class WebFormsService : public pion::net::WebService {
         public:
+            /**
+             * Constructor
+             * @param char* name of a template file
+             */
             WebFormsService(const char*);
             virtual ~WebFormsService();
 
             /**
-             * Handle request
+             * Handle request, refer to pion::net::WebService documentation
              */
             virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) = 0;
-            
+
+            /**
+             * A binding to local google::TemplateDictionary::SetValue accepting a
+             * QVariant
+             * @todo Move this stuff in a derived class of google::TemplateDictionary
+             */
             void setValue(const char*, const QVariant&);
+
+            /**
+             * A binding to local google::TemplateDictionary::SetValue accepting a
+             * QString
+             * @todo Move this stuff in a derived class of google::TemplateDictionary
+             */
             void setValue(const char*, const QString&);
+
+            /**
+             * This is not really needed but it's provided for convenience
+             * @todo Move this stuff in a derived class of google::TemplateDictionary
+             */
             void setValue(const char*, const char*);
         protected:
+            /**
+             * A local instance of google::TemplateDictionary, initialized by ctor
+             */
             google::TemplateDictionary* m_dict;
+
+            /**
+             * Since it is common for KWebForms handlers to have a KexiDB::Cursor somewhere
+             * in the code, provide it as local with facilities to close and delete the pointer
+             * when class is destroyed
+             */
             KexiDB::Cursor* m_cursor;
     };
     

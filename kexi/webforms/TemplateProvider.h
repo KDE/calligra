@@ -28,9 +28,18 @@ namespace google {
 }
 
 namespace KexiWebForms {
-    class HTTPStream;
 
+    /**
+     * Inizialize a template
+     */
     google::TemplateDictionary* initTemplate(const char*);
+
+    
+    /**
+     * Expand a template and write it in response to the request
+     * @param TemplateDictionary* pointer to google::TemplateDictionary
+     * @param pion::net::HTTPResponseWriterPtr pointer to pion::net::HTTPResponseWriter
+     */
     void renderTemplate(google::TemplateDictionary*, pion::net::HTTPResponseWriterPtr);
 
 }

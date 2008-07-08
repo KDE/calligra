@@ -24,7 +24,12 @@
 #include "WebFormsService.h"
 
 namespace KexiWebForms {
-    
+
+    /**
+     * @brief WebService handling delete operations
+     *
+     * This service is responsible to delete a particular record
+     */
     class DeleteService : public WebFormsService {
     public:
         DeleteService(const char* name) : WebFormsService(name) {}

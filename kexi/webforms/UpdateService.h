@@ -30,7 +30,13 @@
 struct RequestData;
 
 namespace KexiWebForms {
-    
+
+    /**
+     * @brief WebService handling the update page
+     *
+     * This service creates a form out of table fields and allows to update
+     * values in a particular row.
+     */
     class UpdateService : public WebFormsService {
     public:
         UpdateService(const char* name) : WebFormsService(name) {}

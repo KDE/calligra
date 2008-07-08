@@ -24,7 +24,12 @@
 #include "WebFormsService.h"
 
 namespace KexiWebForms {
-    
+
+    /**
+     * @brief WebService handling the query page
+     *
+     * This service shows the results after running a particular query
+     */
     class QueryService : public WebFormsService {
     public:
         QueryService(const char* name) : WebFormsService(name) {}

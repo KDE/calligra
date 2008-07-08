@@ -24,7 +24,12 @@
 #include "WebFormsService.h"
 
 namespace KexiWebForms {
-    
+
+    /**
+     * @brief WebService handling the read page
+     *
+     * This service lists records in a particular database table
+     */
     class ReadService : public WebFormsService {
     public:
         ReadService(const char* name) : WebFormsService(name) {}

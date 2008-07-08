@@ -24,7 +24,13 @@
 #include "WebFormsService.h"
 
 namespace KexiWebForms {
-        
+
+    /**
+     * @brief WebService handling the index page
+     *
+     * This service is responsible to show a the welcome page and a list of
+     * tables and queries in the database
+     */
     class IndexService : public WebFormsService {
     public:
         IndexService(const char* name) : WebFormsService(name) {}

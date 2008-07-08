@@ -28,6 +28,12 @@ struct RequestData;
 
 namespace KexiWebForms {
 
+    /**
+     * @brief WebService handling the create page
+     *
+     * This service produces a form out of table fields and allows to create
+     * new records
+     */
     class CreateService : public WebFormsService {
     public:
         CreateService(const char* name) : WebFormsService(name) {}
