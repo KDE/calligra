@@ -164,6 +164,7 @@ void KPrView::startPresentation()
 
         setViewMode( m_presentationMode );
 
+        view->setActivePage( m_activePage );
         view->activatePresenterView( this );
     }
     else {

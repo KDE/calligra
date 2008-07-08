@@ -83,7 +83,6 @@ KPrPresenterViewInterface::KPrPresenterViewInterface( KoPADocument *document, Ko
 
     frame = new QFrame;
     QVBoxLayout *frameLayout2 = new QVBoxLayout;
-    frameLayout2 = new QVBoxLayout;
     m_nextSlideLabel = new QLabel( i18n( "Next Slide" ) );
     m_nextSlidePreview = new QLabel;
     frameLayout2->addWidget( m_nextSlideLabel );
@@ -125,7 +124,8 @@ void KPrPresenterViewInterface::setActivePage( KoPAPageBase *page )
     KoShape *textShape = pageNotes->textShape();
     KoTextShapeData *textShapeData = dynamic_cast<KoTextShapeData *>( textShape->userData() );
     Q_ASSERT( textShapeData );
-    m_notesTextEdit->setDocument( textShapeData->document() );
+    QTextDocument *document = textShapeData->document()->clone( m_notesTextEdit );
+    m_notesTextEdit->setDocument( document );
 }
 
 void KPrPresenterViewInterface::setPreviewSize( const QSize &size )
