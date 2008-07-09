@@ -144,7 +144,8 @@ private:
     QString m_fieldValue;
     bool m_insideField;
     bool m_fieldAfterSeparator;
-    int m_fieldType; // 0 for no field
+    int m_fieldType; //0 if we're not in a field, -1 for a field we can't handle,
+            //anything else is the type of the field
     int m_maxColumns;//max number of columns in a table
     
     bool writeListInfo(KoXmlWriter* writer, const wvWare::Word97::PAP& pap, const wvWare::ListInfo* listInfo);

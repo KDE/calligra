@@ -60,7 +60,7 @@ KWordTextHandler::KWordTextHandler( wvWare::SharedPtr<wvWare::Parser> parser, Ko
       //m_textStyleNumber( 1 ), m_paragraphStyleNumber( 1 ), m_listStyleNumber( 1 ),
       m_currentListDepth( -1 ), m_currentListID( 0 ), m_currentStyle( 0L ),/* m_index( 0 ),*/
       m_currentTable( 0L ), m_writingHeader(false), m_writeMasterStyleName(false),
-      m_insideField( false ), m_fieldAfterSeparator( false ), m_fieldType( 0 ), m_maxColumns(0)
+      m_insideField(false), m_fieldAfterSeparator(false), m_fieldType(0), m_maxColumns(0)
 {
     if(bodyWriter) {
         m_bodyWriter = bodyWriter; //set the pointer to bodyWriter for writing to content.xml in office:text
@@ -380,11 +380,22 @@ void KWordTextHandler::paragraphEnd()
 
 void KWordTextHandler::fieldStart( const wvWare::FLD* fld, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )
 {
-    kDebug(30513) ;
-    m_fieldType = Conversion::fldToFieldType( fld );
+    kDebug(30513) << "fld->flt = " << fld->flt;
+    m_fieldType = fld->flt;
     m_insideField = true;
     m_fieldAfterSeparator = false;
     m_fieldValue = "";
+
+    //check to see if we can process this field type or not
+    switch(m_fieldType) {
+        case 26:
+        case 33:
+            kDebug(30513) << "processing field...";
+            break;
+        default:
+            kDebug(30513) << "can't process field, just outputting text into document...";
+            m_fieldType = -1; //set m_fieldType for unprocessed field
+    }
 }//end fieldStart()
 
 void KWordTextHandler::fieldSeparator( const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> /*chp*/ )
@@ -395,20 +406,31 @@ void KWordTextHandler::fieldSeparator( const wvWare::FLD* /*fld*/, wvWare::Share
 
 void KWordTextHandler::fieldEnd( const wvWare::FLD* /*fld*/, wvWare::SharedPtr<const wvWare::Word97::CHP> chp )
 {
-    kDebug(30513) ;
-    // only for handled field type
-    if( m_fieldType >= 0 )
-    {
-        QDomElement varElem = insertVariable( 8, chp, "STRING" );
-        QDomElement fieldElem = varElem.ownerDocument().createElement( "FIELD" );
-        fieldElem.setAttribute( "subtype", m_fieldType );
-        fieldElem.setAttribute( "value", m_fieldValue );
-        varElem.appendChild( fieldElem );
+    kDebug(30513);
+    //process different fields
+    //we could be writing to content or styles.xml (in a header)
+    KoXmlWriter* writer;
+    if(m_writingHeader) {
+        writer = m_headerWriter;
+    }
+    else {
+        writer = m_bodyWriter;
+    }
+    switch(m_fieldType) {
+        case 26:
+            writer->startElement("text:page-count");
+            writer->endElement();
+            break;
+        case 33:
+            writer->startElement("text:page-number");
+            writer->addAttribute("text:select-page", "current");
+            writer->endElement();
+            break;
     }
 
     // reset
     m_fieldValue = "";
-    m_fieldType = -1;
+    m_fieldType = 0;
     m_insideField = false;
     m_fieldAfterSeparator = false;
 } //end fieldEnd()
@@ -420,12 +442,16 @@ void KWordTextHandler::runOfText( const wvWare::UString& text, wvWare::SharedPtr
     kDebug(30513) << newText.string();
 
     // text after fieldStart and before fieldSeparator is useless
-    if( m_insideField && !m_fieldAfterSeparator ) return;
+    if( m_insideField && !m_fieldAfterSeparator ) {
+        kDebug(30513) << "Ignoring this text in first part of field.";
+        return;
+    }
 
     // if we can handle the field, consume the text
-    if( m_insideField && m_fieldAfterSeparator && ( m_fieldType >= 0 ) )
+    if(m_insideField && m_fieldAfterSeparator && (m_fieldType > 0))
     {
-        m_fieldValue.append( newText.string() );
+        kDebug(30513) << "adding this text to field value.";
+        m_fieldValue.append(newText.string());
         return;
     }
 
