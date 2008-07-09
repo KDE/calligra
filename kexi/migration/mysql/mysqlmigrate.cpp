@@ -365,7 +365,7 @@ KexiDB::Field::Type MySQLMigrate::type(const QString& table,
 	}
 
 	if (kexiType == KexiDB::Field::InvalidType) {
-		return userType(table);
+		return userType(table + '.' + QString::fromUtf8(fld->name));
 	}
 	return kexiType;
 }
