@@ -79,9 +79,8 @@ void BitOpsModule::registerFunctions()
 
 void BitOpsModule::removeFunctions()
 {
-    QStringList functions;
-    functions << "BITAND" << "BITOR" << "BITXOR" << "BITLSHIFT" << "BITRSHIFT";
-    FunctionRepository::self()->remove(functions);
+    // NOTE: The group name has to match the one in the xml description.
+    FunctionRepository::self()->remove("Bit Operations");
 }
 
 

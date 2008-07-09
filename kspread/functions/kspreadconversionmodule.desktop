@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Conversion Functions
+Comment=ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING
 X-KDE-ServiceTypes=KSpread/Plugin
 Type=Service
 X-KDE-Library=kspreadconversionmodule

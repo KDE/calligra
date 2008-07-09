@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Logic Functions
+Comment=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
 X-KDE-ServiceTypes=KSpread/Plugin
 Type=Service
 X-KDE-Library=kspreadlogicmodule

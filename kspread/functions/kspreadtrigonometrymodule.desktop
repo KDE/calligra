@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Trigonometry Functions
+Comment=ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH
 X-KDE-ServiceTypes=KSpread/Plugin
 Type=Service
 X-KDE-Library=kspreadtrigonometrymodule

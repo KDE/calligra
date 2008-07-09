@@ -336,7 +336,8 @@ void FinancialModule::registerFunctions()
 
 void FinancialModule::removeFunctions()
 {
-    // TODO
+    // NOTE: The group name has to match the one in the xml description.
+    FunctionRepository::self()->remove("Financial");
 }
 
 

@@ -222,7 +222,8 @@ void DateTimeModule::registerFunctions()
 
 void DateTimeModule::removeFunctions()
 {
-    // TODO
+    // NOTE: The group name has to match the one in the xml description.
+    FunctionRepository::self()->remove("Date & Time");
 }
 
 

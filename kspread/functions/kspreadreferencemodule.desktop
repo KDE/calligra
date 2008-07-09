@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Reference Functions
+Comment=ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, ROW, ROWS, VLOOKUP
 X-KDE-ServiceTypes=KSpread/Plugin
 Type=Service
 X-KDE-Library=kspreadreferencemodule

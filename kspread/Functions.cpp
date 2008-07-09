@@ -238,11 +238,21 @@ void FunctionRepository::add( FunctionDescription *desc )
   d->descriptions.insert (desc->name(), desc);
 }
 
-void FunctionRepository::remove(const QStringList& functions)
+void FunctionRepository::remove(const QString& groupName)
 {
-    foreach (QString function, functions) {
-        d->functions.remove(function);
-        d->descriptions.remove(function);
+    if (!d->groups.contains(groupName)) {
+        return;
+    }
+    d->groups.removeAll(groupName);
+    QStringList functionNames;
+    foreach (FunctionDescription* description, d->descriptions) {
+        if (description->group() == groupName) {
+            functionNames.append(description->name());
+        }
+    }
+    foreach (QString functionName, functionNames) {
+        d->functions.remove(functionName);
+        d->descriptions.remove(functionName);
     }
 }
 

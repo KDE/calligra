@@ -144,7 +144,7 @@ public:
 
   void add (Function *function);
   void add (FunctionDescription *desc);
-    void remove(const QStringList& functions);
+    void remove(const QString& groupName);
 
   Function *function (const QString& name);
 

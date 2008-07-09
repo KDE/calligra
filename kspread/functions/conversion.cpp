@@ -114,7 +114,8 @@ void ConversionModule::registerFunctions()
 
 void ConversionModule::removeFunctions()
 {
-    // TODO
+    // NOTE: The group name has to match the one in the xml description.
+    FunctionRepository::self()->remove("Conversion");
 }
 
 

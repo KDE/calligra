@@ -360,7 +360,8 @@ void MathModule::registerFunctions()
 
 void MathModule::removeFunctions()
 {
-    // TODO
+    // NOTE: The group name has to match the one in the xml description.
+    FunctionRepository::self()->remove("Math");
 }
 
 

@@ -122,7 +122,8 @@ void TrigonometryModule::registerFunctions()
 
 void TrigonometryModule::removeFunctions()
 {
-    // TODO
+    // NOTE: The group name has to match the one in the xml description.
+    FunctionRepository::self()->remove("Trigonometric");
 }
 
 
