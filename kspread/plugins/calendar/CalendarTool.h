@@ -36,6 +36,13 @@ public Q_SLOTS:
     virtual void activate(bool temporary = false);
     virtual void deactivate();
 
+     /**
+      * This actually inserts the calendar. It reads the configuration
+      * from the insert calendar dialog and builds an calendar in the
+      * spreadsheet accordingly.
+      */
+     void insertCalendar(const QDate &start, const QDate &end);
+
 private:
     virtual QWidget* createOptionWidget();
 
