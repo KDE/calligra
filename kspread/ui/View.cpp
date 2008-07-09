@@ -170,8 +170,6 @@ namespace KSpread
 {
 class ViewActions;
 
-K_GLOBAL_STATIC_WITH_ARGS(DefaultToolFactory, s_defaultToolFactory, (0))
-
 class View::Private
 {
 public:
@@ -748,7 +746,7 @@ void View::initView()
     d->canvas->resourceProvider()->setResource( Canvas::Selection, variant );
 
     // Setup the tool dock widget.
-    KoToolRegistry::instance()->add(s_defaultToolFactory);
+    KoToolRegistry::instance()->add(new DefaultToolFactory(this, "KSpreadDefaultToolId", i18n("Cell Tool")));
     KoToolManager::instance()->addController( d->canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), d->canvasController );
     KoToolBoxFactory toolBoxFactory(d->canvasController, i18n("Tools"));

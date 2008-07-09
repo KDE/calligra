@@ -22,10 +22,12 @@
 
 #include "CellToolBase.h"
 
+#include "kspread_export.h"
+
 namespace KSpread
 {
 
-class DefaultTool : public CellToolBase
+class KSPREAD_EXPORT DefaultTool : public CellToolBase
 {
     Q_OBJECT
 

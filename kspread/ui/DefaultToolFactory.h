@@ -32,7 +32,7 @@ class DefaultToolFactory : public KoToolFactory
 {
     Q_OBJECT
 public:
-    explicit DefaultToolFactory( QObject* parent );
+    explicit DefaultToolFactory(QObject* parent, const QString& id, const QString& name);
     ~DefaultToolFactory();
 
     KoTool* createTool( KoCanvasBase* canvas );

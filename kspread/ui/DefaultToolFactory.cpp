@@ -26,8 +26,8 @@
 
 using namespace KSpread;
 
-DefaultToolFactory::DefaultToolFactory( QObject* parent )
-    : KoToolFactory( parent, KSPREAD_DEFAULT_TOOL_ID, i18n( "Cell Tool" ) )
+DefaultToolFactory::DefaultToolFactory(QObject* parent, const QString& id, const QString& name)
+    : KoToolFactory(parent, id, name)
 {
     setToolTip( i18n( "Cell Tool" ) );
     setIcon( "kspread" );
