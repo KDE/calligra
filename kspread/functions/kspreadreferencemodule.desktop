@@ -1,9 +1,10 @@
 [Desktop Entry]
 Name=Reference Functions
 Comment=ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, ROW, ROWS, VLOOKUP
-X-KDE-ServiceTypes=KSpread/Plugin
+Icon=funct
 Type=Service
 X-KDE-Library=kspreadreferencemodule
+X-KDE-ServiceTypes=KSpread/Plugin,KPluginInfo
 X-KSpread-Version=2
 X-KDE-PluginInfo-Author=The KSpread Team
 X-KDE-PluginInfo-Email=koffice-devel@kde.org

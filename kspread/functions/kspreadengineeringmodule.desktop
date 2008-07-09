@@ -1,9 +1,10 @@
 [Desktop Entry]
 Name=Engineering Functions
 Comment=BASE, BESSELI, BESSELJ, BESSELK, BESSELY, BIN2DEC, BIN2HEX, BIN2OCT, COMPLEX, CONVERT, DEC2BIN, DEC2HEX, DEC2OCT, DELTA, ERF, ERFC, GESTEP, HEX2BIN, HEX2DEC, HEX2OCT, IMABS, IMAGINARY, IMARGUMENT, IMCONJUGATE, IMCOS, IMCOSH, IMDIV, IMEXP, IMLN, IMLOG10, IMLOG2, IMPOWER, IMPRODUCT, IMREAL, IMSIN, IMSINH, IMSQRT, IMSUB, IMSUM, IMTAN, IMTANH, OCT2BIN, OCT2DEC, OCT2HEX
-X-KDE-ServiceTypes=KSpread/Plugin
+Icon=funct
 Type=Service
 X-KDE-Library=kspreadengineeringmodule
+X-KDE-ServiceTypes=KSpread/Plugin,KPluginInfo
 X-KSpread-Version=2
 X-KDE-PluginInfo-Author=The KSpread Team
 X-KDE-PluginInfo-Email=koffice-devel@kde.org

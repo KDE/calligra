@@ -1,9 +1,10 @@
 [Desktop Entry]
 Name=Database Functions
 Comment=DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA
-X-KDE-ServiceTypes=KSpread/Plugin
+Icon=funct
 Type=Service
 X-KDE-Library=kspreaddatabasemodule
+X-KDE-ServiceTypes=KSpread/Plugin,KPluginInfo
 X-KSpread-Version=2
 X-KDE-PluginInfo-Author=The KSpread Team
 X-KDE-PluginInfo-Email=koffice-devel@kde.org

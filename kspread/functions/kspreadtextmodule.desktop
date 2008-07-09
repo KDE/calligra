@@ -1,9 +1,10 @@
 [Desktop Entry]
 Name=Text Functions
 Comment=ASC, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE
-X-KDE-ServiceTypes=KSpread/Plugin
+Icon=funct
 Type=Service
 X-KDE-Library=kspreadtextmodule
+X-KDE-ServiceTypes=KSpread/Plugin,KPluginInfo
 X-KSpread-Version=2
 X-KDE-PluginInfo-Author=The KSpread Team
 X-KDE-PluginInfo-Email=koffice-devel@kde.org
