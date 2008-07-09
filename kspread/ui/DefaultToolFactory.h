@@ -20,15 +20,16 @@
 #ifndef KSPREAD_DEFAULT_TOOL_FACTORY
 #define KSPREAD_DEFAULT_TOOL_FACTORY
 
-
 #include <KoToolFactory.h>
+
+#include "kspread_export.h"
 
 #define KSPREAD_DEFAULT_TOOL_ID "KSpreadDefaultToolId"
 
 namespace KSpread
 {
 
-class DefaultToolFactory : public KoToolFactory
+class KSPREAD_EXPORT DefaultToolFactory : public KoToolFactory
 {
     Q_OBJECT
 public:
@@ -36,6 +37,9 @@ public:
     ~DefaultToolFactory();
 
     KoTool* createTool( KoCanvasBase* canvas );
+
+    void setToolTip(const QString& toolTip);
+    void setIcon(const QString& icon);
 };
 
 } // namespace

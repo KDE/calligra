@@ -45,4 +45,14 @@ KoTool* DefaultToolFactory::createTool( KoCanvasBase* canvas )
     return new DefaultTool( canvas );
 }
 
+void DefaultToolFactory::setToolTip(const QString& toolTip)
+{
+    KoToolFactory::setToolTip(toolTip);
+}
+
+void DefaultToolFactory::setIcon(const QString& icon)
+{
+    KoToolFactory::setIcon(icon);
+}
+
 #include "DefaultToolFactory.moc"

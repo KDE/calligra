@@ -666,7 +666,7 @@ void RowHeader::drawText( QPainter& painter, const QFont& font,
 
 void RowHeader::toolChanged(const QString& toolId)
 {
-    m_cellToolIsActive = (toolId == KSPREAD_DEFAULT_TOOL_ID);
+    m_cellToolIsActive = toolId.startsWith("KSpread");
     update();
 }
 
@@ -1485,7 +1485,7 @@ void ColumnHeader::drawText( QPainter& painter, const QFont& font,
 
 void ColumnHeader::toolChanged(const QString& toolId)
 {
-    m_cellToolIsActive = (toolId == KSPREAD_DEFAULT_TOOL_ID);
+    m_cellToolIsActive = toolId.startsWith("KSpread");
     update();
 }
 
@@ -1577,7 +1577,7 @@ void SelectAllButton::wheelEvent(QWheelEvent* event)
 
 void SelectAllButton::toolChanged(const QString& toolId)
 {
-    m_cellToolIsActive = (toolId == KSPREAD_DEFAULT_TOOL_ID);
+    m_cellToolIsActive = toolId.startsWith("KSpread");
     update();
 }
 

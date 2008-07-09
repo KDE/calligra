@@ -198,6 +198,7 @@ SET (kspreadcommon_LIB_SRCS
 	StyleManager.cpp
 	StyleStorage.cpp
 # 	Toolbox.cpp
+	ToolRegistry.cpp
 	Util.cpp
 	Validity.cpp
 	Value.cpp

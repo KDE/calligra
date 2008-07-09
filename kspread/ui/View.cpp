@@ -116,7 +116,6 @@
 #include "CellStorage.h"
 #include "CellView.h"
 #include "Damages.h"
-#include "DefaultToolFactory.h"
 #include "DependencyManager.h"
 #include "Digest.h"
 #include "Doc.h"
@@ -140,6 +139,7 @@
 #include "Style.h"
 #include "StyleManager.h"
 #include "StyleStorage.h"
+#include "ToolRegistry.h"
 #include "Util.h"
 #include "ValueCalc.h"
 #include "ValueConverter.h"
@@ -745,8 +745,10 @@ void View::initView()
     variant.setValue<void*>( d->selection );
     d->canvas->resourceProvider()->setResource( Canvas::Selection, variant );
 
+    // Load the KSpread Tools
+    ToolRegistry::instance();
+
     // Setup the tool dock widget.
-    KoToolRegistry::instance()->add(new DefaultToolFactory(this, "KSpreadDefaultToolId", i18n("Cell Tool")));
     KoToolManager::instance()->addController( d->canvasController );
     KoToolManager::instance()->registerTools( actionCollection(), d->canvasController );
     KoToolBoxFactory toolBoxFactory(d->canvasController, i18n("Tools"));
@@ -1157,7 +1159,7 @@ void View::initialPosition()
     refreshView();
 
     // Activate the cell tool.
-    KoToolManager::instance()->switchToolRequested(KSPREAD_DEFAULT_TOOL_ID);
+    KoToolManager::instance()->switchToolRequested("KSpreadDefaultToolId");
 }
 
 void View::activateFormulaEditor()

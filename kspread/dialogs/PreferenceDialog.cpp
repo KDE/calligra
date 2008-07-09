@@ -382,6 +382,8 @@ PreferenceDialog::PreferenceDialog(View* view)
     const QList<KPluginInfo> pluginInfoList = KPluginInfo::fromServices(offers);
     d->pluginSelector->addPlugins(pluginInfoList, KPluginSelector::ReadConfigFile,
                                   i18n("Function Modules"), "FunctionModule");
+    d->pluginSelector->addPlugins(pluginInfoList, KPluginSelector::ReadConfigFile,
+                                  i18n("Tools"), "Tool");
     d->pluginSelector->load();
     page = new KPageWidgetItem(d->pluginSelector, i18n("Plugins"));
     page->setIcon(KIcon("preferences-plugin"));
