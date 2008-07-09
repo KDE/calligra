@@ -31,7 +31,7 @@ KAboutData* newKivioAboutData()
 {
   KAboutData* aboutData = new KAboutData("kivio", 0, ki18n("Kivio"),
                                 KIVIO_VERSION, ki18n(KIVIO_DESCRIPTION), KAboutData::License_LGPL,
-                                ki18n("(C) 2000-2007, The Kivio Team"), KLocalizedString(),
+                                ki18n("(C) 2000-2008, The Kivio Team"), KLocalizedString(),
                                 "http://www.koffice.org/kivio/");
   aboutData->addAuthor(ki18n("Peter Simonsson"), ki18n("Maintainer"), "peter.simonsson@gmail.com");
 

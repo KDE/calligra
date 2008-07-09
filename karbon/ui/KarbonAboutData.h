@@ -18,8 +18,9 @@ KAboutData * newKarbonAboutData()
 		version,
 		ki18n(description),
 		KAboutData::License_LGPL,
-		ki18n( "(c) 2001-2007, The Karbon Developers" ),
+		ki18n( "(c) 2001-2008, The Karbon Developers" ),
 		ki18n( "You are invited to participate in any way." ),
+
 		"http://www.koffice.org/karbon/");
 	aboutData->addAuthor(
 		ki18n("Rob Buis"),

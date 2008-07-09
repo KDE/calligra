@@ -36,7 +36,7 @@ KAboutData * newKWordAboutData()
 {
     KAboutData * aboutData=new KAboutData( "kword", 0, ki18n("KWord"),
                                            KWORD_VERSION, ki18n(KWORD_DESCRIPTION), KAboutData::License_LGPL,
-                                           ki18n("(c) 1998-2007, The KWord Team"), KLocalizedString(),
+                                           ki18n("(c) 1998-2008, The KWord Team"), KLocalizedString(),
                                            "http://www.koffice.org/kword/" );
     aboutData->addAuthor(ki18n("David Faure"), KLocalizedString(), "faure@kde.org");
     aboutData->addAuthor(ki18n("Thomas Zander"));
