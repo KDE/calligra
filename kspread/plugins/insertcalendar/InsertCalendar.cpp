@@ -25,7 +25,7 @@
 
 #include "InsertCalendarDialog.h"
 
-#include "View.h"
+#include "ui/View.h"
 #include "Doc.h"
 #include "Selection.h"
 #include "Sheet.h"

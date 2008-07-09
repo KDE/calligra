@@ -1,0 +1,19 @@
+[Desktop Entry]
+Name=Calendar Tool
+Comment=Inserts a calendar into a cell range.
+Icon=office-calendar
+Type=Service
+X-KDE-Library=kspread_plugin_tool_calendar
+X-KDE-ServiceTypes=KSpread/Plugin,KOfficePlugin,KPluginInfo
+X-KSpread-Version=2
+MenuEntries=
+ToolBarEntries=
+X-KDE-PluginInfo-Author=Raphael Langerhorst
+X-KDE-PluginInfo-Email=raphael.langerhorst@kdemail.net
+X-KDE-PluginInfo-Name=CalendarTool
+X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-Website=http://www.koffice.org/
+X-KDE-PluginInfo-Category=Tool
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-License=GPL
+X-KDE-PluginInfo-EnabledByDefault=true

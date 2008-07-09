@@ -1,0 +1,58 @@
+<ui version="4.0" >
+ <class>CalendarToolWidget</class>
+ <widget class="QWidget" name="CalendarToolWidget" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>270</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Calendar Tool</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3" >
+   <item>
+    <widget class="QPushButton" name="pushButton" >
+     <property name="text" >
+      <string>Insert</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox" >
+     <property name="title" >
+      <string>Start date</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout" >
+      <item>
+       <widget class="KDatePicker" name="kdatepicker" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="groupBox_2" >
+     <property name="title" >
+      <string>End date</string>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2" >
+      <item>
+       <widget class="KDatePicker" name="kdatepicker_2" />
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>KDatePicker</class>
+   <extends>QFrame</extends>
+   <header>kdatepicker.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
