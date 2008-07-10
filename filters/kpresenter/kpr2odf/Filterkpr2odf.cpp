@@ -387,6 +387,7 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
         case 11: //freehand
             break;
         case 12: // polyline
+            //a bunch of points that are connected and not closed
             appendPoly( content, objectElement, false /*polyline*/ );
             break;
         case 13: //quadratic bezier curve
@@ -394,9 +395,12 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
         case 14: //cubic bezier curve
             break;
         case 15: //polygon
-            appendPoly( content, objectElement, true /*polygon*/ );
+            //a regular polygon, easily drawn by the number of sides it has
+            appendPolygon( content, objectElement );
             break;
-        case 16: //close line
+        case 16: //closed polyline
+            //that is a closed non-regular polygon
+            appendPoly( content, objectElement, true /*polygon*/ );
             break;
         default:
             kWarning()<<"Unexpected object found in page "<<m_currentPage;
@@ -618,6 +622,7 @@ void Filterkpr2odf::appendPoly( KoXmlWriter* content, const KoXmlElement& object
 {
     //The function was written so to add polygon and polyline because it's basically the same,
     //only the name is changed and I didn't want to copy&paste
+    //TODO: find out wether i shuld use draw:regular-polygon instead of draw:polygon
     content->startElement( ( polygon )? "draw:polygon" : "draw:polyline" );
 
     content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
@@ -655,6 +660,30 @@ void Filterkpr2odf::appendPoly( KoXmlWriter* content, const KoXmlElement& object
     }//if !points.isNull()
 
     content->endElement();//draw:polygon or draw:polyline
+}
+
+void Filterkpr2odf::appendPolygon( KoXmlWriter* content, const KoXmlElement& objectElement )
+{
+    content->startElement( "draw:regular-polygon" );
+
+    set2DGeometry( content, objectElement );
+
+    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+    KoXmlElement settings = objectElement.namedItem( "SETTINGS" ).toElement();
+    int corners = settings.attribute( "cornersValue" ).toInt();
+    content->addAttribute( "draw:corners", corners );
+    bool concavePolygon = settings.attribute( "checkConcavePolygon", "0" ) == "1";
+    if( concavePolygon )
+    {
+        content->addAttribute( "draw:concave", "true" );
+        content->addAttribute( "draw:sharpness", QString( "%1%" ).arg( settings.attribute( "sharpnessValue" ) ) );
+    }
+    else
+    {
+        content->addAttribute( "draw:concave", "false" );
+    }
+
+    content->endElement();//draw:regular-polygon
 }
 
 const QString Filterkpr2odf::getPictureNameFromKey( const KoXmlElement& key )

@@ -60,6 +60,7 @@ private:
     void appendPie( KoXmlWriter* content, const KoXmlElement& objectElement );
     void appendGroupObject( KoXmlWriter* content, const KoXmlElement& objectElement );
     void appendPoly( KoXmlWriter* content, const KoXmlElement& objectElement, bool polygon );
+    void appendPolygon( KoXmlWriter* content, const KoXmlElement& objectElement );
 
     const QString getPictureNameFromKey( const KoXmlElement& key );
     void set2DGeometry( KoXmlWriter* content, const KoXmlElement& objectElement );
