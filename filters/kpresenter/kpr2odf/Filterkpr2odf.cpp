@@ -255,7 +255,7 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
     KoXmlElement pageBackground = backgrounds.firstChild().toElement();
     //Parse pages
     //create the master page style
-    const QString masterPageStyleName( createMasterPageStyle() );
+    const QString masterPageStyleName = createMasterPageStyle();
     //The pages are all stored inside PAGETITLES
     //and all notes in PAGENOTES
     KoXmlNode title = titles.firstChild();
@@ -307,7 +307,7 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
 
     //Specify wether the effects can be started automatically or
     //ignore any previous order and start them manually
-    KoXmlElement manualSwitch( m_mainDoc.namedItem( "DOC" ).namedItem( "MANUALSWITCH" ).toElement() );
+    KoXmlElement manualSwitch = m_mainDoc.namedItem( "DOC" ).namedItem( "MANUALSWITCH" ).toElement();
     if( !manualSwitch.isNull() )
     {
         bool value = manualSwitch.attribute( "value", "0" ) == "1";
@@ -322,7 +322,7 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
     }
 
     //Now store all the shows
-    KoXmlElement customSlideShowConfig( m_mainDoc.namedItem( "DOC" ).namedItem( "CUSTOMSLIDESHOWCONFIG" ).toElement() );
+    KoXmlElement customSlideShowConfig = m_mainDoc.namedItem( "DOC" ).namedItem( "CUSTOMSLIDESHOWCONFIG" ).toElement();
     for( KoXmlElement customSlideShow = customSlideShowConfig.firstChild().toElement(); !customSlideShow.isNull();
           customSlideShow = customSlideShow.nextSibling().toElement() )
     {
@@ -376,21 +376,25 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
         case 6: //clipart
             break;
         //NOTE: 7 is undefined, never happens in a file (according to kpresenter.dtd)
-        case 8: // pie
+        case 8: // pie, chord, arc
+            appendPie( content, objectElement );
             break;
         case 9: //part
             break;
         case 10: //group
+            appendGroupObject( content, objectElement );
             break;
         case 11: //freehand
             break;
         case 12: // polyline
+            appendPoly( content, objectElement, false /*polyline*/ );
             break;
         case 13: //quadratic bezier curve
             break;
         case 14: //cubic bezier curve
             break;
         case 15: //polygon
+            appendPoly( content, objectElement, true /*polygon*/ );
             break;
         case 16: //close line
             break;
@@ -405,34 +409,8 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
 void Filterkpr2odf::appendPicture( KoXmlWriter* content, const KoXmlElement& objectElement )
 {
     content->startElement( "draw:frame" );
-    set2DGeometry( objectElement, *content );//sizes mostly
+    set2DGeometry( content, objectElement );//sizes mostly
     content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
-
-    //apply the simple properties  (that is the ones that don't need but one attribute)
-    KoXmlElement pictureSettings = objectElement.namedItem( "PICTURESETTINGS" ).toElement();
-    if( !pictureSettings.isNull() )
-    {
-        bool grayscal = pictureSettings.attribute( "grayscal", "0" ) == "1";
-        if( grayscal )
-        {
-            //FIXME: OO Impress doesn't load it even though if I apply a grayscale to a picture in it it is saved like this
-            content->addAttribute( "draw:color-mode", "greyscale" );
-        }
-
-        int bright = pictureSettings.attribute( "bright", "0" ).toInt();
-        if( bright != 0 )
-        {
-            content->addAttribute( "draw:luminance", QString( "%1%" ).arg( bright ) );
-        }
-
-        bool swapRGB = pictureSettings.attribute( "bright", "0" ) == "1";
-        if( swapRGB )
-        {
-            content->addAttribute( "draw:color-inversion", "true" );
-        }
-
-        //NOTE: depth is not portable
-    }
 
     content->startElement( "draw:image" );
     content->addAttribute( "xlink:type", "simple" );
@@ -514,7 +492,7 @@ void Filterkpr2odf::appendRectangle( KoXmlWriter* content, const KoXmlElement& o
     content->startElement( "draw:rect" );
 
     content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
-    set2DGeometry( objectElement, *content );
+    set2DGeometry( content, objectElement );
 
     content->endElement();//draw:rect
 }
@@ -527,28 +505,156 @@ void Filterkpr2odf::appendEllipse( KoXmlWriter* content, const KoXmlElement& obj
 
     content->startElement( ( width == height ) ? "draw:circle" : "draw:ellipse" );
     content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
-    set2DGeometry( objectElement, *content );
+    set2DGeometry( content, objectElement );
 
     content->endElement();//draw:circle or draw:ellipse
 }
 
 void Filterkpr2odf::appendTextBox( KoXmlWriter* content, const KoXmlElement& objectElement )
 {
+    content->startElement( "draw:frame" );
+    set2DGeometry( content, objectElement );
+
     content->startElement( "draw:text-box" );
-
     KoXmlElement textObject = objectElement.namedItem( "TEXTOBJ" ).toElement();
-
-    //export "settings"
     content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
-    set2DGeometry( objectElement, *content );
 
-    //xport every paragraph
+    //export every paragraph
     for( KoXmlElement paragraph = textObject.firstChild().toElement(); !paragraph.isNull(); paragraph = paragraph.nextSibling().toElement() )
     {
-//         appendParagraph();
+        appendParagraph( content, paragraph );
     }
 
     content->endElement();//draw:text-box
+    content->endElement();//draw:frame
+}
+
+void Filterkpr2odf::appendParagraph( KoXmlWriter* content, const KoXmlElement& objectElement )
+{
+    content->startElement( "text:p" );
+    content->addAttribute( "text:style-name", createParagraphStyle( objectElement ) );
+
+    //convert every text element
+    for( KoXmlElement text = objectElement.firstChild().toElement(); !text.isNull();  text = text.nextSibling().toElement() )
+    {
+        if( text.nodeName() == "TEXT" ) //only TEXT childs are relevant
+        {
+            appendText( content, text );
+        }
+    }
+
+    content->endElement();//text:p
+}
+
+void Filterkpr2odf::appendText( KoXmlWriter* content, const KoXmlElement& objectElement )
+{
+    content->startElement( "text:span" );
+
+    content->addAttribute( "text:style-name", createTextStyle( objectElement ) );
+    content->addTextNode( objectElement.text() );
+
+    content->endElement();//text:span
+}
+
+void Filterkpr2odf::appendPie( KoXmlWriter* content, const KoXmlElement& objectElement )
+{
+    KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
+    double width = size.attribute( "width" ).toDouble();
+    double height = size.attribute( "height" ).toDouble();
+
+    content->startElement( ( width == height ) ? "draw:circle" : "draw:ellipse" );
+    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+    set2DGeometry( content, objectElement );
+
+    //Type of the enclosure of the circle/ellipse
+    KoXmlElement pie = objectElement.namedItem( "PIETYPE" ).toElement();
+    QString kind = "section";//We didn't find the type, we set "section" by default
+    if( !pie.isNull() )
+    {
+        int typePie = pie.attribute( "value" ).toInt();
+        switch( typePie )
+        {
+        case 0:
+            kind = "section";
+            break;
+        case 1:
+            kind = "arc";
+            break;
+        case 2:
+            kind = "cut";
+            break;
+        }
+    }
+    content->addAttribute( "draw:kind", kind );
+
+    KoXmlElement pieAngle = objectElement.namedItem( "PIEANGLE" ).toElement();
+    int startAngle = 45; //default value take it into kppieobject
+    if( !pieAngle.isNull() )
+    {
+        startAngle = ( pieAngle.attribute( "value" ).toInt() ) / 16;
+    }
+    content->addAttribute( "draw:start-angle", startAngle );
+
+    KoXmlElement pieLength = objectElement.namedItem( "PIELENGTH" ).toElement();
+    int endAngle = 90 + startAngle; //default
+    if( !pieLength.isNull() )
+    {
+        endAngle = pieLength.attribute( "value" ).toInt() / 16 + startAngle;
+    }
+    content->addAttribute( "draw:end-angle", endAngle );
+
+    content->endElement();//draw:circle or draw:ellipse
+}
+
+void Filterkpr2odf::appendGroupObject( KoXmlWriter* content, const KoXmlElement& objectElement )
+{
+    content->startElement( "draw:g" );
+    KoXmlElement objects = objectElement.namedItem( "OBJECTS" ).toElement();
+    convertObjects( content, objects );
+    content->endElement();//draw:g
+}
+
+void Filterkpr2odf::appendPoly( KoXmlWriter* content, const KoXmlElement& objectElement, bool polygon )
+{
+    //The function was written so to add polygon and polyline because it's basically the same,
+    //only the name is changed and I didn't want to copy&paste
+    content->startElement( ( polygon )? "draw:polygon" : "draw:polyline" );
+
+    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+
+    set2DGeometry( content, objectElement );
+    KoXmlElement points = objectElement.namedItem( "POINTS" ).toElement();
+    if( !points.isNull() ) {
+        KoXmlElement elemPoint = points.firstChild().toElement();
+        QString listOfPoints;
+        int maxX = 0;
+        int maxY = 0;
+        while( !elemPoint.isNull() ) {
+            if( elemPoint.tagName() == "Point" ) {
+                //FIXME: according to KPresenter1.6 the following conversion should be ok,
+                //ooimpressexport handles it diferently: toMillimeters( ... ) * 100, so is it coorect?
+                int tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
+                int tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
+
+                //No white spaces allowed before the first element
+                if( !listOfPoints.isEmpty() )
+                {
+                    listOfPoints += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
+                }
+                else
+                {
+                    listOfPoints = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
+                }
+                maxX = qMax( maxX, tmpX );
+                maxY = qMax( maxY, tmpY );
+            }//if tagName == "Point"
+            elemPoint = elemPoint.nextSibling().toElement();
+        }//while !element.isNull()
+        content->addAttribute( "draw:points", listOfPoints );
+        content->addAttribute( "svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
+    }//if !points.isNull()
+
+    content->endElement();//draw:polygon or draw:polyline
 }
 
 const QString Filterkpr2odf::getPictureNameFromKey( const KoXmlElement& key )
@@ -558,40 +664,40 @@ const QString Filterkpr2odf::getPictureNameFromKey( const KoXmlElement& key )
            + key.attribute( "year" ) + key.attribute( "filename" );
 }
 
-void Filterkpr2odf::set2DGeometry( const KoXmlElement& source, KoXmlWriter& target )
+void Filterkpr2odf::set2DGeometry( KoXmlWriter* content, const KoXmlElement& objectElement )
 {
     //This function sets the needed geometry-related attributes
     //for any object that is passed to it
 
-    KoXmlElement name = source.namedItem( "OBJECTNAME" ).toElement();
+    KoXmlElement name = objectElement.namedItem( "OBJECTNAME" ).toElement();
 
     QString nameStr = name.attribute( "objectName" );
     if( !nameStr.isEmpty() )
     {
-        target.addAttribute( "draw:name", nameStr );
+        content->addAttribute( "draw:name", nameStr );
     }
 
-    KoXmlElement angle = source.namedItem( "ANGLE" ).toElement();
+    KoXmlElement angle = objectElement.namedItem( "ANGLE" ).toElement();
     if( !angle.isNull() )
     {
         QString returnAngle = rotateValue( angle.attribute( "value" ).toDouble() );
         if( !returnAngle.isEmpty() )
         {
-            target.addAttribute( "draw:transform", returnAngle );
+            content->addAttribute( "draw:transform", returnAngle );
         }
     }
 
-    KoXmlElement size = source.namedItem( "SIZE" ).toElement();
-    KoXmlElement orig = source.namedItem( "ORIG" ).toElement();
+    KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
+    KoXmlElement orig = objectElement.namedItem( "ORIG" ).toElement();
 
     float y = orig.attribute( "y" ).toFloat();
     y -= m_pageHeight * ( m_currentPage - 1 );
 
-    target.addAttribute( "draw:id", QString( "object%1" ).arg( m_objectIndex ) );
-    target.addAttribute( "svg:x", QString( "%1cm" ).arg( KoUnit::toCentimeter( orig.attribute( "x" ).toDouble() ) ) );
-    target.addAttribute( "svg:y", QString( "%1cm" ).arg( KoUnit::toCentimeter( y ) ) );
-    target.addAttribute( "svg:width", QString( "%1cm" ).arg( KoUnit::toCentimeter( size.attribute( "width" ).toDouble() ) ) );
-    target.addAttribute( "svg:height", QString( "%1cm" ).arg( KoUnit::toCentimeter( size.attribute( "height" ).toDouble() ) ) );
+    content->addAttribute( "draw:id", QString( "object%1" ).arg( m_objectIndex ) );
+    content->addAttribute( "svg:x", QString( "%1cm" ).arg( KoUnit::toCentimeter( orig.attribute( "x" ).toDouble() ) ) );
+    content->addAttribute( "svg:y", QString( "%1cm" ).arg( KoUnit::toCentimeter( y ) ) );
+    content->addAttribute( "svg:width", QString( "%1cm" ).arg( KoUnit::toCentimeter( size.attribute( "width" ).toDouble() ) ) );
+    content->addAttribute( "svg:height", QString( "%1cm" ).arg( KoUnit::toCentimeter( size.attribute( "height" ).toDouble() ) ) );
 }
 
 QString Filterkpr2odf::rotateValue( double val )
@@ -599,101 +705,12 @@ QString Filterkpr2odf::rotateValue( double val )
     QString str;
     if ( val != 0.0 )
     {
-        double value = -1 * ( ( double )val * M_PI ) / 180.0;
+        //FIXME: OOo needs -1 *, KPresenter loads it just fine, which is the right behavior?
+        double value = ( ( double )val * M_PI ) / 180.0;
         str = QString( "rotate(%1)" ).arg( value );
     }
     return str;
 }
-
-//TODO: find a finction to integrate the following code, was part of set2DGeometry, but cannot longer be there as they aren't stored in the element per se
-//     //If the object is a "pie" (a circle) or a "multi-point" object
-//     //it needs some other attributes
-//     if( pieObject )
-//     {
-//         //Type of the enclosure of the circle
-//         KoXmlElement pie = source.namedItem( "PIETYPE" ).toElement();
-//         if( !pie.isNull() )
-//         {
-//             int typePie = pie.attribute( "value" ).toInt();
-//             switch( typePie )
-//             {
-//             case 0:
-//                 target.addAttribute( "draw:kind", "section" );
-//                 break;
-//             case 1:
-//                 target.addAttribute( "draw:kind", "arc" );
-//                 break;
-//             case 2:
-//                 target.addAttribute( "draw:kind", "cut" );
-//                 break;
-//             default:
-//                 kDebug(30518)<<" type unknown :"<<typePie;
-//                 break;
-//             }
-//         }
-//         else
-//         {
-//             //We didn't find the type, we set "section" by default
-//             target.addAttribute( "draw:kind", "section");
-//         }
-//
-//         KoXmlElement pieAngle = source.namedItem( "PIEANGLE" ).toElement();
-//         int startAngle = 45; //default value take it into kppieobject
-//         if( !pieAngle.isNull() )
-//         {
-//             startAngle = ( pieAngle.attribute( "value" ).toInt() ) / 16;
-//         }
-//         target.addAttribute( "draw:start-angle", startAngle );
-//
-//         KoXmlElement pieLength = source.namedItem( "PIELENGTH" ).toElement();
-//         if( !pieLength.isNull() )
-//         {
-//             int value = pieLength.attribute( "value" ).toInt();
-//             value /= 16;
-//             value += startAngle;
-//             target.addAttribute( "draw:end-angle", value );
-//         }
-//         else
-//         {
-//             //default value take it into kppieobject
-//             //default is 90 in kpresenter
-//             target.addAttribute( "draw:end-angle", ( 90 + startAngle ) );
-//         }
-//     }//if pieObject
-
-//     if( multiPoint )
-//     {
-//         KoXmlElement points = source.namedItem( "POINTS" ).toElement();
-//         if( !points.isNull() ) {
-//             KoXmlElement elemPoint = points.firstChild().toElement();
-//             QString listOfPoints;
-//             int maxX = 0;
-//             int maxY = 0;
-//             while( !elemPoint.isNull() ) {
-//                 if( elemPoint.tagName() == "Point" ) {
-//                     //FIXME: according to KPresenter1.6 the following conversion should be ok,
-//                     //ooimpressexport handles it diferently: toMillimeters( ... ) * 100, so is it coorect?
-//                     int tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
-//                     int tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
-//
-//                     //No white spaces allowed before the first element
-//                     if( !listOfPoints.isEmpty() )
-//                     {
-//                         listOfPoints += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
-//                     }
-//                     else
-//                     {
-//                         listOfPoints = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
-//                     }
-//                     maxX = qMax( maxX, tmpX );
-//                     maxY = qMax( maxY, tmpY );
-//                 }//if tagName == "Point"
-//                 elemPoint = elemPoint.nextSibling().toElement();
-//             }//while !element.isNull()
-//             target.addAttribute( "draw:points", listOfPoints );
-//             target.addAttribute( "svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
-//         }//if !points.isNull()
-//     }//if multipoint
 
 #include "StylesFilterkpr2odf.cpp"
 

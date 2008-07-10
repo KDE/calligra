@@ -49,14 +49,20 @@ private:
     void convertContent( KoXmlWriter* content );
     void convertObjects( KoXmlWriter* content, const KoXmlNode& objects );
 
+    //Objects' functions
     void appendPicture( KoXmlWriter* content, const KoXmlElement& objectElement );
     void appendLine( KoXmlWriter* content, const KoXmlElement& objectElement );
     void appendRectangle( KoXmlWriter* content, const KoXmlElement& objectElement );
     void appendEllipse( KoXmlWriter* content, const KoXmlElement& objectElement );
     void appendTextBox( KoXmlWriter* content, const    KoXmlElement& objectElement );
+    void appendParagraph( KoXmlWriter* content, const    KoXmlElement& objectElement );
+    void appendText( KoXmlWriter* content, const    KoXmlElement& objectElement );
+    void appendPie( KoXmlWriter* content, const KoXmlElement& objectElement );
+    void appendGroupObject( KoXmlWriter* content, const KoXmlElement& objectElement );
+    void appendPoly( KoXmlWriter* content, const KoXmlElement& objectElement, bool polygon );
 
     const QString getPictureNameFromKey( const KoXmlElement& key );
-    void set2DGeometry( const KoXmlElement& source, KoXmlWriter& target );
+    void set2DGeometry( KoXmlWriter* content, const KoXmlElement& objectElement );
     QString rotateValue( double val );
 
     //Styles functions
@@ -69,6 +75,11 @@ private:
     const QString createMarkerStyle( int markerType );
     const QString createStrokeDashStyle( int strokeStyle );
     const QString createHatchStyle( int brushStyle, QString fillColor );
+    const QString createParagraphStyle( const KoXmlElement& element );
+    const QString createTextStyle( const KoXmlElement& element );
+
+    QString convertBorder( const KoXmlElement& border );
+
     KoXmlDocument m_mainDoc;//from KPR
     KoXmlDocument m_documentInfo;//from KPR
 

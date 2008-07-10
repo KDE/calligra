@@ -19,6 +19,7 @@
 
 //Qt's includes
 #include <QTime>
+#include <QColor>
 
 //KOffice includes
 #include <KoUnit.h>
@@ -284,17 +285,21 @@ const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientEl
     int type = 1;//we default to 1
     if( gradientElement.nodeName() == "PAGE" )
     {
-        KoXmlElement backColor1( gradientElement.namedItem( "BACKCOLOR1" ).toElement() );
+        KoXmlElement backColor1 = gradientElement.namedItem( "BACKCOLOR1" ).toElement();
         if( !backColor1.isNull() )
             style.addAttribute( "draw:start-color", backColor1.attribute( "color" ) );
 
-        KoXmlElement backColor2( gradientElement.namedItem( "BACKCOLOR2" ).toElement() );
+        KoXmlElement backColor2 = gradientElement.namedItem( "BACKCOLOR2" ).toElement();
         if( !backColor2.isNull() )
+        {
             style.addAttribute( "draw:end-color", backColor2.attribute( "color" ) );
+        }
 
-        KoXmlElement bcType( gradientElement.namedItem( "BCTYPE" ).toElement() );
+        KoXmlElement bcType = gradientElement.namedItem( "BCTYPE" ).toElement();
         if( !bcType.isNull() )
+        {
             type = bcType.attribute( "value" ).toInt();
+        }
 
         KoXmlElement bGradient = gradientElement.namedItem( "BGRADIENT" ).toElement();
         if( !bGradient.isNull() )
@@ -380,8 +385,8 @@ const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientEl
 const QString Filterkpr2odf::createPageLayout()
 {
     //Create the page-layout that is: paper, header and footer sizes
-    KoXmlElement paper( m_mainDoc.namedItem( "DOC" ).namedItem( "PAPER" ).toElement() );
-    KoXmlElement paperBorders( paper.namedItem( "PAPERBORDERS" ).toElement() );
+    KoXmlElement paper = m_mainDoc.namedItem( "DOC" ).namedItem( "PAPER" ).toElement();
+    KoXmlElement paperBorders = paper.namedItem( "PAPERBORDERS" ).toElement();
 
     //page-layout-properties
     KoGenStyle style( KoGenStyle::StylePageLayout );
@@ -389,27 +394,27 @@ const QString Filterkpr2odf::createPageLayout()
 
     if( paperBorders.hasAttribute( "ptTop" ) )
     {
-        style.addProperty( "fo:margin-top", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptTop" ).toFloat() ) ) );
+        style.addProperty( "fo:margin-top", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptTop" ).toDouble() ) ) );
     }
     if( paperBorders.hasAttribute( "ptBottom" ) )
     {
-        style.addProperty( "fo:margin-bottom", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptBottom" ).toFloat() ) ) );
+        style.addProperty( "fo:margin-bottom", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptBottom" ).toDouble() ) ) );
     }
     if( paperBorders.hasAttribute( "ptLeft" ) )
     {
-        style.addProperty( "fo:margin-left", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptLeft" ).toFloat() ) ) );
+        style.addProperty( "fo:margin-left", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptLeft" ).toDouble() ) ) );
     }
     if( paperBorders.hasAttribute( "ptRight" ) )
     {
-        style.addProperty( "fo:margin-right", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptRight" ).toFloat() ) ) );
+        style.addProperty( "fo:margin-right", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptRight" ).toDouble() ) ) );
     }
     if( paper.hasAttribute( "ptWidth" ) )
     {
-        style.addProperty( "fo:page-width", QString( "%1cm" ).arg( KoUnit::toCentimeter( paper.attribute( "ptWidth" ).toFloat() ) ) );
+        style.addProperty( "fo:page-width", QString( "%1cm" ).arg( KoUnit::toCentimeter( paper.attribute( "ptWidth" ).toDouble() ) ) );
     }
     if( paper.hasAttribute( "ptHeight" ) )
     {
-        style.addProperty( "fo:page-height", QString( "%1cm" ).arg( KoUnit::toCentimeter( paper.attribute( "ptHeight" ).toFloat() ) ) );
+        style.addProperty( "fo:page-height", QString( "%1cm" ).arg( KoUnit::toCentimeter( paper.attribute( "ptHeight" ).toDouble() ) ) );
     }
     style.addProperty( "fo:print-orientation", "landscape" );
 
@@ -448,26 +453,26 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
         }
         if( textObject.hasAttribute( "bleftpt" ) )
         {
-             style.addProperty( "fo:padding-left", QString( "%1pt" ).arg( textObject.attribute( "bleftpt" ) ) );
+             style.addPropertyPt( "fo:padding-left", textObject.attribute( "bleftpt" ).toDouble() );
         }
         if( textObject.hasAttribute( "bbottompt" ) )
         {
-            style.addProperty( "fo:padding-bottom",QString( "%1pt" ).arg( textObject.attribute( "bbottompt" ) ) );
+            style.addPropertyPt( "fo:padding-bottom", textObject.attribute( "bbottompt" ).toDouble() );
         }
         if( textObject.hasAttribute( "btoppt" ) )
         {
-            style.addProperty( "fo:padding-top", QString( "%1pt" ).arg( textObject.attribute( "btoppt" ) ) );
+            style.addPropertyPt( "fo:padding-top", textObject.attribute( "btoppt" ).toDouble() );
         }
         if( textObject.hasAttribute( "brightpt" ) )
         {
-            style.addProperty( "fo:padding-right", QString( "%1pt" ).arg( textObject.attribute( "brightpt" ) ) );
+            style.addPropertyPt( "fo:padding-right", textObject.attribute( "brightpt" ).toDouble() );
         }
     }
 
     KoXmlElement pen( element.namedItem( "PEN" ).toElement() );
     if( !pen.isNull() )
     {
-        style.addProperty( "svg:stroke-width", QString("%1cm").arg( KoUnit::toCentimeter( pen.attribute( "width" ).toDouble() ) ) );
+        style.addProperty( "svg:stroke-width", QString( "%1cm" ).arg( KoUnit::toCentimeter( pen.attribute( "width" ).toDouble() ) ) );
         style.addProperty( "svg:stroke-color", pen.attribute( "color" ) );
 
         QString stroke;
@@ -486,6 +491,13 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
             stroke = "none";
         }
         style.addProperty( "draw:stroke", stroke );
+    }
+    else
+    {
+        //TODO: is this the right behavior?
+        style.addProperty( "draw:stroke", "solid" );
+        style.addProperty( "svg:stroke-width", "1px" );
+        style.addProperty( "svg:stroke-color", "#000000" );
     }
 
     //We now define what's the object filled with, we "default" to a brush if both attributes are present
@@ -612,7 +624,7 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
         style.addProperty( "draw:shadow-offset-y", shadowOffsetY );
     }
 
-    //If what we're loading is the style for an image and some form of mirror is applied to it we must load it in the GrpahicStyle
+    //If what we're loading is the style for an image and some form of mirror, luminance, greyscale... is applied to it we must load it in the GrpahicStyle
     KoXmlElement pictureSettings = element.namedItem( "PICTURESETTINGS" ).toElement();
     if( !pictureSettings.isNull() )
     {
@@ -636,9 +648,29 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
         {
             style.addProperty( "style:mirror", mirror );
         }
+
+        bool grayscal = pictureSettings.attribute( "grayscal", "0" ) == "1";
+        if( grayscal )
+        {
+            style.addProperty( "draw:color-mode", "greyscale" );
+        }
+
+        int bright = pictureSettings.attribute( "bright", "0" ).toInt();
+        if( bright != 0 )
+        {
+            style.addProperty( "draw:luminance", QString( "%1%" ).arg( bright ) );
+        }
+
+        bool swapRGB = pictureSettings.attribute( "bright", "0" ) == "1";
+        if( swapRGB )
+        {
+            style.addProperty( "draw:color-inversion", "true" );
+        }
+
+        //NOTE: depth is not portable
     }
-//     if( m_name != "standard" )
-//         style.setAttribute( "style:parent-style-name", "standard" ); FIXME: what do we do?
+
+//     style.addAttribute( "style:parent-style-name", "standard" ); TODO: add the standar Graphic style
 
     return m_styles.lookup( style, "gr" );
 }
@@ -647,7 +679,7 @@ const QString Filterkpr2odf::createOpacityGradientStyle( int opacity )
 {
     //Opacity wasn't a gradient in KPR so we go from and to the same value
     KoGenStyle style( KoGenStyle::StyleOpacity );
-    QString opacityString = QString("%1%").arg( opacity );
+    QString opacityString = QString( "%1%" ).arg( opacity );
     style.addAttribute( "draw:start", opacityString );
     style.addAttribute( "draw:end", opacityString );
     return m_styles.lookup( style, "op" );
@@ -843,4 +875,307 @@ const QString Filterkpr2odf::createHatchStyle( int brushStyle, QString fillColor
     style.addAttribute( "draw:rotation", rotation );
 
     return m_styles.lookup( style, "hs" );
+}
+
+const QString Filterkpr2odf::createParagraphStyle( const KoXmlElement& element )
+{
+    KoGenStyle style( KoGenStyle::StyleUser, "paragraph" );
+
+    QString textAlign;
+    if( element.hasAttribute( "align" ) )
+    {
+        int align = element.attribute( "align" ).toInt();
+        switch( align )
+        {
+        case 0: // left
+            textAlign = "start";
+            break;
+        case 2: // right
+            textAlign = "end";
+            break;
+        case 4: // center
+            textAlign = "center";
+            break;
+        case 8: // justify
+            textAlign = "justify";
+            break;
+        }
+    }
+    if( !textAlign.isNull() )
+    {
+        style.addProperty( "fo:text-align", textAlign );
+    }
+
+    //FIXME: I wasn't able to find this element, rather i found it to be an attribute
+    KoXmlElement shadow = element.namedItem( "SHADOW" ).toElement();
+    if( !shadow.isNull() )
+    {
+        QString distance = QString( "%1pt" ).arg( shadow.attribute( "distance" ) );
+        QString textShadow = distance + ' ' + distance;//KPresenter1.6 didn't allow different distances for the shadow of a text
+        if( !textShadow.isNull() )
+        {
+            style.addProperty( "fo:text-shadow", textShadow );
+        }
+    }
+
+    KoXmlElement indents = element.namedItem( "INDENTS" ).toElement();
+    if ( !indents.isNull() )
+    {
+        QString marginLeft = QString( "%1cm" ).arg( KoUnit::toCentimeter( indents.attribute( "left" ).toDouble() ) );
+        QString marginRight = QString( "%1cm" ).arg( KoUnit::toCentimeter( indents.attribute( "right" ).toDouble() ) );
+        QString textIndent = QString( "%1cm" ).arg( KoUnit::toCentimeter( indents.attribute( "first" ).toDouble() ) );
+
+        if( !marginLeft.isNull() )
+        {
+            style.addProperty( "fo:margin-left", marginLeft );
+        }
+        if( !marginRight.isNull() )
+        {
+            style.addProperty( "fo:margin-right", marginRight );
+        }
+        if( !textIndent.isNull() )
+        {
+            style.addProperty( "fo:text-indent", textIndent );
+        }
+    }
+
+    KoXmlElement offsets = element.namedItem( "OFFSETS" ).toElement();
+    if ( !offsets.isNull() )
+    {
+        QString marginTop = QString( "%1cm" ).arg( KoUnit::toCentimeter( offsets.attribute( "before" ).toDouble() ) );
+        QString marginBottom = QString( "%1cm" ).arg( KoUnit::toCentimeter( offsets.attribute( "after" ).toDouble() ) );
+
+        if( !marginTop.isNull() )
+        {
+            style.addProperty( "fo:margin-top", marginTop );
+        }
+        if( !marginBottom.isNull() )
+        {
+            style.addProperty( "fo:margin-bottom", marginBottom );
+        }
+    }
+
+    KoXmlElement counter = element.namedItem( "COUNTER" ).toElement();
+    if( !counter.isNull() )
+    {
+        style.addProperty( "text:enable-numbering", "true" );
+    }
+
+    KoXmlElement lineSpacing = element.namedItem( "LINESPACING" ).toElement();
+    if( !lineSpacing.isNull() )
+    {
+        QString type = lineSpacing.attribute( "type" );
+        QString lineHeight;
+        QString lineSpacingString;
+        QString lineHeightAtLeast;
+        if( type == "single" )
+        {
+            lineHeight = "100%";
+        }
+        else if( type == "oneandhalf" )
+        {
+            lineHeight = "150%";
+        }
+        else if( type == "double" )
+        {
+            lineHeight = "200%";
+        }
+        else if( type == "multiple" )
+        {
+            lineHeight = QString( "%1%" ).arg( lineSpacing.attribute( "spacingvalue" ).toInt() * 100 );
+        }
+        else if( type == "custom" )
+        {
+            lineSpacingString = QString( "%1cm" ).arg( KoUnit::toCentimeter( lineSpacing.attribute( "spacingvalue" ).toDouble() ) );
+        }
+        else if( type == "atleast" )
+        {
+            lineHeightAtLeast = QString( "%1cm" ).arg( KoUnit::toCentimeter( lineSpacing.attribute( "spacingvalue" ).toDouble() ) );
+        }
+
+        if( !lineHeight.isNull() )
+        {
+            style.addProperty( "fo:line-height", lineHeight );
+        }
+        if( !lineSpacingString.isNull() )
+        {
+            style.addProperty( "text:line-spacing", lineSpacingString );
+        }
+        if( !lineHeightAtLeast.isNull() )
+        {
+            style.addProperty( "style:line-height-at-least", lineHeightAtLeast );
+        }
+    }
+
+    KoXmlElement leftBorder = element.namedItem( "LEFTBORDER" ).toElement();
+    KoXmlElement rightBorder = element.namedItem( "RIGHTBORDER" ).toElement();
+    KoXmlElement topBorder = element.namedItem( "TOPBORDER" ).toElement();
+    KoXmlElement bottomBorder = element.namedItem( "BOTTOMBORDER" ).toElement();
+    if( !leftBorder.isNull() )
+    {
+        style.addProperty( "fo:border-left", convertBorder( leftBorder ) );
+    }
+    if( !rightBorder.isNull() )
+    {
+        style.addProperty( "fo:border-right", convertBorder( rightBorder ) );
+    }
+    if( !topBorder.isNull() )
+    {
+        style.addProperty( "fo:border-top", convertBorder( topBorder ) );
+    }
+    if( !bottomBorder.isNull() )
+    {
+        style.addProperty( "fo:border-left", convertBorder( bottomBorder ) );
+    }
+
+    return m_styles.lookup( style, "P" );
+}
+
+QString Filterkpr2odf::convertBorder( const KoXmlElement& border )
+{
+    QString style;
+    int styleInt = border.attribute( "style" ).toInt();
+    if( styleInt == 5 )
+    {
+        style = "double";
+    }
+    else
+    {
+        style = "solid";
+    }
+    QString width = QString( "%1cm" ).arg( KoUnit::toCentimeter( border.attribute( "width" ).toDouble() ) );
+
+    QColor color( border.attribute( "red" ).toInt(), border.attribute( "green" ).toInt(), border.attribute( "blue" ).toInt() );
+
+    return QString( "%1 %2 %3" ).arg( width ).arg( style ).arg( color.name() );
+}
+
+const QString Filterkpr2odf::createTextStyle( const KoXmlElement& element )
+{
+    KoGenStyle style( KoGenStyle::StyleText, "text" );
+
+    if( element.hasAttribute( "family" ) )
+    {
+        style.addProperty( "fo:font-family", element.attribute( "family" ) );
+    }
+    if( element.hasAttribute( "pointSize" ) )
+    {
+        style.addPropertyPt( "fo:font-size", element.attribute( "pointSize" ).toDouble() );
+    }
+    if( element.hasAttribute( "color" ) )
+    {
+        style.addProperty( "fo:color", element.attribute( "color" ) );
+    }
+    if( element.hasAttribute( "bold" ) )
+    {
+        if( element.attribute( "bold" ) == "1" )
+        {
+            style.addProperty( "fo:font-weight", "bold" );
+        }
+    }
+    if( element.hasAttribute( "italic" ) )
+    {
+        if( element.attribute( "italic" ) == "1" )
+        {
+            style.addProperty( "fo:font-style", "italic" );
+        }
+    }
+    if( element.hasAttribute( "strikeOut" ) )
+    {
+        QString strikeOut = element.attribute( "strikeOut" );
+        QString textLineThroughType;
+        QString textLineThroughWidth;
+        if( strikeOut == "single" )
+        {
+            textLineThroughType = "single";
+        }
+        else if( strikeOut == "single-bold" )
+        {
+            textLineThroughType = "single";
+            textLineThroughWidth = "bold";
+        }
+        else if( strikeOut == "double" )
+        {
+            textLineThroughType = "double";
+        }
+        style.addProperty( "style:text-line-through-type", textLineThroughType );
+        style.addProperty( "style:text-line-through-style", "solid" );
+        if( !textLineThroughWidth.isNull() ) //avoid saving ""
+        {
+            style.addProperty( "style:text-line-through-width", textLineThroughWidth );
+        }
+    }
+    if( element.hasAttribute( "underline" ) )
+    {
+        QString underline = element.attribute( "underline" );
+        QString underlineStyleLine = element.attribute( "underlinestyleline" );
+
+        style.addProperty( "style:text-underline-color", element.attribute( "underlinecolor" ) );
+
+        QString textUnderlineStyle;
+        QString textUnderlineWidth;
+        QString textUnderlineType;
+        //TODO: are these all the posibilities
+        if( underlineStyleLine == "solid" )
+        {
+            if( underline == "1" )
+            {
+                textUnderlineType = "single";
+                textUnderlineStyle = "solid";
+            }
+            else if( underline == "single-bold" )
+            {
+                textUnderlineType = "single";
+                textUnderlineStyle = "solid";
+                textUnderlineWidth = "bold";
+            }
+            else if( underline == "double" )
+            {
+                textUnderlineType = "double";
+                textUnderlineStyle = "solid";
+            }
+            else if( underline == "wave" )
+            {
+                textUnderlineType = "single";
+                textUnderlineStyle = "wave";
+            }
+        }//if underlineStyleLine == solid
+        else if( underlineStyleLine == "dot" )
+        {
+            if( underline == "1" )
+            {
+                textUnderlineType = "single";
+                textUnderlineStyle = "dotted";
+            }
+            else if( underline == "single-bold" )
+            {
+                textUnderlineType = "single";
+                textUnderlineStyle = "dotted";
+                textUnderlineWidth = "bold";
+            }
+        }
+        else if( underlineStyleLine == "dash" )
+        {
+            textUnderlineType = "single";
+            textUnderlineStyle = "dash";
+        }
+
+        style.addProperty( "style:text-underline-type", textUnderlineType );
+        style.addProperty( "style:text-underline-style", textUnderlineStyle );
+        if( !textUnderlineWidth.isNull() )//avoid saving ""
+        {
+            style.addProperty( "style:text-underline-width", textUnderlineWidth );
+        }
+    }//if element.hasAttribute( "strikeOut" )
+
+    QString shadow = element.attribute( "text-shadow" );
+    if( !shadow.isNull() )
+    {
+        QStringList components = shadow.split(" ");
+        QString textShadow = QString( "%1 %2" ).arg( components.at( 1 ) ).arg( components.at( 2 ) );
+
+        style.addProperty( "fo:text-shadow", textShadow );
+    }
+
+    return m_styles.lookup( style, "T" );
 }
