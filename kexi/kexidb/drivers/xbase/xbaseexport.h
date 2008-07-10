@@ -59,7 +59,7 @@ class xBaseExport : public KexiDB::Object
 
 		//! Copy table data from source to destination
 		bool dest_copyTable(const QString& srcTable, KexiDB::Connection *srcConn, 
-			KexiDB::TableSchema* srcTable);
+			KexiDB::TableSchema* /*srcTable*/);
 
 		//! Checks whether objectName is a system object name
 		bool dest_isSystemObjectName(const QString& objectName);
