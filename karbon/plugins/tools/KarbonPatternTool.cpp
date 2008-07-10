@@ -21,6 +21,7 @@
 #include "KarbonPatternChooser.h"
 #include "KarbonPatternEditStrategy.h"
 #include "KarbonPatternItem.h"
+#include <KarbonPatternOptionsWidget.h>
 
 #include <KoCanvasBase.h>
 #include <KoShapeManager.h>
@@ -34,12 +35,14 @@
 #include <KoImageCollection.h>
 #include <KoShapeController.h>
 
+#include <KLocale>
+
 #include <QtGui/QPainter>
 #include <QtGui/QWidget>
 #include <QtGui/QUndoCommand>
 
 KarbonPatternTool::KarbonPatternTool(KoCanvasBase *canvas)
-: KoTool( canvas ), m_currentStrategy( 0 )
+    : KoTool( canvas ), m_currentStrategy( 0 ), m_optionsWidget(0)
 {
     connect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
 }
@@ -77,9 +80,23 @@ void KarbonPatternTool::repaintDecorations()
 
 void KarbonPatternTool::mousePressEvent( KoPointerEvent *event )
 {
-    Q_UNUSED( event )
+    m_currentStrategy = 0;
+
+    foreach( KarbonPatternEditStrategy *strategy, m_patterns )
+    {
+        if( strategy->selectHandle( event->point ) )
+        {
+            m_currentStrategy = strategy;
+            m_currentStrategy->repaint();
+            useCursor(Qt::SizeAllCursor);
+            break;
+        }
+    }
     if( m_currentStrategy )
+    {
         m_currentStrategy->setEditing( true );
+        updateOptionsWidget();
+    }
 }
 
 void KarbonPatternTool::mouseMoveEvent( KoPointerEvent *event )
@@ -98,13 +115,10 @@ void KarbonPatternTool::mouseMoveEvent( KoPointerEvent *event )
     {
         if( strategy->selectHandle( event->point ) )
         {
-            m_currentStrategy = strategy;
-            m_currentStrategy->repaint();
             useCursor(Qt::SizeAllCursor);
             return;
         }
     }
-    m_currentStrategy = 0;
     useCursor(Qt::ArrowCursor);
 }
 
@@ -112,10 +126,14 @@ void KarbonPatternTool::mouseReleaseEvent( KoPointerEvent *event )
 {
     Q_UNUSED( event )
     // if we are editing, get out of edit mode and add a command to the stack
-    if( m_currentStrategy )
+    if( m_currentStrategy && m_currentStrategy->isEditing() )
     {
         m_currentStrategy->setEditing( false );
-        m_canvas->addCommand( m_currentStrategy->createCommand() );
+        QUndoCommand * cmd = m_currentStrategy->createCommand();
+        if( cmd )
+            m_canvas->addCommand( cmd );
+
+        updateOptionsWidget();
     }
 }
 
@@ -164,6 +182,11 @@ void KarbonPatternTool::initialize()
             m_patterns.append( new KarbonPatternEditStrategy( shape, imageCollection ) );
             m_patterns.last()->repaint();
         }
+    }
+    if( m_patterns.count() == 1 )
+    {
+        m_currentStrategy = m_patterns.first();
+        updateOptionsWidget();
     }
 }
 
@@ -215,10 +238,19 @@ void KarbonPatternTool::resourceChanged( int key, const QVariant & res )
 
 QWidget * KarbonPatternTool::createOptionWidget()
 {
+    QTabWidget * tabWidget = new QTabWidget();
+    m_optionsWidget = new KarbonPatternOptionsWidget();
     KarbonPatternChooser * chooser = new KarbonPatternChooser();
     connect( chooser, SIGNAL( itemDoubleClicked(QTableWidgetItem*)),
              this, SLOT(patternSelected(QTableWidgetItem*)));
-    return chooser;
+    connect( m_optionsWidget, SIGNAL(patternChanged()),
+             this, SLOT(patternChanged()) );
+    tabWidget->addTab( m_optionsWidget, i18n( "Edit Pattern" ) );
+    tabWidget->addTab( chooser, i18n( "Choose Pattern" ) );
+
+    updateOptionsWidget();
+
+    return tabWidget;
 }
 
 void KarbonPatternTool::patternSelected( QTableWidgetItem * item )
@@ -236,6 +268,49 @@ void KarbonPatternTool::patternSelected( QTableWidgetItem * item )
         newFill->setPattern( currentPattern->pattern()->img() );
         m_canvas->addCommand( new KoShapeBackgroundCommand( selectedShapes, newFill ) );
         initialize();
+    }
+}
+
+void KarbonPatternTool::updateOptionsWidget()
+{
+    if( m_optionsWidget && m_currentStrategy )
+    {
+        KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( m_currentStrategy->shape()->background() );
+        if( fill )
+        {
+            m_optionsWidget->setRepeat( fill->repeat() );
+            m_optionsWidget->setReferencePoint( fill->referencePoint() );
+            m_optionsWidget->setReferencePointOffset( fill->referencePointOffset() );
+            m_optionsWidget->setTileRepeatOffset( fill->tileRepeatOffset() );
+            m_optionsWidget->setPatternSize( fill->patternDisplaySize() );
+        }
+    }
+}
+
+void KarbonPatternTool::patternChanged()
+{
+    if( m_currentStrategy )
+    {
+        KoShape * shape = m_currentStrategy->shape();
+        KoPatternBackground * oldFill = dynamic_cast<KoPatternBackground*>( shape->background() );
+        if( ! oldFill )
+            return;
+        KoDataCenter * dataCenter = m_canvas->shapeController()->dataCenter( "ImageCollection" );
+        if( ! dataCenter )
+            return;
+        KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>( dataCenter );
+        if( ! imageCollection )
+            return;
+        KoPatternBackground * newFill = new KoPatternBackground( imageCollection );
+        if( ! newFill )
+            return;
+        *newFill = *oldFill;
+        newFill->setRepeat( m_optionsWidget->repeat() );
+        newFill->setReferencePoint( m_optionsWidget->referencePoint() );
+        newFill->setReferencePointOffset( m_optionsWidget->referencePointOffset() );
+        newFill->setTileRepeatOffset( m_optionsWidget->tileRepeatOffset() );
+        newFill->setPatternDisplaySize( m_optionsWidget->patternSize() );
+        m_canvas->addCommand( new KoShapeBackgroundCommand( shape, newFill ) );
     }
 }
 

@@ -33,6 +33,11 @@ set(karbonui_SRCS
     widgets/KarbonStyleButtonBox.cpp
     widgets/KarbonPatternChooser.cpp
     widgets/KarbonPatternItem.cpp
+    widgets/KarbonPatternOptionsWidget.cpp
+)
+
+kde4_add_ui_files(karbonui_SRCS
+    widgets/KarbonPatternOptionsWidget.ui
 )
 
 

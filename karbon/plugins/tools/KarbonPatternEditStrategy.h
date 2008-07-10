@@ -68,6 +68,9 @@ public:
     QBrush background() const;
     KoPatternBackground updatedBackground();
 
+    /// Returns the shape we are working on
+    KoShape * shape();
+
     /// sets the handle radius used for painting the handles
     static void setHandleRadius( int radius ) { m_handleRadius = radius; }
 
@@ -97,6 +100,7 @@ private:
     KoImageCollection * m_imageCollection;
     KoPatternBackground m_oldFill;
     KoPatternBackground m_newFill;
+    bool m_hasChanged;
 };
 
 #endif // _KARBONPATTERNEDITSTRATEGY_H_

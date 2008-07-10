@@ -33,6 +33,7 @@ int KarbonPatternEditStrategy::m_handleRadius = 3;
 KarbonPatternEditStrategy::KarbonPatternEditStrategy( KoShape * shape, KoImageCollection * imageCollection )
 : m_shape( shape ),m_selectedHandle( -1 ), m_editing( false )
 , m_imageCollection( imageCollection ), m_oldFill( imageCollection ), m_newFill( imageCollection )
+, m_hasChanged( false )
 {
     // cache the shapes transformation matrix
     m_matrix = m_shape->absoluteTransformation( 0 );
@@ -123,6 +124,10 @@ void KarbonPatternEditStrategy::handleMouseMove(const QPointF &mouseLocation, Qt
         m_handles[center] += diffPos;
         m_handles[direction] += diffPos;
     }
+    else
+        return;
+
+    m_hasChanged = true;
 
     KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( m_shape->background() );
     if( fill )
@@ -139,6 +144,7 @@ void KarbonPatternEditStrategy::setEditing( bool on )
     // for use inside the command emitted when finished
     if( on )
     {
+        m_hasChanged = false;
         KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( m_shape->background() );
         if( fill )
             m_oldFill = *fill;
@@ -148,7 +154,7 @@ void KarbonPatternEditStrategy::setEditing( bool on )
 QUndoCommand * KarbonPatternEditStrategy::createCommand()
 {
     KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( m_shape->background() );
-    if( fill )
+    if( fill && m_hasChanged )
     {
         *fill = m_oldFill;
         KoPatternBackground * newFill = new KoPatternBackground( m_imageCollection );
@@ -208,4 +214,9 @@ KoPatternBackground KarbonPatternEditStrategy::updatedBackground()
     newFill.setMatrix( matrix );
 
     return newFill;
+}
+
+KoShape * KarbonPatternEditStrategy::shape()
+{
+    return m_shape;
 }
