@@ -58,6 +58,7 @@ KarbonPatternOptionsWidget::KarbonPatternOptionsWidget( QWidget * parent )
     d->widget.patternHeight->setRange( 1, 10000 );
 
     connect( d->widget.patternRepeat, SIGNAL(activated(int)), this, SIGNAL(patternChanged()) );
+    connect( d->widget.patternRepeat, SIGNAL(activated(int)), this, SLOT(updateControls()) );
     connect( d->widget.referencePoint, SIGNAL(activated(int)), this, SIGNAL(patternChanged()) );
     connect( d->widget.refPointOffsetX, SIGNAL(valueChanged(double)), this, SIGNAL(patternChanged()) );
     connect( d->widget.refPointOffsetY, SIGNAL(valueChanged(double)), this, SIGNAL(patternChanged()) );
@@ -77,6 +78,7 @@ void KarbonPatternOptionsWidget::setRepeat( KoPatternBackground::PatternRepeat r
     d->widget.patternRepeat->blockSignals( true );
     d->widget.patternRepeat->setCurrentIndex( repeat );
     d->widget.patternRepeat->blockSignals( false );
+    updateControls();
 }
 
 KoPatternBackground::PatternRepeat KarbonPatternOptionsWidget::repeat() const
@@ -139,6 +141,13 @@ void KarbonPatternOptionsWidget::setPatternSize( const QSize &size )
     d->widget.patternHeight->setValue( size.height() );
     d->widget.patternWidth->blockSignals( false );
     d->widget.patternHeight->blockSignals( false );
+}
+
+void KarbonPatternOptionsWidget::updateControls()
+{
+    bool stretch = d->widget.patternRepeat->currentIndex() == KoPatternBackground::Stretched;
+    d->widget.patternWidth->setEnabled( ! stretch );
+    d->widget.patternHeight->setEnabled( ! stretch );
 }
 
 #include "KarbonPatternOptionsWidget.moc"

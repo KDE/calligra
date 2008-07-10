@@ -66,6 +66,8 @@ public:
 signals:
     /// is emitted whenever an option has changed
     void patternChanged();
+private slots:
+    void updateControls();
 private:
     class Private;
     Private * const d;
