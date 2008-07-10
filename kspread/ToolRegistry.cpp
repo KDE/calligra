@@ -89,6 +89,7 @@ void ToolRegistry::loadTools()
                 continue;
             }
             toolFactory->setIcon(pluginInfo.service()->icon());
+            toolFactory->setPriority(10);
             toolFactory->setToolTip(pluginInfo.service()->comment());
             KoToolRegistry::instance()->add(toolFactory);
         } else {

@@ -77,8 +77,8 @@ bool CalendarToolWidget::buildDatePickerFrame()
 
   connect(m_datePicker,SIGNAL(destroyed()),this,SLOT(datePickerDeleted()));
 
-  m_datePicker->setCloseButton(true);
-  m_datePicker->move(this->x()+this->width(),this->y());
+  const QPoint position = mapToGlobal(pos());
+  m_datePicker->move(position.x() + this->width(), position.y());
   m_datePicker->show();
 
   return true;

@@ -38,6 +38,7 @@ public:
 
     KoTool* createTool( KoCanvasBase* canvas );
 
+    void setPriority(int priority);
     void setToolTip(const QString& toolTip);
     void setIcon(const QString& icon);
 };

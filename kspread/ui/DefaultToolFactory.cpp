@@ -45,6 +45,11 @@ KoTool* DefaultToolFactory::createTool( KoCanvasBase* canvas )
     return new DefaultTool( canvas );
 }
 
+void DefaultToolFactory::setPriority(int priority)
+{
+    KoToolFactory::setPriority(priority);
+}
+
 void DefaultToolFactory::setToolTip(const QString& toolTip)
 {
     KoToolFactory::setToolTip(toolTip);
