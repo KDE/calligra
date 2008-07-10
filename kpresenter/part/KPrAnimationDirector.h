@@ -69,6 +69,11 @@ public:
     bool navigate( Navigation navigation );
 
     /**
+     * do the navigation to the page specified
+     */
+    void navigateToPage( KoPAPageBase * page );
+
+    /**
      * Check if the shape is shown
      *
      * A shape is visible when there are no animations on it or when it

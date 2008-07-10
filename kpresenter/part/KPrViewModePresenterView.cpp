@@ -167,3 +167,8 @@ void KPrViewModePresenterView::updateActivePage( KoPAPageBase *page )
     m_presenterViewWidget->setActivePage( page );
 }
 
+KPrViewModePresentation *KPrViewModePresenterView::presentationMode()
+{
+    return m_presentationMode;
+}
+

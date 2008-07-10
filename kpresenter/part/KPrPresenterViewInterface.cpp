@@ -147,19 +147,24 @@ KPrPresenterViewSlidesInterface::KPrPresenterViewSlidesInterface( KoPADocument *
 {
     QVBoxLayout *vLayout = new QVBoxLayout;
 
-    QListView *listView = new QListView;
+    m_listView = new QListView;
     m_thumbnailModel = new KoPAPageThumbnailModel( m_document->pages( false ), this );
-    listView->setModel( m_thumbnailModel );
-    listView->setDragDropMode( QListView::NoDragDrop );
-    listView->setIconSize( QSize( 128, 128 ) );
-    listView->setViewMode( QListView::IconMode );
-    listView->setFlow( QListView::LeftToRight );
-    listView->setWrapping( true );
-    listView->setResizeMode( QListView::Adjust );
-    listView->setSelectionMode( QAbstractItemView::SingleSelection );
-    listView->setMovement( QListView::Static );
+    m_listView->setModel( m_thumbnailModel );
+    m_listView->setDragDropMode( QListView::NoDragDrop );
+    m_listView->setIconSize( QSize( 128, 128 ) );
+    m_listView->setViewMode( QListView::IconMode );
+    m_listView->setFlow( QListView::LeftToRight );
+    m_listView->setWrapping( true );
+    m_listView->setResizeMode( QListView::Adjust );
+    m_listView->setSelectionMode( QAbstractItemView::SingleSelection );
+    m_listView->setMovement( QListView::Static );
 
-    vLayout->addWidget( listView );
+    connect( m_listView, SIGNAL( clicked( const QModelIndex & ) ), this,
+            SLOT( itemClicked( const QModelIndex & ) ) );
+    connect( m_listView, SIGNAL( doubleClicked( const QModelIndex & ) ), this,
+            SLOT( itemDoubleClicked( const QModelIndex & ) ) );
+
+    vLayout->addWidget( m_listView );
 
     setLayout( vLayout );
 }
@@ -167,6 +172,18 @@ KPrPresenterViewSlidesInterface::KPrPresenterViewSlidesInterface( KoPADocument *
 void KPrPresenterViewSlidesInterface::setActivePage( KoPAPageBase *page )
 {
     KPrPresenterViewBaseInterface::setActivePage( page );
+}
+
+void KPrPresenterViewSlidesInterface::itemClicked( const QModelIndex &index )
+{
+    KoPAPageBase *page = static_cast<KoPAPageBase *>( index.internalPointer() );
+    emit selectedPageChanged( page, false );
+}
+
+void KPrPresenterViewSlidesInterface::itemDoubleClicked( const QModelIndex &index )
+{
+    KoPAPageBase *page = static_cast<KoPAPageBase *>( index.internalPointer() );
+    emit selectedPageChanged( page, true );
 }
 
 /* KPrPresenterViewToolWidget
@@ -198,12 +215,12 @@ KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent)
     mainLayout->addWidget(frame);
     mainLayout->addSpacing( 5 );
 
-    toolButton = new QToolButton;
-    toolButton->setCheckable( true );
-    toolButton->setIcon( KIcon( "view-list-icons.png" ) );
-    toolButton->setIconSize( iconSize );
-    connect( toolButton, SIGNAL( toggled( bool ) ), this, SIGNAL( slideThumbnailsToggled( bool ) ) );
-    mainLayout->addWidget( toolButton );
+    m_slidesToolButton = new QToolButton;
+    m_slidesToolButton->setCheckable( true );
+    m_slidesToolButton->setIcon( KIcon( "view-list-icons.png" ) );
+    m_slidesToolButton->setIconSize( iconSize );
+    connect( m_slidesToolButton, SIGNAL( toggled( bool ) ), this, SIGNAL( slideThumbnailsToggled( bool ) ) );
+    mainLayout->addWidget( m_slidesToolButton );
 
     mainLayout->addSpacing( 5 );
     frame = new QFrame;
@@ -245,6 +262,11 @@ KPrPresenterViewToolWidget::KPrPresenterViewToolWidget(QWidget *parent)
     hour = 0;
     min = 0;
     sec = 0;
+}
+
+void KPrPresenterViewToolWidget::toggleSlideThumbnails( bool toggle )
+{
+    m_slidesToolButton->setChecked( toggle );
 }
 
 void KPrPresenterViewToolWidget::updateClock()

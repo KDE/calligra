@@ -172,6 +172,35 @@ bool KPrAnimationDirector::navigate( Navigation navigation )
     return true;
 }
 
+void KPrAnimationDirector::navigateToPage( KoPAPageBase *page )
+{
+    if ( m_pageEffectRunner ) {
+        m_pageEffectRunner->finish();
+        finishAnimations();
+        // finish on first step
+        m_timeLine.stop();
+    }
+    else if ( m_timeLine.state() == QTimeLine::Running ) { // there are still shape animations running
+        Q_ASSERT( !m_animations.isEmpty() );
+        finishAnimations();
+        m_timeLine.stop();
+    }
+
+    m_pageIndex = m_pages.indexOf( page );
+
+    m_stepIndex = 0;
+
+    updateActivePage( page );
+    updateAnimations();
+
+    // trigger a repaint
+    m_canvas->update();
+
+    if ( hasAnimation() ) {
+        startTimeLine( m_maxShapeDuration );
+    }
+}
+
 bool KPrAnimationDirector::shapeShown( KoShape * shape )
 {
     return !m_animations.contains( shape ) || m_animations[shape].first != 0;

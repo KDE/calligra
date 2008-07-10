@@ -48,6 +48,7 @@ private slots:
     void showSlideThumbnails( bool show );
     void requestPreviousSlide();
     void requestNextSlide();
+    void requestChangePage( KoPAPageBase *page, bool enableMainView );
 
 private:
     KoPACanvas *m_canvas;
@@ -58,6 +59,7 @@ private:
     KPrPresenterViewInterface *m_mainWidget;
     KPrPresenterViewSlidesInterface *m_slidesWidget;
     KPrPresenterViewBaseInterface *m_activeWidget;
+    KPrPresenterViewToolWidget *m_toolWidget;
 };
 
 #endif

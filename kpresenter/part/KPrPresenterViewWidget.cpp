@@ -38,8 +38,9 @@
 #include <KoTextShapeData.h>
 #include <KoZoomHandler.h>
 
-#include "KPrViewModePresenterView.h"
+#include "KPrAnimationDirector.h"
 #include "KPrPresenterViewInterface.h"
+#include "KPrViewModePresenterView.h"
 
 KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresenterView *presenterView, KoPACanvas *canvas, QWidget *parent)
     : QWidget( parent )
@@ -56,16 +57,18 @@ KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresenterView *presen
 
     m_slidesWidget = new KPrPresenterViewSlidesInterface( m_canvas->document() );
     m_stackedLayout->addWidget( m_slidesWidget );
+    connect( m_slidesWidget, SIGNAL( selectedPageChanged( KoPAPageBase *, bool ) ), this,
+            SLOT( requestChangePage( KoPAPageBase *, bool ) ) );
     
     vLayout->addLayout( m_stackedLayout );
 
     QHBoxLayout *hLayout = new QHBoxLayout;
     hLayout->addStretch();
-    KPrPresenterViewToolWidget *toolWidget = new KPrPresenterViewToolWidget;
-    connect( toolWidget, SIGNAL( slideThumbnailsToggled( bool ) ), this, SLOT( showSlideThumbnails( bool ) ) );
-    connect( toolWidget, SIGNAL( previousSlideClicked() ), this, SLOT( requestPreviousSlide() ) );
-    connect( toolWidget, SIGNAL( nextSlideClicked() ), this, SLOT( requestNextSlide() ) );
-    hLayout->addWidget( toolWidget );
+    m_toolWidget = new KPrPresenterViewToolWidget;
+    connect( m_toolWidget, SIGNAL( slideThumbnailsToggled( bool ) ), this, SLOT( showSlideThumbnails( bool ) ) );
+    connect( m_toolWidget, SIGNAL( previousSlideClicked() ), this, SLOT( requestPreviousSlide() ) );
+    connect( m_toolWidget, SIGNAL( nextSlideClicked() ), this, SLOT( requestNextSlide() ) );
+    hLayout->addWidget( m_toolWidget );
     hLayout->addStretch();
 
     vLayout->addLayout( hLayout );
@@ -104,11 +107,11 @@ void KPrPresenterViewWidget::showSlideThumbnails( bool show )
 {
     if ( show ) {
         m_stackedLayout->setCurrentIndex( 1 );
-        m_activeWidget = m_mainWidget;
+        m_activeWidget = m_slidesWidget;
     }
     else {
         m_stackedLayout->setCurrentIndex( 0 );
-        m_activeWidget = m_slidesWidget;
+        m_activeWidget = m_mainWidget;
     }
 }
 
@@ -120,6 +123,19 @@ void KPrPresenterViewWidget::requestPreviousSlide()
 void KPrPresenterViewWidget::requestNextSlide()
 {
     m_presenterView->keyPressEvent( new QKeyEvent( QEvent::KeyPress, Qt::Key_PageDown, Qt::NoModifier ) );
+}
+
+void KPrPresenterViewWidget::requestChangePage( KoPAPageBase *page, bool enableMainView )
+{
+    if ( enableMainView ) {
+        m_toolWidget->toggleSlideThumbnails( false );
+    }
+    m_presenterView->animationDirector()->navigateToPage( page );
+    m_mainWidget->setActivePage( page );
+    m_slidesWidget->setActivePage( page );
+
+    KPrViewModePresentation *presentationMode = m_presenterView->presentationMode();
+    presentationMode->animationDirector()->navigateToPage( page );
 }
 
 #include "KPrPresenterViewWidget.moc"

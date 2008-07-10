@@ -23,9 +23,12 @@
 #include <QtGui/QFrame>
 
 class QLabel;
+class QListView;
+class QModelIndex;
 class QTextEdit;
 class QTimer;
 class QTime;
+class QToolButton;
 
 class KoPACanvas;
 class KoPADocument;
@@ -75,11 +78,19 @@ class KPrPresenterViewSlidesInterface : public KPrPresenterViewBaseInterface
 public:
     KPrPresenterViewSlidesInterface( KoPADocument *document, QWidget *parent = 0 );
 
+signals:
+    void selectedPageChanged( KoPAPageBase *page, bool doubleClicked );
+
 public slots:
     virtual void setActivePage( KoPAPageBase *page );
 
+private slots:
+    void itemClicked( const QModelIndex &index );
+    void itemDoubleClicked( const QModelIndex &index );
+
 private:
     KoPAPageThumbnailModel *m_thumbnailModel;
+    QListView *m_listView;
 };
 
 class KPrPresenterViewToolWidget : public QFrame
@@ -87,6 +98,7 @@ class KPrPresenterViewToolWidget : public QFrame
     Q_OBJECT
 public:
     KPrPresenterViewToolWidget( QWidget *parent = 0 );
+    void toggleSlideThumbnails( bool toggle );
 
 signals:
     void slideThumbnailsToggled( bool toggle );
@@ -97,6 +109,7 @@ private slots:
     void updateClock();
 
 private:
+    QToolButton *m_slidesToolButton;
     QLabel *m_clockLabel;
     QLabel *m_timerLabel;
 

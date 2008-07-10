@@ -53,6 +53,9 @@ public:
     /// reimplemented
     void updateActivePage( KoPAPageBase *page );
 
+    /// return the presentation mode associated with this presenter view mode
+    KPrViewModePresentation *presentationMode();
+
 private:
     KPrPresenterViewWidget *m_presenterViewWidget;
     KPrViewModePresentation *m_presentationMode;
