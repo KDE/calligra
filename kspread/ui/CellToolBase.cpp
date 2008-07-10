@@ -1096,6 +1096,22 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
         return new PasteStrategy(this, canvas(), selection(), event->point, event->modifiers());
     }
 
+    // Drag & drop, if the selected area was hit.
+    Region::ConstIterator end = selection()->constEnd();
+    for (Region::ConstIterator it = selection()->constBegin(); it != end; ++it)
+    {
+        const QRect range = (*it)->rect();
+        if (selection()->activeSheet()->cellCoordinatesToDocument(range).contains(position)) {
+            if (event->button() == Qt::RightButton) {
+                // Setup the context menu.
+                setPopupActionList(d->popupActionList());
+                event->ignore();
+                return 0;
+            }
+            return new DragAndDropStrategy(this, canvas(), selection(), event->point, event->modifiers());
+        }
+    }
+
     // Context menu with the right mouse button.
     if (event->button() == Qt::RightButton) {
         // In which cell did the user click?
@@ -1115,21 +1131,12 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
         return 0;
     }
 
-    // Drag & drop, if the selected area was hit.
-    Region::ConstIterator end = selection()->constEnd();
-    for (Region::ConstIterator it = selection()->constBegin(); it != end; ++it)
-    {
-        const QRect range = (*it)->rect();
-        if (selection()->activeSheet()->cellCoordinatesToDocument(range).contains(position)) {
-            return new DragAndDropStrategy(this, canvas(), selection(), event->point, event->modifiers());
-        }
-    }
-
     return new SelectionStrategy(this, canvas(), selection(), event->point, event->modifiers());
 }
 
 void CellToolBase::selectionChanged(const Region& region)
 {
+    Q_UNUSED(region);
     if (!d->locationComboBox) {
         return;
     }
