@@ -1,4 +1,4 @@
-include_directories(${CMAKE_SOURCE_DIR}/kspread ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES})
+include_directories(${CMAKE_SOURCE_DIR}/kspread ${KOMAIN_INCLUDES} ${FLAKE_INCLUDES} ${EIGEN_INCLUDE_DIR})
 
 ########### next target ###############
 
