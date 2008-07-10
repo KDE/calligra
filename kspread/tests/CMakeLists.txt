@@ -99,7 +99,7 @@ target_link_libraries(TestLogicFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestMathFunctions_SRCS TestMathFunctions.cpp ../functions/math.cpp ../functions/engineering.cpp ../functions/logic.cpp ../functions/trig.cpp)
+set(TestMathFunctions_SRCS TestMathFunctions.cpp ../functions/math.cpp ../functions/engineering.cpp ../functions/logic.cpp ../functions/statistical.cpp ../functions/trig.cpp)
 kde4_add_unit_test(TestMathFunctions TESTNAME kspread-MathFunctions  ${TestMathFunctions_SRCS})
 macro_add_compile_flags(TestMathFunctions "-DKSPREAD_UNIT_TEST")
 target_link_libraries(TestMathFunctions kspreadcommon ${QT_QTTEST_LIBRARY})

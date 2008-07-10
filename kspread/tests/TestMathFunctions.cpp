@@ -31,6 +31,7 @@
 #include "functions/EngineeringModule.h"
 #include "functions/LogicModule.h"
 #include "functions/MathModule.h"
+#include "functions/StatisticalModule.h"
 #include "functions/TrigonometryModule.h"
 #include "FunctionModuleRegistry.h"
 
@@ -108,6 +109,7 @@ void TestMathFunctions::initTestCase()
     FunctionModuleRegistry::instance()->add(new EngineeringModule(this));
     FunctionModuleRegistry::instance()->add(new LogicModule(this));
     FunctionModuleRegistry::instance()->add(new MathModule(this));
+    FunctionModuleRegistry::instance()->add(new StatisticalModule(this));
     FunctionModuleRegistry::instance()->add(new TrigonometryModule(this));
     FunctionModuleRegistry::instance()->registerFunctions();
     m_doc = new Doc();
