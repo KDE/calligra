@@ -237,6 +237,7 @@ protected Q_SLOTS:
     void sheetFormat();
     void listChoosePopupMenu();
     void listChooseItemSelected(QAction*);
+    void documentSettingsDialog();
 
 private:
     Q_DISABLE_COPY(CellToolBase)

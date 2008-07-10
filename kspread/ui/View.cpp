@@ -630,8 +630,6 @@ View::View( QWidget *_parent, Doc *_doc )
 
     connect( doc(), SIGNAL( sig_refreshView(  ) ), this, SLOT( slotRefreshView() ) );
 
-    connect( doc(), SIGNAL( sig_refreshLocale() ), this, SLOT( refreshLocale()));
-
     connect(doc()->map(), SIGNAL(sheetAdded(Sheet*)),
             this, SLOT(slotAddSheet(Sheet*)));
     connect(doc()->map(), SIGNAL(sheetRemoved(Sheet*)),
@@ -1046,14 +1044,6 @@ void View::initCalcMenu()
 void View::recalcWorkBook()
 {
     doc()->map()->recalcManager()->recalcMap();
-}
-
-void View::refreshLocale()
-{
-  foreach ( Sheet* sheet, doc()->map()->sheetList() )
-  {
-    sheet->updateLocale();
-  }
 }
 
 void View::recalcWorkSheet()

@@ -970,11 +970,6 @@ void Doc::refreshInterface()
   emit sig_refreshView();
 }
 
-void Doc::refreshLocale()
-{
-    emit sig_refreshLocale();
-}
-
 void Doc::updateBorderButton()
 {
   foreach ( KoView* view, views() )

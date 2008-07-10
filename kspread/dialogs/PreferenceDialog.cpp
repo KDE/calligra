@@ -71,14 +71,10 @@ class PreferenceDialog::Private
 {
 public:
     View* view;
-    KPageWidgetItem* page1;
     KPageWidgetItem* page2;
     KPageWidgetItem* page3;
     KPageWidgetItem* page4;
     KPageWidgetItem* pluginPage;
-
-    // Locale Options
-    parameterLocale* localePage;
 
     // Interface Options
     Ui::InterfaceOptionsWidget interfaceOptions;
@@ -316,12 +312,6 @@ PreferenceDialog::PreferenceDialog(View* view)
     connect(this, SIGNAL(defaultClicked()), this,SLOT(slotDefault()));
     connect(this, SIGNAL(resetClicked()), this, SLOT(slotReset()));
 
-    KVBox *page2 = new KVBox();
-    d->page1 = addPage(page2, i18n("Locale Settings"));
-    d->page1->setHeader(i18n("Document's Locale Settings"));
-    d->page1->setIcon(KIcon("preferences-desktop-locale"));
-    d->localePage = new parameterLocale(view, page2);
-
     QWidget* widget = 0;
     KPageWidgetItem* page = 0;
 
@@ -407,9 +397,7 @@ PreferenceDialog::~PreferenceDialog()
 
 void PreferenceDialog::openPage(int flags)
 {
-    if (flags & LocalePage)
-        setCurrentPage(d->page1);
-    else if (flags & InterfacePage)
+    if (flags & InterfacePage)
         setCurrentPage(d->page2);
     else if (flags & OpenSavePage)
         setCurrentPage(d->page3);
@@ -429,7 +417,6 @@ void PreferenceDialog::slotApply()
     FunctionModuleRegistry::instance()->loadFunctions();
 
     d->spellCheckPage->save();
-    d->localePage->apply();
 
     d->view->doc()->refreshInterface();
     d->view->slotUpdateView(d->view->activeSheet());
@@ -467,57 +454,6 @@ void PreferenceDialog::unitChanged(int index)
     d->interfaceOptions.m_indentationStep->setUnit(unit);
 }
 
-
-parameterLocale::parameterLocale( View* _view, KVBox *box , char * /*name*/ )
- :QObject ( box->parent() )
-{
-    m_pView = _view;
-    m_bUpdateLocale=false;
-//   QGroupBox* tmpQGroupBox = new QGroupBox( i18n("Settings"), box );
-  KVBox* tmpQGroupBox = box;
-
-  KLocale* locale = _view->doc()->map()->calculationSettings()->locale();
-
-  m_language=new QLabel( tmpQGroupBox );
-  m_number=new QLabel( tmpQGroupBox );
-  m_date=new QLabel( tmpQGroupBox );
-  m_shortDate=new QLabel( tmpQGroupBox );
-  m_time=new QLabel( tmpQGroupBox );
-  m_money=new QLabel( tmpQGroupBox );
-
-  updateToMatchLocale(locale);
-
-  m_updateButton=new QPushButton ( i18n("&Use System's Locale Settings"), tmpQGroupBox);
-  connect(m_updateButton, SIGNAL(clicked()),this,SLOT(updateDefaultSystemConfig()));
-
-  box->layout()->addItem( new QSpacerItem( 1, 1, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
-}
-
-void parameterLocale::apply()
-{
-    if (m_bUpdateLocale) {
-        m_pView->doc()->refreshLocale();
-        m_pView->slotUpdateView( m_pView->activeSheet() );
-    }
-}
-
-void parameterLocale::updateDefaultSystemConfig()
-{
-    m_bUpdateLocale=true;
-    KLocale* const locale = m_pView->doc()->map()->calculationSettings()->locale();
-    static_cast<Localization*>(locale)->defaultSystemConfig();
-    updateToMatchLocale( locale );
-}
-
-void parameterLocale::updateToMatchLocale(KLocale* locale)
-{
-  m_language->setText( i18n("Language: %1", locale->language() ));
-  m_number->setText( i18n("Default number format: %1", locale->formatNumber(12.55) )); // krazy:exclude=i18ncheckarg
-  m_date->setText( i18n("Long date format: %1", locale->formatDate( QDate::currentDate() )));
-  m_shortDate->setText( i18n("Short date format: %1", locale->formatDate( QDate::currentDate() ,KLocale::ShortDate) ));
-  m_time->setText( i18n("Time format: %1", locale->formatTime( QTime::currentTime() ) ));
-  m_money->setText( i18n("Currency format: %1", locale->formatMoney(12.55) ));
-}
 
 #if 0 // UNDOREDOLIMIT
   m_oldNbRedo = config->group( "Misc" ).readEntry( "UndoRedo", m_oldNbRedo );

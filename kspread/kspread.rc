@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="35">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="36">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -129,6 +129,8 @@
   </Menu>
   <Separator/>
   <Action name="shapeAnchor"/>
+  <Separator/>
+  <Action name="documentSettingsDialog"/>
  </Menu>
  <Menu name="Data"><text>&amp;Data</text>
   <Action name="sort"/>
@@ -138,7 +140,7 @@
   </Menu>
   <Action name="textToColumns"/>
   <Separator/>
-  <Action name="showArea"/>
+  <Action name="namedAreaDialog"/>
   <Separator/>
   <Action name="consolidate"/>
   <Action name="subtotals"/>

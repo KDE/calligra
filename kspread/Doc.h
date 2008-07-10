@@ -224,7 +224,6 @@ public:
 
   void initConfig();
   void saveConfig();
-  void refreshLocale();
 
   void updateBorderButton();
 
@@ -260,11 +259,6 @@ Q_SIGNALS:
    * Emitted if all interfaces have to be updated.
    */
   void sig_refreshView();
-
-  /**
-   * Emitted if we update to locale system.
-   */
-  void sig_refreshLocale();
 
 protected Q_SLOTS:
   virtual void openTemplate( const KUrl& url );

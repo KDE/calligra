@@ -346,7 +346,6 @@ public slots:
     void slotSheetHidden( Sheet*_sheet );
     void slotSheetShown( Sheet*_sheet );
     void slotSheetRemoved( Sheet*_sheet );
-    void refreshLocale();
     void shapeSelectionChanged();
 
 public:

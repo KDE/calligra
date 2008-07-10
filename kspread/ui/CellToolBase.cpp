@@ -71,6 +71,7 @@
 #include "dialogs/ConsolidateDialog.h"
 #include "dialogs/CSVDialog.h"
 #include "dialogs/DatabaseDialog.h"
+#include "dialogs/DocumentSettingsDialog.h"
 #include "dialogs/FormulaDialog.h"
 #include "dialogs/GoalSeekDialog.h"
 #include "dialogs/GotoDialog.h"
@@ -785,6 +786,11 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("sheetFormat", action);
     connect(action, SIGNAL(triggered(bool)), this, SLOT(sheetFormat()));
     action->setToolTip(i18n("Set the worksheet formatting"));
+
+    action = new KAction(i18n("Document Settings..."), this);
+    addAction("documentSettingsDialog", action);
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(documentSettingsDialog()));
+    action->setToolTip(i18n("Show document settings dialog"));
 }
 
 CellToolBase::~CellToolBase()
@@ -3110,4 +3116,10 @@ void CellToolBase::listChooseItemSelected(QAction* action)
     command->setParsing(true);
     command->add(selection()->marker());
     command->execute(m_canvas);
+}
+
+void CellToolBase::documentSettingsDialog()
+{
+    DocumentSettingsDialog dialog(selection(), m_canvas->canvasWidget());
+    dialog.exec();
 }

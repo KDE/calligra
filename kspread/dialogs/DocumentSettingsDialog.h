@@ -24,10 +24,27 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_PREFERENCE_DIALOG
-#define KSPREAD_PREFERENCE_DIALOG
+#ifndef KSPREAD_DOCUMENT_SETTINGS_DIALOG
+#define KSPREAD_DOCUMENT_SETTINGS_DIALOG
 
+#include <QGroupBox>
+#include <QLabel>
+
+#include <kconfig.h>
+#include <klineedit.h>
 #include <kpagedialog.h>
+#include <ksharedconfig.h>
+#include <kvbox.h>
+
+#include <KoUnit.h>
+
+class KIntNumInput;
+class KDoubleNumInput;
+class KSpellConfig;
+class QCheckBox;
+class KComboBox;
+class QPushButton;
+class KColorButton;
 
 namespace Sonnet
 {
@@ -36,33 +53,40 @@ class ConfigWidget;
 
 namespace KSpread
 {
-class View;
+class Selection;
 
-class PreferenceDialog : public KPageDialog
+class parameterLocale :  public QObject
+{
+ Q_OBJECT
+public:
+   parameterLocale(Selection* selection, KVBox *box, char *name = 0);
+ void apply();
+public slots:
+   void updateDefaultSystemConfig();
+ protected:
+   /**
+    * Updates the GUI widgets to match the specified locale.
+    */
+   void updateToMatchLocale(KLocale* locale);
+
+   QLabel *m_shortDate,*m_time,*m_money,*m_date,*m_language,*m_number;
+   QPushButton *m_updateButton;
+   Selection* m_selection;
+   bool m_bUpdateLocale;
+};
+
+
+class DocumentSettingsDialog : public KPageDialog
 {
     Q_OBJECT
-
 public:
-    enum
-    {
-        InterfacePage = 2,
-        OpenSavePage = 4,
-        SpellCheckerPage = 8,
-        PluginPage = 16
-    };
-
-    explicit PreferenceDialog(View* view);
-    ~PreferenceDialog();
-
-    void openPage(int flags);
+    explicit DocumentSettingsDialog(Selection* selection, QWidget* parent);
+    ~DocumentSettingsDialog();
 
 public Q_SLOTS:
     void slotApply();
     void slotDefault();
     void slotReset();
-
-private Q_SLOTS:
-    void unitChanged(int index);
 
 private:
     class Private;
@@ -71,4 +95,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_PREFERENCE_DIALOG
+#endif // KSPREAD_DOCUMENT_SETTINGS_DIALOG

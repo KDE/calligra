@@ -81,6 +81,7 @@ SET (dialogs_DIR_SRCS
 	dialogs/ConsolidateDialog.cpp
 	dialogs/CSVDialog.cpp
 	dialogs/DatabaseDialog.cpp
+	dialogs/DocumentSettingsDialog.cpp
 	dialogs/FindDialog.cpp
 	dialogs/FormulaDialog.cpp
 	dialogs/GoalSeekDialog.cpp
