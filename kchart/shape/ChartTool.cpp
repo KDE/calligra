@@ -104,6 +104,7 @@ ChartTool::ChartTool( KoCanvasBase *canvas )
 
 ChartTool::~ChartTool()
 {
+    delete d;
 }
 
 
