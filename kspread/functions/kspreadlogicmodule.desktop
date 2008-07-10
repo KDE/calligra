@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Logic Functions
+Name[it]=Funzioni logiche
 Comment=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
 Icon=funct
 Type=Service

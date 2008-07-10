@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Reference Functions
+Name[it]=Funzioni di riferimento
 Comment=ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, ROW, ROWS, VLOOKUP
 Icon=funct
 Type=Service

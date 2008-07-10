@@ -2,5 +2,7 @@
 Type=ServiceType
 X-KDE-ServiceType=KSpread/Plugin
 Comment=Plugin for KSpread
+Comment[ga]=Breiseán KSpread
+Comment[it]=Plugin per KSpread
 [PropertyDef::X-KSpread-Version]
 Type=int

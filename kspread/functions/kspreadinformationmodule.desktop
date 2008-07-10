@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Information Functions
+Name[it]=Funzioni informatiche
 Comment=ERRORTYPE, FILENAME, INFO, ISBLANK, ISDATE, ISERR, ISERROR, ISEVEN, ISLOGICAL, ISNA, ISNONTEXT, ISNOTTEXT, ISNUM, ISNUMBER, ISODD, ISREF, ISTEXT, ISTIME, N, NA, TYPE
 Icon=funct
 Type=Service

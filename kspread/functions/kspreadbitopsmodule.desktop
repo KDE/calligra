@@ -1,5 +1,6 @@
 [Desktop Entry]
 Name=Bit Operation Functions
+Name[it]=Funzioni di operazione sui bit
 Comment=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT
 Icon=funct
 Type=Service

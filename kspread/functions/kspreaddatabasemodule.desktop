@@ -1,5 +1,7 @@
 [Desktop Entry]
 Name=Database Functions
+Name[ga]=Feidhmeanna Bunachar Sonraí
+Name[it]=Funzioni per banche dati
 Comment=DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA
 Icon=funct
 Type=Service
