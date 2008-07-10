@@ -78,9 +78,8 @@ void KPrCustomSlideShows::addSlideToAll( KoPAPageBase* page, unsigned int positi
     QMap< QString, QList<KoPAPageBase*> >::iterator it = m_customSlideShows.begin();
     //FIXME: should we allow negative index?
     //if( position < 0 ) return;
-    int size;
     while( it != m_customSlideShows.constEnd() ) {
-        size = it.value().size();
+        uint size = it.value().size();
         it.value().insert( (position<=size)? position : size, page );
         ++it;
     }
