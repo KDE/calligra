@@ -148,6 +148,13 @@ void KarbonPatternOptionsWidget::updateControls()
     bool stretch = d->widget.patternRepeat->currentIndex() == KoPatternBackground::Stretched;
     d->widget.patternWidth->setEnabled( ! stretch );
     d->widget.patternHeight->setEnabled( ! stretch );
+
+    bool tiled = d->widget.patternRepeat->currentIndex() == KoPatternBackground::Tiled;
+    d->widget.referencePoint->setEnabled( tiled );
+    d->widget.refPointOffsetX->setEnabled( tiled );
+    d->widget.refPointOffsetY->setEnabled( tiled );
+    d->widget.tileOffsetX->setEnabled( tiled );
+    d->widget.tileOffsetY->setEnabled( tiled );
 }
 
 #include "KarbonPatternOptionsWidget.moc"
