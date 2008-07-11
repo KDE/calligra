@@ -1,6 +1,5 @@
 /* This file is part of the KDE project
-   Made by Tomislav Lukman (tomislav.lukman@ck.t-com.hr)
-   Copyright (C) 2005, The Karbon Developers
+   Copyright (c) 2005 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
    Copyright (c) 2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or

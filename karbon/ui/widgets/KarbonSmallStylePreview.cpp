@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Made by Tomislav Lukman (tomislav.lukman@ck.t-com.hr)
-   Copyright (C) 2005, The Karbon Developers
+   Copyright (c) 2005 Tomislav Lukman <tomislav.lukman@ck.t-com.hr>
+   Copyright (C) 2006 Tim Beaulen <tbscope@gmail.com>
    Copyright (c) 2008 Jan Hambrecht <jaham@gmx.net>
 
    This library is free software; you can redistribute it and/or
@@ -44,7 +45,7 @@
 #include <QtCore/QPointF>
 #include <QtCore/QRectF>
 
-#define FRAMEWIDTH 100
+#define FRAMEWIDTH 75
 #define FRAMEHEIGHT 15
 
 class KarbonFillStyleWidget : public QFrame
@@ -83,6 +84,7 @@ protected:
             else
             {
                 // use the background to draw
+                painter.setPen( Qt::NoPen );
                 QPainterPath p;
                 p.addRect( rect() );
                 m_fill->paint( painter, p );
@@ -130,6 +132,7 @@ protected:
             const KoLineBorder * line = dynamic_cast<const KoLineBorder*>( m_stroke );
             if( line )
             {
+                painter.setPen( Qt::NoPen );
                 QBrush brush = line->lineBrush();
                 if( brush.gradient() )
                 {
@@ -178,27 +181,29 @@ private:
 KarbonSmallStylePreview::KarbonSmallStylePreview( QWidget* parent )
     : QWidget( parent )
 {
+    setFont( KGlobalSettings::smallestReadableFont() );
+
     /* Create widget layout */
     QGridLayout *layout = new QGridLayout(this);
     QLabel * strokeLabel = new QLabel( i18n( "Stroke:" ), this );
+    strokeLabel->setMinimumHeight( FRAMEHEIGHT );
     m_strokeFrame = new KarbonStrokeStyleWidget( this );
     m_strokeFrame->setFrameStyle( QFrame::StyledPanel | QFrame::Plain );
-    m_strokeFrame->setFixedSize( QSize(FRAMEWIDTH,FRAMEHEIGHT) );
     m_strokeFrame->setMinimumSize( QSize(FRAMEWIDTH,FRAMEHEIGHT) );
 
     QLabel * fillLabel = new QLabel( i18n( "Fill:" ), this );
+    fillLabel->setMinimumHeight( FRAMEHEIGHT );
     m_fillFrame = new KarbonFillStyleWidget( this );
     m_fillFrame->setFrameStyle( QFrame::StyledPanel | QFrame::Plain );
-    m_fillFrame->setFixedSize( QSize(FRAMEWIDTH,FRAMEHEIGHT) );
     m_fillFrame->setMinimumSize( QSize(FRAMEWIDTH,FRAMEHEIGHT) );
 
     layout->addWidget( strokeLabel, 0, 0 );
     layout->addWidget( m_strokeFrame, 0, 1 );
     layout->addWidget( fillLabel, 1, 0 );
     layout->addWidget( m_fillFrame, 1, 1 );
-    layout->setContentsMargins( 0, 0, 0, 0 );
+    layout->setContentsMargins( 10, 0, 10, 0 );
+    layout->setVerticalSpacing( 0 );
 
-    setFont( KGlobalSettings::smallestReadableFont() );
     setLayout( layout );
 
     connect( KoToolManager::instance(), SIGNAL(toolCodesSelected(const KoCanvasController *, QList<QString>)),
