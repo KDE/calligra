@@ -273,6 +273,11 @@ double CellView::textHeight() const
   return d->textHeight;
 }
 
+QRectF CellView::textRect() const
+{
+    return QRectF(d->textX, d->textY, d->textWidth, d->textWidth);
+}
+
 QString CellView::testAnchor( const Cell& cell, double x, double y ) const
 {
   if( cell.link().isEmpty() )

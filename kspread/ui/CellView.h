@@ -144,6 +144,11 @@ public:
    */
   double textHeight() const;
 
+    /**
+     * \return the rectangle the text covers
+     */
+    QRectF textRect() const;
+
   QString testAnchor( const Cell& cell, double x, double y ) const;
 
     bool hitTestFilterButton(const Cell& cell, const QRect& cellRect, const QPoint& position) const;

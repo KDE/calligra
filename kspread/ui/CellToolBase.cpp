@@ -1182,7 +1182,8 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
                 url = cellView.testAnchor(cell, position.x() - xpos, position.y() - ypos);
             }
             if (!url.isEmpty()) {
-                return new HyperlinkStrategy(this, canvas(), selection(), event->point, event->modifiers(), url);
+                return new HyperlinkStrategy(this, canvas(), selection(), event->point,
+                                             event->modifiers(), url, cellView.textRect());
             }
         }
     }

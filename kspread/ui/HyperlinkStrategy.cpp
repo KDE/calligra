@@ -40,20 +40,19 @@ using namespace KSpread;
 class HyperlinkStrategy::Private
 {
 public:
-    Selection* selection;
-    QPointF start;
+    QPointF lastPoint;
+    QRectF textRect;
     QString url;
 };
 
 HyperlinkStrategy::HyperlinkStrategy(KoTool* parent, KoCanvasBase* m_canvas, Selection* selection,
                                      const QPointF documentPos, Qt::KeyboardModifiers modifiers,
-                                     const QString& url)
-    : KoInteractionStrategy(parent, m_canvas)
+                                     const QString& url, const QRectF& textRect)
+    : AbstractSelectionStrategy(parent, m_canvas, selection, documentPos, modifiers)
     , d(new Private)
 {
-    Q_UNUSED(modifiers)
-    d->selection = selection;
-    d->start = documentPos;
+    d->lastPoint = documentPos;
+    d->textRect = textRect;
     d->url = url;
 }
 
@@ -64,42 +63,18 @@ HyperlinkStrategy::~HyperlinkStrategy()
 
 void HyperlinkStrategy::handleMouseMove(const QPointF& documentPos, Qt::KeyboardModifiers modifiers)
 {
-    if (!modifiers & Qt::ShiftModifier)
-        return;
-    const KoShape* shape = m_canvas->shapeManager()->selection()->firstSelectedShape();
-    const QPointF position = documentPos - (shape ? shape->position() : QPointF(0.0, 0.0));
-    // In which cell did the user click?
-    double xpos;
-    double ypos;
-    int col = d->selection->activeSheet()->leftColumn(position.x(), xpos);
-    int row = d->selection->activeSheet()->topRow(position.y(), ypos);
-    // Check boundaries.
-    if (col > KS_colMax || row > KS_rowMax)
-    {
-        kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
+    d->lastPoint = documentPos;
+    if (d->textRect.contains(documentPos)) {
         return;
     }
-    // Test whether mouse is over the Selection.handle
-    const QRectF selectionHandle = d->selection->selectionHandleArea(m_canvas->viewConverter());
-    if (selectionHandle.contains(position))
-    {
-        // If the cursor is over the handle, than it might be already on the next cell.
-        // Recalculate the cell position!
-        col = d->selection->activeSheet()->leftColumn(position.x() - m_canvas->viewConverter()->viewToDocumentX(2.0), xpos);
-        row = d->selection->activeSheet()->topRow(position.y() - m_canvas->viewConverter()->viewToDocumentY(2.0), ypos);
-    }
-    // Update the selection.
-    d->selection->update(QPoint(col, row));
-    m_parent->repaintDecorations();
-}
-
-QUndoCommand* HyperlinkStrategy::createCommand()
-{
-    return 0;
+    AbstractSelectionStrategy::handleMouseMove(documentPos, modifiers);
 }
 
 void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 {
+    if (d->textRect.contains(d->lastPoint)) {
+        return;
+    }
     Q_UNUSED(modifiers)
     KNotification* const notify = new KNotification("LinkActivated");
     notify->setText(i18n("Link <i>%1</i> activated", d->url));
@@ -143,14 +118,4 @@ void HyperlinkStrategy::finishInteraction(Qt::KeyboardModifiers modifiers)
 
     QTimer::singleShot(0, notify, SLOT(sendEvent()));
     m_parent->repaintDecorations();
-}
-
-Selection* HyperlinkStrategy::selection() const
-{
-    return d->selection;
-}
-
-const QPointF& HyperlinkStrategy::startPosition() const
-{
-    return d->start;
 }

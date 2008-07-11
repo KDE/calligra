@@ -20,7 +20,7 @@
 #ifndef KSPREAD_HYPERLINK_STRATEGY
 #define KSPREAD_HYPERLINK_STRATEGY
 
-#include <KoInteractionStrategy.h>
+#include "AbstractSelectionStrategy.h"
 
 #include <Qt>
 
@@ -28,14 +28,22 @@ namespace KSpread
 {
 class Selection;
 
-class HyperlinkStrategy : public KoInteractionStrategy
+/**
+ * A strategy for visiting a hyperlink.
+ *
+ * If the mouse is released on the rectangle, that the link text occupies, the link will be visited.
+ *
+ * \todo For the case, that this region is left, a drag is initiated.
+ */
+class HyperlinkStrategy : public AbstractSelectionStrategy
 {
 public:
     /**
      * Constructor.
      */
     HyperlinkStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
-                      const QPointF position, Qt::KeyboardModifiers modifiers, const QString& url);
+                      const QPointF position, Qt::KeyboardModifiers modifiers,
+                      const QString& url, const QRectF& textRect);
 
     /**
      * Destructor.
@@ -43,12 +51,7 @@ public:
     virtual ~HyperlinkStrategy();
 
     virtual void handleMouseMove(const QPointF& mouseLocation, Qt::KeyboardModifiers modifiers);
-    virtual QUndoCommand* createCommand();
     virtual void finishInteraction(Qt::KeyboardModifiers modifiers);
-
-protected:
-    Selection* selection() const;
-    const QPointF& startPosition() const;
 
 private:
     class Private;
