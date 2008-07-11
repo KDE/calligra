@@ -502,14 +502,27 @@ void ProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bot
 	    
 	    for ( int i = 0; i < numRows; i++ )
 	    {
+	        qDebug() << i << d->dataMap[ i ] << firstRow << lastRow;
 	        if ( d->dataMap[ i ] >= firstRow && d->dataMap[ i ] <= lastRow )
 	        {
-	            int dataSet = int( i / d->dataDimensions );
-	            Q_ASSERT( dataSet < d->dataSets.size() );
-	            if ( i % 2 == 0 )
-	                d->dataSets[ dataSet ]->yDataChanged( firstCol, lastCol );
+	            if ( d->dataDimensions == 1 )
+	            {
+    	            Q_ASSERT( i < d->dataSets.size() );
+    	            d->dataSets[ i ]->yDataChanged( firstCol, lastCol );
+	            }
+	            else if ( d->dataDimensions == 2 )
+                {
+                    int dataSet = int( i / 2 );
+                    Q_ASSERT( dataSet < d->dataSets.size() );
+                    if ( i % 2 == 0 )
+                        d->dataSets[ dataSet ]->yDataChanged( firstCol, lastCol );
+                    else
+                        d->dataSets[ dataSet ]->xDataChanged( firstCol, lastCol );
+                }
 	            else
-	                d->dataSets[ dataSet ]->xDataChanged( firstCol, lastCol );
+	            {
+	                Q_ASSERT_X( false, "ProxyModel::dataChanged", "No more than one data direction supported" );
+	            }
 	        }
 	    }
 	}
@@ -749,8 +762,11 @@ void ProxyModel::setFirstRowIsLabel( bool b )
     }*/
     
     d->firstRowIsLabel = b;
-    rebuildDataMap();
     
+    if ( !sourceModel() )
+        return;
+    
+    rebuildDataMap();
     reset();
     
     /*if ( b ) {
@@ -784,8 +800,11 @@ void ProxyModel::setFirstColumnIsLabel( bool b )
     }*/
     
     d->firstColumnIsLabel = b;
-    rebuildDataMap();
     
+    if ( !sourceModel() )
+        return;
+    
+    rebuildDataMap();
     reset();
     
     /*if ( b ) {
