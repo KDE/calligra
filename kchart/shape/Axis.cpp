@@ -798,7 +798,7 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, const KoOdfStylesReader &st
             //setTitleText( name );
         }
         if ( axisElement.hasAttributeNS( KoXmlNS::chart, "dimension" ) ) {
-            const QString dimension = axisElement.attributeNS( KoXmlNS::chart, "dimension",
+            const QString dimension = axisElement.attributeNS( KoXmlNS::chart, "dimension", QString() );
             if ( dimension == "x" )
                 setPosition( BottomAxisPosition );
             if ( dimension == "y" )
