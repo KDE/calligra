@@ -29,7 +29,7 @@
 
 namespace KChart {
 
-class Legend : public KoShape
+class CHARTSHAPELIB_EXPORT Legend : public KoShape
 {
 public:
     Legend( ChartShape *parent );
