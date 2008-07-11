@@ -143,6 +143,7 @@ SET (ui_DIR_SRCS
 	ui/DragAndDropStrategy.cpp
 	ui/Editors.cpp
 	ui/Headers.cpp
+	ui/HyperlinkStrategy.cpp
 	ui/MergeStrategy.cpp
 	ui/PasteStrategy.cpp
 	ui/PrintJob.cpp

@@ -94,7 +94,9 @@ class DefaultTool::Private
 {
 public:
     void processClickSelectionHandle( KoPointerEvent* event );
+#if 0 // KSPREAD_MOUSE_STRATEGIES
     void processLeftClickAnchor();
+#endif
 
 public:
     Canvas* canvas;
@@ -567,6 +569,11 @@ int DefaultTool::maxRow() const
     return KS_rowMax;
 }
 
+SheetView* DefaultTool::sheetView(const Sheet* sheet) const
+{
+    return d->canvas->view()->sheetView(sheet);
+}
+
 void DefaultTool::definePrintRange()
 {
     selection()->activeSheet()->printSettings()->setPrintRegion(*selection());
@@ -589,6 +596,7 @@ void DefaultTool::Private::processClickSelectionHandle( KoPointerEvent* event )
     return;
 }
 
+#if 0 // KSPREAD_MOUSE_STRATEGIES
 void DefaultTool::Private::processLeftClickAnchor()
 {
     KNotification *notify = new KNotification("LinkActivated");
@@ -631,5 +639,6 @@ void DefaultTool::Private::processLeftClickAnchor()
 
     QTimer::singleShot(0, notify, SLOT(sendEvent()));
 }
+#endif
 
 #include "DefaultTool.moc"

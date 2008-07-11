@@ -184,6 +184,11 @@ int TableTool::maxRow() const
     return d->tableShape->rows();
 }
 
+SheetView* TableTool::sheetView(const Sheet* sheet) const
+{
+    return d->tableShape->sheetView();
+}
+
 void TableTool::changeColumns( int num )
 {
     d->tableShape->setColumns( num );

@@ -54,6 +54,7 @@ protected:
     virtual QSizeF size() const;
     virtual int maxCol() const;
     virtual int maxRow() const;
+    virtual SheetView* sheetView(const Sheet* sheet) const;
 
 protected Q_SLOTS:
     // -- misc actions --

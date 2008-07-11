@@ -49,6 +49,7 @@ protected:
     virtual QSizeF size() const;
     virtual int maxCol() const;
     virtual int maxRow() const;
+    virtual SheetView* sheetView(const Sheet* sheet) const;
 
 private Q_SLOTS:
     void changeColumns( int num );

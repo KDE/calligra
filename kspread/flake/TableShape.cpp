@@ -278,6 +278,11 @@ Sheet* TableShape::sheet() const
     return qobject_cast<Sheet*>(KoShape::userData());
 }
 
+SheetView* TableShape::sheetView() const
+{
+    return d->sheetView;
+}
+
 void TableShape::setSheet(const QString& sheetName)
 {
     Sheet* const sheet = map()->findSheet(sheetName);

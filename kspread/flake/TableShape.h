@@ -31,6 +31,7 @@ namespace KSpread
 class Damage;
 class Map;
 class Sheet;
+class SheetView;
 
 class TableShape : public QObject, public KoShape
 {
@@ -61,6 +62,8 @@ public:
      * \return the sheet containing the data for this shape
      */
     Sheet* sheet() const;
+
+    SheetView* sheetView() const;
 
     /**
      * Set the current sheet to the sheet with name \p sheetName .

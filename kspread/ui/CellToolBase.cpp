@@ -34,9 +34,12 @@
 #include "AutoFillStrategy.h"
 #include "CalculationSettings.h"
 #include "Cell.h"
+#include "CellView.h"
 #include "Damages.h"
+#include "database/Database.h"
 #include "Doc.h"
 #include "DragAndDropStrategy.h"
+#include "HyperlinkStrategy.h"
 #include "inspector.h"
 #include "Map.h"
 #include "MergeStrategy.h"
@@ -44,6 +47,7 @@
 #include "PasteStrategy.h"
 #include "SelectionStrategy.h"
 #include "Sheet.h"
+#include "SheetView.h"
 #include "StyleManager.h"
 
 // commands
@@ -850,7 +854,7 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
     }
 
     // Get info about where the event occurred.
-    QPointF position = event->point - offset();
+    QPointF position = event->point - offset(); // the shape offset, not the scrolling one.
     if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
         position.setX(size().width() - position.x());
     }
@@ -870,6 +874,31 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
     for (Region::ConstIterator it = selection()->constBegin(); it != end; ++it) {
         const QRect range = (*it)->rect();
         if (selection()->activeSheet()->cellCoordinatesToDocument(range).contains(position)) {
+            useCursor(Qt::PointingHandCursor);
+            return KoInteractionTool::mouseMoveEvent(event);
+        }
+    }
+
+    // In which cell did the user click?
+    double xpos;
+    double ypos;
+    const int col = this->selection()->activeSheet()->leftColumn(position.x(), xpos);
+    const int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
+    // Check boundaries.
+    if (col > maxCol() || row > maxRow()) {
+        kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
+    } else {
+        const Cell cell = Cell(selection()->activeSheet(), col, row).masterCell();
+        SheetView* const sheetView = this->sheetView(selection()->activeSheet());
+
+        QString url;
+        const CellView cellView = sheetView->cellView(col, row);
+        if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
+            url = cellView.testAnchor(cell, cell.width() - position.x() + xpos, position.y() - ypos);
+        } else {
+            url = cellView.testAnchor(cell, position.x() - xpos, position.y() - ypos);
+        }
+        if (!url.isEmpty()) {
             useCursor(Qt::PointingHandCursor);
             return KoInteractionTool::mouseMoveEvent(event);
         }
@@ -1078,7 +1107,7 @@ QWidget* CellToolBase::createOptionWidget()
 KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
 {
     // Get info about where the event occurred.
-    QPointF position = event->point - offset();
+    QPointF position = event->point - offset(); // the shape offset, not the scrolling one.
     if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft)
         position.setX(size().width() - position.x());
 
@@ -1096,39 +1125,71 @@ KoInteractionStrategy* CellToolBase::createStrategy(KoPointerEvent* event)
         return new PasteStrategy(this, canvas(), selection(), event->point, event->modifiers());
     }
 
-    // Drag & drop, if the selected area was hit.
+    // Check, if the selected area was hit.
+    bool hitSelection = false;
     Region::ConstIterator end = selection()->constEnd();
-    for (Region::ConstIterator it = selection()->constBegin(); it != end; ++it)
-    {
+    for (Region::ConstIterator it = selection()->constBegin(); it != end; ++it) {
         const QRect range = (*it)->rect();
         if (selection()->activeSheet()->cellCoordinatesToDocument(range).contains(position)) {
+            // Context menu with the right mouse button.
             if (event->button() == Qt::RightButton) {
                 // Setup the context menu.
                 setPopupActionList(d->popupActionList());
                 event->ignore();
-                return 0;
+                return 0; // Act directly; no further strategy needed.
             }
-            return new DragAndDropStrategy(this, canvas(), selection(), event->point, event->modifiers());
+            hitSelection = true;
+            break;
         }
     }
 
-    // Context menu with the right mouse button.
-    if (event->button() == Qt::RightButton) {
-        // In which cell did the user click?
-        double xpos;
-        double ypos;
-        int col = this->selection()->activeSheet()->leftColumn(position.x(), xpos);
-        int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
-        // Check boundaries.
-        if (col > maxCol() || row > maxRow()) {
-            kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
-        } else {
+    // In which cell did the user click?
+    double xpos;
+    double ypos;
+    const int col = this->selection()->activeSheet()->leftColumn(position.x(), xpos);
+    const int row = this->selection()->activeSheet()->topRow(position.y(), ypos);
+    // Check boundaries.
+    if (col > maxCol() || row > maxRow()) {
+        kDebug(36005) << "col or row is out of range:" << "col:" << col << " row:" << row;
+    } else {
+        // Context menu with the right mouse button.
+        if (event->button() == Qt::RightButton) {
             selection()->initialize(QPoint(col, row), selection()->activeSheet());
+            // Setup the context menu.
+            setPopupActionList(d->popupActionList());
+            event->ignore();
+            return 0; // Act directly; no further strategy needed.
+        } else {
+            const Cell cell = Cell(selection()->activeSheet(), col, row).masterCell();
+            SheetView* const sheetView = this->sheetView(selection()->activeSheet());
+
+            // Filter button hit.
+            const QPointF p1 = QPointF(xpos, ypos) - offset(); // the shape offset, not the scrolling one.
+            const QSizeF s1(cell.width(), cell.height());
+            const QRect cellRect = m_canvas->viewConverter()->documentToView(QRectF(p1, s1)).toRect();
+            if (sheetView->cellView(col, row).hitTestFilterButton(cell, cellRect, event->pos())) {
+                Database database = cell.database();
+                database.showPopup(m_canvas->canvasWidget(), cell, cellRect);
+                return 0; // Act directly; no further strategy needed.
+            }
+
+            // Hyperlink hit.
+            QString url;
+            const CellView cellView = sheetView->cellView(col, row);
+            if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {
+                url = cellView.testAnchor(cell, cell.width() - position.x() + xpos, position.y() - ypos);
+            } else {
+                url = cellView.testAnchor(cell, position.x() - xpos, position.y() - ypos);
+            }
+            if (!url.isEmpty()) {
+                return new HyperlinkStrategy(this, canvas(), selection(), event->point, event->modifiers(), url);
+            }
         }
-        // Setup the context menu.
-        setPopupActionList(d->popupActionList());
-        event->ignore();
-        return 0;
+    }
+
+    // Drag & drop, if the selected area was hit.
+    if (hitSelection) {
+        return new DragAndDropStrategy(this, canvas(), selection(), event->point, event->modifiers());
     }
 
     return new SelectionStrategy(this, canvas(), selection(), event->point, event->modifiers());
@@ -3086,12 +3147,10 @@ void CellToolBase::listChoosePopupMenu()
     double tx = selection()->activeSheet()->columnPosition(selection()->marker().x());
     double ty = selection()->activeSheet()->rowPosition(selection()->marker().y());
     double h = cell.height();
-#if 0 // FIXME Stefan: action move
     const CellView cellView = sheetView(selection()->activeSheet())->cellView(selection()->marker().x(), selection()->marker().y());
     if (cellView.obscuresCells()) {
         h = cellView.cellHeight();
     }
-#endif
     ty += h;
 
     if (selection()->activeSheet()->layoutDirection() == Qt::RightToLeft) {

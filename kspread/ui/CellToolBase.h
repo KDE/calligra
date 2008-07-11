@@ -37,6 +37,7 @@
 
 namespace KSpread
 {
+class SheetView;
 
 /**
  * Base tool providing actions acting on cell ranges.
@@ -84,6 +85,7 @@ protected:
     virtual QSizeF size() const = 0;
     virtual int maxCol() const = 0;
     virtual int maxRow() const = 0;
+    virtual SheetView* sheetView(const Sheet* sheet) const = 0;
 
 protected Q_SLOTS:
     void selectionChanged(const Region&);
