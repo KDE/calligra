@@ -77,8 +77,6 @@
 #include <KDChartPolarDiagram>
 
 // Qt
-#include <QImage>
-#include <QPainter>
 #include <QPointF>
 #include <QSizeF>
 #include <QTextDocument>
@@ -182,6 +180,14 @@ bool loadOdfLabel( KoShape *label, KoXmlElement &labelElement, const KoOdfStyles
     if ( !labelData )
         return false;
     
+    const qreal x = KoUnit::parseValue( labelElement.attributeNS( KoXmlNS::svg, "x" ) );
+    const qreal y = KoUnit::parseValue( labelElement.attributeNS( KoXmlNS::svg, "x" ) );
+    const qreal width = KoUnit::parseValue( labelElement.attributeNS( KoXmlNS::svg, "width" ) );
+    const qreal height = KoUnit::parseValue( labelElement.attributeNS( KoXmlNS::svg, "height" ) );
+    
+    label->setPosition( QPointF( x, y ) );
+    label->setSize( QSizeF( width, height ) );
+    
     // TODO: Read optional attributes
     // 1. Table range
     // 2. Position and size
@@ -216,8 +222,6 @@ void saveOdfLabel( KoShape *label, KoXmlWriter &bodyWriter, KoGenStyles &mainSty
     bodyWriter.endElement(); // chart:title/subtitle/footer
 }
 
-const int MAX_PIXMAP_SIZE = 1000;
-
 class ChartShape::Private
 {
 public:
@@ -231,13 +235,6 @@ public:
     PlotArea *plotArea;
     Surface *wall;
     Surface *floor;
-
-    // We can rerender faster if we cache KDChart's output
-    QImage   image;
-    bool     paintPixmap;
-    QPointF  lastZoomLevel;
-    QSizeF   lastSize;
-    mutable bool pixmapRepaintRequested;
     
     ProxyModel *model;
     
@@ -256,8 +253,6 @@ ChartShape::Private::Private()
     wall = 0;
     floor = 0;
     model = 0;
-    pixmapRepaintRequested = true;
-    paintPixmap = true;
     document = 0;
 }
 
@@ -276,6 +271,7 @@ ChartShape::ChartShape()
     // We need this as the very first step, because some methods
     // here rely on the d->plotArea pointer
     d->plotArea = new PlotArea( this );
+    addChild( d->plotArea );
     
     d->document = new ChartDocument( this );
     
@@ -466,7 +462,7 @@ void ChartShape::setSize( const QSizeF &size )
     
     KoShape::setSize( size );
     
-    updateChildrenPositions();
+    //updateChildrenPositions();
 }
 
 void ChartShape::updateChildrenPositions()
@@ -566,77 +562,8 @@ void ChartShape::setThreeD( bool threeD )
     d->plotArea->setThreeD( threeD );
 }
 
-void ChartShape::paintPixmap( QPainter &painter, const KoViewConverter &converter )
+void ChartShape::paint( QPainter &painter, const KoViewConverter &converter )
 {
-    Q_ASSERT( d->plotArea );
-    if ( !d->plotArea )
-        return;
-    
-    // Adjust the size of the painting area to the current zoom level
-    const QSize paintRectSize = converter.documentToView( size() ).toSize();
-    const QRect paintRect = QRect( QPoint( 0, 0 ), paintRectSize );
-
-    // Only use a pixmap with sane sizes
-    d->paintPixmap = paintRectSize.width() < MAX_PIXMAP_SIZE || paintRectSize.height() < MAX_PIXMAP_SIZE;
-    
-    if ( d->paintPixmap ) {
-        d->image = QImage( paintRectSize, QImage::Format_ARGB32 );
-    
-        // Copy the painter's render hints, such as antialiasing
-        QPainter pixmapPainter( &d->image );
-        pixmapPainter.setRenderHints( painter.renderHints() );
-        pixmapPainter.setRenderHint( QPainter::Antialiasing, false );
-    
-        // Paint the background
-        QBrush bgBrush( Qt::white );
-        if ( d->plotArea->chartType() == CircleChartType || d->plotArea->chartType() == RingChartType )
-            bgBrush = QBrush( QColor( 255, 255, 255, 0 ) );
-        pixmapPainter.fillRect( paintRect, bgBrush );
-    
-        // scale the painter's coordinate system to fit the current zoom level
-        applyConversion( pixmapPainter, converter );
-    
-        d->plotArea->paint( pixmapPainter );
-    } else {
-        // Paint the background
-        painter.fillRect( paintRect, QColor( 255, 255, 255, 0 ) );
-    
-        // scale the painter's coordinate system to fit the current zoom level
-        applyConversion( painter, converter );
-    
-        d->plotArea->paint( painter );
-    }
-}
-
-void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
-{
-    // Calculate the clipping rect
-    QRectF paintRect = QRectF( QPointF( 0, 0 ), size() );
-    //clipRect.intersect( paintRect );
-    painter.setClipRect( converter.documentToView( paintRect ) );
-
-    // Get the current zoom level
-    QPointF zoomLevel;
-    converter.zoom( &zoomLevel.rx(), &zoomLevel.ry() );
-
-    // Only repaint the pixmap if it is scheduled, the zoom level changed or the shape was resized
-    if (    d->pixmapRepaintRequested
-         || d->lastZoomLevel != zoomLevel
-         || d->lastSize      != size()
-         || !d->paintPixmap ) {
-        // TODO: What if two zoom levels are constantly being requested?
-        // At the moment, this *is* the case, due to the fact
-        // that the shape is also rendered in the page overview
-        // in KPresenter
-        // Everytime the window is hidden and shown again, a repaint is
-        // requested --> laggy performance, especially when quickly
-        // switching through windows
-        paintPixmap( painter, converter );
-        d->pixmapRepaintRequested = false;
-        d->lastZoomLevel = zoomLevel;
-        d->lastSize      = size();
-    }
-    
     foreach( KoShape *shape, iterator() )
     {
         if ( !shape->isVisible() && !d->hiddenChildren.contains( shape ) )
@@ -644,10 +571,6 @@ void ChartShape::paint( QPainter& painter, const KoViewConverter& converter )
         else if ( d->hiddenChildren.contains( shape ) )
             d->hiddenChildren.removeAll( shape );
     }
-
-    // Paint the cached pixmap if we got a GO from paintPixmap()
-    if ( d->paintPixmap )
-        painter.drawImage( 0, 0, d->image );
 }
 
 void ChartShape::paintComponent( QPainter &painter, const KoViewConverter &converter )
@@ -790,13 +713,19 @@ bool ChartShape::loadOdf( const KoXmlElement &chartElement, KoShapeLoadingContex
     if ( chartElement.tagName() != "frame" )
         return false;
     
-    const qreal x = KoUnit::parseValue( chartElement.attributeNS( KoXmlNS::svg, "x" ) );
-    const qreal y = KoUnit::parseValue( chartElement.attributeNS( KoXmlNS::svg, "x" ) );
-    const qreal width = KoUnit::parseValue( chartElement.attributeNS( KoXmlNS::svg, "width" ) );
-    const qreal height = KoUnit::parseValue( chartElement.attributeNS( KoXmlNS::svg, "height" ) );
+    if ( chartElement.hasAttributeNS( KoXmlNS::svg, "x" ) && chartElement.hasAttributeNS( KoXmlNS::svg, "y" ) )
+    {
+        const qreal x = KoUnit::parseValue( chartElement.attributeNS( KoXmlNS::svg, "x" ) );
+        const qreal y = KoUnit::parseValue( chartElement.attributeNS( KoXmlNS::svg, "y" ) );
+        setPosition( QPointF( x, y ) );
+    }
     
-    setPosition( QPointF( x, y ) );
-    setSize( QSizeF( width, height ) );
+    if ( chartElement.hasAttributeNS( KoXmlNS::svg, "width" ) && chartElement.hasAttributeNS( KoXmlNS::svg, "height" ) )
+    {
+        const qreal width = KoUnit::parseValue( chartElement.attributeNS( KoXmlNS::svg, "width" ) );
+        const qreal height = KoUnit::parseValue( chartElement.attributeNS( KoXmlNS::svg, "height" ) );
+        setSize( QSizeF( width, height ) );
+    }
     
     KoXmlElement objectElement = KoXml::namedItemNS( chartElement, KoXmlNS::draw, "object" );
     
@@ -807,7 +736,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, const KoOdfS
 {
     // Check if we're loading an embedded document
     if ( !chartElement.hasAttributeNS( KoXmlNS::chart, "class" ) ) {
-        qDebug() << "Embedded document has no chart:class element. Aborting.";
+        qDebug() << "Error: Embedded document has no chart:class attribute.";
         return false;
     }
 
@@ -868,6 +797,7 @@ bool ChartShape::loadOdfEmbedded( const KoXmlElement &chartElement, const KoOdfS
     if ( !d->legend->loadOdf( legendElem, stylesReader ) )
         return false;
     }
+    d->legend->update();
 
     // 6. Load the data
     KoXmlElement  dataElem = KoXml::namedItemNS( chartElement,
@@ -1053,13 +983,13 @@ void ChartShape::update() const
 
 void ChartShape::relayout() const
 {
-    d->pixmapRepaintRequested = true;
+    d->plotArea->relayout();
     KoShape::update();
 }
 
 void ChartShape::requestRepaint() const
 {
-    d->pixmapRepaintRequested = true;
+    d->plotArea->requestRepaint();
 }
 
 } // Namespace KChart

@@ -40,10 +40,12 @@
 #include "ProxyModel.h"
 #include "PlotArea.h"
 #include "Axis.h"
+#include "Legend.h"
 
 // KDChart
 #include <KDChartChart>
 #include <KDChartAbstractCartesianDiagram>
+#include <KDChartLegend>
 
 
 using namespace KChart;
@@ -119,17 +121,63 @@ KoShape* ChartShapeFactory::createDefaultShape() const
                                       Qt::EditRole | Qt::DisplayRole );
         }
     }
+    
+    const QSizeF shapeSize( CM_TO_POINT( 12 ), CM_TO_POINT( 8 ) );
 
     // We want the chart shape to take over and handle this model itself
-    shape->setModel( m_chartData, true );
     shape->setFirstRowIsLabel( true );
     shape->setFirstColumnIsLabel( true );
-    shape->setSize( QSizeF( CM_TO_POINT( 12 ), CM_TO_POINT( 8 ) ) );
+    shape->setModel( m_chartData, true );
+    shape->setSize( shapeSize );
     
-    if ( shape->plotArea()->xAxis() )
-        shape->plotArea()->xAxis()->setTitleText( "Month" );
-    if ( shape->plotArea()->yAxis() )
-        shape->plotArea()->yAxis()->setTitleText( "Growth in %" );
+    QPointF plotAreaPos( 0.0, 0.0 );
+    QSizeF plotAreaSize( shapeSize );
+    QPointF legendPos( 0.0, 0.0 );
+    shape->legend()->kdLegend()->forceRebuild();
+    shape->legend()->update();
+    QSizeF legendSize = shape->legend()->size();
+    qDebug() << "*************" << legendSize;
+    qDebug() << "+++++++++++++" << shape->legend()->kdLegend()->sizeHint();
+
+    Legend *legend = shape->legend();
+    if ( legend )
+    {
+        legendPos.ry() = shapeSize.height() / 2.0 - legendSize.height() / 2.0;
+        plotAreaSize.rwidth() -= legendSize.width();
+    }
+
+    Axis *xAxis = shape->plotArea()->xAxis();
+    KoShape *xAxisTitle = shape->plotArea()->xAxis()->title();
+    if ( xAxis )
+    {
+        xAxis->setTitleText( "Month" );
+        xAxisTitle->setPosition( QPointF( shapeSize.width() / 2.0 - xAxisTitle->size().width() / 2.0,
+                                          shapeSize.height() - xAxisTitle->size().height() ) );
+        plotAreaSize.rheight() -= xAxisTitle->size().height();
+    }
+    
+    Axis *yAxis = shape->plotArea()->yAxis();
+    KoShape *yAxisTitle = shape->plotArea()->yAxis()->title();
+    if ( yAxis )
+    {
+        yAxis->setTitleText( "Growth in %" );
+        yAxisTitle->setPosition( QPointF( -yAxisTitle->size().width() / 2.0 + yAxisTitle->size().height() / 2.0,
+                                          shapeSize.height() / 2.0 - yAxisTitle->size().height() / 2.0 ) );
+        plotAreaPos.rx() += yAxisTitle->size().height();
+        legendPos.rx() += yAxisTitle->size().height();
+        plotAreaSize.rwidth() -= yAxisTitle->size().height();
+        qDebug() << "yAxisTitle->size().height()=" << yAxisTitle->size().height();
+        qDebug() << "yAxisTitle->size().width()=" << yAxisTitle->size().width();
+    }
+    
+    if ( legend )
+    {
+        legendPos.rx() += plotAreaSize.width();
+        legend->setPosition( legendPos );
+    }
+    
+    shape->plotArea()->setPosition( plotAreaPos );
+    shape->plotArea()->setSize( plotAreaSize );
 
     return shape;
 }

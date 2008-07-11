@@ -155,8 +155,6 @@ public:
     void requestRepaint() const;
     
 private:
-    void paintPixmap( QPainter &painter, const KoViewConverter &converter );
-    
     class Private;
     Private *const d;
 };

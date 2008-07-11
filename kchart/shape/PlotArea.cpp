@@ -35,11 +35,14 @@
 #include <KoTextShapeData.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
+#include <KoViewConverter.h>
 
 // Qt
 #include <QPointF>
 #include <QSizeF>
 #include <QList>
+#include <QImage>
+#include <QPainter>
 
 // KDChart
 #include <KDChartChart>
@@ -64,6 +67,8 @@
 
 using namespace KChart;
 
+const int MAX_PIXMAP_SIZE = 1000;
+
 class PlotArea::Private
 {
 public:
@@ -72,13 +77,6 @@ public:
 
     // The parent chart shape
     ChartShape *shape;
-
-    // The position of the plot area in coordinates
-    // relative to parent shape
-    QPointF position;
-
-    // The size of the plot area
-    QSizeF size;
 
     // The list of axes
     QList<Axis*> axes;
@@ -101,6 +99,13 @@ public:
     int gapBetweenSets;
     
     QList<KoShape*> automaticallyHiddenAxisTitles;
+
+    // We can rerender faster if we cache KDChart's output
+    QImage   image;
+    bool     paintPixmap;
+    QPointF  lastZoomLevel;
+    QSizeF   lastSize;
+    mutable bool pixmapRepaintRequested;
 };
 
 PlotArea::Private::Private()
@@ -116,6 +121,8 @@ PlotArea::Private::Private()
     threeDScene = 0;
     gapBetweenBars = 0;
     gapBetweenSets = 100;
+    pixmapRepaintRequested = true;
+    paintPixmap = true;
 }
 
 PlotArea::Private::~Private()
@@ -125,6 +132,7 @@ PlotArea::Private::~Private()
 
 PlotArea::PlotArea( ChartShape *parent )
     : d( new Private )
+    , KoShape()
 {
     d->shape = parent;
     
@@ -165,25 +173,6 @@ ProxyModel *PlotArea::proxyModel() const
     return d->shape->proxyModel();
 }
 
-QPointF PlotArea::position() const
-{
-    return d->position;
-}
-
-void PlotArea::setPosition( const QPointF &position )
-{
-    d->position = position;
-}
-
-QSizeF PlotArea::size() const
-{
-    return d->size;
-}
-
-void PlotArea::setSize( const QSizeF &size )
-{
-    d->size = size;
-}
 
 QList<Axis*> PlotArea::axes() const
 {
@@ -304,6 +293,12 @@ bool PlotArea::addAxis( Axis *axis )
     }
     d->axes.append( axis );
     
+    foreach ( Axis *axis, d->axes )
+    {
+        if ( axis->dimension() == XAxisDimension )
+            axis->registerKdXAxis( axis->kdAxis() );
+    }
+    
     requestRepaint();
 
     return true;
@@ -322,6 +317,11 @@ bool PlotArea::removeAxis( Axis *axis )
     	return false;
     }
     d->axes.removeAll( axis );
+    
+    foreach ( Axis *axis, d->axes )
+    {
+        axis->deregisterKdXAxis( axis->kdAxis() );
+    }
     
     requestRepaint();
     
@@ -392,9 +392,27 @@ void PlotArea::setThreeD( bool threeD )
     requestRepaint();
 }
 
+bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingContext &context )
+{
+    qWarning() << "Error: The plot area cannot be loaded from ODF directly, but only as a child of the chart shape.";
+}
 
 bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, const KoOdfStylesReader &stylesReader )
 {
+    if ( plotAreaElement.hasAttributeNS( KoXmlNS::svg, "x" ) && plotAreaElement.hasAttributeNS( KoXmlNS::svg, "y" ) )
+    {
+        const qreal x = KoUnit::parseValue( plotAreaElement.attributeNS( KoXmlNS::svg, "x" ) );
+        const qreal y = KoUnit::parseValue( plotAreaElement.attributeNS( KoXmlNS::svg, "y" ) );
+        setPosition( QPointF( x, y ) );
+    }
+    
+    if ( plotAreaElement.hasAttributeNS( KoXmlNS::svg, "width" ) && plotAreaElement.hasAttributeNS( KoXmlNS::svg, "height" ) )
+    {
+        const qreal width = KoUnit::parseValue( plotAreaElement.attributeNS( KoXmlNS::svg, "width" ) );
+        const qreal height = KoUnit::parseValue( plotAreaElement.attributeNS( KoXmlNS::svg, "height" ) );
+        setSize( QSizeF( width, height ) );
+    }
+    
     KoXmlElement dataHasLabelsElem = KoXml::namedItemNS( plotAreaElement, 
                                                          KoXmlNS::chart, "data-source-has-labels" );
     if ( plotAreaElement.hasAttributeNS( KoXmlNS::chart,
@@ -424,23 +442,33 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, const KoOdfStylesRe
         proxyModel()->setFirstColumnIsLabel( false );
     }
 
-    // 1. Load Axes
-    if ( isCartesian( d->chartType ) ) {
-        // TODO: Remove all axes before loading new ones
-        KoXmlElement e;
-        forEachElement( e, plotAreaElement ) {
-            const KoXmlElement axisElement = e;
+    // Remove all axes before loading new ones
+    KoXmlElement e;
+    while( !d->axes.isEmpty() )
+    {
+        Axis *axis = d->axes.takeLast();
+        Q_ASSERT( axis );
+        delete axis;
+    }
+    
+    qDebug() << "AXIS COUNT1=" << d->axes.size();
+    
+    // Things to load first
+    KoXmlElement n;
+    for ( n = plotAreaElement.firstChild().toElement(); !n.isNull(); n = n.nextSibling().toElement() )
+    {
+        if ( n.namespaceURI() != KoXmlNS::chart )
+            continue;
+        if ( n.localName() == "axis" ) {
             Axis *axis = new Axis( this );
-            if ( e.localName() == "axis" && e.namespaceURI() == KoXmlNS::chart ) {
-                axis->loadOdf( axisElement, stylesReader );
-            }
+            axis->loadOdf( n, stylesReader );
             addAxis( axis );
         }
     }
-    
-    // Load dataset properties
-    KoXmlElement n = plotAreaElement.firstChild().toElement();
-    for ( ; !n.isNull(); n = n.nextSibling().toElement() )
+
+    qDebug() << "AXIS COUNT2=" << d->axes.size();
+    // Things to load second
+    for ( n = plotAreaElement.firstChild().toElement(); !n.isNull(); n = n.nextSibling().toElement() )
     {
         if ( n.namespaceURI() != KoXmlNS::chart )
             continue;
@@ -450,7 +478,7 @@ bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, const KoOdfStylesRe
             d->wall->loadOdf( n, stylesReader );
         else if ( n.localName() == "floor" )
             d->floor->loadOdf( n, stylesReader );
-        else
+        else if ( n.localName() != "axis" )
         {
             qWarning() << "PlotArea::loadOdf(): Unknown tag name \"" << n.localName() << "\"";
         }
@@ -557,6 +585,10 @@ bool PlotArea::loadOdfSeries( const KoXmlElement &seriesElement, const KoOdfStyl
     }
 
     return true;
+}
+
+void PlotArea::saveOdf( KoShapeSavingContext &context ) const
+{
 }
 
 void PlotArea::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
@@ -746,23 +778,93 @@ void PlotArea::update() const
 {
     foreach( Axis* axis, d->axes )
         axis->update();
-    d->shape->relayout();
+    relayout();
 }
 
 void PlotArea::requestRepaint() const
 {
-    if ( !d->shape )
-        return;
-    
-    d->shape->requestRepaint();
+    d->pixmapRepaintRequested = true;
 }
 
-void PlotArea::paint( QPainter &painter )
+void PlotArea::paintPixmap( QPainter &painter, const KoViewConverter &converter )
 {
+    // Adjust the size of the painting area to the current zoom level
+    const QSize paintRectSize = converter.documentToView( size() ).toSize();
+    const QRect paintRect = QRect( QPoint( 0, 0 ), paintRectSize );
+    const QSize plotAreaSize = size().toSize();
     const int borderX = 4;
     const int borderY = 4;
-    const QSize size = d->shape->size().toSize();
-    d->kdChart->paint( &painter, QRect( QPoint( borderX, borderY ), QSize( size.width() - 2 * borderX, size.height() - 2 * borderY ) ) );
+
+    // Only use a pixmap with sane sizes
+    d->paintPixmap = paintRectSize.width() < MAX_PIXMAP_SIZE || paintRectSize.height() < MAX_PIXMAP_SIZE;
+    
+    if ( d->paintPixmap ) {
+        d->image = QImage( paintRectSize, QImage::Format_ARGB32 );
+    
+        // Copy the painter's render hints, such as antialiasing
+        QPainter pixmapPainter( &d->image );
+        pixmapPainter.setRenderHints( painter.renderHints() );
+        pixmapPainter.setRenderHint( QPainter::Antialiasing, false );
+    
+        // Paint the background
+        QBrush bgBrush( Qt::white );
+        if ( d->chartType == CircleChartType || d->chartType == RingChartType )
+            bgBrush = QBrush( QColor( 255, 255, 255, 0 ) );
+        pixmapPainter.fillRect( paintRect, bgBrush );
+    
+        // scale the painter's coordinate system to fit the current zoom level
+        applyConversion( pixmapPainter, converter );
+
+        d->kdChart->paint( &pixmapPainter, QRect( QPoint( borderX, borderY ), QSize( plotAreaSize.width() - 2 * borderX, plotAreaSize.height() - 2 * borderY ) ) );
+    } else {
+        // Paint the background
+        painter.fillRect( paintRect, QColor( 255, 255, 255, 0 ) );
+    
+        // scale the painter's coordinate system to fit the current zoom level
+        applyConversion( painter, converter );
+
+        d->kdChart->paint( &painter, QRect( QPoint( borderX, borderY ), QSize( plotAreaSize.width() - 2 * borderX, plotAreaSize.height() - 2 * borderY ) ) );
+    }
+}
+
+void PlotArea::paint( QPainter& painter, const KoViewConverter& converter )
+{
+    // Calculate the clipping rect
+    QRectF paintRect = QRectF( QPointF( 0, 0 ), size() );
+    //clipRect.intersect( paintRect );
+    painter.setClipRect( converter.documentToView( paintRect ) );
+
+    // Get the current zoom level
+    QPointF zoomLevel;
+    converter.zoom( &zoomLevel.rx(), &zoomLevel.ry() );
+
+    // Only repaint the pixmap if it is scheduled, the zoom level changed or the shape was resized
+    if (    d->pixmapRepaintRequested
+         || d->lastZoomLevel != zoomLevel
+         || d->lastSize      != size()
+         || !d->paintPixmap ) {
+        // TODO: What if two zoom levels are constantly being requested?
+        // At the moment, this *is* the case, due to the fact
+        // that the shape is also rendered in the page overview
+        // in KPresenter
+        // Everytime the window is hidden and shown again, a repaint is
+        // requested --> laggy performance, especially when quickly
+        // switching through windows
+        paintPixmap( painter, converter );
+        d->pixmapRepaintRequested = false;
+        d->lastZoomLevel = zoomLevel;
+        d->lastSize      = size();
+    }
+
+    // Paint the cached pixmap if we got a GO from paintPixmap()
+    if ( d->paintPixmap )
+        painter.drawImage( 0, 0, d->image );
+}
+
+void PlotArea::relayout() const
+{
+    d->pixmapRepaintRequested = true;
+    KoShape::update();
 }
 
 #include "PlotArea.moc"

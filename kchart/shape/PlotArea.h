@@ -30,7 +30,7 @@
 
 namespace KChart {
 
-class CHARTSHAPELIB_EXPORT PlotArea : public QObject
+class CHARTSHAPELIB_EXPORT PlotArea : public QObject, public KoShape
 {
     Q_OBJECT
     
@@ -40,8 +40,6 @@ public:
     
     ProxyModel *proxyModel() const;
 
-    QPointF position() const;
-    QSizeF  size() const;
     QList<Axis*> axes() const;
     QList<DataSet*> dataSets() const;
     int dataSetCount() const;
@@ -59,17 +57,18 @@ public:
     int gapBetweenBars() const;
     int gapBetweenSets() const;
 
-    void setPosition( const QPointF &position );
-    void setSize( const QSizeF &size );
     bool addAxis( Axis *axis );
     bool removeAxis( Axis *axis );
     
     void setGapBetweenBars( int percent );
     void setGapBetweenSets( int percent );
     void setPieExplodeFactor( DataSet *dataSet, int percent );
-    
+
+    bool loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingContext &context );
     bool loadOdf( const KoXmlElement &plotAreaElement, const KoOdfStylesReader &stylesReader );
     bool loadOdfSeries( const KoXmlElement &seriesElement, const KoOdfStylesReader &stylesReader );
+    
+    void saveOdf( KoShapeSavingContext &context ) const;
     void saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
     void saveOdfSubType( KoXmlWriter &bodyWriter, KoGenStyle &plotAreaStyle ) const;
     
@@ -79,14 +78,16 @@ public:
     void setThreeD( bool threeD );
     
     ChartShape *parent() const;
-    
-    void paint( QPainter &painter );
+
+    void paint( QPainter &painter, const KoViewConverter &converter );
     
     KDChart::AbstractCoordinatePlane *kdPlane() const;
     KDChart::Chart *kdChart() const;
     
     bool registerKdDiagram( KDChart::AbstractDiagram *diagram );
     bool deregisterKdDiagram( KDChart::AbstractDiagram *diagram );
+    
+    void relayout() const;
     
 public slots:
     void requestRepaint() const;
@@ -99,6 +100,8 @@ signals:
     void pieExplodeFactorChanged( DataSet*, int );
 
 private:
+    void paintPixmap( QPainter &painter, const KoViewConverter &converter );
+    
     class Private;
     Private *const d;
 };
