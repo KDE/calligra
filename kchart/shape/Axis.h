@@ -78,6 +78,9 @@ public:
     void plotAreaChartTypeChanged( ChartType chartType );
     void plotAreaChartSubTypeChanged( ChartSubtype chartSubType );
     
+    void registerKdXAxis( KDChart::CartesianAxis *axis );
+    void deregisterKdXAxis( KDChart::CartesianAxis *axis );
+    
     void update() const;
     void requestRepaint() const;
     void layoutPlanes();

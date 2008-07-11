@@ -193,8 +193,14 @@ void Axis::Private::createBarDiagram()
         
         kdBarDiagram->addAxis( kdAxis );
         kdPlane->addDiagram( kdBarDiagram );
-        
+
         Q_ASSERT( plotArea );
+        foreach ( Axis *axis, plotArea->axes() )
+        {
+            if ( axis->dimension() == XAxisDimension )
+                kdBarDiagram->addAxis( axis->kdAxis() );
+        }
+        
         plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
     }
 }
@@ -213,8 +219,14 @@ void Axis::Private::createLineDiagram()
         
         kdLineDiagram->addAxis( kdAxis );
         kdPlane->addDiagram( kdLineDiagram );
-        
+
         Q_ASSERT( plotArea );
+        foreach ( Axis *axis, plotArea->axes() )
+        {
+            if ( axis->dimension() == XAxisDimension )
+                kdLineDiagram->addAxis( axis->kdAxis() );
+        }
+
         plotArea->parent()->legend()->kdLegend()->addDiagram( kdLineDiagram );
     }
 }
@@ -238,6 +250,15 @@ void Axis::Private::createAreaDiagram()
         
         kdAreaDiagram->addAxis( kdAxis );
         kdPlane->addDiagram( kdAreaDiagram );
+
+        Q_ASSERT( plotArea );
+        foreach ( Axis *axis, plotArea->axes() )
+        {
+            if ( axis->dimension() == XAxisDimension )
+                kdAreaDiagram->addAxis( axis->kdAxis() );
+        }
+
+        plotArea->parent()->legend()->kdLegend()->addDiagram( kdAreaDiagram );
     }
 }
 
@@ -252,9 +273,8 @@ void Axis::Private::createCircleDiagram()
     {
         kdCircleDiagram = new KDChart::PieDiagram( plotArea->kdChart(), kdPolarPlane );
         kdCircleDiagram->setModel( kdCircleDiagramModel );
-        
-        //plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
-        //kdCircleDiagram->addAxis( kdAxis );
+
+        plotArea->parent()->legend()->kdLegend()->addDiagram( kdCircleDiagram );
         kdPolarPlane->addDiagram( kdCircleDiagram );
     }
 }
@@ -270,9 +290,8 @@ void Axis::Private::createRadarDiagram()
     {
         kdRadarDiagram = new KDChart::PolarDiagram( plotArea->kdChart(), kdPolarPlane );
         kdRadarDiagram->setModel( kdRadarDiagramModel );
-        
-        //plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
-        //kdRadarDiagram->addAxis( kdAxis );
+
+        plotArea->parent()->legend()->kdLegend()->addDiagram( kdRadarDiagram );
         kdPolarPlane->addDiagram( kdRadarDiagram );
     }
 }
@@ -290,9 +309,17 @@ void Axis::Private::createScatterDiagram()
         kdScatterDiagram = new KDChart::Plotter( plotArea->kdChart(), kdPlane );
         kdScatterDiagram->setModel( kdScatterDiagramModel );
         
-        //plotArea->parent()->legend()->kdLegend()->addDiagram( kdBarDiagram );
         kdScatterDiagram->addAxis( kdAxis );
         kdPlane->addDiagram( kdScatterDiagram );
+
+        Q_ASSERT( plotArea );
+        foreach ( Axis *axis, plotArea->axes() )
+        {
+            if ( axis->dimension() == XAxisDimension )
+                kdScatterDiagram->addAxis( axis->kdAxis() );
+        }
+
+        plotArea->parent()->legend()->kdLegend()->addDiagram( kdScatterDiagram );
     }
 }
 
@@ -355,6 +382,8 @@ Axis::Axis( PlotArea *parent )
 
 Axis::~Axis()
 {
+    Q_ASSERT( d->plotArea );
+    d->plotArea->parent()->removeChild( d->title );
     delete d;
 }
 
@@ -368,9 +397,9 @@ void Axis::setPosition( AxisPosition position )
     d->position = position;
     
     if ( position == LeftAxisPosition )
-        d->title->rotate( -90 );
+        d->title->rotate( -90 - d->title->rotation() );
     else if ( position == RightAxisPosition )
-        d->title->rotate( 90 );
+        d->title->rotate( 90 - d->title->rotation() );
     
     // KDChart
     d->kdAxis->setPosition( AxisPositionToKDChartAxisPosition( position ) );
@@ -526,6 +555,10 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
         {
             if ( (*oldDiagram)->coordinatePlane() )
                 (*oldDiagram)->coordinatePlane()->takeDiagram( (*oldDiagram) );
+            if ( d->plotArea->parent()->legend()->kdLegend() )
+            {
+                d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
+            }
             Q_ASSERT( oldDiagram );
             Q_ASSERT( *oldDiagram );
             if ( *oldDiagram )
@@ -679,14 +712,93 @@ Qt::Orientation Axis::orientation()
 
 bool Axis::loadOdf( const KoXmlElement &axisElement, const KoOdfStylesReader &stylesReader )
 {
-    d->kdAxis = new KDChart::CartesianAxis();
+    d->title->setVisible( false );
+    
+    KDChart::GridAttributes attr = d->kdPlane->gridAttributes( orientation() );
+    attr.setGridVisible( false );
+    attr.setSubGridVisible( false );
+    d->kdPlane->setGridAttributes( orientation(), attr );
+    
     if ( !axisElement.isNull() ) {
+        KoXmlElement n;
+        for ( n = axisElement.firstChild().toElement(); !n.isNull(); n = n.nextSibling().toElement() )
+        {
+            if ( n.namespaceURI() != KoXmlNS::chart )
+                continue;
+            if ( n.localName() == "title" )
+            {
+                if ( n.hasAttributeNS( KoXmlNS::svg, "x" ) && n.hasAttributeNS( KoXmlNS::svg, "y" ) )
+                {
+                    const qreal x = KoUnit::parseValue( n.attributeNS( KoXmlNS::svg, "x" ) );
+                    const qreal y = KoUnit::parseValue( n.attributeNS( KoXmlNS::svg, "y" ) );
+                    d->title->setPosition( QPointF( x, y ) );
+                }
+                
+                if ( n.hasAttributeNS( KoXmlNS::svg, "width" ) && n.hasAttributeNS( KoXmlNS::svg, "height" ) )
+                {
+                    const qreal width = KoUnit::parseValue( n.attributeNS( KoXmlNS::svg, "width" ) );
+                    const qreal height = KoUnit::parseValue( n.attributeNS( KoXmlNS::svg, "height" ) );
+                    d->title->setSize( QSizeF( width, height ) );
+                }
+                
+                const KoXmlElement textElement = KoXml::namedItemNS( n, KoXmlNS::text, "p" );
+                if ( !textElement.isNull() )
+                {
+                    d->title->setVisible( true );
+                    setTitleText( textElement.text() );
+                }
+                else
+                {
+                    qWarning() << "Error: Axis' <chart:title> element contains no <text:p>";
+                }
+            }
+            else if ( n.localName() == "grid" )
+            {
+                bool major = false;
+                if ( n.hasAttributeNS( KoXmlNS::chart, "class" ) )
+                {
+                    const QString className = n.attributeNS( KoXmlNS::chart, "class" );
+                    if ( className == "major" )
+                        major = true;
+                }
+                if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
+                {
+                    const QString styleName = n.attributeNS( KoXmlNS::chart, "style-name" );
+                    const KoXmlElement *styleElement = stylesReader.findStyle( styleName, "chart" );
+                    if ( styleElement )
+                    {
+                        KoXmlElement graphicPropertiesElement = styleElement->namedItemNS( KoXmlNS::style, "graphic-properties" ).toElement();
+                        if ( !graphicPropertiesElement.isNull() )
+                        {
+                            if ( graphicPropertiesElement.hasAttributeNS( KoXmlNS::svg, "stroke-color" ) )
+                            {
+                                const QString strokeColor = graphicPropertiesElement.attributeNS( KoXmlNS::svg, "stroke-color" );
+                                KDChart::GridAttributes attr = d->kdPlane->gridAttributes( orientation() );
+                                attr.setGridVisible( true );
+                                if ( major )
+                                {
+                                    attr.setGridPen( QColor( strokeColor ) );
+                                    attr.setSubGridVisible( false );
+                                }
+                                else
+                                {
+                                    attr.setSubGridPen( QColor( strokeColor ) );
+                                    attr.setSubGridVisible( true );
+                                }
+                                d->kdPlane->setGridAttributes( orientation(), attr );
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
         if ( axisElement.hasAttributeNS( KoXmlNS::chart, "axis-name" ) ) {
             const QString name = axisElement.attributeNS( KoXmlNS::chart, "axis-name", QString() );
-            setTitleText( name );
+            //setTitleText( name );
         }
         if ( axisElement.hasAttributeNS( KoXmlNS::chart, "dimension" ) ) {
-            const QString dimension = axisElement.attributeNS( KoXmlNS::chart, "dimension", QString() );
+            const QString dimension = axisElement.attributeNS( KoXmlNS::chart, "dimension",
             if ( dimension == "x" )
                 setPosition( BottomAxisPosition );
             if ( dimension == "y" )
@@ -861,12 +973,17 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
     {
         if ( dataSet->chartType() != LastChartType )
             continue;
+        newModel->addDataSet( dataSet );
         if ( oldModel && *oldModel )
         {
         	if ( (*oldModel)->columnCount() == 1 )
         	{
         		if ( (*oldDiagram)->coordinatePlane() )
         			(*oldDiagram)->coordinatePlane()->takeDiagram( (*oldDiagram) );
+        		if ( d->plotArea->parent()->legend()->kdLegend() )
+        		{
+        		    d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
+        		}
         		Q_ASSERT( oldDiagram );
         		Q_ASSERT( *oldDiagram );
 		        if ( *oldDiagram )
@@ -876,9 +993,8 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
 		        *oldDiagram = 0;
         	}
         	else
-        		(*oldModel)->removeDataSet( dataSet, true );
+        		(*oldModel)->removeDataSet( dataSet );
         }
-        newModel->addDataSet( dataSet, true );
         dataSet->setKdDiagram( newDiagram );
         dataSet->setKdDataSetNumber( newModel->dataSets().indexOf( dataSet ) );
         dataSet->setGlobalChartType( chartType );
@@ -952,6 +1068,30 @@ void Axis::plotAreaChartSubTypeChanged( ChartSubtype subType )
     foreach ( DataSet *dataSet, d->dataSets )
         dataSet->setGlobalChartSubType( subType );
         
+}
+
+void Axis::registerKdXAxis( KDChart::CartesianAxis *axis )
+{
+    if ( d->kdBarDiagram )
+        d->kdBarDiagram->addAxis( axis );
+    if ( d->kdLineDiagram )
+        d->kdLineDiagram->addAxis( axis );
+    if ( d->kdAreaDiagram )
+        d->kdAreaDiagram->addAxis( axis );
+    if ( d->kdScatterDiagram )
+        d->kdScatterDiagram->addAxis( axis );
+}
+
+void Axis::deregisterKdXAxis( KDChart::CartesianAxis *axis )
+{
+    if ( d->kdBarDiagram )
+        d->kdBarDiagram->takeAxis( axis );
+    if ( d->kdLineDiagram )
+        d->kdLineDiagram->takeAxis( axis );
+    if ( d->kdAreaDiagram )
+        d->kdAreaDiagram->takeAxis( axis );
+    if ( d->kdScatterDiagram )
+        d->kdScatterDiagram->takeAxis( axis );
 }
 
 void Axis::setThreeD( bool threeD )
