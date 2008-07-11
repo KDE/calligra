@@ -100,7 +100,7 @@ namespace NativeFormat
  * This namespace collects methods related to OpenDocument
  * encoding/decoding.
  */
-namespace Oasis
+namespace Odf
 {
     /**
      * \ingroup OpenDocument

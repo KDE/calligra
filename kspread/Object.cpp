@@ -99,7 +99,7 @@ bool EmbeddedObject::load( const KoXmlElement& /*element*/ )
     return false;
 }
 
-void EmbeddedObject::loadOasis(const KoXmlElement &element, KoOdfLoadingContext & context )
+void EmbeddedObject::loadOdf(const KoXmlElement &element, KoOdfLoadingContext & context )
 {
   if(element.hasAttributeNS( KoXmlNS::draw, "name" ))
     m_objectName = element.attributeNS( KoXmlNS::draw, "name", QString());
@@ -120,7 +120,7 @@ QDomElement EmbeddedObject::save( QDomDocument& /*doc*/ )
     return QDomElement();
 }
 
-void EmbeddedObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
+void EmbeddedObject::saveOdfPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
 {
     xmlWriter.addAttribute( "draw:id", "object" + QString::number( indexObj ) );
     //save all into pt
@@ -137,21 +137,21 @@ void EmbeddedObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) 
 //     }
 }
 
-bool EmbeddedObject::saveOasisObjectAttributes( KSpreadOasisSaveContext &/* sc */ ) const
+bool EmbeddedObject::saveOdfObjectAttributes( KSpreadOdfSaveContext &/* sc */ ) const
 {
-    kDebug() <<"bool saveOasisObjectAttributes not implemented";
+    kDebug() <<"bool saveOdfObjectAttributes not implemented";
     return true;
 }
 
-bool EmbeddedObject::saveOasisObject( KSpreadOasisSaveContext &sc ) const
+bool EmbeddedObject::saveOdfObject( KSpreadOdfSaveContext &sc ) const
 {
-    sc.xmlWriter.startElement( getOasisElementName() );
+    sc.xmlWriter.startElement( getOdfElementName() );
     //sc.xmlWriter.addAttribute( "draw:style-name", getStyle( sc ) );
-    saveOasisPosObject( sc.xmlWriter, sc.indexObj );
+    saveOdfPosObject( sc.xmlWriter, sc.indexObj );
     if( !getObjectName().isEmpty())
         sc.xmlWriter.addAttribute( "draw:name", getObjectName() );
 
-    saveOasisObjectAttributes( sc );
+    saveOdfObjectAttributes( sc );
 
     sc.xmlWriter.endElement();
     return true;
@@ -376,21 +376,21 @@ KoDocumentChild* EmbeddedKOfficeObject::embeddedObject()
     return m_embeddedObject;
 }
 
-bool EmbeddedKOfficeObject::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const
+bool EmbeddedKOfficeObject::saveOdfObjectAttributes( KSpreadOdfSaveContext &sc ) const
 {
-    kDebug() <<"EmbeddedKOfficeObject::saveOasisPart" << sc.partIndexObj;
+    kDebug() <<"EmbeddedKOfficeObject::saveOdfPart" << sc.partIndexObj;
 
     sc.xmlWriter.startElement( "draw:object" );
     const QString name = QString( "Object_%1" ).arg( sc.partIndexObj + 1 );
     ++sc.partIndexObj;
-    m_embeddedObject->saveOasisAttributes( sc.xmlWriter, name );
+    m_embeddedObject->saveOdfAttributes( sc.xmlWriter, name );
 
     if ( getType() != OBJECT_CHART )
         sc.xmlWriter.endElement();
     return true;
 }
 
-const char * EmbeddedKOfficeObject::getOasisElementName() const
+const char * EmbeddedKOfficeObject::getOdfElementName() const
 {
     return "draw:frame";
 }
@@ -403,16 +403,16 @@ bool EmbeddedKOfficeObject::load( const KoXmlElement& element )
     return result;
 }
 
-void EmbeddedKOfficeObject::loadOasis(const KoXmlElement &element, KoOdfLoadingContext &context/*, KPRLoadingInfo *info*/)
+void EmbeddedKOfficeObject::loadOdf(const KoXmlElement &element, KoOdfLoadingContext &context/*, KPRLoadingInfo *info*/)
 {
-    kDebug()<<"void EmbeddedKOfficeObject::loadOasis(const KoXmlElement &element)******************";
-    EmbeddedObject::loadOasis( element, context );
+    kDebug()<<"void EmbeddedKOfficeObject::loadOdf(const KoXmlElement &element)******************";
+    EmbeddedObject::loadOdf( element, context );
 
     KoXmlElement objectElement = KoXml::namedItemNS( element, KoXmlNS::draw, "object" );
-    m_embeddedObject->loadOasis( element, objectElement );
+    m_embeddedObject->loadOdf( element, objectElement );
     if( element.hasAttributeNS( KoXmlNS::draw, "name" ) )
         m_objectName = element.attributeNS( KoXmlNS::draw, "name", QString());
-    (void)m_embeddedObject->loadOasisDocument( context.store(), context.manifestDocument() );
+    (void)m_embeddedObject->loadOdfDocument( context.store(), context.manifestDocument() );
 }
 
 QDomElement EmbeddedKOfficeObject::save( QDomDocument& doc )
@@ -539,7 +539,7 @@ void EmbeddedChart::update()
         m_pBinding->cellChanged( Cell() );
 }
 
-const char * EmbeddedChart::getOasisElementName() const
+const char * EmbeddedChart::getOdfElementName() const
 {
     return "draw:frame";
 }
@@ -567,17 +567,17 @@ bool EmbeddedChart::load( const KoXmlElement& element )
     return true;
 }
 
-void EmbeddedChart::loadOasis(const KoXmlElement &element, KoOdfLoadingContext &context/*, KPRLoadingInfo *info*/)
+void EmbeddedChart::loadOdf(const KoXmlElement &element, KoOdfLoadingContext &context/*, KPRLoadingInfo *info*/)
 {
-    kDebug()<<"void EmbeddedChart::loadOasis(const KoXmlElement &element)******************";
-    EmbeddedKOfficeObject::loadOasis( element, context );
+    kDebug()<<"void EmbeddedChart::loadOdf(const KoXmlElement &element)******************";
+    EmbeddedKOfficeObject::loadOdf( element, context );
 
     KoXmlElement objectElement = KoXml::namedItemNS( element, KoXmlNS::draw, "object" );
     QString str_range = objectElement.attributeNS( KoXmlNS::draw, "notify-on-update-of-ranges", QString());
 
     if ( !str_range.isNull() )
     {
-      str_range = Oasis::decodeFormula( str_range );
+      str_range = Odf::decodeFormula( str_range );
       Region region(Region::loadOdf(str_range));
       if (region.isValid())
         setDataArea(region.firstRange());
@@ -589,11 +589,11 @@ void EmbeddedChart::loadOasis(const KoXmlElement &element, KoOdfLoadingContext &
 }
 
 
-bool EmbeddedChart::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const
+bool EmbeddedChart::saveOdfObjectAttributes( KSpreadOdfSaveContext &sc ) const
 {
-    kDebug() <<"EmbeddedChart::saveOasisPart" << sc.partIndexObj;
+    kDebug() <<"EmbeddedChart::saveOdfPart" << sc.partIndexObj;
 
-    EmbeddedKOfficeObject::saveOasisObjectAttributes( sc );
+    EmbeddedKOfficeObject::saveOdfObjectAttributes( sc );
 
     if(m_pBinding) { // see http://bugs.kde.org/show_bug.cgi?id=120395
         QRect dataArea = m_pBinding->dataArea();
@@ -603,7 +603,7 @@ bool EmbeddedChart::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) con
         sc.xmlWriter.addAttribute( "draw:notify-on-update-of-ranges", rangeName );
     }
     else {
-        kDebug() <<"EmbeddedChart::saveOasisPart m_pBinding is NULL";
+        kDebug() <<"EmbeddedChart::saveOdfPart m_pBinding is NULL";
     }
     sc.xmlWriter.endElement();
 
@@ -732,7 +732,7 @@ QString EmbeddedPictureObject::convertValueToPercent( int val ) const
    return QString::number( val ) + '%';
 }
 
-void EmbeddedPictureObject::saveOasisPictureElement( KoGenStyle &styleobjectauto ) const
+void EmbeddedPictureObject::saveOdfPictureElement( KoGenStyle &styleobjectauto ) const
 {
 
     if ( bright != 0 )
@@ -832,19 +832,19 @@ void EmbeddedPictureObject::saveOasisPictureElement( KoGenStyle &styleobjectauto
     }
 }
 
-bool EmbeddedPictureObject::saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const
+bool EmbeddedPictureObject::saveOdfObjectAttributes( KSpreadOdfSaveContext &sc ) const
 {
     sc.xmlWriter.startElement( "draw:image" );
     sc.xmlWriter.addAttribute( "xlink:type", "simple" );
     sc.xmlWriter.addAttribute( "xlink:show", "embed" );
     sc.xmlWriter.addAttribute( "xlink:actuate", "onLoad" );
-    sc.xmlWriter.addAttribute( "xLinkDialog.href", imageCollection->getOasisFileName( image ) );
+    sc.xmlWriter.addAttribute( "xLinkDialog.href", imageCollection->getOdfFileName( image ) );
     sc.xmlWriter.endElement();
 
     return true;
 }
 
-const char * EmbeddedPictureObject::getOasisElementName() const
+const char * EmbeddedPictureObject::getOdfElementName() const
 {
     return "draw:frame";
 }
@@ -903,7 +903,7 @@ void EmbeddedPictureObject::reload( void )
 //     return fragment;
 // }
 
-void EmbeddedPictureObject::loadOasisPictureEffect(KoOdfLoadingContext & context )
+void EmbeddedPictureObject::loadOdfPictureEffect(KoOdfLoadingContext & context )
 {
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
@@ -959,14 +959,14 @@ void EmbeddedPictureObject::loadOasisPictureEffect(KoOdfLoadingContext & context
 void EmbeddedPictureObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& /*mainStyles*/ ) const
 {
      //KP2DObject::fillStyle( styleObjectAuto, mainStyles );
-     saveOasisPictureElement( styleObjectAuto );
+     saveOdfPictureElement( styleObjectAuto );
 }
 
-void EmbeddedPictureObject::loadOasis(const KoXmlElement &element, KoOdfLoadingContext & context/*, KPRLoadingInfo *info*/)
+void EmbeddedPictureObject::loadOdf(const KoXmlElement &element, KoOdfLoadingContext & context/*, KPRLoadingInfo *info*/)
 {
     //load it into kpresenter_doc
-    EmbeddedObject::loadOasis( element, context );
-    loadOasisPictureEffect( context );
+    EmbeddedObject::loadOdf( element, context );
+    loadOdfPictureEffect( context );
     KoXmlNode imageBox = KoXml::namedItemNS( element, KoXmlNS::draw, "image" );
     const QString href( imageBox.toElement().attributeNS( KoXmlNS::xlink, "href", QString()) );
     kDebug()<<" href:"<<href;

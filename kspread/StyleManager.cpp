@@ -52,11 +52,11 @@ StyleManager::~StyleManager()
   qDeleteAll(m_styles);
 }
 
-void StyleManager::saveOasis( KoGenStyles &mainStyles )
+void StyleManager::saveOdf( KoGenStyles &mainStyles )
 {
     kDebug(36003) <<"StyleManager: Saving default cell style";
     KoGenStyle defStyle = KoGenStyle( KoGenStyle::StyleTableCell, "table-cell" );
-    defaultStyle()->saveOasis(defStyle, mainStyles, this);
+    defaultStyle()->saveOdf(defStyle, mainStyles, this);
 
     m_oasisStyles.clear();
 
@@ -65,12 +65,12 @@ void StyleManager::saveOasis( KoGenStyles &mainStyles )
     {
         kDebug(36003) <<"StyleManager: Saving common cell style" << it.key();
         KoGenStyle customStyle = KoGenStyle( KoGenStyle::StyleTableCell, "table-cell" );
-        const QString oasisName = (*it)->saveOasis(customStyle, mainStyles, this);
+        const QString oasisName = (*it)->saveOdf(customStyle, mainStyles, this);
         m_oasisStyles[(*it)->name()] = oasisName;
     }
 }
 
-void StyleManager::loadOasisStyleTemplate(KoOdfStylesReader& stylesReader, Map* map)
+void StyleManager::loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* map)
 {
     // reset the map of OpenDocument Styles
     m_oasisStyles.clear();
@@ -81,7 +81,7 @@ void StyleManager::loadOasisStyleTemplate(KoOdfStylesReader& stylesReader, Map* 
     {
       kDebug(36003) <<"StyleManager: Loading default cell style";
       Conditions conditions;
-      defaultStyle()->loadOasis( stylesReader, *defStyle, "Default", conditions, this );
+      defaultStyle()->loadOdf( stylesReader, *defStyle, "Default", conditions, this );
       defaultStyle()->setType( Style::BUILTIN );
         if (map) {
             // Load the default precision to be used, if the (default) cell style
@@ -127,12 +127,12 @@ void StyleManager::loadOasisStyleTemplate(KoOdfStylesReader& stylesReader, Map* 
 
         if ( !name.isEmpty() )
         {
-            // The style's parent name will be set in Style::loadOasis(..).
+            // The style's parent name will be set in Style::loadOdf(..).
             // After all styles are loaded the pointer to the parent is set.
             CustomStyle * style = new CustomStyle( name );
 
             Conditions conditions;
-            style->loadOasis( stylesReader, *styleElem, name, conditions, this );
+            style->loadOdf( stylesReader, *styleElem, name, conditions, this );
             // TODO Stefan: conditions
             insertStyle (style);
             // insert it into the the map sorted the OpenDocument name
@@ -145,15 +145,15 @@ void StyleManager::loadOasisStyleTemplate(KoOdfStylesReader& stylesReader, Map* 
     foreach ( CustomStyle* style, m_styles )
         if ( !style->parentName().isNull() )
         {
-            const QString parentOasisName = style->parentName();
-            const CustomStyle* parentStyle = this->style(m_oasisStyles.value(parentOasisName));
+            const QString parentOdfName = style->parentName();
+            const CustomStyle* parentStyle = this->style(m_oasisStyles.value(parentOdfName));
             if ( !parentStyle )
             {
-                kWarning(36003) << parentOasisName << " not found.";
+                kWarning(36003) << parentOdfName << " not found.";
                 continue;
             }
-            style->setParentName(m_oasisStyles.value(parentOasisName));
-            kDebug(36003) << style->name() <<" (" << style <<") gets" << style->parentName() <<" (" << parentOasisName <<") as parent.";
+            style->setParentName(m_oasisStyles.value(parentOdfName));
+            kDebug(36003) << style->name() <<" (" << style <<") gets" << style->parentName() <<" (" << parentOdfName <<") as parent.";
         }
         else
         {
@@ -397,7 +397,7 @@ QStringList StyleManager::styleNames() const
   return list;
 }
 
-Styles StyleManager::loadOasisAutoStyles( KoOdfStylesReader& stylesReader, QHash<QString, Conditions>& conditionalStyles )
+Styles StyleManager::loadOdfAutoStyles( KoOdfStylesReader& stylesReader, QHash<QString, Conditions>& conditionalStyles )
 {
     Styles autoStyles;
     foreach ( KoXmlElement* element, stylesReader.autoStyles("table-cell") )
@@ -408,7 +408,7 @@ Styles StyleManager::loadOasisAutoStyles( KoOdfStylesReader& stylesReader, QHash
             kDebug(36003) <<"StyleManager: Preloading automatic cell style:" << name;
             autoStyles.remove( name );
             Conditions conditions;
-            autoStyles[name].loadOasisStyle( stylesReader, *(element), conditions, this );
+            autoStyles[name].loadOdfStyle( stylesReader, *(element), conditions, this );
             if ( !conditions.isEmpty() )
             {
                 kDebug() <<"\t\tCONDITIONS";
@@ -417,11 +417,11 @@ Styles StyleManager::loadOasisAutoStyles( KoOdfStylesReader& stylesReader, QHash
 
             if ( element->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )
             {
-                const QString parentOasisName = element->attributeNS( KoXmlNS::style, "parent-style-name", QString() );
-                const CustomStyle* parentStyle = style(m_oasisStyles.value(parentOasisName));
+                const QString parentOdfName = element->attributeNS( KoXmlNS::style, "parent-style-name", QString() );
+                const CustomStyle* parentStyle = style(m_oasisStyles.value(parentOdfName));
                 if ( !parentStyle )
                 {
-                    kWarning(36003) << parentOasisName << " not found.";
+                    kWarning(36003) << parentOdfName << " not found.";
                     continue;
                 }
                 autoStyles[name].setParentName( parentStyle->name() );

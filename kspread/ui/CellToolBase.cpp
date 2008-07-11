@@ -2715,7 +2715,7 @@ bool CellToolBase::paste()
         // Also load styles from content.xml
         stylesReader.createStyleMap(doc, false);
 
-        // from KSpreadDoc::loadOasis:
+        // from KSpreadDoc::loadOdf:
         KoXmlElement content = doc.documentElement();
         KoXmlElement realBody(KoXml::namedItemNS(content, KoXmlNS::office, "body"));
         if (realBody.isNull()) {
@@ -2738,10 +2738,10 @@ bool CellToolBase::paste()
         Q_ASSERT(!stylesReader.officeStyle().isNull());
 
         //load in first
-        selection()->activeSheet()->map()->styleManager()->loadOasisStyleTemplate(stylesReader);
+        selection()->activeSheet()->map()->styleManager()->loadOdfStyleTemplate(stylesReader);
 
         // all <sheet:sheet> goes to workbook
-        bool result = selection()->activeSheet()->map()->loadOasis(body, context);
+        bool result = selection()->activeSheet()->map()->loadOdf(body, context);
 
         if (!result)
             return false;

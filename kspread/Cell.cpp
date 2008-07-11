@@ -1057,7 +1057,7 @@ bool Cell::saveCellResult( QDomDocument& doc, QDomElement& result,
   return true; /* really isn't much of a way for this function to fail */
 }
 
-void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
+void Cell::saveOdfAnnotation( KoXmlWriter &xmlwriter )
 {
     const QString comment = this->comment();
     if ( !comment.isEmpty() )
@@ -1074,20 +1074,20 @@ void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
     }
 }
 
-QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles )
+QString Cell::saveOdfCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles )
 {
     const Conditions conditions = this->conditions();
     if ( !conditions.isEmpty() )
     {
         // this has to be an automatic style
         currentCellStyle = KoGenStyle( KoGenStyle::StyleAutoTableCell, "table-cell" );
-        conditions.saveOasisConditions( currentCellStyle );
+        conditions.saveOdfConditions( currentCellStyle );
     }
-    return style().saveOasis( currentCellStyle, mainStyles, d->sheet->map()->styleManager() );
+    return style().saveOdf( currentCellStyle, mainStyles, d->sheet->map()->styleManager() );
 }
 
 
-bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
+bool Cell::saveOdf( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
                       int row, int column, int &repeated,
                      OdfSavingContext& tableContext)
 {
@@ -1111,7 +1111,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
 #endif
     // NOTE save the value before the style as long as the Formatter does not work correctly
     if ( link().isEmpty() )
-      saveOasisValue (xmlwriter);
+      saveOdfValue (xmlwriter);
 
     // Either there's no column and row default and the style's not the default style,
     // or the style is different to one of them. The row default takes precedence.
@@ -1121,8 +1121,8 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         (tableContext.rowDefaultStyles.contains(row) && tableContext.rowDefaultStyles[row] != style()) ||
         (tableContext.columnDefaultStyles.contains(column) && tableContext.columnDefaultStyles[column] != style()))
     {
-        KoGenStyle currentCellStyle; // the type determined in saveOasisCellStyle
-        saveOasisCellStyle( currentCellStyle, mainStyles );
+        KoGenStyle currentCellStyle; // the type determined in saveOdfCellStyle
+        saveOdfCellStyle( currentCellStyle, mainStyles );
         // skip 'table:style-name' attribute for the default style
         if ( !currentCellStyle.isDefaultStyle() )
             xmlwriter.addAttribute( "table:style-name", mainStyles.styles()[currentCellStyle] );
@@ -1150,7 +1150,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
           }
           // otherwise we just stop here to process the adjacent
           // cell in the next iteration of the outer loop
-          // (in Sheet::saveOasisCells)
+          // (in Sheet::saveOdfCells)
           break;
         }
 
@@ -1164,7 +1164,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         // get the next cell and set the index to the adjacent cell
         nextCell = sheet()->cellStorage()->nextInRow( j++, row );
       }
-      kDebug(36003) << "Cell::saveOasis: empty cell in column" << column
+      kDebug(36003) << "Cell::saveOdf: empty cell in column" << column
                     << "repeated" << repeated << "time(s)" << endl;
 
       if ( repeated > 1 )
@@ -1180,7 +1180,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
     if ( isFormula() )
     {
       //kDebug(36003) <<"Formula found";
-      QString formula = Oasis::encodeFormula( userInput(), locale() );
+      QString formula = Odf::encodeFormula( userInput(), locale() );
       xmlwriter.addAttribute( "table:formula", formula );
     }
     else if ( !link().isEmpty() )
@@ -1241,13 +1241,13 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles,
         }
     }
 
-    saveOasisAnnotation( xmlwriter );
+    saveOdfAnnotation( xmlwriter );
 
     xmlwriter.endElement();
     return true;
 }
 
-void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
+void Cell::saveOdfValue (KoXmlWriter &xmlWriter)
 {
   switch (value().format())
   {
@@ -1311,12 +1311,12 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
   };
 }
 
-bool Cell::loadOasis(const KoXmlElement& element, OdfLoadingContext& tableContext)
+bool Cell::loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext)
 {
     kDebug(36003) <<"*** Loading cell properties ***** at" << name();
 
     //Search and load each paragraph of text. Each paragraph is separated by a line break.
-    loadOasisCellText( element );
+    loadOdfCellText( element );
 
     //
     // formula
@@ -1332,7 +1332,7 @@ bool Cell::loadOasis(const KoXmlElement& element, OdfLoadingContext& tableContex
             oasisFormula= oasisFormula.mid( 5 );
         else if (oasisFormula.startsWith( "kspr:" ) )
             oasisFormula= oasisFormula.mid( 5 );
-        oasisFormula = Oasis::decodeFormula( oasisFormula, locale() );
+        oasisFormula = Odf::decodeFormula( oasisFormula, locale() );
         setUserInput( oasisFormula );
     }
     else if ( !userInput().isEmpty() && userInput().at(0) == '=' ) //prepend ' to the text to avoid = to be painted
@@ -1346,7 +1346,7 @@ bool Cell::loadOasis(const KoXmlElement& element, OdfLoadingContext& tableContex
         const QString validationName = element.attributeNS(KoXmlNS::table,"validation-name", QString());
         kDebug(36003) << " validation-name:" << validationName;
         Validity validity;
-        validity.loadOasisValidation(this, validationName, tableContext);
+        validity.loadOdfValidation(this, validationName, tableContext);
         if ( !validity.isEmpty() )
             setValidity( validity );
     }
@@ -1577,12 +1577,12 @@ bool Cell::loadOasis(const KoXmlElement& element, OdfLoadingContext& tableContex
             setComment( comment );
     }
 
-    loadOasisObjects(element, tableContext.odfContext);
+    loadOdfObjects(element, tableContext.odfContext);
 
     return true;
 }
 
-void Cell::loadOasisCellText( const KoXmlElement& parent )
+void Cell::loadOdfCellText( const KoXmlElement& parent )
 {
     //Search and load each paragraph of text. Each paragraph is separated by a line break
     KoXmlElement textParagraphElement;
@@ -1612,7 +1612,7 @@ void Cell::loadOasisCellText( const KoXmlElement& parent )
                     QString link = textA.attributeNS( KoXmlNS::xlink, "href", QString() );
                     cellText = textA.text();
                     setUserInput( cellText );
-                    // The value will be set later in loadOasis().
+                    // The value will be set later in loadOdf().
                     if ( (!link.isEmpty()) && (link[0]=='#') )
                         link=link.remove( 0, 1 );
                     setLink( link );
@@ -1624,7 +1624,7 @@ void Cell::loadOasisCellText( const KoXmlElement& parent )
     if (!cellText.isNull())
     {
         setUserInput( cellText );
-        // The value will be set later in loadOasis().
+        // The value will be set later in loadOdf().
     }
 
     //Enable word wrapping if multiple lines of text have been found.
@@ -1636,7 +1636,7 @@ void Cell::loadOasisCellText( const KoXmlElement& parent )
     }
 }
 
-void Cell::loadOasisObjects( const KoXmlElement &parent, KoOdfLoadingContext& odfContext )
+void Cell::loadOdfObjects( const KoXmlElement &parent, KoOdfLoadingContext& odfContext )
 {
     // Register additional attributes, that identify shapes anchored in cells.
     // Their dimensions need adjustment after all rows are loaded,

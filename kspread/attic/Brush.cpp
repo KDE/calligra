@@ -22,7 +22,7 @@
 
 #include <KoGenStyles.h>
 #include <KoOdfStylesReader.h>
-#include <KoOasisContext.h>
+#include <KoOdfContext.h>
 #include <KoXmlNS.h>
 
 KSpreadBrush::KSpreadBrush()
@@ -66,7 +66,7 @@ KSpreadBrush & KSpreadBrush::operator=( const KSpreadBrush &brush )
 }
 
 
-void KSpreadBrush::saveOasisFillStyle( KoGenStyle &styleObjectAuto, KoGenStyles& mainStyles ) const
+void KSpreadBrush::saveOdfFillStyle( KoGenStyle &styleObjectAuto, KoGenStyles& mainStyles ) const
 {
     switch ( m_fillType )
     {
@@ -74,7 +74,7 @@ void KSpreadBrush::saveOasisFillStyle( KoGenStyle &styleObjectAuto, KoGenStyles&
         {
             if( m_brush.style() != Qt::NoBrush )
             {
-                KoOdfStylesReader::saveOasisFillStyle( styleObjectAuto, mainStyles, m_brush );
+                KoOdfStylesReader::saveOdfFillStyle( styleObjectAuto, mainStyles, m_brush );
             }
             else
             {
@@ -85,14 +85,14 @@ void KSpreadBrush::saveOasisFillStyle( KoGenStyle &styleObjectAuto, KoGenStyles&
         case FT_GRADIENT:
             styleObjectAuto.addProperty( "draw:fill","gradient" );
 #if 0
-            styleObjectAuto.addProperty( "draw:fill-gradient-name", saveOasisGradientStyle( mainStyles ) );
+            styleObjectAuto.addProperty( "draw:fill-gradient-name", saveOdfGradientStyle( mainStyles ) );
 #endif
             break;
     }
 }
 
 
-/*QString KSpreadBrush::saveOasisGradientStyle( KoGenStyles& mainStyles ) const
+/*QString KSpreadBrush::saveOdfGradientStyle( KoGenStyles& mainStyles ) const
 {
     KoGenStyle gradientStyle( KPrDocument::STYLE_GRADIENT no family name);
     gradientStyle.addAttribute( "draw:start-color", m_gColor1.name() );
@@ -153,7 +153,7 @@ void KSpreadBrush::saveOasisFillStyle( KoGenStyle &styleObjectAuto, KoGenStyles&
 }*/
 
 
-void KSpreadBrush::loadOasisFillStyle( KoOasisContext &context, const char * propertyType )
+void KSpreadBrush::loadOdfFillStyle( KoOdfContext &context, const char * propertyType )
 {
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( propertyType );
@@ -165,7 +165,7 @@ void KSpreadBrush::loadOasisFillStyle( KoOasisContext &context, const char * pro
 
         if ( fill == "solid" || fill == "hatch" )
         {
-            setBrush( KoOdfStylesReader::loadOasisFillStyle( styleStack, fill, context.oasisStyles() ) );
+            setBrush( KoOdfStylesReader::loadOdfFillStyle( styleStack, fill, context.oasisStyles() ) );
         }
         else if ( fill == "gradient" )
         {

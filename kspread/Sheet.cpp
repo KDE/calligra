@@ -2592,7 +2592,7 @@ QString Sheet::getPart( const KoXmlNode & part )
 }
 
 
-bool Sheet::loadOasis( const KoXmlElement& sheetElement,
+bool Sheet::loadOdf( const KoXmlElement& sheetElement,
                        OdfLoadingContext& tableContext,
                        const Styles& autoStyles,
                        const QHash<QString, Conditions>& conditionalStyles )
@@ -2637,7 +2637,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
                         KoStyleStack styleStack;
                         styleStack.setTypeProperties( "page-layout" );
                         styleStack.push( *masterLayoutStyle );
-                        loadOasisMasterLayoutPage( styleStack );
+                        loadOdfMasterLayoutPage( styleStack );
                       }
                     }
                 }
@@ -2668,7 +2668,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
             // slightly faster
             KoXml::load(rowElement);
 
-            kDebug(36003)<<" Sheet::loadOasis rowElement.tagName() :"<<rowElement.localName();
+            kDebug(36003)<<" Sheet::loadOdf rowElement.tagName() :"<<rowElement.localName();
             if ( rowElement.namespaceURI() == KoXmlNS::table )
             {
                 if ( rowElement.localName() == "table-header-columns" )
@@ -2740,15 +2740,15 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
 
     // insert the styles into the storage (column defaults)
     kDebug(36003) <<"Inserting column default cell styles ...";
-    loadOasisInsertStyles( autoStyles, columnStyleRegions, conditionalStyles,
+    loadOdfInsertStyles( autoStyles, columnStyleRegions, conditionalStyles,
                            QRect( 1, 1, maxColumn, rowIndex - 1 ) );
     // insert the styles into the storage (row defaults)
     kDebug(36003) <<"Inserting row default cell styles ...";
-    loadOasisInsertStyles( autoStyles, rowStyleRegions, conditionalStyles,
+    loadOdfInsertStyles( autoStyles, rowStyleRegions, conditionalStyles,
                            QRect( 1, 1, maxColumn, rowIndex - 1 ) );
     // insert the styles into the storage
     kDebug(36003) <<"Inserting cell styles ...";
-    loadOasisInsertStyles( autoStyles, cellStyleRegions, conditionalStyles,
+    loadOdfInsertStyles( autoStyles, cellStyleRegions, conditionalStyles,
                            QRect( 1, 1, maxColumn, rowIndex - 1 ) );
 
     if ( sheetElement.hasAttributeNS( KoXmlNS::table, "print-ranges" ) )
@@ -2777,7 +2777,7 @@ bool Sheet::loadOasis( const KoXmlElement& sheetElement,
     return true;
 }
 
-void Sheet::loadOasisMasterLayoutPage( KoStyleStack &styleStack )
+void Sheet::loadOdfMasterLayoutPage( KoStyleStack &styleStack )
 {
     KoPageLayout pageLayout = KoPageLayout::standardLayout();
 
@@ -3017,7 +3017,7 @@ bool Sheet::loadColumnFormat(const KoXmlElement& column,
     return true;
 }
 
-void Sheet::loadOasisInsertStyles( const Styles& autoStyles,
+void Sheet::loadOdfInsertStyles( const Styles& autoStyles,
                                    const QHash<QString, QRegion>& styleRegions,
                                    const QHash<QString, Conditions>& conditionalStyles,
                                    const QRect& usedArea )
@@ -3159,7 +3159,7 @@ bool Sheet::loadRowFormat( const KoXmlElement& row, int &rowIndex,
             continue;
 
         Cell cell(this, columnIndex, rowIndex);
-        cell.loadOasis(cellElement, tableContext);
+        cell.loadOdf(cellElement, tableContext);
 
         bool ok = false;
         const int n = cellElement.attributeNS(KoXmlNS::table, "number-columns-repeated", QString()).toInt(&ok);
@@ -3267,7 +3267,7 @@ bool Sheet::compareRows(int row1, int row2, int& maxCols, OdfSavingContext& tabl
     return true;
 }
 
-void Sheet::saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const
+void Sheet::saveOdfHeaderFooter( KoXmlWriter &xmlWriter ) const
 {
     QString headerLeft = print()->headLeft();
     QString headerCenter= print()->headMid();
@@ -3488,7 +3488,7 @@ void Sheet::convertPart( const QString & part, KoXmlWriter & xmlWriter ) const
 }
 
 
-void Sheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings )
+void Sheet::loadOdfSettings( const KoOasisSettings::NamedMap &settings )
 {
     // Find the entry in the map that applies to this sheet (by name)
     KoOasisSettings::Items items = settings.entry( sheetName() );
@@ -3514,7 +3514,7 @@ void Sheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings )
     setShowColumnNumber (items.parseConfigItemBool( "ShowColumnNumber" ));
 }
 
-void Sheet::saveOasisSettings( KoXmlWriter &settingsWriter ) const
+void Sheet::saveOdfSettings( KoXmlWriter &settingsWriter ) const
 {
   //not into each page into oo spec
   settingsWriter.addConfigItem( "ShowZeroValues", getHideZero() );
@@ -3529,13 +3529,13 @@ void Sheet::saveOasisSettings( KoXmlWriter &settingsWriter ) const
   settingsWriter.addConfigItem( "ShowColumnNumber", getShowColumnNumber() );
 }
 
-bool Sheet::saveOasis(OdfSavingContext& tableContext)
+bool Sheet::saveOdf(OdfSavingContext& tableContext)
 {
     KoXmlWriter & xmlWriter = tableContext.shapeContext.xmlWriter();
     KoGenStyles & mainStyles = tableContext.shapeContext.mainStyles();
     xmlWriter.startElement( "table:table" );
     xmlWriter.addAttribute( "table:name", sheetName() );
-    xmlWriter.addAttribute( "table:style-name", saveOasisSheetStyleName(mainStyles )  );
+    xmlWriter.addAttribute( "table:style-name", saveOdfSheetStyleName(mainStyles )  );
     QByteArray pwd;
     password (pwd);
     if ( !pwd.isEmpty() )
@@ -3569,7 +3569,7 @@ bool Sheet::saveOasis(OdfSavingContext& tableContext)
     }
 
     const QRect usedArea = this->usedArea();
-    saveOasisColRowCell( xmlWriter, mainStyles, usedArea.width(), usedArea.height(), tableContext);
+    saveOdfColRowCell( xmlWriter, mainStyles, usedArea.width(), usedArea.height(), tableContext);
 
     // flake
     // Save the remaining shapes, those that are anchored in the page.
@@ -3589,7 +3589,7 @@ bool Sheet::saveOasis(OdfSavingContext& tableContext)
     return true;
 }
 
-void Sheet::saveOasisPrintStyleLayout( KoGenStyle &style ) const
+void Sheet::saveOdfPrintStyleLayout( KoGenStyle &style ) const
 {
     QString printParameter;
     if ( print()->settings()->printGrid() )
@@ -3607,17 +3607,17 @@ void Sheet::saveOasisPrintStyleLayout( KoGenStyle &style ) const
     }
 }
 
-QString Sheet::saveOasisSheetStyleName( KoGenStyles &mainStyles )
+QString Sheet::saveOdfSheetStyleName( KoGenStyles &mainStyles )
 {
     KoGenStyle pageStyle( KoGenStyle::StyleAutoTable, "table"/*FIXME I don't know if name is sheet*/ );
 
     KoGenStyle pageMaster( KoGenStyle::StyleMaster );
-    pageMaster.addAttribute( "style:page-layout-name", print()->saveOasisSheetStyleLayout( mainStyles ) );
+    pageMaster.addAttribute( "style:page-layout-name", print()->saveOdfSheetStyleLayout( mainStyles ) );
 
     QBuffer buffer;
     buffer.open( QIODevice::WriteOnly );
     KoXmlWriter elementWriter( &buffer );  // TODO pass indentation level
-    saveOasisHeaderFooter(elementWriter);
+    saveOdfHeaderFooter(elementWriter);
 
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     pageMaster.addChildElement( "headerfooter", elementContents );
@@ -3628,10 +3628,10 @@ QString Sheet::saveOasisSheetStyleName( KoGenStyles &mainStyles )
 }
 
 
-void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
+void Sheet::saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                                 int maxCols, int maxRows, OdfSavingContext& tableContext)
 {
-    kDebug(36003) <<"Sheet::saveOasisColRowCell:" << d->name;
+    kDebug(36003) <<"Sheet::saveOdfColRowCell:" << d->name;
 
     // calculate the column/row default cell styles
     int maxMaxRows = maxRows; // includes the max row a column default style occupies
@@ -3651,7 +3651,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     while ( i <= maxCols )
     {
         const ColumnFormat* column = columnFormat( i );
-//         kDebug(36003) << "Sheet::saveOasisColRowCell: first col loop:"
+//         kDebug(36003) << "Sheet::saveOdfColRowCell: first col loop:"
 //                       << "i:" << i
 //                       << "column:" << (column ? column->column() : 0) << endl;
 
@@ -3671,7 +3671,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
           // j becomes the index of the adjacent column
           ++j;
 
-//           kDebug(36003) <<"Sheet::saveOasisColRowCell: second col loop:"
+//           kDebug(36003) <<"Sheet::saveOdfColRowCell: second col loop:"
 //                         << "j:" << j
 //                         << "next column:" << (nextColumn ? nextColumn->column() : 0)
 //                         << "next styled column:" << nextStyleColumnIndex << endl;
@@ -3716,8 +3716,8 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         {
           if ( !style.isDefault() )
           {
-              KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisStyle
-              const QString name = style.saveOasis(currentDefaultCellStyle, mainStyles,
+              KoGenStyle currentDefaultCellStyle; // the type is determined in saveOdfStyle
+              const QString name = style.saveOdf(currentDefaultCellStyle, mainStyles,
                                                                 map()->styleManager());
               xmlWriter.addAttribute("table:default-cell-style-name", name);
           }
@@ -3731,7 +3731,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             xmlWriter.addAttribute("table:number-columns-repeated", count);
         xmlWriter.endElement();
 
-        kDebug(36003) << "Sheet::saveOasisColRowCell: column" << i
+        kDebug(36003) << "Sheet::saveOdfColRowCell: column" << i
                       << "repeated" << count-1 << "time(s)" << endl;
 
         i += count;
@@ -3760,7 +3760,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         // empty row?
         if (!d->cellStorage->firstInRow(i) && !tableContext.rowHasCellAnchoredShapes(this, i)) // row is empty
         {
-//             kDebug(36003) <<"Sheet::saveOasisColRowCell: first row loop:"
+//             kDebug(36003) <<"Sheet::saveOdfColRowCell: first row loop:"
 //                           << " i: " << i
 //                           << " row: " << row->row() << endl;
             int j = i + 1;
@@ -3771,7 +3771,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             //   next row with different Format
             while (j <= maxRows && !d->cellStorage->firstInRow(j) && !tableContext.rowHasCellAnchoredShapes(this, j)) {
               const RowFormat* nextRow = rowFormat( j );
-//               kDebug(36003) <<"Sheet::saveOasisColRowCell: second row loop:"
+//               kDebug(36003) <<"Sheet::saveOdfColRowCell: second row loop:"
 //                         << " j: " << j
 //                         << " row: " << nextRow->row() << endl;
 
@@ -3800,8 +3800,8 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
                 xmlWriter.addAttribute("table:number-rows-repeated", repeated);
             if (!style.isDefault())
             {
-              KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
-              const QString name = style.saveOasis(currentDefaultCellStyle, mainStyles,
+              KoGenStyle currentDefaultCellStyle; // the type is determined in saveOdfCellStyle
+              const QString name = style.saveOdf(currentDefaultCellStyle, mainStyles,
                                                    map()->styleManager());
               xmlWriter.addAttribute("table:default-cell-style-name", name);
             }
@@ -3824,7 +3824,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             }
             xmlWriter.endElement();
 
-            kDebug(36003) << "Sheet::saveOasisColRowCell: empty row" << i
+            kDebug(36003) << "Sheet::saveOdfColRowCell: empty row" << i
                           << "repeated" << repeated << "time(s)" << endl;
 
             // copy the index for the next row to process
@@ -3834,8 +3834,8 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
         {
             if (!style.isDefault())
             {
-                KoGenStyle currentDefaultCellStyle; // the type is determined in saveOasisCellStyle
-                const QString name = style.saveOasis(currentDefaultCellStyle, mainStyles,
+                KoGenStyle currentDefaultCellStyle; // the type is determined in saveOdfCellStyle
+                const QString name = style.saveOdf(currentDefaultCellStyle, mainStyles,
                                                      map()->styleManager());
                 xmlWriter.addAttribute("table:default-cell-style-name", name);
             }
@@ -3851,13 +3851,13 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
             }
             if ( repeated > 1 )
             {
-              kDebug(36003) << "Sheet::saveOasisColRowCell: NON-empty row" << i
+              kDebug(36003) << "Sheet::saveOdfColRowCell: NON-empty row" << i
                             << "repeated" << repeated << "times" << endl;
 
               xmlWriter.addAttribute("table:number-rows-repeated", repeated);
             }
 
-            saveOasisCells(xmlWriter, mainStyles, i, maxCols, tableContext);
+            saveOdfCells(xmlWriter, mainStyles, i, maxCols, tableContext);
 
             // copy the index for the next row to process
             i = j - 1; /*it's already incremented in the for loop*/
@@ -3882,7 +3882,7 @@ void Sheet::saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles
     }
 }
 
-void Sheet::saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols,
+void Sheet::saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols,
                            OdfSavingContext& tableContext)
 {
     int i = 1;
@@ -3894,11 +3894,11 @@ void Sheet::saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int 
     //   we have a further cell in this row
     while (!cell.isDefault() || tableContext.cellHasAnchoredShapes(cell) || !nextCell.isNull())
     {
-//         kDebug(36003) <<"Sheet::saveOasisCells:"
+//         kDebug(36003) <<"Sheet::saveOdfCells:"
 //                       << " i: " << i
 //                       << " column: " << cell.column() << endl;
         int repeated = 1;
-        cell.saveOasis(xmlWriter, mainStyles, row, i, repeated, tableContext);
+        cell.saveOdf(xmlWriter, mainStyles, row, i, repeated, tableContext);
         i += repeated;
         // stop if we reached the end column
         if (i > maxCols || nextCell.isNull())

@@ -342,10 +342,10 @@ bool Doc::loadChildren( KoStore* _store )
 bool Doc::saveOdf( SavingContext &documentContext )
 {
     ElapsedTime et("OpenDocument Saving", ElapsedTime::PrintOnlyTime);
-    return saveOasisHelper(documentContext, SaveAll);
+    return saveOdfHelper(documentContext, SaveAll);
 }
 
-bool Doc::saveOasisHelper( SavingContext & documentContext, SaveFlag saveFlag,
+bool Doc::saveOdfHelper( SavingContext & documentContext, SaveFlag saveFlag,
                             QString* /*plainText*/ )
 {
     KoStore * store = documentContext.odfStore.store();
@@ -385,7 +385,7 @@ bool Doc::saveOasisHelper( SavingContext & documentContext, SaveFlag saveFlag,
     int partIndexObj = 0;
 
     // Saving the map.
-    map()->saveOasis( contentTmpWriter, mainStyles, store,  manifestWriter, indexObj, partIndexObj );
+    map()->saveOdf( contentTmpWriter, mainStyles, store,  manifestWriter, indexObj, partIndexObj );
 
     contentTmpWriter.endElement(); ////office:spreadsheet
     contentTmpWriter.endElement(); ////office:body
@@ -418,7 +418,7 @@ bool Doc::saveOasisHelper( SavingContext & documentContext, SaveFlag saveFlag,
 
     KoUnit::saveOasis(settingsWriter, unit());
 
-    saveOasisSettings( *settingsWriter );
+    saveOdfSettings( *settingsWriter );
 
     settingsWriter->endElement(); // config:config-item-set
 
@@ -441,7 +441,7 @@ bool Doc::saveOasisHelper( SavingContext & documentContext, SaveFlag saveFlag,
     return true;
 }
 
-void Doc::loadOasisSettings( const KoXmlDocument&settingsDoc )
+void Doc::loadOdfSettings( const KoXmlDocument&settingsDoc )
 {
     KoOasisSettings settings( settingsDoc );
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
@@ -449,22 +449,22 @@ void Doc::loadOasisSettings( const KoXmlDocument&settingsDoc )
     {
         setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
     }
-    map()->loadOasisSettings( settings );
-    loadOasisIgnoreList( settings );
+    map()->loadOdfSettings( settings );
+    loadOdfIgnoreList( settings );
 }
 
-void Doc::saveOasisSettings( KoXmlWriter &settingsWriter )
+void Doc::saveOdfSettings( KoXmlWriter &settingsWriter )
 {
     settingsWriter.startElement("config:config-item-map-indexed");
     settingsWriter.addAttribute("config:name", "Views");
     settingsWriter.startElement( "config:config-item-map-entry" );
-    map()->saveOasisSettings( settingsWriter );
+    map()->saveOdfSettings( settingsWriter );
     settingsWriter.endElement();
     settingsWriter.endElement();
 }
 
 
-void Doc::loadOasisIgnoreList( const KoOasisSettings& settings )
+void Doc::loadOdfIgnoreList( const KoOasisSettings& settings )
 {
     KoOasisSettings::Items configurationSettings = settings.itemSet( "configuration-settings" );
     if ( !configurationSettings.isNull() )
@@ -516,7 +516,7 @@ bool Doc::loadOdf( KoOdfReadStore & odfStore )
     // TODO check versions and mimetypes etc.
 
     // all <sheet:sheet> goes to workbook
-    if ( !map()->loadOasis( body, context ) )
+    if ( !map()->loadOdf( body, context ) )
     {
         d->isLoading = false;
         map()->deleteLoadingInfo();
@@ -525,7 +525,7 @@ bool Doc::loadOdf( KoOdfReadStore & odfStore )
 
     if ( !odfStore.settingsDoc().isNull() )
     {
-        loadOasisSettings( odfStore.settingsDoc() );
+        loadOdfSettings( odfStore.settingsDoc() );
     }
     initConfig();
     emit sigProgress(-1);

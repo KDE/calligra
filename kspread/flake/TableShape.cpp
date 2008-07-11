@@ -158,12 +158,12 @@ bool TableShape::loadOdf(const KoXmlElement &element, KoShapeLoadingContext &con
         KoOdfLoadingContext& odfContext = context.odfLoadingContext();
         OdfLoadingContext tableContext(odfContext);
         QHash<QString, Conditions> conditionalStyles;
-        Styles autoStyles = sheet()->map()->styleManager()->loadOasisAutoStyles(odfContext.stylesReader(), conditionalStyles);
+        Styles autoStyles = sheet()->map()->styleManager()->loadOdfAutoStyles(odfContext.stylesReader(), conditionalStyles);
 
         if (!element.attributeNS(KoXmlNS::table, "name", QString()).isEmpty()) {
             sheet()->setSheetName(element.attributeNS(KoXmlNS::table, "name", QString()), true);
         }
-        const bool result = sheet()->loadOasis(element, tableContext, autoStyles, conditionalStyles);
+        const bool result = sheet()->loadOdf(element, tableContext, autoStyles, conditionalStyles);
 
         // delete any styles which were not used
         sheet()->map()->styleManager()->releaseUnusedAutoStyles(autoStyles);
@@ -193,7 +193,7 @@ void TableShape::saveOdf( KoShapeSavingContext & context ) const
 {
     const Map* map = sheet()->map();
     // Saving the custom cell styles including the default cell style.
-    map->styleManager()->saveOasis(context.mainStyles());
+    map->styleManager()->saveOdf(context.mainStyles());
 
     // Saving the default column style
     KoGenStyle defaultColumnStyle(KoGenStyle::StyleTableColumn, "table-column");
@@ -208,7 +208,7 @@ void TableShape::saveOdf( KoShapeSavingContext & context ) const
     context.mainStyles().lookup(defaultRowStyle, "Default", KoGenStyles::DontForceNumbering);
 
     OdfSavingContext tableContext(context);
-    sheet()->saveOasis(tableContext);
+    sheet()->saveOdf(tableContext);
     tableContext.valStyle.writeStyle(context.xmlWriter());
 }
 

@@ -167,14 +167,14 @@ public:
 
     bool loadXML(KoXmlElement& format, Paste::Mode pm = Paste::Normal);
     void saveXML(QDomDocument& doc, QDomElement& format, const StyleManager* styleManager) const;
-    void loadOasisStyle( KoOdfStylesReader& stylesReader, const KoXmlElement& element,
+    void loadOdfStyle( KoOdfStylesReader& stylesReader, const KoXmlElement& element,
                          Conditions& conditions, const StyleManager* styleManager );
     /**
      * Saves an OASIS automatic style.
      * Reimplemented by CustomStyle for OASIS user styles.
      * \return the OASIS style's name
      */
-    virtual QString saveOasis(KoGenStyle& style, KoGenStyles& mainStyles,
+    virtual QString saveOdf(KoGenStyle& style, KoGenStyles& mainStyles,
                               const StyleManager* manager) const;
 
 
@@ -231,16 +231,16 @@ public:
 
 protected:
     /**
-     * Helper function for saveOasis
+     * Helper function for saveOdf
      * Does the real work by determining the used attributes.
      */
-    void saveOasisStyle(const QSet<Key>& subStyles, KoGenStyle &style,
+    void saveOdfStyle(const QSet<Key>& subStyles, KoGenStyle &style,
                         KoGenStyles &mainStyles, const StyleManager* manager) const;
 
-    void loadOasisDataStyle( KoOdfStylesReader& stylesReader, const KoXmlElement& element );
-    void loadOasisParagraphProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& element );
-    void loadOasisTableCellProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& element );
-    void loadOasisTextProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& element );
+    void loadOdfDataStyle( KoOdfStylesReader& stylesReader, const KoXmlElement& element );
+    void loadOdfParagraphProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& element );
+    void loadOdfTableCellProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& element );
+    void loadOdfTextProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& element );
 
 public:
     void setHAlign( HAlign align );
@@ -291,28 +291,28 @@ public:
      * @return the name of the data style (number, currency, percentage, date,
      * boolean, text)
      */
-    static QString saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles, Format::Type _style,
+    static QString saveOdfStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles, Format::Type _style,
                                           const QString &_prefix, const QString &_postfix, int _precision, const QString& symbol );
-    static QString saveOasisStyleNumericDate( KoGenStyles &mainStyles, Format::Type _style,
+    static QString saveOdfStyleNumericDate( KoGenStyles &mainStyles, Format::Type _style,
                                               const QString &_prefix, const QString &_suffix );
-    static QString saveOasisStyleNumericFraction( KoGenStyles &mainStyles, Format::Type _style,
+    static QString saveOdfStyleNumericFraction( KoGenStyles &mainStyles, Format::Type _style,
                                                   const QString &_prefix, const QString &_suffix );
-    static QString saveOasisStyleNumericTime( KoGenStyles& mainStyles, Format::Type _style,
+    static QString saveOdfStyleNumericTime( KoGenStyles& mainStyles, Format::Type _style,
                                               const QString &_prefix, const QString &_suffix );
-    static QString saveOasisStyleNumericCustom( KoGenStyles&mainStyles, Format::Type _style,
+    static QString saveOdfStyleNumericCustom( KoGenStyles&mainStyles, Format::Type _style,
                                                 const QString &_prefix, const QString &_suffix );
-    static QString saveOasisStyleNumericScientific( KoGenStyles&mainStyles, Format::Type _style,
+    static QString saveOdfStyleNumericScientific( KoGenStyles&mainStyles, Format::Type _style,
                                                     const QString &_prefix, const QString &_suffix, int _precision );
-    static QString saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, Format::Type _style, int _precision,
+    static QString saveOdfStyleNumericPercentage( KoGenStyles&mainStyles, Format::Type _style, int _precision,
                                                     const QString &_prefix, const QString &_suffix );
-    static QString saveOasisStyleNumericMoney( KoGenStyles&mainStyles, Format::Type _style,
+    static QString saveOdfStyleNumericMoney( KoGenStyles&mainStyles, Format::Type _style,
                                                const QString& symbol, int _precision,
                                                const QString &_prefix, const QString &_suffix );
-    static QString saveOasisStyleNumericText( KoGenStyles&mainStyles, Format::Type _style, int _precision,
+    static QString saveOdfStyleNumericText( KoGenStyles&mainStyles, Format::Type _style, int _precision,
                                               const QString &_prefix, const QString &_suffix );
-    static QString saveOasisStyleNumericNumber( KoGenStyles&mainStyles, Format::Type _style, int _precision,
+    static QString saveOdfStyleNumericNumber( KoGenStyles&mainStyles, Format::Type _style, int _precision,
                                                 const QString &_prefix, const QString &_suffix );
-    static QString saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush );
+    static QString saveOdfBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush );
 
     /**
      * Returns the name of a color.  This is the same as returned by QColor::name, but an internal cache
@@ -388,7 +388,7 @@ public:
      * @param style the DOM element defining the style
      * @param name the style's new name
      */
-    void loadOasis( KoOdfStylesReader& stylesReader, const KoXmlElement& style,
+    void loadOdf( KoOdfStylesReader& stylesReader, const KoXmlElement& style,
                     const QString& name, Conditions& conditions,
                     const StyleManager* styleManager );
 
@@ -397,7 +397,7 @@ public:
      * Stores an OASIS user style.
      * @return the OASIS style's name
      */
-    virtual QString saveOasis(KoGenStyle& style, KoGenStyles &mainStyles,
+    virtual QString saveOdf(KoGenStyle& style, KoGenStyles &mainStyles,
                               const StyleManager* manager) const;
 
 

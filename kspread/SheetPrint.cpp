@@ -132,13 +132,13 @@ SheetPrint::~SheetPrint()
     delete m_pSheetView;
 }
 
-QString SheetPrint::saveOasisSheetStyleLayout( KoGenStyles &mainStyles )
+QString SheetPrint::saveOdfSheetStyleLayout( KoGenStyles &mainStyles )
 {
     KoGenStyle pageLayout = m_settings->pageLayout().saveOasis();
     //pageLayout.addAttribute( "style:page-usage", "all" ); FIXME
     //necessary for print setup
-    m_pSheet->saveOasisPrintStyleLayout( pageLayout );
-    // this is called from Sheet::saveOasisSheetStyleName for writing the SytleMaster so 
+    m_pSheet->saveOdfPrintStyleLayout( pageLayout );
+    // this is called from Sheet::saveOdfSheetStyleName for writing the SytleMaster so 
     // the style has to be in the styles.xml file and only there
     pageLayout.setAutoStyleInStylesDotXml( true );
 

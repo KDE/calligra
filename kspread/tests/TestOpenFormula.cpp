@@ -77,7 +77,7 @@ QString TestOpenFormula::convertToOpenFormula(const QString& expr)
   locale.setDecimalSymbol(",");   
   locale.setThousandsSeparator(" ");
   
-  QString formula = Oasis::encodeFormula( expr, &locale );
+  QString formula = Odf::encodeFormula( expr, &locale );
   return formula;
 }
 
@@ -87,7 +87,7 @@ QString TestOpenFormula::convertFromOpenFormula(const QString& expr)
   locale.setDecimalSymbol(",");   
   locale.setThousandsSeparator(" ");
 
-  QString formula = Oasis::decodeFormula( expr, &locale );
+  QString formula = Odf::decodeFormula( expr, &locale );
   return formula;
 }
 

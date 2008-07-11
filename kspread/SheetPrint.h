@@ -58,7 +58,7 @@ public:
     explicit SheetPrint( Sheet* sheet );
     ~SheetPrint();
 
-    QString saveOasisSheetStyleLayout( KoGenStyles &mainStyles );
+    QString saveOdfSheetStyleLayout( KoGenStyles &mainStyles );
 
     /**
      * @return false if nothing to print.

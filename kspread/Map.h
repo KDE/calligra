@@ -181,24 +181,24 @@ public:
   /**
    * \ingroup OpenDocument
    */
-  void saveOasisSettings( KoXmlWriter &settingsWriter );
+  void saveOdfSettings( KoXmlWriter &settingsWriter );
 
   /**
    * \ingroup OpenDocument
    */
-  void loadOasisSettings( KoOasisSettings &settings );
+  void loadOdfSettings( KoOasisSettings &settings );
 
   /**
    * \ingroup OpenDocument
    */
-  bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles,
+  bool saveOdf( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles,
                   KoStore *store, KoXmlWriter* manifestWriter,
                   int &_indexObj, int &_partIndexObj );
 
   /**
    * \ingroup OpenDocument
    */
-  bool loadOasis( const KoXmlElement& mymap, KoOdfLoadingContext& odfContext );
+  bool loadOdf( const KoXmlElement& mymap, KoOdfLoadingContext& odfContext );
 
   /**
    * \ingroup NativeFormat

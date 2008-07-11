@@ -418,8 +418,8 @@ void exportNamedExpr( Doc* kspreadDoc, QDomDocument & doc, QDomElement & parent,
     range = kspreadDoc->map()->namedAreaManager()->namedArea(namedAreas[i]).firstRange();
 
     namedRange.setAttribute("table:name", namedAreas[i]);
-    namedRange.setAttribute("table:base-cell-address", Oasis::convertRefToBase(sheet->sheetName(), range));
-    namedRange.setAttribute("table:cell-range-address", Oasis::convertRefToRange(sheet->sheetName(), range));
+    namedRange.setAttribute("table:base-cell-address", Odf::convertRefToBase(sheet->sheetName(), range));
+    namedRange.setAttribute("table:cell-range-address", Odf::convertRefToRange(sheet->sheetName(), range));
 
     parent.appendChild( namedRange );
   }
@@ -482,7 +482,7 @@ bool OpenCalcExport::exportBody( QDomDocument & doc, QDomElement & content, cons
     QRect _printRange = sheet->print()->printRange();
     if ( _printRange != ( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) ) )
     {
-        QString range= Oasis::convertRangeToRef( name, _printRange );
+        QString range= Odf::convertRangeToRef( name, _printRange );
         //kDebug(30518)<<" range :"<<range;
         tabElem.setAttribute( "table:print-ranges", range );
     }

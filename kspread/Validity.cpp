@@ -258,7 +258,7 @@ QDomElement Validity::saveXML( QDomDocument& doc ) const
 }
 
 
-void Validity::loadOasisValidation(Cell* const cell, const QString& validationName,
+void Validity::loadOdfValidation(Cell* const cell, const QString& validationName,
                                    OdfLoadingContext& tableContext)
 {
     KoXmlElement element = tableContext.validities.value(validationName);
@@ -287,7 +287,7 @@ void Validity::loadOasisValidation(Cell* const cell, const QString& validationNa
             kDebug(36003)<<" valExpression = :"<<valExpression;
             setRestriction( Validity::TextLength );
 
-            loadOasisValidationCondition( valExpression );
+            loadOdfValidationCondition( valExpression );
         }
         else if ( valExpression.contains( "cell-content-is-text()" ) )
         {
@@ -302,7 +302,7 @@ void Validity::loadOasisValidation(Cell* const cell, const QString& validationNa
             kDebug(36003)<<" valExpression :"<<valExpression;
             valExpression = valExpression.remove( ')' );
             QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
-            loadOasisValidationValue( listVal );
+            loadOdfValidationValue( listVal );
         }
         else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
         {
@@ -313,7 +313,7 @@ void Validity::loadOasisValidation(Cell* const cell, const QString& validationNa
             valExpression = valExpression.remove( ')' );
             kDebug(36003)<<" valExpression :"<<valExpression;
             QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
-            loadOasisValidationValue( listVal );
+            loadOdfValidationValue( listVal );
         }
         else if ( valExpression.contains( "cell-content-is-in-list(" ) )
         {
@@ -352,7 +352,7 @@ void Validity::loadOasisValidation(Cell* const cell, const QString& validationNa
             if ( valExpression.contains( "cell-content()" ) )
             {
                 valExpression = valExpression.remove( "cell-content()" );
-                loadOasisValidationCondition( valExpression );
+                loadOdfValidationCondition( valExpression );
             }
             //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
             //for the moment we support just int/double value, not text/date/time :(
@@ -361,7 +361,7 @@ void Validity::loadOasisValidation(Cell* const cell, const QString& validationNa
                 valExpression = valExpression.remove( "cell-content-is-between(" );
                 valExpression = valExpression.remove( ')' );
                 QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
-                loadOasisValidationValue( listVal );
+                loadOdfValidationValue( listVal );
                 setCondition( Conditional::Between );
             }
             if ( valExpression.contains( "cell-content-is-not-between(" ) )
@@ -369,7 +369,7 @@ void Validity::loadOasisValidation(Cell* const cell, const QString& validationNa
                 valExpression = valExpression.remove( "cell-content-is-not-between(" );
                 valExpression = valExpression.remove( ')' );
                 QStringList listVal = valExpression.split( ',', QString::SkipEmptyParts );
-                loadOasisValidationValue( listVal );
+                loadOdfValidationValue( listVal );
                 setCondition( Conditional::Different );
             }
         }
@@ -435,7 +435,7 @@ void Validity::loadOasisValidation(Cell* const cell, const QString& validationNa
     cell->setValidity( validity );
 }
 
-void Validity::loadOasisValidationValue( const QStringList &listVal )
+void Validity::loadOdfValidationValue( const QStringList &listVal )
 {
     bool ok = false;
     kDebug(36003)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1];
@@ -480,7 +480,7 @@ void Validity::loadOasisValidationValue( const QStringList &listVal )
     }
 }
 
-void Validity::loadOasisValidationCondition( QString &valExpression )
+void Validity::loadOdfValidationCondition( QString &valExpression )
 {
     if (isEmpty()) return;
     QString value;

@@ -127,7 +127,7 @@ public:
      * \ingroup OpenDocument
      * Loads validity checks.
      */
-    void loadOasisValidation(Cell* const cell, const QString& validationName,
+    void loadOdfValidation(Cell* const cell, const QString& validationName,
                              OdfLoadingContext& tableContext);
 
     Action action() const;
@@ -177,15 +177,15 @@ public:
 private:
     /**
      * \ingroup OpenDocument
-     * Helper method for loadOasisValidation().
+     * Helper method for loadOdfValidation().
      */
-    void loadOasisValidationCondition( QString &valExpression );
+    void loadOdfValidationCondition( QString &valExpression );
 
     /**
      * \ingroup OpenDocument
-     * Helper method for loadOasisValidation().
+     * Helper method for loadOdfValidation().
      */
-    void loadOasisValidationValue( const QStringList &listVal );
+    void loadOdfValidationValue( const QStringList &listVal );
 
     class Private;
     QSharedDataPointer<Private> d;

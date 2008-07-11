@@ -331,12 +331,12 @@ public:
      * @param element An OASIS XML element
      * @param tableContext The loading context assoiated with the XML element
      */
-    bool loadOasis(const KoXmlElement& element, OdfLoadingContext& tableContext);
+    bool loadOdf(const KoXmlElement& element, OdfLoadingContext& tableContext);
 
     /**
      * \ingroup OpenDocument
      */
-    bool saveOasis( KoXmlWriter& xmlwriter, KoGenStyles& mainStyles,
+    bool saveOdf( KoXmlWriter& xmlwriter, KoGenStyles& mainStyles,
                     int row, int column, int &repeated,
                    OdfSavingContext& savingContext);
 
@@ -564,17 +564,17 @@ protected:
      * Load the text paragraphs from an OASIS XML cell description.
      * @param parent The DOM element representing the cell.
      */
-    void loadOasisCellText( const KoXmlElement& parent );
+    void loadOdfCellText( const KoXmlElement& parent );
 
     /**
      * \ingroup OpenDocument
      */
-    void loadOasisObjects( const KoXmlElement& e, KoOdfLoadingContext& odfContext );
+    void loadOdfObjects( const KoXmlElement& e, KoOdfLoadingContext& odfContext );
 
     /**
      * \ingroup OpenDocument
      */
-    void saveOasisAnnotation( KoXmlWriter &xmlwriter );
+    void saveOdfAnnotation( KoXmlWriter &xmlwriter );
 
 private:
     class Private;
@@ -593,13 +593,13 @@ private:
     /**
      * \ingroup OpenDocument
      */
-    void saveOasisValue (KoXmlWriter &xmlWriter);
+    void saveOdfValue (KoXmlWriter &xmlWriter);
 
     /**
      * \ingroup OpenDocument
      * @return the OASIS style's name
      */
-    QString saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles );
+    QString saveOdfCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles );
 };
 
 inline uint qHash( const Cell& cell )

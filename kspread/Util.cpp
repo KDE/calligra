@@ -203,7 +203,7 @@ int KSpread::Util::penCompare( QPen const & pen1, QPen const & pen2 )
 }
 
 
-QString KSpread::Oasis::convertRefToBase( const QString & sheet, const QRect & rect )
+QString KSpread::Odf::convertRefToBase( const QString & sheet, const QRect & rect )
 {
   QPoint bottomRight( rect.bottomRight() );
 
@@ -217,13 +217,13 @@ QString KSpread::Oasis::convertRefToBase( const QString & sheet, const QRect & r
   return s;
 }
 
-QString KSpread::Oasis::convertRefToRange( const QString & sheet, const QRect & rect )
+QString KSpread::Odf::convertRefToRange( const QString & sheet, const QRect & rect )
 {
   QPoint topLeft( rect.topLeft() );
   QPoint bottomRight( rect.bottomRight() );
 
   if ( topLeft == bottomRight )
-    return Oasis::convertRefToBase( sheet, rect );
+    return Odf::convertRefToBase( sheet, rect );
 
   QString s( '$' );
   s += sheet;
@@ -240,13 +240,13 @@ QString KSpread::Oasis::convertRefToRange( const QString & sheet, const QRect & 
 }
 
  // e.g.: Sheet4.A1:Sheet4.E28
- //used in Sheet::saveOasis
-QString KSpread::Oasis::convertRangeToRef( const QString & sheetName, const QRect & _area )
+ //used in Sheet::saveOdf
+QString KSpread::Odf::convertRangeToRef( const QString & sheetName, const QRect & _area )
 {
     return sheetName + '.' + Cell::name( _area.left(), _area.top() ) + ':' + sheetName + '.'+ Cell::name( _area.right(), _area.bottom() );
 }
 
-QString KSpread::Oasis::encodePen( const QPen & pen )
+QString KSpread::Odf::encodePen( const QPen & pen )
 {
 //     kDebug()<<"encodePen( const QPen & pen ) :"<<pen;
     // NOTE Stefan: QPen api docs:
@@ -284,7 +284,7 @@ QString KSpread::Oasis::encodePen( const QPen & pen )
     return s;
 }
 
-QPen KSpread::Oasis::decodePen( const QString &border )
+QPen KSpread::Odf::decodePen( const QString &border )
 {
     QPen pen;
     //string like "0.088cm solid #800000"
@@ -336,7 +336,7 @@ bool KSpread::Util::localReferenceAnchor( const QString &_ref )
 }
 
 
-QString KSpread::Oasis::decodeFormula(const QString& expression, const KLocale* locale)
+QString KSpread::Odf::decodeFormula(const QString& expression, const KLocale* locale)
 {
     // parsing state
     enum { Start, InNumber, InString, InIdentifier, InReference, InSheetName } state = Start;
@@ -528,7 +528,7 @@ QString KSpread::Oasis::decodeFormula(const QString& expression, const KLocale* 
     return result;
 }
 
-QString KSpread::Oasis::encodeFormula( const QString& expr, const KLocale* locale )
+QString KSpread::Odf::encodeFormula( const QString& expr, const KLocale* locale )
 {
     // use locale settings
     const QString decimal = locale ? locale->decimalSymbol() : ".";

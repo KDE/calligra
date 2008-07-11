@@ -354,24 +354,24 @@ void Map::moveSheet( const QString & _from, const QString & _to, bool _before )
   }
 }
 
-void Map::loadOasisSettings( KoOasisSettings &settings )
+void Map::loadOdfSettings( KoOasisSettings &settings )
 {
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
     KoOasisSettings::IndexedMap viewMap = viewSettings.indexedMap( "Views" );
     KoOasisSettings::Items firstView = viewMap.entry( 0 );
 
     KoOasisSettings::NamedMap sheetsMap = firstView.namedMap( "Tables" );
-    kDebug()<<" loadOasisSettings( KoOasisSettings &settings ) exist :"<< !sheetsMap.isNull();
+    kDebug()<<" loadOdfSettings( KoOasisSettings &settings ) exist :"<< !sheetsMap.isNull();
     if ( !sheetsMap.isNull() )
     {
       foreach ( Sheet* sheet, d->lstSheets )
       {
-        sheet->loadOasisSettings( sheetsMap );
+        sheet->loadOdfSettings( sheetsMap );
       }
     }
 
     QString activeSheet = firstView.parseConfigItemString( "ActiveTable" );
-    kDebug()<<" loadOasisSettings( KoOasisSettings &settings ) activeSheet :"<<activeSheet;
+    kDebug()<<" loadOdfSettings( KoOasisSettings &settings ) activeSheet :"<<activeSheet;
 
     if (!activeSheet.isEmpty()) {
         // Used by View's constructor
@@ -379,7 +379,7 @@ void Map::loadOasisSettings( KoOasisSettings &settings )
     }
 }
 
-void Map::saveOasisSettings( KoXmlWriter &settingsWriter )
+void Map::saveOdfSettings( KoXmlWriter &settingsWriter )
 {
     settingsWriter.addConfigItem( "ViewId", QString::fromLatin1( "View1" ) );
     // Save visual info for the first view, such as active sheet and active cell
@@ -409,17 +409,17 @@ void Map::saveOasisSettings( KoXmlWriter &settingsWriter )
         settingsWriter.addConfigItem( "xOffset", offset.x() );
         settingsWriter.addConfigItem( "yOffset", offset.y() );
       }
-      sheet->saveOasisSettings( settingsWriter );
+      sheet->saveOdfSettings( settingsWriter );
       settingsWriter.endElement();
     }
     settingsWriter.endElement();
 }
 
 
-bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore *store, KoXmlWriter* manifestWriter, int &_indexObj, int &_partIndexObj )
+bool Map::saveOdf( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore *store, KoXmlWriter* manifestWriter, int &_indexObj, int &_partIndexObj )
 {
     // Saving the custom cell styles including the default cell style.
-    d->styleManager->saveOasis(mainStyles);
+    d->styleManager->saveOdf(mainStyles);
 
     // Saving the default column style
     KoGenStyle defaultColumnStyle(KoGenStyle::StyleTableColumn, "table-column");
@@ -457,7 +457,7 @@ bool Map::saveOasis( KoXmlWriter & xmlWriter, KoGenStyles & mainStyles, KoStore 
 
     foreach ( Sheet* sheet, d->lstSheets )
     {
-        sheet->saveOasis(tableContext);
+        sheet->saveOdf(tableContext);
     }
 
     tableContext.valStyle.writeStyle(xmlWriter);
@@ -523,13 +523,13 @@ QDomElement Map::save( QDomDocument& doc )
   return mymap;
 }
 
-bool Map::loadOasis( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
+bool Map::loadOdf( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
 {
     d->isLoading = true;
     loadingInfo()->setFileFormat(LoadingInfo::OpenDocument);
 
     //load in first
-    d->styleManager->loadOasisStyleTemplate(odfContext.stylesReader(), this);
+    d->styleManager->loadOdfStyleTemplate(odfContext.stylesReader(), this);
 
     OdfLoadingContext tableContext(odfContext);
     tableContext.validities = Validity::preloadValidities(body); // table:content-validations
@@ -589,7 +589,7 @@ bool Map::loadOasis( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
         KoXmlElement sheetElement = sheetNode.toElement();
         if( !sheetElement.isNull() )
         {
-            //kDebug()<<"  Map::loadOasis tableElement is not null";
+            //kDebug()<<"  Map::loadOdf tableElement is not null";
             //kDebug()<<"tableElement.nodeName() :"<<sheetElement.nodeName();
 
             // make it slightly faster
@@ -613,7 +613,7 @@ bool Map::loadOasis( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
 
     //pre-load auto styles
     QHash<QString, Conditions> conditionalStyles;
-    Styles autoStyles = d->styleManager->loadOasisAutoStyles( odfContext.stylesReader(), conditionalStyles );
+    Styles autoStyles = d->styleManager->loadOdfAutoStyles( odfContext.stylesReader(), conditionalStyles );
 
     // load the sheet
     sheetNode = body.firstChild();
@@ -634,7 +634,7 @@ bool Map::loadOasis( const KoXmlElement& body, KoOdfLoadingContext& odfContext )
                     Sheet* sheet = findSheet( name );
                     if( sheet )
                     {
-                        sheet->loadOasis(sheetElement, tableContext, autoStyles, conditionalStyles);
+                        sheet->loadOdf(sheetElement, tableContext, autoStyles, conditionalStyles);
                     }
                 }
             }

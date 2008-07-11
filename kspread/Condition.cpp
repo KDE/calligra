@@ -304,7 +304,7 @@ void Conditions::setConditionList( const QLinkedList<Conditional> & list )
     d->conditionList = list;
 }
 
-void Conditions::saveOasisConditions( KoGenStyle &currentCellStyle ) const
+void Conditions::saveOdfConditions( KoGenStyle &currentCellStyle ) const
 {
     //todo fix me with kspread old format!!!
     if ( d->conditionList.isEmpty() )
@@ -316,14 +316,14 @@ void Conditions::saveOasisConditions( KoGenStyle &currentCellStyle ) const
         Conditional condition = *it;
         //<style:map style:condition="cell-content()=45" style:apply-style-name="Default" style:base-cell-address="Sheet1.E10"/>
         QMap<QString, QString> map;
-        map.insert( "style:condition", saveOasisConditionValue( condition ) );
+        map.insert( "style:condition", saveOdfConditionValue( condition ) );
         map.insert( "style:apply-style-name",  *( condition.styleName ) );
         //map.insert( ""style:base-cell-address", "..." );//todo
         currentCellStyle.addStyleMap( map );
     }
 }
 
-QString Conditions::saveOasisConditionValue( Conditional &condition) const
+QString Conditions::saveOdfConditionValue( Conditional &condition) const
 {
     //we can also compare text value.
     //todo adapt it.
@@ -473,7 +473,7 @@ QDomElement Conditions::saveConditions( QDomDocument & doc ) const
     }
 }
 
-void Conditions::loadOasisConditions( const StyleManager* styleManager, const KoXmlElement & element )
+void Conditions::loadOdfConditions( const StyleManager* styleManager, const KoXmlElement & element )
 {
     kDebug(36003) <<"Loading conditional styles";
     KoXmlNode node( element );
@@ -486,7 +486,7 @@ void Conditions::loadOasisConditions( const StyleManager* styleManager, const Ko
             bool ok = true;
             kDebug(36003) <<"\tcondition:"<< elementItem.attributeNS( KoXmlNS::style,"condition", QString() );
             Conditional newCondition;
-            loadOasisConditionValue( elementItem.attributeNS( KoXmlNS::style, "condition", QString() ), newCondition );
+            loadOdfConditionValue( elementItem.attributeNS( KoXmlNS::style, "condition", QString() ), newCondition );
             if ( elementItem.hasAttributeNS( KoXmlNS::style, "apply-style-name" ) )
             {
                 kDebug(36003)<<"\tstyle:"<<elementItem.attributeNS( KoXmlNS::style,"apply-style-name", QString() );
@@ -507,13 +507,13 @@ void Conditions::loadOasisConditions( const StyleManager* styleManager, const Ko
     }
 }
 
-void Conditions::loadOasisConditionValue( const QString &styleCondition, Conditional &newCondition )
+void Conditions::loadOdfConditionValue( const QString &styleCondition, Conditional &newCondition )
 {
     QString val( styleCondition );
     if ( val.contains( "cell-content()" ) )
     {
         val = val.remove( "cell-content()" );
-        loadOasisCondition( val,newCondition );
+        loadOdfCondition( val,newCondition );
     }
     //GetFunction ::= cell-content-is-between(Value, Value) | cell-content-is-not-between(Value, Value)
     //for the moment we support just int/double value, not text/date/time :(
@@ -522,7 +522,7 @@ void Conditions::loadOasisConditionValue( const QString &styleCondition, Conditi
         val = val.remove( "cell-content-is-between(" );
         val = val.remove( ')' );
         QStringList listVal = val.split( ',', QString::SkipEmptyParts );
-        loadOasisValidationValue( listVal, newCondition );
+        loadOdfValidationValue( listVal, newCondition );
         newCondition.cond = Conditional::Between;
     }
     if ( val.contains( "cell-content-is-not-between(" ) )
@@ -530,13 +530,13 @@ void Conditions::loadOasisConditionValue( const QString &styleCondition, Conditi
         val = val.remove( "cell-content-is-not-between(" );
         val = val.remove( ')' );
         QStringList listVal = val.split( ',', QString::SkipEmptyParts );
-        loadOasisValidationValue( listVal,newCondition );
+        loadOdfValidationValue( listVal,newCondition );
         newCondition.cond = Conditional::Different;
     }
 
 }
 
-void Conditions::loadOasisCondition( QString &valExpression, Conditional &newCondition )
+void Conditions::loadOdfCondition( QString &valExpression, Conditional &newCondition )
 {
     QString value;
     if (valExpression.indexOf( "<=" )==0 )
@@ -586,7 +586,7 @@ void Conditions::loadOasisCondition( QString &valExpression, Conditional &newCon
     }
 }
 
-void Conditions::loadOasisValidationValue( const QStringList &listVal, Conditional &newCondition )
+void Conditions::loadOdfValidationValue( const QStringList &listVal, Conditional &newCondition )
 {
     bool ok = false;
     kDebug(36003)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1];

@@ -55,8 +55,8 @@ public:
   QDomElement save( QDomDocument & doc );
   bool loadXML( KoXmlElement const & styles );
 
-  void saveOasis( KoGenStyles &mainStyles );
-  void loadOasisStyleTemplate(KoOdfStylesReader& stylesReader, Map* map = 0);
+  void saveOdf( KoGenStyles &mainStyles );
+  void loadOdfStyleTemplate(KoOdfStylesReader& stylesReader, Map* map = 0);
 
   CustomStyle * defaultStyle() const { return m_defaultStyle; }
 
@@ -91,7 +91,7 @@ public:
    * @param stylesReader repository of styles
    * @return a hash of styles with the OpenDocument internal name as key
    */
-  Styles loadOasisAutoStyles( KoOdfStylesReader& stylesReader, QHash<QString, Conditions>& conditionalStyles );
+  Styles loadOdfAutoStyles( KoOdfStylesReader& stylesReader, QHash<QString, Conditions>& conditionalStyles );
 
   /**
    * Releases unused auto styles.
@@ -100,7 +100,7 @@ public:
    * This method is called after the cell loading porcess.
    * @param autoStyles a hash of styles with the OpenDocument internal name as
    *                   key
-   * @see loadOasisAutoStyles
+   * @see loadOdfAutoStyles
    */
   void releaseUnusedAutoStyles( Styles autoStyles );
 

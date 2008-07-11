@@ -144,9 +144,9 @@ class EmbeddedObject
     virtual void rotate( float _angle ) { angle = _angle; }
     virtual float getAngle() const { return angle; }
 
-    struct KSpreadOasisSaveContext
+    struct KSpreadOdfSaveContext
     {
-      KSpreadOasisSaveContext( KoXmlWriter &_xmlWriter, KoGenStyles &_context,
+      KSpreadOdfSaveContext( KoXmlWriter &_xmlWriter, KoGenStyles &_context,
                                int &_indexObj, int &_partIndexObj )
         : xmlWriter( _xmlWriter )
           , context( _context )
@@ -161,9 +161,9 @@ class EmbeddedObject
     };
 
     virtual bool load( const KoXmlElement& element );
-    virtual void loadOasis(const KoXmlElement &element, KoOdfLoadingContext & context );
+    virtual void loadOdf(const KoXmlElement &element, KoOdfLoadingContext & context );
     virtual QDomElement save( QDomDocument& doc );
-    virtual bool saveOasisObject( KSpreadOasisSaveContext &sc ) const;
+    virtual bool saveOdfObject( KSpreadOdfSaveContext &sc ) const;
     virtual void draw( QPainter *_painter );
 
     /**
@@ -187,9 +187,9 @@ class EmbeddedObject
     /**
      * Get the element name for saving the object
      */
-    virtual const char * getOasisElementName() const = 0;
-    virtual void saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const;
-    virtual bool saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const;
+    virtual const char * getOdfElementName() const = 0;
+    virtual void saveOdfPosObject( KoXmlWriter &xmlWriter, int indexObj ) const;
+    virtual bool saveOdfObjectAttributes( KSpreadOdfSaveContext &sc ) const;
 
     virtual void doDelete();
 
@@ -233,7 +233,7 @@ class EmbeddedKOfficeObject : public EmbeddedObject
     KoDocumentChild *embeddedObject();
 
     bool load( const KoXmlElement& element );
-    virtual void loadOasis(const KoXmlElement &element, KoOdfLoadingContext & context );
+    virtual void loadOdf(const KoXmlElement &element, KoOdfLoadingContext & context );
     QDomElement save( QDomDocument& doc );
     virtual void draw( QPainter *_painter );
 
@@ -247,8 +247,8 @@ class EmbeddedKOfficeObject : public EmbeddedObject
 
   protected:
     void updateChildGeometry();
-    virtual const char * getOasisElementName() const;
-    virtual bool saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const;
+    virtual const char * getOdfElementName() const;
+    virtual bool saveOdfObjectAttributes( KSpreadOdfSaveContext &sc ) const;
 
     KoDocumentChild *m_embeddedObject;
     Doc *m_parent;
@@ -272,7 +272,7 @@ class EmbeddedChart : public EmbeddedKOfficeObject
     void update();
 
     bool load( const KoXmlElement& element );
-    virtual void loadOasis(const KoXmlElement &element, KoOdfLoadingContext & context );
+    virtual void loadOdf(const KoXmlElement &element, KoOdfLoadingContext & context );
     QDomElement save( QDomDocument& doc );
     virtual void draw( QPainter *_painter );
 
@@ -284,8 +284,8 @@ class EmbeddedChart : public EmbeddedKOfficeObject
     KoChart::Part* chart();
 
   protected:
-    virtual const char * getOasisElementName() const;
-    virtual bool saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const;
+    virtual const char * getOdfElementName() const;
+    virtual bool saveOdfObjectAttributes( KSpreadOdfSaveContext &sc ) const;
 
   private:
     ChartBinding *m_pBinding;
@@ -308,7 +308,7 @@ class EmbeddedPictureObject : public EmbeddedObject
     virtual QString getTypeString() const
         { return i18n("Picture"); }
     bool load( const KoXmlElement& element );
-    virtual void loadOasis(const KoXmlElement &element, KoOdfLoadingContext & context );
+    virtual void loadOdf(const KoXmlElement &element, KoOdfLoadingContext & context );
     QDomElement save( QDomDocument& doc );
     virtual void draw( QPainter *_painter );
 
@@ -337,7 +337,7 @@ class EmbeddedPictureObject : public EmbeddedObject
     //virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
 
     //virtual double load(const KoXmlElement &element);
-    //virtual void loadOasis(const KoXmlElement &element, KoOdfLoadingContext & context, KPRLoadingInfo *info);
+    //virtual void loadOdf(const KoXmlElement &element, KoOdfLoadingContext & context, KPRLoadingInfo *info);
 
 //     virtual void draw( QPainter *_painter, KoZoomHandler*_zoomHandler,
 //                        int /* page */, SelectionMode selectionMode, bool drawContour = false );
@@ -373,12 +373,12 @@ class EmbeddedPictureObject : public EmbeddedObject
     virtual void flip(bool horizontal );
 
   protected:
-    virtual const char * getOasisElementName() const;
-    virtual bool saveOasisObjectAttributes( KSpreadOasisSaveContext &sc ) const;
+    virtual const char * getOdfElementName() const;
+    virtual bool saveOdfObjectAttributes( KSpreadOdfSaveContext &sc ) const;
 
     QPixmap changePictureSettings( const QPixmap& _tmpPixmap );
-    virtual void saveOasisPictureElement( KoGenStyle &styleobjectauto ) const;
-    void loadOasisPictureEffect(KoOdfLoadingContext & context );
+    virtual void saveOdfPictureElement( KoGenStyle &styleobjectauto ) const;
+    void loadOdfPictureEffect(KoOdfLoadingContext & context );
     virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
 
     /**

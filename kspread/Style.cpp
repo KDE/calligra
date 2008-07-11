@@ -197,30 +197,30 @@ void Style::loadAttributes( const QList<SharedSubStyle>& subStyles )
     }
 }
 
-void Style::loadOasisStyle( KoOdfStylesReader& stylesReader, const KoXmlElement& element,
+void Style::loadOdfStyle( KoOdfStylesReader& stylesReader, const KoXmlElement& element,
                             Conditions& conditions, const StyleManager* styleManager )
 {
     // NOTE Stefan: Do not fill the style stack with the parent styles!
     KoStyleStack styleStack;
     styleStack.push( element );
     styleStack.setTypeProperties( "table-cell" );
-    loadOasisTableCellProperties( stylesReader, styleStack );
+    loadOdfTableCellProperties( stylesReader, styleStack );
     styleStack.setTypeProperties( "text" );
-    loadOasisTextProperties( stylesReader, styleStack );
+    loadOdfTextProperties( stylesReader, styleStack );
     styleStack.setTypeProperties( "paragraph" );
-    loadOasisParagraphProperties( stylesReader, styleStack );
+    loadOdfParagraphProperties( stylesReader, styleStack );
 
     KoXmlElement e;
     forEachElement( e, element )
     {
         if ( e.namespaceURI() == KoXmlNS::style && e.localName() == "map" )
-            conditions.loadOasisConditions( styleManager, e );
+            conditions.loadOdfConditions( styleManager, e );
     }
 
-    loadOasisDataStyle( stylesReader, element );
+    loadOdfDataStyle( stylesReader, element );
 }
 
-void Style::loadOasisDataStyle( KoOdfStylesReader& stylesReader, const KoXmlElement& element )
+void Style::loadOdfDataStyle( KoOdfStylesReader& stylesReader, const KoXmlElement& element )
 {
     QString str;
     if ( element.hasAttributeNS( KoXmlNS::style, "data-style-name" ) )
@@ -309,7 +309,7 @@ void Style::loadOasisDataStyle( KoOdfStylesReader& stylesReader, const KoXmlElem
     }
 }
 
-void Style::loadOasisParagraphProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack )
+void Style::loadOdfParagraphProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack )
 {
     Q_UNUSED( stylesReader );
     kDebug(36003) <<"\t paragraph-properties";
@@ -328,7 +328,7 @@ void Style::loadOasisParagraphProperties( KoOdfStylesReader& stylesReader, const
     }
 }
 
-void Style::loadOasisTableCellProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack )
+void Style::loadOdfTableCellProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack )
 {
     QString str;
     if ( styleStack.hasProperty( KoXmlNS::style, "vertical-align" ) )
@@ -402,7 +402,7 @@ void Style::loadOasisTableCellProperties( KoOdfStylesReader& stylesReader, const
     if ( styleStack.hasProperty( KoXmlNS::fo, "border" ) )
     {
         str=styleStack.property( KoXmlNS::fo, "border" );
-        QPen pen = Oasis::decodePen( str );
+        QPen pen = Odf::decodePen( str );
         setLeftBorderPen( pen );
         setTopBorderPen( pen );
         setBottomBorderPen( pen );
@@ -411,32 +411,32 @@ void Style::loadOasisTableCellProperties( KoOdfStylesReader& stylesReader, const
     if ( styleStack.hasProperty( KoXmlNS::fo, "border-left" ) )
     {
         str=styleStack.property( KoXmlNS::fo, "border-left" );
-        setLeftBorderPen( Oasis::decodePen( str ) );
+        setLeftBorderPen( Odf::decodePen( str ) );
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "border-right" ) )
     {
         str=styleStack.property( KoXmlNS::fo, "border-right" );
-        setRightBorderPen( Oasis::decodePen( str ) );
+        setRightBorderPen( Odf::decodePen( str ) );
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "border-top" ) )
     {
         str=styleStack.property( KoXmlNS::fo, "border-top" );
-        setTopBorderPen( Oasis::decodePen( str ) );
+        setTopBorderPen( Odf::decodePen( str ) );
     }
     if ( styleStack.hasProperty( KoXmlNS::fo, "border-bottom" ) )
     {
         str=styleStack.property( KoXmlNS::fo, "border-bottom" );
-        setBottomBorderPen( Oasis::decodePen( str ) );
+        setBottomBorderPen( Odf::decodePen( str ) );
     }
     if (styleStack.hasProperty( KoXmlNS::style, "diagonal-tl-br" ) )
     {
         str=styleStack.property( KoXmlNS::style, "diagonal-tl-br" );
-        setFallDiagonalPen( Oasis::decodePen( str ) );
+        setFallDiagonalPen( Odf::decodePen( str ) );
     }
     if (styleStack.hasProperty( KoXmlNS::style, "diagonal-bl-tr" ) )
     {
         str=styleStack.property( KoXmlNS::style, "diagonal-bl-tr" );
-        setGoUpDiagonalPen( Oasis::decodePen( str ) );
+        setGoUpDiagonalPen( Odf::decodePen( str ) );
     }
 
     if ( styleStack.hasProperty( KoXmlNS::draw, "style-name" ) )
@@ -468,7 +468,7 @@ void Style::loadOasisTableCellProperties( KoOdfStylesReader& stylesReader, const
     }
 }
 
-void Style::loadOasisTextProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack )
+void Style::loadOdfTextProperties( KoOdfStylesReader& stylesReader, const KoStyleStack& styleStack )
 {
     Q_UNUSED( stylesReader );
   // fo:font-size="13pt"
@@ -664,7 +664,7 @@ Format::Type Style::fractionType( const QString &_format )
         return Format::fraction_half;
 }
 
-QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles,
+QString Style::saveOdfStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles,
                                          Format::Type _style,
                                          const QString &_prefix, const QString &_postfix,
                                          int _precision, const QString& symbol )
@@ -675,28 +675,28 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
     switch( _style )
     {
         case Format::Number:
-            styleName = saveOasisStyleNumericNumber( mainStyles, _style, _precision, _prefix, _postfix );
+            styleName = saveOdfStyleNumericNumber( mainStyles, _style, _precision, _prefix, _postfix );
             valueType = "float";
             break;
         case Format::Text:
-            styleName = saveOasisStyleNumericText( mainStyles, _style, _precision, _prefix, _postfix );
+            styleName = saveOdfStyleNumericText( mainStyles, _style, _precision, _prefix, _postfix );
             valueType = "string";
             break;
         case Format::Money:
-            styleName = saveOasisStyleNumericMoney( mainStyles, _style, symbol, _precision, _prefix, _postfix );
+            styleName = saveOdfStyleNumericMoney( mainStyles, _style, symbol, _precision, _prefix, _postfix );
             valueType = "currency";
             break;
         case Format::Percentage:
-            styleName = saveOasisStyleNumericPercentage( mainStyles, _style, _precision, _prefix, _postfix );
+            styleName = saveOdfStyleNumericPercentage( mainStyles, _style, _precision, _prefix, _postfix );
             valueType = "percentage";
             break;
         case Format::Scientific:
-            styleName = saveOasisStyleNumericScientific( mainStyles, _style, _prefix, _postfix, _precision );
+            styleName = saveOdfStyleNumericScientific( mainStyles, _style, _prefix, _postfix, _precision );
             valueType = "float";
             break;
         case Format::ShortDate:
         case Format::TextDate:
-            styleName = saveOasisStyleNumericDate( mainStyles, _style, _prefix, _postfix );
+            styleName = saveOdfStyleNumericDate( mainStyles, _style, _prefix, _postfix );
             valueType = "date";
             break;
         case Format::Time:
@@ -709,7 +709,7 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
         case Format::Time6:
         case Format::Time7:
         case Format::Time8:
-            styleName = saveOasisStyleNumericTime( mainStyles, _style, _prefix, _postfix );
+            styleName = saveOdfStyleNumericTime( mainStyles, _style, _prefix, _postfix );
             valueType = "time";
             break;
         case Format::fraction_half:
@@ -721,7 +721,7 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
         case Format::fraction_one_digit:
         case Format::fraction_two_digits:
         case Format::fraction_three_digits:
-            styleName = saveOasisStyleNumericFraction( mainStyles, _style, _prefix, _postfix );
+            styleName = saveOdfStyleNumericFraction( mainStyles, _style, _prefix, _postfix );
             valueType = "float";
             break;
         case Format::Date1:
@@ -750,17 +750,17 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
         case Format::Date24:
         case Format::Date25:
         case Format::Date26:
-            styleName = saveOasisStyleNumericDate( mainStyles, _style, _prefix, _postfix );
+            styleName = saveOdfStyleNumericDate( mainStyles, _style, _prefix, _postfix );
             valueType = "date";
             break;
         case Format::Custom:
-            styleName = saveOasisStyleNumericCustom( mainStyles, _style, _prefix, _postfix );
+            styleName = saveOdfStyleNumericCustom( mainStyles, _style, _prefix, _postfix );
             break;
         case Format::Generic:
         case Format::None:
             if (_precision > -1 || !_prefix.isEmpty() || !_postfix.isEmpty())
             {
-                styleName = saveOasisStyleNumericNumber( mainStyles, _style, _precision, _prefix, _postfix );
+                styleName = saveOdfStyleNumericNumber( mainStyles, _style, _precision, _prefix, _postfix );
                 valueType = "float";
             }
             break;
@@ -772,7 +772,7 @@ QString Style::saveOasisStyleNumeric( KoGenStyle &style, KoGenStyles &mainStyles
     return styleName;
 }
 
-QString Style::saveOasisStyleNumericNumber( KoGenStyles& mainStyles, Format::Type /*_style*/, int _precision,
+QString Style::saveOdfStyleNumericNumber( KoGenStyles& mainStyles, Format::Type /*_style*/, int _precision,
                                                const QString& _prefix, const QString& _postfix )
 {
     QString format;
@@ -790,13 +790,13 @@ QString Style::saveOasisStyleNumericNumber( KoGenStyles& mainStyles, Format::Typ
     return KoOdfNumberStyles::saveOdfNumberStyle( mainStyles, format, _prefix, _postfix );
 }
 
-QString Style::saveOasisStyleNumericText( KoGenStyles& /*mainStyles*/, Format::Type /*_style*/, int /*_precision*/,
+QString Style::saveOdfStyleNumericText( KoGenStyles& /*mainStyles*/, Format::Type /*_style*/, int /*_precision*/,
                                              const QString& /*_prefix*/, const QString& /*_postfix*/ )
 {
     return "";
 }
 
-QString Style::saveOasisStyleNumericMoney( KoGenStyles& mainStyles, Format::Type /*_style*/,
+QString Style::saveOdfStyleNumericMoney( KoGenStyles& mainStyles, Format::Type /*_style*/,
                                               const QString& symbol, int _precision,
                                               const QString& _prefix, const QString& _postfix )
 {
@@ -815,7 +815,7 @@ QString Style::saveOasisStyleNumericMoney( KoGenStyles& mainStyles, Format::Type
     return KoOdfNumberStyles::saveOdfCurrencyStyle( mainStyles, format, symbol, _prefix, _postfix );
 }
 
-QString Style::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, Format::Type /*_style*/, int _precision,
+QString Style::saveOdfStyleNumericPercentage( KoGenStyles&mainStyles, Format::Type /*_style*/, int _precision,
         const QString& _prefix, const QString& _postfix )
 {
     //<number:percentage-style style:name="N106" style:family="data-style">
@@ -839,7 +839,7 @@ QString Style::saveOasisStyleNumericPercentage( KoGenStyles&mainStyles, Format::
 }
 
 
-QString Style::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, Format::Type /*_style*/,
+QString Style::saveOdfStyleNumericScientific( KoGenStyles&mainStyles, Format::Type /*_style*/,
         const QString &_prefix, const QString &_suffix, int _precision )
 {
     //<number:number-style style:name="N60" style:family="data-style">
@@ -860,7 +860,7 @@ QString Style::saveOasisStyleNumericScientific( KoGenStyles&mainStyles, Format::
     return KoOdfNumberStyles::saveOdfScientificStyle( mainStyles, format, _prefix, _suffix );
 }
 
-QString Style::saveOasisStyleNumericDate( KoGenStyles&mainStyles, Format::Type _style,
+QString Style::saveOdfStyleNumericDate( KoGenStyles&mainStyles, Format::Type _style,
                                              const QString& _prefix, const QString& _postfix )
 {
     QString format;
@@ -961,7 +961,7 @@ QString Style::saveOasisStyleNumericDate( KoGenStyles&mainStyles, Format::Type _
     return KoOdfNumberStyles::saveOdfDateStyle( mainStyles, format, locale, _prefix, _postfix );
 }
 
-QString Style::saveOasisStyleNumericCustom( KoGenStyles& /*mainStyles*/, Format::Type /*_style*/,
+QString Style::saveOdfStyleNumericCustom( KoGenStyles& /*mainStyles*/, Format::Type /*_style*/,
                                                const QString& /*_prefix*/, const QString& /*_postfix*/ )
 {
     //TODO
@@ -981,7 +981,7 @@ QString Style::saveOasisStyleNumericCustom( KoGenStyles& /*mainStyles*/, Format:
     return "";
 }
 
-QString Style::saveOasisStyleNumericTime( KoGenStyles& mainStyles, Format::Type _style,
+QString Style::saveOdfStyleNumericTime( KoGenStyles& mainStyles, Format::Type _style,
                                              const QString& _prefix, const QString& _postfix )
 {
     //<number:time-style style:name="N42" style:family="data-style">
@@ -1035,7 +1035,7 @@ QString Style::saveOasisStyleNumericTime( KoGenStyles& mainStyles, Format::Type 
 }
 
 
-QString Style::saveOasisStyleNumericFraction( KoGenStyles &mainStyles, Format::Type formatType,
+QString Style::saveOdfStyleNumericFraction( KoGenStyles &mainStyles, Format::Type formatType,
         const QString &_prefix, const QString &_suffix )
 {
     //<number:number-style style:name="N71" style:family="data-style">
@@ -1079,7 +1079,7 @@ QString Style::saveOasisStyleNumericFraction( KoGenStyles &mainStyles, Format::T
     return KoOdfNumberStyles::saveOdfFractionStyle( mainStyles, format, _prefix, _suffix );
 }
 
-QString Style::saveOasis(KoGenStyle& style, KoGenStyles& mainStyles,
+QString Style::saveOdf(KoGenStyle& style, KoGenStyles& mainStyles,
                          const StyleManager* manager) const
 {
     // list of substyles to store
@@ -1121,11 +1121,11 @@ QString Style::saveOasis(KoGenStyle& style, KoGenStyles& mainStyles,
         style = KoGenStyle( KoGenStyle::StyleAutoTableCell, "table-cell" );
 
     // doing the real work
-    saveOasisStyle(keysToStore, style, mainStyles, manager);
+    saveOdfStyle(keysToStore, style, mainStyles, manager);
     return mainStyles.lookup( style, "ce" );
 }
 
-void Style::saveOasisStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
+void Style::saveOdfStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
                            KoGenStyles &mainStyles, const StyleManager* manager) const
 {
 #ifndef NDEBUG
@@ -1276,29 +1276,29 @@ void Style::saveOasisStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
         ( leftBorderPen() == bottomBorderPen() ) )
     {
         if ( leftBorderPen().style() != Qt::NoPen )
-            style.addProperty("fo:border", Oasis::encodePen( leftBorderPen() ) );
+            style.addProperty("fo:border", Odf::encodePen( leftBorderPen() ) );
     }
     else
     {
         if ( keysToStore.contains( LeftPen ) && ( leftBorderPen().style() != Qt::NoPen ) )
-            style.addProperty( "fo:border-left", Oasis::encodePen( leftBorderPen() ) );
+            style.addProperty( "fo:border-left", Odf::encodePen( leftBorderPen() ) );
 
         if ( keysToStore.contains( RightPen ) && ( rightBorderPen().style() != Qt::NoPen ) )
-            style.addProperty( "fo:border-right", Oasis::encodePen( rightBorderPen() ) );
+            style.addProperty( "fo:border-right", Odf::encodePen( rightBorderPen() ) );
 
         if ( keysToStore.contains( TopPen ) && ( topBorderPen().style() != Qt::NoPen ) )
-            style.addProperty( "fo:border-top", Oasis::encodePen( topBorderPen() ) );
+            style.addProperty( "fo:border-top", Odf::encodePen( topBorderPen() ) );
 
         if ( keysToStore.contains( BottomPen ) && ( bottomBorderPen().style() != Qt::NoPen ) )
-            style.addProperty( "fo:border-bottom", Oasis::encodePen( bottomBorderPen() ) );
+            style.addProperty( "fo:border-bottom", Odf::encodePen( bottomBorderPen() ) );
     }
     if ( keysToStore.contains( FallDiagonalPen ) && ( fallDiagonalPen().style() != Qt::NoPen ) )
     {
-        style.addProperty("style:diagonal-tl-br", Oasis::encodePen( fallDiagonalPen() ) );
+        style.addProperty("style:diagonal-tl-br", Odf::encodePen( fallDiagonalPen() ) );
     }
     if ( keysToStore.contains( GoUpDiagonalPen ) && ( goUpDiagonalPen().style() != Qt::NoPen ) )
     {
-        style.addProperty("style:diagonal-bl-tr", Oasis::encodePen( goUpDiagonalPen() ) );
+        style.addProperty("style:diagonal-bl-tr", Odf::encodePen( goUpDiagonalPen() ) );
     }
 
     // font
@@ -1338,7 +1338,7 @@ void Style::saveOasisStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
     //but remove the check if it causes problems.  -- Robert Knight <robertknight@gmail.com>
     if ( keysToStore.contains( BackgroundBrush ) && (backgroundBrush().style() != Qt::NoBrush) )
     {
-        QString tmp = saveOasisBackgroundStyle( mainStyles, backgroundBrush() );
+        QString tmp = saveOdfBackgroundStyle( mainStyles, backgroundBrush() );
         if ( !tmp.isEmpty() )
             style.addProperty("draw:style-name", tmp );
     }
@@ -1359,14 +1359,14 @@ void Style::saveOasisStyle(const QSet<Key>& keysToStore, KoGenStyle &style,
         currencyCode = currency().code();
     }
 
-    QString numericStyle = saveOasisStyleNumeric( style, mainStyles, formatType(),
+    QString numericStyle = saveOdfStyleNumeric( style, mainStyles, formatType(),
             _prefix, _postfix, _precision,
             currencyCode );
     if ( !numericStyle.isEmpty() )
         style.addAttribute( "style:data-style-name", numericStyle );
 }
 
-QString Style::saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush )
+QString Style::saveOdfBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush )
 {
     KoGenStyle styleobjectauto = KoGenStyle( KoGenStyle::StyleGraphicAuto, "graphic" );
     KoOdfGraphicStyles::saveOasisFillStyle( styleobjectauto, mainStyles, brush );
@@ -2696,7 +2696,7 @@ void CustomStyle::setName( QString const & name )
     d->name = name;
 }
 
-QString CustomStyle::saveOasis(KoGenStyle& style, KoGenStyles &mainStyles,
+QString CustomStyle::saveOdf(KoGenStyle& style, KoGenStyles &mainStyles,
                                const StyleManager* manager) const
 {
     Q_ASSERT(!name().isEmpty());
@@ -2708,7 +2708,7 @@ QString CustomStyle::saveOasis(KoGenStyle& style, KoGenStyles &mainStyles,
     QSet<Key> keysToStore;
     for (int i = 0; i < subStyles().count(); ++i)
         keysToStore.insert(subStyles()[i].data()->type());
-    saveOasisStyle(keysToStore, style, mainStyles, manager);
+    saveOdfStyle(keysToStore, style, mainStyles, manager);
 
     if (isDefault())
     {
@@ -2721,7 +2721,7 @@ QString CustomStyle::saveOasis(KoGenStyle& style, KoGenStyles &mainStyles,
     return mainStyles.lookup( style, "custom-style" );
 }
 
-void CustomStyle::loadOasis( KoOdfStylesReader& stylesReader, const KoXmlElement& style,
+void CustomStyle::loadOdf( KoOdfStylesReader& stylesReader, const KoXmlElement& style,
                              const QString& name, Conditions& conditions,
                              const StyleManager* styleManager )
 {
@@ -2731,7 +2731,7 @@ void CustomStyle::loadOasis( KoOdfStylesReader& stylesReader, const KoXmlElement
 
     setType (CUSTOM);
 
-    Style::loadOasisStyle( stylesReader, style, conditions, styleManager );
+    Style::loadOdfStyle( stylesReader, style, conditions, styleManager );
 }
 
 void CustomStyle::save(QDomDocument& doc, QDomElement& styles, const StyleManager* styleManager)

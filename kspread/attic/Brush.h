@@ -27,7 +27,7 @@
 
 class KoGenStyle;
 class KoGenStyles;
-class KoOasisContext;
+class KoOdfContext;
 
 class KSpreadBrush
 {
@@ -73,11 +73,11 @@ public:
     int getGYFactor() const
         { return m_yfactor; }
 
-    void saveOasisFillStyle( KoGenStyle &styleObjectAuto, KoGenStyles& mainStyles ) const;
-    void loadOasisFillStyle( KoOasisContext &context, const char * propertyType );
+    void saveOdfFillStyle( KoGenStyle &styleObjectAuto, KoGenStyles& mainStyles ) const;
+    void loadOdfFillStyle( KoOdfContext &context, const char * propertyType );
 
 private:
-    //QString saveOasisGradientStyle( KoGenStyles& mainStyles ) const;
+    //QString saveOdfGradientStyle( KoGenStyles& mainStyles ) const;
     QBrush m_brush;
     QColor m_gColor1;
     QColor m_gColor2;

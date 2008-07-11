@@ -148,7 +148,7 @@ public:
    * @param plainText must be set when saveFlag==SaveSelected.
    *        It returns the plain text format of the saved data, when available.
    */
-  bool saveOasisHelper( SavingContext &documentContext, SaveFlag saveFlag,
+  bool saveOdfHelper( SavingContext &documentContext, SaveFlag saveFlag,
                         QString* plainText = 0 );
 
   /**
@@ -160,14 +160,14 @@ public:
   /**
    * \ingroup OpenDocument
    * Main loading method.
-   * @see Map::loadOasis
+   * @see Map::loadOdf
    */
   virtual bool loadOdf( KoOdfReadStore & odfStore );
 
   /**
    * \ingroup OpenDocument
    */
-  void loadOasisCalculationSettings( const KoXmlElement& body );
+  void loadOdfCalculationSettings( const KoXmlElement& body );
 
 
   virtual int supportedSpecialFormats() const;
@@ -303,24 +303,24 @@ private:
   /**
    * \ingroup OpenDocument
    * Saves the Document related settings.
-   * The actual saving takes place in Map::saveOasisSettings.
-   * @see Map::saveOasisSettings
+   * The actual saving takes place in Map::saveOdfSettings.
+   * @see Map::saveOdfSettings
    */
-  void saveOasisSettings( KoXmlWriter &settingsWriter );
+  void saveOdfSettings( KoXmlWriter &settingsWriter );
 
   /**
    * \ingroup OpenDocument
    * Loads the Document related settings.
-   * The actual loading takes place in Map::loadOasisSettings.
-   * @see Map::loadOasisSettings
+   * The actual loading takes place in Map::loadOdfSettings.
+   * @see Map::loadOdfSettings
    */
-  void loadOasisSettings( const KoXmlDocument&settingsDoc );
+  void loadOdfSettings( const KoXmlDocument&settingsDoc );
 
   /**
    * \ingroup OpenDocument
    * Load the spell checker ignore list.
    */
-  void loadOasisIgnoreList( const KoOasisSettings& settings );
+  void loadOdfIgnoreList( const KoOasisSettings& settings );
 };
 
 } // namespace KSpread

@@ -131,13 +131,13 @@ public:
      * \ingroup OpenDocument
      * Loads the condtional formattings.
      */
-    void loadOasisConditions( const StyleManager* styleManager, const KoXmlElement & element );
+    void loadOdfConditions( const StyleManager* styleManager, const KoXmlElement & element );
 
     /**
      * \ingroup OpenDocument
      * Saves the condtional formattings.
      */
-    void saveOasisConditions( KoGenStyle &currentCellStyle ) const;
+    void saveOdfConditions( KoGenStyle &currentCellStyle ) const;
 
     /// \note fake implementation to make QMap happy
     bool operator<( const Conditions& ) const { return true; }
@@ -161,22 +161,22 @@ private:
     /**
      * \ingroup OpenDocument
      */
-    void loadOasisCondition( QString &valExpression, Conditional &newCondition );
+    void loadOdfCondition( QString &valExpression, Conditional &newCondition );
 
     /**
      * \ingroup OpenDocument
      */
-    void loadOasisConditionValue( const QString &styleCondition, Conditional &newCondition );
+    void loadOdfConditionValue( const QString &styleCondition, Conditional &newCondition );
 
     /**
      * \ingroup OpenDocument
      */
-    void loadOasisValidationValue( const QStringList &listVal, Conditional &newCondition );
+    void loadOdfValidationValue( const QStringList &listVal, Conditional &newCondition );
 
     /**
      * \ingroup OpenDocument
      */
-    QString saveOasisConditionValue(Conditional &cond) const;
+    QString saveOdfConditionValue(Conditional &cond) const;
 
     class Private;
     QSharedDataPointer<Private> d;

@@ -313,7 +313,7 @@ public:
     /**
      * \ingroup OpenDocument
      */
-    bool loadOasis( const KoXmlElement& sheet,
+    bool loadOdf( const KoXmlElement& sheet,
                     OdfLoadingContext& odfContext,
                     const Styles& autoStyles,
                     const QHash<QString, Conditions>& conditionalStyles );
@@ -321,27 +321,27 @@ public:
     /**
      * \ingroup OpenDocument
      */
-    bool saveOasis(OdfSavingContext& tableContext);
+    bool saveOdf(OdfSavingContext& tableContext);
 
     /**
      * \ingroup OpenDocument
      */
-    void saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const;
+    void saveOdfHeaderFooter( KoXmlWriter &xmlWriter ) const;
 
     /**
      * \ingroup OpenDocument
      */
-    void loadOasisSettings( const KoOasisSettings::NamedMap &settings );
+    void loadOdfSettings( const KoOasisSettings::NamedMap &settings );
 
     /**
      * \ingroup OpenDocument
      */
-    void saveOasisSettings( KoXmlWriter &settingsWriter ) const;
+    void saveOdfSettings( KoXmlWriter &settingsWriter ) const;
 
     /**
      * \ingroup OpenDocument
      */
-    void saveOasisPrintStyleLayout( KoGenStyle &style ) const;
+    void saveOdfPrintStyleLayout( KoGenStyle &style ) const;
 
     //
     //END Methods related to the OpenDocument file format
@@ -954,7 +954,7 @@ protected:
      * \p autoStyles , and custom styles in the StyleManager.
      * The region is restricted to \p usedArea .
      */
-    void loadOasisInsertStyles( const Styles& autoStyles,
+    void loadOdfInsertStyles( const Styles& autoStyles,
                                 const QHash<QString, QRegion>& styleRegions,
                                 const QHash<QString, Conditions>& conditionalStyles,
                                 const QRect& usedArea );
@@ -967,23 +967,23 @@ protected:
     /**
      * \ingroup OpenDocument
      */
-    void loadOasisMasterLayoutPage( KoStyleStack &styleStack );
+    void loadOdfMasterLayoutPage( KoStyleStack &styleStack );
 
     /**
      * \ingroup OpenDocument
      */
-    QString saveOasisSheetStyleName( KoGenStyles &mainStyles );
+    QString saveOdfSheetStyleName( KoGenStyles &mainStyles );
 
     /**
      * \ingroup OpenDocument
      */
-    void saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
+    void saveOdfColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles,
                               int maxCols, int maxRows, OdfSavingContext& tableContext);
 
     /**
      * \ingroup OpenDocument
      */
-    void saveOasisCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols,
+    void saveOdfCells(KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols,
                         OdfSavingContext& tableContext);
 
     /**
