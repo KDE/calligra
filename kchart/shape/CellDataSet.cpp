@@ -113,8 +113,12 @@ QVariant CellDataSet::labelData() const
     for ( int i = 0; i < cellCount; i++ )
     {
         QPoint dataPoint = m_labelDataRegion.pointAtIndex( i );
-        if ( dataPoint.x() > 0 && dataPoint.y() > 0 )
+        if ( dataPoint.x() < 1 )
+            continue;
+        if ( dataPoint.y() > 0 )
         	label += m_model->sourceModel()->data( m_model->index( dataPoint.y() - 1, dataPoint.x() - 1 ) ).toString();
+        else if ( dataPoint.y() == 0 )
+            label += m_model->sourceModel()->headerData( dataPoint.x() - 1, Qt::Horizontal ).toString();
     }
     
     return QVariant( label );
