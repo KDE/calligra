@@ -201,8 +201,7 @@ void KarbonSimplifyPath::simplifySubpaths( QList<KoSubpath *> *subpaths,
 {
     foreach ( KoSubpath *subpath, *subpaths )
     {
-        // FIXME: does not work if points.size() > 1000
-        if ( subpath->size() > 2 && subpath->size() <= 1000 )
+        if ( subpath->size() > 2 )
         {
             simplifySubpath( subpath, error );
         }
