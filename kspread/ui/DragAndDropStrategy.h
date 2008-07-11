@@ -27,6 +27,12 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * A strategy for dragging cells.
+ *
+ * The drag starts, if the mouse leaves the cell, where the mouse press occured.
+ * If this cell is not left, the cell becomes selected.
+ */
 class KSPREAD_EXPORT DragAndDropStrategy : public AbstractSelectionStrategy
 {
 public:

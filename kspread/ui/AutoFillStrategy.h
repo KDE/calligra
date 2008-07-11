@@ -27,6 +27,12 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * A strategy for automatic filling values into selected cells.
+ *
+ * Created, when the user presses the left mouse button on the selection handle.
+ * Nothing happens, if the selection did not change.
+ */
 class KSPREAD_EXPORT AutoFillStrategy : public AbstractSelectionStrategy
 {
 public:

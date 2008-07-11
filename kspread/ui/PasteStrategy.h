@@ -27,6 +27,13 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * A strategy for pasting the global mouse selection.
+ *
+ * On creation, the cell in which the mouse press occured is selected.
+ *
+ * \see QClipboard::Selection
+ */
 class KSPREAD_EXPORT PasteStrategy : public SelectionStrategy
 {
 public:

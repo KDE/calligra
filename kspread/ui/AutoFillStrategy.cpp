@@ -48,6 +48,9 @@ AutoFillStrategy::~AutoFillStrategy()
 
 QUndoCommand* AutoFillStrategy::createCommand()
 {
+    if (d->autoFillSource == selection()->lastRange()) {
+        return 0;
+    }
     AutoFillCommand* command = new AutoFillCommand();
     command->setSheet(selection()->activeSheet());
     command->setSourceRange(d->autoFillSource);

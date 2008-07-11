@@ -27,6 +27,7 @@ using namespace KSpread;
 class MergeStrategy::Private
 {
 public:
+    QRect initialSelection;
 };
 
 MergeStrategy::MergeStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* selection,
@@ -34,6 +35,7 @@ MergeStrategy::MergeStrategy(KoTool* parent, KoCanvasBase* canvas, Selection* se
     : AbstractSelectionStrategy(parent, canvas, selection, documentPos, modifiers)
     , d(new Private)
 {
+    d->initialSelection = selection->lastRange();
 }
 
 MergeStrategy::~MergeStrategy()
@@ -43,6 +45,9 @@ MergeStrategy::~MergeStrategy()
 
 QUndoCommand* MergeStrategy::createCommand()
 {
+    if (d->initialSelection == selection()->lastRange()) {
+        return 0;
+    }
     MergeCommand* command = new MergeCommand();
     command->setSheet(selection()->activeSheet());
     command->add(*selection());

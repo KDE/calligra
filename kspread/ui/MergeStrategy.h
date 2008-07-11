@@ -27,6 +27,12 @@ namespace KSpread
 {
 class Selection;
 
+/**
+ * A strategy for merging cells.
+ *
+ * Created, when the user presses the middle mouse button on the selection handle.
+ * Nothing happens, if the selection did not change.
+ */
 class KSPREAD_EXPORT MergeStrategy : public AbstractSelectionStrategy
 {
 public:
