@@ -55,8 +55,20 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         if( backType.isNull() || backType.attribute( "value" ) == "0" )
         {
             //background is a plain color
-            style.addProperty( "draw:fill", "solid" );
-            style.addProperty( "draw:fill-color", page.namedItem( "BACKCOLOR1" ).toElement().attribute( "color" ) );
+            QString color = page.namedItem( "BACKCOLOR1" ).toElement().attribute( "color" );
+            if( !color.isNull() )
+            {
+                //if the backcolor is not present it's implicitally white
+                //unless a draw:fill is found, in which case even though a
+                //draw:fill-color is not present it's black in KPresenter2.0
+                style.addProperty( "draw:fill", "solid" );
+                style.addProperty( "draw:fill-color", page.namedItem( "BACKCOLOR1" ).toElement().attribute( "color" ) );
+            }
+            else
+            {
+
+                style.addProperty( "draw:fill-color", "#ffffff" );
+            }
         }
         else
         {
@@ -107,7 +119,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
     {
         QTime time;
         time = time.addSecs( pageDuration.attribute( "timer", "0" ).toInt() );
-        style.addProperty( "presentation:duration", time.toString("'P'hh'H'mm'M'ss'S'") );
+        style.addProperty( "presentation:duration", time.toString("'PT'hh'H'mm'M'ss'S'") );
         style.addProperty( "presentation:transition-type", "automatic" );
     }
 
@@ -416,7 +428,7 @@ const QString Filterkpr2odf::createPageLayout()
     {
         style.addProperty( "fo:page-height", QString( "%1cm" ).arg( KoUnit::toCentimeter( paper.attribute( "ptHeight" ).toDouble() ) ) );
     }
-    style.addProperty( "fo:print-orientation", "landscape" );
+    style.addProperty( "style:print-orientation", "landscape" );
 
     //NOTE: header-style and footer-style are not present because in KPresenter they are treated as text boxes
 
@@ -494,10 +506,21 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
     }
     else
     {
-        //TODO: is this the right behavior?
-        style.addProperty( "draw:stroke", "solid" );
-        style.addProperty( "svg:stroke-width", "1px" );
-        style.addProperty( "svg:stroke-color", "#000000" );
+        //even if the pen is not pressent for some objects it has to have a black stroke
+        if( element.attribute( "type" ) == "1"
+            || element.attribute( "type" ) == "2"
+            || element.attribute( "type" ) == "3"
+            || element.attribute( "type" ) == "8"
+            || element.attribute( "type" ) == "12"
+            || element.attribute( "type" ) == "15"
+//perhaps      || element.attribute( "type" ) == "13"
+//             || element.attribute( "type" ) == "14"
+            || element.attribute( "type" ) == "16" )
+        {
+            style.addProperty( "draw:stroke", "solid" );
+            style.addProperty( "svg:stroke-width", "1px" );
+            style.addProperty( "svg:stroke-color", "#000000" );
+        }
     }
 
     //We now define what's the object filled with, we "default" to a brush if both attributes are present
@@ -641,7 +664,7 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
             mirror = "vertical";
             break;
         case 3:
-            mirror = "horizontal vertical";
+            mirror = "vertical horizontal";
             break;
         }
         if( !mirror.isNull() )
@@ -879,7 +902,7 @@ const QString Filterkpr2odf::createHatchStyle( int brushStyle, QString fillColor
 
 const QString Filterkpr2odf::createParagraphStyle( const KoXmlElement& element )
 {
-    KoGenStyle style( KoGenStyle::StyleUser, "paragraph" );
+    KoGenStyle style( KoGenStyle::StyleAuto, "paragraph" );
 
     QString textAlign;
     if( element.hasAttribute( "align" ) )
@@ -958,7 +981,7 @@ const QString Filterkpr2odf::createParagraphStyle( const KoXmlElement& element )
     KoXmlElement counter = element.namedItem( "COUNTER" ).toElement();
     if( !counter.isNull() )
     {
-        style.addProperty( "text:enable-numbering", "true" );
+//         style.addProperty( "text:enable-numbering", "true" );
     }
 
     KoXmlElement lineSpacing = element.namedItem( "LINESPACING" ).toElement();
@@ -1052,11 +1075,11 @@ QString Filterkpr2odf::convertBorder( const KoXmlElement& border )
 
 const QString Filterkpr2odf::createTextStyle( const KoXmlElement& element )
 {
-    KoGenStyle style( KoGenStyle::StyleText, "text" );
+    KoGenStyle style( KoGenStyle::StyleTextAuto, "text" );
 
     if( element.hasAttribute( "family" ) )
     {
-        style.addProperty( "fo:font-family", element.attribute( "family" ) );
+        style.addProperty( "style:font-name", element.attribute( "family" ) );
     }
     if( element.hasAttribute( "pointSize" ) )
     {

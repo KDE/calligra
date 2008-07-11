@@ -372,6 +372,7 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
             appendTextBox( content, objectElement );
             break;
         case 5: //autoform
+//             appendAutoform( content, objectElement );
             break;
         case 6: //clipart
             break;
@@ -518,10 +519,10 @@ void Filterkpr2odf::appendTextBox( KoXmlWriter* content, const KoXmlElement& obj
 {
     content->startElement( "draw:frame" );
     set2DGeometry( content, objectElement );
+    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
 
     content->startElement( "draw:text-box" );
     KoXmlElement textObject = objectElement.namedItem( "TEXTOBJ" ).toElement();
-    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
 
     //export every paragraph
     for( KoXmlElement paragraph = textObject.firstChild().toElement(); !paragraph.isNull(); paragraph = paragraph.nextSibling().toElement() )
@@ -636,8 +637,12 @@ void Filterkpr2odf::appendPoly( KoXmlWriter* content, const KoXmlElement& object
         int maxY = 0;
         while( !elemPoint.isNull() ) {
             if( elemPoint.tagName() == "Point" ) {
-                //FIXME: according to KPresenter1.6 the following conversion should be ok,
-                //ooimpressexport handles it diferently: toMillimeters( ... ) * 100, so is it coorect?
+                //For some reason the last point is saved twice, we need to ignore the last one of them
+                //this fix assumes that the last child of the POINTS tag is a Point, seems to work but it's not garanteed
+                if( elemPoint.nextSibling().isNull() )
+                {
+                    break;
+                }
                 int tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
                 int tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
 
@@ -667,8 +672,8 @@ void Filterkpr2odf::appendPolygon( KoXmlWriter* content, const KoXmlElement& obj
     content->startElement( "draw:regular-polygon" );
 
     set2DGeometry( content, objectElement );
-
     content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+
     KoXmlElement settings = objectElement.namedItem( "SETTINGS" ).toElement();
     int corners = settings.attribute( "cornersValue" ).toInt();
     content->addAttribute( "draw:corners", corners );
@@ -686,10 +691,24 @@ void Filterkpr2odf::appendPolygon( KoXmlWriter* content, const KoXmlElement& obj
     content->endElement();//draw:regular-polygon
 }
 
+void Filterkpr2odf::appendAutoform( KoXmlWriter* content, const KoXmlElement& objectElement )
+{
+    content->startElement( "draw:path" );
+
+    set2DGeometry( content, objectElement );
+    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+
+    QString g;
+    //TODO:export
+    content->addAttribute( "draw:g", g );
+
+    content->endElement();//draw:path
+}
+
 const QString Filterkpr2odf::getPictureNameFromKey( const KoXmlElement& key )
 {
     return key.attribute( "msec" ) + key.attribute( "second" ) + key.attribute( "minute" )
-           + key.attribute( "hour" ) + key.attribute( "day" ) + key.attribute( "month")
+           + key.attribute( "hour" ) + key.attribute( "day" ) + key.attribute( "month" )
            + key.attribute( "year" ) + key.attribute( "filename" );
 }
 
