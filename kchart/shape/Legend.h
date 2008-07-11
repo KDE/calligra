@@ -73,6 +73,8 @@ public:
     void saveOdf( KoShapeSavingContext &context ) const;
     
     KDChart::Legend *kdLegend() const;
+    
+    void update();
 
 private:
     class Private;
