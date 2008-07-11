@@ -313,6 +313,7 @@ void ChartTool::setChartType( ChartType type, ChartSubtype subtype )
     d->shape->setChartType( type );
     d->shape->setChartSubType( subtype );
     d->shape->update();
+    d->shape->legend()->update();
     
     foreach (QWidget *w, optionWidgets().values())
         w->update();
@@ -371,6 +372,7 @@ void ChartTool::setDataSetChartType( DataSet *dataSet, ChartType type )
     if ( dataSet )
         dataSet->setChartType( type );
     d->shape->update();
+    d->shape->legend()->update();
 }
 
 void ChartTool::setDataSetChartSubType( DataSet *dataSet, ChartSubtype subType )
