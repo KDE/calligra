@@ -502,7 +502,6 @@ void ProxyModel::dataChanged( const QModelIndex& topLeft, const QModelIndex& bot
 	    
 	    for ( int i = 0; i < numRows; i++ )
 	    {
-	        qDebug() << i << d->dataMap[ i ] << firstRow << lastRow;
 	        if ( d->dataMap[ i ] >= firstRow && d->dataMap[ i ] <= lastRow )
 	        {
 	            if ( d->dataDimensions == 1 )
