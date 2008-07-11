@@ -83,6 +83,7 @@ AddViewPanel::AddViewPanel( View *view, ViewListWidget &viewlist, QWidget *paren
             << i18n( "Resource Assignments" )
             << i18n( "Cost Breakdown" )
             << i18n( "Performance Chart" )
+            << i18n( "Performance Status" )
             << i18n( "Tasks by Resources" );
     widget.viewtype->addItems( lst );
     
@@ -152,7 +153,10 @@ bool AddViewPanel::ok()
         case 14: // Performance Chart
             m_view->createTaskStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
-        case 15: // Tasks by Resources
+        case 15: // Performance Status
+            m_view->createPerformanceStatusView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
+            break;
+        case 16: // Tasks by Resources
             m_view->createResourceAssignmentView( cat, widget.viewname->text(), widget.viewname->text(), widget.tooltip->text() );
             break;
         default:

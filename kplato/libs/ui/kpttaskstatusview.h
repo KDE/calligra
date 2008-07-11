@@ -27,6 +27,8 @@
 #include "kptviewbase.h"
 #include "ui_kpttaskstatusviewsettingspanel.h"
 #include "kptitemviewsettup.h"
+#include "ui_kptperformancestatus.h"
+#include "kptnodechartmodel.h"
 
 class QTextBrowser;
 
@@ -198,6 +200,75 @@ private:
 
     // View options context menu
     KAction *actionOptions;
+};
+
+//----------------------------------
+class PerformanceStatusBase : public QWidget, public Ui::PerformanceStatus
+{
+
+public:
+    explicit PerformanceStatusBase( QWidget *parent );
+    
+    void setProject( Project *project );
+    void setScheduleManager( ScheduleManager *sm );
+
+    void draw();
+    
+protected:
+    void drawValues();
+    void drawPlot( Project &p, ScheduleManager &sm );
+    void drawAxis( const ChartAxisIndex &idx );
+    void drawData( const ChartAxisIndex &idx );
+    void drawData( const ChartDataIndex &index, const ChartAxisIndex &axisSet );
+
+private:
+    Project *m_project;
+    ScheduleManager *m_manager;
+    NodeChartModel m_model;
+};
+
+//----------------------------------
+class KPLATOUI_EXPORT PerformanceStatusView : public ViewBase
+{
+    Q_OBJECT
+public:
+    PerformanceStatusView( KoDocument *part, QWidget *parent );
+
+    void setupGui();
+    virtual void setProject( Project *project );
+
+    /// Loads context info into this view. Reimplement.
+    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    /// Save context info from this view. Reimplement.
+    virtual void saveContext( QDomElement &/*context*/ ) const;
+
+    using ViewBase::draw;
+    virtual void draw();
+    
+public slots:
+    /// Activate/deactivate the gui
+    virtual void setGuiActive( bool activate );
+
+    void setScheduleManager( ScheduleManager *sm );
+
+    void slotUpdate();
+    void slotUpdate( ScheduleManager *sm );
+
+protected:
+    void updateActionsEnabled( bool on );
+
+private slots:
+    void slotSplitView();
+    void slotOptions();
+
+private:
+    Project *m_project;
+    ScheduleManager *m_manager;
+    PerformanceStatusBase *m_view;
+
+    // View options context menu
+    KAction *actionOptions;
+    
 };
 
 

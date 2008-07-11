@@ -67,6 +67,9 @@ public:
     /// Create an index for @p axisset with @p parent
     virtual ChartAxisIndex axisIndex( int axisset, const ChartAxisIndex &parent = ChartAxisIndex() ) const;
 
+    const EffortCostMap &bcwp() const { return m_bcwp; }
+    const EffortCostMap &acwp() const { return m_acwp; }
+    
 private:
     Project *m_project;
     ScheduleManager *m_manager;

@@ -82,6 +82,8 @@ kde4_add_ui_files(kplatoui_LIB_SRCS
     
     kptdocumentspanel.ui
     
+    kptperformancestatus.ui
+    
     kptcpmwidget.ui
     kptitemviewsettings.ui
     kptpertresult.ui

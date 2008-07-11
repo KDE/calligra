@@ -232,6 +232,21 @@ public:
         return eff;
     }
 
+    double bcwpTotalCost() const {
+        double cost = 0.0;
+        if ( ! m_days.isEmpty() ) {
+            cost = m_days.values().last().bcwpCost();
+        }
+        return cost;
+    }
+    double bcwpTotalEffort() const {
+        double eff;
+        if ( ! m_days.isEmpty() ) {
+            eff = m_days.values().last().bcwpEffort();
+        }
+        return eff;
+    }
+    
     QDate startDate() const { return m_days.isEmpty() ? QDate() : m_days.keys().first(); }
     QDate endDate() const { return m_days.isEmpty() ? QDate() : m_days.keys().last(); }
     

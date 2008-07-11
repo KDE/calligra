@@ -42,6 +42,7 @@
 #include <QTextFrameFormat>
 #include <QTextCharFormat>
 #include <QTextTableCell>
+#include <QLineEdit>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -53,6 +54,7 @@
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
 #include <kactioncollection.h>
+#include <kplotobject.h>
 
 namespace KPlato
 {
@@ -671,6 +673,252 @@ void ProjectStatusView::saveContext( QDomElement &context ) const
 {
 }
 
+
+//-----------------------------------
+PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
+    : QWidget( parent ),
+    m_project( 0 ),
+    m_manager( 0 )
+{
+    setupUi( this );
+    plotwidget->setAntialiasing(false);
+}
+
+void PerformanceStatusBase::setScheduleManager( ScheduleManager *sm )
+{
+    //kDebug();
+    m_manager = sm;
+    m_model.setScheduleManager( sm );
+}
+
+void PerformanceStatusBase::setProject( Project *project )
+{
+    if ( m_project ) {
+        disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotUpdate( ScheduleManager* ) ) );
+        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
+    }
+    m_project = project;
+    m_model.setProject( project );
+    if ( m_project ) {
+        connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotUpdate( ScheduleManager* ) ) );
+        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
+    }
+}
+
+void PerformanceStatusBase::draw()
+{
+    if ( m_project == 0 || m_manager == 0 ) {
+        return;
+    }
+    drawValues();
+    drawPlot( *m_project, *m_manager );
+}
+
+void PerformanceStatusBase::drawValues()
+{
+    KLocale *locale = KGlobal::locale();
+    const EffortCostMap &budget = m_model.bcwp();
+    const EffortCostMap &actual = m_model.acwp();
+    bcwsCost->setText( locale->formatMoney( budget.totalCost() ) );
+    bcwpCost->setText( locale->formatMoney( budget.bcwpTotalCost() ) );
+    acwpCost->setText( locale->formatMoney( actual.totalCost() ) );
+    
+    double cpi_ = 0.0;
+    if ( actual.totalCost() > 0.0 ) {
+        cpi_ = budget.bcwpTotalCost() / actual.totalCost();
+    }
+    cpi->setText( locale->formatNumber( cpi_ ) );
+    
+    double bh = budget.totalEffort().toDouble( Duration::Unit_h);
+    bcwsEffort->setText( locale->formatNumber( bh ) );
+    bcwpEffort->setText( locale->formatNumber( budget.bcwpTotalEffort() ) );
+    acwpEffort->setText( locale->formatNumber( actual.totalEffort().toDouble( Duration::Unit_h) ) );
+
+    double spi_ = 0.0;
+    if ( bh > 0.0 ) {
+        spi_ = budget.bcwpTotalEffort() / bh;
+    }
+    spi->setText( locale->formatNumber( spi_ ) );
+}
+
+void PerformanceStatusBase::drawPlot( Project &p, ScheduleManager &sm ) 
+{
+    kDebug();
+    plotwidget->resetPlot();
+    int axisCount = m_model.axisCount();
+    for ( int i = 0; i < axisCount; ++i ) {
+        ChartAxisIndex ai = m_model.axisIndex( i );
+        if ( ! ai.isValid() ) {
+            continue;
+        }
+        drawAxis( ai );
+        drawData( ai );
+    }
+   
+}
+
+void PerformanceStatusBase::drawAxis( const ChartAxisIndex &idx ) 
+{
+    kDebug();
+    int axisCount = m_model.axisCount( idx );
+    QList<double> range;
+    for ( int i = 0; i < axisCount; ++i ) {
+        ChartAxisIndex ai = m_model.axisIndex( i, idx );
+        if ( ! ai.isValid() ) {
+            continue;
+        }
+        if ( m_model.hasAxisChildren( ai ) ) {
+            kDebug()<<"multiple axis";
+        } else {
+            range << m_model.axisData( ai, AbstractChartModel::AxisMinRole ).toDouble();
+            range << m_model.axisData( ai, AbstractChartModel::AxisMaxRole ).toDouble();
+        }
+    }
+    plotwidget->setLimits( range[0], range[1], range[2], range[3] );
+}
+
+void PerformanceStatusBase::drawData( const ChartAxisIndex &axisSet ) 
+{
+    kDebug();
+    int dataCount = m_model.dataSetCount( axisSet );
+    for ( int i = 0; i < dataCount; ++i ) {
+        kDebug()<<"create data index";
+        ChartDataIndex di = m_model.index( i, axisSet );
+        kDebug()<<"created data index:"<<di.number()<<di.userData;
+        if ( ! di.isValid() ) {
+            kDebug()<<"Invalid index";
+            continue;
+        }
+        if ( m_model.hasChildren( di ) ) {
+            kDebug()<<"sections";
+            int c = m_model.childCount( di );
+            for ( int ii = 0; ii < c; ++ii ) {
+                ChartDataIndex cidx = m_model.index( ii, di );
+                drawData( cidx, axisSet );
+            }
+        } else {
+            kDebug()<<"no sections, go direct to data";
+            drawData( di, axisSet );
+        }
+    }
+}
+
+void PerformanceStatusBase::drawData( const ChartDataIndex &index, const ChartAxisIndex &axisSet ) 
+{
+    kDebug()<<index.number()<<index.userData;
+    QVariantList data;
+    int axisCount = m_model.axisCount( axisSet );
+    for ( int j = 0; j < axisCount; ++j ) {
+        ChartAxisIndex axis = m_model.axisIndex( j, axisSet );
+        if ( m_model.hasAxisChildren( axis ) ) {
+            kDebug()<<"multiple axis";
+        } else {
+            data << m_model.data( index, axis );
+        }
+    }
+    kDebug()<<data;
+    Q_ASSERT( data.count() == 2 );
+    QVariantList x = data[0].toList();
+    QVariantList y = data[1].toList();
+    QVariant color = m_model.data( index, Qt::ForegroundRole );
+    KPlotObject *kpo = new KPlotObject( color.value<QColor>(), KPlotObject::Lines, 4 );
+    for (int i = 0; i < y.count(); ++i ) {
+        kDebug()<<"Add point:"<<x[i].toInt() << y[i].toDouble();
+        kpo->addPoint( x[i].toInt(), y[i].toDouble() );
+    }
+    plotwidget->addPlotObject( kpo );
+}
+
+
+//-----------------------------------
+PerformanceStatusView::PerformanceStatusView( KoDocument *part, QWidget *parent )
+    : ViewBase( part, parent ),
+    m_project( 0 ),
+    m_manager( 0 )
+{
+    kDebug()<<"-------------------- creating PerformanceStatusView -------------------";
+    QVBoxLayout * l = new QVBoxLayout( this );
+    l->setMargin( 0 );
+    m_view = new PerformanceStatusBase( this );
+    l->addWidget( m_view );
+    setupGui();
+
+}
+
+void PerformanceStatusView::setScheduleManager( ScheduleManager *sm )
+{
+    //kDebug();
+    m_manager = sm;
+    m_view->setScheduleManager( sm );
+    draw();
+}
+
+void PerformanceStatusView::setProject( Project *project )
+{
+    if ( m_project ) {
+        disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotUpdate( ScheduleManager* ) ) );
+        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
+    }
+    m_project = project;
+    if ( m_project ) {
+        connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotUpdate( ScheduleManager* ) ) );
+        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
+    }
+    m_view->setProject( project );
+}
+
+void PerformanceStatusView::slotUpdate()
+{
+    draw();
+}
+
+void PerformanceStatusView::slotUpdate( ScheduleManager *sm )
+{
+    if ( sm == m_manager ) {
+        slotUpdate();
+    }
+}
+
+void PerformanceStatusView::draw()
+{
+    m_view->draw();
+}
+
+void PerformanceStatusView::setGuiActive( bool activate )
+{
+    kDebug()<<activate;
+//    updateActionsEnabled( true );
+    ViewBase::setGuiActive( activate );
+}
+
+void PerformanceStatusView::setupGui()
+{
+    // Add the context menu actions for the view options
+/*    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
+    connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
+    addContextAction( actionOptions );*/
+}
+
+void PerformanceStatusView::slotSplitView()
+{
+    kDebug();
+}
+
+
+void PerformanceStatusView::slotOptions()
+{
+    kDebug();
+}
+
+bool PerformanceStatusView::loadContext( const KoXmlElement &context )
+{
+    kDebug();
+    return true;
+}
+
+void PerformanceStatusView::saveContext( QDomElement &context ) const
+{
+}
 
 
 } // namespace KPlato

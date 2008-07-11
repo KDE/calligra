@@ -397,6 +397,8 @@ void View::createViews()
                         v = createResourceAssignmentView( cat, tag, name, tip );
                     } else if ( type == "ChartView" ) {
                         v = createChartView( cat, tag, name, tip );
+                    } else if ( type == "PerformanceStatusView" ) {
+                        v = createPerformanceStatusView( cat, tag, name, tip );
                     } else  {
                         kWarning()<<"Unknown viewtype: "<<type;
                     }
@@ -435,8 +437,10 @@ void View::createViews()
         createScheduleHandler( cat, "ScheduleHandler", i18n( "Schedules" ), i18n( "Calculate and analyze project schedules" ) );
     
         cat = m_viewlist->addCategory( "Views", i18n( "Views" ) );
-//         createProjectStatusView( cat, "ProjectStatusView", i18n( "Project Status" ), i18n( "View project status information" ) );
-
+        createProjectStatusView( cat, "ProjectStatusView", i18n( "Project Status" ), i18n( "View project status information" ) );
+        
+        createPerformanceStatusView( cat, "PerformanceStatusView", i18n( "Performance Status" ), i18n( "View performance status information" ) );
+        
         createTaskStatusView( cat, "TaskStatusView", i18n( "Task Status" ), i18n( "View task progress information" ) );
         
         createTaskView( cat, "TaskView", i18n( "Task Execution" ), i18n( "View task execution information" ) );
@@ -668,6 +672,24 @@ ViewBase *View::createPertEditor( ViewListItem *cat, const QString tag, const QS
 ViewBase *View::createProjectStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
 {
     ProjectStatusView *v = new ProjectStatusView( getPart(), m_tab );
+    m_tab->addWidget( v );
+
+    ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "status_view" );
+    i->setToolTip( 0, tip );
+
+    connect( v, SIGNAL( guiActivated( ViewBase*, bool ) ), SLOT( slotGuiActivated( ViewBase*, bool ) ) );
+
+    connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
+    
+    v->updateReadWrite( m_readWrite );
+    v->setProject( &getProject() );
+    v->setScheduleManager( currentScheduleManager() );
+    return v;
+}
+
+ViewBase *View::createPerformanceStatusView( ViewListItem *cat, const QString tag, const QString &name, const QString &tip )
+{
+    PerformanceStatusView *v = new PerformanceStatusView( getPart(), m_tab );
     m_tab->addWidget( v );
 
     ViewListItem *i = m_viewlist->addView( cat, tag, name, v, getPart(), "status_view" );
