@@ -55,6 +55,7 @@
 #include <KSelectAction>
 
 #include <KoCanvasBase.h>
+#include <KoCanvasController.h>
 #include <KoPointerEvent.h>
 #include <KoSelection.h>
 #include <KoShapeManager.h>
@@ -142,6 +143,18 @@ DefaultTool::DefaultTool( KoCanvasBase* canvas )
 DefaultTool::~DefaultTool()
 {
     delete d;
+}
+
+void DefaultTool::paint(QPainter &painter, const KoViewConverter &viewConverter)
+{
+    KoShape::applyConversion(painter, viewConverter);
+    const double xOffset = viewConverter.viewToDocumentX(m_canvas->canvasController()->canvasOffsetX());
+    const double yOffset = viewConverter.viewToDocumentY(m_canvas->canvasController()->canvasOffsetY());
+    const QRectF paintRect = QRectF(QPointF(-xOffset, -yOffset), size());
+
+    /* paint the selection */
+    paintReferenceSelection(painter, paintRect);
+    paintSelection(painter, paintRect);
 }
 
 #if 0 // KSPREAD_MOUSE_STRATEGIES
@@ -556,7 +569,7 @@ QPointF DefaultTool::offset() const
 
 QSizeF DefaultTool::size() const
 {
-    return d->canvas->size();
+    return m_canvas->viewConverter()->viewToDocument(d->canvas->size());
 }
 
 int DefaultTool::maxCol() const

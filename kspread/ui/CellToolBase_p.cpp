@@ -951,10 +951,6 @@ void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &view
 
     // save the painter state
     painter.save();
-    const double xOffset = q->canvas()->viewConverter()->viewToDocumentX(q->canvas()->canvasController()->canvasOffsetX());
-    const double yOffset = q->canvas()->viewConverter()->viewToDocumentY(q->canvas()->canvasController()->canvasOffsetY());
-    painter.translate(-xOffset, -yOffset); // esp. for a correct clip region
-    painter.translate(q->offset()); // for table shape
     // disable antialiasing
     painter.setRenderHint(QPainter::Antialiasing, false);
     // Extend the clip rect by one in each direction to avoid artefacts caused by rounding errors.
@@ -999,7 +995,7 @@ void CellToolBase::Private::paintSelection(QPainter &painter, const QRectF &view
             // clip out the marker region
             const QRect effMarker = selection->extendToMergedAreas(QRect(selection->marker(), selection->marker()));
             const QRectF markerRect = selection->activeSheet()->cellCoordinatesToDocument(effMarker);
-            painter.setClipRegion(clipRegion.subtracted(markerRect.translated(xOffset, yOffset).toRect()));
+            painter.setClipRegion(clipRegion.subtracted(markerRect.toRect()));
             // draw the transparent selection background
             painter.fillRect(QRectF(left, top, right - left, bottom - top), selectionColor);
             // restore clip region
@@ -1073,10 +1069,6 @@ void CellToolBase::Private::paintReferenceSelection(QPainter &painter, const QRe
     }
     // save painter state
     painter.save();
-    const double xOffset = q->canvas()->viewConverter()->viewToDocumentX(q->canvas()->canvasController()->canvasOffsetX());
-    const double yOffset = q->canvas()->viewConverter()->viewToDocumentY(q->canvas()->canvasController()->canvasOffsetY());
-    painter.translate(-xOffset, -yOffset); // esp. for a correct clip region
-    painter.translate(q->offset()); // for table shape
 
     const QList<QColor> colors = q->selection()->colors();
     const double unzoomedPixelX = q->canvas()->viewConverter()->viewToDocumentX(1.0);
@@ -1100,7 +1092,6 @@ void CellToolBase::Private::paintReferenceSelection(QPainter &painter, const QRe
         // Now adjust the highlight rectangle is slightly inside the cell borders (this means
         // that multiple highlighted cells look nicer together as the borders do not clash)
         unzoomedRect.adjust(unzoomedPixelX, unzoomedPixelY, -unzoomedPixelX, -unzoomedPixelY);
-        unzoomedRect.translate(xOffset, yOffset);
 
         painter.setBrush(QBrush());
         painter.setPen(colors[(index) % colors.size()]);
@@ -1126,9 +1117,7 @@ void CellToolBase::Private::retrieveMarkerInfo(const QRect &cellRange, const QRe
         double positions[], bool paintSides[])
 {
     const Sheet* sheet = q->selection()->activeSheet();
-    const double xOffset = q->canvas()->viewConverter()->viewToDocumentX(q->canvas()->canvasController()->canvasOffsetX());
-    const double yOffset = q->canvas()->viewConverter()->viewToDocumentY(q->canvas()->canvasController()->canvasOffsetY());
-    const QRectF visibleRect = sheet->cellCoordinatesToDocument(cellRange).translated(xOffset, yOffset);
+    const QRectF visibleRect = sheet->cellCoordinatesToDocument(cellRange);
 
     /* these vars are used for clarity, the array for simpler function arguments  */
     double left = visibleRect.left();
@@ -1136,7 +1125,7 @@ void CellToolBase::Private::retrieveMarkerInfo(const QRect &cellRange, const QRe
     double right = visibleRect.right();
     double bottom = visibleRect.bottom();
     if (sheet->layoutDirection() == Qt::RightToLeft) {
-        const double docWidth = q->canvas()->viewConverter()->viewToDocumentX(q->canvas()->canvasWidget()->width());
+        const double docWidth = q->size().width();
         left = docWidth - visibleRect.right();
         right = docWidth - visibleRect.left();
     }

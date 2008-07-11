@@ -808,13 +808,21 @@ CellToolBase::~CellToolBase()
 void CellToolBase::paint(QPainter &painter, const KoViewConverter &viewConverter)
 {
     KoShape::applyConversion(painter, viewConverter);
-    const double xOffset = m_canvas->canvasController()->canvasOffsetX();
-    const double yOffset = m_canvas->canvasController()->canvasOffsetY();
-    // TODO Stefan: For shapes this should be the bounding rect.
-    const QRectF paintRect = viewConverter.viewToDocument(m_canvas->canvasWidget()->rect().translated(xOffset, yOffset));
+    painter.translate(offset()); // the table shape offset
+    const QRectF paintRect = QRectF(QPointF(), size());
 
     /* paint the selection */
     d->paintReferenceSelection(painter, paintRect);
+    d->paintSelection(painter, paintRect);
+}
+
+void CellToolBase::paintReferenceSelection(QPainter &painter, const QRectF &paintRect)
+{
+    d->paintReferenceSelection(painter, paintRect);
+}
+
+void CellToolBase::paintSelection(QPainter &painter, const QRectF &paintRect)
+{
     d->paintSelection(painter, paintRect);
 }
 

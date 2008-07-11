@@ -659,27 +659,28 @@ void Canvas::paintEvent( QPaintEvent* event )
     ElapsedTime et( "Painting cells", ElapsedTime::PrintOnlyTime );
 
     QPainter painter(this);
+    const QPointF offset = viewConverter()->documentToView(this->offset());
+    painter.translate(-offset);
+    painter.setClipRegion(event->region().translated(offset.x(), offset.y()));
     painter.save();
-    painter.setClipRegion( event->region() );
 
     painter.setRenderHints( QPainter::Antialiasing | QPainter::TextAntialiasing );
-    painter.scale( d->view->zoomHandler()->zoomedResolutionX(), d->view->zoomHandler()->zoomedResolutionY() );
+    double zoomX, zoomY;
+    viewConverter()->zoom(&zoomX, &zoomY);
+    painter.scale(zoomX, zoomY);
 
     // erase background
-    const QRectF paintRect = viewConverter()->viewToDocument(rect());
+    const QRectF paintRect = viewConverter()->viewToDocument(rect()).translated(this->offset());
     painter.fillRect(paintRect, painter.background());
 
     // paint visible cells
     const QRect visibleRect = visibleCells();
-    const QPointF topLeft( sheet->columnPosition(visibleRect.left()) - xOffset(),
-                           sheet->rowPosition(visibleRect.top()) - yOffset() );
+    const QPointF topLeft(sheet->columnPosition(visibleRect.left()), sheet->rowPosition(visibleRect.top()));
     view()->sheetView( sheet )->setPaintCellRange( visibleRect );
     view()->sheetView( sheet )->paintCells( this, painter, paintRect, topLeft );
 
     // flake
     painter.restore();
-    painter.translate( -viewConverter()->documentToView( offset() ) );
-    painter.setClipRegion( event->region().translated( viewConverter()->documentToView( offset() ).toPoint() ) );
     d->shapeManager->paint( painter, *viewConverter(), false );
     d->toolProxy->paint( painter, *viewConverter() );
 

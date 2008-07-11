@@ -58,6 +58,8 @@ public:
     virtual ~CellToolBase();
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
+    void paintReferenceSelection(QPainter &painter, const QRectF &paintRect);
+    void paintSelection(QPainter &painter, const QRectF &paintRect);
 
     virtual void mousePressEvent(KoPointerEvent* event);
     virtual void mouseMoveEvent(KoPointerEvent* event);

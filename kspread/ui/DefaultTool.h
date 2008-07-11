@@ -35,6 +35,8 @@ public:
     explicit DefaultTool( KoCanvasBase* canvas );
     ~DefaultTool();
 
+    virtual void paint(QPainter &painter, const KoViewConverter &converter);
+
 #if 0 // KSPREAD_MOUSE_STRATEGIES
     virtual void mousePressEvent( KoPointerEvent* event ) ;
     virtual void mouseReleaseEvent( KoPointerEvent* event );
