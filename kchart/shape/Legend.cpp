@@ -103,11 +103,13 @@ Legend::Legend( ChartShape *parent )
     
     d->kdLegend = new KDChart::Legend();
     
-    setTitleFontSize( 10 );
+    setTitleFontSize( 7 );
     setTitle( QString() );
-    setFontSize( 8 );
     
-    setSize( QSizeF( CM_TO_POINT( 4 ), CM_TO_POINT( 2 ) ) );
+    KDChart::TextAttributes attributes = d->kdLegend->textAttributes();
+    attributes.setFontSize( KDChart::Measure( 6, KDChartEnums::MeasureCalculationModeAbsolute ) );
+    attributes.setAutoShrink( false );
+    d->kdLegend->setTextAttributes( attributes );
     
     parent->addChild( this );
 }
@@ -315,6 +317,7 @@ void Legend::setLegendPosition( LegendPosition position )
 void Legend::setSize( const QSizeF &size )
 {
     d->kdLegend->resize( size.toSize() );
+    d->kdLegend->resizeLayout( size.toSize() );
     KoShape::setSize( size );
 }
 
@@ -335,7 +338,6 @@ void Legend::paintPixmap( QPainter &painter, const KoViewConverter &converter )
 
     // scale the painter's coordinate system to fit the current zoom level
     applyConversion( pixmapPainter, converter );
-    d->kdLegend->needSizeHint();
     d->kdLegend->paint( &pixmapPainter );
 }
 
@@ -381,12 +383,25 @@ bool Legend::loadOdf( const KoXmlElement &legendElement, KoShapeLoadingContext &
 
 bool Legend::loadOdf( const KoXmlElement &legendElement, const KoOdfStylesReader &stylesReader )
 {
-    qDebug() << "Loading legend..." << this;
     // TODO: Read optional attributes
     // 1. Legend expansion
     // 2. Advanced legend styling
     //KDChart::Legend  *oldKdchartLegend = d->kdchartLegend;
     //d->kdLegend = new KDChart::Legend( d->diagram, d->chart );
+    
+    if ( legendElement.hasAttributeNS( KoXmlNS::svg, "x" ) && legendElement.hasAttributeNS( KoXmlNS::svg, "y" ) )
+    {
+        const qreal x = KoUnit::parseValue( legendElement.attributeNS( KoXmlNS::svg, "x" ) );
+        const qreal y = KoUnit::parseValue( legendElement.attributeNS( KoXmlNS::svg, "y" ) );
+        setPosition( QPointF( x, y ) );
+    }
+    
+    if ( legendElement.hasAttributeNS( KoXmlNS::svg, "width" ) && legendElement.hasAttributeNS( KoXmlNS::svg, "height" ) )
+    {
+        const qreal width = KoUnit::parseValue( legendElement.attributeNS( KoXmlNS::svg, "width" ) );
+        const qreal height = KoUnit::parseValue( legendElement.attributeNS( KoXmlNS::svg, "height" ) );
+        setSize( QSizeF( width, height ) );
+    }
 
     if ( !legendElement.isNull() ) {
         QString lp;
@@ -452,8 +467,7 @@ bool Legend::loadOdf( const KoXmlElement &legendElement, const KoOdfStylesReader
             QString styleName = legendElement.attributeNS( KoXmlNS::chart, "style-name", QString() );
             const KoXmlElement *styleElement = stylesReader.findStyle( styleName, "chart" );
             if ( styleElement ) {
-                KoXmlNode graphicsPropertiesNode = styleElement->namedItemNS( KoXmlNS::style, "graphic-properties" );
-                KoXmlElement graphicsPropertiesElement = *( ( KoXmlElement* )( &graphicsPropertiesNode ) );
+                KoXmlElement graphicsPropertiesElement = styleElement->namedItemNS( KoXmlNS::style, "graphic-properties" ).toElement();
                 if ( !graphicsPropertiesElement.isNull() ) {
                     if ( graphicsPropertiesElement.hasAttributeNS( KoXmlNS::draw, "stroke" ) ) {
                         // TODO (Johannes): set stroke type of legend border
@@ -469,6 +483,16 @@ bool Legend::loadOdf( const KoXmlElement &legendElement, const KoOdfStylesReader
                             // use overloaded QColor constructor to convert QString (in form of "#rrggbb") to QColor
                             setBackgroundColor( fillColor );
                         }
+                    }
+                }
+
+                KoXmlElement textPropertiesElement = styleElement->namedItemNS( KoXmlNS::style, "text-properties" ).toElement();
+                if ( !textPropertiesElement.isNull() )
+                {
+                    if ( textPropertiesElement.hasAttributeNS( KoXmlNS::fo, "font-size" ) )
+                    {
+                        const qreal fontSize = KoUnit::parseValue( textPropertiesElement.attributeNS( KoXmlNS::fo, "font-size" ) );
+                        setFontSize( fontSize );
                     }
                 }
             }
@@ -545,4 +569,13 @@ KDChart::Legend *Legend::kdLegend() const
     // There has to be a valid KDChart instance of this legend
     Q_ASSERT( d->kdLegend );
     return d->kdLegend;
+}
+
+void Legend::update()
+{
+    d->pixmapRepaintRequested = true;
+    QSize size = d->kdLegend->sizeHint();
+    // Scale size from px to pt
+    setSize( QSizeF( size ) );
+    KoShape::update();
 }
