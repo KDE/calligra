@@ -136,8 +136,6 @@ KoShape* ChartShapeFactory::createDefaultShape() const
     shape->legend()->kdLegend()->forceRebuild();
     shape->legend()->update();
     QSizeF legendSize = shape->legend()->size();
-    qDebug() << "*************" << legendSize;
-    qDebug() << "+++++++++++++" << shape->legend()->kdLegend()->sizeHint();
 
     Legend *legend = shape->legend();
     if ( legend )
@@ -166,8 +164,6 @@ KoShape* ChartShapeFactory::createDefaultShape() const
         plotAreaPos.rx() += yAxisTitle->size().height();
         legendPos.rx() += yAxisTitle->size().height();
         plotAreaSize.rwidth() -= yAxisTitle->size().height();
-        qDebug() << "yAxisTitle->size().height()=" << yAxisTitle->size().height();
-        qDebug() << "yAxisTitle->size().width()=" << yAxisTitle->size().width();
     }
     
     if ( legend )
