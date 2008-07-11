@@ -57,7 +57,7 @@ int rangeStringToInt( const QString &string )
     const int size = string.size();
     for ( int i = 0; i < size; i++ )
     {
-        kDebug(350001) << "---" << rangeCharToInt( string[i].toAscii() ) * pow( 10, ( size - i - 1 ) );
+        kDebug(350001) << "---" << float( rangeCharToInt( string[i].toAscii() ) * pow( 10, ( size - i - 1 ) ) );
         result += rangeCharToInt( string[i].toAscii() ) * pow( 10, ( size - i - 1 ) );
     }
     kDebug(350001) << "+++++ result=" << result;
