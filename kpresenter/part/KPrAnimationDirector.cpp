@@ -149,27 +149,29 @@ bool KPrAnimationDirector::navigate( Navigation navigation )
         finished = true;
     }
 
+    bool presentationFinished = false;
+
     switch ( navigation )
     {
         case FirstPage:
         case PreviousPage:
         case NextPage:
         case LastPage:
-            changePage( navigation );
+            presentationFinished = changePage( navigation );
             break;
         case PreviousStep:
             previousStep();
             break;
         case NextStep:
             if ( !finished ) {
-                nextStep();
+                presentationFinished = nextStep();
             }
             break;
         default:
             break;
     }
 
-    return true;
+    return presentationFinished;
 }
 
 void KPrAnimationDirector::navigateToPage( KoPAPageBase *page )
@@ -238,10 +240,15 @@ bool KPrAnimationDirector::changePage( Navigation navigation )
             m_pageIndex = 0;
             break;
         case PreviousPage:
-            m_pageIndex = m_pageIndex > 0 ? m_pageIndex - 1 : m_pages.size() - 1;
+            m_pageIndex = m_pageIndex > 0 ? m_pageIndex - 1 : 0;
             break;
         case NextPage:
-            m_pageIndex = m_pageIndex < m_pages.size() - 1 ? m_pageIndex + 1 : 0;
+            if ( m_pageIndex < m_pages.size() -1 ) {
+                ++m_pageIndex;
+            }
+            else {
+                return true;
+            }
             break;
         case LastPage:
             m_pageIndex = m_pages.size() - 1;
@@ -266,7 +273,7 @@ bool KPrAnimationDirector::changePage( Navigation navigation )
         startTimeLine( m_maxShapeDuration );
     }
 
-    return true;
+    return false;
 }
 
 void KPrAnimationDirector::updateZoom( const QSize & size )
@@ -288,7 +295,7 @@ void KPrAnimationDirector::paintStep( QPainter & painter )
     m_canvas->shapeManager()->paint( painter, m_zoomHandler, false );
 }
 
-void KPrAnimationDirector::nextStep()
+bool KPrAnimationDirector::nextStep()
 {
     if ( ! m_steps.isEmpty() && m_stepIndex < m_steps.size() - 1 ) {
         // if there are sub steps go to the next substep
@@ -300,7 +307,12 @@ void KPrAnimationDirector::nextStep()
         // if there are no more sub steps go to the next page
         // The active page and the substeps are updated later as
         // first the current page has to be painted again for the page effect
-        m_pageIndex = m_pageIndex < m_pages.size() - 1 ? m_pageIndex + 1 : 0;
+        if ( m_pageIndex < m_pages.size() -1 ) {
+            ++m_pageIndex;
+        }
+        else {
+            return true;
+        }
         m_stepIndex = 0;
 
         KPrPageEffect * effect = KPrPage::pageData( m_pages[m_pageIndex] )->pageEffect();
@@ -333,6 +345,7 @@ void KPrAnimationDirector::nextStep()
             }
         }
     }
+    return false;
 }
 
 void KPrAnimationDirector::previousStep()

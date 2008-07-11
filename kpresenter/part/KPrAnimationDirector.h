@@ -65,6 +65,8 @@ public:
 
     /**
      * do the next step in the presentation
+     *
+     * @return true if slideshow is finished and should be exited, false otherwise
      */
     bool navigate( Navigation navigation );
 
@@ -95,14 +97,17 @@ protected:
 
     /**
      * change the page
-     * @return true when there was a change
+     *
+     * @return true if slideshow is finished and should be exited, false otherwise
      */
     bool changePage( Navigation navigation );
 
     /**
      * Update to the next step
+     *
+     * @return true if slideshow is finished and should be exited, false otherwise
      */
-    void nextStep();
+    bool nextStep();
 
     /**
      * Update to the previous step

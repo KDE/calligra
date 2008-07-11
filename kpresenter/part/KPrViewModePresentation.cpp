@@ -200,7 +200,9 @@ KPrAnimationDirector * KPrViewModePresentation::animationDirector()
 
 void KPrViewModePresentation::navigate( KPrAnimationDirector::Navigation navigation )
 {
-    m_animationDirector->navigate( navigation );
+    if ( m_animationDirector->navigate( navigation ) ) {
+        activateSavedViewMode();
+    }
 }
 
 KPrPresentationTool * KPrViewModePresentation::presentationTool()
