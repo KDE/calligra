@@ -20,6 +20,7 @@
 
 #include "KarbonCurveFit.h"
 #include <KoPathShape.h>
+#include <QVector>
 #include <math.h>
 
 /*
@@ -30,8 +31,6 @@
 	http://www.acm.org/pubs/tog/GraphicsGems/gems/FitCurves.c
 	http://www.acm.org/pubs/tog/GraphicsGems/gems/README
 */
-
-#define MAXPOINTS	1000		/* The most points you can have */
 
 class FitVector {
 	public:
@@ -207,13 +206,12 @@ static double B3(double u)
 QPointF* GenerateBezier(const QList<QPointF> &points, int first, int last, double *uPrime,FitVector tHat1,FitVector tHat2)
 {
     int 	i;
-    FitVector	A[MAXPOINTS][2];	/* Precomputed rhs for eqn	*/
     int 	nPts;			/* Number of pts in sub-curve */
     double 	C[2][2];			/* Matrix C		*/
     double 	X[2];			/* Matrix X			*/
     double 	det_C0_C1,		/* Determinants of matrices	*/
     	   	det_C0_X,
-	   		det_X_C1;
+	   	det_X_C1;
     double 	alpha_l,		/* Alpha values, left and right	*/
     	   	alpha_r;
     FitVector 	tmp;			/* Utility variable		*/
@@ -222,6 +220,9 @@ QPointF* GenerateBezier(const QList<QPointF> &points, int first, int last, doubl
     curve = new QPointF[4];
     nPts = last - first + 1;
 
+    /* Precomputed rhs for eqn      */
+    // FitVector A[nPts][2]
+    QVector< QVector<FitVector> > A(nPts, QVector<FitVector>(2));
  
     /* Compute the A's	*/
     for (i = 0; i < nPts; i++) {
