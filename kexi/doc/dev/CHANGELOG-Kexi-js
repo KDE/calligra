@@ -17,6 +17,29 @@ Legend:
 
 ===================== Kexi 2.0 Alpha =====================
 
+~~~~~~~~~~~~~~~~ 2.0 alpha 9 ~~~~~~~~~~~~~~~~
+
+2008-07-12
+Simple Printouts
+(still not compiled in though, ported from 1.3, implemented on 2007-11-21)
+- a single record is no longer limited to one page
+  CCBUG:150167
+CSV Import Dialog
+(ported from 1.3, implemented on 2008-05-27)
+- added support for boolean (1, 0, yes, no, true, false) and floating-point data types
+- fixed all dates after 2000 appearing after import wrongly as being 
+  of the 20th century i.e. 1901 or 1902 instead of 2001 or 2002;
+  to implement this, added config value MinimumYearFor100YearSlidingWindow, 
+  by default 1930, range of years that defines where any year expressed as two digits falls. 
+  For date window from 1930 to 2029, two-digit years between 0 and 29 fall in the 2000s, 
+  and two-digit years between 30 and 99 fall in the 1900s. 
+CCBUG:151478
+
+
+2008-07-07
+Core, Main Window
+- avoid infinite recursion on closing window with never saved data
+- avoid repeated call of KexiWindow::switchToViewModeInternal(mode) when previous call did not succeed
 
 ~~~~~~~~~~~~~~~~ 2.0 alpha 8 ~~~~~~~~~~~~~~~~
 
