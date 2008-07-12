@@ -1,6 +1,11 @@
 [Desktop Entry]
 Name=Information Functions
+Name[gl]=Funcións de Información
 Name[it]=Funzioni informatiche
+Name[pt]=Funções Informativas
+Name[pt_BR]=Funções Informativas
+Name[uk]=Інформаційні функції
+Name[zh_TW]=資訊函數
 Comment=ERRORTYPE, FILENAME, INFO, ISBLANK, ISDATE, ISERR, ISERROR, ISEVEN, ISLOGICAL, ISNA, ISNONTEXT, ISNOTTEXT, ISNUM, ISNUMBER, ISODD, ISREF, ISTEXT, ISTIME, N, NA, TYPE
 Icon=funct
 Type=Service

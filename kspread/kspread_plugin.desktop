@@ -3,6 +3,11 @@ Type=ServiceType
 X-KDE-ServiceType=KSpread/Plugin
 Comment=Plugin for KSpread
 Comment[ga]=Breiseán KSpread
+Comment[gl]=Extensión par KSpread
 Comment[it]=Plugin per KSpread
+Comment[pt]='Plugin' para o KSpread
+Comment[pt_BR]=Plugin para o KSpread
+Comment[uk]=Втулок для KSpread
+Comment[zh_TW]=KSpread 外掛程式
 [PropertyDef::X-KSpread-Version]
 Type=int

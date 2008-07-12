@@ -1,6 +1,11 @@
 [Desktop Entry]
 Name=Trigonometry Functions
+Name[gl]=Funcións Trigonométricas
 Name[it]=Funzioni trigonometriche
+Name[pt]=Funções Trigonométricas
+Name[pt_BR]=Funções Trigonométricas
+Name[uk]=Тригонометричні функції
+Name[zh_TW]=三角函數
 Comment=ACOS, ACOSH, ACOT, ASIN, ASINH, ATAN, ATAN2, ATANH, COS, COSH, DEGREES, PI, RADIANS, SIN, SINH, TAN, TANH
 Icon=funct
 Type=Service

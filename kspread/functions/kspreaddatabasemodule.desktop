@@ -1,7 +1,12 @@
 [Desktop Entry]
 Name=Database Functions
 Name[ga]=Feidhmeanna Bunachar Sonraí
+Name[gl]=Funcións de Bases de Datos 
 Name[it]=Funzioni per banche dati
+Name[pt]=Funções de Bases de Dados
+Name[pt_BR]=Funções de Bancos de Dados
+Name[uk]=Функції баз даних
+Name[zh_TW]=資料庫函數
 Comment=DAVERAGE, DCOUNT, DCOUNTA, DGET, DMAX, DMIN, DPRODUCT, DSTDEV, DSTDEVP, DSUM, DVAR, DVARP, GETPIVOTDATA
 Icon=funct
 Type=Service

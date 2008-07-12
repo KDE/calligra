@@ -1,7 +1,12 @@
 [Desktop Entry]
 Name=Text Functions
 Name[ga]=Feidhmeanna Téacs
+Name[gl]=Funcións de Texto
 Name[it]=Funzioni di testo
+Name[pt]=Funções de Texto
+Name[pt_BR]=Funções de Texto
+Name[uk]=Текстові функції
+Name[zh_TW]=文字函數
 Comment=ASC, CHAR, CLEAN, CODE, COMPARE, CONCATENATE, DOLLAR, EXACT, FIND, FIXED, JIS, LEFT, LEN, LOWER, MID, PROPER, REGEXP, REGEXPRE, REPLACE, REPT, RIGHT, ROT, SEARCH, SLEEK, SUBSTITUTE, T, TEXT, TOGGLE, TRIM, UNICHAR, UNICODE, UPPER, VALUE
 Icon=funct
 Type=Service

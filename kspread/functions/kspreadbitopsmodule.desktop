@@ -1,6 +1,11 @@
 [Desktop Entry]
 Name=Bit Operation Functions
+Name[gl]=Funcións de Lóxica Binaria
 Name[it]=Funzioni di operazione sui bit
+Name[pt]=Funções de Operação com 'Bits'
+Name[pt_BR]=Funções de Operação com 'Bits'
+Name[uk]=Бітові дії
+Name[zh_TW]=位元操作函數
 Comment=BITAND, BITOR, BITXOR, BITLSHIFT, BITRSHIFT
 Icon=funct
 Type=Service

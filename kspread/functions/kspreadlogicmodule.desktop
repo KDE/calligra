@@ -1,6 +1,11 @@
 [Desktop Entry]
 Name=Logic Functions
+Name[gl]=Funcións Lóxicas
 Name[it]=Funzioni logiche
+Name[pt]=Funções Lógicas
+Name[pt_BR]=Funções Lógicas
+Name[uk]=Логічні функції
+Name[zh_TW]=邏輯函數
 Comment=AND, FALSE, IF, NAND, NOR, NOT, OR, TRUE, XOR
 Icon=funct
 Type=Service

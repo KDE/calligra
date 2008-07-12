@@ -1,6 +1,10 @@
 [Desktop Entry]
 Name=Reference Functions
+Name[gl]=Funcións de Referencia
 Name[it]=Funzioni di riferimento
+Name[pt]=Funções de Referência
+Name[pt_BR]=Funções de Referência
+Name[zh_TW]=參考函數
 Comment=ADDRESS, AREAS, CHOOSE, COLUMN, COLUMNS, HLOOKUP, INDEX, INDIRECT, LOOKUP, ROW, ROWS, VLOOKUP
 Icon=funct
 Type=Service
