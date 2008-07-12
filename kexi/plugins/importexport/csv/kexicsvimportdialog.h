@@ -168,6 +168,10 @@ class KexiCSVImportDialog : public KDialog
 		nothing is performed, else database buffer is written back to the database. */
 		bool saveRow(bool inGUI);
 
+		//! @return date built out of @a y, @a m, @a d parts, 
+		//! taking m_minimumYearFor100YearSlidingWindow into account
+		QDate buildDate(int y, int m, int d) const;
+
 		bool m_cancelled;
 		bool m_adjustRows;
 		int m_startline;
@@ -195,6 +199,12 @@ class KexiCSVImportDialog : public KDialog
 		int m_primaryKeyColumn; //!< index of column with PK assigned (-1 if none)
 		int m_maximumRowsForPreview;
 		int m_maximumBytesForPreview;
+		/*! The minimum year for the "100 year sliding date window": range of years that defines 
+		 where any year expressed as two digits falls. Example: for date window from 1930 to 2029, 
+		 two-digit years between 0 and 29 fall in the 2000s, and two-digit years between 30 and 99 fall in the 1900s. 
+		 The default is 1930. */
+		int m_minimumYearFor100YearSlidingWindow;
+
 		QPixmap m_pkIcon;
 		QString m_fname;
 		QFile* m_file;
@@ -210,6 +220,7 @@ class KexiCSVImportDialog : public KDialog
 		bool m_implicitPrimaryKeyAdded; //!< (temp) used for importing
 		bool m_allRowsLoadedInPreview; //!< we need to know whether all rows were loaded or it's just a partial data preview
 		bool m_stoppedAt_MAX_BYTES_TO_PREVIEW; //!< used to compute m_allRowsLoadedInPreview
+		const QString m_stringNo, m_stringI18nNo, m_stringFalse, m_stringI18nFalse; //! used for importing boolean values
 
 	private slots:
 		void fillTable();

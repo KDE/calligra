@@ -123,16 +123,20 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
 	textEncodingGroupBoxLyr->addWidget( m_chkAlwaysUseThisEncoding );
 
 	m_comboDateFormat = new QComboBox( plainPage );
-	m_comboDateFormat->setName( "m_comboDateFormat" );
-	m_comboDateFormat->insertItem( i18nc("Date format: Auto", "Auto") );
+	m_comboDateFormat->setObjectName( "m_comboDateFormat" );
+	m_comboDateFormat->addItem( i18nc("Date format: Auto", "Auto") );
 	QString year( i18n("year") ), month( i18n("month") ), day( i18n("day") );
-	QString mask= ki18nc("do not reorder placeholders, just translate e.g. and - to the separator used by dates in your language", "%1, %2, %3 (e.g. %4-%5-%6)").toString();
-	m_comboDateFormat->insertItem( mask.arg(day).arg(month).arg(year).arg(30).arg(12).arg(2008) );
-	m_comboDateFormat->insertItem( mask.arg(year).arg(month).arg(day).arg(2008).arg(12).arg(30) );
-	m_comboDateFormat->insertItem( mask.arg(month).arg(day).arg(year).arg(12).arg(30).arg(2008) );
+	KLocalizedString mask( ki18nc("do not reorder placeholders, just translate e.g. and - to the separator used by dates in your language", "%1, %2, %3 (e.g. %4-%5-%6)") );
+	m_comboDateFormat->addItem( 
+		mask.subs(day).subs(month).subs(year).subs(30).subs(12).subs(2008).toString() );
+	m_comboDateFormat->addItem( 
+		mask.subs(year).subs(month).subs(day).subs(2008).subs(12).subs(30).toString() );
+	m_comboDateFormat->addItem( 
+		mask.subs(month).subs(day).subs(year).subs(12).subs(30).subs(2008).toString() );
 	lyr->addWidget( m_comboDateFormat, 1, 1 );
 
-	QLabel* lblDateFormat = new QLabel( m_comboDateFormat, i18n("Date format:"), plainPage);
+	QLabel* lblDateFormat = new QLabel(i18n("Date format:"), plainPage);
+	lblDateFormat->setBuddy(m_comboDateFormat);
 	lyr->addWidget( lblDateFormat, 1, 0 );
 
 	m_chkStripWhiteSpaceInTextValues = new QCheckBox(
@@ -145,7 +149,7 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
 		m_encodingComboBox->setSelectedEncoding(options.encoding);
 		m_chkAlwaysUseThisEncoding->setChecked(true);
 	}
-	m_comboDateFormat->setCurrentItem( (int)options.dateFormat );
+	m_comboDateFormat->setCurrentIndex( (int)options.dateFormat );
 	m_chkStripWhiteSpaceInTextValues->setChecked(options.trimmedInTextValuesChecked);
 
 	adjustSize();
@@ -174,7 +178,7 @@ void KexiCSVImportOptionsDialog::accept()
 		importExportGroup.deleteEntry("DefaultEncodingForImportingCSVFiles");
 
 	const KexiCSVImportOptions::DateFormat dateFormat 
-		= (KexiCSVImportOptions::DateFormat)m_comboDateFormat->currentItem();
+		= (KexiCSVImportOptions::DateFormat)m_comboDateFormat->currentIndex();
 	if (dateFormat == KexiCSVImportOptions::AutoDateFormat)
 		importExportGroup.deleteEntry("DateFormatWhenImportingCSVFiles");
 	else
