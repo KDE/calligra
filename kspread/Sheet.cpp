@@ -69,7 +69,6 @@
 #include "Object.h"
 #include "OdfLoadingContext.h"
 #include "OdfSavingContext.h"
-#include "PrintManager.h"
 #include "RecalcManager.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"

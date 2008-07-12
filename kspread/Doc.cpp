@@ -703,7 +703,7 @@ void Doc::loadPaper( KoXmlElement const & paper )
     //apply to all sheet
     foreach ( Sheet* sheet, map()->sheetList() )
     {
-        sheet->print()->settings()->setPageLayout(pageLayout);
+        sheet->printSettings()->setPageLayout(pageLayout);
     }
 
   QString hleft, hright, hcenter;

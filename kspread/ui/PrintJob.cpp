@@ -24,15 +24,17 @@
 #include "Doc.h"
 #include "Map.h"
 #include "PrintManager.h"
+#include "PrintSettings.h"
 #include "Selection.h"
 #include "Sheet.h"
-#include "SheetPrint.h"
 #include "View.h"
 
 #include <dialogs/SheetSelectPage.h>
 
 #include <KoGlobal.h>
 #include <KoShapeManager.h>
+
+#include <KMessageBox>
 
 #include <QHash>
 #include <QPainter>

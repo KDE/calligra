@@ -347,12 +347,12 @@ void CellView::paintCellContents( const QRectF& paintRect, QPainter& painter,
 
     // 1. Paint possible comment indicator.
     if ( !dynamic_cast<QPrinter*>(painter.device())
-            || cell.sheet()->print()->settings()->printCommentIndicator() )
+            || cell.sheet()->printSettings()->printCommentIndicator() )
         paintCommentIndicator( painter, coordinate, cell );
 
     // 2. Paint possible formula indicator.
     if ( !dynamic_cast<QPrinter*>(painter.device())
-            || cell.sheet()->print()->settings()->printFormulaIndicator() )
+            || cell.sheet()->printSettings()->printFormulaIndicator() )
     {
         paintFormulaIndicator( painter, coordinate, cell );
         paintMatrixElementIndicator( painter, coordinate, cell );
@@ -450,7 +450,7 @@ void CellView::paintCellBorders( const QRectF& paintRegion, QPainter& painter,
     // 1. Paint the default borders if we are on screen or if we are printing
     //    and the checkbox to do this is checked.
     if ( painter.device()->devType() != QInternal::Printer ||
-         sheet->print()->printGrid())
+         sheet->printSettings()->printGrid())
         paintDefaultBorders( painter, paintRegion, cellRect, paintBorder, cell );
 #endif
 
@@ -911,7 +911,7 @@ void CellView::paintCommentIndicator( QPainter& painter,
     if ( ( !cell.comment().isEmpty() )
             && d->width > 10.0
             && d->height > 10.0
-            && ( cell.sheet()->print()->settings()->printCommentIndicator()
+            && ( cell.sheet()->printSettings()->printCommentIndicator()
             || ( !dynamic_cast<QPrinter*>(painter.device()) && cell.sheet()->getShowCommentIndicator() ) ) )
     {
         QColor penColor = Qt::red;
