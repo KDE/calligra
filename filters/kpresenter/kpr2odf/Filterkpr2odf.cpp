@@ -394,8 +394,8 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
             appendPoly( content, objectElement, false /*polyline*/ );
             break;
         case 13: //quadric bezier curve
-            break;
         case 14: //cubic bezier curve
+            appendBezier( content, objectElement );
             break;
         case 15: //polygon
             //a regular polygon, easily drawn by the number of sides it has
@@ -625,20 +625,20 @@ void Filterkpr2odf::appendPoly( KoXmlWriter* content, const KoXmlElement& object
 {
     //The function was written so to add polygon and polyline because it's basically the same,
     //only the name is changed and I didn't want to copy&paste
-    //TODO: find out wether i shuld use draw:regular-polygon instead of draw:polygon
     content->startElement( ( polygon )? "draw:polygon" : "draw:polyline" );
 
     content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
 
     set2DGeometry( content, objectElement );
     KoXmlElement points = objectElement.namedItem( "POINTS" ).toElement();
-    if( !points.isNull() ) {
-        KoXmlElement elemPoint = points.firstChild().toElement();
+    if( !points.isNull() )
+    {
+        KoXmlElement point = points.firstChild().toElement();
         QString listOfPoints;
 
         //No white spaces allowed before the first element
-        int tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
-        int tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
+        int tmpX = (int) ( point.attribute( "point_x", "0" ).toDouble() * 10000 );
+        int tmpY = (int) ( point.attribute( "point_y", "0" ).toDouble() * 10000 );
         listOfPoints = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
 
         int maxX = tmpX;
@@ -646,12 +646,12 @@ void Filterkpr2odf::appendPoly( KoXmlWriter* content, const KoXmlElement& object
         int previousX = tmpX;
         int previousY = tmpY;
 
-        while( !elemPoint.isNull() ) {
-            tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
-            tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
+        while( !point.isNull() ) {
+            tmpX = (int) ( point.attribute( "point_x", "0" ).toDouble() * 10000 );
+            tmpY = (int) ( point.attribute( "point_y", "0" ).toDouble() * 10000 );
             //For some reason the last point is saved twice for some polygons, so we need to ignore the last one of them if they are equal
             //this fix assumes that the last child of the POINTS tag is a Point, seems to work but it's not garanteed
-            if( tmpX == previousX && tmpY == previousY && elemPoint.nextSibling().isNull() )
+            if( tmpX == previousX && tmpY == previousY && point.nextSibling().isNull() )
             {
                 break;
             }
@@ -663,7 +663,7 @@ void Filterkpr2odf::appendPoly( KoXmlWriter* content, const KoXmlElement& object
             previousX = tmpX;
             previousY = tmpY;
 
-            elemPoint = elemPoint.nextSibling().toElement();
+            point = point.nextSibling().toElement();
         }//while !element.isNull()
         content->addAttribute( "draw:points", listOfPoints );
         content->addAttribute( "svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
@@ -718,31 +718,91 @@ void Filterkpr2odf::appendFreehand( KoXmlWriter* content, const KoXmlElement& ob
     set2DGeometry( content, objectElement );
 
     KoXmlElement points = objectElement.namedItem( "POINTS" ).toElement();
-    if( !points.isNull() ) {
-        KoXmlElement elemPoint = points.firstChild().toElement();
+    if( !points.isNull() )
+    {
+        KoXmlElement point = points.firstChild().toElement();
         QString d;
 
-        int tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
-        int tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
+        int tmpX = (int) ( point.attribute( "point_x", "0" ).toDouble() * 10000 );
+        int tmpY = (int) ( point.attribute( "point_y", "0" ).toDouble() * 10000 );
         int maxX = tmpX;
         int maxY = tmpY;
 
-        elemPoint = elemPoint.nextSibling().toElement();
+        point = point.nextSibling().toElement();
 
         d += QString( "M%1 %2" ).arg( tmpX ).arg( tmpY );
-        while( !elemPoint.isNull() ) {
-            tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
-            tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
+        while( !point.isNull() ) {
+            tmpX = (int) ( point.attribute( "point_x", "0" ).toDouble() * 10000 );
+            tmpY = (int) ( point.attribute( "point_y", "0" ).toDouble() * 10000 );
 
             d += QString( "L%1 %2" ).arg( tmpX ).arg( tmpY );
 
             maxX = qMax( maxX, tmpX );
             maxY = qMax( maxY, tmpY );
-            elemPoint = elemPoint.nextSibling().toElement();
+            point = point.nextSibling().toElement();
         }
         content->addAttribute( "svg:d", d );
         content->addAttribute( "svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
     }//if !points.isNull()
+
+    content->endElement();//draw:path
+}
+
+void Filterkpr2odf::appendBezier( KoXmlWriter* content, const KoXmlElement& objectElement )
+{
+    content->startElement( "draw:path" );
+
+    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+    set2DGeometry( content, objectElement );
+
+    KoXmlElement points = objectElement.namedItem( "POINTS" ).toElement();
+    if( !points.isNull() )
+    {
+        QString d;
+
+        KoXmlElement point1 = points.firstChild().toElement();
+        KoXmlElement point2 = point1.nextSibling().toElement();
+        KoXmlElement point3 = point2.nextSibling().toElement();
+        KoXmlElement point4 = point3.nextSibling().toElement();
+
+        int maxX = 0;
+        int maxY = 0;
+
+        d += QString( "M%1 %2" ).arg( (int) point1.attribute( "point_x" ).toDouble() * 10000 )
+                                .arg( (int) point1.attribute( "point_y" ).toDouble() * 10000 );
+        while( !point3.isNull() )//if point3 is null point4 is too, not need to check it
+        {
+            int point1X = (int)( point1.attribute( "point_x" ).toDouble() * 10000 );
+            int point1Y = (int)( point1.attribute( "point_y" ).toDouble() * 10000 );
+            int point2X = (int)( point2.attribute( "point_x" ).toDouble() * 10000 );
+            int point2Y = (int)( point2.attribute( "point_y" ).toDouble() * 10000 );
+            int point3X = (int)( point3.attribute( "point_x" ).toDouble() * 10000 );
+            int point3Y = (int)( point3.attribute( "point_y" ).toDouble() * 10000 );
+            int point4X = (int)( point4.attribute( "point_x" ).toDouble() * 10000 );
+            int point4Y = (int)( point4.attribute( "point_y" ).toDouble() * 10000 );
+
+            d += QString( "C%1 %2 %3 %4 %5 %6" ).arg( point3X ).arg( point3Y )
+                                                .arg( point4X ).arg( point4Y )
+                                                .arg( point2X ).arg( point2Y );
+
+            maxX = qMax( point1X, qMax( point2X, qMax( point3X, point4X ) ) );
+            maxY = qMax( point1Y, qMax( point2Y, qMax( point3Y, point4Y ) ) );
+
+            point1 = point4.nextSibling().toElement();
+            point2 = point1.nextSibling().toElement();
+            point3 = point2.nextSibling().toElement();
+            point4 = point3.nextSibling().toElement();
+        }
+
+        if( !point2.isNull() )
+        {
+            d += QString( "L%1 %2" ).arg( (int)point2.attribute( "point_x" ).toDouble() * 10000 )
+                                    .arg( (int)point2.attribute( "point_y" ).toDouble() * 10000 );
+        }
+
+        content->addAttribute( "svg:d", d );
+        content->addAttribute( "svg:viewBox", QString("0 0 %1 %2").arg( maxX ).arg( maxY ) );
+    }//if !points.isNull
 
     content->endElement();//draw:path
 }

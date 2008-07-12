@@ -513,9 +513,9 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
             || element.attribute( "type" ) == "8"
             || element.attribute( "type" ) == "11"
             || element.attribute( "type" ) == "12"
-            || element.attribute( "type" ) == "15"
 //perhaps      || element.attribute( "type" ) == "13"
-//             || element.attribute( "type" ) == "14"
+            || element.attribute( "type" ) == "14"
+            || element.attribute( "type" ) == "15"
             || element.attribute( "type" ) == "16" )
         {
             style.addProperty( "draw:stroke", "solid" );
