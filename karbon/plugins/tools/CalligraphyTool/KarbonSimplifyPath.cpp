@@ -45,6 +45,8 @@ namespace KarbonSimplifyPath {
     const int MAX_RECURSIVE_DEPTH = 512;
     int recursiveDepth;
 
+    void removeDuplicates( KoPathShape *path );
+
     QList<KoSubpath *> split( const KoPathShape &path );
 
     // subdivides the path adding additional points where to "complicated"
@@ -70,6 +72,8 @@ void karbonSimplifyPath( KoPathShape *path, double error )
     if ( path->pointCount() == 0 )
         return;
 
+    removeDuplicates( path );
+
     QList<KoSubpath *> subpaths = split( *path );
     foreach ( KoSubpath *subpath, subpaths )
         subdivide( subpath );
@@ -82,6 +86,28 @@ void karbonSimplifyPath( KoPathShape *path, double error )
         KoSubpath *subpath = subpaths.takeLast();
         qDeleteAll( *subpath );
         delete subpath;
+    }
+}
+
+void KarbonSimplifyPath::removeDuplicates( KoPathShape *path )
+{
+    // NOTE: works because path has only has one subshape, if this ever moves in
+    //       KoPathPoint it should be changed
+    for ( int i = 1; i < path->pointCount(); ++i )
+    {
+        KoPathPoint *p = path->pointByIndex( KoPathPointIndex(0, i) );
+        KoPathPoint *prev = path->pointByIndex( KoPathPointIndex(0, i-1) );
+        QPointF diff = p->point() - prev->point();
+        // if diff = 0 remove point
+        if ( qFuzzyCompare( diff.x() + 1, 1 ) && qFuzzyCompare( diff.y() + 1, 1) )
+        {
+            if ( prev->activeControlPoint1() )
+                p->setControlPoint1( prev->controlPoint1() );
+            else
+                p->removeControlPoint1();
+            delete path->removePoint( KoPathPointIndex(0, i-1) );
+            --i;
+        }
     }
 }
 
@@ -120,8 +146,6 @@ void KarbonSimplifyPath::subdivide( KoSubpath *subpath )
     {
         recursiveDepth = 0;
         KoSubpath newPoints = subdivideAux( (*subpath)[i-1], (*subpath)[i] );
-        if (newPoints.size() > 0)
-            kDebug() << "points added: " << newPoints.size();
         foreach ( KoPathPoint *p, newPoints )
         {
             subpath->insert(i, p);

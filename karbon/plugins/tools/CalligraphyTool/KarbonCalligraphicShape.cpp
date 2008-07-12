@@ -32,6 +32,10 @@
 
 KarbonCalligraphicShape::KarbonCalligraphicShape()
 {
+    setShapeId( KoPathShapeId );
+    setFillRule( Qt::WindingFill );
+    setBackground( new KoColorBackground( Qt::black ) );
+    setBorder( 0 );
 }
 
 KarbonCalligraphicShape::~KarbonCalligraphicShape()
@@ -111,7 +115,7 @@ void KarbonCalligraphicShape::
     // if there was a flip
     if ( sum1 < 2 && sum2 < 2 )
     {
-        kDebug() << "!!!!!!!!!! flip !!!!!!!!";
+        kDebug() << "!!!!!!!!!! flip 2 !!!!!!!!";
         m_flipped = !m_flipped;
     }
 
@@ -203,26 +207,6 @@ void KarbonCalligraphicShape::smoothPoint( const int index )
     pointByIndex( INDEX )->setControlPoint2( controlPoint2 );
 }
 
-/*KoPathShape *KarbonCalligraphicShape::simplified( float error )
-{
-    QList<QPointF> points;
-
-    const int pc = pointCount();
-    for (int i = 0; i < pc; ++i)
-    {
-        points << pointByIndex( KoPathPointIndex(0, i) )->point();
-    }
-    
-    KoPathShape *res = bezierFit( points, error );
-
-    res->setShapeId( KoPathShapeId );
-    res->setFillRule( Qt::WindingFill );
-    res->setBackground( new KoColorBackground( Qt::black ) );
-    res->setBorder( 0 );
-    res->setPosition( position() );
-
-    return res;
-}*/
 
 const QRectF KarbonCalligraphicShape::lastPieceBoundingRect()
 {
