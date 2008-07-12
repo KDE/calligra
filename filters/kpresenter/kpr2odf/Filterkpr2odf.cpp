@@ -635,13 +635,20 @@ void Filterkpr2odf::appendPoly( KoXmlWriter* content, const KoXmlElement& object
     if( !points.isNull() ) {
         KoXmlElement elemPoint = points.firstChild().toElement();
         QString listOfPoints;
-        int maxX = 0;
-        int maxY = 0;
-        int previousX = -1;
-        int previousY = -1;
+
+        //No white spaces allowed before the first element
+        int tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
+        int tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
+        listOfPoints = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
+
+        int maxX = tmpX;
+        int maxY = tmpY;
+        int previousX = tmpX;
+        int previousY = tmpY;
+
         while( !elemPoint.isNull() ) {
-            int tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
-            int tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
+            tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
+            tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
             //For some reason the last point is saved twice for some polygons, so we need to ignore the last one of them if they are equal
             //this fix assumes that the last child of the POINTS tag is a Point, seems to work but it's not garanteed
             if( tmpX == previousX && tmpY == previousY && elemPoint.nextSibling().isNull() )
@@ -649,18 +656,10 @@ void Filterkpr2odf::appendPoly( KoXmlWriter* content, const KoXmlElement& object
                 break;
             }
 
-            //No white spaces allowed before the first element
-            if( !listOfPoints.isEmpty() )
-            {
-                listOfPoints += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
-            }
-            else
-            {
-                listOfPoints = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
-            }
+            listOfPoints += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
+
             maxX = qMax( maxX, tmpX );
             maxY = qMax( maxY, tmpY );
-
             previousX = tmpX;
             previousY = tmpY;
 
@@ -723,19 +722,17 @@ void Filterkpr2odf::appendFreehand( KoXmlWriter* content, const KoXmlElement& ob
         KoXmlElement elemPoint = points.firstChild().toElement();
         QString d;
 
-        int maxX = 0;
-        int maxY = 0;
         int tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
         int tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
-        maxX = qMax( maxX, tmpX );
-        maxY = qMax( maxY, tmpY );
+        int maxX = tmpX;
+        int maxY = tmpY;
 
         elemPoint = elemPoint.nextSibling().toElement();
 
         d += QString( "M%1 %2" ).arg( tmpX ).arg( tmpY );
         while( !elemPoint.isNull() ) {
-            int tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
-            int tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
+            tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
+            tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
 
             d += QString( "L%1 %2" ).arg( tmpX ).arg( tmpY );
 
