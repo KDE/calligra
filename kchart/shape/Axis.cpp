@@ -741,6 +741,26 @@ bool Axis::loadOdf( const KoXmlElement &axisElement, const KoOdfStylesReader &st
                     d->title->setSize( QSizeF( width, height ) );
                 }
                 
+                if ( n.hasAttributeNS( KoXmlNS::chart, "style-name" ) )
+                {
+                    const QString styleName = n.attributeNS( KoXmlNS::chart, "style-name" );
+                    const KoXmlElement *styleElement = stylesReader.findStyle( styleName, "chart" );
+                    if ( styleElement )
+                    {
+                        KoXmlElement textPropertiesElement = styleElement->namedItemNS( KoXmlNS::style, "text-properties" ).toElement();
+                        if ( !textPropertiesElement.isNull() )
+                        {
+                            if ( textPropertiesElement.hasAttributeNS( KoXmlNS::fo, "font-size" ) )
+                            {
+                                const qreal fontSize = KoUnit::parseValue( textPropertiesElement.attributeNS( KoXmlNS::fo, "font-size" ) );
+                                QFont font = d->titleData->document()->defaultFont();
+                                font.setPointSizeF( fontSize );
+                                d->titleData->document()->setDefaultFont( font );
+                            }
+                        }
+                    }
+                }
+                
                 const KoXmlElement textElement = KoXml::namedItemNS( n, KoXmlNS::text, "p" );
                 if ( !textElement.isNull() )
                 {
