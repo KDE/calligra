@@ -17,7 +17,7 @@ Legend:
 
 ===================== Kexi 2.0 Alpha =====================
 
-~~~~~~~~~~~~~~~~ 2.0 alpha 9 ~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~ 2.0 alpha 10 ~~~~~~~~~~~~~~~~
 
 2008-07-12
 Simple Printouts
@@ -35,6 +35,7 @@ CSV Import Dialog
   and two-digit years between 30 and 99 fall in the 1900s. 
 CCBUG:151478
 
+~~~~~~~~~~~~~~~~ 2.0 alpha 9 ~~~~~~~~~~~~~~~~
 
 2008-07-07
 Core, Main Window
