@@ -162,12 +162,12 @@ void Filterkpr2odf::createImageList( KoStore* output, KoStore* input, KoXmlWrite
     //its "representation" inside the KPR file
     for( ; !key.isNull(); key = key.nextSibling().toElement() )
     {
-        QString name( key.attribute( "name" ) );
-        QString fullFilename( getPictureNameFromKey( key ) );
+        QString name = key.attribute( "name" );
+        QString fullFilename = getPictureNameFromKey( key );
 
         //Get the name how will be saved in the file
-        QStringList filenameComponents( name.split( "/" ) );
-        QString odfName( filenameComponents.at( filenameComponents.size()-1 ) );
+        QStringList filenameComponents = name.split( "/" );
+        QString odfName = filenameComponents.at( filenameComponents.size()-1 );
 
         m_pictures[ fullFilename ] = odfName;
 
@@ -244,11 +244,11 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
     content->startElement( KoOdf::bodyContentElement( KoOdf::Presentation, true ) );
 
     //We search all this here so that we can make the search just once
-    KoXmlNode titles( m_mainDoc.namedItem( "DOC" ).namedItem( "PAGETITLES" ) );
-    KoXmlNode notes( m_mainDoc.namedItem( "DOC" ).namedItem( "PAGENOTES" ) );
-    KoXmlNode backgrounds( m_mainDoc.namedItem( "DOC" ).namedItem( "BACKGROUND" ) );
-    KoXmlNode objects( m_mainDoc.namedItem( "DOC" ).namedItem( "OBJECTS" ) );
-    KoXmlNode paper( m_mainDoc.namedItem( "DOC" ).namedItem( "PAPER" ) );
+    KoXmlNode titles = m_mainDoc.namedItem( "DOC" ).namedItem( "PAGETITLES" );
+    KoXmlNode notes = m_mainDoc.namedItem( "DOC" ).namedItem( "PAGENOTES" );
+    KoXmlNode backgrounds = m_mainDoc.namedItem( "DOC" ).namedItem( "BACKGROUND" );
+    KoXmlNode objects = m_mainDoc.namedItem( "DOC" ).namedItem( "OBJECTS" );
+    KoXmlNode paper = m_mainDoc.namedItem( "DOC" ).namedItem( "PAPER" );
     m_pageHeight = paper.toElement().attribute( "ptHeight" ).toFloat();
 
     //Go to the first background, there might be missing backgrounds
@@ -343,7 +343,8 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
 {
     //We search through all the objects' nodes because
     //we are not sure if they are saved in order
-    for( KoXmlNode object( objects.firstChild() ); !object.isNull(); object = object.nextSibling() ) {
+    for( KoXmlNode object = objects.firstChild(); !object.isNull(); object = object.nextSibling() )
+    {
         float y = object.namedItem( "ORIG" ).toElement().attribute( "y" ).toFloat();
 
         //We check if the y is on the current page
@@ -386,12 +387,13 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
             appendGroupObject( content, objectElement );
             break;
         case 11: //freehand
+            appendFreehand( content, objectElement );
             break;
         case 12: // polyline
             //a bunch of points that are connected and not closed
             appendPoly( content, objectElement, false /*polyline*/ );
             break;
-        case 13: //quadratic bezier curve
+        case 13: //quadric bezier curve
             break;
         case 14: //cubic bezier curve
             break;
@@ -401,7 +403,7 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
             break;
         case 16: //closed polyline
             //that is a closed non-regular polygon
-            appendPoly( content, objectElement, true /*polygon*/ );
+            appendPoly( content, objectElement, true /*closedPolygon*/ );
             break;
         default:
             kWarning()<<"Unexpected object found in page "<<m_currentPage;
@@ -635,29 +637,33 @@ void Filterkpr2odf::appendPoly( KoXmlWriter* content, const KoXmlElement& object
         QString listOfPoints;
         int maxX = 0;
         int maxY = 0;
+        int previousX = -1;
+        int previousY = -1;
         while( !elemPoint.isNull() ) {
-            if( elemPoint.tagName() == "Point" ) {
-                //For some reason the last point is saved twice, we need to ignore the last one of them
-                //this fix assumes that the last child of the POINTS tag is a Point, seems to work but it's not garanteed
-                if( elemPoint.nextSibling().isNull() )
-                {
-                    break;
-                }
-                int tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
-                int tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
+            int tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
+            int tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
+            //For some reason the last point is saved twice for some polygons, so we need to ignore the last one of them if they are equal
+            //this fix assumes that the last child of the POINTS tag is a Point, seems to work but it's not garanteed
+            if( tmpX == previousX && tmpY == previousY && elemPoint.nextSibling().isNull() )
+            {
+                break;
+            }
 
-                //No white spaces allowed before the first element
-                if( !listOfPoints.isEmpty() )
-                {
-                    listOfPoints += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
-                }
-                else
-                {
-                    listOfPoints = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
-                }
-                maxX = qMax( maxX, tmpX );
-                maxY = qMax( maxY, tmpY );
-            }//if tagName == "Point"
+            //No white spaces allowed before the first element
+            if( !listOfPoints.isEmpty() )
+            {
+                listOfPoints += QString( " %1,%2" ).arg( tmpX ).arg( tmpY );
+            }
+            else
+            {
+                listOfPoints = QString( "%1,%2" ).arg( tmpX ).arg( tmpY );
+            }
+            maxX = qMax( maxX, tmpX );
+            maxY = qMax( maxY, tmpY );
+
+            previousX = tmpX;
+            previousY = tmpY;
+
             elemPoint = elemPoint.nextSibling().toElement();
         }//while !element.isNull()
         content->addAttribute( "draw:points", listOfPoints );
@@ -701,6 +707,45 @@ void Filterkpr2odf::appendAutoform( KoXmlWriter* content, const KoXmlElement& ob
     QString g;
     //TODO:export
     content->addAttribute( "draw:g", g );
+
+    content->endElement();//draw:path
+}
+
+void Filterkpr2odf::appendFreehand( KoXmlWriter* content, const KoXmlElement& objectElement )
+{
+    content->startElement( "draw:path" );
+
+    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+    set2DGeometry( content, objectElement );
+
+    KoXmlElement points = objectElement.namedItem( "POINTS" ).toElement();
+    if( !points.isNull() ) {
+        KoXmlElement elemPoint = points.firstChild().toElement();
+        QString d;
+
+        int maxX = 0;
+        int maxY = 0;
+        int tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
+        int tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
+        maxX = qMax( maxX, tmpX );
+        maxY = qMax( maxY, tmpY );
+
+        elemPoint = elemPoint.nextSibling().toElement();
+
+        d += QString( "M%1 %2" ).arg( tmpX ).arg( tmpY );
+        while( !elemPoint.isNull() ) {
+            int tmpX = ( int ) ( elemPoint.attribute( "point_x", "0" ).toDouble() * 10000 );
+            int tmpY = ( int ) ( elemPoint.attribute( "point_y", "0" ).toDouble() * 10000 );
+
+            d += QString( "L%1 %2" ).arg( tmpX ).arg( tmpY );
+
+            maxX = qMax( maxX, tmpX );
+            maxY = qMax( maxY, tmpY );
+            elemPoint = elemPoint.nextSibling().toElement();
+        }
+        content->addAttribute( "svg:d", d );
+        content->addAttribute( "svg:viewBox", QString( "0 0 %1 %2" ).arg( maxX ).arg( maxY ) );
+    }//if !points.isNull()
 
     content->endElement();//draw:path
 }

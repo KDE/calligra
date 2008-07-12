@@ -62,6 +62,7 @@ private:
     void appendPoly( KoXmlWriter* content, const KoXmlElement& objectElement, bool polygon );
     void appendPolygon( KoXmlWriter* content, const KoXmlElement& objectElement );
     void appendAutoform( KoXmlWriter* content, const KoXmlElement& objectElement );
+    void appendFreehand( KoXmlWriter* content, const KoXmlElement& objectElement );
 
     const QString getPictureNameFromKey( const KoXmlElement& key );
     void set2DGeometry( KoXmlWriter* content, const KoXmlElement& objectElement );
