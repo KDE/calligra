@@ -1,3 +1,3 @@
 #! /bin/sh
 $EXTRACTRC *.ui *.rc >> rc.cpp || exit 11
-$XGETTEXT *.cpp -o $podir/krossmodulekspread.pot
+$XGETTEXT ScriptingWriter.h *.cpp -o $podir/krossmodulekspread.pot
