@@ -53,8 +53,15 @@ class KexiSimplePrintingSettings
 		bool addTableBorders : 1;
 };
 
-/*! @short An engine painting data on pages using QPainter.
- The engine allows for random access to any page. */
+//! @short An engine painting data on pages using QPainter.
+/*! The engine allows for random access to any page. 
+ Features:
+ - page numbers in the footer
+ - date and time in the header
+ - optional table borders
+ - page title
+ - text large fields that could not fit on a full single page are splitted between pages
+*/
 class KexiSimplePrintingEngine : public QObject
 {
 	Q_OBJECT
@@ -93,22 +100,38 @@ class KexiSimplePrintingEngine : public QObject
 		void paintPage(int pageNumber, QPainter& painter, bool paint = true);
 
 	protected:
-		void paintRecord(QPainter& painter, KexiDB::RecordData *record, 
-			int cellMargin, double &y, uint paintedRows, bool paint, bool printing);
+		struct DataOffset;
+		void paintRecord(QPainter& painter, const DataOffset& offset,
+			int cellMargin, double &y, uint paintedRecords, bool paint, 
+			bool continuedRecord, bool printing, DataOffset& newOffset);
+
+		uint cutTextIfTooLarge(const QFontMetrics& fontMetrics,
+			QRect& rect, int alignFlags, const QString& text);
 
 		const KexiSimplePrintingSettings* m_settings;
 
-//		QPainter* m_painter;
 		QFont m_mainFont, m_headerFont;
 		Q3PaintDeviceMetrics m_pdm;
 		double m_dpiX, m_dpiY;
 		uint m_pageWidth, m_pageHeight;
 		uint m_SCALE;
-		//QFontMetrics m_headerFM, m_mainFM;
 		KexiDB::Cursor *m_cursor;
 		KexiTableViewData *m_data;
-//		KexiTableViewData::Iterator *m_dataIterator;
-		QList<uint> m_dataOffsets;
+
+		//! Information about record/field/place-in-text offset for a given page
+		//! Needed because large text values can be splitted between pages
+		struct DataOffset {
+			DataOffset() : record(-1), field(0), textOffset(0) {}
+			DataOffset(const DataOffset& other) { *this = other; }
+			//! first record number for this page
+			int record;
+			//! first field number for this page
+			uint field;
+			//! text offset within the first field of a first record on this page
+			uint textOffset;
+		};
+		//! offsets for records
+		QList<DataOffset*> m_dataOffsets;
 		QString m_headerText;
 		QString m_dateTimeText;
 		uint m_dateTimeWidth;

@@ -197,17 +197,14 @@ void KexiSimplePrintingEngine::clear()
 	m_eof = false;
 	m_pagesCount = 0;
 	m_dataOffsets.clear();
-	m_dataOffsets.append(0);
+	DataOffset *offset = new DataOffset;
+	offset->record = 0;
+	m_dataOffsets.append(offset);
 	m_paintInitialized = false;
 }
 
 void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool paint)
 {
-	uint offset = 0;
-	if (pageNumber < (int)m_dataOffsets.count()) {
-		offset = m_dataOffsets.at(pageNumber);
-	}
-
 	double y = 0.0;
 
 	const bool printing = painter.device()->devType() == QInternal::Printer;
@@ -349,26 +346,40 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 	}
 
 	//--print records
-	KexiDB::RecordData *record;
 //	const uint count = m_fieldsExpanded.count();
 //	const uint count = m_cursor->query()->fieldsExpanded().count(); //real fields count without internals
-	const uint rows = m_data->count();
+	const uint records = m_data->count();
 	const int cellMargin = m_settings->addTableBorders ? 
 		painter.fontMetrics().width("i") : 0;
-	uint paintedRows = 0;
-	for (;offset < rows; ++offset) {
-		record = m_data->at(offset);
+	uint paintedRecords = 0;
+	DataOffset offset;
+	if (pageNumber < (int)m_dataOffsets.count())
+		offset = *m_dataOffsets.at(pageNumber);
+	bool continuedRecord = false; // used for drawing |> arrow for continued records
+	if (pageNumber < ((int)m_dataOffsets.count()-1) && pageNumber > 0)
+		continuedRecord = m_dataOffsets.at(pageNumber-1)->record == offset.record;
 
+	uint record = offset.record==-1 ? 0 : offset.record;
+	while (record < records) {
 		//compute height of this record
 		double newY = y;
-		paintRecord(painter, record, cellMargin, newY, paintedRows, false, printing);
-//		if ((int(m_topMargin + m_pageHeight-newY-m_footerHeight)) < 0 /*(1)*/ && paintedRows > 0/*(2)*/) {
-		if (newY > (m_topMargin + m_pageHeight - m_mainLineSpacing*2 + m_mainLineSpacing) /*(1)*/ && paintedRows > 0/*(2)*/) {
-			//(1) do not break records between pages
+		DataOffset newOffset;
+		paintRecord(painter, offset, /*item,*/ cellMargin, newY, paintedRecords, 
+			false/* !paint */, printing, continuedRecord, newOffset);
+//		if ((int(m_topMargin + m_pageHeight-newY-m_footerHeight)) < 0 /*(1)*/ && paintedRecords > 0/*(2)*/) {
+#if 0
+		if (
+			newY > (m_topMargin + m_pageHeight - m_mainLineSpacing*2 + m_mainLineSpacing) /*(1)*/ && 
+			paintedRecords > 0/*(2)*/)
+		{
+			//[disabled](1) do not break records between pages
 			//(2) but paint at least one record
 //! @todo break large records anyway...
 			break;
 		}
+#endif
+		if ((newY - y) < (m_mainLineSpacing * 3)) // jump to another page if there are less than 3 rows for use
+			break;
 /*		if (int(count * m_mainLineSpacing) > int(m_topMargin + m_pageHeight-(int)y-m_footerHeight)) 
 		{
 			//do not break records between pages
@@ -376,22 +387,116 @@ void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool
 		}*/
 //		kDebug() << " -------- " << y << " / " << m_pageHeight << endl;
 		if (paint)
-			paintRecord(painter, record, cellMargin, y, paintedRows, paint, printing);
+			paintRecord(painter, offset, /*item,*/ cellMargin, y, paintedRecords,
+				paint, printing, continuedRecord, newOffset);
 		else
 			y = newY; //speedup
-		paintedRows++;
-	}
+		if (newOffset.record >= 0) {
+			offset = newOffset;
+			break;
+		}
+		paintedRecords++;
+		record++;
+		// next record will be painted from the beginning
+		offset.record = record;
+		offset.field = 0;
+		offset.textOffset = 0;
+		continuedRecord = false;
+	} // while
 
-	if (int(m_dataOffsets.count()-1)==pageNumber) {//this was next page
-		m_dataOffsets.append(offset);
+	if (int(m_dataOffsets.count()-1)==pageNumber) {//this was the next page
+		m_dataOffsets.append(new DataOffset(offset));
 	}
-	m_eof = offset == rows;
+	m_eof = record == records;
 }
 
-void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiDB::RecordData *record, 
-	int cellMargin, double &y, uint paintedRows, bool paint, bool printing)
+inline QRect getRealRect(const QFontMetrics& fontMetrics,
+	QRect& rect, int alignFlags, const QString& text)
 {
-	if (paintedRows>0 && !m_settings->addTableBorders) {//separator
+	return fontMetrics.boundingRect( 
+		rect.x(), rect.y(), rect.width(), rect.height(),
+		alignFlags, text);
+}
+
+uint KexiSimplePrintingEngine::cutTextIfTooLarge( const QFontMetrics& fontMetrics,
+	QRect& rect, int alignFlags, const QString& text)
+{
+	QRect realRect;
+	uint delta = text.length();
+	kDebug() << "\ntext==" << text << "==text\n" << endl;
+	uint cut = delta;
+	const bool updateRect = delta > 0;
+	while (delta > 0) {
+		realRect = getRealRect(fontMetrics, rect, alignFlags, text.left(cut));
+		if (realRect.height() > rect.height()) {
+			cut -= delta / 2;
+			delta /= 2;
+		}
+		else {//this fragment fits in the rect
+			if (delta == text.length()) {
+				realRect = getRealRect(fontMetrics, rect, alignFlags, text.left(cut)); //.trimmed());
+				break;
+			}
+			cut += delta / 2;
+			delta /= 2;
+		}
+		if (delta == 0) { //final cut
+			if (text.length() == cut || text.length() == 0 || cut == 0)
+				break;
+			if (text.at(cut).isSpace() && !text.at(cut-1).isSpace())
+				break;
+			if (text.at(cut-1).isSpace()) {
+				// we're at whitespace: eat it
+				cut--;
+				for (;cut>0 && text.at(cut).isSpace();cut--)
+					;
+			}
+			else {
+				// we're at a word: eat it
+				for (;cut>0 && !text.at(cut).isSpace();cut--)
+					;
+				if (cut>0) {
+					// we're at whitespace: eat it
+					for (;cut>0 && text.at(cut).isSpace();cut--)
+						;
+					cut++;
+				}
+			}
+			rect.setHeight( rect.height() - m_mainLineSpacing ); // add some pace for the 'more' arrow
+			delta = 1; // just one more step to compute realRect
+		}
+	}
+	if (updateRect)
+    rect.setHeight( realRect.height() );
+	return cut;
+}
+  
+void paintArrow(QPainter& painter, int x, int y, int arrowSize)
+{
+	QPen oldPen( painter.pen() );
+	painter.save();
+	QPointArray arrow;
+	arrow.putPoints(0, 4,
+		0, 0,
+		arrowSize, arrowSize/2,
+		0, arrowSize,
+		0, 0);
+//	painter.setBrush(QBrush(Qt::darkGray));
+	painter.setPen(Qt::darkGray);
+	painter.save();
+	painter.translate(x, y);
+	painter.drawPolyline( arrow );
+	painter.restore();
+	painter.setPen(oldPen);
+}
+
+void KexiSimplePrintingEngine::paintRecord(QPainter& painter, const DataOffset& offset,
+	int cellMargin, double &y, uint paintedRecord, bool paint, bool printing, 
+	bool continuedRecord, DataOffset& newOffset)
+{
+	KexiTableItem *item = m_data->at(offset.record);
+
+	if (paintedRecord>0 && !m_settings->addTableBorders) {//separator
 		if (paint) {
 			painter.setPen(Qt::darkGray);
 			painter.drawLine(
@@ -401,7 +506,14 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiDB::RecordData
 		}
 	}
 
-	for (uint i=0; i<m_visibleFieldsCount; i++) {
+	const int arrowSize = m_mainLineSpacing / 2;
+	if (continuedRecord)
+		y += arrowSize;
+	uint cut = 0;
+	uint i = offset.field;
+	QRect rect;
+	QString text;
+	for (; i < m_visibleFieldsCount; i++) {
 //			kDebug() << "row"<<i<<": "<<row.at(i).toString()<<endl;
 		if (paint) {
 			painter.drawText(
@@ -409,7 +521,7 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiDB::RecordData
 				Qt::AlignTop, m_fieldsExpanded[i]->captionOrAliasOrName()
 				+ (m_settings->addTableBorders ? "" : ":"));
 		}
-		QString text;
+		text = QString::null;
 //! @todo optimize like in KexiCSVExport::exportData()
 		//get real column and real index to get the visible value
 		KexiDB::QueryColumnInfo* ci;
@@ -423,9 +535,15 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiDB::RecordData
 
 		QVariant v(record->at( indexForVisibleLookupValue ));
 		KexiDB::Field::Type ftype = ci->field->type();
-		QRect rect( (int)m_leftMargin + m_maxFieldNameWidth + cellMargin, (int)y,
-			m_pageWidth - m_maxFieldNameWidth - cellMargin*2, m_pageHeight - (int)y);
-
+//		QRect rect( (int)m_leftMargin + m_maxFieldNameWidth + cellMargin, (int)y,
+//			m_pageWidth - m_maxFieldNameWidth - cellMargin*2, m_pageHeight - (int)y);
+		rect = QRect(
+			(int)m_leftMargin + m_maxFieldNameWidth + cellMargin,
+			(int)y,
+			m_pageWidth - m_maxFieldNameWidth - cellMargin*2,
+			int(m_pageHeight - ((int)y - m_topMargin) - m_mainLineSpacing*2 )
+			- (continuedRecord ? arrowSize*2 : 0)
+		);
 		if (v.isNull() || !v.isValid()) {
 			//nothing to do
 		}
@@ -489,21 +607,48 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiDB::RecordData
 			}
 		}
 		else
-			text = v.toString();
+			text = v.toString(); //.trimmed();
 
-		if (ftype!=KexiDB::Field::BLOB || v.isNull() || !v.isValid())
-			rect = QRect( painter.fontMetrics().boundingRect( 
+		cut = 0;
+		const int textOffsetForThisField = (i == offset.field) ? offset.textOffset : 0;
+		if (ftype!=KexiDB::Field::BLOB || v.isNull() || !v.isValid()) {
+/*			rect = QRect( painter.fontMetrics().boundingRect( 
 				rect.x(), rect.y(), rect.width(), rect.height(),
-				Qt::AlignAuto|Qt::TextWordBreak, text) );
+				Qt::AlignAuto|Qt::WordBreak, text) );*/
+			cut = textOffsetForThisField + cutTextIfTooLarge(
+				painter.fontMetrics(), rect, Qt::AlignTop|Qt::WordBreak,
+					((textOffsetForThisField > 0) ? text.mid(textOffsetForThisField) : text));
+		}
 		if (!text.isEmpty() && paint) {
 //			kdDebug() << "print engine: painter.drawText: "
 //				<< rect.x() <<" "<< rect.y() <<" "<< m_pageWidth - m_maxFieldNameWidth - cellMargin*2 
 //				<<" "<< m_topMargin + m_pageHeight - (int)y	<<" "<<m_pageHeight<<" "<<y<<" "<< text << endl;
-			painter.drawText(
-//				rect.x(), rect.y(), rect.width(), rect.height(),
-				rect.x(), rect.y(), m_pageWidth - m_maxFieldNameWidth - cellMargin*2,
-				int(m_topMargin + m_pageHeight - (int)y),
-				Qt::AlignTop|Qt::TextWordBreak, text);
+//			QString firstPartOfText(text), remainingPartOfText;
+			//QRect realRect( rect.x(),rect.y(), 
+//				m_pageWidth - m_maxFieldNameWidth - cellMargin*2,
+	//			int(m_pageHeight - ((int)y - m_topMargin) - m_mainLineSpacing*2 ) );
+//			uint cut = cutTextIfTooLarge(
+//				painter.fontMetrics(), realRect, Qt::AlignTop|Qt::WordBreak,text);
+			
+				QString aa( ((textOffsetForThisField > 0) ? text.mid(textOffsetForThisField) : text).left(cut).trimmed() );
+				kDebug() << "-----" << aa << endl << "=====" << endl;
+				kDebug() << "-----text.mid(textOffsetForThisField):" << text.mid(textOffsetForThisField) << endl << "=====" << endl;
+				kDebug() << "-----text.mid(textOffsetForThisField).left(cut):" << text.mid(textOffsetForThisField).left(cut) << endl << "=====" << endl;
+
+				QString xxxx_start, xxxx_end;
+				if (textOffsetForThisField > 0) {
+					xxxx_start = text.mid(textOffsetForThisField).left(cut-textOffsetForThisField).left(20);
+					xxxx_end = text.mid(textOffsetForThisField).left(cut-textOffsetForThisField).right(20);
+				}
+				else {
+					xxxx_start = text.left(cut-textOffsetForThisField).left(20);
+					xxxx_end = text.left(cut-textOffsetForThisField).right(20);
+				}
+  			painter.drawText(
+//				rect.x(), rect.y(), m_pageWidth - m_maxFieldNameWidth - cellMargin*2,
+//				int(m_pageHeight - ((int)y - m_topMargin)),
+				rect, Qt::AlignTop|Qt::WordBreak, 
+				((textOffsetForThisField > 0) ? text.mid(textOffsetForThisField) : text).left(cut-textOffsetForThisField).trimmed());
 		}
 		if (m_settings->addTableBorders) {
 			if (paint) {
@@ -522,7 +667,9 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiDB::RecordData
 			}
 		}
 		y += (double)rect.height();
-	}
+		if (cut < text.length())
+			break;
+	} //for
 	if (m_settings->addTableBorders) {
 		if (paint) {
 			painter.setPen(Qt::darkGray);
@@ -533,6 +680,20 @@ void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiDB::RecordData
 	}
 	//record spacing
 	y += double(m_mainLineSpacing)*3.0/2.0;
+
+	if (cut < text.length()) {
+		newOffset.record = offset.record;
+		newOffset.field = i;
+		newOffset.textOffset = cut;
+		if (paint) { //add |> arrow at the bottom
+			int bottomRightX = (int)m_leftMargin+m_pageWidth-1 - m_mainLineSpacing/4;
+			int bottomRightY = rect.bottom() - m_mainLineSpacing + arrowSize/3;
+			paintArrow(painter, bottomRightX - 3*arrowSize/2, bottomRightY, arrowSize);
+		}
+	}
+	if (continuedRecord && paint) { //add |> arrow on the top
+		paintArrow(painter, m_leftMargin + arrowSize/2, rect.top() - 3*arrowSize/2, arrowSize);
+	}
 //	if (m_settings->addTableBorders)
 //		y -= m_mainLineSpacing; //a bit less
 }
