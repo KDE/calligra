@@ -132,7 +132,7 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog(
 //	m_comboDateFormat->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Preferred );
 	m_comboDateFormat->insertItem( i18n("Date format: Auto", "Auto") );
 	QString year( i18n("year") ), month( i18n("month") ), day( i18n("day") );
-	QString mask( i18n("\"month, year, day\" mask", "%1, %2, %3 (e.g. %4-%5-%6)") );
+	QString mask( i18n("month, day, year (e.g. month-day-year)", "%1, %2, %3 (e.g. %4-%5-%6)") );
 	m_comboDateFormat->insertItem( mask.arg(day).arg(month).arg(year).arg(30).arg(12).arg(2008) );
 	m_comboDateFormat->insertItem( mask.arg(year).arg(month).arg(day).arg(2008).arg(12).arg(30) );
 	m_comboDateFormat->insertItem( mask.arg(month).arg(day).arg(year).arg(12).arg(30).arg(2008) );
