@@ -35,7 +35,7 @@
 #include "ValueCalc.h"
 #include "ValueConverter.h"
 
-#include "Doc.h"
+#include "part/Doc.h" // FIXME detach from part
 
 using namespace KSpread;
 

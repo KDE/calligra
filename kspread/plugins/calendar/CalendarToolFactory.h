@@ -20,14 +20,14 @@
 #ifndef KSPREAD_CALENDAR_TOOL_FACTORY
 #define KSPREAD_CALENDAR_TOOL_FACTORY
 
-#include <ui/DefaultToolFactory.h>
+#include <part/CellToolFactory.h>
 
 #define KSPREAD_CALENDAR_TOOL_ID "KSpreadCalendarToolId"
 
 namespace KSpread
 {
 
-class CalendarToolFactory : public DefaultToolFactory
+class CalendarToolFactory : public CellToolFactory
 {
     Q_OBJECT
 public:

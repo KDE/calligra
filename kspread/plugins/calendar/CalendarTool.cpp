@@ -37,7 +37,7 @@ public:
 
 
 CalendarTool::CalendarTool(KoCanvasBase* canvas)
-    : DefaultTool(canvas)
+    : CellTool(canvas)
     , d(new Private)
 {
     setObjectName("CalendarTool");
@@ -55,12 +55,12 @@ CalendarTool::~CalendarTool()
 
 void CalendarTool::activate(bool temporary)
 {
-    DefaultTool::activate(temporary);
+    CellTool::activate(temporary);
 }
 
 void CalendarTool::deactivate()
 {
-    DefaultTool::deactivate();
+    CellTool::deactivate();
 }
 
 void CalendarTool::insertCalendar(const QDate &start, const QDate &end)

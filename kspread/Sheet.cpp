@@ -55,12 +55,12 @@
 #include <KoXmlWriter.h>
 
 #include "CellStorage.h"
-#include "Canvas.h"
+#include "part/Canvas.h" // FIXME detach from part
 #include "Cluster.h"
 #include "Condition.h"
 #include "Damages.h"
 #include "DependencyManager.h"
-#include "Doc.h"
+#include "part/Doc.h" // FIXME detach from part
 #include "Global.h"
 #include "LoadingInfo.h"
 #include "Localization.h"
@@ -81,7 +81,7 @@
 #include "Util.h"
 #include "Validity.h"
 #include "ValueConverter.h"
-#include "View.h"
+#include "part/View.h" // FIXME detach from part
 
 // commands
 #include "commands/DataManipulators.h"

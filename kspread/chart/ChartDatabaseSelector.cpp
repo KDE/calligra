@@ -28,9 +28,9 @@
 #include "koChart.h"
 
 #include "Binding.h"
-#include "Canvas.h"
+#include "part/Canvas.h" // FIXME detach from part
 #include "CellStorage.h"
-#include "Doc.h"
+#include "part/Doc.h" // FIXME detach from part
 #include "Region.h"
 #include "Selection.h"
 #include "Sheet.h"

@@ -53,13 +53,14 @@
 
 #include "ApplicationSettings.h"
 #include "CalculationSettings.h"
-#include "Doc.h"
+#include "part/Doc.h"
 #include "Editors.h"
+#include "part/Factory.h"
 #include "FunctionModuleRegistry.h"
 #include "Localization.h"
 #include "Map.h"
 #include "Sheet.h"
-#include "View.h"
+#include "part/View.h"
 
 #include "ui_FileOptionsWidget.h"
 #include "ui_InterfaceOptionsWidget.h"

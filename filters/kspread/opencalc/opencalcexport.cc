@@ -42,11 +42,11 @@
 #include <KoFilterChain.h>
 #include <KoGlobal.h>
 
-#include <kspread/ui/AboutData.h> // for version
-#include <kspread/ui/Canvas.h>
+#include <kspread/part/AboutData.h> // for version
+#include <kspread/part/Canvas.h>
 #include <kspread/CalculationSettings.h>
 #include <kspread/Cell.h>
-#include <kspread/Doc.h>
+#include <kspread/part/Doc.h>
 #include <kspread/Map.h>
 #include <kspread/NamedAreaManager.h>
 #include <kspread/RowColumnFormat.h>
@@ -55,7 +55,7 @@
 #include <kspread/Style.h>
 #include <kspread/StyleManager.h>
 #include <kspread/Util.h>
-#include <kspread/ui/View.h>
+#include <kspread/part/View.h>
 
 using namespace KSpread;
 

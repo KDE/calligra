@@ -20,12 +20,12 @@
 #ifndef KSPREAD_CALENDAR_TOOL
 #define KSPREAD_CALENDAR_TOOL
 
-#include <ui/DefaultTool.h>
+#include <part/CellTool.h>
 
 namespace KSpread
 {
 
-class CalendarTool : public DefaultTool
+class CalendarTool : public CellTool
 {
     Q_OBJECT
 public:

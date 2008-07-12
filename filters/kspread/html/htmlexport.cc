@@ -37,7 +37,7 @@
 #include <kspread/CellStorage.h>
 #include <kspread/Map.h>
 #include <kspread/Sheet.h>
-#include <kspread/Doc.h>
+#include <kspread/part/Doc.h>
 #include <kspread/Util.h>
 
 using namespace KSpread;

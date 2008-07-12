@@ -37,7 +37,7 @@
 #include <kcomponentdata.h>
 
 #include "commands/AutoFillCommand.h"
-#include "Factory.h"
+#include "part/Factory.h" // FIXME detach from part
 #include "Localization.h"
 
 using namespace KSpread;

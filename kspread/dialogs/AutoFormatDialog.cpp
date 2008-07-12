@@ -41,6 +41,7 @@
 
 #include "Cell.h"
 #include "CellStorage.h"
+#include "part/Factory.h" // FIXME detach from part
 #include "Localization.h"
 #include "Selection.h"
 #include "Sheet.h"

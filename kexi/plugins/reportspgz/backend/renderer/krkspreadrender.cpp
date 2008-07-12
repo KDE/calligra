@@ -18,7 +18,7 @@
  * Please contact info@openmfg.com with any questions on this license.
  */
 #include "krkspreadrender.h"
-#include <kspread/Doc.h>
+#include <kspread/part/Doc.h>
 #include <kspread/Map.h>
 #include <kspread/Sheet.h>
 #include <KoStore.h>

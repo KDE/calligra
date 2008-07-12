@@ -18,15 +18,15 @@
 */
 
 // Local
-#include "DefaultToolFactory.h"
+#include "CellToolFactory.h"
 
 #include <klocale.h>
 
-#include "DefaultTool.h"
+#include "CellTool.h"
 
 using namespace KSpread;
 
-DefaultToolFactory::DefaultToolFactory(QObject* parent, const QString& id, const QString& name)
+CellToolFactory::CellToolFactory(QObject* parent, const QString& id, const QString& name)
     : KoToolFactory(parent, id, name)
 {
     setToolTip( i18n( "Cell Tool" ) );
@@ -36,28 +36,28 @@ DefaultToolFactory::DefaultToolFactory(QObject* parent, const QString& id, const
     setActivationShapeId( "flake/always" );
 }
 
-DefaultToolFactory::~DefaultToolFactory()
+CellToolFactory::~CellToolFactory()
 {
 }
 
-KoTool* DefaultToolFactory::createTool( KoCanvasBase* canvas )
+KoTool* CellToolFactory::createTool( KoCanvasBase* canvas )
 {
-    return new DefaultTool( canvas );
+    return new CellTool( canvas );
 }
 
-void DefaultToolFactory::setPriority(int priority)
+void CellToolFactory::setPriority(int priority)
 {
     KoToolFactory::setPriority(priority);
 }
 
-void DefaultToolFactory::setToolTip(const QString& toolTip)
+void CellToolFactory::setToolTip(const QString& toolTip)
 {
     KoToolFactory::setToolTip(toolTip);
 }
 
-void DefaultToolFactory::setIcon(const QString& icon)
+void CellToolFactory::setIcon(const QString& icon)
 {
     KoToolFactory::setIcon(icon);
 }
 
-#include "DefaultToolFactory.moc"
+#include "CellToolFactory.moc"

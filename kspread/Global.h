@@ -34,7 +34,6 @@
 #include <kdebug.h>
 #include <kiconloader.h>
 #include <QTime>
-#include "Factory.h"
 
 /* Definition of maximal supported rows - please check kspread_util (columnName) and kspread_cluster also */
 #define KS_rowMax 0x7FFF

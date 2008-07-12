@@ -31,8 +31,8 @@
 #include <QLayout>
 #include <kdebug.h>
 
-#include <Doc.h>
-#include <View.h>
+#include <part/Doc.h>
+#include <part/View.h>
 #include <interfaces/ViewAdaptor.h>
 #include <Sheet.h>
 #include <interfaces/SheetAdaptor.h>

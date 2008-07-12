@@ -42,7 +42,7 @@
 // KSpread
 #include <kspread/ApplicationSettings.h>
 #include <kspread/Cell.h>
-#include <kspread/Doc.h>
+#include <kspread/part/Doc.h>
 #include <kspread/LoadingInfo.h>
 #include <kspread/Map.h>
 #include <kspread/NamedAreaManager.h>

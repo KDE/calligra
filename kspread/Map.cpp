@@ -40,10 +40,10 @@
 #include "ApplicationSettings.h"
 #include "BindingManager.h"
 #include "CalculationSettings.h"
-#include "Canvas.h"
+#include "part/Canvas.h" // FIXME detach from part
 #include "Damages.h"
 #include "DependencyManager.h"
-#include "Doc.h"
+#include "part/Doc.h" // FIXME detach from part
 #include "LoadingInfo.h"
 #include "Localization.h"
 #include "NamedAreaManager.h"
@@ -59,7 +59,7 @@
 #include "ValueConverter.h"
 #include "ValueFormatter.h"
 #include "ValueParser.h"
-#include "View.h"
+#include "part/View.h" // FIXME detach from part
 
 // database
 #include "database/DatabaseManager.h"

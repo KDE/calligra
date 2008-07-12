@@ -51,6 +51,7 @@
 #include <kmessagebox.h>
 #include <kvbox.h>
 
+#include "part/Factory.h" // FIXME detach from part
 #include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"

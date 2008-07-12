@@ -23,7 +23,6 @@
 #include "DatabaseDialog.h"
 
 #include "Cell.h"
-#include "Doc.h"
 #include "Selection.h"
 #include "Sheet.h"
 #include "Util.h"

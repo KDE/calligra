@@ -24,7 +24,7 @@
 #include "CellStorage.h"
 #include "DependencyManager.h"
 #include "DependencyManager_p.h"
-#include "Doc.h"
+#include "part/Doc.h" // FIXME detach from part
 #include "Map.h"
 #include "Region.h"
 #include "Sheet.h"

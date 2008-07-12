@@ -28,7 +28,6 @@
 
 #include <kdebug.h>
 
-#include "Doc.h"
 #include "Map.h"
 #include "Sheet.h"
 

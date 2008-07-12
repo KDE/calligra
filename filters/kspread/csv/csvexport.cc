@@ -35,9 +35,9 @@
 #include <kspread/CellStorage.h>
 #include <kspread/Map.h>
 #include <kspread/Sheet.h>
-#include <kspread/Doc.h>
+#include <kspread/part/Doc.h>
 #include <kspread/Value.h>
-#include <kspread/ui/View.h>
+#include <kspread/part/View.h>
 #include <kspread/Selection.h>
 
 #include <csvexportdialog.h>

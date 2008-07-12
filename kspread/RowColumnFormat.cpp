@@ -37,7 +37,7 @@
 #include <KoOdfStylesReader.h>
 
 #include "CellStorage.h"
-#include "Doc.h"
+#include "part/Doc.h" // FIXME detach from part
 #include "Global.h"
 #include "Map.h"
 #include "Region.h"

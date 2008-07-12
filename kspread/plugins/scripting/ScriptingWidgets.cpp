@@ -29,8 +29,8 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <View.h>
-#include <Doc.h>
+#include <part/View.h>
+#include <part/Doc.h>
 #include <Map.h>
 #include <Sheet.h>
 #include <Cell.h>

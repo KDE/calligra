@@ -17,23 +17,23 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_DEFAULT_TOOL
-#define KSPREAD_DEFAULT_TOOL
+#ifndef KSPREAD_CELL_TOOL
+#define KSPREAD_CELL_TOOL
 
-#include "CellToolBase.h"
+#include "ui/CellToolBase.h"
 
 #include "kspread_export.h"
 
 namespace KSpread
 {
 
-class KSPREAD_EXPORT DefaultTool : public CellToolBase
+class KSPREAD_EXPORT CellTool : public CellToolBase
 {
     Q_OBJECT
 
 public:
-    explicit DefaultTool( KoCanvasBase* canvas );
-    ~DefaultTool();
+    explicit CellTool( KoCanvasBase* canvas );
+    ~CellTool();
 
     virtual void paint(QPainter &painter, const KoViewConverter &converter);
 
@@ -63,7 +63,7 @@ protected Q_SLOTS:
     void definePrintRange();
 
 private:
-    Q_DISABLE_COPY( DefaultTool )
+    Q_DISABLE_COPY( CellTool )
 
     class Private;
     Private * const d;
@@ -71,4 +71,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_DEFAULT_TOOL
+#endif // KSPREAD_CELL_TOOL

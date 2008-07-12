@@ -119,7 +119,7 @@
 #include "DependencyManager.h"
 #include "Digest.h"
 #include "Doc.h"
-#include "inspector.h"
+#include "Factory.h"
 #include "LoadingInfo.h"
 #include "Canvas.h"
 #include "Editors.h"
@@ -1149,7 +1149,7 @@ void View::initialPosition()
     refreshView();
 
     // Activate the cell tool.
-    KoToolManager::instance()->switchToolRequested("KSpreadDefaultToolId");
+    KoToolManager::instance()->switchToolRequested("KSpreadCellToolId");
 }
 
 void View::activateFormulaEditor()

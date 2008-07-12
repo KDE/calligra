@@ -41,7 +41,9 @@
 #include <KoXmlReader.h>
 #include <KoGenStyle.h>
 
-#include "Global.h"
+#include "../Global.h"
+
+#include "../kspread_export.h"
 
 class QDomDocument;
 class QPainter;

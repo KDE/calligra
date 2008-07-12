@@ -42,17 +42,17 @@
 
 // KSpread
 #include <kspread/ApplicationSettings.h>
-#include <kspread/ui/Canvas.h>
+#include <kspread/part/Canvas.h>
 #include <kspread/CellStorage.h>
 #include <kspread/Currency.h>
-#include <kspread/Doc.h>
+#include <kspread/part/Doc.h>
 #include <kspread/Map.h>
 #include <kspread/NamedAreaManager.h>
 #include <kspread/Sheet.h>
 #include <kspread/SheetPrint.h>
 #include <kspread/RowColumnFormat.h>
 #include <kspread/Validity.h>
-#include <kspread/ui/View.h>
+#include <kspread/part/View.h>
 
 using namespace KSpread;
 

@@ -19,7 +19,7 @@
 */
 
 #include <CellStorage.h>
-#include <Doc.h>
+#include <part/Doc.h> // FIXME detach from part
 #include <Formula.h>
 #include <Map.h>
 #include <Sheet.h>

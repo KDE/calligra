@@ -75,6 +75,7 @@
 #include "CalculationSettings.h"
 #include "Canvas.h"
 #include "DependencyManager.h"
+#include "Factory.h"
 #include "Formula.h"
 #include "FunctionModuleRegistry.h"
 #include "Functions.h"

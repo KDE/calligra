@@ -28,12 +28,12 @@
 // Local
 #include "ViewAdaptor.h"
 
-#include "Doc.h"
+#include "part/Doc.h"
 #include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
-#include "View.h"
-#include "Canvas.h"
+#include "part/View.h"
+#include "part/Canvas.h"
 #include "MapAdaptor.h"
 
 #include <KoShapeManager.h>

@@ -49,13 +49,11 @@
 #include <KoTabBar.h>
 
 #include "CalculationSettings.h"
-#include "Doc.h"
 #include "Editors.h"
 #include "Localization.h"
 #include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
-#include "View.h"
 
 using namespace KSpread;
 

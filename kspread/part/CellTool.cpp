@@ -41,7 +41,7 @@
 */
 
 // Local
-#include "DefaultTool.h"
+#include "CellTool.h"
 
 #include <QPainter>
 
@@ -91,7 +91,7 @@ using namespace KSpread;
  *   \li marking, resizing (handle or Shift), extending (Ctrl)
  */
 
-class DefaultTool::Private
+class CellTool::Private
 {
 public:
     void processClickSelectionHandle( KoPointerEvent* event );
@@ -122,7 +122,7 @@ public:
     QString anchor;
 };
 
-DefaultTool::DefaultTool( KoCanvasBase* canvas )
+CellTool::CellTool( KoCanvasBase* canvas )
     : CellToolBase( canvas )
     , d( new Private )
 {
@@ -140,12 +140,12 @@ DefaultTool::DefaultTool( KoCanvasBase* canvas )
     action->setToolTip(i18n("Define the print range in the current sheet"));
 }
 
-DefaultTool::~DefaultTool()
+CellTool::~CellTool()
 {
     delete d;
 }
 
-void DefaultTool::paint(QPainter &painter, const KoViewConverter &viewConverter)
+void CellTool::paint(QPainter &painter, const KoViewConverter &viewConverter)
 {
     KoShape::applyConversion(painter, viewConverter);
     const double xOffset = viewConverter.viewToDocumentX(m_canvas->canvasController()->canvasOffsetX());
@@ -158,7 +158,7 @@ void DefaultTool::paint(QPainter &painter, const KoViewConverter &viewConverter)
 }
 
 #if 0 // KSPREAD_MOUSE_STRATEGIES
-void DefaultTool::mousePressEvent( KoPointerEvent* event )
+void CellTool::mousePressEvent( KoPointerEvent* event )
 {
     register Sheet * const sheet = d->canvas->activeSheet();
     if (!sheet)
@@ -345,7 +345,7 @@ void DefaultTool::mousePressEvent( KoPointerEvent* event )
     CellToolBase::mousePressEvent(event);
 }
 
-void DefaultTool::mouseReleaseEvent( KoPointerEvent* )
+void CellTool::mouseReleaseEvent( KoPointerEvent* )
 {
     register Sheet * const sheet = d->canvas->activeSheet();
     if (!sheet)
@@ -381,7 +381,7 @@ void DefaultTool::mouseReleaseEvent( KoPointerEvent* )
     d->dragStart.setX( -1 );
 }
 
-void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
+void CellTool::mouseMoveEvent( KoPointerEvent* event )
 {
     // Don't allow modifications, if document is readonly. Selecting is no modification
     if ( (!d->canvas->view()->doc()->isReadWrite()) && (d->mouseAction!=Private::Mark))
@@ -537,62 +537,62 @@ void DefaultTool::mouseMoveEvent( KoPointerEvent* event )
     d->canvas->selection()->update(QPoint(col,row));
 }
 
-void DefaultTool::mouseDoubleClickEvent( KoPointerEvent* event )
+void CellTool::mouseDoubleClickEvent( KoPointerEvent* event )
 {
     Q_UNUSED( event );
     if ( d->canvas->view()->doc()->isReadWrite() && d->canvas->activeSheet() )
         createEditor( false /* keep content */);
 }
 
-KoInteractionStrategy* DefaultTool::createStrategy(KoPointerEvent* event)
+KoInteractionStrategy* CellTool::createStrategy(KoPointerEvent* event)
 {
     Q_UNUSED(event)
     return 0;
 }
 #endif
 
-void DefaultTool::activate(bool temporary)
+void CellTool::activate(bool temporary)
 {
     m_canvas->shapeManager()->selection()->deselectAll();
     CellToolBase::activate(temporary);
 }
 
-KSpread::Selection* DefaultTool::selection()
+KSpread::Selection* CellTool::selection()
 {
     return d->canvas->selection();
 }
 
-QPointF DefaultTool::offset() const
+QPointF CellTool::offset() const
 {
     return QPointF(0.0, 0.0);
 }
 
-QSizeF DefaultTool::size() const
+QSizeF CellTool::size() const
 {
     return m_canvas->viewConverter()->viewToDocument(d->canvas->size());
 }
 
-int DefaultTool::maxCol() const
+int CellTool::maxCol() const
 {
     return KS_colMax;
 }
 
-int DefaultTool::maxRow() const
+int CellTool::maxRow() const
 {
     return KS_rowMax;
 }
 
-SheetView* DefaultTool::sheetView(const Sheet* sheet) const
+SheetView* CellTool::sheetView(const Sheet* sheet) const
 {
     return d->canvas->view()->sheetView(sheet);
 }
 
-void DefaultTool::definePrintRange()
+void CellTool::definePrintRange()
 {
     selection()->activeSheet()->printSettings()->setPrintRegion(*selection());
 }
 
-void DefaultTool::Private::processClickSelectionHandle( KoPointerEvent* event )
+void CellTool::Private::processClickSelectionHandle( KoPointerEvent* event )
 {
     // Auto fill ? That is done using the left mouse button.
     if ( event->button() == Qt::LeftButton )
@@ -610,7 +610,7 @@ void DefaultTool::Private::processClickSelectionHandle( KoPointerEvent* event )
 }
 
 #if 0 // KSPREAD_MOUSE_STRATEGIES
-void DefaultTool::Private::processLeftClickAnchor()
+void CellTool::Private::processLeftClickAnchor()
 {
     KNotification *notify = new KNotification("LinkActivated");
     notify->setText( i18n("Link <i>%1</i> activated", anchor) );
@@ -654,4 +654,4 @@ void DefaultTool::Private::processLeftClickAnchor()
 }
 #endif
 
-#include "DefaultTool.moc"
+#include "CellTool.moc"

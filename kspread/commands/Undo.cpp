@@ -22,7 +22,7 @@
 
 #include "Cell.h"
 #include "CellStorage.h"
-#include "Doc.h"
+#include "part/Doc.h" // FIXME detach from part
 #include "Global.h"
 #include "Localization.h"
 #include "Map.h"

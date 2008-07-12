@@ -17,24 +17,22 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_DEFAULT_TOOL_FACTORY
-#define KSPREAD_DEFAULT_TOOL_FACTORY
+#ifndef KSPREAD_CELL_TOOL_FACTORY
+#define KSPREAD_CELL_TOOL_FACTORY
 
 #include <KoToolFactory.h>
 
 #include "kspread_export.h"
 
-#define KSPREAD_DEFAULT_TOOL_ID "KSpreadDefaultToolId"
-
 namespace KSpread
 {
 
-class KSPREAD_EXPORT DefaultToolFactory : public KoToolFactory
+class KSPREAD_EXPORT CellToolFactory : public KoToolFactory
 {
     Q_OBJECT
 public:
-    explicit DefaultToolFactory(QObject* parent, const QString& id, const QString& name);
-    ~DefaultToolFactory();
+    explicit CellToolFactory(QObject* parent, const QString& id, const QString& name);
+    ~CellToolFactory();
 
     KoTool* createTool( KoCanvasBase* canvas );
 
@@ -45,4 +43,4 @@ public:
 
 } // namespace
 
-#endif // KSPREAD_DEFAULT_TOOL_FACTORY
+#endif // KSPREAD_CELL_TOOL_FACTORY

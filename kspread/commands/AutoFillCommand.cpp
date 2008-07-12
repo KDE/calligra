@@ -30,6 +30,7 @@
 
 #include "AutoFillCommand.h"
 
+#include "part/Factory.h" // FIXME detach from part
 #include "Localization.h"
 #include "Map.h"
 #include "Sheet.h"

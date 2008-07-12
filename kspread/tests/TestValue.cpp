@@ -20,7 +20,7 @@
 
 #include "TestKspreadCommon.h"
 
-#include <Doc.h>
+#include <part/Doc.h> // FIXME detach from part
 #include <Map.h>
 
 #include "TestValue.h"

@@ -37,7 +37,7 @@
 #include "CellView.h"
 #include "Damages.h"
 #include "database/Database.h"
-#include "Doc.h"
+#include "part/Doc.h" // FIXME detach from part
 #include "DragAndDropStrategy.h"
 #include "HyperlinkStrategy.h"
 #include "inspector.h"

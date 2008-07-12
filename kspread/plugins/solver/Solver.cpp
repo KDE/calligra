@@ -26,10 +26,10 @@
 #include <kactioncollection.h>
 #include <Formula.h>
 #include <Cell.h>
-#include <Doc.h>
+#include <part/Doc.h>
 #include <Sheet.h>
 #include <Value.h>
-#include <View.h>
+#include <part/View.h>
 #include <Region.h>
 
 #include "SolverDialog.h"

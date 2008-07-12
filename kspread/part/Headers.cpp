@@ -69,7 +69,6 @@
 #include "Canvas.h"
 #include "Canvas_p.h"
 #include "Cell.h"
-#include "DefaultToolFactory.h"
 #include "Doc.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"

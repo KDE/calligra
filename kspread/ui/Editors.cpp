@@ -23,7 +23,7 @@
 #include "ApplicationSettings.h"
 #include "Cell.h"
 #include "CellToolBase.h"
-#include "Doc.h"
+#include "part/Doc.h" // FIXME detach from part
 #include "Formula.h"
 #include "Functions.h"
 #include "Map.h"
@@ -31,7 +31,7 @@
 #include "Selection.h"
 #include "Sheet.h"
 #include "Style.h"
-#include "View.h"
+#include "part/View.h" // FIXME detach from part
 
 // KOffice
 #include <KoGlobal.h>

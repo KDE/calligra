@@ -27,7 +27,7 @@
 #include <kmessagebox.h>
 
 #include "ApplicationSettings.h"
-#include "Doc.h"
+#include "part/Doc.h" // FIXME detach from part
 #include "Localization.h"
 #include "Map.h"
 #include "Object.h"

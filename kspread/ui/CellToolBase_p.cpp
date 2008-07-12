@@ -47,7 +47,7 @@
 #include "ApplicationSettings.h"
 #include "CalculationSettings.h"
 #include "CellStorage.h"
-#include "Doc.h"
+#include "part/Doc.h" // FIXME detach from part
 #include "Map.h"
 #include "RowColumnFormat.h"
 #include "Selection.h"

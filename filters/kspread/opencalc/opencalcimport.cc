@@ -46,7 +46,7 @@
 #include <kspread/Cell.h>
 #include <kspread/CellStorage.h>
 #include <kspread/Condition.h>
-#include <kspread/Doc.h>
+#include <kspread/part/Doc.h>
 #include <kspread/Global.h>
 #include <kspread/Map.h>
 #include <kspread/NamedAreaManager.h>

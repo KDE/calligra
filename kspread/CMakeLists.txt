@@ -131,25 +131,32 @@ SET (interfaces_DIR_SRCS
 	interfaces/ViewAdaptor.cpp
 	)
 
+SET (part_DIR_SRCS
+	part/Canvas.cpp
+	part/CellTool.cpp
+	part/CellToolFactory.cpp
+	part/Digest.cpp
+	part/Doc.cpp
+	part/Factory.cpp
+	part/Headers.cpp
+	part/PrintJob.cpp
+	part/ToolRegistry.cpp
+	part/View.cpp
+)
+
 SET (ui_DIR_SRCS
 	ui/AbstractSelectionStrategy.cpp
 	ui/AutoFillStrategy.cpp
-	ui/Canvas.cpp
 	ui/CellToolBase.cpp
 	ui/CellToolBase_p.cpp
 	ui/CellView.cpp
-	ui/DefaultTool.cpp
-	ui/DefaultToolFactory.cpp
 	ui/DragAndDropStrategy.cpp
 	ui/Editors.cpp
-	ui/Headers.cpp
 	ui/HyperlinkStrategy.cpp
 	ui/MergeStrategy.cpp
 	ui/PasteStrategy.cpp
-	ui/PrintJob.cpp
 	ui/SelectionStrategy.cpp
 	ui/SheetView.cpp
-	ui/View.cpp
 	)
 
 kde4_add_ui_files(ui_DIR_SRCS
@@ -168,9 +175,6 @@ SET (kspreadcommon_LIB_SRCS
 	Currency.cpp
 	Damages.cpp
 	DependencyManager.cpp
-	Digest.cpp
-	Doc.cpp
-	Factory.cpp
 	Format.cpp
 	Formula.cpp
 	FunctionModule.cpp
@@ -200,7 +204,6 @@ SET (kspreadcommon_LIB_SRCS
 	StyleManager.cpp
 	StyleStorage.cpp
 # 	Toolbox.cpp
-	ToolRegistry.cpp
 	Util.cpp
 	Validity.cpp
 	Value.cpp
@@ -215,6 +218,7 @@ SET (kspreadcommon_LIB_SRCS
 	${dialogs_DIR_SRCS}
 	${functions_DIR_SRCS}
 	${interfaces_DIR_SRCS}
+	${part_DIR_SRCS}
 	${ui_DIR_SRCS}
 	)
 
@@ -233,7 +237,7 @@ install(TARGETS kspreadcommon  DESTINATION ${LIB_INSTALL_DIR})
 
 ########### next target ###############
 
-SET (kspreadpart_PART_SRCS Factory_init.cpp )
+SET (kspreadpart_PART_SRCS part/Factory_init.cpp )
 
 kde4_add_plugin(kspreadpart WITH_PREFIX ${kspreadpart_PART_SRCS})
 
@@ -246,7 +250,7 @@ install(TARGETS kspreadpart  DESTINATION ${PLUGIN_INSTALL_DIR})
 
 ########### next target ###############
 
-SET (kspread_KDEINIT_SRCS Main.cpp )
+SET (kspread_KDEINIT_SRCS part/Main.cpp )
 
 kde4_add_kdeinit_executable( kspread ${kspread_KDEINIT_SRCS})
 
