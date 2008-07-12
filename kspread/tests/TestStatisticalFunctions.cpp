@@ -35,6 +35,8 @@
 
 using namespace KSpread;
 
+#include "functions/LogicModule.h"
+#include "functions/MathModule.h"
 #include "functions/StatisticalModule.h"
 #include "FunctionModuleRegistry.h"
 
@@ -138,6 +140,8 @@ Value TestStatisticalFunctions::evaluate(const QString& formula)
 
 void TestStatisticalFunctions::initTestCase()
 {
+    FunctionModuleRegistry::instance()->add(new LogicModule(this));
+    FunctionModuleRegistry::instance()->add(new MathModule(this));
     FunctionModuleRegistry::instance()->add(new StatisticalModule(this));
     FunctionModuleRegistry::instance()->registerFunctions();
     m_doc = new Doc();

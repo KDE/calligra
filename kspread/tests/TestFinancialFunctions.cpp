@@ -22,11 +22,13 @@
 
 #include "TestFinancialFunctions.h"
 
+#include "functions/DateTimeModule.h"
 #include "functions/FinancialModule.h"
 #include "FunctionModuleRegistry.h"
 
 void TestFinancialFunctions::initTestCase()
 {
+    FunctionModuleRegistry::instance()->add(new DateTimeModule(this));
     FunctionModuleRegistry::instance()->add(new FinancialModule(this));
     FunctionModuleRegistry::instance()->registerFunctions();
 }

@@ -78,14 +78,14 @@ target_link_libraries(TestEngineeringFunctions kspreadcommon ${QT_QTTEST_LIBRARY
 
 ########### next target ###############
 
-set(TestFinancialFunctions_SRCS TestFinancialFunctions.cpp ../functions/financial.cpp)
+set(TestFinancialFunctions_SRCS TestFinancialFunctions.cpp ../functions/financial.cpp ../functions/datetime.cpp)
 kde4_add_unit_test(TestFinancialFunctions TESTNAME kspread-FinancialFunctions  ${TestFinancialFunctions_SRCS})
 macro_add_compile_flags(TestFinancialFunctions "-DKSPREAD_UNIT_TEST")
 target_link_libraries(TestFinancialFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestInformationFunctions_SRCS TestInformationFunctions.cpp ../functions/information.cpp)
+set(TestInformationFunctions_SRCS TestInformationFunctions.cpp ../functions/information.cpp ../functions/datetime.cpp ../functions/logic.cpp ../functions/math.cpp ../functions/reference.cpp ../functions/text.cpp)
 kde4_add_unit_test(TestInformationFunctions TESTNAME kspread-InformationFunctions  ${TestInformationFunctions_SRCS})
 macro_add_compile_flags(TestInformationFunctions "-DKSPREAD_UNIT_TEST")
 target_link_libraries(TestInformationFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
@@ -106,7 +106,7 @@ target_link_libraries(TestMathFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
 
 ########### next target ###############
 
-set(TestStatisticalFunctions_SRCS TestStatisticalFunctions.cpp ../functions/statistical.cpp)
+set(TestStatisticalFunctions_SRCS TestStatisticalFunctions.cpp ../functions/statistical.cpp ../functions/logic.cpp ../functions/math.cpp)
 kde4_add_unit_test(TestStatisticalFunctions TESTNAME kspread-StatisticalFunctions  ${TestStatisticalFunctions_SRCS})
 macro_add_compile_flags(TestStatisticalFunctions "-DKSPREAD_UNIT_TEST")
 target_link_libraries(TestStatisticalFunctions kspreadcommon ${QT_QTTEST_LIBRARY})
