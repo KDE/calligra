@@ -51,7 +51,7 @@ Binding::Binding(const Region& region)
     : d(new Private)
 {
     Q_ASSERT(region.isValid());
-    d->model = new BindingModelContainer(region);
+    d->model = new BindingModelContainer(this, region);
 }
 
 Binding::Binding(const Binding& other)
@@ -121,9 +121,10 @@ bool Binding::operator<(const Binding& other) const
     return d < other.d;
 }
 
-BindingModelContainer::BindingModelContainer(const Region& region)
-    : KoChart::ChartModel(),
-    m_model( new BindingModel(this) )
+BindingModelContainer::BindingModelContainer(Binding* binding, const Region& region)
+    : KoChart::ChartModel()
+    , m_model( new BindingModel(this) )
+    , m_binding(binding)
 {
     m_model->setRegion(region);
     connect (m_model, SIGNAL(changed(const Region&)), this, SIGNAL(changed(const Region&)));
@@ -166,11 +167,24 @@ bool BindingModelContainer::setCellRegion(const QString& regionName)
         kDebug() << qPrintable(regionName) << "is not a valid region.";
         return false;
     }
+    // Clear the old binding.
+    Region::ConstIterator end = m_model->region().constEnd();
+    for (Region::ConstIterator it = m_model->region().constBegin(); it != end; ++it) {
+        if (!(*it)->isValid()) {
+            continue;
+        }
+        // FIXME Stefan: This may also clear other bindings!
+        (*it)->sheet()->cellStorage()->setBinding(Region((*it)->rect(), (*it)->sheet()), Binding());
+    }
+    // Set the new region
     m_model->setRegion(region);
-    // TODO
-    // Inform the manager about the changed region, so that we will be correctly informed
-    // about value changes.
-//     BindingManager* manager = map->bindingManager();
+    end = m_model->region().constEnd();
+    for (Region::ConstIterator it = m_model->region().constBegin(); it != end; ++it) {
+        if (!(*it)->isValid()) {
+            continue;
+        }
+        (*it)->sheet()->cellStorage()->setBinding(Region((*it)->rect(), (*it)->sheet()), *m_binding);
+    }
     return true;
 }
 
