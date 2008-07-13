@@ -24,7 +24,6 @@
 #include "Cell.h"
 #include "CellStorage.h"
 #include "Sheet.h"
-#include "part/Doc.h" // FIXME detach from part
 #include "Map.h"
 #include "NamedAreaManager.h"
 #include "Region.h"
@@ -1372,8 +1371,7 @@ Value Formula::eval() const
   QString c;
   QVector<Value> args;
 
-  const Doc *doc = d->sheet ? d->sheet->doc() : new Doc();
-  const Map* map = d->sheet ? d->sheet->map() : doc->map();
+  const Map* map = d->sheet ? d->sheet->map() : new Map(0 /*document*/);
   const ValueConverter* converter = map->converter();
   ValueCalc* calc = map->calc();
 
@@ -1658,7 +1656,7 @@ Value Formula::eval() const
   }
 
   if ( !d->sheet )
-    delete doc;
+    delete map;
 
   // more than one value in stack ? unsuccessful execution...
   if( stack.count() != 1 )
