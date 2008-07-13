@@ -35,16 +35,15 @@ KarbonPatternOptionsWidget::KarbonPatternOptionsWidget( QWidget * parent )
     d->widget.patternRepeat->insertItem( 1, i18n( "Tiled" ) );
     d->widget.patternRepeat->insertItem( 2, i18n( "Stretched" ) );
 
-    d->widget.referencePoint->insertItem( 0, i18n( "Undefined" ) );
-    d->widget.referencePoint->insertItem( 1, i18n( "Top Left" ) );
-    d->widget.referencePoint->insertItem( 2, i18n( "Top" ) );
-    d->widget.referencePoint->insertItem( 3, i18n( "Top Right" ) );
-    d->widget.referencePoint->insertItem( 4, i18n( "Left" ) );
-    d->widget.referencePoint->insertItem( 5, i18n( "Center" ) );
-    d->widget.referencePoint->insertItem( 6, i18n( "Right" ) );
-    d->widget.referencePoint->insertItem( 7, i18n( "Bottom Left" ) );
-    d->widget.referencePoint->insertItem( 8, i18n( "Bottom" ) );
-    d->widget.referencePoint->insertItem( 9, i18n( "Bottom Right" ) );
+    d->widget.referencePoint->insertItem( 0, i18n( "Top Left" ) );
+    d->widget.referencePoint->insertItem( 1, i18n( "Top" ) );
+    d->widget.referencePoint->insertItem( 2, i18n( "Top Right" ) );
+    d->widget.referencePoint->insertItem( 3, i18n( "Left" ) );
+    d->widget.referencePoint->insertItem( 4, i18n( "Center" ) );
+    d->widget.referencePoint->insertItem( 5, i18n( "Right" ) );
+    d->widget.referencePoint->insertItem( 6, i18n( "Bottom Left" ) );
+    d->widget.referencePoint->insertItem( 7, i18n( "Bottom" ) );
+    d->widget.referencePoint->insertItem( 8, i18n( "Bottom Right" ) );
 
     d->widget.refPointOffsetX->setRange( 0.0, 100.0 );
     d->widget.refPointOffsetX->setSuffix( QString('%') );

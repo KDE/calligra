@@ -28,21 +28,109 @@
 
 #include <math.h>
 
-int KarbonPatternEditStrategy::m_handleRadius = 3;
+int KarbonPatternEditStrategyBase::m_handleRadius = 3;
 
-KarbonPatternEditStrategy::KarbonPatternEditStrategy( KoShape * shape, KoImageCollection * imageCollection )
-: m_shape( shape ),m_selectedHandle( -1 ), m_editing( false )
-, m_imageCollection( imageCollection ), m_oldFill( imageCollection ), m_newFill( imageCollection )
-, m_hasChanged( false )
+KarbonPatternEditStrategyBase::KarbonPatternEditStrategyBase( KoShape * s, KoImageCollection * imageCollection )
+    : m_selectedHandle( -1 )
+    , m_oldFill( imageCollection ), m_newFill( imageCollection )
+    , m_shape( s ), m_imageCollection( imageCollection )
+    , m_editing( false ), m_modified( false )
 {
     // cache the shapes transformation matrix
-    m_matrix = m_shape->absoluteTransformation( 0 );
-    QSizeF size = m_shape->size();
+    m_matrix = shape()->absoluteTransformation( 0 );
+}
+
+KarbonPatternEditStrategyBase::~KarbonPatternEditStrategyBase()
+{
+}
+
+void KarbonPatternEditStrategyBase::setEditing( bool on )
+{
+    m_editing = on;
+    // if we are going into editing mode, save the old background
+    // for use inside the command emitted when finished
+    if( on )
+    {
+        m_modified = false;
+        KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( m_shape->background() );
+        if( fill )
+            m_oldFill = *fill;
+    }
+}
+
+void KarbonPatternEditStrategyBase::setModified()
+{
+    m_modified = true;
+}
+
+bool KarbonPatternEditStrategyBase::isModified() const
+{
+    return m_modified;
+}
+
+QUndoCommand * KarbonPatternEditStrategyBase::createCommand()
+{
+    KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( m_shape->background() );
+    if( fill && isModified() )
+    {
+        *fill = m_oldFill;
+        KoPatternBackground * newFill = new KoPatternBackground( m_imageCollection );
+        *newFill = m_newFill;
+        return new KoShapeBackgroundCommand( m_shape, newFill, 0 );
+    }
+    return 0;
+}
+
+void KarbonPatternEditStrategyBase::paintHandle( QPainter &painter, const KoViewConverter &converter, const QPointF &position ) const
+{
+    QRectF handleRect = converter.viewToDocument( QRectF( m_handleRadius, m_handleRadius, 2*m_handleRadius, 2*m_handleRadius ) );
+    handleRect.moveCenter( position );
+    painter.drawRect( handleRect );
+}
+
+bool KarbonPatternEditStrategyBase::mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos ) const
+{
+    if( mousePos.x() < handlePos.x()-m_handleRadius )
+        return false;
+    if( mousePos.x() > handlePos.x()+m_handleRadius )
+        return false;
+    if( mousePos.y() < handlePos.y()-m_handleRadius )
+        return false;
+    if( mousePos.y() > handlePos.y()+m_handleRadius )
+        return false;
+    return true;
+}
+
+void KarbonPatternEditStrategyBase::repaint() const
+{
+    m_shape->update();
+}
+
+KoShape * KarbonPatternEditStrategyBase::shape() const
+{
+    return m_shape;
+}
+
+KoImageCollection * KarbonPatternEditStrategyBase::imageCollection()
+{
+    return m_imageCollection;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+KarbonPatternEditStrategy::KarbonPatternEditStrategy( KoShape * s, KoImageCollection * imageCollection )
+    : KarbonPatternEditStrategyBase( s, imageCollection )
+{
+    // cache the shapes transformation matrix
+    m_matrix = shape()->absoluteTransformation( 0 );
+    QSizeF size = shape()->size();
     // the fixed length of half the average shape dimension
     m_normalizedLength = 0.25 * ( size.width() + size.height() );
     // get the brush tranformation matrix
     QMatrix brushMatrix;
-    KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( m_shape->background() );
+    KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( shape()->background() );
     if( fill )
         brushMatrix = fill->matrix();
 
@@ -63,31 +151,10 @@ void KarbonPatternEditStrategy::paint( QPainter &painter, const KoViewConverter 
     QPointF centerPoint = m_matrix.map( m_origin + m_handles[center] );
     QPointF directionPoint = m_matrix.map( m_origin + m_handles[direction] );
 
-    m_shape->applyConversion( painter, converter );
+    KoShape::applyConversion( painter, converter );
     painter.drawLine( centerPoint, directionPoint );
     paintHandle( painter, converter, centerPoint );
     paintHandle( painter, converter, directionPoint );
-}
-
-void KarbonPatternEditStrategy::paintHandle( QPainter &painter, const KoViewConverter &converter, const QPointF &position ) const
-{
-    QRectF handleRect = converter.viewToDocument( QRectF( m_handleRadius, m_handleRadius, 2*m_handleRadius, 2*m_handleRadius ) );
-    handleRect.moveCenter( position );
-    painter.drawRect( handleRect );
-}
-
-bool KarbonPatternEditStrategy::mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos ) const
-{
-    QPointF handle = m_matrix.map( m_origin + handlePos );
-    if( mousePos.x() < handle.x()-m_handleRadius )
-        return false;
-    if( mousePos.x() > handle.x()+m_handleRadius )
-        return false;
-    if( mousePos.y() < handle.y()-m_handleRadius )
-        return false;
-    if( mousePos.y() > handle.y()+m_handleRadius )
-        return false;
-    return true;
 }
 
 bool KarbonPatternEditStrategy::selectHandle( const QPointF &mousePos )
@@ -95,7 +162,7 @@ bool KarbonPatternEditStrategy::selectHandle( const QPointF &mousePos )
     int handleIndex = 0;
     foreach( QPointF handle, m_handles )
     {
-        if( mouseInsideHandle( mousePos, handle ) )
+        if( mouseInsideHandle( mousePos, m_matrix.map( m_origin + handle ) ) )
         {
             m_selectedHandle = handleIndex;
             return true;
@@ -127,46 +194,14 @@ void KarbonPatternEditStrategy::handleMouseMove(const QPointF &mouseLocation, Qt
     else
         return;
 
-    m_hasChanged = true;
+    setModified();
 
-    KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( m_shape->background() );
+    KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( shape()->background() );
     if( fill )
     {
         m_newFill = updatedBackground();
         *fill = m_newFill;
     }
-}
-
-void KarbonPatternEditStrategy::setEditing( bool on )
-{
-    m_editing = on;
-    // if we are going into editing mode, save the old background
-    // for use inside the command emitted when finished
-    if( on )
-    {
-        m_hasChanged = false;
-        KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( m_shape->background() );
-        if( fill )
-            m_oldFill = *fill;
-    }
-}
-
-QUndoCommand * KarbonPatternEditStrategy::createCommand()
-{
-    KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( m_shape->background() );
-    if( fill && m_hasChanged )
-    {
-        *fill = m_oldFill;
-        KoPatternBackground * newFill = new KoPatternBackground( m_imageCollection );
-        *newFill = m_newFill;
-        return new KoShapeBackgroundCommand( m_shape, newFill, 0 );
-    }
-    return 0;
-}
-
-void KarbonPatternEditStrategy::repaint() const
-{
-    m_shape->update();
 }
 
 QRectF KarbonPatternEditStrategy::boundingRect() const
@@ -181,22 +216,8 @@ QRectF KarbonPatternEditStrategy::boundingRect() const
         bbox.setTop( qMin( handle.y(), bbox.top() ) );
         bbox.setBottom( qMax( handle.y(), bbox.bottom() ) );
     }
-    return bbox.adjusted( -m_handleRadius, -m_handleRadius, m_handleRadius, m_handleRadius );
-}
-
-QBrush KarbonPatternEditStrategy::background() const
-{
-    // the direction vector controls the rotation of the pattern
-    QPointF dirVec = m_handles[direction]-m_handles[center];
-    double angle = atan2( dirVec.y(), dirVec.x() ) * 180.0 / M_PI;
-    QMatrix matrix;
-    // the center handle controls the translation
-    matrix.translate( m_handles[center].x(), m_handles[center].y() );
-    matrix.rotate( angle );
-
-    QBrush newBrush( m_oldBackground );
-    newBrush.setMatrix( matrix );
-    return newBrush;
+    qreal hr = handleRadius();
+    return bbox.adjusted( -hr, -hr, hr, hr );
 }
 
 KoPatternBackground KarbonPatternEditStrategy::updatedBackground()
@@ -209,14 +230,154 @@ KoPatternBackground KarbonPatternEditStrategy::updatedBackground()
     matrix.translate( m_handles[center].x(), m_handles[center].y() );
     matrix.rotate( angle );
 
-    KoPatternBackground newFill( m_imageCollection );
+    KoPatternBackground newFill( imageCollection() );
     newFill = m_oldFill;
     newFill.setMatrix( matrix );
 
     return newFill;
 }
 
-KoShape * KarbonPatternEditStrategy::shape()
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+KarbonOdfPatternEditStrategy::KarbonOdfPatternEditStrategy( KoShape * s, KoImageCollection * imageCollection )
+    : KarbonPatternEditStrategyBase( s, imageCollection )
 {
-    return m_shape;
+    m_handles.append( QPointF() );
+    m_handles.append( QPointF() );
+    updateHandles( dynamic_cast<KoPatternBackground*>( shape()->background() ) );
+}
+
+KarbonOdfPatternEditStrategy::~KarbonOdfPatternEditStrategy()
+{
+}
+
+void KarbonOdfPatternEditStrategy::paint( QPainter &painter, const KoViewConverter &converter ) const
+{
+    QPointF originPoint = m_matrix.map( m_handles[origin] );
+    QPointF sizePoint = m_matrix.map( m_handles[size] );
+
+    KoShape::applyConversion( painter, converter );
+    painter.save();
+    painter.setBrush( Qt::NoBrush );
+    painter.drawRect( QRectF( originPoint, sizePoint ) );
+    painter.restore();
+
+    KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( shape()->background() );
+    if( ! fill )
+        return;
+
+    if( fill->repeat() == KoPatternBackground::Tiled )
+        paintHandle( painter, converter, originPoint );
+    if( fill->repeat() != KoPatternBackground::Stretched )
+        paintHandle( painter, converter, sizePoint );
+}
+
+bool KarbonOdfPatternEditStrategy::selectHandle( const QPointF &mousePos )
+{
+    KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( shape()->background() );
+    if( ! fill )
+        return false;
+
+    if( fill->repeat() == KoPatternBackground::Stretched )
+        return false;
+
+    m_selectedHandle = -1;
+
+    if( mouseInsideHandle( mousePos, m_matrix.map( m_handles[size] ) ) )
+    {
+        m_selectedHandle = size;
+        return true;
+    }
+
+    if( fill->repeat() == KoPatternBackground::Original )
+        return false;
+
+    if( mouseInsideHandle( mousePos, m_matrix.map( m_handles[origin] ) ) )
+    {
+        m_selectedHandle = origin;
+        return true;
+    }
+
+    return false;
+}
+
+void KarbonOdfPatternEditStrategy::handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers)
+{
+    Q_UNUSED( modifiers );
+
+    KoPatternBackground * fill = dynamic_cast<KoPatternBackground*>( shape()->background() );
+    if( ! fill )
+        return;
+
+    if( fill->repeat() == KoPatternBackground::Stretched )
+        return;
+
+    if( m_selectedHandle == origin )
+    {
+        if( fill->repeat() == KoPatternBackground::Original )
+            return;
+
+        QPointF diffPos = m_matrix.inverted().map( mouseLocation ) - m_handles[origin];
+        m_handles[origin] += diffPos;
+        m_handles[size] += diffPos;
+    }
+    else if( m_selectedHandle == size )
+    {
+        QPointF newPos = m_matrix.inverted().map( mouseLocation );
+        newPos.setX( qMax( newPos.x(), m_handles[origin].x() ) );
+        newPos.setY( qMax( newPos.y(), m_handles[origin].y() ) );
+        if( fill->repeat() == KoPatternBackground::Original )
+        {
+            QPointF diffPos = newPos - m_handles[size];
+            m_handles[size] += 0.5 * diffPos;
+            m_handles[origin] -= 0.5 * diffPos;
+        }
+        else
+        {
+            m_handles[size] = newPos;
+        }
+    }
+    else
+        return;
+
+    setModified();
+
+    m_newFill = updatedBackground();
+    *fill = m_newFill;
+    updateHandles( fill );
+}
+
+QRectF KarbonOdfPatternEditStrategy::boundingRect() const
+{
+    // calculate the bounding rect of the handles
+    QRectF bbox( m_matrix.map( m_handles[origin] ), m_matrix.map( m_handles[size] ) );
+    qreal hr = handleRadius();
+    return bbox.adjusted( -hr, -hr, hr, hr );
+}
+
+KoPatternBackground KarbonOdfPatternEditStrategy::updatedBackground()
+{
+    QSizeF displaySize( m_handles[size].x()-m_handles[origin].x(), m_handles[size].y()-m_handles[origin].y() );
+    qreal offsetX = 100.0 * (m_handles[origin].x() / displaySize.width());
+    qreal offsetY = 100.0 * (m_handles[origin].y() / displaySize.height());
+
+    KoPatternBackground newFill( imageCollection() );
+    newFill = m_oldFill;
+    newFill.setReferencePoint( KoPatternBackground::TopLeft );
+    newFill.setReferencePointOffset( QPointF( offsetX, offsetY ) );
+    newFill.setPatternDisplaySize( displaySize );
+
+    return newFill;
+}
+
+void KarbonOdfPatternEditStrategy::updateHandles( KoPatternBackground * fill )
+{
+    if( ! fill )
+        return;
+
+    QRectF patternRect = fill->patternRectFromFillSize( shape()->size() );
+    m_handles[origin] = patternRect.topLeft();
+    m_handles[size] = patternRect.bottomRight();
 }

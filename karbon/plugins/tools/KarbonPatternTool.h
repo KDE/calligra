@@ -24,7 +24,7 @@
 
 class QPainter;
 class QTableWidgetItem;
-class KarbonPatternEditStrategy;
+class KarbonPatternEditStrategyBase;
 class KarbonPatternOptionsWidget;
 
 class KarbonPatternTool : public KoTool
@@ -56,8 +56,8 @@ private slots:
     void updateOptionsWidget();
     void patternChanged();
 private:
-    QList<KarbonPatternEditStrategy*> m_patterns;  ///< the list of editing strategies, one for each shape
-    KarbonPatternEditStrategy * m_currentStrategy; ///< the current editing strategy
+    QList<KarbonPatternEditStrategyBase*> m_patterns;  ///< the list of editing strategies, one for each shape
+    KarbonPatternEditStrategyBase * m_currentStrategy; ///< the current editing strategy
     KarbonPatternOptionsWidget * m_optionsWidget;
 };
 

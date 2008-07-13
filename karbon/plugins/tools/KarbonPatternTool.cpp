@@ -44,7 +44,6 @@
 KarbonPatternTool::KarbonPatternTool(KoCanvasBase *canvas)
     : KoTool( canvas ), m_currentStrategy( 0 ), m_optionsWidget(0)
 {
-    connect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
 }
 
 KarbonPatternTool::~KarbonPatternTool()
@@ -57,7 +56,7 @@ void KarbonPatternTool::paint( QPainter &painter, const KoViewConverter &convert
     painter.setPen( Qt::blue ); //TODO make configurable
 
     // paint all the strategies
-    foreach( KarbonPatternEditStrategy *strategy, m_patterns )
+    foreach( KarbonPatternEditStrategyBase *strategy, m_patterns )
     {
         painter.save();
         strategy->paint( painter, converter );
@@ -74,7 +73,7 @@ void KarbonPatternTool::paint( QPainter &painter, const KoViewConverter &convert
 
 void KarbonPatternTool::repaintDecorations()
 {
-    foreach( KarbonPatternEditStrategy *strategy, m_patterns )
+    foreach( KarbonPatternEditStrategyBase *strategy, m_patterns )
         m_canvas->updateCanvas( strategy->boundingRect() );
 }
 
@@ -82,7 +81,7 @@ void KarbonPatternTool::mousePressEvent( KoPointerEvent *event )
 {
     m_currentStrategy = 0;
 
-    foreach( KarbonPatternEditStrategy *strategy, m_patterns )
+    foreach( KarbonPatternEditStrategyBase *strategy, m_patterns )
     {
         if( strategy->selectHandle( event->point ) )
         {
@@ -111,7 +110,7 @@ void KarbonPatternTool::mouseMoveEvent( KoPointerEvent *event )
             return;
         }
     }
-    foreach( KarbonPatternEditStrategy *strategy, m_patterns )
+    foreach( KarbonPatternEditStrategyBase *strategy, m_patterns )
     {
         if( strategy->selectHandle( event->point ) )
         {
@@ -165,12 +164,13 @@ void KarbonPatternTool::initialize()
 
     m_currentStrategy = 0;
 
-    foreach( KarbonPatternEditStrategy* strategy, m_patterns )
+    uint strategyCount = m_patterns.count();
+    for( uint i = 0; i < strategyCount; ++i )
     {
-        strategy->repaint();
-        delete strategy;
+        KarbonPatternEditStrategyBase * s = m_patterns.takeFirst();
+        s->repaint();
+        delete s;
     }
-    m_patterns.clear();
 
     KoDataCenter * dataCenter = m_canvas->shapeController()->dataCenter( "ImageCollection" );
     KoImageCollection * imageCollection = dynamic_cast<KoImageCollection*>( dataCenter );
@@ -179,7 +179,7 @@ void KarbonPatternTool::initialize()
     {
         if( dynamic_cast<KoPatternBackground*>( shape->background() ) )
         {
-            m_patterns.append( new KarbonPatternEditStrategy( shape, imageCollection ) );
+            m_patterns.append( new KarbonOdfPatternEditStrategy( shape, imageCollection ) );
             m_patterns.last()->repaint();
         }
     }
@@ -201,14 +201,19 @@ void KarbonPatternTool::activate( bool temporary )
 
     initialize();
 
-    KarbonPatternEditStrategy::setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
+    KarbonPatternEditStrategyBase::setHandleRadius( m_canvas->resourceProvider()->handleRadius() );
 
     useCursor(Qt::ArrowCursor, true);
+
+    connect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
 }
 
 void KarbonPatternTool::deactivate()
 {
-    foreach( KarbonPatternEditStrategy* strategy, m_patterns )
+    // we are not interested in selection content changes when not active
+    disconnect( m_canvas->shapeManager(), SIGNAL(selectionContentChanged()), this, SLOT(initialize()));
+
+    foreach( KarbonPatternEditStrategyBase * strategy, m_patterns )
     {
         strategy->repaint();
         delete strategy;
@@ -223,12 +228,12 @@ void KarbonPatternTool::resourceChanged( int key, const QVariant & res )
     switch( key )
     {
         case KoCanvasResource::HandleRadius:
-            foreach( KarbonPatternEditStrategy *strategy, m_patterns )
+            foreach( KarbonPatternEditStrategyBase *strategy, m_patterns )
                 strategy->repaint();
 
-            KarbonPatternEditStrategy::setHandleRadius( res.toUInt() );
+            KarbonPatternEditStrategyBase::setHandleRadius( res.toUInt() );
 
-            foreach( KarbonPatternEditStrategy *strategy, m_patterns )
+            foreach( KarbonPatternEditStrategyBase *strategy, m_patterns )
                 strategy->repaint();
         break;
         default:
@@ -282,7 +287,7 @@ void KarbonPatternTool::updateOptionsWidget()
             m_optionsWidget->setReferencePoint( fill->referencePoint() );
             m_optionsWidget->setReferencePointOffset( fill->referencePointOffset() );
             m_optionsWidget->setTileRepeatOffset( fill->tileRepeatOffset() );
-            m_optionsWidget->setPatternSize( fill->patternDisplaySize() );
+            m_optionsWidget->setPatternSize( fill->patternDisplaySize().toSize() );
         }
     }
 }

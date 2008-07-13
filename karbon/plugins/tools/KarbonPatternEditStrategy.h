@@ -31,23 +31,23 @@ class QPainter;
 class QUndoCommand;
 
 /// The class used for editing a shapes pattern
-class KarbonPatternEditStrategy
+class KarbonPatternEditStrategyBase
 {
 public:
     /// constructs an edit strategy working on the given shape
-    explicit KarbonPatternEditStrategy( KoShape * shape, KoImageCollection * imageCollection );
+    explicit KarbonPatternEditStrategyBase( KoShape * shape, KoImageCollection * imageCollection );
 
     /// destroy the edit strategy
-    ~KarbonPatternEditStrategy();
+    virtual ~KarbonPatternEditStrategyBase();
 
     /// painting of the pattern editing handles
-    void paint( QPainter &painter, const KoViewConverter &converter ) const;
+    virtual void paint( QPainter &painter, const KoViewConverter &converter ) const = 0;
 
     /// selects handle at the given position
-    bool selectHandle( const QPointF &mousePos );
+    virtual bool selectHandle( const QPointF &mousePos ) = 0;
 
     /// mouse position handling for moving handles
-    void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers) = 0;
 
     /// sets the strategy into editing mode
     void setEditing( bool on );
@@ -62,14 +62,13 @@ public:
     void repaint() const;
 
     /// returns the pattern handles bounding rect
-    QRectF boundingRect() const;
+    virtual QRectF boundingRect() const = 0;
 
     /// returns the actual background brush
-    QBrush background() const;
-    KoPatternBackground updatedBackground();
+    virtual KoPatternBackground updatedBackground() = 0;
 
     /// Returns the shape we are working on
-    KoShape * shape();
+    KoShape * shape() const;
 
     /// sets the handle radius used for painting the handles
     static void setHandleRadius( int radius ) { m_handleRadius = radius; }
@@ -77,30 +76,75 @@ public:
     /// returns the actual handle radius
     static int handleRadius() { return m_handleRadius; }
 
-private:
+protected:
+    /// Returns the image collectio used to create new pattern background
+    KoImageCollection * imageCollection();
 
-    /// paints a singale handle
+    /// Flags the background as modified
+    void setModified();
+
+    /// Returns if background is modified
+    bool isModified() const;
+
+    /// paints a single handle
     void paintHandle( QPainter &painter, const KoViewConverter &converter, const QPointF &position ) const;
 
     /// checks if mouse position is inside handle rect
     bool mouseInsideHandle( const QPointF &mousePos, const QPointF &handlePos ) const;
 
-    enum Handles { center, direction };
 
-    KoShape *m_shape;          ///< the shape we are working on
-    int m_selectedHandle;      ///< index of currently deleted handle or -1 if none selected
-    QBrush m_oldBackground;    ///< the old background brush
-    QBrush m_newBackground;    ///< the new background brush
     QList<QPointF> m_handles;  ///< the list of handles
-    QMatrix m_matrix;          ///< matrix to map handle into document coordinate system
-    static int m_handleRadius; ///< the handle radius for all gradient strategies
-    bool m_editing;            ///< the edit mode flag
-    double m_normalizedLength; ///< the normalized direction vector length
-    QPointF m_origin;          ///< the pattern handle origin
-    KoImageCollection * m_imageCollection;
+    int m_selectedHandle;      ///< index of currently deleted handle or -1 if none selected
     KoPatternBackground m_oldFill;
     KoPatternBackground m_newFill;
-    bool m_hasChanged;
+    QMatrix m_matrix;          ///< matrix to map handle into document coordinate system
+
+private:
+
+    static int m_handleRadius; ///< the handle radius for all gradient strategies
+    KoShape *m_shape;          ///< the shape we are working on
+    KoImageCollection * m_imageCollection;
+    bool m_editing;            ///< the edit mode flag
+    bool m_modified;           ///< indicated if background was modified
+};
+
+/// The class used for editing a shapes pattern
+class KarbonPatternEditStrategy : public KarbonPatternEditStrategyBase
+{
+public:
+    explicit KarbonPatternEditStrategy( KoShape * shape, KoImageCollection * imageCollection );
+    virtual ~KarbonPatternEditStrategy();
+    virtual void paint( QPainter &painter, const KoViewConverter &converter ) const;
+    virtual bool selectHandle( const QPointF &mousePos );
+    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+    virtual QRectF boundingRect() const;
+    virtual KoPatternBackground updatedBackground();
+
+private:
+
+    enum Handles { center, direction };
+
+    double m_normalizedLength; ///< the normalized direction vector length
+    QPointF m_origin;          ///< the pattern handle origin
+};
+
+/// The class used for editing a shapes pattern
+class KarbonOdfPatternEditStrategy : public KarbonPatternEditStrategyBase
+{
+public:
+    explicit KarbonOdfPatternEditStrategy( KoShape * shape, KoImageCollection * imageCollection );
+    virtual ~KarbonOdfPatternEditStrategy();
+    virtual void paint( QPainter &painter, const KoViewConverter &converter ) const;
+    virtual bool selectHandle( const QPointF &mousePos );
+    virtual void handleMouseMove(const QPointF &mouseLocation, Qt::KeyboardModifiers modifiers);
+    virtual QRectF boundingRect() const;
+    virtual KoPatternBackground updatedBackground();
+
+private:
+
+    enum Handles { origin, size };
+
+    void updateHandles( KoPatternBackground * fill );
 };
 
 #endif // _KARBONPATTERNEDITSTRATEGY_H_
