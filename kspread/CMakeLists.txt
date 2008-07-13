@@ -13,6 +13,7 @@ add_subdirectory( templates )
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests
                      ${CMAKE_CURRENT_SOURCE_DIR}/ui
+                     ${CMAKE_CURRENT_SOURCE_DIR}/part
                      ${CMAKE_SOURCE_DIR}/interfaces
                      ${CMAKE_SOURCE_DIR}/kchart
                      ${CMAKE_SOURCE_DIR}/kchart/kdchart/src
