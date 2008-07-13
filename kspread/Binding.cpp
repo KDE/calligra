@@ -47,17 +47,10 @@ Binding::Binding()
 {
 }
 
-Binding::Binding(Sheet *sheet)
-    : d(new Private)
-{
-    d->model = new BindingModel(sheet);
-}
-
 Binding::Binding(const Region& region)
     : d(new Private)
 {
     Q_ASSERT(region.isValid());
-
     d->model = new BindingModel(region);
 }
 
@@ -72,7 +65,7 @@ Binding::~Binding()
 
 bool Binding::isEmpty() const
 {
-    return d->model->sheet() ? false : d->model->region().isEmpty();
+    return d->model->region().isEmpty();
 }
 
 KoChart::ChartModel* Binding::model() const
@@ -94,42 +87,22 @@ void Binding::update(const Region& region)
 {
     QRect rect;
     Region changedRegion;
-    
-    if (d->model->sheet())
+    const QPoint offset = d->model->region().firstRange().topLeft();
+    const QRect range = d->model->region().firstRange();
+    const Sheet* sheet = d->model->region().firstSheet();
+    Region::ConstIterator end(region.constEnd());
+    for (Region::ConstIterator it = region.constBegin(); it != end; ++it)
     {
-		Region::ConstIterator end(region.constEnd());
-		for (Region::ConstIterator it = region.constBegin(); it != end; ++it)
-		{
-		    if (d->model->sheet() != (*it)->sheet())
-		        continue;
-		    rect = (*it)->rect();
-		    if (rect.isValid())
-		    {
-		        d->model->emitDataChanged(rect);
-		        changedRegion.add(rect, (*it)->sheet());
-		    }
-		}
+        if (sheet != (*it)->sheet())
+            continue;
+        rect = range & (*it)->rect();
+        rect.translate( -offset.x(), -offset.y() );
+        if (rect.isValid())
+        {
+            d->model->emitDataChanged(rect);
+            changedRegion.add(rect, (*it)->sheet());
+        }
     }
-    else
-    {
-	    const QPoint offset = d->model->region().firstRange().topLeft();
-	    const QRect range = d->model->region().firstRange();
-	    const Sheet* sheet = d->model->region().firstSheet();
-	    Region::ConstIterator end(region.constEnd());
-	    for (Region::ConstIterator it = region.constBegin(); it != end; ++it)
-	    {
-	        if (sheet != (*it)->sheet())
-	            continue;
-	        rect = range & (*it)->rect();
-	        rect.translate( -offset.x(), -offset.y() );
-	        if (rect.isValid())
-	        {
-	            d->model->emitDataChanged(rect);
-	            changedRegion.add(rect, (*it)->sheet());
-	        }
-	    }
-    }
-    
     d->model->emitChanged(changedRegion);
 }
 
@@ -156,25 +129,17 @@ BindingModel::BindingModel(const Region& region)
     connect (m_model, SIGNAL(changed(const Region&)), this, SIGNAL(changed(const Region&)));
 }
 
-BindingModel::BindingModel( Sheet *sheet )
-    : KoChart::ChartModel(),
-    m_model( new BindingModelModel(this) )
-{
-    m_model->setSheet(sheet);
-    connect (m_model, SIGNAL(changed(const Region&)), this, SIGNAL(changed(const Region&)));
-}
-
 QString BindingModel::regionToString( const QVector<QRect> &region ) const
 {
 	Region r;
 	foreach( QRect rect, region )
-        r.add( rect, m_model->sheet() );
+        r.add( rect, m_model->region().firstSheet() );
 	return r.name();
 }
 
 QVector<QRect> BindingModel::stringToRegion( const QString &string ) const
 {
-    const Region r( string, m_model->sheet()->map() );
+    const Region r( string, m_model->region().firstSheet()->map() );
 	return r.rects();
 }
 
@@ -186,16 +151,6 @@ const KSpread::Region& BindingModel::region() const
 void BindingModel::setRegion(const Region& region)
 {
     m_model->setRegion(region);
-}
-
-Sheet *BindingModel::sheet() const
-{
-    return m_model->sheet();
-}
-
-void BindingModel::setSheet(Sheet *sheet)
-{
-    m_model->setSheet(sheet);
 }
 
 void BindingModel::emitDataChanged(const QRect& rect)
@@ -231,13 +186,8 @@ void BindingModelModel::emitDataChanged(const QRect& rect)
 {
     const QPoint tl = rect.topLeft();
     const QPoint br = rect.bottomRight();
+    kDebug() << "emit QAbstractItemModel::dataChanged(" << index(tl.y(), tl.x()) << ", " << index(br.y(), br.x()) << ");";
     emit dataChanged(index(tl.y(), tl.x()), index(br.y(), br.x()));
-}
-
-void BindingModelModel::setSheet(Sheet *sheet)
-{
-    m_sheet = sheet;
-    m_region = Region();
 }
 
 QVariant BindingModelModel::data(const QModelIndex& index, int role) const
@@ -290,12 +240,12 @@ const KSpread::Region& BindingModelModel::region() const
 
 QVariant BindingModelModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if ( (!m_sheet && m_region.isEmpty()) || (role != Qt::EditRole && role != Qt::DisplayRole))
+    if ( (m_region.isEmpty()) || (role != Qt::EditRole && role != Qt::DisplayRole))
         return QVariant();
-    const QPoint offset = m_sheet ? QPoint(1, 1) : m_region.firstRange().topLeft();
+    const QPoint offset = m_region.firstRange().topLeft();
     const int col = (orientation == Qt::Vertical) ? offset.x() : offset.x() + section;
     const int row = (orientation == Qt::Vertical) ? offset.y() + section : offset.y();
-    const Sheet* sheet = m_sheet ? m_sheet : m_region.firstSheet();
+    const Sheet* sheet = m_region.firstSheet();
     const Value value = sheet->cellStorage()->value(col, row);
     return value.asVariant();
 }
@@ -303,30 +253,19 @@ QVariant BindingModelModel::headerData(int section, Qt::Orientation orientation,
 int BindingModelModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    if (m_sheet)
-    	return m_sheet->cellStorage()->rows();
     return m_region.isEmpty() ? 0 : m_region.firstRange().height();
 }
 
 int BindingModelModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    if (m_sheet)
-    	return m_sheet->cellStorage()->columns();
     return m_region.isEmpty() ? 0 : m_region.firstRange().width();
 }
 
 void BindingModelModel::setRegion(const Region& region)
 {
     m_region = region;
-    m_sheet = 0;
 }
-
-Sheet *BindingModelModel::sheet() const
-{
-    return m_sheet;
-}
-
 
 #include "Binding.moc"
 #include "Binding_p.moc"

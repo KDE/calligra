@@ -71,7 +71,7 @@ void ChartDatabaseSelector::save()
     const Region region(d->widget.m_cellRegion->text(), d->doc->map(), d->selection->activeSheet());
     if (!region.isValid() || !region.isContiguous())
         return;
-    Binding binding(region.firstSheet());
+    Binding binding(region);
     d->shape->setModel(binding.model(), region.rects());
     d->shape->setFirstRowIsLabel( d->widget.m_firstRowAsLabel->isChecked() );
     d->shape->setFirstColumnIsLabel( d->widget.m_firstColumnAsLabel->isChecked() );

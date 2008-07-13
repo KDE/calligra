@@ -36,9 +36,6 @@ public:
     virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
 
-    Sheet *sheet() const;
-    void setSheet(Sheet *sheet);
-
     const Region& region() const;
     void setRegion(const Region& region);
 

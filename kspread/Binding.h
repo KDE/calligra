@@ -39,13 +39,9 @@ class BindingModel : public KoChart::ChartModel
 
 public:
     BindingModel(const Region& region);
-    BindingModel(Sheet *sheet);
 
     const Region& region() const;
     void setRegion(const Region& region);
-
-    Sheet *sheet() const;
-    void setSheet(Sheet *sheet);
 
     void emitDataChanged(const QRect& range);
     void emitChanged(const Region& region);
@@ -65,12 +61,14 @@ private:
 /**
  * Abstracts read-only access to the ValueStorage.
  * Useful for KChart (or other apps, that want read-only access to KSpread's data).
+ *
+ * If a cell in the region is updated, the BindingManager informs this Binding, which
+ * in turn informs the model it holds.
  */
 class KSPREAD_EXPORT Binding
 {
 public:
     Binding();
-    explicit Binding(Sheet *sheet);
     explicit Binding(const Region& region);
     Binding( const Binding& other );
     ~Binding();
