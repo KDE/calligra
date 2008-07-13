@@ -82,8 +82,10 @@ void KarbonCalligraphicShape::
 
     if ( flip )
     {
-        kDebug() << "!!!!!!!!!! flip 1 !!!!!!!!";
+        kDebug() << "!!!!!!!!!! flip 1 !!!!!!!!" << flip << !m_flipped;
         // handle flip
+        if ( m_flipped )
+            flip *= -1;
         m_flipped = ! m_flipped;
 
         int index = pointCount() / 2;
@@ -99,6 +101,10 @@ void KarbonCalligraphicShape::
         smoothLastPoints();
         last1->removeControlPoint2();
         last2->removeControlPoint1();
+        if ( flip > 0 )
+            last2->removeControlPoint2();
+        else // flip < 0
+            last1->removeControlPoint1();
     }
 
     // detect the flip caused by the angle changing 180 degrees
@@ -143,6 +149,10 @@ void KarbonCalligraphicShape::
 
             prev1->removeControlPoint1();
             prev2->removeControlPoint2();
+            if ( flip > 0 )
+                prev2->removeControlPoint1();
+            else // flip < 0
+                prev1->removeControlPoint2();
         }
     }
     normalize();
