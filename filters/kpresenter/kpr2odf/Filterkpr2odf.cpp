@@ -38,7 +38,6 @@
 #include <KoXmlNS.h>
 #include <KoOdf.h>
 #include <KoGenStyle.h>
-// #include <KoUnit.h>
 
 #include "Filterkpr2odf.h"
 
@@ -776,7 +775,7 @@ void Filterkpr2odf::appendBezier( KoXmlWriter* content, const KoXmlElement& obje
 
         d += QString( "M%1 %2" ).arg( (int) point1.attribute( "point_x" ).toDouble() * 10000 )
                                 .arg( (int) point1.attribute( "point_y" ).toDouble() * 10000 );
-        while( !point3.isNull() )//if point3 is null point4 is too, not need to check it
+        while( !point3.isNull() )//if point3 is null then point4 is null too, not need to check it
         {
             int point1X = (int)( point1.attribute( "point_x" ).toDouble() * 10000 );
             int point1Y = (int)( point1.attribute( "point_y" ).toDouble() * 10000 );
@@ -808,7 +807,6 @@ void Filterkpr2odf::appendBezier( KoXmlWriter* content, const KoXmlElement& obje
             maxY = qMax( maxY, point2Y );
 
             d += QString( "L%1 %2" ).arg( point2X ).arg( point2Y );
-
         }
 
         content->addAttribute( "svg:d", d );

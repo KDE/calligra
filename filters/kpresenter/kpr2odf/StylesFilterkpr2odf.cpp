@@ -21,9 +21,6 @@
 #include <QTime>
 #include <QColor>
 
-//KOffice includes
-#include <KoUnit.h>
-
 const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
 {
     KoGenStyle style( KoGenStyle::StyleDrawingPage, "drawing-page" );
@@ -406,27 +403,27 @@ const QString Filterkpr2odf::createPageLayout()
 
     if( paperBorders.hasAttribute( "ptTop" ) )
     {
-        style.addProperty( "fo:margin-top", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptTop" ).toDouble() ) ) );
+        style.addPropertyPt( "fo:margin-top", paperBorders.attribute( "ptTop" ).toDouble() );
     }
     if( paperBorders.hasAttribute( "ptBottom" ) )
     {
-        style.addProperty( "fo:margin-bottom", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptBottom" ).toDouble() ) ) );
+        style.addPropertyPt( "fo:margin-bottom", paperBorders.attribute( "ptBottom" ).toDouble() );
     }
     if( paperBorders.hasAttribute( "ptLeft" ) )
     {
-        style.addProperty( "fo:margin-left", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptLeft" ).toDouble() ) ) );
+        style.addPropertyPt( "fo:margin-left", paperBorders.attribute( "ptLeft" ).toDouble() );
     }
     if( paperBorders.hasAttribute( "ptRight" ) )
     {
-        style.addProperty( "fo:margin-right", QString( "%1cm" ).arg( KoUnit::toCentimeter( paperBorders.attribute( "ptRight" ).toDouble() ) ) );
+        style.addPropertyPt( "fo:margin-right", paperBorders.attribute( "ptRight" ).toDouble() );
     }
     if( paper.hasAttribute( "ptWidth" ) )
     {
-        style.addProperty( "fo:page-width", QString( "%1cm" ).arg( KoUnit::toCentimeter( paper.attribute( "ptWidth" ).toDouble() ) ) );
+        style.addPropertyPt( "fo:page-width", paper.attribute( "ptWidth" ).toDouble() );
     }
     if( paper.hasAttribute( "ptHeight" ) )
     {
-        style.addProperty( "fo:page-height", QString( "%1cm" ).arg( KoUnit::toCentimeter( paper.attribute( "ptHeight" ).toDouble() ) ) );
+        style.addPropertyPt( "fo:page-height", paper.attribute( "ptHeight" ).toDouble() );
     }
     style.addProperty( "style:print-orientation", "landscape" );
 
@@ -484,7 +481,7 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
     KoXmlElement pen( element.namedItem( "PEN" ).toElement() );
     if( !pen.isNull() )
     {
-        style.addProperty( "svg:stroke-width", QString( "%1cm" ).arg( KoUnit::toCentimeter( pen.attribute( "width" ).toDouble() ) ) );
+        style.addPropertyPt( "svg:stroke-width", pen.attribute( "width" ).toDouble() );
         style.addProperty( "svg:stroke-color", pen.attribute( "color" ) );
 
         QString stroke;
@@ -607,7 +604,7 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
         QString shadowOffsetX;
         QString shadowOffsetY;
         int direction = shadow.attribute( "direction" ).toInt();
-        QString distance = QString( "%1cm" ).arg( KoUnit::toCentimeter( shadow.attribute( "distance" ).toDouble() ) );
+        QString distance = QString( "%1pt" ).arg( shadow.attribute( "distance" ).toDouble() );
         //Enum: ShadowDirection
         switch( direction )
         {
@@ -616,7 +613,7 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
             shadowOffsetY = '-' + distance;
             break;
         case 2: //Up
-            shadowOffsetX = "0cm";
+            shadowOffsetX = "0pt";
             shadowOffsetY = '-' + distance;
             break;
         case 3: //Right Up
@@ -625,14 +622,14 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
             break;
         case 4: //Right
             shadowOffsetX = distance;
-            shadowOffsetY = "0cm";
+            shadowOffsetY = "0pt";
             break;
         case 5: //Right Bottom
             shadowOffsetX = distance;
             shadowOffsetY = distance;
             break;
         case 6: //Bottom
-            shadowOffsetX = "0cm";
+            shadowOffsetX = "0pt";
             shadowOffsetY = distance;
             break;
         case 7: //Left Bottom
@@ -641,7 +638,7 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
             break;
         case 8: //Left
             shadowOffsetX = '-' + distance;
-            shadowOffsetY = "0cm";
+            shadowOffsetY = "0pt";
             break;
         }
         style.addProperty( "draw:shadow-offset-x", shadowOffsetX );
@@ -945,43 +942,41 @@ const QString Filterkpr2odf::createParagraphStyle( const KoXmlElement& element )
     KoXmlElement indents = element.namedItem( "INDENTS" ).toElement();
     if ( !indents.isNull() )
     {
-        QString marginLeft = QString( "%1cm" ).arg( KoUnit::toCentimeter( indents.attribute( "left" ).toDouble() ) );
-        QString marginRight = QString( "%1cm" ).arg( KoUnit::toCentimeter( indents.attribute( "right" ).toDouble() ) );
-        QString textIndent = QString( "%1cm" ).arg( KoUnit::toCentimeter( indents.attribute( "first" ).toDouble() ) );
+        QString marginLeft = QString( "%1pt" ).arg( indents.attribute( "left" ).toDouble() );
+        QString marginRight = QString( "%1pt" ).arg( indents.attribute( "right" ).toDouble() );
+        QString textIndent = QString( "%1pt" ).arg( indents.attribute( "first" ).toDouble() );
 
-        if( !marginLeft.isNull() )
+        if( indents.hasAttribute( "left" ) )
         {
-            style.addProperty( "fo:margin-left", marginLeft );
+            style.addPropertyPt( "fo:margin-left", indents.attribute( "left" ).toDouble() );
         }
-        if( !marginRight.isNull() )
+        if( indents.hasAttribute( "right" ) )
         {
-            style.addProperty( "fo:margin-right", marginRight );
+            style.addPropertyPt( "fo:margin-right", indents.attribute( "right" ).toDouble() );
         }
-        if( !textIndent.isNull() )
+        if( indents.hasAttribute( "first" ) )
         {
-            style.addProperty( "fo:text-indent", textIndent );
+            style.addPropertyPt( "fo:text-indent", indents.attribute( "first" ).toDouble() );
         }
     }
 
     KoXmlElement offsets = element.namedItem( "OFFSETS" ).toElement();
     if ( !offsets.isNull() )
     {
-        QString marginTop = QString( "%1cm" ).arg( KoUnit::toCentimeter( offsets.attribute( "before" ).toDouble() ) );
-        QString marginBottom = QString( "%1cm" ).arg( KoUnit::toCentimeter( offsets.attribute( "after" ).toDouble() ) );
-
-        if( !marginTop.isNull() )
+        if( offsets.hasAttribute( "before" ) )
         {
-            style.addProperty( "fo:margin-top", marginTop );
+            style.addPropertyPt( "fo:margin-top", offsets.attribute( "before" ).toDouble() );
         }
-        if( !marginBottom.isNull() )
+        if( offsets.hasAttribute( "after" ) )
         {
-            style.addProperty( "fo:margin-bottom", marginBottom );
+            style.addPropertyPt( "fo:margin-bottom", offsets.attribute( "after" ).toDouble() );
         }
     }
 
     KoXmlElement counter = element.namedItem( "COUNTER" ).toElement();
     if( !counter.isNull() )
     {
+        //TODO
 //         style.addProperty( "text:enable-numbering", "true" );
     }
 
@@ -990,8 +985,8 @@ const QString Filterkpr2odf::createParagraphStyle( const KoXmlElement& element )
     {
         QString type = lineSpacing.attribute( "type" );
         QString lineHeight;
-        QString lineSpacingString;
-        QString lineHeightAtLeast;
+        double lineSpacingDouble = -1;
+        double lineHeightAtLeast = -1;
         if( type == "single" )
         {
             lineHeight = "100%";
@@ -1010,24 +1005,24 @@ const QString Filterkpr2odf::createParagraphStyle( const KoXmlElement& element )
         }
         else if( type == "custom" )
         {
-            lineSpacingString = QString( "%1cm" ).arg( KoUnit::toCentimeter( lineSpacing.attribute( "spacingvalue" ).toDouble() ) );
+            lineSpacingDouble = lineSpacing.attribute( "spacingvalue" ).toDouble();
         }
         else if( type == "atleast" )
         {
-            lineHeightAtLeast = QString( "%1cm" ).arg( KoUnit::toCentimeter( lineSpacing.attribute( "spacingvalue" ).toDouble() ) );
+            lineHeightAtLeast = lineSpacing.attribute( "spacingvalue" ).toDouble();
         }
 
         if( !lineHeight.isNull() )
         {
             style.addProperty( "fo:line-height", lineHeight );
         }
-        if( !lineSpacingString.isNull() )
+        if( lineSpacingDouble != -1 )
         {
-            style.addProperty( "text:line-spacing", lineSpacingString );
+            style.addPropertyPt( "text:line-spacing", lineSpacingDouble );
         }
-        if( !lineHeightAtLeast.isNull() )
+        if( lineHeightAtLeast != -1 )
         {
-            style.addProperty( "style:line-height-at-least", lineHeightAtLeast );
+            style.addPropertyPt( "style:line-height-at-least", lineHeightAtLeast );
         }
     }
 
@@ -1067,7 +1062,7 @@ QString Filterkpr2odf::convertBorder( const KoXmlElement& border )
     {
         style = "solid";
     }
-    QString width = QString( "%1cm" ).arg( KoUnit::toCentimeter( border.attribute( "width" ).toDouble() ) );
+    QString width = QString( "%1pt" ).arg( border.attribute( "width" ).toDouble() );
 
     QColor color( border.attribute( "red" ).toInt(), border.attribute( "green" ).toInt(), border.attribute( "blue" ).toInt() );
 
