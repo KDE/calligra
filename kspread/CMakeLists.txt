@@ -15,7 +15,6 @@ include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests
                      ${CMAKE_CURRENT_SOURCE_DIR}/ui
                      ${CMAKE_SOURCE_DIR}/interfaces
                      ${CMAKE_SOURCE_DIR}/kchart
-                     ${CMAKE_SOURCE_DIR}/kchart/kdchart/src
                      ${KOGUIUTILS_INCLUDES}
                      ${KOTEXT_INCLUDES}
                      ${EIGEN_INCLUDE_DIR} )

@@ -111,11 +111,13 @@ void awMax (ValueCalc *c, Value &res, Value val, Value)
     return;
   if (val.isError())
     res = val;
-  else if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
-    if (res.isEmpty())
+  else if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString())) {
+    if (res.isEmpty()) {
       res = val;
-    else
+    } else {
       if (c->greater (val, res)) res = val;
+    }
+  }
 }
 
 void awMaxA (ValueCalc *c, Value &res, Value val, Value)
@@ -123,9 +125,9 @@ void awMaxA (ValueCalc *c, Value &res, Value val, Value)
   // propagate error values
   if (res.isError())
     return;
-  if (val.isError())
+  if (val.isError()) {
     res = val;
-  else if (!val.isEmpty())
+  } else if (!val.isEmpty()) {
     if (res.isEmpty())
       // convert to number, so that we don't return string/bool
       res = c->conv()->asNumeric (val);
@@ -133,20 +135,22 @@ void awMaxA (ValueCalc *c, Value &res, Value val, Value)
       if (c->greater (val, res))
         // convert to number, so that we don't return string/bool
         res = c->conv()->asNumeric (val);
+  }
 }
 
 void awMin (ValueCalc *c, Value &res, Value val, Value)
 {
-  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
+  if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString())) {
     if (res.isEmpty())
       res = val;
     else
       if (c->lower (val, res)) res = val;
+  }
 }
 
 void awMinA (ValueCalc *c, Value &res, Value val, Value)
 {
-  if (!val.isEmpty())
+  if (!val.isEmpty()) {
     if (res.isEmpty())
       // convert to number, so that we don't return string/bool
       res = c->conv()->asNumeric (val);
@@ -154,6 +158,7 @@ void awMinA (ValueCalc *c, Value &res, Value val, Value)
       if (c->lower (val, res))
         // convert to number, so that we don't return string/bool
         res = c->conv()->asNumeric (val);
+  }
 }
 
 void awProd (ValueCalc *c, Value &res, Value val, Value)
@@ -221,8 +226,8 @@ Value ValueCalc::add (const Value &a, const Value &b)
   if (a.isError()) return a;
   if (b.isError()) return b;
   Value res;
-  if (a.isInteger() && b.isEmpty() || a.isEmpty() && b.isInteger()
-      || a.isInteger() && b.isInteger())
+  if ((a.isInteger() && b.isEmpty()) || (a.isEmpty() && b.isInteger())
+      || (a.isInteger() && b.isInteger()))
   {
     int aa, bb;
     aa = converter->toInteger (a);
@@ -1557,7 +1562,7 @@ Value ValueCalc::GetBeta (Value _x, Value _alpha,
 
 static double ccmath_gaml(double x)
 { double g,h;
-  for(g=1.; x<30. ;g*=x,x+=1.); h=x*x;
+  for(g=1.; x<30. ;g*=x,x+=1.) h=x*x;
   g=(x-.5)*log(x)-x+.918938533204672-log(g);
   g+=(1.-(1./6.-(1./3.-1./(4.*h))/(7.*h))/(5.*h))/(12.*x);
   return g;
