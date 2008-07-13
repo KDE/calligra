@@ -1069,7 +1069,11 @@ void View::shapeSelectionChanged()
     // start with the first shape
     const KoShape* shape = shapes[0];
     const ShapeApplicationData* data = dynamic_cast<ShapeApplicationData*>(shape->applicationData());
-    Q_ASSERT(data);
+    if (!data) {
+        // Container children do not have the application data set, deselect the anchoring action.
+        d->actions->shapeAnchor->setCurrentAction(0);
+        return;
+    }
     bool anchoredToCell = data->isAnchoredToCell();
     d->actions->shapeAnchor->setCurrentAction(anchoredToCell ? i18n("Cell") : i18n("Page"));
 
