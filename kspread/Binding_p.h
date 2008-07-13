@@ -47,7 +47,6 @@ signals:
 
 private:
     Region m_region;
-    Sheet *m_sheet;
 };
 
 } // namespace KSpread

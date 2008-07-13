@@ -143,6 +143,37 @@ QVector<QRect> BindingModel::stringToRegion( const QString &string ) const
 	return r.rects();
 }
 
+QHash<QString, QVector<QRect> > BindingModel::cellRegion() const
+{
+    QHash<QString, QVector<QRect> > answer;
+    Region::ConstIterator end = m_model->region().constEnd();
+    for (Region::ConstIterator it = m_model->region().constBegin(); it != end; ++it) {
+        if (!(*it)->isValid()) {
+            continue;
+        }
+        answer[(*it)->name()].append((*it)->rect());
+    }
+    return answer;
+}
+
+bool BindingModel::setCellRegion(const QString& regionName)
+{
+    Q_ASSERT(m_model->region().isValid());
+    Q_ASSERT(m_model->region().firstSheet());
+    const Map* const map = m_model->region().firstSheet()->map();
+    const Region region = Region(regionName, map);
+    if (!region.isValid()) {
+        kDebug() << qPrintable(regionName) << "is not a valid region.";
+        return false;
+    }
+    m_model->setRegion(region);
+    // TODO
+    // Inform the manager about the changed region, so that we will be correctly informed
+    // about value changes.
+//     BindingManager* manager = map->bindingManager();
+    return true;
+}
+
 const KSpread::Region& BindingModel::region() const
 {
     return m_model->region();
@@ -172,8 +203,7 @@ QAbstractItemModel* BindingModel::model()
 /////// BindingModelModel
 
 BindingModelModel::BindingModelModel(QObject *parent)
-    : QAbstractTableModel(parent),
-    m_sheet(0)
+    : QAbstractTableModel(parent)
 {
 }
 
@@ -192,10 +222,10 @@ void BindingModelModel::emitDataChanged(const QRect& rect)
 
 QVariant BindingModelModel::data(const QModelIndex& index, int role) const
 {
-    if ((!m_sheet && m_region.isEmpty()) || (role != Qt::EditRole && role != Qt::DisplayRole))
+    if ((m_region.isEmpty()) || (role != Qt::EditRole && role != Qt::DisplayRole))
         return QVariant();
-    const QPoint offset = m_sheet ? QPoint(1,1) : m_region.firstRange().topLeft();
-    const Sheet* sheet = m_sheet ? m_sheet : m_region.firstSheet();
+    const QPoint offset = m_region.firstRange().topLeft();
+    const Sheet* sheet = m_region.firstSheet();
     const Value value = sheet->cellStorage()->value(offset.x() + index.column(),
                                                      offset.y() + index.row());
     // KoChart::Value is either:
