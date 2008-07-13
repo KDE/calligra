@@ -272,25 +272,18 @@ void KarbonSimplifyPath::mergeSubpaths( QList<KoSubpath *> subpaths,
             KoPathPoint *point = (*subpaths[si])[pi];
             path->lineTo( point->point() );
 
-            // if the point isn't the last thus has control points
-            if ( pi != subpaths[si]->size()-1 )
-            {
-                // set the first control point
-                KoPathPointIndex index( 0, path->pointCount()-1 );
-                KoPathPoint *p = path->pointByIndex( index );
+            // set the first control point
+            KoPathPointIndex index( 0, path->pointCount()-1 );
+            KoPathPoint *p = path->pointByIndex( index );
+            if ( point->activeControlPoint1() )
                 p->setControlPoint1( point->controlPoint1() );
-            }
 
-            // if the point isn't the second
-            // and thus the previous has control points
-            if ( pi != 1 )
-            {
-                // set the second control point of the previous point
-                KoPathPointIndex index( 0, path->pointCount()-2 );
-                KoPathPoint *p = path->pointByIndex( index );
-                KoPathPoint *prev = (*subpaths[si])[pi-1];
+            // set the second control point of the previous point
+            index = KoPathPointIndex( 0, path->pointCount()-2 );
+            p = path->pointByIndex( index );
+            KoPathPoint *prev = (*subpaths[si])[pi-1];
+            if ( prev->activeControlPoint2() )
                 p->setControlPoint2( prev->controlPoint2() );
-            }
         }
     }
 }
