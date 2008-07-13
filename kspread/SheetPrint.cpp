@@ -776,23 +776,6 @@ void SheetPrint::updateNewPageListY( int _row )
     m_maxCheckedNewPageY = _row;
 }
 
-void SheetPrint::definePrintRange( Selection* selection )
-{
-    if ( !selection->isSingular() )
-    {
-        QUndoCommand* command = new DefinePrintRangeCommand( m_pSheet );
-        m_pDoc->addCommand( command );
-        setPrintRange( selection->lastRange() );
-    }
-}
-
-void SheetPrint::resetPrintRange ()
-{
-    QUndoCommand* command = new DefinePrintRangeCommand( m_pSheet );
-    m_pDoc->addCommand( command );
-    setPrintRange( QRect( QPoint( 1, 1 ), QPoint( KS_colMax, KS_rowMax ) ) );
-}
-
 void SheetPrint::replaceHeadFootLineMacro ( QString &_text, const QString &_search, const QString &_replace )
 {
     if ( _search != _replace )

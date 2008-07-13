@@ -149,6 +149,7 @@
 #include "commands/BorderColorCommand.h"
 #include "commands/CommentCommand.h"
 #include "commands/DataManipulators.h"
+#include "commands/DefinePrintRangeCommand.h"
 #include "commands/RowColumnManipulators.h"
 #include "commands/SheetCommands.h"
 #include "commands/StyleCommand.h"
@@ -2031,7 +2032,11 @@ void View::paperLayoutDlg()
 
 void View::resetPrintRange()
 {
-  d->activeSheet->print()->resetPrintRange();
+    DefinePrintRangeCommand* command = new DefinePrintRangeCommand();
+    command->setText(i18n("Reset Print Range"));
+    command->setSheet(activeSheet());
+    command->add(Region(QRect(QPoint(1, 1), QPoint(KS_colMax, KS_rowMax)), activeSheet()));
+    doc()->addCommand(command);
 }
 
 /*

@@ -77,6 +77,7 @@
 #include "View.h"
 
 #include "commands/AutoFillCommand.h"
+#include "commands/DefinePrintRangeCommand.h"
 
 using namespace KSpread;
 
@@ -589,7 +590,10 @@ SheetView* CellTool::sheetView(const Sheet* sheet) const
 
 void CellTool::definePrintRange()
 {
-    selection()->activeSheet()->printSettings()->setPrintRegion(*selection());
+    DefinePrintRangeCommand* command = new DefinePrintRangeCommand();
+    command->setSheet(selection()->activeSheet());
+    command->add(*selection());
+    d->canvas->view()->doc()->addCommand(command);
 }
 
 void CellTool::Private::processClickSelectionHandle( KoPointerEvent* event )

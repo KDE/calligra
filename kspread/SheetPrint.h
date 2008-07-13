@@ -259,15 +259,6 @@ public:
     void updatePrintRepeatRowsHeight();
 
     /**
-     * Define the print range with the current selection
-     */
-    void definePrintRange(Selection* selection);
-    /**
-     * Reset the print range to the standard definition (whole sheet)
-     */
-    void resetPrintRange();
-
-    /**
      * Updates the print range, according to the inserted columns
      */
     void insertColumn( int col, int nbCol );

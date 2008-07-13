@@ -23,28 +23,26 @@
 
 #include <QRect>
 #include <QString>
-#include <QUndoCommand>
+
+#include "commands/AbstractRegionCommand.h"
 
 /**
  * The KSpread namespace.
  */
 namespace KSpread
 {
-class Doc;
 class Sheet;
 
-class DefinePrintRangeCommand : public QUndoCommand
+class DefinePrintRangeCommand : public AbstractRegionCommand
 {
 public:
-  explicit DefinePrintRangeCommand( Sheet* sheet );
+    explicit DefinePrintRangeCommand();
 
-  virtual void redo();
-  virtual void undo();
+    virtual void redo();
+    virtual void undo();
 
-protected:
-    Doc* doc;
-    QString sheetName;
-    QRect printRangeRedo, printRange;
+private:
+    Region m_oldPrintRegion;
 };
 
 } // namespace KSpread

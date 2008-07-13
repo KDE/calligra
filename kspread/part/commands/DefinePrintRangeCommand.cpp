@@ -21,7 +21,6 @@
 // Local
 #include "DefinePrintRangeCommand.h"
 
-#include "part/Doc.h" // FIXME detach from part
 #include "Localization.h"
 #include "Map.h"
 #include "Sheet.h"
@@ -32,26 +31,23 @@ using namespace KSpread;
 // ----- DefinePrintRangeCommand -----
 
 
-DefinePrintRangeCommand::DefinePrintRangeCommand( Sheet *s )
+DefinePrintRangeCommand::DefinePrintRangeCommand()
+    : AbstractRegionCommand()
 {
-  doc = s->doc();
-  sheetName = s->sheetName();
-  printRange = s->print()->printRange();
-  setText(i18n("Set Page Layout"));
+    setText(i18n("Define Print Range"));
 }
 
 void DefinePrintRangeCommand::redo()
 {
-    Sheet* sheet = doc->map()->findSheet( sheetName );
-    if( !sheet ) return;
-    sheet->print()->setPrintRange( printRangeRedo );
-
+    if (m_firstrun) {
+        m_oldPrintRegion = m_sheet->printSettings()->printRegion();
+    }
+    m_sheet->print()->setPrintRange(lastRange());
+    m_sheet->printSettings()->setPrintRegion(*this);
 }
 
 void DefinePrintRangeCommand::undo()
 {
-    Sheet* sheet = doc->map()->findSheet( sheetName );
-    if( !sheet ) return;
-    printRangeRedo = sheet->print()->printRange();
-    sheet->print()->setPrintRange( printRange );
+    m_sheet->print()->setPrintRange(m_oldPrintRegion.lastRange());
+    m_sheet->printSettings()->setPrintRegion(m_oldPrintRegion);
 }
