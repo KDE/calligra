@@ -24,12 +24,12 @@
 
 namespace KSpread
 {
-class BindingModelModel : public QAbstractTableModel
+class BindingModel : public QAbstractTableModel
 {
     Q_OBJECT
 
 public:
-    BindingModelModel(QObject *parent = 0);
+    BindingModel(QObject *parent = 0);
 
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;

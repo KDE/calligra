@@ -31,14 +31,14 @@
 namespace KSpread
 {
 
-class BindingModelModel;
+class BindingModel;
 
-class BindingModel : public KoChart::ChartModel
+class BindingModelContainer : public KoChart::ChartModel
 {
     Q_OBJECT
 
 public:
-    BindingModel(const Region& region);
+    BindingModelContainer(const Region& region);
 
     const Region& region() const;
     void setRegion(const Region& region);
@@ -57,7 +57,7 @@ signals:
     void changed(const Region& region);
 
 private:
-    BindingModelModel *m_model;
+    BindingModel *m_model;
 };
 
 /**
