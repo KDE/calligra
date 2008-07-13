@@ -38,7 +38,7 @@
 #include <KoXmlNS.h>
 #include <KoOdf.h>
 #include <KoGenStyle.h>
-#include <KoUnit.h>
+// #include <KoUnit.h>
 
 #include "Filterkpr2odf.h"
 
@@ -441,6 +441,7 @@ void Filterkpr2odf::appendLine( KoXmlWriter* content, const KoXmlElement& object
         content->addAttribute( "draw:transform", rotateValue( angle.attribute( "value" ).toDouble() ) );
     }
 
+    //NOTE: we cannot use set2DGeometry because it's handled different
     KoXmlElement orig = objectElement.namedItem( "ORIG" ).toElement();
     KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
     double x1 = orig.attribute( "x" ).toDouble();
@@ -456,29 +457,29 @@ void Filterkpr2odf::appendLine( KoXmlWriter* content, const KoXmlElement& object
     }
 
     content->addAttribute( "draw:id",  QString( "object%1" ).arg( m_objectIndex ) );
-    QString xpos1 = QString( "%1cm" ).arg( KoUnit::toCentimeter( x1 ) );
-    QString xpos2 = QString( "%1cm" ).arg( KoUnit::toCentimeter( x2 ) );
+    QString xpos1 = QString( "%1pt" ).arg( x1 );
+    QString xpos2 = QString( "%1pt" ).arg( x2 );
 
     //Enum: LineType
     switch( type )
     {
     case 0: //Horizontal
-        content->addAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCentimeter( y2/2.0 ) ) );
-        content->addAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCentimeter( y2/2.0 ) ) );
+        content->addAttributePt( "svg:y1", y2/2.0 );
+        content->addAttributePt( "svg:y2", y2/2.0 );
         break;
     case 1: //Vertical
-        content->addAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCentimeter( y1 ) ) );
-        content->addAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCentimeter( y2 ) ) );
-        xpos1 = QString( "%1cm" ).arg( KoUnit::toCentimeter( x1/2.0 ) );
+        content->addAttributePt( "svg:y1", y1 );
+        content->addAttributePt( "svg:y2", y2 );
+        xpos1 = QString( "%1pt" ).arg( x1/2.0 );
         xpos2 = xpos1;
         break;
     case 2: //Left Top to Right Bottom
-        content->addAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCentimeter( y1 ) ) );
-        content->addAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCentimeter( y2 ) ) );
+        content->addAttributePt( "svg:y1", y1 );
+        content->addAttributePt( "svg:y2", y2 );
         break;
     case 3: //Left Bottom to Right Top
-        content->addAttribute( "svg:y1", QString( "%1cm" ).arg( KoUnit::toCentimeter( y2 ) ) );
-        content->addAttribute( "svg:y2", QString( "%1cm" ).arg( KoUnit::toCentimeter( y1 ) ) );
+        content->addAttributePt( "svg:y1", y2 );
+        content->addAttributePt( "svg:y2", y1 );
         break;
     }
 
@@ -616,8 +617,13 @@ void Filterkpr2odf::appendPie( KoXmlWriter* content, const KoXmlElement& objectE
 void Filterkpr2odf::appendGroupObject( KoXmlWriter* content, const KoXmlElement& objectElement )
 {
     content->startElement( "draw:g" );
+
+    set2DGeometry( content, objectElement );
+    content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+
     KoXmlElement objects = objectElement.namedItem( "OBJECTS" ).toElement();
     convertObjects( content, objects );
+
     content->endElement();//draw:g
 }
 
@@ -785,8 +791,8 @@ void Filterkpr2odf::appendBezier( KoXmlWriter* content, const KoXmlElement& obje
                                                 .arg( point4X ).arg( point4Y )
                                                 .arg( point2X ).arg( point2Y );
 
-            maxX = qMax( point1X, qMax( point2X, qMax( point3X, point4X ) ) );
-            maxY = qMax( point1Y, qMax( point2Y, qMax( point3Y, point4Y ) ) );
+            maxX = qMax( point1X, qMax( point2X, qMax( point3X, qMax( point4X, maxX ) ) ) );
+            maxY = qMax( point1Y, qMax( point2Y, qMax( point3Y, qMax( point4Y, maxY ) ) ) );
 
             point1 = point4.nextSibling().toElement();
             point2 = point1.nextSibling().toElement();
@@ -796,8 +802,13 @@ void Filterkpr2odf::appendBezier( KoXmlWriter* content, const KoXmlElement& obje
 
         if( !point2.isNull() )
         {
-            d += QString( "L%1 %2" ).arg( (int)point2.attribute( "point_x" ).toDouble() * 10000 )
-                                    .arg( (int)point2.attribute( "point_y" ).toDouble() * 10000 );
+            int point2X = (int)( point2.attribute( "point_x" ).toDouble() * 10000 );
+            int point2Y = (int)( point2.attribute( "point_y" ).toDouble() * 10000 );
+            maxX = qMax( maxX, point2X );
+            maxY = qMax( maxY, point2Y );
+
+            d += QString( "L%1 %2" ).arg( point2X ).arg( point2Y );
+
         }
 
         content->addAttribute( "svg:d", d );
@@ -844,10 +855,10 @@ void Filterkpr2odf::set2DGeometry( KoXmlWriter* content, const KoXmlElement& obj
     y -= m_pageHeight * ( m_currentPage - 1 );
 
     content->addAttribute( "draw:id", QString( "object%1" ).arg( m_objectIndex ) );
-    content->addAttribute( "svg:x", QString( "%1cm" ).arg( KoUnit::toCentimeter( orig.attribute( "x" ).toDouble() ) ) );
-    content->addAttribute( "svg:y", QString( "%1cm" ).arg( KoUnit::toCentimeter( y ) ) );
-    content->addAttribute( "svg:width", QString( "%1cm" ).arg( KoUnit::toCentimeter( size.attribute( "width" ).toDouble() ) ) );
-    content->addAttribute( "svg:height", QString( "%1cm" ).arg( KoUnit::toCentimeter( size.attribute( "height" ).toDouble() ) ) );
+    content->addAttributePt( "svg:x", orig.attribute( "x" ).toDouble() );
+    content->addAttributePt( "svg:y",  y );
+    content->addAttributePt( "svg:width", size.attribute( "width" ).toDouble() );
+    content->addAttributePt( "svg:height", size.attribute( "height" ).toDouble() );
 }
 
 QString Filterkpr2odf::rotateValue( double val )
