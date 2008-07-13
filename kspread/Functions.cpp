@@ -32,7 +32,7 @@
 #include <klocale.h>
 #include <kstandarddirs.h>
 
-#include "Factory.h"
+#include "part/Factory.h" // FIXME detach from part
 #include "Formula.h"
 #include "FunctionModuleRegistry.h"
 #include "ValueCalc.h"

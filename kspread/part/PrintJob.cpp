@@ -29,7 +29,7 @@
 #include "Sheet.h"
 #include "View.h"
 
-#include <dialogs/SheetSelectPage.h>
+#include "part/dialogs/SheetSelectPage.h"
 
 #include <KoGlobal.h>
 #include <KoShapeManager.h>

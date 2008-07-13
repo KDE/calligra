@@ -18,7 +18,7 @@
 */
 
 #include "FunctionModuleRegistry.h"
-#include "Factory.h"
+#include "part/Factory.h" // FIXME detach from part
 #include "FunctionModule.h"
 #include "Functions.h"
 

@@ -36,7 +36,7 @@
 #include "SheetView.h"
 #include "Selection.h"
 
-#include "commands/DefinePrintRangeCommand.h"
+#include "part/commands/DefinePrintRangeCommand.h" // FIXME detach from part
 
 #include <KoDocumentInfo.h>
 #include <KoZoomHandler.h>

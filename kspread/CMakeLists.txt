@@ -13,7 +13,6 @@ add_subdirectory( templates )
 
 include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/tests
                      ${CMAKE_CURRENT_SOURCE_DIR}/ui
-                     ${CMAKE_CURRENT_SOURCE_DIR}/part
                      ${CMAKE_SOURCE_DIR}/interfaces
                      ${CMAKE_SOURCE_DIR}/kchart
                      ${CMAKE_SOURCE_DIR}/kchart/kdchart/src
@@ -44,14 +43,12 @@ SET (commands_DIR_SRCS
 	commands/ConditionCommand.cpp
 	commands/CSVDataCommand.cpp
 	commands/DataManipulators.cpp
-	commands/DefinePrintRangeCommand.cpp
 	commands/DeleteCommand.cpp
 # 	commands/EmbeddedObjectCommands.cpp
 	commands/IndentationCommand.cpp
 	commands/LinkCommand.cpp
 	commands/MergeCommand.cpp
 	commands/NamedAreaCommand.cpp
-	commands/PageLayoutCommand.cpp
 	commands/PrecisionCommand.cpp
 	commands/RowColumnManipulators.cpp
 	commands/SheetCommands.cpp
@@ -92,13 +89,9 @@ SET (dialogs_DIR_SRCS
 	dialogs/LinkDialog.cpp
 	dialogs/ListDialog.cpp
 	dialogs/NamedAreaDialog.cpp
-	dialogs/PageLayoutDialog.cpp
 	dialogs/PasteInsertDialog.cpp
-	dialogs/PreferenceDialog.cpp
 	dialogs/Resize2Dialog.cpp
 	dialogs/SeriesDialog.cpp
-	dialogs/SheetPropertiesDialog.cpp
-	dialogs/SheetSelectPage.cpp
 	dialogs/ShowDialog.cpp
 	dialogs/ShowColRowDialog.cpp
 	dialogs/SortDialog.cpp
@@ -110,14 +103,9 @@ SET (dialogs_DIR_SRCS
 
 
 kde4_add_ui_files(dialogs_DIR_SRCS
-	dialogs/FileOptionsWidget.ui
 	dialogs/FontWidget.ui
-	dialogs/InterfaceOptionsWidget.ui
-	dialogs/PageLayoutSheetPage.ui
 	dialogs/PositionWidget.ui
 	dialogs/ProtectionWidget.ui
-	dialogs/SheetPropertiesWidget.ui
-	dialogs/SheetSelectWidget.ui
 	dialogs/SpecialPasteWidget.ui
 	dialogs/SubtotalWidget.ui
 	)
@@ -141,8 +129,23 @@ SET (part_DIR_SRCS
 	part/Factory.cpp
 	part/Headers.cpp
 	part/PrintJob.cpp
+	part/PrintManager.cpp
 	part/ToolRegistry.cpp
 	part/View.cpp
+	part/commands/DefinePrintRangeCommand.cpp
+	part/commands/PageLayoutCommand.cpp
+	part/dialogs/PageLayoutDialog.cpp
+	part/dialogs/PreferenceDialog.cpp
+	part/dialogs/SheetPropertiesDialog.cpp
+	part/dialogs/SheetSelectPage.cpp
+)
+
+kde4_add_ui_files(part_DIR_SRCS
+	part/dialogs/FileOptionsWidget.ui
+	part/dialogs/InterfaceOptionsWidget.ui
+	part/dialogs/PageLayoutSheetPage.ui
+	part/dialogs/SheetPropertiesWidget.ui
+	part/dialogs/SheetSelectWidget.ui
 )
 
 SET (ui_DIR_SRCS
@@ -190,7 +193,6 @@ SET (kspreadcommon_LIB_SRCS
 	Number.cpp
 # 	Object.cpp
 	PageManager.cpp
-	PrintManager.cpp
 	PrintSettings.cpp
 # 	PropertyEditor.cpp
 	RecalcManager.cpp

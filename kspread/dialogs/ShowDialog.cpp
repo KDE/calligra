@@ -32,9 +32,9 @@
 
 #include <klocale.h>
 
-#include "Doc.h"
+#include "part/Doc.h" // FIXME detach from part
 #include "Map.h"
-#include "View.h"
+#include "part/View.h" // FIXME detach from part
 
 // commands
 #include "commands/SheetCommands.h"

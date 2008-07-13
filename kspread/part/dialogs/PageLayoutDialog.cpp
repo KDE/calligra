@@ -28,7 +28,7 @@
 #include "Util.h"
 
 // commands
-#include "commands/PageLayoutCommand.h"
+#include "part/commands/PageLayoutCommand.h"
 
 // KDE
 #include <klocale.h>
