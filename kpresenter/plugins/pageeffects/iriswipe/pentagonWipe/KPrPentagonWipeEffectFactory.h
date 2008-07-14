@@ -31,7 +31,9 @@ public:
 
     enum SubType {
         Up,
-        Down
+        UpReverse,
+        Down,
+        DownReverse
     };
 };
 

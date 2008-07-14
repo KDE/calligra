@@ -1,7 +1,7 @@
 Overview
 --------
 Strategy:
-The strategy is responsible for doing the page effect. For each effect we have one object that is instanciated on 
+The strategy is responsible for doing the page effect. For each effect we have one object that is instanciated on
 program start and is shared by all page effects that use these strategy. The strategy need to repaint always the
 full screen. Qt will make sure only to update the parts that where requested for update in KPrPageEffectStrategy::next().
 
@@ -19,7 +19,7 @@ KPrBarWipeEffectFactory::KPrBarWipeEffectFactory()
 }
 
 
-New enums for not yet existing KPrPageEffect::SubType have to be added in KPrPageEffect.h. The UI representation 
+New enums for not yet existing KPrPageEffect::SubType have to be added in KPrPageEffect.h. The UI representation
 of the sub types are defined in dockers/KPrPageEffectDocker.cpp.
 
 It would really be better to have the specific page effects provide these user visible strings as that
@@ -37,7 +37,7 @@ topToBottom   reverse         FromBottom
 
 Specification
 -------------
-The specification is defined in SMIL. See http://www.w3.org/TR/2005/REC-SMIL2-20050107/smil-transitions.html for 
+The specification is defined in SMIL. See http://www.w3.org/TR/2005/REC-SMIL2-20050107/smil-transitions.html for
 information about the different effects.
 
 Effects
@@ -77,7 +77,6 @@ done Jan Hambrecht
 
 Iris Wipes - shapes expand from the center of the media
 -------------------------------------------------------
-    ->Expirements are being done by Carutsu to implement all of them in one go, please don't start implementing them just yet.
 "irisWipe"  "rectangle" (101) [default], "diamond" (102)
 "triangleWipe"  "up" (103) [default], "right" (104), "down" (105), "left" (106)
 "arrowHeadWipe"  "up" (107) [default], "right" (108), "down" (109), "left" (110)
@@ -86,8 +85,10 @@ Iris Wipes - shapes expand from the center of the media
 "ellipseWipe"  "circle" (119) [default], "horizontal" (120), "vertical" (121)
 "eyeWipe"  "horizontal" (122) [default], "vertical" (123)
 "roundRectWipe"  "horizontal" (124) [default], "vertical" (125)
+Carlos, All the above are done, only those remain to be done:
 "starWipe"  "fourPoint" (127) [default], "fivePoint" (128), "sixPoint" (129)
 "miscShapeWipe"  "heart" (130) [default], "keyhole" (131)
+
 
 Clock Wipes - rotate around a center point
 ------------------------------------------
@@ -123,7 +124,7 @@ Matrix Wipes - media is revealed in squares following a pattern
 
 Non-SMPTE Wipes
 ---------------
-"pushWipe"  "fromLeft" [default], "fromTop", "fromRight", "fromBottom" 
+"pushWipe"  "fromLeft" [default], "fromTop", "fromRight", "fromBottom"
 "slideWipe"  "fromLeft" [default], "fromTop", "fromRight", "fromBottom"
  done Thorsten Zachmann
 "fade"  "crossfade" [default], "fadeToColor", "fadeFromColor"

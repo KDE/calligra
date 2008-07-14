@@ -22,7 +22,7 @@
 #include <QWidget>
 #include <QPainter>
 
-KPrIrisWipeEffectStrategyBase::KPrIrisWipeEffectStrategyBase( QPainterPath shape, int subType, const char * smilType, const char *smilSubType, bool reverse)
+KPrIrisWipeEffectStrategyBase::KPrIrisWipeEffectStrategyBase( QPainterPath shape, int subType, const char * smilType, const char *smilSubType, bool reverse )
 : KPrPageEffectStrategy( subType, smilType, smilSubType, reverse )
 , m_shape( shape )
 {
@@ -52,24 +52,42 @@ void KPrIrisWipeEffectStrategyBase::paintStep( QPainter &p, int currPos, const K
     const int width = data.m_widget->width();
     const int height = data.m_widget->height();
     qreal scaleStep;
+    qreal fullScale;
     if( width > height )
     {
         scaleStep = 1 / m_shape.boundingRect().width();
+        fullScale = width;
     }
     else
     {
         scaleStep = 1 / m_shape.boundingRect().height();
+        fullScale = height;
     }
 
-    QRect rect( 0, 0, width, height );
-    p.drawPixmap( QPoint( 0, 0 ), data.m_oldPage, rect );
+    if( !reverse() )
+    {
+        QRect rect( 0, 0, width, height );
+        p.drawPixmap( QPoint( 0, 0 ), data.m_oldPage, rect );
 
-    QMatrix matrix;
-    matrix.translate( width/2, height/2 );
-    matrix.scale( currPos*scaleStep, currPos*scaleStep );
+        QMatrix matrix;
+        matrix.translate( width/2, height/2 );
+        matrix.scale( currPos*scaleStep, currPos*scaleStep );
 
-    p.setClipPath( matrix.map(m_shape) );
-    p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, rect );
+        p.setClipPath( matrix.map(m_shape) );
+        p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, rect );
+    }
+    else
+    {
+        QRect rect( 0, 0, width, height );
+        p.drawPixmap( QPoint( 0, 0 ), data.m_oldPage, rect );
+
+        QMatrix matrix;
+        matrix.translate( width/2, height/2 );
+        matrix.scale( ( fullScale - currPos )*scaleStep, ( fullScale - currPos )*scaleStep );
+
+        p.setClipPath( matrix.map(m_shape) );
+        p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, rect );
+    }
 }
 
 
@@ -79,19 +97,33 @@ void KPrIrisWipeEffectStrategyBase::next( const KPrPageEffect::Data &data )
     const int height = data.m_widget->height();
     const int currPos = data.m_timeLine.frameForTime( data.m_currentTime );
     qreal scaleStep;
+    qreal fullScale;
     if( width > height )
     {
         scaleStep = 1 / m_shape.boundingRect().width();
+        fullScale = width;
     }
     else
     {
         scaleStep = 1 / m_shape.boundingRect().height();
+        fullScale = height;
     }
 
-    QMatrix matrix;
-    matrix.translate( width/2, height/2 );
-    matrix.scale( currPos*scaleStep, currPos*scaleStep );
-    QPainterPath newPath ( matrix.map( m_shape ) );
+    QPainterPath newPath;
+    if( !reverse() )
+    {
+        QMatrix matrix;
+        matrix.translate( width/2, height/2 );
+        matrix.scale( currPos*scaleStep, currPos*scaleStep );
+        newPath = matrix.map( m_shape );
+    }
+    else
+    {
+        QMatrix matrix;
+        matrix.translate( width/2, height/2 );
+        matrix.scale( ( fullScale - currPos )*scaleStep, ( fullScale - currPos )*scaleStep );
+        newPath = matrix.map( m_shape );
+    }
 
     data.m_widget->update( newPath.boundingRect().toRect() );
 }

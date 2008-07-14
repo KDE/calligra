@@ -32,40 +32,52 @@ KPrArrowHeadWipeEffectFactory::KPrArrowHeadWipeEffectFactory()
 {
     QPainterPath shape;
 
-    //arrowHeadWipe up
+    //up
     shape.moveTo( -25*cos( M_PI/2 ), -25*sin( M_PI/2 ) );
     shape.lineTo( -25*cos( 7 * M_PI / 6 ), -25*sin( 7 * M_PI / 6 ) );
     shape.lineTo( 0, 7 );
     shape.lineTo( -25*cos( 11 * M_PI / 6 ), -25*sin( 11 * M_PI / 6 ) );
     shape.closeSubpath();
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Up, "arrowHeadWipe", "up", false) );
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Up, "arrowHeadWipe", "up", false ) );
 
-    //arrowHeadWipe right
+    //up reverse
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, UpReverse, "arrowHeadWipe", "up", true ) );
+
+    //right
     shape = QPainterPath();
     shape.moveTo( 25*cos( 0.0 ), 25*sin( 0.0 ) );
     shape.lineTo( 25*cos( 2 * M_PI / 3), 25*sin( 2 * M_PI / 3 ) );
     shape.lineTo( -7, 0 );
     shape.lineTo( 25*cos( 4 * M_PI / 3), 25*sin( 4 * M_PI / 3 ) );
     shape.closeSubpath();
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Right, "arrowHeadWipe", "right", false) );
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Right, "arrowHeadWipe", "right", false ) );
 
-    //arrowHeadWipe down
+    //right reverse
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, RightReverse, "arrowHeadWipe", "right", true ) );
+
+    //down
     shape = QPainterPath();
     shape.moveTo( 25*cos( M_PI/2 ), 25*sin( M_PI/2 ) );
     shape.lineTo( 25*cos( 7 * M_PI / 6), 25*sin( 7 * M_PI / 6 ) );
     shape.lineTo( 0, -7 );
     shape.lineTo( 25*cos( 11 * M_PI / 6), 25*sin( 11 * M_PI / 6 ) );
     shape.closeSubpath();
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Down, "arrowHeadWipe", "down", false) );
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Down, "arrowHeadWipe", "down", false ) );
 
-    //arrowHeadWipe left
+    //down reverse
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, DownReverse, "arrowHeadWipe", "down", true ) );
+
+    //left
     shape = QPainterPath();
     shape.moveTo( -25*cos( 0.0 ), 25*sin( 0.0 ) );
     shape.lineTo( -25*cos( 2 * M_PI / 3), 25*sin( 2 * M_PI / 3 ) );
     shape.lineTo( 7, 0 );
     shape.lineTo( -25*cos( 4 * M_PI / 3), 25*sin( 4 * M_PI / 3 ) );
     shape.closeSubpath();
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Left, "arrowHeadWipe", "left", false) );
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Left, "arrowHeadWipe", "left", false ) );
+
+    //left reverse
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, LeftReverse, "arrowHeadWipe", "left", true ) );
 }
 
 KPrArrowHeadWipeEffectFactory::~KPrArrowHeadWipeEffectFactory()
@@ -74,9 +86,13 @@ KPrArrowHeadWipeEffectFactory::~KPrArrowHeadWipeEffectFactory()
 
 static const char* s_subTypes[] = {
     I18N_NOOP( "Up" ),
+    I18N_NOOP( "Up Reverse" ),
     I18N_NOOP( "Right" ),
+    I18N_NOOP( "Right Reverse" ),
     I18N_NOOP( "Down" ),
-    I18N_NOOP( "Left" )
+    I18N_NOOP( "Down Reverse" ),
+    I18N_NOOP( "Left" ),
+    I18N_NOOP( "Left Reverse" )
 };
 
 QString KPrArrowHeadWipeEffectFactory::subTypeName(int subType) const

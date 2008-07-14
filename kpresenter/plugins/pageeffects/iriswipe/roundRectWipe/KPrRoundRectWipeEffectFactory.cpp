@@ -38,7 +38,10 @@ KPrRoundRectWipeEffectFactory::KPrRoundRectWipeEffectFactory()
 #else
     shape.addRoundRect( -25, -12, 50, 24, 10 );
 #endif
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Horizontal, "RoundRect", "horizontal", false) );
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Horizontal, "RoundRect", "horizontal", false ) );
+
+    //horizontal reverse
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, HorizontalReverse, "RoundRect", "horizontal", true ) );
 
     //vertical
     shape = QPainterPath();
@@ -47,7 +50,10 @@ KPrRoundRectWipeEffectFactory::KPrRoundRectWipeEffectFactory()
 #else
     shape.addRoundRect( -12, -25, 24, 50, 10 );
 #endif
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Vertical, "RoundRect", "vertical", false) );
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Vertical, "RoundRect", "vertical", false ) );
+
+    //vertical reverse
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, VerticalReverse, "RoundRect", "vertical", true ) );
 }
 
 KPrRoundRectWipeEffectFactory::~KPrRoundRectWipeEffectFactory()
@@ -56,7 +62,9 @@ KPrRoundRectWipeEffectFactory::~KPrRoundRectWipeEffectFactory()
 
 static const char* s_subTypes[] = {
     I18N_NOOP( "Horizontal" ),
-    I18N_NOOP( "Vertical" )
+    I18N_NOOP( "Horizontal Reverse" ),
+    I18N_NOOP( "Vertical" ),
+    I18N_NOOP( "Vertical Reverse" )
 };
 
 QString KPrRoundRectWipeEffectFactory::subTypeName(int subType) const

@@ -10,6 +10,7 @@ set(kpr_pageeffect_iriswipe_SRCS
     ellipseWipe/KPrEllipseWipeEffectFactory.cpp
     roundRectWipe/KPrRoundRectWipeEffectFactory.cpp
     pentagonWipe/KPrPentagonWipeEffectFactory.cpp
+    hexagonWipe/KPrHexagonWipeEffectFactory.cpp
     )
 
 kde4_add_plugin(kpr_pageeffect_iriswipe ${kpr_pageeffect_iriswipe_SRCS})

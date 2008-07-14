@@ -31,10 +31,13 @@ public:
 
     enum SubType {
         Up,
+        UpReverse,
         Right,
+        RightReverse,
         Down,
-        Left
-    };
-};
+        DownReverse,
+        Left,
+        LeftReverse
+    };};
 
 #endif /* KPRTRIANGLEWIPEEFFECTFACTORY_H */

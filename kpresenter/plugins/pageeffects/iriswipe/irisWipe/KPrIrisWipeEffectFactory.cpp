@@ -11,19 +11,24 @@ KPrIrisWipeEffectFactory::KPrIrisWipeEffectFactory()
 
      QPainterPath shape;
 
-    //iris rectangle
+    //rectangle
     shape.addRect( -25, -25, 50, 50 );
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Rectangle, "irisWipe", "rectangle", false) );
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Rectangle, "irisWipe", "rectangle", false ) );
 
-    //iris diamond
+    //rectangle reverse
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, RectangleReverse, "irisWipe", "rectangle", true ) );
+
+    //diamond
     shape = QPainterPath();
     shape.moveTo( 0, -25);
     shape.lineTo( 25, 0 );
     shape.lineTo( 0, 25 );
     shape.lineTo(-25, 0 );
     shape.closeSubpath();
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Diamond, "irisWipe", "diamond", false ) );
 
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Diamond, "irisWipe", "diamond", false) );
+    //diamond reverse
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, DiamondReverse, "irisWipe", "diamond", true ) );
 }
 
 KPrIrisWipeEffectFactory::~KPrIrisWipeEffectFactory()
@@ -32,7 +37,9 @@ KPrIrisWipeEffectFactory::~KPrIrisWipeEffectFactory()
 
 static const char* s_subTypes[] = {
     I18N_NOOP( "Rectangular" ),
-    I18N_NOOP( "Diamond" )
+    I18N_NOOP( "Rectangular Reverse" ),
+    I18N_NOOP( "Diamond" ),
+    I18N_NOOP( "Diamond Reverse" )
 };
 
 QString KPrIrisWipeEffectFactory::subTypeName(int subType) const

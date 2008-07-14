@@ -31,7 +31,9 @@ public:
 
     enum SubType {
         Horizontal,
-	Vertical
+        HorizontalReverse,
+        Vertical,
+        VerticalReverse
     };
 };
 

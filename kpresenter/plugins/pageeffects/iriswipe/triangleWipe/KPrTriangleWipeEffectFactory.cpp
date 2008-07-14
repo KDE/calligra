@@ -31,36 +31,48 @@ KPrTriangleWipeEffectFactory::KPrTriangleWipeEffectFactory()
 {
     QPainterPath shape;
 
-    //triangle up
+    //up
     shape.moveTo( -25*cos( M_PI/2 ), -25*sin( M_PI/2 ) );
     shape.lineTo( -25*cos( 7 * M_PI / 6 ), -25*sin( 7 * M_PI / 6 ) );
     shape.lineTo( -25*cos( 11 * M_PI / 6 ), -25*sin( 11 * M_PI / 6 ) );
     shape.closeSubpath();
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Up, "triangleWipe", "up", false) );
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Up, "triangleWipe", "up", false ) );
 
-    //triangle right
+    //up reverse
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, UpReverse, "triangleWipe", "up", true ) );
+
+    //right
     shape = QPainterPath();
     shape.moveTo( 25*cos( 0.0 ), 25*sin( 0.0 ) );
     shape.lineTo( 25*cos( 2 * M_PI / 3), 25*sin( 2 * M_PI / 3 ) );
     shape.lineTo( 25*cos( 4 * M_PI / 3), 25*sin( 4 * M_PI / 3 ) );
     shape.closeSubpath();
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Right, "triangleWipe", "right", false) );
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Right, "triangleWipe", "right", false ) );
 
-    //triangle down
+    //right reverse
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, RightReverse, "triangleWipe", "right", true ) );
+
+    //down
     shape = QPainterPath();
     shape.moveTo( 25*cos( M_PI/2 ), 25*sin( M_PI/2 ) );
     shape.lineTo( 25*cos( 7 * M_PI / 6), 25*sin( 7 * M_PI / 6 ) );
     shape.lineTo( 25*cos( 11 * M_PI / 6), 25*sin( 11 * M_PI / 6 ) );
     shape.closeSubpath();
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Down, "triangleWipe", "down", false) );
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Down, "triangleWipe", "down", false ) );
 
-    //triangle left
+    //down reverse
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, DownReverse, "triangleWipe", "down", true ) );
+
+    //left
     shape = QPainterPath();
     shape.moveTo( -25*cos( 0.0 ), 25*sin( 0.0 ) );
     shape.lineTo( -25*cos( 2 * M_PI / 3), 25*sin( 2 * M_PI / 3 ) );
     shape.lineTo( -25*cos( 4 * M_PI / 3), 25*sin( 4 * M_PI / 3 ) );
     shape.closeSubpath();
-    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Left, "triangleWipe", "left", false) );
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Left, "triangleWipe", "left", false ) );
+
+    //left reverse
+    addStrategy(new KPrIrisWipeEffectStrategyBase( shape, LeftReverse, "triangleWipe", "left", true ) );
 
 }
 
@@ -70,9 +82,13 @@ KPrTriangleWipeEffectFactory::~KPrTriangleWipeEffectFactory()
 
 static const char* s_subTypes[] = {
     I18N_NOOP( "Up" ),
+    I18N_NOOP( "Up Reverse" ),
     I18N_NOOP( "Right" ),
+    I18N_NOOP( "Right Reverse" ),
     I18N_NOOP( "Down" ),
-    I18N_NOOP( "Left" )
+    I18N_NOOP( "Down Reverse" ),
+    I18N_NOOP( "Left" ),
+    I18N_NOOP( "Left Reverse" )
 };
 
 QString KPrTriangleWipeEffectFactory::subTypeName(int subType) const

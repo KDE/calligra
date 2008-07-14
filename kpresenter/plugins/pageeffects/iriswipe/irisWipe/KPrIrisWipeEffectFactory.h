@@ -31,7 +31,9 @@ public:
 
     enum SubType {
         Rectangle,
-        Diamond
+        RectangleReverse,
+        Diamond,
+        DiamondReverse
     };
 };
 

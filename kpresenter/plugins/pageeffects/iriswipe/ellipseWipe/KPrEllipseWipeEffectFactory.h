@@ -31,8 +31,11 @@ public:
 
     enum SubType {
         Circle,
+        CircleReverse,
         Horizontal,
-	Vertical
+        HorizontalReverse,
+        Vertical,
+        VerticalReverse
     };
 };
 
