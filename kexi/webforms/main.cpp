@@ -37,6 +37,7 @@
 #include "FileService.hpp"
 #include "IndexService.h"
 #include "QueryService.h"
+#include "BlobService.h"
 #include "CRUD.h"
 
 using namespace pion::net;
@@ -93,6 +94,9 @@ int main(int argc, char **argv) {
     fileService.setOption("file", args->getOption("webroot").append("/index.html").toLatin1().constData());
     fileService.setOption("cache", "0");
     fileService.setOption("scan", "0");
+
+    // Other Services
+    BlobService blobService;
     
     server.addService("/", &indexService);
     server.addService("/create", &createService);
@@ -102,10 +106,13 @@ int main(int argc, char **argv) {
     server.addService("/query", &queryService);
     
     server.addService("/f", &fileService);
-    server.start();
+
+    server.addService("/blob", &blobService);
     
+    server.start();
     main_shutdown_manager.wait();
 
+    /// @todo don't always return 0
     return 0;
 }
 
