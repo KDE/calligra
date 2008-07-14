@@ -124,7 +124,6 @@
 #include "Canvas.h"
 #include "Editors.h"
 #include "Global.h"
-// #include "Handler.h"
 #include "Headers.h"
 #include "Localization.h"
 #include "Map.h"
@@ -160,7 +159,6 @@
 #include "dialogs/PreferenceDialog.h"
 #include "dialogs/ShowDialog.h"
 
-#include "PropertyEditor.h"
 #include "dialogs/SheetPropertiesDialog.h"
 
 // D-Bus
@@ -223,8 +221,6 @@ public:
     void adjustActions( bool mode );
     void adjustWorkbookActions( bool mode );
     QAbstractButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0 );
-
-    PropertyEditor *m_propertyEditor;
 
     // On timeout this will execute the status bar operation (e.g. SUM).
     // This is delayed to speed up the selection.
@@ -524,7 +520,6 @@ void View::Private::initActions()
 #else
         action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 #endif
-    m_propertyEditor = 0;
 }
 
 void View::Private::adjustActions( bool mode )

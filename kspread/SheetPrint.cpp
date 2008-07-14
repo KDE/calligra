@@ -30,7 +30,6 @@
 #include "part/Doc.h" // FIXME detach from part
 #include "Localization.h"
 #include "Map.h"
-#include "Object.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
 #include "SheetView.h"
@@ -92,6 +91,7 @@ private:
 };
 
 
+#if 0 // KSPREAD_KOPART_EMBEDDING
 class PrintObject
 {
 public:
@@ -100,6 +100,7 @@ public:
     EmbeddedObject *obj;
     QPixmap *p;
 };
+#endif
 
 } // namespace KSpread
 
@@ -311,10 +312,12 @@ bool SheetPrint::print( QPainter &painter, QPrinter *_printer )
     }
     m_pSheet->setShowGrid( oldShowGrid );
 
+#if 0 // KSPREAD_KOPART_EMBEDDING
     QList<PrintObject *>::iterator it;
     for ( it = m_printObjects.begin(); it != m_printObjects.end(); ++it )
       delete (*it)->p;
     m_printObjects.clear();
+#endif
 
     return ( page_list.count() > 0 );
 }

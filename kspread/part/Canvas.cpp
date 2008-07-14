@@ -112,7 +112,6 @@
 
 // commands
 #include "commands/DeleteCommand.h"
-#include "commands/EmbeddedObjectCommands.h"
 #include "commands/StyleCommand.h"
 #include "commands/Undo.h"
 

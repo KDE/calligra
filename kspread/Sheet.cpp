@@ -66,7 +66,6 @@
 #include "Localization.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
-#include "Object.h"
 #include "OdfLoadingContext.h"
 #include "OdfSavingContext.h"
 #include "RecalcManager.h"
@@ -86,7 +85,6 @@
 // commands
 #include "commands/DataManipulators.h"
 #include "commands/DeleteCommand.h"
-#include "commands/EmbeddedObjectCommands.h"
 #include "commands/MergeCommand.h"
 #include "commands/RowColumnManipulators.h"
 #include "commands/Undo.h"

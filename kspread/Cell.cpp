@@ -55,7 +55,6 @@
 #include "LoadingInfo.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
-#include "Object.h"
 #include "OdfLoadingContext.h"
 #include "OdfSavingContext.h"
 #include "RowColumnFormat.h"

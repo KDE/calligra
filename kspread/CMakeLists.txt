@@ -43,7 +43,6 @@ SET (commands_DIR_SRCS
 	commands/CSVDataCommand.cpp
 	commands/DataManipulators.cpp
 	commands/DeleteCommand.cpp
-# 	commands/EmbeddedObjectCommands.cpp
 	commands/IndentationCommand.cpp
 	commands/LinkCommand.cpp
 	commands/MergeCommand.cpp
@@ -183,17 +182,13 @@ SET (kspreadcommon_LIB_SRCS
 	FunctionModule.cpp
 	FunctionModuleRegistry.cpp
 	Functions.cpp
-# 	GeneralProperty.cpp
 	GenValidationStyle.cpp
-# 	Handler.cpp
 	Localization.cpp
 	Map.cpp
 	NamedAreaManager.cpp
 	Number.cpp
-# 	Object.cpp
 	PageManager.cpp
 	PrintSettings.cpp
-# 	PropertyEditor.cpp
 	RecalcManager.cpp
 	Region.cpp
 	RowColumnFormat.cpp
@@ -205,7 +200,6 @@ SET (kspreadcommon_LIB_SRCS
 	Style.cpp
 	StyleManager.cpp
 	StyleStorage.cpp
-# 	Toolbox.cpp
 	Util.cpp
 	Validity.cpp
 	Value.cpp
