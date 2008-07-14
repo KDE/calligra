@@ -26,7 +26,7 @@
 // Local
 #include "kchart_export.h"
 #include "kchart_global.h"
-#include "koChart.h"
+#include "KoChartInterface.h"
 
 // KOffice
 #include <KoShapeContainer.h>
@@ -85,8 +85,10 @@ extern bool isPolar( ChartType type );
 extern bool isCartesian( ChartType type );
 extern QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color );
 
-class CHARTSHAPELIB_EXPORT ChartShape : public KoFrameShape, public KoShapeContainer, public QObject, public KoChart::ChartInterface
+class CHARTSHAPELIB_EXPORT ChartShape : public QObject, public KoChart::ChartInterface, public KoFrameShape, public KoShapeContainer
 {
+    Q_OBJECT
+    Q_INTERFACES(KoChart::ChartInterface)
 public:
     ChartShape();
     ~ChartShape();

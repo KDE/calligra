@@ -25,7 +25,7 @@
 #include "KoCanvasResourceProvider.h"
 #include "KoShape.h"
 
-#include "koChart.h"
+#include "KoChartInterface.h"
 
 #include "Binding.h"
 #include "part/Canvas.h" // FIXME detach from part
@@ -63,7 +63,13 @@ ChartDatabaseSelector::~ChartDatabaseSelector()
 
 void ChartDatabaseSelector::open(KoShape* shape)
 {
-    d->shape = dynamic_cast<KoChart::ChartInterface*>( shape );
+    QObject* const object = dynamic_cast<QObject*>(shape);
+    Q_ASSERT(object);
+    if (!object) {
+        return;
+    }
+    d->shape = qobject_cast<KoChart::ChartInterface*>(object);
+    Q_ASSERT(d->shape);
 }
 
 void ChartDatabaseSelector::save()
