@@ -1,6 +1,11 @@
 [Desktop Entry]
 Name=Calendar Tool
+Name[ga]=Uirlis Fhéilire
+Name[it]=Strumento calendario
+Name[nds]=Kalennerwarktüüch
 Comment=Inserts a calendar into a cell range.
+Comment[it]=Inserisce un calendario in un intervallo di celle.
+Comment[nds]=Föögt en Kalenner na en Zellrebeet in.
 Icon=office-calendar
 Type=Service
 X-KDE-Library=kspread_plugin_tool_calendar
