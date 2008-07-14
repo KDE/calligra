@@ -32,6 +32,8 @@
 
 namespace KexiWebForms {
 
+    WebFormsService::WebFormsService() {}
+    
     WebFormsService::WebFormsService(const char* name) : pion::net::WebService() {
         m_dict = initTemplate(name);
     }

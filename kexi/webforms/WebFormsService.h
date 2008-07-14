@@ -50,6 +50,11 @@ namespace KexiWebForms {
         public:
             /**
              * Constructor
+             */
+            WebFormsService();
+            
+            /**
+             * Constructor
              * @param char* name of a template file
              */
             WebFormsService(const char*);
