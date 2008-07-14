@@ -11,7 +11,6 @@ include_directories(
 add_definitions(-fexceptions)
 
 set(webforms_SRCS
-  main.cpp
   DataProvider.cpp
   TemplateProvider.cpp
   WebFormsService.cpp
@@ -25,6 +24,9 @@ set(webforms_SRCS
 # Other services
   FileService.cpp
   QueryService.cpp
+  BlobService.cpp
+# Main
+  main.cpp
 )
 
 kde4_add_executable(kwebforms NOGUI ${webforms_SRCS})
