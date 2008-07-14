@@ -33,13 +33,13 @@ KPrHexagonWipeEffectFactory::KPrHexagonWipeEffectFactory()
      QPainterPath shape;
 
     //horizontal
-    shape.moveTo( 0, -25);
-    shape.lineTo( 25*cos( M_PI / 2 ), -25*sin( M_PI / 2 ) );
-    shape.lineTo( 25*cos( 5 * M_PI / 6 ), -25*sin( 5 * M_PI / 6 ) );
-    shape.lineTo( 25*cos( 7 * M_PI / 6 ), -25*sin( 7 * M_PI / 6 ) );
-    shape.lineTo( 25*cos( 9 * M_PI / 6 ), -25*sin( 9 * M_PI / 6 ) );
-    shape.lineTo( 25*cos( 11 * M_PI / 6 ), -25*sin( 11 * M_PI / 6 ) );
-    shape.lineTo( 25*cos( M_PI / 6 ), -25*sin( M_PI / 6 ) );
+    shape.moveTo( 25, 0 );
+    shape.lineTo( 25*cos( M_PI / 3 ), -25*sin( M_PI / 3 ) );
+    shape.lineTo( 25*cos( 2 * M_PI / 3 ), -25*sin( 2 * M_PI / 3 ) );
+    shape.lineTo( 25*cos( M_PI ), -25*sin( M_PI ) );
+    shape.lineTo( 25*cos( 4 * M_PI / 3 ), -25*sin( 4 * M_PI / 3 ) );
+    shape.lineTo( 25*cos( 5 * M_PI / 3 ), -25*sin( 5 * M_PI / 3 ) );
+    shape.lineTo( 25*cos( 2 * M_PI ), -25*sin( 2 * M_PI ) );
     shape.closeSubpath();
     addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Horizontal, "hexagonWipe", "horizontal", false ) );
 
@@ -48,13 +48,13 @@ KPrHexagonWipeEffectFactory::KPrHexagonWipeEffectFactory()
 
     //vertical
     shape = QPainterPath();
-    shape.moveTo( 0, -25);
-    shape.lineTo( -25*cos( M_PI / 2 ), -25*sin( M_PI / 2 ) );
-    shape.lineTo( -25*cos( 5 * M_PI / 6 ), -25*sin( 5 * M_PI / 6 ) );
-    shape.lineTo( -25*cos( 7 * M_PI / 6 ), -25*sin( 7 * M_PI / 6 ) );
-    shape.lineTo( -25*cos( 9 * M_PI / 6 ), -25*sin( 9 * M_PI / 6 ) );
-    shape.lineTo( -25*cos( 11 * M_PI / 6 ),-25*sin( 11 * M_PI / 6 ) );
-    shape.lineTo( -25*cos( M_PI / 6 ), -25*sin( M_PI / 6 ) );
+    shape.moveTo( 0, -25 );
+    shape.lineTo( 25*cos( M_PI / 2 ), -25*sin( M_PI / 2 ) );
+    shape.lineTo( 25*cos( 5 * M_PI / 6 ), -25*sin( 5 * M_PI / 6 ) );
+    shape.lineTo( 25*cos( 7 * M_PI / 6 ), -25*sin( 7 * M_PI / 6 ) );
+    shape.lineTo( 25*cos( 9 * M_PI / 6 ), -25*sin( 9 * M_PI / 6 ) );
+    shape.lineTo( 25*cos( 11 * M_PI / 6 ),-25*sin( 11 * M_PI / 6 ) );
+    shape.lineTo( 25*cos( M_PI / 6 ), -25*sin( M_PI / 6 ) );
     shape.closeSubpath();
     addStrategy(new KPrIrisWipeEffectStrategyBase( shape, Vertical, "hexagonWipe", "vertical", false ) );
 
