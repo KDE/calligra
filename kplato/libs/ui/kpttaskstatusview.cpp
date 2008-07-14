@@ -411,13 +411,12 @@ TaskStatusViewSettingsDialog::TaskStatusViewSettingsDialog( TaskStatusTreeView *
 //-----------------------------------
 ProjectStatusView::ProjectStatusView( KoDocument *part, QWidget *parent )
     : ViewBase( part, parent ),
-    m_project( 0 ),
-    m_manager( 0 )
+    m_project( 0 )
 {
     kDebug()<<"-------------------- creating ProjectStatusView -------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_view = new QTextBrowser( this );
+    m_view = new PerformanceStatusBase( this );
     l->addWidget( m_view );
     setupGui();
 
@@ -426,216 +425,23 @@ ProjectStatusView::ProjectStatusView( KoDocument *part, QWidget *parent )
 void ProjectStatusView::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug();
-    m_manager = sm;
-    draw();
+    m_view->setScheduleManager( sm );
+    m_view->model()->clearNodes();
+    if ( m_project ) {
+        m_view->model()->addNode( m_project );
+    }
 }
 
 void ProjectStatusView::setProject( Project *project )
 {
-    if ( m_project ) {
-        disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotUpdate( ScheduleManager* ) ) );
-        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
-    }
     m_project = project;
-    if ( m_project ) {
-        connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotUpdate( ScheduleManager* ) ) );
-        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
-    }
-}
-
-void ProjectStatusView::slotUpdate()
-{
-    draw();
-}
-
-void ProjectStatusView::slotUpdate( ScheduleManager *sm )
-{
-    if ( sm == m_manager ) {
-        slotUpdate();
-    }
+    m_view->model()->clearNodes();
+    m_view->setProject( project );
 }
 
 void ProjectStatusView::draw()
 {
-    QTime t; t.start();
-    kDebug();
-    m_view->clear();
-    if ( m_project == 0 ) {
-        return;
-    }
-    KLocale *l = KGlobal::locale();
-    QTextCursor cursor = m_view->textCursor();
-    cursor.movePosition(QTextCursor::Start);
-    QTextFrame *topFrame = cursor.currentFrame();
-    
-    QTextTableFormat tableFormat;
-    tableFormat.setAlignment(Qt::AlignHCenter);
-//    tableFormat.setBackground(QColor("#e0e0e0"));
-    tableFormat.setCellPadding(2);
-    tableFormat.setCellSpacing(4);
-    
-    QVector<QTextLength> constraints;
-    constraints << QTextLength(QTextLength::PercentageLength, 20)
-            << QTextLength(QTextLength::PercentageLength, 80);
-    tableFormat.setColumnWidthConstraints(constraints);
-    
-    QTextTable *table = cursor.insertTable(2, 2, tableFormat);
-    QTextFrame *frame = cursor.currentFrame();
-    QTextFrameFormat frameFormat = frame->frameFormat();
-    frameFormat.setBorder(1);
-    frame->setFrameFormat(frameFormat);
-    QTextCharFormat format = cursor.charFormat();
-    format.setFontPointSize(11);
-
-    QTextCharFormat boldFormat = format;
-    boldFormat.setFontWeight(QFont::Bold);
-
-    QTextCharFormat highlightedFormat = format;
-    highlightedFormat.setBackground(Qt::yellow);
-    
-    QTextTableCell cell = table->cellAt(0, 0);
-    QTextCursor cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText(i18n("Project:"), format);
-    
-    cell = table->cellAt(0, 1);
-    cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText(m_project->name(), boldFormat);
-
-    cell = table->cellAt(1, 0);
-    cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText(i18n("Schedule:"), format);
-
-    QString s = m_manager == 0 ? i18n("None") : m_manager->name();
-    cell = table->cellAt(1, 1);
-    cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText(s, boldFormat);
-    
-    if ( m_manager == 0 ) {
-        return;
-    }
-
-    NodeModel m;
-    m.setProject( m_project );
-    m.setManager( m_manager );
-    
-    cursor.setPosition(topFrame->lastPosition());
-    cursor.insertBlock();
-    cursor.insertBlock();
-    
-    constraints.clear();
-    constraints << QTextLength(QTextLength::PercentageLength, 20)
-            << QTextLength(QTextLength::PercentageLength, 20)
-            << QTextLength(QTextLength::PercentageLength, 20)
-            << QTextLength(QTextLength::PercentageLength, 20)
-            << QTextLength(QTextLength::PercentageLength, 20);
-    tableFormat.setColumnWidthConstraints(constraints);
-    table = cursor.insertTable(2, 5, tableFormat);
-    //frame = cursor.currentFrame();
-    //frameFormat = frame->frameFormat();
-    //frameFormat.setBorder(1);
-    //frame->setFrameFormat(frameFormat);
-    //format = cursor.charFormat();
-    //format.setFontPointSize(11);
-
-    //boldFormat = format;
-    //boldFormat.setFontWeight(QFont::Bold);
-
-    
-    cell = table->cellAt(0, 0);
-    cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText(i18nc("Budgeted Cost of Work Scheduled", "BCWS (hours/cost)"), boldFormat);
-    
-    cell = table->cellAt(1, 0);
-    cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText(m.data( m_project, NodeModel::NodeBCWS ).toString(), highlightedFormat);
-
-    cell = table->cellAt(0, 1);
-    cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText(i18nc("Budgeted Cost of Work Performed", "BCWP (hours/cost)"), boldFormat);
-
-    cell = table->cellAt(1, 1);
-    cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText(m.data( m_project, NodeModel::NodeBCWP ).toString(), highlightedFormat);
-    
-    cell = table->cellAt(0, 2);
-    cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText(i18nc("Actual Cost of Work Performed", "ACWP (hours/cost)"), boldFormat);
-
-    cell = table->cellAt(1, 2);
-    cellCursor = cell.firstCursorPosition();
-    QString ss = m.data( m_project, NodeModel::NodeACWP ).toString();
-    cellCursor.insertText(ss, highlightedFormat);
-    
-    cell = table->cellAt(0, 3);
-    cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText(i18nc("Schedule Performance Index", "SPI (hours/cost)"), boldFormat);
-
-    cell = table->cellAt(1, 3);
-    cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText(m.data( m_project, NodeModel::NodePerformanceIndex ).toString(), highlightedFormat);
-
-    cell = table->cellAt(0, 4);
-    cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText(i18n("Date"), boldFormat);
-
-    cell = table->cellAt(1, 4);
-    cellCursor = cell.firstCursorPosition();
-    cellCursor.insertText( m.now().toString( Qt::ISODate ) + " (" + i18n("Today") + ")", highlightedFormat);
-
-    EffortCostMap c = m_project->acwp( m.id() );
-    int elapsed = t.elapsed();
-    kDebug()<<"acwp:"<<elapsed;
-    
-    EffortCostMap b = m_project->bcwpPrDay( m.id() );
-    kDebug()<<"bcwp:"<<t.elapsed() - elapsed;
-    
-    QMap<QDate, int> days;
-    foreach ( const QDate &d, b.days().keys() ) {
-        days.insert( d, 0 );
-    }
-    foreach ( const QDate &d, c.days().keys() ) {
-        if ( ! days.contains( d ) ) {
-            days.insert( d, 0 );
-        }
-    }
-    table->resize( 2 + days.count(), table->columns() );
-    kDebug()<<b.days().count()<<c.days().count()<<days.count()<<table->rows();
-    double eff = 0.0;
-    double cost = 0.0;
-    double aeff = 0.0;
-    double acost = 0.0;
-    int i=2;
-    foreach ( const QDate &d, days.keys() ) {
-        eff += b.days().value( d ).effort().toDouble( Duration::Unit_h );
-        cost += b.days().value( d ).cost();
-        cell = table->cellAt(i, 0);
-        cellCursor = cell.firstCursorPosition();
-        cellCursor.insertText( QString("%1 / %2").arg(eff, 0, 'f', 2 ).arg(l->formatMoney(cost, QString(), 0)), format );
-        
-        double beff = b.days().value( d ).bcwpEffort();
-        double bcost = b.days().value( d ).bcwpCost();
-        cell = table->cellAt(i, 1);
-        cellCursor = cell.firstCursorPosition();
-        cellCursor.insertText( QString("%1 / %2").arg(beff, 0, 'f', 2).arg(l->formatMoney(bcost, QString(), 0)), format );
-    
-        EffortCost acwp = c.days().value( d );
-        aeff += acwp.effort().toDouble( Duration::Unit_h );
-        acost += acwp.cost();
-        cell = table->cellAt(i, 2);
-        cellCursor = cell.firstCursorPosition();
-        cellCursor.insertText( QString("%1 / %2").arg(aeff, 0, 'f', 2).arg(l->formatMoney(acost, QString(), 0)), format );
-        
-        cell = table->cellAt(i, 3);
-        cellCursor = cell.firstCursorPosition();
-        cellCursor.insertText( QString("%1 / %2").arg((beff/eff), 0, 'f', 2).arg(bcost/cost, 0, 'f', 2), format );
-        
-        cell = table->cellAt(i, 4);
-        cellCursor = cell.firstCursorPosition();
-        cellCursor.insertText( d.toString( Qt::ISODate ), format );
-        
-        ++i;
-    }
-    kDebug()<<"finished"<<t.elapsed();
+    m_view->draw();
 }
 
 void ProjectStatusView::setGuiActive( bool activate )
@@ -653,12 +459,6 @@ void ProjectStatusView::setupGui()
     addContextAction( actionOptions );*/
 }
 
-void ProjectStatusView::slotSplitView()
-{
-    kDebug();
-}
-
-
 void ProjectStatusView::slotOptions()
 {
     kDebug();
@@ -673,7 +473,6 @@ bool ProjectStatusView::loadContext( const KoXmlElement &context )
 void ProjectStatusView::saveContext( QDomElement &context ) const
 {
 }
-
 
 //-----------------------------------
 PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )

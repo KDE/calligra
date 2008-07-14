@@ -164,49 +164,6 @@ public:
 };
 
 //----------------------------------
-class KPLATOUI_EXPORT ProjectStatusView : public ViewBase
-{
-    Q_OBJECT
-public:
-    ProjectStatusView( KoDocument *part, QWidget *parent );
-    
-    void setupGui();
-    virtual void setProject( Project *project );
-
-    /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
-    /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
-
-    using ViewBase::draw;
-    virtual void draw();
-    
-public slots:
-    /// Activate/deactivate the gui
-    virtual void setGuiActive( bool activate );
-
-    void setScheduleManager( ScheduleManager *sm );
-
-    void slotUpdate();
-    void slotUpdate( ScheduleManager *sm );
-    
-protected:
-    void updateActionsEnabled( bool on );
-
-private slots:
-    void slotSplitView();
-    void slotOptions();
-    
-private:
-    Project *m_project;
-    ScheduleManager *m_manager;
-    QTextBrowser *m_view;
-
-    // View options context menu
-    KAction *actionOptions;
-};
-
-//----------------------------------
 class PerformanceStatusBase : public QWidget, public Ui::PerformanceStatus
 {
     Q_OBJECT
@@ -233,6 +190,44 @@ private:
     Project *m_project;
     ScheduleManager *m_manager;
     NodeChartModel m_model;
+};
+
+//----------------------------------
+class KPLATOUI_EXPORT ProjectStatusView : public ViewBase
+{
+    Q_OBJECT
+public:
+    ProjectStatusView( KoDocument *part, QWidget *parent );
+
+    void setupGui();
+    virtual void setProject( Project *project );
+
+    /// Loads context info into this view. Reimplement.
+    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    /// Save context info from this view. Reimplement.
+    virtual void saveContext( QDomElement &/*context*/ ) const;
+
+    using ViewBase::draw;
+    virtual void draw();
+
+public slots:
+    /// Activate/deactivate the gui
+    virtual void setGuiActive( bool activate );
+
+    void setScheduleManager( ScheduleManager *sm );
+
+protected:
+    void updateActionsEnabled( bool on );
+
+private slots:
+    void slotOptions();
+
+private:
+    Project *m_project;
+    PerformanceStatusBase *m_view;
+
+    // View options context menu
+    KAction *actionOptions;
 };
 
 //----------------------------------
