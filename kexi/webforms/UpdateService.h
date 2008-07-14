@@ -27,8 +27,6 @@
 
 #include "WebFormsService.h"
 
-struct RequestData;
-
 namespace KexiWebForms {
 
     /**
