@@ -37,6 +37,7 @@
 #include <KoXmlNS.h>
 #include <KoTextShapeData.h>
 #include <KoOdfStylesReader.h>
+#include <KoUnit.h>
 
 // KDChart
 #include <KDChartChart>
@@ -383,7 +384,7 @@ Axis::Axis( PlotArea *parent )
 Axis::~Axis()
 {
     Q_ASSERT( d->plotArea );
-    d->plotArea->parent()->removeChild( d->title );
+    d->plotArea->parent()->KoShapeContainer::removeChild( d->title );
     delete d;
 }
 

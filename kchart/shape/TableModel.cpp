@@ -37,7 +37,7 @@
 namespace KChart {
 
 TableModel::TableModel( QObject *parent /* = 0 */)
-    : KoChart::ChartModel(parent),
+    : QObject(parent),
     m_model(new QStandardItemModel( this ))
 {
 }
@@ -133,6 +133,15 @@ QString TableModel::regionToString( const QVector<QRect> &region ) const
     return result;
 }    
 
+QHash<QString, QVector<QRect> > TableModel::cellRegion() const
+{
+    return QHash<QString, QVector<QRect> >();
+}
+
+bool TableModel::setCellRegion(const QString& regionName)
+{
+    return false;
+}
 
 void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesReader &stylesReader )
 {

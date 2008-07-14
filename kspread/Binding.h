@@ -33,10 +33,10 @@ namespace KSpread
 class Binding;
 class BindingModel;
 
-class BindingModelContainer : public KoChart::ChartModel
+class BindingModelContainer : public QObject, public KoChart::ChartModel
 {
     Q_OBJECT
-
+    Q_INTERFACES(KoChart::ChartModel)
 public:
     BindingModelContainer(Binding* binding, const Region& region);
 
@@ -78,7 +78,7 @@ public:
 
     bool isEmpty() const;
 
-    KoChart::ChartModel* model() const;
+    BindingModelContainer* model() const;
 
     const Region& region() const;
     void setRegion(const Region& region);

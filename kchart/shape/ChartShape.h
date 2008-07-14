@@ -47,6 +47,7 @@ class QFont;
 
 class KoShapeLoadingContext;
 class KoShapeSavingContext;
+class KoStore;
 class KoXmlElement;
 class KoXmlWriter;
 class KoGenStyles;
@@ -84,7 +85,7 @@ extern bool isPolar( ChartType type );
 extern bool isCartesian( ChartType type );
 extern QString saveOdfFont( KoGenStyles& mainStyles, const QFont& font, const QColor& color );
 
-class CHARTSHAPELIB_EXPORT ChartShape : public KoFrameShape, public KoShapeContainer, public KoChart::ChartInterface
+class CHARTSHAPELIB_EXPORT ChartShape : public KoFrameShape, public KoShapeContainer, public QObject, public KoChart::ChartInterface
 {
 public:
     ChartShape();

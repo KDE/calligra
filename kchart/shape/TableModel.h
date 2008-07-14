@@ -35,20 +35,23 @@ class QString;
 
 namespace KChart {
 
-class TableModel : public KoChart::ChartModel
+class TableModel : public QObject, public KoChart::ChartModel
 {
+    Q_OBJECT
+    Q_INTERFACES(KoChart::ChartModel)
 public:
     TableModel( QObject *parent = 0 );
     ~TableModel();
 
-    // reimplemented
-    QString regionToString( const QVector<QRect> &region ) const;
-    // reimplemented
-    QVector<QRect> stringToRegion( const QString &string ) const;
+    // KoChart::ChartModel interface
+    virtual QString regionToString( const QVector<QRect> &region ) const;
+    virtual QVector<QRect> stringToRegion( const QString &string ) const;
+    virtual QHash<QString, QVector<QRect> > cellRegion() const;
+    virtual bool setCellRegion(const QString& regionName);
+    virtual QStandardItemModel * model() { return m_model; }
 
     void loadOdf( const KoXmlElement &tableElement, const KoOdfStylesReader &stylesReader );
     bool saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
-    virtual QStandardItemModel * model() { return m_model; }
 
 private:
     QStandardItemModel *m_model;

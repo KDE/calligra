@@ -49,6 +49,7 @@
 #include <KoOdfStylesReader.h>
 #include <KoXmlNS.h>
 #include <KoGenStyles.h>
+#include <KoUnit.h>
 
 using namespace KChart;
 

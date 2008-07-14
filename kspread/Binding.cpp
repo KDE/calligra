@@ -68,7 +68,7 @@ bool Binding::isEmpty() const
     return d->model->region().isEmpty();
 }
 
-KoChart::ChartModel* Binding::model() const
+BindingModelContainer* Binding::model() const
 {
     return d->model;
 }
@@ -122,7 +122,7 @@ bool Binding::operator<(const Binding& other) const
 }
 
 BindingModelContainer::BindingModelContainer(Binding* binding, const Region& region)
-    : KoChart::ChartModel()
+    : QObject()
     , m_model( new BindingModel(this) )
     , m_binding(binding)
 {

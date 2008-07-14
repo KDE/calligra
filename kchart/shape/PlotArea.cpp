@@ -35,6 +35,7 @@
 #include <KoTextShapeData.h>
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
+#include <KoUnit.h>
 #include <KoViewConverter.h>
 
 // Qt
