@@ -94,6 +94,9 @@ namespace KexiWebForms {
                 tableData.append("<tr>");
                 tableData.append("<td>").append(QVariant(currentRecord).toString()).append(" of ");
                 tableData.append(totalRecords).append("</td>");
+
+                QString pkeyVal(cursor->value(tableSchema->indexOf(primaryKey)).toString());
+                
                 for (uint i = 0; i < cursor->fieldCount(); i++) {
                     tableData.append("<td>");
 
@@ -105,9 +108,9 @@ namespace KexiWebForms {
                     const KexiDB::Field::Type type = field->type();
                     QString valueString;
                     if (type == KexiDB::Field::BLOB) {
-                        valueString = "<img src=\"data:image/png;base64,";
-                        valueString.append(cursor->value(i).toByteArray().toBase64());
-                        valueString.append("\" alt=\"").append(field->captionOrName()).append("\"/>\n");
+                        valueString = QString("<img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/>")
+                            .arg(requestedTable).arg(field->name()).arg(primaryKey->name())
+                            .arg(pkeyVal);
                     }
                     else if (field->isTextType()) {
                         valueString = Qt::escape( cursor->value(i).toString() );
@@ -119,7 +122,6 @@ namespace KexiWebForms {
                     tableData.append("</td>");
                 }
                 // Toolbox
-                QString pkeyVal(cursor->value(tableSchema->indexOf(primaryKey)).toString());
                 if (!readOnly) {
                     // Edit
                     tableData.append("<td><a href=\"/update/").append(requestedTable).append("/");
