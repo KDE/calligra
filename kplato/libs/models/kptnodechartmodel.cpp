@@ -32,35 +32,95 @@ namespace KPlato
 {
     
 NodeChartModel::NodeChartModel( QObject *parent )
-    : AbstractChartModel( parent )
+    : AbstractChartModel( parent ),
+    m_project( 0 ),
+    m_manager( 0 )
 {
 }
 
+
 void NodeChartModel::setProject( Project *project )
 {
+    m_bcwp.clear();
+    m_acwp.clear();
     if ( m_project ) {
-        m_bcwp.clear();
-        m_acwp.clear();
+        disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( setScheduleManager( ScheduleManager* ) ) );
+        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
     }
     m_project = project;
     if ( m_project ) {
+        connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( setScheduleManager( ScheduleManager* ) ) );
+        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotNodeChanged( Node* ) ) );
     }
     emit reset();
 }
 
-void NodeChartModel::setScheduleManager( ScheduleManager *sm )
+void NodeChartModel::slotNodeChanged( Node *node )
 {
-    if ( m_manager ) {
-        m_bcwp.clear();
-        m_acwp.clear();
+    if ( m_nodes.contains( node ) ) {
+        calculate();
+        emit reset();
+        return;
     }
-    m_manager = sm;
-    if ( m_manager ) {
-        if ( m_project ) {
-            m_bcwp = m_project->bcwpPrDay( sm->id() );
-            m_acwp = m_project->acwp( sm->id() );
+    foreach ( Node *n, m_nodes ) {
+        if ( node->isChildOf( n ) ) {
+            calculate();
+            emit reset();
+            return;
         }
     }
+}
+
+void NodeChartModel::setScheduleManager( ScheduleManager *sm )
+{
+    m_manager = sm;
+    calculate();
+    emit reset();
+}
+
+void NodeChartModel::calculate()
+{
+    //kDebug()<<m_project<<m_manager<<m_nodes;
+    m_bcwp.clear();
+    m_acwp.clear();
+    if ( m_manager ) {
+        if ( m_project ) {
+            foreach ( Node *n, m_nodes ) {
+                bool skip = false;
+                foreach ( Node *p, m_nodes ) {
+                    if ( n->isChildOf( p ) ) {
+                        skip = true;
+                        break;
+                    }
+                }
+                if ( ! skip ) {
+                    m_bcwp += n->bcwpPrDay( m_manager->id() );
+                    m_acwp += n->acwp( m_manager->id() );
+                }
+            }
+        }
+    }
+}
+
+void NodeChartModel::setNodes( const QList<Node*> &nodes )
+{
+    //kDebug()<<nodes;
+    m_nodes = nodes;
+    calculate();
+    emit reset();
+}
+
+void NodeChartModel::addNode( Node *node )
+{
+    m_nodes.append( node );
+    calculate();
+    emit reset();
+}
+
+void NodeChartModel::clearNodes()
+{
+    m_nodes.clear();
+    calculate();
     emit reset();
 }
 
@@ -82,7 +142,7 @@ int NodeChartModel::childCount( const ChartDataIndex &index ) const
 
 QVariant NodeChartModel::data( const ChartDataIndex &idx, int role ) const
 {
-    kDebug()<<idx.number()<<idx.userData<<role;
+    //kDebug()<<idx.number()<<idx.userData<<role;
     if ( role == Qt::ForegroundRole ) {
         switch ( idx.userData ) {
             case BCWS: return QColor( Qt::green );
@@ -96,7 +156,7 @@ QVariant NodeChartModel::data( const ChartDataIndex &idx, int role ) const
 QVariant NodeChartModel::data( const ChartDataIndex &idx, const ChartAxisIndex &axis, int role ) const
 {
     //NOTE: Just return a "day number" for x-axis as the test PlotWidget doesn't handle dates
-    kDebug()<<idx.number()<<idx.userData<<role;
+    //kDebug()<<idx.number()<<idx.userData<<role;
     if ( role == Qt::DisplayRole ) {
         int axisType = axis.userData;
         switch ( idx.userData ) {
@@ -161,15 +221,15 @@ ChartDataIndex NodeChartModel::index( int number, const ChartAxisIndex &idx ) co
         return ChartDataIndex();
     }
     if ( number == 0 ) {
-        kDebug()<<number<<"BCWS";
+        //kDebug()<<number<<"BCWS";
         return createDataIndex( number, idx, BCWS );
     }
     if ( number == 1 ) {
-        kDebug()<<number<<"BCWP";
+        //kDebug()<<number<<"BCWP";
         return createDataIndex( number, idx, BCWP );
     }
     if ( number == 2 ) {
-        kDebug()<<number<<"ACWP";
+        //kDebug()<<number<<"ACWP";
         return createDataIndex( number, idx, ACWP );
     }
     return ChartDataIndex();

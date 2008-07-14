@@ -43,6 +43,7 @@
 #include <QTextCharFormat>
 #include <QTextTableCell>
 #include <QLineEdit>
+#include <QItemSelection>
 
 #include <kicon.h>
 #include <kaction.h>
@@ -682,6 +683,13 @@ PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
 {
     setupUi( this );
     plotwidget->setAntialiasing(false);
+    connect( &m_model, SIGNAL( reset() ), SLOT( slotReset() ) );
+}
+
+void PerformanceStatusBase::slotReset()
+{
+    //kDebug();
+    draw();
 }
 
 void PerformanceStatusBase::setScheduleManager( ScheduleManager *sm )
@@ -693,16 +701,8 @@ void PerformanceStatusBase::setScheduleManager( ScheduleManager *sm )
 
 void PerformanceStatusBase::setProject( Project *project )
 {
-    if ( m_project ) {
-        disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotUpdate( ScheduleManager* ) ) );
-        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
-    }
     m_project = project;
     m_model.setProject( project );
-    if ( m_project ) {
-        connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotUpdate( ScheduleManager* ) ) );
-        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
-    }
 }
 
 void PerformanceStatusBase::draw()
@@ -743,7 +743,7 @@ void PerformanceStatusBase::drawValues()
 
 void PerformanceStatusBase::drawPlot( Project &p, ScheduleManager &sm ) 
 {
-    kDebug();
+    //kDebug();
     plotwidget->resetPlot();
     int axisCount = m_model.axisCount();
     for ( int i = 0; i < axisCount; ++i ) {
@@ -759,7 +759,7 @@ void PerformanceStatusBase::drawPlot( Project &p, ScheduleManager &sm )
 
 void PerformanceStatusBase::drawAxis( const ChartAxisIndex &idx ) 
 {
-    kDebug();
+    //kDebug();
     int axisCount = m_model.axisCount( idx );
     QList<double> range;
     for ( int i = 0; i < axisCount; ++i ) {
@@ -779,14 +779,12 @@ void PerformanceStatusBase::drawAxis( const ChartAxisIndex &idx )
 
 void PerformanceStatusBase::drawData( const ChartAxisIndex &axisSet ) 
 {
-    kDebug();
+    //kDebug();
     int dataCount = m_model.dataSetCount( axisSet );
     for ( int i = 0; i < dataCount; ++i ) {
-        kDebug()<<"create data index";
         ChartDataIndex di = m_model.index( i, axisSet );
-        kDebug()<<"created data index:"<<di.number()<<di.userData;
         if ( ! di.isValid() ) {
-            kDebug()<<"Invalid index";
+            //kDebug()<<"Invalid index";
             continue;
         }
         if ( m_model.hasChildren( di ) ) {
@@ -797,7 +795,7 @@ void PerformanceStatusBase::drawData( const ChartAxisIndex &axisSet )
                 drawData( cidx, axisSet );
             }
         } else {
-            kDebug()<<"no sections, go direct to data";
+            //kDebug()<<"no sections, go direct to data";
             drawData( di, axisSet );
         }
     }
@@ -805,42 +803,95 @@ void PerformanceStatusBase::drawData( const ChartAxisIndex &axisSet )
 
 void PerformanceStatusBase::drawData( const ChartDataIndex &index, const ChartAxisIndex &axisSet ) 
 {
-    kDebug()<<index.number()<<index.userData;
+    //kDebug()<<index.number()<<index.userData;
     QVariantList data;
     int axisCount = m_model.axisCount( axisSet );
     for ( int j = 0; j < axisCount; ++j ) {
         ChartAxisIndex axis = m_model.axisIndex( j, axisSet );
         if ( m_model.hasAxisChildren( axis ) ) {
-            kDebug()<<"multiple axis";
+            //kDebug()<<"multiple axis";
         } else {
             data << m_model.data( index, axis );
         }
     }
-    kDebug()<<data;
+    //kDebug()<<data;
     Q_ASSERT( data.count() == 2 );
     QVariantList x = data[0].toList();
     QVariantList y = data[1].toList();
     QVariant color = m_model.data( index, Qt::ForegroundRole );
     KPlotObject *kpo = new KPlotObject( color.value<QColor>(), KPlotObject::Lines, 4 );
     for (int i = 0; i < y.count(); ++i ) {
-        kDebug()<<"Add point:"<<x[i].toInt() << y[i].toDouble();
+        //kDebug()<<"Add point:"<<x[i].toInt() << y[i].toDouble();
         kpo->addPoint( x[i].toInt(), y[i].toDouble() );
     }
     plotwidget->addPlotObject( kpo );
 }
 
+//-----------------------------------
+PerformanceStatusTreeView::PerformanceStatusTreeView( QWidget *parent )
+    : QSplitter( parent )
+{
+    m_tree = new TreeViewBase( this );
+    NodeItemModel *m = new NodeItemModel( m_tree );
+    m_tree->setModel( m );
+    QList<int> lst1; lst1 << 1 << -1; // only display column 0 (NodeName) in tree view
+    m_tree->setDefaultColumns( QList<int>() << 0 );
+    m_tree->setColumnsHidden( lst1 );
+    m_tree->setSelectionMode( QAbstractItemView::ExtendedSelection );
+    addWidget( m_tree );
+    
+    m_chart = new PerformanceStatusBase( this );
+    addWidget( m_chart );
+    
+    connect( m_tree->selectionModel(), SIGNAL( selectionChanged( const QItemSelection &, const QItemSelection & ) ), SLOT( slotSelectionChanged( const QItemSelection &, const QItemSelection & ) ) );
+}
+
+void PerformanceStatusTreeView::slotSelectionChanged( const QItemSelection&, const QItemSelection& )
+{
+    //kDebug();
+    QList<Node*> nodes;
+    foreach ( const QModelIndex &i, m_tree->selectionModel()->selectedIndexes() ) {
+        Node *n = nodeModel()->node( i );
+        if ( ! nodes.contains( n ) ) {
+            nodes.append( n );
+        }
+    }
+    m_chart->model()->setNodes( nodes );
+}
+
+void PerformanceStatusTreeView::draw()
+{
+    m_chart->draw();
+}
+
+NodeItemModel *PerformanceStatusTreeView::nodeModel() const
+{
+    return static_cast<NodeItemModel*>( m_tree->model() );
+}
+
+void PerformanceStatusTreeView::setScheduleManager( ScheduleManager *sm )
+{
+    nodeModel()->setManager( sm );
+    m_chart->setScheduleManager( sm );
+}
+
+void PerformanceStatusTreeView::setProject( Project *project )
+{
+    nodeModel()->setProject( project );
+    m_chart->setProject( project );
+}
+
 
 //-----------------------------------
 PerformanceStatusView::PerformanceStatusView( KoDocument *part, QWidget *parent )
-    : ViewBase( part, parent ),
-    m_project( 0 ),
-    m_manager( 0 )
+    : ViewBase( part, parent )
 {
     kDebug()<<"-------------------- creating PerformanceStatusView -------------------";
     QVBoxLayout * l = new QVBoxLayout( this );
     l->setMargin( 0 );
-    m_view = new PerformanceStatusBase( this );
+    m_view = new PerformanceStatusTreeView( this );
     l->addWidget( m_view );
+    
     setupGui();
 
 }
@@ -848,35 +899,12 @@ PerformanceStatusView::PerformanceStatusView( KoDocument *part, QWidget *parent 
 void PerformanceStatusView::setScheduleManager( ScheduleManager *sm )
 {
     //kDebug();
-    m_manager = sm;
     m_view->setScheduleManager( sm );
-    draw();
 }
 
 void PerformanceStatusView::setProject( Project *project )
 {
-    if ( m_project ) {
-        disconnect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotUpdate( ScheduleManager* ) ) );
-        disconnect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
-    }
-    m_project = project;
-    if ( m_project ) {
-        connect( m_project, SIGNAL( projectCalculated( ScheduleManager* ) ), this, SLOT( slotUpdate( ScheduleManager* ) ) );
-        connect( m_project, SIGNAL( nodeChanged( Node* ) ), this, SLOT( slotUpdate() ) );
-    }
     m_view->setProject( project );
-}
-
-void PerformanceStatusView::slotUpdate()
-{
-    draw();
-}
-
-void PerformanceStatusView::slotUpdate( ScheduleManager *sm )
-{
-    if ( sm == m_manager ) {
-        slotUpdate();
-    }
 }
 
 void PerformanceStatusView::draw()
@@ -898,12 +926,6 @@ void PerformanceStatusView::setupGui()
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
     addContextAction( actionOptions );*/
 }
-
-void PerformanceStatusView::slotSplitView()
-{
-    kDebug();
-}
-
 
 void PerformanceStatusView::slotOptions()
 {

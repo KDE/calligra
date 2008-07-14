@@ -30,7 +30,10 @@
 #include "ui_kptperformancestatus.h"
 #include "kptnodechartmodel.h"
 
+#include <QSplitter>
+
 class QTextBrowser;
+class QItemSelection;
 
 class KoDocument;
 
@@ -44,6 +47,7 @@ class Node;
 class Task;
 class ScheduleManager;
 class TaskStatusItemModel;
+class NodeItemModel;
 
 typedef QList<Node*> NodeList;
 
@@ -205,7 +209,7 @@ private:
 //----------------------------------
 class PerformanceStatusBase : public QWidget, public Ui::PerformanceStatus
 {
-
+    Q_OBJECT
 public:
     explicit PerformanceStatusBase( QWidget *parent );
     
@@ -213,6 +217,7 @@ public:
     void setScheduleManager( ScheduleManager *sm );
 
     void draw();
+    NodeChartModel *model() const { return const_cast<NodeChartModel*>( &m_model ); }
     
 protected:
     void drawValues();
@@ -221,11 +226,35 @@ protected:
     void drawData( const ChartAxisIndex &idx );
     void drawData( const ChartDataIndex &index, const ChartAxisIndex &axisSet );
 
+protected slots:
+    void slotReset();
+    
 private:
     Project *m_project;
     ScheduleManager *m_manager;
     NodeChartModel m_model;
 };
+
+//----------------------------------
+class PerformanceStatusTreeView : public QSplitter
+{
+    Q_OBJECT
+public:
+    explicit PerformanceStatusTreeView( QWidget *parent );
+
+    NodeItemModel *nodeModel() const;
+    void setProject( Project *project );
+    void setScheduleManager( ScheduleManager *sm );
+    void draw();
+
+protected slots:
+    void slotSelectionChanged( const QItemSelection & selected, const QItemSelection & deselected );
+    
+private:
+    TreeViewBase *m_tree;
+    PerformanceStatusBase *m_chart;
+};
+
 
 //----------------------------------
 class KPLATOUI_EXPORT PerformanceStatusView : public ViewBase
@@ -251,20 +280,14 @@ public slots:
 
     void setScheduleManager( ScheduleManager *sm );
 
-    void slotUpdate();
-    void slotUpdate( ScheduleManager *sm );
-
 protected:
     void updateActionsEnabled( bool on );
 
 private slots:
-    void slotSplitView();
     void slotOptions();
 
 private:
-    Project *m_project;
-    ScheduleManager *m_manager;
-    PerformanceStatusBase *m_view;
+    PerformanceStatusTreeView *m_view;
 
     // View options context menu
     KAction *actionOptions;

@@ -31,6 +31,7 @@ namespace KPlato
     
 class Project;
 class ScheduleManager;
+class Node;
 
 /**
 The NodeChartModel class provides the data interface to chart data.
@@ -47,7 +48,6 @@ public:
     enum UserId { None = 0, BCWS, BCWP, ACWP };
     
     void setProject( Project *project );
-    void setScheduleManager( ScheduleManager *sm );
     
     /// Return the number of data sets that shall be plotted against the axis set @p index
     virtual int dataSetCount( const ChartAxisIndex &index ) const;
@@ -70,9 +70,21 @@ public:
     const EffortCostMap &bcwp() const { return m_bcwp; }
     const EffortCostMap &acwp() const { return m_acwp; }
     
+    void setNodes( const QList<Node*> &nodes );
+    void addNode( Node *node );
+    void clearNodes();
+    
+public slots:
+    void setScheduleManager( ScheduleManager *sm );
+    void slotNodeChanged( Node *node );
+    
+protected:
+    void calculate();
+    
 private:
     Project *m_project;
     ScheduleManager *m_manager;
+    QList<Node*> m_nodes;
     
     EffortCostMap m_bcwp;
     EffortCostMap m_acwp;
