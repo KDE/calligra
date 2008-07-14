@@ -75,12 +75,10 @@ namespace KexiWebForms {
             KexiDB::Field* primaryKey = tableSchema->primaryKey()->field(0);
 
             // Create labels with field name
-            tableData.append("<tr>");
-            tableData.append("\t<th scope=\"col\">Record</th>\n");
+            tableData.append("<tr>\t<th scope=\"col\">Record</th>\n");
             for (uint i = 0; i < cursor->fieldCount(); i++) {
-                tableData.append("\t<th scope=\"col\">");
-                tableData.append(querySchema.field(i)->captionOrName());
-                tableData.append("</th>\n");
+                tableData.append(QString("\t<th scope=\"col\">%1</th>\n")
+                    .arg(querySchema.field(i)->captionOrName()));
             }
             tableData.append("</tr>\n");
 
@@ -124,13 +122,13 @@ namespace KexiWebForms {
                 // Toolbox
                 if (!readOnly) {
                     // Edit
-                    tableData.append("<td><a href=\"/update/").append(requestedTable).append("/");
-                    tableData.append(primaryKey->name()).append("/");
-                    tableData.append(pkeyVal).append("\"><img src=\"/f/toolbox/draw-freehand.png\" alt=\"Edit\"/></a></td>");
+                    tableData.append(QString("<td><a href=\"/update/%1/%2/%3\">"
+                        "<img src=\"/f/toolbox/draw-freehand.png\" alt=\"Edit\"/></a></td>")
+                        .arg(requestedTable).arg(primaryKey->name()).arg(pkeyVal));
                     // Delete
-                    tableData.append("<td><a href=\"/delete/").append(requestedTable).append("/");
-                    tableData.append(primaryKey->name()).append("/");
-                    tableData.append(pkeyVal).append("\"><img src=\"/f/toolbox/draw-eraser.png\" alt=\"Delete\"/></a></td>");
+                    tableData.append(QString("<td><a href=\"/delete/%1/%2/%3\">"
+                        "<img src=\"/f/toolbox/draw-eraser.png\" alt=\"Edit\"/></a></td>")
+                        .arg(requestedTable).arg(primaryKey->name()).arg(pkeyVal));
                     // End row
                 }
                 tableData.append("</tr>\n");
