@@ -13,16 +13,15 @@ by hand and use org-mode instead.
    - [X] Implement DELETE
 ** Controls [100%]
    - [X] Implement 'First' 'Previous' 'Next' 'Last' controls in Update
-** Other tasks [83%]
+** Other tasks [100%]
    - [X] Add support for query objects
    - [X] Updating a row should not clear the screen
    - [X] Show "record N of Y" in table view
    - [X] Disable navigation buttons when not needed
-   - [-] Show proper icons for fields [75%]
+   - [X] Show proper icons for fields [100%]
 	 - [X] Display "primary key" for primary key fields
 	 - [X] Display "required" for required fields
 	 - [X] Show 'read only' for read only tables
-	 - [ ] Do not show or gray out disabled fields
    - [X] UTF-8 Support [100%]
 	 - [X] Add support to UTF-8 within main classes
 	 - [X] Enhance UTF-8 support even further
