@@ -17,37 +17,30 @@
    Boston, MA 02110-1301, USA.
 */
 
-#ifndef KSPREAD_READONLY_TABLE_MODEL
-#define KSPREAD_READONLY_TABLE_MODEL
+#ifndef KSPREAD_READWRITE_TABLE_MODEL
+#define KSPREAD_READWRITE_TABLE_MODEL
 
-#include <QAbstractTableModel>
+#include "ReadOnlyTableModel.h"
 
 namespace KSpread
 {
-class Sheet;
 
-class ReadOnlyTableModel : public QAbstractTableModel
+class ReadWriteTableModel : public ReadOnlyTableModel
 {
 public:
     /**
      * Constructor.
      */
-    ReadOnlyTableModel(Sheet* sheet, int columns = 0, int rows = 0);
+    ReadWriteTableModel(Sheet* sheet, int columns = 0, int rows = 0);
 
     /**
      * Destructor.
      */
-    ~ReadOnlyTableModel();
+    ~ReadWriteTableModel();
 
     // QAbstractTableModel interface
-    virtual int columnCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual int rowCount(const QModelIndex& parent = QModelIndex()) const;
-    virtual QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const;
-    virtual QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
-
-protected:
-    Sheet* sheet() const;
-    const QSize& size() const;
+    virtual Qt::ItemFlags flags(const QModelIndex& index) const;
+    virtual bool setData(const QModelIndex& index, const QVariant& value, int role = Qt::EditRole);
 
 private:
     class Private;
@@ -56,4 +49,4 @@ private:
 
 } // namespace KSpread
 
-#endif // KSPREAD_READONLY_TABLE_MODEL
+#endif // KSPREAD_READWRITE_TABLE_MODEL

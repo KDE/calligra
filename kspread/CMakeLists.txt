@@ -116,6 +116,7 @@ SET (interfaces_DIR_SRCS
 	interfaces/MapAdaptor.cpp
 	interfaces/ReadOnlyRegionModel.cpp
 	interfaces/ReadOnlyTableModel.cpp
+	interfaces/ReadWriteTableModel.cpp
 	interfaces/SheetAdaptor.cpp
 	interfaces/ViewAdaptor.cpp
 	)

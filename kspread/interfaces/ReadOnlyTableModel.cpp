@@ -27,19 +27,24 @@
 #include "Value.h"
 #include "ValueFormatter.h"
 
+// Qt
+#include <QSize>
+
 using namespace KSpread;
 
 class ReadOnlyTableModel::Private
 {
 public:
     Sheet* sheet;
+    QSize size;
 };
 
-ReadOnlyTableModel::ReadOnlyTableModel(Sheet* sheet)
+ReadOnlyTableModel::ReadOnlyTableModel(Sheet* sheet, int columns, int rows)
     : QAbstractTableModel(sheet)
     , d(new Private)
 {
     d->sheet = sheet;
+    d->size = (columns && rows) ? QSize(columns, rows) : QSize(KS_colMax, KS_rowMax);
 }
 
 ReadOnlyTableModel::~ReadOnlyTableModel()
@@ -50,13 +55,13 @@ ReadOnlyTableModel::~ReadOnlyTableModel()
 int ReadOnlyTableModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    return d->sheet->usedArea().width();
+    return (d->sheet->usedArea() & QRect(QPoint(1, 1), d->size)).width();
 }
 
 int ReadOnlyTableModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    return d->sheet->usedArea().height();
+    return (d->sheet->usedArea() & QRect(QPoint(1, 1), d->size)).height();
 }
 
 QVariant ReadOnlyTableModel::data(const QModelIndex& index, int role) const
@@ -100,4 +105,14 @@ QVariant ReadOnlyTableModel::headerData(int section, Qt::Orientation orientation
         }
     }
     return QVariant();
+}
+
+Sheet* ReadOnlyTableModel::sheet() const
+{
+    return d->sheet;
+}
+
+const QSize& ReadOnlyTableModel::size() const
+{
+    return d->size;
 }
