@@ -24,6 +24,22 @@ Accessing deleted files
 Deleted Files
 =============
 
+Files related to DCOP
+---------------------
+last revision 832740:
+    KSpreadAppIface.cpp
+    KSpreadAppIface.h
+    KSpreadCellIface.cpp
+    KSpreadCellIface.h
+    KSpreadColumnIface.cpp
+    KSpreadColumnIface.h
+    KSpreadDocIface.cpp
+    KSpreadDocIface.h
+    KSpreadLayoutIface.cpp
+    KSpreadLayoutIface.h
+    KSpreadRowIface.cpp
+    KSpreadRowIface.h
+
 Files related to KoPart embedding
 ---------------------------------
 last revision 832273:
