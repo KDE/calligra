@@ -61,7 +61,9 @@ KPrMiscShapeWipeEffectFactory::~KPrMiscShapeWipeEffectFactory()
 
 static const char* s_subTypes[] = {
     I18N_NOOP( "Heart" ),
-    I18N_NOOP( "Keyhole" )
+    I18N_NOOP( "Heart Reverse" ),
+    I18N_NOOP( "Keyhole" ),
+    I18N_NOOP( "Keyhole Reverse" )
 };
 
 QString KPrMiscShapeWipeEffectFactory::subTypeName(int subType) const
