@@ -135,20 +135,6 @@ namespace KexiWebForms {
                         queryData.append(valueString);
                         queryData.append("</td>");
                     }
-                    // Toolbox
-                    QString pkeyVal(cursor->value(tableSchema->indexOf(primaryKey)).toString());
-                    // Edit -- currently disabled
-                    /*
-                      queryData.append("<td><a href=\"/update/").append(requestedTable).append("/");
-                      queryData.append(primaryKey->name()).append("/");
-                      queryData.append(pkeyVal).append("\"><img src=\"/toolbox/draw-freehand.png\" alt=\"Edit\"/></a></td>");
-                    */
-                    // Delete -- currently disabled
-                    /*
-                      queryData.append("<td><a href=\"/delete/").append(requestedTable).append("/");
-                      queryData.append(primaryKey->name()).append("/");
-                      queryData.append(pkeyVal).append("\"><img src=\"/toolbox/draw-eraser.png\" alt=\"Delete\"/></a></td>");
-                    */
                     // End row
                     queryData.append("</tr>\n");
                     
