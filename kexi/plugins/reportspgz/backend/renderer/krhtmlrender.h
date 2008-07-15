@@ -26,6 +26,8 @@
 #include <QString>
 #include <QFont>
 
+#include <kurl.h>
+
 class ORODocument;
 namespace KexiDB
 {
@@ -40,14 +42,17 @@ class KRHtmlRender {
 
     virtual ~KRHtmlRender();
 
-    QString render(ORODocument *, const QString&,  bool=true);
+    bool render(ORODocument * document, const KUrl& toUrl,  bool css = true);
     
     private:
       QString renderCSS(ORODocument*);
       QString renderTable(ORODocument*);
 
-      QString saveName;
-      QString saveDir;
+      //! This is the directory name that will go inside the HTML files
+      QString actualDirName;
+
+      //! This is the directory where the image and other files will be temporarily stored
+      QString tempDirName;
 };
 
 

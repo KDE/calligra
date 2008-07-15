@@ -22,6 +22,8 @@
 
 #include "renderobjects.h"
 
+#include <kurl.h>
+
 /**
 	@author Adam Pigg <adam@piggz.co.uk>
 */
@@ -32,7 +34,7 @@ class KRKSpreadRender
 
 		~KRKSpreadRender();
 
-		void render (ORODocument *, const QString&);
+		bool render (ORODocument *, const KUrl&);
 		
 	private:
 		

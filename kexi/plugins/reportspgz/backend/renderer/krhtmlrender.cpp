@@ -27,6 +27,8 @@
 #include <QDir>
 #include <QPainter>
 
+#include <ktemporaryfile.h>
+#include <kio/netaccess.h>
 //
 // KRHtmlRender
 //
@@ -40,26 +42,49 @@ KRHtmlRender::~KRHtmlRender()
 {
 }
 
-QString KRHtmlRender::render(ORODocument *document, const QString& sn, bool css)
+bool KRHtmlRender::render(ORODocument *document, const KUrl& toUrl, bool css)
 {
-  QDir d;
+	KTemporaryFile tempHtmlFile; // auto removed by default on destruction
+	if (!tempHtmlFile.open()) {
+		kDebug()<<"Couldn't create temporary file to write into";
+		return false;
+	}
 
-  saveName = sn;
-  saveDir = saveName + ".files";
-  
-  kDebug() << "3" << endl;
-  
-  if (d .exists(saveDir) || d.mkpath( saveDir ) )
-  {
-    if (css)
-      return renderCSS(document);
-    else
-      return renderTable(document);
-  }
-  else
-  {
-    return "";
-  }
+	QTextStream out(&tempHtmlFile);
+
+	QString dirSuffix = ".files";
+	QDir tempDir;
+	QFileInfo fi( tempHtmlFile );
+
+	QString tempFileName = fi.absoluteFilePath();
+	tempDirName = tempFileName + dirSuffix;
+	actualDirName = toUrl.fileName() + dirSuffix;
+
+	if (!tempDir.mkpath(tempDirName))
+		return false;
+
+	if (css)
+		out<<renderCSS(document);
+	else
+		out<<renderTable(document);
+
+	out.flush();
+	tempHtmlFile.close();
+
+	bool status = false;
+	if (KIO::NetAccess::upload(tempFileName, toUrl, 0) && KIO::NetAccess::dircopy(KUrl(tempDirName), 	KUrl(toUrl.url() + dirSuffix), 0)) {
+		status = true;
+	}
+
+	// cleanup the temporary directory
+	tempDir.setPath(tempDirName);
+	QStringList fileList = tempDir.entryList();
+	foreach(const QString& fileName, fileList) {
+		tempDir.remove(fileName);
+	}
+	tempDir.rmdir(tempDirName);
+
+	return status;
 }
 
 QString KRHtmlRender::renderCSS(ORODocument *document)
@@ -74,8 +99,7 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
 
 	kDebug() << "4" << endl;
 
-	QFileInfo fi(saveDir);
-	QDir d(saveDir);
+	QDir d(tempDirName);
 	// Render Each Section
 	for (long s = 0; s < document->sections(); s++ )
 	{
@@ -149,11 +173,11 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
 					styleindex = styles.indexOf(style);
 					
 					body += "<div class=\"style" + QString::number(styleindex) + "\">";
-					body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
+					body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
 					body += "</div>\n";
 
 					
-					im->image().save(saveDir + "/object" + QString::number(s) + QString::number(i) + ".png");
+					im->image().save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
 				}
 				else if (prim->type() == OROPicture::Picture)
 				{
@@ -169,13 +193,13 @@ QString KRHtmlRender::renderCSS(ORODocument *document)
 					styleindex = styles.indexOf(style);
 					
 					body += "<div class=\"style" + QString::number(styleindex) + "\">";
-					body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
+					body += "<img width=\"" + QString::number(im->size().width()) + "px" + "\" height=\"" + QString::number(im->size().height()) + "px" + "\" src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
 					body += "</div>\n";
 					
 					QImage image(im->size().toSize(), QImage::Format_RGB32);
 					QPainter painter(&image);
 					im->picture()->play(&painter);
-					image.save(saveDir + "/object" + QString::number(s) + QString::number(i) + ".png");
+					image.save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
 				}
 				else
 				{
@@ -213,8 +237,7 @@ QString KRHtmlRender::renderTable(ORODocument *document)
 	bool renderedPageHead = false;
 	bool renderedPageFoot = false;
 	
-	QFileInfo fi(saveDir);
-	QDir d(saveDir);
+	QDir d(tempDirName);
 	
 	// Render Each Section
 	body = "<table>\n";
@@ -256,9 +279,9 @@ QString KRHtmlRender::renderTable(ORODocument *document)
 					kDebug() << "Saving an image" << endl;
 					OROImage * im = ( OROImage* ) prim;
 					tr += "<td>";
-					tr += "<img src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
+					tr += "<img src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
 					tr += "</td>\n";
-					im->image().save(saveDir + "/object" + QString::number(s) + QString::number(i) + ".png");
+					im->image().save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
 				}
 				else if (prim->type() == OROPicture::Picture)
 				{
@@ -266,12 +289,12 @@ QString KRHtmlRender::renderTable(ORODocument *document)
 					OROPicture * im = ( OROPicture* ) prim;
 					
 					tr += "<td>";
-					tr += "<img src=\"./" + fi.fileName() + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
+					tr += "<img src=\"./" + actualDirName + "/object" + QString::number(s) + QString::number(i) + ".png\"></img>";
 					tr += "</td>\n";
 					QImage image(im->size().toSize(), QImage::Format_RGB32);
 					QPainter painter(&image);
 					im->picture()->play(&painter);
-					image.save(saveDir + "/object" + QString::number(s) + QString::number(i) + ".png");
+					image.save(tempDirName + "/object" + QString::number(s) + QString::number(i) + ".png");
 				}
 				else
 				{

@@ -41,6 +41,7 @@
 
 #include <krhtmlrender.h>
 #include <kfiledialog.h>
+#include <kio/netaccess.h>
 
 KexiReportView::KexiReportView(QWidget *parent)
  : KexiView(parent)
@@ -166,34 +167,46 @@ void KexiReportView::slotRenderKSpread()
 {
 #ifdef HAVE_KSPREAD
 	KRKSpreadRender ks;
-	QString saveName = KFileDialog::getSaveFileName();
-	QFile file(saveName);
-	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-	{
-	    KMessageBox::error(this, i18n("Report not saved, unable to open file for writing."), i18n("Not Saved"));
-	    return;
+	KUrl saveUrl = KFileDialog::getSaveUrl( KUrl(), QString(), this, i18n("Save Report to.."));
+	if (!saveUrl.isValid()) {
+		KMessageBox::error(this, i18n("Report not exported.The URL was invalid"), i18n("Not Saved"));
+		return;
 	}
-	ks.render(doc, saveName);
+
+	if (KIO::NetAccess::exists(saveUrl, KIO::NetAccess::DestinationSide, this)){
+		int wantSave = KMessageBox::warningContinueCancel(this, i18n("The file %1 exists.\nDo you wish to overwrite it?", saveUrl.path()), i18n("Warning"), KGuiItem(i18n("Overwrite")));
+		if (wantSave != KMessageBox::Continue) {
+			return;
+		}
+	}
+	if (!ks.render(doc, saveUrl)) {
+		KMessageBox::error(this, i18n("Failed to open %1 in KSpread", saveUrl.prettyUrl()) , i18n("Opening in KSpread failed"));
+	}
 #endif
 }
 
 void KexiReportView::slotExportHTML()
 {
-	QString saveName = KFileDialog::getSaveFileName();
-	QFile file(saveName);
-	if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-	{
-	    KMessageBox::error(this, i18n("Report not saved, unable to open file for writing."), i18n("Not Saved"));
-	    return;
+	KUrl saveUrl = KFileDialog::getSaveUrl( KUrl(), QString(), this, i18n("Save Report to.."));
+	if (!saveUrl.isValid()) {
+		KMessageBox::error(this, i18n("Report not exported, no file selected for writing to"), i18n("Not Saved"));
+		return;
+	}
+	if (KIO::NetAccess::exists(saveUrl, KIO::NetAccess::DestinationSide, this)) {
+		int wantSave = KMessageBox::warningContinueCancel(this, i18n("The file %1 exists.\nDo you wish to overwrite it?", saveUrl.path()), i18n("Warning"), KGuiItem(i18n("Overwrite")));
+		if (wantSave != KMessageBox::Continue) {
+		return;
+		}
 	}
 
 	bool css = (KMessageBox::questionYesNo(this, i18n("Would you like to export using a Cascading Style Sheet which will give output closer to the original, or export using a Table which outputs a much simpler format."), i18n("Export Style"), KGuiItem("CSS"), KGuiItem("Table")) == KMessageBox::Yes);
-	KRHtmlRender hr;
-	QTextStream out(&file);
-	out << hr.render(doc, saveName, css) << "\n";
 
-	file.close();
-	KMessageBox::information(this, i18n("Report saved to ") + saveName, i18n("Saved OK"));
+	KRHtmlRender hr;
+	if (!hr.render(doc, saveUrl, css)) {
+		KMessageBox::error(this, i18n("Exporting report to %1 failed", saveUrl.prettyUrl()), i18n( "Saving failed" ));
+	} else {
+		KMessageBox::information(this, i18n("Report saved to %1", saveUrl.prettyUrl()) , i18n("Saved OK"));
+	}
 }
 
 tristate KexiReportView::beforeSwitchTo(Kexi::ViewMode mode, bool &dontStore)

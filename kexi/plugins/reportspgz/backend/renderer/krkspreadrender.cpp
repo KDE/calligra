@@ -35,7 +35,7 @@ KRKSpreadRender::~KRKSpreadRender()
 {
 }
 
-void KRKSpreadRender::render(ORODocument *document,const QString& sn)
+bool KRKSpreadRender::render(ORODocument *document,const KUrl& toUrl)
 {
 	KSpread::Doc *ksdoc = new KSpread::Doc();
 	
@@ -108,14 +108,12 @@ void KRKSpreadRender::render(ORODocument *document,const QString& sn)
 		}
 	}
 	
-	if (ksdoc->exportDocument(KUrl::fromPath(sn)))
-	{
-		kDebug() << "SAVED OK" << endl;
-	}
+        bool status;
+	if (ksdoc->exportDocument(toUrl))
+            status = true;
 	else
-	{
-		kDebug() << "NOT SAVED OK" << endl;
-	}
+            status = false;
 
 	delete ksdoc;
+        return status;
 }
