@@ -4,6 +4,7 @@ Name[hi]=किवियो
 Name[lo]=ແຜນຜັງໄດອະແກຣມ
 Name[ne]=किभियो
 Name[th]=แผนผังไดอะแกรม K
+Name[zh_TW]=流程圖_Kivio
 Exec=kivio %u
 GenericName=Flowchart & Diagram Editing
 GenericName[ar]=تحرير مَسابات ومِبْيَانَات

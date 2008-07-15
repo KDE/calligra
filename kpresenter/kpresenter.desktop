@@ -12,6 +12,7 @@ Name[sv]=Kpresenter
 Name[th]=การนำเสนอข้อมูล
 Name[tr]=Kpresenter
 Name[ven]=Mulanguli wa K
+Name[zh_TW]=簡報_KPresenter
 Name[zu]=Umbonikeleli we K
 Exec=kpresenter %u
 GenericName=Slide Presentations

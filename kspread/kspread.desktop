@@ -8,6 +8,7 @@ Name[ne]=केडीई स्प्रिेड
 Name[sv]=Kspread
 Name[th]=กระดาษคำนวณ K
 Name[ven]=U phadaladza ha K
+Name[zh_TW]=工作表_KSpread
 Exec=kspread %u
 GenericName=Spreadsheets
 GenericName[af]=Spreiblad

@@ -10,6 +10,7 @@ Name[ne]=केडीई सूत्र
 Name[sv]=Kformula
 Name[th]=สูตรคณิตศาสตร์ K
 Name[ven]=Fomula ya K
+Name[zh_TW]=方程式編輯器_KFormula
 Exec=kformula %u
 GenericName=Formula Editor
 GenericName[af]=Formule Redigeerder

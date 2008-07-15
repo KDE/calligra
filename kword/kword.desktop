@@ -8,6 +8,7 @@ Name[lo]=ເອກະສານຂໍ້ຄວາມ K
 Name[ne]=केडीई शब्द
 Name[sv]=Kword
 Name[th]=เอกสารข้อความ K
+Name[zh_TW]=文書處理_KWord
 Exec=kword %u
 GenericName=Word Processing
 GenericName[af]=Woord Verwerking

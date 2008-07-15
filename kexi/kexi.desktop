@@ -3,6 +3,7 @@ Name=Kexi
 Name[hi]=के-एक्जाई
 Name[lo]=ສອຍຄີວ - K
 Name[ne]=केक्सी
+Name[zh_TW]=資料庫_Kexi
 Type=Application
 Exec=kexi
 Icon=kexi
