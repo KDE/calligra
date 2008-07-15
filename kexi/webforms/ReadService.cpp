@@ -89,9 +89,8 @@ namespace KexiWebForms {
             while (cursor->moveNext()) {
                 currentRecord++;
                 
-                tableData.append("<tr>");
-                tableData.append("<td>").append(QVariant(currentRecord).toString()).append(" of ");
-                tableData.append(totalRecords).append("</td>");
+                tableData.append(QString("<tr><td>%1 of %2</td>").arg(QVariant(currentRecord).toString())
+                    .arg(totalRecords));
 
                 QString pkeyVal(cursor->value(tableSchema->indexOf(primaryKey)).toString());
                 

@@ -96,12 +96,10 @@ namespace KexiWebForms {
               
               
                 // Create labels with field name
-                queryData.append("<tr>");
-                queryData.append("\t<th scope=\"col\">Record</th>\n");
+                queryData.append("<tr>\t<th scope=\"col\">Record</th>\n");
                 for (uint i = 0; i < uint( expandedFields.size() ); i++) {
-                    queryData.append("\t<th scope=\"col\">");
-                    queryData.append(expandedFields.at(i)->field->captionOrName());
-                    queryData.append("</th>\n");
+                    queryData.append(QString("\t<th scope=\"col\">%1</th>\n")
+                        .arg(expandedFields.at(i)->field->captionOrName()));
                 }
                 queryData.append("</tr>\n");
 
@@ -112,9 +110,9 @@ namespace KexiWebForms {
                 while (cursor->moveNext()) {
                     currentRecord++;
                     
-                    queryData.append("<tr>");
-                    queryData.append("<td>").append(QVariant(currentRecord).toString()).append(" of ");
-                    queryData.append(totalRecords).append("</td>");
+                    queryData.append(QString("<tr><td>%1 of %2</td>").arg(QVariant(currentRecord).toString())
+                        .arg(totalRecords));
+                        
                     for (uint i = 0; i < uint( expandedFields.size() ); i++) {
                         queryData.append("<td>");
 
