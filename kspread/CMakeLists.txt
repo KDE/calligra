@@ -114,6 +114,8 @@ SET (functions_DIR_SRCS
 
 SET (interfaces_DIR_SRCS
 	interfaces/MapAdaptor.cpp
+	interfaces/ReadOnlyRegionModel.cpp
+	interfaces/ReadOnlyTableModel.cpp
 	interfaces/SheetAdaptor.cpp
 	interfaces/ViewAdaptor.cpp
 	)
