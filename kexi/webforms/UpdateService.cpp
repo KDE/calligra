@@ -203,6 +203,7 @@ namespace KexiWebForms {
             while (cursor->moveNext()) {
                 for (uint i = 0; i < cursor->fieldCount(); i++) {
                     KexiDB::Field* currentField = schema.field(i);
+                    KexiDB::Field* primaryKey = tableSchema.primaryKey()->field(0);
                     const KexiDB::Field::Type type = currentField->type();
                     QString fieldName(currentField->name());
 
@@ -210,19 +211,15 @@ namespace KexiWebForms {
                     formData.append("<td>").append(schema.field(i)->captionOrName()).append("</td>");
                     
                     if (type == KexiDB::Field::BLOB) {
-                        formData.append("<td>");
-                        formData.append("<img src=\"data:image/png;base64,");
-                        formData.append(cursor->value(i).toByteArray().toBase64());
-                        formData.append("\" alt=\"").append(currentField->captionOrName()).append("\"/>\n");
-                        formData.append("</td>");
+                        formData.append(QString("<td><img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/></td>")
+                            .arg(requestedTable).arg(currentField->name()).arg(primaryKey->name())
+                            .arg(cursor->value(tableSchema.indexOf(primaryKey)).toString()));
                     } else if (type == KexiDB::Field::LongText) {
-                        formData.append("<td>").append("<textarea name=\"");
-                        formData.append(fieldName).append("\">");
-                        formData.append(cursor->value(i).toString()).append("</textarea></td>");
+                        formData.append(QString("<td><textarea name=\"%1\">%2</textarea></td>")
+                            .arg(fieldName).arg(cursor->value(i).toString()));
                     } else {
-                        formData.append("<td>").append("<input type=\"text\" name=\"");
-                        formData.append(fieldName).append("\" value=\"");
-                        formData.append(cursor->value(i).toString()).append("\"/></td>");
+                        formData.append(QString("<td><input type=\"text\" name=\"%1\" value=\"%2\"/></td>")
+                            .arg(fieldName).arg(cursor->value(i).toString()));
                     }
 
                     // Field properties images
