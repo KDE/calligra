@@ -22,6 +22,20 @@
             {{QUERY_LIST}}
         </ul>
         <a name="cp-skip-queries"/>
+        
+        <div class="menutitle"><div>
+            <h2 id="cp-menu-login">Login</h2>
+            <a href="#cp-skip-login" class="cp-doNotDisplay">Skip menu "Login"</a>
+        </div></div>
+        <ul>
+            <form action="/login" method="get">
+                <input style="width: 90%" type="text" name="user" value="User name"/>
+                <input style="width: 90%" type="text" name="pass" value="Password"/>
+                <input type="submit" value="Login"/>
+                <input type="reset" value="Reset"/>
+            </form>
+        </ul>
+        <a name="cp-skip-queries"/>
 
 		<!--
 		    <div class="menutitle"><div>

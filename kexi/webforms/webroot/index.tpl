@@ -22,4 +22,14 @@
   At the top of the page there's a clickable text field which can be used
   to create new records.
 </p>
+
+<h3>The account manager</h3>
+<p>
+  At the moment we are experimenting a new account manager, the only user allowed
+  to access /delete /update and /create is 'root'. Use the following credentials
+  <pre>
+  User name: root
+  Password: root
+  </pre>
+</p>
 {{>aftercontent}}

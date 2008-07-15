@@ -29,6 +29,9 @@
 
 #include <google/template.h>
 #include <pion/net/WebServer.hpp>
+#include <pion/net/HTTPBasicAuth.hpp>
+#include <pion/net/HTTPCookieAuth.hpp>
+#include <pion/net/PionUser.hpp>
 
 #include "ShutdownManager.hpp"
 
@@ -98,6 +101,12 @@ int main(int argc, char **argv) {
     // Other Services
     BlobService blobService;
     
+    // Auth
+    PionUserManagerPtr userMan(new PionUserManager());
+    HTTPAuthPtr auth(new HTTPCookieAuth(userMan));
+    auth->addUser("root", "root");
+    
+    
     server.addService("/", &indexService);
     server.addService("/create", &createService);
     server.addService("/read", &readService);
@@ -105,11 +114,17 @@ int main(int argc, char **argv) {
     server.addService("/delete", &deleteService);
     server.addService("/query", &queryService);
     
+    // Restrict use of some services
+    auth->addRestrict("/create");
+    auth->addRestrict("/update");
+    auth->addRestrict("/delete");
+    
     server.addService("/f", &fileService);
 
     server.addService("/blob", &blobService);
     
     server.start();
+    server.setAuthentication(auth);
     main_shutdown_manager.wait();
 
     /// @todo don't always return 0
