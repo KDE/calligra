@@ -79,14 +79,14 @@ void KPrIrisWipeEffectStrategyBase::paintStep( QPainter &p, int currPos, const K
     else
     {
         QRect rect( 0, 0, width, height );
-        p.drawPixmap( QPoint( 0, 0 ), data.m_oldPage, rect );
+        p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, rect );
 
         QMatrix matrix;
         matrix.translate( width/2, height/2 );
         matrix.scale( ( fullScale - currPos )*scaleStep, ( fullScale - currPos )*scaleStep );
 
         p.setClipPath( matrix.map(m_shape) );
-        p.drawPixmap( QPoint( 0, 0 ), data.m_newPage, rect );
+        p.drawPixmap( QPoint( 0, 0 ), data.m_oldPage, rect );
     }
 }
 
