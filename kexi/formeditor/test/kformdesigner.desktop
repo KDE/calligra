@@ -10,6 +10,7 @@ Name[ta]=கெபடிவ வடிவமைப்பாளர்
 Name[tr]=KFormTasarımcısı
 Name[x-test]=xxKFormDesignerxx
 Name[zh_CN]=KForm 设计器
+Name[zh_TW]=表單設計_KFormDesigner
 Exec=kformdesigner %i  -caption "%c"
 Icon=kformdesigner
 Type=Application

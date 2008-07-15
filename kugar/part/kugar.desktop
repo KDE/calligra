@@ -4,6 +4,7 @@ Name[hi]=कुगर
 Name[ne]=कुगर
 Name[ta]=குகார்
 Name[x-test]=xxKugarxx
+Name[zh_TW]=報表_Kugar
 Exec=kugar %u
 Icon=kugar
 MimeType=application/x-kugar;application/x-vnd.kde.kugar.mixed;

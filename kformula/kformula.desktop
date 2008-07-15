@@ -8,6 +8,7 @@ Name[ne]=केडीई सूत्र
 Name[sv]=Kformula
 Name[ta]=கேஃபார்முலா
 Name[x-test]=xxKFormulaxx
+Name[zh_TW]=方程式編輯_KFormula
 Exec=kformula %u
 GenericName=Formula Editor
 GenericName[af]=Formule Redigeerder

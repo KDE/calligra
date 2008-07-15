@@ -7,6 +7,7 @@ Name[ne]=केडीई स्प्रेड
 Name[sv]=Kspread
 Name[ta]=கேஸ்பிரெட்
 Name[x-test]=xxKSpreadxx
+Name[zh_TW]=工作表_KSpread
 Comment=KSpread Spreadsheet
 Comment[ca]=Full de càlcul KSpread
 Comment[de]=KSpread-Tabellenkalkulation
@@ -27,7 +28,7 @@ Comment[tr]=KSpread Hesap Tablosu
 Comment[uk]=Електронні таблиці KSpread
 Comment[x-test]=xxKSpread Spreadsheetxx
 Comment[zh_CN]=KSpread 电子表格
-Comment[zh_TW]=KSpread 資料表
+Comment[zh_TW]=KSpread 工作表
 Version=4
 
 [Event/DocumentLoaded]

@@ -4,6 +4,7 @@ Name[hi]=केरिता
 Name[ne]=क्रिता
 Name[ta]=கிரிட்டா
 Name[x-test]=xxKritaxx
+Name[zh_TW]=繪圖_Krita
 Exec=krita %u
 MimeType=image/x-xcf-gimp;image/gif;image/cgm;image/x-bmp;image/x-ico;image/x-pcx;image/x-portable-pixmap;image/x-targa;image/x-xbm;image/x-xcf;image/x-xpm;image/x-vnd.adobe.photoshop;image/x-rgb;application/dicom;
 Type=Application

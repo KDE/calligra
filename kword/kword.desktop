@@ -7,6 +7,7 @@ Name[ne]=केडीई वर्ड
 Name[sv]=Kword
 Name[ta]=கேவோர்டு
 Name[x-test]=xxKWordxx
+Name[zh_TW]=文書處理_KWord
 Exec=kword %u
 GenericName=Word Processor
 GenericName[ca]=Processador de textos

@@ -4,6 +4,7 @@ Name[hi]=किवियो
 Name[ne]=किभियो
 Name[ta]=கேவியோ
 Name[x-test]=xxKivioxx
+Name[zh_TW]=流程圖_Kivio
 Exec=kivio %u
 GenericName=Flowchart & Diagram Editing
 GenericName[bg]=Диаграми и схеми
