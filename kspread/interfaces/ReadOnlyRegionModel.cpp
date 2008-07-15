@@ -48,13 +48,13 @@ ReadOnlyRegionModel::~ReadOnlyRegionModel()
 int ReadOnlyRegionModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    return KS_colMax - 1; // Model indices start from 0
+    return d->region.firstRange().width();
 }
 
 int ReadOnlyRegionModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    return KS_rowMax - 1; // Model indices start from 0
+    return d->region.firstRange().height();
 }
 
 QModelIndex ReadOnlyRegionModel::index(int row, int column, const QModelIndex& parent) const

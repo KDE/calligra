@@ -50,18 +50,18 @@ ReadOnlyTableModel::~ReadOnlyTableModel()
 int ReadOnlyTableModel::columnCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    return KS_colMax - 1; // Model indices start from 0
+    return d->sheet->usedArea().width();
 }
 
 int ReadOnlyTableModel::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent);
-    return KS_rowMax - 1; // Model indices start from 0
+    return d->sheet->usedArea().height();
 }
 
 QVariant ReadOnlyTableModel::data(const QModelIndex& index, int role) const
 {
-    // NOTE // Model indices start from 0, while KSpread column/row indices start from 1.
+    // NOTE Model indices start from 0, while KSpread column/row indices start from 1.
     const Cell cell = Cell(d->sheet, index.column() + 1, index.row() + 1).masterCell();
     const Style style = cell.effectiveStyle();
     if (role == Qt::DisplayRole) {
@@ -79,7 +79,7 @@ QVariant ReadOnlyTableModel::data(const QModelIndex& index, int role) const
                                                                    style.precision(), style.floatFormat(),
                                                                    style.prefix(), style.postfix(),
                                                                    style.currency().symbol());
-            return value.asVariant();
+            return value.asString();
         }
     } else if (role == Qt::EditRole) {
         return cell.userInput();
@@ -91,9 +91,13 @@ QVariant ReadOnlyTableModel::data(const QModelIndex& index, int role) const
 
 QVariant ReadOnlyTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    if (orientation == Qt::Horizontal) {
-        return Cell::columnName(section + 1);
-    } else {
-        return QString::number(section + 1);
+    // NOTE Model indices start from 0, while KSpread column/row indices start from 1.
+    if (role == Qt::DisplayRole) {
+        if (orientation == Qt::Horizontal) {
+            return Cell::columnName(section + 1);
+        } else {
+            return QString::number(section + 1);
+        }
     }
+    return QVariant();
 }

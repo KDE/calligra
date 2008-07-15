@@ -130,6 +130,11 @@
 #include <QMenu>
 #include <QSqlDatabase>
 
+#ifndef NDEBUG
+#include <QTableView>
+#include "interfaces/ReadOnlyTableModel.h"
+#endif
+
 using namespace KSpread;
 
 CellToolBase::CellToolBase(KoCanvasBase* canvas)
@@ -785,6 +790,13 @@ CellToolBase::CellToolBase(KoCanvasBase* canvas)
     addAction("inspector", action);
     action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_I));
     connect(action, SIGNAL(triggered(bool)), this, SLOT(inspector()));
+
+#ifndef NDEBUG
+    action = new KAction(KIcon("table"), i18n("Show QTableView..."), this);
+    addAction("qTableView", action);
+    action->setShortcut(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_T));
+    connect(action, SIGNAL(triggered(bool)), this, SLOT(qTableView()));
+#endif
 
     action = new KAction(i18n("Auto-Format..."), this);
     addAction("sheetFormat", action);
@@ -3097,6 +3109,22 @@ void CellToolBase::inspector()
     ins->exec();
     delete ins;
 }
+
+#ifndef NDEBUG
+void CellToolBase::qTableView()
+{
+    kDebug() << "Testing ReadOnlyTableModel...";
+    KDialog* const dialog = new KDialog(m_canvas->canvasWidget());
+    QTableView* const view = new QTableView(dialog);
+    ReadOnlyTableModel* const model = new ReadOnlyTableModel(selection()->activeSheet());
+    view->setModel(model);
+    dialog->setCaption("ReadOnlyTableModel Test");
+    dialog->setMainWidget(view);
+    dialog->exec();
+    delete dialog;
+    delete model;
+}
+#endif
 
 void CellToolBase::sheetFormat()
 {
