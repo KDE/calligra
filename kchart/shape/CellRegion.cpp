@@ -365,9 +365,11 @@ QString CellRegion::regionToString( const QVector<QRect> &region )
         const QRect range = region[i];
         result.append(columnName(range.left()));
         result.append(QString::number(range.top()));
-        result.append(':');
-        result.append(columnName(range.right()));
-        result.append(QString::number(range.bottom()));
+        if (range.topLeft() != range.bottomRight()) {
+            result.append(':');
+            result.append(columnName(range.right()));
+            result.append(QString::number(range.bottom()));
+        }
         if (i < region.count() - 1) {
             result.append(';');
         }
