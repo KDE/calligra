@@ -136,6 +136,15 @@ PlotArea::PlotArea( ChartShape *parent )
     , KoShape()
 {
     d->shape = parent;
+}
+
+PlotArea::~PlotArea()
+{
+}
+
+
+void PlotArea::init()
+{
     
     d->kdChart->resize( size().toSize() );
     d->kdChart->replaceCoordinatePlane( d->kdPlane );
@@ -152,11 +161,6 @@ PlotArea::PlotArea( ChartShape *parent )
     d->axes.append( xAxis );
     d->axes.append( yAxis );
 }
-
-PlotArea::~PlotArea()
-{
-}
-
 
 void PlotArea::dataSetCountChanged()
 {

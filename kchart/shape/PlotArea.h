@@ -38,6 +38,8 @@ public:
     PlotArea( ChartShape *parent );
     ~PlotArea();
     
+    void init();
+    
     ProxyModel *proxyModel() const;
 
     QList<Axis*> axes() const;
