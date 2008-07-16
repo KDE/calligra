@@ -194,6 +194,7 @@ void KarbonZoomController::resourceChanged(int key, const QVariant &value)
         QSizeF viewSize = d->zoomHandler->documentToView( documentRect ).size();
         d->canvasController->setDocumentSize( QSize( qRound(viewSize.width()), qRound(viewSize.height()) ) );
         d->canvas->adjustOrigin();
+        d->canvas->update();
     }
 }
 
