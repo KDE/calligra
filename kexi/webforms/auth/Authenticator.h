@@ -38,14 +38,20 @@ namespace Auth {
      */
     class Authenticator {
     public:
-        /** ctor */
-        Authenticator(pion::net::HTTPAuthPtr auth) : m_auth(auth) {}
+        static void init(pion::net::HTTPAuthPtr);
+        static Authenticator* getInstance();
+        
         virtual ~Authenticator() {}
 
         bool loadStore();
         User authenticate(const char*, const char*);
+        
+    protected:
+        /** ctor */
+        Authenticator(pion::net::HTTPAuthPtr auth) : m_auth(auth) {}
 
     private:
+        static Authenticator* m_instance;
         pion::net::HTTPAuthPtr m_auth;
         QList<User> m_users;
     };

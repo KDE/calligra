@@ -26,6 +26,19 @@
 
 namespace KexiWebForms {
 namespace Auth {
+    Authenticator* Authenticator::m_instance = 0;
+    
+    void Authenticator::init(pion::net::HTTPAuthPtr p) {
+        if (!m_instance)
+            m_instance = new Authenticator(p);
+    }
+
+    Authenticator* Authenticator::getInstance() {
+        if (m_instance)
+            return m_instance;
+        else // ouch!
+            return NULL;
+    }
 
     // fictional loadStore, returns a fixed list of users
     bool Authenticator::loadStore() {
