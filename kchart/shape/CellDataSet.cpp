@@ -155,7 +155,7 @@ QString CellDataSet::xDataRegionString() const
     if ( !m_model->spreadSheetModel() )
         return QString();
     
-    return m_model->spreadSheetModel()->regionToString( m_xDataRegion.rects() );
+    return CellRegion::regionToString( m_xDataRegion.rects() );
 }
 
 QString CellDataSet::yDataRegionString() const
@@ -163,7 +163,7 @@ QString CellDataSet::yDataRegionString() const
     if ( !m_model->spreadSheetModel() )
         return QString();
     
-    return m_model->spreadSheetModel()->regionToString( m_yDataRegion.rects() );
+    return CellRegion::regionToString( m_yDataRegion.rects() );
 }
 
 QString CellDataSet::customDataRegionString() const
@@ -171,7 +171,7 @@ QString CellDataSet::customDataRegionString() const
     if ( !m_model->spreadSheetModel() )
         return QString();
     
-    return m_model->spreadSheetModel()->regionToString( m_customDataRegion.rects() );
+    return CellRegion::regionToString( m_customDataRegion.rects() );
 }
 
 QString CellDataSet::categoryDataRegionString() const
@@ -179,7 +179,7 @@ QString CellDataSet::categoryDataRegionString() const
     if ( !m_model->spreadSheetModel() )
         return QString();
     
-    return m_model->spreadSheetModel()->regionToString( m_categoryDataRegion.rects() );
+    return CellRegion::regionToString( m_categoryDataRegion.rects() );
 }
 
 QString CellDataSet::labelDataRegionString() const
@@ -187,7 +187,7 @@ QString CellDataSet::labelDataRegionString() const
     if ( !m_model->spreadSheetModel() )
         return QString();
     
-    return m_model->spreadSheetModel()->regionToString( m_labelDataRegion.rects() );
+    return CellRegion::regionToString( m_labelDataRegion.rects() );
 }
 
 
@@ -286,7 +286,7 @@ void CellDataSet::setXDataRegionString( const QString &string )
     if ( !m_model->spreadSheetModel() )
         return;
     
-    setXDataRegion( m_model->spreadSheetModel()->stringToRegion( string ) );
+    setXDataRegion( CellRegion::stringToRegion( string ) );
 }
 
 void CellDataSet::setYDataRegionString( const QString &string )
@@ -294,7 +294,7 @@ void CellDataSet::setYDataRegionString( const QString &string )
     if ( !m_model->spreadSheetModel() )
         return;
     
-    setYDataRegion( m_model->spreadSheetModel()->stringToRegion( string ) );
+    setYDataRegion( CellRegion::stringToRegion( string ) );
 }
 
 void CellDataSet::setCustomDataRegionString( const QString &string )
@@ -302,7 +302,7 @@ void CellDataSet::setCustomDataRegionString( const QString &string )
     if ( !m_model->spreadSheetModel() )
         return;
     
-    setCustomDataRegion( m_model->spreadSheetModel()->stringToRegion( string ) );
+    setCustomDataRegion( CellRegion::stringToRegion( string ) );
 }
 
 void CellDataSet::setCategoryDataRegionString( const QString &string )
@@ -310,7 +310,7 @@ void CellDataSet::setCategoryDataRegionString( const QString &string )
     if ( !m_model->spreadSheetModel() )
         return;
     
-    setCategoryDataRegion( m_model->spreadSheetModel()->stringToRegion( string ) );
+    setCategoryDataRegion( CellRegion::stringToRegion( string ) );
 }
 
 void CellDataSet::setLabelDataRegionString( const QString &string )
@@ -318,7 +318,7 @@ void CellDataSet::setLabelDataRegionString( const QString &string )
     if ( !m_model->spreadSheetModel() )
         return;
     
-    setLabelDataRegion( m_model->spreadSheetModel()->stringToRegion( string ) );
+    setLabelDataRegion( CellRegion::stringToRegion( string ) );
 }
 
 

@@ -58,6 +58,6 @@ CellRegionStringValidator::~CellRegionStringValidator()
 
 QValidator::State CellRegionStringValidator::validate( QString &string, int &pos ) const
 {
-	CellRegion region = d->model->stringToRegion( string );
+	CellRegion region = CellRegion::stringToRegion( string );
 	return region.isValid() ? QValidator::Acceptable : QValidator::Invalid;
 }

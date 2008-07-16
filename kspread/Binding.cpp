@@ -130,20 +130,6 @@ BindingModelContainer::BindingModelContainer(Binding* binding, const Region& reg
     connect (m_model, SIGNAL(changed(const Region&)), this, SIGNAL(changed(const Region&)));
 }
 
-QString BindingModelContainer::regionToString( const QVector<QRect> &region ) const
-{
-	Region r;
-	foreach( QRect rect, region )
-        r.add( rect, m_model->region().firstSheet() );
-	return r.name();
-}
-
-QVector<QRect> BindingModelContainer::stringToRegion( const QString &string ) const
-{
-    const Region r( string, m_model->region().firstSheet()->map() );
-	return r.rects();
-}
-
 QHash<QString, QVector<QRect> > BindingModelContainer::cellRegion() const
 {
     QHash<QString, QVector<QRect> > answer;

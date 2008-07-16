@@ -62,6 +62,9 @@ public:
     QPoint pointAtIndex( int index ) const;
     int indexAtPoint( const QPoint &point ) const;
     
+    static QString regionToString( const QVector<QRect> &region );
+    static QVector<QRect> stringToRegion( const QString &string );
+
 private:
     QVector<QRect> m_rects;
     QRect m_boundingRect;

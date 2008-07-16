@@ -32,8 +32,6 @@
 #include <KoOdfLoadingContext.h>
 #include <KoOdfStylesReader.h>
 
-#include <cmath>
-
 namespace KChart {
 
 TableModel::TableModel( QObject *parent /* = 0 */)
@@ -45,93 +43,6 @@ TableModel::TableModel( QObject *parent /* = 0 */)
 TableModel::~TableModel()
 {
 }
-
-int rangeCharToInt( char c )
-{
-    return (c >= 'A' && c <= 'Z') ? (c - 'A' + 1) : -1;
-}
-
-int rangeStringToInt( const QString &string )
-{
-    int result = 0;
-    const int size = string.size();
-    for ( int i = 0; i < size; i++ )
-    {
-        kDebug(350001) << "---" << float( rangeCharToInt( string[i].toAscii() ) * pow( 10, ( size - i - 1 ) ) );
-        result += rangeCharToInt( string[i].toAscii() ) * pow( 10, ( size - i - 1 ) );
-    }
-    kDebug(350001) << "+++++ result=" << result;
-    return result;
-}
-
-QString rangeIntToString( int i )
-{
-    QString tmp = QString::number( i );
-    for( int j = 0; j < tmp.size(); j++ )
-    {
-        tmp[j] = 'A' + tmp[j].toAscii() - '1';
-    }
-    kDebug(350001) << "tmp=" << tmp;
-    return tmp;
-}
-
-// reimplemented
-QVector<QRect> TableModel::stringToRegion( const QString &string ) const
-{
-    const bool isPoint = !string.contains( ":" );
-    kDebug(350001) << "TableModel::stringToRegion():" << string;
-    QString s = string;
-    QStringList regionStrings = isPoint ? s.split( "." ) : s.remove( QChar(':') ).split( "." );
-    QPoint topLeftPoint;
-    QPoint bottomRightPoint;
-    
-    if ( isPoint && regionStrings.size() < 2 || !isPoint && regionStrings.size() < 3 )
-    {
-        qWarning() << "1) TableModel::stringToRegion(): Invalid region string \"" << string << "\"";
-        return QVector<QRect>();
-    }
-    
-    const QString tableName = regionStrings[0];
-    
-    const QString topLeft = regionStrings[1];
-    QStringList l = topLeft.split( "$" );
-    if ( l.size() < 3 )
-    {
-        kDebug(350001) << topLeft;
-        qWarning() << "2) TableModel::stringToRegion(): Invalid region string \"" << string << "\"";
-        return QVector<QRect>();
-    }
-    int column = rangeStringToInt( l[1] );
-    int row = l[2].toInt() - 1;
-    topLeftPoint = QPoint( column, row );
-    
-    if ( isPoint )
-    {
-        kDebug(350001) << "Returning" << QVector<QRect>( 1, QRect( topLeftPoint, QSize( 1, 1 ) ) );
-        return QVector<QRect>( 1, QRect( topLeftPoint, QSize( 1, 1 ) ) );
-    }
-    
-    const QString bottomRight = regionStrings[2];
-    l = bottomRight.split( "$" );
-    if ( l.size() < 3 )
-    {
-        qWarning() << "TableModel::stringToRegion(): Invalid region string \"" << string << "\"";
-        return QVector<QRect>();
-    }
-    column = rangeStringToInt( l[1] );
-    row = l[2].toInt() - 1;
-    bottomRightPoint = QPoint( column, row );
-    
-    kDebug(350001) << "///" << QRect( topLeftPoint, bottomRightPoint );
-    
-    return QVector<QRect>( 1, QRect( topLeftPoint, bottomRightPoint ) );
-}
-
-QString TableModel::regionToString( const QVector<QRect> &region ) const
-{
-    QString result( "local-table" );
-    return result;
-}    
 
 QHash<QString, QVector<QRect> > TableModel::cellRegion() const
 {

@@ -44,8 +44,6 @@ public:
     ~TableModel();
 
     // KoChart::ChartModel interface
-    virtual QString regionToString( const QVector<QRect> &region ) const;
-    virtual QVector<QRect> stringToRegion( const QString &string ) const;
     virtual QHash<QString, QVector<QRect> > cellRegion() const;
     virtual bool setCellRegion(const QString& regionName);
     virtual QStandardItemModel * model() { return m_model; }
