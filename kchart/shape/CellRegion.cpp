@@ -336,6 +336,32 @@ QVector<QRect> CellRegion::stringToRegion( const QString &string )
     return QVector<QRect>( 1, QRect( topLeftPoint, bottomRightPoint ) );
 }
 
+int CellRegion::rangeCharToInt( char c )     
+{   
+    return (c >= 'A' && c <= 'Z') ? (c - 'A' + 1) : -1;     
+}   
+     
+int CellRegion::rangeStringToInt( const QString &string )   
+{   
+    int result = 0;     
+    const int size = string.size();     
+    for ( int i = 0; i < size; i++ )    
+    {     
+        result += rangeCharToInt( string[i].toAscii() ) * pow( 10, ( size - i - 1 ) );      
+    } 
+    return result;      
+}   
+     
+QString CellRegion::rangeIntToString( int i )   
+{   
+    QString tmp = QString::number( i );     
+    for( int j = 0; j < tmp.size(); j++ )   
+    {   
+        tmp[j] = 'A' + tmp[j].toAscii() - '1';      
+    }
+    return tmp;     
+}
+
 // Return the symbolic name of any column.
 static QString columnName( uint column )
 {

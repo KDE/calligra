@@ -64,6 +64,10 @@ public:
     
     static QString regionToString( const QVector<QRect> &region );
     static QVector<QRect> stringToRegion( const QString &string );
+    
+    static int rangeCharToInt( char c );
+    static int rangeStringToInt( const QString &string );
+    static QString rangeIntToString( int i );
 
 private:
     QVector<QRect> m_rects;
