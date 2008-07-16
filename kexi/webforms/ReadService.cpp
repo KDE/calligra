@@ -148,6 +148,9 @@ namespace KexiWebForms {
             }
 
             renderTemplate(m_dict, writer);
+        } else {
+            writer->write("Not Authorized");
+            writer->send();
         }
     }
     
