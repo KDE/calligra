@@ -68,7 +68,7 @@ QVariant CellDataSet::xData( int index ) const
 QVariant CellDataSet::yData( int index ) const
 {
     if ( !m_yDataRegion.isValid() )
-            return QVariant();
+        return QVariant(); 
     QAbstractItemModel *model = m_model->sourceModel();
     if ( !model )
         return QVariant();
@@ -324,7 +324,8 @@ void CellDataSet::setLabelDataRegionString( const QString &string )
 
 int CellDataSet::size() const
 {
-    return m_size;
+    qDebug() << "m_size=" << m_size;
+    return m_size > 0 ? m_size : 1;
 }
 
 void CellDataSet::yDataChanged( const QRect &rect ) const
