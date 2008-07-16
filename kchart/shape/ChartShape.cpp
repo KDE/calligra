@@ -272,6 +272,7 @@ ChartShape::ChartShape()
     // here rely on the d->plotArea pointer
     d->plotArea = new PlotArea( this );
     addChild( d->plotArea );
+    d->plotArea->init();
     
     d->document = new ChartDocument( this );
     
@@ -985,12 +986,14 @@ void ChartShape::update() const
 
 void ChartShape::relayout() const
 {
+    Q_ASSERT( d->plotArea );
     d->plotArea->relayout();
     KoShape::update();
 }
 
 void ChartShape::requestRepaint() const
 {
+    Q_ASSERT( d->plotArea );
     d->plotArea->requestRepaint();
 }
 
