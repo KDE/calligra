@@ -35,6 +35,10 @@
 #include <kexidb/roweditbuffer.h>
 #include <kexidb/field.h>
 
+#include "auth/Authenticator.h"
+#include "auth/User.h"
+#include "auth/Permission.h"
+
 #include "DataProvider.h"
 
 #include "BlobService.h"
@@ -47,44 +51,51 @@ namespace KexiWebForms {
         HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
                     boost::bind(&TCPConnection::finish, tcp_conn)));
         
-        
-        QStringList queryString(QString(request->getOriginalResource().c_str()).split('/'));
-        QString table(queryString.at(2));
-        QString fieldName(queryString.at(3));
-        QString pkey(queryString.at(4));
-        QString pkeyVal(queryString.at(5));        
+        PionUserPtr userPtr(request->getUser());
+        Auth::User u = Auth::Authenticator::getInstance()->authenticate(userPtr);
 
-        KexiDB::TableSchema* tableSchema = gConnection->tableSchema(table);
-        KexiDB::Field* field = tableSchema->field(fieldName);
-        
-        if (field->type() == KexiDB::Field::BLOB) {
-            // Perform the rest of the query
-            KexiDB::QuerySchema query(*tableSchema);
-            query.addToWhereExpression(tableSchema->field(pkey), QVariant(pkeyVal));
-            KexiDB::Cursor* cursor = gConnection->executeQuery(query);
+        if (u.can(Auth::READ)) {
+            QStringList queryString(QString(request->getOriginalResource().c_str()).split('/'));
+            QString table(queryString.at(2));
+            QString fieldName(queryString.at(3));
+            QString pkey(queryString.at(4));
+            QString pkeyVal(queryString.at(5));
 
-            QByteArray blobData;
-            // There should be only one record
-            cursor->moveNext();
-            for (uint i = 0; i < cursor->fieldCount(); i++) {
-                if (query.field(i) == field) {
-                    blobData = QByteArray(cursor->value(i).toByteArray());
-                    break;
+            KexiDB::TableSchema* tableSchema = gConnection->tableSchema(table);
+            KexiDB::Field* field = tableSchema->field(fieldName);
+
+            if (field->type() == KexiDB::Field::BLOB) {
+                // Perform the rest of the query
+                KexiDB::QuerySchema query(*tableSchema);
+                query.addToWhereExpression(tableSchema->field(pkey), QVariant(pkeyVal));
+                KexiDB::Cursor* cursor = gConnection->executeQuery(query);
+
+                QByteArray blobData;
+                // There should be only one record
+                cursor->moveNext();
+                for (uint i = 0; i < cursor->fieldCount(); i++) {
+                    if (query.field(i) == field) {
+                        blobData = QByteArray(cursor->value(i).toByteArray());
+                        break;
+                    }
                 }
-            }
 
-            // Resolve the mime type for blobData
-            KSharedPtr<KMimeType> mime = KMimeType::findByContent(blobData);
-            if (mime) {
-                /// @todo wrong assumption: blobs are not always image/png
-                writer->getResponse().setContentType("image/png");
-                writer->writeNoCopy(blobData.data(), blobData.size());
-                writer->writeNoCopy(HTTPTypes::STRING_CRLF);
-                writer->writeNoCopy(HTTPTypes::STRING_CRLF);
-                writer->send();
-            }
+                // Resolve the mime type for blobData
+                KSharedPtr<KMimeType> mime = KMimeType::findByContent(blobData);
+                if (mime) {
+                    /// @todo wrong assumption: blobs are not always image/png
+                    writer->getResponse().setContentType("image/png");
+                    writer->writeNoCopy(blobData.data(), blobData.size());
+                    writer->writeNoCopy(HTTPTypes::STRING_CRLF);
+                    writer->writeNoCopy(HTTPTypes::STRING_CRLF);
+                    writer->send();
+                }
 
-            gConnection->deleteCursor(cursor);
+                gConnection->deleteCursor(cursor);
+            }
+        } else {
+            writer->write("Not Authorized");
+            writer->send();
         }
             
     }

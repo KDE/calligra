@@ -31,6 +31,10 @@
 #include <kexidb/connection.h>
 #include <kexidb/cursor.h>
 
+#include "auth/Authenticator.h"
+#include "auth/User.h"
+#include "auth/Permission.h"
+
 #include "DataProvider.h"
 #include "TemplateProvider.h"
 
@@ -44,102 +48,107 @@ namespace KexiWebForms {
         HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
                     boost::bind(&TCPConnection::finish, tcp_conn)));
 
-        QString requestedTable(QString(request->getOriginalResource().c_str()).split('/').at(2));
+        PionUserPtr userPtr(request->getUser());
+        Auth::User u = Auth::Authenticator::getInstance()->authenticate(userPtr);
 
-        QString tableData;
-        KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
-        KexiDB::QuerySchema querySchema(*tableSchema);
-        KexiDB::Cursor* cursor = gConnection->executeQuery(querySchema);
-        
-        bool readOnly = (querySchema.connection() && querySchema.connection()->isReadOnly());
-        if (readOnly) {
-            setValue("TABLENAME", requestedTable.append(" (read only)"));
-        } else {
-            setValue("TABLENAME", requestedTable);
-        }
+        if (u.can(Auth::READ)) {
+            QString requestedTable(QString(request->getOriginalResource().c_str()).split('/').at(2));
 
-        /* awful */
-        int recordsTotal = 0;
-        while (cursor->moveNext())
-            recordsTotal++;
-        gConnection->deleteCursor(cursor);
+            QString tableData;
+            KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
+            KexiDB::QuerySchema querySchema(*tableSchema);
+            KexiDB::Cursor* cursor = gConnection->executeQuery(querySchema);
 
-        /* even more awful */
-        cursor = gConnection->executeQuery(querySchema);
-
-        if (!cursor) {
-            setValue("ERROR", "Unable to execute the query (" __FILE__ ")");
-        } else if (tableSchema->primaryKey()->fields()->isEmpty()) {
-            setValue("ERROR", "This table has no primary key!");
-        } else {
-            KexiDB::Field* primaryKey = tableSchema->primaryKey()->field(0);
-
-            // Create labels with field name
-            tableData.append("<tr>\t<th scope=\"col\">Record</th>\n");
-            for (uint i = 0; i < cursor->fieldCount(); i++) {
-                tableData.append(QString("\t<th scope=\"col\">%1</th>\n")
-                    .arg(querySchema.field(i)->captionOrName()));
+            bool readOnly = (querySchema.connection() && querySchema.connection()->isReadOnly());
+            if (readOnly) {
+                setValue("TABLENAME", requestedTable.append(" (read only)"));
+            } else {
+                setValue("TABLENAME", requestedTable);
             }
-            tableData.append("</tr>\n");
 
+            /* awful */
+            int recordsTotal = 0;
+            while (cursor->moveNext())
+                recordsTotal++;
+            gConnection->deleteCursor(cursor);
 
-            // Create labels with fields data
-            int currentRecord = 0;
-            QString totalRecords(QVariant(recordsTotal).toString());
-            while (cursor->moveNext()) {
-                currentRecord++;
-                
-                tableData.append(QString("<tr><td>%1 of %2</td>").arg(QVariant(currentRecord).toString())
-                    .arg(totalRecords));
+            /* even more awful */
+            cursor = gConnection->executeQuery(querySchema);
 
-                QString pkeyVal(cursor->value(tableSchema->indexOf(primaryKey)).toString());
-                
+            if (!cursor) {
+                setValue("ERROR", "Unable to execute the query (" __FILE__ ")");
+            } else if (tableSchema->primaryKey()->fields()->isEmpty()) {
+                setValue("ERROR", "This table has no primary key!");
+            } else {
+                KexiDB::Field* primaryKey = tableSchema->primaryKey()->field(0);
+
+                // Create labels with field name
+                tableData.append("<tr>\t<th scope=\"col\">Record</th>\n");
                 for (uint i = 0; i < cursor->fieldCount(); i++) {
-                    tableData.append("<td>");
-
-                    //
-                    // Use Kexi functions to retrieve and represent the Value
-                    //! @todo use Kexi the same functions for rendering values as Kexi table and form view
-                    //
-                    KexiDB::Field* field = querySchema.field(i);
-                    const KexiDB::Field::Type type = field->type();
-                    QString valueString;
-                    if (type == KexiDB::Field::BLOB) {
-                        valueString = QString("<img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/>")
-                            .arg(requestedTable).arg(field->name()).arg(primaryKey->name())
-                            .arg(pkeyVal);
-                    }
-                    else if (field->isTextType()) {
-                        valueString = Qt::escape( cursor->value(i).toString() );
-                    }
-                    else {
-                        valueString = Qt::escape( cursor->value(i).toString() );
-                    }
-                    tableData.append(valueString);
-                    tableData.append("</td>");
-                }
-                // Toolbox
-                if (!readOnly) {
-                    // Edit
-                    tableData.append(QString("<td><a href=\"/update/%1/%2/%3\">"
-                        "<img src=\"/f/toolbox/draw-freehand.png\" alt=\"Edit\"/></a></td>")
-                        .arg(requestedTable).arg(primaryKey->name()).arg(pkeyVal));
-                    // Delete
-                    tableData.append(QString("<td><a href=\"/delete/%1/%2/%3\">"
-                        "<img src=\"/f/toolbox/draw-eraser.png\" alt=\"Edit\"/></a></td>")
-                        .arg(requestedTable).arg(primaryKey->name()).arg(pkeyVal));
-                    // End row
+                    tableData.append(QString("\t<th scope=\"col\">%1</th>\n")
+                        .arg(querySchema.field(i)->captionOrName()));
                 }
                 tableData.append("</tr>\n");
+
+
+                // Create labels with fields data
+                int currentRecord = 0;
+                QString totalRecords(QVariant(recordsTotal).toString());
+                while (cursor->moveNext()) {
+                    currentRecord++;
+
+                    tableData.append(QString("<tr><td>%1 of %2</td>").arg(QVariant(currentRecord).toString())
+                        .arg(totalRecords));
+
+                    QString pkeyVal(cursor->value(tableSchema->indexOf(primaryKey)).toString());
+
+                    for (uint i = 0; i < cursor->fieldCount(); i++) {
+                        tableData.append("<td>");
+
+                        //
+                        // Use Kexi functions to retrieve and represent the Value
+                        //! @todo use Kexi the same functions for rendering values as Kexi table and form view
+                        //
+                        KexiDB::Field* field = querySchema.field(i);
+                        const KexiDB::Field::Type type = field->type();
+                        QString valueString;
+                        if (type == KexiDB::Field::BLOB) {
+                            valueString = QString("<img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/>")
+                                .arg(requestedTable).arg(field->name()).arg(primaryKey->name())
+                                .arg(pkeyVal);
+                        }
+                        else if (field->isTextType()) {
+                            valueString = Qt::escape( cursor->value(i).toString() );
+                        }
+                        else {
+                            valueString = Qt::escape( cursor->value(i).toString() );
+                        }
+                        tableData.append(valueString);
+                        tableData.append("</td>");
+                    }
+                    // Toolbox
+                    if (!readOnly) {
+                        // Edit
+                        tableData.append(QString("<td><a href=\"/update/%1/%2/%3\">"
+                            "<img src=\"/f/toolbox/draw-freehand.png\" alt=\"Edit\"/></a></td>")
+                            .arg(requestedTable).arg(primaryKey->name()).arg(pkeyVal));
+                        // Delete
+                        tableData.append(QString("<td><a href=\"/delete/%1/%2/%3\">"
+                            "<img src=\"/f/toolbox/draw-eraser.png\" alt=\"Edit\"/></a></td>")
+                            .arg(requestedTable).arg(primaryKey->name()).arg(pkeyVal));
+                        // End row
+                    }
+                    tableData.append("</tr>\n");
+                }
+
+                setValue("TABLEDATA", tableData);
+
+                kDebug() << "Deleting cursor..." << endl;
+                gConnection->deleteCursor(cursor);
             }
 
-            setValue("TABLEDATA", tableData);
-
-            kDebug() << "Deleting cursor..." << endl;
-            gConnection->deleteCursor(cursor);
+            renderTemplate(m_dict, writer);
         }
-
-        renderTemplate(m_dict, writer);
     }
     
 }
