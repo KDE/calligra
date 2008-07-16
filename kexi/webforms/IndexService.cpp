@@ -44,12 +44,13 @@ namespace KexiWebForms {
                     boost::bind(&TCPConnection::finish, tcp_conn)));
                     
 
-        QString tables;
+        /* Useless, for now */
+        /*QString tables;
         for (int i = 0; i < gConnection->tableNames().size(); ++i) {
             tables.append("<li><a href=\"/read/").append(gConnection->tableNames().at(i));
             tables.append("\">").append(gConnection->tableNames().at(i)).append("</a></li>");
         }
-        setValue("TABLES", tables);
+        setValue("TABLES", tables);*/
 
         renderTemplate(m_dict, writer);
     }
