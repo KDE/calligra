@@ -28,7 +28,8 @@ namespace Auth {
         CREATE,
         READ,
         UPDATE,
-        DELETE
+        DELETE,
+        QUERY
     };
 
 }
