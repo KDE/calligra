@@ -1,3 +1,4 @@
+# NOTE: Is this really needed?
 project(kwebforms)
 
 include_directories(
@@ -25,6 +26,9 @@ set(webforms_SRCS
   FileService.cpp
   QueryService.cpp
   BlobService.cpp
+# Authentication framework
+  auth/Authenticator.cpp
+  auth/User.cpp
 # Main
   main.cpp
 )

@@ -22,13 +22,13 @@
 #ifndef KEXIWEBFORMS_BLOBSERVICE_H
 #define KEXIWEBFORMS_BLOBSERVICE_H
 
-#include "WebFormsService.h"
+#include <pion/net/WebService.hpp>
 
 namespace KexiWebForms {
 
-    class BlobService : public WebFormsService {
+    class BlobService : public pion::net::WebService {
     public:
-        BlobService() : WebFormsService() {}
+        BlobService() : pion::net::WebService() {}
         virtual ~BlobService() {}
 
         virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
