@@ -68,7 +68,7 @@
 #include <KoCanvasResourceProvider.h>
 #include <KoFilterManager.h>
 #include <KoUnitDoubleSpinBox.h>
-// #include <KoPageLayoutDia.h>
+#include <KoPageLayoutDialog.h>
 #include <KoRuler.h>
 #include <KoToolManager.h>
 #include <KoToolProxy.h>
@@ -1292,29 +1292,21 @@ void KarbonView::configure()
     dialog.exec();
 }
 
-void
-KarbonView::pageLayout()
+void KarbonView::pageLayout()
 {
     debugView("KarbonView::pageLayout()");
 
-// TODO show a simple page layout dialog without all the whistels and bells of the kword one.
-#if 0
-    KoHeadFoot hf;
-    KoPageLayout layout = part()->pageLayout();
-    KoUnit unit = part()->unit();
-    if( KoPageLayoutDia::pageLayout( layout, hf, FORMAT_AND_BORDERS | DISABLE_UNIT, unit ) )
-    {
-        part()->setPageLayout( layout, unit );
-        m_horizRuler->setUnit( unit );
-        m_vertRuler->setUnit( unit );
-        m_canvas->canvasWidget()->resize( int( ( part()->pageLayout().width + 300 ) * zoom() ),
-                                  int( ( part()->pageLayout().height + 460 ) * zoom() ) );
-        m_canvas->adjustOrigin();
-        part()->repaintAllViews();
+    KoPageLayoutDialog dlg( this, part()->pageLayout() );
+    dlg.showPageSpread( false );
+    dlg.showTextDirection( false );
+    dlg.setPageSpread( false );
 
+    if( dlg.exec() == QDialog::Accepted )
+    {
+        part()->setPageLayout( dlg.pageLayout(), part()->unit() );
         emit pageLayoutChanged();
+        part()->repaintAllViews();
     }
-#endif
 }
 
 void

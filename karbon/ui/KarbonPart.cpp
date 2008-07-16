@@ -107,8 +107,7 @@ KarbonPart::~KarbonPart()
 {
 }
 
-void
-KarbonPart::setPageLayout( KoPageLayout& layout, KoUnit _unit )
+void KarbonPart::setPageLayout( const KoPageLayout& layout, KoUnit _unit )
 {
     m_pageLayout = layout;
     m_doc.setUnit( _unit );

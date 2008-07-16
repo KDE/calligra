@@ -150,6 +150,7 @@ protected:
 
 private slots:
     void updateSizeAndOffset();
+    void resourceChanged(int key, const QVariant & value);
 
 private:
     /// paint page margins

@@ -87,7 +87,7 @@ public:
     void initConfig();
     unsigned int maxRecentFiles() const { return m_maxRecentFiles; }
 
-    void setPageLayout( KoPageLayout& layout, KoUnit _unit );
+    void setPageLayout( const KoPageLayout& layout, KoUnit _unit );
 
     bool mergeNativeFormat( const QString & file );
 
