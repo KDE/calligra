@@ -97,30 +97,35 @@ KoShape* ChartShapeFactory::createDefaultShape() const
     QStandardItemModel  *m_chartData = new QStandardItemModel();
     m_chartData->setRowCount( 4 );
     m_chartData->setColumnCount( 5 );
-
-    // Insert example data
-    for ( uint row = 0; row < 4; ++row ) {
-        // The first column has row labels, except the upper left
-        // corner which is unused.
-        if ( row == 1 )
-            m_chartData->setItem( row, 0, new QStandardItem( i18n( "January" ) ) );
-        else if( row == 2 )
-            m_chartData->setItem( row, 0, new QStandardItem( i18n( "July" ) ) );
-        else if( row == 3 )
-            m_chartData->setItem( row, 0, new QStandardItem( i18n( "December" ) ) );
-
-        for ( uint col = 1; col < 5; ++col ) {
-            if ( row == 0 )
-                // First row has column labels
-                m_chartData->setData( m_chartData->index( 0, col ),
-                                      i18n( "Item %1", col ),
-                                      Qt::EditRole | Qt::DisplayRole );
-            else
-                m_chartData->setData( m_chartData->index( row, col ),
-                                      QString::number( row + col ),
-                                      Qt::EditRole | Qt::DisplayRole );
-        }
-    }
+    
+    // Vertical header data
+    m_chartData->setData( m_chartData->index( 1, 0 ), i18n( "January" ) );
+    m_chartData->setData( m_chartData->index( 2, 0 ), i18n( "July" ) );
+    m_chartData->setData( m_chartData->index( 3, 0 ), i18n( "December" ) );
+    
+    // Horizontal header data
+    m_chartData->setData( m_chartData->index( 0, 1 ), i18n( "Column %1", 1 ) );
+    m_chartData->setData( m_chartData->index( 0, 2 ), i18n( "Column %1", 2 ) );
+    m_chartData->setData( m_chartData->index( 0, 3 ), i18n( "Column %1", 3 ) );
+    m_chartData->setData( m_chartData->index( 0, 4 ), i18n( "Column %1", 4 ) );
+    
+    // First row
+    m_chartData->setData( m_chartData->index( 1, 1 ), 5.7 );
+    m_chartData->setData( m_chartData->index( 1, 2 ), 3.4 );
+    m_chartData->setData( m_chartData->index( 1, 3 ), 1.2 );
+    m_chartData->setData( m_chartData->index( 1, 4 ), 8.4 );
+    
+    // Second row
+    m_chartData->setData( m_chartData->index( 2, 1 ), 2.1 );
+    m_chartData->setData( m_chartData->index( 2, 2 ), 6.5 );
+    m_chartData->setData( m_chartData->index( 2, 3 ), 0.9 );
+    m_chartData->setData( m_chartData->index( 2, 4 ), 1.5 );
+    
+    // Third row
+    m_chartData->setData( m_chartData->index( 3, 1 ), 7.9 );
+    m_chartData->setData( m_chartData->index( 3, 2 ), 3.5 );
+    m_chartData->setData( m_chartData->index( 3, 3 ), 8.6 );
+    m_chartData->setData( m_chartData->index( 3, 4 ), 4.3 );
     
     const QSizeF shapeSize( CM_TO_POINT( 12 ), CM_TO_POINT( 8 ) );
 
