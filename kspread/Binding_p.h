@@ -45,6 +45,7 @@ public:
     // KoChart::ChartModel interface
     virtual QHash<QString, QVector<QRect> > cellRegion() const;
     virtual bool setCellRegion(const QString& regionName);
+    virtual bool isCellRegionValid(const QString& regionName) const;
 
     const Region& region() const;
     void setRegion(const Region& region);

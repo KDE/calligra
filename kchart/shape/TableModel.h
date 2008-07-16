@@ -46,6 +46,7 @@ public:
     // KoChart::ChartModel interface
     virtual QHash<QString, QVector<QRect> > cellRegion() const;
     virtual bool setCellRegion(const QString& regionName);
+    virtual bool isCellRegionValid(const QString& regionName) const;
 
     void loadOdf( const KoXmlElement &tableElement, const KoOdfStylesReader &stylesReader );
     bool saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;

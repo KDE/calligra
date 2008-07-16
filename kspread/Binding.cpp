@@ -175,6 +175,13 @@ BindingModel::BindingModel(Binding* binding, QObject *parent)
 {
 }
 
+bool BindingModel::isCellRegionValid(const QString& regionName) const
+{
+    Q_CHECK_PTR(m_region.firstSheet());
+    Q_CHECK_PTR(m_region.firstSheet()->map());
+    return Region(regionName, m_region.firstSheet()->map()).isValid();
+}
+
 void BindingModel::emitChanged(const Region& region)
 {
     emit changed(region);

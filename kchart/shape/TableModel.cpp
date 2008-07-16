@@ -50,7 +50,14 @@ QHash<QString, QVector<QRect> > TableModel::cellRegion() const
 
 bool TableModel::setCellRegion(const QString& regionName)
 {
+    Q_UNUSED(regionName);
     return false;
+}
+
+bool TableModel::isCellRegionValid(const QString& regionName) const
+{
+    Q_UNUSED(regionName);
+    return true;
 }
 
 void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesReader &stylesReader )

@@ -58,7 +58,6 @@ DataSet::DataSet( ProxyModel *proxyModel )
     m_kdDiagram = 0;
     m_attachedAxis = 0;
     m_sourceIsSpreadSheet = false;
-    m_spreadSheetModel = 0;
     m_size = 0;
     m_blockSignals = false;
 }
