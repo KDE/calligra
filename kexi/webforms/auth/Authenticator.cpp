@@ -31,6 +31,7 @@ namespace Auth {
     void Authenticator::init(pion::net::HTTPAuthPtr p) {
         if (!m_instance)
             m_instance = new Authenticator(p);
+        m_instance->loadStore();
     }
 
     Authenticator* Authenticator::getInstance() {
@@ -51,7 +52,12 @@ namespace Auth {
         u = new User("restricted", "restricted");
 
         m_users.append(*u);
+        m_auth->addUser(u->name().toUtf8().constData(), u->password().toUtf8().constData());
+        
         m_users.append(*u);
+        m_auth->addUser(u->name().toUtf8().constData(), u->password().toUtf8().constData());
+
+        return true;
     }
     
     User Authenticator::authenticate(const char* name, const char* password) {
@@ -61,6 +67,8 @@ namespace Auth {
                 return u;
             }
         }
+        User* u = new User("anonymous", "guest");
+        return *u;
     }
 
 }

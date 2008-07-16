@@ -42,6 +42,7 @@
 #include "QueryService.h"
 #include "BlobService.h"
 #include "CRUD.h"
+#include "auth/Authenticator.h"
 
 using namespace pion::net;
 using namespace KexiWebForms;
@@ -104,7 +105,7 @@ int main(int argc, char **argv) {
     // Auth
     PionUserManagerPtr userMan(new PionUserManager());
     HTTPAuthPtr auth(new HTTPCookieAuth(userMan));
-    auth->addUser("root", "root");
+    KexiWebForms::Auth::Authenticator::init(auth);
     
     
     server.addService("/", &indexService);
