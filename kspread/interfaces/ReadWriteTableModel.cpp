@@ -46,7 +46,9 @@ ReadWriteTableModel::~ReadWriteTableModel()
 
 Qt::ItemFlags ReadWriteTableModel::flags(const QModelIndex& index) const
 {
-    Q_UNUSED(index);
+    if (!index.isValid() || !hasIndex(index.row(), index.column(), index.parent())) {
+        return 0;
+    }
     return Qt::ItemIsSelectable | Qt::ItemIsEditable | Qt::ItemIsEnabled;
 }
 
@@ -56,6 +58,7 @@ bool ReadWriteTableModel::setData(const QModelIndex& index, const QVariant& valu
     Cell cell = Cell(sheet(), index.column() + 1, index.row() + 1).masterCell();
     if (role == Qt::EditRole) {
         cell.parseUserInput(value.toString());
+        emit dataChanged(index, index);
         return true;
     }
     return false;
