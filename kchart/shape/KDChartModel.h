@@ -36,6 +36,9 @@ class CHARTSHAPELIB_EXPORT KDChartModel : public QAbstractItemModel
 public:
     KDChartModel( QObject *parent = 0 );
     ~KDChartModel();
+    
+    void setDataDirection( Qt::Orientation direction );
+    Qt::Orientation dataDirection() const;
 
 public slots:
     QVariant data( const QModelIndex &index, int role = Qt::DisplayRole ) const;
@@ -52,6 +55,7 @@ public slots:
     int columnCount( const QModelIndex &parent = QModelIndex() ) const;
     
     void setDataDimensions( int dataDimensions );
+    int dataDimensions() const;
 
     void addDataSet( DataSet *dataSet, bool silent = false );
     void removeDataSet( DataSet *dataSet, bool silent = false );
