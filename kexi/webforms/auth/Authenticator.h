@@ -21,6 +21,8 @@
 #ifndef KEXIWEBFORMS_AUTH_AUTHENTICATOR_H
 #define KEXIWEBFORMS_AUTH_AUTHENTICATOR_H
 
+#include <QList>
+
 #include <pion/net/HTTPAuth.hpp>
 
 #include "User.h"
@@ -40,10 +42,12 @@ namespace Auth {
         Authenticator(pion::net::HTTPAuthPtr auth) : m_auth(auth) {}
         virtual ~Authenticator() {}
 
+        bool loadStore();
         User authenticate(const char*, const char*);
 
     private:
         pion::net::HTTPAuthPtr m_auth;
+        QList<User> m_users;
     };
 
 } // end namespace Auth 

@@ -37,6 +37,8 @@ namespace Auth {
         User(const char* name, const char* password, const QList<Permission>& perms) :
             m_name(name), m_password(password), m_perms(perms) {}
 
+        void addPermission(Permission);
+
         QString name() const;
         QString password() const;
         QList<Permission> permissions() const;

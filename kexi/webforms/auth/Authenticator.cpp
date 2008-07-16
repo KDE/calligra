@@ -18,15 +18,31 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "Authenticator.h"
-
 #include <pion/net/HTTPAuth.hpp>
+
+#include "Permission.h"
+
+#include "Authenticator.h"
 
 namespace KexiWebForms {
 namespace Auth {
 
-    // stub for now
+    // fictional loadStore, returns a fixed list of users
+    bool Authenticator::loadStore() {
+        User* u = new User("root", "root");
+        u->addPermission(CAN_CREATE);
+        u->addPermission(CAN_READ);
+        u->addPermission(CAN_UPDATE);
+        u->addPermission(CAN_DELETE);
+
+        u = new User("restricted", "restricted");
+
+        m_users.append(*u);
+        m_users.append(*u);
+    }
+    
     User Authenticator::authenticate(const char* name, const char* password) {
+        
         //return NULL;
     }
 

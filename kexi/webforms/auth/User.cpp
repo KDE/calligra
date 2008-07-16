@@ -23,6 +23,10 @@
 namespace KexiWebForms {
 namespace Auth {
 
+    void User::addPermission(Permission p) {
+        m_perms.append(p);
+    }
+
     QString User::name() const {
         return m_name;
     }
