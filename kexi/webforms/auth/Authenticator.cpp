@@ -42,8 +42,12 @@ namespace Auth {
     }
     
     User Authenticator::authenticate(const char* name, const char* password) {
-        
-        //return NULL;
+        for (int i = 0; i < m_users.size(); ++i) {
+            User u = m_users.at(i);
+            if ((u.name() == name) && (u.password() == password)) {
+                return u;
+            }
+        }
     }
 
 }
