@@ -35,7 +35,7 @@ class QString;
 
 namespace KChart {
 
-class TableModel : public QObject, public KoChart::ChartModel
+class TableModel : public QStandardItemModel, public KoChart::ChartModel
 {
     Q_OBJECT
     Q_INTERFACES(KoChart::ChartModel)
@@ -46,13 +46,9 @@ public:
     // KoChart::ChartModel interface
     virtual QHash<QString, QVector<QRect> > cellRegion() const;
     virtual bool setCellRegion(const QString& regionName);
-    virtual QStandardItemModel * model() { return m_model; }
 
     void loadOdf( const KoXmlElement &tableElement, const KoOdfStylesReader &stylesReader );
     bool saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const;
-
-private:
-    QStandardItemModel *m_model;
 };
 
 }

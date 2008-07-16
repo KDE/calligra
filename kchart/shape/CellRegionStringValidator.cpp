@@ -32,8 +32,6 @@ class CellRegionStringValidator::Private
 public:
 	Private();
 	~Private();
-	
-	KoChart::ChartModel *model;
 };
 
 CellRegionStringValidator::Private::Private()
@@ -48,7 +46,6 @@ CellRegionStringValidator::CellRegionStringValidator( KoChart::ChartModel *model
 	: QValidator( 0 ),
 	  d( new Private )
 {
-	d->model = model;
 }
 
 CellRegionStringValidator::~CellRegionStringValidator()

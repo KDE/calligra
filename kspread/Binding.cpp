@@ -38,7 +38,7 @@ public:
     Private() : model(0) {}
     ~Private() { delete model; }
 
-    BindingModelContainer* model;
+    BindingModel* model;
 };
 
 
@@ -51,7 +51,8 @@ Binding::Binding(const Region& region)
     : d(new Private)
 {
     Q_ASSERT(region.isValid());
-    d->model = new BindingModelContainer(this, region);
+    d->model = new BindingModel(this);
+    d->model->setRegion(region);
 }
 
 Binding::Binding(const Binding& other)
@@ -68,7 +69,7 @@ bool Binding::isEmpty() const
     return d->model->region().isEmpty();
 }
 
-BindingModelContainer* Binding::model() const
+QAbstractItemModel* Binding::model() const
 {
     return d->model;
 }
@@ -121,20 +122,11 @@ bool Binding::operator<(const Binding& other) const
     return d < other.d;
 }
 
-BindingModelContainer::BindingModelContainer(Binding* binding, const Region& region)
-    : QObject()
-    , m_model( new BindingModel(this) )
-    , m_binding(binding)
-{
-    m_model->setRegion(region);
-    connect (m_model, SIGNAL(changed(const Region&)), this, SIGNAL(changed(const Region&)));
-}
-
-QHash<QString, QVector<QRect> > BindingModelContainer::cellRegion() const
+QHash<QString, QVector<QRect> > BindingModel::cellRegion() const
 {
     QHash<QString, QVector<QRect> > answer;
-    Region::ConstIterator end = m_model->region().constEnd();
-    for (Region::ConstIterator it = m_model->region().constBegin(); it != end; ++it) {
+    Region::ConstIterator end = m_region.constEnd();
+    for (Region::ConstIterator it = m_region.constBegin(); it != end; ++it) {
         if (!(*it)->isValid()) {
             continue;
         }
@@ -143,19 +135,19 @@ QHash<QString, QVector<QRect> > BindingModelContainer::cellRegion() const
     return answer;
 }
 
-bool BindingModelContainer::setCellRegion(const QString& regionName)
+bool BindingModel::setCellRegion(const QString& regionName)
 {
-    Q_ASSERT(m_model->region().isValid());
-    Q_ASSERT(m_model->region().firstSheet());
-    const Map* const map = m_model->region().firstSheet()->map();
+    Q_ASSERT(m_region.isValid());
+    Q_ASSERT(m_region.firstSheet());
+    const Map* const map = m_region.firstSheet()->map();
     const Region region = Region(regionName, map);
     if (!region.isValid()) {
         kDebug() << qPrintable(regionName) << "is not a valid region.";
         return false;
     }
     // Clear the old binding.
-    Region::ConstIterator end = m_model->region().constEnd();
-    for (Region::ConstIterator it = m_model->region().constBegin(); it != end; ++it) {
+    Region::ConstIterator end = m_region.constEnd();
+    for (Region::ConstIterator it = m_region.constBegin(); it != end; ++it) {
         if (!(*it)->isValid()) {
             continue;
         }
@@ -163,9 +155,9 @@ bool BindingModelContainer::setCellRegion(const QString& regionName)
         (*it)->sheet()->cellStorage()->setBinding(Region((*it)->rect(), (*it)->sheet()), Binding());
     }
     // Set the new region
-    m_model->setRegion(region);
-    end = m_model->region().constEnd();
-    for (Region::ConstIterator it = m_model->region().constBegin(); it != end; ++it) {
+    m_region = region;
+    end = m_region.constEnd();
+    for (Region::ConstIterator it = m_region.constBegin(); it != end; ++it) {
         if (!(*it)->isValid()) {
             continue;
         }
@@ -174,36 +166,12 @@ bool BindingModelContainer::setCellRegion(const QString& regionName)
     return true;
 }
 
-const KSpread::Region& BindingModelContainer::region() const
-{
-    return m_model->region();
-}
-
-void BindingModelContainer::setRegion(const Region& region)
-{
-    m_model->setRegion(region);
-}
-
-void BindingModelContainer::emitDataChanged(const QRect& rect)
-{
-    m_model->emitDataChanged(rect);
-}
-
-void BindingModelContainer::emitChanged(const Region& region)
-{
-    m_model->emitChanged(region);
-}
-
-QAbstractItemModel* BindingModelContainer::model()
-{
-    return m_model;
-}
-
 
 /////// BindingModel
 
-BindingModel::BindingModel(QObject *parent)
+BindingModel::BindingModel(Binding* binding, QObject *parent)
     : QAbstractTableModel(parent)
+    , m_binding(binding)
 {
 }
 
@@ -297,5 +265,4 @@ void BindingModel::setRegion(const Region& region)
     m_region = region;
 }
 
-#include "Binding.moc"
 #include "Binding_p.moc"

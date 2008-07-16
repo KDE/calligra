@@ -328,10 +328,12 @@ void ChartConfigWidget::open( KoShape* shape )
 {
     d->shape = dynamic_cast<ChartShape*>( shape );
     Q_ASSERT( d->shape );
-    
-    KoChart::ChartModel *spreadSheetModel = dynamic_cast<KoChart::ChartModel*>( d->shape->model() );
-    TableModel *tableModel = dynamic_cast<TableModel*>( d->shape->model() );
+
+    kDebug() << "Chart has" << d->shape->model() << "as model.";
+    KoChart::ChartModel *spreadSheetModel = qobject_cast<KoChart::ChartModel*>( d->shape->model() );
+    TableModel *tableModel = qobject_cast<TableModel*>( d->shape->model() );
     d->sourceIsSpreadSheet = spreadSheetModel != 0 && tableModel == 0;
+    kDebug() << d->sourceIsSpreadSheet;
     
     // Update the axis titles
     //d->ui.xAxisTitle->setText( ((KDChart::AbstractCartesianDiagram*)d->shape->chart()->coordinatePlane()->diagram())->axes()[0]->titleText() );

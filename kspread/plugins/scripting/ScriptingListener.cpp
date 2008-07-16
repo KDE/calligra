@@ -25,6 +25,8 @@
 #include <CellStorage.h>
 #include <Sheet.h>
 
+#include <QAbstractItemModel>
+
 using namespace KSpread;
 
 namespace KSpread {

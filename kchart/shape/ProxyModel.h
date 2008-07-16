@@ -30,6 +30,8 @@ namespace KoChart
     class ChartModel;
 }
 
+#include <KoChartModel.h>
+
 // Qt
 #include <QAbstractProxyModel>
 
@@ -47,8 +49,8 @@ public:
 
 public slots:
     virtual void setSourceModel( QAbstractItemModel *sourceModel );
-    virtual void setSourceModel( KoChart::ChartModel *model, const QVector<QRect> &selection );
-    KoChart::ChartModel *spreadSheetModel() const;
+    virtual void setSourceModel( QAbstractItemModel *model, const QVector<QRect> &selection );
+    QAbstractItemModel *spreadSheetModel() const;
 
     void setSelection( const QVector<QRect> &selection );
     DataSet *createDataSet();

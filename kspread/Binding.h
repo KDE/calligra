@@ -20,44 +20,17 @@
 #ifndef KSPREAD_BINDING
 #define KSPREAD_BINDING
 
-#include <interfaces/KoChartModel.h>
 #include <QSharedDataPointer>
-#include <QVariant>
-#include <QAbstractItemModel>
+
+#include "Region.h"
 
 #include "kspread_export.h"
-#include "Region.h"
+
+class QAbstractItemModel;
 
 namespace KSpread
 {
 class Binding;
-class BindingModel;
-
-class BindingModelContainer : public QObject, public KoChart::ChartModel
-{
-    Q_OBJECT
-    Q_INTERFACES(KoChart::ChartModel)
-public:
-    BindingModelContainer(Binding* binding, const Region& region);
-
-    const Region& region() const;
-    void setRegion(const Region& region);
-
-    void emitDataChanged(const QRect& range);
-    void emitChanged(const Region& region);
-
-    // Reimplemented methods from KoChartModel
-    virtual QHash<QString, QVector<QRect> > cellRegion() const;
-    virtual bool setCellRegion(const QString& regionName);
-    virtual QAbstractItemModel* model();
-
-signals:
-    void changed(const Region& region);
-
-private:
-    BindingModel *m_model;
-    Binding* m_binding;
-};
 
 /**
  * Abstracts read-only access to the ValueStorage.
@@ -76,7 +49,7 @@ public:
 
     bool isEmpty() const;
 
-    BindingModelContainer* model() const;
+    QAbstractItemModel* model() const;
 
     const Region& region() const;
     void setRegion(const Region& region);

@@ -419,14 +419,16 @@ Surface *ChartShape::floor() const
 void ChartShape::setModel( QAbstractItemModel *model, bool takeOwnershipOfModel )
 {
     Q_ASSERT( model );
+    kDebug() << "Setting" << model << "as chart model.";
     d->model->setSourceModel( model );
     
     requestRepaint();
 }
 
-void ChartShape::setModel( KoChart::ChartModel *model, const QVector<QRect> &selection )
+void ChartShape::setModel( QAbstractItemModel *model, const QVector<QRect> &selection )
 {
     Q_ASSERT( model );
+    kDebug() << "Setting" << model << "as chart model.";
     d->model->setSourceModel( model, selection );
     
     requestRepaint();

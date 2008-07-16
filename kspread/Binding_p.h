@@ -17,24 +17,34 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
    Boston, MA 02110-1301, USA.
 */
-#ifndef BINDINGMODELMODEL_H
-#define BINDINGMODELMODEL_H
+
+#ifndef KSPREAD_BINDING_MODEL
+#define KSPREAD_BINDING_MODEL
+
+#include <KoChartModel.h>
 
 #include <QAbstractTableModel>
 
 namespace KSpread
 {
-class BindingModel : public QAbstractTableModel
+class Binding;
+
+class BindingModel : public QAbstractTableModel, public KoChart::ChartModel
 {
     Q_OBJECT
-
+    Q_INTERFACES(KoChart::ChartModel)
 public:
-    BindingModel(QObject *parent = 0);
+    BindingModel(Binding* binding, QObject *parent = 0);
 
+    // QAbstractTableModel interface
     virtual QVariant headerData( int section, Qt::Orientation orientation, int role = Qt::DisplayRole ) const;
     virtual int rowCount( const QModelIndex& parent = QModelIndex() ) const;
     virtual int columnCount( const QModelIndex& parent = QModelIndex() ) const;
     virtual QVariant data( const QModelIndex& index, int role = Qt::DisplayRole ) const;
+
+    // KoChart::ChartModel interface
+    virtual QHash<QString, QVector<QRect> > cellRegion() const;
+    virtual bool setCellRegion(const QString& regionName);
 
     const Region& region() const;
     void setRegion(const Region& region);
@@ -47,8 +57,9 @@ signals:
 
 private:
     Region m_region;
+    Binding* m_binding;
 };
 
 } // namespace KSpread
 
-#endif
+#endif // KSPREAD_BINDING_MODEL

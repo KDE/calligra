@@ -35,8 +35,7 @@
 namespace KChart {
 
 TableModel::TableModel( QObject *parent /* = 0 */)
-    : QObject(parent),
-    m_model(new QStandardItemModel( this ))
+    : QStandardItemModel(parent)
 {
 }
 
@@ -56,8 +55,8 @@ bool TableModel::setCellRegion(const QString& regionName)
 
 void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesReader &stylesReader )
 {
-    m_model->setRowCount( 0 );
-    m_model->setColumnCount( 0 );
+    setRowCount( 0 );
+    setColumnCount( 0 );
     
     KoXmlElement n = tableElement.firstChild().toElement();
     for( ; !n.isNull(); n = n.nextSibling().toElement() )
@@ -78,7 +77,7 @@ void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesRea
                 {
                     int column = 0;
                     if ( !isHeader )
-                        m_model->setRowCount( m_model->rowCount() + 1 );
+                        setRowCount( rowCount() + 1 );
                     KoXmlElement __n = _n.firstChild().toElement();
                     for ( ; !__n.isNull(); __n = __n.nextSibling().toElement() )
                     {
@@ -87,7 +86,7 @@ void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesRea
                         if ( __n.localName() == "table-cell" )
                         {
                             if ( isHeader )
-                                m_model->setColumnCount( m_model->columnCount() + 1 );
+                                setColumnCount( columnCount() + 1 );
                             const QString valueType = __n.attributeNS( KoXmlNS::office, "value-type" );
                             QString valueString;
                             const KoXmlElement valueElement = __n.namedItemNS( KoXmlNS::text, "p" ).toElement();
@@ -105,9 +104,9 @@ void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesRea
                             else // if ( valueType == "string" )
                                 value = valueString;
                             if ( isHeader )
-                                m_model->setHeaderData( column, Qt::Horizontal, value );
+                                setHeaderData( column, Qt::Horizontal, value );
                             else
-                                m_model->setData( m_model->index( row, column ), value );
+                                setData( index( row, column ), value );
                             kDebug(350001) << isHeader;
                             kDebug(350001) << "Setting data in" << row << column << "to" << value;
                             column++;
@@ -119,11 +118,11 @@ void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesRea
         }
     }
     
-    kDebug(350001) << "BEFORE" << m_model->rowCount() << m_model->columnCount();
+    kDebug(350001) << "BEFORE" << rowCount() << columnCount();
     //reset(); // the model does that for us, doesn't it?
-    kDebug() << "AFTER" << m_model->rowCount() << m_model->columnCount();
+    kDebug() << "AFTER" << rowCount() << columnCount();
     
-    kDebug(350001) << "++++++++ " << m_model->rowCount() << m_model->columnCount();
+    kDebug(350001) << "++++++++ " << rowCount() << columnCount();
 }
 
 bool TableModel::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const

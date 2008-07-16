@@ -184,7 +184,6 @@ protected:
     Qt::Orientation m_categoryDataDirection;
     
     ProxyModel *m_model;
-    KoChart::ChartModel *m_spreadSheetModel;
     KDChart::AbstractDiagram *m_kdDiagram;
     int m_kdDataSetNumber;
     

@@ -48,7 +48,7 @@ public:
     QList<DataSet*> removedDataSets;
     
     QVector<QRect> selection;
-    KoChart::ChartModel *spreadSheetModel;
+    QAbstractItemModel *spreadSheetModel;
 };
 
 ProxyModel::Private::Private()
@@ -349,9 +349,9 @@ void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
     reset();
 }
 
-void ProxyModel::setSourceModel( KoChart::ChartModel *sourceModel, const QVector<QRect> &selection )
+void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel, const QVector<QRect> &selection )
 {
-    connect( sourceModel->model(), SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
+    connect( sourceModel, SIGNAL( dataChanged( const QModelIndex&, const QModelIndex& ) ),
                             this,  SLOT( dataChanged( const QModelIndex&, const QModelIndex& ) ) );
     
     d->selection = selection;
@@ -373,7 +373,7 @@ void ProxyModel::setSourceModel( KoChart::ChartModel *sourceModel, const QVector
     	}
     }
 
-    QAbstractProxyModel::setSourceModel( sourceModel->model() );
+    QAbstractProxyModel::setSourceModel( sourceModel );
     
     d->spreadSheetModel = sourceModel;
     
@@ -383,7 +383,7 @@ void ProxyModel::setSourceModel( KoChart::ChartModel *sourceModel, const QVector
     reset();
 }
 
-KoChart::ChartModel *ProxyModel::spreadSheetModel() const
+QAbstractItemModel *ProxyModel::spreadSheetModel() const
 {
     return d->spreadSheetModel;
 }

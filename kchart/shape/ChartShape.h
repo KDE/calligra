@@ -110,7 +110,7 @@ public:
     
     // Setter methods
     void setModel( QAbstractItemModel *model, bool takeOwnershipOfModel = false );
-    void setModel( KoChart::ChartModel *model, const QVector<QRect> &selection );
+    void setModel( QAbstractItemModel *model, const QVector<QRect> &selection );
     bool addAxis( Axis *axis );
     bool removeAxis( Axis *axis );
     
