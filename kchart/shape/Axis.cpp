@@ -137,19 +137,48 @@ Axis::Private::Private()
 
 Axis::Private::~Private()
 {
-    delete kdBarDiagram;
-    delete kdLineDiagram;
-    delete kdAreaDiagram;
-    delete kdCircleDiagram;
-    delete kdRadarDiagram;
-    delete kdScatterDiagram;
-
-    delete kdBarDiagramModel;
-    delete kdLineDiagramModel;
-    delete kdAreaDiagramModel;
-    delete kdCircleDiagramModel;
-    delete kdRadarDiagramModel;
-    delete kdScatterDiagramModel;
+    Q_ASSERT( plotArea );
+    
+    if ( kdPlane )
+    {
+        plotArea->kdChart()->takeCoordinatePlane( kdPlane );
+        delete kdPlane;
+    }
+    if ( kdPolarPlane )
+    {
+        plotArea->kdChart()->takeCoordinatePlane( kdPolarPlane );
+        delete kdPolarPlane;
+    }
+    
+    if ( kdBarDiagram )
+    {
+        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdBarDiagram );
+        delete kdBarDiagram;
+        delete kdBarDiagramModel;
+    }
+    if ( kdAreaDiagram )
+    {
+        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdAreaDiagram );
+        delete kdAreaDiagram;
+        delete kdAreaDiagramModel;
+    }
+    if ( kdCircleDiagram )
+    {
+        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdCircleDiagram );
+        delete kdCircleDiagram;
+        delete kdCircleDiagramModel;
+    }
+    if ( kdRadarDiagram )
+    {
+        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdRadarDiagram );
+        delete kdRadarDiagram;
+        delete kdRadarDiagramModel;
+    }
+    if ( kdScatterDiagram )
+    {
+        plotArea->parent()->legend()->kdLegend()->removeDiagram( kdScatterDiagram );
+        delete kdScatterDiagramModel;
+    }
 }
 
 void Axis::Private::registerKDChartModel( KDChartModel *model )
@@ -194,6 +223,9 @@ void Axis::Private::createBarDiagram()
         
         kdBarDiagram->addAxis( kdAxis );
         kdPlane->addDiagram( kdBarDiagram );
+        
+        if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
+            plotArea->kdChart()->addCoordinatePlane( kdPlane );
 
         Q_ASSERT( plotArea );
         foreach ( Axis *axis, plotArea->axes() )
@@ -220,6 +252,9 @@ void Axis::Private::createLineDiagram()
         
         kdLineDiagram->addAxis( kdAxis );
         kdPlane->addDiagram( kdLineDiagram );
+        
+        if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
+            plotArea->kdChart()->addCoordinatePlane( kdPlane );
 
         Q_ASSERT( plotArea );
         foreach ( Axis *axis, plotArea->axes() )
@@ -251,6 +286,9 @@ void Axis::Private::createAreaDiagram()
         
         kdAreaDiagram->addAxis( kdAxis );
         kdPlane->addDiagram( kdAreaDiagram );
+        
+        if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
+            plotArea->kdChart()->addCoordinatePlane( kdPlane );
 
         Q_ASSERT( plotArea );
         foreach ( Axis *axis, plotArea->axes() )
@@ -268,6 +306,7 @@ void Axis::Private::createCircleDiagram()
     if ( kdCircleDiagramModel == 0 )
     {
         kdCircleDiagramModel = new KDChartModel;
+        kdCircleDiagramModel->setDataDirection( Qt::Horizontal );
         registerKDChartModel( kdCircleDiagramModel );
     }
     if ( kdCircleDiagram == 0 )
@@ -277,6 +316,9 @@ void Axis::Private::createCircleDiagram()
 
         plotArea->parent()->legend()->kdLegend()->addDiagram( kdCircleDiagram );
         kdPolarPlane->addDiagram( kdCircleDiagram );
+        
+        if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
+            plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
     }
 }
 
@@ -294,6 +336,9 @@ void Axis::Private::createRadarDiagram()
 
         plotArea->parent()->legend()->kdLegend()->addDiagram( kdRadarDiagram );
         kdPolarPlane->addDiagram( kdRadarDiagram );
+        
+        if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPolarPlane ) )
+            plotArea->kdChart()->addCoordinatePlane( kdPolarPlane );
     }
 }
 
@@ -312,6 +357,9 @@ void Axis::Private::createScatterDiagram()
         
         kdScatterDiagram->addAxis( kdAxis );
         kdPlane->addDiagram( kdScatterDiagram );
+        
+        if ( !plotArea->kdChart()->coordinatePlanes().contains( kdPlane ) )
+            plotArea->kdChart()->addCoordinatePlane( kdPlane );
 
         Q_ASSERT( plotArea );
         foreach ( Axis *axis, plotArea->axes() )
@@ -336,10 +384,12 @@ Axis::Axis( PlotArea *parent )
     d->kdPolarPlane = new KDChart::PolarCoordinatePlane();
     d->kdPolarPlane->setReferenceCoordinatePlane( d->plotArea->kdPlane() );
     
+    d->plotAreaChartType = d->plotArea->chartType();
+    d->plotAreaChartSubType = d->plotArea->chartSubType();
+    
     KDChart::GridAttributes gridAttributes = d->kdPlane->gridAttributes( Qt::Horizontal );
     gridAttributes.setGridVisible( false );
     d->kdPlane->setGridAttributes( Qt::Horizontal, gridAttributes );
-    d->plotArea->kdChart()->addCoordinatePlane( d->kdPlane );
     
     gridAttributes = d->kdPolarPlane->gridAttributes( Qt::Horizontal );
     gridAttributes.setGridVisible( false );
@@ -369,9 +419,6 @@ Axis::Axis( PlotArea *parent )
     d->title->setSize( QSizeF( CM_TO_POINT( 5 ), CM_TO_POINT( 0.75 ) ) );
     
     d->plotArea->parent()->addChild( d->title );
-    
-    d->plotAreaChartType = d->plotArea->chartType();
-    d->plotAreaChartSubType = d->plotArea->chartSubType();
     
     connect( d->plotArea, SIGNAL( gapBetweenBarsChanged( int ) ),
              this,        SLOT( setGapBetweenBars( int ) ) );
@@ -437,6 +484,7 @@ QList<DataSet*> Axis::dataSets() const
 
 bool Axis::attachDataSet( DataSet *dataSet, bool silent )
 {
+    Q_ASSERT( !d->dataSets.contains( dataSet ) );
     if ( d->dataSets.contains( dataSet ) )
         return false;
     d->dataSets.append( dataSet );
@@ -494,10 +542,7 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
 
     dataSet->setKdDiagram( diagram );
     if ( model )
-    {
         model->addDataSet( dataSet, silent );
-        dataSet->setKdDataSetNumber( model->dataSets().indexOf( dataSet ) );
-    }
     
     if ( !silent )
     {
@@ -510,6 +555,7 @@ bool Axis::attachDataSet( DataSet *dataSet, bool silent )
 
 bool Axis::detachDataSet( DataSet *dataSet, bool silent )
 {
+    Q_ASSERT( d->dataSets.contains( dataSet ) );
     if ( !d->dataSets.contains( dataSet ) )
         return false;
     d->dataSets.removeAll( dataSet );
@@ -552,10 +598,17 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
     
     if ( oldModel && *oldModel )
     {
-        if ( (*oldModel)->columnCount() == 1 )
+        if ( (*oldModel)->columnCount() == (*oldModel)->dataDimensions() )
         {
-            if ( (*oldDiagram)->coordinatePlane() )
-                (*oldDiagram)->coordinatePlane()->takeDiagram( (*oldDiagram) );
+            KDChart::AbstractCoordinatePlane *plane = (*oldDiagram)->coordinatePlane();
+            if ( plane )
+            {
+                plane->takeDiagram( (*oldDiagram) );
+                if ( plane->diagrams().size() == 0 )
+                {
+                    d->plotArea->kdChart()->takeCoordinatePlane( plane );
+                }
+            }
             if ( d->plotArea->parent()->legend()->kdLegend() )
             {
                 d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
@@ -573,8 +626,8 @@ bool Axis::detachDataSet( DataSet *dataSet, bool silent )
     }
     
     dataSet->setKdDiagram( 0 );
-    dataSet->setKdDataSetNumber( 0 );
-    
+    dataSet->setKdChartModel( 0 );
+    dataSet->setKdDataSetNumber( -1 );
 
     if ( !silent )
     {
@@ -924,6 +977,17 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
         break;
     }
     
+    if ( isCartesian( d->plotAreaChartType ) && isPolar( chartType ) )
+    {
+        if ( d->plotArea->kdChart()->coordinatePlanes().contains( d->kdPlane ) )
+            d->plotArea->kdChart()->takeCoordinatePlane( d->kdPlane );
+    }
+    else if ( isPolar( d->plotAreaChartType ) && isCartesian( chartType ) )
+    {
+        if ( d->plotArea->kdChart()->coordinatePlanes().contains( d->kdPolarPlane ) )
+            d->plotArea->kdChart()->takeCoordinatePlane( d->kdPolarPlane );
+    }
+    
     switch ( chartType )
     {
     case BarChartType:
@@ -966,17 +1030,6 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
     
     Q_ASSERT( newModel );
     
-    if ( isCartesian( d->plotAreaChartType ) && isPolar( chartType ) )
-    {
-        d->plotArea->kdChart()->takeCoordinatePlane( d->kdPlane );
-        d->plotArea->kdChart()->addCoordinatePlane( d->kdPolarPlane );
-    }
-    if ( isPolar( d->plotAreaChartType ) && isCartesian( chartType ) )
-    {
-        d->plotArea->kdChart()->takeCoordinatePlane( d->kdPolarPlane );
-        d->plotArea->kdChart()->addCoordinatePlane( d->kdPlane );
-    }
-    
     if (    isPolar( chartType ) && !isPolar( d->plotAreaChartType )
          || !isPolar( chartType ) && isPolar( d->plotAreaChartType ) )
     {
@@ -994,17 +1047,21 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
     {
         if ( dataSet->chartType() != LastChartType )
             continue;
+        dataSet->setKdDiagram( newDiagram );
         newModel->addDataSet( dataSet );
         if ( oldModel && *oldModel )
         {
-        	if ( (*oldModel)->columnCount() == 1 )
+        	if ( (*oldModel)->columnCount() == (*oldModel)->dataDimensions() )
         	{
-        		if ( (*oldDiagram)->coordinatePlane() )
-        			(*oldDiagram)->coordinatePlane()->takeDiagram( (*oldDiagram) );
-        		if ( d->plotArea->parent()->legend()->kdLegend() )
+                KDChart::AbstractCoordinatePlane *plane = (*oldDiagram)->coordinatePlane();
+        		if ( plane )
         		{
-        		    d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
+        		    plane->takeDiagram( (*oldDiagram) );
+                    if ( plane->diagrams().size() == 0 )
+                        d->plotArea->kdChart()->takeCoordinatePlane( plane );
         		}
+        		if ( d->plotArea->parent()->legend()->kdLegend() )
+        		    d->plotArea->parent()->legend()->kdLegend()->removeDiagram( (*oldDiagram) );
         		Q_ASSERT( oldDiagram );
         		Q_ASSERT( *oldDiagram );
 		        if ( *oldDiagram )
@@ -1016,8 +1073,6 @@ void Axis::plotAreaChartTypeChanged( ChartType chartType )
         	else
         		(*oldModel)->removeDataSet( dataSet );
         }
-        dataSet->setKdDiagram( newDiagram );
-        dataSet->setKdDataSetNumber( newModel->dataSets().indexOf( dataSet ) );
         dataSet->setGlobalChartType( chartType );
     }
     
