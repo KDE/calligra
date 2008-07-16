@@ -57,12 +57,13 @@ private:
     void addPoint( KoPointerEvent *event );
     // auxiliary functions to calculate the dynamic parameters
     double calculateWidth( double pressure );
-    double calculateAngle();
+    double calculateAngle( const QPointF &oldSpeed, const QPointF &newSpeed);
 
     QPointF m_lastPoint;
     KarbonCalligraphicShape *m_shape;
 
     double m_strokeWidth;
+    double m_lastWidth;
     double m_angle; // angle in radians
     double m_fixation;
     double m_thinning;
@@ -70,6 +71,7 @@ private:
     double m_drag; // from 0.0 to 1.0
 
     bool m_isDrawing;
+    bool m_firstPointAdded;
 
     // dynamic parameters
     QPointF m_speed; // used as a vector

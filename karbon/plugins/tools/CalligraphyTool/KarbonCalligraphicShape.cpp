@@ -71,76 +71,44 @@ void KarbonCalligraphicShape::
         moveTo( p1 );
         lineTo( p2 );
         normalize();
-        m_flipped = false;
         return;
     }
     // pointCount > 0
 
-    int flip = 0;
-    if ( pointCount() > 2 ) 
-        flip = flipDetected( p1, p2 );
+    bool flip = (pointCount() > 2) ? flipDetected(p1, p2) : false;
 
-    if ( flip )
-    {
-        kDebug() << "!!!!!!!!!! flip 1 !!!!!!!!" << flip << !m_flipped;
-        // handle flip
-        if ( m_flipped )
-            flip *= -1;
-        m_flipped = ! m_flipped;
-
+    // if there was a flip add additional points
+    if ( flip ) {
         int index = pointCount() / 2;
-
         // find the last two points
         KoPathPoint *last1 = pointByIndex( KoPathPointIndex(0, index-1) );
         KoPathPoint *last2 = pointByIndex( KoPathPointIndex(0, index) );
-
-        // and re-add them in reverse order
-        appendPointsToPathAux( last2->point(), last1->point() );
-
-        // partially smooth
-        smoothLastPoints();
-        last1->removeControlPoint2();
-        last2->removeControlPoint1();
-        if ( flip > 0 )
-            last2->removeControlPoint2();
-        else // flip < 0
-            last1->removeControlPoint1();
-    }
-
-    // detect the flip caused by the angle changing 180 degrees
-    // thus detect the boundary crossing
-    // TODO: write more elegant code (external function?)
-    int index = pointCount() / 2;
-    QPointF last1 = pointByIndex( KoPathPointIndex(0, index-1) )->point();
-    QPointF last2 = pointByIndex( KoPathPointIndex(0, index) )->point();
-    QPointF new1 = m_flipped ? p2 : p1;
-    QPointF new2 = m_flipped ? p1 : p2;
-
-    int sum1 = std::abs( ccw(new1, new2, last1) + ccw(new1, last2, last1) );
-    int sum2 = std::abs( ccw(new2, new1, last2) + ccw(new2, last1, last2) );
-    // if there was a flip
-    if ( sum1 < 2 && sum2 < 2 )
-    {
-        kDebug() << "!!!!!!!!!! flip 2 !!!!!!!!";
-        m_flipped = !m_flipped;
-    }
-
-    if ( m_flipped )
-    {
         appendPointsToPathAux( p2, p1 );
+        if ( pointCount() > 4 )
+            smoothLastPoints();
     }
-    else
-    {
-        appendPointsToPathAux( p1, p2 );
-    }
+
+    appendPointsToPathAux( p1, p2 );
 
     if ( pointCount() > 4 )
     {
         smoothLastPoints();
-        
-        // if there was a flip part of the smoothing was already done
-        // so undoing part of the above call
+
         if ( flip )
+        {
+            int index = pointCount() / 2;
+            // find the last two points
+            KoPathPoint *last1 = pointByIndex( KoPathPointIndex(0, index-1) );
+            KoPathPoint *last2 = pointByIndex( KoPathPointIndex(0, index) );
+
+            last1->removeControlPoint1();
+            last1->removeControlPoint2();
+            last2->removeControlPoint1();
+            last2->removeControlPoint2();
+            m_lastWasFlip = true;
+        }
+
+        if ( m_lastWasFlip )
         {
             int index = pointCount() / 2;
             // find the previous two points
@@ -148,11 +116,12 @@ void KarbonCalligraphicShape::
             KoPathPoint *prev2 = pointByIndex( KoPathPointIndex(0, index+1) );
 
             prev1->removeControlPoint1();
+            prev1->removeControlPoint2();
+            prev2->removeControlPoint1();
             prev2->removeControlPoint2();
-            if ( flip > 0 )
-                prev2->removeControlPoint1();
-            else // flip < 0
-                prev1->removeControlPoint2();
+
+            if ( ! flip )
+                m_lastWasFlip = false;
         }
     }
     normalize();
@@ -245,46 +214,18 @@ const QRectF KarbonCalligraphicShape::lastPieceBoundingRect()
 }
 
 
-int KarbonCalligraphicShape::flipDetected( const QPointF &p1, const QPointF &p2 )
+bool KarbonCalligraphicShape::flipDetected( const QPointF &p1, const QPointF &p2 )
 {
+    // detect the flip caused by the angle changing 180 degrees
+    // thus detect the boundary crossing
     int index = pointCount() / 2;
-
     QPointF last1 = pointByIndex( KoPathPointIndex(0, index-1) )->point();
-    QPointF prev1 = pointByIndex( KoPathPointIndex(0, index-2) )->point();
-
     QPointF last2 = pointByIndex( KoPathPointIndex(0, index) )->point();
-    QPointF prev2 = pointByIndex( KoPathPointIndex(0, index+1) )->point();
 
-    //                 prev2  last2           p2
-    //    ...o-----o-----o-----o  <-- index   o
-    //    ...                  |
-    //    ...o-----o-----o-----o              o
-    //                 prev1  last1           p1
-
-    // the path has already flipped a even number of times
-    // so the indexes of where p1 and p2 will be inserted are swapped
-    if ( m_flipped ) 
-    {
-        qSwap( last1, last2 );
-        qSwap( prev1, prev2 );
-    }
-
-    // detect possible flips
-    // FIXME: think about the degenerate cases (ccw() == 0)
-    if ( ccw( prev1, last1, p1 ) == ccw( prev2, prev1, last1 ) &&
-         ccw( prev1, last1, p1 ) != ccw( last1, p2, last2 ) )
-    {
-        return +1;
-    }
-
-    // the symmetric of the above
-    if ( ccw( prev2, last2, p2 ) == ccw(prev1, prev2, last2) &&
-         ccw( prev2, last2, p2 ) != ccw(last2, p1, last1) )
-    {
-        return -1;
-    }
-    // no flip was detected
-    return 0;
+    int sum1 = std::abs( ccw(p1, p2, last1) + ccw(p1, last2, last1) );
+    int sum2 = std::abs( ccw(p2, p1, last2) + ccw(p2, last1, last2) );
+    // if there was a flip
+    return sum1 < 2 && sum2 < 2;
 }
 
 int KarbonCalligraphicShape::ccw( const QPointF &p1,
@@ -345,7 +286,7 @@ void KarbonCalligraphicShape::updatePath( const QSizeF &size )
     Q_UNUSED(size);
 
     QPointF pos = position();
-    
+
     // remove all points
     clear();
     setPosition( QPoint(0, 0) );
@@ -365,7 +306,7 @@ void KarbonCalligraphicShape::simplifyPath()
 {
     // TODO: the error should be proportional to the width
     //       and it shouldn't be a magic number
-    karbonSimplifyPath( this, 0.3 );
+    //karbonSimplifyPath( this, 0.3 );
 }
 
 QString KarbonCalligraphicShape::pathShapeId() const

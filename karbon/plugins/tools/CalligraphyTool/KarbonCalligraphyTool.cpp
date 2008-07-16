@@ -76,6 +76,7 @@ void KarbonCalligraphyTool::mousePressEvent( KoPointerEvent *event )
     m_speed = QPointF(0, 0);
 
     m_isDrawing = true;
+    m_firstPointAdded = false;
     m_shape = new KarbonCalligraphicShape;
     //addPoint( event );
 }
@@ -121,7 +122,7 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
         // TODO: when may this happen????
         delete finalPath;
     }
-    
+
     m_canvas->updateCanvas( m_shape->boundingRect() );
     m_canvas->updateCanvas( finalPath->boundingRect() );
 
@@ -130,20 +131,24 @@ void KarbonCalligraphyTool::mouseReleaseEvent( KoPointerEvent *event )
 
 void KarbonCalligraphyTool::addPoint( KoPointerEvent *event )
 {
+    if ( ! m_firstPointAdded ) {
+        m_lastPoint = event->point;
+        m_firstPointAdded = true;
+        return;
+    }
+
     QPointF force = event->point - m_lastPoint;
-
     QPointF dSpeed = force/m_mass;
-    m_speed += dSpeed;
-
-    m_lastPoint = m_lastPoint + m_speed;
-
+    // apply drag and "force"
+    QPointF newSpeed = m_speed * (1.0 - m_drag) + dSpeed;
     double width = calculateWidth( event->pressure() );
-    m_shape->appendPoint( m_lastPoint, calculateAngle(), width );
+    double angle = calculateAngle( m_speed, newSpeed );
 
+    m_shape->appendPoint( m_lastPoint, angle, width );
+
+    m_speed = newSpeed;
+    m_lastPoint = m_lastPoint + m_speed;
     m_canvas->updateCanvas( m_shape->lastPieceBoundingRect() );
-
-    // apply drag
-    m_speed *= (1.0 - m_drag);
 }
 
 double KarbonCalligraphyTool::calculateWidth( double pressure )
@@ -165,31 +170,53 @@ double KarbonCalligraphyTool::calculateWidth( double pressure )
 }
 
 
-double KarbonCalligraphyTool::calculateAngle()
+double KarbonCalligraphyTool::calculateAngle( const QPointF &oldSpeed,
+                                              const QPointF &newSpeed )
 {
+    // calculate the avarage of the speed (sum of the normalized values)
+    double oldLength = QLineF( QPointF(0,0), oldSpeed ).length();
+    double newLength = QLineF( QPointF(0,0), newSpeed ).length();
+    QPointF oldSpeedNorm = oldLength ? oldSpeed/oldLength : QPointF(0, 0);
+    QPointF newSpeedNorm = newLength ? newSpeed/newLength : QPointF(0, 0);
+    QPointF speed = oldSpeedNorm + newSpeedNorm;
+
     // angle solely based on the speed
-    double speedAngle = m_angle;
-    if ( m_speed.x() != 0 ) // avoid division by zero
+    double speedAngle = 0;
+    if ( speed.x() != 0 ) // avoid division by zero
     {
-        speedAngle = std::atan( m_speed.y() / m_speed.x() );
+        speedAngle = std::atan( speed.y() / speed.x() );
     }
-    else if ( m_speed.y() != 0 )
+    else if ( speed.y() != 0 )
     {
         // x == 0 && y != 0
         speedAngle = M_PI;
     }
+    if ( speed.x() < 0 )
+        speedAngle += M_PI;
 
+    // move 90 degrees
     speedAngle += M_PI/2;
 
-    double dAngle = speedAngle - m_angle;
+    double fixedAngle = m_angle;
+    // check if the fixed angle needs to be flipped
+    double diff = fixedAngle - speedAngle;
+    while ( diff >= M_PI ) // normalize diff between -180 and 180
+        diff -= 2*M_PI;
+    while ( diff < -M_PI )
+        diff += 2*M_PI;
 
-    // normalize dAngle between -M_PI/2 and M_PI/2
-    while (dAngle > M_PI/2)
-        dAngle -= M_PI;
-    while (dAngle <= -M_PI/2)
-        dAngle += M_PI;
+    if ( std::abs(diff) > M_PI/2 ) // if absolute value < 90
+        fixedAngle += M_PI; // += 180
     
-    double angle = m_angle + dAngle*(1.0 - m_fixation);
+    double dAngle = speedAngle - fixedAngle;
+
+    // normalize dAngle between -90 and +90
+    while ( dAngle >= M_PI/2 )
+        dAngle -= M_PI;
+    while ( dAngle < -M_PI/2 )
+        dAngle += M_PI;
+
+    double angle = fixedAngle + dAngle*(1.0 - m_fixation);
 
     return angle;
 }

@@ -76,8 +76,6 @@ public:
     void appendPoint( const QPointF &p1, double angle, double width );
     void appendPointToPath(const KarbonCalligraphicPoint &p);
 
-    //KoPathShape *simplified( float error );
-
     // returns the bounding rect of whan needs to be repainted
     // after new points are added
     const QRectF lastPieceBoundingRect();
@@ -108,11 +106,7 @@ private:
     void appendPointsToPathAux( const QPointF &p1, const QPointF &p2 );
    
     // function to detect a flip, given the points being inserted
-    // it returns 0 if there is no flip
-    // +1 if the flip is in the direction of the higher indexes
-    // -1 if the flip is in the direction of the lower indexes
-    // TODO: values not used, maybe just return a boolean
-    int flipDetected( const QPointF &p1, const QPointF &p2 );
+    bool flipDetected( const QPointF &p1, const QPointF &p2 );
 
     void smoothLastPoints();
     void smoothPoint( const int index );
@@ -122,11 +116,9 @@ private:
     // and 0 if they form a degenerate triangle
     static int ccw( const QPointF &p1, const QPointF &p2, const QPointF &p3 );
 
-    // when true p1 is connected to the previous
-    bool m_flipped;
-
     // the actual data then determines it's shape
     QList<KarbonCalligraphicPoint *> m_points;
+    bool m_lastWasFlip;
 };
 
 #endif // KARBONCALLIGRAPHICSHAPE_H
