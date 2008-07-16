@@ -20,6 +20,9 @@
 
 // Local
 #include "TableModel.h"
+#include "CellRegion.h"
+
+#include <cmath>
 
 // KDE
 #include <KDebug>
@@ -48,15 +51,20 @@ QHash<QString, QVector<QRect> > TableModel::cellRegion() const
     return QHash<QString, QVector<QRect> >();
 }
 
-bool TableModel::setCellRegion(const QString& regionName)
+bool TableModel::setCellRegion( const QString& regionName )
 {
-    Q_UNUSED(regionName);
-    return false;
+    int result = 0;
+    const int size = regionName.size();
+    for ( int i = 0; i < size; i++ )
+    {
+        result += CellRegion::rangeCharToInt( regionName[i].toAscii() ) * pow( 10, ( size - i - 1 ) );
+    }
+    return result;
 }
 
-bool TableModel::isCellRegionValid(const QString& regionName) const
+bool TableModel::isCellRegionValid( const QString& regionName ) const
 {
-    Q_UNUSED(regionName);
+    Q_UNUSED( regionName );
     return true;
 }
 
@@ -114,8 +122,6 @@ void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesRea
                                 setHeaderData( column, Qt::Horizontal, value );
                             else
                                 setData( index( row, column ), value );
-                            kDebug(350001) << isHeader;
-                            kDebug(350001) << "Setting data in" << row << column << "to" << value;
                             column++;
                         }
                     }
@@ -124,12 +130,6 @@ void TableModel::loadOdf( const KoXmlElement &tableElement, const KoOdfStylesRea
             }
         }
     }
-    
-    kDebug(350001) << "BEFORE" << rowCount() << columnCount();
-    //reset(); // the model does that for us, doesn't it?
-    kDebug() << "AFTER" << rowCount() << columnCount();
-    
-    kDebug(350001) << "++++++++ " << rowCount() << columnCount();
 }
 
 bool TableModel::saveOdf( KoXmlWriter &bodyWriter, KoGenStyles &mainStyles ) const
