@@ -39,7 +39,6 @@
 #include <KoShapeManagerPaintingStrategy.h>
 #include <KoCanvasController.h>
 #include <KoSelection.h>
-#include <KoCanvasResourceProvider.h>
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -93,8 +92,7 @@ KarbonCanvas::KarbonCanvas( KarbonPart *p )
     d->toolProxy = new KoToolProxy(this);
     d->shapeManager = new KoShapeManager(this, d->document->shapes() );
     connect( d->shapeManager, SIGNAL(selectionChanged()), this, SLOT(updateSizeAndOffset()) );
-    connect( resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
-             this, SLOT(resourceChanged(int, const QVariant &)) );
+
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
     setMouseTracking(true);
@@ -378,14 +376,6 @@ void KarbonCanvas::updateInputMethodInfo() {
 KoGuidesData * KarbonCanvas::guidesData()
 {
     return &d->part->guidesData();
-}
-
-void KarbonCanvas::resourceChanged(int key, const QVariant &)
-{
-    if( key == KoCanvasResource::PageSize )
-    {
-        adjustOrigin();
-    }
 }
 
 #include "KarbonCanvas.moc"

@@ -24,6 +24,7 @@
 #include <KoCanvasController.h>
 #include <KoCanvasBase.h>
 #include <KoZoomHandler.h>
+#include <KoCanvasResourceProvider.h>
 
 #include <KActionCollection>
 #include <KLocale>
@@ -69,6 +70,9 @@ KarbonZoomController::KarbonZoomController( KoCanvasController *controller, KAct
     connect(d->canvasController, SIGNAL( zoomBy(const double ) ), this, SLOT( requestZoomBy( const double ) ) );
     connect(d->canvasController, SIGNAL(moveDocumentOffset(const QPoint&)),
             d->canvas, SLOT(setDocumentOffset(const QPoint&)));
+
+    connect( d->canvas->resourceProvider(), SIGNAL(resourceChanged(int, const QVariant &)),
+             this, SLOT(resourceChanged(int, const QVariant &)) );
 }
 
 KarbonZoomController::~KarbonZoomController()
@@ -176,6 +180,21 @@ void KarbonZoomController::setPageSize( const QSizeF &pageSize )
         setZoom(KoZoomMode::ZOOM_WIDTH, -1);
     if(d->zoomHandler->zoomMode() == KoZoomMode::ZOOM_PAGE)
         setZoom(KoZoomMode::ZOOM_PAGE, -1);
+}
+
+void KarbonZoomController::resourceChanged(int key, const QVariant &value)
+{
+    if( key == KoCanvasResource::PageSize )
+    {
+        setPageSize( value.toSizeF() );
+
+        // Tell the canvasController that the document in pixels
+        // has changed as a result of the page layout change
+        QRectF documentRect = d->canvas->documentViewRect();
+        QSizeF viewSize = d->zoomHandler->documentToView( documentRect ).size();
+        d->canvasController->setDocumentSize( QSize( qRound(viewSize.width()), qRound(viewSize.height()) ) );
+        d->canvas->adjustOrigin();
+    }
 }
 
 #include "KarbonZoomController.moc"

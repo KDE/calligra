@@ -73,6 +73,9 @@ private slots:
     /// when the canvas controller wants us to change zoom
     void requestZoomBy(const double factor);
 
+    /// so we know when the page size changed
+    void resourceChanged(int key, const QVariant & value);
+
 private:
     class Private;
     Private * const d;
