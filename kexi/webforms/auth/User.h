@@ -42,6 +42,8 @@ namespace Auth {
         QString name() const;
         QString password() const;
         QList<Permission> permissions() const;
+        bool can(Permission);
+        
     private:
         QString m_name;
         QString m_password;

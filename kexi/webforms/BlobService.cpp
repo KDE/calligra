@@ -27,6 +27,7 @@
 #include <KDebug>
 
 #include <pion/net/HTTPResponseWriter.hpp>
+#include <pion/net/PionUser.hpp>
 
 #include <kexidb/cursor.h>
 #include <kexidb/connection.h>
@@ -51,7 +52,7 @@ namespace KexiWebForms {
         QString table(queryString.at(2));
         QString fieldName(queryString.at(3));
         QString pkey(queryString.at(4));
-        QString pkeyVal(queryString.at(5));
+        QString pkeyVal(queryString.at(5));        
 
         KexiDB::TableSchema* tableSchema = gConnection->tableSchema(table);
         KexiDB::Field* field = tableSchema->field(fieldName);
@@ -85,6 +86,7 @@ namespace KexiWebForms {
 
             gConnection->deleteCursor(cursor);
         }
+            
     }
     
 }

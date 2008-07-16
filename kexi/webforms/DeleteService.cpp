@@ -20,17 +20,20 @@
 
 #include <string>
 
+#include <google/template.h>
+#include <pion/net/HTTPResponseWriter.hpp>
+
 #include <QString>
 
 #include <KDebug>
-
-#include <pion/net/HTTPResponseWriter.hpp>
 
 #include <kexidb/utils.h>
 #include <kexidb/queryschema.h>
 #include <kexidb/cursor.h>
 
-#include <google/template.h>
+#include "auth/Authenticator.h"
+#include "auth/User.h"
+#include "auth/Permission.h"
 
 #include "DataProvider.h"
 #include "TemplateProvider.h"
@@ -46,24 +49,35 @@ namespace KexiWebForms {
                     boost::bind(&TCPConnection::finish, tcp_conn)));
 
 
-        QStringList queryString(QString(request->getOriginalResource().c_str()).split('/'));
-        QString requestedTable = queryString.at(2);
-        QString pkeyName = queryString.at(3);
-        QString pkeyValue = queryString.at(4);
+        PionUserPtr userPtr(request->getUser());
+        Auth::User u = Auth::Authenticator::getInstance()->authenticate(userPtr);
         
-        setValue("TABLENAME", requestedTable);
+        if (u.can(Auth::DELETE)) {
+            /// @todo ensure that there's the correct number of parameters
+            QStringList queryString(QString(request->getOriginalResource().c_str()).split('/'));
+            QString requestedTable = queryString.at(2);
+            QString pkeyName = queryString.at(3);
+            QString pkeyValue = queryString.at(4);
 
-        kDebug() << "Trying to delete row..." << endl;
-        if (KexiDB::deleteRow(*gConnection, gConnection->tableSchema(requestedTable),
-                              pkeyName, pkeyValue)) {
-            m_dict->ShowSection("SUCCESS");
-            setValue("MESSAGE", "Row deleted successfully");
+            setValue("TABLENAME", requestedTable);
+
+            kDebug() << "Trying to delete row..." << endl;
+            if (KexiDB::deleteRow(*gConnection, gConnection->tableSchema(requestedTable),
+                                pkeyName, pkeyValue)) {
+                m_dict->ShowSection("SUCCESS");
+                setValue("MESSAGE", "Row deleted successfully");
+            } else {
+                m_dict->ShowSection("ERROR");
+                /// @todo retrieve proper error message
+                setValue("MESSAGE", "Error while trying to delete row!");
+            }
+            
+            renderTemplate(m_dict, writer);
+            
         } else {
-            m_dict->ShowSection("ERROR");
-            setValue("MESSAGE", "Error while trying to delete row!");
+            writer->write("Not Authorized");
+            writer->send();
         }
-
-        renderTemplate(m_dict, writer);
     }
 
 }

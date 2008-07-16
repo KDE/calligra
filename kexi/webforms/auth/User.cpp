@@ -39,5 +39,13 @@ namespace Auth {
         return m_perms;
     }
 
+    bool User::can(Permission p) {
+        for (int i = 0; i < m_perms.size(); ++i) {
+            if (m_perms.at(i) == p)
+                return true;
+        }
+        return false;
+    }
+
 }
 }

@@ -21,8 +21,11 @@
 #ifndef KEXIWEBFORMS_AUTH_AUTHENTICATOR_H
 #define KEXIWEBFORMS_AUTH_AUTHENTICATOR_H
 
+#include <string>
+
 #include <QList>
 
+#include <pion/net/PionUser.hpp>
 #include <pion/net/HTTPAuth.hpp>
 
 #include "User.h"
@@ -45,6 +48,8 @@ namespace Auth {
 
         bool loadStore();
         User authenticate(const char*, const char*);
+        User authenticate(const std::string&, const std::string&);
+        User authenticate(pion::net::PionUserPtr p);
         
     protected:
         /** ctor */

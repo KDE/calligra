@@ -107,7 +107,7 @@ int main(int argc, char **argv) {
     HTTPAuthPtr auth(new HTTPCookieAuth(userMan));
     KexiWebForms::Auth::Authenticator::init(auth);
     
-    
+    // Standard services
     server.addService("/", &indexService);
     server.addService("/create", &createService);
     server.addService("/read", &readService);
@@ -115,13 +115,16 @@ int main(int argc, char **argv) {
     server.addService("/delete", &deleteService);
     server.addService("/query", &queryService);
     
-    // Restrict use of some services
+    // Restrict CRUD operations (and BlobService) to registered users
+    // filtered using our permissions manager
+    auth->addRestrict("/read");
     auth->addRestrict("/create");
     auth->addRestrict("/update");
     auth->addRestrict("/delete");
-    
-    server.addService("/f", &fileService);
+    auth->addRestrict("/blob");
 
+    // File and blob service
+    server.addService("/f", &fileService);
     server.addService("/blob", &blobService);
     
     server.start();

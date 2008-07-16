@@ -18,6 +18,7 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <pion/net/PionUser.hpp>
 #include <pion/net/HTTPAuth.hpp>
 
 #include "Permission.h"
@@ -43,17 +44,15 @@ namespace Auth {
 
     // fictional loadStore, returns a fixed list of users
     bool Authenticator::loadStore() {
-        User* u = new User("root", "root");
-        u->addPermission(CAN_CREATE);
-        u->addPermission(CAN_READ);
-        u->addPermission(CAN_UPDATE);
-        u->addPermission(CAN_DELETE);
-
-        u = new User("restricted", "restricted");
-
+        User* u = new User("anonymous", "guest");
         m_users.append(*u);
         m_auth->addUser(u->name().toUtf8().constData(), u->password().toUtf8().constData());
         
+        u = new User("root", "root");
+        u->addPermission(CREATE);
+        u->addPermission(READ);
+        u->addPermission(UPDATE);
+        u->addPermission(DELETE);
         m_users.append(*u);
         m_auth->addUser(u->name().toUtf8().constData(), u->password().toUtf8().constData());
 
@@ -67,8 +66,15 @@ namespace Auth {
                 return u;
             }
         }
-        User* u = new User("anonymous", "guest");
-        return *u;
+        return User("anonymous", "guest");
+    }
+
+    User Authenticator::authenticate(const std::string& name, const std::string& password) {
+        return authenticate(name.c_str(), password.c_str());
+    }
+
+    User Authenticator::authenticate(pion::net::PionUserPtr p) {
+        return authenticate(p->getUsername(), p->getPassword());
     }
 
 }

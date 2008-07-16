@@ -25,10 +25,10 @@ namespace KexiWebForms {
 namespace Auth {
 
     enum Permission {
-        CAN_CREATE,
-        CAN_READ,
-        CAN_UPDATE,
-        CAN_DELETE
+        CREATE,
+        READ,
+        UPDATE,
+        DELETE
     };
 
 }
