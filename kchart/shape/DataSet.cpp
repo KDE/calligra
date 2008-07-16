@@ -41,10 +41,11 @@ DataSet::DataSet( ProxyModel *proxyModel )
 {
     m_model = proxyModel;
     
+    m_num = -1;
     m_chartType = LastChartType;
     m_chartSubType = NoChartSubtype;
     m_kdChartModel = 0;
-    m_kdDataSetNumber = 0;
+    m_kdDataSetNumber = -1;
     m_showMeanValue = false;
     m_showValues = false;
     m_showLabels = false;
@@ -54,6 +55,7 @@ DataSet::DataSet( ProxyModel *proxyModel )
     m_errorMargin = 0.0;
     m_lowerErrorLimit = 0.0;
     m_upperErrorLimit = 0.0;
+    m_brush = QColor( Qt::white );
     m_pen = QPen( Qt::black );
     m_kdDiagram = 0;
     m_attachedAxis = 0;
@@ -234,7 +236,7 @@ QBrush DataSet::brush() const
 void DataSet::setPen( const QPen &pen )
 {
     m_pen = pen;
-    if ( m_kdDiagram )
+    if ( m_kdDiagram && m_kdDataSetNumber >= 0 && size() > 0 )
         m_kdDiagram->setPen( m_kdDataSetNumber, pen );
     if ( m_attachedAxis )
         m_attachedAxis->update();
@@ -243,11 +245,8 @@ void DataSet::setPen( const QPen &pen )
 void DataSet::setBrush( const QBrush &brush )
 {
     m_brush = brush;
-    if ( m_kdDiagram )
-    {
-        qDebug() << "Setting brush for dataset" << m_kdDiagram->model() << m_kdDataSetNumber;
+    if ( m_kdDiagram && m_kdDataSetNumber >= 0 && size() > 0 )
         m_kdDiagram->setBrush( m_kdDataSetNumber, brush );
-    }
     if ( m_attachedAxis )
         m_attachedAxis->update();
 }
@@ -262,6 +261,16 @@ void DataSet::setColor( const QColor &color )
     QBrush brush = m_brush;
     brush.setColor( color );
     setBrush( brush );
+}
+
+int DataSet::number() const
+{
+    return m_num;
+}
+
+void DataSet::setNumber( int num )
+{
+    m_num = num;
 }
 
 void DataSet::setShowMeanValue( bool show )
@@ -392,10 +401,10 @@ int DataSet::kdDataSetNumber() const
 void DataSet::setKdDataSetNumber( int number )
 {
     m_kdDataSetNumber = number;
-    if ( m_kdDiagram )
+    if ( m_kdDiagram && m_kdDataSetNumber >= 0 && size() > 0 )
     {
-        m_brush = m_kdDiagram->brush( number );
-        m_pen = m_kdDiagram->pen( number );
+        m_kdDiagram->setBrush( m_kdDataSetNumber, m_brush );
+        m_kdDiagram->setPen( m_kdDataSetNumber, m_pen );
     }
 }
 

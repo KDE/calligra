@@ -52,6 +52,7 @@ public:
     QPen pen() const;
     QBrush brush() const;
     QColor color() const;
+    int number() const;
 
     bool showMeanValue() const;
     QPen meanValuePen() const;
@@ -78,6 +79,7 @@ public:
     void setPen( const QPen &pen );
     void setBrush( const QBrush &brush );
     void setColor( const QColor &color );
+    void setNumber( int num );
 
     void setShowMeanValue( bool b );
     void setMeanValuePen( const QPen &pen );
@@ -170,6 +172,7 @@ protected:
     double m_upperErrorLimit;
     QPen m_pen;
     QBrush m_brush;
+    int m_num;
     
     CellRegion m_xDataRegion;
     CellRegion m_yDataRegion;
