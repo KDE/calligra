@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2008 Stefan Nikolaus stefan.nikolaus@kdemail.net
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,8 +17,30 @@
    Boston, MA 02110-1301, USA.
 */
 
-// muahahaha!
-#include "BindingStorage.moc"
-#include "ConditionsStorage.moc"
-#include "RectStorage.moc"
-#include "ValidityStorage.moc"
+#ifndef KSPREAD_BINDING_STORAGE
+#define KSPREAD_BINDING_STORAGE
+
+#include "Binding.h"
+#include "RectStorage.h"
+
+namespace KSpread
+{
+
+/**
+ * BindingStorage
+ */
+class BindingStorage : public QObject, public RectStorage<Binding>
+{
+    Q_OBJECT
+public:
+    explicit BindingStorage(Map* map) : QObject(map), RectStorage<Binding>(map) {}
+    BindingStorage(const BindingStorage& other) : QObject(other.parent()), RectStorage<Binding>(other) {}
+
+protected Q_SLOTS:
+    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
+    virtual void garbageCollection() { RectStorage<Binding>::garbageCollection(); }
+};
+
+} // namespace KSpread
+
+#endif // KSPREAD_BINDING_STORAGE

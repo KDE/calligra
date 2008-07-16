@@ -21,7 +21,12 @@
 #define KSPREAD_CELL_STORAGE_P
 
 // KSpread
+#include "Binding.h"
+#include "Condition.h"
+#include "Formula.h"
 #include "Style.h"
+#include "Validity.h"
+#include "Value.h"
 
 namespace KSpread
 {

@@ -22,6 +22,7 @@
 
 #include <klocale.h>
 
+#include <Binding.h>
 #include <CellStorage.h>
 #include <Sheet.h>
 

@@ -25,7 +25,7 @@
 
 #include "CellStorage.h"
 #include "Sheet.h"
-#include "RectStorage.h"
+#include "ValidityStorage.h"
 
 using namespace KSpread;
 

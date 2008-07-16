@@ -23,8 +23,8 @@
 #include <klocale.h>
 
 #include "CellStorage.h"
+#include "ConditionsStorage.h"
 #include "Sheet.h"
-#include "RectStorage.h"
 
 using namespace KSpread;
 

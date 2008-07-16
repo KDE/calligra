@@ -24,6 +24,7 @@
 #include "Map.h"
 #include "Selection.h"
 #include "Sheet.h"
+#include "ValueStorage.h"
 
 #include "commands/DataManipulators.h"
 

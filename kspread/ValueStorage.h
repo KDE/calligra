@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2008 Stefan Nikolaus stefan.nikolaus@kdemail.net
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,8 +17,35 @@
    Boston, MA 02110-1301, USA.
 */
 
-// muahahaha!
-#include "BindingStorage.moc"
-#include "ConditionsStorage.moc"
-#include "RectStorage.moc"
-#include "ValidityStorage.moc"
+#ifndef KSPREAD_VALUE_STORAGE
+#define KSPREAD_VALUE_STORAGE
+
+namespace KSpread
+{
+
+/**
+ * ValueStorage
+ */
+class ValueStorage : public PointStorage<Value>
+{
+public:
+    ValueStorage()
+        : PointStorage<Value>()
+    {
+    }
+
+    ValueStorage( const PointStorage<Value>& o )
+        : PointStorage<Value>( o )
+    {
+    }
+
+    ValueStorage& operator=( const PointStorage<Value>& o )
+    {
+        PointStorage<Value>::operator=( o );
+        return *this;
+    }
+};
+
+} // namespace KSpread
+
+#endif // KSPREAD_VALUE_STORAGE

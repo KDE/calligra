@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2008 Stefan Nikolaus stefan.nikolaus@kdemail.net
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,8 +17,28 @@
    Boston, MA 02110-1301, USA.
 */
 
-// muahahaha!
-#include "BindingStorage.moc"
-#include "ConditionsStorage.moc"
-#include "RectStorage.moc"
-#include "ValidityStorage.moc"
+#ifndef KSPREAD_FORMULA_STORAGE
+#define KSPREAD_FORMULA_STORAGE
+
+#include "Formula.h"
+#include "PointStorage.h"
+
+namespace KSpread
+{
+
+/**
+ * FormulaStorage
+ */
+class FormulaStorage : public PointStorage<Formula>
+{
+public:
+    FormulaStorage& operator=( const PointStorage<Formula>& o )
+    {
+        PointStorage<Formula>::operator=( o );
+        return *this;
+    }
+};
+
+} // namespace KSpread
+
+#endif // KSPREAD_FORMULA_STORAGE

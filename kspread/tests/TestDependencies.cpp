@@ -25,9 +25,11 @@
 #include "DependencyManager.h"
 #include "DependencyManager_p.h"
 #include "part/Doc.h" // FIXME detach from part
+#include "Formula.h"
 #include "Map.h"
 #include "Region.h"
 #include "Sheet.h"
+#include "Value.h"
 
 using namespace KSpread;
 

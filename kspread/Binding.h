@@ -30,7 +30,6 @@ class QAbstractItemModel;
 
 namespace KSpread
 {
-class Binding;
 
 /**
  * Abstracts read-only access to the ValueStorage.

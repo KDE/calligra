@@ -28,15 +28,21 @@
 #include <KoXmlWriter.h>
 
 // KSpread
+#include "BindingStorage.h"
+#include "ConditionsStorage.h"
 #include "Damages.h"
 #include "DependencyManager.h"
+#include "FormulaStorage.h"
 #include "Map.h"
 #include "RecalcManager.h"
 #include "RectStorage.h"
 #include "Sheet.h"
 #include "StyleStorage.h"
+#include "ValidityStorage.h"
+#include "ValueStorage.h"
 
 // database
+#include "database/DatabaseStorage.h"
 #include "database/DatabaseManager.h"
 
 using namespace KSpread;

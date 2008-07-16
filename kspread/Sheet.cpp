@@ -61,6 +61,7 @@
 #include "Damages.h"
 #include "DependencyManager.h"
 #include "part/Doc.h" // FIXME detach from part
+#include "FormulaStorage.h"
 #include "Global.h"
 #include "LoadingInfo.h"
 #include "Localization.h"
@@ -80,6 +81,7 @@
 #include "Util.h"
 #include "Validity.h"
 #include "ValueConverter.h"
+#include "ValueStorage.h"
 #include "part/View.h" // FIXME detach from part
 
 // commands

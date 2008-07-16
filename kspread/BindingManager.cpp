@@ -19,9 +19,9 @@
 
 #include "BindingManager.h"
 
+#include "BindingStorage.h"
 #include "CellStorage.h"
 #include "Map.h"
-#include "RectStorage.h"
 #include "Region.h"
 #include "Sheet.h"
 

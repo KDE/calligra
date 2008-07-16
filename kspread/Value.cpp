@@ -21,6 +21,7 @@
 #include "Value.h"
 #include "CalculationSettings.h"
 #include "CellStorage.h"
+#include "ValueStorage.h"
 
 #include <kdebug.h>
 #include <klocale.h>

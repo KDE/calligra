@@ -26,14 +26,9 @@
 
 #include "kspread_export.h"
 
-#include "Binding.h"
-#include "Condition.h"
 #include "Map.h"
 #include "Region.h"
 #include "RTree.h"
-#include "Validity.h"
-
-#include "database/Database.h"
 
 static const int g_garbageCollectionTimeOut = 100;
 
@@ -577,20 +572,6 @@ void RectStorage<T>::invalidateCache( const QRect& invRect )
 
 
 
-class BindingStorage : public QObject, public RectStorage<Binding>
-{
-    Q_OBJECT
-public:
-    explicit BindingStorage(Map* map) : QObject(map), RectStorage<Binding>(map) {}
-    BindingStorage(const BindingStorage& other) : QObject(other.parent()), RectStorage<Binding>(other) {}
-
-protected Q_SLOTS:
-    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
-    virtual void garbageCollection() { RectStorage<Binding>::garbageCollection(); }
-};
-
-
-
 class CommentStorage : public QObject, public RectStorage<QString>
 {
     Q_OBJECT
@@ -601,34 +582,6 @@ public:
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
     virtual void garbageCollection() { RectStorage<QString>::garbageCollection(); }
-};
-
-
-
-class ConditionsStorage : public QObject, public RectStorage<Conditions>
-{
-    Q_OBJECT
-public:
-    explicit ConditionsStorage(Map* map) : QObject(map), RectStorage<Conditions>(map) {}
-    ConditionsStorage(const ConditionsStorage& other) : QObject(other.parent()), RectStorage<Conditions>(other) {}
-
-protected Q_SLOTS:
-    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
-    virtual void garbageCollection() { RectStorage<Conditions>::garbageCollection(); }
-};
-
-
-
-class DatabaseStorage : public QObject, public RectStorage<Database>
-{
-    Q_OBJECT
-public:
-    explicit DatabaseStorage(Map* map) : QObject(map), RectStorage<Database>(map) {}
-    DatabaseStorage(const DatabaseStorage& other) : QObject(other.parent()), RectStorage<Database>(other) {}
-
-protected Q_SLOTS:
-    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
-    virtual void garbageCollection() { RectStorage<Database>::garbageCollection(); }
 };
 
 
@@ -657,20 +610,6 @@ public:
 protected Q_SLOTS:
     virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
     virtual void garbageCollection() { RectStorage<bool>::garbageCollection(); }
-};
-
-
-
-class ValidityStorage : public QObject, public RectStorage<Validity>
-{
-    Q_OBJECT
-public:
-    explicit ValidityStorage(Map* map) : QObject(map), RectStorage<Validity>(map) {}
-    ValidityStorage(const ValidityStorage& other) : QObject(other.parent()), RectStorage<Validity>(other) {}
-
-protected Q_SLOTS:
-    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
-    virtual void garbageCollection() { RectStorage<Validity>::garbageCollection(); }
 };
 
 } // namespace KSpread

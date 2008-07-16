@@ -23,6 +23,7 @@
 #include "Region.h"
 #include "RowColumnFormat.h"
 #include "Sheet.h"
+#include "Validity.h"
 
 #include <klocale.h>
 

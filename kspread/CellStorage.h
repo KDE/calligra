@@ -23,14 +23,9 @@
 #include <QPair>
 #include <QRect>
 
-#include "Binding.h"
 #include "Cell.h"
-#include "Condition.h"
-#include "Formula.h"
 #include "Global.h"
 #include "PointStorage.h"
-#include "Validity.h"
-#include "Value.h"
 
 #include "database/Database.h"
 
@@ -38,18 +33,23 @@ class KoXmlWriter;
 
 namespace KSpread
 {
+class Binding;
 class BindingStorage;
 class Cell;
 class CellStorageUndoData;
 class CommentStorage;
+class Conditions;
 class ConditionsStorage;
+class Formula;
 class FormulaStorage;
 class FusionStorage;
 class LinkStorage;
 class Region;
 class Sheet;
 class StyleStorage;
+class Validity;
 class ValidityStorage;
+class Value;
 class ValueStorage;
 
 /**
@@ -385,17 +385,6 @@ private:
     Private * const d;
 };
 
-
-class FormulaStorage : public PointStorage<Formula>
-{
-public:
-    FormulaStorage& operator=( const PointStorage<Formula>& o )
-    {
-        PointStorage<Formula>::operator=( o );
-        return *this;
-    }
-};
-
 class UserInputStorage : public PointStorage<QString>
 {
 public:
@@ -412,26 +401,6 @@ public:
     LinkStorage& operator=( const PointStorage<QString>& o )
     {
         PointStorage<QString>::operator=( o );
-        return *this;
-    }
-};
-
-class ValueStorage : public PointStorage<Value>
-{
-public:
-    ValueStorage()
-        : PointStorage<Value>()
-    {
-    }
-
-    ValueStorage( const PointStorage<Value>& o )
-        : PointStorage<Value>( o )
-    {
-    }
-
-    ValueStorage& operator=( const PointStorage<Value>& o )
-    {
-        PointStorage<Value>::operator=( o );
         return *this;
     }
 };

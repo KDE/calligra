@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright 2006 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
+   Copyright 2008 Stefan Nikolaus stefan.nikolaus@kdemail.net
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,8 +17,30 @@
    Boston, MA 02110-1301, USA.
 */
 
-// muahahaha!
-#include "BindingStorage.moc"
-#include "ConditionsStorage.moc"
-#include "RectStorage.moc"
-#include "ValidityStorage.moc"
+#ifndef KSPREAD_VALIDITY_STORAGE
+#define KSPREAD_VALIDITY_STORAGE
+
+#include "RectStorage.h"
+#include "Validity.h"
+
+namespace KSpread
+{
+
+/**
+ * ValidityStorage
+ */
+class ValidityStorage : public QObject, public RectStorage<Validity>
+{
+    Q_OBJECT
+public:
+    explicit ValidityStorage(Map* map) : QObject(map), RectStorage<Validity>(map) {}
+    ValidityStorage(const ValidityStorage& other) : QObject(other.parent()), RectStorage<Validity>(other) {}
+
+protected Q_SLOTS:
+    virtual void triggerGarbageCollection() { QTimer::singleShot( g_garbageCollectionTimeOut, this, SLOT( garbageCollection() ) ); }
+    virtual void garbageCollection() { RectStorage<Validity>::garbageCollection(); }
+};
+
+} // namespace KSpread
+
+#endif // KSPREAD_VALIDITY_STORAGE
