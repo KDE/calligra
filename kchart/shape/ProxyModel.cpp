@@ -33,10 +33,31 @@
 
 using namespace KChart;
 
+const int NUM_DEFAULT_DATASET_COLORS = 7;
+
+const char *defaultDataSetColors[NUM_DEFAULT_DATASET_COLORS] =
+{
+    "#7FBB56",
+    "#5F8FCB",
+    "#BA90C0",
+    "#D9AE7E",
+    "#80C39B",
+    "#A49ECD",
+    "#9DA1A6"
+};
+
+static QColor defaultDataSetColor( int dataSetNum )
+{
+    dataSetNum %= NUM_DEFAULT_DATASET_COLORS;
+    return QColor( defaultDataSetColors[ dataSetNum ] );
+}
+
 class ProxyModel::Private {
 public:
     Private();
     ~Private();
+    
+    void resetDefaultDataSetProperties();
 
     bool             firstRowIsLabel;
     bool             firstColumnIsLabel;
@@ -59,6 +80,15 @@ ProxyModel::Private::Private()
 
     dataDirection = Qt::Horizontal;
     spreadSheetModel = 0;
+}
+
+void ProxyModel::Private::resetDefaultDataSetProperties()
+{
+    for ( int i = 0; i < dataSets.size(); i++ )
+    {
+        dataSets[ i ]->setNumber( i );
+        dataSets[ i ]->setColor( defaultDataSetColor( i ) );
+    }
 }
 
 ProxyModel::ProxyModel()
@@ -315,6 +345,8 @@ void ProxyModel::rebuildDataMap()
 	        d->removedDataSets.append( dataSet );
 	    }
 	}
+	
+	d->resetDefaultDataSetProperties();
 }
 
 void ProxyModel::setSourceModel( QAbstractItemModel *sourceModel )
@@ -403,6 +435,9 @@ DataSet *ProxyModel::createDataSet()
     DataSet *dataSet = new CellDataSet( this );
     d->dataSets.append( dataSet );
     endInsertRows();
+    
+    dataSet->setColor( defaultDataSetColor( d->dataSets.size() - 1 ) );
+    dataSet->setNumber( d->dataSets.size() - 1 );
     
     return dataSet;
 }
@@ -879,7 +914,8 @@ QVariant ProxyModel::labelData( const DataSet *dataSet ) const
 
 QVariant ProxyModel::categoryData( const DataSet *dataSet, int column ) const
 {
-    return QVariant();
+    Q_UNUSED( dataSet );
+    return headerData( column, d->dataDirection == Qt::Vertical ? Qt::Horizontal : Qt::Vertical );
 }
 
 #include "ProxyModel.moc"
