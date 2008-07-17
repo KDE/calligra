@@ -242,6 +242,13 @@ public:
     void setScheduleManager( ScheduleManager *sm );
     void draw();
 
+    /// Loads context info into this view.
+    virtual bool loadContext( const KoXmlElement &context );
+    /// Save context info from this view.
+    virtual void saveContext( QDomElement &context ) const;
+
+    TreeViewBase *treeView() const { return m_tree; }
+    
 protected slots:
     void slotSelectionChanged( const QItemSelection & selected, const QItemSelection & deselected );
     
@@ -262,13 +269,18 @@ public:
     virtual void setProject( Project *project );
 
     /// Loads context info into this view. Reimplement.
-    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    virtual bool loadContext( const KoXmlElement &context );
     /// Save context info from this view. Reimplement.
-    virtual void saveContext( QDomElement &/*context*/ ) const;
+    virtual void saveContext( QDomElement &context ) const;
 
     using ViewBase::draw;
     virtual void draw();
     
+    Node *currentNode() const;
+    
+signals:
+    void requestPopupMenu( const QString&, const QPoint & );
+
 public slots:
     /// Activate/deactivate the gui
     virtual void setGuiActive( bool activate );
@@ -279,6 +291,9 @@ protected:
     void updateActionsEnabled( bool on );
 
 private slots:
+    void slotHeaderContextMenuRequested( const QPoint &pos );
+    void slotContextMenuRequested( Node *node, const QPoint& pos );
+    void slotContextMenuRequested( const QModelIndex &index, const QPoint& pos );
     void slotOptions();
 
 private:

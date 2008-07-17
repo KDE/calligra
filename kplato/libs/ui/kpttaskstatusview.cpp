@@ -55,7 +55,9 @@
 #include <kstandardshortcut.h>
 #include <kaccelgen.h>
 #include <kactioncollection.h>
+#include <kplotwidget.h>
 #include <kplotobject.h>
+#include <kplotaxis.h>
 
 namespace KPlato
 {
@@ -571,8 +573,15 @@ void PerformanceStatusBase::drawAxis( const ChartAxisIndex &idx )
         } else {
             range << m_model.axisData( ai, AbstractChartModel::AxisMinRole ).toDouble();
             range << m_model.axisData( ai, AbstractChartModel::AxisMaxRole ).toDouble();
+            int type = m_model.axisData( ai, AbstractChartModel::AxisTypeRole ).toInt();
+            if ( type == AbstractChartModel::Axis_X ) {
+                plotwidget->axis( KPlotWidget::BottomAxis )->setLabel( m_model.axisData( ai, Qt::DisplayRole ).toString() );
+            } else if ( type == AbstractChartModel::Axis_Y ) {
+                plotwidget->axis( KPlotWidget::LeftAxis )->setLabel( m_model.axisData( ai, Qt::DisplayRole ).toString() );
+            }
         }
     }
+    kDebug()<<range;
     plotwidget->setLimits( range[0], range[1], range[2], range[3] );
 }
 
@@ -680,6 +689,16 @@ void PerformanceStatusTreeView::setProject( Project *project )
     m_chart->setProject( project );
 }
 
+bool PerformanceStatusTreeView::loadContext( const KoXmlElement &context )
+{
+    kDebug();
+    return m_tree->loadContext( nodeModel()->columnMap(), context );
+}
+
+void PerformanceStatusTreeView::saveContext( QDomElement &context ) const
+{
+    m_tree->saveContext( nodeModel()->columnMap(), context );
+}
 
 //-----------------------------------
 PerformanceStatusView::PerformanceStatusView( KoDocument *part, QWidget *parent )
@@ -693,7 +712,61 @@ PerformanceStatusView::PerformanceStatusView( KoDocument *part, QWidget *parent 
     
     setupGui();
 
+    connect( m_view->treeView(), SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+
+    connect( m_view->treeView(), SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
 }
+
+void PerformanceStatusView::slotHeaderContextMenuRequested( const QPoint &pos )
+{
+    kDebug();
+    QList<QAction*> lst = contextActionList();
+    if ( ! lst.isEmpty() ) {
+        QMenu::exec( lst, pos,  lst.first() );
+    }
+}
+
+void PerformanceStatusView::slotContextMenuRequested( const QModelIndex &index, const QPoint& pos )
+{
+    kDebug()<<index<<pos;
+    if ( ! index.isValid() ) {
+        return;
+    }
+    Node *node = m_view->nodeModel()->node( index );
+    if ( node == 0 ) {
+        return;
+    }
+    slotContextMenuRequested( node, pos );
+}
+
+Node *PerformanceStatusView::currentNode() const 
+{
+    return m_view->nodeModel()->node( m_view->treeView()->selectionModel()->currentIndex() );
+}
+
+void PerformanceStatusView::slotContextMenuRequested( Node *node, const QPoint& pos )
+{
+    kDebug()<<node->name()<<" :"<<pos;
+    QString name;
+    switch ( node->type() ) {
+        case Node::Type_Task:
+            name = "taskview_popup";
+            break;
+        case Node::Type_Milestone:
+            name = "taskview_milestone_popup";
+            break;
+        case Node::Type_Summarytask:
+            break;
+        default:
+            break;
+    }
+    kDebug()<<name;
+    if ( name.isEmpty() ) {
+        return;
+    }
+    emit requestPopupMenu( name, pos );
+}
+
 
 void PerformanceStatusView::setScheduleManager( ScheduleManager *sm )
 {
@@ -721,24 +794,27 @@ void PerformanceStatusView::setGuiActive( bool activate )
 void PerformanceStatusView::setupGui()
 {
     // Add the context menu actions for the view options
-/*    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
+    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );*/
+    addContextAction( actionOptions );
 }
 
 void PerformanceStatusView::slotOptions()
 {
     kDebug();
+    ItemViewSettupDialog dlg( m_view->treeView(), true );
+    dlg.exec();
 }
 
 bool PerformanceStatusView::loadContext( const KoXmlElement &context )
 {
     kDebug();
-    return true;
+    return m_view->loadContext( context );
 }
 
 void PerformanceStatusView::saveContext( QDomElement &context ) const
 {
+    m_view->saveContext( context );
 }
 
 

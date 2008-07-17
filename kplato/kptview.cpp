@@ -699,6 +699,8 @@ ViewBase *View::createPerformanceStatusView( ViewListItem *cat, const QString ta
 
     connect( this, SIGNAL( currentScheduleManagerChanged( ScheduleManager* ) ), v, SLOT( setScheduleManager( ScheduleManager* ) ) );
     
+    connect( v, SIGNAL( requestPopupMenu( const QString&, const QPoint & ) ), this, SLOT( slotPopupMenu( const QString&, const QPoint& ) ) );
+
     v->updateReadWrite( m_readWrite );
     v->setProject( &getProject() );
     v->setScheduleManager( currentScheduleManager() );

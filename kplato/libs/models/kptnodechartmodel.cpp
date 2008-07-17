@@ -147,7 +147,7 @@ QVariant NodeChartModel::data( const ChartDataIndex &idx, int role ) const
         switch ( idx.userData ) {
             case BCWS: return QColor( Qt::green );
             case BCWP: return QColor( Qt::red );
-            case ACWP: return QColor( Qt::yellow );
+            case ACWP: return QColor( Qt::blue );
         }
     }
     return QVariant();
@@ -266,10 +266,10 @@ QVariant NodeChartModel::axisData( const ChartAxisIndex &index, int role ) const
     }
     if ( role == Qt::DisplayRole ) {
         if ( index.userData == Axis_X ) {
-            return QVariant(); // x-axis
+            return "Days (" + startDate().toString( Qt::ISODate ) + " - " + endDate().toString( Qt::ISODate ) + ")"; // x-axis
         }
         if ( index.userData == Axis_Y ) {
-            return QVariant(); // y-axis
+            return "Cost"; // y-axis
         }
     }
     if ( role == AbstractChartModel::AxisTypeRole ) {
@@ -285,8 +285,8 @@ QVariant NodeChartModel::axisData( const ChartAxisIndex &index, int role ) const
     }
     if ( role == AbstractChartModel::AxisMaxRole ) {
         if ( index.userData == Axis_X ) {
-            QDate d = qMin( m_bcwp.startDate(), m_acwp.startDate() );
-            QDate e = qMax( m_bcwp.endDate(), m_acwp.endDate() );
+            QDate d = startDate();
+            QDate e = endDate();
             return d.daysTo( e );
         }
         if ( index.userData == Axis_Y ) {
@@ -320,6 +320,21 @@ ChartAxisIndex NodeChartModel::axisIndex( int number, const ChartAxisIndex &pare
     return ChartAxisIndex();
 }
 
+QDate NodeChartModel::startDate() const
+{
+    QDate d = m_bcwp.startDate();
+    if ( m_acwp.startDate().isValid() ) {
+        if ( ! d.isValid() || d > m_acwp.startDate() ) {
+            d = m_acwp.startDate();
+        }
+    }
+    return d;
+}
+
+QDate NodeChartModel::endDate() const
+{
+    return qMax( m_bcwp.endDate(), m_acwp.endDate() );
+}
 
 } //namespace KPlato
 

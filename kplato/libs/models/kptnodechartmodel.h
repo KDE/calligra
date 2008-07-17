@@ -74,6 +74,9 @@ public:
     void addNode( Node *node );
     void clearNodes();
     
+    QDate startDate() const;
+    QDate endDate() const;
+    
 public slots:
     void setScheduleManager( ScheduleManager *sm );
     void slotNodeChanged( Node *node );
