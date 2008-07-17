@@ -40,8 +40,8 @@
    Boston, MA 02110-1301, USA.
 */
 
-#include "CellToolBase.h"
 #include "CellToolBase_p.h"
+#include "CellToolBase.h"
 
 // KSpread
 #include "ApplicationSettings.h"

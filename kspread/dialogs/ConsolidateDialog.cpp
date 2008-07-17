@@ -56,7 +56,6 @@
 #include <Util.h>
 
 #include <Formula.h>
-#include <Selection.h>
 #include <ValueConverter.h>
 #include <Cell.h>
 

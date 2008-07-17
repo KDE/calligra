@@ -30,6 +30,7 @@
 #define KSPREAD_CELL_TOOL_BASE_P
 
 // KSpread
+#include "CellToolBase.h"
 #include "Editors.h"
 #include "ui_CellToolOptionWidget.h"
 
@@ -45,11 +46,13 @@
 #include <QAction>
 #include <QHash>
 
-using namespace KSpread;
-
 class QUndoCommand;
 class KFind;
 class KReplace;
+
+namespace KSpread
+{
+class Sheet;
 
 class CellToolBase::Private
 {
@@ -149,5 +152,7 @@ public:
 private:
     CellToolBase* q;
 };
+
+} // namespace KSpread
 
 #endif // KSPREAD_CELL_TOOL_BASE

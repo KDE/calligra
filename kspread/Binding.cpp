@@ -19,7 +19,7 @@
 */
 
 #include "Binding.h"
-#include "Binding_p.h"
+#include "BindingModel.h"
 
 #include <QRect>
 
@@ -272,4 +272,4 @@ void BindingModel::setRegion(const Region& region)
     m_region = region;
 }
 
-#include "Binding_p.moc"
+#include "BindingModel.moc"
