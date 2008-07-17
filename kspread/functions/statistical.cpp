@@ -1582,7 +1582,8 @@ Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
   //
   {
     kDebug()<<"fill X-Matrix with 0,1,2,3 .. sequence"; 
-    for (int i=0; i < known_Y.count(); i++)
+    const int known_Y_count = known_Y.count();
+    for (int i=0; i < known_Y_count; i++)
       known_X.setElement(i,0,Value(i));
 
     cols_X = cols_Y;
@@ -1654,9 +1655,9 @@ Value func_growth (valVector args, ValueCalc *calc, FuncExtra *)
     //
     // Gehe �ber Matrix Reihen/Spaltenweise
     //
-    for (int c=0; c<cols_Y; c++)
+    for (uint c=0; c<cols_Y; c++)
     {
-      for (int r=0; r<rows_Y; r++)
+      for (uint r=0; r<rows_Y; r++)
       {
         valX = known_X.element(c,r).asFloat();
         valY = known_Y.element(c,r).asFloat();
