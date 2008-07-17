@@ -597,13 +597,6 @@ public:
      */
     void cutSelection( Selection* selection );
 
-    void setWordSpelling(Selection* selection, const QString& wordList);
-
-    /**
-     * @param selection the selection of cells to work on
-     */
-    QString wordSpelling( Selection* selection );
-
     /**
      * @return @c true if there are text value in cell
      * so you can create list selection
