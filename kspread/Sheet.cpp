@@ -1192,13 +1192,6 @@ void Sheet::replace( const QString &_find, const QString &_replace, long options
 }
 #endif
 
-void Sheet::refreshPreference()
-{
-  emit sig_updateColumnHeader( this );
-  emit sig_updateView( this );
-}
-
-
 // helper function for Sheet::areaIsEmpty
 bool Sheet::cellIsEmpty( const Cell& cell, TestType _type)
 {

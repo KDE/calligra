@@ -1828,14 +1828,12 @@ void View::optionsNotifications()
 
 void View::preference()
 {
-  if ( !d->activeSheet )
-    return;
-
-  PreferenceDialog dlg(this);
-  if ( dlg.exec() )
-  {
-    d->activeSheet->refreshPreference();
-  }
+    PreferenceDialog dialog(this);
+    if (dialog.exec()) {
+        d->canvas->update();
+        d->columnHeader->update();
+        d->rowHeader->update();
+    }
 }
 
 void View::setSelectionComment( const QString& comment )

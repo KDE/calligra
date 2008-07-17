@@ -736,8 +736,6 @@ public:
     //BEGIN UNSORTED METHODS !!!
     //
 
-    void refreshPreference() ;
-
     void hideSheet(bool _hide);
 
     void removeSheet();
