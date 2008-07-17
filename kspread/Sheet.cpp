@@ -4237,14 +4237,6 @@ void Sheet::setShowPageBorders( bool b )
     emit sig_updateView( this );
 }
 
-Sheet* Sheet::findSheet( const QString & _name )
-{
-  if ( !map() )
-    return 0;
-
-  return map()->findSheet( _name );
-}
-
 void Sheet::insertColumnFormat( ColumnFormat *l )
 {
     d->columns.insertElement( l, l->column() );
@@ -4334,11 +4326,6 @@ void Sheet::hideSheet(bool _hide)
         emit sig_SheetHidden(this);
     else
         emit sig_SheetShown(this);
-}
-
-void Sheet::removeSheet()
-{
-    emit sig_SheetRemoved(this);
 }
 
 bool Sheet::setSheetName(const QString& name, bool init)

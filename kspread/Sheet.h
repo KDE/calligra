@@ -738,8 +738,6 @@ public:
 
     void hideSheet(bool _hide);
 
-    void removeSheet();
-
     /**
      * Change name of reference when the user inserts or removes a column,
      * a row or a cell (= insertion of a row [or column] on a single column [or row]).
@@ -768,11 +766,6 @@ public:
      * The cells are stored row after row in '_list'.
      */
     bool getCellRectangle( const QRect &_range, QList<Cell> &_list );
-
-    /**
-     * A convenience function that finds a sheet by its name.
-     */
-    Sheet *findSheet( const QString & _name );
 
     /**
      * Insert the non-default column format \p columnFormat.
