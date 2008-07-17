@@ -400,6 +400,7 @@ void PlotArea::setThreeD( bool threeD )
 bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, KoShapeLoadingContext &context )
 {
     qWarning() << "Error: The plot area cannot be loaded from ODF directly, but only as a child of the chart shape.";
+    return false;
 }
 
 bool PlotArea::loadOdf( const KoXmlElement &plotAreaElement, const KoOdfStylesReader &stylesReader )
