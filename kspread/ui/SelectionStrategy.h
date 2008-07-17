@@ -30,7 +30,7 @@ class Selection;
 /**
  * A strategy for selecting cell ranges.
  *
- * On creation the cell the mouse press occured in is selected.
+ * On creation the cell the mouse press occurred in is selected.
  *
  * For the case, that you are only interested in updating the selection on mouse movements, derive
  * directly from AbstractSelectionStrategy.

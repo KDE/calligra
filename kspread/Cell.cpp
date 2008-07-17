@@ -154,7 +154,7 @@ bool Cell::isDefault() const
         return false;
     if ( formula() != Formula() )
         return false;
-    if ( link() != QString() )
+    if (!link().isEmpty())
         return false;
     if ( doesMergeCells() == true )
         return false;

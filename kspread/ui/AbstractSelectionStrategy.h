@@ -32,7 +32,7 @@ class Selection;
  * An abstract selection strategy.
  *
  * Derive from this class, if you are only interested in updating the selection on mouse movements.
- * For the case, that you will also need to select the cell, where the mouse press occured, derive
+ * For the case, that you will also need to select the cell, where the mouse press occurred, derive
  * from SelectionStrategy.
  *
  * \see SelectionStrategy

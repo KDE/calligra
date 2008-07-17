@@ -868,7 +868,7 @@ void CellToolBase::mouseMoveEvent(KoPointerEvent* event)
         }
         return;
     }
-    // Indicators are not neccessary for protected sheets or if there's a strategy.
+    // Indicators are not necessary for protected sheets or if there's a strategy.
     if (selection()->activeSheet()->isProtected() || m_currentStrategy) {
         return KoInteractionTool::mouseMoveEvent(event);
     }

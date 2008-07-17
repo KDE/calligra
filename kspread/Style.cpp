@@ -117,7 +117,7 @@ QString SubStyle::name( Style::Key key )
         case Style::FontItalic:             name = "Font italic"; break;
         case Style::FontStrike:             name = "Font strikeout"; break;
         case Style::FontUnderline:          name = "Font underline"; break;
-        case Style::DontPrintText:          name = "Dont print text"; break;
+        case Style::DontPrintText:          name = "Do not print text"; break;
         case Style::NotProtected:           name = "Not protected"; break;
         case Style::HideAll:                name = "Hide all"; break;
         case Style::HideFormula:            name = "Hide formula"; break;

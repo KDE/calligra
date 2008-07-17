@@ -30,7 +30,7 @@ class Selection;
 /**
  * A strategy for pasting the global mouse selection.
  *
- * On creation, the cell in which the mouse press occured is selected.
+ * On creation, the cell in which the mouse press occurred is selected.
  *
  * \see QClipboard::Selection
  */
