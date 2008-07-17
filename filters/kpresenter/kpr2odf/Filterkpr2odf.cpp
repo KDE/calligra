@@ -124,7 +124,7 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
     output->open( "settings.xml" );
     KoStoreDevice device( output );
     KoXmlWriter *settings = KoOdfWriteStore::createOasisXmlWriter( &device, "office:document-settings" );
-    //TODO: check whcih settings we still use in 2.0
+    //TODO: check which settings we still use in 2.0
     settings->endElement();//office:document-settings
     settings->endDocument();
     output->close();
@@ -290,9 +290,13 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
         content->endElement();//draw:text-box
         content->endElement();//draw:frame
         content->endElement();//presentation:notes
+
+        saveAnimations( content );
+
         content->endElement();//draw:page
+
         ++m_currentPage;
-    }//for
+    }//page's for
 
     content->startElement( "presentation:settings" );
 
@@ -325,7 +329,6 @@ void Filterkpr2odf::convertContent( KoXmlWriter* content )
     for( KoXmlElement customSlideShow = customSlideShowConfig.firstChild().toElement(); !customSlideShow.isNull();
           customSlideShow = customSlideShow.nextSibling().toElement() )
     {
-        //FIXME: is this needed? show.tagName()=="CUSTOMSLIDESHOW" )
         content->startElement( "presentation:show" );
         content->addAttribute( "presentation:name", customSlideShow.attribute( "name" ) );
         content->addAttribute( "presentation:pages", customSlideShow.attribute( "pages" ) );
@@ -408,6 +411,7 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
             kWarning()<<"Unexpected object found in page "<<m_currentPage;
             break;
         }//switch objectElement
+        exportAnimation( objectElement );
         ++m_objectIndex;
     }//for
 }
@@ -426,7 +430,7 @@ void Filterkpr2odf::appendPicture( KoXmlWriter* content, const KoXmlElement& obj
 
     content->endElement();//draw:image
     content->endElement();//draw:frame
-    //TODO: port the effects
+    //NOTE: the effects seem to not be portable
 }
 
 void Filterkpr2odf::appendLine( KoXmlWriter* content, const KoXmlElement& objectElement )
@@ -538,7 +542,7 @@ void Filterkpr2odf::appendTextBox( KoXmlWriter* content, const KoXmlElement& obj
 
 void Filterkpr2odf::appendParagraph( KoXmlWriter* content, const KoXmlElement& objectElement )
 {
-    content->startElement( "text:p" );
+    content->startElement( "text:p", false );//false: we should not indent the inner tags
     content->addAttribute( "text:style-name", createParagraphStyle( objectElement ) );
 
     //convert every text element
@@ -555,12 +559,42 @@ void Filterkpr2odf::appendParagraph( KoXmlWriter* content, const KoXmlElement& o
 
 void Filterkpr2odf::appendText( KoXmlWriter* content, const KoXmlElement& objectElement )
 {
-    content->startElement( "text:span" );
+    //Avoid the creation of so many unneded text:span
+    static QString lastStyle;
+    static QString textChain;
+    bool lastSpan = objectElement.nextSibling().isNull();
 
-    content->addAttribute( "text:style-name", createTextStyle( objectElement ) );
-    content->addTextNode( objectElement.text() );
+    QString styleName = createTextStyle( objectElement );
 
-    content->endElement();//text:span
+    textChain += objectElement.text();
+
+    bool whitespace = objectElement.attribute( "whitespace", "0" ) == "1";
+    if( whitespace )
+    {
+            textChain += " ";
+    }
+
+    if( lastSpan || ( ( lastStyle != QString::null ) && ( lastStyle != styleName ) ) )
+    {
+        content->startElement( "text:span" );
+
+        content->addAttribute( "text:style-name", styleName );
+        content->addTextNode( textChain );
+
+        content->endElement();//text:span
+
+        textChain = QString::null;//reset textChain
+    }
+
+    //We have to reset the last style if we are going to change the paragraph
+    if( !lastSpan )
+    {
+        lastStyle = styleName;
+    }
+    else
+    {
+        lastStyle = QString::null;
+    }
 }
 
 void Filterkpr2odf::appendPie( KoXmlWriter* content, const KoXmlElement& objectElement )
@@ -650,6 +684,8 @@ void Filterkpr2odf::appendPoly( KoXmlWriter* content, const KoXmlElement& object
         int maxY = tmpY;
         int previousX = tmpX;
         int previousY = tmpY;
+
+        point = point.nextSibling().toElement();
 
         while( !point.isNull() ) {
             tmpX = (int) ( point.attribute( "point_x", "0" ).toDouble() * 10000 );
@@ -869,6 +905,255 @@ QString Filterkpr2odf::rotateValue( double val )
         str = QString( "rotate(%1)" ).arg( value );
     }
     return str;
+}
+
+void Filterkpr2odf::exportAnimation( const KoXmlElement& objectElement )
+{
+    QBuffer animationsBuffer;
+    animationsBuffer.open( IO_WriteOnly );
+    KoXmlWriter animationsWriter( &animationsBuffer );
+
+    KoXmlElement effects = objectElement.namedItem( "EFFECTS" ).toElement();
+    if( !effects.isNull() )
+    {
+        animationsWriter.startElement( "presentation:show-shape" );
+        animationsWriter.addAttribute( "draw:shape-id", QString( "object%1" ).arg( m_objectIndex ) );
+
+        if( effects.hasAttribute( "effect" ) )
+        {
+            QString effect;
+            QString direction;
+            int effectInt = effects.attribute( "effect" ).toInt();
+
+            //Enum: Effect
+            switch( effectInt )
+            {
+            case 0: //EF_NONE
+                effect = "appear";
+                break;
+            case 1: //EF_COME_RIGHT
+                effect = "move";
+                direction = "from-right";
+                break;
+            case 2: //EF_COME_LEFT
+                effect = "move";
+                direction = "from-left";
+                break;
+            case 3: //EF_COME_TOP
+                effect = "move";
+                direction = "from-top";
+                break;
+            case 4: //EF_COME_BOTTOM
+                effect = "move";
+                direction = "from-bottom";
+                break;
+            case 5: //EF_COME_RIGHT_TOP
+                effect = "move";
+                direction = "from-upper-right";
+                break;
+            case 6: //EF_COME_RIGHT_BOTTOM
+                effect = "move";
+                direction = "from-lower-right";
+                break;
+            case 7: //EF_COME_LEFT_TOP
+                effect = "move";
+                direction = "from-upper-left";
+                break;
+            case 8: //EF_COME_LEFT_BOTTOM
+                effect = "move";
+                direction = "from-lower-left";
+                break;
+            case 9: //EF_WIPE_LEFT
+                effect = "fade";
+                direction = "from-left";
+                break;
+            case 10: //EF_WIPE_RIGHT
+                effect = "fade";
+                direction = "from-right";
+                break;
+            case 11: //EF_WIPE_TOP
+                effect = "fade";
+                direction = "from-top";
+                break;
+            case 12: //EF_WIPE_BOTTOM
+                effect = "fade";
+                direction = "from-bottom";
+                break;
+            }//switch effectInt
+
+            animationsWriter.addAttribute( "presentation:effect", effect );
+            if( !direction.isNull() )
+            {
+                animationsWriter.addAttribute( "presentation:direction", direction );
+            }
+        }//if effect
+
+        if( effects.hasAttribute( "speed" ) )
+        {
+            QString speed;
+            int speedInt = effects.attribute( "speed" ).toInt();
+            //Enum: EffectSpeed
+            switch( speedInt )
+            {
+            case 0: //ES_SLOW
+                speed = "slow";
+                break;
+            case 1: //ES_MEDIUM
+                speed = "medium";
+                break;
+            case 2: //ES_FAST
+                speed = "fast";
+                break;
+            }
+            animationsWriter.addAttribute( "presentation:speed", speed );
+        }
+
+        KoXmlElement appearSoundEffect = objectElement.namedItem( "APPEARSOUNDEFFECT" ).toElement();
+        if( appearSoundEffect.attribute( "appearSoundFileName" ) == "1" )
+        {
+            animationsWriter.startElement( "presentation:sound" );
+            animationsWriter.addAttribute( "xlink:href", m_sounds[ appearSoundEffect.attribute( "appearSoundFileName" ) ] );
+            animationsWriter.addAttribute( "xlink:type", "simple" );
+            animationsWriter.addAttribute( "xlink:show", "new" );
+            animationsWriter.addAttribute( "xlink:actuate", "onRequest" );
+            animationsWriter.endElement();//presentation:sound
+        }
+        animationsWriter.endElement();//presentation:show-shape
+
+        int num = effects.attribute( "num", "0" ).toInt();
+        Q_ASSERT( !m_pageAnimations.contains( num ) );
+        QString animationsContents = QString::fromUtf8( animationsBuffer.buffer(),
+                                                        animationsBuffer.buffer().size() );
+        m_pageAnimations.insert( num, animationsContents );
+    }//if !effects.isNull()
+
+    KoXmlElement disappear = objectElement.namedItem( "DISAPPEAR" ).toElement();
+    if( !disappear.isNull() && ( disappear.attribute( "doit" ) == "1" ) )
+    //the effect it's saved and not displayed unless doit is set to 1
+    {
+        animationsWriter.startElement( "presentation:hide-shape" );
+        animationsWriter.addAttribute( "draw:shape-id", QString( "object%1" ).arg( m_objectIndex ) );
+        if( disappear.hasAttribute( "effect" ) )
+        {
+            QString effect;
+            QString direction;
+            int effectInt = effects.attribute( "effect" ).toInt();
+
+            //Enum: Effect3
+            switch( effectInt )
+            {
+            case 0: //EF3_NONE
+                effect = "hide";
+                break;
+            case 1: //EF3_GO_RIGHT
+                effect = "move";
+                direction = "from-right";
+                break;
+            case 2: //EF3_GO_LEFT
+                effect = "move";
+                direction = "from-left";
+                break;
+            case 3: //EF3_GO_TOP
+                effect = "move";
+                direction = "from-top";
+                break;
+            case 4: //EF3_GO_BOTTOM
+                effect = "move";
+                direction = "from-bottom";
+                break;
+            case 5: //EF3_GO_RIGHT_TOP
+                effect = "move";
+                direction = "from-upper-right";
+                break;
+            case 6: //EF3_GO_RIGHT_BOTTOM
+                effect = "move";
+                direction = "from-lower-right";
+                break;
+            case 7: //EF3_GO_LEFT_TOP
+                effect = "move";
+                direction = "from-upper-left";
+                break;
+            case 8: //EF3_GO_LEFT_BOTTOM
+                effect = "move";
+                direction = "from-lower-left";
+                break;
+            case 9: //EF3_WIPE_LEFT
+                effect = "fade";
+                direction = "from-left";
+                break;
+            case 10: //EF3_WIPE_RIGHT
+                effect = "fade";
+                direction = "from-right";
+                break;
+            case 11: //EF3_WIPE_TOP
+                effect = "fade";
+                direction = "from-top";
+                break;
+            case 12: //EF3_WIPE_BOTTOM
+                effect = "fade";
+                direction = "from-bottom";
+                break;
+            }//switch effectInt
+
+            animationsWriter.addAttribute( "presentation:effect", effect );
+            if( !direction.isNull() )
+            {
+                animationsWriter.addAttribute( "presentation:direction", direction );
+            }
+        }//if effect
+
+        if( disappear.hasAttribute( "speed" ) )
+        {
+            QString speed;
+            int speedInt = effects.attribute( "speed" ).toInt();
+            //Enum: EffectSpeed
+            switch( speedInt )
+            {
+            case 0: //ES_SLOW
+                speed = "slow";
+                break;
+            case 1: //ES_MEDIUM
+                speed = "medium";
+                break;
+            case 2: //ES_FAST
+                speed = "fast";
+                break;
+            }
+            animationsWriter.addAttribute( "presentation:speed", speed );
+        }
+
+        KoXmlElement appearSoundEffect = objectElement.namedItem( "DISAPPEARSOUNDEFFECT" ).toElement();
+        if( appearSoundEffect.attribute( "disappearSoundEffect" ) == "1" )
+        {
+            animationsWriter.startElement( "presentation:sound" );
+            animationsWriter.addAttribute( "xlink:href", m_sounds[ appearSoundEffect.attribute( "disappearSoundFileName" ) ] );
+            animationsWriter.addAttribute( "xlink:type", "simple" );
+            animationsWriter.addAttribute( "xlink:show", "new" );
+            animationsWriter.addAttribute( "xlink:actuate", "onRequest" );
+            animationsWriter.endElement();//presentation:sound
+        }
+        animationsWriter.endElement();//presentation:hide-shape
+
+        int num = disappear.attribute( "num", "0" ).toInt();
+        Q_ASSERT( !m_pageAnimations.contains( num ) );
+        QString animationsContents = QString::fromUtf8( animationsBuffer.buffer(),
+                                                        animationsBuffer.buffer().size() );
+        m_pageAnimations.insert( num, animationsContents );
+    }//if !disappear.isNull()
+}
+
+void Filterkpr2odf::saveAnimations( KoXmlWriter* content )
+{
+    content->startElement( "presentation:animations" );
+    for( int index = 0; m_pageAnimations.contains( index ); ++index )
+    {
+        QString element = m_pageAnimations.value( index );
+        content->addCompleteElement( element.toLatin1().data() );
+    }
+    content->endElement();//presentation:animations
+
+    //Clear the animation's hash because we save the animations per page
+    m_pageAnimations.clear();
 }
 
 #include "StylesFilterkpr2odf.cpp"

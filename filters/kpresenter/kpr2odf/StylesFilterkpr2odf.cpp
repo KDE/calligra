@@ -37,9 +37,8 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         style.addProperty( "presentation:background-objects-visible", true );
         style.addProperty( "draw:fill", "none" );
     }
-    if( !page.hasChildNodes() )
+    if( !page.hasChildNodes() ) //we check if this is an empty page
     {
-        //we check if this is an empty page
         return m_styles.lookup( style, "dp" );
     }
 
@@ -49,7 +48,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
     {
         //it's some form of color, plain or a gradient
         KoXmlElement bcType = page.namedItem( "BCTYPE" ).toElement();
-        if( backType.isNull() || backType.attribute( "value" ) == "0" )
+        if( bcType.isNull() || bcType.attribute( "value" ) == "0" )
         {
             //background is a plain color
             QString color = page.namedItem( "BACKCOLOR1" ).toElement().attribute( "color" );
@@ -63,14 +62,13 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
             }
             else
             {
-
                 style.addProperty( "draw:fill-color", "#ffffff" );
             }
         }
         else
         {
             //background is a gradient
-            style.addAttribute( "draw:fill", "gradient" );
+            style.addProperty( "draw:fill", "gradient" );
             style.addProperty( "draw:fill-gradient-name", createGradientStyle( page ) );
         }
     }
@@ -136,19 +134,19 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
             effectName = "none";
             break;
         case 1:
-            effectName = "close-vertical";
+            effectName = "close-horizontal";
             break;
         case 2:
-            effectName = "close-horizontal";
+            effectName = "close-vertical";
             break;
         case 3:
             effectName = "fade-to-center";
             break;
         case 4:
-            effectName = "open-vertical";
+            effectName = "open-horizontal";
             break;
         case 5:
-            effectName = "open-horizontal";
+            effectName = "open-vertical";
             break;
         case 6:
             effectName = "open";
@@ -263,16 +261,17 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         if( !soundEffect.isNull() && soundEffect.attribute( "soundEffect" ) != "0" )
         {
             //As this is a "complex" tag we add it "manually"
-            //TODO: check if we can use StyleChildElement instead
             QBuffer buffer;
             buffer.open( IO_WriteOnly );
             KoXmlWriter elementWriter( &buffer );
+//             FIXME: 1.1 says it's needed elementWriter.startElement( "style:presentation-properties" );
             elementWriter.startElement( "presentation:sound" );
             elementWriter.addAttribute( "xlink:href", "Sounds/" + m_sounds[ soundEffect.attribute( "soundFileName" ) ] );
             elementWriter.addAttribute( "xlink:type", "simple" );
             elementWriter.addAttribute( "xlink:show", "new" );
             elementWriter.addAttribute( "xlink:actuate", "onRequest");
-            elementWriter.endElement();
+            elementWriter.endElement();//presentation:sound
+//             elementWriter.endElement();//style:presentation
 
             QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
             style.addChildElement( "presentationSound", elementContents );
@@ -283,8 +282,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
 
 const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientElement )
 {
-    KoGenStyle style( KoGenStyle::StyleGradient, "drawing-page" );
-    style.setAutoStyleInStylesDotXml( true );
+    KoGenStyle style( KoGenStyle::StyleGradient );
 
     //KPresenter didn't allow to customize those attributes
     style.addAttribute( "draw:start-intensity", "100%" );
@@ -330,8 +328,8 @@ const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientEl
     }
     else
     {
-        style.addAttribute( "draw:start-color", gradientElement.attribute( "color1", "" ) );
-        style.addAttribute( "draw:end-color", gradientElement.attribute( "color2", "" ) );
+        style.addAttribute( "draw:start-color", gradientElement.attribute( "color1" ) );
+        style.addAttribute( "draw:end-color", gradientElement.attribute( "color2" ) );
         type = gradientElement.attribute( "type" ).toInt();
         if( gradientElement.hasAttribute( "unbalanced" ) )
         {
@@ -522,8 +520,8 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
     }
 
     //We now define what's the object filled with, we "default" to a brush if both attributes are present
-    KoXmlElement brush( element.namedItem( "BRUSH" ).toElement() );
-    KoXmlElement gradient( element.namedItem( "GRADIENT" ).toElement() );
+    KoXmlElement brush = element.namedItem( "BRUSH" ).toElement();
+    KoXmlElement gradient = element.namedItem( "GRADIENT" ).toElement();
     QString fill;
     if( !brush.isNull() )
     {
@@ -971,13 +969,6 @@ const QString Filterkpr2odf::createParagraphStyle( const KoXmlElement& element )
         {
             style.addPropertyPt( "fo:margin-bottom", offsets.attribute( "after" ).toDouble() );
         }
-    }
-
-    KoXmlElement counter = element.namedItem( "COUNTER" ).toElement();
-    if( !counter.isNull() )
-    {
-        //TODO
-//         style.addProperty( "text:enable-numbering", "true" );
     }
 
     KoXmlElement lineSpacing = element.namedItem( "LINESPACING" ).toElement();

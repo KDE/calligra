@@ -49,6 +49,7 @@ private:
     void createSoundList( KoStore* output, KoStore* input, KoXmlWriter* manifest );
     void convertContent( KoXmlWriter* content );
     void convertObjects( KoXmlWriter* content, const KoXmlNode& objects );
+    void saveAnimations( KoXmlWriter* content );
 
     //Objects' functions
     void appendPicture( KoXmlWriter* content, const KoXmlElement& objectElement );
@@ -69,6 +70,7 @@ private:
     const QString getPictureNameFromKey( const KoXmlElement& key );
     void set2DGeometry( KoXmlWriter* content, const KoXmlElement& objectElement );
     QString rotateValue( double val );
+    void exportAnimation( const KoXmlElement& objectElement );
 
     //Styles functions
     const QString createPageStyle( const KoXmlElement& page );
@@ -87,6 +89,8 @@ private:
 
     KoXmlDocument m_mainDoc;//from KPR
     KoXmlDocument m_documentInfo;//from KPR
+
+    QHash<int,QString> m_pageAnimations;//stores the animations, needed a hash to be able to sort them
 
     int m_pageHeight;//needed to find out where's every object
     int m_currentPage;
