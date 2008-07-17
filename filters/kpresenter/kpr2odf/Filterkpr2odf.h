@@ -70,7 +70,7 @@ private:
     const QString getPictureNameFromKey( const KoXmlElement& key );
     void set2DGeometry( KoXmlWriter* content, const KoXmlElement& objectElement );
     QString rotateValue( double val );
-    void exportAnimation( const KoXmlElement& objectElement );
+    void exportAnimation( const KoXmlElement& objectElement, int indentLevel );
 
     //Styles functions
     const QString createPageStyle( const KoXmlElement& page );

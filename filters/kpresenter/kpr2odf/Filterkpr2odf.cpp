@@ -411,7 +411,7 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
             kWarning()<<"Unexpected object found in page "<<m_currentPage;
             break;
         }//switch objectElement
-        exportAnimation( objectElement );
+        exportAnimation( objectElement, content->indentLevel() );
         ++m_objectIndex;
     }//for
 }
@@ -907,15 +907,15 @@ QString Filterkpr2odf::rotateValue( double val )
     return str;
 }
 
-void Filterkpr2odf::exportAnimation( const KoXmlElement& objectElement )
+void Filterkpr2odf::exportAnimation( const KoXmlElement& objectElement, int indentLevel )
 {
-    QBuffer animationsBuffer;
-    animationsBuffer.open( IO_WriteOnly );
-    KoXmlWriter animationsWriter( &animationsBuffer );
-
     KoXmlElement effects = objectElement.namedItem( "EFFECTS" ).toElement();
     if( !effects.isNull() )
     {
+        QBuffer animationsBuffer;
+        animationsBuffer.open( IO_WriteOnly );
+        KoXmlWriter animationsWriter( &animationsBuffer, indentLevel + 1 );
+
         animationsWriter.startElement( "presentation:show-shape" );
         animationsWriter.addAttribute( "draw:shape-id", QString( "object%1" ).arg( m_objectIndex ) );
 
@@ -1031,6 +1031,10 @@ void Filterkpr2odf::exportAnimation( const KoXmlElement& objectElement )
     if( !disappear.isNull() && ( disappear.attribute( "doit" ) == "1" ) )
     //the effect it's saved and not displayed unless doit is set to 1
     {
+        QBuffer animationsBuffer;
+        animationsBuffer.open( IO_WriteOnly );
+        KoXmlWriter animationsWriter( &animationsBuffer, indentLevel + 1 );
+
         animationsWriter.startElement( "presentation:hide-shape" );
         animationsWriter.addAttribute( "draw:shape-id", QString( "object%1" ).arg( m_objectIndex ) );
         if( disappear.hasAttribute( "effect" ) )
