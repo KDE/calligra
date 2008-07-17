@@ -31,7 +31,7 @@ class LogicModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    LogicModule(QObject* parent, const QVariantList& args = QVariantList());
+    explicit LogicModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 

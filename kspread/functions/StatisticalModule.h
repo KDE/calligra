@@ -31,7 +31,7 @@ class StatisticalModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    StatisticalModule(QObject* parent, const QVariantList& args = QVariantList());
+    explicit StatisticalModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 

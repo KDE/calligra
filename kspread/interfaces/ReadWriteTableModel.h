@@ -31,7 +31,7 @@ public:
     /**
      * Constructor.
      */
-    ReadWriteTableModel(Sheet* sheet, int columns = 0, int rows = 0);
+    explicit ReadWriteTableModel(Sheet* sheet, int columns = 0, int rows = 0);
 
     /**
      * Destructor.

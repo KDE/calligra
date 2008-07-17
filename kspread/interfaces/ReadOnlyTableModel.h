@@ -32,7 +32,7 @@ public:
     /**
      * Constructor.
      */
-    ReadOnlyTableModel(Sheet* sheet, int columns = 0, int rows = 0);
+    explicit ReadOnlyTableModel(Sheet* sheet, int columns = 0, int rows = 0);
 
     /**
      * Destructor.

@@ -31,7 +31,7 @@ class DateTimeModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    DateTimeModule(QObject* parent, const QVariantList& args = QVariantList());
+    explicit DateTimeModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 

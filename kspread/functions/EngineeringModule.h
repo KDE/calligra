@@ -31,7 +31,7 @@ class EngineeringModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    EngineeringModule(QObject* parent, const QVariantList& args = QVariantList());
+    explicit EngineeringModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 

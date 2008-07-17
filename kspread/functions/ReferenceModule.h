@@ -31,7 +31,7 @@ class ReferenceModule : public FunctionModule
 {
     Q_OBJECT
 public:
-    ReferenceModule(QObject* parent, const QVariantList& args = QVariantList());
+    explicit ReferenceModule(QObject* parent, const QVariantList& args = QVariantList());
 
     QString descriptionFileName() const;
 
