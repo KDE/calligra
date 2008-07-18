@@ -77,7 +77,7 @@ foreach $section (@sections) {
     chdir $section;
     &alterConf();
     $sect=$section;
-    $sect=~s/\//-/;
+    $sect=~s/\//-/g;
     system "doxygen $doxygenconftmp.2 >/dev/null 2>$basedir$sect/err.log";
     unlink "$doxygenconftmp";
     unlink "$doxygenconftmp.2";
