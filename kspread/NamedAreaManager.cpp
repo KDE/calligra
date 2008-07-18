@@ -39,6 +39,7 @@
 
 // KSpread
 #include "CellStorage.h"
+#include "FormulaStorage.h"
 #include "LoadingInfo.h"
 #include "Map.h"
 #include "Region.h"
@@ -97,8 +98,15 @@ void NamedAreaManager::remove(const QString& name)
     d->namedAreas.remove(name);
     emit namedAreaRemoved(name);
     const QList<Sheet*> sheets = namedArea.sheet->map()->sheetList();
-    foreach (Sheet* sheet, sheets)
-        sheet->refreshRemoveAreaName(name);
+    foreach (Sheet* sheet, sheets) {
+        const QString tmp = '\'' + name + '\'';
+        const FormulaStorage* const storage = sheet->formulaStorage();
+        for (int c = 0; c < storage->count(); ++c) {
+            if (storage->data(c).expression().contains(tmp)) {
+                Cell(sheet, storage->col(c), storage->row(c)).makeFormula();
+            }
+        }
+    }
 }
 
 void NamedAreaManager::remove(Sheet* sheet)

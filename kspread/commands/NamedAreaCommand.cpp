@@ -21,6 +21,8 @@
 
 #include "klocale.h"
 
+#include "Damages.h"
+#include "FormulaStorage.h"
 #include "Map.h"
 #include "NamedAreaManager.h"
 #include "Sheet.h"
@@ -90,7 +92,20 @@ bool NamedAreaCommand::mainProcessing()
 bool NamedAreaCommand::postProcessing()
 {
     // update formulas containing either the new or the old name
-    foreach (Sheet* sheet, m_sheet->map()->sheetList())
-        sheet->refreshChangeAreaName(m_areaName);
+    Map* const map = m_sheet->map();
+    foreach (Sheet* sheet, map->sheetList()) {
+        const QString tmp = '\'' + m_areaName + '\'';
+        const FormulaStorage* const storage = sheet->formulaStorage();
+        for (int c = 0; c < storage->count(); ++c) {
+            if (storage->data(c).expression().contains(tmp)) {
+                Cell cell(sheet, storage->col(c), storage->row(c));
+                if (cell.makeFormula()) {
+                    // recalculate cells
+                    map->addDamage(new CellDamage(cell, CellDamage::Appearance | CellDamage::Binding |
+                                                        CellDamage::Value));
+                }
+            }
+        }
+    }
     return AbstractRegionCommand::postProcessing();
 }

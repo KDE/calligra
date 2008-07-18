@@ -56,11 +56,6 @@ class KoShape;
 class KoShapeSavingContext;
 class KoXmlWriter;
 
-namespace KoChart
-{
-class Part;
-}
-
 namespace KSpread
 {
 class Cell;
@@ -754,18 +749,6 @@ public:
      */
     void changeNameCellRef(const QPoint& pos, bool fullRowOrColumn, ChangeRef ref,
                            const QString& sheetName, int number);
-
-
-    void refreshRemoveAreaName(const QString &_areaName);
-    void refreshChangeAreaName(const QString &_areaName);
-
-
-    /**
-     * Used by the 'chart' to get the sheet on which the chart is build.
-     * The cells we are interested in are in the rectangle '_range'.
-     * The cells are stored row after row in '_list'.
-     */
-    bool getCellRectangle( const QRect &_range, QList<Cell> &_list );
 
     /**
      * Insert the non-default column format \p columnFormat.

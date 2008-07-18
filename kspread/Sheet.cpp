@@ -760,36 +760,6 @@ void Sheet::setText( int _row, int _column, const QString& _text, bool asString 
     emit sig_updateView( this, Region( _column, _row, this ) );
 }
 
-void Sheet::refreshRemoveAreaName(const QString & _areaName)
-{
-    QString tmp = '\'' + _areaName + '\'';
-    for ( int c = 0; c < formulaStorage()->count(); ++c )
-    {
-        if ( formulaStorage()->data( c ).expression().contains( tmp ) )
-        {
-            Cell( this, formulaStorage()->col( c ), formulaStorage()->row( c ) ).makeFormula();
-        }
-    }
-}
-
-void Sheet::refreshChangeAreaName(const QString & _areaName)
-{
-    QString tmp = '\'' + _areaName + '\'';
-    for ( int c = 0; c < formulaStorage()->count(); ++c )
-    {
-        if ( formulaStorage()->data( c ).expression().contains( tmp ) )
-        {
-            Cell cell( this, formulaStorage()->col( c ), formulaStorage()->row( c ) );
-            if ( cell.makeFormula() )
-            {
-                // recalculate cells
-                map()->addDamage(new CellDamage(cell, CellDamage::Appearance | CellDamage::Binding |
-                                                      CellDamage::Value));
-            }
-        }
-    }
-}
-
 void Sheet::changeCellTabName( QString const & old_name, QString const & new_name )
 {
     for ( int c = 0; c < formulaStorage()->count(); ++c )
