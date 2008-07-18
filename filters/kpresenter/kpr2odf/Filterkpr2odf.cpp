@@ -813,7 +813,7 @@ void Filterkpr2odf::appendAutoform( KoXmlWriter* content, const KoXmlElement& ob
     content->startElement( "draw:path" );
     set2DGeometry( content, objectElement );
     content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
-    content->addAttribute( "draw:viewBox", QString( "0 0 %1 %2" ).arg( (int)( width*100 ) ).arg( (int)( height*100 ) ) );
+    content->addAttribute( "svg:viewBox", QString( "0 0 %1 %2" ).arg( (int)( width*100 ) ).arg( (int)( height*100 ) ) );
     content->addAttribute( "svg:d", d );
 
     exportAnimation( objectElement, content->indentLevel() );
@@ -1106,7 +1106,6 @@ void Filterkpr2odf::exportAnimation( const KoXmlElement& objectElement, int inde
         QList<QString> effectList = m_pageAnimations.take( presnumValue );//Qt constructs a default object if Key is not found
         effectList.append( animationsContents );
         m_pageAnimations.insert( presnumValue, effectList );
-
     }//if !effects.isNull()
 
     KoXmlElement disappear = objectElement.namedItem( "DISAPPEAR" ).toElement();
