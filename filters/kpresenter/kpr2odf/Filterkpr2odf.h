@@ -22,6 +22,7 @@
 
 //Qt's includes
 #include <QHash>
+#include <QList>
 
 //KOffice includes
 #include <KoDom.h>
@@ -90,7 +91,7 @@ private:
     KoXmlDocument m_mainDoc;//from KPR
     KoXmlDocument m_documentInfo;//from KPR
 
-    QHash<int,QString> m_pageAnimations;//stores the animations, needed a hash to be able to sort them
+    QHash< int, QList<QString> > m_pageAnimations;//stores the animations, needed a hash to be able to sort them
 
     int m_pageHeight;//needed to find out where's every object
     int m_currentPage;

@@ -24,6 +24,8 @@
 #include <QBuffer>
 #include <QStringList>
 #include <QString>
+#include <QTime>
+#include <QtAlgorithms>
 
 //KDE includes
 #include <kgenericfactory.h>
@@ -89,7 +91,9 @@ KoFilter::ConversionStatus Filterkpr2odf::convert( const QByteArray& from, const
                                            ,KoOdf::mimeType( KoOdf::Presentation ), KoStore::Zip );
 
     if( !output )
+    {
         return KoFilter::StorageCreationError;
+    }
 
     KoOdfWriteStore odfWriter( output );
     KoXmlWriter* manifest = odfWriter.manifestWriter(KoXmlNS::presentation);
@@ -152,7 +156,9 @@ void Filterkpr2odf::createImageList( KoStore* output, KoStore* input, KoXmlWrite
 {
     KoXmlElement key( m_mainDoc.namedItem( "DOC" ).namedItem( "PICTURES" ).firstChild().toElement() );
     if( key.isNull() )
+    {
         return;
+    }
 
     output->enterDirectory( "Pictures" );
 //     manifest->addManifestEntry( "Pictures/", "" );//FIXME: is this needed or not? 1.6 doesn't add an entry, ODEssentials does
@@ -361,57 +367,70 @@ void Filterkpr2odf::convertObjects( KoXmlWriter* content, const KoXmlNode& objec
         {
         case 0: // picture
             appendPicture( content, objectElement );
+            exportAnimation( objectElement, content->indentLevel() );
             break;
         case 1: // line
             appendLine( content, objectElement );
+            exportAnimation( objectElement, content->indentLevel() );
             break;
         case 2: // rectangle
             appendRectangle( content, objectElement );
+            exportAnimation( objectElement, content->indentLevel() );
             break;
         case 3: // ellipse or circle
             appendEllipse( content, objectElement );
+            exportAnimation( objectElement, content->indentLevel() );
             break;
         case 4: // text
             appendTextBox( content, objectElement );
+            exportAnimation( objectElement, content->indentLevel() );
             break;
         case 5: //autoform
-//             appendAutoform( content, objectElement );
+            appendAutoform( content, objectElement );
+            //NOTE: we cannot add the animation since we're not totally sure it's a valid Autoform
             break;
         case 6: //clipart
             break;
         //NOTE: 7 is undefined, never happens in a file (according to kpresenter.dtd)
         case 8: // pie, chord, arc
             appendPie( content, objectElement );
+            exportAnimation( objectElement, content->indentLevel() );
             break;
         case 9: //part
             break;
         case 10: //group
             appendGroupObject( content, objectElement );
+            exportAnimation( objectElement, content->indentLevel() );
             break;
         case 11: //freehand
             appendFreehand( content, objectElement );
+            exportAnimation( objectElement, content->indentLevel() );
             break;
         case 12: // polyline
             //a bunch of points that are connected and not closed
             appendPoly( content, objectElement, false /*polyline*/ );
+            exportAnimation( objectElement, content->indentLevel() );
             break;
         case 13: //quadric bezier curve
         case 14: //cubic bezier curve
             appendBezier( content, objectElement );
+            exportAnimation( objectElement, content->indentLevel() );
             break;
         case 15: //polygon
             //a regular polygon, easily drawn by the number of sides it has
             appendPolygon( content, objectElement );
+            exportAnimation( objectElement, content->indentLevel() );
             break;
         case 16: //closed polyline
             //that is a closed non-regular polygon
             appendPoly( content, objectElement, true /*closedPolygon*/ );
+            exportAnimation( objectElement, content->indentLevel() );
             break;
         default:
             kWarning()<<"Unexpected object found in page "<<m_currentPage;
             break;
         }//switch objectElement
-        exportAnimation( objectElement, content->indentLevel() );
+
         ++m_objectIndex;
     }//for
 }
@@ -510,6 +529,7 @@ void Filterkpr2odf::appendRectangle( KoXmlWriter* content, const KoXmlElement& o
 
 void Filterkpr2odf::appendEllipse( KoXmlWriter* content, const KoXmlElement& objectElement )
 {
+    //TODO: fix the size
     KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
     double width = size.attribute( "width" ).toDouble();
     double height = size.attribute( "height" ).toDouble();
@@ -739,15 +759,64 @@ void Filterkpr2odf::appendPolygon( KoXmlWriter* content, const KoXmlElement& obj
 
 void Filterkpr2odf::appendAutoform( KoXmlWriter* content, const KoXmlElement& objectElement )
 {
-    content->startElement( "draw:path" );
+    QString d;
 
+    KoXmlElement size = objectElement.namedItem( "SIZE" ).toElement();
+    double width = size.attribute( "width" ).toDouble();
+    double height = size.attribute( "height" ).toDouble();
+    QString fileName = objectElement.namedItem( "FILENAME" ).toElement().attribute( "value" );
+    if( fileName.endsWith( "ArrowUp.atf" ) )
+    {
+        d += QString( "M%1 %2" ).arg( (int)( width * 0.25 * 100 ) ).arg( (int)( height * 100 ) );//0.25 = 25% percent
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.75 * 100 ) ).arg( (int)( height * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.75 * 100 ) ).arg( (int)( height * 0.48 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.48 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( 0 );
+        d += QString( "L%1 %2" ).arg( 0 ).arg( (int)( height * 0.48 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.25 * 100 ) ).arg( (int)( height * 0.48 * 100 ) );
+        d += "Z";
+    }
+    else if( fileName.endsWith( "ArrowRightUp.atf" ) )
+    {
+        return;
+    }
+    else if( fileName.endsWith( "ArrowRight.atf" ) )
+    {
+        return;
+    }
+    else if( fileName.endsWith( "ArrowRightDown.atf" ) )
+    {
+        return;
+    }
+    else if( fileName.endsWith( "ArrowDown.atf" ) )
+    {
+        return;
+    }
+    else if( fileName.endsWith( "ArrowLeftDown.atf" ) )
+    {
+        return;
+    }
+    else if( fileName.endsWith( "ArrowLeft.atf" ) )
+    {
+        return;
+    }
+    else if( fileName.endsWith( "ArrowLeftUp.atf" ) )
+    {
+        return;
+    }
+    else
+    {
+        //Not implemented
+        return;
+    }
+
+    content->startElement( "draw:path" );
     set2DGeometry( content, objectElement );
     content->addAttribute( "draw:style-name", createGraphicStyle( objectElement ) );
+    content->addAttribute( "draw:viewBox", QString( "0 0 %1 %2" ).arg( (int)( width*100 ) ).arg( (int)( height*100 ) ) );
+    content->addAttribute( "svg:d", d );
 
-    QString g;
-    //TODO:export
-    content->addAttribute( "draw:g", g );
-
+    exportAnimation( objectElement, content->indentLevel() );
     content->endElement();//draw:path
 }
 
@@ -1008,6 +1077,14 @@ void Filterkpr2odf::exportAnimation( const KoXmlElement& objectElement, int inde
             animationsWriter.addAttribute( "presentation:speed", speed );
         }
 
+        KoXmlElement timer = objectElement.namedItem( "TIMER" ).toElement();
+        if( timer.hasAttribute( "appearTimer" ) && ( timer.attribute( "appearTimer" ) != "1" ) )
+        {
+            QTime time;
+            time = time.addSecs( timer.attribute( "timer" ).toInt() );
+            animationsWriter.addAttribute( "presentation:delay", time.toString("'PT'hh'H'mm'M'ss'S'") );
+        }
+
         KoXmlElement appearSoundEffect = objectElement.namedItem( "APPEARSOUNDEFFECT" ).toElement();
         if( appearSoundEffect.attribute( "appearSoundFileName" ) == "1" )
         {
@@ -1020,16 +1097,21 @@ void Filterkpr2odf::exportAnimation( const KoXmlElement& objectElement, int inde
         }
         animationsWriter.endElement();//presentation:show-shape
 
-        int num = effects.attribute( "num", "0" ).toInt();
-        Q_ASSERT( !m_pageAnimations.contains( num ) );
+        KoXmlElement presnum = objectElement.namedItem( "PRESNUM" ).toElement();
+        int presnumValue = presnum.attribute( "value", "0" ).toInt();
+
         QString animationsContents = QString::fromUtf8( animationsBuffer.buffer(),
                                                         animationsBuffer.buffer().size() );
-        m_pageAnimations.insert( num, animationsContents );
+
+        QList<QString> effectList = m_pageAnimations.take( presnumValue );//Qt constructs a default object if Key is not found
+        effectList.append( animationsContents );
+        m_pageAnimations.insert( presnumValue, effectList );
+
     }//if !effects.isNull()
 
     KoXmlElement disappear = objectElement.namedItem( "DISAPPEAR" ).toElement();
     if( !disappear.isNull() && ( disappear.attribute( "doit" ) == "1" ) )
-    //the effect it's saved and not displayed unless doit is set to 1
+    //in KPR the effect it's saved and not displayed unless doit is set to 1
     {
         QBuffer animationsBuffer;
         animationsBuffer.open( IO_WriteOnly );
@@ -1051,35 +1133,35 @@ void Filterkpr2odf::exportAnimation( const KoXmlElement& objectElement, int inde
                 break;
             case 1: //EF3_GO_RIGHT
                 effect = "move";
-                direction = "from-right";
+                direction = "to-right";
                 break;
             case 2: //EF3_GO_LEFT
                 effect = "move";
-                direction = "from-left";
+                direction = "to-left";
                 break;
             case 3: //EF3_GO_TOP
                 effect = "move";
-                direction = "from-top";
+                direction = "to-top";
                 break;
             case 4: //EF3_GO_BOTTOM
                 effect = "move";
-                direction = "from-bottom";
+                direction = "to-bottom";
                 break;
             case 5: //EF3_GO_RIGHT_TOP
                 effect = "move";
-                direction = "from-upper-right";
+                direction = "to-upper-right";
                 break;
             case 6: //EF3_GO_RIGHT_BOTTOM
                 effect = "move";
-                direction = "from-lower-right";
+                direction = "to-lower-right";
                 break;
             case 7: //EF3_GO_LEFT_TOP
                 effect = "move";
-                direction = "from-upper-left";
+                direction = "to-upper-left";
                 break;
             case 8: //EF3_GO_LEFT_BOTTOM
                 effect = "move";
-                direction = "from-lower-left";
+                direction = "to-lower-left";
                 break;
             case 9: //EF3_WIPE_LEFT
                 effect = "fade";
@@ -1126,6 +1208,14 @@ void Filterkpr2odf::exportAnimation( const KoXmlElement& objectElement, int inde
             animationsWriter.addAttribute( "presentation:speed", speed );
         }
 
+        KoXmlElement timer = objectElement.namedItem( "TIMER" ).toElement();
+        if( timer.hasAttribute( "disappearTimer" ) && ( timer.attribute( "disappearTimer" ) != "1" ) )
+        {
+            QTime time;
+            time = time.addSecs( timer.attribute( "timer" ).toInt() );
+            animationsWriter.addAttribute( "presentation:delay", time.toString("'PT'hh'H'mm'M'ss'S'") );
+        }
+
         KoXmlElement appearSoundEffect = objectElement.namedItem( "DISAPPEARSOUNDEFFECT" ).toElement();
         if( appearSoundEffect.attribute( "disappearSoundEffect" ) == "1" )
         {
@@ -1139,20 +1229,38 @@ void Filterkpr2odf::exportAnimation( const KoXmlElement& objectElement, int inde
         animationsWriter.endElement();//presentation:hide-shape
 
         int num = disappear.attribute( "num", "0" ).toInt();
-        Q_ASSERT( !m_pageAnimations.contains( num ) );
+
         QString animationsContents = QString::fromUtf8( animationsBuffer.buffer(),
                                                         animationsBuffer.buffer().size() );
-        m_pageAnimations.insert( num, animationsContents );
+
+        QList<QString> effectList = m_pageAnimations.take( num );//Qt constructs a default object if Key is not found
+        effectList.append( animationsContents );
+        m_pageAnimations.insert( num, effectList );
     }//if !disappear.isNull()
 }
 
 void Filterkpr2odf::saveAnimations( KoXmlWriter* content )
 {
     content->startElement( "presentation:animations" );
-    for( int index = 0; m_pageAnimations.contains( index ); ++index )
+    QList<int> keys = m_pageAnimations.keys();
+    qSort( keys );//we need to store the effect in the order of it's keys
+    foreach( int key, keys )
     {
-        QString element = m_pageAnimations.value( index );
-        content->addCompleteElement( element.toLatin1().data() );
+        QList<QString> effectList = m_pageAnimations.value( key );
+        if( effectList.size() > 1 )//if it's just 1 effect we don't add the group tag
+        {
+            content->startElement( "presentation:animation-group" );
+            foreach( QString effect, effectList )
+            {
+                content->addCompleteElement( effect.toLatin1().data() );
+            }
+            content->endElement();//presentation:animation-group
+        }
+        else
+        {
+            QString effect = effectList.at( 0 );
+            content->addCompleteElement( effect.toLatin1().data() );
+        }
     }
     content->endElement();//presentation:animations
 

@@ -120,6 +120,7 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
 
     //Add the page effect
     //Enum: PageEffect
+    //TODO: check if it's correct, I've found at least 4 elements wrong.
     KoXmlElement pageEffect = page.namedItem( "PGEFFECT" ).toElement();
     if( !pageEffect.isNull() )
     {
@@ -320,7 +321,6 @@ const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientEl
             {
                 int cx = bGradient.attribute( "xfactor" ).toInt();
                 int cy = bGradient.attribute( "yfactor" ).toInt();
-                //FIXME: find out if this is still applicable and why is the calculus like that
                 style.addAttribute( "draw:cx", QString( "%1%" ).arg( cx / 4 + 50 ) );
                 style.addAttribute( "draw:cy", QString( "%1%" ).arg( cy / 4 + 50 ) );
             }
@@ -342,7 +342,6 @@ const QString Filterkpr2odf::createGradientStyle( const KoXmlElement& gradientEl
             {
                 int cx = gradientElement.attribute( "xfactor" ).toInt();
                 int cy = gradientElement.attribute( "yfactor" ).toInt();
-                //FIXME: find out if this is still applicable and why is the calculus like that
                 style.addAttribute( "draw:cx", QString( "%1%" ).arg( cx / 4 + 50 ) );
                 style.addAttribute( "draw:cy", QString( "%1%" ).arg( cy / 4 + 50 ) );
             }
@@ -505,6 +504,7 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
         if( element.attribute( "type" ) == "1"
             || element.attribute( "type" ) == "2"
             || element.attribute( "type" ) == "3"
+            || element.attribute( "type" ) == "5"
             || element.attribute( "type" ) == "8"
             || element.attribute( "type" ) == "11"
             || element.attribute( "type" ) == "12"
