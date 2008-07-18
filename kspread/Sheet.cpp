@@ -1890,37 +1890,6 @@ void Sheet::updateView(const Region& region)
   emit sig_updateView( this, region );
 }
 
-void Sheet::mergeCells(const Region& region, bool hor, bool ver)
-{
-  // sanity check
-  if( isProtected() )
-    return;
-  if( map()->isProtected() )
-    return;
-
-  MergeCommand* manipulator = new MergeCommand();
-  manipulator->setSheet(this);
-  manipulator->setHorizontalMerge(hor);
-  manipulator->setVerticalMerge(ver);
-  manipulator->add(region);
-  manipulator->execute();
-}
-
-void Sheet::dissociateCells(const Region& region)
-{
-  // sanity check
-  if( isProtected() )
-    return;
-  if( map()->isProtected() )
-    return;
-
-  MergeCommand* manipulator = new MergeCommand();
-  manipulator->setSheet(this);
-  manipulator->setReverse(true);
-  manipulator->add(region);
-  manipulator->execute();
-}
-
 bool Sheet::testListChoose(Selection* selection)
 {
    const QPoint marker( selection->marker() );

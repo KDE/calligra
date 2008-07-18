@@ -59,6 +59,7 @@
 #include "commands/DeleteCommand.h"
 #include "commands/IndentationCommand.h"
 #include "commands/LinkCommand.h"
+#include "commands/MergeCommand.h"
 #include "commands/PrecisionCommand.h"
 #include "commands/RowColumnManipulators.h"
 #include "commands/SortManipulator.h"
@@ -1950,22 +1951,69 @@ void CellToolBase::changeBackgroundColor()
 
 void CellToolBase::mergeCells()
 {
-    selection()->activeSheet()->mergeCells(*selection());
+    // sanity check
+    if (selection()->activeSheet()->isProtected()) {
+        return;
+    }
+    if (selection()->activeSheet()->map()->isProtected()) {
+        return;
+    }
+    MergeCommand* const command = new MergeCommand();
+    command->setSheet(selection()->activeSheet());
+    command->setHorizontalMerge(false);
+    command->setVerticalMerge(false);
+    command->add(*selection());
+    command->execute(m_canvas);
 }
 
 void CellToolBase::mergeCellsHorizontal()
 {
-    selection()->activeSheet()->mergeCells(*selection(), true);
+    // sanity check
+    if (selection()->activeSheet()->isProtected()) {
+        return;
+    }
+    if (selection()->activeSheet()->map()->isProtected()) {
+        return;
+    }
+    MergeCommand* const command = new MergeCommand();
+    command->setSheet(selection()->activeSheet());
+    command->setHorizontalMerge(true);
+    command->setVerticalMerge(false);
+    command->add(*selection());
+    command->execute(m_canvas);
 }
 
 void CellToolBase::mergeCellsVertical()
 {
-    selection()->activeSheet()->mergeCells(*selection(), false, true);
+    // sanity check
+    if (selection()->activeSheet()->isProtected()) {
+        return;
+    }
+    if (selection()->activeSheet()->map()->isProtected()) {
+        return;
+    }
+    MergeCommand* const command = new MergeCommand();
+    command->setSheet(selection()->activeSheet());
+    command->setHorizontalMerge(false);
+    command->setVerticalMerge(true);
+    command->add(*selection());
+    command->execute(m_canvas);
 }
 
 void CellToolBase::dissociateCells()
 {
-    selection()->activeSheet()->dissociateCells(*selection());
+    // sanity check
+    if (selection()->activeSheet()->isProtected()) {
+        return;
+    }
+    if (selection()->activeSheet()->map()->isProtected()) {
+        return;
+    }
+    MergeCommand* const command = new MergeCommand();
+    command->setSheet(selection()->activeSheet());
+    command->setReverse(true);
+    command->add(*selection());
+    command->execute(m_canvas);
 }
 
 void CellToolBase::resizeColumn()

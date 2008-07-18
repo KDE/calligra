@@ -599,14 +599,6 @@ public:
      */
     QString copyAsText(Selection* selection);
 
-    /**
-     * @param region the region to merge
-     * @param hor merge horizontally
-     * @param ver merge vertically
-     */
-    void mergeCells( const Region& region, bool hor = false, bool ver = false );
-    void dissociateCells( const Region &region );
-
     bool areaIsEmpty(const Region& area, TestType _type = Text) ;
 
     /**
