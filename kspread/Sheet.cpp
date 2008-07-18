@@ -746,20 +746,6 @@ RowFormat* Sheet::nonDefaultRowFormat( int _row, bool force_creation )
     return p;
 }
 
-void Sheet::setText( int _row, int _column, const QString& _text, bool asString )
-{
-  DataManipulator *dm = new DataManipulator ();
-  dm->setSheet (this);
-  dm->setValue (Value(_text));
-  dm->setParsing (!asString);
-  dm->add (QPoint (_column, _row));
-  dm->execute ();
-
-  //refresh anchor
-  if ((!_text.isEmpty()) && (_text.at(0)=='!'))
-    emit sig_updateView( this, Region( _column, _row, this ) );
-}
-
 void Sheet::changeCellTabName( QString const & old_name, QString const & new_name )
 {
     for ( int c = 0; c < formulaStorage()->count(); ++c )
@@ -1903,35 +1889,6 @@ void Sheet::updateView(const Region& region)
 {
   emit sig_updateView( this, region );
 }
-
-void Sheet::refreshView( const Region& region )
-{
-    Region tmpRegion;
-    Region::ConstIterator endOfList = region.constEnd();
-    for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
-    {
-        QRect range = (*it)->rect();
-        QRect tmp(range);
-
-        CellStorage subStorage = d->cellStorage->subStorage( Region( range ) );
-        for ( int row = range.top(); row <= range.bottom(); ++row )
-        {
-            Cell cell = subStorage.firstInRow( row );
-            for ( ; !cell.isNull(); cell = subStorage.nextInRow( cell.column(), cell.row() ) )
-            {
-                if ( cell.doesMergeCells() )
-                {
-                    tmp.setWidth( cell.masterCell().mergedXCells() + 1 );
-                    tmp.setHeight( cell.masterCell().mergedYCells() + 1 );
-                }
-            }
-        }
-        deleteCells( Region( range ) );
-        tmpRegion.add(tmp);
-    }
-    emit sig_updateView( this, tmpRegion );
-}
-
 
 void Sheet::mergeCells(const Region& region, bool hor, bool ver)
 {

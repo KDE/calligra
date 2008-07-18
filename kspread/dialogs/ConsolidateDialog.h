@@ -62,6 +62,9 @@ public slots:
   void slotReturnPressed();
 
 protected:
+    void setText(Sheet* sheet, int row, int column, const QString& text, bool asString = false);
+
+protected:
   Selection* m_selection;
   KLineEdit* m_pRef;
   Q3ListBox* m_pRefs;

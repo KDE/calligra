@@ -460,12 +460,6 @@ public:
     //
 
     /**
-     * Sets the contents of the cell at row,column to text
-     */
-    void setText( int row, int column, const QString& text,
-                  bool asString = false );
-
-    /**
      * Determines the row for a given position \p _ypos . If the position is
      * on the border between two cells, the upper row is returned. Also, the offset
      * between the coordinate system root and the upper row border is determined.
@@ -838,12 +832,6 @@ public:
     //
     //BEGIN UNSORTED METHODS !!!
     //
-
-    /**
-     * used to refresh cells when you make redodelete
-     * \note Deletes (!) the cells in the region.
-     */
-    void refreshView(const Region& region);
 
     void emit_updateRow( RowFormat* rowFormat, int _row, bool repaint = true );
     void emit_updateColumn( ColumnFormat* columnFormat, int _column );

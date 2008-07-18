@@ -59,6 +59,8 @@
 #include <ValueConverter.h>
 #include <Cell.h>
 
+#include "commands/DataManipulators.h"
+
 using namespace KSpread;
 
 ConsolidateDialog::ConsolidateDialog(QWidget* parent, Selection* selection)
@@ -283,9 +285,9 @@ void ConsolidateDialog::slotOk()
 	}
 	formula += ')';
 
-        if(!novalue)
-	  sheet->setText( dy + y, dx + x,
-            m_pCopy->isChecked() ? evaluate( formula, sheet ) : formula );
+        if (!novalue) {
+            setText(sheet, dy + y, dx + x, m_pCopy->isChecked() ? evaluate(formula, sheet) : formula);
+        }
       }
     }
   }
@@ -337,7 +339,7 @@ void ConsolidateDialog::slotOk()
     QStringList::Iterator s = lst.begin();
     for( ; s != lst.end(); ++s, ++x )
     {
-      sheet->setText( dy, dx + x, *s );
+        setText(sheet, dy, dx + x, *s);
 
       for( int y = 1; y < h; ++y )
       {
@@ -367,8 +369,7 @@ void ConsolidateDialog::slotOk()
 	}
 	formula += ')';
 
-	sheet->setText( dy + y, dx + x,
-          m_pCopy->isChecked() ? evaluate( formula, sheet ) : formula );
+        setText(sheet, dy + y, dx + x, m_pCopy->isChecked() ? evaluate(formula, sheet) : formula);
       }
     }
   }
@@ -419,7 +420,7 @@ void ConsolidateDialog::slotOk()
     QStringList::Iterator s = lst.begin();
     for( ; s != lst.end(); ++s, ++y )
     {
-      sheet->setText( dy + y, dx, *s );
+      setText(sheet, dy + y, dx, *s);
 
       for( int x = 1; x < w; ++x )
       {
@@ -450,8 +451,7 @@ void ConsolidateDialog::slotOk()
 
 	formula += ')';
 
-	sheet->setText( dy + y, dx + x,
-          m_pCopy->isChecked() ? evaluate( formula, sheet ) : formula );
+        setText(sheet, dy + y, dx + x, m_pCopy->isChecked() ? evaluate(formula, sheet) : formula);
       }
     }
   }
@@ -557,14 +557,16 @@ void ConsolidateDialog::slotOk()
     // Draw the row description
     int i = 1;
     QStringList::Iterator s = rows.begin();
-    for( ; s != rows.end(); ++s, ++i )
-      sheet->setText( dy, dx + i, *s );
+    for( ; s != rows.end(); ++s, ++i ) {
+      setText(sheet, dy, dx + i, *s);
+    }
 
     // Draw the column description
     i = 1;
     s = cols.begin();
-    for( ; s != cols.end(); ++s, ++i )
-      sheet->setText( dy + i, dx, *s );
+    for( ; s != cols.end(); ++s, ++i ) {
+      setText(sheet, dy + i, dx, *s);
+    }
 
     // Draw the data
     int x = 1;
@@ -590,8 +592,7 @@ void ConsolidateDialog::slotOk()
 	}
 	formula += ')';
 
-	sheet->setText( dy + y, dx + x,
-          m_pCopy->isChecked() ? evaluate( formula, sheet ) : formula );
+        setText(sheet, dy + y, dx + x, m_pCopy->isChecked() ? evaluate(formula, sheet) : formula);
       }
     }
   }
@@ -677,6 +678,22 @@ QString ConsolidateDialog::evaluate( const QString& formula, Sheet* sheet )
   delete f;
   result = sheet->map()->converter()->asString (res).asString ();
   return result;
+}
+
+void ConsolidateDialog::setText(Sheet* sheet, int _row, int _column,
+                                const QString& _text, bool asString)
+{
+    DataManipulator* const command = new DataManipulator();
+    command->setSheet(sheet);
+    command->setValue(Value(_text));
+    command->setParsing(!asString);
+    command->add(QPoint(_column, _row));
+    command->execute();
+
+    //refresh anchor
+    if ((!_text.isEmpty()) && (_text.at(0)=='!')) {
+        sheet->updateView(Region(_column, _row, sheet));
+    }
 }
 
 #include "ConsolidateDialog.moc"

@@ -23,6 +23,7 @@
 #include "CalendarToolWidget.h"
 
 #include <Sheet.h>
+#include <commands/DataManipulators.h>
 
 #include <KCalendarSystem>
 #include <KGenericFactory>
@@ -111,7 +112,7 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
     int row = marker.y();
     int col = marker.x();
     int colstart = col; //this is where we get back after each week
-    sheet->setText(row,colstart,i18n("Calendar from %1 to %2",start.toString(),end.toString()));
+    setText(sheet, row, colstart, i18n("Calendar from %1 to %2", start.toString(), end.toString()));
 
     QDate current(start);
 //   QDate previous(current);
@@ -141,25 +142,25 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
 
         if (yearheader) {
             kDebug() <<"inserting year" + QString::number(current.year());
-            sheet->setText(row,colstart+6,cs->yearString(current,KCalendarSystem::LongFormat));
+            setText(sheet,row, colstart + 6, cs->yearString(current, KCalendarSystem::LongFormat));
 
             row+=2;
             yearheader=false;
         }
         if (monthheader) {
             kDebug() <<"inserting month" + QString::number(current.month());
-            sheet->setText(row,colstart+6,cs->monthName(current,KCalendarSystem::LongName));
+            setText(sheet, row, colstart + 6, cs->monthName(current, KCalendarSystem::LongName));
             row+=2;
             //we always have the week number in the first column
-            sheet->setText(row,colstart,i18n("week"));
+            setText(sheet, row, colstart, i18n("week"));
             for (int i=1; i<8; i++) {
-                sheet->setText(row,colstart+(i-1)*2+1,cs->weekDayName(i));
+                setText(sheet, row, colstart + (i-1) * 2 + 1, cs->weekDayName(i));
             }
             row++;
             monthheader=false;
         }
         if (weekheader) {
-            sheet->setText(row,colstart,QString::number(cs->weekNumber(current)));
+            setText(sheet, row, colstart, QString::number(cs->weekNumber(current)));
             col++;
             weekheader=false;
 
@@ -169,7 +170,7 @@ void CalendarTool::insertCalendar(const QDate &start, const QDate &end)
             }
         }
 
-        sheet->setText(row,col,QString::number(cs->day(current)));
+        setText(sheet, row, col, QString::number(cs->day(current)));
         //go to the next date
         //@todo isn't there a better way, like current++ or something??
         QDate next = current.addDays(1);
@@ -185,6 +186,21 @@ QWidget* CalendarTool::createOptionWidget()
     connect(widget, SIGNAL(insertCalendar(const QDate&, const QDate&)),
             this, SLOT(insertCalendar(const QDate&, const QDate&)));
     return widget;
+}
+
+void CalendarTool::setText(Sheet* sheet, int _row, int _column, const QString& _text, bool asString)
+{
+    DataManipulator* const command = new DataManipulator();
+    command->setSheet(sheet);
+    command->setValue(Value(_text));
+    command->setParsing(!asString);
+    command->add(QPoint(_column, _row));
+    command->execute();
+
+    //refresh anchor
+    if ((!_text.isEmpty()) && (_text.at(0)=='!')) {
+        sheet->updateView(Region(_column, _row, sheet));
+    }
 }
 
 #include "CalendarTool.moc"

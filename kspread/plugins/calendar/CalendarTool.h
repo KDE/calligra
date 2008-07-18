@@ -45,6 +45,7 @@ public Q_SLOTS:
 
 private:
     virtual QWidget* createOptionWidget();
+    void setText(Sheet* sheet, int row, int column, const QString& text, bool asString = false);
 
 private:
     Q_DISABLE_COPY(CalendarTool)
