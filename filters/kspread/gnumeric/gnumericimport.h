@@ -64,5 +64,6 @@ enum borderStyle { Left, Right, Top, Bottom, Diagonal, Revdiagonal};
     void ParseBorder( QDomElement & gmr_styleborder, const KSpread::Cell& kspread_cell );
     double parseAttribute( const QDomElement &_element );
 
+    void setText(KSpread::Sheet* sheet, int row, int column, const QString& text, bool asString = false);
 };
 #endif // GNUMERICFILTER_H

@@ -29,6 +29,7 @@
 #include <kspread/Sheet.h>
 #include <kspread/Cell.h>
 #include <kspread/Map.h>
+#include <kspread/commands/DataManipulators.h>
 
 #include <qproimport.h>
 
@@ -185,7 +186,7 @@ KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByt
          field.setNum( lRecInt->integer() );
 //cout << "Setting R " << lRecInt->row()+1 << ", C " << ((unsigned)lRecInt->column()) << endl;
          if( table )
-            table->setText( lRecInt->row()+1, ((unsigned)lRecInt->column())+1, field, false );
+            setText(table, lRecInt->row()+1, ((unsigned)lRecInt->column())+1, field, false);
          break;
 
       case QpFormulaCell:
@@ -219,14 +220,14 @@ KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByt
          }
 
          if( table )
-            table->setText( lRecFormula->row()+1, lRecFormula->column()+1, field, false );
+            setText(table, lRecFormula->row()+1, lRecFormula->column()+1, field, false);
          break;
 
       case QpFloatingPointCell:
          lRecFloat = (QpRecFloatingPointCell*)lRec;
          field.setNum( lRecFloat->value() );
          if( table )
-            table->setText( lRecFloat->row()+1, lRecFloat->column()+1, field, false );
+            setText(table, lRecFloat->row()+1, lRecFloat->column()+1, field, false);
          break;
 
       case QpLabelCell:
@@ -234,7 +235,7 @@ KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByt
          field = "'";
          field += lRecLabel->label();
          if( table )
-            table->setText( lRecLabel->row()+1, lRecLabel->column()+1, field, false );
+            setText(table, lRecLabel->row()+1, lRecLabel->column()+1, field, false);
          break;
 
       case QpPageName:
@@ -266,6 +267,21 @@ KoFilter::ConversionStatus QpImport::convert( const QByteArray& from, const QByt
         return KoFilter::OK;
     else
         return KoFilter::StupidError;
+}
+
+void QpImport::setText(Sheet* sheet, int _row, int _column, const QString& _text, bool asString)
+{
+    DataManipulator* const command = new DataManipulator();
+    command->setSheet(sheet);
+    command->setValue(Value(_text));
+    command->setParsing(!asString);
+    command->add(QPoint(_column, _row));
+    command->execute();
+
+    //refresh anchor
+    if ((!_text.isEmpty()) && (_text.at(0)=='!')) {
+        sheet->updateView(KSpread::Region(_column, _row, sheet));
+    }
 }
 
 #include <qproimport.moc>

@@ -40,6 +40,9 @@ public:
 
     virtual KoFilter::ConversionStatus convert( const QByteArray& from, const QByteArray& to );
     void InitTableName(int pIdx, QString& pResult);
+
+protected:
+    void setText(KSpread::Sheet* sheet, int row, int column, const QString& text, bool asString = false);
 };
 
 class QpTableList : public QpTableNames

@@ -53,6 +53,8 @@
 #include <kspread/Util.h>
 #include <kspread/Validity.h>
 
+#include "kspread/commands/DataManipulators.h"
+
 #include <math.h>
 
 #define SECS_PER_DAY 86400
@@ -2115,10 +2117,10 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
                 {
                   QString formatString = e.attribute( "ValueFormat" );
                   if ( !setType( kspread_cell, formatString, cell_content ) )
-                    table->setText(row, column, cell_content, false);
+                    setText(table, row, column, cell_content, false);
                 }
                 else
-                  table->setText(row, column, cell_content, false);
+                  setText(table, row, column, cell_content, false);
 
 		if (e.hasAttribute("ExprID"))
                 {
@@ -2186,10 +2188,10 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
                 {
                   QString formatString = e.attribute( "ValueFormat" );
                   if ( !setType( kspread_cell, formatString, cell_content ) )
-                    table->setText(row, column, cell_content, false);
+                    setText(table, row, column, cell_content, false);
                 }
                 else
-                  table->setText(row, column, cell_content, false);
+                  setText(table, row, column, cell_content, false);
 
 
                 if (e.hasAttribute("ExprID"))
@@ -2205,9 +2207,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
                            Cell( table, column, row ).decodeFormula(expr).toLatin1() << endl;
 		    kDebug(30521) << expr;
 
-		    table->setText(row, column,
-                                   Cell( table, column, row ).decodeFormula(expr),
-                                   false);
+		    setText(table, row, column, Cell( table, column, row ).decodeFormula(expr), false);
 		  }
                   kspread_cell.setStyle(style);
 	      }
@@ -2264,6 +2264,22 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QByteArray & from, con
         return KoFilter::OK;
     else
         return KoFilter::StupidError;
+}
+
+void GNUMERICFilter::setText(KSpread::Sheet* sheet, int _row, int _column, const QString& _text,
+                             bool asString)
+{
+    DataManipulator* const command = new DataManipulator();
+    command->setSheet(sheet);
+    command->setValue(Value(_text));
+    command->setParsing(!asString);
+    command->add(QPoint(_column, _row));
+    command->execute();
+
+    //refresh anchor
+    if ((!_text.isEmpty()) && (_text.at(0)=='!')) {
+        sheet->updateView(KSpread::Region(_column, _row, sheet));
+    }
 }
 
 #include <gnumericimport.moc>
