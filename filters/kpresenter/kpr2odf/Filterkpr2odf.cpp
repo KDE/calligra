@@ -778,31 +778,81 @@ void Filterkpr2odf::appendAutoform( KoXmlWriter* content, const KoXmlElement& ob
     }
     else if( fileName.endsWith( "ArrowRightUp.atf" ) )
     {
-        return;
+        d += QString( "M%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 2/3 * 100 ) );//66.666...%
+        d += QString( "L%1 %2" ).arg( (int)( width * 1/3 * 100 ) ).arg( (int)( height * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 2/3 * 100 ) ).arg( (int)( height * 2/3 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.9375 * 100 ) ).arg( (int)( height * 0.9375 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.9375 * 100 ) ).arg( (int)( height * 0.0625 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.0625 * 100 ) ).arg( (int)( height * 0.0625 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 1/3 * 100 ) ).arg( (int)( height * 1/3 * 100 ) );
+        d += "Z";
     }
     else if( fileName.endsWith( "ArrowRight.atf" ) )
     {
-        return;
+        d += QString( "M%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 0.25 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 0.75 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.52 * 100 ) ).arg( (int)( height * 0.75 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.52 * 100 ) ).arg( (int)( height * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.50 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.52 * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.52 * 100 ) ).arg( (int)( height * 0.25 * 100 ) );
+        d += "Z";
     }
     else if( fileName.endsWith( "ArrowRightDown.atf" ) )
     {
-        return;
+        d += QString( "M%1 %2" ).arg( (int)( width * 1/3 * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 1/3 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 1/3 * 100 ) ).arg( (int)( height * 2/3 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.0625 * 100 ) ).arg( (int)( height * 0.9375 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.9375 * 100 ) ).arg( (int)( height * 0.9375 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.9375 * 100 ) ).arg( (int)( height * 0.0625 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 2/3 * 100 ) ).arg( (int)( height * 1/3 * 100 ) );
+        d += "Z";
     }
     else if( fileName.endsWith( "ArrowDown.atf" ) )
     {
-        return;
+        d += QString( "M%1 %2" ).arg( (int)( width * 0.20 * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.80 * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.80 * 100 ) ).arg( (int)( height * 0.55 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.55 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( height * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 0.55 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.20 * 100 ) ).arg( (int)( height * 0.55 * 100 ) );
+        d += "Z";
     }
     else if( fileName.endsWith( "ArrowLeftDown.atf" ) )
     {
-        return;
+        d += QString( "M%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.35 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 2/3 * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 1/3 * 100 ) ).arg( (int)( height * 1/3 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.0625 * 100 ) ).arg( (int)( height * 0.0625 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.0625 * 100 ) ).arg( (int)( height * 0.9375 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.9375 * 100 ) ).arg( (int)( height * 0.9375 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 2/3 * 100 ) ).arg( (int)( height * 2/3 * 100 ) );
+        d += "Z";
     }
     else if( fileName.endsWith( "ArrowLeft.atf" ) )
     {
-        return;
+        //NOTE: changed a bit since it was not centered
+        d += QString( "M%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.25 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.75 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.48 * 100 ) ).arg( (int)( height * 0.75 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.48 * 100 ) ).arg( (int)( height * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 0.50 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.48 * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.48 * 100 ) ).arg( (int)( height * 0.25 * 100 ) );
+        d += "Z";
     }
     else if( fileName.endsWith( "ArrowLeftUp.atf" ) )
     {
-        return;
+        d += QString( "M%1 %2" ).arg( (int)( width * 2/3 * 100 ) ).arg( (int)( height * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 2/3 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 2/3 * 100 ) ).arg( (int)( height * 1/3 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.9375 * 100 ) ).arg( (int)( height * 0.0625 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.0625 * 100 ) ).arg( (int)( height * 0.0625 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.0625 * 100 ) ).arg( (int)( height * 0.9375 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 1/3 * 100 ) ).arg( (int)( height * 2/3 * 100 ) );
+        d += "Z";
     }
     else
     {
