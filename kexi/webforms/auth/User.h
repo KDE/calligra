@@ -33,8 +33,14 @@ namespace Auth {
     public:
         User(const char* name, const char* password) :
             m_name(name), m_password(password) {}
+        
+        User(const QString& name, const QString& password) :
+            m_name(name), m_password(password) {}
 
         User(const char* name, const char* password, const QList<Permission>& perms) :
+            m_name(name), m_password(password), m_perms(perms) {}
+
+        User(const QString& name, const QString& password, const QList<Permission>& perms) :
             m_name(name), m_password(password), m_perms(perms) {}
 
         void addPermission(Permission);
