@@ -33,7 +33,7 @@ public:
         Vertical,
         VerticalReverse,
         Horizontal,
-        HorizontalReverse,
+        HorizontalReverse
     };
 };
 
