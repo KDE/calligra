@@ -854,6 +854,98 @@ void Filterkpr2odf::appendAutoform( KoXmlWriter* content, const KoXmlElement& ob
         d += QString( "L%1 %2" ).arg( (int)( width * 1/3 * 100 ) ).arg( (int)( height * 2/3 * 100 ) );
         d += "Z";
     }
+    else if( fileName.endsWith( "Connection1.atf" ) )
+    {
+        d += QString( "M%1 %2" ).arg( (int)( 0 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( height * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 100 ) );
+    }
+    else if( fileName.endsWith( "Connection2.atf" ) )
+    {
+        d += QString( "M%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( height * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 100 ) );
+    }
+    else if( fileName.endsWith( "Connection3.atf" ) )
+    {
+        d += QString( "M%1 %2" ).arg( (int)( 0 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 0.50 * 100  ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.50 * 100  ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 100 ) );
+    }
+    else if( fileName.endsWith( "Connection4.atf" ) )
+    {
+        d += QString( "M%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.50 * 100  ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 0.50 * 100  ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 100 ) );
+    }
+    else if( fileName.endsWith( "Connection5.atf" ) )
+    {
+        d += QString( "M%1 %2" ).arg( (int)( 0 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 0.50 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.50 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "M%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( height * 0.50 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( height * 100 ) );
+    }
+    else if( fileName.endsWith( "Connection6.atf" ) )
+    {
+        d += QString( "M%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 0.50 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.50 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 100 ) );
+        d += QString( "M%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( height * 0.50 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( 0 ) );
+    }
+    else if( fileName.endsWith( "Connection7.atf" ) )
+    {
+        d += QString( "M%1 %2" ).arg( (int)( 0 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( height * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 100 ) );
+        d += QString( "M%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( height * 0.50 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 0.50 * 100 ) );
+    }
+    else if( fileName.endsWith( "Connection8.atf" ) )
+    {
+        d += QString( "M%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( height * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 100 ) );
+        d += QString( "M%1 %2" ).arg( (int)( width * 0.50 * 100 ) ).arg( (int)( height * 0.50 * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 0.50 * 100 ) );
+    }
+    else if( fileName.endsWith( "Connection9.atf" ) )
+    {
+        d += QString( "M%1 %2" ).arg( (int)( 0 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( 0 ) );
+    }
+    else if( fileName.endsWith( "Connection10.atf" ) )
+    {
+        d += QString( "M%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 100 ) );
+    }
+    else if( fileName.endsWith( "Connection11.atf" ) )
+    {
+        d += QString( "M%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 100 ) );
+    }
+    else if( fileName.endsWith( "Connection12.atf" ) )
+    {
+        d += QString( "M%1 %2" ).arg( (int)( 0 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( 0 ) );
+        d += QString( "L%1 %2" ).arg( (int)( width * 100 ) ).arg( (int)( height * 100 ) );
+        d += QString( "L%1 %2" ).arg( (int)( 0 ) ).arg( (int)( height * 100 ) );
+    }
     else
     {
         //Not implemented

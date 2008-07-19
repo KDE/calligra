@@ -52,18 +52,11 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         {
             //background is a plain color
             QString color = page.namedItem( "BACKCOLOR1" ).toElement().attribute( "color" );
-            if( !color.isNull() )
-            {
-                //if the backcolor is not present it's implicitally white
-                //unless a draw:fill is found, in which case even though a
-                //draw:fill-color is not present it's black in KPresenter2.0
-                style.addProperty( "draw:fill", "solid" );
-                style.addProperty( "draw:fill-color", page.namedItem( "BACKCOLOR1" ).toElement().attribute( "color" ) );
-            }
-            else
-            {
-                style.addProperty( "draw:fill-color", "#ffffff" );
-            }
+            //if the backcolor is not present it's implicitally white
+            //unless a draw:fill is found, in which case even though a
+            //draw:fill-color is not present it's black in KPresenter2.0
+            style.addProperty( "draw:fill", "solid" );
+            style.addProperty( "draw:fill-color", page.namedItem( "BACKCOLOR1" ).toElement().attribute( "color", "#ffffff" ) );
         }
         else
         {
@@ -522,8 +515,10 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
     //We now define what's the object filled with, we "default" to a brush if both attributes are present
     KoXmlElement brush = element.namedItem( "BRUSH" ).toElement();
     KoXmlElement gradient = element.namedItem( "GRADIENT" ).toElement();
+    KoXmlElement filename = element.namedItem( "FILENAME" ).toElement();
+    bool isConnection = filename.attribute( "value" ).startsWith( "Connections" );
     QString fill;
-    if( !brush.isNull() )
+    if( !brush.isNull() && !isConnection )
     {
         QString fillColor( brush.attribute( "color" ) );
 
