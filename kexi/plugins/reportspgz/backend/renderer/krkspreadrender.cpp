@@ -75,7 +75,7 @@ bool KRKSpreadRender::render(ORODocument *document,const KUrl& toUrl)
 				{
 					OROTextBox * tb = ( OROTextBox* ) prim;
 					
-					sht->setText(s+1,i+1,tb->text());
+					KSpread::Cell(sht, i+1, s+1).parseUserInput(tb->text());
 				}
 				/*
 				else if (prim->type() == OROImage::Image)
