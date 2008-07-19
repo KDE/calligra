@@ -7,6 +7,7 @@ macro_optional_find_package(Exiv2)
 macro_optional_find_package(JPEG)
 macro_optional_find_package(GraphicsMagick)
 macro_optional_find_package(Poppler)
+macro_optional_find_package(Kdcraw)
 
 if(EXIV2_FOUND)
     # query pkg-config asking for a Exiv2 >= 0.16
@@ -30,7 +31,9 @@ macro_log_feature( POPPLER_FOUND "poppler-qt4" "The Krita PDF filter will not be
 include_directories(${KRITA_INCLUDES})
 
 message("Krita: Port RAW filter to libkdcraw")
-#add_subdirectory( raw )
+if(KDCRAW_FOUND)
+    add_subdirectory( raw )
+endif(KDCRAW_FOUND)
 
 if(EXIV2_FOUND)
     add_subdirectory(libkisexiv2)

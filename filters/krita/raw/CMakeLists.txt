@@ -1,6 +1,8 @@
 
 
-
+if(OPENEXR_FOUND)
+	include_directories(${OPENEXR_INCLUDE_DIR})
+endif(OPENEXR_FOUND)
 
 
 ########### next target ###############
@@ -12,9 +14,11 @@ kde4_add_ui_files(krita_raw_import_PART_SRCS wdgrawimport.ui )
 
 kde4_add_plugin(krita_raw_import WITH_PREFIX ${krita_raw_import_PART_SRCS})
 
+add_definitions( ${KDCRAW_DEFINITIONS} )
+include_directories( ${KDCRAW_INCLUDE_DIR} )
 
 
-target_link_libraries(krita_raw_import kritaui)
+target_link_libraries(krita_raw_import kritaui  ${KDCRAW_LIBRARIES})
 
 install(TARGETS krita_raw_import  DESTINATION ${PLUGIN_INSTALL_DIR})
 

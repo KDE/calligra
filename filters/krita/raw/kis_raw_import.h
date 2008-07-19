@@ -22,16 +22,7 @@
 
 #include <KoFilter.h>
 
-#include "imageviewer.h"
 #include "ui_wdgrawimport.h"
-
-class WdgRawImport : public QWidget, public Ui::WdgRawImport
-{
-    Q_OBJECT
-
-    public:
-        WdgRawImport(QWidget *parent) : QWidget(parent) { setupUi(this); }
-};
 
 class K3Process;
 class KDialog;
@@ -39,41 +30,29 @@ class WdgRawImport;
 class KoColorProfile;
 class QProgressDialog;
 
+namespace KDcrawIface {
+    class RawDecodingSettings;
+}
+
 class KisRawImport : public KoFilter {
     Q_OBJECT
 
-public:
-    KisRawImport(QObject* parent, const QStringList&);
-    virtual ~KisRawImport();
-
-public:
-    virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
-
-
-private slots:
-
-    void slotUpdatePreview();
-    void slotFillCmbProfiles();
-    void slotProcessDone();
-    void slotReceivedStdout(K3Process *proc, char *buffer, int buflen);
-    void slotReceivedStderr(K3Process *proc, char *buffer, int buflen);
-    void incrementProgress();
-
-private:
-
-    QStringList createArgumentList(bool forPreview = false);
-    QSize determineSize(quint32& startOfImageData);
-    void getImageData(const QStringList & arguments);
-    KoColorProfile * profile();
-    KoID colorSpace();
+    public:
+        KisRawImport(QObject* parent, const QStringList&);
+        virtual ~KisRawImport();
     
-private:
-    QByteArray * m_data;
-    KDialog * m_dialog;
-    WdgRawImport * m_page;
-    KoColorProfile * m_monitorProfile;
-    K3Process * m_process;
-    QProgressDialog* m_progress;
+    public:
+        virtual KoFilter::ConversionStatus convert(const QByteArray& from, const QByteArray& to);
+    
+    
+    private slots:
+    
+        void slotUpdatePreview();
+    private:
+        KDcrawIface::RawDecodingSettings rawDecodingSettings();
+    private:
+        Ui::WdgRawImport m_rawWidget;
+        KDialog* m_dialog;
 };
 
 #endif // KIS_RAW_IMPORT_H_
