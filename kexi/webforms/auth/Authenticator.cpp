@@ -60,24 +60,24 @@ namespace Auth {
             // the table doesn't exist, create it
             kDebug() << "kexi__users table does not exist, creating it" << endl;
             KexiDB::TableSchema* kexi__users = new KexiDB::TableSchema("kexi__users");
-            kexi__users->setNative(true);
-            KexiDB::Field* id = new KexiDB::Field("id", KexiDB::Field::Integer);
+            //kexi__users->setNative(true);
+            KexiDB::Field* id = new KexiDB::Field("u_id", KexiDB::Field::Integer);
             id->setAutoIncrement(true);
             id->setPrimaryKey(true);
             kexi__users->insertField(0, id);
-            KexiDB::Field* name = new KexiDB::Field("name", KexiDB::Field::Text);
+            KexiDB::Field* name = new KexiDB::Field("u_name", KexiDB::Field::Text);
             kexi__users->insertField(1, name);
-            KexiDB::Field* password = new KexiDB::Field("password", KexiDB::Field::Text);
+            KexiDB::Field* password = new KexiDB::Field("u_password", KexiDB::Field::Text);
             kexi__users->insertField(2, password);
-            KexiDB::Field* create = new KexiDB::Field("p_create", KexiDB::Field::Boolean);
+            KexiDB::Field* create = new KexiDB::Field("u_create", KexiDB::Field::Boolean);
             kexi__users->insertField(3, create);
-            KexiDB::Field* read = new KexiDB::Field("p_read", KexiDB::Field::Boolean);
+            KexiDB::Field* read = new KexiDB::Field("u_read", KexiDB::Field::Boolean);
             kexi__users->insertField(4, read);
-            KexiDB::Field* update = new KexiDB::Field("p_update", KexiDB::Field::Boolean);
+            KexiDB::Field* update = new KexiDB::Field("u_update", KexiDB::Field::Boolean);
             kexi__users->insertField(5, update);
-            KexiDB::Field* fdelete = new KexiDB::Field("p_delete", KexiDB::Field::Boolean);
+            KexiDB::Field* fdelete = new KexiDB::Field("u_delete", KexiDB::Field::Boolean);
             kexi__users->insertField(6, fdelete);
-            KexiDB::Field* fquery = new KexiDB::Field("p_query", KexiDB::Field::Boolean);
+            KexiDB::Field* fquery = new KexiDB::Field("u_query", KexiDB::Field::Boolean);
             kexi__users->insertField(7, fquery);
 
             if (!gConnection->createTable(kexi__users)) {
