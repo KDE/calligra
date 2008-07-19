@@ -46,10 +46,34 @@ namespace Auth {
         
         virtual ~Authenticator() {}
 
+        /**
+         * This method tries to load the user database, if nothing is found
+         * it creates a new table and fills it with two user accounts:
+         * - root: with password "root" and has access to all functionalities
+         * - anonymous: with password "guest" and has no access
+         */
         bool loadStore();
+
+        /**
+         * Authenticate the user based on user name and password
+         * @param char* username
+         * @param char* password
+         */
         User authenticate(const char*, const char*);
+
+        /**
+         * Authenticate the user based on user name and password
+         * @param std::string& username
+         * @param std::string& password
+         */
         User authenticate(const std::string&, const std::string&);
-        User authenticate(pion::net::PionUserPtr p);
+
+        /**
+         * Authenticate the user based on PionUserPtr structure
+         * @param pion::net::PionUserPtr a boost::shared_ptr<PionUser> object
+         * @todo: Decouple this class from the pion library
+         */
+        User authenticate(pion::net::PionUserPtr);
         
     protected:
         /** ctor */
