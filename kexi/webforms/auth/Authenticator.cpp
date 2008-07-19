@@ -60,6 +60,7 @@ namespace Auth {
             // the table doesn't exist, create it
             kDebug() << "kexi__users table does not exist, creating it" << endl;
             KexiDB::TableSchema* kexi__users = new KexiDB::TableSchema("kexi__users");
+            kexi__users->setNative(true);
             KexiDB::Field* id = new KexiDB::Field("id", KexiDB::Field::Integer);
             id->setAutoIncrement(true);
             id->setPrimaryKey(true);
