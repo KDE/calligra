@@ -206,22 +206,23 @@ KarbonSmallStylePreview::KarbonSmallStylePreview( QWidget* parent )
 
     setLayout( layout );
 
-    connect( KoToolManager::instance(), SIGNAL(toolCodesSelected(const KoCanvasController *, QList<QString>)),
-             this, SLOT(toolCodesSelected(const KoCanvasController *, QList<QString>)));
+    connect( KoToolManager::instance(), SIGNAL(changedCanvas(const KoCanvasBase *)),
+             this, SLOT(canvasChanged(const KoCanvasBase *)));
 }
 
 KarbonSmallStylePreview::~KarbonSmallStylePreview()
 {
 }
 
-void KarbonSmallStylePreview::toolCodesSelected(const KoCanvasController *canvas, QList<QString> types)
+void KarbonSmallStylePreview::canvasChanged(const KoCanvasBase *canvas)
 {
-    Q_UNUSED(types);
-    connect( canvas->canvas()->shapeManager(), SIGNAL(selectionChanged()),
-             this, SLOT(selectionChanged()) );
-    connect( canvas->canvas()->shapeManager(), SIGNAL(selectionContentChanged()),
-             this, SLOT(selectionChanged()) );
-
+    if( canvas )
+    {
+        connect( canvas->shapeManager(), SIGNAL(selectionChanged()),
+                this, SLOT(selectionChanged()) );
+        connect( canvas->shapeManager(), SIGNAL(selectionContentChanged()),
+                this, SLOT(selectionChanged()) );
+    }
     selectionChanged();
 }
 
