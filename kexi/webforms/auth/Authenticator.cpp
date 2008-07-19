@@ -145,20 +145,20 @@ namespace Auth {
             KexiDB::Cursor* cursor = gConnection->executeQuery(query);
             while (cursor->moveNext()) {
                 // Skip id
-                QString username(cursor->value(1).toString());
-                QString password(cursor->value(2).toString());
-                QList<Permission> perms;
+                QString* username = new QString(cursor->value(1).toString());
+                QString* password = new QString(cursor->value(2).toString());
+                QList<Permission>* perms = new QList<Permission>;
                 
-                if (cursor->value(3).toBool()) perms.append(CREATE);
-                if (cursor->value(4).toBool()) perms.append(READ);
-                if (cursor->value(5).toBool()) perms.append(UPDATE);
-                if (cursor->value(6).toBool()) perms.append(DELETE);
-                if (cursor->value(7).toBool()) perms.append(QUERY);
+                if (cursor->value(3).toBool()) perms->append(CREATE);
+                if (cursor->value(4).toBool()) perms->append(READ);
+                if (cursor->value(5).toBool()) perms->append(UPDATE);
+                if (cursor->value(6).toBool()) perms->append(DELETE);
+                if (cursor->value(7).toBool()) perms->append(QUERY);
 
-                User* u = new User(username, password, perms);
+                User* u = new User(*username, *password, *perms);
                 m_users.append(*u);
                 m_auth->addUser(u->name().toUtf8().constData(), u->password().toUtf8().constData());
-                kDebug() << "Loaded user " << username << " from store" << endl;
+                kDebug() << "Loaded user " << *username << " from store" << endl;
             }
         }
 
