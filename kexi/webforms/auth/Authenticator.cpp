@@ -162,20 +162,6 @@ namespace Auth {
         }
 
         return true;
-        
-        /*User* u = new User("anonymous", "guest");
-        m_users.append(*u);
-        m_auth->addUser(u->name().toUtf8().constData(), u->password().toUtf8().constData());
-        
-        u = new User("root", "root");
-        u->addPermission(CREATE);
-        u->addPermission(READ);
-        u->addPermission(UPDATE);
-        u->addPermission(DELETE);
-        m_users.append(*u);
-        m_auth->addUser(u->name().toUtf8().constData(), u->password().toUtf8().constData());
-
-        return true;*/
     }
     
     User Authenticator::authenticate(const char* name, const char* password) {
