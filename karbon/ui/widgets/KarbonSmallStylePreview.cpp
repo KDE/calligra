@@ -228,8 +228,16 @@ void KarbonSmallStylePreview::canvasChanged(const KoCanvasBase *canvas)
 
 void KarbonSmallStylePreview::selectionChanged()
 {
-    KoCanvasBase * canvas = KoToolManager::instance()->activeCanvasController()->canvas();
-    KoShape * shape = canvas->shapeManager()->selection()->firstSelectedShape();
+    KoCanvasController * controller = KoToolManager::instance()->activeCanvasController();
+    if( ! controller || ! controller->canvas() )
+    {
+        m_fillFrame->setFill( 0 );
+        m_strokeFrame->setStroke( 0 );
+        QWidget::update();
+        return;
+    }
+
+    KoShape * shape = controller->canvas()->shapeManager()->selection()->firstSelectedShape();
     if( shape )
     {
         m_fillFrame->setFill( shape->background() );
