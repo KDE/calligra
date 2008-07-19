@@ -177,14 +177,7 @@ void ReportEntityLine::propertyChanged ( KoProperty::Set &s, KoProperty::Propert
 void ReportEntityLine::mousePressEvent ( QGraphicsSceneMouseEvent * event )
 {
 	_rd->changeSet ( _set );
-
-	if ( !(( event->modifiers() & Qt::ShiftModifier ) == Qt::ShiftModifier ))
-	{
-		scene()->clearSelection();
-	}
-
-	_rd->setActiveScene(scene());
-	setSelected(!isSelected());
+ 	setSelected(true);
 }
 
 QVariant ReportEntityLine::itemChange(GraphicsItemChange change, const QVariant &value)

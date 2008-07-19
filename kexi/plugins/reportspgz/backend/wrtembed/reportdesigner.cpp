@@ -1184,32 +1184,28 @@ void ReportDesigner::setGridOptions ( bool vis, int div )
 //
 // methods for the sectionMouse*Event()
 //
-void ReportDesigner::sectionMousePressEvent ( ReportScene * s, QGraphicsSceneMouseEvent * e )
+void ReportDesigner::sectionContextMenuEvent ( ReportScene * s, QGraphicsSceneContextMenuEvent * e )
 {
-	if ( e->button() == Qt::RightButton )
+	QMenu pop;
+	QAction *popCut = 0;
+	QAction *popCopy = 0;
+	QAction *popPaste = 0;
+
+	if ( selectionCount() > 0 )
 	{
-		QMenu pop;
-
-		QAction *popCut = 0;
-		QAction *popCopy = 0;
-		QAction *popPaste = 0;
-
-		if ( selectionCount() > 0 )
-		{
-			popCut = pop.addAction ( i18n ( "Cut" ) );
-			popCopy = pop.addAction ( i18n ( "Copy" ) );
-		}
-		if ( sectionData->copy_list.count() > 0 )
-			popPaste = pop.addAction ( i18n ( "Paste" ) );
-
-		QAction * ret = pop.exec ( QCursor::pos() );
-		if ( ret == popCut )
-			slotEditCut();
-		else if ( ret == popCopy )
-			slotEditCopy();
-		else if ( ret == popPaste )
-			slotEditPaste ( s, e->scenePos() );
+		popCut = pop.addAction ( i18n ( "Cut" ) );
+		popCopy = pop.addAction ( i18n ( "Copy" ) );
 	}
+	if ( sectionData->copy_list.count() > 0 )
+		popPaste = pop.addAction ( i18n ( "Paste" ) );
+
+	QAction * ret = pop.exec ( e->screenPos() );
+	if ( ret == popCut )
+		slotEditCut();
+	else if ( ret == popCopy )
+		slotEditCopy();
+	else if ( ret == popPaste )
+		slotEditPaste ( s, e->scenePos() );
 }
 
 void ReportDesigner::sectionMouseReleaseEvent ( ReportSceneView * v, QMouseEvent * e )
@@ -1551,6 +1547,8 @@ QGraphicsScene* ReportDesigner::activeScene()
 
 void ReportDesigner::setActiveScene ( QGraphicsScene* a )
 {
+	if ( d->activeScene && d->activeScene != a )
+		d->activeScene->clearSelection();
 	d->activeScene = a;
 }
 

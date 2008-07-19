@@ -48,6 +48,7 @@ class ReportSection;
 class KoUnit;
 class ReportScene;
 class QGraphicsSceneMouseEvent;
+class QGraphicsSceneContextMenuEvent;
 class ReportSceneView;
 class ReportWriterSectionData;
 class KexiView;
@@ -113,7 +114,7 @@ class ReportDesigner : public QWidget
 		
 		KoUnit pageUnit() const;
 
-		void sectionMousePressEvent ( ReportScene *, QGraphicsSceneMouseEvent * e );
+		void sectionContextMenuEvent ( ReportScene *, QGraphicsSceneContextMenuEvent * e );
 		void sectionMouseReleaseEvent ( ReportSceneView *, QMouseEvent * e );
 
 		void changeSet ( KoProperty::Set * );

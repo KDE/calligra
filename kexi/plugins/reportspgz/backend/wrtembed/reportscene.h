@@ -32,6 +32,7 @@
 #include <KoUnit.h>
 typedef QList<QGraphicsItem*> QGraphicsItemList;
 class ReportDesigner;
+class QGraphicsSceneContextMenuEvent;
 class QGraphicsSceneMouseEvent;
 
 class ReportScene : public QGraphicsScene
@@ -50,6 +51,7 @@ class ReportScene : public QGraphicsScene
 		virtual void drawBackground ( QPainter* painter, const QRectF & clip );
 		virtual void mousePressEvent ( QGraphicsSceneMouseEvent * e );
 		virtual void focusOutEvent ( QFocusEvent * focusEvent );
+		virtual void contextMenuEvent ( QGraphicsSceneContextMenuEvent * contextMenuEvent );
 
 	signals:
 		void clicked();
