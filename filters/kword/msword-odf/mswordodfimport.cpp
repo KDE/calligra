@@ -75,6 +75,8 @@ bool MSWordOdfImport::Private::initStyles(KoXmlWriter* stylesWriter )
     stylesWriter->startElement( "office:automatic-styles" );
     stylesWriter->endElement(); //office:automatic-styles
     //need to close office:document-styles & endDocument() below!
+
+    return true;
 }
 
 //bool MSWordOdfImport::Private::createManifest(KoOdfWriteStore* store)
