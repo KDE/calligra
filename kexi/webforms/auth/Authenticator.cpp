@@ -58,9 +58,11 @@ namespace Auth {
         
         if (!table) {
             // the table doesn't exist, create it
+            kDebug() << "kexi__users table does not exist, creating it" << endl;
             KexiDB::TableSchema* kexi__users = new KexiDB::TableSchema("kexi__users");
             KexiDB::Field* id = new KexiDB::Field("id", KexiDB::Field::Integer);
             id->setAutoIncrement(true);
+            id->setPrimaryKey(true);
             kexi__users->insertField(0, id);
             KexiDB::Field* name = new KexiDB::Field("name", KexiDB::Field::Text);
             kexi__users->insertField(1, name);
@@ -81,13 +83,6 @@ namespace Auth {
                 // Table was not created, fatal error
                 kError() << "Failed to create system table kexi__users" << endl;
                 kError() << "Error string: " << gConnection->errorMsg() << endl;
-                /*delete name;
-                delete password;
-                delete create;
-                delete read;
-                delete update;
-                delete fdelete;
-                delete fquery;*/
                 delete kexi__users;
                 return false;
             } else {
@@ -140,11 +135,30 @@ namespace Auth {
                     kError() << "An error occurred" << endl;
                     return false;
                 }
-                
+                gConnection->deleteCursor(cursor);
             }
         } else {
             // load stuff from the store, create appropriated User objects, store them within
             // Authenticator
+            KexiDB::QuerySchema query(*table);
+            KexiDB::Cursor* cursor = gConnection->executeQuery(query);
+            while (cursor->moveNext()) {
+                // Skip id
+                QString username(cursor->value(1).toString());
+                QString password(cursor->value(2).toString());
+                QList<Permission> perms;
+                
+                if (cursor->value(3).toBool()) perms.append(CREATE);
+                if (cursor->value(4).toBool()) perms.append(READ);
+                if (cursor->value(5).toBool()) perms.append(UPDATE);
+                if (cursor->value(6).toBool()) perms.append(DELETE);
+                if (cursor->value(7).toBool()) perms.append(QUERY);
+
+                User* u = new User(username, password, perms);
+                m_users.append(*u);
+                m_auth->addUser(u->name().toUtf8().constData(), u->password().toUtf8().constData());
+                kDebug() << "Loaded user " << username << " from store" << endl;
+            }
         }
 
         return true;
