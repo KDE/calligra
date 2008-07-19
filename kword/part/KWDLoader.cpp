@@ -776,7 +776,7 @@ void KWDLoader::fill(KoParagraphStyle *style, const KoXmlElement &layout) {
         else
             lstyle = new KoListStyle();
 
-        KoListLevelProperties llp = lstyle->level( element.attribute("depth").toInt() + 1 );
+        KoListLevelProperties llp = lstyle->levelProperties( element.attribute("depth").toInt() + 1 );
 
         int type = element.attribute("type").toInt();
         switch(type) {
@@ -817,7 +817,7 @@ void KWDLoader::fill(KoParagraphStyle *style, const KoXmlElement &layout) {
                 style->setRestartListNumbering(true);
             style->setListLevel(llp.level());
             style->setListStyle(*lstyle);
-            lstyle->setLevel(llp);
+            lstyle->setLevelProperties(llp);
         }
         else
             style->removeListStyle();
