@@ -40,246 +40,271 @@
 
 using namespace KSpread;
 
-ListDialog::ListDialog(QWidget* parent)
-  : KDialog( parent )
+class ListDialog::Private
 {
-  setCaption( i18n("Custom Lists") );
-  setButtons( Ok|Cancel );
-  setModal( true );
+public:
+    KSharedConfigPtr config;
 
-  QWidget* page = new QWidget(this);
-  setMainWidget( page );
+    QListWidget* list;
+    KTextEdit* textEdit;
+    QPushButton* addButton;
+    QPushButton* cancelButton;
+    QPushButton* removeButton;
+    QPushButton* newButton;
+    QPushButton* modifyButton;
+    QPushButton* copyButton;
+    bool changed;
+};
 
-  QGridLayout *grid1 = new QGridLayout(page);
-  grid1->setMargin(KDialog::marginHint());
-  grid1->setSpacing(KDialog::spacingHint());
+static const int numBuiltinLists = 4;
 
-  QLabel *lab=new QLabel(page);
-  lab->setText(i18n("List:" ));
-  grid1->addWidget(lab,0,0);
+ListDialog::ListDialog(QWidget* parent)
+    : KDialog(parent)
+    , d(new Private)
+{
+    setCaption(i18n("Custom Lists"));
+    setButtons(Ok | Cancel);
+    setModal(true);
 
-  list=new QListWidget(page);
-  grid1->addWidget(list,1,0,7,1);
+    QWidget* page = new QWidget(this);
+    setMainWidget(page);
 
+    QGridLayout *grid1 = new QGridLayout(page);
+    grid1->setMargin(KDialog::marginHint());
+    grid1->setSpacing(KDialog::spacingHint());
 
-  lab=new QLabel(page);
-  lab->setText(i18n("Entry:" ));
-  grid1->addWidget(lab,0,1);
+    QLabel *lab = new QLabel(page);
+    lab->setText(i18n("List:"));
+    grid1->addWidget(lab, 0, 0);
 
-  entryList=new KTextEdit(page);
-  grid1->addWidget(entryList,1,1,7,1);
+    d->list = new QListWidget(page);
+    grid1->addWidget(d->list, 1, 0, 7, 1);
 
-  m_pAdd=new QPushButton(i18n("Add"),page);
-  m_pAdd->setEnabled(false);
-  grid1->addWidget(m_pAdd,1,2);
+    lab = new QLabel(page);
+    lab->setText(i18n("Entry:"));
+    grid1->addWidget(lab, 0, 1);
 
-  m_pCancel=new QPushButton(i18n("Cancel"),page);
-  m_pCancel->setEnabled(false);
-  grid1->addWidget(m_pCancel,2,2);
+    d->textEdit = new KTextEdit(page);
+    grid1->addWidget(d->textEdit, 1, 1, 7, 1);
 
-  m_pNew=new QPushButton(i18n("New"),page);
-  grid1->addWidget(m_pNew,3,2);
+    d->addButton = new QPushButton(i18n("Add"), page);
+    d->addButton->setEnabled(false);
+    grid1->addWidget(d->addButton, 1, 2);
 
-  m_pRemove=new QPushButton(i18n("Remove"),page);
-  grid1->addWidget(m_pRemove,4,2);
+    d->cancelButton = new QPushButton(i18n("Cancel"), page);
+    d->cancelButton->setEnabled(false);
+    grid1->addWidget(d->cancelButton, 2, 2);
 
-  m_pModify=new QPushButton(i18n("Modify"),page);
-  grid1->addWidget(m_pModify,5,2);
+    d->newButton = new QPushButton(i18n("New"), page);
+    grid1->addWidget(d->newButton, 3, 2);
 
-  m_pCopy=new QPushButton(i18n("Copy"),page);
-  grid1->addWidget(m_pCopy,6,2);
+    d->removeButton = new QPushButton(i18n("Remove"), page);
+    grid1->addWidget(d->removeButton, 4, 2);
 
-  connect( m_pAdd, SIGNAL( clicked() ), this, SLOT( slotAdd() ) );
-  connect( m_pCancel, SIGNAL( clicked() ), this, SLOT( slotCancel() ) );
-  connect( m_pNew, SIGNAL( clicked() ), this, SLOT( slotNew() ) );
-  connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
-  connect( m_pModify, SIGNAL( clicked() ), this, SLOT( slotModify() ) );
-  connect( m_pCopy, SIGNAL( clicked() ), this, SLOT( slotCopy() ) );
-  connect(list, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(slotDoubleClicked()));
-  connect(list, SIGNAL(itemSelectionChanged()), this, SLOT(slotTextClicked()));
-  connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
-  init();
-  entryList->setEnabled(false);
-  m_pModify->setEnabled(false);
-  slotTextClicked();
-  resize( 600, 250 );
-  m_bChanged=false;
+    d->modifyButton = new QPushButton(i18n("Modify"), page);
+    grid1->addWidget(d->modifyButton, 5, 2);
+
+    d->copyButton = new QPushButton(i18n("Copy"), page);
+    grid1->addWidget(d->copyButton, 6, 2);
+
+    connect(d->addButton, SIGNAL(clicked()), this, SLOT(slotAdd()));
+    connect(d->cancelButton, SIGNAL(clicked()), this, SLOT(slotCancel()));
+    connect(d->newButton, SIGNAL(clicked()), this, SLOT(slotNew()));
+    connect(d->removeButton, SIGNAL(clicked()), this, SLOT(slotRemove()));
+    connect(d->modifyButton, SIGNAL(clicked()), this, SLOT(slotModify()));
+    connect(d->copyButton, SIGNAL(clicked()), this, SLOT(slotCopy()));
+    connect(d->list, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(slotDoubleClicked()));
+    connect(d->list, SIGNAL(currentRowChanged(int)), this, SLOT(slotCurrentRowChanged(int)));
+    connect(this, SIGNAL(okClicked()), this, SLOT(slotOk()));
+
+    init();
+    d->textEdit->setEnabled(false);
+    d->modifyButton->setEnabled(false);
+    slotCurrentRowChanged(0);
+    resize(600, 250);
+    d->changed = false;
 }
 
-
-void ListDialog::slotTextClicked()
+ListDialog::~ListDialog()
 {
-    //we can't remove the two first item
-    bool state=list->currentRow()>1;
-    m_pRemove->setEnabled(state);
-    m_pModify->setEnabled(state);
-    m_pCopy->setEnabled(list->currentItem()>=0);
+    delete d;
+}
+
+void ListDialog::slotCurrentRowChanged(int row)
+{
+    //we can't remove the first built-in items
+    const bool state = row >= numBuiltinLists;
+    d->removeButton->setEnabled(state);
+    d->modifyButton->setEnabled(state);
+    d->copyButton->setEnabled(row >= 0);
 }
 
 void ListDialog::init()
 {
     QString month;
-    month+=i18n("January")+", ";
-    month+=i18n("February")+", ";
-    month+=i18n("March") +", ";
-    month+=i18n("April")+", ";
-    month+=i18n("May")+", ";
-    month+=i18n("June")+", ";
-    month+=i18n("July")+", ";
-    month+=i18n("August")+", ";
-    month+=i18n("September")+", ";
-    month+=i18n("October")+", ";
-    month+=i18n("November")+", ";
-    month+=i18n("December");
+    month += i18n("January") + ", ";
+    month += i18n("February") + ", ";
+    month += i18n("March") + ", ";
+    month += i18n("April") + ", ";
+    month += i18n("May") + ", ";
+    month += i18n("June") + ", ";
+    month += i18n("July") + ", ";
+    month += i18n("August") + ", ";
+    month += i18n("September") + ", ";
+    month += i18n("October") + ", ";
+    month += i18n("November") + ", ";
+    month += i18n("December");
     QStringList lst;
     lst.append(month);
 
     QString smonth;
-    smonth+=i18n("Jan")+", ";
-    smonth+=i18n("Feb")+", ";
-    smonth+=i18n("Mar") +", ";
-    smonth+=i18n("Apr")+", ";
-    smonth+=i18n("May")+", ";
-    smonth+=i18n("Jun")+", ";
-    smonth+=i18n("Jul")+", ";
-    smonth+=i18n("Aug")+", ";
-    smonth+=i18n("Sep")+", ";
-    smonth+=i18n("Oct")+", ";
-    smonth+=i18n("Nov")+", ";
-    smonth+=i18n("Dec");
+    smonth += i18n("Jan") + ", ";
+    smonth += i18n("Feb") + ", ";
+    smonth += i18n("Mar") + ", ";
+    smonth += i18n("Apr") + ", ";
+    smonth += i18n("May") + ", ";
+    smonth += i18n("Jun") + ", ";
+    smonth += i18n("Jul") + ", ";
+    smonth += i18n("Aug") + ", ";
+    smonth += i18n("Sep") + ", ";
+    smonth += i18n("Oct") + ", ";
+    smonth += i18n("Nov") + ", ";
+    smonth += i18n("Dec");
     lst.append(smonth);
 
-    QString day=i18n("Monday")+", ";
-    day+=i18n("Tuesday")+", ";
-    day+=i18n("Wednesday")+", ";
-    day+=i18n("Thursday")+", ";
-    day+=i18n("Friday")+", ";
-    day+=i18n("Saturday")+", ";
-    day+=i18n("Sunday");
+    QString day = i18n("Monday") + ", ";
+    day += i18n("Tuesday") + ", ";
+    day += i18n("Wednesday") + ", ";
+    day += i18n("Thursday") + ", ";
+    day += i18n("Friday") + ", ";
+    day += i18n("Saturday") + ", ";
+    day += i18n("Sunday");
     lst.append(day);
 
-    QString sday=i18n("Mon")+", ";
-    sday+=i18n("Tue")+", ";
-    sday+=i18n("Wed")+", ";
-    sday+=i18n("Thu")+", ";
-    sday+=i18n("Fri")+", ";
-    sday+=i18n("Sat")+", ";
-    sday+=i18n("Sun");
+    QString sday = i18n("Mon") + ", ";
+    sday += i18n("Tue") + ", ";
+    sday += i18n("Wed") + ", ";
+    sday += i18n("Thu") + ", ";
+    sday += i18n("Fri") + ", ";
+    sday += i18n("Sat") + ", ";
+    sday += i18n("Sun");
     lst.append(sday);
 
-    config = Factory::global().config();
-    QStringList other=config->group( "Parameters" ).readEntry("Other list", QStringList());
+    d->config = Factory::global().config();
+    QStringList other = d->config->group("Parameters").readEntry("Other d->list", QStringList());
     QString tmp;
-    for ( QStringList::Iterator it = other.begin(); it != other.end();++it )
-    {
-        if ( (*it) != "\\" )
-            tmp+=(*it)+", ";
-        else if( it!=other.begin())
-	{
-            tmp=tmp.left(tmp.length()-2);
+    for (QStringList::Iterator it = other.begin(); it != other.end();++it) {
+        if ((*it) != "\\") {
+            tmp += (*it) + ", ";
+        } else if (it != other.begin()) {
+            tmp = tmp.left(tmp.length() - 2);
             lst.append(tmp);
-            tmp="";
-	}
+            tmp = "";
+        }
     }
-    list->addItems(lst);
+    d->list->addItems(lst);
 }
 
 void ListDialog::slotDoubleClicked()
 {
-    //we can't modify the two first item
-    if(list->currentRow()<2)
+    //we can't modify the first built-in items
+    if (d->list->currentRow() < numBuiltinLists) {
         return;
-    const QStringList result = list->currentItem()->text().split(", ", QString::SkipEmptyParts);
-    entryList->setText(result.join(QChar('\n')));
-    entryList->setEnabled(true);
-    m_pModify->setEnabled(true);
+    }
+    const QStringList result = d->list->currentItem()->text().split(", ", QString::SkipEmptyParts);
+    d->textEdit->setText(result.join(QChar('\n')));
+    d->textEdit->setEnabled(true);
+    d->modifyButton->setEnabled(true);
 }
 
 void ListDialog::slotAdd()
 {
-  m_pAdd->setEnabled(false);
-  m_pCancel->setEnabled(false);
-  m_pNew->setEnabled(true);
-  list->setEnabled(true);
-  const QString tmp = entryList->toPlainText().split(QChar('\n'), QString::SkipEmptyParts).join(", ");
-  if(!tmp.isEmpty())
-    list->addItem(tmp);
+    d->addButton->setEnabled(false);
+    d->cancelButton->setEnabled(false);
+    d->newButton->setEnabled(true);
+    d->list->setEnabled(true);
+    const QStringList tmp = d->textEdit->toPlainText().split(QChar('\n'), QString::SkipEmptyParts);
+    if (!tmp.isEmpty()) {
+        d->list->addItem(tmp.join(", "));
+    }
 
-  entryList->setText("");
-  entryList->setEnabled(false);
-  entryList->setFocus();
-  slotTextClicked();
-  m_bChanged=true;
+    d->textEdit->setText("");
+    d->textEdit->setEnabled(false);
+    d->textEdit->setFocus();
+    slotCurrentRowChanged(0);
+    d->changed = true;
 }
 
 void ListDialog::slotCancel()
 {
-  entryList->setText("");
-  slotAdd();
+    d->textEdit->setText("");
+    slotAdd();
 }
 
 void ListDialog::slotNew()
 {
-  m_pAdd->setEnabled(true);
-  m_pCancel->setEnabled(true);
-  m_pNew->setEnabled(false);
-  m_pRemove->setEnabled(false);
-  m_pModify->setEnabled(false);
-  m_pCopy->setEnabled(false);
-  list->setEnabled(false);
-  entryList->setText("");
-  entryList->setEnabled(true);
-  entryList->setFocus();
+    d->addButton->setEnabled(true);
+    d->cancelButton->setEnabled(true);
+    d->newButton->setEnabled(false);
+    d->removeButton->setEnabled(false);
+    d->modifyButton->setEnabled(false);
+    d->copyButton->setEnabled(false);
+    d->list->setEnabled(false);
+    d->textEdit->setText("");
+    d->textEdit->setEnabled(true);
+    d->textEdit->setFocus();
 }
 
 void ListDialog::slotRemove()
 {
-  if(!list->isEnabled() || list->currentRow()==-1)
-    return;
-  //don't remove the two first line
-  if(list->currentRow()<2)
-      return;
-  int ret = KMessageBox::warningContinueCancel( this, i18n("Do you really want to remove this list?"),i18n("Remove List"),KStandardGuiItem::del());
-  if(ret==Cancel) // reponse = No
-    return;
-  list->removeItemWidget(list->currentItem ());
-  entryList->setEnabled(false);
-  entryList->setText("");
-  if(list->count()<=2)
-    m_pRemove->setEnabled(false);
-  m_bChanged=true;
+    if (!d->list->isEnabled() || d->list->currentRow() == -1) {
+        return;
+    }
+    //don't remove the first built-in items
+    if (d->list->currentRow() < numBuiltinLists) {
+        return;
+    }
+    int ret = KMessageBox::warningContinueCancel(this,
+                                                 i18n("Do you really want to remove this d->list?"),
+                                                 i18n("Remove List"), KStandardGuiItem::del());
+    if (ret == Cancel) { // reponse = No
+        return;
+    }
+    d->list->removeItemWidget(d->list->currentItem());
+    d->textEdit->setEnabled(false);
+    d->textEdit->setText("");
+    if (d->list->count() <= numBuiltinLists) {
+        d->removeButton->setEnabled(false);
+    }
+    d->changed = true;
 }
 
 void ListDialog::slotOk()
 {
-    if(!entryList->toPlainText().isEmpty())
-    {
-        int ret = KMessageBox::warningYesNo( this, i18n("Entry area is not empty.\nDo you want to continue?"));
-        if(ret==4) // reponse = No
+    if (!d->textEdit->toPlainText().isEmpty()) {
+        int ret = KMessageBox::warningYesNo(this, i18n("Entry area is not empty.\nDo you want to continue?"));
+        if (ret == 4) { // reponse = No
             return;
+        }
     }
-    if(m_bChanged)
-    {
+    if (d->changed) {
         QStringList result;
-        result.append( "\\" );
+        result.append("\\");
 
-        //don't save the two first line
-        for (int i = 2; i < list->count(); ++i)
-        {
-          QStringList tmp = list->item(i)->text().split(", ", QString::SkipEmptyParts);
-            if ( !tmp.isEmpty() )
-            {
-                result+=tmp;
+        //don't save the first built-in lines
+        for (int i = numBuiltinLists - 1; i < d->list->count(); ++i) {
+            QStringList tmp = d->list->item(i)->text().split(", ", QString::SkipEmptyParts);
+            if (!tmp.isEmpty()) {
+                result += tmp;
                 result += "\\";
             }
         }
-        config->group( "Parameters" ).writeEntry("Other list",result);
+        d->config->group("Parameters").writeEntry("Other d->list", result);
         //todo refresh AutoFillCommand::other
         // I don't know how to do for the moment
-        if(AutoFillCommand::other!=0)
-        {
+        if (AutoFillCommand::other != 0) {
             delete(AutoFillCommand::other);
-            AutoFillCommand::other=0;
+            AutoFillCommand::other = 0;
         }
     }
     accept();
@@ -287,30 +312,24 @@ void ListDialog::slotOk()
 
 void ListDialog::slotModify()
 {
-    //you can modify list but not the two first list
-  if(list->currentRow()>1 && !entryList->toPlainText().isEmpty())
-    {
-      const QString tmp = entryList->toPlainText().split(QChar('\n'), QString::SkipEmptyParts).join(", ");
-      list->insertItem(list->currentRow(), tmp);
-      list->removeItemWidget(list->currentItem());
+    //you can modify list but not the first built-in items
+    if (d->list->currentRow() >= numBuiltinLists && !d->textEdit->toPlainText().isEmpty()) {
+        const QString tmp = d->textEdit->toPlainText().split(QChar('\n'), QString::SkipEmptyParts).join(", ");
+        d->list->insertItem(d->list->currentRow(), tmp);
+        d->list->removeItemWidget(d->list->currentItem());
 
-
-      entryList->setText("");
-      m_bChanged=true;
-
+        d->textEdit->setText("");
+        d->changed = true;
     }
-  entryList->setEnabled(false);
-  m_pModify->setEnabled(false);
-
+    d->textEdit->setEnabled(false);
+    d->modifyButton->setEnabled(false);
 }
 
 void ListDialog::slotCopy()
 {
-  if(list->currentRow()!=-1)
-    {
-      list->addItem(list->currentItem()->text());
+    if (d->list->currentRow() != -1) {
+        d->list->addItem(d->list->currentItem()->text());
     }
 }
-
 
 #include "ListDialog.moc"

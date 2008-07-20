@@ -23,47 +23,33 @@
 #define KSPREAD_LIST_DIALOG
 
 #include <kdialog.h>
-#include <kconfig.h>
-#include <ksharedconfig.h>
-
-class QListWidget;
-class KTextEdit;
-class QPushButton;
 
 namespace KSpread
 {
 
 class ListDialog: public KDialog
 {
-  Q_OBJECT
-
+    Q_OBJECT
 public:
-  ListDialog(QWidget* parent);
-  void init();
+    ListDialog(QWidget* parent);
+    ~ListDialog();
+
+    void init();
 
 public slots:
-  virtual void slotOk();
-  void slotDoubleClicked();
-  void slotTextClicked();
-  void slotAdd();
-  void slotCancel();
-  void slotNew();
-  void slotRemove();
-  void slotModify();
-  void slotCopy();
+    virtual void slotOk();
+    void slotDoubleClicked();
+    void slotCurrentRowChanged(int row);
+    void slotAdd();
+    void slotCancel();
+    void slotNew();
+    void slotRemove();
+    void slotModify();
+    void slotCopy();
 
-protected:
-  KSharedConfigPtr config;
-
-  QListWidget* list;
-  KTextEdit *entryList;
-  QPushButton* m_pAdd;
-  QPushButton* m_pCancel;
-  QPushButton* m_pRemove;
-  QPushButton* m_pNew;
-  QPushButton* m_pModify;
-  QPushButton* m_pCopy;
-  bool m_bChanged;
+private:
+    class Private;
+    Private * const d;
 };
 
 } // namespace KSpread
