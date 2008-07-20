@@ -792,25 +792,25 @@ void CellFormatDialog::init()
   }
 
   floatPage = new CellFormatPageFloat( this, this );
-  KPageWidgetItem* formatitem = addPage( floatPage, i18n("&Data Format") );
+  addPage( floatPage, i18n("&Data Format") );
 
   fontPage = new CellFormatPageFont( this, this );
-  KPageWidgetItem* fontitem = addPage( fontPage, i18n("&Font") );
+  addPage( fontPage, i18n("&Font") );
 
   //  miscPage = new CellFormatPageMisc( tab, this );
   //  tab->addTab( miscPage, i18n("&Misc") );
 
   positionPage = new CellFormatPagePosition( this, this);
-  KPageWidgetItem* positem = addPage( positionPage, i18n("&Position") );
+  addPage( positionPage, i18n("&Position") );
 
   borderPage = new CellFormatPageBorder( this, this );
-  KPageWidgetItem* borderitem = addPage( borderPage, i18n("&Border") );
+  addPage( borderPage, i18n("&Border") );
 
   patternPage=new CellFormatPagePattern(this,this);
-  KPageWidgetItem* backgrounditem = addPage( patternPage,i18n("Back&ground") );
+  addPage( patternPage,i18n("Back&ground") );
 
   protectPage = new CellFormatPageProtection( this, this );
-  KPageWidgetItem* protectitem = addPage( protectPage, i18n("&Cell Protection") );
+  addPage( protectPage, i18n("&Cell Protection") );
 
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotApply() ) );
 }
@@ -1002,7 +1002,8 @@ CellFormatPageFloat::CellFormatPageFloat( QWidget* parent, CellFormatDialog *_dl
     grid->addWidget(postfix,2,1);
     precision = new KIntNumInput( dlg->precision, box, 10 );
     precision->setSpecialValueText(i18n("variable"));
-    precision->setRange(-1,10,1,false);
+    precision->setRange(-1, 10, 1);
+    precision->setSliderEnabled(false);
     precision->setWhatsThis( i18n( "You can control how many digits are displayed after the decimal point for numeric values. This can also be changed using the Increase precision or Decrease precision icons in the Format toolbar. " ) );
     grid->addWidget(precision,1,1);
 
@@ -1631,11 +1632,12 @@ void CellFormatPageFloat::apply(StyleCommand* _obj)
       else
         _obj->setPostfix( "" );
     }
-  if ( prefix->text() != dlg->prefix )
+  if ( prefix->text() != dlg->prefix ) {
       if (prefix->isEnabled())
         _obj->setPrefix( prefix->text() );
       else
         _obj->setPrefix( "" );
+  }
 
   if ( dlg->precision != precision->value() )
       _obj->setPrecision( precision->value() );
