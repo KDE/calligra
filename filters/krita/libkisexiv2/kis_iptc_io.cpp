@@ -38,7 +38,7 @@ static const IPTCToKMD mappings[] = {
     { "Iptc.Application2.City", KisMetaData::Schema::PhotoshopSchemaUri, "City" },
     { "Iptc.Application2.Copyright", KisMetaData::Schema::DublinCoreSchemaUri, "rights" },
     { "Iptc.Application2.CountryName", KisMetaData::Schema::PhotoshopSchemaUri, "Country" },
-    { "Iptc.Application2.CountryCode", KisMetaData::Schema::PhotoshopSchemaUri, "" },
+    { "Iptc.Application2.CountryCode", KisMetaData::Schema::IPTCSchemaUri, "CountryCode" },
     { "Iptc.Application2.Byline", KisMetaData::Schema::DublinCoreSchemaUri, "Creator" },
     { "Iptc.Application2.BylineTitle", KisMetaData::Schema::PhotoshopSchemaUri, "AuthorsPosition" },
     { "Iptc.Application2.DateCreated", KisMetaData::Schema::PhotoshopSchemaUri, "DateCreated" },
@@ -83,6 +83,7 @@ void KisIptcIO::initMappingsTable() const
     {
         for(int i = 0; !mappings[i].exivTag.isEmpty(); i++)
         {
+            dbgKrita << "mapping[i] = " << mappings[i].exivTag << " " << mappings[i].namespaceUri << " " << mappings[i].name;
             d->iptcToKMD[mappings[i].exivTag] = mappings[i];
             d->kmdToIPTC[
                     KisMetaData::SchemaRegistry::instance()
