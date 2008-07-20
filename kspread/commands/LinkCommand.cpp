@@ -36,7 +36,6 @@ LinkCommand::LinkCommand( const Cell& c, const QString& text, const QString& lin
   newText = text;
   newLink = link;
 
-  Sheet* s = cell.sheet();
   setText(newLink.isEmpty() ? i18n("Remove Link") : i18n("Set Link"));
 }
 
