@@ -35,6 +35,7 @@ set( kpresenterprivate_LIB_SRCS
      KPrCustomSlideShows.cpp
      KPrPresenterViewInterface.cpp
      KPrPresenterViewWidget.cpp
+     KPrEndOfSlideShowPage.cpp
 
      commands/KPrAnimationCreateCommand.cpp
      commands/KPrPageEffectSetCommand.cpp

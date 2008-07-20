@@ -27,6 +27,7 @@ class QWidget;
 class KPrPresentationTool;
 class KPrPresenterViewTool;
 class KPrViewModePresenterView;
+class KPrEndOfSlideShowPage;
 
 class KPrViewModePresentation : public KoPAViewMode
 {
@@ -86,6 +87,7 @@ protected:
     KPrViewModePresenterView *m_presenterViewMode;
 
     KPrPresenterViewTool * m_presenterViewTool;
+    KPrEndOfSlideShowPage * m_endOfSlideShowPage;
 };
 
 #endif /* KPRVIEWMODEPRESENTATION_H */

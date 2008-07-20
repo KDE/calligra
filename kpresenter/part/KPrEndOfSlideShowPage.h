@@ -4,7 +4,7 @@
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
  * License as published by the Free Software Foundation; either
- * version 2 of the License, or (  at your option ) any later version.
+ * version 2 of the License, or ( at your option ) any later version.
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,36 +17,23 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KPrPageLayoutDocker.h"
+#ifndef KPRENDOFSLIDESHOWPAGE_H
+#define KPRENDOFSLIDESHOWPAGE_H
 
-#include <QListWidget>
-#include <QVBoxLayout>
+#include "KPrPage.h"
 
-#include <klocale.h>
-
-KPrPageLayoutDocker::KPrPageLayoutDocker( QWidget* parent, Qt::WindowFlags flags )
-: QDockWidget( parent, flags )
-, m_view( 0 )
+/**
+ * This is the page that is use as end of presentation slide show.
+ *
+ * It creates a page that fully fits the page.
+ * It also has it's own master page which will also be deleted when
+ * the page is deleted.
+ */
+class KPrEndOfSlideShowPage : public KPrPage
 {
-    setWindowTitle( i18n( "Page layouts" ) );
+public:
+    KPrEndOfSlideShowPage( const QRectF & screenRect );
+    ~KPrEndOfSlideShowPage();
+};
 
-    QWidget* base = new QWidget( this );
-    QListWidget * m_layoutsView = new QListWidget( base );
-
-    QVBoxLayout* layout = new QVBoxLayout;
-    layout->addWidget( m_layoutsView );
-    base->setLayout( layout );
-    setWidget( base );
-}
-
-void KPrPageLayoutDocker::setView( KPrView* view )
-{
-    Q_ASSERT( view );
-    m_view = view;
-}
-
-void KPrPageLayoutDocker::slotActivePageChanged()
-{
-}
-
-#include "KPrPageLayoutDocker.moc"
+#endif /* KPRENDOFSLIDESHOWPAGE_H */

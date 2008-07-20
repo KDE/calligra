@@ -37,6 +37,7 @@
 #include "KPrPresentationTool.h"
 #include "KPrPresenterViewTool.h"
 #include "KPrViewModePresenterView.h"
+#include "KPrEndOfSlideShowPage.h"
 
 KPrViewModePresentation::KPrViewModePresentation( KoPAView * view, KoPACanvas * canvas )
 : KoPAViewMode( view, canvas )
@@ -45,6 +46,7 @@ KPrViewModePresentation::KPrViewModePresentation( KoPAView * view, KoPACanvas * 
 , m_animationDirector( 0 )
 , m_presenterViewMode( 0 )
 , m_presenterViewTool( 0 )
+, m_endOfSlideShowPage( 0 )
 {
 }
 
@@ -153,7 +155,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
         KPrDocument *document = static_cast<KPrDocument *>( m_canvas->document() );
         int newscreen = document->presentationMonitor();
 
-        QRect rect = desktop.availableGeometry( newscreen );
+        QRect rect = desktop.screenGeometry( newscreen );
         m_canvas->move( rect.topLeft() );
     }
 
@@ -162,18 +164,31 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     m_canvas->setFocus();                             // it shown full screen
     m_tool->activate(false);
 
-    m_animationDirector = new KPrAnimationDirector( m_view, m_view->kopaDocument()->pages(), m_view->activePage() );
+    // add end off slideshow page
+    m_endOfSlideShowPage = new KPrEndOfSlideShowPage( desktop.screenGeometry( m_canvas ) );
+    QList<KoPAPageBase*> pages = m_view->kopaDocument()->pages();
+    pages.append( m_endOfSlideShowPage );
+
+    m_animationDirector = new KPrAnimationDirector( m_view, pages, m_view->activePage() );
 }
 
 void KPrViewModePresentation::deactivate()
 {
+    KoPAPageBase * page = m_view->activePage();
+    if ( m_endOfSlideShowPage ) {
+        if ( page == m_endOfSlideShowPage ) {
+            page = m_view->kopaDocument()->pages().last();
+        }
+        delete m_endOfSlideShowPage;
+        m_endOfSlideShowPage = 0;
+    }
     m_tool->deactivate();
 
     m_canvas->setParent( m_savedParent, Qt::Widget );
     m_canvas->setFocus();
     m_canvas->setWindowState( m_canvas->windowState() & ~Qt::WindowFullScreen ); // reset
     m_canvas->show();
-    m_view->updateActivePage(m_view->activePage());
+    m_view->updateActivePage(page );
     delete m_animationDirector;
     m_animationDirector = 0;
 
