@@ -37,6 +37,7 @@
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 #include "reportrectentity.h"
+#include <QGraphicsSceneMouseEvent>
 
 ReportScene::ReportScene ( qreal w, qreal h, ReportDesigner *rd )
 		: QGraphicsScene ( 0,0,w, h )
@@ -113,6 +114,7 @@ void ReportScene::mousePressEvent ( QGraphicsSceneMouseEvent * e )
 
 	//This will be caught by the section to display its properties, if an item is under the cursor then they will diplay their properties
 	emit ( clicked() );
+
 	QGraphicsScene::mousePressEvent ( e );
 
 }

@@ -59,7 +59,6 @@ ReportDesigner * ReportSceneView::document() { return _rw; }
 
 void ReportSceneView::mouseReleaseEvent ( QMouseEvent * e )
 {
-	//ReportWriterWindow* w = (ReportWriterWindow*)topLevelWidget();
 	_rw->sectionMouseReleaseEvent ( this, e );
 	QGraphicsView::mouseReleaseEvent (e);
 }

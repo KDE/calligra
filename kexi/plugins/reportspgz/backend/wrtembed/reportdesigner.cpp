@@ -1471,6 +1471,7 @@ void ReportDesigner::slotEditPaste ( QGraphicsScene * canvas, const QPointF & po
 			if ( type == KRObjectData::EntityLabel )
 			{
 				ReportEntityLabel * ent = dynamic_cast<ReportEntityLabel*> ( sectionData->copy_list[i] )->clone();
+				ent->setEntityName(suggestEntityName("Label"));
 				ent->setPos ( ent->pos() + o );
 				pasted_ent = ent;
 			}
@@ -1478,30 +1479,34 @@ void ReportDesigner::slotEditPaste ( QGraphicsScene * canvas, const QPointF & po
 			{
 				ReportEntityField * ent = dynamic_cast<ReportEntityField*> ( sectionData->copy_list[i] )->clone();
 				ent->setPos ( ent->pos() + o );
+				ent->setEntityName(suggestEntityName("Field"));
 				pasted_ent = ent;
 			}
 			else if ( type == KRObjectData::EntityText )
 			{
 				ReportEntityText * ent = dynamic_cast<ReportEntityText*> ( sectionData->copy_list[i] )->clone();
 				ent->setPos ( ent->pos() + o );
+				ent->setEntityName(suggestEntityName("Text"));
 				pasted_ent = ent;
 			}
 			else if ( type == KRObjectData::EntityLine )
 			{
 				ReportEntityLine * ent = dynamic_cast<ReportEntityLine*> ( sectionData->copy_list[i] )->clone();
-
+				ent->setEntityName(suggestEntityName("Line"));
 				pasted_ent = ent;
 			}
 			else if ( type == KRObjectData::EntityBarcode )
 			{
 				ReportEntityBarcode * ent = dynamic_cast<ReportEntityBarcode*> ( sectionData->copy_list[i] )->clone();
 				ent->setPos ( ent->pos() + o );
+				ent->setEntityName(suggestEntityName("Barcode"));
 				pasted_ent = ent;
 			}
 			else if ( type == KRObjectData::EntityImage )
 			{
 				ReportEntityImage * ent = dynamic_cast<ReportEntityImage*> ( sectionData->copy_list[i] )->clone();
 				ent->setPos ( ent->pos() + o );
+				ent->setEntityName(suggestEntityName("Image"));
 				pasted_ent = ent;
 			}
 			//TODO add graph

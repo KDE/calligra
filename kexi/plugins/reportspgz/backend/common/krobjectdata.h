@@ -73,6 +73,7 @@ class KRObjectData
 		qreal Z;
 		KRPos position(){return _pos;}
 
+		void setEntityName(const QString& n){_name->setValue(n);}
 		QString entityName(){return _name->value().toString();}
 	protected:
 		KoProperty::Set *_set;

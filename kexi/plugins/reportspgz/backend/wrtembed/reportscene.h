@@ -46,6 +46,7 @@ class ReportScene : public QGraphicsScene
 		void raiseSelected();
 		void lowerSelected();
 		QGraphicsItemList itemsOrdered();
+		qreal gridSize(){return pixel_increment;}
 		
 	protected:
 		virtual void drawBackground ( QPainter* painter, const QRectF & clip );

@@ -280,6 +280,7 @@ int ReportRectEntity::grabHandle ( QPointF pos )
 
 QVariant ReportRectEntity::itemChange(GraphicsItemChange change, const QVariant &value)
 {
+	kDebug() << change << value;
 	if (change == ItemPositionChange && scene()) 
 	{
 		QPointF newPos = value.toPointF();
@@ -295,12 +296,29 @@ QVariant ReportRectEntity::itemChange(GraphicsItemChange change, const QVariant 
 		else if (newPos.y() > (scene()->height() - rect().height()))
 			newPos.setY(scene()->height() - rect().height());
 		
-		
 		return newPos;
 	}
 	else if (change == ItemPositionHasChanged && scene()) 
 	{
 		ppos->setScenePos(value.toPointF());
+	}
+	else if (change == ItemSceneHasChanged && scene() && psize)
+	{
+		kDebug() << pos();
+		QPointF newPos = pos();
+			
+		newPos = dynamic_cast<ReportScene*>(scene())->gridPoint(newPos);
+		if (newPos.x() < 0)
+			newPos.setX(0);
+		else if (newPos.x() > (scene()->width() - rect().width()))
+			newPos.setX(scene()->width() - rect().width());
+		
+		if (newPos.y() < 0)
+			newPos.setY(0);
+		else if (newPos.y() > (scene()->height() - rect().height()))
+			newPos.setY(scene()->height() - rect().height());
+		
+		setSceneRect(newPos, psize->toScene());
 	}
 	
 	return QGraphicsItem::itemChange(change, value);
