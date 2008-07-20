@@ -270,6 +270,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent )
     setLayout(layout);
 
     reorganizeGUI();
+
+    setFocusPolicy(Qt::NoFocus);
 }
 
 KarbonView::~KarbonView()

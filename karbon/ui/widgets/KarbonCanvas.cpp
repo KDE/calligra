@@ -96,7 +96,7 @@ KarbonCanvas::KarbonCanvas( KarbonPart *p )
     setBackgroundRole(QPalette::Base);
     setAutoFillBackground(true);
     setMouseTracking(true);
-    setFocusPolicy(Qt::ClickFocus); // allow to receive keyboard input
+    setFocusPolicy(Qt::StrongFocus); // allow to receive keyboard input
     updateSizeAndOffset();
     setAttribute(Qt::WA_InputMethodEnabled, true);
 }
