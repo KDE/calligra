@@ -31,7 +31,7 @@ class KisXMPIO : public KisMetaData::IOBackend {
         virtual QString name() const { return i18n("XMP"); }
         virtual BackendType type() const { return Text; }
         virtual bool supportSaving() const { return true; }
-        virtual bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const;
+        virtual bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType = NoHeader) const;
         virtual bool canSaveAllEntries(KisMetaData::Store* ) const { return true; }
         virtual bool supportLoading() const { return true; }
         virtual bool loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const;

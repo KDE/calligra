@@ -31,7 +31,7 @@ class KisExifIO : public KisMetaData::IOBackend {
         virtual QString name() const { return i18n("Exif"); }
         virtual BackendType type() const { return Binary; }
         virtual bool supportSaving() const { return true; }
-        virtual bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const;
+        virtual bool saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType = NoHeader) const;
         virtual bool canSaveAllEntries(KisMetaData::Store* store) const;
         virtual bool supportLoading() const { return true; }
         virtual bool loadFrom(KisMetaData::Store* store, QIODevice* ioDevice) const;

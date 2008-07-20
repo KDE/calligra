@@ -37,7 +37,7 @@ KisXMPIO::~KisXMPIO()
 {
 }
 
-bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const
+bool KisXMPIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType ) const
 {
     Q_UNUSED(store);
     Q_UNUSED(ioDevice);

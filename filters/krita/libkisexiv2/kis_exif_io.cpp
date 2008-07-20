@@ -268,7 +268,7 @@ KisExifIO::~KisExifIO()
 }
 
 
-bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const
+bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType ) const
 {
     ioDevice->open(QIODevice::WriteOnly);
     Exiv2::ExifData exifData;

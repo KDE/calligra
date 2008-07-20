@@ -92,7 +92,7 @@ void KisIptcIO::initMappingsTable() const
     }
 }
 
-bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice) const
+bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderType headerType ) const
 {
     initMappingsTable();
     ioDevice->open(QIODevice::WriteOnly);
