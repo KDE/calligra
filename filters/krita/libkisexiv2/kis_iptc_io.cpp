@@ -28,6 +28,11 @@
 #include <kis_meta_data_value.h>
 #include <kis_meta_data_schema.h>
 
+const char photoshopMarker[] = "Photoshop 3.0\0";
+const char photoshopBimId_[] = "8BIM";
+const uint16_t photoshopIptc = 0x0404;
+const QByteArray photoshopIptc_((char*)&photoshopIptc, 2);
+
 struct IPTCToKMD {
     QString exivTag;
     QString namespaceUri;
@@ -111,6 +116,25 @@ bool KisIptcIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
         }
     }
     Exiv2::DataBuf rawData = iptcData.copy();
+    
+    if( headerType == KisMetaData::IOBackend::JpegHeader )
+    {
+        QByteArray header;
+        header.append( photoshopMarker );
+        header.append( QByteArray(1, 0) ); // Null terminated string
+        header.append( photoshopBimId_ );
+        header.append( photoshopIptc_ );
+        header.append( QByteArray(2, 0) );
+        qint32 size = rawData.size_;
+        QByteArray sizeArray(4,0);
+        sizeArray[0] = (char)((size & 0xff000000) >> 24);
+        sizeArray[1] = (char)((size & 0x00ff0000) >> 16);
+        sizeArray[2] = (char)((size & 0x0000ff00) >> 8);
+        sizeArray[3] = (char)(size & 0x000000ff);
+        header.append( sizeArray);
+        ioDevice->write( header );
+    }
+    
     ioDevice->write( (const char*) rawData.pData_, rawData.size_);
     ioDevice->close();
     return true;

@@ -552,19 +552,10 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
             Q_ASSERT(exifIO);
 
             QBuffer buffer;
-            exifIO->saveTo( metaData, &buffer);
+            exifIO->saveTo( metaData, &buffer, KisMetaData::IOBackend::JpegHeader);
 
             dbgFile <<"Exif information size is" << buffer.data().size();
-            QByteArray header(6,0);
-            header[0] = 0x45;
-            header[1] = 0x78;
-            header[2] = 0x69;
-            header[3] = 0x66;
-            header[4] = 0x00;
-            header[5] = 0x00;
-
             QByteArray data = buffer.data();
-            data.prepend(header);
             if (data.size() < MAX_DATA_BYTES_IN_MARKER)
             {
                 jpeg_write_marker(&cinfo, JPEG_APP0 + 1, (const JOCTET*)data.data(), data.size());
@@ -580,25 +571,10 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KUrl& uri, KisPaintLaye
             Q_ASSERT(iptcIO);
 
             QBuffer buffer;
-            iptcIO->saveTo( metaData, &buffer);
+            iptcIO->saveTo( metaData, &buffer, KisMetaData::IOBackend::JpegHeader);
 
-            QByteArray header;
-            header.append( photoshopMarker );
-            header.append( QByteArray(1, 0) ); // Null terminated string
-            header.append( photoshopBimId_ );
-            header.append( photoshopIptc_ );
-            header.append( QByteArray(2, 0) );
-            qint32 size = buffer.size();
-            QByteArray sizeArray(4,0);
-            sizeArray[0] = (char)((size & 0xff000000) >> 24);
-            sizeArray[1] = (char)((size & 0x00ff0000) >> 16);
-            sizeArray[2] = (char)((size & 0x0000ff00) >> 8);
-            sizeArray[3] =  (char)(size & 0x000000ff);
-            header.append( sizeArray);
-
-            dbgFile <<"IPTC information size is" << buffer.data().size() <<" and header is of size =" << header.size();
+            dbgFile <<"IPTC information size is" << buffer.data().size();
             QByteArray data = buffer.data();
-            data.prepend(header);
             if (data.size() < MAX_DATA_BYTES_IN_MARKER)
             {
                 jpeg_write_marker(&cinfo, JPEG_APP0 + 13, (const JOCTET*)data.data(), data.size());

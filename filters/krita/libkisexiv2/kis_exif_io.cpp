@@ -272,7 +272,18 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
 {
     ioDevice->open(QIODevice::WriteOnly);
     Exiv2::ExifData exifData;
-    
+    if( headerType == KisMetaData::IOBackend::JpegHeader )
+    {
+        QByteArray header(6,0);
+        header[0] = 0x45;
+        header[1] = 0x78;
+        header[2] = 0x69;
+        header[3] = 0x66;
+        header[4] = 0x00;
+        header[5] = 0x00;
+        ioDevice->write( header );
+    }
+
     for(QHash<QString, KisMetaData::Entry>::const_iterator it = store->begin();
         it != store->end(); ++it )
     {
