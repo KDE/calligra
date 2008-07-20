@@ -171,7 +171,7 @@ LinkDialog::LinkDialog(QWidget* parent, Selection* selection)
     const NamedAreaManager *manager = selection->activeSheet()->map()->namedAreaManager();
     d->cellLink->addItems( manager->areaNames() );
 
-    d->cellLink->setCurrentText( "" );
+    d->cellLink->setItemText(d->cellLink->currentIndex(), "");
     cLayout->addWidget( d->cellLink );
     cLayout->addItem( new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
     connect( d->cellText, SIGNAL( textChanged( const QString& ) ), this,
@@ -306,7 +306,7 @@ void LinkDialog::setLink( const QString& link )
     }
 
     // assume cell reference
-    d->cellLink->setCurrentText( link );
+    d->cellLink->setItemText(d->cellLink->currentIndex(), link);
     setCurrentPage( d->p4 );
 }
 

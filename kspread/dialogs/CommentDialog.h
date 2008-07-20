@@ -26,7 +26,7 @@
 
 #include <kdialog.h>
 
-class Q3MultiLineEdit;
+class KTextEdit;
 
 namespace KSpread
 {
@@ -44,7 +44,7 @@ public slots:
 protected:
 
   Selection* m_selection;
-  Q3MultiLineEdit *multiLine; 
+  KTextEdit *multiLine;
 };
 
 } // namespace KSpread

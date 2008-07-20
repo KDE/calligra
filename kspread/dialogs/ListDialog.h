@@ -26,8 +26,8 @@
 #include <kconfig.h>
 #include <ksharedconfig.h>
 
-class Q3ListBox;
-class Q3MultiLineEdit;
+class QListWidget;
+class KTextEdit;
 class QPushButton;
 
 namespace KSpread
@@ -55,8 +55,8 @@ public slots:
 protected:
   KSharedConfigPtr config;
 
-  Q3ListBox * list;
-  Q3MultiLineEdit *entryList;
+  QListWidget* list;
+  KTextEdit *entryList;
   QPushButton* m_pAdd;
   QPushButton* m_pCancel;
   QPushButton* m_pRemove;

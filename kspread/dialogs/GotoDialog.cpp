@@ -98,7 +98,7 @@ void GotoDialog::slotOk()
     }
     else
     {
-      m_nameCell->setCurrentText("");
+      m_nameCell->setItemText(m_nameCell->currentIndex(), "");
     }
 }
 

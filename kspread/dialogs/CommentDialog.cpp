@@ -24,11 +24,11 @@
 // Local
 #include "CommentDialog.h"
 
-#include <q3multilineedit.h>
 #include <QPushButton>
 #include <QVBoxLayout>
 
 #include <klocale.h>
+#include <KTextEdit>
 
 //KSpread includes
 #include "Cell.h"
@@ -54,7 +54,7 @@ CommentDialog::CommentDialog(QWidget* parent, Selection* selection)
     lay1->setMargin(KDialog::marginHint());
     lay1->setSpacing(KDialog::spacingHint());
 
-    multiLine = new Q3MultiLineEdit( page );
+    multiLine = new KTextEdit( page );
     lay1->addWidget(multiLine);
 
     multiLine->setFocus();
@@ -73,7 +73,7 @@ CommentDialog::CommentDialog(QWidget* parent, Selection* selection)
 
 void CommentDialog::slotTextChanged()
 {
-    enableButtonOk( !multiLine->text().isEmpty());
+    enableButtonOk( !multiLine->toPlainText().isEmpty());
 }
 
 void CommentDialog::slotOk()
@@ -81,7 +81,7 @@ void CommentDialog::slotOk()
     CommentCommand* command = new CommentCommand();
     command->setSheet(m_selection->activeSheet());
     command->setText(i18n("Add Comment"));
-    command->setComment(multiLine->text().trimmed());
+    command->setComment(multiLine->toPlainText().trimmed());
     command->add(*m_selection);
     command->execute(m_selection->canvas());
     accept();

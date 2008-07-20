@@ -22,19 +22,17 @@
 // Local
 #include "ListDialog.h"
 
-#include <QLabel>
-#include <q3listbox.h>
-#include <q3multilineedit.h>
-#include <QPushButton>
-//Added by qt3to4:
 #include <QGridLayout>
+#include <QLabel>
+#include <QListWidget>
+#include <QPushButton>
 
-
+#include <kcomponentdata.h>
 #include <kconfig.h>
 #include <kdebug.h>
 #include <klineedit.h>
 #include <kmessagebox.h>
-#include <kcomponentdata.h>
+#include <KTextEdit>
 
 #include "commands/AutoFillCommand.h"
 #include "part/Factory.h" // FIXME detach from part
@@ -60,7 +58,7 @@ ListDialog::ListDialog(QWidget* parent)
   lab->setText(i18n("List:" ));
   grid1->addWidget(lab,0,0);
 
-  list=new Q3ListBox(page);
+  list=new QListWidget(page);
   grid1->addWidget(list,1,0,7,1);
 
 
@@ -68,7 +66,7 @@ ListDialog::ListDialog(QWidget* parent)
   lab->setText(i18n("Entry:" ));
   grid1->addWidget(lab,0,1);
 
-  entryList=new Q3MultiLineEdit(page);
+  entryList=new KTextEdit(page);
   grid1->addWidget(entryList,1,1,7,1);
 
   m_pAdd=new QPushButton(i18n("Add"),page);
@@ -97,8 +95,8 @@ ListDialog::ListDialog(QWidget* parent)
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_pModify, SIGNAL( clicked() ), this, SLOT( slotModify() ) );
   connect( m_pCopy, SIGNAL( clicked() ), this, SLOT( slotCopy() ) );
-  connect( list, SIGNAL(doubleClicked(Q3ListBoxItem *)),this,SLOT(slotDoubleClicked()));
-  connect( list, SIGNAL(clicked ( Q3ListBoxItem * )),this,SLOT(slotTextClicked()));
+  connect(list, SIGNAL(itemDoubleClicked(QListWidgetItem*)), this, SLOT(slotDoubleClicked()));
+  connect(list, SIGNAL(itemSelectionChanged()), this, SLOT(slotTextClicked()));
   connect(this,SIGNAL(okClicked()),this,SLOT(slotOk()));
   init();
   entryList->setEnabled(false);
@@ -112,7 +110,7 @@ ListDialog::ListDialog(QWidget* parent)
 void ListDialog::slotTextClicked()
 {
     //we can't remove the two first item
-    bool state=list->currentItem()>1;
+    bool state=list->currentRow()>1;
     m_pRemove->setEnabled(state);
     m_pModify->setEnabled(state);
     m_pCopy->setEnabled(list->currentItem()>=0);
@@ -183,23 +181,16 @@ void ListDialog::init()
             tmp="";
 	}
     }
-    list->insertStringList(lst);
+    list->addItems(lst);
 }
 
 void ListDialog::slotDoubleClicked()
 {
     //we can't modify the two first item
-    if(list->currentItem()<2)
+    if(list->currentRow()<2)
         return;
-    QString tmp=list->currentText();
-    entryList->setText("");
-    QStringList result = tmp.split(", ", QString::SkipEmptyParts);
-    int index=0;
-    for ( QStringList::Iterator it = result.begin(); it != result.end();++it )
-        {
-            entryList->insertLine((*it),index);
-            index++;
-        }
+    const QStringList result = list->currentItem()->text().split(", ", QString::SkipEmptyParts);
+    entryList->setText(result.join(QChar('\n')));
     entryList->setEnabled(true);
     m_pModify->setEnabled(true);
 }
@@ -210,19 +201,9 @@ void ListDialog::slotAdd()
   m_pCancel->setEnabled(false);
   m_pNew->setEnabled(true);
   list->setEnabled(true);
-  QString tmp;
-  for(int i=0;i<entryList->numLines();i++)
-  {
-    if(!entryList->textLine(i).isEmpty())
-    {
-      if(tmp.isEmpty())
-        tmp=entryList->textLine(i);
-      else
-        tmp+=", "+entryList->textLine(i);
-    }
-  }
+  const QString tmp = entryList->toPlainText().split(QChar('\n'), QString::SkipEmptyParts).join(", ");
   if(!tmp.isEmpty())
-    list->insertItem(tmp,list->count());
+    list->addItem(tmp);
 
   entryList->setText("");
   entryList->setEnabled(false);
@@ -253,15 +234,15 @@ void ListDialog::slotNew()
 
 void ListDialog::slotRemove()
 {
-  if(!list->isEnabled() || list->currentItem()==-1)
+  if(!list->isEnabled() || list->currentRow()==-1)
     return;
   //don't remove the two first line
-  if(list->currentItem()<2)
+  if(list->currentRow()<2)
       return;
   int ret = KMessageBox::warningContinueCancel( this, i18n("Do you really want to remove this list?"),i18n("Remove List"),KStandardGuiItem::del());
   if(ret==Cancel) // reponse = No
     return;
-  list->removeItem(list->currentItem ());
+  list->removeItemWidget(list->currentItem ());
   entryList->setEnabled(false);
   entryList->setText("");
   if(list->count()<=2)
@@ -271,7 +252,7 @@ void ListDialog::slotRemove()
 
 void ListDialog::slotOk()
 {
-    if(!entryList->text().isEmpty())
+    if(!entryList->toPlainText().isEmpty())
     {
         int ret = KMessageBox::warningYesNo( this, i18n("Entry area is not empty.\nDo you want to continue?"));
         if(ret==4) // reponse = No
@@ -283,9 +264,9 @@ void ListDialog::slotOk()
         result.append( "\\" );
 
         //don't save the two first line
-        for(unsigned int i=2;i<list->count();i++)
+        for (int i = 2; i < list->count(); ++i)
         {
-          QStringList tmp = list->text(i).split(", ", QString::SkipEmptyParts);
+          QStringList tmp = list->item(i)->text().split(", ", QString::SkipEmptyParts);
             if ( !tmp.isEmpty() )
             {
                 result+=tmp;
@@ -307,21 +288,11 @@ void ListDialog::slotOk()
 void ListDialog::slotModify()
 {
     //you can modify list but not the two first list
-  if(list->currentItem ()>1 && !entryList->text().isEmpty())
+  if(list->currentRow()>1 && !entryList->toPlainText().isEmpty())
     {
-      QString tmp;
-      for(int i=0;i<entryList->numLines();i++)
-	{
-	  if(!entryList->textLine(i).isEmpty())
-	    {
-	      if(tmp.isEmpty())
-		tmp=entryList->textLine(i);
-	      else
-		tmp+=", "+entryList->textLine(i);
-	    }
-	}
-      list->insertItem(tmp,list->currentItem());
-      list->removeItem(list->currentItem());
+      const QString tmp = entryList->toPlainText().split(QChar('\n'), QString::SkipEmptyParts).join(", ");
+      list->insertItem(list->currentRow(), tmp);
+      list->removeItemWidget(list->currentItem());
 
 
       entryList->setText("");
@@ -335,9 +306,9 @@ void ListDialog::slotModify()
 
 void ListDialog::slotCopy()
 {
-  if(list->currentItem()!=-1)
+  if(list->currentRow()!=-1)
     {
-      list->insertItem(list->currentText(),list->count());
+      list->addItem(list->currentItem()->text());
     }
 }
 
