@@ -191,7 +191,7 @@ void ListDialog::init()
     lst.append(sday);
 
     d->config = Factory::global().config();
-    QStringList other = d->config->group("Parameters").readEntry("Other d->list", QStringList());
+    QStringList other = d->config->group("Parameters").readEntry("Other list", QStringList());
     QString tmp;
     for (QStringList::Iterator it = other.begin(); it != other.end();++it) {
         if ((*it) != "\\") {
@@ -265,7 +265,7 @@ void ListDialog::slotRemove()
         return;
     }
     int ret = KMessageBox::warningContinueCancel(this,
-                                                 i18n("Do you really want to remove this d->list?"),
+                                                 i18n("Do you really want to remove this list?"),
                                                  i18n("Remove List"), KStandardGuiItem::del());
     if (ret == Cancel) { // reponse = No
         return;
@@ -299,7 +299,7 @@ void ListDialog::slotOk()
                 result += "\\";
             }
         }
-        d->config->group("Parameters").writeEntry("Other d->list", result);
+        d->config->group("Parameters").writeEntry("Other list", result);
         //todo refresh AutoFillCommand::other
         // I don't know how to do for the moment
         if (AutoFillCommand::other != 0) {
