@@ -1,5 +1,5 @@
 
-include_directories( ${KRITA_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/ui/openrastertk)
+include_directories( ${KRITA_INCLUDES} ${CMAKE_SOURCE_DIR}/krita/ui/openrastertk ${CMAKE_SOURCE_DIR}/krita/image/metadata)
 
 set(libkritaconverter_LIB_SRCS
     ora_converter.cc

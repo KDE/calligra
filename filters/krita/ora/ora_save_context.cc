@@ -26,6 +26,8 @@
 #include <kis_paint_device.h>
 #include <kis_image.h>
 
+#include <kis_meta_data_store.h>
+
 #include "kis_png_converter.h"
 
 OraSaveContext::OraSaveContext(KoStore* _store) : m_id(0), m_store(_store)
@@ -45,11 +47,14 @@ QString OraSaveContext::saveDeviceData(KisPaintLayerSP layer)
         }
         KisPNGConverter pngconv(0, layer->image()->undoAdapter());
         vKisAnnotationSP_it annotIt = 0;
-        if( pngconv.buildFile(&io, layer->image(), layer->paintDevice(), annotIt, annotIt, 0, false, true) != KisImageBuilder_RESULT_OK)
+        KisMetaData::Store* store = new KisMetaData::Store( *layer->metaData( ));
+        if( pngconv.buildFile(&io, layer->image(), layer->paintDevice(), annotIt, annotIt, KisPNGOptions(), store ) != KisImageBuilder_RESULT_OK)
         {
             dbgFile << "Saving PNG failed:" << filename;
+            delete store;
             return "";
         }
+        delete store;
         io.close();
         if(!m_store->close())
         {

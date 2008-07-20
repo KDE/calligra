@@ -33,10 +33,64 @@
 #include <kis_doc2.h>
 #include <kis_image.h>
 #include <kis_paint_layer.h>
+#include <kis_group_layer.h>
 
 #include <kis_iterators_pixel.h>
 
+#include <kis_meta_data_store.h>
+#include <kis_meta_data_filter_registry_model.h>
+
 #include "kis_png_converter.h"
+
+#include <kis_node_visitor.h>
+
+class KisExifInfoVisitor : public KisNodeVisitor
+{
+    public:
+        using KisNodeVisitor::visit;
+    
+        KisExifInfoVisitor() :
+            m_exifInfo(0),
+            m_countPaintLayer(0)
+        { }
+    public:
+
+        virtual bool visit(KisExternalLayer*)
+        {
+            return true;
+        }
+
+        virtual bool visit(KisGeneratorLayer*)
+        {
+            return true;
+        }
+
+        virtual bool visit(KisPaintLayer* layer) {
+            m_countPaintLayer++;
+            if (!layer->metaData()->empty())
+            {
+                m_exifInfo = layer->metaData();
+            }
+            return true;
+        }
+
+        
+        virtual bool visit(KisGroupLayer* layer)
+        {
+            dbgFile <<"Visiting on grouplayer" << layer->name() <<"";
+            return visitAll( layer, true );
+        }
+        
+        virtual bool visit(KisAdjustmentLayer* ) {  return true; }
+        
+    public:
+        inline uint countPaintLayer() { return m_countPaintLayer; }
+        inline KisMetaData::Store* exifInfo() {return m_exifInfo; }
+    private:
+        KisMetaData::Store* m_exifInfo;
+        uint m_countPaintLayer;
+};
+
 
 typedef KGenericFactory<KisPNGExport> KisPNGExportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkritapngexport, KisPNGExportFactory("kofficefilters"))
@@ -129,11 +183,26 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QByteArray& from, const Q
     vKisAnnotationSP_it beginIt = img->beginAnnotations();
     vKisAnnotationSP_it endIt = img->endAnnotations();
     KisImageBuilder_Result res;
-
-    if ( (res = kpc.buildFile(url, img, l->paintDevice(), beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
+    KisPNGOptions options;
+    options.alpha = alpha;
+    options.interlace = interlace;
+    options.compression = compression;
+    KisExifInfoVisitor eIV;
+    eIV.visit( img->rootLayer().data() );
+    KisMetaData::Store* eI = 0;
+    if(eIV.countPaintLayer() == 1)
+        eI = eIV.exifInfo();
+    if(eI)
+    {
+        KisMetaData::Store* copy = new KisMetaData::Store( *eI );
+        eI = copy;
+    }
+    if ( (res = kpc.buildFile(url, img, l->paintDevice(), beginIt, endIt, options, eI)) == KisImageBuilder_RESULT_OK) {
         dbgFile <<"success !";
+        delete eI;
         return KoFilter::OK;
     }
+    delete eI;
     dbgFile <<" Result =" << res;
     return KoFilter::InternalError;
 }
