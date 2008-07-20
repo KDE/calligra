@@ -270,7 +270,7 @@ void ListDialog::slotRemove()
     if (ret == Cancel) { // reponse = No
         return;
     }
-    d->list->removeItemWidget(d->list->currentItem());
+    delete d->list->takeItem(d->list->currentRow());
     d->textEdit->setEnabled(false);
     d->textEdit->setText("");
     if (d->list->count() <= numBuiltinLists) {
@@ -316,7 +316,7 @@ void ListDialog::slotModify()
     if (d->list->currentRow() >= numBuiltinLists && !d->textEdit->toPlainText().isEmpty()) {
         const QString tmp = d->textEdit->toPlainText().split(QChar('\n'), QString::SkipEmptyParts).join(", ");
         d->list->insertItem(d->list->currentRow(), tmp);
-        d->list->removeItemWidget(d->list->currentItem());
+        delete d->list->takeItem(d->list->currentRow());
 
         d->textEdit->setText("");
         d->changed = true;
