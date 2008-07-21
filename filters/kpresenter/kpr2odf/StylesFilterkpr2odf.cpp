@@ -121,130 +121,130 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
         int effect = pageEffect.attribute( "value", "0" ).toInt();
         switch( effect )
         {
-        case -1:
+        case -1: //PEF_RANDOM
             effectName = "random";
             break;
-        case 0:
+        case 0: //PEF_NONE
             effectName = "none";
             break;
-        case 1:
+        case 1: //PEF_CLOSE_HORZ
             effectName = "close-horizontal";
             break;
-        case 2:
+        case 2: //PEF_CLOSE_VERT
             effectName = "close-vertical";
             break;
-        case 3:
-            effectName = "fade-to-center";
+        case 3: //PEF_CLOSE_ALL
+            effectName = "close";
             break;
-        case 4:
+        case 4: //PEF_OPEN_HORZ
             effectName = "open-horizontal";
             break;
-        case 5:
+        case 5: //PEF_OPEN VERT
             effectName = "open-vertical";
             break;
-        case 6:
+        case 6: //PEF_OPEN_ALL
             effectName = "open";
             break;
-        case 7:
+        case 7: //PEF_INTERLOCKING_HORZ_1
             effectName = "interlocking-horizontal-left";
             break;
-        case 8:
+        case 8: //PEF_INTERLOCKING_HORZ_2
             effectName = "interlocking-horizontal-right";
             break;
-        case 9:
-            effectName = "interlocking-horizontal-right";
+        case 9: //PEF_INTERLOCKING_VERT_1
+            effectName = "interlocking-vertical-up";
             break;
-        case 10:
+        case 10: //PEF_INTERLOCKING_VERT_2
             effectName = "interlocking-vertical-bottom";
             break;
-        case 11:
+        case 11: //PEF_SURROUND1
             effectName = "spiralin-left";
             break;
-        case 12:
+        case 12: //PEF_FLY1
             effectName = "fly-away";
             break;
-        case 13:
+        case 13: //PEF_BLINDS_HOR
             effectName = "horizontal-stripes";
             break;
-        case 14:
+        case 14: //PEF_BLINDS_VER
             effectName = "vertical-stripes";
             break;
-        case 15:
+        case 15: //PEF_BOX_IN
             effectName = "fade-to-center";
             break;
-        case 16:
+        case 16: //PEF_BOX_OUT
             effectName = "fade-from-center";
             break;
-        case 17:
+        case 17: //PEF_CHECKBOARD_ACROSS
             effectName = "horizontal-checkerboard";
             break;
-        case 18:
+        case 18: //PEF_CHECKBOARD_DOWN
             effectName = "vertical-checkerboard";
             break;
-        case 19:
+        case 19: //PEF_COVER_DOWN
             effectName = "fade-from-top";
             break;
-        case 20:
+        case 20: //PEF_UNCOVER_DOWN
             effectName = "uncover-to-bottom";
             break;
-        case 21:
+        case 21: //PEF_COVER_UP
             effectName = "fade-from-bottom";
             break;
-        case 22:
+        case 22: //PEF_UNCOVER_UP
             effectName = "uncover-to-top";
             break;
-        case 23:
+        case 23: //PEF_COVER_LEFT
             effectName = "fade-from-right";
             break;
-        case 24:
+        case 24: //PEF_UNCOVER_LEFT
             effectName = "uncover-to-left";
             break;
-        case 25:
+        case 25: //PEF_COVER_RIGHT
             effectName = "fade-from-left";
             break;
-        case 26:
+        case 26: //PEF_UNCOVER_RIGHT
             effectName = "uncover-to-right";
             break;
-        case 27:
+        case 27: //PEF_COVER_LEFT_UP
             effectName = "fade-from-lowerright";
             break;
-        case 28:
+        case 28: //PEF_UNCOVER_LEFT_UP
             effectName = "uncover-to-upperleft";
             break;
-        case 29:
+        case 29: //PEF_COVER_LEFT_DOWN
             effectName = "fade-from-upperrigh";
             break;
-        case 30:
+        case 30: //PEF_UNCOVER_LEFT_DOWN
             effectName = "uncover-to-lowerleft";
             break;
-        case 31:
+        case 31: //PEF_COVER_RIGHT_UP
             effectName = "fade-from-lowerleft";
             break;
-        case 32:
+        case 32: //PEF_UNCOVER_RIGHT_UP
             effectName = "uncover-to-upperright";
             break;
-        case 33:
+        case 33: //PEF_COVER_RIGHT_DOWN
             effectName = "fade-from-upperleft";
             break;
-        case 34:
+        case 34: //PEF_UNCOVER_RIGHT_DOWN
             effectName = "fade-from-lowerleft";
             break;
-        case 35:
+        case 35: //PEF_DISSOLVE
             effectName = "dissolve";
             break;
-        case 36:
+        case 36: //PEF_STRIPS_LEFT_UP
             effectName = "fade-from-lowerright";
             break;
-        case 37:
+        case 37: //PEF_STRIPS_LEFT_DOWN
             effectName = "fade-from-upperright";
             break;
-        case 38:
+        case 38: //PEF_STRIPS_RIGHT_UP
             effectName = "fade-from-lowerleft";
             break;
-        case 39:
+        case 39: //PEF_STRIPS_RIGHT_DOWN
             effectName = "fade-from-upperleft";
             break;
-        case 40:
+        case 40: //PEF_MELTING
             effectName = "melt";
             break;
         }//switch efect
@@ -258,14 +258,14 @@ const QString Filterkpr2odf::createPageStyle( const KoXmlElement& page )
             QBuffer buffer;
             buffer.open( IO_WriteOnly );
             KoXmlWriter elementWriter( &buffer );
-//             FIXME: 1.1 says it's needed elementWriter.startElement( "style:presentation-properties" );
+//          FIXME:   elementWriter.startElement( "style:presentation-properties" );
             elementWriter.startElement( "presentation:sound" );
             elementWriter.addAttribute( "xlink:href", "Sounds/" + m_sounds[ soundEffect.attribute( "soundFileName" ) ] );
             elementWriter.addAttribute( "xlink:type", "simple" );
             elementWriter.addAttribute( "xlink:show", "new" );
             elementWriter.addAttribute( "xlink:actuate", "onRequest");
             elementWriter.endElement();//presentation:sound
-//             elementWriter.endElement();//style:presentation
+//             elementWriter.endElement();//style:presentation-properties
 
             QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
             style.addChildElement( "presentationSound", elementContents );
@@ -468,7 +468,7 @@ const QString Filterkpr2odf::createGraphicStyle( const KoXmlElement& element )
         }
     }
 
-    KoXmlElement pen( element.namedItem( "PEN" ).toElement() );
+    KoXmlElement pen = element.namedItem( "PEN" ).toElement();
     if( !pen.isNull() )
     {
         style.addPropertyPt( "svg:stroke-width", pen.attribute( "width" ).toDouble() );
@@ -772,10 +772,6 @@ const QString Filterkpr2odf::createStrokeDashStyle( int strokeStyle )
 
     switch( strokeStyle )
     {
-    case 0:
-    case 1:
-        //"Empty style"
-        return m_styles.lookup( style, "sds" );
     case 2:
         displayName = "Fine Dashed";
         styleString = "rect";
@@ -812,6 +808,7 @@ const QString Filterkpr2odf::createStrokeDashStyle( int strokeStyle )
 
     //Not all the strings are filled always so in oder to not
     //flood the style with unneeded "", we check if it was written
+    style.addAttribute( "draw:display-name", displayName );
     style.addAttribute( "draw:style", styleString );
     style.addAttribute( "draw:dots1", dots1 );
     style.addAttribute( "draw:distance", distance );
@@ -828,7 +825,7 @@ const QString Filterkpr2odf::createStrokeDashStyle( int strokeStyle )
         style.addAttribute( "draw:dots2-length", dots2_length );
     }
 
-    return m_styles.lookup( style, "sds" );
+    return m_styles.lookup( style, "stroke" );
 }
 
 const QString Filterkpr2odf::createHatchStyle( int brushStyle, QString fillColor )
@@ -1120,7 +1117,6 @@ const QString Filterkpr2odf::createTextStyle( const KoXmlElement& element )
         QString textUnderlineStyle;
         QString textUnderlineWidth;
         QString textUnderlineType;
-        //TODO: are these all the posibilities
         if( underlineStyleLine == "solid" )
         {
             if( underline == "1" )

@@ -161,7 +161,6 @@ void Filterkpr2odf::createImageList( KoStore* output, KoStore* input, KoXmlWrite
     }
 
     output->enterDirectory( "Pictures" );
-//     manifest->addManifestEntry( "Pictures/", "" );//FIXME: is this needed or not? 1.6 doesn't add an entry, ODEssentials does
 
     //Iterate over all the keys to copy the image, get the file name and
     //its "representation" inside the KPR file
@@ -185,7 +184,6 @@ void Filterkpr2odf::createImageList( KoStore* output, KoStore* input, KoXmlWrite
         delete image;
 
         //generate manifest entry
-        //FIXME: is there a better way to do it?
         QString mediaType;
         if( odfName.endsWith( "png" ) ) {
             mediaType = "image/png";
@@ -230,7 +228,6 @@ void Filterkpr2odf::createSoundList( KoStore* output, KoStore* input, KoXmlWrite
         delete sound;
 
         //generate manifest entry
-        //FIXME: is there a better way to do it?
         QString mediaType;
         if( odfName.endsWith( "wav" ) ) {
             mediaType = "audio/wav";
@@ -1384,7 +1381,7 @@ void Filterkpr2odf::saveAnimations( KoXmlWriter* content )
 {
     content->startElement( "presentation:animations" );
     QList<int> keys = m_pageAnimations.keys();
-    qSort( keys );//we need to store the effect in the order of it's keys
+    qSort( keys );//we need to store the effect in the order of its keys
     foreach( int key, keys )
     {
         QList<QString> effectList = m_pageAnimations.value( key );
