@@ -21,7 +21,7 @@ if(EXIV2_FOUND)
 endif(EXIV2_FOUND)
 
 macro_log_feature(JPEG_FOUND "jpeg" "The Krita JPEG filter will not be built" "http://www.ijg.org" FALSE "")
-macro_log_feature(EXIV2_FOUND "Exiv2" "The Krita JPEG filter will not be built" "http://www.exiv2.org" FALSE "")
+macro_log_feature(EXIV2_FOUND "Exiv2" "The Krita JPEG and PNG filters will not be built" "http://www.exiv2.org" FALSE "")
 macro_log_feature(TIFF_FOUND "tiff" "The Krita TIFF filter will not be built" "http://www.remotesensing.org/libtiff" FALSE "")
 macro_log_feature(PNG_FOUND "png" "The Krita PNG filter will not be built" "http://www.libpng.org/pub/png/libpng.html" FALSE "")
 macro_log_feature(OPENEXR_FOUND "OpenEXR" "The Krita OpenEXR filter will not be built" "http://www.openexr.com" FALSE "")
@@ -47,9 +47,9 @@ if(TIFF_FOUND)
 	add_subdirectory(tiff)
 endif(TIFF_FOUND )
 
-if(PNG_FOUND)
+if(PNG_FOUND AND EXIV2_FOUND)
     add_subdirectory(png)
-endif(PNG_FOUND)
+endif(PNG_FOUND AND EXIV2_FOUND)
 
 # OpenCTL is needed for having a RGB16/32f color space
 if(OPENEXR_FOUND AND OPENCTL_FOUND)

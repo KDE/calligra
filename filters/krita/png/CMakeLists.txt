@@ -14,7 +14,7 @@ include_directories(${PNG_INCLUDE_DIR})
 
 add_definitions(${PNG_DEFINITIONS} ${KDE4_ENABLE_EXCEPTIONS})
 
-target_link_libraries(kritapngimport kritaui ${PNG_LIBRARIES})
+target_link_libraries(kritapngimport kritaui ${PNG_LIBRARIES} kisexiv2)
 
 install(TARGETS kritapngimport  DESTINATION ${PLUGIN_INSTALL_DIR})
 
