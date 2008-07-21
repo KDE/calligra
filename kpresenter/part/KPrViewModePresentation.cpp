@@ -141,6 +141,11 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     bool presenterViewEnabled = document->isPresenterViewEnabled();
     int presentationscreen = document->presentationMonitor();
 
+    // add end off slideshow page
+    m_endOfSlideShowPage = new KPrEndOfSlideShowPage( desktop.screenGeometry( m_canvas ) );
+    QList<KoPAPageBase*> pages = m_view->kopaDocument()->pages();
+    pages.append( m_endOfSlideShowPage );
+
     if ( presenterViewEnabled ) {
         if ( desktop.numScreens() > 1 ) {
             int newscreen = desktop.numScreens() - presentationscreen - 1; // What if we have > 2 screens?
@@ -154,7 +159,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
             m_presenterViewCanvas->show();
             m_presenterViewCanvas->setFocus();                             // it shown full screen
             m_pvAnimationDirector = new KPrAnimationDirector( m_view,
-                    m_presenterViewCanvas, m_view->kopaDocument()->pages(), m_view->activePage() );
+                    m_presenterViewCanvas, pages, m_view->activePage() );
         }
         else {
             kWarning() << "Presenter View is enabled but only found one monitor";
@@ -168,11 +173,6 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     m_canvas->show();
     m_canvas->setFocus();                             // it shown full screen
     m_tool->activate(false);
-
-    // add end off slideshow page
-    m_endOfSlideShowPage = new KPrEndOfSlideShowPage( desktop.screenGeometry( m_canvas ) );
-    QList<KoPAPageBase*> pages = m_view->kopaDocument()->pages();
-    pages.append( m_endOfSlideShowPage );
 
     m_animationDirector = new KPrAnimationDirector( m_view, m_canvas, pages, m_view->activePage() );
 }

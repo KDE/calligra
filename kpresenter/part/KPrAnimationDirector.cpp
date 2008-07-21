@@ -224,27 +224,30 @@ QPair<KPrShapeAnimation *, KPrAnimationData *> KPrAnimationDirector::shapeAnimat
 
 void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
 {
-    // m_view->viewMode()->updateActivePage( page );
-
-    QList<KoShape*> shapes = page->iterator();
-    m_canvas->shapeManager()->setShapes( shapes, false );
-    //Make the top most layer active
-    if ( !shapes.isEmpty() ) {
-        KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
-        m_canvas->shapeManager()->selection()->setActiveLayer( layer );
+    if ( m_canvas == m_view->kopaCanvas() ) {
+        m_view->setActivePage( page );
     }
+    else {
+        QList<KoShape*> shapes = page->iterator();
+        m_canvas->shapeManager()->setShapes( shapes, false );
+        //Make the top most layer active
+        if ( !shapes.isEmpty() ) {
+            KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
+            m_canvas->shapeManager()->selection()->setActiveLayer( layer );
+        }
 
-    // if the page is not a master page itself set shapes of the master page
-    KoPAPage * paPage = dynamic_cast<KoPAPage *>( page );
+        // if the page is not a master page itself set shapes of the master page
+        KoPAPage * paPage = dynamic_cast<KoPAPage *>( page );
 
-    Q_ASSERT( paPage );
-    KoPAMasterPage * masterPage = paPage->masterPage();
-    QList<KoShape*> masterShapes = masterPage->iterator();
-    m_canvas->masterShapeManager()->setShapes( masterShapes, false );
-    // Make the top most layer active
-    if ( !masterShapes.isEmpty() ) {
-        KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( masterShapes.last() );
-        m_canvas->masterShapeManager()->selection()->setActiveLayer( layer );
+        Q_ASSERT( paPage );
+        KoPAMasterPage * masterPage = paPage->masterPage();
+        QList<KoShape*> masterShapes = masterPage->iterator();
+        m_canvas->masterShapeManager()->setShapes( masterShapes, false );
+        // Make the top most layer active
+        if ( !masterShapes.isEmpty() ) {
+            KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( masterShapes.last() );
+            m_canvas->masterShapeManager()->selection()->setActiveLayer( layer );
+        }
     }
 
     // it can be that the pages have different sizes. So we need to recalulate
