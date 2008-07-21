@@ -197,10 +197,12 @@ void KPrViewModePresentation::deactivate()
     delete m_animationDirector;
     m_animationDirector = 0;
 
-    m_presenterViewCanvas->setWindowState(
-        m_presenterViewCanvas->windowState() & ~Qt::WindowFullScreen );
-    delete m_pvAnimationDirector;
-    m_pvAnimationDirector = 0;
+    if ( m_presenterViewCanvas ) {
+        m_presenterViewCanvas->setWindowState(
+            m_presenterViewCanvas->windowState() & ~Qt::WindowFullScreen );
+        delete m_pvAnimationDirector;
+        m_pvAnimationDirector = 0;
+    }
 
     delete m_presenterViewCanvas;
     m_presenterViewCanvas = 0;
