@@ -70,9 +70,9 @@ KPrView::~KPrView()
     delete m_notesMode;
 }
 
-KoViewConverter * KPrView::viewConverter()
+KoViewConverter * KPrView::viewConverter( KoPACanvas * canvas )
 {
-    return viewMode()->viewConverter();
+    return viewMode()->viewConverter( canvas );
 }
 
 void KPrView::updateActivePage(KoPAPageBase *page)
@@ -150,26 +150,7 @@ void KPrView::initActions()
 
 void KPrView::startPresentation()
 {
-    KPrDocument *doc = static_cast<KPrDocument *>( m_doc );
-    bool presenterViewEnabled = doc->isPresenterViewEnabled();
-    if ( presenterViewEnabled ) {
-        // Create a new view
-        KoMainWindow *shell = new KoMainWindow( m_doc->componentData() );
-        shell->setRootDocument( m_doc );
-        m_doc->addShell( shell );
-        shell->show();
-
-        KPrView *view = dynamic_cast<KPrView *>( shell->rootView() );
-        Q_ASSERT( view );
-
-        setViewMode( m_presentationMode );
-
-        view->setActivePage( m_activePage );
-        view->activatePresenterView( this );
-    }
-    else {
-        setViewMode( m_presentationMode );
-    }
+    setViewMode( m_presentationMode );
 }
 
 void KPrView::startPresentationFromBeginning()

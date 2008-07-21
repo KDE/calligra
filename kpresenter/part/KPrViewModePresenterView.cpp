@@ -139,7 +139,7 @@ void KPrViewModePresenterView::activate(KoPAViewMode *previousViewMode)
         m_presenterViewWidget->updateWidget( rect.size() ); 
         m_presenterViewWidget->show();
         m_presenterViewWidget->setFocus();    
-        m_animationDirector = new KPrAnimationDirector( m_view, m_view->kopaDocument()->pages(), m_view->activePage() );
+        // m_animationDirector = new KPrAnimationDirector( m_view, m_view->kopaDocument()->pages(), m_view->activePage() );
     }
 
 }

@@ -38,7 +38,7 @@ public:
     explicit KPrView( KPrDocument * document, QWidget * parent = 0 );
     ~KPrView();
 
-    virtual KoViewConverter * viewConverter();
+    virtual KoViewConverter * viewConverter( KoPACanvas * canvas);
 
 public slots:
     void updateActivePage(KoPAPageBase *page);

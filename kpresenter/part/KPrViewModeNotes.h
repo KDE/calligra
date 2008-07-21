@@ -33,7 +33,7 @@ public:
     KPrViewModeNotes(KoPAView *view, KoPACanvas *canvas);
     ~KPrViewModeNotes();
 
-    void paintEvent(QPaintEvent* event);
+    void paintEvent( KoPACanvas * canvas, QPaintEvent* event );
     void tabletEvent(QTabletEvent *event, const QPointF &point);
     void mousePressEvent(QMouseEvent *event, const QPointF &point);
     void mouseDoubleClickEvent(QMouseEvent *event, const QPointF &point);

@@ -41,9 +41,15 @@
 #include "shapeanimations/KPrAnimationData.h"
 #include "shapeanimations/KPrShapeAnimation.h"
 
-KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, const QList<KoPAPageBase*> & pages, KoPAPageBase* currentPage )
+#include <KoShapeManager.h>
+#include <KoShapeLayer.h>
+#include <KoShapeLayer.h>
+#include <KoPAMasterPage.h>
+#include <KoSelection.h>
+
+KPrAnimationDirector::KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas, const QList<KoPAPageBase*> & pages, KoPAPageBase* currentPage )
 : m_view( view )
-, m_canvas( view->kopaCanvas() )
+, m_canvas( canvas )
 , m_pages( pages )
 , m_pageEffectRunner( 0 )
 , m_stepIndex( 0 )
@@ -218,7 +224,29 @@ QPair<KPrShapeAnimation *, KPrAnimationData *> KPrAnimationDirector::shapeAnimat
 
 void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
 {
-    m_view->viewMode()->updateActivePage( page );
+    // m_view->viewMode()->updateActivePage( page );
+
+    QList<KoShape*> shapes = page->iterator();
+    m_canvas->shapeManager()->setShapes( shapes, false );
+    //Make the top most layer active
+    if ( !shapes.isEmpty() ) {
+        KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( shapes.last() );
+        m_canvas->shapeManager()->selection()->setActiveLayer( layer );
+    }
+
+    // if the page is not a master page itself set shapes of the master page
+    KoPAPage * paPage = dynamic_cast<KoPAPage *>( page );
+
+    Q_ASSERT( paPage );
+    KoPAMasterPage * masterPage = paPage->masterPage();
+    QList<KoShape*> masterShapes = masterPage->iterator();
+    m_canvas->masterShapeManager()->setShapes( masterShapes, false );
+    // Make the top most layer active
+    if ( !masterShapes.isEmpty() ) {
+        KoShapeLayer* layer = dynamic_cast<KoShapeLayer*>( masterShapes.last() );
+        m_canvas->masterShapeManager()->selection()->setActiveLayer( layer );
+    }
+
     // it can be that the pages have different sizes. So we need to recalulate
     // the zoom when we change the page
     updateZoom( m_canvas->size() );

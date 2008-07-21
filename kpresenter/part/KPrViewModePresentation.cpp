@@ -44,8 +44,9 @@ KPrViewModePresentation::KPrViewModePresentation( KoPAView * view, KoPACanvas * 
 , m_savedParent( 0 )
 , m_tool( new KPrPresentationTool( *this ) )
 , m_animationDirector( 0 )
+, m_pvAnimationDirector( 0 )
+, m_presenterViewCanvas( 0 )
 , m_presenterViewMode( 0 )
-, m_presenterViewTool( 0 )
 , m_endOfSlideShowPage( 0 )
 {
 }
@@ -56,19 +57,25 @@ KPrViewModePresentation::~KPrViewModePresentation()
     delete m_tool;
 }
 
-KoViewConverter * KPrViewModePresentation::viewConverter()
+KoViewConverter * KPrViewModePresentation::viewConverter( KoPACanvas * canvas )
 {
-    if(!m_animationDirector)
+    if ( m_animationDirector && m_canvas == canvas ) {
+        return m_animationDirector->viewConverter();
+    }
+    else if ( m_pvAnimationDirector && m_presenterViewCanvas == canvas ) {
+        return m_pvAnimationDirector->viewConverter();
+    }
+    else {
         return 0;
-
-    return m_animationDirector->viewConverter();
+    }
 }
 
-void KPrViewModePresentation::paintEvent( QPaintEvent* event )
+void KPrViewModePresentation::paintEvent( KoPACanvas * canvas,  QPaintEvent* event )
 {
-    if ( m_animationDirector )
-    {
+    if ( m_canvas == canvas && m_animationDirector ) {
         m_animationDirector->paintEvent( event );
+    } else if ( m_presenterViewCanvas == canvas && m_pvAnimationDirector ) {
+        m_pvAnimationDirector->paintEvent( event );
     }
 }
 
@@ -81,66 +88,45 @@ void KPrViewModePresentation::mousePressEvent( QMouseEvent *event, const QPointF
 {
     KoPointerEvent ev( event, point );
 
-    if ( m_presenterViewTool )
-        m_presenterViewTool->mousePressEvent( &ev );
-    else
-        m_tool->mousePressEvent( &ev );
+    m_tool->mousePressEvent( &ev );
 }
 
 void KPrViewModePresentation::mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point )
 {
     KoPointerEvent ev( event, point );
 
-    if ( m_presenterViewTool )
-        m_presenterViewTool->mouseDoubleClickEvent( &ev );
-    else
-        m_tool->mouseDoubleClickEvent( &ev );
+    m_tool->mouseDoubleClickEvent( &ev );
 }
 
 void KPrViewModePresentation::mouseMoveEvent( QMouseEvent *event, const QPointF &point )
 {
     KoPointerEvent ev( event, point );
 
-    if ( m_presenterViewTool )
-        m_presenterViewTool->mouseMoveEvent( &ev );
-    else
-        m_tool->mouseMoveEvent( &ev );
+    m_tool->mouseMoveEvent( &ev );
 }
 
 void KPrViewModePresentation::mouseReleaseEvent( QMouseEvent *event, const QPointF &point )
 {
     KoPointerEvent ev( event, point );
 
-    if ( m_presenterViewTool )
-        m_presenterViewTool->mouseReleaseEvent( &ev );
-    else
-        m_tool->mouseReleaseEvent( &ev );
+    m_tool->mouseReleaseEvent( &ev );
 }
 
 void KPrViewModePresentation::keyPressEvent( QKeyEvent *event )
 {
-    if ( m_presenterViewTool )
-        m_presenterViewTool->keyPressEvent( event );
-    else
-        m_tool->keyPressEvent( event );
+    m_tool->keyPressEvent( event );
 }
 
 void KPrViewModePresentation::keyReleaseEvent( QKeyEvent *event )
 {
-    if ( m_presenterViewTool )
-        m_presenterViewTool->keyReleaseEvent( event );
-    else
-        m_tool->keyReleaseEvent( event );
+    m_tool->keyReleaseEvent( event );
 }
 
 void KPrViewModePresentation::wheelEvent( QWheelEvent * event, const QPointF &point )
 {
     KoPointerEvent ev( event, point );
 
-    if ( m_presenterViewTool )
-        m_presenterViewTool->wheelEvent( &ev );
-    else
-        m_tool->wheelEvent( &ev );
+    m_tool->wheelEvent( &ev );
 }
 
 void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
@@ -151,14 +137,33 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
 
     QDesktopWidget desktop;
 
-    if ( desktop.numScreens() > 1 ) {
-        KPrDocument *document = static_cast<KPrDocument *>( m_canvas->document() );
-        int newscreen = document->presentationMonitor();
+    KPrDocument *document = static_cast<KPrDocument *>( m_view->kopaDocument() );
+    bool presenterViewEnabled = document->isPresenterViewEnabled();
+    int presentationscreen = document->presentationMonitor();
 
-        QRect rect = desktop.screenGeometry( newscreen );
-        m_canvas->move( rect.topLeft() );
+    if ( presenterViewEnabled ) {
+        if ( desktop.numScreens() > 1 ) {
+            int newscreen = desktop.numScreens() - presentationscreen - 1; // What if we have > 2 screens?
+            QRect rect = desktop.screenGeometry( newscreen );
+
+            m_presenterViewCanvas = new KoPACanvas( m_view, document );
+            m_presenterViewCanvas->setParent( ( QWidget* )0, Qt::Window );
+            m_presenterViewCanvas->setWindowState(
+                    m_presenterViewCanvas->windowState() | Qt::WindowFullScreen );
+            m_presenterViewCanvas->move( rect.topLeft() );
+            m_presenterViewCanvas->show();
+            m_presenterViewCanvas->setFocus();                             // it shown full screen
+            m_pvAnimationDirector = new KPrAnimationDirector( m_view,
+                    m_presenterViewCanvas, m_view->kopaDocument()->pages(), m_view->activePage() );
+        }
+        else {
+            kWarning() << "Presenter View is enabled but only found one monitor";
+            document->setPresenterViewEnabled( false );
+        }
     }
 
+    QRect rect = desktop.screenGeometry( presentationscreen );
+    m_canvas->move( rect.topLeft() );
     m_canvas->setWindowState( m_canvas->windowState() | Qt::WindowFullScreen ); // detach widget to make
     m_canvas->show();
     m_canvas->setFocus();                             // it shown full screen
@@ -169,7 +174,7 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
     QList<KoPAPageBase*> pages = m_view->kopaDocument()->pages();
     pages.append( m_endOfSlideShowPage );
 
-    m_animationDirector = new KPrAnimationDirector( m_view, pages, m_view->activePage() );
+    m_animationDirector = new KPrAnimationDirector( m_view, m_canvas, pages, m_view->activePage() );
 }
 
 void KPrViewModePresentation::deactivate()
@@ -192,15 +197,18 @@ void KPrViewModePresentation::deactivate()
     delete m_animationDirector;
     m_animationDirector = 0;
 
-    if ( m_presenterViewTool ) {
-        m_presenterViewTool->deactivate();
-        m_presenterViewTool = 0;
-    }
+    m_presenterViewCanvas->setWindowState(
+        m_presenterViewCanvas->windowState() & ~Qt::WindowFullScreen );
+    delete m_pvAnimationDirector;
+    m_pvAnimationDirector = 0;
+
+    delete m_presenterViewCanvas;
+    m_presenterViewCanvas = 0;
 }
 
 void KPrViewModePresentation::updateActivePage( KoPAPageBase *page )
 {
-    m_view->setActivePage( page );
+    // m_view->setActivePage( page );
 }
 
 void KPrViewModePresentation::activateSavedViewMode()
@@ -215,7 +223,12 @@ KPrAnimationDirector * KPrViewModePresentation::animationDirector()
 
 void KPrViewModePresentation::navigate( KPrAnimationDirector::Navigation navigation )
 {
-    if ( m_animationDirector->navigate( navigation ) ) {
+    bool finished = m_animationDirector->navigate( navigation );
+    if ( m_pvAnimationDirector ) {
+        finished = m_pvAnimationDirector->navigate( navigation ) && finished;
+    }
+
+    if ( finished ) {
         activateSavedViewMode();
     }
 }

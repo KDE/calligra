@@ -35,9 +35,9 @@ public:
     KPrViewModePresentation( KoPAView * view, KoPACanvas * m_canvas );
     ~KPrViewModePresentation();
 
-    KoViewConverter * viewConverter();
+    KoViewConverter * viewConverter( KoPACanvas * canvas );
 
-    void paintEvent( QPaintEvent* event );
+    void paintEvent( KoPACanvas * canvas, QPaintEvent* event );
     void tabletEvent( QTabletEvent *event, const QPointF &point );
     void mousePressEvent( QMouseEvent *event, const QPointF &point );
     void mouseDoubleClickEvent( QMouseEvent *event, const QPointF &point );
@@ -76,14 +76,15 @@ public:
     void navigate( KPrAnimationDirector::Navigation navigation );
 
     KPrPresentationTool *presentationTool();
-
     void setPresenterViewTool( KPrPresenterViewTool *tool );
 
 protected:
     KoPAViewMode * m_savedViewMode;
+    KoPACanvas * m_presenterViewCanvas;
     QWidget * m_savedParent;
     KPrPresentationTool * m_tool;
     KPrAnimationDirector * m_animationDirector;
+    KPrAnimationDirector * m_pvAnimationDirector;
     KPrViewModePresenterView *m_presenterViewMode;
 
     KPrPresenterViewTool * m_presenterViewTool;

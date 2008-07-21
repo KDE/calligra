@@ -56,7 +56,7 @@ public:
         LastPage
     };
 
-    KPrAnimationDirector( KoPAView * view, const QList<KoPAPageBase*> & pages, KoPAPageBase* currentPage );
+    KPrAnimationDirector( KoPAView * view, KoPACanvas * canvas, const QList<KoPAPageBase*> & pages, KoPAPageBase* currentPage );
     virtual ~KPrAnimationDirector();
 
     void paintEvent( QPaintEvent* event );
