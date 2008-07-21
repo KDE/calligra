@@ -5,6 +5,7 @@
 #include <QMap>
 
 class KComboBox;
+class QCheckBox;
 class QSpinBox;
 class QDoubleSpinBox;
 class QPushButton;
@@ -24,6 +25,9 @@ public:
 signals:
     // all the following signals emit user friendly values, not the internal
     // values which are instead computed directly by KarbonCalligraphyTool
+    void usePathChanged(bool);
+    void usePressureChanged(bool);
+    void useAngleChanged(bool);
     void widthChanged(double);
     void thinningChanged(double);
     void angleChanged(int);
@@ -33,6 +37,8 @@ signals:
 
 private slots:
     void loadProfile( const QString &name );
+    void toggleUsePressure( bool checked );
+    void toggleUseAngle( bool checked );
     void updateCurrentProfile();
     void saveProfileAs();
     void removeProfile();
@@ -83,9 +89,13 @@ private:
     QMap<QString, Profile *> profiles;
 
     KComboBox *comboBox;
+    QCheckBox *usePath;
+    QCheckBox *usePressure;
+    QCheckBox *useAngle;
     QDoubleSpinBox  *widthBox;
     QDoubleSpinBox  *thinningBox;
     QSpinBox        *angleBox;
+    QDoubleSpinBox  *capsBox;
     QDoubleSpinBox  *fixationBox;
     QDoubleSpinBox  *massBox;
     QDoubleSpinBox  *dragBox;

@@ -8,6 +8,7 @@
 #include <KMessageBox>
 
 #include <QtGui/QSpinBox>
+#include <QtGui/QCheckBox>
 #include <QtGui/QDoubleSpinBox>
 #include <QtGui/QVBoxLayout>
 #include <QtGui/QLabel>
@@ -48,12 +49,18 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     widthLayout->addWidget( widthBox );
     layout->addLayout( widthLayout );
 
+    usePath = new QCheckBox( i18n("&Follow selected path"), this );
+    layout->addWidget( usePath );
+
     detailsButton = new QPushButton( "", this );
     layout->addWidget( detailsButton );
 
     details = new QWidget( this );
     QVBoxLayout *detailsLayout = new QVBoxLayout( details );
-    
+
+    usePressure = new QCheckBox( i18n("Use tablet &pressure"), this );
+    detailsLayout->addWidget( usePressure );
+
     QHBoxLayout *thinningLayout = new QHBoxLayout( this );
     QLabel *thinningLabel = new QLabel( i18n( "Thinning" ), this );
     thinningBox = new QDoubleSpinBox;
@@ -62,6 +69,9 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     thinningLayout->addWidget( thinningLabel );
     thinningLayout->addWidget( thinningBox );
     detailsLayout->addLayout( thinningLayout );
+
+    useAngle = new QCheckBox( i18n("Use tablet &angle"), this );
+    detailsLayout->addWidget( useAngle );
 
     QHBoxLayout *angleLayout = new QHBoxLayout( this );
     QLabel *angleLabel = new QLabel( i18n( "Angle" ), this );
@@ -79,6 +89,15 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
     fixationLayout->addWidget( fixationLabel );
     fixationLayout->addWidget( fixationBox );
     detailsLayout->addLayout( fixationLayout );
+
+    QHBoxLayout *capsLayout = new QHBoxLayout( this );
+    QLabel *capsLabel = new QLabel( i18n( "Caps" ), this );
+    capsBox = new QDoubleSpinBox;
+    capsBox->setRange( 0.0, 3.0 );
+    capsBox->setSingleStep( 0.1 );
+    capsLayout->addWidget( capsLabel );
+    capsLayout->addWidget( capsBox );
+    detailsLayout->addLayout( capsLayout );
 
     QHBoxLayout *massLayout = new QHBoxLayout( this );
     QLabel *massLabel = new QLabel( i18n( "Mass" ), this );
@@ -126,6 +145,9 @@ KarbonCalligraphyOptionWidget::~KarbonCalligraphyOptionWidget()
 
 void KarbonCalligraphyOptionWidget::emitAll()
 {
+    emit usePathChanged( usePath->isChecked() );
+    emit usePressureChanged( usePressure->isChecked() );
+    emit useAngleChanged( useAngle->isChecked() );
     emit widthChanged( widthBox->value() );
     emit thinningChanged( thinningBox->value() );
     emit angleChanged( angleBox->value() );
@@ -222,6 +244,15 @@ void KarbonCalligraphyOptionWidget::toggleDetails()
     detailsShowed = !detailsShowed;
 }
 
+void KarbonCalligraphyOptionWidget::toggleUsePressure( bool checked )
+{
+    thinningBox->setEnabled( ! checked );
+}
+
+void KarbonCalligraphyOptionWidget::toggleUseAngle( bool checked )
+{
+    angleBox->setEnabled( ! checked );
+}
 
 /******************************************************************************
  ************************* Convenience Functions ******************************
@@ -229,9 +260,19 @@ void KarbonCalligraphyOptionWidget::toggleDetails()
 
 void KarbonCalligraphyOptionWidget::createConnections()
 {
-    connect ( comboBox, SIGNAL(currentIndexChanged(const QString &)),
-              SLOT(loadProfile(const QString &)) );
+    connect( comboBox, SIGNAL(currentIndexChanged(const QString &)),
+             SLOT(loadProfile(const QString &)) );
 
+
+    // propagate changes
+    connect( usePath, SIGNAL(toggled(bool)),
+             SIGNAL(usePathChenged(bool)) );
+
+    connect( usePressure, SIGNAL(toggled(bool)),
+             SIGNAL(usePressureChenged(bool)) );
+
+    connect( useAngle, SIGNAL(toggled(bool)),
+             SIGNAL(useAngleChenged(bool)) );
 
     connect( widthBox, SIGNAL(valueChanged(double)),
              SIGNAL(widthChanged(double)) );
@@ -251,6 +292,16 @@ void KarbonCalligraphyOptionWidget::createConnections()
     connect( dragBox, SIGNAL(valueChanged(double)),
              SIGNAL(dragChanged(double)) );
 
+
+    // update profile
+    connect( usePath, SIGNAL(toggled(bool)),
+             SLOT(updateCurrentProfile()) );
+
+    connect( usePressure, SIGNAL(toggled(bool)),
+             SLOT(updateCurrentProfile()) );
+
+    connect( useAngle, SIGNAL(toggled(bool)),
+             SLOT(updateCurrentProfile()) );
 
     connect( widthBox, SIGNAL(valueChanged(double)),
              SLOT(updateCurrentProfile()) );
@@ -273,7 +324,11 @@ void KarbonCalligraphyOptionWidget::createConnections()
 
     connect( saveButton, SIGNAL(clicked()), SLOT(saveProfileAs()) );
     connect( removeButton, SIGNAL(clicked()), SLOT(removeProfile()) );
+
+    // visualization
     connect( detailsButton, SIGNAL(clicked()), SLOT(toggleDetails()) );
+    connect( usePressure,SIGNAL(toggled(bool)), SLOT(toggleUsePressure(bool)) );
+    connect( useAngle, SIGNAL(toggled(bool)), SLOT(toggleUseAngle(bool)));
 }
 
 void KarbonCalligraphyOptionWidget::addDefaultProfiles()
