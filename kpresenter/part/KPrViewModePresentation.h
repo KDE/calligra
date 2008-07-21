@@ -26,6 +26,7 @@
 class QWidget;
 class KPrPresentationTool;
 class KPrPresenterViewTool;
+class KPrPresenterViewWidget;
 class KPrViewModePresenterView;
 class KPrEndOfSlideShowPage;
 
@@ -85,6 +86,7 @@ protected:
     KPrPresentationTool * m_tool;
     KPrAnimationDirector * m_animationDirector;
     KPrAnimationDirector * m_pvAnimationDirector;
+    KPrPresenterViewWidget * m_presenterViewWidget;
     KPrViewModePresenterView *m_presenterViewMode;
 
     KPrPresenterViewTool * m_presenterViewTool;

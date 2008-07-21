@@ -42,10 +42,10 @@
 #include "KPrPresenterViewInterface.h"
 #include "KPrViewModePresenterView.h"
 
-KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresenterView *presenterView, KoPACanvas *canvas, QWidget *parent)
+KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMode, KoPACanvas *canvas, QWidget *parent )
     : QWidget( parent )
+    , m_viewMode( viewMode )
     , m_canvas( canvas )
-    , m_presenterView( presenterView )
 {
     QVBoxLayout *vLayout = new QVBoxLayout;
 
@@ -76,7 +76,7 @@ KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresenterView *presen
     setLayout(vLayout);
 
     m_activeWidget = m_mainWidget;
-    KoPAPageBase *activePage = m_presenterView->view()->activePage();
+    KoPAPageBase *activePage = m_viewMode->view()->activePage();
     m_activeWidget->setActivePage( activePage );
 }
 
@@ -93,7 +93,7 @@ void KPrPresenterViewWidget::updateWidget( const QSize &widgetSize )
 {
     int previewHeight = 0.5 * widgetSize.height();
 
-    KoPAPageBase *page = m_presenterView->view()->activePage();
+    KoPAPageBase *page = m_viewMode->view()->activePage();
 
     const KoPageLayout &layout = page->pageLayout();
     KoZoomHandler zoomHandler;
@@ -117,17 +117,17 @@ void KPrPresenterViewWidget::showSlideThumbnails( bool show )
 
 void KPrPresenterViewWidget::requestPreviousSlide()
 {
-    m_presenterView->keyPressEvent( new QKeyEvent( QEvent::KeyPress, Qt::Key_PageUp, Qt::NoModifier ) );
+    m_viewMode->keyPressEvent( new QKeyEvent( QEvent::KeyPress, Qt::Key_PageUp, Qt::NoModifier ) );
 }
 
 void KPrPresenterViewWidget::requestNextSlide()
 {
-    m_presenterView->keyPressEvent( new QKeyEvent( QEvent::KeyPress, Qt::Key_PageDown, Qt::NoModifier ) );
+    m_viewMode->keyPressEvent( new QKeyEvent( QEvent::KeyPress, Qt::Key_PageDown, Qt::NoModifier ) );
 }
 
 void KPrPresenterViewWidget::requestChangePage( KoPAPageBase *page, bool enableMainView )
 {
-    if ( enableMainView ) {
+    /* if ( enableMainView ) {
         m_toolWidget->toggleSlideThumbnails( false );
     }
     m_presenterView->animationDirector()->navigateToPage( page );
@@ -135,7 +135,7 @@ void KPrPresenterViewWidget::requestChangePage( KoPAPageBase *page, bool enableM
     m_slidesWidget->setActivePage( page );
 
     KPrViewModePresentation *presentationMode = m_presenterView->presentationMode();
-    presentationMode->animationDirector()->navigateToPage( page );
+    presentationMode->animationDirector()->navigateToPage( page ); */
 }
 
 #include "KPrPresenterViewWidget.moc"

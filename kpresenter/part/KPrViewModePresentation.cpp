@@ -36,6 +36,7 @@
 #include "KPrDocument.h"
 #include "KPrPresentationTool.h"
 #include "KPrPresenterViewTool.h"
+#include "KPrPresenterViewWidget.h"
 #include "KPrViewModePresenterView.h"
 #include "KPrEndOfSlideShowPage.h"
 
@@ -46,6 +47,7 @@ KPrViewModePresentation::KPrViewModePresentation( KoPAView * view, KoPACanvas * 
 , m_animationDirector( 0 )
 , m_pvAnimationDirector( 0 )
 , m_presenterViewCanvas( 0 )
+, m_presenterViewWidget( 0 )
 , m_presenterViewMode( 0 )
 , m_endOfSlideShowPage( 0 )
 {
@@ -152,12 +154,14 @@ void KPrViewModePresentation::activate( KoPAViewMode * previousViewMode )
             QRect rect = desktop.screenGeometry( newscreen );
 
             m_presenterViewCanvas = new KoPACanvas( m_view, document );
-            m_presenterViewCanvas->setParent( ( QWidget* )0, Qt::Window );
-            m_presenterViewCanvas->setWindowState(
-                    m_presenterViewCanvas->windowState() | Qt::WindowFullScreen );
-            m_presenterViewCanvas->move( rect.topLeft() );
-            m_presenterViewCanvas->show();
-            m_presenterViewCanvas->setFocus();                             // it shown full screen
+            m_presenterViewWidget = new KPrPresenterViewWidget( this, m_presenterViewCanvas );
+            m_presenterViewWidget->setParent( ( QWidget* )0, Qt::Window );
+            m_presenterViewWidget->setWindowState(
+                    m_presenterViewWidget->windowState() | Qt::WindowFullScreen );
+            m_presenterViewWidget->move( rect.topLeft() );
+            m_presenterViewWidget->updateWidget( rect.size() ); 
+            m_presenterViewWidget->show();
+            m_presenterViewWidget->setFocus();                             // it shown full screen
             m_pvAnimationDirector = new KPrAnimationDirector( m_view,
                     m_presenterViewCanvas, pages, m_view->activePage() );
         }
@@ -193,19 +197,20 @@ void KPrViewModePresentation::deactivate()
     m_canvas->setFocus();
     m_canvas->setWindowState( m_canvas->windowState() & ~Qt::WindowFullScreen ); // reset
     m_canvas->show();
-    m_view->updateActivePage(page );
+    m_view->updateActivePage( page );
     delete m_animationDirector;
     m_animationDirector = 0;
 
-    if ( m_presenterViewCanvas ) {
-        m_presenterViewCanvas->setWindowState(
-            m_presenterViewCanvas->windowState() & ~Qt::WindowFullScreen );
+    if ( m_presenterViewWidget ) {
+        m_presenterViewWidget->setWindowState(
+            m_presenterViewWidget->windowState() & ~Qt::WindowFullScreen );
         delete m_pvAnimationDirector;
         m_pvAnimationDirector = 0;
-    }
 
-    delete m_presenterViewCanvas;
-    m_presenterViewCanvas = 0;
+       delete m_presenterViewWidget;
+        m_presenterViewWidget = 0;
+        m_presenterViewCanvas = 0;
+    }
 }
 
 void KPrViewModePresentation::updateActivePage( KoPAPageBase *page )

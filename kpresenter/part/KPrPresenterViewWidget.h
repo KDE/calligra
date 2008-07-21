@@ -28,7 +28,7 @@ class KoPACanvas;
 class KoPAPageBase;
 class KoPAPageThumbnailModel;
 
-class KPrViewModePresenterView;
+class KPrViewModePresentation;
 
 class KPrPresenterViewBaseInterface;
 class KPrPresenterViewInterface;
@@ -39,7 +39,7 @@ class KPrPresenterViewWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KPrPresenterViewWidget( KPrViewModePresenterView *presenterView, KoPACanvas *canvas, QWidget *parent=0 );
+    KPrPresenterViewWidget( KPrViewModePresentation *viewMode, KoPACanvas *canvas, QWidget *parent=0 );
     ~KPrPresenterViewWidget();
     void setActivePage( KoPAPageBase *page );
     void updateWidget( const QSize &widgetSize );
@@ -51,8 +51,8 @@ private slots:
     void requestChangePage( KoPAPageBase *page, bool enableMainView );
 
 private:
+    KPrViewModePresentation *m_viewMode;
     KoPACanvas *m_canvas;
-    KPrViewModePresenterView *m_presenterView;
 
     QStackedLayout *m_stackedLayout;
 
