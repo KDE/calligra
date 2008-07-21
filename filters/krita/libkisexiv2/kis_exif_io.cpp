@@ -329,6 +329,7 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
                 exivKey = "Exif.Photo.MakerNote";
             }
         }
+        dbgFile << "Saving " << entry << " to " << exivKey;
         if(exivKey.isEmpty())
         {
             dbgFile << entry.qualifiedName() <<" is unsavable to EXIF";
@@ -357,14 +358,15 @@ bool KisExifIO::saveTo(KisMetaData::Store* store, QIODevice* ioDevice, HeaderTyp
             } else if(exivKey == "Exif.Photo.Flash") {
                 v = flashKMDToExif( entry.value() );
             } else {
+                dbgFile << exifKey.tag();
                 v = kmdValueToExivValue( entry.value(), Exiv2::ExifTags::tagType( exifKey.tag(), exifKey.ifdId()  ) );
             }
             if( v && v->typeId() != Exiv2::invalidTypeId )
             {
-//                 dbgFile <<"Saving key" << exivKey <<" of KMD value" << entry.value();
+                dbgFile <<"Saving key" << exivKey <<" of KMD value" << entry.value();
                 exifData.add(exifKey, v );
             } else {
-                //dbgFile <<"No exif value was created for" << entry.qualifiedName() <<" as" << exivKey <<" of KMD value" << entry.value();
+                dbgFile <<"No exif value was created for" << entry.qualifiedName() <<" as" << exivKey <<" of KMD value" << entry.value();
             }
         }
     }

@@ -116,6 +116,7 @@ KisMetaData::Value exivValueToKMDValue( const Exiv2::Value::AutoPtr value )
     return KisMetaData::Value();
 }
 
+
 // Convert a QtVariant to an Exiv value
 Exiv2::Value* variantToExivValue( const QVariant& variant, Exiv2::TypeId type )
 {
@@ -123,8 +124,10 @@ Exiv2::Value* variantToExivValue( const QVariant& variant, Exiv2::TypeId type )
     {
         case Exiv2::undefined:
             return new Exiv2::DataValue( (Exiv2::byte*)variant.toByteArray().data(), variant.toByteArray().size() );
+        case Exiv2::unsignedByte:
+            return new Exiv2::ValueType<uint16_t>(variant.toUInt(0));
         case Exiv2::unsignedShort:
-            return new Exiv2::ValueType<uint16_t>(variant.toInt(0));
+            return new Exiv2::ValueType<uint16_t>(variant.toUInt(0));
         case Exiv2::unsignedLong:
             return new Exiv2::ValueType<uint32_t>(variant.toUInt(0));
         case Exiv2::signedShort:
@@ -161,6 +164,17 @@ Exiv2::Value* variantToExivValue( const QVariant& variant, Exiv2::TypeId type )
     }
 }
 
+template<typename _TYPE_>
+Exiv2::Value* arrayToExivValue( const KisMetaData::Value& value )
+{
+    Exiv2::ValueType<_TYPE_>* ev = new Exiv2::ValueType<_TYPE_>();
+    for(int i = 0; i < value.asArray().size(); ++i)
+    {
+        ev->value_.push_back(value.asVariant().value<_TYPE_>() );
+    }
+    return ev;
+}
+
 // Convert a KisMetaData to an Exiv value
 Exiv2::Value* kmdValueToExivValue( const KisMetaData::Value& value, Exiv2::TypeId type )
 {
@@ -180,7 +194,29 @@ Exiv2::Value* kmdValueToExivValue( const KisMetaData::Value& value, Exiv2::TypeI
             Q_ASSERT( type == Exiv2::unsignedRational );
             return new Exiv2::ValueType<Exiv2::URational>(Exiv2::URational( value.asUnsignedRational().numerator, value.asUnsignedRational().denominator ) );
         }
+        case KisMetaData::Value::OrderedArray:
+        case KisMetaData::Value::UnorderedArray:
+        case KisMetaData::Value::AlternativeArray:
+        {
+            switch(type)
+            {
+                case Exiv2::unsignedByte:
+                    return arrayToExivValue<uint16_t>(value );
+                case Exiv2::unsignedShort:
+                    return arrayToExivValue<uint16_t>(value );
+                case Exiv2::unsignedLong:
+                    return arrayToExivValue<uint32_t>(value );
+                case Exiv2::signedShort:
+                    return arrayToExivValue<int16_t>(value );
+                case Exiv2::signedLong:
+                    return arrayToExivValue<int32_t>(value );
+                default:
+                    dbgFile << type << " " << value;
+                    Q_ASSERT(false);
+            }
+        }
         default:
+            dbgFile << type << " " << value;
             Q_ASSERT(false);
     }
     return 0;
