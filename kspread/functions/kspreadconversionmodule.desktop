@@ -6,6 +6,7 @@ Name[it]=Funzioni di conversione
 Name[nds]=Ümrekenfunkschonen
 Name[pt]=Funções de Conversão
 Name[pt_BR]=Funções de Conversão
+Name[tr]=Dönüştürme Fonksiyonları
 Name[uk]=Функції перетворення
 Name[zh_TW]=轉換函數
 Comment=ARABIC, ASCIITOCHAR, BOOL2INT, BOOL2STRING, CARX, CARY, CHARTOASCII, DECSEX, INT2BOOL, NUM2STRING, POLA, POLR, ROMAN, SEXDEC, STRING

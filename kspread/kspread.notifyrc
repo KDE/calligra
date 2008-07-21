@@ -189,6 +189,7 @@ Name[it]=Elaborazione non riuscita
 Name[nds]=Inlesen fehlslaan
 Name[pt]=O processamento falhou
 Name[pt_BR]=O processamento falhou
+Name[tr]=Ayrıştırma başarısız oldu
 Name[uk]=Обробка зазнала невдачі
 Name[zh_TW]=剖析失敗
 Comment=Parsing of a cell's formula failed

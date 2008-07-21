@@ -11,6 +11,7 @@ Comment[it]=Driver per banche dati Kexi per accedere ai file di banche dati xBas
 Comment[nds]=Kexi-Datenbankdriever för den Togriep op xBase-Datenbankdateien
 Comment[pt]=Controlador de bases de dados do Kexi para aceder a ficheiros de xBase
 Comment[pt_BR]=Controlador de bancos de dados do Kexi para acesso a arquivos do xBase
+Comment[tr]=xBase veritabanlarına erişmek için Kexi veritabanı sürücüsü
 Comment[uk]=Драйвер бази даних Kexi для доступу до файлів баз даних xBase
 Comment[zh_CN]=访问 xBase 服务器的 Kexi 数据库驱动
 Comment[zh_TW]=存取 xBase 資料庫檔案的 Kexi 資料庫驅動程式
