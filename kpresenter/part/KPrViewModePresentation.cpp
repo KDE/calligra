@@ -36,9 +36,7 @@
 
 #include "KPrDocument.h"
 #include "KPrPresentationTool.h"
-#include "KPrPresenterViewTool.h"
 #include "KPrPresenterViewWidget.h"
-#include "KPrViewModePresenterView.h"
 #include "KPrEndOfSlideShowPage.h"
 
 KPrViewModePresentation::KPrViewModePresentation( KoPAView * view, KoPACanvas * canvas )
@@ -49,7 +47,6 @@ KPrViewModePresentation::KPrViewModePresentation( KoPAView * view, KoPACanvas * 
 , m_pvAnimationDirector( 0 )
 , m_presenterViewCanvas( 0 )
 , m_presenterViewWidget( 0 )
-, m_presenterViewMode( 0 )
 , m_endOfSlideShowPage( 0 )
 {
 }
@@ -250,15 +247,5 @@ void KPrViewModePresentation::navigateToPage( KoPAPageBase * page )
     if ( m_pvAnimationDirector ) {
         m_pvAnimationDirector->navigateToPage( page );
     }
-}
-
-KPrPresentationTool * KPrViewModePresentation::presentationTool()
-{
-    return m_tool;
-}
-
-void KPrViewModePresentation::setPresenterViewTool( KPrPresenterViewTool *tool )
-{
-    m_presenterViewTool = tool;
 }
 

@@ -34,7 +34,6 @@
 #include "KPrPage.h"
 #include "KPrMasterPage.h"
 #include "KPrPageApplicationData.h"
-#include "KPrViewModePresenterView.h"
 #include "KPrViewModePresentation.h"
 #include "KPrViewModeNotes.h"
 #include "commands/KPrAnimationCreateCommand.h"
@@ -60,13 +59,11 @@ KPrView::KPrView( KPrDocument *document, QWidget *parent )
 {
     initGUI();
     initActions();
-    m_presenterViewMode = 0;
 }
 
 KPrView::~KPrView()
 {
     delete m_presentationMode;
-    delete m_presenterViewMode;
     delete m_notesMode;
 }
 
@@ -157,18 +154,6 @@ void KPrView::startPresentationFromBeginning()
 {
     setActivePage( m_doc->pageByNavigation( activePage(), KoPageApp::PageFirst ) );
     startPresentation();
-}
-
-void KPrView::activatePresenterView( KPrView *mainView )
-{
-    if ( !m_presenterViewMode ) {
-        KPrViewModePresentation *presentationMode = dynamic_cast<KPrViewModePresentation *>( mainView->viewMode() );
-        // To use presenter view, the main view should be in presentation mode
-        Q_ASSERT( presentationMode );
-        m_presenterViewMode = new KPrViewModePresenterView( this, m_canvas, presentationMode );
-    }
-
-    setViewMode( m_presenterViewMode );
 }
 
 void KPrView::createAnimation()

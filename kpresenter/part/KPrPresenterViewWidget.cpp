@@ -40,7 +40,7 @@
 
 #include "KPrAnimationDirector.h"
 #include "KPrPresenterViewInterface.h"
-#include "KPrViewModePresenterView.h"
+#include "KPrViewModePresentation.h"
 
 KPrPresenterViewWidget::KPrPresenterViewWidget( KPrViewModePresentation *viewMode, KoPACanvas *canvas, QWidget *parent )
     : QWidget( parent )

@@ -78,9 +78,6 @@ public:
 
     void navigateToPage( KoPAPageBase * page );
 
-    KPrPresentationTool *presentationTool();
-    void setPresenterViewTool( KPrPresenterViewTool *tool );
-
 protected:
     KoPAViewMode * m_savedViewMode;
     KoPACanvas * m_presenterViewCanvas;
@@ -89,9 +86,7 @@ protected:
     KPrAnimationDirector * m_animationDirector;
     KPrAnimationDirector * m_pvAnimationDirector;
     KPrPresenterViewWidget * m_presenterViewWidget;
-    KPrViewModePresenterView *m_presenterViewMode;
 
-    KPrPresenterViewTool * m_presenterViewTool;
     KPrEndOfSlideShowPage * m_endOfSlideShowPage;
 };
 

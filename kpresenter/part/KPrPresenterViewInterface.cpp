@@ -44,7 +44,6 @@
 
 #include "KPrNotes.h"
 #include "KPrPage.h"
-#include "KPrViewModePresenterView.h"
 
 /* KPrPresenterViewBaseInterface */
 KPrPresenterViewBaseInterface::KPrPresenterViewBaseInterface( KoPADocument *document, QWidget *parent )
