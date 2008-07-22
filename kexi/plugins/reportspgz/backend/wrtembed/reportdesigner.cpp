@@ -1190,14 +1190,21 @@ void ReportDesigner::sectionContextMenuEvent ( ReportScene * s, QGraphicsSceneCo
 	QAction *popCut = 0;
 	QAction *popCopy = 0;
 	QAction *popPaste = 0;
+	QAction* popDelete = 0;
 
-	if ( selectionCount() > 0 )
+	bool itemsSelected = selectionCount() > 0;
+	if ( itemsSelected )
 	{
 		popCut = pop.addAction ( i18n ( "Cut" ) );
 		popCopy = pop.addAction ( i18n ( "Copy" ) );
 	}
 	if ( sectionData->copy_list.count() > 0 )
 		popPaste = pop.addAction ( i18n ( "Paste" ) );
+
+	if ( itemsSelected ) {
+		pop.addSeparator();
+		popDelete = pop.addAction( i18n( "Delete" ) );
+	}
 
 	QAction * ret = pop.exec ( e->screenPos() );
 	if ( ret == popCut )
@@ -1206,6 +1213,8 @@ void ReportDesigner::sectionContextMenuEvent ( ReportScene * s, QGraphicsSceneCo
 		slotEditCopy();
 	else if ( ret == popPaste )
 		slotEditPaste ( s, e->scenePos() );
+	else if ( ret == popDelete )
+		slotEditDelete();
 }
 
 void ReportDesigner::sectionMouseReleaseEvent ( ReportSceneView * v, QMouseEvent * e )
