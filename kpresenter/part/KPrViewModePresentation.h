@@ -76,6 +76,8 @@ public:
      */
     void navigate( KPrAnimationDirector::Navigation navigation );
 
+    void navigateToPage( KoPAPageBase * page );
+
     KPrPresentationTool *presentationTool();
     void setPresenterViewTool( KPrPresenterViewTool *tool );
 

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
  * Copyright (C) 2007-2008 Thorsten Zachmann <zachmann@kde.org>
+ * Copyright (C) 2008 Fredy Yanardi <fyanardi@kde.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -215,7 +216,10 @@ void KPrViewModePresentation::deactivate()
 
 void KPrViewModePresentation::updateActivePage( KoPAPageBase *page )
 {
-    // m_view->setActivePage( page );
+    m_view->setActivePage( page );
+    if ( m_presenterViewWidget ) {
+        m_presenterViewWidget->setActivePage( page );
+    }
 }
 
 void KPrViewModePresentation::activateSavedViewMode()
@@ -237,6 +241,14 @@ void KPrViewModePresentation::navigate( KPrAnimationDirector::Navigation navigat
 
     if ( finished ) {
         activateSavedViewMode();
+    }
+}
+
+void KPrViewModePresentation::navigateToPage( KoPAPageBase * page )
+{
+    m_animationDirector->navigateToPage( page );
+    if ( m_pvAnimationDirector ) {
+        m_pvAnimationDirector->navigateToPage( page );
     }
 }
 

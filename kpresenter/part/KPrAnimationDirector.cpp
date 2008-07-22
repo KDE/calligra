@@ -225,7 +225,7 @@ QPair<KPrShapeAnimation *, KPrAnimationData *> KPrAnimationDirector::shapeAnimat
 void KPrAnimationDirector::updateActivePage( KoPAPageBase * page )
 {
     if ( m_canvas == m_view->kopaCanvas() ) {
-        m_view->setActivePage( page );
+        m_view->viewMode()->updateActivePage( page );
     }
     else {
         QList<KoShape*> shapes = page->iterator();

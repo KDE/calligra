@@ -127,15 +127,12 @@ void KPrPresenterViewWidget::requestNextSlide()
 
 void KPrPresenterViewWidget::requestChangePage( KoPAPageBase *page, bool enableMainView )
 {
-    /* if ( enableMainView ) {
+    if ( enableMainView ) {
         m_toolWidget->toggleSlideThumbnails( false );
     }
-    m_presenterView->animationDirector()->navigateToPage( page );
+    m_viewMode->navigateToPage( page );
     m_mainWidget->setActivePage( page );
     m_slidesWidget->setActivePage( page );
-
-    KPrViewModePresentation *presentationMode = m_presenterView->presentationMode();
-    presentationMode->animationDirector()->navigateToPage( page ); */
 }
 
 #include "KPrPresenterViewWidget.moc"
