@@ -32,6 +32,7 @@ signals:
     void thinningChanged(double);
     void angleChanged(int);
     void fixationChanged(double);
+    void capsChanged(double);
     void massChanged(double);
     void dragChanged(double);
 
@@ -45,14 +46,20 @@ private slots:
     void toggleDetails();
 
 private:
+    // TODO: maybe make it a hash?? <QString, QVariant>
+    //       is it needed al all??
     struct Profile
     {
         QString name;
         int index; // index in the config file
+        bool usePath;
+        bool usePressure;
+        bool useAngle;
         double width;
         double thinning;
         int angle;
         double fixation;
+        bool caps;
         double mass;
         double drag;
     };

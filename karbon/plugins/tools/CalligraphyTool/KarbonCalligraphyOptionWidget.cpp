@@ -128,9 +128,9 @@ KarbonCalligraphyOptionWidget::KarbonCalligraphyOptionWidget()
 
     toggleDetails();
 
+    createConnections();
     addDefaultProfiles(); // if they are already added does nothing
     loadProfiles();
-    createConnections();
 }
 
 KarbonCalligraphyOptionWidget::~KarbonCalligraphyOptionWidget()
@@ -152,6 +152,7 @@ void KarbonCalligraphyOptionWidget::emitAll()
     emit thinningChanged( thinningBox->value() );
     emit angleChanged( angleBox->value() );
     emit fixationChanged( fixationBox->value() );
+    emit capsChanged( capsBox->value() );
     emit massChanged( massBox->value() );
     emit dragChanged( dragBox->value() );
 }
@@ -286,6 +287,9 @@ void KarbonCalligraphyOptionWidget::createConnections()
     connect( fixationBox, SIGNAL(valueChanged(double)),
              SIGNAL(fixationChanged(double)) );
 
+    connect( capsBox, SIGNAL(valueChanged(double)),
+             SIGNAL(capsChanged(double)) );
+
     connect( massBox, SIGNAL(valueChanged(double)),
              SIGNAL(massChanged(double)) );
 
@@ -315,6 +319,9 @@ void KarbonCalligraphyOptionWidget::createConnections()
     connect( fixationBox, SIGNAL(valueChanged(double)),
              SLOT(updateCurrentProfile()) );
 
+    connect( capsBox, SIGNAL(valueChanged(double)),
+             SLOT(updateCurrentProfile()) );
+
     connect( massBox, SIGNAL(valueChanged(double)),
              SLOT(updateCurrentProfile()) );
 
@@ -342,19 +349,27 @@ void KarbonCalligraphyOptionWidget::addDefaultProfiles()
 
     KConfigGroup profile0( &config, "Profile0" );
     profile0.writeEntry( "name", i18n("Mouse") );
+    profile0.writeEntry( "usePath", false );
+    profile0.writeEntry( "usePressure", false );
+    profile0.writeEntry( "useAngle", false );
     profile0.writeEntry( "width", 30.0 );
     profile0.writeEntry( "thinning", 0.2 );
     profile0.writeEntry( "angle", 30 );
     profile0.writeEntry( "fixation", 1.0 );
+    profile0.writeEntry( "caps", 0.0 );
     profile0.writeEntry( "mass", 3.0 );
     profile0.writeEntry( "drag", 0.7 );
 
     KConfigGroup profile1( &config, "Profile1" );
     profile1.writeEntry( "name", i18n("Graphics Pen") );
     profile1.writeEntry( "width", 50.0 );
+    profile1.writeEntry( "usePath", false );
+    profile1.writeEntry( "usePressure", false );
+    profile1.writeEntry( "useAngle", false );
     profile1.writeEntry( "thinning", 0.2 );
     profile1.writeEntry( "angle", 30 );
     profile1.writeEntry( "fixation", 1.0 );
+    profile1.writeEntry( "caps", 0.0 );
     profile1.writeEntry( "mass", 1.0 );
     profile1.writeEntry( "drag", 0.9 );
 
@@ -380,13 +395,17 @@ void KarbonCalligraphyOptionWidget::loadProfiles()
 
         Profile *profile = new Profile;
         profile->index = 1;
-        profile->name =     profileGroup.readEntry( "name", QString() );
-        profile->width =    profileGroup.readEntry( "width", 30.0 );
-        profile->thinning = profileGroup.readEntry( "thinning", 0.2 );
-        profile->angle =    profileGroup.readEntry( "angle", 30 );
-        profile->fixation = profileGroup.readEntry( "fixation", 0.0 );
-        profile->mass =     profileGroup.readEntry( "mass", 3.0 );
-        profile->drag =     profileGroup.readEntry( "drag", 0.7 );
+        profile->name =         profileGroup.readEntry( "name", QString() );
+        profile->usePath =      profileGroup.readEntry( "usePath", false );
+        profile->usePressure =  profileGroup.readEntry( "usePressure", false );
+        profile->useAngle =     profileGroup.readEntry( "useAngle", false );
+        profile->width =        profileGroup.readEntry( "width", 30.0 );
+        profile->thinning =     profileGroup.readEntry( "thinning", 0.2 );
+        profile->angle =        profileGroup.readEntry( "angle", 30 );
+        profile->fixation =     profileGroup.readEntry( "fixation", 0.0 );
+        profile->caps =         profileGroup.readEntry( "caps", 0.0 );
+        profile->mass =         profileGroup.readEntry( "mass", 3.0 );
+        profile->drag =         profileGroup.readEntry( "drag", 0.7 );
 
         profiles.insert( profile->name, profile );
         ++i;
@@ -421,10 +440,14 @@ void KarbonCalligraphyOptionWidget::loadCurrentProfile()
     Profile *profile = profiles[currentProfile];
 
     changingProfile = true;
+    usePath->setChecked( profile->usePath );
+    usePressure->setChecked( profile->usePressure );
+    useAngle->setChecked( profile->useAngle );
     widthBox->setValue( profile->width );
     thinningBox->setValue( profile->thinning );
     angleBox->setValue( profile->angle );
     fixationBox->setValue( profile->fixation );
+    capsBox->setValue( profile->caps );
     massBox->setValue( profile->mass );
     dragBox->setValue( profile->drag );
     changingProfile = false;
@@ -435,10 +458,14 @@ void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
 
     Profile *profile = new Profile;
     profile->name = name;
+    profile->usePath = usePath->isChecked();
+    profile->usePressure = usePressure->isChecked();
+    profile->useAngle = useAngle->isChecked();
     profile->width = widthBox->value();
     profile->thinning = thinningBox->value();
     profile->angle = angleBox->value();
     profile->fixation = fixationBox->value();
+    profile->caps = capsBox->value();
     profile->mass = massBox->value();
     profile->drag = dragBox->value();
 
@@ -461,10 +488,14 @@ void KarbonCalligraphyOptionWidget::saveProfile( const QString &name )
     KConfigGroup profileGroup( &config, str );
 
     profileGroup.writeEntry( "name", name );
+    profileGroup.writeEntry( "usePath", profile->usePath );
+    profileGroup.writeEntry( "usePressure", profile->usePressure );
+    profileGroup.writeEntry( "useAngle", profile->useAngle );
     profileGroup.writeEntry( "width", profile->width );
     profileGroup.writeEntry( "thinning", profile->thinning );
     profileGroup.writeEntry( "angle", profile->angle );
     profileGroup.writeEntry( "fixation", profile->fixation );
+    profileGroup.writeEntry( "caps", profile->caps );
     profileGroup.writeEntry( "mass", profile->mass );
     profileGroup.writeEntry( "drag", profile->drag );
 
@@ -516,10 +547,14 @@ void KarbonCalligraphyOptionWidget::removeProfile(const QString &name)
 
     KConfigGroup profileGroup( &config, deletedGroup );
     profileGroup.writeEntry( "name", profile->name );
+    profileGroup.writeEntry( "usePath", profile->usePath );
+    profileGroup.writeEntry( "usePressure", profile->usePressure );
+    profileGroup.writeEntry( "useAngle", profile->useAngle );
     profileGroup.writeEntry( "width", profile->width );
     profileGroup.writeEntry( "thinning", profile->thinning );
     profileGroup.writeEntry( "angle", profile->angle );
     profileGroup.writeEntry( "fixation", profile->fixation );
+    profileGroup.writeEntry( "caps", profile->caps );
     profileGroup.writeEntry( "mass", profile->mass );
     profileGroup.writeEntry( "drag", profile->drag );
     config.sync();
