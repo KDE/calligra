@@ -238,9 +238,7 @@ protected Q_SLOTS:
     void gotoCell();
     void spellCheck();
     void inspector();
-#ifndef NDEBUG
     void qTableView();
-#endif
     void sheetFormat();
     void listChoosePopupMenu();
     void listChooseItemSelected(QAction*);

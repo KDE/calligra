@@ -3158,9 +3158,9 @@ void CellToolBase::inspector()
     delete ins;
 }
 
-#ifndef NDEBUG
 void CellToolBase::qTableView()
 {
+#ifndef NDEBUG
     KDialog* const dialog = new KDialog(m_canvas->canvasWidget());
     QTableView* const view = new QTableView(dialog);
 //     ReadOnlyTableModel* const model = new ReadOnlyTableModel(selection()->activeSheet());
@@ -3171,8 +3171,8 @@ void CellToolBase::qTableView()
     dialog->exec();
     delete dialog;
     delete model;
-}
 #endif
+}
 
 void CellToolBase::sheetFormat()
 {
