@@ -45,7 +45,7 @@ public:
     NodeChartModel( QObject *parent = 0 );
     virtual ~NodeChartModel() {}
     
-    enum UserId { None = 0, BCWS, BCWP, ACWP };
+    enum UserId { None = 0, AxisSet = None, BCWS, BCWP, ACWP, X_AxisSet, Y_AxisSet, X_Axis, Y_Axis };
     
     void setProject( Project *project );
     
@@ -60,6 +60,8 @@ public:
     /// Create an index for the @p number in the axis set @p index
     ChartDataIndex index( int number, const ChartDataIndex &idx ) const;
     
+    /// Return the parent ChartAxisIndex of @p index
+    virtual ChartAxisIndex parent( const ChartAxisIndex &index ) const;
     /// Return the number if axis sets with @p parent in this model
     virtual int axisCount( const ChartAxisIndex &parent = ChartAxisIndex() ) const;
     /// Return data for @p role for the axis set @p index
@@ -77,6 +79,21 @@ public:
     QDate startDate() const;
     QDate endDate() const;
     
+    struct DataShown {
+        bool showCost;
+        bool showBCWSCost;
+        bool showBCWPCost;
+        bool showACWPCost;
+        
+        bool showEffort;
+        bool showBCWSEffort;
+        bool showBCWPEffort;
+        bool showACWPEffort;
+    };
+
+    void setDataShown( const DataShown &show );
+    DataShown dataShown() const { return m_dataShown; }
+            
 public slots:
     void setScheduleManager( ScheduleManager *sm );
     void slotNodeChanged( Node *node );
@@ -91,6 +108,9 @@ private:
     
     EffortCostMap m_bcwp;
     EffortCostMap m_acwp;
+    
+    DataShown m_dataShown;
+
 };
 
 

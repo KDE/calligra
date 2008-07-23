@@ -132,7 +132,7 @@ void ItemViewSettup::setDefault()
 
 //---------------------------
 ItemViewSettupDialog::ItemViewSettupDialog( TreeViewBase *view, bool includeColumn0, QWidget *parent )
-    : KDialog( parent )
+    : KPageDialog( parent )
 {
     setCaption( i18n("View Settings") );
     setButtons( Ok|Cancel|Default );
@@ -141,13 +141,31 @@ ItemViewSettupDialog::ItemViewSettupDialog( TreeViewBase *view, bool includeColu
 
     button( Default )->setEnabled( ! view->defaultColumns().isEmpty() );
     
-    m_panel = new ItemViewSettup( view, includeColumn0, this );
-    setMainWidget( m_panel );
+    m_panel = new ItemViewSettup( view, includeColumn0 );
+    KPageWidgetItem *page = new KPageWidgetItem( m_panel, i18n( "Tree View" ) );
+    page->setHeader( i18n( "Tree View Column Configuration" ) );
+    addPage( page );
+    m_pageList.append( page );
     
     //connect( m_panel, SIGNAL( enableButtonOk( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
     
     connect( this, SIGNAL( okClicked() ), m_panel, SLOT( slotOk() ) );
     connect( this, SIGNAL( defaultClicked() ), m_panel, SLOT( setDefault() ) );
+}
+
+KPageWidgetItem *ItemViewSettupDialog::insertWidget( int index, QWidget *widget, const QString &name, const QString &header )
+{
+    KPageWidgetItem *before = m_pageList.value( index );
+    KPageWidgetItem *page = new KPageWidgetItem( widget, name );
+    page->setHeader( header );
+    if ( before ) {
+        insertPage( before, page );
+        m_pageList.insert( index, page );
+    } else {
+        addPage( page );
+        m_pageList.append( page );
+    }
+    return page;
 }
 
 //-------------------------------

@@ -421,8 +421,21 @@ ProjectStatusView::ProjectStatusView( KoDocument *part, QWidget *parent )
     m_view = new PerformanceStatusBase( this );
     l->addWidget( m_view );
     setupGui();
+    
+    connect( m_view, SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+
 
 }
+
+void ProjectStatusView::slotHeaderContextMenuRequested( const QPoint &pos )
+{
+    kDebug();
+    QList<QAction*> lst = contextActionList();
+    if ( ! lst.isEmpty() ) {
+        QMenu::exec( lst, pos,  lst.first() );
+    }
+}
+
 
 void ProjectStatusView::setScheduleManager( ScheduleManager *sm )
 {
@@ -456,14 +469,16 @@ void ProjectStatusView::setGuiActive( bool activate )
 void ProjectStatusView::setupGui()
 {
     // Add the context menu actions for the view options
-/*    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
+    actionOptions = new KAction(KIcon("configure"), i18n("Configure..."), this);
     connect(actionOptions, SIGNAL(triggered(bool) ), SLOT(slotOptions()));
-    addContextAction( actionOptions );*/
+    addContextAction( actionOptions );
 }
 
 void ProjectStatusView::slotOptions()
 {
     kDebug();
+    ProjectStatusViewSettingsDialog dlg( m_view );
+    dlg.exec();
 }
 
 bool ProjectStatusView::loadContext( const KoXmlElement &context )
@@ -485,6 +500,16 @@ PerformanceStatusBase::PerformanceStatusBase( QWidget *parent )
     setupUi( this );
     plotwidget->setAntialiasing(false);
     connect( &m_model, SIGNAL( reset() ), SLOT( slotReset() ) );
+    
+    setContextMenuPolicy ( Qt::DefaultContextMenu );
+    connect( this, SIGNAL( contextMenuRequested( const QPoint& ) ), SLOT( slotContextMenuRequested( const QPoint& ) ) );
+    
+}
+
+void PerformanceStatusBase::contextMenuEvent( QContextMenuEvent *event )
+{
+    kDebug()<<event->globalPos();
+    emit customContextMenuRequested( event->globalPos() );
 }
 
 void PerformanceStatusBase::slotReset()
@@ -548,91 +573,145 @@ void PerformanceStatusBase::drawPlot( Project &p, ScheduleManager &sm )
     plotwidget->resetPlot();
     int axisCount = m_model.axisCount();
     for ( int i = 0; i < axisCount; ++i ) {
+        kDebug()<<i<<"of"<<axisCount;
         ChartAxisIndex ai = m_model.axisIndex( i );
         if ( ! ai.isValid() ) {
             continue;
         }
-        drawAxis( ai );
+        QList<QPointF> range = drawAxis( ai );
+        kDebug()<<i<<range;
+        if ( i == 0 ) {
+            plotwidget->setLimits( range[0].x(), range[0].y(), range[1].x(), range[1].y()  );
+            //kDebug()<<"Primary:"<<plotwidget->dataRect();
+        }
+        if ( i == 1 ) {
+            plotwidget->setSecondaryLimits( range[0].x(), range[0].y(), range[1].x(), range[1].y() );
+            //kDebug()<<"Secondary:"<<plotwidget->secondaryDataRect();
+        }
         drawData( ai );
     }
    
 }
 
-void PerformanceStatusBase::drawAxis( const ChartAxisIndex &idx ) 
+QList<QPointF> PerformanceStatusBase::drawAxis( const ChartAxisIndex &idx ) 
 {
     //kDebug();
     int axisCount = m_model.axisCount( idx );
-    QList<double> range;
+    QList<QPointF> range;
     for ( int i = 0; i < axisCount; ++i ) {
         ChartAxisIndex ai = m_model.axisIndex( i, idx );
         if ( ! ai.isValid() ) {
             continue;
         }
-        if ( m_model.hasAxisChildren( ai ) ) {
-            kDebug()<<"multiple axis";
-        } else {
-            range << m_model.axisData( ai, AbstractChartModel::AxisMinRole ).toDouble();
-            range << m_model.axisData( ai, AbstractChartModel::AxisMaxRole ).toDouble();
-            int type = m_model.axisData( ai, AbstractChartModel::AxisTypeRole ).toInt();
-            if ( type == AbstractChartModel::Axis_X ) {
+        int type = m_model.axisData( ai, AbstractChartModel::AxisTypeRole ).toInt();
+        if ( type == AbstractChartModel::Axis_X ) {
+            //kDebug()<<"add x-axis";
+            range.prepend ( QPointF ( m_model.axisData( ai, AbstractChartModel::AxisMinRole ).toDouble(), m_model.axisData( ai, AbstractChartModel::AxisMaxRole ).toDouble() ) );
+            if ( idx.number() == 0 ) {
                 plotwidget->axis( KPlotWidget::BottomAxis )->setLabel( m_model.axisData( ai, Qt::DisplayRole ).toString() );
-            } else if ( type == AbstractChartModel::Axis_Y ) {
-                plotwidget->axis( KPlotWidget::LeftAxis )->setLabel( m_model.axisData( ai, Qt::DisplayRole ).toString() );
+            } else {
+                plotwidget->axis( KPlotWidget::TopAxis )->setLabel( m_model.axisData( ai, Qt::DisplayRole ).toString() );
+                plotwidget->axis( KPlotWidget::TopAxis )->setTickLabelsShown( true );
+            }
+        } else if ( type == AbstractChartModel::Axis_Y ) {
+            //kDebug()<<"add y-axis"<<idx<<ai;
+            range.append ( QPointF ( m_model.axisData( ai, AbstractChartModel::AxisMinRole ).toDouble(), m_model.axisData( ai, AbstractChartModel::AxisMaxRole ).toDouble() ) );
+            if ( idx.number() == 0 ) {
+                QString s = m_model.axisData( ai, Qt::DisplayRole ).toString();
+                //kDebug()<<"LeftAxis:"<<s;
+                plotwidget->axis( KPlotWidget::LeftAxis )->setLabel( s );
+            } else {
+                QString s = m_model.axisData( ai, Qt::DisplayRole ).toString();
+                //kDebug()<<"RightAxis:"<<s;
+                plotwidget->axis( KPlotWidget::RightAxis )->setLabel( s );
+                plotwidget->axis( KPlotWidget::RightAxis )->setTickLabelsShown( true );
             }
         }
+        //kDebug()<<range;
     }
-    kDebug()<<range;
-    plotwidget->setLimits( range[0], range[1], range[2], range[3] );
+    return range;
 }
 
 void PerformanceStatusBase::drawData( const ChartAxisIndex &axisSet ) 
 {
-    //kDebug();
+    //kDebug()<<axisSet;
     int dataCount = m_model.dataSetCount( axisSet );
     for ( int i = 0; i < dataCount; ++i ) {
         ChartDataIndex di = m_model.index( i, axisSet );
         if ( ! di.isValid() ) {
-            //kDebug()<<"Invalid index";
+            //kDebug()<<"Invalid index"<<di;
             continue;
         }
         if ( m_model.hasChildren( di ) ) {
-            kDebug()<<"sections";
+            //kDebug()<<"sections";
             int c = m_model.childCount( di );
             for ( int ii = 0; ii < c; ++ii ) {
                 ChartDataIndex cidx = m_model.index( ii, di );
                 drawData( cidx, axisSet );
             }
         } else {
-            //kDebug()<<"no sections, go direct to data";
+            //kDebug()<<"no sections, go direct to data"<<di;
             drawData( di, axisSet );
         }
     }
 }
 
-void PerformanceStatusBase::drawData( const ChartDataIndex &index, const ChartAxisIndex &axisSet ) 
+void PerformanceStatusBase::drawData( const ChartDataIndex &index, const ChartAxisIndex &axisSet )
 {
-    //kDebug()<<index.number()<<index.userData;
+    //kDebug()<<index;
     QVariantList data;
     int axisCount = m_model.axisCount( axisSet );
-    for ( int j = 0; j < axisCount; ++j ) {
-        ChartAxisIndex axis = m_model.axisIndex( j, axisSet );
-        if ( m_model.hasAxisChildren( axis ) ) {
-            //kDebug()<<"multiple axis";
-        } else {
-            data << m_model.data( index, axis );
-        }
+    for ( int i = 0; i < axisCount; ++i ) {
+        ChartAxisIndex axis = m_model.axisIndex( i, axisSet );
+        //kDebug()<<"data axis"<<axis<<" set="<<axisSet;
+        data << m_model.data( index, axis );
     }
     //kDebug()<<data;
-    Q_ASSERT( data.count() == 2 );
-    QVariantList x = data[0].toList();
-    QVariantList y = data[1].toList();
-    QVariant color = m_model.data( index, Qt::ForegroundRole );
+    QVariantList xlst = data[0].toList();
+    QVariantList ylst = data[1].toList();
+    QVariant color = m_model.data( index, axisSet, Qt::ForegroundRole );
     KPlotObject *kpo = new KPlotObject( color.value<QColor>(), KPlotObject::Lines, 4 );
-    for (int i = 0; i < y.count(); ++i ) {
+    double factor = plotwidget->dataRect().height() / plotwidget->secondaryDataRect().height();
+    for (int i = 0; i < ylst.count(); ++i ) {
         //kDebug()<<"Add point:"<<x[i].toInt() << y[i].toDouble();
-        kpo->addPoint( x[i].toInt(), y[i].toDouble() );
+        double y = ylst[i].toDouble();
+        if ( axisSet.number() == 1 ) {
+            y *= factor;
+        }
+        kpo->addPoint( xlst[i].toInt(), y );
     }
     plotwidget->addPlotObject( kpo );
+}
+
+bool PerformanceStatusBase::loadContext( const KoXmlElement &context )
+{
+    kDebug();
+    NodeChartModel::DataShown show;
+    show.showCost = context.attribute( "show-cost", "1" ).toInt();
+    show.showBCWSCost = context.attribute( "show-bcws-cost", "1" ).toInt();
+    show.showBCWPCost = context.attribute( "show-bcwp-cost", "1" ).toInt();
+    show.showACWPCost = context.attribute( "show-acwp-cost", "1" ).toInt();
+    
+    show.showEffort = context.attribute( "show-effort", "1" ).toInt();
+    show.showBCWSEffort = context.attribute( "show-bcws-effort", "1" ).toInt();
+    show.showBCWPEffort = context.attribute( "show-bcwp-effort", "1" ).toInt();
+    show.showACWPEffort = context.attribute( "show-acwp-effort", "1" ).toInt();
+    model()->setDataShown( show );
+    return true;
+}
+
+void PerformanceStatusBase::saveContext( QDomElement &context ) const
+{
+    NodeChartModel::DataShown show = model()->dataShown();
+    context.setAttribute( "show-cost", show.showCost );
+    context.setAttribute( "show-bcws-cost", show.showBCWSCost );
+    context.setAttribute( "show-bcwp-cost", show.showBCWPCost );
+    context.setAttribute( "show-acwp-cost", show.showACWPCost );
+    
+    context.setAttribute( "show-effort",  show.showEffort );
+    context.setAttribute( "show-bcws-effort", show.showBCWSEffort );
+    context.setAttribute( "show-bcwp-effort", show.showBCWPEffort );
+    context.setAttribute( "show-acwp-effort", show.showACWPEffort );
 }
 
 //-----------------------------------
@@ -692,12 +771,22 @@ void PerformanceStatusTreeView::setProject( Project *project )
 bool PerformanceStatusTreeView::loadContext( const KoXmlElement &context )
 {
     kDebug();
-    return m_tree->loadContext( nodeModel()->columnMap(), context );
+    
+    bool res = false;
+    res = m_chart->loadContext( context.namedItem( "chart" ).toElement() );
+    res &= m_tree->loadContext( nodeModel()->columnMap(), context.namedItem( "tree" ).toElement() );
+    return res;
 }
 
 void PerformanceStatusTreeView::saveContext( QDomElement &context ) const
 {
-    m_tree->saveContext( nodeModel()->columnMap(), context );
+    QDomElement c = context.ownerDocument().createElement( "chart" );
+    context.appendChild( c );
+    m_chart->saveContext( c );
+    
+    QDomElement t = context.ownerDocument().createElement( "tree" );
+    context.appendChild( t );
+    m_tree->saveContext( nodeModel()->columnMap(), t );
 }
 
 //-----------------------------------
@@ -713,6 +802,7 @@ PerformanceStatusView::PerformanceStatusView( KoDocument *part, QWidget *parent 
     setupGui();
 
     connect( m_view->treeView(), SIGNAL( headerContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
+    connect( m_view->chartView(), SIGNAL( customContextMenuRequested( const QPoint& ) ), SLOT( slotHeaderContextMenuRequested( const QPoint& ) ) );
 
     connect( m_view->treeView(), SIGNAL( contextMenuRequested( const QModelIndex&, const QPoint& ) ), SLOT( slotContextMenuRequested( const QModelIndex&, const QPoint& ) ) );
 }
@@ -760,7 +850,7 @@ void PerformanceStatusView::slotContextMenuRequested( Node *node, const QPoint& 
         default:
             break;
     }
-    kDebug()<<name;
+    //kDebug()<<name;
     if ( name.isEmpty() ) {
         return;
     }
@@ -802,7 +892,7 @@ void PerformanceStatusView::setupGui()
 void PerformanceStatusView::slotOptions()
 {
     kDebug();
-    ItemViewSettupDialog dlg( m_view->treeView(), true );
+    PerformanceStatusViewSettingsDialog dlg( m_view );
     dlg.exec();
 }
 
@@ -815,6 +905,82 @@ bool PerformanceStatusView::loadContext( const KoXmlElement &context )
 void PerformanceStatusView::saveContext( QDomElement &context ) const
 {
     m_view->saveContext( context );
+}
+
+//------------------------------------------------
+PerformanceStatusViewSettingsPanel::PerformanceStatusViewSettingsPanel( PerformanceStatusBase *view, QWidget *parent )
+    : QWidget( parent ),
+    m_view( view )
+{
+    setupUi( this );
+    
+    NodeChartModel::DataShown show = m_view->dataShown();
+
+    ui_bcwsCost->setCheckState( show.showBCWSCost ? Qt::Checked : Qt::Unchecked );
+    ui_bcwpCost->setCheckState( show.showBCWPCost ? Qt::Checked : Qt::Unchecked );
+    ui_acwpCost->setCheckState( show.showACWPCost ? Qt::Checked : Qt::Unchecked );
+    ui_cost->setChecked( show.showCost );
+
+    ui_bcwsEffort->setCheckState( show.showBCWSEffort ? Qt::Checked : Qt::Unchecked );
+    ui_bcwpEffort->setCheckState( show.showBCWPEffort ? Qt::Checked : Qt::Unchecked );
+    ui_acwpEffort->setCheckState( show.showACWPEffort ? Qt::Checked : Qt::Unchecked );
+    ui_effort->setChecked( show.showEffort );
+}
+
+void PerformanceStatusViewSettingsPanel::slotOk()
+{
+    NodeChartModel::DataShown show;
+    show.showBCWSCost = ui_bcwsCost->checkState() == Qt::Unchecked ? false : true;
+    show.showBCWPCost = ui_bcwpCost->checkState() == Qt::Unchecked ? false : true;
+    show.showACWPCost = ui_acwpCost->checkState() == Qt::Unchecked ? false : true;
+    show.showCost = ui_cost->isChecked();
+
+    show.showBCWSEffort = ui_bcwsEffort->checkState() == Qt::Unchecked ? false : true;
+    show.showBCWPEffort = ui_bcwpEffort->checkState() == Qt::Unchecked ? false : true;
+    show.showACWPEffort = ui_acwpEffort->checkState() == Qt::Unchecked ? false : true;
+    show.showEffort = ui_effort->isChecked();
+    m_view->setDataShown( show );
+}
+
+void PerformanceStatusViewSettingsPanel::setDefault()
+{
+    ui_bcwsCost->setCheckState( Qt::Checked );
+    ui_bcwpCost->setCheckState( Qt::Checked );
+    ui_acwpCost->setCheckState( Qt::Checked );
+    ui_cost->setChecked( Qt::Checked );
+
+    ui_bcwsEffort->setCheckState( Qt::Checked );
+    ui_bcwpEffort->setCheckState( Qt::Checked );
+    ui_acwpEffort->setCheckState( Qt::Checked );
+    ui_effort->setChecked( Qt::Unchecked );
+}
+
+//-----------------
+PerformanceStatusViewSettingsDialog::PerformanceStatusViewSettingsDialog( PerformanceStatusTreeView *view, QWidget *parent )
+    : ItemViewSettupDialog( view->treeView(), true, parent )
+{
+    PerformanceStatusViewSettingsPanel *panel = new PerformanceStatusViewSettingsPanel( view->chartView(), this );
+    KPageWidgetItem *page = insertWidget( 0, panel, i18n( "Chart" ), i18n( "Chart Settings" ) );
+    setCurrentPage( page );
+    //connect( panel, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
+    
+    connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
+    connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
+}
+
+//-----------------
+ProjectStatusViewSettingsDialog::ProjectStatusViewSettingsDialog( PerformanceStatusBase *view, QWidget *parent )
+    : KPageDialog( parent )
+{
+    PerformanceStatusViewSettingsPanel *panel = new PerformanceStatusViewSettingsPanel( view, this );
+    KPageWidgetItem *page = new KPageWidgetItem( panel, i18n( "Chart" ) );
+    page->setHeader( i18n( "Chart Settings" ) );
+    addPage( page );
+
+    //connect( panel, SIGNAL( changed( bool ) ), this, SLOT( enableButtonOk( bool ) ) );
+    
+    connect( this, SIGNAL( okClicked() ), panel, SLOT( slotOk() ) );
+    connect( this, SIGNAL( defaultClicked() ), panel, SLOT( setDefault() ) );
 }
 
 

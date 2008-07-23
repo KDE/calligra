@@ -54,6 +54,10 @@ public:
     int number() const;
     /// Holds the user defined data
     int userData;
+    /// Holds users info of this index's parent
+    int parentId;
+
+    QDebug debug( QDebug dbg) const;
 
 protected:
     int m_number;
@@ -81,6 +85,10 @@ public:
     int number() const;
     /// Holds the user defined data
     int userData;
+
+    ChartAxisIndex axisIndex() const { return m_axisIndex; }
+
+    QDebug debug( QDebug dbg) const;
 
 protected:
     int m_number;
@@ -139,6 +147,8 @@ public:
     /// Return true if @p parent has child data sets
     virtual bool hasChildren( const ChartDataIndex &parent ) const;
     
+    /// Return the parent ChartAxisIndex of @p index
+    virtual ChartAxisIndex parent( const ChartAxisIndex &index ) const;
     /// Return the number if axis with @p parent in this model
     virtual int axisCount( const ChartAxisIndex &parent = ChartAxisIndex() ) const = 0;
     /// Return data for @p role for the axis set @p index
@@ -160,10 +170,15 @@ protected:
     ChartDataIndex createDataIndex( int number, const ChartAxisIndex &axisIndex, int userdata = 0 ) const;
     ChartDataIndex createDataIndex( int number, const ChartDataIndex &parent, int userdata = 0 ) const;
 
-    ChartAxisIndex createAxisIndex( int number, const ChartAxisIndex &parent, int userdata = 0 ) const;
+    ChartAxisIndex createAxisIndex( int number, const ChartAxisIndex &parent, int userdata = 0, int parentId = -1 ) const;
 };
 
 
 } //namespace KPlato
+
+
+KPLATOMODELS_EXPORT QDebug operator<<( QDebug dbg, const KPlato::ChartAxisIndex& );
+
+KPLATOMODELS_EXPORT QDebug operator<<( QDebug dbg, const KPlato::ChartDataIndex& );
 
 #endif

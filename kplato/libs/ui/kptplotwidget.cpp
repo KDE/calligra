@@ -119,8 +119,8 @@ void PlotWidget::drawModel( Project &p, ScheduleManager &sm )
         if ( ! ai.isValid() ) {
             continue;
         }
-        drawAxis( ai );
-        drawData( ai );
+        //drawAxis( ai );
+        //drawData( ai );
     }
    
 }

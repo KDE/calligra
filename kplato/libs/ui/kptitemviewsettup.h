@@ -63,13 +63,16 @@ private:
     bool m_includeColumn0;
 };
 
-class ItemViewSettupDialog : public KDialog
+class ItemViewSettupDialog : public KPageDialog
 {
     Q_OBJECT
 public:
     explicit ItemViewSettupDialog( TreeViewBase *view, bool includeColumn0 = false, QWidget *parent = 0 );
 
+    KPageWidgetItem *insertWidget( int before, QWidget *widget, const QString &name, const QString &header );
+
 private:
+    QList<KPageWidgetItem*> m_pageList;
     ItemViewSettup *m_panel;
 };
 

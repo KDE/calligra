@@ -28,6 +28,7 @@
 #include "ui_kpttaskstatusviewsettingspanel.h"
 #include "kptitemviewsettup.h"
 #include "ui_kptperformancestatus.h"
+#include "ui_kptperformancestatusviewsettingspanel.h"
 #include "kptnodechartmodel.h"
 
 #include <QSplitter>
@@ -48,6 +49,7 @@ class Task;
 class ScheduleManager;
 class TaskStatusItemModel;
 class NodeItemModel;
+class PerformanceStatusViewSettingsPanel;
 
 typedef QList<Node*> NodeList;
 
@@ -176,10 +178,24 @@ public:
     void draw();
     NodeChartModel *model() const { return const_cast<NodeChartModel*>( &m_model ); }
     
+    void setDataShown( const NodeChartModel::DataShown &show ) {
+        model()->setDataShown( show );
+    }
+    NodeChartModel::DataShown dataShown() const {
+        return model()->dataShown();
+    }
+    
+    /// Loads context info into this view. Reimplement.
+    virtual bool loadContext( const KoXmlElement &/*context*/ );
+    /// Save context info from this view. Reimplement.
+    virtual void saveContext( QDomElement &/*context*/ ) const;
+    
 protected:
+    void contextMenuEvent( QContextMenuEvent *event );
+    
     void drawValues();
     void drawPlot( Project &p, ScheduleManager &sm );
-    void drawAxis( const ChartAxisIndex &idx );
+    QList<QPointF> drawAxis( const ChartAxisIndex &idx );
     void drawData( const ChartAxisIndex &idx );
     void drawData( const ChartDataIndex &index, const ChartAxisIndex &axisSet );
 
@@ -190,6 +206,7 @@ private:
     Project *m_project;
     ScheduleManager *m_manager;
     NodeChartModel m_model;
+    
 };
 
 //----------------------------------
@@ -220,6 +237,7 @@ protected:
     void updateActionsEnabled( bool on );
 
 private slots:
+    void slotHeaderContextMenuRequested( const QPoint &pos );
     void slotOptions();
 
 private:
@@ -248,6 +266,7 @@ public:
     virtual void saveContext( QDomElement &context ) const;
 
     TreeViewBase *treeView() const { return m_tree; }
+    PerformanceStatusBase *chartView() const { return m_chart; }
     
 protected slots:
     void slotSelectionChanged( const QItemSelection & selected, const QItemSelection & deselected );
@@ -302,6 +321,40 @@ private:
     // View options context menu
     KAction *actionOptions;
     
+};
+
+//--------------------------------------
+class PerformanceStatusViewSettingsPanel : public QWidget, public Ui::PerformanceStatusViewSettingsPanel
+{
+    Q_OBJECT
+public:
+    explicit PerformanceStatusViewSettingsPanel( PerformanceStatusBase *view, QWidget *parent = 0 );
+
+public slots:
+    void slotOk();
+    void setDefault();
+
+signals:
+    void changed();
+
+private:
+    PerformanceStatusBase *m_view;
+};
+
+class PerformanceStatusViewSettingsDialog : public ItemViewSettupDialog
+{
+    Q_OBJECT
+public:
+    PerformanceStatusViewSettingsDialog( PerformanceStatusTreeView *view, QWidget *parent = 0 );
+
+};
+
+class ProjectStatusViewSettingsDialog : public KPageDialog
+{
+    Q_OBJECT
+public:
+    ProjectStatusViewSettingsDialog( PerformanceStatusBase *view, QWidget *parent = 0 );
+
 };
 
 

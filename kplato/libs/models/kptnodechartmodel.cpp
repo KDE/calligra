@@ -36,6 +36,14 @@ NodeChartModel::NodeChartModel( QObject *parent )
     m_project( 0 ),
     m_manager( 0 )
 {
+    m_dataShown.showCost = true;
+    m_dataShown.showBCWSCost = true;
+    m_dataShown.showBCWPCost = true;
+    m_dataShown.showACWPCost = true;
+    m_dataShown.showEffort = true;
+    m_dataShown.showBCWSEffort = true;
+    m_dataShown.showBCWPEffort = true;
+    m_dataShown.showACWPEffort = true;
 }
 
 
@@ -78,6 +86,12 @@ void NodeChartModel::setScheduleManager( ScheduleManager *sm )
     emit reset();
 }
 
+void NodeChartModel::setDataShown( const NodeChartModel::DataShown &show )
+{
+    m_dataShown = show;
+    emit reset();
+}
+
 void NodeChartModel::calculate()
 {
     //kDebug()<<m_project<<m_manager<<m_nodes;
@@ -100,6 +114,24 @@ void NodeChartModel::calculate()
             }
         }
     }
+/* debug
+    EffortCostDayMap::ConstIterator it;
+    EffortCostDayMap::ConstIterator end = m_bcwp.days().constEnd();
+    for ( it = m_bcwp.days().constBegin(); it != end; ++it ) {
+        //kDebug()<<"Plan:"<<it.key()
+                <<it.value().effort().toString()
+                <<it.value().cost()
+                <<it.value().bcwpEffort()
+                <<it.value().bcwpCost();
+    }
+    end = m_acwp.days().constEnd();
+    for ( it = m_acwp.days().constBegin(); it != end; ++it ) {
+        //kDebug()<<"Actual:"<<it.key()
+                <<it.value().effort().toString()
+                <<it.value().cost();
+    }
+*/
+
 }
 
 void NodeChartModel::setNodes( const QList<Node*> &nodes )
@@ -129,7 +161,7 @@ int NodeChartModel::dataSetCount( const ChartAxisIndex &index ) const
     if ( m_project == 0 || m_manager == 0 ) {
         return 0;
     }
-    if ( index.isValid() && index.number() == 0 ) {
+    if ( index.isValid() && index.userData == AxisSet ) {
         return 3;
     }
     return 0;
@@ -144,10 +176,18 @@ QVariant NodeChartModel::data( const ChartDataIndex &idx, int role ) const
 {
     //kDebug()<<idx.number()<<idx.userData<<role;
     if ( role == Qt::ForegroundRole ) {
-        switch ( idx.userData ) {
-            case BCWS: return QColor( Qt::green );
-            case BCWP: return QColor( Qt::red );
-            case ACWP: return QColor( Qt::blue );
+        if ( idx.axisIndex().number() == 0 ) {
+            switch ( idx.userData ) {
+                case BCWS: return QColor( Qt::green );
+                case BCWP: return QColor( Qt::red );
+                case ACWP: return QColor( Qt::blue );
+            }
+        } else {
+            switch ( idx.userData ) {
+                case BCWS: return QColor( Qt::black );
+                case BCWP: return QColor( Qt::gray );
+                case ACWP: return QColor( Qt::yellow );
+            }
         }
     }
     return QVariant();
@@ -156,59 +196,116 @@ QVariant NodeChartModel::data( const ChartDataIndex &idx, int role ) const
 QVariant NodeChartModel::data( const ChartDataIndex &idx, const ChartAxisIndex &axis, int role ) const
 {
     //NOTE: Just return a "day number" for x-axis as the test PlotWidget doesn't handle dates
-    //kDebug()<<idx.number()<<idx.userData<<role;
+    //kDebug()<<idx.number()<<idx.userData<<role<<", "<<axis.number()<<axis.userData;
     if ( role == Qt::DisplayRole ) {
         int axisType = axis.userData;
+        bool cost_Y = m_dataShown.showCost && axis.parentId == 0;
+        bool effort_Y = m_dataShown.showEffort && ( m_dataShown.showCost ? axis.parentId == 1 : axis.parentId == 0 );
         switch ( idx.userData ) {
             case BCWS: {
                 QVariantList lst;
-                if ( axisType == Axis_X ) {
-                    QDate s = qMin( m_bcwp.startDate(), m_acwp.startDate() );
+                if ( axisType == X_Axis ) {
+                    //kDebug()<<"X-axis"<<idx<<axis;
+                    QDate s = startDate();
                     foreach ( QDate d, m_bcwp.days().keys() ) {
                         lst << s.daysTo( d );
                     }
-                } else if ( axisType == Axis_Y ) {
-                    double c = 0.0;
-                    foreach ( const EffortCost &v, m_bcwp.days().values() ) {
-                        c += v.cost();
-                        lst << c;
+                } else if ( axisType == Y_Axis ) {
+                    //kDebug()<<"Y-axis"<<idx.number()<<axis.number();
+                    if ( cost_Y ) {
+                        //kDebug()<<"Y-axis, Cost"<<idx;
+                        double c = 0.0;
+                        foreach ( const EffortCost &v, m_bcwp.days().values() ) {
+                            c += v.cost();
+                            lst << c;
+                        }
+                    } else if ( effort_Y ) {
+                        //kDebug()<<"Y-axis, Hours"<<idx;
+                        double c = 0.0;
+                        foreach ( const EffortCost &v, m_bcwp.days().values() ) {
+                            c += v.effort().toDouble( Duration::Unit_h );
+                            lst << c;
+                        }
                     }
                 }
+                //kDebug()<<"BCWS"<<idx<<lst;
                 return lst;
                 break; }
             case BCWP: {
                 QVariantList lst;
-                if ( axisType == Axis_X ) {
-                    QDate s = qMin( m_bcwp.startDate(), m_acwp.startDate() );
+                if ( axisType == X_Axis ) {
+                    //kDebug()<<"X-axis"<<idx<<axis;
+                    QDate s = startDate();
                     foreach ( QDate d, m_bcwp.days().keys() ) {
                         lst << s.daysTo( d );
                     }
-                } else if ( axisType == Axis_Y ) {
-                    foreach ( const EffortCost &v, m_bcwp.days().values() ) {
-                        lst << v.bcwpCost();
+                } else if ( axisType == Y_Axis ) {
+                    //kDebug()<<"Y-axis"<<idx<<axis;
+                    if ( cost_Y ) {
+                        //kDebug()<<"Y-axis, Cost"<<idx;
+                        foreach ( const EffortCost &v, m_bcwp.days().values() ) {
+                            lst << v.bcwpCost();
+                        }
+                    } else if ( effort_Y ) {
+                        //kDebug()<<"Y-axis, Hours"<<idx;
+                        foreach ( const EffortCost &v, m_bcwp.days().values() ) {
+                            lst << v.bcwpEffort();
+                        }
                     }
+
                 }
+                //kDebug()<<"BCWP"<<idx<<lst;
                 return lst;
                 break; }
             case ACWP: {
                 QVariantList lst;
-                if ( axisType == Axis_X ) {
-                    QDate s = qMin( m_bcwp.startDate(), m_acwp.startDate() );
-                    foreach ( QDate d, m_bcwp.days().keys() ) {
+                if ( axisType == X_Axis ) {
+                    //kDebug()<<"X-axis"<<idx;
+                    QDate s = startDate();
+                    foreach ( QDate d, m_acwp.days().keys() ) {
                         lst << s.daysTo( d );
                     }
-                } else if ( axisType == Axis_Y ) {
-                    double c = 0.0;
-                    foreach ( const EffortCost &v, m_acwp.days().values() ) {
-                        c +=  v.cost();
-                        lst << c;
+                } else if ( axisType == Y_Axis ) {
+                    //kDebug()<<"Y-axis"<<idx;
+                    if ( cost_Y ) {
+                        //kDebug()<<"Y-axis, Cost"<<idx;
+                        double c = 0.0;
+                        foreach ( const EffortCost &v, m_acwp.days().values() ) {
+                            c +=  v.cost();
+                            lst << c;
+                        }
+                    } else if ( effort_Y ) {
+                        //kDebug()<<"Y-axis, Hours"<<idx;
+                        double c = 0.0;
+                        foreach ( const EffortCost &v, m_acwp.days().values() ) {
+                            c +=  v.effort().toDouble( Duration::Unit_h );
+                            lst << c;
+                        }
                     }
                 }
+                //kDebug()<<"ACWP"<<idx<<lst;
                 return lst;
                 break; }
             default:
-                kDebug()<<"Invalid userData"<<idx.userData;
+                kDebug()<<"Invalid userData"<<idx;
                 break;
+        }
+    }
+    if ( role == Qt::ForegroundRole ) {
+        if ( m_dataShown.showCost && axis.number() == 0 ) {
+            //kDebug()<<"cost"<<axis;
+            switch ( idx.userData ) {
+                case BCWS: return QColor( Qt::green );
+                case BCWP: return QColor( Qt::red );
+                case ACWP: return QColor( Qt::blue );
+            }
+        } else {
+            //kDebug()<<"effort"<<axis;
+            switch ( idx.userData ) {
+                case BCWS: return QColor( Qt::black );
+                case BCWP: return QColor( Qt::gray );
+                case ACWP: return QColor( Qt::yellow );
+            }
         }
     }
     return QVariant();
@@ -220,17 +317,41 @@ ChartDataIndex NodeChartModel::index( int number, const ChartAxisIndex &idx ) co
     if ( ! idx.isValid() ) {
         return ChartDataIndex();
     }
-    if ( number == 0 ) {
-        //kDebug()<<number<<"BCWS";
-        return createDataIndex( number, idx, BCWS );
+    //kDebug()<<idx;
+    int type = 0;
+    if ( m_dataShown.showCost ) {
+        if ( m_dataShown.showBCWSCost ) type = 1;
+        if ( m_dataShown.showBCWPCost ) type += 2;
+        if ( m_dataShown.showACWPCost ) type += 4;
     }
-    if ( number == 1 ) {
-        //kDebug()<<number<<"BCWP";
-        return createDataIndex( number, idx, BCWP );
+    if ( m_dataShown.showEffort ) {
+        if ( m_dataShown.showBCWSEffort ) type += 8;
+        if ( m_dataShown.showBCWPEffort ) type += 16;
+        if ( m_dataShown.showACWPEffort ) type += 32;
     }
-    if ( number == 2 ) {
-        //kDebug()<<number<<"ACWP";
-        return createDataIndex( number, idx, ACWP );
+    if ( m_dataShown.showCost && idx.number() == 0 ) {
+        switch ( number ) {
+            case 0:
+                if ( type & 1 ) return createDataIndex( number, idx, BCWS );
+                //fall trough
+            case 1:
+                if ( type & 2 ) return createDataIndex( number, idx, BCWP );
+                //fall trough
+            case 2:
+                if ( type & 4 ) return createDataIndex( number, idx, ACWP );
+        }
+    }
+    if ( m_dataShown.showEffort && idx.number() == m_dataShown.showCost ? 1 : 0 ) {
+        switch ( number ) {
+            case 0:
+                if ( type & 8 ) return createDataIndex( number, idx, BCWS );
+                //fall trough
+            case 1:
+                if ( type & 16 ) return createDataIndex( number, idx, BCWP );
+                //fall trough
+            case 2:
+                if ( type & 32 ) return createDataIndex( number, idx, ACWP );
+        }
     }
     return ChartDataIndex();
 }
@@ -240,6 +361,7 @@ ChartDataIndex NodeChartModel::index( int number, const ChartDataIndex &idx ) co
     if ( ! idx.isValid() ) {
         return ChartDataIndex();
     }
+    // if sections, return valid index
     return ChartDataIndex();
 }
 
@@ -249,13 +371,27 @@ int NodeChartModel::axisCount( const ChartAxisIndex &index ) const
         return 0;
     }
     if ( ! index.isValid() ) {
-        return 1; // we have one x,y axis pair
+        //kDebug()<<index<<"we have max 2; x,y axis pairs";
+        int c = 0;
+        if ( m_dataShown.showCost ) ++c;
+        if ( m_dataShown.showEffort ) ++c;
+        return c; // we have one x,y axis pair
     }
-    if ( index.number() == 0 && index.userData == 0 ) {
+    if ( index.userData == AxisSet ) {
+        //kDebug()<<index<<"x- and y axis";
         return 2; // x- and y axis
-    } else kDebug()<<"Invalid index";
-    
+    }
+    //kDebug()<<index<<"Axis, no children";
     return 0;
+}
+
+ChartAxisIndex NodeChartModel::parent( const ChartAxisIndex &index ) const
+{
+    //kDebug()<<index;
+    if ( ! index.isValid() || index.userData == AxisSet ) {
+        return ChartAxisIndex();
+    }
+    return createAxisIndex( index.parentId, ChartAxisIndex(), AxisSet );
 }
 
 QVariant NodeChartModel::axisData( const ChartAxisIndex &index, int role ) const
@@ -265,41 +401,78 @@ QVariant NodeChartModel::axisData( const ChartAxisIndex &index, int role ) const
         return QVariant();
     }
     if ( role == Qt::DisplayRole ) {
-        if ( index.userData == Axis_X ) {
-            return "Days (" + startDate().toString( Qt::ISODate ) + " - " + endDate().toString( Qt::ISODate ) + ")"; // x-axis
+        //kDebug()<<"Display:"<<index;
+        if ( index.userData == AxisSet ) {
+            //kDebug()<<index<<"Axis set";
+            return QVariant();
         }
-        if ( index.userData == Axis_Y ) {
-            return "Cost"; // y-axis
+        if ( index.userData == X_Axis ) {
+            if ( parent( index ).number() == 0 ) {
+                return "Days"; // left y-axis
+            }
+            if ( parent( index ).number() == 1 ) {
+                // Top axis label
+                return startDate().toString( Qt::ISODate ) + " - " + endDate().toString( Qt::ISODate );
+            }
         }
+        if ( index.userData == Y_Axis ) {
+            //kDebug()<<"Y axis:"<<index;
+            if ( m_dataShown.showCost && parent( index ).number() == 0 ) {
+                //kDebug()<<"Y-axis Cost";
+                return "Cost"; // left y-axis
+            }
+            if ( m_dataShown.showEffort && parent( index ).number() == ( m_dataShown.showCost ? 1 : 0 ) ) {
+                //kDebug()<<"Y-axis Hours";
+                return "Hours"; // right y-axis
+            }
+        }
+        //kDebug()<<index<<"No data";
+        return QVariant();
     }
     if ( role == AbstractChartModel::AxisTypeRole ) {
-        return index.userData;
+        if ( index.userData == X_Axis ) {
+            return AbstractChartModel::Axis_X;
+        }
+        if ( index.userData == Y_Axis || index.userData == Y_AxisSet ) {
+            return AbstractChartModel::Axis_Y;
+        }
+        return QVariant();
     }
     if ( role == AbstractChartModel::AxisMinRole ) {
-        if ( index.userData == Axis_X ) {
+        if ( index.userData == X_Axis ) {
             return 0;
         }
-        if ( index.userData == Axis_Y ) {
-            return 0.0;
+        if ( index.userData == Y_Axis ) {
+            return 0.0; // both cost and effort
         }
+        return QVariant();
     }
     if ( role == AbstractChartModel::AxisMaxRole ) {
-        if ( index.userData == Axis_X ) {
+        if ( index.userData == X_Axis ) {
             QDate d = startDate();
             QDate e = endDate();
             return d.daysTo( e );
         }
-        if ( index.userData == Axis_Y ) {
-            return qMax( m_bcwp.totalCost(), m_acwp.totalCost() ) * 1.1;
+        if ( index.userData == Y_Axis ) {
+            if ( m_dataShown.showCost && parent( index ).number() == 0 ) {
+                //kDebug()<<"Cost"<<index;
+                return qMax( m_bcwp.totalCost(), m_acwp.totalCost() ) * 1.1;
+            }
+            if ( m_dataShown.showEffort && parent( index ).number() == ( m_dataShown.showCost ? 1 : 0 ) ) {
+                //kDebug()<<"Effort"<<index;
+                return qMax( m_bcwp.totalEffort().toDouble( Duration::Unit_h ), m_acwp.totalEffort().toDouble( Duration::Unit_h ) ) * 1.1;
+            }
         }
+        return QVariant();
     }
     if ( role == AbstractChartModel::AxisDataTypeRole ) {
-        if ( index.userData == Axis_X ) {
+        if ( index.userData == X_Axis ) {
             return QVariant::Date; // x-axis
         }
-        if ( index.userData == Axis_Y ) {
+        if ( index.userData == Y_Axis ) {
             return QVariant::Double; // y-axis
         }
+        return QVariant();
     }
     return QVariant();
 }
@@ -307,14 +480,14 @@ QVariant NodeChartModel::axisData( const ChartAxisIndex &index, int role ) const
 ChartAxisIndex NodeChartModel::axisIndex( int number, const ChartAxisIndex &parent ) const
 {
     if ( ! parent.isValid() ) {
+        return createAxisIndex( number, parent, AxisSet );
+    }
+    if ( parent.userData == AxisSet ) {
         if ( number == 0 ) {
-            return createAxisIndex( number, parent, AbstractChartModel::Axis_None );
+            return createAxisIndex( number, parent, X_Axis, parent.number() );
         }
-    } else {
-        if ( number == 0 ) {
-            return createAxisIndex( number, parent, AbstractChartModel::Axis_X );
-        } else if ( number == 1 ) {
-            return createAxisIndex( number, parent, AbstractChartModel::Axis_Y );
+        if ( number == 1 ) {
+            return createAxisIndex( number, parent, Y_Axis, parent.number() );
         }
     }
     return ChartAxisIndex();

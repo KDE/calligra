@@ -49,15 +49,24 @@ int ChartDataIndex::number() const
     return m_number;
 }
 
+QDebug ChartDataIndex::debug( QDebug dbg ) const
+{
+    dbg.nospace() << "( KPlato::ChartDataIndex[ number=" << m_number << " userData=" << userData << " )";
+    return dbg.space();
+}
+
+
 //---------------------
 ChartAxisIndex::ChartAxisIndex()
     : userData( 0 ),
+      parentId( -1 ),
       m_number( -1 )
 {
 }
 
 ChartAxisIndex::ChartAxisIndex( int number, int userData )
     : userData( userData ),
+      parentId( -1 ),
       m_number( number )
 {
 }
@@ -74,6 +83,12 @@ bool ChartAxisIndex::isValid() const
 int ChartAxisIndex::number() const
 {
     return m_number;
+}
+
+QDebug ChartAxisIndex::debug( QDebug dbg ) const
+{
+    dbg.nospace() << "( KPlato::ChartAxisIndex[ number=" << m_number << " userData=" << userData << " parentId=" << parentId<< " )";
+    return dbg.space();
 }
 
 //-------------------------
@@ -96,6 +111,10 @@ ChartDataIndex AbstractChartModel::index( int, const ChartDataIndex & ) const
     return ChartDataIndex();
 }
 
+ChartAxisIndex AbstractChartModel::parent( const ChartAxisIndex & ) const
+{
+    return ChartAxisIndex();
+}
 
 int AbstractChartModel::childCount( const ChartDataIndex & ) const
 {
@@ -111,25 +130,37 @@ ChartDataIndex AbstractChartModel::createDataIndex( int number, const ChartAxisI
 {
     ChartDataIndex idx( number, userdata );
     idx.m_axisIndex = axisIndex;
-    kDebug()<<"Created"<<idx.number()<<idx.userData;
+    //kDebug()<<"Created"<<idx;
     return idx;
 }
 
 ChartDataIndex AbstractChartModel::createDataIndex( int number, const ChartDataIndex &parent, int userdata ) const
 {
     ChartDataIndex idx( number, userdata );
-    idx.m_axisIndex = parent.m_axisIndex;
-    kDebug()<<"Created"<<idx.number()<<idx.userData;
+    idx.m_axisIndex = parent.axisIndex();
+    //kDebug()<<"Created"<<idx;
     return idx;
 }
 
-ChartAxisIndex AbstractChartModel::createAxisIndex( int number, const ChartAxisIndex &parent, int userdata ) const
+ChartAxisIndex AbstractChartModel::createAxisIndex( int number, const ChartAxisIndex &parent, int userdata, int parentId ) const
 {
     ChartAxisIndex idx( number, userdata );
+    idx.parentId = parentId;
+    //kDebug()<<"Created"<<idx;
     return idx;
 }
 
 
 } //namespace KPlato
+
+QDebug operator<<( QDebug dbg, const KPlato::ChartAxisIndex& index )
+{
+    return index.debug( dbg );
+}
+
+QDebug operator<<( QDebug dbg, const KPlato::ChartDataIndex& index )
+{
+    return index.debug( dbg );
+}
 
 #include "kptabstractchartmodel.moc"
