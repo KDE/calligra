@@ -63,6 +63,10 @@ KPrCustomSlideShowsDialog::KPrCustomSlideShowsDialog( QWidget *parent, KPrCustom
     connect( m_uiWidget.availableSlidesList, SIGNAL( itemDoubleClicked( QListWidgetItem* ) ),
              this, SLOT( addSlidesToCurrentSlideShow( QListWidgetItem* ) ) );
 
+    //Set the size of the icon
+    m_uiWidget.availableSlidesList->setIconSize( QSize(75,75) );
+    m_uiWidget.currentSlidesList->setIconSize( QSize(75,75) );
+
     //Make the newSlideShows be the same as m_slideShows
     newSlideShows = m_slideShows;
 
@@ -70,13 +74,13 @@ KPrCustomSlideShowsDialog::KPrCustomSlideShowsDialog( QWidget *parent, KPrCustom
     loadCustomSlideShowsData();
 
     //Load the available slides
-    QListWidgetItem * item;
     int currentPage = 1;
+    QListWidgetItem * item;
+
     foreach( KoPAPageBase* page, doc->pages() )
     {
-        item = new QListWidgetItem( QIcon(), i18n("Slide %1", currentPage++), m_uiWidget.availableSlidesList );
+        item = new QListWidgetItem( QIcon( page->thumbnail( QSize(75,75) ) ), i18n("Slide %1", currentPage++), m_uiWidget.availableSlidesList );
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable );
-
         item->setData( SlideData, QVariant::fromValue(page) );
     }
 }
@@ -158,6 +162,7 @@ void KPrCustomSlideShowsDialog::deleteCustomSlideShow()
         m_selectedSlideShowName = QString::null;
         m_uiWidget.currentSlidesList->clear();
         m_uiWidget.addSlideButton->setEnabled( false );
+        m_uiWidget.deleteButton->setEnabled( false );
     }
 }
 
@@ -175,6 +180,13 @@ void KPrCustomSlideShowsDialog::loadCustomSlideShowsData()
         m_uiWidget.customSlideShowsList->clear();
     }
     m_firstTime = false;
+
+    bool deleteEnabled = true;
+    if( m_oldSlideShows->names().size() == 0 )
+    {
+        deleteEnabled = false;
+    }
+    m_uiWidget.deleteButton->setEnabled( deleteEnabled );
 
     //build, configure and insert every Item:
     QListWidgetItem * item;
@@ -209,6 +221,8 @@ void KPrCustomSlideShowsDialog::changedSelectedSlideshow(QListWidgetItem* curren
 
     //if we have selected a slideShow we can safelly try to add slides to it
     m_uiWidget.addSlideButton->setEnabled( true );
+    //and allow to delete slideShows
+    m_uiWidget.deleteButton->setEnabled( true );
 
     //get the slideShow and its pages
     m_selectedSlideShowName = current->data( SlideShowNameData ).toString();
@@ -221,7 +235,7 @@ void KPrCustomSlideShowsDialog::changedSelectedSlideshow(QListWidgetItem* curren
     QListWidgetItem * item;
     foreach( KoPAPageBase* page, pages )
     {
-        item = new QListWidgetItem( QIcon(), i18n( "Slide %1", m_doc->pageIndex(page)+1 ), m_uiWidget.currentSlidesList );
+        item = new QListWidgetItem( QIcon( page->thumbnail( QSize(75,75) ) ), i18n( "Slide %1", m_doc->pageIndex(page)+1 ), m_uiWidget.currentSlidesList );
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable );
         item->setData( SlideData, QVariant( page ) );
         item->setData( SlidePositionData, QVariant( slideNumberInSlideShow++ ) );
@@ -243,7 +257,7 @@ void KPrCustomSlideShowsDialog::addSlidesToCurrentSlideShow()
         KoPAPageBase* page( (item->data( SlideData ).value<KoPAPageBase*>()));
         selectedSlideShow.append( page );
 
-        item = new QListWidgetItem( QIcon(), i18n("Slide %1", m_doc->pageIndex(page)+1 ), m_uiWidget.currentSlidesList );
+        item = new QListWidgetItem( QIcon( page->thumbnail( QSize(75,75) ) ), i18n("Slide %1", m_doc->pageIndex(page)+1 ), m_uiWidget.currentSlidesList );
         item->setFlags( Qt::ItemIsSelectable | Qt::ItemIsDragEnabled | Qt::ItemIsEnabled | Qt::ItemIsUserCheckable );
         item->setData( SlideData, QVariant( page ) );
         item->setData( SlidePositionData, QVariant( nextSlideNumberInSlideShow++ ) );
