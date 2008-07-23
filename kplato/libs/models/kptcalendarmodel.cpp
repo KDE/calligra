@@ -81,6 +81,7 @@ void CalendarDayItemModelBase::setProject( Project *project )
     if ( project ) {
         connect( m_project, SIGNAL( calendarToBeRemoved( const Calendar* ) ), this, SLOT( slotCalendarToBeRemoved( const Calendar* ) ) );
     }
+    reset();
 }
 
 
@@ -145,6 +146,7 @@ void CalendarItemModel::setProject( Project *project )
         connect( m_project, SIGNAL( calendarRemoved( const Calendar* ) ), this, SLOT( slotCalendarRemoved( const Calendar* ) ) );
         connect( m_project, SIGNAL( calendarToBeRemoved( const Calendar* ) ), this, SLOT( slotCalendarToBeRemoved( const Calendar* ) ) );
     }
+    reset();
 }
 
 Qt::ItemFlags CalendarItemModel::flags( const QModelIndex &index ) const
