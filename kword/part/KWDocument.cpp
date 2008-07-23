@@ -173,6 +173,9 @@ KWPage* KWDocument::appendPage() {
 }
 
 void KWDocument::removePage(int pageNumber) {
+    if (pageCount() <= 1)
+        return;
+
     KWPage *page = m_pageManager.page(pageNumber);
     if(page == 0) {
         kWarning() << "remove page requested for a non exiting page!\n";
