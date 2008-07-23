@@ -1077,11 +1077,10 @@ void KWView::showStatusBar(bool toggled) {
     statusBar()->setVisible(toggled);
 }
 
-void KWView::deletePage() {
-    if(m_currentPage == 0)
-        return;
-    KWPageRemoveCommand *cmd = new KWPageRemoveCommand(m_document, m_currentPage);
-    m_document->addCommand(cmd);
+void KWView::deletePage()
+{
+    Q_ASSERT(m_currentPage);
+    m_document->removePage( m_currentPage->pageNumber() );
 }
 
 void KWView::setShowFormattingChars(bool on) {
