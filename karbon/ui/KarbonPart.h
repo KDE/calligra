@@ -105,6 +105,7 @@ protected:
     virtual KoView* createViewInstance( QWidget* parent );
     virtual void removeView( KoView *view );
     void loadOasisSettings( const KoXmlDocument&settingsDoc );
+    void saveOasisSettings( KoStore * store );
 
     void updateDocumentSize();
     void setPageSize( const QSizeF &pageSize );

@@ -217,8 +217,6 @@ public:
 
 private:
 
-    void saveOasisSettings( KoStore * store );
-
     class Private;
     Private * const d;
 };

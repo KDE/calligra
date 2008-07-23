@@ -411,38 +411,9 @@ bool KarbonDocument::saveOdf( KoDocument::SavingContext &documentContext )
     //add manifest line for content.xml
     documentContext.odfStore.manifestWriter()->addManifestEntry( "content.xml", "text/xml" );
 
-    if(!store->open("settings.xml"))
-        return false;
-
-    saveOasisSettings( store );
-
-    if(!store->close())
-        return false;
-
-    documentContext.odfStore.manifestWriter()->addManifestEntry("settings.xml", "text/xml");
-
     if ( !shapeContext.saveDataCenter( store, documentContext.odfStore.manifestWriter() ) ) {
         return false;
     }
 
     return mainStyles.saveOdfStylesDotXml( store, documentContext.odfStore.manifestWriter() );
-}
-
-void KarbonDocument::saveOasisSettings( KoStore * store )
-{
-    KoStoreDevice settingsDev( store );
-    KoXmlWriter * settingsWriter = KoOdfWriteStore::createOasisXmlWriter( &settingsDev, "office:document-settings");
-
-    settingsWriter->startElement("office:settings");
-    settingsWriter->startElement("config:config-item-set");
-    settingsWriter->addAttribute("config:name", "view-settings");
-
-    KoUnit::saveOasis( settingsWriter, unit() );
-
-    settingsWriter->endElement(); // config:config-item-set
-    settingsWriter->endElement(); // office:settings
-    settingsWriter->endElement(); // office:document-settings
-    settingsWriter->endDocument();
-
-    delete settingsWriter;
 }

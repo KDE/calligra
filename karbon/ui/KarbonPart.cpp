@@ -63,6 +63,7 @@
 #include <KoShapeLayer.h>
 #include <KoShapeRegistry.h>
 #include <KoCanvasResourceProvider.h>
+#include <KoStoreDevice.h>
 
 #include <kconfig.h>
 #include <kconfiggroup.h>
@@ -308,8 +309,7 @@ bool KarbonPart::completeLoading( KoStore* store )
 
 }
 
-void
-KarbonPart::loadOasisSettings( const KoXmlDocument&settingsDoc )
+void KarbonPart::loadOasisSettings( const KoXmlDocument & settingsDoc )
 {
     if ( settingsDoc.isNull() )
         return ; // not an error if some file doesn't have settings.xml
@@ -320,13 +320,62 @@ KarbonPart::loadOasisSettings( const KoXmlDocument&settingsDoc )
         setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
         // FIXME: add other config here.
     }
+    guidesData().loadOdfSettings( settingsDoc );
+    gridData().loadOdfSettings( settingsDoc );
 }
 
+void KarbonPart::saveOasisSettings( KoStore * store )
+{
+    KoStoreDevice settingsDev( store );
+    KoXmlWriter * settingsWriter = KoOdfWriteStore::createOasisXmlWriter( &settingsDev, "office:document-settings");
+
+    // add this so that OOo reads guides lines and grid data from ooo:view-settings
+    settingsWriter->addAttribute( "xmlns:ooo", "http://openoffice.org/2004/office" );
+
+    settingsWriter->startElement("office:settings");
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "view-settings");
+
+    KoUnit::saveOasis( settingsWriter, unit() );
+
+    settingsWriter->endElement(); // config:config-item-set
+
+    settingsWriter->startElement("config:config-item-set");
+    settingsWriter->addAttribute("config:name", "ooo:view-settings");
+    settingsWriter->startElement("config:config-item-map-indexed" );
+    settingsWriter->addAttribute("config:name", "Views" );
+    settingsWriter->startElement("config:config-item-map-entry" );
+
+    guidesData().saveOdfSettings( *settingsWriter );
+    gridData().saveOdfSettings( *settingsWriter );
+
+    settingsWriter->endElement(); // config:config-item-map-entry
+    settingsWriter->endElement(); // config:config-item-map-indexed
+    settingsWriter->endElement(); // config:config-item-set
+
+    settingsWriter->endElement(); // office:settings
+    settingsWriter->endElement(); // office:document-settings
+
+    settingsWriter->endDocument();
+
+    delete settingsWriter;
+}
 
 bool KarbonPart::saveOdf( SavingContext &documentContext )
 {
     if( ! m_doc.saveOdf( documentContext ) )
         return false;
+
+    KoStore * store = documentContext.odfStore.store();
+    if( ! store->open("settings.xml"))
+        return false;
+
+    saveOasisSettings( store );
+
+    if( ! store->close() )
+        return false;
+
+    documentContext.odfStore.manifestWriter()->addManifestEntry("settings.xml", "text/xml");
 
     setModified( false );
 
