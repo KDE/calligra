@@ -67,6 +67,7 @@ namespace KexiWebForms {
 
 
             KexiDB::TableSchema* tableSchema = gConnection->tableSchema(requestedTable);
+            KexiWebForms::Model::Database db;
 
 
             /* Build the form */
@@ -83,7 +84,6 @@ namespace KexiWebForms {
                         data[field] = QVariant(request->getQuery(field.toUtf8().constData()).c_str());
                 }
                 
-                KexiWebForms::Model::Database db;
                 if (db.createRow(requestedTable, data)) {
                     m_dict->ShowSection("SUCCESS");
                     setValue("MESSAGE", "Row added successfully");
@@ -93,24 +93,15 @@ namespace KexiWebForms {
                 }
             }
 
-            m_dict->ShowSection("FORM");
-
             QString formData;
             QStringList fieldsList;
-
-            KexiWebForms::Model::Database db;
+            
             QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > data = db.getSchema(requestedTable);
             QList< QPair<QString, QString> > dataKeys(data.keys());
-            
-            /*for (int i = 0; i < dataKeys.count(); ++i) {
-                QPair<QString, QString> valueTypePair = dataKeys[i];
-                QPair<QString, KexiDB::
-                }*/
+
+            // WORK AROUND
             typedef QPair<QString, QString> QCaptionNamePair;
             
-            /*foreach(const QPair<QString, QString>& captionNamePair, dataKeys) {
-              }*/
-
             // FIXME: Regression, no icons, this way
             foreach(const QCaptionNamePair& captionNamePair, data.keys()) {
                 formData.append("\t<tr>\n");
