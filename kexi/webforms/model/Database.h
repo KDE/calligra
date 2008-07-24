@@ -37,6 +37,8 @@ namespace KexiWebForms {
             
             /**
              * Get all table names
+             * @param KexiDB::ObjectTypes specify for which type of object we should retrieve names
+             * @return QHash<QString, QString> a QHash with captions as keys and object names as values
              */
             QHash<QString, QString> getNames(KexiDB::ObjectTypes);
             
