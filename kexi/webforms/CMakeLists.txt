@@ -15,6 +15,8 @@ set(webforms_SRCS
   DataProvider.cpp
   TemplateProvider.cpp
   WebFormsService.cpp
+# Model
+  model/Database.cpp
 # Index view
   IndexService.cpp
 # CRUD
