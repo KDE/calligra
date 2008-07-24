@@ -77,9 +77,6 @@ namespace KexiWebForms {
             data[QUrl::fromPercentEncoding(QByteArray(it->first.c_str()))] =
                 QUrl::fromPercentEncoding(QByteArray(it->second.c_str()));
         }
-        foreach(const QString& n, data.keys()) {
-            kDebug() << "PARAMETER " << n << "=" << data[n] << endl;
-        }
         
         kDebug() << "ACTION :" << action << endl;
         kDebug() << "PARAMETERS COUNT: " << requestURI.count() << endl;
