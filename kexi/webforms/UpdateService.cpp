@@ -109,31 +109,37 @@ namespace KexiWebForms {
             if (current < uint( cachedPkeys[requestedTable].size()-1 )) {
                 m_dict->ShowSection("NEXT_ENABLED");
                 m_dict->SetValue("NEXT", QVariant(cachedPkeys[requestedTable].at(current+1)).toString().toUtf8().constData());
+                m_dict->ShowSection("LAST_ENABLED");
+                m_dict->SetValue("LAST", QVariant(cachedPkeys[requestedTable].at(cachedPkeys[requestedTable].size()-1)).toString().toUtf8().constData());
             } else {
                 m_dict->ShowSection("NEXT_DISABLED");
+                m_dict->ShowSection("LAST_DISABLED");
             }
 
             if (current > 0) {
                 m_dict->ShowSection("PREV_ENABLED");
                 m_dict->SetValue("PREV", QVariant(cachedPkeys[requestedTable].at(current-1)).toString().toUtf8().constData());
+                m_dict->ShowSection("FIRST_ENABLED");
+                m_dict->SetValue("FIRST", QVariant(cachedPkeys[requestedTable].at(0)).toString().toUtf8().constData());
             } else {
                 m_dict->ShowSection("PREV_DISABLED");
+                 m_dict->ShowSection("FIRST_DISABLED");
             }
 
-            if (current >= cachedPkeys[requestedTable].at(0)) {
+            /*if (current >= cachedPkeys[requestedTable].at(0)) {
                 m_dict->ShowSection("FIRST_ENABLED");
                 m_dict->SetValue("FIRST", QVariant(cachedPkeys[requestedTable].at(0)).toString().toUtf8().constData());
             } else {
                 m_dict->ShowSection("FIRST_DISABLED");
-            }
+                }*/
 
 
-            if (current < uint( cachedPkeys[requestedTable].size()-1 )) {
+            /*if (current < uint( cachedPkeys[requestedTable].size()-1 )) {
                 m_dict->ShowSection("LAST_ENABLED");
                 m_dict->SetValue("LAST", QVariant(cachedPkeys[requestedTable].at(cachedPkeys[requestedTable].size()-1)).toString().toUtf8().constData());
             } else {
                 m_dict->ShowSection("LAST_DISABLED");
-            }
+                }*/
 
 
 

@@ -24,6 +24,7 @@
 
 #include <QPair>
 #include <QHash>
+#include <kexidb/field.h>
 
 class QString;
 
