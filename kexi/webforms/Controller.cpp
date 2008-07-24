@@ -28,6 +28,7 @@
 #include <pion/net/HTTPResponseWriter.hpp>
 
 #include "view/Index.h"
+#include "view/Create.h"
 #include "view/Read.h"
 
 #include "Controller.h"
@@ -36,11 +37,13 @@ namespace KexiWebForms {
 
     Controller::Controller() {
         m_index = new View::Index(*this, "index.tpl");
+        m_create = new View::Create(*this, "create.tpl");
         m_read = new View::Read(*this, "read.tpl");
     }
 
     Controller::~Controller() {
         delete m_index;
+        delete m_create;
         delete m_read;
     }
 
@@ -64,6 +67,12 @@ namespace KexiWebForms {
             if (!requestURI.count() != 0) {
                 malformedRequest = false;
                 m_index->view(data, writer);
+            }
+        } else if (action == "create") {
+            if (!requestURI.count() != 1) {
+                data["uri-table"] = requestURI.at(0);
+                m_create->view(data, writer);
+                malformedRequest = false;
             }
         } else if (action == "read") {
             if (!requestURI.count() != 1) {

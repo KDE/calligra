@@ -18,6 +18,7 @@ set(webforms_SRCS
 # View
   view/View.cpp
   view/Index.cpp
+  view/Create.cpp
   view/Read.cpp
   view/TemplateProvider.cpp
 # Controller

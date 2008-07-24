@@ -19,28 +19,29 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KEXIWEBFORMS_CREATESERVICE_H
-#define KEXIWEBFORMS_CREATESERVICE_H
+#ifndef KEXIWEBFORMS_VIEW_CREATE_H
+#define KEXIWEBFORMS_VIEW_CREATE_H
 
-#include "WebFormsService.h"
+#include <QHash>
+#include <pion/net/HTTPResponseWriter.hpp>
 
-struct RequestData;
+#include "View.h"
 
 namespace KexiWebForms {
 
-    /**
-     * @brief WebService handling the create page
-     *
-     * This service produces a form out of table fields and allows to create
-     * new records
-     */
-    class CreateService : public WebFormsService {
-    public:
-        CreateService(const char* name) : WebFormsService(name) {}
-        virtual ~CreateService() {}
+    class Controller;
 
-        virtual void operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn);
+namespace View {
+    
+    class Create : public View {
+    public:
+        Create(KexiWebForms::Controller& c, const char* name) : View(c, name) {}
+        virtual ~Create() {}
+        
+        virtual void view(const QHash<QString, QString>&, pion::net::HTTPResponseWriterPtr);
     };
+    
+}
 }
 
 #endif /* KEXIWEBFORMS_CREATESERVICE_H */

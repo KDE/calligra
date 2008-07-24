@@ -19,6 +19,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
+#include <QMap>
 #include <QPair>
 #include <QHash>
 #include <QString>
@@ -40,25 +41,23 @@
 
 #include "TemplateProvider.h"
 
-#include "CreateService.h"
+#include "Create.h"
 
 using namespace pion::net;
 
 namespace KexiWebForms {
+namespace View {
+    
+    void Create::view(const QHash<QString, QString>& d, pion::net::HTTPResponseWriterPtr writer) {
 
-    void CreateService::operator()(pion::net::HTTPRequestPtr& request, pion::net::TCPConnectionPtr& tcp_conn) {
-        HTTPResponseWriterPtr writer(HTTPResponseWriter::create(tcp_conn, *request,
-                    boost::bind(&TCPConnection::finish, tcp_conn)));
-
-
-        PionUserPtr userPtr(request->getUser());
+        /*PionUserPtr userPtr(request->getUser());
         Auth::User u = Auth::Authenticator::getInstance()->authenticate(userPtr);
 
-        if (u.can(Auth::CREATE)) {
+        if (u.can(Auth::CREATE)) {*/
             m_dict = initTemplate("create.tpl");
 
             /* Retrieve the requested table name */
-            QString requestedTable(QString(request->getOriginalResource().c_str()).split('/').at(2));
+            QString requestedTable(d["uri-table"]);
             setValue("TABLENAME", requestedTable);
 
             KexiWebForms::Model::Database db;
@@ -66,17 +65,16 @@ namespace KexiWebForms {
 
 
             /* Build the form */
-            if (request->getQuery("dataSent") == "true") {
-                QStringList fieldsList(QUrl::fromPercentEncoding(QString(
-                            request->getQuery("tableFields").c_str()).toUtf8()
-                ).split("|:|"));
+            if (d["dataSent"] == "true") {
+                QString tableFields(d["table-fields"]);
+                QStringList fieldsList(QUrl::fromPercentEncoding(tableFields.toUtf8()).split("|:|"));
                 kDebug() << "Fields: " << fieldsList;
 
                 QHash<QString, QVariant> data;
                 foreach(const QString& field, fieldsList) {
                     KexiDB::Field* currentField = tableSchema->field(field);
                     if (currentField)
-                        data[field] = QVariant(request->getQuery(field.toUtf8().constData()).c_str());
+                        data[field] = QVariant(d[field]);
                 }
                 
                 if (db.updateRow(requestedTable, data, true)) {
@@ -117,10 +115,10 @@ namespace KexiWebForms {
 
             renderTemplate(m_dict, writer);
             delete m_dict;
-        } else {
+            /*} else {
             writer->write("Not Authorized");
             writer->send();
-        }
+            }*/
     }
-
+}
 }
