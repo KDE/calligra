@@ -73,19 +73,11 @@ namespace KexiWebForms {
             setValue("PKEY_NAME", pkeyName);
             setValue("PKEY_VALUE", pkeyValue);
 
-            // Initialize our needed Objects
+            // Initialize needed Objects
             KexiDB::TableSchema tableSchema(*gConnection->tableSchema(requestedTable));
-            KexiDB::QuerySchema schema(tableSchema);
-            schema.addToWhereExpression(schema.field(pkeyName), QVariant(pkeyValue));
 
             KexiWebForms::Model::Database db;
             db.updateCachedPkeys(requestedTable);
-
-            /*!
-             * @note We shouldn't use executeQuery otherwise the corresponding table will
-             * be locked and we won't be able to update it
-             */
-            KexiDB::Cursor* cursor = gConnection->prepareQuery(schema);
 
             // Retrieve current position in cache
             QList<uint> cachedPkeys(db.getCachedPkeys(requestedTable));
@@ -115,76 +107,67 @@ namespace KexiWebForms {
                 m_dict->ShowSection("FIRST_DISABLED");
             }
 
+            
+            if (request->getQuery("dataSent") == "true") {
+                    
 
+                QStringList fieldsList(QUrl::fromPercentEncoding(QString(
+                                                                     request->getQuery("tableFields").c_str()).toUtf8()
+                                           ).split("|:|"));
 
-            if (!cursor) {
-                m_dict->ShowSection("ERROR");
-                setValue("MESSAGE", "No cursor object available");
-            } else {
-                if (request->getQuery("dataSent") == "true") {
-                    cursor = gConnection->prepareQuery(schema);
-
-                    QStringList fieldsList(QUrl::fromPercentEncoding(QString(
-                                                                         request->getQuery("tableFields").c_str()).toUtf8()
-                                               ).split("|:|"));
-
-                    QHash<QString, QVariant> data;
-                    foreach(const QString& field, fieldsList) {
-                        KexiDB::Field* currentField = tableSchema.field(field);
-                        if (currentField)
-                            data[field] = QVariant(request->getQuery(field.toUtf8().constData()).c_str());
-                    }
-
-                    if (db.updateRow(requestedTable, data, false, pkeyValue.toInt())) {
-                        m_dict->ShowSection("SUCCESS");
-                        setValue("MESSAGE", "Updated");
-                    } else {
-                        m_dict->ShowSection("ERROR");
-                        setValue("MESSAGE", gConnection->errorMsg());
-                    }
+                QHash<QString, QVariant> data;
+                foreach(const QString& field, fieldsList) {
+                    KexiDB::Field* currentField = tableSchema.field(field);
+                    if (currentField)
+                        data[field] = QVariant(request->getQuery(field.toUtf8().constData()).c_str());
                 }
 
-                kDebug() << "Showing fields" << endl;
-
-                cursor = gConnection->executeQuery(schema);
-
-                m_dict->ShowSection("FORM");
-
-                
-                QString formData;
-                QStringList formFieldsList;
-
-                QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > data(db.getSchema(requestedTable,
-                                                                                                       pkeyName, pkeyValue.toInt()));
-                QList< QPair<QString, QString> > dataKeys(data.keys());
-
-                // WORK AROUND
-                typedef QPair<QString, QString> QCaptionNamePair;
-                
-                // FIXME: Regression, no icons, this way
-                foreach(const QCaptionNamePair& captionNamePair, data.keys()) {
-                    formData.append("\t<tr>\n");
-                    QPair<QString, KexiDB::Field::Type> valueTypePair(data[captionNamePair]);
-                    formData.append("\t\t<td>").append(captionNamePair.first).append("</td>\n");
-                    if (valueTypePair.second == KexiDB::Field::LongText) {
-                        formData.append(QString("\t\t<td><textarea name=\"%1\"></textarea></td>\n").arg(captionNamePair.second));
-                    } else if (valueTypePair.second == KexiDB::Field::BLOB) {
-                        formData.append(QString("<td><img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/></td>")
-                                        .arg(requestedTable).arg(captionNamePair.second).arg(pkeyName)
-                                        .arg(pkeyValue));
-                    } else {
-                        formData.append(QString("\t\t<td><input type=\"text\" name=\"%1\" value=\"%2\"/></td>\n")
-                                        .arg(captionNamePair.second).arg(valueTypePair.first));
-                    }
-                    formData.append("\t</tr>\n");
-                    formFieldsList << captionNamePair.second;
+                if (db.updateRow(requestedTable, data, false, pkeyValue.toInt())) {
+                    m_dict->ShowSection("SUCCESS");
+                    setValue("MESSAGE", "Updated");
+                } else {
+                    m_dict->ShowSection("ERROR");
+                    setValue("MESSAGE", gConnection->errorMsg());
                 }
-                
-                setValue("TABLEFIELDS", formFieldsList.join("|:|"));
-                setValue("FORMDATA", formData);
-
-                gConnection->deleteCursor(cursor);
             }
+
+            kDebug() << "Showing fields" << endl;
+
+            m_dict->ShowSection("FORM");
+
+                
+            QString formData;
+            QStringList formFieldsList;
+
+            QMap< QPair<QString, QString>, QPair<QString, KexiDB::Field::Type> > data(db.getSchema(requestedTable,
+                                                                                                   pkeyName, pkeyValue.toInt()));
+            QList< QPair<QString, QString> > dataKeys(data.keys());
+
+            // WORK AROUND
+            typedef QPair<QString, QString> QCaptionNamePair;
+                
+            // FIXME: Regression, no icons, this way
+            foreach(const QCaptionNamePair& captionNamePair, data.keys()) {
+                formData.append("\t<tr>\n");
+                QPair<QString, KexiDB::Field::Type> valueTypePair(data[captionNamePair]);
+                formData.append("\t\t<td>").append(captionNamePair.first).append("</td>\n");
+                if (valueTypePair.second == KexiDB::Field::LongText) {
+                    formData.append(QString("\t\t<td><textarea name=\"%1\"></textarea></td>\n").arg(captionNamePair.second));
+                } else if (valueTypePair.second == KexiDB::Field::BLOB) {
+                    formData.append(QString("<td><img src=\"/blob/%1/%2/%3/%4\" alt=\"Image\"/></td>")
+                                    .arg(requestedTable).arg(captionNamePair.second).arg(pkeyName)
+                                    .arg(pkeyValue));
+                } else {
+                    formData.append(QString("\t\t<td><input type=\"text\" name=\"%1\" value=\"%2\"/></td>\n")
+                                    .arg(captionNamePair.second).arg(valueTypePair.first));
+                }
+                formData.append("\t</tr>\n");
+                formFieldsList << captionNamePair.second;
+            }
+                
+            setValue("TABLEFIELDS", formFieldsList.join("|:|"));
+            setValue("FORMDATA", formData);
+            
 
             renderTemplate(m_dict, writer);
             delete m_dict;
