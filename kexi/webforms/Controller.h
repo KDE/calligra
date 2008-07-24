@@ -29,6 +29,9 @@ namespace KexiWebForms {
         class Index;
         class Create;
         class Read;
+        class Update;
+        class Delete;
+        class Query;
     }
 
     class Controller : public pion::net::WebService {
@@ -41,6 +44,9 @@ namespace KexiWebForms {
         View::Index* m_index;
         View::Create* m_create;
         View::Read* m_read;
+        View::Update* m_update;
+        View::Delete* m_delete;
+        View::Query* m_query;
     };
     
     
