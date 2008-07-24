@@ -25,7 +25,6 @@
 #include <QHash>
 
 class QString;
-//class QMap;
 
 namespace KexiWebForms {
     namespace Model {
@@ -47,7 +46,7 @@ namespace KexiWebForms {
              * @param QString& the table name
              * @param QMap<const QString&, const QString&>& 
              */
-            bool createRow(const QString&, const QMap<const QString&, const QString&>&);
+            bool createRow(const QString&, const QHash<QString, QVariant>);
         };
         
     }
